@@ -1,0 +1,92 @@
+@import '../../styles/fonts';
+@import '../../styles/mixins';
+@import '../../styles/common';
+
+.maintenance {
+    width: 100%;
+    padding-top: 80px;
+    box-sizing: border-box;
+    color: var(--primary-text);
+
+    &__content {
+        max-width: $width-large-screen;
+        margin: 0 auto;
+        padding: 0 80px;
+        display: flex;
+        align-items: center;
+
+        @media (min-width: $width-medium-screen) {
+            padding: 0 120px;
+        }
+
+        @media (min-width: $width-large-screen) {
+            padding: 0 240px;
+        }
+    }
+
+    &__info {
+        max-width: 504px;
+    }
+
+    &__title {
+        @include heading-size(l);
+        font-weight: 500;
+        max-width: 350px;
+        margin-bottom: 8px;
+    }
+
+    &__severity {
+        font-weight: 500;
+        margin: 0;
+        margin-bottom: 28px;
+
+        span:last-child {
+            margin-left: 4px;
+        }
+
+        &_type_minor {
+            color: var(--info-text);
+        }
+
+        &_type_major {
+            color: var(--danger-text);
+        }
+    }
+
+    &__user-title {
+        @include heading-size(s);
+        font-weight: 500;
+        margin: 0;
+        margin-bottom: 8px;
+    }
+
+    &__user-description {
+        font-size: 16px;
+        margin: 0;
+        margin-bottom: 32px;
+    }
+
+    &__time-line {
+        font-weight: 500;
+        margin: 0;
+        margin-bottom: 12px;
+    }
+
+    &__author {
+        margin-bottom: 60px;
+    }
+
+    &__links {
+        @include reset-ul();
+        display: flex;
+    }
+
+    &__link {
+        @include reset-li();
+        margin-right: 24px;
+
+        &:last-child {
+            margin-right: 0;
+        }
+    }
+}

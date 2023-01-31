@@ -1,0 +1,35 @@
+.yc-progress {
+    background-color: var(--light-divider);
+
+    &__item {
+        color: var(--light-text);
+
+        &_theme_default {
+            background-color: var(--default-color);
+        }
+
+        &_theme_success {
+            background-color: var(--success-color);
+        }
+
+        &_theme_warning {
+            background-color: var(--warning-color);
+        }
+
+        &_theme_danger {
+            background-color: var(--danger-color);
+        }
+
+        &_theme_info {
+            background-color: var(--info-color);
+        }
+    }
+
+    &__text {
+        color: var(--primary-text);
+    }
+
+    &__text-inner {
+        color: var(--light-text);
+    }
+}

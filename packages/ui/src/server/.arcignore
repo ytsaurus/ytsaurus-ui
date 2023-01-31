@@ -1,0 +1,9 @@
+#socket
+run/node.sock
+
+#build
+public/
+!public/.keep
+
+#secrets
+../../secrets/yt-interface-secret.json

@@ -1,0 +1,134 @@
+@import '../../styles/themes/light-theme';
+@import '../../styles/themes/dark-theme';
+@import '../../styles/fonts';
+
+// unipika
+
+@import '~@gravity-ui/unipika/styles/themes';
+
+body {
+    margin: 0px;
+
+    &.yc-root {
+        @include yt-fonts-variables;
+    }
+
+    &.theme-light {
+        @include yt-theme-light;
+        @include unipika-default;
+    }
+
+    &.theme-dark {
+        @include yt-theme-dark;
+        @include unipika-dark;
+    }
+
+    &.theme-light-hc {
+        @include yt-theme-light;
+        @include yt-theme-light-a11y;
+        @include unipika-default;
+    }
+
+    &.theme-dark-hc {
+        @include yt-theme-dark;
+        @include yt-theme-dark-a11y;
+        @include unipika-dark;
+    }
+
+    color: var(--primary-text);
+    background: var(--main-background);
+    --yt-font-weight-bold: 500;
+
+    --app-header-height: 56px;
+    --nv-aside-header-size: 0px;
+
+    --section-main-padding-horizontal: 20px;
+    --section-main-padding-vertical: 10px;
+
+    // z-index variables descending ordered by value;
+    --tooltip-z-index: 70000;
+    --bug-report-z-index: 60000;
+    --dialog-suggest-z-index: 50000;
+    --dialog-z-index: 6901;
+    --dialog-backdrop-z-index: 6900;
+    --aside-header-z-index: 1010;
+    --app-header-z-index: 1007;
+    --suggest-z-index: 1006;
+    --yql-kit-spinner-z-index: 1006;
+    --yql-kit-wrapper-z-index: 1001;
+    --draggable-splitter-z-index: 999;
+    --fixed-toolbar-z-index: 20;
+    --fixed-toolbar-spacer-z-index: 19;
+    --sticky-toolbar-z-index: 10;
+    --elements-table-sticky-top-z-index: 5;
+
+    // remove me later
+    --tmp-slideout-menu-top: 1002;
+    --tmp-slideout-menu-middle: 1001;
+
+    --tmp-cluster-page-heder-old-z-index: 1001;
+    --tmp-cluster-page-header-old-cluster-z-index: 1005;
+    --tmp-cluster-page-header-old-triangle-z-index: 1008;
+
+    .yc-tooltip__tooltip {
+        z-index: var(--tooltip-z-index);
+    }
+
+    .yc-modal {
+        z-index: var(--dialog-z-index);
+    }
+
+    .yc-popup,
+    .yc-popup-wrapper {
+        z-index: var(--dialog-z-index);
+    }
+
+    .yc-button_disabled.yc-button_view_outlined::before,
+    .yc-button_disabled.yc-button_view_outlined-info::before,
+    .yc-button_disabled.yc-button_view_outlined-danger::before {
+        background-color: var(--yc-button-background-color);
+    }
+    .yc-select-control_disabled.yc-select-control,
+    .yc-text-input_disabled.yc-text-input__control {
+        background-color: var(--yc-color-base-generic-accent-disabled);
+    }
+
+    .yc-button_view_outlined::before,
+    .yc-button_view_outlined-info::before,
+    .yc-button_view_outlined-danger::before,
+    .yc-select-control,
+    .yc-text-input__control {
+        background-color: var(--main-background);
+    }
+
+    .yc-select-search {
+        .yc-text-input__control {
+            background-color: unset;
+        }
+    }
+
+    link.link_theme_normal {
+        color: var(--external-link);
+        text-decoration: none;
+
+        &:hover {
+            color: var(--hover-link);
+        }
+    }
+
+    .yc-popover__tooltip {
+        max-width: 600px;
+    }
+
+    a.link {
+        text-decoration: none;
+        color: var(--external-link);
+        &:hover {
+            color: var(--hover-link);
+        }
+
+        &.link_theme_black {
+            color: var(--primary-link);
+        }
+    }
+}

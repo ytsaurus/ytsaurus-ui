@@ -1,0 +1,40 @@
+@import '../globals';
+
+// DEPRECATED remove when no more usages
+
+.elements-definition {
+    display: flex;
+
+    padding: 2px 0;
+
+    &__key {
+        flex-shrink: 0;
+
+        margin-right: 10px;
+
+        line-height: 24px;
+    }
+
+    &__value {
+        margin: 0;
+
+        line-height: 24px;
+
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    &__dots {
+        flex: 1 0 10px;
+
+        height: 9px;
+        margin: 9px 10px 0 0;
+
+        &-inner {
+            margin: 4px 0;
+
+            border-top: 1px dotted var(--dark-divider);
+        }
+    }
+}

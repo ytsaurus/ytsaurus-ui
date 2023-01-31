@@ -1,0 +1,17 @@
+.operation-weight {
+    $self: &;
+
+    &:hover {
+        #{$self}__weight-edit {
+            opacity: 1;
+            transition: opacity 300ms ease;
+        }
+    }
+
+    &__weight-edit {
+        // Fit meta height
+        line-height: 20px;
+        height: 20px;
+        opacity: 0;
+    }
+}

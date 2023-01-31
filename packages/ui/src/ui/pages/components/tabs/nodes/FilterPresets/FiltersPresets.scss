@@ -1,0 +1,48 @@
+
+.nodes-filters-preset {
+    grid-column: 1 / -1;
+
+    &__preset {
+        font-size: 13px;
+        line-height: 28px;
+
+        display: inline-flex;
+        justify-content: space-between;
+        align-items: center;
+
+        margin-right: 20px;
+        padding: 1px 13px;
+        min-width: 100px;
+
+        background-color: var(--filter-color);
+        border-radius: 3px;
+
+        transition: background-color 0.1s ease-in;
+        cursor: pointer;
+
+        &:last-child {
+            margin-right: 0;
+        }
+
+        &:hover {
+            background-color: var(--filter-hover);
+        }
+
+        .icon {
+            opacity: 0.5;
+            cursor: pointer;
+
+            &:hover {
+                opacity: 1;
+            }
+        }
+    }
+
+    &__close {
+        margin-left: 10px;
+
+        .icon {
+            transform: translateY(1px);
+        }
+    }
+}

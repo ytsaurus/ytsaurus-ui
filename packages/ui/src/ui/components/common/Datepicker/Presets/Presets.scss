@@ -1,0 +1,24 @@
+.yc-datepicker-presets {
+    flex: 0 0 40px;
+    display: flex;
+    align-items: center;
+    color: var(--yc-color-text-secondary);
+    background-color: var(--yc-color-base-generic);
+
+    .yc-datepicker_mobile & {
+        justify-content: center;
+    }
+
+    &__item {
+        margin-left: 16px;
+        cursor: pointer;
+
+        .yc-datepicker_desktop &:hover {
+            color: var(--yc-color-text-complementary);
+        }
+
+        .yc-datepicker_mobile &:first-child {
+            margin-left: 0;
+        }
+    }
+}

@@ -1,0 +1,80 @@
+@mixin label-theme-block($color, $background-color) {
+    color: $color;
+    background-color: $background-color;
+}
+
+.elements-label {
+    $label: &;
+
+    font-size: 1em;
+    font-weight: 500;
+
+    display: inline-block;
+
+    padding: 0 0.5em;
+    margin: 1px;
+
+    color: var(--light-text);
+    border-radius: 3px;
+    vertical-align: bottom;
+
+    &_theme_default {
+        @include label-theme-block(var(--default-text), var(--default-background));
+    }
+
+    &_theme_success {
+        @include label-theme-block(var(--success-text), var(--success-background));
+    }
+
+    &_theme_warning {
+        @include label-theme-block(var(--warning-text), var(--warning-background));
+    }
+
+    &_theme_danger {
+        @include label-theme-block(var(--danger-text), var(--danger-background));
+    }
+
+    &_theme_info {
+        @include label-theme-block(var(--info-text), var(--info-background));
+    }
+
+    &_theme_misc {
+        @include label-theme-block(var(--yc-color-text-misc), var(--yc-color-base-misc));
+    }
+
+    &_theme_complementary {
+        @include label-theme-block(var(--yc-color-text-complementary), var(--yc-color-base-generic));
+    }
+
+    &_type_text {
+        font-size: 1em;
+        padding: 0;
+        background: none;
+        border: none;
+
+
+        &#{$label}_theme_default {
+            color: var(--default-color);
+        }
+
+        &#{$label}_theme_success {
+            color: var(--success-color);
+        }
+
+        &#{$label}_theme_warning {
+            color: var(--warning-color);
+        }
+
+        &#{$label}_theme_danger {
+            color: var(--danger-color);
+        }
+
+        &#{$label}_theme_info {
+            color: var(--info-color);
+        }
+    }
+
+    &_capitalize:first-letter {
+        text-transform: capitalize;
+    }
+}

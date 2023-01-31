@@ -1,0 +1,9 @@
+.error-message {
+    margin: 0;
+    font-size: 13px;
+    color: var(--danger-color);
+
+    &__message-text {
+        margin-left: 5px;
+    }
+}

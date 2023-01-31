@@ -1,0 +1,22 @@
+.table-sort-by-control {
+    display: block;
+
+    &__item {
+        display: flex;
+        align-items: center;
+    }
+
+    &__item-name {
+        flex-grow: 1;
+        flex-shrink: 1;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    &__item-icon {
+        flex-shrink: 0;
+        padding-right: 1ex;
+        cursor: pointer;
+    }
+}

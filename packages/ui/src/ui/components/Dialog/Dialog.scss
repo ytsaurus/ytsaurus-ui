@@ -1,0 +1,17 @@
+.yt-dialog {
+    &__error {
+        margin: 0 -32px;
+        padding: 20px 32px;
+        overflow: auto;
+    }
+}
+
+.df-dialog_with_vertical_tabs {
+    .yt-dialog__error {
+        margin: 0 -14px;
+    }
+}
+
+.df-dialog-tab__name-text {
+    line-height: 1.43;
+}

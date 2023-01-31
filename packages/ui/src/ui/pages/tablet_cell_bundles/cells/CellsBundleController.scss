@@ -1,0 +1,35 @@
+.cells-bundle-controller {
+    .toolbar__item_name_filter {
+        flex-grow: 1;
+        justify-content: space-between;
+    }
+
+    .elements-filter {
+        width: calc((100% / 3) - 10px);
+    }
+
+    &__address-copy {
+        padding-left: 1ex;
+        color: var(--secondary-text);
+    }
+
+    &__alloc-request {
+        display: flex;
+    }
+
+    &__alloc-request-attrs {
+        flex-shrink: 0;
+        margin: -5px 0;
+    }
+
+    &__alloc-request-url {
+        padding-left: 1ex;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    &__link-icon {
+        padding-left: 1ex;
+    }
+}

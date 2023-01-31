@@ -1,0 +1,33 @@
+.operation-detail-jobs {
+    &__toolbar {
+        &-filter-by {
+            flex-grow: 1;
+            min-width: 200px;
+            max-width: 360px;
+            display: flex;
+
+            &-select {
+                width: 100px;
+                margin-right: -1px;
+            }
+
+            &-value {
+                flex-grow: 1;
+            }
+        }
+
+        &-pagination {
+            margin-left: auto;
+        }
+    }
+
+    &__state {
+        &-section {
+            margin-bottom: 8px;
+
+            &:last-child {
+                margin-bottom: 0;
+            }
+        }
+    }
+}

@@ -1,0 +1,34 @@
+.annotation-editor {
+    display: flex;
+    position: relative;
+
+    &__left {
+        display: flex;
+    }
+
+    &__monaco {
+        flex-grow: 1;
+    }
+
+    .Resizer {
+        width: 10px;
+        cursor: col-resize;
+    }
+
+    .Pane {
+        min-width: 0px;
+    }
+
+    &__panel {
+        height: 100%;
+
+        &_growable {
+            flex-grow: 1;
+        }
+    }
+
+    &__markdown {
+        overflow: auto;
+        padding: 0 1ex;
+    }
+}

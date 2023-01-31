@@ -1,0 +1,170 @@
+.navigation {
+    min-width: 1200px;
+
+    &__error-action-button {
+        margin-top: 20px;
+    }
+
+    &__viewer {
+        padding-top: 20px;
+
+        .elements-toolbar__container {
+            flex-wrap: nowrap;
+        }
+
+        &_mode_content,
+        &_mode_attributes,
+        &_mode_user_attributes,
+        &_mode_access_log,
+        &_mode_locks,
+        &_mode_mount_config {
+            padding-top: 10px;
+        }
+    }
+
+    &__description {
+        padding: 10px 0;
+    }
+
+    &__warning,
+    &__error-block {
+        margin-top: 20px;
+    }
+
+    &__error-action-button {
+        width: 100%;
+        height: 38px;
+    }
+
+    &__instruments {
+        display: flex;
+        margin-bottom: 15px;
+
+        &-control {
+            display: inline-block;
+
+            &:not(:first-child) {
+                margin-left: 0;
+            }
+
+            &_clear_yes {
+                font-size: 16px;
+            }
+        }
+    }
+
+    &__path {
+        &-tools {
+            display: flex;
+            align-items: center;
+            flex-shrink: 1;
+            flex-grow: 1;
+        }
+
+        &-actions {
+            display: flex;
+            align-items: center;
+        }
+
+        &-actions {
+            white-space: nowrap;
+        }
+
+        &-copy {
+            margin-left: 10px;
+        }
+
+        &-editor,
+        &-breadcrumbs-wrapper {
+            flex-grow: 1;
+
+            margin-left: 10px;
+        }
+
+        &-breadcrumbs-wrapper {
+            position: relative;
+
+            height: 28px;
+        }
+
+        &-breadcrumbs {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+
+            overflow: hidden;
+
+            &-edit-icon {
+                margin-left: 5px;
+                opacity: 0.3;
+            }
+
+            &-link-icon {
+                margin-right: 5px;
+            }
+        }
+
+        &-editor {
+            &-control {
+                &.textinput_size_s .textinput__control {
+                    // Custom size bigger font for path-editor
+                    font-size: 14px;
+                }
+            }
+
+            &-suggest {
+                max-height: 300px;
+                overflow-y: auto;
+
+                &-icon {
+                    width: 13px;
+                    margin-right: 10px;
+
+                    text-align: center;
+                }
+
+                &-parent {
+                    color: var(--secondary-text);
+                }
+            }
+        }
+    }
+
+    &__content {
+        &-tools {
+            flex-grow: 0;
+            flex-shrink: 0;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+
+            margin-left: 15px;
+        }
+    }
+
+    &__transaction {
+        display: flex;
+        align-items: center;
+
+        margin-right: 15px;
+
+        &-editor {
+            margin-right: 10px;
+        }
+    }
+
+    &__restore-button {
+        margin-left: 15px;
+    }
+
+    &__edit-metadata {
+        height: 0px;
+        text-align: right;
+
+        .yc-button {
+            margin-top: 6px;
+        }
+    }
+}

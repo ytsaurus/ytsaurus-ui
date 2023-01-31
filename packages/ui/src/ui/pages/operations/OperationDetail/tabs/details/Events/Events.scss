@@ -1,0 +1,51 @@
+.events {
+    &-progress {
+        display: flex;
+        align-items: center;
+
+        &-percentage {
+            flex: 0 0 42px;
+
+            text-align: right;
+        }
+
+        & .yc-progress {
+            flex: 1 1 auto;
+
+            margin-left: 20px;
+        }
+    }
+
+    &__table {
+        table-layout: fixed;
+
+        &-item {
+            box-sizing: border-box;
+
+            &_type {
+                &_progress {
+                    width: 210px;
+                }
+
+                &_start-time {
+                    width: 170px;
+                }
+
+                &_duration {
+                    width: 110px;
+                }
+
+                &_actions {
+                    width: 26px;
+                    padding-left: 0;
+                    box-sizing: border-box;
+                }
+            }
+        }
+    }
+
+    &__actions {
+        color: var(--secondary-text);
+        cursor: pointer;
+    }
+}

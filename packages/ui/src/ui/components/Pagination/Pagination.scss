@@ -1,0 +1,18 @@
+.elements-pagination {
+    display: flex;
+    padding-left: 1px;
+
+    &__divider {
+        border-left: 1px solid var(--dark-divider);
+    }
+
+    &__control {
+        &_name_next {
+            margin-left: -1px;
+        }
+    }
+
+    &__control:hover {
+        z-index: 5;
+    }
+}

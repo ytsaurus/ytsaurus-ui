@@ -1,0 +1,64 @@
+@import '../../styles/mixins';
+
+.path-viewer {
+    .textinput__box {
+        border-width: 1px !important;
+    }
+
+    &__overview {
+        padding: 10px 0;
+        margin-bottom: 20px;
+
+        z-index: var(--fixed-toolbar-z-index);
+        background-color: var(--main-background);
+
+        &_sticky {
+            @include sticky-style();
+        }
+    }
+
+    &__top-section {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 10px;
+    }
+
+    &__path,
+    &__attributes {
+        flex-grow: 1;
+    }
+
+    &__path {
+        margin-right: 20px;
+    }
+
+    &__middle-section {
+        display: flex;
+        margin-bottom: 10px;
+    }
+
+    &__command {
+        margin-right: 20px;
+    }
+
+    &__bottom-section {
+        display: flex;
+    }
+
+    &__checkbox {
+        margin-right: 20px;
+
+        &:last-child {
+            margin-right: 0;
+        }
+    }
+
+    &__content {
+        &_loading {
+            height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    }
+}

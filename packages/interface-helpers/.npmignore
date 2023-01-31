@@ -1,0 +1,5 @@
+.arcignore
+.eslintrc
+.prettierrc.js
+jest.config.js
+*.spec.js

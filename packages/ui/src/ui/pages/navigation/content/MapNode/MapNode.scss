@@ -1,0 +1,193 @@
+@import '../../../../styles/common';
+@import '../../../../styles/mixins';
+
+.map-node {
+    min-width: 1150px;
+    $this: &;
+
+    .elements-toolbar {
+        &_sticky {
+            @include sticky-style();
+            padding: 0 20px;
+        }
+    }
+
+    .elements-table__body {
+        .elements-table__row {
+            cursor: pointer;
+        }
+        .yc-checkbox__indicator {
+            width: 32px;
+            height: 38px;
+            top: -2px;
+            left: -8px;
+        }
+        .yc-checkbox__indicator::before {
+            top: 11px;
+            bottom: 10px;
+            left: 8px;
+            right: 7px;
+        }
+    }
+
+    .checkbox {
+        position: relative;
+
+        &__label {
+            padding: 0;
+            position: absolute;
+            top: -7px;
+            left: -7px;
+            width: 30px;
+            height: 32px;
+        }
+    }
+
+    .icon-wrapper {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    &__medium-type {
+        width: 160px;
+    }
+
+    &__filter {
+        width: 30%;
+        min-width: 200px;
+        flex-shrink: 1;
+    }
+
+    &_resources__table {
+        min-width: 1200px;
+
+        @media (max-width: 1024px) {
+            min-width: 1024px;
+        }
+
+        @media (max-width: 720px) {
+            min-width: 720px;
+        }
+    }
+
+    &__multiple-actions {
+        margin-left: auto;
+    }
+
+    &_resources__table,
+    &_default__table {
+        table-layout: fixed;
+
+        &-item_type {
+            &_account {
+                width: 160px;
+            }
+
+            &_name,
+            &_account {
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+
+            &_icon,
+            &_chooser {
+                width: 16px;
+            }
+
+            &_multipleActions {
+                width: 50px;
+            }
+
+            &_locks {
+                width: 60px;
+            }
+
+            &_modification-time,
+            &_creation-time {
+                width: 140px;
+            }
+
+            &_tablet-static-memory,
+            &_master-memory {
+                width: 100px;
+            }
+
+            &_data-weight,
+            &_disk-space {
+                width: 90px;
+            }
+
+            &_rows {
+                width: 110px;
+            }
+
+            &_tablets,
+            &_chunks,
+            &_nodes {
+                width: 75px;
+            }
+
+            &_actions {
+                width: 100px;
+            }
+        }
+
+        &-item_type {
+            &_locks,
+            &_account,
+            &_modification-time {
+                .cluster-page__content-pane_width_medium & {
+                    opacity: 0;
+                    width: 0;
+                }
+            }
+        }
+
+        @media (max-width: 1024px) {
+            &-item_type {
+                &_locks,
+                &_account,
+                &_modification-time {
+                    opacity: 0;
+                    width: 0;
+                }
+            }
+        }
+
+        &-item_type {
+            &_locks,
+            &_account,
+            &_modification-time,
+            &_disk-space,
+            &_rows,
+            &_chunks,
+            &_nodes {
+                .cluster-page__content-pane_width_small & {
+                    opacity: 0;
+                    width: 0;
+                }
+            }
+        }
+
+
+        @media (max-width: 720px) {
+            &-item_type {
+                &_disk-space,
+                &_rows,
+                &_chunks,
+                &_nodes {
+                    opacity: 0;
+                    width: 0;
+                }
+            }
+        }
+    }
+
+    &__create-popup {
+        .icon {
+            height: unset;
+            margin-right: 0.5ex;
+        }
+    }
+}

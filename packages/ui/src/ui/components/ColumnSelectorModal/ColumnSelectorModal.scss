@@ -1,0 +1,36 @@
+@import '../ColumnSelector/constants';
+
+.column-selector-modal-content {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    height: 65vh;
+}
+
+.column-selector-modal {
+    display: flex;
+    justify-content: space-between;
+    overflow: hidden;
+    flex-grow: 1;
+
+    &__header {
+        $horizontal: $column-selector-offset-horizontal;
+        $vertical: $column-selector-offset-vertical;
+        padding: $vertical $horizontal 0 $horizontal;
+    }
+
+    &__panel {
+        display: flex;
+        flex-direction: column;
+        width: 50%;
+
+        &_left_yes {
+            background-color: var(--light-background);
+        }
+    }
+
+    &__no-content {
+        margin: auto;
+        text-align: center;
+    }
+}

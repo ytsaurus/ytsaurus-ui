@@ -1,0 +1,11 @@
+@import '../../styles/mixins';
+
+.collapsible-list {
+    &__list {
+        @include reset-ul();
+
+        li {
+            @include reset-li();
+        }
+    }
+}

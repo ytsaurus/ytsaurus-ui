@@ -1,0 +1,154 @@
+@import './login-page-theme-light.scss';
+@import './login-page-theme-dark.scss';
+
+.yc-root_theme_light,
+.yc-root_theme_light-hc {
+    @include yt-login-page-light;
+}
+
+.yc-root_theme_dark,
+.yc-root_theme_dark-hc {
+    @include yt-login-page-dark;
+}
+
+@mixin login-page-font-settings {
+    font-family: 'Manrope';
+    font-style: normal;
+    font-weight: 400;
+}
+
+.login-page {
+    @include login-page-font-settings;
+
+    position: relative;
+    display: flex;
+    flex-direction: column;
+
+    min-width: 320px;
+    min-height: 100vh;
+    justify-content: center;
+
+    background-color: var(--login-background);
+    background-image: var(--login-background-image);
+    background-repeat: no-repeat;
+    background-position: bottom 0 right 0;
+    background-size: auto 100%;
+
+    &__logo {
+        position: absolute;
+        top: 40px;
+        left: 40px;
+        width: 160.32px;
+        height: 33.06px;
+    }
+
+    &__content {
+        max-width: 300px;
+        margin-left: 150px;
+
+        @media (min-width: 1200px) {
+            margin-left: 150px;
+        }
+
+        @media (min-width: 1400px) {
+            margin-left: 200px;
+        }
+
+        @media (min-width: 1600px) {
+            margin-left: 250px;
+        }
+
+        @media (min-width: 1920px) {
+            margin-left: 330px;
+        }
+    }
+
+    &__title {
+        font-size: 30px;
+        line-height: 36px;
+        margin: 0 0 8px;
+        font-weight: 600;
+        white-space: nowrap;
+    }
+
+    &__text {
+        font-size: 13px;
+        line-height: 18px;
+        margin: 0 0 24px;
+    }
+
+    &__error {
+        margin: 12px 0;
+    }
+
+    &__field {
+        margin-bottom: 20px;
+        --yc-text-input-border-radius: 10px;
+
+        .yc-text-input__control {
+            @include login-page-font-settings;
+            height: 40px;
+            padding: 12px 10px;
+            font-size: 13px;
+            line-height: 16px;
+            background: none;
+        }
+
+        &_password {
+            .yc-text-input__control:not(:placeholder-shown) {
+                letter-spacing: 2px;
+            }
+        }
+    }
+
+    &__button {
+        @include login-page-font-settings;
+        --yc-button-height: 38px;
+        font-size: 15px;
+        line-height: 20px;
+
+        &_solid {
+            --yc-button-background-color: var(--login-button-solid);
+            --yc-button-background-color-hover: var(--login-button-solid-hover);
+        }
+    }
+
+    .yc-button_loading {
+        --yc-button-loading-color-1: var(--login-button-loading-color-1);
+        --yc-button-loading-color-2: var(--login-button-loading-color-2);
+    }
+
+    .yc-button_view_outlined::before {
+        background-color: var(--login-background);
+    }
+
+    .yc-button:hover::before {
+        background-color: var(--yc-button-background-color-hover);
+    }
+
+    &__navigate {
+        padding-top: 15px;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    &__navigate-link {
+        margin: 0;
+        cursor: pointer;
+        font-style: normal;
+        font-weight: 400;
+        font-size: 13px;
+        line-height: 18px;
+        text-align: left;
+        color: var(--yc-color-text-secondary);
+        border-bottom: 1px dashed;
+        border-color: var(--yc-color-line-generic-accent);
+
+        &:hover {
+            color: var(--yc-color-text-primary);
+            border-color: var(--yc-color-line-generic-accent-hover);
+        }
+    }
+}

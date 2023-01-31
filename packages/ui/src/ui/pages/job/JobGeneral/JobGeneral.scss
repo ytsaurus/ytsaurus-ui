@@ -1,0 +1,54 @@
+.job-general {
+    &__header {
+        display: flex;
+        align-items: center;
+    }
+
+    &__heading {
+        margin: 0;
+        font-size: 24px;
+        line-height: 28px;
+        margin-right: 12px;
+    }
+
+    .job-actions {
+        margin-left: auto;
+    }
+
+    &__header,
+    &__tabs {
+        margin-bottom: 24px;
+    }
+
+    &__speculative-label {
+        position: relative;
+        bottom: 20px;
+    }
+
+    &__meta-host {
+        display: flex;
+        align-items: center;
+        margin: -2px 0;
+    }
+
+    &__meta-ssh {
+        display: flex;
+
+        max-width: 300px;
+        font-family: var(--yt-font-family-monospace);
+
+        &-cmd {
+            flex-shrink: 1;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .yt-clipboard-button {
+            margin-top: -2px;
+        }
+    }
+
+    &__meta-breadcrumbs {
+        margin: -2px 0;
+    }
+}

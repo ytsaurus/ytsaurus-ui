@@ -1,0 +1,25 @@
+.query-status {
+    display: inline-flex;
+    align-items: center;
+
+    &__icon-container {
+        margin-right: 4px;
+
+        &_completed {
+            color: var(--color-status-icon-completed, var(--yc-color-text-positive));
+        }
+
+        &_failed {
+            color: var(--color-status-icon-error, var(--yc-color-text-yandex-red));
+        }
+
+        &.loading {
+            width: 16px;
+            height: 16px;
+        }
+
+        &_aborted {
+            color: var(--color-status-icon-aborting, var(--yc-color-text-secondary));
+        }
+    }
+}

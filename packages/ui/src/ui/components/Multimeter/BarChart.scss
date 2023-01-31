@@ -1,0 +1,12 @@
+.multimeter {
+    &__barchart {
+        display: inline-block;
+        height: 20px;
+        width: 20px;
+    }
+
+    &__barchart-bar {
+        display: inline-block;
+        background-color: var(--yc-color-text-info);
+    }
+}

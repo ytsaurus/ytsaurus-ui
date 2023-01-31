@@ -1,0 +1,25 @@
+{
+  "BbEnvType": 2,
+  "clients": {
+    "app": {
+      "REMOVE_ME_0": "Copy secret from  https://abc.yandex-team.ru/services/ytfront/resources/?view=consuming&layout=table&supplier=14&type=47&show-resource=31931150",
+      "REMOVE_ME_1": "Copy content of the file to dist/.tvm.json",
+      "REMOVE_ME_2": "To start use command `sudo tvmtool -a tvmtool-development-access-token -c dist/.tvm.json`",
+      "REMOVE_ME_3": "Remove fields with prefix 'REMOVE_ME_'",
+      "secret": "******************",
+      "self_tvm_id": 2028413,
+      "dsts": {
+        "blackbox": {
+          "dst_id": 223
+        },
+        "monitoring": {
+          "dst_id": 2010242
+        },
+        "yt": {
+          "dst_id": 2031010,
+        }
+      }
+    }
+  },
+  "port": 1
+}

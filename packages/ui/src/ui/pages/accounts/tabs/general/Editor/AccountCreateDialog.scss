@@ -1,0 +1,11 @@
+.account-create-dialog {
+    &__name {
+        *::placeholder {
+            color: var(--yc-color-text-hint) !important;
+        }
+
+        .textinput__box {
+            border-width: 2px !important;
+        }
+    }
+}

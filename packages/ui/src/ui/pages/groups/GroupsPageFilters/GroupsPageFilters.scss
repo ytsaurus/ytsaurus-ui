@@ -1,0 +1,25 @@
+.groups-page-filters {
+    &__item {
+        flex-grow: 1;
+        flex-shrink: 1;
+        min-width: 28ex;
+        max-width: 380px;
+
+        .elements-filter {
+            flex-grow: 1;
+        }
+
+        .textinput__box {
+            border-radius: 4px;
+        }
+
+        ::placeholder {
+            color: var(--yc-color-text-hint) !important;
+        }
+    }
+
+
+    &__user-suggest-select {
+        border-width: 1px !important;
+    }
+}

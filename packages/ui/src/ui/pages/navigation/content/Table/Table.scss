@@ -1,0 +1,27 @@
+.data-table {
+    &__table {
+        min-width: 100%;
+    }
+
+    &__td,
+    &__th {
+        max-width: 600px;
+    }
+
+    &__head-cell {
+        font-weight: bold;
+    }
+}
+
+.navigation-table {
+    $self: &;
+    padding-top: 10px;
+
+    .collapsible-section {
+        margin-top: 0;
+    }
+
+    &__fullscreen:fullscreen {
+        background-color: var(--main-background);
+    }
+}

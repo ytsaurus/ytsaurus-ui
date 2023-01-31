@@ -1,0 +1,45 @@
+.system {
+    &__chunks {
+        margin-bottom: 20px;
+    }
+
+    .chunk-cells {
+        &__table {
+            &-item_type {
+                &_cell-tag {
+                    width: 65px;
+                }
+                &_foreign-chunks {
+                    width: 105px;
+                }
+                &_overreplicated-chunks {
+                    width: 147px;
+                }
+                &_underreplicated-chunks {
+                    width: 156px;
+                }
+                &_quorum-missing-chunks {
+                    width: 156px;
+                }
+                &_data-missing-chunks {
+                    width: 131px;
+                }
+                &_parity-missing-chunks {
+                    width: 140px;
+                }
+                &_lost-chunks {
+                    width: 66px;
+                }
+                &_lost-vital-chunks {
+                    width: 102px;
+                }
+                &_unsafely-placed-chunks {
+                    width: 153px;
+                }
+                &_chunks {
+                    width: 125px;
+                }
+            }
+        }
+    }
+}

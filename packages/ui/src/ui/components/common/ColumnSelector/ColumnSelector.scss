@@ -1,0 +1,15 @@
+.yc-column-selector {
+    display: inline-block;
+
+    &__controls {
+        padding: 16px;
+        border-top: 1px solid var(--yc-color-line-generic);
+        text-align: right;
+    }
+
+    &__control {
+        &:not(:first-child) {
+            margin-left: 8px;
+        }
+    }
+}

@@ -1,0 +1,77 @@
+.accounts-editor {
+    margin-top: 0;
+
+    &__section {
+        & + & {
+            margin-top: 10px;
+        }
+    }
+
+    &__parameter {
+        display: flex;
+        align-items: baseline;
+
+        &-name {
+            flex-shrink: 0;
+        }
+
+        &-value {
+            margin-left: auto;
+        }
+    }
+
+    &__input {
+        display: flex;
+
+        &-control {
+            flex-grow: 1;
+        }
+    }
+
+    &__prompt-value {
+        white-space: nowrap;
+    }
+
+    &__danger-text {
+        color: var(--danger-text);
+    }
+
+    &__edit {
+        display: flex;
+
+        margin: -15px -30px;
+        height: 70vh;
+
+        &-sidebar {
+            flex: 0 0 33%;
+
+            padding: 15px;
+            padding-left: 30px;
+
+            background-color: var(--light-background);
+        }
+
+        &-tabs {
+            margin-left: -30px;
+        }
+
+        &-content {
+            flex: 1 1 auto;
+
+            height: 100%;
+            padding: 15px;
+            padding-right: 30px;
+
+            overflow-y: auto;
+        }
+    }
+
+    &__responsible-user {
+        display: inline-flex;
+        margin-bottom: 5px;
+
+        &-delete {
+            margin-right: 5px;
+        }
+    }
+}

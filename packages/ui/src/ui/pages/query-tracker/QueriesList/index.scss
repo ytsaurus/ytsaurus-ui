@@ -1,0 +1,15 @@
+.queires-list {
+    flex: 1;
+
+    max-width: 100%;
+
+    display: flex;
+    flex-direction: column;
+
+    &__content {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        overflow: auto;
+    }
+}

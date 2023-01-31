@@ -1,0 +1,17 @@
+.system {
+    .collapsible-section {
+        border-top: solid var(--dark-divider) 1px;
+        margin-top: 0;
+    }
+
+    .elements-heading {
+        margin-bottom: 0;
+        align-items: center;
+
+        &__heading {
+            padding-top: 20px;
+            padding-bottom: 20px;
+            flex-grow: 1;
+        }
+    }
+}

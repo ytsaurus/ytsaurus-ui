@@ -1,0 +1,416 @@
+@import '../elements/globals';
+@import '../../styles/common.scss';
+@import '../../containers/ClusterPageHeader/ClusterColor.scss';
+
+/* PLACEHOLDERS */
+%item-image {
+    content: '';
+
+    position: absolute;
+    width: 100%;
+    height: 100%;
+
+    border-radius: 50%;
+    background-size: 100%;
+}
+
+.cluster-menu {
+    padding-top: var(--app-header-height);
+    padding-bottom: $section-offset;
+
+    /* HEADER */
+    &__header {
+        &-inner {
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+
+            height: 100%;
+            width: 100%;
+        }
+    }
+
+    &__logo {
+        font-size: 40px;
+        line-height: 1;
+
+        letter-spacing: 1px;
+    }
+
+    &__links {
+        margin-left: auto;
+
+        &-list {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            height: 40px;
+
+            li:not(:last-child) {
+                margin-right: 20px;
+            }
+        }
+
+        &_theme_collapsed {
+            display: none;
+        }
+
+        &-item {
+            white-space: nowrap;
+
+            .far, .fas, .fal {
+                margin-right: 10px;
+            }
+        }
+    }
+
+    &__filter {
+        max-width: 240px;
+        flex-shrink: 0;
+        flex-grow: 0;
+    }
+
+    &__view,
+    &__links,
+    &__logo,
+    &__filter {
+        padding: 0 15px;
+    }
+
+    &__heading {
+        &_size_l {
+            font-size: 28px;
+
+            margin-bottom: 10px;
+        }
+
+        &_position_center {
+            text-align: center;
+        }
+    }
+
+    /* CLUSTER GROUPS */
+    &__message {
+        margin-top: 60px;
+        margin-bottom: 0;
+
+        color: var(--secondary-text);
+    }
+
+    &__group {
+        max-width: 1200px;
+        margin: 60px auto 0;
+
+        &-heading {
+            margin-bottom: 40px;
+
+            text-transform: capitalize;
+        }
+    }
+
+    /* CLUSTER LIST */
+    &__list {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+
+    /* CLUSTER ITEM */
+    &__item {
+        position: relative;
+
+        display: block;
+
+        width: 240px;
+        height: 320px;
+
+        text-decoration: none;
+
+        color: var(--primary-text);
+
+        &-body {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+
+            padding: 20px;
+
+            background-color: transparent;
+            transition: background-color 0.2s;
+        }
+
+        &-body:hover {
+            text-decoration: none;
+
+            background-color: var(--hover-background);
+        }
+
+        &_size_l {
+            width: 300px;
+            height: 400px;
+        }
+
+        &_state_unavailable {
+            background-color: var(--dark-background);
+        }
+
+        &_access_none {
+            color: var(--secondary-text);
+        }
+
+        &-heading {
+            font-weight: 600;
+            font-size: 16px;
+
+            margin-bottom: 15px;
+
+            text-transform: uppercase;
+            text-align: center;
+        }
+
+        &_size_l &-heading {
+            margin-bottom: 30px;
+            margin-top: 10px;
+        }
+
+        &-image-wrapper {
+            margin-bottom: 15px;
+        }
+
+        &-image {
+            position: relative;
+
+            $edge: 120px;
+
+            width: $edge;
+            line-height: $edge;
+            height: $edge;
+
+            margin: 0 auto;
+            border-radius: 50%;
+            background-size: 100%;
+
+            &::before {
+                @extend %item-image;
+
+                background-image: inherit;
+            }
+
+            &::after {
+                @extend %item-image;
+
+                display: none;
+            }
+        }
+
+        &_size_l &-image-wrapper {
+            margin-bottom: 20px;
+        }
+
+        &_size_l &-image {
+            font-size: 18px;
+
+            $edge: 155px;
+
+            width: $edge;
+            height: $edge;
+            line-height: $edge;
+        }
+
+        &_access_none &-image,
+        &_state_unavailable &-image {
+            &::before {
+                filter: grayscale(100%);
+            }
+        }
+
+        &_access_none &-image {
+            &::after {
+                display: block;
+
+                background-color: var(--main-background);
+                opacity: 0.5;
+            }
+        }
+
+        &_state_unavailable &-image {
+            &::after {
+                display: block;
+
+                content: 'UNAVAILABLE';
+
+                text-align: center;
+
+                color: var(--light-text);
+                background-color: var(--danger-color);
+                opacity: 0.5;
+            }
+        }
+
+        &-description {
+            font-size: 13px;
+
+            text-align: center;
+        }
+
+        &-version,
+        &-environment {
+            text-align: center;
+
+            color: var(--secondary-text);
+
+            margin-bottom: 5px;
+            font-weight: 300;
+        }
+    }
+
+    &__table-wrapper {
+        padding: 0 15px;
+    }
+
+    &__table {
+        margin-top: 40px;
+
+        &-item {
+            height: 35px;
+
+            cursor: pointer;
+        }
+
+        &-item_type_image {
+            width: 60px;
+        }
+
+        &-item_type_status,
+        &-item_type_access {
+            width: 100px;
+        }
+
+        &-item_type_version,
+        &-item_type_name {
+            width: 200px;
+        }
+
+        &-item-image {
+            display: inline-block;
+            vertical-align: top;
+
+            $edge: 28px;
+
+            width: $edge;
+            height: $edge;
+
+            border-radius: 50%;
+            background-size: $edge;
+            @include cluster-styled;
+        }
+    }
+}
+
+@media screen and (min-width: 915px) {
+    // Rules that must only be applied for wide view (as opposed to general rules)
+    .cluster-menu {
+        &__links {
+            &-popup {
+                display: none;
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 915px) {
+    %margin-padding-reset {
+        margin: 0;
+        padding: 0 15px;
+    }
+
+    .cluster-menu {
+        &__links {
+            &_theme_expanded {
+                display: none;
+            }
+
+            &_theme_collapsed {
+                display: block;
+            }
+        }
+
+        &__message {
+            margin-top: 20px;
+        }
+
+        &__group {
+            margin-top: 20px;
+        }
+
+        &__group-heading {
+            margin-bottom: 10px;
+        }
+
+        &__list {
+            display: block;
+        }
+
+        &__item {
+            width: 100%;
+            height: 60px;
+
+            &-body {
+                display: flex;
+                align-items: center;
+                justify-content: flex-start;
+
+                padding: 0;
+            }
+
+            &_size_l &-image-wrapper,
+            &-image-wrapper {
+                margin: 0;
+                padding: 0 15px;
+
+                flex-grow: 0;
+                flex-shrink: 0;
+                order: -1;
+            }
+
+            &_size_l &-image,
+            &-image {
+                width: 40px;
+                height: 40px;
+            }
+
+            &_state_unavailable &-image {
+                &::after {
+                    content: '';
+                }
+            }
+
+            &_size_l &-heading,
+            &-heading {
+                @extend %margin-padding-reset;
+            }
+
+            &_size_l &-version,
+            &-version {
+                @extend %margin-padding-reset;
+
+                margin-left: auto;
+            }
+
+            &-description {
+                display: none;
+            }
+        }
+
+        &__table-wrapper {
+            padding: 0;
+        }
+
+        &__table {
+            margin-top: 0;
+        }
+    }
+}

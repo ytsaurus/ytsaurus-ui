@@ -1,0 +1,18 @@
+.bundle-meta-table {
+    .meta-table__group {
+        grid-gap: 6px 27px;
+    }
+
+    .yc-progress {
+        width: 200px;
+    }
+
+    &__container {
+        display: flex;
+        align-items: flex-start;
+
+        .meta-table {
+            min-width: 500px;
+        }
+    }
+}

@@ -1,0 +1,50 @@
+@import '../../../../styles/mixins';
+
+.navigation-transaction-map {
+    &__overview {
+        display: flex;
+
+        padding: 10px 0;
+
+        z-index: var(--fixed-toolbar-z-index);
+        background-color: var(--main-background);
+
+        &_sticky {
+            @include sticky-style();
+        }
+    }
+
+    &__filter {
+        width: 30%;
+        min-width: 200px;
+    }
+
+    &__table {
+        table-layout: fixed;
+
+        &-item {
+            &_type_owner {
+                width: 160px;
+            }
+
+            &_type_id,
+            &_type_owner,
+            &_type_title {
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+
+            &_type_icon {
+                width: 16px;
+            }
+
+            &_type_start-time {
+                width: 140px;
+            }
+
+            &_type_actions {
+                width: 28px;
+            }
+        }
+    }
+}

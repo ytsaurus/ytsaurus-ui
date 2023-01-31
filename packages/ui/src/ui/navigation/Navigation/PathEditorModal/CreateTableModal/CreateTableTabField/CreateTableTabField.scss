@@ -1,0 +1,72 @@
+.create-table-tab-field {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    width: 240px;
+    min-height: 450px;
+
+    &__add-column {
+        flex-shrink: 0;
+
+        display: flex;
+        align-items: center;
+
+        padding: 20px 16px 10px 24px;
+        font-size: var(--yc-text-subheader-3-font-size);
+
+        &-label {
+            flex-grow: 1;
+        }
+    }
+
+    &__columns {
+        flex-grow: 1;
+        flex-shrink: 1;
+        border-bottom: 1px solid var(--light-divider);
+
+        &-item {
+            flex-grow: 1;
+
+            display: flex;
+            align-items: center;
+            overflow: hidden;
+
+            &-sort-icon {
+                padding-right: 1ex;
+                color: var(--secondary-text);
+                visibility: hidden;
+
+                &_visible {
+                    visibility: unset;
+                }
+            }
+
+            &-node {
+                flex-grow: 1;
+                flex-shrink: 1;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+
+            &-remove-icon {
+                padding-right: 1ex;
+                &:hover {
+                    cursor: pointer;
+                }
+            }
+        }
+    }
+
+    &__table-settings {
+        flex-shrink: 0;
+    }
+
+    &__sort-icon {
+        color: var(--primary-text);
+        &:hover {
+            cursor: pointer;
+            opacity: unset;
+            color: var(--danger-color);
+        }
+    }
+}

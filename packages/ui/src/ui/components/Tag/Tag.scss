@@ -1,0 +1,24 @@
+.yt-tag {
+    background-color: var(--yc-color-line-generic);
+    padding: 2px 0 2px 8px;
+    border-radius: 4px;
+
+    display: flex;
+    align-items: center;
+
+    &__text {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        margin-right: 5px;
+    }
+
+    &__remove {
+        color: var(--yc-color-text-secondary);
+        cursor: pointer;
+
+        &:hover {
+            color: var(--yc-color-text-primary);
+        }
+    }
+}

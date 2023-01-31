@@ -1,0 +1,18 @@
+{
+  "clusters": [
+    {
+      "id": "my-cluster",
+      "name": "My cluster",
+      "proxy": "my_cluster_proxy.my-domain.com",
+      "secure": true,
+      "authentication": "domain",
+      "group": "chaos-coordinator",
+      "theme": "lavander",
+      "description": "Production cluster",
+      "environment": "production",
+      "primaryMaster": {
+        "cellTag": 1056
+      }
+    }
+  ]
+}

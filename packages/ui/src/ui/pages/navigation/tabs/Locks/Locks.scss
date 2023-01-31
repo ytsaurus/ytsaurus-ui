@@ -1,0 +1,39 @@
+.navigation-locks {
+    .elements-table__body .elements-table__row {
+        padding-top: 5px;
+        padding-bottom: 5px;
+    }
+
+    &_loading {
+        height: 200px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    &__table {
+        table-layout: fixed;
+    }
+
+    &__table-item {
+        &_type_index {
+            width: 60px;
+        }
+
+        &_type_lock {
+            width: 350px;
+        }
+    }
+
+    &__title {
+        white-space: nowrap !important;
+        text-overflow: ellipsis;
+        overflow: hidden;
+
+        &-tooltip {
+            display: inline-block;
+            width: 100%;
+            line-height: var(--yc-text-body-1-line-height);
+        }
+    }
+}

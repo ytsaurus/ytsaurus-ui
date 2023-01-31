@@ -1,0 +1,25 @@
+.query-result-scheme {
+    &__title {
+        margin-bottom: 8px;
+    }
+
+    &__table-wrap {
+        display: flex;
+    }
+
+    &__item {
+        display: inline-flex;
+
+        width: 100%;
+    }
+
+    &__name {
+        overflow: hidden;
+
+        max-width: auto;
+        margin-right: 10px;
+
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+}

@@ -1,0 +1,21 @@
+.bundle-meta-resource-progress {
+    display: flex;
+    align-items: center;
+
+    &__info {
+        margin-left: 8px;
+
+        color: var(--yc-color-text-secondary);
+    }
+
+    & .yc-progress {
+        width: 150px;
+    }
+
+    &__tooltip-list {
+        margin: 0;
+        padding: 0;
+
+        list-style: none;
+    }
+}

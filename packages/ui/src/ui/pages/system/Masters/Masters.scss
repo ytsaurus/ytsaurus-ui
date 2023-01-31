@@ -1,0 +1,52 @@
+@import '../../../styles/common';
+@import '../../../styles/mixins';
+
+@mixin three-column-grid($row-gap) {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-gap: $row-gap 80px;
+}
+
+.system-master {
+    &__container-host-radio {
+        margin-left: 20px;
+    }
+
+    &__all-masters {
+        @include three-column-grid(8px);
+        grid-auto-flow: column;
+
+        & .elements-heading {
+            grid-row-end: 1;
+        }
+
+        & .system-master__group {
+            grid-row-start: 1;
+        }
+    }
+
+    &__secondary-masters {
+        @include three-column-grid(20px);
+    }
+
+    &__maintenance-hover {
+        display: inline;
+    }
+
+    &__primary-master {
+        margin-bottom: 40px;
+    }
+
+    &__secondary-masters {
+        margin-bottom: 20px;
+    }
+
+    &__flex {
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    &__providers {
+        margin-right: 100px;
+    }
+}

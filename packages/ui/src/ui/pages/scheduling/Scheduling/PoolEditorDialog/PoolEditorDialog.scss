@@ -1,0 +1,32 @@
+.pool-editor-dialog {
+    .df-dialog {
+        min-height: 490px;
+
+        .df-tab-field-vertical {
+            font-size: 14px;
+            width: 200px;
+        }
+    }
+
+    &__permissions-warning {
+        color: var(--warning-text);
+    }
+
+    &__flag {
+        font-weight: 500;
+        color: var(--secondary-text);
+    }
+
+    &__error {
+        margin: 0 -1em;
+    }
+
+    &__separator {
+        margin-bottom: 10px;
+        border-bottom: 2px solid var(--light-divider);
+    }
+
+    &__transfer-quota-notice {
+        padding-bottom: 20px;
+    }
+}

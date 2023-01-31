@@ -1,0 +1,54 @@
+@import '../../styles/mixins';
+
+.histogram {
+    $graph-height: 400px;
+
+    &__chart {
+        height: $graph-height;
+        overflow: hidden;
+    }
+
+    &__toolbar {
+        align-items: baseline;
+        display: flex;
+        width: 30%;
+        min-width: 410px;
+        margin-right: 20px;
+        margin-bottom: 20px;
+    }
+    &__detailed {
+        padding-left: 2ex;
+        min-width: 200px;
+    }
+    &__quartiles {
+        @include reset-ul();
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+
+    &__quartiles-item {
+        @include reset-li();
+        margin-right: 10px;
+    }
+
+    &__quartiles-count {
+        font-weight: bold;
+    }
+
+    &__bad-data {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: $graph-height;
+    }
+
+    &__bad-data-message {
+        margin: 0;
+        padding: 10px 30px;
+        font-size: 18px;
+        color: var(--secondary-text);
+        border-radius: 3px;
+        border: 2px solid var(--info-color);
+    }
+}

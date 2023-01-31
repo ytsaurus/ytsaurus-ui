@@ -1,0 +1,20 @@
+.role-list-control {
+    &__many-lists {
+        margin-top: 10px;
+    }
+    &__many-lists-title {
+        color: var(--secondary-text);
+    }
+
+    &__item-to-add {
+        background-color: var(--success-background);
+    }
+
+    &__item-to-remove {
+        background-color: var(--danger-background);
+    }
+
+    &__item-unrecognized {
+        background-color: var(--warning-color);
+    }
+}

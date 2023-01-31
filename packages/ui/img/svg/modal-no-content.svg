@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="194px" height="194px" viewBox="0 0 194 194" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 51.1 (57501) - http://www.bohemiancoding.com/sketch -->
+    <title>Illustration</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Illustration" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" opacity="0.219999999">
+        <g id="Group" stroke="#999999">
+            <rect id="Rectangle-4" stroke-width="2" x="97.1164036" y="188.443455" width="1" height="1"></rect>
+            <rect id="Rectangle-4" stroke-width="2" x="96.4244604" y="185.293145" width="1.09978769" height="1"></rect>
+            <rect id="Rectangle-4" stroke-width="2" x="95.3741007" y="182.142835" width="2.33970276" height="1"></rect>
+            <rect id="Rectangle-4" stroke-width="2" x="94.323741" y="178.992525" width="4.19957537" height="1"></rect>
+            <rect id="Rectangle-4" stroke-width="2" x="93.2733813" y="175.842215" width="6.67940552" height="1"></rect>
+            <rect id="Rectangle-4" stroke-width="2" x="91.1726619" y="172.691905" width="9.77919321" height="1"></rect>
+            <rect id="Rectangle-4" stroke-width="2" x="89.5971223" y="169.541594" width="13.4989384" height="1"></rect>
+            <rect id="Rectangle-4" stroke-width="2" x="87.4964029" y="166.391284" width="17.8386412" height="1"></rect>
+            <rect id="Rectangle-4" stroke-width="2" x="84.8705036" y="163.240974" width="22.7983015" height="1"></rect>
+            <rect id="Rectangle-4" stroke-width="2" x="81.7194245" y="160.090664" width="28.9978769" height="1"></rect>
+            <rect id="Rectangle-4" stroke-width="2" x="78.0431655" y="156.940354" width="35.8174098" height="1"></rect>
+            <rect id="Rectangle-4" stroke-width="2" x="73.8417266" y="153.623152" width="45.1167728" height="1"></rect>
+            <ellipse id="Oval" stroke-width="8" cx="96.7703035" cy="96.6095121" rx="92.403397" ry="92.6095121"></ellipse>
+            <ellipse id="Oval" stroke-width="4" cx="96.6688356" cy="96.3714661" rx="37.0573248" ry="37.1408313"></ellipse>
+            <ellipse id="Oval" stroke-width="8" cx="97.2687226" cy="96.9150888" rx="11.4989384" ry="11.5320759"></ellipse>
+            <path d="M34.5035971,34.6534119 L66.1214315,66.3388468" id="Line" stroke-width="4" stroke-linecap="square"></path>
+            <path d="M33.0228352,44.1043425 L33.0228352,148.479892" id="Line" stroke-width="4" stroke-dasharray="8,8"></path>
+            <path d="M160.11636,44.1043425 L160.11636,148.479892" id="Line" stroke-width="4" stroke-dasharray="8,8"></path>
+            <path d="M127.985612,34.6534119 L159.603446,66.3388468" id="Line" stroke-width="4" stroke-linecap="square" transform="translate(143.794529, 50.496129) scale(-1, 1) translate(-143.794529, -50.496129) "></path>
+            <path d="M34.5035971,128.112614 L66.1214315,159.798049" id="Line" stroke-width="4" stroke-linecap="square" transform="translate(50.312514, 143.955331) scale(1, -1) translate(-50.312514, -143.955331) "></path>
+            <path d="M127.985612,128.112614 L159.603446,159.798049" id="Line" stroke-width="4" stroke-linecap="square" transform="translate(143.794529, 143.955331) scale(-1, -1) translate(-143.794529, -143.955331) "></path>
+        </g>
+    </g>
+</svg>

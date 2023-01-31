@@ -1,0 +1,53 @@
+.elements-message {
+    position: relative;
+
+    padding: 10px 15px;
+    margin-bottom: 10px;
+
+    &:last-child {
+        margin-bottom: 0;
+    }
+
+    &__paragraph {
+        margin-top: 0;
+        margin-bottom: 5px;
+
+        &:first-of-type {
+            padding-right: 20px;
+        }
+
+        &:last-child {
+            margin-bottom: 0;
+        }
+    }
+
+    &__close {
+        position: absolute;
+        top: 8px;
+        right: 9px;
+    }
+
+    &__button {
+        margin-right: 10px;
+    }
+
+    &_theme_success {
+        background-color: var(--success-background);
+    }
+
+    &_theme_error {
+        background-color: var(--danger-background);
+    }
+
+    &_theme_warning {
+        background-color: var(--warning-background);
+    }
+
+    &_theme_info {
+        background-color: var(--info-background);
+    }
+
+    &_theme_default {
+        background-color: var(--light-background);
+    }
+}

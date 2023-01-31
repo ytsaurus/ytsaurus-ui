@@ -1,0 +1,65 @@
+.navigation-schema {
+    position: relative;
+
+    .meta-table {
+        margin-bottom: 20px;
+    }
+
+    &__help {
+        position: absolute;
+        top: 0;
+        right: 0;
+    }
+
+    &__filter {
+        width: 30%;
+        min-width: 200px;
+        margin-bottom: 20px;
+    }
+
+    &__description {
+        display: flex;
+        align-items: center;
+    }
+
+    &__icon {
+        margin-left: 2px;
+    }
+
+    &__table {
+        table-layout: fixed;
+
+        &-item {
+            text-overflow: ellipsis;
+            overflow: hidden;
+        }
+
+        &-item {
+            &_type_name,
+            &_type_expression {
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+                width: 450px;
+            }
+
+            &_type_type-v3 {
+                width: 250px;
+            }
+
+            &_type_index {
+                width: 100px;
+            }
+
+            &_type_type {
+                min-width: 80px;
+            }
+
+            &_type_lock,
+            &_type_aggregate,
+            &_type_group {
+                min-width: 100px;
+            }
+        }
+    }
+}

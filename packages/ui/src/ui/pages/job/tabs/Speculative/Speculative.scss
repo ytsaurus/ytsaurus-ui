@@ -1,0 +1,33 @@
+.job-competitors {
+    &__id,
+    &__host {
+        font-size: 14px;
+    }
+
+    &__host {
+        color: var(--secondary-text);
+    }
+
+    &__speculative-job-label {
+        color: var(--warning-color);
+        padding-left: 24px;
+    }
+
+    &__table {
+        table-layout: fixed;
+
+        &-item {
+            padding: 8px;
+
+            &_type {
+                &_type {
+                    width: 90px;
+                }
+
+                &_state {
+                    width: 140px;
+                }
+            }
+        }
+    }
+}

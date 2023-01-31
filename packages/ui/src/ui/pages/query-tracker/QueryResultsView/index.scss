@@ -1,0 +1,36 @@
+.query-result-table {
+    height: 100%;
+    position: relative;
+    overflow: auto;
+
+    &__loading {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+        position: absolute;
+        width: 100%;
+        z-index: 1;
+    }
+
+    &__floating-bottom-left {
+        position: sticky;
+        bottom: 20px;
+        pointer-events: none;
+        display: flex;
+        z-index: 2;
+    }
+
+    &__padding_span {
+        flex: 1;
+    }
+
+    &__pagination {
+        margin-right: 20px;
+        background-color: var(--yc-color-base-float);
+        border-radius: 8px;
+        box-shadow: 0 1px 8px var(--yc-color-sfx-shadow);
+        padding: 8px;
+        pointer-events: all;
+    }
+}

@@ -1,0 +1,225 @@
+import React, {useEffect} from 'react';
+import {connect, ConnectedProps, useSelector} from 'react-redux';
+import cn from 'bem-cn-lite';
+import _ from 'lodash';
+
+import LoadDataHandler from '../../../../components/LoadDataHandler/LoadDataHandler';
+import {Loader} from '@gravity-ui/uikit';
+import Error from '../../../../components/Error/Error';
+import Link from '../../../../components/Link/Link';
+import CollapsibleSection from '../../../../components/CollapsibleSection/CollapsibleSection';
+import {Secondary} from '../../../../components/Text/Text';
+
+import {getTabletErrors} from '../../../../store/actions/navigation/tabs/tablet-errors';
+import {getPath} from '../../../../store/selectors/navigation';
+import {getEffectiveMode} from '../../../../store/selectors/navigation/navigation';
+import {getCluster} from '../../../../store/selectors/global';
+import {
+    getTabletErrorCountNoticeVisbile,
+    getTabletErrorsLoadingStatus,
+    getTabletErrorsReplicationErrors,
+} from '../../../../store/selectors/navigation/tabs/tablet-errors';
+import {getReplicatedTableReplicasMap} from '../../../../store/selectors/navigation/content/replicated-table';
+import {RootState} from '../../../../store/reducers';
+
+import {useAppRumMeasureStart} from '../../../../rum/rum-app-measures';
+import {RumMeasureTypes} from '../../../../rum/rum-measure-types';
+import {useRumMeasureStop} from '../../../../rum/RumUiContext';
+import {isFinalLoadingStatus} from '../../../../utils/utils';
+import {YTError} from '../../../../types';
+
+import './TabletErrors.scss';
+
+const block = cn('navigation-tablet-errors');
+
+function TabletErrors(props: ConnectedProps<typeof connector>) {
+    const {path, mode, cluster, getTabletErrors} = props;
+    useEffect(() => {
+        getTabletErrors();
+    }, [path, mode]);
+
+    const {
+        loading,
+        loaded,
+        tabletErrors: {tablet_errors},
+        replicationErrors,
+        error,
+    } = props;
+    const initialLoading = loading && !loaded;
+
+    return (
+        <LoadDataHandler loaded={loaded} error={Boolean(error)} errorData={error}>
+            {initialLoading ? (
+                <Loader />
+            ) : (
+                <div className={block({loading: initialLoading})}>
+                    <TabletErrorsCountNotice />
+                    <CollapsibleSection name="Tablet errors">
+                        <TabletErrorsBlock
+                            cluster={cluster}
+                            items={tablet_errors}
+                            sectionClassName={block('section')}
+                        />
+                    </CollapsibleSection>
+                    <CollapsibleSection name="Replication errors">
+                        <ReplicationErrorsBlock cluster={cluster} data={replicationErrors} />
+                    </CollapsibleSection>
+                </div>
+            )}
+        </LoadDataHandler>
+    );
+}
+
+const mapStateToProps = (state: RootState) => {
+    const {loading, loaded, error, tabletErrors} = state.navigation.tabs.tabletErrors;
+    const path = getPath(state);
+    const mode = getEffectiveMode(state);
+    const cluster = getCluster(state);
+
+    return {
+        loading,
+        loaded,
+        error,
+
+        path,
+        mode,
+        tabletErrors,
+        cluster,
+        replicationErrors: getTabletErrorsReplicationErrors(state),
+    };
+};
+
+const mapDispatchToProps = {
+    getTabletErrors,
+};
+
+const connector = connect(mapStateToProps, mapDispatchToProps);
+
+const TabletErrorsConnected = connector(TabletErrors);
+
+export default function TabletErrorsWithRum() {
+    const loadState = useSelector(getTabletErrorsLoadingStatus);
+
+    useAppRumMeasureStart({
+        type: RumMeasureTypes.NAVIGATION_TAB_TABLET_ERRORS,
+        startDeps: [loadState],
+        allowStart: ([loadState]) => {
+            return !isFinalLoadingStatus(loadState);
+        },
+    });
+
+    useRumMeasureStop({
+        type: RumMeasureTypes.NAVIGATION_TAB_TABLET_ERRORS,
+        stopDeps: [loadState],
+        allowStop: ([loadState]) => {
+            return isFinalLoadingStatus(loadState);
+        },
+    });
+
+    return <TabletErrorsConnected />;
+}
+
+interface ReplicationErrorsBlockProps {
+    cluster: string;
+    data: ReturnType<typeof getTabletErrorsReplicationErrors>;
+}
+
+function ReplicationErrorsBlock({data, cluster}: ReplicationErrorsBlockProps) {
+    let counter = 0;
+    return (
+        <React.Fragment>
+            {_.map(data, (items, replicaId) => {
+                return (
+                    <CollapsibleSection
+                        key={replicaId}
+                        name={<ReplicaErrorHeader id={replicaId} />}
+                        className={block('group', block('section'))}
+                        collapsed={0 < counter++}
+                    >
+                        <TabletErrorsBlock cluster={cluster} items={items} />
+                    </CollapsibleSection>
+                );
+            })}
+        </React.Fragment>
+    );
+}
+
+function TabletErrorsCountNotice() {
+    const visible = useSelector(getTabletErrorCountNoticeVisbile);
+    if (!visible) {
+        return null;
+    }
+    return (
+        <div className={block('count-notice')}>
+            Only limited number of errors is displayed. See Tablets tab for the complete list.
+        </div>
+    );
+}
+
+function TabletErrorsHeader({id, cluster}: {id: string; cluster: string}) {
+    return (
+        <React.Fragment>
+            Errors of tablet <Link url={`/${cluster}/tablet/${id}`}>{id}</Link>
+        </React.Fragment>
+    );
+}
+
+function ReplicaErrorHeader({id}: {id: string}) {
+    const data = useSelector(getReplicatedTableReplicasMap);
+    const {[id]: attrs} = data;
+    const {cluster_name: cluster, mode, replica_path: path} = attrs;
+
+    const link =
+        cluster && path ? <Link url={`/${cluster}/navigation?path=${path}`}>{path}</Link> : id;
+
+    return (
+        <React.Fragment>
+            {id}{' '}
+            <Secondary>
+                ({mode ? `${mode} replica to ` : 'Replica to '}
+                {_.capitalize(cluster)}, table path {link})
+            </Secondary>
+        </React.Fragment>
+    );
+}
+
+interface Props {
+    cluster: string;
+    items?: Record<string, Array<YTError>>;
+    sectionClassName?: string;
+}
+
+function TabletErrorsBlock({items, cluster, sectionClassName}: Props) {
+    if (_.isEmpty(items)) {
+        return null;
+    }
+
+    let counter = 0;
+    return (
+        <div className={block('items')}>
+            {_.map(items, (errors, id) => {
+                return (
+                    <CollapsibleSection
+                        key={id}
+                        className={block('group', sectionClassName)}
+                        size="s"
+                        name={<TabletErrorsHeader {...{id, cluster}} />}
+                        collapsed={0 < counter++}
+                    >
+                        {_.map(errors, (error, index) => {
+                            return (
+                                <Error
+                                    key={index}
+                                    className={block('error')}
+                                    topMargin="none"
+                                    error={error}
+                                    disableLogger={true}
+                                />
+                            );
+                        })}
+                    </CollapsibleSection>
+                );
+            })}
+        </div>
+    );
+}

@@ -1,0 +1,9 @@
+.yt-number-input {
+    &__hint,
+    &__pretty-value {
+        color: var(--secondary-text);
+
+        font-size: 13px;
+        padding: 4px 8px 0px;
+    }
+}

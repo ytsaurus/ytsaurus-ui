@@ -1,0 +1,128 @@
+@mixin yt-theme-dark {
+    // Text
+    --primary-text: #c0c0c2;
+    --secondary-text: #76757a;
+    --light-text: #000000;
+
+    // Links
+    --external-link: #6ba0df;
+    --primary-link: #c0c0c2;
+    --secondary-link: #888e99;
+    --disabled-link: #585760;
+    --visited-link: #7a75b7;
+    --hover-link: #f34c55;
+
+    // Checked
+    --checked-color: #19bc42;
+
+    // Dividers
+    --dark-divider: #3e3d43;
+    --light-divider: #37363f;
+
+    // Background
+    --dark-background: #37363f;
+    --light-background: #312f36;
+    --hover-background: #34333c;
+    --main-background: #2d2c33;
+    --opacity-background: rgba(0, 0, 0, 0.4);
+
+    // System
+    --button-color: #667aa2;
+    --button-hover: #546a97;
+    --button-active: #435986;
+    --button-text: #c0c0c2;
+
+    --filter-color: #49536b;
+    --filter-hover: #586786;
+    --filter-active: #667aa2;
+
+    --alert-text: #feaa47;
+    --alert-background: #443832;
+
+    --error-text: #f34c55;
+    --error-background: #402e35;
+
+    --action-button-color: #5b5870;
+    --action-button-hover: #524f64;
+    --action-button-active: #444251;
+
+    --radio-button-color: #4b495b;
+    --radio-button-hover: #4b495b;
+    --radio-button-active: #3c3b47;
+    --radio-button-disabled: #35343b;
+
+    --radio-button-border-color: #5d5b6b;
+    --radio-button-border-hover: #767582;
+    --radio-button-border-active: #3c3b47;
+    --radio-button-border-disabled: #585760;
+
+    --input-border-color: #585760;
+    --input-border-hover: #76757a;
+    --input-border-active: var(--yc-color-line-generic-active);
+
+    // Status
+    --info-color: #3779dd;
+    --info-text: #5c9afd;
+    --info-background: #2e3547;
+
+    --success-color: #76a559;
+    --success-text: #97cb78;
+    --success-background: #363b38;
+
+    --warning-color: #e98f27;
+    --warning-text: #feaa47;
+    --warning-background: #443832;
+
+    --danger-color: #c83d45;
+    --danger-text: #f34c55;
+    --danger-background: #402e35;
+
+    --default-color: #888e99;
+    --default-text: #c0c0c2;
+    --default-background: #3e3d43;
+
+    // Stacked progress bar
+    --red-color: #c83d45;
+    --orange-color: #e98f27;
+    --yellow-color: #ffdb80;
+    --pale-yellow-color: #c6cb8e;
+    --green-color: #76a559;
+    --cyan-color: #8dcaaf;
+    --lime-color: #bee9ef;
+    --blue-color: #3779dd;
+    --purple-color: #6a72b8;
+    --pink-color: #b67598;
+
+    // Clusters
+    --grapefruit-color: #da4453;
+    --bittersweet-color: #e9573f;
+    --sunflower-color: #f68b42;
+    --grass-color: #8cc152;
+    --mint-color: #37bc9b;
+    --aqua-color: #3bafda;
+    --bluejeans-color: #4a89dc;
+    --lavander-color: #967adc;
+    --pinkrose-color: #d770ad;
+    --mediumgray-color: #7f8285;
+    --darkgray-color: #434445;
+
+    --checkbox-icon: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiIgZmlsbD0iI0MwQzBDMiI+PHBhdGggZD0iTTEzLjc5NSAxTDUuNzkgMTIuNTI3IDIuMDM2IDguNTAzIDEgOS43NzMgNS45MTcgMTUgMTUgMi4xMTIgMTMuNzk1IDF6Ii8+PC9zdmc+');
+}
+
+@mixin yt-theme-dark-a11y {
+    // Status
+    --info-color: #00a3ff;
+    --info-text: #00a3ff;
+
+    --success-color: #80d712;
+    --success-text: #80d712;
+
+    --warning-color: #b26300;
+    --warning-text: #b26300;
+
+    --danger-color: #9e669c;
+    --danger-text: #9e669c;
+
+    --default-color: #c0c0c2;
+    --default-text: #c0c0c2;
+}

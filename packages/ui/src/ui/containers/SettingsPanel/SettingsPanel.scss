@@ -1,0 +1,13 @@
+.settings-panel {
+    height: 100%;
+
+    .nv-settings-menu__item {
+        .link__inner {
+            color: var(--primary-text);
+        }
+
+        &-icon {
+            margin-top: 1px;
+        }
+    }
+}

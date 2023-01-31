@@ -1,0 +1,33 @@
+.operation-details {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(600px, 1fr));
+    grid-column-gap: 30px;
+
+    &__alerts,
+    &__result {
+        margin-top: 20px;
+    }
+
+    &__edit-button {
+        margin-left: auto;
+    }
+
+    &__table {
+        overflow: auto;
+    }
+
+    .collapsible-section {
+        box-shadow: 0 2px 5px var(--default-background);
+        border: 1px solid var(--light-divider);
+        border-radius: 3px;
+        padding: 24px 20px;
+
+        .elements-heading_size_m:last-child {
+            margin-bottom: 0;
+        }
+    }
+
+    .elements-alert {
+        margin-bottom: 20px;
+    }
+}

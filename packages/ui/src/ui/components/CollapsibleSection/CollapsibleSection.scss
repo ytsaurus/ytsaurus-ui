@@ -1,0 +1,20 @@
+.collapsible-section {
+    margin-top: 20px;
+
+    &__toggler {
+        cursor: pointer;
+        margin-left: 4px;
+    }
+
+    .elements {
+        &-block {
+            margin-bottom: 10px;
+        }
+
+        &-heading__heading {
+            &_clickable_yes {
+                cursor: pointer;
+            }
+        }
+    }
+}

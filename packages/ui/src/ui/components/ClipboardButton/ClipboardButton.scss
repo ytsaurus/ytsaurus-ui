@@ -1,0 +1,19 @@
+.yt-clipboard-button {
+    color: var(--yc-color-text-secondary);
+
+    &_inline-margins {
+        margin: -5px 1ex;
+    }
+}
+
+.data-table__row {
+    .yt-clipboard-button_visbile-on-row-hover {
+        visibility: hidden;
+    }
+
+    &:hover {
+        .yt-clipboard-button_visbile-on-row-hover {
+            visibility: visible;
+        }
+    }
+}

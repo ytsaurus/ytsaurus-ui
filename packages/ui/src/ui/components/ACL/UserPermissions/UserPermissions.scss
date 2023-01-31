@@ -1,0 +1,58 @@
+@import '../../../styles/mixins';
+
+.df-dialog__label {
+    padding-top: 0;
+}
+
+.acl-user-permissions {
+    &__card {
+        padding: 32px;
+        margin-bottom: 12px;
+        background-color: var(--light-background);
+    }
+
+    &__list {
+        @include reset-ul();
+    }
+
+    &__item {
+        padding-top: 8px;
+
+        @include reset-li();
+
+        &_type_allow {
+            .icon {
+                color: var(--success-color);
+                margin-right: 4px;
+            }
+        }
+
+        &_type_deny {
+            .icon {
+                color: var(--danger-color);
+                margin-right: 7px;
+            }
+        }
+    }
+
+    &__permissions-list:not(:last-child) {
+        margin-bottom: 30px;
+    }
+
+    &__columns-list {
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    &__columns-item {
+        margin-right: 5px;
+
+        &:not(:last-child)::after {
+            content: ',';
+        }
+    }
+
+    &__request:not(:last-child) {
+        margin-bottom: 12px;
+    }
+}

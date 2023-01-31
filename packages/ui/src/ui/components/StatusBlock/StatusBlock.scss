@@ -1,0 +1,39 @@
+@mixin setColor($color, $background-color) {
+    color: $color;
+    background-color: $background-color;
+}
+
+.status-block {
+    border-radius: 4px;
+    font-weight: 500;
+    padding: 5px 10px;
+    margin: 1px;
+    display: inline-block;
+    font-size: 0.9em;
+
+    &_theme {
+        &_warning,
+        &_banned {
+            @include setColor(var(--warning-text), var(--warning-background));
+        }
+
+        &_info {
+            @include setColor(var(--info-text), var(--info-background));
+        }
+
+        &_success {
+            @include setColor(var(--success-text), var(--success-background));
+        }
+
+        &_danger,
+        &_full,
+        &_alerts {
+            @include setColor(var(--danger-text), var(--danger-background));
+        }
+
+        &_default,
+        &_decommissioned {
+            @include setColor(var(--default-text), var(--default-background));
+        }
+    }
+}

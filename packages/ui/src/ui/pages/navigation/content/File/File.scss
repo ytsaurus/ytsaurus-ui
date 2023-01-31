@@ -1,0 +1,20 @@
+.navigation-file {
+    .elements-dropdown-menu {
+        margin-left: 20px;
+    }
+
+    .elements-code:not(:last-child) {
+        margin-bottom: 20px;
+    }
+
+    &_loading {
+        height: 200px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    &__actions {
+        margin-bottom: 20px;
+    }
+}

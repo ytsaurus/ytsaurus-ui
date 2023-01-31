@@ -1,0 +1,17 @@
+.operation-short-info {
+    &__state {
+        text-transform: capitalize;
+
+        &_state_failed {
+            color: var(--danger-text);
+        }
+
+        &_state_completed {
+            color: var(--success-color);
+        }
+    }
+
+    &__value {
+        text-transform: capitalize;
+    }
+}

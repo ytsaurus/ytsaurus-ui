@@ -1,0 +1,46 @@
+.comma-separated-list-with-rest-counter {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    &__content {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    &__row {
+        display: flex;
+        width: 100%;
+        align-items: center;
+
+        &-items {
+            flex-shrink: 1;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        &-item {
+            white-space: nowrap;
+        }
+
+        &-counter {
+            padding-left: 1ex;
+            color: var(--secondary-text);
+            text-align: right;
+            cursor: default;
+
+            &_clickable {
+                cursor: pointer;
+            }
+        }
+    }
+
+    &__hover-tooltip {
+        flex-shrink: 0;
+    }
+
+    &__tooltip {
+        padding: 12px 8px;
+    }
+}

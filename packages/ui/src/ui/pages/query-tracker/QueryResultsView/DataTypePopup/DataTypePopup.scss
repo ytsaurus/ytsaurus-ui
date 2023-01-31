@@ -1,0 +1,20 @@
+.data-type-popup {
+    &__container {
+        display: inline-flex;
+        align-items: center;
+    }
+
+    &__icon {
+        margin-left: 6px;
+
+        color: var(--yc-color-text-hint);
+    }
+
+    &__tooltip-container {
+            overflow-y: auto;
+
+            max-height: 300px;
+            margin-right: -16px;
+            padding-right: 16px;
+    }
+}

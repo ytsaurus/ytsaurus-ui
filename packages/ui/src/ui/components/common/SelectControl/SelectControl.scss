@@ -1,0 +1,99 @@
+.yc-selector-control {
+    box-sizing: border-box;
+    position: relative;
+    display: flex;
+    align-items: center;
+    padding-left: 8px;
+    border: 1px solid var(--yc-color-line-generic);
+    border-radius: 3px;
+    user-select: none;
+    transition: border-color 0.1s linear, background-color 0.1s linear;
+    cursor: pointer;
+
+    &_size_s {
+        height: 28px;
+    }
+
+    &_focused {
+        border-color: var(--yc-color-line-generic);
+    }
+
+    &_disabled {
+        color: var(--yc-color-text-secondary);
+        pointer-events: none;
+
+        &::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--yc-color-line-generic);
+        }
+    }
+
+    &:hover {
+        background-color: var(--yc-color-base-simple-hover);
+    }
+
+    &:active {
+        transform: scale(0.98);
+    }
+
+    &__label {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding-right: 6px;
+        font-weight: 700;
+        white-space: nowrap;
+    }
+
+    &__value,
+    &__placeholder {
+        flex: 1 1 auto;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+        padding-right: 8px;
+    }
+
+    &__placeholder {
+        color: var(--yc-color-text-hint);
+    }
+
+    &__placeholder-icon,
+    &__selected-item-icon {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 16px;
+        height: 16px;
+        margin-right: 5px;
+    }
+
+    &__badge {
+        display: flex;
+        align-items: center;
+        height: 20px;
+        padding: 0 6px;
+        background-color: var(--yc-color-base-selection);
+        border-radius: 4px;
+        transition: background-color 0.1s linear;
+        margin-right: 3px;
+
+        &_focused {
+            background-color: var(--yc-color-base-special);
+            color: var(--yc-color-text-light-primary);
+        }
+    }
+
+    &__arrow {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 30px;
+        height: 100%;
+    }
+}

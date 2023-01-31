@@ -1,0 +1,53 @@
+@import '../../styles/mixins';
+
+.labels-group {
+    @include reset-ul();
+
+    &__label {
+        @include reset-li();
+
+        font-size: 13px;
+        line-height: 25px;
+
+        display: inline-flex;
+        justify-content: space-between;
+        align-items: center;
+
+        margin: 2px;
+        padding: 1px 10px;
+
+        background-color: var(--filter-color);
+        border-radius: 3px;
+
+        transition: background-color 0.1s ease-in;
+
+        &:last-child {
+            margin-right: 0;
+        }
+
+        &_clickable {
+            cursor: pointer;
+
+            &:hover {
+                background-color: var(--filter-hover);
+            }
+        }
+
+        .icon {
+            opacity: 0.5;
+            cursor: pointer;
+
+            &:hover {
+                opacity: 1;
+            }
+        }
+    }
+
+    &__close {
+        margin-left: 10px;
+
+        .icon {
+            transform: translateY(1px);
+        }
+    }
+}

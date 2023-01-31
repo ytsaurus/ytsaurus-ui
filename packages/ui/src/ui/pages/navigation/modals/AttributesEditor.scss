@@ -1,0 +1,55 @@
+.navigation-attributes-editor {
+    .df-dialog_with_vertical_tabs {
+        min-height: 415px;
+    }
+
+    &_single-mode {
+        .df-dialog_with_vertical_tabs {
+            min-height: 570px;
+        }
+    }
+
+    &__run-notice {
+        color: var(--warning-text);
+    }
+
+    .df-dialog__tabs-content {
+        overflow: hidden;
+    }
+
+    .df-dialog__field-group_type_annotation {
+        flex-grow: 1;
+        overflow: hidden;
+    }
+
+    .df-dialog__field-group_type_annotation {
+        justify-content: flex-start;
+        display: flex;
+
+        .df-dialog__field-wrapper_type_annotation {
+            flex-grow: 1;
+            flex-shrink: 1;
+            display: flex;
+            flex-direction: column;
+            width: unset;
+            height: 50vh;
+        }
+
+        .textarea__control {
+            height: 250px;
+        }
+
+        .df-dialog__label {
+            display: none;
+        }
+    }
+
+    &__full-height {
+        height: 100%;
+    }
+
+    &__path-list {
+        max-height: 50vh;
+        overflow: auto;
+    }
+}

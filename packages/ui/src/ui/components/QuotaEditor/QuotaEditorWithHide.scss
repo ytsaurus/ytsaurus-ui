@@ -1,0 +1,78 @@
+.yt-quota-editor-with-hide {
+    margin: 8px 0;
+    padding: 12px 16px 20px;
+    background-color: var(--light-background);
+
+    &__top {
+        position: relative;
+        color: var(--secondary-text);
+        padding-bottom: 8px;
+    }
+
+    &__hide {
+        display: inline-block;
+        position: absolute;
+        right: 0;
+        top: 0;
+    }
+
+    &__controls {
+        display: flex;
+
+        &-item {
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+
+            &_save {
+                flex-grow: 0;
+            }
+
+            &:not(:first-child) {
+                padding-left: 1em;
+            }
+        }
+
+        .textinput__box {
+            background-color: var(--main-background) !important;
+        }
+    }
+
+    &__limit {
+        &-bytes {
+            color: var(--secondary-text);
+        }
+    }
+
+    &__control-title {
+        padding-bottom: 4px;
+    }
+
+    &__confirm {
+        margin: 8px 0;
+        background-color: var(--alert-background);
+        padding: 16px 24px;
+        &-notice {
+            font-size: 16px;
+            font-weight: 500;
+            line-height: var(--yc-text-body-2-line-height);
+        }
+        &-details {
+            padding-top: 6px;
+        }
+        &-actions {
+            padding-top: 12px;
+        }
+        &-limit {
+            font-weight: 500;
+        }
+
+        .yc-button {
+            width: 100px;
+        }
+    }
+
+    &__grow {
+        flex-grow: 1;
+    }
+}

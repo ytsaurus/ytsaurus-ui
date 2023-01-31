@@ -1,0 +1,40 @@
+.tablets {
+    &__bundle-name {
+        display: flex;
+        align-items: center;
+
+        &-left {
+            flex-grow: 1;
+        }
+    }
+
+    &__top {
+        display: flex;
+        padding-bottom: 20px;
+
+        &-favourites {
+            padding-right: 20px;
+        }
+    }
+
+    &__content {
+        margin-bottom: 10px;
+    }
+
+    &__dashboard-link {
+        margin-left: 1ex;
+    }
+
+    &__tabs {
+        position: relative;
+        min-width: 400px;
+    }
+
+    &__breadcrumbs {
+        flex-grow: 1;
+    }
+
+    &__request-quota {
+        padding-left: 10px;
+    }
+}

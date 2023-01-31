@@ -1,0 +1,59 @@
+@import '../../../styles/mixins.scss';
+
+.yt-tabbed-content {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid var(--dark-divider);
+    border-radius: 4px 4px 0 0;
+    overflow: hidden;
+
+    &__header {
+        display: flex;
+        align-items: center;
+        flex-wrap: nowrap;
+        flex-shrink: 0;
+        height: 40px;
+        overflow: hidden;
+        border-bottom: 1px solid var(--dark-divider);
+
+        background-color: var(--dark-background);
+
+        .yc-button:before {
+            background-color: var(--yc-color-base-generic-medium) !important;
+        }
+    }
+
+    &__content {
+        flex-grow: 1;
+    }
+
+    &__title {
+        padding: 0 1ex;
+        flex-shrink: 1;
+        font-weight: 500;
+        color: var(--primary-text);
+
+        @include ellipsis();
+
+        &_growable {
+            flex-grow: 1;
+        }
+    }
+
+    &__sub-title {
+        flex: 1 1 0;
+        color: var(--secondary-text);
+        padding-right: 1ex;
+
+        @include ellipsis();
+    }
+
+    &__actions {
+        padding: 0 1ex;
+        flex-shrink: 0;
+    }
+
+    &__actions-item {
+        margin-left: 1ex;
+    }
+}

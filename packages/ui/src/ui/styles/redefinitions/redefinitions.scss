@@ -1,0 +1,43 @@
+@import './common/common';
+@import './common/link';
+@import './common/icon';
+@import './common/progress';
+@import './chartkit';
+@import './DataTable';
+@import './common/Breadcrumbs';
+
+@font-face {
+    font-family: Manrope;
+    font-weight: 300;
+    src: url('../../../../assets/Manrope/otf/Manrope-Light.otf') format('opentype');
+}
+
+@font-face {
+    font-family: Manrope;
+    font-weight: 400;
+    src: url('../../../../assets/Manrope/otf/Manrope-Regular.otf') format('opentype');
+}
+
+@font-face {
+    font-family: Manrope;
+    font-weight: 600;
+    src: url('../../../../assets/Manrope/otf/Manrope-SemiBold.otf') format('opentype');
+}
+
+@font-face {
+    font-family: Manrope;
+    font-weight: 700;
+    src: url('../../../../assets/Manrope/otf/Manrope-Bold.otf') format('opentype');
+}
+
+@font-face {
+    font-family: RobotoMono;
+    font-weight: 400;
+    src: url('../../../../assets/Roboto_Mono/static/RobotoMono-Regular.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: RobotoMono;
+    font-weight: 700;
+    src: url('../../../../assets/Roboto_Mono/static/RobotoMono-Bold.ttf') format('truetype');
+}

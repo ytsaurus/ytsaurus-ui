@@ -1,0 +1,14 @@
+.data-table_theme_yt-internal {
+    --data-table-color-base: var(--main-background);
+    --data-table-color-stripe: rgba(0, 0, 0, 0.03);
+    --data-table-border-color: var(--dark-divider);
+    --data-table-color-hover-area: var(--hover-background);
+    --data-table-color-footer-area: var(--data-table-color-base);
+
+    --color-front: var(--primary-text);
+    --color-back: var(--main-background);
+    --color-table-border: var(--dark-divider);
+    --back-table-stripe: var(--light-background);
+    --back-hover: var(--hover-background);
+    --back-table-footer: var(--color-back);
+}

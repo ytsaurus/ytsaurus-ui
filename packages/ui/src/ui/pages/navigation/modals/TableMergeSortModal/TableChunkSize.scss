@@ -1,0 +1,14 @@
+.table-chunk-size {
+    &__pretty {
+        color: var(--secondary-text);
+        height: 0px;
+        font-size: 13px;
+        padding-left: 8px;
+    }
+
+    &__popup {
+        .yc-suggest__item {
+            padding-left: 1em;
+        }
+    }
+}

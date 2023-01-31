@@ -1,0 +1,176 @@
+import React, {Component} from 'react';
+import PropTypes from 'prop-types';
+import {connect} from 'react-redux';
+import block from 'bem-cn-lite';
+import {compose} from 'redux';
+import _ from 'lodash';
+
+import Block from '../../../components/Block/Block';
+import {Progress} from '@gravity-ui/uikit';
+
+import hammer from '../../../common/hammer';
+import {getMediumList} from '../../../store/selectors/thor';
+import withDataLoader from '../../../hocs/pages/withDataLoader';
+import {cancelLoadResources, loadResources} from '../../../store/actions/system/resources';
+
+import './Resources.scss';
+
+const formatNumber = hammer.format.Number;
+const formatBytes = hammer.format.Bytes;
+
+const b = block('system');
+
+class Resources extends Component {
+    static propTypes = {
+        // from connect
+        resources: PropTypes.object.isRequired,
+        nodeAttributes: PropTypes.object,
+        mediumList: PropTypes.arrayOf(PropTypes.string),
+    };
+
+    prepareResources() {
+        const {resources} = this.props;
+        if (!resources) {
+            return [];
+        }
+        const {resource_usage: usage, resource_limits: limits} = resources;
+        return [
+            {
+                caption: 'CPU',
+                usage: {
+                    text: formatNumber(usage?.cpu) + ' / ' + formatNumber(limits?.cpu),
+                    progress: limits?.cpu ? (usage.cpu / limits.cpu) * 100 : 0,
+                },
+            },
+            {
+                caption: 'Memory',
+                usage: {
+                    text:
+                        formatBytes(usage?.user_memory) + ' / ' + formatBytes(limits?.user_memory),
+                    progress: limits?.user_memory
+                        ? (usage.user_memory / limits.user_memory) * 100
+                        : 0,
+                },
+            },
+            {
+                caption: 'GPU',
+                usage: {
+                    text: formatNumber(usage?.gpu) + ' / ' + formatNumber(limits?.gpu),
+                    progress: limits?.gpu ? (usage.gpu / limits.gpu) * 100 : 0,
+                },
+            },
+        ];
+    }
+
+    prepareDiskResources() {
+        const {nodeAttributes, mediumList} = this.props;
+        const diskResourcesPerMedium = [];
+        if (nodeAttributes && mediumList) {
+            const {
+                available_space_per_medium: availableSpacePerMedium,
+                used_space_per_medium: usedSpacePerMedium,
+            } = nodeAttributes;
+
+            _.each(mediumList, (medium) => {
+                const available = availableSpacePerMedium[medium];
+                const used = usedSpacePerMedium[medium];
+
+                if (available > 0 || used > 0) {
+                    const total = available + used;
+                    const caption = hammer.format['ReadableField'](medium);
+                    const progressText =
+                        hammer.format['Bytes'](used) + ' / ' + hammer.format['Bytes'](total);
+                    const progressValue = (used / total) * 100;
+
+                    diskResourcesPerMedium.push({
+                        caption: caption,
+                        show: true,
+                        usage: {
+                            text: progressText,
+                            progress: progressValue,
+                        },
+                    });
+                }
+            });
+        }
+        return diskResourcesPerMedium;
+    }
+
+    renderFullNodesMessage() {
+        const {nodeAttributes} = this.props;
+        if (!nodeAttributes) {
+            return null;
+        }
+
+        const {full_node_count: fullNodeCount, online_node_count: onlineNodeCount} = nodeAttributes;
+        const fullNodePercentage = (fullNodeCount / onlineNodeCount) * 100;
+
+        if (!fullNodePercentage) {
+            return null;
+        }
+        return (
+            <Block
+                type={fullNodePercentage >= 90 ? 'error' : 'alert'}
+                message={`${fullNodePercentage.toFixed(2)} % (${fullNodeCount}) of nodes are full.`}
+            />
+        );
+    }
+
+    renderResources(entries) {
+        return entries.map(({caption, usage}) => {
+            return (
+                <div key={caption} className={b('resource')}>
+                    <div className={b('resources-caption')}>{caption}</div>
+                    <div className={b('resources-progress')}>
+                        <Progress theme={'success'} text={usage.text} value={usage.progress} />
+                    </div>
+                </div>
+            );
+        });
+    }
+
+    render() {
+        const headingCN = b('resources-heading');
+        const resources = this.prepareResources();
+        const diskResources = this.prepareDiskResources();
+        const showResources = resources.length > 0;
+        const showDiskResources = diskResources.length > 0;
+        const diskResourcesCN = b('resources-heading', b('resources-meters-disk'));
+
+        return (
+            <div className={b('resources')}>
+                <div className={b('resources-message')}>{this.renderFullNodesMessage()}</div>
+                <div className={b('resources-meters')}>
+                    {showResources && [
+                        <div key="resources" className={headingCN}>
+                            Resources
+                        </div>,
+                        this.renderResources(resources),
+                    ]}
+                    {showDiskResources && [
+                        <div key="disk-resources" className={diskResourcesCN}>
+                            Disk space
+                        </div>,
+                        this.renderResources(diskResources),
+                    ]}
+                </div>
+            </div>
+        );
+    }
+}
+
+function mapStateToProps(state) {
+    const {resources, nodeAttributes} = state.system.resources;
+    return {
+        resources,
+        nodeAttributes,
+        mediumList: getMediumList(state),
+    };
+}
+
+const mapDispatchToProps = {
+    loadData: loadResources,
+    cancelLoadData: cancelLoadResources,
+};
+
+export default compose(connect(mapStateToProps, mapDispatchToProps), withDataLoader)(Resources);

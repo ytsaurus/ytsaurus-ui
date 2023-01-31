@@ -1,0 +1,34 @@
+.elements-modal {
+    &__loader {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 50vh;
+    }
+
+    &__wrapper {
+        &_size_s {
+            width: 400px;
+        }
+
+        &_size_m {
+            width: 650px;
+        }
+
+        &_size_l {
+            width: 950px;
+        }
+    }
+
+    &__body {
+        max-height: 85vh;
+
+        &_borderless_yes {
+            padding: 0 !important;
+        }
+    }
+
+    &__header {
+        width: 100%;
+    }
+}

@@ -1,0 +1,39 @@
+@import '../globals';
+
+/**
+  .elements-main-section Should be used only as top level section of pages
+  .elements-section Should be used to split logical groups of elements
+ */
+
+.elements-section {
+    margin-bottom: $section-offset;
+
+    &:last-child {
+        margin-bottom: 0;
+    }
+}
+
+.settings-section {
+    margin-bottom: 20px;
+
+    &:last-child {
+        margin-bottom: 0;
+    }
+}
+
+.settings-heading {
+    margin-bottom: 10px;
+    font-size: 16px;
+}
+
+.elements-main-section {
+    padding: var(--section-main-padding-vertical) var(--section-main-padding-horizontal);
+
+    max-width: calc(100vw - var(--nv-aside-header-size));
+    margin: 0 auto;
+    width: 100%;
+
+    &_collapsable_yes {
+        border-top: 1px solid var(--light-divider);
+    }
+}

@@ -1,0 +1,246 @@
+@import '../../../../../styles/mixins';
+
+$elements-table: '.elements-table';
+
+.components-nodes {
+    $self: &;
+    margin-top: -10px;
+
+    &:focus {
+        outline: none;
+    }
+
+    &__overview {
+        display: grid;
+        grid-template-columns: 1fr;
+        grid-gap: 20px;
+
+        z-index: var(--fixed-toolbar-z-index);
+        background-color: var(--main-background);
+
+        min-width: 200px;
+        padding: 10px 0;
+
+        &_sticky {
+            @include sticky-style();
+        }
+
+        &_split {
+            @include sticky-style();
+
+            position: absolute;
+            left: 0;
+            top: 0px;
+
+            #{$self}__filters {
+                .textinput {
+                    width: 360px;
+                }
+            }
+        }
+    }
+
+    &__overview-top {
+        display: flex;
+    }
+
+    &__spacer {
+        flex-grow: 1;
+    }
+
+    &__content {
+        &_split {
+            padding-top: 50px;
+        }
+    }
+
+    &__filters {
+        display: flex;
+        align-items: center;
+
+        .textinput {
+            width: 640px;
+            margin-right: 20px;
+        }
+
+        &_split {
+            .textinput {
+                width: 320px !important;
+            }
+        }
+
+        &-item {
+            & + & {
+                margin-left: 20px;
+            }
+        }
+
+        .elements-select {
+            width: auto;
+        }
+    }
+
+    &__table {
+        table-layout: fixed;
+
+        #{$elements-table}__head {
+            border-bottom: none;
+
+            #{$elements-table}__row {
+                &:only-child {
+                    height: 70px;
+
+                    #{$elements-table}__cell {
+                        vertical-align: bottom;
+                        padding-bottom: 10px;
+                    }
+                }
+
+                #{$elements-table}__cell {
+                    position: relative;
+                    box-sizing: border-box;
+
+                    &:before {
+                        content: '';
+                        position: absolute;
+                        left: 0;
+                        bottom: 0;
+                        width: 100%;
+                        border-bottom: 1px solid var(--light-divider);
+                    }
+                }
+
+                &:last-child:not(:first-child) {
+                    #{$elements-table}__cell {
+                        &:after {
+                            content: '';
+                            position: absolute;
+                            right: 0;
+                            top: 4px;
+                            bottom: 4px;
+                            border-right: 1px solid var(--light-divider);
+                        }
+
+                        &:last-child:after {
+                            border-right: none;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    &__table-group-item {
+        &_type {
+            &_io-weight,
+            &_tablet-memory {
+                width: 400px;
+            }
+        }
+    }
+
+    &__table-item {
+        &_group_io-weight {
+            background-color: unset;
+        }
+
+        &_type {
+            &_host {
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+
+            &_banned,
+            &_decommissioned,
+            &_full,
+            &_alerts {
+                width: 40px;
+            }
+
+            &_state,
+            &_data-center {
+                width: 60px;
+            }
+
+            &_role,
+            &_follower-recovery,
+            &_leader-recovery {
+                width: 80px;
+            }
+
+            &_space-limit,
+            &_locations,
+            &_sessions,
+            &_chunks,
+            &_seal-slots,
+            &_user-slots,
+            &_none,
+            &_leading,
+            &_following,
+            &_stopped,
+            &_elections {
+                width: 90px;
+            }
+
+            &_load-average,
+            &_network-load,
+            &_cpu,
+            &_memory-total,
+            &_network {
+                width: 110px;
+            }
+
+            &_actions,
+            &_repair-slots,
+            &_removal-slots,
+            &_replication-slots,
+            &_rack,
+            &_scheduler-jobs,
+            &_write-sessions,
+            &_tablet-cells {
+                width: 130px;
+            }
+
+            &_updated-at {
+                width: 140px;
+            }
+
+            &_space,
+            &_last-seen {
+                width: 180px;
+            }
+
+            &_user-tags,
+            &_system-tags {
+                width: 200px;
+                white-space: normal !important;
+            }
+
+            &_tablet-slots {
+                width: 220px;
+            }
+
+            &_memory {
+                width: 280px;
+            }
+
+            &_version,
+            &_physical-host {
+                width: 310px;
+            }
+
+            &_host {
+                width: 400px;
+            }
+        }
+    }
+
+    &__custom-column-selector {
+        max-height: 60vh;
+    }
+
+    &__medium-cell {
+        width: 100px;
+    }
+}

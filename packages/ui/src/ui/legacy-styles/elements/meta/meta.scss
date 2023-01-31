@@ -1,0 +1,48 @@
+@import '../globals';
+@import '../mixins';
+
+$key-value-offset: 10px;
+
+.elements-meta {
+    &-item {
+        display: flex;
+        align-items: baseline;
+
+        min-height: 22px;
+
+        &__key,
+        &__value {
+            @include ellipsis();
+            flex: 0 0 auto;
+        }
+
+        &__key {
+            flex-basis: calc(40% - #{$key-value-offset});
+            margin-right: $key-value-offset;
+            text-align: right;
+        }
+
+        &__value {
+            flex-basis: calc(60% - #{$key-value-offset});
+            margin-left: $key-value-offset;
+        }
+
+        &__key {
+            color: var(--secondary-text);
+        }
+    }
+}
+
+.elements-meta__preset {
+    &-id {
+        position: relative;
+        padding-right: 24px;
+
+        &-copy {
+            // height: 24px; line-height: 20px;
+            position: absolute;
+            right: 0;
+            top: -2px;
+        }
+    }
+}

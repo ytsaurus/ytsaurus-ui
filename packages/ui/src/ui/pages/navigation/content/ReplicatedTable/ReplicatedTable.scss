@@ -1,0 +1,50 @@
+@import '../../../../styles/mixins';
+
+.navigation-replicated-table {
+    .collapsible-section {
+        margin-top: 0;
+    }
+
+    &__overview {
+        display: flex;
+
+        padding: 10px 0;
+        margin-bottom: 20px;
+
+        z-index: var(--fixed-toolbar-z-index);
+        background-color: var(--main-background);
+
+        &_sticky {
+            @include sticky-style();
+        }
+    }
+
+    &__table {
+        table-layout: fixed;
+
+        &-item {
+            &_type_name {
+                width: 300px;
+            }
+
+            &_type_cluster,
+            &_type_error_count,
+            &_type_replication-lag-time {
+                width: 150px;
+            }
+
+            &_type_state,
+            &_type_mode {
+                width: 70px;
+            }
+
+            &_type_actions {
+                width: 80px;
+            }
+
+            &_type_errors {
+                width: 150px;
+            }
+        }
+    }
+}

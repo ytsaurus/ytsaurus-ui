@@ -1,0 +1,88 @@
+.table-download-manager {
+    &__content {
+        margin: -15px -30px;
+
+        .elements-message {
+            margin-bottom: 0;
+        }
+    }
+
+    &__manager {
+        position: relative;
+        display: flex;
+    }
+
+    &__format {
+        flex: 0 0 33%;
+        padding: 15px 0;
+        background-color: var(--light-background);
+    }
+
+    &__tabs {
+        margin-bottom: 20px;
+    }
+
+    &__help {
+        margin: 0;
+        padding: 0 30px;
+        line-height: 1.6em;
+    }
+
+    &__format-description {
+        margin: 0;
+    }
+
+    &__report-error {
+        padding: 0 15px;
+    }
+
+    &__settings {
+        flex: 1 1 auto;
+        display: flex;
+        flex-direction: column;
+
+        padding: 15px;
+        overflow: auto;
+    }
+
+    &__shared-settings {
+        .elements-radiobutton {
+            margin-bottom: 20px;
+        }
+
+        .column-selector {
+            max-height: 25vh;
+
+            &__content {
+                overflow: auto;
+            }
+        }
+
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+    }
+
+    &__rows {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-gap: 30px;
+    }
+
+    &__columns-selector {
+        display: flex;
+        overflow: hidden;
+
+        background-color: var(--light-background);
+    }
+
+    &__schemaful-dsv,
+    &__yson,
+    &__json {
+        margin-top: 20px;
+    }
+
+    &__dsv-separators-item {
+        padding-top: 10px;
+    }
+}

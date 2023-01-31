@@ -1,0 +1,21 @@
+<svg viewBox="0 0 44 51" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>Group.svg</title>
+    <g>
+        <g style="mix-blend-mode:normal">
+            <g style="mix-blend-mode:normal">
+                <g>
+                    <use xlink:href="#i" transform="translate(3.21 31.27)" fill="#F37726" style="mix-blend-mode:normal"/>
+                </g>
+                <g>
+                    <use xlink:href="#j" transform="translate(3.21 4.88)" fill="#F37726" style="mix-blend-mode:normal"/>
+                </g>
+            </g>
+        </g>
+    </g>
+    <defs>
+        <path id="i"
+              d="M18.696 7.122C10.684 7.122 3.641 4.247 0 0a19.934 19.934 0 0 0 37.392 0C33.76 4.247 26.744 7.122 18.696 7.122z"/>
+        <path id="j"
+              d="M18.696 5.897c8.013 0 15.055 2.876 18.696 7.123A19.934 19.934 0 0 0 0 13.02c3.641-4.256 10.648-7.123 18.696-7.123z"/>
+    </defs>
+</svg>

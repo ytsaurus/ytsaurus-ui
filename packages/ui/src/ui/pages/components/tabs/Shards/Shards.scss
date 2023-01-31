@@ -1,0 +1,45 @@
+.components-shards {
+    &_loading {
+        height: 200px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    &__table {
+        table-layout: fixed;
+    }
+
+    &__name,
+    &__node-count {
+        .yc-button {
+            visibility: hidden;
+            opacity: 0;
+            transition: opacity 300ms ease;
+        }
+
+        &:hover {
+            .yc-button {
+                visibility: visible;
+                opacity: 1;
+            }
+        }
+    }
+
+    &__table {
+        table-layout: fixed;
+        min-width: 1100px;
+
+        &-item {
+            &_type {
+                &_id {
+                    width: 300px;
+                }
+
+                &_nodes {
+                    width: 100px;
+                }
+            }
+        }
+    }
+}

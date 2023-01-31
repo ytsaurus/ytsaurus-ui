@@ -1,0 +1,14 @@
+.cluster-select-control {
+    &.yc-select {
+        width: 100%;
+    }
+
+    &__warning {
+        color: var(--warning-text);
+    }
+
+    &__name {
+        color: var(--secondary-text);
+        text-transform: capitalize;
+    }
+}

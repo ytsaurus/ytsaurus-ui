@@ -1,0 +1,9 @@
+.multiple-actions {
+    display: inline-flex;
+    align-items: center;
+    flex-wrap: nowrap;
+
+    &__item {
+        padding-left: 20px;
+    }
+}

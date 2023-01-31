@@ -1,0 +1,217 @@
+@import '../../../../../styles/mixins';
+
+.scheduling-details {
+    $this: &;
+
+    margin-top: -10px;
+
+    &__toolbar {
+        box-sizing: border-box;
+        display: flex;
+        height: 48px;
+
+        padding: 10px 0;
+
+        z-index: var(--fixed-toolbar-z-index);
+        background-color: var(--main-background);
+
+        &_sticky {
+            margin-top: 0;
+            @include sticky-style();
+        }
+    }
+
+    &__filter {
+        width: 33%;
+        min-width: 200px;
+        margin-right: 20px;
+    }
+
+    &__table {
+        width: 100%;
+        min-width: 1300px;
+
+        &_mode_operations {
+            min-width: 1500px;
+        }
+
+        &_mode_integral {
+            min-width: 1550px;
+        }
+
+        table-layout: fixed;
+
+        &-row {
+            &-expander {
+                cursor: pointer;
+                padding-right: 10px;
+
+                &_empty {
+                    cursor: default;
+                }
+
+                &-icon {
+                    padding-right: 5px;
+
+                    &_empty {
+                        cursor: default;
+                        opacity: 0;
+                    }
+                }
+            }
+
+            &_current_yes {
+                background: var(--dark-background);
+            }
+
+            &_aggregation_yes {
+                font-weight: bold;
+            }
+        }
+
+        &-item_type {
+            &_name {
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+
+            &_mode {
+                width: 70px;
+            }
+
+            &_FI {
+                width: 30px;
+            }
+
+            &_weight {
+                width: 80px;
+            }
+
+            &_dominant-resource,
+            &_operation-overview,
+            &_min-share,
+            &_max-share,
+            &_fair-share,
+            &_usage,
+            &_demand {
+                width: 85px;
+            }
+
+            &_guaranteed-usage-cpu,
+            &_guaranteed-usage-memory,
+            &_guaranteed-usage-gpu,
+            &_guaranteed-usage-user-slots {
+                width: 180px;
+            }
+
+            &_fair-share-usage {
+                width: 160px;
+            }
+
+            &_min-resources-cpu,
+            &_min-resources-memory,
+            &_min-resources-gpu,
+            &_min-resources-user-slots {
+                width: 120px;
+            }
+
+            &_rel-guaranteed-cpu,
+            &_rel-guaranteed-memory,
+            &_rel-guaranteed-gpu,
+            &_rel-guaranteed-user-slots,
+            &_abs-guaranteed-cpu,
+            &_abs-guaranteed-memory,
+            &_abs-guaranteed-gpu,
+            &_abs-guaranteed-user-slots {
+                width: 130px;
+            }
+
+            &_abs-demand-cpu,
+            &_abs-demand-memory,
+            &_abs-demand-gpu,
+            &_abs-demand-user-slots,
+            &_abs-usage-cpu,
+            &_abs-usage-memory,
+            &_abs-usage-gpu,
+            &_abs-usage-user-slots,
+            &_rel-usage-cpu,
+            &_rel-usage-memory,
+            &_rel-usage-gpu,
+            &_rel-usage-user-slots {
+                width: 100px;
+            }
+
+            &_resource-limit-cpu,
+            &_resource-limit-memory,
+            &_resource-limit-gpu,
+            &_resource-limit-user-slots {
+                width: 100px;
+            }
+
+            &_resource-detailed-cpu,
+            &_resource-detailed-memory,
+            &_resource-detailed-gpu,
+            &_resource-detailed-user-slots {
+                width: 100px;
+            }
+
+            &_running-operations,
+            &_max-running-operations {
+                width: 180px;
+            }
+
+            &_operations,
+            &_max-operations,
+            &_operation-progress,
+            &_running-operation-progress {
+                width: 150px;
+            }
+
+            &_integral-type {
+                width: 140px;
+            }
+
+            &_burst-cpu,
+            &_flow-cpu,
+            &_children-burst-cpu,
+            &_children-flow-cpu {
+                width: 120px;
+            }
+
+            &_accumulated,
+            &_accumulated-cpu {
+                width: 160px;
+            }
+
+            &_burst-duration {
+                width: 200px;
+            }
+
+            &_actions {
+                width: 80px;
+            }
+        }
+    }
+
+    &__name-cell {
+        display: flex;
+        align-items: center;
+        overflow: hidden;
+
+        &_child {
+            padding-left: 24px;
+        }
+    }
+
+    &__name-cell-text {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        flex-shrink: 1;
+    }
+
+    &__integral-guarantee {
+        &_inactive {
+            color: var(--yc-color-text-secondary);
+        }
+    }
+}

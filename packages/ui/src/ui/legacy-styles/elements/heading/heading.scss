@@ -1,0 +1,44 @@
+@import '../../../styles/mixins';
+
+.elements-secondary-text {
+    font-size: 13px;
+    line-height: 20px;
+
+    color: var(--secondary-text);
+}
+
+.elements-heading {
+    font-weight: 600;
+    letter-spacing: 0em;
+
+    &_size_s {
+        @include heading-size(s);
+    }
+
+    // In some time the project should use only variables from common-lib, as the block below
+    &_size_ss {
+        font-size: var(--yc-text-body-3-font-size);
+        line-height: var(--yc-text-body-3-line-height);
+        margin-bottom: 15px;
+    }
+
+    &_size_xs {
+        @include heading-size(xs);
+    }
+
+    &_size_m {
+        @include heading-size(m);
+    }
+
+    &_size_l {
+        @include heading-size(l);
+    }
+
+    &_size_xl {
+        @include heading-size(xl);
+    }
+
+    &_overview_yes {
+        display: flex;
+    }
+}

@@ -1,0 +1,192 @@
+@import '../../styles/mixins';
+@import './constants';
+
+$item-vertical-padding: 10px;
+$item-horizontal-padding: 8px;
+
+.column-selector {
+    $block: &;
+    padding: $column-selector-offset-vertical $column-selector-offset-horizontal;
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
+
+    &__controls {
+        flex-grow: 0;
+        flex-shrink: 0;
+        display: flex;
+        margin-bottom: $column-selector-offset-vertical;
+
+        &-item {
+            margin-left: 10px;
+
+            &:first-child {
+                margin-left: 0;
+            }
+        }
+    }
+
+    &__content {
+        flex-grow: 1;
+        flex-shrink: 1;
+        overflow-y: auto;
+
+        &_empty_yes {
+            display: flex;
+            flex-direction: column;
+        }
+    }
+
+    &__list {
+        margin: 0;
+        padding: 0;
+
+        &-item {
+            display: flex;
+            align-items: center;
+
+            white-space: nowrap;
+            list-style: none;
+            user-select: none;
+
+            overflow: hidden;
+
+            &-name {
+                margin-right: auto;
+                padding: $item-vertical-padding $item-horizontal-padding;
+                flex-basis: 95%;
+                flex-shrink: 1;
+                overflow: hidden;
+                text-overflow: ellipsis;
+
+                display: flex;
+                align-items: center;
+
+                .icon {
+                    margin-right: 5px;
+                }
+            }
+
+            &-check {
+                padding: $item-vertical-padding $item-horizontal-padding $item-vertical-padding 32px;
+                cursor: pointer;
+                opacity: 0;
+
+                &:not(:hover) {
+                    color: var(--checked-color);
+                }
+            }
+
+            &-lock {
+                padding: $item-vertical-padding $item-horizontal-padding $item-vertical-padding 32px;
+                opacity: 0;
+            }
+
+            $list-item: &;
+            $checkbox: #{$list-item}-check;
+            $lockicon: #{$list-item}-lock;
+            $selected-item: #{$list-item}_selected_yes;
+
+            &_selectable_yes {
+                &:hover {
+                    background-color: var(--hover-background);
+
+                    #{$checkbox} {
+                        opacity: 1;
+                    }
+                }
+
+                &#{$selected-item} {
+                    #{$checkbox} {
+                        opacity: 1;
+                    }
+                }
+
+                &#{$selected-item} {
+                    font-weight: 600;
+                }
+
+                &:hover #{$checkbox}:before {
+                    @include yt-fonts();
+
+                    content: 'Add';
+                    line-height: 1;
+                    color: var(--primary-text);
+                }
+            }
+
+            &_selected_yes {
+                &:hover {
+                    background-color: var(--hover-background);
+                    box-sizing: border-box;
+
+                    #{$checkbox} {
+                        opacity: 1;
+                    }
+
+                    #{$checkbox}:before {
+                        @include yt-fonts();
+                        content: 'Remove';
+                        line-height: 1;
+                        color: var(--primary-text);
+                    }
+                }
+            }
+
+            &_helper_yes {
+                z-index: var(--dialog-suggest-z-index);
+
+                opacity: 0.8;
+                cursor: move;
+
+                /* To show correct cursor when dragging helper */
+                pointer-events: auto !important;
+                & > * {
+                    pointer-events: none;
+                }
+            }
+
+            &_disabled_yes {
+                background-clip: content-box;
+                box-sizing: border-box;
+                cursor: not-allowed;
+                color: var(--secondary-text);
+
+                .elements-label {
+                    padding-right: 8px;
+                }
+
+                #{$lockicon} {
+                    opacity: 1;
+                }
+
+                &:hover {
+                    #{$lockicon}:before {
+                        @include yt-fonts();
+                        content: 'Access denied';
+                        line-height: 1;
+                    }
+                }
+            }
+        }
+    }
+
+    &__separator {
+        margin: 10px 0;
+        border-bottom: 2px solid var(--light-divider);
+    }
+
+    &__drag-handle {
+        width: 20px;
+        height: 20px;
+
+        font-size: 0.8em;
+        line-height: 20px;
+        text-align: center;
+
+        opacity: 0.2;
+        cursor: move;
+
+        flex-shrink: 0;
+    }
+}

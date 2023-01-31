@@ -1,0 +1,151 @@
+@import '../../../../../styles/mixins';
+
+$overview-height: 50px;
+
+.navigation-table-overview {
+    display: flex;
+    align-items: center;
+    padding: 10px 0;
+    height: $overview-height;
+
+    background-color: var(--main-background);
+
+    &_sticky {
+        @include sticky-style();
+        padding: 10px 20px;
+    }
+
+    &_fullscreen {
+        @include sticky-style();
+        height: 0;
+        padding: 10px;
+    }
+
+    &__pagination {
+        margin-right: 20px;
+    }
+
+    &__input {
+        flex: 0 1 50%;
+        display: flex;
+        min-width: 200px;
+        margin-right: 20px;
+        position: relative;
+
+        .yc-button:before {
+            transition: none;
+        }
+
+        &_edit {
+            top: 7px;
+        }
+
+        &_dynamic {
+            top: 0;
+
+            .elements-filter {
+                width: 100%;
+            }
+        }
+
+        .textinput__icon_side_left {
+            top: 4px;
+        }
+
+        .yc-range-input-picker {
+            width: 100%;
+
+            &_size_s {
+                .rc-slider-handle {
+                    bottom: 3.5px;
+                }
+            }
+        }
+    }
+
+    &__query-current {
+        width: 100%;
+        padding: 0 5px;
+        border: 2px solid var(--dark-divider);
+        background-color: var(--main-background);
+        position: relative;
+        line-height: 24px;
+        font-size: 13px;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        cursor: pointer;
+
+        .icon {
+            margin-right: 5px;
+        }
+    }
+
+    &__query-progress {
+        background-color: var(--blue-color);
+        position: absolute;
+        bottom: -2px;
+        left: -2px;
+        height: 2px;
+        z-index: 1;
+    }
+
+    &__settings {
+        margin-left: 10px;
+        margin-right: 10px;
+    }
+
+    &__settings-modal {
+        padding: 10px 15px;
+    }
+
+    &__yql {
+        margin-left: 10px;
+        margin-right: 10px;
+
+        display: flex;
+
+        .yc-button:first-child {
+            width: 100px;
+        }
+    }
+
+    &__jupyter {
+        height: 28px;
+        margin-right: 10px;
+    }
+
+    &__datalens {
+        margin-right: 10px;
+    }
+
+    &__jupyter-content {
+        display: flex;
+        align-items: center;
+    }
+
+    &__jupyter-logo {
+        position: relative;
+        left: -6px;
+    }
+
+    &__actions {
+        display: flex;
+        align-items: center;
+        margin-left: 10px;
+        margin-right: 10px;
+
+        > * {
+            margin-right: 10px;
+
+            &:last-child {
+                margin-right: 0;
+            }
+        }
+    }
+
+    &__fs-button {
+        &_fullscreen {
+            margin-left: auto;
+        }
+    }
+}

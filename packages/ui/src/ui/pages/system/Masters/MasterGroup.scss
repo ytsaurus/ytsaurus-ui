@@ -1,0 +1,108 @@
+@import '../../../styles/common';
+@import '../../../styles/mixins';
+
+.master-group {
+
+    &__availability {
+        grid-column: status;
+    }
+
+    &__role {
+        grid-column: role;
+    }
+
+    &__group {
+        margin-top: 12px;
+        margin-bottom: 18px;
+        display: grid;
+        grid-gap: 8px;
+        grid-template-columns: [status] 14px [role] minmax(max-content, 100px) [icon] minmax(30px, max-content) [host] max-content;
+        grid-auto-rows: 20px;
+
+        &_grid-row-start {
+            grid-row-start: 1;
+        }
+    }
+
+    &__icon {
+        grid-column: icon;
+        justify-self: end;
+
+        &-maintenance {
+            color: var(--secondary-text);
+        }
+
+        &-glyph {
+            vertical-align: middle;
+            color: var(--secondary-text);
+            display: inline-flex;
+        }
+
+        &-glyph.yt-icon {
+            top: -1px;
+        }
+    }
+
+    &__host {
+        grid-column: host;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        &-name {
+            flex: 0 1 auto;
+            @include ellipsis();
+        }
+
+        &-copy-btn {
+            flex: 0 0 auto;
+            visibility: hidden;
+        }
+
+        &:hover &-copy-btn {
+            visibility: visible;
+        }
+    }
+
+    &__quorum {
+        &-status {
+            grid-column: status;
+
+            &_state {
+                &_present {
+                    .yt-icon {
+                        color: var(--success-color);
+                    }
+                }
+
+                &_weak {
+                    color: var(--warning-color);
+                }
+
+                &_missing {
+                    color: var(--danger-color);
+                }
+
+                &_unknown {
+                }
+            }
+
+            .yt-icon {
+                top: -1px;
+            }
+        }
+
+        &-label {
+            grid-column: role;
+        }
+
+
+        &-version {
+            cursor: pointer;
+        }
+
+        &-cell {
+            cursor: pointer;
+        }
+    }
+}

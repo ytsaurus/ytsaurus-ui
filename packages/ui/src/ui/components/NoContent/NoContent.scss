@@ -1,0 +1,18 @@
+.no-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    padding-top: 120px;
+    padding-bottom: 120px;
+
+    &__image {
+        margin-bottom: 40px;
+        max-width: 288px;
+    }
+
+    &__warning {
+        font-size: 20px;
+    }
+}

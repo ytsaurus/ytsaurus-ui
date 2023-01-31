@@ -1,0 +1,17 @@
+.create-table-modal {
+    .df-dialog_with_vertical_tabs {
+        min-height: 470px;
+    }
+
+    &__title {
+        font-size: var(--yc-text-subheader-3-font-size);
+    }
+
+    &__tooltip {
+        text-align: left;
+    }
+
+    &__alert-text {
+        color: var(--warning-text);
+    }
+}

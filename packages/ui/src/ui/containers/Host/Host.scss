@@ -1,0 +1,9 @@
+.yt-host {
+    display: flex;
+    overflow: hidden;
+    align-items: center;
+
+    &_hidden {
+        visibility: hidden;
+    }
+}

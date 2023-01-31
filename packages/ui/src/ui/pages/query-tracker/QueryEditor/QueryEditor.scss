@@ -1,0 +1,62 @@
+.query-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+
+    &__loading {
+        position: absolute;
+        z-index: 1000;
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0, 0.1);
+        display: flex;
+        justify-content: center;
+    }
+
+    &_minimized .flex-split__pane:nth-child(3) {
+        flex: initial;
+        /* In order to override flex basis from split component */
+        flex-basis: initial !important;
+    }
+
+    &_full .flex-split__pane:nth-child(1) {
+        flex: initial;
+        /* In order to override flex basis from split component */
+        flex-basis: initial !important;
+    }
+
+    &__query {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+    }
+
+    &__results {
+        flex: 1;
+    }
+
+    &__editor {
+        flex: 1;
+        border-bottom: 1px solid var(--dark-divider);
+        overflow: hidden;
+        width: 100%;
+        height: 100%;
+    }
+
+    &__actions {
+        padding: 6px 20px;
+        display: flex;
+        flex-direction: row;
+        background: var(--main-background);
+
+        .query-run-action {
+            padding-right: 12px;
+            margin-right: 12px;
+
+            .query-run-action-button:first-child {
+                margin-right: 4px;
+            }
+        }
+    }
+}

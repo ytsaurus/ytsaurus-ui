@@ -1,0 +1,41 @@
+.yt-progress-tooltip {
+    //    &__progress-tooltip-grid {
+    display: grid;
+    grid-template-columns: auto auto auto auto;
+    align-items: center;
+    grid-gap: 10px;
+    max-height: 40vh;
+    overflow: auto;
+    padding-right: 15px;
+
+    &__header {
+        color: var(--secondary-text);
+        border-bottom: 1px solid var(--dark-divider);
+        align-self: end;
+
+        &:empty {
+            border-bottom: unset;
+        }
+    }
+
+    &__total {
+        font-weight: 700;
+    }
+
+    &__committed,
+    &__limit {
+        padding-left: 2em;
+        text-align: right;
+    }
+
+    &__icon,
+    &__name {
+        display: inline-block;
+        padding-right: 5px;
+    }
+
+    & * {
+        white-space: nowrap;
+    }
+    //    }
+}

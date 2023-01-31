@@ -1,0 +1,21 @@
+.yt-text {
+    &__secondary {
+        color: var(--secondary-text);
+
+        &_disabled {
+            color: var(--disabled-link);
+        }
+    }
+
+    &__bold {
+        font-weight: 500;
+    }
+
+    &__warning {
+        color: var(--warning-text);
+    }
+
+    &__no-wrap {
+        white-space: nowrap;
+    }
+}

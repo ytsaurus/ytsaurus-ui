@@ -1,0 +1,12 @@
+.before-date-picker {
+    display: flex;
+
+    &__input-container {
+        flex-grow: 1;
+        width: 25ex;
+        padding-left: 2ex;
+        display: flex;
+        flex-direction: column;
+        justify-items: stretch;
+    }
+}

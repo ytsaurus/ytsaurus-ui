@@ -1,0 +1,48 @@
+@import '../globals';
+@import '../../../styles/common';
+
+.elements-page-wrapper {
+    margin: 0;
+}
+
+.elements-page-wrapper .container-fluid {
+    margin: 0;
+    padding: 0;
+    width: auto;
+}
+
+.elements-page {
+    display: flex;
+    flex-direction: column;
+
+    min-width: 320px;
+    min-height: 100vh;
+
+    &__header {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: var(--app-header-z-index);
+
+        background-color: var(--main-background);
+        border-bottom: 1px solid var(--dark-divider);
+        box-sizing: border-box;
+
+        &-inner {
+            height: var(--app-header-height);
+            display: flex;
+            align-items: center;
+        }
+    }
+
+    &__footer {
+        margin-top: auto;
+
+        .footer__addon-text {
+            white-space: pre-line;
+
+            color: var(--secondary-text);
+        }
+    }
+}

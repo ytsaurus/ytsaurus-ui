@@ -1,0 +1,32 @@
+.yt-quota-editor {
+    display: flex;
+
+    &__item {
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+        width: 50%;
+
+        &_save {
+            flex-grow: 0;
+        }
+
+        &:not(:first-child) {
+            padding-left: 1em;
+        }
+    }
+
+    &__item-title {
+        padding-bottom: 4px;
+    }
+
+    &__free {
+        color: var(--secondary-text);
+        padding-top: 4px;
+        padding-left: 8px;
+        font-size: 13px;
+        &-value {
+            font-weight: bolder;
+        }
+    }
+}

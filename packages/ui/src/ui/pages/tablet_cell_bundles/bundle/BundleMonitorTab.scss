@@ -1,0 +1,31 @@
+.bundle-monitor-tab {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(600px, 1fr));
+    grid-gap: 40px 100px;
+
+    &__item {
+        height: 400px;
+    }
+
+    &__avg-rates {
+        display: flex;
+        flex-direction: column;
+        height: 100px;
+        &-charts {
+            flex-grow: 1;
+            display: flex;
+        }
+    }
+
+    &__avg-chart {
+        flex-grow: 1;
+
+        &-spacer {
+            flex-grow: 0.1;
+        }
+
+        &-spacer2 {
+            flex-grow: 0.25;
+        }
+    }
+}

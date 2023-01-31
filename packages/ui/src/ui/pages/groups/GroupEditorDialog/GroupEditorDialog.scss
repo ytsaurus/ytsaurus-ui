@@ -1,0 +1,9 @@
+.group-editor-dialog {
+    .df-tab-field-vertical {
+        min-height: 400px;
+    }
+
+    &__list-title {
+        color: var(--secondary-text);
+    }
+}

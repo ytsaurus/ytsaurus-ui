@@ -1,0 +1,20 @@
+.node-general {
+    $meta-table: '.meta-table-item';
+
+    &__cpu,
+    &__storage,
+    &__resources {
+        #{$meta-table} {
+            margin-bottom: 0;
+            margin-right: 0;
+
+            &__key {
+                width: 120px;
+            }
+
+            &__value {
+                min-width: 200px;
+            }
+        }
+    }
+}

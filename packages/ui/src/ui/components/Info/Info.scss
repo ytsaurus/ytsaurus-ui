@@ -1,0 +1,23 @@
+.info-block {
+    --external-link: var(--yc-color-text-link);
+
+    display: flex;
+    padding: 12px 16px;
+    background-color: var(--yc-color-base-info);
+    border-radius: 5px;
+
+    .yc-icon {
+        color: #027bf3;
+    }
+
+    &__icon {
+        flex-shrink: 0;
+        margin-right: 8px;
+    }
+
+    &__body {
+        font-size: var(--yc-text-body-short-font-size);
+        line-height: var(--yc-text-body-short-line-height);
+        color: var(--yc-color-text-secondary);
+    }
+}

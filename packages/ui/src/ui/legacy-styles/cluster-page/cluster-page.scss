@@ -1,0 +1,24 @@
+@import '../elements/globals';
+
+$error-alert-header-hight: 42px;
+$error-alert-vertical-offsets: 150px;
+
+.cluster-page {
+    &__page-missing {
+        text-align: center;
+
+        &-status {
+            font-size: 15em;
+
+            margin: 0;
+        }
+
+        &-message {
+            font-size: 17px;
+        }
+    }
+
+    &_type_old {
+        padding: 20px 0;
+    }
+}

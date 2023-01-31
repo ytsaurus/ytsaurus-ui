@@ -1,0 +1,16 @@
+.account-static-configuration {
+    &__table {
+        margin-top: -20px;
+        display: inline-block;
+    }
+
+    &__row {
+        &_level_1 {
+            color: var(--secondary-text);
+
+            td:first-child {
+                padding-left: 4ex;
+            }
+        }
+    }
+}

@@ -1,0 +1,21 @@
+@import '../../../components/WithStickyToolbar/WithStickyToolbar.scss';
+
+.bundles-table-instruments {
+    &__item {
+        max-width: 380px;
+        min-width: 20ex;
+
+        .elements-filter {
+            flex-grow: 1;
+        }
+
+        .textinput__box {
+            border-radius: 4px;
+        }
+
+        ::placeholder {
+            color: var(--yc-color-text-hint) !important;
+            font-size: 14px;
+        }
+    }
+}

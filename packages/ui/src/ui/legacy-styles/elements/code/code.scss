@@ -1,0 +1,21 @@
+@import '../globals';
+
+.elements-code {
+    font-family: $yt-monospace-font;
+    line-height: 20px;
+
+    margin: 0;
+
+    word-break: break-all;
+    word-wrap: break-word;
+    white-space: pre-wrap;
+
+    color: var(--primary-text);
+
+    &_theme_default {
+        padding: 10px;
+
+        background-color: var(--light-background);
+        border-left: 2px solid var(--dark-divider);
+    }
+}

@@ -1,0 +1,31 @@
+.navigation-acl-delete-modal {
+    &__warning {
+        display: block;
+        padding: 10px 30px;
+        margin: 20px -30px;
+
+        color: var(--default-color);
+        font-size: 16px;
+    }
+
+    &__meta {
+        margin-bottom: 20px;
+    }
+
+    &__delete {
+        margin: 0;
+        display: flex;
+        justify-content: space-between;
+
+        .elements-label {
+            opacity: 0;
+            transition: 100ms opacity ease;
+        }
+
+        &_confirm {
+            .elements-label {
+                opacity: 1;
+            }
+        }
+    }
+}

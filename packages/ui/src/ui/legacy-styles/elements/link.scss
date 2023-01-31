@@ -1,0 +1,28 @@
+.elements-executable-link,
+.elements-external-link {
+    position: relative;
+
+    padding-right: 18px;
+}
+
+.elements-external-link::after,
+.elements-executable-link::after {
+    font-family: 'Font Awesome 5 Pro';
+    font-weight: 400;
+    font-size: 0.9em;
+    line-height: 1;
+
+    position: absolute;
+    right: 0;
+    top: 50%;
+
+    margin-top: -0.45em;
+}
+
+.elements-executable-link::after {
+    content: '\f085';
+}
+
+.elements-external-link::after {
+    content: '\f08e';
+}

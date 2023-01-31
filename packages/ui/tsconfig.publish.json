@@ -1,0 +1,13 @@
+{
+  "extends": "./tsconfig",
+  "compilerOptions": {
+    "declaration": true,
+    "allowJs": true,
+    "module": "esnext",
+    "jsx": "react",
+    "resolveJsonModule": true,
+    "baseUrl": ".",
+    "isolatedModules": true
+  },
+  "include": ["src/**/*"]
+}

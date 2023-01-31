@@ -1,0 +1,73 @@
+$pad: 4px;
+
+.flex-split {
+    display: flex;
+    flex: 1 1;
+    overflow: auto;
+    position: relative;
+
+    &_direction_vertical {
+        flex-direction: column;
+    }
+
+    &_direction_horizontal {
+        flex-direction: row;
+    }
+
+    &__pane {
+        position: relative;
+        flex: 1 1;
+        overflow: auto;
+        display: flex;
+
+        min-height: 1%;
+        min-width: 1%;
+
+        &:empty {
+            display: none;
+        }
+    }
+
+    .gutter {
+        position: relative;
+        background-color: var(--dark-background);
+        color: var(--secondary-text);
+        z-index: var(--draggable-splitter-z-index);
+
+        &:before {
+            content: '';
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            border-radius: 2px;
+            top: 50%;
+            left: 50%;
+        }
+
+        &.gutter-vertical {
+            cursor: ns-resize;
+
+            &:before {
+                $line1: $pad;
+                $line2: 2*$pad;
+                margin-left: 1px - 2*$pad;
+                margin-top: 1px - 2*$pad;
+                box-shadow: 0 $line1, $pad $line1, 2*$pad $line1, 3*$pad $line1,
+                    0 $line2, $pad $line2, 2*$pad $line2, 3*$pad $line2;
+            }
+        }
+
+        &.gutter-horizontal {
+            cursor: ew-resize;
+
+            &:before {
+                $line1: $pad;
+                $line2: 2*$pad;
+                margin-left: 1px - 2*$pad;
+                margin-top: 1px - 2*$pad;
+                box-shadow: $line1 0, $line1 $pad, $line1 2*$pad, $line1 3*$pad,
+                    $line2 0, $line2 $pad, $line2 2*$pad, $line2 3*$pad;
+            }
+        }
+    }
+}

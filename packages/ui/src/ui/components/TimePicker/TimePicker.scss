@@ -1,0 +1,11 @@
+.timepicker {
+    .icon_awesome {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    &__control {
+        width: 80px;
+    }
+}

@@ -1,0 +1,41 @@
+.bundle-general-meta {
+    .meta-table__group {
+        grid-gap: 6px 27px;
+    }
+
+    .yc-progress {
+        width: 200px;
+    }
+
+    &__health {
+        font-weight: 600;
+        text-transform: capitalize;
+
+        &_value {
+            &_good {
+                color: var(--success-color);
+            }
+            &_failed {
+                color: var(--danger-color);
+            }
+            &_initializing {
+                color: var(--secondary-text);
+            }
+        }
+    }
+
+    &__bb {
+        font-weight: 600;
+        text-transform: capitalize;
+        color: var(--danger-color);
+
+        &_success {
+            color: var(--success-color);
+        }
+
+        &_blocking {
+            font-weight: 400;
+            color: var(--error-text);
+        }
+    }
+}

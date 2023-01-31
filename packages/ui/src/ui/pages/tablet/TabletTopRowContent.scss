@@ -1,0 +1,16 @@
+@import '../../styles/fonts.scss';
+
+.tablet-top-row-content {
+
+    &__editable {
+        @include font-body2;
+
+        min-width: 40ex;
+        color: var(--secondary-text);
+    }
+
+    &__control {
+        display: inline-block;
+        margin-bottom: -2px;
+    }
+}

@@ -1,0 +1,29 @@
+@import '../../../styles/mixins.scss';
+
+.account-quota {
+    padding: 16px 0;
+    &__value {
+        display: flex;
+        align-items: center;
+    }
+
+    &__name {
+        font-weight: 500;
+        flex: 0 0 150px;
+
+        @include ellipsis();
+    }
+    &__progress {
+        flex-grow: 1.5;
+        flex-shrink: 1;
+        padding: 0 1em;
+    }
+
+    &__progress-tooltip {
+        display: block;
+    }
+
+    &__progress-tooltip-popup {
+        max-width: unset;
+    }
+}

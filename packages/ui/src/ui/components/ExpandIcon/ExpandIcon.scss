@@ -1,0 +1,12 @@
+.expand-icon {
+    padding: 0 1ex;
+    visibility: hidden;
+
+    &_visible {
+        visibility: unset;
+    }
+
+    &_clickable {
+        cursor: pointer;
+    }
+}

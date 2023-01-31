@@ -1,0 +1,13 @@
+.elements-toolbar__component {
+    .elements-filter {
+        flex: 1 1 100%;
+    }
+}
+
+.elements-filter {
+    &_invalid {
+        .textinput__box {
+            border: 1px solid var(--danger-color) !important;
+        }
+    }
+}

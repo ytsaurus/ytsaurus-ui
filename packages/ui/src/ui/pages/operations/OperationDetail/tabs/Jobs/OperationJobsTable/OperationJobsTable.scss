@@ -1,0 +1,119 @@
+@import '../../../../../../styles/common.scss';
+@import '../../../../../../styles/mixins.scss';
+
+.operation-detail-jobs {
+    &__table {
+        table-layout: fixed;
+
+        min-width: calc(1280px - 2 * var(--section-main-padding-horizontal));
+
+        &-item {
+            padding: 8px;
+
+            vertical-align: top;
+
+            &_type {
+                &_type {
+                    width: 80px;
+                }
+
+                &_error {
+                    width: 240px;
+                }
+
+                &_start-time,
+                &_finish-time {
+                    width: 160px;
+                }
+
+                &_progress {
+                    width: 160px;
+                }
+
+                &_stderr,
+                &_duration {
+                    width: 80px;
+                }
+
+                &_actions {
+                    width: 25px;
+                }
+            }
+        }
+    }
+
+    &__in-progress,
+    &__start-time,
+    &__finish-time {
+        height: 22px;
+    }
+
+    &__error-badge {
+        margin-right: 5px;
+
+        .icon.icon_awesome {
+            opacity: 1;
+            color: var(--danger-color);
+        }
+    }
+
+    &__speculative-job-label {
+        color: var(--warning-color);
+        padding-left: 24px;
+    }
+
+    &__host {
+        font-size: 14px;
+        @include ellipsis();
+    }
+
+    &__id {
+        font-size: 14px;
+        display: flex;
+        overflow: hidden;
+        align-items: center;
+    }
+
+    &__id-job-link {
+        flex-shrink: 1;
+        @include ellipsis();
+    }
+
+    &__host {
+        color: var(--secondary-text);
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+
+        &-name {
+            flex-shrink: 1;
+            @include ellipsis();
+        }
+        &-chart-link {
+            padding-left: 1ex;
+            flex-shrink: 0;
+            flex-grow: 1;
+        }
+    }
+
+    &__warning-icon {
+        flex-shrink: 0;
+        flex-grow: 1;
+        padding-left: 1ex;
+    }
+
+    &__state-details {
+        display: flex;
+        align-items: center;
+    }
+
+    &__state-icon {
+        padding-left: 1ex;
+        color: var(--secondary-text);
+        flex-shrink: 1;
+    }
+
+    &__state-value {
+        text-align: right;
+    }
+}

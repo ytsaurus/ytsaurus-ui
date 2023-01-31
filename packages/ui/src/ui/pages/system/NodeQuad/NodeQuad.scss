@@ -1,0 +1,42 @@
+@import '../../../styles/common';
+
+.node-quad {
+    position: relative;
+    top: 2px;
+
+    display: inline-block;
+
+    width: $node-width;
+    height: $node-width;
+    margin: $node-margin;
+
+    overflow: hidden;
+    flex-shrink: 0;
+
+    text-align: center;
+
+    color: var(--light-text);
+
+    &_theme_online {
+        background-color: var(--success-color);
+    }
+
+    &_theme_banned {
+        background-color: var(--warning-color);
+    }
+
+    &_theme_offline {
+        background-color: var(--danger-color);
+    }
+
+    &_theme_following {
+        background-color: var(--info-color);
+    }
+
+    &_theme_mixed,
+    &_theme_registered,
+    &_theme_unregistered,
+    &_theme_unknown {
+        background-color: var(--default-color);
+    }
+}

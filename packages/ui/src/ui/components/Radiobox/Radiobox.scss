@@ -1,0 +1,15 @@
+$block: '.elements-radiobox';
+
+#{$block} {
+    &_layout_vertical {
+        #{$block}__radio {
+            display: block;
+        }
+    }
+
+    &_layout_horizontal {
+        #{$block}__radio {
+            margin-right: 10px;
+        }
+    }
+}

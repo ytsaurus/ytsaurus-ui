@@ -1,0 +1,18 @@
+.system {
+    &__heading-overview {
+        display: flex;
+        align-items: center;
+        font-size: 14px;
+        line-height: 24px;
+        margin-left: auto;
+        letter-spacing: 0.05em;
+
+        .elements-label {
+            margin-left: 5px;
+        }
+
+        &-states {
+            width: 200px;
+        }
+    }
+}

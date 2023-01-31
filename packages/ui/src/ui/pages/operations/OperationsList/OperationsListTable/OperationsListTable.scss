@@ -1,0 +1,168 @@
+.operations-list {
+    $self: &;
+
+    min-width: 1150px;
+
+    .meta-table-item {
+        align-items: center;
+
+        &__key {
+            min-width: 50px;
+        }
+    }
+
+    &__view-button {
+        margin-left: 5px;
+    }
+
+    &__edit-button {
+        margin: -5px 0;
+        margin-left: -5px;
+        display: none;
+        transition: opacity 300ms ease;
+    }
+
+    &__multiply-pools {
+        &:hover {
+            #{$self}__edit-button {
+                display: unset;
+            }
+        }
+    }
+
+    &__user-pool-item {
+        display: flex;
+        align-items: center;
+        overflow: hidden;
+        line-height: 21px;
+
+        &:not(:last-child) {
+            padding-bottom: 3px;
+        }
+    }
+
+    &__user-pool-item-icon {
+        width: 20px;
+        text-align: center;
+        padding-right: 1ex;
+        flex-shrink: 0;
+        color: var(--secondary-link);
+    }
+
+    &__user-pool-item-name {
+        flex-shrink: 1;
+        flex-grow: 1;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+
+    &__failed-jobs {
+        white-space: nowrap;
+
+        &-counter {
+            margin-left: 5px;
+
+            line-height: 28px;
+
+            color: var(--secondary-text);
+        }
+    }
+
+    &__table {
+        table-layout: fixed;
+
+        &-item {
+            padding: 8px;
+
+            vertical-align: top;
+        }
+
+        .elements-table__head &-item_type_title {
+            padding-left: 42px;
+        }
+
+        &-item_type {
+            &_title {
+                width: 100%;
+            }
+
+            &_type {
+                width: 100px;
+            }
+
+            &_user-pool {
+                width: 170px;
+
+                & .elements-meta-item__key {
+                    flex-basis: 60px;
+                }
+
+                & .elements-meta-item__value {
+                    flex-basis: calc(100% - 80px);
+                }
+            }
+
+            &_start-time {
+                width: 150px;
+            }
+
+            &_state {
+                width: 100px;
+            }
+
+            &_progress {
+                width: 200px;
+            }
+
+            &_actions {
+                width: 70px;
+            }
+        }
+    }
+
+    & &__item {
+        &-title {
+            display: flex;
+            align-items: center;
+
+            &-copy {
+                margin-right: 10px;
+            }
+        }
+
+        &-io {
+            & .elements-meta-item__key {
+                flex-basis: 40px;
+
+                margin-right: 4px;
+                margin-left: -20px;
+            }
+
+            & .elements-meta-item__value {
+                flex-basis: calc(100% - 34px);
+            }
+
+            &-count {
+                display: inline-block;
+
+                width: 1.5em;
+                margin-right: 5px;
+
+                color: var(--secondary-text);
+            }
+        }
+
+        &-type {
+            font-size: 0.9em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        &-start-time {
+            &-default {
+                color: var(--secondary-text);
+            }
+        }
+    }
+}

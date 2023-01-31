@@ -1,0 +1,48 @@
+@import '../../styles/common.scss';
+
+.cluster-page-header {
+    position: fixed;
+    top: 0;
+    left: var(--nv-aside-header-size);
+    right: 0;
+    height: var(--app-header-height);
+    overflow: hidden;
+    background-color: var(--main-background);
+    border-bottom: 1px solid var(--dark-divider);
+    display: flex;
+    align-items: center;
+    z-index: var(--app-header-z-index);
+    padding-right: 30px;
+    padding-left: 5px;
+    //    min-width: 1200px;
+    width: 100%;
+    max-width: calc(100vw - var(--nv-aside-header-size));
+
+    &__spacer {
+        height: 24px;
+        border-left: 1px solid var(--dark-divider);
+    }
+
+    &__cluster {
+        display: flex;
+        align-items: center;
+        padding: 0 20px 0 15px;
+
+        font-size: var(--yc-text-body-2-font-size);
+
+        &:hover {
+            cursor: pointer;
+        }
+    }
+
+    &__popup {
+        z-index: var(--dialog-suggest-z-index) !important;
+    }
+
+    &__popup-content {
+        min-width: 270px;
+        border-radius: 5px;
+        background-color: var(--main-background);
+        border: 1px solid var(--dark-divider);
+    }
+}

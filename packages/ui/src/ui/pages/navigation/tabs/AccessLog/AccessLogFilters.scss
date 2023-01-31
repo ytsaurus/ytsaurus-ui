@@ -1,0 +1,19 @@
+.access-log-filters {
+    &__path-regex {
+        max-width: 450px;
+    }
+
+    &__user-regex {
+        width: 170px;
+    }
+
+    &__user-type,
+    &__scope,
+    &__method-group {
+        width: 160px;
+    }
+
+    &__available-range {
+        color: var(--secondary-text);
+    }
+}

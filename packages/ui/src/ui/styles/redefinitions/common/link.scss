@@ -1,0 +1,29 @@
+.yc-root {
+    .yc-link {
+        &_view_normal {
+            color: var(--external-link);
+        }
+
+        &_view_black {
+            color: var(--primary-link);
+        }
+
+        &_view_ghost {
+            color: var(--secondary-link);
+        }
+
+        &_view_secondary {
+            color: var(--secondary-text);
+        }
+
+        &:hover {
+            color: var(--hover-link);
+        }
+    }
+
+    .yc-link_view_normal.yc-link_disabled_yes,
+    .yc-link_view_primary.yc-link_disabled_yes,
+    .yc-link_view_ghost.yc-link_disabled_yes {
+        color: var(--disabled-link);
+    }
+}

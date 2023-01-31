@@ -1,0 +1,50 @@
+@import '../globals';
+
+.elements-toolbar {
+    &__container {
+        & + & {
+            margin-top: -10px;
+        }
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+
+    &__component {
+        height: 48px;
+        margin-right: 20px;
+        padding: 10px 0;
+        flex-shrink: 0;
+
+        &:last-child {
+            margin-right: 0;
+        }
+    }
+
+    .is-sticky & {
+        z-index: var(--fixed-toolbar-z-index);
+        right: 0;
+        left: 0;
+
+        background-color: var(--light-background);
+        box-shadow: 0 1px 10px var(--opacity-background);
+
+        &__container {
+            padding-left: var(--section-main-padding-horizontal);
+            padding-right: var(--section-main-padding-horizontal);
+
+            .table__fullscreen:fullscreen & {
+                padding-right: $section-main-padding-horizontal-fullscreen;
+            }
+
+            .table__controls {
+                margin-right: auto;
+                padding-right: 10px;
+            }
+
+            .table__exports {
+                margin-left: 0;
+            }
+        }
+    }
+}

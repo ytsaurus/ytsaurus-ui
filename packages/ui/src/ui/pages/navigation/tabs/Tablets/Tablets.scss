@@ -1,0 +1,157 @@
+@import '../../../../styles/mixins';
+
+.navigation-tablets {
+    .collapsible-section {
+        margin-top: 0;
+        margin-bottom: 40px;
+    }
+
+    &__overview {
+        display: flex;
+
+        padding: 10px 0;
+        margin-bottom: 20px;
+
+        z-index: var(--fixed-toolbar-z-index);
+        background-color: var(--main-background);
+
+        &_sticky {
+            @include sticky-style();
+        }
+    }
+
+    &__pivot-key {
+        display: flex;
+        align-items: center;
+    }
+
+    &__tablets-filter,
+    .histogram__select {
+        width: 20%;
+        min-width: 40ex;
+        margin-right: 20px;
+    }
+
+    &_loading {
+        height: 200px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    &__table {
+        table-layout: fixed;
+
+        &-item {
+            &_type_index {
+                width: 80px;
+            }
+
+            &_type_actions {
+                width: 24px;
+            }
+
+            &_type_errors {
+                width: 50px;
+            }
+
+            &_type_state {
+                width: 100px;
+            }
+
+            &_type_pivot-key {
+                width: 300px;
+            }
+
+            &_type_cell-id,
+            &_type_tablet-id,
+            &_type_store-preload {
+                width: 220px;
+            }
+            &_type_name-tablet-id,
+            &_type_name-cell-id {
+                width: 260px;
+            }
+
+            &_type_uncompressed-size,
+            &_type_compressed-size,
+            &_type_unmerged-rows,
+            &_type_disk-space,
+            &_type_chunks,
+            &_type_partitions,
+            &_type_stores,
+            &_type_overlapping-stores {
+                width: 140px;
+            }
+
+            &_type_dynamic-read,
+            &_type_dynamic-lookup,
+            &_type_dynamic-write,
+            &_type_dynamic-delete,
+            &_type_static-chunk-read,
+            &_type_static-chunk-lookup {
+                width: 80px;
+            }
+
+            &_type_merged-read,
+            &_type_unmerged-read,
+            &_type_replication-errors,
+            &_type_cell-leader-address {
+                width: 120px;
+            }
+        }
+
+        &-group-item {
+            &_type_dynamic {
+                width: 320px + 48px;
+            }
+
+            &_type_static-chunk {
+                width: 160px + 16px;
+            }
+        }
+
+        &-row {
+            &_aggregation_yes {
+                font-weight: bold;
+            }
+        }
+    }
+
+    &__id-link {
+        display: flex;
+        align-items: center;
+    }
+
+    &__copy-btn {
+        margin-top: -10px;
+        margin-bottom: -10px;
+        visibility: hidden;
+    }
+
+    $self: &;
+
+    .elements-table__row {
+        &:hover {
+            #{$self}__copy-btn {
+                visibility: unset;
+            }
+        }
+    }
+
+    &__row {
+        &_top {
+            font-weight: var(--yt-font-weight-bold);
+            background-color: var(--light-background);
+        }
+    }
+
+    &__name {
+        display: flex;
+        white-space: nowrap;
+        &_level_1 {
+            padding-left: 40px;
+            cursor: default;
+        }
+    }
+}

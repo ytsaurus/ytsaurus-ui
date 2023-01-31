@@ -1,0 +1,63 @@
+.yt-icon {
+    position: relative;
+    display: inline-flex;
+    vertical-align: middle;
+
+    &_not-exist {
+        color: #c211db;
+        position: relative;
+        animation: shake 0.82s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+        animation-iteration-count: 10;
+        &:hover::after {
+            position: absolute;
+            content: 'please report this icon';
+            top: -15px;
+            left: -50%;
+            font-size: 10px;
+            margin: 0;
+            line-height: 11px;
+            width: 100px;
+        }
+    }
+
+    &_spin {
+        animation-name: spin;
+        animation-delay: 0s;
+        animation-direction: normal;
+        animation-duration: 2s;
+        animation-iteration-count: infinite;
+        animation-timing-function: linear;
+    }
+}
+
+@keyframes shake {
+    10%,
+    90% {
+        transform: translate3d(-0.5px, 0, 0);
+    }
+
+    20%,
+    80% {
+        transform: translate3d(0.5px, 0, 0);
+    }
+
+    30%,
+    50%,
+    70% {
+        transform: translate3d(-1px, 0, 0);
+    }
+
+    40%,
+    60% {
+        transform: translate3d(1px, 0, 0);
+    }
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}

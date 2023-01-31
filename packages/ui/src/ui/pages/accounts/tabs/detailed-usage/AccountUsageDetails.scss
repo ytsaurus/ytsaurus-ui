@@ -1,0 +1,41 @@
+.account-usage-details {
+    &__row {
+        &:hover {
+            background-color: var(--yc-color-hover-area);
+        }
+    }
+    &__no-wrap {
+        white-space: nowrap;
+    }
+
+    &__path-cell_view_tree-diff,
+    &__path-cell_view_tree {
+        cursor: pointer;
+    }
+
+    &__path-header {
+        display: flex;
+        align-items: center;
+    }
+
+    &__path-header-loader {
+        width: 60px;
+        margin-bottom: -5px;
+    }
+
+    &__path-header-page {
+        font-weight: normal;
+        min-width: 200px;
+        text-align: right;
+        padding-right: 2em;
+    }
+
+    &__value {
+        &_diff_plus {
+            color: var(--danger-color);
+        }
+        &_diff_minus {
+            color: var(--success-color);
+        }
+    }
+}

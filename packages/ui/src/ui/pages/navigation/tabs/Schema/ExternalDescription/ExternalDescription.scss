@@ -1,0 +1,17 @@
+.external-description {
+    display: flex;
+    align-items: center;
+
+    &__meta {
+        margin-top: 10px;
+    }
+
+    &__icon {
+        color: var(--yc-color-text-warning-medium);
+        margin-right: 1em;
+    }
+
+    &__preview {
+        flex: 1;
+    }
+}

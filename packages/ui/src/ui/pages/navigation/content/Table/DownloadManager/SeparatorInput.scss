@@ -1,0 +1,22 @@
+.separator-input {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    &__item {
+        flex: 0 0 50%;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+
+        &_preview {
+            padding-left: 1ex;
+            padding-right: 1ex;
+        }
+    }
+
+    &__error {
+        color: var(--danger-text);
+        padding-top: 2px;
+    }
+}

@@ -1,0 +1,45 @@
+.operation-pool {
+    display: flex;
+    align-items: center;
+    margin-right: 10px;
+
+    $self: &;
+
+    &__pool-edit {
+        display: none;
+        &_reserve {
+            display: unset;
+            visibility: hidden;
+        }
+        margin: -5px 0;
+        margin-left: 4px;
+    }
+
+    &:hover {
+        #{$self}__pool-edit {
+            display: unset;
+            transition: opacity 300ms ease;
+        }
+
+        #{$self}__pool-edit_reserve {
+            visibility: visible;
+        }
+    }
+
+    &__pool-link {
+        margin-left: 5px;
+
+        &_compact {
+            margin-left: 0;
+        }
+    }
+
+    &__pool-tree {
+        margin-left: 5px;
+        margin-right: 5px;
+
+        &-name_erased {
+            text-decoration: line-through;
+        }
+    }
+}

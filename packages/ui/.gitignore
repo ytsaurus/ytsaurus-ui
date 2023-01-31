@@ -1,0 +1,33 @@
+#npm
+npm-debug.log*
+node_modules
+
+# build
+dist/
+build/
+!dist/run/.keep
+
+src/server/configs
+
+#webpack
+webpack.sock
+
+#temporary
+tmp/
+temp/
+
+#personal
+.idea/
+.DS_Store
+
+# git merge leftovers
+*.orig
+
+secrets/
+
+.env
+
+ytsaurus-ui-*.tgz
+
+clusters-config.json
+clusters-config-oss.json

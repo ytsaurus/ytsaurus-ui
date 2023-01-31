@@ -1,0 +1,24 @@
+.job-statistics-io {
+    .elements-heading_size_m {
+        margin-bottom: 12px;
+        margin-top: 24px;
+    }
+
+    &__meta {
+        margin-bottom: 24px;
+    }
+
+    &__table-item {
+        &_type {
+            &_table {
+                width: 100px;
+            }
+
+            &_busy-time,
+            &_bytes,
+            &_idle-time {
+                width: 150px;
+            }
+        }
+    }
+}

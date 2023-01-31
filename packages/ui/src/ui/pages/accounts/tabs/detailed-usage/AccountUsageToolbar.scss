@@ -1,0 +1,55 @@
+.account-usage-toolbar {
+    &__spacer {
+        flex-grow: 1;
+    }
+
+    &__item {
+        min-width: 100px;
+    }
+
+    .textinput__control {
+        border-radius: 3px;
+    }
+
+    &__date-range,
+    &__snapshots {
+        display: flex;
+        flex-grow: 1;
+        align-items: center;
+
+        .yc-select-control {
+            max-width: 180px;
+        }
+    }
+
+    &__snapshot-label {
+        color: var(--secondary-text);
+        padding-left: 1ex;
+        padding-right: 0.5ex;
+    }
+
+    &__date-range-control {
+        width: 180px;
+    }
+
+    &__date-range {
+        .yc-text-input__control {
+            border-right: 0px;
+            border-bottom-right-radius: 0px;
+            border-top-right-radius: 0px;
+        }
+
+        .yc-select-control {
+            border-bottom-left-radius: 0px;
+            border-top-left-radius: 0px;
+        }
+    }
+
+    &__owner-popup {
+        min-width: 200px;
+    }
+
+    &__owner-item {
+        white-space: nowrap;
+    }
+}

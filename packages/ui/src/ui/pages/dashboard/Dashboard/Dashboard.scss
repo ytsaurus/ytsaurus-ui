@@ -1,0 +1,17 @@
+.dashboard {
+    &__links-header {
+        margin-top: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    &__operations-header {
+        margin-bottom: 10px;
+    }
+
+    &__idm-roles-link {
+        font-size: var(--yc-text-body-1-font-size);
+        white-space: nowrap;
+    }
+}

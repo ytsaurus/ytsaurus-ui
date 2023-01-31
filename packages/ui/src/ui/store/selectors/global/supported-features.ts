@@ -1,0 +1,184 @@
+import {createSelector} from 'reselect';
+import _ from 'lodash';
+
+import {RootState} from '../../../store/reducers';
+import {getCluster} from './index';
+import {SelectWithSubItemsProps} from '../../../components/Dialog/controls/SelectWithSubItems/SelectWithSubItems';
+import {OperationStatisticInfo} from '../../../store/reducers/global/supported-features';
+
+const getSupportedFeaturesRaw = (state: RootState) => state.supportedFeatures.features;
+const getSupportedFeaturesCluster = (state: RootState) => state.supportedFeatures.featuresCluster;
+
+//                                    Record<codec, level>
+const RECOMMENDED_COMPRESSION_CODECS: Record<string, string> = {
+    lz4: '',
+    zstd_: '5',
+    zlib_: '9',
+    brotli_: '8',
+    lzma_: '6',
+};
+
+const RECOMMENDED = ' (recommended)';
+
+const getSupportedFeatures = createSelector(
+    [getCluster, getSupportedFeaturesCluster, getSupportedFeaturesRaw],
+    (cluster, featuresCluster, features) => {
+        return cluster === featuresCluster ? features : {};
+    },
+);
+
+export const getErasureCodecs = createSelector([getSupportedFeatures], (features) => {
+    return _.map(features.erasure_codecs, (value) => {
+        return {value, text: value};
+    }).sort(compareItems);
+});
+
+export const getPrimitiveTypes = createSelector([getSupportedFeatures], (features) => {
+    return _.sortBy(features.primitive_types).map((value) => {
+        return {value, text: value};
+    });
+});
+
+export const getPrimitiveTypesMap = createSelector([getPrimitiveTypes], (types) => {
+    return new Set(types.map(({value}) => value));
+});
+
+export const getCompressionCodecs = createSelector([getSupportedFeatures], (features) => {
+    return prepareItemsSubitems(features.compression_codecs);
+});
+
+export const makeCompressionCodecFinder = createSelector([getCompressionCodecs], ({items}) => {
+    return (codec: string) => {
+        if (!codec) {
+            return undefined;
+        }
+
+        const item = _.find(items, (x) => {
+            return x.value === codec;
+        });
+        if (item) {
+            return [item.value as string];
+        }
+
+        const [first, ...rest] = codec.split('_');
+        const subCodec = rest.join('_');
+
+        return [first + '_', subCodec];
+    };
+});
+
+export type CompressionCodecs = Required<
+    Pick<SelectWithSubItemsProps, 'items' | 'subItemsMap' | 'labels'>
+>;
+
+function prepareItemsSubitems(arr: Array<string> = []): CompressionCodecs {
+    const res: CompressionCodecs = {
+        items: [],
+        subItemsMap: {},
+        labels: ['Codec:', 'level:'],
+    };
+
+    const {items, subItemsMap} = res;
+
+    for (const item of arr) {
+        const parts = item.split('_');
+        const [first, ...rest] = parts;
+
+        if (rest.length) {
+            const value = first + '_';
+
+            if (!subItemsMap[value]) {
+                items.push({value, content: value});
+            }
+
+            const dst = (subItemsMap[value] = subItemsMap[value] || new Array<string>());
+            const subValue = rest.join('_');
+            dst.push({value: subValue, content: subValue});
+        } else {
+            items.push({value: item, content: item});
+        }
+    }
+
+    _.forEach(subItemsMap, (subItems, key) => {
+        const index = items.findIndex(({value}) => value === key);
+        if (index === -1) {
+            return;
+        }
+        subItems.sort(compareItems);
+        if (subItems.length === 1) {
+            const value = items[index].value + subItems[0].value;
+            items[index] = {value, content: value};
+            delete subItemsMap[key];
+        } else {
+            const item = items[index];
+            item.content = `${item.value}[${subItems[0].value}-${
+                subItems[subItems.length - 1].value
+            }]`;
+        }
+
+        const recommended = RECOMMENDED_COMPRESSION_CODECS[key];
+        if (recommended) {
+            const subItems2 = subItemsMap[key];
+            if (subItems2) {
+                const first = subItems2[0];
+                const last = subItems2[subItems2.length - 1];
+                first.content = first.value + ' (faster)';
+                last.content = last.value + ' (slower & smaller)';
+
+                const item = subItems2.find(({value}) => value === recommended);
+                if (item) {
+                    item.content = item.value + RECOMMENDED;
+                }
+            } else {
+                items[index].content += RECOMMENDED;
+            }
+        }
+    });
+
+    items.sort(compareItems);
+    return res;
+}
+
+function compareItems(l: {value: string}, r: {value: string}) {
+    if (l.value === r.value) {
+        return 0;
+    }
+
+    if (l.value === 'none') {
+        return -1;
+    }
+
+    if (r.value === 'none') {
+        return 1;
+    }
+
+    const lValue = String(Number(l.value)) === l.value ? Number(l.value) : l.value;
+    const rValue = String(Number(r.value)) === r.value ? Number(r.value) : r.value;
+
+    return lValue < rValue ? -1 : 1;
+}
+
+export const getOperationStatisticsDescription = createSelector(
+    [getSupportedFeaturesRaw],
+    ({operation_statistics_descriptions}) => {
+        const byName: Record<string, OperationStatisticInfo> = {};
+        const byRegexp: Array<OperationStatisticInfo & {regexp: RegExp}> = [];
+        _.forEach(operation_statistics_descriptions, (item, key) => {
+            const idx = key.indexOf('*');
+            if (idx !== -1) {
+                const tmp = key.replace(/\//g, '\\/').replace(/\*/g, '[^/]*');
+                byRegexp.push({
+                    ...item,
+                    regexp: new RegExp(tmp),
+                });
+            } else {
+                byName[key] = item;
+            }
+        });
+
+        return {
+            byName,
+            byRegexp,
+        };
+    },
+);

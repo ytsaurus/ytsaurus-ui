@@ -1,0 +1,46 @@
+@mixin cluster-styled {
+    color: var(--main-background);
+    background-color: var(--cluster-color);
+}
+
+.cluster-color {
+    // when theme is undefined
+    --cluster-color: #cfd4e0;
+
+    &_theme_ytsaurus {
+        --cluster-color: #ffb23e;
+    }
+    &_theme_grapefruit {
+        --cluster-color: var(--grapefruit-color);
+    }
+    &_theme_bittersweet {
+        --cluster-color: var(--bittersweet-color);
+    }
+    &_theme_sunflower {
+        --cluster-color: var(--sunflower-color);
+    }
+    &_theme_grass {
+        --cluster-color: var(--grass-color);
+    }
+    &_theme_mint {
+        --cluster-color: var(--mint-color);
+    }
+    &_theme_aqua {
+        --cluster-color: var(--aqua-color);
+    }
+    &_theme_bluejeans {
+        --cluster-color: var(--bluejeans-color);
+    }
+    &_theme_lavander {
+        --cluster-color: var(--lavander-color);
+    }
+    &_theme_pinkrose {
+        --cluster-color: var(--pinkrose-color);
+    }
+    &_theme_mediumgray {
+        --cluster-color: var(--mediumgray-color);
+    }
+    &_theme_darkgray {
+        --cluster-color: var(--darkgray-color);
+    }
+}

@@ -1,0 +1,32 @@
+@import '../../../components/WithStickyToolbar/WithStickyToolbar.scss';
+
+.users-page-filters {
+    &__item {
+        max-width: 380px;
+        min-width: 20ex;
+
+        .elements-filter {
+            flex-grow: 1;
+        }
+    }
+
+    &__username-filter {
+        .textinput__box {
+            border-radius: 4px;
+        }
+
+        ::placeholder {
+            color: var(--yc-color-text-hint) !important;
+            font-size: 14px;
+        }
+    }
+
+    &__group-suggest {
+        flex-grow: 1;
+        background-color: var(--main-background);
+    }
+
+    &__group-suggest-select {
+        border-width: 1px !important;
+    }
+}

@@ -1,0 +1,42 @@
+.job-statistics {
+    .elements-toolbar {
+        margin-top: -10px;
+        margin-bottom: 10px;
+    }
+
+    &__help {
+        display: flex;
+        align-items: center;
+        margin-left: auto;
+    }
+
+    &__group-icon,
+    &__group-icon-toggler,
+    &__metric-icon {
+        margin-right: 10px;
+    }
+
+    &__metric {
+        display: inline-block;
+    }
+
+    &__table {
+        &-item_type {
+            &_min,
+            &_max,
+            &_last,
+            &_sum,
+            &_count {
+                min-width: 130px;
+            }
+            &_metric {
+                padding-right: 40px;
+            }
+        }
+    }
+
+    &__table-container {
+        display: inline-block;
+        min-width: 550px;
+    }
+}

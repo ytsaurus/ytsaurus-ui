@@ -1,0 +1,35 @@
+.operation-detail-job-sizes {
+    $chartHeight: 350px;
+
+    padding-top: 1em;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minMax(600px, 1fr));
+    grid-gap: 30px;
+
+    .elements-section {
+        &:first-child {
+            margin-top: 40px;
+        }
+    }
+
+    .chartkit {
+        height: $chartHeight;
+        width: 100%;
+    }
+
+    &__task-cell {
+        padding: 1em;
+
+        &_per-task {
+            background-color: var(--light-background);
+        }
+    }
+
+    &__chart-section {
+        flex-grow: 1;
+    }
+
+    &__charts {
+        height: $chartHeight;
+    }
+}

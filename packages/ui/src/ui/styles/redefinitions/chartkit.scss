@@ -1,0 +1,14 @@
+.chartkit {
+    --ck-loader-active-color: var(--yc-color-base-special);
+    --ck-loader-off-color: var(--yc-color-celestial-thunder);
+}
+
+.theme-dark {
+    .chartkit-loader_veiled {
+        background-color: var(--main-background);
+    }
+}
+
+.highcharts-label text {
+    fill: var(--primary-text) !important;
+}

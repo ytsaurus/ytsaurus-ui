@@ -1,0 +1,56 @@
+@import '../../styles/common.scss';
+
+.cluster-menu {
+    &__header-inner {
+        height: var(--app-header-height);
+    }
+
+    &__user {
+        padding: 5px 10px;
+    }
+
+    &__header {
+        height: 56px;
+        display: flex;
+        align-items: center;
+        left: var(--nv-aside-header-size) !important;
+
+        &-yt {
+            font-size: 40px;
+            line-height: 1;
+            letter-spacing: 1px;
+            flex-grow: 1;
+            padding: 0 15px;
+        }
+
+        &-docs {
+            font-size: 20px;
+            padding: 5px;
+        }
+
+        &-user {
+            padding: 5px 10px;
+        }
+
+        .yc-radio-button__option-text {
+            display: flex;
+            align-items: center;
+            height: 100%;
+        }
+    }
+
+    &__page-name {
+        padding-left: 16px;
+        font-size: var(--yc-text-body-3-font-size);
+        font-weight: 500;
+        line-height: var(--yc-text-body-3-line-height);
+    }
+
+    &__popup {
+        z-index: var(--dialog-suggest-z-index);
+    }
+
+    &__item-version {
+        font-family: var(--yc-font-family-monospace);
+    }
+}

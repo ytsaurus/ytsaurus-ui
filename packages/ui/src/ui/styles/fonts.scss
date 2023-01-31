@@ -1,0 +1,22 @@
+/* Reset fonts for lego-controls */
+
+$yt-font: 'Manrope', 'Helvetica Neue', helvetica, arial, sans-serif;
+$font-size: 14px;
+$line-height: 1.428571429;
+$font-weight-bold: 700;
+
+@mixin yt-fonts-variables {
+    --yc-font-family-sans: 'Manrope', 'Helvetica Neue', helvetica, arial, sans-serif;
+    --yc-font-family-monospace: 'RobotoMono', monospace;
+    --yc-font-weight-bold: 700;
+}
+
+@mixin font-body2 {
+    font-size: var(--yc-text-body-2-font-size);
+    line-height: var(--yc-text-body-2-line-height);
+}
+
+@mixin font-body3 {
+    font-size: var(--yc-text-body-3-font-size);
+    line-height: var(--yc-text-body-3-line-height);
+}

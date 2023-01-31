@@ -1,0 +1,16 @@
+.accounts-log-transaction-info {
+    &__copy {
+        overflow: hidden;
+        display: flex;
+    }
+
+    &__copy-text {
+        flex-shrink: 1;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    &__copy-btn {
+        margin-top: -6px;
+    }
+}

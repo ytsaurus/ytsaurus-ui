@@ -1,0 +1,9 @@
+@import '../globals';
+
+.elements-button {
+    &_checked_yes {
+        &:before {
+            background: var(--radio-button-color) !important;
+        }
+    }
+}

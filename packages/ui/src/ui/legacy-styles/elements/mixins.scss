@@ -1,0 +1,11 @@
+@import 'globals';
+@import '../../styles/mixins';
+
+@mixin invalid-field() {
+    .textinput_theme_normal .textinput__box,
+    .textinput_theme_normal.textinput_hovered_yes .textinput__box,
+    .textinput_theme_normal.textinput_focused_yes .textinput__box,
+    .textinput_theme_normal.textinput_focused_yes.textinput_hovered_yes .textinput__box {
+        border: 2px solid var(--danger-color) !important;
+    }
+}

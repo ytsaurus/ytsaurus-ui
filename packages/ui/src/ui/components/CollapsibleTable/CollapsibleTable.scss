@@ -1,0 +1,10 @@
+.collapsible-table {
+    &__heading {
+        margin-right: 5px;
+    }
+
+    &__size {
+        font-size: 0.9em;
+        color: var(--secondary-text);
+    }
+}

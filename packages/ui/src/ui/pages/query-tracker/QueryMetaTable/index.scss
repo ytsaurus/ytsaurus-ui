@@ -1,0 +1,36 @@
+.query-meta-table {
+    display: grid;
+    align-items: center;
+    grid-template-columns: max-content auto;
+    grid-auto-rows: minmax(32px, max-content);
+
+    margin: 0;
+
+    &__title {
+        display: flex;
+        grid-column: 1;
+
+        height: 16px;
+
+        white-space: nowrap;
+
+        &::after {
+            flex: 1 0 0;
+
+            min-width: 20px;
+            margin: 0 2px;
+
+            content: '';
+
+            border-bottom: 1px dotted var(--yc-color-line-generic);
+        }
+    }
+
+    &__value {
+        grid-column: 2;
+
+        margin: 0;
+
+        white-space: nowrap;
+    }
+}

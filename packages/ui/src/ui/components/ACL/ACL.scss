@@ -1,0 +1,217 @@
+.navigation-acl {
+    $acl: &;
+
+    position: relative;
+
+    display: grid;
+    grid-template-columns: 1fr 360px;
+    grid-template-rows: auto auto auto;
+    grid-gap: 20px;
+
+    &_loading {
+        height: 200px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    &__meta {
+        grid-column: 1;
+
+        & .meta-table__group {
+            margin-bottom: 0px;
+        }
+    }
+
+    &__filter {
+        width: 250px;
+        margin-right: 16px;
+    }
+
+    &__approvers {
+        margin-bottom: 20px;
+    }
+
+    &__object-permissions {
+        grid-column: 1 / -2;
+
+        #{$acl}__permissions {
+            display: flex;
+            align-items: baseline;
+
+            &_type_allow {
+                .icon {
+                    color: var(--success-color);
+                    margin-right: 4px;
+                }
+            }
+
+            &_type_deny {
+                .icon {
+                    color: var(--danger-color);
+                    margin-right: 7px;
+                }
+            }
+        }
+
+        #{$acl}__subjects {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            .icon {
+                margin-left: 16px;
+            }
+        }
+    }
+
+    &__columns-permissions {
+        grid-column: 1 / -2;
+
+        #{$acl}__filters-group {
+            display: flex;
+            align-items: center;
+        }
+    }
+
+    &__user-permissions {
+        grid-row: 1 / 5;
+        grid-column: 2 / -1;
+
+        position: relative;
+    }
+
+    .elements-table {
+        width: unset;
+    }
+
+    .elements-table__row {
+        border-bottom: none;
+        height: unset !important;
+
+        .elements-table__cell {
+            padding-top: 8px;
+            padding-bottom: 8px;
+
+            .yc-button {
+                height: 14px;
+            }
+        }
+
+        &:first-child {
+            .elements-table__cell {
+                padding-top: 16px !important;
+            }
+        }
+    }
+
+    &__row {
+        &-transparent {
+            opacity: 0.5;
+        }
+
+        &_depriving {
+            opacity: 0.5;
+            background-color: var(--danger-background);
+        }
+        &_approved,
+        &_requested {
+            opacity: 0.5;
+            background-color: var(--dark-background);
+        }
+    }
+
+    &__table-item {
+        &_type_inherited {
+            width: 20px;
+        }
+
+        &_type_subjects {
+            width: 440px;
+            max-width: 440px;
+            vertical-align: top;
+        }
+
+        &_type_permissions {
+            width: 320px;
+        }
+
+        &_type_inheritance-mode {
+            width: 240px;
+        }
+
+        &_type_actions {
+            width: 40px;
+        }
+
+        &_type_columns {
+            display: flex;
+            flex-flow: row wrap;
+            vertical-align: top;
+        }
+    }
+
+    &__subject-column {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+    }
+
+    &__subject-link {
+        display: block;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    &__subject-name {
+        &_highlighted {
+            background-color: var(--action-button-color);
+        }
+    }
+
+    &__icon {
+        margin-left: 1ex;
+        color: var(--secondary-text) !important;
+
+        &:last-child {
+            margin-right: 1ex;
+        }
+
+        &_unrecognized {
+            color: var(--warning-text);
+        }
+
+        &_link {
+            &:hover {
+                color: var(--hover-link) !important;
+            }
+        }
+
+        &_delete {
+            &:hover {
+                cursor: pointer;
+            }
+        }
+    }
+
+    &__flag-icon {
+        padding-right: 0.5ex;
+    }
+
+    &__copy-idm-group {
+        color: var(--secondary-text);
+        margin-left: 1ex;
+    }
+
+    &__action-label {
+        text-align: center;
+        min-width: 5ex;
+        margin-right: 1ex;
+        font-weight: unset;
+    }
+
+    &__subjects-list {
+        display: flex;
+        flex-flow: wrap;
+    }
+}

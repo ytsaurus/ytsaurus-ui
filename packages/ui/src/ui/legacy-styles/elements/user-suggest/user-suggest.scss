@@ -1,0 +1,39 @@
+$userSuggest: '.elements-user-suggest';
+
+#{$userSuggest} {
+    padding: 5px 0;
+
+    &__item {
+        display: flex;
+        align-items: center;
+
+        padding: 5px 10px;
+
+        text-decoration: none;
+
+        &-name {
+            flex-grow: 1;
+
+            line-height: 30px;
+
+            color: var(--primary-text);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        &-img {
+            width: 30px;
+            height: 30px;
+            margin-left: 5px;
+        }
+
+        &:hover {
+            background-color: var(--hover-background);
+
+            #{$userSuggest}__item-name {
+                color: var(--danger-color);
+            }
+        }
+    }
+}

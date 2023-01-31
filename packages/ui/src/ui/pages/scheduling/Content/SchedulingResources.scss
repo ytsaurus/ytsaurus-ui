@@ -1,0 +1,8 @@
+.scheduling-resources {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-gap: 20px 30px;
+
+    padding-top: 10px;
+    margin-bottom: 20px;
+}

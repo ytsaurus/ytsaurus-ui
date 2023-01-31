@@ -1,0 +1,51 @@
+.pages-settings-editor {
+    width: 220px;
+    display: flex;
+    flex-direction: column;
+
+    &__top {
+        display: flex;
+        align-items: center;
+        padding: 18px 11px 20px 20px;
+    }
+
+    &__top-title {
+        flex-grow: 1;
+        font-size: var(--yc-text-body-2-font-size);
+        line-height: var(--yc-text-body-2-line-height);
+        font-weight: var(--yt-font-weight-bold);
+    }
+
+    &__top-btn {
+        border-radius: 4px;
+        svg {
+            color: var(--yc-color-text-secondary);
+        }
+
+        &_active {
+            background-color: var(--yc-color-base-selection);
+            svg {
+                color: var(--yc-color-base-special);
+            }
+        }
+    }
+
+    &__content {
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+    }
+
+    &__service-item {
+        flex-grow: 1;
+        height: 100%;
+    }
+
+    &__service-item-link {
+        &_current {
+            .nv-composite-bar__menu-icon {
+                color: var(--yc-color-base-special);
+            }
+        }
+    }
+}

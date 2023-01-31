@@ -1,0 +1,22 @@
+.accounts {
+    &__top {
+        display: flex;
+        padding-bottom: 20px;
+        justify-content: space-between;
+        &-create {
+            padding-left: 10px;
+        }
+    }
+
+    &__breadcrumbs-icon {
+        color: var(--secondary-text);
+    }
+
+    &__breadcrumbs-suggest {
+        width: 300px;
+    }
+
+    &__usage {
+        margin-top: -10px;
+    }
+}

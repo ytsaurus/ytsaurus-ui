@@ -1,0 +1,42 @@
+.favourites {
+    display: flex;
+    align-items: center;
+
+    &__popup {
+        z-index: var(--dialog-suggest-z-index) !important;
+        min-width: 200px;
+        max-width: calc(100vw - 40px);
+
+        // FIX: React Popup doesn't properly positioning tail when offset is specified
+        & .popup2__tail {
+            margin-left: 28px;
+        }
+
+        &_empty .yc-drop-down-menu__item {
+            padding: 5px 15px;
+
+            color: var(--secondary-text);
+        }
+    }
+
+    &__clear-button {
+        display: inline-block;
+        padding: 0 4px;
+
+        &:hover {
+            cursor: pointer;
+            color: var(--hover-link);
+        }
+
+        &_disabled {
+            cursor: unset !important;
+            color: unset !important;
+        }
+    }
+
+    &__star-btn {
+        &_clear {
+            padding-right: 2px;
+        }
+    }
+}

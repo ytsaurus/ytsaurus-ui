@@ -1,0 +1,114 @@
+.yc-timeline-picker {
+    $_: &;
+
+    display: flex;
+    align-items: center;
+    white-space: nowrap;
+    overflow: hidden;
+
+    margin-right: 12px;
+    height: 36px;
+
+    &__hot-buttons {
+        display: flex;
+        align-items: center;
+
+        &_divider {
+            margin-right: 12px;
+            border-right: 1px solid var(--yc-color-line-generic);
+        }
+
+        .yc-button_size_l .yc-button__text {
+            margin: 0;
+        }
+    }
+    &__hot {
+        width: 35px;
+        margin-right: 4px;
+    }
+    &__hot-custom {
+        width: 72px;
+        margin-right: 12px;
+    }
+
+    &__datepicker {
+        display: flex;
+        align-items: center;
+        color: var(--yc-color-text-complementary);
+        overflow: hidden;
+        min-width: 36px;
+
+        &_opened {
+            flex: 1 1 auto;
+            flex-direction: column;
+
+            #{$_}__date-text {
+                height: 0;
+            }
+        }
+    }
+
+    &__date-text {
+        flex: 1 1 auto;
+        display: flex;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        align-items: center;
+    }
+
+    &__text {
+        flex: 1 1 auto;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    &__icon {
+        flex: 0 0 auto;
+    }
+
+    &__shortcuts {
+        padding-top: 12px;
+    }
+
+    &__shortcuts-title {
+        padding: 0 20px;
+    }
+
+    &__shortcut-pane {
+        display: flex;
+        padding: 8px;
+    }
+
+    &__shortcut-group {
+        display: flex;
+        flex-direction: column;
+        &:not(:last-child) {
+            margin-right: 20px;
+        }
+    }
+
+    &__shortcut {
+        min-width: 76px;
+        text-align: left;
+    }
+
+    &__refresh {
+        margin-left: 8px;
+
+        &:empty {
+            display: none;
+        }
+    }
+
+    &__refresh-selector-icon {
+        height: 28px;
+        margin-right: 4px;
+    }
+
+    &__range-datepicker {
+        display: flex;
+        align-items: center;
+        margin: 0 20px 10px;
+    }
+}

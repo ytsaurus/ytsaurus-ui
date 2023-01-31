@@ -1,0 +1,93 @@
+@import '../../../../styles/mixins';
+
+.components-proxies {
+    &__overview {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        grid-gap: 20px;
+
+        margin-bottom: 20px;
+
+        z-index: var(--fixed-toolbar-z-index);
+        background-color: var(--main-background);
+
+        &_sticky {
+            @include sticky-style();
+        }
+
+        &_split {
+            @include sticky-style();
+
+            left: 0;
+
+            position: absolute;
+            top: 0;
+        }
+    }
+
+    &__filters {
+        display: flex;
+        align-items: center;
+    }
+
+    &__filter {
+        width: 200px;
+        margin-right: 20px;
+
+        &_host {
+            width: 320px;
+        }
+
+        &:last-child {
+            margin-right: 0;
+        }
+    }
+
+    &__table {
+        table-layout: fixed;
+    }
+
+    &__table-item {
+        &_type {
+            &_host {
+                width: 400px;
+            }
+
+            &_state,
+            &_banned {
+                width: 60px;
+            }
+
+            &_role {
+                width: 80px;
+            }
+
+            &_version {
+                width: 200px;
+            }
+
+            &_load-average,
+            &_network-load,
+            &_updated-at {
+                width: 120px;
+            }
+
+            &_actions {
+                width: 90px;
+            }
+        }
+    }
+
+    &__version {
+        display: flex;
+        overflow: hidden;
+        align-items: center;
+
+        &-text {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            flex-grow: 1;
+            flex-shrink: 1;
+        }
+    }
+}

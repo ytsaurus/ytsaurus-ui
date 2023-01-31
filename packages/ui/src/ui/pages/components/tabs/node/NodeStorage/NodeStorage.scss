@@ -1,0 +1,25 @@
+.node-storage {
+    $meta-table: '.meta-table-item';
+
+    #{$meta-table} {
+        margin-bottom: 0;
+        margin-right: 0;
+
+        &__key {
+            width: 120px;
+        }
+
+        &__value {
+            min-width: 200px;
+        }
+    }
+
+    &__heading {
+        color: var(--secondary-text);
+        margin-bottom: 10px;
+    }
+
+    &__meta {
+        margin-bottom: 20px;
+    }
+}

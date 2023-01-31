@@ -1,0 +1,9 @@
+.version-cell {
+    &__tooltip {
+        display: inline;
+    }
+
+    &__text {
+        font-family: var(--yt-font-family-monospace);
+    }
+}

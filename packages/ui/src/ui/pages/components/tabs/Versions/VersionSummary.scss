@@ -1,0 +1,60 @@
+.versions-summary {
+    .data-table__row {
+        box-sizing: border-box;
+        border-bottom: 1px solid var(--light-divider);
+        height: 40px;
+    }
+
+    .data-table__head-row {
+        border-bottom: 1px solid var(--dark-divider);
+    }
+
+    .data-table__td {
+        padding-left: 8px;
+        vertical-align: middle;
+    }
+
+    .data-table__th {
+        max-width: 100px;
+        min-width: 100px;
+    }
+
+    &__value {
+        &_clickable {
+            &:hover {
+                cursor: pointer;
+                color: var(--hover-link);
+            }
+        }
+    }
+
+    &__version {
+        display: flex;
+        margin-top: -2px;
+    }
+
+    .data-table__row {
+        .yt-clipboard-button {
+            visibility: hidden;
+        }
+
+        &:hover {
+            .yt-clipboard-button {
+                visibility: unset;
+            }
+        }
+    }
+
+    &__row {
+        &_special {
+            background-color: var(--light-background);
+        }
+    }
+}
+
+.hide-offline-checkbox {
+    position: relative;
+    top: -33px;
+    right: 10px;
+    float: right;
+}

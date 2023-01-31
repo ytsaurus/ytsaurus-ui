@@ -1,0 +1,313 @@
+import _ from 'lodash';
+import yt from '@ytsaurus/javascript-wrapper/lib/yt';
+
+import {
+    LOAD_DATA,
+    CHANGE_OBJECT_SUBJECT,
+    CHANGE_COLUMNS_COLUMNS,
+    DELETE_PERMISSION,
+    REQUEST_PERMISSION,
+    UPDATE_ACL,
+    PERMISSIONS_SETTINGS,
+    IdmObjectType,
+} from '../../constants/acl';
+import {getPools, getTree} from '../../store/selectors/scheduling/scheduling';
+import {computePathItems} from '../../utils/scheduling/scheduling';
+import {
+    getAcl,
+    checkUserPermissions,
+    getResponsible,
+    updateAcl as updateAclApi,
+} from '../../utils/acl/acl-api';
+import {prepareAclSubject} from '../../utils/acl';
+import {ROOT_POOL_NAME} from '../../constants/scheduling';
+import UIFactory from '../../UIFactory';
+
+const prepareUserPermissions = (userPermissions, idmKind) => {
+    const {permissionTypes} = PERMISSIONS_SETTINGS[idmKind];
+    return _.map(userPermissions, (item, index) => {
+        return {
+            type: permissionTypes[index],
+            action: item.action,
+        };
+    });
+};
+
+function getPathToCheckPermissions(idmKind, state, entityName, poolTree) {
+    switch (idmKind) {
+        case IdmObjectType.PATH:
+            return entityName;
+        case IdmObjectType.ACCOUNT:
+            return `//sys/accounts/${entityName}`;
+        case IdmObjectType.POOL: {
+            const pools = getPools(state);
+            if (pools?.length) {
+                const poolPath = computePathItems(pools, entityName).filter(
+                    (item) => item !== ROOT_POOL_NAME,
+                );
+                return `//sys/pool_trees/${poolTree}/${poolPath.join('/')}`;
+            } else {
+                const params = new URLSearchParams(window.location.search);
+                const path = params.get('path');
+                if (!path) {
+                    break;
+                }
+                return path;
+            }
+        }
+        case IdmObjectType.TABLET_CELL_BUNDLE: {
+            return `//sys/tablet_cell_bundles/${entityName}`;
+        }
+        case IdmObjectType.ACCESS_CONTROL_OBJECT: {
+            return entityName;
+        }
+        default:
+            throw new Error('Unexpected value of parameter idmKind');
+    }
+}
+
+export function loadAclData(
+    {path, idmKind},
+    {normalizedPoolTree} = {},
+    options = {useEffective: false, skipResponsible: false, userPermissionsPath: undefined},
+) {
+    return (dispatch, getState) => {
+        const state = getState();
+        const {login, cluster} = state.global;
+
+        dispatch({type: LOAD_DATA.REQUEST, idmKind});
+
+        const poolTree =
+            idmKind === IdmObjectType.POOL ? normalizedPoolTree || getTree(state) : undefined;
+        const {permissionTypes} = PERMISSIONS_SETTINGS[idmKind];
+
+        const {useEffective, skipResponsible, userPermissionsPath} = options;
+
+        const pathToCheckPermissions = getPathToCheckPermissions(idmKind, state, path, poolTree);
+        const pathToCheckUserPermissions = userPermissionsPath
+            ? getPathToCheckPermissions(idmKind, state, userPermissionsPath, poolTree)
+            : pathToCheckPermissions;
+
+        return Promise.all([
+            getAcl({
+                cluster,
+                path,
+                kind: idmKind,
+                poolTree,
+                sysPath: pathToCheckPermissions,
+                useEffective,
+            }),
+            checkUserPermissions(pathToCheckUserPermissions, login, permissionTypes),
+            getResponsible({
+                cluster,
+                path,
+                kind: idmKind,
+                poolTree,
+                sysPath: pathToCheckPermissions,
+                skipResponsible,
+            }),
+        ])
+            .then(([acl, userPermissions, responsible]) => {
+                dispatch({
+                    type: LOAD_DATA.SUCCESS,
+                    data: {
+                        path,
+                        version: responsible.version,
+                        auditors: responsible.auditors,
+                        objectPermissions: acl.permissions,
+                        columnGroups: acl.column_groups,
+                        responsible: responsible.responsible,
+                        userPermissions: prepareUserPermissions(userPermissions, idmKind),
+                        readApprovers: responsible.readApprovers,
+                        disableAclInheritance: responsible.disableAclInheritance,
+                        bossApproval: responsible.bossApproval,
+                        disableInheritanceResponsible: responsible.disableInheritanceResponsible,
+                    },
+                    idmKind,
+                });
+            })
+            .catch((error) => {
+                dispatch({
+                    type: LOAD_DATA.FAILURE,
+                    data: {
+                        error: error?.response?.data || error?.response || error,
+                    },
+                    idmKind,
+                });
+            });
+    };
+}
+
+export function deletePermissions({roleKey, idmKind}) {
+    return (dispatch, getState) => {
+        const {cluster} = getState().global;
+
+        dispatch({
+            type: DELETE_PERMISSION.REQUEST,
+            data: roleKey,
+            idmKind,
+        });
+
+        return UIFactory.getAclApi()
+            .deleteRole(cluster, roleKey)
+            .then(() => {
+                dispatch({
+                    type: DELETE_PERMISSION.SUCCESS,
+                    data: roleKey,
+                    idmKind,
+                });
+            })
+            .catch((error) => {
+                if (error.code === yt.codes.CANCELLED) {
+                    dispatch({type: DELETE_PERMISSION.CANCELLED, idmKind});
+                } else {
+                    dispatch({
+                        type: DELETE_PERMISSION.FAILURE,
+                        data: error?.response?.data || error?.response || error,
+                        idmKind,
+                    });
+                    return Promise.reject(error);
+                }
+            });
+    };
+}
+
+function dateToDaysAfterNow(date) {
+    if (!date) {
+        return undefined;
+    }
+
+    return Math.round((date.getTime() - Date.now()) / 3600 / 24 / 1000);
+}
+
+export function requestPermissions({values, idmKind}, {normalizedPoolTree} = {}) {
+    return (dispatch, getState) => {
+        const state = getState();
+        const {
+            global: {cluster},
+        } = state;
+
+        dispatch({
+            type: REQUEST_PERMISSION.REQUEST,
+            idmKind,
+        });
+
+        const daysAfter = dateToDaysAfterNow(values.duration);
+        const roles = [];
+        for (const item of values.subjects) {
+            const subject = item.type === 'app' ? {tvm_id: item.value} : prepareAclSubject(item);
+
+            _.forEach(values.permissions, (permissions) => {
+                roles.push({
+                    permissions,
+                    subject,
+                    deprive_after_days: daysAfter,
+                });
+            });
+        }
+
+        const poolTree =
+            idmKind === IdmObjectType.POOL ? normalizedPoolTree || getTree(state) : undefined;
+
+        //cluster, path, roles, comment, columns
+        return UIFactory.getAclApi()
+            .requestPermissions({
+                cluster,
+                path: values.path,
+                roles,
+                comment: values.comment,
+                kind: idmKind,
+                poolTree,
+            })
+            .then(() => {
+                dispatch({
+                    type: REQUEST_PERMISSION.SUCCESS,
+                    idmKind,
+                });
+            })
+            .catch((error) => {
+                if (error.code === yt.codes.CANCELLED) {
+                    dispatch({type: REQUEST_PERMISSION.CANCELLED, idmKind});
+                } else {
+                    dispatch({
+                        type: REQUEST_PERMISSION.FAILURE,
+                        data: error?.response?.data || error?.response || error,
+                        idmKind,
+                    });
+                    return Promise.reject(error);
+                }
+            });
+    };
+}
+
+export function cancelRequestPermissions({idmKind}) {
+    return {type: REQUEST_PERMISSION.CANCELLED, idmKind};
+}
+
+export function updateAcl({path, values, version, idmKind}, {normalizedPoolTree} = {}) {
+    return (dispatch, getState) => {
+        const state = getState();
+        const {
+            global: {cluster},
+        } = getState();
+
+        dispatch({
+            type: UPDATE_ACL.REQUEST,
+            idmKind,
+        });
+
+        const poolTree =
+            idmKind === IdmObjectType.POOL ? normalizedPoolTree || getTree(state) : undefined;
+        return updateAclApi(cluster, path, {
+            responsible: values.responsibleApproval,
+            auditors: values.auditors,
+            disableInheritance: !values.inheritanceResponsible,
+            bossApproval: values.bossApproval,
+            inheritAcl: values.inheritAcl,
+            readApprovers: values.readApprovers,
+            version,
+            idmKind,
+            poolTree,
+            comment: values.comment,
+        })
+            .then(() => {
+                dispatch({
+                    type: UPDATE_ACL.SUCCESS,
+                    idmKind,
+                });
+            })
+            .catch((error) => {
+                if (error.code === yt.codes.CANCELLED) {
+                    return dispatch({type: UPDATE_ACL.CANCELLED, idmKind});
+                } else {
+                    const data = error?.response?.data || error?.response || error;
+                    dispatch({
+                        type: UPDATE_ACL.FAILURE,
+                        data,
+                        idmKind,
+                    });
+                    return Promise.reject(error);
+                }
+            });
+    };
+}
+
+export function cancelUpdateAcl({idmKind}) {
+    return {type: UPDATE_ACL.CANCELLED, idmKind};
+}
+
+export function changeObjectSubject({objectSubject, idmKind}) {
+    return {
+        type: CHANGE_OBJECT_SUBJECT,
+        data: {objectSubject},
+        idmKind,
+    };
+}
+
+export function changeColumnsColumns({columnsColumns, idmKind}) {
+    return {
+        type: CHANGE_COLUMNS_COLUMNS,
+        data: {columnsColumns},
+        idmKind,
+    };
+}

@@ -1,0 +1,52 @@
+@import '../../styles/mixins';
+@import '../../styles/common';
+
+$content-offset: 60px;
+
+.preloader {
+    font-size: 16px;
+    margin-top: 60px;
+
+    &__loading {
+        text-align: center;
+    }
+
+    &__error {
+        max-width: 504px;
+        padding-top: 80px;
+        margin-left: 80px;
+
+        @media (min-width: $width-medium-screen) {
+            margin-left: 120px;
+        }
+
+        @media (min-width: $width-large-screen) {
+            margin-left: 240px;
+        }
+    }
+
+    &__title {
+        @include heading-size(l);
+        margin-bottom: 28px;
+        font-weight: 500;
+    }
+
+    &__text {
+        margin: 0;
+        margin-bottom: $content-offset;
+    }
+
+    &__suggestions-list {
+        @include reset-ul();
+        margin-bottom: $content-offset;
+    }
+
+    &__suggestions-item {
+        @include reset-li();
+        margin-bottom: 24px;
+    }
+
+    &__suggestions-title {
+        @include heading-size(s);
+    }
+}

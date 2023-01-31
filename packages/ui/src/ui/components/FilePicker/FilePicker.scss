@@ -1,0 +1,7 @@
+.yt-file-picker {
+    &__input {
+        visibility: hidden;
+        position: absolute;
+        z-index: -1;
+    }
+}

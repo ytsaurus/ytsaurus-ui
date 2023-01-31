@@ -1,0 +1,42 @@
+@import '../../../../styles/common';
+
+.operations-list {
+    &__toolbar {
+        position: sticky;
+        top: var(--app-header-height);
+        border-bottom: 2px solid var(--light-divider);
+        background-color: var(--main-background);
+        z-index: var(--sticky-toolbar-z-index);
+
+        &-text-filter {
+            flex: 1 0 260px;
+
+            display: flex;
+        }
+
+        &-user-filter {
+            & .yt-select,
+            & .suggest {
+                width: 260px;
+            }
+        }
+
+        &-access-filters {
+            display: flex;
+            align-items: center;
+
+            & .yt-select,
+            & .suggest {
+                width: 160px;
+            }
+        }
+    }
+
+    &__toolbar-pool-filter {
+        display: flex;
+    }
+
+    &__only-jobs-with-failed-counter {
+        font-weight: 500;
+    }
+}

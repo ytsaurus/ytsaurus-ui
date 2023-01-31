@@ -1,0 +1,47 @@
+$padding: 10px 15px;
+
+.nodes-memory {
+    width: 100%;
+
+    &__header {
+        padding: $padding;
+
+        border-bottom: 1px solid var(--dark-divider);
+    }
+
+    &__content {
+        margin: 0;
+        padding: $padding;
+
+        list-style: none;
+    }
+
+    &__category {
+        display: flex;
+
+        width: 320px;
+        padding: 5px 0;
+
+        &-legend,
+        &-data {
+            width: 50%;
+
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        &-legend-color {
+            display: inline-block;
+
+            width: 11px;
+            height: 11px;
+            margin-right: 10px;
+            border-radius: 50%;
+        }
+
+        &-data {
+            text-align: right;
+        }
+    }
+}

@@ -1,0 +1,16 @@
+.acl-permissions-control {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+
+    margin-bottom: 30px;
+    padding-top: 5px;
+
+    &__item:not(:last-child) {
+        margin-bottom: 10px;
+    }
+
+    &__error-message {
+        color: var(--danger-text);
+    }
+}

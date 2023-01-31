@@ -1,0 +1,18 @@
+.user-link {
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+
+    &__name {
+        flex-grow: 1;
+
+        color: var(--primary-text);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+
+        &:hover {
+            color: var(--danger-color);
+        }
+    }
+}

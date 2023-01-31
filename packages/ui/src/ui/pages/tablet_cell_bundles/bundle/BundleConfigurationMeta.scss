@@ -1,0 +1,32 @@
+.bundle-configuration-meta {
+    .meta-table__group {
+        grid-gap: 6px 27px;
+    }
+
+    &__percentage {
+        margin-left: 6px;
+
+        color: var(--yc-color-text-secondary);
+    }
+
+    &__health {
+        &_value {
+            &_changing {
+                color: var(--info-color);
+            }
+        }
+    }
+
+    &__tooltip-list {
+        margin: 0;
+        padding: 0;
+
+        &:not(&_alerts) {
+            list-style: none;
+        }
+
+        &_alerts {
+            padding-left: var(--yc-popover-padding);
+        }
+    }
+}

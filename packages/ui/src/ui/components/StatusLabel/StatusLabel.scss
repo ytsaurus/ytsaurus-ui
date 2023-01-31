@@ -1,0 +1,62 @@
+@mixin colored-plaque($color, $background-color) {
+    font-size: 13px;
+    border-radius: 14px;
+    padding: 5px 12px;
+    font-weight: 500;
+    vertical-align: text-top;
+    color: $color;
+    background-color: $background-color;
+    white-space: nowrap;
+}
+
+.status-label {
+    .icon {
+        margin-right: 8px;
+    }
+
+    &__plaque {
+        &_state_unknown {
+            @include colored-plaque(var(--default-text), var(--default-background));
+        }
+        &_state_preparing {
+            @include colored-plaque(var(--warning-text), var(--warning-background));
+        }
+        &_state_running {
+            @include colored-plaque(var(--info-text), var(--info-background));
+        }
+        &_state_failed {
+            @include colored-plaque(var(--danger-text), var(--danger-background));
+        }
+        &_state_completed {
+            @include colored-plaque(var(--success-text), var(--success-background));
+        }
+        &_state_aborted {
+            @include colored-plaque(var(--default-text), var(--default-background));
+        }
+        &_state_suspended {
+            @include colored-plaque(var(--warning-text), var(--warning-background));
+        }
+    }
+
+    &_state_unknown {
+        color: var(--default-text);
+    }
+    &_state_preparing {
+        color: var(--warning-text);
+    }
+    &_state_running {
+        color: var(--info-text);
+    }
+    &_state_failed {
+        color: var(--danger-text);
+    }
+    &_state_completed {
+        color: var(--success-text);
+    }
+    &_state_aborted {
+        color: var(--default-text);
+    }
+    &_state_suspended {
+        color: var(--warning-text);
+    }
+}

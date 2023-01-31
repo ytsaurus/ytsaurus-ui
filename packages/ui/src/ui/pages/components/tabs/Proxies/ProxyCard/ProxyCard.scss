@@ -1,0 +1,21 @@
+@import '../../../../../styles/common';
+
+.proxy-card {
+    height: calc(100vh - var(--app-header-height));
+    width: 100%;
+    padding: 0 20px;
+
+    &__header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 10px;
+
+        border-bottom: 1px solid var(--dark-divider);
+    }
+
+    &__proxy {
+        font-weight: normal;
+        font-size: 18px;
+    }
+}

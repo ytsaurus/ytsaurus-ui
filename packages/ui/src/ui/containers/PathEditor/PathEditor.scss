@@ -1,0 +1,56 @@
+@import '../../styles/mixins';
+
+.path-editor {
+    position: relative;
+
+    display: block;
+
+    &__items {
+        @include reset-ul();
+
+        max-height: 300px;
+
+        overflow-x: hidden;
+        overflow-y: auto;
+
+        border: 1px solid var(--dark-divider);
+        border-top: none;
+        box-shadow: 0 10px 20px -5px var(--opacity-background);
+        background-color: var(--main-background);
+    }
+
+    &__item {
+        @include reset-li();
+        @include ellipsis();
+
+        line-height: 30px;
+
+        width: 100%;
+        padding: 0 20px;
+
+        vertical-align: bottom;
+
+        color: var(--primary-text);
+        cursor: pointer;
+
+        &:hover {
+            background-color: var(--hover-background);
+        }
+
+        &_error {
+            color: var(--danger-color);
+        }
+
+        &-path {
+            margin-left: 12px;
+        }
+
+        &_selected_yes {
+            background-color: var(--hover-background);
+        }
+    }
+
+    &__popup {
+        z-index: var(--dialog-suggest-z-index) !important;
+    }
+}

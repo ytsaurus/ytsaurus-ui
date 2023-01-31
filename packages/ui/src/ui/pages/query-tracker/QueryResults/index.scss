@@ -1,0 +1,51 @@
+.query-results {
+    background: var(--main-background);
+    display: flex;
+    flex-direction: column;
+
+    &__result-wrap {
+        height: 100%;
+    }
+
+    &__meta {
+        height: 40px;
+        border-bottom: 1px solid var(--dark-divider);
+        display: flex;
+        align-items: center;
+        padding: 8px 20px;
+    }
+
+    &__meta-info {
+        flex: 1;
+    }
+
+    &__result {
+        flex: 1;
+
+        padding: 8px 0 0 20px;
+        display: flex;
+        flex-direction: column;
+        overflow: auto;
+    }
+
+    &__tabs {
+        flex: 1;
+        box-shadow: none;
+    }
+
+    &__content {
+        flex: 1;
+        overflow: auto;
+        contain: strict;
+    }
+
+    &__result {
+        padding: 8px 20px;
+    }
+
+    &__header {
+        display: flex;
+        margin-bottom: 20px;
+        box-shadow: inset 0 -1px 0 0 var(--yc-color-line-generic);
+    }
+}

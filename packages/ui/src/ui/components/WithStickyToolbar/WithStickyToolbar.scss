@@ -1,0 +1,40 @@
+@import '../../styles/mixins.scss';
+@import './Toolbar/Toolbar.scss';
+
+$stickySpacerHeight: 6px;
+
+.with-sticky-toolbar {
+    $height: $TOOLBAR_COMPONENT_HEIGHT;
+
+    &__toolbar {
+        height: $height;
+
+        &_sticky {
+            @include sticky-style();
+            padding: 0px 20px;
+            z-index: var(--fixed-toolbar-z-index);
+        }
+
+        &_x2 {
+            height: 2 * $height;
+        }
+
+        &-spacer {
+            display: none;
+
+            &_sticky {
+                display: unset;
+                position: fixed;
+                height: $stickySpacerHeight;
+                width: 100%;
+                background-color: var(--main-background);
+                z-index: var(--fixed-toolbar-spacer-z-index);
+                top: calc(var(--app-header-height) + #{$height});
+            }
+
+            &_x2 {
+                top: calc(var(--app-header-height) + #{2 * $height});
+            }
+        }
+    }
+}

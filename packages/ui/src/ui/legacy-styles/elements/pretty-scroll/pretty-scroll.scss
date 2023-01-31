@@ -1,0 +1,63 @@
+@import '../globals';
+
+body.theme-dark {
+    *::-webkit-scrollbar,
+    &::-webkit-scrollbar {
+        width: 13px;
+        height: 13px;
+        margin-right: 50px;
+        background-color: var(--main-background);
+    }
+
+    *::-webkit-scrollbar-thumb,
+    &::-webkit-scrollbar-thumb {
+        min-height: 20px;
+        border: 3px solid transparent;
+        border-radius: 5px;
+        background-clip: content-box;
+        box-shadow: inset 0 0 0 4px rgba(#ffffff, 0.6);
+    }
+
+    *::-webkit-scrollbar-corner,
+    &::-webkit-scrollbar-corner {
+        background: 0 0;
+        background-color: var(--main-background);
+    }
+
+    *::-webkit-scrollbar,
+    &::-webkit-scrollbar {
+        width: 13px;
+    }
+
+    *::-webkit-scrollbar-thumb,
+    &::-webkit-scrollbar-thumb {
+        box-shadow: inset 0 0 0 7px rgba(#ffffff, 0.6);
+    }
+}
+
+.pretty-scroll::-webkit-scrollbar {
+    width: 13px;
+    height: 13px;
+    margin-right: 50px;
+}
+
+.pretty-scroll::-webkit-scrollbar-thumb {
+    min-height: 20px;
+    border: 3px solid transparent;
+    border-radius: 5px;
+    background-clip: content-box;
+    box-shadow: inset 0 0 0 4px var(--dark-divider);
+}
+
+.pretty-scroll::-webkit-scrollbar-corner {
+    background: 0 0;
+}
+
+.pretty-scroll_black::-webkit-scrollbar {
+    width: 11px;
+}
+
+.pretty-scroll_black::-webkit-scrollbar-thumb {
+    box-shadow: inset 0 0 0 4px var(--main-background);
+}
+

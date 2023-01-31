@@ -1,0 +1,21 @@
+.table-formatters-id {
+    display: flex;
+    align-items: center;
+    min-height: 28px;
+
+    $button-size: 14px;
+    $button-margin: 12px;
+
+    &_hovered_no {
+        margin-right: $button-size + $button-margin;
+    }
+
+    &__clipboard-button-wrapper {
+        margin-left: $button-margin;
+        opacity: 0.3;
+
+        &:hover {
+            opacity: 0.5;
+        }
+    }
+}

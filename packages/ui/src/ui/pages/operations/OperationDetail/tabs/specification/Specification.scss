@@ -1,0 +1,11 @@
+.operation-specification {
+    position: relative;
+
+    &__help {
+        margin: 0;
+
+        position: absolute;
+        top: 20px;
+        right: 0;
+    }
+}

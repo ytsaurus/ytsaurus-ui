@@ -1,0 +1,10 @@
+.queue-partitions {
+    &__filter {
+        width: 15%;
+        max-width: 30ex;
+    }
+
+    &__divider {
+        border-left: 1px solid var(--dark-divider);
+    }
+}

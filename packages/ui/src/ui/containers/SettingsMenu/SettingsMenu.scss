@@ -1,0 +1,67 @@
+.elements-page {
+    &__settings {
+        $settings: &;
+        background-color: var(--light-background);
+
+        .radiobox,
+        .path-editor,
+        .yc-field-wrapper {
+            margin-top: 5px;
+            margin-bottom: 5px;
+        }
+
+        &-section {
+            padding-bottom: 10px;
+
+            &:last-child {
+                margin-bottom: 0;
+            }
+        }
+
+        &-content {
+            max-width: 500px;
+        }
+
+        &-heading {
+            margin-bottom: 10px;
+        }
+
+        &-radio-heading {
+            font-size: 14px;
+        }
+
+        &-description {
+            font-size: 13px;
+            padding-top: 3px;
+            padding-bottom: 10px;
+        }
+
+        &-item {
+            margin-bottom: 15px;
+
+            & > .checkbox_size_s {
+                font-size: 14px;
+            }
+
+            &_size_m {
+                & #{$settings}-annotation {
+                    padding-left: 25px;
+                }
+            }
+
+            &_one-line {
+                display: flex;
+            }
+        }
+
+        &-annotation {
+            padding-left: 19px;
+
+            color: var(--secondary-text);
+        }
+
+        &-annotation-highlight {
+            color: var(--danger-color);
+        }
+    }
+}

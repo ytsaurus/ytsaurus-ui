@@ -1,0 +1,105 @@
+import {Toaster} from '@gravity-ui/uikit';
+
+import ypath from '../../../common/thor/ypath';
+import Updater from '../../../utils/hammer/updater';
+import createActionTypes from '../../../constants/utils';
+import {isRetryFutile} from '../../../utils/index';
+import {showErrorPopup, splitBatchResults} from '../../../utils/utils';
+import {USE_CACHE, USE_MAX_SIZE} from '../../../constants';
+import {YTApiId, ytApiV3Id} from '../../../rum/rum-wrap-api';
+
+export const FETCH_NODES = createActionTypes('NODES');
+const NODES_UPDATER_ID = 'system_nodes';
+
+const toaster = new Toaster();
+const updater = new Updater();
+
+export function loadNodes() {
+    return (dispatch) => {
+        updater.add(NODES_UPDATER_ID, () => dispatch(getNodes()), 30 * 1000);
+    };
+}
+
+export function cancelLoadNodes() {
+    return () => {
+        updater.remove(NODES_UPDATER_ID);
+    };
+}
+
+function getNodes() {
+    return (dispatch) => {
+        const requests = [
+            {
+                command: 'list',
+                parameters: {
+                    path: '//sys/cluster_nodes',
+                    attributes: [
+                        'state',
+                        'banned',
+                        'decommissioned',
+                        'alert_count',
+                        'full',
+                        'rack',
+                    ],
+                    suppress_transaction_coordinator_sync: true,
+                    suppress_upstream_sync: true,
+                    ...USE_CACHE,
+                    ...USE_MAX_SIZE,
+                },
+            },
+            {
+                command: 'list',
+                parameters: {
+                    path: '//sys/racks',
+                    suppress_transaction_coordinator_sync: true,
+                    suppress_upstream_sync: true,
+                    ...USE_MAX_SIZE,
+                },
+            },
+        ];
+
+        ytApiV3Id
+            .executeBatch(YTApiId.systemNodes, {requests})
+            .then((data) => {
+                const {error, results} = splitBatchResults(data);
+                if (error) {
+                    return Promise.reject(error);
+                }
+
+                const [nodes, racks] = results;
+                dispatch({
+                    type: FETCH_NODES.SUCCESS,
+                    data: {
+                        nodes: ypath.getValue(nodes),
+                        racks: ypath.getValue(racks),
+                    },
+                });
+            })
+            .catch((error) => {
+                dispatch({
+                    type: FETCH_NODES.FAILURE,
+                    data: error,
+                });
+
+                const data = error?.response?.data || error;
+                const {code, message} = data;
+
+                toaster.createToast({
+                    name: 'load/system/nodes',
+                    allowAutoHiding: false,
+                    type: 'error',
+                    content: `[code ${code}] ${message}`,
+                    title: 'Could not load Nodes',
+                    actions: [
+                        {
+                            label: ' view',
+                            onClick: () => showErrorPopup(error),
+                        },
+                    ],
+                });
+                if (isRetryFutile(error.code)) {
+                    dispatch(cancelLoadNodes());
+                }
+            });
+    };
+}

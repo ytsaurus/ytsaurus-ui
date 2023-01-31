@@ -1,0 +1,241 @@
+@import '../../../../../styles/mixins';
+
+.scheduling-overview {
+    $this: &;
+
+    &__toolbar {
+        display: flex;
+
+        padding: 10px 0;
+
+        z-index: var(--fixed-toolbar-z-index);
+        background-color: var(--main-background);
+
+        .yc-button {
+            margin-right: 10px;
+        }
+
+        &_sticky {
+            @include sticky-style();
+        }
+    }
+
+    &__filter {
+        width: 33%;
+        min-width: 200px;
+        margin-right: 20px;
+    }
+
+    &__bar {
+        display: flex;
+        align-items: center;
+
+        height: 10px;
+
+        &-progress {
+            flex-grow: 1;
+
+            border-radius: 2px;
+            background-color: var(--light-background);
+
+            &-inner {
+                width: 100%;
+                height: 8px;
+
+                border-radius: 2px;
+                transition: width 0.6s ease;
+
+                &_theme {
+                    &_default {
+                        background-color: var(--default-color);
+                    }
+
+                    &_success {
+                        background-color: var(--success-color);
+                    }
+
+                    &_info {
+                        background-color: var(--info-color);
+                    }
+
+                    &_warning {
+                        background-color: var(--warning-color);
+                    }
+                }
+            }
+        }
+    }
+
+    &__operation-icon {
+        &_type_operation {
+            padding-left: 12px;
+        }
+    }
+
+    &__ephemeral-icon {
+        position: relative;
+        margin-left: 8px;
+        top: 1px;
+    }
+
+    &__table {
+        width: 100%;
+        min-width: 1144px;
+
+        //table-layout: fixed;
+
+        &-row {
+            &-expander {
+                cursor: pointer;
+                padding-right: 10px;
+
+                &_empty {
+                    cursor: default;
+                }
+
+                &-icon {
+                    padding-right: 5px;
+
+                    &_empty {
+                        cursor: default;
+                        opacity: 0;
+                    }
+                }
+            }
+
+            &_current_yes {
+                background: var(--dark-background);
+            }
+
+            &_aggregation_yes {
+                font-weight: bold;
+            }
+        }
+
+        &-item_type {
+            &_type {
+                width: 18px;
+            }
+
+            &_name {
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+
+            &_FI {
+                width: 30px;
+            }
+
+            &_mode {
+                width: 70px;
+            }
+
+            &_min-share,
+            &_dominant-resource,
+            &_weight {
+                width: 85px;
+            }
+
+            &_operation-overview,
+            &_fair-share,
+            &_usage,
+            &_demand {
+                width: 85px;
+            }
+
+            &_fair-share-usage {
+                width: 160px;
+            }
+
+            &_actions {
+                width: 80px;
+            }
+        }
+    }
+
+    &__abc-filter {
+        min-width: 200px;
+        margin-right: 20px;
+
+        .yc-select-control__tokens-text_empty {
+            font-size: 13px;
+            margin-bottom: -2px;
+        }
+    }
+
+
+    &__name-content {
+        $ncbMinWidth: 350px;
+        $levelPadding: 38px;
+
+        display: flex;
+        align-items: center;
+        width: $ncbMinWidth;
+
+
+        //&_level_0 {padding-left: 0 * 38px;}
+        /* stylelint-disable */
+        &_level_1 {padding-left: 1 * $levelPadding;}
+        &_level_2 {padding-left: 2 * $levelPadding;}
+        &_level_3 {padding-left: 3 * $levelPadding;}
+        &_level_4 {padding-left: 4 * $levelPadding;}
+        &_level_5 {padding-left: 5 * $levelPadding;}
+        &_level_6 {padding-left: 6 * $levelPadding;}
+        &_level_7 {padding-left: 7 * $levelPadding;}
+        &_level_8 {padding-left: 8 * $levelPadding;}
+
+        &_max-depth_1 {width: 1 * $levelPadding + $ncbMinWidth;}
+        &_max-depth_2 {width: 2 * $levelPadding + $ncbMinWidth;}
+        &_max-depth_3 {width: 3 * $levelPadding + $ncbMinWidth;}
+        &_max-depth_4 {width: 4 * $levelPadding + $ncbMinWidth;}
+        &_max-depth_5 {width: 5 * $levelPadding + $ncbMinWidth;}
+        &_max-depth_6 {width: 6 * $levelPadding + $ncbMinWidth;}
+        &_max-depth_7 {width: 7 * $levelPadding + $ncbMinWidth;}
+        &_max-depth_8 {width: 8 * $levelPadding + $ncbMinWidth;}
+        /* stylelint-enable */
+    }
+
+    &__name-content-name {
+        flex-shrink: 1;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    &__name-content-tags {
+    }
+
+    &__current-row {
+        background-color: var(--dark-background);
+    }
+
+    ::placeholder {
+        color: var(--yc-color-text-hint) !important;
+    }
+
+    &__starvation-status {
+        padding-bottom: 6px;
+        margin-left: -0.5em;
+    }
+
+    &__weight-content {
+        color: var(--yc-color-text-secondary);
+        &_edited {
+            color: unset;
+            font-weight: $font-weight-bold;
+        }
+    }
+
+    &__abc-id {
+        margin-top: 1px;
+        padding-left: 4px;
+    }
+
+    &__static {
+        display: flex;
+        padding-bottom: 20px;
+    }
+
+    &__pool-meta {
+        padding-right: 75px;
+    }
+}

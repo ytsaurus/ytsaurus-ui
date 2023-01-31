@@ -1,0 +1,32 @@
+.bundle-params-list {
+    display: grid;
+    grid-auto-flow: column;
+    justify-content: start;
+    align-items: center;
+    gap: 15px;
+
+    color: var(--yc-color-text-secondary);
+
+    &_size_s {
+        font-size: var(--yc-text-body-short-font-size);
+        line-height: var(--yc-text-body-short-line-height);
+    }
+
+    &_size_m {
+        font-size: var(--yc-text-body-2-font-size);
+        line-height: var(--yc-text-body-2-line-height);
+    }
+
+    &__value {
+        margin-left: 3px;
+        color: var(--yc-color-text-primary);
+
+        &_type_positive {
+            color: var(--yc-color-text-positive);
+        }
+
+        &_type_negative {
+            color: var(--yc-color-text-danger);
+        }
+    }
+}

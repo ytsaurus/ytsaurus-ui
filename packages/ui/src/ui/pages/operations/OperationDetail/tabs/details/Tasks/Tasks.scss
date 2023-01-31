@@ -1,0 +1,70 @@
+.jobs {
+    &__table-container {
+        overflow: auto;
+    }
+    &__table {
+        &-item {
+            &_type {
+                &_job-type {
+                    width: 100%;
+                }
+
+                &_failed {
+                    color: var(--danger-color);
+                }
+
+                &_completed {
+                    color: var(--success-color);
+                }
+
+                &_aborted {
+                    color: var(--default-color);
+                }
+            }
+        }
+
+        .yc-link {
+            margin-right: 5px;
+        }
+    }
+
+    &__job-type {
+        display: flex;
+        //align-items: center;
+    }
+
+    &__info {
+        color: var(--secondary-text);
+        padding-top: 2px;
+        padding-right: 1ex;
+        visibility: hidden;
+
+        &_visible {
+            visibility: unset;
+        }
+
+        &-meta {
+            margin: 1ex;
+            font-size: var(--yc-text-body-1-font-size);
+            line-height: var(--yc-text-body-1-line-height);
+        }
+    }
+
+    &__row {
+        &-total {
+            color: var(--default-color);
+        }
+
+        &-task-info {
+            td {
+                padding-left: 5ex;
+            }
+        }
+    }
+
+    &__name {
+        &_clickable:hover {
+            cursor: pointer;
+        }
+    }
+}

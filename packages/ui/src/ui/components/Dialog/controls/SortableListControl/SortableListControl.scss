@@ -1,0 +1,44 @@
+@import '../../../../styles/mixins';
+
+.ic-sortable-list-control {
+    @include reset-ul();
+
+    display: flex;
+    position: relative;
+
+    &__item {
+        @include reset-li();
+
+        border-radius: 4px;
+        background-color: var(--light-background);
+        user-select: none;
+        cursor: move;
+        z-index: var(--dialog-suggest-z-index);
+        opacity: 0.8;
+
+        margin-right: 10px;
+        margin-left: 10px;
+        padding: 6px 12px;
+
+        display: flex;
+
+        &:first-child {
+            margin-left: 0;
+        }
+
+        &:last-child {
+            margin-right: 0;
+        }
+    }
+
+    &__drag-handle {
+        display: flex;
+        align-items: center;
+    }
+
+    &__icon {
+        margin-right: 10px;
+        position: relative;
+        top: 1px;
+    }
+}

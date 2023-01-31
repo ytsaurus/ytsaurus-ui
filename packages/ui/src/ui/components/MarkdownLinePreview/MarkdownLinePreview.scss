@@ -1,0 +1,11 @@
+.one-line-text-preview {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    &__preview-text {
+        margin-right: 1ex;
+    }
+}

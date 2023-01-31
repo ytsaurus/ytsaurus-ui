@@ -1,0 +1,84 @@
+@mixin redefinition($theme, $color) {
+    &__events-progress_theme_#{$theme} {
+        .yc-progress__item_theme_default {
+            background-color: $color;
+        }
+    }
+}
+
+.operation-detail {
+    &_loading {
+        height: 200px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .elements-error {
+        margin-top: 20px;
+    }
+
+    &__header {
+        display: grid;
+
+        /* stylelint-disable */
+        grid-template-rows: min-content;
+        grid-template-columns: 1fr auto;
+        grid-template-areas: 'a b' 'c c';
+        /* stylelint-enable */
+
+        &-heading {
+            grid-area: a;
+
+            margin-bottom: 5px;
+        }
+
+        &-actions {
+            grid-area: b;
+        }
+
+        &-title {
+            grid-area: c;
+        }
+    }
+
+    &__overview {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+    }
+
+    &__tabs {
+        padding-bottom: 20px;
+    }
+
+    &__progress-wrapper {
+        display: flex;
+        margin-bottom: 20px;
+
+        & .operation-progress {
+            margin-right: 20px;
+        }
+    }
+
+    &__actions {
+        flex: 1 1 auto;
+        text-align: right;
+
+        white-space: nowrap;
+    }
+
+    &__action {
+        margin-left: 10px;
+    }
+
+    @include redefinition('grass', var(--grass-color));
+    @include redefinition('mint', var(--mint-color));
+    @include redefinition('aqua', var(--aqua-color));
+    @include redefinition('bluejeans', var(--bluejeans-color));
+    @include redefinition('lavander', var(--lavander-color));
+    @include redefinition('grapefruit', var(--grapefruit-color));
+    @include redefinition('bittersweet', var(--bittersweet-color));
+    @include redefinition('sunflower', var(--sunflower-color));
+    @include redefinition('mediumgray', var(--mediumgray-color));
+}

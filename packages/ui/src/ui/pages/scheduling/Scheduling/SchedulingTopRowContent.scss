@@ -1,0 +1,76 @@
+.scheduling-top-row-content {
+    min-width: 900px;
+    &__favourites {
+        padding-right: 15px;
+    }
+
+    &__tree {
+        width: 20ex;
+    }
+
+    &__tree-popup {
+        z-index: var(--dialog-suggest-z-index) !important;
+    }
+
+    &__btn-spacer {
+        padding-left: 8px;
+        flex: 0 0 8px;
+    }
+
+    &__clipboard {
+        padding-right: 15px;
+    }
+
+    &__editable-breadcrumbs {
+        display: flex;
+        align-items: center;
+        padding-right: 15px;
+        flex-grow: 1;
+        flex-shrink: 1;
+        overflow: hidden;
+
+        &_edit {
+            padding-left: 2ex;
+        }
+    }
+
+    &__breadcrumbs {
+        padding-left: 4px;
+        flex-shrink: 1;
+        overflow: hidden;
+    }
+
+    &__breadcrumbs-link {
+        color: var(--secondary-text) !important;
+
+        &_current {
+            color: var(--primary-text) !important;
+        }
+
+        &:hover {
+            color: var(--hover-link) !important;
+        }
+    }
+
+    &__pool-suggest {
+        flex-grow: 1;
+    }
+
+    &__pool-suggest-popup {
+        min-width: 220px;
+        z-index: var(--dialog-suggest-z-index) !important;
+    }
+
+    &__actions {
+        display: flex;
+        align-items: center;
+    }
+
+    &__extra-control {
+        padding-right: 10px;
+    }
+}
+
+.yc-breadcrumbs__popup {
+    z-index: var(--dialog-suggest-z-index) !important;
+}

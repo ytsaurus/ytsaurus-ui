@@ -1,0 +1,14 @@
+{
+    "presets": [
+        [
+            "@gravity-ui/app-builder/dist/common/babel/ui-preset",
+            {
+                "typescript": true,
+                "env": {
+                    "bugfixes": true,
+                    "include": ["@babel/plugin-proposal-class-properties"]
+                }
+            }
+        ]
+    ]
+}

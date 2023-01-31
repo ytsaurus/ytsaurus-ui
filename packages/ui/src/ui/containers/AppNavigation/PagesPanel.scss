@@ -1,0 +1,44 @@
+@import '../../styles/fonts.scss';
+
+.pages-panel {
+    &__list {
+        display: flex;
+        flex-direction: column;
+        padding-bottom: 20px;
+    }
+    &__list-list {
+        height: 100%;
+        flex-grow: 1;
+    }
+
+    &__list-title {
+        padding: 0px 16px 5px 20px;
+        color: var(--yc-color-text-secondary);
+    }
+
+    &__list-item {
+        display: flex;
+        align-items: center;
+        height: 40px;
+        padding-left: 20px;
+        color: var(--primary-text);
+    }
+
+    &__list-item-link {
+        display: flex;
+        align-items: center;
+        flex-grow: 1;
+        height: 100%;
+        &_current {
+
+        }
+    }
+
+    &__list-item-name {
+        padding-left: 1ex;
+    }
+
+    &__list-item-icon {
+        color: var(--yc-color-text-misc);
+    }
+}

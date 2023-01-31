@@ -1,0 +1,39 @@
+.chaos-editor {
+    &__body {
+        display: flex;
+        justify-content: stretch;
+        padding: 0;
+
+        min-height: 450px;
+    }
+
+    &__body-tabs {
+        padding: 1em 0;
+        background-color: var(--light-background);
+
+        width: 250px;
+    }
+
+    &__body-tab-content {
+        padding: 1em;
+        width: 650px;
+    }
+
+    &__item {
+        margin-bottom: 1em;
+    }
+
+    &__name-usage {
+        display: flex;
+        align-items: center;
+    }
+
+    &__name {
+        width: 25ex;
+    }
+
+    &__progress {
+        width: 60ex;
+        margin: 0 1ex;
+    }
+}

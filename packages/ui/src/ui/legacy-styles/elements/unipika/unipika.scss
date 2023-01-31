@@ -1,0 +1,75 @@
+@import '../globals';
+@import '../mixins';
+
+.unipika {
+    font-family: $yt-monospace-font;
+
+    &-wrapper & {
+        margin: 0;
+        padding: 0;
+        border: 0;
+    }
+
+    &-wrapper_inline_yes & {
+        @include ellipsis();
+        display: inline-block;
+        vertical-align: bottom;
+        max-width: 100%;
+    }
+
+    &-wrapper_mode_navigation & {
+        font-family: $yt-font;
+
+        max-width: 100%;
+
+        .quote {
+            display: none;
+        }
+
+        & .string {
+            position: relative;
+
+            display: inline-block;
+
+            max-width: 100%;
+            overflow: hidden;
+
+            color: var(--primary-text);
+            text-overflow: ellipsis;
+            vertical-align: bottom;
+        }
+
+        & .string.binary {
+            padding-right: 60px;
+        }
+
+        & .string.incomplete {
+            padding-right: 80px;
+        }
+
+        & .string.binary.incomplete {
+            padding-right: 140px;
+        }
+
+        & .string::after {
+            position: absolute;
+            top: 0;
+            right: 0;
+        }
+    }
+
+    .yc-link_view_primary &-wrapper &,
+    .yc-link_view_normal &-wrapper & {
+        .string {
+            color: var(--primary-link);
+
+            &:hover {
+                color: var(--hover-link);
+            }
+        }
+    }
+
+    .tag_image {
+        max-width: 300px;
+    }
+}

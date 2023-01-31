@@ -1,0 +1,48 @@
+.column-groups {
+    grid-column: 1 / -2;
+
+    &__button {
+        &_add {
+            margin-left: 16px;
+        }
+    }
+
+    &__icon {
+        margin-left: 1ex;
+
+        &_delete {
+            &:hover {
+                cursor: pointer;
+            }
+        }
+
+        &_edit {
+            &:hover {
+                cursor: pointer;
+            }
+        }
+    }
+
+    &__empty {
+        width: 36px;
+    }
+
+    &__name {
+        width: 440px;
+        max-width: 440px;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+
+    &__columns {
+        display: flex;
+        flex-flow: row wrap;
+    }
+
+    &__column {
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+}

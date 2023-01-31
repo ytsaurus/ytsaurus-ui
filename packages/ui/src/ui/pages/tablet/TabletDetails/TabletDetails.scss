@@ -1,0 +1,128 @@
+@import '../../../styles/mixins';
+
+.tablet-details {
+    $graph-height: 300px;
+
+    .meta-table {
+        &__group:not(:last-child) {
+            .meta-table-item {
+                &__value {
+                    width: 250px;
+                }
+            }
+        }
+
+        .meta-table-item {
+            &__key {
+                min-width: 150px;
+            }
+        }
+    }
+
+    .histogram {
+        flex-grow: 1;
+        min-width: 350px;
+        max-width: 33%;
+
+        display: flex;
+        flex-direction: column;
+
+        .chartkit {
+            min-height: $graph-height;
+        }
+
+        &__bad-data {
+            min-height: $graph-height;
+        }
+
+        &__select {
+            align-self: flex-end;
+        }
+    }
+
+    min-width: 1150px;
+
+    &__content {
+        &_loading {
+            height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    }
+
+    &__overview {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    &__table-overview {
+        display: flex;
+
+        padding: 10px 0;
+
+        z-index: var(--fixed-toolbar-z-index);
+        background-color: var(--main-background);
+
+        &_sticky {
+            @include sticky-style();
+        }
+    }
+
+    &__table {
+        table-layout: fixed;
+
+        &-item {
+            &_type_index {
+                width: 85px;
+            }
+
+            &_type_state,
+            &_type_stores,
+            &_type_sample-keys,
+            &_type_unmerged-rows,
+            &_type_uncompressed-size,
+            &_type_compressed-size {
+                width: 140px;
+            }
+
+            &_type_pivot-key {
+                width: 920px;
+            }
+
+            &_type_actions {
+                width: 25px;
+            }
+        }
+
+        &-row {
+            &_aggregation_yes {
+                font-weight: bold;
+            }
+        }
+    }
+}
+
+.tablet-partitions-stores {
+    &__table {
+        min-width: 850px;
+        &-item {
+            vertical-align: top;
+            padding: 8px;
+        }
+
+        &-item_type {
+            &_id {
+                width: 240px;
+            }
+
+            &_store-state {
+                width: 120px;
+            }
+
+            &_rows {
+                width: 140px;
+            }
+        }
+    }
+}

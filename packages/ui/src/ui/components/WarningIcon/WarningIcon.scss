@@ -1,0 +1,19 @@
+.yt-warning-icon {
+    display: inline-flex;
+    vertical-align: middle;
+
+    &__tooltip {
+        color: var(--error-text);
+        display: inline-flex;
+        vertical-align: middle;
+        span {
+            display: inline-flex;
+            vertical-align: middle;
+        }
+    }
+
+    &__icon {
+        position: relative;
+        color: var(--primary-text);
+    }
+}

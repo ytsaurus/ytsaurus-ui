@@ -1,0 +1,22 @@
+.status-bulb {
+    display: inline-block;
+
+    width: 12px;
+    height: 12px;
+
+    border-radius: 50%;
+
+    background-color: var(--dark-divider);
+
+    &_theme_unknown {
+        background-color: var(--default-color);
+    }
+
+    &_theme_enabled {
+        background-color: var(--success-color);
+    }
+
+    &_theme_disabled {
+        background-color: var(--danger-color);
+    }
+}

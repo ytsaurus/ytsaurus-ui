@@ -1,0 +1,12 @@
+.acl-update-message {
+    display: flex;
+    align-items: center;
+
+    &__link {
+        margin: 0 3px;
+    }
+
+    &__subject {
+        margin: 0 2px;
+    }
+}

@@ -1,0 +1,7 @@
+.query-result-paginator {
+    display: inline-flex;
+
+    &__control:not(:last-child) {
+        margin-right: 4px;
+    }
+}

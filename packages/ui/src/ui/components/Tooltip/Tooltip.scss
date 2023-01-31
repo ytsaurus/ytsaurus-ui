@@ -1,0 +1,8 @@
+.yt-tooltip {
+    position: relative;
+    display: inline-block;
+
+    &_block {
+        display: unset;
+    }
+}

@@ -1,0 +1,26 @@
+.offset-selector {
+
+    &__content {
+        padding: 24px;
+    }
+
+    &__item-group {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        color: var(--primary-text);
+
+        &_disabled {
+            color: var(--secondary-text);
+        }
+    }
+
+    &__item-group:not(:last-child) {
+        margin-bottom: 24px;
+    }
+
+    &__item {
+        width: 350px;
+        margin-left: 5px;
+    }
+}

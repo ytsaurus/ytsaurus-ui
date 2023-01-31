@@ -1,0 +1,41 @@
+.query-settings-popup {
+    width: 620px;
+
+    &__header {
+        padding: 16px 20px 8px;
+    }
+
+    &__footer {
+        padding: 8px 20px;
+    }
+
+    &__list-item {
+        padding: 0 20px;
+        flex: 1;
+        display: flex;
+        align-items: center;
+    }
+}
+
+.query-setting-view {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    padding: 12px 0;
+
+    &__value {
+        flex: 1;
+    }
+
+    &__control {
+        margin-right: 8px;
+    }
+}
+
+.query-setting-form {
+    flex: 1;
+    display: flex;
+    &__item {
+        margin-right: 8px;
+    }
+}

@@ -1,0 +1,50 @@
+@import '../../../styles/mixins';
+
+.system {
+    &__container-host-radio {
+        margin-left: 20px;
+    }
+    &__schedulers-agents {
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    &__schedulers-hosts,
+    &__agents-hosts {
+        display: grid;
+        grid-gap: 8px 80px;
+        grid-auto-flow: column;
+
+        margin-bottom: 18px;
+        margin-top: 8px;
+    }
+
+    &__scheduler {
+        display: grid;
+        grid-template-columns: 14px 100px 30px minmax(150px, 380px);
+        grid-gap: 12px;
+    }
+
+    &__scheduler-host {
+        display: flex;
+
+        &-address {
+            flex: 0 1 auto;
+            @include ellipsis();
+        }
+
+        &-copy-btn {
+            margin-top: -3px;
+            visibility: hidden;
+        }
+
+        &:hover &-copy-btn {
+            visibility: visible;
+        }
+    }
+
+    &__maintenance {
+        justify-self: end;
+        color: var(--secondary-text);
+    }
+}

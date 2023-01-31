@@ -1,0 +1,19 @@
+.node-memory-details-table {
+    &__name {
+        &_level_1 {
+            padding-left: 40px;
+        }
+    }
+
+    &__progress {
+        width: 200px;
+    }
+
+    &__row {
+        &_bundle {
+            cursor: pointer;
+            background-color: var(--light-background);
+            font-weight: 500;
+        }
+    }
+}

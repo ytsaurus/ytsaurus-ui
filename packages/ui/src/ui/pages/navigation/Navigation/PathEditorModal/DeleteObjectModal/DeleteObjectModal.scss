@@ -1,0 +1,74 @@
+.navigation-delete-object-modal {
+    &__preview-icon,
+    &__preview-name,
+    &__preview-disk-space,
+    &__preview-node-count,
+    &__preview-node-count {
+        font-weight: bold;
+    }
+
+    &__table {
+        display: grid;
+        grid-template-columns: 10px 1fr 70px 80px 75px;
+        grid-template-rows: 20px;
+        grid-gap: 12px 20px;
+        align-items: center;
+    }
+
+    &__object {
+        margin-bottom: 15px;
+        display: flex;
+        align-items: center;
+    }
+
+    &__name {
+        margin: 0;
+        max-width: 50%;
+
+        display: flex;
+        align-items: center;
+    }
+
+    &__meta {
+        margin-bottom: 20px;
+    }
+
+    &__path {
+        margin-left: 12px;
+    }
+
+    &__delete {
+        margin: 0;
+        margin-top: 30px;
+        display: flex;
+        justify-content: space-between;
+
+        .elements-label {
+            opacity: 0;
+            transition: 100ms opacity ease;
+        }
+
+        &_permanently {
+            .elements-label {
+                opacity: 1;
+            }
+        }
+    }
+
+    &_loading,
+    &_error {
+        min-height: 125px;
+    }
+
+    &_loading {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .icon-wrapper {
+        display: inline-block;
+        vertical-align: middle;
+        line-height: 1em;
+    }
+}

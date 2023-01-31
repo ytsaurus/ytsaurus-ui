@@ -1,0 +1,36 @@
+.operations-list {
+    $preset-horizontal-padding: 13px;
+
+    &__preset {
+        font-size: 13px;
+
+        transition: background-color 0.1s ease-in;
+        cursor: pointer;
+
+        &-name {
+            margin-right: $preset-horizontal-padding;
+            display: flex;
+            align-items: center;
+        }
+
+        &-remove {
+            margin-left: auto;
+
+            opacity: 0.5;
+            cursor: pointer;
+
+            &:hover {
+                opacity: 1;
+            }
+        }
+    }
+
+    &__preset-content {
+        display: inline-flex;
+        align-items: baseline;
+    }
+
+    &__ytfront-2383 {
+        color: var(--warning-text) !important;
+    }
+}

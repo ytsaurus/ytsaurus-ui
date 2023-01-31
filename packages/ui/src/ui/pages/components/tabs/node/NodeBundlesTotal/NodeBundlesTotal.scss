@@ -1,0 +1,40 @@
+.node-bundles-total {
+    margin-top: 20px;
+
+    &__progress {
+        width: 500px;
+        padding-bottom: 5px;
+    }
+
+    &__progress-tooltip {
+        display: grid;
+        grid-gap: 5px;
+        grid-template-columns: auto auto auto;
+    }
+
+    &__progress-tooltip-title {
+        &::first-letter {
+            text-transform: capitalize;
+        }
+    }
+
+    &__color-circle {
+        width: 1em;
+        height: 1em;
+        border-radius: 50%;
+
+        &_theme_default {
+            background-color: var(--default-color);
+        }
+        &_theme_success {
+            background-color: var(--success-color);
+        }
+        &_theme_danger {
+            background-color: var(--danger-color);
+        }
+
+        &_theme_info {
+            background-color: var(--blue-color);
+        }
+    }
+}

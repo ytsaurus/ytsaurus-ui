@@ -1,0 +1,61 @@
+.acl-request-permissions {
+    .yc-button {
+        width: 100%;
+        height: 38px;
+    }
+
+    &__cluster {
+        font-weight: bold;
+        text-transform: capitalize;
+    }
+
+    &__comment-notice {
+        font-size: 12px;
+        line-height: 18px;
+        color: var(--secondary-text);
+        margin: 4px 0;
+    }
+
+    &__modal {
+        .page-dialog {
+            width: 100%;
+        }
+
+        .df-dialog__label {
+            font-size: 14px;
+            min-width: 160px;
+            max-width: 160px;
+        }
+
+        &-comments {
+            .df-dialog__field-group {
+                margin-top: unset;
+            }
+
+            .df-dialog__field-wrapper {
+                max-width: unset;
+                margin-bottom: unset;
+            }
+
+            .df-dialog__label {
+                display: none;
+            }
+
+            &-header {
+                .df-dialog__field-wrapper {
+                    max-width: unset;
+                    margin-bottom: unset;
+                }
+            }
+        }
+
+        &-error {
+            margin-left: -32px;
+            width: calc(100% + 64px);
+
+            .df-dialog__field-wrapper {
+                max-width: unset;
+            }
+        }
+    }
+}

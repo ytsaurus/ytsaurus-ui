@@ -1,0 +1,18 @@
+.share-usage-bar {
+    display: block !important;
+    position: relative;
+
+    &__progress {
+        border: 1px solid var(--yc-color-base-generic);
+    }
+
+    &__tick {
+        position: absolute;
+        top: -3px;
+        left: calc(50% - 1px);
+        width: 0;
+        border: 1px solid var(--yc-color-line-generic-accent);
+        height: calc(100% + 4px);
+        z-index: 1;
+    }
+}

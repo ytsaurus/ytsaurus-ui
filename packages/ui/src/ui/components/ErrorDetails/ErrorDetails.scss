@@ -1,0 +1,37 @@
+.elements-error-details {
+    &__details {
+        margin-bottom: 10px;
+
+        .unipika-wrapper {
+            background-color: var(--main-background);
+
+            padding: 10px 15px;
+        }
+    }
+
+    &__message {
+        white-space: pre-wrap;
+    }
+
+    &__error {
+        margin-bottom: 5px;
+
+        &-toggler {
+            margin-right: 5px;
+        }
+    }
+
+    &__error:last-child,
+    &__error:last-child &__details {
+        margin-bottom: 0;
+    }
+
+    &__tabs {
+        margin: 10px 0 20px;
+    }
+
+    &__inner-errors {
+        margin: 0;
+        padding: 0 0 0 20px;
+    }
+}

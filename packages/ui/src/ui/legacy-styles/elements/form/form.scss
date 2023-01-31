@@ -1,0 +1,110 @@
+@import '../globals';
+@import '../mixins';
+
+.elements-form-section {
+    margin-bottom: 30px;
+
+    &:last-child {
+        margin-bottom: 0;
+    }
+}
+
+$field-height: 28px;
+$field-offset: 10px;
+
+.elements-field {
+    min-height: $field-height;
+
+    margin-bottom: $field-offset;
+
+    &-set {
+        margin: 0;
+        margin-bottom: $field-offset;
+        padding: 0;
+        border: none;
+
+        &__legend {
+            line-height: $field-height;
+            margin-bottom: $field-offset;
+        }
+    }
+
+    &-set & {
+        color: var(--secondary-text);
+    }
+
+    &:last-child {
+        margin-bottom: 0;
+    }
+
+    &_inline_yes {
+        display: flex;
+    }
+
+    &_inline_yes &-reset {
+        flex: 0 0 100px;
+
+        text-align: center;
+    }
+
+    &_inline_yes &__control {
+        flex: 1 1 auto;
+    }
+
+    &_inline_yes &__label {
+        @include ellipsis();
+
+        flex: 0 0 220px;
+        padding-right: 20px;
+
+        line-height: $field-height;
+    }
+
+    &_invalid_yes &__control {
+        @include invalid-field();
+    }
+}
+
+// DEPRECATED APPROACH
+// TODO Fix usages
+
+.elements-form {
+    &__label {
+        font-size: 12.6px;
+
+        display: block;
+
+        margin-bottom: 5px;
+
+        letter-spacing: 1px;
+    }
+
+    &__field {
+        &:not(:last-child) {
+            margin-bottom: 20px;
+        }
+
+        &_theme_invalid {
+            @include invalid-field();
+        }
+    }
+
+    $block: &;
+    &__field-group {
+        display: flex;
+
+        margin-bottom: 15px;
+
+        & #{$block}__field {
+            margin-bottom: 0;
+
+            &:not(:first-child) {
+                margin-left: 15px;
+            }
+        }
+    }
+
+    &__timepicker {
+        width: 80px;
+    }
+}

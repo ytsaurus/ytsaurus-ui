@@ -1,0 +1,38 @@
+@import '../../../components/WithStickyToolbar/WithStickyToolbar.scss';
+@import '../../../styles/mixins.scss';
+
+.cells-table-instruments {
+    &__item {
+        max-width: 380px;
+        min-width: 20ex;
+
+        .elements-filter {
+            flex-grow: 1;
+        }
+
+        .textinput__box {
+            border-radius: 4px;
+        }
+
+        ::placeholder {
+            color: var(--yc-color-text-hint) !important;
+            font-size: 14px;
+        }
+    }
+
+    &__suggest {
+        width: 100%;
+    }
+
+    &__suggest-popup {
+        .yc-suggest__list_empty {
+            color: var(--secondary-text);
+        }
+        .yc-list__item {
+            padding: 0.5ex 1ex;
+        }
+        .yc-suggest__item {
+            @include ellipsis();
+        }
+    }
+}

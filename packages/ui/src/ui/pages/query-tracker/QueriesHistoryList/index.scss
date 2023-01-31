@@ -1,0 +1,85 @@
+.query-history-item {
+    cursor: pointer;
+    position: relative;
+
+    &:hover {
+        background-color: var(--hover-background);
+    }
+
+    &_selected {
+        background-color: var(--dark-background);
+    }
+
+    &__name {
+        display: inline-flex;
+        align-items: center;
+        width: 100%;
+    }
+
+    &__name_row {
+        max-width: 100px;
+    }
+
+    &__author_row {
+        max-width: 120px;
+    }
+
+    &__name > &__name-container {
+        flex: 1;
+    }
+
+    &__name > &__status-icon {
+        min-width: 16px;
+        min-height: 16px;
+    }
+
+    &__actions_row {
+        visibility: hidden;
+    }
+
+    &:hover &__actions_row {
+        visibility: visible;
+        background-color: var(--dark-background);
+    }
+
+    &:hover &__actions {
+        width: auto;
+        position: sticky;
+        right: 0;
+        z-index: 1;
+    }
+}
+
+.queries-history-list {
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
+    flex: 1;
+
+    &__filter {
+        padding: 12px 12px 0;
+        margin-bottom: 8px;
+    }
+
+    &__list-wrapper {
+        flex: 1;
+        overflow: auto;
+        display: flex;
+        flex-direction: column;
+
+        .elements-table-wrapper {
+            overflow: auto;
+        }
+    }
+
+    &__list-wrapper > &__list {
+        flex: 1;
+    }
+
+    &__pagination {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 8px 0;
+    }
+}

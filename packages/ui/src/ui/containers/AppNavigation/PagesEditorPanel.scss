@@ -1,0 +1,34 @@
+.pages-editor-panel {
+    &__list-item-container {
+        padding-left: 17px;
+        padding-right: 15px;
+    }
+
+    &__list-item {
+        display: flex;
+        align-items: center;
+        flex-grow: 1;
+    }
+
+    &__icon {
+        color: var(--yc-color-text-misc);
+    }
+
+    &__name {
+        padding-left: 1ex;
+        flex-grow: 1;
+    }
+
+    &__pin-icon {
+        color: var(--yc-color-text-secondary);
+        cursor: pointer;
+
+        &:hover {
+            color: var(--yc-color-base-special-hover);
+        }
+
+        &_pinned {
+            color: var(--yc-color-base-special);
+        }
+    }
+}

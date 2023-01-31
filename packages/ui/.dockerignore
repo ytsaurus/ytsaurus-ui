@@ -1,0 +1,45 @@
+# Exclude both main and webpack's node_modules
+**/node_modules
+
+Dockerfile
+
+# Compiled sources
+dist/server
+dist/public/build
+dist/run
+
+# No need for tests and docs inside image
+tests
+deploy/nginx/includes/dev-locations.conf
+deploy/nginx/farm-preview.example
+deploy/nginx/yt.dataui.conf.example
+src/server/tests
+docs
+smoke-tests
+**/__mocks__
+**/*.asciidoc
+**/*.md
+**/*.spec.*
+
+# Do not put secrets into the image
+src/server/secrets/*
+
+# System files
+**/.DS_Store
+.env
+.git
+.gitignore
+.editorconfig
+**/.eslintrc
+**/.eslintrc.json
+.stylelintrc
+.dockerignore
+.idea
+**/.arcignore
+.babelrc
+.eslintignore
+.prettierrc.js
+a.yaml
+
+# Exclude git merge leftovers
+**/*.orig

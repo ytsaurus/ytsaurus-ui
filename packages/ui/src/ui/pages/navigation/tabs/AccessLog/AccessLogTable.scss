@@ -1,0 +1,25 @@
+.access-log-table {
+    &__date-column-header {
+        display: flex;
+    }
+
+    &__path {
+        display: flex;
+        align-items: center;
+        overflow: hidden;
+    }
+
+    &__path-link {
+        display: flex;
+        align-items: center;
+
+        flex-grow: 1;
+        flex-shrink: 1;
+        overflow: hidden;
+    }
+
+    &__path-link-link {
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+}

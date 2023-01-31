@@ -1,0 +1,37 @@
+.resources {
+    &__table {
+        &-item {
+            &_type {
+                &_name {
+                    width: 100%;
+                }
+            }
+        }
+    }
+
+    &__named-row {
+        color: var(--default-color);
+    }
+
+    &__expand {
+        color: var(--secondary-text);
+    }
+
+    &__inner {
+        padding-left: 5ex;
+
+        &-row {
+            color: var(--secondary-text);
+        }
+    }
+
+    &__name {
+        &:hover {
+            cursor: pointer;
+        }
+    }
+
+    &__table {
+        overflow: auto;
+    }
+}

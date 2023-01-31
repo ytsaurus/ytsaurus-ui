@@ -1,0 +1,30 @@
+.system {
+    &__resources {
+        margin-bottom: 20px;
+
+        &-message {
+            margin-bottom: 20px;
+        }
+
+        &-heading {
+            font-size: 16px;
+            line-height: 20px;
+            margin-bottom: 3px;
+        }
+
+        &-caption {
+            margin-bottom: 5px;
+        }
+
+        &-meters {
+            display: grid;
+            grid-gap: 9px 60px;
+            grid-template-rows: repeat(4, minmax(20px, auto));
+            grid-auto-flow: column;
+
+            &-disk {
+                grid-column-end: span 3;
+            }
+        }
+    }
+}

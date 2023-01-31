@@ -1,0 +1,63 @@
+@import '../../styles/mixins';
+
+.meta-table {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+
+    &__group {
+        margin-right: 50px;
+        margin-bottom: 20px;
+
+        &:only-child {
+            margin: 0;
+        }
+    }
+
+    &__title {
+        width: 100%;
+        margin: 0;
+        margin-bottom: 9px;
+
+        font-size: inherit;
+        line-height: inherit;
+    }
+}
+
+.meta-table-item {
+    $item-height: 22px;
+
+    display: grid;
+    grid-template-columns: repeat(2, auto);
+    grid-gap: 3px 20px;
+
+    &__key,
+    &__value {
+        @include ellipsis();
+        flex: 0 0 auto;
+    }
+
+    &__key {
+        color: var(--secondary-text);
+    }
+
+    /* templates */
+
+    &__pools {
+        display: block;
+    }
+
+    &__id,
+    &__link_clickable {
+        display: flex;
+        align-items: center;
+    }
+
+    &__files {
+        @include reset-ul();
+    }
+
+    &__file {
+        @include reset-li();
+    }
+}

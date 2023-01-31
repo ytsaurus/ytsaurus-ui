@@ -1,0 +1,20 @@
+.ic-select-with-subitems {
+    display: flex;
+    align-items: center;
+
+    &__control {
+        display: flex;
+        align-items: center;
+        flex-grow: 1;
+        width: 50%;
+
+
+        &:not(:last-child) {
+            padding-right: 1ex;
+        }
+
+        &-label {
+            padding-right: 1ex;
+        }
+    }
+}

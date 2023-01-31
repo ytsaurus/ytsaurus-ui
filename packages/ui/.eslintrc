@@ -1,0 +1,10 @@
+{
+    "extends": ["@yandex-cloud/eslint-config", "@yandex-cloud/eslint-config/prettier"],
+    "root": true,
+    "rules": {
+        "new-cap": 0
+    },
+    "env": {
+        "jest": true
+    }
+}

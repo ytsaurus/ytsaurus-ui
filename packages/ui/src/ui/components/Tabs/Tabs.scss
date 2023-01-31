@@ -1,0 +1,139 @@
+.yc-root .tabs .yc-link_view_normal {
+    color: var(--secondary-text) !important;
+
+    &:hover {
+        color: var(--hover-link) !important;
+    }
+}
+
+.tabs {
+    .yc-link {
+        color: var(--secondary-text);
+
+        &:hover {
+            color: var(--hover-link);
+        }
+    }
+
+    &__underline {
+        border-bottom: 1px solid var(--dark-divider);
+    }
+
+    &__list {
+        list-style-type: none;
+
+        margin: 0;
+        padding: 0;
+
+        white-space: nowrap;
+    }
+
+    // Vertical layout
+    &__list_layout_vertical &__tab {
+        padding-left: 30px;
+
+        &_active_yes {
+            &::before {
+                position: absolute;
+                top: 0;
+                bottom: 0;
+                left: 0;
+
+                width: 3px;
+
+                content: '';
+
+                background-color: var(--primary-text);
+                transition: background-color 0.15s ease-out;
+            }
+
+            .yc-link {
+                color: var(--primary-text);
+            }
+        }
+    }
+
+    // Horizontal layout
+    &__list_layout_horizontal &__tab {
+        display: inline-block;
+        margin-right: 16px;
+
+        &_active_yes {
+            &::before {
+                position: absolute;
+                bottom: 0;
+                right: 0;
+                left: 0;
+
+                height: 2px;
+
+                content: '';
+
+                background-color: var(--primary-text);
+                transition: background-color 0.15s ease-out;
+            }
+
+            .yc-link {
+                color: var(--primary-text);
+            }
+        }
+    }
+
+    &__tab {
+        position: relative;
+
+        a {
+            text-decoration: none;
+            color: var(--secondary-text);
+
+            &:visited {
+                color: var(--secondary-text);
+            }
+
+            &:hover {
+                color: var(--hover-link);
+            }
+
+            &.active {
+                color: var(--primary-text);
+
+                &::before {
+                    position: absolute;
+                    bottom: 0;
+                    right: 0;
+                    left: 0;
+
+                    height: 2px;
+
+                    content: '';
+
+                    background-color: var(--primary-text);
+                    transition: background-color 0.15s ease-out;
+                }
+            }
+        }
+
+        &-counter {
+            margin-left: 5px;
+            padding: 1px 3px 0;
+
+            color: var(--secondary-text);
+            border-radius: 3px;
+        }
+
+        &_size_s {
+            font-size: 13px;
+            line-height: 30px;
+        }
+
+        &_size_m {
+            font-size: 13px;
+            line-height: 36px;
+        }
+
+        &_size_l {
+            font-size: 17px;
+            line-height: 42px;
+        }
+    }
+}

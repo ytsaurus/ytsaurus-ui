@@ -1,0 +1,17 @@
+.multimeter {
+    width: 100%;
+    display: inline-flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1em;
+
+    &__value {
+        display: inline-block;
+        text-align: right;
+        min-width: 50px;
+    }
+
+    &__tooltip {
+        min-width: 65px;
+    }
+}

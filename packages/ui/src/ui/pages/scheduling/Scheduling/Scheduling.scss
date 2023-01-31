@@ -1,0 +1,22 @@
+.scheduling {
+    &__wrapper {
+        &_loading {
+            height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    }
+
+    &__instruments,
+    &__alerts {
+        margin-bottom: 20px;
+    }
+
+    &__delete-dialog {
+        .yc-dialog-footer {
+            padding-top: 10px;
+            padding-bottom: 10px;
+        }
+    }
+}

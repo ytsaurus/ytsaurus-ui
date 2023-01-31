@@ -1,0 +1,26 @@
+.operation-pools-weights {
+    display: grid;
+    grid-template-columns: 3fr 1fr 1fr;
+    grid-template-rows: 28px;
+    grid-auto-rows: 28px;
+    grid-gap: 20px;
+    align-items: center;
+
+    &__header {
+        color: var(--secondary-text);
+    }
+
+    &__title {
+        justify-content: center;
+        display: flex;
+        align-items: center;
+    }
+
+    &__name {
+        padding-bottom: 1em;
+    }
+
+    &__error {
+        margin-top: 20px;
+    }
+}

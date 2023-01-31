@@ -1,0 +1,14 @@
+{
+  "extends": "@yandex-cloud/tsconfig",
+  "compilerOptions": {
+    // не dist/server, т.к. для случае с server/, common/
+    // получается dist/server/server/, dist/server/common/ и ui-core не может запустить сервер
+    "noUnusedParameters": false,
+    "outDir": "../../dist",
+    "resolveJsonModule": true,
+    "declaration": true
+  },
+  "include": ["**/*", "../@types"],
+  "exclude": ["node_modules"],
+  "types": ["node"]
+}

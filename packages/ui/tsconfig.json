@@ -1,0 +1,7 @@
+{
+  "extends": "@yandex-cloud/tsconfig/tsconfig.json",
+  "compilerOptions": {
+    "resolveJsonModule": true,
+    "allowSyntheticDefaultImports": true,
+  }
+}

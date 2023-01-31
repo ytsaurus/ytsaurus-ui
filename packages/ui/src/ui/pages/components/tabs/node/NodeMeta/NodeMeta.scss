@@ -1,0 +1,24 @@
+.node-meta {
+    $meta-table: '.meta-table-item';
+
+    display: flex;
+    margin: 10px 0;
+
+    &__column {
+        flex-grow: 1;
+        width: 50%;
+
+        &_type {
+            &_tags {
+                #{$meta-table}__value {
+                    white-space: normal;
+                }
+            }
+        }
+    }
+
+    &__tags {
+        max-width: 500px;
+        white-space: normal;
+    }
+}

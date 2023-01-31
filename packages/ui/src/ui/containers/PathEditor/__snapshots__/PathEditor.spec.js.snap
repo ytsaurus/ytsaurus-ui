@@ -1,0 +1,239 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<PathEditor /> snapshots should match snapshot from mount rendering without suggestions 1`] = `
+<PathEditor
+  autoFocus={true}
+  defaultPath="//path/to/object"
+  disabled={false}
+  errorMessage="Oops, something went wrong"
+  hasClear={false}
+  loadSuggestionsList={
+    [MockFunction] {
+      "calls": Array [
+        Array [
+          "//path/to/object",
+          undefined,
+        ],
+        Array [
+          "//path/to/object",
+          undefined,
+        ],
+      ],
+      "results": Array [
+        Object {
+          "type": "return",
+          "value": undefined,
+        },
+        Object {
+          "type": "return",
+          "value": undefined,
+        },
+      ],
+    }
+  }
+  onApply={[MockFunction]}
+  onBlur={[MockFunction]}
+  onCancel={[MockFunction]}
+  onChange={[MockFunction]}
+  onFocus={[MockFunction]}
+  placeholder="placeholder"
+  removeActiveRequests={[MockFunction]}
+  showErrors={true}
+  suggestions={Array []}
+  suggestionsError={false}
+>
+  <div
+    className="path-editor"
+  >
+    <ForwardRef(TextInput)
+      autoFocus={true}
+      controlRef={
+        Object {
+          "current": <input
+            class="yc-text-input__control yc-text-input__control_type_input"
+            placeholder="placeholder"
+            value="//path/to/object"
+          />,
+        }
+      }
+      disabled={false}
+      hasClear={false}
+      onBlur={[Function]}
+      onFocus={[Function]}
+      onKeyDown={[Function]}
+      onUpdate={[Function]}
+      placeholder="placeholder"
+      value="//path/to/object"
+    >
+      <span
+        className="yc-text-input yc-text-input_view_normal yc-text-input_size_m yc-text-input_pin_round-round"
+      >
+        <InputControl
+          autoFocus={true}
+          controlRef={[Function]}
+          disabled={false}
+          hasClear={false}
+          onBlur={[Function]}
+          onChange={[Function]}
+          onFocus={[Function]}
+          onKeyDown={[Function]}
+          onUpdate={[Function]}
+          placeholder="placeholder"
+          value="//path/to/object"
+        >
+          <input
+            autoFocus={true}
+            className="yc-text-input__control yc-text-input__control_type_input"
+            disabled={false}
+            onBlur={[Function]}
+            onChange={[Function]}
+            onFocus={[Function]}
+            onKeyDown={[Function]}
+            placeholder="placeholder"
+            value="//path/to/object"
+          />
+        </InputControl>
+      </span>
+    </ForwardRef(TextInput)>
+    <Popup
+      anchorRef={
+        Object {
+          "current": <input
+            class="yc-text-input__control yc-text-input__control_type_input"
+            placeholder="placeholder"
+            value="//path/to/object"
+          />,
+        }
+      }
+      className="path-editor__popup"
+      offset={
+        Array [
+          undefined,
+          0,
+        ]
+      }
+      onClose={[Function]}
+      open={false}
+      placement={
+        Array [
+          "bottom-start",
+          "top-start",
+        ]
+      }
+    >
+      <Portal>
+        <Portal
+          containerInfo={
+            <body>
+              <div
+                class="yc-toaster"
+              />
+            </body>
+          }
+        >
+          <CSSTransition
+            addEndListener={[Function]}
+            appear={true}
+            classNames={
+              Object {
+                "appear": "yc-popup-wrapper_appear",
+                "appearActive": "yc-popup-wrapper_appear_active",
+                "appearDone": "yc-popup-wrapper_appear_done",
+                "enter": "yc-popup-wrapper_enter",
+                "enterActive": "yc-popup-wrapper_enter_active",
+                "enterDone": "yc-popup-wrapper_enter_done",
+                "exit": "yc-popup-wrapper_exit",
+                "exitActive": "yc-popup-wrapper_exit_active",
+                "exitDone": "yc-popup-wrapper_exit_done",
+              }
+            }
+            in={false}
+            mountOnEnter={true}
+            nodeRef={
+              Object {
+                "current": null,
+              }
+            }
+            unmountOnExit={true}
+          >
+            <Transition
+              addEndListener={[Function]}
+              appear={true}
+              enter={true}
+              exit={true}
+              in={false}
+              mountOnEnter={true}
+              nodeRef={
+                Object {
+                  "current": null,
+                }
+              }
+              onEnter={[Function]}
+              onEntered={[Function]}
+              onEntering={[Function]}
+              onExit={[Function]}
+              onExited={[Function]}
+              onExiting={[Function]}
+              unmountOnExit={true}
+            />
+          </CSSTransition>
+        </Portal>
+      </Portal>
+    </Popup>
+  </div>
+</PathEditor>
+`;
+
+exports[`<PathEditor /> snapshots should match snapshot from shallow rendering 1`] = `
+<div
+  className="path-editor"
+>
+  <ForwardRef(TextInput)
+    autoFocus={true}
+    controlRef={
+      Object {
+        "current": null,
+      }
+    }
+    disabled={false}
+    hasClear={false}
+    onBlur={[Function]}
+    onFocus={[Function]}
+    onKeyDown={[Function]}
+    onUpdate={[Function]}
+    placeholder="placeholder"
+    value="//path/to/object"
+  />
+  <Popup
+    anchorRef={
+      Object {
+        "current": null,
+      }
+    }
+    className="path-editor__popup"
+    offset={
+      Array [
+        undefined,
+        0,
+      ]
+    }
+    onClose={[Function]}
+    open={false}
+    placement={
+      Array [
+        "bottom-start",
+        "top-start",
+      ]
+    }
+  >
+    <div
+      className="path-editor__items"
+      style={
+        Object {
+          "width": 200,
+        }
+      }
+    />
+  </Popup>
+</div>
+`;

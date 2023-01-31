@@ -1,0 +1,31 @@
+$TOOLBAR_COMPONENT_HEIGHT: 48px;
+
+.toolbar {
+    &__container {
+        display: flex;
+        flex-wrap: nowrap;
+        align-items: center;
+    }
+
+    &__item {
+        display: flex;
+        align-items: center;
+
+        height: $TOOLBAR_COMPONENT_HEIGHT;
+        margin-right: 20px;
+        padding: 10px 0;
+        flex-shrink: 0;
+
+        &:last-child {
+            margin-right: 0;
+        }
+
+        &_growable {
+            flex-grow: 1;
+        }
+
+        &_shrinkable {
+            flex-shrink: 1;
+        }
+    }
+}

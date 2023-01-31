@@ -1,0 +1,11 @@
+.system {
+    &-nodes {
+        .elements-heading {
+            margin-bottom: 0;
+        }
+
+        .collapsible-section & {
+            margin-top: 20px;
+        }
+    }
+}

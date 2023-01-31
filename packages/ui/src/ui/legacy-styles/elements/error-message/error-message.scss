@@ -1,0 +1,32 @@
+@import '../globals';
+
+.elements-error-message {
+    position: relative;
+
+    &__message {
+        line-height: 1.6em;
+
+        word-break: break-all;
+
+        &-toggler {
+            margin-right: 5px;
+        }
+    }
+
+    &__inner-errors {
+        margin: 0;
+        padding: 0 0 0 20px;
+    }
+
+    &__tabs {
+        margin-bottom: 10px;
+    }
+
+    &__details {
+        margin: 10px 0;
+
+        & .unipika {
+            margin: 0;
+        }
+    }
+}

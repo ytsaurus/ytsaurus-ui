@@ -1,0 +1,36 @@
+.accounts-top-row-content {
+    &__breadcrumbs {
+        padding-left: 4px;
+        flex-grow: 1;
+        flex-shrink: 1;
+        overflow: hidden;
+        min-width: 160px;
+    }
+
+    &__breadcrumbs-item {
+        color: var(--secondary-text) !important;
+
+        &_current {
+            color: var(--primary-text) !important;
+        }
+
+        &:hover {
+            color: var(--hover-link) !important;
+        }
+    }
+
+    &__actions {
+        display: flex;
+        align-items: center;
+        padding-left: 10px;
+    }
+
+    &__create {
+        flex-shrink: 0;
+        padding-left: 1ex;
+    }
+
+    &__abc-link {
+        padding: 0 1ex;
+    }
+}

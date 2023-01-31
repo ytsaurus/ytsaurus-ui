@@ -1,0 +1,9 @@
+.yc-root {
+    .icon_awesome {
+        text-align: center;
+
+        &::after {
+            content: none;
+        }
+    }
+}

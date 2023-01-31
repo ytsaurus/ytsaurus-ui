@@ -1,0 +1,8 @@
+@mixin yt-login-page-light {
+    --login-background: #f5fff0;
+    --login-button-solid: #4c4c4c;
+    --login-button-solid-hover: #333333;
+    --login-background-image: url('../../../../../img/svg/YT-login-page-background-light.svg');
+    --login-button-loading-color-1: #333333;
+    --login-button-loading-color-2: #4c4c4c;
+}

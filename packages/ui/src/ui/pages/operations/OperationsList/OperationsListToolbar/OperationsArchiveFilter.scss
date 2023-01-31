@@ -1,0 +1,21 @@
+.operations-list {
+    &__archive-range {
+        &-button {
+            width: 280px;
+        }
+    }
+}
+
+.elements-form {
+    &__button-group {
+        margin-bottom: 10px;
+    }
+}
+
+.operations-datepicker-control {
+    width: 170px;
+}
+
+.operations-datepicker-popup {
+    z-index: var(--dialog-suggest-z-index) !important;
+}

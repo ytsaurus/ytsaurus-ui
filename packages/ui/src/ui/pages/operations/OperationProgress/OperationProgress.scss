@@ -1,0 +1,25 @@
+.operation-progress {
+    min-width: 200px;
+
+    &__bar {
+        display: inline-block;
+
+        width: 100%;
+
+        line-height: 20px;
+    }
+
+    &__state {
+        padding-bottom: 4px;
+    }
+
+    &__counter {
+        display: flex;
+        justify-content: space-between;
+
+        &-state {
+            color: var(--secondary-text);
+            padding-right: 1ex;
+        }
+    }
+}

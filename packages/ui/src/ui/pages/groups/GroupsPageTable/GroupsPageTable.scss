@@ -1,0 +1,119 @@
+$usersCellWidth: 250px;
+$smallCellWidth: 65px;
+
+$levelPadding: 30px;
+
+.groups-page-table {
+    max-width: 94vw;
+
+    .data-table__table {
+        .data-table__th, .data-table__td {
+            border: 0;
+        }
+
+        .data-table__head-row, .data-table__row {
+            border-bottom: 1px solid var(--light-divider);
+        }
+    }
+
+    &__header-cell {
+        &_sortable {
+            cursor: pointer;
+        }
+    }
+
+    &__td_col_name,
+    &__td_col_members {
+        min-width: $usersCellWidth !important;
+        max-width: $usersCellWidth !important;
+    }
+
+    &__content {
+        padding: 5px 0;
+        height: 60px;
+        display: flex;
+        align-items: center;
+        overflow: hidden;
+        text-overflow: ellipsis;
+
+        &_col_name {
+            margin-left: -1ex;
+        }
+
+        &_col_name,
+        &_col_members {
+            min-width: $usersCellWidth !important;
+        }
+
+        &_col_size {
+            width: $smallCellWidth;
+            justify-content: flex-end;
+        }
+
+        &_col_actions {
+            width: $smallCellWidth;
+            justify-content: space-between;
+        }
+
+        &_level_1 {
+            padding-left: $levelPadding;
+        }
+
+        &_level_2 {
+            padding-left: $levelPadding * 2;
+        }
+
+        &_level_3 {
+            padding-left: $levelPadding * 3;
+        }
+
+        &_level_4 {
+            padding-left: $levelPadding * 4;
+        }
+
+        &_level_5 {
+            padding-left: $levelPadding * 5;
+        }
+
+        &_level_6 {
+            padding-left: $levelPadding * 6;
+        }
+
+        &_level_7 {
+            padding-left: $levelPadding * 7;
+        }
+
+        &_level_8 {
+            padding-left: $levelPadding * 8;
+        }
+
+        &_level_9 {
+            padding-left: $levelPadding * 9;
+        }
+
+        &_level_10 {
+            padding-left: $levelPadding * 10;
+        }
+    }
+
+    &__groups {
+        width: 100%;
+        height: 100%;
+
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: pre-wrap;
+    }
+
+    &__attrs-action,
+    &__edit-action {
+        color: var(--secondary-text) !important;
+    }
+
+    &__group-name {
+        flex-shrink: 1;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+}

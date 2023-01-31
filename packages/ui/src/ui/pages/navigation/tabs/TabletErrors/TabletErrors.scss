@@ -1,0 +1,33 @@
+.navigation-tablet-errors {
+    .elements-error:not(:last-child) {
+        margin-bottom: 10px;
+    }
+
+    &_loading {
+        height: 200px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    &__error {
+        margin-bottom: 1em;
+    }
+
+    &__count-notice {
+        color: var(--warning-text);
+        margin-bottom: 1em;
+    }
+
+    &__section {
+        padding-bottom: 1px;
+        padding-top: 10px;
+    }
+
+    &__group {
+        background-color: var(--hover-background);
+        border-radius: 4px;
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+}

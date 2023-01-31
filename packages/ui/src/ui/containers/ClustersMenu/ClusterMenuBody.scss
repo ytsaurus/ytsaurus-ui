@@ -1,0 +1,7 @@
+@import '../ClusterPageHeader/ClusterColor.scss';
+
+.cluster-menu {
+    &__item-image {
+        @include cluster-styled;
+    }
+}

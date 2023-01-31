@@ -1,0 +1,17 @@
+@import '../globals';
+
+.elements-confirmation {
+    &__option {
+        display: flex;
+
+        &-message {
+            margin: 0;
+
+            flex: 0 0 60%;
+        }
+
+        &-control {
+            flex: 0 0 40%;
+        }
+    }
+}

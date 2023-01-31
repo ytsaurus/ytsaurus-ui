@@ -1,0 +1,20 @@
+.queries-history-filter {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+
+
+    &__row {
+        display: flex;
+        align-items: center;
+        flex-direction: row;
+
+        &:not(:last-child) {
+            margin-bottom: 8px;
+        }
+    }
+
+    &__row-item:not(:first-child) {
+        margin-left: 8px;
+    }
+}

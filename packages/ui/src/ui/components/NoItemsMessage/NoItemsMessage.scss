@@ -1,0 +1,9 @@
+@import '../../styles/mixins';
+
+.no-items-message {
+    @include heading-size('m');
+    line-height: 5em;
+    font-weight: 500;
+    padding: 0 1ex;
+    white-space: nowrap;
+}

@@ -1,0 +1,22 @@
+.path-editor-modal {
+    &__text {
+        margin-top: 0;
+    }
+
+    .path-editor {
+        margin-bottom: 10px;
+    }
+
+    &__error-wrapper {
+        position: relative;
+        min-height: 25px;
+
+        .error-message {
+            margin-bottom: 10px;
+
+            &:last-child {
+                margin-bottom: 0;
+            }
+        }
+    }
+}

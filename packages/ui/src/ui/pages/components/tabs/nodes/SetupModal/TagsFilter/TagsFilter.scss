@@ -1,0 +1,15 @@
+.tags-filter {
+    display: flex;
+
+    &__control {
+        flex-grow: 1;
+        max-width: 370px;
+    }
+
+    &__dropdown-popup {
+        .icon {
+            height: unset;
+            margin-right: 2px;
+        }
+    }
+}

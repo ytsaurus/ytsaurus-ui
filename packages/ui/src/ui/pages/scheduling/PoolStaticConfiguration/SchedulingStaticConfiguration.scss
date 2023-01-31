@@ -1,0 +1,26 @@
+.scheduling-static-configuration {
+    &__table {
+        display: inline-block;
+    }
+
+    &__name {
+        &_level_1 {
+            padding-left: 38px;
+        }
+    }
+
+    &__row {
+        color: var(--yc-color-text-secondary);
+    }
+
+    &__pool-meta {
+        padding-right: 70px;
+        padding-top: 11px;
+    }
+
+    &__container {
+        display: flex;
+        margin-top: -20px;
+        margin-bottom: 20px;
+    }
+}

@@ -1,0 +1,19 @@
+.queue-partitions {
+    --data-table-cell-align: baseline;
+
+    .data-table__row {
+        height: 48px;
+    }
+
+    $cellsTable: &;
+    &__hover-action {
+        visibility: hidden;
+        color: var(--hover-link);
+    }
+
+    tr:hover {
+        #{$cellsTable}__hover-action {
+            visibility: visible;
+        }
+    }
+}
