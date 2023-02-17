@@ -7,6 +7,9 @@
     "type": "github",
     "url": "https://github.com/YTsaurus/ytsaurus-ui/packages/javascript-wrapper"
   },
+  "files": [
+    "lib"
+  ],
   "license": "Apache License 2.0",
   "main": "./lib/index.js",
   "scripts": {
