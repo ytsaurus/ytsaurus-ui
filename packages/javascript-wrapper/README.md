@@ -1,7 +1,3 @@
-[![npm version](https://badger.yandex-team.ru/npm/@yandex-data-ui/yt-javascript-wrapper/version.svg)](https://npm.yandex-team.ru/@yandex-data-ui/yt-javascript-wrapper)
-[![oko health](https://oko.yandex-team.ru/badges/repo.svg?repoName=data-ui/yt-javascript-wrapper&vcs=arc)](https://oko.yandex-team.ru/repo/data-ui/yt-javascript-wrapper)
-[![oko health](https://oko.yandex-team.ru/badges/repoSecurity.svg?repoName=data-ui/yt-javascript-wrapper&vcs=arc)](https://oko.yandex-team.ru/repo/data-ui/yt-javascript-wrapper)
-
 ## YT JavaScript Wrapper (Browser + Node.js)
 
 The library helps to make requests to YTsaurus clusters over HTTP API YT.
