@@ -11,8 +11,8 @@ The library helps to make requests to YTsaurus clusters over HTTP API YT.
 ```javascript
 const yt = require("@yandex-data-ui/yt-javascript-wrapper")();
 
-// Позволяет задать настройки по умолчанию для всех команд.
-// Если же необходимо работать с несколькими кластерами одновременно, то прокси и токен передаются каждой команде отдельно.
+// The example show how to set global options for all commands.
+// But if you need to communicate with several cluster then you have to provide proxy and token for each separate command.
 yt.setup.setGlobalOption("proxy", "plato.yt.yandex-team.ru");
 yt.setup.setGlobalOption("secure", true);
 
@@ -22,7 +22,7 @@ yt.setup.setGlobalOption("authentication", {
 
 yt.setup.setGlobalOption("timeout", 15000);
 
-// Пример 1
+// Example 1
 yt.v3.get({ path: "//sys/users/yozhik/@" });
 
 yt.v3
@@ -39,7 +39,7 @@ yt.v3
     // ...
   });
 
-// Пример 2
+// Example 2
 yt.v3.set({ path: "//sys/users/yozhik/@banned" }, true);
 
 yt.v3
