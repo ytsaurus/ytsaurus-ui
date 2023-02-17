@@ -1,0 +1,30 @@
+{
+  "name": "@ytsaurus/interface-helpers",
+  "version": "0.1.0",
+  "repository": {
+    "type": "github",
+    "url": "https://github.com/YTsaurus/ytsaurus-ui/tree/main/packages/interface-helpers"
+  },
+  "peerDependencies": {
+    "bignumber.js": "^9.0.1",
+    "moment": "^2.24.0",
+    "lodash": "^4.17.15"
+  },
+  "private": false,
+  "devDependencies": {
+    "@gravity-ui/eslint-config": "^2.0.0",
+    "@gravity-ui/prettier-config": "^1.0.1",
+    "bignumber.js": "^9.0.1",
+    "eslint": "^8.16.0",
+    "jest": "^26.6.3",
+    "lodash": "^4.17.15",
+    "moment": "^2.24.0",
+    "prettier": "^2.6.2"
+  },
+  "scripts": {
+    "lint": "npm run lint:js",
+    "lint:js": "eslint \"{assets,lib}/**/*.{js,jsx,ts,tsx}\" --ignore-pattern src/ui/vendor --quiet",
+    "lint:fix": "npm run lint:js -- --fix",
+    "test": "jest --config ./jest.config.js"
+  }
+}
