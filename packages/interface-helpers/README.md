@@ -1,8 +1,11 @@
-# yt-interface-helpers
+# interface-helpers
+
 JavaScript helpers for YT
 
-## Установка
-`npm install --save @yandex-data-ui/yt-interface-helpers`
+## Install
 
-## Пример
-hammer.format\['Bytes'\](123456789)  ---->  "117.74 MiB"
+`npm install --save @ytsaurus/interface-helpers`
+
+## Example
+
+hammer.format\['Bytes'\](123456789) ----> "117.74 MiB"
