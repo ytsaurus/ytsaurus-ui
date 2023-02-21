@@ -15,8 +15,8 @@ describe('yt', function () {
     });
 
     describe('API', function () {
-        var PROXY = 'kant.yt.yandex-team.ru',
-            OVERRIDEN_PROXY = 'plato.yt.yandex-team.ru',
+        var PROXY = 'kant.yt.my-domain.com',
+            OVERRIDEN_PROXY = 'plato.yt.my-domain.com',
             TIMEOUT = 42,
             OVERRIDEN_TIMEOUT = 314,
             DOMAIN_AUTHENTICATION = {

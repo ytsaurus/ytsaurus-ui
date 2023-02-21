@@ -4,16 +4,16 @@ The library helps to make requests to YTsaurus clusters over HTTP API YT.
 
 ### Installation
 
-`npm install @yandex-data-ui/yt-javascript-wrapper`
+`npm install @ytsaurus/javascript-wrapper`
 
 ### Usage
 
 ```javascript
-const yt = require("@yandex-data-ui/yt-javascript-wrapper")();
+const yt = require("@ytsaurus/javascript-wrapper")();
 
 // The example show how to set global options for all commands.
 // But if you need to communicate with several cluster then you have to provide proxy and token for each separate command.
-yt.setup.setGlobalOption("proxy", "plato.yt.yandex-team.ru");
+yt.setup.setGlobalOption("proxy", "plato.yt.my-domain.com");
 yt.setup.setGlobalOption("secure", true);
 
 yt.setup.setGlobalOption("authentication", {
@@ -28,7 +28,7 @@ yt.v3.get({ path: "//sys/users/yozhik/@" });
 yt.v3
   .get({
     setup: {
-      proxy: "hahn.yt.yandex.net",
+      proxy: "hahn.yt.my-domain.com",
       authentication: {
         type: "none",
       },
@@ -45,7 +45,7 @@ yt.v3.set({ path: "//sys/users/yozhik/@banned" }, true);
 yt.v3
   .set({
     setup: {
-      proxy: "banach.yt.yandex.net",
+      proxy: "banach.yt.my-domain.com",
       authentication: {
         type: "oauth",
         token: "abcdefghijklmnopqrstuvwxyz",

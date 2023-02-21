@@ -45,34 +45,6 @@ core._makeSubscribable = function (yt) {
     yt.notify = core.notify;
 };
 
-/**
- * XXX Rewrite heavy proxy "yt.yandex.net" to "yt.yandex-team.ru"
- * if configured proxy is "yt.yandex-team.ru"
- */
-// function rewriteHeavyProxy(proxy, heavyProxy) {
-//     var YANDEX_TEAM = 'yt.yandex-team.ru';
-//     var YANDEX_NET = 'yt.yandex.net';
-//
-//     if (
-//         proxy.indexOf(YANDEX_TEAM) !== -1 &&
-//         heavyProxy.indexOf(YANDEX_NET) !== -1
-//     ) {
-//         return heavyProxy.replace(YANDEX_NET, YANDEX_TEAM);
-//     }
-//
-//     var MAPS_YANDEX = 'maps.yandex.ru';
-//     var MAPS_YANDEX_TEAM = 'maps.yandex-team.ru';
-//
-//     if (
-//         proxy.indexOf(YANDEX_TEAM) !== -1 &&
-//         heavyProxy.indexOf(MAPS_YANDEX) !== -1
-//     ) {
-//         return heavyProxy.replace(MAPS_YANDEX, MAPS_YANDEX_TEAM);
-//     }
-//
-//     return heavyProxy;
-// }
-
 function appendEncodedParameters(headers, localSetup, parameters) {
     var settings = setup.getOption(localSetup, 'encodedParametersSettings');
 

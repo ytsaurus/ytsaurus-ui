@@ -3,7 +3,7 @@ const nock = require('nock')
 const yt = require('../lib')({ exportBrowserModule: false })
 
 describe('axios', function () {
-    const PROXY = 'kant.yt.yandex-team.ru'
+    const PROXY = 'kant.yt.my-domain.com'
 
     beforeEach(function (done) {
         nock.disableNetConnect()
@@ -12,7 +12,7 @@ describe('axios', function () {
     })
 
     it('requests v2.write correctly', async function () {
-        const scope = nock('https://kant.yt.yandex-team.ru')
+        const scope = nock('https://kant.yt.my-domain.com')
             .put('/api/v2/write', '{"test":"row 1"}\n{"test":"row 2"}')
             .reply(200, 'wrote')
 
@@ -30,7 +30,7 @@ describe('axios', function () {
     })
 
     it('requests v3.insertRows correctly', async function () {
-        const scope = nock('https://kant.yt.yandex-team.ru')
+        const scope = nock('https://kant.yt.my-domain.com')
             .put('/api/v3/insert_rows', '{"test":"row 1"}\n{"test":"row 2"}')
             .reply(200, 'inserted rows')
 
@@ -48,7 +48,7 @@ describe('axios', function () {
     })
 
     it('requests v3.writeTable correctly', async function () {
-        const scope = nock('https://kant.yt.yandex-team.ru')
+        const scope = nock('https://kant.yt.my-domain.com')
             .put('/api/v3/write_table', '{"test":"row 1"}\n{"test":"row 2"}')
             .reply(200, 'wrote table')
 
