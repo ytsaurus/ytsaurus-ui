@@ -104,5 +104,32 @@ module.exports = {
     // Other
     parseYPath: v3.parseYPath,
     executeBatch: v3.executeBatch,
-    _discoverVersions: v3._discoverVersions
+    _discoverVersions: v3._discoverVersions,
+
+    // QueryTracker
+    listQueries: {
+        name: 'list_queries',
+        method: 'GET',
+        dataType: 'json'
+    },
+    getQuery: {
+        name: 'get_query',
+        method: 'GET',
+        dataType: 'json'
+    },
+    startQuery: {
+        name: 'start_query',
+        method: 'POST',
+        dataType: 'json'
+    },
+    readQueryResults: {
+        name: 'read_query_result',
+        method: 'GET',
+        dataType: 'json'
+    },
+    abortQuery: {
+        name: 'abort_query',
+        method: 'POST',
+        dataType: 'json'
+    }
 }
