@@ -127,6 +127,11 @@ module.exports = {
         method: 'GET',
         dataType: 'json'
     },
+    getQueryResults: {
+        name: 'get_query_result',
+        method: 'GET',
+        dataType: 'json'
+    },
     abortQuery: {
         name: 'abort_query',
         method: 'POST',
