@@ -1,0 +1,15 @@
+{
+  "name": "root",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
+  "devDependencies": {
+    "lerna": "^6.5.1"
+  },
+  "scripts": {
+    "lint": "lerna run lint",
+    "postinstall": "lerna link && lerna bootstrap",
+    "test": "lerna run test"
+  }
+}
