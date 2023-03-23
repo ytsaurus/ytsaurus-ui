@@ -1,0 +1,8 @@
+{
+  "plugins": ["node-workspace"],
+  "packages": {
+    "packages/javascript-wrapper": {},
+    "packages/interface-helpers": {},
+    "packages/ui": {}
+  }
+}
