@@ -4,6 +4,7 @@ import _ from 'lodash';
 import {isLocalClusterId} from '../shared/utils';
 import {ConfigData} from '../shared/yt-types';
 import renderLayout, {AppLayoutConfig} from './render-layout';
+import {isLocalModeByEnvironment} from './utils';
 
 export interface ServerFactory {
     getExtraRootPages(): Array<string>;
@@ -30,7 +31,7 @@ const serverFactory: ServerFactory = {
         return [];
     },
     isLocalClusterId(cluster) {
-        return isLocalClusterId(cluster);
+        return isLocalModeByEnvironment() || isLocalClusterId(cluster);
     },
     getHomeRedirectedUrl() {
         return Promise.resolve(undefined);
