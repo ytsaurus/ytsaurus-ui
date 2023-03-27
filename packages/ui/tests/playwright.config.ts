@@ -6,13 +6,15 @@ import {defineConfig, devices} from '@playwright/test';
  */
 // require('dotenv').config();
 
+const headless = process.env.HEADLESS !== 'false';
+
 /**
  * See https://playwright.dev/docs/test-configuration.
  */
 export default defineConfig({
     testDir: './e2e',
     /* Run tests in files in parallel */
-    fullyParallel: true,
+    fullyParallel: headless,
     /* Fail the build on CI if you accidentally left test.only in the source code. */
     forbidOnly: !!process.env.CI,
     /* Retry on CI only */
@@ -23,6 +25,8 @@ export default defineConfig({
     reporter: process.env.CI ? 'github' : 'list',
     /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
     use: {
+        headless,
+
         /* Base URL to use in actions like `await page.goto('/')`. */
         // baseURL: 'http://127.0.0.1:3000',
 

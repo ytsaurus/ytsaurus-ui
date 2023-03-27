@@ -34,7 +34,7 @@ export function makeLocalModeConfig(
 ): Pick<YTConfig, 'clusters' | 'environment' | 'isLocalCluster'> {
     const proxyClusters: Record<string, ClusterConfig> =
         proxy && proxy !== YT_LOCAL_CLUSTER_ID
-            ? {[proxy]: makeClusterConfig(proxy, 'Local', proxy)}
+            ? {[proxy]: makeClusterConfig(proxy, 'Local as remote', proxy)}
             : {};
 
     return {
