@@ -1,11 +1,11 @@
 import React, {useEffect, useState} from 'react';
 import cn from 'bem-cn-lite';
 
-import {Icon, Popover, Progress, TextInput} from '@gravity-ui/uikit';
-import tooltipIcon from '../../../../../../../../img/svg/tooltip-icon.svg';
+import {Progress, TextInput} from '@gravity-ui/uikit';
 
 import {DialogControlProps} from '../../../../../../components/Dialog/Dialog.types';
 import {formatValue, parseValue} from '../../../../../../components/NumberInput/NumberInput';
+import {Tooltip} from '../../../../../../components/Tooltip/Tooltip';
 
 import {calcProgressProps} from '../../../../../../utils/utils';
 import {ThemeThreshold} from '../../../../../../utils/progress';
@@ -28,7 +28,6 @@ function errorFromValue(value: BundleInputProps['value']) {
 type BundleInputProps = DialogControlProps<
     number | undefined,
     {
-        title: string;
         postfix?: string;
         hint?: string;
         className?: string;
@@ -50,14 +49,10 @@ type BundleInputProps = DialogControlProps<
 
 export function BundleInput(props: BundleInputProps) {
     const {
-        className,
         value,
         onChange,
         postfix,
         hint,
-        tooltip,
-        required,
-        title,
         readonly,
         format,
         progress,
@@ -114,23 +109,8 @@ export function BundleInput(props: BundleInputProps) {
     const calcProgress =
         progress && calcProgressProps(progress?.usage || 0, Number(value) || 0, format);
     return (
-        <div className={block(null, className)}>
+        <div className={block(null)}>
             <div className={block('row')}>
-                <div className={block('left')}>
-                    <label className={block('label', {required})}>{title}</label>
-                    {Boolean(tooltip) && (
-                        <div className={block('tooltip')}>
-                            <Popover
-                                content={tooltip}
-                                delayOpening={150}
-                                delayClosing={150}
-                                placement={['bottom', 'top', 'right']}
-                            >
-                                <Icon data={tooltipIcon} />
-                            </Popover>
-                        </div>
-                    )}
-                </div>
                 <div className={block('right')}>
                     <div className={block('control-block')}>
                         {readonly ? (
@@ -155,12 +135,11 @@ export function BundleInput(props: BundleInputProps) {
             </div>
             {calcProgress && (
                 <div className={block('row')}>
-                    <div className={block('left')}>
-                        <span className={block('usage')}>Usage</span>
-                    </div>
-                    <div className={block('right')}>
-                        <Progress className={block('progress')} {...calcProgress} />
-                    </div>
+                    <Tooltip content="Usage">
+                        <div className={block('left')}>
+                            <Progress className={block('progress')} {...calcProgress} />
+                        </div>
+                    </Tooltip>
                 </div>
             )}
             {!parsedError && hint && (

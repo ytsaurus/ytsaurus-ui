@@ -10,6 +10,7 @@
 
         .df-dialog__tabs-content {
             overflow-y: auto;
+            overflow-x: hidden;
         }
 
         .yc-dialog-divider {
@@ -19,28 +20,11 @@
         .df-dialog__error-message {
             white-space: pre;
         }
-    }
 
-    &__dialog-field-without-default-label {
-        .df-dialog__label {
-            display: none;
-        }
-
-        .df-dialog__field-error {
-            display: none;
-        }
-
-        .df-dialog__field-wrapper {
-            width: 100%;
-        }
-    }
-
-    &__dialog-field-with-transfer-to-another-line {
-        flex-wrap: wrap;
-
-        .df-dialog__field-wrapper {
-            width: 100%;
-            margin-top: 12px;
+        .df-dialog__field-group_type_bundle-title {
+            .df-dialog__label-text {
+                font-weight: 700;
+            }
         }
     }
 
