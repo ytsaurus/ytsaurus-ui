@@ -1,0 +1,31 @@
+.query-widget {
+    flex: 1;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    background: var(--main-background);
+    width: 100%;
+    height: 100%;
+
+    &__header {
+        display: flex;
+        padding: 12px;
+    }
+
+    &__header &__control:not(:last-child) {
+        margin-right: 8px;
+    }
+
+    &__header-controls {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        flex-wrap: nowrap;
+    }
+
+    &__header-control-right {
+        flex: 1;
+        display: flex;
+        justify-content: flex-end;
+    }
+}

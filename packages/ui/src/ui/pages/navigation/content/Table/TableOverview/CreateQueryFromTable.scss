@@ -1,0 +1,7 @@
+.create-query-btn {
+    display: inline-flex;
+    flex-wrap: nowrap;
+    &__btn + &__btn {
+        margin-left: 1px;
+    }
+}

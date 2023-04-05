@@ -7,8 +7,11 @@ export const draftQueryParameters: LocationParameters = {
     engine: {
         stateKey: 'queryTracker.query.params.engine',
     },
-    query: {
-        stateKey: 'queryTracker.query.params.query',
+    path: {
+        stateKey: 'queryTracker.query.params.path',
+    },
+    cluster: {
+        stateKey: 'queryTracker.query.params.cluster',
     },
 };
 
@@ -16,6 +19,7 @@ export function getDraftQueryParameters(state: RootState, props: {query: RootSta
     const queryParams = props.query.queryTracker.query.params;
     return produce(state, (draft) => {
         updateIfChanged(draft.queryTracker.query.params, 'engine', queryParams.engine);
-        updateIfChanged(draft.queryTracker.query.params, 'query', queryParams.query);
+        updateIfChanged(draft.queryTracker.query.params, 'path', queryParams.path);
+        updateIfChanged(draft.queryTracker.query.params, 'cluster', queryParams.cluster);
     });
 }

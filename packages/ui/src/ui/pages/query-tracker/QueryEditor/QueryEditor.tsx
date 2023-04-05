@@ -21,10 +21,16 @@ import minimazeBlockIcon from '../../../../../img/svg/icons/square-semifill.svg'
 import closeIcon from '../../../../../img/svg/close-icon.svg';
 
 import './QueryEditor.scss';
+import {QueryItem} from '../module/api';
+import {useCurrentQuery} from '../QueryResults/hooks/useCurrentQuery';
 
 const b = block('query-container');
 
-const QueryEditorView = React.memo(function QueryEditorView() {
+const QueryEditorView = React.memo(function QueryEditorView({
+    onStartQuery,
+}: {
+    onStartQuery?: (queryId: string) => boolean | void;
+}) {
     const editorRef = useRef<monaco.editor.IStandaloneCodeEditor>();
     const activeQuery = useSelector(getQuery);
     const text = useSelector(getQueryText);
@@ -32,6 +38,7 @@ const QueryEditorView = React.memo(function QueryEditorView() {
 
     useEffect(() => {
         editorRef.current?.focus();
+        editorRef.current?.setScrollTop(0);
     }, [editorRef.current, activeQuery?.id]);
 
     const monacoConfig = useMemo<MonacoEditorConfig>(() => {
@@ -54,9 +61,9 @@ const QueryEditorView = React.memo(function QueryEditorView() {
 
     const runQueryCallback = useCallback(
         function () {
-            dispatch(runQuery());
+            dispatch(runQuery(onStartQuery));
         },
-        [dispatch],
+        [dispatch, onStartQuery],
     );
     return (
         <div className={b('query')}>
@@ -85,14 +92,17 @@ const QueryEditorView = React.memo(function QueryEditorView() {
 });
 
 const ResultView = React.memo(function ResultView({
+    query,
     resultViewMode,
     setResultViewMode,
 }: {
+    query: QueryItem;
     resultViewMode: ResultMode;
     setResultViewMode: (v: ResultMode) => void;
 }) {
     return (
         <QueryResults
+            query={query}
             className={b('results')}
             minimized={resultViewMode === 'minimized'}
             toolbar={
@@ -130,8 +140,8 @@ const ResultView = React.memo(function ResultView({
 });
 
 type ResultMode = 'full' | 'minimized' | 'split';
-export function QueryEditor() {
-    const query = useSelector(getQuery);
+export function QueryEditor({onStartQuery}: {onStartQuery?: (queryId: string) => boolean | void}) {
+    const query = useCurrentQuery();
 
     const [resultViewMode, setResultViewMode] = useState<ResultMode>('minimized');
 
@@ -157,10 +167,11 @@ export function QueryEditor() {
                 onResizeEnd={setSize}
                 getInitialSizes={() => partSizes}
             >
-                {resultViewMode !== 'full' && <QueryEditorView />}
+                {resultViewMode !== 'full' && <QueryEditorView onStartQuery={onStartQuery} />}
 
-                {isExecuted && (
+                {query?.id && isExecuted && (
                     <ResultView
+                        query={query}
                         setResultViewMode={setResultViewMode}
                         resultViewMode={resultViewMode}
                     />

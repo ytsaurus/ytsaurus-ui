@@ -12,7 +12,6 @@ import QueryMetaTable from '../QueryMetaTable';
 import {loadQueryResult} from '../module/query_result/actions';
 import {QueryResultActions} from './QueryResultActions';
 import {QueryResultTab, useQueryResultTabs} from './hooks/useQueryResultTabs';
-import {useCurrentQuery} from './hooks/useCurrentQuery';
 import {YQLStatisticsTable} from '../QueryResultsView/YQLStatistics';
 import NotRenderUntilFirstVisible from '../NotRenderUntilFirstVisible/NotRenderUntilFirstVisible';
 
@@ -29,16 +28,16 @@ function QueryResultContainer({resultIndex, query}: {resultIndex: number; query:
 }
 
 export const QueryResults = React.memo(function QueryResults({
+    query,
     className,
     toolbar,
     minimized = false,
 }: {
+    query: QueryItem;
     className: string;
     toolbar: React.ReactChild;
     minimized: boolean;
 }) {
-    const query = useCurrentQuery();
-
     const [tabs, setTab, {activeTabId, category, resultIndex}] = useQueryResultTabs(query);
 
     return query ? (

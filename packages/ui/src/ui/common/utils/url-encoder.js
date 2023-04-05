@@ -5,6 +5,8 @@ export default function encodeValue(value) {
         .replace(/%/g, '%25') // Escape %
         .replace(/#/g, '%23') // Escape #
 
+        .replace(/\n/g, '%0A') // replace new line
+
         .replace(/\+/g, '%2B') // Treated as whitespace
 
         .replace(/\[/g, '%5B')

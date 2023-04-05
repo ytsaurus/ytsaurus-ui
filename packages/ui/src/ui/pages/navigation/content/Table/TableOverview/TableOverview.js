@@ -13,12 +13,14 @@ import OffsetInput from '../../../../../pages/navigation/content/Table/TableOver
 import Paginator from '../../../../../pages/navigation/content/Table/TableOverview/Paginator';
 import ErrorBoundary from '../../../../../components/ErrorBoundary/ErrorBoundary';
 import UIFactory from '../../../../../UIFactory';
+import {CreateQueryFromTable} from './CreateQueryFromTable';
 
-import {HEADER_HEIGHT} from '../../../../../constants/index';
+import {HEADER_HEIGHT, Page} from '../../../../../constants/index';
 
 import './TableOverview.scss';
 import EditTableActions from './EditTableActions';
 import DataLensButton from './DatalensButton';
+import {getAdminPages, isDeveloper} from '../../../../../store/selectors/global';
 
 const block = cn('navigation-table-overview');
 
@@ -26,10 +28,11 @@ TableOverview.propTypes = {
     // from connect
     isFullScreen: PropTypes.bool.isRequired,
     isSplit: PropTypes.bool.isRequired,
+    queriesAllowed: PropTypes.bool,
 };
 
 function TableOverview(props) {
-    const {isFullScreen, isSplit} = props;
+    const {isFullScreen, isSplit, queriesAllowed} = props;
 
     // TODO: add sticky for the Overview in the split mode https://github.com/captivationsoftware/react-sticky/issues/282
     return (
@@ -47,6 +50,9 @@ function TableOverview(props) {
                         <OffsetInput block={block} />
                         {!isFullScreen && <ColumnSelectorButton block={block} />}
                         {!isFullScreen && <SettingsButton block={block} />}
+                        {!isFullScreen && queriesAllowed && (
+                            <CreateQueryFromTable className={block('query')} />
+                        )}
                         {!isFullScreen &&
                             UIFactory.yqlWidgetSetup?.renderButton({
                                 isSplit,
@@ -67,8 +73,14 @@ function TableOverview(props) {
 const mapStateToProps = (state) => {
     const {isFullScreen} = state.navigation.content.table;
     const {isSplit} = state.global.splitScreen;
+    const adminPages = getAdminPages(state);
+    const isAdmin = isDeveloper(state);
 
-    return {isFullScreen, isSplit};
+    return {
+        isFullScreen,
+        isSplit,
+        queriesAllowed: !adminPages?.includes(Page.QUERIES) || isAdmin,
+    };
 };
 
 export default connect(mapStateToProps)(TableOverview);
