@@ -1,7 +1,17 @@
-import {AbortableStatuses, ProgressStatuses, QueryEngine, QueryItem} from '../module/api';
+import {
+    AbortableStatuses,
+    CompletedStates,
+    ProgressStatuses,
+    QueryEngine,
+    QueryItem,
+} from '../module/api';
 
 export function isQueryProgress(query: QueryItem): boolean {
     return ProgressStatuses.includes(query.state);
+}
+
+export function isQueryCompleted(query: QueryItem): boolean {
+    return CompletedStates.includes(query.state);
 }
 
 export function isAbortable(query: QueryItem): boolean {

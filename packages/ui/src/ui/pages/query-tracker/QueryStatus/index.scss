@@ -5,6 +5,10 @@
     &__icon-container {
         margin-right: 4px;
 
+        &_draft {
+            color: var(--color-status-icon-draft, var(--yc-color-text-secondary));
+        }
+
         &_completed {
             color: var(--color-status-icon-completed, var(--yc-color-text-positive));
         }
