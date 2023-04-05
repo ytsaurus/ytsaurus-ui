@@ -5,10 +5,9 @@ import {Toaster} from '@gravity-ui/uikit';
 
 import {getWindowStore} from '../store/window-store';
 import {getXsrfCookieName, getClusterConfig} from '../utils';
-import {ytApiUseCORS} from '../config/index';
-import {isSupportedYtTvmAPIGlobal} from '../store/selectors/thor/support';
 import {BLOCK_USER, BAN_USER} from '../constants/index';
 import YT from '../config/yt-config';
+import {getClusterProxy, isAllowYtTwmApi} from '../store/selectors/global';
 
 export function initYTApiClusterParams(cluster: string) {
     const {clusters} = YT;
@@ -16,15 +15,10 @@ export function initYTApiClusterParams(cluster: string) {
 
     yt.setup.setGlobalOption('suppressAccessTracking', true);
     yt.setup.setGlobalOption('useEncodedParameters', true);
+    yt.setup.setGlobalOption('proxy', getClusterProxy(config));
 
-    const allowYtTvmApi = !ytApiUseCORS() && isSupportedYtTvmAPIGlobal();
-    const isSecureLocation = window.location.protocol === 'https:';
-
-    if (allowYtTvmApi) {
-        yt.setup.setGlobalOption('proxy', `${window.location.host}/api/yt/${config.id}`);
-        config.secure = isSecureLocation;
-    } else {
-        yt.setup.setGlobalOption('proxy', config.proxy);
+    if (isAllowYtTwmApi()) {
+        config.secure = window.location.protocol === 'https:';
     }
 
     yt.setup.setGlobalOption('useHeavyProxy', false);
