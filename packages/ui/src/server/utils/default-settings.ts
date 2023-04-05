@@ -51,7 +51,7 @@ const defaultSettings = {
         [SettingName.NAVIGATION.MAXIMUM_TABLE_STRING_SIZE]: 1024,
         [SettingName.NAVIGATION.DEFAULT_TABLE_COLUMN_LIMIT]: 50,
         [SettingName.NAVIGATION.ENABLE_TABLE_SIMILARITY]: false,
-        [SettingName.NAVIGATION.DEFAULT_CHYT_ALIAS]: ' *ch_public',
+        [SettingName.NAVIGATION.DEFAULT_CHYT_ALIAS]: '*ch_public',
         [SettingName.NAVIGATION.ANNOTATION_VISIBILITY]: 'partial',
         [SettingName.NAVIGATION.QUEUE_PARTITIONS_VISIBILITY]: [], // YTFRONT-3327-column-button
         [SettingName.NAVIGATION.QUEUE_CONSUMERS_VISIBILITY]: [], // YTFRONT-3327-column-button
