@@ -50,14 +50,11 @@ export const QueryResultsView = React.memo(
                     <>
                         <QueryReadyResultView result={result} />
                         {result.settings.viewMode === QueryResultsViewMode.Table && (
-                            <div className={b('floating-bottom-left')}>
-                                <div className={b('padding_span')} />
-                                <ResultPaginator
-                                    className={b('pagination')}
-                                    queryId={query.id}
-                                    resultIndex={index}
-                                />
-                            </div>
+                            <ResultPaginator
+                                className={b('pagination')}
+                                queryId={query.id}
+                                resultIndex={index}
+                            />
                         )}
                     </>
                 )}

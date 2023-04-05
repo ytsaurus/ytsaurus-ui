@@ -2,12 +2,15 @@ import {ThunkAction} from 'redux-thunk';
 import {RootState} from '../../../../store/reducers';
 import FontFaceObserver from 'fontfaceobserver';
 import {ActionD} from '../../../../types';
-import {getQueryResultMeta, QueryItem, readQueryResults} from '../api';
+import {getQueryResultMeta, QueryItem, QueryResultMetaScheme, readQueryResults} from '../api';
 import {getType} from '../../../../components/SchemaDataType/dataTypes';
 import {getQueryResultGlobalSettings, getQueryResultSettings, hasQueryResult} from './selectors';
 import {QueryResultReadyState} from './types';
 import {prepareFormattedValue} from './utils/format';
 import {wrapApiPromiseByToaster} from '../../../../utils/utils';
+import {getPrimitiveTypesMap} from '../../../../store/selectors/global/supported-features';
+import {parseV3Type, Type} from '../../../../components/SchemaDataType/dateTypesV3';
+import ypath from '../../../../common/thor/ypath';
 
 export const REQUEST_QUERY_RESULTS = 'query-tracker/REQUEST_QUERY_RESULTS';
 export type RequestQueryResultsAction = ActionD<
@@ -99,7 +102,8 @@ export function loadQueryResult(
     resultIndex = 0,
 ): ThunkAction<any, RootState, any, QueryResultsActions> {
     return async (dispatch, getState) => {
-        if (hasQueryResult(getState(), queryId, resultIndex)) {
+        const state = getState();
+        if (hasQueryResult(state, queryId, resultIndex)) {
             return;
         }
         try {
@@ -109,6 +113,17 @@ export function loadQueryResult(
             });
             await preloadTableFont();
             const meta = await getQueryResultMeta(queryId, resultIndex);
+            const typeMap = getPrimitiveTypesMap(getState());
+            const scheme = (ypath.getValue(meta?.schema) as QueryResultMetaScheme[]) || [];
+            const columns =
+                scheme.map(({name, type_v3}) => {
+                    return {
+                        name,
+                        type: getType(parseV3Type(type_v3 as Type, typeMap)),
+                        displayName: name,
+                    };
+                }) || [];
+
             const settings = getQueryResultGlobalSettings();
 
             const result = await wrapApiPromiseByToaster(
@@ -128,17 +143,9 @@ export function loadQueryResult(
                 },
             );
 
-            const {rows, all_column_names, yql_type_registry: types} = result;
-            const example = rows[0];
-            const columns = all_column_names.map((field) => {
-                return {
-                    name: field,
-                    displayName: field,
-                    type: getType(types[Number(example[field][1])]),
-                };
-            });
+            const {rows, yql_type_registry: types} = result;
 
-            const formattedResult = result.rows.map((v) => {
+            const formattedResult = rows.map((v) => {
                 return Object.entries(v).reduce((acc, [k, [value, typeIndex]]) => {
                     acc[k] = prepareFormattedValue(value, types[Number(typeIndex)]);
                     return acc;

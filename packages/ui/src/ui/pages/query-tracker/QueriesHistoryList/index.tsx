@@ -1,5 +1,5 @@
 import hammer from '../../../common/hammer';
-import {Label, Text} from '@gravity-ui/uikit';
+import {Text} from '@gravity-ui/uikit';
 import block from 'bem-cn-lite';
 import {useHistory} from 'react-router';
 import React, {useCallback, useContext, useEffect, useState} from 'react';
@@ -20,7 +20,6 @@ import {
     getUncompletedItems,
 } from '../module/queries_list/selectors';
 import {QueryStatusIcon} from '../QueryStatus';
-import {queryDuration} from '../utils/date';
 
 import './index.scss';
 import {getQuery} from '../module/query/selectors';
@@ -36,6 +35,7 @@ import DataTableYT from '../../../components/DataTableYT/DataTableYT';
 import DataTable, {Column, Settings} from '@yandex-cloud/react-data-table';
 import {useQuriesHistoryFilter} from '../hooks/QueryListFilter';
 import {QueriesHistoryAuthor} from '../module/queries_list/types';
+import {QueryDuration} from '../QueryDuration';
 
 const b = block('queries-history-list');
 
@@ -178,7 +178,7 @@ const DurationColumns: Column<QueryItem> = {
         if (row.state === QueryStatus.RUNNING) {
             return hammer.format.NO_VALUE;
         }
-        return <Label>{queryDuration(row)}</Label>;
+        return <QueryDuration query={row} />;
     },
 };
 

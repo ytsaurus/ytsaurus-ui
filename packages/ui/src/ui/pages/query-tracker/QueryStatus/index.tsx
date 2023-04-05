@@ -5,6 +5,7 @@ import hammer from '../../../common/hammer';
 import doneIcon from '../../../../../img/svg/icons/check-circle.svg';
 import errorIcon from '../../../../../img/svg/icons/exclamation-circle.svg';
 import abortedIcon from '../../../../../img/svg/icons/stop-circle.svg';
+import draftIcon from '../../../../../img/svg/icons/file.svg';
 import {SVGIconData} from '@gravity-ui/uikit/build/esm/components/Icon/types';
 import {ProgressStatuses, QueryStatus} from '../module/api';
 import './index.scss';
@@ -18,6 +19,7 @@ type Props = {
 };
 
 const STATUS_ICONS: Partial<Record<QueryStatus, SVGIconData>> = {
+    [QueryStatus.DRAFT]: draftIcon,
     [QueryStatus.FAILED]: errorIcon,
     [QueryStatus.ABORTED]: abortedIcon,
     [QueryStatus.COMPLETED]: doneIcon,

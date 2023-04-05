@@ -13,19 +13,11 @@
         z-index: 1;
     }
 
-    &__floating-bottom-left {
-        position: sticky;
-        bottom: 20px;
-        pointer-events: none;
-        display: flex;
-        z-index: 2;
-    }
-
-    &__padding_span {
-        flex: 1;
-    }
-
     &__pagination {
+        position: fixed;
+        right: 20px;
+        bottom: 20px;
+
         margin-right: 20px;
         background-color: var(--yc-color-base-float);
         border-radius: 8px;

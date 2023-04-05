@@ -56,6 +56,7 @@ export interface QueryItem extends DraftQuery {
 }
 
 export enum QueryStatus {
+    DRAFT = 'draft',
     RUNNING = 'running',
     PENDING = 'pending',
     COMPLETING = 'completing',
@@ -76,7 +77,12 @@ export const ProgressStatuses = [
 
 export const AbortableStatuses = [QueryStatus.RUNNING, QueryStatus.PENDING];
 
-export const CompletedStates = [QueryStatus.ABORTED, QueryStatus.COMPLETED, QueryStatus.FAILED];
+export const CompletedStates = [
+    QueryStatus.DRAFT,
+    QueryStatus.ABORTED,
+    QueryStatus.COMPLETED,
+    QueryStatus.FAILED,
+];
 
 export enum QueriesHistoryCursorDirection {
     PAST = 'past',
@@ -216,6 +222,16 @@ export async function requestQueries(ids: string[]): Promise<QueryItem[]> {
     return results;
 }
 
+export type QueryResultMetaScheme = {
+    name: string;
+    required: boolean;
+    type: string;
+    type_v3: {
+        type_name: string;
+        item: string;
+    };
+};
+
 export type QueryResultMeta = {
     id: string;
     result_index: number;
@@ -224,15 +240,7 @@ export type QueryResultMeta = {
             strict: boolean;
             unique_keys: boolean;
         };
-        $value: {
-            name: string;
-            required: boolean;
-            type: string;
-            type_v3: {
-                type_name: string;
-                item: string;
-            };
-        }[];
+        $value: QueryResultMetaScheme[];
     };
     data_statistics: {
         chunk_count: number;
