@@ -1,12 +1,30 @@
-import {getQueryTrackerStage} from '../../../config';
+import {getQueryTrackerCluster, getQueryTrackerStage} from '../../../config';
 import {extractBatchV4Values, splitBatchResults} from '../../../utils/utils';
 import {BatchResultsItem} from '../../../../shared/yt-types';
 import {YTApiId, ytApiV4Id} from '../../../rum/rum-wrap-api';
 
 import {Plan} from './types/plan';
 import {TypeArray} from '../../../components/SchemaDataType/dataTypes';
+import {
+    getClusterConfigByName,
+    getClusterProxy,
+    getClusterProxyURL,
+} from '../../../store/selectors/global';
 
 const QT_STAGE = getQueryTrackerStage();
+
+function getQTApiSetup(): {proxy?: string} {
+    const QT_CLUSTER = getQueryTrackerCluster();
+    if (QT_CLUSTER) {
+        const cluster = getClusterConfigByName(QT_CLUSTER);
+        if (cluster) {
+            return {
+                proxy: getClusterProxy(cluster),
+            };
+        }
+    }
+    return {};
+}
 
 export enum QueryEngine {
     YT_QL = 'ql',
@@ -124,13 +142,38 @@ export function loadQueriesList({params, cursor, limit}: QueriesListRequestParam
                 },
             },
         },
+        setup: getQTApiSetup(),
     });
+}
+
+function makeGetQueryParams(query_id: string) {
+    return {
+        query_id,
+        stage: QT_STAGE,
+        output_format: {
+            $value: 'json',
+            $attributes: {
+                encode_utf8: 'false',
+            },
+        },
+    };
 }
 
 export function getQuery(query_id: string): Promise<QueryItem> {
     return ytApiV4Id.getQuery(YTApiId.getQuery, {
+        parameters: makeGetQueryParams(query_id),
+        setup: getQTApiSetup(),
+    });
+}
+
+export function startQuery(queryInstance: DraftQuery): Promise<{query_id: QueryItemId}> {
+    const {query, engine, settings, annotations} = queryInstance;
+    return ytApiV4Id.startQuery(YTApiId.startQuery, {
         parameters: {
-            query_id,
+            query,
+            engine,
+            annotations,
+            settings,
             stage: QT_STAGE,
             output_format: {
                 $value: 'json',
@@ -139,32 +182,18 @@ export function getQuery(query_id: string): Promise<QueryItem> {
                 },
             },
         },
-    });
-}
-
-// startQuery(query: DraftQuery)
-export function startQuery(queryInstance: DraftQuery): Promise<{query_id: QueryItemId}> {
-    const {query, engine, settings, annotations} = queryInstance;
-    return ytApiV4Id.startQuery(YTApiId.startQuery, {
-        query,
-        engine,
-        annotations,
-        settings,
-        stage: QT_STAGE,
-        output_format: {
-            $value: 'json',
-            $attributes: {
-                encode_utf8: 'false',
-            },
-        },
+        setup: getQTApiSetup(),
     });
 }
 
 export function abortQuery(query_id: string, message?: string): Promise<void> {
     return ytApiV4Id.abortQuery(YTApiId.abortQuery, {
-        query_id,
-        message,
-        stage: QT_STAGE,
+        parameters: {
+            query_id,
+            message,
+            stage: QT_STAGE,
+        },
+        setup: getQTApiSetup(),
     });
 }
 
@@ -185,19 +214,22 @@ export function readQueryResults(
     },
 ): Promise<QueryResult> {
     return ytApiV4Id.readQueryResults(YTApiId.readQueryResults, {
-        query_id,
-        result_index,
-        lower_row_index: cursor?.start,
-        upper_row_index: cursor?.end,
-        output_format: {
-            $value: 'web_json',
-            $attributes: {
-                value_format: 'yql',
-                field_weight_limit: settings?.cellsSize,
-                encode_utf8: 'false',
+        parameters: {
+            query_id,
+            result_index,
+            lower_row_index: cursor?.start,
+            upper_row_index: cursor?.end,
+            output_format: {
+                $value: 'web_json',
+                $attributes: {
+                    value_format: 'yql',
+                    field_weight_limit: settings?.cellsSize,
+                    encode_utf8: 'false',
+                },
             },
+            stage: QT_STAGE,
         },
-        stage: QT_STAGE,
+        setup: getQTApiSetup(),
     });
 }
 
@@ -221,19 +253,22 @@ export function getDownloadQueryResultURL(
     if (QT_STAGE) {
         params.set('stage', QT_STAGE);
     }
-    return `/api/yt/${cluster}/api/v4/read_query_result?${params.toString()}`;
+    const clusterConfig = getClusterConfigByName(getQueryTrackerCluster() || cluster);
+    if (clusterConfig) {
+        const url = getClusterProxyURL(clusterConfig);
+        return `${url}/api/v4/read_query_result?${params.toString()}`;
+    }
+    return '';
 }
 
 export async function requestQueries(ids: string[]): Promise<QueryItem[]> {
     const requests: any[] = ids.map((query_id) => ({
         command: 'get_query',
-        parameters: {
-            query_id,
-            stage: QT_STAGE,
-        },
+        parameters: makeGetQueryParams(query_id),
     }));
     const resp = (await ytApiV4Id.executeBatch(YTApiId.getQuery, {
-        requests,
+        parameters: {requests},
+        setup: getQTApiSetup(),
     })) as unknown as {results: BatchResultsItem<QueryItem>[]};
 
     const extracted = extractBatchV4Values(resp, requests);
@@ -279,8 +314,7 @@ export async function getQueryResultMeta(
     result_index = 0,
 ): Promise<QueryResultMeta | undefined> {
     return ytApiV4Id.getQueryResults(YTApiId.readQueryResults, {
-        query_id,
-        result_index,
-        stage: QT_STAGE,
+        parameters: {query_id, result_index, stage: QT_STAGE},
+        setup: getQTApiSetup(),
     });
 }

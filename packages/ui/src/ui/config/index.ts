@@ -52,6 +52,10 @@ export function getQueryTrackerStage() {
     return uiSettings.queryTrackerStage;
 }
 
+export function getQueryTrackerCluster() {
+    return uiSettings.queryTrackerCluster;
+}
+
 export function getConfigUploadTable() {
     return {
         uploadTableMaxSize: uiSettings.uploadTableMaxSize ?? 1024 * 1024 * 1024,

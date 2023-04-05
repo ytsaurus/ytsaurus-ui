@@ -25,6 +25,7 @@ export interface UISettings {
 
     sslCertFixUrl?: string;
     queryTrackerStage?: string;
+    queryTrackerCluster?: string;
 
     oauthTokenUrl?: string;
 }

@@ -13,7 +13,8 @@ import {getClusterNS} from '../settings';
 import {ClusterConfig} from '../../../../shared/yt-types';
 import {FIX_MY_TYPE} from '../../../types';
 import UIFactory from '../../../UIFactory';
-import {getConfigData} from '../../../config';
+import {getConfigData, ytApiUseCORS} from '../../../config';
+import {isSupportedYtTvmAPIGlobal} from '../thor/support';
 
 export const getGlobalError = (state: RootState) => state.global.error.error;
 
@@ -50,6 +51,23 @@ export const getCurrentClusterConfig = createSelector([getCluster], (cluster): C
 
 export function getClusterConfigByName(clusterName: string): ClusterConfig {
     return getClusterConfig(YT.clusters, clusterName);
+}
+
+export function isAllowYtTwmApi() {
+    return !ytApiUseCORS() && isSupportedYtTvmAPIGlobal();
+}
+
+export function getClusterProxy(clusterConfig: ClusterConfig): string {
+    const allowYtTvmApi = isAllowYtTwmApi();
+    if (allowYtTvmApi) {
+        return `${window.location.host}/api/yt/${clusterConfig.id}`;
+    }
+    return clusterConfig.proxy;
+}
+
+export function getClusterProxyURL(clusterConfig: ClusterConfig): string {
+    const proxy = getClusterProxy(clusterConfig);
+    return `${window.location.protocol}//${proxy}`;
 }
 
 export const getHttpProxyVersion = createSelector(
