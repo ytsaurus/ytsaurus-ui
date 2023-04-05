@@ -24,10 +24,8 @@ export function EditableAsText(props: Props) {
     const [input, setInput] = React.useState(text || '');
 
     const closeEditMode = React.useCallback(() => {
-        if (withControls) {
-            setEditMode(!withControls);
-        }
-    }, [setEditMode, editMode, withControls]);
+        setEditMode(false);
+    }, []);
 
     const startTextEdit = useCallback(() => {
         setEditMode(true);
@@ -72,13 +70,17 @@ export function EditableAsText(props: Props) {
                     />
                     {withControls && (
                         <>
-                            <Button className={block('control')} view="normal" onClick={applyValue}>
+                            <Button
+                                className={block('control')}
+                                view="normal"
+                                extraProps={{onMouseDown: applyValue}}
+                            >
                                 <Icon awesome={'check'} />
                             </Button>
                             <Button
                                 className={block('control')}
                                 view="normal"
-                                onClick={closeAndResetValue}
+                                extraProps={{onMouseDown: closeAndResetValue}}
                             >
                                 <Icon awesome={'times'} />
                             </Button>
