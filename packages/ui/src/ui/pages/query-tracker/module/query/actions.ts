@@ -4,7 +4,14 @@ import {ThunkAction} from 'redux-thunk';
 import {RootState} from '../../../../store/reducers';
 import {getCluster} from '../../../../store/selectors/global';
 import {ActionD} from '../../../../types';
-import {getQuery, QueryItem, abortQuery, QueryEngine, startQuery} from '../api';
+import {
+    getQuery,
+    QueryItem,
+    abortQuery,
+    QueryEngine,
+    startQuery,
+    generateQueryFromTable,
+} from '../api';
 import {requestQueriesList} from '../queries_list/actions';
 import {getCurrentQuery, getQueryDraft} from './selectors';
 import {getAppBrowserHistory} from '../../../../store/window-store';
@@ -54,9 +61,48 @@ export function loadQuery(
     };
 }
 
+export function createQueryFromTablePath(
+    engine: QueryEngine,
+    cluster: string,
+    path: string,
+): ThunkAction<any, RootState, any, SetQueryAction | RequestQueryAction | SetQueryErrorLoadAction> {
+    return async (dispatch) => {
+        dispatch({
+            type: SET_QUERY,
+            data: {
+                initialQuery: undefined,
+            },
+        });
+        dispatch({type: REQUEST_QUERY});
+        try {
+            const draft = await wrapApiPromiseByToaster(
+                generateQueryFromTable(engine, {cluster, path}),
+                {
+                    toasterName: 'load_query',
+                    skipSuccessToast: true,
+                    errorTitle: 'Failed to load query',
+                },
+            );
+            if (draft) {
+                dispatch({
+                    type: SET_QUERY,
+                    data: {
+                        initialQuery: draft as QueryItem,
+                    },
+                });
+            } else {
+                dispatch(createEmptyQuery(engine));
+            }
+        } catch (e) {
+            dispatch(createEmptyQuery(engine));
+        }
+    };
+}
+
 export function createEmptyQuery(
     engine = QueryEngine.YQL,
     query?: string,
+    settings?: Record<string, string>,
 ): ThunkAction<any, RootState, any, SetQueryAction> {
     return (dispatch) => {
         dispatch({
@@ -65,14 +111,16 @@ export function createEmptyQuery(
                 initialQuery: {
                     query: query || '',
                     engine,
-                    settings: {},
+                    settings: settings || {},
                 } as QueryItem,
             },
         });
     };
 }
 
-export function runQuery(): ThunkAction<any, RootState, any, SetQueryAction> {
+export function runQuery(
+    afterCreate?: (query_id: string) => boolean | void,
+): ThunkAction<any, RootState, any, SetQueryAction> {
     return async (dispatch, getState) => {
         const state = getState();
         const query = getQueryDraft(state);
@@ -81,7 +129,10 @@ export function runQuery(): ThunkAction<any, RootState, any, SetQueryAction> {
             skipSuccessToast: true,
             errorTitle: 'Failed to start query',
         });
-        dispatch(goToQuery(query_id));
+        const handled = afterCreate?.(query_id);
+        if (!handled) {
+            dispatch(loadQuery(query_id));
+        }
         dispatch(requestQueriesList());
     };
 }

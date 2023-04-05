@@ -1,15 +1,12 @@
-import {getQueryTrackerCluster, getQueryTrackerStage} from '../../../config';
+import {allowDirectDownload, getQueryTrackerCluster, getQueryTrackerStage} from '../../../config';
 import {extractBatchV4Values, splitBatchResults} from '../../../utils/utils';
 import {BatchResultsItem} from '../../../../shared/yt-types';
-import {YTApiId, ytApiV4Id} from '../../../rum/rum-wrap-api';
-
+import {YTApiId, ytApiV4Id, ytApiV3} from '../../../rum/rum-wrap-api';
+import ypath from '../../../common/thor/ypath';
 import {Plan} from './types/plan';
 import {TypeArray} from '../../../components/SchemaDataType/dataTypes';
-import {
-    getClusterConfigByName,
-    getClusterProxy,
-    getClusterProxyURL,
-} from '../../../store/selectors/global';
+import {getClusterConfigByName, getClusterProxy} from '../../../store/selectors/global';
+import {generateQuerySettings, generateQueryText} from '../utils/query_generate';
 
 const QT_STAGE = getQueryTrackerStage();
 
@@ -35,8 +32,6 @@ export enum QueryEngine {
 
 export const Engines = Object.values(QueryEngine);
 
-export const EngineKeys = [QueryEngine.YQL, QueryEngine.YT_QL, QueryEngine.CHYT];
-
 export function isEngine(engine: string): engine is QueryEngine {
     return Engines.includes(engine as unknown as QueryEngine);
 }
@@ -50,9 +45,6 @@ export type YQLSstatistics = Record<string, any>;
 export interface DraftQuery {
     engine: QueryEngine;
     query: string;
-    attributes?: {
-        title?: string;
-    };
     annotations?: {
         title?: string;
     };
@@ -123,6 +115,43 @@ export type QueriesListRequestParams = {
     cursor?: QueriiesListCursorParams;
     limit?: number;
 };
+
+export async function generateQueryFromTable(
+    engine: QueryEngine,
+    {cluster, path}: {cluster: string; path: string},
+): Promise<DraftQuery | undefined> {
+    const selectedCluster = getClusterConfigByName(cluster);
+    const node = await ytApiV3.get({
+        parameters: {
+            path: `${path}/@`,
+            attributes: ['type', 'schema'],
+            output_format: {
+                $value: 'json',
+                $attributes: {
+                    encode_utf8: 'false',
+                },
+            },
+        },
+        setup: {
+            proxy: getClusterProxy(selectedCluster),
+        },
+    });
+    if (node.type === 'table') {
+        const schema = ypath.getValue(node.schema) as {name: string}[];
+        return {
+            engine,
+            query: generateQueryText(cluster, engine, {
+                path,
+                columns: schema.map(({name}) => name),
+                pageSize: 50,
+                schemaExists: Boolean(schema.length),
+            }),
+            annotations: {},
+            settings: generateQuerySettings(engine, cluster),
+        };
+    }
+    return undefined;
+}
 
 export function loadQueriesList({params, cursor, limit}: QueriesListRequestParams): Promise<{
     incomplete: boolean;
@@ -255,8 +284,10 @@ export function getDownloadQueryResultURL(
     }
     const clusterConfig = getClusterConfigByName(getQueryTrackerCluster() || cluster);
     if (clusterConfig) {
-        const url = getClusterProxyURL(clusterConfig);
-        return `${url}/api/v4/read_query_result?${params.toString()}`;
+        const base = allowDirectDownload()
+            ? `//${clusterConfig.proxy}/api/v4/read_query_result`
+            : `/api/yt/${clusterConfig.id}/api/v4/read_query_result`;
+        return `${base}?${params.toString()}`;
     }
     return '';
 }

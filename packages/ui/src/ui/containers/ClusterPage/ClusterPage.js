@@ -292,10 +292,6 @@ class ClusterPage extends Component {
                         from={`/:cluster/${Page.VERSIONS}`}
                         to={`/:cluster/${Page.COMPONENTS}/versions`}
                     />
-                    {
-                        // https://a.yandex-team.ru/review/3534811/details#comment-5045335
-                        // move route there
-                    }
                     {makeExtraPageRoutes()}
                     <Redirect from={`/${cluster}/`} to={`/${cluster}/${startingPage}`} />
                 </Switch>

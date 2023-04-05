@@ -1,4 +1,6 @@
 .query-tracker-top-row-content {
+    display: flex;
+    flex: 1;
 
     &__meta {
         flex: 1;
@@ -7,25 +9,7 @@
         align-items: center;
     }
 
-    &__control {
-        margin-right: 8px;
-        &_name {
-            display: inline-flex;
-            max-width: 30%;
-            align-items: center;
-        }
-    }
-
-    &__select {
-        .query-language-selector-item {
-            &__link {
-                text-decoration: none;
-                color: var(--yc-color-text-primary) !important;
-
-                &:hover {
-                    color: var(--yc-color-text-primary) !important;
-                }
-            }
-        }
+    &__meta &__meta-form {
+        flex: 1;
     }
 }

@@ -1,0 +1,13 @@
+.query-tracker-meta-form {
+    display: flex;
+
+    &__control {
+        margin-right: 8px;
+        &_name {
+            display: inline-flex;
+            max-width: 30%;
+            min-width: 80px;
+            align-items: center;
+        }
+    }
+}

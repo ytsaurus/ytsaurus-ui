@@ -1,10 +1,15 @@
-import React, {useEffect, useMemo, useState} from 'react';
+import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {Switch, Route} from 'react-router';
 import FlexSplitPane from '../../../components/FlexSplitPane/FlexSplitPane';
 import {QueriesPooling} from '../hooks/QueriesPooling/context';
 import {isEngine, QueryEngine} from '../module/api';
-import {createEmptyQuery, loadQuery} from '../module/query/actions';
+import {
+    createEmptyQuery,
+    createQueryFromTablePath,
+    goToQuery,
+    loadQuery,
+} from '../module/query/actions';
 import {getQueryGetParams} from '../module/query/selectors';
 import {QueriesList} from '../QueriesList';
 import {QueryEditor} from '../QueryEditor/QueryEditor';
@@ -30,14 +35,15 @@ function DefaultQueriesPage() {
     const routeParams = useSelector(getQueryGetParams);
 
     useEffect(() => {
-        dispatch(
-            createEmptyQuery(
-                routeParams.engine && isEngine(routeParams.engine)
-                    ? (routeParams.engine as QueryEngine)
-                    : QueryEngine.YQL,
-                routeParams.query,
-            ),
-        );
+        const engine =
+            routeParams.engine && isEngine(routeParams.engine)
+                ? (routeParams.engine as QueryEngine)
+                : QueryEngine.YQL;
+        if (routeParams.cluster && routeParams.path) {
+            dispatch(createQueryFromTablePath(engine, routeParams.cluster, routeParams.path));
+        } else {
+            dispatch(createEmptyQuery(engine));
+        }
     }, [dispatch, routeParams]);
     return null;
 }
@@ -60,6 +66,15 @@ export const QueryTracker = ({match}: Props) => {
     const getSize = useMemo(() => {
         return () => sizes;
     }, [sizes]);
+    const dispatch = useDispatch();
+
+    const goToCreatedQuery = useCallback(
+        (queryId: string) => {
+            dispatch(goToQuery(queryId));
+            return true;
+        },
+        [dispatch],
+    );
     return (
         <>
             <Switch>
@@ -76,7 +91,7 @@ export const QueryTracker = ({match}: Props) => {
                 >
                     <QueriesList />
 
-                    <QueryEditor></QueryEditor>
+                    <QueryEditor onStartQuery={goToCreatedQuery}></QueryEditor>
                 </FlexSplitPane>
             </QueriesPooling>
         </>

@@ -17,7 +17,8 @@ export interface QueryState {
     draft: DraftQuery;
     params: {
         engine?: string;
-        query?: string;
+        path?: string;
+        cluster?: string;
     };
     state: 'init' | 'loading' | 'ready' | 'error';
 }
