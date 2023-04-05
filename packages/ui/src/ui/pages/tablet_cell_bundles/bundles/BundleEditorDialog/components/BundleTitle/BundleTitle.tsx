@@ -15,17 +15,15 @@ const block = cn('bundle-title');
 type BundleTitleProps = DialogControlProps<
     boolean,
     {
-        title: string;
         params: BundleParam[];
         className?: string;
         onReset: () => void;
     }
 >;
 
-export function BundleTitle({className, title, params, onReset}: BundleTitleProps) {
+export function BundleTitle({className, params, onReset}: BundleTitleProps) {
     return (
         <div className={block(null, className)}>
-            <span className={block('title')}>{title}</span>
             <BundleParamsList
                 className={block('params')}
                 params={params}

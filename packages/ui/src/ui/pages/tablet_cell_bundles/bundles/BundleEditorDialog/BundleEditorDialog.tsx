@@ -161,6 +161,7 @@ export function BundleEditorDialog() {
             {
                 name: 'info',
                 type: 'block',
+                fullWidth: true,
                 extras: {
                     children: (
                         <Info className={block('info')}>
@@ -187,11 +188,10 @@ export function BundleEditorDialog() {
                 },
             },
             {
-                className: block('dialog-field-without-default-label'),
                 name: 'tablet_count',
                 type: 'bundle-input',
+                caption: 'Tablet count',
                 extras: {
-                    title: 'Tablet count',
                     format: 'Number',
                     withoutDetailedBar: true,
                     progress: {
@@ -202,11 +202,10 @@ export function BundleEditorDialog() {
             },
             {section: 'RPC proxy'},
             {
-                className: block('dialog-field-without-default-label'),
                 type: 'bundle-input',
                 name: 'rpc_proxy_count',
+                caption: 'Rpc proxy count',
                 extras: {
-                    title: 'Rpc proxy count',
                     format: 'Number',
                     withoutDetailedBar: true,
                     hasClear: true,
@@ -214,21 +213,20 @@ export function BundleEditorDialog() {
                 validator: simpleBundleValidate,
             },
             {
-                className: block('dialog-field-with-transfer-to-another-line'),
                 type: 'bundle-table-field',
                 name: 'rpc_proxy_resource_guarantee',
                 caption: 'Instance configuration',
+                fullWidth: true,
                 extras: {
                     data: rpcConfigurations,
                 },
             },
             {section: 'Tablet node'},
             {
-                className: block('dialog-field-without-default-label'),
                 type: 'bundle-input',
                 name: 'tablet_node_count',
+                caption: 'Tablet node count',
                 extras: {
-                    title: 'Tablet node count',
                     format: 'Number',
                     withoutDetailedBar: true,
                     hasClear: true,
@@ -236,10 +234,10 @@ export function BundleEditorDialog() {
                 validator: simpleBundleValidate,
             },
             {
-                className: block('dialog-field-with-transfer-to-another-line'),
                 type: 'bundle-table-field',
                 name: 'tablet_node_resource_guarantee',
                 caption: 'Instance configuration',
+                fullWidth: true,
                 extras: function (values, form) {
                     const onRadioClick = (value: BundleResourceGuarantee) => {
                         const nodeConfigurationType = value.type || '';
@@ -288,11 +286,10 @@ export function BundleEditorDialog() {
         size: 's',
         fields: [
             {
-                className: block('dialog-field-without-default-label'),
                 name: 'tablet_count',
                 type: 'bundle-input',
+                caption: 'Tablet count',
                 extras: {
-                    title: 'Tablet count',
                     format: 'Number',
                     withoutDetailedBar: true,
                     progress: {
@@ -302,11 +299,10 @@ export function BundleEditorDialog() {
                 validator: simpleBundleValidate,
             },
             {
-                className: block('dialog-field-without-default-label'),
                 name: 'tablet_static_memory',
                 type: 'bundle-input',
+                caption: 'Tablet static memory',
                 extras: {
-                    title: 'Tablet static memory',
                     format: 'Bytes',
                     progress: {
                         usage: tabletStaticMemoryUsage,
@@ -330,7 +326,7 @@ export function BundleEditorDialog() {
             {
                 name: 'memory_reset',
                 type: 'bundle-title',
-                className: block('dialog-field-without-default-label'),
+                caption: 'Memory',
                 extras: (allValues, form) => {
                     const tablet_node_resource_guarantee =
                         allValues.resources?.tablet_node_resource_guarantee;
@@ -356,7 +352,6 @@ export function BundleEditorDialog() {
                     if (!tablet_node_resource_guarantee) {
                         return {
                             params: [],
-                            title: 'Memory',
                             onReset,
                         };
                     }
@@ -368,72 +363,65 @@ export function BundleEditorDialog() {
 
                     return {
                         params: createParams('Bytes', memory, used),
-                        title: 'Memory',
                         onReset,
                     };
                 },
             },
             {
-                className: block('dialog-field-without-default-label'),
                 name: 'tablet_static',
                 type: 'bundle-input',
+                caption: 'Tablet static',
                 extras: {
-                    title: 'Tablet static',
                     format: 'Bytes',
                     hasClear: true,
                 },
                 validator: simpleBundleValidate,
             },
             {
-                className: block('dialog-field-without-default-label'),
                 name: 'tablet_dynamic',
                 type: 'bundle-input',
+                caption: 'Tablet dynamic',
                 extras: {
-                    title: 'Tablet dynamic',
                     format: 'Bytes',
                     hasClear: true,
                 },
                 validator: simpleBundleValidate,
             },
             {
-                className: block('dialog-field-without-default-label'),
                 name: 'compressed_block_cache',
                 type: 'bundle-input',
+                caption: 'Compressed block cache',
                 extras: {
-                    title: 'Compressed block cache',
                     format: 'Bytes',
                     hasClear: true,
                 },
                 validator: simpleBundleValidate,
             },
             {
-                className: block('dialog-field-without-default-label'),
                 name: 'uncompressed_block_cache',
                 type: 'bundle-input',
+                caption: 'Uncompressed block cache',
                 extras: {
-                    title: 'Uncompressed block cache',
                     format: 'Bytes',
                     hasClear: true,
                 },
                 validator: simpleBundleValidate,
             },
             {
-                className: block('dialog-field-without-default-label'),
                 name: 'versioned_chunk_meta',
                 type: 'bundle-input',
+                caption: 'Versioned chunk meta',
                 extras: {
-                    title: 'Versioned chunk meta',
                     format: 'Bytes',
                     hasClear: true,
                 },
                 validator: simpleBundleValidate,
             },
             {
-                className: block('dialog-field-without-default-label'),
                 name: 'lookup_row_cache',
                 type: 'bundle-input',
+                caption: 'Lookup row cache',
                 extras: {
-                    title: 'Lookup row cache',
                     format: 'Bytes',
                     hasClear: true,
                 },
@@ -476,7 +464,7 @@ export function BundleEditorDialog() {
             {
                 name: 'threadPool_reset',
                 type: 'bundle-title',
-                className: block('dialog-field-without-default-label'),
+                caption: 'vCPU',
                 extras: (allValues, form) => {
                     const tablet_node_resource_guarantee =
                         allValues.resources?.tablet_node_resource_guarantee;
@@ -488,7 +476,6 @@ export function BundleEditorDialog() {
                     ) {
                         return {
                             params: [],
-                            title: 'vCPU',
                             onReset: () => {},
                         };
                     }
@@ -512,17 +499,15 @@ export function BundleEditorDialog() {
 
                     return {
                         params: createParams('vCores', vcpu),
-                        title: 'vCPU',
                         onReset,
                     };
                 },
             },
             {
-                className: block('dialog-field-without-default-label'),
                 name: 'lookup_thread_pool_size',
                 type: 'bundle-input',
+                caption: 'Lookup thread pool size',
                 extras: {
-                    title: 'Lookup thread pool size',
                     postfix: 'threads',
                     format: 'Number',
                     hasClear: true,
@@ -530,11 +515,10 @@ export function BundleEditorDialog() {
                 validator: simpleBundleValidate,
             },
             {
-                className: block('dialog-field-without-default-label'),
                 name: 'query_thread_pool_size',
                 type: 'bundle-input',
+                caption: 'Query thread pool size',
                 extras: {
-                    title: 'Query thread pool size',
                     postfix: 'threads',
                     format: 'Number',
                     hasClear: true,
@@ -542,11 +526,10 @@ export function BundleEditorDialog() {
                 validator: simpleBundleValidate,
             },
             {
-                className: block('dialog-field-without-default-label'),
                 name: 'write_thread_pool_size',
                 type: 'bundle-input',
+                caption: 'Write thread pool size',
                 extras: {
-                    title: 'Write thread pool size',
                     postfix: 'threads',
                     format: 'Number',
                     hasClear: true,
