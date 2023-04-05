@@ -10,7 +10,7 @@ import {createQueryFromTablePath} from '../../../../query-tracker/module/query/a
 import Icon from '../../../../../components/Icon/Icon';
 import {createNewQueryUrl} from '../../../../query-tracker/utils/navigation';
 import withSplit from '../../../../../hocs/withSplit';
-import {splitScreen} from '../../../../../store/actions/global';
+import {mergeScreen, splitScreen} from '../../../../../store/actions/global';
 import {SPLIT_TYPE} from '../../../../../constants/components/nodes/nodes';
 import './CreateQueryFromTable.scss';
 
@@ -35,7 +35,8 @@ export function CreateQueryFromTable({className}: {className: string}) {
 
     const onClose = useCallback(() => {
         setWidgetOpened(false);
-    }, [setWidgetOpened]);
+        dispatch(mergeScreen());
+    }, [setWidgetOpened, dispatch]);
 
     return (
         <>
