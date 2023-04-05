@@ -117,6 +117,12 @@ export function loadQueriesList({params, cursor, limit}: QueriesListRequestParam
             ...cursor,
             limit,
             stage: QT_STAGE,
+            output_format: {
+                $value: 'json',
+                $attributes: {
+                    encode_utf8: 'false',
+                },
+            },
         },
     });
 }
@@ -126,6 +132,12 @@ export function getQuery(query_id: string): Promise<QueryItem> {
         parameters: {
             query_id,
             stage: QT_STAGE,
+            output_format: {
+                $value: 'json',
+                $attributes: {
+                    encode_utf8: 'false',
+                },
+            },
         },
     });
 }
@@ -139,6 +151,12 @@ export function startQuery(queryInstance: DraftQuery): Promise<{query_id: QueryI
         annotations,
         settings,
         stage: QT_STAGE,
+        output_format: {
+            $value: 'json',
+            $attributes: {
+                encode_utf8: 'false',
+            },
+        },
     });
 }
 
@@ -176,6 +194,7 @@ export function readQueryResults(
             $attributes: {
                 value_format: 'yql',
                 field_weight_limit: settings?.cellsSize,
+                encode_utf8: 'false',
             },
         },
         stage: QT_STAGE,
