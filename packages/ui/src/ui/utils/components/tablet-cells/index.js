@@ -185,7 +185,7 @@ export function tabletActiveBundleLink(cluster, bundle, enable_bundle_controller
 }
 
 export function tabletActiveChaosBundleLink(cluster, bundle) {
-    return `/${cluster}/${Page.TABLET_CELL_BUNDLES}/${TabletsTab.TABLET_CELLS}?activeBundle=${bundle}`;
+    return `/${cluster}/${Page.CHAOS_CELL_BUNDLES}/${TabletsTab.CHAOS_CELLS}?activeBundle=${bundle}`;
 }
 
 export function tabletCellBundleRootLink(cluster) {

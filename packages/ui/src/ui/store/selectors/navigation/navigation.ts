@@ -86,7 +86,11 @@ export const getSupportedTabs = createSelector(
             (name) => attributes?.hasOwnProperty(name),
         );
 
-        if (attributes?.type === 'table' && attributes?.dynamic === true) {
+        if (
+            (attributes?.type === 'table' && attributes?.dynamic === true) ||
+            attributes?.type === 'replicated_table' ||
+            attributes?.type === 'replication_log_table'
+        ) {
             supportedByAttribute.push(Tab.TABLETS);
         }
 

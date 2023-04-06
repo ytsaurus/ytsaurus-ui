@@ -67,7 +67,7 @@ export class CollapsibleSectionStateLess extends Component<PropsStateLess> {
     }
 }
 
-interface Props {
+export interface Props {
     className?: string;
     name: React.ReactNode;
     collapsed?: boolean;

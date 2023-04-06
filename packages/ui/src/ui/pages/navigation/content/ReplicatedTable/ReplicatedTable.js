@@ -38,6 +38,7 @@ import {
 } from '../../../../store/selectors/navigation/content/replicated-table';
 
 import './ReplicatedTable.scss';
+import {CypressNodeTypes} from '../../../../utils/cypress-attributes';
 
 const block = cn('navigation-replicated-table');
 
@@ -82,6 +83,7 @@ class ReplicatedTable extends Component {
         loadReplicas: PropTypes.func.isRequired,
         abortAndReset: PropTypes.func.isRequired,
         performReplicaAction: PropTypes.func.isRequired,
+        type: PropTypes.string.isRequired,
     };
 
     static tableItems = {
@@ -317,7 +319,8 @@ class ReplicatedTable extends Component {
     };
 
     render() {
-        const {replicas} = this.props;
+        const {replicas, type} = this.props;
+        const hasActions = type !== CypressNodeTypes.CHAOS_REPLICATED_TABLE;
 
         return (
             <LoadDataHandler {...this.props}>
@@ -334,7 +337,7 @@ class ReplicatedTable extends Component {
                                         sticky: isSticky,
                                     })}
                                 >
-                                    <TableActions block={block} />
+                                    {hasActions && <TableActions block={block} />}
                                 </div>
                             )}
                         </Sticky>
@@ -353,10 +356,10 @@ const mapStateToProps = (state) => {
     const path = getPath(state);
     const attributes = getAttributes(state);
 
-    const enable_replicated_table_tracker = ypath.getValue(
-        attributes,
+    const [enable_replicated_table_tracker, type] = ypath.getValues(attributes, [
         '/replicated_table_options/enable_replicated_table_tracker',
-    );
+        '/type',
+    ]);
 
     return {
         loading,
@@ -368,6 +371,7 @@ const mapStateToProps = (state) => {
         attributes,
         tableMode: allowEnableReplicatedTracker ? 'with-auto-switch' : 'default',
         enable_replicated_table_tracker,
+        type,
     };
 };
 

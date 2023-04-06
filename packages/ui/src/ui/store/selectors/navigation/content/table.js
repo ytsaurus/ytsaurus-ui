@@ -62,13 +62,17 @@ export const getTableType = createSelector(
     [getAttributes, getIsDynamic],
     (attributes, isDynamic) => {
         if (isDynamic) {
-            const upstreamReplicaID = ypath.getValue(attributes, '/upstream_replica_id');
-
+            const [upstreamReplicaID, type] = ypath.getValues(attributes, [
+                '/upstream_replica_id',
+                '/type',
+            ]);
+            if (String(type).startsWith('chaos')) {
+                return 'chaos';
+            }
             if (upstreamReplicaID && upstreamReplicaID !== '0-0-0-0') {
                 return 'replica';
-            } else {
-                return 'dynamic';
             }
+            return 'dynamic';
         } else {
             return 'static';
         }
