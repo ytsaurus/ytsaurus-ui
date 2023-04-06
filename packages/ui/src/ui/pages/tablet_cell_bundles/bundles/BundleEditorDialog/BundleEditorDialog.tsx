@@ -14,7 +14,7 @@ import Dialog, {
 } from '../../../../components/Dialog/Dialog';
 import hammer from '../../../../common/hammer';
 
-import {isDeveloper} from '../../../../store/selectors/global';
+import {getClusterUiConfig, isDeveloper} from '../../../../store/selectors/global';
 import {
     hideTabletCellBundleEditor,
     setBundleEditorController,
@@ -80,6 +80,9 @@ export function BundleEditorDialog() {
         data,
         bundleControllerData: orchidData,
     } = useSelector(getTabletCellBundleEditorState);
+
+    const clusterUiConfig = useSelector(getClusterUiConfig);
+
     const {defaultConfig: bundleDefaultConfig} = useSelector(getBundleEditorData);
 
     const bundleControllerConfig = bundleData?.bundle_controller_target_config;
@@ -134,7 +137,7 @@ export function BundleEditorDialog() {
             {
                 name: 'changelog_account',
                 type: 'accounts-suggest-with-loading',
-                caption: 'Changelog_account account',
+                caption: 'Changelog account',
                 extras: {
                     allowRootAccount: true,
                     disabled: !allowEdit,
@@ -143,7 +146,7 @@ export function BundleEditorDialog() {
             {
                 name: 'snapshot_account',
                 type: 'accounts-suggest-with-loading',
-                caption: 'Snapshot_account account',
+                caption: 'Snapshot account',
                 extras: {
                     allowRootAccount: true,
                     disabled: !allowEdit,
@@ -165,7 +168,10 @@ export function BundleEditorDialog() {
                 extras: {
                     children: (
                         <Info className={block('info')}>
-                            {UIFactory.renderTableCellBundleEditorNotice({bundleData})}
+                            {UIFactory.renderTableCellBundleEditorNotice({
+                                bundleData,
+                                clusterUiConfig,
+                            })}
                             <BundleParamsList
                                 className={block('params')}
                                 params={[
@@ -204,7 +210,7 @@ export function BundleEditorDialog() {
             {
                 type: 'bundle-input',
                 name: 'rpc_proxy_count',
-                caption: 'Rpc proxy count',
+                caption: 'RPC proxy count',
                 extras: {
                     format: 'Number',
                     withoutDetailedBar: true,
@@ -453,7 +459,7 @@ export function BundleEditorDialog() {
 
     const renderThreadPoolTab: DialogTabField<DialogField<BundleEditorDialogFormValues>> = {
         name: 'cpu_limits',
-        title: 'Thread pool',
+        title: 'Thread pools',
         type: 'tab-vertical',
         size: 's',
         visibilityCondition: {

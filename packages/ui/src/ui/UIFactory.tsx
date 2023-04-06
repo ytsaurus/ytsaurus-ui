@@ -266,6 +266,7 @@ export interface UIFactory {
 
     renderTableCellBundleEditorNotice(props: {
         bundleData?: {$attributes: unknown};
+        clusterUiConfig?: ClusterUiConfig;
     }): React.ReactNode;
 
     getNodeDeployUrl(ypCluster?: string, podId?: string): string | undefined;
