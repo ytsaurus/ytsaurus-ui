@@ -1,0 +1,36 @@
+.queries-tutorial-list {
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
+
+    &__list {
+        &_loading {
+            flex: 0;
+        }
+    }
+
+     &__loader {
+        display: flex;
+        justify-content: center;
+        margin-top: 20px;
+    }
+
+    &__filter {
+        padding: 0 12px 8px;
+
+        position: sticky;
+        top: 0;
+        z-index: 1;
+        background: var(--main-background);
+    }
+}
+
+.query-tutorial-item {
+    padding: 0 12px;
+    cursor: pointer;
+
+    &__icon {
+        margin-right: 8px;
+        color: var(--yc-color-text-secondary);
+    }
+}

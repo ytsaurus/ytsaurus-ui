@@ -1,22 +1,21 @@
 import {useSelector, useDispatch} from 'react-redux';
 import {useCallback} from 'react';
 import {applyFilter} from '../../module/queries_list/actions';
-import {QueriesListState} from '../..//module/queries_list/reducer';
-import {getQueriesHistoryFilter} from '../..//module/queries_list/selectors';
+import {getQueriesListFilter, getQueriesListMode} from '../../module/queries_list/selectors';
+import {QueriesListFilter, QueriesListMode} from '../../module/queries_list/types';
 
 export const useQuriesHistoryFilter = (): [
-    QueriesListState['filter'],
-    <K extends keyof QueriesListState['filter']>(
-        filter: K,
-        value: QueriesListState['filter'][K],
-    ) => void,
+    QueriesListFilter,
+    QueriesListMode,
+    <K extends keyof QueriesListFilter>(filter: K, value: QueriesListFilter[K]) => void,
 ] => {
-    const filter = useSelector(getQueriesHistoryFilter);
+    const filter = useSelector(getQueriesListFilter);
+    const filterPreset = useSelector(getQueriesListMode);
     const dispatch = useDispatch();
     const setFilter = useCallback(
-        function setFilter<K extends keyof QueriesListState['filter']>(
+        function setFilter<K extends keyof QueriesListFilter>(
             name: K,
-            value: QueriesListState['filter'][K],
+            value: QueriesListFilter[K],
         ) {
             dispatch(
                 applyFilter({
@@ -26,5 +25,5 @@ export const useQuriesHistoryFilter = (): [
         },
         [dispatch],
     );
-    return [filter, setFilter];
+    return [filter, filterPreset, setFilter];
 };

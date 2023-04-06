@@ -1,71 +1,30 @@
-import hammer from '../../../common/hammer';
+import hammer from '../../../../common/hammer';
 import {Text} from '@gravity-ui/uikit';
 import block from 'bem-cn-lite';
-import {useHistory} from 'react-router';
-import React, {useCallback, useContext, useEffect, useState} from 'react';
+import React, {useCallback, useContext, useEffect, useRef, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import {QueriesHistoryCursorDirection, QueryItem, QueryStatus} from '../module/api';
-import {
-    refreshQueryHistoryListIfNeeded,
-    loadNextQueriesList,
-    requestQueriesList,
-    resetCursor,
-    UPDATE_QUERIES_LIST,
-} from '../module/queries_list/actions';
-import {
-    isQueriesListLoading,
-    getQueriesList,
-    getQueriesHistoryCursor,
-    hasQueriesListMore,
-    getUncompletedItems,
-} from '../module/queries_list/selectors';
-import {QueryStatusIcon} from '../QueryStatus';
+import {QueryItem, QueryStatus} from '../../module/api';
+import {refreshQueriesListIfNeeded, UPDATE_QUERIES_LIST} from '../../module/queries_list/actions';
+import {getQueriesListTimestamp, getUncompletedItems} from '../../module/queries_list/selectors';
+import {QueryStatusIcon} from '../../QueryStatus';
 
 import './index.scss';
-import {getQuery} from '../module/query/selectors';
-import {QuriesHistoryListFilter} from './QueriesHistoryFilter';
-import Pagination from '../../../components/Pagination/Pagination';
+import Pagination from '../../../../components/Pagination/Pagination';
 import {noop} from 'lodash';
-import {QueriesPoolingContext} from '../hooks/QueriesPooling/context';
-import {getCluster} from '../../../store/selectors/global';
-import {formatDateCompact} from '../../../components/common/Timeline/util';
-import {createQueryUrl} from '../utils/navigation';
-import {QueryEnginesNames} from '../utils/query';
-import DataTableYT from '../../../components/DataTableYT/DataTableYT';
+import {QueriesPoolingContext} from '../../hooks/QueriesPooling/context';
+import {formatDateCompact} from '../../../../components/common/Timeline/util';
+import {QueryEnginesNames} from '../../utils/query';
+import DataTableYT from '../../../../components/DataTableYT/DataTableYT';
 import DataTable, {Column, Settings} from '@yandex-cloud/react-data-table';
-import {useQuriesHistoryFilter} from '../hooks/QueryListFilter';
-import {QueriesHistoryAuthor} from '../module/queries_list/types';
-import {QueryDuration} from '../QueryDuration';
+import {useQuriesHistoryFilter} from '../../hooks/QueryListFilter';
+import {QueriesListAuthorFilter} from '../../module/queries_list/types';
+import {QueryDuration} from '../../QueryDuration';
+import {useQueryNavigation} from '../../hooks/Query';
+import {useQueriesPagination, useQueryList} from '../../hooks/QueriesList';
 
 const b = block('queries-history-list');
 
 const itemBlock = block('query-history-item');
-
-const useQueriesHistoryCursor = () => {
-    const dispatch = useDispatch();
-    const cursor = useSelector(getQueriesHistoryCursor);
-    const hasNext = useSelector(hasQueriesListMore);
-
-    const goNext = useCallback(() => {
-        dispatch(loadNextQueriesList(QueriesHistoryCursorDirection.PAST));
-    }, [dispatch]);
-
-    const goBack = useCallback(() => {
-        dispatch(loadNextQueriesList(QueriesHistoryCursorDirection.FUTURE));
-    }, [dispatch]);
-
-    const reset = useCallback(() => {
-        dispatch(resetCursor());
-    }, [dispatch]);
-
-    return {
-        first: !cursor?.cursorTime,
-        last: !hasNext,
-        goNext,
-        goBack,
-        goFirst: reset,
-    };
-};
 
 function useQueriesHistoryUpdate() {
     const pollingContext = useContext(QueriesPoolingContext);
@@ -95,7 +54,7 @@ function useRefreshHistoryList(timeout = 5000) {
         let timer: ReturnType<typeof setTimeout>;
         function start() {
             timer = setTimeout(() => {
-                dispatch(refreshQueryHistoryListIfNeeded(start));
+                dispatch(refreshQueriesListIfNeeded(start));
             }, timeout);
         }
 
@@ -109,32 +68,11 @@ function useRefreshHistoryList(timeout = 5000) {
     }, [timeout, dispatch]);
 }
 
-function useQueryHistoryList(): [QueryItem[], boolean] {
-    const dispatch = useDispatch();
-    const isLoading = useSelector(isQueriesListLoading);
-    const items = useSelector(getQueriesList);
-    useEffect(() => {
-        dispatch(requestQueriesList());
-    }, []);
+function useQueryHistoryList() {
+    useRefreshHistoryList();
     useQueriesHistoryUpdate();
-    useRefreshHistoryList(5000);
-    return [items, isLoading];
+    return useQueryList();
 }
-
-const useQueryNavigation = (): [QueryItem['id'] | undefined, (id: QueryItem) => void] => {
-    const selectedItem = useSelector(getQuery);
-    const cluster = useSelector(getCluster);
-    const history = useHistory();
-
-    const goToQuery = useCallback(
-        (item: QueryItem) => {
-            history.push(createQueryUrl(cluster, item.id));
-        },
-        [history],
-    );
-
-    return [selectedItem?.id, goToQuery];
-};
 
 const NameColumns: Column<QueryItem> = {
     name: 'Name',
@@ -226,22 +164,31 @@ const tableSettings: Settings = {
 };
 
 export function QueriesHistoryList() {
-    // const mainLocation = useParams();
     const [items, isLoading] = useQueryHistoryList();
 
-    const [filter, setFilter] = useQuriesHistoryFilter();
+    const [filter] = useQuriesHistoryFilter();
 
-    const {first, last, goBack, goNext, goFirst} = useQueriesHistoryCursor();
+    const timestamp = useSelector(getQueriesListTimestamp);
+
+    const {first, last, goBack, goNext, goFirst} = useQueriesPagination();
 
     const [selectedId, goToQuery] = useQueryNavigation();
 
     const [columns, setColumns] = useState<Column<QueryItem>[]>([]);
 
+    const scrollElemRef = useRef<HTMLDivElement | null>(null);
+
     useEffect(() => {
         if (!isLoading || !items?.length) {
-            setColumns(filter.user === QueriesHistoryAuthor.My ? MyColumns : AllColumns);
+            setColumns(filter.user === QueriesListAuthorFilter.My ? MyColumns : AllColumns);
         }
     }, [items, setColumns, filter.user, isLoading]);
+
+    useEffect(() => {
+        if (scrollElemRef?.current) {
+            scrollElemRef.current.scrollTop = 0;
+        }
+    }, [scrollElemRef, timestamp]);
 
     const setClassName = useCallback(
         (item: QueryItem) => {
@@ -254,8 +201,7 @@ export function QueriesHistoryList() {
 
     return (
         <div className={b()}>
-            <QuriesHistoryListFilter className={b('filter')} filter={filter} onChange={setFilter} />
-            <div className={b('list-wrapper')}>
+            <div className={b('list-wrapper')} ref={scrollElemRef}>
                 <DataTableYT
                     className={b('list')}
                     loading={isLoading}

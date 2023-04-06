@@ -3,31 +3,47 @@ import {RootState} from '../../../../store/reducers';
 import {getCurrentUserName} from '../../../../store/selectors/global';
 import {QueriesListParams} from '../api';
 import {isQueryProgress} from '../../utils/query';
+import {QueriesListFilterPresets} from './types';
 
-export const getQueriesHistoryState = (state: RootState) => state.queryTracker.list;
+export const getQueriesListState = (state: RootState) => state.queryTracker.list;
 
 export const isQueriesListLoading = (state: RootState) =>
-    getQueriesHistoryState(state).state === 'loading';
+    getQueriesListState(state).state === 'loading';
 
-const getQueriesHistoryMap = (state: RootState) => getQueriesHistoryState(state).map;
+export const getQueriesListMap = (state: RootState) => getQueriesListState(state).map;
 
-export const getQueriesList = createSelector(getQueriesHistoryMap, (map) => {
+export const getQueriesListTimestamp = (state: RootState) => getQueriesListState(state).timestamp;
+
+export const getQueriesList = createSelector(getQueriesListMap, (map) => {
     return Object.values(map);
 });
-export const hasQueriesListMore = (state: RootState) => getQueriesHistoryState(state).hasMore;
+export const hasQueriesListMore = (state: RootState) => getQueriesListState(state).hasMore;
 
-export const getQueriesListError = (state: RootState) => getQueriesHistoryState(state).error;
+export const getQueriesListError = (state: RootState) => getQueriesListState(state).error;
 
-export const getQueriesHistoryFilter = (state: RootState) => getQueriesHistoryState(state).filter;
+export const getQueriesFilters = (state: RootState) => getQueriesListState(state).filter;
+export const getQueriesListMode = (state: RootState) => getQueriesListState(state).listMode;
 
-export const getQueriesHistoryCursor = (state: RootState) => getQueriesHistoryState(state).cursor;
+export const getQueriesListFilter = createSelector(
+    [getQueriesFilters, getQueriesListMode],
+    (filters, listMode) => {
+        return filters[listMode]?.filter || {};
+    },
+);
+
+export const getQueriesListCursor = createSelector(
+    [getQueriesFilters, getQueriesListMode],
+    (filters, listMode) => {
+        return filters[listMode]?.cursor;
+    },
+);
 
 export const getUncompletedItems = createSelector(getQueriesList, (items) => {
     return items.filter(isQueryProgress);
 });
 
-export const getQueriesHistoryCursorParams = (state: RootState) => {
-    const cursor = getQueriesHistoryCursor(state);
+export const getQueriesListCursorParams = (state: RootState) => {
+    const cursor = getQueriesListCursor(state);
     if (cursor) {
         return {cursor_time: cursor.cursorTime, cursor_direction: cursor.direction};
     }
@@ -35,8 +51,16 @@ export const getQueriesHistoryCursorParams = (state: RootState) => {
     return undefined;
 };
 
-export function getQueriesHistoryFilterParams(state: RootState): QueriesListParams {
-    const filter = getQueriesHistoryFilter(state);
+export function getQueriesListFilterParams(state: RootState): QueriesListParams {
+    const listMode = getQueriesListMode(state);
+    const filterParams = {
+        ...getQueriesListFilter(state),
+        ...(QueriesListFilterPresets[listMode] || {}),
+    };
+    const {is_tutorial, ...filter} = filterParams;
+    if (is_tutorial) {
+        filter.filter = `is_tutorial`;
+    }
     if (filter.user === 'my') {
         const user = getCurrentUserName(state);
         if (user) {
