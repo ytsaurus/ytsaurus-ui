@@ -6,10 +6,11 @@
     "url": "https://github.com/YTsaurus/ytsaurus-ui/tree/main/packages/ui"
   },
   "files": [
-    "build"
+    "build",
+    "dist"
   ],
   "scripts": {
-    "prepublishOnly": "rm README.md && npm run build:lib && git checkout -- README.md",
+    "prepublishOnly": "rm -f README.md && npm run build:lib && npm run build",
     "build": "npm run copy:icons &&  NODE_OPTIONS=\"--max-old-space-size=4096\" NODE_ENV=production app-builder build --config ./build.app.config.ts",
     "build:lib": "rm -rf build && npm run build:lib:ui && npm run build:lib:server",
     "build:lib:ui": "NODE_OPTIONS=\"--max-old-space-size=4096\" NODE_ENV=production app-builder build --config ./build.lib.config.ts && cp -r img assets build",
@@ -40,7 +41,6 @@
     "start": "NODE_OPTIONS=\"--max-http-header-size=204800 ${NODE_OPTIONS}\" node dist/server",
     "test": "npm run test:unit",
     "test:coverage": "APP_ENV=local jest --config ./jest.config.js --coverage",
-    "test:lint": "npm run lint",
     "test:e2e": "cd tests; npm ci; npm run test:e2e",
     "test:e2e:dev": "E2E_MATCH=e2e1 npm run test:e2e:show",
     "test:e2e:localmode": "cd tests; npm ci; cd ..; npm run test:e2e:localmode:noci",
