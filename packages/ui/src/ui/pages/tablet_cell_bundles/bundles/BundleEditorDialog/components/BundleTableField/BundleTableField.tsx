@@ -7,6 +7,8 @@ import {Radio, Table, TableColumnConfig} from '@gravity-ui/uikit';
 import {DialogControlProps} from '../../../../../../components/Dialog/Dialog.types';
 import {BundleResourceGuarantee} from '../../../../../../store/reducers/tablet_cell_bundles';
 
+import './BundleTableField.scss';
+
 const block = cn('bundle-table-field');
 
 const columns: TableColumnConfig<BundleData>[] = [

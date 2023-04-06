@@ -125,7 +125,7 @@ export const getInitialFormValues = (
 
 function formatNetwork(value?: number) {
     const formatted = typeof value !== 'undefined' ? (value / 1000e6).toPrecision(2) : 0;
-    return `${formatted} Gbit rx/tx`;
+    return `${formatted} Gbit RX/TX`;
 }
 
 export const createConfigurationList = (

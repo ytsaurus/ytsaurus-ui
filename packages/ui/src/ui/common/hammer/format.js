@@ -41,6 +41,8 @@ function postformat(value) {
         ['Ssd', 'SSD'],
         ['hdd', 'HDD'],
         ['Rpc', 'RPC'],
+        ['VCPU', 'vCPU'],
+        ['vcpu', 'vCPU'],
         ['tablet-cell-bundle', 'TABLET CELL BUNDLE'],
         ['Fifo', 'FIFO'],
         ['Http', 'HTTP'],
