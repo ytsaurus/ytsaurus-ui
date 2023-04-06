@@ -66,7 +66,7 @@
             &_type_cell-id,
             &_type_tablet-id,
             &_type_store-preload {
-                width: 220px;
+                width: 250px;
             }
             &_type_name-tablet-id,
             &_type_name-cell-id {
@@ -98,6 +98,9 @@
             &_type_replication-errors,
             &_type_cell-leader-address {
                 width: 120px;
+                .yt-host {
+                    overflow: visible;
+                }
             }
         }
 

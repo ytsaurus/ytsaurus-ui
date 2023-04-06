@@ -6,7 +6,7 @@ import StatusBulb from '../../../../../components/StatusBulb/StatusBulb';
 import Dialog, {FormApi, makeErrorFields} from '../../../../../components/Dialog/Dialog';
 import {YTError} from '../../../../../types';
 
-interface Props {
+export interface Props {
     value?: boolean;
     onEdit?: (currentValue?: Props['value']) => Promise<void>;
 }

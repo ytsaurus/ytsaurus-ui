@@ -51,7 +51,7 @@ export default function metaTablePresetMain(attributes) {
         {
             key: 'YQL operation',
             value: yqlLink,
-            visible: yqlLink,
+            visible: Boolean(yqlLink),
         },
     ];
 }

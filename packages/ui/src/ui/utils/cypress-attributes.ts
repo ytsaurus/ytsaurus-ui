@@ -130,6 +130,8 @@ export function prepareSetCommandForBatch(path: string, value: any, additionalPa
 
 export const CypressNodeTypes = {
     REPLICATED_TABLE: 'replicated_table',
+    REPLICATION_LOG_TABLE: 'replication_log_table',
+    CHAOS_REPLICATED_TABLE: 'chaos_replicated_table',
     MAP_NODE: 'map_node',
     TABLE: 'table',
     // TODO: add more types

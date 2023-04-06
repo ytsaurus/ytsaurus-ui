@@ -15,6 +15,7 @@ import AccessLog from '../../../../pages/navigation/tabs/AccessLog/AccessLog';
 import TabletErrors from '../../../../pages/navigation/tabs/TabletErrors/TabletErrors';
 import UserAttributes from '../../../../pages/navigation/tabs/UserAttributes/UserAttributes';
 import ReplicatedTable from '../../../../pages/navigation/content/ReplicatedTable/ReplicatedTable';
+import ReplicatedTableMeta from '../../content/ReplicatedTable/ReplicatedTableMeta';
 
 import Link from '../../../../pages/navigation/content/Link/Link';
 import File from '../../../../pages/navigation/content/File/File';
@@ -58,6 +59,8 @@ export default class ContentViewer extends Component {
         file: File,
         table: Table,
         replicated_table: ReplicatedTable,
+        chaos_replicated_table: ReplicatedTable,
+        replication_log_table: ReplicatedTableMeta,
         transaction: Transaction,
         nested_transaction: Transaction,
         topmost_transaction_map: TransactionMap,
