@@ -1,25 +1,37 @@
-import {QueriesHistoryCursorDirection, QueryItem} from '../api';
+import {QueryItem} from '../api';
 import {
     QueriesListAction,
     LOAD_QUERIES_LIST_ERROR,
     LOAD_QUERIES_LIST_REQUEST,
     LOAD_QUERIES_LIST_SUCCESS,
-    SET_QUERYIES_HISTORY_CURSOR,
-    SET_QUERYIES_HISTORY_FILTER,
+    SET_QUERIES_LIST_CURSOR,
+    SET_QUERIES_LIST_FILTER,
     UPDATE_QUERIES_LIST,
+    SET_QUERIES_LIST_MODE,
 } from './actions';
-import {QueriesHistoryAuthor, QueriesHistoryFilter} from './types';
+import {
+    DefaultQueriesListFilter,
+    QueriesListCursor,
+    QueriesListFilter,
+    QueriesListMode,
+} from './types';
 
 export interface QueriesListState {
     state: 'loading' | 'ready' | 'error';
     error?: string | Error;
     map: Record<QueryItem['id'], QueryItem>;
     hasMore: boolean;
-    filter: QueriesHistoryFilter;
-    cursor?: {
-        cursorTime: string;
-        direction: QueriesHistoryCursorDirection;
-    };
+    timestamp: number; // Determines is the list is changed(by filter or cursor).
+    filter: Partial<
+        Record<
+            QueriesListMode,
+            {
+                filter: QueriesListFilter;
+                cursor?: QueriesListCursor;
+            }
+        >
+    >;
+    listMode: QueriesListMode;
 }
 
 const initialState: QueriesListState = {
@@ -27,10 +39,14 @@ const initialState: QueriesListState = {
     error: undefined,
     map: {},
     hasMore: false,
+    timestamp: 0,
     filter: {
-        user: QueriesHistoryAuthor.My,
+        [QueriesListMode.History]: {
+            filter: DefaultQueriesListFilter[QueriesListMode.History],
+            cursor: undefined,
+        },
     },
-    cursor: undefined,
+    listMode: QueriesListMode.History,
 };
 
 export function reducer(state = initialState, action: QueriesListAction): QueriesListState {
@@ -51,6 +67,7 @@ export function reducer(state = initialState, action: QueriesListAction): Querie
                     },
                     {},
                 ),
+                timestamp: action.data.timestamp || state.timestamp,
                 hasMore: action.data.hasMore,
             };
         }
@@ -81,20 +98,51 @@ export function reducer(state = initialState, action: QueriesListAction): Querie
             };
         }
 
-        case SET_QUERYIES_HISTORY_FILTER: {
+        case SET_QUERIES_LIST_FILTER: {
+            const listMode = state.listMode;
             return {
                 ...state,
+                listMode,
                 filter: {
                     ...state.filter,
-                    ...action.data,
+                    [listMode]: {
+                        ...state.filter[listMode],
+                        filter: {...state.filter[listMode]?.filter, ...action.data},
+                    },
                 },
             };
         }
 
-        case SET_QUERYIES_HISTORY_CURSOR: {
+        case SET_QUERIES_LIST_MODE: {
+            const listMode = action.data.listMode;
             return {
                 ...state,
-                cursor: action.data,
+                listMode,
+                filter: {
+                    ...state.filter,
+                    [listMode]: {
+                        ...state.filter[listMode],
+                        filter: {
+                            ...(action.data.reset
+                                ? DefaultQueriesListFilter[listMode]
+                                : state.filter[listMode]?.filter),
+                        },
+                    },
+                },
+            };
+        }
+
+        case SET_QUERIES_LIST_CURSOR: {
+            const listMode = state.listMode;
+            return {
+                ...state,
+                filter: {
+                    ...state.filter,
+                    [listMode]: {
+                        ...state.filter[listMode],
+                        cursor: action.data,
+                    },
+                },
             };
         }
 

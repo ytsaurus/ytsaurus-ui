@@ -1,4 +1,5 @@
 import {RootState} from '../../../../store/reducers';
+import {QueryStatus} from '../api';
 
 const getState = (state: RootState) => state.queryTracker.query;
 
@@ -16,7 +17,7 @@ export const isQueryLoading = (state: RootState) => getState(state).state === 'l
 export const isQueryExecuted = (state: RootState): boolean => {
     const queryItem = getState(state).queryItem;
     // TODO: Use real query's state
-    return Boolean(queryItem?.id);
+    return Boolean(queryItem?.id) && queryItem?.state !== QueryStatus.DRAFT;
 };
 
 export const getCurrentQuery = (state: RootState) => getState(state).queryItem;

@@ -11,6 +11,7 @@ import {
     UPDATE_QUERY,
     UpdateQueryAction,
 } from './actions';
+import {cleanupQueryForDraft} from './utills';
 
 export interface QueryState {
     queryItem?: QueryItem;
@@ -44,7 +45,9 @@ export function reducer(state = initState, action: Actions): QueryState {
                 queryItem: action.data.initialQuery,
                 draft: {
                     ...initialQueryDraftState,
-                    ...action.data.initialQuery,
+                    ...(action.data.initialQuery
+                        ? cleanupQueryForDraft(action.data.initialQuery)
+                        : {}),
                 },
                 state: 'ready',
             };

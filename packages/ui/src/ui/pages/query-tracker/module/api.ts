@@ -105,6 +105,7 @@ export type QueriiesListCursorParams = {
 };
 
 export type QueriesListParams = {
+    is_tutorial?: string;
     user?: string;
     engine?: string;
     filter?: string;
