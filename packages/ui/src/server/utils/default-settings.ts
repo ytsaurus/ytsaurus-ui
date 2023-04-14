@@ -6,6 +6,7 @@ import {getPath} from '../../shared/utils/settings';
 const defaultSettings = {
     GLOBAL: {
         [SettingName.GLOBAL.THEME]: 'system',
+        [SettingName.GLOBAL.FONT_TYPE]: '',
         [SettingName.GLOBAL.AUTO_REFRESH]: true,
         [SettingName.GLOBAL.PAGES_ORDER]: [],
         [SettingName.GLOBAL.PAGES_PINNED]: {

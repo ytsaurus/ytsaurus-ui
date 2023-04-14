@@ -22,27 +22,36 @@ import {setTheme} from '../../store/actions/global';
 import {getAuthPagesEnabled, getGlobalShowLoginDialog} from '../../store/selectors/global';
 
 import './App.scss';
+import {getFontType} from '../../store/selectors/settings-ts';
 
 interface AppProps {
     theme?: 'light' | 'dark' | 'system' | 'light-hc' | 'dark-hc';
+    fontType?: string;
     a11y?: boolean;
 }
 
 class App extends Component<AppProps> {
     static propTypes = {
         theme: PropTypes.oneOf(['light', 'dark', 'system', 'light-hc', 'dark-hc']).isRequired,
+        fontType: PropTypes.string,
         a11y: PropTypes.bool.isRequired,
     };
 
     componentDidMount() {
-        const {theme} = this.props;
+        const {theme, fontType} = this.props;
         document.body.classList.add(`theme-${theme}`);
+        if (fontType) document.body.classList.add(`font-${fontType}`);
     }
 
     componentDidUpdate(prevProps: AppProps) {
         if (prevProps.theme !== this.props.theme) {
             document.body.classList.remove(`theme-${prevProps.theme}`);
             document.body.classList.add(`theme-${this.props.theme}`);
+        }
+
+        if (prevProps.fontType !== this.props.fontType) {
+            document.body.classList.remove(`font-${prevProps.fontType}`);
+            document.body.classList.add(`font-${this.props.fontType}`);
         }
     }
 
@@ -68,6 +77,7 @@ function AppWithRum() {
     const a11y = useSelector(shouldUseSafeColors);
     const showLogin = useSelector(getGlobalShowLoginDialog);
     const hasAuthPages = useSelector(getAuthPagesEnabled);
+    const fontType = useSelector(getFontType);
 
     return showLogin ? (
         <Route render={() => <LoginFormPage theme={themeType} />} />
@@ -79,7 +89,7 @@ function AppWithRum() {
                     render={() => <ChangePasswordFormPage theme={themeType} />}
                 />
             ) : null}
-            <Route render={() => <App theme={theme} a11y={a11y} />} />
+            <Route render={() => <App theme={theme} a11y={a11y} fontType={fontType} />} />
         </Switch>
     );
 }

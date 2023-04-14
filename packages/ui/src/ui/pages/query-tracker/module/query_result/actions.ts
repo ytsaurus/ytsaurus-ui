@@ -11,6 +11,7 @@ import {wrapApiPromiseByToaster} from '../../../../utils/utils';
 import {getPrimitiveTypesMap} from '../../../../store/selectors/global/supported-features';
 import {parseV3Type, Type} from '../../../../components/SchemaDataType/dateTypesV3';
 import ypath from '../../../../common/thor/ypath';
+import {getFontFamilies} from '../../../../store/selectors/settings-ts';
 
 export const REQUEST_QUERY_RESULTS = 'query-tracker/REQUEST_QUERY_RESULTS';
 export type RequestQueryResultsAction = ActionD<
@@ -90,11 +91,8 @@ export function applySettings(
     };
 }
 
-function preloadTableFont() {
-    return Promise.all([
-        new FontFaceObserver('RobotoMono', {weight: 400}).load(null, 10000),
-        new FontFaceObserver('RobotoMono', {weight: 700}).load(null, 10000),
-    ]);
+function preloadTableFont(fontFamily: string) {
+    return new FontFaceObserver(fontFamily).load(null, 10000);
 }
 
 export function loadQueryResult(
@@ -103,6 +101,7 @@ export function loadQueryResult(
 ): ThunkAction<any, RootState, any, QueryResultsActions> {
     return async (dispatch, getState) => {
         const state = getState();
+        const fontFamilies = getFontFamilies(state);
         if (hasQueryResult(state, queryId, resultIndex)) {
             return;
         }
@@ -111,7 +110,7 @@ export function loadQueryResult(
                 type: REQUEST_QUERY_RESULTS,
                 data: {queryId, index: resultIndex},
             });
-            await preloadTableFont();
+            await preloadTableFont(fontFamilies.monospace);
             const meta = await getQueryResultMeta(queryId, resultIndex);
             const typeMap = getPrimitiveTypesMap(getState());
             const scheme = (ypath.getValue(meta?.schema) as QueryResultMetaScheme[]) || [];

@@ -2,7 +2,7 @@
 @import '../mixins';
 
 .unipika {
-    font-family: $yt-monospace-font;
+    font-family: var(--yc-font-family-monospace);
 
     &-wrapper & {
         margin: 0;
@@ -18,7 +18,7 @@
     }
 
     &-wrapper_mode_navigation & {
-        font-family: $yt-font;
+        font-family: var(--yc-font-family-sans);
 
         max-width: 100%;
 

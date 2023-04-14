@@ -27,9 +27,9 @@
 // font
 
 @mixin yt-fonts() {
-    font-family: $yt-font;
-    font-size: $font-size;
-    line-height: $line-height;
+    font-family: var(--yc-font-family-sans);
+    font-size: var(--yt-font-size);
+    line-height: var(--yt-line-height);
 }
 
 

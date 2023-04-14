@@ -1,7 +1,7 @@
 @import '../globals';
 
 .elements-code {
-    font-family: $yt-monospace-font;
+    font-family: var(--yc-font-family-monospace);
     line-height: 20px;
 
     margin: 0;
