@@ -30,7 +30,7 @@ interface OperationStatistics {
     items: Array<unknown>;
     filterText: string;
     jobTypes: Array<string>;
-    activeAggregation: unknown;
+    activeAggregation: typeof activeAggregation;
     activeJobType: null | string;
     treeState: ValueOf<typeof TREE_STATE>;
 }

@@ -7,7 +7,7 @@ import {
     OperationStatisticName,
     OperationStatisticValue,
 } from '../../../pages/operations/OperationDetail/tabs/statistics/OperationStatisticName';
-import {OPERATION_STATISTICS_BLOCK_NAME} from '../../../pages/operations/OperationDetail/tabs/statistics/Statistics.js';
+import {OPERATION_STATISTICS_BLOCK_NAME} from '../../../pages/operations/OperationDetail/tabs/statistics/Statistics';
 import Icon from '../../Icon/Icon';
 
 const statisticsBlock = cn(OPERATION_STATISTICS_BLOCK_NAME);

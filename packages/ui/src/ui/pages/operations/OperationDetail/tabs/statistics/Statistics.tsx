@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
-import PropTypes from 'prop-types';
-import {connect, useSelector} from 'react-redux';
+import {ConnectedProps, connect, useSelector} from 'react-redux';
 import cn from 'bem-cn-lite';
 
 import ErrorBoundary from '../../../../../components/ErrorBoundary/ErrorBoundary';
@@ -14,7 +13,6 @@ import Icon from '../../../../../components/Icon/Icon';
 import {
     TREE_STATE,
     DEBOUNCE_DELAY,
-    AGGREGATOR_OPTIONS,
     AGGREGATOR_RADIO_ITEMS,
 } from '../../../../../constants/operations/statistics';
 import {
@@ -26,37 +24,24 @@ import {
 import {statisticsTableProps} from '../../../../../utils/operations/tabs/statistics/statisticsTableProps';
 import {makeRadioButtonProps} from '../../../../../utils';
 
+import {RootState} from '../../../../../store/reducers';
 import {getOperationDetailsLoadingStatus} from '../../../../../store/selectors/operations/operation';
 import {RumMeasureTypes} from '../../../../../rum/rum-measure-types';
 import {useRumMeasureStop} from '../../../../../rum/RumUiContext';
 import {isFinalLoadingStatus} from '../../../../../utils/utils';
 import {useAppRumMeasureStart} from '../../../../../rum/rum-app-measures';
 import {docsUrl} from '../../../../../config';
+import UIFactory from '../../../../../UIFactory';
 
 import './Statistics.scss';
-import UIFactory from '../../../../../UIFactory';
 
 export const OPERATION_STATISTICS_BLOCK_NAME = 'operation-statistics';
 const statisticsBlock = cn(OPERATION_STATISTICS_BLOCK_NAME);
 const toolbarBlock = cn('elements-toolbar');
 
-export class Statistics extends Component {
-    static propTypes = {
-        // from connect
-        treeState: PropTypes.oneOf([TREE_STATE.EXPANDED, TREE_STATE.COLLAPSED, TREE_STATE.MIXED])
-            .isRequired,
-        activeAggregation: PropTypes.oneOf(AGGREGATOR_OPTIONS).isRequired,
-        filterText: PropTypes.string.isRequired,
-        items: PropTypes.array.isRequired,
-        jobTypes: PropTypes.arrayOf(PropTypes.string).isRequired,
-        activeJobType: PropTypes.string.isRequired,
+type Props = ConnectedProps<typeof connector>;
 
-        setTreeState: PropTypes.func.isRequired,
-        changeFilterText: PropTypes.func.isRequired,
-        changeAggregation: PropTypes.func.isRequired,
-        changeJobType: PropTypes.func.isRequired,
-    };
-
+export class Statistics extends Component<Props> {
     componentWillUnmount() {
         this.expandTable();
     }
@@ -77,7 +62,8 @@ export class Statistics extends Component {
     collapseTable = () => this.props.setTreeState(TREE_STATE.COLLAPSED);
     expandTable = () => this.props.setTreeState(TREE_STATE.EXPANDED);
 
-    changeJobType = (e) => this.props.changeJobType(e.target.value);
+    changeJobType = (e: React.ChangeEvent<HTMLInputElement>) =>
+        this.props.changeJobType(e.target.value);
 
     renderToolbar() {
         const {filterText, activeAggregation, jobTypes, activeJobType} = this.props;
@@ -97,7 +83,7 @@ export class Statistics extends Component {
                     <div className={toolbarBlock('component')}>
                         <RadioButton
                             size="m"
-                            value={activeJobType}
+                            value={activeJobType ?? ''}
                             onChange={this.changeJobType}
                             items={makeRadioButtonProps(jobTypes)}
                             name="operation-statistics-aggregator"
@@ -158,7 +144,7 @@ export class Statistics extends Component {
     }
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state: RootState) => {
     const {items, treeState, filterText, activeAggregation, jobTypes, activeJobType} =
         state.operations.statistics;
 
@@ -179,7 +165,9 @@ const mapDispatchToProps = {
     changeJobType,
 };
 
-const StatisticsConnected = connect(mapStateToProps, mapDispatchToProps)(Statistics);
+const connector = connect(mapStateToProps, mapDispatchToProps);
+
+const StatisticsConnected = connector(Statistics);
 
 export default function SpecificationWithRum() {
     const loadState = useSelector(getOperationDetailsLoadingStatus);
