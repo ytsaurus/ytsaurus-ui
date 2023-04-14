@@ -8,11 +8,6 @@ import {
 } from '../../../../constants/operations/statistics';
 import {GET_OPERATION} from '../../../../constants/operations/detail';
 
-import {
-    prepareStatistics,
-    prepareMetricsTree,
-    flatMetricsTree,
-} from '../../../../utils/operations/tabs/statistics/statistics';
 import {NAMESPACES, SettingName} from '../../../../../shared/constants/settings';
 import {getPath} from '../../../../../shared/utils/settings';
 import {getSettingsDataFromInitialConfig} from '../../../../config';
@@ -25,8 +20,6 @@ const {OPERATIONS} = NAMESPACES;
 const activeAggregation = settings[getPath(STATISTICS_AGGREGATION_TYPE, OPERATIONS)];
 
 export interface OperationStatistics {
-    tree: Record<string, unknown>;
-    items: Array<unknown>;
     filterText: string;
     activeAggregation: typeof activeAggregation;
     jobTypeFilter: string;
@@ -35,9 +28,6 @@ export interface OperationStatistics {
 }
 
 export const initialState: OperationStatistics = {
-    tree: {},
-    items: [],
-    /* @type: string */
     filterText: '',
     activeAggregation: activeAggregation,
     jobTypeFilter: STATISTICS_FILTER_ALL_VALUE,
@@ -47,17 +37,6 @@ export const initialState: OperationStatistics = {
 
 export default (state = initialState, action: OperationStaticsAction): OperationStatistics => {
     switch (action.type) {
-        case GET_OPERATION.SUCCESS: {
-            const {filterText} = state;
-            const {operation} = action.data;
-
-            const statistics = prepareStatistics(operation);
-            const tree = prepareMetricsTree(statistics);
-            const items = flatMetricsTree(tree, filterText);
-
-            return {...state, tree, items};
-        }
-
         case SET_TREE_STATE: {
             const {treeState} = action.data;
 
@@ -65,12 +44,9 @@ export default (state = initialState, action: OperationStaticsAction): Operation
         }
 
         case CHANGE_FILTER_TEXT: {
-            const {tree} = state;
             const {filterText} = action.data;
 
-            const items = flatMetricsTree(tree, filterText);
-
-            return {...state, filterText, items};
+            return {...state, filterText};
         }
 
         case CHANGE_AGGREGATION: {

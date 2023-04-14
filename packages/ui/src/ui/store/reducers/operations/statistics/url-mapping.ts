@@ -14,7 +14,7 @@ export const statisticsParams: LocationParameters = {
         initialState: initialFilter,
     },
     jobType: {
-        stateKey: 'operations.statistics.jobTypeFiter',
+        stateKey: 'operations.statistics.jobTypeFilter',
     },
     poolTree: {
         stateKey: 'operations.statistics.poolTreeFilter',
