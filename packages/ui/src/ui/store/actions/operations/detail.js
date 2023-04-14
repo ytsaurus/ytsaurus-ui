@@ -13,19 +13,7 @@ import {Toaster} from '@gravity-ui/uikit';
 import Updater from '../../../utils/hammer/updater';
 import CancelHelper from '../../../utils/cancel-helper';
 import {YTApiId, ytApiV3, ytApiV3Id} from '../../../rum/rum-wrap-api';
-import {getSettingOperationStatisticsActiveJobTypes} from '../../../store/selectors/settings-ts';
-import {
-    prepareStatistics,
-    prepareJobTypeOptions,
-} from '../../../utils/operations/tabs/statistics/statistics';
-import {changeJobType} from '../../../store/actions/operations/statistics';
-import {INITIAL_ACTIVE_JOB_TYPE} from '../../../store/reducers/operations/statistics/statistics';
 import {getJobsMonitoringDescriptors} from '../../../store/actions/operations/jobs-monitor';
-import {
-    getOperation as getOperationSelector,
-    getOperationDetailsLoadingStatus,
-} from '../../../store/selectors/operations/operation';
-import {LOADING_STATUS} from '../../../constants';
 
 const updater = new Updater();
 const toaster = new Toaster();
@@ -118,39 +106,6 @@ function loadIntermediateResourceUsage(operation, callback) {
     };
 }
 
-function isValidJobType(activeJobType, jobTypes) {
-    return activeJobType !== INITIAL_ACTIVE_JOB_TYPE && jobTypes.indexOf(activeJobType) > -1;
-}
-
-function updateActiveJobType(operationType, operationJobTypes) {
-    return (dispatch, getState) => {
-        const state = getState();
-        const currentActiveJobType = state.operations.statistics.activeJobType;
-        const prevOperation = {
-            loaded: getOperationDetailsLoadingStatus(state) === LOADING_STATUS.LOADED,
-            type: getOperationSelector(state).type,
-        };
-        const settingJobType = getSettingOperationStatisticsActiveJobTypes(state)[operationType];
-        const jobTypes = operationJobTypes;
-
-        let calculatedJobType = currentActiveJobType;
-
-        const activeJobTypeNotDefined = currentActiveJobType === INITIAL_ACTIVE_JOB_TYPE;
-        const operationTypeChanged = prevOperation.loaded && prevOperation.type !== operationType;
-        if (activeJobTypeNotDefined || operationTypeChanged) {
-            calculatedJobType = settingJobType;
-        }
-
-        if (!isValidJobType(calculatedJobType, jobTypes)) {
-            calculatedJobType = jobTypes[0];
-        }
-
-        if (calculatedJobType !== currentActiveJobType) {
-            dispatch(changeJobType(calculatedJobType));
-        }
-    };
-}
-
 export function getOperation(id) {
     return (dispatch, getState) => {
         const isAlias = !isOperationId(id);
@@ -176,11 +131,6 @@ export function getOperation(id) {
                     operationAttributes,
                     orchidAttributes,
                 );
-
-                const statistics = prepareStatistics(operation);
-                const jobTypes = prepareJobTypeOptions(statistics);
-
-                dispatch(updateActiveJobType(operation.type, jobTypes));
 
                 const dispatchOperationSuccess = () => {
                     dispatch({

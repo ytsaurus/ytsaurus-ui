@@ -20,12 +20,17 @@ import {
     changeFilterText,
     changeAggregation,
     changeJobType,
+    changePoolTreeFilter,
 } from '../../../../../store/actions/operations/statistics';
 import {statisticsTableProps} from '../../../../../utils/operations/tabs/statistics/statisticsTableProps';
 import {makeRadioButtonProps} from '../../../../../utils';
 
 import {RootState} from '../../../../../store/reducers';
 import {getOperationDetailsLoadingStatus} from '../../../../../store/selectors/operations/operation';
+import {
+    getOperationStatisticsActiveFilterValues,
+    getOperationStatisticsAvailableValues,
+} from '../../../../../store/selectors/operations/statistics-v2';
 import {RumMeasureTypes} from '../../../../../rum/rum-measure-types';
 import {useRumMeasureStop} from '../../../../../rum/RumUiContext';
 import {isFinalLoadingStatus} from '../../../../../utils/utils';
@@ -62,11 +67,9 @@ export class Statistics extends Component<Props> {
     collapseTable = () => this.props.setTreeState(TREE_STATE.COLLAPSED);
     expandTable = () => this.props.setTreeState(TREE_STATE.EXPANDED);
 
-    changeJobType = (e: React.ChangeEvent<HTMLInputElement>) =>
-        this.props.changeJobType(e.target.value);
-
     renderToolbar() {
-        const {filterText, activeAggregation, jobTypes, activeJobType} = this.props;
+        const {filterText, activeAggregation, jobTypes, poolTrees, activeJobType, activePoolTree} =
+            this.props;
 
         return (
             <div className={toolbarBlock(null, statisticsBlock('toolbar'))}>
@@ -80,15 +83,29 @@ export class Statistics extends Component<Props> {
                         />
                     </div>
 
-                    <div className={toolbarBlock('component')}>
-                        <RadioButton
-                            size="m"
-                            value={activeJobType ?? ''}
-                            onChange={this.changeJobType}
-                            items={makeRadioButtonProps(jobTypes)}
-                            name="operation-statistics-aggregator"
-                        />
-                    </div>
+                    {jobTypes.length > 1 && (
+                        <div className={toolbarBlock('component')}>
+                            <RadioButton
+                                size="m"
+                                value={activeJobType ?? ''}
+                                onUpdate={this.props.changeJobType}
+                                items={makeRadioButtonProps(jobTypes, '')}
+                                name="operation-statistics-job-type"
+                            />
+                        </div>
+                    )}
+
+                    {poolTrees.length > 1 && (
+                        <div className={toolbarBlock('component')}>
+                            <RadioButton
+                                size="m"
+                                value={activePoolTree ?? ''}
+                                onUpdate={this.props.changePoolTreeFilter}
+                                items={makeRadioButtonProps(poolTrees, '')}
+                                name="operation-statistics-pool-tree"
+                            />
+                        </div>
+                    )}
 
                     <div className={toolbarBlock('component')}>
                         <RadioButton
@@ -145,8 +162,9 @@ export class Statistics extends Component<Props> {
 }
 
 const mapStateToProps = (state: RootState) => {
-    const {items, treeState, filterText, activeAggregation, jobTypes, activeJobType} =
-        state.operations.statistics;
+    const {items, treeState, filterText, activeAggregation} = state.operations.statistics;
+
+    const {job_type: jobTypes, pool_tree: poolTrees} = getOperationStatisticsAvailableValues(state);
 
     return {
         items,
@@ -154,7 +172,8 @@ const mapStateToProps = (state: RootState) => {
         filterText,
         activeAggregation,
         jobTypes,
-        activeJobType,
+        poolTrees,
+        ...getOperationStatisticsActiveFilterValues(state),
     };
 };
 
@@ -163,6 +182,7 @@ const mapDispatchToProps = {
     changeFilterText,
     changeAggregation,
     changeJobType,
+    changePoolTreeFilter,
 };
 
 const connector = connect(mapStateToProps, mapDispatchToProps);
