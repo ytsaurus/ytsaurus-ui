@@ -1,6 +1,12 @@
 import {createSelector} from 'reselect';
-import reduce from 'lodash/reduce';
-import forEach from 'lodash/forEach';
+import filter_ from 'lodash/filter';
+import forEach_ from 'lodash/forEach';
+import min_ from 'lodash/min';
+import max_ from 'lodash/max';
+import reduce_ from 'lodash/reduce';
+import sum_ from 'lodash/sum';
+
+import {FieldTree, fieldTreeForEach, filterFieldTree} from '../../../common/hammer/field-tree';
 
 import ypath from '../../../common/thor/ypath';
 import {STATISTICS_FILTER_ALL_VALUE} from '../../../constants/operations/statistics';
@@ -24,7 +30,7 @@ interface StatisticItem {
     tags: StatisticItemTags;
 }
 
-interface StatisticItemSummary {
+export interface StatisticItemSummary {
     min: number;
     max: number;
     sum: number;
@@ -37,13 +43,13 @@ interface StatisticItemTags {
     pool_tree: string;
 }
 
-type JobState = 'completed' | 'running' | 'aborted' | 'failed' | 'list';
+type JobState = 'completed' | 'running' | 'aborted' | 'failed' | 'lost';
 
-interface StatisticTree extends Record<string, StatisticTree | Array<StatisticItem> | undefined> {}
+type StatisticTree = FieldTree<Array<StatisticItem>>;
 
-interface StatisticTreeRoot extends StatisticTree {
+type StatisticTreeRoot = StatisticTree & {
     time?: StatisticTree & {total?: Array<StatisticItem>};
-}
+};
 
 export function isStatisticItem(v: ValueOf<StatisticTree>): v is Array<StatisticItem> {
     return Array.isArray(v);
@@ -53,10 +59,10 @@ export const getOperationStatisticsAvailableValues = createSelector(
     [getOperationStatisticsV2],
     (stats) => {
         const total = stats?.time?.total ?? [];
-        const tmp = reduce(
+        const tmp = reduce_(
             total,
             (acc, item) => {
-                forEach(item.tags, (v, k) => {
+                forEach_(item.tags, (v, k) => {
                     const key = k as keyof typeof acc;
                     if (v) {
                         if (!acc[key]) {
@@ -69,7 +75,7 @@ export const getOperationStatisticsAvailableValues = createSelector(
             },
             {} as Record<keyof Partial<Omit<StatisticItemTags, 'job_state'>>, Set<string>>,
         );
-        return reduce(
+        return reduce_(
             tmp,
             (acc, v, k) => {
                 const key = k as keyof typeof acc;
@@ -96,3 +102,77 @@ export const getOperationStatisticsActiveFilterValues = createSelector(
         };
     },
 );
+
+export const getOperationStatisticsFilteredTree = createSelector(
+    [getOperationStatisticsActiveFilterValues, getOperationStatisticsV2],
+    ({activeJobType, activePoolTree}, tree) => {
+        if (!activeJobType && !activePoolTree) {
+            return tree;
+        }
+        return filterFieldTree(
+            tree,
+            isStatisticItem,
+            () => {
+                return true;
+            },
+            (items) => {
+                return filter_(items, ({tags: {job_type, pool_tree}}) => {
+                    if (activeJobType && job_type !== activeJobType) {
+                        return false;
+                    }
+                    if (activePoolTree && pool_tree !== activePoolTree) {
+                        return false;
+                    }
+                    return true;
+                });
+            },
+        );
+    },
+);
+
+export const getOperationStatisticsFiltered = createSelector(
+    [getOperationStatisticsFilteredTree],
+    (tree) => {
+        const res: Array<{
+            name: string;
+            title: string;
+            level: number;
+            data?: Partial<Record<JobState, StatisticItemSummary>>;
+            isLeafNode?: boolean;
+        }> = [];
+        fieldTreeForEach(tree ?? {}, isStatisticItem, (path, _tree, item) => {
+            const isLeafNode = Boolean(item);
+            res.push({
+                title: path[path.length - 1],
+                level: path.length - 1,
+                data: item ? itemToRow(item) : undefined,
+                isLeafNode,
+                name: path.join('/'),
+            });
+        });
+        return res;
+    },
+);
+
+function itemToRow(items: Array<StatisticItem>) {
+    const res: Partial<Record<JobState, StatisticItemSummary>> = {};
+    forEach_(items, ({summary, tags: {job_state}}) => {
+        res[job_state] = mergeSummary(summary, res[job_state]);
+    });
+    return res;
+}
+
+function mergeSummary(summary: StatisticItemSummary, current?: StatisticItemSummary) {
+    if (!current) {
+        return summary;
+    }
+
+    const c = sum_([summary.count, current.count])!;
+    const s = sum_([summary.sum, current?.sum]);
+    return {
+        min: min_([summary.min, current.min])!,
+        max: max_([summary.max, current.max])!,
+        count: c,
+        sum: s,
+    };
+}
