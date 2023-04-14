@@ -10,7 +10,7 @@
     "dist"
   ],
   "scripts": {
-    "prepublishOnly": "rm -f README.md && npm run build:lib && npm run build",
+    "prepublishOnly": "npm run build:lib && npm run build",
     "build": "npm run copy:icons &&  NODE_OPTIONS=\"--max-old-space-size=4096\" NODE_ENV=production app-builder build --config ./build.app.config.ts",
     "build:lib": "rm -rf build && npm run build:lib:ui && npm run build:lib:server",
     "build:lib:ui": "NODE_OPTIONS=\"--max-old-space-size=4096\" NODE_ENV=production app-builder build --config ./build.lib.config.ts && cp -r img assets build",
