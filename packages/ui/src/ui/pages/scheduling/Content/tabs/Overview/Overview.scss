@@ -221,7 +221,7 @@
         color: var(--yc-color-text-secondary);
         &_edited {
             color: unset;
-            font-weight: $font-weight-bold;
+            font-weight: var(--yc-font-weight-bold);
         }
     }
 

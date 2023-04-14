@@ -67,6 +67,7 @@ import unipika from '../../../../../common/thor/unipika';
 
 import {loadColumnPresetIfDefined, saveColumnPreset, setTablePresetHash} from './columns-preset';
 import {makeTableRumId} from './table-rum-id';
+import {getFontFamilies} from '../../../../selectors/settings-ts';
 
 const requests = new CancelHelper();
 const toaster = new Toaster();
@@ -365,11 +366,8 @@ function restoreColumns(state) {
 }
 
 // TODO: consider switching back for <link rel="preload"> once it's supported in all major browsers
-function preloadTableFont() {
-    return Promise.all([
-        new FontFaceObserver('RobotoMono', {weight: 400}).load(null, 10000),
-        new FontFaceObserver('RobotoMono', {weight: 700}).load(null, 10000),
-    ]);
+function preloadTableFont(fontFamily) {
+    return new FontFaceObserver(fontFamily).load(null, 10000);
 }
 
 export function updateTableData() {
@@ -453,6 +451,7 @@ export function getTableData() {
         const state = getState();
 
         const attributes = getAttributes(state);
+        const fontFamilies = getFontFamilies(state);
 
         return dispatch(loadColumnPresetIfDefined()).then(() => {
             const updateColumns = ({
@@ -496,7 +495,10 @@ export function getTableData() {
             // 3. If at the previous step was returned an array then building columns based on stored columns and save their in the store.
             // 4. load table rows for columns in the store
 
-            return Promise.all([restoreColumns(getState()), preloadTableFont()])
+            return Promise.all([
+                restoreColumns(getState()),
+                preloadTableFont(fontFamilies.monospace),
+            ])
                 .then(([{columns, omittedColumns, storedColumns, ...rest}]) => {
                     if (columns) {
                         updateColumns({

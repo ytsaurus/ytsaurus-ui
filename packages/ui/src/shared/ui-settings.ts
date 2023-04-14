@@ -28,6 +28,10 @@ export interface UISettings {
     queryTrackerCluster?: string;
 
     oauthTokenUrl?: string;
+
+    defaultFontType?: keyof Required<UISettings>['fontTypes'];
+
+    fontTypes?: Record<string, {regular: string; monospace: string}>;
 }
 
 export const uiSettingFromEnv: Partial<UISettings> = {

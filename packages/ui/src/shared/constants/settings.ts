@@ -32,6 +32,7 @@ export const SettingName = {
     },
     GLOBAL: {
         THEME: 'theme',
+        FONT_TYPE: 'fontType',
         NAVIGATION_PANEL_EXPAND: 'navigationPanelExpand',
         AUTO_REFRESH: 'autoRefresh',
         PAGES_ORDER: 'pagesOrder',
@@ -87,9 +88,9 @@ export const SettingName = {
         DEFAULT_CHYT_ALIAS: 'defaultChytAlias',
         TABLE_DISPLAY_RAW_STRINGS: 'tableDisplayRawStrings',
         ANNOTATION_VISIBILITY: 'annotationVisibility',
-        QUEUE_PARTITIONS_VISIBILITY: 'queuePartitionsVisibility', // YTFRONT-3327-column-button
-        QUEUE_CONSUMERS_VISIBILITY: 'queueConsumersVisibility', // YTFRONT-3327-column-button
-        CONSUMER_PARTITIONS_VISIBILITY: 'consumerPartitionsVisibility', // YTFRONT-3327-column-button
+        QUEUE_PARTITIONS_VISIBILITY: 'queuePartitionsVisibility',
+        QUEUE_CONSUMERS_VISIBILITY: 'queueConsumersVisibility',
+        CONSUMER_PARTITIONS_VISIBILITY: 'consumerPartitionsVisibility',
     },
     A11Y: {
         USE_SAFE_COLORS: 'useSafeColors',
