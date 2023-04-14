@@ -146,6 +146,7 @@ export function prepareBundles(tabletCells, bundles) {
                 res.push(aggregation[key]);
             } else {
                 res.push({
+                    $attributes: value.$attributes,
                     ...collectBundlesAttrs({}, value.$attributes),
                     bundle: key,
                     nodes: value.$attributes.nodes,
