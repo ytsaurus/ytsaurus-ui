@@ -184,13 +184,18 @@ export function makeTabProps<TabName extends string>(
     };
 }
 
-export function makeRadioButtonProps(items: string[]) {
-    return _.map(items, (value) => {
+export function makeRadioButtonProps(items: string[], allItemValue?: string) {
+    const res = _.map(items, (value) => {
         return {
             value,
             text: hammer.format['ReadableField'](value),
         };
     });
+
+    if (allItemValue !== undefined) {
+        res.splice(0, 0, {value: allItemValue, text: 'All'});
+    }
+    return res;
 }
 
 export function makeRadioButtonPropsByKey(items: {[k: string]: string}) {

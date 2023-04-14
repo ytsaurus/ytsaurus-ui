@@ -14,7 +14,10 @@ export const statisticsParams: LocationParameters = {
         initialState: initialFilter,
     },
     jobType: {
-        stateKey: 'operations.statistics.activeJobType',
+        stateKey: 'operations.statistics.jobTypeFiter',
+    },
+    poolTree: {
+        stateKey: 'operations.statistics.poolTreeFilter',
     },
     aggregator: {
         stateKey: 'operations.statistics.activeAggregation',
@@ -27,7 +30,8 @@ export function getStatisticsPreparedState(state: RootState, {query}: {query: Ro
         const queryStatistics = query.operations.statistics;
 
         updateIfChanged(draftStatistics, 'filterText', queryStatistics.filterText);
-        updateIfChanged(draftStatistics, 'activeJobType', queryStatistics.activeJobType);
+        updateIfChanged(draftStatistics, 'jobTypeFilter', queryStatistics.jobTypeFilter);
+        updateIfChanged(draftStatistics, 'poolTreeFilter', queryStatistics.poolTreeFilter);
         updateIfChanged(draftStatistics, 'activeAggregation', queryStatistics.activeAggregation);
     });
 }

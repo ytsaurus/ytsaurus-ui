@@ -102,16 +102,3 @@ export function flatMetricsTree(metricsTree, currentFilter = '') {
 export function prepareStatistics(operation) {
     return ypath.getValue(operation, '/@progress/job_statistics');
 }
-
-export function prepareJobTypeOptions(statistics) {
-    const metricsList = prepareMetricsList(statistics);
-    let types = [];
-
-    _.each(metricsList.leaves, (metric) => {
-        _.each(metric.value, (stateStatistics) => {
-            types = types.concat(_.keys(stateStatistics));
-        });
-    });
-
-    return _.uniq(types);
-}

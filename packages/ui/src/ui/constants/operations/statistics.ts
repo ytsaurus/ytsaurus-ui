@@ -7,7 +7,9 @@ const PREFIX = createPrefix('operations', Tab.STATISTICS);
 export const SET_TREE_STATE = `${PREFIX}SET_TREE_STATE` as const;
 export const CHANGE_FILTER_TEXT = `${PREFIX}CHANGE_FILTER_TEXT` as const;
 export const CHANGE_AGGREGATION = `${PREFIX}CHANGE_AGGREGATION` as const;
-export const CHANGE_JOB_TYPE = `${PREFIX}CHANGE_JOB_TYPE` as const;
+export const OPERATION_STATISTICS_PARTIAL = `${PREFIX}PARTIAL` as const;
+
+export const STATISTICS_FILTER_ALL_VALUE = '';
 
 export const AGGREGATOR_OPTIONS = ['avg', 'min', 'max', 'sum', 'count'];
 export const DEBOUNCE_DELAY = 500;

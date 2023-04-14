@@ -2,7 +2,7 @@ import {
     SET_TREE_STATE,
     CHANGE_FILTER_TEXT,
     CHANGE_AGGREGATION,
-    CHANGE_JOB_TYPE,
+    OPERATION_STATISTICS_PARTIAL,
 } from '../../../constants/operations/statistics';
 import {getOperation} from '../../../store/selectors/operations/operation';
 import {getSettingOperationStatisticsActiveJobTypes} from '../../../store/selectors/settings-ts';
@@ -32,8 +32,8 @@ export function changeAggregation({target}) {
 export function changeJobType(jobType) {
     return (dispatch, getState) => {
         dispatch({
-            type: CHANGE_JOB_TYPE,
-            data: {activeJobType: jobType},
+            type: OPERATION_STATISTICS_PARTIAL,
+            data: {jobTypeFilter: jobType},
         });
 
         const state = getState();
@@ -48,5 +48,11 @@ export function changeJobType(jobType) {
                 }),
             );
         }
+    };
+}
+
+export function changePoolTreeFilter(poolTreeFilter) {
+    return (dispatch) => {
+        dispatch({type: OPERATION_STATISTICS_PARTIAL, data: {poolTreeFilter}});
     };
 }
