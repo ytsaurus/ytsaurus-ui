@@ -17,7 +17,7 @@ import {prepareRuntime} from '../../../utils/operations/tabs/details/runtime';
 import {prepareJobs} from '../../../utils/operations/tabs/details/tasks.js';
 import {prepareAlerts} from '../../../utils/operations/tabs/details/alerts';
 import {prepareError} from '../../../utils/operations/tabs/details/error';
-import {prepareActions} from '../../../utils/operations/detail';
+import {prepareActions} from '../../../utils/operations/details-ts';
 import {mergeStateOnClusterChange} from '../utils';
 
 const initialState = {
@@ -28,7 +28,11 @@ const initialState = {
         message: '',
         details: null,
     },
-    operation: {$value: undefined},
+    /** @type {import('../../../pages/operations/selectors').DetailedOperationSelector} */
+    operation: {
+        $value: undefined,
+    },
+    /** @type {ReturnType<typeof prepareActions>} */
     actions: [],
     details: {
         /** @type {Array<{alert_type: string, time: string, error: YTError}>} */
