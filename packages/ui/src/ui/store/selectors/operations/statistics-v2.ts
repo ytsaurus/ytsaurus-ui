@@ -1,6 +1,7 @@
 import {createSelector} from 'reselect';
 import filter_ from 'lodash/filter';
 import forEach_ from 'lodash/forEach';
+import isEmpty_ from 'lodash/isEmpty';
 import min_ from 'lodash/min';
 import max_ from 'lodash/max';
 import reduce_ from 'lodash/reduce';
@@ -43,7 +44,7 @@ interface StatisticItemTags {
     pool_tree: string;
 }
 
-type JobState = 'completed' | 'running' | 'aborted' | 'failed' | 'lost';
+export type JobState = 'completed' | 'running' | 'aborted' | 'failed' | 'lost';
 
 type StatisticTree = FieldTree<Array<StatisticItem>>;
 
@@ -102,6 +103,10 @@ export const getOperationStatisticsActiveFilterValues = createSelector(
         };
     },
 );
+
+export const getOperationStatiscsHasData = (state: RootState) => {
+    return !isEmpty_(getOperationStatisticsV2(state));
+};
 
 export const getOperationStatisticsFilteredTree = createSelector(
     [getOperationStatisticsActiveFilterValues, getOperationStatisticsV2],
