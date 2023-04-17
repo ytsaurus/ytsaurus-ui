@@ -8,9 +8,15 @@ import min_ from 'lodash/min';
 import map_ from 'lodash/map';
 import max_ from 'lodash/max';
 import reduce_ from 'lodash/reduce';
+import some_ from 'lodash/some';
 import sum_ from 'lodash/sum';
 
-import {FieldTree, fieldTreeForEach, filterFieldTree} from '../../../common/hammer/field-tree';
+import {
+    FieldTree,
+    fieldTreeForEach,
+    fieldTreeSome,
+    filterFieldTree,
+} from '../../../common/hammer/field-tree';
 import format from '../../../common/hammer/format';
 
 import ypath from '../../../common/thor/ypath';
@@ -20,6 +26,7 @@ import {ValueOf} from '../../../../@types/types';
 
 const getJobTypeFilter = (state: RootState) => state.operations.statistics.jobTypeFilter;
 const getPoolTreeFilter = (state: RootState) => state.operations.statistics.poolTreeFilter;
+const getFilterText = (state: RootState) => state.operations.statistics.filterText;
 
 const getOperationDetailsOperation = (state: RootState) => state.operations.detail.operation;
 
@@ -95,8 +102,8 @@ export const getOperationStatisticsAvailableValues = createSelector(
 );
 
 export const getOperationStatisticsActiveFilterValues = createSelector(
-    [getJobTypeFilter, getPoolTreeFilter, getOperationStatisticsAvailableValues],
-    (jobTypeFilter, poolTreeFilter, {job_type, pool_tree}) => {
+    [getJobTypeFilter, getPoolTreeFilter, getFilterText, getOperationStatisticsAvailableValues],
+    (jobTypeFilter, poolTreeFilter, filterText, {job_type, pool_tree}) => {
         return {
             activeJobType:
                 -1 === job_type.indexOf(jobTypeFilter)
@@ -106,6 +113,7 @@ export const getOperationStatisticsActiveFilterValues = createSelector(
                 -1 === pool_tree.indexOf(poolTreeFilter)
                     ? STATISTICS_FILTER_ALL_VALUE
                     : poolTreeFilter,
+            filterText,
         };
     },
 );
@@ -116,15 +124,29 @@ export const getOperationStatiscsHasData = (state: RootState) => {
 
 export const getOperationStatisticsFilteredTree = createSelector(
     [getOperationStatisticsActiveFilterValues, getOperationStatisticsV2],
-    ({activeJobType, activePoolTree}, tree) => {
-        if (!activeJobType && !activePoolTree) {
+    ({activeJobType, activePoolTree, filterText}, tree) => {
+        if (!activeJobType && !activePoolTree && !filterText) {
             return tree;
         }
+
+        const checkLastItemOfPath = !filterText
+            ? () => true
+            : (p: Array<string>) => {
+                  return -1 !== p[p.length - 1].indexOf(filterText);
+              };
+
+        const checkName = !filterText
+            ? () => true
+            : (name: string) => -1 !== name.indexOf(filterText);
+
         return filterFieldTree(
             tree ?? {},
             isStatisticItem,
-            () => {
-                return true;
+            (path, tree) => {
+                if (some_(path, checkName)) {
+                    return true;
+                }
+                return tree && fieldTreeSome(tree, isStatisticItem, checkLastItemOfPath);
             },
             (items) => {
                 return filter_(items, ({tags: {job_type, pool_tree}}) => {
