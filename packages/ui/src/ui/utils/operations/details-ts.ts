@@ -1,4 +1,4 @@
-import {DetailedOperationSelector} from 'pages/operations/selectors';
+import {DetailedOperationSelector} from '../../pages/operations/selectors';
 import ypath from '../../common/thor/ypath';
 import {PLEASE_PROCEED_TEXT} from '../../utils/actions';
 import {IconName} from '../../components/Icon/Icon';

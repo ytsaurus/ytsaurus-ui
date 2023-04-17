@@ -39,10 +39,6 @@ import {
     POLLING_INTERVAL,
     OperationTabType,
 } from '../../../constants/operations/detail';
-import {
-    getTotalCpuTimeSpent,
-    getTotalJobWallTime,
-} from '../../../store/selectors/operations/statistics';
 import {showEditPoolsWeightsModal} from '../../../store/actions/operations';
 import {getOperation} from '../../../store/actions/operations/detail';
 import {isOperationId} from '../../../utils/operations/list';
@@ -66,6 +62,8 @@ import OperationDetailsMonitor from './tabs/monitor/OperationDetailsMonitor';
 import {getJobsMonitorTabVisible} from '../../../store/selectors/operations/jobs-monitor';
 import {
     getOperationStatiscsHasData,
+    getTotalCpuTimeSpent,
+    getTotalJobWallTime,
     JobState,
 } from '../../../store/selectors/operations/statistics-v2';
 import UIFactory from '../../../UIFactory';
