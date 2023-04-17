@@ -59,3 +59,27 @@ export function filterFieldTree<T>(
     });
     return empty ? undefined : res;
 }
+
+export function fieldTreeSome<T>(
+    vertex: FieldTree<T>,
+    isT: (v: FieldTree<T> | T) => v is T,
+    predicate: FieldTreePredicate<T, boolean | undefined>,
+    path: Array<string> = [],
+): boolean {
+    return Object.keys(vertex).some((k) => {
+        path.push(k);
+        const item = vertex[k];
+        if (isT(item)) {
+            if (predicate(path, undefined, item)) {
+                return true;
+            }
+        } else if (predicate(path, item, undefined)) {
+            return true;
+        } else if (fieldTreeSome(item, isT, predicate, path)) {
+            return true;
+        }
+
+        path.pop();
+        return false;
+    });
+}

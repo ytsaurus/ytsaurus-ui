@@ -1,5 +1,11 @@
 import _ from 'lodash';
-import {FieldTree, FieldTreePredicate, fieldTreeForEach, filterFieldTree} from './field-tree';
+import {
+    FieldTree,
+    FieldTreePredicate,
+    fieldTreeForEach,
+    fieldTreeSome,
+    filterFieldTree,
+} from './field-tree';
 
 function makeCollector<T, R>(fn?: FieldTreePredicate<T, R>) {
     const dst: Array<string> = [];
@@ -96,5 +102,75 @@ describe('filterFieldTree', () => {
         };
         const res = filterFieldTree(tree, Array.isArray, predicate, filterT);
         expect(res).toEqual({a: {c: [20, 22], d: {e: [30, 33]}}, g: [50]});
+    });
+});
+
+describe('fieldTreeSome', () => {
+    let tree: FieldTree<Array<number>>;
+
+    beforeEach(() => {
+        tree = {
+            a: {
+                b: [2],
+                c: [20, 3, 22],
+                d: {
+                    e: [30, 4, 33],
+                    f: [4],
+                },
+            },
+            g: [50],
+            i: {
+                secret: [600],
+            },
+        };
+    });
+
+    it('contains value >= 10', () => {
+        const obj: {predicate: FieldTreePredicate<Array<number>, boolean | undefined>} = {
+            predicate: (_path, _t, item) => {
+                return item?.some((v) => v >= 10);
+            },
+        };
+
+        spyOn(obj, 'predicate').and.callThrough();
+
+        expect(fieldTreeSome(tree, Array.isArray, obj.predicate)).toBe(true);
+        expect(obj.predicate).toBeCalledTimes(3);
+    });
+
+    it('contains field with name "secret"', () => {
+        const obj: {predicate: FieldTreePredicate<Array<number>, boolean | undefined>} = {
+            predicate: (path) => {
+                return -1 !== path[path.length - 1].indexOf('secret');
+            },
+        };
+
+        spyOn(obj, 'predicate').and.callThrough();
+
+        expect(fieldTreeSome(tree, Array.isArray, obj.predicate)).toBe(true);
+        expect(obj.predicate).toBeCalledTimes(9);
+    });
+
+    it('missing 666 value', () => {
+        const obj: {predicate: FieldTreePredicate<Array<number>, boolean | undefined>} = {
+            predicate: (_path, _tree, item) => {
+                return item?.some((v) => v === 666);
+            },
+        };
+
+        spyOn(obj, 'predicate').and.callThrough();
+
+        expect(fieldTreeSome(tree, Array.isArray, obj.predicate)).toBe(false);
+        expect(obj.predicate).toBeCalledTimes(9);
+    });
+
+    it('empty tree', () => {
+        const obj = {
+            predicate: () => true,
+        };
+        spyOn(obj, 'predicate').and.callThrough();
+
+        expect(fieldTreeSome({}, Array.isArray, obj.predicate)).toBe(false);
+        expect(obj.predicate).toBeCalledTimes(0);
     });
 });

@@ -248,14 +248,13 @@ export class Statistics extends Component<Props> {
 }
 
 const mapStateToProps = (state: RootState) => {
-    const {treeState, filterText, activeAggregation} = state.operations.statistics;
+    const {treeState, activeAggregation} = state.operations.statistics;
 
     const {job_type: jobTypes, pool_tree: poolTrees} = getOperationStatisticsAvailableValues(state);
 
     return {
         items: getOperationStatisticsFiltered(state),
         treeState,
-        filterText,
         activeAggregation,
         jobTypes,
         poolTrees,

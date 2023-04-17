@@ -3,7 +3,7 @@ import ypath from '../../common/thor/ypath';
 import {PLEASE_PROCEED_TEXT} from '../../utils/actions';
 import {IconName} from '../../components/Icon/Icon';
 
-interface OperationAction {
+export interface OperationAction {
     modalKey: string;
     name: string;
     successMessage: string;
