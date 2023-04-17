@@ -1,13 +1,17 @@
 import {createSelector} from 'reselect';
+import compact_ from 'lodash/compact';
 import filter_ from 'lodash/filter';
 import forEach_ from 'lodash/forEach';
+import get_ from 'lodash/get';
 import isEmpty_ from 'lodash/isEmpty';
 import min_ from 'lodash/min';
+import map_ from 'lodash/map';
 import max_ from 'lodash/max';
 import reduce_ from 'lodash/reduce';
 import sum_ from 'lodash/sum';
 
 import {FieldTree, fieldTreeForEach, filterFieldTree} from '../../../common/hammer/field-tree';
+import format from '../../../common/hammer/format';
 
 import ypath from '../../../common/thor/ypath';
 import {STATISTICS_FILTER_ALL_VALUE} from '../../../constants/operations/statistics';
@@ -22,7 +26,9 @@ const getOperationDetailsOperation = (state: RootState) => state.operations.deta
 export const getOperationStatisticsV2 = createSelector(
     [getOperationDetailsOperation],
     (operation) => {
-        return ypath.getValue(operation, '/@progress/job_statistics_v2') as StatisticTreeRoot;
+        return ypath.getValue(operation, '/@progress/job_statistics_v2') as
+            | StatisticTreeRoot
+            | undefined;
     },
 );
 
@@ -52,7 +58,7 @@ type StatisticTreeRoot = StatisticTree & {
     time?: StatisticTree & {total?: Array<StatisticItem>};
 };
 
-export function isStatisticItem(v: ValueOf<StatisticTree>): v is Array<StatisticItem> {
+export function isStatisticItem(v?: ValueOf<StatisticTree>): v is Array<StatisticItem> {
     return Array.isArray(v);
 }
 
@@ -115,7 +121,7 @@ export const getOperationStatisticsFilteredTree = createSelector(
             return tree;
         }
         return filterFieldTree(
-            tree,
+            tree ?? {},
             isStatisticItem,
             () => {
                 return true;
@@ -181,3 +187,39 @@ function mergeSummary(summary: StatisticItemSummary, current?: StatisticItemSumm
         sum: s,
     };
 }
+
+export const getTotalJobWallTime = createSelector(getOperationStatisticsV2, (tree) => {
+    const item = tree?.time?.total;
+    return excludeRunningAndCalcSum(item);
+});
+
+function excludeRunningAndCalcSum(item?: Array<StatisticItem>) {
+    const {running: _tmp, ...rest} = itemToRow(item ?? []);
+    const valuesToSum = compact_(map_(rest, 'sum'));
+    return !valuesToSum.length ? format.NO_VALUE : sum_(valuesToSum);
+}
+
+const CPU_TIME_SPENT_PART_NAMES = [
+    'job_proxy.cpu.user',
+    'job_proxy.cpu.system',
+    'user_job.cpu.user',
+    'user_job.cpu.system',
+];
+
+export const getTotalCpuTimeSpent = createSelector([getOperationStatisticsV2], (tree) => {
+    const items = reduce_(
+        CPU_TIME_SPENT_PART_NAMES,
+        (acc, path) => {
+            const item = get_(tree, path);
+            if (isStatisticItem(item)) {
+                const value = excludeRunningAndCalcSum(item);
+                if (value !== undefined) {
+                    acc.push(value);
+                }
+            }
+            return acc;
+        },
+        [] as Array<number>,
+    );
+    return items.length ? sum_(items) : format.NO_VALUE;
+});
