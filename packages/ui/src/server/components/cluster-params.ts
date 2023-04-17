@@ -39,7 +39,6 @@ function fetchClusterParams(cluster: string, {ctx}: {ctx?: AppContext}) {
                 xYTCorrelationId,
                 responseStatus,
             });
-            // @ts-expect-error
             cx.stats?.('ytRequests', {
                 responseStatus,
                 headerContentLength: 0,

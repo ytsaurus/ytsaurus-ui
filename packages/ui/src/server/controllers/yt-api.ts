@@ -71,7 +71,6 @@ export async function ytTvmApiHandler(req: Request, res: Response) {
         const timestamp = Date.now();
         const {headerContentLength} = overrides;
         const contentLength = Number(headerContentLength);
-        // @ts-expect-error
         ctx.stats?.('ytRequests', {
             ...overrides,
             headerContentLength: isNaN(contentLength) ? 0 : contentLength,

@@ -31,7 +31,6 @@ export async function getXSRFToken(req: Request, config: YTApiUserSetup, actionP
             responseStatus,
         });
 
-        // @ts-expect-error
         req.ctx.stats?.('ytRequests', {
             responseStatus,
             headerContentLength: 0,
