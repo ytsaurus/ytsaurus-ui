@@ -23,6 +23,7 @@ import ypath from '../../../common/thor/ypath';
 import {STATISTICS_FILTER_ALL_VALUE} from '../../../constants/operations/statistics';
 import {RootState} from '../../../store/reducers';
 import {ValueOf} from '../../../../@types/types';
+import {prepareDataFromGraph} from '../../../utils/operations/tabs/details/tasks';
 
 const getJobTypeFilter = (state: RootState) => state.operations.statistics.jobTypeFilter;
 const getPoolTreeFilter = (state: RootState) => state.operations.statistics.poolTreeFilter;
@@ -63,6 +64,12 @@ type StatisticTree = FieldTree<Array<StatisticItem>>;
 
 type StatisticTreeRoot = StatisticTree & {
     time?: StatisticTree & {total?: Array<StatisticItem>};
+    data?: {
+        input?: {
+            data_weight?: Array<StatisticItem>;
+            row_count?: Array<StatisticItem>;
+        };
+    };
 };
 
 export function isStatisticItem(v?: ValueOf<StatisticTree>): v is Array<StatisticItem> {
@@ -245,3 +252,72 @@ export const getTotalCpuTimeSpent = createSelector([getOperationStatisticsV2], (
     );
     return items.length ? sum_(items) : format.NO_VALUE;
 });
+
+export const getOperationDetailTasksData = createSelector(
+    [getOperationDetailsOperation, getOperationStatisticsV2],
+    (operation, stats) => {
+        const items = prepareDataFromGraph(operation);
+
+        const {running: _r, ...timeStatistics} = itemToRow(stats?.time?.total ?? []);
+
+        const abortedJobsTime = timeStatistics.aborted?.sum;
+        const completedJobsTime = timeStatistics.completed?.sum;
+
+        const abortedJobsTimeRatio = prepareAbortedJobsTimeRatio(
+            abortedJobsTime,
+            completedJobsTime,
+        );
+
+        const averageReadDataRate = prepareAverageReadDataRate(stats || {}, completedJobsTime);
+        const averageReadRowRate = prepareAverageReadRowRate(stats || {}, completedJobsTime);
+
+        if (
+            !timeStatistics &&
+            !abortedJobsTime &&
+            !completedJobsTime &&
+            !abortedJobsTimeRatio &&
+            !averageReadDataRate &&
+            !averageReadDataRate &&
+            items.length === 0
+        ) {
+            return {items: []};
+        }
+
+        return {
+            items,
+            abortedJobsTime,
+            completedJobsTime,
+            abortedJobsTimeRatio,
+            averageReadDataRate,
+            averageReadRowRate,
+        };
+    },
+);
+
+function prepareAbortedJobsTimeRatio(abortedJobsTime?: number, completedJobsTime?: number) {
+    let abortedJobsShare;
+
+    if (typeof completedJobsTime !== 'undefined' && typeof abortedJobsTime !== 'undefined') {
+        if (abortedJobsTime > 0 && completedJobsTime > 0) {
+            abortedJobsShare = (abortedJobsTime / completedJobsTime) * 100;
+        } else if (abortedJobsTime > 0) {
+            abortedJobsShare = 100;
+        } else if (completedJobsTime > 0) {
+            abortedJobsShare = 0;
+        }
+    }
+
+    return abortedJobsShare;
+}
+
+function prepareAverageReadDataRate(stats: StatisticTreeRoot, completedJobsTime = NaN) {
+    const completedInputSize = itemToRow(stats?.data?.input?.data_weight || []).completed?.sum ?? 0;
+
+    return completedInputSize > 0 ? completedInputSize / (completedJobsTime / 1000) : undefined;
+}
+
+function prepareAverageReadRowRate(stats: StatisticTreeRoot, completedJobsTime = NaN) {
+    const completedInputRows = itemToRow(stats?.data?.input?.row_count || []).completed?.sum ?? 0;
+
+    return completedJobsTime > 0 ? completedInputRows / (completedJobsTime / 1000) : undefined;
+}

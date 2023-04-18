@@ -1,11 +1,12 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+import {ConnectedProps, connect} from 'react-redux';
 import cn from 'bem-cn-lite';
 import forEach_ from 'lodash/forEach';
 import isEmpty_ from 'lodash/isEmpty';
 
-import MetaTable, {Template} from '../../../../../../components/MetaTable/MetaTable';
+import CollapsibleSection from '../../../../../../components/CollapsibleSection/CollapsibleSection';
 import ElementsTable from '../../../../../../components/ElementsTable/ElementsTable';
+import MetaTable, {Template} from '../../../../../../components/MetaTable/MetaTable';
 
 import hammer from '../../../../../../common/hammer';
 import ypath from '../../../../../../common/thor/ypath';
@@ -16,21 +17,10 @@ import {tasksTablesProps} from '../../../../../../utils/operations/tabs/details/
 import {hasProgressTasks} from '../../../../../../utils/operations/tabs/details/data-flow';
 import ClickableAttributesButton from '../../../../../../components/AttributesButton/ClickableAttributesButton';
 import ExpandIcon from '../../../../../../components/ExpandIcon/ExpandIcon';
+import {RootState} from '../../../../../../store/reducers';
+import {getOperationDetailTasksData} from '../../../../../../store/selectors/operations/statistics-v2';
 
 const block = cn('jobs');
-
-export const jobsProps = PropTypes.shape({
-    abortedJobsTime: PropTypes.number,
-    abortedJobsTimeRatio: PropTypes.number,
-    averageReadDataRate: PropTypes.number,
-    averageReadRowRate: PropTypes.number,
-    completedJobsTime: PropTypes.number,
-    items: PropTypes.array.isRequired,
-    timeStatistics: PropTypes.shape({
-        aborted: PropTypes.object,
-        completed: PropTypes.object,
-    }),
-});
 
 function prepareVisibleItems(items: Array<Item> = [], expandedState: Record<string, boolean>) {
     const visibleItems: typeof items = [];
@@ -44,19 +34,6 @@ function prepareVisibleItems(items: Array<Item> = [], expandedState: Record<stri
     return {
         items,
         visibleItems,
-    };
-}
-
-interface JobsInfo {
-    abortedJobsTime?: number;
-    abortedJobsTimeRatio?: number;
-    averageReadDataRate?: number;
-    averageReadRowRate?: number;
-    completedJobsTime?: number;
-    items: Array<Item>;
-    timeStatistics?: {
-        aborted: unknown;
-        completed: unknown;
     };
 }
 
@@ -82,21 +59,22 @@ interface CompletedStats {
     nonInterrupted: {total: number};
 }
 
-interface Props {
-    operation?: unknown;
-    jobs: JobsInfo;
-    items?: Array<Item>;
+interface OwnProps {
+    className?: string;
+    collapsibleSize?: 'ss';
 }
+
+type Props = OwnProps & ConnectedProps<typeof connector>;
 
 interface State {
     allowActions: boolean;
     expandedState: Record<string, boolean>;
     visibleItems: Array<Item>;
-    items: Props['items'];
+    items: Array<Item>;
     operation: unknown;
 }
 
-export default class Tasks extends React.Component<Props, State> {
+class Tasks extends React.Component<Props, State> {
     static getDerivedStateFromProps(props: Props, state: State) {
         const {
             operation,
@@ -264,6 +242,15 @@ export default class Tasks extends React.Component<Props, State> {
     }
 
     render() {
+        const {className, jobs, collapsibleSize} = this.props;
+        return !jobs?.items?.length ? null : (
+            <CollapsibleSection name="Tasks" className={className} size={collapsibleSize}>
+                {this.renderContent()}
+            </CollapsibleSection>
+        );
+    }
+
+    renderContent() {
         const {
             abortedJobsTimeRatio,
             abortedJobsTime,
@@ -457,3 +444,10 @@ function TaskInfo(props: ItemTaskInfo) {
         />
     );
 }
+
+const connector = connect((state: RootState) => {
+    const taskData = getOperationDetailTasksData(state);
+    return {jobs: taskData, operation: state.operations.detail.operation};
+});
+
+export default connector(Tasks);
