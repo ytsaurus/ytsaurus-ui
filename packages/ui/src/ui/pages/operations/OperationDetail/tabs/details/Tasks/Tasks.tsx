@@ -1,7 +1,8 @@
-import React, {Component} from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import cn from 'bem-cn-lite';
-import _ from 'lodash';
+import forEach_ from 'lodash/forEach';
+import isEmpty_ from 'lodash/isEmpty';
 
 import MetaTable, {Template} from '../../../../../../components/MetaTable/MetaTable';
 import ElementsTable from '../../../../../../components/ElementsTable/ElementsTable';
@@ -31,12 +32,12 @@ export const jobsProps = PropTypes.shape({
     }),
 });
 
-function prepareVisibleItems(items, expandedState) {
-    const visibleItems = [];
-    _.forEach(items, (item) => {
+function prepareVisibleItems(items: Array<Item> = [], expandedState: Record<string, boolean>) {
+    const visibleItems: typeof items = [];
+    forEach_(items, (item) => {
         visibleItems.push(item);
         const {caption} = item;
-        if (expandedState[caption]) {
+        if (expandedState[caption!]) {
             visibleItems.push({taskInfo: item.info});
         }
     });
@@ -46,23 +47,57 @@ function prepareVisibleItems(items, expandedState) {
     };
 }
 
-export default class Tasks extends Component {
-    static propTypes = {
-        jobs: jobsProps,
-        items: PropTypes.arrayOf([
-            PropTypes.shape({
-                type: PropTypes.string,
-                caption: PropTypes.string,
-                jobType: PropTypes.string,
-                info: PropTypes.object,
-                counters: PropTypes.object,
-                abortedStats: PropTypes.object,
-                completedStats: PropTypes.object,
-            }),
-        ]),
+interface JobsInfo {
+    abortedJobsTime?: number;
+    abortedJobsTimeRatio?: number;
+    averageReadDataRate?: number;
+    averageReadRowRate?: number;
+    completedJobsTime?: number;
+    items: Array<Item>;
+    timeStatistics?: {
+        aborted: unknown;
+        completed: unknown;
     };
+}
 
-    static getDerivedStateFromProps(props, state) {
+interface Item {
+    type?: string;
+    caption?: string;
+    jobType?: string;
+    info?: ItemTaskInfo;
+    taskInfo?: Item['info'];
+    counters?: Record<string, unknown>;
+    abortedStats?: AbortedStats;
+    completedStats?: CompletedStats;
+    isTotal?: boolean;
+}
+
+interface AbortedStats {
+    scheduled: {total: number};
+    nonScheduled: {total: number};
+}
+
+interface CompletedStats {
+    interrupted: {total: number};
+    nonInterrupted: {total: number};
+}
+
+interface Props {
+    operation?: unknown;
+    jobs: JobsInfo;
+    items?: Array<Item>;
+}
+
+interface State {
+    allowActions: boolean;
+    expandedState: Record<string, boolean>;
+    visibleItems: Array<Item>;
+    items: Props['items'];
+    operation: unknown;
+}
+
+export default class Tasks extends React.Component<Props, State> {
+    static getDerivedStateFromProps(props: Props, state: State) {
         const {
             operation,
             jobs: {items},
@@ -82,10 +117,10 @@ export default class Tasks extends Component {
             });
         }
 
-        return _.isEmpty(res) ? null : res;
+        return isEmpty_(res) ? null : res;
     }
 
-    state = {
+    state: State = {
         allowActions: false,
         expandedState: {},
 
@@ -95,7 +130,12 @@ export default class Tasks extends Component {
         operation: undefined,
     };
 
-    constructor(props) {
+    private templates: Record<
+        string | '__default__',
+        (item: Item, column: string) => React.ReactNode
+    >;
+
+    constructor(props: Props) {
         super(props);
 
         const self = this;
@@ -147,7 +187,7 @@ export default class Tasks extends Component {
                 const {expandedState, allowActions} = self.state;
                 const expandable = !isTotal && allowActions && caption;
 
-                const expanded = expandedState[caption];
+                const expanded = expandedState[caption!];
                 const onClick = !expandable ? undefined : () => self.toggleExpand(caption);
 
                 return (
@@ -156,7 +196,7 @@ export default class Tasks extends Component {
                             {Boolean(caption) && (
                                 <ExpandIcon
                                     visible={Boolean(onClick)}
-                                    expanded={expanded}
+                                    expanded={Boolean(expanded)}
                                     onClick={onClick}
                                 />
                             )}
@@ -194,7 +234,8 @@ export default class Tasks extends Component {
         };
     }
 
-    toggleExpand(name) {
+    // eslint-disable-next-line react/sort-comp
+    toggleExpand(name: string) {
         const expandedState = {...this.state.expandedState};
         if (expandedState[name]) {
             delete expandedState[name];
@@ -208,17 +249,18 @@ export default class Tasks extends Component {
         });
     }
 
-    rowClassName(item) {
+    rowClassName(item: Item) {
         if (item.taskInfo) {
             return block('row-task-info');
         }
         return item.isTotal ? block('row-total') : undefined;
     }
 
-    colSpan(item, _rowIndex, colIndex) {
+    colSpan(item: Item, _rowIndex: number, colIndex: number) {
         if (item.taskInfo && colIndex === 0) {
             return 8;
         }
+        return undefined;
     }
 
     render() {
@@ -230,7 +272,8 @@ export default class Tasks extends Component {
             averageReadRowRate,
             items,
         } = this.props.jobs;
-        const rowRateFormat = (value) => hammer.format['NumberPerSecond'](value, {measure: 'rows'});
+        const rowRateFormat = (value: number) =>
+            hammer.format['NumberPerSecond'](value, {measure: 'rows'});
         const {allowActions, visibleItems} = this.state;
 
         return (
@@ -307,7 +350,19 @@ export default class Tasks extends Component {
     }
 }
 
-function TaskInfo(props) {
+interface ItemTaskInfo {
+    job_type: string;
+    has_user_job: boolean;
+    input_finished: boolean;
+    completed: boolean;
+    user_job_memory_reserve_factor: number;
+    start_time: string;
+    completion_time: string;
+    ready_time: string;
+    exhaust_time: string;
+}
+
+function TaskInfo(props: ItemTaskInfo) {
     const {
         job_type,
         has_user_job,
