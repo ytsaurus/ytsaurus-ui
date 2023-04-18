@@ -76,7 +76,7 @@ function prepareJobTypeOrder(jobTypeOrder) {
     return jobTypeOrder;
 }
 
-function prepareDataFromGraph(operation) {
+export function prepareDataFromGraph(operation) {
     if (hasProgressTasks(operation)) {
         return prepareDataFromGraphByTasks(operation);
     }
@@ -149,100 +149,6 @@ function prepareCounters(counters) {
         counters,
         abortedStats: prepareAbortedStatistics(counters),
         completedStats: prepareCompletedStatistics(counters),
-    };
-}
-
-function mergeStatsByJobType(stats, condition) {
-    const resultingStat = {
-        max: -Infinity,
-        count: 0,
-        min: Infinity,
-        sum: 0,
-        avg: 0,
-    };
-
-    _.each(stats, (value, jobType) => {
-        if (typeof condition !== 'function' || condition(jobType)) {
-            resultingStat.min = Math.min(resultingStat.min, value.min);
-            resultingStat.max = Math.max(resultingStat.max, value.max);
-            resultingStat.count += value.count;
-            resultingStat.sum += value.sum;
-            // Add computed aggregator 'avg' for group
-            resultingStat.avg = resultingStat.count && resultingStat.sum / resultingStat.count;
-        }
-    });
-
-    return resultingStat;
-}
-
-function prepareAbortedJobsTimeRatio(abortedJobsTime, completedJobsTime) {
-    let abortedJobsShare;
-
-    if (typeof completedJobsTime !== 'undefined' && typeof abortedJobsTime !== 'undefined') {
-        if (abortedJobsTime > 0 && completedJobsTime > 0) {
-            abortedJobsShare = (abortedJobsTime / completedJobsTime) * 100;
-        } else if (abortedJobsTime > 0) {
-            abortedJobsShare = 100;
-        } else if (completedJobsTime > 0) {
-            abortedJobsShare = 0;
-        }
-    }
-
-    return abortedJobsShare;
-}
-
-function prepareAverageReadDataRate(operation, completedJobsTime) {
-    const dataStatistics = ypath.getValue(
-        operation,
-        '/@progress/job_statistics/data/input/data_weight/$$',
-    );
-
-    const completedInputSize = dataStatistics && mergeStatsByJobType(dataStatistics.completed).sum;
-
-    return completedJobsTime > 0 ? completedInputSize / (completedJobsTime / 1000) : undefined;
-}
-
-function prepareAverageReadRowRate(operation, completedJobsTime) {
-    const rowStatistics = ypath.getValue(
-        operation,
-        '/@progress/job_statistics/data/input/row_count/$$',
-    );
-    const completedInputRows = rowStatistics && mergeStatsByJobType(rowStatistics.completed).sum;
-
-    return completedJobsTime > 0 ? completedInputRows / (completedJobsTime / 1000) : undefined;
-}
-
-export function prepareJobs(operation) {
-    const items = prepareDataFromGraph(operation);
-
-    const timeStatistics = ypath.getValue(operation, '/@progress/job_statistics/time/total/$$');
-    const abortedJobsTime = timeStatistics && mergeStatsByJobType(timeStatistics.aborted).sum;
-    const completedJobsTime = timeStatistics && mergeStatsByJobType(timeStatistics.completed).sum;
-    const abortedJobsTimeRatio = prepareAbortedJobsTimeRatio(abortedJobsTime, completedJobsTime);
-
-    const averageReadDataRate = prepareAverageReadDataRate(operation, completedJobsTime);
-    const averageReadRowRate = prepareAverageReadRowRate(operation, completedJobsTime);
-
-    if (
-        !timeStatistics &&
-        !abortedJobsTime &&
-        !completedJobsTime &&
-        !abortedJobsTimeRatio &&
-        !averageReadDataRate &&
-        !averageReadDataRate &&
-        items.length === 0
-    ) {
-        return null;
-    }
-
-    return {
-        items,
-        timeStatistics,
-        abortedJobsTime,
-        completedJobsTime,
-        abortedJobsTimeRatio,
-        averageReadDataRate,
-        averageReadRowRate,
     };
 }
 
