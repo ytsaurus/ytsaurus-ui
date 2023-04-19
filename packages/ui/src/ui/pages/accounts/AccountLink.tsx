@@ -4,9 +4,10 @@ import {AccountsTab} from '../../constants/accounts/accounts';
 import {Page} from '../../constants';
 import {useSelector} from 'react-redux';
 import {getCluster} from '../../store/selectors/global';
+import hammer from '../../common/hammer';
 
 interface Props {
-    account: string;
+    account?: string;
     cluster?: string;
 }
 
@@ -19,8 +20,14 @@ export default function AccountLink(props: Props) {
     const currentCluster = useSelector(getCluster);
     const cluster = propsCluster || currentCluster;
     return (
-        <Link theme={'primary'} routed url={genAccountsUrl(cluster, account)}>
-            {account}
-        </Link>
+        <>
+            {account ? (
+                <Link theme={'primary'} routed url={genAccountsUrl(cluster, account)}>
+                    {account}
+                </Link>
+            ) : (
+                hammer.format.NO_VALUE
+            )}
+        </>
     );
 }

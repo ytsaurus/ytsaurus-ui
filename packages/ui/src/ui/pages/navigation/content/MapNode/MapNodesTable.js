@@ -204,11 +204,7 @@ class MapNodesTable extends Component {
     }
 
     static renderAccount(item, columnName) {
-        return item[columnName] ? (
-            <AccountLink account={item[columnName]} />
-        ) : (
-            hammer.format['ValueOrDefault'](item[columnName])
-        );
+        return <AccountLink account={item[columnName]} />;
     }
 
     get hotkeys() {
