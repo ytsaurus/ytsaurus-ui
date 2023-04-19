@@ -260,7 +260,11 @@ export default function MultipleActions(props: {className: string}) {
             </span>
 
             <span className={b('item')}>
-                <DropdownMenu switcher={dropdownButton} items={items} />
+                <DropdownMenu
+                    disabled={allowModifyActions}
+                    switcher={dropdownButton}
+                    items={items}
+                />
             </span>
 
             <span className={b('item')}>
