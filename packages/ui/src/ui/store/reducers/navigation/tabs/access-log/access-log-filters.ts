@@ -71,7 +71,7 @@ export const initialState: AccessLogFiltersState = {
         transaction_info: false,
     },
 
-    time: {shortcutValue: '3h'},
+    time: {shortcutValue: '4h'},
 
     distinct_by: undefined,
 };
