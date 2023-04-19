@@ -13,7 +13,7 @@ import DataFlow, {resourcesProps, intermediateResourcesProps} from '../DataFlow/
 import Specification, {specificationProps} from '../Specification/Specification';
 import Runtime, {runtimeProps, operationProps} from '../Runtime/Runtime';
 import Events, {eventsProps} from '../Events/Events';
-import Tasks, {jobsProps} from '../Tasks/Tasks';
+import Tasks from '../Tasks/Tasks';
 
 import {showEditPoolsWeightsModal} from '../../../../../../store/actions/operations';
 
@@ -44,7 +44,6 @@ class Details extends Component {
             error: PropTypes.object.isRequired,
         }),
         runtime: runtimeProps,
-        jobs: jobsProps,
         events: eventsProps,
         resources: resourcesProps,
         intermediateResources: intermediateResourcesProps,
@@ -139,15 +138,8 @@ class Details extends Component {
     }
 
     renderJobs() {
-        const {operation, jobs, collapsibleSize} = this.props;
-
-        return (
-            jobs && (
-                <CollapsibleSection name="Tasks" className={block('jobs')} size={collapsibleSize}>
-                    <Tasks operation={operation} jobs={jobs} />
-                </CollapsibleSection>
-            )
-        );
+        const {collapsibleSize} = this.props;
+        return <Tasks className={block('jobs')} size={collapsibleSize} />;
     }
 
     renderResources() {

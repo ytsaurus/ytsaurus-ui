@@ -18,8 +18,8 @@ function useStatisticInfo(name: string) {
     const {byName, byRegexp} = useSelector(getOperationStatisticsDescription);
 
     const info = React.useMemo(() => {
-        const key = name.substring('<Root>/'.length);
-        const res = byName[key.substring(0, key.length - 3)]; // get rid of '/$$' at the end of string
+        const key = name.startsWith('<Root>/') ? name.substring('<Root>/'.length) : name;
+        const res = key.endsWith('/$$') ? byName[key.substring(0, key.length - 3)] : byName[key];
         if (res) {
             return res;
         }
@@ -68,17 +68,17 @@ function OperationStatisticNameImpl({name, title}: {name: string; title: string}
     );
 }
 
-const UNIT_TO_FORMATTER: Record<string, (v: number, settings?: object) => string> = {
-    ['ms']: (v: number, settings?: object) =>
-        format.TimeDuration(Math.round(v), {format: 'milliseconds', ...settings}),
-    ['bytes']: (v: number, settings?: object) => formatBytes(v, settings),
-    ['bytes * sec']: (v: number, settings?: object) => formatBytes(v, settings, ' * sec'),
-    ['ms * bytes']: (v: number, settings?: object) => formatBytes(v, settings, ' * ms'),
-    ['Mb*sec']: (v: number, settings?: object) => formatBytes(v * 1024 * 1024, settings, ' * sec'),
+const UNIT_TO_FORMATTER: Record<string, (v?: number, settings?: object) => string> = {
+    ['ms']: (v, settings) =>
+        format.TimeDuration(Math.round(v!), {format: 'milliseconds', ...settings}),
+    ['bytes']: (v, settings) => formatBytes(v, settings),
+    ['bytes * sec']: (v, settings) => formatBytes(v, settings, ' * sec'),
+    ['ms * bytes']: (v, settings) => formatBytes(v, settings, ' * ms'),
+    ['Mb*sec']: (v, settings) => formatBytes(v! * 1024 * 1024, settings, ' * sec'),
 };
 
-function formatBytes(v: number, settings?: object, suffix = '') {
-    return isNaN(v) ? format.NO_VALUE : format.Bytes(Math.round(v), settings) + suffix;
+function formatBytes(v?: number, settings?: object, suffix = '') {
+    return isNaN(v!) ? format.NO_VALUE : format.Bytes(Math.round(v!), settings) + suffix;
 }
 
 function OperationStatisticValueImpl({
@@ -86,9 +86,9 @@ function OperationStatisticValueImpl({
     settings,
     value,
 }: {
-    value: number;
+    value?: number;
     name: string;
-    settings: {significantDigits: 6};
+    settings?: {significantDigits: number};
 }) {
     const info = useStatisticInfo(name);
     const formatFn = UNIT_TO_FORMATTER[info?.unit || ''];

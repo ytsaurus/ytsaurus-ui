@@ -19,7 +19,8 @@ import Icon from '../../../../components/Icon/Icon';
 import {Tooltip} from '../../../../components/Tooltip/Tooltip';
 
 import {showEditPoolsWeightsModal, updateOperations} from '../../../../store/actions/operations';
-import {performAction, prepareActions} from '../../../../utils/operations/detail';
+import {performAction} from '../../../../utils/operations/detail';
+import {prepareActions} from '../../../../utils/operations/details-ts';
 import {promptAction} from '../../../../store/actions/actions';
 import '../../../../components/templates/meta';
 import OperationIOLink from '../../OperationIOLink/OperationIOLink';

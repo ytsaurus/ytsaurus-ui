@@ -15,7 +15,7 @@ import {Tooltip} from '../../../components/Tooltip/Tooltip';
 OperationPool.poolType = PropTypes.shape({
     tree: PropTypes.string.isRequired,
     pool: PropTypes.string.isRequired,
-    weight: PropTypes.number.isRequired,
+    weight: PropTypes.number,
     isEphemeral: PropTypes.bool,
 });
 

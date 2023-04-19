@@ -1,4 +1,5 @@
 import {YTError} from '../@types/types';
+import {Settings} from './constants/settings-types';
 import {UISettings} from './ui-settings';
 
 export interface YTConfig {
@@ -145,7 +146,7 @@ export type BatchSubRequest =
     | SubRequest<'get_query', GetQueryParams>;
 
 export interface SettingsConfig {
-    data: Record<string, unknown>;
+    data: Settings;
     meta: {
         useRemoteSettings: boolean;
         errorMessage: any;

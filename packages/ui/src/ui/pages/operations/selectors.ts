@@ -28,7 +28,7 @@ export class OperationSelector implements Record<string, any> {
 
     $value: string;
     $attributes: any;
-    state: typeof OperationSelector.INTERMEDIATE_STATES[0] | 'completed';
+    state: typeof OperationSelector.INTERMEDIATE_STATES[0] | 'completed' | 'failed' | 'aborted';
     pools: Array<OperationPool> = [];
 
     constructor(data: any) {

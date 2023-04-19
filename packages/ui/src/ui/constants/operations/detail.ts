@@ -1,3 +1,4 @@
+import {ValueOf} from '../../../@types/types';
 import createActionTypes, {createPrefix} from '../../constants/utils';
 
 const PREFIX = createPrefix('opertaions', 'details');
@@ -17,6 +18,9 @@ export const Tab = {
     PARTITION_SIZES: 'partition_sizes',
     MONITOR: 'monitor',
 } as const;
+
+export type OperationTabType = ValueOf<typeof Tab>;
+
 export const POLLING_INTERVAL = 15 * 1000;
 export const DEFAULT_TAB = Tab.DETAILS;
 

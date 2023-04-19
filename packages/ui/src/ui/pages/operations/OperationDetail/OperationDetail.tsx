@@ -1,7 +1,7 @@
-import {Route, Switch, Redirect} from 'react-router';
-import React, {Component, Fragment} from 'react';
-import {connect, useSelector} from 'react-redux';
-import PropTypes from 'prop-types';
+import {Route, Switch, Redirect, match as MatchType} from 'react-router';
+import React, {Fragment} from 'react';
+import {ConnectedProps, connect, useSelector} from 'react-redux';
+//import PropTypes from 'prop-types';
 import hammer from '../../../common/hammer';
 import unipika from '../../../common/thor/unipika';
 import cn from 'bem-cn-lite';
@@ -22,7 +22,7 @@ import Tabs from '../../../components/Tabs/Tabs';
 import Yson from '../../../components/Yson/Yson';
 
 import PartitionSizes from './tabs/partition-sizes/PartitionSizes/PartitionSizes';
-import Details, {operationProps} from './tabs/details/Details/Details';
+import Details from './tabs/details/Details/Details';
 import Specification from './tabs/specification/Specification';
 import JobSizes from './tabs/job-sizes/JobSizes/JobSizes';
 import Statistics from './tabs/statistics/Statistics';
@@ -33,11 +33,12 @@ import OperationAttributes from './tabs/attributes/OperationAttributes';
 import Placeholder from '../../../pages/components/Placeholder';
 
 import {performAction, getDetailsTabsShowSettings} from '../../../utils/operations/detail';
-import {Tab, DEFAULT_TAB, POLLING_INTERVAL} from '../../../constants/operations/detail';
 import {
-    getTotalCpuTimeSpent,
-    getTotalJobWallTime,
-} from '../../../store/selectors/operations/statistics';
+    Tab,
+    DEFAULT_TAB,
+    POLLING_INTERVAL,
+    OperationTabType,
+} from '../../../constants/operations/detail';
 import {showEditPoolsWeightsModal} from '../../../store/actions/operations';
 import {getOperation} from '../../../store/actions/operations/detail';
 import {isOperationId} from '../../../utils/operations/list';
@@ -59,54 +60,26 @@ import {updateFilter} from '../../../store/actions/operations/jobs';
 import {getUISizes} from '../../../store/selectors/global';
 import OperationDetailsMonitor from './tabs/monitor/OperationDetailsMonitor';
 import {getJobsMonitorTabVisible} from '../../../store/selectors/operations/jobs-monitor';
+import {
+    getOperationStatiscsHasData,
+    getTotalCpuTimeSpent,
+    getTotalJobWallTime,
+    JobState,
+} from '../../../store/selectors/operations/statistics-v2';
 import UIFactory from '../../../UIFactory';
+import {RootState} from '../../../store/reducers';
+import {getCurrentCluster} from '../../../store/selectors/thor';
 
 const detailBlock = cn('operation-detail');
 
 const headingBlock = cn('elements-heading');
 const updater = new Updater();
 
-class OperationDetail extends Component {
-    static propTypes = {
-        // from react-router
-        match: PropTypes.shape({
-            params: PropTypes.shape({
-                operationId: PropTypes.string.isRequired,
-            }),
-        }),
-        // from connect
-        loading: PropTypes.bool.isRequired,
-        loaded: PropTypes.bool.isRequired,
-        error: PropTypes.bool.isRequired,
-        errorData: PropTypes.shape({
-            message: PropTypes.string,
-            details: PropTypes.object,
-        }),
-        operation: operationProps.isRequired,
-        cluster: PropTypes.string.isRequired,
-        totalJobWallTime: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
-        actions: PropTypes.arrayOf(
-            PropTypes.shape({
-                modalKey: PropTypes.string.isRequired,
-                name: PropTypes.string.isRequired,
-                details: PropTypes.string,
-                icon: PropTypes.string.isRequired,
-                theme: PropTypes.string,
-                optionName: PropTypes.string,
-                optionValue: PropTypes.string,
-                options: PropTypes.array,
-            }),
-        ).isRequired,
-        statisticsItems: PropTypes.array,
+type RouteProps = {match: MatchType<{operationId: string; tab: OperationTabType}>};
 
-        getOperation: PropTypes.func.isRequired,
-        promptAction: PropTypes.func.isRequired,
-        showEditPoolsWeightsModal: PropTypes.func.isRequired,
+type ReduxProps = ConnectedProps<typeof connector>;
 
-        monitorTabVisible: PropTypes.bool,
-        jobsMonitorVisible: PropTypes.bool,
-    };
-
+class OperationDetail extends React.Component<ReduxProps & RouteProps> {
     componentDidMount() {
         const {
             getOperation,
@@ -131,7 +104,7 @@ class OperationDetail extends Component {
         showEditPoolsWeightsModal(operation);
     };
 
-    renderAction = (action) => {
+    renderAction = (action: ReduxProps['actions'][0]) => {
         const {promptAction, operation, getOperation} = this.props;
 
         const updateOperation = () => getOperation(operation.$value);
@@ -140,7 +113,7 @@ class OperationDetail extends Component {
                 Are you sure you want to <strong>{action.name}</strong> the operation?
             </span>
         );
-        const handler = ({currentOption}) =>
+        const handler = ({currentOption}: {currentOption?: string}) =>
             performAction({
                 ...action,
                 operation,
@@ -165,7 +138,7 @@ class OperationDetail extends Component {
 
     renderHeader() {
         const {actions} = this.props;
-        const {type, user, state, suspended, title, $value} = this.props.operation;
+        const {type, user = '', state, suspended, title, $value} = this.props.operation;
         const label = suspended ? 'suspended' : state;
 
         return (
@@ -187,7 +160,7 @@ class OperationDetail extends Component {
 
     renderOverview() {
         const {operation, cluster, totalJobWallTime, cpuTimeSpent, erasedTrees} = this.props;
-        const {$value, user, type, startTime, finishTime, duration, pools, state} = operation;
+        const {$value, user = '', type, startTime, finishTime, duration, pools, state} = operation;
 
         const items = [
             [
@@ -254,7 +227,7 @@ class OperationDetail extends Component {
         );
     }
 
-    onProgressLinkClick = (jobState /* 'completed' | 'failed' | 'running' */) => {
+    onProgressLinkClick = (jobState: JobState) => {
         const {updateFilter} = this.props;
         updateFilter('state', jobState);
     };
@@ -266,14 +239,15 @@ class OperationDetail extends Component {
             },
             cluster,
             operation,
-            statisticsItems,
             tabSize,
+            hasStatististicsTab,
             jobsMonitorVisible,
             monitorTabVisible,
         } = this.props;
         const path = `/${cluster}/${Page.OPERATIONS}/${operationId}`;
         const showSettings = {
-            ...getDetailsTabsShowSettings(operation, statisticsItems),
+            ...getDetailsTabsShowSettings(operation),
+            [Tab.STATISTICS]: {show: hasStatististicsTab},
             [Tab.JOBS_MONITOR]: {show: jobsMonitorVisible},
             [Tab.MONITOR]: {show: monitorTabVisible},
         };
@@ -352,7 +326,7 @@ class OperationDetail extends Component {
         return <Redirect from={url} to={redirectPath} />;
     }
 
-    renderContent(isFirstLoading) {
+    renderContent(isFirstLoading: boolean) {
         return isFirstLoading ? (
             <Loader />
         ) : (
@@ -385,17 +359,14 @@ class OperationDetail extends Component {
     }
 }
 
-const mapStateToProps = (state) => {
-    const {operations, global} = state;
-    const {cluster} = global;
-    const {operation, errorData, loading, loaded, error, actions} = operations.detail;
-    const {items} = operations.statistics;
+const mapStateToProps = (state: RootState) => {
+    const {operation, errorData, loading, loaded, error, actions} = state.operations.detail;
     const totalJobWallTime = getTotalJobWallTime(state);
     const cpuTimeSpent = getTotalCpuTimeSpent(state);
     const erasedTrees = getOperationErasedTrees(state);
 
     return {
-        cluster,
+        cluster: getCurrentCluster(state),
         operation,
         errorData,
         loading,
@@ -404,12 +375,12 @@ const mapStateToProps = (state) => {
         actions,
         totalJobWallTime,
         cpuTimeSpent,
-        statisticsItems: items,
         erasedTrees,
         tabSize: getUISizes(state).tabSize,
         monitorTabVisible: Boolean(UIFactory.getMonitorComponentForOperation()),
         jobsMonitorVisible:
             Boolean(UIFactory.getMonitorComponentForJob()) && getJobsMonitorTabVisible(state),
+        hasStatististicsTab: getOperationStatiscsHasData(state),
     };
 };
 
@@ -420,9 +391,11 @@ const mapDispatchToProps = {
     updateFilter,
 };
 
-const OperationDetailConnected = connect(mapStateToProps, mapDispatchToProps)(OperationDetail);
+const connector = connect(mapStateToProps, mapDispatchToProps);
 
-export default function OperationDetailsWithRum(props) {
+const OperationDetailConnected = connector(OperationDetail);
+
+export default function OperationDetailsWithRum(props: RouteProps) {
     const loadState = useSelector(getOperationDetailsLoadingStatus);
 
     useAppRumMeasureStart({

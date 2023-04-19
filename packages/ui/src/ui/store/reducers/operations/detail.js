@@ -14,10 +14,9 @@ import {
 import {prepareSpecification} from '../../../utils/operations/tabs/details/specification/specification';
 import {prepareOperationEvents} from '../../../utils/operations/tabs/details/events/events';
 import {prepareRuntime} from '../../../utils/operations/tabs/details/runtime';
-import {prepareJobs} from '../../../utils/operations/tabs/details/tasks.js';
 import {prepareAlerts} from '../../../utils/operations/tabs/details/alerts';
 import {prepareError} from '../../../utils/operations/tabs/details/error';
-import {prepareActions} from '../../../utils/operations/detail';
+import {prepareActions} from '../../../utils/operations/details-ts';
 import {mergeStateOnClusterChange} from '../utils';
 
 const initialState = {
@@ -28,7 +27,11 @@ const initialState = {
         message: '',
         details: null,
     },
-    operation: {$value: undefined},
+    /** @type {import('../../../pages/operations/selectors').DetailedOperationSelector} */
+    operation: {
+        $value: undefined,
+    },
+    /** @type {ReturnType<typeof prepareActions>} */
     actions: [],
     details: {
         /** @type {Array<{alert_type: string, time: string, error: YTError}>} */
@@ -65,7 +68,6 @@ function reducer(state = initialState, action) {
             const alert_events = ypath.getValue(operation, '/@alert_events');
             const error = prepareError(operation);
             const runtime = prepareRuntime(operation);
-            const jobs = prepareJobs(operation);
             const events = prepareOperationEvents(operation);
             const resources = prepareCompletedUsage(operation);
 
@@ -75,7 +77,6 @@ function reducer(state = initialState, action) {
                 alert_events,
                 error,
                 runtime,
-                jobs,
                 events,
                 resources,
             };
