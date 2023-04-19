@@ -51,6 +51,16 @@
                 width: 100px;
             }
 
+            &_type_group {
+                width: 80px;
+                box-sizing: border-box;
+            }
+
+            &_type_max-inline-hunk-size {
+                width: 160px;
+                box-sizing: border-box;
+            }
+
             &_type_type {
                 min-width: 80px;
             }
