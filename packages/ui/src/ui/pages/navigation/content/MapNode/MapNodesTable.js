@@ -16,6 +16,7 @@ import withKeyboardNavigation from '../../../../components/ElementsTable/hocs/wi
 import ElementsTableBase from '../../../../components/ElementsTable/ElementsTable';
 import Link from '../../../../components/Link/Link';
 import Icon from '../../../../components/Icon/Icon';
+import AccountLink from '../../../accounts/AccountLink';
 
 import {getIconNameForType} from '../../../../utils/navigation/path-editor';
 import {itemNavigationAllowed} from '../../../../utils/navigation';
@@ -203,7 +204,11 @@ class MapNodesTable extends Component {
     }
 
     static renderAccount(item, columnName) {
-        return hammer.format['ValueOrDefault'](item[columnName]);
+        return item[columnName] ? (
+            <AccountLink account={item[columnName]} />
+        ) : (
+            hammer.format['ValueOrDefault'](item[columnName])
+        );
     }
 
     get hotkeys() {
@@ -280,7 +285,7 @@ class MapNodesTable extends Component {
                 tablet_static_memory: this.printColumnAsBytes,
                 master_memory: this.printColumnAsBytes,
                 tablet_count: this.printColumnAsNumber,
-                account: this.renderAccount,
+                account: MapNodesTable.renderAccount,
                 actions: this.renderActions,
             },
         };
