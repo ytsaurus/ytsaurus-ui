@@ -21,9 +21,52 @@ const prepareSubjects = (subjects, type) => {
 
 export const getAllUserPermissions = (state, idmKind) => state.acl[idmKind].userPermissions;
 export const getAllObjectPermissions = (state, idmKind) => state.acl[idmKind].objectPermissions;
+export const getObjectSubjects = (state, idmKind) => state.acl[idmKind].objectSubject;
+
+export const getAllObjectPermissionsWithSplittedSubjects = createSelector(
+    [getAllObjectPermissions],
+    SplitSubjects,
+);
+
+function SplitSubjects(items) {
+    const res = [];
+    _.forEach(items, (item) => {
+        const {subjects} = item;
+        if (subjects && subjects.length >= 1) {
+            _.forEach(subjects, (subject) => res.push({...item, subjects: [subject]}));
+        } else {
+            res.push(item);
+        }
+    });
+    return res;
+}
+
+function FilterBySubject(items, subjectFilter) {
+    const lowerNameFilter = subjectFilter.toLowerCase();
+    return _.filter(items, (item) => {
+        const {subjectType, groupInfo} = item;
+        if (subjectType === 'group') {
+            return _.some(Object.entries(groupInfo), ([key, value]) => {
+                let str = String(value);
+                if (key === 'url') {
+                    if (str[str.length - 1] === '/') str = str.slice(0, -1);
+                    str = str.split('/').pop();
+                }
+                return -1 !== str.toLowerCase().indexOf(lowerNameFilter);
+            });
+        }
+        const value = item.subjects[0];
+        return -1 !== value.toLowerCase().indexOf(lowerNameFilter);
+    });
+}
+
+export const getAllObjectPermissionsFiltered = createSelector(
+    [getAllObjectPermissionsWithSplittedSubjects, getObjectSubjects],
+    FilterBySubject,
+);
 
 export const getAllObjectPermissionsOrderedByInheritanceAndSubject = createSelector(
-    [getAllObjectPermissions],
+    [getAllObjectPermissionsFiltered],
     OrderByInheritanceAndSubject,
 );
 
@@ -65,7 +108,6 @@ function OrderByInheritanceAndSubject(items) {
 }
 
 export const getColumnsColumns = (state, idmKind) => state.acl[idmKind].columnsColumns;
-export const getObjectSubjects = (state, idmKind) => state.acl[idmKind].objectSubject;
 
 const getReadApprovers = (state, idmKind) => state.acl[idmKind].readApprovers;
 const getResponsibles = (state, idmKind) => state.acl[idmKind].responsible;
@@ -92,8 +134,15 @@ const getAllApprovers = createSelector(
     },
 );
 
-export const getApproversOrderedByInheritanceAndSubject = createSelector(
-    [getAllApprovers],
+export const getHasApprovers = createSelector([getAllApprovers], (items) => items.length > 0);
+
+export const getApproversFiltered = createSelector(
+    [getAllApprovers, getObjectSubjects],
+    FilterBySubject,
+);
+
+export const getApproversFilteredAndOrdered = createSelector(
+    [getApproversFiltered],
     OrderByInheritanceAndSubject,
 );
 
@@ -113,8 +162,13 @@ export const getAllAccessColumnsPermissions = createSelector(
     },
 );
 
+export const getAllAccessColumnsPermissionsFiltered = createSelector(
+    [getAllAccessColumnsPermissions, getObjectSubjects],
+    FilterBySubject,
+);
+
 export const getAllAccessColumnsPermissionsOrderedByInheritanceAndSubject = createSelector(
-    [getAllAccessColumnsPermissions],
+    [getAllAccessColumnsPermissionsFiltered],
     OrderByInheritanceAndSubject,
 );
 

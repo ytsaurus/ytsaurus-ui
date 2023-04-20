@@ -5,7 +5,7 @@
 
     display: grid;
     grid-template-columns: 1fr 360px;
-    grid-template-rows: auto auto auto;
+    grid-template-rows: repeat(3, min-content) 1fr;
     grid-gap: 20px;
 
     &_loading {
@@ -213,5 +213,10 @@
     &__subjects-list {
         display: flex;
         flex-flow: wrap;
+    }
+
+    .elements-table__empty-header {
+        font-size: inherit;
+        padding-top: 20px;
     }
 }
