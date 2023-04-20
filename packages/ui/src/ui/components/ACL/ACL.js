@@ -155,7 +155,8 @@ class ACL extends Component {
         objectPermissions: ACL.permissionProps.isRequired,
         columnGroups: ACL.columnGroupsProps.isRequired,
         columnsPermissions: ACL.permissionProps.isRequired,
-        approvers: PropTypes.arrayOf(
+        hasApprovers: PropTypes.bool.isRequired,
+        approversFiltered: PropTypes.arrayOf(
             PropTypes.shape({
                 type: PropTypes.string.isRequired,
                 inherited: PropTypes.bool,
@@ -537,9 +538,9 @@ class ACL extends Component {
     }
 
     renderApprovers() {
-        const {approvers} = this.props;
+        const {hasApprovers, approversFiltered} = this.props;
         return (
-            approvers.length > 0 && (
+            hasApprovers && (
                 <ErrorBoundary>
                     <div className={block('approvers')}>
                         <div className="elements-heading elements-heading_size_xs">
@@ -548,7 +549,7 @@ class ACL extends Component {
 
                         <ElementsTable
                             {...this.approversTableProps}
-                            items={approvers}
+                            items={approversFiltered}
                             itemMods={this.approversRowClass}
                         />
                     </div>

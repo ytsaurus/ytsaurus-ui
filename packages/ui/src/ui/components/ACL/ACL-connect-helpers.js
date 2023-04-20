@@ -1,5 +1,6 @@
 import {
-    getApproversOrderedByInheritanceAndSubject,
+    getHasApprovers,
+    getApproversFilteredAndOrdered,
     getAllUserPermissions,
     getIdmPermissionsRequestError,
     getAllAccessColumnsNames,
@@ -67,7 +68,8 @@ const makeAclMapStateToProps = (inputIdmKind) => {
             disableInheritanceResponsible,
         } = state.acl[idmKind];
 
-        const approvers = getApproversOrderedByInheritanceAndSubject(state, idmKind);
+        const hasApprovers = getHasApprovers(state, idmKind);
+        const approversFiltered = getApproversFilteredAndOrdered(state, idmKind);
         const columnsPermissions = getAllAccessColumnsPermissionsOrderedByInheritanceAndSubject(
             state,
             idmKind,
@@ -104,7 +106,8 @@ const makeAclMapStateToProps = (inputIdmKind) => {
             objectPermissions,
             columnGroups,
             columnsPermissions,
-            approvers,
+            hasApprovers,
+            approversFiltered,
             auditors,
             readApprovers,
             responsible,
