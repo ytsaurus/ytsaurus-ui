@@ -25,6 +25,7 @@ export interface RawJob {
     statistics: JobStatistics;
     monitoring_descriptor?: string;
     pool_tree?: string;
+    is_stale?: boolean;
 }
 
 export interface CompetitiveJobs {

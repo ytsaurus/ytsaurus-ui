@@ -30,6 +30,7 @@ import {getJob} from '../../../store/selectors/job/detail';
 import ClipboardButton from '../../../components/ClipboardButton/ClipboardButton';
 import {getCluster, getUISizes} from '../../../store/selectors/global';
 import UIFactory from '../../../UIFactory';
+import {StaleJobIcon} from '../../../pages/operations/OperationDetail/tabs/Jobs/StaleJobIcon';
 
 import './JobGeneral.scss';
 
@@ -62,6 +63,7 @@ export default function JobGeneral() {
         jobCompetitionId,
         monitoring_descriptor,
         pool_tree,
+        is_stale,
     } = job;
     const operationUrl = `/${cluster}/${Page.OPERATIONS}/${operationID}/jobs?jobId=${jobID}`;
     const path = `/${cluster}/${Page.JOB}/${operationID}/${jobID}`;
@@ -165,6 +167,16 @@ export default function JobGeneral() {
                             {
                                 key: 'duration',
                                 value: <Template.Time time={duration} valueFormat="TimeDuration" />,
+                            },
+                            {
+                                key: 'Stale',
+                                value: (
+                                    <>
+                                        {Boolean('is_stale').toString() + ' '}
+                                        <StaleJobIcon />
+                                    </>
+                                ),
+                                visible: is_stale,
                             },
                         ],
                         [

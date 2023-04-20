@@ -210,6 +210,7 @@ export default (state = initialState, action) => {
                 loaded: true,
                 error: false,
                 loading: false,
+                operationId,
                 competitiveJobs: competitiveJobs.filter(({id}) => id !== jobId),
             };
         }
