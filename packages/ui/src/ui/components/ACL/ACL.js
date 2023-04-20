@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import hammer from '../../common/hammer';
 import cn from 'bem-cn-lite';
 import _ from 'lodash';
-import HighlightedText from '../../components/HighlightedText/HighlightedText';
 import {PERMISSIONS_SETTINGS, IdmObjectType} from '../../constants/acl';
 
 import ColumnGroups from './ColumnGroups/ColumnGroups';
@@ -195,13 +194,6 @@ class ACL extends Component {
 
         subjectFilter: PropTypes.string,
         columnsFilter: PropTypes.string,
-        highlightedByFilter: PropTypes.shape({
-            subjects: PropTypes.func.isRequired,
-            columns: PropTypes.func.isRequired,
-            approverRows: PropTypes.func.isRequired,
-            permissionRows: PropTypes.func.isRequired,
-            columnRows: PropTypes.isRequired,
-        }).isRequired,
     };
 
     static tableColumns = {
@@ -255,19 +247,13 @@ class ACL extends Component {
     };
 
     // eslint-disable-next-line react/sort-comp
-    static renderSubjectLink(item, type, getHightlihghtedPos) {
+    static renderSubjectLink(item) {
         if (item.subjectType === 'user') {
             const {subjectUrl} = item;
             const username = item.subjects[0];
-            const {start, length} = getHightlihghtedPos(type, username);
             return (
                 <UserName key={username} url={subjectUrl} userName={username}>
-                    <HighlightedText
-                        className={block('subject-name')}
-                        text={username}
-                        start={start}
-                        length={length}
-                    />
+                    <span className={block('subject-name')}>{username}</span>
                 </UserName>
             );
         }
@@ -277,7 +263,6 @@ class ACL extends Component {
             const tvmId = item.subjects[0];
             const {name} = item.tvmInfo;
             const text = `${name} (${tvmId})`;
-            const {start, length} = getHightlihghtedPos(type, text);
             return (
                 <div className={block('subject-column')}>
                     <Link
@@ -287,12 +272,7 @@ class ACL extends Component {
                         theme="primary"
                         title={text}
                     >
-                        <HighlightedText
-                            className={block('subject-name')}
-                            text={text}
-                            start={start}
-                            length={length}
-                        />
+                        <span className={block('subject-name')}>{text}</span>
                     </Link>
                     <Label text="TVM" />
                 </div>
@@ -300,7 +280,6 @@ class ACL extends Component {
         }
 
         const {name, url, group} = item.groupInfo || {};
-        const {start, length} = getHightlihghtedPos(type, name);
         return (
             <Link key={name} url={url} theme="primary">
                 <Tooltip
@@ -315,12 +294,7 @@ class ACL extends Component {
                         )
                     }
                 >
-                    <HighlightedText
-                        className={block('subject-name')}
-                        text={name}
-                        start={start}
-                        length={length}
-                    />
+                    <span className={block('subject-name')}>{name}</span>
                 </Tooltip>
             </Link>
         );
@@ -378,40 +352,30 @@ class ACL extends Component {
 
     get templates() {
         const openDeleteModal = this.handleDeletePermissionClick;
-        const {highlightedByFilter, idmKind, cluster} = this.props;
-        const getSubjectHighlightedPos = highlightedByFilter['subjects'] || (() => false);
-        const getColumnHighlightedPos = highlightedByFilter['columns'] || (() => false);
+        const {idmKind, cluster} = this.props;
 
         return {
             subjects(item) {
                 const {type, internal} = item;
                 if (!internal) {
-                    return ACL.renderSubjectLink(item, type, getSubjectHighlightedPos);
+                    return ACL.renderSubjectLink(item, type);
                 }
 
-                const nodes = _.map(item.subjects, (subject, index, arr) => {
+                const nodes = _.map(item.subjects, (subject, index) => {
                     const isGroup = item.types?.[index] === 'group';
-                    const {start, length} = getSubjectHighlightedPos(type, subject);
                     const url = isGroup
                         ? `/${cluster}/groups?groupFilter=${subject}`
                         : `/${cluster}/users?filter=${subject}`;
                     return (
                         <Link key={index} theme={'primary'} routed url={url}>
-                            <HighlightedText
-                                key={subject}
-                                text={subject}
-                                className={block('subject-name')}
-                                start={start}
-                                length={length}
-                                hasComa={index !== arr.length - 1}
-                            />
+                            <span className={block('subject-name')}>{subject}</span>
                         </Link>
                     );
                 });
                 return <div className={block('subjects-list')}>{nodes}</div>;
             },
             inherited(item) {
-                return item.inherited && <Icon awesome="level-down-alt" />;
+                return item.inherited && <Icon awesome="folder-arrow-down" />;
             },
             permissions(item) {
                 const action = item.action === 'deny' ? 'deny' : 'allow';
@@ -428,15 +392,8 @@ class ACL extends Component {
             },
             columns(item) {
                 const columns = _.map(item.columns, (column, index, arr) => {
-                    const {start, length} = getColumnHighlightedPos(column);
                     return (
-                        <AclColumn
-                            key={column}
-                            column={column}
-                            highlightStart={start}
-                            highlightLength={length}
-                            hasComa={index < arr.length - 1}
-                        />
+                        <AclColumn key={column} column={column} hasComa={index < arr.length - 1} />
                     );
                 });
 
@@ -520,13 +477,6 @@ class ACL extends Component {
         );
     }
 
-    rowClassName(key, index) {
-        const {
-            highlightedByFilter: {[key]: isTransparent},
-        } = this.props;
-        return isTransparent(index) ? block('row-transparent') : null;
-    }
-
     rowClassNameByFlags(item, mixin) {
         const {
             isUnrecognized: unrecognized,
@@ -558,9 +508,8 @@ class ACL extends Component {
         );
     }
 
-    approversRowClass = (item, index) => {
-        const opacityClassName = this.rowClassName('approverRows', index);
-        return this.rowClassNameByFlags(item, opacityClassName);
+    approversRowClass = (item) => {
+        return this.rowClassNameByFlags(item);
     };
 
     renderObjectPermissions() {
@@ -596,9 +545,8 @@ class ACL extends Component {
         ) : null;
     }
 
-    permissionsRowClass = (item, index) => {
-        const opacityClassName = this.rowClassName('permissionRows', index);
-        return this.rowClassNameByFlags(item, opacityClassName);
+    permissionsRowClass = (item) => {
+        return this.rowClassNameByFlags(item);
     };
 
     onSubjectFilterChange = (objectSubject) => {
@@ -628,20 +576,12 @@ class ACL extends Component {
                             />
                         </div>
 
-                        <ElementsTable
-                            {...this.columnsTableProps}
-                            items={columnsPermissions}
-                            itemMods={this.columnsRowClass}
-                        />
+                        <ElementsTable {...this.columnsTableProps} items={columnsPermissions} />
                     </div>
                 </ErrorBoundary>
             )
         );
     }
-
-    columnsRowClass = (item, index) => {
-        return this.rowClassName('columnRows', index);
-    };
 
     onFilterColumnPermissionsByColumn = (columnsColumns) => {
         const {idmKind, changeColumnsColumns} = this.props;
