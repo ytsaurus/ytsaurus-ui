@@ -14,7 +14,6 @@ import {
     getAllColumnGroupsActual,
     getObjectSubjects,
     getColumnsColumns,
-    getAclHightlightedByFilter,
     getNotInheritedAuditors,
     getNotInheritedReadApprovers,
     getNotInheritedResponsibles,
@@ -83,7 +82,6 @@ const makeAclMapStateToProps = (inputIdmKind) => {
 
         const subjectFilter = getObjectSubjects(state, idmKind);
         const columnsFilter = getColumnsColumns(state, idmKind);
-        const highlightedByFilter = getAclHightlightedByFilter(state, idmKind);
 
         const auditors = getNotInheritedAuditors(state, idmKind);
         const readApprovers = getNotInheritedReadApprovers(state, idmKind);
@@ -127,7 +125,6 @@ const makeAclMapStateToProps = (inputIdmKind) => {
 
             subjectFilter,
             columnsFilter,
-            highlightedByFilter,
 
             normalizedPoolTree,
             aclRequestOptions,
