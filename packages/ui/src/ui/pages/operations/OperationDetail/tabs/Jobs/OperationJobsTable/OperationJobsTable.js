@@ -32,16 +32,16 @@ import {openAttributesModal} from '../../../../../../store/actions/modals/attrib
 import {promptAction, showErrorModal} from '../../../../../../store/actions/actions';
 import {performJobAction} from '../utils';
 import {LOADING_STATUS} from '../../../../../../constants/index';
-import JobTemplate from './JobTemplate';
-
-import './OperationJobsTable.scss';
 import {PLEASE_PROCEED_TEXT} from '../../../../../../utils/actions';
 import {getShowCompetitiveJobs} from '../../../../../../pages/operations/selectors';
-import WarningIcon from '../../../../../../components/WarningIcon/WarningIcon';
 import {getUISizes} from '../../../../../../store/selectors/global';
 import {getJobsOperationId} from '../../../../../../store/selectors/operations/jobs';
 import {getOperationId} from '../../../../../../store/selectors/operations/operation';
 import UIFactory from '../../../../../../UIFactory';
+import {StaleJobIcon} from '../StaleJobIcon';
+
+import JobTemplate from './JobTemplate';
+import './OperationJobsTable.scss';
 
 const block = cn('operation-detail-jobs');
 
@@ -167,12 +167,7 @@ class OperationJobsTable extends React.Component {
                     >
                         {id}
                     </Link>
-                    {is_stale && (
-                        <WarningIcon
-                            className={block('warning-icon')}
-                            hoverContent={'The job is stale, the information may be obsolete'}
-                        />
-                    )}
+                    {is_stale && <StaleJobIcon />}
                 </div>
                 <div className={block('host', 'elements-monospace')}>
                     <span className={block('host-name')}>
