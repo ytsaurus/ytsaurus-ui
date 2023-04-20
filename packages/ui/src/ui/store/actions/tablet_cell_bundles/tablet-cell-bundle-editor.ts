@@ -68,7 +68,21 @@ export function fetchTabletCellBundleEditor(bundleName: string): TabletCellBundl
         }
 
         return wrapApiPromiseByToaster(
-            ytApiV3Id.executeBatch(YTApiId.tabletCellBundlesEditData, {requests}),
+            ytApiV3Id
+                .executeBatch(YTApiId.tabletCellBundlesEditData, {requests})
+                .then((results) => {
+                    const bundleControllerIsUnavailable =
+                        toEdit.enable_bundle_controller &&
+                        results[1]?.error?.code === yt.codes.NODE_DOES_NOT_EXIST;
+                    const error = getBatchError(
+                        bundleControllerIsUnavailable ? [results[0]] : results,
+                    );
+
+                    if (error) {
+                        throw error;
+                    }
+                    return results;
+                }),
             {
                 toasterName: 'edit-bundle-data',
                 skipSuccessToast: true,
@@ -76,11 +90,6 @@ export function fetchTabletCellBundleEditor(bundleName: string): TabletCellBundl
             },
         )
             .then((results) => {
-                const error = getBatchError(results);
-                if (error) {
-                    return;
-                }
-
                 const [{output: data}, {output: bundleControllerData} = {output: undefined}] =
                     results as BatchResults<[unknown, OrchidBundlesData]>;
 
@@ -153,6 +162,7 @@ export function fetchTabletCellBundleEditor(bundleName: string): TabletCellBundl
                     type: TABLETS_BUNDLES_EDITOR_LOAD_FAILURE,
                     data: e,
                 });
+                return Promise.reject(e);
             });
     };
 }

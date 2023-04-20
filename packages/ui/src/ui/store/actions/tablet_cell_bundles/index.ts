@@ -61,6 +61,12 @@ export function fetchTabletsBundles(): TabletsBundlesThunkAction {
         dispatch({type: TABLETS_BUNDLES_LOAD_REQUEST});
         const requests = [
             {
+                command: 'exists' as const,
+                parameters: {
+                    path: '//sys/bundle_controller/orchid/bundle_controller/state/bundles',
+                },
+            },
+            {
                 command: 'list' as const,
                 parameters: {
                     path: '//sys/tablet_cells',
@@ -88,21 +94,16 @@ export function fetchTabletsBundles(): TabletsBundlesThunkAction {
                     ],
                 },
             },
-            {
-                command: 'exists' as const,
-                parameters: {
-                    path: '//sys/bundle_controller/orchid/bundle_controller/state/bundles',
-                },
-            },
         ];
 
         return ytApiV3Id
             .executeBatch(YTApiId.tabletCellBundles, {requests})
             .then((results: Array<any>) => {
-                const [{output: cells}, {output: bundles}, {output: isBundleControllerSupported}] =
-                    results;
+                const [{output: isBundleControllerSupported}, ...rest] = results;
 
-                const error = getBatchError(results, 'Tablet cell bundles cannot be loaded');
+                const [{output: cells}, {output: bundles}] = rest;
+
+                const error = getBatchError(rest, 'Tablet cell bundles cannot be loaded');
                 if (error) {
                     throw error;
                 }
