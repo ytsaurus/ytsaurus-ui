@@ -375,7 +375,13 @@ class ACL extends Component {
                 return <div className={block('subjects-list')}>{nodes}</div>;
             },
             inherited(item) {
-                return item.inherited && <Icon awesome="folder-arrow-down" />;
+                return (
+                    item.inherited && (
+                        <Popover content={'Role is inherited'}>
+                            <Icon awesome="level-down-alt" />
+                        </Popover>
+                    )
+                );
             },
             permissions(item) {
                 const action = item.action === 'deny' ? 'deny' : 'allow';

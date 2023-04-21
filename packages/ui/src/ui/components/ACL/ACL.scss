@@ -5,7 +5,7 @@
 
     display: grid;
     grid-template-columns: 1fr 360px;
-    grid-template-rows: repeat(3, min-content) 1fr;
+    grid-template-rows: repeat(6, min-content);
     grid-gap: 20px;
 
     &_loading {
@@ -75,7 +75,7 @@
     }
 
     &__user-permissions {
-        grid-row: 1 / 5;
+        grid-row: 1 / -1;
         grid-column: 2 / -1;
 
         position: relative;
@@ -124,12 +124,12 @@
     &__table-item {
         &_type_inherited {
             width: 20px;
+            min-width: 20px;
         }
 
         &_type_subjects {
             width: 440px;
             max-width: 440px;
-            vertical-align: top;
         }
 
         &_type_permissions {
