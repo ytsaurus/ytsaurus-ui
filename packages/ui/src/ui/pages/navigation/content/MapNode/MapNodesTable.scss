@@ -1,0 +1,38 @@
+.map-nodes-table {
+    &__name {
+        .unipika {
+            display: inline;
+            white-space: nowrap;
+
+            font-family: var(--yc-font-family-sans);
+
+            .quote {
+                display: none;
+            }
+
+            & .string {
+                position: relative;
+                color: var(--primary-text);
+                vertical-align: bottom;
+            }
+
+            & .string.binary {
+                padding-right: 60px;
+            }
+
+            & .string.incomplete {
+                padding-right: 80px;
+            }
+
+            & .string.binary.incomplete {
+                padding-right: 140px;
+            }
+
+            & .string::after {
+                position: absolute;
+                top: 0;
+                right: 0;
+            }
+        }
+    }
+}

@@ -51,7 +51,9 @@ import PathActions from './PathActions';
 import {Tooltip} from '../../../../components/Tooltip/Tooltip';
 import WarningIcon from '../../../../components/WarningIcon/WarningIcon';
 
-const block = cn('unipika-wrapper');
+import './MapNodesTable.scss';
+
+const block = cn('map-nodes-table');
 const ElementsTable = withKeyboardNavigation(ElementsTableBase);
 
 export function renderMapNodesTableIcon(item) {
@@ -123,7 +125,7 @@ class MapNodesTable extends Component {
                 asHTML
                 title={item.title}
                 theme="primary"
-                className={block({inline: 'yes', mode: 'navigation'})}
+                className={block('name', 'unipika-wrapper')}
             />
         );
 
