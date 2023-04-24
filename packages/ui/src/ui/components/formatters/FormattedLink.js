@@ -11,11 +11,7 @@ function FormattedLink(props) {
     const url = computeStateQuery({cluster: match.params.cluster, ...state});
     return (
         <Link routed url={url} theme={theme} onClick={onClick} className={className}>
-            {React.isValidElement(text) ? (
-                text
-            ) : (
-                <FormattedText className={className} text={text} {...rest} />
-            )}
+            {React.isValidElement(text) ? text : <FormattedText text={text} {...rest} />}
         </Link>
     );
 }
