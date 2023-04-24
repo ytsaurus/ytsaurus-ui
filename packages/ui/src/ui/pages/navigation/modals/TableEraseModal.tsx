@@ -1,6 +1,6 @@
 import React from 'react';
 
-import Dialog, {DialogError} from '../../../components/Dialog/Dialog';
+import Dialog, {DialogError, FormApi} from '../../../components/Dialog/Dialog';
 import {makeLink} from '../../../navigation/Navigation/PathEditorModal/CreateTableModal/CreateTableModal';
 import {useDispatch, useSelector} from 'react-redux';
 import {
@@ -14,6 +14,12 @@ import {
 import {docsUrl} from '../../../config';
 import UIFactory from '../../../UIFactory';
 
+interface FormValues {
+    path: string;
+    range: string;
+    combine_chunks: boolean;
+}
+
 export default function TableEraseModal() {
     const visible = useSelector(getNavigationTableEraseModalVisible);
     const path = useSelector(getNavigationTableEraseModalPath);
@@ -23,17 +29,18 @@ export default function TableEraseModal() {
     const dispatch = useDispatch();
 
     const handleAdd = React.useCallback(
-        async (form: any) => {
+        async (form: FormApi<FormValues>) => {
             try {
-                const {range} = form.getState().values;
+                const {range, combine_chunks} = form.getState().values;
 
                 const [from, to] = range?.split(':') || [];
                 await dispatch(
-                    runTableErase(
-                        path || '',
-                        from ? Number(from) : undefined,
-                        to ? Number(to) : undefined,
-                    ),
+                    runTableErase({
+                        path: path ?? '',
+                        from: from ? Number(from) : undefined,
+                        to: to ? Number(to) : undefined,
+                        combine_chunks,
+                    }),
                 );
             } catch (e) {
                 setError(e);
@@ -48,7 +55,7 @@ export default function TableEraseModal() {
     }, [dispatch]);
 
     return (
-        <Dialog
+        <Dialog<FormValues>
             visible={visible}
             headerProps={{
                 title: 'Erase table rows',
@@ -82,6 +89,11 @@ export default function TableEraseModal() {
                     extras: {
                         placeholder: '10:20',
                     },
+                },
+                {
+                    name: 'combine_chunks',
+                    type: 'tumbler',
+                    caption: 'Combine chunks',
                 },
                 ...(!error
                     ? []

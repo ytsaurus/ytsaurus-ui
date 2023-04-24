@@ -23,7 +23,17 @@ export function hideTableEraseModal() {
 
 type EraseThunkAction = ThunkAction<any, RootState, any, any>;
 
-export function runTableErase(path: string, from?: number, to?: number): EraseThunkAction {
+export function runTableErase({
+    path,
+    from,
+    to,
+    combine_chunks,
+}: {
+    path: string;
+    from?: number;
+    to?: number;
+    combine_chunks?: boolean;
+}): EraseThunkAction {
     return () => {
         if (!path) {
             throw Error('Path cannot be empty for "erase" operation');
@@ -37,12 +47,11 @@ export function runTableErase(path: string, from?: number, to?: number): EraseTh
             range = `[:#${to}]`;
         }
 
-        console.log({range});
-
         return wrapApiPromiseByToaster(
             yt.v3.erase({
                 spec: {
                     table_path: path + range,
+                    combine_chunks,
                 },
                 ...makeUiMarker(`${Page.NAVIGATION}:erase`),
             }),

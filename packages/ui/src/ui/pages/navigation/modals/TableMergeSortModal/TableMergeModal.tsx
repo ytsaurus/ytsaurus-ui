@@ -46,6 +46,7 @@ export default function TableMergeModal() {
                     poolTree,
                     chunkSize,
                     force_transform,
+                    combine_chunks,
                 } = values;
                 const chunkSizeBytes = parseBytes(chunkSize);
                 const data_size_per_job = isNaN(chunkSizeBytes) ? undefined : chunkSizeBytes;
@@ -62,6 +63,7 @@ export default function TableMergeModal() {
                                 pool_trees,
                                 data_size_per_job,
                                 force_transform,
+                                combine_chunks,
                             },
                             Boolean,
                         ) as any,
@@ -104,6 +106,7 @@ export default function TableMergeModal() {
                 columns: [],
                 force_transform: true,
                 poolTree: defaultPoolTree,
+                combine_chunks: true,
             }}
             fields={[
                 {
@@ -157,6 +160,11 @@ export default function TableMergeModal() {
                     name: 'chunkSize',
                     type: 'table-chunk-size',
                     caption: 'Chunk size',
+                },
+                {
+                    name: 'combine_chunks',
+                    type: 'tumbler',
+                    caption: 'Combine chunks',
                 },
                 {
                     name: 'poolTree',
@@ -220,4 +228,5 @@ interface FormValues {
     columns: Array<unknown>;
     chunkSize: string;
     force_transform: boolean;
+    combine_chunks: boolean;
 }
