@@ -37,7 +37,7 @@ export async function homeIndex(req: Request, res: Response) {
     res.set('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
 
     const {clusterConfig, ytConfig} = getClusterConfig(cluster);
-    const login = ytConfig.isLocalCluster ? 'guest' : req.yt?.login;
+    const login = ytConfig.isLocalCluster ? 'root' : req.yt?.login;
     // Refuse to serve localRemoteProxy requests erroneously delegated from main interface to another
     // interface running in a container (instead of YT container)
     if (_.isEmpty(clusterConfig) && cluster) {

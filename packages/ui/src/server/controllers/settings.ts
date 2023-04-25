@@ -40,8 +40,8 @@ export function settingsSetItem(req: Request, res: Response) {
     const {
         ctx,
         params: {username, path},
+        body: {value} = {},
     } = req;
-    const value = req.body;
 
     return setItem({ctx, username, path, value})
         .then(sendResponse.bind(null, req, res))

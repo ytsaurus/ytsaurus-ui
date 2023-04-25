@@ -14,9 +14,8 @@ const localModeConfig: Partial<AppConfig> = {
             if (req.url?.startsWith('/api/yt/')) return true;
             if (req.url?.startsWith('/localmode/api/yt/')) return false;
 
-            // Simulate default logic given that 'type' option is 'multiform-data'
-            // https://github.com/expressjs/body-parser/blob/1f6f58e1f8dc222f2b6cfc7eb3a3bf5145ff2b56/lib/types/raw.js#L99
-            return Boolean(typeis(req, 'multipart/form-data'));
+            // Simulate default logic given that 'type' option is 'application/json'
+            return Boolean(typeis(req, 'application/json'));
         },
     },
 
@@ -27,6 +26,11 @@ const localModeConfig: Partial<AppConfig> = {
         queryTrackerStage: 'testing',
 
         directDownload: false,
+    },
+
+    userSettingsConfig: {
+        cluster: 'ui',
+        mapNodePath: '//tmp',
     },
 };
 
