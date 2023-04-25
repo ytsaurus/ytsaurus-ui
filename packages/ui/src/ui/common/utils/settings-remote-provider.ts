@@ -48,7 +48,7 @@ const provider: SettingsProvider = {
              */
             return provider.remove(username, path);
         }
-        return api('put', username, '/' + path, value);
+        return api('put', username, '/' + path, {value});
     },
     remove(username: string, path: string) {
         return api('delete', username, '/' + path);

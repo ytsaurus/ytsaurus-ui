@@ -55,6 +55,7 @@ jobs:
       - name: Tests for 'Local'
         run: |
           cd packages/ui
+          YT_PROXY=`hostname`:8000 npm run test:e2e:localmode:init
           npm run test:e2e:localmode:ui
       - name: Run containers for 'Local as remote'
         run: |
@@ -65,6 +66,7 @@ jobs:
       - name: Tests for 'Local as remote'
         run: |
           cd packages/ui
+          YT_PROXY=`hostname`:8000 npm run test:e2e:localmode:init
           npm run test:e2e:localmode:remote
 
   stop-vm:
