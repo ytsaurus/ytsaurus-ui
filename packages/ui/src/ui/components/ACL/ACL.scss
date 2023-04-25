@@ -130,6 +130,17 @@
         &_type_subjects {
             width: 440px;
             max-width: 440px;
+            .user-link {
+                display: inline-block;
+            }
+            .yc-link {
+                display: flex;
+            }
+            .yc-popover {
+                display: block;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
         }
 
         &_type_permissions {
