@@ -1,3 +1,5 @@
+import './afterEach';
+
 export const {BASE_URL, CLUSTER = '', CLUSTER_TITLE} = process.env;
 
 console.log({BASE_URL, CLUSTER, CLUSTER_TITLE});

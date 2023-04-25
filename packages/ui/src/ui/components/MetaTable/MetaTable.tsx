@@ -20,6 +20,7 @@ export interface MetaTableProps {
     items: Array<MetaTableItem> | Array<Array<MetaTableItem>>;
     title?: string;
     subTitles?: Array<string>;
+    qa?: string;
 }
 
 export interface MetaTableItem {
@@ -127,11 +128,11 @@ export default class MetaTable extends Component<MetaTableProps> {
     }
 
     render() {
-        const {items, className, title, subTitles} = this.props;
+        const {items, className, title, subTitles, qa} = this.props;
         const {groups, withInnerGroups, groupTitles} = splitItems(items, subTitles);
 
         return (
-            <div className={block(null, className)}>
+            <div className={block(null, className)} data-qa={qa}>
                 {title && this.renderTitle(title)}
                 {withInnerGroups
                     ? _.map(withInnerGroups, (item, index) =>
