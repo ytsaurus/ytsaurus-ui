@@ -31,3 +31,5 @@ ytsaurus-ui-*.tgz
 
 clusters-config.json
 clusters-config-oss.json
+
+run_local_cluster.sh

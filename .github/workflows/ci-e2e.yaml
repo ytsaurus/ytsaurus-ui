@@ -54,8 +54,8 @@ jobs:
           sleep 10
       - name: Tests for 'Local'
         run: |
-          cd packages/ui/tests
-          BASE_URL=http://`hostname`:8001 CLUSTER=ui CLUSTER_TITLE=Local npm start
+          cd packages/ui
+          npm run test:e2e:localmode:ui
       - name: Run containers for 'Local as remote'
         run: |
           cd packages/ui/tests
@@ -64,8 +64,8 @@ jobs:
           sleep 10
       - name: Tests for 'Local as remote'
         run: |
-          cd packages/ui/tests
-          BASE_URL=http://`hostname`:8001 CLUSTER=`hostname`:8000 CLUSTER_TITLE='Local as remote' npm start
+          cd packages/ui
+          npm run test:e2e:localmode:remote
 
   stop-vm:
     name: Stop VM
