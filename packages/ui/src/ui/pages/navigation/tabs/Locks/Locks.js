@@ -81,6 +81,7 @@ class Locks extends Component {
     static renderLock(item) {
         return (
             <MetaTable
+                qa="lock-meta-table"
                 items={[
                     {key: 'id', value: item.id},
                     {key: 'mode', value: item.mode},
@@ -231,6 +232,7 @@ class Locks extends Component {
                         name: 'buttons',
                         node: (
                             <CustomRadioButton
+                                qa="locks-type-filter"
                                 onChange={this.onModeFilter}
                                 value={modeFilter}
                                 items={[
