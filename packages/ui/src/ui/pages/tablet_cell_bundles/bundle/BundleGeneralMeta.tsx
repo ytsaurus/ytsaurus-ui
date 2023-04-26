@@ -120,7 +120,11 @@ export default function BundleGeneralMeta() {
         {
             key: 'Changelog account',
             value: bundleData.changelog_account ? (
-                <AccountLink account={bundleData.changelog_account} cluster={cluster} />
+                <AccountLink
+                    className={block('account-link')}
+                    account={bundleData.changelog_account}
+                    cluster={cluster}
+                />
             ) : (
                 hammer.format.NO_VALUE
             ),
@@ -128,14 +132,18 @@ export default function BundleGeneralMeta() {
         {
             key: 'Snapshot account',
             value: bundleData.snapshot_account ? (
-                <AccountLink account={bundleData.snapshot_account} cluster={cluster} />
+                <AccountLink
+                    className={block('account-link')}
+                    account={bundleData.snapshot_account}
+                    cluster={cluster}
+                />
             ) : (
                 hammer.format.NO_VALUE
             ),
         },
     ];
 
-    return <MetaTable className={block()} title="General" items={[leftGroup, rightGroup]} />;
+    return <MetaTable className={block()} items={[leftGroup, rightGroup]} title={'General'} />;
 }
 
 function renderResourceProgress(data: object, resourceName: string) {

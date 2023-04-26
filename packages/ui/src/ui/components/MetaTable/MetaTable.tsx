@@ -19,6 +19,7 @@ export interface MetaTableProps {
     className?: string;
     items: Array<MetaTableItem> | Array<Array<MetaTableItem>>;
     title?: string;
+    subTitles?: Array<string>;
 }
 
 export interface MetaTableItem {
@@ -31,9 +32,19 @@ export interface MetaTableItem {
     className?: string;
 }
 
-function splitItems(items: MetaTableProps['items']) {
+function splitItems(items: MetaTableProps['items'], subTitles?: Array<string>) {
     if (Array.isArray(items[0])) {
-        return {withInnerGroups: items as Array<Array<MetaTableItem>>};
+        const groupTitles = !subTitles?.length
+            ? undefined
+            : _.reduce(
+                  items,
+                  (acc, _item, index) => {
+                      acc.push(subTitles[Number(index)]);
+                      return acc;
+                  },
+                  [] as Array<string>,
+              );
+        return {withInnerGroups: items as Array<Array<MetaTableItem>>, groupTitles};
     } else {
         return {groups: items as Array<MetaTableItem>};
     }
@@ -101,26 +112,32 @@ export default class MetaTable extends Component<MetaTableProps> {
         );
     }
 
-    renderGroup(group?: Array<MetaTableItem>, key?: string) {
+    renderGroup(group: Array<MetaTableItem>, index: number, groupTitles?: Array<string>) {
+        const title = !groupTitles?.length ? null : groupTitles[index!] ?? <>&nbsp;</>;
         return (
-            <div className={block('group', itemBlock())} key={key}>
-                {this.renderItems(group)}
+            <div className={block('group')} key={`group-${index}`}>
+                {title && this.renderTitle(title)}
+                <div className={itemBlock()}>{this.renderItems(group)}</div>
             </div>
         );
     }
 
+    renderTitle(title: string) {
+        return <h2 className={block('title')}>{title}</h2>;
+    }
+
     render() {
-        const {items, className, title} = this.props;
-        const {groups, withInnerGroups} = splitItems(items);
+        const {items, className, title, subTitles} = this.props;
+        const {groups, withInnerGroups, groupTitles} = splitItems(items, subTitles);
 
         return (
             <div className={block(null, className)}>
-                {title && <h2 className={block('title')}>{title}</h2>}
+                {title && this.renderTitle(title)}
                 {withInnerGroups
                     ? _.map(withInnerGroups, (item, index) =>
-                          this.renderGroup(item, 'group-' + index),
+                          this.renderGroup(item, index, groupTitles),
                       )
-                    : this.renderGroup(groups)}
+                    : this.renderGroup(groups, 0)}
             </div>
         );
     }

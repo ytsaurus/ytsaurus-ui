@@ -3,8 +3,10 @@
         grid-gap: 6px 27px;
     }
 
+    $progressWidth: 200px;
+
     .yc-progress {
-        width: 200px;
+        width: $progressWidth;
     }
 
     &__health {
@@ -37,5 +39,13 @@
             font-weight: 400;
             color: var(--error-text);
         }
+    }
+
+    &__account-link {
+        display: inline-block;
+        max-width: $progressWidth;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
     }
 }

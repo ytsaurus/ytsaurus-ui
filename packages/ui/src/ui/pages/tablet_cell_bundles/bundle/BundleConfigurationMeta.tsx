@@ -161,7 +161,9 @@ export default function BundleConfigurationMeta() {
         );
     }
 
-    return <MetaTable className={block()} title="Bundle configuration" items={bundleGroup} />;
+    return (
+        <MetaTable className={block()} subTitles={['Bundle configuration']} items={[bundleGroup]} />
+    );
 }
 
 function getLimitAllocatedField(
