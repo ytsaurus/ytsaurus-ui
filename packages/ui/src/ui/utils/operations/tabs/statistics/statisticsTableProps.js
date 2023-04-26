@@ -37,7 +37,7 @@ export const statisticsTableProps = {
     size: 's',
     striped: false,
     computeKey(item) {
-        return item.name;
+        return `<Root>/${item.name}`;
     },
     tree: true,
     columns: {
