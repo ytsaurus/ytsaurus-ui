@@ -7,9 +7,7 @@ export const LOAD_DATA = createActionTypes(PREFIX + 'LOAD_DATA');
 export const DELETE_PERMISSION = createActionTypes(PREFIX + 'DELETE_PERMISSION');
 export const REQUEST_PERMISSION = createActionTypes(PREFIX + 'REQUEST_PERMISSION');
 export const UPDATE_ACL = createActionTypes(PREFIX + 'UPDATE_ACL');
-export const CHANGE_OBJECT_SUBJECT = PREFIX + 'CHANGE_OBJECT_SUBJECT';
-export const CHANGE_COLUMNS_SUBJECT = PREFIX + 'CHANGE_COLUMNS_SUBJECT';
-export const CHANGE_COLUMNS_COLUMNS = PREFIX + 'CHANGE_COLUMNS_COLUMNS';
+export const ACL_CHANGE_FILTERS = `${PREFIX}ACL_CHANGE_FILTERS` as const;
 
 export const IdmObjectType: {[key: string]: IdmKindType} = {
     ACCOUNT: 'account',

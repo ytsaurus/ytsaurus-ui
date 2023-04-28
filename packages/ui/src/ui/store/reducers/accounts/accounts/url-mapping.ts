@@ -14,6 +14,7 @@ import {
 import {RootState} from '../../../../store/reducers';
 import produce from 'immer';
 import {updateIfChanged} from '../../../../utils/utils';
+import {aclFiltersParams, getAclFiltersPreparedState} from '../../acl/url-mapping';
 
 function dateFromStr(numberStr: string) {
     if (!numberStr) {
@@ -185,5 +186,19 @@ export function getAccountsUsageState(prevState: RootState, {query}: {query: Roo
         updateIfChanged(draftFilters, 'treePath', queryFilters.treePath);
         updateIfChanged(draftFilters, 'diffFromSnapshot', queryFilters.diffFromSnapshot);
         updateIfChanged(draftFilters, 'diffToSnapshot', queryFilters.diffToSnapshot);
+    });
+}
+
+export const accountAclParams = {
+    ...accountOnlyParams,
+    ...aclFiltersParams,
+};
+
+export function getAccountsAclState(prevState: RootState, {query}: {query: RootState}) {
+    const state = getAclFiltersPreparedState(prevState, {query});
+    return produce(state, (draft) => {
+        const draftAccounts = draft.accounts.accounts;
+        const queryAccounts = query.accounts.accounts;
+        updateIfChanged(draftAccounts, 'activeAccount', queryAccounts.activeAccount);
     });
 }

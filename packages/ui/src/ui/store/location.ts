@@ -41,6 +41,8 @@ import {
     getAccountOnlyPreparedState,
     getAccountsUsageState,
     accountUsageParams,
+    accountAclParams,
+    getAccountsAclState,
 } from './reducers/accounts/accounts/url-mapping';
 
 import {dashboardParams, getDashboardPreparedState} from './reducers/dashboard/url-mapping';
@@ -74,6 +76,8 @@ import {
     tabletsAllBundlesParams,
     tabletsTabletCellsParams,
     tabletsBundlesParams,
+    tabletsBundlesAclParams,
+    getTabletsBundlesAclPreparedState,
 } from './reducers/tablet_cell_bundles/url-mapping';
 import {TabletsTab} from '../constants/tablets';
 import {paramsToQuery} from '../utils';
@@ -160,6 +164,7 @@ const storeSetup: Array<[string, PathParameters]> = [
 
     [`/*/${Page.ACCOUNTS}/${AccountsTab.GENERAL}`, [accountsParams, getAccountsPreparedState]],
     [`/*/${Page.ACCOUNTS}/${AccountsTab.USAGE}`, [accountUsageParams, getAccountsUsageState]],
+    [`/*/${Page.ACCOUNTS}/${AccountsTab.ACL}`, [accountAclParams, getAccountsAclState]],
     [`/*/${Page.ACCOUNTS}/*`, [accountOnlyParams, getAccountOnlyPreparedState]],
     [`/*/${Page.ACCOUNTS}`, [accountOnlyParams, getAccountOnlyPreparedState]],
 
@@ -190,6 +195,11 @@ const storeSetup: Array<[string, PathParameters]> = [
     [
         `/*/${Page.TABLET_CELL_BUNDLES}/${TabletsTab.TABLET_CELLS}`,
         [tabletsTabletCellsParams, getTabletsCellsPreparedState],
+    ],
+
+    [
+        `/*/${Page.TABLET_CELL_BUNDLES}/${TabletsTab.ACL}`,
+        [tabletsBundlesAclParams, getTabletsBundlesAclPreparedState],
     ],
 
     [`/*/${Page.TABLET_CELL_BUNDLES}`, [tabletsAllBundlesParams, getTabletsBundlesPreparedState]],

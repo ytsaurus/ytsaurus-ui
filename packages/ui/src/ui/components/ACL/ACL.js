@@ -25,6 +25,8 @@ import withVisible from '../../hocs/withVisible';
 import {renderText} from '../../components/templates/utils';
 import Label from '../../components/Label/Label';
 import {isIdmAclAvailable} from '../../config';
+import ApproversFilters from './ApproversFilters/ApproversFilters';
+import ObjectPermissionsFilters from './ObjectPermissionsFilters/ObjectPermissionsFilters';
 
 import AclColumn from './AclColumn';
 
@@ -149,8 +151,6 @@ class ACL extends Component {
         disableAclInheritance: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
         bossApproval: PropTypes.bool,
         disableInheritanceResponsible: PropTypes.bool,
-        objectSubject: PropTypes.string.isRequired,
-        columnsColumns: PropTypes.string.isRequired,
         objectPermissions: ACL.permissionProps.isRequired,
         columnGroups: ACL.columnGroupsProps.isRequired,
         columnsPermissions: ACL.permissionProps.isRequired,
@@ -183,7 +183,6 @@ class ACL extends Component {
         deletePermissionsFn: PropTypes.func.isRequired,
 
         loadAclData: PropTypes.func.isRequired,
-        changeObjectSubject: PropTypes.func.isRequired,
         changeColumnsColumns: PropTypes.func.isRequired,
 
         cluster: PropTypes.string,
@@ -192,7 +191,6 @@ class ACL extends Component {
             inheritAcl: PropTypes.bool,
         }),
 
-        subjectFilter: PropTypes.string,
         columnsFilter: PropTypes.string,
     };
 
@@ -471,18 +469,6 @@ class ACL extends Component {
         this.setState({deleteItem: {}}, handleClose);
     };
 
-    renderSubjectsFilter() {
-        return (
-            <Filter
-                placeholder="Filter by subject"
-                onChange={this.onSubjectFilterChange}
-                className={block('filter')}
-                value={this.props.subjectFilter}
-                size="m"
-            />
-        );
-    }
-
     rowClassNameByFlags(item, mixin) {
         const {
             isUnrecognized: unrecognized,
@@ -502,7 +488,7 @@ class ACL extends Component {
                         <div className="elements-heading elements-heading_size_xs">
                             Responsibles
                         </div>
-
+                        <ApproversFilters />
                         <ElementsTable
                             {...this.approversTableProps}
                             items={approversFiltered}
@@ -519,14 +505,14 @@ class ACL extends Component {
     };
 
     renderObjectPermissions() {
-        const {objectPermissions} = this.props;
+        const {objectPermissions, idmKind} = this.props;
         return (
             <ErrorBoundary>
                 <div className={block('object-permissions')}>
                     <div className="elements-heading elements-heading_size_xs">
                         Object Permissions
                     </div>
-
+                    <ObjectPermissionsFilters idmKind={idmKind} />
                     <ElementsTable
                         {...this.objectTableProps}
                         items={objectPermissions}
@@ -553,11 +539,6 @@ class ACL extends Component {
 
     permissionsRowClass = (item) => {
         return this.rowClassNameByFlags(item);
-    };
-
-    onSubjectFilterChange = (objectSubject) => {
-        const {idmKind, changeObjectSubject} = this.props;
-        changeObjectSubject({objectSubject, idmKind});
     };
 
     renderColumnsPermissions() {
@@ -590,8 +571,8 @@ class ACL extends Component {
     }
 
     onFilterColumnPermissionsByColumn = (columnsColumns) => {
-        const {idmKind, changeColumnsColumns} = this.props;
-        changeColumnsColumns({idmKind, columnsColumns});
+        const {changeColumnsColumns} = this.props;
+        changeColumnsColumns({columnsColumns});
     };
 
     deletePermissionsFn = (...args) => {
@@ -638,7 +619,6 @@ class ACL extends Component {
         return (
             <Fragment>
                 {this.renderFlags()}
-                {this.renderSubjectsFilter()}
                 {this.renderApprovers()}
                 {this.renderObjectPermissions()}
                 {this.renderColumnGroups()}

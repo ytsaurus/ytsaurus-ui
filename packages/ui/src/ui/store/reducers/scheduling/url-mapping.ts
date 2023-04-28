@@ -11,6 +11,7 @@ import {parseSortState} from '../../../utils';
 import produce from 'immer';
 import {updateIfChanged} from '../../../utils/utils';
 import {RootState} from '../../../store/reducers';
+import {aclFiltersParams, getAclFiltersPreparedState} from '../acl/url-mapping';
 
 export const schedulingParams = {
     pool: {
@@ -86,6 +87,7 @@ export const schedulingMonitorParams = {
 
 export const schedulingAclParams = {
     ...schedulingParams,
+    ...aclFiltersParams,
 };
 
 export function getSchedulingDetailsPreparedState(state: RootState, {query}: {query: RootState}) {
@@ -109,6 +111,7 @@ export function getSchedulingMonitorPreparedState(state: RootState, location: {q
     return getSchedulingPreparedState(state, location);
 }
 
-export function getSchedulingAclPreparedState(state: RootState, location: {query: RootState}) {
-    return getSchedulingPreparedState(state, location);
+export function getSchedulingAclPreparedState(prevState: RootState, {query}: {query: RootState}) {
+    const state = getAclFiltersPreparedState(prevState, {query});
+    return getSchedulingPreparedState(state, {query});
 }

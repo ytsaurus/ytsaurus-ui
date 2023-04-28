@@ -12,23 +12,23 @@ import {
     getAllAccessColumnsPermissionsOrderedByInheritanceAndSubject,
     getAllObjectPermissionsOrderedByInheritanceAndSubject,
     getAllColumnGroupsActual,
-    getObjectSubjects,
-    getColumnsColumns,
     getNotInheritedAuditors,
     getNotInheritedReadApprovers,
     getNotInheritedResponsibles,
 } from '../../store/selectors/acl';
 
+import {getColumnsColumns} from '../../store/selectors/acl-filters';
+
 import {
     loadAclData,
-    changeObjectSubject,
-    changeColumnsColumns,
     requestPermissions,
     cancelRequestPermissions,
     deletePermissions,
     updateAcl,
     cancelUpdateAcl,
 } from '../../store/actions/acl';
+
+import {changeColumnsColumns} from '../../store/actions/acl-filters';
 
 import {getCluster} from '../../store/selectors/global';
 import {normalizeIdmParams} from '../../utils/acl';
@@ -59,9 +59,6 @@ const makeAclMapStateToProps = (inputIdmKind) => {
             loading,
             error,
             errorData,
-            objectSubject,
-            columnsSubject,
-            columnsColumns,
             disableAclInheritance,
             bossApproval,
             disableInheritanceResponsible,
@@ -80,8 +77,7 @@ const makeAclMapStateToProps = (inputIdmKind) => {
         const columnGroups = getAllColumnGroupsActual(state, idmKind);
         const userPermissions = getAllUserPermissions(state, idmKind);
 
-        const subjectFilter = getObjectSubjects(state, idmKind);
-        const columnsFilter = getColumnsColumns(state, idmKind);
+        const columnsFilter = getColumnsColumns(state);
 
         const auditors = getNotInheritedAuditors(state, idmKind);
         const readApprovers = getNotInheritedReadApprovers(state, idmKind);
@@ -110,10 +106,6 @@ const makeAclMapStateToProps = (inputIdmKind) => {
             readApprovers,
             responsible,
 
-            objectSubject,
-            columnsSubject,
-            columnsColumns,
-
             userPermissions,
             userPermissionsRequestError: getIdmPermissionsRequestError(state, idmKind),
             userPermissionsAccessColumns: getAllAccessColumnsNames(state, idmKind),
@@ -123,7 +115,6 @@ const makeAclMapStateToProps = (inputIdmKind) => {
             deletePermissionsLastItemKey: getLastDeletedPermissionKey(state, idmKind),
             deletePermissionsError: permissionDeletionError(state, idmKind),
 
-            subjectFilter,
             columnsFilter,
 
             normalizedPoolTree,
@@ -134,7 +125,6 @@ const makeAclMapStateToProps = (inputIdmKind) => {
 
 const makeAclMapDispatchToProps = () => ({
     loadAclData,
-    changeObjectSubject,
     changeColumnsColumns,
     userPermissionsRequestFn: requestPermissions,
     userPermissionsCancelRequestFn: cancelRequestPermissions,

@@ -5,10 +5,7 @@ import {
     consumerParams,
     getNavigationConsumerPreparedState,
 } from '../../../store/reducers/navigation/tabs/consumer/url-mapping';
-import {
-    aclParams,
-    getNavigationAclPreparedState,
-} from '../../../store/reducers/navigation/tabs/acl/url-mapping';
+import {aclFiltersParams, getAclFiltersPreparedState} from '../acl/url-mapping';
 import {
     queueParams,
     getNavigationQueuePreparedState,
@@ -54,7 +51,7 @@ export const navigationParams: LocationParameters = {
 
     ...consumerParams,
     ...queueParams,
-    ...aclParams,
+    ...aclFiltersParams,
     ...schemaParams,
     ...tabletsParams,
 
@@ -86,7 +83,7 @@ function getNavigationNodeTypesPreparedState(state: RootState, location: {query:
     res = getNavigationTransactionMapPreparedState(res, location);
     res = getNavigationConsumerPreparedState(res, location);
     res = getNavigationQueuePreparedState(res, location);
-    res = getNavigationAclPreparedState(res, location);
+    res = getAclFiltersPreparedState(res, location);
     res = getNavigationSchemaPreparedState(res, location);
     res = getNavigationTabletsPreparedState(res, location);
     return res;
