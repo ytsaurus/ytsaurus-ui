@@ -3,8 +3,6 @@ import yt from '@ytsaurus/javascript-wrapper/lib/yt';
 
 import {
     LOAD_DATA,
-    CHANGE_OBJECT_SUBJECT,
-    CHANGE_COLUMNS_COLUMNS,
     DELETE_PERMISSION,
     REQUEST_PERMISSION,
     UPDATE_ACL,
@@ -294,20 +292,4 @@ export function updateAcl({path, values, version, idmKind}, {normalizedPoolTree}
 
 export function cancelUpdateAcl({idmKind}) {
     return {type: UPDATE_ACL.CANCELLED, idmKind};
-}
-
-export function changeObjectSubject({objectSubject, idmKind}) {
-    return {
-        type: CHANGE_OBJECT_SUBJECT,
-        data: {objectSubject},
-        idmKind,
-    };
-}
-
-export function changeColumnsColumns({columnsColumns, idmKind}) {
-    return {
-        type: CHANGE_COLUMNS_COLUMNS,
-        data: {columnsColumns},
-        idmKind,
-    };
 }

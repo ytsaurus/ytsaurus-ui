@@ -1,6 +1,13 @@
 import {createSelector} from 'reselect';
 import _ from 'lodash';
 import {calculateLoadingStatus} from '../../utils/utils';
+import {concatByAnd} from '../../common/hammer/predicate';
+import {PERMISSIONS_SETTINGS} from '../../constants/acl';
+import {
+    getApproversSubjectFilter,
+    getObjectSubjectFilter,
+    getObjectPermissionsFilter,
+} from './acl-filters';
 
 const prepareColumnsNames = (columnsPermissions) => {
     const columns = _.map(columnsPermissions, (permission) => permission.columns);
@@ -21,12 +28,32 @@ const prepareSubjects = (subjects, type) => {
 
 export const getAllUserPermissions = (state, idmKind) => state.acl[idmKind].userPermissions;
 export const getAllObjectPermissions = (state, idmKind) => state.acl[idmKind].objectPermissions;
-export const getObjectSubjects = (state, idmKind) => state.acl[idmKind].objectSubject;
 
 export const getAllObjectPermissionsWithSplittedSubjects = createSelector(
     [getAllObjectPermissions],
     SplitSubjects,
 );
+
+export const getObjectPermissionsTypesList = (idmKind) => {
+    return createSelector(
+        [
+            getObjectPermissionsFilter,
+            (state) => getAllObjectPermissionsWithSplittedSubjects(state, idmKind),
+        ],
+        (permissionsFilter, items) => {
+            const uniquePermisions = new Set();
+            const {permissionTypes} = PERMISSIONS_SETTINGS[idmKind] || {};
+            [...permissionTypes, ...permissionsFilter].forEach((permission) =>
+                uniquePermisions.add(permission),
+            );
+            items.forEach((item) => {
+                const {permissions} = item;
+                permissions.forEach((permission) => uniquePermisions.add(permission));
+            });
+            return _.sortBy([...uniquePermisions], (permission) => permission);
+        },
+    );
+};
 
 function SplitSubjects(items) {
     const res = [];
@@ -41,28 +68,50 @@ function SplitSubjects(items) {
     return res;
 }
 
+const subjectFilterPredicate = (item, filter) => {
+    const {subjectType, groupInfo} = item;
+    if (subjectType === 'group') {
+        return _.some(Object.entries(groupInfo), ([key, value]) => {
+            let str = String(value);
+            if (key === 'url') {
+                if (str[str.length - 1] === '/') str = str.slice(0, -1);
+                str = str.split('/').pop();
+            }
+            return -1 !== str.toLowerCase().indexOf(filter);
+        });
+    }
+    const value = item.subjects[0];
+    return -1 !== value.toLowerCase().indexOf(filter);
+};
+
 function FilterBySubject(items, subjectFilter) {
+    if (!subjectFilter) return items;
     const lowerNameFilter = subjectFilter.toLowerCase();
-    return _.filter(items, (item) => {
-        const {subjectType, groupInfo} = item;
-        if (subjectType === 'group') {
-            return _.some(Object.entries(groupInfo), ([key, value]) => {
-                let str = String(value);
-                if (key === 'url') {
-                    if (str[str.length - 1] === '/') str = str.slice(0, -1);
-                    str = str.split('/').pop();
-                }
-                return -1 !== str.toLowerCase().indexOf(lowerNameFilter);
-            });
-        }
-        const value = item.subjects[0];
-        return -1 !== value.toLowerCase().indexOf(lowerNameFilter);
-    });
+    return _.filter(items, (item) => subjectFilterPredicate(item, lowerNameFilter));
 }
 
+const permissionsFilterPredicate = (item, filter) => {
+    const {permissions} = item;
+    return _.difference(filter, permissions).length === 0;
+};
+
 export const getAllObjectPermissionsFiltered = createSelector(
-    [getAllObjectPermissionsWithSplittedSubjects, getObjectSubjects],
-    FilterBySubject,
+    [
+        getAllObjectPermissionsWithSplittedSubjects,
+        getObjectSubjectFilter,
+        getObjectPermissionsFilter,
+    ],
+    (items, subjectFilter, permissionsFilter) => {
+        const predicates = [];
+        if (subjectFilter) {
+            const lowerNameFilter = subjectFilter.toLowerCase();
+            predicates.push((item) => subjectFilterPredicate(item, lowerNameFilter));
+        }
+        if (Array.isArray(permissionsFilter) && permissionsFilter.length > 0) {
+            predicates.push((item) => permissionsFilterPredicate(item, permissionsFilter));
+        }
+        return _.filter(items, concatByAnd(...predicates));
+    },
 );
 
 export const getAllObjectPermissionsOrderedByInheritanceAndSubject = createSelector(
@@ -107,8 +156,6 @@ function OrderByInheritanceAndSubject(items) {
     ]);
 }
 
-export const getColumnsColumns = (state, idmKind) => state.acl[idmKind].columnsColumns;
-
 const getReadApprovers = (state, idmKind) => state.acl[idmKind].readApprovers;
 const getResponsibles = (state, idmKind) => state.acl[idmKind].responsible;
 const getAuditors = (state, idmKind) => state.acl[idmKind].auditors;
@@ -137,7 +184,7 @@ const getAllApprovers = createSelector(
 export const getHasApprovers = createSelector([getAllApprovers], (items) => items.length > 0);
 
 export const getApproversFiltered = createSelector(
-    [getAllApprovers, getObjectSubjects],
+    [getAllApprovers, getApproversSubjectFilter],
     FilterBySubject,
 );
 
@@ -162,13 +209,8 @@ export const getAllAccessColumnsPermissions = createSelector(
     },
 );
 
-export const getAllAccessColumnsPermissionsFiltered = createSelector(
-    [getAllAccessColumnsPermissions, getObjectSubjects],
-    FilterBySubject,
-);
-
 export const getAllAccessColumnsPermissionsOrderedByInheritanceAndSubject = createSelector(
-    [getAllAccessColumnsPermissionsFiltered],
+    [getAllAccessColumnsPermissions],
     OrderByInheritanceAndSubject,
 );
 

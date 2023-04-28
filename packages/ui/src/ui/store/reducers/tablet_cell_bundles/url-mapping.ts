@@ -4,6 +4,7 @@ import {initialState} from './index';
 import {RootState} from '../../../store/reducers';
 import produce from 'immer';
 import {updateIfChanged} from '../../../utils/utils';
+import {aclFiltersParams, getAclFiltersPreparedState} from '../acl/url-mapping';
 
 export const tabletsBundlesParams = {
     activeBundle: {
@@ -89,5 +90,22 @@ export function getTabletsCellsPreparedState(
         updateIfChanged(draftTcb, 'cellsBundleFilter', queryTcb.cellsBundleFilter);
         updateIfChanged(draftTcb, 'cellsHostFilter', queryTcb.cellsHostFilter);
         updateIfChanged(draftTcb, 'cellsSort', queryTcb.cellsSort);
+    });
+}
+
+export const tabletsBundlesAclParams = {
+    ...tabletsBundlesParams,
+    ...aclFiltersParams,
+};
+
+export function getTabletsBundlesAclPreparedState(
+    prevState: RootState,
+    {query}: {query: RootState},
+): RootState {
+    const state = getAclFiltersPreparedState(prevState, {query});
+    return produce(state, (draft) => {
+        const queryTcb = query.tablet_cell_bundles;
+        const draftTcb = draft.tablet_cell_bundles;
+        updateIfChanged(draftTcb, 'activeBundle', queryTcb.activeBundle);
     });
 }

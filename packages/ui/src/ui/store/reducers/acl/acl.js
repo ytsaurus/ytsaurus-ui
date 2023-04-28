@@ -1,6 +1,4 @@
 import {
-    CHANGE_COLUMNS_COLUMNS,
-    CHANGE_OBJECT_SUBJECT,
     DELETE_PERMISSION,
     LOAD_DATA,
     REQUEST_PERMISSION,
@@ -35,14 +33,7 @@ const ephemeralState = {
     idmManageAclRequestError: undefined,
 };
 
-const persistedState = {
-    objectSubject: '',
-    columnsColumns: '',
-    columnsSubject: '',
-};
-
 export const aclDefaults = {
-    ...persistedState,
     ...ephemeralState,
 };
 
@@ -131,16 +122,6 @@ export default (state = initialState, action) => {
         case LOAD_DATA.CANCELLED:
             return modifyFieldState(state, action.idmKind, {loading: false});
 
-        case CHANGE_OBJECT_SUBJECT:
-            return modifyFieldState(state, action.idmKind, {
-                objectSubject: action.data.objectSubject,
-            });
-
-        case CHANGE_COLUMNS_COLUMNS:
-            return modifyFieldState(state, action.idmKind, {
-                columnsColumns: action.data.columnsColumns,
-            });
-
         case REQUEST_PERMISSION.REQUEST:
         case REQUEST_PERMISSION.CANCELLED:
         case REQUEST_PERMISSION.SUCCESS:
@@ -166,10 +147,7 @@ export default (state = initialState, action) => {
             });
 
         case RESET_STORE_BEFORE_CLUSTER_CHANGE: {
-            const {shouldUsePreserveState} = action.data;
-            const fieldData = shouldUsePreserveState
-                ? ephemeralState
-                : {...ephemeralState, ...persistedState};
+            const fieldData = ephemeralState;
             const tmp = modifyFieldState(state, IdmObjectType.PATH, fieldData);
 
             return modifyFieldState(tmp, IdmObjectType.ACCOUNT, fieldData);
