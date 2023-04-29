@@ -228,7 +228,7 @@ export function setExpandedPool(
         const tree = getTree(getState());
         const expandedPools = getSchedulingOperationsExpandedPools(state);
 
-        const treeExpandedPools = expandedPools[tree] || new Set<string>();
+        const treeExpandedPools = new Set(expandedPools[tree]);
         if (expanded) {
             treeExpandedPools.add(poolName);
         } else {
