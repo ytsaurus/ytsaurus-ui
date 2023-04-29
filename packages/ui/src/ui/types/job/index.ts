@@ -82,6 +82,7 @@ export interface StatisticsIO {
     busy_time: number;
     bytes: number;
     idle_time: number;
+    isTotal?: boolean;
 }
 
 export interface PipesIO {
