@@ -109,7 +109,7 @@ class InverseIndex extends BoundedArray {
     static TABLE_SIMILARITY_THRESHOLD = 0.9;
 
     static addToFrequences(container, word) {
-        if (!container[word]) {
+        if (isNaN(container[word])) {
             container[word] = 0;
         }
         ++container[word];
@@ -131,7 +131,7 @@ class InverseIndex extends BoundedArray {
         });
 
         _.each(factors, (val) => {
-            if (!this.factorsToDataIndex[val]) {
+            if (!Array.isArray(this.factorsToDataIndex[val])) {
                 this.factorsToDataIndex[val] = [];
             }
             this.factorsToDataIndex[val].push(dataIndex);
