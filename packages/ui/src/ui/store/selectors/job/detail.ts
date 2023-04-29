@@ -1,11 +1,10 @@
-// @ts-nocheck TS2339
 import {createSelector} from 'reselect';
 import ypath from '../../../common/thor/ypath';
 import _ from 'lodash';
 
 import {PLEASE_PROCEED_TEXT} from '../../../utils/actions';
 import {PreparedJob, StatisticsIO, JobPipes, PipesIO, JobSpecification} from '../../../types/job';
-import {Action as JobAction} from 'pages/job/JobActions/JobActions';
+import {Action as JobAction} from '../../../pages/job/JobActions/JobActions';
 
 interface State {
     job: {
@@ -18,9 +17,9 @@ interface State {
     };
 }
 
-const prepareStatisticsIO = (obj: PipesIO, type: string, index: number): StatisticsIO[] => {
+const prepareStatisticsIO = (obj: PipesIO, type: string, index?: number): StatisticsIO => {
     return {
-        table: `${type}:${index}`,
+        table: index !== undefined ? `${type}:${index}` : type,
         ..._.mapValues(obj, (value) => value.sum),
     };
 };
@@ -29,7 +28,6 @@ export const getJob = (state: State) => state.job.general.job;
 const getJobSpecification = (state: State) => state.job.specification.specification;
 
 const getPipesIO = createSelector(getJob, (job: PreparedJob): JobPipes => {
-    // @ts-ignore
     return ypath.getValue(job, '/statistics/user_job/pipes') || {};
 });
 
@@ -40,14 +38,23 @@ export const getTotalTimeIO = createSelector(getPipesIO, ({input, output}: JobPi
     };
 });
 
-export const getJobStatisticsIO = createSelector(getPipesIO, ({input, output}: JobPipes) => {
-    return {
-        input: [prepareStatisticsIO(input, 'input', 0)],
-        output: _.values(output).map((outputStatistics: PipesIO, index) =>
-            prepareStatisticsIO(outputStatistics, 'output', index),
-        ),
-    };
-});
+export const getJobStatisticsIO = createSelector(
+    getPipesIO,
+    ({input, output: {total, ...output}}: JobPipes) => {
+        const res = {
+            input: [prepareStatisticsIO(input, 'input', 0)],
+            output: _.values(output).map((outputStatistics: PipesIO, index) =>
+                prepareStatisticsIO(outputStatistics, 'output', index),
+            ),
+        };
+        if (total) {
+            const last = prepareStatisticsIO(total, 'Total');
+            last.isTotal = true;
+            res.output.push(last);
+        }
+        return res;
+    },
+);
 
 const getUserCpuTimeSum = createSelector(getJob, (job: PreparedJob): number =>
     ypath.getNumber(job, '/statistics/user_job/cpu/user/sum'),

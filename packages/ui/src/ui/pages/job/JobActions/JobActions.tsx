@@ -33,7 +33,7 @@ interface OptionAction {
     data: Record<string, any>;
 }
 
-interface Action {
+export interface Action {
     icon: IconName;
     modalKey: string;
     name: ActionName;

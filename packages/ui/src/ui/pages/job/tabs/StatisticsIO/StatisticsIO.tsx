@@ -154,6 +154,9 @@ export default function StatisticsIO() {
                         striped={false}
                         columns={columns}
                         templates={templates}
+                        rowClassName={({isTotal}: {isTotal?: boolean}) => {
+                            return isTotal ? block('row-total') : undefined;
+                        }}
                     />
                 </React.Fragment>
             )}
