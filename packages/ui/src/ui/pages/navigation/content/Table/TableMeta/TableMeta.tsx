@@ -105,7 +105,10 @@ function TableMeta({
                     main(attributes),
                     tableSize(attributes, isDynamic, mediumList),
                     tableStorage(attributes, tableType),
-                    [cf.sorted, ...dynTableInfo(attributes, cluster, tabletErrorCount)],
+                    [
+                        cf.sorted,
+                        ...(isDynamic ? dynTableInfo(attributes, cluster, tabletErrorCount) : []),
+                    ],
                 ];
         }
     }, [type, attributes, isDynamic, mediumList, tableType, cf, cluster, tabletErrorCount]);
