@@ -21,6 +21,11 @@ export const getPath = createSelector(
     (rawPath, defaultPath) => rawPath || defaultPath,
 );
 
+export const getAttributesPath = createSelector(
+    [getAttributes, getPath],
+    (attributes, navigationPath) => attributes?.path || navigationPath,
+);
+
 export const isNavigationFinalLoadState = createSelector([getLoadState], (state) => {
     return isFinalLoadingStatus(state);
 });
