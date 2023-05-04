@@ -30,7 +30,7 @@ import './Schema.scss';
 import {useRumMeasureStop} from '../../../../rum/RumUiContext';
 import {RumMeasureTypes} from '../../../../rum/rum-measure-types';
 import {useAppRumMeasureStart} from '../../../../rum/rum-app-measures';
-import {getLoadState, getPath} from '../../../../store/selectors/navigation';
+import {getLoadState, getAttributesPath} from '../../../../store/selectors/navigation';
 import {isFinalLoadingStatus} from '../../../../utils/utils';
 import {docsUrl} from '../../../../config';
 
@@ -253,7 +253,7 @@ const mapStateToProps = (state) => {
     const {column} = state.navigation.tabs.schema;
 
     const cluster = getCluster(state);
-    const path = getPath(state);
+    const path = getAttributesPath(state);
     const schema = getSchema(state);
     const meta = getSchemaMeta(state);
     const filteredSchema = getFilteredSchema(state);
