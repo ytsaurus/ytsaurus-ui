@@ -90,6 +90,8 @@ export function getIconNameForType(type, targetPathBroken) {
         table: 'th',
         table_dynamic: 'dyn-th',
         replicated_table: 'th',
+        chaos_replicated_table: 'chaos-replicated-table',
+        replication_log_table: 'replication-log-table',
         file: 'file',
         topmost_transaction_map: 'folder',
         transaction_map: 'folder',
