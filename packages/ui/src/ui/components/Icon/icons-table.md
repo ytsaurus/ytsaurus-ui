@@ -20,6 +20,7 @@
 |ban|<img src='../../../../img/svg/icons/ban.svg'>|ban.svg|<img src='../../../../node_modules/@gravity-ui/icons/svgs/ban.svg'>|  
 |book|<img src='../../../../img/svg/icons/book.svg'>|| |  
 |calendar-alt|<img src='../../../../img/svg/icons/calendar-alt.svg'>|| |  
+|chaos-replicated-table|<img src='../../../../img/svg/icons/chaos-replicated-table.svg'>|| |  
 |chart-bar|<img src='../../../../img/svg/icons/chart-bar.svg'>|| |  
 |chart-line|<img src='../../../../img/svg/icons/chart-line.svg'>|chart-line.svg|<img src='../../../../node_modules/@gravity-ui/icons/svgs/chart-line.svg'>|  
 |chart_line|<img src='../../../../img/svg/icons/chart_line.svg'>|| |  
@@ -77,6 +78,7 @@
 |poll-people|<img src='../../../../img/svg/icons/poll-people.svg'>|| |  
 |question-circle|<img src='../../../../img/svg/icons/question-circle.svg'>|| |  
 |redo|<img src='../../../../img/svg/icons/redo.svg'>|| |  
+|replication-log-table|<img src='../../../../img/svg/icons/replication-log-table.svg'>|| |  
 |rocket|<img src='../../../../img/svg/icons/rocket.svg'>|| |  
 |save|<img src='../../../../img/svg/icons/save.svg'>|| |  
 |share|<img src='../../../../img/svg/icons/share.svg'>|| |  

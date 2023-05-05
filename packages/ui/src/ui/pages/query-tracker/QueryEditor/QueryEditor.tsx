@@ -16,8 +16,8 @@ import {
 import {runQuery, SET_QUERY_PATCH} from '../module/query/actions';
 import FlexSplitPane from '../../../components/FlexSplitPane/FlexSplitPane';
 import {QueryResults} from '../QueryResults';
-import maximizeBlockIcon from '../../../../../img/svg/icons/square.svg';
-import minimazeBlockIcon from '../../../../../img/svg/icons/square-semifill.svg';
+import maximizeBlockIcon from '../../../../../img/svg/square.svg';
+import minimazeBlockIcon from '../../../../../img/svg/square-semifill.svg';
 import closeIcon from '../../../../../img/svg/close-icon.svg';
 
 import './QueryEditor.scss';

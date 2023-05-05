@@ -4,7 +4,7 @@ import {Icon, Text, List, ListItemData, Loader} from '@gravity-ui/uikit';
 import {QueryItem} from '../../module/api';
 import {useQueryList} from '../../hooks/QueriesList';
 import {useQueryNavigation} from '../../hooks/Query';
-import tutorialIcon from '../../../../../../img/svg/icons/learn.svg';
+import tutorialIcon from '../../../../../../img/svg/learn.svg';
 import './index.scss';
 
 const itemCn = cn('query-tutorial-item');

@@ -18,6 +18,7 @@ import At from '../../../../img/svg/icons/at.svg';
 import Ban from '../../../../img/svg/icons/ban.svg';
 import Book from '../../../../img/svg/icons/book.svg';
 import CalendarAlt from '../../../../img/svg/icons/calendar-alt.svg';
+import ChaosReplicatedTable from '../../../../img/svg/icons/chaos-replicated-table.svg';
 import ChartBar from '../../../../img/svg/icons/chart-bar.svg';
 import ChartLine from '../../../../img/svg/icons/chart-line.svg';
 import Chart_line from '../../../../img/svg/icons/chart_line.svg';
@@ -53,6 +54,7 @@ import FileExport from '../../../../img/svg/icons/file-export.svg';
 import File from '../../../../img/svg/icons/file.svg';
 import Filter from '../../../../img/svg/icons/filter.svg';
 import Fire from '../../../../img/svg/icons/fire.svg';
+import FolderOpen from '../../../../img/svg/icons/folder-open.svg';
 import FolderTree from '../../../../img/svg/icons/folder-tree.svg';
 import Folder from '../../../../img/svg/icons/folder.svg';
 import Folders from '../../../../img/svg/icons/folders.svg';
@@ -74,6 +76,7 @@ import Plus from '../../../../img/svg/icons/plus.svg';
 import PollPeople from '../../../../img/svg/icons/poll-people.svg';
 import QuestionCircle from '../../../../img/svg/icons/question-circle.svg';
 import Redo from '../../../../img/svg/icons/redo.svg';
+import ReplicationLogTable from '../../../../img/svg/icons/replication-log-table.svg';
 import Rocket from '../../../../img/svg/icons/rocket.svg';
 import Save from '../../../../img/svg/icons/save.svg';
 import Share from '../../../../img/svg/icons/share.svg';
@@ -124,6 +127,7 @@ export const iconNames = {
     ['ban']: Ban,
     ['book']: Book,
     ['calendar-alt']: CalendarAlt,
+    ['chaos-replicated-table']: ChaosReplicatedTable,
     ['chart-bar']: ChartBar,
     ['chart-line']: ChartLine,
     ['chart_line']: Chart_line,
@@ -159,6 +163,7 @@ export const iconNames = {
     ['file']: File,
     ['filter']: Filter,
     ['fire']: Fire,
+    ['folder-open']: FolderOpen,
     ['folder-tree']: FolderTree,
     ['folder']: Folder,
     ['folders']: Folders,
@@ -180,6 +185,7 @@ export const iconNames = {
     ['poll-people']: PollPeople,
     ['question-circle']: QuestionCircle,
     ['redo']: Redo,
+    ['replication-log-table']: ReplicationLogTable,
     ['rocket']: Rocket,
     ['save']: Save,
     ['share']: Share,
