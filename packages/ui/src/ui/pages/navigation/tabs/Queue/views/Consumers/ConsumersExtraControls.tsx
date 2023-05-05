@@ -38,10 +38,8 @@ const rateItems: React.ComponentProps<typeof RadioButton>['items'] = [
 
 const ConsumersExtraControls: React.VFC<Props> = ({
     queueConsumerName,
-    queueOwner,
     queueRateMode,
     changeQueueConsumerName,
-    changeQueueOwner,
     changeQueueRateMode,
 }) => {
     return (
@@ -53,13 +51,6 @@ const ConsumersExtraControls: React.VFC<Props> = ({
                 onChange={changeQueueConsumerName}
                 placeholder="Consumer name..."
             />
-            <Filter
-                className={block('filter')}
-                value={queueOwner}
-                onChange={changeQueueOwner}
-                placeholder="Owner:"
-            />
-            <div className={block('divider')} />
             <RadioButton value={queueRateMode} onChange={changeQueueRateMode} items={rateItems} />
         </>
     );

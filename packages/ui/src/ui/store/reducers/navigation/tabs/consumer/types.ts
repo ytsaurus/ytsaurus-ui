@@ -1,17 +1,6 @@
 import type {TPerformanceCounters} from '../../../../../store/reducers/navigation/tabs/queue/types';
 import type {YTError} from '../../../../../types';
 
-export interface YtConsumerStatus {
-    error?: YTError; // may be missing
-    // All attributes below are missing if error is not null.
-    target_queue: string;
-    vital: boolean;
-    owner: string; // Always username.
-    partition_count: number;
-    read_data_weight_rate: TPerformanceCounters; // (unimplemented)
-    read_row_count_rate: TPerformanceCounters; // (unimplemented)
-}
-
 export interface YtConsumerPartition {
     error?: YTError; // may be missing
     // All attributes below are missing if error is not null.

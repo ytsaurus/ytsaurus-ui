@@ -14,7 +14,7 @@ import {prepareRequest} from '../../../../../utils/navigation';
 
 type ConsumerThunkAction = ThunkAction<void, RootState, unknown, ConsumerPartitionsAction>;
 
-export function loadConsumerPartitions(): ConsumerThunkAction {
+export function loadConsumerPartitions(queue: string): ConsumerThunkAction {
     return (dispatch, getState) => {
         const state = getState();
         const path = getPath(state);
@@ -24,7 +24,10 @@ export function loadConsumerPartitions(): ConsumerThunkAction {
         return ytApiV3Id
             .get(
                 YTApiId.queueConsumerPartitions,
-                prepareRequest('/@queue_consumer_partitions', {path, transaction}),
+                prepareRequest(`/@queue_consumer_partitions/${queue.replace(/\//g, '\\/')}`, {
+                    path,
+                    transaction,
+                }),
             )
             .then((data: YtConsumerPartition[]) => {
                 dispatch({

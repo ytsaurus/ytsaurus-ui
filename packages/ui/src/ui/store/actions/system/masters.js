@@ -202,7 +202,7 @@ function loadMastersConfig() {
                 (value, address) => ({
                     command: 'get',
                     parameters: {
-                        path: `//sys/queue_agents/instances/${address}/orchid/queue_agent/active`,
+                        path: `//sys/queue_agents/instances/${address}/orchid/cypress_synchronizer/active`,
                         suppress_transaction_coordinator_sync: true,
                         suppress_upstream_sync: true,
                     },

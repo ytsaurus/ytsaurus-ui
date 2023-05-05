@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import {connect, ConnectedProps} from 'react-redux';
+import {connect, ConnectedProps, useSelector} from 'react-redux';
 import cn from 'bem-cn-lite';
 import {createSelector} from 'reselect';
 import type {Column, Settings} from '@yandex-cloud/react-data-table';
@@ -7,6 +7,7 @@ import type {Column, Settings} from '@yandex-cloud/react-data-table';
 import format from '../../../../../../common/hammer/format';
 import DataTableYT from '../../../../../../components/DataTableYT/DataTableYT';
 import ErrorBlock from '../../../../../../components/Block/Block';
+import {NoContent} from '../../../../../../components/NoContent/NoContent';
 import {CONSUMER_RATE_MODE} from '../../../../../../constants/navigation/tabs/consumer';
 import {
     datetime,
@@ -26,6 +27,7 @@ import {
     getConsumerTimeWindow,
     SelectedPartition,
     getConsumerPartitionsColumns,
+    getTargetQueue,
 } from '../../../../../../store/selectors/navigation/tabs/consumer';
 
 import './Partitions.scss';
@@ -78,9 +80,22 @@ const Partitions: React.VFC<PropsFromRedux> = ({
     partitionsLoading,
     partitionsLoaded,
 }) => {
+    const {queue} = useSelector(getTargetQueue) ?? {};
+
     useEffect(() => {
-        loadConsumerPartitions();
-    }, []);
+        if (queue) {
+            loadConsumerPartitions(queue);
+        }
+    }, [queue]);
+
+    if (!queue) {
+        return (
+            <NoContent
+                hint={'Please select a queue'}
+                warning={"You don't have any selected queues"}
+            />
+        );
+    }
 
     if (partitionsError) {
         return <ErrorBlock error={partitionsError} topMargin="half" />;

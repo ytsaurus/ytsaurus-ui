@@ -19,9 +19,11 @@ export interface YTSelectProps extends Omit<SelectProps, 'options' | 'filter' | 
     hideClear?: boolean;
     hideFilter?: boolean;
     onChange?: (v: Required<YTSelectProps>['value']) => void;
+
+    renderItem?: (item: Item, useNoValue?: boolean) => React.ReactNode;
 }
 
-interface Item {
+export interface Item {
     value: string;
     text?: React.ReactNode;
     count?: number;
@@ -132,7 +134,7 @@ function renderItemContent(item: Item, useNoValue = false) {
 class CustomSelect extends React.Component<
     SelectProps &
         Pick<ValueControlProps, 'hashByValue' | 'maxVisibleValues'> &
-        Pick<YTSelectProps, 'hideClear' | 'hideFilter'>
+        Pick<YTSelectProps, 'hideClear' | 'hideFilter' | 'renderItem'>
 > {
     render() {
         const {className, hideFilter, ...props} = this.props;
@@ -163,6 +165,7 @@ class CustomSelect extends React.Component<
         return (
             <ValueControl
                 controlRef={ref}
+                renderItem={this.renderItem}
                 {...props}
                 {...{
                     className,
@@ -179,11 +182,16 @@ class CustomSelect extends React.Component<
         );
     };
 
+    renderItem = (item: Item, useNoValue?: boolean) => {
+        const {renderItem} = this.props;
+        return renderItem ? renderItem(item, useNoValue) : renderItemContent(item, useNoValue);
+    };
+
     renderOption = (option: SelectOption) => {
         const {data: item} = option;
         const {count} = item as Item;
 
-        const content = renderItemContent(item);
+        const content = this.renderItem(item);
 
         const meta = typeof count === 'number' ? String(count) : undefined;
 
@@ -246,7 +254,10 @@ function ValueControl({
     disabled,
     maxVisibleValues,
     placeholder,
-}: ValueControlProps & Pick<SelectProps, 'value' | 'pin' | 'label' | 'width' | 'disabled'>) {
+    renderItem,
+}: ValueControlProps &
+    Pick<SelectProps, 'value' | 'pin' | 'label' | 'width' | 'disabled'> &
+    Pick<Required<YTSelectProps>, 'renderItem'>) {
     const options = _map(value, (v) => hashByValue.get(v));
     const {w, style} =
         typeof width !== 'number' ? {w: width, style: undefined} : {style: {width}, w: undefined};
@@ -270,10 +281,10 @@ function ValueControl({
                 ) : (
                     _map(visbileItems, (option, index) => {
                         const content = option ? (
-                            renderItemContent(option.data, true)
+                            renderItem(option.data, true)
                         ) : (
                             <Text color="secondary">
-                                {renderItemContent({value: value[index]!}, true)}
+                                {renderItem({value: value[index]!}, true)}
                             </Text>
                         );
                         return (

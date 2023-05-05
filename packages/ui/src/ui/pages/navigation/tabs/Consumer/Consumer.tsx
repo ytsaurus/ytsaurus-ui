@@ -13,17 +13,15 @@ import {
     getPartitionCount,
     getReadDataWeightRate,
     getReadRowCountRate,
-    getTargetQueue,
-    getVital,
     getStatusError,
 } from '../../../../store/selectors/navigation/tabs/consumer';
 
+import TargetQueue from './TargetQueue/TargetQueue';
 import Meta from './Meta/Meta';
 import Toolbar from './Toolbar/Toolbar';
 import ConsumerMetrics from './views/ConsumerMetrics/ConsumerMetrics';
 import Partitions from './views/Partitions/Partitions';
 import PartitionsExtraControls from './views/Partitions/PartitionsExtraControls';
-import UIFactory from '../../../../UIFactory';
 
 const views: Record<CONSUMER_MODE, {ExtraControls: ComponentType; View: ComponentType}> = {
     [CONSUMER_MODE.METRICS]: {ExtraControls: () => null, View: ConsumerMetrics},
@@ -36,19 +34,12 @@ const emptyView: {ExtraControls: ComponentType; View: ComponentType} = {
 };
 
 function useViewByMode(mode: CONSUMER_MODE): {ExtraControls: ComponentType; View: ComponentType} {
-    const component = UIFactory.getComponentForConsumerMetrics();
-    if (!component) {
-        return emptyView;
-    }
-
     return views[mode] || emptyView;
 }
 
 const Consumer: React.VFC<PropsFromRedux> = ({
     loadConsumerStatus,
-    targetQueue,
     owner,
-    vital,
     partitionCount,
     readDataWeightRate,
     readRowCountRate,
@@ -67,10 +58,9 @@ const Consumer: React.VFC<PropsFromRedux> = ({
 
     return (
         <ErrorBoundary>
+            <TargetQueue />
             <Meta
-                targetQueue={targetQueue}
                 owner={owner}
-                vital={vital}
                 partitionCount={partitionCount}
                 readDataWeightRate={readDataWeightRate}
                 readRowCountRate={readRowCountRate}
@@ -82,9 +72,7 @@ const Consumer: React.VFC<PropsFromRedux> = ({
 
 function mapStateToProps(state: RootState) {
     return {
-        targetQueue: getTargetQueue(state),
         owner: getOwner(state),
-        vital: getVital(state),
         partitionCount: getPartitionCount(state),
         readDataWeightRate: getReadDataWeightRate(state),
         readRowCountRate: getReadRowCountRate(state),

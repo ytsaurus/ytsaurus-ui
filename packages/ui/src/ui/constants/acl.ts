@@ -33,7 +33,13 @@ const ACCOUNTS_PERMISSION_TYPES = ['administer', 'use'];
 export const PERMISSIONS_SETTINGS = {
     [IdmObjectType.PATH]: {
         permissionTypes: PERMISSION_TYPES,
-        permissionsToRequest: [['read'], ['read', 'write', 'remove'], ['mount']],
+        permissionsToRequest: [
+            ['read'],
+            ['read', 'write', 'remove'],
+            ['mount'],
+            ['register_queue_consumer'],
+            ['register_queue_consumer_vital'],
+        ],
         allowBossApprovals: true,
         allowReadApprovers: true,
         allowAuditors: true,

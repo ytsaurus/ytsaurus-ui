@@ -4,4 +4,18 @@
     .meta-table__group {
         align-items: baseline;
     }
+
+    &__header {
+        display: flex;
+        align-items: baseline;
+    }
+
+    &__header-title {
+        padding-right: 16px;
+    }
+
+    &__header-controls {
+        flex-shrink: 1;
+        max-width: 70vh;
+    }
 }
