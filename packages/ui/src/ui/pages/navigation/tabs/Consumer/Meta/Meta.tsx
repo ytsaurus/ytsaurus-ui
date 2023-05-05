@@ -1,16 +1,19 @@
 import React from 'react';
 import cn from 'bem-cn-lite';
+import {useSelector} from 'react-redux';
+import _map from 'lodash/map';
+import _reduce from 'lodash/reduce';
 
 import format from '../../../../../common/hammer/format';
 import ErrorBoundary from '../../../../../components/ErrorBoundary/ErrorBoundary';
 import Label from '../../../../../components/Label/Label';
-import Link from '../../../../../components/Link/Link';
 import MetaTable from '../../../../../components/MetaTable/MetaTable';
 import Multimeter from '../../../../../components/Multimeter/Multimeter';
 import {UserCard} from '../../../../../components/UserLink/UserLink';
+
 import type {TPerformanceCounters} from '../../../../../store/reducers/navigation/tabs/queue/types';
 import {isNull} from '../../../../../utils';
-import {genNavigationUrl} from '../../../../../utils/navigation/navigation';
+import {getTargetQueue} from '../../../../../store/selectors/navigation/tabs/consumer';
 
 import './Meta.scss';
 
@@ -19,43 +22,25 @@ const block = cn('consumer-meta');
 interface Props {
     targetQueue?: string;
     owner?: string;
-    vital?: boolean;
     partitionCount?: number;
     readDataWeightRate?: TPerformanceCounters;
     readRowCountRate?: TPerformanceCounters;
 }
 
-const Meta: React.VFC<Props> = ({
-    targetQueue,
-    owner,
-    vital,
-    partitionCount,
-    readDataWeightRate,
-    readRowCountRate,
-}) => {
-    let clusterQueueUrl;
-    if (targetQueue) {
-        const [cluster, path] = targetQueue.split(':');
-        clusterQueueUrl = genNavigationUrl(cluster, path);
-    }
+const Meta: React.FC<Props> = ({owner, partitionCount, readDataWeightRate, readRowCountRate}) => {
+    const {vital} = useSelector(getTargetQueue) ?? {};
 
     return (
         <ErrorBoundary>
-            <div className="elements-heading elements-heading_size_xs">Meta</div>
+            <div className={block('header')}>
+                <div className={block('header-title', 'elements-heading elements-heading_size_xs')}>
+                    Meta
+                </div>
+            </div>
             <MetaTable
                 className={block()}
                 items={[
                     [
-                        {
-                            key: 'target-queue',
-                            label: 'Target queue',
-                            value: (
-                                <Link url={clusterQueueUrl} routed>
-                                    {targetQueue}
-                                </Link>
-                            ),
-                            visible: !isNull(targetQueue),
-                        },
                         {
                             key: 'owner',
                             label: 'Owner',

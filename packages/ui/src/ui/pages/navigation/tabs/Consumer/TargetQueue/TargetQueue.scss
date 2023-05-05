@@ -1,0 +1,22 @@
+.target-queue {
+    padding-bottom: 20px;
+
+    &__selector {
+        display: flex;
+        align-items: baseline;
+        max-width: 100%;
+        overflow: hidden;
+    }
+
+    &__prefix {
+        flex-shrink: 1;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        padding-right: 4px;
+    }
+
+    &__prefix-item {
+        padding: 0 4px;
+    }
+}

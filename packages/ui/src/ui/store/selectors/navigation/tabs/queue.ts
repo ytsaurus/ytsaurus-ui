@@ -89,23 +89,18 @@ export const getPartitionsLoaded = (state: RootState) =>
     state.navigation.tabs.queue.partitions.partitionsLoaded;
 
 const getRawConsumers = (state: RootState) =>
-    state.navigation.tabs.queue.status.statusData?.consumers;
+    state.navigation.tabs.queue.status.statusData?.registrations;
 
 export const getConsumers = createSelector(
-    [getQueueConsumerName, getQueueOwner, getRawConsumers],
-    (queueConsumerName, queueOwner, consumers) =>
-        (consumers ? Object.entries(consumers) : undefined)
-            ?.map(([ypath, consumer]) => ({
+    [getQueueConsumerName, getRawConsumers],
+    (queueConsumerName, consumers) =>
+        (consumers ? consumers : [])
+            ?.map((consumer) => ({
                 ...consumer,
-                ypath,
-                read_data_weight_rate: consumer.read_data_weight_rate ?? emptyRate,
-                read_row_count_rate: consumer.read_row_count_rate ?? emptyRate,
+                read_data_weight_rate: emptyRate,
+                read_row_count_rate: emptyRate,
             }))
-            ?.filter(
-                (consumer) =>
-                    consumer.ypath.includes(queueConsumerName) &&
-                    consumer.owner.includes(queueOwner),
-            ) ?? [],
+            ?.filter((item) => item.consumer.includes(queueConsumerName)),
 );
 
 export type SelectedConsumer = NonNullable<ReturnType<typeof getConsumers>>[0];

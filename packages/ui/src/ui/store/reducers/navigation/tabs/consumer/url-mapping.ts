@@ -17,6 +17,10 @@ export const consumerParams = {
         stateKey: 'navigation.tabs.consumer.filters.consumerRateMode',
         initialState: initialState.consumerRateMode,
     },
+    cQueue: {
+        stateKey: 'navigation.tabs.consumer.filters.targetQueue.queue',
+        initialState: initialState.targetQueue?.queue,
+    },
 };
 
 export function getNavigationConsumerPreparedState(state: RootState, {query}: {query: RootState}) {
@@ -35,6 +39,11 @@ export function getNavigationConsumerPreparedState(state: RootState, {query}: {q
             draft.navigation.tabs.consumer.filters,
             'consumerRateMode',
             query.navigation.tabs.consumer.filters.consumerRateMode,
+        );
+        updateIfChanged(
+            draft.navigation.tabs.consumer.filters,
+            'targetQueue',
+            query.navigation.tabs.consumer.filters.targetQueue,
         );
     });
 }

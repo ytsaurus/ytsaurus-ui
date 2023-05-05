@@ -3,11 +3,12 @@ import PropTypes from 'prop-types';
 import block from 'bem-cn-lite';
 
 import SystemCounters from '../SystemCounters/SystemCounters';
-import {Progress} from '@gravity-ui/uikit';
+import {Progress, Select} from '@gravity-ui/uikit';
 
 import {computeEffectiveStateProgress} from '../../../utils/index';
 
 import './SystemStateOverview.scss';
+import {NODE_TYPE_ITEMS} from '../../../constants/components/nodes/nodes';
 
 const b = block('system');
 
@@ -34,6 +35,7 @@ export default class SystemStateOverview extends Component {
 
         return (
             <div className={b('heading-overview')}>
+                <Select item={NODE_TYPE_ITEMS} />
                 <SystemCounters counters={counters} {...rest} />
                 <div className={b('heading-overview-states')}>
                     <Progress {...stateOverview} />

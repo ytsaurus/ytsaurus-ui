@@ -98,9 +98,7 @@ export default class MetaTable extends Component<MetaTableProps> {
         );
     }
 
-    renderItems(items?: Array<MetaTableItem>) {
-        const visibleItems = _.filter(items, (item) => item.visible !== false);
-
+    renderItems(visibleItems?: Array<MetaTableItem>) {
         return (
             <Fragment>
                 {_.map(visibleItems, (item) => (
@@ -115,10 +113,12 @@ export default class MetaTable extends Component<MetaTableProps> {
 
     renderGroup(group: Array<MetaTableItem>, index: number, groupTitles?: Array<string>) {
         const title = !groupTitles?.length ? null : groupTitles[index!] ?? <>&nbsp;</>;
-        return (
-            <div className={block('group')} key={`group-${index}`}>
+        const visibleItems = _.filter(group, (item) => item.visible !== false);
+
+        return !visibleItems?.length ? null : (
+            <div className={block('group', itemBlock())} key={index}>
                 {title && this.renderTitle(title)}
-                <div className={itemBlock()}>{this.renderItems(group)}</div>
+                {this.renderItems(visibleItems)}
             </div>
         );
     }

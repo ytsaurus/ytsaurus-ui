@@ -1,5 +1,5 @@
 import React from 'react';
-import {connect, ConnectedProps} from 'react-redux';
+import {useSelector} from 'react-redux';
 import cn from 'bem-cn-lite';
 import {createSelector} from 'reselect';
 import type {Column, Settings} from '@yandex-cloud/react-data-table';
@@ -11,10 +11,8 @@ import {
     bool,
     error,
     multimeter,
-    user,
     ypath,
 } from '../../../../../../pages/navigation/tabs/Queue/utils/column-builder';
-import type {RootState} from '../../../../../../store/reducers';
 import type {TPerformanceCounters} from '../../../../../../store/reducers/navigation/tabs/queue/types';
 import {
     getConsumers,
@@ -41,7 +39,7 @@ const readRateGetter: Record<QUEUE_RATE_MODE, (row: SelectedConsumer) => TPerfor
 const getColumns = createSelector(
     [getQueueRateMode, getQueueTimeWindow],
     (rateMode, timeWindow): Array<Column<SelectedConsumer>> => [
-        ypath<SelectedConsumer>('Consumer', (x) => x.ypath),
+        ypath<SelectedConsumer>('Consumer', (x) => x.consumer),
         error<SelectedConsumer>('Error', (x) => x.error),
         multimeter<SelectedConsumer>(
             readRateName[rateMode],
@@ -50,18 +48,17 @@ const getColumns = createSelector(
             rateMode === QUEUE_RATE_MODE.ROWS ? format.RowsPerSecond : format.BytesPerSecond,
         ),
         bool<SelectedConsumer>('Vital', (x) => x.vital),
-        user<SelectedConsumer>('Owner', (x) => x.owner),
     ],
 );
 
 const settings: Settings = {displayIndices: false};
 
-const Consumers: React.VFC<PropsFromRedux> = ({
-    columns,
-    consumers,
-    consumersLoading,
-    consumersLoaded,
-}) => {
+export default function Consumers() {
+    const columns = useSelector(getColumns);
+    const consumers = useSelector(getConsumers);
+    const consumersLoading = useSelector(getStatusLoading);
+    const consumersLoaded = useSelector(getStatusLoaded);
+
     return (
         <DataTableYT
             className={block('table-row')}
@@ -73,20 +70,4 @@ const Consumers: React.VFC<PropsFromRedux> = ({
             settings={settings}
         />
     );
-};
-
-function mapStateToProps(state: RootState) {
-    return {
-        columns: getColumns(state),
-        consumers: getConsumers(state),
-        consumersLoading: getStatusLoading(state),
-        consumersLoaded: getStatusLoaded(state),
-    };
 }
-
-const mapDispatchToProps = {};
-
-const connector = connect(mapStateToProps, mapDispatchToProps);
-type PropsFromRedux = ConnectedProps<typeof connector>;
-
-export default connector(Consumers);

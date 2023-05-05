@@ -1,12 +1,12 @@
 import {
-    CONSUMER_CHANGE_PARTITIONS_COLUMNS,
-    CONSUMER_CHANGE_PERSISTED_STATE,
+    CONSUMER_CHANGE_FILTERS,
     CONSUMER_MODE,
     CONSUMER_RATE_MODE,
 } from '../../../../../constants/navigation/tabs/consumer';
 import type {TPerformanceCounters} from '../../../../../store/reducers/navigation/tabs/queue/types';
 import {mergeStateOnClusterChange} from '../../../../../store/reducers/utils';
 import type {ActionD} from '../../../../../types';
+import {ConsumerQueueInfo} from './status';
 
 export interface PartitionColumn<Names> {
     name: Names;
@@ -27,12 +27,14 @@ const CONSUMER_PARTITIONS_COLUMNS = [
 ] as const;
 
 export type ConsumerPartitionsColumns = typeof CONSUMER_PARTITIONS_COLUMNS[number]['id'];
+
 export interface ConsumerFiltersState {
     consumerMode: CONSUMER_MODE;
     consumerPartitionIndex: string;
     consumerRateMode: CONSUMER_RATE_MODE;
     consumerTimeWindow: keyof TPerformanceCounters;
     partitionsColumns: Array<PartitionColumn<ConsumerPartitionsColumns>>;
+    targetQueue: ConsumerQueueInfo | undefined;
 }
 
 export const initialState: ConsumerFiltersState = {
@@ -45,14 +47,12 @@ export const initialState: ConsumerFiltersState = {
         caption,
         checked: true,
     })),
+    targetQueue: undefined,
 };
 
 function reducer(state = initialState, action: ConsumerFiltersAction): ConsumerFiltersState {
     switch (action.type) {
-        case CONSUMER_CHANGE_PERSISTED_STATE:
-            return {...state, ...action.data};
-
-        case CONSUMER_CHANGE_PARTITIONS_COLUMNS:
+        case CONSUMER_CHANGE_FILTERS:
             return {...state, ...action.data};
 
         default: {
@@ -62,7 +62,7 @@ function reducer(state = initialState, action: ConsumerFiltersAction): ConsumerF
 }
 
 export type ConsumerFiltersAction = ActionD<
-    typeof CONSUMER_CHANGE_PERSISTED_STATE | typeof CONSUMER_CHANGE_PARTITIONS_COLUMNS,
+    typeof CONSUMER_CHANGE_FILTERS,
     Partial<ConsumerFiltersState>
 >;
 

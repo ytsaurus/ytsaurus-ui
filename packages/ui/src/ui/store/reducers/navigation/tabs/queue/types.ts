@@ -15,15 +15,12 @@ export interface YtQueueStatus {
     read_data_weight_rate: TPerformanceCounters; // (unimplemented)
     write_row_count_rate: TPerformanceCounters; // (unimplemented)
     read_row_count_rate: TPerformanceCounters; // (unimplemented)
-    consumers: Record<
-        string, // <consumer_ypath: TYPath >
-        YtQueueConsumer
-    >;
+    registrations: Array<YtQueueConsumer>;
 }
 
 export interface YtQueueConsumer {
     vital: boolean; // DA
-    owner: string; // Always username.
+    consumer: string;
     error?: YTError; // may be missing
     read_data_weight_rate: TPerformanceCounters; // (unimplemented)
     read_row_count_rate: TPerformanceCounters; // (unimplemented)

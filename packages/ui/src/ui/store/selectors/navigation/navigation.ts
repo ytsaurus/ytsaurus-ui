@@ -10,7 +10,6 @@ import {getParsedPath, getPath, getTransaction} from './index';
 import {ParsedPath, prepareNavigationState} from '../../../utils/navigation';
 import {Tab} from '../../../constants/navigation/index';
 
-import {isDeveloper as getIsDeveloper} from '../../../store/selectors/global';
 import {getTableMountConfigHasData} from '../../../store/selectors/navigation/content/table-mount-config';
 import {getAccessLogBasePath} from '../../../config';
 import {getTabletErrorsCount} from '../../../store/selectors/navigation/tabs/tablet-errors';
@@ -68,8 +67,8 @@ export const getNavigationRestorePath = createSelector([getNavigationPathAttribu
 });
 
 export const getSupportedTabs = createSelector(
-    [getNavigationPathAttributes, getTableMountConfigHasData, getTabletErrorsCount, getIsDeveloper],
-    (attributes, mountConfigHasData, tabletErrorsCount, isDeveloper) => {
+    [getNavigationPathAttributes, getTableMountConfigHasData, getTabletErrorsCount],
+    (attributes, mountConfigHasData, tabletErrorsCount) => {
         const isDynamic = attributes.dynamic === true;
         const mountConfigVisible = mountConfigHasData || isDynamic;
         const alwaysSupportedTabs = _.compact([
@@ -95,7 +94,6 @@ export const getSupportedTabs = createSelector(
         }
 
         if (
-            isDeveloper &&
             attributes?.type === 'table' &&
             attributes?.dynamic === true &&
             attributes?.sorted === false
@@ -103,10 +101,7 @@ export const getSupportedTabs = createSelector(
             supportedByAttribute.push(Tab.QUEUE);
         }
 
-        if (
-            isDeveloper &&
-            (attributes?.type == 'queue_consumer' || attributes?.treat_as_queue_consumer == true)
-        ) {
+        if (attributes?.type == 'queue_consumer' || attributes?.treat_as_queue_consumer == true) {
             supportedByAttribute.push(Tab.CONSUMER);
         }
 

@@ -4,6 +4,8 @@ import _ from 'lodash';
 
 import {Checkbox} from '@gravity-ui/uikit';
 
+import format from '../../../../common/hammer/format';
+
 import './PermissionsControl.scss';
 
 const block = cn('acl-permissions-control');
@@ -58,7 +60,7 @@ export default class PermissionsControl extends Component<Props, State> {
             <Checkbox
                 checked={Boolean(value?.[permissionName])}
                 key={permissionName}
-                content={permissionName}
+                content={format.ReadableField(permissionName)}
                 onChange={() => this.handleCheckboxChange(permissionName, permissionsToSet)}
                 disabled={itemDisabled}
                 className={block('item')}
