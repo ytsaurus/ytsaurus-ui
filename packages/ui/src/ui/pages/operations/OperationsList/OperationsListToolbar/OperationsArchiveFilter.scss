@@ -12,10 +12,12 @@
     }
 }
 
-.operations-datepicker-control {
-    width: 170px;
-}
+.operations-archive-filter {
+    .operations-datepicker-control {
+        width: 170px;
+    }
 
-.operations-datepicker-popup {
-    z-index: var(--dialog-suggest-z-index) !important;
+    .operations-datepicker-popup {
+        z-index: var(--dialog-suggest-z-index) !important;
+    }
 }
