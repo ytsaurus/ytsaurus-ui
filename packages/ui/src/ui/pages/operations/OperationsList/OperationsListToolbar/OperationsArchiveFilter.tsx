@@ -14,7 +14,7 @@ import Modal from '../../../../components/Modal/Modal';
 import TimePicker from '../../../../components/TimePicker/TimePicker';
 import CustomRadioButton from '../../../../components/RadioButton/RadioButton';
 import {SelectButton} from '../../../../components/Button/Button';
-import {Datepicker, DatepickerOutputDates} from '../../../../components/common/Datepicker';
+import {Datepicker} from '../../../../components/common/Datepicker';
 
 import './OperationsArchiveFilter.scss';
 import {ValueOf} from '../../../../../@types/types';
@@ -119,16 +119,22 @@ export default function OperationsArchiveFilter() {
         }
     }, [dataMode, from, to]);
 
-    const updateStartTime = useCallback(
-        ({from: newFrom}: DatepickerOutputDates) =>
-            setState({
-                ...state,
-                from: newFrom || state.from,
-            }),
+    const updateDate = useCallback(
+        (date: Pick<State, 'from' | 'to'>) => {
+            const dateWithHours = _.mapValues(date, (field, key) => {
+                if (field) {
+                    const {hours, minutes} = moment(state[key as 'from' | 'to']).toObject();
+                    return moment(field).add({hours, minutes}).toISOString();
+                }
+                return field;
+            });
+            setState({...state, ...dateWithHours});
+        },
         [state],
     );
-    const updateFinishTime = useCallback(
-        ({from: newTo}: DatepickerOutputDates) => setState({...state, to: newTo || state.to}),
+
+    const updateTime = useCallback(
+        (date: {from?: string; to?: string}) => setState({...state, ...date}),
         [state],
     );
 
@@ -138,15 +144,12 @@ export default function OperationsArchiveFilter() {
             setState({
                 ...state,
                 activeTypeValue,
-                from: moment()
-                    .subtract(
-                        activeTypeValue !== 'custom'
-                            ? radioButtonTypes[activeTypeValue].hours
-                            : undefined,
-                        'hours',
-                    )
-                    .toISOString(),
-                to: moment().toISOString(),
+                ...(activeTypeValue !== 'custom' && {
+                    from: moment()
+                        .subtract(radioButtonTypes[activeTypeValue].hours, 'hours')
+                        .toISOString(),
+                    to: moment().toISOString(),
+                }),
             });
         },
         [state],
@@ -183,7 +186,9 @@ export default function OperationsArchiveFilter() {
                                         {...datePickerProps}
                                         disabled={disabled}
                                         from={state.from}
-                                        onUpdate={updateStartTime}
+                                        onUpdate={({from: newFrom}) =>
+                                            newFrom && updateDate({from: newFrom})
+                                        }
                                     />
                                 </span>
                                 <span className={formBlock('field')}>
@@ -191,7 +196,9 @@ export default function OperationsArchiveFilter() {
                                         <TimePicker
                                             disabled={disabled}
                                             date={state.from}
-                                            onChange={updateStartTime}
+                                            onChange={(newDate: string) =>
+                                                updateTime({from: newDate})
+                                            }
                                         />
                                     )}
                                 </span>
@@ -202,8 +209,10 @@ export default function OperationsArchiveFilter() {
                                     <Datepicker
                                         {...datePickerProps}
                                         disabled={disabled}
-                                        from={state.to}
-                                        onUpdate={updateFinishTime}
+                                        to={state.to}
+                                        onUpdate={({from: newTo}) =>
+                                            newTo && updateDate({to: newTo})
+                                        }
                                     />
                                 </span>
                                 <span className={formBlock('field')}>
@@ -211,7 +220,9 @@ export default function OperationsArchiveFilter() {
                                         <TimePicker
                                             disabled={disabled}
                                             date={state.to}
-                                            onChange={updateFinishTime}
+                                            onChange={(newDate: string) =>
+                                                updateTime({to: newDate})
+                                            }
                                         />
                                     )}
                                 </span>
