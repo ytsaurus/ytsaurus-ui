@@ -61,6 +61,7 @@ export interface Role {
     is_approved?: boolean;
     is_unrecognized?: boolean;
     is_missing?: boolean;
+    vital?: boolean;
 }
 
 export interface RoleConverted {

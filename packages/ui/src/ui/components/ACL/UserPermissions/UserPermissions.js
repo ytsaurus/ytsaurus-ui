@@ -80,7 +80,7 @@ export default class UserPermissions extends Component {
                         return (
                             <li className={block('item', {type: action})} key={type}>
                                 <Icon awesome={icon} />
-                                {hammer.format['FirstUppercase'](type)}
+                                {hammer.format.Readable(type)}
                             </li>
                         );
                     })}

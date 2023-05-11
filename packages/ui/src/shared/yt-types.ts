@@ -111,6 +111,7 @@ export interface CheckPermissionsParams extends BaseBatchParams {
     user: string;
     path: string;
     permission: string;
+    vital?: boolean;
 }
 
 export interface TransferPoolQuotaParams extends BaseBatchParams {
