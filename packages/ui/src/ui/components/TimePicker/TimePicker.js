@@ -83,7 +83,7 @@ export default class TimePicker extends Component {
         if (isValidFormat) {
             const newDate = this._prepareOutputDate(newTime);
 
-            onChange({from: newDate});
+            onChange(newDate);
         }
     };
 
