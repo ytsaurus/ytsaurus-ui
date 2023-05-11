@@ -1,4 +1,8 @@
-import {IdmObjectType} from '../../constants/acl';
+import {
+    IdmObjectType,
+    REGISTER_QUEUE_CONSUMER,
+    REGISTER_QUEUE_CONSUMER_VITAL,
+} from '../../constants/acl';
 import {IdmKindType, ResponsibleType, Subject} from '../../utils/acl/acl-types';
 
 // //sys/accounts/accountName
@@ -115,4 +119,44 @@ export interface PreparedRole {
 
 export function prepareAclSubject({type, value}: ResponsibleType) {
     return {[type === 'users' ? 'user' : 'group']: value};
+}
+
+export function convertToUIPermissions<T extends {permissions?: Array<string>; vital?: boolean}>(
+    role: T,
+): T {
+    if (!role.vital ?? !role.permissions) {
+        return role;
+    }
+
+    const uiPermissions: T['permissions'] = role.permissions.map((item) => {
+        return item === REGISTER_QUEUE_CONSUMER ? REGISTER_QUEUE_CONSUMER_VITAL : item;
+    });
+    return {
+        ...role,
+        permissions: uiPermissions,
+    };
+}
+
+export function convertFromUIPermissions<T extends {permissions: Array<string>; vital?: boolean}>(
+    data: T,
+): T {
+    let vital = data.vital;
+    const effectivePermissions = data.permissions.map((item) => {
+        if (item === REGISTER_QUEUE_CONSUMER_VITAL) {
+            vital = true;
+            return REGISTER_QUEUE_CONSUMER;
+        }
+        return item;
+    });
+    return {
+        ...data,
+        vital,
+        permissions: effectivePermissions,
+    };
+}
+
+export function convertFromUIPermission(permission: string) {
+    return permission === REGISTER_QUEUE_CONSUMER_VITAL
+        ? {permission: REGISTER_QUEUE_CONSUMER, vital: true}
+        : {permission};
 }

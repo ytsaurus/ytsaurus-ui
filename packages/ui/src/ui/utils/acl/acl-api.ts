@@ -13,6 +13,7 @@ import {
 import {YTApiId, ytApiV3, ytApiV3Id} from '../../rum/rum-wrap-api';
 import {splitBatchResults} from '../../utils/utils';
 import {BatchResultsItem} from '../../../shared/yt-types';
+import {convertFromUIPermission, convertToUIPermissions} from '.';
 
 function getInheritAcl(path: string): Promise<ACLResponsible> {
     return yt.v3.get({path: path + '/@inherit_acl'}).then((inherit_acl: boolean) => {
@@ -94,7 +95,7 @@ export const getEffectiveAcl = (sysPath: string) => {
     return yt.v3.get({path: sysPath + '/@effective_acl'}).then((items: Array<ACE>) => {
         return internalAclWithTypes(items).then((data) => {
             return {
-                permissions: data,
+                permissions: data.map(convertToUIPermissions),
             };
         });
     });
@@ -130,7 +131,11 @@ export function checkPermissions(
     const requests = _.map(arr, ({path, user, permission, transaction_id: tx}) => {
         return {
             command: 'check_permission' as const,
-            parameters: Object.assign({path, user, permission}, tx ? {transaction_id: tx} : {}),
+            parameters: Object.assign(
+                {path, user},
+                convertFromUIPermission(permission),
+                tx ? {transaction_id: tx} : {},
+            ),
         };
     });
 

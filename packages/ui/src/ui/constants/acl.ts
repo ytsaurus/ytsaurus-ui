@@ -17,6 +17,9 @@ export const IdmObjectType: {[key: string]: IdmKindType} = {
     ACCESS_CONTROL_OBJECT: 'access_control_object',
 };
 
+export const REGISTER_QUEUE_CONSUMER = 'register_queue_consumer';
+export const REGISTER_QUEUE_CONSUMER_VITAL = 'register_queue_consumer_vital';
+
 const PERMISSION_TYPES = [
     'read',
     'write',
@@ -26,6 +29,8 @@ const PERMISSION_TYPES = [
     'mount',
     'use',
     'create',
+    REGISTER_QUEUE_CONSUMER,
+    REGISTER_QUEUE_CONSUMER_VITAL,
 ];
 
 const ACCOUNTS_PERMISSION_TYPES = ['administer', 'use'];
@@ -37,8 +42,8 @@ export const PERMISSIONS_SETTINGS = {
             ['read'],
             ['read', 'write', 'remove'],
             ['mount'],
-            ['register_queue_consumer'],
-            ['register_queue_consumer_vital'],
+            [REGISTER_QUEUE_CONSUMER],
+            [REGISTER_QUEUE_CONSUMER_VITAL],
         ],
         allowBossApprovals: true,
         allowReadApprovers: true,

@@ -390,7 +390,7 @@ class ACL extends Component {
                         <Label className={block('action-label')} theme={theme}>
                             {action}
                         </Label>
-                        {renderText(item.permissions?.join(', '))}
+                        {renderText(item.permissions?.map(hammer.format.Readable).join(', '))}
                     </div>
                 );
             },
