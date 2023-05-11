@@ -169,7 +169,7 @@ export default function OperationsArchiveFilter() {
                 cl={formBlock('time-modal')}
                 visible={state.modalVisible}
                 content={
-                    <div className={formBlock()}>
+                    <div className={formBlock(null, 'operations-archive-filter')}>
                         <div className={formBlock('button-group')}>
                             <CustomRadioButton
                                 name="time-range"
