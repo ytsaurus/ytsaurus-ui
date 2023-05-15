@@ -8,6 +8,7 @@ import {Progress, ProgressProps} from '@gravity-ui/uikit';
 import {Tooltip} from '../../components/Tooltip/Tooltip';
 
 import {getProgressBarColorByIndex} from '../../constants/colors';
+import MetaTable, {MetaTableItem} from '../../components/MetaTable/MetaTable';
 
 import {CPULimits, MemoryLimits} from '../../store/reducers/tablet_cell_bundles';
 
@@ -26,16 +27,15 @@ export function BundleMetaResourceProgress(
     title: string,
     {data, limit, resourceType, postfix = ''}: ResourceProgress,
 ) {
-    const {props, info, commonTooltip} = getProgressData({data, limit, resourceType, postfix});
+    const {props, text, commonTooltip} = getProgressData({data, limit, resourceType, postfix});
 
     return {
         key: title,
         value: (
             <div className={block()}>
                 <Tooltip placement={'bottom'} content={commonTooltip}>
-                    <Progress className={block('progress')} {...props} />
+                    <Progress className={block('progress')} {...props} text={text} />
                 </Tooltip>
-                <span className={block('info')}>{info}</span>
             </div>
         ),
     };
@@ -49,37 +49,22 @@ function getProgressData({data, limit, resourceType, postfix}: ResourceProgress)
     const sum = _.reduce(data, (acc, v) => acc + Number(v), 0);
     const max = limit ?? sum;
 
-    const info = `${hammer.format[resourceType](sum)} ${postfix}`.trim();
-    const generalTooltipList: string[] = [];
+    const text = `${hammer.format[resourceType](sum)} ${postfix}`.trim();
+    const metaItems: Array<MetaTableItem> = [];
 
     _.forEach(data, (value, name) => {
         const formattedValue = hammer.format[resourceType](value);
-        const content = `${name} - ${formattedValue} ${postfix}`;
+
+        metaItems.push({key: hammer.format.Readable(name), value: `${formattedValue} ${postfix}`});
         const fraction = (Number(value) / max) * 100;
 
-        generalTooltipList.push(content);
-
         props.stack.push({
-            color: getProgressBarColorByIndex(props.stack.length, 0),
+            color: getProgressBarColorByIndex(props.stack.length),
             value: fraction,
         });
     });
 
-    const commonTooltip = renderTooltip(generalTooltipList);
+    const commonTooltip = <MetaTable items={metaItems} />;
 
-    return {props, info, commonTooltip};
-}
-
-function renderTooltip(list: string[]) {
-    return (
-        <ul className={block('tooltip-list')}>
-            {list.map((text, i) => {
-                return (
-                    <li key={i} className={block('tooltip-item')}>
-                        {text}
-                    </li>
-                );
-            })}
-        </ul>
-    );
+    return {props, text, commonTooltip};
 }
