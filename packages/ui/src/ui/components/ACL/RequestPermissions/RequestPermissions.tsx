@@ -1,40 +1,48 @@
-import PropTypes from 'prop-types';
 import {compose} from 'redux';
 import cn from 'bem-cn-lite';
 import React, {useCallback} from 'react';
-import Dialog, {makeErrorFields} from '../../../components/Dialog/Dialog';
+import Dialog, {FormApi, makeErrorFields} from '../../../components/Dialog/Dialog';
 import ErrorBoundary from '../../../components/ErrorBoundary/ErrorBoundary';
 import Button from '../../../components/Button/Button';
 import PermissionsControl from '../RequestPermissions/PermissionsControl/PermissionsControl';
 
-import withVisible from '../../../hocs/withVisible';
+import withVisible, {WithVisibleProps} from '../../../hocs/withVisible';
 
 import './RequestPermissions.scss';
 import {PERMISSIONS_SETTINGS, IdmObjectType} from '../../../constants/acl';
+import {YTError} from '../../../types';
 
 const block = cn('acl-request-permissions');
 
-RequestPermissions.propTypes = {
-    buttonText: PropTypes.string,
+interface Props extends WithVisibleProps {
+    buttonText?: string;
+    className?: string;
+    cluster?: string;
+    normalizedPoolTree?: string;
+    path: string;
+    idmKind: string;
+    requestPermissions: (params: {values: FormValues; idmKind: string}) => Promise<any>;
+    cancelRequestPermissions: (params: {idmKind: string}) => any;
+    error: YTError;
+    onSuccess?: () => void;
+}
 
-    // from withVisible
-    visible: PropTypes.bool.isRequired,
-    handleClose: PropTypes.func.isRequired,
-    handleShow: PropTypes.func.isRequired,
+interface FormValues {
+    path: string;
+    cluster: string;
+    permissions: {[x: string]: any} | null;
+    subjects: Array<{
+        value: string;
+        type: 'users' | 'groups' | 'app';
+        text?: string;
+    }>;
+    duration: string;
+    comment: string;
+}
 
-    // from parent
-    className: PropTypes.string,
-    cluster: PropTypes.string,
-    path: PropTypes.string.isRequired,
-    idmKind: PropTypes.string.isRequired,
-    requestPermissions: PropTypes.func.isRequired,
-    cancelRequestPermissions: PropTypes.func.isRequired,
-    error: PropTypes.any,
-};
-
-function RequestPermissions(props) {
+function RequestPermissions(props: Props) {
     const {
-        buttonText,
+        buttonText = 'Request permissions',
         visible,
         handleShow,
         handleClose,
@@ -54,7 +62,7 @@ function RequestPermissions(props) {
     }, [handleClose, cancelRequestPermissions, idmKind]);
 
     const onAdd = useCallback(
-        (form) =>
+        (form: FormApi<FormValues, Partial<FormValues>>) =>
             requestPermissions({
                 values: form.getState().values,
                 idmKind,
@@ -67,7 +75,7 @@ function RequestPermissions(props) {
 
     const firstItemDisabled = idmKind === IdmObjectType.ACCOUNT;
     const permissions = firstItemDisabled ? valueWithCheckedFirstChoice(choices) : null;
-    const disabledChoices = idmKind === IdmObjectType.ACCOUNT ? [0] : null;
+    const disabledChoices = idmKind === IdmObjectType.ACCOUNT ? [0] : undefined;
 
     return (
         <ErrorBoundary>
@@ -75,12 +83,11 @@ function RequestPermissions(props) {
                 <Button view={'action'} onClick={handleShow}>
                     {buttonText}
                 </Button>
-                <Dialog
+                <Dialog<FormValues>
                     pristineSubmittable
                     onClose={onClose}
                     className={block('modal')}
-                    confirmText="Send"
-                    visible={visible}
+                    visible={Boolean(visible)}
                     onAdd={onAdd}
                     headerProps={{
                         title: 'Request permissions',
@@ -92,7 +99,10 @@ function RequestPermissions(props) {
                     }}
                     validate={(values) => {
                         const subjects = values.subjects;
-                        const validationError = {
+                        const validationError: Record<
+                            keyof Pick<FormValues, 'subjects'>,
+                            string | undefined
+                        > = {
                             subjects: undefined,
                         };
 
@@ -175,13 +185,9 @@ function RequestPermissions(props) {
     );
 }
 
-RequestPermissions.defaultProps = {
-    buttonText: 'Request permissions',
-};
-
 export default compose(withVisible)(RequestPermissions);
 
-function valueWithCheckedFirstChoice(choices) {
+function valueWithCheckedFirstChoice(choices: string | any[]) {
     if (!choices || choices.length < 1) {
         return {};
     }
