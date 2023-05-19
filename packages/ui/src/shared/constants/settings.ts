@@ -70,6 +70,7 @@ export const SettingName = {
         HTTP_PROXIES_COLLAPSED: 'httpProxiesCollapsed',
         RPC_PROXIES_COLLAPSED: 'rpcProxiesCollapsed',
         NODES_COLLAPSED: 'nodesCollapsed',
+        NODES_NODE_TYPE: 'nodesNodeType',
     },
     OPERATIONS: {
         STATISTICS_AGGREGATION_TYPE: 'statisticsAggregationType',

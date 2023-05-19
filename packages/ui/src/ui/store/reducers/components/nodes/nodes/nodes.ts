@@ -11,7 +11,6 @@ import {
     CONTENT_MODE,
     GET_NODES_TAGS,
     GET_NODES,
-    NODE_TYPE,
     CHANGE_NODE_TYPE,
 } from '../../../../../constants/components/nodes/nodes';
 import type {
@@ -19,6 +18,7 @@ import type {
     changeHostFilter,
 } from '../../../../../store/actions/components/nodes/nodes';
 import type {ActionD, ValueOf, YTError} from '../../../../../types';
+import {NODE_TYPE, NodeType} from '../../../../../../shared/constants/system';
 
 export interface NodesEphemeralState {
     index: number;
@@ -36,7 +36,7 @@ export interface NodesEphemeralState {
 
 export interface NodesPersistedState {
     hostFilter: string;
-    nodeType: ValueOf<typeof NODE_TYPE>;
+    nodeType: NodeType;
     contentMode: ValueOf<typeof CONTENT_MODE>;
 }
 

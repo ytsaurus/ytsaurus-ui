@@ -1,3 +1,5 @@
+import {NodeType} from './system';
+
 export interface Namespace {
     name: string;
     value: string;
@@ -51,6 +53,7 @@ interface NavigationSettings {
 
 interface SystemSettings {
     'global::system::mastersHostType': 'container' | 'host';
+    'global::system::nodesType': NodeType;
 }
 
 interface A11YSettings {

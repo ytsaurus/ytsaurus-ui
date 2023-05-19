@@ -132,6 +132,7 @@ function prepareRacks(rackNames, nodes) {
 }
 
 const initialState = {
+    loaded: false,
     fetching: false,
     error: null,
     racks: undefined,
@@ -180,6 +181,7 @@ function nodes(state = initialState, action) {
             if (racks.length <= MAX_RACKS_TO_NOT_GROUP) {
                 return {
                     ...state,
+                    loaded: true,
                     fetching: false,
                     error: null,
                     racks: racks,
@@ -191,6 +193,7 @@ function nodes(state = initialState, action) {
                 const [groupedRacks, counters] = groupRacks(racks);
                 return {
                     ...state,
+                    loaded: true,
                     fetching: false,
                     error: null,
                     racks: undefined,

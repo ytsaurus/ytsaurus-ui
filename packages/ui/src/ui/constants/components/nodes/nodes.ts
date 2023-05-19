@@ -4,6 +4,7 @@ import createActionTypes, {createPrefix} from '../../../constants/utils';
 import {makeRadioButtonProps, makeRadioButtonPropsByKey} from '../../../utils';
 import {Tab} from '../../../constants/components/main';
 import {Page} from '../../../constants/index';
+import {NODE_TYPE} from '../../../../shared/constants/system';
 
 const PREFIX = createPrefix(Page.COMPONENTS, Tab.NODES);
 
@@ -33,13 +34,6 @@ export const FLAG_STATE = {
     DISABLED: 'disabled',
     ALL: 'all',
 };
-export const NODE_TYPE = {
-    ALL_NODES: 'cluster_nodes',
-    DATA_NODES: 'data_nodes',
-    EXEC_NODES: 'exec_nodes',
-    TABLET_NODES: 'tablet_nodes',
-    CHAOS_NODES: 'chaos_nodes',
-} as const;
 
 export const CONTENT_MODE_OPTIONS = _.values(CONTENT_MODE);
 export const CONTENT_MODE_ITEMS = makeRadioButtonProps(CONTENT_MODE_OPTIONS);

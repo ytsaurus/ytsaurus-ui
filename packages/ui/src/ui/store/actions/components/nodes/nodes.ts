@@ -29,14 +29,14 @@ import {
     GET_NODES_TAGS,
     GET_NODES,
     CHANGE_NODE_TYPE,
-    NODE_TYPE,
 } from '../../../../constants/components/nodes/nodes';
 import {USE_CACHE, USE_MAX_SIZE} from '../../../../constants';
 import CancelHelper from '../../../../utils/cancel-helper';
 import {YTApiId, ytApiV3Id} from '../../../../rum/rum-wrap-api';
-import type {ActionD, FIX_MY_TYPE, PartialDeep, ValueOf} from '../../../../types';
+import type {ActionD, FIX_MY_TYPE, PartialDeep} from '../../../../types';
 import {wrapApiPromiseByToaster} from '../../../../utils/utils';
 import {DiscoverVersionsData, getVersions, VersionHostInfo} from '../versions/versions_v2';
+import {NodeType} from '../../../../../shared/constants/system';
 
 const {COMPONENTS} = NAMESPACES;
 const {TEMPLATES} = SettingName.COMPONENTS;
@@ -145,7 +145,7 @@ export function changeHostFilter(
     };
 }
 
-export function changeNodeType(nodeType: ValueOf<typeof NODE_TYPE>): NodesThunkAction {
+export function changeNodeType(nodeType: NodeType): NodesThunkAction {
     return (dispatch) => {
         dispatch({
             type: CHANGE_NODE_TYPE,

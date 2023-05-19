@@ -1,11 +1,15 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
-import block from 'bem-cn-lite';
+import cn from 'bem-cn-lite';
 import _ from 'lodash';
 import {compose} from 'redux';
 
+import format from '../../../common/hammer/format';
+
 import {CollapsibleSectionStateLess} from '../../../components/CollapsibleSection/CollapsibleSection';
+import {NoContent} from '../../../components/NoContent/NoContent';
+
 import withDataLoader from '../../../hocs/pages/withDataLoader';
 import SystemStateOverview from '../SystemStateOverview/SystemStateOverview';
 import NodeRacks from '../NodeRacks/NodeRacks';
@@ -14,9 +18,16 @@ import {formatCounterName} from '../../../utils/index';
 import {cancelLoadNodes, loadNodes} from '../../../store/actions/system/nodes';
 import {getUISizes} from '../../../store/selectors/global';
 import {setSettingsSystemNodesCollapsed} from '../../../store/actions/settings/settings';
-import {getSettingsSystemNodesCollapsed} from '../../../store/selectors/settings-ts';
+import {
+    getSettingSystemNodesNodeType,
+    getSettingsSystemNodesCollapsed,
+} from '../../../store/selectors/settings-ts';
+
+import NodeTypeSelector from './NodeTypeSelector';
 
 import './Nodes.scss';
+
+const block = cn('system-nodes');
 
 class Nodes extends Component {
     static propTypes = {
@@ -39,17 +50,26 @@ class Nodes extends Component {
     };
 
     renderContent(theme) {
-        const {racks, rackGroups, containerWidth} = this.props;
-        const headingCN = block('elements-heading')({
+        const {racks, rackGroups, nodeType, containerWidth} = this.props;
+        const headingCN = cn('elements-heading')({
             size: 's',
             overview: 'yes',
         });
+
+        if (_.isEmpty(racks) && _.isEmpty(rackGroups)) {
+            return (
+                <NoContent
+                    warning={`There is no ${format.ReadableField(nodeType)}`}
+                    hint={'Try to select another node type'}
+                />
+            );
+        }
 
         if (rackGroups) {
             const {counters} = this.props;
 
             return _.map(rackGroups, (rackGroup, groupName) => (
-                <div key={groupName} className={block('system-nodes')()} ref={this.container}>
+                <div key={groupName} className={block()} ref={this.container}>
                     <div className={headingCN}>
                         {groupName}
                         <SystemStateOverview
@@ -69,7 +89,7 @@ class Nodes extends Component {
         }
 
         return (
-            <div className={block('system-nodes')()} ref={this.container}>
+            <div className={block()} ref={this.container}>
                 <NodeRacks
                     formatCounterName={formatCounterName}
                     racks={racks}
@@ -83,18 +103,23 @@ class Nodes extends Component {
         const {overviewCounters} = this.props;
 
         return (
-            <SystemStateOverview
-                counters={overviewCounters}
-                stateThemeMappings={theme}
-                tab="nodes"
-            />
+            <React.Fragment>
+                <div className={block('node-type')}>
+                    <NodeTypeSelector />
+                </div>
+                <SystemStateOverview
+                    counters={overviewCounters}
+                    stateThemeMappings={theme}
+                    tab="nodes"
+                />
+            </React.Fragment>
         );
     }
 
     render() {
-        const {racks, rackGroups, collapsibleSize, collapsed} = this.props;
+        const {racks, rackGroups, collapsibleSize, loaded, collapsed} = this.props;
 
-        if (!racks && !rackGroups) {
+        if (!loaded && !racks && !rackGroups) {
             return null;
         }
 
@@ -118,15 +143,17 @@ class Nodes extends Component {
 }
 
 function mapStateToProps(state) {
-    const {racks, rackGroups, counters, overviewCounters} = state.system.nodes;
+    const {racks, rackGroups, counters, loaded, overviewCounters} = state.system.nodes;
 
     return {
+        loaded,
         racks,
         rackGroups,
         counters,
         overviewCounters,
         collapsibleSize: getUISizes(state).collapsibleSize,
         collapsed: getSettingsSystemNodesCollapsed(state),
+        nodeType: getSettingSystemNodesNodeType(state),
     };
 }
 

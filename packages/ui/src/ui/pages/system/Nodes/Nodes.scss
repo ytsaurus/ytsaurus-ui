@@ -1,11 +1,13 @@
-.system {
-    &-nodes {
-        .elements-heading {
-            margin-bottom: 0;
-        }
+.system-nodes {
+    .elements-heading {
+        margin-bottom: 0;
+    }
 
-        .collapsible-section & {
-            margin-top: 20px;
-        }
+    .collapsible-section & {
+        margin-top: 20px;
+    }
+
+    &__node-type {
+        padding-right: 10px;
     }
 }
