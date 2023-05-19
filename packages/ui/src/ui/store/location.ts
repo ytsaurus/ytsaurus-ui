@@ -79,6 +79,8 @@ import {
     tabletsBundlesAclParams,
     getTabletsBundlesAclPreparedState,
 } from './reducers/tablet_cell_bundles/url-mapping';
+import {systemParams, getSystemPreparedState} from '../store/reducers/system/url-mapping';
+
 import {TabletsTab} from '../constants/tablets';
 import {paramsToQuery} from '../utils';
 import {getWindowStore} from './window-store';
@@ -191,6 +193,8 @@ const storeSetup: Array<[string, PathParameters]> = [
         [schedulingAclParams, getSchedulingAclPreparedState],
     ],
     [`/*/${Page.SCHEDULING}`, [schedulingParams, getSchedulingPreparedState]],
+
+    [`/*/${Page.SYSTEM}`, [systemParams, getSystemPreparedState]],
 
     [
         `/*/${Page.TABLET_CELL_BUNDLES}/${TabletsTab.TABLET_CELLS}`,

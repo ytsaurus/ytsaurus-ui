@@ -8,6 +8,7 @@ import {ActiveJobTypesMap} from '../../store/actions/settings/settings';
 import {RootState} from '../../store/reducers';
 import {uiSettings} from '../../config';
 import _ from 'lodash';
+import {NODE_TYPE} from '../../../shared/constants/system';
 
 export const getSettingsDataRaw = (state: RootState) => state.settings.data;
 
@@ -162,4 +163,13 @@ export const getSettingsNavigationConsumerPartitionsVisibility = createSelector(
     makeGetSetting,
     (getSetting): Array<string> =>
         getSetting(SettingName.NAVIGATION.CONSUMER_PARTITIONS_VISIBILITY, NAMESPACES.NAVIGATION),
+);
+
+export const getSettingSystemNodesNodeType = createSelector(
+    makeGetSetting,
+    (getSetting): string => {
+        return (
+            getSetting(SettingName.SYSTEM.NODES_NODE_TYPE, NAMESPACES.SYSTEM) ?? NODE_TYPE.ALL_NODES
+        );
+    },
 );

@@ -44,9 +44,13 @@ export class CollapsibleSectionStateLess extends Component<PropsStateLess> {
                 <div className={b(null, className)}>
                     <div className={headingCN({size, overview: 'yes'})}>
                         <span
-                            className={headingCN('heading', {
-                                clickable: 'yes',
-                            })}
+                            className={headingCN(
+                                'heading',
+                                {
+                                    clickable: 'yes',
+                                },
+                                b('title'),
+                            )}
                             onClick={this.toggle}
                         >
                             {name}

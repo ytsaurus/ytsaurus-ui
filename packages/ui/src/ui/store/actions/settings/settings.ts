@@ -8,6 +8,7 @@ import {setSetting} from './index';
 import {SettingName, NAMESPACES} from '../../../../shared/constants/settings';
 import {AnnotationVisibilityType} from '../../../../shared/constants/settings-ts';
 import {AccountUsageViewType} from '../../../store/reducers/accounts/usage/accounts-usage-filters';
+import {NodeType} from '../../../../shared/constants/system';
 
 type SettingThunkAction = ThunkAction<any, RootState, any, any>;
 
@@ -219,5 +220,11 @@ export function setSettingNavigationPanelExpanded(expanded: boolean): SettingThu
         dispatch(
             setSetting(SettingName.GLOBAL.NAVIGATION_PANEL_EXPAND, NAMESPACES.GLOBAL, expanded),
         );
+    };
+}
+
+export function setSettingSystemNodesNodeType(nodeType: NodeType): SettingThunkAction {
+    return (dispatch) => {
+        dispatch(setSetting(SettingName.SYSTEM.NODES_NODE_TYPE, NAMESPACES.SYSTEM, nodeType));
     };
 }

@@ -7,6 +7,7 @@ import {isRetryFutile} from '../../../utils/index';
 import {showErrorPopup, splitBatchResults} from '../../../utils/utils';
 import {USE_CACHE, USE_MAX_SIZE} from '../../../constants';
 import {YTApiId, ytApiV3Id} from '../../../rum/rum-wrap-api';
+import {getSettingSystemNodesNodeType} from '../../../store/selectors/settings-ts';
 
 export const FETCH_NODES = createActionTypes('NODES');
 const NODES_UPDATER_ID = 'system_nodes';
@@ -27,12 +28,14 @@ export function cancelLoadNodes() {
 }
 
 function getNodes() {
-    return (dispatch) => {
+    return (dispatch, getState) => {
+        const nodeType = getSettingSystemNodesNodeType(getState());
+
         const requests = [
             {
                 command: 'list',
                 parameters: {
-                    path: '//sys/cluster_nodes',
+                    path: `//sys/${nodeType}`,
                     attributes: [
                         'state',
                         'banned',

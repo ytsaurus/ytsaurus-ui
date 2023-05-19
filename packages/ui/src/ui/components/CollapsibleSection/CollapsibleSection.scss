@@ -1,9 +1,14 @@
 .collapsible-section {
     margin-top: 20px;
 
+    &__title {
+        white-space: nowrap;
+    }
+
     &__toggler {
         cursor: pointer;
         margin-left: 4px;
+        padding-right: 20px;
     }
 
     .elements {
