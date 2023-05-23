@@ -8,7 +8,6 @@ import min_ from 'lodash/min';
 import map_ from 'lodash/map';
 import max_ from 'lodash/max';
 import reduce_ from 'lodash/reduce';
-import some_ from 'lodash/some';
 import sum_ from 'lodash/sum';
 
 import {
@@ -136,24 +135,21 @@ export const getOperationStatisticsFilteredTree = createSelector(
             return tree;
         }
 
-        const checkLastItemOfPath = !filterText
+        const checkByName = !filterText.length
             ? () => true
-            : (p: Array<string>) => {
-                  return -1 !== p[p.length - 1].indexOf(filterText);
+            : (path: Array<string>) => {
+                  const pathText = path.join('/');
+                  return -1 !== pathText.indexOf(filterText);
               };
-
-        const checkName = !filterText
-            ? () => true
-            : (name: string) => -1 !== name.indexOf(filterText);
 
         return filterFieldTree(
             tree ?? {},
             isStatisticItem,
             (path, tree) => {
-                if (some_(path, checkName)) {
+                if (checkByName(path)) {
                     return true;
                 }
-                return tree && fieldTreeSome(tree, isStatisticItem, checkLastItemOfPath);
+                return tree && fieldTreeSome(tree, isStatisticItem, checkByName, path.slice());
             },
             (items) => {
                 return filter_(items, ({tags: {job_type, pool_tree}}) => {
