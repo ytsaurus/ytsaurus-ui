@@ -215,13 +215,32 @@ function PoolsSuggest(props: {onCancelEdit: () => void}) {
     const poolNames = useSelector(getPoolsNames);
     const dispatch = useDispatch();
 
-    const [filter, setFilter] = React.useState('');
+    const getSuggestItems = React.useCallback(
+        (_items: any, filter?: string) => {
+            if (!filter) {
+                return poolNames;
+            }
 
-    const getSuggestItems = React.useCallback(() => {
-        return _.filter(poolNames, (poolName) => {
-            return poolName !== ROOT_POOL_NAME && poolName.toLowerCase().indexOf(filter) !== -1;
-        }).sort();
-    }, [filter, poolNames]);
+            const match: Array<string> = [];
+            const startsWith: Array<string> = [];
+            const filtered: Array<string> = [];
+
+            const lcFilter = filter?.toLowerCase();
+
+            _.forEach(poolNames, (poolName) => {
+                const lcPoolName = poolName.toLowerCase();
+                if (lcFilter === lcPoolName) {
+                    match.push(poolName);
+                } else if (lcPoolName.startsWith(lcFilter)) {
+                    startsWith.push(poolName);
+                } else if (poolName !== ROOT_POOL_NAME && -1 !== lcPoolName.indexOf(lcFilter)) {
+                    filtered.push(poolName);
+                }
+            });
+            return match.concat(startsWith, filtered);
+        },
+        [poolNames],
+    );
 
     const handleCancelEdit = React.useCallback(() => {
         setTimeout(onCancelEdit, 500);
@@ -229,22 +248,19 @@ function PoolsSuggest(props: {onCancelEdit: () => void}) {
 
     const onItemClick = React.useCallback(
         (pool: string) => {
-            setFilter('');
             dispatch(changePool(pool));
             onCancelEdit();
         },
-        [setFilter, onCancelEdit],
+        [dispatch, onCancelEdit],
     );
 
     return (
         <Suggest
             popupClassName={block('pool-suggest-popup')}
             autoFocus
-            text={filter}
             filter={getSuggestItems}
             onBlur={handleCancelEdit}
             placeholder="Select pool..."
-            onTextUpdate={setFilter}
             onItemClick={(item) => onItemClick('string' === typeof item ? item : item.value)}
         />
     );
