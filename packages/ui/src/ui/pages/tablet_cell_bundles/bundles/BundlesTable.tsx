@@ -49,7 +49,7 @@ const COLUMN_TITLE: {[name: string]: string} = {
     compressed: 'Compressed size',
     enable_bundle_controller: 'Bundle controller',
     enable_bundle_balancer: 'Bundle balancer',
-    changelog_account: 'Changelog, snapshot account',
+    changelog_account: 'Changelog and Snapshot account',
     node_tag_filter: 'Node tag filter',
     actions: ' ',
     tablet_count: 'Usage',
@@ -161,15 +161,15 @@ class BundlesTable extends React.Component<ReduxProps> {
     renderBB(data: {row: TabletBundle}) {
         const {bundle, enable_bundle_balancer: value} = data?.row || {};
         const isTotalAggregatedRow = !bundle;
-        if (isTotalAggregatedRow) return;
+        if (isTotalAggregatedRow) return null;
 
-        return <span>{value ? 'on' : 'off'}</span>;
+        return <BundleBalancerValue value={value} />;
     }
 
     renderBC(data: {row: TabletBundle}) {
         const {bundle, enable_bundle_controller: value} = data?.row || {};
         const isTotalAggregatedRow = !bundle;
-        if (isTotalAggregatedRow) return;
+        if (isTotalAggregatedRow) return null;
 
         return <BundleBalancerValue value={value} />;
     }
