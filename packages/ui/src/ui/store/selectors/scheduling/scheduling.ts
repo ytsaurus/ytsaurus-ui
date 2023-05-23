@@ -47,7 +47,10 @@ export const getSortState = (state: RootState) => state.tables[SCHEDULING_POOL_T
 export const getPoolChildrenSortState = (state: RootState) =>
     state.tables[SCHEDULING_POOL_CHILDREN_TABLE_ID];
 
-export const getPoolsNames = createSelector(getPools, (pools) => _.map(pools, (pool) => pool.name));
+export const getPoolsNames = createSelector(
+    getPools,
+    (pools): Array<string> => _.map(pools, (pool) => pool.name).sort(),
+);
 
 const DETAILS_CONTENT_MODES = {
     cpu: 'cpu',
@@ -77,7 +80,7 @@ export const getPoolsSelectItems = createSelector(getPoolsNames, (pools) => {
         text: pool,
     }));
 
-    return _.sortBy(items, (item) => item.value);
+    return items;
 });
 
 export const getCurrentPool = createSelector([getPool, getPools], (pool, pools) =>
