@@ -48,8 +48,8 @@ export class NumberControl extends Component<Omit<NumberInputWithErrorProps, 'fo
         return value === undefined || value === ('' as any);
     }
 
-    static validate({error}: NumberInputWithErrorProps['value']) {
-        return error ? error : undefined;
+    static validate(v: NumberInputWithErrorProps['value']) {
+        return v?.error ? v?.error : undefined;
     }
 
     render() {
@@ -58,7 +58,7 @@ export class NumberControl extends Component<Omit<NumberInputWithErrorProps, 'fo
             <NumberInputWithError
                 className={block()}
                 {...this.props}
-                value={value.value === ('' as any) ? {...value, value: undefined} : value}
+                value={value?.value === ('' as any) ? {...value, value: undefined} : value}
                 format={'Number'}
             />
         );

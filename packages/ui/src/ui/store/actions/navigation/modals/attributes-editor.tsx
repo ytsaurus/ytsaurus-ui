@@ -49,6 +49,8 @@ const EDITABLE_ATTRIBUTES = [
     'sorted',
     'annotation',
     'annotation_path',
+    'expiration_time',
+    'expiration_timeout',
 ];
 
 export function showNavigationAttributesEditor(paths: Array<string>): ActionType {
@@ -78,12 +80,12 @@ export function showNavigationAttributesEditor(paths: Array<string>): ActionType
                     {} as any,
                 );
                 dispatch({
-                    type: NAVIGATION_ATTRIBUTES_EDITOR_PARTIAL,
-                    data: {paths, visible: true},
+                    type: NAVIGATION_ATTRIBUTES_EDITOR_SUCCESS,
+                    data: {attributesMap, paths},
                 });
                 dispatch({
-                    type: NAVIGATION_ATTRIBUTES_EDITOR_SUCCESS,
-                    data: {attributesMap},
+                    type: NAVIGATION_ATTRIBUTES_EDITOR_PARTIAL,
+                    data: {visible: true},
                 });
             })
             .catch((e: any) => {
@@ -247,6 +249,10 @@ export function navigationSetNodeAttributes(
             })
             .then(() => {
                 dispatch(updateView());
+                dispatch({
+                    type: NAVIGATION_ATTRIBUTES_EDITOR_PARTIAL,
+                    data: {paths: undefined, visible: false},
+                });
             })
             .catch((e: any) => {
                 dispatch({

@@ -15,6 +15,7 @@ import Filter from '../../../../components/Filter/Filter';
 import {SelectSingle} from '../../../../components/Select/Select';
 import Error from '../../../../components/Error/Error';
 import Icon from '../../../../components/Icon/Icon';
+import TTLInfo from '../../../../components/TTLInfo/TTLInfo';
 import CreateTableModal from '../../../../navigation/Navigation/PathEditorModal/CreateTableModal/CreateTableModal';
 import {isCreateTableModalVisible} from '../../../../store/selectors/navigation/modals/create-table';
 
@@ -22,6 +23,7 @@ import MapNodesTable from './MapNodesTable';
 
 import {openCreateTableModal} from '../../../../store/actions/navigation/modals/create-table';
 import {getPath, getTransaction} from '../../../../store/selectors/navigation';
+import {getNavigationPathAttributes} from '../../../../store/selectors/navigation/navigation';
 import {getMediumList} from '../../../../store/selectors/thor';
 import {
     getFilterState,
@@ -156,6 +158,7 @@ function mapStateToProps(state) {
         mediumList: getMediumList(state),
         mediumType: getMediumType(state),
         showCreateTableModal: isCreateTableModalVisible(state),
+        attributes: getNavigationPathAttributes(state),
     };
 }
 
@@ -218,6 +221,7 @@ class MapNodeToolbar extends React.PureComponent {
             setMediumType,
             filterState,
             path,
+            attributes,
         } = this.props;
 
         return (
@@ -232,6 +236,8 @@ class MapNodeToolbar extends React.PureComponent {
                             onChange={setFilter}
                         />
                     </div>
+
+                    <TTLInfo attributes={attributes} size={'m'} className={tbBlock('component')} />
 
                     <div className={block('content-mode', tbBlock('component'))}>
                         <RadioButton

@@ -50,6 +50,7 @@ import {isFinalLoadingStatus, showErrorPopup} from '../../../../utils/utils';
 import PathActions from './PathActions';
 import {Tooltip} from '../../../../components/Tooltip/Tooltip';
 import WarningIcon from '../../../../components/WarningIcon/WarningIcon';
+import TTLInfo from '../../../../components/TTLInfo/TTLInfo';
 
 import './MapNodesTable.scss';
 
@@ -109,6 +110,28 @@ class MapNodesTable extends Component {
     }
 
     static renderName(item) {
+        return (
+            <div className={block('name-cell')}>
+                <div className={block('name-cell-text')}>{MapNodesTable.renderNameImpl(item)}</div>
+                <div className={block('name-cell-tags')}>{MapNodesTable.renderTags(item)}</div>
+            </div>
+        );
+    }
+
+    static renderTags(item) {
+        return (
+            <TTLInfo
+                attributes={item.$attributes}
+                onClick={(e) => {
+                    e.stopPropagation();
+                    e.preventDefault();
+                    return true;
+                }}
+            />
+        );
+    }
+
+    static renderNameImpl(item) {
         if (MapNodesTable.isTrashNode(item)) {
             return MapNodesTable.renderTrash(item.pathState);
         } else if (MapNodesTable.isLinkToTrashNode(item)) {

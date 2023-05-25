@@ -51,6 +51,8 @@ import {BundleInput} from '../../pages/tablet_cell_bundles/bundles/BundleEditorD
 import {AbcControl} from './controls/AbcControl/AbcControl';
 import Select, {SelectSingle} from '../../components/Select/Select';
 import BeforeDatePicker from '../../components/common/BeforeDatePicker/BeforeDatePicker';
+import {TimeDuration} from '../../components/TimeDuration/TimeDuration';
+import {DatePickerControl} from './controls/DatePickerControl/DatePickerControl';
 
 const block = cn('yt-dialog');
 
@@ -70,6 +72,8 @@ registerDialogControl('yt-group', GroupSuggest);
 registerDialogControl('sortable-list', SortableListControl);
 registerDialogControl('bytes', BytesControl);
 registerDialogControl('number', NumberControl);
+registerDialogControl('time-duration', TimeDuration);
+registerDialogControl('datepicker', DatePickerControl);
 
 registerDialogControl('select-with-subitems', SelectWithSubItems);
 registerDialogControl('yt-select', Select);
@@ -123,6 +127,8 @@ export type DialogField<FormValues = unknown> =
     | RegisteredDialogField<'sortable-list', ComponentProps<typeof SortableListControl>, FormValues>
     | RegisteredDialogField<'bytes', ComponentProps<typeof BytesControl>, FormValues>
     | RegisteredDialogField<'number', ComponentProps<typeof NumberControl>, FormValues>
+    | RegisteredDialogField<'time-duration', ComponentProps<typeof TimeDuration>, FormValues>
+    | RegisteredDialogField<'datepicker', ComponentProps<typeof DatePickerControl>, FormValues>
     | RegisteredDialogField<
           'select-with-subitems',
           ComponentProps<typeof SelectWithSubItems>,

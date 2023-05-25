@@ -1,4 +1,19 @@
 .map-nodes-table {
+    &__name-cell {
+        display: flex;
+        align-items: center;
+        overflow: hidden;
+    }
+
+    &__name-cell-text {
+        flex-grow: 1;
+        overflow: hidden;
+    }
+
+    &__name-cell-tags {
+        flex-shrink: 0;
+    }
+
     &__name {
         .unipika {
             display: inline;

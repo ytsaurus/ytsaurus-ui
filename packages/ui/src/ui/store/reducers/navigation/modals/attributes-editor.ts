@@ -60,7 +60,7 @@ export type NavAttrEditorAction =
     | Action<typeof NAVIGATION_ATTRIBUTES_EDITOR_REQUEST>
     | ActionD<
           typeof NAVIGATION_ATTRIBUTES_EDITOR_SUCCESS,
-          Pick<NavAttrEditorState, 'attributesMap'>
+          Pick<NavAttrEditorState, 'attributesMap' | 'paths'>
       >
     | ActionD<typeof NAVIGATION_ATTRIBUTES_EDITOR_ERROR, NavAttrEditorState['error']>
     | ActionD<

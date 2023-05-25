@@ -19,6 +19,7 @@ export function homeRedirect(req: Request, res: Response) {
 
     res.redirect(url);
 }
+
 export async function homeIndex(req: Request, res: Response) {
     const isRoot = isRootPage(req.params.cluster);
     const cluster = isRoot ? undefined : req.params.cluster;

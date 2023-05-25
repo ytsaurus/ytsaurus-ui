@@ -3,6 +3,7 @@ import {getDocsBaseUrl} from '../config';
 const baseUrl = getDocsBaseUrl() || '';
 
 export const docsUrls = {
+    'cypress:ttl': `${baseUrl}/user-guide/storage/cypress#TTL`,
     'storage:compression': `${baseUrl}/user-guide/storage/compression`,
     'operations:recommendations#slishkom-melkie-chanki': `${baseUrl}/user-guide/data-processing/operations/recommendations#slishkom-melkie-chanki`,
     'scheduler:integral_guarantees': `${baseUrl}/user-guide/data-processing/scheduler/integral-guarantees`,

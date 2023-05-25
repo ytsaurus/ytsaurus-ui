@@ -15,3 +15,9 @@
 .df-dialog-tab__name-text {
     line-height: 1.43;
 }
+
+.df-dialog__field-wrapper_type_datepicker {
+    .yc-datepicker__control {
+        width: 100%;
+    }
+}

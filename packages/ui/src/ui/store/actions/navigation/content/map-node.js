@@ -57,6 +57,8 @@ function getList(path, transaction, cluster) {
                     'lock_count',
                     'tablet_state',
                     '_restore_path',
+                    'expiration_time',
+                    'expiration_timeout',
                 ],
                 path,
                 transaction,
