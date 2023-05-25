@@ -45,8 +45,12 @@ export interface NumberInputWithErrorProps
     className?: string;
 
     format?: 'Number' | 'Bytes'; // 'Number' by default
+
+    formatFn?: (v: NumberInputProps['value']) => string;
+    parseFn?: (v: string) => NumberInputWithErrorProps['value'];
+
     decimalPlaces?: number;
-    value: {
+    value?: {
         value: number | undefined;
         error?: string;
     };
@@ -54,7 +58,7 @@ export interface NumberInputWithErrorProps
     onChange: (v: NumberInputWithErrorProps['value']) => void;
     onEnterKeyDown?: () => void;
 
-    validator?: (v: NumberInputWithErrorProps['value']['value']) => string | undefined;
+    validator?: (v?: number) => string | undefined;
     min?: number;
     max?: number;
     showHint?: boolean;
@@ -84,11 +88,13 @@ export class NumberInputWithError extends React.Component<NumberInputWithErrorPr
         props: NumberInputWithErrorProps,
         state: State,
     ): Partial<State> | null {
-        const {value, format, preciseInitialRawValue, decimalPlaces} = props;
+        const {value, format, preciseInitialRawValue, decimalPlaces, formatFn} = props;
         if (state.rawValue === undefined) {
-            const formatted = formatValue(value?.value, format, {
-                digits: decimalPlaces,
-            });
+            const formatted = formatFn
+                ? formatFn(value?.value)
+                : formatValue(value?.value, format, {
+                      digits: decimalPlaces,
+                  });
             return {
                 parsedValue: value?.value,
                 parsedError: NumberInputWithError.errorFromValue(value, props),
@@ -138,27 +144,35 @@ export class NumberInputWithError extends React.Component<NumberInputWithErrorPr
 
     state: State = {parsedValue: NaN};
 
-    parseValue(rawValue: string): number | undefined {
-        return parseValue(rawValue, this.props.format);
+    // eslint-disable-next-line react/sort-comp
+    parseValue(rawValue: string): NumberInputWithErrorProps['value'] {
+        if (this.props.parseFn) {
+            return this.props.parseFn(rawValue);
+        }
+        return {value: parseValue(rawValue, this.props.format)};
     }
 
     format(value: NumberInputProps['value']) {
-        const {format, decimalPlaces} = this.props;
+        const {format, decimalPlaces, formatFn} = this.props;
+        if (formatFn) {
+            return formatFn(value);
+        }
         return formatValue(value, format, {digits: decimalPlaces});
     }
 
     onChange = (rawValue: string) => {
-        const value = this.parseValue(rawValue);
-        const error = NumberInputWithError.errorFromValue({value}, this.props);
+        const parsedValue = this.parseValue(rawValue);
+        const error = NumberInputWithError.errorFromValue(parsedValue, this.props);
+        const formattedValue = this.format(parsedValue?.value);
         this.setState({
-            parsedValue: value,
+            parsedValue: parsedValue?.value,
             parsedError: error,
             rawValue,
-            formattedValue: this.format(value),
+            formattedValue,
         });
 
         const {onChange} = this.props;
-        onChange({value, error});
+        onChange({value: parsedValue?.value, error});
     };
 
     onBlur = () => {
@@ -222,7 +236,7 @@ export class NumberInputWithError extends React.Component<NumberInputWithErrorPr
         const rest = this.getRestProps();
         const {size, view, hasClear} = rest;
 
-        const {error} = propsValue;
+        const {error} = propsValue ?? {};
 
         const err = error || parsedError;
 
@@ -283,7 +297,7 @@ export default class NumberInput extends React.Component<NumberInputProps> {
         return <NumberInputWithError {...rest} onChange={this.onChange} value={{value, error}} />;
     }
 
-    onChange: NumberInputWithErrorProps['onChange'] = ({value}) => {
-        this.props.onChange(value);
+    onChange: NumberInputWithErrorProps['onChange'] = (v) => {
+        this.props.onChange(v?.value);
     };
 }

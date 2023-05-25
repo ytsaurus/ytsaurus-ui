@@ -115,9 +115,9 @@ export default class QuotaEditor extends React.Component<QuotaEditorProps> {
     private onBytesChange: NumberInputWithErrorProps['onChange'] = (value) => {
         const {onChange, sourceAccount} = this.props;
         onChange({
-            limit: value.value,
+            limit: value?.value,
             source: sourceAccount,
-            error: value.error || this.checkForError(value.value, sourceAccount),
+            error: value?.error || this.checkForError(value?.value, sourceAccount),
         });
     };
 

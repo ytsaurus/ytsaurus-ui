@@ -1,0 +1,14 @@
+.yt-time-duration {
+    display: flex;
+    align-items: top;
+
+    &__input {
+        flex-grow: 1;
+    }
+
+    &__info {
+        padding-left: 4px;
+        padding-top: 4px;
+        color: var(--secondary-text);
+    }
+}

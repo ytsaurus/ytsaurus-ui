@@ -4,6 +4,7 @@ import {Template} from '../../../components/MetaTable/templates/Template';
 import {UserCard} from '../../UserLink/UserLink';
 import AccountLink from '../../../pages/accounts/AccountLink';
 import UIFactory from '../../../UIFactory';
+import {makeTTLItems} from './ttl';
 
 export default function metaTablePresetMain(attributes) {
     const [id, owner, account, creationTime, modificationTime, accessTime, yql_op_id] =
@@ -38,6 +39,7 @@ export default function metaTablePresetMain(attributes) {
             value: <Template.Time time={creationTime} valueFormat="DateTime" />,
             visible: Boolean(creationTime),
         },
+        ...makeTTLItems(attributes, {showTTLLabel: true}),
         {
             key: 'modification_time',
             value: <Template.Time time={modificationTime} valueFormat="DateTime" />,

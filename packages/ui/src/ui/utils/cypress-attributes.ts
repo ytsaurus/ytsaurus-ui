@@ -8,6 +8,7 @@ import {SelectWithSubItemsProps} from '../components/Dialog/controls/SelectWithS
 import {wrapBatchPromise} from './utils';
 import {YTApiId, ytApiV3Id} from '../rum/rum-wrap-api';
 import {BatchSubRequest} from '../../shared/yt-types';
+import {ValueOf} from '../../@types/types';
 
 export interface WithAttrs<T> {
     $attributes: T;
@@ -94,13 +95,13 @@ export function erasureCodecFromStorageOption(type?: StorageOptionsType, erasure
     return erasureCodec || ERASURE_CODECS[0].value;
 }
 
-type InMemoryModeType = 'none' | 'compressed' | 'uncompressed';
+export type InMemoryModeType = ValueOf<typeof InMemoryMode>;
 
 export const InMemoryMode = {
-    NONE: 'none' as InMemoryModeType,
-    COMPRESSED: 'compressed' as InMemoryModeType,
-    UNCOMPRESSED: 'uncompressed' as InMemoryModeType,
-};
+    NONE: 'none',
+    COMPRESSED: 'compressed',
+    UNCOMPRESSED: 'uncompressed',
+} as const;
 
 export function makeUiMarker(ui_marker: string) {
     return {ui_marker};

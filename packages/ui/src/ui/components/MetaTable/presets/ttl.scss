@@ -1,0 +1,12 @@
+.meta-table-ttl {
+    &__ttl {
+        display: inline-flex;
+        flex-wrap: nowrap;
+        align-items: center;
+    }
+
+    &__ttl-info {
+        padding: 0 4px;
+        margin-top: -2px;
+    }
+}

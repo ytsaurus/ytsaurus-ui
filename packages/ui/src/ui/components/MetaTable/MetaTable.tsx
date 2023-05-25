@@ -1,13 +1,14 @@
 import React, {Component, Fragment} from 'react';
 import PropTypes from 'prop-types';
-import cn from 'bem-cn-lite';
 import _ from 'lodash';
+import cn from 'bem-cn-lite';
 
 import hammer from '../../common/hammer';
 
-import './MetaTable.scss';
 import Link from '../Link/Link';
 import Icon from '../Icon/Icon';
+
+import './MetaTable.scss';
 
 const block = cn('meta-table');
 const itemBlock = cn('meta-table-item');

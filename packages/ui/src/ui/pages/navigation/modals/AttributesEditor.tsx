@@ -31,6 +31,7 @@ import {
     compressionCodecValueToString,
     erasureCodecFromStorageOption,
     InMemoryMode,
+    InMemoryModeType,
     normalizeErasureCodec,
     storageOptionFromErasureCodec,
     StorageOptions,
@@ -44,11 +45,37 @@ import {docsUrl} from '../../../config';
 
 import './AttributesEditor.scss';
 import UIFactory from '../../../UIFactory';
-import {FIX_MY_TYPE} from '../../../../@types/types';
 
 const block = cn('navigation-attributes-editor');
 
-export function AttributesEditorLoaded() {
+interface FormValues {
+    general: {
+        path: Array<{title: string}>;
+        account: string;
+        primary_medium: string;
+        tablet_cell_bundle: string;
+        in_memory_mode: InMemoryModeType | '';
+
+        expiration_time: {from?: string | number};
+        expiration_timeout: {value: number};
+    };
+    storage: {
+        path: Array<{title: string}>;
+        optimize_for: 'lookup' | 'scan';
+        compression_codec: Array<string>;
+        erasure_codec: string;
+        replication_factor: number;
+
+        runMerge: true;
+        _storageOption: 'replication' | 'erasure';
+    };
+    description: {
+        annotation: {value: string};
+    };
+}
+
+// eslint-disable-next-line complexity
+function AttributesEditorLoaded() {
     const paths = useSelector(getNavigationAttributesEditorPath);
     const attributesMap = useSelector(getNavigationAttributesEditorAttributes);
 
@@ -89,13 +116,16 @@ export function AttributesEditorLoaded() {
     const annotationInitial = {
         value: ypath.getValue(attributes, '/@annotation'),
     };
-    const initialValues = {
+    const initialValues: FormValues = {
         general: {
             path: pathsValues,
             account: ypath.getValue(attributes, '/@account') || '',
             primary_medium: ypath.getValue(attributes, '/@primary_medium') || '',
             tablet_cell_bundle: ypath.getValue(attributes, '/@tablet_cell_bundle') || '',
             in_memory_mode: ypath.getValue(attributes, '/@in_memory_mode'),
+
+            expiration_time: {from: ypath.getValue(attributes, '/@expiration_time')},
+            expiration_timeout: {value: ypath.getValue(attributes, '/@expiration_timeout')},
         },
         storage: {
             path: pathsValues,
@@ -119,7 +149,7 @@ export function AttributesEditorLoaded() {
     const annotationPath = paths && tmp !== paths[0] ? tmp : undefined;
 
     const handleAdd = React.useCallback(
-        async (form: FormApi<FIX_MY_TYPE, FIX_MY_TYPE>) => {
+        async (form: FormApi<FormValues, FormValues>) => {
             try {
                 const {values} = form.getState();
                 const {general, storage, description} = values;
@@ -163,7 +193,11 @@ export function AttributesEditorLoaded() {
                     in_memory_mode,
                 };
 
-                const storageAttributes: Partial<typeof storage> = {};
+                const storageAttributes: Partial<
+                    Omit<FormValues['storage'], 'compression_codec'> & {
+                        compression_codec: string;
+                    }
+                > = {};
 
                 if (optimize_for) {
                     storageAttributes['optimize_for'] = optimize_for;
@@ -195,6 +229,14 @@ export function AttributesEditorLoaded() {
                 } = description;
 
                 const generalAttrs = _.pickBy(generalAttributes, (v) => v !== undefined);
+                if (general.expiration_time.from !== initialValues.general.expiration_time.from) {
+                    generalAttrs.expiration_time = general.expiration_time.from;
+                }
+
+                if (general.expiration_timeout.value !== initials.expiration_timeout.value) {
+                    generalAttrs.expiration_timeout = general.expiration_timeout.value;
+                }
+
                 await dispatch(
                     navigationSetNodeAttributes(
                         {
@@ -374,6 +416,22 @@ export function AttributesEditorLoaded() {
                                   },
                               ]),
                         ...(!hasDynamicTables ? [] : [inMemoryModeField]),
+                        {
+                            name: 'expiration_time',
+                            type: 'datepicker',
+                            caption: 'Expiration time',
+                            tooltip: docsUrl(makeLink(UIFactory.docsUrls['cypress:ttl'])),
+                            extras: {
+                                format: 'yyyy-MM-dd HH:mm',
+                                range: false,
+                            },
+                        },
+                        {
+                            name: 'expiration_timeout',
+                            type: 'time-duration',
+                            caption: 'Expiration timeout',
+                            tooltip: docsUrl(makeLink(UIFactory.docsUrls['cypress:ttl'])),
+                        },
                         ...mergeNoticeAndError,
                     ],
                 },
@@ -482,7 +540,7 @@ export default function AttributesEditor() {
     const path = useSelector(getNavigationAttributesEditorPath);
     const visible = useSelector(getNavigationAttributesEditorVisible);
 
-    if (!path || !visible) {
+    if (!path?.length || !visible) {
         return null;
     }
     return <AttributesEditorLoaded />;
@@ -505,7 +563,7 @@ function validateStorage(storage: any) {
     return {replication_factor};
 }
 
-function validateForm({storage}: {storage: {replication_factor: string}}) {
+function validateForm({storage}: FormValues) {
     const res: any = {
         storage: validateStorage(storage),
     };
