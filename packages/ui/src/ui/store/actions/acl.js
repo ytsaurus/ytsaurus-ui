@@ -11,12 +11,7 @@ import {
 } from '../../constants/acl';
 import {getPools, getTree} from '../../store/selectors/scheduling/scheduling';
 import {computePathItems} from '../../utils/scheduling/scheduling';
-import {
-    getAcl,
-    checkUserPermissions,
-    getResponsible,
-    updateAcl as updateAclApi,
-} from '../../utils/acl/acl-api';
+import {getAcl, checkUserPermissions, getResponsible} from '../../utils/acl/acl-api';
 import {prepareAclSubject} from '../../utils/acl';
 import {ROOT_POOL_NAME} from '../../constants/scheduling';
 import UIFactory from '../../UIFactory';
@@ -273,18 +268,19 @@ export function updateAcl({path, values, version, idmKind}, {normalizedPoolTree}
 
         const poolTree =
             idmKind === IdmObjectType.POOL ? normalizedPoolTree || getTree(state) : undefined;
-        return updateAclApi(cluster, path, {
-            responsible: values.responsibleApproval,
-            auditors: values.auditors,
-            disableInheritance: !values.inheritanceResponsible,
-            bossApproval: values.bossApproval,
-            inheritAcl: values.inheritAcl,
-            readApprovers: values.readApprovers,
-            version,
-            idmKind,
-            poolTree,
-            comment: values.comment,
-        })
+        return UIFactory.getAclApi()
+            .updateAcl(cluster, path, {
+                responsible: values.responsibleApproval,
+                auditors: values.auditors,
+                disableInheritance: !values.inheritanceResponsible,
+                bossApproval: values.bossApproval,
+                inheritAcl: values.inheritAcl,
+                readApprovers: values.readApprovers,
+                version,
+                idmKind,
+                poolTree,
+                comment: values.comment,
+            })
             .then(() => {
                 dispatch({
                     type: UPDATE_ACL.SUCCESS,

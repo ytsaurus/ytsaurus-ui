@@ -28,4 +28,9 @@
             }
         }
     }
+
+    &__flag {
+        font-weight: 500;
+        color: var(--secondary-text);
+    }
 }

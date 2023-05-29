@@ -176,3 +176,24 @@ export function requestPermissions(params: RequestPermissionParams): Promise<Upd
         return results;
     });
 }
+
+export function updateAclAttributes(_cluster: string, path: string, params: UpdateAclParams) {
+    const {inheritAcl} = params;
+    const batchParams = {
+        requests: [
+            {
+                command: 'set',
+                parameters: {path: `${path}/@inherit_acl`},
+                input: inheritAcl,
+            },
+        ],
+    };
+    return yt.v3.executeBatch(batchParams).then((results: BatchResultsItem<unknown>[]) => {
+        const error = getBatchError(results);
+        if (error) {
+            throw error;
+        }
+        window.location.reload();
+        return results;
+    });
+}

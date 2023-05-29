@@ -1,10 +1,10 @@
-import React, {useCallback, useMemo} from 'react';
+import React, {useState, useCallback, useMemo} from 'react';
 import {compose} from 'redux';
 import cn from 'bem-cn-lite';
 
 import _isEqual from 'lodash/isEqual';
 
-import Dialog, {FormApi} from '../../../components/Dialog/Dialog';
+import Dialog, {DialogField, FormApi} from '../../../components/Dialog/Dialog';
 import {Dialog as CommonDialog, Loader} from '@gravity-ui/uikit';
 
 import RoleListControl, {
@@ -26,58 +26,20 @@ import withVisible, {WithVisibleProps} from '../../../hocs/withVisible';
 import {PERMISSIONS_SETTINGS} from '../../../constants/acl';
 
 import './ManageAcl.scss';
+import UIFactory from '../../../UIFactory';
+import ErrorBlock from '../../Block/Block';
 
 const block = cn('acl-manage');
 
-const manageAclDialogFields = [
-    {
-        name: 'responsible',
-        type: 'acl-roles',
-        caption: 'Responsible',
-        extras: {
-            maxVisibleCount: 3,
-            placeholder: 'Who should approve...',
-        },
-    },
-    {
-        name: 'inheritanceResponsible',
-        type: 'tumbler',
-        caption: 'Inherit responsible',
-    },
-    {
-        name: 'readApprovers',
-        type: 'acl-roles',
-        caption: 'Read approvers',
-        extras: {
-            maxVisibleCount: 3,
-            placeholder: 'Who should approve read requests...',
-        },
-    },
-    {
-        name: 'auditors',
-        type: 'acl-roles',
-        caption: 'Auditors',
-        extras: {
-            maxVisibleCount: 3,
-            placeholder: 'Who should audit ACL change...',
-        },
-    },
-    {
-        name: 'bossApproval',
-        type: 'tumbler',
-        caption: 'Boss approval',
-    },
-    {
-        name: 'inheritAcl',
-        type: 'tumbler',
-        caption: 'Inherit ACL',
-    },
-    {
-        name: 'comment',
-        caption: 'Comment for IDM',
-        type: 'textarea',
-    },
-] as const;
+export type ManageAclFieldsNames =
+    | 'responsible'
+    | 'inheritanceResponsible'
+    | 'readApprovers'
+    | 'auditors'
+    | 'bossApproval'
+    | 'inheritAcl'
+    | 'inheritAcl_warning'
+    | 'comment';
 
 interface Props extends WithVisibleProps {
     className?: string;
@@ -133,6 +95,8 @@ function ManageAcl(props: Props) {
         updateAcl,
     } = props;
 
+    const [hasWarning, setHasWarning] = useState(false);
+
     const handleModalOpen = useCallback(() => {
         loadAclData({path, idmKind});
         handleShow();
@@ -161,18 +125,97 @@ function ManageAcl(props: Props) {
         [idmKind, path, updateAcl, version],
     );
 
+    const manageAclDialogFields = useMemo(
+        () =>
+            ({
+                responsible: {
+                    name: 'responsible',
+                    type: 'acl-roles',
+                    caption: 'Responsible',
+                    extras: {
+                        maxVisibleCount: 3,
+                        placeholder: 'Who should approve...',
+                    },
+                },
+                inheritanceResponsible: {
+                    name: 'inheritanceResponsible',
+                    type: 'tumbler',
+                    caption: 'Inherit responsible',
+                },
+                readApprovers: {
+                    name: 'readApprovers',
+                    type: 'acl-roles',
+                    caption: 'Read approvers',
+                    extras: {
+                        maxVisibleCount: 3,
+                        placeholder: 'Who should approve read requests...',
+                    },
+                },
+                auditors: {
+                    name: 'auditors',
+                    type: 'acl-roles',
+                    caption: 'Auditors',
+                    extras: {
+                        maxVisibleCount: 3,
+                        placeholder: 'Who should audit ACL change...',
+                    },
+                },
+                bossApproval: {
+                    name: 'bossApproval',
+                    type: 'tumbler',
+                    caption: 'Boss approval',
+                },
+                inheritAcl: {
+                    name: 'inheritAcl',
+                    type: 'tumbler',
+                    caption: 'Inherit ACL',
+                    onChange: (value) => {
+                        setHasWarning(!value);
+                    },
+                },
+                inheritAcl_warning: {
+                    name: 'inheritAcl_warning',
+                    type: 'block',
+                    extras: {
+                        children: hasWarning ? (
+                            <ErrorBlock
+                                type={'alert'}
+                                message={
+                                    <>
+                                        Setting <span className={block('flag')}>inherit_acl</span>{' '}
+                                        flag to <span className={block('flag')}>false</span> may
+                                        result in the loss of permissions sufficient to undo this
+                                        operation.{' '}
+                                    </>
+                                }
+                            ></ErrorBlock>
+                        ) : null,
+                    },
+                },
+                comment: {
+                    name: 'comment',
+                    caption: 'Comment for IDM',
+                    type: 'textarea',
+                },
+            } as Record<ManageAclFieldsNames, DialogField>),
+        [hasWarning],
+    );
+
     const dialogFields = useMemo(() => {
-        const idmKindConditions: Record<string, boolean> = {
+        const idmKindConditions: {[Key in ManageAclFieldsNames]?: boolean} = {
             inheritAcl: PERMISSIONS_SETTINGS[idmKind].allowInheritAcl,
             bossApproval: PERMISSIONS_SETTINGS[idmKind].allowBossApprovals,
             auditors: PERMISSIONS_SETTINGS[idmKind].allowAuditors,
             readApprovers: PERMISSIONS_SETTINGS[idmKind].allowReadApprovers,
             inheritanceResponsible: PERMISSIONS_SETTINGS[idmKind].allowInheritResponsibles,
         };
-        return manageAclDialogFields.filter(({name}) =>
-            idmKindConditions[name] !== undefined ? idmKindConditions[name] : true,
-        );
-    }, [idmKind]);
+
+        return UIFactory.getAclApi()
+            .manageAclFields.filter((name) =>
+                idmKindConditions[name] !== undefined ? idmKindConditions[name] : true,
+            )
+            .map((name) => manageAclDialogFields[name]);
+    }, [idmKind, manageAclDialogFields]);
 
     const renderDialog = () => {
         return (

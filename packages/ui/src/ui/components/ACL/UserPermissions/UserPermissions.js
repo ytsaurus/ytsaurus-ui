@@ -14,7 +14,6 @@ import RequestPermissions from '../RequestPermissions/RequestPermissions';
 import ManageAcl from '../ManageAcl/ManageAcl';
 
 import './UserPermissions.scss';
-import {isIdmAclAvailable} from '../../../config';
 
 const block = cn('acl-user-permissions');
 
@@ -189,27 +188,26 @@ export default class UserPermissions extends Component {
                                 cancelRequestPermissions={cancelRequestPermissions}
                                 cluster={cluster}
                             />
-                            {isIdmAclAvailable() && (
-                                <ManageAcl
-                                    loadAclData={loadAclData}
-                                    loading={loading}
-                                    loaded={loaded}
-                                    error={error}
-                                    errorData={errorData}
-                                    path={path}
-                                    idmKind={idmKind}
-                                    version={version}
-                                    inheritAcl={inheritAcl}
-                                    bossApproval={bossApproval}
-                                    disableInheritanceResponsible={disableInheritanceResponsible}
-                                    auditors={auditors}
-                                    readApprovers={readApprovers}
-                                    responsible={responsible}
-                                    updateAcl={this.updateAcl}
-                                    manageAclError={updateAclError}
-                                    cancelUpdateAcl={cancelUpdateAcl}
-                                />
-                            )}
+
+                            <ManageAcl
+                                loadAclData={loadAclData}
+                                loading={loading}
+                                loaded={loaded}
+                                error={error}
+                                errorData={errorData}
+                                path={path}
+                                idmKind={idmKind}
+                                version={version}
+                                inheritAcl={inheritAcl}
+                                bossApproval={bossApproval}
+                                disableInheritanceResponsible={disableInheritanceResponsible}
+                                auditors={auditors}
+                                readApprovers={readApprovers}
+                                responsible={responsible}
+                                updateAcl={this.updateAcl}
+                                manageAclError={updateAclError}
+                                cancelUpdateAcl={cancelUpdateAcl}
+                            />
                         </React.Fragment>
                     )}
                 </div>
