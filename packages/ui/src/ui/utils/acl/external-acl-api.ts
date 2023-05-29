@@ -1,6 +1,6 @@
 import {ManageAclFieldsNames} from '../../components/ACL/ManageAcl/ManageAcl';
 import {RequestPermissionsFieldsNames} from '../../components/ACL/RequestPermissions/RequestPermissions';
-import {requestPermissions} from './acl-api';
+import {requestPermissions, updateAclAttributes} from './acl-api';
 import {
     ACLResponsible,
     ColumnGroup,
@@ -19,6 +19,7 @@ export interface AclApi {
 
     getAcl(params: GetAclParams): Promise<PreparedAclData>;
     updateAcl(cluster: string, path: string, params: UpdateAclParams): Promise<UpdateResponse>;
+    manageAclFields: Array<ManageAclFieldsNames>;
 
     getGroupAcl(cluster: string, group: string): Promise<{group: GroupACL; version: string}>;
     updateGroup(params: UpdateGroupParams): Promise<UpdateResponse>;
@@ -85,7 +86,8 @@ export const defaultAclApi: AclApi = {
     isAllowed: false,
 
     getAcl: () => methodNotSupported('getAcl'),
-    updateAcl: () => methodNotSupported('updateAcl'),
+    updateAcl: (...args) => updateAclAttributes(...args),
+    manageAclFields: ['inheritAcl', 'inheritAcl_warning'],
 
     getGroupAcl: () => methodNotSupported('getGroupAcl'),
     updateGroup: () => methodNotSupported('updateGruop'),
