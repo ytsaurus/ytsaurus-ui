@@ -131,7 +131,7 @@ export const isOperationWithExperiment_ytadmin_11194 = createSelector(
 export const isOperationWithJobsMonitorTab = createSelector(
     [getOperationJobsCount, isOperationWithExperiment_ytadmin_11194],
     (jobsCount, hasRequiredExperiment) => {
-        return hasRequiredExperiment && jobsCount > 0 && jobsCount <= 100;
+        return hasRequiredExperiment && jobsCount > 0 && jobsCount <= 200;
     },
 );
 
