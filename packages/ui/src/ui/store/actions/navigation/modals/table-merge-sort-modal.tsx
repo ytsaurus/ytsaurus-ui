@@ -10,21 +10,24 @@ import ypath from '../../../../common/thor/ypath';
 import {TABLE_SORT_MODAL_PARTIAL} from '../../../../constants/navigation/modals/table-sort-modal';
 import {getBatchError, wrapApiPromiseByToaster} from '../../../../utils/utils';
 import {TableSortModalAction} from '../../../../store/reducers/navigation/modals/table-merge-sort-modal';
+import {loadPoolTreesIfNotLoaded} from '../../../../store/actions/global';
 import {OperationShortInfo} from '../../../../pages/components/OperationShortInfo/OperationShortInfo';
 import {AppStoreProvider} from '../../../../containers/App/AppStoreProvider';
 import {CypressNodeTypes, makeUiMarker} from '../../../../utils/cypress-attributes';
 import {Page} from '../../../../constants';
 import {YTApiId, ytApiV3Id} from '../../../../rum/rum-wrap-api';
 
-type TableMergeSortThunkAction = ThunkAction<any, RootState, any, TableSortModalAction>;
+type TableMergeSortThunkAction<T = void> = ThunkAction<T, RootState, any, TableSortModalAction>;
 
-export function showTableSortModal(paths: Array<string>): TableMergeSortThunkAction {
+export function showTableSortModal(paths: Array<string>): TableMergeSortThunkAction<Promise<void>> {
     return (dispatch) => {
-        dispatch({
-            type: TABLE_SORT_MODAL_PARTIAL,
-            data: {sortVisible: true, paths},
+        return dispatch(loadPoolTreesIfNotLoaded()).finally(() => {
+            dispatch({
+                type: TABLE_SORT_MODAL_PARTIAL,
+                data: {sortVisible: true, paths},
+            });
+            dispatch(tableSortModalLoadColumns(paths));
         });
-        dispatch(tableSortModalLoadColumns(paths));
     };
 }
 
@@ -37,13 +40,15 @@ export function hideTableSortModal(): TableSortModalAction {
 
 export function showTableMergeModal(
     paths: Array<string>,
-): ThunkAction<any, RootState, any, TableSortModalAction> {
+): ThunkAction<Promise<void>, RootState, any, TableSortModalAction> {
     return (dispatch) => {
-        dispatch({
-            type: TABLE_SORT_MODAL_PARTIAL,
-            data: {mergeVisible: true, paths},
+        return dispatch(loadPoolTreesIfNotLoaded()).finally(() => {
+            dispatch({
+                type: TABLE_SORT_MODAL_PARTIAL,
+                data: {mergeVisible: true, paths},
+            });
+            dispatch(tableSortModalLoadColumns(paths));
         });
-        dispatch(tableSortModalLoadColumns(paths));
     };
 }
 

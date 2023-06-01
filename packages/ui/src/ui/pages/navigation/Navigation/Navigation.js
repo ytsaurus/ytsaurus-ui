@@ -22,7 +22,6 @@ import ContentViewer from './ContentViewer/ContentViewer';
 import Error from '../../../components/Error/Error';
 import {Info} from '../../../components/Info/Info';
 import Tabs from '../../../components/Tabs/Tabs';
-import {PoolTreesLoader} from '../../../hooks/global';
 
 import {Tab} from '../../../constants/navigation';
 import {LOADING_STATUS} from '../../../constants/index';
@@ -427,7 +426,6 @@ class Navigation extends Component {
 
         return (
             <ErrorBoundary>
-                <PoolTreesLoader />
                 <div className="navigation elements-main-section">
                     <StickyContainer>
                         <div className={block('header')}>
