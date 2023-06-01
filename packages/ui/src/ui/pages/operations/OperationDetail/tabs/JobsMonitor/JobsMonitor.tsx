@@ -15,7 +15,7 @@ function JobsMonitor() {
     const {from, to} = useSelector(getJobsMonitorFromTo);
 
     if (!job_descriptor) {
-        return <NoContent warning={'There is no jobs with "monitoring_descriptor"'} />;
+        return <NoContent warning={'There are no jobs with "monitoring_descriptor"'} />;
     }
 
     const JobMonitorComponent = UIFactory.getMonitorComponentForJob()!;
