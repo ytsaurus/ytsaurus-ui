@@ -44,11 +44,13 @@ jobs:
       - name: "Docker: build & push"
         if: ${{ steps.release.outputs.releases_created }}
         run: |
+          cd packages/ui
+
           UI_IMAGE=$(npm run show:docker-image-name | tail -n 1)
           UI_TAG=$(npm run show:version | tail -n 1)
 
           TARGET_IMAGE=${UI_IMAGE}:${UI_TAG}
-          echo target image and tag: ${UI_IMAGE}:${UI_TAG}
+          echo target image and tag: ${TARGET_IMAGE}
 
           if ! docker pull ${TARGET_IMAGE} ; then
             npm run docker:build --dockertag=${UI_TAG}
