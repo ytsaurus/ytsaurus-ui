@@ -52,7 +52,6 @@
   },
   "dependencies": {
     "@gravity-ui/app-layout": "^1.1.1",
-    "@gravity-ui/dialog-fields": "^1.1.1",
     "@gravity-ui/expresskit": "^0.2.0",
     "@gravity-ui/navigation": "^0.3.0",
     "@gravity-ui/nodekit": "^0.2.0",
@@ -77,6 +76,7 @@
     "@gravity-ui/app-builder": "^0.0.1",
     "@gravity-ui/chartkit": "^1.4.0",
     "@gravity-ui/dashkit": "^3.0.2",
+    "@gravity-ui/dialog-fields": "^1.1.1",
     "@gravity-ui/i18n": "^1.0.0",
     "@gravity-ui/icons": "^1.1.0",
     "@gravity-ui/uikit": "^3.18.0",
@@ -160,6 +160,9 @@
     "tsc-watch": "^4.6.0",
     "typescript": "^4.9.3",
     "vis-network": "^9.1.2"
+  },
+  "peerDependencies": {
+    "@gravity-ui/dialog-fields": "^1.0.0"
   },
   "engines": {
     "node": ">=14"
