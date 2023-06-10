@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import hammer from '../../common/hammer';
 import cn from 'bem-cn-lite';
 import _ from 'lodash';
-import {PERMISSIONS_SETTINGS, IdmObjectType, getPermissionsToRequest} from '../../constants/acl';
+import {PERMISSIONS_SETTINGS, IdmObjectType} from '../../constants/acl';
 
 import ColumnGroups from './ColumnGroups/ColumnGroups';
 
@@ -33,79 +33,12 @@ import './ACL.scss';
 const block = cn('navigation-acl');
 
 function FlagRole({role, invert}) {
+    const RoleActions = UIFactory.getComponentForAclRoleActions();
     const value = invert ? !role : Boolean(role);
     return (
         <React.Fragment>
             {String(value)}
             {role && <RoleActions role={role} />}
-        </React.Fragment>
-    );
-}
-
-function RoleActions(props) {
-    const {role, onDelete, idmKind} = props;
-    const {depriveDate, isUnrecognized, isMissing, idmLink} = role;
-    const hasFlags = ACL.hasFlags(role);
-    const helpTooltip = ACL.helpByFlags(role);
-    const canBeRequested = ACL.isMightBeRequested(idmKind, role);
-
-    const handleDelete = React.useCallback(() => {
-        onDelete(role);
-    }, [role, onDelete]);
-
-    return (
-        <React.Fragment>
-            {isUnrecognized && (
-                <Popover
-                    className={block('icon', {unrecognized: true})}
-                    content={
-                        <React.Fragment>
-                            <div>The role is active in YT but is missing in IDM.</div>
-                            It means that ACL was edited manually.
-                        </React.Fragment>
-                    }
-                >
-                    <Icon awesome="exclamation-triangle" face="solid" />
-                </Popover>
-            )}
-            {isMissing && (
-                <Popover
-                    className={block('icon', {unrecognized: true})}
-                    content={
-                        <React.Fragment>
-                            <div>The role is active in IDM but is missing in YT.</div>
-                            It means that object was removed from YT and later another one was
-                            created with the same name. You have to revoke this role from IDM and
-                            request a new one.
-                        </React.Fragment>
-                    }
-                >
-                    <Icon awesome="exclamation-triangle" face="solid" />
-                </Popover>
-            )}
-            {depriveDate && !hasFlags && (
-                <Popover
-                    className={block('icon', {deprive: true})}
-                    content={`The role is valid until ${depriveDate}`}
-                >
-                    <Icon awesome="clock" />
-                </Popover>
-            )}
-            {helpTooltip && (
-                <Popover className={block('icon', {info: true})} content={helpTooltip}>
-                    <Icon awesome="question-circle" face="regular" />
-                </Popover>
-            )}
-            {!hasFlags && !role.inherited && role.group === 'role' && canBeRequested && (
-                <span className={block('icon', {delete: true})} onClick={() => handleDelete()}>
-                    <Icon awesome="trash-alt" />
-                </span>
-            )}
-            {idmLink && (
-                <Link className={block('icon', {link: true})} url={idmLink}>
-                    <Icon awesome="link" />
-                </Link>
-            )}
         </React.Fragment>
     );
 }
@@ -296,40 +229,6 @@ class ACL extends Component {
         );
     }
 
-    static hasFlags(item) {
-        const {isUnrecognized, isRequested, isApproved, isDepriving} = item;
-        return isUnrecognized || isRequested || isApproved || isDepriving;
-    }
-
-    static helpByFlags(item) {
-        const {isRequested, isApproved, isDepriving} = item;
-        if (isApproved) {
-            return 'The role is approved and will be added';
-        }
-        if (isRequested) {
-            return 'The role is pending approval';
-        }
-        if (isDepriving) {
-            return 'The role will be removed';
-        }
-        return null;
-    }
-
-    static isMightBeRequested(idmKind, role) {
-        const {
-            permissions,
-            //role_type: roleType
-        } = role;
-        // if (roleType === 'auditor' || roleType === 'read_approver' || roleType === 'responsible') {
-        //     return true;
-        // }
-        const permissionsToRequest = getPermissionsToRequest(
-            idmKind,
-            UIFactory.getAclApi().permissionsToRequestType,
-        );
-        return permissionsToRequest.some((item) => _.isEqual(item, permissions));
-    }
-
     state = {
         deleteItem: {},
     };
@@ -425,6 +324,7 @@ class ACL extends Component {
                 align: 'right',
                 className: block('table-item', {type: 'actions'}),
                 render({row}) {
+                    const RoleActions = UIFactory.getComponentForAclRoleActions();
                     return <RoleActions role={row} idmKind={idmKind} onDelete={openDeleteModal} />;
                 },
             },
@@ -652,6 +552,7 @@ class ACL extends Component {
 
                 <DeletePermissionModal
                     idmKind={idmKind}
+                    path={path}
                     key={deleteItem?.key}
                     visible={visible}
                     itemToDelete={deleteItem}

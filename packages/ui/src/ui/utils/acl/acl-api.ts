@@ -8,6 +8,8 @@ import {
     ACLResponsible,
     GetAclParams,
     GetResponsibleParams,
+    IdmKindType,
+    PreparedAclSubject,
     UpdateAclParams,
     UpdateResponse,
 } from './acl-types';
@@ -16,6 +18,7 @@ import {getBatchError, splitBatchResults} from '../../utils/utils';
 import {convertFromUIPermission, convertToUIPermissions} from '.';
 import {BatchResultsItem, ExecuteBatchParams} from '../../../shared/yt-types';
 import {RequestPermissionParams} from './external-acl-api';
+import {PERMISSIONS_SETTINGS} from '../../constants/acl';
 
 function getInheritAcl(path: string): Promise<ACLResponsible> {
     return yt.v3.get({path: path + '/@inherit_acl'}).then((inherit_acl: boolean) => {
@@ -34,10 +37,10 @@ export function getAcl({
     useEffective = false,
 }: GetAclParams) {
     const api = UIFactory.getAclApi();
-    if (useEffective || !api.isAllowed) {
+    if (useEffective) {
         return getEffectiveAcl(sysPath);
     }
-    return api.getAcl({cluster, path, kind, poolTree});
+    return api.getAcl({cluster, path, kind, poolTree, sysPath});
 }
 
 export function updateAcl(cluster: string, path: string, params: UpdateAclParams) {
@@ -101,6 +104,47 @@ export const getEffectiveAcl = (sysPath: string) => {
             };
         });
     });
+};
+
+export const getCombinedAcl = (sysPath: string) => {
+    return ytApiV3
+        .executeBatch<string>({
+            requests: [
+                {command: 'get', parameters: {path: sysPath + '/@effective_acl'}},
+                {command: 'get', parameters: {path: sysPath + '/@acl'}},
+                {command: 'get', parameters: {path: sysPath + '/@revision'}},
+            ],
+        })
+        .then((results: Array<any>) => {
+            const error = getBatchError(results, 'Failed to load combined acl list');
+            if (error) {
+                throw error;
+            }
+            const [{output: effective_acl}, {output: acl}, {output: revision}] = results;
+            const effective_acl_dif = _.filter(
+                effective_acl,
+                (e_item) => !_.some(acl, (a_item) => _.isEqual(a_item, e_item)),
+            );
+            return [
+                ...effective_acl_dif.map((e_item) => ({
+                    inherited: true,
+                    ...e_item,
+                })),
+                ...(acl as any[]).map((a_item, index) => ({
+                    aclIndex: index,
+                    revision,
+                    ...a_item,
+                })),
+            ];
+        })
+        .then((items) => {
+            return internalAclWithTypes(items).then((data) => {
+                return {
+                    permissions: data.map(convertToUIPermissions),
+                    column_groups: [],
+                };
+            });
+        });
 };
 
 export interface CheckPermissionResult {
@@ -195,5 +239,25 @@ export function updateAclAttributes(_cluster: string, path: string, params: Upda
         }
         window.location.reload();
         return results;
+    });
+}
+
+export function deleteAclItemOrSubjectByIndex(params: {
+    sysPath: string;
+    itemToDelete: PreparedAclSubject;
+    idmKind: IdmKindType;
+}) {
+    const {sysPath, itemToDelete, idmKind} = params;
+    const {revision, aclIndex, isSplitted, subjectIndex} = itemToDelete;
+    const allowUnsafeDelete = PERMISSIONS_SETTINGS[idmKind].allowDeleteWithoutRevisionCheck;
+    if (isSplitted) {
+        return yt.v3.remove({
+            path: `${sysPath}/@acl/${aclIndex}/subjects/${subjectIndex}`,
+            ...(allowUnsafeDelete ? {} : {prerequisite_revisions: [{revision, path: sysPath}]}),
+        });
+    }
+    return yt.v3.remove({
+        path: `${sysPath}/@acl/${aclIndex}`,
+        ...(allowUnsafeDelete ? {} : {prerequisite_revisions: [{revision, path: sysPath}]}),
     });
 }

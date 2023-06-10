@@ -59,8 +59,10 @@ function SplitSubjects(items) {
     const res = [];
     _.forEach(items, (item) => {
         const {subjects} = item;
-        if (subjects && subjects.length >= 1) {
-            _.forEach(subjects, (subject) => res.push({...item, subjects: [subject]}));
+        if (subjects && subjects.length > 1) {
+            _.forEach(subjects, (subject, index) => {
+                res.push({...item, subjects: [subject], isSplitted: true, subjectIndex: index});
+            });
         } else {
             res.push(item);
         }

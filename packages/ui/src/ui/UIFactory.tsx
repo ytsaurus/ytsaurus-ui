@@ -20,6 +20,7 @@ import {UserSuggestProps} from './containers/UserSuggest/UserSuggest';
 import {YTUserSuggest} from './containers/UserSuggest/YTUserSuggest';
 import {docsUrls, DocsUrls} from './constants/docsUrls';
 import {YTSubjectSuggest} from './components/ACL/SubjectsControl/YTSubjectSuggest';
+import RoleActions, {Props as RoleActionsProps} from './components/ACL/RoleActions';
 
 type HeaderItemOrPage =
     | {
@@ -311,6 +312,8 @@ export interface UIFactory {
     getAdminPages(): string[];
 
     docsUrls: DocsUrls;
+
+    getComponentForAclRoleActions(): undefined | React.ComponentType<RoleActionsProps>;
 }
 
 const adminPages: string[] = [];
@@ -510,6 +513,10 @@ const uiFactory: UIFactory = {
     },
 
     docsUrls: docsUrls,
+
+    getComponentForAclRoleActions() {
+        return RoleActions;
+    },
 };
 
 function configureUIFactoryItem<K extends keyof UIFactory>(k: K, redefinition: UIFactory[K]) {
