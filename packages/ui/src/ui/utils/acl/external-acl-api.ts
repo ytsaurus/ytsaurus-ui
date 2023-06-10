@@ -1,6 +1,11 @@
 import {ManageAclFieldsNames} from '../../components/ACL/ManageAcl/ManageAcl';
 import {RequestPermissionsFieldsNames} from '../../components/ACL/RequestPermissions/RequestPermissions';
-import {requestPermissions, updateAclAttributes} from './acl-api';
+import {
+    getCombinedAcl,
+    requestPermissions,
+    updateAclAttributes,
+    deleteAclItemOrSubjectByIndex,
+} from './acl-api';
 import {
     ACLResponsible,
     ColumnGroup,
@@ -8,6 +13,7 @@ import {
     GroupACL,
     IdmKindType,
     PreparedAclData,
+    PreparedAclSubject,
     Role,
     SuccessColumnGroupCreate,
     UpdateAclParams,
@@ -31,7 +37,14 @@ export interface AclApi {
     requestPermissions(params: RequestPermissionParams): Promise<UpdateResponse>;
     requestPermissionsFields: Array<RequestPermissionsFieldsNames>;
 
-    deleteRole(cluster: string, roleKey: string): Promise<UpdateResponse>;
+    deleteRole(params: {
+        path: string;
+        sysPath: string;
+        cluster: string;
+        roleKey: string;
+        itemToDelete: PreparedAclSubject;
+        idmKind: IdmKindType;
+    }): Promise<UpdateResponse>;
 
     createColumnGroup(
         cluster: string,
@@ -45,6 +58,7 @@ export interface AclApi {
 export interface GetAclParams {
     cluster: string;
     path: string;
+    sysPath: string;
     kind: string;
     poolTree?: string;
 }
@@ -85,7 +99,7 @@ export interface RequestPermissionParams {
 export const defaultAclApi: AclApi = {
     isAllowed: false,
 
-    getAcl: () => methodNotSupported('getAcl'),
+    getAcl: ({sysPath}) => getCombinedAcl(sysPath),
     updateAcl: (...args) => updateAclAttributes(...args),
     manageAclFields: ['inheritAcl', 'inheritAcl_warning'],
 
@@ -99,7 +113,9 @@ export const defaultAclApi: AclApi = {
     requestPermissions: (params) => requestPermissions(params),
     requestPermissionsFields: ['cluster', 'path', 'permissions', 'inheritance_mode', 'subjects'],
 
-    deleteRole: () => methodNotSupported('deleteRole'),
+    deleteRole: ({sysPath, itemToDelete, idmKind}) => {
+        return deleteAclItemOrSubjectByIndex({sysPath, itemToDelete, idmKind});
+    },
 
     createColumnGroup: () => methodNotSupported('createColumnGroup'),
     editColumnGroup: () => methodNotSupported('editColumnGroup'),

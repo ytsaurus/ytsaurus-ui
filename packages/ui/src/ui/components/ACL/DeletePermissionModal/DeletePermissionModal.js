@@ -19,6 +19,7 @@ export default class DeletePermissionModal extends Component {
     static propTypes = {
         // from parent
         idmKind: PropTypes.string,
+        path: PropTypes.string.isRequired,
         itemToDelete: PropTypes.shape({
             key: PropTypes.string,
             action: PropTypes.string,
@@ -45,23 +46,32 @@ export default class DeletePermissionModal extends Component {
     toggleConfirm = () => this.setState((prevState) => ({confirm: !prevState.confirm}));
 
     deleteItem = () => {
-        const {idmKind} = this.props;
+        const {idmKind, path, itemToDelete} = this.props;
         const {
             itemToDelete: {key},
             deletePermissions,
-            handleClose,
         } = this.props;
-        return deletePermissions({roleKey: key, idmKind}).then((error) => {
+        return deletePermissions({
+            roleKey: key,
+            idmKind,
+            path,
+            itemToDelete,
+        }).then((error) => {
             if (!error) {
-                handleClose();
+                this.onClose();
             }
         });
     };
 
+    onClose = () => {
+        const {handleClose} = this.props;
+        this.setState(() => ({confirm: false}));
+        handleClose();
+    };
+
     render() {
         const {confirm} = this.state;
-        const {visible, itemToDelete, handleClose, isPermissionDeleted, error, lastItemKey} =
-            this.props;
+        const {visible, itemToDelete, isPermissionDeleted, error, lastItemKey} = this.props;
         const {key, type, inherited, subjects, permissions, columns, inheritanceMode} =
             itemToDelete;
 
@@ -71,9 +81,9 @@ export default class DeletePermissionModal extends Component {
                 loading={isPermissionDeleted}
                 visible={visible}
                 confirmText="Delete"
-                onCancel={handleClose}
+                onCancel={this.onClose}
                 title="Delete permissions"
-                onOutsideClick={handleClose}
+                onOutsideClick={this.onClose}
                 isConfirmDisabled={this.checkConfirmDisabled}
                 content={
                     <div className={block()}>

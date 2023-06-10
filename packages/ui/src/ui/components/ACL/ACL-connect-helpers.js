@@ -135,14 +135,22 @@ const makeAclMapDispatchToProps = () => ({
 
 const mergeProps = (stateProps, dispatchProps, ownProps) => {
     const {normalizedPoolTree, aclRequestOptions} = stateProps;
-    const {loadAclData, userPermissionsRequestFn, userPermissionsUpdateAcl, ...restDispatchProps} =
-        dispatchProps;
+    const {
+        loadAclData,
+        deletePermissionsFn,
+        userPermissionsRequestFn,
+        userPermissionsUpdateAcl,
+        ...restDispatchProps
+    } = dispatchProps;
     return {
         ...ownProps,
         ...stateProps,
         ...restDispatchProps,
         loadAclData: (params) => {
             return loadAclData({...params}, {normalizedPoolTree}, aclRequestOptions);
+        },
+        deletePermissionsFn: (params) => {
+            return deletePermissionsFn(params, {normalizedPoolTree});
         },
         userPermissionsRequestFn: (params) => {
             return userPermissionsRequestFn(params, {normalizedPoolTree});

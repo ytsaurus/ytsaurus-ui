@@ -131,9 +131,13 @@ export function loadAclData(
     };
 }
 
-export function deletePermissions({roleKey, idmKind}) {
+export function deletePermissions(
+    {roleKey, idmKind, path, itemToDelete},
+    {normalizedPoolTree} = {},
+) {
     return (dispatch, getState) => {
         const {cluster} = getState().global;
+        const state = getState();
 
         dispatch({
             type: DELETE_PERMISSION.REQUEST,
@@ -141,8 +145,20 @@ export function deletePermissions({roleKey, idmKind}) {
             idmKind,
         });
 
+        const poolTree =
+            idmKind === IdmObjectType.POOL ? normalizedPoolTree || getTree(state) : undefined;
+
+        const deletePermissionsPath = getPathToCheckPermissions(idmKind, state, path, poolTree);
+
         return UIFactory.getAclApi()
-            .deleteRole(cluster, roleKey)
+            .deleteRole({
+                idmKind,
+                cluster,
+                roleKey,
+                path,
+                sysPath: deletePermissionsPath,
+                itemToDelete,
+            })
             .then(() => {
                 dispatch({
                     type: DELETE_PERMISSION.SUCCESS,

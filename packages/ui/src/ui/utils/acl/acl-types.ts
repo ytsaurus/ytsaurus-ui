@@ -228,6 +228,10 @@ export type PreparedAclSubject = TypedAclSubject & {
     isApproved?: boolean;
     isUnrecognized?: boolean;
     isMissing?: boolean;
+    revision?: number;
+    aclIndex?: number;
+    isSplitted?: boolean;
+    subjectIndex?: number;
 };
 
 export type ResponsibleType = {type: 'users' | 'groups'; value: string};

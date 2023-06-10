@@ -75,6 +75,7 @@ export const PERMISSIONS_SETTINGS = {
         allowAuditors: false,
         allowInheritAcl: false,
         allowInheritResponsibles: true,
+        allowDeleteWithoutRevisionCheck: true,
     },
     [IdmObjectType.POOL]: {
         permissionTypes: ACCOUNTS_PERMISSION_TYPES,
@@ -84,6 +85,7 @@ export const PERMISSIONS_SETTINGS = {
         allowAuditors: false,
         allowInheritAcl: true,
         allowInheritResponsibles: true,
+        allowDeleteWithoutRevisionCheck: true,
     },
     [IdmObjectType.TABLET_CELL_BUNDLE]: {
         permissionTypes: ACCOUNTS_PERMISSION_TYPES,
@@ -93,5 +95,6 @@ export const PERMISSIONS_SETTINGS = {
         allowAuditors: false,
         allowInheritAcl: false,
         allowInheritResponsibles: false,
+        allowDeleteWithoutRevisionCheck: true,
     },
 };
