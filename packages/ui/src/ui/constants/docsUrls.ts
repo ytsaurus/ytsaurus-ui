@@ -36,6 +36,7 @@ export const docsUrls = {
     'operations:overview#aborted_jobs': `${baseUrl}/user-guide/data-processing/operations/overview#aborted_jobs`,
     'operations:overview#completed_jobs': `${baseUrl}/user-guide/data-processing/operations/overview#completed_jobs`,
     'operations:operations_options': `${baseUrl}/user-guide/data-processing/operations/operations-options`,
+    'operations:remote_copy': `${baseUrl}/user-guide/data-processing/operations/remote-copy`,
     'scheduler:scheduler_and_pools': `${baseUrl}/user-guide/data-processing/scheduler/scheduler-and-pools`,
     'faq:alert_type': `${baseUrl}/faq/faq#`,
     'common:quotas#request_quota': '',
