@@ -12,7 +12,7 @@ import {
     hideRemoteCopyModal,
     remoteCopy,
 } from '../../../store/actions/navigation/modals/remote-copy-modal';
-import {getCluster, getCurrentUserName} from '../../../store/selectors/global';
+import {getCluster} from '../../../store/selectors/global';
 import {
     getCompressionCodecs,
     getErasureCodecs,
@@ -34,7 +34,6 @@ function RemoteCopyModal() {
     const visible = useSelector(getRemoteCopyModalVisible);
     const paths = useSelector(getRemoteCopyModalPaths);
     const cluster = useSelector(getCluster);
-    const login = useSelector(getCurrentUserName);
 
     const [error, setError] = React.useState<YTError | undefined>();
 
@@ -49,7 +48,7 @@ function RemoteCopyModal() {
                         ...rest,
                         input_table_paths: _.map(input_table_paths, 'title'),
                         compression_codec: compression_codec.join(''),
-                        pool: pool || login,
+                        pool: pool,
                     }),
                 );
             } catch (e) {
@@ -186,6 +185,23 @@ function RemoteCopyModal() {
                     name: 'pool',
                     type: 'pool',
                     caption: 'Pool',
+                    warning: (
+                        <>
+                            pool must have specified{' '}
+                            {docsUrl(
+                                makeLink(
+                                    UIFactory.docsUrls['operations:remote_copy'],
+                                    'limits',
+                                    true,
+                                ),
+                            )}
+                        </>
+                    ),
+                    visibilityCondition: {
+                        when: 'dstCluster',
+                        isActive: (value) => Boolean(value),
+                    },
+                    required: true,
                     tooltip: docsUrl(
                         makeLink(
                             UIFactory.docsUrls[
@@ -194,7 +210,17 @@ function RemoteCopyModal() {
                         ),
                     ),
                     extras: ({dstCluster}: Values) => {
-                        return {cluster: dstCluster, placeholder: login};
+                        return {
+                            cluster: dstCluster,
+                            placeholder: `(cluster: ${dstCluster}) pool name`,
+                            calculateValueOnPoolsLoaded({loadedPoolNames}) {
+                                const transferPool = _.find(
+                                    loadedPoolNames,
+                                    (name) => name === `transfer_${cluster}`,
+                                );
+                                return transferPool || '';
+                            },
+                        };
                     },
                 },
                 ...(!error

@@ -20,6 +20,7 @@ type Props = DialogControlProps<string> & {
     cluster?: string;
     // If not defined then default pool tree should be used
     poolTree?: string;
+    calculateValueOnPoolsLoaded?: (params: {loadedPoolNames: Array<string>}) => string;
 };
 
 /**
@@ -29,7 +30,7 @@ type Props = DialogControlProps<string> & {
  */
 export function PoolSuggestControl(props: Props) {
     const defaultPoolTree = useSelector(getGlobalDefaultPoolTreeName);
-    const {value, onChange, placeholder, poolTree, cluster} = props;
+    const {value, onChange, placeholder, poolTree, cluster, calculateValueOnPoolsLoaded} = props;
 
     // !!! default pool tree of current cluster must be never used for other clusters !!!
     const treeName = cluster ? poolTree : poolTree || defaultPoolTree;
@@ -52,6 +53,9 @@ export function PoolSuggestControl(props: Props) {
                 onChange('');
             }
             setPoolNames({items: _.sortBy(noRoot), itemsTree: tree});
+            if (calculateValueOnPoolsLoaded) {
+                onChange(calculateValueOnPoolsLoaded({loadedPoolNames: noRoot}));
+            }
         });
     }, [loadedPools, setPoolNames, onChange]);
 
