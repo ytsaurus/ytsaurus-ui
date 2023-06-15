@@ -9,6 +9,7 @@ import {RootState} from '../../store/reducers';
 import {uiSettings} from '../../config';
 import _ from 'lodash';
 import {NODE_TYPE} from '../../../shared/constants/system';
+import {ValueOf} from '../../../@types/types';
 
 export const getSettingsDataRaw = (state: RootState) => state.settings.data;
 
@@ -167,9 +168,23 @@ export const getSettingsNavigationConsumerPartitionsVisibility = createSelector(
 
 export const getSettingSystemNodesNodeType = createSelector(
     makeGetSetting,
-    (getSetting): string => {
-        return (
-            getSetting(SettingName.SYSTEM.NODES_NODE_TYPE, NAMESPACES.SYSTEM) ?? NODE_TYPE.ALL_NODES
-        );
+    (getSetting): Array<ValueOf<typeof NODE_TYPE>> => {
+        const propValue = getSetting(SettingName.SYSTEM.NODES_NODE_TYPE, NAMESPACES.SYSTEM) ?? '';
+        const items = typeof propValue === 'string' ? propValue.split(',') : [];
+        const allowedValues = Object.values(NODE_TYPE);
+        const allowedSet = new Set(allowedValues);
+
+        const res: typeof allowedValues = [];
+        items.forEach((v) => {
+            if (allowedSet.has(v as any)) {
+                res.push(v as typeof allowedValues[number]);
+            }
+        });
+
+        if (!res.length) {
+            res.push(NODE_TYPE.ALL_NODES);
+        }
+
+        return res;
     },
 );
