@@ -12,9 +12,8 @@ import UserPermissions from './UserPermissions/UserPermissions';
 
 import LoadDataHandler from '../../components/LoadDataHandler/LoadDataHandler';
 import ErrorBoundary from '../../components/ErrorBoundary/ErrorBoundary';
-import ElementsTable from '../../components/ElementsTable/ElementsTable';
+import DataTableYT from '../../components/DataTableYT/DataTableYT';
 import MetaTable from '../../components/MetaTable/MetaTable';
-import Filter from '../../components/Filter/Filter';
 import {ClipboardButton, Loader, Popover} from '@gravity-ui/uikit';
 import Icon from '../../components/Icon/Icon';
 import Link from '../../components/Link/Link';
@@ -27,8 +26,6 @@ import Label from '../../components/Label/Label';
 import {isIdmAclAvailable} from '../../config';
 import ApproversFilters from './ApproversFilters/ApproversFilters';
 import ObjectPermissionsFilters from './ObjectPermissionsFilters/ObjectPermissionsFilters';
-
-import AclColumn from './AclColumn';
 
 import './ACL.scss';
 
@@ -348,113 +345,100 @@ class ACL extends Component {
         }
     }
 
-    get templates() {
+    get columnsTemplates() {
         const openDeleteModal = this.handleDeletePermissionClick;
-        const {idmKind, cluster} = this.props;
-
+        const {cluster, idmKind} = this.props;
         return {
-            subjects(item) {
-                const {type, internal} = item;
-                if (!internal) {
-                    return ACL.renderSubjectLink(item, type);
-                }
-
-                const nodes = _.map(item.subjects, (subject, index) => {
-                    const isGroup = item.types?.[index] === 'group';
-                    const url = isGroup
-                        ? `/${cluster}/groups?groupFilter=${subject}`
-                        : `/${cluster}/users?filter=${subject}`;
+            inherited: {
+                name: 'inherited',
+                header: '',
+                className: block('table-item', {type: 'inherited'}),
+                render({row}) {
                     return (
-                        <Link key={index} theme={'primary'} routed url={url}>
-                            <span className={block('subject-name')}>{subject}</span>
-                        </Link>
+                        row.inherited && (
+                            <Popover content={'Role is inherited'}>
+                                <Icon awesome="level-down-alt" />
+                            </Popover>
+                        )
                     );
-                });
-                return <div className={block('subjects-list')}>{nodes}</div>;
+                },
             },
-            inherited(item) {
-                return (
-                    item.inherited && (
-                        <Popover content={'Role is inherited'}>
-                            <Icon awesome="level-down-alt" />
-                        </Popover>
-                    )
-                );
-            },
-            permissions(item) {
-                const action = item.action === 'deny' ? 'deny' : 'allow';
-                const theme = action === 'deny' ? 'danger' : 'success';
+            subjects: {
+                name: 'Subjects',
+                align: 'left',
+                className: block('table-item', {type: 'subjects'}),
+                render({row}) {
+                    const {type, internal} = row;
+                    if (!internal) {
+                        return ACL.renderSubjectLink(row, type);
+                    }
 
-                return (
-                    <div className={block('permissions', {type: item.action})}>
-                        <Label className={block('action-label')} theme={theme}>
-                            {action}
-                        </Label>
-                        {renderText(item.permissions?.map(hammer.format.Readable).join(', '))}
-                    </div>
-                );
+                    const nodes = _.map(row.subjects, (subject, index) => {
+                        const isGroup = row.types?.[index] === 'group';
+                        const url = isGroup
+                            ? `/${cluster}/groups?groupFilter=${subject}`
+                            : `/${cluster}/users?filter=${subject}`;
+                        return (
+                            <Link key={index} theme={'primary'} routed url={url}>
+                                <span className={block('subject-name')}>{subject}</span>
+                            </Link>
+                        );
+                    });
+
+                    if (nodes.length === 1) return nodes[0];
+                    return <div className={block('subjects-list')}>{nodes}</div>;
+                },
             },
-            columns(item) {
-                const columns = _.map(item.columns, (column, index, arr) => {
+            permissions: {
+                name: 'Permissions',
+                align: 'left',
+                className: block('table-item', {type: 'permissions'}),
+                render({row}) {
+                    const action = row.action === 'deny' ? 'deny' : 'allow';
+                    const theme = action === 'deny' ? 'danger' : 'success';
+
                     return (
-                        <AclColumn key={column} column={column} hasComa={index < arr.length - 1} />
+                        <div className={block('permissions', {type: row.action})}>
+                            <Label className={block('action-label')} theme={theme}>
+                                {action}
+                            </Label>
+                            {renderText(row.permissions?.map(hammer.format.Readable).join(', '))}
+                        </div>
                     );
-                });
-
-                return columns;
+                },
             },
-            inheritance_mode(item) {
-                return renderText(hammer.format['ReadableField'](item.inheritance_mode));
+            inheritance_mode: {
+                name: 'Inheritance mode',
+                render({row}) {
+                    return renderText(hammer.format['ReadableField'](row.inheritance_mode));
+                },
+                align: 'left',
+                className: block('table-item', {type: 'inheritance-mode'}),
             },
-            actions(item) {
-                return <RoleActions role={item} idmKind={idmKind} onDelete={openDeleteModal} />;
+            actions: {
+                name: 'actions',
+                header: '',
+                align: 'right',
+                className: block('table-item', {type: 'actions'}),
+                render({row}) {
+                    return <RoleActions role={row} idmKind={idmKind} onDelete={openDeleteModal} />;
+                },
             },
-            approve_type(item) {
-                return hammer.format['Readable'](item.type);
+            approve_type: {
+                name: 'Type',
+                align: 'left',
+                className: block('table-item', {type: 'approve-type'}),
+                render({row}) {
+                    return hammer.format['Readable'](row.type);
+                },
             },
-        };
-    }
-
-    get tableProps() {
-        return {
-            templates: this.templates,
-            virtual: false,
-            striped: false,
-            cssHover: true,
-            theme: 'light',
-            css: block(),
-            size: 'm',
-        };
-    }
-
-    get objectTableProps() {
-        const mode = 'objectDefault';
-
-        return {
-            ...this.tableProps,
             columns: {
-                ...ACL.tableColumns,
-                mode,
-            },
-        };
-    }
-
-    get columnsTableProps() {
-        return {
-            ...this.tableProps,
-            columns: {
-                ...ACL.tableColumns,
-                mode: 'columns',
-            },
-        };
-    }
-
-    get approversTableProps() {
-        return {
-            ...this.tableProps,
-            columns: {
-                ...ACL.tableColumns,
-                mode: 'approvers',
+                name: 'Private columns',
+                align: 'left',
+                className: block('table-item', {type: 'columns'}),
+                render({row}) {
+                    return renderText(row.columns?.map((column) => `"${column}"`).join(', '));
+                },
             },
         };
     }
@@ -481,6 +465,9 @@ class ACL extends Component {
 
     renderApprovers() {
         const {hasApprovers, approversFiltered} = this.props;
+        const tableColumns = ['inherited', 'subjects', 'approve_type', 'actions'].map(
+            (name) => this.columnsTemplates[name],
+        );
         return (
             hasApprovers && (
                 <ErrorBoundary>
@@ -489,10 +476,15 @@ class ACL extends Component {
                             Responsibles
                         </div>
                         <ApproversFilters />
-                        <ElementsTable
-                            {...this.approversTableProps}
-                            items={approversFiltered}
-                            itemMods={this.approversRowClass}
+                        <DataTableYT
+                            data={approversFiltered}
+                            columns={tableColumns}
+                            theme={'yt-borderless'}
+                            rowClassName={this.rowClassNameByFlags}
+                            settings={{
+                                sortable: false,
+                                displayIndices: false,
+                            }}
                         />
                     </div>
                 </ErrorBoundary>
@@ -500,12 +492,15 @@ class ACL extends Component {
         );
     }
 
-    approversRowClass = (item) => {
-        return this.rowClassNameByFlags(item);
-    };
-
     renderObjectPermissions() {
         const {objectPermissions, idmKind} = this.props;
+        const tableColumns = [
+            'inherited',
+            'subjects',
+            'permissions',
+            'inheritance_mode',
+            'actions',
+        ].map((name) => this.columnsTemplates[name]);
         return (
             <ErrorBoundary>
                 <div className={block('object-permissions')}>
@@ -513,10 +508,16 @@ class ACL extends Component {
                         Object Permissions
                     </div>
                     <ObjectPermissionsFilters idmKind={idmKind} />
-                    <ElementsTable
-                        {...this.objectTableProps}
-                        items={objectPermissions}
-                        itemMods={this.permissionsRowClass}
+
+                    <DataTableYT
+                        data={objectPermissions}
+                        columns={tableColumns}
+                        theme={'yt-borderless'}
+                        rowClassName={this.rowClassNameByFlags}
+                        settings={{
+                            sortable: false,
+                            displayIndices: false,
+                        }}
                     />
                 </div>
             </ErrorBoundary>
@@ -537,12 +538,11 @@ class ACL extends Component {
         ) : null;
     }
 
-    permissionsRowClass = (item) => {
-        return this.rowClassNameByFlags(item);
-    };
-
     renderColumnsPermissions() {
-        const {userPermissionsAccessColumns, columnsPermissions, columnsFilter} = this.props;
+        const {userPermissionsAccessColumns, columnsPermissions} = this.props;
+        const tableColumns = ['inherited', 'subjects', 'columns'].map(
+            (name) => this.columnsTemplates[name],
+        );
 
         return (
             userPermissionsAccessColumns.length > 0 && (
@@ -552,28 +552,20 @@ class ACL extends Component {
                             Private columns permissions
                         </div>
 
-                        <div className={block('filters-group')}>
-                            <Filter
-                                onChange={this.onFilterColumnPermissionsByColumn}
-                                placeholder="Filter by columns"
-                                className={block('filter')}
-                                value={columnsFilter}
-                                autofocus={false}
-                                size="m"
-                            />
-                        </div>
-
-                        <ElementsTable {...this.columnsTableProps} items={columnsPermissions} />
+                        <DataTableYT
+                            data={columnsPermissions}
+                            columns={tableColumns}
+                            theme={'yt-borderless'}
+                            settings={{
+                                sortable: false,
+                                displayIndices: false,
+                            }}
+                        />
                     </div>
                 </ErrorBoundary>
             )
         );
     }
-
-    onFilterColumnPermissionsByColumn = (columnsColumns) => {
-        const {changeColumnsColumns} = this.props;
-        changeColumnsColumns({columnsColumns});
-    };
 
     deletePermissionsFn = (...args) => {
         const {deletePermissionsFn, loadAclData, idmKind, path} = this.props;
