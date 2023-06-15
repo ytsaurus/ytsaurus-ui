@@ -38,6 +38,7 @@ class Nodes extends Component {
         racks: PropTypes.array,
         collapsed: PropTypes.bool,
         containerWidth: PropTypes.number,
+        nodeType: PropTypes.array,
     };
 
     static defaultProps = {
@@ -59,7 +60,11 @@ class Nodes extends Component {
         if (_.isEmpty(racks) && _.isEmpty(rackGroups)) {
             return (
                 <NoContent
-                    warning={`There is no ${format.ReadableField(nodeType)}`}
+                    warning={
+                        !nodeType.length
+                            ? undefined
+                            : `There are no ${nodeType.map(format.ReadableField).join(',')}`
+                    }
                     hint={'Try to select another node type'}
                 />
             );

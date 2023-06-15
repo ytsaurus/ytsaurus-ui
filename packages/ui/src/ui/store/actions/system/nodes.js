@@ -7,7 +7,7 @@ import {isRetryFutile} from '../../../utils/index';
 import {showErrorPopup, splitBatchResults} from '../../../utils/utils';
 import {USE_CACHE, USE_MAX_SIZE} from '../../../constants';
 import {YTApiId, ytApiV3Id} from '../../../rum/rum-wrap-api';
-import {getSettingSystemNodesNodeType} from '../../../store/selectors/settings-ts';
+import {getSystemNodesNodeTypesToLoad} from '../../../store/selectors/system/nodes';
 
 export const FETCH_NODES = createActionTypes('NODES');
 const NODES_UPDATER_ID = 'system_nodes';
@@ -29,27 +29,9 @@ export function cancelLoadNodes() {
 
 function getNodes() {
     return (dispatch, getState) => {
-        const nodeType = getSettingSystemNodesNodeType(getState());
+        const nodeTypes = getSystemNodesNodeTypesToLoad(getState());
 
         const requests = [
-            {
-                command: 'list',
-                parameters: {
-                    path: `//sys/${nodeType}`,
-                    attributes: [
-                        'state',
-                        'banned',
-                        'decommissioned',
-                        'alert_count',
-                        'full',
-                        'rack',
-                    ],
-                    suppress_transaction_coordinator_sync: true,
-                    suppress_upstream_sync: true,
-                    ...USE_CACHE,
-                    ...USE_MAX_SIZE,
-                },
-            },
             {
                 command: 'list',
                 parameters: {
@@ -59,9 +41,29 @@ function getNodes() {
                     ...USE_MAX_SIZE,
                 },
             },
+            ...nodeTypes.map((nodeType) => {
+                return {
+                    command: 'list',
+                    parameters: {
+                        path: `//sys/${nodeType}`,
+                        attributes: [
+                            'state',
+                            'banned',
+                            'decommissioned',
+                            'alert_count',
+                            'full',
+                            'rack',
+                        ],
+                        suppress_transaction_coordinator_sync: true,
+                        suppress_upstream_sync: true,
+                        ...USE_CACHE,
+                        ...USE_MAX_SIZE,
+                    },
+                };
+            }),
         ];
 
-        ytApiV3Id
+        return ytApiV3Id
             .executeBatch(YTApiId.systemNodes, {requests})
             .then((data) => {
                 const {error, results} = splitBatchResults(data);
@@ -69,7 +71,11 @@ function getNodes() {
                     return Promise.reject(error);
                 }
 
-                const [nodes, racks] = results;
+                const [racks, ...rest] = results;
+                const nodes = rest.reduce((acc, items) => {
+                    return acc.concat(items);
+                }, []);
+
                 dispatch({
                     type: FETCH_NODES.SUCCESS,
                     data: {

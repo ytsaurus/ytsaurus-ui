@@ -5,7 +5,7 @@ import {RootState} from '../../../store/reducers';
 import {loadNodes} from './nodes';
 
 export function setSysmetNodesNodeType(
-    value: NodeType,
+    value: Array<NodeType>,
 ): ThunkAction<void, RootState, unknown, any> {
     return (dispatch) => {
         dispatch(setSettingSystemNodesNodeType(value));
