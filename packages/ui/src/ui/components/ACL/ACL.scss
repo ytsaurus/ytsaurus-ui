@@ -4,7 +4,7 @@
     position: relative;
 
     display: grid;
-    grid-template-columns: minmax(0, 1fr) 300px;
+    grid-template-columns: minmax(870px, 1fr) 270px;
     grid-template-rows: repeat(6, min-content);
     grid-gap: 20px;
 
@@ -34,10 +34,15 @@
             display: flex;
             align-items: baseline;
 
+            .elements-text {
+                white-space: normal;
+            }
+
             &_type_allow {
                 .icon {
                     color: var(--success-color);
                     margin-right: 4px;
+                    padding: 0 5px;
                 }
             }
 
@@ -76,29 +81,6 @@
         position: relative;
     }
 
-    .elements-table {
-        width: unset;
-    }
-
-    .elements-table__row {
-        border-bottom: none;
-        height: unset !important;
-
-        .elements-table__cell {
-            padding-top: 8px;
-            padding-bottom: 8px;
-
-            .yc-button {
-                height: 14px;
-            }
-        }
-
-        &:first-child {
-            .elements-table__cell {
-                padding-top: 16px !important;
-            }
-        }
-    }
 
     &__row {
         &-transparent {
@@ -116,19 +98,19 @@
         }
     }
 
-    &__table-item {
+    & &__table-item {
+        box-sizing: border-box;
+        padding-left: 4px;
+        padding-right: 4px;
+
         &_type_inherited {
-            width: 20px;
-            min-width: 20px;
+            width: 25px;
         }
 
         &_type_subjects {
-            width: 340px;
-            max-width: 340px;
+            width: 270px;
+            max-width: 320px;
             .user-link {
-                display: inline-block;
-            }
-            .yc-link {
                 display: flex;
             }
             .yc-popover {
@@ -139,21 +121,30 @@
         }
 
         &_type_permissions {
-            width: 320px;
+            width: 270px;
+            max-width: 320px;
+        }
+
+        &_type_approve-type {
+            width: calc(270px + 160px);
         }
 
         &_type_inheritance-mode {
-            width: 240px;
+            width: 160px;
+            max-width: 200px;
         }
 
         &_type_actions {
-            width: 40px;
+            width: 85px;
+            max-width: 85px;
+            .navigation-acl__icon {
+                margin-right: 0px;
+            }
         }
 
         &_type_columns {
-            display: flex;
-            flex-flow: row wrap;
-            vertical-align: top;
+            width: 575px;
+            white-space: normal;
         }
     }
 
@@ -214,15 +205,11 @@
         min-width: 5ex;
         margin-right: 1ex;
         font-weight: unset;
+        flex-shrink: 0;
     }
 
     &__subjects-list {
         display: flex;
         flex-flow: wrap;
-    }
-
-    .elements-table__empty-header {
-        font-size: inherit;
-        padding-top: 20px;
     }
 }

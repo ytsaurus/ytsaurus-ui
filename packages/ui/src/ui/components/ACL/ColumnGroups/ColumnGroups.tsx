@@ -8,7 +8,6 @@ import ErrorBoundary from '../../../components/ErrorBoundary/ErrorBoundary';
 import DataTableYT from '../../../components/DataTableYT/DataTableYT';
 import type {Column} from '@yandex-cloud/react-data-table';
 import Icon from '../../../components/Icon/Icon';
-import AclColumn from '../../../components/ACL/AclColumn';
 import Button from '../../../components/Button/Button';
 import StatusBulb from '../../../components/StatusBulb/StatusBulb';
 
@@ -17,6 +16,7 @@ import {ColumnGroup} from '../../../utils/acl/acl-types';
 import UIFactory from '../../../UIFactory';
 
 import './ColumnGroups.scss';
+import {renderText} from '../../templates/utils';
 
 const block = cn('column-groups');
 
@@ -119,20 +119,14 @@ export default function ColumnGroups({columnGroups, path, loadAclDataFn, cluster
         {
             name: 'Columns',
             render({row}) {
-                return _.map(row.columns, (column, index: number, arr) => (
-                    <AclColumn
-                        className={block('column')}
-                        key={column}
-                        column={column}
-                        hasComa={index < arr.length - 1}
-                    />
-                ));
+                return renderText(row.columns?.map((column) => `"${column}"`).join(', '));
             },
             className: block('columns'),
             align: 'left',
         },
         {
             name: 'Enabled',
+            className: block('enabled'),
             render({row}) {
                 const theme = row.enabled ? 'enabled' : 'unknown';
                 return <StatusBulb theme={theme} />;
@@ -141,6 +135,7 @@ export default function ColumnGroups({columnGroups, path, loadAclDataFn, cluster
         },
         {
             name: '',
+            className: block('actions'),
             render({row}) {
                 return (
                     <>
