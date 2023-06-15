@@ -117,7 +117,12 @@ export default class MetaTable extends Component<MetaTableProps> {
 
         return !visibleItems?.length ? null : (
             <div className={block('group', itemBlock())} key={index}>
-                {title && this.renderTitle(title)}
+                {title && (
+                    <>
+                        <h2 className={block('sub-title')}>{title}</h2>
+                        <span />
+                    </>
+                )}
                 {this.renderItems(visibleItems)}
             </div>
         );
