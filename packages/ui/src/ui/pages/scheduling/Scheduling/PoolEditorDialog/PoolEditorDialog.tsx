@@ -266,8 +266,13 @@ export function PoolEditorDialog() {
                         },
                         {
                             name: 'weight',
-                            type: 'text',
+                            type: 'number',
                             caption: 'Weight',
+                            extras: {
+                                min: 0,
+                                hidePrettyValue: true,
+                                formatFn: (value) => (value === undefined ? '' : String(value)),
+                            },
                         },
                         {
                             name: 'maxOperationCount',
