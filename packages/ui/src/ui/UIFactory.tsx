@@ -22,6 +22,7 @@ import {DocsUrls, docsUrls} from './constants/docsUrls';
 import {YTSubjectSuggest} from './components/ACL/SubjectsControl/YTSubjectSuggest';
 import RoleActions, {Props as RoleActionsProps} from './components/ACL/RoleActions';
 import {PERMISSIONS_SETTINGS} from './constants/acl';
+import {uiSettings} from './config';
 
 type HeaderItemOrPage =
     | {
@@ -69,7 +70,12 @@ export interface ReducersAndUrlMapping {
 export interface SchedulingExtraTab {
     name: string;
     title?: string;
-    component: React.ComponentType<any>;
+    component?: React.ComponentType<any>;
+    /**
+     * Allows to redefine link of corresponding tab
+     * Example: https://grafana.mydomain.com?var-pool={ytPool}&var-tree={ytPoolTree}&var-cluster={ytCluster}
+     */
+    urlTemplate?: string;
 }
 
 export interface UIFactory {
@@ -359,7 +365,19 @@ const uiFactory: UIFactory = {
     },
 
     getSchedulingExtraTabs() {
-        return [];
+        if (!uiSettings.schedulingMonitoring) {
+            return [];
+        }
+
+        const {urlTemplate, tabName: title = 'Monitoring'} = uiSettings.schedulingMonitoring;
+
+        return [
+            {
+                name: 'monitoring',
+                title,
+                urlTemplate,
+            },
+        ];
     },
 
     getMonitorComponentForAccount() {

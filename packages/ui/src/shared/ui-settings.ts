@@ -32,6 +32,19 @@ export interface UISettings {
     defaultFontType?: keyof Required<UISettings>['fontTypes'];
 
     fontTypes?: Record<string, {regular: string; monospace: string}>;
+
+    /**
+     * schedulingMonitoring.urlTemplate template might contain following parameters: ytCluster, ytPool, ytPoolTree.
+     * All the parameters are optional. They will be replaced with corresponding values.
+     * A parameter should be wrapped by '{' and '}' characters, see example below:
+     * @example 'https://grafana.mydomain.com?var-pool={ytPool}&var-tree={ytPoolTree}&var-cluster={ytCluster}'
+     */
+    schedulingMonitoring?: UISettingsMonitoring;
+}
+
+export interface UISettingsMonitoring {
+    urlTemplate: string;
+    tabName?: string;
 }
 
 export const uiSettingFromEnv: Partial<UISettings> = {

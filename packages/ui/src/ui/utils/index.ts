@@ -157,7 +157,12 @@ export function getDisplayName(WrappedComponent): string {
 export function makeTabProps<TabName extends string>(
     path: string,
     Tab: Record<string, TabName>,
-    settings?: Partial<Record<TabName, {show?: boolean; counter?: number}>>,
+    settings?: Partial<
+        Record<
+            TabName,
+            {show?: boolean; counter?: number; url?: string; routed?: boolean; external?: boolean}
+        >
+    >,
     queryParams?: any,
     titleDict: Partial<Record<TabName, string>> = {},
 ) {
@@ -171,12 +176,22 @@ export function makeTabProps<TabName extends string>(
         }>((key) => {
             const query = queryParams ? `?${qs.stringify(queryParams)}` : '';
 
+            const {
+                show = true,
+                url = `${path}/${key}${query}`,
+                counter,
+                routed,
+                external,
+            } = settings?.[key] ?? {};
+
             return {
                 value: key,
                 text: titleDict[key] || hammer.format['ReadableField'](key),
-                show: settings && settings[key] ? settings[key]!.show : true,
-                url: `${path}/${key}${query}`,
-                counter: settings && settings[key] ? settings[key]!.counter : undefined,
+                show,
+                url,
+                counter,
+                routed,
+                external,
             };
         }),
         underline: true,

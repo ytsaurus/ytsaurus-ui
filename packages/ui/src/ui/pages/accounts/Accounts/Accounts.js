@@ -52,14 +52,14 @@ export class Accounts extends React.Component {
             AccountsTab,
             (acc, tab) => {
                 acc[tab] = {
-                    show: Boolean(activeAccount) || ACCOUNTS_ALLOWED_ROOT_TABS[tab],
+                    show: Boolean(activeAccount) || Boolean(ACCOUNTS_ALLOWED_ROOT_TABS[tab]),
                 };
                 return acc;
             },
             {},
         );
         const usageTab = showSettings[AccountsTab.USAGE];
-        usageTab.show = usageTab.show && allowUsageTab;
+        usageTab.show = usageTab.show && Boolean(allowUsageTab);
 
         const statsTab = showSettings[AccountsTab.STATISTICS];
         statsTab.show = statsTab.show && Boolean(UIFactory.getStatisticsComponentForAccount());
