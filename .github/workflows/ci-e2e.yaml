@@ -50,7 +50,7 @@ jobs:
       - name: Run containers for 'Local'
         run: |
           cd packages/ui/tests
-          ./run_local_cluster.sh --ui-skip-pull true --ui-version local
+          ./run_local_cluster.sh --ui-skip-pull true --ui-version local --ui-app-installation e2e
           sleep 10
       - name: Tests for 'Local'
         run: |
@@ -61,7 +61,7 @@ jobs:
         run: |
           cd packages/ui/tests
           ./run_local_cluster.sh --stop
-          ./run_local_cluster.sh --ui-skip-pull true --ui-version local --docker-hostname `hostname` --ui-network bridge --ui-proxy-internal ""
+          ./run_local_cluster.sh --ui-skip-pull true --ui-version local --ui-app-installation e2e --docker-hostname `hostname` --ui-network bridge --ui-proxy-internal ""
           sleep 10
       - name: Tests for 'Local as remote'
         run: |

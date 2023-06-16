@@ -32,3 +32,6 @@ yt lock --mode snapshot //tmp/locked --tx $(yt start-tx --timeout 3600000)
 yt lock --mode shared //tmp/locked --tx $(yt start-tx --timeout 3600000)
 
 yt vanilla --tasks '{main={job_count=1; command="sleep 6000";}}' --spec '{alias="*test-alias"}' --async
+
+yt create --type scheduler_pool --attributes '{name="yt-e2e-pool-1";pool_tree="default";parent_name="<Root>"}'
+yt create --type scheduler_pool --attributes '{name="yt-e2e-pool-2";pool_tree="default";parent_name="<Root>"}'

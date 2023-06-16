@@ -53,6 +53,10 @@ $ npm run dev:localmode
 - `YT_USER_SETTINGS_PATH` - path to map-node with files of user-settings, if not defined '//tmp' is used _(the variable is ignored if `YT_AUTH_CLUSTER_ID` is not defined)_
 - `YT_USER_COLUMN_PRESETS_PATH` - path to dynamic table with user column presets _(the variable is ignored if `YT_AUTH_CLUSTER_ID` is not defined)_. The table should have two columns: **"name"** _(string, required, sort_order: ascheding)_, **"columns_json"** _(string)_.
 
+### Configuration
+
+By default the application uses base configaration from `path_to_dist/server/configs/common.js` file. The behavior might be adjusted through `APP_ENV` and `APP_INSTALLATION` environment variables, see (README.config.md)[./docs/configuration.md] for more details.
+
 ### Docker
 
 There is ability to build docker-image:

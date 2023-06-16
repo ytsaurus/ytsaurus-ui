@@ -21,6 +21,7 @@ import {
     isPoolAclAllowed,
 } from '../../../store/selectors/scheduling/scheduling';
 import {makeTabProps} from '../../../utils';
+import {formatByParams} from '../../../utils/format';
 
 import './Content.scss';
 import {getCluster, getUISizes} from '../../../store/selectors/global';
@@ -76,14 +77,28 @@ function Content({className, match, location}) {
     const extraRoutes = [];
 
     extraTabs.forEach((tab) => {
-        const {name, title, component} = tab;
-        showSettings[name] = {show: true};
+        const {name, title, component, urlTemplate} = tab;
+        const tabSettings = {show: true};
+        showSettings[name] = tabSettings;
+
+        if (urlTemplate) {
+            tabSettings.routed = false;
+            tabSettings.external = true;
+            tabSettings.url = formatByParams(urlTemplate, {
+                ytCluster: cluster,
+                ytPool: pool,
+                ytPoolTree: tree,
+            });
+        }
+
         localTab[name] = name;
         if (title) {
             titleDict[name] = title;
         }
-        const route = <Route key={name} path={`${match.path}/${name}`} component={component} />;
-        extraRoutes.push(route);
+        if (component) {
+            const route = <Route key={name} path={`${match.path}/${name}`} component={component} />;
+            extraRoutes.push(route);
+        }
     });
 
     delete localTab.ACL;

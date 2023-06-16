@@ -5,6 +5,7 @@ import block from 'bem-cn-lite';
 
 import Hotkey from '../Hotkey/Hotkey';
 import Link from '../Link/Link';
+import Icon from '../Icon/Icon';
 
 import action from '../action/action';
 
@@ -21,7 +22,9 @@ const propTypes = {
             counter: PropTypes.number,
             show: PropTypes.bool,
             title: PropTypes.string,
-            link: PropTypes.string,
+            url: PropTypes.string,
+            routed: PropTypes.bool,
+            external: PropTypes.bool,
         }),
     ).isRequired,
     active: PropTypes.string,
@@ -119,6 +122,9 @@ class Tabs extends Component {
                     url={item.url}
                 >
                     {item.text}
+                    {item.external && (
+                        <Icon className={b('external-icon')} awesome="external-link" />
+                    )}
                 </Link>
             )
         );
@@ -132,10 +138,12 @@ class Tabs extends Component {
             active: !routed && item.value === active && 'yes',
         });
 
+        const useRoutedLink = item.routed ?? routed;
+
         return (
             item.show && (
                 <li key={item.value} title={item.title} className={className}>
-                    {routed ? this.renderNavLink(item) : this.renderLink(item)}
+                    {useRoutedLink ? this.renderNavLink(item) : this.renderLink(item)}
                     {this.renderCounter(item)}
                     {this.renderHotkey(item)}
                 </li>
