@@ -44,6 +44,7 @@ export const docsUrls = {
     'api:cli': `${baseUrl}/api/cli/cli`,
     'chyt:yt_tables#dynamic': `${baseUrl}/user-guide/data-processing/chyt/yt-tables#dynamic`,
     'common:regular_system_processes': '',
+    'acl:permissions': `${baseUrl}/user-guide/storage/access-control#authorization`,
 };
 
 export type DocsUrls = typeof docsUrls;

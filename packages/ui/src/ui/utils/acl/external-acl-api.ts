@@ -1,3 +1,6 @@
+import {ManageAclFieldsNames} from '../../components/ACL/ManageAcl/ManageAcl';
+import {RequestPermissionsFieldsNames} from '../../components/ACL/RequestPermissions/RequestPermissions';
+import {requestPermissions} from './acl-api';
 import {
     ACLResponsible,
     ColumnGroup,
@@ -25,6 +28,7 @@ export interface AclApi {
     getResponsible(params: GetResponsibleParams): Promise<ACLResponsible>;
 
     requestPermissions(params: RequestPermissionParams): Promise<UpdateResponse>;
+    requestPermissionsFields: Array<RequestPermissionsFieldsNames>;
 
     deleteRole(cluster: string, roleKey: string): Promise<UpdateResponse>;
 
@@ -69,7 +73,9 @@ export interface GetResponsibleParams {
 export interface RequestPermissionParams {
     cluster: string;
     path: string;
+    sysPath: string;
     roles: Array<Role>;
+    roles_grouped: Array<Role>;
     comment: string;
     /*columns, */ kind: IdmKindType;
     poolTree?: string;
@@ -88,7 +94,8 @@ export const defaultAclApi: AclApi = {
 
     getResponsible: () => methodNotSupported('getResponsible'),
 
-    requestPermissions: () => methodNotSupported('requestPermission'),
+    requestPermissions: (params) => requestPermissions(params),
+    requestPermissionsFields: ['cluster', 'path', 'permissions', 'inheritance_mode', 'subjects'],
 
     deleteRole: () => methodNotSupported('deleteRole'),
 
