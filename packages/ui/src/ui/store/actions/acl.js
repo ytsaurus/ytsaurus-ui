@@ -192,14 +192,22 @@ export function requestPermissions({values, idmKind}, {normalizedPoolTree} = {})
 
         const daysAfter = dateToDaysAfterNow(values.duration);
         const roles = [];
+        const rolesGroupedBySubject = [];
+        const {inheritance_mode} = values;
         for (const item of values.subjects) {
             const subject = item.type === 'app' ? {tvm_id: item.value} : prepareAclSubject(item);
-
+            rolesGroupedBySubject.push({
+                permissions: _.flatten(_.map(values.permissions)),
+                subject,
+                deprive_after_days: daysAfter,
+                ...(inheritance_mode ? {inheritance_mode} : {}),
+            });
             _.forEach(values.permissions, (permissions) => {
                 roles.push({
                     permissions,
                     subject,
                     deprive_after_days: daysAfter,
+                    ...(inheritance_mode ? {inheritance_mode} : {}),
                 });
             });
         }
@@ -207,12 +215,21 @@ export function requestPermissions({values, idmKind}, {normalizedPoolTree} = {})
         const poolTree =
             idmKind === IdmObjectType.POOL ? normalizedPoolTree || getTree(state) : undefined;
 
+        const requestPermissionsPath = getPathToCheckPermissions(
+            idmKind,
+            state,
+            values.path,
+            poolTree,
+        );
+
         //cluster, path, roles, comment, columns
         return UIFactory.getAclApi()
             .requestPermissions({
                 cluster,
                 path: values.path,
+                sysPath: requestPermissionsPath,
                 roles,
+                roles_grouped: rolesGroupedBySubject,
                 comment: values.comment,
                 kind: idmKind,
                 poolTree,

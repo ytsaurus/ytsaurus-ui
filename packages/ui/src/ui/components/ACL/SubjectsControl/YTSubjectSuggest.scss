@@ -1,0 +1,9 @@
+.yt-subject-suggest {
+    .yt-select {
+        display: block;
+    }
+
+    .yt-select:not(:first-child) {
+        margin-top: 1em;
+    }
+}

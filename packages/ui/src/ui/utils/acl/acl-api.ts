@@ -9,11 +9,13 @@ import {
     GetAclParams,
     GetResponsibleParams,
     UpdateAclParams,
+    UpdateResponse,
 } from './acl-types';
 import {YTApiId, ytApiV3, ytApiV3Id} from '../../rum/rum-wrap-api';
-import {splitBatchResults} from '../../utils/utils';
-import {BatchResultsItem} from '../../../shared/yt-types';
+import {getBatchError, splitBatchResults} from '../../utils/utils';
 import {convertFromUIPermission, convertToUIPermissions} from '.';
+import {BatchResultsItem, ExecuteBatchParams} from '../../../shared/yt-types';
+import {RequestPermissionParams} from './external-acl-api';
 
 function getInheritAcl(path: string): Promise<ACLResponsible> {
     return yt.v3.get({path: path + '/@inherit_acl'}).then((inherit_acl: boolean) => {
@@ -148,4 +150,29 @@ export function checkPermissions(
             }
             return results;
         });
+}
+
+export function requestPermissions(params: RequestPermissionParams): Promise<UpdateResponse> {
+    const {roles_grouped, sysPath} = params;
+    const batchParams: ExecuteBatchParams = {
+        requests: roles_grouped.map(({permissions, subject, inheritance_mode}) => {
+            return {
+                command: 'set',
+                parameters: {path: `${sysPath}/@acl/end`},
+                input: {
+                    action: 'allow',
+                    inheritance_mode: inheritance_mode,
+                    permissions: permissions,
+                    subjects: Object.values(subject),
+                },
+            };
+        }),
+    };
+    return yt.v3.executeBatch(batchParams).then((results: BatchResultsItem<unknown>[]) => {
+        const error = getBatchError(results);
+        if (error) {
+            throw error;
+        }
+        return results;
+    });
 }

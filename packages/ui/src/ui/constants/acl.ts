@@ -33,6 +33,13 @@ const PERMISSION_TYPES = [
     REGISTER_QUEUE_CONSUMER_VITAL,
 ];
 
+export const INHERITANCE_MODE_TYPES = {
+    OBJECT_ONLY: 'object_only',
+    OBJECT_AND_DESCENDANTS: 'object_and_descendants',
+    DESCENDANTS_ONLY: 'descendants_only',
+    IMMEDIATE_DESCENDANTS_ONLY: 'immediate_descendants_only',
+};
+
 const ACCOUNTS_PERMISSION_TYPES = ['administer', 'use'];
 
 export const PERMISSIONS_SETTINGS = {

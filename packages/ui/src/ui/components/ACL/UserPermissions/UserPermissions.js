@@ -178,19 +178,18 @@ export default class UserPermissions extends Component {
             <ErrorBoundary>
                 <div className={block(null, className)}>
                     {this.renderCard()}
-                    {isIdmAclAvailable() &&
-                        idmKind !== IdmObjectType.ACCESS_CONTROL_OBJECT &&
-                        !useEffective && (
-                            <React.Fragment>
-                                <RequestPermissions
-                                    className={block('request')}
-                                    path={path}
-                                    idmKind={idmKind}
-                                    error={requestPermissionsError}
-                                    requestPermissions={this.requestPermissions}
-                                    cancelRequestPermissions={cancelRequestPermissions}
-                                    cluster={cluster}
-                                />
+                    {idmKind !== IdmObjectType.ACCESS_CONTROL_OBJECT && !useEffective && (
+                        <React.Fragment>
+                            <RequestPermissions
+                                className={block('request')}
+                                path={path}
+                                idmKind={idmKind}
+                                error={requestPermissionsError}
+                                requestPermissions={this.requestPermissions}
+                                cancelRequestPermissions={cancelRequestPermissions}
+                                cluster={cluster}
+                            />
+                            {isIdmAclAvailable() && (
                                 <ManageAcl
                                     loadAclData={loadAclData}
                                     loading={loading}
@@ -210,8 +209,9 @@ export default class UserPermissions extends Component {
                                     manageAclError={updateAclError}
                                     cancelUpdateAcl={cancelUpdateAcl}
                                 />
-                            </React.Fragment>
-                        )}
+                            )}
+                        </React.Fragment>
+                    )}
                 </div>
             </ErrorBoundary>
         );

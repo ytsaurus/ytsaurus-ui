@@ -19,6 +19,7 @@ import {SettingsPage} from './containers/SettingsPanel/settings-description';
 import {UserSuggestProps} from './containers/UserSuggest/UserSuggest';
 import {YTUserSuggest} from './containers/UserSuggest/YTUserSuggest';
 import {docsUrls, DocsUrls} from './constants/docsUrls';
+import {YTSubjectSuggest} from './components/ACL/SubjectsControl/YTSubjectSuggest';
 
 type HeaderItemOrPage =
     | {
@@ -488,8 +489,8 @@ const uiFactory: UIFactory = {
         return defaultAclApi;
     },
 
-    renderAclSubjectsSuggestControl() {
-        return <span>AclSubjectsSuggestControl is not implemented</span>;
+    renderAclSubjectsSuggestControl(props) {
+        return <YTSubjectSuggest {...props} />;
     },
 
     renderRolesLink() {

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import hammer from '../../common/hammer';
 import cn from 'bem-cn-lite';
 import _ from 'lodash';
-import {PERMISSIONS_SETTINGS, IdmObjectType} from '../../constants/acl';
+import {PERMISSIONS_SETTINGS, IdmObjectType, getPermissionsToRequest} from '../../constants/acl';
 
 import ColumnGroups from './ColumnGroups/ColumnGroups';
 
@@ -26,6 +26,7 @@ import Label from '../../components/Label/Label';
 import {isIdmAclAvailable} from '../../config';
 import ApproversFilters from './ApproversFilters/ApproversFilters';
 import ObjectPermissionsFilters from './ObjectPermissionsFilters/ObjectPermissionsFilters';
+import UIFactory from '../../UIFactory';
 
 import './ACL.scss';
 
@@ -322,8 +323,11 @@ class ACL extends Component {
         // if (roleType === 'auditor' || roleType === 'read_approver' || roleType === 'responsible') {
         //     return true;
         // }
-        const {permissionsToRequest} = PERMISSIONS_SETTINGS[idmKind] || {};
-        return (permissionsToRequest || []).some((item) => _.isEqual(item, permissions));
+        const permissionsToRequest = getPermissionsToRequest(
+            idmKind,
+            UIFactory.getAclApi().permissionsToRequestType,
+        );
+        return permissionsToRequest.some((item) => _.isEqual(item, permissions));
     }
 
     state = {
