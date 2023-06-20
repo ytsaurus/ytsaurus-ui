@@ -18,7 +18,6 @@ import {getBatchError, splitBatchResults} from '../../utils/utils';
 import {convertFromUIPermission, convertToUIPermissions} from '.';
 import {BatchResultsItem, ExecuteBatchParams} from '../../../shared/yt-types';
 import {RequestPermissionParams} from './external-acl-api';
-import {PERMISSIONS_SETTINGS} from '../../constants/acl';
 
 function getInheritAcl(path: string): Promise<ACLResponsible> {
     return yt.v3.get({path: path + '/@inherit_acl'}).then((inherit_acl: boolean) => {
@@ -249,7 +248,8 @@ export function deleteAclItemOrSubjectByIndex(params: {
 }) {
     const {sysPath, itemToDelete, idmKind} = params;
     const {revision, aclIndex, isSplitted, subjectIndex} = itemToDelete;
-    const allowUnsafeDelete = PERMISSIONS_SETTINGS[idmKind].allowDeleteWithoutRevisionCheck;
+    const allowUnsafeDelete =
+        UIFactory.getAclPermissionsSettings()[idmKind].allowDeleteWithoutRevisionCheck;
     if (isSplitted) {
         return yt.v3.remove({
             path: `${sysPath}/@acl/${aclIndex}/subjects/${subjectIndex}`,

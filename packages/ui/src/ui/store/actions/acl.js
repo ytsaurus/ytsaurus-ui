@@ -6,7 +6,6 @@ import {
     DELETE_PERMISSION,
     REQUEST_PERMISSION,
     UPDATE_ACL,
-    PERMISSIONS_SETTINGS,
     IdmObjectType,
 } from '../../constants/acl';
 import {getPools, getTree} from '../../store/selectors/scheduling/scheduling';
@@ -17,7 +16,7 @@ import {ROOT_POOL_NAME} from '../../constants/scheduling';
 import UIFactory from '../../UIFactory';
 
 const prepareUserPermissions = (userPermissions, idmKind) => {
-    const {permissionTypes} = PERMISSIONS_SETTINGS[idmKind];
+    const {permissionTypes} = UIFactory.getAclPermissionsSettings()[idmKind];
     return _.map(userPermissions, (item, index) => {
         return {
             type: permissionTypes[index],
@@ -72,7 +71,7 @@ export function loadAclData(
 
         const poolTree =
             idmKind === IdmObjectType.POOL ? normalizedPoolTree || getTree(state) : undefined;
-        const {permissionTypes} = PERMISSIONS_SETTINGS[idmKind];
+        const {permissionTypes} = UIFactory.getAclPermissionsSettings()[idmKind];
 
         const {useEffective, skipResponsible, userPermissionsPath} = options;
 

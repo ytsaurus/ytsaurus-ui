@@ -21,6 +21,7 @@ import {YTUserSuggest} from './containers/UserSuggest/YTUserSuggest';
 import {docsUrls, DocsUrls} from './constants/docsUrls';
 import {YTSubjectSuggest} from './components/ACL/SubjectsControl/YTSubjectSuggest';
 import RoleActions, {Props as RoleActionsProps} from './components/ACL/RoleActions';
+import {PERMISSIONS_SETTINGS} from './constants/acl';
 
 type HeaderItemOrPage =
     | {
@@ -314,6 +315,8 @@ export interface UIFactory {
     docsUrls: DocsUrls;
 
     getComponentForAclRoleActions(): undefined | React.ComponentType<RoleActionsProps>;
+
+    getAclPermissionsSettings(): typeof PERMISSIONS_SETTINGS;
 }
 
 const adminPages: string[] = [];
@@ -516,6 +519,10 @@ const uiFactory: UIFactory = {
 
     getComponentForAclRoleActions() {
         return RoleActions;
+    },
+
+    getAclPermissionsSettings() {
+        return PERMISSIONS_SETTINGS;
     },
 };
 
