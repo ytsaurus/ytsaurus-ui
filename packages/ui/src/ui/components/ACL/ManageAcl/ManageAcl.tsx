@@ -23,8 +23,6 @@ import Button from '../../../components/Button/Button';
 
 import withVisible, {WithVisibleProps} from '../../../hocs/withVisible';
 
-import {PERMISSIONS_SETTINGS} from '../../../constants/acl';
-
 import './ManageAcl.scss';
 import UIFactory from '../../../UIFactory';
 import ErrorBlock from '../../Block/Block';
@@ -202,12 +200,13 @@ function ManageAcl(props: Props) {
     );
 
     const dialogFields = useMemo(() => {
+        const permissionsSettings = UIFactory.getAclPermissionsSettings();
         const idmKindConditions: {[Key in ManageAclFieldsNames]?: boolean} = {
-            inheritAcl: PERMISSIONS_SETTINGS[idmKind].allowInheritAcl,
-            bossApproval: PERMISSIONS_SETTINGS[idmKind].allowBossApprovals,
-            auditors: PERMISSIONS_SETTINGS[idmKind].allowAuditors,
-            readApprovers: PERMISSIONS_SETTINGS[idmKind].allowReadApprovers,
-            inheritanceResponsible: PERMISSIONS_SETTINGS[idmKind].allowInheritResponsibles,
+            inheritAcl: permissionsSettings[idmKind].allowInheritAcl,
+            bossApproval: permissionsSettings[idmKind].allowBossApprovals,
+            auditors: permissionsSettings[idmKind].allowAuditors,
+            readApprovers: permissionsSettings[idmKind].allowReadApprovers,
+            inheritanceResponsible: permissionsSettings[idmKind].allowInheritResponsibles,
         };
 
         return UIFactory.getAclApi()

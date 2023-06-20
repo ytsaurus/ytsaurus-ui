@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import hammer from '../../common/hammer';
 import cn from 'bem-cn-lite';
 import _ from 'lodash';
-import {PERMISSIONS_SETTINGS, IdmObjectType} from '../../constants/acl';
+import {IdmObjectType} from '../../constants/acl';
 
 import ColumnGroups from './ColumnGroups/ColumnGroups';
 
@@ -570,7 +570,7 @@ class ACL extends Component {
         const {idmKind, disableAclInheritance, bossApproval, disableInheritanceResponsible} =
             this.props;
         const {allowBossApprovals, allowInheritAcl, allowInheritResponsibles} =
-            PERMISSIONS_SETTINGS[idmKind];
+            UIFactory.getAclPermissionsSettings()[idmKind];
 
         const {inherited: bossApprovalInherited} = bossApproval || {};
         const {inherited: aclInherited} = disableAclInheritance || {};

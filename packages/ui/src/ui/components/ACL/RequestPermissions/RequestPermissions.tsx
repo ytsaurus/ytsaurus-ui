@@ -10,7 +10,7 @@ import withVisible, {WithVisibleProps} from '../../../hocs/withVisible';
 
 import './RequestPermissions.scss';
 import {YTError} from '../../../types';
-import {PERMISSIONS_SETTINGS, IdmObjectType, INHERITANCE_MODE_TYPES} from '../../../constants/acl';
+import {IdmObjectType, INHERITANCE_MODE_TYPES} from '../../../constants/acl';
 
 import UIFactory from '../../../UIFactory';
 import hammer from '../../../common/hammer';
@@ -89,7 +89,7 @@ function RequestPermissions(props: Props) {
     );
 
     const currentCaption = `Current ${idmKind}`;
-    const {permissionsToRequest: choices} = PERMISSIONS_SETTINGS[idmKind];
+    const {permissionsToRequest: choices} = UIFactory.getAclPermissionsSettings()[idmKind];
 
     const firstItemDisabled = idmKind === IdmObjectType.ACCOUNT;
     const permissions = firstItemDisabled ? valueWithCheckedFirstChoice(choices) : null;

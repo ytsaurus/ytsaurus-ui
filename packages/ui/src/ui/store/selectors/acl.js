@@ -2,12 +2,12 @@ import {createSelector} from 'reselect';
 import _ from 'lodash';
 import {calculateLoadingStatus} from '../../utils/utils';
 import {concatByAnd} from '../../common/hammer/predicate';
-import {PERMISSIONS_SETTINGS} from '../../constants/acl';
 import {
     getApproversSubjectFilter,
     getObjectSubjectFilter,
     getObjectPermissionsFilter,
 } from './acl-filters';
+import UIFactory from '../../UIFactory';
 
 const prepareColumnsNames = (columnsPermissions) => {
     const columns = _.map(columnsPermissions, (permission) => permission.columns);
@@ -42,7 +42,7 @@ export const getObjectPermissionsTypesList = (idmKind) => {
         ],
         (permissionsFilter, items) => {
             const uniquePermisions = new Set();
-            const {permissionTypes} = PERMISSIONS_SETTINGS[idmKind] || {};
+            const {permissionTypes} = UIFactory.getAclPermissionsSettings()[idmKind] || {};
             [...permissionTypes, ...permissionsFilter].forEach((permission) =>
                 uniquePermisions.add(permission),
             );
