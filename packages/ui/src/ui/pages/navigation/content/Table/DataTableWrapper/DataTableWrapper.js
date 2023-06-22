@@ -7,7 +7,7 @@ import _ from 'lodash';
 
 import ClipboardButton from '../../../../../components/ClipboardButton/ClipboardButton';
 import YqlValue from '../../../../../components/YqlValue/YqlValue';
-import DataTable from '@yandex-cloud/react-data-table';
+import DataTable from '@gravity-ui/react-data-table';
 import {Loader} from '@gravity-ui/uikit';
 import copyToClipboard from 'copy-to-clipboard';
 import Icon from '../../../../../components/Icon/Icon';

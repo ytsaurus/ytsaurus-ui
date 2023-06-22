@@ -1,6 +1,6 @@
 import React from 'react';
 
-import type {Column} from '@yandex-cloud/react-data-table';
+import type {Column} from '@gravity-ui/react-data-table';
 
 import type {YTConfig} from '../../../../../../shared/yt-types';
 import hammer from '../../../../../common/hammer';

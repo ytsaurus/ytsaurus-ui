@@ -6,7 +6,7 @@ import cn from 'bem-cn-lite';
 import ErrorBoundary from '../../../components/ErrorBoundary/ErrorBoundary';
 
 import DataTableYT from '../../../components/DataTableYT/DataTableYT';
-import type {Column} from '@yandex-cloud/react-data-table';
+import type {Column} from '@gravity-ui/react-data-table';
 import Icon from '../../../components/Icon/Icon';
 import Button from '../../../components/Button/Button';
 import StatusBulb from '../../../components/StatusBulb/StatusBulb';

@@ -4,10 +4,10 @@ import * as React from 'react';
 import {ClipboardButton, Link, Text} from '@gravity-ui/uikit';
 import hammer from '../../../../common/hammer';
 import cn from 'bem-cn-lite';
-import DataTable, {Column, OrderType, Settings, SortOrder} from '@yandex-cloud/react-data-table';
+import DataTable, {Column, OrderType, Settings, SortOrder} from '@gravity-ui/react-data-table';
 import DataTypePopup from '../DataTypePopup/DataTypePopup';
 import {StrictReactNode, hasKey} from './utils';
-import {MOVING} from '@yandex-cloud/react-data-table/build/esm/lib/constants';
+import {MOVING} from '@gravity-ui/react-data-table/build/esm/lib/constants';
 import DataTableYT from '../../../../components/DataTableYT/DataTableYT';
 
 import './YQLTable.scss';

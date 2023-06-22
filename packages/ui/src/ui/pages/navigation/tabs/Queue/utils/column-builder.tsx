@@ -1,6 +1,6 @@
 import React from 'react';
 import moment from 'moment';
-import type {Column} from '@yandex-cloud/react-data-table';
+import type {Column} from '@gravity-ui/react-data-table';
 
 import format from '../../../../../common/hammer/format';
 import Label from '../../../../../components/Label/Label';

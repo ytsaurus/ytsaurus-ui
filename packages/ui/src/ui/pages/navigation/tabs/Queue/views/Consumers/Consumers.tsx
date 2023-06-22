@@ -2,7 +2,7 @@ import React from 'react';
 import {useSelector} from 'react-redux';
 import cn from 'bem-cn-lite';
 import {createSelector} from 'reselect';
-import type {Column, Settings} from '@yandex-cloud/react-data-table';
+import type {Column, Settings} from '@gravity-ui/react-data-table';
 
 import format from '../../../../../../common/hammer/format';
 import DataTableYT from '../../../../../../components/DataTableYT/DataTableYT';

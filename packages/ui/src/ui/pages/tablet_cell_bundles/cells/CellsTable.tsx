@@ -2,7 +2,7 @@ import React from 'react';
 import cn from 'bem-cn-lite';
 import _ from 'lodash';
 
-import DataTable, {Column, Settings} from '@yandex-cloud/react-data-table';
+import DataTable, {Column, Settings} from '@gravity-ui/react-data-table';
 
 import ClickableAttributesButton from '../../../components/AttributesButton/ClickableAttributesButton';
 import ClipboardButton from '../../../components/ClipboardButton/ClipboardButton';

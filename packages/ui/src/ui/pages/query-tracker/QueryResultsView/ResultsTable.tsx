@@ -1,5 +1,5 @@
 import React, {useEffect, useMemo, useState} from 'react';
-import {YCLOUD_THEME} from '@yandex-cloud/react-data-table/build/esm/lib/constants';
+import {YCLOUD_THEME} from '@gravity-ui/react-data-table/build/esm/lib/constants';
 import YQLTable from './YQLTable/YQLTable';
 import {formatResuts} from '../module/query_result/utils/format';
 import {QueryResultReadyState} from '../module/query_result/types';

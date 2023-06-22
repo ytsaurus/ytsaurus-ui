@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import cn from 'bem-cn-lite';
 import _ from 'lodash';
 
-import DataTable, {Column, DataTableProps, Settings} from '@yandex-cloud/react-data-table';
+import DataTable, {Column, DataTableProps, Settings} from '@gravity-ui/react-data-table';
 import {NoItemsMessage} from '../../components/NoItemsMessage/NoItemsMessage';
 import {STICKY_TOOLBAR_BOTTOM} from '../../components/WithStickyToolbar/WithStickyToolbar';
 

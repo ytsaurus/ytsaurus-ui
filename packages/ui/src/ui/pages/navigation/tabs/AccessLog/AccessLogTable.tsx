@@ -3,7 +3,7 @@ import {useSelector} from 'react-redux';
 import cn from 'bem-cn-lite';
 import _ from 'lodash';
 
-import DataTable, {Column, Settings} from '@yandex-cloud/react-data-table';
+import DataTable, {Column, Settings} from '@gravity-ui/react-data-table';
 
 import format from '../../../../common/hammer/format';
 import DataTableYT from '../../../../components/DataTableYT/DataTableYT';

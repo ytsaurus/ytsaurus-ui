@@ -2,7 +2,7 @@ import React from 'react';
 import cn from 'bem-cn-lite';
 import _ from 'lodash';
 
-import {Column} from '@yandex-cloud/react-data-table';
+import {Column} from '@gravity-ui/react-data-table';
 
 import {FlatItem} from '../../../../../common/hammer/tree-list';
 import Link from '../../../../../components/Link/Link';

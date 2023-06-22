@@ -9,7 +9,7 @@ import {
 import CollapsibleSection from '../../../../../components/CollapsibleSection/CollapsibleSection';
 import {getUISizes} from '../../../../../store/selectors/global';
 import DataTableYT from '../../../../../components/DataTableYT/DataTableYT';
-import {Column} from '@yandex-cloud/react-data-table';
+import {Column} from '@gravity-ui/react-data-table';
 import hammer from '../../../../../common/hammer';
 import {setSettingsAccountsExpandStaticConfiguration} from '../../../../../store/actions/settings/settings';
 

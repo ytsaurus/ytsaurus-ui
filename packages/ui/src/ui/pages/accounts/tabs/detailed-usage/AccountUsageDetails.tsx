@@ -46,7 +46,7 @@ import {
     isAccountsUsageDiffView,
     readableAccountUsageColumnName,
 } from '../../../../store/selectors/accounts/account-usage';
-import DataTable, {Column, Settings} from '@yandex-cloud/react-data-table';
+import DataTable, {Column, Settings} from '@gravity-ui/react-data-table';
 
 import ErrorBlock from '../../../../components/Error/Error';
 import {

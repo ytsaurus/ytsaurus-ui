@@ -15,7 +15,7 @@ import {
     flattenUnipika,
 } from '../StructuredYson/flattenUnipika';
 import DataTableYT, {DATA_TABLE_YT_SETTINGS} from '../../DataTableYT/DataTableYT';
-import * as DT100 from '@yandex-cloud/react-data-table';
+import * as DT100 from '@gravity-ui/react-data-table';
 import WithStickyToolbar from '../../../components/WithStickyToolbar/WithStickyToolbar';
 
 import './StructuredYsonVirtualized.scss';
