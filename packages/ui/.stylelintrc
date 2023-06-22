@@ -1,5 +1,5 @@
 {
-    "extends": ["@yandex-cloud/stylelint-config"],
+    "extends": ["@gravity-ui/stylelint-config"],
     "rules": {
         "property-case": null,
         "at-rule-no-unknown": null,

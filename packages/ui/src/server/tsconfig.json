@@ -1,8 +1,8 @@
 {
-  "extends": "@yandex-cloud/tsconfig",
+  "extends": "@gravity-ui/tsconfig",
   "compilerOptions": {
-    // не dist/server, т.к. для случае с server/, common/
-    // получается dist/server/server/, dist/server/common/ и ui-core не может запустить сервер
+    // not dist/server, because when use server/, common/
+    // it results with dist/server/server/, dist/server/common/ and ui-core fails to start server
     "noUnusedParameters": false,
     "outDir": "../../dist",
     "resolveJsonModule": true,
