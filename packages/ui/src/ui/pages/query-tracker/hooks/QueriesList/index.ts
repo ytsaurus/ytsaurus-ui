@@ -2,10 +2,10 @@ import {useCallback} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {QueriesHistoryCursorDirection, QueryItem} from '../../module/api';
 import {
-    isQueriesListLoading,
     getQueriesList,
     getQueriesListCursor,
     hasQueriesListMore,
+    isQueriesListLoading,
 } from '../../module/queries_list/selectors';
 import {loadNextQueriesList, resetCursor} from '../../module/queries_list/actions';
 

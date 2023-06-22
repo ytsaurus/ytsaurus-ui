@@ -9,7 +9,7 @@ import PathEditor from '../../../../containers/PathEditor/PathEditor';
 import Modal from '../../../../components/Modal/Modal';
 import Error from '../../../../components/Error/Error';
 
-import {setPath, hideError} from '../../../../store/actions/navigation/modals/path-editing-popup';
+import {hideError, setPath} from '../../../../store/actions/navigation/modals/path-editing-popup';
 import {getOnlyFolders} from '../../../../utils/navigation/path-editing-popup';
 import withScope from '../../../../hocs/components/Modal/withScope';
 

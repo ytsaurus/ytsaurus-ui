@@ -1,5 +1,5 @@
 import {useDispatch, useSelector} from 'react-redux';
-import {Route, RouteComponentProps, Switch, Redirect} from 'react-router';
+import {Redirect, Route, RouteComponentProps, Switch} from 'react-router';
 import React from 'react';
 import cn from 'bem-cn-lite';
 

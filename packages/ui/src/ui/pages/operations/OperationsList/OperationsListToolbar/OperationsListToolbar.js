@@ -12,8 +12,8 @@ import OperationsSelectFilter from './OperationsSelectFilter';
 import OperationsListPaginator from './OperationsListPaginator';
 import OperationsFilterPresets from './OperationsFilterPresets';
 import {
-    updateFilter,
     toggleSaveFilterPresetDialog,
+    updateFilter,
 } from '../../../../store/actions/operations/list';
 
 import {

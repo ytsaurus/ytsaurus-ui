@@ -1,7 +1,7 @@
 import {
-    OPEN_CHANGE_ROLE_MODAL,
-    CLOSE_CHANGE_ROLE_MODAL,
     CHANGE_ROLE,
+    CLOSE_CHANGE_ROLE_MODAL,
+    OPEN_CHANGE_ROLE_MODAL,
 } from '../../../../../constants/components/proxies/actions/change-role';
 
 const initialState = {

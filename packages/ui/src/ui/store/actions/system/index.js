@@ -1,6 +1,6 @@
 import {Toaster} from '@gravity-ui/uikit';
 
-import {getSchedulers, getAgents} from '../../../store/actions/system/schedulers';
+import {getAgents, getSchedulers} from '../../../store/actions/system/schedulers';
 import {FETCH_SCHEDULERS, SCHEDULERS_UPDATER_ID} from '../../../constants/system/schedulers';
 import {isRetryFutile} from '../../../utils/index';
 import {showErrorPopup} from '../../../utils/utils';

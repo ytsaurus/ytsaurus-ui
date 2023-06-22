@@ -1,12 +1,12 @@
 import React from 'react';
 import block from 'bem-cn-lite';
 import {
-    MobileContextProps,
-    Platform,
-    withMobile,
     History,
     Location,
+    MobileContextProps,
+    Platform,
     getComponentName,
+    withMobile,
 } from '@gravity-ui/uikit';
 import {VelocityTracker} from './utils';
 

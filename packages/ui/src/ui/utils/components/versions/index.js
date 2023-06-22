@@ -1,7 +1,7 @@
 import hammer from '../../../common/hammer';
 import _ from 'lodash';
 
-import {typeToReadable, pluralToSingular} from '../../../constants/components/versions/versions';
+import {pluralToSingular, typeToReadable} from '../../../constants/components/versions/versions';
 import {tableProps} from './tables';
 
 export function prepareVersions(data) {

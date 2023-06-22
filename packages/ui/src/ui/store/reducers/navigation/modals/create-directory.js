@@ -1,12 +1,12 @@
 import {
+    CLOSE_CREATE_DIRECTORY_POPUP,
     CREATE_DIRECTORY,
     OPEN_CREATE_DIRECTORY_POPUP,
-    CLOSE_CREATE_DIRECTORY_POPUP,
 } from '../../../../constants/navigation/modals/create-directory';
 import {
+    HIDE_ERROR,
     SET_PATH,
     SHOW_ERROR,
-    HIDE_ERROR,
 } from '../../../../constants/navigation/modals/path-editing-popup';
 
 const initialState = {

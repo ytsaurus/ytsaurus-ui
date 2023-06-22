@@ -1,10 +1,10 @@
 import {Action} from 'redux';
 import {ActionD, YTError} from '../../../../types';
 import {
+    LOAD_REPLICAS_CANCELLED,
+    LOAD_REPLICAS_FAILURE,
     LOAD_REPLICAS_REQUEST,
     LOAD_REPLICAS_SUCCESS,
-    LOAD_REPLICAS_FAILURE,
-    LOAD_REPLICAS_CANCELLED,
 } from '../../../../constants/navigation/content/replicated-table';
 
 export interface ReplicatedTableState {

@@ -5,9 +5,9 @@ import CancelHelper from '../../../utils/cancel-helper';
 import {GENERIC_ERROR_MESSAGE, TYPED_OUTPUT_FORMAT} from '../../../constants/index';
 import {preparePartitions} from '../../../utils/tablet/tablet';
 import {
-    LOAD_TABLET_DATA,
-    CHANGE_CONTENT_MODE,
     CHANGE_ACTIVE_HISTOGRAM,
+    CHANGE_CONTENT_MODE,
+    LOAD_TABLET_DATA,
 } from '../../../constants/tablet';
 import {YTApiId, ytApiV3Id} from '../../../rum/rum-wrap-api';
 

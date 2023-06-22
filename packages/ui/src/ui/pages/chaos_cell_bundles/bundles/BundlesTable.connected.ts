@@ -10,9 +10,9 @@ import {showChaosCellBundleEditor} from '../../../store/actions/chaos_cell_bundl
 import type {RootState} from '../../../store/reducers';
 import {getCluster} from '../../../store/selectors/global';
 import {
-    getChaosBundlesTableMode,
-    getChaosBundlesSorted,
     getChaosBundlesSortState,
+    getChaosBundlesSorted,
+    getChaosBundlesTableMode,
     getChaosBundlesTotal,
     getChaosIsLoaded,
     getChaosIsLoading,

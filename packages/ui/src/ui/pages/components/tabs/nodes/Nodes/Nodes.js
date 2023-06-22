@@ -1,4 +1,4 @@
-import {StickyContainer, Sticky} from 'react-sticky';
+import {Sticky, StickyContainer} from 'react-sticky';
 import React, {Component, Fragment} from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
@@ -30,8 +30,8 @@ import SetupModal from '../SetupModal/SetupModal';
 import NodeCard from '../NodeCard/NodeCard';
 
 import {
-    getVisibleNodes,
     getComponentNodesTableProps,
+    getVisibleNodes,
 } from '../../../../../store/selectors/components/nodes/nodes';
 import {getSelectedColumns} from '../../../../../store/selectors/settings';
 import {getSettingsEnableSideBar} from '../../../../../store/selectors/settings-ts';
@@ -48,15 +48,15 @@ import {
 } from '../../../../../store/actions/components/nodes/nodes';
 
 import {banNode, unbanNode} from '../../../../../store/actions/components/nodes/actions/ban-unban';
-import {splitScreen as splitScreenAction, mergeScreen} from '../../../../../store/actions/global';
+import {mergeScreen, splitScreen as splitScreenAction} from '../../../../../store/actions/global';
 import {HEADER_HEIGHT, KeyCode} from '../../../../../constants/index';
 import {
-    CONTENT_MODE_OPTIONS,
-    CONTENT_MODE_ITEMS,
-    SPLIT_TYPE,
     CONTENT_MODE,
-    POLLING_INTERVAL,
+    CONTENT_MODE_ITEMS,
+    CONTENT_MODE_OPTIONS,
     NODE_TYPE_ITEMS,
+    POLLING_INTERVAL,
+    SPLIT_TYPE,
 } from '../../../../../constants/components/nodes/nodes';
 
 import DecommissionNodeModal from '../NodeActions/DecommissionNodeModal';

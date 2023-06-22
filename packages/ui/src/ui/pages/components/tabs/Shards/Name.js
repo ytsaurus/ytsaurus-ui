@@ -9,9 +9,9 @@ import Error from '../../../../components/Error/Error';
 import Icon from '../../../../components/Icon/Icon';
 
 import {
-    setShardName,
-    openNameEditor,
     closeNameEditor,
+    openNameEditor,
+    setShardName,
 } from '../../../../store/actions/components/shards';
 
 Name.propTypes = {

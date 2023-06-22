@@ -1,6 +1,6 @@
 import {
-    LOAD_TRANSACTIONS,
     CHANGE_FILTER,
+    LOAD_TRANSACTIONS,
 } from '../../../../../constants/navigation/content/transaction-map';
 import {mergeStateOnClusterChange} from '../../../../../store/reducers/utils';
 

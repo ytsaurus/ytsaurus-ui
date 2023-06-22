@@ -2,22 +2,22 @@ import yt from '@ytsaurus/javascript-wrapper/lib/yt';
 
 import ypath from '../../../common/thor/ypath';
 import {
+    GET_COMPETITIVE_JOBS,
     GET_JOB,
     GET_JOBS,
-    GET_COMPETITIVE_JOBS,
+    HIDE_INPUT_PATHS,
+    OPERATION_JOBS_TABLE_ID,
     RESET_COMPETITIVE_JOBS,
     SHOW_INPUT_PATHS,
-    HIDE_INPUT_PATHS,
     UPDATE_FILTER,
-    UPDATE_OFFSET,
     UPDATE_FILTER_COUNTERS,
-    OPERATION_JOBS_TABLE_ID,
+    UPDATE_OFFSET,
 } from '../../../constants/operations/jobs';
 import {changeColumnSortOrder} from '../../../store/actions/tables';
 import {
-    getJobsRequestParameters,
-    getJobRequestParameters,
     getCompetitiveJobsRequestParameters,
+    getJobRequestParameters,
+    getJobsRequestParameters,
 } from '../../../store/actions/operations/utils';
 import {OPERATIONS_PAGE} from '../../../constants/operations/list';
 import {getCluster} from '../../../store/selectors/global';

@@ -1,5 +1,5 @@
 import React from 'react';
-import {Text, Popover} from '@gravity-ui/uikit';
+import {Popover, Text} from '@gravity-ui/uikit';
 import Icon from '../../../../../components/Icon/Icon';
 import MetaTable from '../../../../../components/MetaTable/MetaTable';
 import {MarkdownLinePreview} from '../../../../../components/MarkdownLinePreview/MarkdownLinePreview';

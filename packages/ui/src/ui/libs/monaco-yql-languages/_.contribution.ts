@@ -1,4 +1,4 @@
-import {languages, IEvent, Emitter, IDisposable} from './fillers/monaco-editor-core';
+import {Emitter, IDisposable, IEvent, languages} from './fillers/monaco-editor-core';
 import {CompletionLists, getCompletionItemsProvider} from './completion';
 
 interface ILang extends languages.ILanguageExtensionPoint {

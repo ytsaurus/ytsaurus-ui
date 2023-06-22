@@ -1,11 +1,11 @@
 import {
-    COMPONENTS_VERSIONS_SUMMARY_TABLE_ID,
     COMPONENTS_VERSIONS_DETAILED_TABLE_ID,
+    COMPONENTS_VERSIONS_SUMMARY_TABLE_ID,
 } from '../../../constants/components/versions/versions';
 import {
-    changeVersionFilter,
-    changeTypeFilter,
     changeHostFilter,
+    changeTypeFilter,
+    changeVersionFilter,
 } from '../../../store/actions/components/versions/versions_v2';
 import {getWindowStore} from '../../../store/window-store';
 import {showErrorPopup} from '../../../utils/utils';

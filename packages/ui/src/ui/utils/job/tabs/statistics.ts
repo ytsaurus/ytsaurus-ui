@@ -5,8 +5,8 @@ import {TREE_ROOT_NAME} from '../../../constants/job';
 import Job from '../../../pages/operations/OperationDetail/tabs/Jobs/job-selector';
 import {
     JobStatistic,
-    LeafStatistic,
     JobTree,
+    LeafStatistic,
     MetricsEntry,
     MetricsEntryLeaf,
     MetricsList,

@@ -1,18 +1,18 @@
-import React, {Component, CSSProperties} from 'react';
+import React, {CSSProperties, Component} from 'react';
 import PropTypes from 'prop-types';
 import block from 'bem-cn-lite';
 
 import {
     ELEMENTS_TABLE,
-    prepareColumnsData,
-    prepareCellClassName,
-    prepareGroupCellClassName,
+    TemplatesPropType,
     getColumnCaption,
     getColumnEdgePosition,
-    TemplatesPropType,
+    prepareCellClassName,
+    prepareColumnsData,
+    prepareGroupCellClassName,
 } from './utils';
 import {OldSortState} from '../../types';
-import {oldSortStateToOrderType, OrderType} from '../../utils/sort-helpers';
+import {OrderType, oldSortStateToOrderType} from '../../utils/sort-helpers';
 import SortIcon from '../../components/SortIcon/SortIcon';
 import {Tooltip} from '../../components/Tooltip/Tooltip';
 import {ToggleColumnSortOrderParams} from '../../store/actions/tables';

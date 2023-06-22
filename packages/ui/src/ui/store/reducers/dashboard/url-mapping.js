@@ -1,6 +1,6 @@
 import _ from 'lodash';
 
-import {listParams, getListPreparedState} from '../operations/list/url-mapping';
+import {getListPreparedState, listParams} from '../operations/list/url-mapping';
 import {
     accountsParams,
     getAccountsPreparedState,

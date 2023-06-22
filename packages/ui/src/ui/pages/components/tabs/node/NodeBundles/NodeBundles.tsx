@@ -22,7 +22,7 @@ function NodeBundles() {
     const items = useSelector(getNodeMemoryUsageBundlesItems);
     const sortOrder = useSelector(getNodeMemorySortOrder);
 
-    const toggleExpandState = React.useCallback((item: typeof items[0]) => {
+    const toggleExpandState = React.useCallback((item: (typeof items)[0]) => {
         dispatch(toggleNodeMemoryBundleExpanded(item.name));
     }, []);
 

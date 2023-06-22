@@ -2,17 +2,17 @@ import _ from 'lodash';
 
 import {LOADING_STATUS} from '../../../../constants/index';
 import {
-    GET_JOBS,
-    GET_JOB,
-    GET_COMPETITIVE_JOBS,
-    RESET_COMPETITIVE_JOBS,
-    JOBS_PER_PAGE_LIMIT,
     EXTRA_JOBS_COUNT,
-    UPDATE_OFFSET,
-    UPDATE_FILTER,
-    SHOW_INPUT_PATHS,
+    GET_COMPETITIVE_JOBS,
+    GET_JOB,
+    GET_JOBS,
     HIDE_INPUT_PATHS,
+    JOBS_PER_PAGE_LIMIT,
+    RESET_COMPETITIVE_JOBS,
+    SHOW_INPUT_PATHS,
+    UPDATE_FILTER,
     UPDATE_FILTER_COUNTERS,
+    UPDATE_OFFSET,
 } from '../../../../constants/operations/jobs';
 import {GET_OPERATION} from '../../../../constants/operations/detail';
 import Job from '../../../../pages/operations/OperationDetail/tabs/Jobs/job-selector';

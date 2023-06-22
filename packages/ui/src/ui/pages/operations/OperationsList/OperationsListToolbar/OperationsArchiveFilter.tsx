@@ -1,4 +1,4 @@
-import React, {useState, useCallback} from 'react';
+import React, {useCallback, useState} from 'react';
 import cn from 'bem-cn-lite';
 import {useDispatch, useSelector} from 'react-redux';
 import {RootState} from '../../../../store/reducers';

@@ -3,7 +3,7 @@ import block from 'bem-cn-lite';
 
 import Icon from '../Icon/Icon';
 
-import {Button, Modal as ModalImpl, Loader} from '@gravity-ui/uikit';
+import {Button, Loader, Modal as ModalImpl} from '@gravity-ui/uikit';
 
 import withHandledScrollBar from '../../hocs/components/Modal/withHandledScrollBar';
 

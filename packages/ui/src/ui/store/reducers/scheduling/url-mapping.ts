@@ -4,8 +4,8 @@ import {initialState as schedulingInitialState} from './index';
 import {initialState as tableSortState} from '../../../store/reducers/tables';
 
 import {
-    SCHEDULING_POOL_TREE_TABLE_ID,
     SCHEDULING_POOL_CHILDREN_TABLE_ID,
+    SCHEDULING_POOL_TREE_TABLE_ID,
 } from '../../../constants/scheduling';
 import {parseSortState} from '../../../utils';
 import produce from 'immer';

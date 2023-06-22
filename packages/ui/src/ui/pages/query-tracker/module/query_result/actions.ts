@@ -2,14 +2,14 @@ import {ThunkAction} from 'redux-thunk';
 import {RootState} from '../../../../store/reducers';
 import FontFaceObserver from 'fontfaceobserver';
 import {ActionD} from '../../../../types';
-import {getQueryResultMeta, QueryItem, QueryResultMetaScheme, readQueryResults} from '../api';
+import {QueryItem, QueryResultMetaScheme, getQueryResultMeta, readQueryResults} from '../api';
 import {getType} from '../../../../components/SchemaDataType/dataTypes';
 import {getQueryResultGlobalSettings, getQueryResultSettings, hasQueryResult} from './selectors';
 import {QueryResultReadyState} from './types';
 import {prepareFormattedValue} from './utils/format';
 import {wrapApiPromiseByToaster} from '../../../../utils/utils';
 import {getPrimitiveTypesMap} from '../../../../store/selectors/global/supported-features';
-import {parseV3Type, Type} from '../../../../components/SchemaDataType/dateTypesV3';
+import {Type, parseV3Type} from '../../../../components/SchemaDataType/dateTypesV3';
 import ypath from '../../../../common/thor/ypath';
 import {getFontFamilies} from '../../../../store/selectors/settings-ts';
 

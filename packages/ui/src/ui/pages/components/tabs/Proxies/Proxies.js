@@ -21,29 +21,29 @@ import ProxyCard from './ProxyCard/ProxyCard';
 import Label from '../../../../components/Label/Label';
 
 import {
+    changeHostFilter,
+    changeRoleFilter,
+    changeStateFilter,
     getProxies,
     resetProxyState,
-    changeHostFilter,
-    changeStateFilter,
-    changeRoleFilter,
 } from '../../../../store/actions/components/proxies/proxies';
 import {
-    getVisibleProxies,
-    getStates,
     getRoles,
+    getStates,
+    getVisibleProxies,
 } from '../../../../store/selectors/components/proxies/proxies';
 import {banProxy, unbanProxy} from '../../../../store/actions/components/proxies/actions/ban-unban';
-import {splitScreen as splitScreenAction, mergeScreen} from '../../../../store/actions/global';
+import {mergeScreen, splitScreen as splitScreenAction} from '../../../../store/actions/global';
 import {proxiesTableColumnItems} from '../../../../utils/components/proxies/table';
 import Updater from '../../../../utils/hammer/updater';
 import {HEADER_HEIGHT} from '../../../../constants/index';
 import {isPaneSplit} from '../../../../utils';
 import {
-    SPLIT_TYPE,
+    COMPONENTS_PROXIES_TABLE_ID,
     POLLING_INTERVAL,
     PROXY_TYPE,
-    COMPONENTS_PROXIES_TABLE_ID,
     ROLE_THEME,
+    SPLIT_TYPE,
     STATE_THEME,
 } from '../../../../constants/components/proxies/proxies';
 

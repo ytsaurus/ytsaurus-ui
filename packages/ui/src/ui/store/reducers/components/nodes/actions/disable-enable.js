@@ -1,14 +1,14 @@
 import {mergeStateOnClusterChange} from '../../../../../store/reducers/utils';
 import {
-    WRITE_SESSION,
-    OPEN_DISABLE_MODAL,
     CLOSE_DISABLE_MODAL,
-    DISABLE_WRITE_SESSION,
-    ENABLE_WRITE_SESSION,
-    DISABLE_TABLET_CELLS,
-    ENABLE_TABLET_CELLS,
     DISABLE_JOBS,
+    DISABLE_TABLET_CELLS,
+    DISABLE_WRITE_SESSION,
     ENABLE_JOBS,
+    ENABLE_TABLET_CELLS,
+    ENABLE_WRITE_SESSION,
+    OPEN_DISABLE_MODAL,
+    WRITE_SESSION,
 } from '../../../../../constants/components/nodes/actions/disable-enable';
 
 const initialState = {

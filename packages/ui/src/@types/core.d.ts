@@ -1,4 +1,4 @@
-import {AppContext, AppConfig} from '@gravity-ui/nodekit';
+import {AppConfig, AppContext} from '@gravity-ui/nodekit';
 import {Request, Response} from '@gravity-ui/expresskit';
 import {MetrikaCounter} from '@gravity-ui/app-layout';
 import {UISettings} from 'shared/ui-settings';

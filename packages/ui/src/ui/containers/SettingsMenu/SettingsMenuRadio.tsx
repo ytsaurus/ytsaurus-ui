@@ -1,6 +1,6 @@
 import React, {VFC} from 'react';
 import cn from 'bem-cn-lite';
-import {connect, ConnectedProps} from 'react-redux';
+import {ConnectedProps, connect} from 'react-redux';
 
 import RadioButton, {ItemType} from '../../components/RadioButton/RadioButton';
 

@@ -1,4 +1,4 @@
-import {Route, Switch, Redirect, match as MatchType} from 'react-router';
+import {match as MatchType, Redirect, Route, Switch} from 'react-router';
 import React, {Fragment} from 'react';
 import {ConnectedProps, connect, useSelector} from 'react-redux';
 //import PropTypes from 'prop-types';
@@ -9,7 +9,7 @@ import _ from 'lodash';
 
 import ypath from '../../../common/thor/ypath';
 
-import MetaTable, {Template, OperationTemplate} from '../../../components/MetaTable/MetaTable';
+import MetaTable, {OperationTemplate, Template} from '../../../components/MetaTable/MetaTable';
 import OperationProgress from '../OperationProgress/OperationProgress';
 import ErrorBoundary from '../../../components/ErrorBoundary/ErrorBoundary';
 import {UserCard} from '../../../components/UserLink/UserLink';
@@ -32,12 +32,12 @@ import OperationAttributes from './tabs/attributes/OperationAttributes';
 
 import Placeholder from '../../../pages/components/Placeholder';
 
-import {performAction, getDetailsTabsShowSettings} from '../../../utils/operations/detail';
+import {getDetailsTabsShowSettings, performAction} from '../../../utils/operations/detail';
 import {
-    Tab,
     DEFAULT_TAB,
-    POLLING_INTERVAL,
     OperationTabType,
+    POLLING_INTERVAL,
+    Tab,
 } from '../../../constants/operations/detail';
 import {showEditPoolsWeightsModal} from '../../../store/actions/operations';
 import {getOperation} from '../../../store/actions/operations/detail';
@@ -47,8 +47,8 @@ import Updater from '../../../utils/hammer/updater';
 import {makeTabProps} from '../../../utils';
 import {Page} from '../../../constants/index';
 import {
-    getOperationErasedTrees,
     getOperationDetailsLoadingStatus,
+    getOperationErasedTrees,
 } from '../../../store/selectors/operations/operation';
 
 import {useAppRumMeasureStart} from '../../../rum/rum-app-measures';
@@ -61,10 +61,10 @@ import {getUISizes} from '../../../store/selectors/global';
 import OperationDetailsMonitor from './tabs/monitor/OperationDetailsMonitor';
 import {getJobsMonitorTabVisible} from '../../../store/selectors/operations/jobs-monitor';
 import {
+    JobState,
     getOperationStatiscsHasData,
     getTotalCpuTimeSpent,
     getTotalJobWallTime,
-    JobState,
 } from '../../../store/selectors/operations/statistics-v2';
 import UIFactory from '../../../UIFactory';
 import {RootState} from '../../../store/reducers';

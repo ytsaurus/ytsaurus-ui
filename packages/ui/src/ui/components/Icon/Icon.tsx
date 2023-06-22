@@ -1,4 +1,4 @@
-import React, {useRef, useState, useEffect, useMemo} from 'react';
+import React, {useEffect, useMemo, useRef, useState} from 'react';
 import cn from 'bem-cn-lite';
 import {Icon as KitIcon} from '@gravity-ui/uikit';
 import {iconNames as iconNamesYt} from './importIcons';

@@ -4,14 +4,14 @@ import _ from 'lodash';
 import QuotaEditor, {QuotaEditorProps} from '../../../components/QuotaEditor/QuotaEditor';
 import _isEmpty from 'lodash/isEmpty';
 import {RootState} from '../../../store/reducers';
-import {connect, ConnectedProps, useSelector} from 'react-redux';
+import {ConnectedProps, connect, useSelector} from 'react-redux';
 import {getSchedulingPoolsMapByName} from '../../../store/selectors/scheduling/scheduling-pools';
 import {
     getSchedulingSourcesOfEditItem,
     getSchedulingSourcesOfEditItemSkipParent,
 } from '../../../store/selectors/scheduling/scheduling';
 import Select from '../../../components/Select/Select';
-import {getPoolResourceInfo, PoolResourceType} from '../../../utils/scheduling/scheduling';
+import {PoolResourceType, getPoolResourceInfo} from '../../../utils/scheduling/scheduling';
 
 interface Props {
     resourceType: PoolResourceType;

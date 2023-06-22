@@ -7,11 +7,11 @@ import ypath from '../../../../../common/thor/ypath';
 import {
     CHANGE_CONTENT_MODE,
     CHANGE_HOST_FILTER,
+    CHANGE_NODE_TYPE,
     COMPONENTS_NODES_UPDATE_NODE,
     CONTENT_MODE,
-    GET_NODES_TAGS,
     GET_NODES,
-    CHANGE_NODE_TYPE,
+    GET_NODES_TAGS,
 } from '../../../../../constants/components/nodes/nodes';
 import type {
     changeContentMode,

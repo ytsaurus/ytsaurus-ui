@@ -1,9 +1,9 @@
 import type {ThunkAction} from 'redux-thunk';
 
 import {
+    CONSUMER_PARTITIONS_LOAD_FAILURE,
     CONSUMER_PARTITIONS_LOAD_REQUEST,
     CONSUMER_PARTITIONS_LOAD_SUCCESS,
-    CONSUMER_PARTITIONS_LOAD_FAILURE,
 } from '../../../../../constants/navigation/tabs/consumer';
 import {YTApiId, ytApiV3Id} from '../../../../../rum/rum-wrap-api';
 import type {RootState} from '../../../../../store/reducers';

@@ -9,10 +9,10 @@ import {getPath, getTransaction} from '../../../../store/selectors/navigation';
 import {YTApiId, ytApiV3, ytApiV3Id} from '../../../../rum/rum-wrap-api';
 
 import {
+    LOAD_REPLICAS_CANCELLED,
+    LOAD_REPLICAS_FAILURE,
     LOAD_REPLICAS_REQUEST,
     LOAD_REPLICAS_SUCCESS,
-    LOAD_REPLICAS_FAILURE,
-    LOAD_REPLICAS_CANCELLED,
 } from '../../../../constants/navigation/content/replicated-table';
 import {updateView} from '..';
 import _ from 'lodash';

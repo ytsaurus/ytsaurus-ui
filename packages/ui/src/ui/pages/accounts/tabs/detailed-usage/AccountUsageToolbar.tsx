@@ -8,8 +8,8 @@ import {Breadcrumbs} from '@gravity-ui/uikit';
 import format from '../../../../common/hammer/format';
 import {useDispatch, useSelector} from 'react-redux';
 import {
-    fetchAccountsUsageSnapshots,
     fetchAccountUsage,
+    fetchAccountsUsageSnapshots,
     setAccountUsageDataFilter,
     setAccountUsageDataPageIndex,
     setAccountUsageViewType,
@@ -19,8 +19,6 @@ import Updater from '../../../../utils/hammer/updater';
 import {Toolbar} from '../../../../components/WithStickyToolbar/Toolbar/Toolbar';
 import Select from '../../../../components/Select/Select';
 import {
-    getAccountsUsageDiffFromSnapshot,
-    getAccountsUsageDiffToSnapshot,
     getAccountUsageCurrentSnapshot,
     getAccountUsageDateRangeFilter,
     getAccountUsageDateRangeTypeFilter,
@@ -31,6 +29,8 @@ import {
     getAccountUsageSnapshots,
     getAccountUsageTreeItemsBasePathSplitted,
     getAccountUsageViewType,
+    getAccountsUsageDiffFromSnapshot,
+    getAccountsUsageDiffToSnapshot,
     isAccountsUsageDiffView,
 } from '../../../../store/selectors/accounts/account-usage';
 import TextInputWithDebounce from '../../../../components/TextInputWithDebounce/TextInputWithDebounce';

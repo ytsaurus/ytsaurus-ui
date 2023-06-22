@@ -1,7 +1,7 @@
 import _compact from 'lodash/compact';
 import _map from 'lodash/map';
 import React from 'react';
-import YagrChartKit, {getSerieColor, YagrWidgetData} from '../YagrChartKit/YagrChartKit';
+import YagrChartKit, {YagrWidgetData, getSerieColor} from '../YagrChartKit/YagrChartKit';
 
 import formatLib from '../../common/hammer/format';
 

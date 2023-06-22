@@ -9,10 +9,10 @@ import {Settings, UnipikaValue} from '../StructuredYson/StructuredYsonTypes';
 import {
     BlockType,
     CollapsedState,
-    flattenUnipika,
     FlattenUnipikaResult,
     SearchInfo,
     UnipikaFlattenTreeItem,
+    flattenUnipika,
 } from '../StructuredYson/flattenUnipika';
 import DataTableYT, {DATA_TABLE_YT_SETTINGS} from '../../DataTableYT/DataTableYT';
 import * as DT100 from '@yandex-cloud/react-data-table';
@@ -24,7 +24,7 @@ import Icon from '../../Icon/Icon';
 import Filter from '../../Filter/Filter';
 import {MultiHighlightedText} from '../../HighlightedText/HighlightedText';
 import Link from '../../Link/Link';
-import {Dialog, Button} from '@gravity-ui/uikit';
+import {Button, Dialog} from '@gravity-ui/uikit';
 const block = cn('structured-yson-virtualized');
 
 interface Props {

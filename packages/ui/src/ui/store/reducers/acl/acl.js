@@ -1,9 +1,9 @@
 import {
     DELETE_PERMISSION,
+    IdmObjectType,
     LOAD_DATA,
     REQUEST_PERMISSION,
     UPDATE_ACL,
-    IdmObjectType,
 } from '../../../constants/acl';
 import {RESET_STORE_BEFORE_CLUSTER_CHANGE} from '../../../constants/utils';
 

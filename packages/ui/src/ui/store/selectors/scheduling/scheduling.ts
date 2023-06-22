@@ -8,16 +8,16 @@ import {prepareResources} from '../../../utils/scheduling/overview';
 import {childTableItems} from '../../../utils/scheduling/detailsTable';
 import {poolsTableItems} from '../../../utils/scheduling/overviewTable';
 import {
-    SCHEDULING_POOL_TREE_TABLE_ID,
-    SCHEDULING_POOL_CHILDREN_TABLE_ID,
     ROOT_POOL_NAME,
+    SCHEDULING_POOL_CHILDREN_TABLE_ID,
+    SCHEDULING_POOL_TREE_TABLE_ID,
 } from '../../../constants/scheduling';
 
 import {
-    getPools as getPoolsImpl,
-    getSchedulingPoolsMapByName,
     OperationInfo,
     PoolInfo,
+    getPools as getPoolsImpl,
+    getSchedulingPoolsMapByName,
 } from './scheduling-pools';
 import {RootState} from '../../../store/reducers';
 import {FIX_MY_TYPE} from '../../../types';

@@ -1,5 +1,5 @@
 import React, {ComponentType} from 'react';
-import {connect, ConnectedProps} from 'react-redux';
+import {ConnectedProps, connect} from 'react-redux';
 import cn from 'bem-cn-lite';
 
 import RadioButton from '../../../../../components/RadioButton/RadioButton';

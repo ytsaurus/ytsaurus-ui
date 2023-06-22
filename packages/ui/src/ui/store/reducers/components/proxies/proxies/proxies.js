@@ -1,9 +1,9 @@
 import {mergeStateOnClusterChange} from '../../../../../store/reducers/utils';
 import {
-    GET_PROXIES,
     CHANGE_HOST_FILTER,
-    CHANGE_STATE_FILTER,
     CHANGE_ROLE_FILTER,
+    CHANGE_STATE_FILTER,
+    GET_PROXIES,
 } from '../../../../../constants/components/proxies/proxies';
 
 const ephemeralState = {

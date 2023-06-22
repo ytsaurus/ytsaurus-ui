@@ -8,8 +8,8 @@ import Modal from '../../../../../../components/Modal/Modal';
 import {TextInput} from '@gravity-ui/uikit';
 
 import {
-    closeChangeRoleModal,
     changeRole,
+    closeChangeRoleModal,
 } from '../../../../../../store/actions/components/proxies/actions/change-role';
 import {PROXY_TYPE} from '../../../../../../constants/components/proxies/proxies';
 

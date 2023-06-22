@@ -4,9 +4,9 @@ import _ from 'lodash';
 import {getOperation} from '../../../store/actions/operations/detail';
 import {updateOperations} from '../../../store/actions/operations/list';
 import {
-    SHOW_EDIT_WEIGHT_POOL_MODAL,
     HIDE_EDIT_WEIGHT_POOL_MODAL,
     SET_PULLS_AND_WEIGHTS,
+    SHOW_EDIT_WEIGHT_POOL_MODAL,
 } from '../../../constants/operations';
 import {Page} from '../../../constants';
 

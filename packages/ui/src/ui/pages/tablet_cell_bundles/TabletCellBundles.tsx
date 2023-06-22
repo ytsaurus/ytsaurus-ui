@@ -83,7 +83,7 @@ export default function TabletCellBundles() {
                 }
                 return acc;
             },
-            {} as Record<typeof TabletsTab[keyof typeof TabletsTab], {show: boolean}>,
+            {} as Record<(typeof TabletsTab)[keyof typeof TabletsTab], {show: boolean}>,
         );
     }, [activeBundle, enableBundleController]);
 

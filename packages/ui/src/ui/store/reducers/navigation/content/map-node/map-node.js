@@ -1,17 +1,17 @@
-import {LOCATION_PUSH, LOCATION_POP} from 'redux-location-state/lib/constants';
+import {LOCATION_POP, LOCATION_PUSH} from 'redux-location-state/lib/constants';
 import {parseParams} from 'redux-location-state/lib/helpers';
 import {LOADING_STATUS, MediumType} from '../../../../../constants/index';
 import {mergeStateOnClusterChange} from '../../../../../store/reducers/utils';
 import {
-    SELECT_ALL,
-    ContentMode,
-    UPDATE_PATH,
-    FETCH_NODES,
-    SET_MEDIUM_TYPE,
-    SET_TEXT_FILTER,
-    SET_CONTENT_MODE,
     APPLY_CUSTOM_SORT,
+    ContentMode,
+    FETCH_NODES,
+    SELECT_ALL,
+    SET_CONTENT_MODE,
+    SET_MEDIUM_TYPE,
     SET_SELECTED_ITEM,
+    SET_TEXT_FILTER,
+    UPDATE_PATH,
     UPDATE_RESOURCE_USAGE,
 } from '../../../../../constants/navigation';
 import {DELETE_OBJECT} from '../../../../../constants/navigation/modals/delete-object';

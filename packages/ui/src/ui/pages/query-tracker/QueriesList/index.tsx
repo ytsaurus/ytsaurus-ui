@@ -5,7 +5,7 @@ import {Tabs, TabsItemProps} from '@gravity-ui/uikit';
 import {QueriesHistoryList} from './QueriesHistoryList';
 
 import {getQueriesListMode} from '../module/queries_list/selectors';
-import {useSelector, useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {QueriesListMode, QueriesListModes} from '../module/queries_list/types';
 import {applyListMode, requestQueriesList} from '../module/queries_list/actions';
 

@@ -9,10 +9,10 @@ import Button from '../../../../components/Button/Button';
 
 import {getCurrentUserName} from '../../../../store/selectors/global';
 import {
-    getTree,
-    getPool,
-    getTreesSelectItems,
     getIsRoot,
+    getPool,
+    getTree,
+    getTreesSelectItems,
 } from '../../../../store/selectors/scheduling/scheduling';
 
 import {

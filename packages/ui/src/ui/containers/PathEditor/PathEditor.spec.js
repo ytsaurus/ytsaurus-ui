@@ -1,7 +1,7 @@
 import 'jsdom-global/register';
 
 import React from 'react';
-import Enzyme, {shallow, mount} from 'enzyme';
+import Enzyme, {mount, shallow} from 'enzyme';
 import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
 import toJson from 'enzyme-to-json';
 import _ from 'lodash';
@@ -10,9 +10,9 @@ import {PathEditor} from './PathEditor';
 
 import {
     filterByCurrentPath,
+    getCompletedPath,
     getNextSelectedIndex,
     getPrevSelectedIndex,
-    getCompletedPath,
 } from '../../utils/navigation/path-editor';
 import {KeyCode} from '../../constants/index';
 

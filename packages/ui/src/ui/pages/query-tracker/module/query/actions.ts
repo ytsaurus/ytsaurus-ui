@@ -5,12 +5,12 @@ import {RootState} from '../../../../store/reducers';
 import {getCluster} from '../../../../store/selectors/global';
 import {ActionD} from '../../../../types';
 import {
-    getQuery,
+    QueryEngine,
     QueryItem,
     abortQuery,
-    QueryEngine,
-    startQuery,
     generateQueryFromTable,
+    getQuery,
+    startQuery,
 } from '../api';
 import {requestQueriesList} from '../queries_list/actions';
 import {getCurrentQuery, getQueryDraft} from './selectors';

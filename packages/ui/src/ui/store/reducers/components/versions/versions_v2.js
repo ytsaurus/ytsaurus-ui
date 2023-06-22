@@ -1,13 +1,13 @@
 import _ from 'lodash';
 import {mergeStateOnClusterChange} from '../../../../store/reducers/utils';
 import {
-    DISCOVER_VERSIONS,
-    CHANGE_HOST_FILTER,
-    CHANGE_VERSION_FILTER,
-    CHANGE_TYPE_FILTER,
-    CHANGE_STATE_FILTER,
     CHANGE_BANNED_FILTER,
+    CHANGE_HOST_FILTER,
+    CHANGE_STATE_FILTER,
+    CHANGE_TYPE_FILTER,
+    CHANGE_VERSION_FILTER,
     CHANGE_VERSION_SUMMARY_PARTIAL,
+    DISCOVER_VERSIONS,
 } from '../../../../constants/components/versions/versions_v2';
 
 const prepareGroup = (group, version) => {

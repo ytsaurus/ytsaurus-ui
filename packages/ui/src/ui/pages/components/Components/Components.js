@@ -2,7 +2,7 @@ import React from 'react';
 import block from 'bem-cn-lite';
 import PropTypes from 'prop-types';
 import {connect, useSelector} from 'react-redux';
-import {Route, Switch, Redirect, matchPath} from 'react-router';
+import {Redirect, Route, Switch, matchPath} from 'react-router';
 
 import VersionsV2 from '../tabs/Versions/VersionsV2';
 import Proxies from '../tabs/Proxies/Proxies';

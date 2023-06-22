@@ -6,12 +6,12 @@ import cn from 'bem-cn-lite';
 import LoadDataHandler from '../../../../components/LoadDataHandler/LoadDataHandler';
 import MetaTable from '../../../../components/MetaTable/MetaTable';
 import {
-    main,
-    size,
     compression,
     erasureReplication,
+    main,
+    size,
 } from '../../../../components/MetaTable/presets';
-import {Loader, Button} from '@gravity-ui/uikit';
+import {Button, Loader} from '@gravity-ui/uikit';
 import Link from '../../../../components/Link/Link';
 
 import {
@@ -20,8 +20,8 @@ import {
     getIsTooBig,
     getNavigationFileLoadingStatus,
 } from '../../../../store/selectors/navigation/content/file';
-import {loadFile, abortAndReset} from '../../../../store/actions/navigation/content/file';
-import {getPath, getAttributes} from '../../../../store/selectors/navigation';
+import {abortAndReset, loadFile} from '../../../../store/actions/navigation/content/file';
+import {getAttributes, getPath} from '../../../../store/selectors/navigation';
 import {getEffectiveMode} from '../../../../store/selectors/navigation/navigation';
 
 import {useRumMeasureStop} from '../../../../rum/RumUiContext';

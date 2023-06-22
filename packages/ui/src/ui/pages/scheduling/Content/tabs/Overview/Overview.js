@@ -7,7 +7,7 @@ import cn from 'bem-cn-lite';
 import qs from 'qs';
 
 import ElementsTable from '../../../../../components/ElementsTable/ElementsTable';
-import {FormattedText, FormattedLink} from '../../../../../components/formatters';
+import {FormattedLink, FormattedText} from '../../../../../components/formatters';
 
 import ClickableAttributesButton from '../../../../../components/AttributesButton/ClickableAttributesButton';
 import ErrorBoundary from '../../../../../components/ErrorBoundary/ErrorBoundary';
@@ -18,22 +18,22 @@ import Link from '../../../../../components/Link/Link';
 import Icon from '../../../../../components/Icon/Icon';
 
 import {
-    changeTableTreeState,
+    changeAbcServiceFilter,
     changeFilter,
     changePool,
-    openEditModal,
+    changeTableTreeState,
     openDeleteModal,
-    changeAbcServiceFilter,
+    openEditModal,
 } from '../../../../../store/actions/scheduling/scheduling';
 import {
-    getFilter,
-    getTableItems,
     getCurrentPool,
-    getSchedulingTreeState,
-    getSchedulingAbcFilter,
+    getFilter,
     getIsRoot,
-    getTree,
+    getSchedulingAbcFilter,
     getSchedulingOverviewMaxDepth,
+    getSchedulingTreeState,
+    getTableItems,
+    getTree,
 } from '../../../../../store/selectors/scheduling/scheduling';
 import {SCHEDULING_POOL_TREE_TABLE_ID, Tab} from '../../../../../constants/scheduling';
 import {poolsTableItems} from '../../../../../utils/scheduling/overviewTable';

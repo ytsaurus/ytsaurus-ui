@@ -13,73 +13,73 @@ import {
 } from './reducers/clusters-menu/url-mapping';
 
 import {
-    navigationParams,
     getNavigationPreparedState,
+    navigationParams,
 } from '../store/reducers/navigation/url-mapping';
 
 import {
-    versionsV2Params,
     getVersionsV2PreparedState,
+    versionsV2Params,
 } from './reducers/components/versions/url-mapping_v2';
 import {
-    proxiesParams,
     getProxiesPreparedState,
+    proxiesParams,
 } from './reducers/components/proxies/proxies/url-mapping';
-import {nodesParams, getNodesPreparedState} from './reducers/components/nodes/url-mapping';
+import {getNodesPreparedState, nodesParams} from './reducers/components/nodes/url-mapping';
 
 import {
-    statisticsParams,
     getStatisticsPreparedState,
+    statisticsParams,
 } from './reducers/operations/statistics/url-mapping';
-import {listParams, getListPreparedState} from './reducers/operations/list/url-mapping';
-import {jobsParams, getJobsPreparedState} from './reducers/operations/jobs/url-mapping';
+import {getListPreparedState, listParams} from './reducers/operations/list/url-mapping';
+import {getJobsPreparedState, jobsParams} from './reducers/operations/jobs/url-mapping';
 
 import {
-    accountsParams,
-    getAccountsPreparedState,
-    accountOnlyParams,
-    getAccountOnlyPreparedState,
-    getAccountsUsageState,
-    accountUsageParams,
     accountAclParams,
+    accountOnlyParams,
+    accountUsageParams,
+    accountsParams,
+    getAccountOnlyPreparedState,
     getAccountsAclState,
+    getAccountsPreparedState,
+    getAccountsUsageState,
 } from './reducers/accounts/accounts/url-mapping';
 
 import {dashboardParams, getDashboardPreparedState} from './reducers/dashboard/url-mapping';
 
-import {globalParams, getGlobalPreparedState} from './reducers/url-mapping';
+import {getGlobalPreparedState, globalParams} from './reducers/url-mapping';
 
 import {getGroupsPreparedState, groupsPageParams} from '../store/reducers/groups/url-mapping';
 
 import {getUsersPreparedState, usersPageParams} from '../store/reducers/users/url-mapping';
 
 import {
-    pathViewerParams,
     getPathViewerPreparedState,
+    pathViewerParams,
 } from '../store/reducers/path-viewer/url-mapping';
 
-import {tabletParams, getTabletPreparedState} from '../store/reducers/tablet/url-mapping';
+import {getTabletPreparedState, tabletParams} from '../store/reducers/tablet/url-mapping';
 
 import {
-    schedulingOverviewParams,
-    getSchedulingOverviewPreparedState,
-    schedulingDetailsParams,
-    getSchedulingDetailsPreparedState,
     getSchedulingAclPreparedState,
-    schedulingAclParams,
-    schedulingParams,
+    getSchedulingDetailsPreparedState,
+    getSchedulingOverviewPreparedState,
     getSchedulingPreparedState,
+    schedulingAclParams,
+    schedulingDetailsParams,
+    schedulingOverviewParams,
+    schedulingParams,
 } from '../store/reducers/scheduling/url-mapping';
 import {
+    getTabletsBundlesAclPreparedState,
     getTabletsBundlesPreparedState,
     getTabletsCellsPreparedState,
     tabletsAllBundlesParams,
-    tabletsTabletCellsParams,
-    tabletsBundlesParams,
     tabletsBundlesAclParams,
-    getTabletsBundlesAclPreparedState,
+    tabletsBundlesParams,
+    tabletsTabletCellsParams,
 } from './reducers/tablet_cell_bundles/url-mapping';
-import {systemParams, getSystemPreparedState} from '../store/reducers/system/url-mapping';
+import {getSystemPreparedState, systemParams} from '../store/reducers/system/url-mapping';
 
 import {TabletsTab} from '../constants/tablets';
 import {paramsToQuery} from '../utils';

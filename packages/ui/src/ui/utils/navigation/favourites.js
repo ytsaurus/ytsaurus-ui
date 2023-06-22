@@ -1,7 +1,7 @@
 import {Favourites} from '../../utils/favourites';
 import {
-    getLastVisited as getLastVisitedSelector,
     getClusterNS,
+    getLastVisited as getLastVisitedSelector,
 } from '../../store/selectors/settings';
 import {setSetting} from '../../store/actions/settings';
 import {SettingName} from '../../../shared/constants/settings';

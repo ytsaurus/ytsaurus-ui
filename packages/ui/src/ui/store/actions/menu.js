@@ -1,16 +1,16 @@
 import moment from 'moment';
 
-import {SPLIT_MENU_ITEMS, JOIN_MENU_ITEMS} from '../../constants/index';
-import {updateTitle, mergeScreen} from '../../store/actions/global';
+import {JOIN_MENU_ITEMS, SPLIT_MENU_ITEMS} from '../../constants/index';
+import {mergeScreen, updateTitle} from '../../store/actions/global';
 import {setSetting} from '../../store/actions/settings';
 import {
+    getKnownPages,
     getRecentClustersInfo,
     getRecentPagesInfo,
-    getKnownPages,
 } from '../../store/selectors/slideoutMenu';
 import metrics from '../../common/utils/metrics';
-import {SettingName, NAMESPACES} from '../../../shared/constants/settings';
-import {getLastVisitedTabs, getClusterNS} from '../../store/selectors/settings';
+import {NAMESPACES, SettingName} from '../../../shared/constants/settings';
+import {getClusterNS, getLastVisitedTabs} from '../../store/selectors/settings';
 import {getPath} from '../../../shared/utils/settings';
 import {getCluster, getCurrentUserName} from '../../store/selectors/global';
 

@@ -3,7 +3,7 @@ import cn from 'bem-cn-lite';
 import key from 'hotkeys-js';
 import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
 
-import {connect, ConnectedProps} from 'react-redux';
+import {ConnectedProps, connect} from 'react-redux';
 
 import {getTheme} from '../../store/selectors/global';
 import {RootState} from '../../store/reducers';

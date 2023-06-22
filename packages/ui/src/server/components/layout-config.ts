@@ -2,7 +2,7 @@ import _ from 'lodash';
 import {getInterfaceVersion, isProductionEnv} from '../utils';
 import type {Request} from 'express';
 import {YTCoreConfig} from '../../@types/core';
-import {YTConfig, ConfigData} from '../../shared/yt-types';
+import {ConfigData, YTConfig} from '../../shared/yt-types';
 import {AppLayoutConfig} from '../render-layout';
 import {isUserColumnPresetsEnabled} from '../controllers/table-column-preset';
 

@@ -1,6 +1,6 @@
 import React, {useMemo} from 'react';
 import cn from 'bem-cn-lite';
-import {ButtonProps, SelectOption, Button, Select} from '@gravity-ui/uikit';
+import {Button, ButtonProps, Select, SelectOption} from '@gravity-ui/uikit';
 import {Engines, QueryEngine} from '../module/api';
 import {createNewQueryUrl} from '../utils/navigation';
 import Link from '../../../components/Link/Link';

@@ -19,25 +19,25 @@ import {OVERVIEW_HEIGHT} from '../../../../constants/navigation/content/table';
 import {getPath} from '../../../../store/selectors/navigation';
 import {HEADER_HEIGHT} from '../../../../constants/index';
 import {
-    getTableData,
-    updateColumns,
     abortAndReset,
-    handleScreenChanged,
     closeColumnSelectorModal,
+    getTableData,
+    handleScreenChanged,
+    updateColumns,
 } from '../../../../store/actions/navigation/content/table/table';
 import {
-    getKeyColumns,
     getAllColumns,
-    getSrcColumns,
+    getKeyColumns,
     getOffsetValue,
-    getVisibleRows,
+    getSrcColumns,
     getVisibleColumns,
+    getVisibleRows,
 } from '../../../../store/selectors/navigation/content/table';
 import {
     getColumns,
-    getYqlTypes,
     getIsDynamic,
     getNavigationTableLoadingState,
+    getYqlTypes,
 } from '../../../../store/selectors/navigation/content/table-ts';
 import {getCluster} from '../../../../store/selectors/global';
 import {getTableYsonSettings} from '../../../../store/selectors/thor/unipika';

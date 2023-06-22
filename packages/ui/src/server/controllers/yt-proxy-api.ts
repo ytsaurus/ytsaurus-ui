@@ -3,7 +3,7 @@ import axios from 'axios';
 import qs from 'qs';
 
 import type {Request, Response} from 'express';
-import {pipeAxiosResponse, sendAndLogError, UNEXPECTED_PIPE_AXIOS_RESPONSE} from '../utils';
+import {UNEXPECTED_PIPE_AXIOS_RESPONSE, pipeAxiosResponse, sendAndLogError} from '../utils';
 import {getUserYTApiSetup} from '../components/requestsSetup';
 
 export async function ytProxyApi(req: Request, res: Response) {

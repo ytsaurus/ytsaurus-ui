@@ -3,7 +3,7 @@ import {Route, Switch} from 'react-router';
 import {useDispatch, useSelector} from 'react-redux';
 import PropTypes from 'prop-types';
 
-import {ThemeProvider, useThemeValue, useThemeType} from '@gravity-ui/uikit';
+import {ThemeProvider, useThemeType, useThemeValue} from '@gravity-ui/uikit';
 
 import ModalErrors from '../../containers/ModalErrors/ModalErrors';
 import AttributesModal from '../../components/AttributesModal/AttributesModal';

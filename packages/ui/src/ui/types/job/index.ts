@@ -1,6 +1,6 @@
 /* eslint-disable camelcase */
 import * as JOB from '../../constants/job';
-import {YTError, Acl} from '../../types';
+import {Acl, YTError} from '../../types';
 
 export interface RawJobEvent {
     time: string;
@@ -190,7 +190,7 @@ export interface JobTreeItem extends JobTree {
 }
 
 type TreeStateKeys = keyof typeof JOB.TREE_STATE;
-export type JobTreeState = typeof JOB.TREE_STATE[TreeStateKeys];
+export type JobTreeState = (typeof JOB.TREE_STATE)[TreeStateKeys];
 
 export interface MetricsEntry {
     name: string;

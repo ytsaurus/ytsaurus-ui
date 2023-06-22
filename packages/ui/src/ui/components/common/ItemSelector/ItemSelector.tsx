@@ -1,6 +1,6 @@
 import React from 'react';
 import block from 'bem-cn-lite';
-import {List, ListProps, Button, Icon} from '@gravity-ui/uikit';
+import {Button, Icon, List, ListProps} from '@gravity-ui/uikit';
 
 import i18n from './i18n';
 

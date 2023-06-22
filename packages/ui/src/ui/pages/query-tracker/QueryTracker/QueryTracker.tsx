@@ -1,9 +1,9 @@
 import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import {Switch, Route} from 'react-router';
+import {Route, Switch} from 'react-router';
 import FlexSplitPane from '../../../components/FlexSplitPane/FlexSplitPane';
 import {QueriesPooling} from '../hooks/QueriesPooling/context';
-import {isEngine, QueryEngine} from '../module/api';
+import {QueryEngine, isEngine} from '../module/api';
 import {
     createEmptyQuery,
     createQueryFromTablePath,

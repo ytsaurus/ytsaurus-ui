@@ -6,7 +6,7 @@ import _range from 'lodash/range';
 import {DateTime} from 'luxon';
 
 import i18n from '../i18n';
-import {WEEKDAYS, MONTHS} from '../constants';
+import {MONTHS, WEEKDAYS} from '../constants';
 
 import './Month.scss';
 

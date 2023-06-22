@@ -1,19 +1,19 @@
-import React, {useEffect, useCallback, useMemo} from 'react';
+import React, {useCallback, useEffect, useMemo} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import {StickyContainer, Sticky} from 'react-sticky';
+import {Sticky, StickyContainer} from 'react-sticky';
 import cn from 'bem-cn-lite';
 
 import Yson from '../../components/Yson/Yson';
-import {Loader, TextInput, Checkbox} from '@gravity-ui/uikit';
+import {Checkbox, Loader, TextInput} from '@gravity-ui/uikit';
 import ErrorBoundary from '../../components/ErrorBoundary/ErrorBoundary';
 import LoadDataHandler from '../../components/LoadDataHandler/LoadDataHandler';
 import Select from '../../components/Select/Select';
 
 import {
-    loadData,
-    changeParameters,
-    toggleParameters,
     abortAndReset,
+    changeParameters,
+    loadData,
+    toggleParameters,
 } from '../../store/actions/path-viewer';
 import {HEADER_HEIGHT, KeyCode} from '../../constants/index';
 import {getFormat} from '../../store/selectors/settings';

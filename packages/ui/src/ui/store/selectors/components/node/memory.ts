@@ -3,11 +3,11 @@ import type {RootState} from '../../../../store/reducers';
 import {createSelector} from 'reselect';
 import {NodeMemoryUsagePreload} from '../../../../types/node/node';
 import {
+    TreeNode,
     filterTree,
     flattenTree,
     prepareTree,
     sortTree,
-    TreeNode,
 } from '../../../../common/hammer/tree-list';
 import {getCluster} from '../../../../store/selectors/global';
 import {SortState} from '../../../../types';

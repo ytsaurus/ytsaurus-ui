@@ -1,9 +1,9 @@
 import axios from 'axios';
 import {
-    UPDATE_FILTER,
-    UPDATE_VIEWMODE,
     FETCH_CLUSTER_AVAILABILITY,
     FETCH_CLUSTER_VERSIONS,
+    UPDATE_FILTER,
+    UPDATE_VIEWMODE,
 } from '../../constants/index';
 import UIFactory from '../../UIFactory';
 

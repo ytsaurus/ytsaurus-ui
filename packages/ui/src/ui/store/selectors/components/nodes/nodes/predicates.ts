@@ -5,9 +5,9 @@ import {RootState} from '../../../../../store/reducers';
 import type {Node} from '../../../../../store/reducers/components/nodes/nodes/node';
 import {
     FlagState,
-    groupFilterInitialState,
     NodeRange,
     TagFilter,
+    groupFilterInitialState,
 } from '../../../../../store/reducers/components/nodes/setup/setup';
 import {MEDIUM_COLS_PREFIX} from '../../../../../constants/components/nodes/nodes';
 import {getMediumListNoCache} from '../../../../../store/selectors/thor';
@@ -107,7 +107,7 @@ const PropertiesByPredicate = {
 
 type NodeWithProps<T extends keyof typeof PropertiesByPredicate> = Pick<
     Node,
-    typeof PropertiesByPredicate[T][number]
+    (typeof PropertiesByPredicate)[T][number]
 >;
 
 type Predicates = {
@@ -468,7 +468,7 @@ function createNodeTagPredicate(
 }
 
 function createFlagPredicate<T extends keyof typeof PropertiesByPredicate>(
-    key: typeof PropertiesByPredicate[T][number],
+    key: (typeof PropertiesByPredicate)[T][number],
     flag: FlagState,
 ) {
     if (!flag || flag === 'all') {
@@ -481,7 +481,7 @@ function createFlagPredicate<T extends keyof typeof PropertiesByPredicate>(
 }
 
 function createAttributeStatePredicate<T extends keyof typeof PropertiesByPredicate>(
-    key: typeof PropertiesByPredicate[T][number],
+    key: (typeof PropertiesByPredicate)[T][number],
     value: FlagState,
 ) {
     if (value === 'all') {

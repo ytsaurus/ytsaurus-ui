@@ -6,7 +6,7 @@ import cn from 'bem-cn-lite';
 import unipika from '../../../../common/thor/unipika';
 
 import ElementsTable from '../../../../components/ElementsTable/ElementsTable';
-import {FormattedText, FormattedLink} from '../../../../components/formatters';
+import {FormattedLink, FormattedText} from '../../../../components/formatters';
 
 import LoadDataHandler from '../../../../components/LoadDataHandler/LoadDataHandler';
 import MetaTable, {TemplateTime} from '../../../../components/MetaTable/MetaTable';
@@ -17,8 +17,8 @@ import {Linkify} from '../../../../components/Linkify/Linkify';
 
 import {MAX_TRANSACTIONS_REQUESTS} from '../../../../constants/navigation/tabs/locks';
 import {
-    getLocks,
     abortAndReset,
+    getLocks,
     setLocksModeFilter,
 } from '../../../../store/actions/navigation/tabs/locks';
 import {Page} from '../../../../constants/index';

@@ -3,12 +3,12 @@ import {useDispatch, useSelector} from 'react-redux';
 import cn from 'bem-cn-lite';
 import {map} from 'lodash';
 import {
-    changeObjectSubjectFilter,
     changeObjectPermissionsFilter,
+    changeObjectSubjectFilter,
 } from '../../../store/actions/acl-filters';
 import {
-    getObjectSubjectFilter,
     getObjectPermissionsFilter,
+    getObjectSubjectFilter,
 } from '../../../store/selectors/acl-filters';
 import {getObjectPermissionsTypesList} from '../../../store/selectors/acl';
 import Filter from '../../../components/Filter/Filter';

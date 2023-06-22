@@ -420,7 +420,7 @@ export class Node {
     }
 }
 
-type AttributeName = typeof Node.ATTRIBUTES[number] | 'versions';
+type AttributeName = (typeof Node.ATTRIBUTES)[number] | 'versions';
 type Attributes = Record<AttributeName, FIX_MY_TYPE>;
 
 const alertsAttributes: ReadonlyArray<AttributeName> = ['alerts'];

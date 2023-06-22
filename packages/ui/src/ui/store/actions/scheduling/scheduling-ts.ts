@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import {
-    InitialPoolResourceInfo,
     INTEGRAL_GUARANTEES_PREFIX,
+    InitialPoolResourceInfo,
     POOL_RESOURCE_TYPE_TO_ATTRIBUTE,
     PoolResourceType,
 } from '../../../utils/scheduling/scheduling';

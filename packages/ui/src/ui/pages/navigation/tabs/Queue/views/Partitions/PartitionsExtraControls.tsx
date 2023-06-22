@@ -1,30 +1,30 @@
 import React from 'react';
-import {connect, ConnectedProps} from 'react-redux';
+import {ConnectedProps, connect} from 'react-redux';
 import cn from 'bem-cn-lite';
 
 import {
-    timeItems,
     CompactColumnSelector,
+    timeItems,
 } from '../../../Consumer/views/Partitions/PartitionsExtraControls';
 import Filter from '../../../../../../components/Filter/Filter';
 import RadioButton from '../../../../../../components/RadioButton/RadioButton';
 import {QUEUE_RATE_MODE} from '../../../../../../constants/navigation/tabs/queue';
 import {
     changeQueuePartitionIndex,
-    changeQueueRateMode,
-    changeQueueTabletCellId,
-    changeQueueTabletCellHost,
-    changeQueueTimeWindow,
     changeQueuePartitionsColumns,
+    changeQueueRateMode,
+    changeQueueTabletCellHost,
+    changeQueueTabletCellId,
+    changeQueueTimeWindow,
 } from '../../../../../../store/actions/navigation/tabs/queue/filters';
 import type {RootState} from '../../../../../../store/reducers';
 import {
     getQueuePartitionIndex,
-    getQueueRateMode,
-    getQueueTabletCellId,
-    getQueueTabletCellHost,
-    getQueueTimeWindow,
     getQueuePartitionsColumns,
+    getQueueRateMode,
+    getQueueTabletCellHost,
+    getQueueTabletCellId,
+    getQueueTimeWindow,
 } from '../../../../../../store/selectors/navigation/tabs/queue';
 
 import './PartitionsExtraControls.scss';

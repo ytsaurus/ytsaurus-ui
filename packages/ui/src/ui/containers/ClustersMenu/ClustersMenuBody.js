@@ -5,12 +5,12 @@ import block from 'bem-cn-lite';
 import {Link} from 'react-router-dom';
 import _ from 'lodash';
 
-import {CLUSTER_GROUPS_ORDER, CLUSTER_GROUPS, DEFAULT_GROUP} from '../../constants/cluster-menu';
+import {CLUSTER_GROUPS, CLUSTER_GROUPS_ORDER, DEFAULT_GROUP} from '../../constants/cluster-menu';
 import format from '@ytsaurus/interface-helpers/lib/hammer/format';
 import {utils} from '../../common/hammer/utils';
 import ElementsTable from '../../components/ElementsTable/ElementsTable';
 import {sortStateType} from '../../components/ElementsTable/ElementsTableHeader';
-import {fetchClusterVersions, fetchClusterAvailability} from '../../store/actions/clusters-menu';
+import {fetchClusterAvailability, fetchClusterVersions} from '../../store/actions/clusters-menu';
 import {CLUSTER_MENU_TABLE_ID} from '../../constants/tables';
 import {getClusterAppearance} from '../../appearance';
 import YT from '../../config/yt-config';

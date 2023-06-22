@@ -8,7 +8,7 @@ import Button from '../../../../../components/Button/Button';
 import Modal from '../../../../../components/Modal/Modal';
 
 import {getPath} from '../../../../../store/selectors/navigation';
-import {connect, ConnectedProps} from 'react-redux';
+import {ConnectedProps, connect} from 'react-redux';
 import Error from '../../../../../components/Block/Block';
 import Dialog from '../../../../../components/Dialog/Dialog';
 import {Progress} from '@gravity-ui/uikit';

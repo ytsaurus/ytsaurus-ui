@@ -3,7 +3,7 @@ import block from 'bem-cn-lite';
 import PropTypes from 'prop-types';
 import {connect, useSelector} from 'react-redux';
 import _ from 'lodash';
-import {Route, Switch, Redirect} from 'react-router';
+import {Redirect, Route, Switch} from 'react-router';
 
 import Tabs from '../../../components/Tabs/Tabs';
 

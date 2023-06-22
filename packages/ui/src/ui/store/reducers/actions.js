@@ -1,4 +1,4 @@
-import {PROMPT_ACTION, CONFIRM_ACTION, DISMISS_ACTION, MODAL_STATES} from '../../constants/actions';
+import {CONFIRM_ACTION, DISMISS_ACTION, MODAL_STATES, PROMPT_ACTION} from '../../constants/actions';
 
 const initialState = {
     status: MODAL_STATES.HIDDEN,

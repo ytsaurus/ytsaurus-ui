@@ -1,8 +1,8 @@
 import {prepareErrorMessage} from '../../../../utils/navigation/path-editing-popup';
 import {
-    SHOW_ERROR,
     HIDE_ERROR,
     SET_PATH,
+    SHOW_ERROR,
 } from '../../../../constants/navigation/modals/path-editing-popup';
 
 export function showErrorInModal(error) {

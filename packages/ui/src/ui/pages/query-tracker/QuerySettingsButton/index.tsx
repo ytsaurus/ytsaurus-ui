@@ -1,4 +1,4 @@
-import {Button, Icon, Text, Popup, TextInput, List} from '@gravity-ui/uikit';
+import {Button, Icon, List, Popup, Text, TextInput} from '@gravity-ui/uikit';
 import cn from 'bem-cn-lite';
 import React, {KeyboardEvent, useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import dots from '../../../../../img/svg/icons/ellipsis-h.svg';

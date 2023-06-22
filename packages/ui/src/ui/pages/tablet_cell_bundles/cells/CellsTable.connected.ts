@@ -9,8 +9,8 @@ import {
 import type {RootState} from '../../../store/reducers';
 import {getCluster} from '../../../store/selectors/global';
 import {
-    getTabletsCellsSorted,
     getTabletsCellsSortState,
+    getTabletsCellsSorted,
     getTabletsIsLoaded,
     getTabletsIsLoading,
 } from '../../../store/selectors/tablet_cell_bundles';

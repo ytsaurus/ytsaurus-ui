@@ -12,9 +12,9 @@ import {getMediumListNoCache} from '../../../../../store/selectors/thor';
 import type {ValueOf} from '../../../../../types';
 import {createMediumsPredicates} from '../../../../../utils/components/nodes/setup';
 import {
+    PropertiesByColumn,
     defaultColumns,
     getNodeTablesProps,
-    PropertiesByColumn,
 } from '../../../../../utils/components/nodes/tables';
 import {
     getComponentNodesFilterPredicates,

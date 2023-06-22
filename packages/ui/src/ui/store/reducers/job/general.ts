@@ -1,6 +1,6 @@
 import {prepareJobEvents} from '../../../utils/operations/tabs/details/events/events';
 import Job from '../../../pages/operations/OperationDetail/tabs/Jobs/job-selector';
-import {PreparedJob, JobEvents, JobStatistic, JobStatistics} from '../../../types/job';
+import {JobEvents, JobStatistic, JobStatistics, PreparedJob} from '../../../types/job';
 import {mergeStateOnClusterChange} from '../../../store/reducers/utils';
 import {prepareStatistics} from '../../../utils/job/tabs/statistics';
 import {GeneralActionType} from '../../../store/actions/job/general';

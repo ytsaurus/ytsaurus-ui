@@ -1,6 +1,6 @@
 import {
-    QUEUE_CHANGE_PERSISTED_STATE,
     QUEUE_CHANGE_PARTITIONS_COLUMNS,
+    QUEUE_CHANGE_PERSISTED_STATE,
     QUEUE_MODE,
     QUEUE_RATE_MODE,
 } from '../../../../../constants/navigation/tabs/queue';
@@ -21,7 +21,7 @@ export interface QueueFiltersState {
     partitionsColumns: Array<PartitionColumn<QueuePartitionsColumns>>;
 }
 
-export type QueuePartitionsColumns = typeof QUEUE_PARTITIONS_COLUMNS[number]['id'];
+export type QueuePartitionsColumns = (typeof QUEUE_PARTITIONS_COLUMNS)[number]['id'];
 
 const QUEUE_PARTITIONS_COLUMNS = [
     {id: 'partition_index', caption: '#'},

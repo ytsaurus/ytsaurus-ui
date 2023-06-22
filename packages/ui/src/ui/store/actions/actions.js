@@ -1,5 +1,5 @@
 import {Toaster} from '@gravity-ui/uikit';
-import {PROMPT_ACTION, CONFIRM_ACTION, DISMISS_ACTION} from '../../constants/actions';
+import {CONFIRM_ACTION, DISMISS_ACTION, PROMPT_ACTION} from '../../constants/actions';
 
 const toaster = new Toaster();
 

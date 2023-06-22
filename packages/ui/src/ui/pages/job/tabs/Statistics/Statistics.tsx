@@ -9,9 +9,9 @@ import Toolbar from './Toolbar';
 
 import {StatisticsState} from '../../../../store/reducers/job/statistics';
 import {
+    LEVEL_OFFSET,
     getJobStatisticsMetricMinWidth,
     getTreeItems,
-    LEVEL_OFFSET,
 } from '../../../../store/selectors/job/statistics';
 import {mixTable} from '../../../../store/actions/job/statistics';
 import {JobTreeItem, LeafStatistic} from '../../../../types/job';

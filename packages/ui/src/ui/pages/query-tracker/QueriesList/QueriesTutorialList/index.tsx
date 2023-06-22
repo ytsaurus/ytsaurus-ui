@@ -1,6 +1,6 @@
 import React, {useMemo} from 'react';
 import cn from 'bem-cn-lite';
-import {Icon, Text, List, ListItemData, Loader} from '@gravity-ui/uikit';
+import {Icon, List, ListItemData, Loader, Text} from '@gravity-ui/uikit';
 import {QueryItem} from '../../module/api';
 import {useQueryList} from '../../hooks/QueriesList';
 import {useQueryNavigation} from '../../hooks/Query';

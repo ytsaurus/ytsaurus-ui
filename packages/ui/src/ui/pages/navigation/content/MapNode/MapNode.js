@@ -26,13 +26,13 @@ import {getPath, getTransaction} from '../../../../store/selectors/navigation';
 import {getNavigationPathAttributes} from '../../../../store/selectors/navigation/navigation';
 import {getMediumList} from '../../../../store/selectors/thor';
 import {
-    getFilterState,
     getContentMode,
-    isRootNode,
-    getMediumType,
-    getLoadState,
     getError,
+    getFilterState,
+    getLoadState,
     getMapNodeResourcesLoading,
+    getMediumType,
+    isRootNode,
 } from '../../../../store/selectors/navigation/content/map-node';
 
 import {OPEN_CREATE_DIRECTORY_POPUP} from '../../../../constants/navigation/modals/create-directory';
@@ -41,11 +41,11 @@ import {ContentMode} from '../../../../constants/navigation';
 
 import {openEditingPopup} from '../../../../store/actions/navigation/modals/path-editing-popup';
 import {
-    updateResourceUsage,
     fetchNodes,
-    setFilter,
     setContentMode,
+    setFilter,
     setMediumType,
+    updateResourceUsage,
 } from '../../../../store/actions/navigation/content/map-node';
 import {RumMeasureTypes} from '../../../../rum/rum-measure-types';
 import {useAppRumMeasureStart} from '../../../../rum/rum-app-measures';

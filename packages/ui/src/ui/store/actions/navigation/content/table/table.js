@@ -6,16 +6,16 @@ import metrics from '../../../../../common/utils/metrics';
 import yt from '@ytsaurus/javascript-wrapper/lib/yt';
 
 import {
-    SET_COLUMNS,
-    SET_COLUMNS_ORDER,
-    GET_TABLE_DATA,
     CHANGE_CELL_SIZE,
     CHANGE_PAGE_SIZE,
-    TOGGLE_FULL_SCREEN,
-    OPEN_COLUMN_SELECTOR_MODAL,
     CLOSE_COLUMN_SELECTOR_MODAL,
-    SET_OFFSET,
+    GET_TABLE_DATA,
     LOAD_TYPE,
+    OPEN_COLUMN_SELECTOR_MODAL,
+    SET_COLUMNS,
+    SET_COLUMNS_ORDER,
+    SET_OFFSET,
+    TOGGLE_FULL_SCREEN,
 } from '../../../../../constants/navigation/content/table';
 
 import {updateView} from '../../../../../store/actions/navigation';
@@ -27,38 +27,38 @@ import Query from '../../../../../utils/navigation/content/table/query';
 import Columns from '../../../../../utils/navigation/content/table/columns';
 import {getCluster} from '../../../../../store/selectors/global';
 import {
-    prepareRows,
-    prepareHeaders,
-    parseErrorFromResponse,
-    getRequestOutputFormat,
     getColumnsValues,
     getParsedError,
+    getRequestOutputFormat,
+    parseErrorFromResponse,
+    prepareHeaders,
+    prepareRows,
 } from '../../../../../utils/navigation/content/table/table';
 
 import {getAttributes, getPath, getTransaction} from '../../../../../store/selectors/navigation';
 import {
-    isTableSimilarityEnabled,
     getDefaultTableColumnLimit,
+    isTableSimilarityEnabled,
 } from '../../../../../store/selectors/settings';
 import {
+    getAllColumns,
     getKeyColumns,
+    getNextOffset,
     getRequestedPageSize,
     getVisibleColumns,
-    getNextOffset,
     isYqlTypesEnabled,
-    getAllColumns,
 } from '../../../../../store/selectors/navigation/content/table';
 import {
     getCellSize,
+    getColumns,
+    getColumnsPreset,
+    getDeniedKeyColumns,
     getIsDynamic,
     getIsStrict,
-    getColumns,
     getMoveOffsetBackward,
-    getRows,
     getOmittedColumns,
-    getDeniedKeyColumns,
+    getRows,
     getTableColumnNamesFromSchema,
-    getColumnsPreset,
 } from '../../../../../store/selectors/navigation/content/table-ts';
 import {mergeScreen} from '../../../../../store/actions/global';
 import {injectColumnsFromSchema} from '../../../../../utils/navigation/content/table/table-ts';

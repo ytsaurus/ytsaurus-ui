@@ -2,8 +2,8 @@ import mockStore from '../../../../store/__mocks__';
 
 import {
     loadSuggestions,
-    preparePath,
     pathEditorRequests,
+    preparePath,
 } from '../../../../utils/navigation/path-editor';
 import {
     loadSuggestionsList,

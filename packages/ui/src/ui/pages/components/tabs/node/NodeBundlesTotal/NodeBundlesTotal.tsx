@@ -17,8 +17,8 @@ import {
     getNodeMemoryUsageTotalTabletDynamic,
 } from '../../../../../store/selectors/components/node/memory';
 import {
-    getProgressBarColorByIndex,
     STACKED_PROGRESS_BAR_COLORS,
+    getProgressBarColorByIndex,
 } from '../../../../../constants/colors';
 
 import './NodeBundlesTotal.scss';

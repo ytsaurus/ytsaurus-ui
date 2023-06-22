@@ -13,16 +13,16 @@ import Filter from '../../../../../components/Filter/Filter';
 import Icon from '../../../../../components/Icon/Icon';
 
 import {
-    TREE_STATE,
-    DEBOUNCE_DELAY,
     AGGREGATOR_RADIO_ITEMS,
+    DEBOUNCE_DELAY,
+    TREE_STATE,
 } from '../../../../../constants/operations/statistics';
 import {
-    setTreeState,
-    changeFilterText,
     changeAggregation,
+    changeFilterText,
     changeJobType,
     changePoolTreeFilter,
+    setTreeState,
 } from '../../../../../store/actions/operations/statistics';
 import {statisticsTableProps} from '../../../../../utils/operations/tabs/statistics/statisticsTableProps';
 import {makeRadioButtonProps} from '../../../../../utils';

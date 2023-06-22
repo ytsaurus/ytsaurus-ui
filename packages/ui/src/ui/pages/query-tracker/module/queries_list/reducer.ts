@@ -1,13 +1,13 @@
 import {QueryItem} from '../api';
 import {
-    QueriesListAction,
     LOAD_QUERIES_LIST_ERROR,
     LOAD_QUERIES_LIST_REQUEST,
     LOAD_QUERIES_LIST_SUCCESS,
+    QueriesListAction,
     SET_QUERIES_LIST_CURSOR,
     SET_QUERIES_LIST_FILTER,
-    UPDATE_QUERIES_LIST,
     SET_QUERIES_LIST_MODE,
+    UPDATE_QUERIES_LIST,
 } from './actions';
 import {
     DefaultQueriesListFilter,

@@ -1,19 +1,19 @@
-import React, {useEffect, useCallback} from 'react';
+import React, {useCallback, useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import cn from 'bem-cn-lite';
 
 import Yson from '../../../../components/Yson/Yson';
-import {Loader, Checkbox} from '@gravity-ui/uikit';
+import {Checkbox, Loader} from '@gravity-ui/uikit';
 import ErrorBoundary from '../../../../components/ErrorBoundary/ErrorBoundary';
 import LoadDataHandler from '../../../../components/LoadDataHandler/LoadDataHandler';
 
 import {RootState} from '../../../../store/reducers';
 import {
     abortAndReset,
-    loadJobSpecification,
-    changeOmitNodeDirectory,
     changeOmitInputTableSpecs,
+    changeOmitNodeDirectory,
     changeOmitOutputTableSpecs,
+    loadJobSpecification,
 } from '../../../../store/actions/job/specification';
 
 import './Specification.scss';

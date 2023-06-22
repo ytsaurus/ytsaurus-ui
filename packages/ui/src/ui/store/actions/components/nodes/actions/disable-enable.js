@@ -3,14 +3,14 @@ import yt from '@ytsaurus/javascript-wrapper/lib/yt';
 import {showErrorPopup} from '../../../../../utils/utils';
 import {getNodes} from '../../../../../store/actions/components/nodes/nodes';
 import {
-    OPEN_DISABLE_MODAL,
     CLOSE_DISABLE_MODAL,
-    DISABLE_WRITE_SESSION,
-    ENABLE_WRITE_SESSION,
-    DISABLE_TABLET_CELLS,
-    ENABLE_TABLET_CELLS,
     DISABLE_JOBS,
+    DISABLE_TABLET_CELLS,
+    DISABLE_WRITE_SESSION,
     ENABLE_JOBS,
+    ENABLE_TABLET_CELLS,
+    ENABLE_WRITE_SESSION,
+    OPEN_DISABLE_MODAL,
 } from '../../../../../constants/components/nodes/actions/disable-enable';
 
 function setAttribute({host, attr, flag, successType, failType}) {

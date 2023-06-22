@@ -1,5 +1,5 @@
 import {useContext, useEffect} from 'react';
-import {useSelector, useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {QueriesPoolingContext} from '../../hooks/QueriesPooling/context';
 import {UPDATE_QUERY} from '../../module/query/actions';
 import {getCurrentQuery} from '../../module/query/selectors';

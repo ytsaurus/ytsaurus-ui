@@ -1,5 +1,5 @@
 import type {Request, Response} from 'express';
-import {create, get, getItem, setItem, deleteItem} from '../components/settings';
+import {create, deleteItem, get, getItem, setItem} from '../components/settings';
 import {sendError} from '../utils';
 
 function sendResponse(_req: Request, res: Response, data: object) {

@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 
-import {flagToChar, Node, Flag} from '../../../constants/index';
+import {Flag, Node, flagToChar} from '../../../constants/index';
 
 export const rackPropTypes = {
     empty: PropTypes.bool.isRequired,

@@ -3,10 +3,10 @@ import {createSelector} from 'reselect';
 import {getPreparedDataForColumns, getTabletsMode, getTabletsSortState} from './tablets';
 import {
     FieldDescr,
-    flattenTree,
-    sortTree,
     TreeItem,
     TreeNode,
+    flattenTree,
+    sortTree,
 } from '../../../../common/hammer/tree-list';
 import {OldSortState, TypedKeys} from '../../../../types';
 import {RootState} from '../../../reducers';

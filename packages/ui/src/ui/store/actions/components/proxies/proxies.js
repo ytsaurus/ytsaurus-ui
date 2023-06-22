@@ -4,10 +4,10 @@ import ypath from '../../../../common/thor/ypath';
 
 import Proxy from '../../../../store/reducers/components/proxies/proxies/proxy';
 import {
-    GET_PROXIES,
     CHANGE_HOST_FILTER,
-    CHANGE_STATE_FILTER,
     CHANGE_ROLE_FILTER,
+    CHANGE_STATE_FILTER,
+    GET_PROXIES,
     PROXY_TYPE,
 } from '../../../../constants/components/proxies/proxies';
 import {getCluster} from '../../../../store/selectors/global';

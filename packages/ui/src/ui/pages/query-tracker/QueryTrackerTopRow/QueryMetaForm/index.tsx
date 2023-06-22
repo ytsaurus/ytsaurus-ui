@@ -5,7 +5,7 @@ import {EditableAsText} from '../../../../components/EditableAsText/EditableAsTe
 import {useDispatch, useSelector} from 'react-redux';
 import {Engines} from '../../module/api';
 import {SET_QUERY_PATCH} from '../../module/query/actions';
-import {getQueryDraft, getQuery} from '../../module/query/selectors';
+import {getQuery, getQueryDraft} from '../../module/query/selectors';
 import {QueryEnginesNames} from '../../utils/query';
 import {QuerySettingsButton} from '../../QuerySettingsButton';
 import './index.scss';

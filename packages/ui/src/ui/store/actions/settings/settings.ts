@@ -5,7 +5,7 @@ import {RootState} from '../../../store/reducers';
 import {setSetting} from './index';
 
 // @ts-ignore
-import {SettingName, NAMESPACES} from '../../../../shared/constants/settings';
+import {NAMESPACES, SettingName} from '../../../../shared/constants/settings';
 import {AnnotationVisibilityType} from '../../../../shared/constants/settings-ts';
 import {AccountUsageViewType} from '../../../store/reducers/accounts/usage/accounts-usage-filters';
 

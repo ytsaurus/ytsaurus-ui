@@ -1,8 +1,8 @@
 import {
+    HIDE_EDIT_WEIGHT_POOL_MODAL,
     OPERATIONS_STATUS,
     SET_PULLS_AND_WEIGHTS,
     SHOW_EDIT_WEIGHT_POOL_MODAL,
-    HIDE_EDIT_WEIGHT_POOL_MODAL,
 } from '../../../constants/operations';
 
 const initialState = {

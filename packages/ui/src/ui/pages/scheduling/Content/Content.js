@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {useSelector} from 'react-redux';
-import {Route, Switch, Redirect, withRouter} from 'react-router';
+import {Redirect, Route, Switch, withRouter} from 'react-router';
 import cn from 'bem-cn-lite';
 import _ from 'lodash';
 
@@ -11,19 +11,19 @@ import {OverviewWithRum} from '../../../pages/scheduling/Content/tabs/Overview/O
 import Details from '../../../pages/scheduling/Content/tabs/Details/Details';
 import ErrorBoundary from '../../../components/ErrorBoundary/ErrorBoundary';
 
-import {Tab, DEFAULT_TAB, SCHEDULING_ALLOWED_ROOT_TABS} from '../../../constants/scheduling';
+import {DEFAULT_TAB, SCHEDULING_ALLOWED_ROOT_TABS, Tab} from '../../../constants/scheduling';
 import PoolAcl from '../../../pages/scheduling/Content/tabs/PoolAcl/PoolAcl';
 import {
-    getTree,
-    getPool,
-    isPoolAclAllowed,
     getIsRoot,
+    getPool,
     getPoolIsEphemeral,
+    getTree,
+    isPoolAclAllowed,
 } from '../../../store/selectors/scheduling/scheduling';
 import {makeTabProps} from '../../../utils';
 
 import './Content.scss';
-import {getUISizes, getCluster} from '../../../store/selectors/global';
+import {getCluster, getUISizes} from '../../../store/selectors/global';
 import SchedulingOperationsUpdater from './SchedulingOperationsUpdater';
 import UIFactory from '../../../UIFactory';
 

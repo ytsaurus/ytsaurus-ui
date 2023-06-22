@@ -6,7 +6,7 @@ import Cookies from 'js-cookie';
 
 import ypath from '../../common/thor/ypath';
 import {prepareCheckIsDeveloperRequests} from '../../../shared/utils/check-is-developer';
-import {INIT_CLUSTER_PARAMS, UPDATE_CLUSTER, LOAD_ERROR} from '../../constants/index';
+import {INIT_CLUSTER_PARAMS, LOAD_ERROR, UPDATE_CLUSTER} from '../../constants/index';
 import {getCurrentUserName} from '../../store/selectors/global';
 import {getXsrfCookieName} from '../../utils';
 import {RESET_STORE_BEFORE_CLUSTER_CHANGE} from '../../constants/utils';

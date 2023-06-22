@@ -1,5 +1,5 @@
 import {getSettingsDataFromInitialConfig} from '../../../../config';
-import {SettingName, NAMESPACES} from '../../../../../shared/constants/settings';
+import {NAMESPACES, SettingName} from '../../../../../shared/constants/settings';
 import {getPath} from '../../../../../shared/utils/settings';
 import {QueryItem} from '../api';
 import {

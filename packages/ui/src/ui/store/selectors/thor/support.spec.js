@@ -1,9 +1,9 @@
 import {
+    _DEV_PATCH_NUMBER,
+    _LOCAL_ARCADIA_VERSION,
+    _compareVersions,
     _isFeatureSupported,
     _versionInInterval,
-    _compareVersions,
-    _LOCAL_ARCADIA_VERSION,
-    _DEV_PATCH_NUMBER,
     isSupportedSelector,
 } from './support';
 

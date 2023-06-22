@@ -1,7 +1,7 @@
 import {ThunkAction} from 'redux-thunk';
 import {RootState} from '../../../store/reducers';
 import {SettingsAction} from '../../../store/reducers/settings';
-import {getPath, SettingNS} from '../../../../shared/utils/settings';
+import {SettingNS, getPath} from '../../../../shared/utils/settings';
 
 import {
     SET_SETTING_VALUE,

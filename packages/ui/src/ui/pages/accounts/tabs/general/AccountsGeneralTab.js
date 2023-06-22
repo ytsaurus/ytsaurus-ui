@@ -42,28 +42,28 @@ import {loadUsers} from '../../../../store/actions/accounts/editor';
 import {accountsToggleFavourite} from '../../../../store/actions/favourites';
 import getTableProps from '../../../../utils/accounts/tables';
 import {
-    makeReadableItems,
     ACCOUNTS_CONTENT_MODE_ITEMS,
     genRadioButtonVisibleAccounts,
+    makeReadableItems,
 } from '../../../../utils/accounts';
 import {getMediumList} from '../../../../store/selectors/thor';
 import {
-    changeNameFilter,
     changeContentFilter,
     changeMediumFilter,
-    filterUsableAccounts,
+    changeNameFilter,
     closeEditorModal,
-    setAccountsTreeState,
+    filterUsableAccounts,
     loadEditedAccount,
+    setAccountsAbcServiceFilter,
+    setAccountsTreeState,
+    setAccountsVisibilityMode,
+    setAccountsVisibilityModeOfDashboard,
     setActiveAccount,
     showEditorModal,
-    setAccountsVisibilityModeOfDashboard,
-    setAccountsAbcServiceFilter,
-    setAccountsVisibilityMode,
 } from '../../../../store/actions/accounts/accounts';
 import {
-    getActiveAccountAggregationRow,
     getAccountsAbcServiceIdSlugFilter,
+    getActiveAccountAggregationRow,
 } from '../../../../store/selectors/accounts/accounts';
 import {isNull} from '../../../../utils';
 import {DASHBOARD_VIEW_CONTEXT} from '../../../../constants/index';

@@ -1,11 +1,11 @@
-import {useSelector, useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import React, {useCallback, useState} from 'react';
 import hammer from '../../../common/hammer';
 import PropTypes from 'prop-types';
 import ypath from '@ytsaurus/interface-helpers/lib/ypath';
 import _ from 'lodash';
 
-import {Dialog, Button} from '@gravity-ui/uikit';
+import {Button, Dialog} from '@gravity-ui/uikit';
 
 import ErrorBoundary from '../../../components/ErrorBoundary/ErrorBoundary';
 import MetaTable, {Template} from '../../../components/MetaTable/MetaTable';

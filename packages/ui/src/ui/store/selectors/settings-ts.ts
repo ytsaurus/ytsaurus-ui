@@ -177,7 +177,7 @@ export const getSettingSystemNodesNodeType = createSelector(
         const res: typeof allowedValues = [];
         items.forEach((v) => {
             if (allowedSet.has(v as any)) {
-                res.push(v as typeof allowedValues[number]);
+                res.push(v as (typeof allowedValues)[number]);
             }
         });
 

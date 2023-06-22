@@ -17,8 +17,8 @@ import Select from '../../../../../components/Select/Select';
 import {initialState} from '../../../../../store/reducers/components/nodes/setup/setup';
 import {
     applyPreset,
-    savePreset,
     getTags,
+    savePreset,
 } from '../../../../../store/actions/components/nodes/nodes';
 import {FLAG_STATE, MEDIUM_COLS_PREFIX} from '../../../../../constants/components/nodes/nodes';
 import {parseBytes} from '../../../../../utils';

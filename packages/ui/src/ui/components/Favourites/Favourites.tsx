@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import block from 'bem-cn-lite';
 import _ from 'lodash';
 
-import {DropdownMenu, Button, ButtonProps} from '@gravity-ui/uikit';
+import {Button, ButtonProps, DropdownMenu} from '@gravity-ui/uikit';
 
 import Icon from '../Icon/Icon';
 import Hotkey from '../../components/Hotkey/Hotkey';

@@ -1,7 +1,7 @@
 import React from 'react';
 import cn from 'bem-cn-lite';
 
-import YagrChartKit, {getSerieColor, YagrWidgetData} from '../YagrChartKit/YagrChartKit';
+import YagrChartKit, {YagrWidgetData, getSerieColor} from '../YagrChartKit/YagrChartKit';
 import './YTHistogram.scss';
 
 import format from '../../common/hammer/format';

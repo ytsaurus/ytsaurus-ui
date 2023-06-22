@@ -1,10 +1,10 @@
 import {ManageAclFieldsNames} from '../../components/ACL/ManageAcl/ManageAcl';
 import {RequestPermissionsFieldsNames} from '../../components/ACL/RequestPermissions/RequestPermissions';
 import {
+    deleteAclItemOrSubjectByIndex,
     getCombinedAcl,
     requestPermissions,
     updateAclAttributes,
-    deleteAclItemOrSubjectByIndex,
 } from './acl-api';
 import {
     ACLResponsible,

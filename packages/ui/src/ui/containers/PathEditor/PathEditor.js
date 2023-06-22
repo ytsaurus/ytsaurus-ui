@@ -13,10 +13,10 @@ import ErrorMessage from '../../components/ErrorMessage/ErrorMessage';
 
 import {
     filterByCurrentPath,
-    getNextSelectedIndex,
-    getPrevSelectedIndex,
     getCompletedPath,
     getIconNameForType,
+    getNextSelectedIndex,
+    getPrevSelectedIndex,
 } from '../../utils/navigation/path-editor';
 import {
     loadSuggestionsList,

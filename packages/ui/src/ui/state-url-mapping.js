@@ -1,6 +1,6 @@
 import encoder from './common/utils/url-encoder';
 import {parseQuery} from 'redux-location-state/lib/parseQuery';
-import {LOCATION_PUSH, LOCATION_POP} from 'redux-location-state/lib/constants';
+import {LOCATION_POP, LOCATION_PUSH} from 'redux-location-state/lib/constants';
 
 import {createReduxLocationActions, setParamEncoder} from 'redux-location-state';
 import {getParamSetup, mapLocationToState} from './store/location';

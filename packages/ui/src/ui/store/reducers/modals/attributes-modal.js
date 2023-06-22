@@ -1,7 +1,7 @@
 import {
     CLOSE_ATTRIBUTES_MODAL,
-    OPEN_ATTRIBUTES_MODAL,
     LOAD_ATTRIBUTES,
+    OPEN_ATTRIBUTES_MODAL,
 } from '../../../constants/modals/attributes-modal';
 
 const initialState = {

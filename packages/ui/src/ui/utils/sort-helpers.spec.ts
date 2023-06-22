@@ -1,13 +1,13 @@
 import {
     compareArraysBySizeThenByItems,
-    sortItemsBySchema,
+    compareVectors,
     multiSortWithUndefined,
     nextSortOrderValue,
-    orderTypeToOrderK,
-    sortArrayBySortState,
     oldSortStateToOrderType,
     orderTypeToOldSortState,
-    compareVectors,
+    orderTypeToOrderK,
+    sortArrayBySortState,
+    sortItemsBySchema,
 } from './sort-helpers';
 
 function createItems(str: string) {

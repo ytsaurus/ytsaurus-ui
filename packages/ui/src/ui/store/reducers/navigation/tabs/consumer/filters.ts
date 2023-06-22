@@ -26,7 +26,7 @@ const CONSUMER_PARTITIONS_COLUMNS = [
     {id: 'next_row_commit_time', caption: 'Next row commit time'},
 ] as const;
 
-export type ConsumerPartitionsColumns = typeof CONSUMER_PARTITIONS_COLUMNS[number]['id'];
+export type ConsumerPartitionsColumns = (typeof CONSUMER_PARTITIONS_COLUMNS)[number]['id'];
 
 export interface ConsumerFiltersState {
     consumerMode: CONSUMER_MODE;

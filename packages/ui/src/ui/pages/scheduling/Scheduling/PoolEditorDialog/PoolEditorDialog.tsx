@@ -6,24 +6,24 @@ import EditDialog, {DialogField, FormApi} from '../../../../components/Dialog/Di
 import Error from '../../../../components/Error/Error';
 
 import {
-    getPoolsSelectItems,
-    getPools,
     calculatePoolPath,
-    getTree,
+    getPools,
+    getPoolsSelectItems,
     getSchedulingEditItem,
     getSchedulingSourcesOfEditItem,
+    getTree,
 } from '../../../../store/selectors/scheduling/scheduling';
 import {
-    getInitialValues,
     InitialPoolResourceInfo,
-    isAbcPoolName,
-    isTopLevelPool,
     POOL_GENERAL_TYPE_TO_ATTRIBUTE,
     POOL_INTEGRAL_GUARANTEE_FIELD_TO_ATTR,
     POOL_STRONG_RESOURCE_TYPE_TO_ATTRIBUTE,
     PoolGeneralResourceType,
     PoolIntegralResourceType,
     PoolStrongResourceType,
+    getInitialValues,
+    isAbcPoolName,
+    isTopLevelPool,
 } from '../../../../utils/scheduling/scheduling';
 import {closeEditModal, editPool} from '../../../../store/actions/scheduling/scheduling';
 
@@ -34,8 +34,8 @@ import {getCurrentTreeGpuLimit} from '../../../../store/selectors/scheduling/sch
 import {RootState} from '../../../../store/reducers';
 import {isSupportedTransferPoolQuota} from '../../../../store/selectors/thor/support';
 import {
-    getSchedulingPoolsMapByName,
     PoolInfo,
+    getSchedulingPoolsMapByName,
 } from '../../../../store/selectors/scheduling/scheduling-pools';
 import Link from '../../../../components/Link/Link';
 

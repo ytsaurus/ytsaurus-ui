@@ -1,7 +1,7 @@
 import {
+    NODE_LOAD_FAILURE,
     NODE_LOAD_REQUEST,
     NODE_LOAD_SUCCESS,
-    NODE_LOAD_FAILURE,
 } from '../../../../constants/components/nodes/node';
 import type {Action} from 'redux';
 import {Node} from '../../../../store/reducers/components/nodes/nodes/node';

@@ -1,8 +1,8 @@
 import {FETCH_RPC_PROXIES} from '../../../store/actions/system/rpc-proxies';
 import {mergeStateOnClusterChange} from '../../../store/reducers/utils';
 import {
-    extractRoleGroups,
     extractProxyCounters,
+    extractRoleGroups,
     extractRpcProxy,
 } from '../../../utils/system/proxies';
 

@@ -4,10 +4,10 @@ import block from 'bem-cn-lite';
 
 import {
     ELEMENTS_TABLE,
-    prepareCellClassName,
-    getColumnEdgePosition,
     TemplatesPropType,
+    getColumnEdgePosition,
     getRenderer,
+    prepareCellClassName,
 } from './utils';
 
 export default class ElementsTableRow extends React.PureComponent {

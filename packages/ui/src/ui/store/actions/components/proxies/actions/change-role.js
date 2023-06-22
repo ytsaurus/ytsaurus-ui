@@ -4,9 +4,9 @@ import {getProxies} from '../../../../../store/actions/components/proxies/proxie
 import {showErrorPopup} from '../../../../../utils/utils';
 
 import {
-    OPEN_CHANGE_ROLE_MODAL,
-    CLOSE_CHANGE_ROLE_MODAL,
     CHANGE_ROLE,
+    CLOSE_CHANGE_ROLE_MODAL,
+    OPEN_CHANGE_ROLE_MODAL,
 } from '../../../../../constants/components/proxies/actions/change-role';
 import {PROXY_TYPE} from '../../../../../constants/components/proxies/proxies';
 

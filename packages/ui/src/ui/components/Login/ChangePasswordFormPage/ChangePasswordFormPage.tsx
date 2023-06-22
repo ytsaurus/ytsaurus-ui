@@ -1,4 +1,4 @@
-import React, {useState, useCallback} from 'react';
+import React, {useCallback, useState} from 'react';
 import {Button, TextInput} from '@gravity-ui/uikit';
 import cn from 'bem-cn-lite';
 import LoginPageWrapper from '../LoginPageWrapper/LoginPageWrapper';

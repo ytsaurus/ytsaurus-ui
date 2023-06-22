@@ -19,11 +19,11 @@ import ColumnHeader from '../../../../components/ColumnHeader/ColumnHeader';
 import {
     getAccessLogFilterPagination,
     getAccessLogItems,
+    getAccessLogLastLoadedFieldSelector,
     getAccessLogLoaded,
     getAccessLogLoading,
     getAccessLogPagesCount,
     getAccessLogReady,
-    getAccessLogLastLoadedFieldSelector,
 } from '../../../../store/selectors/navigation/tabs/access-log';
 import {AccessLogItem} from '../../../../store/reducers/navigation/tabs/access-log/access-log';
 import {getCluster} from '../../../../store/selectors/global';

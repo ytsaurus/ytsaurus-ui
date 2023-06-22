@@ -1,20 +1,20 @@
 import {
-    DISCOVER_VERSIONS,
     CHANGE_ADDRESS_FILTER,
-    SORT_SUMMARY_TABLE,
     CHANGE_TYPE_FILTER,
-    SORT_DETAILED_TABLE,
     CHANGE_VERSION_FILTER,
+    DISCOVER_VERSIONS,
+    SORT_DETAILED_TABLE,
+    SORT_SUMMARY_TABLE,
 } from '../../../../constants/components/versions/versions';
 import {
-    prepareVersions,
-    aggregateSummary,
-    sortSummary,
-    sortDetailed,
     aggregateDetailed,
-    getActualData,
+    aggregateSummary,
     getActiveFilter,
+    getActualData,
     getFilterColumns,
+    prepareVersions,
+    sortDetailed,
+    sortSummary,
 } from '../../../../utils/components/versions/index';
 
 const totalItem = {text: 'All', value: 'total', count: 0};

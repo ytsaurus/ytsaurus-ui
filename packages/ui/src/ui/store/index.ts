@@ -1,4 +1,4 @@
-import {createStore, applyMiddleware, compose, Store} from 'redux';
+import {Store, applyMiddleware, compose, createStore} from 'redux';
 // @ts-ignore
 import {listenForHistoryChange} from 'redux-location-state';
 import {createBrowserHistory} from 'history';

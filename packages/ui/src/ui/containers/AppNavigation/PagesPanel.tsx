@@ -2,12 +2,12 @@ import React from 'react';
 import _ from 'lodash';
 import cn from 'bem-cn-lite';
 import {useSelector} from 'react-redux';
-import {getRecentPagesInfo, PageInfo} from '../../store/selectors/slideoutMenu';
+import {PageInfo, getRecentPagesInfo} from '../../store/selectors/slideoutMenu';
 
 import Link from '../../components/Link/Link';
 import {makeRoutedURL} from '../../store/location';
 import {Icon, List} from '@gravity-ui/uikit';
-import {emptyPageIcon, PAGE_ICONS_BY_ID} from '../../constants/slideoutMenu';
+import {PAGE_ICONS_BY_ID, emptyPageIcon} from '../../constants/slideoutMenu';
 import {isRecentPagesFirst} from '../../store/selectors/settings';
 
 import './PagesPanel.scss';

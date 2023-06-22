@@ -7,26 +7,26 @@ import {setSetting} from '../../../store/actions/settings';
 import {accountsTrackVisit} from '../../../store/actions/favourites';
 import {setAccountParent} from '../../../utils/accounts/editor';
 import {
+    ACCOUNTS_TABLE_ID,
     CHANGE_CONTENT_MODE_FILTER,
     CHANGE_MEDIUM_TYPE_FILTER,
     CHANGE_NAME_FILTER,
+    CLOSE_EDITOR_MODAL,
+    FETCH_ACCOUNTS_NODES,
+    FETCH_ACCOUNTS_RESOURCE,
+    FETCH_ACCOUNTS_TOTAL_USAGE,
+    FETCH_ACCOUNTS_USABLE,
     FILTER_USABLE_ACCOUNTS,
     OPEN_EDITOR_MODAL,
-    CLOSE_EDITOR_MODAL,
-    FETCH_ACCOUNTS_TOTAL_USAGE,
-    FETCH_ACCOUNTS_RESOURCE,
-    FETCH_ACCOUNTS_NODES,
-    FETCH_ACCOUNTS_USABLE,
-    UPDATE_EDITABLE_ACCOUNT,
-    ACCOUNTS_TABLE_ID,
+    ROOT_ACCOUNT_NAME,
     SET_ACCOUNTS_TREE_STATE,
     SET_ACTIVE_ACCOUNT,
-    ROOT_ACCOUNT_NAME,
+    UPDATE_EDITABLE_ACCOUNT,
 } from '../../../constants/accounts/accounts';
 import {ACCOUNTS_DATA_FIELDS_ACTION} from '../../../constants/accounts';
 import {USE_CACHE, USE_MAX_SIZE} from '../../../constants/index';
-import {getCurrentUserName, getCluster} from '../../../store/selectors/global';
-import {YTApiId, ytApiV3Id, RumWrapper} from '../../../rum/rum-wrap-api';
+import {getCluster, getCurrentUserName} from '../../../store/selectors/global';
+import {RumWrapper, YTApiId, ytApiV3Id} from '../../../rum/rum-wrap-api';
 import {parseAccountsData} from './accounts-ts';
 import Account from '../../../pages/accounts/selector';
 import {RumMeasureTypes} from '../../../rum/rum-measure-types';

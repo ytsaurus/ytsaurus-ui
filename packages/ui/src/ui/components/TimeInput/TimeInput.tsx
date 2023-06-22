@@ -1,4 +1,4 @@
-import React, {useState, useCallback, useMemo} from 'react';
+import React, {useCallback, useMemo, useState} from 'react';
 import cn from 'bem-cn-lite';
 
 import {TextInput, TextInputProps} from '@gravity-ui/uikit';

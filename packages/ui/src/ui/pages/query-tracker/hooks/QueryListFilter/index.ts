@@ -1,4 +1,4 @@
-import {useSelector, useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {useCallback} from 'react';
 import {applyFilter} from '../../module/queries_list/actions';
 import {getQueriesListFilter, getQueriesListMode} from '../../module/queries_list/selectors';

@@ -5,9 +5,9 @@ import hammer from '../hammer';
 import {getSettingBySelector} from '../utils/redux';
 import {
     getFormat,
-    shouldShowDecoded,
     shouldCompact,
     shouldEscapeWhitespace,
+    shouldShowDecoded,
     useBinaryAsHex,
 } from '../../store/selectors/settings';
 import {Settings} from '../../components/Yson/StructuredYson/StructuredYsonTypes';

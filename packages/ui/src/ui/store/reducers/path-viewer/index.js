@@ -1,8 +1,8 @@
 import {mergeStateOnClusterChange} from '../../../store/reducers/utils';
 import {
+    CHANGE_PARAMETERS,
     COMMAND,
     LOAD_DATA,
-    CHANGE_PARAMETERS,
     TOGGLE_PARAMETERS,
 } from '../../../constants/path-viewer';
 

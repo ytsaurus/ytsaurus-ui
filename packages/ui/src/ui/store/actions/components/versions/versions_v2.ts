@@ -1,12 +1,12 @@
 import axios from 'axios';
 
 import {
-    DISCOVER_VERSIONS,
-    CHANGE_HOST_FILTER,
-    CHANGE_VERSION_FILTER,
-    CHANGE_TYPE_FILTER,
-    CHANGE_STATE_FILTER,
     CHANGE_BANNED_FILTER,
+    CHANGE_HOST_FILTER,
+    CHANGE_STATE_FILTER,
+    CHANGE_TYPE_FILTER,
+    CHANGE_VERSION_FILTER,
+    DISCOVER_VERSIONS,
 } from '../../../../constants/components/versions/versions_v2';
 import {getCluster} from '../../../../store/selectors/global';
 import {ThunkAction} from 'redux-thunk';

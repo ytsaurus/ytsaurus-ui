@@ -6,10 +6,10 @@ import {updateFilter} from '../../../../store/actions/operations/list';
 import {getActualValue} from '../../../../pages/operations/selectors';
 import {
     getOperationsListFilters,
-    getOperationsPoolSuggestions,
-    getOperationsUserSuggestions,
     getOperationsListFixedStartedByFilter_FOR_YTFRONT_2838,
+    getOperationsPoolSuggestions,
     getOperationsPoolTreeSuggestions,
+    getOperationsUserSuggestions,
 } from '../../../../store/selectors/operations';
 import {RootState} from '../../../../store/reducers';
 import {OperationsListFilterName} from '../../../../store/reducers/operations/list/list';

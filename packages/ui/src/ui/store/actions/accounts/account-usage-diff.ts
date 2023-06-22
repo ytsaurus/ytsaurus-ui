@@ -3,9 +3,9 @@ import axios from 'axios';
 import {ThunkAction} from 'redux-thunk';
 import {RootState} from '../../../store/reducers';
 import {
-    AccountsUsageDiffDataResponse,
     AccountUsageListDiffAction,
     AccountUsageListDiffDataParams,
+    AccountsUsageDiffDataResponse,
 } from '../../../store/reducers/accounts/usage/accounts-usage-list-diff';
 import {accountUsageApiUrl, getFilterParameters} from './account-usage';
 import {
@@ -17,11 +17,11 @@ import {
     ACCOUNTS_USAGE_TREE_DIFF_SUCCESS,
 } from '../../../constants/accounts/accounts';
 import {
-    getAccountsUsageDiffFromSnapshot,
-    getAccountsUsageDiffToSnapshot,
     getAccountUsageListDiffRequestParams,
     getAccountUsageTreeDiffRequestParams,
     getAccountUsageTreePath,
+    getAccountsUsageDiffFromSnapshot,
+    getAccountsUsageDiffToSnapshot,
 } from '../../../store/selectors/accounts/account-usage';
 import {
     AccountUsageTreeDiffAction,

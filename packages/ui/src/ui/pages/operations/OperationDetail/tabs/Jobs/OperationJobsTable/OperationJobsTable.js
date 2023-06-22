@@ -23,10 +23,10 @@ import {Tooltip} from '../../../../../../components/Tooltip/Tooltip';
 import CollapsibleSection from '../../../../../../components/CollapsibleSection/CollapsibleSection';
 
 import {
-    showInputPaths,
-    hideInputPaths,
-    getJobs,
     getCompetitiveJobs,
+    getJobs,
+    hideInputPaths,
+    showInputPaths,
 } from '../../../../../../store/actions/operations/jobs';
 import {openAttributesModal} from '../../../../../../store/actions/modals/attributes-modal';
 import {promptAction, showErrorModal} from '../../../../../../store/actions/actions';

@@ -1,8 +1,8 @@
 import {
-    SET_TREE_STATE,
-    CHANGE_FILTER_TEXT,
     CHANGE_AGGREGATION,
+    CHANGE_FILTER_TEXT,
     OPERATION_STATISTICS_PARTIAL,
+    SET_TREE_STATE,
 } from '../../../constants/operations/statistics';
 import {getOperation} from '../../../store/selectors/operations/operation';
 import {getSettingOperationStatisticsActiveJobTypes} from '../../../store/selectors/settings-ts';

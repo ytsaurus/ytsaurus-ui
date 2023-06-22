@@ -13,11 +13,11 @@ import {toggleColumnSortOrder} from '../../store/actions/tables';
 import action from '../../components/action/action';
 import {
     ELEMENTS_TABLE,
+    TemplatesPropType,
     getColumnEdgePosition,
     prepareCellClassName,
     prepareColumnsData,
     prepareTableClassName,
-    TemplatesPropType,
 } from './utils';
 
 import './ElementsTable.scss';

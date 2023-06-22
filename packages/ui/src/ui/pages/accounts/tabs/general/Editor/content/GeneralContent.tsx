@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import React from 'react';
-import {connect, ConnectedProps} from 'react-redux';
+import {ConnectedProps, connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import block from 'bem-cn-lite';
 

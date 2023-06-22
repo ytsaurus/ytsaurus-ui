@@ -1,5 +1,5 @@
 import React from 'react';
-import {connect, ConnectedProps, useSelector} from 'react-redux';
+import {ConnectedProps, connect, useSelector} from 'react-redux';
 import PropTypes from 'prop-types';
 import ypath from '../../../../../../common/thor/ypath';
 import cn from 'bem-cn-lite';
@@ -17,9 +17,9 @@ import {RumMeasureTypes} from '../../../../../../rum/rum-measure-types';
 import {isFinalLoadingStatus} from '../../../../../../utils/utils';
 import {useRumMeasureStop} from '../../../../../../rum/RumUiContext';
 import YTHistogram, {
-    calculateFormatSettings,
     YTHistogramProps,
     YTHistorgramData,
+    calculateFormatSettings,
 } from '../../../../../../components/YTHistogram/YTHistogram';
 import {RootState} from '../../../../../../store/reducers';
 

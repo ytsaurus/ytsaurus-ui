@@ -1,7 +1,7 @@
 import {allowDirectDownload, getQueryTrackerCluster, getQueryTrackerStage} from '../../../config';
 import {extractBatchV4Values, splitBatchResults} from '../../../utils/utils';
 import {BatchResultsItem} from '../../../../shared/yt-types';
-import {YTApiId, ytApiV4Id, ytApiV3} from '../../../rum/rum-wrap-api';
+import {YTApiId, ytApiV3, ytApiV4Id} from '../../../rum/rum-wrap-api';
 import ypath from '../../../common/thor/ypath';
 import {Plan} from './types/plan';
 import {TypeArray} from '../../../components/SchemaDataType/dataTypes';

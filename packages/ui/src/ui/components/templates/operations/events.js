@@ -6,9 +6,9 @@ import {Event} from '../../../utils/operations/tabs/details/events/events';
 
 import hammer from '../../../common/hammer';
 import templates, {
+    printColumnAsReadableField,
     printColumnAsTime,
     printColumnAsTimeDurationWithMs,
-    printColumnAsReadableField,
 } from '../../../components/templates/utils';
 
 const block = cn('operation-detail');

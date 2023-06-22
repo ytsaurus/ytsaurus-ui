@@ -16,8 +16,8 @@ import {
 } from '../../../store/selectors/global';
 import {
     getTabletBundlesTableMode,
-    getTabletsBundlesSorted,
     getTabletsBundlesSortState,
+    getTabletsBundlesSorted,
     getTabletsBundlesTotal,
     getTabletsIsLoaded,
     getTabletsIsLoading,

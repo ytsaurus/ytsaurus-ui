@@ -3,7 +3,7 @@ import cn from 'bem-cn-lite';
 import _ from 'lodash';
 import SortIcon from '../../components/SortIcon/SortIcon';
 
-import {calculateNextOrderValue, nextSortOrderValue, OrderType} from '../../utils/sort-helpers';
+import {OrderType, calculateNextOrderValue, nextSortOrderValue} from '../../utils/sort-helpers';
 import PageCounter, {PageCounterProps} from '../../components/PageCounter/PageCounter';
 import Loader from '../../components/Loader/Loader';
 

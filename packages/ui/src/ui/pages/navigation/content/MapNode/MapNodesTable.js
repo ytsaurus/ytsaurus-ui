@@ -7,8 +7,8 @@ import _ from 'lodash';
 import {
     FormattedLink,
     FormattedTextOrLink,
-    printColumnAsNumber,
     printColumnAsBytes,
+    printColumnAsNumber,
 } from '../../../../components/formatters';
 import {Checkbox} from '@gravity-ui/uikit';
 
@@ -24,14 +24,14 @@ import {itemNavigationAllowed} from '../../../../utils/navigation';
 import {
     getContentMode,
     getLoadState,
-    getSortedNodes,
     getPreparedTableColumns,
-    getSelectedIndex,
     getSelected,
+    getSelectedIndex,
+    getSortedNodes,
 } from '../../../../store/selectors/navigation/content/map-node';
 import {getTransaction} from '../../../../store/selectors/navigation';
 
-import {updatePath, updateView, navigateParent} from '../../../../store/actions/navigation';
+import {navigateParent, updatePath, updateView} from '../../../../store/actions/navigation';
 import {setSelectedItem} from '../../../../store/actions/navigation/content/map-node';
 
 import {ROOT_POOL_NAME, Tab as SchedulingTab} from '../../../../constants/scheduling';

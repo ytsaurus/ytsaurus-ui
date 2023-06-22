@@ -2,23 +2,23 @@ import ypath from '@ytsaurus/interface-helpers/lib/ypath';
 
 import {NAMESPACES, SettingName} from '../../../../../../shared/constants/settings';
 import {getPath} from '../../../../../../shared/utils/settings';
-import {UPDATE_VIEW, UPDATE_PATH} from '../../../../../constants/navigation';
+import {UPDATE_PATH, UPDATE_VIEW} from '../../../../../constants/navigation';
 import {mergeStateOnClusterChange} from '../../../../../store/reducers/utils';
 import {
+    CHANGE_CELL_SIZE,
+    CHANGE_PAGE_SIZE,
+    CLOSE_COLUMN_SELECTOR_MODAL,
+    CLOSE_OFFSET_SELECTOR_MODAL,
+    GET_TABLE_DATA,
+    MOVE_OFFSET,
+    OPEN_COLUMN_SELECTOR_MODAL,
+    OPEN_OFFSET_SELECTOR_MODAL,
     SET_COLUMNS,
     SET_COLUMNS_ORDER,
     SET_OFFSET,
-    MOVE_OFFSET,
-    GET_TABLE_DATA,
-    CHANGE_CELL_SIZE,
-    CHANGE_PAGE_SIZE,
-    TOGGLE_FULL_SCREEN,
-    CLOSE_OFFSET_SELECTOR_MODAL,
-    OPEN_OFFSET_SELECTOR_MODAL,
-    OPEN_COLUMN_SELECTOR_MODAL,
-    CLOSE_COLUMN_SELECTOR_MODAL,
-    SET_TABLE_COLUMNS_PRESET_HASH,
     SET_TABLE_COLUMNS_PRESET,
+    SET_TABLE_COLUMNS_PRESET_HASH,
+    TOGGLE_FULL_SCREEN,
 } from '../../../../../constants/navigation/content/table';
 import {getSettingsDataFromInitialConfig} from '../../../../../config';
 

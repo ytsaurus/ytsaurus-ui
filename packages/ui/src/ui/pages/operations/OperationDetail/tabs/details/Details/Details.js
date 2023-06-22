@@ -9,9 +9,9 @@ import Button from '../../../../../../components/Button/Button';
 import Error from '../../../../../../components/Error/Error';
 import Icon from '../../../../../../components/Icon/Icon';
 
-import DataFlow, {resourcesProps, intermediateResourcesProps} from '../DataFlow/DataFlow';
+import DataFlow, {intermediateResourcesProps, resourcesProps} from '../DataFlow/DataFlow';
 import Specification, {specificationProps} from '../Specification/Specification';
-import Runtime, {runtimeProps, operationProps} from '../Runtime/Runtime';
+import Runtime, {operationProps, runtimeProps} from '../Runtime/Runtime';
 import Events, {eventsProps} from '../Events/Events';
 import Tasks from '../Tasks/Tasks';
 
