@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import {Button, Icon} from '@gravity-ui/uikit';
-import DataTable, {Column, DataTableProps} from '@yandex-cloud/react-data-table';
+import DataTable, {Column, DataTableProps} from '@gravity-ui/react-data-table';
 import {isEqual} from 'lodash';
 import cn from 'bem-cn-lite';
 import {

@@ -15,7 +15,7 @@ import {QueriesPoolingContext} from '../../hooks/QueriesPooling/context';
 import {formatDateCompact} from '../../../../components/common/Timeline/util';
 import {QueryEnginesNames} from '../../utils/query';
 import DataTableYT from '../../../../components/DataTableYT/DataTableYT';
-import DataTable, {Column, Settings} from '@yandex-cloud/react-data-table';
+import DataTable, {Column, Settings} from '@gravity-ui/react-data-table';
 import {useQuriesHistoryFilter} from '../../hooks/QueryListFilter';
 import {QueriesListAuthorFilter} from '../../module/queries_list/types';
 import {QueryDuration} from '../../QueryDuration';

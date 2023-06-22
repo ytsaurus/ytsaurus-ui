@@ -1,5 +1,5 @@
 import React from 'react';
-import {Column} from '@yandex-cloud/react-data-table';
+import {Column} from '@gravity-ui/react-data-table';
 import cn from 'bem-cn-lite';
 import _ from 'lodash';
 

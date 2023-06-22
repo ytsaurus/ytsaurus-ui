@@ -4,7 +4,7 @@ import cn from 'bem-cn-lite';
 
 import {RootState} from '../../../../store/reducers';
 import DataTableYT from '../../../../components/DataTableYT/DataTableYT';
-import * as DT100 from '@yandex-cloud/react-data-table';
+import * as DT100 from '@gravity-ui/react-data-table';
 import {
     VersionsSummaryItem,
     getHideOfflineValue,

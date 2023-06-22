@@ -2,7 +2,7 @@ import React from 'react';
 import cn from 'bem-cn-lite';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
-import DataTable from '@yandex-cloud/react-data-table';
+import DataTable from '@gravity-ui/react-data-table';
 
 import {openAttributesModal} from '../../../store/actions/modals/attributes-modal';
 import {fetchUsers, setUsersPageSorting, showUserEditorModal} from '../../../store/actions/users';

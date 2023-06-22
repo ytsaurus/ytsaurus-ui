@@ -2,7 +2,7 @@ import React from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import cn from 'bem-cn-lite';
 
-import {Column} from '@yandex-cloud/react-data-table';
+import {Column} from '@gravity-ui/react-data-table';
 
 import CollapsibleSection from '../../../components/CollapsibleSection/CollapsibleSection';
 import {getIsRoot, getTree} from '../../../store/selectors/scheduling/scheduling';

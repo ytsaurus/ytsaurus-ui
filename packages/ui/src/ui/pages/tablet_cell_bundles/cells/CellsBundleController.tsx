@@ -4,7 +4,7 @@ import _ from 'lodash';
 
 import format from '../../../common/hammer/format';
 
-import DataTable, {Column, Settings} from '@yandex-cloud/react-data-table';
+import DataTable, {Column, Settings} from '@gravity-ui/react-data-table';
 import DataTableYT from '../../../components/DataTableYT/DataTableYT';
 import {Toolbar} from '../../../components/WithStickyToolbar/Toolbar/Toolbar';
 import Filter from '../../../components/Filter/Filter';

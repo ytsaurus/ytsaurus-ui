@@ -1,7 +1,7 @@
 // import ElementsTable from "components/ElementsTable/ElementsTable"
 // import React from "react"
 
-import {Column, Settings} from '@yandex-cloud/react-data-table';
+import {Column, Settings} from '@gravity-ui/react-data-table';
 import React, {useMemo} from 'react';
 import {QueryItem, YQLSstatistics} from '../../module/api';
 import {StrictReactNode} from '../YQLTable/utils';
@@ -10,7 +10,7 @@ import {FilterInfo, Row, RowTree, SortInfo} from './CollapsibleTable/utils';
 import block from 'bem-cn-lite';
 
 import './index.scss';
-import {MOVING} from '@yandex-cloud/react-data-table/build/esm/lib/constants';
+import {MOVING} from '@gravity-ui/react-data-table/build/esm/lib/constants';
 
 const metrics = ['min', 'max', 'avg', 'sum', 'count'];
 
