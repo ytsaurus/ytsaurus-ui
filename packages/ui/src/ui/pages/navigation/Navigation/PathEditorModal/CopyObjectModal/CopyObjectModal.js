@@ -6,8 +6,8 @@ import PathEditorModal from '../PathEditorModal';
 
 import {CLOSE_COPY_OBJECT_POPUP} from '../../../../../constants/navigation/modals/copy-object';
 import {
-    copyObject,
     abortRequests,
+    copyObject,
 } from '../../../../../store/actions/navigation/modals/copy-object';
 import {closeEditingPopup} from '../../../../../store/actions/navigation/modals/path-editing-popup';
 import {updateView} from '../../../../../store/actions/navigation';

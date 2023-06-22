@@ -9,8 +9,8 @@ import {Loader} from '@gravity-ui/uikit';
 import Yson from '../../../../components/Yson/Yson';
 
 import {
-    getUserAttributeKeys,
     abortAndReset,
+    getUserAttributeKeys,
 } from '../../../../store/actions/navigation/tabs/user-attributes';
 import {getUserAttributes} from '../../../../store/selectors/navigation/tabs/user-attributes';
 import {getPath} from '../../../../store/selectors/navigation';

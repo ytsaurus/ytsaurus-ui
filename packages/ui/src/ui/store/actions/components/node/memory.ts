@@ -1,9 +1,9 @@
 import type {ThunkAction} from 'redux-thunk';
 
 import {
+    NODE_MEMORY_LOAD_FAILURE,
     NODE_MEMORY_LOAD_REQUEST,
     NODE_MEMORY_LOAD_SUCCESS,
-    NODE_MEMORY_LOAD_FAILURE,
     NODE_MEMORY_PARTIAL,
 } from '../../../../constants/components/nodes/memory';
 import type {RootState} from '../../../../store/reducers';

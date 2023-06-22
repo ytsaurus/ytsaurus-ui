@@ -7,9 +7,9 @@ import Pagination from '../../../../../components/Pagination/Pagination';
 
 import {getIsDynamic} from '../../../../../store/selectors/navigation/content/table-ts';
 import {
-    getOffsetValue,
-    getIsTableEndReached,
     getIsPaginationDisabled,
+    getIsTableEndReached,
+    getOffsetValue,
 } from '../../../../../store/selectors/navigation/content/table';
 import {
     moveOffsetToEnd,

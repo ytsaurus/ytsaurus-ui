@@ -1,7 +1,7 @@
 import {
+    CONSUMER_STATUS_LOAD_FAILURE,
     CONSUMER_STATUS_LOAD_REQUEST,
     CONSUMER_STATUS_LOAD_SUCCESS,
-    CONSUMER_STATUS_LOAD_FAILURE,
 } from '../../../../../constants/navigation/tabs/consumer';
 import type {Action} from 'redux';
 import {mergeStateOnClusterChange} from '../../../../../store/reducers/utils';

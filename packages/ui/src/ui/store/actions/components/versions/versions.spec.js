@@ -3,12 +3,12 @@ import yt from '@ytsaurus/javascript-wrapper/lib/yt';
 import * as types from '../../../../constants/components/versions/versions';
 import mockStore from '../../../../store/__mocks__';
 import {
-    loadVersions,
-    sortSummaryTable,
-    sortDetailedTable,
     changeAddressFilter,
-    changeVersionFilter,
     changeTypeFilter,
+    changeVersionFilter,
+    loadVersions,
+    sortDetailedTable,
+    sortSummaryTable,
 } from '../../../../store/actions/components/versions/versions';
 
 jest.mock('yt', () => ({

@@ -2,7 +2,7 @@ import React from 'react';
 import _ from 'lodash';
 import {COMPONENTS_NODES_TABLE_ID} from '../../../constants/components/nodes/nodes';
 import {Page} from '../../../constants/index';
-import {compareArraysBySizeThenByItems, DESC_ASC_UNORDERED} from '../../../utils/sort-helpers';
+import {DESC_ASC_UNORDERED, compareArraysBySizeThenByItems} from '../../../utils/sort-helpers';
 
 import {Progress} from '@gravity-ui/uikit';
 import Version from '../../../pages/components/tabs/nodes/Version';
@@ -16,9 +16,9 @@ import MemoryProgress from '../../../pages/components/tabs/nodes/MemoryProgress/
 import hammer from '../../../common/hammer';
 import templates from '../../../components/templates/utils.js';
 import {
-    renderLabel,
-    prepareUsageText,
     TABLET_SLOTS,
+    prepareUsageText,
+    renderLabel,
 } from '../../../components/templates/components/nodes/nodes';
 import type {Node, TabletSlotState} from '../../../store/reducers/components/nodes/nodes/node';
 import type {FIX_MY_TYPE} from '../../../types';
@@ -82,7 +82,7 @@ export const PropertiesByColumn = {
 
 export type NodeWithProps<T extends keyof typeof PropertiesByColumn> = Pick<
     Node & {cluster: string},
-    typeof PropertiesByColumn[T][number]
+    (typeof PropertiesByColumn)[T][number]
 >;
 
 type ItemDef<P extends keyof typeof PropertiesByColumn> = {

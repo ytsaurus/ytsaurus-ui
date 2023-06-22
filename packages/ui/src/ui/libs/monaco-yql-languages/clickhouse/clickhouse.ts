@@ -1,14 +1,14 @@
 import type {languages} from '../fillers/monaco-editor-core';
 import {
     constants,
-    keywords,
-    // keywordsDouble,
-    functionsCaseInsensitive,
-    functionsCaseSensitive,
-    tableFunctions,
-    tableEngines,
     dataTypeFamiliesCaseInsensitive,
     dataTypeFamiliesCaseSensitive,
+    functionsCaseInsensitive,
+    functionsCaseSensitive,
+    keywords,
+    // keywordsDouble,
+    tableEngines,
+    tableFunctions,
 } from './clickhouse.keywords';
 
 export {completionLists} from './clickhouse.keywords';

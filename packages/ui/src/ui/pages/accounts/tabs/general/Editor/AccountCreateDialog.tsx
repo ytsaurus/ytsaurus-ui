@@ -1,6 +1,6 @@
 import cn from 'bem-cn-lite';
 import React from 'react';
-import {connect, ConnectedProps} from 'react-redux';
+import {ConnectedProps, connect} from 'react-redux';
 
 import Dialog, {DialogField, FormApi} from '../../../../../components/Dialog/Dialog';
 import {closeCreateModal} from '../../../../../store/actions/accounts/editor';

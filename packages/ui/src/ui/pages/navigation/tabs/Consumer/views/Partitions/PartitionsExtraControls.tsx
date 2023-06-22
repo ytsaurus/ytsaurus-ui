@@ -1,5 +1,5 @@
 import React from 'react';
-import {connect, ConnectedProps} from 'react-redux';
+import {ConnectedProps, connect} from 'react-redux';
 import cn from 'bem-cn-lite';
 
 import Filter from '../../../../../../components/Filter/Filter';
@@ -8,17 +8,17 @@ import RadioButton from '../../../../../../components/RadioButton/RadioButton';
 import {CONSUMER_RATE_MODE} from '../../../../../../constants/navigation/tabs/consumer';
 import {
     changeConsumerPartitionIndex,
+    changeConsumerPartitionsColumns,
     changeConsumerRateMode,
     changeConsumerTimeWindow,
-    changeConsumerPartitionsColumns,
 } from '../../../../../../store/actions/navigation/tabs/consumer/filters';
 import type {RootState} from '../../../../../../store/reducers';
 import type {TPerformanceCounters} from '../../../../../../store/reducers/navigation/tabs/queue/types';
 import {
     getConsumerPartitionIndex,
+    getConsumerPartitionsColumns,
     getConsumerRateMode,
     getConsumerTimeWindow,
-    getConsumerPartitionsColumns,
 } from '../../../../../../store/selectors/navigation/tabs/consumer';
 import Button from '../../../../../../components/Button/Button';
 import Icon from '../../../../../../components/Icon/Icon';

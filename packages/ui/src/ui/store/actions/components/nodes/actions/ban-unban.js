@@ -3,8 +3,8 @@ import yt from '@ytsaurus/javascript-wrapper/lib/yt';
 import {showErrorPopup} from '../../../../../utils/utils';
 import {getNodes} from '../../../../../store/actions/components/nodes/nodes';
 import {
-    CLOSE_BAN_MODAL,
     BAN_ITEM,
+    CLOSE_BAN_MODAL,
     CLOSE_UNBAN_MODAL,
     UNBAN_ITEM,
 } from '../../../../../constants/components/ban-unban';

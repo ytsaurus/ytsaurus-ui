@@ -16,7 +16,7 @@ import {handleClusterInfo} from './controllers/cluster-info';
 import {clusterVersions} from './controllers/clusters';
 import {tableColumnPresetGet, tableColumnPresetSave} from './controllers/table-column-preset';
 import {ping} from './controllers/ping';
-import {handleLogin, handleLogout, handleChangePassword} from './controllers/login';
+import {handleChangePassword, handleLogin, handleLogout} from './controllers/login';
 import {getClusterPools} from './controllers/scheduling-pools';
 
 const HOME_INDEX_TARGET: AppRouteDescription = {handler: homeIndex, ui: true};

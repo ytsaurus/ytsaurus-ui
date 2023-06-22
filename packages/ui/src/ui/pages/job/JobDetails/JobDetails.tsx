@@ -8,7 +8,7 @@ import ErrorBoundary from '../../../components/ErrorBoundary/ErrorBoundary';
 import JobGeneral from '../../../pages/job/JobGeneral/JobGeneral';
 import {Loader} from '@gravity-ui/uikit';
 
-import {loadJobData, abortAndReset} from '../../../store/actions/job/general';
+import {abortAndReset, loadJobData} from '../../../store/actions/job/general';
 import Updater from '../../../utils/hammer/updater';
 import {RootState} from '../../../store/reducers';
 import {RouteInfo} from '../../../pages/job/Job';

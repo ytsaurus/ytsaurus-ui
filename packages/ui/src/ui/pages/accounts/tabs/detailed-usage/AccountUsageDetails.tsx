@@ -13,10 +13,8 @@ import {
 } from '../../../../store/actions/accounts/account-usage';
 import DataTableYT from '../../../../components/DataTableYT/DataTableYT';
 import {
-    getAccountUsageCurrentSnapshot,
-    getAccountsUsageDiffFromSnapshot,
-    getAccountsUsageDiffToSnapshot,
     getAccountUsageAvailableColumns,
+    getAccountUsageCurrentSnapshot,
     getAccountUsageListDiffError,
     getAccountUsageListDiffItems,
     getAccountUsageListDiffLoaded,
@@ -43,6 +41,8 @@ import {
     getAccountUsageTreeMediums,
     getAccountUsageViewType,
     getAccountUsageVisibleDataColumns,
+    getAccountsUsageDiffFromSnapshot,
+    getAccountsUsageDiffToSnapshot,
     isAccountsUsageDiffView,
     readableAccountUsageColumnName,
 } from '../../../../store/selectors/accounts/account-usage';

@@ -3,10 +3,10 @@ import cn from 'bem-cn-lite';
 import {connect, useSelector} from 'react-redux';
 
 import {
+    dynTableInfo,
     replicatedTableTracker,
     tableSize,
     tableStorage,
-    dynTableInfo,
 } from '../../../../../components/MetaTable/presets/presets';
 import CollapsibleSection, {
     Props as CollapsibleSectionProps,

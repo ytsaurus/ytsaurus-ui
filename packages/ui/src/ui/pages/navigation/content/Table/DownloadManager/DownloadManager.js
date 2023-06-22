@@ -1,4 +1,4 @@
-import React, {Fragment, Component} from 'react';
+import React, {Component, Fragment} from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import unipika from '../../../../../common/thor/unipika';
@@ -8,7 +8,7 @@ import _ from 'lodash';
 import qs from 'qs';
 import axios from 'axios';
 
-import {TextInput, Checkbox} from '@gravity-ui/uikit';
+import {Checkbox, TextInput} from '@gravity-ui/uikit';
 
 import ColumnSelector from '../../../../../components/ColumnSelector/ColumnSelector';
 import RadioButton from '../../../../../components/RadioButton/RadioButton';
@@ -29,9 +29,9 @@ import {getCluster, getCurrentClusterConfig} from '../../../../../store/selector
 import withVisible from '../../../../../hocs/withVisible';
 import {
     getAllColumns,
-    getSrcColumns,
     getOffsetValue,
     getRowCount,
+    getSrcColumns,
 } from '../../../../../store/selectors/navigation/content/table';
 import {getColumns} from '../../../../../store/selectors/navigation/content/table-ts';
 

@@ -34,12 +34,12 @@ import SettingsMenuItem from '../../containers/SettingsMenu/SettingsMenuItem';
 import SettingsMenuRadio from '../../containers/SettingsMenu/SettingsMenuRadio';
 import SettingsMenuInput from '../SettingsMenu/SettingsMenuInput';
 import {
-    isDeveloperSettings,
     getCurrentClusterNS,
-    isYqlTypesSupported,
-    getHttpProxyVersion,
-    getGlobalSchedulerVersion,
     getCurrentUserName,
+    getGlobalSchedulerVersion,
+    getHttpProxyVersion,
+    isDeveloperSettings,
+    isYqlTypesSupported,
 } from '../../store/selectors/global';
 import {
     cellSizeRadioButtonItems,

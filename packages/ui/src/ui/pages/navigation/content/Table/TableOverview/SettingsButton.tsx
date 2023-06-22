@@ -1,5 +1,5 @@
 import React, {ComponentProps, VFC} from 'react';
-import {connect, ConnectedProps} from 'react-redux';
+import {ConnectedProps, connect} from 'react-redux';
 import type cn from 'bem-cn-lite';
 import {Checkbox} from '@gravity-ui/uikit';
 
@@ -13,10 +13,10 @@ import {
     pageSizeRadioButtonItems,
 } from '../../../../../constants/navigation/content/table';
 import {
-    changePageSize,
     changeCellSize,
+    changePageSize,
 } from '../../../../../store/actions/navigation/content/table/table';
-import {getPageSize, getCellSize} from '../../../../../store/selectors/navigation/content/table-ts';
+import {getCellSize, getPageSize} from '../../../../../store/selectors/navigation/content/table-ts';
 import {getSettingTableDisplayRawStrings} from '../../../../../store/selectors/settings';
 import {setTableDisplayRawStrings} from '../../../../../store/actions/settings/settings';
 import type {RootState} from '../../../../../store/reducers';

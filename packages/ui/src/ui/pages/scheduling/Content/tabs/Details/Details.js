@@ -15,10 +15,10 @@ import Filter from '../../../../../components/Filter/Filter';
 
 import {
     changeContentMode,
-    changePoolChildrenFilter,
     changePool,
-    openEditModal,
+    changePoolChildrenFilter,
     openDeleteModal,
+    openEditModal,
 } from '../../../../../store/actions/scheduling/scheduling';
 import {SCHEDULING_POOL_CHILDREN_TABLE_ID, Tab} from '../../../../../constants/scheduling';
 import {calculateTotalOverPools} from '../../../../../utils/scheduling/details';
@@ -26,9 +26,9 @@ import {childTableItems} from '../../../../../utils/scheduling/detailsTable';
 import {HEADER_HEIGHT} from '../../../../../constants/index';
 import {getCluster} from '../../../../../store/selectors/global';
 import {
+    getContentMode,
     getCurrentPool,
     getPollChildrenTableItems,
-    getContentMode,
     getPoolChildrenFilter,
     getSortedPoolChildren,
 } from '../../../../../store/selectors/scheduling/scheduling';

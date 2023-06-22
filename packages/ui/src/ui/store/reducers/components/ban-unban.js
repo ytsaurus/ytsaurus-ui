@@ -1,10 +1,10 @@
 import {mergeStateOnClusterChange} from '../../../store/reducers/utils';
 import {
-    OPEN_BAN_MODAL,
-    CLOSE_BAN_MODAL,
     BAN_ITEM,
-    OPEN_UNBAN_MODAL,
+    CLOSE_BAN_MODAL,
     CLOSE_UNBAN_MODAL,
+    OPEN_BAN_MODAL,
+    OPEN_UNBAN_MODAL,
     UNBAN_ITEM,
 } from '../../../constants/components/ban-unban';
 

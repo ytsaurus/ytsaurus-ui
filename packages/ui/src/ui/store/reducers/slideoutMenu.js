@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import hammer from '../../common/hammer';
-import {SPLIT_MENU_ITEMS, JOIN_MENU_ITEMS} from '../../constants';
+import {JOIN_MENU_ITEMS, SPLIT_MENU_ITEMS} from '../../constants';
 import pages from '../../pages';
 
 function prepareClusters(clustersObj) {

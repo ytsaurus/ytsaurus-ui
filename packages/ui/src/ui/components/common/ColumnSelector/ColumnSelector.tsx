@@ -1,6 +1,6 @@
 import React from 'react';
 import block from 'bem-cn-lite';
-import {Popup, PopupPlacement, Button} from '@gravity-ui/uikit';
+import {Button, Popup, PopupPlacement} from '@gravity-ui/uikit';
 
 import {ItemSelector, ItemSelectorProps} from '../ItemSelector/ItemSelector';
 import {SelectControl} from '../SelectControl/SelectControl';

@@ -2,7 +2,7 @@ import React from 'react';
 import cn from 'bem-cn-lite';
 
 import Icon from '../../components/Icon/Icon';
-import {nextSortOrderValue, OrderType} from '../../utils/sort-helpers';
+import {OrderType, nextSortOrderValue} from '../../utils/sort-helpers';
 
 import './SortIcon.scss';
 

@@ -1,8 +1,8 @@
 import {ActionD, YTError} from '../../../../types';
 import {
+    ACCOUNTS_USAGE_TREE_DIFF_FAILED,
     ACCOUNTS_USAGE_TREE_DIFF_REQUEST,
     ACCOUNTS_USAGE_TREE_DIFF_SUCCESS,
-    ACCOUNTS_USAGE_TREE_DIFF_FAILED,
 } from '../../../../constants/accounts/accounts';
 import {AccountUsageListDiffDataParams} from './accounts-usage-list-diff';
 import {AccountUsageData} from './account-usage-types';

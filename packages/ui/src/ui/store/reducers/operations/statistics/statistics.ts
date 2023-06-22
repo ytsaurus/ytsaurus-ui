@@ -1,10 +1,10 @@
 import {
-    TREE_STATE,
-    SET_TREE_STATE,
-    CHANGE_FILTER_TEXT,
     CHANGE_AGGREGATION,
+    CHANGE_FILTER_TEXT,
     OPERATION_STATISTICS_PARTIAL,
+    SET_TREE_STATE,
     STATISTICS_FILTER_ALL_VALUE,
+    TREE_STATE,
 } from '../../../../constants/operations/statistics';
 import {GET_OPERATION} from '../../../../constants/operations/detail';
 

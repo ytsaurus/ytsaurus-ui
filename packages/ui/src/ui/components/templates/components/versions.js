@@ -5,11 +5,11 @@ import Icon from '../../../components/Icon/Icon';
 
 import hammer from '../../../common/hammer';
 import templates, {
-    printColumnAsNumberSkipZero,
     printColumnAsClickableId,
-    printColumnAsTime,
-    printColumnAsError,
     printColumnAsClickableReadableField,
+    printColumnAsError,
+    printColumnAsNumberSkipZero,
+    printColumnAsTime,
 } from '../../../components/templates/utils';
 import {VersionCellWithAction} from '../../../pages/components/tabs/Versions/VersionCell';
 

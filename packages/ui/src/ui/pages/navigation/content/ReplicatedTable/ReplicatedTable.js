@@ -17,12 +17,12 @@ import Link from '../../../../components/Link/Link';
 import {Tooltip} from '../../../../components/Tooltip/Tooltip';
 
 import {
-    loadReplicas,
     abortAndReset,
+    loadReplicas,
     performReplicaAction,
     updateEnableReplicatedTableTracker,
 } from '../../../../store/actions/navigation/content/replicated-table';
-import {getPath, getAttributes} from '../../../../store/selectors/navigation';
+import {getAttributes, getPath} from '../../../../store/selectors/navigation';
 import {HEADER_HEIGHT, Page} from '../../../../constants/index';
 
 import {ReplicatedTableSettingsButton} from './ReplicatedTableSettings';
@@ -32,8 +32,8 @@ import {useAppRumMeasureStart} from '../../../../rum/rum-app-measures';
 import {isFinalLoadingStatus} from '../../../../utils/utils';
 
 import {
-    getNavigationReplicatedTableLoadingStatus,
     getAllowEnableReplicatedTracker,
+    getNavigationReplicatedTableLoadingStatus,
     getReplicatedTableData,
 } from '../../../../store/selectors/navigation/content/replicated-table';
 

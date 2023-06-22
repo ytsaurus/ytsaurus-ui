@@ -1,9 +1,9 @@
 import type {ThunkAction} from 'redux-thunk';
 
 import {
+    CONSUMER_STATUS_LOAD_FAILURE,
     CONSUMER_STATUS_LOAD_REQUEST,
     CONSUMER_STATUS_LOAD_SUCCESS,
-    CONSUMER_STATUS_LOAD_FAILURE,
 } from '../../../../../constants/navigation/tabs/consumer';
 import {YTApiId, ytApiV3Id} from '../../../../../rum/rum-wrap-api';
 import type {RootState} from '../../../../../store/reducers';
@@ -12,8 +12,8 @@ import {getPath, getTransaction} from '../../../../../store/selectors/navigation
 import {ConsumerFiltersAction} from '../../../../../store/reducers/navigation/tabs/consumer/filters';
 import {prepareRequest} from '../../../../../utils/navigation';
 import {
-    getTargetQueue,
     getConsumerRegisteredQueues,
+    getTargetQueue,
 } from '../../../../../store/selectors/navigation/tabs/consumer';
 import {changeConsumerFilters} from './filters';
 

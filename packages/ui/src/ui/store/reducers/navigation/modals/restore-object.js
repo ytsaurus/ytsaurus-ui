@@ -1,12 +1,12 @@
 import {
-    RESTORE_OBJECT,
-    OPEN_RESTORE_POPUP,
     CLOSE_RESTORE_POPUP,
+    OPEN_RESTORE_POPUP,
+    RESTORE_OBJECT,
 } from '../../../../constants/navigation/modals/restore-object';
 import {
-    SHOW_ERROR,
     HIDE_ERROR,
     SET_PATH,
+    SHOW_ERROR,
 } from '../../../../constants/navigation/modals/path-editing-popup';
 
 const initialState = {

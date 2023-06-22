@@ -13,7 +13,7 @@ import {
     isQueryExecuted,
     isQueryLoading,
 } from '../module/query/selectors';
-import {runQuery, SET_QUERY_PATCH} from '../module/query/actions';
+import {SET_QUERY_PATCH, runQuery} from '../module/query/actions';
 import FlexSplitPane from '../../../components/FlexSplitPane/FlexSplitPane';
 import {QueryResults} from '../QueryResults';
 import maximizeBlockIcon from '../../../../../img/svg/square.svg';

@@ -1,6 +1,6 @@
 import ypath from '@ytsaurus/interface-helpers/lib/ypath';
 import {createSelector} from 'reselect';
-import {getPath, getAttributes} from '../../../../store/selectors/navigation';
+import {getAttributes, getPath} from '../../../../store/selectors/navigation';
 import {MAX_FILE_SIZE} from '../../../../constants/navigation/content/file';
 import {calculateLoadingStatus} from '../../../../utils/utils';
 import {getCluster} from '../../../../store/selectors/global';

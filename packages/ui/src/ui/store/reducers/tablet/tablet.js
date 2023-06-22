@@ -1,8 +1,8 @@
 import {mergeStateOnClusterChange} from '../../../store/reducers/utils';
 import {
-    LOAD_TABLET_DATA,
-    CHANGE_CONTENT_MODE,
     CHANGE_ACTIVE_HISTOGRAM,
+    CHANGE_CONTENT_MODE,
+    LOAD_TABLET_DATA,
 } from '../../../constants/tablet';
 
 const ephemeralState = {

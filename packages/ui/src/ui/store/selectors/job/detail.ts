@@ -3,7 +3,7 @@ import ypath from '../../../common/thor/ypath';
 import _ from 'lodash';
 
 import {PLEASE_PROCEED_TEXT} from '../../../utils/actions';
-import {PreparedJob, StatisticsIO, JobPipes, PipesIO, JobSpecification} from '../../../types/job';
+import {JobPipes, JobSpecification, PipesIO, PreparedJob, StatisticsIO} from '../../../types/job';
 import {Action as JobAction} from '../../../pages/job/JobActions/JobActions';
 
 interface State {

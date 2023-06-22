@@ -12,8 +12,8 @@ import {
     stderrTableProps,
 } from '../../../../../../utils/operations/tabs/details/specification/specificationTablesProps';
 import {
-    prepareVisibleItems,
     filterVisibleItems,
+    prepareVisibleItems,
 } from '../../../../../../utils/operations/tabs/details/specification/specification';
 import hammer from '../../../../../../common/hammer';
 

@@ -2,9 +2,9 @@ import yt from '@ytsaurus/javascript-wrapper/lib/yt';
 import _ from 'lodash';
 import CancelHelper from '../../utils/cancel-helper';
 import {
+    CHANGE_PARAMETERS,
     COMMAND,
     LOAD_DATA,
-    CHANGE_PARAMETERS,
     TOGGLE_PARAMETERS,
 } from '../../constants/path-viewer';
 

@@ -5,12 +5,12 @@ import _reduce from 'lodash/reduce';
 import {useDispatch, useSelector} from 'react-redux';
 
 import {
-    getTargetQueue,
     getConsumerRegisteredQueues,
+    getTargetQueue,
 } from '../../../../../store/selectors/navigation/tabs/consumer';
 import Icon from '../../../../../components/Icon/Icon';
 import Link from '../../../../../components/Link/Link';
-import {genNavigationUrl, findCommonPathParent} from '../../../../../utils/navigation/navigation';
+import {findCommonPathParent, genNavigationUrl} from '../../../../../utils/navigation/navigation';
 import ClipboardButton from '../../../../../components/ClipboardButton/ClipboardButton';
 import {Item, SelectSingle} from '../../../../../components/Select/Select';
 import {Tooltip} from '../../../../../components/Tooltip/Tooltip';

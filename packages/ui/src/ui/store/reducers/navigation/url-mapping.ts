@@ -7,8 +7,8 @@ import {
 } from '../../../store/reducers/navigation/tabs/consumer/url-mapping';
 import {aclFiltersParams, getAclFiltersPreparedState} from '../acl/url-mapping';
 import {
-    queueParams,
     getNavigationQueuePreparedState,
+    queueParams,
 } from '../../../store/reducers/navigation/tabs/queue/url-mapping';
 import {
     getNavigationSchemaPreparedState,

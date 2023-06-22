@@ -2,10 +2,10 @@ import _ from 'lodash';
 import ypath from '@ytsaurus/interface-helpers/lib/ypath';
 import {mergeStateOnClusterChange} from '../../../store/reducers/utils';
 import {
-    GET_SHARDS,
-    SET_SHARD_NAME,
-    OPEN_SHARD_NAME_EDITOR,
     CLOSE_SHARD_NAME_EDITOR,
+    GET_SHARDS,
+    OPEN_SHARD_NAME_EDITOR,
+    SET_SHARD_NAME,
 } from '../../../constants/components/shards';
 
 const prepareShards = (shards) => {

@@ -3,8 +3,8 @@ import {
     RESTORE_OBJECT,
 } from '../../../../constants/navigation/modals/restore-object';
 import {
-    showErrorInModal,
     openEditingPopup,
+    showErrorInModal,
 } from '../../../../store/actions/navigation/modals/path-editing-popup';
 import {findCorrectObjectName} from '../../../../utils/navigation/restore-object';
 import {NetworkCode} from '../../../../constants/navigation/modals/path-editing-popup';

@@ -8,7 +8,7 @@ import Link from '../../../../components/Link/Link';
 import {MOVE_OBJECT} from '../../../../constants/navigation/modals/move-object';
 import {showErrorInModal} from '../../../../store/actions/navigation/modals/path-editing-popup';
 import {HIDE_ERROR} from '../../../../constants/navigation/modals/path-editing-popup';
-import {preparePath, prepareDestinationPath} from '../../../../utils/navigation';
+import {prepareDestinationPath, preparePath} from '../../../../utils/navigation';
 import CancelHelper from '../../../../utils/cancel-helper';
 import _ from 'lodash';
 import {executeBatchWithRetries} from '../../execute-batch';

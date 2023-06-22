@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import cn from 'bem-cn-lite';
 // @ts-ignore
-import {StickyContainer, Sticky} from 'react-sticky';
+import {Sticky, StickyContainer} from 'react-sticky';
 import {HEADER_HEIGHT} from '../../constants/index';
 import {TOOLBAR_COMPONENT_HEIGHT} from './Toolbar/Toolbar';
 

@@ -1,8 +1,8 @@
 import path from 'path';
 import {
+    createLayoutPlugin,
     createRenderFunction,
     createYandexMetrikaPlugin,
-    createLayoutPlugin,
 } from '@gravity-ui/app-layout';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import {ConfigData} from '../shared/yt-types';

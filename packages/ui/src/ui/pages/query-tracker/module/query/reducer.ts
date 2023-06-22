@@ -1,13 +1,13 @@
 import {DraftQuery, QueryEngine, QueryItem} from '../api';
 import {
-    RequestQueryAction,
     REQUEST_QUERY,
-    SetQueryAction,
-    SetQueryErrorLoadAction,
-    SetQueryPatchAction,
+    RequestQueryAction,
     SET_QUERY,
     SET_QUERY_LOAD_ERROR,
     SET_QUERY_PATCH,
+    SetQueryAction,
+    SetQueryErrorLoadAction,
+    SetQueryPatchAction,
     UPDATE_QUERY,
     UpdateQueryAction,
 } from './actions';

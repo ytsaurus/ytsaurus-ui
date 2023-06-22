@@ -10,10 +10,10 @@ import {getDefaultMode} from '../../../store/selectors/navigation/navigation';
 
 import {
     autoCorrectPath,
-    saveRequestCancellation,
     cancelRequests,
-    prepareRequest,
     getParentPath,
+    prepareRequest,
+    saveRequestCancellation,
 } from '../../../utils/navigation';
 import {prepareAttributes} from '../../../utils/index';
 import {getBatchError} from '../../../utils/utils';
@@ -22,14 +22,14 @@ import {getPermissionDeniedError} from '../../../utils/errors';
 import {GENERIC_ERROR_MESSAGE, TYPED_OUTPUT_FORMAT} from '../../../constants/index';
 import {
     CLEAR_TRANSACTION,
+    NAVIGATION_PARTIAL,
+    SET_MODE,
     SET_TRANSACTION,
+    Tab,
     UPDATE_PATH,
     UPDATE_VIEW,
-    SET_MODE,
-    NAVIGATION_PARTIAL,
-    Tab,
 } from '../../../constants/navigation/index';
-import {getCurrentUserName, getCluster} from '../../../store/selectors/global';
+import {getCluster, getCurrentUserName} from '../../../store/selectors/global';
 import {fetchTableMountConfig} from '../../../store/actions/navigation/content/table/table-mount-config';
 import {checkPermissions} from '../../../utils/acl/acl-api';
 import {getAnnotation} from './tabs/annotation';

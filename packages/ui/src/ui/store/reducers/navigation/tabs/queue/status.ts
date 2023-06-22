@@ -1,7 +1,7 @@
 import {
+    QUEUE_STATUS_LOAD_FAILURE,
     QUEUE_STATUS_LOAD_REQUEST,
     QUEUE_STATUS_LOAD_SUCCESS,
-    QUEUE_STATUS_LOAD_FAILURE,
 } from '../../../../../constants/navigation/tabs/queue';
 import type {Action} from 'redux';
 import {mergeStateOnClusterChange} from '../../../../../store/reducers/utils';

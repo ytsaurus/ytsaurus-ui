@@ -1,5 +1,5 @@
 import React, {ComponentType, useEffect} from 'react';
-import {connect, ConnectedProps} from 'react-redux';
+import {ConnectedProps, connect} from 'react-redux';
 
 import ErrorBlock from '../../../../components/Block/Block';
 import ErrorBoundary from '../../../../components/ErrorBoundary/ErrorBoundary';
@@ -11,9 +11,9 @@ import {
     getFamily,
     getPartitionCount,
     getQueueMode,
+    getStatusError,
     getWriteDataWeightRate,
     getWriteRowCountRate,
-    getStatusError,
 } from '../../../../store/selectors/navigation/tabs/queue';
 
 import Meta from './Meta/Meta';

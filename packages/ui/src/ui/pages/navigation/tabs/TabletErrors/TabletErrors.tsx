@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import {connect, ConnectedProps, useSelector} from 'react-redux';
+import {ConnectedProps, connect, useSelector} from 'react-redux';
 import cn from 'bem-cn-lite';
 import _ from 'lodash';
 

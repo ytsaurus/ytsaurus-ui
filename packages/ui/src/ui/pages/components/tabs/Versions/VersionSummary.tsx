@@ -1,15 +1,15 @@
 import React from 'react';
-import {connect, ConnectedProps} from 'react-redux';
+import {ConnectedProps, connect} from 'react-redux';
 import cn from 'bem-cn-lite';
 
 import {RootState} from '../../../../store/reducers';
 import DataTableYT from '../../../../components/DataTableYT/DataTableYT';
 import * as DT100 from '@yandex-cloud/react-data-table';
 import {
+    VersionsSummaryItem,
     getHideOfflineValue,
     getSummarySortState,
     getVersionsSummaryData,
-    VersionsSummaryItem,
 } from '../../../../store/selectors/components/versions/versions_v2-ts';
 
 import hammer from '../../../../common/hammer';

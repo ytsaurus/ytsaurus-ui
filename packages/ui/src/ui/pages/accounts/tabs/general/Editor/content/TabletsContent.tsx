@@ -10,7 +10,7 @@ import {
     getClusterUiConfigEnablePerAccountTabletAccounting,
     getClusterUiConfigEnablePerBundleTabletAccounting,
 } from '../../../../../../store/selectors/global';
-import {connect, ConnectedProps, useSelector} from 'react-redux';
+import {ConnectedProps, connect, useSelector} from 'react-redux';
 import Link from '../../../../../../components/Link/Link';
 import {Page} from '../../../../../../constants';
 

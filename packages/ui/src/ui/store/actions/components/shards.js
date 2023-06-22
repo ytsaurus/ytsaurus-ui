@@ -1,10 +1,10 @@
 import yt from '@ytsaurus/javascript-wrapper/lib/yt';
 import CancelHelper from '../../../utils/cancel-helper';
 import {
-    GET_SHARDS,
-    SET_SHARD_NAME,
-    OPEN_SHARD_NAME_EDITOR,
     CLOSE_SHARD_NAME_EDITOR,
+    GET_SHARDS,
+    OPEN_SHARD_NAME_EDITOR,
+    SET_SHARD_NAME,
 } from '../../../constants/components/shards';
 import {YTApiId, ytApiV3Id} from '../../../rum/rum-wrap-api';
 

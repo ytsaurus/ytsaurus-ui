@@ -33,13 +33,13 @@ import {UsableAccountSuggest} from '../../pages/accounts/UsableAccountSuggest';
 import AnnotationEditor from '../../pages/navigation/AnnotationEditor/AnnotationEditor';
 import {
     DFDialog,
-    DFDialogProps,
     DFDialogField,
+    DFDialogProps,
     DFDialogTabField,
-    registerDialogControl,
     RegisteredDialogField,
-    registerDialogTabControl,
     RegisteredDialogTabField,
+    registerDialogControl,
+    registerDialogTabControl,
 } from '@gravity-ui/dialog-fields';
 export {FORM_ERROR} from '@gravity-ui/dialog-fields';
 export type {FormApi} from '@gravity-ui/dialog-fields';

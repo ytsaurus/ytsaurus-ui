@@ -2,19 +2,19 @@ import _ from 'lodash';
 
 import MaintenancePage from '../../../containers/MaintenancePage/MaintenancePage';
 import {
-    UPDATE_TITLE,
-    BLOCK_USER,
     BAN_USER,
-    INC_NAV_BLOCKER_COUNTER,
+    BLOCK_USER,
     DEC_NAV_BLOCKER_COUNTER,
-    SET_MAINTENANCE_PAGE_EVENT,
+    GLOBAL_SET_THEME,
+    INC_NAV_BLOCKER_COUNTER,
     INIT_CLUSTER_PARAMS,
-    UPDATE_CLUSTER,
     LOADING_STATUS,
     LOAD_ERROR,
-    SPLIT_SCREEN,
     MERGE_SCREEN,
-    GLOBAL_SET_THEME,
+    SET_MAINTENANCE_PAGE_EVENT,
+    SPLIT_SCREEN,
+    UPDATE_CLUSTER,
+    UPDATE_TITLE,
 } from '../../../constants/index';
 import {GLOBAL_PARTIAL} from '../../../constants/global';
 

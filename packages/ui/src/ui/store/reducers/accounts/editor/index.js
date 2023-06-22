@@ -3,10 +3,10 @@ import ypath from '../../../../common/thor/ypath';
 
 import {mergeStateOnClusterChange} from '../../../../store/reducers/utils';
 import {
-    FETCH_USERS,
     CHANGE_USER_SUGGEST_LIST,
-    OPEN_CREATE_MODAL,
     CLOSE_CREATE_MODAL,
+    FETCH_USERS,
+    OPEN_CREATE_MODAL,
 } from '../../../../constants/accounts/editor';
 
 const initialState = {

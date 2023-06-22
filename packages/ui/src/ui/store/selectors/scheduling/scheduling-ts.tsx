@@ -5,7 +5,7 @@ import {getCurrentPool, getIsRoot, getPool, getTree, getTreeResources} from './s
 import ypath from '../../../common/thor/ypath';
 import {ROOT_POOL_NAME} from '../../../constants/scheduling';
 import {getCluster} from '../global';
-import {getPools, PoolInfo} from './scheduling-pools';
+import {PoolInfo, getPools} from './scheduling-pools';
 
 export const getSchedulingBreadcrumbItems = createSelector(
     [getPool, getPools],

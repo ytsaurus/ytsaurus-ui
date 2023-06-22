@@ -4,7 +4,7 @@ import block from 'bem-cn-lite';
 
 import ElementsTableRow from '../../components/ElementsTable/ElementsTableRow';
 
-import {ELEMENTS_TABLE, prepareColumnsData, TemplatesPropType} from './utils';
+import {ELEMENTS_TABLE, TemplatesPropType, prepareColumnsData} from './utils';
 
 import './ElementsTable.scss';
 

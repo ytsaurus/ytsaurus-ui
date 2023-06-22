@@ -1,9 +1,9 @@
 import type {ThunkAction} from 'redux-thunk';
 
 import {
+    QUEUE_STATUS_LOAD_FAILURE,
     QUEUE_STATUS_LOAD_REQUEST,
     QUEUE_STATUS_LOAD_SUCCESS,
-    QUEUE_STATUS_LOAD_FAILURE,
 } from '../../../../../constants/navigation/tabs/queue';
 import {YTApiId, ytApiV3Id} from '../../../../../rum/rum-wrap-api';
 import type {RootState} from '../../../../../store/reducers';

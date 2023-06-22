@@ -18,7 +18,7 @@ import {SubjectsControlProps} from './components/ACL/SubjectsControl/SubjectsCon
 import {SettingsPage} from './containers/SettingsPanel/settings-description';
 import {UserSuggestProps} from './containers/UserSuggest/UserSuggest';
 import {YTUserSuggest} from './containers/UserSuggest/YTUserSuggest';
-import {docsUrls, DocsUrls} from './constants/docsUrls';
+import {DocsUrls, docsUrls} from './constants/docsUrls';
 import {YTSubjectSuggest} from './components/ACL/SubjectsControl/YTSubjectSuggest';
 import RoleActions, {Props as RoleActionsProps} from './components/ACL/RoleActions';
 import {PERMISSIONS_SETTINGS} from './constants/acl';

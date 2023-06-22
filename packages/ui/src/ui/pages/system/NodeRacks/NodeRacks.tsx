@@ -6,7 +6,7 @@ import _ from 'lodash';
 
 import NodeRacksGroup, {rackPropTypes} from '../NodeRackGroup/NodeRackGroup';
 
-import {UNAWARE, Node} from '../../../constants/index';
+import {Node, UNAWARE} from '../../../constants/index';
 import {shouldUseSafeColors} from '../../../store/selectors/settings';
 import {getCluster, getTheme} from '../../../store/selectors/global';
 import Link from '../../../components/Link/Link';

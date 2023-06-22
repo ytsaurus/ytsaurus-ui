@@ -5,8 +5,8 @@ import cn from 'bem-cn-lite';
 import _ from 'lodash';
 
 import MetaTable, {
-    Template,
     OperationTemplate,
+    Template,
 } from '../../../../../../components/MetaTable/MetaTable';
 
 import {formatShare} from '../../../../../../utils/operations/tabs/details/runtime';

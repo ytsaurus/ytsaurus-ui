@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import hoistNonReactStatics from 'hoist-non-react-statics';
 
-import {removeNavigationBlocker, addNavigationBlocker} from '../store/actions/global';
+import {addNavigationBlocker, removeNavigationBlocker} from '../store/actions/global';
 import {getDisplayName} from '../utils';
 
 export default function withBlockedNavigation(Component) {

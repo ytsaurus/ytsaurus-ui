@@ -8,7 +8,7 @@ import {Toaster} from '@gravity-ui/uikit';
 
 import {checkIsTrash} from '../../../../store/selectors/navigation';
 import {showErrorPopup} from '../../../../utils/utils';
-import {updateView, navigateParent} from '../../../../store/actions/navigation';
+import {navigateParent, updateView} from '../../../../store/actions/navigation';
 import {preparePath} from '../../../../utils/navigation';
 import {
     CLOSE_DELETE_OBJECT_POPUP,

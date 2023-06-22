@@ -1,8 +1,8 @@
 import {FETCH_SUGGESTIONS} from '../../../../constants/navigation/path-editor';
 import {
     loadSuggestions,
-    preparePath,
     pathEditorRequests,
+    preparePath,
 } from '../../../../utils/navigation/path-editor';
 
 export function loadSuggestionsList(path, customFilter) {

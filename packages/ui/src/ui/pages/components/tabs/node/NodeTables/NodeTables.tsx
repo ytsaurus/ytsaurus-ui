@@ -25,7 +25,7 @@ function NodeTables() {
         dispatch(setNodeMemoryTablesSort(sortOrder));
     }, []);
 
-    const toggleExpandState = React.useCallback((item: typeof items[0]) => {
+    const toggleExpandState = React.useCallback((item: (typeof items)[0]) => {
         dispatch(toggleNodeMemoryBundleExpanded(item.name));
     }, []);
 

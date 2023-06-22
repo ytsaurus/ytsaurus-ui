@@ -1,12 +1,12 @@
 import {LOADING_STATUS} from '../../../constants/index';
 import {mergeStateOnClusterChange} from '../../../store/reducers/utils';
 import {
-    Tab,
-    SET_TRANSACTION,
     CLEAR_TRANSACTION,
+    SET_MODE,
+    SET_TRANSACTION,
+    Tab,
     UPDATE_PATH,
     UPDATE_VIEW,
-    SET_MODE,
 } from '../../../constants/navigation';
 
 const persistedState = {

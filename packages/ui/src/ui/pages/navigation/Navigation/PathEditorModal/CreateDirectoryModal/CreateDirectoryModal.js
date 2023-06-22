@@ -6,8 +6,8 @@ import PathEditorModal from '../PathEditorModal';
 
 import {CLOSE_CREATE_DIRECTORY_POPUP} from '../../../../../constants/navigation/modals/create-directory';
 import {
-    createDirectory,
     abortRequests,
+    createDirectory,
 } from '../../../../../store/actions/navigation/modals/create-directory';
 import {closeEditingPopup} from '../../../../../store/actions/navigation/modals/path-editing-popup';
 import {updateView} from '../../../../../store/actions/navigation';

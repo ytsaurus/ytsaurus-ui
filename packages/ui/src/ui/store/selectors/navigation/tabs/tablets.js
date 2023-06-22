@@ -3,7 +3,7 @@ import hammer from '../../../../common/hammer';
 import {createSelector} from 'reselect';
 import {histogramItems, tableItems} from '../../../../utils/navigation/tabs/tables';
 import {NAVIGATION_TABLETS_TABLE_ID} from '../../../../constants/navigation/tabs/tablets';
-import {prepareDataForColumns, prepareAggregation} from '../../../../utils/navigation/tabs/tablets';
+import {prepareAggregation, prepareDataForColumns} from '../../../../utils/navigation/tabs/tablets';
 import {calculateLoadingStatus} from '../../../../utils/utils';
 
 export const getTabletsMode = (state) => state.navigation.tabs.tablets.tabletsMode;

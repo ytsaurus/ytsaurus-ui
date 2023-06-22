@@ -6,11 +6,11 @@ import PathEditorModal from '../PathEditorModal';
 
 import {CLOSE_MOVE_OBJECT_POPUP} from '../../../../../constants/navigation/modals/move-object';
 import {
-    moveObject,
     abortRequests,
+    moveObject,
 } from '../../../../../store/actions/navigation/modals/move-object';
 import {closeEditingPopup} from '../../../../../store/actions/navigation/modals/path-editing-popup';
-import {updateView, updatePath} from '../../../../../store/actions/navigation';
+import {updatePath, updateView} from '../../../../../store/actions/navigation';
 import {Checkbox} from '@gravity-ui/uikit';
 import {getPath} from '../../../../../store/selectors/navigation';
 

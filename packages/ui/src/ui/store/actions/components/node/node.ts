@@ -2,9 +2,9 @@ import type {ThunkAction} from 'redux-thunk';
 
 // import ypath from '../../../../common/thor/ypath';
 import {
+    NODE_LOAD_FAILURE,
     NODE_LOAD_REQUEST,
     NODE_LOAD_SUCCESS,
-    NODE_LOAD_FAILURE,
 } from '../../../../constants/components/nodes/node';
 import {Node} from '../../../../store/reducers/components/nodes/nodes/node';
 import type {RootState} from '../../../../store/reducers';

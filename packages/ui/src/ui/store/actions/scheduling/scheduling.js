@@ -6,36 +6,36 @@ import {Toaster} from '@gravity-ui/uikit';
 
 import {getSchedulingNS} from '../../../store/selectors/settings';
 import {toggleFavourite} from '../../../store/actions/favourites';
-import {getTree, getPools, getPool} from '../../../store/selectors/scheduling/scheduling';
+import {getPool, getPools, getTree} from '../../../store/selectors/scheduling/scheduling';
 import {
-    computePoolPath,
-    prepareTrees,
-    prepareCurrentTree,
     POOL_GENERAL_TYPE_TO_ATTRIBUTE,
+    computePoolPath,
+    prepareCurrentTree,
+    prepareTrees,
 } from '../../../utils/scheduling/scheduling';
 
 import {
-    CHANGE_POOL_CHILDREN_FILTER,
-    TOGGLE_DELETE_VISIBILITY,
-    CHANGE_TABLE_TREE_STATE,
-    TOGGLE_EDIT_VISIBILITY,
     CHANGE_CONTENT_MODE,
     CHANGE_FILTER,
-    CHANGE_TREE,
     CHANGE_POOL,
+    CHANGE_POOL_CHILDREN_FILTER,
+    CHANGE_TABLE_TREE_STATE,
+    CHANGE_TREE,
+    ROOT_POOL_NAME,
+    SCHEDULING_DATA_CANCELLED,
+    SCHEDULING_DATA_FAILURE,
     SCHEDULING_DATA_PARTITION,
     SCHEDULING_DATA_REQUEST,
     SCHEDULING_DATA_SUCCESS,
-    SCHEDULING_DATA_FAILURE,
+    SCHEDULING_DELETE_POOL_FAILURE,
     SCHEDULING_DELETE_POOL_REQUEST,
     SCHEDULING_DELETE_POOL_SUCCESS,
-    SCHEDULING_DELETE_POOL_FAILURE,
+    SCHEDULING_EDIT_POOL_CANCELLED,
+    SCHEDULING_EDIT_POOL_FAILURE,
     SCHEDULING_EDIT_POOL_REQUEST,
     SCHEDULING_EDIT_POOL_SUCCESS,
-    SCHEDULING_EDIT_POOL_FAILURE,
-    SCHEDULING_DATA_CANCELLED,
-    SCHEDULING_EDIT_POOL_CANCELLED,
-    ROOT_POOL_NAME,
+    TOGGLE_DELETE_VISIBILITY,
+    TOGGLE_EDIT_VISIBILITY,
 } from '../../../constants/scheduling';
 import {setPoolAttributes} from './scheduling-ts';
 import {loadSchedulingOperations} from './scheduling-operations';

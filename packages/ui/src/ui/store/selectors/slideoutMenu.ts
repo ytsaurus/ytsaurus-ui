@@ -4,7 +4,7 @@ import {ClusterConfig} from '../../../shared/yt-types';
 import {RootState} from '../reducers';
 import {PAGE_ICONS_BY_ID} from '../../constants/slideoutMenu';
 import {getSettingsPagesOrder, getSettingsPagesPinned} from './settings-ts';
-import {isDeveloper, getAdminPages} from './global';
+import {getAdminPages, isDeveloper} from './global';
 
 interface RecentInfo<T> {
     all: Array<T>;

@@ -1,7 +1,7 @@
 import {compose} from 'redux';
 import cn from 'bem-cn-lite';
 import React, {useCallback, useMemo} from 'react';
-import Dialog, {FormApi, DialogField, makeErrorFields} from '../../../components/Dialog/Dialog';
+import Dialog, {DialogField, FormApi, makeErrorFields} from '../../../components/Dialog/Dialog';
 import ErrorBoundary from '../../../components/ErrorBoundary/ErrorBoundary';
 import Button from '../../../components/Button/Button';
 import PermissionsControl from '../RequestPermissions/PermissionsControl/PermissionsControl';
@@ -10,7 +10,7 @@ import withVisible, {WithVisibleProps} from '../../../hocs/withVisible';
 
 import './RequestPermissions.scss';
 import {YTError} from '../../../types';
-import {IdmObjectType, INHERITANCE_MODE_TYPES} from '../../../constants/acl';
+import {INHERITANCE_MODE_TYPES, IdmObjectType} from '../../../constants/acl';
 
 import UIFactory from '../../../UIFactory';
 import hammer from '../../../common/hammer';

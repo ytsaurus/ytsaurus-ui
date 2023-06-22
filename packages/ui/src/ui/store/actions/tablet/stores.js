@@ -3,7 +3,7 @@ import _ from 'lodash';
 import CancelHelper from '../../../utils/cancel-helper';
 import {TYPED_OUTPUT_FORMAT} from '../../../constants/index';
 import {LOAD_STORES} from '../../../constants/tablet';
-import {prepareStores, preparePath} from '../../../utils/tablet/stores';
+import {preparePath, prepareStores} from '../../../utils/tablet/stores';
 import {YTApiId, ytApiV3Id} from '../../../rum/rum-wrap-api';
 import {splitBatchResults} from '../../../utils/utils';
 

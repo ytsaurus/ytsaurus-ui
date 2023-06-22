@@ -6,29 +6,29 @@ import {Toaster} from '@gravity-ui/uikit';
 import ypath from '../../../../common/thor/ypath';
 import {prepareRequest, saveRequestCancellation} from '../../../../utils/navigation';
 import {
-    SET_TEXT_FILTER,
-    SET_CONTENT_MODE,
-    UPDATE_RESOURCE_USAGE,
-    FETCH_NODES,
-    SET_MEDIUM_TYPE,
     APPLY_CUSTOM_SORT,
+    FETCH_NODES,
     NAVIGATION_MAP_NODE_TABLE_ID,
-    SET_SELECTED_ITEM,
     SELECT_ALL,
+    SET_CONTENT_MODE,
+    SET_MEDIUM_TYPE,
+    SET_SELECTED_ITEM,
+    SET_TEXT_FILTER,
+    UPDATE_RESOURCE_USAGE,
 } from '../../../../constants/navigation';
 import {
     getFilteredNodes,
-    isRootNode,
-    getNodesData,
-    shouldApplyCustomSort,
-    getSelected,
     getLastSelected,
+    getNodesData,
+    getSelected,
     getSortedNodes,
+    isRootNode,
+    shouldApplyCustomSort,
 } from '../../../../store/selectors/navigation/content/map-node';
 import {getCluster} from '../../../../store/selectors/global';
 import {getPath, getTransaction} from '../../../../store/selectors/navigation';
 import {changeColumnSortOrder} from '../../../../store/actions/tables';
-import {YTApiId, ytApiV3Id, RumWrapper} from '../../../../rum/rum-wrap-api';
+import {RumWrapper, YTApiId, ytApiV3Id} from '../../../../rum/rum-wrap-api';
 import {getBatchError, showErrorPopup} from '../../../../utils/utils';
 import {RumMeasureTypes} from '../../../../rum/rum-measure-types';
 import hammer from '../../../../common/hammer';

@@ -1,4 +1,4 @@
-import {createNestedNS, createNS} from '../utils/settings';
+import {createNS, createNestedNS} from '../utils/settings';
 
 export const Page = {
     BAN: 'ban',

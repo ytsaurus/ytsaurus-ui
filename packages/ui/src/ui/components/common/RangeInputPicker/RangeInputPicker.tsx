@@ -2,18 +2,18 @@ import React, {Component, ReactElement} from 'react';
 import block from 'bem-cn-lite';
 // @ts-ignore
 import Slider, {Marks} from 'rc-slider';
-import {TextInput, TextInputSize, IconProps} from '@gravity-ui/uikit';
+import {IconProps, TextInput, TextInputSize} from '@gravity-ui/uikit';
 
 import {debounce} from 'lodash';
 import type {DebouncedFunc} from 'lodash';
 
 import {
-    prepareValue,
-    prepareAvailableValues,
+    getClosestValue,
     getInfoPoints,
     getParsedValue,
     getTextValue,
-    getClosestValue,
+    prepareAvailableValues,
+    prepareValue,
 } from './utils';
 import {LEFT_INFO_POINT_STYLE, RIGHT_INFO_POINT_STYLE} from './constants';
 

@@ -31,20 +31,20 @@ import GeneralErrorRegion from '../../components/PreloaderErrors/GeneralErrorReg
 import FlexSplitPane from '../../components/FlexSplitPane/FlexSplitPane';
 import ErrorBlock from '../../components/Error/Error';
 
-import {Page, SPLIT_PANE_ID, LOADING_STATUS, LOAD_ERROR} from '../../constants/index';
-import {trackVisit, splitMenuItemsAction, joinMenuItemsAction} from '../../store/actions/menu';
+import {LOADING_STATUS, LOAD_ERROR, Page, SPLIT_PANE_ID} from '../../constants/index';
+import {joinMenuItemsAction, splitMenuItemsAction, trackVisit} from '../../store/actions/menu';
 import {setSetting} from '../../store/actions/settings';
-import {updateCluster, initClusterParams} from '../../store/actions/cluster-params';
+import {initClusterParams, updateCluster} from '../../store/actions/cluster-params';
 import {updateTitle} from '../../store/actions/global';
 import {getAdminPages, isDeveloper} from '../../store/selectors/global';
 import {getClusterConfig} from '../../utils';
 import {NAMESPACES, SettingName} from '../../../shared/constants/settings';
 import {
-    isRedirectToBetaSwitched,
-    isRecentClustersFirst,
-    isRecentPagesFirst,
     getClusterPagePaneSizes,
     getStartingPage,
+    isRecentClustersFirst,
+    isRecentPagesFirst,
+    isRedirectToBetaSwitched,
 } from '../../store/selectors/settings';
 import SupportedFeaturesUpdater from './SupportedFeaturesUpdater';
 import {useRumMeasureStart, useRumMeasureStop} from '../../rum/RumUiContext';

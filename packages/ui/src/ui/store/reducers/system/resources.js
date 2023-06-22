@@ -1,4 +1,4 @@
-import {FETCH_RESOURCES, FETCH_NODE_ATTRS} from '../../../store/actions/system/resources';
+import {FETCH_NODE_ATTRS, FETCH_RESOURCES} from '../../../store/actions/system/resources';
 import {mergeStateOnClusterChange} from '../../../store/reducers/utils';
 
 const initialState = {

@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import {connect, ConnectedProps} from 'react-redux';
+import {ConnectedProps, connect} from 'react-redux';
 import cn from 'bem-cn-lite';
 import {createSelector} from 'reselect';
 import type {Column, Settings} from '@yandex-cloud/react-data-table';
@@ -20,14 +20,14 @@ import {loadQueuePartitions} from '../../../../../../store/actions/navigation/ta
 import type {RootState} from '../../../../../../store/reducers';
 import type {TPerformanceCounters} from '../../../../../../store/reducers/navigation/tabs/queue/types';
 import {
+    SelectedPartition,
     getPartitions,
     getPartitionsError,
-    getPartitionsLoading,
     getPartitionsLoaded,
+    getPartitionsLoading,
+    getQueuePartitionsColumns,
     getQueueRateMode,
     getQueueTimeWindow,
-    SelectedPartition,
-    getQueuePartitionsColumns,
 } from '../../../../../../store/selectors/navigation/tabs/queue';
 
 import './Partitions.scss';

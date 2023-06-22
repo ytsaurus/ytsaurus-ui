@@ -1,8 +1,8 @@
 import _ from 'lodash';
 import {createSelector} from 'reselect';
 
-import {getPath, createNestedNS} from '../../../shared/utils/settings';
-import {NAMESPACES, FAVOURITES, SettingName} from '../../../shared/constants/settings';
+import {createNestedNS, getPath} from '../../../shared/utils/settings';
+import {FAVOURITES, NAMESPACES, SettingName} from '../../../shared/constants/settings';
 
 import {DEFAULT_PATH} from '../../constants/navigation';
 

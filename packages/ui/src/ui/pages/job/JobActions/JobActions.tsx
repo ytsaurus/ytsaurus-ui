@@ -1,12 +1,12 @@
 import React, {useCallback, useMemo, useState} from 'react';
-import {useSelector, useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import copy from 'copy-to-clipboard';
 import cn from 'bem-cn-lite';
 import _ from 'lodash';
 // @ts-ignore
 import yt from '@ytsaurus/javascript-wrapper/lib/yt';
 
-import {DropdownMenu, Dialog, Toaster, ButtonProps} from '@gravity-ui/uikit';
+import {ButtonProps, Dialog, DropdownMenu, Toaster} from '@gravity-ui/uikit';
 import ErrorBoundary from '../../../components/ErrorBoundary/ErrorBoundary';
 import PathEditor from '../../../containers/PathEditor/PathEditor';
 import Button from '../../../components/Button/Button';

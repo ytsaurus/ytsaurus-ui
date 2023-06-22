@@ -1,7 +1,7 @@
 import React from 'react';
 import cn from 'bem-cn-lite';
 import {useSelector} from 'react-redux';
-import {Route, Switch, Redirect, useRouteMatch} from 'react-router';
+import {Redirect, Route, Switch, useRouteMatch} from 'react-router';
 
 import Specification from '../../../pages/job/tabs/Specification/Specification';
 import ErrorBoundary from '../../../components/ErrorBoundary/ErrorBoundary';
@@ -17,7 +17,7 @@ import Yson from '../../../components/Yson/Yson';
 import Tabs from '../../../components/Tabs/Tabs';
 
 import {getJobGeneralYsonSettings} from '../../../store/selectors/thor/unipika';
-import {Tab, DEFAULT_TAB} from '../../../constants/job';
+import {DEFAULT_TAB, Tab} from '../../../constants/job';
 import {RootState} from '../../../store/reducers';
 import {Page} from '../../../constants/index';
 import {makeTabProps} from '../../../utils';

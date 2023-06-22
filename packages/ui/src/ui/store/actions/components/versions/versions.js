@@ -1,14 +1,14 @@
 import yt from '@ytsaurus/javascript-wrapper/lib/yt';
 
 import {
-    DISCOVER_VERSIONS,
-    SORT_SUMMARY_TABLE,
-    SORT_DETAILED_TABLE,
-    CHANGE_VERSION_FILTER,
-    CHANGE_TYPE_FILTER,
     CHANGE_ADDRESS_FILTER,
-    COMPONENTS_VERSIONS_SUMMARY_TABLE_ID,
+    CHANGE_TYPE_FILTER,
+    CHANGE_VERSION_FILTER,
     COMPONENTS_VERSIONS_DETAILED_TABLE_ID,
+    COMPONENTS_VERSIONS_SUMMARY_TABLE_ID,
+    DISCOVER_VERSIONS,
+    SORT_DETAILED_TABLE,
+    SORT_SUMMARY_TABLE,
 } from '../../../../constants/components/versions/versions';
 
 export function loadVersions() {

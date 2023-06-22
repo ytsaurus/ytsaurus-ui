@@ -1,4 +1,4 @@
-import {prepare, countValues} from './aggregation';
+import {countValues, prepare} from './aggregation';
 
 describe('hammer.aggregation', () => {
     describe('API', () => {

@@ -2,7 +2,7 @@ import React from 'react';
 import cn from 'bem-cn-lite';
 
 import DataTable, {Column, Settings} from '@yandex-cloud/react-data-table';
-import {Progress, HelpPopover} from '@gravity-ui/uikit';
+import {HelpPopover, Progress} from '@gravity-ui/uikit';
 
 import AccountLink from '../../../pages/accounts/AccountLink';
 import ClickableAttributesButton from '../../../components/AttributesButton/ClickableAttributesButton';

@@ -1,31 +1,31 @@
 import {
-    getHasApprovers,
-    getApproversFilteredAndOrdered,
-    getAllUserPermissions,
-    getIdmPermissionsRequestError,
     getAllAccessColumnsNames,
-    isPermissionDeleted,
-    getLastDeletedPermissionKey,
-    permissionDeletionError,
+    getAllAccessColumnsPermissionsOrderedByInheritanceAndSubject,
+    getAllColumnGroupsActual,
+    getAllObjectPermissionsOrderedByInheritanceAndSubject,
+    getAllUserPermissions,
+    getApproversFilteredAndOrdered,
+    getHasApprovers,
     getIdmManageAclRequestError,
     getIdmPathVersion,
-    getAllAccessColumnsPermissionsOrderedByInheritanceAndSubject,
-    getAllObjectPermissionsOrderedByInheritanceAndSubject,
-    getAllColumnGroupsActual,
+    getIdmPermissionsRequestError,
+    getLastDeletedPermissionKey,
     getNotInheritedAuditors,
     getNotInheritedReadApprovers,
     getNotInheritedResponsibles,
+    isPermissionDeleted,
+    permissionDeletionError,
 } from '../../store/selectors/acl';
 
 import {getColumnsColumns} from '../../store/selectors/acl-filters';
 
 import {
+    cancelRequestPermissions,
+    cancelUpdateAcl,
+    deletePermissions,
     loadAclData,
     requestPermissions,
-    cancelRequestPermissions,
-    deletePermissions,
     updateAcl,
-    cancelUpdateAcl,
 } from '../../store/actions/acl';
 
 import {changeColumnsColumns} from '../../store/actions/acl-filters';

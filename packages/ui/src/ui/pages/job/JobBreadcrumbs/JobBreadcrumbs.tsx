@@ -1,4 +1,4 @@
-import React, {useState, useCallback} from 'react';
+import React, {useCallback, useState} from 'react';
 import {useHistory, useRouteMatch} from 'react-router';
 import {useSelector} from 'react-redux';
 import cn from 'bem-cn-lite';

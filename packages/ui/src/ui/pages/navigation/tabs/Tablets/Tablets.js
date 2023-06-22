@@ -22,23 +22,23 @@ import Icon from '../../../../components/Icon/Icon';
 import {getPath, getType} from '../../../../store/selectors/navigation';
 
 import {
-    getTablets,
-    getHistogram,
     getActiveHistogram,
+    getHistogram,
     getNavigationTabletsLoadingStatus,
+    getTablets,
 } from '../../../../store/selectors/navigation/tabs/tablets';
 
 import {NAVIGATION_TABLETS_TABLE_ID} from '../../../../constants/navigation/tabs/tablets';
 import {HEADER_HEIGHT, Page} from '../../../../constants/index';
 
 import {
-    loadTablets,
     abortAndReset,
+    changeActiveHistogram,
     changeTabletsFilter,
     changeTabletsMode,
-    toggleHistogram,
-    changeActiveHistogram,
+    loadTablets,
     toggleExpandedHost,
+    toggleHistogram,
 } from '../../../../store/actions/navigation/tabs/tablets';
 
 import {histogramItems, tableItems} from '../../../../utils/navigation/tabs/tables';

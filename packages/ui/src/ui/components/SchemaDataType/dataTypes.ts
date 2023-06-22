@@ -60,10 +60,10 @@ const dateTimeDataTypes = [
 const stringDataTypes = ['String', 'Utf8', 'Json'] as const;
 
 export type DataTypeType =
-    | typeof notSimpleDataTypes[number]
-    | typeof numericDataTypes[number]
-    | typeof dateTimeDataTypes[number]
-    | typeof stringDataTypes[number]
+    | (typeof notSimpleDataTypes)[number]
+    | (typeof numericDataTypes)[number]
+    | (typeof dateTimeDataTypes)[number]
+    | (typeof stringDataTypes)[number]
     | 'Bool'
     | 'Raw'
     | 'Uuid'

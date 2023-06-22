@@ -1,9 +1,9 @@
 import type {
-    languages,
-    editor,
-    Position,
-    IRange,
     CancellationToken,
+    IRange,
+    Position,
+    editor,
+    languages,
 } from './fillers/monaco-editor-core';
 
 export type CompletionListProvider = {

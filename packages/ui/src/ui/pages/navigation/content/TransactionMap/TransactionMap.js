@@ -7,19 +7,19 @@ import cn from 'bem-cn-lite';
 
 import ClickableAttributesButton from '../../../../components/AttributesButton/ClickableAttributesButton';
 import LoadDataHandler from '../../../../components/LoadDataHandler/LoadDataHandler';
-import {FormattedTextOrLink, FormattedText} from '../../../../components/formatters';
+import {FormattedText, FormattedTextOrLink} from '../../../../components/formatters';
 import ElementsTable from '../../../../components/ElementsTable/ElementsTable';
 import Filter from '../../../../components/Filter/Filter';
 import Icon from '../../../../components/Icon/Icon';
 
 import {NAVIGATION_TRANSACTION_MAP_TABLE_ID} from '../../../../constants/navigation/content/transaction-map';
 import {
-    loadTransactions,
     changeFilter,
+    loadTransactions,
 } from '../../../../store/actions/navigation/content/transaction-map';
 import {
-    getTransactions,
     getNavigationTransactionMapLoadingStatus,
+    getTransactions,
 } from '../../../../store/selectors/navigation/content/transaction-map';
 import {tableItems} from '../../../../utils/navigation/content/transaction-map/table';
 import {getIconNameForType} from '../../../../utils/navigation/path-editor';

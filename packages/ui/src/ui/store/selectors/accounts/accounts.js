@@ -5,11 +5,11 @@ import {getTables} from '../../../store/selectors/tables';
 import hammer from '../../../common/hammer';
 import ypath from '../../../common/thor/ypath';
 import {
+    getAccountMasterMemoryMedia,
     getAccountNames,
     getAccountsColumnFields,
     getAccountsMapByName,
     getAccountsTree,
-    getAccountMasterMemoryMedia,
 } from './accounts-ts';
 import {concatByAnd} from '../../../common/hammer/predicate';
 import {accountMemoryMediumToFieldName} from '../../../utils/accounts/accounts-selector';

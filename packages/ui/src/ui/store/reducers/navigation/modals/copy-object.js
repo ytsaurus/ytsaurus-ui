@@ -1,12 +1,12 @@
 import {
+    CLOSE_COPY_OBJECT_POPUP,
     COPY_OBJECT,
     OPEN_COPY_OBJECT_POPUP,
-    CLOSE_COPY_OBJECT_POPUP,
 } from '../../../../constants/navigation/modals/copy-object';
 import {
-    SHOW_ERROR,
     HIDE_ERROR,
     SET_PATH,
+    SHOW_ERROR,
 } from '../../../../constants/navigation/modals/path-editing-popup';
 
 const initialState = {

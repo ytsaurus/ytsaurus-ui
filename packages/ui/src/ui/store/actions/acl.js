@@ -2,15 +2,15 @@ import _ from 'lodash';
 import yt from '@ytsaurus/javascript-wrapper/lib/yt';
 
 import {
-    LOAD_DATA,
     DELETE_PERMISSION,
+    IdmObjectType,
+    LOAD_DATA,
     REQUEST_PERMISSION,
     UPDATE_ACL,
-    IdmObjectType,
 } from '../../constants/acl';
 import {getPools, getTree} from '../../store/selectors/scheduling/scheduling';
 import {computePathItems} from '../../utils/scheduling/scheduling';
-import {getAcl, checkUserPermissions, getResponsible} from '../../utils/acl/acl-api';
+import {checkUserPermissions, getAcl, getResponsible} from '../../utils/acl/acl-api';
 import {prepareAclSubject} from '../../utils/acl';
 import {ROOT_POOL_NAME} from '../../constants/scheduling';
 import UIFactory from '../../UIFactory';

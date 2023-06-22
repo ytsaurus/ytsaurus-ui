@@ -1,9 +1,9 @@
 import {
-    TOGGLE_PERMANENTLY_DELETE,
     CLOSE_DELETE_OBJECT_POPUP,
-    OPEN_DELETE_OBJECT_POPUP,
-    LOAD_REAL_PATH,
     DELETE_OBJECT,
+    LOAD_REAL_PATH,
+    OPEN_DELETE_OBJECT_POPUP,
+    TOGGLE_PERMANENTLY_DELETE,
 } from '../../../../constants/navigation/modals/delete-object';
 
 export const initialState = {

@@ -1,7 +1,7 @@
-import React, {useState, useCallback} from 'react';
+import React, {useCallback, useState} from 'react';
 import axios, {AxiosError} from 'axios';
 import {useDispatch} from 'react-redux';
-import {Button, TextInput, Text} from '@gravity-ui/uikit';
+import {Button, Text, TextInput} from '@gravity-ui/uikit';
 import {onSuccessLogin} from '../../../store/actions/global';
 import ytLocalStorage from '../../../utils/yt-local-storage';
 import LoginPageWrapper from '../LoginPageWrapper/LoginPageWrapper';

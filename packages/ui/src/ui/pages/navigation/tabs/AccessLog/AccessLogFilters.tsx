@@ -42,22 +42,22 @@ import {
 
 import './AccessLogFilters.scss';
 import {
-    TimelinePicker,
     TIMELINE_RANGE_PICKER_SHORTCUTS,
+    TimelinePicker,
     convertTimeToRequestParams,
     formatInterval,
 } from '../../../../components/common/Timeline';
 import {EMPTY_OBJECT} from '../../../../constants/index';
 import {Tooltip} from '../../../../components/Tooltip/Tooltip';
 import {
-    accessLogFieldSelectorSelectionToValue,
-    accessLogMethodSelectionToValue,
-    accessLogScopeSelectionToValue,
-    accessLogUserTypeSelectionToValue,
     ACCESS_LOG_FIELD_SELECTOR_ITEMS,
     ACCESS_LOG_METHOD_ITEMS,
     ACCESS_LOG_SCOPE_ITEMS,
     ACCESS_LOG_USER_TYPE_ITEMS,
+    accessLogFieldSelectorSelectionToValue,
+    accessLogMethodSelectionToValue,
+    accessLogScopeSelectionToValue,
+    accessLogUserTypeSelectionToValue,
     valueToSelection,
 } from '../../../../utils/navigation/tabs/access-log';
 import {getAccessLogBasePath} from '../../../../config';

@@ -1,7 +1,7 @@
 import {
+    CLOSE_CREATE_MODAL,
     FETCH_USERS,
     OPEN_CREATE_MODAL,
-    CLOSE_CREATE_MODAL,
 } from '../../../constants/accounts/editor';
 import {listAllUsers} from '../../../utils/users-groups';
 import {YTApiId} from '../../../rum/rum-wrap-api';

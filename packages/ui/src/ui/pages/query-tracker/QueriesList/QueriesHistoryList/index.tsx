@@ -4,7 +4,7 @@ import block from 'bem-cn-lite';
 import React, {useCallback, useContext, useEffect, useRef, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {QueryItem, QueryStatus} from '../../module/api';
-import {refreshQueriesListIfNeeded, UPDATE_QUERIES_LIST} from '../../module/queries_list/actions';
+import {UPDATE_QUERIES_LIST, refreshQueriesListIfNeeded} from '../../module/queries_list/actions';
 import {getQueriesListTimestamp, getUncompletedItems} from '../../module/queries_list/selectors';
 import {QueryStatusIcon} from '../../QueryStatus';
 

@@ -10,18 +10,18 @@ import {renderMapNodesTableIcon} from '../../../../../pages/navigation/content/M
 import ErrorBoundary from '../../../../../components/ErrorBoundary/ErrorBoundary';
 import MetaTable from '../../../../../components/MetaTable/MetaTable';
 import HelpLink from '../../../../../components/HelpLink/HelpLink';
-import {Loader, Checkbox} from '@gravity-ui/uikit';
+import {Checkbox, Loader} from '@gravity-ui/uikit';
 import Error from '../../../../../components/Error/Error';
 import Modal from '../../../../../components/Modal/Modal';
 import Label from '../../../../../components/Label/Label';
 
 import {
     closeDeleteModal,
-    togglePermanentlyDelete,
     deleteObject,
     deleteObjects,
     getRealPath,
     getRealPaths,
+    togglePermanentlyDelete,
 } from '../../../../../store/actions/navigation/modals/delete-object';
 import withScope from '../../../../../hocs/components/Modal/withScope';
 import {checkIsTrash} from '../../../../../store/selectors/navigation';

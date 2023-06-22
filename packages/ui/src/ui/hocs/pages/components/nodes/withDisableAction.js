@@ -5,18 +5,18 @@ import {connect} from 'react-redux';
 
 import {getDisplayName} from '../../../../utils';
 import {
-    WRITE_SESSION,
-    TABLET_CELLS,
     JOBS,
+    TABLET_CELLS,
+    WRITE_SESSION,
 } from '../../../../constants/components/nodes/actions/disable-enable';
 import {
     closeDisableModal,
-    disableWriteSession,
-    enableWriteSession,
-    disableTabletCells,
-    enableTabletCells,
     disableJobs,
+    disableTabletCells,
+    disableWriteSession,
     enableJobs,
+    enableTabletCells,
+    enableWriteSession,
 } from '../../../../store/actions/components/nodes/actions/disable-enable';
 
 export default function withDisableAction(Component) {

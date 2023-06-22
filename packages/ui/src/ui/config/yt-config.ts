@@ -1,7 +1,7 @@
 import _ from 'lodash';
 
 import {DEFAULT_GROUP} from '../constants/cluster-menu';
-import {YTConfig, ClusterConfig} from '../../shared/yt-types';
+import {ClusterConfig, YTConfig} from '../../shared/yt-types';
 
 const YT = (window as any).YT as YTConfig;
 

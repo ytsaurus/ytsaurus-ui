@@ -2,7 +2,7 @@ import {connect} from 'react-redux';
 
 import OperationSelectFilter from '../../../../pages/operations/OperationSelectFilter/OperationSelectFilter';
 import {updateFilter} from '../../../../store/actions/operations/list';
-import {getCounters, getActualValue} from '../../../../pages/operations/selectors';
+import {getActualValue, getCounters} from '../../../../pages/operations/selectors';
 
 function mapStateToProps({operations}, ownProps) {
     const filters = operations.list.filters;

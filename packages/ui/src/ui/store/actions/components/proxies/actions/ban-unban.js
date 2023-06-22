@@ -4,8 +4,8 @@ import {showErrorPopup} from '../../../../../utils/utils';
 import {getProxies} from '../../../../../store/actions/components/proxies/proxies';
 import {PROXY_TYPE} from '../../../../../constants/components/proxies/proxies';
 import {
-    CLOSE_BAN_MODAL,
     BAN_ITEM,
+    CLOSE_BAN_MODAL,
     CLOSE_UNBAN_MODAL,
     UNBAN_ITEM,
 } from '../../../../../constants/components/ban-unban';

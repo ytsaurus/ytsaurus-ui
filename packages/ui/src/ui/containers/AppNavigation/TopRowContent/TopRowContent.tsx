@@ -2,7 +2,7 @@ import React from 'react';
 
 import {useSelector} from 'react-redux';
 
-import {getGlobalLoadState, isDeveloper, getAdminPages} from '../../../store/selectors/global';
+import {getAdminPages, getGlobalLoadState, isDeveloper} from '../../../store/selectors/global';
 
 import {LOADING_STATUS, Page} from '../../../constants/index';
 import {Route, Switch} from 'react-router';

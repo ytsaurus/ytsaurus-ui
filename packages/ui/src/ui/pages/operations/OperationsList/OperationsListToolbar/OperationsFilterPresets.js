@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import cn from 'bem-cn-lite';
 import _ from 'lodash';
 
-import {TextInput, Checkbox, Button} from '@gravity-ui/uikit';
+import {Button, Checkbox, TextInput} from '@gravity-ui/uikit';
 
 import {NAMESPACES} from '../../../../../shared/constants/settings';
 import {
@@ -19,8 +19,8 @@ import {OPERATIONS_LIST_RUNNING_PRESET} from '../../../../constants/operations/l
 
 import {makeGetSetting} from '../../../../store/selectors/settings';
 import {
-    getOperationsListFilterPresets,
     getOperationsListActivePresets,
+    getOperationsListFilterPresets,
 } from '../../../../store/selectors/operations/operations-list';
 import Modal from '../../../../components/Modal/Modal';
 import Icon from '../../../../components/Icon/Icon';

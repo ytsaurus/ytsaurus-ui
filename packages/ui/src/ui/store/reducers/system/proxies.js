@@ -2,7 +2,7 @@ import _ from 'lodash';
 import ypath from '../../../common/thor/ypath';
 import {FETCH_PROXIES} from '../../../store/actions/system/proxies';
 import {mergeStateOnClusterChange} from '../../../store/reducers/utils';
-import {extractRoleGroups, extractProxyCounters} from '../../../utils/system/proxies';
+import {extractProxyCounters, extractRoleGroups} from '../../../utils/system/proxies';
 
 const initialState = {
     fetching: false,

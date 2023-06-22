@@ -3,11 +3,11 @@ import _ from 'lodash';
 import ypath from '@ytsaurus/interface-helpers/lib/ypath';
 import CancelHelper from '../../../../utils/cancel-helper';
 import {prepareRequest} from '../../../../utils/navigation';
-import {getPath, getTransaction, getParsedPath} from '../../../../store/selectors/navigation';
+import {getParsedPath, getPath, getTransaction} from '../../../../store/selectors/navigation';
 import Transaction from '../../../../utils/navigation/content/transaction-map/transaction';
 import {
-    LOAD_TRANSACTIONS,
     CHANGE_FILTER,
+    LOAD_TRANSACTIONS,
 } from '../../../../constants/navigation/content/transaction-map';
 import {YTApiId, ytApiV3Id} from '../../../../rum/rum-wrap-api';
 

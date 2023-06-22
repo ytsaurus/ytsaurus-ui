@@ -19,8 +19,8 @@ import {createNewColumn} from '../../../../store/reducers/navigation/modals/crea
 
 import {
     ColumnAggregateTypes as AggrTypes,
-    ColumnDataTypes,
     ColumnAggregateType,
+    ColumnDataTypes,
     SELECT_EMPTY_VALUE,
 } from '../../../../constants/navigation/modals/create-table';
 import {

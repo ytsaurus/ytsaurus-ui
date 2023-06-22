@@ -2,8 +2,8 @@ import _ from 'lodash';
 
 import {
     GROUPS_TABLE,
-    GROUP_EDITOR_ACTION,
     GROUPS_TABLE_DATA_FIELDS,
+    GROUP_EDITOR_ACTION,
     GROUP_EDITOR_ACTION_DATA_FIELDS,
 } from '../../constants/groups';
 import {getCluster} from '../../store/selectors/global';

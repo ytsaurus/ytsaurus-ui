@@ -1,12 +1,12 @@
 import {
+    CLOSE_MOVE_OBJECT_POPUP,
     MOVE_OBJECT,
     OPEN_MOVE_OBJECT_POPUP,
-    CLOSE_MOVE_OBJECT_POPUP,
 } from '../../../../constants/navigation/modals/move-object';
 import {
+    HIDE_ERROR,
     SET_PATH,
     SHOW_ERROR,
-    HIDE_ERROR,
 } from '../../../../constants/navigation/modals/path-editing-popup';
 
 const initialState = {

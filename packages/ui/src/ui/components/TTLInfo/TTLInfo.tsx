@@ -1,7 +1,7 @@
 import React from 'react';
 
 import MetaTable from '../../components/MetaTable/MetaTable';
-import {makeTTLItems, TTLLabel} from '../../components/MetaTable/presets/ttl';
+import {TTLLabel, makeTTLItems} from '../../components/MetaTable/presets/ttl';
 import {Tooltip, TooltipProps} from '../../components/Tooltip/Tooltip';
 
 export default function TTLInfo({

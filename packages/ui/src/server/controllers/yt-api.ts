@@ -4,7 +4,7 @@ import qs from 'qs';
 import _ from 'lodash';
 // @ts-ignore
 import ytLib from '@ytsaurus/javascript-wrapper';
-import {pipeAxiosResponse, sendAndLogError, UNEXPECTED_PIPE_AXIOS_RESPONSE} from '../utils';
+import {UNEXPECTED_PIPE_AXIOS_RESPONSE, pipeAxiosResponse, sendAndLogError} from '../utils';
 import * as os from 'os';
 import {getYtPageIdParts} from '../../shared/utils';
 import {YT_API_REQUEST_ID_HEADER} from '../../shared/constants';

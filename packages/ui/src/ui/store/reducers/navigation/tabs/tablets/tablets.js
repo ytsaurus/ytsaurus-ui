@@ -1,10 +1,10 @@
 import {mergeStateOnClusterChange} from '../../../../../store/reducers/utils';
 import {
-    GET_TABLETS,
-    CHANGE_TABLETS_MODE,
-    TOGGLE_HISTOGRAM,
     CHANGE_ACTIVE_HISTOGRAM,
+    CHANGE_TABLETS_MODE,
+    GET_TABLETS,
     TABLETS_STATE_PARTIAL,
+    TOGGLE_HISTOGRAM,
 } from '../../../../../constants/navigation/tabs/tablets';
 
 const persistedState = {

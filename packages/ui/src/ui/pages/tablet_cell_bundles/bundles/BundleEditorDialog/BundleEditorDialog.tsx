@@ -6,11 +6,11 @@ import _ from 'lodash';
 import {Info} from '../../../../components/Info/Info';
 import {BundleParamsList} from './components/BundleParamsList/BundleParamsList';
 import Dialog, {
-    FormApi,
-    FORM_ERROR,
     DialogError,
     DialogField,
     DialogTabField,
+    FORM_ERROR,
+    FormApi,
 } from '../../../../components/Dialog/Dialog';
 import hammer from '../../../../common/hammer';
 

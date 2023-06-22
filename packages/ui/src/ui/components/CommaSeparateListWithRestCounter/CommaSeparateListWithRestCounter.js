@@ -1,7 +1,7 @@
 import React from 'react';
 import cn from 'bem-cn-lite';
 import PropTypes from 'prop-types';
-import {throttle, isEqual} from 'lodash';
+import {isEqual, throttle} from 'lodash';
 import SimpleModal from '../../components/Modal/SimpleModal';
 import {Tooltip} from '../Tooltip/Tooltip';
 

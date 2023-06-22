@@ -4,8 +4,8 @@ import yt from '@ytsaurus/javascript-wrapper/lib/yt';
 import {Toaster} from '@gravity-ui/uikit';
 
 import {getWindowStore} from '../store/window-store';
-import {getXsrfCookieName, getClusterConfig} from '../utils';
-import {BLOCK_USER, BAN_USER} from '../constants/index';
+import {getClusterConfig, getXsrfCookieName} from '../utils';
+import {BAN_USER, BLOCK_USER} from '../constants/index';
 import YT from '../config/yt-config';
 import {getClusterProxy, isAllowYtTwmApi} from '../store/selectors/global';
 

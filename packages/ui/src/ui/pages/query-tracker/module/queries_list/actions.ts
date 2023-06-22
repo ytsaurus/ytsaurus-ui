@@ -3,9 +3,9 @@ import {ThunkAction} from 'redux-thunk';
 import {ActionD} from '../../../../types';
 import {wrapApiPromiseByToaster} from '../../../../utils/utils';
 import {RootState} from '../../../../store/reducers';
-import {loadQueriesList, QueriesHistoryCursorDirection, QueryItem} from '../api';
+import {QueriesHistoryCursorDirection, QueryItem, loadQueriesList} from '../api';
 import {QueriesListState} from './reducer';
-import {getQueriesListCursorParams, getQueriesListFilterParams, getQueriesList} from './selectors';
+import {getQueriesList, getQueriesListCursorParams, getQueriesListFilterParams} from './selectors';
 import {QueriesListCursor, QueriesListFilter} from './types';
 
 export const LOAD_QUERIES_LIST_REQUEST = 'query-tracker/LOAD_QUERIES_LIST_REQUEST';

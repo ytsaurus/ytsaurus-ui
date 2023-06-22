@@ -4,11 +4,11 @@ import {prepareRequest} from '../../../../utils/navigation';
 import {TYPED_OUTPUT_FORMAT} from '../../../../constants/index';
 import {getPath, getTransaction} from '../../../../store/selectors/navigation';
 import {
-    GET_TABLETS,
-    CHANGE_TABLETS_MODE,
-    TOGGLE_HISTOGRAM,
     CHANGE_ACTIVE_HISTOGRAM,
+    CHANGE_TABLETS_MODE,
+    GET_TABLETS,
     TABLETS_STATE_PARTIAL,
+    TOGGLE_HISTOGRAM,
 } from '../../../../constants/navigation/tabs/tablets';
 import {YTApiId, ytApiV3Id} from '../../../../rum/rum-wrap-api';
 import {getTabletsExpandedHosts} from '../../../../store/selectors/navigation/tabs/tablets-ts';

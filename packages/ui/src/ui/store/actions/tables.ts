@@ -1,9 +1,9 @@
-import {TOGGLE_COLUMN_SORT_ORDER, CHANGE_COLUMN_SORT_ORDER} from '../../constants/tables';
+import {CHANGE_COLUMN_SORT_ORDER, TOGGLE_COLUMN_SORT_ORDER} from '../../constants/tables';
 import {
+    OrderType,
     calculateNextOrderValue,
     nextSortOrderValue,
     oldSortStateToOrderType,
-    OrderType,
     orderTypeToOldSortState,
 } from '../../utils/sort-helpers';
 import {ThunkAction} from 'redux-thunk';

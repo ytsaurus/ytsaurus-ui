@@ -10,9 +10,9 @@ import Icon from '../../../../../components/Icon/Icon';
 import OffsetSelectorButton from '../../../../../pages/navigation/content/Table/TableOverview/OffsetSelectorButton';
 
 import {
-    getRowCount,
     getOffsetValue,
     getProgressWidth,
+    getRowCount,
 } from '../../../../../store/selectors/navigation/content/table';
 import {getIsDynamic} from '../../../../../store/selectors/navigation/content/table-ts';
 import {moveOffset} from '../../../../../store/actions/navigation/content/table/pagination';

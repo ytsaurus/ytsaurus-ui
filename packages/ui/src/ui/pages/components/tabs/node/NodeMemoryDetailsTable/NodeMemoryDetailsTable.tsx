@@ -75,7 +75,7 @@ function NodeMemoryDetailsTable(props: Props) {
                 ),
             };
         }
-        const res: Array<Column<typeof items[0]>> = [
+        const res: Array<Column<(typeof items)[0]>> = [
             {
                 ...headerProps('name', nameColumnTitle),
                 render: ({row: item}) => {

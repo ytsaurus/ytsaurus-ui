@@ -2,8 +2,8 @@ import * as JOB from '../../../constants/job';
 import {GeneralActionType} from '../../../store/actions/job/general';
 import {mergeStateOnClusterChange} from '../../../store/reducers/utils';
 import {StatisticsActionType} from '../../../store/actions/job/statistics';
-import {JobStatistic, JobTree, RawJob, JobTreeState} from '../../../types/job';
-import {prepareStatistics, prepareMetricsTree} from '../../../utils/job/tabs/statistics';
+import {JobStatistic, JobTree, JobTreeState, RawJob} from '../../../types/job';
+import {prepareMetricsTree, prepareStatistics} from '../../../utils/job/tabs/statistics';
 
 export interface StatisticsEphemeralState {
     tree: Partial<JobTree>;

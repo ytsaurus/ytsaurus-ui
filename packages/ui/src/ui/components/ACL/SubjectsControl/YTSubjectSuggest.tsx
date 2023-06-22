@@ -2,7 +2,7 @@ import React from 'react';
 import {useSelector} from 'react-redux';
 import cn from 'bem-cn-lite';
 
-import {getAllUserNames, getAllGroupNames} from '../../../store/selectors/global';
+import {getAllGroupNames, getAllUserNames} from '../../../store/selectors/global';
 import Select from '../../Select/Select';
 import {UserName} from '../../UserLink/UserLink';
 import {useAllUserNamesFiltered, useGroupsLoaded} from '../../../hooks/global';

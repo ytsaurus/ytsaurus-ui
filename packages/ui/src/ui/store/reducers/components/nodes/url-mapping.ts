@@ -8,9 +8,9 @@ import {COMPONENTS_NODES_TABLE_ID} from '../../../../constants/components/nodes/
 import {parseSortState} from '../../../../utils';
 
 import {
-    initialState,
-    groupFilterInitialState,
     TagFilter,
+    groupFilterInitialState,
+    initialState,
 } from '../../../../store/reducers/components/nodes/setup/setup';
 import {
     makeObjectParseSerialize,

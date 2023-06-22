@@ -11,8 +11,8 @@ import OperationJobsToolbar from './OperationJobsToolbar/OperationJobsToolbar';
 import Updater from '../../../../../utils/hammer/updater';
 import {POLLING_INTERVAL} from '../../../../../constants/operations/detail';
 import {
-    getOperationJobsLoadingStatus,
     getOperationDetailsLoadingStatus,
+    getOperationJobsLoadingStatus,
 } from '../../../../../store/selectors/operations/operation';
 import {useAppRumMeasureStart} from '../../../../../rum/rum-app-measures';
 import {RumMeasureTypes} from '../../../../../rum/rum-measure-types';

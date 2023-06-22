@@ -1,4 +1,4 @@
-import {NetworkCode, ErrorMessage} from '../../constants/navigation/modals/path-editing-popup';
+import {ErrorMessage, NetworkCode} from '../../constants/navigation/modals/path-editing-popup';
 import _ from 'lodash';
 
 export function getOnlyFolders(suggestions) {

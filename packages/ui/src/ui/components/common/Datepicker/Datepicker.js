@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import block from 'bem-cn-lite';
 import {DateTime} from 'luxon';
-import {Popup, TextInput, MobileContext} from '@gravity-ui/uikit';
+import {MobileContext, Popup, TextInput} from '@gravity-ui/uikit';
 
 import {FieldWrapper} from '../FieldWrapper/FieldWrapper';
 import {MobileModal} from '../MobileModal/MobileModal';
@@ -12,15 +12,15 @@ import {PopupContent} from './PopupContent/PopupContent';
 import {
     createDateTime,
     getHashedData,
+    getListWithoutNullableValues,
     getPlaceholder,
     getSearchText,
     getZone,
-    getListWithoutNullableValues,
+    hasTimeUnitsInFormat,
     isValidDate,
     resolveDates,
-    hasTimeUnitsInFormat,
 } from './utils';
-import {DISPLAY_FORMAT, OUTPUT_FORMAT, AVAILABLE_POPUP_PLACEMENT, TABS} from './constants';
+import {AVAILABLE_POPUP_PLACEMENT, DISPLAY_FORMAT, OUTPUT_FORMAT, TABS} from './constants';
 
 import './Datepicker.scss';
 

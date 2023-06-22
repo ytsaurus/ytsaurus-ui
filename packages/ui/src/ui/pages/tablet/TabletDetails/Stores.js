@@ -12,7 +12,7 @@ import ElementsTable from '../../../components/ElementsTable/ElementsTable';
 import ErrorBoundary from '../../../components/ErrorBoundary/ErrorBoundary';
 import LoadDataHandler from '../../../components/LoadDataHandler/LoadDataHandler';
 
-import {loadStoresData, abortAndReset} from '../../../store/actions/tablet/stores';
+import {abortAndReset, loadStoresData} from '../../../store/actions/tablet/stores';
 import {TABLET_PARTITION_STORES_TABLE_ID} from '../../../constants/tablet';
 import {storesTableItems} from '../../../utils/tablet/table';
 import {getStores} from '../../../store/selectors/tablet/stores';

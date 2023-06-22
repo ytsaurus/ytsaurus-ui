@@ -4,8 +4,8 @@ import {calculateLoadingStatus} from '../../utils/utils';
 import {concatByAnd} from '../../common/hammer/predicate';
 import {
     getApproversSubjectFilter,
-    getObjectSubjectFilter,
     getObjectPermissionsFilter,
+    getObjectSubjectFilter,
 } from './acl-filters';
 import UIFactory from '../../UIFactory';
 

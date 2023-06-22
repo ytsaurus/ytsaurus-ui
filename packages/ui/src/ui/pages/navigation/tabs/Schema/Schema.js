@@ -17,10 +17,10 @@ import UIFactory from '../../../../UIFactory';
 import {ExternalDescription} from './ExternalDescription/ExternalDescription';
 
 import {
-    getSchema,
-    getFilteredSchema,
-    getSchemaMeta,
     getComputedColumns,
+    getFilteredSchema,
+    getSchema,
+    getSchemaMeta,
 } from '../../../../store/selectors/navigation/tabs/schema';
 import {updateFilter} from '../../../../store/actions/navigation/tabs/schema';
 import {getCluster} from '../../../../store/selectors/global';
@@ -30,7 +30,7 @@ import './Schema.scss';
 import {useRumMeasureStop} from '../../../../rum/RumUiContext';
 import {RumMeasureTypes} from '../../../../rum/rum-measure-types';
 import {useAppRumMeasureStart} from '../../../../rum/rum-app-measures';
-import {getLoadState, getAttributesPath} from '../../../../store/selectors/navigation';
+import {getAttributesPath, getLoadState} from '../../../../store/selectors/navigation';
 import {isFinalLoadingStatus} from '../../../../utils/utils';
 import {docsUrl} from '../../../../config';
 

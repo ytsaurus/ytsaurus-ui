@@ -13,7 +13,7 @@ import {Loader} from '@gravity-ui/uikit';
 import Name from './Name';
 import NodeCount from './NodeCount';
 
-import {getShards, abortAllRequests} from '../../../../store/actions/components/shards';
+import {abortAllRequests, getShards} from '../../../../store/actions/components/shards';
 
 import './Shards.scss';
 import {getCluster} from '../../../../store/selectors/global';

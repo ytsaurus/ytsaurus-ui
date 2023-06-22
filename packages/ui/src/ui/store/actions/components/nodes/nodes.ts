@@ -6,7 +6,7 @@ import type {ThunkAction} from 'redux-thunk';
 import ypath from '../../../../common/thor/ypath';
 
 import {setSetting} from '../../../../store/actions/settings';
-import {SettingName, NAMESPACES} from '../../../../../shared/constants/settings';
+import {NAMESPACES, SettingName} from '../../../../../shared/constants/settings';
 import {
     getRequestIndex,
     getRequiredAttributes,
@@ -25,17 +25,17 @@ import {
     APPLY_SETUP,
     CHANGE_CONTENT_MODE,
     CHANGE_HOST_FILTER,
-    COMPONENTS_NODES_UPDATE_NODE,
-    GET_NODES_TAGS,
-    GET_NODES,
     CHANGE_NODE_TYPE,
+    COMPONENTS_NODES_UPDATE_NODE,
+    GET_NODES,
+    GET_NODES_TAGS,
 } from '../../../../constants/components/nodes/nodes';
 import {USE_CACHE, USE_MAX_SIZE} from '../../../../constants';
 import CancelHelper from '../../../../utils/cancel-helper';
 import {YTApiId, ytApiV3Id} from '../../../../rum/rum-wrap-api';
 import type {ActionD, FIX_MY_TYPE, PartialDeep} from '../../../../types';
 import {wrapApiPromiseByToaster} from '../../../../utils/utils';
-import {DiscoverVersionsData, getVersions, VersionHostInfo} from '../versions/versions_v2';
+import {DiscoverVersionsData, VersionHostInfo, getVersions} from '../versions/versions_v2';
 import {NodeType} from '../../../../../shared/constants/system';
 
 const {COMPONENTS} = NAMESPACES;

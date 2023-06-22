@@ -1,7 +1,7 @@
 import {mergeStateOnClusterChange} from '../../../../../store/reducers/utils';
 import {
-    OPEN_RESOURCES_MODAL,
     CLOSE_RESOURCES_MODAL,
+    OPEN_RESOURCES_MODAL,
     SET_RESOURCES_LIMIT,
 } from '../../../../../constants/components/nodes/actions/set-resources-limits';
 

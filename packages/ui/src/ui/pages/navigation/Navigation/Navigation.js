@@ -10,11 +10,11 @@ import {getCluster, getUISizes} from '../../../store/selectors/global';
 import {updateTitle} from '../../../store/actions/global';
 
 import {
-    CreateDirectoryModal,
-    MoveObjectModal,
     CopyObjectModal,
-    RestoreObjectModal,
+    CreateDirectoryModal,
     DeleteObjectModal,
+    MoveObjectModal,
+    RestoreObjectModal,
 } from './PathEditorModal';
 import RequestPermissions from '../../../pages/navigation/tabs/ACL/RequestPermissions/RequestPermissions';
 import ErrorBoundary from '../../../components/ErrorBoundary/ErrorBoundary';
@@ -26,17 +26,17 @@ import Tabs from '../../../components/Tabs/Tabs';
 import {Tab} from '../../../constants/navigation';
 import {LOADING_STATUS} from '../../../constants/index';
 
-import {setMode, updateView, onTransactionChange} from '../../../store/actions/navigation';
+import {onTransactionChange, setMode, updateView} from '../../../store/actions/navigation';
 
 import {
-    getTransaction,
     getAttributes,
-    getParsedPath,
+    getError,
     getIdmSupport,
     getLoadState,
-    getError,
-    getType,
+    getParsedPath,
     getPath,
+    getTransaction,
+    getType,
     isNavigationFinalLoadState,
 } from '../../../store/selectors/navigation';
 import {getEffectiveMode, getSupportedTabs} from '../../../store/selectors/navigation/navigation';

@@ -6,28 +6,28 @@ import yt from '@ytsaurus/javascript-wrapper/lib/yt';
 import ypath from '../../../common/thor/ypath';
 import hammer from '../../../common/hammer';
 import {
-    UPDATE_FILTER,
-    UPDATE_FILTER_COUNTERS,
+    APPLY_FILTER_PRESET,
+    DEFAULT_PRESET_SETTING,
+    OPERATIONS_CURSOR_DIRECTION,
     OPERATIONS_DATA_MODE,
+    OPERATIONS_PAGE,
     RESET_TIME_RANGE,
     SET_OPERATIONS_DATA_MODE,
-    UPDATE_CURSOR,
-    OPERATIONS_PAGE,
-    OPERATIONS_CURSOR_DIRECTION,
-    DEFAULT_PRESET_SETTING,
-    APPLY_FILTER_PRESET,
     TOGGLE_SAVE_FILTER_PRESET_DIALOG,
-    UPDATE_SAVE_FILTER_PRESET_DIALOG,
-    UPDATE_OPERATIONS_SUCCESS,
-    UPDATE_OPERATIONS_REQUEST,
+    UPDATE_CURSOR,
+    UPDATE_FILTER,
+    UPDATE_FILTER_COUNTERS,
     UPDATE_OPERATIONS_CANCELLED,
     UPDATE_OPERATIONS_FAILURE,
+    UPDATE_OPERATIONS_REQUEST,
+    UPDATE_OPERATIONS_SUCCESS,
+    UPDATE_SAVE_FILTER_PRESET_DIALOG,
 } from '../../../constants/operations';
 import {ListOperationSelector} from '../../../pages/operations/selectors';
 import {removeSetting, setSetting} from '../../../store/actions/settings';
 import {
-    getDefaultToTime,
     getDefaultFromTime,
+    getDefaultToTime,
     getListRequestParameters,
 } from '../../../store/actions/operations/utils';
 import CancelHelper from '../../../utils/cancel-helper';

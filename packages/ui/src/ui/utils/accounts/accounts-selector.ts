@@ -2,7 +2,7 @@ import _ from 'lodash';
 import ypath from '../../common/thor/ypath';
 
 import {AccountResourceInfo} from '../../constants/accounts/accounts';
-import {getProgressTheme, computeProgress} from '../../utils/progress';
+import {computeProgress, getProgressTheme} from '../../utils/progress';
 import formatLib from '../../common/hammer/format';
 import {FIX_MY_TYPE} from '../../types';
 

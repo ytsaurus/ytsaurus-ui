@@ -1,12 +1,12 @@
 import React, {Fragment} from 'react';
 import PropTypes from 'prop-types';
 import cn from 'bem-cn-lite';
-import {Popup, Icon, Button, ButtonProps} from '@gravity-ui/uikit';
+import {Button, ButtonProps, Icon, Popup} from '@gravity-ui/uikit';
 
 import noop from 'lodash/noop';
 import moment, {MomentInput} from 'moment';
 import i18n from '../i18n';
-import {humanizeInterval, formatInterval, formatTimeCanonical, getTimestampFromDate} from '../util';
+import {formatInterval, formatTimeCanonical, getTimestampFromDate, humanizeInterval} from '../util';
 
 import {EnterInput} from '../../EnterInput/EnterInput';
 import {TimelineDatepicker} from './TimelineDatepicker';

@@ -11,8 +11,8 @@ import {main} from '../../../../components/MetaTable/presets';
 import {Loader} from '@gravity-ui/uikit';
 import Yson from '../../../../components/Yson/Yson';
 
-import {getDocument, abortAndReset} from '../../../../store/actions/navigation/content/document';
-import {getPath, getAttributes} from '../../../../store/selectors/navigation';
+import {abortAndReset, getDocument} from '../../../../store/actions/navigation/content/document';
+import {getAttributes, getPath} from '../../../../store/selectors/navigation';
 import {getEffectiveMode} from '../../../../store/selectors/navigation/navigation';
 import {getNavigationDocumentLoadingStatus} from '../../../../store/selectors/navigation/content/document';
 import {useRumMeasureStop} from '../../../../rum/RumUiContext';

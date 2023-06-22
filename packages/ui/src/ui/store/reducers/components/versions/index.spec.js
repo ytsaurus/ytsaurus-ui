@@ -1,12 +1,12 @@
 import reducer, {initialState} from './index';
 import * as types from '../../../../constants/components/versions/versions';
 import {
-    sortSummary,
-    sortDetailed,
-    getActualData,
     aggregateDetailed,
     getActiveFilter,
+    getActualData,
     getFilterColumns,
+    sortDetailed,
+    sortSummary,
 } from '../../../../utils/components/versions/index';
 
 jest.mock('../../../../utils/components/versions', () => ({

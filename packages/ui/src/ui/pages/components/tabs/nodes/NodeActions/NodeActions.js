@@ -14,9 +14,9 @@ import './NodeActions.scss';
 const block = cn('node-actions');
 
 import {
-    WRITE_SESSION,
-    TABLET_CELLS,
     JOBS,
+    TABLET_CELLS,
+    WRITE_SESSION,
 } from '../../../../../constants/components/nodes/actions/disable-enable';
 import {openResourcesModal} from '../../../../../store/actions/components/nodes/actions/set-resources-limits';
 import {openDisableModal} from '../../../../../store/actions/components/nodes/actions/disable-enable';

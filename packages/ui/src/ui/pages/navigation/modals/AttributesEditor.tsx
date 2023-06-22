@@ -27,14 +27,14 @@ import {
 } from '../../../store/actions/navigation/modals/attributes-editor';
 import {getMediumListNoCache} from '../../../store/selectors/thor';
 import {
+    InMemoryMode,
+    InMemoryModeType,
+    StorageOptions,
     compressionCodecValueFromString,
     compressionCodecValueToString,
     erasureCodecFromStorageOption,
-    InMemoryMode,
-    InMemoryModeType,
     normalizeErasureCodec,
     storageOptionFromErasureCodec,
-    StorageOptions,
 } from '../../../utils/cypress-attributes';
 import {makeLink} from '../../../navigation/Navigation/PathEditorModal/CreateTableModal/CreateTableModal';
 import {

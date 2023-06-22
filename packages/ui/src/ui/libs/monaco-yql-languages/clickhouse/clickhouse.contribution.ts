@@ -1,9 +1,9 @@
 import {
-    registerLanguage,
     LanguageServiceDefaults,
     LanguageServiceDefaultsImpl,
     diagnosticDefault,
     modeConfigurationDefault,
+    registerLanguage,
 } from '../_.contribution';
 import {languages} from '../fillers/monaco-editor-core';
 

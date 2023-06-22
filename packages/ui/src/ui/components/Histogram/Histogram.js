@@ -6,10 +6,10 @@ import React from 'react';
 import _ from 'lodash';
 
 import {
-    createGetPDF,
     createGetECDF,
-    createGetQuartiles,
     createGetIsDataGood,
+    createGetPDF,
+    createGetQuartiles,
 } from '../../store/selectors/histogram';
 import HistogramChart from './HistogramChart';
 

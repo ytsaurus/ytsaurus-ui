@@ -7,8 +7,8 @@ import ypath from '../../../../common/thor/ypath';
 import {CollapsibleSectionStateLess} from '../../../../components/CollapsibleSection/CollapsibleSection';
 import {getUISizes} from '../../../../store/selectors/global';
 import {
-    getOperationExperimentAssignments,
     OperationExperimentItem,
+    getOperationExperimentAssignments,
 } from '../../../../store/selectors/operations/operation';
 import MetaTable from '../../../../components/MetaTable/MetaTable';
 import StarTrackLink from '../../../../components/StarTrackLink/StarTrackLink';

@@ -15,12 +15,12 @@ import {
 } from '../../../../../../pages/navigation/tabs/Queue/utils/column-builder';
 import type {TPerformanceCounters} from '../../../../../../store/reducers/navigation/tabs/queue/types';
 import {
+    SelectedConsumer,
     getConsumers,
-    getStatusLoading,
-    getStatusLoaded,
     getQueueRateMode,
     getQueueTimeWindow,
-    SelectedConsumer,
+    getStatusLoaded,
+    getStatusLoading,
 } from '../../../../../../store/selectors/navigation/tabs/queue';
 
 import './Consumers.scss';

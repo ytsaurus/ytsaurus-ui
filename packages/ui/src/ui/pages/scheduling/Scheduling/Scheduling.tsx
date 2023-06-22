@@ -4,7 +4,7 @@ import cn from 'bem-cn-lite';
 import _ from 'lodash';
 
 import LoadDataHandler from '../../../components/LoadDataHandler/LoadDataHandler';
-import {Loader, Dialog as DeleteDialog} from '@gravity-ui/uikit';
+import {Dialog as DeleteDialog, Loader} from '@gravity-ui/uikit';
 import ErrorBoundary from '../../../components/ErrorBoundary/ErrorBoundary';
 import Error from '../../../components/Error/Error';
 
@@ -14,10 +14,10 @@ import Alerts from '../Alerts';
 import {SCHEDULING_CREATE_POOL_CANCELLED} from '../../../constants/scheduling';
 import Updater from '../../../utils/hammer/updater';
 import {
-    loadSchedulingData,
     abortAndReset,
     closeDeleteModal,
     deletePool,
+    loadSchedulingData,
 } from '../../../store/actions/scheduling/scheduling';
 
 import './Scheduling.scss';

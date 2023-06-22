@@ -13,19 +13,19 @@ import Filter from '../../../../components/Filter/Filter';
 import Select from '../../../../components/Select/Select';
 
 import {
-    getVisibleDetails,
-    getVersionSelectItems,
-    getTypeSelectItems,
-    getStatesSelectItems,
     getBannedSelectItems,
+    getStatesSelectItems,
+    getTypeSelectItems,
+    getVersionSelectItems,
+    getVisibleDetails,
 } from '../../../../store/selectors/components/versions/versions_v2';
 import {
-    getVersions,
-    changeHostFilter,
-    changeVersionFilter,
-    changeTypeFilter,
-    changeStateFilter,
     changeBannedFilter,
+    changeHostFilter,
+    changeStateFilter,
+    changeTypeFilter,
+    changeVersionFilter,
+    getVersions,
 } from '../../../../store/actions/components/versions/versions_v2';
 import {
     DEBOUNCE_TIME,

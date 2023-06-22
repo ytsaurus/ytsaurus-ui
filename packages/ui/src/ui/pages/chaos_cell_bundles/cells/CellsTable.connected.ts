@@ -6,8 +6,8 @@ import {setChaosActiveBundle, setChaosPartial} from '../../../store/actions/chao
 import type {RootState} from '../../../store/reducers';
 import {getCluster} from '../../../store/selectors/global';
 import {
-    getChaosCellsSorted,
     getChaosCellsSortState,
+    getChaosCellsSorted,
     getChaosIsLoaded,
     getChaosIsLoading,
 } from '../../../store/selectors/chaos_cell_bundles';

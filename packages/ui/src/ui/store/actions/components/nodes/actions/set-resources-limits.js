@@ -4,8 +4,8 @@ import yt from '@ytsaurus/javascript-wrapper/lib/yt';
 import {getNodes} from '../../../../../store/actions/components/nodes/nodes';
 import {showErrorPopup} from '../../../../../utils/utils';
 import {
-    OPEN_RESOURCES_MODAL,
     CLOSE_RESOURCES_MODAL,
+    OPEN_RESOURCES_MODAL,
     SET_RESOURCES_LIMIT,
 } from '../../../../../constants/components/nodes/actions/set-resources-limits';
 

@@ -1,6 +1,6 @@
 import {Dialog} from '@gravity-ui/uikit';
 import React from 'react';
-import {connect, ConnectedProps} from 'react-redux';
+import {ConnectedProps, connect} from 'react-redux';
 
 import {hideErrorModal} from '../../store/actions/modals/errors';
 import {getModalErrors} from '../../store/selectors/modals/errors';
