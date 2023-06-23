@@ -1,5 +1,5 @@
 import {test, expect} from '@playwright/test';
-import {makeClusterTille, makeClusterUrl} from '../utils';
+import {E2E_DIR, makeClusterTille, makeClusterUrl} from '../utils';
 
 test('Navigation - Content', async ({page}) => {
     await page.goto(makeClusterUrl('navigation'));
@@ -54,7 +54,7 @@ test('Navigation - ACL', async ({page}) => {
 });
 
 test('Navigation - Locks', async ({page}) => {
-    await page.goto(makeClusterUrl('navigation?navmode=locks&path=//tmp/locked'));
+    await page.goto(makeClusterUrl(`navigation?navmode=locks&path=${E2E_DIR}/locked`));
 
     await page.waitForSelector('[data-qa="lock-meta-table"]');
     let length = await page.$$eval('[data-qa="lock-meta-table"]', (nodes) => nodes.length);
@@ -67,5 +67,5 @@ test('Navigation - Locks', async ({page}) => {
     expect(length).toBe(1);
 
     await expect(page).toHaveTitle(makeClusterTille({page: 'Navigation', path: 'locked'}));
-    await expect(page).toHaveURL(makeClusterUrl('navigation?navmode=locks&path=//tmp/locked'));
+    await expect(page).toHaveURL(makeClusterUrl(`navigation?navmode=locks&path=${E2E_DIR}/locked`));
 });

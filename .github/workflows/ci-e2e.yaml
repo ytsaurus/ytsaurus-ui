@@ -55,19 +55,19 @@ jobs:
       - name: Tests for 'Local'
         run: |
           cd packages/ui
-          YT_PROXY=`hostname`:8000 npm run test:e2e:localmode:init
-          npm run test:e2e:localmode:ui
+          YT_PROXY=`hostname`:8000 npm run e2e:localmode:init
+          npm run e2e:localmode:ui
       - name: Run containers for 'Local as remote'
         run: |
           cd packages/ui/tests
           ./run_local_cluster.sh --stop
-          ./run_local_cluster.sh --ui-skip-pull true --ui-version local --ui-app-installation e2e --docker-hostname `hostname` --ui-network bridge --ui-proxy-internal ""
+          ./run_local_cluster.sh --ui-skip-pull true --ui-version local --ui-app-installation e2e --docker-hostname `hostname` --fqdn localhost --ui-network bridge --ui-proxy-internal ""
           sleep 10
       - name: Tests for 'Local as remote'
         run: |
           cd packages/ui
-          YT_PROXY=`hostname`:8000 npm run test:e2e:localmode:init
-          npm run test:e2e:localmode:remote
+          YT_PROXY=`hostname`:8000 npm run e2e:localmode:init
+          npm run e2e:localmode:remote
 
   stop-vm:
     name: Stop VM

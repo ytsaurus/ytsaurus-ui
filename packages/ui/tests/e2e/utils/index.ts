@@ -1,8 +1,8 @@
 import './afterEach';
 
-export const {BASE_URL, CLUSTER = '', CLUSTER_TITLE} = process.env;
+export const {BASE_URL, CLUSTER = '', E2E_DIR = '//tmp', CLUSTER_TITLE} = process.env;
 
-console.log({BASE_URL, CLUSTER, CLUSTER_TITLE});
+console.log({BASE_URL, CLUSTER, CLUSTER_TITLE, E2E_DIR});
 
 export function makeUrl(pathWithParams = '') {
     return [BASE_URL, pathWithParams].filter(Boolean).join('/');
