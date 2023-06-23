@@ -1,5 +1,5 @@
 import {test, expect} from '@playwright/test';
-import {makeClusterTille, makeClusterUrl} from '../utils';
+import {CLUSTER, makeClusterTille, makeClusterUrl} from '../utils';
 
 test('Scheduliing - Overview', async ({page}) => {
     await page.goto(makeClusterUrl('scheduling'));
