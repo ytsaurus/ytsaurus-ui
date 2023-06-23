@@ -55,7 +55,7 @@ $ npm run dev:localmode
 
 ### Configuration
 
-By default the application uses base configaration from `path_to_dist/server/configs/common.js` file. The behavior might be adjusted through `APP_ENV` and `APP_INSTALLATION` environment variables, see (README.config.md)[./docs/configuration.md] for more details.
+By default the application uses base configaration from `path_to_dist/server/configs/common.js` file. The behavior might be adjusted through `APP_ENV` and `APP_INSTALLATION` environment variables, see [README.config.md](./docs/configuration.md) for more details.
 
 ### Docker
 
