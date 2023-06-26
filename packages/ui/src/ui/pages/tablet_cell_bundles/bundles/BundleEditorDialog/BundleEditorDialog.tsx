@@ -27,25 +27,27 @@ import {
     bundleEditorDict,
     createConfigurationList,
     createParams,
+    getBundleControllerResource,
     getInitialFormValues,
-    getResource,
     getResourceData,
     prepareSubmitBundle,
     simpleBundleValidate,
 } from '../../../../utils/tablet_cell_bundles/bundles/bundle-editor-dialog';
 import UIFactory, {isAbcAllowed} from '../../../../UIFactory';
+import {makeLink} from '../../../../utils/utils';
+import {docsUrl} from '../../../../config';
 
 import './BundleEditorDialog.scss';
 
 const block = cn('bundle-editor');
 
 export interface BundleEditorDialogFormValues {
-    general?: {
+    general: {
         abc?: {slug: string; id?: number};
         changelog_account?: string;
         snapshot_account?: string;
     };
-    resources?: {
+    resources: {
         info?: string; // system
         rpc_proxy_count?: number; // todo
         rpc_proxy_resource_guarantee?: BundleResourceGuarantee;
@@ -54,9 +56,10 @@ export interface BundleEditorDialogFormValues {
         tablet_count?: number; // old
         tablet_static_memory?: number; // pld
     };
-    memory_limits?: {
+    memory_limits: {
         error?: boolean; // system
         memory_reset: boolean; // system
+        reserved?: number;
         tablet_static?: number;
         tablet_dynamic?: number;
         compressed_block_cache?: number;
@@ -64,7 +67,7 @@ export interface BundleEditorDialogFormValues {
         versioned_chunk_meta?: number;
         lookup_row_cache?: number;
     };
-    cpu_limits?: {
+    cpu_limits: {
         threadPool_reset?: boolean; //system
         lookup_thread_pool_size?: number;
         query_thread_pool_size?: number;
@@ -93,7 +96,7 @@ export function BundleEditorDialog() {
 
     const allowEdit = useSelector(isDeveloper);
 
-    const initialValues: BundleEditorDialogFormValues = (() => {
+    const initialValues: Partial<BundleEditorDialogFormValues> = (() => {
         if (!enableBundleController) {
             return getInitialFormValues(data);
         }
@@ -255,12 +258,12 @@ export function BundleEditorDialog() {
                             bundleDefaultConfig?.tablet_node_sizes[nodeConfigurationType]
                                 .default_config.cpu_limits || {};
 
-                        const resultMemory = getResource(
+                        const resultMemory = getBundleControllerResource(
                             values.memory_limits,
                             defaultMemory,
                             'memory_limits',
                         );
-                        const resultThreadPool = getResource(
+                        const resultThreadPool = getBundleControllerResource(
                             values.cpu_limits,
                             defaultThreadPool,
                             'cpu_limits',
@@ -364,7 +367,8 @@ export function BundleEditorDialog() {
                     const {memory} = tablet_node_resource_guarantee;
 
                     const used = bundleEditorDict.keys.memory_limits.reduce((sum, k) => {
-                        return sum + (allValues?.memory_limits?.[k] || 0);
+                        const v = allValues?.memory_limits?.[k];
+                        return typeof v !== 'number' || isNaN(v) ? sum : sum + v;
                     }, 0);
 
                     return {
@@ -372,6 +376,18 @@ export function BundleEditorDialog() {
                         onReset,
                     };
                 },
+            },
+            {
+                name: 'reserved',
+                type: 'bundle-input',
+                caption: 'Reserved',
+                extras: {
+                    format: 'Bytes',
+                    disabled: true,
+                },
+                tooltip: docsUrl(
+                    makeLink(UIFactory.docsUrls['bundle-controller:reserved-memory'], 'Help'),
+                ),
             },
             {
                 name: 'tablet_static',
@@ -437,6 +453,7 @@ export function BundleEditorDialog() {
                 type: 'block',
                 name: 'error',
                 validator: (v: any) => (v ? v : undefined),
+                fullWidth: true,
                 extras(allValues, form) {
                     const hasError = _.get(allValues, 'memory_limits.error');
                     const errorText = validateMemoryLimits(allValues);

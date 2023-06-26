@@ -75,6 +75,7 @@ export interface BundleResourceGuarantee {
 }
 
 export interface MemoryLimits {
+    reserved?: number;
     tablet_static?: number;
     tablet_dynamic?: number;
     compressed_block_cache?: number;
