@@ -27,6 +27,7 @@ export const CONTENT_MODE = {
     RESOURCES: 'resources',
     TABLETS: 'tablets',
     TABLET_SLOTS: 'tablet_slots',
+    CHAOS_SLOTS: 'chaos_slots',
     CUSTOM: 'custom',
 } as const;
 export const FLAG_STATE = {
