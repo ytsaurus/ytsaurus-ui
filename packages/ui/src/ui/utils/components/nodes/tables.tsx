@@ -43,19 +43,25 @@ export const PropertiesByColumn = {
     data_center: ['dataCenter'],
     decommissioned: ['decommissioned'],
     elections: ['tabletSlots'],
+    elections_chaos: ['chaosSlots'],
     follower_recovery: ['tabletSlots'],
+    follower_recovery_chaos: ['chaosSlots'],
     following: ['tabletSlots'],
+    following_chaos: ['chaosSlots'],
     full: ['full'],
     host: ['cluster', 'host'],
     io_weight: ['IOWeight'],
     last_seen: ['lastSeenTime'],
     leader_recovery: ['tabletSlots'],
+    leader_recovery_chaos: ['chaosSlots'],
     leading: ['tabletSlots'],
+    leading_chaos: ['chaosSlots'],
     locations: ['locations', 'enabledLocations'],
     memory_total: ['memoryProgress', 'memoryTotalText'],
     memory: ['memoryData', 'memoryProgress', 'memoryText'],
     network: ['networkProgress', 'networkText'],
     none: ['tabletSlots'],
+    none_chaos: ['chaosSlots'],
     physical_host: ['physicalHost'],
     rack: ['rack'],
     removal_slots: ['removalSlots', 'removalSlotsProgress'],
@@ -68,6 +74,7 @@ export const PropertiesByColumn = {
     space: ['spaceAvailable', 'spaceProgress', 'spaceText', 'spaceUsed'],
     state: ['state'],
     stopped: ['tabletSlots'],
+    stopped_chaos: ['chaosSlots'],
     system_tags: ['systemTags'],
     tablet_cells: ['disableTabletCells'],
     tablet_memory_dynamic: ['tabletDynamicMemory'],
@@ -413,6 +420,18 @@ const nodesTableProps = {
                 },
                 //                sort: true,
                 align: 'center',
+                ...makeCaptionProps('TS None', 'Tablet Slots None'),
+            },
+            none_chaos: {
+                get(node) {
+                    return node.chaosSlots?.byState.none;
+                },
+                sort(node) {
+                    return node.chaosSlots?.byState.none?.length;
+                },
+                //                sort: true,
+                align: 'center',
+                ...makeCaptionProps('CS None', 'Chaos Slots None'),
             },
             leading: {
                 get(node) {
@@ -422,6 +441,17 @@ const nodesTableProps = {
                     return node.tabletSlots?.byState?.leading?.length;
                 },
                 align: 'center',
+                ...makeCaptionProps('TS Leading', 'Tablet Slots Leading'),
+            },
+            leading_chaos: {
+                get(node) {
+                    return node.chaosSlots?.byState.leading;
+                },
+                sort(node) {
+                    return node.chaosSlots?.byState?.leading?.length;
+                },
+                align: 'center',
+                ...makeCaptionProps('CS Leading', 'Chaos Slots Leading'),
             },
             following: {
                 get(node) {
@@ -431,6 +461,17 @@ const nodesTableProps = {
                     return node.tabletSlots?.byState?.following?.length;
                 },
                 align: 'center',
+                ...makeCaptionProps('TS Following', 'Tablet Slots Following'),
+            },
+            following_chaos: {
+                get(node) {
+                    return node.chaosSlots?.byState.following;
+                },
+                sort(node) {
+                    return node.chaosSlots?.byState?.following?.length;
+                },
+                align: 'center',
+                ...makeCaptionProps('CS Following', 'Chaos Slots Following'),
             },
             follower_recovery: {
                 get(node) {
@@ -440,11 +481,17 @@ const nodesTableProps = {
                     return node.tabletSlots?.byState.follower_recovery?.length;
                 },
                 align: 'center',
-                caption: 'FR',
-                tooltipProps: {
-                    placement: 'bottom',
-                    content: 'Follower Recovery',
+                ...makeCaptionProps('TS FR', 'Tablet Slots Follower Recovery'),
+            },
+            follower_recovery_chaos: {
+                get(node) {
+                    return node.chaosSlots?.byState.follower_recovery;
                 },
+                sort(node) {
+                    return node.chaosSlots?.byState.follower_recovery?.length;
+                },
+                align: 'center',
+                ...makeCaptionProps('CS FR', 'Chaos Slots Follower Recovery'),
             },
             leader_recovery: {
                 get(node) {
@@ -452,11 +499,15 @@ const nodesTableProps = {
                 },
                 sort: true,
                 align: 'center',
-                caption: 'LR',
-                tooltipProps: {
-                    placement: 'bottom',
-                    content: 'Leader Recovery',
+                ...makeCaptionProps('TS LR', 'Tablet Slots Leader Recovery'),
+            },
+            leader_recovery_chaos: {
+                get(node) {
+                    return node.chaosSlots?.byState['leader_recovery'];
                 },
+                sort: true,
+                align: 'center',
+                ...makeCaptionProps('CS LR', 'Chaos Slots Leader Recovery'),
             },
             stopped: {
                 get(node) {
@@ -466,6 +517,17 @@ const nodesTableProps = {
                     return node.tabletSlots?.byState.stopped?.length;
                 },
                 align: 'center',
+                ...makeCaptionProps('TS Stopped', 'Tablet Slots Stopped'),
+            },
+            stopped_chaos: {
+                get(node) {
+                    return node.chaosSlots?.byState.stopped;
+                },
+                sort(node) {
+                    return node.chaosSlots?.byState.stopped?.length;
+                },
+                align: 'center',
+                ...makeCaptionProps('CS Stopped', 'Chaos Slots Stopped'),
             },
             elections: {
                 get(node) {
@@ -475,6 +537,17 @@ const nodesTableProps = {
                     return node.tabletSlots?.byState.elections?.length;
                 },
                 align: 'center',
+                ...makeCaptionProps('TS Elections', 'Tablet Slots Elections'),
+            },
+            elections_chaos: {
+                get(node) {
+                    return node.chaosSlots?.byState.elections;
+                },
+                sort(node) {
+                    return node.chaosSlots?.byState.elections?.length;
+                },
+                align: 'center',
+                ...makeCaptionProps('CS Elections', 'Chaos Slots Elections'),
             },
             tablet_memory: {
                 group: true,
@@ -557,6 +630,18 @@ const nodesTableProps = {
                     'leader_recovery',
                     'stopped',
                     'elections',
+                ],
+            },
+            chaos_slots: {
+                items: [
+                    'host',
+                    'none_chaos',
+                    'leading_chaos',
+                    'following_chaos',
+                    'follower_recovery_chaos',
+                    'leader_recovery_chaos',
+                    'stopped_chaos',
+                    'elections_chaos',
                 ],
             },
             custom: {
@@ -800,8 +885,20 @@ export const NODES_TABLE_TEMPLATES: Templates = {
         return data ? <StatusBlock text={data.length} theme="default" /> : hammer.format.NO_VALUE;
     },
 
+    none_chaos(item) {
+        const data = item.chaosSlots?.byState.none;
+
+        return data ? <StatusBlock text={data.length} theme="default" /> : hammer.format.NO_VALUE;
+    },
+
     leading(item) {
         const data = item.tabletSlots?.byState.leading;
+
+        return data ? <StatusBlock text={data.length} theme="success" /> : hammer.format.NO_VALUE;
+    },
+
+    leading_chaos(item) {
+        const data = item.chaosSlots?.byState.leading;
 
         return data ? <StatusBlock text={data.length} theme="success" /> : hammer.format.NO_VALUE;
     },
@@ -812,8 +909,20 @@ export const NODES_TABLE_TEMPLATES: Templates = {
         return data ? <StatusBlock text={data.length} theme="info" /> : hammer.format.NO_VALUE;
     },
 
+    following_chaos(item) {
+        const data = item.chaosSlots?.byState.following;
+
+        return data ? <StatusBlock text={data.length} theme="info" /> : hammer.format.NO_VALUE;
+    },
+
     follower_recovery(item) {
         const data = item.tabletSlots?.byState['follower_recovery'];
+
+        return data ? <StatusBlock text={data.length} theme="warning" /> : hammer.format.NO_VALUE;
+    },
+
+    follower_recovery_chaos(item) {
+        const data = item.chaosSlots?.byState['follower_recovery'];
 
         return data ? <StatusBlock text={data.length} theme="warning" /> : hammer.format.NO_VALUE;
     },
@@ -824,14 +933,32 @@ export const NODES_TABLE_TEMPLATES: Templates = {
         return data ? <StatusBlock text={data.length} theme="warning" /> : hammer.format.NO_VALUE;
     },
 
+    leader_recovery_chaos(item) {
+        const data = item.chaosSlots?.byState['leader_recovery'];
+
+        return data ? <StatusBlock text={data.length} theme="warning" /> : hammer.format.NO_VALUE;
+    },
+
     stopped(item) {
         const data = item.tabletSlots?.byState.stopped;
 
         return data ? <StatusBlock text={data.length} theme="default" /> : hammer.format.NO_VALUE;
     },
 
+    stopped_chaos(item) {
+        const data = item.chaosSlots?.byState.stopped;
+
+        return data ? <StatusBlock text={data.length} theme="default" /> : hammer.format.NO_VALUE;
+    },
+
     elections(item) {
         const data = item.tabletSlots?.byState.elections;
+
+        return data ? <StatusBlock text={data.length} theme="warning" /> : hammer.format.NO_VALUE;
+    },
+
+    elections_chaos(item) {
+        const data = item.chaosSlots?.byState.elections;
 
         return data ? <StatusBlock text={data.length} theme="warning" /> : hammer.format.NO_VALUE;
     },
@@ -897,4 +1024,14 @@ export function getNodeTablesProps(mediumList: string[] = []) {
     });
     res.columns!.items!.io_weight!.set = mediumList;
     return res;
+}
+
+function makeCaptionProps(columnName: string, title: string) {
+    return {
+        caption: columnName,
+        tooltipProps: {
+            placement: 'bottom',
+            content: title,
+        },
+    };
 }

@@ -165,7 +165,9 @@ $elements-table: '.elements-table';
 
             &_role,
             &_follower-recovery,
-            &_leader-recovery {
+            &_follower-recovery-chaos,
+            &_leader-recovery,
+            &_leader-recovery-chaos {
                 width: 80px;
             }
 
@@ -179,10 +181,15 @@ $elements-table: '.elements-table';
             &_leading,
             &_following,
             &_stopped,
-            &_elections {
+            &_elections,
+            &_none-chaos,
+            &_leading-chaos,
+            &_stopped-chaos,
+            &_elections-chaos {
                 width: 90px;
             }
 
+            &_following-chaos,
             &_load-average,
             &_network-load,
             &_cpu,

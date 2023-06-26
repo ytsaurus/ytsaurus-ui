@@ -50,7 +50,7 @@ export class Node {
         'used_space',
         'chunk_count',
         'session_count',
-        'tablet_slots',
+        'cellars',
         'io_weight',
         'resource_usage',
         'resource_limits',
@@ -85,6 +85,7 @@ export class Node {
     banMessage?: string;
     banned!: boolean;
     cachedReplicas!: number;
+    chaosSlots!: TabletSlots;
     chunks!: number;
     cpu: unknown;
     cpuProgress!: number;
@@ -376,24 +377,10 @@ export class Node {
     }
 
     private prepareTabletsStatistics(attributes: Attributes) {
-        const tabletSlots = ypath.getValue(attributes, '/tablet_slots');
+        this.tabletSlots = prepareTabletSlots(ypath.getValue(attributes, '/cellars/tablet'));
+        this.chaosSlots = prepareTabletSlots(ypath.getValue(attributes, '/cellars/chaos'));
+
         const memory = this.memory;
-
-        if (tabletSlots) {
-            const states = _.groupBy(tabletSlots, 'state');
-
-            this.tabletSlots = {
-                raw: tabletSlots,
-                byState: states,
-                all: _.flatten(_.values(states)),
-            };
-        } else {
-            this.tabletSlots = {
-                raw: [],
-                byState: {},
-                all: [],
-            };
-        }
 
         const staticUsed = ypath.getValue(memory, '/tablet_static/used');
         const staticLimit = ypath.getValue(memory, '/tablet_static/limit');
@@ -420,7 +407,26 @@ export class Node {
     }
 }
 
+function prepareTabletSlots(tabletSlots: Array<any>): TabletSlots {
+    if (tabletSlots) {
+        const states = _.groupBy(tabletSlots, 'state');
+
+        return {
+            raw: tabletSlots,
+            byState: states,
+            all: _.flatten(_.values(states)),
+        };
+    } else {
+        return {
+            raw: [],
+            byState: {},
+            all: [],
+        };
+    }
+}
+
 type AttributeName = (typeof Node.ATTRIBUTES)[number] | 'versions';
+
 type Attributes = Record<AttributeName, FIX_MY_TYPE>;
 
 const alertsAttributes: ReadonlyArray<AttributeName> = ['alerts'];
@@ -510,7 +516,8 @@ export const AttributesByProperty: Record<keyof Node, ReadonlyArray<AttributeNam
         hostAttributes,
     ),
     tabletDynamicMemory: memoryAttributes,
-    tabletSlots: ['tablet_slots'],
+    tabletSlots: ['cellars'],
+    chaosSlots: ['cellars'],
     tabletStaticMemory: memoryAttributes,
     tags: tagsAttributes,
     userSlots: userSlotsAttributes,
