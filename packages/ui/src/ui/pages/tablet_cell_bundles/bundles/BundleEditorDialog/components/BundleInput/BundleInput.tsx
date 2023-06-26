@@ -36,6 +36,7 @@ type BundleInputProps = DialogControlProps<
         tooltip?: React.ReactNode;
         withoutDetailedBar?: boolean;
         format?: 'Bytes' | 'Number';
+        disabled?: boolean;
         decimalPlaces?: number;
         preciseInitialRawValue?: boolean;
         progress?: {
@@ -61,6 +62,7 @@ export function BundleInput(props: BundleInputProps) {
         decimalPlaces,
         preciseInitialRawValue,
         error,
+        disabled,
     } = props;
     const [parsedValue, setParsedValue] = useState<number | undefined>();
     const [parsedError, setParsedError] = useState<string | undefined>();
@@ -125,6 +127,7 @@ export function BundleInput(props: BundleInputProps) {
                                 error={Boolean(parsedError)}
                                 onFocus={() => setFocused(true)}
                                 onBlur={() => setFocused(false)}
+                                disabled={disabled}
                             />
                         )}
                         {!withoutDetailedBar && (

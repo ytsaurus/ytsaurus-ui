@@ -10,7 +10,13 @@ import {BundleParam} from '../../../../pages/tablet_cell_bundles/bundles/BundleE
 import {BundleEditorDialogFormValues} from '../../../../pages/tablet_cell_bundles/bundles/BundleEditorDialog/BundleEditorDialog';
 import {FormApi} from '../../../../components/Dialog/Dialog';
 
-export const bundleEditorDict = {
+type InnerKeys<T> = {[K in keyof T]: Array<keyof T[K]>};
+type FormKeys = InnerKeys<Required<BundleEditorDialogFormValues>>;
+
+export const bundleEditorDict: {
+    keys: Pick<FormKeys, 'memory_limits' | 'resources' | 'cpu_limits'>;
+    defaults: Pick<Required<BundleEditorDialogFormValues>, 'memory_limits' | 'cpu_limits'>;
+} = {
     keys: {
         resources: [
             'rpc_proxy_count',
@@ -19,13 +25,14 @@ export const bundleEditorDict = {
             'tablet_node_resource_guarantee',
         ],
         memory_limits: [
+            'reserved',
             'tablet_static',
             'tablet_dynamic',
             'compressed_block_cache',
             'uncompressed_block_cache',
             'versioned_chunk_meta',
             'lookup_row_cache',
-        ] as const,
+        ],
         cpu_limits: ['lookup_thread_pool_size', 'query_thread_pool_size', 'write_thread_pool_size'],
     },
     defaults: {
@@ -60,7 +67,7 @@ export const getResourceData = (source: object, resourceType: string) => {
 export const getInitialFormValues = (
     data: object,
     bundleControllerConfig?: BundleControllerConfig,
-): BundleEditorDialogFormValues => {
+): Partial<BundleEditorDialogFormValues> => {
     const slug = ypath.getValue(data, '/@abc/slug');
     const changelogAccount = ypath.getValue(data, `/@options/changelog_account`);
     const snapshotAccount = ypath.getValue(data, `/@options/snapshot_account`);
@@ -107,6 +114,7 @@ export const getInitialFormValues = (
         memory_limits: {
             error: false, // system
             memory_reset: false, // system
+            reserved: memory_limits?.reserved || 0,
             tablet_static: memory_limits?.tablet_static || 0,
             tablet_dynamic: memory_limits?.tablet_dynamic || 0,
             compressed_block_cache: memory_limits?.compressed_block_cache || 0,
@@ -254,17 +262,16 @@ export const simpleBundleValidate = (v?: number | string) => {
     return error;
 };
 
-export function getResource(
-    current: any,
-    defaultValues: any,
-    resourceName: 'cpu_limits' | 'memory_limits',
+export function getBundleControllerResource<K extends 'cpu_limits' | 'memory_limits'>(
+    current: Partial<Required<BundleEditorDialogFormValues>[K]>,
+    defaultValues: Partial<Required<BundleEditorDialogFormValues>[K]>,
+    resourceName: K,
 ) {
-    const result = Object.create(null);
+    const result: Partial<BundleEditorDialogFormValues[K]> = {};
 
-    const resourcesKeys = bundleEditorDict.keys[resourceName];
-    resourcesKeys.forEach((resName) => {
-        result[resName] =
-            typeof current[resName] !== 'undefined' ? current[resName] : defaultValues[resName];
-    });
+    for (const key of bundleEditorDict.keys[resourceName]) {
+        result[key] = current[key] ?? defaultValues[key];
+    }
+
     return result;
 }

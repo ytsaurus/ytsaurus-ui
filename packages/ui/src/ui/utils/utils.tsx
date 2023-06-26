@@ -274,7 +274,7 @@ export function delayed<T>(callBack: () => Promise<T>, timeout: number): Promise
 }
 
 export function makeLink(url: string, text: string) {
-    return (
+    return !url ? undefined : (
         <Link href={url} target={'_blank'}>
             {text}
         </Link>
