@@ -4,9 +4,11 @@ import {
     RequestQueryAction,
     SET_QUERY,
     SET_QUERY_LOAD_ERROR,
+    SET_QUERY_PARAMS,
     SET_QUERY_PATCH,
     SetQueryAction,
     SetQueryErrorLoadAction,
+    SetQueryParamsAction,
     SetQueryPatchAction,
     UPDATE_QUERY,
     UpdateQueryAction,
@@ -20,6 +22,7 @@ export interface QueryState {
         engine?: string;
         path?: string;
         cluster?: string;
+        useDraft?: boolean;
     };
     state: 'init' | 'loading' | 'ready' | 'error';
 }
@@ -46,7 +49,10 @@ export function reducer(state = initState, action: Actions): QueryState {
                 draft: {
                     ...initialQueryDraftState,
                     ...(action.data.initialQuery
-                        ? cleanupQueryForDraft(action.data.initialQuery)
+                        ? cleanupQueryForDraft({
+                              ...action.data.initialQuery,
+                              query: action.data.draftText || action.data.initialQuery.query,
+                          })
                         : {}),
                 },
                 state: 'ready',
@@ -79,6 +85,14 @@ export function reducer(state = initState, action: Actions): QueryState {
                 },
             };
         }
+        case SET_QUERY_PARAMS: {
+            return {
+                ...state,
+                params: {
+                    ...action.data.params,
+                },
+            };
+        }
     }
     return state;
 }
@@ -88,4 +102,5 @@ type Actions =
     | RequestQueryAction
     | SetQueryErrorLoadAction
     | SetQueryPatchAction
-    | UpdateQueryAction;
+    | UpdateQueryAction
+    | SetQueryParamsAction;

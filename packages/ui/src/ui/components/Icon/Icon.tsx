@@ -24,14 +24,29 @@ const findNameInClass = (classValue: string): string | null => {
     }
 };
 
+const iconSizes = {
+    s: 10,
+    m: 13,
+    l: 16,
+    xl: 18,
+};
+
+const getNumberSize = (size: number | 's' | 'm' | 'l' | 'xl') => {
+    if (typeof size === 'string') {
+        return iconSizes[size];
+    }
+    return size;
+};
+
 export interface IconProps {
     className?: string;
     awesome?: IconName;
     face?: 'solid' | 'light' | 'regular' | 'brands';
     spin?: boolean;
+    size?: number | 's' | 'm' | 'l' | 'xl';
 }
 
-export default function Icon({className = '', face, awesome, spin}: IconProps) {
+export default function Icon({className = '', face, awesome, spin, size: propSize}: IconProps) {
     const inputEl = useRef(null);
     const [size, setSize] = useState(13);
 
@@ -57,6 +72,7 @@ export default function Icon({className = '', face, awesome, spin}: IconProps) {
 
     const hasIcon: boolean = iconName !== null && iconName in iconNames;
 
+    const iconsSize = propSize ? getNumberSize(propSize) : size;
     return (
         <span
             ref={inputEl}
@@ -65,7 +81,7 @@ export default function Icon({className = '', face, awesome, spin}: IconProps) {
                 spin,
             })} icon icon_awesome ${className}`}
         >
-            <KitIcon data={icon} size={size} />
+            <KitIcon data={icon} size={iconsSize} />
         </span>
     );
 }

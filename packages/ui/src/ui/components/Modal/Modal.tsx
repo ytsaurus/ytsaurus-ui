@@ -20,8 +20,8 @@ interface ModalProps {
     onConfirm?: () => void;
     isConfirmDisabled?: () => boolean;
     onCancel: () => void;
-    renderCustomCancel: (className: string) => React.ReactNode;
-    renderCustomConfirm: (className: string) => React.ReactNode;
+    renderCustomCancel?: (className: string) => React.ReactNode;
+    renderCustomConfirm?: (className: string) => React.ReactNode;
     confirmText?: string;
     confirmTheme?: ButtonProps['view'];
     content?: React.ReactNode;

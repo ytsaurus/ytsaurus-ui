@@ -9,11 +9,12 @@ export function createQueryUrl(cluster: string, query_id: string) {
 export function createNewQueryUrl(
     QTcluster: string,
     engine: QueryEngine,
-    {tableCluster, path}: {tableCluster?: string; path?: string},
+    {tableCluster, path, useDraft}: {tableCluster?: string; path?: string; useDraft?: boolean},
 ) {
     return makeRoutedURL(`/${QTcluster}/${Page.QUERIES}?`, {
         engine,
         path: path || undefined,
         cluster: tableCluster || QTcluster,
+        useDraft: useDraft || undefined,
     });
 }

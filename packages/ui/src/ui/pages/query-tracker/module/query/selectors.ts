@@ -1,3 +1,4 @@
+import {createSelector} from 'reselect';
 import {RootState} from '../../../../store/reducers';
 import {QueryStatus} from '../api';
 
@@ -21,3 +22,12 @@ export const isQueryExecuted = (state: RootState): boolean => {
 };
 
 export const getCurrentQuery = (state: RootState) => getState(state).queryItem;
+
+export const isQueryDraftEditted = createSelector([getQuery, getQueryDraft], (query, draft) => {
+    return query?.query !== draft.query;
+});
+
+export const hasLoadedQueryItem = (state: RootState) => {
+    const queryItem = getState(state).queryItem;
+    return Boolean(queryItem?.id);
+};

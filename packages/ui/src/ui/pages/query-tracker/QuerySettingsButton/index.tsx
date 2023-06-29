@@ -300,8 +300,8 @@ export const QuerySettingsButton = ({
 
     return (
         <>
-            <Button className={className} onClick={toggleOpened} ref={ref} view="outlined">
-                <Icon data={dots} />
+            <Button className={className} onClick={toggleOpened} ref={ref} view="outlined" size="l">
+                <Icon data={dots} size={16} />
             </Button>
             <Popup anchorRef={ref} open={opened} className={b()} onOutsideClick={toggleOpened}>
                 <div className={b('header')}>

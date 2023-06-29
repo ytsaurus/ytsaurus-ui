@@ -1,13 +1,13 @@
-import React, {useCallback, useState} from 'react';
+import React from 'react';
 import cn from 'bem-cn-lite';
 import {QueryEditor} from '../QueryEditor/QueryEditor';
-import {QueryMetaForm} from '../QueryTrackerTopRow/QueryMetaForm';
+import {QueryMetaForm} from '../QueryTrackerTopRow/QueryMetaForm/QueryMetaForm';
 import Icon from '../../../components/Icon/Icon';
 import {useSelector} from 'react-redux';
 import {getCluster} from '../../../store/selectors/global';
-import {createQueryUrl} from '../utils/navigation';
 import {Button} from '@gravity-ui/uikit';
-import {QueryTrackerNewButton} from '../QueryTrackerNewButton';
+import {QueryTrackerOpenButton} from '../QueryTrackerOpenButton/QueryTrackerOpenButton';
+import {getPath} from '../../../store/selectors/navigation';
 import './index.scss';
 
 const block = cn('query-widget');
@@ -16,47 +16,27 @@ export type QueryWidgetProps = {onClose: () => void};
 
 export function QueryWidget({onClose}: QueryWidgetProps) {
     const cluster = useSelector(getCluster);
-    const [queryId, setQueryId] = useState<string | null>(null);
-    const onStartQuery = useCallback(
-        (query: string) => {
-            setQueryId(query);
-        },
-        [setQueryId],
-    );
+    const path = useSelector(getPath);
     return (
         <div className={block()}>
             <div className={block('header')}>
-                <QueryMetaForm className={block('meta-form')} />
+                <QueryMetaForm className={block('meta-form')} cluster={cluster} path={path} />
                 <div className={block('header-controls')}>
                     <div className={block('header-control-left')}>
-                        {queryId && (
-                            <Button
-                                className={block('control')}
-                                view="outlined"
-                                href={createQueryUrl(cluster, queryId)}
-                                target="_blank"
-                            >
-                                <Icon awesome="external-link" />
-                                Open query
-                            </Button>
-                        )}
+                        <QueryTrackerOpenButton
+                            className={block('control')}
+                            cluster={cluster}
+                            path={path}
+                        />
                     </div>
                     <div className={block('header-control-right')}>
-                        <QueryTrackerNewButton
-                            className={block('control')}
-                            renderDefaultTitle={({engineTitle}) => (
-                                <>Open query in {engineTitle} syntax</>
-                            )}
-                            cluster={cluster}
-                            target="_blank"
-                        />
-                        <Button view="flat" className={block('control')} onClick={onClose}>
-                            <Icon awesome="times" />
+                        <Button view="flat" className={block('control')} onClick={onClose} size="l">
+                            <Icon awesome="times" size={16} />
                         </Button>
                     </div>
                 </div>
             </div>
-            <QueryEditor onStartQuery={onStartQuery} />
+            <QueryEditor />
         </div>
     );
 }
