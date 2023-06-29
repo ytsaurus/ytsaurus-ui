@@ -1,15 +1,13 @@
 .editable-as-text {
-    &__icon {
-        display: inline-block;
-        padding-left: 1ex;
-
-        &:hover {
-            cursor: pointer;
-            color: var(--hover-link);
-        }
-    }
-
     &__control {
         margin-right: 8px;
+        &:last-child {
+            margin-right: 0;
+        }
+        &_type {
+            &_edit {
+                margin-left: 8px;
+            }
+        }
     }
 }

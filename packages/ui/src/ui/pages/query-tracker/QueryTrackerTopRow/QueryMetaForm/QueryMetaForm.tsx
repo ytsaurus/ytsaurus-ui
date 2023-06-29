@@ -1,37 +1,28 @@
 import React, {useCallback} from 'react';
 import cn from 'bem-cn-lite';
-import {Select, Text} from '@gravity-ui/uikit';
+import {Text} from '@gravity-ui/uikit';
 import {EditableAsText} from '../../../../components/EditableAsText/EditableAsText';
 import {useDispatch, useSelector} from 'react-redux';
-import {Engines} from '../../module/api';
-import {SET_QUERY_PATCH} from '../../module/query/actions';
 import {getQuery, getQueryDraft} from '../../module/query/selectors';
-import {QueryEnginesNames} from '../../utils/query';
 import {QuerySettingsButton} from '../../QuerySettingsButton';
-import './index.scss';
+import {SET_QUERY_PATCH} from '../../module/query/actions';
+import {QueryEngineSelector} from './QueryEngineSelector/QueryEngineSelector';
 
-const EngineOptions = Engines.map((key) => ({
-    value: key,
-    content: QueryEnginesNames[key],
-}));
+import './QueryMetaForm.scss';
 
 const block = cn('query-tracker-meta-form');
-export function QueryMetaForm({className}: {className: string}) {
+export function QueryMetaForm({
+    className,
+    cluster,
+    path,
+}: {
+    className: string;
+    cluster?: string;
+    path?: string;
+}) {
     const dispatch = useDispatch();
     const draft = useSelector(getQueryDraft);
     const originalQuery = useSelector(getQuery);
-
-    const onEngineChange = useCallback(
-        (engines: string[]) => {
-            dispatch({
-                type: SET_QUERY_PATCH,
-                data: {
-                    engine: engines[0],
-                },
-            });
-        },
-        [dispatch],
-    );
 
     const onNameChange = useCallback(
         (name: string) => {
@@ -68,6 +59,7 @@ export function QueryMetaForm({className}: {className: string}) {
                 onChange={onNameChange}
                 text={queryName}
                 key={originalQuery?.id}
+                size="l"
             >
                 <Text
                     title={queryName}
@@ -78,12 +70,7 @@ export function QueryMetaForm({className}: {className: string}) {
                     {queryName || 'No name'}
                 </Text>
             </EditableAsText>
-            <Select
-                className={block('control')}
-                options={EngineOptions}
-                value={[draft.engine]}
-                onUpdate={onEngineChange}
-            />
+            <QueryEngineSelector cluster={cluster} path={path} className={block('control')} />
             <QuerySettingsButton
                 className={block('control')}
                 settings={draft.settings}

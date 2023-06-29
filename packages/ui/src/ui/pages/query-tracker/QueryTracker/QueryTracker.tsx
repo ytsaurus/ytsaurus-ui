@@ -5,12 +5,13 @@ import FlexSplitPane from '../../../components/FlexSplitPane/FlexSplitPane';
 import {QueriesPooling} from '../hooks/QueriesPooling/context';
 import {QueryEngine, isEngine} from '../module/api';
 import {
+    SET_QUERY_PARAMS,
     createEmptyQuery,
     createQueryFromTablePath,
     goToQuery,
     loadQuery,
 } from '../module/query/actions';
-import {getQueryGetParams} from '../module/query/selectors';
+import {getQueryGetParams, getQueryText} from '../module/query/selectors';
 import {QueriesList} from '../QueriesList';
 import {QueryEditor} from '../QueryEditor/QueryEditor';
 import './QueryTracker.scss';
@@ -30,9 +31,10 @@ type Props = {
 const initialSizes = [23, 77];
 const minSize = 380; // see history list's cells size
 
-function DefaultQueriesPage() {
+function QueryPageDraft() {
     const dispatch = useDispatch();
     const routeParams = useSelector(getQueryGetParams);
+    const draftText = useSelector(getQueryText);
 
     useEffect(() => {
         const engine =
@@ -40,11 +42,29 @@ function DefaultQueriesPage() {
                 ? (routeParams.engine as QueryEngine)
                 : QueryEngine.YQL;
         if (routeParams.cluster && routeParams.path) {
-            dispatch(createQueryFromTablePath(engine, routeParams.cluster, routeParams.path));
+            if (routeParams.useDraft) {
+                dispatch({
+                    type: SET_QUERY_PARAMS,
+                    data: {
+                        params: {
+                            ...routeParams,
+                            useDraft: undefined,
+                        },
+                    },
+                });
+            }
+            dispatch(
+                createQueryFromTablePath(
+                    engine,
+                    routeParams.cluster,
+                    routeParams.path,
+                    routeParams.useDraft ? draftText : undefined,
+                ),
+            );
         } else {
             dispatch(createEmptyQuery(engine));
         }
-    }, [dispatch, routeParams]);
+    }, [dispatch]);
     return null;
 }
 
@@ -52,6 +72,12 @@ function QueryPage(props: Props) {
     const dispatch = useDispatch();
 
     useEffect(() => {
+        dispatch({
+            type: SET_QUERY_PARAMS,
+            data: {
+                params: {},
+            },
+        });
         if (props.match.params.queryId) {
             dispatch(loadQuery(props.match.params.queryId));
         } else {
@@ -78,7 +104,7 @@ export const QueryTracker = ({match}: Props) => {
     return (
         <>
             <Switch>
-                <Route exact path={match.path} component={DefaultQueriesPage} />
+                <Route exact path={match.path} component={QueryPageDraft} />
                 <Route path={`${match.path}/:queryId`} component={QueryPage} />
             </Switch>
             <QueriesPooling>

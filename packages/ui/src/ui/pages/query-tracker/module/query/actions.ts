@@ -26,6 +26,7 @@ export type SetQueryAction = ActionD<
     typeof SET_QUERY,
     {
         initialQuery?: QueryItem;
+        draftText?: string;
     }
 >;
 
@@ -37,6 +38,12 @@ export type SetQueryErrorLoadAction = ActionD<typeof SET_QUERY_LOAD_ERROR, Error
 
 export const SET_QUERY_PATCH = 'query-tracker/SET_QUERY_PATCH';
 export type SetQueryPatchAction = ActionD<typeof SET_QUERY_PATCH, Pick<QueryState, 'draft'>>;
+
+export const SET_QUERY_PARAMS = 'query-tracker/SET_QUERY_PARAMS';
+export type SetQueryParamsAction = ActionD<
+    typeof SET_QUERY_PARAMS,
+    Partial<Pick<QueryState, 'params'>>
+>;
 
 export function loadQuery(
     queryId: string,
@@ -65,7 +72,13 @@ export function createQueryFromTablePath(
     engine: QueryEngine,
     cluster: string,
     path: string,
-): ThunkAction<any, RootState, any, SetQueryAction | RequestQueryAction | SetQueryErrorLoadAction> {
+    draftText?: string,
+): ThunkAction<
+    any,
+    RootState,
+    any,
+    SetQueryAction | RequestQueryAction | SetQueryErrorLoadAction | SetQueryPatchAction
+> {
     return async (dispatch) => {
         dispatch({
             type: SET_QUERY,
@@ -88,13 +101,14 @@ export function createQueryFromTablePath(
                     type: SET_QUERY,
                     data: {
                         initialQuery: draft as QueryItem,
+                        draftText,
                     },
                 });
             } else {
-                dispatch(createEmptyQuery(engine));
+                dispatch(createEmptyQuery(engine, draftText));
             }
         } catch (e) {
-            dispatch(createEmptyQuery(engine));
+            dispatch(createEmptyQuery(engine, draftText));
         }
     };
 }

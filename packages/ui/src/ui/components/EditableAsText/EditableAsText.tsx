@@ -16,10 +16,11 @@ interface Props {
     children: React.ReactNode;
     onChange: (v: string) => void;
     withControls?: boolean;
+    size?: 's' | 'm' | 'l' | 'xl';
 }
 
 export function EditableAsText(props: Props) {
-    const {children, onChange, text, className, withControls} = props;
+    const {children, onChange, text, className, withControls, size} = props;
     const [editMode, setEditMode] = React.useState(false);
     const [input, setInput] = React.useState(text || '');
 
@@ -55,6 +56,8 @@ export function EditableAsText(props: Props) {
         [applyValue, closeAndResetValue],
     );
 
+    const controlSize = size ? size : 'm';
+
     return (
         <div className={block(null, className)}>
             {editMode ? (
@@ -62,7 +65,7 @@ export function EditableAsText(props: Props) {
                     <TextInput
                         className={block('control')}
                         autoFocus
-                        size="m"
+                        size={controlSize}
                         value={input}
                         onUpdate={handleChange}
                         onKeyDown={handleKeyDown}
@@ -74,15 +77,17 @@ export function EditableAsText(props: Props) {
                                 className={block('control')}
                                 view="normal"
                                 extraProps={{onMouseDown: applyValue}}
+                                size={controlSize}
                             >
-                                <Icon awesome={'check'} />
+                                <Icon awesome={'check'} size={controlSize} />
                             </Button>
                             <Button
                                 className={block('control')}
                                 view="normal"
                                 extraProps={{onMouseDown: closeAndResetValue}}
+                                size={controlSize}
                             >
-                                <Icon awesome={'times'} />
+                                <Icon awesome={'times'} size={controlSize} />
                             </Button>
                         </>
                     )}
@@ -90,9 +95,14 @@ export function EditableAsText(props: Props) {
             ) : (
                 <React.Fragment>
                     {children}
-                    <div className={block('icon')} onClick={startTextEdit}>
-                        <Icon awesome={'pencil'} />
-                    </div>
+                    <Button
+                        className={block('control', {type: 'edit'})}
+                        view="outlined"
+                        onClick={startTextEdit}
+                        size={controlSize}
+                    >
+                        <Icon awesome={'pencil'} size={controlSize} />
+                    </Button>
                 </React.Fragment>
             )}
         </div>
