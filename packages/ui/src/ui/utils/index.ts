@@ -154,15 +154,18 @@ export function getDisplayName(WrappedComponent): string {
     return WrappedComponent.displayName || WrappedComponent.name || 'Component';
 }
 
+export type TabSettings = {
+    show?: boolean;
+    counter?: number;
+    url?: string;
+    routed?: boolean;
+    external?: boolean;
+};
+
 export function makeTabProps<TabName extends string>(
     path: string,
     Tab: Record<string, TabName>,
-    settings?: Partial<
-        Record<
-            TabName,
-            {show?: boolean; counter?: number; url?: string; routed?: boolean; external?: boolean}
-        >
-    >,
+    settings?: Partial<Record<TabName, TabSettings>>,
     queryParams?: any,
     titleDict: Partial<Record<TabName, string>> = {},
 ) {

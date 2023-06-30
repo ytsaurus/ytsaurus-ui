@@ -48,3 +48,7 @@ fi
 if [ "false" = "$(yt exists //sys/pool_trees/default/yt-e2e-pool-2)" ]; then
     yt create --type scheduler_pool --attributes '{name="yt-e2e-pool-2";pool_tree="default";parent_name="<Root>"}'
 fi
+
+if [ "false" = "$(yt exists //sys/accounts/account-for-e2e)" ]; then
+    yt create --type account --attributes '{name="account-for-e2e"}'
+fi

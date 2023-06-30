@@ -1,7 +1,6 @@
 import React from 'react';
 import block from 'bem-cn-lite';
-import PropTypes from 'prop-types';
-import {connect, useSelector} from 'react-redux';
+import {ConnectedProps, connect, useSelector} from 'react-redux';
 import _ from 'lodash';
 import {Redirect, Route, Switch} from 'react-router';
 
@@ -18,7 +17,8 @@ import {
     getActiveAccount,
 } from '../../../store/selectors/accounts/accounts-ts';
 import {getLastVisitedTabs} from '../../../store/selectors/settings';
-import {makeTabProps} from '../../../utils';
+import {TabSettings, makeTabProps} from '../../../utils';
+import {formatByParams} from '../../../utils/format';
 
 import AccountsGeneralTab from '../tabs/general/AccountsGeneralTab';
 import AccountStatisticTab from '../tabs/statistic/AccountStatisticTab';
@@ -28,26 +28,27 @@ import AccountsUsageTab from '../tabs/detailed-usage/AccountUsageTab';
 import {useAppRumMeasureStart} from '../../../rum/rum-app-measures';
 import {useRumMeasureStop} from '../../../rum/RumUiContext';
 import {RumMeasureTypes} from '../../../rum/rum-measure-types';
-import {getUISizes} from '../../../store/selectors/global';
+import {getCluster, getUISizes} from '../../../store/selectors/global';
 import AccountsUpdater from './AccountsUpdater';
 import {getAccountsUsageBasePath} from '../../../config';
+import {RootState} from '../../../store/reducers';
 
 import './Accounts.scss';
 import UIFactory from '../../../UIFactory';
 
 const b = block('accounts');
 
-export class Accounts extends React.Component {
-    static propTypes = {
-        activeAccount: PropTypes.string.isRequired,
-    };
+type Props = ConnectedProps<typeof connector>;
 
-    state = {
-        editMode: false,
+export class Accounts extends React.Component<
+    Props & {match: {url: string; path: string}; lastVisitedTab: string}
+> {
+    static defaultProps = {
+        lastVisitedTab: ACCOUNTS_DEFAULT_TAB,
     };
 
     render() {
-        const {match, lastVisitedTab, activeAccount, tabSize, allowUsageTab} = this.props;
+        const {match, cluster, lastVisitedTab, activeAccount, tabSize, allowUsageTab} = this.props;
         const showSettings = _.reduce(
             AccountsTab,
             (acc, tab) => {
@@ -56,7 +57,7 @@ export class Accounts extends React.Component {
                 };
                 return acc;
             },
-            {},
+            {} as Record<string, TabSettings>,
         );
         const usageTab = showSettings[AccountsTab.USAGE];
         usageTab.show = usageTab.show && Boolean(allowUsageTab);
@@ -64,14 +65,28 @@ export class Accounts extends React.Component {
         const statsTab = showSettings[AccountsTab.STATISTICS];
         statsTab.show = statsTab.show && Boolean(UIFactory.getStatisticsComponentForAccount());
 
+        const {
+            component: monitoringComponent,
+            urlTemplate,
+            title: monitoringTitle,
+        } = UIFactory.getMonitoringForAccounts() ?? {};
         const monTab = showSettings[AccountsTab.MONITOR];
-        monTab.show = monTab.show && Boolean(UIFactory.getMonitorComponentForAccount());
+        monTab.show = monTab.show && Boolean(monitoringComponent ?? urlTemplate);
+        if (urlTemplate) {
+            monTab.routed = false;
+            monTab.external = true;
+            monTab.url = formatByParams(urlTemplate, {
+                ytCluster: cluster,
+                ytAccount: activeAccount,
+            });
+        }
 
         const props = makeTabProps(match.url, AccountsTab, showSettings, undefined, {
             [AccountsTab.USAGE]: 'Detailed usage',
+            [AccountsTab.MONITOR]: monitoringTitle ?? 'Monitoring',
         });
 
-        const lastTab = AccountsTab[lastVisitedTab] ? lastVisitedTab : undefined;
+        const lastTab = lastVisitedTab in AccountsTab ? lastVisitedTab : undefined;
         const tabToRedirect = activeAccount && lastTab ? lastTab : AccountsTab.GENERAL;
 
         return (
@@ -103,10 +118,12 @@ export class Accounts extends React.Component {
                                     component={AccountStatisticTab}
                                 />
                             )}
-                            {monTab.show && (
+                            {monTab.show && monitoringComponent && (
                                 <Route
                                     path={`${match.path}/${AccountsTab.MONITOR}`}
-                                    component={AccountsMonitorTab}
+                                    render={() => (
+                                        <AccountsMonitorTab component={monitoringComponent} />
+                                    )}
                                 />
                             )}
                             <Route
@@ -128,20 +145,7 @@ export class Accounts extends React.Component {
     }
 }
 
-Accounts.propTypes = {
-    // from react-router
-    match: PropTypes.shape({
-        path: PropTypes.string.isRequired,
-    }).isRequired,
-    // from connect
-    lastVisitedTab: PropTypes.string,
-};
-
-Accounts.defaultProps = {
-    lastVisitedTab: ACCOUNTS_DEFAULT_TAB,
-};
-
-const mapStateToProps = (state) => {
+const mapStateToProps = (state: RootState) => {
     const lastVisitedTabs = getLastVisitedTabs(state);
 
     return {
@@ -149,10 +153,12 @@ const mapStateToProps = (state) => {
         activeAccount: getActiveAccount(state),
         tabSize: getUISizes(state).tabSize,
         allowUsageTab: Boolean(getAccountsUsageBasePath()),
+        cluster: getCluster(state),
     };
 };
 
-export default connect(mapStateToProps)(Accounts);
+const connector = connect(mapStateToProps);
+export default connector(Accounts);
 
 function AccountsRumMeasure() {
     const isFinalStatus = useSelector(getAccountsIsFinalLoadingStatus);

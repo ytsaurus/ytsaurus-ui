@@ -108,9 +108,14 @@ export interface UIFactory {
         };
     }): Array<SchedulingExtraTab>;
 
-    getMonitorComponentForAccount():
+    getMonitoringForAccounts():
         | undefined
-        | React.ComponentType<{cluster: string; account: string}>;
+        | {
+              component: React.ComponentType<{cluster: string; account: string}>;
+              urlTemplate?: undefined;
+              title?: undefined;
+          }
+        | {urlTemplate: string; title?: string; component?: undefined};
     getMonitorComponentForBundle():
         | undefined
         | React.ComponentType<{cluster: string; tablet_cell_bundle: string; bundleData: any}>;
@@ -365,11 +370,11 @@ const uiFactory: UIFactory = {
     },
 
     getSchedulingExtraTabs() {
-        if (!uiSettings.schedulingMonitoring) {
+        if (!uiSettings.schedulingMonitoring?.urlTemplate) {
             return [];
         }
 
-        const {urlTemplate, tabName: title = 'Monitoring'} = uiSettings.schedulingMonitoring;
+        const {urlTemplate, title = 'Monitoring'} = uiSettings.schedulingMonitoring;
 
         return [
             {
@@ -379,9 +384,13 @@ const uiFactory: UIFactory = {
             },
         ];
     },
+    getMonitoringForAccounts() {
+        if (!uiSettings?.accountsMonitoring?.urlTemplate) {
+            return undefined;
+        }
 
-    getMonitorComponentForAccount() {
-        return undefined;
+        const {urlTemplate, title} = uiSettings.accountsMonitoring;
+        return {urlTemplate, title};
     },
     getMonitorComponentForBundle() {
         return undefined;
