@@ -34,17 +34,23 @@ export interface UISettings {
     fontTypes?: Record<string, {regular: string; monospace: string}>;
 
     /**
-     * schedulingMonitoring.urlTemplate template might contain following parameters: ytCluster, ytPool, ytPoolTree.
-     * All the parameters are optional. They will be replaced with corresponding values.
-     * A parameter should be wrapped by '{' and '}' characters, see example below:
-     * @example 'https://grafana.mydomain.com?var-pool={ytPool}&var-tree={ytPoolTree}&var-cluster={ytCluster}'
+     * schedulingMonitoring.urlTemplate supports following parameters: {ytCluster}, {ytPool}, {ytPoolTree}.
+     * All the parameters are optional and they are replaced with corresponding values.
+     * @example {urlTemplate: 'https://my.monitoring.service/scheduling?cluster={ytCluster}&pool={ytPool}&poolTree={ytPoolTree}'}
      */
     schedulingMonitoring?: UISettingsMonitoring;
+
+    /**
+     * accountsMonitoring.urlTemplate supports following parameters: {ytCluster}, {ytAccount}
+     * All the parameters are optional and they are replaced with corresponding values.
+     * @example {urlTemplate: 'https://grafana.mydomain.com/accounts?cluster={ytCluster}&account={ytAccount}'}
+     */
+    accountsMonitoring?: UISettingsMonitoring;
 }
 
 export interface UISettingsMonitoring {
     urlTemplate: string;
-    tabName?: string;
+    title?: string;
 }
 
 export const uiSettingFromEnv: Partial<UISettings> = {
