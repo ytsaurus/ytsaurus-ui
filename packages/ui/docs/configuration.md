@@ -9,7 +9,7 @@ By default the application uses base configaration from `path_to_dist/server/con
 
 There are different options that allow to change behavior of the application.
 
-How to use:
+Example of usage for 'custom' installation:
 
 1. Set environment variable APP_INSTALLATION=cusom
 2. Create path_to_dist/server/config/custom/common.js with some redefinitions:
@@ -36,7 +36,7 @@ exports.default = {
 ```
 
 `schedulingMonitoring.urlTemplate` allows to define parametrized template of url for external monitoring dashbord of a pool.
-If defined then `${title} ?? 'Monitoring'` tab will be present as a link generated from the template on a page of a pool.
+If defined then `${title} ?? 'Monitoring'` tab will be present as a link generated from the template.
 The template supports following parameters: `{ytCluster}`, `{ytPool}`, `{ytPoolTree}`, all the parameters will be replaced with corresponiding values.
 Example of usage:
 
@@ -61,8 +61,8 @@ Example of usage:
 ```
 
 `accountsMonitoring.urlTemplate` allows to define parametrized template of url for external monitoring dashbord of an account.
-If defined then `${title} ?? 'Monitoring'` tab will be present as a link generated from the template on a page of a pool.
-The template supports following parameters: `{ytCluster}`, `{ytAccount}`, all the parameters will be replaced with corresponiding values.
+If defined then `${title} ?? 'Monitoring'` tab will be present as a link generated from the template.
+The template supports following parameters: `{ytCluster}`, `{ytAccount}`. All the parameters are optional and will be replaced with corresponiding values.
 Example of usage:
 
 ```js
@@ -75,3 +75,28 @@ Example of usage:
   },
 };
 ```
+
+##### `uiSettings.bundlesMonitoring`
+
+```ts
+{
+  bundlesMonitoring: {urlTemplate: string; title?: string}
+}
+```
+
+`bundlesMonitoring.urlTemplate` allows to define parametrized template of url for external monitoring dashbord of a tablet cell bundle.
+If defined then `${title} ?? 'Monitoring'` tab will be present as a link generated from the template on a page of a pool.
+The template supports following parameters: `{ytCluster}`, `{ytTabletCellBundle}`. All the parameters are optional and will be replaced with corresponiding values.
+Example of usage:
+
+```js
+{
+  uiSettings: {
+    bundlesMonitoring: {
+      urlTemplate: 'https://my.monitoring.service/bundles?cluster={ytCluster}&bundle={ytTabletCellBundle}',
+      title: 'My monitoring',
+    },
+  },
+};
+```
+

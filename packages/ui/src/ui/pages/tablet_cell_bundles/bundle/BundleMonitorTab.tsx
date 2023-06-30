@@ -8,9 +8,11 @@ import {NoContent} from '../../../components/NoContent/NoContent';
 import ErrorBoundary from '../../../components/ErrorBoundary/ErrorBoundary';
 
 import './BundleMonitorTab.scss';
-import UIFactory from '../../../UIFactory';
 
-function BundleMonitorTab() {
+function BundleMonitorTab(props: {
+    component: React.ComponentType<{cluster: string; tablet_cell_bundle: string; bundleData: any}>;
+}) {
+    const {component: BundleMonitor} = props;
     const bundleData = useSelector(getTabletsActiveBundleData);
     const cluster = useSelector(getCluster);
 
@@ -26,8 +28,6 @@ function BundleMonitorTab() {
             />
         );
     }
-
-    const BundleMonitor = UIFactory.getMonitorComponentForBundle()!;
 
     return (
         <ErrorBoundary>

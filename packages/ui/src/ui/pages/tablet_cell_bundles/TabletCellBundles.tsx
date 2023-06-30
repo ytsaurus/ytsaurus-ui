@@ -6,7 +6,7 @@ import Tabs from '../../components/Tabs/Tabs';
 import {TabletsTab} from '../../constants/tablets';
 import {Redirect, Route, Switch, useRouteMatch} from 'react-router';
 import {BundleCells} from './cells/Cells';
-import {makeTabProps} from '../../utils';
+import {TabSettings, makeTabProps} from '../../utils';
 import {useUpdater} from '../../hooks/use-updater';
 import {useDispatch, useSelector} from 'react-redux';
 import {fetchChaosBundles as fetchChaosBundles} from '../../store/actions/chaos_cell_bundles';
@@ -43,6 +43,7 @@ import ChaosBundleEditorDialog from '../../pages/chaos_cell_bundles/bundles/Chao
 import {ChaosCells} from '../../pages/chaos_cell_bundles/cells/Cells';
 import UIFactory from '../../UIFactory';
 import {TabletBundle} from '../../store/reducers/tablet_cell_bundles';
+import {formatByParams} from '../../utils/format';
 
 const b = cn('tablets');
 
@@ -83,7 +84,7 @@ export default function TabletCellBundles() {
                 }
                 return acc;
             },
-            {} as Record<(typeof TabletsTab)[keyof typeof TabletsTab], {show: boolean}>,
+            {} as Record<(typeof TabletsTab)[keyof typeof TabletsTab], TabSettings>,
         );
     }, [activeBundle, enableBundleController]);
 
@@ -91,7 +92,22 @@ export default function TabletCellBundles() {
     statsTab.show = statsTab.show && Boolean(UIFactory.getStatisticsComponentForBundle());
 
     const monTab = showSettings[TabletsTab.MONITOR];
-    monTab.show = monTab.show && Boolean(UIFactory.getMonitorComponentForBundle());
+
+    const {
+        component: monitoringComponent,
+        urlTemplate,
+        title: monitoringTitle,
+    } = UIFactory.getMonitoringForBundle() ?? {};
+    monTab.show = monTab.show && Boolean(monitoringComponent || urlTemplate);
+
+    if (urlTemplate) {
+        monTab.external = true;
+        monTab.routed = false;
+        monTab.url = formatByParams(urlTemplate, {
+            ytCluster: cluster,
+            ytTabletCellBundle: activeBundle,
+        });
+    }
 
     const instTab = showSettings[TabletsTab.INSTANCES];
     instTab.show = instTab.show && enableBundleController;
@@ -135,7 +151,11 @@ export default function TabletCellBundles() {
                         )}
                         <BundleMetaTable />
                         <div className={b('tabs')}>
-                            <TabletsTabs activeBundle={activeBundle} showSettings={showSettings} />
+                            <TabletsTabs
+                                activeBundle={activeBundle}
+                                showSettings={showSettings}
+                                monitoringTitle={monitoringTitle}
+                            />
                         </div>
                     </div>
                 </div>
@@ -168,10 +188,10 @@ export default function TabletCellBundles() {
                                 component={BundleStatisticsTab}
                             />
                         )}
-                        {monTab.show && (
+                        {monTab.show && monitoringComponent && (
                             <Route
                                 path={`/${cluster}/${Page.TABLET_CELL_BUNDLES}/${TabletsTab.MONITOR}`}
-                                component={BundleMonitorTab}
+                                render={() => <BundleMonitorTab component={monitoringComponent} />}
                             />
                         )}
                         <Route
@@ -233,9 +253,11 @@ function makeAllTabsProps(matchUrl: string, cluster: string) {
 function TabletsTabsImpl({
     activeBundle,
     showSettings,
+    monitoringTitle = 'Monitoring',
 }: {
     activeBundle: string | undefined;
-    showSettings: Record<string, {show: boolean}>;
+    showSettings: Record<string, TabSettings>;
+    monitoringTitle?: string;
 }) {
     const match = useRouteMatch<{cluster: string}>();
     const {cluster} = match.params;
@@ -243,7 +265,9 @@ function TabletsTabsImpl({
     const {tabSize} = useSelector(getUISizes);
 
     const tabProps = activeBundle
-        ? makeTabProps(match.url, TabletsTab, showSettings)
+        ? makeTabProps(match.url, TabletsTab, showSettings, undefined, {
+              [TabletsTab.MONITOR]: monitoringTitle,
+          })
         : makeAllTabsProps(match.url, cluster);
 
     return (

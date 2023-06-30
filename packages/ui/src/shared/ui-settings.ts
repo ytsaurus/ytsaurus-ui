@@ -46,6 +46,13 @@ export interface UISettings {
      * @example {urlTemplate: 'https://grafana.mydomain.com/accounts?cluster={ytCluster}&account={ytAccount}'}
      */
     accountsMonitoring?: UISettingsMonitoring;
+
+    /**
+     * bundlesMonitoring.urlTemplate supports following parameters: {ytCluster}, {ytTabletCellBundle}
+     * All the parameters are optional and they are replaced with corresponding values.
+     * @example {urlTemplate: 'https://grafana.mydomain.com/bundles?cluster={ytCluster}&account={ytTabletCellBundle}'}
+     */
+    bundlesMonitoring?: UISettingsMonitoring;
 }
 
 export interface UISettingsMonitoring {
