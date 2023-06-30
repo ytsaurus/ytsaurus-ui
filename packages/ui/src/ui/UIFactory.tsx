@@ -116,9 +116,18 @@ export interface UIFactory {
               title?: undefined;
           }
         | {urlTemplate: string; title?: string; component?: undefined};
-    getMonitorComponentForBundle():
+    getMonitoringForBundle():
         | undefined
-        | React.ComponentType<{cluster: string; tablet_cell_bundle: string; bundleData: any}>;
+        | {
+              component: React.ComponentType<{
+                  cluster: string;
+                  tablet_cell_bundle: string;
+                  bundleData: any;
+              }>;
+              urlTemplate?: undefined;
+              title?: undefined;
+          }
+        | {urlTemplate: string; title?: string; component?: undefined};
     getMonitorComponentForOperation():
         | undefined
         | React.ComponentType<{
@@ -392,8 +401,13 @@ const uiFactory: UIFactory = {
         const {urlTemplate, title} = uiSettings.accountsMonitoring;
         return {urlTemplate, title};
     },
-    getMonitorComponentForBundle() {
-        return undefined;
+    getMonitoringForBundle() {
+        if (!uiSettings.bundlesMonitoring?.urlTemplate) {
+            return undefined;
+        }
+
+        const {urlTemplate, title} = uiSettings.bundlesMonitoring;
+        return {urlTemplate, title};
     },
     getMonitorComponentForOperation() {
         return undefined;

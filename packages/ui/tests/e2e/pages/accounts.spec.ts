@@ -1,4 +1,4 @@
-import {test, expect} from '@playwright/test';
+import {test} from '@playwright/test';
 import {CLUSTER, makeClusterUrl} from '../utils';
 
 test('Accounts - Monitoring', async ({page}) => {
