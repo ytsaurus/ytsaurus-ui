@@ -1,6 +1,6 @@
 ## Configuration
 
-By default the application uses base configaration from `path_to_dist/server/configs/common.js` file. And it might be expanded by additional files throgh special variables:
+By default the application uses base configuration from `path_to_dist/server/configs/common.js` file. And it might be expanded by additional files throgh special variables:
 
 - `APP_ENV` - if defined then tries to expand base config from `path_to_dist/server/config/{APP_ENV}.js`
 - `APP_INSTALLATION` - if defined then tries to expand base config from:
@@ -25,7 +25,7 @@ exports.default = {
 
 #### UISettings
 
-`uiSettings` object from config is passed to user's browser as is and might it be accessed as `window.__DATA__.uiSettings`.
+`uiSettings` object from config is passed to user's browser "as is" and might it be accessed as `window.__DATA__.uiSettings`.
 
 ##### `uiSettings.schedulingMonitoring`
 
@@ -100,3 +100,39 @@ Example of usage:
 };
 ```
 
+##### `uiSettings.operationsMonitoring`
+
+```ts
+{
+  operationsMonitoring: {
+    urlTemplate: string;
+  }
+}
+```
+
+`operationsMonitoring.urlTemplate` allows to define parametrized template of url for external monitoring dashbord of an operation.
+If defined then `'Monitoring'` tab will be present for current operation and the contend will be defined as a list
+of generated urls from the templates for each pair of pool and pool-tree involved to the operation.
+The template support following parameters:
+
+- `{ytCluster}`
+- `{ytOperationId}`
+- `{ytPool}`
+- `{ytPoolTree}`
+- `{ytSlotIndex}`
+- `{fromTimeMs}`
+- `{toTimeMs}`
+
+all the parameters are oprional and will be replaced with corresponiding values.
+Example of usage:
+
+```js
+{
+  uiSettings: {
+    operationsMonitoring: {
+      urlTemplate:
+        'https://my.monitoring.service/operations?cluster={ytCluster}&ytOperationId={ytOperationId}&pool={ytPool}&poolTree={ytPoolTree}&from={fromTimeMs}&to={toTimeMs}',
+    },
+  },
+};
+```

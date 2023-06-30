@@ -5,13 +5,14 @@ import _ from 'lodash';
 import {getOperation} from '../../../../../store/selectors/operations/operation';
 import {getCluster} from '../../../../../store/selectors/global';
 import ErrorBoundary from '../../../../../components/ErrorBoundary/ErrorBoundary';
-import UIFactory from '../../../../../UIFactory';
+import {OperationMonitoringTabProps} from '../../../../../UIFactory';
 
-function OperationDetailsMonitor() {
+function OperationDetailsMonitor(props: {
+    component: React.ComponentType<OperationMonitoringTabProps>;
+}) {
+    const {component: OperationMonitor} = props;
     const operation = useSelector(getOperation);
     const cluster = useSelector(getCluster);
-
-    const OperationMonitor = UIFactory.getMonitorComponentForOperation()!;
 
     return (
         <ErrorBoundary>

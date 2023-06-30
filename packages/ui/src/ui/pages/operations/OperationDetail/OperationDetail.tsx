@@ -1,7 +1,6 @@
 import {match as MatchType, Redirect, Route, Switch} from 'react-router';
 import React, {Fragment} from 'react';
 import {ConnectedProps, connect, useSelector} from 'react-redux';
-//import PropTypes from 'prop-types';
 import hammer from '../../../common/hammer';
 import unipika from '../../../common/thor/unipika';
 import cn from 'bem-cn-lite';
@@ -44,7 +43,7 @@ import {getOperation} from '../../../store/actions/operations/detail';
 import {isOperationId} from '../../../utils/operations/list';
 import {promptAction} from '../../../store/actions/actions';
 import Updater from '../../../utils/hammer/updater';
-import {makeTabProps} from '../../../utils';
+import {TabSettings, makeTabProps} from '../../../utils';
 import {Page} from '../../../constants/index';
 import {
     getOperationDetailsLoadingStatus,
@@ -69,6 +68,7 @@ import {
 import UIFactory from '../../../UIFactory';
 import {RootState} from '../../../store/reducers';
 import {getCurrentCluster} from '../../../store/selectors/thor';
+import {operationMonitoringUrl} from '../../../utils/operations/details-ts';
 
 const detailBlock = cn('operation-detail');
 
@@ -243,16 +243,35 @@ class OperationDetail extends React.Component<ReduxProps & RouteProps> {
             hasStatististicsTab,
             jobsMonitorVisible,
             monitorTabVisible,
+            monitorTabTitle,
+            monitorTabUrlTemplate,
         } = this.props;
         const path = `/${cluster}/${Page.OPERATIONS}/${operationId}`;
-        const showSettings = {
+
+        const showSettings: Record<string, TabSettings> = {
             ...getDetailsTabsShowSettings(operation),
             [Tab.STATISTICS]: {show: hasStatististicsTab},
             [Tab.JOBS_MONITOR]: {show: jobsMonitorVisible},
             [Tab.MONITOR]: {show: monitorTabVisible},
         };
 
-        const props = makeTabProps(path, Tab, showSettings);
+        if (monitorTabUrlTemplate) {
+            const monTab = showSettings[Tab.MONITOR];
+            monTab.routed = false;
+            monTab.external = true;
+
+            const firstPoolInfo = operation.pools?.[0] || {};
+            monTab.url = operationMonitoringUrl({
+                cluster,
+                operation,
+                ...firstPoolInfo,
+                urlTemplate: monitorTabUrlTemplate,
+            });
+        }
+
+        const props = makeTabProps(path, Tab, showSettings, undefined, {
+            [Tab.MONITOR]: monitorTabTitle ?? 'Monitoring',
+        });
 
         return (
             <div className={detailBlock('tabs')}>
@@ -268,7 +287,8 @@ class OperationDetail extends React.Component<ReduxProps & RouteProps> {
     }
 
     renderMain() {
-        const {match, cluster, monitorTabVisible, jobsMonitorVisible} = this.props;
+        const {match, cluster, monitorTabVisible, jobsMonitorVisible, monitoringComponent} =
+            this.props;
         const {url, params} = match;
         const {operationId} = params;
 
@@ -291,10 +311,12 @@ class OperationDetail extends React.Component<ReduxProps & RouteProps> {
                     <Route path={`${path}/${Tab.JOBS}`} component={Jobs} />
                     <Route path={`${path}/${Tab.JOB_SIZES}`} component={JobSizes} />
                     <Route path={`${path}/${Tab.PARTITION_SIZES}`} component={PartitionSizes} />
-                    {monitorTabVisible && (
+                    {monitorTabVisible && monitoringComponent && (
                         <Route
                             path={`${path}/${Tab.MONITOR}`}
-                            component={OperationDetailsMonitor}
+                            render={() => (
+                                <OperationDetailsMonitor component={monitoringComponent} />
+                            )}
                         />
                     )}
                     {jobsMonitorVisible && (
@@ -365,6 +387,14 @@ const mapStateToProps = (state: RootState) => {
     const cpuTimeSpent = getTotalCpuTimeSpent(state);
     const erasedTrees = getOperationErasedTrees(state);
 
+    const {
+        component: monitoringComponent,
+        urlTemplate: monitorTabUrlTemplate,
+        title: monitorTabTitle,
+    } = UIFactory.getMonitoringForOperation(operation) || {};
+
+    const monitorTabVisible = Boolean(monitoringComponent) || Boolean(monitorTabUrlTemplate);
+
     return {
         cluster: getCurrentCluster(state),
         operation,
@@ -377,7 +407,10 @@ const mapStateToProps = (state: RootState) => {
         cpuTimeSpent,
         erasedTrees,
         tabSize: getUISizes(state).tabSize,
-        monitorTabVisible: Boolean(UIFactory.getMonitorComponentForOperation()),
+        monitorTabVisible,
+        monitorTabTitle,
+        monitorTabUrlTemplate,
+        monitoringComponent,
         jobsMonitorVisible:
             Boolean(UIFactory.getMonitorComponentForJob()) && getJobsMonitorTabVisible(state),
         hasStatististicsTab: getOperationStatiscsHasData(state),

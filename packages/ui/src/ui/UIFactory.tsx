@@ -21,6 +21,7 @@ import {YTUserSuggest} from './containers/UserSuggest/YTUserSuggest';
 import {DocsUrls, docsUrls} from './constants/docsUrls';
 import {YTSubjectSuggest} from './components/ACL/SubjectsControl/YTSubjectSuggest';
 import RoleActions, {Props as RoleActionsProps} from './components/ACL/RoleActions';
+import OperationDetailMonitorLinks from './pages/operations/OperationDetail/tabs/monitor/OperationDetailsMonitorLinks';
 import {PERMISSIONS_SETTINGS} from './constants/acl';
 import {uiSettings} from './config';
 
@@ -78,6 +79,16 @@ export interface SchedulingExtraTab {
     urlTemplate?: string;
 }
 
+export interface OperationMonitoringTabProps {
+    cluster: string;
+    operation: {
+        id: string;
+        startTime?: string;
+        finishTime?: string;
+        pools?: Array<{pool: string; tree: string; slotIndex?: number}>;
+    };
+}
+
 export interface UIFactory {
     getClusterAppearance(cluster?: string): undefined | ClusterAppearance;
 
@@ -128,16 +139,14 @@ export interface UIFactory {
               title?: undefined;
           }
         | {urlTemplate: string; title?: string; component?: undefined};
-    getMonitorComponentForOperation():
+    getMonitoringForOperation(params: OperationMonitoringTabProps['operation']):
         | undefined
-        | React.ComponentType<{
-              cluster: string;
-              operation: {
-                  startTime: string;
-                  finishTime?: string;
-                  pools?: Array<{pool: string; tree: string; slotIndex: number}>;
-              };
-          }>;
+        | {
+              component: React.ComponentType<OperationMonitoringTabProps>;
+              urlTemplate?: undefined;
+              title?: undefined;
+          }
+        | {urlTemplate: string; title?: string; component?: undefined};
     getMonitorComponentForJob():
         | undefined
         | React.ComponentType<{
@@ -409,8 +418,21 @@ const uiFactory: UIFactory = {
         const {urlTemplate, title} = uiSettings.bundlesMonitoring;
         return {urlTemplate, title};
     },
-    getMonitorComponentForOperation() {
-        return undefined;
+    getMonitoringForOperation(params) {
+        if (!uiSettings.operationsMonitoring?.urlTemplate) {
+            return undefined;
+        }
+
+        const {urlTemplate, title} = uiSettings.operationsMonitoring;
+
+        const hasPoolParameter =
+            urlTemplate.indexOf('{ytPool}') !== -1 || urlTemplate.indexOf('{ytPoolTree}') !== -1;
+
+        if (hasPoolParameter && params.pools?.length! > 1) {
+            return {component: OperationDetailMonitorLinks};
+        }
+
+        return {urlTemplate, title};
     },
     getMonitorComponentForJob() {
         return undefined;
