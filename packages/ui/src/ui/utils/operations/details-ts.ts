@@ -1,7 +1,10 @@
-import {DetailedOperationSelector} from '../../pages/operations/selectors';
+import moment from 'moment';
 import ypath from '../../common/thor/ypath';
+
+import {DetailedOperationSelector} from '../../pages/operations/selectors';
 import {PLEASE_PROCEED_TEXT} from '../../utils/actions';
 import {IconName} from '../../components/Icon/Icon';
+import {formatByParams} from '../../utils/format';
 
 export interface OperationAction {
     modalKey: string;
@@ -90,4 +93,24 @@ export function prepareActions(operation: DetailedOperationSelector) {
     }
 
     return actions;
+}
+
+export function operationMonitoringUrl(params: {
+    cluster: string;
+    operation: {id: string; startTime?: string; finishTime?: string};
+    pool: string;
+    tree: string;
+    slotIndex?: number;
+    urlTemplate: string;
+}) {
+    const {cluster, operation, urlTemplate, pool, tree, slotIndex} = params;
+    return formatByParams(urlTemplate, {
+        ytCluster: cluster,
+        ytOperationId: operation.id,
+        ytPool: pool,
+        ytPoolTree: tree,
+        ytSlotIndex: slotIndex ?? '',
+        fromTimeMs: operation.startTime ? moment(operation.startTime).valueOf() : '',
+        toTimeMs: operation.finishTime ? moment(operation.finishTime).valueOf() : '',
+    });
 }

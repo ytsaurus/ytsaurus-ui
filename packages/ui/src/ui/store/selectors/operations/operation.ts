@@ -34,8 +34,7 @@ const getOperationAlerts = (state: RootState) =>
     ypath.getValue(state.operations.detail.operation, '/@alerts');
 const getOperationAlertEvents = (state: RootState) => state.operations.detail.details.alert_events;
 
-export const getOperation = (state: RootState) =>
-    (state.operations.detail as FIX_MY_TYPE).operation;
+export const getOperation = (state: RootState) => state.operations.detail.operation;
 export const getOperationId = (state: RootState) =>
     ypath.getValue(state.operations.detail.operation);
 export const getOperationTasks = createSelector(

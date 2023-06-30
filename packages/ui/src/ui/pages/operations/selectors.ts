@@ -26,6 +26,7 @@ export class OperationSelector implements Record<string, any> {
         ...OperationSelector.PREPARING_STATES,
     ];
 
+    id: string;
     $value: string;
     $attributes: any;
     state: (typeof OperationSelector.INTERMEDIATE_STATES)[0] | 'completed' | 'failed' | 'aborted';
@@ -34,6 +35,7 @@ export class OperationSelector implements Record<string, any> {
     constructor(data: any) {
         const {id, ...attributes} = data;
         this.$value = id;
+        this.id = id;
         this.$attributes = attributes;
 
         this.state = ypath.getValue(attributes, '/state');

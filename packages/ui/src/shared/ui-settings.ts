@@ -43,16 +43,27 @@ export interface UISettings {
     /**
      * accountsMonitoring.urlTemplate supports following parameters: {ytCluster}, {ytAccount}
      * All the parameters are optional and they are replaced with corresponding values.
-     * @example {urlTemplate: 'https://grafana.mydomain.com/accounts?cluster={ytCluster}&account={ytAccount}'}
+     * @example {urlTemplate: 'https://my.monitoring.service/accounts?cluster={ytCluster}&account={ytAccount}'}
      */
     accountsMonitoring?: UISettingsMonitoring;
 
     /**
      * bundlesMonitoring.urlTemplate supports following parameters: {ytCluster}, {ytTabletCellBundle}
      * All the parameters are optional and they are replaced with corresponding values.
-     * @example {urlTemplate: 'https://grafana.mydomain.com/bundles?cluster={ytCluster}&account={ytTabletCellBundle}'}
+     * @example {urlTemplate: 'https://my.monitoring.service/bundles?cluster={ytCluster}&account={ytTabletCellBundle}'}
      */
     bundlesMonitoring?: UISettingsMonitoring;
+
+    /**
+     * operationsMonitoring.urlTemplate supports following parameters:
+     *  {ytCluster}, {ytOperationId}, {ytPool}, {ytPoolTree}, {ytSlotIndex}, {fromTimeMs}, {toTimeMs}
+     * All the parameters are optional and they are replaced with corresponding values.
+     * @example {
+     *   urlTemplate:
+     *     'https://my.monitoring.service/operations?cluster={ytCluster}&operationId={ytOperationId}&pool={ytPool}&tree={ytPoolTree}&slot={ytSlotIndex}&from={fromTimeMs}&to={toTimeMs}'
+     * }
+     */
+    operationsMonitoring?: UISettingsMonitoring;
 }
 
 export interface UISettingsMonitoring {
