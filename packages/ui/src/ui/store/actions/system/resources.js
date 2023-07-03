@@ -5,6 +5,7 @@ import createActionTypes from '../../../constants/utils';
 import {isRetryFutile} from '../../../utils/index';
 import {showErrorPopup} from '../../../utils/utils';
 import {YTApiId, ytApiV3Id} from '../../../rum/rum-wrap-api';
+import {USE_SUPRESS_SYNC} from '../../../../shared/constants';
 
 export const FETCH_RESOURCES = createActionTypes('RESOURCES');
 export const FETCH_NODE_ATTRS = createActionTypes('NODE_ATTRS');
@@ -39,16 +40,14 @@ function getResources() {
                 command: 'get',
                 parameters: {
                     path: '//sys/scheduler/orchid/scheduler/cluster',
-                    suppress_transaction_coordinator_sync: true,
-                    suppress_upstream_sync: true,
+                    ...USE_SUPRESS_SYNC,
                 },
             },
             {
                 command: 'get',
                 parameters: {
                     path: '//sys/cluster_nodes/@',
-                    suppress_transaction_coordinator_sync: true,
-                    suppress_upstream_sync: true,
+                    ...USE_SUPRESS_SYNC,
                 },
             },
         ];
