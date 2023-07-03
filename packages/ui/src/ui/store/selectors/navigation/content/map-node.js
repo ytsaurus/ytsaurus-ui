@@ -272,7 +272,7 @@ const DATE_REGEXP = /^\d{4}[-]\d{2}[-]\d{2}(T\d{2}:\d{2}:\d{2})?(\.[a-zA-Z0-9]+)
 export const shouldApplyCustomSort = createSelector(
     [getNodes, makeGetSetting, getSortState],
     (nodes, getSetting, sortState) =>
-        getSetting('useSmartSort', NAMESPACES.NAVIGATION) &&
+        getSetting(SettingName.NAVIGATION.USE_SMART_SORT, NAMESPACES.NAVIGATION) &&
         sortState?.field === 'name' &&
         _.every(nodes, (item) => DATE_REGEXP.test(item.name)),
 );

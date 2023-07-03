@@ -34,10 +34,12 @@ function fetchClusterParams(cluster: string, {ctx}: {ctx?: AppContext}) {
         const {setup: configSetup} = getRobotYTApiSetup(cluster);
         const xYTCorrelationId = `${cx.get('requestId')}.fetchClusterParams`;
 
-        function sendStats(responseStatus: number) {
+        const mlSuffix = '.masterList';
+
+        function sendStats(responseStatus: number, suffix = '') {
             const timestamp = Date.now();
-            cx.log('fetchClusterParams', {
-                xYTCorrelationId,
+            cx.log('fetchClusterParams' + suffix, {
+                xYTCorrelationId: xYTCorrelationId + suffix,
                 responseStatus,
             });
             cx.stats?.('ytRequests', {
@@ -47,12 +49,69 @@ function fetchClusterParams(cluster: string, {ctx}: {ctx?: AppContext}) {
                 host: os.hostname(),
                 service: cluster,
                 requestTime: timestamp - timeStart,
-                requestId: cx.get('requestId')!,
-                action: 'fetchClusterParams',
+                requestId: cx.get('requestId')! + suffix,
+                action: 'fetchClusterParams' + suffix,
             });
         }
 
-        const [mediumList, schedulerVersion, uiConfig, uiDevConfig] = await yt.v3
+        const mastersList = await yt.v3
+            .executeBatch({
+                setup: {
+                    ...configSetup,
+                    requestHeaders: {
+                        ...cx.getMetadata(),
+                        'X-YT-Correlation-Id': xYTCorrelationId + mlSuffix,
+                    },
+                    transformResponse({parsedData, rawResponse}: FIX_MY_TYPE) {
+                        return {
+                            data: parsedData,
+                            status: rawResponse?.status,
+                            headers: rawResponse?.headers,
+                        };
+                    },
+                    transformError({parsedData, rawError}: FIX_MY_TYPE) {
+                        throw {
+                            data: parsedData,
+                            status: rawError?.response?.status,
+                            headers: rawError?.response?.headers,
+                        };
+                    },
+                },
+                parameters: {
+                    requests: [
+                        {
+                            command: 'list',
+                            parameters: {
+                                path: '//sys/primary_masters',
+                                ...USE_SUPRESS_SYNC,
+                            },
+                        },
+                    ],
+                },
+            })
+            .then((response: FIX_MY_TYPE) => {
+                cx.log('List of masters is fetched', {
+                    cluster,
+                    'x-yt-proxy': response.headers['x-yt-proxy'],
+                    'x-yt-request-id': response.headers['x-yt-request-id'],
+                    'x-yt-trace-id': response.headers['x-yt-trace-id'],
+                });
+                sendStats(response.status, mlSuffix);
+                return response.data[0];
+            })
+            .catch((error: FIX_MY_TYPE) => {
+                const headers = error?.headers || {};
+                cx.logError('List of masters fetch failed', {
+                    cluster,
+                    'x-yt-proxy': headers['x-yt-proxy'],
+                    'x-yt-request-id': headers['x-yt-request-id'],
+                    'x-yt-trace-id': headers['x-yt-trace-id'],
+                });
+                sendStats(error.status, mlSuffix);
+                return Promise.reject(error.data);
+            });
+
+        const [mediumList, schedulerVersion, uiConfig, uiDevConfig, masterVersion] = await yt.v3
             .executeBatch({
                 setup: {
                     ...configSetup,
@@ -102,6 +161,17 @@ function fetchClusterParams(cluster: string, {ctx}: {ctx?: AppContext}) {
                                 ...USE_SUPRESS_SYNC,
                             },
                         },
+                        ...(!mastersList.output?.length
+                            ? []
+                            : [
+                                  {
+                                      command: 'get',
+                                      parameters: {
+                                          path: `//sys/primary_masters/${mastersList.output[0]}/orchid/service/version`,
+                                          ...USE_SUPRESS_SYNC,
+                                      },
+                                  },
+                              ]),
                     ],
                 },
             })
@@ -127,28 +197,45 @@ function fetchClusterParams(cluster: string, {ctx}: {ctx?: AppContext}) {
                 return Promise.reject(error.data);
             });
 
+        if (uiDevConfig?.error?.code === yt.codes.NODE_DOES_NOT_EXIST) {
+            delete uiDevConfig.error;
+        }
+
         if (schedulerVersion?.error?.code === yt.codes.NODE_DOES_NOT_EXIST) {
             delete schedulerVersion.error;
             schedulerVersion.output = '0.0.0-unknown';
         }
-        const response = {mediumList, schedulerVersion, uiConfig, uiDevConfig};
+
+        if (masterVersion?.error?.code === yt.codes.NODE_DOES_NOT_EXIST) {
+            delete masterVersion.error;
+            masterVersion.output = '0.0.0-unknown';
+        }
+
+        const response = {
+            mediumList,
+            schedulerVersion,
+            uiConfig,
+            uiDevConfig,
+            masterVersion: masterVersion ?? mastersList,
+        };
 
         if (
             mediumList.error ||
             schedulerVersion.error ||
             (uiConfig.error && uiConfig.error.code !== yt.codes.NODE_DOES_NOT_EXIST) ||
-            (uiDevConfig.error && uiDevConfig.error.code !== yt.codes.NODE_DOES_NOT_EXIST)
+            (uiDevConfig.error && uiDevConfig.error.code !== yt.codes.NODE_DOES_NOT_EXIST) ||
+            (masterVersion?.error && masterVersion.error.code !== yt.codes.NODE_DOES_NOT_EXIST) ||
+            mastersList.error
         ) {
-            cx.logError(
-                'Unacceptable response',
-                {
-                    mediumList: {error: mediumList.error},
-                    schedulerVersion: {error: schedulerVersion.error},
-                    uiConfig: {error: uiConfig.error},
-                    uiDevConfig: {error: uiDevConfig.error},
-                },
-                {cluster},
-            );
+            cx.logError('Unacceptable response', undefined, {
+                cluster,
+                mediumList: {error: mediumList.error},
+                schedulerVersion: {error: schedulerVersion.error},
+                uiConfig: {error: uiConfig.error},
+                uiDevConfig: {error: uiDevConfig.error},
+                masterVersion: {error: masterVersion?.error},
+                masterList: {error: mastersList?.error},
+            });
             throw new BatchSubrequestError(response);
         }
 

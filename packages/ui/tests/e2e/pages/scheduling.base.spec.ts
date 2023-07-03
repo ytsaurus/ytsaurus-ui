@@ -1,5 +1,6 @@
 import {expect, test} from '@playwright/test';
 import {CLUSTER, makeClusterTille, makeClusterUrl} from '../utils';
+import page from '../../../src/ui/store/reducers/operations/page';
 
 test('Scheduliing - Overview', async ({page}) => {
     await page.goto(makeClusterUrl('scheduling'));
@@ -75,5 +76,18 @@ test('Scheduling - Pool - Edit Dialog - Change Weight', async ({page}) => {
     await confirmBtn.click();
     await page.waitForSelector(
         `td.scheduling-overview__table-item_type_weight :text("${newValue}")`,
+    );
+});
+
+test('Scheduling: Should display pools from Navigation', async ({page}) => {
+    await page.goto(makeClusterUrl('navigation?path=//sys/pool_trees'));
+    await page.click('.elements-table__row :text("default")');
+    await page.click('.elements-table__row :text("yt-e2e-pool-1")');
+
+    await page.waitForSelector(':text("No items to show")');
+
+    await expect(page).toHaveTitle(makeClusterTille({path: 'yt-e2e-pool-1', page: 'Navigation'}));
+    await expect(page).toHaveURL(
+        makeClusterUrl('navigation?path=//sys/pool_trees/default/yt-e2e-pool-1'),
     );
 });

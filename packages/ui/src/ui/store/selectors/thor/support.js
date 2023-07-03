@@ -95,46 +95,55 @@ function extractPatchNumber(version) {
 
 const rawProxyVersion = (state) => state.global.version;
 const rawSchedulerVersion = (state) => state.global.schedulerVersion;
+const rawMasterVersion = (state) => state.global.masterVersion;
 export const getProxyVersion = createSelector(rawProxyVersion, getVersionAndBuild);
 const proxyPatchNumber = createSelector(rawProxyVersion, extractPatchNumber);
 export const getSchedulerVersion = createSelector(rawSchedulerVersion, getVersionAndBuild);
+export const getMasterVersion = createSelector(rawMasterVersion, getVersionAndBuild);
 
-const features = createSelector([getProxyVersion, getSchedulerVersion], (proxy, scheduler) => {
-    return {
-        newSchedulingAttributes: {
-            prestable: '20.2',
-            component: scheduler,
-        },
-        newOperationStarvationStatus: {
-            prestable: '21.2.8084183',
-            component: scheduler,
-        },
-        transferPoolQuota: {
-            prestable: '21.3',
-            component: proxy,
-        },
-        schedulingOperationsPerPool: {
-            prestable: '21.3.8724602',
-            component: scheduler,
-        },
-        operationAlertEvents: {
-            prestable: '22.1.9091274',
-            component: scheduler,
-        },
-        ytTvmApi: {
-            prestable: '21.3',
-            component: proxy,
-        },
-        operationsPoolTreeFilter: {
-            prestable: '22.1.9091043',
-            component: proxy,
-        },
-        fieldsFilter: {
-            prestable: '22.1.9091155',
-            component: scheduler,
-        },
-    };
-});
+const features = createSelector(
+    [getProxyVersion, getSchedulerVersion, getMasterVersion],
+    (proxy, scheduler, master) => {
+        return {
+            newSchedulingAttributes: {
+                prestable: '20.2',
+                component: scheduler,
+            },
+            newOperationStarvationStatus: {
+                prestable: '21.2.8084183',
+                component: scheduler,
+            },
+            transferPoolQuota: {
+                prestable: '21.3',
+                component: proxy,
+            },
+            schedulingOperationsPerPool: {
+                prestable: '21.3.8724602',
+                component: scheduler,
+            },
+            operationAlertEvents: {
+                prestable: '22.1.9091274',
+                component: scheduler,
+            },
+            ytTvmApi: {
+                prestable: '21.3',
+                component: proxy,
+            },
+            operationsPoolTreeFilter: {
+                prestable: '22.1.9091043',
+                component: proxy,
+            },
+            fieldsFilter: {
+                prestable: '22.1.9091155',
+                component: scheduler,
+            },
+            effectiveExpiration: {
+                prestable: '23.1.11146445',
+                component: master,
+            },
+        };
+    },
+);
 
 export const _isFeatureSupported = (rawProxyVersion, proxyPatch, features) => (featureName) => {
     // yt-local in arcadia is meant to be of the freshest version
@@ -220,6 +229,13 @@ export const isSupportedOperationsFilterByPoolTree = createSelector(
 export const isSupportedFieldsFilter = createSelector([isSupportedSelector], (isSupported) => {
     return isSupported('fieldsFilter');
 });
+
+export const isSupportedEffectiveExpiration = createSelector(
+    [isSupportedSelector],
+    (isSupported) => {
+        return isSupported('effectiveExpiration');
+    },
+);
 
 /**
  This function function is recommended for usage inside utils and old knockout components, where it is difficult

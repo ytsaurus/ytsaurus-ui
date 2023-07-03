@@ -34,6 +34,7 @@ import {fetchTableMountConfig} from '../../../store/actions/navigation/content/t
 import {checkPermissions} from '../../../utils/acl/acl-api';
 import {getAnnotation} from './tabs/annotation';
 import {loadTabletErrorsCount} from './tabs/tablet-errors';
+import {isSupportedEffectiveExpiration} from '../../../store/selectors/thor/support';
 
 export function updateView(settings = {}) {
     return (dispatch, getState) => {
@@ -48,6 +49,8 @@ export function updateView(settings = {}) {
 
         dispatch(getAnnotation());
         dispatch(loadTabletErrorsCount({path, saveCancelTokenSource: saveRequestCancellation}));
+
+        const allowEffectiveExpiration = isSupportedEffectiveExpiration(state);
 
         const requestParams = {
             path,
@@ -66,7 +69,18 @@ export function updateView(settings = {}) {
                     {
                         requests: [
                             {command: 'get', parameters: prepareRequest('/@', requestParams)},
-                            {command: 'get', parameters: prepareRequest('/@path', requestParams)},
+                            {
+                                command: 'get',
+                                parameters: prepareRequest('/@', {
+                                    ...requestParams,
+                                    attributes: [
+                                        'path',
+                                        ...(allowEffectiveExpiration
+                                            ? ['effective_expiration']
+                                            : []),
+                                    ],
+                                }),
+                            },
                         ],
                         output_format: TYPED_OUTPUT_FORMAT,
                     },
@@ -74,7 +88,7 @@ export function updateView(settings = {}) {
                 ),
             )
             .then((results) => {
-                const [attrs, path] = results;
+                const [attrs, {output: opaqueAttrs} = {}] = results;
                 const pathError = prepareAttributes(path.error);
                 if (pathError?.code === yt.codes.NODE_DOES_NOT_EXIST) {
                     delete path.error;
@@ -89,7 +103,10 @@ export function updateView(settings = {}) {
 
                 return {
                     ...attrs.output,
-                    ...(path.output ? {path: path.output} : {}),
+                    ...(opaqueAttrs?.effective_expiration
+                        ? {effective_expiration: opaqueAttrs.effective_expiration}
+                        : {}),
+                    ...(path.output ? {path: opaqueAttrs.path} : {}),
                 };
             })
             .then((attributes) => {

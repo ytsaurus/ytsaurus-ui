@@ -21,7 +21,7 @@ if [ $? -ne 0 ]; then
     curl -o run_local_cluster.sh ${srcUrl}
     chmod u+x run_local_cluster.sh
     echo -e "\n\nrun_local_cluster.sh is downloaded, to run your cluster use command:"
-    echo -e "      ./run_local_cluster.sh --docker-hostname $(hostname) --fqdn localhost\n"
+    echo -e "      ./run_local_cluster.sh --yt-version dev --docker-hostname $(hostname) --fqdn localhost\n"
   fi
   exit 1
 else

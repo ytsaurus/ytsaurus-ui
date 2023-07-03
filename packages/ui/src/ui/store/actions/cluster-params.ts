@@ -96,7 +96,7 @@ export function initClusterParams(cluster: string): GlobalThunkAction<Promise<vo
         )
             .then(([[checkDeveloper], {data}]) => {
                 const isDeveloper = checkDeveloper?.output?.action === 'allow';
-                const {mediumList, schedulerVersion, uiConfig, uiDevConfig} = data;
+                const {mediumList, schedulerVersion, masterVersion, uiConfig, uiDevConfig} = data;
                 const error = getBatchError(
                     [mediumList, isDeveloper],
                     'Cluster initialization failure',
@@ -118,6 +118,7 @@ export function initClusterParams(cluster: string): GlobalThunkAction<Promise<vo
                             ? Object.assign({}, uiConfigOutput, uiDevConfigOutput)
                             : uiConfigOutput,
                         schedulerVersion: schedulerVersion.output,
+                        masterVersion: masterVersion.output,
                     },
                 });
             })

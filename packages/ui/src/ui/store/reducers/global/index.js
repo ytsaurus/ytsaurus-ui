@@ -53,6 +53,7 @@ const initialState = {
 
     version: YT.parameters.version,
     schedulerVersion: null,
+    masterVersion: null,
     login: YT.parameters.login,
 
     // cluster-params
@@ -130,8 +131,15 @@ export default (state = initialState, action) => {
         }
 
         case INIT_CLUSTER_PARAMS.SUCCESS: {
-            const {mediumList, schedulerVersion, accounts, isDeveloper, clusterUiConfig, cluster} =
-                action.data;
+            const {
+                mediumList,
+                schedulerVersion,
+                masterVersion,
+                accounts,
+                isDeveloper,
+                clusterUiConfig,
+                cluster,
+            } = action.data;
 
             return {
                 ...state,
@@ -144,6 +152,7 @@ export default (state = initialState, action) => {
                 paramsLoading: false,
                 paramsError: undefined,
                 schedulerVersion,
+                masterVersion,
             };
         }
 

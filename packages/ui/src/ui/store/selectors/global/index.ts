@@ -84,6 +84,13 @@ export const getGlobalSchedulerVersion = createSelector(
     },
 );
 
+export const getGlobalMasterVersion = createSelector(
+    [getCluster, (state: RootState) => state.global.masterVersion],
+    (cluster, version) => {
+        return cluster ? version : '';
+    },
+);
+
 export const getCurrentClusterNS = createSelector([getCluster, getClusterNS], (cluster, ns) => {
     return cluster ? ns : undefined;
 });
