@@ -24,19 +24,21 @@ import {
     SCHEDULING_POOL_TREE_TABLE_ID,
 } from '../../constants/scheduling';
 
+const NAME_ASC_SORT_VALUE = {field: 'name', asc: true};
+
 export const initialState = {
-    [CLUSTER_MENU_TABLE_ID]: {field: 'name', asc: true},
+    [CLUSTER_MENU_TABLE_ID]: NAME_ASC_SORT_VALUE,
 
     [SYSTEM_CHUNKS_TABLE_ID]: {field: 'cell_tag', asc: true},
 
-    [NAVIGATION_MAP_NODE_TABLE_ID]: {field: 'name', asc: true},
+    [NAVIGATION_MAP_NODE_TABLE_ID]: NAME_ASC_SORT_VALUE,
     [NAVIGATION_TABLETS_TABLE_ID]: {field: 'index', asc: true},
     [NAVIGATION_TRANSACTION_MAP_TABLE_ID]: {field: 'id', asc: true},
 
     [TABLET_PARTITIONS_TABLE_ID]: {field: 'index', asc: true},
     [TABLET_PARTITION_STORES_TABLE_ID]: {field: 'store_state', asc: true},
 
-    [ACCOUNTS_TABLE_ID]: {field: 'name', asc: true},
+    [ACCOUNTS_TABLE_ID]: NAME_ASC_SORT_VALUE,
 
     [OPERATION_JOBS_TABLE_ID]: {field: 'start_time', asc: true},
 
@@ -48,8 +50,8 @@ export const initialState = {
 
     [COMPONENTS_PROXIES_TABLE_ID]: {field: 'host', asc: true},
 
-    [SCHEDULING_POOL_TREE_TABLE_ID]: {field: 'name', asc: true},
-    [SCHEDULING_POOL_CHILDREN_TABLE_ID]: {field: 'name', asc: true},
+    [SCHEDULING_POOL_TREE_TABLE_ID]: NAME_ASC_SORT_VALUE,
+    [SCHEDULING_POOL_CHILDREN_TABLE_ID]: NAME_ASC_SORT_VALUE,
 };
 
 export default (state = initialState, action) => {

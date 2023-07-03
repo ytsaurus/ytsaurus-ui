@@ -60,7 +60,7 @@ export function showNavigationAttributesEditor(paths: Array<string>): ActionType
             return {
                 command: 'get' as const,
                 parameters: {
-                    path,
+                    path: path + '/@',
                     attributes: EDITABLE_ATTRIBUTES,
                 },
             };
@@ -74,7 +74,7 @@ export function showNavigationAttributesEditor(paths: Array<string>): ActionType
                 const attributesMap = _.reduce(
                     paths,
                     (acc, path, index) => {
-                        acc[path] = results[index].output;
+                        acc[path] = {$attributes: results[index].output};
                         return acc;
                     },
                     {} as any,

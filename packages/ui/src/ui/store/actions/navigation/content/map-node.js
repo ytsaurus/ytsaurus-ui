@@ -33,8 +33,9 @@ import {getBatchError, showErrorPopup} from '../../../../utils/utils';
 import {RumMeasureTypes} from '../../../../rum/rum-measure-types';
 import hammer from '../../../../common/hammer';
 import {GENERIC_ERROR_MESSAGE} from '../../../../constants';
+import {isSupportedEffectiveExpiration} from '../../../../store/selectors/thor/support';
 
-function getList(path, transaction, cluster) {
+function getList(path, transaction, cluster, allowEffectiveExpiration) {
     const id = new RumWrapper(cluster, RumMeasureTypes.NAVIGATION_CONTENT_MAP_NODE);
     return id.fetch(
         YTApiId.navigationListNodes,
@@ -59,6 +60,7 @@ function getList(path, transaction, cluster) {
                     '_restore_path',
                     'expiration_time',
                     'expiration_timeout',
+                    ...(allowEffectiveExpiration ? ['effective_expiration'] : []),
                 ],
                 path,
                 transaction,
@@ -75,8 +77,10 @@ export function fetchNodes() {
         const transaction = getTransaction(state);
         const cluster = getCluster(state);
 
+        const allowEffectiveExpiration = isSupportedEffectiveExpiration(state);
+
         dispatch({type: FETCH_NODES.REQUEST});
-        return getList(path, transaction, cluster)
+        return getList(path, transaction, cluster, allowEffectiveExpiration)
             .then(ypath.getValue)
             .then((data) => {
                 dispatch({

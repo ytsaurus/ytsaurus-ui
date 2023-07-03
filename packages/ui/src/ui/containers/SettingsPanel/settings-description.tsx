@@ -36,6 +36,7 @@ import SettingsMenuInput from '../SettingsMenu/SettingsMenuInput';
 import {
     getCurrentClusterNS,
     getCurrentUserName,
+    getGlobalMasterVersion,
     getGlobalSchedulerVersion,
     getHttpProxyVersion,
     isDeveloperSettings,
@@ -80,6 +81,7 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
     const isSupportedYqlTypes = useSelector(isYqlTypesSupported);
     const httpProxyVersion: string = useSelector(getHttpProxyVersion);
     const schedulerVersion: string = useSelector(getGlobalSchedulerVersion);
+    const masterVersion: string = useSelector(getGlobalMasterVersion);
 
     return _compact([
         makePage('General', generalIcon, [
@@ -500,6 +502,7 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
             _compact([
                 Boolean(cluster) && makeItem('HTTP proxy version', undefined, httpProxyVersion),
                 Boolean(cluster) && makeItem('Scheduler version', undefined, schedulerVersion),
+                Boolean(cluster) && makeItem('Master version', undefined, masterVersion),
                 makeItem('Interface version', undefined, YT.parameters.interface.version),
             ]),
         ),
