@@ -14,6 +14,7 @@ import {RoleGroupItemInfo} from '../../../store/reducers/system/proxies';
 import ypath from '../../../common/thor/ypath';
 import {RootState} from '../../../store/reducers';
 import {RpcProxiesAction} from '../../../store/reducers/system/rpc-proxies';
+import {USE_SUPRESS_SYNC} from '../../../../shared/constants';
 
 const RPC_PROXIES_UPDATER_ID = 'system_rpcproxies';
 
@@ -63,8 +64,7 @@ function getRPCProxies(): RPCProxiesThunkAction {
             .get(YTApiId.systemRpcProxies, {
                 path: '//sys/rpc_proxies',
                 attributes: ['role', 'banned'],
-                suppress_transaction_coordinator_sync: true,
-                suppress_upstream_sync: true,
+                ...USE_SUPRESS_SYNC,
             })
             .then((data = []) => {
                 const rpcProxies = extractRpcProxy(data);

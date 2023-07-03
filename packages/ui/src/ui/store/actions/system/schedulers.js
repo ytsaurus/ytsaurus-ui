@@ -3,14 +3,14 @@ import ypath from '@ytsaurus/interface-helpers/lib/ypath';
 
 import {YTApiId, ytApiV3Id} from '../../../rum/rum-wrap-api';
 import {splitBatchResults} from '../../../utils/utils';
+import {USE_SUPRESS_SYNC} from '../../../../shared/constants';
 
 export function getSchedulers() {
     return ytApiV3Id
         .list(YTApiId.systemSchedulers, {
             path: '//sys/scheduler/instances',
             attributes: ['annotations', 'maintenance', 'maintenance_message'],
-            suppress_transaction_coordinator_sync: true,
-            suppress_upstream_sync: true,
+            ...USE_SUPRESS_SYNC,
         })
         .then((hosts) => {
             const ordered = _.sortBy(hosts, (host) => {
@@ -27,8 +27,7 @@ function getSchedulersState(hosts) {
             parameters: {
                 path: '//sys/scheduler/@alerts',
                 timeout: 10 * 1000,
-                suppress_transaction_coordinator_sync: true,
-                suppress_upstream_sync: true,
+                ...USE_SUPRESS_SYNC,
             },
         },
     ];
@@ -40,8 +39,7 @@ function getSchedulersState(hosts) {
             parameters: {
                 path: '//sys/scheduler/instances/' + name + '/orchid/scheduler/service/connected',
                 timeout: 10 * 1000,
-                suppress_transaction_coordinator_sync: true,
-                suppress_upstream_sync: true,
+                ...USE_SUPRESS_SYNC,
             },
         });
     });
@@ -70,8 +68,7 @@ function getAgentsState(hosts) {
                 parameters: {
                     path: basePath + '/orchid/controller_agent/service/connected',
                     timeout: 10 * 1000,
-                    suppress_transaction_coordinator_sync: true,
-                    suppress_upstream_sync: true,
+                    ...USE_SUPRESS_SYNC,
                 },
             },
             {
@@ -79,8 +76,7 @@ function getAgentsState(hosts) {
                 parameters: {
                     path: basePath + '/@alerts',
                     timeout: 10 * 1000,
-                    suppress_transaction_coordinator_sync: true,
-                    suppress_upstream_sync: true,
+                    ...USE_SUPRESS_SYNC,
                 },
             },
         );
@@ -112,8 +108,7 @@ export function getAgents() {
         .list(YTApiId.systemCAInstances, {
             path: '//sys/controller_agents/instances',
             attributes: ['annotations', 'maintenance', 'maintenance_message'],
-            suppress_transaction_coordinator_sync: true,
-            suppress_upstream_sync: true,
+            ...USE_SUPRESS_SYNC,
         })
         .then((hosts) => {
             hosts = hosts || [];

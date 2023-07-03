@@ -8,6 +8,7 @@ import createActionTypes from '../../../constants/utils';
 import {isRetryFutile} from '../../../utils/index';
 import {showErrorPopup} from '../../../utils/utils';
 import {YTApiId, ytApiV3Id} from '../../../rum/rum-wrap-api';
+import {USE_SUPRESS_SYNC} from '../../../../shared/constants';
 
 export const FETCH_CHUNKS = createActionTypes('CHUNKS');
 const CHUNKS_UPDATER_ID = 'load/system/chunks';
@@ -127,9 +128,8 @@ function getChunks() {
                 parameters: {
                     path: '//sys/' + chunk.name + '/@',
                     attributes: ['count', 'multicell_count'],
+                    ...USE_SUPRESS_SYNC,
                 },
-                suppress_transaction_coordinator_sync: true,
-                suppress_upstream_sync: true,
             });
         });
 
@@ -143,8 +143,7 @@ function getChunks() {
                     'chunk_refresh_enabled',
                     'chunk_requisition_update_enabled',
                 ],
-                suppress_transaction_coordinator_sync: true,
-                suppress_upstream_sync: true,
+                ...USE_SUPRESS_SYNC,
             },
         });
 

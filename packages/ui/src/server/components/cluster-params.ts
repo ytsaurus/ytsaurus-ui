@@ -8,6 +8,7 @@ import {createAutoUpdatedCache} from '../utils/auto-updated-cache';
 import {getRobotYTApiSetup} from './requestsSetup';
 import {getApp} from '../ServerFactory';
 import {FIX_MY_TYPE} from '../../@types/types';
+import {USE_SUPRESS_SYNC} from '../../shared/constants';
 
 const yt = ytLib();
 
@@ -77,32 +78,28 @@ function fetchClusterParams(cluster: string, {ctx}: {ctx?: AppContext}) {
                             command: 'list',
                             parameters: {
                                 path: '//sys/media',
-                                suppress_transaction_coordinator_sync: true,
-                                suppress_upstream_sync: true,
+                                ...USE_SUPRESS_SYNC,
                             },
                         },
                         {
                             command: 'get',
                             parameters: {
                                 path: '//sys/scheduler/orchid/service/version',
-                                suppress_transaction_coordinator_sync: true,
-                                suppress_upstream_sync: true,
+                                ...USE_SUPRESS_SYNC,
                             },
                         },
                         {
                             command: 'get',
                             parameters: {
                                 path: '//sys/@ui_config',
-                                suppress_transaction_coordinator_sync: true,
-                                suppress_upstream_sync: true,
+                                ...USE_SUPRESS_SYNC,
                             },
                         },
                         {
                             command: 'get',
                             parameters: {
                                 path: '//sys/@ui_config_dev_overrides',
-                                suppress_transaction_coordinator_sync: true,
-                                suppress_upstream_sync: true,
+                                ...USE_SUPRESS_SYNC,
                             },
                         },
                     ],

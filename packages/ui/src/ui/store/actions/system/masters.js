@@ -10,6 +10,7 @@ import {getBatchError, showErrorPopup} from '../../../utils/utils';
 
 import yt from '@ytsaurus/javascript-wrapper/lib/yt';
 import {YTApiId, ytApiV3Id} from '../../../rum/rum-wrap-api';
+import {USE_SUPRESS_SYNC} from '../../../../shared/constants';
 
 export const FETCH_MASTER_CONFIG = createActionTypes('MASTER_CONFIG');
 export const FETCH_MASTER_DATA = createActionTypes('MASTER_DATA');
@@ -24,16 +25,14 @@ function loadMastersConfig() {
             parameters: {
                 path: '//sys/primary_masters',
                 attributes: ['annotations', 'maintenance', 'maintenance_message'],
-                suppress_transaction_coordinator_sync: true,
-                suppress_upstream_sync: true,
+                ...USE_SUPRESS_SYNC,
             },
         },
         {
             command: 'get',
             parameters: {
                 path: '//sys/@cell_tag',
-                suppress_transaction_coordinator_sync: true,
-                suppress_upstream_sync: true,
+                ...USE_SUPRESS_SYNC,
             },
         },
         {
@@ -41,8 +40,7 @@ function loadMastersConfig() {
             parameters: {
                 path: '//sys/secondary_masters',
                 attributes: ['annotations', 'maintenance', 'maintenance_message'],
-                suppress_transaction_coordinator_sync: true,
-                suppress_upstream_sync: true,
+                ...USE_SUPRESS_SYNC,
             },
         },
         {
@@ -55,8 +53,7 @@ function loadMastersConfig() {
                     'maintenance',
                     'maintenance_message',
                 ],
-                suppress_transaction_coordinator_sync: true,
-                suppress_upstream_sync: true,
+                ...USE_SUPRESS_SYNC,
             },
         },
         {
@@ -64,8 +61,7 @@ function loadMastersConfig() {
             parameters: {
                 path: '//sys/discovery_servers',
                 attributes: ['annotations', 'native_cell_tag'],
-                suppress_transaction_coordinator_sync: true,
-                suppress_upstream_sync: true,
+                ...USE_SUPRESS_SYNC,
             },
         },
         {
@@ -73,8 +69,7 @@ function loadMastersConfig() {
             parameters: {
                 path: '//sys/queue_agents/instances',
                 attributes: ['annotations', 'maintenance', 'maintenance_message'],
-                suppress_transaction_coordinator_sync: true,
-                suppress_upstream_sync: true,
+                ...USE_SUPRESS_SYNC,
             },
         },
     ];
@@ -190,8 +185,7 @@ function loadMastersConfig() {
                     command: 'get',
                     parameters: {
                         path: `//sys/discovery_servers/${address}/orchid/discovery_server`,
-                        suppress_transaction_coordinator_sync: true,
-                        suppress_upstream_sync: true,
+                        ...USE_SUPRESS_SYNC,
                     },
                     address,
                 }),
@@ -203,8 +197,7 @@ function loadMastersConfig() {
                     command: 'get',
                     parameters: {
                         path: `//sys/queue_agents/instances/${address}/orchid/cypress_synchronizer/active`,
-                        suppress_transaction_coordinator_sync: true,
-                        suppress_upstream_sync: true,
+                        ...USE_SUPRESS_SYNC,
                     },
                     address,
                 }),
@@ -336,8 +329,7 @@ function loadHydra(requests, masterInfo, type, masterEntry) {
                 parameters: {
                     path: cypressPath + '/' + host + hydraPath,
                     timeout: 5000,
-                    suppress_transaction_coordinator_sync: true,
-                    suppress_upstream_sync: true,
+                    ...USE_SUPRESS_SYNC,
                 },
             });
         },
