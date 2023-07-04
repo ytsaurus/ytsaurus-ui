@@ -19,9 +19,6 @@ interface Props<ValueT extends string = string> {
 
     items: Array<TabItem<ValueT>>;
     active?: ValueT;
-    getTabLink?: () => void;
-    onTabChange: () => void;
-    isLink?: boolean;
     onTabChange: (value: ValueT) => void;
     layout?: 'horizontal' | 'vertical';
     size?: 's' | 'm' | 'l';
@@ -90,13 +87,9 @@ class Tabs<ValueT extends string = string> extends React.Component<Props<ValueT>
     }
 
     renderLink(item: TabItem<ValueT>) {
-        const {active, getTabLink, isLink} = this.props;
-
-        // NOTE: onTabChange has a priority over getTabLink in action.makeEntryClickHandler - in case tabs correspond
-        // links, do not pass onTabChange at all - so it won't get called.
-        const onTabChange = !isLink && this.props.onTabChange;
+        const {active, onTabChange} = this.props;
         const onTabClick = (evt: React.MouseEvent<Element, MouseEvent>) => {
-            const clickHandler = action.makeEntryClickHandler(evt, onTabChange, getTabLink);
+            const clickHandler = action.makeEntryClickHandler(evt, onTabChange);
             clickHandler(item.value);
         };
 
