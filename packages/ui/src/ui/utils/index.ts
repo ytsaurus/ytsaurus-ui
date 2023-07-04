@@ -198,7 +198,7 @@ export function makeTabProps<TabName extends string>(
             };
         }),
         underline: true,
-        size: 'l',
+        size: 'l' as const,
     };
 }
 
