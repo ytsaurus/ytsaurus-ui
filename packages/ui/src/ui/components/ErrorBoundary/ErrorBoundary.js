@@ -2,6 +2,8 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 
 import ErrorBlock from '../../components/Block/Block';
+import CompactError from '../CompactError/CompactError';
+
 import {rumLogError} from '../../rum/rum-counter';
 
 export default class ErrorBoundary extends Component {
@@ -40,8 +42,10 @@ export default class ErrorBoundary extends Component {
 
     render() {
         const {hasError, error} = this.state;
-        const {children} = this.props;
-
+        const {children, compact} = this.props;
+        if (compact) {
+            return hasError ? <CompactError error={error} /> : children;
+        }
         return hasError ? <ErrorBlock error={error} /> : children;
     }
 }
