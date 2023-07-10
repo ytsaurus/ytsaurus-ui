@@ -216,7 +216,9 @@ export function getInitialValues(editItem: PoolInfo | undefined, allowedSources:
                 : undefined,
             parent: editItem?.parent,
             mode: editItem?.mode,
-            weight: ypath.getValue(editItem, '/cypressAttributes/weight') || '',
+            weight: {
+                value: ypath.getValue(editItem, '/cypressAttributes/weight') || undefined,
+            },
             maxOperationCount: Object.assign(
                 getPoolResourceInitialValue(editItem, 'maxOperationCount', allowSource),
                 {source: undefined},

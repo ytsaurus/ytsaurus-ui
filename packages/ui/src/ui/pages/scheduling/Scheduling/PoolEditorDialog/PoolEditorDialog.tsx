@@ -60,7 +60,9 @@ function makeError(error: any) {
 }
 
 interface FormValues {
-    general: Record<PoolGeneralResourceType, InitialPoolResourceInfo>; // TODO add description for another fields
+    general: Record<PoolGeneralResourceType, InitialPoolResourceInfo> & {
+        weight: {value?: number; error?: string};
+    }; // TODO add description for another fields
     resourceGuarantee: Record<PoolStrongResourceType, InitialPoolResourceInfo>;
     integralGuarantee: Record<
         Exclude<PoolIntegralResourceType, 'guaranteeType'>,
@@ -102,14 +104,15 @@ export function PoolEditorDialog() {
                 values;
             const data = {
                 general: {
-                    ..._.pick(general, ['name', 'mode', 'weight']),
+                    ..._.pick(general, ['name', 'mode']),
+                    weight: general.weight.value,
                     ..._.pickBy(
                         _.pick(general, Object.keys(POOL_GENERAL_TYPE_TO_ATTRIBUTE)),
                         (item: {limit: number}, k) => {
                             if (!item) {
                                 return false;
                             }
-                            const key = k as keyof typeof general;
+                            const key = k as keyof typeof POOL_GENERAL_TYPE_TO_ATTRIBUTE;
                             const initialValue = initialValues.general[key].limit;
                             return item.limit !== initialValue;
                         },
@@ -269,7 +272,7 @@ export function PoolEditorDialog() {
                             type: 'number',
                             caption: 'Weight',
                             extras: {
-                                min: 0,
+                                min: Number.MIN_VALUE,
                                 hidePrettyValue: true,
                                 formatFn: (value) => (value === undefined ? '' : String(value)),
                             },

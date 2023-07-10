@@ -395,7 +395,10 @@ const makeGeneralCommands = (path, values, initialValues) => {
         Object.prototype.hasOwnProperty.call(omittedValues, value);
 
     //const {name: abcServiceName, slug: abcServiceSlug, id} = prepareAbcService(values.abcService);
-    const omittedValues = _.pickBy(values, (value) => value === '');
+    const omittedValues = _.pickBy(
+        values,
+        (value) => value === '' || value === undefined || value === null,
+    );
 
     const commands = [];
 
@@ -509,7 +512,7 @@ export function editPool(pool, values, initialValues, allowTransfer) {
             .then(setName(path, values.general.name, initialValues.general.name))
             .then(() => {
                 toaster.createToast({
-                    name: 'delete pool',
+                    name: 'edit pool',
                     timeout: 10000,
                     type: 'success',
                     title: `Successfully edited ${pool.name}. Please wait.`,
