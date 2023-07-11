@@ -28,7 +28,6 @@ export interface NodesEphemeralState {
     errorData: {};
     nodes: Node[];
     customColumns: [];
-    versions: Record<string, ConstructorParameters<typeof Node>[1]>;
     tagsLoaded: boolean;
     tagsError: boolean;
     tags: string[];
@@ -48,7 +47,6 @@ const ephemeralState: NodesEphemeralState = {
     errorData: {},
     nodes: [],
     customColumns: [],
-    versions: {},
     tagsLoaded: false,
     tagsError: false,
     tags: [],
@@ -76,20 +74,16 @@ const reducer = (state = initialState, action: NodesAction) => {
             return {...state, index: action.data.index, loading: true};
 
         case GET_NODES.SUCCESS: {
-            const {index, nodes, versions} = action.data;
+            const {index, nodes} = action.data;
             if (index !== state.index) {
                 return state;
             }
 
-            const preparedNodes = _.map(
-                nodes,
-                (node) => new Node(node, versions[ypath.getValue(node)]),
-            );
+            const preparedNodes = _.map(nodes, (node) => new Node(node));
 
             return {
                 ...state,
                 nodes: preparedNodes,
-                versions,
                 loading: false,
                 loaded: true,
                 error: false,
@@ -97,14 +91,14 @@ const reducer = (state = initialState, action: NodesAction) => {
         }
 
         case COMPONENTS_NODES_UPDATE_NODE: {
-            const {nodes, versions} = state;
+            const {nodes} = state;
             const {node} = action.data;
 
             const index = _.findIndex(state.nodes, ({host}) => host === ypath.getValue(node));
             if (index === -1) {
                 return state;
             }
-            const preparedNode = new Node(node, versions[ypath.getValue(node)]);
+            const preparedNode = new Node(node);
             const newNodes = nodes.slice();
             newNodes[index] = preparedNode;
 
@@ -140,7 +134,7 @@ const reducer = (state = initialState, action: NodesAction) => {
         case GET_NODES_TAGS.SUCCESS: {
             const {nodes} = action.data;
 
-            const preparedTags = _.uniq(_.flatMap(nodes, (node) => new Node(node, {}).tags)).sort();
+            const preparedTags = _.uniq(_.flatMap(nodes, (node) => new Node(node).tags)).sort();
 
             return {...state, tags: preparedTags, tagsLoading: false, tagsError: false};
         }
@@ -160,7 +154,7 @@ export type NodesAction =
     | ActionD<typeof GET_NODES.REQUEST, Pick<NodesEphemeralState, 'index'>>
     | ActionD<
           typeof GET_NODES.SUCCESS,
-          Pick<NodesEphemeralState, 'index' | 'versions'> & {
+          Pick<NodesEphemeralState, 'index'> & {
               nodes: Array<ConstructorParameters<typeof Node>[0]>;
           }
       >
