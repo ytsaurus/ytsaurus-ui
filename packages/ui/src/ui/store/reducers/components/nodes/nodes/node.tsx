@@ -62,6 +62,7 @@ export class Node {
         'disable_write_sessions',
         '/annotations/physical_host',
         '/statistics/full',
+        '/statistics/locations',
         '/statistics/media',
         '/statistics/memory',
         '/statistics/total_stored_chunk_count',
@@ -445,7 +446,7 @@ const userTagsAttributes: ReadonlyArray<AttributeName> = ['user_tags'];
 
 const cpuAttributes = _.union(resourceUsageAttributes, resourceLimitsAttributes);
 const fullAttributes: ReadonlyArray<AttributeName> = ['/statistics/full'];
-const locationsAttributes = statisticsAttributes;
+const locationsAttributes: ReadonlyArray<AttributeName> = ['/statistics/locations'];
 const memoryAttributes: ReadonlyArray<AttributeName> = ['/statistics/memory'];
 const networkAttributes = _.union(resourceUsageAttributes, resourceLimitsAttributes);
 const removalSlotsAttributes = _.union(resourceUsageAttributes, resourceLimitsAttributes);
