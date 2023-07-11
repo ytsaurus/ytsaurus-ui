@@ -65,8 +65,10 @@ export class Node {
         '/statistics/locations',
         '/statistics/media',
         '/statistics/memory',
-        '/statistics/total_stored_chunk_count',
         '/statistics/total_session_count',
+        '/statistics/total_stored_chunk_count',
+        '/statistics/total_used_space',
+        '/statistics/total_available_space',
     ] as const;
 
     static getResourcesSlots(resourceUsage: unknown, resourceLimits: unknown, key: string) {
@@ -440,7 +442,6 @@ const rackAttributes: ReadonlyArray<AttributeName> = ['rack'];
 const resourceLimitsAttributes: ReadonlyArray<AttributeName> = ['resource_limits'];
 const resourceUsageAttributes: ReadonlyArray<AttributeName> = ['resource_usage'];
 const stateAttributes: ReadonlyArray<AttributeName> = ['state'];
-const statisticsAttributes: ReadonlyArray<AttributeName> = [];
 const tagsAttributes: ReadonlyArray<AttributeName> = ['tags'];
 const userTagsAttributes: ReadonlyArray<AttributeName> = ['user_tags'];
 
@@ -453,8 +454,10 @@ const removalSlotsAttributes = _.union(resourceUsageAttributes, resourceLimitsAt
 const repairSlotsAttributes = _.union(resourceUsageAttributes, resourceLimitsAttributes);
 const replicationSlotsAttributes = _.union(resourceUsageAttributes, resourceLimitsAttributes);
 const sealSlotsAttributes = _.union(resourceUsageAttributes, resourceLimitsAttributes);
-const spaceAvailableAttributes = statisticsAttributes;
-const spaceUsedAttributes = statisticsAttributes;
+const spaceAvailableAttributes: ReadonlyArray<AttributeName> = [
+    '/statistics/total_available_space',
+];
+const spaceUsedAttributes: ReadonlyArray<AttributeName> = ['/statistics/total_used_space'];
 const spaceTotalAttributes = _.union(spaceUsedAttributes, spaceAvailableAttributes);
 const userSlotsAttributes = _.union(resourceUsageAttributes, resourceLimitsAttributes);
 
