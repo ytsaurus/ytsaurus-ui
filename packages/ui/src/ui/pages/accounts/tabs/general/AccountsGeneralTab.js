@@ -286,6 +286,7 @@ class AccountsGeneralTab extends Component {
                         placeholder="Account..."
                         onChange={this.props.changeNameFilter}
                         autofocus={viewContext !== DASHBOARD_VIEW_CONTEXT}
+                        qa={'accounts-name-filter'}
                     />
                 </div>
                 {UIFactory.renderControlAbcService({
@@ -299,6 +300,7 @@ class AccountsGeneralTab extends Component {
                         options={ACCOUNTS_CONTENT_MODE_ITEMS}
                         onUpdate={(vals) => this.props.changeContentFilter(vals[0])}
                         label="Mode:"
+                        qa="accounts-content-mode"
                     />
                 </div>
                 <div className={b('content-mode-subtype', 'elements-toolbar__component')}>
@@ -670,7 +672,12 @@ class AccountsGeneralTab extends Component {
 
                 return (
                     <span>
-                        <Button {...commonProps} title="Edit account" onClick={handleClick}>
+                        <Button
+                            {...commonProps}
+                            title="Edit account"
+                            onClick={handleClick}
+                            qa={`edit-account-${item.name}`}
+                        >
                             <Icon awesome="pencil" />
                         </Button>
                     </span>
