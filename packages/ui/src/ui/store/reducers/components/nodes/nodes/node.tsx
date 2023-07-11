@@ -34,7 +34,6 @@ export class Node {
     static ATTRIBUTES = [
         'state',
         'banned',
-        'annotations',
         'ban_message',
         'decommissioned',
         'decommission_message',
@@ -62,6 +61,7 @@ export class Node {
         'disable_scheduler_jobs',
         'disable_tablet_cells',
         'disable_write_sessions',
+        '/annotations/physical_host',
     ] as const;
 
     static getResourcesSlots(resourceUsage: unknown, resourceLimits: unknown, key: string) {
@@ -487,7 +487,7 @@ export const AttributesByProperty: Record<keyof Node, ReadonlyArray<AttributeNam
     memoryTotalText: memoryAttributes,
     networkProgress: networkAttributes,
     networkText: networkAttributes,
-    physicalHost: ['annotations'],
+    physicalHost: ['/annotations/physical_host'],
     rack: rackAttributes,
     registerTime: ['register_time'],
     removalSlots: removalSlotsAttributes,
