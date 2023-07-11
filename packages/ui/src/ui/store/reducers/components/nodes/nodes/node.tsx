@@ -62,6 +62,7 @@ export class Node {
         'disable_write_sessions',
         '/annotations/physical_host',
         '/statistics/memory',
+        '/statistics/media',
     ] as const;
 
     static getResourcesSlots(resourceUsage: unknown, resourceLimits: unknown, key: string) {
@@ -477,7 +478,7 @@ export const AttributesByProperty: Record<keyof Node, ReadonlyArray<AttributeNam
     enabledLocations: locationsAttributes,
     full: fullAttributes,
     host: hostAttributes,
-    IOWeight: statisticsAttributes,
+    IOWeight: ['/statistics/media'],
     lastSeenTime: ['last_seen_time'],
     locations: locationsAttributes,
     memory: memoryAttributes,
