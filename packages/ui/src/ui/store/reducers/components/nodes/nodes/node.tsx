@@ -60,6 +60,7 @@ export class Node {
         'disable_scheduler_jobs',
         'disable_tablet_cells',
         'disable_write_sessions',
+        'version',
         '/annotations/physical_host',
         '/statistics/full',
         '/statistics/locations',
@@ -146,23 +147,11 @@ export class Node {
     userSlotsProgress!: number;
     userTags!: string[];
     version?: string;
-    versionError?: unknown;
 
     private statistics: unknown;
 
-    constructor(node: FIX_MY_TYPE, version: {version?: string; error?: unknown} = {}) {
+    constructor(node: FIX_MY_TYPE) {
         this.host = ypath.getValue(node);
-        this.version = version.version;
-
-        if (_.isEmpty(version)) {
-            this.version = 'error';
-            this.versionError = new Error('Empty version');
-        }
-
-        if (version.error) {
-            this.version = 'error';
-            this.versionError = version.error;
-        }
 
         this.prepareDefault(ypath.getAttributes(node));
         this.prepareEffectiveFlag();
@@ -178,6 +167,7 @@ export class Node {
         this.statistics = ypath.getValue(attributes, '/statistics');
         this.memory = ypath.getValue(this.statistics, '/memory') || {};
 
+        this.version = ypath.getValue(attributes, '/version');
         this.physicalHost = ypath.getValue(attributes, '/annotations')?.['physical_host'];
         this.dataCenter = ypath.getValue(attributes, '/data_center');
         this.state = ypath.getValue(attributes, '/state');
@@ -429,7 +419,7 @@ function prepareTabletSlots(tabletSlots: Array<any>): TabletSlots {
     }
 }
 
-type AttributeName = (typeof Node.ATTRIBUTES)[number] | 'versions';
+type AttributeName = (typeof Node.ATTRIBUTES)[number];
 
 type Attributes = Record<AttributeName, FIX_MY_TYPE>;
 
@@ -525,6 +515,5 @@ export const AttributesByProperty: Record<keyof Node, ReadonlyArray<AttributeNam
     userSlots: userSlotsAttributes,
     userSlotsProgress: userSlotsAttributes,
     userTags: userTagsAttributes,
-    version: ['versions'],
-    versionError: ['versions'],
+    version: ['version'],
 };

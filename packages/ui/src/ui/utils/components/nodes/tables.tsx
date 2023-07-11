@@ -83,7 +83,7 @@ export const PropertiesByColumn = {
     tablet_slots: ['tabletSlots'],
     user_slots: ['userSlots', 'userSlotsProgress'],
     user_tags: ['userTags'],
-    version: ['version', 'versionError'],
+    version: ['version'],
     write_sessions: ['disableWriteSession'],
 } as const;
 
@@ -754,9 +754,9 @@ export const NODES_TABLE_TEMPLATES: Templates = {
     },
 
     version(item) {
-        const {version, versionError} = item;
+        const {version} = item;
 
-        return <Version version={version} error={versionError} />;
+        return <Version version={version} />;
     },
 
     last_seen(item) {

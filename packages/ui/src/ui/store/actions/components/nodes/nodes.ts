@@ -3,7 +3,6 @@ import yt from '@ytsaurus/javascript-wrapper/lib/yt';
 import difference_ from 'lodash/difference';
 import omit_ from 'lodash/omit';
 import partition_ from 'lodash/partition';
-import reduce_ from 'lodash/reduce';
 import type {ThunkAction} from 'redux-thunk';
 
 import ypath from '../../../../common/thor/ypath';
@@ -38,7 +37,6 @@ import CancelHelper from '../../../../utils/cancel-helper';
 import {YTApiId, ytApiV3Id} from '../../../../rum/rum-wrap-api';
 import type {ActionD, FIX_MY_TYPE, PartialDeep} from '../../../../types';
 import {wrapApiPromiseByToaster} from '../../../../utils/utils';
-import {DiscoverVersionsData, VersionHostInfo, getVersions} from '../versions/versions_v2';
 import {NodeType} from '../../../../../shared/constants/system';
 
 const {COMPONENTS} = NAMESPACES;
@@ -73,13 +71,10 @@ export function getNodes(): NodesThunkAction {
         updateNodeCanceler.removeAllRequests();
 
         const attributes = getRequiredAttributes(getState());
+        const [keys, paths] = partition_(attributes, (k) => -1 === k.indexOf('/'));
 
-        const attrsList = attributes.filter((a) => a !== 'versions');
-        const hasVersionAttr = attrsList.length < attributes.length;
-        const [keys, paths] = partition_(attrsList, (k) => -1 === k.indexOf('/'));
-
-        return Promise.all([
-            ytApiV3Id.list(YTApiId.componentsClusterNodes, {
+        return ytApiV3Id
+            .list(YTApiId.componentsClusterNodes, {
                 parameters: {
                     path: `//sys/${nodeType}`,
                     attributes: {keys, paths},
@@ -87,30 +82,13 @@ export function getNodes(): NodesThunkAction {
                     ...USE_MAX_SIZE,
                 },
                 cancellation: updateNodeCanceler.saveCancelToken,
-            }),
-            !hasVersionAttr
-                ? {nodes: {}}
-                : dispatch(getVersions()).then((data: DiscoverVersionsData) => {
-                      const nodes = reduce_(
-                          data?.details,
-                          (acc, item) => {
-                              if (item.type === 'node') {
-                                  acc[item.address] = item;
-                              }
-                              return acc;
-                          },
-                          {} as Record<string, VersionHostInfo>,
-                      );
-                      return {nodes};
-                  }),
-        ])
-            .then(([nodes, versions]) => {
+            })
+            .then((nodes) => {
                 dispatch({
                     type: GET_NODES.SUCCESS,
                     data: {
                         index,
                         nodes: ypath.getValue(nodes),
-                        versions: versions.nodes,
                     },
                 });
             })
