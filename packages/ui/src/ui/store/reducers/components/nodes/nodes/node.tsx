@@ -38,7 +38,6 @@ export class Node {
         'decommissioned',
         'decommission_message',
         'alerts',
-        'statistics',
         'rack',
         'register_time',
         'last_seen_time',
@@ -62,6 +61,7 @@ export class Node {
         'disable_tablet_cells',
         'disable_write_sessions',
         '/annotations/physical_host',
+        '/statistics/memory',
     ] as const;
 
     static getResourcesSlots(resourceUsage: unknown, resourceLimits: unknown, key: string) {
@@ -439,14 +439,14 @@ const rackAttributes: ReadonlyArray<AttributeName> = ['rack'];
 const resourceLimitsAttributes: ReadonlyArray<AttributeName> = ['resource_limits'];
 const resourceUsageAttributes: ReadonlyArray<AttributeName> = ['resource_usage'];
 const stateAttributes: ReadonlyArray<AttributeName> = ['state'];
-const statisticsAttributes: ReadonlyArray<AttributeName> = ['statistics'];
+const statisticsAttributes: ReadonlyArray<AttributeName> = [];
 const tagsAttributes: ReadonlyArray<AttributeName> = ['tags'];
 const userTagsAttributes: ReadonlyArray<AttributeName> = ['user_tags'];
 
 const cpuAttributes = _.union(resourceUsageAttributes, resourceLimitsAttributes);
 const fullAttributes = statisticsAttributes;
 const locationsAttributes = statisticsAttributes;
-const memoryAttributes = statisticsAttributes;
+const memoryAttributes: ReadonlyArray<AttributeName> = ['/statistics/memory'];
 const networkAttributes = _.union(resourceUsageAttributes, resourceLimitsAttributes);
 const removalSlotsAttributes = _.union(resourceUsageAttributes, resourceLimitsAttributes);
 const repairSlotsAttributes = _.union(resourceUsageAttributes, resourceLimitsAttributes);
