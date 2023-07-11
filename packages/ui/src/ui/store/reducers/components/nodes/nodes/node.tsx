@@ -64,6 +64,7 @@ export class Node {
         '/statistics/memory',
         '/statistics/media',
         '/statistics/total_stored_chunk_count',
+        '/statistics/total_session_count',
     ] as const;
 
     static getResourcesSlots(resourceUsage: unknown, resourceLimits: unknown, key: string) {
@@ -497,7 +498,7 @@ export const AttributesByProperty: Record<keyof Node, ReadonlyArray<AttributeNam
     resourcesLimitOverrides: ['resource_limits_overrides'],
     sealSlots: sealSlotsAttributes,
     sealSlotsProgress: sealSlotsAttributes,
-    sessions: statisticsAttributes,
+    sessions: ['/statistics/total_session_count'],
     spaceAvailable: spaceAvailableAttributes,
     spaceProgress: _.union(spaceUsedAttributes, spaceAvailableAttributes, spaceTotalAttributes),
     spaceText: _.union(spaceUsedAttributes, spaceTotalAttributes),
