@@ -61,8 +61,9 @@ export class Node {
         'disable_tablet_cells',
         'disable_write_sessions',
         '/annotations/physical_host',
-        '/statistics/memory',
+        '/statistics/full',
         '/statistics/media',
+        '/statistics/memory',
         '/statistics/total_stored_chunk_count',
         '/statistics/total_session_count',
     ] as const;
@@ -443,7 +444,7 @@ const tagsAttributes: ReadonlyArray<AttributeName> = ['tags'];
 const userTagsAttributes: ReadonlyArray<AttributeName> = ['user_tags'];
 
 const cpuAttributes = _.union(resourceUsageAttributes, resourceLimitsAttributes);
-const fullAttributes = statisticsAttributes;
+const fullAttributes: ReadonlyArray<AttributeName> = ['/statistics/full'];
 const locationsAttributes = statisticsAttributes;
 const memoryAttributes: ReadonlyArray<AttributeName> = ['/statistics/memory'];
 const networkAttributes = _.union(resourceUsageAttributes, resourceLimitsAttributes);
