@@ -11,7 +11,7 @@ const localModeConfig: Partial<AppConfig> = {
         limit: '51mb',
         type(req) {
             // Enable raw parser for all content-types on yt-api for piping requests
-            if (req.url?.startsWith('/api/yt/')) return true;
+            if (req.url?.startsWith('/api/yt/')) return false;
             if (req.url?.startsWith('/localmode/api/yt/')) return false;
 
             // Simulate default logic given that 'type' option is 'application/json'

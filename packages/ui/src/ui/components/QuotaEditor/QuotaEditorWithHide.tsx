@@ -71,7 +71,12 @@ export default class QuotaEditorWithHide extends React.Component<Props, State> {
                     {this.renderLimit(this.getLimit())}
                 </div>
                 <div className={block('confirm-actions')}>
-                    <Button className={block('confirm-btn')} view={'action'} onClick={this.onYes}>
+                    <Button
+                        className={block('confirm-btn')}
+                        view={'action'}
+                        onClick={this.onYes}
+                        qa="quota-editor-confirmation-yes"
+                    >
                         Yes
                     </Button>
                     <Button
@@ -124,6 +129,7 @@ export default class QuotaEditorWithHide extends React.Component<Props, State> {
                             view={'action'}
                             disabled={!isReadyToSave}
                             onClick={this.onSave}
+                            qa="quota-editor-save"
                         >
                             Save
                         </Button>

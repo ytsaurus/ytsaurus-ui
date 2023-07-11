@@ -20,7 +20,7 @@ function NumberOrFalse(props: FilterProps, _propName: 'debounce', componentName:
 const block = cn('elements-filter');
 
 export interface FilterProps
-    extends Partial<Pick<TextInputProps, 'type' | 'view' | 'pin' | 'disabled'>> {
+    extends Partial<Pick<TextInputProps, 'type' | 'view' | 'pin' | 'disabled' | 'qa'>> {
     className?: string;
 
     value: string;

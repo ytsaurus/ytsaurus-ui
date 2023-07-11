@@ -101,6 +101,7 @@ export default class QuotaEditor extends React.Component<QuotaEditorProps> {
                         max={this.getMaxLimit()}
                         onEnterKeyDown={this.onEnterKeyDown}
                         decimalPlaces={decimalPlaces}
+                        qa="quota-editor-new-limit"
                     />
                 </div>
             </div>

@@ -28,8 +28,8 @@ jobs:
           disk-type: network-ssd-nonreplicated
           disk-size: 93GB
 
-  e2e-tests:
-    name: Tests
+  e2e-build:
+    name: Build & Run containers for 'Local'
     runs-on: ${{ needs.start-vm.outputs.label }}
     needs: start-vm
     steps:
@@ -41,28 +41,75 @@ jobs:
         run: |
           cd packages/ui
           npm run docker:build --dockertag=local
-      - name: npm ci
+      - name: Run containers for 'Local'
         run: |
           cd packages/ui/tests
           curl https://raw.githubusercontent.com/ytsaurus/ytsaurus/main/yt/docker/local/run_local_cluster.sh > run_local_cluster.sh
           chmod u+x run_local_cluster.sh
-          npm ci
-      - name: Run containers for 'Local'
-        run: |
-          cd packages/ui/tests
           ./run_local_cluster.sh --ui-skip-pull true --ui-version local --ui-app-installation e2e
           sleep 10
+
+  e2e-local:
+    name: E2E for 'Local'
+    runs-on: ${{ needs.start-vm.outputs.label }}
+    needs:
+      - start-vm
+      - e2e-build
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: npm ci
+        run: |
+          cd packages/ui/tests
+          npm ci
+
       - name: Tests for 'Local'
         run: |
           cd packages/ui
           YT_PROXY=`hostname`:8000 npm run e2e:localmode:init
           npm run e2e:localmode:ui
+
+  e2e-run-for-local-as-remote:
+    name: Run containers for 'Local as remote'
+    runs-on: ${{ needs.start-vm.outputs.label }}
+    needs:
+      - start-vm
+      - e2e-local
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: npm ci
+        run: |
+          cd packages/ui/tests
+          npm ci
       - name: Run containers for 'Local as remote'
         run: |
           cd packages/ui/tests
+          curl https://raw.githubusercontent.com/ytsaurus/ytsaurus/main/yt/docker/local/run_local_cluster.sh > run_local_cluster.sh
+          chmod u+x run_local_cluster.sh
           ./run_local_cluster.sh --stop
           ./run_local_cluster.sh --ui-skip-pull true --ui-version local --ui-app-installation e2e --docker-hostname `hostname` --fqdn localhost --ui-network bridge --ui-proxy-internal ""
           sleep 10
+
+  e2e-local-as-remote:
+    name: E2E for 'Local as remote'
+    runs-on: ${{ needs.start-vm.outputs.label }}
+    needs:
+      - start-vm
+      - e2e-run-for-local-as-remote
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: npm ci
+        run: |
+          cd packages/ui/tests
+          npm ci
       - name: Tests for 'Local as remote'
         run: |
           cd packages/ui
@@ -73,7 +120,7 @@ jobs:
     name: Stop VM
     needs:
       - start-vm
-      - e2e-tests
+      - e2e-local-as-remote
     runs-on: ubuntu-latest
     if: ${{ always() }}
     steps:

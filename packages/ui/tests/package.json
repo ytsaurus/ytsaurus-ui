@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "playwright test"
+    "start": "playwright test ${PW_OPTIONS}"
   },
   "keywords": [],
   "author": "",
