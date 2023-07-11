@@ -63,6 +63,7 @@ export class Node {
         '/annotations/physical_host',
         '/statistics/memory',
         '/statistics/media',
+        '/statistics/total_stored_chunk_count',
     ] as const;
 
     static getResourcesSlots(resourceUsage: unknown, resourceLimits: unknown, key: string) {
@@ -85,7 +86,6 @@ export class Node {
     alerts!: object[];
     banMessage?: string;
     banned!: boolean;
-    cachedReplicas!: number;
     chaosSlots!: TabletSlots;
     chunks!: number;
     cpu: unknown;
@@ -132,7 +132,6 @@ export class Node {
     spaceTotal!: number;
     spaceUsed!: number;
     state!: 'online' | 'offline';
-    storedReplicas!: number;
     systemTags!: string[];
     tabletDynamicMemory!: Memory;
     tabletSlots!: TabletSlots;
@@ -180,8 +179,6 @@ export class Node {
         this.rack = ypath.getValue(attributes, '/rack');
         this.registerTime = ypath.getValue(attributes, '/register_time');
         this.lastSeenTime = ypath.getValue(attributes, '/last_seen_time');
-        this.storedReplicas = ypath.getValue(this.statistics, '/total_stored_chunk_count');
-        this.cachedReplicas = ypath.getValue(this.statistics, '/total_cached_chunk_count');
         this.full = ypath.getValue(this.statistics, '/full');
         this.banned = ypath.getBoolean(attributes, '/banned');
         this.banMessage = ypath.getValue(attributes, '/ban_message');
@@ -462,8 +459,7 @@ export const AttributesByProperty: Record<keyof Node, ReadonlyArray<AttributeNam
     alerts: alertsAttributes,
     banMessage: ['ban_message'],
     banned: bannedAttributes,
-    cachedReplicas: statisticsAttributes,
-    chunks: statisticsAttributes,
+    chunks: ['/statistics/total_stored_chunk_count'],
     cpu: cpuAttributes,
     cpuProgress: cpuAttributes,
     cpuText: cpuAttributes,
@@ -508,7 +504,6 @@ export const AttributesByProperty: Record<keyof Node, ReadonlyArray<AttributeNam
     spaceTotal: spaceTotalAttributes,
     spaceUsed: spaceUsedAttributes,
     state: stateAttributes,
-    storedReplicas: statisticsAttributes,
     systemTags: _.union(
         tagsAttributes,
         userTagsAttributes,
