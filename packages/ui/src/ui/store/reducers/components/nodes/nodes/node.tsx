@@ -131,7 +131,6 @@ export class Node {
     spaceTotal!: number;
     spaceUsed!: number;
     state!: 'online' | 'offline';
-    statistics: unknown;
     storedReplicas!: number;
     systemTags!: string[];
     tabletDynamicMemory!: Memory;
@@ -143,6 +142,8 @@ export class Node {
     userTags!: string[];
     version?: string;
     versionError?: unknown;
+
+    private statistics: unknown;
 
     constructor(node: FIX_MY_TYPE, version: {version?: string; error?: unknown} = {}) {
         this.host = ypath.getValue(node);
@@ -506,7 +507,6 @@ export const AttributesByProperty: Record<keyof Node, ReadonlyArray<AttributeNam
     spaceTotal: spaceTotalAttributes,
     spaceUsed: spaceUsedAttributes,
     state: stateAttributes,
-    statistics: statisticsAttributes,
     storedReplicas: statisticsAttributes,
     systemTags: _.union(
         tagsAttributes,

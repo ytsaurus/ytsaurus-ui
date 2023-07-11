@@ -1,6 +1,9 @@
 // @ts-ignore
 import yt from '@ytsaurus/javascript-wrapper/lib/yt';
-import _ from 'lodash';
+import difference_ from 'lodash/difference';
+import omit_ from 'lodash/omit';
+import partition_ from 'lodash/partition';
+import reduce_ from 'lodash/reduce';
 import type {ThunkAction} from 'redux-thunk';
 
 import ypath from '../../../../common/thor/ypath';
@@ -71,20 +74,24 @@ export function getNodes(): NodesThunkAction {
 
         const attributes = getRequiredAttributes(getState());
 
+        const attrsList = attributes.filter((a) => a !== 'versions');
+        const hasVersionAttr = attrsList.length < attributes.length;
+        const [keys, paths] = partition_(attrsList, (k) => -1 === k.indexOf('/'));
+
         return Promise.all([
             ytApiV3Id.list(YTApiId.componentsClusterNodes, {
                 parameters: {
                     path: `//sys/${nodeType}`,
-                    attributes: attributes.filter((a) => a !== 'versions'),
+                    attributes: {keys, paths},
                     ...USE_CACHE,
                     ...USE_MAX_SIZE,
                 },
                 cancellation: updateNodeCanceler.saveCancelToken,
             }),
-            attributes.indexOf('versions') < 0
+            !hasVersionAttr
                 ? {nodes: {}}
                 : dispatch(getVersions()).then((data: DiscoverVersionsData) => {
-                      const nodes = _.reduce(
+                      const nodes = reduce_(
                           data?.details,
                           (acc, item) => {
                               if (item.type === 'node') {
@@ -181,7 +188,7 @@ export function savePreset(name: string, data: FIX_MY_TYPE): NodesThunkAction {
 export function removePreset(name: string): NodesThunkAction {
     return (dispatch, getState) => {
         const state = getState();
-        const templates = _.omit(getTemplates(state), name);
+        const templates = omit_(getTemplates(state), name);
 
         dispatch(setSetting(TEMPLATES, COMPONENTS, templates));
     };
@@ -200,7 +207,7 @@ export function handleColumnsChange(selectedColumns: string[]): NodesThunkAction
         );
 
         const currentAttributes = getRequiredAttributes(getState());
-        if (_.difference(currentAttributes, prevAttributes).length > 0) {
+        if (difference_(currentAttributes, prevAttributes).length > 0) {
             await dispatch(getNodes());
         }
     };
