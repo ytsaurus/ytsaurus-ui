@@ -9,6 +9,7 @@ import {rumLogError} from '../../rum/rum-counter';
 export default class ErrorBoundary extends Component {
     static propTypes = {
         children: PropTypes.node,
+        compact: PropTypes.bool,
     };
 
     static getDerivedStateFromError(error) {

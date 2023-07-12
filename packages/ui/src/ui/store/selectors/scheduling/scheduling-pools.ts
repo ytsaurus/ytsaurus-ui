@@ -68,7 +68,6 @@ const getPoolsPrepared = createSelector(
         return rumId.wrap('prepareData', () => {
             return _.map(preparePools(rawPools!, rawOperations), (pool) => {
                 const cypressAttributes = ypath.getValue(attributes)[pool.name];
-
                 return updatePoolChild(pool, cypressAttributes, 'pool', treeResources, {
                     useStarvingStatus,
                 });
