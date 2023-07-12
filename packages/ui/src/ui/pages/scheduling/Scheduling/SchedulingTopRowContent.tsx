@@ -3,6 +3,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import cn from 'bem-cn-lite';
 import _ from 'lodash';
 
+import ErrorBoundary from '../../../components/ErrorBoundary/ErrorBoundary';
 import {RowWithName} from '../../../containers/AppNavigation/TopRowContent/SectionName';
 import Favourites from '../../../components/Favourites/Favourites';
 import {
@@ -288,4 +289,12 @@ function SchedulingPhysicalTree() {
     );
 }
 
-export default React.memo(SchedulingTopRowContent);
+const SchedulingTopRowContentMemo = React.memo(SchedulingTopRowContent);
+
+export default function SchedulingTopRowContentWithError() {
+    return (
+        <ErrorBoundary compact>
+            <SchedulingTopRowContentMemo />
+        </ErrorBoundary>
+    );
+}

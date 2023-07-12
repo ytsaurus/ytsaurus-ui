@@ -1,5 +1,6 @@
 import ypath from '@ytsaurus/interface-helpers/lib/ypath';
 import unipika from '@gravity-ui/unipika/lib/unipika';
+import {appendInnerErrors} from '../../utils/errors';
 
 const yson = unipika.utils.yson;
 
@@ -79,9 +80,14 @@ thorYPath.getBoolean = function (node, path) {
  * @returns {number|*}
  */
 thorYPath.getNumber = function (node, path, defaultValue) {
-    const value = thorYPath.get(node, path);
-
-    return convertToNumber(value, defaultValue);
+    try {
+        const value = thorYPath.get(node, path);
+        return convertToNumber(value, defaultValue);
+    } catch (e) {
+        throw appendInnerErrors(e, {
+            message: `thorYPath.getNumber: failed to convert field with path: "${path}".`,
+        });
+    }
 };
 
 export default thorYPath;
