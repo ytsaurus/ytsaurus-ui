@@ -1,4 +1,4 @@
-import {test, expect} from '@playwright/test';
+import {expect, test} from '@playwright/test';
 import {CLUSTER, makeClusterTille, makeClusterUrl} from '../utils';
 
 test('Scheduliing - Overview', async ({page}) => {
@@ -65,5 +65,24 @@ test('Scheduling - Monitoring', async ({page}) => {
     await page.waitForSelector('text="yt-e2e-pool-1"');
     await page.waitForSelector(
         `a:text("My monitoring")[href="https://monitoring-service.my-domain.com/d/DB-id?var-pool=yt-e2e-pool-1&var-cluster=${CLUSTER}&var-tree=default"]`,
+    );
+});
+
+test('Scheduling - Pool - Edit Dialog - Change Weight', async ({page}) => {
+    await page.goto(makeClusterUrl('scheduling/overview?pool=yt-e2e-pool-1&tree=default'));
+    const editBtn = await page.getByTitle('edit pool yt-e2e-pool-1');
+    await editBtn.click();
+    // pool edit dialog is open
+    const dialogCaption = await page.waitForSelector('.df-dialog__caption');
+    expect(await dialogCaption.innerText()).toBe('yt-e2e-pool-1');
+    const weightInput = await page.waitForSelector('input[name="general.weight"]');
+    const initialValue = await weightInput.inputValue();
+    const newValue = '5' === initialValue ? '4' : '5';
+    await weightInput.fill('');
+    await weightInput.type(newValue);
+    const confirmBtn = await page.getByText('Confirm');
+    await confirmBtn.click();
+    await page.waitForSelector(
+        `td.scheduling-overview__table-item_type_weight :text("${newValue}")`,
     );
 });

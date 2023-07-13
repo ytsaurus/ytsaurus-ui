@@ -223,8 +223,9 @@ class Overview extends Component {
         if (item.isEphemeral) {
             return null;
         }
+        const title = `edit pool ${item?.name || ''}`;
         return (
-            <Button size="s" view="flat-secondary" onClick={onClick}>
+            <Button title={title} size="s" view="flat-secondary" onClick={onClick}>
                 <Icon awesome="pencil" />
             </Button>
         );
