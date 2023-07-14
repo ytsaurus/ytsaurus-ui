@@ -11,6 +11,8 @@
 
 ### Bug Fixes
 
+* PoolEditorDialog weight field [YTFRONT-3748] ([c906006](https://github.com/ytsaurus/ytsaurus-ui/commit/c906006730658e7633678e8b7d66036d468affc2))
+* Scheduling page fix ui handling parsing pools errors [YTFRONT-3748] ([facc1d6](https://github.com/ytsaurus/ytsaurus-ui/commit/facc1d648f2f379efaf5e7fb96daae8f70f83f5a))
 * ui lock ([03940a6](https://github.com/ytsaurus/ytsaurus-ui/commit/03940a6c2240cabc78f5592b99e7540d32c1531e))
 
 ## [0.11.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v0.10.0...ui-v0.11.0) (2023-07-06)
