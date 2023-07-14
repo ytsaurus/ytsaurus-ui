@@ -6,6 +6,13 @@
   * dependencies
     * @ytsaurus/javascript-wrapper bumped from ^0.2.1 to ^0.3.0
 
+## [0.11.3](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v0.11.2...ui-v0.11.3) (2023-07-14)
+
+
+### Bug Fixes
+
+* README ([cd2d3db](https://github.com/ytsaurus/ytsaurus-ui/commit/cd2d3dbe2e75341274a9c0a71f36db1ee34878f2))
+
 ## [0.11.2](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v0.11.1...ui-v0.11.2) (2023-07-14)
 
 
