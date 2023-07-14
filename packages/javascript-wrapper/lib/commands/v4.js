@@ -136,5 +136,10 @@ module.exports = {
         name: 'abort_query',
         method: 'POST',
         dataType: 'json'
+    },
+    alterQuery: {
+        name: 'alter_query',
+        method: 'POST',
+        dataType: 'json'
     }
 }
