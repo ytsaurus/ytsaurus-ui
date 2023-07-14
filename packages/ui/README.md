@@ -27,7 +27,7 @@ To run the development environment you need to prepare and run nginx:
 
 4. `sudo systemctl restart nginx`
 
-Install required dependencies
+Install required dependencies:
 
 ```
 $ npm ci
