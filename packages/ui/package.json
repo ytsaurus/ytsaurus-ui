@@ -1,6 +1,6 @@
 {
   "name": "@ytsaurus/ui",
-  "version": "0.11.0",
+  "version": "0.11.1",
   "repository": {
     "type": "github",
     "url": "https://github.com/YTsaurus/ytsaurus-ui/tree/main/packages/ui"
@@ -59,7 +59,7 @@
     "@gravity-ui/nodekit": "^0.2.0",
     "@gravity-ui/unipika": "^1.0.0",
     "@ytsaurus/interface-helpers": "^0.1.1",
-    "@ytsaurus/javascript-wrapper": "^0.2.1",
+    "@ytsaurus/javascript-wrapper": "^0.3.0",
     "axios": "^0.21.4",
     "cookie-parser": "^1.4.6",
     "highlight.js": "^10.7.3",
