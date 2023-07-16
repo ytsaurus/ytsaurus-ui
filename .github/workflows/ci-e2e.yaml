@@ -37,13 +37,17 @@ jobs:
         uses: actions/checkout@v2
         with:
           fetch-depth: 0
+      - name: Setup Node
+        uses: actions/setup-node@v2
+        with:
+          node-version: "18.x"
+          cache: "npm"
       - name: Build UI
         run: |
           cd packages/ui
           npm run docker:build --dockertag=local
       - name: Run containers for 'Local'
         run: |
-          cd packages/ui/tests
           curl https://raw.githubusercontent.com/ytsaurus/ytsaurus/main/yt/docker/local/run_local_cluster.sh > run_local_cluster.sh
           chmod u+x run_local_cluster.sh
           ./run_local_cluster.sh --ui-skip-pull true --ui-version local --ui-app-installation e2e
@@ -60,11 +64,15 @@ jobs:
         uses: actions/checkout@v2
         with:
           fetch-depth: 0
+      - name: Setup Node
+        uses: actions/setup-node@v2
+        with:
+          node-version: "18.x"
+          cache: "npm"
       - name: npm ci
         run: |
           cd packages/ui/tests
           npm ci
-
       - name: Tests for 'Local'
         run: |
           cd packages/ui
@@ -78,17 +86,8 @@ jobs:
       - start-vm
       - e2e-local
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
-      - name: npm ci
-        run: |
-          cd packages/ui/tests
-          npm ci
       - name: Run containers for 'Local as remote'
         run: |
-          cd packages/ui/tests
           curl https://raw.githubusercontent.com/ytsaurus/ytsaurus/main/yt/docker/local/run_local_cluster.sh > run_local_cluster.sh
           chmod u+x run_local_cluster.sh
           ./run_local_cluster.sh --stop
@@ -106,6 +105,11 @@ jobs:
         uses: actions/checkout@v2
         with:
           fetch-depth: 0
+      - name: Setup Node
+        uses: actions/setup-node@v2
+        with:
+          node-version: "18.x"
+          cache: "npm"
       - name: npm ci
         run: |
           cd packages/ui/tests
