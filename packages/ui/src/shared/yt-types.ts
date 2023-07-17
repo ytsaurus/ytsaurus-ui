@@ -146,6 +146,20 @@ export type BatchSubRequest =
     | SubRequest<'check_permission_by_acl', CheckAclParams>
     | SubRequest<'get_query', GetQueryParams>;
 
+export type OutputFormat =
+    | {
+          $value: 'json';
+          $attributes: {
+              encode_utf8?: 'true' | 'false';
+          };
+      }
+    | {
+          $value: 'web_json';
+          $attributes: {
+              field_weight_limit?: number;
+          };
+      };
+
 export interface SettingsConfig {
     data: Settings;
     meta: {

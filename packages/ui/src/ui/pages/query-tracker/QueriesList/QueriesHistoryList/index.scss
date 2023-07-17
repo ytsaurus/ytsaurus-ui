@@ -14,6 +14,7 @@
         display: inline-flex;
         align-items: center;
         width: 100%;
+        justify-content: flex-start;
     }
 
     &__name_row {
@@ -24,29 +25,22 @@
         max-width: 120px;
     }
 
-    &__name > &__name-container {
-        flex: 1;
-    }
-
     &__name > &__status-icon {
         min-width: 16px;
         min-height: 16px;
     }
 
-    &__actions_row {
+    &__name-edit {
         visibility: hidden;
-    }
-
-    &:hover &__actions_row {
-        visibility: visible;
-        background-color: var(--dark-background);
-    }
-
-    &:hover &__actions {
-        width: auto;
-        position: sticky;
-        right: 0;
+        width: 0;
         z-index: 1;
+        margin: -14px 0;
+    }
+
+    &:hover &__name-edit {
+        padding-left: 5px;
+        visibility: visible;
+        width: auto;
     }
 }
 

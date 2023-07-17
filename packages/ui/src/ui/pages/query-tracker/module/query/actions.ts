@@ -21,6 +21,9 @@ import {wrapApiPromiseByToaster} from '../../../../utils/utils';
 export const REQUEST_QUERY = 'query-tracker/REQUEST_QUERY';
 export type RequestQueryAction = Action<typeof REQUEST_QUERY>;
 
+export const SET_QUERY_READY = 'query-tracker/SET_QUERY_READY';
+export type SetQueryReadyAction = Action<typeof SET_QUERY_READY>;
+
 export const SET_QUERY = 'query-tracker/SET_QUERY';
 export type SetQueryAction = ActionD<
     typeof SET_QUERY,
@@ -72,20 +75,19 @@ export function createQueryFromTablePath(
     engine: QueryEngine,
     cluster: string,
     path: string,
-    draftText?: string,
+    options?: {useDraft?: boolean},
 ): ThunkAction<
     any,
     RootState,
     any,
-    SetQueryAction | RequestQueryAction | SetQueryErrorLoadAction | SetQueryPatchAction
+    | SetQueryAction
+    | RequestQueryAction
+    | SetQueryErrorLoadAction
+    | SetQueryPatchAction
+    | UpdateQueryAction
+    | SetQueryReadyAction
 > {
     return async (dispatch) => {
-        dispatch({
-            type: SET_QUERY,
-            data: {
-                initialQuery: undefined,
-            },
-        });
         dispatch({type: REQUEST_QUERY});
         try {
             const draft = await wrapApiPromiseByToaster(
@@ -97,18 +99,25 @@ export function createQueryFromTablePath(
                 },
             );
             if (draft) {
-                dispatch({
-                    type: SET_QUERY,
-                    data: {
-                        initialQuery: draft as QueryItem,
-                        draftText,
-                    },
-                });
+                if (options?.useDraft) {
+                    dispatch({
+                        type: UPDATE_QUERY,
+                        data: draft as QueryItem,
+                    });
+                    dispatch({type: SET_QUERY_READY});
+                } else {
+                    dispatch({
+                        type: SET_QUERY,
+                        data: {
+                            initialQuery: draft as QueryItem,
+                        },
+                    });
+                }
             } else {
-                dispatch(createEmptyQuery(engine, draftText));
+                dispatch(createEmptyQuery(engine));
             }
         } catch (e) {
-            dispatch(createEmptyQuery(engine, draftText));
+            dispatch(createEmptyQuery(engine));
         }
     };
 }

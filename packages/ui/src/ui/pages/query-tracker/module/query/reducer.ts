@@ -6,10 +6,12 @@ import {
     SET_QUERY_LOAD_ERROR,
     SET_QUERY_PARAMS,
     SET_QUERY_PATCH,
+    SET_QUERY_READY,
     SetQueryAction,
     SetQueryErrorLoadAction,
     SetQueryParamsAction,
     SetQueryPatchAction,
+    SetQueryReadyAction,
     UPDATE_QUERY,
     UpdateQueryAction,
 } from './actions';
@@ -51,7 +53,6 @@ export function reducer(state = initState, action: Actions): QueryState {
                     ...(action.data.initialQuery
                         ? cleanupQueryForDraft({
                               ...action.data.initialQuery,
-                              query: action.data.draftText || action.data.initialQuery.query,
                           })
                         : {}),
                 },
@@ -74,6 +75,12 @@ export function reducer(state = initState, action: Actions): QueryState {
             return {
                 ...state,
                 state: 'error',
+            };
+        }
+        case SET_QUERY_READY: {
+            return {
+                ...state,
+                state: 'ready',
             };
         }
         case SET_QUERY_PATCH: {
@@ -103,4 +110,5 @@ type Actions =
     | SetQueryErrorLoadAction
     | SetQueryPatchAction
     | UpdateQueryAction
-    | SetQueryParamsAction;
+    | SetQueryParamsAction
+    | SetQueryReadyAction;
