@@ -1,13 +1,12 @@
-import React, {useMemo, useState} from 'react';
+import React, {useState} from 'react';
 import {Text} from '@gravity-ui/uikit';
 import Button from '../Button/Button';
 import Icon from '../Icon/Icon';
 import Modal from '../Modal/Modal';
 import cn from 'bem-cn-lite';
-import transform from '@doc-tools/transform';
 
+import {useMarkdown} from '../../components/Markdown/Markdown';
 import './MarkdownLinePreview.scss';
-import '../Markdown/Markdown.scss';
 
 const block = cn('one-line-text-preview');
 const mdBlock = cn('yt-markdown');
@@ -30,15 +29,15 @@ export function MarkdownLinePreview({text, title, className, allowHTML = false}:
         setVisible(false);
     };
 
-    const {plainText, html} = useMemo(() => {
-        const {
-            result: {html},
-        } = transform(text, {disableLiquid: true, allowHTML});
+    const {result} = useMarkdown({text, allowHTML});
+
+    const {plainText, html} = React.useMemo(() => {
+        const {html} = result ?? {};
         const div = document.createElement('div');
-        div.innerHTML = html;
+        div.innerHTML = html ?? '';
         const plainText = div.innerText;
         return {html, plainText};
-    }, [text, allowHTML]);
+    }, [result?.plainText, result?.html]);
 
     return (
         <div className={block(null, className)}>
@@ -56,7 +55,9 @@ export function MarkdownLinePreview({text, title, className, allowHTML = false}:
                     onOutsideClick={hideModal}
                     onCancel={hideModal}
                     footer={false}
-                    content={<div className={mdBlock()} dangerouslySetInnerHTML={{__html: html}} />}
+                    content={
+                        <div className={mdBlock()} dangerouslySetInnerHTML={{__html: html ?? ''}} />
+                    }
                 />
             ) : null}
         </div>

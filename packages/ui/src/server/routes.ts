@@ -18,6 +18,7 @@ import {tableColumnPresetGet, tableColumnPresetSave} from './controllers/table-c
 import {ping} from './controllers/ping';
 import {handleChangePassword, handleLogin, handleLogout} from './controllers/login';
 import {getClusterPools} from './controllers/scheduling-pools';
+import {markdownToHtmlHandler} from './controllers/markdown-to-html';
 
 const HOME_INDEX_TARGET: AppRouteDescription = {handler: homeIndex, ui: true};
 
@@ -33,6 +34,8 @@ const routes: Record<string, AppRouteDescription> = {
     'POST /api/yt/logout': {handler: handleLogout, ui: true},
     'POST /api/yt/change-password': {handler: handleChangePassword, ui: true},
     'POST /api/remote-copy': {handler: handleRemoteCopy},
+
+    'POST /api/markdown-to-html': {handler: markdownToHtmlHandler},
 
     'GET  /api/yt/:cluster/api/:version/:command': {handler: ytTvmApiHandler},
     'POST /api/yt/:cluster/api/:version/:command': {handler: ytTvmApiHandler},

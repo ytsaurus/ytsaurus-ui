@@ -54,6 +54,7 @@
     "test:watch": "jest --config ./jest.config.js --watchAll"
   },
   "dependencies": {
+    "@doc-tools/transform": "3.3.2",
     "@gravity-ui/app-layout": "1.1.1",
     "@gravity-ui/expresskit": "0.2.0",
     "@gravity-ui/navigation": "0.3.0",
@@ -164,6 +165,7 @@
     "vis-network": "^9.1.2"
   },
   "peerDependencies": {
+    "@doc-tools/transform": "3.3.2",
     "@gravity-ui/dialog-fields": "1.1.1",
     "@ytsaurus/interface-helpers": "0.1.1",
     "@ytsaurus/javascript-wrapper": "0.3.0",
