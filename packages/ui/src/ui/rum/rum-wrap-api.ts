@@ -6,7 +6,7 @@ import {CancelTokenSource} from 'axios';
 import {YT_API_REQUEST_ID_HEADER} from '../../shared/constants';
 import {isSupportedYtTvmAPIGlobal} from '../store/selectors/thor/support';
 import {RumMeasureTypes} from './rum-measure-types';
-import {BatchResultsItem, BatchSubRequest} from '../../shared/yt-types';
+import {BatchResultsItem, BatchSubRequest, OutputFormat} from '../../shared/yt-types';
 import type {ValueOf} from '../types';
 import YT from '../config/yt-config';
 
@@ -163,6 +163,7 @@ export enum YTApiId {
     abortQuery,
     readQueryResults,
     getQueryResults,
+    alterQuery,
 }
 
 interface RumWrapApi {
@@ -183,6 +184,7 @@ export interface RumWrapApiWithId {
 
 interface BatchParameters {
     requests: Array<BatchSubRequest>;
+    output_format?: OutputFormat;
 }
 
 type SaveCancellationCb = (cancel: CancelTokenSource) => void;

@@ -21,6 +21,7 @@ import {QueriesListAuthorFilter} from '../../module/queries_list/types';
 import {QueryDuration} from '../../QueryDuration';
 import {useQueryNavigation} from '../../hooks/Query';
 import {useQueriesPagination, useQueryList} from '../../hooks/QueriesList';
+import EditQueryNameModal from '../EditQueryNameModal/EditQueryNameModal';
 
 const b = block('queries-history-list');
 
@@ -90,6 +91,7 @@ const NameColumns: Column<QueryItem> = {
                 >
                     {name || 'No name'}
                 </Text>
+                <EditQueryNameModal className={itemBlock('name-edit')} query={row} />
             </div>
         );
     },

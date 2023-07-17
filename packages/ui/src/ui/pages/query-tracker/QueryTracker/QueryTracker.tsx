@@ -11,7 +11,7 @@ import {
     goToQuery,
     loadQuery,
 } from '../module/query/actions';
-import {getQueryGetParams, getQueryText} from '../module/query/selectors';
+import {getQueryGetParams} from '../module/query/selectors';
 import {QueriesList} from '../QueriesList';
 import {QueryEditor} from '../QueryEditor/QueryEditor';
 import './QueryTracker.scss';
@@ -34,7 +34,6 @@ const minSize = 380; // see history list's cells size
 function QueryPageDraft() {
     const dispatch = useDispatch();
     const routeParams = useSelector(getQueryGetParams);
-    const draftText = useSelector(getQueryText);
 
     useEffect(() => {
         const engine =
@@ -54,12 +53,9 @@ function QueryPageDraft() {
                 });
             }
             dispatch(
-                createQueryFromTablePath(
-                    engine,
-                    routeParams.cluster,
-                    routeParams.path,
-                    routeParams.useDraft ? draftText : undefined,
-                ),
+                createQueryFromTablePath(engine, routeParams.cluster, routeParams.path, {
+                    useDraft: true,
+                }),
             );
         } else {
             dispatch(createEmptyQuery(engine));

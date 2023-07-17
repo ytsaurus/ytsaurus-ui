@@ -26,7 +26,6 @@ function getQTApiSetup(): {proxy?: string} {
 export enum QueryEngine {
     YT_QL = 'ql',
     YQL = 'yql',
-
     CHYT = 'chyt',
 }
 
@@ -299,7 +298,15 @@ export async function requestQueries(ids: string[]): Promise<QueryItem[]> {
         parameters: makeGetQueryParams(query_id),
     }));
     const resp = (await ytApiV4Id.executeBatch(YTApiId.getQuery, {
-        parameters: {requests},
+        parameters: {
+            requests: requests,
+            output_format: {
+                $value: 'json',
+                $attributes: {
+                    encode_utf8: 'false',
+                },
+            },
+        },
         setup: getQTApiSetup(),
     })) as unknown as {results: BatchResultsItem<QueryItem>[]};
 
@@ -349,4 +356,15 @@ export async function getQueryResultMeta(
         parameters: {query_id, result_index, stage: QT_STAGE},
         setup: getQTApiSetup(),
     });
+}
+
+export async function setQueryName(query_id: string, annotations: QueryItem['annotations']) {
+    return ytApiV4Id
+        .alterQuery(YTApiId.alterQuery, {
+            parameters: {query_id, annotations, stage: QT_STAGE},
+            setup: getQTApiSetup(),
+        })
+        .then(() => {
+            return getQuery(query_id);
+        });
 }
