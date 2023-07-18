@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -x
+set -xe
 
 if ! which yt >/dev/null; then
     echo You have to install YT CLI manually, please 1>&2
