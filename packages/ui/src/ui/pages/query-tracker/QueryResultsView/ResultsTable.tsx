@@ -1,7 +1,7 @@
 import React, {useEffect, useMemo, useState} from 'react';
 import {YCLOUD_THEME} from '@gravity-ui/react-data-table/build/esm/lib/constants';
 import YQLTable from './YQLTable/YQLTable';
-import {formatResuts} from '../module/query_result/utils/format';
+import {formatResults} from '../module/query_result/utils/format';
 import {QueryResultReadyState} from '../module/query_result/types';
 import isEqual from 'lodash/isEqual';
 
@@ -65,7 +65,7 @@ export const ResultsTable = React.memo(
         const [results, columns, visibleColumns, transposed, startIndex] = useYqlTable(result);
         return (
             <YQLTable
-                format={formatResuts}
+                format={formatResults}
                 formatterSettings={settings}
                 header={columns}
                 rows={results}

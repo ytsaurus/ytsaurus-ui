@@ -1,4 +1,3 @@
-import hammer from '../../../../../common/hammer';
 // @ts-ignore
 import unipika from '@gravity-ui/unipika/lib/unipika';
 import {TypeArray} from '../../../../../components/SchemaDataType/dataTypes';
@@ -14,7 +13,6 @@ const defaultSettings = {
     maxListSize: 50,
     maxStringSize: undefined as number | undefined,
     showYsonAs: 'yson',
-    customNumberFormatter: hammer.format.Number, //getNumberFormatter(),
 };
 
 export function convert(
@@ -39,14 +37,13 @@ export function convert(
     }
 }
 
-export function formatResuts(
+export function formatResults(
     value: {$type: string; $value: unknown; $tag?: unknown},
     settings: Settings = defaultSettings,
 ) {
     try {
         return unipika.format(value, settings);
     } catch (error) {
-        console.log(error);
         let valueStr: string;
         try {
             valueStr = JSON.stringify(value);
@@ -87,16 +84,15 @@ export function prepareFormattedValue(
             $rawValue = node.$value;
         }
     } else {
-        $rawValue = formatResuts(fullValue, {
+        $rawValue = formatResults(fullValue, {
             ...settings,
-            customNumberFormatter: defaultSettings.customNumberFormatter,
             asHTML: false,
             maxStringSize: undefined,
         });
         formatValue = $rawValue.length < maxFormattedLength;
     }
 
-    const $formattedValue = formatValue ? formatResuts(convertedValue, settings) : `Escaped value`;
+    const $formattedValue = formatValue ? formatResults(convertedValue, settings) : `Escaped value`;
     return {
         ...fullValue,
         $formattedValue,
@@ -104,7 +100,7 @@ export function prepareFormattedValue(
             convertedValue === fullValue
                 ? $formattedValue
                 : formatValue
-                ? formatResuts(fullValue, {...settings, maxStringSize: undefined})
+                ? formatResults(fullValue, {...settings, maxStringSize: undefined})
                 : '',
         $rawValue,
     };
