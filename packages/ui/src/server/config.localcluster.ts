@@ -5,7 +5,7 @@ import {ClusterConfig, YTConfig} from '../shared/yt-types';
 const localProxy = process.env.PROXY;
 
 const localThemes: Record<string, ClusterConfig['theme']> = {
-    ui: 'grapefruit',
+    [YT_LOCAL_CLUSTER_ID]: 'grapefruit',
     [localProxy!]: 'grapefruit',
 };
 
@@ -24,7 +24,7 @@ function makeClusterConfig(id: string, name: string, proxy: string): ClusterConf
 
 const localClusters: Record<string, ClusterConfig> = localProxy
     ? {
-          ui: makeClusterConfig(YT_LOCAL_CLUSTER_ID, 'Local', localProxy),
+          [YT_LOCAL_CLUSTER_ID]: makeClusterConfig(YT_LOCAL_CLUSTER_ID, 'Local', localProxy),
           [localProxy]: makeClusterConfig(localProxy, 'Local as remote', localProxy),
       }
     : {};

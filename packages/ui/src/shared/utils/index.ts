@@ -1,7 +1,8 @@
 import {YTError} from '../../@types/types';
+import {YT_LOCAL_CLUSTER_ID} from '../../shared/constants';
 
 export function isLocalClusterId(clusterId: string) {
-    return clusterId === 'ui';
+    return clusterId === YT_LOCAL_CLUSTER_ID;
 }
 
 export function getYtPageIdParts(url: string): PageId {

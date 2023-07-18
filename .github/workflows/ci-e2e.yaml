@@ -45,7 +45,7 @@ jobs:
       - name: npm install
         run: |
           cd packages/ui
-          npm install
+          npm run deps:install
       - name: Build UI
         run: |
           cd packages/ui
@@ -97,7 +97,7 @@ jobs:
           curl https://raw.githubusercontent.com/ytsaurus/ytsaurus/main/yt/docker/local/run_local_cluster.sh > run_local_cluster.sh
           chmod u+x run_local_cluster.sh
           ./run_local_cluster.sh --stop
-          ./run_local_cluster.sh --ui-skip-pull true --ui-version local --ui-app-installation e2e --docker-hostname `hostname` --fqdn localhost --ui-network bridge --ui-proxy-internal ""
+          ./run_local_cluster.sh --ui-skip-pull true --ui-version local --ui-app-installation e2e --docker-hostname `hostname` --fqdn localhost --ui-network bridge
           sleep 10
 
   e2e-local-as-remote:

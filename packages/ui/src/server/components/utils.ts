@@ -1,3 +1,4 @@
+import {YT_LOCAL_CLUSTER_ID} from '../../shared/constants';
 import {ClusterConfig, YTConfig} from '../../shared/yt-types';
 import {makeLocalModeConfig} from '../config.localcluster';
 import {getRealClustersConfig} from '../config.realcluster';
@@ -40,22 +41,26 @@ export function getClusterConfig(cluster?: string) {
     if (Object.hasOwnProperty.call(clusters, cluster)) {
         return {
             ytConfig,
-            clusterConfig: applyInnernalProxy(clusters[cluster]),
+            clusterConfig: applyInternalProxy(clusters[cluster]),
         };
     } else if (ServerFactory.isLocalClusterId(cluster)) {
         const config = getClientConfig(cluster);
         return {
             ytConfig: config,
-            clusterConfig: applyInnernalProxy(config.clusters[cluster]),
+            clusterConfig: applyInternalProxy(config.clusters[cluster]),
         };
     } else {
         return {ytConfig};
     }
 }
 
-function applyInnernalProxy(clusterConfig: ClusterConfig) {
+/**
+ * PROXY_INTERNAL environment variable should be applied only for 'ui' cluster.
+ * Do not use `isLocalClusterId(...)` in the function!
+ */
+function applyInternalProxy(clusterConfig: ClusterConfig) {
     const internalProxyName = process.env.PROXY_INTERNAL;
-    if (!internalProxyName) {
+    if (!internalProxyName || clusterConfig.id !== YT_LOCAL_CLUSTER_ID) {
         return clusterConfig;
     }
     return {
