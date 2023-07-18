@@ -5,8 +5,7 @@ import {AxiosError, AxiosResponse} from 'axios';
 import {AppContext} from '@gravity-ui/nodekit';
 import {isYTError} from '../../shared/utils';
 import {getApp} from '../ServerFactory';
-
-const path = require('path');
+import path from 'path';
 
 export function isProductionEnv() {
     return getApp().config.appEnv !== 'development';
@@ -21,9 +20,17 @@ export function getInterfaceVersion() {
         const {INIT_CWD} = process.env;
         const packageJsonPath = INIT_CWD
             ? path.resolve(INIT_CWD, 'package.json')
-            : path.resolve(__dirname, '../../../package.json');
-        /* eslint-disable-next-line global-require, security/detect-non-literal-require */
-        return require(packageJsonPath).version;
+            : path.resolve('./package.json');
+        try {
+            /* eslint-disable-next-line global-require, security/detect-non-literal-require */
+            return require(packageJsonPath).version;
+        } catch (e) {
+            getApp().nodekit.ctx.logError(`Failed to get version from ${packageJsonPath}`, e, {
+                INIT_CWD,
+                packageJsonPath,
+            });
+            return 'unkonwn';
+        }
     } else {
         return 'local';
     }

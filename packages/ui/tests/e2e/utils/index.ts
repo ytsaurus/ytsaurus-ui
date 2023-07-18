@@ -1,9 +1,24 @@
 import './afterEach';
 
-export const {BASE_URL, CLUSTER, E2E_DIR, E2E_OPERATION_ID, E2E_OPERATION_2_ID, CLUSTER_TITLE} =
-    process.env;
+export const {
+    BASE_URL,
+    CLUSTER,
+    E2E_DIR,
+    E2E_OPERATION_ID,
+    E2E_OPERATION_2_ID,
+    CLUSTER_TITLE,
+    CLUSTERS_MENU_EXPECT,
+} = process.env;
 
-console.log({BASE_URL, CLUSTER, CLUSTER_TITLE, E2E_DIR, E2E_OPERATION_ID, E2E_OPERATION_2_ID});
+console.log({
+    BASE_URL,
+    CLUSTER,
+    CLUSTER_TITLE,
+    E2E_DIR,
+    E2E_OPERATION_ID,
+    E2E_OPERATION_2_ID,
+    CLUSTERS_MENU_EXPECT,
+});
 
 if (!CLUSTER || !E2E_DIR) {
     throw new Error('E2E environment is not prepared');

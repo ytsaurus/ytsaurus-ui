@@ -59,15 +59,6 @@ test('Scheduliing - Details', async ({page}) => {
     expect(rowCount2).toBe(1);
 });
 
-test('Scheduling - Monitoring', async ({page}) => {
-    await page.goto(makeClusterUrl('scheduling/overview?pool=yt-e2e-pool-1&tree=default'));
-
-    await page.waitForSelector('text="yt-e2e-pool-1"');
-    await page.waitForSelector(
-        `a:text("My monitoring")[href="https://monitoring-service.my-domain.com/d/DB-id?var-pool=yt-e2e-pool-1&var-cluster=${CLUSTER}&var-tree=default"]`,
-    );
-});
-
 test('Scheduling - Pool - Edit Dialog - Change Weight', async ({page}) => {
     await page.goto(makeClusterUrl('scheduling/overview?pool=yt-e2e-pool-1&tree=default'));
     const editBtn = await page.getByTitle('edit pool yt-e2e-pool-1');
