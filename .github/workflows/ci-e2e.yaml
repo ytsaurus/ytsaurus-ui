@@ -42,10 +42,16 @@ jobs:
         with:
           node-version: "18.x"
           cache: "npm"
+      - name: npm install
+        run: |
+          cd packages/ui
+          npm install
       - name: Build UI
         run: |
           cd packages/ui
-          npm run docker:build --dockertag=local
+          npm run build
+          npm pack
+          npm run docker:build:dev --dockertag=local
       - name: Run containers for 'Local'
         run: |
           curl https://raw.githubusercontent.com/ytsaurus/ytsaurus/main/yt/docker/local/run_local_cluster.sh > run_local_cluster.sh

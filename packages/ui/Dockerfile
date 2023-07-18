@@ -1,29 +1,22 @@
-FROM ubuntu:20.04
-
-RUN apt-get update && \
-    DEBIAN_FRONTEND=noninteractive TZ=Etc/UTC apt-get -y install tzdata && \
-    apt-get -y install nano python3-pip nginx curl && \
-    pip install supervisor && \
-    curl -fsSL https://deb.nodesource.com/setup_18.x | bash - && \
-    apt-get install -y nodejs
+FROM  ghcr.io/gravity-ui/node-nginx:ubuntu20-nodejs18
 
 RUN mkdir -p /opt/app
 WORKDIR /opt/app
 
+COPY deploy ./deploy
 COPY deploy/nginx /etc/nginx
 COPY deploy/supervisor /etc/supervisor
 
-COPY . .
+COPY ./ytsaurus-ui-*.tgz ./
 
-RUN npm run deps:install
+ARG UI_VERSION
+ARG DEV
 
-RUN npm run build && \
-    npm run deps:truncate && \
-    rm -rf /tmp/*
-
-# Make final preparations
-RUN useradd -r app && mkdir /var/log/supervisor && rm /etc/nginx/sites-enabled/default
+RUN UI_PACKAGE=$(test -n "${DEV}" && echo ./ytsaurus-ui-${UI_VERSION}.tgz || echo ytsaurus-ui-${UI_VERSION}.tgz) \
+        && echo "\n  UI_VERSION=${UI_VERSION} \n  DEV=${DEV} \n  UI_PACKAGE=${UI_PACKAGE} \n" >&2 \
+        && npm install --legacy-peer-deps $UI_PACKAGE \
+        && mv node_modules/@ytsaurus/ui . && mv ui/* .
 
 EXPOSE 80
 
-ENTRYPOINT ["/usr/local/bin/supervisord", "-c", "/etc/supervisor/supervisord.conf"]
+ENTRYPOINT ["/usr/bin/supervisord", "-c", "/etc/supervisor/supervisord.conf"]
