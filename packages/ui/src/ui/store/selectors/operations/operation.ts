@@ -114,7 +114,7 @@ export const getOperationExperimentAssignments = createSelector(
 );
 
 export const getOperationJobsCount = createSelector([getOperation], (operation) => {
-    const res = ypath.getNumber(operation, '/@brief_progress/total_job_counter/total');
+    const res = ypath.getNumberDeprecated(operation, '/@brief_progress/total_job_counter/total');
     return res;
 });
 

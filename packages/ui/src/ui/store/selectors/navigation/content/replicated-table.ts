@@ -38,7 +38,7 @@ export const getReplicatedTableReplicasMap = createSelector(
             replicas,
             (acc, {$value, $attributes}) => {
                 acc[$value] = {
-                    error_count: ypath.getNumber($attributes, '/error_count'),
+                    error_count: ypath.getNumberDeprecated($attributes, '/error_count'),
                     cluster_name: ypath.getValue($attributes, '/cluster_name'),
                     mode: ypath.getValue($attributes, '/mode'),
                     replica_path: ypath.getValue($attributes, '/replica_path'),
@@ -46,7 +46,10 @@ export const getReplicatedTableReplicasMap = createSelector(
                         $attributes,
                         '/replicated_table_tracker_enabled',
                     ),
-                    replication_lag_time: ypath.getNumber($attributes, '/replication_lag_time'),
+                    replication_lag_time: ypath.getNumberDeprecated(
+                        $attributes,
+                        '/replication_lag_time',
+                    ),
                     state: ypath.getValue($attributes, '/state'),
                 };
                 return acc;

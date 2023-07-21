@@ -90,10 +90,20 @@ export function PoolEditorDialog() {
         {key: 'fair_share', value: 'fair_share', title: 'fair_share'},
         {key: 'fifo', value: 'fifo', title: 'fifo'},
     ];
-    const initialValues: FormValues = useMemo(
-        () => getInitialValues(editItem, allowedSources),
-        [editItem, allowedSources],
-    ); // don't pass pools into memo's array
+    const [initialValues, initialFormValues] = useMemo(() => {
+        const data = getInitialValues(editItem, allowedSources);
+        const formData: FormValues = {
+            ...data,
+            general: {
+                ...data.general,
+                weight: {
+                    value: data.general.weight,
+                },
+            },
+        };
+        return [data, formData];
+    }, [editItem, allowedSources]); // don't pass pools into memo's array
+
     const editCloseHandler = useCallback(() => {
         dispatch(closeEditModal({cancelled: true}));
     }, [dispatch]);
@@ -217,7 +227,7 @@ export function PoolEditorDialog() {
                 title: editItem?.name,
             }}
             onAdd={editConfirmHandler}
-            initialValues={initialValues}
+            initialValues={initialFormValues}
             fields={[
                 {
                     type: 'tab-vertical',

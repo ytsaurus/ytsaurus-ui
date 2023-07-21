@@ -84,8 +84,8 @@ interface PoolTreeStaticConfigurationItem {
 }
 
 function calcTreeStaticConfiguration(totals: any, undistributed: any, resourceType: any) {
-    const total = ypath.getNumber(totals, '/' + resourceType);
-    const free = ypath.getNumber(undistributed, '/' + resourceType);
+    const total = ypath.getNumber(totals, '/' + resourceType, 0);
+    const free = ypath.getNumber(undistributed, '/' + resourceType, 0);
     return {
         total,
         used: total - free,
@@ -98,8 +98,8 @@ function calcTreeStaticConfigurationByDistributed(
     undistributed: any,
     resourceType: any,
 ) {
-    const used = ypath.getNumber(distributed, '/' + resourceType);
-    const free = ypath.getNumber(undistributed, '/' + resourceType);
+    const used = ypath.getNumber(distributed, '/' + resourceType, 0);
+    const free = ypath.getNumber(undistributed, '/' + resourceType, 0);
     return {
         total: used + free,
         used,
@@ -130,8 +130,8 @@ export const getCurrentTreeGpuLimit = createSelector([getTreeResources], (resour
 export const getOperationsStaticConfiguration = createSelector(
     [getTreeResources, getPoolsAllocatedOperationsCount, getCluster, getTree],
     ({config}, allocated): Array<PoolTreeStaticConfigurationItem> => {
-        const operationCount = ypath.getNumber(config, '/max_operation_count');
-        const runningOperationCount = ypath.getNumber(config, '/max_running_operation_count');
+        const operationCount = ypath.getNumber(config, '/max_operation_count', 0);
+        const runningOperationCount = ypath.getNumber(config, '/max_running_operation_count', 0);
 
         return [
             {

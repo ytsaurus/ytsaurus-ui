@@ -48,7 +48,7 @@ function getIsEphemeral([operationAttributes, userTransactionAlive]) {
         .then((data) => {
             return _.map(data, ({error, output}) => {
                 if (error) {
-                    if (ypath.getNumber(error.code) === yt.codes.NODE_DOES_NOT_EXIST) {
+                    if (ypath.getNumberDeprecated(error.code) === yt.codes.NODE_DOES_NOT_EXIST) {
                         return true;
                     }
                     return false;

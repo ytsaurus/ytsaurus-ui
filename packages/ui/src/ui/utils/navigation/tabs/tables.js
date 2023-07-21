@@ -56,7 +56,7 @@ export const tableItems = {
         sort: true,
         align: 'center',
         get(tablet) {
-            return ypath.getNumber(tablet, '/error_count', NaN);
+            return ypath.getNumberDeprecated(tablet, '/error_count', NaN);
         },
         allowedOrderTypes: DESC_ASC_UNORDERED,
         overall: 'sum',
@@ -65,7 +65,7 @@ export const tableItems = {
         sort: true,
         align: 'center',
         get(tablet) {
-            return ypath.getNumber(tablet, '/replication_error_count', NaN);
+            return ypath.getNumberDeprecated(tablet, '/replication_error_count', NaN);
         },
         allowedOrderTypes: DESC_ASC_UNORDERED,
         overall: 'sum',

@@ -106,7 +106,7 @@ function AlertEvents({items}: Props) {
             items,
             (acc, item) => {
                 const type = ypath.getValue(item.alert_type);
-                const code = ypath.getNumber(item, '/error/code', NaN);
+                const code = ypath.getNumberDeprecated(item, '/error/code', NaN);
                 if (!code && appeared[type]) {
                     const last = appeared[type];
                     last.to = ypath.getValue(item.time);
