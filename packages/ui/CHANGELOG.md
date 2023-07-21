@@ -6,6 +6,20 @@
   * dependencies
     * @ytsaurus/javascript-wrapper bumped from ^0.2.1 to ^0.3.0
 
+## [0.12.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v0.11.3...ui-v0.12.0) (2023-07-21)
+
+
+### Features
+
+* **Components/Nodes:** use attributes.paths and attributes.keys for list of nodes [YTFRONT-3378] ([a60ec5e](https://github.com/ytsaurus/ytsaurus-ui/commit/a60ec5e191a14221400b610c94aa15cf4fe670da))
+* enable query name editing [YTFRONT-3649] ([f375ea4](https://github.com/ytsaurus/ytsaurus-ui/commit/f375ea468543299b7a18d2b92417b9966c8e664c))
+
+
+### Bug Fixes
+
+* **PoolEditorDialog:** weight field remove request when value was not changed [YTFRONT-3748] ([1d25e5b](https://github.com/ytsaurus/ytsaurus-ui/commit/1d25e5bd0fabb720a5121fdc11ade5692e2fccd2))
+* QT format decimal number results [YTFRONT-3782] ([58d6f66](https://github.com/ytsaurus/ytsaurus-ui/commit/58d6f66ac684774e1a45d656b8dfda9d9a9e5af8))
+
 ## [0.11.3](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v0.11.2...ui-v0.11.3) (2023-07-14)
 
 
