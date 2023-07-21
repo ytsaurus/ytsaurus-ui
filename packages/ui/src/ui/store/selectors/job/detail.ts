@@ -57,24 +57,24 @@ export const getJobStatisticsIO = createSelector(
 );
 
 const getUserCpuTimeSum = createSelector(getJob, (job: PreparedJob): number =>
-    ypath.getNumber(job, '/statistics/user_job/cpu/user/sum'),
+    ypath.getNumberDeprecated(job, '/statistics/user_job/cpu/user/sum'),
 );
 const getWaitCpuTimeSum = createSelector(getJob, (job: PreparedJob): number =>
-    ypath.getNumber(job, '/statistics/user_job/cpu/wait/sum'),
+    ypath.getNumberDeprecated(job, '/statistics/user_job/cpu/wait/sum'),
 );
 
 const getGpuUtilizationSum = createSelector(getJob, (job: PreparedJob): number =>
-    ypath.getNumber(job, '/statistics/user_job/gpu/cumulative_utilization_gpu/sum'),
+    ypath.getNumberDeprecated(job, '/statistics/user_job/gpu/cumulative_utilization_gpu/sum'),
 );
 const getGpuPowerSum = createSelector(getJob, (job: PreparedJob): number =>
-    ypath.getNumber(job, '/statistics/user_job/gpu/cumulative_power/sum'),
+    ypath.getNumberDeprecated(job, '/statistics/user_job/gpu/cumulative_power/sum'),
 );
 const getGpuMemorySum = createSelector(getJob, (job: PreparedJob): number =>
-    ypath.getNumber(job, '/statistics/user_job/gpu/cumulative_memory/sum'),
+    ypath.getNumberDeprecated(job, '/statistics/user_job/gpu/cumulative_memory/sum'),
 );
 
 const getTimeExec = createSelector(getJob, (job: PreparedJob): number =>
-    ypath.getNumber(job, '/statistics/time/exec/sum'),
+    ypath.getNumberDeprecated(job, '/statistics/time/exec/sum'),
 );
 
 export const getAverageUserCpuTime = createSelector(
@@ -87,7 +87,7 @@ export const getAverageWaitCpuTime = createSelector(
 );
 
 export const getGpuDevices = createSelector(getJob, (job: PreparedJob) =>
-    ypath.getNumber(job, '/exec_attributes/gpu_devices/length'),
+    ypath.getNumberDeprecated(job, '/exec_attributes/gpu_devices/length'),
 );
 export const getAverageGpuUtilization = createSelector(
     [getGpuUtilizationSum, getTimeExec],

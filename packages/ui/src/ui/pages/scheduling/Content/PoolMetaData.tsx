@@ -26,13 +26,9 @@ export default function PoolMetaData({className}: Props) {
         return null;
     }
 
-    const cpu = ypath.getNumber(pool, '/cypressAttributes/strong_guarantee_resources/cpu', NaN);
-    const gpu = ypath.getNumber(pool, '/cypressAttributes/strong_guarantee_resources/gpu', NaN);
-    const memory = ypath.getNumber(
-        pool,
-        '/cypressAttributes/strong_guarantee_resources/memory',
-        NaN,
-    );
+    const cpu = ypath.getNumber(pool, '/cypressAttributes/strong_guarantee_resources/cpu', 0);
+    const gpu = ypath.getNumber(pool, '/cypressAttributes/strong_guarantee_resources/gpu', 0);
+    const memory = ypath.getNumber(pool, '/cypressAttributes/strong_guarantee_resources/memory', 0);
     const hasStrong = cpu > 0 || gpu > 0 || memory > 0;
 
     const {integralType, mode} = pool;

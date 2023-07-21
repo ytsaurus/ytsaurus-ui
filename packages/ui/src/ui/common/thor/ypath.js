@@ -1,6 +1,7 @@
 import ypath from '@ytsaurus/interface-helpers/lib/ypath';
 import unipika from '@gravity-ui/unipika/lib/unipika';
 import {appendInnerErrors} from '../../utils/errors';
+import {getNumber} from './utils';
 
 const yson = unipika.utils.yson;
 
@@ -18,6 +19,7 @@ function convertToBoolean(value) {
     }
 }
 
+/** @deprecated */
 function convertToNumber(value, defaultValue) {
     value = yson.value(value);
 
@@ -45,6 +47,18 @@ function convertToNumber(value, defaultValue) {
 }
 
 // Simple wrapper for ypath that unwraps observables passed to ypath methods
+/**
+ * @typedef {Object} Thor
+ * @property {Function} get
+ * @property {Function} getAttributes
+ * @property {Function} getValue
+ * @property {Function} getValues
+ * @property {Function} getBoolean
+ * @property {typeof getNumber} getNumber
+ * @property {Function} getNumberDeprecated
+ */
+
+/** @type {{[key: string] : any} & Thor} */
 const thorYPath = {...ypath};
 
 thorYPath.get = function (node, path) {
@@ -73,13 +87,10 @@ thorYPath.getBoolean = function (node, path) {
     return convertToBoolean(value);
 };
 
-/**
- * @param node
- * @param path
- * @param defaultValue Number or NaN to return undefined for unparsable values instead of throwing an error
- * @returns {number|*}
- */
-thorYPath.getNumber = function (node, path, defaultValue) {
+thorYPath.getNumber = getNumber;
+
+/** @deprecated */
+thorYPath.getNumberDeprecated = function (node, path, defaultValue) {
     try {
         const value = thorYPath.get(node, path);
         return convertToNumber(value, defaultValue);
