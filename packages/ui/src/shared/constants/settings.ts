@@ -108,6 +108,10 @@ export const SettingName = {
     SCHEDULING: {
         EXPAND_STATIC_CONFIGURATION: 'expandStaticConfiguration',
     },
+    QUERY_TRACKER: {
+        STAGE: 'queryTrackerStage',
+        YQL_AGENT_STAGE: 'yqlAgentStage',
+    },
 } as const;
 
 const GLOBAL = createNS('global');
@@ -126,6 +130,7 @@ const LAST_VISITED_PAGE = createNestedNS(SettingName.LOCAL.LAST_VISITED_PAGE, ME
 const OPERATION_PRESETS = createNestedNS('presets', OPERATION);
 const ACCOUNTS = createNestedNS('accounts', GLOBAL);
 const SCHEDULING = createNestedNS('scheduling', GLOBAL);
+const QUERY_TRACKER = createNestedNS('query-tracker', GLOBAL);
 
 export const NAMESPACES = {
     GLOBAL,
@@ -144,6 +149,7 @@ export const NAMESPACES = {
     OPERATION_PRESETS,
     ACCOUNTS,
     SCHEDULING,
+    QUERY_TRACKER,
 };
 
 export const FAVOURITES = 'favourites';

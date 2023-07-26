@@ -1,7 +1,13 @@
 import {createSelector} from 'reselect';
 import {RootState} from '../../../../store/reducers';
-import {QueryStatus} from '../api';
+import {QTRequestOptions, QueryStatus} from '../api';
+import {
+    getSettingQueryTrackerStage,
+    getSettingQueryTrackerYQLAgentStage,
+} from '../../../../store/selectors/settings-ts';
+import {getQueryTrackerStage} from '../../../../config';
 
+const QT_STAGE = getQueryTrackerStage();
 const getState = (state: RootState) => state.queryTracker.query;
 
 export const getQuery = (state: RootState) => getState(state).queryItem;
@@ -31,3 +37,14 @@ export const hasLoadedQueryItem = (state: RootState) => {
     const queryItem = getState(state).queryItem;
     return Boolean(queryItem?.id);
 };
+
+export const getQueryTrackerRequestOptions = createSelector(
+    [getSettingQueryTrackerStage, getSettingQueryTrackerYQLAgentStage],
+    (stage, yqlAgentStage) => {
+        const res: QTRequestOptions = {
+            stage: stage || QT_STAGE,
+            yqlAgentStage,
+        };
+        return res;
+    },
+);

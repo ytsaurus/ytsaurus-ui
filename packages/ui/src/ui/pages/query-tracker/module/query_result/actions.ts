@@ -111,7 +111,7 @@ export function loadQueryResult(
                 data: {queryId, index: resultIndex},
             });
             await preloadTableFont(fontFamilies.monospace);
-            const meta = await getQueryResultMeta(queryId, resultIndex);
+            const meta = await dispatch(getQueryResultMeta(queryId, resultIndex));
             const typeMap = getPrimitiveTypesMap(getState());
             const scheme = (ypath.getValue(meta?.schema) as QueryResultMetaScheme[]) || [];
             const columns =
@@ -124,16 +124,17 @@ export function loadQueryResult(
                 }) || [];
 
             const settings = getQueryResultGlobalSettings();
-
             const result = await wrapApiPromiseByToaster(
-                readQueryResults(
-                    queryId,
-                    resultIndex,
-                    {
-                        start: 0,
-                        end: settings.pageSize,
-                    },
-                    {cellsSize: settings.cellSize},
+                dispatch(
+                    readQueryResults(
+                        queryId,
+                        resultIndex,
+                        {
+                            start: 0,
+                            end: settings.pageSize,
+                        },
+                        {cellsSize: settings.cellSize},
+                    ),
                 ),
                 {
                     toasterName: 'load_result',
@@ -190,14 +191,16 @@ export function updateQueryResult(
             const startPage = page * settings.pageSize;
             const endPage = startPage + settings.pageSize;
             const result = await wrapApiPromiseByToaster(
-                readQueryResults(
-                    queryId,
-                    resultIndex,
-                    {
-                        start: page * settings.pageSize,
-                        end: endPage,
-                    },
-                    {cellsSize: settings.cellSize},
+                dispatch(
+                    readQueryResults(
+                        queryId,
+                        resultIndex,
+                        {
+                            start: page * settings.pageSize,
+                            end: endPage,
+                        },
+                        {cellsSize: settings.cellSize},
+                    ),
                 ),
                 {
                     toasterName: `load_result_page_${page}`,

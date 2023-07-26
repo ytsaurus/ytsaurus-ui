@@ -51,10 +51,10 @@ export type SetQueryParamsAction = ActionD<
 export function loadQuery(
     queryId: string,
 ): ThunkAction<any, RootState, any, SetQueryAction | RequestQueryAction | SetQueryErrorLoadAction> {
-    return async (dispatch) => {
+    return async (dispatch, _getState) => {
         dispatch({type: REQUEST_QUERY});
         try {
-            const query = await wrapApiPromiseByToaster(getQuery(queryId), {
+            const query = await wrapApiPromiseByToaster(dispatch(getQuery(queryId)), {
                 toasterName: 'load_query',
                 skipSuccessToast: true,
                 errorTitle: 'Failed to load query',
@@ -147,7 +147,7 @@ export function runQuery(
     return async (dispatch, getState) => {
         const state = getState();
         const query = getQueryDraft(state);
-        const {query_id} = await wrapApiPromiseByToaster(startQuery(query), {
+        const {query_id} = await wrapApiPromiseByToaster(dispatch(startQuery(query)), {
             toasterName: 'start_query',
             skipSuccessToast: true,
             errorTitle: 'Failed to start query',
@@ -165,7 +165,7 @@ export function abortCurrentQuery(): ThunkAction<any, RootState, any, SetQueryAc
         const state = getState();
         const currentQuery = getCurrentQuery(state);
         if (currentQuery) {
-            await wrapApiPromiseByToaster(abortQuery(currentQuery?.id), {
+            await wrapApiPromiseByToaster(dispatch(abortQuery({query_id: currentQuery?.id})), {
                 toasterName: 'abort_query',
                 skipSuccessToast: true,
                 errorTitle: 'Failed to abort query',

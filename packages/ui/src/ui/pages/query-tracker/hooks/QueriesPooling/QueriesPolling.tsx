@@ -1,7 +1,8 @@
 import {isEqual, omit} from 'lodash';
-import {QueryItem, requestQueries} from '../../module/api';
+import {QueryItem} from '../../module/api';
 
 type QueryChangeHandler = (value: QueryItem[]) => void;
+type QueryListRequest = (ids: string[]) => Promise<QueryItem[]>;
 
 export class QueriesPollingService {
     protected intervaTime = 1000;
@@ -17,6 +18,12 @@ export class QueriesPollingService {
     protected intervalKey?: number;
 
     protected loading = false;
+
+    protected requestQueryList: QueryListRequest;
+
+    constructor(requestQueryList: QueryListRequest) {
+        this.requestQueryList = requestQueryList;
+    }
 
     watch(query: QueryItem[], onChange: QueryChangeHandler) {
         const ubsubscribes = query.map((q) => this.subscribe(q.id, onChange, q));
@@ -45,7 +52,7 @@ export class QueriesPollingService {
         }
         this.loading = true;
         try {
-            const result = await requestQueries(items);
+            const result = await this.requestQueryList(items);
 
             // Collect data for handlers;
             const handlersMap = result?.reduce((acc, item) => {

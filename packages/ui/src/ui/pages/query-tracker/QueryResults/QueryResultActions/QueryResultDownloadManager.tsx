@@ -8,12 +8,14 @@ import {DownloadManager} from '../../../navigation/content/Table/DownloadManager
 import {getDownloadQueryResultURL} from '../../module/api';
 import {getQueryResult} from '../../module/query_result/selectors';
 import {RootState} from '../../../../store/reducers';
+import {useThunkDispatch} from '../../../../store/thunkDispatch';
 
 export class QueryResultTableDownloadManager extends DownloadManager {
     static propTypes = {
         ...super.propTypes,
         queryId: PropTypes.string.isRequired,
         resultIndex: PropTypes.number.isRequired,
+        getDownloadBaseUrl: PropTypes.func,
     };
 
     getDownloadParams() {
@@ -32,11 +34,11 @@ export class QueryResultTableDownloadManager extends DownloadManager {
     }
 
     getDownloadLink() {
-        const {cluster, queryId, resultIndex} = this.props;
+        const {getDownloadBaseUrl} = this.props;
         const {rowsMode, startRow, numRows} = this.state;
         const cursor =
             rowsMode === 'range' ? {start: startRow, end: startRow + numRows} : undefined;
-        const base = getDownloadQueryResultURL(cluster, queryId, resultIndex, cursor);
+        const base = getDownloadBaseUrl(cursor);
 
         const {query, error} = this.getDownloadParams();
         return {
@@ -63,6 +65,7 @@ export const QueryResultDownloadManager = React.memo(function QueryResultDownloa
 }: Props) {
     const cluster = useSelector(getCluster);
     const result = useSelector((state: RootState) => getQueryResult(state, queryId, resultIndex));
+    const dispatch = useThunkDispatch();
     const startRow = result?.resultReady ? result?.page * result?.settings?.pageSize || 0 : 0;
     const allItems = useMemo(() => {
         return allColumns.map((item) => ({
@@ -73,6 +76,9 @@ export const QueryResultDownloadManager = React.memo(function QueryResultDownloa
     const [opened, setOpened] = useState(false);
     return (
         <QueryResultTableDownloadManager
+            getDownloadBaseUrl={(cursor: {start: number; end: number} | undefined) =>
+                dispatch(getDownloadQueryResultURL(cluster, queryId, resultIndex, cursor))
+            }
             queryId={queryId}
             resultIndex={resultIndex}
             className={className}
