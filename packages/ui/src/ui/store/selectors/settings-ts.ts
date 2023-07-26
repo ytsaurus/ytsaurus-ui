@@ -188,3 +188,19 @@ export const getSettingSystemNodesNodeType = createSelector(
         return res;
     },
 );
+
+export const getSettingQueryTrackerStage = createSelector(
+    makeGetSetting,
+    (getSetting): string | undefined => {
+        const res = getSetting(SettingName.QUERY_TRACKER.STAGE, NAMESPACES.QUERY_TRACKER);
+        return res !== '' ? res : undefined;
+    },
+);
+
+export const getSettingQueryTrackerYQLAgentStage = createSelector(
+    makeGetSetting,
+    (getSetting): string | undefined => {
+        const res = getSetting(SettingName.QUERY_TRACKER.YQL_AGENT_STAGE, NAMESPACES.QUERY_TRACKER);
+        return res !== '' ? res : undefined;
+    },
+);

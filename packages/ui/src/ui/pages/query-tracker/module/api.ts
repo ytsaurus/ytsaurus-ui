@@ -1,4 +1,5 @@
-import {allowDirectDownload, getQueryTrackerCluster, getQueryTrackerStage} from '../../../config';
+import {ThunkAction} from 'redux-thunk';
+import {allowDirectDownload, getQueryTrackerCluster} from '../../../config';
 import {extractBatchV4Values, splitBatchResults} from '../../../utils/utils';
 import {BatchResultsItem} from '../../../../shared/yt-types';
 import {YTApiId, ytApiV3, ytApiV4Id} from '../../../rum/rum-wrap-api';
@@ -7,8 +8,10 @@ import {Plan} from './types/plan';
 import {TypeArray} from '../../../components/SchemaDataType/dataTypes';
 import {getClusterConfigByName, getClusterProxy} from '../../../store/selectors/global';
 import {generateQuerySettings, generateQueryText} from '../utils/query_generate';
-
-const QT_STAGE = getQueryTrackerStage();
+import {RootState} from '../../../store/reducers';
+import {getQueryTrackerRequestOptions} from './query/selectors';
+import {AnyAction} from 'redux';
+import {UPDATE_QUERIES_LIST} from './queries_list/actions';
 
 function getQTApiSetup(): {proxy?: string} {
     const QT_CLUSTER = getQueryTrackerCluster();
@@ -22,6 +25,23 @@ function getQTApiSetup(): {proxy?: string} {
     }
     return {};
 }
+
+function makeGetQueryParams(query_id: string) {
+    return {
+        query_id,
+        output_format: {
+            $value: 'json',
+            $attributes: {
+                encode_utf8: 'false',
+            },
+        },
+    };
+}
+
+export type QTRequestOptions = {
+    stage?: string;
+    yqlAgentStage?: string;
+};
 
 export enum QueryEngine {
     YT_QL = 'ql',
@@ -153,77 +173,94 @@ export async function generateQueryFromTable(
     return undefined;
 }
 
-export function loadQueriesList({params, cursor, limit}: QueriesListRequestParams): Promise<{
-    incomplete: boolean;
-    queries: QueryItem[];
-    timestamp: number;
-}> {
-    return ytApiV4Id.listQueries(YTApiId.listQueries, {
-        parameters: {
-            ...params,
-            ...cursor,
-            limit,
-            stage: QT_STAGE,
-            output_format: {
-                $value: 'json',
-                $attributes: {
-                    encode_utf8: 'false',
+export function loadQueriesList({params, cursor, limit}: QueriesListRequestParams): ThunkAction<
+    Promise<{
+        incomplete: boolean;
+        queries: QueryItem[];
+        timestamp: number;
+    }>,
+    RootState,
+    any,
+    any
+> {
+    return async (_dispatch, getState) => {
+        const state = getState();
+        const {stage} = getQueryTrackerRequestOptions(state);
+        return ytApiV4Id.listQueries(YTApiId.listQueries, {
+            parameters: {
+                stage,
+                ...params,
+                ...cursor,
+                limit,
+                output_format: {
+                    $value: 'json',
+                    $attributes: {
+                        encode_utf8: 'false',
+                    },
                 },
             },
-        },
-        setup: getQTApiSetup(),
-    });
-}
-
-function makeGetQueryParams(query_id: string) {
-    return {
-        query_id,
-        stage: QT_STAGE,
-        output_format: {
-            $value: 'json',
-            $attributes: {
-                encode_utf8: 'false',
-            },
-        },
+            setup: getQTApiSetup(),
+        });
     };
 }
 
-export function getQuery(query_id: string): Promise<QueryItem> {
-    return ytApiV4Id.getQuery(YTApiId.getQuery, {
-        parameters: makeGetQueryParams(query_id),
-        setup: getQTApiSetup(),
-    });
+export function getQuery(query_id: string): ThunkAction<Promise<QueryItem>, RootState, any, any> {
+    return (_dispatch, getState) => {
+        const state = getState();
+        const {stage} = getQueryTrackerRequestOptions(state);
+        return ytApiV4Id.getQuery(YTApiId.getQuery, {
+            parameters: {stage, ...makeGetQueryParams(query_id)},
+            setup: getQTApiSetup(),
+        });
+    };
 }
 
-export function startQuery(queryInstance: DraftQuery): Promise<{query_id: QueryItemId}> {
-    const {query, engine, settings, annotations} = queryInstance;
-    return ytApiV4Id.startQuery(YTApiId.startQuery, {
-        parameters: {
-            query,
-            engine,
-            annotations,
-            settings,
-            stage: QT_STAGE,
-            output_format: {
-                $value: 'json',
-                $attributes: {
-                    encode_utf8: 'false',
+export function startQuery(
+    queryInstance: DraftQuery,
+): ThunkAction<Promise<{query_id: QueryItemId}>, RootState, any, any> {
+    return async (_dispatch, getState) => {
+        const state = getState();
+        const {stage, yqlAgentStage} = getQueryTrackerRequestOptions(state);
+        const {query, engine, settings, annotations} = queryInstance;
+        return ytApiV4Id.startQuery(YTApiId.startQuery, {
+            parameters: {
+                stage,
+                query,
+                engine,
+                annotations,
+                settings: {
+                    stage: yqlAgentStage ? yqlAgentStage : undefined,
+                    ...settings,
+                },
+                output_format: {
+                    $value: 'json',
+                    $attributes: {
+                        encode_utf8: 'false',
+                    },
                 },
             },
-        },
-        setup: getQTApiSetup(),
-    });
+            setup: getQTApiSetup(),
+        });
+    };
 }
 
-export function abortQuery(query_id: string, message?: string): Promise<void> {
-    return ytApiV4Id.abortQuery(YTApiId.abortQuery, {
-        parameters: {
-            query_id,
-            message,
-            stage: QT_STAGE,
-        },
-        setup: getQTApiSetup(),
-    });
+export function abortQuery(params: {
+    query_id: string;
+    message?: string;
+}): ThunkAction<Promise<void>, RootState, any, any> {
+    return async (_dispatch, getState) => {
+        const state = getState();
+        const {stage} = getQueryTrackerRequestOptions(state);
+        const {query_id, message} = params;
+        return ytApiV4Id.abortQuery(YTApiId.abortQuery, {
+            parameters: {
+                stage,
+                query_id,
+                message,
+            },
+            setup: getQTApiSetup(),
+        });
+    };
 }
 
 type QueryResult = {
@@ -237,82 +274,96 @@ type QueryResult = {
 export function readQueryResults(
     query_id: string,
     result_index = 0,
-    cursor?: {start: number; end: number},
-    settings?: {
+    cursor: {start: number; end: number},
+    settings: {
         cellsSize: number;
     },
-): Promise<QueryResult> {
-    return ytApiV4Id.readQueryResults(YTApiId.readQueryResults, {
-        parameters: {
-            query_id,
-            result_index,
-            lower_row_index: cursor?.start,
-            upper_row_index: cursor?.end,
-            output_format: {
-                $value: 'web_json',
-                $attributes: {
-                    value_format: 'yql',
-                    field_weight_limit: settings?.cellsSize,
-                    encode_utf8: 'false',
+): ThunkAction<Promise<QueryResult>, RootState, any, any> {
+    return (_dispatch, getState) => {
+        const state = getState();
+        const {stage} = getQueryTrackerRequestOptions(state);
+        return ytApiV4Id.readQueryResults(YTApiId.readQueryResults, {
+            parameters: {
+                stage,
+                query_id,
+                result_index,
+                lower_row_index: cursor?.start,
+                upper_row_index: cursor?.end,
+                output_format: {
+                    $value: 'web_json',
+                    $attributes: {
+                        value_format: 'yql',
+                        field_weight_limit: settings?.cellsSize,
+                        encode_utf8: 'false',
+                    },
                 },
             },
-            stage: QT_STAGE,
-        },
-        setup: getQTApiSetup(),
-    });
+            setup: getQTApiSetup(),
+        });
+    };
 }
 
 export function getDownloadQueryResultURL(
     cluster: string,
     queryId: string,
     resultIndex = 0,
-    cursor?: {start: number; end: number},
-) {
-    const params = new URLSearchParams({
-        query_id: queryId,
-        result_index: resultIndex.toString(),
-        ...(cursor
-            ? {
-                  lower_row_index: cursor.start.toString(),
-                  upper_row_index: cursor.end.toString(),
-              }
-            : {}),
-    });
+    cursor: {start: number; end: number} | undefined,
+): ThunkAction<string, RootState, any, any> {
+    return (_dispatch, getState) => {
+        const state = getState();
+        const {stage} = getQueryTrackerRequestOptions(state);
+        const params = new URLSearchParams({
+            query_id: queryId,
+            result_index: resultIndex.toString(),
+            ...(cursor
+                ? {
+                      lower_row_index: cursor.start.toString(),
+                      upper_row_index: cursor.end.toString(),
+                  }
+                : {}),
+        });
 
-    if (QT_STAGE) {
-        params.set('stage', QT_STAGE);
-    }
-    const clusterConfig = getClusterConfigByName(getQueryTrackerCluster() || cluster);
-    if (clusterConfig) {
-        const base = allowDirectDownload()
-            ? `//${clusterConfig.proxy}/api/v4/read_query_result`
-            : `/api/yt/${clusterConfig.id}/api/v4/read_query_result`;
-        return `${base}?${params.toString()}`;
-    }
-    return '';
+        if (stage) {
+            params.set('stage', stage);
+        }
+        const clusterConfig = getClusterConfigByName(getQueryTrackerCluster() || cluster);
+        if (clusterConfig) {
+            const base = allowDirectDownload()
+                ? `//${clusterConfig.proxy}/api/v4/read_query_result`
+                : `/api/yt/${clusterConfig.id}/api/v4/read_query_result`;
+            return `${base}?${params.toString()}`;
+        }
+        return '';
+    };
 }
 
-export async function requestQueries(ids: string[]): Promise<QueryItem[]> {
-    const requests: any[] = ids.map((query_id) => ({
-        command: 'get_query',
-        parameters: makeGetQueryParams(query_id),
-    }));
-    const resp = (await ytApiV4Id.executeBatch(YTApiId.getQuery, {
-        parameters: {
-            requests: requests,
-            output_format: {
-                $value: 'json',
-                $attributes: {
-                    encode_utf8: 'false',
+export function requestQueries(
+    ids: string[],
+): ThunkAction<Promise<QueryItem[]>, RootState, any, any> {
+    return async (_dispatch, getState) => {
+        const state = getState();
+        const {stage} = getQueryTrackerRequestOptions(state);
+        const requests: any[] = ids.map((query_id) => ({
+            command: 'get_query',
+            parameters: {stage, ...makeGetQueryParams(query_id)},
+        }));
+        const resp = (await ytApiV4Id.executeBatch(YTApiId.getQuery, {
+            parameters: {
+                requests: requests,
+                output_format: {
+                    $value: 'json',
+                    $attributes: {
+                        encode_utf8: 'false',
+                    },
                 },
             },
-        },
-        setup: getQTApiSetup(),
-    })) as unknown as {results: BatchResultsItem<QueryItem>[]};
+            setup: getQTApiSetup(),
+        })) as unknown as {results: BatchResultsItem<QueryItem>[]};
 
-    const extracted = extractBatchV4Values(resp, requests);
-    const {results} = splitBatchResults(extracted.results ?? []);
-    return results;
+        const extracted = extractBatchV4Values(resp, requests);
+        const {results} = splitBatchResults(extracted.results ?? []);
+        return results;
+    };
 }
 
 export type QueryResultMetaScheme = {
@@ -348,23 +399,39 @@ export type QueryResultMeta = {
     };
 };
 
-export async function getQueryResultMeta(
+export function getQueryResultMeta(
     query_id: string,
     result_index = 0,
-): Promise<QueryResultMeta | undefined> {
-    return ytApiV4Id.getQueryResults(YTApiId.readQueryResults, {
-        parameters: {query_id, result_index, stage: QT_STAGE},
-        setup: getQTApiSetup(),
-    });
+): ThunkAction<Promise<QueryResultMeta | undefined>, RootState, any, any> {
+    return (_dispatch, getState) => {
+        const state = getState();
+        const {stage} = getQueryTrackerRequestOptions(state);
+        return ytApiV4Id.getQueryResults(YTApiId.readQueryResults, {
+            parameters: {stage, query_id, result_index},
+            setup: getQTApiSetup(),
+        });
+    };
 }
 
-export async function setQueryName(query_id: string, annotations: QueryItem['annotations']) {
-    return ytApiV4Id
-        .alterQuery(YTApiId.alterQuery, {
-            parameters: {query_id, annotations, stage: QT_STAGE},
+export function setQueryName(
+    query_id: string,
+    annotations: QueryItem['annotations'],
+): ThunkAction<Promise<any>, RootState, any, AnyAction> {
+    return async (dispatch, getState) => {
+        const state = getState();
+        const {stage} = getQueryTrackerRequestOptions(state);
+        await ytApiV4Id.alterQuery(YTApiId.alterQuery, {
+            parameters: {
+                stage,
+                query_id,
+                annotations,
+            },
             setup: getQTApiSetup(),
-        })
-        .then(() => {
-            return getQuery(query_id);
         });
+        const query = await dispatch(getQuery(query_id));
+        dispatch({
+            type: UPDATE_QUERIES_LIST,
+            data: [query],
+        });
+    };
 }

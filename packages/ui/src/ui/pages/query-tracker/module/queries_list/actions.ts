@@ -44,14 +44,16 @@ export function refreshQueriesListIfNeeded(
             const state = getState();
             const list = getQueriesList(state);
             if (list?.length) {
-                const newQueriesResp = await loadQueriesList({
-                    params: getQueriesListFilterParams(state),
-                    cursor: {
-                        cursor_direction: QueriesHistoryCursorDirection.FUTURE,
-                        cursor_time: list[0].start_time,
-                    },
-                    limit: 1,
-                });
+                const newQueriesResp = await dispatch(
+                    loadQueriesList({
+                        params: getQueriesListFilterParams(state),
+                        cursor: {
+                            cursor_direction: QueriesHistoryCursorDirection.FUTURE,
+                            cursor_time: list[0].start_time,
+                        },
+                        limit: 1,
+                    }),
+                );
                 if (newQueriesResp.queries.length) {
                     dispatch(requestQueriesList({refresh: true}));
                 }
@@ -69,10 +71,12 @@ export function requestQueriesList(params?: {
         try {
             const state = getState();
             const result = await wrapApiPromiseByToaster(
-                loadQueriesList({
-                    params: getQueriesListFilterParams(state),
-                    cursor: getQueriesListCursorParams(state),
-                }),
+                dispatch(
+                    loadQueriesList({
+                        params: getQueriesListFilterParams(state),
+                        cursor: getQueriesListCursorParams(state),
+                    }),
+                ),
                 {
                     toasterName: 'load_history_list',
                     skipSuccessToast: true,

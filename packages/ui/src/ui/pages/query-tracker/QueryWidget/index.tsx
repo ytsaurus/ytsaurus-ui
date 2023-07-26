@@ -8,6 +8,7 @@ import {getCluster} from '../../../store/selectors/global';
 import {Button} from '@gravity-ui/uikit';
 import {QueryTrackerOpenButton} from '../QueryTrackerOpenButton/QueryTrackerOpenButton';
 import {getPath} from '../../../store/selectors/navigation';
+import {QueriesPooling} from '../hooks/QueriesPooling/context';
 import './index.scss';
 
 const block = cn('query-widget');
@@ -19,24 +20,31 @@ export function QueryWidget({onClose}: QueryWidgetProps) {
     const path = useSelector(getPath);
     return (
         <div className={block()}>
-            <div className={block('header')}>
-                <QueryMetaForm className={block('meta-form')} cluster={cluster} path={path} />
-                <div className={block('header-controls')}>
-                    <div className={block('header-control-left')}>
-                        <QueryTrackerOpenButton
-                            className={block('control')}
-                            cluster={cluster}
-                            path={path}
-                        />
-                    </div>
-                    <div className={block('header-control-right')}>
-                        <Button view="flat" className={block('control')} onClick={onClose} size="l">
-                            <Icon awesome="times" size={16} />
-                        </Button>
+            <QueriesPooling>
+                <div className={block('header')}>
+                    <QueryMetaForm className={block('meta-form')} cluster={cluster} path={path} />
+                    <div className={block('header-controls')}>
+                        <div className={block('header-control-left')}>
+                            <QueryTrackerOpenButton
+                                className={block('control')}
+                                cluster={cluster}
+                                path={path}
+                            />
+                        </div>
+                        <div className={block('header-control-right')}>
+                            <Button
+                                view="flat"
+                                className={block('control')}
+                                onClick={onClose}
+                                size="l"
+                            >
+                                <Icon awesome="times" size={16} />
+                            </Button>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <QueryEditor />
+                <QueryEditor />
+            </QueriesPooling>
         </div>
     );
 }

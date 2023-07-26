@@ -1,11 +1,10 @@
-import React, {useCallback, useMemo, useState} from 'react';
-import {useDispatch} from 'react-redux';
+import React, {useMemo, useState} from 'react';
 import Dialog, {makeErrorFields} from '../../../../components/Dialog/Dialog';
 import Button from '../../../../components/Button/Button';
 import Icon from '../../../../components/Icon/Icon';
 import _ from 'lodash';
 import {QueryItem, setQueryName} from '../../module/api';
-import {UPDATE_QUERIES_LIST} from '../../module/queries_list/actions';
+import {useThunkDispatch} from '../../../../store/thunkDispatch';
 
 export interface Props {
     query: QueryItem;
@@ -21,7 +20,7 @@ export default function EditQueryNameModal({query, className}: Props) {
     const [visible, setVisible] = useState(false);
     const {state} = query;
 
-    const dispatch = useDispatch();
+    const dispatch = useThunkDispatch();
 
     const initialValues = useMemo(() => {
         return {
@@ -29,17 +28,9 @@ export default function EditQueryNameModal({query, className}: Props) {
         };
     }, [query.annotations?.title]);
 
-    const handleSubmit = useCallback(
-        (name: string) => {
-            return setQueryName(query.id, {...query.annotations, title: name}).then((res) => {
-                dispatch({
-                    type: UPDATE_QUERIES_LIST,
-                    data: [res],
-                });
-            });
-        },
-        [dispatch, query.annotations, query.id],
-    );
+    const handleSubmit = (name: string) => {
+        return dispatch(setQueryName(query.id, {...query.annotations, title: name}));
+    };
 
     return state === 'completed' || state === 'failed' || state === 'draft' ? (
         <div
