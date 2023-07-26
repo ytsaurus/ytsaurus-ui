@@ -42,7 +42,7 @@ jobs:
         run: npx lerna publish from-package --no-push --no-private --yes
 
       - name: "Docker: build & push"
-        if: ${{ steps.release.outputs.releases_created }}
+        if: ${{ steps.release.outputs['packages/ui--release_created'] }}
         run: |
           cd packages/ui
 
