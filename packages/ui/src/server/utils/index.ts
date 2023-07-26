@@ -73,7 +73,7 @@ const LOG_HEADERS = ['x-yt-proxy', 'x-yt-request-id', 'x-yt-trace-id', 'content-
 export async function pipeAxiosResponse(
     ctx: AppContext,
     dst: Response,
-    src?: AxiosResponse<stream.Readable>,
+    src?: AxiosResponse<stream.Readable | unknown>,
     logMsgPrefix = '',
     transformHeaders: (headers: any) => typeof headers = (v) => v,
 ): Promise<PipedResponseSize | undefined> {

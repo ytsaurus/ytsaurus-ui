@@ -20,15 +20,15 @@
     "cut:version": "node -e \"const json=require('${npm_config_file}'); delete json.version; console.log(JSON.stringify(json, null, 2))\"",
     "debug": "npm run copy:icons && NODE_OPTIONS=\"--max-http-header-size=204800 ${NODE_OPTIONS}\" app-builder dev --inspect --config ./build.app.config.ts",
     "deps:build": "npm run build",
-    "deps:install": "npm ci",
-    "deps:truncate": "npm prune --production",
+    "deps:install": "npm ci --legacy-peer-deps",
+    "deps:truncate": "npm prune --omit=dev --legacy-peer-deps",
     "dev": "test -f dist/.tvm.json && npm run dev:app",
     "dev:oss": "APP_INSTALLATION=oss npm run dev",
     "dev:app": "./scripts/check-start-files.sh && npm run copy:icons && APP_ENV=${APP_ENV:-development} APP_DEV_MODE=1 NODE_OPTIONS=\"--max-http-header-size=204800 ${NODE_OPTIONS}\" app-builder dev --config ./build.app.config.ts",
     "dev:localmode": "bash -c '. scripts/dev.localmode-env.sh && TVM_DISABLED=true npm run dev:app'",
     "dev:localmode:e2e": "APP_INSTALLATION=${APP_INSTALLATION:-e2e} npm run dev:localmode",
-    "docker:build": "docker build . -t ${npm_package_docker_image}:${npm_config_dockertag}",
-    "docker:push": "docker push ${npm_package_docker_image}:${npm_config_dockertag}",
+    "docker:build": "docker build . -t ${npm_package_config_docker_image}:${npm_config_dockertag}",
+    "docker:push": "docker push ${npm_package_config_docker_image}:${npm_config_dockertag}",
     "lint": "npm run lint:file-names && npm run lint:js && npm run lint:styles",
     "lint:fix": "npm run lint:js -- --fix && npm run lint:styles -- --fix",
     "lint:js": "eslint \"src/**/*.{js,jsx,ts,tsx}\" --ignore-pattern src/ui/vendor --quiet",
@@ -37,7 +37,7 @@
     "show:file-types": "find src -type f | rev | cut -d '.' -f 1 | rev | sort | uniq -c | sort -rn",
     "notify:mail": "node scripts/notify.js",
     "platform-tools": "platform-tools",
-    "show:docker-image-name": "echo ${npm_package_docker_image}",
+    "show:docker-image-name": "echo ${npm_package_config_docker_image}",
     "show:version": "echo ${npm_package_version}",
     "start": "NODE_OPTIONS=\"--max-http-header-size=204800 ${NODE_OPTIONS}\" node dist/server",
     "test": "npm run test:unit",
@@ -166,9 +166,9 @@
     "@gravity-ui/dialog-fields": "^1.0.0"
   },
   "engines": {
-    "node": ">=14"
+    "node": ">=18"
   },
-  "docker": {
-    "image": "ytsaurus/ui"
+  "config": {
+    "docker_image": "ytsaurus/ui"
   }
 }

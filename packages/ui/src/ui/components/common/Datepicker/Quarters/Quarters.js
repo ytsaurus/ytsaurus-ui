@@ -113,7 +113,7 @@ export class Quarters extends React.PureComponent {
                         <div
                             key={`${cell}-${this.dateTime.year}`}
                             className={b(CELLS.QUARTER, mods)}
-                            range={`${startQuarter.toISODate()}/${endQuarter.toISODate()}`}
+                            {...{range: `${startQuarter.toISODate()}/${endQuarter.toISODate()}`}}
                             {...(!disabled && {
                                 onClick: this.getOnRangeDateClick({
                                     start: startQuarter,

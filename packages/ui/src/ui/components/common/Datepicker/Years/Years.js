@@ -84,7 +84,7 @@ export class Years extends React.PureComponent {
                     {...(isNeedScroll && {ref: this.scrollRef})}
                     key={year}
                     className={b('year', mods)}
-                    range={`${startYear.toISODate()}/${endYear.toISODate()}`}
+                    {...{range: `${startYear.toISODate()}/${endYear.toISODate()}`}}
                     onClick={this.getOnRangeDateClick({
                         start: startYear,
                         end: endYear,

@@ -158,7 +158,7 @@ export class Month extends React.Component {
             <div
                 key={`${day}-${month}-${year}`}
                 className={b(CELLS.DAY, mods)}
-                date={currentDateTime.toISODate()}
+                {...{date: currentDateTime.toISODate()}}
                 {...(!mods.disabled && {onClick: this.getOnDateClick({start, end})})}
             >
                 {day}
@@ -198,8 +198,7 @@ export class Month extends React.Component {
                     gridTemplateAreas: `"${_repeat('title ', this.titleCells)}"`,
                 }}
                 className={b()}
-                year={this.firstMonthDate.year}
-                month={this.firstMonthDate.month}
+                {...{year: this.firstMonthDate.year, month: this.firstMonthDate.month}}
             >
                 {this.renderMonth()}
             </div>

@@ -132,7 +132,7 @@ export class Months extends React.PureComponent {
                         <div
                             key={`${cell}-${this.dateTime.year}`}
                             className={b(CELLS.MONTH, mods)}
-                            range={`${startMonth.toISODate()}/${endMonth.toISODate()}`}
+                            {...{range: `${startMonth.toISODate()}/${endMonth.toISODate()}`}}
                             {...(!disabled && {
                                 onClick: this.getOnRangeDateClick({
                                     start: startMonth,

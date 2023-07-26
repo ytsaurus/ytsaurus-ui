@@ -58,7 +58,7 @@ test('Accounts - Editor', async ({page}) => {
     await page.click('[data-qa="quota-editor-save"]');
     await page.click('[data-qa="quota-editor-confirmation-yes"]');
 
-    await page.waitForTimeout(100);
+    await page.waitForTimeout(200);
 
     await page.click('.elements-modal__close button');
 

@@ -4,7 +4,7 @@ RUN apt-get update && \
     DEBIAN_FRONTEND=noninteractive TZ=Etc/UTC apt-get -y install tzdata && \
     apt-get -y install nano python3-pip nginx curl && \
     pip install supervisor && \
-    curl -fsSL https://deb.nodesource.com/setup_14.x | bash - && \
+    curl -fsSL https://deb.nodesource.com/setup_18.x | bash - && \
     apt-get install -y nodejs
 
 RUN mkdir -p /opt/app
