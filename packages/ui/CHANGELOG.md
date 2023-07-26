@@ -6,6 +6,13 @@
   * dependencies
     * @ytsaurus/javascript-wrapper bumped from ^0.2.1 to ^0.3.0
 
+## [0.13.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v0.12.0...ui-v0.13.0) (2023-07-26)
+
+
+### Features
+
+* **QT:** add QT request settings override with UI [YTFRONT-3790] ([95479bb](https://github.com/ytsaurus/ytsaurus-ui/commit/95479bbabdd260e148879a3be2623ec9f008979f))
+
 ## [0.12.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v0.11.3...ui-v0.12.0) (2023-07-21)
 
 
