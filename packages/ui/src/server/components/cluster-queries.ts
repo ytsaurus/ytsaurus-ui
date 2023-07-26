@@ -120,22 +120,27 @@ function prepareError(message: string, err: AxiosError) {
 
 export async function getClusterInfo(req: Request, config: YTApiUserSetup) {
     const {setup} = config;
-    const tokenPromise = getXSRFToken(req, config, 'ui_clusterInfo');
-    const clusterVersionPromise = getVersion(setup);
 
     let tokenError, versionError;
-    let token,
-        version = null;
-    try {
-        version = await clusterVersionPromise;
-    } catch (err: any) {
+    let token, version;
+
+    const [tokenResult, versionResult] = await Promise.allSettled([
+        getXSRFToken(req, config, 'ui_clusterInfo'),
+        getVersion(setup),
+    ]);
+
+    if (versionResult.status === 'fulfilled') {
+        version = versionResult.value;
+    } else {
+        const err = versionResult.reason;
         versionError = prepareError('Failed to get cluster version ', err);
         req.ctx.logError('Failed to get cluster version: ' + err.toString(), err, getExtra(err));
     }
 
-    try {
-        token = await tokenPromise;
-    } catch (err: any) {
+    if (tokenResult.status === 'fulfilled') {
+        token = tokenResult.value;
+    } else {
+        const err = tokenResult.reason;
         tokenError = prepareError('Failed to get XSRF token ', err);
         req.ctx.logError('Failed to get XSRF token', err, getExtra(err));
     }

@@ -93,7 +93,7 @@ if (EXCEL_BASE_URL) {
 
 type ProgressState =
     | {inProgress: false}
-    | {inProgress: true; event: {total: number; loaded: number}};
+    | {inProgress: true; event: {total?: number; loaded: number}};
 
 class UploadManager extends React.Component<Props, State> {
     state: State = {
@@ -297,7 +297,7 @@ class UploadManager extends React.Component<Props, State> {
                             text={`${loadedStr} / ${totalStr}`}
                             stack={[
                                 {
-                                    value: (100 * loaded) / total,
+                                    value: (100 * loaded) / ((total ?? loaded) || 1),
                                     theme: 'info',
                                 },
                             ]}

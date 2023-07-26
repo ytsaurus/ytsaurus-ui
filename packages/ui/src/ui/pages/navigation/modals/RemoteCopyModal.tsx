@@ -35,7 +35,7 @@ function RemoteCopyModal() {
     const paths = useSelector(getRemoteCopyModalPaths);
     const cluster = useSelector(getCluster);
 
-    const [error, setError] = React.useState<YTError | undefined>();
+    const [error, setError] = React.useState<YTError | unknown>();
 
     const handleAdd = React.useCallback(
         async (form: FormApi<Values>) => {
@@ -51,8 +51,8 @@ function RemoteCopyModal() {
                         pool: pool,
                     }),
                 );
-            } catch (e) {
-                setError((e as AxiosError)?.response?.data || e);
+            } catch (e: unknown) {
+                setError((e as AxiosError<YTError>)?.response?.data || e);
                 throw e;
             }
         },

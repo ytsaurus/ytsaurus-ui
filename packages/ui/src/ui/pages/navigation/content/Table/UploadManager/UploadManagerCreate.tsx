@@ -64,7 +64,7 @@ const FILE_TYPES: Array<{value: FileType; title: FileType}> = [{value: 'xlsx', t
 
 type ProgressState =
     | {inProgress: false}
-    | {inProgress: true; event: {total: number; loaded: number}};
+    | {inProgress: true; event: {total?: number; loaded: number}};
 
 const UPLOAD_CONFIG = getConfigUploadTable();
 const EXCEL_BASE_URL = UPLOAD_CONFIG.uploadTableExcelBaseUrl;
@@ -249,7 +249,7 @@ class UploadManagerCreate extends React.Component<Props, State> {
                             text={`${loadedStr} / ${totalStr}`}
                             stack={[
                                 {
-                                    value: (100 * loaded) / total,
+                                    value: (100 * loaded) / ((total ?? loaded) || 1),
                                     theme: 'info',
                                 },
                             ]}

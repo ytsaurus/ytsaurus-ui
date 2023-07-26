@@ -59,7 +59,7 @@ function LoginForm({theme}: Props) {
                     ytLocalStorage.set('loginDialog', {username});
                     dispatch(onSuccessLogin(username));
                 })
-                .catch((error: AxiosError) => {
+                .catch((error: AxiosError<Error>) => {
                     if (error.response && error.response.data && error.response.data.message) {
                         setErrors({
                             response: error.response.data.message,

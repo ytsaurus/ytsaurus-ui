@@ -70,6 +70,11 @@ exports[`<PathEditor /> snapshots should match snapshot from mount rendering wit
       >
         <InputControl
           autoFocus={true}
+          controlProps={
+            Object {
+              "style": Object {},
+            }
+          }
           controlRef={[Function]}
           disabled={false}
           hasClear={false}
@@ -90,6 +95,7 @@ exports[`<PathEditor /> snapshots should match snapshot from mount rendering wit
             onFocus={[Function]}
             onKeyDown={[Function]}
             placeholder="placeholder"
+            style={Object {}}
             value="//path/to/object"
           />
         </InputControl>
