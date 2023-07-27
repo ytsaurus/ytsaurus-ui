@@ -83,8 +83,9 @@ export interface PathParams extends BaseBatchParams {
     path: string;
 }
 
-export interface PathAttrParams extends PathParams {
-    attributes?: Array<string>;
+export interface GetParams extends PathParams {
+    // see more details https://nda.ya.ru/t/OkgJ1bMg6WtqEf
+    attributes?: Array<string> | {keys: Array<string>; paths: Array<string>};
     fields?: Array<string>;
 }
 
@@ -138,7 +139,7 @@ export type BatchSubRequest =
     | SubRequest<'mount_table' | 'unmount_table' | 'freeze_table' | 'unfreeze_table', PathParams>
     | SubRequest<'check_permission', CheckPermissionsParams>
     | SubRequest<'set' | 'remove', PathParams>
-    | SubRequest<'get' | 'list', PathAttrParams>
+    | SubRequest<'get' | 'list', GetParams>
     | SubRequest<'exists', PathParams>
     | SubRequest<'copy' | 'move', CopyMoveParams>
     | SubRequest<'merge', MergeParams>
