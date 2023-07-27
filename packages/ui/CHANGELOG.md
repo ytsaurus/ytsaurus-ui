@@ -6,6 +6,14 @@
   * dependencies
     * @ytsaurus/javascript-wrapper bumped from ^0.2.1 to ^0.3.0
 
+## [0.13.1](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v0.13.0...ui-v0.13.1) (2023-07-27)
+
+
+### Bug Fixes
+
+* **Components/Node/MemoryUsage:** use virtualized table [YTFRONT-3796] ([267eeef](https://github.com/ytsaurus/ytsaurus-ui/commit/267eeeffbfa3a559d1cf74296492dbfb3644289d))
+* **Components/Node:** bring back missing locations [YTFRONT-3796] ([d3686b3](https://github.com/ytsaurus/ytsaurus-ui/commit/d3686b31c76cd8ac365f54337ebe41434c420ea3))
+
 ## [0.13.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v0.12.0...ui-v0.13.0) (2023-07-26)
 
 
