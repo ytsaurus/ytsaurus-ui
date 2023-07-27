@@ -10,6 +10,7 @@ import {Node} from '../../../../store/reducers/components/nodes/nodes/node';
 import type {RootState} from '../../../../store/reducers';
 import type {NodeLoadAction} from '../../../../store/reducers/components/node/node';
 import {YTApiId, ytApiV3Id} from '../../../../rum/rum-wrap-api';
+import {prepareAttributes} from '../../../../utils/cypress-attributes';
 
 type NodeLoadThunkAction = ThunkAction<any, RootState, any, NodeLoadAction>;
 
@@ -19,7 +20,7 @@ export function loadNodeAttributes(host: string): NodeLoadThunkAction {
         return ytApiV3Id
             .get(YTApiId.nodeAttributes, {
                 path: `//sys/cluster_nodes/${host}`,
-                attributes: Node.ATTRIBUTES,
+                attributes: prepareAttributes(Node.ATTRIBUTES),
             })
             .then((node: Node) => {
                 dispatch({

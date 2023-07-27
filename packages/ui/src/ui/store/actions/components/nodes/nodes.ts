@@ -2,7 +2,6 @@
 import yt from '@ytsaurus/javascript-wrapper/lib/yt';
 import difference_ from 'lodash/difference';
 import omit_ from 'lodash/omit';
-import partition_ from 'lodash/partition';
 import type {ThunkAction} from 'redux-thunk';
 
 import ypath from '../../../../common/thor/ypath';
@@ -36,6 +35,7 @@ import {USE_CACHE, USE_MAX_SIZE} from '../../../../constants';
 import CancelHelper from '../../../../utils/cancel-helper';
 import {YTApiId, ytApiV3Id} from '../../../../rum/rum-wrap-api';
 import type {ActionD, FIX_MY_TYPE, PartialDeep} from '../../../../types';
+import {prepareAttributes} from '../../../../utils/cypress-attributes';
 import {wrapApiPromiseByToaster} from '../../../../utils/utils';
 import {NodeType} from '../../../../../shared/constants/system';
 
@@ -71,13 +71,12 @@ export function getNodes(): NodesThunkAction {
         updateNodeCanceler.removeAllRequests();
 
         const attributes = getRequiredAttributes(getState());
-        const [keys, paths] = partition_(attributes, (k) => -1 === k.indexOf('/'));
 
         return ytApiV3Id
             .list(YTApiId.componentsClusterNodes, {
                 parameters: {
                     path: `//sys/${nodeType}`,
-                    attributes: {keys, paths},
+                    attributes: prepareAttributes(attributes),
                     ...USE_CACHE,
                     ...USE_MAX_SIZE,
                 },
@@ -110,7 +109,7 @@ export function updateComponentsNode(host: string): NodesThunkAction {
         return ytApiV3Id
             .get(YTApiId.componentsUpdateNodeData, {
                 path: `//sys/cluster_nodes/${host}`,
-                attributes: Node.ATTRIBUTES,
+                attributes: prepareAttributes(Node.ATTRIBUTES),
             })
             .then((node) => {
                 dispatch({

@@ -1,4 +1,9 @@
-import _ from 'lodash';
+import cloneDeep_ from 'lodash/cloneDeep';
+import forEach_ from 'lodash/forEach';
+import isEqual_ from 'lodash/isEqual';
+import isEmpty_ from 'lodash/isEmpty';
+import map_ from 'lodash/map';
+import partition_ from 'lodash/partition';
 
 // @ts-ignore
 import yt from '@ytsaurus/javascript-wrapper/lib/yt';
@@ -7,7 +12,7 @@ import {SELECT_EMPTY_VALUE} from '../constants/navigation/modals/create-table';
 import {SelectWithSubItemsProps} from '../components/Dialog/controls/SelectWithSubItems/SelectWithSubItems';
 import {wrapBatchPromise} from './utils';
 import {YTApiId, ytApiV3Id} from '../rum/rum-wrap-api';
-import {BatchSubRequest} from '../../shared/yt-types';
+import {BatchSubRequest, GetParams} from '../../shared/yt-types';
 import {ValueOf} from '../../@types/types';
 
 export interface WithAttrs<T> {
@@ -62,7 +67,7 @@ export function compressionCodecValueFromString(value: string) {
 }
 
 export function compressionCodecValueToString(value: Array<string>) {
-    if (_.isEqual(value, [SELECT_EMPTY_VALUE])) {
+    if (isEqual_(value, [SELECT_EMPTY_VALUE])) {
         return '';
     }
     return value?.join('');
@@ -144,7 +149,7 @@ export async function createParentsBeforeSet(nodePath: string, attributesToSet: 
     }
 
     const parentPaths: Record<string, boolean> = {};
-    _.forEach(attributesToSet, (attr) => {
+    forEach_(attributesToSet, (attr) => {
         const parents = attr.split('/');
         for (let i = 1; i < parents.length; ++i) {
             const key = parents.slice(0, i).join('/');
@@ -159,7 +164,6 @@ export async function createParentsBeforeSet(nodePath: string, attributesToSet: 
         const path = nodePath + '/@' + attr;
         await yt.v3.exists({path}).then((isCreated: boolean) => {
             if (!isCreated) {
-                console.log({create: path});
                 return yt.v3.set({path}, {});
             }
         });
@@ -170,7 +174,7 @@ export function updateNodeAttributes(
     nodePath: string,
     changes: Array<{attr: string; value: any}>,
 ): Promise<unknown> {
-    if (_.isEmpty(changes)) {
+    if (isEmpty_(changes)) {
         return Promise.resolve();
     }
 
@@ -178,7 +182,7 @@ export function updateNodeAttributes(
 
     const oneLevelDiffsParents: Array<string> = [];
     const oneLevelDiffs: Record<string, Record<string, unknown>> = {};
-    _.forEach(changes, ({attr, value}) => {
+    forEach_(changes, ({attr, value}) => {
         const attrPath = attr.split('/');
         if (attrPath.length === 1) {
             const path = nodePath + '/@' + attrPath.join('/');
@@ -198,11 +202,11 @@ export function updateNodeAttributes(
             ? [wrapBatchPromise(ytApiV3Id.executeBatch(YTApiId.updateNodeAttributes, {requests}))]
             : []),
         createParentsBeforeSet(nodePath, oneLevelDiffsParents).then(() => {
-            if (_.isEmpty(oneLevelDiffs)) {
+            if (isEmpty_(oneLevelDiffs)) {
                 return Promise.resolve([]);
             }
 
-            const promises: Array<Promise<unknown>> = _.map(oneLevelDiffs, async (diff, path) => {
+            const promises: Array<Promise<unknown>> = map_(oneLevelDiffs, async (diff, path) => {
                 const p = updateAttributes(path, diff);
                 await p;
                 return p;
@@ -214,20 +218,20 @@ export function updateNodeAttributes(
 }
 
 function updateAttributes(path: string, oneLevelDiff: Record<'string', unknown>) {
-    if (_.isEmpty(oneLevelDiff)) {
+    if (isEmpty_(oneLevelDiff)) {
         return Promise.resolve();
     }
 
     const modifyGuarantee = (data: any = {}) => {
-        const res = _.cloneDeep(data);
-        _.forEach(oneLevelDiff, (value, key) => {
+        const res = cloneDeep_(data);
+        forEach_(oneLevelDiff, (value, key) => {
             if (value === undefined) {
                 delete res[key];
             } else {
                 res[key] = value;
             }
         });
-        if (_.isEqual(data, res)) {
+        if (isEqual_(data, res)) {
             return Promise.resolve();
         }
         return yt.v3.set({path}, res);
@@ -251,4 +255,14 @@ export function makeBatchSubRequest<T extends BatchSubRequest>(
         parameters,
         setup,
     } as BatchSubRequest;
+}
+
+export function prepareAttributes(attributes: readonly string[]): GetParams['attributes'] {
+    const [keys, paths] = partition_(attributes, (k) => -1 === k.indexOf('/'));
+
+    if (!paths.length) {
+        return keys;
+    }
+
+    return {keys, paths};
 }
