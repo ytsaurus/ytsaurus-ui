@@ -14,11 +14,15 @@
 
             &_type {
                 &_type {
-                    width: 80px;
+                    width: 120px;
+                    font-size: 0.9em;
+                    text-transform: uppercase;
+                    letter-spacing: 1px;
+                    white-space: pre-wrap;
                 }
 
                 &_error {
-                    width: 240px;
+                    width: 200px;
                 }
 
                 &_start-time,
