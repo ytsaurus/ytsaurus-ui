@@ -14,7 +14,7 @@ import {
     UnipikaFlattenTreeItem,
     flattenUnipika,
 } from '../StructuredYson/flattenUnipika';
-import DataTableYT, {DATA_TABLE_YT_SETTINGS} from '../../DataTableYT/DataTableYT';
+import DataTableYT, {DATA_TABLE_YT_SETTINGS_UNDER_TOOLBAR} from '../../DataTableYT/DataTableYT';
 import * as DT100 from '@gravity-ui/react-data-table';
 import WithStickyToolbar from '../../../components/WithStickyToolbar/WithStickyToolbar';
 
@@ -49,7 +49,7 @@ interface State {
 }
 
 const SETTINGS: DT100.Settings = {
-    ...DATA_TABLE_YT_SETTINGS,
+    ...DATA_TABLE_YT_SETTINGS_UNDER_TOOLBAR,
     stickyHead: undefined,
     stickyBottom: undefined,
 };

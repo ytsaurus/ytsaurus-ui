@@ -6,6 +6,7 @@ import _ from 'lodash';
 import DataTable, {Column, DataTableProps, Settings} from '@gravity-ui/react-data-table';
 import {NoItemsMessage} from '../../components/NoItemsMessage/NoItemsMessage';
 import {STICKY_TOOLBAR_BOTTOM} from '../../components/WithStickyToolbar/WithStickyToolbar';
+import {HEADER_HEIGHT} from '../../constants';
 
 import './DataTableYT.scss';
 
@@ -29,11 +30,18 @@ export const DATA_TABLE_YT_SETTINGS: Settings = {
     displayIndices: false,
     stickyHead: DataTable.MOVING,
     stickyFooter: DataTable.MOVING,
-    stickyTop: STICKY_TOOLBAR_BOTTOM,
+    stickyTop: HEADER_HEIGHT,
     stickyBottom: 0,
     syncHeadOnResize: true,
     dynamicRender: true,
+    sortable: false,
+    externalSort: true,
     dynamicRenderScrollParentGetter: () => window as any,
+};
+
+export const DATA_TABLE_YT_SETTINGS_UNDER_TOOLBAR: Settings = {
+    ...DATA_TABLE_YT_SETTINGS,
+    stickyTop: STICKY_TOOLBAR_BOTTOM,
 };
 
 export default class DataTableYT<T> extends React.Component<DataTableYtProps<T>> {
