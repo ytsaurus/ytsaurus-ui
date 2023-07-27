@@ -9,7 +9,9 @@ import Link from '../../../../../components/Link/Link';
 import Icon from '../../../../../components/Icon/Icon';
 import Button from '../../../../../components/Button/Button';
 import ColumnHeader from '../../../../../components/ColumnHeader/ColumnHeader';
-import DataTableYT from '../../../../../components/DataTableYT/DataTableYT';
+import DataTableYT, {
+    DATA_TABLE_YT_SETTINGS,
+} from '../../../../../components/DataTableYT/DataTableYT';
 import {NodeMemoryInfo} from '../../../../../store/selectors/components/node/memory';
 
 import {
@@ -194,11 +196,7 @@ function NodeMemoryDetailsTable(props: Props) {
             data={items}
             columns={columns}
             useThemeYT
-            settings={{
-                displayIndices: false,
-                externalSort: true,
-                sortable: false,
-            }}
+            settings={DATA_TABLE_YT_SETTINGS}
             rowClassName={({attributes: {isBundle}}) => {
                 return block('row', {
                     bundle: isBundle,
