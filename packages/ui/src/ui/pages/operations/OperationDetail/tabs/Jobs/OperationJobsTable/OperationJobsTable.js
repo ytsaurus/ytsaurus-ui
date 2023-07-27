@@ -409,7 +409,7 @@ class OperationJobsTable extends React.Component {
     }
 
     renderType(item) {
-        return <span className="elements-ellipsis">{item.type}</span>;
+        return <span>{hammer.format['ReadableField'](item.type)}</span>;
     }
 
     renderInputPathsModal() {
