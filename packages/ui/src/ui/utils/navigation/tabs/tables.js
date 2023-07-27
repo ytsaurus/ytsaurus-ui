@@ -307,6 +307,9 @@ export const histogramItems = {
     chunk_count: {
         format: 'Number',
     },
+    overlapping_store_count: {
+        format: 'Number',
+    },
     static_chunk_read: {
         dataName: 'rows/s',
         format: 'Number',
