@@ -1,0 +1,46 @@
+{
+    "clusters": [
+        {
+            "id": "meta",
+            "name": "meta",
+            "proxy": "http-proxy.meta.dc.idzn.ru",
+            "secure": false,
+            "authentication": "basic",
+            "group": "auxiliary",
+            "theme": "lavander",
+            "environment": "production",
+            "description": "",
+            "primaryMaster": {
+                "cellTag": 1
+            }
+        },
+        {
+            "id": "zhahnok",
+            "name": "zhahnok",
+            "proxy": "http-proxy.zhahnok.dc.idzn.ru",
+            "secure": false,
+            "authentication": "basic",
+            "group": "common",
+            "theme": "lavander",
+            "environment": "production",
+            "description": "",
+            "primaryMaster": {
+                "cellTag": 1
+            }
+        },
+        {
+            "id": "zfreud",
+            "name": "zfreud",
+            "proxy": "http-proxy.zfreud.dc.idzn.ru",
+            "secure": false,
+            "authentication": "basic",
+            "group": "common",
+            "theme": "lavander",
+            "environment": "staging",
+            "description": "",
+            "primaryMaster": {
+                "cellTag": 1
+            }
+        }
+    ]
+}

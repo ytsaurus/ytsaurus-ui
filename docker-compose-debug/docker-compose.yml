@@ -1,0 +1,14 @@
+version: '3.7'
+services:
+  ui:
+    image: ytsaurus/ui:debug
+    volumes:
+      - ./clusters-config.json:/opt/app/clusters-config.json
+      - ./yt-interface-secret.json:/opt/app/secrets/yt-interface-secret.json
+    ports:
+      - 80:80
+    environment:
+      YT_AUTH_CLUSTER_ID: meta
+      YT_AUTH_ALLOW_INSECURE: 1
+      YTAUTH_URL: http://ytauth.ytauth.dc.idzn.ru
+    

@@ -93,11 +93,15 @@ function removeSecureFlagIfOriginInsecure(
 
 export async function handleLogout(req: Request, res: Response) {
     try {
-        const {ytAuthCluster} = req.ctx.config;
+        const {ytAuthCluster, ytauthConfig} = req.ctx.config;
         if (!ytAuthCluster) {
             return throwAuthDisabled();
         }
-        res.setHeader('set-cookie', `${YT_CYPRESS_COOKIE_NAME}=deleted; Path=/; Max-Age=0;`);
+        const setCookie = [`${YT_CYPRESS_COOKIE_NAME}=deleted; Path=/; Max-Age=0;`];
+        if (ytauthConfig) {
+            setCookie.push(`${ytauthConfig.ytauthCookieName}=deleted; Path=/; Max-Age=0;`);
+        }
+        res.setHeader('set-cookie', setCookie);
         res.sendStatus(401).send('Logout');
     } catch (e: any) {
         sendAndLogError(req.ctx, res, 500, e);

@@ -113,6 +113,7 @@ export const getBundles = (state: RootState) => state?.global.bundles;
 export const getGlobalUsers = (state: RootState) => state.global.users;
 export const getGlobalGroups = (state: RootState) => state.global.groups;
 export const getCurrentUserName = (state: RootState): string => state?.global?.login;
+export const getCurrentUserInfo = (state: RootState): string => state?.global?.userInfo;
 
 const isCheckedDeveloper = (state: RootState): boolean => state?.global?.isDeveloper;
 

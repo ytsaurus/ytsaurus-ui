@@ -18,7 +18,7 @@ nodekit.ctx.log('AppConfig details', {
     appDevMode,
 });
 
-const {ytAuthCluster, appAuthHandler} = nodekit.config;
+const {ytAuthCluster, appAuthHandler, ytauthConfig} = nodekit.config;
 
 if (ytAuthCluster) {
     if (appAuthHandler) {
@@ -29,7 +29,7 @@ if (ytAuthCluster) {
         );
     }
 
-    nodekit.config.appAuthHandler = createYTAuthMiddleware(ytAuthCluster);
+    nodekit.config.appAuthHandler = createYTAuthMiddleware(ytAuthCluster, ytauthConfig);
 }
 
 nodekit.config.adjustAppConfig?.(nodekit);
