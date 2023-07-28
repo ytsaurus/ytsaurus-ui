@@ -129,28 +129,29 @@ function LoginForm({theme}: Props) {
                 >
                     Login
                 </Button>
-                {oauthConfig?.enabled && (
-                    <Button
-                        className={block('button', {solid: true})}
-                        type="button"
-                        width="max"
-                        size="l"
-                        pin="circle-circle"
-                        view={theme === 'light' ? 'action' : 'normal-contrast'}
-                    >
-                        {`Login with ${oauthConfig.name}`}
-                        <img
-                            src={oauthConfig.imageUrl}
-                            style={{height: '25px', verticalAlign: 'middle', marginLeft: '10px'}}
-                        />
-                    </Button>
-                )}
                 {errors.response && (
                     <Text as="p" color="danger" className={block('error')}>
                         {errors.response}
                     </Text>
                 )}
             </form>
+            {oauthConfig?.enabled && (
+                <Button
+                    className={block('button', {solid: true})}
+                    type="button"
+                    width="max"
+                    size="l"
+                    pin="circle-circle"
+                    view={theme === 'light' ? 'action' : 'normal-contrast'}
+                    style={{marginTop: '15px'}}
+                >
+                    {`Login with ${oauthConfig.name}`}
+                    <img
+                        src={oauthConfig.imageUrl}
+                        style={{height: '25px', verticalAlign: 'middle', marginLeft: '10px'}}
+                    />
+                </Button>
+            )}
         </>
     );
 }
