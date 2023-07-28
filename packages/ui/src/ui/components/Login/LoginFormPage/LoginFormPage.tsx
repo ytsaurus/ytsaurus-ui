@@ -8,6 +8,7 @@ import LoginPageWrapper from '../LoginPageWrapper/LoginPageWrapper';
 import _ from 'lodash';
 
 import cn from 'bem-cn-lite';
+import {OauthConfig} from '../../../../shared/yt-types';
 
 const block = cn('login-page');
 
@@ -36,6 +37,10 @@ const validate = ({
 
     return result;
 };
+
+async function getOauthConfig(): Promise<OauthConfig & {enabled: boolean}> {
+    return (await axios.get('/api/oauth/config')).data;
+}
 
 function LoginForm({theme}: Props) {
     const dispatch = useDispatch();
@@ -74,6 +79,16 @@ function LoginForm({theme}: Props) {
         },
         [username, password, dispatch],
     );
+
+    const [oauthConfig, setOauthConfig] = useState<OauthConfig & {enabled: boolean}>();
+
+    React.useEffect(() => {
+        getOauthConfig()
+            .then((config) => setOauthConfig(config))
+            .catch((error) => {
+                console.error('Error fetching oauth config:', error);
+            });
+    }, []);
 
     return (
         <>
@@ -114,6 +129,22 @@ function LoginForm({theme}: Props) {
                 >
                     Login
                 </Button>
+                {oauthConfig?.enabled && (
+                    <Button
+                        className={block('button', {solid: true})}
+                        type="button"
+                        width="max"
+                        size="l"
+                        pin="circle-circle"
+                        view={theme === 'light' ? 'action' : 'normal-contrast'}
+                    >
+                        {`Login with ${oauthConfig.name}`}
+                        <img
+                            src={oauthConfig.imageUrl}
+                            style={{height: '25px', verticalAlign: 'middle', marginLeft: '10px'}}
+                        />
+                    </Button>
+                )}
                 {errors.response && (
                     <Text as="p" color="danger" className={block('error')}>
                         {errors.response}

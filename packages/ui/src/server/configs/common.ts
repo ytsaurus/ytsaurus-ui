@@ -25,12 +25,26 @@ const ytAuthConfig: Partial<AppConfig> = process.env.YT_AUTH_CLUSTER_ID
       }
     : {};
 
+const externalAuthConfig: Partial<AppConfig> =
+    process.env.YTAUTH_URL && process.env.YT_AUTH_CLUSTER_ID
+        ? {
+              appAuthPolicy: AuthPolicy.required,
+              ytauthConfig: {
+                  ytauthUrl: process.env.YTAUTH_URL as string,
+                  ytauthCookieName: process.env.YTAUTH_COOKIE_NAME ?? 'access_token',
+                  ytauthHeaderName: process.env.YTAUTH_HEADER_NAME ?? 'Authorization',
+                  redirectBaseUrl: process.env.YTAUTH_REDIRECT_BASE_URL ?? 'http://localhost',
+              },
+          }
+        : {};
+
 const config: Partial<AppConfig> = {
     appName: 'YTSaurus',
     appSocket: 'dist/run/server.sock',
     appAuthPolicy: (process.env.AUTH_POLICY as AuthPolicy) || 'redirect',
 
     ...ytAuthConfig,
+    ...externalAuthConfig,
 
     // TODO: fix me
     // csp: 'disabled',

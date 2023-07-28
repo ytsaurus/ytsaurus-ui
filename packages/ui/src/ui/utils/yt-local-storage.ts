@@ -3,6 +3,9 @@ import _ from 'lodash';
 export interface YTStorageData {
     loginDialog: {
         username?: string;
+        firstName?: string;
+        lastName?: string;
+        avatar?: string;
     };
 }
 

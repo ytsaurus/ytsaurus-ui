@@ -2,8 +2,17 @@ import {AppConfig, AppContext} from '@gravity-ui/nodekit';
 import {Request, Response} from '@gravity-ui/expresskit';
 import {MetrikaCounter} from '@gravity-ui/app-layout';
 import {UISettings} from 'shared/ui-settings';
+import {UserInfo} from 'shared/yt-types';
 import {Settings} from '../shared/constants/settings-types';
 import type {NodeKit} from '@gravity-ui/nodekit';
+
+export interface YtauthConfig {
+    // The url to running ytauth proxy.
+    ytauthUrl: string;
+    ytauthCookieName: string;
+    ytauthHeaderName: string;
+    redirectBaseUrl: string;
+}
 
 export interface YTCoreConfig {
     /**
@@ -69,6 +78,29 @@ export interface YTCoreConfig {
      * Enables YT-password authentication when defined
      */
     ytAuthCluster?: string;
+
+    /**
+     * Enables usage of external OAuth providers with Ytauth.
+     * If enabled, the login page will contain button that redirects to external
+     * authorization resourse.
+     * Authorization flow:
+     * 0) getting oauth2 params from ytauth/gateway/info before rendering login page
+     * 1) click on the banner on the login page
+     * 2) redirect to {oauthAuthorizeUrl} with these query params:
+     *    - client_id = {oauthClientId}
+     *    - response_type = "code"
+     *    - scope = "user_info"
+     *    - redirect_uri = {redirectBaseUrl}/oauth/callback
+     * 3) accept authorization_code in /oauth/callback
+     * 4) POST request to {ytAuthUrl}/tokens/authorize, accept token
+     * 5) redirect to {previousPath} with cookie
+     *
+     * Authentication flow:
+     * 1) extract token from cookie
+     * 2) GET request to {ytAuthUrl}/tokens/authenticate, accept user info
+     */
+    ytauthConfig?: YtauthConfig;
+
     /**
      * Modifies headers of /api/yt/login request:
      * if enabled removes 'Secure'-option from 'Set-Cookie: YTCypressCookie=...; ...' response-header
@@ -117,6 +149,7 @@ declare module 'express' {
             uid?: string;
             login?: string;
             ytApiAuthHeaders?: Record<string, string>;
+            userInfo?: UserInfo;
         };
         ctx: AppContext;
     }
