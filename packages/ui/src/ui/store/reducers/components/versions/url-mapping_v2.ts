@@ -43,6 +43,9 @@ export const versionsV2Params: LocationParameters = {
         stateKey: 'components.versionsV2.summarySortState',
         initialState: versionsInitialState.summarySortState,
         type: 'object',
+        options: {
+            parse: parseSortState,
+        },
     },
     detailsSort: {
         stateKey: `tables.${COMPONENTS_VERSIONS_DETAILED_TABLE_ID}`,

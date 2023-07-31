@@ -4,6 +4,7 @@ import {updateIfChanged} from '../../../utils/utils';
 import {RootState} from '..';
 
 import {usersTableState} from './table';
+import {parseSortState} from '../../../utils/index';
 
 export const usersPageParams = {
     filter: {
@@ -22,6 +23,9 @@ export const usersPageParams = {
         stateKey: 'users.table.sort',
         initialState: usersTableState.sort,
         type: 'object',
+        options: {
+            parse: parseSortState,
+        },
     },
 };
 

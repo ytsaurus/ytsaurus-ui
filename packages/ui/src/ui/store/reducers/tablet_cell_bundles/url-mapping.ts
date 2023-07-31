@@ -5,6 +5,7 @@ import {RootState} from '../../../store/reducers';
 import produce from 'immer';
 import {updateIfChanged} from '../../../utils/utils';
 import {aclFiltersParams, getAclFiltersPreparedState} from '../acl/url-mapping';
+import {parseSortState} from '../../../utils';
 
 export const tabletsBundlesParams = {
     activeBundle: {
@@ -48,6 +49,9 @@ export const tabletsAllBundlesParams = {
         stateKey: 'tablet_cell_bundles.bundlesSort',
         initialState: initialState.bundlesSort,
         type: 'object',
+        options: {
+            parse: parseSortState,
+        },
     },
     mode: {
         stateKey: 'tablet_cell_bundles.bundlesTableMode',
@@ -74,6 +78,9 @@ export const tabletsTabletCellsParams = {
         stateKey: 'tablet_cell_bundles.cellsSort',
         initialState: initialState.cellsSort,
         type: 'object',
+        options: {
+            parse: parseSortState,
+        },
     },
 };
 

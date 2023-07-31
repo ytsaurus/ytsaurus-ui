@@ -5,6 +5,7 @@ import {RootState} from '../../../store/reducers';
 import produce from 'immer';
 import {updateIfChanged} from '../../../utils/utils';
 import {LocationParameters} from '../../../store/location';
+import {parseSortState} from '../../../utils/index';
 
 export const chaosBundlesParams: LocationParameters = {
     activeBundle: {
@@ -48,6 +49,9 @@ export const chaosAllBundlesParams: LocationParameters = {
         stateKey: 'chaos_cell_bundles.bundlesSort',
         initialState: initialState.bundlesSort,
         type: 'object',
+        options: {
+            parse: parseSortState,
+        },
     },
     mode: {
         stateKey: 'chaos_cell_bundles.bundlesTableMode',
@@ -74,6 +78,9 @@ export const chaosCellsParams = {
         stateKey: 'chaos_cell_bundles.cellsSort',
         initialState: initialState.cellsSort,
         type: 'object',
+        options: {
+            parse: parseSortState,
+        },
     },
 };
 
