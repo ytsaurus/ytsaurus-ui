@@ -267,7 +267,7 @@ export function parseBytes(input: string): number {
 }
 
 export function parseSortState(stringSortState: string) {
-    const values = _.map(stringSortState.split(','), (value) => value.split('-'));
+    const values = _.map(stringSortState.split(','), (value) => value.split(/-(.*)/s));
     const parsed = _.fromPairs(values);
 
     parsed.asc = flags.get(parsed.asc);
