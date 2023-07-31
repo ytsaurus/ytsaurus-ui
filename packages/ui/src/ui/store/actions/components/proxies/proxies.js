@@ -53,7 +53,7 @@ function getHttpProxies() {
         return Promise.all([
             axios.get(`/api/yt-proxy/${cluster}/hosts-all`),
             ytApiV3Id.get(YTApiId.systemProxies, {
-                path: '//sys/proxies',
+                path: '//sys/http_proxies',
                 attributes: Proxy.ATTRIBUTES,
             }),
         ])

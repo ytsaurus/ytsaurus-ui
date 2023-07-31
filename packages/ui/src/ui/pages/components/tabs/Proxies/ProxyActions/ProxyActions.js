@@ -36,7 +36,7 @@ class ProxyActions extends Component {
     get basePath() {
         const {type} = this.props;
 
-        return type === PROXY_TYPE.HTTP ? '//sys/proxies' : '//sys/rpc_proxies';
+        return type === PROXY_TYPE.HTTP ? '//sys/http_proxies' : '//sys/rpc_proxies';
     }
 
     handleBanClick = () => {

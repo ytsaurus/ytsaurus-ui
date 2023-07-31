@@ -27,7 +27,7 @@ export function changeRole(host, role, type) {
     return (dispatch) => {
         dispatch({type: CHANGE_ROLE.REQUEST});
 
-        const basePath = type === PROXY_TYPE.HTTP ? '//sys/proxies' : '//sys/rpc_proxies';
+        const basePath = type === PROXY_TYPE.HTTP ? '//sys/http_proxies' : '//sys/rpc_proxies';
 
         return yt.v3
             .set({path: `${basePath}/${host}/@role`}, role)

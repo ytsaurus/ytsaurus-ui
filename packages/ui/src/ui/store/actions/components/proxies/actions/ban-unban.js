@@ -12,7 +12,7 @@ import {
 import {getCurrentUserName} from '../../../../../store/selectors/global';
 
 function setAttributes({host, banned, messageValue, successType, closeType, failType}, type) {
-    const basePath = type === PROXY_TYPE.HTTP ? '//sys/proxies' : '//sys/rpc_proxies';
+    const basePath = type === PROXY_TYPE.HTTP ? '//sys/http_proxies' : '//sys/rpc_proxies';
 
     return (dispatch) => {
         return Promise.all([
