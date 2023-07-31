@@ -2,7 +2,7 @@ import ypath from '../../../../../common/thor/ypath';
 
 export default class Proxy {
     constructor(data) {
-        // data comes in format like in /hosts/all, not like //sys/proxies
+        // data comes in format like in /hosts/all, not like //sys/http_proxies
         this.name = data.name;
         this.host = data.name;
         this.state = data.dead ? 'offline' : 'online';
