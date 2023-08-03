@@ -1,4 +1,10 @@
-import _ from 'lodash';
+import filter_ from 'lodash/filter';
+import forEach_ from 'lodash/forEach';
+import isEqual_ from 'lodash/isEqual';
+import map_ from 'lodash/map';
+import reduce_ from 'lodash/reduce';
+import some_ from 'lodash/some';
+
 // @ts-ignore
 import yt from '@ytsaurus/javascript-wrapper/lib/yt';
 
@@ -16,8 +22,14 @@ import {
 import {YTApiId, ytApiV3, ytApiV3Id} from '../../rum/rum-wrap-api';
 import {getBatchError, splitBatchResults} from '../../utils/utils';
 import {convertFromUIPermission, convertToUIPermissions} from '.';
-import {BatchResultsItem, ExecuteBatchParams} from '../../../shared/yt-types';
+import {
+    BatchResultsItem,
+    BatchSubRequest,
+    ExecuteBatchParams,
+    YTPermissionType,
+} from '../../../shared/yt-types';
 import {RequestPermissionParams} from './external-acl-api';
+import {REGISTER_QUEUE_CONSUMER_VITAL} from '../../constants/acl';
 
 function getInheritAcl(path: string): Promise<ACLResponsible> {
     return yt.v3.get({path: path + '/@inherit_acl'}).then((inherit_acl: boolean) => {
@@ -68,28 +80,28 @@ export const getResponsible = async ({
 };
 
 export function internalAclWithTypes(items: Array<ACE>) {
-    const allSubjects = _.reduce(
+    const allSubjects = reduce_(
         items,
         (acc, item) => {
-            _.forEach(item.subjects, (subject) => acc.add(subject));
+            forEach_(item.subjects, (subject) => acc.add(subject));
             return acc;
         },
         new Set<string>(),
     );
 
-    const requests = _.map([...allSubjects], (group) => {
+    const requests = map_([...allSubjects], (group) => {
         return {command: 'get' as const, parameters: {path: `//sys/groups/${group}/@name`}};
     });
 
     return ytApiV3.executeBatch<string>({requests}).then((data) => {
         const {results} = splitBatchResults(data);
         const groups = new Set(results);
-        return _.map(items, (item) => {
+        return map_(items, (item) => {
             return {
                 ...item,
                 inherited: Boolean(item.inherited),
                 internal: true,
-                types: _.map(item.subjects, (subject) => (groups.has(subject) ? 'group' : 'user')),
+                types: map_(item.subjects, (subject) => (groups.has(subject) ? 'group' : 'user')),
             };
         });
     });
@@ -120,9 +132,9 @@ export const getCombinedAcl = (sysPath: string) => {
                 throw error;
             }
             const [{output: effective_acl}, {output: acl}, {output: revision}] = results;
-            const effective_acl_dif = _.filter(
+            const effective_acl_dif = filter_(
                 effective_acl,
-                (e_item) => !_.some(acl, (a_item) => _.isEqual(a_item, e_item)),
+                (e_item) => !some_(acl, (a_item) => isEqual_(a_item, e_item)),
             );
             return [
                 ...effective_acl_dif.map((e_item) => ({
@@ -153,9 +165,9 @@ export interface CheckPermissionResult {
 export const checkUserPermissions = (
     path: string,
     user: string,
-    permissionTypes: Array<string>,
+    permissionTypes: Array<YTPermissionType>,
 ): Promise<CheckPermissionResult[]> => {
-    const items: CheckPermissionItem[] = _.map(permissionTypes, (permission) => {
+    const items = map_(permissionTypes, (permission) => {
         return {path, user, permission};
     });
 
@@ -165,24 +177,33 @@ export const checkUserPermissions = (
 export interface CheckPermissionItem {
     user: string;
     path: string;
-    permission: string;
+    permission: YTPermissionType | typeof REGISTER_QUEUE_CONSUMER_VITAL;
     transaction_id?: string;
+}
+
+export function makeCheckPermissionBatchSubRequest({
+    path,
+    user,
+    permission,
+    transaction_id,
+}: CheckPermissionItem) {
+    const result: BatchSubRequest = {
+        command: 'check_permission' as const,
+        parameters: {
+            path,
+            user,
+            ...convertFromUIPermission(permission),
+            ...(transaction_id ? {transaction_id} : {}),
+        },
+    };
+    return result;
 }
 
 export function checkPermissions(
     arr: Array<CheckPermissionItem>,
     ytApiId?: YTApiId,
 ): Promise<CheckPermissionResult[]> {
-    const requests = _.map(arr, ({path, user, permission, transaction_id: tx}) => {
-        return {
-            command: 'check_permission' as const,
-            parameters: Object.assign(
-                {path, user},
-                convertFromUIPermission(permission),
-                tx ? {transaction_id: tx} : {},
-            ),
-        };
-    });
+    const requests = map_(arr, makeCheckPermissionBatchSubRequest);
 
     return ytApiV3Id
         .executeBatch(ytApiId ?? YTApiId.checkPermissions, {requests})

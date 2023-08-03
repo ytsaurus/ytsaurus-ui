@@ -1,3 +1,4 @@
+import {YTPermissionType} from '../../../shared/yt-types';
 import {
     IdmObjectType,
     REGISTER_QUEUE_CONSUMER,
@@ -155,8 +156,11 @@ export function convertFromUIPermissions<T extends {permissions: Array<string>; 
     };
 }
 
-export function convertFromUIPermission(permission: string) {
-    return permission === REGISTER_QUEUE_CONSUMER_VITAL
-        ? {permission: REGISTER_QUEUE_CONSUMER, vital: true}
-        : {permission};
+export function convertFromUIPermission(
+    permission: YTPermissionType | typeof REGISTER_QUEUE_CONSUMER_VITAL,
+): {permission: YTPermissionType; vital?: true} {
+    if (permission === REGISTER_QUEUE_CONSUMER_VITAL) {
+        return {permission: REGISTER_QUEUE_CONSUMER, vital: true};
+    }
+    return {permission};
 }

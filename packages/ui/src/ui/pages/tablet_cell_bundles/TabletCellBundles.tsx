@@ -12,6 +12,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {fetchChaosBundles as fetchChaosBundles} from '../../store/actions/chaos_cell_bundles';
 import {fetchTabletsBundles} from '../../store/actions/tablet_cell_bundles';
 import {
+    getTabletBundlesWriteableByName,
     getTabletsActiveBundle,
     getTabletsActiveBundleData,
     getTabletsError,
@@ -70,7 +71,13 @@ export default function TabletCellBundles() {
         }
     }, [activeBundle, dispatch]);
 
-    const allowEdit = useSelector(getClusterUiConfigEnablePerBundleTabletAccounting);
+    const writeableByName = useSelector(getTabletBundlesWriteableByName);
+
+    const bundleWritable = writeableByName.get(activeBundle);
+
+    const allowEdit = enableBundleController || bundleWritable;
+
+    const allowAccounting = useSelector(getClusterUiConfigEnablePerBundleTabletAccounting);
 
     const showSettings = React.useMemo(() => {
         return _.reduce(
@@ -134,7 +141,7 @@ export default function TabletCellBundles() {
                                             )}
                                         />
                                     </div>
-                                    {allowEdit && (
+                                    {allowAccounting && allowEdit && (
                                         <div className={b('tabs-edit-btn')}>
                                             <Button
                                                 className={b('edit-btn')}

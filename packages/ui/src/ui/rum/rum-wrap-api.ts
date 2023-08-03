@@ -157,6 +157,7 @@ export enum YTApiId {
 
     bundleControllerZones,
     tabletBundleControllerState,
+    tabletBundlesCheckWrite,
     listQueries,
     getQuery,
     startQuery,

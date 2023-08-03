@@ -17,6 +17,8 @@ export interface TabletsBundlesState {
     cells: Array<TabletCell>;
     bundles: Array<TabletBundle>;
 
+    writableByName: Map<string, boolean>;
+
     bundlesNameFilter: string;
     bundlesAccountFilter: string;
     bundlesTagNodeFilter: string;
@@ -238,6 +240,8 @@ const ephemeralState: Pick<
     cells: [],
     bundles: [],
 
+    writableByName: new Map<string, boolean>(),
+
     cellsIdFilter: '',
 
     bundleDefaultConfig: undefined,
@@ -278,6 +282,7 @@ export type TabletsPartialAction = ActionD<
             | 'cellsBundleFilter'
             | 'cellsHostFilter'
             | 'bundlesTableMode'
+            | 'writableByName'
         >
     >
 >;

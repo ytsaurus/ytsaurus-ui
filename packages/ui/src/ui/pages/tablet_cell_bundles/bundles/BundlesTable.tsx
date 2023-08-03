@@ -224,12 +224,15 @@ class BundlesTable extends React.Component<ReduxProps> {
             copyHostListToClipboard,
             pathPrefix,
             showCellBundleEditor,
+            writeableByName,
         } = this.props;
-        const {bundle, nodes} = data?.row || {};
+        const {bundle, nodes, enable_bundle_controller} = data?.row || {};
         if (!bundle) {
             return;
         }
         const path = `${pathPrefix}${bundle}`;
+
+        const allowEdit = enable_bundle_controller ?? writeableByName?.get(bundle);
         return (
             <div className={block('actions')}>
                 <div className={block('actions-attrs')}>
@@ -240,7 +243,7 @@ class BundlesTable extends React.Component<ReduxProps> {
                         path={path}
                     />
                 </div>
-                {allowPerBundleAccounting && (
+                {allowPerBundleAccounting && allowEdit && (
                     <div className={block('actions-attrs')}>
                         <Button
                             size="m"
@@ -514,6 +517,7 @@ export type ReduxProps = {
     columns: Array<keyof typeof Columns>;
     activeBundleLink(cluster: string, bundle: string, enable_bundle_controller?: boolean): string;
     bundleDashboardUrl?(cluster: string, bundle: string): string | undefined;
+    writeableByName?: {get: (bundleName: string) => boolean | undefined};
 } & {
     copyHostListToClipboard(bundle: string): void;
     setBundlesSortState(bundlesSort: SortState<keyof TabletBundle>): void;
