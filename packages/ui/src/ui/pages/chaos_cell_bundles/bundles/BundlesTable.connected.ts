@@ -42,6 +42,7 @@ const mapStateToProps = (state: RootState) => {
         pathPrefix: '//sys/chaos_cell_bundles/',
         columns,
         activeBundleLink: chaosActiveBundleLink,
+        writeableByName: {get: () => true},
     };
 };
 

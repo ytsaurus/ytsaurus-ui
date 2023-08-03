@@ -53,6 +53,9 @@ export const getBundleDefaultConfig = (state: RootState) =>
 export const getTabletBundlesTableMode = (state: RootState) =>
     state.tablet_cell_bundles.bundlesTableMode;
 
+export const getTabletBundlesWriteableByName = (state: RootState) =>
+    state.tablet_cell_bundles.writableByName;
+
 export const getTabletsActiveBundleData = createSelector(
     [getTabletsBundles, getTabletsActiveBundle],
     (bundles, activeBundle) => {

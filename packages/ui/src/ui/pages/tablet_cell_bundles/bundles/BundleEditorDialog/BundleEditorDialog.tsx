@@ -19,7 +19,10 @@ import {
     hideTabletCellBundleEditor,
     setBundleEditorController,
 } from '../../../../store/actions/tablet_cell_bundles/tablet-cell-bundle-editor';
-import {getBundleEditorData} from '../../../../store/selectors/tablet_cell_bundles';
+import {
+    getBundleEditorData,
+    getTabletBundlesWriteableByName,
+} from '../../../../store/selectors/tablet_cell_bundles';
 import {BundleResourceGuarantee} from '../../../../store/reducers/tablet_cell_bundles';
 import {getTabletCellBundleEditorState} from '../../../../store/selectors/tablet_cell_bundles/tablet-cell-bundle-editor';
 
@@ -94,6 +97,8 @@ export function BundleEditorDialog() {
     const {usage: tabletCountUsage} = getResourceData(data, 'tablet_count');
     const {usage: tabletStaticMemoryUsage} = getResourceData(data, 'tablet_static_memory');
 
+    const writeableByName = useSelector(getTabletBundlesWriteableByName);
+    const allowTabletCount = writeableByName.get(bundleName ?? '');
     const allowEdit = useSelector(isDeveloper);
 
     const initialValues: Partial<BundleEditorDialogFormValues> = (() => {
@@ -190,25 +195,35 @@ export function BundleEditorDialog() {
                                             orchidData?.resource_quota.vcpu || '0',
                                         ),
                                     },
+                                    {
+                                        title: 'Tablet count',
+                                        value: hammer.format.Number(
+                                            initialValues.resources?.tablet_count,
+                                        ),
+                                    },
                                 ]}
                             />
                         </Info>
                     ),
                 },
             },
-            {
-                name: 'tablet_count',
-                type: 'bundle-input',
-                caption: 'Tablet count',
-                extras: {
-                    format: 'Number',
-                    withoutDetailedBar: true,
-                    progress: {
-                        usage: tabletCountUsage,
-                    },
-                },
-                validator: simpleBundleValidate,
-            },
+            ...(!allowTabletCount
+                ? []
+                : [
+                      {
+                          name: 'tablet_count',
+                          type: 'bundle-input',
+                          caption: 'Tablet count',
+                          extras: {
+                              format: 'Number',
+                              withoutDetailedBar: true,
+                              progress: {
+                                  usage: tabletCountUsage,
+                              },
+                          },
+                          validator: simpleBundleValidate,
+                      } as const,
+                  ]),
             {section: 'RPC proxy'},
             {
                 type: 'bundle-input',
@@ -318,6 +333,15 @@ export function BundleEditorDialog() {
                     },
                 },
                 validator: simpleBundleValidate,
+                tooltip: (
+                    <span>
+                        Tablet static memory limit is based on hardware resources. Do not increase
+                        it unless you fully understand what you are doing. In case of emergency
+                        consider adding new tablet cells to the bundle, consulting with
+                        Components/Nodes page and increasing the limit only when new nodes are added
+                        to the bundle.
+                    </span>
+                ),
             },
         ],
     };

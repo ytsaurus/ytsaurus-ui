@@ -77,6 +77,9 @@ export interface SubRequest<K extends string, T extends BaseBatchParams> {
 export interface BaseBatchParams {
     transaction_id?: string;
     ui_marker?: string;
+
+    read_from?: 'cache';
+    disable_per_user_cache?: boolean;
 }
 
 export interface PathParams extends BaseBatchParams {
@@ -111,7 +114,7 @@ export interface MergeParams extends BaseBatchParams {
 export interface CheckPermissionsParams extends BaseBatchParams {
     user: string;
     path: string;
-    permission: string;
+    permission: YTPermissionType;
     vital?: boolean;
 }
 
@@ -137,7 +140,7 @@ export interface GetQueryResultParams extends GetQueryParams {
     result_index: number;
 }
 
-export type YTPermissionType = 'read' | 'write' | 'use' | 'mount';
+export type YTPermissionType = 'read' | 'write' | 'use' | 'mount' | 'register_queue_consumer';
 
 export type BatchSubRequest =
     | SubRequest<'transfer_pool_resources', TransferPoolQuotaParams>

@@ -1,4 +1,6 @@
 import {ThunkAction} from 'redux-thunk';
+import map_ from 'lodash/map';
+import reduce_ from 'lodash/reduce';
 
 // @ts-ignore
 import ypath from '@ytsaurus/interface-helpers/lib/ypath';
@@ -31,10 +33,16 @@ import {
 } from '../../selectors/tablet_cell_bundles';
 
 import copy from 'copy-to-clipboard';
-import {getBatchError} from '../../../utils/utils';
-import {getCluster} from '../../selectors/global';
+import {getBatchError, splitBatchResults, wrapApiPromiseByToaster} from '../../../utils/utils';
+import {getCluster, getCurrentUserName} from '../../selectors/global';
 import {YTApiId, ytApiV3Id} from '../../../rum/rum-wrap-api';
 import {getAppBrowserHistory} from '../../../store/window-store';
+import {BatchSubRequest} from '../../../../shared/yt-types';
+import {
+    CheckPermissionResult,
+    makeCheckPermissionBatchSubRequest,
+} from '../../../utils/acl/acl-api';
+import CancelHelper, {isCancelled} from '../../../utils/cancel-helper';
 
 function getZones(allBundles: TabletBundle[]) {
     const map = new Map<string, boolean>();
@@ -55,6 +63,8 @@ function prepareBundleDefaultConfig(result: object) {
 }
 
 type TabletsBundlesThunkAction = ThunkAction<any, RootState, any, TabletsBundlesAction>;
+
+const cancelHelper = new CancelHelper();
 
 export function fetchTabletsBundles(): TabletsBundlesThunkAction {
     return (dispatch) => {
@@ -96,8 +106,13 @@ export function fetchTabletsBundles(): TabletsBundlesThunkAction {
             },
         ];
 
+        cancelHelper.removeAllRequests();
+
         return ytApiV3Id
-            .executeBatch(YTApiId.tabletCellBundles, {requests})
+            .executeBatch(YTApiId.tabletCellBundles, {
+                parameters: {requests},
+                cancellation: cancelHelper.saveCancelToken,
+            })
             .then((results: Array<any>) => {
                 const [{output: isBundleControllerSupported}, ...rest] = results;
 
@@ -113,6 +128,8 @@ export function fetchTabletsBundles(): TabletsBundlesThunkAction {
 
                 const zones = getZones(allBundles);
 
+                dispatch(fetchWritePermissions(allBundles));
+
                 if (!zones.length || !isBundleControllerSupported) {
                     dispatch({
                         type: TABLETS_BUNDLES_LOAD_SUCCESS,
@@ -126,9 +143,12 @@ export function fetchTabletsBundles(): TabletsBundlesThunkAction {
 
                 ytApiV3Id
                     .get(YTApiId.bundleControllerZones, {
-                        path: `//sys/bundle_controller/controller/zones`,
-                        values: Object.keys(zones),
-                        attributes: ['tablet_node_sizes', 'rpc_proxy_sizes'],
+                        parameters: {
+                            path: `//sys/bundle_controller/controller/zones`,
+                            values: Object.keys(zones),
+                            attributes: ['tablet_node_sizes', 'rpc_proxy_sizes'],
+                        },
+                        cancellation: cancelHelper.saveCancelToken,
                     })
                     .then((result: object) => {
                         const bundleDefaultConfig = prepareBundleDefaultConfig(result);
@@ -142,12 +162,61 @@ export function fetchTabletsBundles(): TabletsBundlesThunkAction {
                         });
                     })
                     .catch((e: any) => {
-                        dispatch({type: TABLETS_BUNDLES_LOAD_FAILURE, data: e});
+                        if (!isCancelled(e)) {
+                            dispatch({type: TABLETS_BUNDLES_LOAD_FAILURE, data: e});
+                        }
                     });
             })
             .catch((e: any) => {
-                dispatch({type: TABLETS_BUNDLES_LOAD_FAILURE, data: e});
+                if (!isCancelled(e)) {
+                    dispatch({type: TABLETS_BUNDLES_LOAD_FAILURE, data: e});
+                }
             });
+    };
+}
+
+export function fetchWritePermissions(
+    bundles: Array<{bundle: string}> = [],
+): TabletsBundlesThunkAction {
+    return (dispatch, getState) => {
+        const user = getCurrentUserName(getState());
+        const requests: Array<BatchSubRequest> = map_(bundles, (item) => {
+            return makeCheckPermissionBatchSubRequest({
+                path: `//sys/tablet_cell_bundles/${item.bundle}`,
+                user,
+                permission: 'write',
+            });
+        });
+        return wrapApiPromiseByToaster(
+            ytApiV3Id
+                .executeBatch(YTApiId.tabletBundlesCheckWrite, {
+                    parameters: {requests},
+                    cancellation: cancelHelper.saveCancelToken,
+                })
+                .then((data) => {
+                    const {error, outputs} = splitBatchResults<CheckPermissionResult>(data);
+                    const writableByName = reduce_(
+                        outputs,
+                        (acc, item, index) => {
+                            if (item?.action === 'allow') {
+                                const name = bundles[index].bundle;
+                                acc.set(name, true);
+                            }
+                            return acc;
+                        },
+                        new Map<string, boolean>(),
+                    );
+
+                    dispatch({type: TABLETS_BUNDLES_PARTIAL, data: {writableByName}});
+
+                    return error ? Promise.reject(error) : undefined;
+                }),
+            {
+                toasterName: 'bundleWritePermissions',
+                skipSuccessToast: true,
+                errorTitle: 'Fetch write permissions',
+            },
+        );
     };
 }
 

@@ -16,6 +16,7 @@ import {
 } from '../../../store/selectors/global';
 import {
     getTabletBundlesTableMode,
+    getTabletBundlesWriteableByName,
     getTabletsBundlesSortState,
     getTabletsBundlesSorted,
     getTabletsBundlesTotal,
@@ -81,6 +82,7 @@ const mapStateToProps = (state: RootState) => {
         columns: calcColumns(state),
         activeBundleLink: tabletActiveBundleLink,
         bundleDashboardUrl: tabletCellBundleDashboardUrl,
+        writeableByName: getTabletBundlesWriteableByName(state),
     };
 };
 
