@@ -9,7 +9,7 @@ import {defineConfig, devices} from '@playwright/test';
 const headless = process.env.HEADLESS !== 'false';
 
 const {E2E_MATCH = '.spec.'} = process.env;
-const testMatch = new RegExp(E2E_MATCH.replace(/\./g, '.'));
+const testMatch = new RegExp(E2E_MATCH.replace(/\./g, '\\.'));
 
 /**
  * See https://playwright.dev/docs/test-configuration.
