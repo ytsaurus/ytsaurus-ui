@@ -27,7 +27,7 @@
     "dev:localmode": "bash -c '. scripts/dev.localmode-env.sh && TVM_DISABLED=true npm run dev:app'",
     "dev:localmode:e2e": "APP_INSTALLATION=${APP_INSTALLATION:-e2e} npm run dev:localmode",
     "dev:oss": "APP_INSTALLATION=oss npm run dev",
-    "docker:build": "docker build ${BUILD_ARGS} --build-arg UI_VERSION=$(npm run show:version | tail -1) . -t ${npm_package_config_docker_image}:${npm_config_dockertag}",
+    "docker:build": "touch ytsaurus-ui-empty.tgz; docker build ${BUILD_ARGS} --build-arg UI_VERSION=$(npm run show:version | tail -1) . -t ${npm_package_config_docker_image}:${npm_config_dockertag}",
     "docker:build:dev": "npm run build && npm pack && BUILD_ARGS=\"--build-arg DEV=1\" npm run docker:build",
     "docker:push": "docker push ${npm_package_config_docker_image}:${npm_config_dockertag}",
     "lint": "npm run lint:file-names && npm run lint:js && npm run lint:styles",
