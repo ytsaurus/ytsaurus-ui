@@ -166,6 +166,6 @@ class PathEditorModal extends Component {
 }
 
 export default compose(
-    connect(null, {setPath, hideError}),
     withScope('path-editor-modal'),
+    connect(null, {setPath, hideError}),
 )(PathEditorModal);

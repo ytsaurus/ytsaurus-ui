@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 
@@ -11,8 +11,25 @@ import {
 } from '../../../../../store/actions/navigation/modals/create-directory';
 import {closeEditingPopup} from '../../../../../store/actions/navigation/modals/path-editing-popup';
 import {updateView} from '../../../../../store/actions/navigation';
+import {YTError} from '../../../../../../@types/types';
+import {RootState} from '../../../../../store/reducers';
 
-class CreateDirectoryModal extends Component {
+type CreateDirecotryProps = {
+    error: YTError;
+    errorMessage: string;
+    popupVisible: boolean;
+    showError: boolean;
+
+    creating?: boolean;
+    creatingPath: string;
+
+    updateView: () => void;
+    abortRequests: () => void;
+    createDirectory: (path: string, updateCb: () => void) => void;
+    closeEditingPopup: (popupId: string) => void;
+};
+
+class CreateDirectoryModal extends React.Component<CreateDirecotryProps> {
     static propTypes = {
         // from connect
         error: PropTypes.shape({
@@ -29,28 +46,6 @@ class CreateDirectoryModal extends Component {
         abortRequests: PropTypes.func.isRequired,
         createDirectory: PropTypes.func.isRequired,
         closeEditingPopup: PropTypes.func.isRequired,
-    };
-
-    handleConfirmButtonClick = () => {
-        const {creatingPath, createDirectory, updateView} = this.props;
-
-        createDirectory(creatingPath, updateView);
-    };
-
-    handleCancelButtonClick = () => {
-        const {abortRequests, closeEditingPopup} = this.props;
-
-        closeEditingPopup(CLOSE_CREATE_DIRECTORY_POPUP);
-        abortRequests();
-    };
-
-    handleApply = (newPath) => {
-        const {creating, showError, createDirectory, updateView} = this.props;
-        const disabled = creating || showError;
-
-        if (!disabled) {
-            createDirectory(newPath, updateView);
-        }
     };
 
     render() {
@@ -79,11 +74,31 @@ class CreateDirectoryModal extends Component {
             />
         );
     }
+
+    handleConfirmButtonClick = () => {
+        const {creatingPath, createDirectory, updateView} = this.props;
+
+        createDirectory(creatingPath, updateView);
+    };
+
+    handleCancelButtonClick = () => {
+        this.props.closeEditingPopup(CLOSE_CREATE_DIRECTORY_POPUP);
+        this.props.abortRequests();
+    };
+
+    handleApply = (newPath: string) => {
+        const {creating, showError, createDirectory, updateView} = this.props;
+        const disabled = creating || showError;
+
+        if (!disabled) {
+            createDirectory(newPath, updateView);
+        }
+    };
 }
 
-const mapStateToProps = ({navigation}) => {
+const mapStateToProps = (state: RootState) => {
     const {creatingPath, popupVisible, showError, creating, errorMessage, error} =
-        navigation.modals.createDirectory;
+        state.navigation.modals.createDirectory;
 
     return {
         popupVisible,
