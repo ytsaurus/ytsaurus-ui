@@ -3,7 +3,13 @@ import PropTypes from 'prop-types';
 import cn from 'bem-cn-lite';
 import _ from 'lodash';
 
-import MetaTable, {OperationTemplate} from '../../../../../../components/MetaTable/MetaTable';
+import MetaTable, {
+    TemplateCommand,
+    TemplateEnvironment,
+    TemplateFiles,
+    TemplateIntermediate,
+    TemplateTransferTask,
+} from '../../../../../../components/MetaTable/MetaTable';
 import CollapsibleTable from '../../../../../../components/CollapsibleTable/CollapsibleTable';
 
 import {
@@ -85,7 +91,7 @@ export default class Specification extends Component {
                     },
                     {
                         key: 'transfer task',
-                        value: <OperationTemplate.TransferTask id={id} url={url} />,
+                        value: <TemplateTransferTask id={id} url={url} />,
                         visible: Boolean(id || url),
                     },
                 ]}
@@ -116,7 +122,7 @@ export default class Specification extends Component {
 
         items.push({
             key: 'command',
-            value: <OperationTemplate.Command value={command} lineCount={5} />,
+            value: <TemplateCommand value={command} lineCount={5} />,
         });
 
         return (
@@ -151,17 +157,17 @@ export default class Specification extends Component {
                         },
                         {
                             key: 'environment',
-                            value: <OperationTemplate.Environment environments={environment} />,
+                            value: <TemplateEnvironment environments={environment} />,
                             visible: environment.length > 0,
                         },
                         {
                             key: 'files',
-                            value: <OperationTemplate.Files files={files} cluster={cluster} />,
+                            value: <TemplateFiles files={files} cluster={cluster} />,
                             visible: files.length > 0,
                         },
                         {
                             key: 'command',
-                            value: <OperationTemplate.Command value={command} lineCount={5} />,
+                            value: <TemplateCommand value={command} lineCount={5} />,
                             visible: Boolean(command),
                         },
                     ]}
@@ -191,7 +197,7 @@ export default class Specification extends Component {
             <div className={specificationBlock('intermediate')}>
                 <div className={headingBlock({size: 's'})}>Intermediate</div>
 
-                <OperationTemplate.Intermediate {...intermediate} cluster={cluster} />
+                <TemplateIntermediate {...intermediate} cluster={cluster} />
             </div>
         );
     }

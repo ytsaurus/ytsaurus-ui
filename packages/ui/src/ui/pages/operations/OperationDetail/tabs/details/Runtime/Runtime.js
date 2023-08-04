@@ -5,8 +5,9 @@ import cn from 'bem-cn-lite';
 import _ from 'lodash';
 
 import MetaTable, {
-    OperationTemplate,
     Template,
+    TemplatePool,
+    TemplateWeight,
 } from '../../../../../../components/MetaTable/MetaTable';
 
 import {formatShare} from '../../../../../../utils/operations/tabs/details/runtime';
@@ -89,7 +90,7 @@ class Runtime extends Component {
                             {
                                 key: 'pool',
                                 value: (
-                                    <OperationTemplate.Pool
+                                    <TemplatePool
                                         onEdit={this.handlePoolEditClick}
                                         cluster={cluster}
                                         state={state}
@@ -102,7 +103,7 @@ class Runtime extends Component {
                             {
                                 key: 'weight',
                                 value: (
-                                    <OperationTemplate.Weight
+                                    <TemplateWeight
                                         operation={operation}
                                         pool={pool}
                                         onEdit={() => showEditPoolsWeightsModal(operation)}

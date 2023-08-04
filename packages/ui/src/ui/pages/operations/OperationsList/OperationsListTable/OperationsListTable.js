@@ -8,7 +8,7 @@ import _, {trimEnd} from 'lodash';
 
 import unipika from '../../../../common/thor/unipika';
 import OperationProgress from '../../../../pages/operations/OperationProgress/OperationProgress';
-import {OperationTemplate} from '../../../../components/MetaTable/MetaTable';
+import {TemplatePools, TemplateWeight} from '../../../../components/MetaTable/MetaTable';
 import templates, {renderText} from '../../../../components/templates/utils';
 import ClipboardButton from '../../../../components/ClipboardButton/ClipboardButton';
 import ElementsTable from '../../../../components/ElementsTable/ElementsTable';
@@ -210,7 +210,7 @@ class OperationsListTable extends Component {
                     {multiplePools ? (
                         this.renderMultiplePools(item)
                     ) : (
-                        <OperationTemplate.Pools
+                        <TemplatePools
                             onEdit={() => showEditPoolsWeightsModal(item)}
                             cluster={cluster}
                             pools={pools}
@@ -221,7 +221,7 @@ class OperationsListTable extends Component {
                 </UserPoolItem>
                 {!multiplePools && (
                     <UserPoolItem awesomeIcon={'weight-hanging'} title={'Weight'}>
-                        <OperationTemplate.Weight
+                        <TemplateWeight
                             onEdit={() => showEditPoolsWeightsModal(item)}
                             operation={item}
                             pool={pools[0]}

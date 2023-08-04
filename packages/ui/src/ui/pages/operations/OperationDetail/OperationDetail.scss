@@ -72,6 +72,11 @@
         margin-left: 10px;
     }
 
+    &__script-environment {
+        white-space: break-spaces;
+        word-break: break-all;
+    }
+
     @include redefinition('grass', var(--grass-color));
     @include redefinition('mint', var(--mint-color));
     @include redefinition('aqua', var(--aqua-color));
