@@ -15,6 +15,7 @@ import {Template} from '../../../components/MetaTable/MetaTable';
 import encoder from '../../../common/utils/url-encoder';
 import hammer from '../../../common/hammer';
 import {Page} from '../../../constants/index';
+import CollapsableText from '../../../components/CollapsableText/CollapsableText';
 
 const itemBlock = cn('meta-table-item');
 const detailBlock = cn('operation-detail');
@@ -103,25 +104,17 @@ TemplateCommand.propTypes = {
 /* ----------------------------------------------------------------------------------------------------------------- */
 
 export function TemplateEnvironment({environments}) {
-    return _.map(environments, ({name, value}) => {
+    const variables = _.map(environments, ({name, value}) => {
         const preparedValue = ypath.getValue(value);
 
         return (
             <div className={detailBlock('script-environment')} key={name + '/' + preparedValue}>
-                <div className={detailBlock('script-environment-variable')}>
-                    <span className={detailBlock('script-environment-variable-name')}>{name}</span>=
-                    <span
-                        className={detailBlock(
-                            'script-environment-variable-value',
-                            'elements-ellipsis',
-                        )}
-                    >
-                        {preparedValue}
-                    </span>
-                </div>
+                <span>{name}</span>=<span>{preparedValue}</span>
             </div>
         );
     });
+
+    return <CollapsableText lineCount={10}>{variables}</CollapsableText>;
 }
 
 TemplateEnvironment.propTypes = {
@@ -222,14 +215,3 @@ TemplateWeight.propTypes = {
 };
 
 /* ----------------------------------------------------------------------------------------------------------------- */
-
-export function OperationTemplate() {}
-
-OperationTemplate.Pool = TemplatePool;
-OperationTemplate.Pools = TemplatePools;
-OperationTemplate.TransferTask = TemplateTransferTask;
-OperationTemplate.Command = TemplateCommand;
-OperationTemplate.Environment = TemplateEnvironment;
-OperationTemplate.Files = TemplateFiles;
-OperationTemplate.Weight = TemplateWeight;
-OperationTemplate.Intermediate = TemplateIntermediate;

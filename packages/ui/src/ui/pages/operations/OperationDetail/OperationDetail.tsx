@@ -8,7 +8,7 @@ import _ from 'lodash';
 
 import ypath from '../../../common/thor/ypath';
 
-import MetaTable, {OperationTemplate, Template} from '../../../components/MetaTable/MetaTable';
+import MetaTable, {Template, TemplatePools} from '../../../components/MetaTable/MetaTable';
 import OperationProgress from '../OperationProgress/OperationProgress';
 import ErrorBoundary from '../../../components/ErrorBoundary/ErrorBoundary';
 import {UserCard} from '../../../components/UserLink/UserLink';
@@ -169,7 +169,7 @@ class OperationDetail extends React.Component<ReduxProps & RouteProps> {
                 {
                     key: 'pools',
                     value: (
-                        <OperationTemplate.Pools
+                        <TemplatePools
                             onEdit={this.handlePoolsEditClick}
                             cluster={cluster}
                             pools={pools}
