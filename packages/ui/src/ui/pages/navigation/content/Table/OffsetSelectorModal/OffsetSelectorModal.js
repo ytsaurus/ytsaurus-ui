@@ -5,7 +5,7 @@ import {connect} from 'react-redux';
 import cn from 'bem-cn-lite';
 import _ from 'lodash';
 
-import {TextInput as Input} from '@gravity-ui/uikit';
+import {TextInput} from '@gravity-ui/uikit';
 import Modal from '../../../../../components/Modal/Modal';
 
 import Query from '../../../../../utils/navigation/content/table/query';
@@ -96,11 +96,11 @@ class OffsetSelectorModal extends Component {
 
     renderSearchBox() {
         return (
-            <Input
+            <TextInput
                 theme="normal"
                 size="s"
                 placeholder="Search..."
-                onChange={this._changeFilter}
+                onUpdate={this._changeFilter}
                 text={this.state.filter}
                 hasClear={true}
             />
@@ -128,11 +128,11 @@ class OffsetSelectorModal extends Component {
                         >
                             {item.name}
                             <div className={block('item')}>
-                                <Input
+                                <TextInput
                                     theme="normal"
                                     size="s"
                                     placeholder=""
-                                    onChange={this._handleInputChange(item.name)}
+                                    onUpdate={this._handleInputChange(item.name)}
                                     text={item.value}
                                     hasClear={true}
                                 />

@@ -42,6 +42,8 @@ const renderInput = (props, handleEndEditing) => {
             value={offsetValue}
             placeholder=""
             size="m"
+            pin={'brick-clear'}
+            hasClear={false}
         />
     ) : (
         <RangeInputPicker
