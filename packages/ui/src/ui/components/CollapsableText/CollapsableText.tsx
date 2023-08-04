@@ -1,47 +1,69 @@
-import React, {Component} from 'react';
-import PropTypes from 'prop-types';
+import React from 'react';
 import cn from 'bem-cn-lite';
-import Button from '../../components/Button/Button';
+import Button from '../Button/Button';
 
-import Yson from '../../components/Yson/Yson';
+import Yson from '../Yson/Yson';
 
 import './CollapsableText.scss';
 
-export const propTypes = {
-    value: PropTypes.any.isRequired,
-    settings: PropTypes.object,
-    lineCount: PropTypes.number,
-    lineHeight: PropTypes.number,
-    collapsed: PropTypes.bool,
-    onToggle: PropTypes.func,
-};
-
-const defaultProps = {
-    collapsed: true,
-    lineHeight: 20,
-    lineCount: 3,
-};
-
 const block = cn('elements-collapsable-text');
 
-class CollapsableText extends Component {
-    constructor(props) {
-        super(props);
+type CollapsableTextProps = {
+    lineCount?: number;
+    lineHeight?: number;
+    collapsed?: boolean;
+    onToggle?: ({collapsed}: {collapsed: boolean}) => void;
+} & ContentProps;
 
-        this.toggle = this.toggle.bind(this);
+type ContentProps =
+    | {
+          value: any;
+          settings?: React.ComponentProps<typeof Yson>['settings'];
 
-        this.textBlock = null;
-        this.textSize = null;
+          children?: never;
+      }
+    | {
+          value?: never;
+          settings?: never;
 
-        this.state = {
-            collapsed: props.collapsed,
-        };
-    }
+          children?: React.ReactChild;
+      };
+
+type State = {
+    collapsed: CollapsableTextProps['collapsed'];
+};
+
+class CollapsableText extends React.Component<CollapsableTextProps> {
+    static defaultProps = {
+        collapsed: true,
+        lineHeight: 20,
+        lineCount: 3,
+    };
+
+    state: State = {
+        collapsed: this.props.collapsed,
+    };
+
+    private textRef = React.createRef<HTMLDivElement>();
+    private textSize?: number;
+
     componentDidMount() {
         this.textSize = this.getTextSize();
         this.forceUpdate();
     }
-    toggle() {
+    render() {
+        const {collapsed} = this.state;
+
+        const className = block({collapsed: collapsed ? 'yes' : undefined});
+
+        return (
+            <div className={className}>
+                {this.renderContent()}
+                {this.renderToggler()}
+            </div>
+        );
+    }
+    toggle = () => {
         const {onToggle} = this.props;
 
         const collapsed = !this.state.collapsed;
@@ -51,26 +73,21 @@ class CollapsableText extends Component {
         if (typeof onToggle === 'function') {
             onToggle({collapsed});
         }
-    }
+    };
     getTextSize() {
-        const textBlock = this.textBlock;
-        return textBlock && textBlock.offsetHeight;
+        return this.textRef.current?.offsetHeight;
     }
-    renderText() {
-        const {value, settings, lineHeight, lineCount} = this.props;
+    renderContent() {
+        const {value, settings, lineHeight, lineCount, children} = this.props;
         const {collapsed} = this.state;
 
         const className = block('text');
-        const style = collapsed ? {maxHeight: lineCount * lineHeight} : undefined;
+        const style = collapsed ? {maxHeight: lineCount! * lineHeight!} : undefined;
 
         return (
             <div className={className} style={style}>
-                <div
-                    ref={(textBlock) => {
-                        this.textBlock = textBlock;
-                    }}
-                >
-                    <Yson settings={settings} value={value} />
+                <div ref={this.textRef}>
+                    {children ? children : <Yson settings={settings} value={value} />}
                 </div>
             </div>
         );
@@ -80,28 +97,13 @@ class CollapsableText extends Component {
         const {lineHeight, lineCount} = this.props;
 
         return (
-            this.textSize > lineHeight * lineCount && (
+            this.textSize! > lineHeight! * lineCount! && (
                 <Button className={block('toggler')} view="flat" size="s" onClick={this.toggle}>
                     {collapsed ? 'Show more' : 'Show less'}
                 </Button>
             )
         );
     }
-    render() {
-        const {collapsed} = this.state;
-
-        const className = block({collapsed: collapsed ? 'yes' : undefined});
-
-        return (
-            <div className={className}>
-                {this.renderText()}
-                {this.renderToggler()}
-            </div>
-        );
-    }
 }
-
-CollapsableText.propTypes = propTypes;
-CollapsableText.defaultProps = defaultProps;
 
 export default CollapsableText;
