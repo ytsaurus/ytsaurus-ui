@@ -133,7 +133,9 @@ export function copyObject(
                     name: 'copy',
                     timeout: 10000,
                     type: 'success',
-                    title: `Object${multipleMode ? 's' : ''} was successfully copied`,
+                    title: multipleMode
+                        ? 'Objects were successfully copied'
+                        : 'Object was successfully copied',
                     content: <Link url={`navigation?path=${copyingPath}`}>{copyingPath}</Link>,
                 });
             })
