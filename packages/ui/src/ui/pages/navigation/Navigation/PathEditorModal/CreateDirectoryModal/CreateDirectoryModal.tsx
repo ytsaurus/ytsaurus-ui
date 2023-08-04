@@ -1,51 +1,28 @@
 import React from 'react';
-import {connect} from 'react-redux';
-import PropTypes from 'prop-types';
+import {ConnectedProps, connect} from 'react-redux';
 
 import PathEditorModal from '../PathEditorModal';
 
 import {CLOSE_CREATE_DIRECTORY_POPUP} from '../../../../../constants/navigation/modals/create-directory';
 import {
     abortRequests,
+    clearCreateDirectoryError,
     createDirectory,
 } from '../../../../../store/actions/navigation/modals/create-directory';
 import {closeEditingPopup} from '../../../../../store/actions/navigation/modals/path-editing-popup';
 import {updateView} from '../../../../../store/actions/navigation';
-import {YTError} from '../../../../../../@types/types';
 import {RootState} from '../../../../../store/reducers';
+import {Checkbox} from '@gravity-ui/uikit';
 
-type CreateDirecotryProps = {
-    error: YTError;
-    errorMessage: string;
-    popupVisible: boolean;
-    showError: boolean;
-
-    creating?: boolean;
-    creatingPath: string;
-
-    updateView: () => void;
-    abortRequests: () => void;
-    createDirectory: (path: string, updateCb: () => void) => void;
-    closeEditingPopup: (popupId: string) => void;
+type State = {
+    recursive: boolean;
 };
 
-class CreateDirectoryModal extends React.Component<CreateDirecotryProps> {
-    static propTypes = {
-        // from connect
-        error: PropTypes.shape({
-            code: PropTypes.number,
-            message: PropTypes.string,
-        }).isRequired,
-        errorMessage: PropTypes.string.isRequired,
-        popupVisible: PropTypes.bool.isRequired,
-        showError: PropTypes.bool.isRequired,
-        creating: PropTypes.bool.isRequired,
-        creatingPath: PropTypes.string.isRequired,
+type ReduxProps = ConnectedProps<typeof connector>;
 
-        updateView: PropTypes.func.isRequired,
-        abortRequests: PropTypes.func.isRequired,
-        createDirectory: PropTypes.func.isRequired,
-        closeEditingPopup: PropTypes.func.isRequired,
+class CreateDirectoryModal extends React.Component<ReduxProps> {
+    state: State = {
+        recursive: false,
     };
 
     render() {
@@ -71,14 +48,24 @@ class CreateDirectoryModal extends React.Component<CreateDirecotryProps> {
                 onConfirmButtonClick={this.handleConfirmButtonClick}
                 onCancelButtonClick={this.handleCancelButtonClick}
                 onApply={this.handleApply}
+                options={
+                    <Checkbox checked={this.state.recursive} onUpdate={this.onRecursiveUpdate}>
+                        Make parent directories as needed
+                    </Checkbox>
+                }
             />
         );
     }
 
+    onRecursiveUpdate = (recursive: boolean) => {
+        this.setState({recursive});
+        this.props.clearCreateDirectoryError?.();
+    };
+
     handleConfirmButtonClick = () => {
         const {creatingPath, createDirectory, updateView} = this.props;
 
-        createDirectory(creatingPath, updateView);
+        createDirectory({path: creatingPath, recursive: this.state.recursive}, updateView);
     };
 
     handleCancelButtonClick = () => {
@@ -91,7 +78,7 @@ class CreateDirectoryModal extends React.Component<CreateDirecotryProps> {
         const disabled = creating || showError;
 
         if (!disabled) {
-            createDirectory(newPath, updateView);
+            createDirectory({path: newPath, recursive: this.state.recursive}, updateView);
         }
     };
 }
@@ -106,7 +93,7 @@ const mapStateToProps = (state: RootState) => {
         error,
         showError,
         creating,
-        creatingPath,
+        creatingPath: creatingPath as string,
     };
 };
 
@@ -115,6 +102,9 @@ const mapDispatchToProps = {
     abortRequests,
     createDirectory,
     closeEditingPopup,
+    clearCreateDirectoryError,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(CreateDirectoryModal);
+const connector = connect(mapStateToProps, mapDispatchToProps);
+
+export default connector(CreateDirectoryModal);
