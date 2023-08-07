@@ -12,6 +12,7 @@ import Button, {ButtonProps} from '../Button/Button';
 const b = block('elements-modal');
 
 interface ModalProps {
+    className?: string;
     visible?: boolean;
     loading?: boolean;
     title?: string;
@@ -80,21 +81,18 @@ class Modal extends Component<ModalProps> {
 
     renderConfirmButton(className: string) {
         const {renderCustomConfirm, loading, confirmText, confirmTheme} = this.props;
-        const icon = <Icon awesome="sync-alt" spin />;
 
         if (typeof renderCustomConfirm === 'function') {
             return renderCustomConfirm(className);
         } else {
-            return loading ? (
-                <Button className={className} disabled={this._isConfirmDisabled()}>
-                    {icon}
-                </Button>
-            ) : (
+            return (
                 <Button
                     view={confirmTheme}
+                    loading={loading}
                     disabled={this._isConfirmDisabled()}
                     className={className}
                     onClick={this.props.onConfirm}
+                    qa="modal-confirm"
                 >
                     {confirmText}
                 </Button>
@@ -134,10 +132,10 @@ class Modal extends Component<ModalProps> {
     }
 
     render() {
-        const {visible, onOutsideClick, size} = this.props;
+        const {visible, onOutsideClick, size, className} = this.props;
         return (
             <ModalImpl open={visible} onClose={onOutsideClick}>
-                <div className={b('wrapper', {size})}>
+                <div className={b('wrapper', {size}, className)}>
                     {this.renderHeader()}
                     {this.renderContent()}
                     {this.renderErrors()}

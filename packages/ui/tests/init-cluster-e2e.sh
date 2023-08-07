@@ -1,5 +1,7 @@
 #!/bin/bash
 
+EXPIRATION_TIMEOUT=${EXPIRATION_TIMEOUT:-3600000}
+
 set -xe
 
 if ! which yt >/dev/null; then
@@ -18,6 +20,7 @@ if [ -z "${E2E_DIR}" ]; then
 fi
 
 yt create map_node ${E2E_DIR}
+yt set ${E2E_DIR}/@expiration_timeout 10000
 
 yt remove -f ${E2E_DIR}/root
 yt remove -f ${E2E_DIR}/locked
@@ -35,8 +38,8 @@ yt set //@test_attr "hello_world"
 
 yt copy ${E2E_DIR}/file-types ${E2E_DIR}/locked
 
-yt lock --mode snapshot ${E2E_DIR}/locked --tx $(yt start-tx --timeout 3600000)
-yt lock --mode shared ${E2E_DIR}/locked --tx $(yt start-tx --timeout 3600000)
+yt lock --mode snapshot ${E2E_DIR}/locked --tx $(yt start-tx --timeout ${EXPIRATION_TIMEOUT})
+yt lock --mode shared ${E2E_DIR}/locked --tx $(yt start-tx --timeout ${EXPIRATION_TIMEOUT})
 
 if [ "false" = "$(yt exists //sys/pool_trees/e2e)" ]; then
     yt create scheduler_pool_tree --attributes '{name=e2e;config={nodes_filter=e2e}}'
@@ -66,3 +69,24 @@ fi
 if [ "false" = "$(yt exists //sys/accounts/account-for-e2e)" ]; then
     yt create --type account --attributes '{name="account-for-e2e"}'
 fi
+
+DYN_TABLE=${E2E_DIR}/dynamic-table
+yt create --attributes "{dynamic=%true;schema=[{name=key;sort_order=ascending;type=string};{name=value;type=string};{name=empty;type=any}]}" table ${DYN_TABLE}
+yt mount-table ${DYN_TABLE}
+(
+    set +x
+    for ((i = 0; i < 300; i++)); do
+        echo "{key=key$i; value=value$i;};"
+    done
+    set -x
+) | yt insert-rows --format yson ${DYN_TABLE}
+
+STATIC_TABLE=${E2E_DIR}/static-table
+yt create --attributes "{schema=[{name=key;type=string};{name=value;type=string};{name=empty;type=any}]}" table ${STATIC_TABLE}
+(
+    set +x
+    for ((i = 0; i < 300; i++)); do
+        echo '{"key": "key'$i'", "value": "value'$i'"}'
+    done
+    set -x
+) | yt write-table --format json ${STATIC_TABLE}
