@@ -87,14 +87,14 @@ export function loadJobSpecification(
             )
             .then((req: JobSpecRequest) => {
                 // @ts-ignore
-                const specification: JobSpecification = ypath.getValue(
+                const [scheduler_job_spec_ext, job_spec_ext]: JobSpecification = ypath.getValues(
                     req,
-                    '/scheduler_job_spec_ext',
+                    ['/scheduler_job_spec_ext', '/job_spec_ext'],
                 );
 
                 dispatch({
                     type: JOB.LOAD_JOB_SPECIFICATION_SUCCESS,
-                    data: {specification},
+                    data: {specification: job_spec_ext ?? scheduler_job_spec_ext},
                 });
             })
             .catch((error: YTError) => {
