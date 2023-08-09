@@ -1,68 +1,65 @@
-import _ from 'lodash';
-import PropTypes from 'prop-types';
+import each_ from 'lodash/each';
+import map_ from 'lodash/map';
+import reduce_ from 'lodash/reduce';
+import sortBy_ from 'lodash/sortBy';
+import values_ from 'lodash/values';
 
-export const roleGroupStructure = PropTypes.shape({
-    name: PropTypes.string.isRequired,
-    items: PropTypes.array.isRequired,
-    total: PropTypes.number.isRequired,
-});
+import {HttpProxiesState, ProxyInfo, RoleGroup} from '../../store/reducers/system/proxies';
 
-export function extractRpcProxy(data) {
-    return _.reduce(
-        data,
-        (acc, value, key) => {
-            acc.push({
-                name: key,
-                role: value.$attributes?.role,
-                state: value.$value?.alive || value?.alive ? 'online' : 'offline',
-                effectiveState: value.$value?.alive || value?.alive ? 'online' : 'offline',
-            });
-            return acc;
-        },
-        [],
-    );
+// @ts-expect-error
+export function extractRpcProxy(data: FIX_ME) {
+    return map_(data, (value, key) => {
+        return {
+            name: key,
+            role: value.$attributes?.role,
+            state: value.$value?.alive || value?.alive ? 'online' : 'offline',
+            effectiveState: value.$value?.alive || value?.alive ? 'online' : 'offline',
+        } as unknown;
+    });
 }
 
-export function extractRoleGroups(proxies) {
-    const roleGroups = _.reduce(
+export function extractRoleGroups(proxies: Array<ProxyInfo>): Array<RoleGroup> {
+    const roleGroups = reduce_(
         proxies,
         (roles, proxy) => {
             const roleName = proxy.role || 'default';
-            const role = (roles[roleName] = roles[roleName] || {
-                total: 0,
-                items: [],
-                name: roleName,
-            });
+            let role = roles[roleName];
+            if (!role) {
+                role = roles[roleName] = {
+                    total: 0,
+                    items: [],
+                    name: roleName,
+                };
+            }
+
             role.total++;
             role.items.push(proxy);
 
             return roles;
         },
-        {},
+        {} as Record<string, RoleGroup>,
     );
 
-    const roles = _.values(roleGroups);
+    const roles = values_(roleGroups);
 
-    return _.sortBy(roles, 'name');
+    return sortBy_(roles, 'name');
 }
 
-function incrementStateCounters(counters, name, proxy) {
-    const state = proxy[name];
-    const stateCounters = counters[name + 's'];
-    stateCounters[state] = stateCounters[state] || 0;
-    stateCounters[state]++;
+function incrementKeyCounter<K extends string>(counters: Record<K, number>, key: K) {
+    counters[key] = counters[key] ?? 0;
+    ++counters[key];
 }
 
-export function extractProxyCounters(proxies) {
-    const counters = {
+export function extractProxyCounters(proxies: Array<ProxyInfo>) {
+    const counters: HttpProxiesState['counters'] = {
         total: proxies.length,
         states: {},
         effectiveStates: {},
     };
 
-    _.each(proxies, (proxy) => {
-        incrementStateCounters(counters, 'state', proxy);
-        incrementStateCounters(counters, 'effectiveState', proxy);
+    each_(proxies, (proxy) => {
+        incrementKeyCounter(counters.states, proxy.state);
+        incrementKeyCounter(counters.effectiveStates, proxy.effectiveState);
     });
 
     return counters;

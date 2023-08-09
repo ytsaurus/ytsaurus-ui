@@ -1,47 +1,60 @@
-import _ from 'lodash';
-import ypath from '../../../common/thor/ypath';
-import {FETCH_PROXIES} from '../../../store/actions/system/proxies';
+import {Action} from 'redux';
+import {FETCH_PROXIES} from '../../../constants/system/nodes';
 import {mergeStateOnClusterChange} from '../../../store/reducers/utils';
-import {extractProxyCounters, extractRoleGroups} from '../../../utils/system/proxies';
+import {YTError} from '../../../../@types/types';
+import {ActionD} from '../../../types';
 
-const initialState = {
-    fetching: false,
-    loaded: false,
-    error: null,
-    roleGroups: [],
-    counters: {},
+export type HttpProxiesState = {
+    fetching: boolean;
+    loaded: boolean;
+    error?: YTError;
+    roleGroups: Array<RoleGroup>;
+    counters: {
+        total: number;
+        states: Record<string, number>;
+        effectiveStates: Record<string, number>;
+    };
 };
 
-class Proxy {
-    constructor(data) {
-        this.name = data.name;
-        this.host = data.name;
+export type RoleGroup = {
+    name: string;
+    items: Array<ProxyInfo>;
+    total: number;
+};
 
-        this.state = data && data.dead ? 'offline' : 'online';
-        this.banned = data && data.banned;
-        this.banMessage = (data && data.ban_message) || 'Ban message omitted';
-        this.effectiveState = this.banned ? 'banned' : this.state;
-        this.role = data && data.role;
-        this.liveness = data && data.liveness;
-        this.loadAverage = ypath.getValue(this.liveness, '/load_average');
-        this.updatedAt = ypath.getValue(this.liveness, '/updated_at');
-        this.networkLoad = ypath.getValue(this.liveness, '/network_coef');
-    }
-}
+const initialState: HttpProxiesState = {
+    fetching: false,
+    loaded: false,
+    error: undefined,
+    roleGroups: [],
+    counters: {total: 0, states: {}, effectiveStates: {}},
+};
 
-function proxies(state = initialState, action) {
+export type ProxyInfo = {
+    name: string;
+    host: string;
+    state: 'offline' | 'online';
+    banned: boolean;
+    banMessage?: string;
+    effectiveState: 'banned' | ProxyInfo['state'];
+    role: string;
+    liveness: unknown;
+    loadAverage: unknown;
+    updatedAt: unknown;
+    networkLoad: unknown;
+};
+
+function proxies(state = initialState, action: HttpProxiesAction): HttpProxiesState {
     switch (action.type) {
         case FETCH_PROXIES.REQUEST:
             return {...state, fetching: true};
         case FETCH_PROXIES.SUCCESS: {
-            const proxies = _.map(action.data, (data) => new Proxy(data));
             return {
                 ...state,
                 fetching: false,
-                roleGroups: extractRoleGroups(proxies),
-                counters: extractProxyCounters(proxies),
-                error: null,
+                error: undefined,
                 loaded: true,
+                ...action.data,
             };
         }
         case FETCH_PROXIES.FAILURE:
@@ -50,5 +63,10 @@ function proxies(state = initialState, action) {
             return state;
     }
 }
+
+export type HttpProxiesAction =
+    | Action<typeof FETCH_PROXIES.REQUEST>
+    | ActionD<typeof FETCH_PROXIES.FAILURE, HttpProxiesState['error']>
+    | ActionD<typeof FETCH_PROXIES.SUCCESS, Pick<HttpProxiesState, 'roleGroups' | 'counters'>>;
 
 export default mergeStateOnClusterChange(initialState, {}, proxies);
