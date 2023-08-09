@@ -1,6 +1,7 @@
 {
     "extends": "@gravity-ui/eslint-config/client",
     "rules": {
-        "import/order": 0
+        "import/order": 0,
+        "react/sort-comp": 0
     }
 }
