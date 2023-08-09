@@ -1,19 +1,28 @@
-import axios from '../../../utils/axios-no-xsrf';
+import axios from 'axios';
+import map_ from 'lodash/map';
+
+import ypath from '../../../common/thor/ypath';
+
 import {Toaster} from '@gravity-ui/uikit';
 
 import Updater from '../../../utils/hammer/updater';
-import createActionTypes from '../../../constants/utils';
 import {isRetryFutile} from '../../../utils/index';
 import {showErrorPopup} from '../../../utils/utils';
 import {getCluster} from '../../../store/selectors/global';
+import {extractProxyCounters, extractRoleGroups} from '../../../utils/system/proxies';
+import type {HttpProxiesAction, ProxyInfo} from '../../../store/reducers/system/proxies';
+import {ThunkAction} from 'redux-thunk';
+import type {RootState} from '../../../store/reducers';
+import {FETCH_PROXIES} from '../../../constants/system/nodes';
 
-export const FETCH_PROXIES = createActionTypes('PROXIES');
 const PROXIES_UPDATER_ID = 'system_proxies';
 
 const toaster = new Toaster();
 const updater = new Updater();
 
-export function loadProxies() {
+type ProxiesThunkAction = ThunkAction<void, RootState, unknown, HttpProxiesAction>;
+
+export function loadProxies(): ProxiesThunkAction {
     return (dispatch) => {
         updater.add(PROXIES_UPDATER_ID, () => dispatch(getProxies()), 30 * 1000);
     };
@@ -25,7 +34,27 @@ export function cancelLoadProxies() {
     };
 }
 
-function getProxies() {
+function makeProxyInfo(data: any): ProxyInfo {
+    const state = data.dead ? 'offline' : 'online';
+    const banned = data.banned;
+    const liveness = data.liveness;
+
+    return {
+        name: data.name,
+        host: data.name,
+        state,
+        banned,
+        banMessage: data.ban_message || 'Ban message omitted',
+        effectiveState: banned ? 'banned' : state,
+        role: data.role,
+        liveness,
+        loadAverage: ypath.getValue(liveness, '/load_average'),
+        updatedAt: ypath.getValue(liveness, '/updated_at'),
+        networkLoad: ypath.getValue(liveness, '/network_coef'),
+    };
+}
+
+function getProxies(): ProxiesThunkAction {
     return (dispatch, getState) => {
         const cluster = getCluster(getState());
 
@@ -34,10 +63,14 @@ function getProxies() {
                 url: `/api/yt-proxy/${cluster}/hosts-all`,
                 method: 'GET',
             })
-            .then((response) => {
+            .then(({data}) => {
+                const proxies = map_(data, makeProxyInfo);
                 dispatch({
                     type: FETCH_PROXIES.SUCCESS,
-                    data: response.data,
+                    data: {
+                        roleGroups: extractRoleGroups(proxies),
+                        counters: extractProxyCounters(proxies),
+                    },
                 });
             })
             .catch((error) => {

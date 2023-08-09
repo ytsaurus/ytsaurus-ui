@@ -1,3 +1,5 @@
+import createActionTypes from '../../constants/utils';
+
 // Node and Racks
 export const flagToChar = {
     alerts: 'A',
@@ -20,3 +22,5 @@ export const Flag = {
 export const SYSTEM_NODES_FILTERS_PARTIAL = 'SYSTEM_NODES_FILTERS_PARTIAL';
 
 export const UNAWARE = 'unaware';
+
+export const FETCH_PROXIES = createActionTypes('PROXIES');
