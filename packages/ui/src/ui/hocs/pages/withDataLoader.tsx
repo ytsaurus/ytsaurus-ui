@@ -18,6 +18,21 @@ const ErrorWithTitle = PropTypes.shape({
 
 const ErrorType = PropTypes.oneOfType([ErrorWithTitle, PropTypes.any]);
 
+export type DataLoaderProps = {
+    className?: string;
+
+    loading?: boolean;
+    loaded?: boolean;
+
+    hideLoader?: boolean;
+
+    hasError?: boolean;
+    error?: {message?: string; error?: any} | any;
+
+    loadData: () => void;
+    cancelLoadData: () => void;
+};
+
 /**
  * The HOC is might be useful to wrap components which requires some data loading, but not only for them.
  * It is important to notice all properties is not required,
@@ -25,8 +40,10 @@ const ErrorType = PropTypes.oneOfType([ErrorWithTitle, PropTypes.any]);
  * See comments for properties.
  * @param Component
  */
-export default function withDataLoader(Component) {
-    return class WithDataLoader extends React.Component {
+export default function withDataLoader<P extends DataLoaderProps>(
+    Component: React.ComponentType<P>,
+) {
+    return class WithDataLoader extends React.Component<P> {
         static propTypes = {
             className: PropTypes.string,
 
@@ -61,9 +78,9 @@ export default function withDataLoader(Component) {
         }
 
         renderContent() {
-            const {className, hideLoader, loading, loaded, hasError, error, ...rest} = this.props;
+            const {className, hideLoader, loading, loaded, hasError, error} = this.props;
             if (hasError || error) {
-                const {message, error: errorData} = error || {};
+                const {message, error: errorData} = error || ({} as any);
                 return <Error className={className} error={errorData || error} message={message} />;
             }
 
@@ -75,7 +92,7 @@ export default function withDataLoader(Component) {
                 );
             }
 
-            return !loaded ? null : <Component className={className} {...rest} />;
+            return !loaded ? null : <Component {...this.props} />;
         }
 
         render() {

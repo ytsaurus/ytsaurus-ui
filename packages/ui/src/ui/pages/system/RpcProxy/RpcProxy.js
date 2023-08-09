@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import PropTypes from 'prop-types';
 import block from 'bem-cn-lite';
 import {compose} from 'redux';
 import _ from 'lodash';
@@ -12,7 +11,6 @@ import Link from '../../../components/Link/Link';
 import NodeQuad from '../NodeQuad/NodeQuad';
 
 import {cancelLoadRPCProxies, loadRPCProxies} from '../../../store/actions/system/rpc-proxies';
-import {roleGroupStructure} from '../../../utils/system/proxies';
 import {formatCounterName} from '../../../utils/index';
 import {getUISizes} from '../../../store/selectors/global';
 import {setSettingsSystemRpcProxiesCollapsed} from '../../../store/actions/settings/settings';
@@ -21,12 +19,6 @@ import {getSettingsSystemRpcProxiesCollapsed} from '../../../store/selectors/set
 const b = block('system');
 
 class RpcProxies extends Component {
-    static propTypes = {
-        // from connect
-        counters: PropTypes.object.isRequired,
-        roleGroups: PropTypes.arrayOf(roleGroupStructure).isRequired,
-    };
-
     onToggle = () => {
         const {collapsed, setSettingsSystemRpcProxiesCollapsed} = this.props;
         setSettingsSystemRpcProxiesCollapsed(!collapsed);

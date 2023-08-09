@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
-import {connect} from 'react-redux';
-import PropTypes from 'prop-types';
+import {ConnectedProps, connect} from 'react-redux';
 import block from 'bem-cn-lite';
 import _ from 'lodash';
 import {compose} from 'redux';
@@ -13,27 +12,24 @@ import NodeQuad from '../NodeQuad/NodeQuad';
 
 import {cancelLoadProxies, loadProxies} from '../../../store/actions/system/proxies';
 import {isSystemResourcesLoaded} from '../../../store/selectors/system';
-import {roleGroupStructure} from '../../../utils/system/proxies';
 import {formatCounterName} from '../../../utils/index';
 import {getUISizes} from '../../../store/selectors/global';
 import {getSettingsSystemHttpProxiesCollapsed} from '../../../store/selectors/settings-ts';
 import {setSettingsSystemHttpProxiesCollapsed} from '../../../store/actions/settings/settings';
+import type {RootState} from '../../../store/reducers';
+import type {RoleGroup} from '../../../store/reducers/system/proxies';
 
 const b = block('system');
 
-class Proxies extends Component {
-    static propTypes = {
-        // from connect
-        counters: PropTypes.object.isRequired,
-        roleGroups: PropTypes.arrayOf(roleGroupStructure).isRequired,
-    };
+type ReduxProps = ConnectedProps<typeof connector>;
 
+class Proxies extends Component<ReduxProps> {
     onToggle = () => {
-        const {collapsed, setSettingsSystemHttpProxiesCollapsed} = this.props;
-        setSettingsSystemHttpProxiesCollapsed(!collapsed);
+        const {collapsed} = this.props;
+        this.props.setSettingsSystemHttpProxiesCollapsed(!collapsed);
     };
 
-    renderRoleGroup(group) {
+    renderRoleGroup(group: RoleGroup) {
         const nodes = _.map(group.items, (proxy) => {
             const state = proxy.effectiveState;
             return <NodeQuad key={proxy.name} theme={state} />;
@@ -83,7 +79,7 @@ class Proxies extends Component {
     }
 }
 
-function mapStateToProps(state) {
+function mapStateToProps(state: RootState) {
     const {counters, roleGroups, loaded} = state.system.proxies;
 
     return {
@@ -101,4 +97,6 @@ const mapDispatchToProps = {
     setSettingsSystemHttpProxiesCollapsed,
 };
 
-export default compose(connect(mapStateToProps, mapDispatchToProps), withDataLoader)(Proxies);
+const connector = connect(mapStateToProps, mapDispatchToProps);
+
+export default compose(connector, withDataLoader)(Proxies);
