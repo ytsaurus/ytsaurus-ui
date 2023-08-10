@@ -1,21 +1,25 @@
+import {ThunkAction} from 'redux-thunk';
+
 import {Toaster} from '@gravity-ui/uikit';
 
 import ypath from '../../../common/thor/ypath';
 import Updater from '../../../utils/hammer/updater';
-import createActionTypes from '../../../constants/utils';
 import {isRetryFutile} from '../../../utils/index';
 import {showErrorPopup, splitBatchResults} from '../../../utils/utils';
-import {USE_CACHE, USE_MAX_SIZE} from '../../../constants';
+import {SYSTEM_FETCH_NODES, USE_CACHE, USE_MAX_SIZE} from '../../../constants';
 import {YTApiId, ytApiV3Id} from '../../../rum/rum-wrap-api';
 import {getSystemNodesNodeTypesToLoad} from '../../../store/selectors/system/nodes';
+import {RootState} from '../../../store/reducers';
+import {SystemNodesAction} from '../../../store/reducers/system/nodes';
+import {BatchSubRequest} from '../../../../shared/yt-types';
 
-export const FETCH_NODES = createActionTypes('NODES');
 const NODES_UPDATER_ID = 'system_nodes';
 
-const toaster = new Toaster();
 const updater = new Updater();
 
-export function loadNodes() {
+type SystemNodesThunkAction = ThunkAction<void, RootState, unknown, SystemNodesAction>;
+
+export function loadNodes(): SystemNodesThunkAction {
     return (dispatch) => {
         updater.add(NODES_UPDATER_ID, () => dispatch(getNodes()), 30 * 1000);
     };
@@ -27,11 +31,11 @@ export function cancelLoadNodes() {
     };
 }
 
-function getNodes() {
+function getNodes(): SystemNodesThunkAction {
     return (dispatch, getState) => {
         const nodeTypes = getSystemNodesNodeTypesToLoad(getState());
 
-        const requests = [
+        const requests: Array<BatchSubRequest> = [
             {
                 command: 'list',
                 parameters: {
@@ -43,7 +47,7 @@ function getNodes() {
             },
             ...nodeTypes.map((nodeType) => {
                 return {
-                    command: 'list',
+                    command: 'list' as const,
                     parameters: {
                         path: `//sys/${nodeType}`,
                         attributes: [
@@ -77,7 +81,7 @@ function getNodes() {
                 }, []);
 
                 dispatch({
-                    type: FETCH_NODES.SUCCESS,
+                    type: SYSTEM_FETCH_NODES.SUCCESS,
                     data: {
                         nodes: ypath.getValue(nodes),
                         racks: ypath.getValue(racks),
@@ -86,14 +90,16 @@ function getNodes() {
             })
             .catch((error) => {
                 dispatch({
-                    type: FETCH_NODES.FAILURE,
+                    type: SYSTEM_FETCH_NODES.FAILURE,
                     data: error,
                 });
 
                 const data = error?.response?.data || error;
                 const {code, message} = data;
 
-                toaster.createToast({
+                const toaster = new Toaster();
+
+                toaster.add({
                     name: 'load/system/nodes',
                     allowAutoHiding: false,
                     type: 'error',
