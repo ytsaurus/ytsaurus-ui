@@ -1,0 +1,82 @@
+.yt-role-group {
+    display: inline-block;
+    width: 321px;
+
+    padding: 16px 20px;
+    border: 1px solid var(--dark-divider);
+
+    margin-right: 20px;
+    margin-bottom: 20px;
+
+    &:hover {
+        background-color: var(--hover-background);
+    }
+
+    &__name {
+        display: block;
+        padding-bottom: 16px;
+    }
+
+    &__progress {
+        display: flex;
+        overflow: hidden;
+        height: 52px;
+        margin-bottom: 16px;
+    }
+
+    &__progress-text {
+        flex-grow: 1;
+    }
+
+    &__progress-number {
+        line-height: 36px;
+    }
+
+    &__status {
+        display: inline-block;
+        width: 91px;
+        height: 32px;
+
+        margin-bottom: 16px;
+    }
+
+    &__status-color {
+        display: inline-block;
+        width: 14px;
+        height: 14px;
+        border-radius: 2px;
+        margin-right: 4px;
+
+        background-color: var(--yc-color-base-generic-medium);
+
+        &_theme_online {
+            background-color: var(--success-color);
+        }
+
+        &_theme_offline {
+            background-color: var(--danger-color);
+        }
+
+        &_theme_banned {
+            background-color: var(--warning-color);
+        }
+
+        &_theme_following {
+            background-color: var(--info-color);
+        }
+    }
+
+    &__status-label {
+        text-transform: uppercase;
+        line-height: 14px;
+    }
+
+    &__status-count {
+        display: flex;
+        align-items: center;
+    }
+
+    &__status-count-number {
+        line-height: 14px;
+    }
+}
