@@ -1,9 +1,9 @@
 import _ from 'lodash';
 import ypath from '../../../common/thor/ypath';
 import hammer from '../../../common/hammer';
-import {FETCH_NODES} from '../../../store/actions/system/nodes';
+import {FETCH_NODES} from '../../actions/system/nodes';
 import {UNAWARE} from '../../../constants/index';
-import {mergeStateOnClusterChange} from '../../../store/reducers/utils';
+import {mergeStateOnClusterChange} from '../utils';
 
 function increaseFlagCounter(counters, name, node) {
     counters.flags[name] += node.$attributes[name] ? 1 : 0;
