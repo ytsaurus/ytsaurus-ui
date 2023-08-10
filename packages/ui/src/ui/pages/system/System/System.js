@@ -5,7 +5,7 @@ import Resources from '../Resources/Resources';
 import Masters from '../Masters/Masters';
 import Chunks from '../Chunks/Chunks';
 import Proxies from '../Proxies/Proxies';
-import RpcProxies from '../RpcProxy/RpcProxy';
+import RpcProxies from '../RpcProxies/RpcProxies';
 import Nodes from '../Nodes/Nodes';
 
 import './System.scss';
