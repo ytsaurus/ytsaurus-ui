@@ -1,8 +1,6 @@
 import axios from 'axios';
 import map_ from 'lodash/map';
 
-import ypath from '../../../common/thor/ypath';
-
 import {Toaster} from '@gravity-ui/uikit';
 
 import Updater from '../../../utils/hammer/updater';
@@ -37,20 +35,12 @@ export function cancelLoadProxies() {
 function makeProxyInfo(data: any): ProxyInfo {
     const state = data.dead ? 'offline' : 'online';
     const banned = data.banned;
-    const liveness = data.liveness;
 
     return {
         name: data.name,
-        host: data.name,
         state,
-        banned,
-        banMessage: data.ban_message || 'Ban message omitted',
         effectiveState: banned ? 'banned' : state,
         role: data.role,
-        liveness,
-        loadAverage: ypath.getValue(liveness, '/load_average'),
-        updatedAt: ypath.getValue(liveness, '/updated_at'),
-        networkLoad: ypath.getValue(liveness, '/network_coef'),
     };
 }
 

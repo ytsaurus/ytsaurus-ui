@@ -9,7 +9,6 @@ import SystemStateOverview from '../SystemStateOverview/SystemStateOverview';
 import withDataLoader from '../../../hocs/pages/withDataLoader';
 
 import {cancelLoadProxies, loadProxies} from '../../../store/actions/system/proxies';
-import {isSystemResourcesLoaded} from '../../../store/selectors/system';
 import {getUISizes} from '../../../store/selectors/global';
 import {getSettingsSystemHttpProxiesCollapsed} from '../../../store/selectors/settings-ts';
 import {setSettingsSystemHttpProxiesCollapsed} from '../../../store/actions/settings/settings';
@@ -68,7 +67,7 @@ function mapStateToProps(state: RootState) {
     return {
         counters,
         roleGroups,
-        loaded: loaded && isSystemResourcesLoaded(state),
+        loaded,
         collapsibleSize: getUISizes(state).collapsibleSize,
         collapsed: getSettingsSystemHttpProxiesCollapsed(state),
     };
