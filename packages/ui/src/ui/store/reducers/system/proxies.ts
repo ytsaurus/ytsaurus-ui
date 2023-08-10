@@ -13,6 +13,7 @@ export type HttpProxiesState = {
         total: number;
         states: Record<string, number>;
         effectiveStates: Record<string, number>;
+        flags: Record<string, number>;
     };
 };
 
@@ -34,21 +35,14 @@ const initialState: HttpProxiesState = {
     loaded: false,
     error: undefined,
     roleGroups: [],
-    counters: {total: 0, states: {}, effectiveStates: {}},
+    counters: {total: 0, states: {}, effectiveStates: {}, flags: {}},
 };
 
 export type ProxyInfo = {
     name: string;
-    host: string;
     state: 'offline' | 'online';
-    banned: boolean;
-    banMessage?: string;
     effectiveState: 'banned' | ProxyInfo['state'];
     role: string;
-    liveness: unknown;
-    loadAverage: unknown;
-    updatedAt: unknown;
-    networkLoad: unknown;
 };
 
 function proxies(state = initialState, action: HttpProxiesAction): HttpProxiesState {

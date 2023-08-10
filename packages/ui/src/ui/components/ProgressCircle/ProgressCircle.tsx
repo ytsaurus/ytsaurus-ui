@@ -21,7 +21,7 @@ export type Stack = {
 
 export function ProgressCircle({stack: rawStack, gap = 0, size, className}: ProgressCircleProps) {
     const stack = rawStack.filter(({value}) => Math.abs(value) > 0);
-    if (!stack) {
+    if (!stack.length) {
         return null;
     }
 
@@ -36,7 +36,7 @@ export function ProgressCircle({stack: rawStack, gap = 0, size, className}: Prog
     const l = 2 * Math.PI * r;
     const gapLength = (l / 100) * (stack.length > 1 ? gap : 0);
 
-    let lastOffset = 0;
+    let lastOffset = gapLength;
 
     const storkeDashArrays = stack.map(({value}) => {
         const current = ((l - gapLength * stack.length) * Math.abs(value)) / sum;
@@ -49,7 +49,13 @@ export function ProgressCircle({stack: rawStack, gap = 0, size, className}: Prog
     });
 
     return (
-        <svg className={className} width={size} height={size} viewBox={`0 0 ${viewBox} ${viewBox}`}>
+        <svg
+            style={{transform: 'rotate(-90deg)'}}
+            className={className}
+            width={size}
+            height={size}
+            viewBox={`0 0 ${viewBox} ${viewBox}`}
+        >
             {sum > 0 &&
                 stack.map((item, index) => {
                     const current = (100 * Math.abs(item.value)) / sum;

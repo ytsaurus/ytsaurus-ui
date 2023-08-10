@@ -1,22 +1,9 @@
 import each_ from 'lodash/each';
-import map_ from 'lodash/map';
 import reduce_ from 'lodash/reduce';
 import sortBy_ from 'lodash/sortBy';
 import values_ from 'lodash/values';
 
 import {HttpProxiesState, ProxyInfo, RoleGroupInfo} from '../../store/reducers/system/proxies';
-
-// @ts-expect-error
-export function extractRpcProxy(data: FIX_ME) {
-    return map_(data, (value, key) => {
-        return {
-            name: key,
-            role: value.$attributes?.role,
-            state: value.$value?.alive || value?.alive ? 'online' : 'offline',
-            effectiveState: value.$value?.alive || value?.alive ? 'online' : 'offline',
-        } as unknown;
-    });
-}
 
 export function extractRoleGroups(proxies: Array<ProxyInfo>): Array<RoleGroupInfo> {
     const roleGroups = reduce_(
@@ -63,11 +50,15 @@ export function extractProxyCounters(proxies: Array<ProxyInfo>) {
         total: proxies.length,
         states: {},
         effectiveStates: {},
+        flags: {},
     };
 
     each_(proxies, (proxy) => {
         incrementKeyCounter(counters.states, proxy.state);
         incrementKeyCounter(counters.effectiveStates, proxy.effectiveState);
+        if (proxy.effectiveState === 'banned') {
+            incrementKeyCounter(counters.flags, 'banned');
+        }
     });
 
     return counters;

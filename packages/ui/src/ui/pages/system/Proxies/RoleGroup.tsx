@@ -14,9 +14,13 @@ const block = cn('yt-role-group');
 export function RoleGroup({
     data: {name, total, effectiveStates},
     url,
+    showAlerts,
+    showDecomissioned,
 }: {
     data: RoleGroupInfo;
     url: string;
+    showAlerts?: boolean;
+    showDecomissioned?: boolean;
 }) {
     const {online, offline, banned} = effectiveStates;
     return (
@@ -43,20 +47,32 @@ export function RoleGroup({
                     ]}
                 />
             </div>
-            <States states={effectiveStates} />
+            <States
+                states={effectiveStates}
+                showAlerts={showAlerts}
+                showDecomissioned={showDecomissioned}
+            />
         </Link>
     );
 }
 
-function States({states}: {states: RoleGroupInfo['effectiveStates']}) {
+function States({
+    states,
+    showAlerts,
+    showDecomissioned,
+}: {
+    states: RoleGroupInfo['effectiveStates'];
+    showAlerts?: boolean;
+    showDecomissioned?: boolean;
+}) {
     const {online, offline, banned, alert, dec} = states;
     return (
         <div className={block('counters')}>
             <Status status="online" count={online} />
             <Status status="offline" count={offline} />
             <Status status="banned" count={banned} />
-            <Status status="alert" count={alert} />
-            <Status status="dec" count={dec} />
+            {showAlerts && <Status status="alert" count={alert} />}
+            {showDecomissioned && <Status status="dec" count={dec} />}
         </div>
     );
 }
