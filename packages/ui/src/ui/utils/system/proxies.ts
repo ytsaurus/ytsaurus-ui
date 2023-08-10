@@ -4,7 +4,7 @@ import reduce_ from 'lodash/reduce';
 import sortBy_ from 'lodash/sortBy';
 import values_ from 'lodash/values';
 
-import {HttpProxiesState, ProxyInfo, RoleGroup} from '../../store/reducers/system/proxies';
+import {HttpProxiesState, ProxyInfo, RoleGroupInfo} from '../../store/reducers/system/proxies';
 
 // @ts-expect-error
 export function extractRpcProxy(data: FIX_ME) {
@@ -18,7 +18,7 @@ export function extractRpcProxy(data: FIX_ME) {
     });
 }
 
-export function extractRoleGroups(proxies: Array<ProxyInfo>): Array<RoleGroup> {
+export function extractRoleGroups(proxies: Array<ProxyInfo>): Array<RoleGroupInfo> {
     const roleGroups = reduce_(
         proxies,
         (roles, proxy) => {
@@ -29,15 +29,23 @@ export function extractRoleGroups(proxies: Array<ProxyInfo>): Array<RoleGroup> {
                     total: 0,
                     items: [],
                     name: roleName,
+                    effectiveStates: {
+                        online: 0,
+                        offline: 0,
+                        banned: 0,
+                        alert: 0,
+                        dec: 0,
+                    },
                 };
             }
 
-            role.total++;
+            ++role.total;
             role.items.push(proxy);
+            ++role.effectiveStates[proxy.effectiveState];
 
             return roles;
         },
-        {} as Record<string, RoleGroup>,
+        {} as Record<string, RoleGroupInfo>,
     );
 
     const roles = values_(roleGroups);

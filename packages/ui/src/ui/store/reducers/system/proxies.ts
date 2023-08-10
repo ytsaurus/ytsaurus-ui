@@ -8,7 +8,7 @@ export type HttpProxiesState = {
     fetching: boolean;
     loaded: boolean;
     error?: YTError;
-    roleGroups: Array<RoleGroup>;
+    roleGroups: Array<RoleGroupInfo>;
     counters: {
         total: number;
         states: Record<string, number>;
@@ -16,10 +16,17 @@ export type HttpProxiesState = {
     };
 };
 
-export type RoleGroup = {
+export type RoleGroupInfo = {
     name: string;
     items: Array<ProxyInfo>;
     total: number;
+    effectiveStates: {
+        online: number;
+        offline: number;
+        banned: number;
+        alert: number;
+        dec: number;
+    };
 };
 
 const initialState: HttpProxiesState = {
