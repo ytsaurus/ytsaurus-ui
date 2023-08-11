@@ -16,6 +16,11 @@ export interface YTConfig {
     environment?: 'development' | 'production' | 'farm' | 'localmode';
 }
 
+export type CypressNode<AttributesT extends Record<string, unknown>, ValueT> = {
+    $attributes: AttributesT;
+    $value: ValueT;
+};
+
 export type BatchResults<T extends Array<any>> = [...BatchFirst<T>, ...BatchRest<T>];
 
 export type BatchFirst<T extends Array<any>> = T extends [first: infer F, ...rest: any]
@@ -77,9 +82,10 @@ export interface SubRequest<K extends string, T extends BaseBatchParams> {
 export interface BaseBatchParams {
     transaction_id?: string;
     ui_marker?: string;
-
     read_from?: 'cache';
     disable_per_user_cache?: boolean;
+    suppress_transaction_coordinator_sync?: boolean;
+    suppress_upstream_sync?: boolean;
 }
 
 export interface PathParams extends BaseBatchParams {
