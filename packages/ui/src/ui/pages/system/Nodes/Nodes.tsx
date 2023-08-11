@@ -43,13 +43,15 @@ class Nodes extends Component<ReduxProps> {
     };
 
     renderContent() {
-        const {racks, rackGroups, nodeType} = this.props;
+        const {rackGroups, nodeType} = this.props;
         const headingCN = cn('elements-heading')({
             size: 's',
             overview: 'yes',
         });
 
-        if (_.isEmpty(racks) && _.isEmpty(rackGroups)) {
+        const rackNames = Object.keys(rackGroups ?? {});
+
+        if (!rackGroups || !rackNames.length) {
             return (
                 <NoContent
                     warning={
@@ -62,7 +64,7 @@ class Nodes extends Component<ReduxProps> {
             );
         }
 
-        if (rackGroups) {
+        if (rackNames.length > 1) {
             const {counters} = this.props;
 
             return _.map(rackGroups, (rackGroup, groupName) => (
@@ -89,7 +91,7 @@ class Nodes extends Component<ReduxProps> {
             <div className={block()}>
                 <NodeRacks
                     formatCounterName={formatCounterName}
-                    racks={racks as any}
+                    racks={rackGroups[rackNames[0]] as any}
                     containerWidth={1200}
                 />
             </div>
@@ -114,9 +116,9 @@ class Nodes extends Component<ReduxProps> {
     }
 
     render() {
-        const {racks, rackGroups, collapsibleSize, loaded, collapsed} = this.props;
+        const {rackGroups, collapsibleSize, loaded, collapsed} = this.props;
 
-        if (!loaded && !racks && !rackGroups) {
+        if (!loaded && !rackGroups) {
             return null;
         }
 
@@ -135,11 +137,10 @@ class Nodes extends Component<ReduxProps> {
 }
 
 function mapStateToProps(state: RootState) {
-    const {racks, rackGroups, counters, loaded, overviewCounters} = state.system.nodes;
+    const {rackGroups, counters, loaded, overviewCounters} = state.system.nodes;
 
     return {
         loaded,
-        racks,
         rackGroups,
         counters,
         overviewCounters,

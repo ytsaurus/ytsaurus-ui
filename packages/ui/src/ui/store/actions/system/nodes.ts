@@ -44,8 +44,6 @@ export function cancelLoadNodes() {
     };
 }
 
-const MAX_RACKS_TO_NOT_GROUP = 12;
-
 function getNodes(): SystemNodesThunkAction {
     return (dispatch, getState) => {
         dispatch({type: SYSTEM_FETCH_NODES.REQUEST});
@@ -103,28 +101,16 @@ function getNodes(): SystemNodesThunkAction {
 
                 const racks = prepareRacks(rackNames, nodes);
                 const overviewCounters = extractNodeCounters(racks);
-                if (racks.length <= MAX_RACKS_TO_NOT_GROUP) {
-                    dispatch({
-                        type: SYSTEM_FETCH_NODES.SUCCESS,
-                        data: {
-                            racks,
-                            overviewCounters,
-                            rackGroups: undefined,
-                            counters: undefined,
-                        },
-                    });
-                } else {
-                    const {rackGroups, counters} = groupRacks(racks);
-                    dispatch({
-                        type: SYSTEM_FETCH_NODES.SUCCESS,
-                        data: {
-                            racks: undefined,
-                            rackGroups,
-                            overviewCounters,
-                            counters,
-                        },
-                    });
-                }
+                const {rackGroups, counters} = groupRacks(racks);
+                dispatch({
+                    type: SYSTEM_FETCH_NODES.SUCCESS,
+                    data: {
+                        racks: undefined,
+                        rackGroups,
+                        overviewCounters,
+                        counters,
+                    },
+                });
             })
             .catch((error) => {
                 dispatch({

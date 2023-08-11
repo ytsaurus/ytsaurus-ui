@@ -11,7 +11,6 @@ export type SystemNodesState = {
     fetching: boolean;
     loaded: boolean;
     error: YTError | undefined;
-    racks: Array<RackInfo> | undefined;
     rackGroups: Record<string, Array<RackInfo>> | undefined;
     overviewCounters: HttpProxiesState['counters'] | undefined;
     counters: Record<string, HttpProxiesState['counters']> | undefined;
@@ -21,7 +20,6 @@ const initialState: SystemNodesState = {
     loaded: false,
     fetching: false,
     error: undefined,
-    racks: undefined,
     overviewCounters: undefined,
     counters: undefined,
     rackGroups: undefined,
@@ -74,7 +72,7 @@ export type SystemNodesAction =
     | Action<typeof SYSTEM_FETCH_NODES.REQUEST>
     | ActionD<
           typeof SYSTEM_FETCH_NODES.SUCCESS,
-          Pick<SystemNodesState, 'racks' | 'rackGroups' | 'counters' | 'overviewCounters'>
+          Pick<SystemNodesState, 'rackGroups' | 'counters' | 'overviewCounters'>
       >
     | ActionD<typeof SYSTEM_FETCH_NODES.FAILURE, SystemNodesState['error']>;
 
