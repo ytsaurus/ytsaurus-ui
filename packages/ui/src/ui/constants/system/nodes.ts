@@ -23,6 +23,8 @@ export const SYSTEM_NODES_FILTERS_PARTIAL = 'SYSTEM_NODES_FILTERS_PARTIAL';
 
 export const UNAWARE = 'unaware';
 
-export const FETCH_PROXIES = createActionTypes('PROXIES');
+export const FETCH_PROXIES = createActionTypes('SYSTEM_PROXIES');
 
-export const FETCH_RPC_PROXIES = createActionTypes('RPC_PROXIES');
+export const FETCH_RPC_PROXIES = createActionTypes('SYSTEM_RPC_PROXIES');
+
+export const SYSTEM_FETCH_NODES = createActionTypes('SYSTEM_NODES');

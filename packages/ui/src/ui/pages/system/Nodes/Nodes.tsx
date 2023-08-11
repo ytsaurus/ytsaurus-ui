@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
-import {connect} from 'react-redux';
-import PropTypes from 'prop-types';
+import {ConnectedProps, connect} from 'react-redux';
 import cn from 'bem-cn-lite';
 import _ from 'lodash';
 import {compose} from 'redux';
@@ -22,6 +21,7 @@ import {
     getSettingSystemNodesNodeType,
     getSettingsSystemNodesCollapsed,
 } from '../../../store/selectors/settings-ts';
+import type {RootState} from '../../../store/reducers';
 
 import NodeTypeSelector from './NodeTypeSelector';
 
@@ -29,29 +29,21 @@ import './Nodes.scss';
 
 const block = cn('system-nodes');
 
-class Nodes extends Component {
-    static propTypes = {
-        // from connect
-        counters: PropTypes.object,
-        overviewCounters: PropTypes.object,
-        rackGroups: PropTypes.object,
-        racks: PropTypes.array,
-        collapsed: PropTypes.bool,
-        containerWidth: PropTypes.number,
-        nodeType: PropTypes.array,
-    };
+const STATE_THEME_MAPPING = {
+    alerts: 'warning',
+    full: 'danger',
+};
 
-    static defaultProps = {
-        containerWidth: 1200,
-    };
+type ReduxProps = ConnectedProps<typeof connector>;
 
+class Nodes extends Component<ReduxProps> {
     onToggle = () => {
         const {collapsed, setSettingsSystemNodesCollapsed} = this.props;
         setSettingsSystemNodesCollapsed(!collapsed);
     };
 
-    renderContent(theme) {
-        const {racks, rackGroups, nodeType, containerWidth} = this.props;
+    renderContent() {
+        const {racks, rackGroups, nodeType} = this.props;
         const headingCN = cn('elements-heading')({
             size: 's',
             overview: 'yes',
@@ -74,12 +66,12 @@ class Nodes extends Component {
             const {counters} = this.props;
 
             return _.map(rackGroups, (rackGroup, groupName) => (
-                <div key={groupName} className={block()} ref={this.container}>
+                <div key={groupName} className={block()}>
                     <div className={headingCN}>
                         {groupName}
                         <SystemStateOverview
-                            counters={counters[groupName]}
-                            stateThemeMappings={theme}
+                            counters={counters?.[groupName]}
+                            stateThemeMappings={STATE_THEME_MAPPING}
                             tab="nodes"
                         />
                     </div>
@@ -87,24 +79,24 @@ class Nodes extends Component {
                     <NodeRacks
                         formatCounterName={formatCounterName}
                         racks={rackGroup}
-                        containerWidth={containerWidth}
+                        containerWidth={1200}
                     />
                 </div>
             ));
         }
 
         return (
-            <div className={block()} ref={this.container}>
+            <div className={block()}>
                 <NodeRacks
                     formatCounterName={formatCounterName}
-                    racks={racks}
-                    containerWidth={containerWidth}
+                    racks={racks as any}
+                    containerWidth={1200}
                 />
             </div>
         );
     }
 
-    renderOverview(theme) {
+    renderOverview() {
         const {overviewCounters} = this.props;
 
         return (
@@ -114,7 +106,7 @@ class Nodes extends Component {
                 </div>
                 <SystemStateOverview
                     counters={overviewCounters}
-                    stateThemeMappings={theme}
+                    stateThemeMappings={STATE_THEME_MAPPING}
                     tab="nodes"
                 />
             </React.Fragment>
@@ -128,26 +120,21 @@ class Nodes extends Component {
             return null;
         }
 
-        const stateThemeMapping = {
-            alerts: 'warning',
-            full: 'danger',
-        };
-
         return (
             <CollapsibleSectionStateLess
-                overview={this.renderOverview(stateThemeMapping)}
+                overview={this.renderOverview()}
                 collapsed={collapsed}
                 onToggle={this.onToggle}
                 name={'Nodes'}
                 size={collapsibleSize}
             >
-                {this.renderContent(stateThemeMapping)}
+                {this.renderContent()}
             </CollapsibleSectionStateLess>
         );
     }
 }
 
-function mapStateToProps(state) {
+function mapStateToProps(state: RootState) {
     const {racks, rackGroups, counters, loaded, overviewCounters} = state.system.nodes;
 
     return {
@@ -168,4 +155,6 @@ const mapDispatchToProps = {
     setSettingsSystemNodesCollapsed,
 };
 
-export default compose(connect(mapStateToProps, mapDispatchToProps), withDataLoader)(Nodes);
+const connector = connect(mapStateToProps, mapDispatchToProps);
+
+export default compose(connector, withDataLoader)(Nodes);

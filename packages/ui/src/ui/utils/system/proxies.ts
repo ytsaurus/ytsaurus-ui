@@ -40,7 +40,7 @@ export function extractRoleGroups(proxies: Array<ProxyInfo>): Array<RoleGroupInf
     return sortBy_(roles, 'name');
 }
 
-function incrementKeyCounter<K extends string>(counters: Record<K, number>, key: K) {
+export function incrementKeyCounter<K extends string>(counters: Record<K, number>, key: K) {
     counters[key] = counters[key] ?? 0;
     ++counters[key];
 }
