@@ -1,0 +1,35 @@
+FROM ghcr.io/gravity-ui/node-nginx:ubuntu20-nodejs18 as builder
+
+WORKDIR /build
+
+COPY package.json .
+COPY package-lock.json .
+
+RUN npm install --legacy-peer-deps
+
+ADD assets assets
+ADD img img 
+COPY build.*.config.ts .
+COPY tsconfig.json .
+ADD src src
+
+RUN npm run build && npm pack
+
+FROM ghcr.io/gravity-ui/node-nginx:ubuntu20-nodejs18
+
+RUN mkdir -p /opt/app
+WORKDIR /opt/app
+
+COPY deploy ./deploy
+COPY deploy/nginx /etc/nginx
+COPY deploy/supervisor /etc/supervisor
+
+COPY --from=builder /build/ytsaurus-ui-*.tgz .
+
+RUN UI_PACKAGE=$(ls ./ytsaurus-ui-*.tgz) \
+        && npm install --legacy-peer-deps $UI_PACKAGE \
+        && mv node_modules/@ytsaurus/ui . && mv ui/* .
+
+EXPOSE 80
+
+ENTRYPOINT ["/usr/bin/supervisord", "-c", "/etc/supervisor/supervisord.conf"]

@@ -37,7 +37,7 @@ function parseUserInfo(data: any): UserInfo | undefined {
 }
 
 function parseOauthConfig(data: any): OauthConfig | undefined {
-    if (!data || !data.name || !data.image_url || !data.client_id || !data.authorize_path) {
+    if (!data || !data.name || !data.image_url || !data.client_id || !data.authorize_url) {
         return undefined;
     }
 
@@ -45,7 +45,7 @@ function parseOauthConfig(data: any): OauthConfig | undefined {
         name: data.name,
         imageUrl: data.image_url,
         clientId: data.client_id,
-        authorizePath: data.authorize_path,
+        authorizeUrl: data.authorize_url,
     };
 }
 
@@ -91,7 +91,7 @@ export async function ytauthAuthenticate(
 
 export async function getOauthConfig(config: YtauthConfig): Promise<OauthConfig> {
     try {
-        const res = await axios.get(`${config.ytauthUrl}/gateway/config`);
+        const res = await axios.get(`${config.ytauthUrl}/oauth`);
         if (res.status === 200) {
             const oauthConfig = parseOauthConfig(res.data);
             if (!oauthConfig) {
@@ -152,16 +152,18 @@ export async function handleOauthCallback(req: Request, res: Response) {
         return;
     }
 
-    const {code} = JSON.parse(req.body);
+    const code = req.query['code'];
     if (!code) {
         sendError(res, new UnexpectedError("Oauth callback without query parameter 'code'"), 500);
         return;
     }
 
     try {
-        const tokenRes = await axios.post(`${config.ytauthUrl}/tokens/authorize`, {
+        const tokenRes = await axios.post(`${config.ytauthUrl}/oauth/authorize`, {
             auth_code: code,
-            redirect_uri: `${config.redirectBaseUrl}/oauth/callback`,
+            redirect_uri: `${req.secure ? 'https://' : 'http://'}${req.get(
+                'host',
+            )}/api/oauth/callback`,
         });
 
         if (tokenRes.status !== 200) {

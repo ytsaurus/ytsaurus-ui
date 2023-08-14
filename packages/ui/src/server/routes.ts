@@ -34,8 +34,8 @@ const routes: Record<string, AppRouteDescription> = {
     'GET /api/clusters/versions': {handler: clusterVersions},
     'GET /api/pool-names/:cluster': {handler: getClusterPools},
 
-    'GET  /api/oauth/config': {handler: handleOauthConfig},
-    'POST /api/oauth/callback': {handler: handleOauthCallback, ui: true},
+    'GET /api/oauth/config': {handler: handleOauthConfig, skipAuth: true},
+    'GET /api/oauth/callback': {handler: handleOauthCallback, ui: true, skipAuth: true},
 
     'POST /api/yt/login': {handler: handleLogin, ui: true},
     'POST /api/yt/logout': {handler: handleLogout, ui: true},

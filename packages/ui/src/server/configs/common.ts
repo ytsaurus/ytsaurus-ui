@@ -33,7 +33,6 @@ const externalAuthConfig: Partial<AppConfig> =
                   ytauthUrl: process.env.YTAUTH_URL as string,
                   ytauthCookieName: process.env.YTAUTH_COOKIE_NAME ?? 'access_token',
                   ytauthHeaderName: process.env.YTAUTH_HEADER_NAME ?? 'Authorization',
-                  redirectBaseUrl: process.env.YTAUTH_REDIRECT_BASE_URL ?? 'http://localhost',
               },
           }
         : {};

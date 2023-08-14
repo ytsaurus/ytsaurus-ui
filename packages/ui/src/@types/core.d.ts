@@ -11,7 +11,6 @@ export interface YtauthConfig {
     ytauthUrl: string;
     ytauthCookieName: string;
     ytauthHeaderName: string;
-    redirectBaseUrl: string;
 }
 
 export interface YTCoreConfig {
@@ -90,7 +89,7 @@ export interface YTCoreConfig {
      *    - client_id = {oauthClientId}
      *    - response_type = "code"
      *    - scope = "user_info"
-     *    - redirect_uri = {redirectBaseUrl}/oauth/callback
+     *    - redirect_uri = {req.host}/api/oauth/callback
      * 3) accept authorization_code in /oauth/callback
      * 4) POST request to {ytAuthUrl}/tokens/authorize, accept token
      * 5) redirect to {previousPath} with cookie
@@ -128,6 +127,7 @@ declare module '@gravity-ui/expresskit' {
     interface AppRouteParams {
         ui?: true;
         ignoreRedirect?: boolean;
+        skipAuth?: boolean;
     }
 }
 

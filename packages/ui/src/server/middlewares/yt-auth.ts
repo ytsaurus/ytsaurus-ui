@@ -31,6 +31,10 @@ export function createYTAuthMiddleware(
         throw new Error('Required to pass at least one of [ytAuthCluster, ytauthConfig]');
     }
     return async function ytAuthMiddleware(req, res, next) {
+        if (req.routeInfo.skipAuth) {
+            next();
+            return;
+        }
         try {
             if (ytauthConfig && req.cookies[ytauthConfig.ytauthCookieName]) {
                 const secret: string = req.cookies[ytauthConfig.ytauthCookieName];
