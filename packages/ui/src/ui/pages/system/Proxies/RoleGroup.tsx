@@ -4,37 +4,33 @@ import {Link, Text} from '@gravity-ui/uikit';
 
 import './RoleGroup.scss';
 
+import format from '../../../common/hammer/format';
 import {ProgressCircle} from '../../../components/ProgressCircle/ProgressCircle';
 
-import type {RoleGroupInfo} from '../../../store/reducers/system/proxies';
-import format from '../../../common/hammer/format';
+import type {RoleGroupInfo, SystemNodeCounters} from '../../../store/reducers/system/proxies';
+import type {NodeEffectiveState} from '../../../store/reducers/system/nodes';
 
 const block = cn('yt-role-group');
 
 export function RoleGroup({
-    data: {name, total, effectiveStates},
+    data: {name, counters},
     url,
-    showAlerts,
-    showDecomissioned,
+    showFlags,
 }: {
     data: RoleGroupInfo;
     url: string;
-    showAlerts?: boolean;
-    showDecomissioned?: boolean;
+    showFlags?: boolean;
 }) {
-    const {online, offline, banned} = effectiveStates;
+    const {online = 0, offline = 0, banned = 0, other = 0} = counters.effectiveStates;
     return (
         <Link href={url} className={block()}>
-            <Text className={block('name')} color="primary" variant="body-3" ellipsis>
-                {name}
-            </Text>
             <div className={block('progress')}>
                 <div className={block('progress-text')}>
-                    <div>
-                        <Text color="secondary">TOTAL SERVERS IN RACK</Text>
-                    </div>
+                    <Text className={block('name')} color="primary" variant="body-3" ellipsis>
+                        {name}
+                    </Text>
                     <Text className={block('progress-number')} color="primary" variant="display-1">
-                        {format.Number(total)}
+                        {format.Number(counters.total)}
                     </Text>
                 </div>
                 <ProgressCircle
@@ -44,47 +40,55 @@ export function RoleGroup({
                         {value: online, color: 'var(--success-color)'},
                         {value: offline, color: 'var(--danger-color)'},
                         {value: banned, color: 'var(--warning-color)'},
+                        {value: other, color: 'var(--info-color)'},
                     ]}
                 />
             </div>
-            <States
-                states={effectiveStates}
-                showAlerts={showAlerts}
-                showDecomissioned={showDecomissioned}
-            />
+            <States counters={counters} showFlags={showFlags} />
         </Link>
     );
 }
 
-function States({
-    states,
-    showAlerts,
-    showDecomissioned,
-}: {
-    states: RoleGroupInfo['effectiveStates'];
-    showAlerts?: boolean;
-    showDecomissioned?: boolean;
-}) {
-    const {online, offline, banned, alert, dec} = states;
+function States({counters, showFlags}: {counters: SystemNodeCounters; showFlags?: boolean}) {
+    const {online = 0, offline = 0, banned = 0, other = 0} = counters.effectiveStates;
+    const {decommissioned = 0, alerts = 0, full = 0} = counters.flags;
     return (
         <div className={block('counters')}>
             <Status status="online" count={online} />
+            <span />
             <Status status="offline" count={offline} />
+            <span />
             <Status status="banned" count={banned} />
-            {showAlerts && <Status status="alert" count={alert} />}
-            {showDecomissioned && <Status status="dec" count={dec} />}
+            <span />
+            <Status status="other" count={other} />
+            {showFlags && (
+                <>
+                    <Status status="alert" count={alerts} />
+                    <span />
+                    <Status status="dec" count={decommissioned} />
+                    <span />
+                    <Status status="full" count={full} />
+                    <span />
+                </>
+            )}
         </div>
     );
 }
 
-function Status({status, count}: {status: keyof RoleGroupInfo['effectiveStates']; count: number}) {
+function Status({
+    status,
+    count,
+}: {
+    status: NodeEffectiveState | 'alert' | 'dec' | 'full';
+    count: number;
+}) {
     return (
         <div className={block('status')}>
             <Text className={block('status-label')} color="secondary" variant="caption-2">
                 {status}
             </Text>
             <div className={block('status-count')}>
-                <div className={block('status-color', {theme: status})} />
+                <div className={block('status-color', {theme: status, empty: !(count > 0)})} />
                 <Text className={block('status-count-number')} color="primary" variant="caption-2">
                     {format.Number(count)}
                 </Text>

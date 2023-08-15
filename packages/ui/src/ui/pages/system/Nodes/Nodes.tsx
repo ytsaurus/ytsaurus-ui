@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {ConnectedProps, connect} from 'react-redux';
 import cn from 'bem-cn-lite';
-import _ from 'lodash';
+import map_ from 'lodash/map';
 import {compose} from 'redux';
 
 import format from '../../../common/hammer/format';
@@ -11,17 +11,16 @@ import {NoContent} from '../../../components/NoContent/NoContent';
 
 import withDataLoader from '../../../hocs/pages/withDataLoader';
 import SystemStateOverview from '../SystemStateOverview/SystemStateOverview';
-import NodeRacks from '../NodeRacks/NodeRacks';
 
-import {formatCounterName} from '../../../utils/index';
 import {cancelLoadNodes, loadNodes} from '../../../store/actions/system/nodes';
-import {getUISizes} from '../../../store/selectors/global';
+import {getCluster, getUISizes} from '../../../store/selectors/global';
 import {setSettingsSystemNodesCollapsed} from '../../../store/actions/settings/settings';
 import {
     getSettingSystemNodesNodeType,
     getSettingsSystemNodesCollapsed,
 } from '../../../store/selectors/settings-ts';
 import type {RootState} from '../../../store/reducers';
+import {RoleGroup} from '../Proxies/RoleGroup';
 
 import NodeTypeSelector from './NodeTypeSelector';
 
@@ -43,15 +42,11 @@ class Nodes extends Component<ReduxProps> {
     };
 
     renderContent() {
-        const {rackGroups, nodeType} = this.props;
-        const headingCN = cn('elements-heading')({
-            size: 's',
-            overview: 'yes',
-        });
+        const {nodeType, roleGroups, cluster} = this.props;
 
-        const rackNames = Object.keys(rackGroups ?? {});
+        const rackNames = Object.keys(roleGroups ?? {});
 
-        if (!rackGroups || !rackNames.length) {
+        if (!roleGroups || !rackNames.length) {
             return (
                 <NoContent
                     warning={
@@ -64,38 +59,41 @@ class Nodes extends Component<ReduxProps> {
             );
         }
 
-        if (rackNames.length > 1) {
-            const {counters} = this.props;
+        const {counters} = this.props;
 
-            return _.map(rackGroups, (rackGroup, groupName) => (
+        const headingCN = cn('elements-heading')({
+            size: 's',
+            overview: 'yes',
+        });
+
+        return map_(roleGroups, (roleGroup, groupName) => {
+            return !roleGroup ? null : (
                 <div key={groupName} className={block()}>
-                    <div className={headingCN}>
-                        {groupName}
-                        <SystemStateOverview
-                            counters={counters?.[groupName]}
-                            stateThemeMappings={STATE_THEME_MAPPING}
-                            tab="nodes"
-                        />
+                    {rackNames.length > 1 && (
+                        <div className={block('group-summary', headingCN)}>
+                            {groupName}
+                            <SystemStateOverview
+                                counters={counters?.[groupName]}
+                                stateThemeMappings={STATE_THEME_MAPPING}
+                                tab="nodes"
+                            />
+                        </div>
+                    )}
+                    <div>
+                        {map_(roleGroup, (group) => {
+                            return (
+                                <RoleGroup
+                                    key={group.name}
+                                    data={group}
+                                    url={`/${cluster}/components/nodes?rack=${group.name}`}
+                                    showFlags
+                                />
+                            );
+                        })}
                     </div>
-
-                    <NodeRacks
-                        formatCounterName={formatCounterName}
-                        racks={rackGroup}
-                        containerWidth={1200}
-                    />
                 </div>
-            ));
-        }
-
-        return (
-            <div className={block()}>
-                <NodeRacks
-                    formatCounterName={formatCounterName}
-                    racks={rackGroups[rackNames[0]] as any}
-                    containerWidth={1200}
-                />
-            </div>
-        );
+            );
+        });
     }
 
     renderOverview() {
@@ -116,9 +114,9 @@ class Nodes extends Component<ReduxProps> {
     }
 
     render() {
-        const {rackGroups, collapsibleSize, loaded, collapsed} = this.props;
+        const {roleGroups, collapsibleSize, loaded, collapsed} = this.props;
 
-        if (!loaded && !rackGroups) {
+        if (!loaded && !roleGroups) {
             return null;
         }
 
@@ -137,16 +135,17 @@ class Nodes extends Component<ReduxProps> {
 }
 
 function mapStateToProps(state: RootState) {
-    const {rackGroups, counters, loaded, overviewCounters} = state.system.nodes;
+    const {roleGroups, counters, loaded, overviewCounters} = state.system.nodes;
 
     return {
+        cluster: getCluster(state),
         loaded,
-        rackGroups,
         counters,
         overviewCounters,
         collapsibleSize: getUISizes(state).collapsibleSize,
         collapsed: getSettingsSystemNodesCollapsed(state),
         nodeType: getSettingSystemNodesNodeType(state),
+        roleGroups,
     };
 }
 

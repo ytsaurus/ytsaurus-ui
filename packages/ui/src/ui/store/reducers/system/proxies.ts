@@ -3,31 +3,27 @@ import {FETCH_PROXIES} from '../../../constants/system/nodes';
 import {mergeStateOnClusterChange} from '../../../store/reducers/utils';
 import {YTError} from '../../../../@types/types';
 import {ActionD} from '../../../types';
+import {NodeEffectiveFlag, NodeEffectiveState, NodeState} from './nodes';
+
+export type SystemNodeCounters = {
+    total: number;
+    states: Record<NodeState, number>;
+    effectiveStates: Partial<Record<NodeEffectiveState, number>>;
+    flags: Partial<Record<NodeEffectiveFlag, number>>;
+};
 
 export type HttpProxiesState = {
     fetching: boolean;
     loaded: boolean;
     error?: YTError;
     roleGroups: Array<RoleGroupInfo>;
-    counters: {
-        total: number;
-        states: Record<string, number>;
-        effectiveStates: Record<string, number>;
-        flags: Record<string, number>;
-    };
+    counters: SystemNodeCounters;
 };
 
 export type RoleGroupInfo = {
     name: string;
-    items: Array<ProxyInfo>;
-    total: number;
-    effectiveStates: {
-        online: number;
-        offline: number;
-        banned: number;
-        alert: number;
-        dec: number;
-    };
+    items: Array<RoleGroupItemInfo>;
+    counters: SystemNodeCounters;
 };
 
 const initialState: HttpProxiesState = {
@@ -38,10 +34,10 @@ const initialState: HttpProxiesState = {
     counters: {total: 0, states: {}, effectiveStates: {}, flags: {}},
 };
 
-export type ProxyInfo = {
+export type RoleGroupItemInfo = {
     name: string;
-    state: 'offline' | 'online';
-    effectiveState: 'banned' | ProxyInfo['state'];
+    state: NodeState;
+    effectiveState: NodeEffectiveState;
     role: string;
 };
 
