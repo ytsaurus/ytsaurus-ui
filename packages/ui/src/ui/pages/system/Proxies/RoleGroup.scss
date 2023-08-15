@@ -1,12 +1,12 @@
 .yt-role-group {
     display: inline-block;
-    width: 321px;
+    width: 300px;
 
-    padding: 16px 20px;
+    padding: 10px 16px;
     border: 1px solid var(--dark-divider);
 
-    margin-right: 20px;
-    margin-bottom: 20px;
+    margin-right: 10px;
+    margin-bottom: 10px;
 
     &:hover {
         background-color: var(--hover-background);
@@ -14,14 +14,11 @@
 
     &__name {
         display: block;
-        padding-bottom: 16px;
     }
 
     &__progress {
         display: flex;
         overflow: hidden;
-        height: 52px;
-        margin-bottom: 16px;
     }
 
     &__progress-text {
@@ -32,12 +29,14 @@
         line-height: 36px;
     }
 
+    &__counters {
+        display: grid;
+        grid-template-columns: auto 1fr auto 1fr auto 1fr auto;
+        row-gap: 4px;
+    }
+
     &__status {
         display: inline-block;
-        width: 91px;
-        height: 32px;
-
-        margin-bottom: 16px;
     }
 
     &__status-color {
@@ -61,8 +60,12 @@
             background-color: var(--warning-color);
         }
 
-        &_theme_following {
+        &_theme_other {
             background-color: var(--info-color);
+        }
+
+        &_empty {
+            background-color: var(--light-divider);
         }
     }
 

@@ -8,7 +8,7 @@ import {isRetryFutile} from '../../../utils/index';
 import {showErrorPopup} from '../../../utils/utils';
 import {getCluster} from '../../../store/selectors/global';
 import {extractProxyCounters, extractRoleGroups} from '../../../utils/system/proxies';
-import type {HttpProxiesAction, ProxyInfo} from '../../../store/reducers/system/proxies';
+import type {HttpProxiesAction, RoleGroupItemInfo} from '../../../store/reducers/system/proxies';
 import {ThunkAction} from 'redux-thunk';
 import type {RootState} from '../../../store/reducers';
 import {FETCH_PROXIES} from '../../../constants/system/nodes';
@@ -32,7 +32,7 @@ export function cancelLoadProxies() {
     };
 }
 
-function makeProxyInfo(data: any): ProxyInfo {
+function makeProxyInfo(data: any): RoleGroupItemInfo {
     const state = data.dead ? 'offline' : 'online';
     const banned = data.banned;
 

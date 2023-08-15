@@ -3,9 +3,14 @@ import reduce_ from 'lodash/reduce';
 import sortBy_ from 'lodash/sortBy';
 import values_ from 'lodash/values';
 
-import {HttpProxiesState, ProxyInfo, RoleGroupInfo} from '../../store/reducers/system/proxies';
+import type {
+    HttpProxiesState,
+    RoleGroupInfo,
+    RoleGroupItemInfo,
+} from '../../store/reducers/system/proxies';
+import type {NodeEffectiveState, NodeState} from '../../store/reducers/system/nodes';
 
-export function extractRoleGroups(proxies: Array<ProxyInfo>): Array<RoleGroupInfo> {
+export function extractRoleGroups(proxies: Array<RoleGroupItemInfo>): Array<RoleGroupInfo> {
     const roleGroups = reduce_(
         proxies,
         (roles, proxy) => {
@@ -13,23 +18,21 @@ export function extractRoleGroups(proxies: Array<ProxyInfo>): Array<RoleGroupInf
             let role = roles[roleName];
             if (!role) {
                 role = roles[roleName] = {
-                    total: 0,
                     items: [],
                     name: roleName,
-                    effectiveStates: {
-                        online: 0,
-                        offline: 0,
-                        banned: 0,
-                        alert: 0,
-                        dec: 0,
+                    counters: {
+                        total: 0,
+                        states: {},
+                        effectiveStates: {},
+                        flags: {},
                     },
                 };
             }
 
-            ++role.total;
+            ++role.counters.total;
             role.items.push(proxy);
-            ++role.effectiveStates[proxy.effectiveState];
-
+            incrementStateCounter(role.counters.effectiveStates, proxy.effectiveState);
+            incrementStateCounter(role.counters.states, proxy.state);
             return roles;
         },
         {} as Record<string, RoleGroupInfo>,
@@ -40,12 +43,27 @@ export function extractRoleGroups(proxies: Array<ProxyInfo>): Array<RoleGroupInf
     return sortBy_(roles, 'name');
 }
 
-export function incrementKeyCounter<K extends string>(counters: Record<K, number>, key: K) {
-    counters[key] = counters[key] ?? 0;
-    ++counters[key];
+const MAIN_STATES = new Set<NodeEffectiveState>(['online', 'offline', 'banned']);
+export function getNodeffectiveState(state: NodeState): NodeEffectiveState {
+    return MAIN_STATES.has(state as any) ? (state as NodeEffectiveState) : 'other';
 }
 
-export function extractProxyCounters(proxies: Array<ProxyInfo>) {
+export function incrementStateCounter<K extends string>(
+    counters: Partial<Record<K, number>>,
+    k?: K,
+) {
+    if (!k) {
+        return;
+    }
+
+    if (counters[k] === undefined) {
+        counters[k] = 1;
+    } else {
+        ++counters[k]!;
+    }
+}
+
+export function extractProxyCounters(proxies: Array<RoleGroupItemInfo>) {
     const counters: HttpProxiesState['counters'] = {
         total: proxies.length,
         states: {},
@@ -54,10 +72,10 @@ export function extractProxyCounters(proxies: Array<ProxyInfo>) {
     };
 
     each_(proxies, (proxy) => {
-        incrementKeyCounter(counters.states, proxy.state);
-        incrementKeyCounter(counters.effectiveStates, proxy.effectiveState);
+        incrementStateCounter(counters.states, proxy.state);
+        incrementStateCounter(counters.effectiveStates, proxy.effectiveState);
         if (proxy.effectiveState === 'banned') {
-            incrementKeyCounter(counters.flags, 'banned');
+            incrementStateCounter(counters.flags, 'banned');
         }
     });
 

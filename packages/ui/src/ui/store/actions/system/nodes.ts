@@ -1,7 +1,7 @@
 import each_ from 'lodash/each';
 import filter_ from 'lodash/filter';
 import reduce_ from 'lodash/reduce';
-import map_ from 'lodash/values';
+import map_ from 'lodash/map';
 
 import {Toaster} from '@gravity-ui/uikit';
 
@@ -9,7 +9,7 @@ import ypath from '../../../common/thor/ypath';
 import hammer from '../../../common/hammer';
 import Updater from '../../../utils/hammer/updater';
 import {isRetryFutile} from '../../../utils/index';
-import {incrementKeyCounter} from '../../../utils/system/proxies';
+import {getNodeffectiveState, incrementStateCounter} from '../../../utils/system/proxies';
 import {showErrorPopup, splitBatchResults} from '../../../utils/utils';
 import {SYSTEM_FETCH_NODES, UNAWARE, USE_CACHE, USE_MAX_SIZE} from '../../../constants';
 import {YTApiId, ytApiV3Id} from '../../../rum/rum-wrap-api';
@@ -17,13 +17,18 @@ import {getSystemNodesNodeTypesToLoad} from '../../../store/selectors/system/nod
 
 import type {RootState} from '../../../store/reducers';
 import type {
+    NodeEffectiveState,
     RackInfo,
     SystemNodeInfo,
     SystemNodesAction,
     SystemNodesState,
 } from '../../../store/reducers/system/nodes';
 import type {BatchSubRequest} from '../../../../shared/yt-types';
-import type {HttpProxiesState} from 'store/reducers/system/proxies';
+import type {
+    HttpProxiesState,
+    RoleGroupInfo,
+    RoleGroupItemInfo,
+} from '../../../store/reducers/system/proxies';
 import {ThunkAction} from 'redux-thunk';
 
 const NODES_UPDATER_ID = 'system_nodes';
@@ -105,10 +110,9 @@ function getNodes(): SystemNodesThunkAction {
                 dispatch({
                     type: SYSTEM_FETCH_NODES.SUCCESS,
                     data: {
-                        racks: undefined,
-                        rackGroups,
                         overviewCounters,
                         counters,
+                        roleGroups: prepareRoleGroups(rackGroups),
                     },
                 });
             })
@@ -169,11 +173,15 @@ function groupRacks(racks: Array<RackInfo>) {
 }
 
 function increaseFlagCounter<K extends keyof RackInfo['nodes'][number]['$attributes']>(
-    dst: Record<K, number>,
+    dst: Partial<Record<K, number>>,
     name: K,
     attrs: Record<K, boolean>,
 ) {
-    dst[name] += attrs[name] ? 1 : 0;
+    if (dst[name] === undefined) {
+        dst[name] = attrs[name] ? 1 : 0;
+    } else {
+        dst[name]! += attrs[name] ? 1 : 0;
+    }
 }
 
 function extractNodeCounters(racks: Array<RackInfo>) {
@@ -184,13 +192,13 @@ function extractNodeCounters(racks: Array<RackInfo>) {
 
             each_(rack.nodes, (node) => {
                 const attrs = node.$attributes;
-                increaseFlagCounter(acc.flags, 'decomissioned', attrs);
-                increaseFlagCounter(acc.flags, 'banned', attrs);
+                increaseFlagCounter(acc.flags, 'decommissioned', attrs);
                 increaseFlagCounter(acc.flags, 'full', attrs);
                 increaseFlagCounter(acc.flags, 'alerts', attrs);
+                increaseFlagCounter(acc.flags, 'banned', attrs);
 
-                incrementKeyCounter(acc.states, attrs.state);
-                incrementKeyCounter(acc.effectiveStates, attrs.effectiveState);
+                incrementStateCounter(acc.states, attrs.state);
+                incrementStateCounter(acc.effectiveStates, attrs.effectiveState);
             });
 
             return acc;
@@ -238,15 +246,18 @@ function createRack(name: string): RackInfo {
 
 function insertNodeToRack(racks: Record<string, RackInfo>, node: SystemNodeInfo) {
     const rackName = ypath.getValue(node, '/@rack');
-    const state = ypath.getValue(node, '/@state');
-    const banned = ypath.getBoolean(node, '/@banned');
-    const decommissioned = ypath.getBoolean(node, '/@decommissioned');
-    const full = ypath.getBoolean(node, '/@full');
+    const state: NodeEffectiveState = ypath.getValue(node, '/@state');
+    const banned: boolean = ypath.getBoolean(node, '/@banned');
+    const decommissioned: boolean = ypath.getBoolean(node, '/@decommissioned');
+    const full: boolean = ypath.getBoolean(node, '/@full');
     const alerts = Boolean(ypath.getValue(node, '/@alert_count'));
 
     const effectiveState = banned ? 'banned' : state;
     const effectiveFlag =
-        (decommissioned && 'decommissioned') || (full && 'full') || (alerts && 'alerts') || '';
+        (decommissioned && 'decommissioned') ||
+        (full && 'full') ||
+        (alerts && 'alerts') ||
+        undefined;
 
     const rack = racks[Object.hasOwnProperty.call(racks, rackName) ? rackName : UNAWARE];
 
@@ -276,4 +287,58 @@ function prepareRacks(rackNames: Array<string>, nodes: Array<SystemNodeInfo>) {
     each_(prepareNodes(nodes), (node) => insertNodeToRack(racks, node));
 
     return map_(racks);
+}
+
+function prepareRoleGroups(rackGroups: Record<string, Array<RackInfo>>) {
+    const roleGroups = reduce_(
+        rackGroups,
+        (acc, item, key) => {
+            const groups = rackInfo2roleGroup(item);
+            const toAdd = groups.filter((g) => {
+                return g.counters.total > 0;
+            });
+            if (toAdd.length) {
+                acc[key] = toAdd;
+            }
+            return acc;
+        },
+        {} as Record<string, Array<RoleGroupInfo>>,
+    );
+    console.log({roleGroups, rackGroups});
+    return roleGroups;
+}
+
+function rackInfo2roleGroup(data: Array<RackInfo>): Array<RoleGroupInfo> {
+    return map_(data, (rack) => {
+        const res: RoleGroupInfo = {
+            name: rack.name,
+            items: [],
+            counters: {
+                total: rack.nodes.length,
+                effectiveStates: {},
+                states: {},
+                flags: {},
+            },
+        };
+        rack.nodes.forEach((node) => {
+            const {state, effectiveState} = node.$attributes;
+            const info: RoleGroupItemInfo = {
+                name: node.$value,
+                state,
+                role: rack.name,
+                effectiveState: getNodeffectiveState(effectiveState),
+            };
+            incrementStateCounter(res.counters.effectiveStates, info.effectiveState);
+            incrementStateCounter(res.counters.states, info.state);
+
+            increaseFlagCounter(res.counters.flags, 'decommissioned', node.$attributes);
+            increaseFlagCounter(res.counters.flags, 'full', node.$attributes);
+            increaseFlagCounter(res.counters.flags, 'alerts', node.$attributes);
+            increaseFlagCounter(res.counters.flags, 'banned', node.$attributes);
+
+            res.items.push(info);
+        });
+
+        return res;
+    });
 }

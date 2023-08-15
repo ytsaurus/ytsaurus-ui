@@ -10,7 +10,7 @@ import Updater from '../../../utils/hammer/updater';
 import {YTApiId, ytApiV3Id} from '../../../rum/rum-wrap-api';
 import {FETCH_RPC_PROXIES} from '../../../constants/system/nodes';
 import {extractProxyCounters, extractRoleGroups} from '../../../utils/system/proxies';
-import {ProxyInfo} from '../../../store/reducers/system/proxies';
+import {RoleGroupItemInfo} from '../../../store/reducers/system/proxies';
 import ypath from '../../../common/thor/ypath';
 import {RootState} from '../../../store/reducers';
 import {RpcProxiesAction} from '../../../store/reducers/system/rpc-proxies';
@@ -33,7 +33,7 @@ export function cancelLoadRPCProxies() {
     };
 }
 
-function extractRpcProxy(data: object): Array<ProxyInfo> {
+function extractRpcProxy(data: object): Array<RoleGroupItemInfo> {
     return reduce_(
         data,
         (acc, value, key) => {
@@ -48,7 +48,7 @@ function extractRpcProxy(data: object): Array<ProxyInfo> {
             });
             return acc;
         },
-        [] as Array<ProxyInfo>,
+        [] as Array<RoleGroupItemInfo>,
     );
 }
 

@@ -4,14 +4,14 @@ import {SYSTEM_FETCH_NODES} from '../../../constants/index';
 import {mergeStateOnClusterChange} from '../utils';
 import {YTError} from '../../../../@types/types';
 import {ActionD} from '../../../types';
-import type {HttpProxiesState} from './proxies';
+import type {HttpProxiesState, RoleGroupInfo} from './proxies';
 import {CypressNode} from '../../../../shared/yt-types';
 
 export type SystemNodesState = {
     fetching: boolean;
     loaded: boolean;
     error: YTError | undefined;
-    rackGroups: Record<string, Array<RackInfo>> | undefined;
+    roleGroups: Record<string, Array<RoleGroupInfo>> | undefined;
     overviewCounters: HttpProxiesState['counters'] | undefined;
     counters: Record<string, HttpProxiesState['counters']> | undefined;
 };
@@ -22,14 +22,14 @@ const initialState: SystemNodesState = {
     error: undefined,
     overviewCounters: undefined,
     counters: undefined,
-    rackGroups: undefined,
+    roleGroups: undefined,
 };
 
 export type SystemNodeInfo = CypressNode<
     {
         alert_count: number;
         banned: boolean;
-        decomissioned: boolean;
+        decommissioned: boolean;
         full: boolean;
         rack: string;
         state: NodeState;
@@ -37,10 +37,9 @@ export type SystemNodeInfo = CypressNode<
     string
 >;
 
-type NodeState = 'online' | 'offline';
-type NodeEffectiveState = 'banned' | NodeState;
-type NodeEffectiveFlag = 'decomissioned' | 'full' | 'alerts' | '';
-
+export type NodeState = 'online' | 'offline' | string;
+export type NodeEffectiveState = 'banned' | 'other' | 'online' | 'offline';
+export type NodeEffectiveFlag = 'decommissioned' | 'full' | 'alerts' | 'banned';
 export type RackInfo = {
     name: string;
     empty: boolean;
@@ -49,7 +48,7 @@ export type RackInfo = {
             $attributes: {
                 alerts: boolean;
                 effectiveState: NodeEffectiveState;
-                effectiveFlag: NodeEffectiveFlag;
+                effectiveFlag?: NodeEffectiveFlag;
             };
         }
     >;
@@ -72,7 +71,7 @@ export type SystemNodesAction =
     | Action<typeof SYSTEM_FETCH_NODES.REQUEST>
     | ActionD<
           typeof SYSTEM_FETCH_NODES.SUCCESS,
-          Pick<SystemNodesState, 'rackGroups' | 'counters' | 'overviewCounters'>
+          Pick<SystemNodesState, 'roleGroups' | 'counters' | 'overviewCounters'>
       >
     | ActionD<typeof SYSTEM_FETCH_NODES.FAILURE, SystemNodesState['error']>;
 
