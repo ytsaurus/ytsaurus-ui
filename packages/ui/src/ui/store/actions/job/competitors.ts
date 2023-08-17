@@ -61,10 +61,10 @@ export function loadCompetitors(
                 if (error.code === yt.codes.CANCELLED) {
                     dispatch({type: JOB.LOAD_JOB_COMPETITORS_CANCELLED});
                 } else {
-                    toaster.createToast({
+                    toaster.add({
                         type: 'error',
                         name: 'job competitors',
-                        timeout: 10000,
+                        autoHiding: 10000,
                         content: error?.message || 'Oops, something went wrong',
                         title: "Failed to load job's competitors",
                     });

@@ -22,10 +22,10 @@ export default class LoadDataHandler extends Component<LoadDataHandlerProps> {
         const {error, loaded, errorData} = this.props;
 
         if (error && loaded) {
-            toaster.createToast({
+            toaster.add({
                 type: 'error',
                 name: 'network',
-                timeout: 500000,
+                autoHiding: 500000,
                 title: 'Oops! something went wrong.',
                 content: errorData ? (errorData as YTError).message : hammer.format.NO_VALUE,
                 actions: [

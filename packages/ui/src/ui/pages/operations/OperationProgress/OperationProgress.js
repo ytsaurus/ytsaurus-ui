@@ -126,7 +126,7 @@ class OperationProgress extends Component {
         return (
             <div className={className}>
                 {this.renderState()}
-                <Progress view="thin" value={failedJobsProgress || 0} theme="danger" />
+                <Progress size="xs" value={failedJobsProgress || 0} theme="danger" />
             </div>
         );
     }
@@ -144,7 +144,7 @@ class OperationProgress extends Component {
             case 'running':
                 progressBar = operation.inIntermediateState() && (
                     <Progress
-                        view="thin"
+                        size="xs"
                         value={jobsProgress || 0}
                         stack={[
                             {
@@ -157,16 +157,16 @@ class OperationProgress extends Component {
                 );
                 break;
             case 'completed':
-                progressBar = <Progress view="thin" value={RESOLVED_PROGRESS} theme="success" />;
+                progressBar = <Progress size="xs" value={RESOLVED_PROGRESS} theme="success" />;
                 break;
             case 'failed':
-                progressBar = <Progress view="thin" value={RESOLVED_PROGRESS} theme="danger" />;
+                progressBar = <Progress size="xs" value={RESOLVED_PROGRESS} theme="danger" />;
                 break;
             case 'aborted':
-                progressBar = <Progress view="thin" value={RESOLVED_PROGRESS} theme="default" />;
+                progressBar = <Progress size="xs" value={RESOLVED_PROGRESS} theme="default" />;
                 break;
             default:
-                progressBar = <Progress view="thin" value={PENDING_PROGRESS || 0} />;
+                progressBar = <Progress size="xs" value={PENDING_PROGRESS || 0} />;
                 break;
         }
 

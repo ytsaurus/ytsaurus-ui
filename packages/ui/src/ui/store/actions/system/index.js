@@ -37,9 +37,9 @@ function fetchSchedulersAndAgents(dispatch) {
             const data = error?.response?.data || error;
             const {code, message} = data;
 
-            toaster.createToast({
+            toaster.add({
                 name: 'load/system/schedulersAndAgents',
-                allowAutoHiding: false,
+                autoHiding: false,
                 type: 'error',
                 content: `[code ${code}] ${message}`,
                 title: 'Could not load Schedulers and Agents',

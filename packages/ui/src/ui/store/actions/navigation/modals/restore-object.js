@@ -62,7 +62,7 @@ export function restoreObjects(items) {
                 dispatch({type: RESTORE_OBJECT.SUCCESS});
                 dispatch(updateView());
 
-                toaster.createToast({
+                toaster.add({
                     type: 'success',
                     name: 'restore objects',
                     timeout: 10000,
@@ -73,10 +73,10 @@ export function restoreObjects(items) {
             .catch((err) => {
                 dispatch({type: RESTORE_OBJECT.FAILURE});
 
-                toaster.createToast({
+                toaster.add({
                     name: 'restore objects',
                     type: 'error',
-                    allowAutoHiding: false,
+                    autoHiding: false,
                     title: 'Could not restore objects.',
                     content: err?.message || 'Oops, something went wrong',
                     actions: [{label: ' view', onClick: () => showErrorPopup(err)}],
@@ -101,7 +101,7 @@ export function restoreObject(objectPath, restorePath, onSuccess) {
                     onSuccess(objectPath, restorePath);
                 }
 
-                toaster.createToast({
+                toaster.add({
                     type: 'success',
                     name: 'restore object',
                     timeout: 10000,

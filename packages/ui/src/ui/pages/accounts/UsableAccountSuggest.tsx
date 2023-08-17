@@ -20,13 +20,13 @@ export function UsableAccountSuggest(props: DialogControlProps<string | undefine
             })
             .catch((e: any) => {
                 const toaster = new Toaster();
-                toaster.createToast({
+                toaster.add({
                     name: 'usable_accounts',
                     type: 'error',
                     title: 'Failed to load usable accounts',
                     content: e?.message,
                     actions: [{label: ' Details', onClick: () => showErrorPopup(e)}],
-                    allowAutoHiding: false,
+                    autoHiding: false,
                 });
             });
     }, [login, setItems]);

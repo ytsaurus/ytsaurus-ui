@@ -154,9 +154,9 @@ export function getOperation(id) {
 
                 if (error.code !== yt.codes.CANCELLED) {
                     if (!isFirstLoading) {
-                        toaster.createToast({
+                        toaster.add({
                             name: 'get operation',
-                            allowAutoHiding: false,
+                            autoHiding: false,
                             type: 'error',
                             title: 'Failed to load operation',
                             content: error.message,

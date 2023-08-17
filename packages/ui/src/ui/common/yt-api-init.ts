@@ -53,7 +53,7 @@ function onError(error: any) {
         new Toaster().add({
             name: 'xsrf-expired',
             type: 'info',
-            allowAutoHiding: false,
+            autoHiding: false,
             title: 'CSRF-toke expired',
             content: content,
         });

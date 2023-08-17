@@ -55,7 +55,7 @@ export function confirmAction(handler, data) {
                 const {successMessage} = getState().actions;
 
                 dispatch(dismissAction());
-                toaster.createToast({
+                toaster.add({
                     name: 'confirm action',
                     timeout: 10000,
                     type: 'success',

@@ -141,14 +141,13 @@ export function wrapApiPromiseByToaster<T>(p: Promise<T>, options: WrapApiOption
             }
 
             if (!options.skipSuccessToast) {
-                toaster.createToast({
+                toaster.add({
                     name: options.toasterName,
                     type: 'success',
                     title: options.successTitle || 'Success',
                     content:
                         'function' === typeof successContent ? successContent(res) : successContent,
-                    timeout: options.timeout || 10000,
-                    allowAutoHiding: options.autoHide,
+                    autoHiding: options.autoHide === false ? false : options.timeout ?? 10000,
                 });
             }
             return res;
@@ -174,7 +173,7 @@ export function wrapApiPromiseByToaster<T>(p: Promise<T>, options: WrapApiOption
                               </span>
                           ),
                 actions: [{label: ' Details', onClick: () => showErrorPopup(data)}],
-                allowAutoHiding: false,
+                autoHiding: false,
             });
             return Promise.reject(error);
         });
@@ -202,7 +201,7 @@ export function showToasterError(name: string, error: any) {
     const data = error?.response?.data || error;
     const {code, message} = data;
 
-    toaster.createToast({
+    toaster.add({
         name,
         type: 'error',
         title: `${name} failure`,

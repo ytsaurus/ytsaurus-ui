@@ -53,7 +53,7 @@ import FileAlt from '../../../../img/svg/icons/file-alt.svg';
 import FileExport from '../../../../img/svg/icons/file-export.svg';
 import File from '../../../../img/svg/icons/file.svg';
 import Filter from '../../../../img/svg/icons/filter.svg';
-import Fire from '../../../../img/svg/icons/fire.svg';
+import Flame from '../../../../img/svg/icons/flame.svg';
 import FolderOpen from '../../../../img/svg/icons/folder-open.svg';
 import FolderTree from '../../../../img/svg/icons/folder-tree.svg';
 import Folder from '../../../../img/svg/icons/folder.svg';
@@ -97,7 +97,7 @@ import Tasks from '../../../../img/svg/icons/tasks.svg';
 import Th from '../../../../img/svg/icons/th.svg';
 import Times from '../../../../img/svg/icons/times.svg';
 import TrashAlt from '../../../../img/svg/icons/trash-alt.svg';
-import Trash from '../../../../img/svg/icons/trash.svg';
+import TrashBin from '../../../../img/svg/icons/trash-bin.svg';
 import Triangle from '../../../../img/svg/icons/triangle.svg';
 import Undo from '../../../../img/svg/icons/undo.svg';
 import Union from '../../../../img/svg/icons/union.svg';
@@ -162,7 +162,7 @@ export const iconNames = {
     ['file-export']: FileExport,
     ['file']: File,
     ['filter']: Filter,
-    ['fire']: Fire,
+    ['flame']: Flame,
     ['folder-open']: FolderOpen,
     ['folder-tree']: FolderTree,
     ['folder']: Folder,
@@ -206,7 +206,7 @@ export const iconNames = {
     ['th']: Th,
     ['times']: Times,
     ['trash-alt']: TrashAlt,
-    ['trash']: Trash,
+    ['trash-bin']: TrashBin,
     ['triangle']: Triangle,
     ['undo']: Undo,
     ['union']: Union,

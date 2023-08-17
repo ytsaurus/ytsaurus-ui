@@ -291,7 +291,7 @@ export function deletePool(item) {
                 path: `//sys/pool_trees/${tree}/${path}`,
             })
             .then(() => {
-                toaster.createToast({
+                toaster.add({
                     name: 'delete pool',
                     timeout: 10000,
                     type: 'success',
@@ -511,7 +511,7 @@ export function editPool(pool, values, initialValues, allowTransfer) {
         ])
             .then(setName(path, values.general.name, initialValues.general.name))
             .then(() => {
-                toaster.createToast({
+                toaster.add({
                     name: 'edit pool',
                     timeout: 10000,
                     type: 'success',

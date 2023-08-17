@@ -87,10 +87,9 @@ function getRPCProxies(): RPCProxiesThunkAction {
                 const {code, message} = data;
 
                 const toaster = new Toaster();
-
                 toaster.add({
                     name: 'load/system/rpc-proxies',
-                    allowAutoHiding: false,
+                    autoHiding: false,
                     type: 'error',
                     content: `[code ${code}] ${message}`,
                     title: 'Could not load RPC-Proxies',

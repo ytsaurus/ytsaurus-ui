@@ -149,9 +149,9 @@ export function moveObject(
                     onSuccess(result);
                 }
 
-                toaster.createToast({
+                toaster.add({
                     name: 'move',
-                    timeout: 10000,
+                    autoHiding: 10000,
                     type: 'success',
                     title: `Object${multipleMode ? 's' : ''} was successfully moved`,
                     content: <Link url={`navigation?path=${result}`}>{result}</Link>,

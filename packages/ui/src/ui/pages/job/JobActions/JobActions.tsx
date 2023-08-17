@@ -142,18 +142,18 @@ const dumpJobContext = (id: string, path: string, cluster: string) => {
     return yt.v3
         .dumpJobContext(parameters)
         .then(() => {
-            toaster.createToast({
+            toaster.add({
                 type: 'success',
-                allowAutoHiding: false,
+                autoHiding: false,
                 name: 'dump job context',
                 title: 'Job context has been dumped.',
                 content: <Link url={`/${cluster}/navigation?path=${path}`}>{path}</Link>,
             });
         })
         .catch((err: YTError) => {
-            toaster.createToast({
+            toaster.add({
                 type: 'error',
-                allowAutoHiding: false,
+                autoHiding: false,
                 name: 'dump job context',
                 title: 'Could not dump job context.',
                 content: err?.message || 'Oops, something went wrong',

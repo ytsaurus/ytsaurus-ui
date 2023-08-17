@@ -72,9 +72,9 @@ function getProxies(): ProxiesThunkAction {
                 const data = error?.response?.data || error;
                 const {code, message} = data;
 
-                toaster.createToast({
+                toaster.add({
                     name: 'load/system/proxies',
-                    allowAutoHiding: false,
+                    autoHiding: false,
                     type: 'error',
                     content: `[code ${code}] ${message}`,
                     title: 'Could not load Proxies',

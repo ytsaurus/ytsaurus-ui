@@ -94,7 +94,9 @@ export default class Favourites extends Component<Props, State> {
 
         return (
             <DropdownMenu
-                popupClassName={b('popup', {empty: items.length === 0})}
+                popupProps={{
+                    className: b('popup', {empty: items.length === 0}),
+                }}
                 items={dropItems}
                 switcher={switcher}
             />

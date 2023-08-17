@@ -103,7 +103,7 @@ export function getRealPath({path, type}) {
             })
             .catch((error) => {
                 console.error(error);
-                toaster.createToast({
+                toaster.add({
                     type: 'error',
                     name: 'real path',
                     timeout: 10000,
@@ -167,7 +167,7 @@ export function getRealPaths(items) {
             })
             .catch((error) => {
                 console.error(error);
-                toaster.createToast({
+                toaster.add({
                     type: 'error',
                     name: 'real path',
                     timeout: 10000,
@@ -199,7 +199,7 @@ function deleteCurrentObject(path, restorePath) {
 
         if (permanently) {
             return yt.v3.remove({path}).then(() => {
-                toaster.createToast({
+                toaster.add({
                     type: 'success',
                     name: 'delete object',
                     timeout: 10000,
@@ -231,7 +231,7 @@ function deleteCurrentObject(path, restorePath) {
                     }),
                 )
                 .then(() => {
-                    toaster.createToast({
+                    toaster.add({
                         type: 'success',
                         name: 'delete object',
                         timeout: 10000,
@@ -262,7 +262,7 @@ export function deleteObject() {
         if (transaction) {
             dispatch({type: CLOSE_DELETE_OBJECT_POPUP});
 
-            toaster.createToast({
+            toaster.add({
                 type: 'error',
                 name: 'delete object',
                 timeout: 10000,
@@ -290,7 +290,7 @@ export function deleteObject() {
                     type: DELETE_OBJECT.FAILURE,
                     data: {error},
                 });
-                toaster.createToast({
+                toaster.add({
                     type: 'error',
                     name: 'delete object',
                     timeout: 10000,
@@ -321,7 +321,7 @@ function permanentlyDeleteObjects(multipleInfo, transaction) {
         .then(checkError)
         .then(() => yt.v3.commitTransaction({transaction_id: transaction}))
         .then(() => {
-            toaster.createToast({
+            toaster.add({
                 type: 'success',
                 name: 'delete objects',
                 timeout: 10000,
@@ -381,7 +381,7 @@ function moveObjectsIntoTrash(multipleInfo, transaction, login) {
         .then(checkError)
         .then(() => yt.v3.commitTransaction({transaction_id: transaction}))
         .then(() => {
-            toaster.createToast({
+            toaster.add({
                 type: 'success',
                 name: 'delete objects',
                 timeout: 10000,
@@ -401,7 +401,7 @@ export function deleteObjects() {
         if (transaction) {
             dispatch({type: CLOSE_DELETE_OBJECT_POPUP});
 
-            toaster.createToast({
+            toaster.add({
                 type: 'error',
                 name: 'delete object',
                 timeout: 10000,
@@ -431,7 +431,7 @@ export function deleteObjects() {
                     type: DELETE_OBJECT.FAILURE,
                     data: {error},
                 });
-                toaster.createToast({
+                toaster.add({
                     type: 'error',
                     name: 'delete objects',
                     timeout: 10000,

@@ -80,10 +80,10 @@ export function remoteCopy(params: RemoteCopyParams): RemoteCopyThunkAction {
             const {dstCluster} = params;
 
             const toaster = new Toaster();
-            toaster.createToast({
+            toaster.add({
                 type: 'success',
                 name: 'remoteCopyStarted',
-                timeout: 500000,
+                autoHiding: 500000,
                 title: 'Remote copy',
                 content: (
                     <span>

@@ -253,7 +253,7 @@ function PathActions(props: Props) {
                     ? [
                           {
                               text: 'Unfreeze',
-                              icon: <Icon awesome={'fire'} />,
+                              icon: <Icon awesome={'flame'} />,
                               action: onUnfreeze,
                           },
                       ]

@@ -91,7 +91,7 @@ export function showNavigationAttributesEditor(paths: Array<string>): ActionType
             .catch((e: any) => {
                 dispatch({type: NAVIGATION_ATTRIBUTES_EDITOR_ERROR, data: e});
                 const toaster = new Toaster();
-                toaster.createToast({
+                toaster.add({
                     name: 'show_attrs_editor_' + _.join(paths),
                     type: 'error',
                     title: 'Attributes cannot be loaded',
@@ -102,7 +102,7 @@ export function showNavigationAttributesEditor(paths: Array<string>): ActionType
                             onClick: () => showErrorPopup(e),
                         },
                     ],
-                    allowAutoHiding: false,
+                    autoHiding: false,
                 });
             });
     };
@@ -231,7 +231,7 @@ export function navigationSetNodeAttributes(
                             }
 
                             const toaster = new Toaster();
-                            toaster.createToast({
+                            toaster.add({
                                 type: 'success',
                                 name: 'merge_' + staticTables.join(','),
                                 title: `${staticTables.length} operations are started`,

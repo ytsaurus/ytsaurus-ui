@@ -55,7 +55,7 @@
 |file-export|<img src='../../../../img/svg/icons/file-export.svg'>|| |  
 |file|<img src='../../../../img/svg/icons/file.svg'>|file.svg|<img src='../../../../node_modules/@gravity-ui/icons/svgs/file.svg'>|  
 |filter|<img src='../../../../img/svg/icons/filter.svg'>|| |  
-|fire|<img src='../../../../img/svg/icons/fire.svg'>|fire.svg|<img src='../../../../node_modules/@gravity-ui/icons/svgs/fire.svg'>|  
+|flame|<img src='../../../../img/svg/icons/flame.svg'>|| |  
 |folder-open|<img src='../../../../img/svg/icons/folder-open.svg'>|folder-open.svg|<img src='../../../../node_modules/@gravity-ui/icons/svgs/folder-open.svg'>|  
 |folder-tree|<img src='../../../../img/svg/icons/folder-tree.svg'>|folder-tree.svg|<img src='../../../../node_modules/@gravity-ui/icons/svgs/folder-tree.svg'>|  
 |folder|<img src='../../../../img/svg/icons/folder.svg'>|folder.svg|<img src='../../../../node_modules/@gravity-ui/icons/svgs/folder.svg'>|  
@@ -99,7 +99,7 @@
 |th|<img src='../../../../img/svg/icons/th.svg'>|| |  
 |times|<img src='../../../../img/svg/icons/times.svg'>|| |  
 |trash-alt|<img src='../../../../img/svg/icons/trash-alt.svg'>|| |  
-|trash|<img src='../../../../img/svg/icons/trash.svg'>|trash.svg|<img src='../../../../node_modules/@gravity-ui/icons/svgs/trash.svg'>|  
+|trash-bin|<img src='../../../../img/svg/icons/trash-bin.svg'>|| |  
 |triangle|<img src='../../../../img/svg/icons/triangle.svg'>|| |  
 |undo|<img src='../../../../img/svg/icons/undo.svg'>|| |  
 |union|<img src='../../../../img/svg/icons/union.svg'>|| |  

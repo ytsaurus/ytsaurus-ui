@@ -61,7 +61,7 @@ function ShareUsageBar(props: Props) {
         >
             <Progress
                 className={block('progress')}
-                view={'thin'}
+                size={'xs'}
                 value={Number(value)}
                 theme={forceTheme || theme}
             />

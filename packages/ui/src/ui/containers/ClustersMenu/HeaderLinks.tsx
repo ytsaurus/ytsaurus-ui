@@ -125,7 +125,7 @@ export function HeaderLinks({currentUrl, showTitle}: Props) {
             </div>
             <div className={b('links', {theme: 'collapsed'})}>
                 <DropdownMenu
-                    popupClassName={b('popup')}
+                    popupProps={{className: b('popup')}}
                     switcher={
                         <Button>
                             Links&nbsp;
