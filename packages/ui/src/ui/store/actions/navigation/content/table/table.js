@@ -649,7 +649,7 @@ export function mountUnmountTable(action) {
 
         return ytApiV3[`${action}Table`]({path})
             .then(() => {
-                toaster.createToast({
+                toaster.add({
                     name: `${action} table`,
                     type: 'success',
                     title: `Success ${action}ing table`,
@@ -658,7 +658,7 @@ export function mountUnmountTable(action) {
             })
             .catch((err) => {
                 console.error(err);
-                toaster.createToast({
+                toaster.add({
                     name: `${action} table`,
                     type: 'error',
                     title: `Could not ${action} table.`,

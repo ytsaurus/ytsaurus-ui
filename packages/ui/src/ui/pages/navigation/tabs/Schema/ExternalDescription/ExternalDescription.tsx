@@ -30,7 +30,7 @@ export function ExternalDescription({type, data}: Props) {
 
     const typeMismatchElement = (
         <>
-            <Text color={'warning-medium'}>
+            <Text color={'warning'}>
                 <Icon awesome="exclamation-triangle" face="solid" />
                 There might be a type mismatch
             </Text>

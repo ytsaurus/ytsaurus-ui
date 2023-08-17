@@ -201,7 +201,7 @@ export function updateResourceUsage() {
                         },
                     });
                     const toast = new Toaster();
-                    toast.createToast({
+                    toast.add({
                         type: 'error',
                         name: 'map_node_update_resources',
                         timeout: 500000,

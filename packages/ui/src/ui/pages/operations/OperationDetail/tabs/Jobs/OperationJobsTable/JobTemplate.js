@@ -60,15 +60,15 @@ function JobProgress({state, progress}) {
 
     switch (state) {
         case 'running':
-            return <Progress view="thin" value={progress * 100} theme="info" />;
+            return <Progress size="xs" value={progress * 100} theme="info" />;
         case 'completed':
-            return <Progress view="thin" value={RESOLVED_PROGRESS} theme="success" />;
+            return <Progress size="xs" value={RESOLVED_PROGRESS} theme="success" />;
         case 'failed':
-            return <Progress view="thin" value={RESOLVED_PROGRESS} theme="danger" />;
+            return <Progress size="xs" value={RESOLVED_PROGRESS} theme="danger" />;
         case 'aborted':
-            return <Progress view="thin" value={RESOLVED_PROGRESS} theme="default" />;
+            return <Progress size="xs" value={RESOLVED_PROGRESS} theme="default" />;
         default:
-            return <Progress view="thin" value={PENDING_PROGRESS} />;
+            return <Progress size="xs" value={PENDING_PROGRESS} />;
     }
 }
 

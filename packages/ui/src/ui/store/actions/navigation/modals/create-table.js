@@ -48,7 +48,7 @@ export function createTable(path, attributes) {
             .create(params)
             .then(() => {
                 dispatch(updateView());
-                toaster.createToast({
+                toaster.add({
                     name: path,
                     timeout: 10000,
                     type: 'success',
@@ -70,7 +70,7 @@ export function createTable(path, attributes) {
                     const data = error?.response?.data || error?.response || error;
                     const {code, message} = data;
 
-                    toaster.createToast({
+                    toaster.add({
                         name: path,
                         timeout: 10000,
                         type: 'error',

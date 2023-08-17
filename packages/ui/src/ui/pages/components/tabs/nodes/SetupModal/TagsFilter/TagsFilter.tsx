@@ -137,7 +137,6 @@ function TagsFilter(props: Props) {
         <div className={block(null, className)}>
             {control}
             <DropdownMenu
-                popupClassName={block('dropdown-popup')}
                 items={modes}
                 switcher={
                     <Button size={size} width={'auto'} pin={'clear-round'}>

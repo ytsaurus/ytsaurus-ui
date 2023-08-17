@@ -93,7 +93,7 @@ export function loadSchedulingOperations(tree: string): SchedulingOperationsThun
                     const data = error?.response?.data || error;
                     const {code, message} = data;
 
-                    new Toaster().createToast({
+                    new Toaster().add({
                         name: 'load-scheduling-operations',
                         type: 'error',
                         title: 'Failed to load operations',
@@ -202,7 +202,7 @@ export function loadSchedulingOperationsPerPool(tree: string): SchedulingOperati
                     const data = error?.response?.data || error;
                     const {code, message} = data;
 
-                    new Toaster().createToast({
+                    new Toaster().add({
                         name: 'load-scheduling-operations',
                         type: 'error',
                         title: 'Failed to load operations',

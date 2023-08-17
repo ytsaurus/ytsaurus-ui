@@ -242,9 +242,9 @@ function showErrorToaster(
     reloadFn: () => void,
 ) {
     const toaster = new Toaster();
-    toaster.createToast({
+    toaster.add({
         name: `global/${listType}`,
-        allowAutoHiding: false,
+        autoHiding: false,
         type: 'error',
         content: 'If the problem persists, please report the error.',
         title: `Failed to load list of ${listType}`,

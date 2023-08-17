@@ -171,7 +171,7 @@ export const getJobActions = createSelector(getJob, (job: PreparedJob) => {
             modalKey: 'abandon',
             name: 'abandon',
             successMessage: 'Job was successfully aborted. Please wait',
-            icon: 'trash',
+            icon: 'trash-bin',
             message:
                 'Job will be aborted, but considered as completed, output data of job will be lost. Do you want to proceed?',
             confirmationText: PLEASE_PROCEED_TEXT,

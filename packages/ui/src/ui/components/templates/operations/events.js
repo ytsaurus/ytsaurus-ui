@@ -35,7 +35,7 @@ templates.add('operations/detail/events', {
                         {hammer.format['Percent'](progress)}
                     </span>
 
-                    <Progress value={value} view="thin" />
+                    <Progress value={value} size={'xs'} />
                 </div>
             );
         }

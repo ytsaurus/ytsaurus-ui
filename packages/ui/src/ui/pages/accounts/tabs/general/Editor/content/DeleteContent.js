@@ -34,7 +34,7 @@ class DeleteContent extends Component {
                     activeValue: '',
                 });
                 closeEditorModal();
-                toaster.createToast({
+                toaster.add({
                     name: 'delete account',
                     timeout: 10000,
                     type: 'success',

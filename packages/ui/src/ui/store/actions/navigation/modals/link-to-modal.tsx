@@ -48,7 +48,7 @@ export function createLink(params: Pick<LinkToState, 'path' | 'target'>): LinkTo
             .then(() => {
                 dispatch(hideLinkToModal());
                 const toast = new Toaster();
-                toast.createToast({
+                toast.add({
                     name: 'create-link',
                     type: 'success',
                     title: 'Link created',

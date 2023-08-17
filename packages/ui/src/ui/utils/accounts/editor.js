@@ -55,7 +55,7 @@ function createAccount(accountName, parentName) {
             },
         })
         .then((d) => {
-            toaster.createToast({
+            toaster.add({
                 name: 'create account',
                 timeout: SUCCESS_TOASTER_TIMEOUT,
                 type: 'success',
@@ -64,7 +64,7 @@ function createAccount(accountName, parentName) {
             return d;
         })
         .catch((err) => {
-            toaster.createToast({
+            toaster.add({
                 name: 'create account',
                 timeout: ERRRO_TOASTER_TIMEOUT,
                 type: 'error',
@@ -80,7 +80,7 @@ export function setAccountParent(accountName, parentName) {
     return yt.v3
         .set({path: basePath + accountName + '/@parent_name'}, parentName)
         .then((d) => {
-            toaster.createToast({
+            toaster.add({
                 name: 'set parent for account',
                 timeout: SUCCESS_TOASTER_TIMEOUT,
                 type: 'success',
@@ -89,7 +89,7 @@ export function setAccountParent(accountName, parentName) {
             return d;
         })
         .catch((err) => {
-            toaster.createToast({
+            toaster.add({
                 name: 'set parent for account',
                 timeout: ERRRO_TOASTER_TIMEOUT,
                 type: 'error',
@@ -108,7 +108,7 @@ export function setAccountAbc(accountName, abcId, abcSlug) {
     return yt.v3
         .set({path: basePath + accountName + '/@abc'}, {id: abcId, slug: abcSlug})
         .then((d) => {
-            toaster.createToast({
+            toaster.add({
                 name: 'account abc service',
                 timeout: SUCCESS_TOASTER_TIMEOUT,
                 type: 'success',
@@ -117,7 +117,7 @@ export function setAccountAbc(accountName, abcId, abcSlug) {
             return d;
         })
         .catch((err) => {
-            toaster.createToast({
+            toaster.add({
                 name: 'account abc service',
                 timeout: ERRRO_TOASTER_TIMEOUT,
                 type: 'error',
@@ -147,7 +147,7 @@ export function createAccountHome(accountName) {
                     },
                 })
                 .then((d) => {
-                    toaster.createToast({
+                    toaster.add({
                         name: 'account create home',
                         timeout: SUCCESS_TOASTER_TIMEOUT,
                         type: 'success',
@@ -157,7 +157,7 @@ export function createAccountHome(accountName) {
                 });
         })
         .catch((err) => {
-            toaster.createToast({
+            toaster.add({
                 name: 'account create home',
                 timeout: ERRRO_TOASTER_TIMEOUT,
                 type: 'error',

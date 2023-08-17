@@ -210,7 +210,7 @@ export default function MultipleActions(props: {className: string}) {
                 : [
                       {
                           text: 'Unfreeze',
-                          icon: <Icon awesome={'fire'} />,
+                          icon: <Icon awesome={'flame'} />,
                           action: () => {
                               dispatch(showDynTablesStateModalByNodes('unfreeze', selectedNodes));
                           },

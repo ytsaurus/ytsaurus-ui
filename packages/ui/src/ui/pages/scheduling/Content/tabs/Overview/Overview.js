@@ -245,7 +245,7 @@ class Overview extends Component {
         }
         return (
             <Button size="s" view="flat-secondary" onClick={onClick}>
-                <Icon awesome="trash" />
+                <Icon awesome="trash-bin" />
             </Button>
         );
     }

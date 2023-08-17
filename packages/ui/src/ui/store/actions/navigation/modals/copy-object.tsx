@@ -131,7 +131,7 @@ export function copyObject(
 
                 toaster.add({
                     name: 'copy',
-                    timeout: 10000,
+                    autoHiding: 10000,
                     type: 'success',
                     title: multipleMode
                         ? 'Objects were successfully copied'

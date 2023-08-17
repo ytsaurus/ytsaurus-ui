@@ -188,9 +188,9 @@ function getChunks() {
                     const data = error?.response?.data || error;
                     const {code, message} = data;
 
-                    toaster.createToast({
+                    toaster.add({
                         name: 'load/system/chunks',
-                        allowAutoHiding: false,
+                        autoHiding: false,
                         type: 'error',
                         content: `[code ${code}] ${message}`,
                         title: 'Could not load Chunks',

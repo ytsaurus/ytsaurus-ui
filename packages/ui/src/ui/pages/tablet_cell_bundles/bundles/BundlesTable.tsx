@@ -2,7 +2,8 @@ import React from 'react';
 import cn from 'bem-cn-lite';
 
 import DataTable, {Column, Settings} from '@gravity-ui/react-data-table';
-import {HelpPopover, Progress} from '@gravity-ui/uikit';
+import {Progress} from '@gravity-ui/uikit';
+import {HelpPopover} from '@gravity-ui/components';
 
 import AccountLink from '../../../pages/accounts/AccountLink';
 import ClickableAttributesButton from '../../../components/AttributesButton/ClickableAttributesButton';

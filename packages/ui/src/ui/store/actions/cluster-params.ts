@@ -41,10 +41,10 @@ const toast = new Toaster();
 function prepareClusterUiConfig(uiConfig: BatchResultsItem, uiDevConfig: BatchResultsItem) {
     if (uiConfig.error && uiConfig.error.code !== yt.codes.NODE_DOES_NOT_EXIST) {
         handleUiConfigError('//sys/@ui_config', uiConfig.error);
-        toast.createToast({
+        toast.add({
             name: 'get-ui_config',
             type: 'error',
-            allowAutoHiding: false,
+            autoHiding: false,
             title: 'Failed to load //sys/@ui_config',
             content:
                 'Some UI features might be not available. ' +
