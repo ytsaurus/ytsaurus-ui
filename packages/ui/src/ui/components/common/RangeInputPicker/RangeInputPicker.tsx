@@ -1,7 +1,7 @@
 import React, {Component, ReactElement} from 'react';
 import block from 'bem-cn-lite';
 // @ts-ignore
-import Slider, {Marks} from 'rc-slider';
+import Slider, {SliderRef, Marks} from 'rc-slider';
 import {IconProps, TextInput, TextInputSize} from '@gravity-ui/uikit';
 
 import {debounce} from 'lodash';
@@ -117,7 +117,7 @@ export class RangeInputPicker extends Component<RangeInputPickerProps, RangeInpu
     }
 
     private wrapperRef = React.createRef<HTMLDivElement>();
-    private sliderRef = React.createRef<Slider>();
+    private sliderRef = React.createRef<SliderRef>();
     private textInputInnerRef = React.createRef<HTMLInputElement>();
     private debouncedCallOnUpdate: DebouncedFunc<() => void>;
     private debouncedHandleOnAfterUpdate: DebouncedFunc<() => void>;
@@ -348,9 +348,10 @@ export class RangeInputPicker extends Component<RangeInputPickerProps, RangeInpu
         );
     };
 
-    private handleSliderChange = (newValue: number) => {
+    private handleSliderChange = (newValue: number | Array<number>) => {
         const {min, max, values} = this.state;
-        const value = getClosestValue(prepareValue({min, max, value: newValue}), values);
+        const numValue = Array.isArray(newValue) ? newValue[0] : newValue;
+        const value = getClosestValue(prepareValue({min, max, value: numValue}), values);
 
         this.setState(
             {

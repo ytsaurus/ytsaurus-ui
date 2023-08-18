@@ -313,7 +313,7 @@ const mapStateToProps = (state: RootState) => {
         stateSelectItems,
         bannedSelectItems,
 
-        collapsibleSize: getUISizes(state).collapsibleSize,
+        collapsibleSize: getUISizes().collapsibleSize,
     };
 };
 

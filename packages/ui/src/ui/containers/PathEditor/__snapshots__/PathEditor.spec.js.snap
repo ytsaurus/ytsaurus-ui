@@ -68,37 +68,41 @@ exports[`<PathEditor /> snapshots should match snapshot from mount rendering wit
       <span
         className="yc-text-input yc-text-input_view_normal yc-text-input_size_m yc-text-input_pin_round-round"
       >
-        <InputControl
-          autoFocus={true}
-          controlProps={
-            Object {
-              "style": Object {},
-            }
-          }
-          controlRef={[Function]}
-          disabled={false}
-          hasClear={false}
-          onBlur={[Function]}
-          onChange={[Function]}
-          onFocus={[Function]}
-          onKeyDown={[Function]}
-          onUpdate={[Function]}
-          placeholder="placeholder"
-          value="//path/to/object"
+        <span
+          className="yc-text-input__content"
         >
-          <input
+          <TextInputControl
             autoFocus={true}
-            className="yc-text-input__control yc-text-input__control_type_input"
+            controlProps={
+              Object {
+                "style": Object {},
+              }
+            }
+            controlRef={[Function]}
             disabled={false}
+            hasClear={false}
             onBlur={[Function]}
             onChange={[Function]}
             onFocus={[Function]}
             onKeyDown={[Function]}
+            onUpdate={[Function]}
             placeholder="placeholder"
-            style={Object {}}
             value="//path/to/object"
-          />
-        </InputControl>
+          >
+            <input
+              autoFocus={true}
+              className="yc-text-input__control yc-text-input__control_type_input"
+              disabled={false}
+              onBlur={[Function]}
+              onChange={[Function]}
+              onFocus={[Function]}
+              onKeyDown={[Function]}
+              placeholder="placeholder"
+              style={Object {}}
+              value="//path/to/object"
+            />
+          </TextInputControl>
+        </span>
       </span>
     </ForwardRef(TextInput)>
     <Popup
@@ -129,28 +133,22 @@ exports[`<PathEditor /> snapshots should match snapshot from mount rendering wit
     >
       <Portal>
         <Portal
-          containerInfo={
-            <body>
-              <div
-                class="yc-toaster"
-              />
-            </body>
-          }
+          containerInfo={<body />}
         >
           <CSSTransition
             addEndListener={[Function]}
             appear={true}
             classNames={
               Object {
-                "appear": "yc-popup-wrapper_appear",
-                "appearActive": "yc-popup-wrapper_appear_active",
-                "appearDone": "yc-popup-wrapper_appear_done",
-                "enter": "yc-popup-wrapper_enter",
-                "enterActive": "yc-popup-wrapper_enter_active",
-                "enterDone": "yc-popup-wrapper_enter_done",
-                "exit": "yc-popup-wrapper_exit",
-                "exitActive": "yc-popup-wrapper_exit_active",
-                "exitDone": "yc-popup-wrapper_exit_done",
+                "appear": "yc-popup_appear",
+                "appearActive": "yc-popup_appear_active",
+                "appearDone": "yc-popup_appear_done",
+                "enter": "yc-popup_enter",
+                "enterActive": "yc-popup_enter_active",
+                "enterDone": "yc-popup_enter_done",
+                "exit": "yc-popup_exit",
+                "exitActive": "yc-popup_exit_active",
+                "exitDone": "yc-popup_exit_done",
               }
             }
             in={false}

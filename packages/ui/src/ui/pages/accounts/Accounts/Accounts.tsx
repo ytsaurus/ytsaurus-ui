@@ -151,7 +151,7 @@ const mapStateToProps = (state: RootState) => {
     return {
         lastVisitedTab: lastVisitedTabs[Page.ACCOUNTS],
         activeAccount: getActiveAccount(state),
-        tabSize: getUISizes(state).tabSize,
+        tabSize: getUISizes().tabSize,
         allowUsageTab: Boolean(getAccountsUsageBasePath()),
         cluster: getCluster(state),
     };

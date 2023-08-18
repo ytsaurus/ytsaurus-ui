@@ -63,6 +63,7 @@ function GroupSuggest(props: Props) {
                 multiple={multiple}
                 width={width ?? 'max'}
                 filterable
+                disablePortal
             />
             {multiple && showTags && <EditableList onChange={onListChange} value={listValue} />}
         </div>

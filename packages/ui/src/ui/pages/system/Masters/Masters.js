@@ -250,7 +250,7 @@ function mapStateToProps(state) {
         discovery,
         queueAgents,
         counters,
-        collapsibleSize: getUISizes(state).collapsibleSize,
+        collapsibleSize: getUISizes().collapsibleSize,
         collapsed: getSettingsSystemMastersCollapsed(state),
     };
 }

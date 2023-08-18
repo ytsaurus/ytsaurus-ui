@@ -74,6 +74,7 @@ export default class SelectWithSubItems extends Component<Props> {
                     onUpdate={(vals) => onChange(vals[0])}
                     placeholder={placeholder}
                     width="max"
+                    disablePortal
                 />
             </div>
         );

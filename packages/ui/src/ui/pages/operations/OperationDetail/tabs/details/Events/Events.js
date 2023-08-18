@@ -91,7 +91,7 @@ export default class Events extends React.Component {
                             >
                                 {hammer.format['Percent'](progress)}
                             </span>
-                            <Progress value={value} size="xs" />
+                            <Progress value={value} size="s" />
                         </div>
                     );
                 }

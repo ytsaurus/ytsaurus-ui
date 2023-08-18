@@ -1,9 +1,9 @@
 @mixin yt-fonts-variables {
-    --yc-font-family-sans: 'Manrope', 'Helvetica Neue', helvetica, arial, sans-serif;
-    --yc-font-family-monospace: 'RobotoMono', monospace;
-    --yc-font-weight-bold: 700;
-    --yt-font-size: 14px;
-    --yt-line-height: 1.428571429;
+    --g-font-family-sans: 'Manrope', 'Helvetica Neue', helvetica, arial, sans-serif;
+    --g-font-family-monospace: 'RobotoMono', monospace;
+    --g-font-weight-bold: 700;
+    --g-font-size: 14px;
+    --g-line-height: 1.428571429;
 }
 
 @mixin font-body2 {

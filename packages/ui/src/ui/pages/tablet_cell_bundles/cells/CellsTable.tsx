@@ -144,7 +144,7 @@ class CellsTable extends React.Component<Props & ReduxProps> {
     };
 
     renderState = (data: {row: TabletCell}) => {
-        const {state} = data?.row;
+        const {state} = data?.row ?? {};
         const theme = state ? STATE_THEME[state] : undefined;
         return <Label theme={theme} type="text" text={state} capitalize />;
     };

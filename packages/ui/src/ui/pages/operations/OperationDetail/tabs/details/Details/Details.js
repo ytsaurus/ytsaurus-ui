@@ -209,7 +209,7 @@ const mapStateToProps = (state) => {
         cluster,
         operation,
         ...operations.detail.details,
-        collapsibleSize: getUISizes(state).collapsibleSize,
+        collapsibleSize: getUISizes().collapsibleSize,
         alertEvents: getOperationAlertEventsItems(state),
     };
 };

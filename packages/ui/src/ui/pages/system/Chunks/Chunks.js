@@ -246,7 +246,7 @@ function mapStateToProps(state) {
         cells,
         types,
         sortState: state.tables[SYSTEM_CHUNKS_TABLE_ID],
-        collapsibleSize: getUISizes(state).collapsibleSize,
+        collapsibleSize: getUISizes().collapsibleSize,
         collapsed: getSettingsSystemChunksCollapsed(state),
     };
 }

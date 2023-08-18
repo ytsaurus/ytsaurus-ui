@@ -642,7 +642,7 @@ const mapStateToProps = (state) => {
         activeHistogram,
         histogram,
         type,
-        collapsibleSize: getUISizes(state).collapsibleSize,
+        collapsibleSize: getUISizes().collapsibleSize,
     };
 };
 

@@ -132,7 +132,7 @@ const mapStateToProps = (state: RootState) => {
         mediumList,
         isDynamic,
         tableType,
-        collapsibleSize: getUISizes(state).collapsibleSize,
+        collapsibleSize: getUISizes().collapsibleSize,
     };
 };
 
