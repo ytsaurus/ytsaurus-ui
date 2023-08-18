@@ -27,7 +27,7 @@ const STATUS_ICONS: Partial<Record<QueryStatus, SVGIconData>> = {
 
 export function QueryStatusIcon({status, className}: {status: QueryStatus; className?: string}) {
     if (ProgressStatuses.includes(status)) {
-        return <Spin size="xs" className={b('icon-container', {loading: true}, className)} />;
+        return <Spin size="s" className={b('icon-container', {loading: true}, className)} />;
     }
     if (STATUS_ICONS[status]) {
         return (

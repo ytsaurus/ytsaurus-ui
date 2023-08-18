@@ -146,6 +146,7 @@ class CustomSelect extends React.Component<
                 renderOption={this.renderOption}
                 renderControl={this.renderControl}
                 renderFilter={this.renderFilter}
+                disablePortal
             />
         );
     }

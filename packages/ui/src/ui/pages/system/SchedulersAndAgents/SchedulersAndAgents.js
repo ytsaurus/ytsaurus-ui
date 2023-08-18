@@ -158,7 +158,7 @@ function mapStateToProps(state) {
         agents: getSystemAgentsWithState(state),
         counters: getSystemSchedulerAndAgentCounters(state),
         alerts: getSystemSchedulerAndAgentAlerts(state),
-        collapsibleSize: getUISizes(state).collapsibleSize,
+        collapsibleSize: getUISizes().collapsibleSize,
         collapsed: getSettingsSystemSchedulersCollapsed(state),
     };
 }

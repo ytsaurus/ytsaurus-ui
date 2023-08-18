@@ -26,6 +26,7 @@ export function PoolTreeSuggestControl(props: Props) {
             onUpdate={(values) => onChange(values[0])}
             placeholder={placeholder}
             width="max"
+            disablePortal
         />
     );
 }

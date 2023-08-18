@@ -27,7 +27,7 @@ export const getFontType = createSelector(
 export const getFontFamilies = createSelector(getFontType, (fontType) => {
     const {fontTypes} = uiSettings;
     if (fontTypes?.[fontType]) {
-        const {regular, monospace} = fontTypes?.[fontType];
+        const {regular, monospace} = fontTypes?.[fontType] ?? {};
         if (regular && monospace) {
             return fontTypes[fontType];
         }

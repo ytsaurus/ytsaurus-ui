@@ -502,7 +502,7 @@ function mapStateToProps(state, props) {
         inputPaths,
         cluster,
         login,
-        collapsibleSize: getUISizes(state).collapsibleSize,
+        collapsibleSize: getUISizes().collapsibleSize,
         isLoading: props.isLoading || operationId !== jobsOperationId,
     };
 }

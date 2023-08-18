@@ -112,13 +112,8 @@ const competitiveItem = {
     text: 'With competitive jobs',
 };
 
-export const getAttributeItems = createSelector([], () => {
-    return [...attributeItems, competitiveItem];
-});
-
-export const getAttributesNames = createSelector(getAttributeItems, (attributeItems) =>
-    _.map(attributeItems, ({value}) => value),
-);
+export const ATTRIBUTE_ITEMS = [...attributeItems, competitiveItem];
+export const ATTRIBUTE_ITEM_NAMES = _.map(ATTRIBUTE_ITEMS, ({value}) => value);
 
 export const getOperationsListFilterParameters = createSelector(
     [getOperationsListFilters],

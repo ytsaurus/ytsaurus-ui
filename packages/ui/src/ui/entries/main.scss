@@ -1,4 +1,4 @@
-body.yc-root {
+body.g-root {
     --yc-color-base-special: #ffb23e;
     --yc-my-color-brand-text: rgba(0, 0, 0);
     --yc-my-color-brand-text-contrast: rgba(0, 0, 0, 0.85);
@@ -9,14 +9,14 @@ body.yc-root {
     --yc-color-base-selection: rgba(255, 178, 62, 0.2);
     --yc-color-base-selection-hover: rgba(255, 178, 62, 0.5);
 
-    &.yc-root_theme_dark,
-    &.yc-root_theme_dark-hc {
+    &.g-root_theme_dark,
+    &.g-root_theme_dark-hc {
         --yc-color-base-special-hover: rgb(229, 138, 0, 0.9);
         --yc-my-color-brand-text: rgba(255, 255, 255);
     }
 
-    &.yc-root_theme_light,
-    &.yc-root_theme_light-hc {
+    &.g-root_theme_light,
+    &.g-root_theme_light-hc {
         .login-page__button {
             --yc-my-color-brand-text-contrast: #ffffff;
         }

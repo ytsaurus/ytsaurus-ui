@@ -406,7 +406,7 @@ const mapStateToProps = (state: RootState) => {
         totalJobWallTime,
         cpuTimeSpent,
         erasedTrees,
-        tabSize: getUISizes(state).tabSize,
+        tabSize: getUISizes().tabSize,
         monitorTabVisible,
         monitorTabTitle,
         monitorTabUrlTemplate,

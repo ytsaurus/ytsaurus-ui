@@ -471,7 +471,7 @@ function mapStateToProps(state) {
         parsedPath: getParsedPath(state),
         transaction: getTransaction(state),
         cluster: getCluster(state),
-        tabSize: getUISizes(state).tabSize,
+        tabSize: getUISizes().tabSize,
         tabletErrorsCount: getTabletErrorsCount(state),
     };
 }

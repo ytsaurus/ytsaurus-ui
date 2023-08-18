@@ -171,7 +171,7 @@ const mapStateToProps = (state) => {
         lastVisitedAccounts: getLastVisitedAccounts(state),
         popularAccounts: getPopularAccounts(state),
         favouriteAccounts: getFavouriteAccounts(state),
-        tabSize: getUISizes(state).tabSize,
+        tabSize: getUISizes().tabSize,
         cluster: getCluster(state),
     };
 };

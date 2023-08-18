@@ -5,15 +5,13 @@ import Select from '../../../../../../components/Select/Select';
 
 import {getFilteredAttributes} from '../../../../../../pages/operations/selectors';
 import {updateFilteredAttributes} from '../../../../../../store/actions/operations/jobs';
-import {getAttributeItems, getAttributesNames} from '../../../../../../store/selectors/operations';
+import {ATTRIBUTE_ITEMS, ATTRIBUTE_ITEM_NAMES} from '../../../../../../store/selectors/operations';
 
 function JobsAttributesFilter(props: {disabled: boolean}) {
-    const attributeItems = useSelector(getAttributeItems);
-    const attributeNames = useSelector(getAttributesNames);
-    const attributes = useSelector(getFilteredAttributes(attributeNames));
+    const attributes = useSelector(getFilteredAttributes(ATTRIBUTE_ITEM_NAMES));
     const dispatch = useDispatch();
     const handleChange = useCallback((value: Array<string>) => {
-        dispatch(updateFilteredAttributes(attributeNames, value));
+        dispatch(updateFilteredAttributes(ATTRIBUTE_ITEM_NAMES, value));
     }, []);
 
     return (
@@ -23,7 +21,7 @@ function JobsAttributesFilter(props: {disabled: boolean}) {
             value={attributes}
             label="Attributes:"
             filterable
-            items={attributeItems}
+            items={ATTRIBUTE_ITEMS}
             onUpdate={handleChange}
         />
     );

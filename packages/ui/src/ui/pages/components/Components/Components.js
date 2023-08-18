@@ -101,7 +101,7 @@ const mapStateToProps = (state) => {
     const lastVisitedTabs = getLastVisitedTabs(state);
     return {
         lastVisitedTab: lastVisitedTabs[Page.COMPONENTS],
-        tabSize: getUISizes(state).tabSize,
+        tabSize: getUISizes().tabSize,
     };
 };
 

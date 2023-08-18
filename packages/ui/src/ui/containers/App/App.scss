@@ -9,7 +9,7 @@
 body {
     margin: 0px;
 
-    &.yc-root {
+    &.g-root {
         @include yt-fonts-variables;
     }
 
@@ -90,20 +90,22 @@ body {
         background-color: var(--yc-button-background-color);
     }
     .yc-select-control_disabled.yc-select-control,
-    .yc-text-input_disabled.yc-text-input__control {
-        background-color: var(--yc-color-base-generic-accent-disabled);
+    .yc-text-input_disabled {
+        .yc-text-input__content {
+            background-color: var(--yc-color-base-generic-accent-disabled);
+        }
     }
 
     .yc-button_view_outlined::before,
     .yc-button_view_outlined-info::before,
     .yc-button_view_outlined-danger::before,
     .yc-select-control,
-    .yc-text-input__control {
+    .yc-text-input__content {
         background-color: var(--main-background);
     }
 
     .yc-select-search {
-        .yc-text-input__control {
+        .yc-text-input__content {
             background-color: unset;
         }
     }

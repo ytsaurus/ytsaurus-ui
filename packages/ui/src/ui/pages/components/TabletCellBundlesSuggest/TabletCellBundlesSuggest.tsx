@@ -39,6 +39,7 @@ function TabletCellBundlesSuggest(props: Props) {
                 placeholder={placeholder}
                 value={value ? [value] : undefined}
                 width="max"
+                disablePortal
             />
         </div>
     );
