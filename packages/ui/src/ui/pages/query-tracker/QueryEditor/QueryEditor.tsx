@@ -8,6 +8,7 @@ import playIcon from '../../../../../img/svg/play.svg';
 import {useDispatch, useSelector} from 'react-redux';
 import {
     getQuery,
+    getQueryEditorErrors,
     getQueryEngine,
     getQueryText,
     isQueryExecuted,
@@ -23,6 +24,8 @@ import closeIcon from '../../../../../img/svg/close-icon.svg';
 import './QueryEditor.scss';
 import {QueryItem} from '../module/api';
 import {useCurrentQuery} from '../QueryResults/hooks/useCurrentQuery';
+import forEach_ from 'lodash/forEach';
+import uniqBy_ from 'lodash/uniqBy';
 
 const b = block('query-container');
 
@@ -35,11 +38,58 @@ const QueryEditorView = React.memo(function QueryEditorView({
     const activeQuery = useSelector(getQuery);
     const text = useSelector(getQueryText);
     const engine = useSelector(getQueryEngine);
+    const editorErrors = useSelector(getQueryEditorErrors);
+    const decorationsCollection = useRef<monaco.editor.IEditorDecorationsCollection | undefined>(
+        undefined,
+    );
+    const model = editorRef.current?.getModel();
 
     useEffect(() => {
         editorRef.current?.focus();
         editorRef.current?.setScrollTop(0);
     }, [editorRef.current, activeQuery?.id]);
+
+    useEffect(
+        function updateErrorMarkers() {
+            if (model) {
+                const markers: monaco.editor.IMarkerData[] = [];
+                const decorations: monaco.editor.IModelDeltaDecoration[] = [];
+                forEach_(editorErrors, (error) => {
+                    const {attributes, message} = error;
+                    const range = new monaco.Range(
+                        attributes.start_position.row,
+                        attributes.start_position.column,
+                        attributes.end_position.row,
+                        attributes.end_position.column,
+                    );
+                    const {startLineNumber, startColumn, endLineNumber, endColumn} = range;
+                    const marker: monaco.editor.IMarkerData = {
+                        message: message,
+                        severity: monaco.MarkerSeverity.Error,
+                        startLineNumber,
+                        startColumn,
+                        endLineNumber,
+                        endColumn,
+                    };
+                    markers.push(marker);
+                    const line = {
+                        range: range,
+                        options: {
+                            isWholeLine: true,
+                            className: b('error-line'),
+                        },
+                    };
+                    decorations.push(line);
+                });
+                monaco.editor.setModelMarkers(model, 'query-tracker', markers);
+                decorationsCollection.current?.clear();
+                decorationsCollection.current = editorRef.current?.createDecorationsCollection(
+                    uniqBy_(decorations, (d) => d.range.startLineNumber),
+                );
+            }
+        },
+        [editorErrors, model],
+    );
 
     const monacoConfig = useMemo<MonacoEditorConfig>(() => {
         return {
@@ -54,7 +104,7 @@ const QueryEditorView = React.memo(function QueryEditorView({
     const dispatch = useDispatch();
     const upadteQueryText = useCallback(
         function (text: string) {
-            dispatch({type: SET_QUERY_PATCH, data: {query: text}});
+            dispatch({type: SET_QUERY_PATCH, data: {query: text, error: undefined}});
         },
         [dispatch],
     );

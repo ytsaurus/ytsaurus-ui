@@ -68,11 +68,6 @@ class MonacoEditor extends React.Component<Props> {
         }
     }
 
-    componentWillUnmount() {
-        this.editor?.dispose();
-        key.setScope(this.prevScope!);
-    }
-
     componentDidUpdate(prevProps: Readonly<Props>): void {
         const {theme, value, monacoConfig} = this.props;
         const options: monaco.editor.IStandaloneEditorConstructionOptions = {};
@@ -91,14 +86,11 @@ class MonacoEditor extends React.Component<Props> {
         this.editor?.updateOptions(options);
     }
 
-    onContentChanged = () => {
-        if (this.silent) {
-            return;
-        }
-        const {onChange} = this.props;
-        const value = this.model.getValue();
-        onChange(value);
-    };
+    componentWillUnmount() {
+        this.editor?.getModel()?.dispose();
+        this.editor?.dispose();
+        key.setScope(this.prevScope!);
+    }
 
     render() {
         const {className} = this.props;
@@ -109,6 +101,15 @@ class MonacoEditor extends React.Component<Props> {
             </div>
         );
     }
+
+    onContentChanged = () => {
+        if (this.silent) {
+            return;
+        }
+        const {onChange} = this.props;
+        const value = this.model.getValue();
+        onChange(value);
+    };
 }
 
 const mapStateToProps = (state: RootState) => {
