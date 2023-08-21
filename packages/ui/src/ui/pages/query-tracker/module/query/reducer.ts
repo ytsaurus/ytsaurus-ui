@@ -63,6 +63,10 @@ export function reducer(state = initState, action: Actions): QueryState {
             return {
                 ...state,
                 queryItem: action.data,
+                draft: {
+                    ...state.draft,
+                    error: action.data?.error,
+                },
             };
         }
         case REQUEST_QUERY: {

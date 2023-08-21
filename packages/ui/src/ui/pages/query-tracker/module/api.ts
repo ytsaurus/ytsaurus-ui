@@ -68,6 +68,7 @@ export interface DraftQuery {
         title?: string;
     };
     settings?: {};
+    error?: unknown;
 }
 
 export interface QueryItem extends DraftQuery {

@@ -6,6 +6,9 @@ import {
     getSettingQueryTrackerYQLAgentStage,
 } from '../../../../store/selectors/settings-ts';
 import {getQueryTrackerStage} from '../../../../config';
+import {QTEditorError} from '../types/editor';
+import {YTError} from '../../../../types';
+import {isYTError} from '../../../../../shared/utils';
 
 const QT_STAGE = getQueryTrackerStage();
 const getState = (state: RootState) => state.queryTracker.query;
@@ -48,3 +51,23 @@ export const getQueryTrackerRequestOptions = createSelector(
         return res;
     },
 );
+
+export const getQueryEditorErrors = (state: RootState): QTEditorError[] => {
+    const res: QTEditorError[] = [];
+    const checkIsEditorError = (error: YTError) => {
+        if (error.attributes) {
+            if ('end_position' in error.attributes && 'start_position' in error.attributes) {
+                res.push(error as QTEditorError);
+            }
+        }
+        if (error.inner_errors && error.inner_errors.length !== 0) {
+            error.inner_errors.forEach((inner_error) => checkIsEditorError(inner_error));
+        }
+    };
+
+    const error = getState(state).draft?.error;
+    if (isYTError(error)) {
+        checkIsEditorError(error);
+    }
+    return res;
+};

@@ -1,6 +1,7 @@
 .query-widget {
     flex: 1;
-    z-index: 1;
+    z-index: var(--query-editor-container-z-index);
+    overflow: visible;
     display: flex;
     flex-direction: column;
     background: var(--main-background);
@@ -30,5 +31,9 @@
         flex: 1 0;
         display: flex;
         justify-content: flex-end;
+    }
+
+    .flex-split__pane:nth-child(1) {
+        overflow: visible;
     }
 }
