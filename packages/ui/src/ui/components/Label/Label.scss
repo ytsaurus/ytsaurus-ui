@@ -39,11 +39,11 @@
     }
 
     &_theme_misc {
-        @include label-theme-block(var(--yc-color-text-misc), var(--yc-color-base-misc));
+        @include label-theme-block(var(--g-color-text-misc), var(--g-color-base-misc-light));
     }
 
     &_theme_complementary {
-        @include label-theme-block(var(--yc-color-text-complementary), var(--yc-color-base-generic));
+        @include label-theme-block(var(--g-color-text-complementary), var(--g-color-base-generic));
     }
 
     &_type_text {

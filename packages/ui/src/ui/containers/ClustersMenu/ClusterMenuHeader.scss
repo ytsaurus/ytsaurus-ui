@@ -41,9 +41,9 @@
 
     &__page-name {
         padding-left: 16px;
-        font-size: var(--yc-text-body-3-font-size);
+        font-size: var(--g-text-body-3-font-size);
         font-weight: 500;
-        line-height: var(--yc-text-body-3-line-height);
+        line-height: var(--g-text-body-3-line-height);
     }
 
     &__popup {
@@ -51,6 +51,6 @@
     }
 
     &__item-version {
-        font-family: var(--yc-font-family-monospace);
+        font-family: var(--g-font-family-monospace);
     }
 }

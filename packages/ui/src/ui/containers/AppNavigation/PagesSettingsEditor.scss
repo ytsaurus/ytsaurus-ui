@@ -11,21 +11,21 @@
 
     &__top-title {
         flex-grow: 1;
-        font-size: var(--yc-text-body-2-font-size);
-        line-height: var(--yc-text-body-2-line-height);
+        font-size: var(--g-text-body-2-font-size);
+        line-height: var(--g-text-body-2-line-height);
         font-weight: var(--yt-font-weight-bold);
     }
 
     &__top-btn {
         border-radius: 4px;
         svg {
-            color: var(--yc-color-text-secondary);
+            color: var(--g-color-text-secondary);
         }
 
         &_active {
-            background-color: var(--yc-color-base-selection);
+            background-color: var(--g-color-base-selection);
             svg {
-                color: var(--yc-color-base-special);
+                color: var(--g-color-base-brand);
             }
         }
     }
@@ -44,7 +44,7 @@
     &__service-item-link {
         &_current {
             .nv-composite-bar__menu-icon {
-                color: var(--yc-color-base-special);
+                color: var(--g-color-base-brand);
             }
         }
     }

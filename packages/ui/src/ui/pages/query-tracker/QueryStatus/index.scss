@@ -6,15 +6,15 @@
         margin-right: 4px;
 
         &_draft {
-            color: var(--color-status-icon-draft, var(--yc-color-text-secondary));
+            color: var(--color-status-icon-draft, var(--g-color-text-secondary));
         }
 
         &_completed {
-            color: var(--color-status-icon-completed, var(--yc-color-text-positive));
+            color: var(--color-status-icon-completed, var(--g-color-text-positive));
         }
 
         &_failed {
-            color: var(--color-status-icon-error, var(--yc-color-text-yandex-red));
+            color: var(--color-status-icon-error, var(--g-color-text-danger));
         }
 
         &.loading {
@@ -23,7 +23,7 @@
         }
 
         &_aborted {
-            color: var(--color-status-icon-aborting, var(--yc-color-text-secondary));
+            color: var(--color-status-icon-aborting, var(--g-color-text-secondary));
         }
     }
 

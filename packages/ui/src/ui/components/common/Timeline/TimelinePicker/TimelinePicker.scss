@@ -15,7 +15,7 @@
 
         &_divider {
             margin-right: 12px;
-            border-right: 1px solid var(--yc-color-line-generic);
+            border-right: 1px solid var(--g-color-line-generic);
         }
 
         .yc-button_size_l .yc-button__text {
@@ -34,7 +34,7 @@
     &__datepicker {
         display: flex;
         align-items: center;
-        color: var(--yc-color-text-complementary);
+        color: var(--g-color-text-complementary);
         overflow: hidden;
         min-width: 36px;
 

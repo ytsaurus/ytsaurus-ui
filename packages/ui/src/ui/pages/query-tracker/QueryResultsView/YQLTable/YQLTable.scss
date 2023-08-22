@@ -1,8 +1,8 @@
 .yql-result-table {
     --qt-result-table-cell-max-width: 700px;
     font-family: var(--g-font-family-monospace);
-    font-size: var(--yc-text-code-2-font-size);
-    line-height: var(--yc-text-code-2-line-height);
+    font-size: var(--g-text-code-2-font-size);
+    line-height: var(--g-text-code-2-line-height);
 
     overflow: initial;
 
@@ -36,7 +36,7 @@
     .data-table {
         --data-table-header-vertical-padding: 6px;
         --data-table-cell-vertical-padding: 6px;
-        --data-table-color-footer-area: var(--yc-color-base-misc);
+        --data-table-color-footer-area: var(--g-color-base-misc-light);
         --data-table-row-height: auto;
 
         &__table-wrapper {
@@ -46,7 +46,7 @@
         }
 
         &__table {
-            background: var(--yc-color-base-background);
+            background: var(--g-color-base-background);
         }
 
         &__th {

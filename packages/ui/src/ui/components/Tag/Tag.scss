@@ -1,5 +1,5 @@
 .yt-tag {
-    background-color: var(--yc-color-line-generic);
+    background-color: var(--g-color-line-generic);
     padding: 2px 0 2px 8px;
     border-radius: 4px;
 
@@ -14,11 +14,11 @@
     }
 
     &__remove {
-        color: var(--yc-color-text-secondary);
+        color: var(--g-color-text-secondary);
         cursor: pointer;
 
         &:hover {
-            color: var(--yc-color-text-primary);
+            color: var(--g-color-text-primary);
         }
     }
 }

@@ -11,14 +11,14 @@
 
     &__error-text {
         @include text-body-1;
-        color: var(--yc-color-text-danger);
+        color: var(--g-color-text-danger);
         margin-top: 2px;
     }
 
     &_state_error {
         .yc-select-control,
         .yc-text-input__control {
-            border-color: var(--yc-color-text-danger);
+            border-color: var(--g-color-text-danger);
         }
     }
 }

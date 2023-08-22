@@ -142,13 +142,13 @@
         font-size: 13px;
         line-height: 18px;
         text-align: left;
-        color: var(--yc-color-text-secondary);
+        color: var(--g-color-text-secondary);
         border-bottom: 1px dashed;
-        border-color: var(--yc-color-line-generic-accent);
+        border-color: var(--g-color-line-generic-accent);
 
         &:hover {
-            color: var(--yc-color-text-primary);
-            border-color: var(--yc-color-line-generic-accent-hover);
+            color: var(--g-color-text-primary);
+            border-color: var(--g-color-line-generic-accent-hover);
         }
     }
 }

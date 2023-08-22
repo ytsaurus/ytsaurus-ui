@@ -11,7 +11,7 @@
     }
 
     &__icon {
-        color: var(--yc-color-text-misc);
+        color: var(--g-color-text-misc);
     }
 
     &__name {
@@ -20,15 +20,15 @@
     }
 
     &__pin-icon {
-        color: var(--yc-color-text-secondary);
+        color: var(--g-color-text-secondary);
         cursor: pointer;
 
         &:hover {
-            color: var(--yc-color-base-special-hover);
+            color: var(--g-color-base-brand-hover);
         }
 
         &_pinned {
-            color: var(--yc-color-base-special);
+            color: var(--g-color-base-brand);
         }
     }
 }
