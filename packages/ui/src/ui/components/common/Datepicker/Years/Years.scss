@@ -16,19 +16,19 @@
         cursor: pointer;
 
         .yc-datepicker_desktop &:hover {
-            background-color: var(--yc-color-base-simple-hover);
+            background-color: var(--g-color-base-simple-hover);
         }
 
         &_today {
-            color: var(--yc-color-text-info);
+            color: var(--g-color-text-info);
         }
 
         &_selected {
             border-radius: 0;
-            background-color: var(--yc-color-base-selection);
+            background-color: var(--g-color-base-selection);
 
             .yc-datepicker_desktop &:hover {
-                background-color: var(--yc-color-base-selection);
+                background-color: var(--g-color-base-selection);
             }
         }
 
@@ -50,7 +50,7 @@
             display: block;
             height: 40px;
             width: 6px;
-            background-color: var(--yc-color-base-selection);
+            background-color: var(--g-color-base-selection);
         }
 
         &_disabled {

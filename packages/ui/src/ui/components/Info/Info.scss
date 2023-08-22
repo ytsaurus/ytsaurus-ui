@@ -1,9 +1,9 @@
 .info-block {
-    --external-link: var(--yc-color-text-link);
+    --external-link: var(--g-color-text-link);
 
     display: flex;
     padding: 12px 16px;
-    background-color: var(--yc-color-base-info);
+    background-color: var(--g-color-base-info-light);
     border-radius: 5px;
 
     .yc-icon {
@@ -16,8 +16,8 @@
     }
 
     &__body {
-        font-size: var(--yc-text-body-short-font-size);
-        line-height: var(--yc-text-body-short-line-height);
-        color: var(--yc-color-text-secondary);
+        font-size: var(--g-text-body-short-font-size);
+        line-height: var(--g-text-body-short-line-height);
+        color: var(--g-color-text-secondary);
     }
 }

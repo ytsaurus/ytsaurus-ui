@@ -1,24 +1,24 @@
 body.g-root {
-    --yc-color-base-special: #ffb23e;
-    --yc-my-color-brand-text: rgba(0, 0, 0);
-    --yc-my-color-brand-text-contrast: rgba(0, 0, 0, 0.85);
+    --g-color-base-brand: #ffb23e;
+    --g-color-text-brand: rgba(0, 0, 0);
+    --g-color-text-brand-contrast: rgba(0, 0, 0, 0.85);
     --filter-color: rgba(255, 178, 62, 0.1);
 
-    --yc-color-base-special-hover: #e58a00;
+    --g-color-base-brand-hover: #e58a00;
 
-    --yc-color-base-selection: rgba(255, 178, 62, 0.2);
-    --yc-color-base-selection-hover: rgba(255, 178, 62, 0.5);
+    --g-color-base-selection: rgba(255, 178, 62, 0.2);
+    --g-color-base-selection-hover: rgba(255, 178, 62, 0.5);
 
     &.g-root_theme_dark,
     &.g-root_theme_dark-hc {
-        --yc-color-base-special-hover: rgb(229, 138, 0, 0.9);
-        --yc-my-color-brand-text: rgba(255, 255, 255);
+        --g-color-base-brand-hover: rgb(229, 138, 0, 0.9);
+        --g-color-text-brand: rgba(255, 255, 255);
     }
 
     &.g-root_theme_light,
     &.g-root_theme_light-hc {
         .login-page__button {
-            --yc-my-color-brand-text-contrast: #ffffff;
+            --g-color-text-brand-contrast: #ffffff;
         }
     }
 }

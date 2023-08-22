@@ -3,7 +3,7 @@
     position: relative;
 
     &__progress {
-        border: 1px solid var(--yc-color-base-generic);
+        border: 1px solid var(--g-color-base-generic);
     }
 
     &__tick {
@@ -11,7 +11,7 @@
         top: -3px;
         left: calc(50% - 1px);
         width: 0;
-        border: 1px solid var(--yc-color-line-generic-accent);
+        border: 1px solid var(--g-color-line-generic-accent);
         height: calc(100% + 4px);
         z-index: 1;
     }

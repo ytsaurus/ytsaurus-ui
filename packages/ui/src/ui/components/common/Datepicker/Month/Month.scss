@@ -17,23 +17,23 @@
         cursor: pointer;
 
         .yc-datepicker_desktop &:hover {
-            background-color: var(--yc-color-base-simple-hover);
+            background-color: var(--g-color-base-simple-hover);
         }
 
         &_weekend {
-            color: var(--yc-color-text-danger);
+            color: var(--g-color-text-danger);
         }
 
         &_today {
-            color: var(--yc-color-text-info);
+            color: var(--g-color-text-info);
         }
 
         &_selected {
             border-radius: 0;
-            background-color: var(--yc-color-base-selection);
+            background-color: var(--g-color-base-selection);
 
             .yc-datepicker_desktop &:hover {
-                background-color: var(--yc-color-base-selection);
+                background-color: var(--g-color-base-selection);
             }
         }
 
@@ -50,7 +50,7 @@
             display: block;
             height: 36px;
             width: 4px;
-            background-color: var(--yc-color-base-selection);
+            background-color: var(--g-color-base-selection);
         }
 
         &_left-edge,
@@ -72,7 +72,7 @@
                 display: block;
                 height: 36px;
                 width: 4px;
-                background-color: var(--yc-color-base-float);
+                background-color: var(--g-color-base-float);
                 pointer-events: none;
             }
 
@@ -86,7 +86,7 @@
                 width: 4px;
                 border-top-right-radius: 4px;
                 border-bottom-right-radius: 4px;
-                background-color: var(--yc-color-base-selection);
+                background-color: var(--g-color-base-selection);
                 pointer-events: none;
             }
         }
@@ -102,7 +102,7 @@
         align-self: center;
         font-size: 18px;
         line-height: 20px;
-        color: var(--yc-color-text-secondary);
+        color: var(--g-color-text-secondary);
 
         &_disabled {
             opacity: 0.3;

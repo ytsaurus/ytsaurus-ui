@@ -1,6 +1,6 @@
-$pin-color: var(--yc-color-base-special);
-$pin-focus-color: var(--yc-color-base-selection);
-$pin-disabled-color: var(--yc-color-sfx-veil);
+$pin-color: var(--g-color-base-brand);
+$pin-focus-color: var(--g-color-base-selection);
+$pin-disabled-color: var(--g-color-sfx-veil);
 
 .yc-range-input-picker {
     $block: &;
@@ -25,7 +25,7 @@ $pin-disabled-color: var(--yc-color-sfx-veil);
 
     &__range-info-item {
         cursor: pointer;
-        color: var(--yc-color-text-secondary);
+        color: var(--g-color-text-secondary);
         font-size: var(--yc-range-input-picker-font-size);
         line-height: var(--yc-range-input-picker-line-height);
     }
@@ -80,7 +80,7 @@ $pin-disabled-color: var(--yc-color-sfx-veil);
 
         &-disabled .rc-slider-handle {
             box-shadow: none;
-            background-color: var(--yc-color-base-float);
+            background-color: var(--g-color-base-float);
             cursor: not-allowed;
         }
 
@@ -108,7 +108,7 @@ $pin-disabled-color: var(--yc-color-sfx-veil);
                 //stylelint-disable-next-line
                 transform: translateX(0) !important;
                 cursor: pointer;
-                color: var(--yc-color-text-secondary);
+                color: var(--g-color-text-secondary);
                 font-size: var(--yc-range-input-picker-font-size);
                 line-height: var(--yc-range-input-picker-line-height);
             }
@@ -116,8 +116,8 @@ $pin-disabled-color: var(--yc-color-sfx-veil);
     }
 
     &_size_s {
-        --yc-range-input-picker-font-size: var(--yc-text-body-short-font-size);
-        --yc-range-input-picker-line-height: var(--yc-text-body-short-line-height);
+        --yc-range-input-picker-font-size: var(--g-text-body-short-font-size);
+        --yc-range-input-picker-line-height: var(--g-text-body-short-line-height);
 
         #{$block}__range-info-items-list {
             top: 31px;
@@ -142,8 +142,8 @@ $pin-disabled-color: var(--yc-color-sfx-veil);
     }
 
     &_size_m {
-        --yc-range-input-picker-font-size: var(--yc-text-body-short-font-size);
-        --yc-range-input-picker-line-height: var(--yc-text-body-short-line-height);
+        --yc-range-input-picker-font-size: var(--g-text-body-short-font-size);
+        --yc-range-input-picker-line-height: var(--g-text-body-short-line-height);
 
         #{$block}__range-info-items-list {
             top: 35px;
@@ -168,8 +168,8 @@ $pin-disabled-color: var(--yc-color-sfx-veil);
     }
 
     &_size_l {
-        --yc-range-input-picker-font-size: var(--yc-text-body-short-font-size);
-        --yc-range-input-picker-line-height: var(--yc-text-body-short-line-height);
+        --yc-range-input-picker-font-size: var(--g-text-body-short-font-size);
+        --yc-range-input-picker-line-height: var(--g-text-body-short-line-height);
 
         #{$block}__range-info-items-list {
             top: 43px;
@@ -177,8 +177,8 @@ $pin-disabled-color: var(--yc-color-sfx-veil);
     }
 
     &_size_xl {
-        --yc-range-input-picker-font-size: var(--yc-text-body-2-font-size);
-        --yc-range-input-picker-line-height: var(--yc-text-body-2-line-height);
+        --yc-range-input-picker-font-size: var(--g-text-body-2-font-size);
+        --yc-range-input-picker-line-height: var(--g-text-body-2-line-height);
 
         #{$block}__range-info-items-list {
             top: 51px;

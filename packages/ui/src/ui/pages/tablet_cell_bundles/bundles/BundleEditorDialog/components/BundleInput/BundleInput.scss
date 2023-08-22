@@ -2,8 +2,8 @@
     --vertical-space: 8px;
     --default-input-width: 200px;
 
-    font-size: var(--yc-text-body-2-font-size);
-    color: var(--yc-color-text-primary);
+    font-size: var(--g-text-body-2-font-size);
+    color: var(--g-color-text-primary);
 
     &__row {
         display: flex;
@@ -29,7 +29,7 @@
     &__label {
         &_required::after {
             content: '*';
-            color: var(--yc-color-text-danger);
+            color: var(--g-color-text-danger);
         }
     }
 
@@ -60,19 +60,19 @@
     }
 
     &__usage {
-        color: var(--yc-color-text-secondary);
+        color: var(--g-color-text-secondary);
     }
 
     &__meta,
     &__hint {
-        font-size: var(--yc-text-body-1-font-size);
-        line-height: var(--yc-text-body-1-line-height);
-        color: var(--yc-color-text-secondary);
+        font-size: var(--g-text-body-1-font-size);
+        line-height: var(--g-text-body-1-line-height);
+        color: var(--g-color-text-secondary);
     }
 
     &__error {
-        font-size: var(--yc-text-body-1-font-size);
-        line-height: var(--yc-text-body-1-line-height);
-        color: var(--yc-color-text-danger);
+        font-size: var(--g-text-body-1-font-size);
+        line-height: var(--g-text-body-1-line-height);
+        color: var(--g-color-text-danger);
     }
 }
