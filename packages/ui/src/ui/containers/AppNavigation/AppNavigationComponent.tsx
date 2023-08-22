@@ -84,6 +84,7 @@ function AppNavigationComponent({
     return (
         <AsideHeader
             className={block(null, className)}
+            multipleTooltip
             panelItems={panelItems}
             onClosePanel={onClosePanel}
             menuItems={menuItems}
