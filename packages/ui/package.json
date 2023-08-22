@@ -57,7 +57,7 @@
     "@doc-tools/transform": "^3.8.5",
     "@gravity-ui/app-layout": "^1.2.0",
     "@gravity-ui/expresskit": "^0.4.1",
-    "@gravity-ui/navigation": "^0.13.1",
+    "@gravity-ui/navigation": "^0.14.0",
     "@gravity-ui/nodekit": "^0.2.0",
     "@ytsaurus/interface-helpers": "0.2.0",
     "@ytsaurus/javascript-wrapper": "0.4.0",
