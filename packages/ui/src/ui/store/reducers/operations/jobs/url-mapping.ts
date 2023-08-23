@@ -44,7 +44,6 @@ export const jobsParams: LocationParameters = {
     address: {
         stateKey: 'operations.jobs.filters.address.value',
         initialState: initialAddressFilter,
-        options: {parse: (address: string) => decodeURIComponent(address)},
     },
     jobId: {
         stateKey: 'operations.jobs.filters.jobId.value',

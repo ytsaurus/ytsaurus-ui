@@ -2,6 +2,8 @@ import React from 'react';
 import cn from 'bem-cn-lite';
 
 import './Text.scss';
+import unipika from '../../common/thor/unipika';
+import {UNIPIKA_ESCAPED_SETTINGS} from '../../utils';
 
 const block = cn('yt-text');
 
@@ -32,4 +34,12 @@ export function Warning({children, className}: Props) {
 
 export function NoWrap({children}: Props) {
     return <span className={block('no-wrap')}>{children}</span>;
+}
+
+export function Escaped({text}: {text: string}) {
+    const textNode = unipika.prettyprint(text, {
+        ...UNIPIKA_ESCAPED_SETTINGS,
+        asHTML: true,
+    });
+    return <span className={block('escaped')} dangerouslySetInnerHTML={{__html: textNode}} />;
 }

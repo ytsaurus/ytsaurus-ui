@@ -34,7 +34,6 @@ import {
 } from '../../../store/reducers/navigation/content/transaction-map/url-mapping';
 
 import {initialState} from '../../../store/reducers/navigation/navigation';
-import {customEncodeURIComponent} from '../../../utils/url-mapping';
 import {
     getNavigationAccessLogPreparedState,
     navigationAccessLogParams,
@@ -71,8 +70,6 @@ export const navigationParams: LocationParameters = {
         stateKey: 'navigation.navigation.path',
         options: {
             shouldPush: true,
-            serialize: (v: string) => customEncodeURIComponent(v),
-            parse: (v: string) => decodeURIComponent(v),
         },
     },
 };

@@ -5,10 +5,10 @@ import hammer from '../common/hammer';
 // @ts-expect-error
 import unipika from '@gravity-ui/unipika/lib/unipika';
 import qs from 'qs';
-import encodeValue from '../common/utils/url-encoder';
 import Cookies from 'js-cookie';
 import type {Settings} from '../components/Yson/StructuredYson/StructuredYsonTypes';
 import type {ClusterConfig, YTConfig} from '../../shared/yt-types';
+import {customEncodeURIComponent} from './url-mapping';
 
 export const flags = new Map<'false' | 'FALSE' | false | 'true' | 'TRUE' | true, boolean>([
     ['false', false],
@@ -317,13 +317,15 @@ export function computeStateQuery(state): string {
         delete params.t;
     }
     // TODO: here we should tranlate params taken from redux state into query params via RLS paramSetup
-    const query = qs.stringify(params, {encoder: encodeValue});
+    const query = qs.stringify(params, {
+        encoder: (str) => customEncodeURIComponent(str),
+    });
 
     return `${baseUrl}?${query}`;
 }
 
 export function paramsToQuery(params: any): string {
-    return qs.stringify(params, {encoder: encodeValue});
+    return qs.stringify(params, {encoder: (str) => customEncodeURIComponent(str)});
 }
 
 export function isNull(value: any): boolean {
@@ -361,3 +363,11 @@ export function printUsageLimit(usage: string, limit: string) {
     const usageNoSuffix = usage.substring(0, lastSpaceIndex);
     return `${usageNoSuffix} / ${limit}`;
 }
+
+export const UNIPIKA_ESCAPED_SETTINGS = {
+    asHTML: false,
+    indent: 0,
+    break: false,
+    showDecoded: true,
+    escapeWhitespace: true,
+};

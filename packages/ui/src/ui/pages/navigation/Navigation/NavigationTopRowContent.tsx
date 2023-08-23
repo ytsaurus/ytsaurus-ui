@@ -40,6 +40,7 @@ import {getNavigationDefaultPath} from '../../../store/selectors/settings';
 import {Tab} from '../../../constants/navigation';
 
 import './NavigationTopRowContent.scss';
+import {Escaped} from '../../../components/Text/Text';
 
 const block = cn('navigation-top-row-content');
 
@@ -227,7 +228,7 @@ function renderBcItem(
             }
         >
             {!isRoot ? (
-                item.text
+                <Escaped text={item.text} />
             ) : (
                 <span className={block('breadcrumbs-root')}>
                     <Icon awesome={'folder-tree'} face={'solid'} />

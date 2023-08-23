@@ -25,6 +25,12 @@
                 display: none;
             }
 
+            .escape {
+                word-spacing: 5px;
+                white-space: pre-wrap;
+                background-color: var(--error-background);
+            }
+
             & .string {
                 position: relative;
                 color: var(--primary-text);

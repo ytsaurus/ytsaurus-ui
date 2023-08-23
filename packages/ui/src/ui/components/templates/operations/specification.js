@@ -1,7 +1,6 @@
 /* global YT */
 import React from 'react';
 import cn from 'bem-cn-lite';
-import qs from 'qs';
 
 import FilterOverview from '../../../pages/operations/OperationDetail/tabs/details/FilterOverview/FilterOverview';
 import ClipboardButton from '../../../components/ClipboardButton/ClipboardButton';
@@ -14,7 +13,7 @@ import templates from '../../../components/templates/utils';
 import {Page} from '../../../constants/index';
 
 import hammer from '../../../common/hammer';
-import encoder from '../../../common/utils/url-encoder';
+import {paramsToQuery} from '../../../utils';
 import OperationIOLink from '../../../pages/operations/OperationIOLink/OperationIOLink';
 
 const block = cn('specification');
@@ -24,7 +23,7 @@ templates.add('operations/detail/specification/io', {
     name(item) {
         const {path, originalPath, transaction, remote, url: itemUrl} = item;
 
-        const query = qs.stringify({path, t: transaction}, {encoder});
+        const query = paramsToQuery({path, t: transaction});
         const url = remote ? itemUrl : `/${YT.cluster}/${Page.NAVIGATION}?${query}`;
 
         return item.isFolder ? (

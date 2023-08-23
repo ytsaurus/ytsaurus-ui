@@ -6,11 +6,7 @@ import {initialState as tableSortState} from '../../tables';
 import {ACCOUNTS_TABLE_ID} from '../../../../constants/accounts/accounts';
 import {parseSortState} from '../../../../utils';
 import {initialUsageFiltersState} from '../usage/accounts-usage-filters';
-import {
-    customEncodeURIComponent,
-    parseSortStateArray,
-    serializeSortStateArray,
-} from '../../../../utils/url-mapping';
+import {parseSortStateArray, serializeSortStateArray} from '../../../../utils/url-mapping';
 import {RootState} from '../../../../store/reducers';
 import produce from 'immer';
 import {updateIfChanged} from '../../../../utils/utils';
@@ -156,8 +152,6 @@ export const accountUsageParams = {
         initialState: initialUsageFiltersState.treePath,
         options: {
             shouldPush: true,
-            serialize: (v: string) => customEncodeURIComponent(v),
-            parse: (v: string) => decodeURIComponent(v),
         },
     },
     b: {
