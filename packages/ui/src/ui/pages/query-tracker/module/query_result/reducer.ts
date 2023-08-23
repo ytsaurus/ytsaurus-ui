@@ -7,6 +7,7 @@ import {
     REQUEST_QUERY_RESULTS,
     SET_QUERY_RESULTS,
     SET_QUERY_RESULTS_ERROR,
+    SET_QUERY_RESULTS_ERRORS,
     SET_QUERY_RESULTS_PAGE,
     SET_QUERY_RESULTS_SETTINGS,
 } from './actions';
@@ -94,6 +95,16 @@ export function reducer(state = initialState, action: QueryResultsActions) {
                         state: QueryResultState.Error,
                         error: action.data.error,
                     },
+                },
+            };
+        }
+        case SET_QUERY_RESULTS_ERRORS: {
+            const results = state[action.data.queryId] ?? {};
+            return {
+                ...state,
+                [action.data.queryId]: {
+                    ...results,
+                    ...action.data.errors,
                 },
             };
         }

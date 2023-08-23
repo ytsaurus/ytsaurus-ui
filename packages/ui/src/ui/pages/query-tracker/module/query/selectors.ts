@@ -9,6 +9,8 @@ import {getQueryTrackerStage} from '../../../../config';
 import {QTEditorError} from '../types/editor';
 import {YTError} from '../../../../types';
 import {isYTError} from '../../../../../shared/utils';
+import {getQueryResults} from '../query_result/selectors';
+import forOwn_ from 'lodash/forOwn';
 
 const QT_STAGE = getQueryTrackerStage();
 const getState = (state: RootState) => state.queryTracker.query;
@@ -65,9 +67,20 @@ export const getQueryEditorErrors = (state: RootState): QTEditorError[] => {
         }
     };
 
-    const error = getState(state).draft?.error;
+    const {error, id} = getState(state).draft;
     if (isYTError(error)) {
         checkIsEditorError(error);
     }
+    if (id && !isQueryDraftEditted(state)) {
+        const results = getQueryResults(state, id);
+        if (results) {
+            forOwn_(results, (value) => {
+                if (value.state === 'error' && isYTError(value.error)) {
+                    checkIsEditorError(value.error);
+                }
+            });
+        }
+    }
+
     return res;
 };

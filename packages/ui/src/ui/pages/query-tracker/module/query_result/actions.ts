@@ -2,16 +2,23 @@ import {ThunkAction} from 'redux-thunk';
 import {RootState} from '../../../../store/reducers';
 import FontFaceObserver from 'fontfaceobserver';
 import {ActionD} from '../../../../types';
-import {QueryItem, QueryResultMetaScheme, getQueryResultMeta, readQueryResults} from '../api';
+import {
+    QueryItem,
+    QueryResultMetaScheme,
+    getQueryResultMeta,
+    getQueryResultMetaList,
+    readQueryResults,
+} from '../api';
 import {getType} from '../../../../components/SchemaDataType/dataTypes';
 import {getQueryResultGlobalSettings, getQueryResultSettings, hasQueryResult} from './selectors';
-import {QueryResultReadyState} from './types';
+import {QueryResultErrorState, QueryResultReadyState, QueryResultState} from './types';
 import {prepareFormattedValue} from './utils/format';
 import {wrapApiPromiseByToaster} from '../../../../utils/utils';
 import {getPrimitiveTypesMap} from '../../../../store/selectors/global/supported-features';
 import {Type, parseV3Type} from '../../../../components/SchemaDataType/dateTypesV3';
 import ypath from '../../../../common/thor/ypath';
 import {getFontFamilies} from '../../../../store/selectors/settings-ts';
+import forEach_ from 'lodash/forEach';
 
 export const REQUEST_QUERY_RESULTS = 'query-tracker/REQUEST_QUERY_RESULTS';
 export type RequestQueryResultsAction = ActionD<
@@ -56,6 +63,12 @@ export type SetQueryResultsErrorAction = ActionD<
     }
 >;
 
+export const SET_QUERY_RESULTS_ERRORS = 'query-tracker/SET_QUERY_RESULTS_ERRORS';
+export type SetQueryResultsErrorsAction = ActionD<
+    typeof SET_QUERY_RESULTS_ERRORS,
+    {queryId: QueryItem['id']; errors: {[index: number]: QueryResultErrorState}}
+>;
+
 export const SET_QUERY_RESULTS_SETTINGS = 'query-tracker/SET_QUERY_RESULTS_SETTINGS';
 export type SetQueryResultsSettingsAction = ActionD<
     typeof SET_QUERY_RESULTS_SETTINGS,
@@ -71,7 +84,8 @@ export type QueryResultsActions =
     | SetQueryResultsAction
     | SetQueryResultsErrorAction
     | SetQueryResultsSettingsAction
-    | SetQueryResultsPageAction;
+    | SetQueryResultsPageAction
+    | SetQueryResultsErrorsAction;
 
 export function applySettings(
     queryId: QueryItem['id'],
@@ -110,8 +124,10 @@ export function loadQueryResult(
                 type: REQUEST_QUERY_RESULTS,
                 data: {queryId, index: resultIndex},
             });
-            await preloadTableFont(fontFamilies.monospace);
             const meta = await dispatch(getQueryResultMeta(queryId, resultIndex));
+            if (meta?.error) throw meta.error;
+
+            await preloadTableFont(fontFamilies.monospace);
             const typeMap = getPrimitiveTypesMap(getState());
             const scheme = (ypath.getValue(meta?.schema) as QueryResultMetaScheme[]) || [];
             const columns =
@@ -151,7 +167,6 @@ export function loadQueryResult(
                     return acc;
                 }, {} as Record<string, {$type: string; $value: unknown}>);
             });
-
             dispatch({
                 type: SET_QUERY_RESULTS,
                 data: {
@@ -240,5 +255,49 @@ export function updateQueryResult(
                 },
             });
         }
+    };
+}
+
+export function loadQueryResultsErrors(
+    query: QueryItem,
+): ThunkAction<any, RootState, any, QueryResultsActions> {
+    return async (dispatch, getState) => {
+        const state = getState();
+        const {result_count} = query;
+
+        if (!result_count) return;
+
+        const inds: number[] = [];
+        for (let ind = 0; ind < result_count; ind++) {
+            if (!hasQueryResult(state, query.id, ind)) inds.push(ind);
+        }
+
+        if (inds.length === 0) return;
+
+        try {
+            const results = await wrapApiPromiseByToaster(
+                dispatch(getQueryResultMetaList(query.id, inds)),
+                {
+                    toasterName: `load_query_results`,
+                    skipSuccessToast: true,
+                    errorTitle: `Failed to load query results meta`,
+                },
+            );
+            const resultsErrors: {[index: number]: QueryResultErrorState} = {};
+            forEach_(results, ({output: meta, error}, ind: number) => {
+                const e = error || meta?.error;
+                if (e) {
+                    resultsErrors[ind] = {
+                        error: e as Error,
+                        state: QueryResultState.Error,
+                        resultReady: false,
+                    };
+                }
+            });
+            dispatch({
+                type: SET_QUERY_RESULTS_ERRORS,
+                data: {queryId: query.id, errors: resultsErrors},
+            });
+        } catch (e) {}
     };
 }

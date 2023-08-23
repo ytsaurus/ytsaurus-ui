@@ -56,7 +56,7 @@ export function extractBatchV4Values<V, T extends {value?: V}>(
     return {...rest, results: res};
 }
 
-interface SplitedBatchResults<T> {
+export interface SplitedBatchResults<T> {
     error: YTError | undefined;
     results: Array<T>;
     outputs: Array<T | undefined>;

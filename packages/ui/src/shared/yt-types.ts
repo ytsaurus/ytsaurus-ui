@@ -130,8 +130,13 @@ export interface CheckAclParams extends BaseBatchParams {
 
 export interface GetQueryParams extends BaseBatchParams {
     query_id: string;
-    stage: string;
+    stage?: string;
 }
+
+export interface GetQueryResultParams extends GetQueryParams {
+    result_index: number;
+}
+
 export type YTPermissionType = 'read' | 'write' | 'use' | 'mount';
 
 export type BatchSubRequest =
@@ -145,7 +150,8 @@ export type BatchSubRequest =
     | SubRequest<'merge', MergeParams>
     | SubRequest<'execute_batch', ExecuteBatchParams>
     | SubRequest<'check_permission_by_acl', CheckAclParams>
-    | SubRequest<'get_query', GetQueryParams>;
+    | SubRequest<'get_query', GetQueryParams>
+    | SubRequest<'get_query_result', GetQueryResultParams>;
 
 export type OutputFormat =
     | {

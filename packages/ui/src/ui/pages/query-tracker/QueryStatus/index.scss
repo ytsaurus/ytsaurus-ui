@@ -26,4 +26,8 @@
             color: var(--color-status-icon-aborting, var(--yc-color-text-secondary));
         }
     }
+
+    &_tabs {
+        margin-right: 0px;
+    }
 }
