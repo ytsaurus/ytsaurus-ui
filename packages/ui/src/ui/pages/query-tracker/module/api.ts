@@ -1,7 +1,7 @@
 import {ThunkAction} from 'redux-thunk';
 import {allowDirectDownload, getQueryTrackerCluster} from '../../../config';
 import {extractBatchV4Values, splitBatchResults} from '../../../utils/utils';
-import {BatchResultsItem} from '../../../../shared/yt-types';
+import {BatchResultsItem, BatchSubRequest} from '../../../../shared/yt-types';
 import {YTApiId, ytApiV3, ytApiV4Id} from '../../../rum/rum-wrap-api';
 import ypath from '../../../common/thor/ypath';
 import {Plan} from './types/plan';
@@ -62,6 +62,7 @@ export type YQLStatistic = {sum?: number; count?: number; avg?: number; max?: nu
 export type YQLSstatistics = Record<string, any>;
 
 export interface DraftQuery {
+    id?: QueryItemId;
     engine: QueryEngine;
     query: string;
     annotations?: {
@@ -344,7 +345,7 @@ export function requestQueries(
     return async (_dispatch, getState) => {
         const state = getState();
         const {stage} = getQueryTrackerRequestOptions(state);
-        const requests: any[] = ids.map((query_id) => ({
+        const requests: BatchSubRequest[] = ids.map((query_id) => ({
             command: 'get_query',
             parameters: {stage, ...makeGetQueryParams(query_id)},
         }));
@@ -398,6 +399,7 @@ export type QueryResultMeta = {
         unmerged_row_count: number;
         unmerged_data_weight: number;
     };
+    error?: unknown;
 };
 
 export function getQueryResultMeta(
@@ -407,10 +409,37 @@ export function getQueryResultMeta(
     return (_dispatch, getState) => {
         const state = getState();
         const {stage} = getQueryTrackerRequestOptions(state);
-        return ytApiV4Id.getQueryResults(YTApiId.readQueryResults, {
+        return ytApiV4Id.getQueryResults(YTApiId.getQueryResults, {
             parameters: {stage, query_id, result_index},
             setup: getQTApiSetup(),
         });
+    };
+}
+
+export function getQueryResultMetaList(
+    query_id: string,
+    inds: number[],
+): ThunkAction<Promise<BatchResultsItem<QueryResultMeta>[]>, RootState, any, any> {
+    return async (_dispatch, getState) => {
+        const state = getState();
+        const {stage} = getQueryTrackerRequestOptions(state);
+        const requests: BatchSubRequest[] = inds.map((ind) => ({
+            command: 'get_query_result',
+            parameters: {stage, query_id, result_index: ind},
+        }));
+        const {results} = (await ytApiV4Id.executeBatch<QueryResultMeta>(YTApiId.getQueryResults, {
+            parameters: {
+                requests: requests,
+                output_format: {
+                    $value: 'json',
+                    $attributes: {
+                        encode_utf8: 'false',
+                    },
+                },
+            },
+            setup: getQTApiSetup(),
+        })) as unknown as {results: BatchResultsItem<QueryResultMeta>[]};
+        return results;
     };
 }
 

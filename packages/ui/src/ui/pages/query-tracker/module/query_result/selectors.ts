@@ -17,6 +17,11 @@ export const getQueryResultGlobalSettings = (): QueryResultReadyState['settings'
     };
 };
 
+export const getQueryResults = (
+    state: RootState,
+    queryId: string,
+): Record<number, QueryResult> | undefined => getQueryResultsState(state)?.[queryId];
+
 export const getQueryResult = (
     state: RootState,
     queryId: string,
@@ -37,7 +42,7 @@ export const getQueryReadyResult = (
 
 export const isQueryResultReady = (state: RootState, queryId: string, index: number): boolean => {
     const result = getQueryResult(state, queryId, index);
-    return !!result?.resultReady;
+    return Boolean(result?.resultReady);
 };
 
 export const hasQueryResult = (state: RootState, queryId: string, index: number) => {

@@ -1,7 +1,13 @@
 import {TabsItemProps} from '@gravity-ui/uikit';
-import {times} from 'lodash';
+import times_ from 'lodash/times';
+import has_ from 'lodash/has';
 import {QueryItem, QueryStatus} from '../../module/api';
-import {useCallback, useEffect, useMemo, useState} from 'react';
+import {QueryStatusIcon} from '../../QueryStatus';
+import React, {useCallback, useEffect, useMemo, useState} from 'react';
+import {useDispatch, useSelector} from 'react-redux';
+import {loadQueryResultsErrors} from '../../module/query_result/actions';
+import {getQueryResults} from '../../module/query_result/selectors';
+import {RootState} from '../../../../store/reducers';
 
 export enum QueryResultTab {
     ERROR = 'error',
@@ -30,6 +36,8 @@ export const useQueryResultTabs = (
 ): [TabsItemProps[], (tab: string) => void, ResultCurrentState] => {
     const [tab, setTab] = useState<QueryResultTab>(QueryResultTab.META);
     const [resultIndex, setActiveIndex] = useState<number | undefined>(undefined);
+    const dispatch = useDispatch();
+    const resultsMeta = useSelector((state: RootState) => getQueryResults(state, query?.id || ''));
 
     const activeTabId = useMemo(() => {
         if (tab === QueryResultTab.RESULT) {
@@ -66,16 +74,31 @@ export const useQueryResultTabs = (
                 });
             }
             items.unshift(
-                ...times(query.result_count, (num) => ({
-                    id: createResultTabId(num),
-                    title: query.result_count === 1 ? 'Result' : `Result #${num + 1}`,
-                })),
+                ...times_(query.result_count, (num) => {
+                    let icon;
+                    if (resultsMeta && resultsMeta[num] && has_(resultsMeta[num], 'error')) {
+                        icon = (
+                            <QueryStatusIcon
+                                status={QueryStatus.FAILED}
+                                className={'query-status_tabs'}
+                            />
+                        );
+                    }
+                    return {
+                        id: createResultTabId(num),
+                        title: query.result_count === 1 ? 'Result' : `Result #${num + 1}`,
+                        icon,
+                    };
+                }),
             );
         }
         return items;
-    }, [query]);
+    }, [query, resultsMeta]);
 
     useEffect(() => {
+        if (query) {
+            dispatch(loadQueryResultsErrors(query));
+        }
         setActiveTab(tabs?.[0]?.id);
     }, [query]);
 
