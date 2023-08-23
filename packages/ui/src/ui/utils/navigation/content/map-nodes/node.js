@@ -8,6 +8,7 @@ export default class Node {
         break: false,
         binaryAsHex: false,
         highlightControlCharacter: true,
+        escapeWhitespace: true,
     };
 
     static TITLE_PRINT_SETTINGS = Object.assign(

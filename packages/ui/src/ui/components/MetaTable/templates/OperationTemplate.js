@@ -12,7 +12,7 @@ import Icon from '../../../components/Icon/Icon';
 import Link from '../../../components/Link/Link';
 
 import {Template} from '../../../components/MetaTable/MetaTable';
-import encoder from '../../../common/utils/url-encoder';
+import {paramsToQuery} from '../../../utils';
 import hammer from '../../../common/hammer';
 import {Page} from '../../../constants/index';
 import CollapsableText from '../../../components/CollapsableText/CollapsableText';
@@ -129,7 +129,7 @@ TemplateEnvironment.propTypes = {
 /* ----------------------------------------------------------------------------------------------------------------- */
 
 function TemplateFile({name, path, originalPath, executable, cluster}) {
-    const getQuery = (path) => qs.stringify({path: path}, {encoder});
+    const getQuery = (path) => paramsToQuery({path: path});
     const getUrl = (path) => `/${cluster}/${Page.NAVIGATION}?${getQuery(path)}`;
 
     return (

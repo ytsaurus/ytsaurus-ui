@@ -1,12 +1,10 @@
 import React from 'react';
 
-import qs from 'qs';
-
 import Link, {LinkProps} from '../../../components/Link/Link';
 
 import {Page} from '../../../constants/index';
 
-import encoder from '../../../common/utils/url-encoder';
+import {paramsToQuery} from '../../../utils';
 
 const YT = (window as any).YT;
 
@@ -35,9 +33,9 @@ export default function OperationIOLink(props: Props) {
         theme,
     } = props;
 
-    const query = qs.stringify({path, t: transaction}, {encoder});
+    const query = paramsToQuery({path, t: transaction});
     const url = remote ? itemUrl : `/${YT.cluster}/${Page.NAVIGATION}?${query}`;
-    const originalQuery = qs.stringify({path: originalPath}, {encoder});
+    const originalQuery = paramsToQuery({path: originalPath});
     const originalUrl = `/${YT.cluster}/${Page.NAVIGATION}?${originalQuery}`;
 
     return isFolder ? (

@@ -18,4 +18,29 @@
     &__no-wrap {
         white-space: nowrap;
     }
+
+    &__escaped {
+        & .unipika {
+            display: inline;
+            white-space: nowrap;
+            font-family: var(--yc-font-family-sans);
+            color: inherit;
+
+            .quote {
+                display: none;
+            }
+
+            .escape {
+                word-spacing: 5px;
+                white-space: pre-wrap;
+                background-color: var(--error-background);
+            }
+
+            & .string {
+                position: relative;
+                color: inherit;
+                vertical-align: bottom;
+            }
+        }
+    }
 }

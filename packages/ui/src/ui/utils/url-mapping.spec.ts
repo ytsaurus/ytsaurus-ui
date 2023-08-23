@@ -1,6 +1,37 @@
-import {parseSortStateArray, serializeSortStateArray} from './url-mapping';
+import {
+    customEncodeURIComponent,
+    parseSortStateArray,
+    serializeSortStateArray,
+} from './url-mapping';
 
 describe('utils/utils.tsx', () => {
+    describe('customEncodeURIComponent', () => {
+        it('Escape %', () => {
+            expect(customEncodeURIComponent('%')).toEqual('%25');
+        });
+        it('Escape #', () => {
+            expect(customEncodeURIComponent('#')).toEqual('%23');
+        });
+        it('Escape \n', () => {
+            expect(customEncodeURIComponent('\n')).toEqual('%0A');
+        });
+        it('Escape +', () => {
+            expect(customEncodeURIComponent('+')).toEqual('%2B');
+        });
+        it('Escape [', () => {
+            expect(customEncodeURIComponent('[')).toEqual('%5B');
+        });
+        it('Escape ]', () => {
+            expect(customEncodeURIComponent(']')).toEqual('%5D');
+        });
+        it('Escape =', () => {
+            expect(customEncodeURIComponent('=')).toEqual('%3D');
+        });
+        it('Escape &', () => {
+            expect(customEncodeURIComponent('&')).toEqual('%26');
+        });
+    });
+
     describe('parseSortStateArray', () => {
         it('col-name:asc', () => {
             expect(parseSortStateArray('col%2dname-asc')).toEqual([

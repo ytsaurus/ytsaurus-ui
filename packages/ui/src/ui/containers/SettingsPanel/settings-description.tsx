@@ -70,6 +70,10 @@ const {oauthTokenUrl} = uiSettings;
 
 const StartPageSettingMemo = React.memo(StartPageSetting);
 
+function wrapEscapeText(text: string) {
+    return `<span class="unipika"><span class="escape">${text}</span></span>`;
+}
+
 function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
     const clusterNS = useSelector(getCurrentClusterNS);
 
@@ -239,7 +243,9 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
                     settingName={SettingName.YSON.ESCAPE_WHITESPACES}
                     settingNS={NAMESPACES.YSON}
                     annotation={
-                        'Symbols \n and \t will be rendered as escape sequences, whitespaces will be ' +
+                        `Symbols ${wrapEscapeText('\\n')} and ${wrapEscapeText(
+                            '\\t',
+                        )} will be rendered as escape sequences, whitespaces will be ` +
                         'highlighted as neccessary. Does not affect Raw JSON format.'
                     }
                     annotationHighlight={

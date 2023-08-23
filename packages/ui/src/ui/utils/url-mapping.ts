@@ -7,6 +7,7 @@ const TO_ENCODE: Record<string, string> = {
     '&': encodeURIComponent('&'),
     '#': encodeURIComponent('#'),
     ' ': encodeURIComponent(' '),
+    '+': encodeURIComponent('+'),
 };
 
 const TO_ENCODE_WITH_DASH = {
@@ -22,7 +23,7 @@ export function customEncodeURIComponent(value: string, toEncode = TO_ENCODE) {
         if (encoded) {
             res += encoded;
         } else {
-            res += c;
+            res += encodeURI(c);
         }
     }
     return res;
