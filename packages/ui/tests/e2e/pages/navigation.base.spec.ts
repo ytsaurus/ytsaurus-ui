@@ -1,5 +1,5 @@
-import {test, expect} from '@playwright/test';
-import {E2E_DIR, makeClusterTille, makeClusterUrl} from '../utils';
+import {expect, test} from '@playwright/test';
+import {CLUSTER, E2E_DIR, makeClusterTille, makeClusterUrl} from '../utils';
 
 test('Navigation - Content', async ({page}) => {
     await page.goto(makeClusterUrl('navigation'));
@@ -68,4 +68,105 @@ test('Navigation - Locks', async ({page}) => {
 
     await expect(page).toHaveTitle(makeClusterTille({page: 'Navigation', path: 'locked'}));
     await expect(page).toHaveURL(makeClusterUrl(`navigation?navmode=locks&path=${E2E_DIR}/locked`));
+});
+
+test('Navigation - URL correct encoding', async ({page}) => {
+    test.slow();
+    await test.step('escaped-symbol', async () => {
+        await page.goto(makeClusterUrl(`navigation?navmode=content&path=${E2E_DIR}/bad-names`));
+        const link = await page.waitForSelector(
+            `[href="/${CLUSTER}/navigation?path=${E2E_DIR}/bad-names/escaped-symbol%0A"]`,
+        );
+        await link.click();
+        await page.waitForSelector(':text("ok")');
+    });
+
+    await test.step('trailing-space', async () => {
+        await page.goto(makeClusterUrl(`navigation?navmode=content&path=${E2E_DIR}/bad-names`));
+        const link = await page.waitForSelector(
+            `[href="/${CLUSTER}/navigation?path=${E2E_DIR}/bad-names/trailing-space%20"]`,
+        );
+        await link.click();
+        await page.waitForSelector(':text("ok")');
+    });
+
+    await test.step("<script>alert('hello XSS!')</script>", async () => {
+        await page.goto(makeClusterUrl(`navigation?navmode=content&path=${E2E_DIR}/bad-names`));
+        const link = await page.waitForSelector(
+            `[href="/${CLUSTER}/navigation?path=${E2E_DIR}/bad-names/%3Cscript%3Ealert('hello%20XSS!')%3C%5C/script%3E"]`,
+        );
+        await link.click();
+        await page.waitForSelector(':text("ok")');
+    });
+
+    await test.step('<script>console.error("hello XSS")</script>', async () => {
+        await page.goto(makeClusterUrl(`navigation?navmode=content&path=${E2E_DIR}/bad-names`));
+        const link = await page.waitForSelector(
+            `[href="/${CLUSTER}/navigation?path=${E2E_DIR}/bad-names/%3Cscript%3Econsole.error(%22hello%20XSS%22)%3C%5C/script%3E"]`,
+        );
+        await link.click();
+        await page.waitForSelector(':text("ok")');
+    });
+
+    await test.step('_TAB_TAB', async () => {
+        await page.goto(makeClusterUrl(`navigation?navmode=content&path=${E2E_DIR}/bad-names`));
+        const link = await page.waitForSelector(
+            `[href="/${CLUSTER}/navigation?path=${E2E_DIR}/bad-names/_%09_%09"]`,
+        );
+        await link.click();
+        await page.waitForSelector(':text("ok")');
+    });
+
+    await test.step('_NEWLINE_NEWLINE', async () => {
+        await page.goto(makeClusterUrl(`navigation?navmode=content&path=${E2E_DIR}/bad-names`));
+        const link = await page.waitForSelector(
+            `[href="/${CLUSTER}/navigation?path=${E2E_DIR}/bad-names/_%10_%10"]`,
+        );
+        await link.click();
+        await page.waitForSelector(':text("ok")');
+    });
+
+    await test.step('Компоненты для Paysup.json', async () => {
+        await page.goto(makeClusterUrl(`navigation?navmode=content&path=${E2E_DIR}/bad-names`));
+        const link = await page.waitForSelector(
+            `[href="/${CLUSTER}/navigation?path=${E2E_DIR}/bad-names/%C3%90%C2%9A%C3%90%C2%BE%C3%90%C2%BC%C3%90%C2%BF%C3%90%C2%BE%C3%90%C2%BD%C3%90%C2%B5%C3%90%C2%BD%C3%91%C2%82%C3%91%C2%8B%20%C3%90%C2%B4%C3%90%C2%BB%C3%91%C2%8F%20Paysup.json"]`,
+        );
+        await link.click();
+        await page.waitForSelector(':text("ok")');
+    });
+
+    await test.step('__SLASH', async () => {
+        await page.goto(makeClusterUrl(`navigation?navmode=content&path=${E2E_DIR}/bad-names`));
+        const link = await page.waitForSelector(
+            `[href="/${CLUSTER}/navigation?path=${E2E_DIR}/bad-names/__%5C/"]`,
+        );
+        await link.click();
+        await page.waitForSelector(':text("ok")');
+    });
+
+    await test.step('__@', async () => {
+        await page.goto(makeClusterUrl(`navigation?navmode=content&path=${E2E_DIR}/bad-names`));
+        const link = await page.waitForSelector(
+            `[href="/${CLUSTER}/navigation?path=${E2E_DIR}/bad-names/__%5C@"]`,
+        );
+        await link.click();
+        await page.waitForSelector(':text("ok")');
+    });
+});
+
+test('Navigation - escpaped symbols are highlighted', async ({page}) => {
+    await test.step('escaped-symbol\\n', async () => {
+        await page.goto(makeClusterUrl(`navigation?navmode=content&path=${E2E_DIR}/bad-names`));
+        const link = await page.waitForSelector(
+            `[href="/${CLUSTER}/navigation?path=${E2E_DIR}/bad-names/escaped-symbol%0A"]`,
+        );
+        expect(await link.innerText()).toEqual('escaped-symbol\\n');
+    });
+    await test.step('trailing-space', async () => {
+        await page.goto(makeClusterUrl(`navigation?navmode=content&path=${E2E_DIR}/bad-names`));
+        const link = await page.waitForSelector(
+            `[href="/${CLUSTER}/navigation?path=${E2E_DIR}/bad-names/trailing-space%20"]`,
+        );
+        expect(await link.innerText()).toEqual('trailing-space ');
+    });
 });
