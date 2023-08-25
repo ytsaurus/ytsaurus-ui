@@ -21,6 +21,8 @@ class SystemCounters extends Component {
         stateThemeMappings: PropTypes.objectOf(PropTypes.string),
         renderLinks: PropTypes.bool,
 
+        makeUrl: PropTypes.func,
+
         // from hoc
         cluster: PropTypes.string.isRequired,
     };
@@ -31,13 +33,17 @@ class SystemCounters extends Component {
     };
 
     prepareUrl(state) {
-        const {cluster, page = 'components', tab, ...params} = state;
+        const {cluster, makeUrl, page = 'components', tab, ...params} = state;
         const isEmptyParams = Object.keys(params).length === 0;
         Object.keys(params).forEach((key) => {
             if (params[key] === true) {
                 params[key] = 'enabled';
             }
         });
+
+        if (makeUrl) {
+            return makeUrl(params);
+        }
 
         return `/${cluster}/${page}/${tab}` + (isEmptyParams ? '' : `?${qs.stringify(params)}`);
     }

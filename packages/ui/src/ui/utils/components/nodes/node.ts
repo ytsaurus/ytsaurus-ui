@@ -50,3 +50,49 @@ export const nodeTableProps = {
         key: 'components/nodes/node',
     },
 };
+
+export function makeComponentsNodesLink({
+    cluster,
+    state,
+    rackFilter,
+    rackSelected,
+    banned,
+    decommissioned,
+    alerts,
+    nodeTypes,
+}: {
+    cluster?: string;
+    rackFilter?: string;
+    rackSelected?: Array<string>;
+    banned?: 'enabled';
+    decommissioned?: 'enabled';
+    alerts?: 'enabled';
+    state?: 'online' | 'offline';
+    nodeTypes?: Array<string>;
+}) {
+    if (!cluster) {
+        return '';
+    }
+    let search = '';
+    if (rackFilter) {
+        search += `rack=filter-${rackFilter}&`;
+    } else if (rackSelected?.length) {
+        search += `rack=mode-union,selected-${rackSelected.join('|')}&`;
+    }
+    if (banned) {
+        search += `banned=${banned}&`;
+    }
+    if (state) {
+        search += `state=${state}&`;
+    }
+    if (decommissioned) {
+        search += `decommissioned=${decommissioned}&`;
+    }
+    if (alerts) {
+        search += `alerts=${alerts}&`;
+    }
+    if (nodeTypes?.length) {
+        search += `nodeType=${nodeTypes?.join(',')}&`;
+    }
+    return `/${cluster}/components/nodes?${search}`;
+}
