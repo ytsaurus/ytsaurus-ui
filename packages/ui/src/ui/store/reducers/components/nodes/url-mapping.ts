@@ -145,7 +145,7 @@ export const setupNodesParams = {
 
 const initialContentMode = nodesInitialState.contentMode;
 const initialHostFilter = nodesInitialState.hostFilter;
-const initialNodeType = nodesInitialState.nodeType;
+const initialNodeType = nodesInitialState.nodeTypes;
 
 const initialSortState = {...tableSortState[COMPONENTS_NODES_TABLE_ID]};
 
@@ -156,8 +156,9 @@ export const nodesParams: LocationParameters = {
         initialState: initialContentMode,
     },
     nodeType: {
-        stateKey: 'components.nodes.nodes.nodeType',
+        stateKey: 'components.nodes.nodes.nodeTypes',
         initialState: initialNodeType,
+        type: 'array',
     },
     host: {
         stateKey: 'components.nodes.nodes.hostFilter',

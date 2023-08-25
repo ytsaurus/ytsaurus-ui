@@ -304,7 +304,6 @@ function prepareRoleGroups(rackGroups: Record<string, Array<RackInfo>>) {
         },
         {} as Record<string, Array<RoleGroupInfo>>,
     );
-    console.log({roleGroups, rackGroups});
     return roleGroups;
 }
 

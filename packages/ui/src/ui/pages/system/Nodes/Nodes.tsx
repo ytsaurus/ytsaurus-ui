@@ -22,7 +22,7 @@ import {
 import type {RootState} from '../../../store/reducers';
 import {RoleGroup} from '../Proxies/RoleGroup';
 
-import NodeTypeSelector from './NodeTypeSelector';
+import {SystemNodeTypeSelector} from './NodeTypeSelector';
 
 import './Nodes.scss';
 
@@ -102,7 +102,7 @@ class Nodes extends Component<ReduxProps> {
         return (
             <React.Fragment>
                 <div className={block('node-type')}>
-                    <NodeTypeSelector />
+                    <SystemNodeTypeSelector />
                 </div>
                 <SystemStateOverview
                     counters={overviewCounters}

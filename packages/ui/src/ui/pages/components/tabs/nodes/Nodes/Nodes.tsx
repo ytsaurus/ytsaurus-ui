@@ -1,13 +1,11 @@
+import React from 'react';
 import {Sticky, StickyContainer} from 'react-sticky';
-import React, {Component, Fragment} from 'react';
-import {connect} from 'react-redux';
+import {ConnectedProps, connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import hammer from '../../../../../common/hammer';
 import {compose} from 'redux';
 import cn from 'bem-cn-lite';
 import _ from 'lodash';
-
-import {Select} from '@gravity-ui/uikit';
 
 import ColumnSelector from '../../../../../components/ColumnSelector/ColumnSelector';
 import ElementsTable from '../../../../../components/ElementsTable/ElementsTable';
@@ -29,23 +27,26 @@ import DisableModal from '../NodeActions/DisableModal';
 import SetupModal from '../SetupModal/SetupModal';
 import NodeCard from '../NodeCard/NodeCard';
 
+import {ComponentsNodeTypeSelector} from '../../../../../pages/system/Nodes/NodeTypeSelector';
+
 import {
     getComponentNodesTableProps,
+    getComponentsNodesNodeTypes,
     getVisibleNodes,
 } from '../../../../../store/selectors/components/nodes/nodes';
 import {getSelectedColumns} from '../../../../../store/selectors/settings';
 import {getSettingsEnableSideBar} from '../../../../../store/selectors/settings-ts';
 import {defaultColumns} from '../../../../../utils/components/nodes/tables';
-import withVisible from '../../../../../hocs/withVisible';
+import withVisible, {WithVisibleProps} from '../../../../../hocs/withVisible';
 import Updater from '../../../../../utils/hammer/updater';
 import {isPaneSplit} from '../../../../../utils';
 import {
     changeContentMode,
     changeHostFilter,
-    changeNodeType,
     getNodes,
     handleColumnsChange,
 } from '../../../../../store/actions/components/nodes/nodes';
+import type {NodesState} from '../../../../../store/reducers/components/nodes/nodes/nodes';
 
 import {banNode, unbanNode} from '../../../../../store/actions/components/nodes/actions/ban-unban';
 import {mergeScreen, splitScreen as splitScreenAction} from '../../../../../store/actions/global';
@@ -54,10 +55,10 @@ import {
     CONTENT_MODE,
     CONTENT_MODE_ITEMS,
     CONTENT_MODE_OPTIONS,
-    NODE_TYPE_ITEMS,
     POLLING_INTERVAL,
     SPLIT_TYPE,
 } from '../../../../../constants/components/nodes/nodes';
+import {RootState} from '../../../../../store/reducers';
 
 import DecommissionNodeModal from '../NodeActions/DecommissionNodeModal';
 
@@ -66,7 +67,16 @@ import './Nodes.scss';
 const updater = new Updater();
 const block = cn('components-nodes');
 
-class Nodes extends Component {
+type ReduxProps = ConnectedProps<typeof connector>;
+
+type State = {
+    preset: string;
+    activeNodeHost?: string;
+    selectedColumns: ReduxProps['selectedColumns'];
+    nodes: Array<unknown>;
+};
+
+class Nodes extends React.Component<ReduxProps & WithVisibleProps, State> {
     static propTypes = {
         // from connect
         loading: PropTypes.bool.isRequired,
@@ -88,7 +98,7 @@ class Nodes extends Component {
             type: PropTypes.string.isRequired,
         }).isRequired,
         sideBarEnabled: PropTypes.bool.isRequired,
-        nodeType: PropTypes.string.isRequired,
+        nodeTypes: PropTypes.string.isRequired,
 
         changeContentMode: PropTypes.func.isRequired,
         splitScreenAction: PropTypes.func.isRequired,
@@ -107,9 +117,9 @@ class Nodes extends Component {
         toggleVisible: PropTypes.func.isRequired,
     };
 
-    state = {
+    state: State = {
         preset: '',
-        activeNodeHost: null,
+        activeNodeHost: undefined,
         selectedColumns: this.props.selectedColumns,
         nodes: [],
     };
@@ -120,7 +130,7 @@ class Nodes extends Component {
         updater.add('components/nodes', getNodes, POLLING_INTERVAL);
     }
 
-    componentDidUpdate(prevProps) {
+    componentDidUpdate(prevProps: ReduxProps) {
         if (this.props.loading && !prevProps.loading) {
             updater.remove('components/nodes');
         }
@@ -155,13 +165,15 @@ class Nodes extends Component {
         return hasSplit ? this.getSelectedIndex(activeNodeHost, nodes) : -1;
     }
 
-    getSelectedIndex = _.memoize((activeNodeHost, nodes) =>
-        (nodes ?? []).findIndex((node) => activeNodeHost === node.host),
+    // eslint-disable-next-line @typescript-eslint/member-ordering
+    getSelectedIndex = _.memoize(
+        (activeNodeHost: State['activeNodeHost'], nodes: ReduxProps['nodes'] = []) =>
+            nodes.findIndex((node) => activeNodeHost === node.host),
     );
 
-    handlePresetChange = ({name}) => this.setState({preset: name});
+    handlePresetChange = ({name}: {name: string}) => this.setState({preset: name});
 
-    handleItemClick = (node, index) => {
+    handleItemClick = (_node: ReduxProps['nodes'][number], index: number) => {
         const {nodes, sideBarEnabled, splitScreenAction} = this.props;
 
         if (sideBarEnabled) {
@@ -172,7 +184,7 @@ class Nodes extends Component {
         }
     };
 
-    handleColumnsChange = ({items}) => {
+    handleColumnsChange = ({items}: {items: Nodes['allColumns']}) => {
         const {handleColumnsChange} = this.props;
 
         const selectedItems = _.filter(items, (column) => column.checked);
@@ -182,7 +194,7 @@ class Nodes extends Component {
         handleColumnsChange(selectedColumns);
     };
 
-    handleKeyDown = (evt) => {
+    handleKeyDown = (evt: React.KeyboardEvent<HTMLInputElement>) => {
         const key = evt.keyCode;
 
         switch (key) {
@@ -211,10 +223,10 @@ class Nodes extends Component {
         getNodes();
     };
 
-    handleContentModeChange = async (...args) => {
+    handleContentModeChange = async (value: string) => {
         const {changeContentMode, getNodes} = this.props;
 
-        await changeContentMode(...args);
+        await changeContentMode(value as NodesState['contentMode']);
         getNodes();
     };
 
@@ -236,17 +248,9 @@ class Nodes extends Component {
         }
     }
 
-    renderFilters(sticky, split) {
-        const {
-            changeHostFilter,
-            changeNodeType,
-            hostFilter,
-            contentMode,
-            toggleVisible,
-            totalItems,
-            showingItems,
-            nodeType,
-        } = this.props;
+    renderFilters(sticky: boolean, split: boolean) {
+        const {changeHostFilter, hostFilter, contentMode, toggleVisible, totalItems, showingItems} =
+            this.props;
         const isFiltered = totalItems !== showingItems;
 
         return (
@@ -288,13 +292,7 @@ class Nodes extends Component {
                     }
                 />
 
-                <Select
-                    className={block('filters-item')}
-                    value={[nodeType]}
-                    options={NODE_TYPE_ITEMS}
-                    onUpdate={(vals) => changeNodeType(vals[0])}
-                    label="Node type:"
-                />
+                <ComponentsNodeTypeSelector className={block('filters-item')} />
             </div>
         );
     }
@@ -326,8 +324,8 @@ class Nodes extends Component {
                                     size="m"
                                     value={contentMode}
                                     items={CONTENT_MODE_ITEMS}
-                                    onChange={this.handleContentModeChange}
                                     name="components-nodes-content-mode"
+                                    onUpdate={this.handleContentModeChange}
                                 />
                             </div>
 
@@ -383,12 +381,12 @@ class Nodes extends Component {
         const {resourcesHost, banNode, unbanNode} = this.props;
 
         return (
-            <Fragment>
+            <React.Fragment>
                 <BanModal ban={banNode} label="You are about to ban node" />
                 <UnbanModal unban={unbanNode} label="You are about to unban node" />
                 <DisableModal />
                 <ResourcesLimitModal key={resourcesHost} />
-            </Fragment>
+            </React.Fragment>
         );
     }
 
@@ -420,9 +418,9 @@ class Nodes extends Component {
     }
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state: RootState) => {
     const {splitScreen} = state.global;
-    const {contentMode, nodes, loading, loaded, error, errorData, hostFilter, nodeType} =
+    const {contentMode, nodes, loading, loaded, error, errorData, hostFilter} =
         state.components.nodes.nodes;
     const {host: resourcesHost} = state.components.nodes.resourcesLimit;
 
@@ -451,7 +449,7 @@ const mapStateToProps = (state) => {
         initialLoading,
         nodesTableProps,
         sideBarEnabled,
-        nodeType,
+        nodeTypes: getComponentsNodesNodeTypes(state),
     };
 };
 
@@ -459,7 +457,6 @@ const mapDispatchToProps = {
     changeContentMode,
     splitScreenAction,
     changeHostFilter,
-    changeNodeType,
     mergeScreen,
     getNodes,
     handleColumnsChange,
@@ -468,4 +465,6 @@ const mapDispatchToProps = {
     unbanNode,
 };
 
-export default compose(connect(mapStateToProps, mapDispatchToProps), withVisible)(Nodes);
+const connector = connect(mapStateToProps, mapDispatchToProps);
+
+export default compose(connector, withVisible)(Nodes);

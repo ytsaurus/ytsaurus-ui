@@ -50,7 +50,7 @@ export class SetupModal extends Component {
 
     static propTypes = {
         // from parent
-        visible: PropTypes.bool.isRequired,
+        visible: PropTypes.bool,
         handleClose: PropTypes.func.isRequired,
 
         // from connect

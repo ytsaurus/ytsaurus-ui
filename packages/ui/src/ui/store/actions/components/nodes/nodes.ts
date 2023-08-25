@@ -9,6 +9,7 @@ import ypath from '../../../../common/thor/ypath';
 import {setSetting} from '../../../../store/actions/settings';
 import {NAMESPACES, SettingName} from '../../../../../shared/constants/settings';
 import {
+    getComponentsNodesNodeTypes,
     getRequestIndex,
     getRequiredAttributes,
     getShouldFetchTags,
@@ -36,8 +37,9 @@ import CancelHelper from '../../../../utils/cancel-helper';
 import {YTApiId, ytApiV3Id} from '../../../../rum/rum-wrap-api';
 import type {ActionD, FIX_MY_TYPE, PartialDeep} from '../../../../types';
 import {prepareAttributes} from '../../../../utils/cypress-attributes';
-import {wrapApiPromiseByToaster} from '../../../../utils/utils';
+import {splitBatchResults, wrapApiPromiseByToaster} from '../../../../utils/utils';
 import {NodeType} from '../../../../../shared/constants/system';
+import {BatchSubRequest} from '../../../../../shared/yt-types';
 
 const {COMPONENTS} = NAMESPACES;
 const {TEMPLATES} = SettingName.COMPONENTS;
@@ -49,14 +51,12 @@ export type NodesThunkAction = ThunkAction<
     DecommissionAction | NodesAction
 >;
 
-export function changeContentMode({
-    target,
-}: {
-    target: {value: NodesState['contentMode']};
-}): ActionD<typeof CHANGE_CONTENT_MODE, Pick<NodesState, 'contentMode'>> {
+export function changeContentMode(
+    contentMode: NodesState['contentMode'],
+): ActionD<typeof CHANGE_CONTENT_MODE, Pick<NodesState, 'contentMode'>> {
     return {
         type: CHANGE_CONTENT_MODE,
-        data: {contentMode: target.value},
+        data: {contentMode},
     };
 }
 
@@ -64,32 +64,48 @@ const updateNodeCanceler = new CancelHelper();
 
 export function getNodes(): NodesThunkAction {
     return (dispatch, getState) => {
-        const {nodeType} = getState().components.nodes.nodes;
-        const index = getRequestIndex(getState()) + 1;
+        const state = getState();
+        const index = getRequestIndex(state) + 1;
         dispatch({type: GET_NODES.REQUEST, data: {index}});
 
-        updateNodeCanceler.removeAllRequests();
-
         const attributes = getRequiredAttributes(getState());
+        const preparedAttrs = prepareAttributes(attributes);
 
-        return ytApiV3Id
-            .list(YTApiId.componentsClusterNodes, {
+        const nodeTypes = getComponentsNodesNodeTypes(state);
+        const requests: Array<BatchSubRequest> = nodeTypes.map((type) => {
+            return {
+                command: 'list',
                 parameters: {
-                    path: `//sys/${nodeType}`,
-                    attributes: prepareAttributes(attributes),
+                    path: `//sys/${type}`,
+                    attributes: preparedAttrs,
                     ...USE_CACHE,
                     ...USE_MAX_SIZE,
                 },
-                cancellation: updateNodeCanceler.saveCancelToken,
+            };
+        });
+
+        return ytApiV3Id
+            .executeBatch(YTApiId.componentsClusterNodes, {
+                parameters: {requests},
+                cancellation: updateNodeCanceler.removeAllAndSave,
             })
-            .then((nodes) => {
+            .then((data) => {
+                const {results, error} = splitBatchResults(data);
                 dispatch({
                     type: GET_NODES.SUCCESS,
                     data: {
                         index,
-                        nodes: ypath.getValue(nodes),
+                        nodes: [].concat(
+                            ...results.map((output) => {
+                                return ypath.getValue(output) || [];
+                            }),
+                        ),
                     },
                 });
+
+                if (error) {
+                    throw error;
+                }
             })
             .catch((error) => {
                 if (error.code === yt.codes.CANCELLED) {
@@ -129,11 +145,11 @@ export function changeHostFilter(
     };
 }
 
-export function changeNodeType(nodeType: NodeType): NodesThunkAction {
+export function componentsNodesSetNodeTypes(nodeTypes: Array<NodeType>): NodesThunkAction {
     return (dispatch) => {
         dispatch({
             type: CHANGE_NODE_TYPE,
-            data: {nodeType},
+            data: {nodeTypes},
         });
 
         dispatch(getNodes());
