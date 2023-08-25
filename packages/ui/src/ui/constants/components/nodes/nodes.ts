@@ -10,7 +10,7 @@ const PREFIX = createPrefix(Page.COMPONENTS, Tab.NODES);
 
 export const CHANGE_CONTENT_MODE = `${PREFIX}CHANGE_CONTENT_MODE` as const;
 export const GET_NODES = createActionTypes(`${PREFIX}GET_NODES`);
-export const GET_NODES_TAGS = createActionTypes(`${PREFIX}GET_NODES_TAGS`);
+export const GET_NODES_FILTER_OPTIONS = createActionTypes(`${PREFIX}GET_NODES_TAGS`);
 export const CHANGE_HOST_FILTER = `${PREFIX}CHANGE_HOST_FILTER` as const;
 export const CHANGE_NODE_TYPE = `${PREFIX}CHANGE_NODE_TYPE` as const;
 export const APPLY_SETUP = 'COMPONENTS_NODES_APPLY_SETUP';

@@ -14,8 +14,12 @@ import Icon, {IconName} from '../../../../../../components/Icon/Icon';
 
 const block = cn('tags-filter');
 
+const TAG_FILTER_MODES = ['filter', 'union', 'intersection'] as const;
+
+type TagFilterMode = (typeof TAG_FILTER_MODES)[number];
+
 interface TagsFilterValue extends FilterWithRegExpValue {
-    mode?: 'filter' | 'union' | 'intersection';
+    mode?: TagFilterMode;
     selected?: Array<string>;
 }
 
@@ -28,6 +32,8 @@ interface Props {
     onChange: (v: Props['value']) => void;
 
     items?: Array<string>;
+
+    allowedModes?: Array<TagsFilterValue['mode']>;
 
     selectPlaceholder?: string;
 }
@@ -47,7 +53,15 @@ const ICONS: Record<Required<TagsFilterValue>['mode'], IconName> = {
 };
 
 function TagsFilter(props: Props) {
-    const {value, onChange, className, size = 'm', items, selectPlaceholder} = props;
+    const {
+        value,
+        onChange,
+        className,
+        size = 'm',
+        items,
+        selectPlaceholder,
+        allowedModes = TAG_FILTER_MODES,
+    } = props;
     const {
         mode = defaultValue.mode,
         filter = defaultValue.filter,
@@ -110,28 +124,21 @@ function TagsFilter(props: Props) {
             />
         );
 
+    const modes = allowedModes.map((m) => {
+        const itemMode = m!;
+        return {
+            icon: <Icon awesome={ICONS[itemMode]} />,
+            text: itemMode[0].toUpperCase() + itemMode.substring(1),
+            action: () => handleChange({...value, mode: itemMode}),
+        };
+    });
+
     return (
         <div className={block(null, className)}>
             {control}
             <DropdownMenu
                 popupClassName={block('dropdown-popup')}
-                items={[
-                    {
-                        icon: <Icon awesome={ICONS['filter']} />,
-                        text: 'Filter',
-                        action: () => handleChange({...value, mode: 'filter'}),
-                    },
-                    {
-                        icon: <Icon awesome={ICONS['union']} />,
-                        text: 'Union',
-                        action: () => handleChange({...value, mode: 'union'}),
-                    },
-                    {
-                        icon: <Icon awesome={ICONS['intersection']} />,
-                        text: 'Intersection',
-                        action: () => handleChange({...value, mode: 'intersection'}),
-                    },
-                ]}
+                items={modes}
                 switcher={
                     <Button size={size} width={'auto'} pin={'clear-round'}>
                         <Icon awesome={ICONS[mode]} />
