@@ -25,7 +25,7 @@ export interface NodesEphemeralState {
     loading: boolean;
     loaded: boolean;
     error: boolean;
-    errorData: {};
+    errorData: YTError | undefined;
     nodes: Node[];
     customColumns: [];
     tagsLoaded: boolean;
@@ -35,7 +35,7 @@ export interface NodesEphemeralState {
 
 export interface NodesPersistedState {
     hostFilter: string;
-    nodeType: NodeType;
+    nodeTypes: Array<NodeType>;
     contentMode: ValueOf<typeof CONTENT_MODE>;
 }
 
@@ -44,7 +44,7 @@ const ephemeralState: NodesEphemeralState = {
     loading: false,
     loaded: false,
     error: false,
-    errorData: {},
+    errorData: undefined,
     nodes: [],
     customColumns: [],
     tagsLoaded: false,
@@ -54,7 +54,7 @@ const ephemeralState: NodesEphemeralState = {
 
 const persistedState: NodesPersistedState = {
     hostFilter: '',
-    nodeType: NODE_TYPE.ALL_NODES,
+    nodeTypes: [NODE_TYPE.ALL_NODES],
     contentMode: CONTENT_MODE.CUSTOM,
 };
 
@@ -143,7 +143,7 @@ const reducer = (state = initialState, action: NodesAction) => {
             return {...state, tagsLoading: false, tagsError: true};
 
         case CHANGE_NODE_TYPE:
-            return {...state, nodeType: action.data.nodeType};
+            return {...state, ...action.data};
 
         default:
             return state;
@@ -165,7 +165,7 @@ export type NodesAction =
     | ActionD<typeof GET_NODES_TAGS.SUCCESS, {nodes: Array<ConstructorParameters<typeof Node>[0]>}>
     | Action<typeof GET_NODES_TAGS.FAILURE>
     | ReturnType<typeof changeContentMode>
-    | ActionD<typeof CHANGE_NODE_TYPE, Pick<NodesState, 'nodeType'>>
+    | ActionD<typeof CHANGE_NODE_TYPE, Pick<NodesState, 'nodeTypes'>>
     | ReturnType<typeof changeHostFilter>;
 
 export default mergeStateOnClusterChange(ephemeralState, persistedState, reducer);

@@ -285,7 +285,7 @@ export function setMaintenancePageEvent(events: Array<unknown>, isFirstUpdate: b
     };
 }
 
-export function splitScreen(type: string, paneClassNames = []) {
+export function splitScreen(type: string, paneClassNames: Array<string> = []) {
     document.body.style.overflow = 'hidden';
 
     return {
