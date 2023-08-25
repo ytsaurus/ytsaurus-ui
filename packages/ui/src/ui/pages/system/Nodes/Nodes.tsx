@@ -8,6 +8,7 @@ import format from '../../../common/hammer/format';
 
 import {CollapsibleSectionStateLess} from '../../../components/CollapsibleSection/CollapsibleSection';
 import {NoContent} from '../../../components/NoContent/NoContent';
+import Link from '../../../components/Link/Link';
 
 import withDataLoader from '../../../hocs/pages/withDataLoader';
 import SystemStateOverview from '../SystemStateOverview/SystemStateOverview';
@@ -20,6 +21,8 @@ import {
     getSettingsSystemNodesCollapsed,
 } from '../../../store/selectors/settings-ts';
 import type {RootState} from '../../../store/reducers';
+import {makeComponentsNodesLink} from '../../../utils/components/nodes/node';
+
 import {RoleGroup} from '../Proxies/RoleGroup';
 
 import {SystemNodeTypeSelector} from './NodeTypeSelector';
@@ -71,11 +74,21 @@ class Nodes extends Component<ReduxProps> {
                 <div key={groupName} className={block()}>
                     {rackNames.length > 1 && (
                         <div className={block('group-summary', headingCN)}>
-                            {groupName}
+                            <Link
+                                theme="primary"
+                                url={makeComponentsNodesLink({
+                                    cluster,
+                                    rackFilter: groupName,
+                                    nodeTypes: nodeType,
+                                })}
+                            >
+                                {groupName}
+                            </Link>
                             <SystemStateOverview
                                 counters={counters?.[groupName]}
                                 stateThemeMappings={STATE_THEME_MAPPING}
                                 tab="nodes"
+                                makeUrl={this.makeComponentNodesUrl}
                             />
                         </div>
                     )}
@@ -85,7 +98,11 @@ class Nodes extends Component<ReduxProps> {
                                 <RoleGroup
                                     key={group.name}
                                     data={group}
-                                    url={`/${cluster}/components/nodes?rack=${group.name}`}
+                                    url={makeComponentsNodesLink({
+                                        cluster,
+                                        rackSelected: [group.name],
+                                        nodeTypes: nodeType,
+                                    })}
                                     showFlags
                                 />
                             );
@@ -95,6 +112,11 @@ class Nodes extends Component<ReduxProps> {
             );
         });
     }
+
+    makeComponentNodesUrl: typeof makeComponentsNodesLink = (params) => {
+        const {cluster, nodeType} = this.props;
+        return makeComponentsNodesLink({cluster, nodeTypes: nodeType, ...params});
+    };
 
     renderOverview() {
         const {overviewCounters} = this.props;

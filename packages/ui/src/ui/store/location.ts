@@ -133,6 +133,7 @@ interface ParameterDescription<T = any> {
         parse?: (v: string) => T | undefined;
         serialize?: (v: T) => string | number | undefined;
         shouldPush?: boolean;
+        delimiter?: string;
     };
 }
 

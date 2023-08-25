@@ -165,8 +165,10 @@ export const nodesParams: LocationParameters = {
         initialState: initialContentMode,
     },
     nodeType: {
-        stateKey: 'components.nodes.nodes.nodeType',
+        stateKey: 'components.nodes.nodes.nodeTypes',
         initialState: initialNodeType,
+        type: 'array',
+        options: {delimiter: ','},
     },
     host: {
         stateKey: 'components.nodes.nodes.hostFilter',

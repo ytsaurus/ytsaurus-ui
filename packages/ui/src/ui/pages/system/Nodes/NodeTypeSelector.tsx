@@ -7,8 +7,8 @@ import {NODE_TYPE_ITEMS} from '../../../constants/components/nodes/nodes';
 import {getSystemNodesNodeTypesToLoad} from '../../../store/selectors/system/nodes';
 import {setSysmetNodesNodeType} from '../../../store/actions/system/nodes-ts';
 import {NODE_TYPE, NodeType} from '../../../../shared/constants/system';
-import {getComponentsNodesNodeTypes} from 'store/selectors/components/nodes/nodes';
-import {componentsNodesSetNodeTypes} from 'store/actions/components/nodes/nodes';
+import {getComponentsNodesNodeTypes} from '../../../store/selectors/components/nodes/nodes';
+import {componentsNodesSetNodeTypes} from '../../../store/actions/components/nodes/nodes';
 
 type NodeTypeSelectorProps = {
     className?: string;
