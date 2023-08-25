@@ -2,6 +2,8 @@
 import yt from '@ytsaurus/javascript-wrapper/lib/yt';
 import difference_ from 'lodash/difference';
 import omit_ from 'lodash/omit';
+import forEach_ from 'lodash/forEach';
+import compact_ from 'lodash/compact';
 import type {ThunkAction} from 'redux-thunk';
 
 import ypath from '../../../../common/thor/ypath';
@@ -12,7 +14,8 @@ import {
     getComponentsNodesNodeTypes,
     getRequestIndex,
     getRequiredAttributes,
-    getShouldFetchTags,
+    useRacksFromAttributes,
+    useTagsFromAttributes,
 } from '../../../../store/selectors/components/nodes/nodes';
 import {getTemplates} from '../../../../store/selectors/settings';
 import type {RootState} from '../../../../store/reducers';
@@ -30,7 +33,7 @@ import {
     CHANGE_NODE_TYPE,
     COMPONENTS_NODES_UPDATE_NODE,
     GET_NODES,
-    GET_NODES_TAGS,
+    GET_NODES_FILTER_OPTIONS,
 } from '../../../../constants/components/nodes/nodes';
 import {USE_CACHE, USE_MAX_SIZE} from '../../../../constants';
 import CancelHelper from '../../../../utils/cancel-helper';
@@ -206,37 +209,60 @@ export function handleColumnsChange(selectedColumns: string[]): NodesThunkAction
     };
 }
 
-export function getTags(): NodesThunkAction {
+export function getComponentsNodesFilterOptions(): NodesThunkAction {
     return (dispatch, getState) => {
-        const shouldFetchTags = getShouldFetchTags(getState());
-        if (!shouldFetchTags) {
+        const state = getState();
+
+        const attributes = compact_([
+            !useTagsFromAttributes(state) && 'tags',
+            !useRacksFromAttributes(state) && 'rack',
+        ]);
+
+        if (0 === attributes.length) {
             return;
         }
 
-        dispatch({type: GET_NODES_TAGS.REQUEST});
+        dispatch({type: GET_NODES_FILTER_OPTIONS.REQUEST});
 
-        return wrapApiPromiseByToaster(
+        wrapApiPromiseByToaster(
             ytApiV3Id.list(YTApiId.componentsClusterNodes, {
                 path: '//sys/cluster_nodes',
-                attributes: ['tags'],
+                attributes,
                 ...USE_CACHE,
                 ...USE_MAX_SIZE,
             }),
             {
-                toasterName: 'node tags',
-                errorTitle: 'Failed to load node tags',
+                toasterName: 'node filter options',
+                errorTitle: `Failed to load node ${attributes.join(',')}`,
                 skipSuccessToast: true,
             },
         )
             .then((nodes) => {
+                const tags = new Set<string>();
+                const racks = new Set<string>();
+                forEach_(nodes, (item) => {
+                    const node = new Node(item);
+                    forEach_(node.tags, (tag) => {
+                        if (tag) {
+                            tags.add(tag);
+                        }
+                    });
+                    if (node.rack) {
+                        racks.add(node.rack);
+                    }
+                });
+
                 dispatch({
-                    type: GET_NODES_TAGS.SUCCESS,
-                    data: {nodes: ypath.getValue(nodes)},
+                    type: GET_NODES_FILTER_OPTIONS.SUCCESS,
+                    data: {
+                        filterOptionsTags: [...tags].sort(),
+                        filterOptionsRacks: [...racks].sort(),
+                    },
                 });
             })
             .catch((error) => {
                 dispatch({
-                    type: GET_NODES_TAGS.FAILURE,
+                    type: GET_NODES_FILTER_OPTIONS.FAILURE,
                     data: {error},
                 });
             });

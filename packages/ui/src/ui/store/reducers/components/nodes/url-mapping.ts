@@ -87,6 +87,15 @@ const defaultParams = {
     rack: {
         stateKey: 'components.nodes.setup.default.rack',
         initialState: rackInitialState,
+        options: {
+            ...makeObjectParseSerialize(rackInitialState as TagFilter, {
+                mode: parseSerializeSymbolCreate<Required<TagFilter>['mode']>(),
+                selected: parseSerializeArrayString,
+                filter: parseSerializeString,
+                useRegexp: parseSerializeBoolean,
+                regexpError: parseSerializeString,
+            }),
+        },
     },
     banned: {
         stateKey: 'components.nodes.setup.default.banned',
@@ -156,9 +165,8 @@ export const nodesParams: LocationParameters = {
         initialState: initialContentMode,
     },
     nodeType: {
-        stateKey: 'components.nodes.nodes.nodeTypes',
+        stateKey: 'components.nodes.nodes.nodeType',
         initialState: initialNodeType,
-        type: 'array',
     },
     host: {
         stateKey: 'components.nodes.nodes.hostFilter',

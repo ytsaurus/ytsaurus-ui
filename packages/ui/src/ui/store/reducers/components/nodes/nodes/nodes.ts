@@ -11,7 +11,7 @@ import {
     COMPONENTS_NODES_UPDATE_NODE,
     CONTENT_MODE,
     GET_NODES,
-    GET_NODES_TAGS,
+    GET_NODES_FILTER_OPTIONS,
 } from '../../../../../constants/components/nodes/nodes';
 import type {
     changeContentMode,
@@ -28,9 +28,10 @@ export interface NodesEphemeralState {
     errorData: YTError | undefined;
     nodes: Node[];
     customColumns: [];
-    tagsLoaded: boolean;
-    tagsError: boolean;
-    tags: string[];
+    filterOptionsLoading: boolean;
+    filterOptionsError: boolean;
+    filterOptionsTags: string[];
+    filterOptionsRacks: string[];
 }
 
 export interface NodesPersistedState {
@@ -47,9 +48,10 @@ const ephemeralState: NodesEphemeralState = {
     errorData: undefined,
     nodes: [],
     customColumns: [],
-    tagsLoaded: false,
-    tagsError: false,
-    tags: [],
+    filterOptionsLoading: false,
+    filterOptionsError: false,
+    filterOptionsTags: [],
+    filterOptionsRacks: [],
 };
 
 const persistedState: NodesPersistedState = {
@@ -65,7 +67,7 @@ export const initialState = {
 
 export type NodesState = typeof initialState;
 
-const reducer = (state = initialState, action: NodesAction) => {
+const reducer = (state = initialState, action: NodesAction): NodesState => {
     switch (action.type) {
         case CHANGE_CONTENT_MODE:
             return {...state, contentMode: action.data.contentMode};
@@ -128,19 +130,20 @@ const reducer = (state = initialState, action: NodesAction) => {
         case CHANGE_HOST_FILTER:
             return {...state, hostFilter: action.data.hostFilter};
 
-        case GET_NODES_TAGS.REQUEST:
-            return {...state, tagsLoading: true};
+        case GET_NODES_FILTER_OPTIONS.REQUEST:
+            return {...state, filterOptionsLoading: true};
 
-        case GET_NODES_TAGS.SUCCESS: {
-            const {nodes} = action.data;
-
-            const preparedTags = _.uniq(_.flatMap(nodes, (node) => new Node(node).tags)).sort();
-
-            return {...state, tags: preparedTags, tagsLoading: false, tagsError: false};
+        case GET_NODES_FILTER_OPTIONS.SUCCESS: {
+            return {
+                ...state,
+                ...action.data,
+                filterOptionsLoading: false,
+                filterOptionsError: false,
+            };
         }
 
-        case GET_NODES_TAGS.FAILURE:
-            return {...state, tagsLoading: false, tagsError: true};
+        case GET_NODES_FILTER_OPTIONS.FAILURE:
+            return {...state, filterOptionsLoading: false, filterOptionsError: true};
 
         case CHANGE_NODE_TYPE:
             return {...state, ...action.data};
@@ -161,9 +164,12 @@ export type NodesAction =
     | ActionD<typeof GET_NODES.FAILURE, Pick<NodesEphemeralState, 'index'> & {error: YTError}>
     | ActionD<typeof GET_NODES.CANCELLED, Pick<NodesEphemeralState, 'index'>>
     | ActionD<typeof COMPONENTS_NODES_UPDATE_NODE, ConstructorParameters<typeof Node>[0]>
-    | Action<typeof GET_NODES_TAGS.REQUEST>
-    | ActionD<typeof GET_NODES_TAGS.SUCCESS, {nodes: Array<ConstructorParameters<typeof Node>[0]>}>
-    | Action<typeof GET_NODES_TAGS.FAILURE>
+    | Action<typeof GET_NODES_FILTER_OPTIONS.REQUEST>
+    | ActionD<
+          typeof GET_NODES_FILTER_OPTIONS.SUCCESS,
+          Pick<NodesEphemeralState, 'filterOptionsTags' | 'filterOptionsRacks'>
+      >
+    | Action<typeof GET_NODES_FILTER_OPTIONS.FAILURE>
     | ReturnType<typeof changeContentMode>
     | ActionD<typeof CHANGE_NODE_TYPE, Pick<NodesState, 'nodeTypes'>>
     | ReturnType<typeof changeHostFilter>;

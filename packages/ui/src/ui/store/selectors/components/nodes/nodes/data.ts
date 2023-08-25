@@ -19,6 +19,7 @@ import {
 import {
     getComponentNodesFilterPredicates,
     getComponentNodesFiltersSetup,
+    getComponentNodesIndexByRack,
     getComponentNodesIndexByTag,
     getNodes,
     getPropertiesRequiredForFilters,
@@ -125,20 +126,38 @@ export const getRequiredAttributes = createSelector(
     },
 );
 
-export const getShouldFetchTags = createSelector([getRequiredAttributes], (attributes) => {
-    return attributes.indexOf('tags') < 0;
+export const useTagsFromAttributes = createSelector([getRequiredAttributes], (attributes) => {
+    return attributes.indexOf('tags') >= 0;
 });
 
-const getFetchedTags = (state: RootState): string[] => state.components.nodes.nodes.tags;
+export const useRacksFromAttributes = createSelector([getRequiredAttributes], (attributes) => {
+    return attributes.indexOf('rack') >= 0;
+});
+
+const getFetchedTags = (state: RootState): string[] =>
+    state.components.nodes.nodes.filterOptionsTags;
+const getFetchedRacks = (state: RootState): string[] =>
+    state.components.nodes.nodes.filterOptionsRacks;
 
 export const getComponentNodesTags = createSelector(
-    [getShouldFetchTags, getFetchedTags, getComponentNodesIndexByTag],
-    (shouldFetchTags, fetchedTags, map) => {
-        if (shouldFetchTags) {
+    [useTagsFromAttributes, getFetchedTags, getComponentNodesIndexByTag],
+    (useFromAttrs, fetchedTags, nodesByTag) => {
+        if (!useFromAttrs) {
             return fetchedTags;
         }
 
-        return _.keys(map).sort();
+        return [...nodesByTag.keys()].sort();
+    },
+);
+
+export const getComponentNodesRacks = createSelector(
+    [useRacksFromAttributes, getFetchedRacks, getComponentNodesIndexByRack],
+    (useFromAttrs, fetchedRacks, nodesByRack) => {
+        if (!useFromAttrs) {
+            return fetchedRacks;
+        }
+
+        return [...nodesByRack.keys()].sort();
     },
 );
 

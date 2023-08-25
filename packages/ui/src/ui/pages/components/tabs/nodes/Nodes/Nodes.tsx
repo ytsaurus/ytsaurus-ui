@@ -7,6 +7,8 @@ import {compose} from 'redux';
 import cn from 'bem-cn-lite';
 import _ from 'lodash';
 
+import {Text} from '@gravity-ui/uikit';
+
 import ColumnSelector from '../../../../../components/ColumnSelector/ColumnSelector';
 import ElementsTable from '../../../../../components/ElementsTable/ElementsTable';
 import UnbanModal from '../../../../../pages/components/UnbanModal/UnbanModal';
@@ -30,6 +32,7 @@ import NodeCard from '../NodeCard/NodeCard';
 import {ComponentsNodeTypeSelector} from '../../../../../pages/system/Nodes/NodeTypeSelector';
 
 import {
+    getComponentNodesFiltersCount,
     getComponentNodesTableProps,
     getComponentsNodesNodeTypes,
     getVisibleNodes,
@@ -249,8 +252,15 @@ class Nodes extends React.Component<ReduxProps & WithVisibleProps, State> {
     }
 
     renderFilters(sticky: boolean, split: boolean) {
-        const {changeHostFilter, hostFilter, contentMode, toggleVisible, totalItems, showingItems} =
-            this.props;
+        const {
+            changeHostFilter,
+            hostFilter,
+            contentMode,
+            toggleVisible,
+            totalItems,
+            showingItems,
+            filterCount,
+        } = this.props;
         const isFiltered = totalItems !== showingItems;
 
         return (
@@ -271,6 +281,7 @@ class Nodes extends React.Component<ReduxProps & WithVisibleProps, State> {
                     selected={isFiltered}
                 >
                     <Icon awesome="filter" /> Filter
+                    <Text color="secondary"> {filterCount}</Text>
                 </Button>
 
                 <Dropdown
@@ -450,6 +461,7 @@ const mapStateToProps = (state: RootState) => {
         nodesTableProps,
         sideBarEnabled,
         nodeTypes: getComponentsNodesNodeTypes(state),
+        filterCount: getComponentNodesFiltersCount(state),
     };
 };
 

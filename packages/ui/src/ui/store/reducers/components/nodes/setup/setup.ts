@@ -43,7 +43,7 @@ export interface NodesSetupState {
         schedulerJobs: FlagState;
         writeSessions: FlagState;
         tabletCells: FlagState;
-        rack: string;
+        rack: string | TagFilter;
         banned: FlagState;
         decommissioned: FlagState;
         full: FlagState;

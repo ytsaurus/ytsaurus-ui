@@ -17,7 +17,7 @@ import Select from '../../../../../components/Select/Select';
 import {initialState} from '../../../../../store/reducers/components/nodes/setup/setup';
 import {
     applyPreset,
-    getTags,
+    getComponentsNodesFilterOptions,
     savePreset,
 } from '../../../../../store/actions/components/nodes/nodes';
 import {FLAG_STATE, MEDIUM_COLS_PREFIX} from '../../../../../constants/components/nodes/nodes';
@@ -27,6 +27,7 @@ import {getMediumListNoCache} from '../../../../../store/selectors/thor';
 import TagsFilter from './TagsFilter/TagsFilter';
 import {
     getComponentNodesFiltersSetup,
+    getComponentNodesRacks,
     getComponentNodesTags,
 } from '../../../../../store/selectors/components/nodes/nodes';
 
@@ -263,7 +264,7 @@ export class SetupModal extends Component {
         );
     }
 
-    renderTagsFilter({items, onChange, value, disabled = false, invalid = false}) {
+    renderTagsFilter({items, onChange, value, disabled = false, modes, invalid = false}) {
         return (
             <TagsFilter
                 value={value}
@@ -272,6 +273,7 @@ export class SetupModal extends Component {
                 disabled={disabled}
                 onChange={onChange}
                 items={items}
+                allowedModes={modes}
                 selectPlaceholder={'Select tags...'}
             />
         );
@@ -354,7 +356,7 @@ export class SetupModal extends Component {
 
     renderDefaultFilters() {
         const section = 'default';
-        const {nodeTags} = this.props;
+        const {nodeTags, nodeRacks} = this.props;
 
         return (
             <MetaTable
@@ -382,9 +384,10 @@ export class SetupModal extends Component {
                     },
                     {
                         key: 'racks',
-                        value: this.renderTextFilter({
+                        value: this.renderTagsFilter({
+                            items: nodeRacks,
                             value: this.state[section]['rack'],
-                            placeholder: 'Enter rack name...',
+                            modes: ['filter', 'union'],
                             onChange: (value) =>
                                 this.handleTextFilterChange(section, 'rack', value),
                         }),
@@ -794,18 +797,18 @@ export class SetupModal extends Component {
     }
 
     componentDidMount() {
-        const {visible, getTags} = this.props;
+        const {visible, loadOptions} = this.props;
 
         if (visible) {
-            getTags();
+            loadOptions();
         }
     }
 
     componentDidUpdate(prevProps) {
-        const {visible, getTags} = this.props;
+        const {visible, loadOptions} = this.props;
 
         if (!prevProps.visible && visible) {
-            getTags();
+            loadOptions();
         }
     }
 }
@@ -815,7 +818,12 @@ const mapStateToProps = (state) => {
         setup: getComponentNodesFiltersSetup(state),
         mediumList: getMediumListNoCache(state),
         nodeTags: getComponentNodesTags(state),
+        nodeRacks: getComponentNodesRacks(state),
     };
 };
 
-export default connect(mapStateToProps, {applyPreset, savePreset, getTags})(SetupModal);
+export default connect(mapStateToProps, {
+    applyPreset,
+    savePreset,
+    loadOptions: getComponentsNodesFilterOptions,
+})(SetupModal);

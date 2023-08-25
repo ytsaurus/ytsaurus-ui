@@ -38,17 +38,32 @@ export const getComponentNodesIndexByTag = createSelector([getNodes], (nodes) =>
         (acc, node) => {
             const {tags} = node;
             _.forEach(tags, (tag) => {
-                if (acc[tag]) {
-                    acc[tag].add(node);
+                if (acc.has(tag)) {
+                    acc.get(tag)?.add(node);
                 } else {
-                    acc[tag] = new Set([node]);
+                    acc.set(tag, new Set([node]));
                 }
             });
             return acc;
         },
-        {} as Record<string, Set<Node>>,
+        new Map<string, Set<Node>>(),
     );
     return res;
+});
+
+export const getComponentNodesIndexByRack = createSelector([getNodes], (nodes) => {
+    return _.reduce(
+        nodes,
+        (acc, node) => {
+            if (!acc.has(node.rack)) {
+                acc.set(node.rack, new Set([node]));
+            } else {
+                acc.get(node.rack)?.add(node);
+            }
+            return acc;
+        },
+        new Map<string, Set<Node>>(),
+    );
 });
 
 const PropertiesByPredicate = {
@@ -118,8 +133,8 @@ type Predicates = {
 };
 
 const getFilterPredicatesObject = createSelector(
-    [getSetupFiltersRaw, getComponentNodesIndexByTag],
-    (setupFilters, nodesByTags) => {
+    [getSetupFiltersRaw, getComponentNodesIndexByTag, getComponentNodesIndexByRack],
+    (setupFilters, nodesByTags, nodesByRack) => {
         const predicates: Predicates = {
             // filter by default
             physicalHost:
@@ -127,21 +142,19 @@ const getFilterPredicatesObject = createSelector(
                 ((node) => {
                     return -1 !== node.physicalHost?.indexOf(setupFilters.default.physicalHost);
                 }),
-            tags: createNodeTagPredicate(setupFilters.default.tag, nodesByTags),
+            tags: createNodeTagPredicate<'tags'>(
+                setupFilters.default.tag,
+                nodesByTags,
+                (node) => node.tags,
+            ),
             state:
                 setupFilters.default.state !== 'all' &&
                 ((node) => {
                     return setupFilters.default.state === node.state;
                 }),
-            rack:
-                Boolean(setupFilters.default.rack) &&
-                ((node) => {
-                    const rack: string = setupFilters.default.rack.toLowerCase();
-                    if (rack === 'unaware' && !node.rack) {
-                        return true;
-                    }
-                    return node.rack?.toLowerCase().startsWith(rack.toLowerCase());
-                }),
+            rack: createNodeTagPredicate<'rack'>(setupFilters.default.rack, nodesByRack, (node) => [
+                node.rack,
+            ]),
 
             banned: createFlagPredicate('banned', setupFilters.default.banned),
             decommissioned: createFlagPredicate(
@@ -384,6 +397,19 @@ const getFilterPredicatesObject = createSelector(
     },
 );
 
+export const getComponentNodesFiltersCount = createSelector(
+    [getFilterPredicatesObject],
+    (filters) => {
+        return _.reduce(
+            filters,
+            (acc, predicate) => {
+                return predicate ? acc + 1 : acc;
+            },
+            0,
+        );
+    },
+);
+
 export const getComponentNodesFilterPredicates = createSelector(
     [getFilterPredicatesObject],
     (filterPredicatesObject) => {
@@ -405,10 +431,11 @@ export const getPropertiesRequiredForFilters = createSelector(
     },
 );
 
-function createNodeTagPredicate(
+function createNodeTagPredicate<K extends keyof typeof PropertiesByPredicate>(
     tagFilter: string | TagFilter,
-    nodesByTags: Record<string, Set<Pick<Node, 'tags'>>>,
-): undefined | ((node: Pick<Node, 'tags'>) => boolean) {
+    nodesByTags: Map<string, Set<NodeWithProps<K>>>,
+    getTags: (node: NodeWithProps<K>) => Array<string>,
+): undefined | ((node: NodeWithProps<K>) => boolean) {
     if (!tagFilter) {
         return undefined;
     }
@@ -416,7 +443,7 @@ function createNodeTagPredicate(
     if (typeof tagFilter === 'string') {
         return (node) => {
             return _.some(
-                node.tags,
+                getTags(node),
                 (item) => -1 !== item.toLowerCase().indexOf(tagFilter.toLowerCase()),
             );
         };
@@ -433,7 +460,7 @@ function createNodeTagPredicate(
             }
             return (node) => {
                 return _.some(selectedItems, (tagName) => {
-                    return nodesByTags[tagName]?.has(node);
+                    return nodesByTags.get(tagName)?.has(node);
                 });
             };
         }
@@ -443,22 +470,21 @@ function createNodeTagPredicate(
             }
             return (node) => {
                 return _.every(selectedItems, (tagName) => {
-                    return nodesByTags[tagName]?.has(node);
+                    return nodesByTags.get(tagName)?.has(node);
                 });
             };
         }
-        case 'filter':
-        case undefined: {
+        default: {
             if (!filter) {
                 return undefined;
             }
             if (!useRegexp) {
-                return createNodeTagPredicate(filter, {});
+                return createNodeTagPredicate(filter, new Map(), getTags);
             }
             try {
                 const re = new RegExp(filter);
                 return (node) => {
-                    return _.some(node.tags, (tag) => re.test(tag));
+                    return _.some(getTags(node), (tag) => re.test(tag));
                 };
             } catch (e) {
                 return () => false;
