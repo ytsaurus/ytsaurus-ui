@@ -17,14 +17,20 @@ import NotRenderUntilFirstVisible from '../NotRenderUntilFirstVisible/NotRenderU
 
 const b = block('query-results');
 
-function QueryResultContainer({resultIndex, query}: {resultIndex: number; query: QueryItem}) {
+function QueryResultContainer({
+    query,
+    activeResultParams,
+}: {
+    query: QueryItem;
+    activeResultParams?: {queryId: string; resultIndex: number};
+}) {
     const dispatch = useDispatch();
     useEffect(() => {
-        if (query.result_count) {
-            dispatch(loadQueryResult(query.id, resultIndex));
+        if (activeResultParams) {
+            dispatch(loadQueryResult(activeResultParams.queryId, activeResultParams.resultIndex));
         }
-    }, [query, resultIndex, dispatch]);
-    return <QueryResultsView query={query} index={resultIndex} />;
+    }, [activeResultParams, dispatch]);
+    return <QueryResultsView query={query} index={activeResultParams?.resultIndex || 0} />;
 }
 
 export const QueryResults = React.memo(function QueryResults({
@@ -38,8 +44,8 @@ export const QueryResults = React.memo(function QueryResults({
     toolbar: React.ReactChild;
     minimized: boolean;
 }) {
-    const [tabs, setTab, {activeTabId, category, resultIndex}] = useQueryResultTabs(query);
-
+    const [tabs, setTab, {activeTabId, category, activeResultParams}] = useQueryResultTabs(query);
+    const resultIndex = activeResultParams?.resultIndex;
     return query ? (
         <div className={b(null, className)}>
             <div className={b('meta')}>
@@ -52,7 +58,7 @@ export const QueryResults = React.memo(function QueryResults({
                         className={b('tabs')}
                         items={tabs}
                         activeTab={activeTabId}
-                        onSelectTab={setTab}
+                        onSelectTab={(tabId: string) => setTab(tabId)}
                     />
                     {category === QueryResultTab.RESULT && Number.isInteger(resultIndex) && (
                         <div className={b('tab_actions')}>
@@ -65,7 +71,10 @@ export const QueryResults = React.memo(function QueryResults({
                         hide={category !== QueryResultTab.RESULT && !Number.isInteger(resultIndex)}
                         className={b('result-wrap')}
                     >
-                        <QueryResultContainer query={query} resultIndex={resultIndex ?? 0} />
+                        <QueryResultContainer
+                            query={query}
+                            activeResultParams={activeResultParams}
+                        />
                     </NotRenderUntilFirstVisible>
                     {category === QueryResultTab.ERROR && <Error error={query.error} />}
                     {category === QueryResultTab.META && <QueryMetaTable query={query} />}
