@@ -1,9 +1,9 @@
-import React, {Component} from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import block from 'bem-cn-lite';
 
 import SystemCounters from '../SystemCounters/SystemCounters';
-import {Progress} from '@gravity-ui/uikit';
+import {Progress, ProgressProps} from '@gravity-ui/uikit';
 
 import {computeEffectiveStateProgress} from '../../../utils/index';
 
@@ -11,7 +11,15 @@ import './SystemStateOverview.scss';
 
 const b = block('system');
 
-export default class SystemStateOverview extends Component {
+export type SystemStateOverviewProps<Counters extends object> = {
+    tab?: string;
+    counters?: Counters;
+    stateOverview?: ProgressProps;
+};
+
+export default class SystemStateOverview<Counters extends object> extends React.Component<
+    SystemStateOverviewProps<Counters>
+> {
     static propTypes = {
         tab: PropTypes.string.isRequired,
         counters: PropTypes.object,
