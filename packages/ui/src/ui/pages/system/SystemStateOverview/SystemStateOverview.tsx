@@ -1,8 +1,7 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import block from 'bem-cn-lite';
 
-import SystemCounters from '../SystemCounters/SystemCounters';
+import SystemCounters, {SystemCountersProps} from '../SystemCounters/SystemCounters';
 import {Progress, ProgressProps} from '@gravity-ui/uikit';
 
 import {computeEffectiveStateProgress} from '../../../utils/index';
@@ -11,24 +10,16 @@ import './SystemStateOverview.scss';
 
 const b = block('system');
 
-export type SystemStateOverviewProps<Counters extends object> = {
-    tab?: string;
-    counters?: Counters;
+export type SystemStateOverviewProps<Flags extends string> = SystemCountersProps<Flags> & {
     stateOverview?: ProgressProps;
 };
 
-export default class SystemStateOverview<Counters extends object> extends React.Component<
-    SystemStateOverviewProps<Counters>
+export default class SystemStateOverview<Flags extends string> extends React.Component<
+    SystemStateOverviewProps<Flags>
 > {
-    static propTypes = {
-        tab: PropTypes.string.isRequired,
-        counters: PropTypes.object,
-        stateOverview: PropTypes.object,
-    };
-
     render() {
-        const {counters, ...rest} = this.props;
-        if (!counters) {
+        const {stateOverview: _x, ...rest} = this.props;
+        if (!this.props.counters) {
             return null;
         }
 
@@ -36,13 +27,13 @@ export default class SystemStateOverview<Counters extends object> extends React.
             stateOverview = {
                 value: 100,
                 view: 'thin',
-                stack: computeEffectiveStateProgress(counters),
+                stack: computeEffectiveStateProgress(this.props.counters),
             },
         } = this.props;
 
         return (
             <div className={b('heading-overview')}>
-                <SystemCounters counters={counters} {...rest} />
+                <SystemCounters {...rest} />
                 <div className={b('heading-overview-states')}>
                     <Progress {...stateOverview} />
                 </div>

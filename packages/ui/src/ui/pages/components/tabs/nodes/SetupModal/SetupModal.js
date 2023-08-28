@@ -63,7 +63,7 @@ export class SetupModal extends Component {
                 schedulerJobs: SetupModal.radioProps.isRequired,
                 writeSessions: SetupModal.radioProps.isRequired,
                 tabletCells: SetupModal.radioProps.isRequired,
-                rack: PropTypes.string.isRequired,
+                rack: PropTypes.object.isRequired,
                 banned: SetupModal.radioProps.isRequired,
                 decommissioned: SetupModal.radioProps.isRequired,
                 full: SetupModal.radioProps.isRequired,

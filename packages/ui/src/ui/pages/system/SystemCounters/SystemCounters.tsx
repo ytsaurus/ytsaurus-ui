@@ -1,9 +1,8 @@
 import React from 'react';
-import {ConnectedProps, connect} from 'react-redux';
-import PropTypes from 'prop-types';
+import {connect} from 'react-redux';
 import block from 'bem-cn-lite';
-import _ from 'lodash';
 import qs from 'qs';
+import map_ from 'lodash/map';
 
 import Link from '../../../components/Link/Link';
 
@@ -16,28 +15,26 @@ import './SystemCounters.scss';
 
 const b = block('system');
 
-export type SystemCountersProps<States extends string, Flags extends string> = {
-    tab: string;
-    counters: {states: Record<States, number>; flags: Record<Flags, number>; total: number};
-    stateThemeMappings: Record<States | Flags, SystemCounterTheme>;
+export type SystemCountersProps<Flags extends string> = {
+    cluster?: string;
+    tab?: string;
+
+    counters?: {
+        states?: Partial<Record<string, number | undefined>>;
+        flags?: Partial<Record<Flags, number | undefined>>;
+        total?: number;
+    };
+    stateThemeMappings?: Partial<Record<string, SystemCounterTheme>>;
     renderLinks?: boolean;
 
-    makeUrl?: (params: Record<Flags, 'enabled'> | Record<States, string>) => string;
-} & ReduxProps;
+    makeUrl?: (
+        params: Partial<Omit<Record<Flags, 'enabled'>, 'state'>> | {state?: string},
+    ) => string | undefined;
+};
 
 export type SystemCounterTheme = 'warning' | 'danger' | undefined;
 
-type ReduxProps = ConnectedProps<typeof connector>;
-
-class SystemCounters<States extends string, Flags extends string> extends React.Component<
-    SystemCountersProps<States, Flags>
-> {
-    static propTypes = {
-        renderLinks: PropTypes.bool,
-
-        makeUrl: PropTypes.func,
-    };
-
+class SystemCounters<Flags extends string> extends React.Component<SystemCountersProps<Flags>> {
     static defaultProps = {
         stateThemeMappings: {},
         renderLinks: true,
@@ -62,9 +59,13 @@ class SystemCounters<States extends string, Flags extends string> extends React.
     }: {
         caption: string;
         params: Record<string, string>;
-        value: number;
+        value?: number;
         theme?: SystemCounterTheme;
     }) {
+        if (isNaN(value!)) {
+            return null;
+        }
+
         const {renderLinks} = this.props;
 
         const url = renderLinks ? this.prepareUrl(params) : undefined;
@@ -88,7 +89,7 @@ class SystemCounters<States extends string, Flags extends string> extends React.
     renderCountersFlags() {
         const {counters, stateThemeMappings} = this.props;
 
-        return _.map(counters.flags, (flag, key) => {
+        return map_(counters?.flags, (flag, key) => {
             if (!flag) {
                 return null;
             }
@@ -99,8 +100,8 @@ class SystemCounters<States extends string, Flags extends string> extends React.
                 <li key={flagName} className={'counter_flag'}>
                     {this.renderCounter({
                         caption: formatCounterName(flagName),
-                        params: {flagName: 'enabled'},
-                        theme: stateThemeMappings[flagName],
+                        params: {[flagName]: 'enabled'},
+                        theme: stateThemeMappings?.[flagName],
                         value: flag,
                     })}
                 </li>
@@ -111,14 +112,13 @@ class SystemCounters<States extends string, Flags extends string> extends React.
     renderCountersStates() {
         const {counters, stateThemeMappings} = this.props;
 
-        return _.map(counters.states, (state, key) => {
-            const stateName = key as States;
+        return map_(counters?.states, (state, stateName) => {
             return (
                 <li key={stateName} className={'counter_state'}>
                     {this.renderCounter({
                         caption: formatCounterName(stateName),
                         params: {state: stateName},
-                        theme: stateThemeMappings[stateName],
+                        theme: stateThemeMappings?.[stateName],
                         value: state,
                     })}
                 </li>
@@ -134,7 +134,7 @@ class SystemCounters<States extends string, Flags extends string> extends React.
                 {this.renderCounter({
                     caption: formatCounterName('total'),
                     params: {},
-                    value: counters.total,
+                    value: counters?.total,
                 })}
             </li>
         );
@@ -163,6 +163,4 @@ const mapStateToProps = (state: RootState) => {
     };
 };
 
-const connector = connect(mapStateToProps);
-
-export default connector(SystemCounters);
+export default connect(mapStateToProps)(SystemCounters);

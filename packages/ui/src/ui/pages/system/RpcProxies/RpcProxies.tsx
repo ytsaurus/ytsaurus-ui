@@ -44,6 +44,7 @@ class RpcProxies extends Component<ReduxProps> {
                     {map_(roleGroups, (data) => {
                         return (
                             <RoleGroup
+                                key={data.name}
                                 data={data}
                                 url={`components/rpc_proxies?role=${data.name}`}
                             />

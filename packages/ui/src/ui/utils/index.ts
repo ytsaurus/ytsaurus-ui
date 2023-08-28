@@ -99,27 +99,6 @@ export function formatCounterName(name: string): string {
     return hammer.format['Readable'](caption, {delimiter: '-'});
 }
 
-export function getCounterAction(tab: string, type?: 'state' | 'flags', name?: string): unknown {
-    let filterName;
-    let filterValue;
-
-    if (type === 'state') {
-        filterName = type;
-        filterValue = name;
-    } else if (type === 'flags') {
-        filterName = name;
-        filterValue = true;
-    }
-
-    const action: Record<string, string | boolean | undefined> = {tab: tab};
-
-    if (filterName) {
-        action[filterName] = filterValue;
-    }
-
-    return hammer.utils.getState('components', action);
-}
-
 // @ts-expect-error
 export function sortStateProgress(progress): unknown {
     return hammer.utils.sortInPredefinedOrder(

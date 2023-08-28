@@ -58,6 +58,7 @@ export function makeComponentsNodesLink({
     rackSelected,
     banned,
     decommissioned,
+    full,
     alerts,
     nodeTypes,
 }: {
@@ -67,7 +68,8 @@ export function makeComponentsNodesLink({
     banned?: 'enabled';
     decommissioned?: 'enabled';
     alerts?: 'enabled';
-    state?: 'online' | 'offline';
+    full?: 'enabled';
+    state?: 'online' | 'offline' | string;
     nodeTypes?: Array<string>;
 }) {
     if (!cluster) {
@@ -90,6 +92,9 @@ export function makeComponentsNodesLink({
     }
     if (alerts) {
         search += `alerts=${alerts}&`;
+    }
+    if (full) {
+        search += `full=${full}&`;
     }
     if (nodeTypes?.length) {
         search += `nodeType=${nodeTypes?.join(',')}&`;
