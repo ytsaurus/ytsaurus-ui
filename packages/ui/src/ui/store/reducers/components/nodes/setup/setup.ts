@@ -193,18 +193,7 @@ export const initialState = _.cloneDeep(initialFiltersState);
 export default (state = initialState, action: NodesSetupAction) => {
     switch (action.type) {
         case APPLY_SETUP: {
-            if (action.data.default?.tag) {
-                const dst = {
-                    ...state,
-                    default: {
-                        ...state.default,
-                        tag: '',
-                    },
-                };
-                return _.merge(dst, action.data);
-            } else {
-                return _.merge({}, state, action.data);
-            }
+            return _.merge({}, state, action.data);
         }
         default:
             return state;

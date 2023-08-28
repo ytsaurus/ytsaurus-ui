@@ -34,7 +34,7 @@ const block = cn('system-nodes');
 const STATE_THEME_MAPPING = {
     alerts: 'warning',
     full: 'danger',
-};
+} as const;
 
 type ReduxProps = ConnectedProps<typeof connector>;
 
@@ -88,7 +88,12 @@ class Nodes extends Component<ReduxProps> {
                                 counters={counters?.[groupName]}
                                 stateThemeMappings={STATE_THEME_MAPPING}
                                 tab="nodes"
-                                makeUrl={this.makeComponentNodesUrl}
+                                makeUrl={(params) => {
+                                    return this.makeComponentNodesUrl({
+                                        rackFilter: groupName,
+                                        ...params,
+                                    });
+                                }}
                             />
                         </div>
                     )}

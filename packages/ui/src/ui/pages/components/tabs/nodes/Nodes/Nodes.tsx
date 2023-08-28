@@ -1,11 +1,14 @@
 import React from 'react';
 import {Sticky, StickyContainer} from 'react-sticky';
 import {ConnectedProps, connect} from 'react-redux';
-import PropTypes from 'prop-types';
 import hammer from '../../../../../common/hammer';
 import {compose} from 'redux';
 import cn from 'bem-cn-lite';
-import _ from 'lodash';
+import memoize_ from 'lodash/memoize';
+import filter_ from 'lodash/filter';
+import map_ from 'lodash/map';
+import includes_ from 'lodash/includes';
+import keys_ from 'lodash/keys';
 
 import {Text} from '@gravity-ui/uikit';
 
@@ -57,7 +60,6 @@ import {HEADER_HEIGHT, KeyCode} from '../../../../../constants/index';
 import {
     CONTENT_MODE,
     CONTENT_MODE_ITEMS,
-    CONTENT_MODE_OPTIONS,
     POLLING_INTERVAL,
     SPLIT_TYPE,
 } from '../../../../../constants/components/nodes/nodes';
@@ -80,46 +82,6 @@ type State = {
 };
 
 class Nodes extends React.Component<ReduxProps & WithVisibleProps, State> {
-    static propTypes = {
-        // from connect
-        loading: PropTypes.bool.isRequired,
-        loaded: PropTypes.bool.isRequired,
-        error: PropTypes.bool.isRequired,
-        errorData: PropTypes.object.isRequired,
-
-        contentMode: PropTypes.oneOf(CONTENT_MODE_OPTIONS).isRequired,
-        nodes: PropTypes.arrayOf(PropTypes.object).isRequired,
-        initialLoading: PropTypes.bool.isRequired,
-        totalItems: PropTypes.number.isRequired,
-        hostFilter: PropTypes.string.isRequired,
-        resourcesHost: PropTypes.string.isRequired,
-        showingItems: PropTypes.number.isRequired,
-        selectedColumns: PropTypes.arrayOf(PropTypes.string).isRequired,
-        splitScreen: PropTypes.shape({
-            isSplit: PropTypes.bool.isRequired,
-            paneClassNames: PropTypes.array.isRequired,
-            type: PropTypes.string.isRequired,
-        }).isRequired,
-        sideBarEnabled: PropTypes.bool.isRequired,
-        nodeTypes: PropTypes.string.isRequired,
-
-        changeContentMode: PropTypes.func.isRequired,
-        splitScreenAction: PropTypes.func.isRequired,
-        changeHostFilter: PropTypes.func.isRequired,
-        mergeScreen: PropTypes.func.isRequired,
-        getNodes: PropTypes.func.isRequired,
-        handleColumnsChange: PropTypes.func.isRequired,
-
-        banNode: PropTypes.func.isRequired,
-        unbanNode: PropTypes.func.isRequired,
-
-        // from hoc
-        visible: PropTypes.bool.isRequired,
-        handleClose: PropTypes.func.isRequired,
-        handleShow: PropTypes.func.isRequired,
-        toggleVisible: PropTypes.func.isRequired,
-    };
-
     state: State = {
         preset: '',
         activeNodeHost: undefined,
@@ -150,11 +112,11 @@ class Nodes extends React.Component<ReduxProps & WithVisibleProps, State> {
         const {nodesTableProps} = this.props;
         const {selectedColumns} = this.state;
 
-        const columns = _.filter(_.keys(nodesTableProps.columns.items), (key) => key !== 'actions');
+        const columns = filter_(keys_(nodesTableProps.columns.items), (key) => key !== 'actions');
 
-        return _.map(columns, (column) => ({
+        return map_(columns, (column) => ({
             name: column,
-            checked: _.includes(selectedColumns, column),
+            checked: includes_(selectedColumns, column),
             caption: hammer.format['ReadableField'](column),
         }));
     }
@@ -169,7 +131,7 @@ class Nodes extends React.Component<ReduxProps & WithVisibleProps, State> {
     }
 
     // eslint-disable-next-line @typescript-eslint/member-ordering
-    getSelectedIndex = _.memoize(
+    getSelectedIndex = memoize_(
         (activeNodeHost: State['activeNodeHost'], nodes: ReduxProps['nodes'] = []) =>
             nodes.findIndex((node) => activeNodeHost === node.host),
     );
@@ -190,8 +152,8 @@ class Nodes extends React.Component<ReduxProps & WithVisibleProps, State> {
     handleColumnsChange = ({items}: {items: Nodes['allColumns']}) => {
         const {handleColumnsChange} = this.props;
 
-        const selectedItems = _.filter(items, (column) => column.checked);
-        const selectedColumns = [..._.map(selectedItems, (column) => column.name), 'actions'];
+        const selectedItems = filter_(items, (column) => column.checked);
+        const selectedColumns = [...map_(selectedItems, (column) => column.name), 'actions'];
 
         this.setState({selectedColumns});
         handleColumnsChange(selectedColumns);
