@@ -28,35 +28,44 @@ const parseResultTabIndex = (tabId: string) => {
 type ResultCurrentState = {
     activeTabId: string;
     category: QueryResultTab;
-    resultIndex?: number;
+    activeResultParams?: {queryId: string; resultIndex: number};
 };
 
 export const useQueryResultTabs = (
     query?: QueryItem,
 ): [TabsItemProps[], (tab: string) => void, ResultCurrentState] => {
     const [tab, setTab] = useState<QueryResultTab>(QueryResultTab.META);
-    const [resultIndex, setActiveIndex] = useState<number | undefined>(undefined);
+    const [activeResultParams, setResultParams] =
+        useState<ResultCurrentState['activeResultParams']>(undefined);
     const dispatch = useDispatch();
     const resultsMeta = useSelector((state: RootState) => getQueryResults(state, query?.id || ''));
 
     const activeTabId = useMemo(() => {
         if (tab === QueryResultTab.RESULT) {
-            return createResultTabId(resultIndex || 0);
+            return createResultTabId(activeResultParams?.resultIndex || 0);
         }
         return tab;
-    }, [tab, resultIndex]);
+    }, [tab, activeResultParams]);
 
     const setActiveTab = useCallback(
-        (tab: string) => {
-            if (isResultTab(tab)) {
+        (tabId: string, queryId?: string) => {
+            if (isResultTab(tabId)) {
                 setTab(QueryResultTab.RESULT);
-                setActiveIndex(parseResultTabIndex(tab));
+                const id = queryId || activeResultParams?.queryId;
+                if (id) {
+                    setResultParams({
+                        queryId: id,
+                        resultIndex: parseResultTabIndex(tabId) || 0,
+                    });
+                } else {
+                    setResultParams(undefined);
+                }
             } else {
-                setTab(tab as QueryResultTab);
-                setActiveIndex(undefined);
+                setTab(tabId as QueryResultTab);
+                setResultParams(undefined);
             }
         },
-        [setTab],
+        [activeResultParams],
     );
 
     const tabs = useMemo(() => {
@@ -99,8 +108,8 @@ export const useQueryResultTabs = (
         if (query) {
             dispatch(loadQueryResultsErrors(query));
         }
-        setActiveTab(tabs?.[0]?.id);
-    }, [query]);
+        setActiveTab(tabs?.[0]?.id, query?.id);
+    }, [dispatch, query]);
 
     return [
         tabs,
@@ -108,7 +117,7 @@ export const useQueryResultTabs = (
         {
             activeTabId,
             category: tab,
-            resultIndex,
+            activeResultParams,
         },
     ];
 };
