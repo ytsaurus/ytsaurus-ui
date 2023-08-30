@@ -1,4 +1,7 @@
-import _ from 'lodash';
+import filter_ from 'lodash/filter';
+import some_ from 'lodash/some';
+import union_ from 'lodash/union';
+
 import hammer from '../../../../../common/hammer';
 import {createSelector} from 'reselect';
 
@@ -18,6 +21,7 @@ import {
 } from '../../../../../utils/components/nodes/tables';
 import {
     getComponentNodesFilterPredicates,
+    getComponentNodesFilterStatePredicate,
     getComponentNodesFiltersSetup,
     getComponentNodesIndexByRack,
     getComponentNodesIndexByTag,
@@ -46,10 +50,8 @@ const getPropertiesRequiredForMediums = createSelector(
 
 const getFilteredByHost = createSelector([getNodes, getHostFilter], (nodes, hostFilter) => {
     const hostFilters = hostFilter.split(/\s+/);
-    return _.filter(nodes, (node) => {
-        return _.some(hostFilters, (hostFilter) =>
-            node?.host?.toLowerCase().startsWith(hostFilter),
-        );
+    return filter_(nodes, (node) => {
+        return some_(hostFilters, (hostFilter) => node?.host?.toLowerCase().startsWith(hostFilter));
     });
 });
 
@@ -62,7 +64,7 @@ const getFilteredNodes = createSelector(
         }
 
         const predicate = concatByAnd(...predicatesArray);
-        return _.filter(nodes, (node) => {
+        return filter_(nodes, (node) => {
             return predicate(node);
         });
     },
@@ -93,7 +95,7 @@ const getVisibleColumns = createSelector(
 const getPropertiesRequiredForRender = createSelector(
     [getVisibleColumns],
     (visibleColumns /* : Array<keyof typeof PropertiesByColumn> */) => {
-        const requiredProperties = _.union(
+        const requiredProperties = union_(
             ...visibleColumns.map(
                 (x) => (PropertiesByColumn as any)[x] as ValueOf<typeof PropertiesByColumn>,
             ),
@@ -116,7 +118,7 @@ export const getRequiredAttributes = createSelector(
             ...propertiesRequiredForMediums,
         ];
 
-        const requiredAttributes = _.union(
+        const requiredAttributes = union_(
             ...allRequiredProperties.map(
                 (x) => (AttributesByProperty as any)[x] as ValueOf<typeof AttributesByProperty>,
             ),
@@ -169,5 +171,32 @@ export const getComponentsNodesNodeTypes = createSelector(
             return [NODE_TYPE.ALL_NODES];
         }
         return res;
+    },
+);
+
+export const getComponentNodesAvailableStates = createSelector([], () => {
+    return [
+        'all',
+        'being_disposed',
+        'online',
+        'offline',
+        'mixed',
+        'registered',
+        'unregistered',
+        'unknown',
+    ];
+});
+
+export const getComponentNodesFilterSetupStateValue = createSelector(
+    [getComponentNodesAvailableStates, getComponentNodesFilterStatePredicate],
+    (availableValues, predicate) => {
+        if (!predicate) {
+            return ['all'];
+        }
+
+        return availableValues
+            .map((state) => ({state}))
+            .filter(predicate)
+            .map(({state}) => state);
     },
 );

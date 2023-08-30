@@ -39,7 +39,16 @@ export interface NodesSetupState {
     default: {
         physicalHost: string;
         tag: string | TagFilter;
-        state: 'all' | 'online' | 'offline' | 'mixed' | 'registered' | 'unregistered' | 'unknown';
+        state: Array<
+            | 'all'
+            | 'online'
+            | 'offline'
+            | 'mixed'
+            | 'registered'
+            | 'unregistered'
+            | 'unknown'
+            | string
+        >;
         schedulerJobs: FlagState;
         writeSessions: FlagState;
         tabletCells: FlagState;
@@ -110,7 +119,7 @@ export const initialFiltersState: NodesSetupState = {
     default: {
         physicalHost: '',
         tag: {mode: 'filter', filter: '', selected: []},
-        state: 'all',
+        state: ['all'],
         schedulerJobs: 'all',
         writeSessions: 'all',
         tabletCells: 'all',
