@@ -122,11 +122,8 @@ class Nodes extends Component<ReduxProps> {
 
         const {name, state: s, flag: f} = params ?? {};
 
-        if (s === 'others') {
-            return undefined;
-        }
-
-        const state = s === 'online' || s === 'offline' ? s : undefined;
+        const stateAsOthers = s === 'others' ? '!online,!offline' : undefined;
+        const state = s === 'online' || s === 'offline' ? s : stateAsOthers;
 
         const flag = s === 'banned' ? 'banned' : f;
 
