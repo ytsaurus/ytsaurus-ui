@@ -1,5 +1,5 @@
 {
   "packages/javascript-wrapper": "0.4.0",
   "packages/interface-helpers": "0.2.0",
-  "packages/ui": "0.16.1"
+  "packages/ui": "0.17.0"
 }
