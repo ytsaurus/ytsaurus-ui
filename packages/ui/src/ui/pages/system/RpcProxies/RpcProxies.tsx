@@ -47,7 +47,7 @@ class RpcProxies extends Component<ReduxProps> {
                                 <RoleGroup
                                     key={data.name}
                                     data={data}
-                                    url={`components/rpc_proxies?role=${data.name}`}
+                                    makeUrl={() => `components/rpc_proxies?role=${data.name}`}
                                 />
                             );
                         })}
