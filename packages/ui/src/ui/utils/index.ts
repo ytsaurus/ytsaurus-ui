@@ -351,3 +351,26 @@ export const UNIPIKA_ESCAPED_SETTINGS = {
     escapeWhitespace: true,
     format: 'raw-json',
 };
+
+export function updateListWithAll<V extends string>(
+    {
+        value,
+        newValue,
+    }: {
+        value: Array<V>;
+        newValue: Array<V>;
+    },
+    all: V,
+): Array<V> {
+    const prevHasAllItem = -1 !== value.indexOf(all);
+    const newAllItemIndex = newValue.indexOf(all);
+    if (newValue.length > value.length && prevHasAllItem) {
+        const tmp = [...newValue];
+        tmp.splice(newAllItemIndex, 1);
+        return tmp;
+    } else if (!prevHasAllItem && newAllItemIndex !== -1) {
+        return [all];
+    } else {
+        return newValue.length > 0 ? newValue : [all];
+    }
+}
