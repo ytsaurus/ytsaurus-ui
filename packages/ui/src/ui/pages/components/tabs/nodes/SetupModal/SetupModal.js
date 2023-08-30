@@ -21,7 +21,7 @@ import {
     savePreset,
 } from '../../../../../store/actions/components/nodes/nodes';
 import {FLAG_STATE, MEDIUM_COLS_PREFIX} from '../../../../../constants/components/nodes/nodes';
-import {parseBytes} from '../../../../../utils';
+import {parseBytes, updateListWithAll} from '../../../../../utils';
 
 import {getMediumListNoCache} from '../../../../../store/selectors/thor';
 import TagsFilter from './TagsFilter/TagsFilter';
@@ -30,6 +30,10 @@ import {
     getComponentNodesRacks,
     getComponentNodesTags,
 } from '../../../../../store/selectors/components/nodes/nodes';
+import {
+    getComponentNodesAvailableStates,
+    getComponentNodesFilterSetupStateValue,
+} from '../../../../../store/selectors/components/nodes/nodes/data';
 
 import './SetupModal.scss';
 
@@ -107,47 +111,30 @@ export class SetupModal extends Component {
         return {storage: {...storage, ...newStorage}};
     }
 
-    state = {
-        ...this.props.setup,
-        saveAsTemplate: false,
-        templateName: '',
-    };
+    state = {};
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            ...this.props.setup,
+            saveAsTemplate: false,
+            templateName: '',
+        };
+
+        this.state.default.state = this.props.stateValue;
+    }
 
     get hotkeySettings() {
         return [{keys: 'enter', handler: this.handleApplySetup, scope: 'all'}];
     }
 
     get states() {
-        return {
-            all: {
-                title: 'All',
-                value: 'all',
-            },
-            online: {
-                title: 'Online',
-                value: 'online',
-            },
-            offline: {
-                title: 'Offline',
-                value: 'offline',
-            },
-            unknown: {
-                title: 'Unknown',
-                value: 'unknown',
-            },
-            mixed: {
-                title: 'Mixed',
-                value: 'mixed',
-            },
-            registered: {
-                title: 'Registered',
-                value: 'registered',
-            },
-            unregistered: {
-                title: 'Unregistered',
-                value: 'unregistered',
-            },
-        };
+        return _.map(this.props.nodeStates, (state) => {
+            return {
+                title: hammer.format.Readable(state),
+                value: state,
+            };
+        });
     }
 
     get radioItems() {
@@ -182,11 +169,15 @@ export class SetupModal extends Component {
         this.setState({saveAsTemplate: false}, handleClose);
     };
 
-    handleSelectChange = (value) => {
+    handleSelectChange = (newValue) => {
+        const {state} = this.state.default;
+
+        const values = updateListWithAll({value: state, newValue}, 'all');
+
         this.setState({
             default: {
                 ...this.state.default,
-                state: this.states[value].value,
+                state: values,
             },
         });
     };
@@ -310,18 +301,17 @@ export class SetupModal extends Component {
 
     renderStatesSelect() {
         const {state} = this.state.default;
-        const items = _.values(this.states);
         return (
             <div className={block('select')}>
                 <Select
-                    value={state ? [state] : undefined}
-                    items={items}
+                    value={state}
+                    items={this.states}
                     filterable
-                    onUpdate={(vals) => this.handleSelectChange(vals[0])}
-                    placeholder={hammer.format['FirstUppercase'](state)}
+                    onUpdate={this.handleSelectChange}
+                    placeholder={'Select states...'}
                     width="max"
-                    hideClear
                     hideFilter
+                    multiple
                 />
             </div>
         );
@@ -819,6 +809,8 @@ const mapStateToProps = (state) => {
         mediumList: getMediumListNoCache(state),
         nodeTags: getComponentNodesTags(state),
         nodeRacks: getComponentNodesRacks(state),
+        nodeStates: getComponentNodesAvailableStates(state),
+        stateValue: getComponentNodesFilterSetupStateValue(state),
     };
 };
 

@@ -1,8 +1,18 @@
-import _ from 'lodash';
+import cloneDeep_ from 'lodash/cloneDeep';
+import every_ from 'lodash/every';
+import filter_ from 'lodash/filter';
+import forEach_ from 'lodash/forEach';
+import merge_ from 'lodash/merge';
+import pickBy_ from 'lodash/pickBy';
+import reduce_ from 'lodash/reduce';
+import some_ from 'lodash/some';
+import values_ from 'lodash/values';
+import union_ from 'lodash/union';
+
 import {createSelector} from 'reselect';
 
-import {RootState} from '../../../../../store/reducers';
-import type {Node} from '../../../../../store/reducers/components/nodes/nodes/node';
+import {Toaster} from '@gravity-ui/uikit';
+
 import {
     FlagState,
     NodeRange,
@@ -12,32 +22,78 @@ import {
 import {MEDIUM_COLS_PREFIX} from '../../../../../constants/components/nodes/nodes';
 import {getMediumListNoCache} from '../../../../../store/selectors/thor';
 import type {ValueOf} from '../../../../../types';
+import {Node} from '../../../../reducers/components/nodes/nodes/node';
 
-const getSetupFiltersRaw = (state: RootState) => state.components.nodes.setup;
+import {RootState} from '../../../../reducers';
+
+export const getSetupFiltersRaw = (state: RootState) => state.components.nodes.setup;
 
 export const getNodes = (state: RootState): Array<Node> => state.components.nodes.nodes.nodes;
+
+export const getComponentNodesFilterStatePredicate = createSelector(
+    [getSetupFiltersRaw],
+    ({default: {state}}) => {
+        if (!state.length || (state.length === 1 && state[0] === 'all')) {
+            return undefined;
+        }
+        const excludes = reduce_(
+            state,
+            (acc, item) => {
+                if (item[0] === '!') {
+                    acc.add(item.substring(1));
+                }
+                return acc;
+            },
+            new Set<string>(),
+        );
+
+        if (excludes.size) {
+            if (excludes.size !== state.length) {
+                new Toaster().add({
+                    name: 'component-nodes-excludes',
+                    type: 'error',
+                    allowAutoHiding: false,
+                    title: 'Unexpected behavior',
+                    content:
+                        'Components/Nodes: It is not allowed to have excludes and includes for "state" filter at the same time',
+                });
+            }
+
+            excludes.add('all');
+
+            return (node: {state: string}) => {
+                return !excludes.has(node.state);
+            };
+        } else {
+            const includes = new Set(state);
+            return (node: {state: string}) => {
+                return includes.has(node.state);
+            };
+        }
+    },
+);
 
 export const getComponentNodesFiltersSetup = createSelector(
     [getSetupFiltersRaw, getMediumListNoCache],
     (setup, mediumList) => {
-        const mediumDefaults = _.reduce(
+        const mediumDefaults = reduce_(
             mediumList,
             (acc, medium) => {
-                acc[MEDIUM_COLS_PREFIX + medium] = _.cloneDeep(groupFilterInitialState);
+                acc[MEDIUM_COLS_PREFIX + medium] = cloneDeep_(groupFilterInitialState);
                 return acc;
             },
             {} as Record<string, NodeRange>,
         );
-        return _.merge({}, {storage: mediumDefaults}, setup);
+        return merge_({}, {storage: mediumDefaults}, setup);
     },
 );
 
 export const getComponentNodesIndexByTag = createSelector([getNodes], (nodes) => {
-    const res = _.reduce(
+    const res = reduce_(
         nodes,
         (acc, node) => {
             const {tags} = node;
-            _.forEach(tags, (tag) => {
+            forEach_(tags, (tag) => {
                 if (acc.has(tag)) {
                     acc.get(tag)?.add(node);
                 } else {
@@ -52,7 +108,7 @@ export const getComponentNodesIndexByTag = createSelector([getNodes], (nodes) =>
 });
 
 export const getComponentNodesIndexByRack = createSelector([getNodes], (nodes) => {
-    return _.reduce(
+    return reduce_(
         nodes,
         (acc, node) => {
             if (!acc.has(node.rack)) {
@@ -133,8 +189,13 @@ type Predicates = {
 };
 
 const getFilterPredicatesObject = createSelector(
-    [getSetupFiltersRaw, getComponentNodesIndexByTag, getComponentNodesIndexByRack],
-    (setupFilters, nodesByTags, nodesByRack) => {
+    [
+        getSetupFiltersRaw,
+        getComponentNodesIndexByTag,
+        getComponentNodesIndexByRack,
+        getComponentNodesFilterStatePredicate,
+    ],
+    (setupFilters, nodesByTags, nodesByRack, statePredicate) => {
         const predicates: Predicates = {
             // filter by default
             physicalHost:
@@ -147,11 +208,7 @@ const getFilterPredicatesObject = createSelector(
                 nodesByTags,
                 (node) => node.tags,
             ),
-            state:
-                setupFilters.default.state !== 'all' &&
-                ((node) => {
-                    return setupFilters.default.state === node.state;
-                }),
+            state: statePredicate,
             rack: createNodeTagPredicate<'rack'>(setupFilters.default.rack, nodesByRack, (node) => [
                 node.rack,
             ]),
@@ -400,7 +457,7 @@ const getFilterPredicatesObject = createSelector(
 export const getComponentNodesFiltersCount = createSelector(
     [getFilterPredicatesObject],
     (filters) => {
-        return _.reduce(
+        return reduce_(
             filters,
             (acc, predicate) => {
                 return predicate ? acc + 1 : acc;
@@ -413,21 +470,21 @@ export const getComponentNodesFiltersCount = createSelector(
 export const getComponentNodesFilterPredicates = createSelector(
     [getFilterPredicatesObject],
     (filterPredicatesObject) => {
-        return _.filter(filterPredicatesObject, (p) => p) as Array<(node: Node) => boolean>;
+        return filter_(filterPredicatesObject, (p) => p) as Array<(node: Node) => boolean>;
     },
 );
 
 export const getPropertiesRequiredForFilters = createSelector(
     [getFilterPredicatesObject],
     (filterPredicatesObject) => {
-        const picked = _.values(
-            _.pickBy(
+        const picked = values_(
+            pickBy_(
                 PropertiesByPredicate,
                 (_value, key) => filterPredicatesObject[key as keyof typeof PropertiesByPredicate],
             ),
         ) as any;
 
-        return _.union(...picked) as Array<ValueOf<typeof PropertiesByPredicate>[number]>;
+        return union_(...picked) as Array<ValueOf<typeof PropertiesByPredicate>[number]>;
     },
 );
 
@@ -442,7 +499,7 @@ function createNodeTagPredicate<K extends keyof typeof PropertiesByPredicate>(
 
     if (typeof tagFilter === 'string') {
         return (node) => {
-            return _.some(
+            return some_(
                 getTags(node),
                 (item) => -1 !== item.toLowerCase().indexOf(tagFilter.toLowerCase()),
             );
@@ -459,7 +516,7 @@ function createNodeTagPredicate<K extends keyof typeof PropertiesByPredicate>(
                 return undefined;
             }
             return (node) => {
-                return _.some(selectedItems, (tagName) => {
+                return some_(selectedItems, (tagName) => {
                     return nodesByTags.get(tagName)?.has(node);
                 });
             };
@@ -469,7 +526,7 @@ function createNodeTagPredicate<K extends keyof typeof PropertiesByPredicate>(
                 return undefined;
             }
             return (node) => {
-                return _.every(selectedItems, (tagName) => {
+                return every_(selectedItems, (tagName) => {
                     return nodesByTags.get(tagName)?.has(node);
                 });
             };
@@ -484,7 +541,7 @@ function createNodeTagPredicate<K extends keyof typeof PropertiesByPredicate>(
             try {
                 const re = new RegExp(filter);
                 return (node) => {
-                    return _.some(getTags(node), (tag) => re.test(tag));
+                    return some_(getTags(node), (tag) => re.test(tag));
                 };
             } catch (e) {
                 return () => false;

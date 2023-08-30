@@ -139,7 +139,7 @@ export class Node {
     spaceText!: string;
     spaceTotal!: number;
     spaceUsed!: number;
-    state!: 'online' | 'offline';
+    state!: 'online' | 'offline' | string;
     systemTags!: string[];
     tabletDynamicMemory!: Memory;
     tabletSlots!: TabletSlots;

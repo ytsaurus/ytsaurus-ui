@@ -83,6 +83,10 @@ const defaultParams = {
     state: {
         stateKey: 'components.nodes.setup.default.state',
         initialState: stateInitialState,
+        type: 'array',
+        options: {
+            delimiter: ',',
+        },
     },
     rack: {
         stateKey: 'components.nodes.setup.default.rack',
