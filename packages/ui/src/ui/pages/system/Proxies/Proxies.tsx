@@ -51,7 +51,7 @@ class Proxies extends Component<ReduxProps> {
                             <RoleGroup
                                 key={data.name}
                                 data={data}
-                                url={`components/http_proxies?role=${data.name}`}
+                                makeUrl={() => `components/http_proxies?role=${data.name}`}
                             />
                         );
                     })}

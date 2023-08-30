@@ -12,30 +12,51 @@ import type {NodeEffectiveState} from '../../../store/reducers/system/nodes';
 
 const block = cn('yt-role-group');
 
+export type MakeUrlParams = {
+    name?: string;
+    state?: 'online' | 'offline' | 'banned' | 'others';
+    flag?: 'decommissioned' | 'alerts' | 'full';
+};
+
 export function RoleGroupsContainer({children}: {children: React.ReactNode}) {
     return <div className={block('container')}>{children}</div>;
 }
 
 export function RoleGroup({
     data: {name, counters},
-    url,
+    makeUrl,
     showFlags,
 }: {
     data: RoleGroupInfo;
-    url: string;
+    makeUrl: (params?: MakeUrlParams) => string | undefined;
     showFlags?: boolean;
 }) {
     const {online = 0, offline = 0, banned = 0, other = 0} = counters.effectiveStates;
+    const nameUrl = makeUrl({name});
     return (
-        <Link href={url} className={block()}>
+        <div className={block()}>
             <div className={block('progress')}>
                 <div className={block('progress-text')}>
-                    <Text className={block('name')} color="primary" variant="body-3" ellipsis>
-                        {name}
-                    </Text>
-                    <Text className={block('progress-number')} color="primary" variant="display-1">
-                        {format.Number(counters.total)}
-                    </Text>
+                    <div>
+                        <Link
+                            view="primary"
+                            href={nameUrl}
+                            className={block('name')}
+                            target="_blank"
+                        >
+                            <Text variant="body-3" ellipsis>
+                                {name}
+                            </Text>
+                        </Link>
+                    </div>
+                    <Link
+                        view="primary"
+                        className={block('progress-number')}
+                        href={nameUrl}
+                        target="_blank"
+                    >
+                        <Text variant="display-1">{format.Number(counters.total)}</Text>
+                    </Link>
                 </div>
                 <ProgressCircle
                     size={52}
@@ -48,30 +69,46 @@ export function RoleGroup({
                     ]}
                 />
             </div>
-            <States counters={counters} showFlags={showFlags} />
-        </Link>
+            <States
+                counters={counters}
+                showFlags={showFlags}
+                makeUrl={(params) => makeUrl({name, ...params})}
+            />
+        </div>
     );
 }
 
-function States({counters, showFlags}: {counters: SystemNodeCounters; showFlags?: boolean}) {
+function States({
+    counters,
+    showFlags,
+    makeUrl,
+}: {
+    counters: SystemNodeCounters;
+    showFlags?: boolean;
+    makeUrl: (params?: MakeUrlParams) => string | undefined;
+}) {
     const {online = 0, offline = 0, banned = 0, other = 0} = counters.effectiveStates;
     const {decommissioned = 0, alerts = 0, full = 0} = counters.flags;
     return (
         <div className={block('counters')}>
-            <Status status="online" count={online} />
+            <Status status="online" count={online} url={makeUrl({state: 'online'})} />
             <span />
-            <Status status="offline" count={offline} />
+            <Status status="offline" count={offline} url={makeUrl({state: 'offline'})} />
             <span />
-            <Status status="banned" count={banned} />
+            <Status status="banned" count={banned} url={makeUrl({state: 'banned'})} />
             <span />
-            <Status status="other" count={other} />
+            <Status status="other" count={other} url={makeUrl({state: 'others'})} />
             {showFlags && (
                 <>
-                    <Status status="alert" count={alerts} />
+                    <Status status="alert" count={alerts} url={makeUrl({flag: 'alerts'})} />
                     <span />
-                    <Status status="dec" count={decommissioned} />
+                    <Status
+                        status="dec"
+                        count={decommissioned}
+                        url={makeUrl({flag: 'decommissioned'})}
+                    />
                     <span />
-                    <Status status="full" count={full} />
+                    <Status status="full" count={full} url={makeUrl({flag: 'full'})} />
                     <span />
                 </>
             )}
@@ -82,13 +119,20 @@ function States({counters, showFlags}: {counters: SystemNodeCounters; showFlags?
 function Status({
     status,
     count,
+    url,
 }: {
     status: NodeEffectiveState | 'alert' | 'dec' | 'full';
     count: number;
+    url?: string;
 }) {
-    return (
-        <div className={block('status')}>
-            <Text className={block('status-label')} color="secondary" variant="caption-2">
+    const withUrl = count > 0 && Boolean(url);
+    const content = (
+        <React.Fragment>
+            <Text
+                className={block('status-label')}
+                color={withUrl ? undefined : 'secondary'}
+                variant="caption-2"
+            >
                 {status}
             </Text>
             <div className={block('status-count')}>
@@ -97,6 +141,13 @@ function Status({
                     {format.Number(count)}
                 </Text>
             </div>
-        </div>
+        </React.Fragment>
+    );
+    return withUrl ? (
+        <Link className={block('status')} view="secondary" href={url} target="_blank">
+            {content}
+        </Link>
+    ) : (
+        <div className={block('status')}>{content}</div>
     );
 }

@@ -51,6 +51,18 @@ export const nodeTableProps = {
     },
 };
 
+export type ComponentsNodesLinkParams = {
+    cluster?: string;
+    rackFilter?: string;
+    rackSelected?: Array<string>;
+    banned?: 'enabled';
+    decommissioned?: 'enabled';
+    alerts?: 'enabled';
+    full?: 'enabled';
+    state?: 'online' | 'offline' | string;
+    nodeTypes?: Array<string>;
+};
+
 export function makeComponentsNodesLink({
     cluster,
     state,
@@ -61,17 +73,7 @@ export function makeComponentsNodesLink({
     full,
     alerts,
     nodeTypes,
-}: {
-    cluster?: string;
-    rackFilter?: string;
-    rackSelected?: Array<string>;
-    banned?: 'enabled';
-    decommissioned?: 'enabled';
-    alerts?: 'enabled';
-    full?: 'enabled';
-    state?: 'online' | 'offline' | string;
-    nodeTypes?: Array<string>;
-}) {
+}: ComponentsNodesLinkParams) {
     if (!cluster) {
         return '';
     }

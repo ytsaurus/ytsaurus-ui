@@ -21,9 +21,12 @@ import {
     getSettingsSystemNodesCollapsed,
 } from '../../../store/selectors/settings-ts';
 import type {RootState} from '../../../store/reducers';
-import {makeComponentsNodesLink} from '../../../utils/components/nodes/node';
+import {
+    ComponentsNodesLinkParams,
+    makeComponentsNodesLink,
+} from '../../../utils/components/nodes/node';
 
-import {RoleGroup, RoleGroupsContainer} from '../Proxies/RoleGroup';
+import {MakeUrlParams, RoleGroup, RoleGroupsContainer} from '../Proxies/RoleGroup';
 
 import {SystemNodeTypeSelector} from './NodeTypeSelector';
 
@@ -103,11 +106,7 @@ class Nodes extends Component<ReduxProps> {
                                 <RoleGroup
                                     key={group.name}
                                     data={group}
-                                    url={makeComponentsNodesLink({
-                                        cluster,
-                                        rackSelected: [group.name],
-                                        nodeTypes: nodeType,
-                                    })}
+                                    makeUrl={this.makeRoleGroupUrl}
                                     showFlags
                                 />
                             );
@@ -117,6 +116,33 @@ class Nodes extends Component<ReduxProps> {
             );
         });
     }
+
+    makeRoleGroupUrl = (params?: MakeUrlParams) => {
+        const {nodeType, cluster} = this.props;
+
+        const {name, state: s, flag: f} = params ?? {};
+
+        if (s === 'others') {
+            return undefined;
+        }
+
+        const state = s === 'online' || s === 'offline' ? s : undefined;
+
+        const flag = s === 'banned' ? 'banned' : f;
+
+        const p: ComponentsNodesLinkParams = {
+            cluster,
+            rackSelected: name ? [name] : undefined,
+            nodeTypes: nodeType,
+            state,
+        };
+
+        if (flag) {
+            Object.assign(p, {[flag]: 'enabled'});
+        }
+
+        return makeComponentsNodesLink(p);
+    };
 
     makeComponentNodesUrl: typeof makeComponentsNodesLink = (params) => {
         const {cluster, nodeType} = this.props;
