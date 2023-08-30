@@ -12,7 +12,7 @@ import {getUISizes} from '../../../store/selectors/global';
 import {setSettingsSystemRpcProxiesCollapsed} from '../../../store/actions/settings/settings';
 import {getSettingsSystemRpcProxiesCollapsed} from '../../../store/selectors/settings-ts';
 import {RootState} from '../../../store/reducers';
-import {RoleGroup} from '../Proxies/RoleGroup';
+import {RoleGroup, RoleGroupsContainer} from '../Proxies/RoleGroup';
 
 type ReduxProps = ConnectedProps<typeof connector>;
 
@@ -41,15 +41,17 @@ class RpcProxies extends Component<ReduxProps> {
                     collapsed={collapsed}
                     size={collapsibleSize}
                 >
-                    {map_(roleGroups, (data) => {
-                        return (
-                            <RoleGroup
-                                key={data.name}
-                                data={data}
-                                url={`components/rpc_proxies?role=${data.name}`}
-                            />
-                        );
-                    })}
+                    <RoleGroupsContainer>
+                        {map_(roleGroups, (data) => {
+                            return (
+                                <RoleGroup
+                                    key={data.name}
+                                    data={data}
+                                    url={`components/rpc_proxies?role=${data.name}`}
+                                />
+                            );
+                        })}
+                    </RoleGroupsContainer>
                 </CollapsibleSectionStateLess>
             )
         );

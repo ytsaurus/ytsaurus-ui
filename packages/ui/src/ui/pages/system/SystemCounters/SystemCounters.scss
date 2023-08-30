@@ -26,6 +26,7 @@
     }
 
     &__counter {
+        font-weight: normal;
         &_theme {
             &_warning {
                 color: var(--warning-color);

@@ -14,7 +14,7 @@ import {getSettingsSystemHttpProxiesCollapsed} from '../../../store/selectors/se
 import {setSettingsSystemHttpProxiesCollapsed} from '../../../store/actions/settings/settings';
 import type {RootState} from '../../../store/reducers';
 
-import {RoleGroup} from './RoleGroup';
+import {RoleGroup, RoleGroupsContainer} from './RoleGroup';
 
 type ReduxProps = ConnectedProps<typeof connector>;
 
@@ -45,7 +45,7 @@ class Proxies extends Component<ReduxProps> {
                 collapsed={collapsed}
                 size={collapsibleSize}
             >
-                <div>
+                <RoleGroupsContainer>
                     {map_(roleGroups, (data) => {
                         return (
                             <RoleGroup
@@ -55,7 +55,7 @@ class Proxies extends Component<ReduxProps> {
                             />
                         );
                     })}
-                </div>
+                </RoleGroupsContainer>
             </CollapsibleSectionStateLess>
         );
     }

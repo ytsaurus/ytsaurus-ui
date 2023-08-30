@@ -23,7 +23,7 @@ import {
 import type {RootState} from '../../../store/reducers';
 import {makeComponentsNodesLink} from '../../../utils/components/nodes/node';
 
-import {RoleGroup} from '../Proxies/RoleGroup';
+import {RoleGroup, RoleGroupsContainer} from '../Proxies/RoleGroup';
 
 import {SystemNodeTypeSelector} from './NodeTypeSelector';
 
@@ -97,7 +97,7 @@ class Nodes extends Component<ReduxProps> {
                             />
                         </div>
                     )}
-                    <div>
+                    <RoleGroupsContainer>
                         {map_(roleGroup, (group) => {
                             return (
                                 <RoleGroup
@@ -112,7 +112,7 @@ class Nodes extends Component<ReduxProps> {
                                 />
                             );
                         })}
-                    </div>
+                    </RoleGroupsContainer>
                 </div>
             );
         });

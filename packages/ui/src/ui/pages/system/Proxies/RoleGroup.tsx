@@ -12,6 +12,10 @@ import type {NodeEffectiveState} from '../../../store/reducers/system/nodes';
 
 const block = cn('yt-role-group');
 
+export function RoleGroupsContainer({children}: {children: React.ReactNode}) {
+    return <div className={block('container')}>{children}</div>;
+}
+
 export function RoleGroup({
     data: {name, counters},
     url,
