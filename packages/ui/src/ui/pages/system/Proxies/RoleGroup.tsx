@@ -25,11 +25,13 @@ export function RoleGroupsContainer({children}: {children: React.ReactNode}) {
 export function RoleGroup({
     data: {name, counters},
     makeUrl,
+    hideOthers,
     showFlags,
 }: {
     data: RoleGroupInfo;
     makeUrl: (params?: MakeUrlParams) => string | undefined;
     showFlags?: boolean;
+    hideOthers?: boolean;
 }) {
     const {online = 0, offline = 0, banned = 0, other = 0} = counters.effectiveStates;
     const nameUrl = makeUrl({name});
@@ -72,6 +74,7 @@ export function RoleGroup({
             <States
                 counters={counters}
                 showFlags={showFlags}
+                hideOthers={hideOthers}
                 makeUrl={(params) => makeUrl({name, ...params})}
             />
         </div>
@@ -81,10 +84,12 @@ export function RoleGroup({
 function States({
     counters,
     showFlags,
+    hideOthers,
     makeUrl,
 }: {
     counters: SystemNodeCounters;
     showFlags?: boolean;
+    hideOthers?: boolean;
     makeUrl: (params?: MakeUrlParams) => string | undefined;
 }) {
     const {online = 0, offline = 0, banned = 0, other = 0} = counters.effectiveStates;
@@ -97,7 +102,11 @@ function States({
             <span />
             <Status status="banned" count={banned} url={makeUrl({state: 'banned'})} />
             <span />
-            <Status status="other" count={other} url={makeUrl({state: 'others'})} />
+            {hideOthers ? (
+                <span />
+            ) : (
+                <Status status="other" count={other} url={makeUrl({state: 'others'})} />
+            )}
             {showFlags && (
                 <>
                     <Status status="alert" count={alerts} url={makeUrl({flag: 'alerts'})} />

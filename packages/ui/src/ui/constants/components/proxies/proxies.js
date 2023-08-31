@@ -5,9 +5,7 @@ import {Page} from '../../../constants/index';
 const PREFIX = createPrefix(Page.COMPONENTS, Tab.HTTP_PROXIES);
 
 export const GET_PROXIES = createActionTypes(PREFIX + 'GET_PROXIES');
-export const CHANGE_HOST_FILTER = PREFIX + 'CHANGE_HOST_FILTER';
-export const CHANGE_STATE_FILTER = PREFIX + 'CHANGE_STATE_FILTER';
-export const CHANGE_ROLE_FILTER = PREFIX + 'CHANGE_ROLE_FILTER';
+export const PROXIES_CHANGE_FILTERS = PREFIX + 'PROXIES_CHANGE_FILTERS';
 
 export const COMPONENTS_PROXIES_TABLE_ID = 'components/proxies';
 export const POLLING_INTERVAL = 30 * 1000;

@@ -8,11 +8,11 @@ import SystemStateOverview from '../SystemStateOverview/SystemStateOverview';
 import withDataLoader from '../../../hocs/pages/withDataLoader';
 
 import {cancelLoadRPCProxies, loadRPCProxies} from '../../../store/actions/system/rpc-proxies';
-import {getUISizes} from '../../../store/selectors/global';
+import {getCluster, getUISizes} from '../../../store/selectors/global';
 import {setSettingsSystemRpcProxiesCollapsed} from '../../../store/actions/settings/settings';
 import {getSettingsSystemRpcProxiesCollapsed} from '../../../store/selectors/settings-ts';
 import {RootState} from '../../../store/reducers';
-import {RoleGroup, RoleGroupsContainer} from '../Proxies/RoleGroup';
+import {MakeUrlParams, RoleGroup, RoleGroupsContainer} from '../Proxies/RoleGroup';
 
 type ReduxProps = ConnectedProps<typeof connector>;
 
@@ -47,7 +47,8 @@ class RpcProxies extends Component<ReduxProps> {
                                 <RoleGroup
                                     key={data.name}
                                     data={data}
-                                    makeUrl={() => `components/rpc_proxies?role=${data.name}`}
+                                    makeUrl={this.makeRoleGroupUrl}
+                                    hideOthers
                                 />
                             );
                         })}
@@ -56,6 +57,18 @@ class RpcProxies extends Component<ReduxProps> {
             )
         );
     }
+
+    makeRoleGroupUrl = ({name, state}: MakeUrlParams = {}) => {
+        const {cluster} = this.props;
+        const params = new URLSearchParams({role: name!});
+        if (state === 'banned') {
+            params.append('banned', 'true');
+        } else if (state) {
+            params.append('state', state);
+            params.append('banned', 'false');
+        }
+        return `/${cluster}/components/rpc_proxies?${params}`;
+    };
 }
 
 function mapStateToProps(state: RootState) {
@@ -65,6 +78,7 @@ function mapStateToProps(state: RootState) {
         roleGroups,
         collapsibleSize: getUISizes(state).collapsibleSize,
         collapsed: getSettingsSystemRpcProxiesCollapsed(state),
+        cluster: getCluster(state),
     };
 }
 

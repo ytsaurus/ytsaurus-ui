@@ -1,9 +1,7 @@
 import {mergeStateOnClusterChange} from '../../../../../store/reducers/utils';
 import {
-    CHANGE_HOST_FILTER,
-    CHANGE_ROLE_FILTER,
-    CHANGE_STATE_FILTER,
     GET_PROXIES,
+    PROXIES_CHANGE_FILTERS,
 } from '../../../../../constants/components/proxies/proxies';
 
 const ephemeralState = {
@@ -18,6 +16,10 @@ const persistedState = {
     hostFilter: '',
     stateFilter: 'all',
     roleFilter: 'all',
+    /**
+     * @type {'all' | 'true' | 'false'}
+     */
+    bannedFilter: 'all',
 };
 
 export const initialState = {
@@ -53,14 +55,8 @@ const reducer = (state = initialState, action) => {
         case GET_PROXIES.CANCELLED:
             return {...initialState};
 
-        case CHANGE_HOST_FILTER:
-            return {...state, hostFilter: action.data.hostFilter};
-
-        case CHANGE_STATE_FILTER:
-            return {...state, stateFilter: action.data.stateFilter};
-
-        case CHANGE_ROLE_FILTER:
-            return {...state, roleFilter: action.data.roleFilter};
+        case PROXIES_CHANGE_FILTERS:
+            return {...state, ...action.data};
 
         default:
             return state;

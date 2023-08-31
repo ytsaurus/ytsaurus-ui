@@ -4,10 +4,8 @@ import ypath from '../../../../common/thor/ypath';
 
 import Proxy from '../../../../store/reducers/components/proxies/proxies/proxy';
 import {
-    CHANGE_HOST_FILTER,
-    CHANGE_ROLE_FILTER,
-    CHANGE_STATE_FILTER,
     GET_PROXIES,
+    PROXIES_CHANGE_FILTERS,
     PROXY_TYPE,
 } from '../../../../constants/components/proxies/proxies';
 import {getCluster} from '../../../../store/selectors/global';
@@ -90,23 +88,27 @@ export function getProxies(type) {
 
 export function changeHostFilter(hostFilter) {
     return {
-        type: CHANGE_HOST_FILTER,
+        type: PROXIES_CHANGE_FILTERS,
         data: {hostFilter},
     };
 }
 
 export function changeStateFilter(stateFilter) {
     return {
-        type: CHANGE_STATE_FILTER,
+        type: PROXIES_CHANGE_FILTERS,
         data: {stateFilter},
     };
 }
 
 export function changeRoleFilter(roleFilter) {
     return {
-        type: CHANGE_ROLE_FILTER,
+        type: PROXIES_CHANGE_FILTERS,
         data: {roleFilter},
     };
+}
+
+export function changeBannedFilter(bannedFilter) {
+    return {type: PROXIES_CHANGE_FILTERS, data: {bannedFilter}};
 }
 
 export function resetProxyState() {
