@@ -21,6 +21,7 @@ import ProxyCard from './ProxyCard/ProxyCard';
 import Label from '../../../../components/Label/Label';
 
 import {
+    changeBannedFilter,
     changeHostFilter,
     changeRoleFilter,
     changeStateFilter,
@@ -264,6 +265,8 @@ export class Proxies extends Component {
             states,
             roleFilter,
             changeRoleFilter,
+            bannedFilter,
+            changeBannedFilter,
             roles,
         } = this.props;
 
@@ -300,6 +303,24 @@ export class Proxies extends Component {
                         disabled={initialLoading}
                         onUpdate={(vals) => changeRoleFilter(vals[0])}
                         label="Role:"
+                        width="max"
+                        hideFilter
+                    />
+                </div>
+
+                <div className={block('filter')}>
+                    <Select
+                        label="Banned:"
+                        items={[
+                            {value: 'all', title: 'All'},
+                            {value: 'true', title: 'True'},
+                            {value: 'false', title: 'False'},
+                        ]}
+                        value={[String(bannedFilter ?? 'all')]}
+                        disabled={initialLoading}
+                        onUpdate={([value]) => {
+                            changeBannedFilter(value);
+                        }}
                         width="max"
                         hideFilter
                     />
@@ -377,8 +398,17 @@ export class Proxies extends Component {
 
 const mapStateToProps = (state) => {
     const {components, global} = state;
-    const {loading, loaded, error, errorData, proxies, hostFilter, stateFilter, roleFilter} =
-        components.proxies.proxies;
+    const {
+        loading,
+        loaded,
+        error,
+        errorData,
+        proxies,
+        hostFilter,
+        stateFilter,
+        bannedFilter,
+        roleFilter,
+    } = components.proxies.proxies;
     const {splitScreen} = global;
 
     const visibleProxies = getVisibleProxies(state);
@@ -401,6 +431,7 @@ const mapStateToProps = (state) => {
         stateFilter,
         hostFilter,
         roleFilter,
+        bannedFilter,
         initialLoading,
     };
 };
@@ -408,6 +439,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = {
     getProxies,
     resetProxyState,
+    changeBannedFilter,
     changeHostFilter,
     changeStateFilter,
     changeRoleFilter,

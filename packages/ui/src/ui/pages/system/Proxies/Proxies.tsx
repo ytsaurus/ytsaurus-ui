@@ -9,12 +9,12 @@ import SystemStateOverview from '../SystemStateOverview/SystemStateOverview';
 import withDataLoader from '../../../hocs/pages/withDataLoader';
 
 import {cancelLoadProxies, loadProxies} from '../../../store/actions/system/proxies';
-import {getUISizes} from '../../../store/selectors/global';
+import {getCluster, getUISizes} from '../../../store/selectors/global';
 import {getSettingsSystemHttpProxiesCollapsed} from '../../../store/selectors/settings-ts';
 import {setSettingsSystemHttpProxiesCollapsed} from '../../../store/actions/settings/settings';
 import type {RootState} from '../../../store/reducers';
 
-import {RoleGroup, RoleGroupsContainer} from './RoleGroup';
+import {MakeUrlParams, RoleGroup, RoleGroupsContainer} from './RoleGroup';
 
 type ReduxProps = ConnectedProps<typeof connector>;
 
@@ -51,7 +51,8 @@ class Proxies extends Component<ReduxProps> {
                             <RoleGroup
                                 key={data.name}
                                 data={data}
-                                makeUrl={() => `components/http_proxies?role=${data.name}`}
+                                makeUrl={this.makeRoleGroupUrl}
+                                hideOthers
                             />
                         );
                     })}
@@ -59,6 +60,18 @@ class Proxies extends Component<ReduxProps> {
             </CollapsibleSectionStateLess>
         );
     }
+
+    makeRoleGroupUrl = ({name, state}: MakeUrlParams = {}) => {
+        const {cluster} = this.props;
+        const params = new URLSearchParams({role: name!});
+        if (state === 'banned') {
+            params.append('banned', 'true');
+        } else if (state) {
+            params.append('state', state);
+            params.append('banned', 'false');
+        }
+        return `/${cluster}/components/http_proxies?${params}`;
+    };
 }
 
 function mapStateToProps(state: RootState) {
@@ -70,6 +83,7 @@ function mapStateToProps(state: RootState) {
         loaded,
         collapsibleSize: getUISizes(state).collapsibleSize,
         collapsed: getSettingsSystemHttpProxiesCollapsed(state),
+        cluster: getCluster(state),
     };
 }
 

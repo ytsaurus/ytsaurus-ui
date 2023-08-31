@@ -28,6 +28,11 @@ export const proxiesParams: LocationParameters = {
         stateKey: 'components.proxies.proxies.roleFilter',
         initialState: initialStateFilter,
     },
+    banned: {
+        stateKey: 'components.proxies.proxies.bannedFilter',
+        initialState: proxiesInitialState.bannedFilter,
+        type: 'bool',
+    },
     proxySort: {
         stateKey: `tables.${COMPONENTS_PROXIES_TABLE_ID}`,
         initialState: initialSortState,
@@ -50,5 +55,6 @@ export function getProxiesPreparedState(state: RootState, {query}: {query: RootS
         updateIfChanged(draftProxies, 'hostFilter', queryProxies.hostFilter);
         updateIfChanged(draftProxies, 'stateFilter', queryProxies.stateFilter);
         updateIfChanged(draftProxies, 'roleFilter', queryProxies.roleFilter);
+        updateIfChanged(draftProxies, 'bannedFilter', queryProxies.bannedFilter);
     });
 }
