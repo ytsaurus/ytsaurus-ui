@@ -13,6 +13,7 @@ import {createSelector} from 'reselect';
 
 import {Toaster} from '@gravity-ui/uikit';
 
+import {UNAWARE} from '../../../../../constants';
 import {
     FlagState,
     NodeRange,
@@ -188,14 +189,27 @@ type Predicates = {
         | ((node: NodeWithProps<P>) => boolean);
 };
 
+const getRackPredicate = createSelector(
+    [getSetupFiltersRaw, getComponentNodesIndexByRack],
+    (setupFilters, nodesByRack) => {
+        const {rack} = setupFilters.default;
+        if ('string' !== typeof rack && rack.selected?.[0] === UNAWARE) {
+            return ({rack}: {rack?: string}) => rack === undefined;
+        }
+        return createNodeTagPredicate<'rack'>(setupFilters.default.rack, nodesByRack, (node) => [
+            node.rack,
+        ]);
+    },
+);
+
 const getFilterPredicatesObject = createSelector(
     [
         getSetupFiltersRaw,
         getComponentNodesIndexByTag,
-        getComponentNodesIndexByRack,
+        getRackPredicate,
         getComponentNodesFilterStatePredicate,
     ],
-    (setupFilters, nodesByTags, nodesByRack, statePredicate) => {
+    (setupFilters, nodesByTags, rackPredicate, statePredicate) => {
         const predicates: Predicates = {
             // filter by default
             physicalHost:
@@ -209,9 +223,7 @@ const getFilterPredicatesObject = createSelector(
                 (node) => node.tags,
             ),
             state: statePredicate,
-            rack: createNodeTagPredicate<'rack'>(setupFilters.default.rack, nodesByRack, (node) => [
-                node.rack,
-            ]),
+            rack: rackPredicate,
 
             banned: createFlagPredicate('banned', setupFilters.default.banned),
             decommissioned: createFlagPredicate(
