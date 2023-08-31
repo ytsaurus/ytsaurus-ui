@@ -23,6 +23,7 @@ import {Tab as NavigationTab} from '../../../constants/navigation';
 import {Page} from '../../../constants/index';
 import {genTabletCellBundlesCellUrl} from '../../../utils/tablet_cell_bundles';
 import StoresDialog from './StoresDialog';
+import {Tooltip} from '../../../components/Tooltip/Tooltip';
 
 function makeMetaItem(format, data, key, visible) {
     return {
@@ -119,17 +120,31 @@ function Overview({id, block}) {
               makeMetaItem('Number', statistics, 'partition_count', !unorderedDynamicTable),
               {
                   key: 'store_count',
-                  value: !unorderedDynamicTable ? (
-                      hammer.format.Number(statistics.store_count)
-                  ) : (
-                      <span>
-                          {hammer.format.Number(statistics.store_count)}
-                          &nbsp;&nbsp;
-                          <Button view="flat-secondary" onClick={toggleStoresVisibility}>
-                              View
-                          </Button>
-                      </span>
-                  ),
+                  value: (() => {
+                      const disableStoresDialog = statistics.store_count >= 200;
+                      return (
+                          <span>
+                              {hammer.format.Number(statistics.store_count)}
+                              {unorderedDynamicTable && (
+                                  <>
+                                      &nbsp;&nbsp;
+                                      <Tooltip
+                                          disabled={!disableStoresDialog}
+                                          content="Too many stores to show"
+                                      >
+                                          <Button
+                                              disabled={disableStoresDialog}
+                                              view="flat-secondary"
+                                              onClick={toggleStoresVisibility}
+                                          >
+                                              View
+                                          </Button>
+                                      </Tooltip>
+                                  </>
+                              )}
+                          </span>
+                      );
+                  })(),
               },
               makeMetaItem('Number', statistics, 'overlapping_store_count', !unorderedDynamicTable),
               makeMetaItem('Number', statistics, 'preload_completed_store_count'),
