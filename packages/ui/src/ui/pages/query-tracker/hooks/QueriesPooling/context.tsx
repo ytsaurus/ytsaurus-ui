@@ -13,8 +13,10 @@ type QueriesPoolingProps = {
 
 export const QueriesPooling = ({children}: QueriesPoolingProps) => {
     const dispatch = useThunkDispatch();
-    const requestQueryList = (items: string[]) => dispatch(requestQueries(items));
-    const poolingService = useMemo(() => new QueriesPollingService(requestQueryList), []);
+    const poolingService = useMemo(() => {
+        const requestQueryList = (items: string[]) => dispatch(requestQueries(items));
+        return new QueriesPollingService(requestQueryList);
+    }, [dispatch]);
     return (
         <QueriesPoolingContext.Provider value={poolingService}>
             {children}
