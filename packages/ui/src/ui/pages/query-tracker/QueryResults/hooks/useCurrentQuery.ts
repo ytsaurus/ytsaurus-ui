@@ -1,9 +1,10 @@
-import {useContext, useEffect} from 'react';
+import {useContext, useEffect, useMemo} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {QueriesPoolingContext} from '../../hooks/QueriesPooling/context';
 import {UPDATE_QUERY} from '../../module/query/actions';
 import {getCurrentQuery} from '../../module/query/selectors';
 import {isQueryProgress} from '../../utils/query';
+import {QueryItem} from '../../module/api';
 
 export function useCurrentQuery() {
     const query = useSelector(getCurrentQuery);
@@ -11,20 +12,26 @@ export function useCurrentQuery() {
 
     const dispatch = useDispatch();
 
+    const queryUpdateHandler = useMemo(
+        () =>
+            ([item]: QueryItem[]) => {
+                dispatch({
+                    type: UPDATE_QUERY,
+                    data: item,
+                });
+            },
+        [dispatch],
+    );
+
     useEffect(
         function pollingEffect() {
             if (!pollingContext || !query || !isQueryProgress(query)) {
                 return;
             }
             // eslint-disable-next-line consistent-return
-            return pollingContext.watch([query], ([item]) => {
-                dispatch({
-                    type: UPDATE_QUERY,
-                    data: item,
-                });
-            });
+            return pollingContext.watch([query], queryUpdateHandler);
         },
-        [pollingContext, dispatch, query?.id, query?.state],
+        [pollingContext, query, queryUpdateHandler],
     );
 
     return query;

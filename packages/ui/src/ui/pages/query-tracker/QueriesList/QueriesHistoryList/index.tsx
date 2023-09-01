@@ -1,7 +1,7 @@
 import hammer from '../../../../common/hammer';
 import {Text} from '@gravity-ui/uikit';
 import block from 'bem-cn-lite';
-import React, {useCallback, useContext, useEffect, useRef, useState} from 'react';
+import React, {useCallback, useContext, useEffect, useMemo, useRef, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {QueryItem, QueryStatus} from '../../module/api';
 import {UPDATE_QUERIES_LIST, refreshQueriesListIfNeeded} from '../../module/queries_list/actions';
@@ -32,19 +32,24 @@ function useQueriesHistoryUpdate() {
     const uncompletedItems = useSelector(getUncompletedItems);
     const dispatch = useDispatch();
 
+    const queryListUpdateHandler = useMemo(
+        () => (items: QueryItem[]) => {
+            dispatch({
+                type: UPDATE_QUERIES_LIST,
+                data: items,
+            });
+        },
+        [dispatch],
+    );
+
     useEffect(
         function pollingEffect() {
             if (!uncompletedItems?.length) {
                 return;
             }
-            return pollingContext.watch(uncompletedItems, (items) => {
-                dispatch({
-                    type: UPDATE_QUERIES_LIST,
-                    data: items,
-                });
-            });
+            pollingContext.watch(uncompletedItems, queryListUpdateHandler);
         },
-        [uncompletedItems],
+        [pollingContext, queryListUpdateHandler, uncompletedItems],
     );
 }
 
