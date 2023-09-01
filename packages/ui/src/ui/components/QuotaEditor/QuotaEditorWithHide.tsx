@@ -180,7 +180,9 @@ export default class QuotaEditorWithHide extends React.Component<Props, State> {
     };
 
     private onSave = () => {
-        this.setState({showConfirm: true});
+        if (this.state.isReadyToSave) {
+            this.setState({showConfirm: true});
+        }
     };
 
     private getLimit() {

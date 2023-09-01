@@ -14,10 +14,13 @@ if [ -z "${YT_PROXY}" ]; then
     exit 2
 fi
 
-if [ -z "${E2E_DIR}" ]; then
-    E2E_DIR="$(mktemp -u $(date "+//tmp/e2e.%Y-%m-%d.%H:%M:%S.XXXXXXXX"))"
-    echo E2E_DIR=${E2E_DIR} >./e2e-env.tmp
-fi
+suffix=E=$(mktemp -u XXXXXX)
+# to lower case
+E2E_SUFFIX=$(mktemp -u XXXXXX | tr '[:upper:]' '[:lower:]')
+echo E2E_SUFFIX=$E2E_SUFFIX >./e2e-env.tmp
+
+E2E_DIR="$(date "+//tmp/e2e.%Y-%m-%d.%H:%M:%S.${E2E_SUFFIX}")"
+echo E2E_DIR=${E2E_DIR} >>./e2e-env.tmp
 
 yt create map_node ${E2E_DIR}
 yt set ${E2E_DIR}/@expiration_timeout 10000
@@ -41,8 +44,8 @@ yt copy ${E2E_DIR}/file-types ${E2E_DIR}/locked
 yt lock --mode snapshot ${E2E_DIR}/locked --tx $(yt start-tx --timeout ${EXPIRATION_TIMEOUT})
 yt lock --mode shared ${E2E_DIR}/locked --tx $(yt start-tx --timeout ${EXPIRATION_TIMEOUT})
 
-yt create -i -r map_node  "${E2E_DIR}/bad-names/trailing-space /ok"
-yt create -i -r map_node  "${E2E_DIR}/bad-names/escaped-symbol\\x0a/ok"
+yt create -i -r map_node "${E2E_DIR}/bad-names/trailing-space /ok"
+yt create -i -r map_node "${E2E_DIR}/bad-names/escaped-symbol\\x0a/ok"
 yt create -i -r map_node "${E2E_DIR}/bad-names/<script>alert('hello XSS!')<\\/script>/ok"
 yt create -i -r map_node "${E2E_DIR}/bad-names/<script>console.error(\"hello XSS\")<\\/script>/ok"
 yt create -i -r map_node "${E2E_DIR}/bad-names/_\\x09_\\x09/ok"
@@ -77,9 +80,49 @@ if [ "false" = "$(yt exists //sys/pool_trees/default/yt-e2e-weight-null)" ]; the
     yt create --type scheduler_pool --attributes '{name="yt-e2e-weight-null";weight=#;pool_tree="default";parent_name="<Root>"}'
 fi
 
-if [ "false" = "$(yt exists //sys/accounts/account-for-e2e)" ]; then
-    yt create --type account --attributes '{name="account-for-e2e"}'
-fi
+function createAccountByPath {
+    path=$1
+    nodeCount=$2
+    if [ "true" = "$(yt exists ${path})" ]; then
+        return
+    fi
+
+    accounts=$(echo ${path} | sed 's/^\/\/sys\/accounts\///g')
+    name=$(echo ${accounts} | sed 's/\//\n/g' | tail -1)
+    parent=$(echo ${accounts} | sed 's/\//\n/g' | tail -2 | head -1)
+
+    if [ "$parent" != "$name" ]; then
+        yt create --type account --attributes '{name="'$name'";parent_name="'$parent'"}'
+    else
+        yt create --type account --attributes '{name="'$name'"}'
+    fi
+
+    if [ "$nodeCount" != "" ]; then
+        yt set $path/@resource_limits/node_count $nodeCount
+    fi
+}
+
+createAccountByPath //sys/accounts/account-for-e2e
+
+function createAccountNodes {
+    account=$1
+
+    yt create -i -r map_node ${E2E_DIR}/${account} --attributes '{account='$account'}'
+    yt create -i -r map_node ${E2E_DIR}/${account}/child-1/0 --attributes '{account='$account'-child-1}'
+    yt create -i -r map_node ${E2E_DIR}/${account}/child-2/0/1 --attributes '{account='$account'-child-2}'
+}
+
+function createAccountForQuotaEditor {
+    account=${1}
+    createAccountByPath //sys/accounts/${account} 10
+    createAccountByPath //sys/accounts/${account}/${account}-child-1 5
+    createAccountByPath //sys/accounts/${account}/${account}-child-2 5
+    createAccountNodes ${account}
+}
+
+createAccountForQuotaEditor e2e-parent-${E2E_SUFFIX}
+createAccountForQuotaEditor e2e-overcommit-${E2E_SUFFIX}
+yt set //sys/accounts/e2e-overcommit-${E2E_SUFFIX}/@allow_children_limit_overcommit %true
 
 DYN_TABLE=${E2E_DIR}/dynamic-table
 yt create --attributes "{dynamic=%true;schema=[{name=key;sort_order=ascending;type=string};{name=value;type=string};{name=empty;type=any}]}" table ${DYN_TABLE}

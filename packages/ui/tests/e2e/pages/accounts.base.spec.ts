@@ -1,5 +1,5 @@
 import {expect, test} from '@playwright/test';
-import {CLUSTER, makeClusterTille, makeClusterUrl} from '../utils';
+import {CLUSTER, E2E_SUFFIX, makeClusterTille, makeClusterUrl} from '../utils';
 
 test('Accounts - General as default page', async ({page}) => {
     await page.goto(makeClusterUrl('accounts'));
@@ -63,4 +63,32 @@ test('Accounts - Editor', async ({page}) => {
     await expect(page).toHaveURL(
         makeClusterUrl('accounts/general?mode=nodes&account=account-for-e2e'),
     );
+});
+
+test('Account - Editor: Nodes min limit', async ({page}) => {
+    const account = `e2e-parent-${E2E_SUFFIX}`;
+
+    await page.goto(makeClusterUrl(`accounts/general?account=${account}`));
+
+    await page.click(`[data-qa="edit-account-${account}"]`);
+    await page.click('.accounts-editor__edit-tabs :text("Nodes")');
+    await page.click('.account-quota__edit');
+
+    await page.fill('[data-qa="quota-editor-new-limit"] input', '1');
+
+    await page.waitForSelector(':text("The value must be ≥ 11")');
+});
+
+test('Account - Editor: Nodes min limit with overcommit', async ({page}) => {
+    const account = `e2e-overcommit-${E2E_SUFFIX}`;
+
+    await page.goto(makeClusterUrl(`accounts/general?account=${account}`));
+
+    await page.click(`[data-qa="edit-account-${account}"]`);
+    await page.click('.accounts-editor__edit-tabs :text("Nodes")');
+    await page.click('.account-quota__edit');
+
+    await page.fill('[data-qa="quota-editor-new-limit"] input', '1');
+
+    await page.waitForSelector(':text("The value must be ≥ 6")');
 });

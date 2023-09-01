@@ -185,8 +185,13 @@ class AccountQuotaEditor extends React.Component<Props & ReduxProps, State> {
 
     private calcMinLimit() {
         const {currentAccount} = this.props;
-        const {usage, totalChildrenLimit} = this.getInfoByName(currentAccount);
-        return (usage || 0) + (totalChildrenLimit || 0);
+        const {
+            usage = 0,
+            total = 0,
+            totalChildrenLimit = 0,
+            allowChildrenOverCommit,
+        } = this.getInfoByName(currentAccount);
+        return allowChildrenOverCommit ? total : usage + totalChildrenLimit;
     }
 }
 
