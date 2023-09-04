@@ -10,8 +10,8 @@ import {getClusterConfigByName, getClusterProxy} from '../../../store/selectors/
 import {generateQuerySettings, generateQueryText} from '../utils/query_generate';
 import {RootState} from '../../../store/reducers';
 import {getQueryTrackerRequestOptions} from './query/selectors';
+import {UPDATE_QUERIES_LIST} from './query-tracker-contants';
 import {AnyAction} from 'redux';
-import {UPDATE_QUERIES_LIST} from './queries_list/actions';
 
 function getQTApiSetup(): {proxy?: string} {
     const QT_CLUSTER = getQueryTrackerCluster();

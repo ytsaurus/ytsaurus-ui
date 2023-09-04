@@ -7,10 +7,10 @@ import {QueriesHistoryCursorDirection, QueryItem, loadQueriesList} from '../api'
 import {QueriesListState} from './reducer';
 import {getQueriesList, getQueriesListCursorParams, getQueriesListFilterParams} from './selectors';
 import {QueriesListCursor, QueriesListFilter} from './types';
+import {UPDATE_QUERIES_LIST} from '../query-tracker-contants';
 
 export const LOAD_QUERIES_LIST_REQUEST = 'query-tracker/LOAD_QUERIES_LIST_REQUEST';
 export const LOAD_QUERIES_LIST_SUCCESS = 'query-tracker/LOAD_QUERIES_LIST_SUCCESS';
-export const UPDATE_QUERIES_LIST = 'query-tracker/UPDATE_QUERIES_LIST';
 export const LOAD_QUERIES_LIST_ERROR = 'query-tracker/LOAD_QUERIES_LIST_ERROR';
 export const SET_QUERIES_LIST_FILTER = 'query-tracker/SET_QUERIES_LIST_FILTER';
 export const SET_QUERIES_LIST_MODE = 'query-tracker/SET_QUERIES_LIST_MODE';
