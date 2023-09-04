@@ -4,9 +4,12 @@ import moment from 'moment';
 
 import ypath from '@ytsaurus/interface-helpers/lib/ypath';
 
+import {makeDirectDownloadPath} from '../../../../../utils/navigation';
+
 export default class Job {
-    constructor({job, operationId, cluster}) {
+    constructor({job, operationId, cluster, proxy}) {
         this.cluster = cluster;
+        this.proxy = proxy;
         this.operationId = operationId;
         this.computeProperties(job);
         this.attributes = job;
@@ -76,7 +79,12 @@ export default class Job {
             dump_error_into_response: true,
         });
 
-        return `/api/yt/${this.cluster}/api/v3/${commandName}?${params}`;
+        const path = makeDirectDownloadPath(commandName, {
+            cluster: this.cluster,
+            proxy: this.proxy,
+        });
+
+        return `${path}?${params}`;
     }
 
     getDebugInfo(name) {

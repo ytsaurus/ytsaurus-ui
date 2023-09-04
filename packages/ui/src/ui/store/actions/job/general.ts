@@ -3,7 +3,7 @@ import CancelHelper from '../../../utils/cancel-helper';
 // @ts-ignore
 import yt from '@ytsaurus/javascript-wrapper/lib/yt';
 
-import {getCluster} from '../../../store/selectors/global';
+import {getCurrentClusterConfig} from '../../../store/selectors/global';
 import {RawJob} from '../../../types/job';
 import {RootState} from '../../../store/reducers';
 import {ThunkAction} from 'redux-thunk';
@@ -19,9 +19,9 @@ interface LoadJobDataRequestAction {
 interface LoadJobDataSuccessAction {
     type: typeof JOB.LOAD_JOB_DATA_SUCCESS;
     data: {
-        isSupported: () => boolean;
         job: RawJob;
         cluster: string;
+        proxy: string;
     };
 }
 
@@ -40,11 +40,11 @@ type LoadJobDataAction =
 export function loadJobData(
     operationID: string,
     jobID: string,
-): ThunkAction<Promise<void>, RootState, unknown, Action<string>> {
+): ThunkAction<Promise<void>, RootState, unknown, GeneralActionType> {
     return (dispatch, getState) => {
         dispatch({type: JOB.LOAD_JOB_DATA_REQUEST});
 
-        const cluster = getCluster(getState());
+        const {id: cluster, proxy} = getCurrentClusterConfig(getState());
 
         return yt.v3
             .getJob(
@@ -57,7 +57,7 @@ export function loadJobData(
             .then((job: RawJob) => {
                 dispatch({
                     type: JOB.LOAD_JOB_DATA_SUCCESS,
-                    data: {job, cluster},
+                    data: {job, cluster, proxy},
                 });
             })
             .catch((error: YTError) => {

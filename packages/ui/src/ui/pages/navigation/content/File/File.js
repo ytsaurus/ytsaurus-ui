@@ -51,7 +51,9 @@ const renderMeta = (attributes, mediumList) => {
 const renderActions = (downloadPath) => {
     return (
         <div className={block('actions')}>
-            <Button href={downloadPath}>Download</Button>
+            <Button href={downloadPath} target="_blank">
+                Download
+            </Button>
             <NavigationExtraActions />
         </div>
     );
@@ -70,7 +72,10 @@ const renderTooBigInfo = (downloadPath) => {
         <div className={messageBlock({theme: 'info'})}>
             <p className={messageBlock('paragraph')}>
                 The file is too big to be fully shown here. You can{' '}
-                <Link url={downloadPath}>download</Link> it.
+                <Link url={downloadPath} target="_blank">
+                    download
+                </Link>{' '}
+                it.
             </p>
         </div>
     );

@@ -1,20 +1,24 @@
 import ypath from '@ytsaurus/interface-helpers/lib/ypath';
 import {createSelector} from 'reselect';
 import {getAttributes, getPath} from '../../../../store/selectors/navigation';
+import {getCurrentClusterConfig} from '../../../../store/selectors/global';
 import {MAX_FILE_SIZE} from '../../../../constants/navigation/content/file';
 import {calculateLoadingStatus} from '../../../../utils/utils';
-import {getCluster} from '../../../../store/selectors/global';
+import {makeDirectDownloadPath} from '../../../../utils/navigation';
 
-export const getDownloadPath = createSelector([getPath, getCluster], (cypressPath, cluster) => {
-    const path = `/api/yt/${cluster}/api/v3/read_file?`;
-    const query = [
-        'path=' + encodeURIComponent(cypressPath),
-        'disposition=attachment',
-        'dump_error_into_response=true',
-    ].join('&');
+export const getDownloadPath = createSelector(
+    [getPath, getCurrentClusterConfig],
+    (cypressPath, {id: cluster, proxy}) => {
+        const path = makeDirectDownloadPath('read_file', {cluster, proxy});
+        const query = [
+            'path=' + encodeURIComponent(cypressPath),
+            'disposition=attachment',
+            'dump_error_into_response=true',
+        ].join('&');
 
-    return path + query;
-});
+        return path + '?' + query;
+    },
+);
 
 export const getIsEmpty = createSelector(getAttributes, (attributes) => {
     return ypath.getValue(attributes, '/resource_usage/disk_space') === 0;
