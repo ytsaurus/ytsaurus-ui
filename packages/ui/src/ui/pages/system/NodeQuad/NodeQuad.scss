@@ -39,4 +39,8 @@
     &_theme_unknown {
         background-color: var(--default-color);
     }
+
+    &_theme_nonvoting {
+        background-color: var(--g-color-text-info-heavy, var(--external-link));
+    }
 }

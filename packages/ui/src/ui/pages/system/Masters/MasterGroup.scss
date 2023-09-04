@@ -2,7 +2,6 @@
 @import '../../../styles/mixins';
 
 .master-group {
-
     &__availability {
         grid-column: status;
     }
@@ -16,7 +15,12 @@
         margin-bottom: 18px;
         display: grid;
         grid-gap: 8px;
-        grid-template-columns: [status] 14px [role] minmax(max-content, 100px) [icon] minmax(30px, max-content) [host] max-content;
+        grid-template-columns: /* the comment is required to fix lint error without `style-lint-disable-line` */
+            [status] 14px
+            [role] minmax(max-content, 100px)
+            [icon] minmax(30px, max-content)
+            [host] max-content;
+
         grid-auto-rows: 20px;
 
         &_grid-row-start {
@@ -96,13 +100,18 @@
             grid-column: role;
         }
 
-
         &-version {
             cursor: pointer;
         }
 
         &-cell {
             cursor: pointer;
+        }
+    }
+
+    &__voting {
+        &_hide {
+            visibility: hidden;
         }
     }
 }
