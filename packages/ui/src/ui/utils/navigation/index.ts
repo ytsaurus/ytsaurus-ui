@@ -1,3 +1,4 @@
+import unipika from '../../common/thor/unipika';
 // @ts-ignore
 import ypath from '../../common/thor/ypath';
 
@@ -149,4 +150,18 @@ export function getParentPath(path: string): string {
     }
 
     return nextPath;
+}
+
+export function decodeEscapedAbsPath(path: string) {
+    const {fragments} = ypath.YPath.create(path, 'absolute') as {fragments: Array<{name: string}>};
+
+    return (
+        '//' +
+        fragments
+            .slice(1)
+            .map(({name}) => {
+                return unipika.utils.utf8.decode(ypath.YPath.fragmentToYSON(name));
+            })
+            .join('/')
+    );
 }

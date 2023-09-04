@@ -6,10 +6,10 @@ import ypath from '@ytsaurus/interface-helpers/lib/ypath';
 import Link from '../../../../components/Link/Link';
 import {Toaster} from '@gravity-ui/uikit';
 
-import {checkIsTrash} from '../../../../store/selectors/navigation';
+import {checkIsTrash, getRawPath} from '../../../../store/selectors/navigation';
 import {showErrorPopup} from '../../../../utils/utils';
 import {navigateParent, updateView} from '../../../../store/actions/navigation';
-import {preparePath} from '../../../../utils/navigation';
+import {decodeEscapedAbsPath, preparePath} from '../../../../utils/navigation';
 import {
     CLOSE_DELETE_OBJECT_POPUP,
     DELETE_OBJECT,
@@ -34,13 +34,13 @@ function prepareRestorePath(path, type) {
     return path;
 }
 
-export function openDeleteModal(item, inObject = false, multipleMode = false) {
+export function openDeleteModal(item, multipleMode = false) {
     return (dispatch, getState) => {
         const inTrash = checkIsTrash(getState());
 
         dispatch({
             type: OPEN_DELETE_OBJECT_POPUP,
-            data: {item, inTrash, inObject, multipleMode},
+            data: {item, inTrash, multipleMode},
         });
     };
 }
@@ -251,7 +251,7 @@ function deleteCurrentObject(path, restorePath) {
 export function deleteObject() {
     return (dispatch, getState) => {
         const {navigation} = getState();
-        const {realPath, item, inObject} = navigation.modals.deleteObject;
+        const {realPath, item} = navigation.modals.deleteObject;
         const {transaction} = navigation.navigation;
 
         const path = preparePath(realPath, item.type);
@@ -275,7 +275,10 @@ export function deleteObject() {
                 dispatch({type: DELETE_OBJECT.SUCCESS});
                 dispatch({type: CLOSE_DELETE_OBJECT_POPUP});
 
-                if (inObject) {
+                const currentPath = getRawPath(getState());
+                const realPathDecoded = decodeEscapedAbsPath(realPath);
+
+                if (currentPath === realPathDecoded) {
                     dispatch(navigateParent());
                 } else {
                     dispatch(updateView());

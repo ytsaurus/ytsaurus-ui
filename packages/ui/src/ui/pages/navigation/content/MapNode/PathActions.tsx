@@ -94,7 +94,7 @@ function PathActions(props: Props) {
                 dispatch(
                     openAttributesModal({
                         title: item.$value,
-                        attributes: item.$attributes,
+                        path: item.path,
                     } as any),
                 );
                 evt.stopPropagation();
@@ -181,6 +181,11 @@ function PathActions(props: Props) {
             text: 'Link',
             icon: <Icon awesome="link" face="solid" />,
             action: onLink,
+        },
+        {
+            text: 'Delete',
+            icon: <Icon awesome="trash-alt" />,
+            action: onDeleteClick,
         },
     ];
 
