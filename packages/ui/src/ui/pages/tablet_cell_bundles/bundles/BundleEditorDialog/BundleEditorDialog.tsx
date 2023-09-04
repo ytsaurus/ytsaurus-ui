@@ -69,6 +69,7 @@ export interface BundleEditorDialogFormValues {
         uncompressed_block_cache?: number;
         versioned_chunk_meta?: number;
         lookup_row_cache?: number;
+        key_filter_block_cache?: number;
     };
     cpu_limits: {
         threadPool_reset?: boolean; //system
@@ -467,6 +468,16 @@ export function BundleEditorDialog() {
                 name: 'lookup_row_cache',
                 type: 'bundle-input',
                 caption: 'Lookup row cache',
+                extras: {
+                    format: 'Bytes',
+                    hasClear: true,
+                },
+                validator: simpleBundleValidate,
+            },
+            {
+                name: 'key_filter_block_cache',
+                type: 'bundle-input',
+                caption: 'Key filter block cache',
                 extras: {
                     format: 'Bytes',
                     hasClear: true,

@@ -6,6 +6,7 @@ import hammer from '../../common/hammer';
 
 import {Progress, ProgressProps} from '@gravity-ui/uikit';
 import {Tooltip} from '../../components/Tooltip/Tooltip';
+import {ColorCircle} from '../../components/ColorCircle/ColorCircle';
 
 import {getProgressBarColorByIndex} from '../../constants/colors';
 import MetaTable, {MetaTableItem} from '../../components/MetaTable/MetaTable';
@@ -54,12 +55,22 @@ function getProgressData({data, limit, resourceType, postfix}: ResourceProgress)
 
     _.forEach(data, (value, name) => {
         const formattedValue = hammer.format[resourceType](value);
+        const color = getProgressBarColorByIndex(props.stack.length);
 
-        metaItems.push({key: hammer.format.Readable(name), value: `${formattedValue} ${postfix}`});
+        metaItems.push({
+            key: name,
+            label: (
+                <span>
+                    <ColorCircle color={color} marginRight />
+                    {hammer.format.Readable(name)}
+                </span>
+            ),
+            value: `${formattedValue} ${postfix}`,
+        });
         const fraction = (Number(value) / max) * 100;
 
         props.stack.push({
-            color: getProgressBarColorByIndex(props.stack.length),
+            color,
             value: fraction,
         });
     });
