@@ -17,6 +17,7 @@ interface Props {
         | 'mixed'
         | 'registered'
         | 'unregistered'
+        | 'nonvoting'
         | 'unknown';
 }
 

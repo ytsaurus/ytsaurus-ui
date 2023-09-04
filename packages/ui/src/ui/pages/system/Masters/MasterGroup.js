@@ -3,6 +3,8 @@ import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
 import block from 'bem-cn-lite';
+import {Text} from '@gravity-ui/uikit';
+
 import ReadOnlyIcon from '../../../../../img/svg/read-only-icon.svg';
 import WarmUpIcon from '../../../../../img/svg/warmup-icon.svg';
 import hammer from '../../../common/hammer';
@@ -40,13 +42,16 @@ class Instance extends Component {
         attributes: PropTypes.shape({
             warming_up: PropTypes.bool,
             read_only: PropTypes.bool,
+            voting: PropTypes.bool,
         }),
         maintenanceMessage: PropTypes.string,
     };
 
     render() {
         const {state, address, attributes, maintenanceMessage} = this.props;
-        const theme = Instance.instanceStateToTheme[state];
+        const {voting} = attributes ?? {};
+        const theme =
+            !voting && state === 'following' ? 'nonvoting' : Instance.instanceStateToTheme[state];
 
         /* eslint-disable camelcase */
         return (
@@ -80,8 +85,15 @@ class Instance extends Component {
                 </div>
                 <div className={b('host')}>
                     <div className={b('host-name')}>{hammer.format['Address'](address)}</div>
-                    <div className={b('host-copy-btn')}>
-                        <ClipboardButton view="flat-secondary" text={address} />
+                    <div>
+                        <span className={b('host-copy-btn')}>
+                            <ClipboardButton view="flat-secondary" text={address} />
+                        </span>
+                        {
+                            <Text className={b('voting', {hide: voting})} color="secondary">
+                                [nonvoting]
+                            </Text>
+                        }
                     </div>
                 </div>
             </Fragment>
