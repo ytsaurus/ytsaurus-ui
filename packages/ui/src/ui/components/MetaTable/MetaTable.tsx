@@ -26,7 +26,7 @@ export interface MetaTableProps {
 
 export interface MetaTableItem {
     key: string;
-    label?: string;
+    label?: React.ReactChild;
     value: boolean | React.ReactNode;
     icon?: React.ReactNode;
     visible?: boolean;
@@ -75,7 +75,7 @@ export default class MetaTable extends Component<MetaTableProps> {
         title: PropTypes.string,
     };
 
-    renderKey(key: string, icon: React.ReactNode, label?: string) {
+    renderKey(key: string, icon: React.ReactNode, label?: React.ReactChild) {
         return (
             <div className={itemBlock('key')} key={key + '-key'}>
                 {icon}

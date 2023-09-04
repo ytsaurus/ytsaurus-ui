@@ -45,6 +45,7 @@ export const bundleEditorDict: {
             uncompressed_block_cache: 0,
             versioned_chunk_meta: 0,
             lookup_row_cache: 0,
+            key_filter_block_cache: 0,
         },
         cpu_limits: {
             threadPool_reset: false,
@@ -121,6 +122,7 @@ export const getInitialFormValues = (
             uncompressed_block_cache: memory_limits?.uncompressed_block_cache || 0,
             versioned_chunk_meta: memory_limits?.versioned_chunk_meta || 0,
             lookup_row_cache: memory_limits?.lookup_row_cache || 0,
+            key_filter_block_cache: memory_limits?.key_filter_block_cache || 0,
         },
         cpu_limits: {
             threadPool_reset: false, //system
@@ -230,6 +232,10 @@ export const prepareSubmitBundle = (form: FormApi<BundleEditorDialogFormValues>)
     addToChange(
         '@bundle_controller_target_config/memory_limits/lookup_row_cache',
         'memory_limits.lookup_row_cache',
+    );
+    addToChange(
+        '@bundle_controller_target_config/memory_limits/key_filter_block_cache',
+        'memory_limits.key_filter_block_cache',
     );
     // Cpu_limits
     addToChange(
