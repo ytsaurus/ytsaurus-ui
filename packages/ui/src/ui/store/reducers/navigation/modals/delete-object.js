@@ -22,7 +22,6 @@ export const initialState = {
     resourceUsage: {},
     visible: false,
     permanently: false,
-    inObject: false,
     multipleMode: false,
     multipleInfo: [],
     item: {},
@@ -31,12 +30,11 @@ export const initialState = {
 export default (state = initialState, action) => {
     switch (action.type) {
         case OPEN_DELETE_OBJECT_POPUP: {
-            const {item, inTrash, inObject, multipleMode} = action.data;
+            const {item, inTrash, multipleMode} = action.data;
 
             return {
                 ...state,
                 item,
-                inObject,
                 multipleMode,
                 permanently: inTrash,
                 visible: true,

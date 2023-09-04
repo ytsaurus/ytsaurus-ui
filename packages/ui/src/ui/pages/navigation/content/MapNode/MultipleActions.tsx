@@ -51,7 +51,7 @@ export default function MultipleActions(props: {className: string}) {
     }, [selectedNodes]);
 
     const handleDeleteClick = useCallback(() => {
-        dispatch(openDeleteModal(selectedNodes, false, true));
+        dispatch(openDeleteModal(selectedNodes, true));
     }, [dispatch, selectedNodes]);
 
     const allowModifyActions = !isOneSelected || isTooLarge;
