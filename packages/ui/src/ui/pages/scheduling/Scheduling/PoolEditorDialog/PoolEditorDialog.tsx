@@ -409,18 +409,6 @@ export function PoolEditorDialog() {
                                 decimalPlaces: 2,
                             },
                         },
-                        {
-                            name: 'burstRam',
-                            type: 'pool-quota-editor',
-                            caption: 'Burst RAM',
-                            extras: {
-                                format: 'Bytes',
-                                pool: editItem?.name || '',
-                                resourceType: 'burstRam',
-                                initialLimit: initialValues.integralGuarantee.burstRam.limit,
-                                sourceDisabled: !allowTransfer,
-                            },
-                        },
                         ...(treGpuLimit > 0
                             ? [
                                   {
@@ -447,18 +435,6 @@ export function PoolEditorDialog() {
                                 initialLimit: initialValues.integralGuarantee.flowCpu.limit,
                                 sourceDisabled: !allowTransfer,
                                 decimalPlaces: 2,
-                            },
-                        },
-                        {
-                            name: 'flowRam',
-                            type: 'pool-quota-editor' as const,
-                            caption: 'Flow RAM',
-                            extras: {
-                                format: 'Bytes',
-                                pool: editItem?.name || '',
-                                resourceType: 'flowRam',
-                                initialLimit: initialValues.integralGuarantee.flowRam.limit,
-                                sourceDisabled: !allowTransfer,
                             },
                         },
                         ...(treGpuLimit > 0
