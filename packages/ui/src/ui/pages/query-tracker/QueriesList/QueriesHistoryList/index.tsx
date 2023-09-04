@@ -4,7 +4,7 @@ import block from 'bem-cn-lite';
 import React, {useCallback, useContext, useEffect, useMemo, useRef, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {QueryItem, QueryStatus} from '../../module/api';
-import {UPDATE_QUERIES_LIST, refreshQueriesListIfNeeded} from '../../module/queries_list/actions';
+import {refreshQueriesListIfNeeded} from '../../module/queries_list/actions';
 import {getQueriesListTimestamp, getUncompletedItems} from '../../module/queries_list/selectors';
 import {QueryStatusIcon} from '../../QueryStatus';
 
@@ -22,6 +22,7 @@ import {QueryDuration} from '../../QueryDuration';
 import {useQueryNavigation} from '../../hooks/Query';
 import {useQueriesPagination, useQueryList} from '../../hooks/QueriesList';
 import EditQueryNameModal from '../EditQueryNameModal/EditQueryNameModal';
+import {UPDATE_QUERIES_LIST} from '../../module/query-tracker-contants';
 
 const b = block('queries-history-list');
 

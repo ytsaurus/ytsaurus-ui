@@ -7,7 +7,6 @@ import {
     SET_QUERIES_LIST_CURSOR,
     SET_QUERIES_LIST_FILTER,
     SET_QUERIES_LIST_MODE,
-    UPDATE_QUERIES_LIST,
 } from './actions';
 import {
     DefaultQueriesListFilter,
@@ -15,6 +14,7 @@ import {
     QueriesListFilter,
     QueriesListMode,
 } from './types';
+import {UPDATE_QUERIES_LIST} from '../query-tracker-contants';
 
 export interface QueriesListState {
     state: 'loading' | 'ready' | 'error';
