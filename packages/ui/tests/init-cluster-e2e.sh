@@ -44,12 +44,13 @@ yt lock --mode shared ${E2E_DIR}/locked --tx $(yt start-tx --timeout ${EXPIRATIO
 yt create -i -r map_node  "${E2E_DIR}/bad-names/trailing-space /ok"
 yt create -i -r map_node  "${E2E_DIR}/bad-names/escaped-symbol\\x0a/ok"
 yt create -i -r map_node "${E2E_DIR}/bad-names/<script>alert('hello XSS!')<\\/script>/ok"
-yt create -i -r  map_node "${E2E_DIR}/bad-names/<script>console.error(\"hello XSS\")<\\/script>/ok"
-yt create -i -r  map_node "${E2E_DIR}/bad-names/_\\x09_\\x09/ok"
-yt create -i -r  map_node "${E2E_DIR}/bad-names/_\\x10_\\x10/ok"
-yt create -i -r  map_node "${E2E_DIR}/bad-names/\\xc3\\x90\\xc2\\x9a\\xc3\\x90\\xc2\\xbe\\xc3\\x90\\xc2\\xbc\\xc3\\x90\\xc2\\xbf\\xc3\\x90\\xc2\\xbe\\xc3\\x90\\xc2\\xbd\\xc3\\x90\\xc2\\xb5\\xc3\\x90\\xc2\\xbd\\xc3\\x91\\xc2\\x82\\xc3\\x91\\xc2\\x8b \\xc3\\x90\\xc2\\xb4\\xc3\\x90\\xc2\\xbb\\xc3\\x91\\xc2\\x8f Paysup.json/ok"
-yt create -i -r  map_node "${E2E_DIR}/bad-names/__\\//ok"
-yt create -i -r  map_node "${E2E_DIR}/bad-names/__\\@/ok"
+yt create -i -r map_node "${E2E_DIR}/bad-names/<script>console.error(\"hello XSS\")<\\/script>/ok"
+yt create -i -r map_node "${E2E_DIR}/bad-names/_\\x09_\\x09/ok"
+yt create -i -r map_node "${E2E_DIR}/bad-names/_\\x10_\\x10/ok"
+yt create -i -r map_node "${E2E_DIR}/bad-names/\\xc3\\x90\\xc2\\x9a\\xc3\\x90\\xc2\\xbe\\xc3\\x90\\xc2\\xbc\\xc3\\x90\\xc2\\xbf\\xc3\\x90\\xc2\\xbe\\xc3\\x90\\xc2\\xbd\\xc3\\x90\\xc2\\xb5\\xc3\\x90\\xc2\\xbd\\xc3\\x91\\xc2\\x82\\xc3\\x91\\xc2\\x8b \\xc3\\x90\\xc2\\xb4\\xc3\\x90\\xc2\\xbb\\xc3\\x91\\xc2\\x8f Paysup.json/ok"
+yt create -i -r map_node "${E2E_DIR}/bad-names/Компоненты для Paysup.json/ok"
+yt create -i -r map_node "${E2E_DIR}/bad-names/__\\//ok"
+yt create -i -r map_node "${E2E_DIR}/bad-names/__\\@/ok"
 
 if [ "false" = "$(yt exists //sys/pool_trees/e2e)" ]; then
     yt create scheduler_pool_tree --attributes '{name=e2e;config={nodes_filter=e2e}}'

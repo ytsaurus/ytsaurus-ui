@@ -370,4 +370,5 @@ export const UNIPIKA_ESCAPED_SETTINGS = {
     break: false,
     showDecoded: true,
     escapeWhitespace: true,
+    format: 'raw-json',
 };

@@ -129,6 +129,15 @@ test('Navigation - URL correct encoding', async ({page}) => {
     await test.step('Компоненты для Paysup.json', async () => {
         await page.goto(makeClusterUrl(`navigation?navmode=content&path=${E2E_DIR}/bad-names`));
         const link = await page.waitForSelector(
+            `[href="/${CLUSTER}/navigation?path=${E2E_DIR}/bad-names/%D0%9A%D0%BE%D0%BC%D0%BF%D0%BE%D0%BD%D0%B5%D0%BD%D1%82%D1%8B%20%D0%B4%D0%BB%D1%8F%20Paysup.json"]`,
+        );
+        await link.click();
+        await page.waitForSelector(':text("ok")');
+    });
+
+    await test.step('Компоненты для Paysup.json ENCODED', async () => {
+        await page.goto(makeClusterUrl(`navigation?navmode=content&path=${E2E_DIR}/bad-names`));
+        const link = await page.waitForSelector(
             `[href="/${CLUSTER}/navigation?path=${E2E_DIR}/bad-names/%C3%90%C2%9A%C3%90%C2%BE%C3%90%C2%BC%C3%90%C2%BF%C3%90%C2%BE%C3%90%C2%BD%C3%90%C2%B5%C3%90%C2%BD%C3%91%C2%82%C3%91%C2%8B%20%C3%90%C2%B4%C3%90%C2%BB%C3%91%C2%8F%20Paysup.json"]`,
         );
         await link.click();
@@ -154,7 +163,7 @@ test('Navigation - URL correct encoding', async ({page}) => {
     });
 });
 
-test('Navigation - escpaped symbols are highlighted', async ({page}) => {
+test('Navigation - escpaped symbols are highlighted and cyrillic', async ({page}) => {
     await test.step('escaped-symbol\\n', async () => {
         await page.goto(makeClusterUrl(`navigation?navmode=content&path=${E2E_DIR}/bad-names`));
         const link = await page.waitForSelector(
@@ -168,5 +177,17 @@ test('Navigation - escpaped symbols are highlighted', async ({page}) => {
             `[href="/${CLUSTER}/navigation?path=${E2E_DIR}/bad-names/trailing-space%20"]`,
         );
         expect(await link.innerText()).toEqual('trailing-space ');
+    });
+    await test.step('cyrillic', async () => {
+        await page.goto(makeClusterUrl(`navigation?navmode=content&path=${E2E_DIR}/bad-names`));
+        const link = await page.waitForSelector(
+            `[href="/${CLUSTER}/navigation?path=${E2E_DIR}/bad-names/%D0%9A%D0%BE%D0%BC%D0%BF%D0%BE%D0%BD%D0%B5%D0%BD%D1%82%D1%8B%20%D0%B4%D0%BB%D1%8F%20Paysup.json"]`,
+        );
+        expect(await link.innerText()).toEqual('Компоненты для Paysup.json');
+        await link.click();
+        const breadcrumbLink = await page.waitForSelector(
+            `[href="/${CLUSTER}/navigation?path=${E2E_DIR}/bad-names/%D0%9A%D0%BE%D0%BC%D0%BF%D0%BE%D0%BD%D0%B5%D0%BD%D1%82%D1%8B%20%D0%B4%D0%BB%D1%8F%20Paysup.json&navmode=content&filter="]`,
+        );
+        expect(await breadcrumbLink.innerText()).toEqual('Компоненты для Paysup.json');
     });
 });
