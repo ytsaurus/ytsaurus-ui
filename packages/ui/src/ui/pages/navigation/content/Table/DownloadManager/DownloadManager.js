@@ -36,9 +36,10 @@ import {
 import {getColumns} from '../../../../../store/selectors/navigation/content/table-ts';
 
 import './DownloadManager.scss';
-import {allowDirectDownload, docsUrl, getConfigData} from '../../../../../config';
+import {docsUrl, getConfigData} from '../../../../../config';
 import SeparatorInput, {prepareSeparatorValue} from './SeparatorInput';
 import UIFactory from '../../../../../UIFactory';
+import {makeDirectDownloadPath} from '../../../../../utils/navigation';
 
 const block = cn('table-download-manager');
 const messageBlock = cn('elements-message');
@@ -286,10 +287,7 @@ export class DownloadManager extends Component {
 
     getDownloadLink() {
         const {cluster, proxy} = this.props;
-        const base = allowDirectDownload()
-            ? `//${proxy}/api/v3/read_table`
-            : `/api/yt/${cluster}/api/v3/read_table`;
-
+        const base = makeDirectDownloadPath('read_table', {cluster, proxy});
         const {query, error} = this.getDownloadParams();
         return {url: base + '?' + query, error};
     }

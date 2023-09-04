@@ -10,6 +10,7 @@ import {Page} from '../../constants/index';
 import {SUPPRESS_REDIRECT} from '../../constants/navigation/modals/delete-object';
 import {Tab} from '../../constants/navigation';
 import {YTError} from '../../../@types/types';
+import {allowDirectDownload} from '../../config';
 
 export function autoCorrectPath(path: string) {
     // 1) Strip slash from the end
@@ -164,4 +165,18 @@ export function decodeEscapedAbsPath(path: string) {
             })
             .join('/')
     );
+}
+
+export function makeDirectDownloadPath(
+    command:
+        | 'read_table'
+        | 'read_file'
+        | 'get_job_input'
+        | 'get_job_stderr'
+        | 'get_job_fail_context',
+    {cluster, proxy}: {cluster: string; proxy: string},
+) {
+    return allowDirectDownload()
+        ? `//${proxy}/api/v3/${command}`
+        : `/api/yt/${cluster}/api/v3/${command}`;
 }

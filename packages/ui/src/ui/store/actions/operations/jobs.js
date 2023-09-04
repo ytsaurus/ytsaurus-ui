@@ -20,7 +20,7 @@ import {
     getJobsRequestParameters,
 } from '../../../store/actions/operations/utils';
 import {OPERATIONS_PAGE} from '../../../constants/operations/list';
-import {getCluster} from '../../../store/selectors/global';
+import {getCurrentClusterConfig} from '../../../store/selectors/global';
 import {TYPED_OUTPUT_FORMAT, USE_CACHE, USE_MAX_SIZE} from '../../../constants/index';
 import {getShowCompetitiveJobs} from '../../../pages/operations/selectors';
 import CancelHelper, {isCancelled} from '../../../utils/cancel-helper';
@@ -33,7 +33,7 @@ const getOperation = (state) => state.operations.detail.operation;
 export function getJob() {
     return (dispatch, getState) => {
         const state = getState();
-        const cluster = getCluster(state);
+        const {id: cluster, proxy} = getCurrentClusterConfig(state);
 
         requests.removeAllRequests();
         return ytApiV3
@@ -44,6 +44,7 @@ export function getJob() {
                     data: {
                         job,
                         cluster,
+                        proxy,
                         operationId: getOperation(state).$value,
                     },
                 });
@@ -65,7 +66,7 @@ export function getJob() {
 export function getCompetitiveJobs() {
     return (dispatch, getState) => {
         const state = getState();
-        const cluster = getCluster(state);
+        const {id: cluster, proxy} = getCurrentClusterConfig(state);
 
         requests.removeAllRequests();
         return ytApiV3
@@ -76,6 +77,7 @@ export function getCompetitiveJobs() {
                     data: {
                         jobs,
                         cluster,
+                        proxy,
                         operationId: getOperation(state).$value,
                     },
                 });
@@ -123,7 +125,7 @@ export function getJobs() {
             },
         ];
 
-        const cluster = getCluster(state);
+        const {id: cluster, proxy} = getCurrentClusterConfig(state);
 
         return ytApiV3Id
             .executeBatch(YTApiId.operationGetJobs, {
@@ -145,6 +147,7 @@ export function getJobs() {
                         addresses: ypath.getValue(addresses.output),
                         operationId: getOperation(state).$value,
                         cluster,
+                        proxy,
                     },
                 });
 
