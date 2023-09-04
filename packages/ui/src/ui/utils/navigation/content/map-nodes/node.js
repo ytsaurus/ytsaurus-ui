@@ -9,6 +9,7 @@ export default class Node {
         binaryAsHex: false,
         highlightControlCharacter: true,
         escapeWhitespace: true,
+        format: 'json',
     };
 
     static TITLE_PRINT_SETTINGS = Object.assign(
