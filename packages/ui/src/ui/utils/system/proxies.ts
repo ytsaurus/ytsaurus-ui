@@ -7,6 +7,7 @@ import type {
     HttpProxiesState,
     RoleGroupInfo,
     RoleGroupItemInfo,
+    SystemNodeCounters,
 } from '../../store/reducers/system/proxies';
 import type {NodeEffectiveState, NodeState} from '../../store/reducers/system/nodes';
 
@@ -30,9 +31,7 @@ export function extractRoleGroups(proxies: Array<RoleGroupItemInfo>): Array<Role
             }
 
             ++role.counters.total;
-            role.items.push(proxy);
-            incrementStateCounter(role.counters.effectiveStates, proxy.effectiveState);
-            incrementStateCounter(role.counters.states, proxy.state);
+            incrementCounters(proxy, role.counters);
             return roles;
         },
         {} as Record<string, RoleGroupInfo>,
@@ -43,7 +42,7 @@ export function extractRoleGroups(proxies: Array<RoleGroupItemInfo>): Array<Role
     return sortBy_(roles, 'name');
 }
 
-const MAIN_STATES = new Set<NodeEffectiveState>(['online', 'offline', 'banned']);
+const MAIN_STATES = new Set<NodeEffectiveState>(['online', 'offline']);
 export function getNodeffectiveState(state: NodeState): NodeEffectiveState {
     return MAIN_STATES.has(state as any) ? (state as NodeEffectiveState) : 'other';
 }
@@ -72,12 +71,16 @@ export function extractProxyCounters(proxies: Array<RoleGroupItemInfo>) {
     };
 
     each_(proxies, (proxy) => {
-        incrementStateCounter(counters.states, proxy.state);
-        incrementStateCounter(counters.effectiveStates, proxy.effectiveState);
-        if (proxy.effectiveState === 'banned') {
-            incrementStateCounter(counters.flags, 'banned');
-        }
+        incrementCounters(proxy, counters);
     });
 
     return counters;
+}
+
+function incrementCounters(proxy: RoleGroupItemInfo, counters: SystemNodeCounters) {
+    incrementStateCounter(counters.states, proxy.state);
+    incrementStateCounter(counters.effectiveStates, proxy.effectiveState);
+    if (proxy.banned) {
+        incrementStateCounter(counters.flags, 'banned');
+    }
 }

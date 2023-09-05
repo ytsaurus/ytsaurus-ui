@@ -53,6 +53,7 @@ class Proxies extends Component<ReduxProps> {
                                 data={data}
                                 makeUrl={this.makeRoleGroupUrl}
                                 hideOthers
+                                bannedAsState
                             />
                         );
                     })}
@@ -68,7 +69,6 @@ class Proxies extends Component<ReduxProps> {
             params.append('banned', 'true');
         } else if (state) {
             params.append('state', state);
-            params.append('banned', 'false');
         }
         return `/${cluster}/components/http_proxies?${params}`;
     };

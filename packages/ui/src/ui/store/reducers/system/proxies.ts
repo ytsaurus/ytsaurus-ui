@@ -39,6 +39,7 @@ export type RoleGroupItemInfo = {
     state: NodeState;
     effectiveState: NodeEffectiveState;
     role: string;
+    banned: boolean;
 };
 
 function proxies(state = initialState, action: HttpProxiesAction): HttpProxiesState {

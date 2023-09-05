@@ -34,13 +34,13 @@ export function cancelLoadProxies() {
 
 function makeProxyInfo(data: any): RoleGroupItemInfo {
     const state = data.dead ? 'offline' : 'online';
-    const banned = data.banned;
 
     return {
         name: data.name,
         state,
-        effectiveState: banned ? 'banned' : state,
+        effectiveState: state,
         role: data.role,
+        banned: data.banned,
     };
 }
 

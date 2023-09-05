@@ -38,7 +38,7 @@ export type SystemNodeInfo = CypressNode<
 >;
 
 export type NodeState = 'online' | 'offline' | string;
-export type NodeEffectiveState = 'banned' | 'other' | 'online' | 'offline';
+export type NodeEffectiveState = 'other' | 'online' | 'offline';
 export type NodeEffectiveFlag = 'decommissioned' | 'full' | 'alerts' | 'banned';
 export type RackInfo = {
     name: string;
