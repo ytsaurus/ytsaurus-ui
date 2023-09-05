@@ -252,7 +252,6 @@ function insertNodeToRack(racks: Record<string, RackInfo>, node: SystemNodeInfo)
     const full: boolean = ypath.getBoolean(node, '/@full');
     const alerts = Boolean(ypath.getValue(node, '/@alert_count'));
 
-    const effectiveState = banned ? 'banned' : state;
     const effectiveFlag =
         (decommissioned && 'decommissioned') ||
         (full && 'full') ||
@@ -267,9 +266,10 @@ function insertNodeToRack(racks: Record<string, RackInfo>, node: SystemNodeInfo)
         $value: node.$value,
         $attributes: {
             ...node.$attributes,
-            effectiveState: effectiveState,
+            effectiveState: state,
             effectiveFlag: effectiveFlag,
             alerts,
+            banned,
         },
     });
 }
@@ -320,12 +320,13 @@ function rackInfo2roleGroup(data: Array<RackInfo>): Array<RoleGroupInfo> {
             },
         };
         rack.nodes.forEach((node) => {
-            const {state, effectiveState} = node.$attributes;
+            const {state, effectiveState, banned} = node.$attributes;
             const info: RoleGroupItemInfo = {
                 name: node.$value,
                 state,
                 role: rack.name,
                 effectiveState: getNodeffectiveState(effectiveState),
+                banned,
             };
             incrementStateCounter(res.counters.effectiveStates, info.effectiveState);
             incrementStateCounter(res.counters.states, info.state);

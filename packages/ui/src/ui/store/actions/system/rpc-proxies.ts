@@ -44,7 +44,8 @@ function extractRpcProxy(data: object): Array<RoleGroupItemInfo> {
                 name: key,
                 role: ypath.getValue(value, '/@role'), //value.$attributes?.role,
                 state,
-                effectiveState: banned ? 'banned' : state,
+                effectiveState: state,
+                banned,
             });
             return acc;
         },

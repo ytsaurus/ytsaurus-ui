@@ -31,7 +31,6 @@ export const proxiesParams: LocationParameters = {
     banned: {
         stateKey: 'components.proxies.proxies.bannedFilter',
         initialState: proxiesInitialState.bannedFilter,
-        type: 'bool',
     },
     proxySort: {
         stateKey: `tables.${COMPONENTS_PROXIES_TABLE_ID}`,

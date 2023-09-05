@@ -27,13 +27,15 @@ export function RoleGroup({
     makeUrl,
     hideOthers,
     showFlags,
+    bannedAsState,
 }: {
     data: RoleGroupInfo;
     makeUrl: (params?: MakeUrlParams) => string | undefined;
     showFlags?: boolean;
     hideOthers?: boolean;
+    bannedAsState?: boolean;
 }) {
-    const {online = 0, offline = 0, banned = 0, other = 0} = counters.effectiveStates;
+    const {online = 0, offline = 0, other = 0} = counters.effectiveStates;
     const nameUrl = makeUrl({name});
     return (
         <div className={block()}>
@@ -66,12 +68,12 @@ export function RoleGroup({
                     stack={[
                         {value: online, color: 'var(--success-color)'},
                         {value: offline, color: 'var(--danger-color)'},
-                        {value: banned, color: 'var(--warning-color)'},
                         {value: other, color: 'var(--info-color)'},
                     ]}
                 />
             </div>
             <States
+                bannedAsState={bannedAsState}
                 counters={counters}
                 showFlags={showFlags}
                 hideOthers={hideOthers}
@@ -86,51 +88,96 @@ function States({
     showFlags,
     hideOthers,
     makeUrl,
+    bannedAsState,
 }: {
     counters: SystemNodeCounters;
     showFlags?: boolean;
     hideOthers?: boolean;
     makeUrl: (params?: MakeUrlParams) => string | undefined;
+    bannedAsState?: boolean;
 }) {
-    const {online = 0, offline = 0, banned = 0, other = 0} = counters.effectiveStates;
-    const {decommissioned = 0, alerts = 0, full = 0} = counters.flags;
+    const {online = 0, offline = 0, other = 0} = counters.effectiveStates;
+    const {decommissioned = 0, alerts = 0, banned = 0, full = 0} = counters.flags;
+
+    let k = -1;
+    const statesRow = [
+        <Status key={++k} status="online" count={online} url={makeUrl({state: 'online'})} />,
+        <span key={++k} />,
+        <Status key={++k} status="offline" count={offline} url={makeUrl({state: 'offline'})} />,
+        <span key={++k} />,
+        ...(bannedAsState
+            ? [
+                  <Status
+                      key={++k}
+                      status="alert"
+                      label="banned"
+                      count={banned}
+                      url={makeUrl({state: 'banned'})}
+                  />,
+                  <span key={++k} />,
+              ]
+            : []),
+        ...(hideOthers
+            ? []
+            : [
+                  <Status
+                      key={++k}
+                      status="other"
+                      count={other}
+                      url={makeUrl({state: 'others'})}
+                  />,
+                  <span key={++k} />,
+              ]),
+        <span key={++k} />,
+        <span key={++k} />,
+        <span key={++k} />,
+    ].filter(Boolean);
+
+    const flagsRow = !showFlags
+        ? []
+        : [
+              <Status key={++k} status="alert" count={alerts} url={makeUrl({flag: 'alerts'})} />,
+              <span key={++k} />,
+              ...(bannedAsState
+                  ? []
+                  : [
+                        <React.Fragment key={++k}>
+                            <Status
+                                key={++k}
+                                status="banned"
+                                count={banned}
+                                url={makeUrl({state: 'banned'})}
+                            />
+                            <span />
+                        </React.Fragment>,
+                    ]),
+              <Status
+                  key={++k}
+                  status="dec"
+                  count={decommissioned}
+                  url={makeUrl({flag: 'decommissioned'})}
+              />,
+              <span key={++k} />,
+              <Status key={++k} status="full" count={full} url={makeUrl({flag: 'full'})} />,
+              <span key={++k} />,
+          ];
+
     return (
         <div className={block('counters')}>
-            <Status status="online" count={online} url={makeUrl({state: 'online'})} />
-            <span />
-            <Status status="offline" count={offline} url={makeUrl({state: 'offline'})} />
-            <span />
-            <Status status="banned" count={banned} url={makeUrl({state: 'banned'})} />
-            <span />
-            {hideOthers ? (
-                <span />
-            ) : (
-                <Status status="other" count={other} url={makeUrl({state: 'others'})} />
-            )}
-            {showFlags && (
-                <>
-                    <Status status="alert" count={alerts} url={makeUrl({flag: 'alerts'})} />
-                    <span />
-                    <Status
-                        status="dec"
-                        count={decommissioned}
-                        url={makeUrl({flag: 'decommissioned'})}
-                    />
-                    <span />
-                    <Status status="full" count={full} url={makeUrl({flag: 'full'})} />
-                    <span />
-                </>
-            )}
+            {statesRow.slice(0, 7)}
+            {flagsRow.slice(0, 7)}
         </div>
     );
 }
 
 function Status({
     status,
+    label,
     count,
     url,
 }: {
-    status: NodeEffectiveState | 'alert' | 'dec' | 'full';
+    status: NodeEffectiveState | 'banned' | 'alert' | 'dec' | 'full';
+    label?: string;
     count: number;
     url?: string;
 }) {
@@ -142,7 +189,7 @@ function Status({
                 color={withUrl ? undefined : 'secondary'}
                 variant="caption-2"
             >
-                {status}
+                {label ?? status}
             </Text>
             <div className={block('status-count')}>
                 <div className={block('status-color', {theme: status, empty: !(count > 0)})} />
