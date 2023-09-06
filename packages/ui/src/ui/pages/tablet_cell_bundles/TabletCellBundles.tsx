@@ -149,7 +149,7 @@ export default function TabletCellBundles() {
                                                 onClick={showEditor}
                                             >
                                                 <Icon awesome={'pencil'} />
-                                                &nbsp;Edit Bundle
+                                                Edit Bundle
                                             </Button>
                                         </div>
                                     )}
