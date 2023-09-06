@@ -50,7 +50,7 @@ function reducer(
     switch (action.type) {
         case TABLETS_BUNDLES_EDITOR_LOAD_REQUREST: {
             const {bundleName} = action.data;
-            const s = state.bundleName !== bundleName ? initialState : state;
+            const s = !state.bundleName || state.bundleName === bundleName ? state : initialState;
             return {...s, ...action.data, loading: true};
         }
         case TABLETS_BUNDLES_EDITOR_LOAD_FAILURE:
