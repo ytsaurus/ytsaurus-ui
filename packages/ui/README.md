@@ -53,6 +53,31 @@ $ npm run dev:localmode
 - `YT_USER_SETTINGS_PATH` - path to map-node with files of user-settings, if not defined '//tmp' is used _(the variable is ignored if `YT_AUTH_CLUSTER_ID` is not defined)_
 - `YT_USER_COLUMN_PRESETS_PATH` - path to dynamic table with user column presets _(the variable is ignored if `YT_AUTH_CLUSTER_ID` is not defined)_. The table should have two columns: **"name"** _(string, required, sort_order: ascheding)_, **"columns_json"** _(string)_.
 
+### Feature flags
+
+It is recommended way to link feature with version of proxies or schedulers of cluster.
+But some cases require ability to turn on/off a feature manually on a cluster. Such feature flags
+are placed placed in:
+
+- `//sys/@ui_config` (values affects all users)
+- `//sys/@ui_config_dev_overrides` (values affects only developers)
+
+([more details](https://nda.ya.ru/t/bgh9NWJ16fPRp4))
+
+It is supposed that a user is developer on a cluster if he has `write` access to `admins` group of the cluster.
+
+Available flags (**default values** are highlighted in bold):
+
+| Flag name                            | Allowed values          | Description                                                                                                                                                     |
+| :----------------------------------- | :---------------------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| web_json_value_format                | **"schemaless"**, "yql" | Allows to use `YQLv3 types` [YTFRONT-2804](https://nda.ya.ru/t/bgh9NWJ16fPRp4)                                                                                  |
+| enable_per_bundle_tablet_accounting  | **false**, true         | Allows editing of resources of tablets through BundleEditorDialog [YTFRONT-2851](https://nda.ya.ru/t/xnLq-3Dm6fPYPo)                                            |
+| enable_per_account_tablet_accounting | **true**, false         | Allows editing of resources of tablets through AccountEditorDialog [YTFRONT-2851](https://nda.ya.ru/t/xnLq-3Dm6fPYPo)                                           |
+| per_bundle_accounting_help_link      | **null**, url as string | Help link for resources of tablets to display from AccountEditorDialog about moving the resources to bundles [YTFRONT-2851](https://nda.ya.ru/t/xnLq-3Dm6fPYPo) |
+| enable_nodes_maintenance_api         | **null**, boolean       | Allows to use `add_maintenance`/`remove_maintenance` commands from UI [YTFRONT-3792](https://nda.ya.ru/t/RvueJLzN6fWx3h)                                        |
+
+|
+
 ### Configuration
 
 By default the application uses base configuration from `path_to_dist/server/configs/common.js` file. The behavior might be adjusted through `APP_ENV` and `APP_INSTALLATION` environment variables, see [README.config.md](./docs/configuration.md) for more details.
