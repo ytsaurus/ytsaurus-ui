@@ -143,6 +143,9 @@ const features = createSelector(
             },
             clusterNodeVersion: {
                 prestable: '23.2',
+            },
+            nodeMaintenanceApi: {
+                prestable: '23.1.11106567',
                 component: proxy,
             },
         };
@@ -245,6 +248,13 @@ export const isSupportedClusterNodeForVersions = createSelector(
     [isSupportedSelector],
     (isSupported) => {
         return isSupported('clusterNodeVersion');
+    },
+);
+
+export const isSupportedNodeMaintenanceApi = createSelector(
+    [isSupportedSelector],
+    (isSupported) => {
+        return isSupported('nodeMaintenanceApi');
     },
 );
 

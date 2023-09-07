@@ -165,6 +165,9 @@ export enum YTApiId {
     readQueryResults,
     getQueryResults,
     alterQuery,
+
+    addMaintenance,
+    removeMaintenance,
 }
 
 interface RumWrapApi {

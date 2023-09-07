@@ -148,6 +148,19 @@ export interface GetQueryResultParams extends GetQueryParams {
 
 export type YTPermissionType = 'read' | 'write' | 'use' | 'mount' | 'register_queue_consumer';
 
+export interface AddMaintenanceParams extends BaseBatchParams {
+    component: 'cluster_node' | 'http_proxy' | 'rpc_proxy';
+    address: string;
+    mine: boolean;
+    comment?: string;
+    type:
+        | 'ban'
+        | 'disable_scheduler_jobs'
+        | 'disable_write_sessions'
+        | 'disable_tablet_cells'
+        | 'decommission';
+}
+
 export type BatchSubRequest =
     | SubRequest<'transfer_pool_resources', TransferPoolQuotaParams>
     | SubRequest<'mount_table' | 'unmount_table' | 'freeze_table' | 'unfreeze_table', PathParams>
@@ -160,7 +173,8 @@ export type BatchSubRequest =
     | SubRequest<'execute_batch', ExecuteBatchParams>
     | SubRequest<'check_permission_by_acl', CheckAclParams>
     | SubRequest<'get_query', GetQueryParams>
-    | SubRequest<'get_query_result', GetQueryResultParams>;
+    | SubRequest<'get_query_result', GetQueryResultParams>
+    | SubRequest<'add_maintenance' | 'remove_maintenance', AddMaintenanceParams>;
 
 export type OutputFormat =
     | {
