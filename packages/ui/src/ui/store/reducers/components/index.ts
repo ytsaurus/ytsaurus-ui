@@ -6,14 +6,14 @@ import nodes from './nodes';
 import node from './node';
 import proxies from './proxies';
 import shards from './shards';
-import decommission from './decommission';
+import nodeMaintenanceModal from './node-maintenance-modal';
 
 export default combineReducers({
     banUnban,
-    decommission,
     versionsV2,
     nodes,
     node,
     proxies,
     shards,
+    nodeMaintenanceModal,
 });

@@ -14,10 +14,8 @@ import {Text} from '@gravity-ui/uikit';
 
 import ColumnSelector from '../../../../../components/ColumnSelector/ColumnSelector';
 import ElementsTable from '../../../../../components/ElementsTable/ElementsTable';
-import UnbanModal from '../../../../../pages/components/UnbanModal/UnbanModal';
 import Radiobutton from '../../../../../components/RadioButton/RadioButton';
 import TableInfo from '../../../../../pages/components/TableInfo/TableInfo';
-import BanModal from '../../../../../pages/components/BanModal/BanModal';
 import Dropdown from '../../../../../components/Dropdown/Dropdown';
 import Button from '../../../../../components/Button/Button';
 import Filter from '../../../../../components/Filter/Filter';
@@ -28,7 +26,6 @@ import ResourcesLimitModal from '../NodeActions/ResourcesLimitsModal/ResourcesLi
 import LoadDataHandler from '../../../../../components/LoadDataHandler/LoadDataHandler';
 import ErrorBoundary from '../../../../../components/ErrorBoundary/ErrorBoundary';
 import FiltersPresets from '../FilterPresets/FiltersPresets';
-import DisableModal from '../NodeActions/DisableModal';
 import SetupModal from '../SetupModal/SetupModal';
 import NodeCard from '../NodeCard/NodeCard';
 
@@ -54,7 +51,6 @@ import {
 } from '../../../../../store/actions/components/nodes/nodes';
 import type {NodesState} from '../../../../../store/reducers/components/nodes/nodes/nodes';
 
-import {banNode, unbanNode} from '../../../../../store/actions/components/nodes/actions/ban-unban';
 import {mergeScreen, splitScreen as splitScreenAction} from '../../../../../store/actions/global';
 import {HEADER_HEIGHT, KeyCode} from '../../../../../constants/index';
 import {
@@ -65,7 +61,7 @@ import {
 } from '../../../../../constants/components/nodes/nodes';
 import {RootState} from '../../../../../store/reducers';
 
-import DecommissionNodeModal from '../NodeActions/DecommissionNodeModal';
+import {NodeMaintenanceModal} from '../../../NodeMaintenanceModal/NodeMaintenanceModal';
 
 import './Nodes.scss';
 
@@ -351,14 +347,12 @@ class Nodes extends React.Component<ReduxProps & WithVisibleProps, State> {
     }
 
     renderModals() {
-        const {resourcesHost, banNode, unbanNode} = this.props;
+        const {resourcesHost} = this.props;
 
         return (
             <React.Fragment>
-                <BanModal ban={banNode} label="You are about to ban node" />
-                <UnbanModal unban={unbanNode} label="You are about to unban node" />
-                <DisableModal />
                 <ResourcesLimitModal key={resourcesHost} />
+                <NodeMaintenanceModal />
             </React.Fragment>
         );
     }
@@ -385,7 +379,6 @@ class Nodes extends React.Component<ReduxProps & WithVisibleProps, State> {
                         {this.renderModals()}
                     </div>
                 </LoadDataHandler>
-                <DecommissionNodeModal />
             </ErrorBoundary>
         );
     }
@@ -434,9 +427,6 @@ const mapDispatchToProps = {
     mergeScreen,
     getNodes,
     handleColumnsChange,
-
-    banNode,
-    unbanNode,
 };
 
 const connector = connect(mapStateToProps, mapDispatchToProps);
