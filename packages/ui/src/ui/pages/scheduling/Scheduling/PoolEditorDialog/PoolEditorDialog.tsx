@@ -2,7 +2,7 @@ import React, {useCallback, useMemo} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import cn from 'bem-cn-lite';
 import _ from 'lodash';
-import EditDialog, {DialogField, FormApi} from '../../../../components/Dialog/Dialog';
+import {DialogField, FormApi, YTDFDialog} from '../../../../components/Dialog/Dialog';
 import Error from '../../../../components/Error/Error';
 
 import {
@@ -217,7 +217,7 @@ export function PoolEditorDialog() {
     const integralTypeNotice = useChangeIntegralTypeNotice(editItem, pools, tree);
 
     return (
-        <EditDialog<FormValues>
+        <YTDFDialog<FormValues>
             size="l"
             key={editItem?.name + '/' + editVisibility}
             className={block()}

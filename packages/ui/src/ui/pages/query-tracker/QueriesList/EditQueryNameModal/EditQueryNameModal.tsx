@@ -1,5 +1,5 @@
 import React, {useMemo, useState} from 'react';
-import Dialog, {makeErrorFields} from '../../../../components/Dialog/Dialog';
+import {YTDFDialog, makeErrorFields} from '../../../../components/Dialog/Dialog';
 import Button from '../../../../components/Button/Button';
 import Icon from '../../../../components/Icon/Icon';
 import _ from 'lodash';
@@ -53,7 +53,7 @@ export default function EditQueryNameModal({query, className}: Props) {
                 <Icon awesome="pencil"></Icon>
             </Button>
             {visible ? (
-                <Dialog<FormValues>
+                <YTDFDialog<FormValues>
                     pristineSubmittable
                     visible={visible}
                     modal={true}

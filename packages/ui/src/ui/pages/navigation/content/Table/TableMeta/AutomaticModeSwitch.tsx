@@ -3,7 +3,7 @@ import React from 'react';
 import {Switch} from '@gravity-ui/uikit';
 
 import StatusBulb from '../../../../../components/StatusBulb/StatusBulb';
-import Dialog, {FormApi, makeErrorFields} from '../../../../../components/Dialog/Dialog';
+import {FormApi, YTDFDialog, makeErrorFields} from '../../../../../components/Dialog/Dialog';
 import {YTError} from '../../../../../types';
 
 export interface Props {
@@ -32,7 +32,7 @@ function AutomaticModeSwitchEditor({value, onEdit, onClose}: Props & {onClose: (
     );
 
     return (
-        <Dialog<FormValues>
+        <YTDFDialog<FormValues>
             pristineSubmittable={true}
             headerProps={{
                 title: 'Edit',

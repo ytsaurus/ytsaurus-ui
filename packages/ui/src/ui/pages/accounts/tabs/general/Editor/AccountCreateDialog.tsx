@@ -2,7 +2,7 @@ import cn from 'bem-cn-lite';
 import React from 'react';
 import {ConnectedProps, connect} from 'react-redux';
 
-import Dialog, {DialogField, FormApi} from '../../../../../components/Dialog/Dialog';
+import {DialogField, FormApi, YTDFDialog} from '../../../../../components/Dialog/Dialog';
 import {closeCreateModal} from '../../../../../store/actions/accounts/editor';
 import {loadEditedAccount} from '../../../../../store/actions/accounts/accounts';
 import {createAccountFromInfo} from '../../../../../utils/accounts/editor';
@@ -36,7 +36,7 @@ class AccountCreateDialog extends React.Component<ConnectedProps<typeof connecto
         const {parentAccount, responsibles = []} = newAccountInfo;
 
         return (
-            <Dialog<FormValues>
+            <YTDFDialog<FormValues>
                 className={block()}
                 visible={visible}
                 onClose={this.onClose}

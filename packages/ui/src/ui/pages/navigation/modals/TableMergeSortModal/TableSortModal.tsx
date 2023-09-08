@@ -2,7 +2,7 @@ import React from 'react';
 import cn from 'bem-cn-lite';
 import _ from 'lodash';
 
-import Dialog, {DialogError, DialogField} from '../../../../components/Dialog/Dialog';
+import {DialogError, DialogField, YTDFDialog} from '../../../../components/Dialog/Dialog';
 import {useDispatch, useSelector} from 'react-redux';
 import {
     getNavigationTableSortError,
@@ -105,7 +105,7 @@ export default function TableSortModal() {
     }
 
     return !visible ? null : (
-        <Dialog<FormValues>
+        <YTDFDialog<FormValues>
             className={block()}
             visible={visible}
             headerProps={{

@@ -183,7 +183,7 @@ export type DialogTabField<FieldT> =
     | DFDialogTabField<FieldT>
     | RegisteredDialogTabField<'yt-create-table-tab', any, FieldT>;
 
-export default function YTInfraDialog<Values, InitialValues = Partial<Values>>(
+export function YTDFDialog<Values, InitialValues = Partial<Values>>(
     props: DFDialogProps<
         Values,
         InitialValues,

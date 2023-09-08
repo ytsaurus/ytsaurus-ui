@@ -33,7 +33,7 @@ import {MetricData, MetricListItem} from '../odin-utils';
 import {OdinOverviewStateDataItem} from '../_reducers/odin-overview';
 import Link from '../../../components/Link/Link';
 // @ts-ignore
-import InfraDialog from '../../../components/Dialog/Dialog';
+import {YTDFDialog} from '../../../components/Dialog/Dialog';
 
 import ErrorBoundary from '../../../components/ErrorBoundary/ErrorBoundary';
 import {Dialog, Popup} from '@gravity-ui/uikit';
@@ -151,7 +151,7 @@ function OdinOverviewRemoveConfirmationDialog() {
     }, [presetToRemove, dispatch]);
 
     return (
-        <InfraDialog
+        <YTDFDialog
             pristineSubmittable
             visible={Boolean(presetToRemove)}
             onClose={handleClose}

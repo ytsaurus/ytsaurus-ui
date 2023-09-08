@@ -1,7 +1,7 @@
 import React from 'react';
 import _ from 'lodash';
 
-import Dialog, {DialogError, FormApi} from '../../../../components/Dialog/Dialog';
+import {DialogError, FormApi, YTDFDialog} from '../../../../components/Dialog/Dialog';
 import {useDispatch, useSelector} from 'react-redux';
 import {
     getNavigationTableMergeVisible,
@@ -91,7 +91,7 @@ export default function TableMergeModal() {
     const outputPath = paths?.length === 1 ? paths[0] : undefined;
 
     return (
-        <Dialog<FormValues>
+        <YTDFDialog<FormValues>
             visible={visible}
             headerProps={{
                 title: 'Merge',

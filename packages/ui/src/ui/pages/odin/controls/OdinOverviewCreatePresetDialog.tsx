@@ -1,7 +1,7 @@
 import React from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {getOdinOverviewShowCreatePresetDialog} from '../_selectors/odin-overview';
-import Dialog from '../../../components/Dialog/Dialog';
+import {YTDFDialog} from '../../../components/Dialog/Dialog';
 import {odinOverviewAddPreset, odinOverviewShowCreatePresetDialog} from '../_actions/odin-overview';
 import {getSettingOdinOverviewVisiblePresets} from '../_selectors';
 
@@ -26,7 +26,7 @@ export default function OdinOverviewCreatePresetDialog() {
     );
 
     return (
-        <Dialog
+        <YTDFDialog
             visible={visible}
             headerProps={{
                 title: 'Create preset',

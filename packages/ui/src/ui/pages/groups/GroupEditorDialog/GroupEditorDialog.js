@@ -1,4 +1,4 @@
-import Dialog from '../../../components/Dialog/Dialog';
+import {YTDFDialog} from '../../../components/Dialog/Dialog';
 import React from 'react';
 import cn from 'bem-cn-lite';
 import PropTypes from 'prop-types';
@@ -110,7 +110,7 @@ class GroupEditorDialog extends React.Component {
         const {visible, closeGroupEditorModal, groupName, idm, members, otherMembers, responsible} =
             this.props;
         return (
-            <Dialog
+            <YTDFDialog
                 size={'l'}
                 className={block(null)}
                 pristineSubmittable={false}

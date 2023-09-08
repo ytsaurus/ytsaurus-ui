@@ -2,7 +2,7 @@ import React from 'react';
 import _ from 'lodash';
 import cn from 'bem-cn-lite';
 
-import Dialog, {DialogError} from '../../../components/Dialog/Dialog';
+import {DialogError, YTDFDialog} from '../../../components/Dialog/Dialog';
 import {useDispatch, useSelector} from 'react-redux';
 import {
     dynTablesChangeState,
@@ -64,7 +64,7 @@ export default function DynTablesStateModal() {
     const warning = renderWarning(action);
 
     return (
-        <Dialog
+        <YTDFDialog
             visible
             onAdd={onAdd}
             onClose={onClose}

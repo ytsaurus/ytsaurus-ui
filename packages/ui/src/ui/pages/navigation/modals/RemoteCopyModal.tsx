@@ -2,7 +2,7 @@ import React from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import _ from 'lodash';
 
-import YTInfraDialog, {DialogError, FormApi} from '../../../components/Dialog/Dialog';
+import {DialogError, FormApi, YTDFDialog} from '../../../components/Dialog/Dialog';
 import {
     getRemoteCopyCodecs,
     getRemoteCopyModalPaths,
@@ -79,7 +79,7 @@ function RemoteCopyModal() {
     const {compression_codec, erasure_codec} = useSelector(getRemoteCopyCodecs);
 
     return !visible ? null : (
-        <YTInfraDialog<Values>
+        <YTDFDialog<Values>
             visible={true}
             onAdd={handleAdd}
             onClose={handleClose}

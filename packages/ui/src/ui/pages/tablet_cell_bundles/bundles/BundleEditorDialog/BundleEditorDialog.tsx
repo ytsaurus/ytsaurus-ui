@@ -5,12 +5,13 @@ import _ from 'lodash';
 
 import {Info} from '../../../../components/Info/Info';
 import {BundleParamsList} from './components/BundleParamsList/BundleParamsList';
-import Dialog, {
+import {
     DialogError,
     DialogField,
     DialogTabField,
     FORM_ERROR,
     FormApi,
+    YTDFDialog,
 } from '../../../../components/Dialog/Dialog';
 import hammer from '../../../../common/hammer';
 
@@ -638,7 +639,7 @@ export function BundleEditorDialog() {
     }
 
     return (
-        <Dialog<BundleEditorDialogFormValues>
+        <YTDFDialog<BundleEditorDialogFormValues>
             className={block('dialog')}
             headerProps={{
                 title: bundleName,
