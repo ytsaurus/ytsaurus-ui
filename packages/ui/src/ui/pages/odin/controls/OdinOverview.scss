@@ -1,0 +1,178 @@
+@use 'sass:math';
+
+$size: 20px;
+$row_width: $size * 30;
+
+.odin-overview {
+    &__grid {
+        display: grid;
+        grid-template-columns: auto auto 1fr;
+        column-gap: 1em;
+    }
+
+    &__dates {
+        display: flex;
+        justify-content: space-between;
+        color: var(--secondary-text);
+        font-size: 12px;
+
+        &-item {
+            margin-top: auto;
+            position: relative;
+            left: math.div($size, 8);
+
+            &-to {
+                position: relative;
+                left: calc(100% - #{$size});
+            }
+        }
+    }
+
+    &__show-hide-all {
+        text-align: center;
+        font-size: 1.25em;
+    }
+    &__save {
+        font-size: 1.25em;
+    }
+
+    &__graph {
+        height: $size;
+
+        &-cell {
+            min-width: $row_width;
+        }
+    }
+    &__hidden-graph {
+        color: var(--secondary-text);
+        text-align: center;
+    }
+
+    &__name {
+        white-space: nowrap;
+    }
+
+    &__svg {
+        width: $row_width;
+        height: $size;
+
+        &:hover {
+            opacity: 0.8;
+        }
+    }
+
+    &__rect {
+        cursor: pointer;
+        fill: var(--danger-color);
+
+        &_state {
+            &_available {
+                fill: var(--success-color);
+            }
+            &_no_data {
+                fill: var(--dark-divider);
+            }
+            &_partially_available {
+                fill: var(--warning-color);
+            }
+        }
+
+        &:hover {
+            opacity: 0.6;
+        }
+    }
+
+    &__status {
+        font-weight: bold;
+        margin-left: 2ex;
+        color: var(--danger-color);
+
+        &_state {
+            &_available {
+                color: var(--success-color);
+            }
+            &_no_data {
+                color: var(--secondary-text);
+            }
+            &_partially_available {
+                color: var(--warning-color);
+            }
+        }
+    }
+
+    &__dialog {
+        .yc-dialog-header__caption {
+            flex-grow: 1;
+        }
+    }
+
+    &__dialog-header {
+        text-align: center;
+    }
+
+    &__dialog-time {
+        color: var(--secondary-text);
+        padding-right: 1em;
+    }
+
+    &__dialog-message {
+        max-width: 80vw;
+        max-height: 80vh;
+        overflow: auto;
+
+        padding: 10px;
+        background-color: var(--light-background);
+        border-left: 2px solid var(--dark-divider);
+
+        word-break: break-all;
+        word-wrap: break-word;
+        white-space: pre-wrap;
+    }
+
+    &__presets {
+        padding-bottom: 1em;
+    }
+
+    &__preset {
+        height: 28px;
+        font-size: 13px;
+        display: inline-flex;
+        align-items: center;
+        padding: 0 13px;
+        margin-bottom: 10px;
+        min-width: 120px;
+        max-width: 220px;
+        border-radius: 4px;
+        cursor: pointer;
+        background-color: var(--filter-color);
+        &:hover {
+            background-color: var(--filter-hover);
+        }
+        &:not(:last-child) {
+            margin-right: 20px;
+        }
+
+        &-star {
+            flex-shrink: 0;
+        }
+
+        &-name {
+            padding-right: 1ex;
+            flex-grow: 1;
+            flex-shrink: 1;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            padding-left: 1ex;
+        }
+
+        &-remove {
+            flex-shrink: 0;
+        }
+    }
+
+    &__preset-to-remove {
+        font-weight: bold;
+    }
+}
+

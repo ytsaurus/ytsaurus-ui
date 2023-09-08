@@ -1,0 +1,97 @@
+.odin {
+    &__toolbar,
+    &__cluster-toolbar {
+        display: flex;
+        align-items: center;
+        flex-wrap: nowrap;
+    }
+
+    &__cluster-picker {
+        max-width: 50ex;
+    }
+
+    &__tabs {
+        padding-bottom: 1em;
+    }
+
+    &__toolbar-metric-filter {
+        width: 240px;
+    }
+
+    &__toolbar-current-date,
+    &__toolbar-availability-message {
+        display: flex;
+        align-items: center;
+    }
+
+    &__monitor {
+        margin-left: -20px;
+        position: relative;
+
+        .d3-tooltip {
+            line-height: 1;
+            font-weight: bold;
+            padding: 12px;
+            background: var(--secondary-text);
+            color: var(--light-text);
+            border-radius: 2px;
+            pointer-events: none;
+            transform: translate(-50%, -100%);
+        }
+
+        /* Creates a small triangle extender for the tooltip */
+        .d3-tooltip:after {
+            box-sizing: border-box;
+            display: inline;
+            font-size: 10px;
+            width: 100%;
+            line-height: 1;
+            color: var(--secondary-text);
+            position: absolute;
+            pointer-events: none;
+            content: '\25BC';
+            margin: -1px 0 0;
+            top: 100%;
+            left: 0;
+            text-align: center;
+        }
+
+        svg {
+            shape-rendering: crispEdges;
+
+            .availability {
+                fill: var(--dark-background);
+                stroke: var(--dark-divider);
+
+                cursor: pointer;
+
+                &-mouseover {
+                    fill: var(--main-background);
+                    opacity: 0.8;
+                }
+
+                &-high {
+                    fill: var(--success-color);
+                }
+
+                &-medium {
+                    fill: var(--warning-color);
+                }
+
+                &-low {
+                    fill: var(--danger-color);
+                }
+
+                &-row-label,
+                &-col-label {
+                    font-size: 10px;
+                    fill: var(--primary-text);
+
+                    &.availability-mouseover {
+                        fill: var(--danger-color);
+                    }
+                }
+            }
+        }
+    }
+}
