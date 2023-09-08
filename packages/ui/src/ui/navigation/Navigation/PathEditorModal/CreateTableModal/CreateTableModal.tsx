@@ -4,7 +4,7 @@ import {connect} from 'react-redux';
 import _ from 'lodash';
 
 import Button from '../../../../components/Button/Button';
-import Dialog, {FormApi} from '../../../../components/Dialog/Dialog';
+import {FormApi, YTDFDialog} from '../../../../components/Dialog/Dialog';
 import Icon from '../../../../components/Icon/Icon';
 import Link from '../../../../components/Link/Link';
 
@@ -519,7 +519,7 @@ class CreateTableModalContentImpl extends React.Component<Props> {
         const name = `${parentDirectory}/New table`;
 
         return (
-            <Dialog<FIX_MY_TYPE>
+            <YTDFDialog<FIX_MY_TYPE>
                 virtualized
                 pristineSubmittable
                 className={block(null, className)}

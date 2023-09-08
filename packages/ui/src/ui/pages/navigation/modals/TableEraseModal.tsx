@@ -1,6 +1,6 @@
 import React from 'react';
 
-import Dialog, {DialogError, FormApi} from '../../../components/Dialog/Dialog';
+import {DialogError, FormApi, YTDFDialog} from '../../../components/Dialog/Dialog';
 import {makeLink} from '../../../navigation/Navigation/PathEditorModal/CreateTableModal/CreateTableModal';
 import {useDispatch, useSelector} from 'react-redux';
 import {
@@ -55,7 +55,7 @@ export default function TableEraseModal() {
     }, [dispatch]);
 
     return (
-        <Dialog<FormValues>
+        <YTDFDialog<FormValues>
             visible={visible}
             headerProps={{
                 title: 'Erase table rows',

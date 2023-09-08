@@ -4,7 +4,7 @@ import _ from 'lodash';
 
 import Link from '../../../../components/Link/Link';
 import Error from '../../../../components/Error/Error';
-import Dialog, {FormApi} from '../../../../components/Dialog/Dialog';
+import {FormApi, YTDFDialog} from '../../../../components/Dialog/Dialog';
 import Button from '../../../../components/Button/Button';
 
 import {getCurrentUserName} from '../../../../store/selectors/global';
@@ -141,7 +141,7 @@ function CreatePoolDialog(props: {onClose: () => void}) {
     );
 
     return (
-        <Dialog
+        <YTDFDialog
             visible={true}
             onClose={props.onClose}
             headerProps={{

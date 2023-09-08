@@ -17,7 +17,7 @@ import Modal from '../../../../../components/Modal/Modal';
 import {getPath} from '../../../../../store/selectors/navigation';
 import {ConnectedProps, connect} from 'react-redux';
 import Error from '../../../../../components/Block/Block';
-import Dialog, {DialogField} from '../../../../../components/Dialog/Dialog';
+import {DialogField, YTDFDialog} from '../../../../../components/Dialog/Dialog';
 import {Progress} from '@gravity-ui/uikit';
 
 import hammer from '../../../../../common/hammer';
@@ -155,7 +155,7 @@ class UploadManager extends React.Component<Props, State> {
 
         const {fields, initials} = this.typeSpecificFields();
         return (
-            <Dialog
+            <YTDFDialog
                 onAdd={() => Promise.resolve()}
                 onClose={() => {}}
                 visible={true}

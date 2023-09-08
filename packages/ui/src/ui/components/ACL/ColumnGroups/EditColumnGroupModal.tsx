@@ -1,5 +1,5 @@
 import React, {useMemo, useState} from 'react';
-import Dialog, {makeErrorFields} from '../../../components/Dialog/Dialog';
+import {YTDFDialog, makeErrorFields} from '../../../components/Dialog/Dialog';
 import {ColumnGroup} from '../../../utils/acl/acl-types';
 import _ from 'lodash';
 
@@ -39,7 +39,7 @@ export default function EditColumnGroupModal({
     }, [initialData]);
 
     return (
-        <Dialog<FormValues>
+        <YTDFDialog<FormValues>
             pristineSubmittable
             visible={visible}
             modal={true}

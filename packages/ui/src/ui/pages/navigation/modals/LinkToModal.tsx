@@ -1,7 +1,7 @@
 import React from 'react';
 import cn from 'bem-cn-lite';
 
-import Dialog, {DialogError, DialogField, FormApi} from '../../../components/Dialog/Dialog';
+import {DialogError, DialogField, FormApi, YTDFDialog} from '../../../components/Dialog/Dialog';
 import {useDispatch, useSelector} from 'react-redux';
 import {getLinkToModalState} from '../../../store/selectors/navigation/modals/link-to-modal';
 import {createLink, hideLinkToModal} from '../../../store/actions/navigation/modals/link-to-modal';
@@ -46,7 +46,7 @@ export default function LinkToModal() {
     }
 
     return !visible ? null : (
-        <Dialog<LinkToModalState>
+        <YTDFDialog<LinkToModalState>
             className={block()}
             visible={true}
             headerProps={{

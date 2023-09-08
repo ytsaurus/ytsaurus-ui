@@ -4,7 +4,7 @@ import cn from 'bem-cn-lite';
 
 import _isEqual from 'lodash/isEqual';
 
-import Dialog, {DialogField, FormApi} from '../../../components/Dialog/Dialog';
+import {DialogField, FormApi, YTDFDialog} from '../../../components/Dialog/Dialog';
 import {Dialog as CommonDialog, Loader} from '@gravity-ui/uikit';
 
 import RoleListControl, {
@@ -218,7 +218,7 @@ function ManageAcl(props: Props) {
 
     const renderDialog = () => {
         return (
-            <Dialog<FormValues>
+            <YTDFDialog<FormValues>
                 pristineSubmittable
                 modal={false}
                 visible={Boolean(visible)}

@@ -4,7 +4,7 @@ import cn from 'bem-cn-lite';
 
 import Button from '../../../../components/Button/Button';
 import Icon from '../../../../components/Icon/Icon';
-import Dialog, {FormApi} from '../../../../components/Dialog/Dialog';
+import {FormApi, YTDFDialog} from '../../../../components/Dialog/Dialog';
 import {YTError} from '../../../../types';
 import Error from '../../../../components/Error/Error';
 
@@ -70,7 +70,7 @@ function ReplicatedTableSettingsDialog(props: Props & SettingsProps) {
         [props.mode, props.state, props.onApply, setError],
     );
     return (
-        <Dialog<FormValues>
+        <YTDFDialog<FormValues>
             visible={props.visible}
             onAdd={handleApply}
             onClose={props.onClose}

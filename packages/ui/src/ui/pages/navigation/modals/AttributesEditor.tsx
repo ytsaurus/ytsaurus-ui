@@ -5,11 +5,12 @@ import cn from 'bem-cn-lite';
 import ypath from '../../../common/thor/ypath';
 
 // @ts-ignore
-import Dialog, {
+import {
     DialogError,
     DialogField,
     DialogTabField,
     FormApi,
+    YTDFDialog,
 } from '../../../components/Dialog/Dialog';
 import {
     getNavigationAttributesEditorAttributes,
@@ -348,7 +349,7 @@ function AttributesEditorLoaded() {
     const erasureCodecs = useSelector(getErasureCodecs);
 
     return (
-        <Dialog
+        <YTDFDialog
             className={block({'single-mode': singleMode})}
             visible={true}
             onAdd={handleAdd}

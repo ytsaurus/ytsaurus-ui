@@ -1,4 +1,4 @@
-import Dialog, {FormApi, makeErrorFields} from '../../../components/Dialog/Dialog';
+import {FormApi, YTDFDialog, makeErrorFields} from '../../../components/Dialog/Dialog';
 import React from 'react';
 import cn from 'bem-cn-lite';
 import PropTypes from 'prop-types';
@@ -177,7 +177,7 @@ class UsersPageEditor extends React.Component<Props, State> {
         return (
             <React.Fragment>
                 <GroupsLoader />
-                <Dialog<FormValues>
+                <YTDFDialog<FormValues>
                     className={block(null, className)}
                     headerProps={{
                         title: `User ${username}`,

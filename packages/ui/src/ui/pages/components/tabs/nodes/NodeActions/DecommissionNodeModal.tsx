@@ -1,5 +1,5 @@
 import React from 'react';
-import YTInfraDialog, {DialogError, FormApi} from '../../../../../components/Dialog/Dialog';
+import {DialogError, FormApi, YTDFDialog} from '../../../../../components/Dialog/Dialog';
 import {getComponentsDecommissionData} from '../../../../../store/selectors/components/nodes/decommission';
 import {useDispatch, useSelector} from 'react-redux';
 import {YTError} from '../../../../../types';
@@ -35,7 +35,7 @@ function DecommissionNodeModal() {
     }, [dispatch]);
 
     return (
-        <YTInfraDialog<FormValues>
+        <YTDFDialog<FormValues>
             onAdd={handleAdd}
             onClose={handleClose}
             visible={Boolean(host)}

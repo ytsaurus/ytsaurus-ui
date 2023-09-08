@@ -10,7 +10,7 @@ import Modal from '../../../../../components/Modal/Modal';
 import {getPath} from '../../../../../store/selectors/navigation';
 import {ConnectedProps, connect} from 'react-redux';
 import Error from '../../../../../components/Block/Block';
-import Dialog from '../../../../../components/Dialog/Dialog';
+import {YTDFDialog} from '../../../../../components/Dialog/Dialog';
 import {Progress} from '@gravity-ui/uikit';
 
 import hammer from '../../../../../common/hammer';
@@ -127,7 +127,7 @@ class UploadManagerCreate extends React.Component<Props, State> {
         const {name} = this.state;
         const inProgress = this.inProgress();
         return (
-            <Dialog
+            <YTDFDialog
                 onAdd={() => Promise.resolve()}
                 onClose={() => {}}
                 visible={true}
