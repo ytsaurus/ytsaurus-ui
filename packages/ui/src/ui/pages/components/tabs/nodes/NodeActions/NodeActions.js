@@ -13,18 +13,12 @@ import './NodeActions.scss';
 
 const block = cn('node-actions');
 
-import {
-    JOBS,
-    TABLET_CELLS,
-    WRITE_SESSION,
-} from '../../../../../constants/components/nodes/actions/disable-enable';
 import {openResourcesModal} from '../../../../../store/actions/components/nodes/actions/set-resources-limits';
-import {openDisableModal} from '../../../../../store/actions/components/nodes/actions/disable-enable';
-import {openBanModal, openUnbanModal} from '../../../../../store/actions/components/ban-unban';
+import {openUnbanModal} from '../../../../../store/actions/components/ban-unban';
 import {nodeProps} from '../../../../../pages/components/tabs/nodes/NodeCard/NodeCard';
 import {getCluster} from '../../../../../store/selectors/global';
 import {DropdownMenu} from '@gravity-ui/uikit';
-import {toggleNodeDecommissioned} from '../../../../../store/actions/components/nodes/actions/decommission';
+import {showNodeMaintenance} from '../../../../../store/actions/components/node-maintenance-modal';
 
 import UIFactory from '../../../../../UIFactory';
 
@@ -44,47 +38,93 @@ class NodeActions extends Component {
         node: nodeProps.isRequired,
 
         // from connect
-        openBanModal: PropTypes.func.isRequired,
         openUnbanModal: PropTypes.func.isRequired,
-        openDisableModal: PropTypes.func.isRequired,
         openResourcesModal: PropTypes.func.isRequired,
     };
 
     get items() {
-        const {openDisableModal, openResourcesModal, toggleNodeDecommissioned, node} = this.props;
+        const {openResourcesModal, node, showNodeMaintenance} = this.props;
         const {host, disableWriteSession, disableTabletCells, disableJobs, decommissioned} = node;
-
-        const writeSessionType = disableWriteSession ? 'enable' : 'disable';
-        const tabletCellsType = disableTabletCells ? 'enable' : 'disable';
-        const jobsType = disableJobs ? 'enable' : 'disable';
 
         return [
             {
                 text: disableJobs ? 'Enable jobs' : 'Disable jobs',
-                action: () => openDisableModal({host, type: jobsType, subject: JOBS}),
+                action: () => {
+                    if (disableJobs) {
+                        showNodeMaintenance({
+                            address: host,
+                            command: 'remove_maintenance',
+                            type: 'disable_scheduler_jobs',
+                            component: 'cluster_node',
+                        });
+                    } else {
+                        showNodeMaintenance({
+                            address: host,
+                            command: 'add_maintenance',
+                            type: 'disable_scheduler_jobs',
+                            component: 'cluster_node',
+                        });
+                    }
+                },
             },
             {
                 text: disableWriteSession ? 'Enable write session' : 'Disable write session',
-                action: () =>
-                    openDisableModal({
-                        host,
-                        type: writeSessionType,
-                        subject: WRITE_SESSION,
-                    }),
+                action: () => {
+                    if (disableWriteSession) {
+                        showNodeMaintenance({
+                            address: host,
+                            command: 'remove_maintenance',
+                            type: 'disable_write_sessions',
+                            component: 'cluster_node',
+                        });
+                    } else {
+                        showNodeMaintenance({
+                            address: host,
+                            command: 'add_maintenance',
+                            type: 'disable_write_sessions',
+                            component: 'cluster_node',
+                        });
+                    }
+                },
             },
             {
                 text: disableTabletCells ? 'Enable tablet cells' : 'Disable tablet cells',
-                action: () =>
-                    openDisableModal({
-                        host,
-                        type: tabletCellsType,
-                        subject: TABLET_CELLS,
-                    }),
+                action: () => {
+                    if (disableTabletCells) {
+                        showNodeMaintenance({
+                            address: host,
+                            command: 'remove_maintenance',
+                            type: 'disable_tablet_cells',
+                            component: 'cluster_node',
+                        });
+                    } else {
+                        showNodeMaintenance({
+                            address: host,
+                            command: 'add_maintenance',
+                            type: 'disable_tablet_cells',
+                            component: 'cluster_node',
+                        });
+                    }
+                },
             },
             {
                 text: decommissioned ? 'Recommission node' : 'Decommission node',
                 action: () => {
-                    toggleNodeDecommissioned(node);
+                    if (decommissioned) {
+                        showNodeMaintenance({
+                            address: host,
+                            command: 'remove_maintenance',
+                            type: 'decommission',
+                            component: 'cluster_node',
+                        });
+                    } else {
+                        showNodeMaintenance({
+                            address: host,
+                            command: 'add_maintenance',
+                            type: 'decommission',
+                            component: 'cluster_node',
+                        });
+                    }
                 },
             },
             {
@@ -105,15 +145,25 @@ class NodeActions extends Component {
     }
 
     handleBanClick = () => {
-        const {node, openBanModal} = this.props;
+        const {node, showNodeMaintenance} = this.props;
 
-        openBanModal(node.host);
+        showNodeMaintenance({
+            address: node.host,
+            command: 'add_maintenance',
+            type: 'ban',
+            component: 'cluster_node',
+        });
     };
 
     handleUnbanClick = () => {
-        const {node, openUnbanModal} = this.props;
+        const {node, showNodeMaintenance} = this.props;
 
-        openUnbanModal(node.host);
+        showNodeMaintenance({
+            address: node.host,
+            command: 'remove_maintenance',
+            type: 'ban',
+            component: 'cluster_node',
+        });
     };
 
     render() {
@@ -190,11 +240,9 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = {
-    openBanModal,
     openUnbanModal,
-    openDisableModal,
     openResourcesModal,
-    toggleNodeDecommissioned,
+    showNodeMaintenance,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(NodeActions);

@@ -168,6 +168,7 @@ export enum YTApiId {
 
     addMaintenance,
     removeMaintenance,
+    maintenanceRequests,
 }
 
 interface RumWrapApi {

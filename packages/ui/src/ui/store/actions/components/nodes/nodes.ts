@@ -19,7 +19,6 @@ import {
 } from '../../../../store/selectors/components/nodes/nodes';
 import {getTemplates} from '../../../../store/selectors/settings';
 import type {RootState} from '../../../../store/reducers';
-import type {DecommissionAction} from '../../../../store/reducers/components/decommission';
 import {Node} from '../../../../store/reducers/components/nodes/nodes/node';
 import type {
     NodesAction,
@@ -43,19 +42,11 @@ import {prepareAttributes} from '../../../../utils/cypress-attributes';
 import {splitBatchResults, wrapApiPromiseByToaster} from '../../../../utils/utils';
 import {NodeType} from '../../../../../shared/constants/system';
 import {BatchSubRequest} from '../../../../../shared/yt-types';
-import {isSupportedNodeMaintenanceApi} from 'store/selectors/thor/support';
-import {getClusterUiConfig} from 'store/selectors/global';
-import {createSelector} from 'reselect';
 
 const {COMPONENTS} = NAMESPACES;
 const {TEMPLATES} = SettingName.COMPONENTS;
 
-export type NodesThunkAction = ThunkAction<
-    void,
-    RootState,
-    never,
-    DecommissionAction | NodesAction
->;
+export type NodesThunkAction = ThunkAction<void, RootState, unknown, NodesAction>;
 
 export function changeContentMode(
     contentMode: NodesState['contentMode'],
@@ -271,10 +262,3 @@ export function getComponentsNodesFilterOptions(): NodesThunkAction {
             });
     };
 }
-
-export const isAllowedMaintenanceApi = createSelector(
-    [isSupportedNodeMaintenanceApi, getClusterUiConfig],
-    (isSupported, uiConfig) => {
-        return isSupported && Boolean(uiConfig.enable_nodes_maintenance_api);
-    },
-);

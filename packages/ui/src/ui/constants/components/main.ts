@@ -8,5 +8,3 @@ export const Tab = {
 } as const;
 
 export const DEFAULT_TAB = Tab.VERSIONS;
-
-export const DECOMMISSION_PARTIAL = 'DECOMMISSION_PARTIAL';
