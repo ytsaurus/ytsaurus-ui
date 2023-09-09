@@ -11,9 +11,7 @@ import LoadDataHandler from '../../../../components/LoadDataHandler/LoadDataHand
 import ClipboardButton from '../../../../components/ClipboardButton/ClipboardButton';
 import ElementsTable from '../../../../components/ElementsTable/ElementsTable';
 import ErrorBoundary from '../../../../components/ErrorBoundary/ErrorBoundary';
-import UnbanModal from '../../../../pages/components/UnbanModal/UnbanModal';
 import TableInfo from '../../../../pages/components/TableInfo/TableInfo';
-import BanModal from '../../../../pages/components/BanModal/BanModal';
 import Filter from '../../../../components/Filter/Filter';
 import Select from '../../../../components/Select/Select';
 import ProxyCard from './ProxyCard/ProxyCard';
@@ -31,9 +29,9 @@ import {
     getStates,
     getVisibleProxies,
 } from '../../../../store/selectors/components/proxies/proxies';
-import {banProxy, unbanProxy} from '../../../../store/actions/components/proxies/actions/ban-unban';
 import {mergeScreen, splitScreen as splitScreenAction} from '../../../../store/actions/global';
 import {proxiesTableColumnItems} from '../../../../utils/components/proxies/table';
+import {showNodeMaintenance} from '../../../../store/actions/components/node-maintenance-modal';
 import Updater from '../../../../utils/hammer/updater';
 import {HEADER_HEIGHT} from '../../../../constants/index';
 import {isPaneSplit} from '../../../../utils';
@@ -44,6 +42,7 @@ import {
     SPLIT_TYPE,
 } from '../../../../constants/components/proxies/proxies';
 import {NodeColumnBanned, NodeColumnRole, NodeColumnState, NodeColumnText} from '../NodeColumns';
+import {NodeMaintenanceModal} from '../../NodeMaintenanceModal/NodeMaintenanceModal';
 
 import './Proxies.scss';
 
@@ -88,8 +87,6 @@ export class Proxies extends Component {
         changeStateFilter: PropTypes.func.isRequired,
         changeRoleFilter: PropTypes.func.isRequired,
 
-        banProxy: PropTypes.func.isRequired,
-        unbanProxy: PropTypes.func.isRequired,
         splitScreenAction: PropTypes.func.isRequired,
         mergeScreen: PropTypes.func.isRequired,
     };
@@ -224,13 +221,23 @@ export class Proxies extends Component {
     };
 
     handleBanClick = (proxy) => {
-        const {banProxy, type} = this.props;
-        banProxy(proxy, type);
+        const {type} = this.props;
+        this.props.showNodeMaintenance({
+            addres: proxy,
+            command: 'add_maintenance',
+            type: 'ban',
+            component: type === PROXY_TYPE.HTTP ? 'http_proxy' : 'rpc_proxy',
+        });
     };
 
     handleUnbanClick = (host) => {
-        const {unbanProxy, type} = this.props;
-        unbanProxy(host, type);
+        const {type} = this.props;
+        this.props.showNodeMaintenance({
+            addres: host,
+            command: 'remove_maintenance',
+            type: 'ban',
+            component: type === PROXY_TYPE.HTTP ? 'http_proxy' : 'rpc_proxy',
+        });
     };
 
     renderActions = (item) => {
@@ -355,9 +362,8 @@ export class Proxies extends Component {
 
         return (
             <Fragment>
-                <BanModal ban={this.handleBanClick} label="You are about to ban proxy" />
-                <UnbanModal unban={this.handleUnbanClick} label="You are about to unban proxy" />
                 <ChangeRoleModal type={type} />
+                <NodeMaintenanceModal />
             </Fragment>
         );
     }
@@ -430,8 +436,7 @@ const mapDispatchToProps = {
     splitScreenAction,
     mergeScreen,
 
-    banProxy,
-    unbanProxy,
+    showNodeMaintenance,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Proxies);

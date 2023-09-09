@@ -145,7 +145,6 @@ export function fetchTabletsBundles(): TabletsBundlesThunkAction {
                     .get(YTApiId.bundleControllerZones, {
                         parameters: {
                             path: `//sys/bundle_controller/controller/zones`,
-                            values: Object.keys(zones),
                             attributes: ['tablet_node_sizes', 'rpc_proxy_sizes'],
                         },
                         cancellation: cancelHelper.saveCancelToken,
