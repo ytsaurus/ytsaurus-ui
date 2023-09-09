@@ -2,15 +2,16 @@ import React, {Component, Fragment} from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 
+import {DropdownMenu} from '@gravity-ui/uikit';
+
 import ClickableAttributesButton from '../../../../../components/AttributesButton/ClickableAttributesButton';
 import {ProxyCard} from '../../../../../pages/components/tabs/Proxies/ProxyCard/ProxyCard';
 import Button from '../../../../../components/Button/Button';
 import Icon from '../../../../../components/Icon/Icon';
 
 import {openChangeRoleModal} from '../../../../../store/actions/components/proxies/actions/change-role';
-import {openBanModal, openUnbanModal} from '../../../../../store/actions/components/ban-unban';
 import {PROXY_TYPE} from '../../../../../constants/components/proxies/proxies';
-import {DropdownMenu} from '@gravity-ui/uikit';
+import {showNodeMaintenance} from '../../../../../store/actions/components/node-maintenance-modal';
 
 class ProxyActions extends Component {
     static propTypes = {
@@ -19,8 +20,6 @@ class ProxyActions extends Component {
         type: PropTypes.oneOf([PROXY_TYPE.HTTP, PROXY_TYPE.RPC]).isRequired,
 
         // from connect
-        openBanModal: PropTypes.func.isRequired,
-        openUnbanModal: PropTypes.func.isRequired,
         openChangeRoleModal: PropTypes.func.isRequired,
     };
 
@@ -40,15 +39,23 @@ class ProxyActions extends Component {
     }
 
     handleBanClick = () => {
-        const {proxy, openBanModal} = this.props;
-
-        openBanModal(proxy.host);
+        const {proxy, type} = this.props;
+        this.props.showNodeMaintenance({
+            address: proxy.host,
+            command: 'add_maintenance',
+            component: type === PROXY_TYPE.HTTP ? 'http_proxy' : 'rpc_proxy',
+            type: 'ban',
+        });
     };
 
     handleUnbanClick = () => {
-        const {proxy, openUnbanModal} = this.props;
-
-        openUnbanModal(proxy.host);
+        const {proxy, type} = this.props;
+        this.props.showNodeMaintenance({
+            address: proxy.host,
+            command: 'remove_maintenance',
+            component: type === PROXY_TYPE.HTTP ? 'http_proxy' : 'rpc_proxy',
+            type: 'ban',
+        });
     };
 
     handleChangeRoleClick = () => {
@@ -112,9 +119,8 @@ class ProxyActions extends Component {
 }
 
 const mapDispatchToProps = {
-    openBanModal,
-    openUnbanModal,
     openChangeRoleModal,
+    showNodeMaintenance,
 };
 
 export default connect(null, mapDispatchToProps)(ProxyActions);

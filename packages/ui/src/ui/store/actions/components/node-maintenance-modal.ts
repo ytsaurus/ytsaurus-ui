@@ -3,22 +3,27 @@ import filter_ from 'lodash/filter';
 import partition_ from 'lodash/partition';
 
 import format from '../../../common/hammer/format';
+import ypath from '../../../common/thor/ypath';
 
-import {RootState} from '../../reducers';
-import {
-    NodeMaintenanceAction,
-    NodeMaintenanceState,
-} from '../../reducers/components/node-maintenance-modal';
+import {RootState} from '../../../store/reducers';
 import {
     NODE_MAINTENANCE_PARTIAL,
     NODE_MAINTENANCE_RESET,
 } from '../../../constants/components/node-maintenance-modal';
-import {isAllowedMaintenanceApi} from '../../../store/selectors/components/node-maintenance-modal';
+import {
+    NodeMaintenanceAction,
+    NodeMaintenanceState,
+} from '../../../store/reducers/components/node-maintenance-modal';
+import {
+    isAllowedMaintenanceApiNodes,
+    isAllowedMaintenanceApiProxies,
+} from '../../../store/selectors/components/node-maintenance-modal';
 import {wrapApiPromiseByToaster} from '../../../utils/utils';
 import {YTApiId, ytApiV3, ytApiV3Id} from '../../../rum/rum-wrap-api';
 import {AddMaintenanceParams} from '../../../../shared/yt-types';
 import {updateComponentsNode} from './nodes/nodes';
-import {getCurrentUserName} from 'store/selectors/global';
+import {getCurrentUserName} from '../../../store/selectors/global';
+import {getProxies} from './proxies/proxies';
 
 type NodeMaintenanceThunkAction<T = Promise<unknown>> = ThunkAction<
     T,
@@ -34,7 +39,7 @@ function makeNodePath(address: string, component: AddMaintenanceParams['componen
         case 'http_proxy':
             return `//sys/http_proxies/${address}`;
         case 'rpc_proxy':
-            return `//sys/rpc_proxy/${address}`;
+            return `//sys/rpc_proxies/${address}`;
         default:
             throw new Error(`Unexpected component type: ${component}`);
     }
@@ -53,10 +58,7 @@ const applyObsoleteMaintenance: typeof applyMaintenance = (
                 const banned = command === 'add_maintenance';
                 return Promise.all([
                     ytApiV3.set({path: `${path}/@banned`}, banned),
-                    ytApiV3.set(
-                        {path: '//sys/cluster_nodes/' + address + '/@ban_message'},
-                        comment,
-                    ),
+                    ytApiV3.set({path: `${path}/@ban_message`}, comment),
                 ]);
             }
             case 'disable_scheduler_jobs':
@@ -79,15 +81,22 @@ export function applyMaintenance(
     data: Pick<AddMaintenanceParams, 'component' | 'address' | 'comment' | 'type'>,
 ): NodeMaintenanceThunkAction {
     return (dispatch, getState) => {
+        const {component, address, comment, type} = data;
+
         const onSuccess = () => {
-            dispatch(updateComponentsNode(data.address));
+            switch (component) {
+                case 'cluster_node':
+                    return dispatch(updateComponentsNode(data.address));
+                case 'http_proxy':
+                    return dispatch(getProxies('http'));
+                case 'rpc_proxy':
+                    return dispatch(getProxies('rpc'));
+            }
         };
 
-        if (!isAllowedMaintenanceApi(getState())) {
+        if (!isMaintenanceApiAllowedForComponent(component, getState())) {
             return dispatch(applyObsoleteMaintenance(command, data)).then(onSuccess);
         }
-
-        const {component, address, comment, type} = data;
 
         return wrapApiPromiseByToaster(
             ytApiV3Id.executeBatch(YTApiId.addMaintenance, {
@@ -142,25 +151,26 @@ export function loadNodeMaintenanceComments({
     Promise<{mine?: string; others?: string}>
 > {
     return (_dispatch, getState) => {
-        if (!isAllowedMaintenanceApi(getState())) {
+        if (!isMaintenanceApiAllowedForComponent(component, getState())) {
             return Promise.resolve({});
         }
 
         const user = getCurrentUserName(getState());
-        const path = `${makeNodePath(address, component)}/@maintenance_requests`;
+        const path = makeNodePath(address, component);
 
         return wrapApiPromiseByToaster(
             ytApiV3Id.get(YTApiId.maintenanceRequests, {
                 path,
+                attributes: ['maintenance_requests', type],
             }),
             {
                 toasterName: 'maintenance_request_' + path,
                 skipSuccessToast: true,
-                errorContent: `Cannot load ${path}`,
+                errorContent: `Cannot load '@maintenance_requests' for ${path}`,
             },
         ).then((data: Record<string, MaintenanceRequestInfo>) => {
-            const [mine, others] = partition_(
-                filter_(data, (item) => {
+            const [mine = [], others = []] = partition_(
+                filter_(ypath.get(data, '/@maintenance_requests'), (item) => {
                     return item.type === type;
                 }),
                 (item) => {
@@ -179,4 +189,19 @@ export function loadNodeMaintenanceComments({
 
 export function closeNodeMaintenanceModal(): NodeMaintenanceAction {
     return {type: NODE_MAINTENANCE_RESET};
+}
+
+function isMaintenanceApiAllowedForComponent(
+    component: AddMaintenanceParams['component'],
+    state: RootState,
+) {
+    switch (component) {
+        case 'cluster_node':
+            return isAllowedMaintenanceApiNodes(state);
+        case 'http_proxy':
+        case 'rpc_proxy':
+            return isAllowedMaintenanceApiProxies(state);
+        default:
+            return false;
+    }
 }

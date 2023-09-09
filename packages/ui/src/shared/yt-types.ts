@@ -86,6 +86,7 @@ export interface BaseBatchParams {
     disable_per_user_cache?: boolean;
     suppress_transaction_coordinator_sync?: boolean;
     suppress_upstream_sync?: boolean;
+    annotate_with_types?: boolean;
 }
 
 export interface PathParams extends BaseBatchParams {

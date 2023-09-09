@@ -78,6 +78,11 @@ function getHttpProxies() {
     };
 }
 
+/**
+ *
+ * @param {'http' | 'rpc'} type
+ * @returns
+ */
 export function getProxies(type) {
     return (dispatch) => {
         dispatch({type: GET_PROXIES.REQUEST});

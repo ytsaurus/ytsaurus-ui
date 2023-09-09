@@ -68,13 +68,14 @@ It is supposed that a user is developer on a cluster if he has `write` access to
 
 Available flags (**default values** are highlighted in bold):
 
-| Flag name                            | Allowed values          | Description                                                                                                                                                     |
-| :----------------------------------- | :---------------------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| web_json_value_format                | **"schemaless"**, "yql" | Allows to use `YQLv3 types` [YTFRONT-2804](https://nda.ya.ru/t/bgh9NWJ16fPRp4)                                                                                  |
-| enable_per_bundle_tablet_accounting  | **false**, true         | Allows editing of resources of tablets through BundleEditorDialog [YTFRONT-2851](https://nda.ya.ru/t/xnLq-3Dm6fPYPo)                                            |
-| enable_per_account_tablet_accounting | **true**, false         | Allows editing of resources of tablets through AccountEditorDialog [YTFRONT-2851](https://nda.ya.ru/t/xnLq-3Dm6fPYPo)                                           |
-| per_bundle_accounting_help_link      | **null**, url as string | Help link for resources of tablets to display from AccountEditorDialog about moving the resources to bundles [YTFRONT-2851](https://nda.ya.ru/t/xnLq-3Dm6fPYPo) |
-| enable_nodes_maintenance_api         | **null**, boolean       | Allows to use `add_maintenance`/`remove_maintenance` commands from UI [YTFRONT-3792](https://nda.ya.ru/t/RvueJLzN6fWx3h)                                        |
+| Flag name                            | Allowed values          | Description                                                                                                                                                                        |
+| :----------------------------------- | :---------------------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| web_json_value_format                | **"schemaless"**, "yql" | Allows to use `YQLv3 types` [YTFRONT-2804](https://nda.ya.ru/t/bgh9NWJ16fPRp4)                                                                                                     |
+| enable_per_bundle_tablet_accounting  | **false**, true         | Allows editing of resources of tablets through BundleEditorDialog [YTFRONT-2851](https://nda.ya.ru/t/xnLq-3Dm6fPYPo)                                                               |
+| enable_per_account_tablet_accounting | **true**, false         | Allows editing of resources of tablets through AccountEditorDialog [YTFRONT-2851](https://nda.ya.ru/t/xnLq-3Dm6fPYPo)                                                              |
+| per_bundle_accounting_help_link      | **null**, url as string | Help link for resources of tablets to display from AccountEditorDialog about moving the resources to bundles [YTFRONT-2851](https://nda.ya.ru/t/xnLq-3Dm6fPYPo)                    |
+| enable_maintenance_api_nodes         | **null**, boolean       | Allows to use `add_maintenance`/`remove_maintenance` commands from `Comopnents/Nodes` page [YTFRONT-3792](https://nda.ya.ru/t/RvueJLzN6fWx3h)                                      |
+| enable_maintenance_api_proxies       | **null**, boolean       | Allows to use `add_maintenance`/`remove_maintenance` commands from `Components/HTTP Proxies` and `Components/RPC Proxies` pages [YTFRONT-3792](https://nda.ya.ru/t/RvueJLzN6fWx3h) |
 
 |
 

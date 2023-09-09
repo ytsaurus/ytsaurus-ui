@@ -14,7 +14,6 @@ import './NodeActions.scss';
 const block = cn('node-actions');
 
 import {openResourcesModal} from '../../../../../store/actions/components/nodes/actions/set-resources-limits';
-import {openUnbanModal} from '../../../../../store/actions/components/ban-unban';
 import {nodeProps} from '../../../../../pages/components/tabs/nodes/NodeCard/NodeCard';
 import {getCluster} from '../../../../../store/selectors/global';
 import {DropdownMenu} from '@gravity-ui/uikit';
@@ -38,7 +37,6 @@ class NodeActions extends Component {
         node: nodeProps.isRequired,
 
         // from connect
-        openUnbanModal: PropTypes.func.isRequired,
         openResourcesModal: PropTypes.func.isRequired,
     };
 
@@ -240,7 +238,6 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = {
-    openUnbanModal,
     openResourcesModal,
     showNodeMaintenance,
 };

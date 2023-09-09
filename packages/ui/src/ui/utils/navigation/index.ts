@@ -52,18 +52,20 @@ export function prepareRequest(
         relativePath = parameters.relativePath!;
     }
 
-    const {path, transaction, ...rest} = parameters;
+    const {path, relativePath: _x, transaction, ...rest} = parameters;
 
-    const restParameters: Partial<RelativePath & {transaction_id: string}> = rest;
+    const restParameters: {transaction_id?: string} = rest;
 
-    restParameters.path = path + (relativePath ? relativePath : '');
+    const resultPath = path + (relativePath ? relativePath : '');
 
     if (transaction?.length) {
         restParameters.transaction_id = transaction;
     }
 
-    delete restParameters['relativePath'];
-    return restParameters;
+    return {
+        ...restParameters,
+        path: resultPath,
+    };
 }
 
 export function hasViewerForType(type: string): boolean {

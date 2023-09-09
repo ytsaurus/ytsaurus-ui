@@ -7,9 +7,16 @@ import {isSupportedNodeMaintenanceApi} from '../thor/support';
 export const getNodeMaintenanceModalData = (state: RootState) =>
     state.components.nodeMaintenanceModal;
 
-export const isAllowedMaintenanceApi = createSelector(
+export const isAllowedMaintenanceApiNodes = createSelector(
     [isSupportedNodeMaintenanceApi, getClusterUiConfig],
     (isSupported, uiConfig) => {
-        return isSupported && Boolean(uiConfig.enable_nodes_maintenance_api);
+        return isSupported && Boolean(uiConfig.enable_maintenance_api_nodes);
+    },
+);
+
+export const isAllowedMaintenanceApiProxies = createSelector(
+    [isSupportedNodeMaintenanceApi, getClusterUiConfig],
+    (isSupported, uiConfig) => {
+        return isSupported && Boolean(uiConfig.enable_maintenance_api_proxies);
     },
 );
