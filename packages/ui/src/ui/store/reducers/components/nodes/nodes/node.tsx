@@ -37,6 +37,7 @@ export class Node {
         'ban_message',
         'decommissioned',
         'decommission_message',
+        'alert_count',
         'alerts',
         'rack',
         'register_time',
@@ -89,7 +90,8 @@ export class Node {
         return limit ? (usage / limit) * 100 : 0;
     }
 
-    alerts!: object[];
+    alertCount?: number;
+    alerts?: object[];
     banMessage?: string;
     banned!: boolean;
     chaosSlots!: TabletSlots;
@@ -179,6 +181,7 @@ export class Node {
         this.banMessage = ypath.getValue(attributes, '/ban_message');
         this.decommissioned = ypath.getBoolean(attributes, '/decommissioned');
         this.decommissionedMessage = ypath.getValue(attributes, '/decommission_message');
+        this.alertCount = ypath.getValue(attributes, '/alert_count');
         this.alerts = ypath.getValue(attributes, '/alerts');
         this.effectiveState = this.banned ? 'banned' : this.state;
         this.tags = ypath.getValue(attributes, '/tags');
@@ -199,7 +202,7 @@ export class Node {
             this.effectiveFlag = 'decommissioned';
         } else if (this.full) {
             this.effectiveFlag = 'full';
-        } else if (this.alerts && this.alerts.length > 0) {
+        } else if (this.alertCount! > 0) {
             this.effectiveFlag = 'alerts';
         } else {
             this.effectiveFlag = '';
@@ -423,7 +426,7 @@ type AttributeName = (typeof Node.ATTRIBUTES)[number];
 
 type Attributes = Record<AttributeName, FIX_MY_TYPE>;
 
-const alertsAttributes: ReadonlyArray<AttributeName> = ['alerts'];
+const alertCountAttributes: ReadonlyArray<AttributeName> = ['alert_count'];
 const bannedAttributes: ReadonlyArray<AttributeName> = ['banned'];
 const dataCenterAttributes: ReadonlyArray<AttributeName> = ['data_center'];
 const decommissionedAttributes: ReadonlyArray<AttributeName> = ['decommissioned'];
@@ -452,7 +455,8 @@ const spaceTotalAttributes = _.union(spaceUsedAttributes, spaceAvailableAttribut
 const userSlotsAttributes = _.union(resourceUsageAttributes, resourceLimitsAttributes);
 
 export const AttributesByProperty: Record<keyof Node, ReadonlyArray<AttributeName>> = {
-    alerts: alertsAttributes,
+    alerts: ['alerts'],
+    alertCount: alertCountAttributes,
     banMessage: ['ban_message'],
     banned: bannedAttributes,
     chunks: ['/statistics/total_stored_chunk_count'],
@@ -465,7 +469,7 @@ export const AttributesByProperty: Record<keyof Node, ReadonlyArray<AttributeNam
     disableJobs: ['disable_scheduler_jobs'],
     disableTabletCells: ['disable_tablet_cells'],
     disableWriteSession: ['disable_write_sessions'],
-    effectiveFlag: _.union(decommissionedAttributes, fullAttributes, alertsAttributes),
+    effectiveFlag: _.union(decommissionedAttributes, fullAttributes, alertCountAttributes),
     effectiveState: _.union(bannedAttributes, stateAttributes),
     enabledLocations: locationsAttributes,
     full: fullAttributes,

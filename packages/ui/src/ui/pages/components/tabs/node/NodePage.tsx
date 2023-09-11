@@ -14,7 +14,7 @@ import {loadNodeAttributes} from '../../../../store/actions/components/node/node
 import Updater from '../../../../utils/hammer/updater';
 import {makeTabProps} from '../../../../utils';
 import type {RootState} from '../../../../store/reducers';
-import {getNodeAlerts, nodeSelector} from '../../../../store/selectors/components/node/node';
+import {getNodeAlertCount, nodeSelector} from '../../../../store/selectors/components/node/node';
 import {getSortedItems} from '../../../../store/selectors/components/nodes/node-card';
 import NodeMeta from './NodeMeta/NodeMeta';
 
@@ -38,7 +38,7 @@ function NodePage({match}: NodeDetailsProps): ReturnType<React.VFC> {
     const {node, loading, loaded, error, errorData} = useSelector(nodeSelector);
 
     const host = decodeURIComponent(match.params.host);
-    const alerts = useSelector(getNodeAlerts);
+    const alertCount = useSelector(getNodeAlertCount);
 
     React.useEffect(() => {
         const loadHandler = () => dispatch(loadNodeAttributes(host));
@@ -65,7 +65,7 @@ function NodePage({match}: NodeDetailsProps): ReturnType<React.VFC> {
                     [NodeTab.MEMORY_USAGE]: {show: Boolean(node && tabletSlots.length > 0)},
                     [NodeTab.LOCATIONS]: {show: Boolean(node?.locations?.length)},
                     [NodeTab.TABLET_SLOTS]: {show: Boolean(node && tabletSlots.length > 0)},
-                    [NodeTab.ALERTS]: {show: Boolean(alerts?.length), counter: alerts?.length},
+                    [NodeTab.ALERTS]: {show: Boolean(alertCount), counter: alertCount},
                 },
                 null,
                 {
@@ -73,7 +73,7 @@ function NodePage({match}: NodeDetailsProps): ReturnType<React.VFC> {
                     [NodeTab.MEMORY_USAGE]: 'Memory usage',
                 },
             ),
-        [matchUrl, alerts, tabletSlots],
+        [matchUrl, alertCount, tabletSlots],
     );
 
     return (
