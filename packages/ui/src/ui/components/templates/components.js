@@ -1,5 +1,3 @@
-import './components/components';
-
 import './components/versions';
 import './components/nodes/nodes';
 import './components/nodes/node';

@@ -36,7 +36,7 @@ interface Props {
     decommissioned: Node['decommissioned'];
     decommissionedMessage?: Node['decommissionedMessage'];
     full: Node['full'];
-    alerts: Node['alerts'];
+    alertCount?: Node['alertCount'];
     dataCenter: Node['dataCenter'];
     lastSeenTime: Node['lastSeenTime'];
     disableJobs: Node['disableJobs'];
@@ -56,7 +56,7 @@ function NodeMeta({
     decommissioned,
     decommissionedMessage,
     full,
-    alerts,
+    alertCount,
     dataCenter,
     lastSeenTime,
     disableJobs,
@@ -69,7 +69,6 @@ function NodeMeta({
     const stateText = hammer.format['FirstUppercase'](state);
     const stateTheme = getStateTheme(state);
 
-    const alertsCount = alerts?.length || 0;
     const metaTableItems = React.useMemo(
         () => [
             {
@@ -104,8 +103,8 @@ function NodeMeta({
             },
             {
                 key: 'alerts',
-                value: <Label text={alertsCount} theme="danger" type="text" />,
-                visible: alertsCount > 0,
+                value: <Label text={alertCount} theme="danger" type="text" />,
+                visible: alertCount! > 0,
             },
             {
                 key: 'scheduler jobs',
@@ -132,7 +131,7 @@ function NodeMeta({
             },
         ],
         [
-            alertsCount,
+            alertCount,
             banMessage,
             banned,
             dataCenter,

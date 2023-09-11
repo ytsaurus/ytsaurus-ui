@@ -1,20 +1,17 @@
 import React from 'react';
 import _ from 'lodash';
 import {COMPONENTS_NODES_TABLE_ID} from '../../../constants/components/nodes/nodes';
-import {Page} from '../../../constants/index';
 import {DESC_ASC_UNORDERED, compareArraysBySizeThenByItems} from '../../../utils/sort-helpers';
 
 import {Progress} from '@gravity-ui/uikit';
 import Version from '../../../pages/components/tabs/nodes/Version';
 import StatusBlock from '../../../components/StatusBlock/StatusBlock';
 import ClipboardButton from '../../../components/ClipboardButton/ClipboardButton';
-import Link from '../../../components/Link/Link';
-import {Tab} from '../../../constants/components/main';
+import Label from '../../../components/Label/Label';
 import NodeActions from '../../../pages/components/tabs/nodes/NodeActions/NodeActions';
 import MemoryProgress from '../../../pages/components/tabs/nodes/MemoryProgress/MemoryProgress';
 
 import hammer from '../../../common/hammer';
-import templates from '../../../components/templates/utils.js';
 import {
     TABLET_SLOTS,
     prepareUsageText,
@@ -36,7 +33,7 @@ export const PropertiesByColumn = {
         'resourcesLimit',
         'resourcesLimitOverrides',
     ],
-    alerts: ['alerts'],
+    alert_count: ['alertCount'],
     banned: ['banned'],
     chunks: ['chunks'],
     cpu: ['cpuProgress', 'cpuText'],
@@ -243,14 +240,14 @@ const nodesTableProps = {
                 caption: 'F',
                 tooltipProps: {placement: 'bottom', content: 'Full'},
             },
-            alerts: {
+            alert_count: {
                 get(item) {
-                    return item.alerts;
+                    return item.alertCount;
+                },
+                sort(item) {
+                    return item.alertCount;
                 },
                 align: 'center',
-                sort: (item) => {
-                    return item?.alerts?.length || undefined;
-                },
                 caption: 'A',
                 tooltipProps: {placement: 'bottom', content: 'Alerts'},
             },
@@ -594,7 +591,7 @@ const nodesTableProps = {
                     'banned',
                     'decommissioned',
                     'full',
-                    'alerts',
+                    'alert_count',
                     'version',
                     'last_seen',
                     'actions',
@@ -652,7 +649,7 @@ const nodesTableProps = {
                     'banned',
                     'decommissioned',
                     'full',
-                    'alerts',
+                    'alert_count',
                     'last_seen',
                     'actions',
                 ],
@@ -692,20 +689,59 @@ export const NODES_TABLE_TEMPLATES: Templates = {
             return hammer.format['Number'](item.IOWeight[mediumName]);
         }
     },
-
     host(item, columnName) {
-        const {cluster, host} = item;
         return (
-            <Link routed url={`/${cluster}/${Page.COMPONENTS}/${Tab.NODES}/${host}/general`}>
-                {templates.get('components').host(item, columnName)}
-            </Link>
+            <div
+                className="elements-column_type_id elements-column_with-hover-button"
+                title={item.host}
+            >
+                <span className="elements-monospace elements-ellipsis">
+                    {hammer.format['Address'](item.host)}
+                </span>
+                &nbsp;
+                <ClipboardButton
+                    text={item.host}
+                    view="flat-secondary"
+                    size="s"
+                    title={'Copy ' + columnName}
+                />
+            </div>
         );
     },
-    state: templates.get('components').state,
-    banned: templates.get('components').banned,
-    decommissioned: templates.get('components').decommissioned,
-    full: templates.get('components').full,
-    alerts: templates.get('components').alerts,
+    state(item) {
+        const text = hammer.format['FirstUppercase'](item.state);
+        const theme =
+            (
+                {
+                    online: 'success',
+                    offline: 'danger',
+                    error: 'danger',
+                } as const
+            )[item.state] || 'default';
+
+        return <Label theme={theme} type="text" text={text} />;
+    },
+    banned(item) {
+        return item.banned ? <StatusBlock text="B" theme="banned" /> : hammer.format.NO_VALUE;
+    },
+    decommissioned(item) {
+        return item.decommissioned ? (
+            <StatusBlock text="D" theme="decommissioned" />
+        ) : (
+            hammer.format.NO_VALUE
+        );
+    },
+    full(item) {
+        return item.full ? <StatusBlock text="F" theme="full" /> : hammer.format.NO_VALUE;
+    },
+
+    alert_count(item) {
+        return item.alertCount! > 0 ? (
+            <StatusBlock text={item.alertCount!} theme="alerts" />
+        ) : (
+            hammer.format.NO_VALUE
+        );
+    },
 
     physical_host(item, columnName) {
         return (

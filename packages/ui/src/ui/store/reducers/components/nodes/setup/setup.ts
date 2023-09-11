@@ -47,7 +47,7 @@ export interface NodesSetupState {
         banned: FlagState;
         decommissioned: FlagState;
         full: FlagState;
-        alerts: FlagState;
+        alertCount: FlagState;
     };
     storage: {
         sessions: NodeRange;
@@ -118,7 +118,7 @@ export const initialFiltersState: NodesSetupState = {
         banned: 'all',
         decommissioned: 'all',
         full: 'all',
-        alerts: 'all',
+        alertCount: 'all',
     },
     storage: {
         sessions: _.cloneDeep(groupFilterInitialState),

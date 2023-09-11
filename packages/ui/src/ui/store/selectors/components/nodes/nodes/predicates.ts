@@ -59,7 +59,7 @@ const PropertiesByPredicate = {
     banned: ['banned'],
     decommissioned: ['decommissioned'],
     full: ['full'],
-    alerts: ['alerts'],
+    alertCount: ['alertCount'],
     disableJobs: ['disableJobs'],
     disableWriteSession: ['disableWriteSession'],
     disableTabletCells: ['disableTabletCells'],
@@ -149,7 +149,7 @@ const getFilterPredicatesObject = createSelector(
                 setupFilters.default.decommissioned,
             ),
             full: createFlagPredicate('full', setupFilters.default.full),
-            alerts: createAlertsFlagPredicate(setupFilters.default.alerts),
+            alertCount: createAlertsFlagPredicate(setupFilters.default.alertCount),
 
             disableJobs: createAttributeStatePredicate(
                 'disableJobs',
@@ -498,12 +498,12 @@ function createAlertsFlagPredicate(flag: FlagState) {
         return undefined;
     }
 
-    return (node: Pick<Node, 'alerts'>) => {
+    return (node: Pick<Node, 'alertCount'>) => {
         if (flag === 'disabled') {
-            return node['alerts'] ? node['alerts'].length === 0 : true;
+            return node.alertCount === 0;
         }
 
-        return node['alerts']?.length! > 0;
+        return node.alertCount! > 0;
     };
 }
 

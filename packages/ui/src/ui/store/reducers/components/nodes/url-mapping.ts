@@ -56,7 +56,7 @@ const {
     banned: bannedInitialState,
     decommissioned: decommissionedInitialState,
     full: fullInitialState,
-    alerts: alertsInitialState,
+    alertCount: alertsInitialState,
     schedulerJobs: schedulerJobsInitialState,
     writeSessions: writeSessionsInitialState,
     tabletCells: tabletCellsInitialState,
