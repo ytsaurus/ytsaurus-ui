@@ -6,6 +6,7 @@ import './RoleGroup.scss';
 
 import format from '../../../common/hammer/format';
 import {ProgressCircle} from '../../../components/ProgressCircle/ProgressCircle';
+import {GridWithMediaMinWidth} from '../../../containers/GridWithMediaMinWidth/GridWithMediaMinWidth';
 
 import type {RoleGroupInfo, SystemNodeCounters} from '../../../store/reducers/system/proxies';
 import type {NodeEffectiveState} from '../../../store/reducers/system/nodes';
@@ -19,7 +20,16 @@ export type MakeUrlParams = {
 };
 
 export function RoleGroupsContainer({children}: {children: React.ReactNode}) {
-    return <div className={block('container')}>{children}</div>;
+    return (
+        <GridWithMediaMinWidth
+            gap={10}
+            itemMinWidth={300}
+            itemMaxWidth={450}
+            className={block('container')}
+        >
+            {children}
+        </GridWithMediaMinWidth>
+    );
 }
 
 export function RoleGroup({

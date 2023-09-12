@@ -38,6 +38,7 @@ export interface AppNavigationProps {
 
     compact: boolean;
     onChangeCompact: (compact: boolean) => void;
+    rememberSize: (asideWidth: number) => void;
 }
 
 function AppNavigationComponent({
@@ -58,6 +59,8 @@ function AppNavigationComponent({
 
     compact,
     onChangeCompact,
+
+    rememberSize,
 }: AppNavigationProps) {
     const panelItems = React.useMemo(() => {
         return [
@@ -101,6 +104,7 @@ function AppNavigationComponent({
             compact={compact}
             onChangeCompact={onChangeCompact}
             renderContent={(size) => {
+                rememberSize(size.size);
                 return (
                     <div
                         style={{

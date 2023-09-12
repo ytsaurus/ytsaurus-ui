@@ -203,3 +203,5 @@ export const getGlobalShowLoginDialog = (state: RootState) => {
 export const getAuthPagesEnabled = () => {
     return getConfigData().allowLoginDialog;
 };
+
+export const getGlobalAsideHeaderWidth = (state: RootState) => state.global.asideHeaderWidth;
