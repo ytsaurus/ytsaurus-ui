@@ -19,6 +19,8 @@ import {ping} from './controllers/ping';
 import {handleChangePassword, handleLogin, handleLogout} from './controllers/login';
 import {getClusterPools} from './controllers/scheduling-pools';
 import {markdownToHtmlHandler} from './controllers/markdown-to-html';
+import {odinProxyApi} from './controllers/odin-proxy-api';
+import {getClustersAvailability} from './controllers/availability';
 
 const HOME_INDEX_TARGET: AppRouteDescription = {handler: homeIndex, ui: true};
 
@@ -42,6 +44,9 @@ const routes: Record<string, AppRouteDescription> = {
     'PUT  /api/yt/:cluster/api/:version/:command': {handler: ytTvmApiHandler},
 
     'GET /api/yt-proxy/:cluster/:command': {handler: ytProxyApi},
+
+    'GET /api/odin/proxy/:action/:cluster?': {handler: odinProxyApi},
+    'GET /api/odin/clusters/availability': {handler: getClustersAvailability},
 
     'GET    /api/settings/:username': {handler: settingsGet},
     'POST   /api/settings/:username': {handler: settingsCreate},

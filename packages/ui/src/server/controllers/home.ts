@@ -4,12 +4,17 @@ import _ from 'lodash';
 import {getLayoutConfig} from '../components/layout-config';
 import {create, get, isRemoteSettingsConfigured} from '../components/settings';
 import {getClusterConfig} from '../components/utils';
-import ServerFactory from '../ServerFactory';
+import ServerFactory, {getApp} from '../ServerFactory';
 import {isLocalModeByEnvironment} from '../utils';
 import {getDafaultUserSettings} from '../utils/default-settings';
+import {ODIN_PAGE_ID} from '../../shared/constants';
 
 function isRootPage(page: string) {
-    return -1 !== ServerFactory.getExtraRootPages().indexOf(page);
+    const rootPages = [
+        ...(getApp().config?.odinBaseUrl ? [ODIN_PAGE_ID] : []),
+        ...ServerFactory.getExtraRootPages(),
+    ];
+    return -1 !== rootPages.indexOf(page);
 }
 
 export function homeRedirect(req: Request, res: Response) {

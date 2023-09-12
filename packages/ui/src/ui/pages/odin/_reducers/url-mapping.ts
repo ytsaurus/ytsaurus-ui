@@ -4,9 +4,9 @@ import produce from 'immer';
 
 import {initialState} from './odin-details';
 import {DATE_FORMAT} from '../odin-constants';
-import {updateIfChanged} from '@ytsaurus/ui/build/esm/ui/utils/utils';
-import {LocationParameters} from '@ytsaurus/ui/build/esm/ui/store/location';
-import {FIX_MY_TYPE} from '@ytsaurus/ui/build/esm/ui/types';
+import {updateIfChanged} from '../../../utils/utils';
+import {LocationParameters} from '../../../store/location';
+import {FIX_MY_TYPE} from '../../../types';
 import {OdinRootState} from '.';
 
 export const odinParams: LocationParameters = {

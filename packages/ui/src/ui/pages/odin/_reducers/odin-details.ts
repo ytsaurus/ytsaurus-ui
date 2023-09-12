@@ -1,7 +1,7 @@
 import moment from 'moment';
 
-import {mergeStateOnClusterChange} from '@ytsaurus/ui/build/esm/ui/store/reducers/utils';
-import {FIX_MY_TYPE} from '@ytsaurus/ui/build/esm/ui/types';
+import {mergeStateOnClusterChange} from '../../../store/reducers/utils';
+import {FIX_MY_TYPE} from '../../../types';
 import {
     DATE_FORMAT,
     GET_METRIC_DATA,
@@ -13,7 +13,7 @@ import {
 } from '../odin-constants';
 import {currentDate} from '../odin-utils';
 
-interface OdinDetailsEphemeral {
+export interface OdinDetailsEphemeral {
     metricAvailability: Array<{
         message: string;
         state: 'available' | 'no_data' | 'unavailable' | 'partially_available';
@@ -24,7 +24,7 @@ interface OdinDetailsEphemeral {
     errorData: unknown;
 }
 
-interface OdinDetailsPersisted {
+export interface OdinDetailsPersisted {
     metric: string;
     useCurrentDate: boolean;
     date: string | null;

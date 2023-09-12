@@ -4,20 +4,20 @@ import {connect, useDispatch, useSelector} from 'react-redux';
 import block from 'bem-cn-lite';
 import {Redirect, Route, Switch, useRouteMatch} from 'react-router';
 
-import Message from '@ytsaurus/ui/build/esm/ui/components/Message/Message';
-import ErrorBoundary from '@ytsaurus/ui/build/esm/ui/components/ErrorBoundary/ErrorBoundary';
-import ClusterSelectControl from '@ytsaurus/ui/build/esm/ui/components/Dialog/controls/ClusterSelectControl/ClusterSelectControl';
-import {setRootPagesCluster} from '@ytsaurus/ui/build/esm/ui/store/actions/global';
-import {getCluster, getUISizes} from '@ytsaurus/ui/build/esm/ui/store/selectors/global';
-import Tabs from '@ytsaurus/ui/build/esm/ui/components/Tabs/Tabs';
-import {OdinTab} from '../odin-constants';
-import {makeTabProps} from '@ytsaurus/ui/build/esm/ui/utils';
+import Message from '../../../components/Message/Message';
+import ErrorBoundary from '../../../components/ErrorBoundary/ErrorBoundary';
+import ClusterSelectControl from '../../../components/Dialog/controls/ClusterSelectControl/ClusterSelectControl';
+import {setRootPagesCluster} from '../../../store/actions/global';
+import {getCluster, getUISizes} from '../../../store/selectors/global';
+import Tabs from '../../../components/Tabs/Tabs';
+import {ODIN_PAGE_ID, OdinTab} from '../odin-constants';
+import {makeTabProps} from '../../../utils';
 import OdinOverview from './OdinOverview';
 import Toolbar from './OdinToolbar';
 import Monitor from './OdinMonitor';
 
 import Utils from '../odin-utils';
-import Updater from '@ytsaurus/ui/build/esm/ui/utils/hammer/updater';
+import Updater from '../../../utils/hammer/updater';
 import {loadMetricAvailability, setOdinCluster} from '../_actions';
 import {
     getDate,
@@ -26,20 +26,19 @@ import {
     getOdinClusterNamesAsItems,
     getUseCurrentDate,
 } from '../_selectors';
-import {GENERIC_ERROR_MESSAGE} from '@ytsaurus/ui/build/esm/ui/constants/index';
+import {GENERIC_ERROR_MESSAGE} from '../../../constants/index';
 
 import {setOdinLastVisitedTab} from '../_actions/odin-overview';
 import {getOdinLastVisitedTab} from '../_selectors/odin-overview';
-import {CreateNotificationButton} from '@ytsaurus/ui/build/esm/ui/pages/system/System/SystemTopRowContent';
-import YT from '@ytsaurus/ui/build/esm/ui/config/yt-config';
-import {odinPageId} from '../../../../../ya-shared/constants';
+import {CreateNotificationButton} from '../../system/System/SystemTopRowContent';
+import YT from '../../../config/yt-config';
+import RootPage from '../../../containers/RootPage/RootPage';
+import WithStickyToolbar from '../../../components/WithStickyToolbar/WithStickyToolbar';
 
 import './Odin.scss';
-import RootPage from '@ytsaurus/ui/build/esm/ui/containers/RootPage/RootPage';
-import WithStickyToolbar from '@ytsaurus/ui/build/esm/ui/components/WithStickyToolbar/WithStickyToolbar';
 
 const updater = new Updater();
-export const odinCN = block('odin');
+const odinCN = block('odin');
 
 function useLoadMetricAvailability(cluster) {
     const dispatch = useDispatch();
@@ -195,7 +194,7 @@ function IndependentOdinImpl({clusters, cluster, name}) {
     const title = name ? `Odin - ${name}` : 'Odin';
 
     return (
-        <RootPage title={title} currentPathname={`/${odinPageId}`}>
+        <RootPage title={title} currentPathname={`/${ODIN_PAGE_ID}`}>
             <div className={odinCN('landing')}>
                 <Odin showClusterControl cluster={cluster} clusters={clusters} />
             </div>

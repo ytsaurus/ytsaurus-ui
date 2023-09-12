@@ -3,7 +3,7 @@ import _forEach from 'lodash/forEach';
 import _map from 'lodash/map';
 
 import Utils from '../odin-utils';
-import {RootState} from '@ytsaurus/ui/build/esm/ui/store/reducers';
+import {RootState} from '../../../store/reducers';
 import {OdinOverviewAction, OdinOverviewState} from '../_reducers/odin-overview';
 import {
     ODIN_OVERVIEW_CANCELLED,
@@ -22,15 +22,11 @@ import {
     getOdinOverviewHiddenMetrics,
     getOdinOverviewVisiblePresets,
 } from '../_selectors/odin-overview';
-import {reloadSetting, setSetting} from '@ytsaurus/ui/build/esm/ui/store/actions/settings';
+import {reloadSetting, setSetting} from '../../../store/actions/settings';
 import {Toaster} from '@gravity-ui/uikit';
-import {showErrorPopup} from '@ytsaurus/ui/build/esm/ui/utils/utils';
-import {NAMESPACES} from '@ytsaurus/ui/build/esm/shared/constants/settings';
-import {
-    ODIN_LAST_VISITED_TAB,
-    ODIN_VISIBLE_METRIC_PRESETS,
-    YA_NAMESPACES,
-} from '_yandex-team/ya-settings';
+import {showErrorPopup} from '../../../utils/utils';
+import {NAMESPACES} from '../../../../shared/constants/settings';
+import {ODIN_LAST_VISITED_TAB, ODIN_VISIBLE_METRIC_PRESETS, YA_NAMESPACES} from '../odin-settings';
 import {OdinRootState} from '../_reducers';
 
 type OdinOverviewThunkAction = ThunkAction<any, OdinRootState & RootState, any, OdinOverviewAction>;
@@ -55,6 +51,7 @@ export function fetchOdinOverview(cluster: string): OdinOverviewThunkAction {
                 data: {data: {}, clusterMetrics: [], dataCluster: cluster},
             });
         }
+
         return Utils.listMetrics()
             .then((clusterMetrics) => {
                 if (getCluterHelper(getState) !== cluster) {

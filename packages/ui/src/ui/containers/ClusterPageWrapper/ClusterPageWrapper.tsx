@@ -4,6 +4,8 @@ import _ from 'lodash';
 
 import ClusterPage from '../ClusterPage/ClusterPage';
 import UIFactory from '../../UIFactory';
+import {odinRootPageInfo} from '../../pages/odin';
+import {hasOdinPage} from '../../config';
 
 export default class ClusterPageWrapper extends React.PureComponent {
     render() {
@@ -14,6 +16,13 @@ export default class ClusterPageWrapper extends React.PureComponent {
                         <Route key={index} path={`/${pageId}`} component={reactComponent} />
                     ) : null;
                 })}
+                {hasOdinPage() && (
+                    <Route
+                        path={`/${odinRootPageInfo.pageId}`}
+                        component={odinRootPageInfo.reactComponent}
+                    />
+                )}
+
                 <Route
                     path="/:cluster/"
                     render={(props) => {

@@ -37,6 +37,8 @@ import {registerLocationParameters} from '../../store/location';
 import _ from 'lodash';
 import {registerHeaderLink} from '../../containers/ClustersMenu/header-links-items';
 import {queryTracker} from '../../pages/query-tracker/module';
+import {odinPageInfo, odinRootPageInfo} from '../../pages/odin';
+import {hasOdinPage} from '../../config';
 
 const appReducers = {
     acl,
@@ -102,6 +104,18 @@ export function makeRootReducer() {
     const extraReducersAndUrlMapping = UIFactory.getExtraReducersAndUrlMapping();
     if (extraReducersAndUrlMapping) {
         registerReducersAndUrlMapping(extraReducersAndUrlMapping);
+    }
+
+    if (hasOdinPage()) {
+        registerReducersAndUrlMapping(odinPageInfo);
+        registerReducersAndUrlMapping(odinRootPageInfo);
+        registerExtraPage(odinPageInfo);
+        registerHeaderLink({
+            href: odinRootPageInfo.pageId ? `/${odinRootPageInfo.pageId}` : odinRootPageInfo.href!,
+            text: odinRootPageInfo.title,
+            routed: Boolean(odinRootPageInfo.reactComponent),
+            getVisible: odinRootPageInfo.getVisible,
+        });
     }
 
     const extraPages = UIFactory.getExtaClusterPages();

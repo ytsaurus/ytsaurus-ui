@@ -1,7 +1,7 @@
 import React from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {getOdinOverviewShowCreatePresetDialog} from '../_selectors/odin-overview';
-import Dialog from '@ytsaurus/ui/build/esm/ui/components/Dialog/Dialog';
+import Dialog from '../../../components/Dialog/Dialog';
 import {odinOverviewAddPreset, odinOverviewShowCreatePresetDialog} from '../_actions/odin-overview';
 import {getSettingOdinOverviewVisiblePresets} from '../_selectors';
 

@@ -1,5 +1,6 @@
-import createActionTypes from '@ytsaurus/ui/build/esm/ui/constants/utils';
+import createActionTypes from '../../constants/utils';
 
+export {ODIN_PAGE_ID} from '../../../shared/constants';
 export const ODIN_CELL_SIZE = 20;
 
 const PREFIX = 'ODIN:';

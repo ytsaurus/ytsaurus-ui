@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import * as d3 from 'd3';
 
 import {COLS_NUMBER, ROWS_NUMBER} from '../odin-constants';
-import hammer from '@ytsaurus/ui/build/esm/ui/common/hammer';
+import hammer from '../../../common/hammer';
 
 const size = 19;
 const pad = 4;

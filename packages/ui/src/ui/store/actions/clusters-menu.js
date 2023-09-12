@@ -5,7 +5,7 @@ import {
     UPDATE_FILTER,
     UPDATE_VIEWMODE,
 } from '../../constants/index';
-import UIFactory from '../../UIFactory';
+import {fetchClustersAvailability} from '../../pages/odin/odin-utils';
 
 export function updateViewMode(viewMode) {
     return {type: UPDATE_VIEWMODE, data: viewMode};
@@ -33,7 +33,7 @@ export function fetchClusterVersions() {
 
 export function fetchClusterAvailability() {
     return (dispatch) => {
-        return UIFactory.loadClustersAvailability()
+        return fetchClustersAvailability()
             .then(({data}) => {
                 dispatch({type: FETCH_CLUSTER_AVAILABILITY.SUCCESS, data});
             })

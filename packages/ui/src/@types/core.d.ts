@@ -39,6 +39,11 @@ export interface YTCoreConfig {
     metrikaCounter: Array<MetrikaCounter>;
 
     /**
+     * Odin base url
+     */
+    odinBaseUrl?: string;
+
+    /**
      *  The OAuthRobot should have read/write access to mapNodePath
      */
     userSettingsConfig?: {

@@ -4,7 +4,7 @@ import * as d3 from 'd3';
 import moment from 'moment';
 import _map from 'lodash/map';
 
-import hammer from '@ytsaurus/ui/build/esm/ui/common/hammer';
+import hammer from '../../../common/hammer';
 
 import {useDispatch, useSelector} from 'react-redux';
 import {
@@ -31,20 +31,20 @@ import {
 } from '../_selectors/odin-overview';
 import {MetricData, MetricListItem} from '../odin-utils';
 import {OdinOverviewStateDataItem} from '../_reducers/odin-overview';
-import Link from '@ytsaurus/ui/build/esm/ui/components/Link/Link';
+import Link from '../../../components/Link/Link';
 // @ts-ignore
-import InfraDialog from '@ytsaurus/ui/build/esm/ui/components/Dialog/Dialog';
+import InfraDialog from '../../../components/Dialog/Dialog';
 
-import ErrorBoundary from '@ytsaurus/ui/build/esm/ui/components/ErrorBoundary/ErrorBoundary';
+import ErrorBoundary from '../../../components/ErrorBoundary/ErrorBoundary';
 import {Dialog, Popup} from '@gravity-ui/uikit';
 import {setMetric} from '../_actions';
-import Icon from '@ytsaurus/ui/build/esm/ui/components/Icon/Icon';
+import Icon from '../../../components/Icon/Icon';
 import OdinOverviewCreatePresetDialog from './OdinOverviewCreatePresetDialog';
 
 import {ODIN_CELL_SIZE, OdinTab} from '../odin-constants';
 
 import './OdinOverview.scss';
-import {absolute} from '@ytsaurus/ui/build/esm/ui/common/utils/url-ts';
+import {absolute} from '../../../common/utils/url-ts';
 
 const block = cn('odin-overview');
 
