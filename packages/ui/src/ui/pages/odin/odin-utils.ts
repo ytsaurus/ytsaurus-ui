@@ -1,9 +1,9 @@
 import axios, {Canceler} from 'axios';
 import _ from 'lodash';
 import moment from 'moment';
-// import {odinPath} from '../../../../ya-shared/constants';
 
 import {DATE_FORMAT} from './odin-constants';
+import {hasOdinPage} from '../../config';
 
 type SaveCancelToken = ({cancel}: {cancel: Canceler}) => void;
 type Availability = {[key: string]: MetricData};
@@ -19,7 +19,7 @@ export interface MetricData {
 }
 
 export default class Utils {
-    static ODIN_PATH = odinPath;
+    static ODIN_PATH = '/api/odin/proxy';
     static ODIN_AUTH = 'none';
 
     static request<T = unknown>(path: string, saveCancelToken?: SaveCancelToken): Promise<T> {
@@ -146,3 +146,17 @@ export default class Utils {
 export function currentDate() {
     return moment().startOf('day').format(DATE_FORMAT);
 }
+
+export const fetchClustersAvailability = hasOdinPage()
+    ? () => {
+          return axios.request({
+              method: 'get',
+              url: '/api/odin/clusters/availability',
+          }) as Promise<
+              {
+                  id: string;
+                  availability?: 1 | undefined;
+              }[]
+          >;
+      }
+    : () => Promise.resolve([]);

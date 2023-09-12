@@ -1,4 +1,4 @@
-import {ActionD, YTError} from '@ytsaurus/ui/build/esm/ui/types';
+import {ActionD, YTError} from '../../../types';
 import {AxiosError, Canceler} from 'axios';
 import {
     ODIN_OVERVIEW_CANCELLED,
@@ -9,7 +9,7 @@ import {
     ODIN_OVERVIEW_SUCCESS,
 } from '../odin-constants';
 import {Action} from 'redux';
-import {mergeStateOnClusterChange} from '@ytsaurus/ui/build/esm/ui/store/reducers/utils';
+import {mergeStateOnClusterChange} from '../../../store/reducers/utils';
 import {MetricData, MetricListItem} from '../odin-utils';
 
 export interface OdinOverviewState {

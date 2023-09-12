@@ -19,6 +19,9 @@ import ComponentsTopRowContent from '../../../pages/components/Components/Compon
 import {makeExtraPageTopRowRoutes} from '../../../containers/ClusterPage/ExtraClusterPageRoutes';
 import {QueryTrackerTopRow} from '../../../pages/query-tracker/QueryTrackerTopRow';
 
+import {odinPageInfo} from '../../../pages/odin';
+import {hasOdinPage} from '../../../config';
+
 export default function TopRowContent() {
     const loadState = useSelector(getGlobalLoadState);
     const isAdmin = useSelector(isDeveloper);
@@ -43,6 +46,12 @@ export default function TopRowContent() {
             <Route path={`/:cluster/${Page.COMPONENTS}`} component={ComponentsTopRowContent} />
             {(!adminPages.includes(Page.QUERIES) || isAdmin) && (
                 <Route path={`/:cluster/${Page.QUERIES}`} component={QueryTrackerTopRow} />
+            )}
+            {hasOdinPage() && (
+                <Route
+                    path={`/:cluster/${odinPageInfo.pageId}`}
+                    component={odinPageInfo.topRowComponent}
+                />
             )}
             {makeExtraPageTopRowRoutes()}
             <Route path={'/:cluster/:page'} component={SectionName} />

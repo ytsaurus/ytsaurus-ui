@@ -177,8 +177,6 @@ export interface UIFactory {
         attributes: unknown;
     }): React.ReactNode;
 
-    loadClustersAvailability(): Promise<Array<{id: string; availability?: 1}>>;
-
     renderSchedulingLastDayMaximum(props: {
         className?: string;
         cluster: string;
@@ -446,10 +444,6 @@ const uiFactory: UIFactory = {
 
     renderNavigationExtraActions() {
         return null;
-    },
-
-    loadClustersAvailability() {
-        return Promise.resolve([]);
     },
 
     renderSchedulingLastDayMaximum() {

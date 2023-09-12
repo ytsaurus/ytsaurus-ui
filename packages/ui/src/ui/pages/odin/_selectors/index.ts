@@ -4,10 +4,10 @@ import {createSelector} from 'reselect';
 
 import Utils, {currentDate} from '../odin-utils';
 import {COLS_NUMBER} from '../odin-constants';
-import {makeGetSetting} from '@ytsaurus/ui/build/esm/ui/store/selectors/settings';
-import {ODIN_VISIBLE_METRIC_PRESETS, YA_NAMESPACES} from '../../../ya-settings';
+import {makeGetSetting} from '../../../store/selectors/settings';
+import {ODIN_VISIBLE_METRIC_PRESETS, YA_NAMESPACES} from '../odin-settings';
 import {OdinRootState} from '../_reducers';
-import YT from '@ytsaurus/ui/build/esm/ui/config/yt-config';
+import YT from '../../../config/yt-config';
 
 export const getMetric = (state: OdinRootState) => state.odin.details.metric;
 export const getUseCurrentDate = (state: OdinRootState) => state.odin.details.useCurrentDate;

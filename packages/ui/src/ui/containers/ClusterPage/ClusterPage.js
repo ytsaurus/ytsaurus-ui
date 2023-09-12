@@ -51,6 +51,8 @@ import {useRumMeasureStart, useRumMeasureStop} from '../../rum/RumUiContext';
 import {RumMeasureTypes} from '../../rum/rum-measure-types';
 import {useClusterFromLocation} from '../../hooks/use-cluster';
 import {makeExtraPageRoutes} from './ExtraClusterPageRoutes';
+import {odinPageInfo} from '../../pages/odin';
+import {hasOdinPage} from '../../config';
 
 import './ClusterPage.scss';
 
@@ -288,6 +290,13 @@ class ClusterPage extends Component {
                     {(!adminPages.includes(Page.QUERIES) || isAdmin) && (
                         <Route path={`/:cluster/${Page.QUERIES}`} component={QueryTracker} />
                     )}
+                    {hasOdinPage() && (
+                        <Route
+                            path={`/:cluster/${odinPageInfo.pageId}`}
+                            component={odinPageInfo.reactComponent}
+                        />
+                    )}
+
                     <Redirect
                         from={`/:cluster/${Page.VERSIONS}`}
                         to={`/:cluster/${Page.COMPONENTS}/versions`}

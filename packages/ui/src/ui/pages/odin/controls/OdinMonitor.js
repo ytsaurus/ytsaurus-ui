@@ -2,7 +2,7 @@ import React, {useCallback} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import cn from 'bem-cn-lite';
 
-import LoadDataHandler from '@ytsaurus/ui/build/esm/ui/components/LoadDataHandler/LoadDataHandler';
+import LoadDataHandler from '../../../components/LoadDataHandler/LoadDataHandler';
 import AvailabilityMonitor from './AvailabilityMonitor';
 
 import {getExtendedInfo, getMetricAvailability} from '../_selectors';

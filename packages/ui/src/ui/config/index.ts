@@ -9,6 +9,9 @@ export function getConfigData(): ConfigData {
 export const uiSettings: Partial<Required<ConfigData>['uiSettings']> =
     getConfigData()?.uiSettings || {};
 
+export function hasOdinPage() {
+    return getConfigData().odinPageEnabled;
+}
 export function getSettingsDataFromInitialConfig() {
     return getConfigData().settings;
 }

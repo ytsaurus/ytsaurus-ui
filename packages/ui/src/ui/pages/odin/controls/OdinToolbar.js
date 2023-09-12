@@ -2,8 +2,8 @@ import React, {useCallback, useEffect, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 
 import {Checkbox} from '@gravity-ui/uikit';
-import Select from '@ytsaurus/ui/build/esm/ui/components/Select/Select';
-import {Datepicker} from '@ytsaurus/ui/build/esm/ui/components/common/Datepicker';
+import Select from '../../../components/Select/Select';
+import {Datepicker} from '../../../components/common/Datepicker';
 
 import block from 'bem-cn-lite';
 import _ from 'lodash';
@@ -11,9 +11,9 @@ import _ from 'lodash';
 import {getDate, getMetric, getStat, getUseCurrentDate} from '../_selectors';
 import {setDate, setMetric, toggleUseCurrentDate} from '../_actions';
 import Utils from '../odin-utils';
-import hammer from '@ytsaurus/ui/build/esm/ui/common/hammer';
+import hammer from '../../../common/hammer';
 
-import {odinCN} from './Odin';
+const odinCN = block('odin');
 
 const tbBlock = block('elements-toolbar');
 

@@ -1,10 +1,5 @@
-import axios from 'axios';
-import UIFactory, {
-    UIFactoryClusterPageInfo,
-    UIFactoryRootPageInfo,
-} from '@ytsaurus/ui/build/esm/ui/UIFactory';
-import {odinPageId} from '../../../../ya-shared/constants';
-import svgOdin from '../../icons/page-odin.svg';
+import {UIFactoryClusterPageInfo, UIFactoryRootPageInfo} from '../../UIFactory';
+import {PageOdin} from '../../icons/PageOdin';
 import Odin, {IndependentOdin} from './controls/Odin';
 import OdinTopRowContent from './controls/OdinTopRowContent';
 import reducers from './_reducers';
@@ -14,33 +9,27 @@ import {
     odinOverviewParams,
     odinParams,
 } from './_reducers/url-mapping';
+import {ODIN_PAGE_ID} from './odin-constants';
 
 export const odinPageInfo: UIFactoryClusterPageInfo = {
     title: 'Odin',
-    pageId: odinPageId,
-    svgIcon: svgOdin,
+    pageId: ODIN_PAGE_ID,
+    svgIcon: PageOdin,
     reducers,
     reactComponent: Odin,
     topRowComponent: OdinTopRowContent,
     urlMapping: {
-        [`/*/${odinPageId}/details`]: [odinParams, getOdinPreparedState],
+        [`/*/odin/details`]: [odinParams, getOdinPreparedState],
     },
 };
 
 export const odinRootPageInfo: UIFactoryRootPageInfo = {
     title: 'Odin',
-    pageId: odinPageId,
+    pageId: ODIN_PAGE_ID,
     reactComponent: IndependentOdin,
     reducers: {},
     urlMapping: {
-        [`/${odinPageId}/details`]: [odinIndependentParams, getOdinPreparedState],
-        [`/${odinPageId}/overview`]: [odinOverviewParams, getOdinPreparedState],
+        [`/odin/details`]: [odinIndependentParams, getOdinPreparedState],
+        [`/odin/overview`]: [odinOverviewParams, getOdinPreparedState],
     },
-};
-
-export const fetchClustersAvailability: typeof UIFactory.loadClustersAvailability = () => {
-    return axios.request({
-        method: 'get',
-        url: '/api/odin/clusters/availability',
-    });
 };

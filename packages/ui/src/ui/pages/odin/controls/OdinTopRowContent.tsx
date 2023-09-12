@@ -1,12 +1,13 @@
 import React from 'react';
 
-import {RowWithName} from '@ytsaurus/ui/build/esm/ui/containers/AppNavigation/TopRowContent/SectionName';
-import {CreateClusterNotificationButton} from '@ytsaurus/ui/build/esm/ui/pages/system/System/SystemTopRowContent';
-import {odinPageId} from '../../../../../ya-shared/constants';
+import {RowWithName} from '../../../containers/AppNavigation/TopRowContent/SectionName';
+import {CreateClusterNotificationButton} from '../../system/System/SystemTopRowContent';
+
+import {ODIN_PAGE_ID} from '../odin-constants';
 
 function OdinTopRowContent() {
     return (
-        <RowWithName page={odinPageId} name={'Odin'}>
+        <RowWithName page={ODIN_PAGE_ID} name={'Odin'}>
             <CreateClusterNotificationButton />
         </RowWithName>
     );

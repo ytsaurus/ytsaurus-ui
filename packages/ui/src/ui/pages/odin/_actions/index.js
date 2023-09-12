@@ -9,7 +9,8 @@ import {
     TOGGLE_USE_CURRENT_DATE,
 } from '../odin-constants';
 import {getDate, getMetric} from '../_selectors';
-import CancelHelper from '@ytsaurus/ui/build/esm/ui/utils/cancel-helper';
+import CancelHelper from '../../../utils/cancel-helper';
+
 import Utils from '../odin-utils';
 
 const requests = new CancelHelper();

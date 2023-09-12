@@ -2,10 +2,10 @@ import _ from 'lodash';
 import {createSelector} from 'reselect';
 import {getSettingOdinOverviewVisiblePresets} from './index';
 import {OdinRootState} from '../_reducers';
-import {makeGetSetting} from '@ytsaurus/ui/build/esm/ui/store/selectors/settings';
+import {makeGetSetting} from '../../../store/selectors/settings';
 import {OdinTab} from '../odin-constants';
-import {ODIN_LAST_VISITED_TAB} from '_yandex-team/ya-settings';
-import {NAMESPACES} from '@ytsaurus/ui/build/esm/shared/constants/settings';
+import {ODIN_LAST_VISITED_TAB} from '../odin-settings';
+import {NAMESPACES} from '../../../../shared/constants/settings';
 
 export const getOdinOverviewDateFrom = (state: OdinRootState) => state.odin.overview.dateFrom;
 export const getOdinOverviewDateTo = (state: OdinRootState) => state.odin.overview.dateTo;
