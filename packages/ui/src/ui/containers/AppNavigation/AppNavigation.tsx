@@ -22,6 +22,7 @@ import UIFactory from '../../UIFactory';
 import {AppNavigationProps} from './AppNavigationComponent';
 import {getSettingNavigationPanelExpanded} from '../../store/selectors/settings';
 import {setSettingNavigationPanelExpanded} from '../../store/actions/settings/settings';
+import {setAsideHeaderWidth} from '../../store/actions/global';
 
 const block = cn('app-navigation');
 
@@ -81,9 +82,19 @@ export default function AppNavigation({children}: ExtProps) {
     }, [items, cluster, togglePanelVisibility]);
 
     const expanded = useSelector(getSettingNavigationPanelExpanded);
-    const onChangeCompact = React.useCallback((newCompact: boolean) => {
-        dispatch(setSettingNavigationPanelExpanded(!newCompact));
-    }, []);
+    const onChangeCompact = React.useCallback(
+        (newCompact: boolean) => {
+            dispatch(setSettingNavigationPanelExpanded(!newCompact));
+        },
+        [dispatch],
+    );
+
+    const rememberSize = React.useCallback(
+        (size: number) => {
+            dispatch(setAsideHeaderWidth(size));
+        },
+        [dispatch],
+    );
 
     const props: AppNavigationProps = {
         className: block(),
@@ -108,6 +119,7 @@ export default function AppNavigation({children}: ExtProps) {
         compact: !expanded,
         onChangeCompact,
         children,
+        rememberSize,
     };
 
     return UIFactory.renderAppNavigation(props);

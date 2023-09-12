@@ -72,6 +72,8 @@ const initialState = {
     showLoginDialog: false,
 
     theme: '',
+
+    asideHeaderWidth: 56,
 };
 
 function updatedTitle(state, {cluster, page, path, clusters}) {

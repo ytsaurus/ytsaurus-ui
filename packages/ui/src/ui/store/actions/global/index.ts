@@ -8,6 +8,7 @@ import {normalizeResponseWithAttributes} from '../../../utils';
 import {RootState} from '../../../store/reducers';
 import {
     getBundles,
+    getGlobalAsideHeaderWidth,
     getGlobalGroups,
     getGlobalUsers,
     getPoolTrees,
@@ -40,6 +41,15 @@ export function setTheme(theme: 'light' | 'dark' | 'system' | 'light-hc' | 'dark
 let usersInProgress = false;
 
 type YTThunkAction<T = unknown> = ThunkAction<T, RootState, any, any>;
+
+export function setAsideHeaderWidth(asideHeaderWidth: number): YTThunkAction {
+    return (dispatch, getState) => {
+        const oldWidth = getGlobalAsideHeaderWidth(getState());
+        if (oldWidth !== asideHeaderWidth) {
+            dispatch({type: GLOBAL_PARTIAL, data: {asideHeaderWidth}});
+        }
+    };
+}
 
 export function loadUsersIfNotLoaded(): ThunkAction<any, RootState, any, any> {
     return (dispatch, getState) => {
