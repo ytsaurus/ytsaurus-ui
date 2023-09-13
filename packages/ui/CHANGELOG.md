@@ -6,6 +6,7 @@
 ### Features
 
 * **System/Master:** display 'nonvoting'-flag [YTFRONT-3832] ([77a5953](https://github.com/ytsaurus/ytsaurus-ui/commit/77a5953d07ce5f53fd56f1267c8888a3e6cd2e6a))
+* **Odin:** add Odin page [YTFRONT-3856] ([396a4cc](https://github.com/ytsaurus/ytsaurus-ui/commit/396a4cc04f426fbff9313350a3e8a1175771ce8c))
 
 
 ### Bug Fixes

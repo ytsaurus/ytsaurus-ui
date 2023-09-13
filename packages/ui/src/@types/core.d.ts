@@ -39,7 +39,8 @@ export interface YTCoreConfig {
     metrikaCounter: Array<MetrikaCounter>;
 
     /**
-     * Odin base url
+     * Odin is a service for monitoring the availability of YTsaurus clusters
+     * This parameter sets service base url and enables UI page
      */
     odinBaseUrl?: string;
 
