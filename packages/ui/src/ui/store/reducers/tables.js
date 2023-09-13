@@ -8,7 +8,7 @@ import {ACCOUNTS_TABLE_ID} from '../../constants/accounts/accounts';
 import {
     COMPONENTS_VERSIONS_DETAILED_TABLE_ID,
     COMPONENTS_VERSIONS_SUMMARY_TABLE_ID,
-} from '../../constants/components/versions/versions';
+} from '../../constants/components/versions/versions_v2';
 import {OPERATION_JOBS_TABLE_ID} from '../../constants/operations/jobs';
 import {
     COMPONENTS_NODES_NODE_TABLE_ID,

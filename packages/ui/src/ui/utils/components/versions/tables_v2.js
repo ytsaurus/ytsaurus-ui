@@ -1,7 +1,7 @@
 import {
     COMPONENTS_VERSIONS_DETAILED_TABLE_ID,
     COMPONENTS_VERSIONS_SUMMARY_TABLE_ID,
-} from '../../../constants/components/versions/versions';
+} from '../../../constants/components/versions/versions_v2';
 import {
     changeHostFilter,
     changeTypeFilter,
