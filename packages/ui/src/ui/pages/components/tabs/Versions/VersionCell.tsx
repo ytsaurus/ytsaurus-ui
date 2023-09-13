@@ -7,7 +7,7 @@ import Link from '../../../../components/Link/Link';
 
 import './VersionCell.scss';
 import {useDispatch} from 'react-redux';
-import {changeVersionStateTypeFilters} from '../../../../store/actions/components/versions/version_v2-ts';
+import {changeVersionStateTypeFilters} from '../../../../store/actions/components/versions/versions_v2';
 import {Tooltip} from '../../../../components/Tooltip/Tooltip';
 
 const block = cn('version-cell');

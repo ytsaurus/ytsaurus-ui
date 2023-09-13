@@ -2,11 +2,12 @@ import React from 'react';
 import {ConnectedProps, connect} from 'react-redux';
 import cn from 'bem-cn-lite';
 
+import {Checkbox} from '@gravity-ui/uikit';
+
 import {RootState} from '../../../../store/reducers';
 import DataTableYT from '../../../../components/DataTableYT/DataTableYT';
 import * as DT100 from '@gravity-ui/react-data-table';
 import {
-    VersionsSummaryItem,
     getHideOfflineValue,
     getSummarySortState,
     getVersionsSummaryData,
@@ -18,20 +19,20 @@ import {
     changeCheckedHideOffline,
     changeVersionStateTypeFilters,
     setVersionsSummarySortState,
-} from '../../../../store/actions/components/versions/version_v2-ts';
+} from '../../../../store/actions/components/versions/versions_v2';
 import Icon from '../../../../components/Icon/Icon';
 import Link from '../../../../components/Link/Link';
 import ColumnHeader from '../../../../components/ColumnHeader/ColumnHeader';
 import {VersionCellWithAction} from './VersionCell';
+import {VersionSummaryItem} from '../../../../store/reducers/components/versions/versions_v2';
 
 import './VersionSummary.scss';
-import {Checkbox} from '@gravity-ui/uikit';
 
 const block = cn('versions-summary');
 
 type Props = ConnectedProps<typeof connector>;
 
-type RenderData = {row: VersionsSummaryItem; index: number};
+type RenderData = {row: VersionSummaryItem; index: number};
 
 const SETTINGS: DT100.Settings = {
     displayIndices: false,
@@ -42,7 +43,7 @@ function isSpecialRow(version: string) {
 }
 
 class VersionsSummary extends React.Component<Props> {
-    getColumns(): Array<DT100.Column<VersionsSummaryItem>> {
+    getColumns(): Array<DT100.Column<VersionSummaryItem>> {
         return [];
     }
     renderVersion = ({row: {version}}: RenderData) => {
@@ -74,7 +75,7 @@ class VersionsSummary extends React.Component<Props> {
 
         return <span className={block('value')}>{content}</span>;
     };
-    renderNumber = (key: keyof VersionsSummaryItem, rowData: RenderData) => {
+    renderNumber = (key: keyof VersionSummaryItem, rowData: RenderData) => {
         const {row} = rowData;
         const value = row[key];
         const content = !value ? hammer.format.NO_VALUE : hammer.format['Number'](value);
@@ -95,10 +96,10 @@ class VersionsSummary extends React.Component<Props> {
     };
 
     makeColumnInfo(
-        key: keyof VersionsSummaryItem,
+        key: keyof VersionSummaryItem,
         name: string,
         shortName?: string,
-    ): DT100.Column<VersionsSummaryItem> {
+    ): DT100.Column<VersionSummaryItem> {
         return {
             name: shortName || name,
             title: name,
@@ -109,7 +110,7 @@ class VersionsSummary extends React.Component<Props> {
         };
     }
 
-    renderHeader(key: keyof VersionsSummaryItem, name: string, shortName?: string) {
+    renderHeader(key: keyof VersionSummaryItem, name: string, shortName?: string) {
         const {sortState, setVersionsSummarySortState} = this.props;
         const {column, order} = sortState || {};
         return (
@@ -132,7 +133,7 @@ class VersionsSummary extends React.Component<Props> {
     };
 
     render() {
-        const columns: Array<DT100.Column<VersionsSummaryItem>> = [
+        const columns: Array<DT100.Column<VersionSummaryItem>> = [
             {
                 name: 'version',
                 render: this.renderVersion,
@@ -176,11 +177,11 @@ class VersionsSummary extends React.Component<Props> {
         );
     }
 
-    rowClassName(row: VersionsSummaryItem) {
+    rowClassName(row: VersionSummaryItem) {
         return block('row', {special: isSpecialRow(row.version)});
     }
 
-    onClick = (key: keyof VersionsSummaryItem, data: RenderData) => {
+    onClick = (key: keyof VersionSummaryItem, data: RenderData) => {
         const {changeVersionStateTypeFilters} = this.props;
         const {
             row: {version: rowVersion},
