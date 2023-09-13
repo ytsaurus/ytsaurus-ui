@@ -50,7 +50,6 @@
     &__host {
         grid-column: host;
         display: flex;
-        justify-content: space-between;
         align-items: center;
 
         &-name {
@@ -65,6 +64,10 @@
 
         &:hover &-copy-btn {
             visibility: visible;
+        }
+
+        &_quorum {
+            justify-content: space-between;
         }
     }
 
@@ -109,9 +112,10 @@
         }
     }
 
-    &__voting {
-        &_hide {
-            visibility: hidden;
+    &__nonvoting {
+        display: none;
+        &_show {
+            display: unset;
         }
     }
 }

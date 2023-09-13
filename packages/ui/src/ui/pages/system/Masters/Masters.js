@@ -72,9 +72,14 @@ class Masters extends Component {
         return groupsCount <= 3;
     }
 
-    renderMastersGroups = (masters, gridRowStart) =>
+    renderMastersGroups = (masters, gridRowStart, {allowVoting} = {allowVoting: false}) =>
         _.map(masters, (master) => (
-            <MasterGroup key={master.cellTag} {...master} gridRowStart={gridRowStart} />
+            <MasterGroup
+                key={master.cellTag}
+                {...master}
+                gridRowStart={gridRowStart}
+                allowVoting={allowVoting}
+            />
         ));
 
     renderMasterTypeSwitcher() {
@@ -86,7 +91,9 @@ class Masters extends Component {
 
         const fitIntoSection = this.mastersFitIntoSection();
 
-        const secondaryGroups = this.renderMastersGroups(secondary, fitIntoSection);
+        const secondaryGroups = this.renderMastersGroups(secondary, fitIntoSection, {
+            allowVoting: true,
+        });
 
         return fitIntoSection ? (
             <div className={b('all-masters')}>
@@ -94,7 +101,7 @@ class Masters extends Component {
                     Primary Masters
                     {this.renderMasterTypeSwitcher()}
                 </div>
-                <MasterGroup className={b('primary-master')} {...primary} />
+                <MasterGroup className={b('primary-master')} {...primary} allowVoting />
                 {Boolean(secondary?.length) && (
                     <React.Fragment>
                         <div className={headingCN}>Secondary Masters</div>
@@ -111,6 +118,7 @@ class Masters extends Component {
                             {...providers}
                             className={b('timestamp-providers')}
                             gridRowStart
+                            allowVoting
                         />
                     </React.Fragment>
                 )}
@@ -143,7 +151,7 @@ class Masters extends Component {
                     Primary Masters
                     {this.renderMasterTypeSwitcher()}
                 </div>
-                <MasterGroup className={b('primary-master')} {...primary} />
+                <MasterGroup className={b('primary-master')} {...primary} allowVoting />
                 {Boolean(secondary?.length) && (
                     <React.Fragment>
                         <div className={headingCN}>Secondary Masters</div>
@@ -153,7 +161,9 @@ class Masters extends Component {
 
                 <div className={b('flex')}>
                     {Boolean(providers?.instances?.length) &&
-                        this.renderSection('providers', 'Timestamp providers', providers)}
+                        this.renderSection('providers', 'Timestamp providers', providers, {
+                            allowVoting: true,
+                        })}
                     {Boolean(discovery?.instances?.length) &&
                         this.renderSection('discovery', 'Discovery servers', discovery)}
                     {Boolean(queueAgents?.length) &&
@@ -163,12 +173,12 @@ class Masters extends Component {
         );
     }
 
-    renderSection(name, heading, data) {
+    renderSection(name, heading, data, {allowVoting} = {allowVoting: false}) {
         return (
             <div className={b(name)}>
                 <div className={headingCN}>{heading}</div>
                 <div className={b(`${name}-hosts`)}>
-                    <MasterGroup {...data} />
+                    <MasterGroup {...data} allowVoting={allowVoting} />
                 </div>
             </div>
         );
