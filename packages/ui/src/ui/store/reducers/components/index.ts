@@ -1,7 +1,6 @@
 import {combineReducers} from 'redux';
 
 import banUnban from './ban-unban';
-import versions from './versions';
 import versionsV2 from './versions/versions_v2';
 import nodes from './nodes';
 import node from './node';
@@ -12,7 +11,6 @@ import decommission from './decommission';
 export default combineReducers({
     banUnban,
     decommission,
-    versions,
     versionsV2,
     nodes,
     node,

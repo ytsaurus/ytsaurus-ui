@@ -4,7 +4,7 @@ import produce from 'immer';
 import {initialState as versionsInitialState} from './versions_v2';
 import {initialState as tableSortState} from '../../../../store/reducers/tables';
 
-import {COMPONENTS_VERSIONS_DETAILED_TABLE_ID} from '../../../../constants/components/versions/versions';
+import {COMPONENTS_VERSIONS_DETAILED_TABLE_ID} from '../../../../constants/components/versions/versions_v2';
 import {parseSortState} from '../../../../utils';
 import {RootState} from '../../../../store/reducers';
 import {updateIfChanged} from '../../../../utils/utils';
