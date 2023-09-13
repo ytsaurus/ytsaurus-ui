@@ -2,27 +2,14 @@ import {createSelector} from 'reselect';
 import {RootState} from '../../../../store/reducers';
 import {FIX_MY_TYPE, SortState} from '../../../../types';
 import {sortArrayBySortState} from '../../../../utils/sort-helpers';
-
-export interface VersionsSummaryItem {
-    version: string;
-    primary_master: number;
-    secondary_master: number;
-    controller_agent: number;
-    scheduler: number;
-    node: number;
-    http_proxy: number;
-    rpc_proxy: number;
-    online: number;
-    offline: number;
-    banned: number;
-}
+import {VersionSummaryItem} from '../../../../store/reducers/components/versions/versions_v2';
 
 export const getSummarySortState = (
     state: RootState,
-): undefined | SortState<keyof VersionsSummaryItem> =>
+): undefined | SortState<keyof VersionSummaryItem> =>
     (state.components.versionsV2 as FIX_MY_TYPE).summarySortState;
 
-const getSummary = (state: RootState): Array<VersionsSummaryItem> =>
+const getSummary = (state: RootState): Array<VersionSummaryItem> =>
     state.components.versionsV2.summary;
 
 export const getHideOfflineValue = (state: RootState): boolean =>

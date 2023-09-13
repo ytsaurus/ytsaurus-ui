@@ -1,46 +1,30 @@
 import axios from 'axios';
 
+import map_ from 'lodash/map';
+import reduce_ from 'lodash/reduce';
+
 import {
-    CHANGE_BANNED_FILTER,
-    CHANGE_HOST_FILTER,
-    CHANGE_STATE_FILTER,
-    CHANGE_TYPE_FILTER,
-    CHANGE_VERSION_FILTER,
+    CHANGE_VERSION_SUMMARY_PARTIAL,
     DISCOVER_VERSIONS,
 } from '../../../../constants/components/versions/versions_v2';
 import {getCluster} from '../../../../store/selectors/global';
 import {ThunkAction} from 'redux-thunk';
 import {RootState} from '../../../../store/reducers';
+import {
+    HostType,
+    SummaryItem,
+    VersionHostInfo,
+    VersionSummaryItem,
+    VersionsAction,
+} from '../../../../store/reducers/components/versions/versions_v2';
+import {SortState} from '../../../../types';
 
 export interface DiscoverVersionsData {
     details: Array<VersionHostInfo>;
-    summary: Record<'total' | string, VersionSummary>;
+    summary: Record<'total' | 'error' | string, VersionSummary>;
 }
 
 type VersionSummary = Record<HostType, SummaryItem>;
-
-interface SummaryItem {
-    total: number;
-    banned: number;
-    offline: number;
-}
-
-export type HostType =
-    | 'controller_agent'
-    | 'primary_master'
-    | 'secondary_master'
-    | 'node'
-    | 'http_proxy'
-    | 'rpc_proxy'
-    | 'scheduler';
-
-export interface VersionHostInfo {
-    address: string;
-    banned: boolean;
-    type: HostType;
-    version: string;
-    start_time: string;
-}
 
 type NodesThunkAction<T = void> = ThunkAction<Promise<T>, RootState, unknown, any>;
 
@@ -53,9 +37,12 @@ export function getVersions(): NodesThunkAction<DiscoverVersionsData> {
         return axios
             .get<DiscoverVersionsData>(`/api/yt-proxy/${cluster}/internal-discover_versions`)
             .then(({data}) => {
+                const summary = prepareSummary(data.summary);
+                const details = prepareDetails(data.details);
+
                 dispatch({
                     type: DISCOVER_VERSIONS.SUCCESS,
-                    data: {versions: data},
+                    data: {summary, details},
                 });
                 return data;
             })
@@ -69,37 +56,116 @@ export function getVersions(): NodesThunkAction<DiscoverVersionsData> {
     };
 }
 
-export function changeHostFilter(hostFilter: string) {
+export function changeHostFilter(hostFilter: string): VersionsAction {
     return {
-        type: CHANGE_HOST_FILTER,
+        type: CHANGE_VERSION_SUMMARY_PARTIAL,
         data: {hostFilter},
     };
 }
 
-export function changeVersionFilter(versionFilter: string) {
+export function changeVersionFilter(versionFilter: string): VersionsAction {
     return {
-        type: CHANGE_VERSION_FILTER,
+        type: CHANGE_VERSION_SUMMARY_PARTIAL,
         data: {versionFilter},
     };
 }
 
-export function changeTypeFilter(typeFilter: string) {
+export function changeTypeFilter(typeFilter: string): VersionsAction {
     return {
-        type: CHANGE_TYPE_FILTER,
+        type: CHANGE_VERSION_SUMMARY_PARTIAL,
         data: {typeFilter},
     };
 }
 
-export function changeStateFilter(stateFilter: string) {
+export function changeStateFilter(stateFilter: string): VersionsAction {
     return {
-        type: CHANGE_STATE_FILTER,
+        type: CHANGE_VERSION_SUMMARY_PARTIAL,
         data: {stateFilter},
     };
 }
 
-export function changeBannedFilter(bannedFilter: boolean) {
+export function changeBannedFilter(bannedFilter: 'all' | boolean): VersionsAction {
     return {
-        type: CHANGE_BANNED_FILTER,
+        type: CHANGE_VERSION_SUMMARY_PARTIAL,
         data: {bannedFilter: bannedFilter || false},
+    };
+}
+
+function prepareGroup(group: VersionSummary, version: string) {
+    const res = reduce_(
+        group,
+        (acc, value, type) => {
+            const {total, banned, offline} = value;
+
+            const k = type as HostType;
+            acc[k] = total;
+            acc.banned += banned;
+            acc.offline += offline;
+            acc.online += total - offline;
+
+            return acc;
+        },
+        {banned: 0, offline: 0, online: 0, version} as VersionSummaryItem,
+    );
+
+    return {
+        ...res,
+        banned: res.banned || undefined,
+        offline: res.offline || undefined,
+        online: res.online || undefined,
+    };
+}
+
+function prepareSummary({total, error, ...versions}: DiscoverVersionsData['summary']) {
+    const preparedTotal = prepareGroup(total, 'total');
+    const preparedError = error && prepareGroup(error, 'error');
+    const preparedVersions = map_(versions, prepareGroup);
+
+    return [...preparedVersions, preparedError, preparedTotal];
+}
+
+function prepareDetails(details: DiscoverVersionsData['details']) {
+    return map_(details, (detail) => {
+        const calculatedState = detail.offline ? 'offline' : 'online';
+        detail.state = detail.state ? detail.state : calculatedState;
+        if (detail.error) {
+            detail.state = 'error';
+        }
+
+        detail.banned = Boolean(detail.banned);
+
+        return detail;
+    });
+}
+
+export function changeVersionStateTypeFilters(data: {
+    version?: string;
+    state?: string;
+    type?: string;
+    banned?: boolean;
+}) {
+    const {version, state, type, banned} = data;
+    return {
+        type: CHANGE_VERSION_SUMMARY_PARTIAL,
+        data: {
+            stateFilter: state || 'all',
+            versionFilter: version || 'all',
+            typeFilter: type || 'all',
+            bannedFilter: banned === undefined ? 'all' : banned,
+        },
+    };
+}
+
+export function setVersionsSummarySortState(summarySortState: SortState) {
+    return {
+        type: CHANGE_VERSION_SUMMARY_PARTIAL,
+        data: {summarySortState},
+    };
+}
+
+export function changeCheckedHideOffline(checkedHideOffline: boolean) {
+    return {
+        type: CHANGE_VERSION_SUMMARY_PARTIAL,
+        data: {checkedHideOffline},
     };
 }
