@@ -36,11 +36,8 @@
     &_theme_mixed,
     &_theme_registered,
     &_theme_unregistered,
-    &_theme_unknown {
-        background-color: var(--default-color);
-    }
-
+    &_theme_unknown,
     &_theme_nonvoting {
-        background-color: var(--g-color-text-info-heavy, var(--external-link));
+        background-color: var(--default-color);
     }
 }

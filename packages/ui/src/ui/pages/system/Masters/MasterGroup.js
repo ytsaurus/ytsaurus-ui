@@ -45,13 +45,18 @@ class Instance extends Component {
             voting: PropTypes.bool,
         }),
         maintenanceMessage: PropTypes.string,
+        allowVoting: PropTypes.bool,
     };
 
     render() {
-        const {state, address, attributes, maintenanceMessage} = this.props;
+        const {state, address, attributes, maintenanceMessage, allowVoting} = this.props;
         const {voting} = attributes ?? {};
+        // do not use `!voting` cause `voting === undefined` is the same as `voting === true`
+        const denyVoting = allowVoting && voting === false;
         const theme =
-            !voting && state === 'following' ? 'nonvoting' : Instance.instanceStateToTheme[state];
+            denyVoting && state === 'following'
+                ? 'nonvoting'
+                : Instance.instanceStateToTheme[state];
 
         /* eslint-disable camelcase */
         return (
@@ -90,7 +95,7 @@ class Instance extends Component {
                             <ClipboardButton view="flat-secondary" text={address} />
                         </span>
                         {
-                            <Text className={b('voting', {hide: voting})} color="secondary">
+                            <Text className={b('nonvoting', {show: denyVoting})} color="secondary">
                                 [nonvoting]
                             </Text>
                         }
@@ -125,6 +130,7 @@ class MasterGroup extends Component {
         // from connect
         hostType: PropTypes.oneOf(['host', 'physicalHost']),
         gridRowStart: PropTypes.bool,
+        allowVoting: PropTypes.bool,
     };
 
     renderQuorum() {
@@ -168,7 +174,7 @@ class MasterGroup extends Component {
                     </Fragment>
                 )}
 
-                <div className={b('host')}>
+                <div className={b('host', {quorum: true})}>
                     <div className={b('quorum-version')} title={quorumTitle}>
                         <span>{quorum && quorum.leaderCommitedVersion}</span>
                     </div>
@@ -182,7 +188,7 @@ class MasterGroup extends Component {
     }
 
     render() {
-        const {className, instances, hostType, gridRowStart} = this.props;
+        const {className, instances, hostType, gridRowStart, allowVoting} = this.props;
 
         return (
             <div className={b('group', {'grid-row-start': gridRowStart}, className)}>
@@ -203,6 +209,7 @@ class MasterGroup extends Component {
                                 state={state}
                                 attributes={$attributes}
                                 maintenanceMessage={maintenanceMessage}
+                                allowVoting={allowVoting}
                             />
                         );
                     },
