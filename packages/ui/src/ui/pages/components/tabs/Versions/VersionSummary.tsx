@@ -25,6 +25,7 @@ import Link from '../../../../components/Link/Link';
 import ColumnHeader from '../../../../components/ColumnHeader/ColumnHeader';
 import {VersionCellWithAction} from './VersionCell';
 import {VersionSummaryItem} from '../../../../store/reducers/components/versions/versions_v2';
+import {isSupportedClusterNodeForVersions} from '../../../../store/selectors/thor/support';
 
 import './VersionSummary.scss';
 
@@ -133,6 +134,7 @@ class VersionsSummary extends React.Component<Props> {
     };
 
     render() {
+        const {useClusterNode} = this.props;
         const columns: Array<DT100.Column<VersionSummaryItem>> = [
             {
                 name: 'version',
@@ -145,7 +147,7 @@ class VersionsSummary extends React.Component<Props> {
             this.makeColumnInfo('secondary_master', 'Secondary masters', 'Sec Masters'),
             this.makeColumnInfo('scheduler', 'Schedulers'),
             this.makeColumnInfo('controller_agent', 'Controller Agents', 'CA'),
-            this.makeColumnInfo('node', 'Nodes'),
+            this.makeColumnInfo(useClusterNode ? 'cluster_node' : 'node', 'Nodes'),
             this.makeColumnInfo('http_proxy', 'HTTP Proxies'),
             this.makeColumnInfo('rpc_proxy', 'RPC Proxies'),
             this.makeColumnInfo('online', 'Online'),
@@ -207,12 +209,15 @@ const mapStateToProps = (state: RootState) => {
     const items = getVersionsSummaryData(state);
     const sortState = getSummarySortState(state);
 
+    const useClusterNode = isSupportedClusterNodeForVersions(state);
+
     return {
         loading: loading as boolean,
         loaded: loaded as boolean,
         items,
         sortState,
         checkedHideOffline: getHideOfflineValue(state),
+        useClusterNode,
     };
 };
 
