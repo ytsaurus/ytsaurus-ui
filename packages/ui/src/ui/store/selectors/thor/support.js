@@ -141,6 +141,10 @@ const features = createSelector(
                 prestable: '23.1.11146445',
                 component: master,
             },
+            clusterNodeVersion: {
+                prestable: '23.2',
+                component: proxy,
+            },
         };
     },
 );
@@ -234,6 +238,13 @@ export const isSupportedEffectiveExpiration = createSelector(
     [isSupportedSelector],
     (isSupported) => {
         return isSupported('effectiveExpiration');
+    },
+);
+
+export const isSupportedClusterNodeForVersions = createSelector(
+    [isSupportedSelector],
+    (isSupported) => {
+        return isSupported('clusterNodeVersion');
     },
 );
 
