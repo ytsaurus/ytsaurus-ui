@@ -254,7 +254,6 @@ export const summaryTableProps = {
 
 export const detailsTableProps = {
     ...tableProps,
-    css: 'components-versions-detailed',
     tableId: COMPONENTS_VERSIONS_DETAILED_TABLE_ID,
     columns: {
         ...tableProps.columns,

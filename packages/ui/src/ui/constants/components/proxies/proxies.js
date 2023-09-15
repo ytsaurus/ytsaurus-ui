@@ -14,12 +14,3 @@ export const PROXY_TYPE = {
     HTTP: 'http',
     RPC: 'rpc',
 };
-export const ROLE_THEME = {
-    default: 'default',
-    control: 'default',
-    data: 'default',
-};
-export const STATE_THEME = {
-    online: 'success',
-    offline: 'danger',
-};

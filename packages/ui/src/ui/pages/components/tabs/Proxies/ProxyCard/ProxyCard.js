@@ -10,12 +10,12 @@ import Button from '../../../../../components/Button/Button';
 import Label from '../../../../../components/Label/Label';
 import Icon from '../../../../../components/Icon/Icon';
 
-import {ROLE_THEME, STATE_THEME} from '../../../../../constants/components/proxies/proxies';
 import {getCluster, getCurrentClusterConfig} from '../../../../../store/selectors/global';
 import withSplit from '../../../../../hocs/withSplit';
 
 import './ProxyCard.scss';
 import UIFactory from '../../../../../UIFactory';
+import {NodeColumnRole, NodeColumnState} from '../../NodeColumns';
 
 const block = cn('proxy-card');
 
@@ -57,20 +57,16 @@ export class ProxyCard extends Component {
         const {state, banned, banMessage, role, loadAverage, networkLoad, version, updatedAt} =
             this.props.proxy;
 
-        const stateText = hammer.format['FirstUppercase'](state);
-        const stateTheme = STATE_THEME[state] || 'default';
-        const roleTheme = ROLE_THEME[role] || 'info';
-
         return (
             <MetaTable
                 items={[
                     {
                         key: 'state',
-                        value: <Label theme={stateTheme} type="text" text={stateText} />,
+                        value: <NodeColumnState state={state} />,
                     },
                     {
                         key: 'role',
-                        value: <Label theme={roleTheme} type="text" text={role} />,
+                        value: <NodeColumnRole role={role} />,
                     },
                     {
                         key: 'Banned',

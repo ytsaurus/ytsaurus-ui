@@ -13,12 +13,10 @@ import ElementsTable from '../../../../components/ElementsTable/ElementsTable';
 import ErrorBoundary from '../../../../components/ErrorBoundary/ErrorBoundary';
 import UnbanModal from '../../../../pages/components/UnbanModal/UnbanModal';
 import TableInfo from '../../../../pages/components/TableInfo/TableInfo';
-import StatusBlock from '../../../../components/StatusBlock/StatusBlock';
 import BanModal from '../../../../pages/components/BanModal/BanModal';
 import Filter from '../../../../components/Filter/Filter';
 import Select from '../../../../components/Select/Select';
 import ProxyCard from './ProxyCard/ProxyCard';
-import Label from '../../../../components/Label/Label';
 
 import {
     changeBannedFilter,
@@ -43,10 +41,9 @@ import {
     COMPONENTS_PROXIES_TABLE_ID,
     POLLING_INTERVAL,
     PROXY_TYPE,
-    ROLE_THEME,
     SPLIT_TYPE,
-    STATE_THEME,
 } from '../../../../constants/components/proxies/proxies';
+import {NodeColumnBanned, NodeColumnRole, NodeColumnState, NodeColumnText} from '../NodeColumns';
 
 import './Proxies.scss';
 
@@ -135,32 +132,19 @@ export class Proxies extends Component {
     }
 
     static renderState(item) {
-        const text = hammer.format['FirstUppercase'](item.state);
-        const theme = STATE_THEME[item.state] || 'default';
-
-        return <Label theme={theme} type="text" text={text} />;
+        return <NodeColumnState state={item.state} />;
     }
 
     static renderBanned(item) {
-        return item.banned ? <StatusBlock text="B" theme="banned" /> : hammer.format.NO_VALUE;
+        return <NodeColumnBanned banned={item.banned} />;
     }
 
     static renderRole(item) {
-        const theme = ROLE_THEME[item.role] || 'info';
-        const text = hammer.format['Address'](item.role);
-
-        return <Label theme={theme} type="text" text={text} />;
+        return <NodeColumnRole role={item.role} />;
     }
 
     static renderVersion(item) {
-        return (
-            <div className={block('version', 'elements-column_with-hover-button')}>
-                <div className={block('version-text')} title={item.version}>
-                    {item.version}
-                </div>
-                <ClipboardButton text={item.version} view="flat-secondary" size="s" />
-            </div>
-        );
+        return <NodeColumnText text={item.version} />;
     }
 
     static renderLoadAverage(item) {

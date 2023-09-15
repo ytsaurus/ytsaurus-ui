@@ -1,7 +1,7 @@
 import {Sticky, StickyContainer} from 'react-sticky';
 import React from 'react';
 import {ConnectedProps, connect} from 'react-redux';
-import block from 'bem-cn-lite';
+import cn from 'bem-cn-lite';
 
 import CollapsibleSection from '../../../../components/CollapsibleSection/CollapsibleSection';
 import LoadDataHandler from '../../../../components/LoadDataHandler/LoadDataHandler';
@@ -10,6 +10,13 @@ import ElementsTable from '../../../../components/ElementsTable/ElementsTable';
 import TableInfo from '../../../../pages/components/TableInfo/TableInfo';
 import Filter from '../../../../components/Filter/Filter';
 import Select from '../../../../components/Select/Select';
+
+import Link from '../../../../components/Link/Link';
+import Icon from '../../../../components/Icon/Icon';
+
+import format from '../../../../common/hammer/format';
+
+import {VersionCellWithAction} from '../../../../pages/components/tabs/Versions/VersionCell';
 
 import {
     getBannedSelectItems,
@@ -37,9 +44,13 @@ import VersionsSummary from './VersionSummary';
 import {RootState} from '../../../../store/reducers';
 import {getUISizes} from '../../../../store/selectors/global';
 
+import templates, {ColumnAsTime, printColumnAsError} from '../../../../components/templates/utils';
+import {VersionHostInfo} from '../../../../store/reducers/components/versions/versions_v2';
+import {ClickableId, NodeColumnBanned, NodeColumnState} from '../NodeColumns';
+
 import './Versions.scss';
 
-const b = block('components-versions');
+const b = cn('components-versions');
 const updater = new Updater();
 
 type ReduxProps = ConnectedProps<typeof connector>;
@@ -170,6 +181,56 @@ class VersionsV2 extends React.Component<ReduxProps> {
         );
     }
 
+    getDetailsTemplates() {
+        const {changeVersionFilter, changeHostFilter, changeTypeFilter} = this.props;
+
+        const res: Record<string, (item: VersionHostInfo) => React.ReactNode> = {
+            start_time: (item) => <ColumnAsTime value={item.start_time} />,
+            type: (item) => (
+                <ClickableId
+                    text={item.type}
+                    onClick={() => changeTypeFilter(item.type)}
+                    format={format.ReadableField}
+                />
+            ),
+            error: (item) => printColumnAsError(item.error),
+            address: (item) => (
+                <ClickableId text={item.address} onClick={() => changeHostFilter(item.address)} />
+            ),
+            state: (item) => <NodeColumnState state={item.state} />,
+            banned: (item) => <NodeColumnBanned banned={item.banned} />,
+            decommissioned: templates.get('components').decommissioned,
+            full: templates.get('components').full,
+            alerts: templates.get('components').alerts,
+            version(item) {
+                const version = item.version;
+                const versionIsError = version === 'error';
+                const versionIsTotal = version === 'total';
+                const handleClick = () => changeVersionFilter(version);
+
+                if (versionIsError || versionIsTotal) {
+                    return (
+                        <Link
+                            theme="primary"
+                            onClick={handleClick}
+                            className={cn('elements-table')(
+                                `cell_type`,
+                                {version: version === 'error' ? 'error' : undefined},
+                                'elements-monospace elements-ellipsis',
+                            )}
+                        >
+                            {versionIsError && <Icon awesome="exclamation-triangle" />}
+                            {format.FirstUppercase(version)}
+                        </Link>
+                    );
+                } else {
+                    return <VersionCellWithAction version={version} />;
+                }
+            },
+        };
+        return res;
+    }
+
     render() {
         const {details, loading, loaded, collapsibleSize} = this.props;
         const initialLoading = loading && !loaded;
@@ -202,6 +263,7 @@ class VersionsV2 extends React.Component<ReduxProps> {
                                     {...detailsTableProps}
                                     isLoading={initialLoading}
                                     items={details}
+                                    templates={this.getDetailsTemplates()}
                                 />
                             </CollapsibleSection>
                         </StickyContainer>
