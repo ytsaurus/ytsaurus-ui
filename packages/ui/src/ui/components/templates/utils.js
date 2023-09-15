@@ -2,15 +2,12 @@ import React from 'react';
 import unipika from '../../common/thor/unipika';
 import block from 'bem-cn-lite';
 
-import ClipboardButton from '../../components/ClipboardButton/ClipboardButton';
-import {Tooltip} from '../Tooltip/Tooltip';
 import Link from '../../components/Link/Link';
 
 import hammer from '../../common/hammer';
+import {showErrorPopup} from '../../utils/utils';
 
 import './utils.scss';
-
-const tuBlock = block('template-utils');
 
 function wrapRenderMethods(templates) {
     return Object.keys(templates).reduce((newTemplates, key) => {
@@ -73,12 +70,6 @@ export function printColumnAsNumber(item, columnName) {
     return hammer.format['Number'](column.get(item));
 }
 
-export function printColumnAsNumberSkipZero(item, columnName) {
-    const column = this.getColumn(columnName);
-    const value = column.get(item);
-    return !value ? hammer.format.NO_VALUE : hammer.format['Number'](value);
-}
-
 export function printColumnAsTimeDurationWithMs(item, columnName) {
     const column = this.getColumn(columnName);
     return hammer.format['TimeDuration'](column.get(item), {
@@ -95,39 +86,22 @@ export function printColumnAsReadableField(item, columnName) {
     );
 }
 
-export function printColumnAsClickableReadableField(item, columnName) {
-    const {handleItemClick} = this.props.templates.data;
-    const column = this.getColumn(columnName);
-    const text = hammer.format['ReadableField'](column.get(item));
-    const handleClick = () => handleItemClick(column.get(item), columnName);
-
-    return (
-        <Link
-            theme="primary"
-            onClick={handleClick}
-            className={'elements-monospace elements-ellipsis'}
-        >
-            {text}
-        </Link>
-    );
+export function printColumnAsTime(item, columnName) {
+    const value = this?.getColumn ? this.getColumn(columnName).get(item) : item[columnName];
+    return <ColumnAsTime value={value} />;
 }
 
-export function printColumnAsTime(item, columnName) {
-    const column = this.getColumn(columnName);
+export function ColumnAsTime({value}) {
     return (
         <span className="elements-ellipsis">
-            {hammer.format['DateTime'](column.get(item), {format: 'full'})}
+            {hammer.format['DateTime'](value, {format: 'full'})}
         </span>
     );
 }
 
-export function printColumnAsError(item, columnName) {
-    const column = this.getColumn(columnName);
-    const error = column.get(item);
+export function printColumnAsError(error) {
     const showError = () => {
-        if (this.props.templates.data.showError) {
-            this.props.templates.data.showError(error, {hideOopsMsg: true});
-        }
+        showErrorPopup(error, {hideOopsMsg: true});
     };
     return typeof error === 'object' ? (
         <Link theme="ghost" onClick={showError}>
@@ -135,36 +109,6 @@ export function printColumnAsError(item, columnName) {
         </Link>
     ) : (
         hammer.format.NO_VALUE
-    );
-}
-
-export function printColumnAsClickableId(item, columnName, allowTooltip) {
-    const {handleItemClick} = this.props.templates.data;
-    const column = this.getColumn(columnName);
-    const handleClick = () => handleItemClick(column.get(item), columnName);
-    const text = column.get(item);
-    return (
-        <div className="elements-column_type_id elements-column_with-hover-button">
-            <Link
-                theme="primary"
-                onClick={handleClick}
-                className={'elements-monospace elements-ellipsis'}
-            >
-                <Tooltip
-                    className={tuBlock('clickable-column-tooltip')}
-                    content={allowTooltip ? text : null}
-                >
-                    {text}
-                </Tooltip>
-            </Link>
-            &nbsp;
-            <ClipboardButton
-                text={text}
-                view="flat-secondary"
-                size="s"
-                title={'Copy ' + columnName}
-            />
-        </div>
     );
 }
 

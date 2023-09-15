@@ -125,16 +125,19 @@ function prepareSummary({total, error, ...versions}: DiscoverVersionsData['summa
 }
 
 function prepareDetails(details: DiscoverVersionsData['details']) {
-    return map_(details, (detail) => {
-        const calculatedState = detail.offline ? 'offline' : 'online';
-        detail.state = detail.state ? detail.state : calculatedState;
-        if (detail.error) {
-            detail.state = 'error';
+    return map_(details, (item) => {
+        const calculatedState = item.offline ? 'offline' : 'online';
+        item.state = item.state ? item.state : calculatedState;
+        if (item.error) {
+            item.state = 'error';
         }
 
-        detail.banned = Boolean(detail.banned);
+        item.banned = Boolean(item.banned);
+        if (item.banned) {
+            console.log(item);
+        }
 
-        return detail;
+        return item;
     });
 }
 

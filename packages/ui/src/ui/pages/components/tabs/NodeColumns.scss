@@ -1,0 +1,20 @@
+.yt-node-columns {
+    &__text {
+        display: flex;
+        overflow: hidden;
+        align-items: center;
+    }
+    &__text-content {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        flex-grow: 1;
+        flex-shrink: 1;
+    }
+
+    &__clickable-column-tooltip {
+        width: 100%;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+}

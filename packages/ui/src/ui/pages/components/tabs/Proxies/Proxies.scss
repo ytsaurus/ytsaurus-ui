@@ -77,17 +77,4 @@
             }
         }
     }
-
-    &__version {
-        display: flex;
-        overflow: hidden;
-        align-items: center;
-
-        &-text {
-            overflow: hidden;
-            text-overflow: ellipsis;
-            flex-grow: 1;
-            flex-shrink: 1;
-        }
-    }
 }

@@ -4,11 +4,14 @@ import {createSelector} from 'reselect';
 import {detailsTableProps} from '../../../../utils/components/versions/tables_v2';
 
 import {COMPONENTS_VERSIONS_DETAILED_TABLE_ID} from '../../../../constants/components/versions/versions_v2';
+import {RootState} from '../../../../store/reducers';
+import {VersionHostInfo} from '../../../../store/reducers/components/versions/versions_v2';
 
-const aggregateItems = (proxies, key) => {
+const aggregateItems = (proxies: Array<VersionHostInfo>, key: keyof VersionHostInfo) => {
     const items = _.reduce(
         proxies,
-        (acc, {[key]: value} = {}) => {
+        (acc, item) => {
+            const value = item[key];
             if (!acc.has(value)) {
                 acc.set(value, 1);
             } else {
@@ -29,7 +32,12 @@ const aggregateItems = (proxies, key) => {
     });
 };
 
-const getSelectItems = (allItems, visibleItems, hostFilter, otherFilters) => {
+function getSelectItems(
+    allItems: ReturnType<typeof aggregateItems>,
+    visibleItems: ReturnType<typeof aggregateItems>,
+    hostFilter: string,
+    otherFilters: Partial<ReturnType<typeof getFilters>>,
+) {
     const isAllSelected = _.isEmpty(otherFilters);
 
     let items = allItems;
@@ -45,17 +53,18 @@ const getSelectItems = (allItems, visibleItems, hostFilter, otherFilters) => {
     };
 
     return [allItemsSection, ...items];
-};
+}
 
-const getDetails = (state) => state.components.versionsV2.details;
+const getDetails = (state: RootState) => state.components.versionsV2.details;
 
-const getHostFilter = (state) => state.components.versionsV2.hostFilter;
-const getVersionFilter = (state) => state.components.versionsV2.versionFilter;
-const getTypeFilter = (state) => state.components.versionsV2.typeFilter;
-const getStateFilter = (state) => state.components.versionsV2.stateFilter;
-const getBannedFilter = (state) => state.components.versionsV2.bannedFilter;
+const getHostFilter = (state: RootState) => state.components.versionsV2.hostFilter;
+const getVersionFilter = (state: RootState) => state.components.versionsV2.versionFilter;
+const getTypeFilter = (state: RootState) => state.components.versionsV2.typeFilter;
+const getStateFilter = (state: RootState) => state.components.versionsV2.stateFilter;
+const getBannedFilter = (state: RootState) => state.components.versionsV2.bannedFilter;
 
-const getDetailsSortState = (state) => state.tables[COMPONENTS_VERSIONS_DETAILED_TABLE_ID];
+const getDetailsSortState = (state: RootState) =>
+    state.tables[COMPONENTS_VERSIONS_DETAILED_TABLE_ID];
 
 const getFilteredByHost = createSelector([getDetails, getHostFilter], (details, hostFilter) => {
     if (!hostFilter) {
@@ -74,48 +83,51 @@ const getFilters = createSelector(
                 state,
                 banned,
             },
-            (acc, value, key) => {
+            (acc, value, k) => {
                 if (value !== 'all') {
-                    acc[key] = value;
+                    const key = k as keyof typeof acc;
+                    acc[key] = value as any;
                 }
                 return acc;
             },
-            {},
+            {} as Partial<{
+                version: typeof version;
+                type: typeof version;
+                state: typeof state;
+                banned: typeof banned;
+            }>,
         );
     },
 );
 
 const getFiltersSkipVersion = createSelector([getFilters], (filters) => {
-    // eslint-disable-next-line no-unused-vars
-    const {version, ...rest} = filters;
+    const {version: _x, ...rest} = filters;
     return rest;
 });
 
 const getFiltersSkipType = createSelector([getFilters], (filters) => {
-    // eslint-disable-next-line no-unused-vars
-    const {type, ...rest} = filters;
+    const {type: _x, ...rest} = filters;
     return rest;
 });
 
 const getFiltersSkipState = createSelector([getFilters], (filters) => {
-    // eslint-disable-next-line no-unused-vars
-    const {state, ...rest} = filters;
+    const {state: _x, ...rest} = filters;
     return rest;
 });
 
 const getFiltersSkipBanned = createSelector([getFilters], (filters) => {
-    // eslint-disable-next-line no-unused-vars
-    const {banned, ...rest} = filters;
+    const {banned: _x, ...rest} = filters;
     return rest;
 });
 
 const getFilteredDetails = createSelector([getFilteredByHost, getFilters], (data, filters) => {
-    return _.filter(data, filters);
+    return _.filter(data, filters) as Array<VersionHostInfo>;
 });
 
 export const getVisibleDetails = createSelector(
     [getFilteredDetails, getDetailsSortState],
-    (details, sortState) => hammer.utils.sort(details, sortState, detailsTableProps.columns.items),
+    (details, sortState): typeof details =>
+        hammer.utils.sort(details, sortState, detailsTableProps.columns.items),
 );
 
 const getAllVersions = createSelector([getDetails], (versions) =>
@@ -129,23 +141,27 @@ const getAllBanned = createSelector([getDetails], (version) => aggregateItems(ve
 const getVisibleVersions = createSelector(
     [getFilteredByHost, getFiltersSkipVersion],
     (data, filters) => {
-        return aggregateItems(_.filter(data, filters), 'version');
+        const items = _.filter(data, filters) as Array<VersionHostInfo>;
+        return aggregateItems(items, 'version');
     },
 );
 const getVisibleTypes = createSelector([getFilteredByHost, getFiltersSkipType], (data, filters) => {
-    return aggregateItems(_.filter(data, filters), 'type');
+    const items = _.filter(data, filters) as Array<VersionHostInfo>;
+    return aggregateItems(items, 'type');
 });
 const getVisibleStates = createSelector(
     [getFilteredByHost, getFiltersSkipState],
     (data, filters) => {
-        return aggregateItems(_.filter(data, filters), 'state');
+        const items = _.filter(data, filters) as Array<VersionHostInfo>;
+        return aggregateItems(items, 'state');
     },
 );
 
 const getVisibleBanned = createSelector(
     [getFilteredByHost, getFiltersSkipBanned],
     (data, filters) => {
-        return aggregateItems(_.filter(data, filters), 'banned');
+        const items = _.filter(data, filters) as Array<VersionHostInfo>;
+        return aggregateItems(items, 'banned');
     },
 );
 
