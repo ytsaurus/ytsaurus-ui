@@ -5,8 +5,6 @@ import cn from 'bem-cn-lite';
 import guid from '../../common/hammer/guid';
 import {getGlobalAsideHeaderWidth} from '../../store/selectors/global';
 
-import './GridWithMediaMinWidth.scss';
-
 const block = cn('grid-with-media-min-width');
 
 export type WithMediaMinWidthProps = {
@@ -32,19 +30,28 @@ export function GridWithMediaMinWidth({
         const id = block(guid());
         const pagePadding = 40 + asideHeaderWidth;
         let res = `.${id} {`;
-        res += `\ngap: ${gap}px;`;
+        res += `\n display: grid;`;
+        res += `\n gap: ${gap}px;`;
+        res += `\n}`;
         let i = 1;
+        function calcMinWidth(columnsCount: number) {
+            return gap * (columnsCount - 1) + itemMinWidth * columnsCount + pagePadding;
+        }
         while (++i) {
-            const minWidth = gap * (i - 1) + itemMinWidth * i + pagePadding;
-            res += `\n@media (min-width: ${minWidth}px) {`;
-            res += `\n grid-template-columns: ${Array.from({length: i}, () => '1fr').join(' ')};`;
-            res += `\n max-width: ${gap * (i - 1) + itemMaxWidth * i}px;`;
-            res += `};`;
+            const minWidth = calcMinWidth(i);
+            const nextMinWidth = calcMinWidth(i + 1);
+            const mediaMaxWidthCondition =
+                minWidth >= maxWidth ? '' : `and (max-width: ${nextMinWidth}px)`;
+            res += `\n@media screen and (min-width: ${minWidth}px) ${mediaMaxWidthCondition} {`;
+            res += `\n .${id} {`;
+            res += `\n   grid-template-columns: ${Array.from({length: i}, () => '1fr').join(' ')};`;
+            res += `\n   max-width: ${gap * (i - 1) + itemMaxWidth * i}px;`;
+            res += `\n }`;
+            res += `\n}`;
             if (minWidth >= maxWidth) {
                 break;
             }
         }
-        res += `}`;
         return {inlineClassName: id, inlineStyle: res};
     }, [itemMinWidth, itemMaxWidth, maxWidth, gap, asideHeaderWidth]);
 
