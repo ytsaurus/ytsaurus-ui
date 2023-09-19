@@ -133,10 +133,6 @@ function prepareDetails(details: DiscoverVersionsData['details']) {
         }
 
         item.banned = Boolean(item.banned);
-        if (item.banned) {
-            console.log(item);
-        }
-
         return item;
     });
 }

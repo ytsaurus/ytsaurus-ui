@@ -2,6 +2,8 @@ import React from 'react';
 import _ from 'lodash';
 import cn from 'bem-cn-lite';
 
+import {Text} from '@gravity-ui/uikit';
+
 import ClipboardButton from '../../../../components/ClipboardButton/ClipboardButton';
 import Link from '../../../../components/Link/Link';
 
@@ -9,8 +11,11 @@ import './VersionCell.scss';
 import {useDispatch} from 'react-redux';
 import {changeVersionStateTypeFilters} from '../../../../store/actions/components/versions/versions_v2';
 import {Tooltip} from '../../../../components/Tooltip/Tooltip';
+import {uiSettings} from '../../../../config';
 
 const block = cn('version-cell');
+
+const {reHashFromNodeVersion} = uiSettings;
 
 function shortHash(version: string) {
     const tildaIndex = _.indexOf(version, '~');
@@ -42,12 +47,41 @@ function VersionCell(props: Props) {
                 <span className={block('tooltip')}>{visibleVersion + '\u2026'} </span>
             </Tooltip>
         );
+
+    const hashPart = React.useMemo(() => {
+        if (!version || !reHashFromNodeVersion) {
+            return undefined;
+        }
+
+        try {
+            const res = new RegExp(reHashFromNodeVersion).exec(version);
+            return res?.groups?.hash;
+        } catch (e) {
+            return undefined;
+        }
+    }, [version]);
+
     return (
         <React.Fragment>
             <Link className={block('text')} theme={'primary'} onClick={handleClick}>
                 {versionContent}
             </Link>
-            <ClipboardButton text={version} view="flat-secondary" size="s" title={'Copy version'} />
+            <ClipboardButton
+                text={version}
+                shiftText={hashPart}
+                view="flat-secondary"
+                size="s"
+                hoverContent={
+                    <div>
+                        Copy version
+                        {Boolean(hashPart) && (
+                            <div>
+                                <Text color="secondary">Hold SHIFT-key to copy hash</Text>
+                            </div>
+                        )}
+                    </div>
+                }
+            />
         </React.Fragment>
     );
 }
