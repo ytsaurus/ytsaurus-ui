@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.21.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v0.20.0...ui-v0.21.0) (2023-09-19)
+
+
+### Features
+
+* **Navigation:** use [@effective_expiration](https://github.com/effective) attribute [YTFRONT-3665] ([6eafe35](https://github.com/ytsaurus/ytsaurus-ui/commit/6eafe35452282cfaff96123e808da59db02964f3))
+
+
+### Bug Fixes
+
+* **System/Nodes:** minor fix for firefox/safari [YTFRONT-3297] ([c537054](https://github.com/ytsaurus/ytsaurus-ui/commit/c537054a752b423bac9204348fe86de25fdabcc4))
+
 ## [0.20.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v0.19.1...ui-v0.20.0) (2023-09-15)
 
 
