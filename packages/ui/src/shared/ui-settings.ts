@@ -64,6 +64,12 @@ export interface UISettings {
      * }
      */
     operationsMonitoring?: UISettingsMonitoring;
+
+    /**
+     * Allows to define regular expression to get hash-part from version of node by named group 'hash'
+     * @example reHashFromNodeVersion: '[^~]+(?<hash>[^+]+)'
+     */
+    reHashFromNodeVersion?: string;
 }
 
 export interface UISettingsMonitoring {

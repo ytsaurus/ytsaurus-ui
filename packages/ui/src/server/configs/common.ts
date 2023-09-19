@@ -68,6 +68,7 @@ const config: Partial<AppConfig> = {
     },
 
     uiSettings: {
+        reHashFromNodeVersion: '[^~]+~(?<hash>[^+]+)',
         directDownload: true,
         docsBaseUrl: process.env.YT_DOCS_BASE_URL || 'https://ytsaurus.tech/docs/en',
     },
