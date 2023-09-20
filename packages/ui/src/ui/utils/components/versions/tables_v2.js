@@ -70,36 +70,6 @@ export const tableProps = {
                 caption: 'B',
                 tooltipProps: {placement: 'bottom', content: 'Banned'},
             },
-            decommissioned: {
-                get(item) {
-                    return item.decommissioned;
-                },
-                align: 'center',
-                sort: true,
-                caption: 'D',
-                tooltipProps: {
-                    placement: 'bottom',
-                    content: 'Decommissioned',
-                },
-            },
-            full: {
-                get(item) {
-                    return item.full;
-                },
-                align: 'center',
-                sort: true,
-                caption: 'F',
-                tooltipProps: {placement: 'bottom', content: 'Full'},
-            },
-            alerts: {
-                get(item) {
-                    return item.alerts;
-                },
-                align: 'center',
-                sort: true,
-                caption: 'A',
-                tooltipProps: {placement: 'bottom', content: 'Alerts'},
-            },
             type: {
                 get(item) {
                     return item.type;
@@ -225,18 +195,7 @@ export const tableProps = {
                 ],
             },
             detailed: {
-                items: [
-                    'address',
-                    'version',
-                    'state',
-                    'banned',
-                    'decommissioned',
-                    'full',
-                    'alerts',
-                    'type',
-                    'error',
-                    'start_time',
-                ],
+                items: ['address', 'version', 'state', 'banned', 'type', 'error', 'start_time'],
             },
         },
     },
