@@ -7,10 +7,6 @@ describe('hammer.aggregation', () => {
                 expect(prepare).toBeDefined();
             });
 
-            it('isFunction', () => {
-                expect(prepare).toBeFunction();
-            });
-
             it('aggregation "count"', () => {
                 const items = [{foo: 1}, {foo: 2}];
 

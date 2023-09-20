@@ -192,7 +192,7 @@ function mapStateToProps(state: RootState) {
         loaded,
         counters,
         overviewCounters,
-        collapsibleSize: getUISizes(state).collapsibleSize,
+        collapsibleSize: getUISizes().collapsibleSize,
         collapsed: getSettingsSystemNodesCollapsed(state),
         nodeType: getSettingSystemNodesNodeType(state),
         roleGroups,

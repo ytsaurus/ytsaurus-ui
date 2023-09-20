@@ -34,10 +34,7 @@ $animation-duration: 0.2s;
 
     position: fixed;
     z-index: var(--dialog-z-index);
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
+    inset: 0;
 
     &__warning {
         & .elements-message {

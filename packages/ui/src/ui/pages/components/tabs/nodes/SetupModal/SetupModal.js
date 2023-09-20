@@ -31,7 +31,7 @@ import {
     getComponentNodesTags,
 } from '../../../../../store/selectors/components/nodes/nodes';
 import {
-    getComponentNodesAvailableStates,
+    COMPONENTS_AVAILABLE_STATES,
     getComponentNodesFilterSetupStateValue,
 } from '../../../../../store/selectors/components/nodes/nodes/data';
 
@@ -812,7 +812,7 @@ const mapStateToProps = (state) => {
         mediumList: getMediumListNoCache(state),
         nodeTags: getComponentNodesTags(state),
         nodeRacks: getComponentNodesRacks(state),
-        nodeStates: getComponentNodesAvailableStates(state),
+        nodeStates: COMPONENTS_AVAILABLE_STATES,
         stateValue: getComponentNodesFilterSetupStateValue(state),
     };
 };

@@ -90,7 +90,7 @@ interface AccountsAggregation {
     masterMemoryLimit: number;
 }
 
-interface AccountsTreeItem {
+export interface AccountsTreeItem {
     attributes: AccountSelector;
     isAggregation: boolean;
 }

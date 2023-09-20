@@ -1,4 +1,4 @@
-import {AppRouteDescription, AuthPolicy} from '@gravity-ui/expresskit';
+import {AppRouteDescription, AppRoutes, AuthPolicy} from '@gravity-ui/expresskit';
 import {clusterParams} from './controllers/cluster-params';
 import {ytTvmApiHandler} from './controllers/yt-api';
 import {handleRemoteCopy} from './controllers/remote-copy';
@@ -24,7 +24,7 @@ import {getClustersAvailability} from './controllers/availability';
 
 const HOME_INDEX_TARGET: AppRouteDescription = {handler: homeIndex, ui: true};
 
-const routes: Record<string, AppRouteDescription> = {
+const routes: AppRoutes = {
     'GET /change-password/': HOME_INDEX_TARGET,
     'GET /': HOME_INDEX_TARGET,
     'GET /ping': {handler: ping, authPolicy: AuthPolicy.disabled},

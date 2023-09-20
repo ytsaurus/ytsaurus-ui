@@ -1,7 +1,7 @@
 import React from 'react';
 import _ from 'lodash';
 import {compose} from 'redux';
-import axios from 'axios';
+import axios, {AxiosProgressEvent} from 'axios';
 import cn from 'bem-cn-lite';
 
 // @ts-ignore
@@ -440,7 +440,7 @@ class UploadManager extends React.Component<Props, State> {
         });
     }
 
-    onUploadProgress = (event: ProgressEvent) => {
+    onUploadProgress = (event: AxiosProgressEvent) => {
         this.setState({progress: {inProgress: true, event}});
     };
 

@@ -5,9 +5,6 @@
 .elements-multiline-ellipsis {
     @include ellipsis();
     display: block;
-    /* stylelint-disable */
-    display: box;
-    /* stylelint-enable */
 
     line-height: 1.4em;
     max-width: 100%;

@@ -16,7 +16,7 @@ describe('concatByAnd', () => {
     });
 
     it('p2 and p3 should not be called, fn should return false', () => {
-        expect(fn('a', 'b', 'c')).toBeFalse();
+        expect(fn('a', 'b', 'c')).toBeFalsy();
         expect(p1).toHaveBeenCalledWith('a', 'b', 'c');
         expect(p1).toHaveBeenCalledTimes(1);
 
@@ -27,7 +27,7 @@ describe('concatByAnd', () => {
     it('p3 should not be called, fn should return false', () => {
         res1 = true;
 
-        expect(fn('d', 'e')).toBeFalse();
+        expect(fn('d', 'e')).toBeFalsy();
 
         expect(p1).toHaveBeenCalledWith('d', 'e');
         expect(p1).toHaveBeenCalledTimes(1);
@@ -42,7 +42,7 @@ describe('concatByAnd', () => {
         res1 = true;
         res2 = true;
 
-        expect(fn('d', 'e')).toBeFalse();
+        expect(fn('d', 'e')).toBeFalsy();
 
         expect(p1).toHaveBeenCalledWith('d', 'e');
         expect(p1).toHaveBeenCalledTimes(1);
@@ -59,7 +59,7 @@ describe('concatByAnd', () => {
         res2 = true;
         res3 = true;
 
-        expect(fn('d', 'e')).toBeTrue();
+        expect(fn('d', 'e')).toBeTruthy();
 
         expect(p1).toHaveBeenCalledWith('d', 'e');
         expect(p1).toHaveBeenCalledTimes(1);
@@ -103,19 +103,19 @@ describe('concatByAnd with objects', () => {
     });
 
     it('test 2', () => {
-        expect(f1({value: 'abc'})).toBeFalse();
-        expect(f2({value: 'abc'})).toBeFalse();
-        expect(f3({value: 'abc'})).toBeFalse();
-        expect(f4({value: 'abc'})).toBeFalse();
-        expect(f5({value: 'abc'})).toBeFalse();
+        expect(f1({value: 'abc'})).toBeFalsy();
+        expect(f2({value: 'abc'})).toBeFalsy();
+        expect(f3({value: 'abc'})).toBeFalsy();
+        expect(f4({value: 'abc'})).toBeFalsy();
+        expect(f5({value: 'abc'})).toBeFalsy();
     });
 
     it('test 3', () => {
-        expect(f1({hidden: false})).toBeFalse();
-        expect(f2({hidden: false})).toBeFalse();
-        expect(f3({hidden: false})).toBeFalse();
-        expect(f4({hidden: false})).toBeFalse();
-        expect(f5({hidden: false})).toBeFalse();
+        expect(f1({hidden: false})).toBeFalsy();
+        expect(f2({hidden: false})).toBeFalsy();
+        expect(f3({hidden: false})).toBeFalsy();
+        expect(f4({hidden: false})).toBeFalsy();
+        expect(f5({hidden: false})).toBeFalsy();
     });
 });
 
@@ -135,7 +135,7 @@ describe('concatByOr', () => {
     });
 
     it('p2 and p3 should not be called, fn should return true', () => {
-        expect(fn('a', 'b', 'c')).toBeTrue();
+        expect(fn('a', 'b', 'c')).toBeTruthy();
         expect(p1).toHaveBeenCalledWith('a', 'b', 'c');
         expect(p1).toHaveBeenCalledTimes(1);
 
@@ -146,7 +146,7 @@ describe('concatByOr', () => {
     it('p3 should not be called, fn should return false', () => {
         res1 = false;
 
-        expect(fn('d', 'e')).toBeTrue();
+        expect(fn('d', 'e')).toBeTruthy();
 
         expect(p1).toHaveBeenCalledWith('d', 'e');
         expect(p1).toHaveBeenCalledTimes(1);
@@ -161,7 +161,7 @@ describe('concatByOr', () => {
         res1 = false;
         res2 = false;
 
-        expect(fn('d', 'e')).toBeTrue();
+        expect(fn('d', 'e')).toBeTruthy();
 
         expect(p1).toHaveBeenCalledWith('d', 'e');
         expect(p1).toHaveBeenCalledTimes(1);
@@ -178,7 +178,7 @@ describe('concatByOr', () => {
         res2 = false;
         res3 = false;
 
-        expect(fn('d', 'e')).toBeFalse();
+        expect(fn('d', 'e')).toBeFalsy();
 
         expect(p1).toHaveBeenCalledWith('d', 'e');
         expect(p1).toHaveBeenCalledTimes(1);

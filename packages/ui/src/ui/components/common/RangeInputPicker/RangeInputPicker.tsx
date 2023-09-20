@@ -1,7 +1,7 @@
 import React, {Component, ReactElement} from 'react';
 import block from 'bem-cn-lite';
 // @ts-ignore
-import Slider, {SliderRef, Marks} from 'rc-slider';
+import Slider, {Marks, SliderRef} from 'rc-slider';
 import {IconProps, TextInput, TextInputSize} from '@gravity-ui/uikit';
 
 import {debounce} from 'lodash';

@@ -7,8 +7,9 @@ import {FIX_MY_TYPE} from '../../types';
 
 const block = cn('yt-tooltip');
 
-export type TooltipProps = Omit<PopoverProps, 'theme'> & {
+export type TooltipProps = Omit<PopoverProps, 'theme' | 'children'> & {
     theme?: PopoverProps['theme'] | 'fix-link-colors';
+    children?: React.ReactNode;
 };
 
 export function Tooltip(props: TooltipProps) {

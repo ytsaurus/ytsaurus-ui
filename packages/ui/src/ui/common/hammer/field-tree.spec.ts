@@ -132,7 +132,7 @@ describe('fieldTreeSome', () => {
             },
         };
 
-        spyOn(obj, 'predicate').and.callThrough();
+        jest.spyOn(obj, 'predicate');
 
         expect(fieldTreeSome(tree, Array.isArray, obj.predicate)).toBe(true);
         expect(obj.predicate).toBeCalledTimes(3);
@@ -145,7 +145,7 @@ describe('fieldTreeSome', () => {
             },
         };
 
-        spyOn(obj, 'predicate').and.callThrough();
+        jest.spyOn(obj, 'predicate');
 
         expect(fieldTreeSome(tree, Array.isArray, obj.predicate)).toBe(true);
         expect(obj.predicate).toBeCalledTimes(9);
@@ -158,7 +158,7 @@ describe('fieldTreeSome', () => {
             },
         };
 
-        spyOn(obj, 'predicate').and.callThrough();
+        jest.spyOn(obj, 'predicate');
 
         expect(fieldTreeSome(tree, Array.isArray, obj.predicate)).toBe(false);
         expect(obj.predicate).toBeCalledTimes(9);
@@ -168,7 +168,7 @@ describe('fieldTreeSome', () => {
         const obj = {
             predicate: () => true,
         };
-        spyOn(obj, 'predicate').and.callThrough();
+        jest.spyOn(obj, 'predicate');
 
         expect(fieldTreeSome({}, Array.isArray, obj.predicate)).toBe(false);
         expect(obj.predicate).toBeCalledTimes(0);

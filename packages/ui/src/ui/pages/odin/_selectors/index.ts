@@ -50,17 +50,18 @@ export const getExtendedInfo = createSelector(
 );
 
 export const getOdinCluster = (state: OdinRootState) => state.odin.details.odinCluster;
-export const getClusterNames = createSelector([], () => {
-    return _.map(YT.clusters, 'id').sort();
-});
+function makeClusterNameItems() {
+    const names = _.map(YT.clusters, 'id').sort();
+    return _.map(names, (name) => {
+        return {
+            key: name,
+            value: name,
+            title: (YT.clusters[name] || {name}).name,
+        };
+    });
+}
 
-export const getOdinClusterNamesAsItems = createSelector([getClusterNames], (names) => {
-    return _.map(names, (name) => ({
-        key: name,
-        value: name,
-        title: (YT.clusters[name] || {name}).name,
-    }));
-});
+export const ODIN_CLUSTER_NAMES_ITEMS = makeClusterNameItems();
 
 export const getSettingOdinOverviewVisiblePresets = createSelector(makeGetSetting, (getSetting) => {
     return getSetting(ODIN_VISIBLE_METRIC_PRESETS, YA_NAMESPACES.ODIN) || [];
