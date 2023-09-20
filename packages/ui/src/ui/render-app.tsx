@@ -3,7 +3,7 @@ import './redefinitions';
 import './common/hammer';
 
 import React from 'react';
-import {render} from 'react-dom';
+import {createRoot} from 'react-dom/client';
 import {Provider} from 'react-redux';
 import {Router} from 'react-router';
 
@@ -32,5 +32,7 @@ function AppRoot({store, history}: ReturnType<typeof createAppStore>) {
 export function renderApp(overrides: Partial<typeof UIFactory>) {
     configureUIFactory(overrides);
     const {store, history} = createAppStore();
-    render(<AppRoot {...{store, history}} />, document.getElementById('root'));
+
+    const root = createRoot(document.getElementById('root')!);
+    root.render(<AppRoot {...{store, history}} />);
 }

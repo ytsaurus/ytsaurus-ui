@@ -53,7 +53,7 @@ export const getComponentNodesFilterStatePredicate = createSelector(
                 new Toaster().add({
                     name: 'component-nodes-excludes',
                     type: 'error',
-                    allowAutoHiding: false,
+                    autoHiding: false,
                     title: 'Unexpected behavior',
                     content:
                         'Components/Nodes: It is not allowed to have excludes and includes for "state" filter at the same time',

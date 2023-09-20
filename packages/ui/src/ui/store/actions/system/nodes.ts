@@ -129,7 +129,7 @@ function getNodes(): SystemNodesThunkAction {
 
                 toaster.add({
                     name: 'load/system/nodes',
-                    allowAutoHiding: false,
+                    autoHiding: false,
                     type: 'error',
                     content: `[code ${code}] ${message}`,
                     title: 'Could not load Nodes',

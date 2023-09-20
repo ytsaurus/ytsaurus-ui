@@ -20,10 +20,10 @@ import Utils from '../odin-utils';
 import Updater from '../../../utils/hammer/updater';
 import {loadMetricAvailability, setOdinCluster} from '../_actions';
 import {
+    ODIN_CLUSTER_NAMES_ITEMS,
     getDate,
     getMetric,
     getOdinCluster,
-    getOdinClusterNamesAsItems,
     getUseCurrentDate,
 } from '../_selectors';
 import {GENERIC_ERROR_MESSAGE} from '../../../constants/index';
@@ -208,7 +208,7 @@ const mapIndependentOdinStateToProps = (state) => {
     return {
         name,
         cluster,
-        clusters: getOdinClusterNamesAsItems(state),
+        clusters: ODIN_CLUSTER_NAMES_ITEMS,
     };
 };
 

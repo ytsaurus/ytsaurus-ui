@@ -1,9 +1,5 @@
 import {AppConfig} from '@gravity-ui/nodekit';
 
-import {NAMESPACES, SettingName} from '../../../shared/constants/settings';
-
-import {getPath} from '../../../shared/utils/settings';
-
 const e2eConfig: Partial<AppConfig> = {
     uiSettings: {
         newTableReplicasCount: 1,
@@ -33,8 +29,9 @@ const e2eConfig: Partial<AppConfig> = {
                 'https://my.monitoring.service/operations?cluster={ytCluster}&id={ytOperationId}&pool={ytPool}&tree={ytPoolTree}&from={fromTimeMs}&to={toTimeMs}',
         },
     },
+
     defaultUserSettingsOverrides: {
-        [getPath(SettingName.NAVIGATION.USE_SMART_SORT, NAMESPACES.NAVIGATION)]: false,
+        ['global::navigation::useSmartSort']: false,
     },
 };
 

@@ -81,7 +81,7 @@ function mapStateToProps(state: RootState) {
         counters,
         roleGroups,
         loaded,
-        collapsibleSize: getUISizes(state).collapsibleSize,
+        collapsibleSize: getUISizes().collapsibleSize,
         collapsed: getSettingsSystemHttpProxiesCollapsed(state),
         cluster: getCluster(state),
     };

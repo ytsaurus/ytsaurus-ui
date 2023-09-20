@@ -87,6 +87,8 @@ export function loadTabletErrorsCount(options: LoadTabletErrorOptions): TabletEr
             if (type === 'replicated_table') {
                 return dispatch(loadTabletErrorsCountOfReplicatedTable(options));
             }
+
+            return undefined;
         });
     };
 }

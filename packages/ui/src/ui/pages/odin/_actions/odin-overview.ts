@@ -187,8 +187,6 @@ export function odinOverviewShowCreatePresetDialog(
     return {type: ODIN_OVERVIEW_PARTIAL, data: {showCreatePresetDialog}};
 }
 
-const toaster = new Toaster();
-
 export function odinOverviewAddPreset(name: string, isDefault: boolean): OdinOverviewThunkAction {
     return (dispatch, getState) => {
         const toHide = getOdinOverviewHiddenMetrics(getState());
@@ -208,9 +206,9 @@ export function odinOverviewAddPreset(name: string, isDefault: boolean): OdinOve
                     const data = error?.response?.data || error;
                     const {message} = data;
 
-                    toaster.createToast({
+                    new Toaster().add({
                         name: 'add-preset',
-                        allowAutoHiding: false,
+                        autoHiding: false,
                         type: 'error',
                         content: message,
                         title: 'Failed to crete preset',
@@ -251,9 +249,9 @@ export function odinOverviewRemovePreset(name: string): OdinOverviewThunkAction 
                 const data = error?.response?.data || error;
                 const {message} = data;
 
-                toaster.createToast({
+                new Toaster().add({
                     name: 'delete-preset',
-                    allowAutoHiding: false,
+                    autoHiding: false,
                     type: 'error',
                     content: message,
                     title: 'Failed to delete the preset',
@@ -282,9 +280,9 @@ export function odinOverviewToggleDefaultPreset(name: string): OdinOverviewThunk
                 const data = error?.response?.data || error;
                 const {message} = data;
 
-                toaster.createToast({
+                new Toaster().add({
                     name: 'set-deault-preset',
-                    allowAutoHiding: false,
+                    autoHiding: false,
                     type: 'error',
                     content: message,
                     title: 'Failed to set the preset as default',

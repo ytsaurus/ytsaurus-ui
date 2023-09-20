@@ -10,11 +10,7 @@ function defer<T>() {
     return {promise, resolve, reject};
 }
 
-function flushPromises() {
-    return new Promise(setImmediate);
-}
-
-const CACHE_TIME = 2 * 60 * 1000;
+const CACHE_TIME = 2 * 0.5 * 1000;
 
 describe('createAutoUpdatedCache', () => {
     beforeEach(() => {
@@ -33,18 +29,15 @@ describe('createAutoUpdatedCache', () => {
         const getter = jest.fn().mockReturnValueOnce(deferred.promise);
 
         const getPreloadedValue = createAutoUpdatedCache(getter, CACHE_TIME);
-
         const results = [
             getPreloadedValue('key'),
             getPreloadedValue('key'),
             getPreloadedValue('key'),
         ];
-        await flushPromises();
 
         deferred.resolve('result');
 
         await expect(Promise.all(results)).resolves.toEqual(['result', 'result', 'result']);
-        await flushPromises();
 
         expect(getter).lastCalledWith('key');
         expect(getter).toBeCalledTimes(1);
@@ -60,13 +53,10 @@ describe('createAutoUpdatedCache', () => {
         const getPreloadedValue = createAutoUpdatedCache(getter, CACHE_TIME);
 
         const result1 = getPreloadedValue('key');
-        await flushPromises();
 
         const result2 = getPreloadedValue('key');
-        await flushPromises();
 
         const result3 = getPreloadedValue('key');
-        await flushPromises();
 
         deferred.resolve('result');
 
@@ -75,7 +65,6 @@ describe('createAutoUpdatedCache', () => {
             'result',
             'result',
         ]);
-        await flushPromises();
 
         expect(getter).lastCalledWith('key');
         expect(getter).toBeCalledTimes(1);
@@ -92,23 +81,18 @@ describe('createAutoUpdatedCache', () => {
         const getPreloadedValue = createAutoUpdatedCache(getter, CACHE_TIME);
 
         const result1 = getPreloadedValue('key');
-        await flushPromises();
 
         deferred.resolve('result');
-        await flushPromises();
 
         const result2 = getPreloadedValue('key');
-        await flushPromises();
 
         const result3 = getPreloadedValue('key');
-        await flushPromises();
 
         await expect(Promise.all([result1, result2, result3])).resolves.toEqual([
             'result',
             'result',
             'result',
         ]);
-        await flushPromises();
 
         expect(getter).lastCalledWith('key');
         expect(getter).toBeCalledTimes(1);
@@ -128,28 +112,25 @@ describe('createAutoUpdatedCache', () => {
 
         const getPreloadedValue = createAutoUpdatedCache(getter, CACHE_TIME);
 
+        expect(getter).toBeCalledTimes(0);
+
         const result1 = getPreloadedValue('key');
-        await flushPromises();
 
         deferred1.resolve('result1');
 
         await expect(result1).resolves.toEqual('result1');
-        await flushPromises();
 
         expect(getter).lastCalledWith('key');
         expect(getter).toBeCalledTimes(1);
 
-        jest.advanceTimersByTime(CACHE_TIME);
-        await flushPromises();
-
         deferred2.resolve('result2');
-        await flushPromises();
+
+        await jest.advanceTimersByTimeAsync(CACHE_TIME * 1.5);
 
         // Trying to fetch a value right after resolve of previous request.
         // This should return updated value from cache.
         const result2 = getPreloadedValue('key');
         await expect(result2).resolves.toEqual('result2');
-        await flushPromises();
 
         expect(getter).lastCalledWith('key');
         expect(getter).toBeCalledTimes(2);
@@ -172,24 +153,20 @@ describe('createAutoUpdatedCache', () => {
         const getPreloadedValue = createAutoUpdatedCache(getter, CACHE_TIME);
 
         const result1 = getPreloadedValue('key');
-        await flushPromises();
 
         deferred1.resolve('result1');
 
         await expect(result1).resolves.toEqual('result1');
-        await flushPromises();
 
         expect(getter).lastCalledWith('key');
         expect(getter).toBeCalledTimes(1);
 
-        jest.advanceTimersByTime(CACHE_TIME);
-        await flushPromises();
+        await jest.advanceTimersByTimeAsync(CACHE_TIME);
 
         // Trying to fetch a value before resolve of previous request.
         // This should return existing value from cache.
         const result2 = getPreloadedValue('key');
         await expect(result2).resolves.toEqual('result1');
-        await flushPromises();
 
         expect(getter).lastCalledWith('key');
         expect(getter).toBeCalledTimes(2);
@@ -210,25 +187,23 @@ describe('createAutoUpdatedCache', () => {
         const getPreloadedValue = createAutoUpdatedCache(getter, CACHE_TIME);
 
         const result1 = getPreloadedValue('key');
-        await flushPromises();
 
         deferred1.reject('error1');
 
         await expect(result1).rejects.toEqual('error1');
-        await flushPromises();
 
         expect(getter).lastCalledWith('key');
         expect(getter).toBeCalledTimes(1);
 
+        await jest.advanceTimersByTimeAsync(1);
+
         // Trying to fetch a value right after rejection of previous request.
         // This should trigger new request if the previous one was not cached.
         const result2 = getPreloadedValue('key');
-        await flushPromises();
 
         deferred2.resolve('result2');
 
         await expect(result2).resolves.toEqual('result2');
-        await flushPromises();
 
         expect(getter).lastCalledWith('key');
         expect(getter).toBeCalledTimes(2);
@@ -251,34 +226,31 @@ describe('createAutoUpdatedCache', () => {
         const getPreloadedValue = createAutoUpdatedCache(getter, CACHE_TIME);
 
         const result1 = getPreloadedValue('key');
-        await flushPromises();
 
         deferred1.resolve('result1');
 
         await expect(result1).resolves.toEqual('result1');
-        await flushPromises();
 
         expect(getter).lastCalledWith('key');
         expect(getter).toBeCalledTimes(1);
 
-        jest.advanceTimersByTime(CACHE_TIME);
-        await flushPromises();
+        await jest.advanceTimersByTimeAsync(CACHE_TIME);
 
         deferred2.reject('error2');
-        await flushPromises();
 
         expect(getter).lastCalledWith('key');
         expect(getter).toBeCalledTimes(2);
+        expect(getter).toHaveLastReturnedWith(deferred2.promise);
+
+        await jest.advanceTimersByTimeAsync(1);
 
         // Trying to fetch a value right after rejection of previous request.
         // This should trigger new request if the previous one was not cached.
         const result3 = getPreloadedValue('key');
-        await flushPromises();
 
         deferred3.resolve('result3');
 
         await expect(result3).resolves.toEqual('result3');
-        await flushPromises();
 
         expect(getter).lastCalledWith('key');
         expect(getter).toBeCalledTimes(3);
@@ -298,18 +270,15 @@ describe('createAutoUpdatedCache', () => {
         const getPreloadedValue = createAutoUpdatedCache(getter, CACHE_TIME);
 
         const result1 = getPreloadedValue('key');
-        await flushPromises();
 
         deferred1.reject('error1');
 
         await expect(result1).rejects.toEqual('error1');
-        await flushPromises();
 
         expect(getter).lastCalledWith('key');
         expect(getter).toBeCalledTimes(1);
 
-        jest.advanceTimersByTime(3 * CACHE_TIME);
-        await flushPromises();
+        await jest.advanceTimersByTimeAsync(3 * CACHE_TIME);
 
         expect(getter).toBeCalledTimes(1);
     });
@@ -331,27 +300,22 @@ describe('createAutoUpdatedCache', () => {
         const getPreloadedValue = createAutoUpdatedCache(getter, CACHE_TIME);
 
         const result1 = getPreloadedValue('key');
-        await flushPromises();
 
         deferred1.resolve('result1');
 
         await expect(result1).resolves.toEqual('result1');
-        await flushPromises();
 
         expect(getter).lastCalledWith('key');
         expect(getter).toBeCalledTimes(1);
 
-        jest.advanceTimersByTime(CACHE_TIME);
-        await flushPromises();
+        await jest.advanceTimersByTimeAsync(CACHE_TIME);
 
         deferred2.reject('error2');
-        await flushPromises();
 
         expect(getter).lastCalledWith('key');
         expect(getter).toBeCalledTimes(2);
 
-        jest.advanceTimersByTime(3 * CACHE_TIME);
-        await flushPromises();
+        await jest.advanceTimersByTimeAsync(3 * CACHE_TIME);
 
         expect(getter).toBeCalledTimes(2);
     });
@@ -368,7 +332,6 @@ describe('createAutoUpdatedCache', () => {
         const result1 = getPreloadedValue('key1');
 
         await expect(result1).resolves.toEqual('result1');
-        await flushPromises();
 
         expect(getter).lastCalledWith('key1');
         expect(getter).toBeCalledTimes(1);
@@ -376,7 +339,6 @@ describe('createAutoUpdatedCache', () => {
         const result2 = getPreloadedValue('key2');
 
         await expect(result2).resolves.toEqual('result2');
-        await flushPromises();
 
         expect(getter).lastCalledWith('key2');
         expect(getter).toBeCalledTimes(2);
@@ -394,7 +356,6 @@ describe('createAutoUpdatedCache', () => {
         const result1 = getPreloadedValue('key', 'rest1');
 
         await expect(result1).resolves.toEqual('result1');
-        await flushPromises();
 
         expect(getter).lastCalledWith('key', 'rest1');
         expect(getter).toBeCalledTimes(1);
@@ -402,7 +363,6 @@ describe('createAutoUpdatedCache', () => {
         const result2 = getPreloadedValue('key', 'rest2');
 
         await expect(result2).resolves.toEqual('result1');
-        await flushPromises();
 
         expect(getter).toBeCalledTimes(1);
     });

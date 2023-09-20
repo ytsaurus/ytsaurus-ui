@@ -62,10 +62,6 @@ describe('actions/navigation/path-editor', () => {
     });
 
     describe('loadSuggestionsList', () => {
-        it('should return function from action creator', () => {
-            expect(loadSuggestionsList()).toBeFunction();
-        });
-
         it("should avoid dispatching a request and calling loadSuggestions() if data hasn't changed", () => {
             store = mockStore({
                 navigation: {
@@ -78,7 +74,7 @@ describe('actions/navigation/path-editor', () => {
             store.dispatch(loadSuggestionsList(path));
 
             expect(loadSuggestions).not.toHaveBeenCalled();
-            expect(store.getActions()).toBeArrayOfSize(0);
+            expect(store.getActions().length).toBe(0);
         });
 
         it(`should dispatch ${types.FETCH_SUGGESTIONS.REQUEST}`, () => {
@@ -133,10 +129,6 @@ describe('actions/navigation/path-editor', () => {
     describe('removeActiveRequests', () => {
         beforeEach(() => {
             store.dispatch(removeActiveRequests());
-        });
-
-        it('should return function from action creator', () => {
-            expect(removeActiveRequests()).toBeFunction();
         });
 
         it('should abort all active requests', () => {

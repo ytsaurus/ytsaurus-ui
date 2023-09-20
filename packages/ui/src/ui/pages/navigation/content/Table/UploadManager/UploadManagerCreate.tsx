@@ -1,6 +1,6 @@
 import React from 'react';
 import {compose} from 'redux';
-import axios from 'axios';
+import axios, {AxiosProgressEvent} from 'axios';
 import cn from 'bem-cn-lite';
 
 import withVisible, {WithVisibleProps} from '../../../../../hocs/withVisible';
@@ -376,7 +376,7 @@ class UploadManagerCreate extends React.Component<Props, State> {
         });
     }
 
-    onUploadProgress = (event: ProgressEvent) => {
+    onUploadProgress = (event: AxiosProgressEvent) => {
         this.setState({progress: {inProgress: true, event}});
     };
 

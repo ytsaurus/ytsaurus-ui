@@ -35,10 +35,6 @@ describe('hammer.tree-list', () => {
                 expect(treeList.prepareTree).toBeDefined();
             });
 
-            it('isFunction', () => {
-                expect(treeList.prepareTree).toBeFunction();
-            });
-
             describe('behavior', () => {
                 let treeNodes;
 
@@ -90,10 +86,6 @@ describe('hammer.tree-list', () => {
                 expect(treeList.attachTreeLeaves).toBeDefined();
             });
 
-            it('isFunction', () => {
-                expect(treeList.attachTreeLeaves).toBeFunction();
-            });
-
             describe('behavior', () => {
                 // TODO
                 // let treeNodes;
@@ -107,10 +99,6 @@ describe('hammer.tree-list', () => {
         describe('filterTree()', () => {
             it('Exports', () => {
                 expect(treeList.filterTree).toBeDefined();
-            });
-
-            it('isFunction', () => {
-                expect(treeList.filterTree).toBeFunction();
             });
 
             describe('behavior', () => {
@@ -142,10 +130,6 @@ describe('hammer.tree-list', () => {
         describe('sortTree()', () => {
             it('Exports', () => {
                 expect(treeList.sortTree).toBeDefined();
-            });
-
-            it('isFunction', () => {
-                expect(treeList.sortTree).toBeFunction();
             });
 
             describe('behavior', () => {
@@ -198,10 +182,6 @@ describe('hammer.tree-list', () => {
         describe('flattenTree()', () => {
             it('Exports', () => {
                 expect(treeList.flattenTree).toBeDefined();
-            });
-
-            it('isFunction', () => {
-                expect(treeList.flattenTree).toBeFunction();
             });
         });
     });

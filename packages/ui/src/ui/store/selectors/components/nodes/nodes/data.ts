@@ -174,28 +174,25 @@ export const getComponentsNodesNodeTypes = createSelector(
     },
 );
 
-export const getComponentNodesAvailableStates = createSelector([], () => {
-    return [
-        'all',
-        'being_disposed',
-        'online',
-        'offline',
-        'mixed',
-        'registered',
-        'unregistered',
-        'unknown',
-    ];
-});
+export const COMPONENTS_AVAILABLE_STATES = [
+    'all',
+    'being_disposed',
+    'online',
+    'offline',
+    'mixed',
+    'registered',
+    'unregistered',
+    'unknown',
+];
 
 export const getComponentNodesFilterSetupStateValue = createSelector(
-    [getComponentNodesAvailableStates, getComponentNodesFilterStatePredicate],
-    (availableValues, predicate) => {
+    [getComponentNodesFilterStatePredicate],
+    (predicate) => {
         if (!predicate) {
             return ['all'];
         }
 
-        return availableValues
-            .map((state) => ({state}))
+        return COMPONENTS_AVAILABLE_STATES.map((state) => ({state}))
             .filter(predicate)
             .map(({state}) => state);
     },

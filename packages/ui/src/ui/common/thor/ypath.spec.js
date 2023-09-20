@@ -5,10 +5,6 @@ describe('./ypath', () => {
         expect(_ypath).toBeDefined();
     });
 
-    it('isObject', () => {
-        expect(_ypath).toBeObject();
-    });
-
     describe('getValue', () => {
         it('null is treated as an error if encountered in the middle', () => {
             const node = {
