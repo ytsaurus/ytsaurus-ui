@@ -11,6 +11,7 @@ import {
     getHideOfflineValue,
     getSummarySortState,
     getVersionsSummaryData,
+    getVersionsSummaryVisibleColumns,
 } from '../../../../store/selectors/components/versions/versions_v2-ts';
 
 import hammer from '../../../../common/hammer';
@@ -25,7 +26,6 @@ import Link from '../../../../components/Link/Link';
 import ColumnHeader from '../../../../components/ColumnHeader/ColumnHeader';
 import {VersionCellWithAction} from './VersionCell';
 import {VersionSummaryItem} from '../../../../store/reducers/components/versions/versions_v2';
-import {isSupportedClusterNodeForVersions} from '../../../../store/selectors/thor/support';
 
 import './VersionSummary.scss';
 
@@ -96,18 +96,22 @@ class VersionsSummary extends React.Component<Props> {
         );
     };
 
-    makeColumnInfo(
-        key: keyof VersionSummaryItem,
-        name: string,
-        shortName?: string,
-    ): DT100.Column<VersionSummaryItem> {
+    makeColumnInfo({
+        type,
+        name,
+        shortName,
+    }: {
+        type: keyof VersionSummaryItem;
+        name: string;
+        shortName?: string;
+    }): DT100.Column<VersionSummaryItem> {
         return {
             name: shortName || name,
             title: name,
             sortable: false,
-            render: this.renderNumber.bind(this, key),
+            render: this.renderNumber.bind(this, type),
             align: 'right',
-            header: this.renderHeader(key, name, shortName),
+            header: this.renderHeader(type, name, shortName),
         };
     }
 
@@ -134,7 +138,7 @@ class VersionsSummary extends React.Component<Props> {
     };
 
     render() {
-        const {useClusterNode} = this.props;
+        const {visibleColumns} = this.props;
         const columns: Array<DT100.Column<VersionSummaryItem>> = [
             {
                 name: 'version',
@@ -143,16 +147,8 @@ class VersionsSummary extends React.Component<Props> {
                 sortAccessor: (row) => row.version,
                 header: this.renderHeader('version', 'Versions'),
             },
-            this.makeColumnInfo('primary_master', 'Primary Masters', 'Pri Masters'),
-            this.makeColumnInfo('secondary_master', 'Secondary masters', 'Sec Masters'),
-            this.makeColumnInfo('scheduler', 'Schedulers'),
-            this.makeColumnInfo('controller_agent', 'Controller Agents', 'CA'),
-            this.makeColumnInfo(useClusterNode ? 'cluster_node' : 'node', 'Nodes'),
-            this.makeColumnInfo('http_proxy', 'HTTP Proxies'),
-            this.makeColumnInfo('rpc_proxy', 'RPC Proxies'),
-            this.makeColumnInfo('online', 'Online'),
-            this.makeColumnInfo('offline', 'Offline'),
-            this.makeColumnInfo('banned', 'Banned'),
+
+            ...visibleColumns.map((item) => this.makeColumnInfo(item)),
         ];
 
         const {items, loading, loaded, checkedHideOffline} = this.props;
@@ -209,7 +205,7 @@ const mapStateToProps = (state: RootState) => {
     const items = getVersionsSummaryData(state);
     const sortState = getSummarySortState(state);
 
-    const useClusterNode = isSupportedClusterNodeForVersions(state);
+    const visibleColumns = getVersionsSummaryVisibleColumns(state);
 
     return {
         loading: loading as boolean,
@@ -217,7 +213,7 @@ const mapStateToProps = (state: RootState) => {
         items,
         sortState,
         checkedHideOffline: getHideOfflineValue(state),
-        useClusterNode,
+        visibleColumns,
     };
 };
 

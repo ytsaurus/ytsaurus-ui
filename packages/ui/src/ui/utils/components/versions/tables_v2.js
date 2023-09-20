@@ -1,7 +1,4 @@
-import {
-    COMPONENTS_VERSIONS_DETAILED_TABLE_ID,
-    COMPONENTS_VERSIONS_SUMMARY_TABLE_ID,
-} from '../../../constants/components/versions/versions_v2';
+import {COMPONENTS_VERSIONS_DETAILED_TABLE_ID} from '../../../constants/components/versions/versions_v2';
 import {
     changeHostFilter,
     changeTypeFilter,
@@ -52,7 +49,6 @@ export const tableProps = {
                 sort: true,
                 caption: 'Version',
             },
-
             state: {
                 get(item) {
                     return item.state;
@@ -78,89 +74,6 @@ export const tableProps = {
                 sort: true,
                 caption: 'Type',
             },
-            primary_masters: {
-                get(item) {
-                    return item.primary_master || 0;
-                },
-                align: 'right',
-                sort: true,
-                caption: 'Pri Masters',
-                title: 'Primary  Masters',
-            },
-            secondary_masters: {
-                get(item) {
-                    return item.secondary_master || 0;
-                },
-                align: 'right',
-                sort: true,
-                caption: 'Sec Masters',
-                title: 'Secondary Masters',
-            },
-            schedulers: {
-                get(item) {
-                    return item.scheduler || 0;
-                },
-                align: 'right',
-                sort: true,
-                caption: 'Schedulers',
-            },
-            controller_agents: {
-                get(item) {
-                    return item.controller_agent || 0;
-                },
-                align: 'right',
-                sort: true,
-                caption: 'CA',
-                title: 'Control Agents',
-            },
-            nodes: {
-                get(item) {
-                    return item.node || 0;
-                },
-                align: 'right',
-                sort: true,
-                caption: 'Nodes',
-            },
-            http_proxies: {
-                get(item) {
-                    return item.http_proxy || 0;
-                },
-                align: 'right',
-                sort: true,
-                caption: 'HTTP Proxies',
-            },
-            rpc_proxies: {
-                get(item) {
-                    return item.rpc_proxy || 0;
-                },
-                align: 'right',
-                sort: true,
-                caption: 'RPC Proxies',
-            },
-            online_count: {
-                get(item) {
-                    return item.online;
-                },
-                align: 'right',
-                sort: true,
-                caption: 'Online',
-            },
-            offline_count: {
-                get(item) {
-                    return item.offline;
-                },
-                align: 'right',
-                sort: true,
-                caption: 'Offline',
-            },
-            banned_count: {
-                get(item) {
-                    return item.banned;
-                },
-                align: 'right',
-                sort: true,
-                caption: 'Banned',
-            },
             error: {
                 get(item) {
                     return item.error;
@@ -179,35 +92,10 @@ export const tableProps = {
             },
         },
         sets: {
-            summary: {
-                items: [
-                    'version',
-                    'primary_masters',
-                    'secondary_masters',
-                    'schedulers',
-                    'controller_agents',
-                    'nodes',
-                    'http_proxies',
-                    'rpc_proxies',
-                    'online_count',
-                    'offline_count',
-                    'banned_count',
-                ],
-            },
             detailed: {
                 items: ['address', 'version', 'state', 'banned', 'type', 'error', 'start_time'],
             },
         },
-    },
-};
-
-export const summaryTableProps = {
-    ...tableProps,
-    css: 'components-versions-summary',
-    tableId: COMPONENTS_VERSIONS_SUMMARY_TABLE_ID,
-    columns: {
-        ...tableProps.columns,
-        mode: 'summary',
     },
 };
 
