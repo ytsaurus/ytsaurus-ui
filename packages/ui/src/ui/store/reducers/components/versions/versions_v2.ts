@@ -44,7 +44,8 @@ export type HostType =
     | 'cluster_node'
     | 'http_proxy'
     | 'rpc_proxy'
-    | 'scheduler';
+    | 'scheduler'
+    | 'job_proxy';
 
 export interface VersionHostInfo {
     address: string;
@@ -56,20 +57,6 @@ export interface VersionHostInfo {
     offline: boolean;
     error: unknown;
 }
-
-export const NODE_ROLES_ORDER = [
-    'primary_master',
-    'secondary_master',
-    'job_proxy',
-    'controller_agent',
-    'nodes',
-    'cluster_node',
-    'controller_agent',
-    'http_proxy',
-    'rpc_proxy',
-] as const;
-
-export type NodeRoleType = (typeof NODE_ROLES_ORDER)[number];
 
 export type VersionSummaryItem = Partial<Record<HostType, number>> &
     Record<'banned' | 'online' | 'offline', number> & {version: string};
