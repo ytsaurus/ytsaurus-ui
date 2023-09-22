@@ -15,12 +15,12 @@
 
 // reset
 
-@mixin reset-ul () {
+@mixin reset-ul() {
     margin: 0;
     padding: 0;
 }
 
-@mixin reset-li () {
+@mixin reset-li() {
     list-style-type: none;
 }
 
@@ -32,16 +32,35 @@
     line-height: var(--g-line-height);
 }
 
-
 // heading
 
 @mixin heading-size($key) {
     $sizes: (
-        s: (16px 20px $offset-heading-small),
-        xs: (18px 20px $offset-heading-small-x),
-        m: (20px 24px $offset-heading-medium),
-        l: (24px 28px $offset-heading-large),
-        xl: (24px 28px $offset-heading-large),
+        s: (
+            16px,
+            20px,
+            $offset-heading-small,
+        ),
+        xs: (
+            18px,
+            20px,
+            $offset-heading-small-x,
+        ),
+        m: (
+            20px,
+            24px,
+            $offset-heading-medium,
+        ),
+        l: (
+            24px,
+            28px,
+            $offset-heading-large,
+        ),
+        xl: (
+            24px,
+            28px,
+            $offset-heading-large,
+        ),
     );
     $size: map-get($sizes, $key);
 
@@ -62,7 +81,7 @@ $stickyVerticalPadding: 10px;
     padding: $stickyVerticalPadding 20px;
 
     box-shadow: 0 1px 10px var(--opacity-background);
-    background-color: var(--light-background);
+    background-color: var(--main-background);
     border-bottom: 1px solid var(--dark-divider);
     z-index: var(--fixed-toolbar-z-index);
 }

@@ -84,29 +84,35 @@ body {
         z-index: var(--dialog-z-index);
     }
 
-    .yc-button_disabled.yc-button_view_outlined::before,
-    .yc-button_disabled.yc-button_view_outlined-info::before,
-    .yc-button_disabled.yc-button_view_outlined-danger::before {
-        background-color: var(--yc-button-background-color);
-    }
-    .yc-select-control_disabled.yc-select-control,
-    .yc-text-input_disabled {
-        .yc-text-input__content {
-            background-color: var(--g-color-base-generic-accent-disabled);
+    .yt-special-background {
+        .yc-button_disabled.yc-button_view_outlined::before,
+        .yc-button_disabled.yc-button_view_outlined-info::before,
+        .yc-button_disabled.yc-button_view_outlined-danger::before {
+            background-color: var(--yc-button-background-color);
         }
-    }
+        .yc-select-control_disabled.yc-select-control,
+        .yc-text-input_disabled {
+            .yc-text-input__content {
+                background-color: var(--g-color-base-generic-accent-disabled);
+            }
+        }
 
-    .yc-button_view_outlined::before,
-    .yc-button_view_outlined-info::before,
-    .yc-button_view_outlined-danger::before,
-    .yc-select-control,
-    .yc-text-input__content {
-        background-color: var(--main-background);
-    }
+        .yt-select,
+        .yc-button_view_outlined::before,
+        .yc-button_view_outlined-info::before,
+        .yc-button_view_outlined-danger::before {
+            background-color: var(--main-background);
+        }
 
-    .yc-select-search {
+        .yc-select-control,
         .yc-text-input__content {
-            background-color: unset;
+            background-color: var(--main-background);
+        }
+
+        .yc-select-search {
+            .yc-text-input__content {
+                background-color: unset;
+            }
         }
     }
 
