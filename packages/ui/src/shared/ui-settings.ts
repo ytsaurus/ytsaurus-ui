@@ -66,10 +66,24 @@ export interface UISettings {
     operationsMonitoring?: UISettingsMonitoring;
 
     /**
-     * Allows to define regular expression to get hash-part from version of node by named group 'hash'
+     * Allows to define regular expression to extract hash-part from version of node by named group 'hash'
      * @example reHashFromNodeVersion: '[^~]+(?<hash>[^+]+)'
      */
     reHashFromNodeVersion?: string;
+
+    /**
+     * Allows to define regular expression to extract short-name from full address of host by named group 'shortname'.
+     *  Also it supports optional named group 'suffix' that will pe appended to shortname as is.
+     * @example reShortNameFromAddress: '(?<shortname>.*)((\\.msk\\.my-domain\\.ru)|(\\.vla\\.my-domain\\.net))'
+     * @example reShortNameFromAddress: '(?<shortname>.*)((\\.msk\\.my-domain\\.ru)|(\\.vla\\.my-domain\\.net))'
+     */
+    reShortNameFromAddress?: string;
+
+    /**
+     * Allows to override behavior of `reShortNameFromAddress` for tablet/bundles/cells specific parts of UI.
+     * @example reShortNameFromTabletNodeAddress: '(?<shortname>[^-]+-[^-]+).*'
+     */
+    reShortNameFromTabletNodeAddress?: string;
 }
 
 export interface UISettingsMonitoring {

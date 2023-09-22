@@ -28,6 +28,9 @@ const e2eConfig: Partial<AppConfig> = {
             urlTemplate:
                 'https://my.monitoring.service/operations?cluster={ytCluster}&id={ytOperationId}&pool={ytPool}&tree={ytPoolTree}&from={fromTimeMs}&to={toTimeMs}',
         },
+
+        reShortNameFromAddress: '(?<shortname>^(loca)).*(?<suffix>:\\d\\d\\d)',
+        reShortNameFromTabletNodeAddress: '(?<shortname>^(local))[^:]+(?<suffix>:\\d\\d)',
     },
 
     defaultUserSettingsOverrides: {

@@ -61,7 +61,7 @@ export function NodeMaintenanceModal() {
             headerProps={{
                 title: (
                     <>
-                        <Host asText prefix={<>Edit &nbsp;</>} address={address} />
+                        <Host useText prefix={<>Edit &nbsp;</>} address={address} />
                     </>
                 ),
             }}
