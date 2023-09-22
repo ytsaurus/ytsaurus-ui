@@ -47,6 +47,7 @@ import {getUISizes} from '../../../../store/selectors/global';
 import templates, {ColumnAsTime, printColumnAsError} from '../../../../components/templates/utils';
 import {VersionHostInfo} from '../../../../store/reducers/components/versions/versions_v2';
 import {ClickableId, NodeColumnBanned, NodeColumnState} from '../NodeColumns';
+import {Host} from '../../../../containers/Host/Host';
 
 import './Versions.scss';
 
@@ -194,9 +195,16 @@ class VersionsV2 extends React.Component<ReduxProps> {
                 />
             ),
             error: (item) => printColumnAsError(item.error),
-            address: (item) => (
-                <ClickableId text={item.address} onClick={() => changeHostFilter(item.address)} />
-            ),
+            address: (item) => {
+                return (
+                    <Host
+                        address={item.address}
+                        onClick={() => changeHostFilter(item.address)}
+                        useText
+                        allowByRegexp
+                    />
+                );
+            },
             state: (item) => <NodeColumnState state={item.state} />,
             banned: (item) => <NodeColumnBanned banned={item.banned} />,
             decommissioned: templates.get('components').decommissioned,

@@ -9,6 +9,7 @@ import StatusBlock from '../../../components/StatusBlock/StatusBlock';
 import ClipboardButton from '../../../components/ClipboardButton/ClipboardButton';
 import NodeActions from '../../../pages/components/tabs/nodes/NodeActions/NodeActions';
 import MemoryProgress from '../../../pages/components/tabs/nodes/MemoryProgress/MemoryProgress';
+import {Host} from '../../../containers/Host/Host';
 
 import hammer from '../../../common/hammer';
 import {
@@ -679,24 +680,8 @@ export const NODES_TABLE_TEMPLATES: Templates = {
             return hammer.format['Number'](item.IOWeight[mediumName]);
         }
     },
-    host(item, columnName) {
-        return (
-            <div
-                className="elements-column_type_id elements-column_with-hover-button"
-                title={item.host}
-            >
-                <span className="elements-monospace elements-ellipsis">
-                    {hammer.format['Address'](item.host)}
-                </span>
-                &nbsp;
-                <ClipboardButton
-                    text={item.host}
-                    view="flat-secondary"
-                    size="s"
-                    title={'Copy ' + columnName}
-                />
-            </div>
-        );
+    host(item) {
+        return <Host address={item.host} useText allowByRegexp />;
     },
     state(item) {
         return <NodeColumnState state={item.state} />;
