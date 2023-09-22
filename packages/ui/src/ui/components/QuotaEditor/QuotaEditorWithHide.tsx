@@ -113,7 +113,12 @@ export default class QuotaEditorWithHide extends React.Component<Props, State> {
         const {isReadyToSave} = this.state;
 
         return (
-            <div className={block(null, className)}>
+            <div
+                className={block(
+                    null,
+                    [className, 'yt-special-background'].filter(Boolean).join(' '),
+                )}
+            >
                 <div className={block('top')}>
                     Edit Quota limit
                     <Link className={block('hide')} theme={'ghost'} onClick={onHide}>

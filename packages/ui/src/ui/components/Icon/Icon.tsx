@@ -79,6 +79,7 @@ export default function Icon({className = '', face, awesome, spin, size: propSiz
             className={`${block({
                 'not-exist': !hasIcon,
                 spin,
+                name: iconName || undefined,
             })} icon icon_awesome ${className}`}
         >
             <KitIcon data={icon} size={iconsSize} />

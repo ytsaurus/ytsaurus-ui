@@ -10,8 +10,6 @@ import map_ from 'lodash/map';
 import includes_ from 'lodash/includes';
 import keys_ from 'lodash/keys';
 
-import {Text} from '@gravity-ui/uikit';
-
 import ColumnSelector from '../../../../../components/ColumnSelector/ColumnSelector';
 import ElementsTable from '../../../../../components/ElementsTable/ElementsTable';
 import Radiobutton from '../../../../../components/RadioButton/RadioButton';
@@ -237,8 +235,7 @@ class Nodes extends React.Component<ReduxProps & WithVisibleProps, State> {
                     onClick={toggleVisible}
                     selected={isFiltered}
                 >
-                    <Icon awesome="filter" /> Filter
-                    <Text color="secondary"> {filterCount}</Text>
+                    <Icon awesome="filter" /> Filter {filterCount}
                 </Button>
 
                 <Dropdown
