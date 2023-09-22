@@ -6,8 +6,42 @@ import {getCluster} from '../../store/selectors/global';
 import Link from '../../components/Link/Link';
 import ClipboardButton from '../../components/ClipboardButton/ClipboardButton';
 import {Tooltip} from '../../components/Tooltip/Tooltip';
+import {uiSettings} from '../../config';
 
 import './Host.scss';
+
+function makeRegexpFromSettings(value?: string) {
+    try {
+        return new RegExp(value!);
+    } catch {
+        return undefined;
+    }
+}
+
+const reShortName = makeRegexpFromSettings(uiSettings.reShortNameFromAddress);
+const reTabletNodeShortName = makeRegexpFromSettings(uiSettings.reShortNameFromTabletNodeAddress);
+
+function calcShortNameByRegExp(address: string, asTabletNode?: boolean) {
+    const re = asTabletNode ? reTabletNodeShortName : reShortName;
+    if (re) {
+        const res = re?.exec(address);
+        if (res?.groups?.shortname) {
+            return [res.groups.shortname, res.groups.suffix].filter(Boolean).join('');
+        }
+    }
+    return undefined;
+}
+
+function calcShortNameByMinus(address: string) {
+    const first = address.indexOf('-');
+    const second = address.indexOf('-', first + 1);
+    const res = address.substring(0, second);
+    if (res.length) {
+        return res;
+    }
+    const dotIndex = address.indexOf('.');
+    return dotIndex === -1 ? address : address.substring(0, dotIndex);
+}
 
 const block = cn('yt-host');
 
@@ -15,32 +49,43 @@ interface Props {
     address: string;
     className?: string;
     copyBtnClassName?: string;
-    asText?: boolean;
+    onClick?: () => void;
+    useText?: boolean;
     prefix?: React.ReactNode;
+    asTabletNode?: boolean;
 }
 
-export function Host({address = '', prefix, className, asText, copyBtnClassName}: Props) {
+export function Host({
+    address = '',
+    prefix,
+    className,
+    copyBtnClassName,
+    onClick,
+    useText,
+    asTabletNode,
+}: Props) {
     const host = React.useMemo(() => {
-        const first = address.indexOf('-');
-        const second = address.indexOf('-', first + 1);
-        const res = address.substring(0, second);
-        if (res.length) {
-            return res;
-        }
-        const dotIndex = address.indexOf('.');
-        return dotIndex === -1 ? address : address.substring(0, dotIndex);
-    }, [address]);
+        return calcShortNameByRegExp(address, asTabletNode) || calcShortNameByMinus(address);
+    }, [address, asTabletNode]);
 
     const cluster = useSelector(getCluster);
 
     return (
-        <span className={block({hidden: !host}, className)}>
+        <span
+            className={block(
+                {hidden: !host},
+                ['elements-monospace', className].filter(Boolean).join(' '),
+            )}
+            onClick={onClick}
+        >
             {prefix}
             <Tooltip content={address}>
-                {asText ? (
+                {useText ? (
                     host
                 ) : (
-                    <Link url={`/${cluster}/components/nodes/${address}`}>{host}</Link>
+                    <Link url={`/${cluster}/components/nodes/${address}`} routed>
+                        {host}
+                    </Link>
                 )}
             </Tooltip>
             <span className={block('copy-btn', copyBtnClassName)}>

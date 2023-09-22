@@ -27,6 +27,14 @@ exports.default = {
 
 `uiSettings` object from config is passed to user's browser "as is" and might it be accessed as `window.__DATA__.uiSettings`.
 
+#### `uiSettings.reShortNameFromAddress`
+
+The option allows to define regular expression with named groups `shortname` and `suffix` to extract short name from address of node. `suffix`-group is optional, but if it is preset it will be concatenated with shortname.
+
+#### `uiSettings.reShortNameFromTabletNodeAddress`
+
+The option is similar to `reShortNameFromAddress` but it is applied only to bundles/tablets/cells specific parts of UI, the option do not affects `Components/Nodes`.
+
 ##### `uiSettings.schedulingMonitoring`
 
 ```ts

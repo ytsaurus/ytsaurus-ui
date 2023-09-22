@@ -123,7 +123,13 @@ class CellsTable extends React.Component<Props & ReduxProps> {
     };
 
     renderHost(data: {row: TabletCell}) {
-        return <Host address={data?.row?.peerAddress} copyBtnClassName={block('hover-action')} />;
+        return (
+            <Host
+                asTabletNode
+                address={data?.row?.peerAddress}
+                copyBtnClassName={block('hover-action')}
+            />
+        );
     }
 
     renderBundle = (data: {row: TabletCell}) => {

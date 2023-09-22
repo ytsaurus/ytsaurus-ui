@@ -55,7 +55,7 @@ export function host<T>(name: string, getter: (row: T) => string, classNames: st
         name,
         render({row}) {
             const host = getter(row);
-            return <Host address={host} copyBtnClassName={classNames} />;
+            return <Host asTabletNode address={host} copyBtnClassName={classNames} />;
         },
         sortAccessor: getter,
     };
