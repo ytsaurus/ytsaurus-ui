@@ -63,11 +63,14 @@ export class SetupModal extends Component {
             default: PropTypes.shape({
                 physicalHost: PropTypes.string.isRequired,
                 tag: PropTypes.oneOfType([PropTypes.string, PropTypes.object]).isRequired,
-                state: PropTypes.string.isRequired,
+                state: PropTypes.arrayOf(PropTypes.string),
                 schedulerJobs: SetupModal.radioProps.isRequired,
                 writeSessions: SetupModal.radioProps.isRequired,
                 tabletCells: SetupModal.radioProps.isRequired,
-                rack: PropTypes.object.isRequired,
+                rack: PropTypes.oneOfType([
+                    PropTypes.string.isRequired,
+                    PropTypes.object.isRequired,
+                ]).isRequired,
                 banned: SetupModal.radioProps.isRequired,
                 decommissioned: SetupModal.radioProps.isRequired,
                 full: SetupModal.radioProps.isRequired,

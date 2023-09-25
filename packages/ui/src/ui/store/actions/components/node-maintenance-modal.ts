@@ -9,6 +9,7 @@ import {
 import {
     NodeMaintenanceAction,
     NodeMaintenanceState,
+    NodeResourceLimits,
 } from '../../../store/reducers/components/node-maintenance-modal';
 import {
     isAllowedMaintenanceApiNodes,
@@ -21,6 +22,7 @@ import {updateComponentsNode} from './nodes/nodes';
 import {getCurrentUserName} from '../../../store/selectors/global';
 import {getProxies} from './proxies/proxies';
 import _ from 'lodash';
+import {prepareSetCommandForBatch} from 'utils/cypress-attributes';
 
 type NodeMaintenanceThunkAction<T = Promise<unknown>> = ThunkAction<
     T,
@@ -84,9 +86,21 @@ export function applyMaintenance(
     address: string,
     component: NodeMaintenanceState['component'],
     data: NodeMaintenanceState['maintenance'],
+    resourceLimitsOverrides?: Partial<NodeResourceLimits>,
 ): NodeMaintenanceThunkAction {
     return (dispatch, getState) => {
         const requests: Array<BatchSubRequest> = [];
+
+        const path = makeNodePath(address, component);
+
+        if (resourceLimitsOverrides !== undefined) {
+            requests.push(
+                prepareSetCommandForBatch(
+                    `${path}/@resource_limits_overrides`,
+                    resourceLimitsOverrides,
+                ),
+            );
+        }
 
         forEach_(data, (item, t) => {
             const type = t as AddMaintenanceParams['type'];
@@ -139,14 +153,14 @@ export function applyMaintenance(
 }
 
 export function showNodeMaintenance(
-    data: Pick<NodeMaintenanceState, 'address' | 'component'>,
+    params: Pick<NodeMaintenanceState, 'address' | 'component'>,
 ): NodeMaintenanceThunkAction {
     return async (dispatch) => {
-        const maintenance = await dispatch(loadNodeMaintenanceData(data));
+        const data = await dispatch(loadNodeMaintenanceData(params));
 
         return dispatch({
             type: NODE_MAINTENANCE_PARTIAL,
-            data: {...data, maintenance},
+            data: {...params, ...data},
         });
     };
 }
@@ -167,6 +181,9 @@ type MaintenanceDataResponse = {
     disable_tablet_cells?: boolean;
     disable_write_sessions?: boolean;
 
+    resource_limits?: NodeResourceLimits;
+    resource_limits_overrides?: Partial<NodeResourceLimits>;
+
     maintenance_requests?: Record<string, MaintenanceRequestInfo>;
 };
 
@@ -174,7 +191,11 @@ export function loadNodeMaintenanceData({
     address,
     component,
 }: Pick<NodeMaintenanceState, 'address' | 'component'>): NodeMaintenanceThunkAction<
-    Promise<NodeMaintenanceState['maintenance']>
+    Promise<{
+        maintenance: NodeMaintenanceState['maintenance'];
+        resourceLimits?: NodeResourceLimits;
+        resourceLimitsOverrides?: Partial<NodeResourceLimits>;
+    }>
 > {
     return (_dispatch, getState) => {
         const state = getState();
@@ -187,6 +208,8 @@ export function loadNodeMaintenanceData({
             ytApiV3Id.get(YTApiId.maintenanceRequests, {
                 path,
                 attributes: [
+                    'resource_limits',
+                    'resource_limits_overrides',
                     ...(allowMaintenanceRequests
                         ? ['maintenance_requests']
                         : [
@@ -232,7 +255,11 @@ export function loadNodeMaintenanceData({
                     disable_write_sessions: {state: data.disable_write_sessions},
                 } as typeof maintenance);
             }
-            return maintenance;
+            return {
+                maintenance,
+                resourceLimits: data.resource_limits,
+                resourceLimitsOverrides: data.resource_limits_overrides,
+            };
         });
     };
 }

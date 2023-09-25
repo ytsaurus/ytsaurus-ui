@@ -22,12 +22,31 @@ export type NodeMaintenanceState = {
             }
         >
     >;
+
+    resourceLimits?: Partial<NodeResourceLimits>;
+    resourceLimitsOverrides?: Partial<NodeResourceLimits>;
+};
+
+export type NodeResourceLimits = {
+    cpu: number;
+    gpu: number;
+    network: number;
+    replication_slots: number;
+    replication_data_size: number;
+    removal_slots: number;
+    repair_slots: number;
+    repair_data_size: number;
+    seal_slots: number;
+    system_memory: number;
+    user_memory: number;
 };
 
 const initialState: NodeMaintenanceState = {
     component: 'cluster_node',
     address: '',
     maintenance: {},
+    resourceLimits: undefined,
+    resourceLimitsOverrides: undefined,
 };
 
 function reducer(state: NodeMaintenanceState, action: NodeMaintenanceAction): NodeMaintenanceState {

@@ -53,7 +53,6 @@ export class Node {
         'io_weight',
         'resource_usage',
         'resource_limits',
-        'resource_limits_overrides',
         'user_tags',
         'tags',
         'data_center',
@@ -130,7 +129,6 @@ export class Node {
     replicationSlots!: NodeSlots;
     replicationSlotsProgress!: number;
     resourcesLimit: unknown;
-    resourcesLimitOverrides: unknown;
     sealSlots!: NodeSlots;
     sealSlotsProgress!: number;
     sessions!: number;
@@ -261,8 +259,6 @@ export class Node {
     private prepareResources(attributes: Attributes) {
         const resourceUsage = ypath.getValue(attributes, '/resource_usage');
         const resourceLimits = ypath.getValue(attributes, '/resource_limits');
-        this.resourcesLimitOverrides =
-            ypath.getValue(attributes, '/resource_limits_overrides') || {};
         this.resourcesLimit = resourceLimits || {};
 
         // Network
@@ -494,7 +490,6 @@ export const AttributesByProperty: Record<keyof Node, ReadonlyArray<AttributeNam
     replicationSlots: replicationSlotsAttributes,
     replicationSlotsProgress: replicationSlotsAttributes,
     resourcesLimit: resourceLimitsAttributes,
-    resourcesLimitOverrides: ['resource_limits_overrides'],
     sealSlots: sealSlotsAttributes,
     sealSlotsProgress: sealSlotsAttributes,
     sessions: ['/statistics/total_session_count'],

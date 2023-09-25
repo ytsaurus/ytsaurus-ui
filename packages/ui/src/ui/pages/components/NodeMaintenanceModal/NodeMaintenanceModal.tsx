@@ -1,12 +1,21 @@
 import React from 'react';
 import {useSelector} from 'react-redux';
+import cn from 'bem-cn-lite';
 
 import reduce_ from 'lodash/reduce';
 
+import format from '../../../common/hammer/format';
+
 import {AddMaintenanceParams} from '../../../../shared/yt-types';
 import {YTDFDialog, makeErrorFields} from '../../../components/Dialog/Dialog';
-import type {NodeMaintenanceState} from '../../../store/reducers/components/node-maintenance-modal';
-import {getNodeMaintenanceModalData} from '../../../store/selectors/components/node-maintenance-modal';
+import type {
+    NodeMaintenanceState,
+    NodeResourceLimits,
+} from '../../../store/reducers/components/node-maintenance-modal';
+import {
+    getNodeMaintenanceModalInitialValues,
+    getNodeMaintenanceModalState,
+} from '../../../store/selectors/components/node-maintenance-modal';
 import {
     applyMaintenance,
     // applyMaintenance,
@@ -16,7 +25,13 @@ import {useThunkDispatch} from '../../../store/thunkDispatch';
 import {YTError} from '../../../../@types/types';
 import {Host} from 'containers/Host/Host';
 
-type FormValues = NodeMaintenanceState['maintenance'] & {limits: unknown};
+import './NodeMaintenanceModal.scss';
+
+const block = cn('node-maintenance-modal');
+
+type FormValues = NodeMaintenanceState['maintenance'] & {
+    limits: Partial<{[K in keyof NodeResourceLimits]: {value?: number}}>;
+};
 
 function makeLabels(type: AddMaintenanceParams['type']) {
     const labels: Record<typeof type, [string, string]> = {
@@ -35,8 +50,9 @@ export function NodeMaintenanceModal() {
     const dispatch = useThunkDispatch();
     const [error, setError] = React.useState<YTError | undefined>();
 
-    const state = useSelector(getNodeMaintenanceModalData);
-    const {address, component, maintenance} = state;
+    const initialValues = useSelector(getNodeMaintenanceModalInitialValues);
+    const {maintenance} = initialValues;
+    const {address, component, resourceLimits} = useSelector(getNodeMaintenanceModalState);
 
     function makeMaintenanceFields({
         type,
@@ -77,6 +93,27 @@ export function NodeMaintenanceModal() {
         ];
     }
 
+    function makeResourceLimitField(
+        name: keyof NodeResourceLimits,
+        options?: {
+            caption?: string;
+            format?: 'Number' | 'Bytes';
+        },
+    ) {
+        return {
+            type: 'number' as const,
+            name,
+            caption: options?.caption || format.ReadableField(name),
+            extras: {
+                format: options?.format ?? 'Number',
+                showDefaultValue: true,
+                defaultValue: resourceLimits?.[name],
+                defaultValueClassName: block('limit-default'),
+                bottomLineVisibility: 'focused' as const,
+            },
+        };
+    }
+
     return address ? (
         <YTDFDialog<FormValues>
             visible
@@ -87,11 +124,11 @@ export function NodeMaintenanceModal() {
                     </>
                 ),
             }}
-            initialValues={maintenance}
+            initialValues={initialValues}
             onClose={() => dispatch(closeNodeMaintenanceModal())}
             onAdd={async (form) => {
                 const {
-                    values: {limits: _x, ...rest},
+                    values: {limits, ...rest},
                 } = form.getState();
 
                 const diff = reduce_(
@@ -106,8 +143,31 @@ export function NodeMaintenanceModal() {
                     {} as Partial<FormValues>,
                 );
 
+                let hasLimitsChanges = false;
+                const newLimits = reduce_(
+                    limits,
+                    (acc, item, k) => {
+                        const key = k as keyof typeof limits;
+                        if (initialValues.limits[key] !== item?.value) {
+                            hasLimitsChanges = true;
+                        }
+                        if (!isNaN(item?.value!)) {
+                            acc[key] = item?.value;
+                        }
+                        return acc;
+                    },
+                    {} as Partial<NodeResourceLimits>,
+                );
+
                 try {
-                    dispatch(applyMaintenance(address, component, diff));
+                    dispatch(
+                        applyMaintenance(
+                            address,
+                            component,
+                            diff,
+                            hasLimitsChanges ? newLimits : undefined,
+                        ),
+                    );
                 } catch (e: any) {
                     setError(e);
                 }
@@ -174,11 +234,21 @@ export function NodeMaintenanceModal() {
                     ],
                 },
                 {
-                    name: 'Limits',
+                    name: 'limits',
                     type: 'tab',
                     title: 'Limits',
                     fields: [
-                        {type: 'plain', name: 'x', caption: 'Not implemented'},
+                        makeResourceLimitField('cpu', {caption: 'vCPU'}),
+                        makeResourceLimitField('gpu', {caption: 'GPU'}),
+                        makeResourceLimitField('network'),
+                        makeResourceLimitField('replication_slots'),
+                        makeResourceLimitField('replication_data_size', {format: 'Bytes'}),
+                        makeResourceLimitField('removal_slots'),
+                        makeResourceLimitField('repair_slots'),
+                        makeResourceLimitField('repair_data_size', {format: 'Bytes'}),
+                        makeResourceLimitField('seal_slots'),
+                        makeResourceLimitField('system_memory', {format: 'Bytes'}),
+                        makeResourceLimitField('user_memory', {format: 'Bytes'}),
                         ...makeErrorFields([error]),
                     ],
                 },
