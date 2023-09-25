@@ -79,6 +79,10 @@ export interface SubRequest<K extends string, T extends BaseBatchParams> {
     setup?: unknown;
 }
 
+export type SetSubRequest<K extends string, T extends BaseBatchParams, V> = SubRequest<K, T> & {
+    input: V;
+};
+
 export interface BaseBatchParams {
     transaction_id?: string;
     ui_marker?: string;
@@ -166,7 +170,8 @@ export type BatchSubRequest =
     | SubRequest<'transfer_pool_resources', TransferPoolQuotaParams>
     | SubRequest<'mount_table' | 'unmount_table' | 'freeze_table' | 'unfreeze_table', PathParams>
     | SubRequest<'check_permission', CheckPermissionsParams>
-    | SubRequest<'set' | 'remove', PathParams>
+    | SetSubRequest<'set', PathParams, any>
+    | SubRequest<'remove', PathParams>
     | SubRequest<'get' | 'list', GetParams>
     | SubRequest<'exists', PathParams>
     | SubRequest<'copy' | 'move', CopyMoveParams>

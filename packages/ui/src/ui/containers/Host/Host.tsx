@@ -15,9 +15,11 @@ interface Props {
     address: string;
     className?: string;
     copyBtnClassName?: string;
+    asText?: boolean;
+    prefix?: React.ReactNode;
 }
 
-export function Host({address = '', className, copyBtnClassName}: Props) {
+export function Host({address = '', prefix, className, asText, copyBtnClassName}: Props) {
     const host = React.useMemo(() => {
         const first = address.indexOf('-');
         const second = address.indexOf('-', first + 1);
@@ -33,8 +35,13 @@ export function Host({address = '', className, copyBtnClassName}: Props) {
 
     return (
         <span className={block({hidden: !host}, className)}>
+            {prefix}
             <Tooltip content={address}>
-                <Link url={`/${cluster}/components/nodes/${address}`}>{host}</Link>
+                {asText ? (
+                    host
+                ) : (
+                    <Link url={`/${cluster}/components/nodes/${address}`}>{host}</Link>
+                )}
             </Tooltip>
             <span className={block('copy-btn', copyBtnClassName)}>
                 <ClipboardButton view={'flat-secondary'} text={address} />

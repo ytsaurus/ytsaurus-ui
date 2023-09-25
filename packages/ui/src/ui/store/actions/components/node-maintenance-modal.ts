@@ -1,9 +1,5 @@
 import type {ThunkAction} from 'redux-thunk';
-import filter_ from 'lodash/filter';
-import partition_ from 'lodash/partition';
-
-import format from '../../../common/hammer/format';
-import ypath from '../../../common/thor/ypath';
+import forEach_ from 'lodash/forEach';
 
 import {RootState} from '../../../store/reducers';
 import {
@@ -19,11 +15,12 @@ import {
     isAllowedMaintenanceApiProxies,
 } from '../../../store/selectors/components/node-maintenance-modal';
 import {wrapApiPromiseByToaster} from '../../../utils/utils';
-import {YTApiId, ytApiV3, ytApiV3Id} from '../../../rum/rum-wrap-api';
-import {AddMaintenanceParams} from '../../../../shared/yt-types';
+import {YTApiId, ytApiV3Id} from '../../../rum/rum-wrap-api';
+import {AddMaintenanceParams, BatchSubRequest} from '../../../../shared/yt-types';
 import {updateComponentsNode} from './nodes/nodes';
 import {getCurrentUserName} from '../../../store/selectors/global';
 import {getProxies} from './proxies/proxies';
+import _ from 'lodash';
 
 type NodeMaintenanceThunkAction<T = Promise<unknown>> = ThunkAction<
     T,
@@ -45,48 +42,84 @@ function makeNodePath(address: string, component: AddMaintenanceParams['componen
     }
 }
 
-const applyObsoleteMaintenance: typeof applyMaintenance = (
-    command,
-    {address, type, comment: c, component},
-): NodeMaintenanceThunkAction => {
-    return () => {
-        const path = makeNodePath(address, component);
-        const isAdd = command === 'add_maintenance';
-        const comment = isAdd ? c : '';
-        switch (type) {
-            case 'ban': {
-                const banned = command === 'add_maintenance';
-                return Promise.all([
-                    ytApiV3.set({path: `${path}/@banned`}, banned),
-                    ytApiV3.set({path: `${path}/@ban_message`}, comment),
-                ]);
-            }
-            case 'disable_scheduler_jobs':
-            case 'disable_tablet_cells':
-            case 'disable_write_sessions':
-                return ytApiV3.set({path: `${path}/@${type}`}, isAdd);
-            case 'decommission':
-                return Promise.all([
-                    ytApiV3.set({path: `${path}/@decommissioned`}, isAdd),
-                    ytApiV3.set({path: `${path}/@decommission_message`}, isAdd),
-                ]);
-            default:
-                return Promise.resolve();
+function makeObsoleteMaintenanceRequests(
+    command: 'add_maintenance' | 'remove_maintenance',
+    {
+        address,
+        type,
+        comment: c,
+        component,
+    }: Pick<AddMaintenanceParams, 'address' | 'type' | 'comment' | 'component'>,
+): Array<BatchSubRequest> {
+    const path = makeNodePath(address, component);
+    const isAdd = command === 'add_maintenance';
+    const comment = isAdd ? c : '';
+    switch (type) {
+        case 'ban': {
+            const banned = command === 'add_maintenance';
+            return [
+                {command: 'set', parameters: {path: `${path}/@banned`}, input: banned},
+                {command: 'set', parameters: {path: `${path}/@ban_message`}, input: comment},
+            ];
         }
-    };
-};
+        case 'disable_scheduler_jobs':
+        case 'disable_tablet_cells':
+        case 'disable_write_sessions':
+            return [{command: 'set', parameters: {path: `${path}/@${type}`}, input: isAdd}];
+        case 'decommission':
+            return [
+                {command: 'set', parameters: {path: `${path}/@decommissioned`}, input: isAdd},
+                {
+                    command: 'set',
+                    parameters: {path: `${path}/@decommission_message`},
+                    input: isAdd ? comment : '',
+                },
+            ];
+        default:
+            return [];
+    }
+}
 
 export function applyMaintenance(
-    command: NodeMaintenanceState['command'],
-    data: Pick<AddMaintenanceParams, 'component' | 'address' | 'comment' | 'type'>,
+    address: string,
+    component: NodeMaintenanceState['component'],
+    data: NodeMaintenanceState['maintenance'],
 ): NodeMaintenanceThunkAction {
     return (dispatch, getState) => {
-        const {component, address, comment, type} = data;
+        const requests: Array<BatchSubRequest> = [];
 
-        const onSuccess = () => {
+        forEach_(data, (item, t) => {
+            const type = t as AddMaintenanceParams['type'];
+            const command = item?.state ? 'add_maintenance' : 'remove_maintenance';
+            const comment = item?.comment;
+
+            if (!isMaintenanceApiAllowedForComponent(component, getState())) {
+                requests.push(
+                    ...makeObsoleteMaintenanceRequests(command, {
+                        address,
+                        component,
+                        comment,
+                        type,
+                    }),
+                );
+            } else {
+                requests.push({
+                    command,
+                    parameters: {
+                        component,
+                        address,
+                        type,
+                        mine: true,
+                        comment,
+                    },
+                });
+            }
+        });
+
+        const reloadNodeData = () => {
             switch (component) {
                 case 'cluster_node':
-                    return dispatch(updateComponentsNode(data.address));
+                    return dispatch(updateComponentsNode(address));
                 case 'http_proxy':
                     return dispatch(getProxies('http'));
                 case 'rpc_proxy':
@@ -94,44 +127,26 @@ export function applyMaintenance(
             }
         };
 
-        if (!isMaintenanceApiAllowedForComponent(component, getState())) {
-            return dispatch(applyObsoleteMaintenance(command, data)).then(onSuccess);
-        }
-
-        return wrapApiPromiseByToaster(
-            ytApiV3Id.executeBatch(YTApiId.addMaintenance, {
-                requests: [
-                    {
-                        command,
-                        parameters: {
-                            component,
-                            address,
-                            type,
-                            mine: true,
-                            comment,
-                        },
-                    },
-                ],
-            }),
-            {
-                toasterName: 'add_maintenance',
-                isBatch: true,
-                skipSuccessToast: true,
-                errorTitle: `Failed to ${format.ReadableField(command).toLowerCase()}`,
-            },
-        ).then(onSuccess);
+        return wrapApiPromiseByToaster(ytApiV3Id.executeBatch(YTApiId.addMaintenance, {requests}), {
+            toasterName: 'edit_node_' + address,
+            isBatch: true,
+            skipSuccessToast: true,
+            errorTitle: `Failed to modify ${address}`,
+        })
+            .then(reloadNodeData)
+            .catch(reloadNodeData);
     };
 }
 
 export function showNodeMaintenance(
-    data: Pick<NodeMaintenanceState, 'address' | 'command' | 'component' | 'type'>,
+    data: Pick<NodeMaintenanceState, 'address' | 'component'>,
 ): NodeMaintenanceThunkAction {
     return async (dispatch) => {
-        const {mine, others} = await dispatch(loadNodeMaintenanceComments(data));
+        const maintenance = await dispatch(loadNodeMaintenanceData(data));
 
         return dispatch({
             type: NODE_MAINTENANCE_PARTIAL,
-            data: {...data, comment: mine ?? '', otherComments: others ?? ''},
+            data: {...data, maintenance},
         });
     };
 }
@@ -143,46 +158,81 @@ export type MaintenanceRequestInfo = {
     type: AddMaintenanceParams['type'];
 };
 
-export function loadNodeMaintenanceComments({
+type MaintenanceDataResponse = {
+    ban?: boolean;
+    ban_message?: string;
+    decommission?: boolean;
+    decommission_message?: string;
+    disable_scheduler_jobs?: boolean;
+    disable_tablet_cells?: boolean;
+    disable_write_sessions?: boolean;
+
+    maintenance_requests?: Record<string, MaintenanceRequestInfo>;
+};
+
+export function loadNodeMaintenanceData({
     address,
     component,
-    type,
-}: Pick<NodeMaintenanceState, 'address' | 'component' | 'type'>): NodeMaintenanceThunkAction<
-    Promise<{mine?: string; others?: string}>
+}: Pick<NodeMaintenanceState, 'address' | 'component'>): NodeMaintenanceThunkAction<
+    Promise<NodeMaintenanceState['maintenance']>
 > {
     return (_dispatch, getState) => {
-        if (!isMaintenanceApiAllowedForComponent(component, getState())) {
-            return Promise.resolve({});
-        }
+        const state = getState();
+        const user = getCurrentUserName(state);
+        const path = makeNodePath(address, component) + '/@';
 
-        const user = getCurrentUserName(getState());
-        const path = makeNodePath(address, component);
+        const allowMaintenanceRequests = isMaintenanceApiAllowedForComponent(component, state);
 
         return wrapApiPromiseByToaster(
             ytApiV3Id.get(YTApiId.maintenanceRequests, {
                 path,
-                attributes: ['maintenance_requests', type],
+                attributes: [
+                    ...(allowMaintenanceRequests
+                        ? ['maintenance_requests']
+                        : [
+                              'ban',
+                              'ban_message',
+                              'decommission',
+                              'decommission_message',
+                              'disable_scheduler_jobs',
+                              'disable_tablet_cells',
+                              'disable_write_sessions',
+                          ]),
+                ],
             }),
             {
-                toasterName: 'maintenance_request_' + path,
+                toasterName: 'maintenance_attributes_request_' + path,
                 skipSuccessToast: true,
-                errorContent: `Cannot load '@maintenance_requests' for ${path}`,
+                errorContent: `Cannot load node attributes for ${path}`,
             },
-        ).then((data: Record<string, MaintenanceRequestInfo>) => {
-            const [mine = [], others = []] = partition_(
-                filter_(ypath.get(data, '/@maintenance_requests'), (item) => {
-                    return item.type === type;
-                }),
-                (item) => {
-                    return user === item.user;
-                },
-            );
-            return {
-                mine: mine.map(({timestamp, comment}) => `${timestamp}: ${comment}`).join('\n'),
-                others: others
-                    .map(({timestamp, user, comment}) => `${timestamp}: ${user}: ${comment}`)
-                    .join('\n'),
-            };
+        ).then((data: MaintenanceDataResponse) => {
+            const maintenance: NodeMaintenanceState['maintenance'] = {};
+            if (allowMaintenanceRequests) {
+                forEach_(data.maintenance_requests, (item) => {
+                    const dst =
+                        maintenance[item.type] ??
+                        (maintenance[item.type] = {comment: '', othersComment: ''});
+
+                    if (item.user === user) {
+                        dst.state = true;
+                        if (dst.comment?.length) {
+                            dst.comment += '\n';
+                        }
+                        dst.comment += item.comment;
+                    } else {
+                        dst.othersComment += `${item.timestamp} ${item.user}\t${item.comment}`;
+                    }
+                });
+            } else {
+                Object.assign(maintenance, {
+                    ban: {state: data.ban, comment: data.ban_message},
+                    decommission: {state: data.decommission, comment: data.decommission_message},
+                    disable_scheduler_jobs: {state: data.disable_scheduler_jobs},
+                    disable_tablet_cells: {state: data.disable_tablet_cells},
+                    disable_write_sessions: {state: data.disable_write_sessions},
+                } as typeof maintenance);
+            }
+            return maintenance;
         });
     };
 }
