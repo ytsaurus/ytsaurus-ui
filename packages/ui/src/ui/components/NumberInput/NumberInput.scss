@@ -1,4 +1,8 @@
 .yt-number-input {
+    &__top {
+        display: flex;
+    }
+
     &__hint,
     &__pretty-value {
         color: var(--secondary-text);

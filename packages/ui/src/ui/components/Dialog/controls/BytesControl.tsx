@@ -37,7 +37,7 @@ export default class BytesControl extends Component<Omit<NumberInputProps, 'form
     }
 }
 
-export class NumberControl extends Component<Omit<NumberInputWithErrorProps, 'format'>> {
+export class NumberControl extends Component<NumberInputWithErrorProps> {
     static hasErrorRenderer = true;
 
     static getDefaultValue() {
@@ -59,7 +59,6 @@ export class NumberControl extends Component<Omit<NumberInputWithErrorProps, 'fo
                 className={block()}
                 {...this.props}
                 value={value?.value === ('' as any) ? {...value, value: undefined} : value}
-                format={'Number'}
             />
         );
     }
