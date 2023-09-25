@@ -4,7 +4,7 @@ import {createSelector} from 'reselect';
 import {RootState} from '../../reducers';
 import {getClusterUiConfig} from '../global';
 import {isSupportedNodeMaintenanceApi} from '../thor/support';
-import {NodeResourceLimits} from 'store/reducers/components/node-maintenance-modal';
+import {NodeResourceLimits} from '../../../store/reducers/components/node-maintenance-modal';
 
 export const getNodeMaintenanceModalState = (state: RootState) =>
     state.components.nodeMaintenanceModal;

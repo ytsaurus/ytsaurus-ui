@@ -23,7 +23,7 @@ import {
 } from '../../../store/actions/components/node-maintenance-modal';
 import {useThunkDispatch} from '../../../store/thunkDispatch';
 import {YTError} from '../../../../@types/types';
-import {Host} from 'containers/Host/Host';
+import {Host} from '../../../containers/Host/Host';
 
 import './NodeMaintenanceModal.scss';
 
@@ -143,15 +143,11 @@ export function NodeMaintenanceModal() {
                     {} as Partial<FormValues>,
                 );
 
-                let hasLimitsChanges = false;
-                const newLimits = reduce_(
+                const limitsDiff = reduce_(
                     limits,
                     (acc, item, k) => {
                         const key = k as keyof typeof limits;
                         if (initialValues.limits[key] !== item?.value) {
-                            hasLimitsChanges = true;
-                        }
-                        if (!isNaN(item?.value!)) {
                             acc[key] = item?.value;
                         }
                         return acc;
@@ -160,14 +156,7 @@ export function NodeMaintenanceModal() {
                 );
 
                 try {
-                    dispatch(
-                        applyMaintenance(
-                            address,
-                            component,
-                            diff,
-                            hasLimitsChanges ? newLimits : undefined,
-                        ),
-                    );
+                    dispatch(applyMaintenance(address, component, diff, limitsDiff));
                 } catch (e: any) {
                     setError(e);
                 }
