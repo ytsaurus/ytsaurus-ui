@@ -22,7 +22,6 @@ import Filter from '../../../../../components/Filter/Filter';
 import Icon from '../../../../../components/Icon/Icon';
 import Loader from '../../../../../components/Loader/Loader';
 
-import ResourcesLimitModal from '../NodeActions/ResourcesLimitsModal/ResourcesLimitsModal';
 import LoadDataHandler from '../../../../../components/LoadDataHandler/LoadDataHandler';
 import ErrorBoundary from '../../../../../components/ErrorBoundary/ErrorBoundary';
 import FiltersPresets from '../FilterPresets/FiltersPresets';
@@ -346,17 +345,6 @@ class Nodes extends React.Component<ReduxProps & WithVisibleProps, State> {
         );
     }
 
-    renderModals() {
-        const {resourcesHost} = this.props;
-
-        return (
-            <React.Fragment>
-                <ResourcesLimitModal key={resourcesHost} />
-                <NodeMaintenanceModal />
-            </React.Fragment>
-        );
-    }
-
     render() {
         const {visible} = this.props;
         const {preset} = this.state;
@@ -376,7 +364,7 @@ class Nodes extends React.Component<ReduxProps & WithVisibleProps, State> {
                             handleClose={this.handleSetupModalClose}
                         />
 
-                        {this.renderModals()}
+                        <NodeMaintenanceModal />
                     </div>
                 </LoadDataHandler>
             </ErrorBoundary>
@@ -388,7 +376,6 @@ const mapStateToProps = (state: RootState) => {
     const {splitScreen} = state.global;
     const {contentMode, nodes, loading, loaded, error, errorData, hostFilter} =
         state.components.nodes.nodes;
-    const {host: resourcesHost} = state.components.nodes.resourcesLimit;
 
     const visibleNodes = getVisibleNodes(state);
     const selectedColumns = getSelectedColumns(state) || defaultColumns;
@@ -408,7 +395,6 @@ const mapStateToProps = (state: RootState) => {
         totalItems: nodes.length,
         showingItems: visibleNodes.length,
         selectedColumns,
-        resourcesHost,
         hostFilter,
         contentMode,
         splitScreen,

@@ -20,9 +20,8 @@ import {YTApiId, ytApiV3Id} from '../../../rum/rum-wrap-api';
 import {AddMaintenanceParams, BatchSubRequest} from '../../../../shared/yt-types';
 import {updateComponentsNode} from './nodes/nodes';
 import {getCurrentUserName} from '../../../store/selectors/global';
+import {prepareSetCommandForBatch} from '../../../utils/cypress-attributes';
 import {getProxies} from './proxies/proxies';
-import _ from 'lodash';
-import {prepareSetCommandForBatch} from 'utils/cypress-attributes';
 
 type NodeMaintenanceThunkAction<T = Promise<unknown>> = ThunkAction<
     T,
@@ -93,14 +92,20 @@ export function applyMaintenance(
 
         const path = makeNodePath(address, component);
 
-        if (resourceLimitsOverrides !== undefined) {
+        forEach_(resourceLimitsOverrides, (value, key) => {
             requests.push(
                 prepareSetCommandForBatch(
-                    `${path}/@resource_limits_overrides`,
-                    resourceLimitsOverrides,
+                    `${path}/@resource_limits_overrides/${key}`,
+                    {$value: value, $type: 'double'},
+                    {
+                        input_format: {
+                            $value: 'json',
+                            $attributes: {annotate_with_types: true},
+                        },
+                    },
                 ),
             );
-        }
+        });
 
         forEach_(data, (item, t) => {
             const type = t as AddMaintenanceParams['type'];
