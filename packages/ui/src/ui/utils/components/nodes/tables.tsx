@@ -22,17 +22,7 @@ import type {FIX_MY_TYPE} from '../../../types';
 
 export const PropertiesByColumn = {
     __default__: ['IOWeight'],
-    actions: [
-        'banned',
-        'decommissioned',
-        'decommissionedMessage',
-        'disableJobs',
-        'disableTabletCells',
-        'disableWriteSession',
-        'host',
-        'resourcesLimit',
-        'resourcesLimitOverrides',
-    ],
+    actions: ['host'],
     alert_count: ['alertCount'],
     banned: ['banned'],
     chunks: ['chunks'],
