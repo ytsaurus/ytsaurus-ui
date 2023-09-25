@@ -10,20 +10,24 @@ import {mergeStateOnClusterChange} from '../utils';
 
 export type NodeMaintenanceState = {
     address: string;
-    comment: string;
-    otherComments: string;
-    command: 'add_maintenance' | 'remove_maintenance';
-    type: AddMaintenanceParams['type'];
     component: AddMaintenanceParams['component'];
+
+    maintenance: Partial<
+        Record<
+            AddMaintenanceParams['type'],
+            {
+                state?: boolean;
+                comment?: string;
+                othersComment?: string;
+            }
+        >
+    >;
 };
 
 const initialState: NodeMaintenanceState = {
-    command: 'add_maintenance',
     component: 'cluster_node',
-    type: 'ban',
     address: '',
-    comment: '',
-    otherComments: '',
+    maintenance: {},
 };
 
 function reducer(state: NodeMaintenanceState, action: NodeMaintenanceAction): NodeMaintenanceState {
@@ -44,5 +48,5 @@ export type NodeMaintenanceAction =
     | Action<typeof NODE_MAINTENANCE_RESET>
     | ActionD<
           typeof NODE_MAINTENANCE_PARTIAL,
-          Pick<NodeMaintenanceState, 'address' | 'comment' | 'component' | 'type'>
+          Pick<NodeMaintenanceState, 'address' | 'component' | 'maintenance'>
       >;
