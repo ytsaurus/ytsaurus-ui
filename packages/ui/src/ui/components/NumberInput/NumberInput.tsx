@@ -41,7 +41,7 @@ function toRawValue(value: NumberInputProps['value']) {
 }
 
 export interface NumberInputWithErrorProps
-    extends Omit<TextInputProps, 'value' | 'onChange' | 'theme' | 'error'> {
+    extends Omit<TextInputProps, 'value' | 'onChange' | 'theme' | 'error' | 'defaultValue'> {
     className?: string;
 
     format?: 'Number' | 'Bytes'; // 'Number' by default
@@ -55,6 +55,10 @@ export interface NumberInputWithErrorProps
         error?: string;
     };
 
+    showDefaultValue?: boolean;
+    defaultValue?: number;
+    defaultValueClassName?: string;
+
     onChange: (v: NumberInputWithErrorProps['value']) => void;
     onEnterKeyDown?: () => void;
 
@@ -65,6 +69,8 @@ export interface NumberInputWithErrorProps
 
     hidePrettyValue?: boolean;
     preciseInitialRawValue?: boolean;
+
+    bottomLineVisibility?: 'visible' | 'hidden' | 'focused';
 
     disabled?: boolean;
 }
@@ -82,6 +88,7 @@ export class NumberInputWithError extends React.Component<NumberInputWithErrorPr
         size: 'm',
         view: 'normal',
         hasClear: true,
+        bottomLineVisibility: 'visible',
     };
 
     static getDerivedStateFromProps(
@@ -185,7 +192,7 @@ export class NumberInputWithError extends React.Component<NumberInputWithErrorPr
 
     getRestProps() {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const {value, onChange, min, max, validator, format, ...rest} = this.props;
+        const {value, onChange, min, max, validator, format, defaultValue, ...rest} = this.props;
         return rest;
     }
 
@@ -230,8 +237,36 @@ export class NumberInputWithError extends React.Component<NumberInputWithErrorPr
         return <div className={block('pretty-value', {size})}>{formattedValue}&nbsp;</div>;
     }
 
+    renderDefaultValue() {
+        const {defaultValue, defaultValueClassName} = this.props;
+
+        return (
+            <TextInput
+                disabled
+                className={defaultValueClassName}
+                value={this.format(defaultValue)}
+                pin={'clear-round'}
+            />
+        );
+    }
+
+    isBottomLineVisible() {
+        const {bottomLineVisibility} = this.props;
+        const {focused} = this.state;
+
+        return (
+            bottomLineVisibility === 'visible' || (focused && bottomLineVisibility === 'focused')
+        );
+    }
+
     render() {
-        const {value: propsValue, className, hidePrettyValue, showHint} = this.props;
+        const {
+            value: propsValue,
+            className,
+            showHint,
+            hidePrettyValue,
+            showDefaultValue,
+        } = this.props;
         const {parsedError, rawValue, formattedValue, focused} = this.state;
         const rest = this.getRestProps();
         const {size, view, hasClear} = rest;
@@ -244,20 +279,24 @@ export class NumberInputWithError extends React.Component<NumberInputWithErrorPr
 
         return (
             <div className={block(null, className)}>
-                <TextInput
-                    {...rest}
-                    error={err as any}
-                    autoComplete={false}
-                    onUpdate={this.onChange}
-                    onKeyDown={this.onKeyDown}
-                    hasClear={hasClear}
-                    value={text}
-                    size={size}
-                    view={view}
-                    onBlur={this.onBlur}
-                    onFocus={this.onFocus}
-                />
-                {!err && (
+                <div className={block('top')}>
+                    <TextInput
+                        {...rest}
+                        error={err as any}
+                        autoComplete={false}
+                        onUpdate={this.onChange}
+                        onKeyDown={this.onKeyDown}
+                        hasClear={hasClear}
+                        value={text}
+                        size={size}
+                        view={view}
+                        onBlur={this.onBlur}
+                        onFocus={this.onFocus}
+                        pin={showDefaultValue ? 'round-brick' : undefined}
+                    />
+                    {showDefaultValue && this.renderDefaultValue()}
+                </div>
+                {!err && this.isBottomLineVisible() && (
                     <React.Fragment>
                         {showHint && (!focused || hidePrettyValue)
                             ? this.renderMinMaxHint()
