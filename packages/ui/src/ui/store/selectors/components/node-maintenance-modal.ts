@@ -11,9 +11,10 @@ export const getNodeMaintenanceModalState = (state: RootState) =>
 
 export const getNodeMaintenanceModalInitialValues = createSelector(
     [getNodeMaintenanceModalState],
-    ({maintenance, resourceLimitsOverrides}) => {
+    ({maintenance, resourceLimitsOverrides, role}) => {
         return {
-            maintenance,
+            ...maintenance,
+            role: {role},
             limits: reduce_(
                 resourceLimitsOverrides,
                 (acc, value, k) => {
@@ -21,7 +22,7 @@ export const getNodeMaintenanceModalInitialValues = createSelector(
                     acc[key] = {value};
                     return acc;
                 },
-                {} as Record<keyof NodeResourceLimits, {value?: number}>,
+                {} as Partial<Record<keyof NodeResourceLimits, {value?: number}>>,
             ),
         };
     },

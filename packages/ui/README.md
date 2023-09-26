@@ -62,7 +62,7 @@ are placed placed in:
 - `//sys/@ui_config` (values affects all users)
 - `//sys/@ui_config_dev_overrides` (values affects only developers)
 
-([more details](https://nda.ya.ru/t/bgh9NWJ16fPRp4))
+(see more detail in [YTFRONT-2804](https://nda.ya.ru/t/bgh9NWJ16fPRp4))
 
 It is supposed that a user is developer on a cluster if he has `write` access to `admins` group of the cluster.
 

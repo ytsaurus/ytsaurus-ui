@@ -1,4 +1,10 @@
 .yt-node-columns {
+    &__state {
+        display: inline-block;
+        max-width: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
     &__text {
         display: flex;
         overflow: hidden;

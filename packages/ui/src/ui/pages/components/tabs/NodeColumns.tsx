@@ -27,7 +27,7 @@ export function NodeColumnState({state}: {state: 'online' | 'offline' | string})
     const text = format.FirstUppercase(state);
     const theme = STATE_THEME[state] ?? 'default';
 
-    return <Label theme={theme} type="text" text={text} />;
+    return <Label theme={theme} className={block('state')} type="text" text={text} />;
 }
 
 export function NodeColumnBanned({banned}: {banned: boolean}) {

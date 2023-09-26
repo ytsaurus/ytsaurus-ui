@@ -16,13 +16,14 @@ export type NodeMaintenanceState = {
         Record<
             AddMaintenanceParams['type'],
             {
-                state?: boolean;
+                state: 'maintenance' | '';
                 comment?: string;
                 othersComment?: string;
             }
         >
     >;
 
+    role?: string;
     resourceLimits?: Partial<NodeResourceLimits>;
     resourceLimitsOverrides?: Partial<NodeResourceLimits>;
 };
