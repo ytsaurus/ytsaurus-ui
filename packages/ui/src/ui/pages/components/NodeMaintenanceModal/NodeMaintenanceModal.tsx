@@ -2,6 +2,7 @@ import React from 'react';
 import {useSelector} from 'react-redux';
 import cn from 'bem-cn-lite';
 
+import map_ from 'lodash/map';
 import reduce_ from 'lodash/reduce';
 
 import format from '../../../common/hammer/format';
@@ -18,7 +19,6 @@ import {
 } from '../../../store/selectors/components/node-maintenance-modal';
 import {
     applyMaintenance,
-    // applyMaintenance,
     closeNodeMaintenanceModal,
 } from '../../../store/actions/components/node-maintenance-modal';
 import {useThunkDispatch} from '../../../store/thunkDispatch';
@@ -31,88 +31,29 @@ const block = cn('node-maintenance-modal');
 
 type FormValues = NodeMaintenanceState['maintenance'] & {
     limits: Partial<{[K in keyof NodeResourceLimits]: {value?: number}}>;
+    role: {role?: string};
 };
-
-function makeLabels(type: AddMaintenanceParams['type']) {
-    const labels: Record<typeof type, [string, string]> = {
-        ban: ['Unban', 'Ban'],
-        disable_scheduler_jobs: ['Enable scheduler jobs', 'Disable scheduler jobs'],
-        disable_write_sessions: ['Enable write sessions', 'Disable write sessions'],
-
-        disable_tablet_cells: ['Enable tablet cells', 'Disable tablet cells'],
-        decommission: ['Recommission', 'Decommission'],
-    };
-    const [labelLeft, labelRight] = labels[type];
-    return {labelLeft, labelRight};
-}
 
 export function NodeMaintenanceModal() {
     const dispatch = useThunkDispatch();
     const [error, setError] = React.useState<YTError | undefined>();
 
     const initialValues = useSelector(getNodeMaintenanceModalInitialValues);
-    const {maintenance} = initialValues;
     const {address, component, resourceLimits} = useSelector(getNodeMaintenanceModalState);
 
-    function makeMaintenanceFields({
-        type,
-        allowOthers,
-    }: {
-        type: AddMaintenanceParams['type'];
-        allowOthers: boolean;
-    }) {
-        return [
-            {
-                name: 'state',
-                type: 'tumbler' as const,
-                caption: 'State',
-                extras: makeLabels(type),
-            },
-            {
-                name: 'comment',
-                type: 'textarea' as const,
-                caption: allowOthers ? 'Mine comment' : 'Comment',
-                tooltip: 'Changes of the field affects only activated maintenances',
-                extras: (values: FormValues) => {
-                    return values[type]?.state ? {} : {disabled: true};
-                },
-            },
-            ...(allowOthers
-                ? [
-                      {
-                          name: 'otherComments',
-                          type: 'textarea' as const,
-                          caption: 'Other users comments',
-                          tooltip: 'Do not edit the field, any changes of it affect nothing',
-                          extras: {
-                              disabled: true,
-                          },
-                      },
-                  ]
-                : []),
-        ];
-    }
+    const allowedMaintenanceTypes: Array<AddMaintenanceParams['type']> =
+        component === 'cluster_node'
+            ? [
+                  'ban',
+                  'disable_scheduler_jobs',
+                  'disable_write_sessions',
+                  'disable_tablet_cells',
+                  'decommission',
+              ]
+            : ['ban'];
 
-    function makeResourceLimitField(
-        name: keyof NodeResourceLimits,
-        options?: {
-            caption?: string;
-            format?: 'Number' | 'Bytes';
-        },
-    ) {
-        return {
-            type: 'number' as const,
-            name,
-            caption: options?.caption || format.ReadableField(name),
-            extras: {
-                format: options?.format ?? 'Number',
-                showDefaultValue: true,
-                defaultValue: resourceLimits?.[name],
-                defaultValueClassName: block('limit-default'),
-                bottomLineVisibility: 'focused' as const,
-            },
-        };
-    }
+    const allowLimitsTab = component === 'cluster_node';
+    const allowChangeRole = component !== 'cluster_node';
 
     return address ? (
         <YTDFDialog<FormValues>
@@ -128,14 +69,14 @@ export function NodeMaintenanceModal() {
             onClose={() => dispatch(closeNodeMaintenanceModal())}
             onAdd={async (form) => {
                 const {
-                    values: {limits, ...rest},
+                    values: {limits, role: roleTab, ...rest},
                 } = form.getState();
 
                 const diff = reduce_(
                     rest,
                     (acc, item, t) => {
                         const type = t as keyof typeof rest;
-                        if (Boolean(maintenance?.[type]?.state) !== Boolean(item?.state)) {
+                        if (Boolean(initialValues?.[type]?.state) !== Boolean(item?.state)) {
                             acc[type] = item;
                         }
                         return acc;
@@ -147,7 +88,7 @@ export function NodeMaintenanceModal() {
                     limits,
                     (acc, item, k) => {
                         const key = k as keyof typeof limits;
-                        if (initialValues.limits[key] !== item?.value) {
+                        if (initialValues.limits[key]?.value !== item?.value) {
                             acc[key] = item?.value;
                         }
                         return acc;
@@ -155,93 +96,146 @@ export function NodeMaintenanceModal() {
                     {} as Partial<NodeResourceLimits>,
                 );
 
+                const role = initialValues.role.role !== roleTab.role ? roleTab.role : undefined;
+
                 try {
-                    dispatch(applyMaintenance(address, component, diff, limitsDiff));
+                    dispatch(applyMaintenance(address, component, diff, limitsDiff, role));
                 } catch (e: any) {
                     setError(e);
                 }
             }}
             fields={[
-                {
-                    name: 'ban',
-                    type: 'tab',
-                    title: 'Ban',
-                    fields: [
-                        ...makeMaintenanceFields({
-                            type: 'ban',
-                            allowOthers: true,
-                        }),
-                        ...makeErrorFields([error]),
-                    ],
-                },
-                {
-                    name: 'disable_scheduler_jobs',
-                    type: 'tab',
-                    title: 'Scheduler jobs',
-                    fields: [
-                        ...makeMaintenanceFields({
-                            type: 'disable_scheduler_jobs',
-                            allowOthers: true,
-                        }),
-                        ...makeErrorFields([error]),
-                    ],
-                },
-                {
-                    name: 'disable_write_sessions',
-                    type: 'tab',
-                    title: 'Write sessions',
-                    fields: [
-                        ...makeMaintenanceFields({
-                            type: 'disable_write_sessions',
-                            allowOthers: true,
-                        }),
-                        ...makeErrorFields([error]),
-                    ],
-                },
-                {
-                    name: 'disable_tablet_cells',
-                    type: 'tab',
-                    title: 'Tablet cells',
-                    fields: [
-                        ...makeMaintenanceFields({
-                            type: 'disable_tablet_cells',
-                            allowOthers: true,
-                        }),
-                        ...makeErrorFields([error]),
-                    ],
-                },
-                {
-                    name: 'decommission',
-                    type: 'tab',
-                    title: 'Decommission',
-                    fields: [
-                        ...makeMaintenanceFields({
-                            type: 'decommission',
-                            allowOthers: true,
-                        }),
-                        ...makeErrorFields([error]),
-                    ],
-                },
-                {
-                    name: 'limits',
-                    type: 'tab',
-                    title: 'Limits',
-                    fields: [
-                        makeResourceLimitField('cpu', {caption: 'vCPU'}),
-                        makeResourceLimitField('gpu', {caption: 'GPU'}),
-                        makeResourceLimitField('network'),
-                        makeResourceLimitField('replication_slots'),
-                        makeResourceLimitField('replication_data_size', {format: 'Bytes'}),
-                        makeResourceLimitField('removal_slots'),
-                        makeResourceLimitField('repair_slots'),
-                        makeResourceLimitField('repair_data_size', {format: 'Bytes'}),
-                        makeResourceLimitField('seal_slots'),
-                        makeResourceLimitField('system_memory', {format: 'Bytes'}),
-                        makeResourceLimitField('user_memory', {format: 'Bytes'}),
-                        ...makeErrorFields([error]),
-                    ],
-                },
+                ...map_(allowedMaintenanceTypes, (name) => {
+                    const title = name.split('disable_')[1];
+                    return {
+                        name,
+                        type: 'tab' as const,
+                        title: format.ReadableField(title ?? name),
+                        fields: [...makeMaintenanceFields(name), ...makeErrorFields([error])],
+                    };
+                }),
+                ...(!allowLimitsTab
+                    ? []
+                    : [
+                          {
+                              name: 'limits',
+                              type: 'tab' as const,
+                              title: 'Limits',
+                              fields: [
+                                  makeResourceLimitField('cpu', resourceLimits),
+                                  makeResourceLimitField('gpu', resourceLimits),
+                                  makeResourceLimitField('network', resourceLimits),
+                                  makeResourceLimitField('replication_slots', resourceLimits),
+                                  makeResourceLimitField('replication_data_size', resourceLimits),
+                                  makeResourceLimitField('removal_slots', resourceLimits),
+                                  makeResourceLimitField('repair_slots', resourceLimits),
+                                  makeResourceLimitField('repair_data_size', resourceLimits),
+                                  makeResourceLimitField('seal_slots', resourceLimits),
+                                  makeResourceLimitField('system_memory', resourceLimits),
+                                  makeResourceLimitField('user_memory', resourceLimits),
+                                  ...makeErrorFields([error]),
+                              ],
+                          },
+                      ]),
+                ...(!allowChangeRole
+                    ? []
+                    : [
+                          {
+                              name: 'role',
+                              type: 'tab' as const,
+                              title: 'Role',
+                              fields: [
+                                  {
+                                      name: 'role',
+                                      type: 'text' as const,
+                                      caption: 'Role',
+                                  },
+                              ],
+                          },
+                      ]),
             ]}
         />
     ) : null;
+}
+
+function makeMaintenanceFields(type: AddMaintenanceParams['type'], allowOthers = true) {
+    return [
+        {
+            name: 'state',
+            type: 'radio' as const,
+            caption: 'State',
+            extras: makeRadioExtras(type),
+        },
+        {
+            name: 'comment',
+            type: 'textarea' as const,
+            caption: 'Comment',
+            extras: (values: FormValues) => {
+                return values[type]?.state ? {} : {disabled: true};
+            },
+        },
+        ...(allowOthers
+            ? [
+                  {
+                      name: 'otherComments',
+                      type: 'textarea' as const,
+                      caption: 'Other users comments',
+                      extras: {
+                          disabled: true,
+                      },
+                  },
+              ]
+            : []),
+    ];
+}
+
+function makeRadioExtras(type: AddMaintenanceParams['type']) {
+    const labels: Partial<Record<typeof type, [string, string]>> = {
+        ban: ['Enabled', 'Banned'],
+        decommission: ['Enabled', 'Decommissioned'],
+    };
+    const [activeLabel = 'Enabled', maintenanceLabel = 'Disabled'] = labels[type] ?? [];
+    return {
+        options: [
+            {value: '', label: activeLabel},
+            {value: 'maintenance', label: maintenanceLabel},
+        ],
+    };
+}
+
+function makeResourceLimitField(
+    name: keyof NodeResourceLimits,
+    defaults?: Partial<Record<typeof name, number>>,
+) {
+    const OPTIONS: Partial<Record<typeof name, {format?: 'Bytes'; caption?: string}>> = {
+        cpu: {caption: 'CPU'},
+        gpu: {caption: 'GPU'},
+        user_memory: {
+            format: 'Bytes',
+        },
+        system_memory: {
+            format: 'Bytes',
+        },
+        repair_data_size: {
+            format: 'Bytes',
+        },
+        replication_data_size: {
+            format: 'Bytes',
+        },
+    };
+
+    const options = OPTIONS[name] ?? {};
+
+    return {
+        type: 'number' as const,
+        name,
+        caption: options?.caption || format.ReadableField(name),
+        extras: {
+            format: options?.format ?? ('Number' as const),
+            showDefaultValue: true,
+            defaultValue: defaults?.[name],
+            defaultValueClassName: block('limit-default'),
+            bottomLineVisibility: 'focused' as const,
+        },
+    };
 }

@@ -7,7 +7,6 @@ import {Progress} from '@gravity-ui/uikit';
 import Version from '../../../pages/components/tabs/nodes/Version';
 import StatusBlock from '../../../components/StatusBlock/StatusBlock';
 import ClipboardButton from '../../../components/ClipboardButton/ClipboardButton';
-import Label from '../../../components/Label/Label';
 import NodeActions from '../../../pages/components/tabs/nodes/NodeActions/NodeActions';
 import MemoryProgress from '../../../pages/components/tabs/nodes/MemoryProgress/MemoryProgress';
 
@@ -19,6 +18,7 @@ import {
 } from '../../../components/templates/components/nodes/nodes';
 import type {Node, TabletSlotState} from '../../../store/reducers/components/nodes/nodes/node';
 import type {FIX_MY_TYPE} from '../../../types';
+import {NodeColumnBanned, NodeColumnState} from '../../../pages/components/tabs/NodeColumns';
 
 export const PropertiesByColumn = {
     __default__: ['IOWeight'],
@@ -699,20 +699,10 @@ export const NODES_TABLE_TEMPLATES: Templates = {
         );
     },
     state(item) {
-        const text = hammer.format['FirstUppercase'](item.state);
-        const theme =
-            (
-                {
-                    online: 'success',
-                    offline: 'danger',
-                    error: 'danger',
-                } as const
-            )[item.state] || 'default';
-
-        return <Label theme={theme} type="text" text={text} />;
+        return <NodeColumnState state={item.state} />;
     },
     banned(item) {
-        return item.banned ? <StatusBlock text="B" theme="banned" /> : hammer.format.NO_VALUE;
+        return <NodeColumnBanned banned={item.banned} />;
     },
     decommissioned(item) {
         return item.decommissioned ? (

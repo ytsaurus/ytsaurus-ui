@@ -86,17 +86,24 @@ export function applyMaintenance(
     component: NodeMaintenanceState['component'],
     data: NodeMaintenanceState['maintenance'],
     resourceLimitsOverrides?: Partial<NodeResourceLimits>,
+    role?: string,
 ): NodeMaintenanceThunkAction {
     return (dispatch, getState) => {
         const requests: Array<BatchSubRequest> = [];
 
         const path = makeNodePath(address, component);
 
+        if (role && (component === 'http_proxy' || component === 'rpc_proxy')) {
+            requests.push(prepareSetCommandForBatch(`${path}/@role`, role));
+        }
+
         forEach_(resourceLimitsOverrides, (value, key) => {
             requests.push(
                 prepareSetCommandForBatch(
                     `${path}/@resource_limits_overrides/${key}`,
-                    {$value: value, $type: 'double'},
+                    isNaN(value!)
+                        ? undefined
+                        : {$value: value, $type: key === 'cpu' ? 'double' : 'int64'},
                     {
                         input_format: {
                             $value: 'json',
@@ -178,9 +185,10 @@ export type MaintenanceRequestInfo = {
 };
 
 type MaintenanceDataResponse = {
+    banned?: boolean;
     ban?: boolean;
     ban_message?: string;
-    decommission?: boolean;
+    decommissioned?: boolean;
     decommission_message?: string;
     disable_scheduler_jobs?: boolean;
     disable_tablet_cells?: boolean;
@@ -190,6 +198,8 @@ type MaintenanceDataResponse = {
     resource_limits_overrides?: Partial<NodeResourceLimits>;
 
     maintenance_requests?: Record<string, MaintenanceRequestInfo>;
+
+    role?: string;
 };
 
 export function loadNodeMaintenanceData({
@@ -218,14 +228,16 @@ export function loadNodeMaintenanceData({
                     ...(allowMaintenanceRequests
                         ? ['maintenance_requests']
                         : [
-                              'ban',
                               'ban_message',
-                              'decommission',
+                              'decommissioned',
                               'decommission_message',
                               'disable_scheduler_jobs',
                               'disable_tablet_cells',
                               'disable_write_sessions',
                           ]),
+                    ...(component === 'http_proxy' || component === 'rpc_proxy'
+                        ? ['banned', 'role']
+                        : ['banned']),
                 ],
             }),
             {
@@ -239,10 +251,10 @@ export function loadNodeMaintenanceData({
                 forEach_(data.maintenance_requests, (item) => {
                     const dst =
                         maintenance[item.type] ??
-                        (maintenance[item.type] = {comment: '', othersComment: ''});
+                        (maintenance[item.type] = {comment: '', othersComment: '', state: ''});
 
                     if (item.user === user) {
-                        dst.state = true;
+                        dst.state = 'maintenance';
                         if (dst.comment?.length) {
                             dst.comment += '\n';
                         }
@@ -253,17 +265,28 @@ export function loadNodeMaintenanceData({
                 });
             } else {
                 Object.assign(maintenance, {
-                    ban: {state: data.ban, comment: data.ban_message},
-                    decommission: {state: data.decommission, comment: data.decommission_message},
-                    disable_scheduler_jobs: {state: data.disable_scheduler_jobs},
-                    disable_tablet_cells: {state: data.disable_tablet_cells},
-                    disable_write_sessions: {state: data.disable_write_sessions},
+                    ban: {
+                        state: data.banned ? 'maintenance' : '',
+                        comment: data.ban_message,
+                    },
+                    decommission: {
+                        state: data.decommissioned ? 'maintenance' : '',
+                        comment: data.decommission_message,
+                    },
+                    disable_scheduler_jobs: {
+                        state: data.disable_scheduler_jobs ? 'maintenance' : '',
+                    },
+                    disable_tablet_cells: {state: data.disable_tablet_cells ? 'maintenance' : ''},
+                    disable_write_sessions: {
+                        state: data.disable_write_sessions ? 'maintenance' : '',
+                    },
                 } as typeof maintenance);
             }
             return {
                 maintenance,
                 resourceLimits: data.resource_limits,
                 resourceLimitsOverrides: data.resource_limits_overrides,
+                role: data.role,
             };
         });
     };

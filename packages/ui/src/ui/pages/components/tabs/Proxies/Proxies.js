@@ -1,12 +1,11 @@
 import {Sticky, StickyContainer} from 'react-sticky';
-import React, {Component, Fragment} from 'react';
+import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import hammer from '../../../../common/hammer';
 import PropTypes from 'prop-types';
 import cn from 'bem-cn-lite';
 
 import ProxyActions from '../../../../pages/components/tabs/Proxies/ProxyActions/ProxyActions';
-import ChangeRoleModal from './ProxyActions/ChangeRoleModal/ChangeRoleModal';
 import LoadDataHandler from '../../../../components/LoadDataHandler/LoadDataHandler';
 import ClipboardButton from '../../../../components/ClipboardButton/ClipboardButton';
 import ElementsTable from '../../../../components/ElementsTable/ElementsTable';
@@ -220,26 +219,6 @@ export class Proxies extends Component {
         splitScreenAction(SPLIT_TYPE, paneClassNames);
     };
 
-    handleBanClick = (proxy) => {
-        const {type} = this.props;
-        this.props.showNodeMaintenance({
-            addres: proxy,
-            command: 'add_maintenance',
-            type: 'ban',
-            component: type === PROXY_TYPE.HTTP ? 'http_proxy' : 'rpc_proxy',
-        });
-    };
-
-    handleUnbanClick = (host) => {
-        const {type} = this.props;
-        this.props.showNodeMaintenance({
-            addres: host,
-            command: 'remove_maintenance',
-            type: 'ban',
-            component: type === PROXY_TYPE.HTTP ? 'http_proxy' : 'rpc_proxy',
-        });
-    };
-
     renderActions = (item) => {
         const {type} = this.props;
 
@@ -357,17 +336,6 @@ export class Proxies extends Component {
         );
     }
 
-    renderModals() {
-        const {type} = this.props;
-
-        return (
-            <Fragment>
-                <ChangeRoleModal type={type} />
-                <NodeMaintenanceModal />
-            </Fragment>
-        );
-    }
-
     render() {
         return (
             <ErrorBoundary>
@@ -377,8 +345,7 @@ export class Proxies extends Component {
                             {this.renderOverview()}
                             {this.renderContent()}
                         </StickyContainer>
-
-                        {this.renderModals()}
+                        <NodeMaintenanceModal />
                     </div>
                 </LoadDataHandler>
             </ErrorBoundary>
