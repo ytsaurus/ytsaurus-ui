@@ -22,4 +22,5 @@ export const QueryEnginesNames: Record<QueryEngine, string> = {
     [QueryEngine.YQL]: 'YQL',
     [QueryEngine.YT_QL]: 'YT QL',
     [QueryEngine.CHYT]: 'CHYT',
+    [QueryEngine.SPYT]: 'SPYT',
 };
