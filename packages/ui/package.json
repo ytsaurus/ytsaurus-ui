@@ -72,7 +72,8 @@
     "opentracing": "^0.14.7",
     "qs": "^6.11.2",
     "source-map-support": "0.5.21",
-    "type-is": "1.6.18"
+    "type-is": "1.6.18",
+    "zod": "^3.21.4"
   },
   "devDependencies": {
     "@gravity-ui/app-builder": "^0.7.0",

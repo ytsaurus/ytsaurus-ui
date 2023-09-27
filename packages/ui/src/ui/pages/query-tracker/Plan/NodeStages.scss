@@ -1,0 +1,25 @@
+@import 'src/ui/styles/mixins.scss';
+
+.node-stages {
+    overflow: auto;
+
+    .data-table {
+        --data-table-color-base: var(--yc-color-base-float);
+        --data-table-border-color: var(--yc-color-base-float);
+
+        th {
+            @include sticky-data-table-head();
+        }
+    }
+
+    &__footer {
+        font-weight: 500;
+
+        td {
+            position: sticky;
+            bottom: 0;
+
+            background: var(--yc-color-base-float);
+        }
+    }
+}

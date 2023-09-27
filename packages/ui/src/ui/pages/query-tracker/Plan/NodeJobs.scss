@@ -1,0 +1,56 @@
+.node-jobs {
+    .data-table {
+        --data-table-color-base: transparent;
+        --data-table-border-color: transparent;
+        --data-table-row-height: 40px;
+    }
+
+    &__row {
+        height: 40px;
+    }
+
+    &__item {
+        display: flex;
+        align-items: center;
+
+        &-color {
+            display: inline-block;
+
+            width: 12px;
+            height: 12px;
+            margin-right: 5px;
+
+            border-radius: 3px;
+
+            &_status {
+                &_pending {
+                    background: var(--yql-graph-color-operation-pending);
+                }
+                &_running {
+                    background: var(--yql-graph-color-operation-running);
+                }
+                &_finished {
+                    background: var(--yql-graph-color-operation-completed);
+                }
+                &_failed {
+                    background: var(--yql-graph-color-operation-failed);
+                }
+                &_aborted {
+                    background: var(--yql-graph-color-operation-aborted);
+                }
+                &_completed {
+                    background: var(--yql-graph-color-operation-completed);
+                }
+            }
+        }
+
+        &-title {
+            display: inline-block;
+
+            padding-right: 2px;
+            padding-left: 2px;
+
+            vertical-align: top;
+        }
+    }
+}

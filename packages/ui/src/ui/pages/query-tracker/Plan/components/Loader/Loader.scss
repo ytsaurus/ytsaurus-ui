@@ -1,0 +1,21 @@
+.yql-loader {
+    position: fixed;
+    z-index: 10;
+    inset: 0;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    &_veil {
+        background-color: var(--yc-color-sfx-veil);
+    }
+
+    &_local {
+        position: absolute;
+    }
+
+    &_statical {
+        position: static;
+    }
+}
