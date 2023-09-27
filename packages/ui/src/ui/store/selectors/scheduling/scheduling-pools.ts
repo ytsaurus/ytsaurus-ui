@@ -59,7 +59,7 @@ const getPoolsPrepared = createSelector(
         getCluster,
     ],
     (rawPools, rawOperations, attributes, treeResources, useStarvingStatus, cluster) => {
-        if (_.isEmpty(rawPools) || _.isEmpty(attributes) || _.isEmpty(treeResources)) {
+        if (_.isEmpty(rawPools)) {
             return [];
         }
 

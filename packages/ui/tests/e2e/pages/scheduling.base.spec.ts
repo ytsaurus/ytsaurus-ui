@@ -91,3 +91,19 @@ test('Scheduling: Should display pools from Navigation', async ({page}) => {
         makeClusterUrl('navigation?path=//sys/pool_trees/default/yt-e2e-pool-1'),
     );
 });
+
+test('Scheduling: Should display ephemeral pool for empty pool tree', async ({page}) => {
+    await page.goto(makeClusterUrl('scheduling?tree=e2e'));
+
+    await page.waitForSelector('text="test-e2e"');
+
+    await expect(page).toHaveTitle(makeClusterTille({page: 'Scheduling'}));
+    await expect(page).toHaveURL(makeClusterUrl('scheduling/overview?tree=e2e'));
+
+    const operationLinkSelector = `.scheduling-overview__name-content-name [href^="/${CLUSTER}/operations/"]`;
+    const length = await page.$$eval(operationLinkSelector, (nodes) => nodes.length);
+    expect(length).toBe(0);
+
+    await page.click('.scheduling-overview__table-row-expander');
+    await page.waitForSelector(operationLinkSelector);
+});

@@ -57,6 +57,13 @@ yt create -i -r map_node "${E2E_DIR}/bad-names/__\\@/ok"
 
 if [ "false" = "$(yt exists //sys/pool_trees/e2e)" ]; then
     yt create scheduler_pool_tree --attributes '{name=e2e;config={nodes_filter=e2e}}'
+    e2eNode=$(yt list //sys/cluster_nodes | head -1)
+    yt set //sys/cluster_nodes/${e2eNode}/@user_tags/end e2e
+    yt set //sys/pool_trees/default/@config/nodes_filter '"!e2e"'
+
+    yt vanilla \
+        --tasks '{main2={"job_count"=10;"command"="sleep 7200"}}' \
+        --spec '{"pool_trees"=[e2e];"scheduling_options_per_pool_tree"={"e2e"={pool=test-e2e}}}' --async
 fi
 
 echo -n E2E_OPERATION_ID= >>./e2e-env.tmp
