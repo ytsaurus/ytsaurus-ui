@@ -1,0 +1,13 @@
+.yql-node-schemas {
+    &__item + &__item {
+        margin-top: 4px;
+    }
+
+    &__item-heading {
+        word-break: break-all;
+    }
+
+    &__item .yc-collapse__arrow-wrapper {
+        align-self: flex-start;
+    }
+}

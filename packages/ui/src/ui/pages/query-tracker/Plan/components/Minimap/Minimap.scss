@@ -1,0 +1,34 @@
+.yql-plan-minimap {
+    overflow: hidden;
+
+    width: 150px;
+    height: 100px;
+
+    &__minimap {
+        width: 100%;
+        height: 100%;
+
+        & > :first-child {
+            outline: none;
+        }
+    }
+
+    &__wrapper {
+        position: absolute;
+        inset: 0;
+    }
+    &__radar {
+        position: absolute;
+        top: 0;
+        left: 0;
+
+        width: 100px;
+        height: 100px;
+
+        pointer-events: none;
+
+        border: 1px solid var(--yc-color-line-info);
+        border-radius: 5px;
+        background: var(--yc-color-base-info);
+    }
+}

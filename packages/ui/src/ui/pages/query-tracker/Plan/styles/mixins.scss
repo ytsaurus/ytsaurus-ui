@@ -1,0 +1,15 @@
+@mixin sticky-data-table-head {
+    position: sticky;
+    z-index: 1;
+    top: 0;
+
+    &::before {
+        position: absolute;
+        inset: -1px;
+
+        content: '';
+
+        border: 1px solid var(--data-table-border-color);
+        background: var(--data-table-color-base);
+    }
+}

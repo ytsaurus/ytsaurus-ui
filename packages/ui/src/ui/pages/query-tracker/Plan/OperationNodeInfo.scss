@@ -1,0 +1,30 @@
+.operation-node-info {
+    display: grid;
+    grid-template-rows: min-content;
+    justify-items: center;
+
+    width: 330px;
+    height: 332px;
+    padding: 12px 2px;
+
+    &__selector {
+        margin-bottom: 12px;
+    }
+
+    .data-table__table {
+        width: 100%;
+    }
+
+    &__schema {
+        --yql-schema-table_name-width: 120px;
+        overflow: auto;
+
+        width: 100%;
+        padding: 0 10px 20px;
+
+        .data-table__table {
+            width: auto;
+            min-width: 100%;
+        }
+    }
+}
