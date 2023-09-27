@@ -149,6 +149,10 @@ export function loadSchedulingOperationsPerPool(tree: string): SchedulingOperati
                     },
                 };
             });
+            requests.push({
+                command: 'get' as const,
+                parameters: {path: `${prefix}/${ROOT_POOL_NAME}`},
+            });
         }
 
         if (!requests.length) {
