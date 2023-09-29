@@ -21,6 +21,7 @@ import UsersPage from '../../pages/users/UsersPage';
 import Scheduling from '../../pages/scheduling/Scheduling/Scheduling';
 import QueryTracker from '../../pages/query-tracker/QueryTracker';
 import Job from '../../pages/job/Job';
+import {ChytPage} from '../../pages/chyt';
 
 import ClusterPageHeader from '../ClusterPageHeader/ClusterPageHeader';
 import PageTracker from './PageTracker';
@@ -287,6 +288,7 @@ class ClusterPage extends Component {
                     <Route path={`/:cluster/${Page.USERS}`} component={UsersPage} />
                     <Route path={`/:cluster/${Page.GROUPS}`} component={GroupsPage} />
                     <Route path={`/:cluster/${Page.SCHEDULING}`} component={Scheduling} />
+                    <Route path={`/:cluster/${Page.CHYT}`} component={ChytPage} />
                     {allowQueryTracker && (
                         <Route path={`/:cluster/${Page.QUERIES}`} component={QueryTracker} />
                     )}

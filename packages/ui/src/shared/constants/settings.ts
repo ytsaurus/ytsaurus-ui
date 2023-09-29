@@ -19,6 +19,7 @@ export const Page = {
     CHAOS_CELL_BUNDLES: 'chaos_cell_bundles',
     VERSIONS: 'versions',
     QUERIES: 'queries',
+    CHYT: 'chyt',
 } as const;
 
 export const SettingName = {

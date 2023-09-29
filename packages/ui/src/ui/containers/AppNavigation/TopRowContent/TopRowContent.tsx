@@ -25,6 +25,7 @@ import withLazyLoading from '../../../hocs/withLazyLoading';
 const QueryTrackerTopRowLazy = React.lazy(
     () => import('../../../pages/query-tracker/QueryTrackerTopRow'),
 );
+import {ChytPageTopRow} from '../../../pages/chyt';
 
 export default function TopRowContent() {
     const loadState = useSelector(getGlobalLoadState);
@@ -47,6 +48,7 @@ export default function TopRowContent() {
             />
             <Route path={`/:cluster/${Page.DASHBOARD}`} component={DashboardTopRowContent} />
             <Route path={`/:cluster/${Page.COMPONENTS}`} component={ComponentsTopRowContent} />
+            <Route path={`/:cluster/${Page.CHYT}`} component={ChytPageTopRow} />
             {allowQT && (
                 <Route
                     path={`/:cluster/${Page.QUERIES}`}

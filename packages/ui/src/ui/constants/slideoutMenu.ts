@@ -12,6 +12,7 @@ import usersIcon from '../../../img/svg/page-users.svg';
 import versionsIcon from '../../../img/svg/page-versions.svg';
 import pageNoIcon from '../../../img/svg/page-no-icon.svg';
 import pageQueries from '../../../img/svg/page-query-tracker.svg';
+import pageChyt from '../../../img/svg/page-chyt.svg';
 
 import {Page} from './index';
 import {SVGIconData} from '@gravity-ui/uikit/build/esm/components/Icon/types';
@@ -31,6 +32,7 @@ export const PAGES_WITH_ICONS = [
     {id: Page.USERS, icon: usersIcon},
     {id: Page.VERSIONS, icon: versionsIcon},
     {id: Page.QUERIES, icon: pageQueries},
+    {id: Page.CHYT, icon: pageChyt},
 ];
 
 export const PAGE_ICONS_BY_ID = PAGES_WITH_ICONS.reduce((acc, {id, icon}) => {
