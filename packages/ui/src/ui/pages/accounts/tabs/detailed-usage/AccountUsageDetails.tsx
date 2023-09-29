@@ -111,7 +111,7 @@ function AccountUsageDetailsHeader(props: {column: keyof AccountUsageDataItem}) 
         [dispatch],
     );
 
-    const {order, index} = sortOrder[column] || {};
+    const {order, multisortIndex} = sortOrder[column] || {};
 
     return (
         <ColumnHeader
@@ -120,7 +120,7 @@ function AccountUsageDetailsHeader(props: {column: keyof AccountUsageDataItem}) 
             order={order}
             sortable={true}
             toggleSort={toggleSort}
-            multisortIndex={index !== undefined ? index + 1 : index}
+            multisortIndex={multisortIndex}
         />
     );
 }

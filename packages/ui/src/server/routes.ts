@@ -21,6 +21,7 @@ import {getClusterPools} from './controllers/scheduling-pools';
 import {markdownToHtmlHandler} from './controllers/markdown-to-html';
 import {odinProxyApi} from './controllers/odin-proxy-api';
 import {getClustersAvailability} from './controllers/availability';
+import {chytProxyApi} from './controllers/chyt-api';
 
 const HOME_INDEX_TARGET: AppRouteDescription = {handler: homeIndex, ui: true};
 
@@ -47,6 +48,8 @@ const routes: AppRoutes = {
 
     'GET /api/odin/proxy/:action/:cluster?': {handler: odinProxyApi},
     'GET /api/odin/clusters/availability': {handler: getClustersAvailability},
+
+    'POST /api/chyt/:cluster/:action': {handler: chytProxyApi},
 
     'GET    /api/settings/:username': {handler: settingsGet},
     'POST   /api/settings/:username': {handler: settingsCreate},

@@ -225,6 +225,6 @@ export interface ConfigData {
     metrikaCounterId?: number;
     allowLoginDialog?: boolean;
     allowUserColumnPresets?: boolean;
-    odinBaseUrl?: string;
     odinPageEnabled: boolean;
+    chytPageEnabled: boolean;
 }

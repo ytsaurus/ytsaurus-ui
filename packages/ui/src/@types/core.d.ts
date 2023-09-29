@@ -48,6 +48,11 @@ export interface YTCoreConfig {
     odinBaseUrl?: string;
 
     /**
+     * Defines CHYT-api base url. If defined enables corresponding pages for UI.
+     */
+    chytApiBaseUrl?: string;
+
+    /**
      *  The OAuthRobot should have read/write access to mapNodePath
      */
     userSettingsConfig?: {

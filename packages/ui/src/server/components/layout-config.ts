@@ -16,8 +16,8 @@ interface Params {
 
 export async function getLayoutConfig(req: Request, params: Params): Promise<AppLayoutConfig> {
     const {login, ytConfig, settings} = params;
-    const {ytApiUseCORS, uiSettings, metrikaCounter, ytAuthCluster, odinBaseUrl} = req.ctx
-        .config as YTCoreConfig;
+    const {ytApiUseCORS, uiSettings, metrikaCounter, ytAuthCluster, odinBaseUrl, chytApiBaseUrl} =
+        req.ctx.config as YTCoreConfig;
     const YT = ytConfig;
     const uiVersion = getInterfaceVersion();
 
@@ -54,6 +54,7 @@ export async function getLayoutConfig(req: Request, params: Params): Promise<App
             allowLoginDialog: Boolean(ytAuthCluster),
             allowUserColumnPresets: isUserColumnPresetsEnabled(req),
             odinPageEnabled: Boolean(odinBaseUrl),
+            chytPageEnabled: Boolean(chytApiBaseUrl),
         },
         pluginsOptions: {
             yandexMetrika: {

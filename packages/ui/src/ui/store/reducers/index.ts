@@ -39,6 +39,7 @@ import {registerHeaderLink} from '../../containers/ClustersMenu/header-links-ite
 import {queryTracker} from '../../pages/query-tracker/module';
 import {odinPageInfo, odinRootPageInfo} from '../../pages/odin';
 import {hasOdinPage} from '../../config';
+import {chyt} from './chyt';
 
 const appReducers = {
     acl,
@@ -74,6 +75,8 @@ const appReducers = {
 
     executeBatch,
     queryTracker,
+
+    chyt,
 };
 
 export type RootState = Omit<ReturnType<ReturnType<typeof makeRootReducer>>, 'global'> & {

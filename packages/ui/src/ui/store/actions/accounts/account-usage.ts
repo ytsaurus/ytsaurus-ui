@@ -55,6 +55,7 @@ import {
 import {AccountUsageDataParams} from '../../reducers/accounts/usage/account-usage-types';
 import {fetchAccountUsageListDiff, fetchAccountUsageTreeDiff} from './account-usage-diff';
 import {getAccountsUsageBasePath} from '../../../config';
+import {updateSortStateArray} from '../../../utils/sort-helpers';
 
 type SnapshotsThunkAction = ThunkAction<any, RootState, any, AccountsSnapshotsAction>;
 
@@ -265,24 +266,9 @@ export function fetchAccountUsage(): FiltersThunkAction {
 
 export function setAccountUsageSortState(item: SortState, multisort?: boolean): FiltersThunkAction {
     return (dispatch, getState) => {
-        let sortState: Array<SortState>;
-        if (multisort) {
-            const prevSortState = getAccountUsageSortState(getState());
-            const index = _.findIndex(prevSortState, ({column}) => column === item.column);
-            if (index >= 0) {
-                const toChange = {...prevSortState[index]};
-                toChange.order = item.order;
-                sortState = ([] as typeof prevSortState).concat(
-                    prevSortState.slice(0, index),
-                    toChange,
-                    prevSortState.slice(index + 1),
-                );
-            } else {
-                sortState = prevSortState.concat(item);
-            }
-        } else {
-            sortState = [item];
-        }
+        const prevSortState = getAccountUsageSortState(getState());
+        const sortState = updateSortStateArray(prevSortState, item, {multisort});
+
         dispatch({
             type: ACCOUNTS_USAGE_FILTERS_PARTIAL,
             data: {sortState, pageIndex: 0},

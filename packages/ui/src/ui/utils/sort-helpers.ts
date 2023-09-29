@@ -1,10 +1,14 @@
-import _ from 'lodash';
+import compact_ from 'lodash/compact';
+import findIndex_ from 'lodash/findIndex';
+import reduce_ from 'lodash/reduce';
+import some_ from 'lodash/some';
+
 import {OldSortState, SortState} from '../types';
 
-const ascOrder = 1;
-const descOrder = -1;
+const ASK_ORDER = 1;
+const DESC_ORDER = -1;
 
-type OrderK = typeof ascOrder | typeof descOrder;
+type OrderK = typeof ASK_ORDER | typeof DESC_ORDER;
 
 export function compareWithUndefined<T>(
     l: T,
@@ -21,22 +25,27 @@ export function compareWithUndefined<T>(
         : orderK * (l > r ? 1 : -1);
 }
 
-type ColumnSortInfo<T> = {
+export type ColumnSortInfo<T extends {}> = {
     key: keyof T;
     orderK?: OrderK;
     undefinedOrderK?: OrderK;
 };
+
 export function multiSortWithUndefined<T extends {}>(
     items: Array<T>,
     keys: Array<keyof T | ColumnSortInfo<T>>,
 ) {
-    const columnsInfo = _.reduce(
+    if (!keys.length) {
+        return items;
+    }
+
+    const columnsInfo = reduce_(
         keys,
         (acc, item) => {
             if ('string' === typeof item) {
                 acc.push({key: item, orderK: 1, undefinedOrderK: 1});
             } else {
-                const {key, orderK = 1, undefinedOrderK = 1} = item as unknown as ColumnSortInfo<T>;
+                const {key, orderK = 1, undefinedOrderK = 1} = item as ColumnSortInfo<T>;
                 acc.push({key, orderK, undefinedOrderK});
             }
             return acc;
@@ -56,6 +65,35 @@ export function multiSortWithUndefined<T extends {}>(
     });
 }
 
+export function multiSortBySortStateArray<T extends {}>(
+    items: Array<T>,
+    sortState: Array<SortState<keyof T>>,
+) {
+    if (!sortState.length) {
+        return items;
+    }
+
+    const columnSortInfo = compact_(sortState.map(sortState2columnSortState));
+
+    return multiSortWithUndefined(items, columnSortInfo);
+}
+
+function sortState2columnSortState<T extends {}>({column, order}: SortState<keyof T>) {
+    if (!column || !order) {
+        return undefined;
+    }
+
+    const {asc, undefinedAsc} = orderTypeToOldSortState(column as string, order);
+
+    const res: ColumnSortInfo<T> = {
+        key: column,
+        orderK: asc ? ASK_ORDER : DESC_ORDER,
+        undefinedOrderK: undefinedAsc ? ASK_ORDER : DESC_ORDER,
+    };
+
+    return res;
+}
+
 /**
  * Orders elements from `items` accourding to positions of elements with the same name from schema.
  * Missing elements in schema will be added to the end.
@@ -65,7 +103,7 @@ export function sortItemsBySchema<T extends {name: string}>(
     items: Array<T>,
     schema: Array<{name: string}> = [],
 ) {
-    const schemaIndices = _.reduce(
+    const schemaIndices = reduce_(
         schema,
         (acc, item, index) => {
             acc[item.name] = index;
@@ -104,7 +142,7 @@ export function compareArraysBySizeThenByItems<T>(
     }
 
     let lastResult = 0;
-    _.some(l, (_, index) => {
+    some_(l, (_, index) => {
         lastResult = compareWithUndefined(
             l !== undefined ? l[index] : l,
             r !== undefined ? r[index] : r,
@@ -198,8 +236,8 @@ export function orderTypeToOrderK(orderValue?: OrderType): {
         return res;
     }
     const order = MAP_ASC_DESC[orderValue!] || orderValue;
-    res.undefinedOrderK = order.startsWith('undefined-') ? descOrder : ascOrder;
-    res.orderK = order.startsWith('asc') || order.endsWith('asc') ? ascOrder : descOrder;
+    res.undefinedOrderK = order.startsWith('undefined-') ? DESC_ORDER : ASK_ORDER;
+    res.orderK = order.startsWith('asc') || order.endsWith('asc') ? ASK_ORDER : DESC_ORDER;
 
     return res;
 }
@@ -282,4 +320,29 @@ export function compareVectors(left: any, right: any, orderK: OrderK, undefinedO
     }
 
     return comparison;
+}
+
+export function updateSortStateArray<T extends string>(
+    prevSortState: Array<SortState<T>>,
+    nextItem: SortState<T>,
+    {multisort}: {multisort?: boolean} = {},
+) {
+    let sortState: Array<SortState<T>>;
+    if (multisort) {
+        const index = findIndex_(prevSortState, ({column}) => column === nextItem.column);
+        if (index >= 0) {
+            const toChange = {...prevSortState[index]};
+            toChange.order = nextItem.order;
+            sortState = ([] as typeof prevSortState).concat(
+                prevSortState.slice(0, index),
+                toChange,
+                prevSortState.slice(index + 1),
+            );
+        } else {
+            sortState = prevSortState.concat(nextItem);
+        }
+    } else {
+        sortState = [nextItem];
+    }
+    return sortState;
 }
