@@ -84,6 +84,10 @@ const pages: Array<HeaderItem> = [
         id: Page.QUERIES,
         name: 'Queries',
     },
+    {
+        id: Page.CHYT,
+        name: 'Cliqueues',
+    },
 ];
 
 export function registerExtraPage({pageId, title, svgIcon}: UIFactoryClusterPageInfo) {
