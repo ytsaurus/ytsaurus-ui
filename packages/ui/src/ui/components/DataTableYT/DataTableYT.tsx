@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import cn from 'bem-cn-lite';
 import _ from 'lodash';
 
@@ -45,13 +44,6 @@ export const DATA_TABLE_YT_SETTINGS_UNDER_TOOLBAR: Settings = {
 };
 
 export default class DataTableYT<T> extends React.Component<DataTableYtProps<T>> {
-    static propTypes = {
-        loaded: PropTypes.bool,
-        loading: PropTypes.bool,
-
-        // see https://github.com/yandex-cloud/react-data-table
-    };
-
     private dataTable = React.createRef<DataTable<T>>();
 
     isEmpty() {

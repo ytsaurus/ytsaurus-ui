@@ -211,12 +211,12 @@ export const getAccountUsageSortStateByColumn = createSelector(
                 if (column && order) {
                     acc[column] = {
                         order,
-                        index: sortState.length > 1 ? index : undefined,
+                        multisortIndex: sortState.length > 1 ? index + 1 : undefined,
                     };
                 }
                 return acc;
             },
-            {} as Record<string, {order: Required<SortState>['order']; index?: number}>,
+            {} as Record<string, {order: Required<SortState>['order']; multisortIndex?: number}>,
         );
     },
 );

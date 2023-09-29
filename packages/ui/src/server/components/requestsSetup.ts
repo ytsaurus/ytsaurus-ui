@@ -59,11 +59,19 @@ export function getYTApiClusterSetup(
     return {isLocalCluster, ...getClusterSetup(clusterConfig)};
 }
 
-export function getRobotYTApiSetup(cluster: string): ReturnType<typeof getYTApiClusterSetup> {
+export function getRobotYTApiSetup(cluster: string): YTApiUserSetup {
     const oauthToken = getRobotOAuthToken();
     const config = getYTApiClusterSetup(cluster);
 
     const {setup, ...rest} = config;
+
+    const authHeaders: Record<string, string> =
+        setup.authentication && setup.authentication !== 'none'
+            ? {
+                  Authorization: `OAuth ${oauthToken}`,
+              }
+            : {};
+
     return {
         setup: {
             ...setup,
@@ -75,6 +83,7 @@ export function getRobotYTApiSetup(cluster: string): ReturnType<typeof getYTApiC
                       }
                     : 'none',
         },
+        authHeaders,
         ...rest,
     };
 }
