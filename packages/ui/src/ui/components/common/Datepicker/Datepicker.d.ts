@@ -1,7 +1,11 @@
 import {PureComponent} from 'react';
-import {TextInputSize} from '@gravity-ui/uikit';
+
+import {TextInputProps, TextInputSize} from '@gravity-ui/uikit';
+
+export type DatepickerScale = 'day' | 'week' | 'month' | 'quarter' | 'year';
 
 export interface DatepickerOutputDates {
+    scale?: DatepickerScale;
     from: string | null;
     to: string | null;
 }
@@ -20,7 +24,8 @@ export interface DatepickerProps {
     emptyValueText?: string;
     placeholder?: string;
     timezoneOffset?: number;
-    scale?: 'day' | 'week' | 'month' | 'quarter' | 'year';
+    scale?: DatepickerScale;
+    availableScales?: DatepickerScale[];
     controlWidth?: number | string;
     range?: boolean;
     allowNullableValues?: boolean;
@@ -30,6 +35,7 @@ export interface DatepickerProps {
     controlSize?: TextInputSize;
     className?: string;
     popupClassName?: string;
+    pin?: TextInputProps['pin'];
 }
 
 export const datepickerDefaultProps: Partial<DatepickerProps>;

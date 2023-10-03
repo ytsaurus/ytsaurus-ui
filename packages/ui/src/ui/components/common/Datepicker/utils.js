@@ -1,5 +1,7 @@
+import _uniq from 'lodash/uniq';
 import {DateTime} from 'luxon';
-import {MINUTES_IN_HOUR} from './constants';
+
+import {MINUTES_IN_HOUR, TABS} from './constants';
 import i18n from './i18n';
 
 const FORMAT_LETTERS = ['y', 'M', 'd', 'h', 'H', 'm', 's', 'S'];
@@ -243,4 +245,11 @@ export function getListWithoutNullableValues(...args) {
 
 export function hasTimeUnitsInFormat(format) {
     return /H|h|m|s/.test(format);
+}
+
+export function getTabs(scales = [TABS.DAY, TABS.WEEK, TABS.MONTH, TABS.QUARTER, TABS.YEAR]) {
+    return _uniq(scales).map((tab) => ({
+        id: tab,
+        title: i18n(`tab_${tab}`),
+    }));
 }

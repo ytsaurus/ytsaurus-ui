@@ -356,6 +356,7 @@ function DateRangeFilter() {
                 className={block('date-range-control')}
                 onError={() => {}}
                 placeholder={format.Readable(type) + ' range...'}
+                pin="round-brick"
             />
             <DateRangeTypeFilterMemo />
         </span>
@@ -375,6 +376,7 @@ function DateRangeTypeFilter() {
 
     return (
         <Select
+            pin="clear-round"
             value={[value]}
             onUpdate={(vals) => handleChange(vals[0])}
             items={[
