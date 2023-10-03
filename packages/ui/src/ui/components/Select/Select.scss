@@ -2,11 +2,10 @@ body .yt-select {
     font-size: 13px;
 
     .yc-button__text {
-        margin: 0 8px;
         display: inline-flex;
         align-items: center;
         overflow: hidden;
-        width: calc(100% - 16px);
+        width: 100%;
     }
 
     &__item-icon {
@@ -47,9 +46,11 @@ body .yt-select {
     }
 
     &__spacer {
+        display: inline-block;
         flex-grow: 1;
         flex-shrink: 1;
         text-align: left;
+        min-width: 4px;
     }
 
     &__chevron {

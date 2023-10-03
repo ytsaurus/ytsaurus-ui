@@ -136,6 +136,10 @@ class CustomSelect extends React.Component<
         Pick<ValueControlProps, 'hashByValue' | 'maxVisibleValues'> &
         Pick<YTSelectProps, 'hideClear' | 'hideFilter' | 'renderItem'>
 > {
+    static defaultProps = {
+        width: 'max',
+    };
+
     render() {
         const {className, hideFilter, ...props} = this.props;
         return (

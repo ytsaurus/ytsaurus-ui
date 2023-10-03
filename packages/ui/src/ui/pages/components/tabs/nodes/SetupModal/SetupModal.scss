@@ -10,6 +10,10 @@
 
             grid-gap: 10px 0;
             grid-template-columns: 180px 1fr;
+
+            &__value {
+                width: 397px;
+            }
         }
     }
 
@@ -25,12 +29,6 @@
     &__heading {
         color: var(--secondary-text);
         margin-bottom: 10px;
-    }
-
-    &__select {
-        .yc-button_size_m .yc-button__text {
-            margin: 0 8px;
-        }
     }
 
     &__checkbox-group {

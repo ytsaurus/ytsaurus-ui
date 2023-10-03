@@ -27,11 +27,11 @@
 
     &__text {
         color: var(--primary-text);
-        text-shadow: 0 0 1px var(--light-text);
+        text-shadow: 0 0 3px var(--light-text);
     }
 
     &__text-inner {
         color: var(--light-text);
-        text-shadow: 0 0 1px var(--primary-text);
+        text-shadow: 0 0 3px var(--primary-text);
     }
 }

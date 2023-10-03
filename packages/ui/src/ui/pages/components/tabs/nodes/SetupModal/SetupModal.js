@@ -313,6 +313,7 @@ export class SetupModal extends Component {
                     onUpdate={this.handleSelectChange}
                     placeholder={'Select states...'}
                     width="max"
+                    maxVisibleValues={5}
                     hideFilter
                     multiple
                 />

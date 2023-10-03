@@ -13,7 +13,8 @@ import App from './containers/App/App';
 
 import {configure} from '@gravity-ui/uikit';
 
-import '@gravity-ui/uikit/styles/styles.scss';
+import '@gravity-ui/uikit/styles/fonts.css';
+import '@gravity-ui/uikit/styles/styles.css';
 
 import './legacy-styles/legacy.scss';
 import './styles/redefinitions/redefinitions.scss';
