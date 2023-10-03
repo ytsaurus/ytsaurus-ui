@@ -32,7 +32,7 @@ export default function DataTypePopup({children, type, hideIcon, className}: Pro
                 ) : null
             }
             hasArrow={false}
-            delayOpening={300}
+            delayOpening={400}
         >
             <span className={block('container')}>
                 {children}

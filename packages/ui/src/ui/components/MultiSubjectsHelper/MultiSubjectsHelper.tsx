@@ -80,8 +80,8 @@ export default class MultiSubjectHelper<T extends string> extends Component<Prop
                             key={item.value}
                             className={block('tags-item')}
                             content={tagText}
-                            delayClosing={150}
-                            delayOpening={150}
+                            delayClosing={400}
+                            delayOpening={400}
                         >
                             {content}
                         </Popover>

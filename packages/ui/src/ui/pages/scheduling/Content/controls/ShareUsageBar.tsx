@@ -49,7 +49,6 @@ function ShareUsageBar(props: Props) {
     return (
         <Tooltip
             className={block(null, className)}
-            delayOpening={500}
             content={
                 <React.Fragment>
                     {title}
