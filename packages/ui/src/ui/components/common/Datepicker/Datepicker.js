@@ -1,14 +1,16 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import block from 'bem-cn-lite';
+
+import cn from 'bem-cn-lite';
+
+import {MobileContext, Popup, Sheet, TextInput} from '@gravity-ui/uikit';
 import {DateTime} from 'luxon';
-import {MobileContext, Popup, TextInput} from '@gravity-ui/uikit';
+import PropTypes from 'prop-types';
 
 import {FieldWrapper} from '../FieldWrapper/FieldWrapper';
-import {MobileModal} from '../MobileModal/MobileModal';
 
-import i18n from './i18n';
 import {PopupContent} from './PopupContent/PopupContent';
+import {AVAILABLE_POPUP_PLACEMENT, DISPLAY_FORMAT, OUTPUT_FORMAT, TABS} from './constants';
+import i18n from './i18n';
 import {
     createDateTime,
     getHashedData,
@@ -20,11 +22,10 @@ import {
     isValidDate,
     resolveDates,
 } from './utils';
-import {AVAILABLE_POPUP_PLACEMENT, DISPLAY_FORMAT, OUTPUT_FORMAT, TABS} from './constants';
 
 import './Datepicker.scss';
 
-const b = block('yc-datepicker');
+const b = cn('datepicker');
 const dateType = PropTypes.oneOfType([PropTypes.string, PropTypes.number]);
 const getModifier = (name) => b({[name]: true}).split(' ')[1];
 
@@ -52,7 +53,8 @@ export class Datepicker extends React.PureComponent {
         placeholder: PropTypes.string,
         timezoneOffset: PropTypes.number,
         outputFormat: PropTypes.oneOf([OUTPUT_FORMAT.DATE, OUTPUT_FORMAT.DATETIME]),
-        scale: PropTypes.oneOf([TABS.DAY, TABS.WEEK, TABS.MONTH, TABS.QUARTER, TABS.YEAR]),
+        scale: PropTypes.oneOf(Object.values(TABS)),
+        availableScales: PropTypes.arrayOf(PropTypes.oneOf(Object.values(TABS))),
         controlWidth: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
         range: PropTypes.bool,
         allowNullableValues: PropTypes.bool,
@@ -62,6 +64,7 @@ export class Datepicker extends React.PureComponent {
         controlSize: PropTypes.oneOf(['s', 'm', 'l', 'xl']),
         className: PropTypes.string,
         popupClassName: PropTypes.string,
+        pin: PropTypes.string,
     };
 
     static defaultProps = datepickerDefaultProps;
@@ -120,7 +123,7 @@ export class Datepicker extends React.PureComponent {
     constructor(props) {
         super(props);
 
-        const {format, timezoneOffset, emptyValueText, range} = this.props;
+        const {format, timezoneOffset, emptyValueText, range, availableScales} = this.props;
 
         const zone = getZone(timezoneOffset);
         let from = createDateTime({date: this.props.from, zone});
@@ -140,7 +143,7 @@ export class Datepicker extends React.PureComponent {
             max: isValidDate(max) ? max : undefined,
             lastValidHash: getHashedData({from, to}),
             prevProps: this.props,
-            activeTab: 'day',
+            activeTab: availableScales?.[0] ?? 'day',
             pick: 0,
             error: '',
             active: false,
@@ -322,6 +325,7 @@ export class Datepicker extends React.PureComponent {
             isFromValid = isValidDate(from);
         }
 
+        // [DATAUI-348] не проверяем валидность содержимого dates[1] если это emptyValueText
         if (dates[1] && dates[1] !== this.props.emptyValueText) {
             to = DateTime.fromFormat(dates[1].trim(), format, {zone});
             isToValid = isValidDate(to);
@@ -344,6 +348,9 @@ export class Datepicker extends React.PureComponent {
             return;
         }
 
+        // [DATAUI-791] обнуляем счетчик кликов:
+        // - при очистке инпута
+        // - если после выбора первой части диапазона пользователь внеапно стер его начало
         const resetPickCounter = !searchText || (range && !to);
 
         this.setState({
@@ -374,6 +381,7 @@ export class Datepicker extends React.PureComponent {
     };
 
     onClose = () => {
+        // Ловим клик по крестику для очистки инпута, который вызывает ложное срабатывание текущего метода
         if (document.activeElement === this.ControlNodeRef.current) {
             return;
         }
@@ -384,6 +392,7 @@ export class Datepicker extends React.PureComponent {
         const currentHash = getHashedData({from, to});
 
         if (lastValidHash === currentHash) {
+            // [DATAUI-347] возвращаем emptyValueText
             const searchText = getSearchText({
                 from,
                 to,
@@ -400,7 +409,7 @@ export class Datepicker extends React.PureComponent {
 
     onUpdate = () => {
         const {allowNullableValues, onError} = this.props;
-        const {min, max} = this.state;
+        const {min, max, activeTab} = this.state;
 
         if (this.isInvalidState()) {
             this.setState(
@@ -471,13 +480,14 @@ export class Datepicker extends React.PureComponent {
                 this.props.onUpdate({
                     from: outputFrom,
                     to: outputTo,
+                    scale: activeTab,
                 });
             },
         );
     };
 
     renderContent(mobile) {
-        const {scale, range, showApply} = this.props;
+        const {scale, range, showApply, availableScales} = this.props;
         const {from, to, min, max, zone, activeTab, pick, scrollCalendar} = this.state;
 
         const mod = mobile ? getModifier('mobile') : getModifier('desktop');
@@ -490,6 +500,7 @@ export class Datepicker extends React.PureComponent {
                 max={max}
                 zone={zone}
                 activeTab={scale || activeTab}
+                availableScales={availableScales}
                 mod={mod}
                 pick={pick}
                 range={range}
@@ -505,7 +516,7 @@ export class Datepicker extends React.PureComponent {
     }
 
     render() {
-        const {controlWidth, hasClear, disabled, controlSize, className, popupClassName} =
+        const {controlWidth, hasClear, disabled, controlSize, className, popupClassName, pin} =
             this.props;
         const {searchText, active, error} = this.state;
 
@@ -532,6 +543,7 @@ export class Datepicker extends React.PureComponent {
                                     onFocus={this.onInputFocus}
                                     onKeyDown={this.onInputKeyPress}
                                     controlRef={this.ControlNodeRef}
+                                    pin={pin}
                                 />
                                 {mobile && (
                                     <div
@@ -542,18 +554,18 @@ export class Datepicker extends React.PureComponent {
                             </FieldWrapper>
                         </div>
                         {mobile ? (
-                            <MobileModal
+                            <Sheet
                                 id="datepicker"
                                 visible={active && !disabled}
-                                contentClassName={b('mobile-modal')}
+                                contentClassName={b('sheet')}
                                 allowHideOnContentScroll={false}
                                 onClose={this.onClose}
                             >
                                 {this.renderContent(mobile)}
-                            </MobileModal>
+                            </Sheet>
                         ) : (
                             <Popup
-                                className={b('popup', popupClassName)}
+                                contentClassName={b('popup', popupClassName)}
                                 open={active && !disabled}
                                 anchorRef={this.ControlNodeRef}
                                 placement={AVAILABLE_POPUP_PLACEMENT}

@@ -32,19 +32,6 @@
         width: 180px;
     }
 
-    &__date-range {
-        .yc-text-input__control {
-            border-right: 0px;
-            border-bottom-right-radius: 0px;
-            border-top-right-radius: 0px;
-        }
-
-        .yc-select-control {
-            border-bottom-left-radius: 0px;
-            border-top-left-radius: 0px;
-        }
-    }
-
     &__owner-popup {
         min-width: 200px;
     }
