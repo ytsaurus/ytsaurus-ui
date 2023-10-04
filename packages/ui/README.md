@@ -30,20 +30,20 @@ To run the development environment you need to prepare and run nginx:
 Install required dependencies:
 
 ```
-$ npm ci
+$ npm deps:install
 ```
 
-After that we can start the UI:
-
-```bash
-# my-cluster shoul be present in your clusters-config.json
-$ YT_AUTH_CLUSTER_ID=my-cluster npm run dev:app
-```
-
-Also there is the ability to connect to a local yt cluster:
+A simple way to start development is using your local-yt cluster. The command bellow suggests to start local-yt cluster as docker-container:
 
 ```bash
 $ npm run dev:localmode
+```
+
+Another way is to provide `clusters-config.json` and run the command like:
+
+```bash
+# my-cluster should be present in your clusters-config.json
+$ YT_AUTH_CLUSTER_ID=my-cluster npm run dev:app
 ```
 
 ### Environment variables
