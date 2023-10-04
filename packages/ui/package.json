@@ -78,7 +78,7 @@
     "@gravity-ui/chartkit": "^3.4.2",
     "@gravity-ui/components": "^2.4.1",
     "@gravity-ui/dashkit": "^6.0.0",
-    "@gravity-ui/dialog-fields": "^3.0.0",
+    "@gravity-ui/dialog-fields": "^3.0.2",
     "@gravity-ui/eslint-config": "^2.2.0",
     "@gravity-ui/i18n": "^1.0.0",
     "@gravity-ui/icons": "^2.4.0",
