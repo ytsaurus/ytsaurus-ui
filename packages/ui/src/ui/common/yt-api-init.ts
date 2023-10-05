@@ -7,7 +7,8 @@ import {getWindowStore} from '../store/window-store';
 import {getClusterConfig, getXsrfCookieName} from '../utils';
 import {BAN_USER, BLOCK_USER} from '../constants/index';
 import YT from '../config/yt-config';
-import {getClusterProxy, isAllowYtTwmApi} from '../store/selectors/global';
+import {getClusterProxy} from '../store/selectors/global';
+import {getConfigData} from '../config/ui-settings';
 
 export function initYTApiClusterParams(cluster: string) {
     const {clusters} = YT;
@@ -17,7 +18,9 @@ export function initYTApiClusterParams(cluster: string) {
     yt.setup.setGlobalOption('useEncodedParameters', true);
     yt.setup.setGlobalOption('proxy', getClusterProxy(config));
 
-    if (isAllowYtTwmApi()) {
+    const allowYtTvm = !getConfigData().ytApiUseCORS;
+
+    if (allowYtTvm) {
         config.secure = window.location.protocol === 'https:';
     }
 

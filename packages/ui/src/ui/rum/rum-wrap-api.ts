@@ -4,11 +4,9 @@ import yt from '@ytsaurus/javascript-wrapper/lib/yt';
 import {rumDebugLog2, rumGetTime, rumSendDelta} from './rum-counter';
 import {CancelTokenSource} from 'axios';
 import {YT_API_REQUEST_ID_HEADER} from '../../shared/constants';
-import {isSupportedYtTvmAPIGlobal} from '../store/selectors/thor/support';
 import {RumMeasureTypes} from './rum-measure-types';
 import {BatchResultsItem, BatchSubRequest, GetParams, OutputFormat} from '../../shared/yt-types';
 import type {ValueOf} from '../types';
-import YT from '../config/yt-config';
 
 export enum YTApiId {
     // Names of ids for node-controllers should be started with 'ui_'-prefix
@@ -239,10 +237,6 @@ export function injectRequestId<T>(
 }
 
 function makeSetupWithId(id: YTApiId, setup: {requestHeaders?: object} | undefined) {
-    if (!isSupportedYtTvmAPIGlobal() || YT.isLocalCluster) {
-        return setup;
-    }
-
     const {requestHeaders} = setup || {};
     return {...setup, requestHeaders: {...requestHeaders, [YT_API_REQUEST_ID_HEADER]: YTApiId[id]}};
 }

@@ -113,10 +113,6 @@ const features = createSelector(
                 prestable: '22.1.9091274',
                 component: scheduler,
             },
-            ytTvmApi: {
-                prestable: '21.3',
-                component: proxy,
-            },
             operationsPoolTreeFilter: {
                 prestable: '22.1.9091043',
                 component: proxy,
@@ -247,7 +243,3 @@ export const isSupportedNodeMaintenanceApi = createSelector(
 */
 const isSupportedGlobal = (featureName) =>
     isSupportedSelector(window.store.getState())(featureName);
-
-export function isSupportedYtTvmAPIGlobal() {
-    return isSupportedGlobal('ytTvmApi');
-}
