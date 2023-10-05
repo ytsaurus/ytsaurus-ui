@@ -456,7 +456,7 @@ function isValidNumber(value) {
     return !isInvalidNumber(value);
 }
 
-export function editPool(pool, values, initialValues, allowTransfer) {
+export function editPool(pool, values, initialValues) {
     return (dispatch, getState) => {
         const state = getState();
 
@@ -500,7 +500,6 @@ export function editPool(pool, values, initialValues, allowTransfer) {
                     ..._.pick(initialValues.general, Object.keys(POOL_GENERAL_TYPE_TO_ATTRIBUTE)),
                 },
                 tree,
-                allowTransfer,
             }),
             setResourceAttributes(
                 path,

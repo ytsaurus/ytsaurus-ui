@@ -105,10 +105,6 @@ const features = createSelector(
     [getProxyVersion, getSchedulerVersion, getMasterVersion],
     (proxy, scheduler, master) => {
         return {
-            transferPoolQuota: {
-                prestable: '21.3',
-                component: proxy,
-            },
             schedulingOperationsPerPool: {
                 prestable: '21.3.8724602',
                 component: scheduler,
@@ -194,10 +190,6 @@ export const isSupportedSelector = createSelector(
     [rawProxyVersion, proxyPatchNumber, features],
     _isFeatureSupported,
 );
-
-export const isSupportedTransferPoolQuota = createSelector([isSupportedSelector], (isSupported) => {
-    return isSupported('transferPoolQuota');
-});
 
 export const isSupportedSchedulingOperationsPerPool = createSelector(
     [isSupportedSelector],

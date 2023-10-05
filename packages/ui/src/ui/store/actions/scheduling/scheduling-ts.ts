@@ -18,11 +18,10 @@ interface SetResourceGuaranteeParams {
     values: PoolResources & {guaranteeType: string};
     initials: PoolResources;
     tree: string;
-    allowTransfer?: boolean;
 }
 
 export function setPoolAttributes(params: SetResourceGuaranteeParams) {
-    const {poolPath, values, initials, tree, allowTransfer} = params;
+    const {poolPath, values, initials, tree} = params;
     if (_.isEmpty(values)) {
         return Promise.resolve();
     }
@@ -37,7 +36,7 @@ export function setPoolAttributes(params: SetResourceGuaranteeParams) {
         const key = k as keyof typeof restValues;
 
         const attr = POOL_RESOURCE_TYPE_TO_ATTRIBUTE[key];
-        if (!source || limit === undefined || !allowTransfer) {
+        if (!source || limit === undefined) {
             toModify.push({attr, value: limit});
         } else {
             const prevLimit = initials[key]?.limit || 0;

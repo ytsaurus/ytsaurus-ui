@@ -32,7 +32,6 @@ import {getCluster, getCurrentUserName} from '../../../../store/selectors/global
 import {getCurrentTreeGpuLimit} from '../../../../store/selectors/scheduling/scheduling-ts';
 
 import {RootState} from '../../../../store/reducers';
-import {isSupportedTransferPoolQuota} from '../../../../store/selectors/thor/support';
 import {
     PoolInfo,
     getSchedulingPoolsMapByName,
@@ -74,7 +73,6 @@ interface FormValues {
 
 export function PoolEditorDialog() {
     const dispatch = useDispatch();
-    const allowTransfer = useSelector(isSupportedTransferPoolQuota);
 
     const editItem = useSelector(getSchedulingEditItem);
     const {poolErrorData, editVisibility} = useSelector((state: RootState) => state.scheduling);
@@ -161,9 +159,9 @@ export function PoolEditorDialog() {
                     'createEphemeralSubpools',
                 ]),
             };
-            await dispatch(editPool(editItem, data, initialValues, allowTransfer));
+            await dispatch(editPool(editItem, data, initialValues));
         },
-        [editItem, initialValues, dispatch, allowTransfer],
+        [editItem, initialValues, dispatch],
     );
 
     const user = useSelector(getCurrentUserName);
@@ -295,7 +293,6 @@ export function PoolEditorDialog() {
                                 pool: editItem?.name || '',
                                 resourceType: 'maxOperationCount',
                                 initialLimit: initialValues.general.maxOperationCount.limit,
-                                sourceDisabled: !allowTransfer,
                                 min: 0,
                                 max: Infinity,
                                 sourcesSkipParent: true,
@@ -310,7 +307,6 @@ export function PoolEditorDialog() {
                                 pool: editItem?.name || '',
                                 resourceType: 'maxRunningOperationCount',
                                 initialLimit: initialValues.general.maxRunningOperationCount.limit,
-                                sourceDisabled: !allowTransfer,
                                 min: 0,
                                 max: Infinity,
                                 sourcesSkipParent: true,
@@ -337,7 +333,6 @@ export function PoolEditorDialog() {
                                 resourceType: 'cpuStrong',
                                 initialLimit: initialValues.resourceGuarantee.cpuStrong.limit,
                                 decimalPlaces: 2,
-                                sourceDisabled: !allowTransfer,
                             },
                         },
                         ...(treGpuLimit > 0
@@ -351,7 +346,6 @@ export function PoolEditorDialog() {
                                           resourceType: 'gpuStrong' as const,
                                           initialLimit:
                                               initialValues.resourceGuarantee.gpuStrong.limit,
-                                          sourceDisabled: !allowTransfer,
                                       },
                                   },
                               ]
@@ -365,7 +359,6 @@ export function PoolEditorDialog() {
                                 pool: editItem?.name || '',
                                 resourceType: 'memoryStrong' as const,
                                 initialLimit: initialValues.resourceGuarantee.memoryStrong.limit,
-                                sourceDisabled: !allowTransfer,
                             },
                         },
                         warningField,
@@ -405,7 +398,6 @@ export function PoolEditorDialog() {
                                 pool: editItem?.name || '',
                                 resourceType: 'burstCpu',
                                 initialLimit: initialValues.integralGuarantee.burstCpu.limit,
-                                sourceDisabled: !allowTransfer,
                                 decimalPlaces: 2,
                             },
                         },
@@ -420,7 +412,6 @@ export function PoolEditorDialog() {
                                           resourceType: 'burstGpu' as const,
                                           initialLimit:
                                               initialValues.integralGuarantee.burstGpu.limit,
-                                          sourceDisabled: !allowTransfer,
                                       },
                                   },
                               ]
@@ -433,7 +424,6 @@ export function PoolEditorDialog() {
                                 pool: editItem?.name || '',
                                 resourceType: 'flowCpu',
                                 initialLimit: initialValues.integralGuarantee.flowCpu.limit,
-                                sourceDisabled: !allowTransfer,
                                 decimalPlaces: 2,
                             },
                         },
@@ -448,7 +438,6 @@ export function PoolEditorDialog() {
                                           resourceType: 'flowGpu' as const,
                                           initialLimit:
                                               initialValues.integralGuarantee.flowGpu.limit,
-                                          sourceDisabled: !allowTransfer,
                                       },
                                   },
                               ]
