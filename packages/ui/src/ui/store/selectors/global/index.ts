@@ -14,7 +14,6 @@ import {ClusterConfig} from '../../../../shared/yt-types';
 import {FIX_MY_TYPE} from '../../../types';
 import UIFactory from '../../../UIFactory';
 import {getConfigData} from '../../../config/ui-settings';
-import {isSupportedYtTvmAPIGlobal} from '../thor/support';
 import {Page} from '../../../../shared/constants/settings';
 import {AuthWay} from '../../../../shared/constants';
 
@@ -46,11 +45,11 @@ export function getClusterConfigByName(clusterName: string): ClusterConfig {
 }
 
 export function isAllowYtTwmApi() {
-    return !getConfigData().ytApiUseCORS && isSupportedYtTvmAPIGlobal();
+    return !getConfigData().ytApiUseCORS;
 }
 
 export function getClusterProxy(clusterConfig: ClusterConfig): string {
-    const allowYtTvmApi = isAllowYtTwmApi();
+    const allowYtTvmApi = !getConfigData().ytApiUseCORS;
     if (allowYtTvmApi) {
         return `${window.location.host}/api/yt/${clusterConfig.id}`;
     }
