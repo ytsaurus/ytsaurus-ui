@@ -109,10 +109,6 @@ const features = createSelector(
                 prestable: '20.2',
                 component: scheduler,
             },
-            newOperationStarvationStatus: {
-                prestable: '21.2.8084183',
-                component: scheduler,
-            },
             transferPoolQuota: {
                 prestable: '21.3',
                 component: proxy,
@@ -201,13 +197,6 @@ export const _isFeatureSupported = (rawProxyVersion, proxyPatch, features) => (f
 export const isSupportedSelector = createSelector(
     [rawProxyVersion, proxyPatchNumber, features],
     _isFeatureSupported,
-);
-
-export const isSupportedOperationStarvationStatus = createSelector(
-    [rawSchedulerVersion, isSupportedSelector],
-    (rawVersion, isSupported) => {
-        return rawVersion && isSupported('newOperationStarvationStatus');
-    },
 );
 
 export const isSupportedTransferPoolQuota = createSelector([isSupportedSelector], (isSupported) => {

@@ -44,7 +44,7 @@ function preparePoolChildResource(data, type, treeResources, resource) {
     return data;
 }
 
-export function updatePoolChild(data, cypressData, type, treeResources, opts) {
+export function updatePoolChild(data, cypressData, type, treeResources) {
     try {
         const attributes = data.attributes;
         const cypressAttributes = ypath.getAttributes(cypressData);
@@ -64,7 +64,7 @@ export function updatePoolChild(data, cypressData, type, treeResources, opts) {
             data.mode = ypath.getValue(attributes, '/mode');
 
             data.leaves = _.map(data.leaves, (leaf) => {
-                return updatePoolChild(leaf, {}, 'operation', treeResources, opts);
+                return updatePoolChild(leaf, {}, 'operation', treeResources);
             });
 
             if (!data.leaves?.length) {
@@ -79,7 +79,6 @@ export function updatePoolChild(data, cypressData, type, treeResources, opts) {
                         {},
                         'operation',
                         treeResources,
-                        opts,
                     );
                     data.leaves = [];
                     for (let i = 0; i < data.pool_operation_count; ++i) {
@@ -110,12 +109,7 @@ export function updatePoolChild(data, cypressData, type, treeResources, opts) {
         }
 
         data.id = data.name;
-        const {useStarvingStatus} = opts;
-        data.starvation_status = useStarvingStatus
-            ? ypath.getValue(attributes, '/starvation_status')
-            : ypath.getBoolean(attributes, '/starving')
-            ? 'starving'
-            : 'non_starving';
+        data.starvation_status = ypath.getValue(attributes, '/starvation_status');
 
         // General
         data.weight = ypath.getNumber(attributes, '/weight');
