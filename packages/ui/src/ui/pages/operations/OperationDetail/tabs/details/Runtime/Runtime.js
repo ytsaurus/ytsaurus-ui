@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {connect, useSelector} from 'react-redux';
+import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import cn from 'bem-cn-lite';
 import _ from 'lodash';
@@ -12,7 +12,6 @@ import MetaTable, {
 import {formatShare} from '../../../../../../utils/operations/tabs/details/runtime';
 import {showEditPoolsWeightsModal} from '../../../../../../store/actions/operations';
 import hammer from '../../../../../../common/hammer';
-import {isSupportedOperationStarvationStatus} from '../../../../../../store/selectors/thor/support';
 import {OperationPool} from '../../../../../../components/OperationPool/OperationPool';
 
 const headingBlock = cn('elements-heading');
@@ -26,9 +25,8 @@ export const runtimeProps = PropTypes.arrayOf(
 );
 
 function StarvingStatus({progress}) {
-    const useNewStatus = useSelector(isSupportedOperationStarvationStatus);
-    const {starvation_status, starving} = progress || {};
-    const res = useNewStatus ? hammer.format.Readable(starvation_status) : starving?.toString();
+    const {starvation_status} = progress || {};
+    const res = starvation_status ? hammer.format.Readable(starvation_status) : undefined;
     return res || null; // returns null to prevent react warning
 }
 

@@ -4,7 +4,6 @@ import {createSelector} from 'reselect';
 import {RootState} from '../../../store/reducers';
 import {ROOT_POOL_NAME} from '../../../constants/scheduling';
 import {flattenAttributes, preparePools} from '../../../utils/scheduling/scheduling';
-import {isSupportedOperationStarvationStatus} from '../thor/support';
 import ypath from '../../../common/thor/ypath';
 import {updatePoolChild} from '../../../utils/scheduling/pool-child';
 import {getSchedulingOperations, getSchedulingOperationsTree} from './scheduling-operations';
@@ -50,15 +49,8 @@ const getOperationsFiltered = createSelector(
 );
 
 const getPoolsPrepared = createSelector(
-    [
-        getPoolsRaw,
-        getOperationsFiltered,
-        getTreeAttributesFlatten,
-        getTreeResources,
-        isSupportedOperationStarvationStatus,
-        getCluster,
-    ],
-    (rawPools, rawOperations, attributes, treeResources, useStarvingStatus, cluster) => {
+    [getPoolsRaw, getOperationsFiltered, getTreeAttributesFlatten, getTreeResources, getCluster],
+    (rawPools, rawOperations, attributes, treeResources, cluster) => {
         if (_.isEmpty(rawPools)) {
             return [];
         }
@@ -68,9 +60,7 @@ const getPoolsPrepared = createSelector(
         return rumId.wrap('prepareData', () => {
             return _.map(preparePools(rawPools!, rawOperations), (pool) => {
                 const cypressAttributes = ypath.getValue(attributes)[pool.name];
-                return updatePoolChild(pool, cypressAttributes, 'pool', treeResources, {
-                    useStarvingStatus,
-                });
+                return updatePoolChild(pool, cypressAttributes, 'pool', treeResources);
             });
         });
     },
