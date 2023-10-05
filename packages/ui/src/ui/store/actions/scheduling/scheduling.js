@@ -39,7 +39,6 @@ import {
 } from '../../../constants/scheduling';
 import {setPoolAttributes} from './scheduling-ts';
 import {loadSchedulingOperationsPerPool} from './scheduling-operations';
-import {isSupportedFieldsFilter} from '../../selectors/thor/support';
 import {extractBatchV4Values, splitBatchResults} from '../../../utils/utils';
 import {RumWrapper, YTApiId, ytApiV3Id, ytApiV4Id} from '../../../rum/rum-wrap-api';
 import {getCluster} from '../../../store/selectors/global';
@@ -69,7 +68,7 @@ const commands = [
     },
 ];
 
-function loadTreeRequests(tree, {allowFieldsFilter}) {
+function loadTreeRequests(tree) {
     const requests = [
         {
             command: 'get',
@@ -120,42 +119,38 @@ function loadTreeRequests(tree, {allowFieldsFilter}) {
             command: 'get',
             parameters: {
                 path: `//sys/scheduler/orchid/scheduler/pool_trees/${tree}/pools`,
-                ...(allowFieldsFilter
-                    ? {
-                          fields: [
-                              'accumulated_resource_ratio_volume',
-                              'accumulated_resource_volume',
-                              'demand_ratio',
-                              'detailed_fair_share',
-                              'dominant_resource',
-                              'estimated_burst_usage_duration_sec',
-                              'fair_share_ratio',
-                              'fifo_index',
-                              'integral_guarantee_type',
-                              'is_ephemeral',
-                              'max_operation_count',
-                              'max_running_operation_count',
-                              'max_share_ratio',
-                              'min_share_ratio',
-                              'mode',
-                              'operation_count',
-                              'parent',
-                              'pool_operation_count',
-                              'resource_demand',
-                              'resource_limits',
-                              'resource_usage',
-                              'promised_fair_share_resources',
-                              'running_operation_count',
-                              'specified_burst_guarantee_resources',
-                              'specified_resource_flow',
-                              'starvation_status',
-                              'starving',
-                              'strong_guarantee_resources',
-                              'usage_ratio',
-                              'weight',
-                          ],
-                      }
-                    : {}),
+                fields: [
+                    'accumulated_resource_ratio_volume',
+                    'accumulated_resource_volume',
+                    'demand_ratio',
+                    'detailed_fair_share',
+                    'dominant_resource',
+                    'estimated_burst_usage_duration_sec',
+                    'fair_share_ratio',
+                    'fifo_index',
+                    'integral_guarantee_type',
+                    'is_ephemeral',
+                    'max_operation_count',
+                    'max_running_operation_count',
+                    'max_share_ratio',
+                    'min_share_ratio',
+                    'mode',
+                    'operation_count',
+                    'parent',
+                    'pool_operation_count',
+                    'resource_demand',
+                    'resource_limits',
+                    'resource_usage',
+                    'promised_fair_share_resources',
+                    'running_operation_count',
+                    'specified_burst_guarantee_resources',
+                    'specified_resource_flow',
+                    'starvation_status',
+                    'starving',
+                    'strong_guarantee_resources',
+                    'usage_ratio',
+                    'weight',
+                ],
             },
         },
     ];
@@ -196,9 +191,7 @@ export function loadSchedulingData() {
 
                 dispatch(loadSchedulingOperationsPerPool(tree));
 
-                const allowFieldsFilter = isSupportedFieldsFilter(state);
-
-                const treeRequests = loadTreeRequests(tree, {allowFieldsFilter});
+                const treeRequests = loadTreeRequests(tree);
 
                 return rumId
                     .fetch(

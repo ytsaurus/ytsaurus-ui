@@ -175,10 +175,6 @@ export const isSupportedSelector = createSelector(
     _isFeatureSupported,
 );
 
-export const isSupportedFieldsFilter = createSelector([isSupportedSelector], (isSupported) => {
-    return isSupported('fieldsFilter');
-});
-
 export const isSupportedEffectiveExpiration = createSelector(
     [isSupportedSelector],
     (isSupported) => {
