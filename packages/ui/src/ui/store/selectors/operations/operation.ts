@@ -5,7 +5,6 @@ import {RootState} from '../../../store/reducers';
 import ypath from '../../../common/thor/ypath';
 import {calculateLoadingStatus} from '../../../utils/utils';
 import {FIX_MY_TYPE} from '../../../types';
-import {isSupportedOperationAlertEvents} from '../thor/support';
 
 const getOperationErasedTreesRaw = (state: RootState) => {
     return ypath.getValue(state.operations.detail, '/operation/@runtime_parameters/erased_trees');
@@ -30,8 +29,6 @@ interface OperationTask {
     task_name: string;
 }
 
-const getOperationAlerts = (state: RootState) =>
-    ypath.getValue(state.operations.detail.operation, '/@alerts');
 const getOperationAlertEvents = (state: RootState) => state.operations.detail.details.alert_events;
 
 export const getOperation = (state: RootState) => state.operations.detail.operation;
@@ -135,23 +132,8 @@ export const isOperationWithJobsMonitorTab = createSelector(
 );
 
 export const getOperationAlertEventsItems = createSelector(
-    [isSupportedOperationAlertEvents, getOperationAlerts, getOperationAlertEvents],
-    (allowEvents, alerts, alertEvents) => {
-        if (allowEvents) {
-            return alertEvents;
-        }
-
-        return _.reduce(
-            alerts,
-            (acc, value, key) => {
-                acc.push({
-                    alert_type: key,
-                    error: value,
-                    time: value?.attributes?.datetime,
-                });
-                return acc;
-            },
-            [] as typeof alertEvents,
-        );
+    [getOperationAlertEvents],
+    (alertEvents) => {
+        return alertEvents;
     },
 );
