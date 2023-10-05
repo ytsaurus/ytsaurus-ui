@@ -105,10 +105,6 @@ const features = createSelector(
     [getProxyVersion, getSchedulerVersion, getMasterVersion],
     (proxy, scheduler, master) => {
         return {
-            schedulingOperationsPerPool: {
-                prestable: '21.3.8724602',
-                component: scheduler,
-            },
             operationAlertEvents: {
                 prestable: '22.1.9091274',
                 component: scheduler,
@@ -185,11 +181,6 @@ export const _isFeatureSupported = (rawProxyVersion, proxyPatch, features) => (f
 export const isSupportedSelector = createSelector(
     [rawProxyVersion, proxyPatchNumber, features],
     _isFeatureSupported,
-);
-
-export const isSupportedSchedulingOperationsPerPool = createSelector(
-    [isSupportedSelector],
-    (isSupported) => isSupported('schedulingOperationsPerPool'),
 );
 
 export const isSupportedOperationAlertEvents = createSelector(

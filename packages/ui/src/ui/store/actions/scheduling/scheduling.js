@@ -38,11 +38,8 @@ import {
     TOGGLE_EDIT_VISIBILITY,
 } from '../../../constants/scheduling';
 import {setPoolAttributes} from './scheduling-ts';
-import {loadSchedulingOperations} from './scheduling-operations';
-import {
-    isSupportedFieldsFilter,
-    isSupportedSchedulingOperationsPerPool,
-} from '../../selectors/thor/support';
+import {loadSchedulingOperationsPerPool} from './scheduling-operations';
+import {isSupportedFieldsFilter} from '../../selectors/thor/support';
 import {extractBatchV4Values, splitBatchResults} from '../../../utils/utils';
 import {RumWrapper, YTApiId, ytApiV3Id, ytApiV4Id} from '../../../rum/rum-wrap-api';
 import {getCluster} from '../../../store/selectors/global';
@@ -72,7 +69,7 @@ const commands = [
     },
 ];
 
-function loadTreeRequests(tree, {useOperationsPerPool, allowFieldsFilter}) {
+function loadTreeRequests(tree, {allowFieldsFilter}) {
     const requests = [
         {
             command: 'get',
@@ -98,41 +95,31 @@ function loadTreeRequests(tree, {useOperationsPerPool, allowFieldsFilter}) {
         {
             command: 'get',
             parameters: {
-                path: useOperationsPerPool
-                    ? `//sys/scheduler/orchid/scheduler/pool_trees/${tree}/resource_usage`
-                    : `//sys/scheduler/orchid/scheduler/scheduling_info_per_pool_tree/${tree}/resource_usage`,
+                path: `//sys/scheduler/orchid/scheduler/pool_trees/${tree}/resource_usage`,
             },
         },
         {
             command: 'get',
             parameters: {
-                path: useOperationsPerPool
-                    ? `//sys/scheduler/orchid/scheduler/pool_trees/${tree}/resource_limits`
-                    : `//sys/scheduler/orchid/scheduler/scheduling_info_per_pool_tree/${tree}/resource_limits`,
+                path: `//sys/scheduler/orchid/scheduler/pool_trees/${tree}/resource_limits`,
             },
         },
         {
             command: 'get',
             parameters: {
-                path: useOperationsPerPool
-                    ? `//sys/scheduler/orchid/scheduler/pool_trees/${tree}/config`
-                    : `//sys/scheduler/orchid/scheduler/scheduling_info_per_pool_tree/${tree}/config`,
+                path: `//sys/scheduler/orchid/scheduler/pool_trees/${tree}/config`,
             },
         },
         {
             command: 'get',
             parameters: {
-                path: useOperationsPerPool
-                    ? `//sys/scheduler/orchid/scheduler/pool_trees/${tree}/resource_distribution_info`
-                    : `//sys/scheduler/orchid/scheduler/scheduling_info_per_pool_tree/${tree}/fair_share_info/resource_distribution_info`,
+                path: `//sys/scheduler/orchid/scheduler/pool_trees/${tree}/resource_distribution_info`,
             },
         },
         {
             command: 'get',
             parameters: {
-                path: useOperationsPerPool
-                    ? `//sys/scheduler/orchid/scheduler/pool_trees/${tree}/pools`
-                    : `//sys/scheduler/orchid/scheduler/scheduling_info_per_pool_tree/${tree}/fair_share_info/pools`,
+                path: `//sys/scheduler/orchid/scheduler/pool_trees/${tree}/pools`,
                 ...(allowFieldsFilter
                     ? {
                           fields: [
@@ -207,15 +194,11 @@ export function loadSchedulingData() {
                     data: {schedulerAlerts, trees, tree},
                 });
 
-                dispatch(loadSchedulingOperations(tree));
+                dispatch(loadSchedulingOperationsPerPool(tree));
 
-                const useOperationsPerPool = isSupportedSchedulingOperationsPerPool(state);
                 const allowFieldsFilter = isSupportedFieldsFilter(state);
 
-                const treeRequests = loadTreeRequests(tree, {
-                    useOperationsPerPool,
-                    allowFieldsFilter,
-                });
+                const treeRequests = loadTreeRequests(tree, {allowFieldsFilter});
 
                 return rumId
                     .fetch(

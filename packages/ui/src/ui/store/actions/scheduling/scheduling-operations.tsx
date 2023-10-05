@@ -17,7 +17,6 @@ import {
     SCHEDULING_OPERATIONS_REQUEST,
     SCHEDULING_OPERATIONS_SUCCESS,
 } from '../../../constants/scheduling';
-import {isSupportedSchedulingOperationsPerPool} from '../../selectors/thor/support';
 import {
     calculatePoolPath,
     getCurrentPool,
@@ -39,88 +38,9 @@ function saveCancellation(canceler?: {cancel: (msg: string) => void}) {
     loadCanceler = canceler;
 }
 
-export function loadSchedulingOperations(tree: string): SchedulingOperationsThunkAction {
-    return (dispatch, getState) => {
-        if (isSupportedSchedulingOperationsPerPool(getState())) {
-            return dispatch(loadSchedulingOperationsPerPool(tree));
-        }
-
-        dispatch({type: SCHEDULING_OPERATIONS_REQUEST});
-
-        const requests = [
-            {
-                command: 'get' as const,
-                parameters: {
-                    path: `//sys/scheduler/orchid/scheduler/scheduling_info_per_pool_tree/${tree}/fair_share_info/operations`,
-                },
-            },
-        ];
-
-        return ytApiV3Id
-            .executeBatch(YTApiId.schedulingLoadOperations, {
-                parameters: {requests},
-                cancellation: saveCancellation,
-            })
-            .then((batchRestuls) => {
-                const {error, results} = splitBatchResults(
-                    batchRestuls,
-                    "Failed to load some pools' operations",
-                );
-                const rawOperations = _.reduce(
-                    results,
-                    (acc, data) => {
-                        return Object.assign(acc, data);
-                    },
-                    {},
-                );
-
-                dispatch({
-                    type: SCHEDULING_OPERATIONS_SUCCESS,
-                    data: {rawOperations, rawOperationsTree: tree},
-                });
-
-                if (error) {
-                    throw error;
-                }
-            })
-            .catch((error) => {
-                if (!axios.isCancel(error) && (!error?.code as any) === 'cancelled') {
-                    dispatch({
-                        type: SCHEDULING_OPERATIONS_FAILURE,
-                        data: {error},
-                    });
-
-                    const data = error?.response?.data || error;
-                    const {code, message} = data;
-
-                    new Toaster().add({
-                        name: 'load-scheduling-operations',
-                        type: 'error',
-                        title: 'Failed to load operations',
-                        content: (
-                            <span>
-                                [code {code}] {message}
-                            </span>
-                        ),
-                        actions: [
-                            {
-                                label: ' Details',
-                                onClick: () => showErrorPopup(data),
-                            },
-                        ],
-                    });
-                }
-            });
-    };
-}
-
 export function loadSchedulingOperationsPerPool(tree: string): SchedulingOperationsThunkAction {
     return (dispatch, getState) => {
         const state = getState();
-
-        if (!isSupportedSchedulingOperationsPerPool(state)) {
-            return;
-        }
 
         let requests = [];
         if (getSchedulingOperationsLoadAll(state)) {
@@ -279,9 +199,6 @@ export function resetExpandedPools(tree: string): SchedulingOperationsThunkActio
 export function getSchedulingOperationsCount(): ThunkAction<number, RootState, any, any> {
     return (_dispatch, getState) => {
         const state = getState();
-        if (!isSupportedSchedulingOperationsPerPool(state)) {
-            return 0;
-        }
 
         const tree = getSchedulingPoolsMapByName(state);
         const root = tree[ROOT_POOL_NAME];
