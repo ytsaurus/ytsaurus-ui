@@ -105,10 +105,6 @@ const features = createSelector(
     [getProxyVersion, getSchedulerVersion, getMasterVersion],
     (proxy, scheduler, master) => {
         return {
-            newSchedulingAttributes: {
-                prestable: '20.2',
-                component: scheduler,
-            },
             transferPoolQuota: {
                 prestable: '21.3',
                 component: proxy,
