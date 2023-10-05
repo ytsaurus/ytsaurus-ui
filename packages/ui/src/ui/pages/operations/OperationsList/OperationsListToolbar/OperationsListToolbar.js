@@ -26,7 +26,6 @@ import {getOperationsListFixedStartedByFilter_FOR_YTFRONT_2838} from '../../../.
 import Button, {SelectButton} from '../../../../components/Button/Button';
 import Icon from '../../../../components/Icon/Icon';
 import {PoolTreesLoader} from '../../../../hooks/global';
-import {isSupportedOperationsFilterByPoolTree} from '../../../../store/selectors/thor/support';
 
 import './OperationsListToolbar.scss';
 
@@ -47,7 +46,6 @@ class OperationsListToolbar extends React.PureComponent {
         subjects: PropTypes.arrayOf(PropTypes.string).isRequired,
         // from props
         inDashboard: PropTypes.bool,
-        allowPoolTreeFilte: PropTypes.bool,
     };
 
     preparePermissionsPlaceholder(permissions) {
@@ -61,17 +59,13 @@ class OperationsListToolbar extends React.PureComponent {
     }
 
     renderTopSection() {
-        const {allowPoolTreeFilter} = this.props;
-
         return (
             <div className={tbBlock('container')}>
                 <OperationsTextFilter />
 
                 <div className={block('toolbar-pool-filter', tbComp)}>
                     <PoolTreesLoader />
-                    {allowPoolTreeFilter && (
-                        <OperationsListPoolTreeSuggestFilter pin="round-clear" />
-                    )}
+                    <OperationsListPoolTreeSuggestFilter pin="round-clear" />
                     <OperationsListPoolSuggestFilter pin="brick-round" />
                 </div>
 
@@ -267,8 +261,6 @@ function OperationsListToolbarHooked() {
         [dispatch],
     );
 
-    const allowPoolTreeFilter = useSelector(isSupportedOperationsFilterByPoolTree);
-
     const handleToggleSaveFilterPresetDialog = React.useCallback(
         (...args) => {
             dispatch(toggleSaveFilterPresetDialog(...args));
@@ -282,7 +274,6 @@ function OperationsListToolbarHooked() {
                 subjects,
                 failedJobsFilter: failedJobs,
                 fixedStartedByFilter,
-                allowPoolTreeFilter,
             }}
             updateFilter={handleUpdateFilter}
             toggleSaveFilterPresetDialog={handleToggleSaveFilterPresetDialog}

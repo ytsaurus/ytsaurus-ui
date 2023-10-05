@@ -105,10 +105,6 @@ const features = createSelector(
     [getProxyVersion, getSchedulerVersion, getMasterVersion],
     (proxy, scheduler, master) => {
         return {
-            operationsPoolTreeFilter: {
-                prestable: '22.1.9091043',
-                component: proxy,
-            },
             fieldsFilter: {
                 prestable: '22.1.9091155',
                 component: scheduler,
@@ -177,13 +173,6 @@ export const _isFeatureSupported = (rawProxyVersion, proxyPatch, features) => (f
 export const isSupportedSelector = createSelector(
     [rawProxyVersion, proxyPatchNumber, features],
     _isFeatureSupported,
-);
-
-export const isSupportedOperationsFilterByPoolTree = createSelector(
-    [isSupportedSelector],
-    (isSupported) => {
-        return isSupported('operationsPoolTreeFilter');
-    },
 );
 
 export const isSupportedFieldsFilter = createSelector([isSupportedSelector], (isSupported) => {
