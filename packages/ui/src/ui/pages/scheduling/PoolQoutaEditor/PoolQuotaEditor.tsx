@@ -31,7 +31,6 @@ interface Props {
     min?: number;
     max?: number;
 
-    sourceDisabled?: boolean;
     sourcesSkipParent?: boolean;
 
     limitInputTitle?: string;
@@ -66,7 +65,6 @@ class PoolQuotaEditorControl extends React.Component<Props & ReduxProps> {
             error,
             initialLimit,
             decimalPlaces,
-            sourceDisabled,
             min,
             max,
             sourcesSkipParent,
@@ -90,7 +88,6 @@ class PoolQuotaEditorControl extends React.Component<Props & ReduxProps> {
                 limitInputTitle={limitInputTitle || 'Guaranteed'}
                 sourceSuggestTitle={'Pool for distribution'}
                 decimalPlaces={decimalPlaces}
-                sourceSuggestDisabled={sourceDisabled}
             />
         );
     }
