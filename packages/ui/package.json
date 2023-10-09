@@ -59,6 +59,7 @@
     "@gravity-ui/expresskit": "^1.0.0",
     "@gravity-ui/navigation": "^0.14.0",
     "@gravity-ui/nodekit": "^1.0.0",
+    "@gravity-ui/yagr": "^3.10.4",
     "@ytsaurus/interface-helpers": "0.2.0",
     "@ytsaurus/javascript-wrapper": "0.4.0",
     "axios": "^1.5.0",
@@ -75,7 +76,7 @@
   },
   "devDependencies": {
     "@gravity-ui/app-builder": "^0.3.0",
-    "@gravity-ui/chartkit": "^3.4.2",
+    "@gravity-ui/chartkit": "^4.7.2",
     "@gravity-ui/components": "^2.4.1",
     "@gravity-ui/dashkit": "^6.0.0",
     "@gravity-ui/dialog-fields": "^3.0.2",
@@ -181,5 +182,6 @@
   },
   "config": {
     "docker_image": "ytsaurus/ui"
-  }
+  },
+  "gitHead": "aba657f50f894370eaef7f27d5083386e218afe8"
 }
