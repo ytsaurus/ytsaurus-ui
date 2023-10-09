@@ -17,9 +17,9 @@ import {
     changeContentMode,
     changePool,
     changePoolChildrenFilter,
-    openDeleteModal,
     openEditModal,
 } from '../../../../../store/actions/scheduling/scheduling';
+import {openPoolDeleteModal} from '../../../../../store/actions/scheduling/scheduling-ts';
 import {SCHEDULING_POOL_CHILDREN_TABLE_ID, Tab} from '../../../../../constants/scheduling';
 import {calculateTotalOverPools} from '../../../../../utils/scheduling/details';
 import {childTableItems} from '../../../../../utils/scheduling/detailsTable';
@@ -188,7 +188,7 @@ class Details extends Component {
         changePoolChildrenFilter: PropTypes.func.isRequired,
         changeContentMode: PropTypes.func.isRequired,
         openEditModal: PropTypes.func.isRequired,
-        openDeleteModal: PropTypes.func.isRequired,
+        openPoolDeleteModal: PropTypes.func.isRequired,
         changePool: PropTypes.func.isRequired,
     };
 
@@ -454,7 +454,7 @@ class Details extends Component {
     };
 
     renderActions = (item) => {
-        const {openEditModal, openDeleteModal, getPoolPathsByName} = this.props;
+        const {openEditModal, openPoolDeleteModal, getPoolPathsByName} = this.props;
 
         if (item.aggregation) {
             return;
@@ -465,7 +465,7 @@ class Details extends Component {
         }
 
         const handleEditClick = () => openEditModal(item);
-        const handleDeleteClick = () => openDeleteModal(item);
+        const handleDeleteClick = () => openPoolDeleteModal(item);
 
         return (
             <Fragment>
@@ -570,7 +570,7 @@ const mapDispatchToProps = {
     changePoolChildrenFilter,
     changeContentMode,
     openEditModal,
-    openDeleteModal,
+    openPoolDeleteModal,
     changePool,
     getPoolPathsByName,
 };

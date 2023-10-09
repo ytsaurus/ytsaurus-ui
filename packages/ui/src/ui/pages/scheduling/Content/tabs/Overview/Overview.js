@@ -22,9 +22,9 @@ import {
     changeFilter,
     changePool,
     changeTableTreeState,
-    openDeleteModal,
     openEditModal,
 } from '../../../../../store/actions/scheduling/scheduling';
+import {openPoolDeleteModal} from '../../../../../store/actions/scheduling/scheduling-ts';
 import {
     getCurrentPool,
     getFilter,
@@ -101,7 +101,7 @@ class Overview extends Component {
         }),
 
         changePool: PropTypes.func.isRequired,
-        openDeleteModal: PropTypes.func.isRequired,
+        openPoolDeleteModal: PropTypes.func.isRequired,
         changeFilter: PropTypes.func.isRequired,
         openEditModal: PropTypes.func.isRequired,
         changeTableTreeState: PropTypes.func.isRequired,
@@ -353,7 +353,7 @@ class Overview extends Component {
     };
 
     renderActions = (item) => {
-        const {openEditModal, openDeleteModal, getPoolPathsByName} = this.props;
+        const {openEditModal, openPoolDeleteModal, getPoolPathsByName} = this.props;
 
         if (item.aggregation) {
             return;
@@ -364,7 +364,7 @@ class Overview extends Component {
         }
 
         const handleEditClick = () => openEditModal(item);
-        const handleDeleteClick = () => openDeleteModal(item);
+        const handleDeleteClick = () => openPoolDeleteModal(item);
 
         return (
             <Fragment>
@@ -502,7 +502,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = {
     changePool,
-    openDeleteModal,
+    openPoolDeleteModal,
     changeFilter,
     openEditModal,
     changeTableTreeState,

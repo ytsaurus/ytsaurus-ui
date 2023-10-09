@@ -13,12 +13,12 @@ import Alerts from '../Alerts';
 
 import {SCHEDULING_CREATE_POOL_CANCELLED} from '../../../constants/scheduling';
 import {useUpdater} from '../../../hooks/use-updater';
+
 import {
-    abortAndReset,
-    closeDeleteModal,
+    closePoolDeleteModal as closeDeleteModal,
     deletePool,
     loadSchedulingData,
-} from '../../../store/actions/scheduling/scheduling';
+} from '../../../store/actions/scheduling/scheduling-ts';
 
 import './Scheduling.scss';
 import {useAppRumMeasureStart} from '../../../rum/rum-app-measures';
@@ -37,14 +37,11 @@ function Scheduling() {
     const initialLoading = loading && !loaded;
     const dispatch = useDispatch();
 
-    const {updateFn, destructFn} = React.useMemo(() => {
-        return {
-            updateFn: () => dispatch(loadSchedulingData()),
-            destructFn: () => dispatch(abortAndReset()),
-        };
+    const updateFn = React.useCallback(() => {
+        dispatch(loadSchedulingData());
     }, [dispatch]);
 
-    useUpdater(updateFn, {destructFn});
+    useUpdater(updateFn);
 
     return (
         <div className={block(null, 'elements-main-section')}>

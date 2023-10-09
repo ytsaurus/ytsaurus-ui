@@ -195,16 +195,3 @@ export const isSupportedNodeMaintenanceApi = createSelector(
         return isSupported('nodeMaintenanceApi');
     },
 );
-
-/**
- This function function is recommended for usage inside utils and old knockout components, where it is difficult
- to pass state, since it needs to be passed through many function calls or is separated from the Redux data flow.
- When you are inside actions/connect-ed React component, you are strongly encouraged to use isSupportedSelector
- directly, since it is guaranteed to use correct state.
- Within reducer it's better to use isSupported function passed from within action, because isSupportedSelector works
- on the global state, while in reducer we have an access to its local part.
-
- @Deprecated
-*/
-const isSupportedGlobal = (featureName) =>
-    isSupportedSelector(window.store.getState())(featureName);

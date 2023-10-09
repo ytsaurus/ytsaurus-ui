@@ -1,5 +1,5 @@
 import {AppBrowserHistory, StoreType} from '../store';
-import {loadSchedulingData} from './actions/scheduling/scheduling';
+import {loadSchedulingData} from './actions/scheduling/scheduling-ts';
 import {MakeRotedUrlFnType} from './location';
 
 // @ts-ignore

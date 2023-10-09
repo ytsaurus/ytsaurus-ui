@@ -1,8 +1,8 @@
 import _ from 'lodash';
 import ypath from '../../common/thor/ypath';
-import hammer from '../../common/hammer';
 import {ROOT_POOL_NAME} from '../../constants/scheduling';
 import {OperationInfo, PoolInfo} from '../../store/selectors/scheduling/scheduling-pools';
+import {attachTreeLeaves, prepareTree} from '../../common/hammer/tree-list';
 
 function getPool(pools: Array<PoolInfo>, name: string) {
     return _.find(pools, (pool) => pool.name === name);
@@ -18,19 +18,16 @@ export function prepareCurrentTree(defaultTree: unknown, trees: Array<string>, t
         : ypath.getValue(defaultTree, '') || trees[0];
 }
 
-export function preparePools<P extends {parent?: string}, O extends {pool: string}>(
-    pools: Record<string, P>,
-    operations: Record<string, O>,
+export function preparePools(
+    pools: Record<string, PoolInfo>,
+    operations: Record<string, OperationInfo>,
 ) {
-    let treeNodesMap: Record<string, PoolInfo> = hammer.treeList.prepareTree(
-        pools,
-        (entry: PoolInfo) => ypath.getValue(entry, '/parent'),
+    const treeNodesMap = prepareTree<PoolInfo, OperationInfo>(pools, (entry: PoolInfo) =>
+        ypath.getValue(entry, '/parent'),
     );
 
-    treeNodesMap = hammer.treeList.attachTreeLeaves(
-        treeNodesMap,
-        operations,
-        (operation: OperationInfo) => ypath.getValue(operation, '/pool'),
+    attachTreeLeaves(treeNodesMap, operations, (operation: OperationInfo) =>
+        ypath.getValue(operation, '/pool'),
     );
 
     return _.map(treeNodesMap);

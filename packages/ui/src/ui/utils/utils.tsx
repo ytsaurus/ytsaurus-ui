@@ -39,7 +39,7 @@ export function extractBatchV4Values<V, T extends {value?: V}>(
 ) {
     const {results, ...rest} = data;
     const res = !results
-        ? null
+        ? []
         : _.map(results, (itemData, index) => {
               const hasValue = COMMANDS_V4_WITH_VALUE[requests[index]?.command];
               if (!hasValue) {
@@ -61,6 +61,7 @@ export interface SplitedBatchResults<T> {
     results: Array<T>;
     outputs: Array<T | undefined>;
     errorIndices: Array<number>;
+    resultIndices: Array<number>;
 }
 
 export function splitBatchResults<T = unknown>(
@@ -71,6 +72,7 @@ export function splitBatchResults<T = unknown>(
     const results: Array<T> = [];
     const outputs: Array<T | undefined> = [];
     const errorIndices: Array<number> = [];
+    const resultIndices: Array<number> = [];
     _.forEach(batchResults, (res, index) => {
         const {error, output} = res;
         outputs.push(output);
@@ -79,11 +81,12 @@ export function splitBatchResults<T = unknown>(
             errorIndices.push(index);
         } else {
             results.push(output!);
+            resultIndices.push(index);
         }
     });
 
     const error = !innerErrors.length ? undefined : {inner_errors: innerErrors, message, results};
-    return {error, results, outputs, errorIndices};
+    return {error, results, outputs, errorIndices, resultIndices};
 }
 
 export function getBatchErrorIndices<T>(results: Array<BatchResultsItem<T>>) {

@@ -58,7 +58,7 @@ function makeError(error: any) {
     return _.isEmpty(error) ? null : <Error className={block('error')} error={error} />;
 }
 
-interface FormValues {
+export interface PoolEditorFormValues {
     general: Record<PoolGeneralResourceType, InitialPoolResourceInfo> & {
         weight: {value?: number; error?: string};
     }; // TODO add description for another fields
@@ -67,8 +67,17 @@ interface FormValues {
         Exclude<PoolIntegralResourceType, 'guaranteeType'>,
         InitialPoolResourceInfo
     > & {guaranteeType?: 'none' | 'burst' | 'relaxed'};
-    resourceLimits: any;
-    otherSettings: any;
+    resourceLimits: {
+        cpu: number | string;
+        gpu: number | string;
+        memory: number | string;
+        userSlots: number | string;
+    };
+    otherSettings: {
+        forbidImmediateOperations: boolean;
+        fifoSortParams: Array<string>;
+        createEphemeralSubpools: boolean;
+    };
 }
 
 export function PoolEditorDialog() {
@@ -90,7 +99,7 @@ export function PoolEditorDialog() {
     ];
     const [initialValues, initialFormValues] = useMemo(() => {
         const data = getInitialValues(editItem, allowedSources);
-        const formData: FormValues = {
+        const formData: PoolEditorFormValues = {
             ...data,
             general: {
                 ...data.general,
@@ -106,7 +115,7 @@ export function PoolEditorDialog() {
         dispatch(closeEditModal({cancelled: true}));
     }, [dispatch]);
     const editConfirmHandler = useCallback(
-        async (form: FormApi<FormValues>) => {
+        async (form: FormApi<PoolEditorFormValues>) => {
             const {values} = form.getState();
             const {general, resourceGuarantee, integralGuarantee, resourceLimits, otherSettings} =
                 values;
@@ -215,7 +224,7 @@ export function PoolEditorDialog() {
     const integralTypeNotice = useChangeIntegralTypeNotice(editItem, pools, tree);
 
     return (
-        <YTDFDialog<FormValues>
+        <YTDFDialog<PoolEditorFormValues>
             size="l"
             key={editItem?.name + '/' + editVisibility}
             className={block()}

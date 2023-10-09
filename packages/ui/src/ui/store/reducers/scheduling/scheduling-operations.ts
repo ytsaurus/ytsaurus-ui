@@ -8,14 +8,16 @@ import {
     SCHEDULING_OPERATIONS_SUCCESS,
 } from '../../../constants/scheduling';
 import {Action} from 'redux';
+
 import {EMPTY_OBJECT} from '../../../constants/empty';
+import {OperationInfo} from '../../../store/selectors/scheduling/scheduling-pools';
 
 export interface SchedulingOperationsState {
     loading: boolean;
     loaded: boolean;
     error?: YTError;
 
-    rawOperations: Record<string, {pool: string}>;
+    rawOperations: Record<string, OperationInfo>;
     rawOperationsTree: string;
 
     expandedPools: Record<string, Set<string>>; // Record<tree_name, Set<pool_name>>

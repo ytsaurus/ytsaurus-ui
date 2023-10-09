@@ -118,6 +118,12 @@ export interface BaseBatchParams {
 
 export interface PathParams extends BaseBatchParams {
     path: string;
+    output_format?:
+        | 'json'
+        | {
+              $value: 'json';
+              $attributes: {encode_utf8?: 'true' | 'false'};
+          };
 }
 
 export interface GetParams extends PathParams {
