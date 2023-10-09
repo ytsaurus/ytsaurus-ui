@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.1](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.0.0...ui-v1.0.1) (2023-10-09)
+
+
+### Bug Fixes
+
+* try to rerun release ([ebcb80f](https://github.com/ytsaurus/ytsaurus-ui/commit/ebcb80f09df5a8ddd479f295dc701c01558748a3))
+
 ## [1.0.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v0.23.0...ui-v1.0.0) (2023-10-09)
 
 
