@@ -3,7 +3,7 @@
 ## [1.0.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v0.23.0...ui-v1.0.0) (2023-10-09)
 
 
-### ⚠ BREAKING CHANGES
+### ⚠ BREAKING CHANGES 
 
 * update @gravity-ui/uikit v5
 
