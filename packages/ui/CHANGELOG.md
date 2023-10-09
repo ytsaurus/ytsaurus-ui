@@ -1,3 +1,5 @@
+* @gravity-ui/uikit v5
+
 # Changelog
 
 ## [0.23.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v0.22.0...ui-v0.23.0) (2023-10-02)
