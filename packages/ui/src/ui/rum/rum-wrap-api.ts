@@ -5,7 +5,13 @@ import {rumDebugLog2, rumGetTime, rumSendDelta} from './rum-counter';
 import {CancelTokenSource} from 'axios';
 import {YT_API_REQUEST_ID_HEADER} from '../../shared/constants';
 import {RumMeasureTypes} from './rum-measure-types';
-import {BatchResultsItem, BatchSubRequest, GetParams, OutputFormat} from '../../shared/yt-types';
+import {
+    BatchResultsItem,
+    BatchSubRequest,
+    GetParams,
+    OutputFormat,
+    PathParams,
+} from '../../shared/yt-types';
 import type {ValueOf} from '../types';
 
 export enum YTApiId {
@@ -170,21 +176,54 @@ export enum YTApiId {
     maintenanceRequests,
 }
 
-interface RumWrapApi {
+interface YTApiV3 {
     executeBatch<T = any>(
         ...args: ApiMethodParameters<BatchParameters>
     ): Promise<Array<BatchResultsItem<T>>>;
+    get<Value = any>(...args: ApiMethodParameters<GetParams>): Promise<Value>;
+    list<Value = any>(...args: ApiMethodParameters<GetParams>): Promise<Value>;
+    exists(...args: ApiMethodParameters<PathParams>): Promise<boolean>;
     [method: string]: (...args: ApiMethodParameters<any>) => Promise<any>;
 }
 
-export interface RumWrapApiWithId {
+type YTApiV3WithId = {
     executeBatch<T = any>(
         id: YTApiId,
         ...args: ApiMethodParameters<BatchParameters>
     ): Promise<Array<BatchResultsItem<T>>>;
     get<Value = any>(id: YTApiId, ...args: ApiMethodParameters<GetParams>): Promise<Value>;
+    list<Value = any>(id: YTApiId, ...args: ApiMethodParameters<GetParams>): Promise<Value>;
+    exists(id: YTApiId, ...args: ApiMethodParameters<PathParams>): Promise<boolean>;
     [method: string]: (id: YTApiId, ...args: ApiMethodParameters<any>) => Promise<any>;
-}
+};
+
+type YTApiV4 = {
+    executeBatch<T = any>(
+        ...args: ApiMethodParameters<BatchParameters>
+    ): Promise<{results: Array<BatchResultsItem<T>>}>;
+    get<Value = any>(...args: ApiMethodParameters<GetParams>): Promise<{value: Value}>;
+    list<Value = any>(...args: ApiMethodParameters<GetParams>): Promise<{value: Value}>;
+    exists(...args: ApiMethodParameters<PathParams>): Promise<{value: boolean}>;
+    [method: string]: (...args: ApiMethodParameters<any>) => Promise<any>;
+};
+
+type YTApiV4WithId = {
+    executeBatch<T = any>(
+        id: YTApiId,
+        ...args: ApiMethodParameters<BatchParameters>
+    ): Promise<{results: Array<BatchResultsItem<T>>}>;
+    get<Value = any>(id: YTApiId, ...args: ApiMethodParameters<GetParams>): Promise<{value: Value}>;
+    list<Value = any>(
+        id: YTApiId,
+        ...args: ApiMethodParameters<GetParams>
+    ): Promise<{value: Value}>;
+    exists(id: YTApiId, ...args: ApiMethodParameters<PathParams>): Promise<{value: boolean}>;
+    [method: string]: (id: YTApiId, ...args: ApiMethodParameters<any>) => Promise<any>;
+};
+
+type ApiWithId<ApiT extends Record<string, (...args: ApiMethodParameters<any>) => Promise<any>>> = {
+    [K in keyof ApiT]: (id: YTApiId, ...args: Parameters<ApiT[K]>) => ReturnType<ApiT[K]>;
+};
 
 interface BatchParameters {
     requests: Array<BatchSubRequest>;
@@ -204,11 +243,14 @@ interface ApiMethodParams<ParametersT> {
     cancellation?: SaveCancellationCb;
 }
 
-function wrapYtApiId<T>(ytApi: RumWrapApi) {
+function makeApiWithId<
+    ApiT extends Record<string, (...args: ApiMethodParameters<any>) => Promise<any>>,
+>(ytApi: ApiT): ApiWithId<ApiT> {
     return _.reduce(
         ytApi,
-        (acc, _fn, method) => {
-            acc[method] = (id: YTApiId, ...args: ApiMethodParameters<T>) => {
+        (acc, _fn, k) => {
+            const method = k as keyof ApiT;
+            acc[method] = <T>(id: YTApiId, ...args: ApiMethodParameters<T>) => {
                 const startTime = Date.now();
                 return (ytApi as any)[method](...injectRequestId(id, args)).finally(() => {
                     rumDebugLog2(`fetch.${YTApiId[id]}`, Date.now() - startTime);
@@ -216,7 +258,7 @@ function wrapYtApiId<T>(ytApi: RumWrapApi) {
             };
             return acc;
         },
-        {} as RumWrapApiWithId,
+        {} as ApiWithId<ApiT>,
     );
 }
 
@@ -241,10 +283,11 @@ function makeSetupWithId(id: YTApiId, setup: {requestHeaders?: object} | undefin
     return {...setup, requestHeaders: {...requestHeaders, [YT_API_REQUEST_ID_HEADER]: YTApiId[id]}};
 }
 
-export const ytApiV3 = yt.v3 as RumWrapApi;
+export const ytApiV3 = yt.v3 as YTApiV3;
+export const ytApiV4 = yt.v4 as YTApiV4;
 
-export const ytApiV3Id = wrapYtApiId(yt.v3);
-export const ytApiV4Id = wrapYtApiId(yt.v4);
+export const ytApiV3Id = makeApiWithId(ytApiV3) as YTApiV3WithId;
+export const ytApiV4Id = makeApiWithId(ytApiV4) as YTApiV4WithId;
 
 export function wrapPromiseWithRum<T>(id: string, promise: Promise<T>) {
     const start = rumGetTime();

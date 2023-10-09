@@ -1,5 +1,6 @@
-import {RootState} from '../../../store/reducers';
 import {createSelector} from 'reselect';
+
+import {RootState} from '../../../store/reducers';
 
 export const getSchedulingOperations = (state: RootState) =>
     state.schedulingOperations.rawOperations;

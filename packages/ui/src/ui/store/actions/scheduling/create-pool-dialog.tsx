@@ -13,7 +13,7 @@ import {
 import yt from '@ytsaurus/javascript-wrapper/lib/yt';
 import {prepareAbcService} from '../../../utils/scheduling';
 import {wrapApiPromiseByToaster} from '../../../utils/utils';
-import {loadSchedulingData} from './scheduling';
+import {loadSchedulingData} from './scheduling-ts';
 import {FIX_MY_TYPE} from '../../../types';
 import {getCluster} from '../../selectors/global';
 import {updateAcl} from '../../../utils/acl/acl-api';

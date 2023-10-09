@@ -6,6 +6,7 @@ import {
     CHANGE_POOL_CHILDREN_FILTER,
     CHANGE_TABLE_TREE_STATE,
     CHANGE_TREE,
+    POOL_TOGGLE_DELETE_VISIBILITY,
     ROOT_POOL_NAME,
     SCHEDULING_CREATE_POOL_CANCELLED,
     SCHEDULING_DATA_CANCELLED,
@@ -20,7 +21,6 @@ import {
     SCHEDULING_EDIT_POOL_FAILURE,
     SCHEDULING_EDIT_POOL_REQUEST,
     SCHEDULING_EDIT_POOL_SUCCESS,
-    TOGGLE_DELETE_VISIBILITY,
     TOGGLE_EDIT_VISIBILITY,
 } from '../../../constants/scheduling';
 import {ActionD, YTError} from '../../../types';
@@ -44,7 +44,7 @@ export interface SchedulingEphemeralState {
     treeResources: TreeResources;
     trees: Array<string>;
 
-    rawPools: Record<string, {name: string; parent?: string}>;
+    rawPools: Record<string, PoolInfo>;
     rawTreeAttributes: unknown;
 
     editVisibility: boolean;
@@ -210,7 +210,7 @@ const reducer = (state = initialState, action: SchedulingAction) => {
             return {...state, editVisibility: visibility, editItem: item};
         }
 
-        case TOGGLE_DELETE_VISIBILITY: {
+        case POOL_TOGGLE_DELETE_VISIBILITY: {
             const {visibility, item} = action.data;
 
             return {...state, deleteVisibility: visibility, deleteItem: item};
@@ -245,7 +245,7 @@ export type SchedulingAction =
           {item: SchedulingState['editItem']; visibility: boolean}
       >
     | ActionD<
-          typeof TOGGLE_DELETE_VISIBILITY,
+          typeof POOL_TOGGLE_DELETE_VISIBILITY,
           {item: SchedulingState['deleteItem']; visibility: boolean}
       >;
 
