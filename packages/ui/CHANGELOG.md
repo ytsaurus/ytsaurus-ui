@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.2](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.0.1...ui-v1.0.2) (2023-10-09)
+
+
+### Bug Fixes
+
+* update @gravity-ui/charkit v4.7.2, @gravity-ui/yagr v3.10.4 ([e647df2](https://github.com/ytsaurus/ytsaurus-ui/commit/e647df2cb980ae60f73afe7cbefd6bd1478f6e38))
+
 ## [1.0.1](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.0.0...ui-v1.0.1) (2023-10-09)
 
 
