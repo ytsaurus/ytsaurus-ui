@@ -57,7 +57,7 @@ import {
     resetExpandedPools,
     setExpandedPool,
     setLoadAllOperations,
-} from '../../../../../store/actions/scheduling/scheduling-operations';
+} from '../../../../../store/actions/scheduling/expanded-pools';
 import PoolTags from './PoolTags';
 import UIFactory from '../../../../../UIFactory';
 

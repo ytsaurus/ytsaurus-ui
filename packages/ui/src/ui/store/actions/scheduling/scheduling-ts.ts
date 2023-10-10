@@ -30,7 +30,7 @@ import {
     SCHEDULING_DELETE_POOL_REQUEST,
     SCHEDULING_DELETE_POOL_SUCCESS,
 } from '../../../constants/scheduling';
-import {loadSchedulingOperationsPerPool} from './scheduling-operations';
+import {loadExpandedPools} from './expanded-pools';
 import {RumWrapper, YTApiId, ytApiV3Id, ytApiV4Id} from '../../../rum/rum-wrap-api';
 import {getCluster} from '../../../store/selectors/global';
 import {RumMeasureTypes} from '../../../rum/rum-measure-types';
@@ -113,7 +113,7 @@ export function loadSchedulingData(): SchedulingThunkAction {
                     data: {schedulerAlerts, trees, tree},
                 });
 
-                dispatch(loadSchedulingOperationsPerPool(tree));
+                dispatch(loadExpandedPools(tree));
 
                 const treeRequests = [
                     makeSubRequest(`//sys/pool_trees/${tree}`, {

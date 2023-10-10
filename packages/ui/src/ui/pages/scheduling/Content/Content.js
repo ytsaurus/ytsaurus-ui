@@ -25,7 +25,7 @@ import {formatByParams} from '../../../utils/format';
 
 import './Content.scss';
 import {getCluster, getUISizes} from '../../../store/selectors/global';
-import SchedulingOperationsUpdater from './SchedulingOperationsUpdater';
+import SchedulingExpandedPoolsUpdater from './SchedulingExpandedPoolsUpdater';
 import UIFactory from '../../../UIFactory';
 
 const block = cn('scheduling-content');
@@ -110,7 +110,7 @@ function Content({className, match, location}) {
 
     return (
         <ErrorBoundary>
-            <SchedulingOperationsUpdater />
+            <SchedulingExpandedPoolsUpdater />
             <div className={block(null, className)}>
                 <Tabs
                     {...props}

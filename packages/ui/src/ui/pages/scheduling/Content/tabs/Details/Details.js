@@ -42,7 +42,7 @@ import {Tooltip} from '../../../../../components/Tooltip/Tooltip';
 import {Bold, Secondary} from '../../../../../components/Text/Text';
 
 import SchedulingOperationsError from '../SchedulingOperationsError/SchedulingOperationsError';
-import {getPoolPathsByName} from '../../../../../store/actions/scheduling/scheduling-operations';
+import {getPoolPathsByName} from '../../../../../store/actions/scheduling/expanded-pools';
 
 import PoolTags from '../Overview/PoolTags';
 

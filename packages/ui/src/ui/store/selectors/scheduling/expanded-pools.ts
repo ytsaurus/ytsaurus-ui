@@ -1,20 +1,20 @@
 import {createSelector} from 'reselect';
 
-import {RootState} from '../../../store/reducers';
+import {RootState} from '../../reducers';
 
 export const getSchedulingOperations = (state: RootState) =>
-    state.scheduling.operations.rawOperations;
+    state.scheduling.expandedPools.rawOperations;
 export const getSchedulingOperationsTree = (state: RootState) =>
-    state.scheduling.operations.rawOperationsTree;
-export const getSchedulingOperationsError = (state: RootState) => state.scheduling.operations.error;
+    state.scheduling.expandedPools.rawOperationsTree;
+export const getSchedulingOperationsError = (state: RootState) =>
+    state.scheduling.expandedPools.error;
 export const getSchedulingOperationsLoading = (state: RootState) =>
-    state.scheduling.operations.loading;
+    state.scheduling.expandedPools.loading;
 export const getSchedulingOperationsLoaded = (state: RootState) =>
-    state.scheduling.operations.loading;
+    state.scheduling.expandedPools.loading;
 export const getSchedulingOperationsExpandedPools = (state: RootState) =>
-    state.scheduling.operations.expandedPools;
-export const getSchedulingOperationsLoadAll = (state: RootState) =>
-    state.scheduling.operations.loadAllOperations;
+    state.scheduling.expandedPools.expandedPools;
+export const getExpandedPoolsLoadAll = (state: RootState) => state.scheduling.expandedPools.loadAll;
 
 export const getSchedulingOperationsLoadingStatus = createSelector(
     [getSchedulingOperationsLoading, getSchedulingOperationsLoaded],

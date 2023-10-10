@@ -23,10 +23,7 @@ import {RootState} from '../../../store/reducers';
 import {FIX_MY_TYPE} from '../../../types';
 import {isAbcPoolName, isTopLevelPool} from '../../../utils/scheduling/scheduling';
 import {visitTreeItems} from '../../../utils/utils';
-import {
-    getSchedulingOperationsExpandedPools,
-    getSchedulingOperationsLoadAll,
-} from './scheduling-operations';
+import {getExpandedPoolsLoadAll, getSchedulingOperationsExpandedPools} from './expanded-pools';
 export const getPools = getPoolsImpl;
 
 export const getTreeResources = (state: RootState) => state.scheduling.scheduling.treeResources;
@@ -157,7 +154,7 @@ export const getTableItems = createSelector(
 );
 
 export const getSchedulingOverviewMaxDepth = createSelector(
-    [getTableItems, getSchedulingOperationsLoadAll, getTree, getSchedulingOperationsExpandedPools],
+    [getTableItems, getExpandedPoolsLoadAll, getTree, getSchedulingOperationsExpandedPools],
     (items: Array<{level: number; name: string}>, allExpanded, tree, expandedPoolsMap) => {
         if (allExpanded) {
             return _.reduce(

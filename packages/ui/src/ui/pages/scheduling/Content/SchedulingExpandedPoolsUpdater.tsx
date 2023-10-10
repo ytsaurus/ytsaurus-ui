@@ -1,9 +1,9 @@
 import React from 'react';
 import {getCurrentPool, getTree} from '../../../store/selectors/scheduling/scheduling';
 import {useDispatch, useSelector} from 'react-redux';
-import {loadSchedulingOperationsPerPool} from '../../../store/actions/scheduling/scheduling-operations';
+import {loadExpandedPools} from '../../../store/actions/scheduling/expanded-pools';
 
-function SchedulingOperationsUpdater() {
+function SchedulingExpandedPoolsUpdater() {
     const dispatch = useDispatch();
 
     const tree = useSelector(getTree);
@@ -12,10 +12,10 @@ function SchedulingOperationsUpdater() {
     const name = pool?.name;
 
     React.useEffect(() => {
-        dispatch(loadSchedulingOperationsPerPool(tree));
+        dispatch(loadExpandedPools(tree));
     }, [dispatch, tree, name]);
 
     return null;
 }
 
-export default React.memo(SchedulingOperationsUpdater);
+export default React.memo(SchedulingExpandedPoolsUpdater);
