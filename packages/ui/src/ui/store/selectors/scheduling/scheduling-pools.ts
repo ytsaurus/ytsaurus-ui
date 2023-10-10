@@ -6,7 +6,7 @@ import {ROOT_POOL_NAME} from '../../../constants/scheduling';
 import {flattenAttributes, preparePools} from '../../../utils/scheduling/scheduling';
 import ypath from '../../../common/thor/ypath';
 import {updatePoolChild} from '../../../utils/scheduling/pool-child';
-import {getSchedulingOperations, getSchedulingOperationsTree} from './scheduling-operations';
+import {getSchedulingOperations, getSchedulingOperationsTree} from './expanded-pools';
 import {getCluster} from '../../../store/selectors/global';
 import {RumWrapper} from '../../../rum/rum-wrap-api';
 import {RumMeasureTypes} from '../../../rum/rum-measure-types';

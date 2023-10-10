@@ -6,16 +6,16 @@ import _ from 'lodash';
 
 import {Toaster} from '@gravity-ui/uikit';
 
-import {SchedulingOperationsAction} from '../../../store/reducers/scheduling/scheduling-operations';
+import {ExpandedPoolsAction} from '../../reducers/scheduling/expanded-pools';
 
 import {YTApiId, ytApiV3Id} from '../../../rum/rum-wrap-api';
 import {showErrorPopup, splitBatchResults} from '../../../utils/utils';
 import {
     ROOT_POOL_NAME,
-    SCHEDULING_OPERATIONS_FAILURE,
-    SCHEDULING_OPERATIONS_PARTITION,
-    SCHEDULING_OPERATIONS_REQUEST,
-    SCHEDULING_OPERATIONS_SUCCESS,
+    SCHEDULING_EXPANDED_POOLS_FAILURE,
+    SCHEDULING_EXPANDED_POOLS_PARTITION,
+    SCHEDULING_EXPANDED_POOLS_REQUEST,
+    SCHEDULING_EXPANDED_POOLS_SUCCESS,
 } from '../../../constants/scheduling';
 import {
     calculatePoolPath,
@@ -24,13 +24,13 @@ import {
     getTree,
 } from '../../selectors/scheduling/scheduling';
 import {
+    getExpandedPoolsLoadAll,
     getSchedulingOperationsExpandedPools,
-    getSchedulingOperationsLoadAll,
-} from '../../selectors/scheduling/scheduling-operations';
+} from '../../selectors/scheduling/expanded-pools';
 import {getSchedulingPoolsMapByName} from '../../selectors/scheduling/scheduling-pools';
 import {EMPTY_OBJECT} from '../../../constants/empty';
 
-type SchedulingOperationsThunkAction = ThunkAction<any, RootState, any, SchedulingOperationsAction>;
+type ExpandedPoolsThunkAction = ThunkAction<any, RootState, any, ExpandedPoolsAction>;
 
 let loadCanceler: undefined | {cancel: (msg: string) => void};
 function saveCancellation(canceler?: {cancel: (msg: string) => void}) {
@@ -38,12 +38,12 @@ function saveCancellation(canceler?: {cancel: (msg: string) => void}) {
     loadCanceler = canceler;
 }
 
-export function loadSchedulingOperationsPerPool(tree: string): SchedulingOperationsThunkAction {
+export function loadExpandedPools(tree: string): ExpandedPoolsThunkAction {
     return (dispatch, getState) => {
         const state = getState();
 
         let requests = [];
-        if (getSchedulingOperationsLoadAll(state)) {
+        if (getExpandedPoolsLoadAll(state)) {
             requests = [
                 {
                     command: 'get' as const,
@@ -79,12 +79,12 @@ export function loadSchedulingOperationsPerPool(tree: string): SchedulingOperati
             saveCancellation();
 
             return dispatch({
-                type: SCHEDULING_OPERATIONS_SUCCESS,
+                type: SCHEDULING_EXPANDED_POOLS_SUCCESS,
                 data: {rawOperations: EMPTY_OBJECT, rawOperationsTree: tree},
             });
         }
 
-        dispatch({type: SCHEDULING_OPERATIONS_REQUEST});
+        dispatch({type: SCHEDULING_EXPANDED_POOLS_REQUEST});
         return ytApiV3Id
             .executeBatch(YTApiId.schedulingLoadOperationsPerPool, {
                 parameters: {requests},
@@ -104,7 +104,7 @@ export function loadSchedulingOperationsPerPool(tree: string): SchedulingOperati
                 );
 
                 dispatch({
-                    type: SCHEDULING_OPERATIONS_SUCCESS,
+                    type: SCHEDULING_EXPANDED_POOLS_SUCCESS,
                     data: {rawOperations, rawOperationsTree: tree},
                 });
 
@@ -115,7 +115,7 @@ export function loadSchedulingOperationsPerPool(tree: string): SchedulingOperati
             .catch((error) => {
                 if (!axios.isCancel(error) && (!error?.code as any) === 'cancelled') {
                     dispatch({
-                        type: SCHEDULING_OPERATIONS_FAILURE,
+                        type: SCHEDULING_EXPANDED_POOLS_FAILURE,
                         data: {error},
                     });
 
@@ -143,10 +143,7 @@ export function loadSchedulingOperationsPerPool(tree: string): SchedulingOperati
     };
 }
 
-export function setExpandedPool(
-    poolName: string,
-    expanded: boolean,
-): SchedulingOperationsThunkAction {
+export function setExpandedPool(poolName: string, expanded: boolean): ExpandedPoolsThunkAction {
     return (dispatch, getState) => {
         const state = getState();
         const tree = getTree(getState());
@@ -165,15 +162,15 @@ export function setExpandedPool(
         };
 
         dispatch({
-            type: SCHEDULING_OPERATIONS_PARTITION,
+            type: SCHEDULING_EXPANDED_POOLS_PARTITION,
             data: {expandedPools: newExpandedPools},
         });
 
-        dispatch(loadSchedulingOperationsPerPool(tree));
+        dispatch(loadExpandedPools(tree));
     };
 }
 
-export function resetExpandedPools(tree: string): SchedulingOperationsThunkAction {
+export function resetExpandedPools(tree: string): ExpandedPoolsThunkAction {
     return (dispatch, getState) => {
         if (!tree) {
             return;
@@ -184,7 +181,7 @@ export function resetExpandedPools(tree: string): SchedulingOperationsThunkActio
 
         if (old?.size) {
             dispatch({
-                type: SCHEDULING_OPERATIONS_PARTITION,
+                type: SCHEDULING_EXPANDED_POOLS_PARTITION,
                 data: {
                     expandedPools: {
                         ...rest,
@@ -221,15 +218,15 @@ export function getPoolPathsByName(
     };
 }
 
-export function setLoadAllOperations(loadAllOperations: boolean): SchedulingOperationsThunkAction {
+export function setLoadAllOperations(loadAll: boolean): ExpandedPoolsThunkAction {
     return (dispatch, getState) => {
         const state = getState();
         dispatch({
-            type: SCHEDULING_OPERATIONS_PARTITION,
-            data: {loadAllOperations},
+            type: SCHEDULING_EXPANDED_POOLS_PARTITION,
+            data: {loadAll},
         });
 
         const tree = getTree(state);
-        dispatch(loadSchedulingOperationsPerPool(tree));
+        dispatch(loadExpandedPools(tree));
     };
 }

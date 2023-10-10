@@ -1,5 +1,5 @@
 import React from 'react';
-import {getSchedulingOperationsLoadingStatus} from '../../../../../store/selectors/scheduling/scheduling-operations';
+import {getSchedulingOperationsLoadingStatus} from '../../../../../store/selectors/scheduling/expanded-pools';
 import {useSelector} from 'react-redux';
 import Loader from '../../../../../components/Loader/Loader';
 
