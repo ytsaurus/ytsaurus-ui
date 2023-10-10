@@ -3,11 +3,11 @@ import {RootState} from '../../reducers';
 import {createSelector} from 'reselect';
 
 export const getCreatePoolDialogCurrentTree = (state: RootState) =>
-    state.schedulingCreatePoolDialog.currentTree;
+    state.scheduling.createPoolDialog.currentTree;
 export const getCreatePoolDialogTreeItems = (state: RootState) =>
-    state.schedulingCreatePoolDialog.treeItems;
+    state.scheduling.createPoolDialog.treeItems;
 export const getCreatePoolDialogError = (state: RootState) =>
-    state.schedulingCreatePoolDialog.error;
+    state.scheduling.createPoolDialog.error;
 
 export const getCreatePoolDialogFlatTreeItems = createSelector(
     [getCreatePoolDialogTreeItems, getCreatePoolDialogCurrentTree],

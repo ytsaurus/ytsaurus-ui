@@ -84,7 +84,9 @@ export function PoolEditorDialog() {
     const dispatch = useDispatch();
 
     const editItem = useSelector(getSchedulingEditItem);
-    const {poolErrorData, editVisibility} = useSelector((state: RootState) => state.scheduling);
+    const {poolErrorData, editVisibility} = useSelector(
+        (state: RootState) => state.scheduling.scheduling,
+    );
 
     const treGpuLimit = useSelector(getCurrentTreeGpuLimit);
 

@@ -29,19 +29,21 @@ import {
 } from './scheduling-operations';
 export const getPools = getPoolsImpl;
 
-export const getTreeResources = (state: RootState) => state.scheduling.treeResources;
-export const getFilter = (state: RootState) => state.scheduling.filter;
-export const getSchedulingAbcFilter = (state: RootState) => state.scheduling.abcServiceFilter;
-export const getPoolChildrenFilter = (state: RootState) => state.scheduling.poolChildrenFilter;
-export const getSchedulingTreeState = (state: RootState) => state.scheduling.treeState;
-const getContentModeRaw = (state: RootState) => state.scheduling.contentMode;
+export const getTreeResources = (state: RootState) => state.scheduling.scheduling.treeResources;
+export const getFilter = (state: RootState) => state.scheduling.scheduling.filter;
+export const getSchedulingAbcFilter = (state: RootState) =>
+    state.scheduling.scheduling.abcServiceFilter;
+export const getPoolChildrenFilter = (state: RootState) =>
+    state.scheduling.scheduling.poolChildrenFilter;
+export const getSchedulingTreeState = (state: RootState) => state.scheduling.scheduling.treeState;
+const getContentModeRaw = (state: RootState) => state.scheduling.scheduling.contentMode;
 
-export const getTree = (state: RootState) => state.scheduling.tree;
-export const getTrees = (state: RootState) => state.scheduling.trees;
+export const getTree = (state: RootState) => state.scheduling.scheduling.tree;
+export const getTrees = (state: RootState) => state.scheduling.scheduling.trees;
 
-export const getPool = (state: RootState) => state.scheduling.pool;
+export const getPool = (state: RootState) => state.scheduling.scheduling.pool;
 
-export const getSchedulingEditItem = (state: RootState) => state.scheduling.editItem;
+export const getSchedulingEditItem = (state: RootState) => state.scheduling.scheduling.editItem;
 
 export const getSortState = (state: RootState) => state.tables[SCHEDULING_POOL_TREE_TABLE_ID];
 export const getPoolChildrenSortState = (state: RootState) =>
