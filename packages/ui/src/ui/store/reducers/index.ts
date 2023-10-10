@@ -21,8 +21,6 @@ import tablet from './tablet';
 import users from './users';
 import groups from './groups';
 import scheduling from './scheduling';
-import schedulingCreatePoolDialog from './scheduling/create-pool-dialog';
-import schedulingOperations from './scheduling/scheduling-operations';
 import suggests from './suggests';
 import job from './job';
 import tablet_cell_bundles from './tablet_cell_bundles';
@@ -67,8 +65,8 @@ const appReducers = {
     users,
     groups,
     scheduling,
-    schedulingOperations,
-    schedulingCreatePoolDialog,
+    //    schedulingOperations,
+    //    schedulingCreatePoolDialog,
 
     suggests,
     job,

@@ -16,7 +16,7 @@ Alerts.propTypes = {
 };
 
 export default function Alerts({className}) {
-    const {schedulerAlerts} = useSelector((state) => state.scheduling);
+    const {schedulerAlerts} = useSelector((state) => state.scheduling.scheduling);
     const {collapsibleSize} = useSelector(getUISizes);
 
     if (!schedulerAlerts?.length) {

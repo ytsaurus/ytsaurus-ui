@@ -1,6 +1,6 @@
 import _ from 'lodash';
 
-import {initialState as schedulingInitialState} from './index';
+import {initialState as schedulingInitialState} from './scheduling';
 import {initialState as tableSortState} from '../../../store/reducers/tables';
 
 import {
@@ -15,26 +15,26 @@ import {aclFiltersParams, getAclFiltersPreparedState} from '../acl/url-mapping';
 
 export const schedulingParams = {
     pool: {
-        stateKey: 'scheduling.pool',
+        stateKey: 'scheduling.scheduling.pool',
         initialState: '<Root>',
     },
     tree: {
-        stateKey: 'scheduling.tree',
+        stateKey: 'scheduling.scheduling.tree',
         initialState: schedulingInitialState.tree,
     },
 };
 
 export function getSchedulingPreparedState(state: RootState, {query}: {query: RootState}) {
     return produce(state, (draft) => {
-        updateIfChanged(draft.scheduling, 'pool', query.scheduling.pool);
-        updateIfChanged(draft.scheduling, 'tree', query.scheduling.tree);
+        updateIfChanged(draft.scheduling.scheduling, 'pool', query.scheduling.scheduling.pool);
+        updateIfChanged(draft.scheduling.scheduling, 'tree', query.scheduling.scheduling.tree);
     });
 }
 
 export const schedulingOverviewParams = {
     ...schedulingParams,
     filter: {
-        stateKey: 'scheduling.filter',
+        stateKey: 'scheduling.scheduling.filter',
         initialState: schedulingInitialState.filter,
     },
     sortState: {
@@ -44,7 +44,7 @@ export const schedulingOverviewParams = {
         type: 'object',
     },
     abc: {
-        stateKey: 'scheduling.abcServiceFilter',
+        stateKey: 'scheduling.scheduling.abcServiceFilter',
         initialState: schedulingInitialState.abcServiceFilter,
         type: 'object',
     },
@@ -53,8 +53,12 @@ export const schedulingOverviewParams = {
 export function getSchedulingOverviewPreparedState(state: RootState, {query}: {query: RootState}) {
     state = getSchedulingPreparedState(state, {query});
     return produce(state, (draft) => {
-        updateIfChanged(draft.scheduling, 'filter', query.scheduling.filter);
-        updateIfChanged(draft.scheduling, 'abcServiceFilter', query.scheduling.abcServiceFilter);
+        updateIfChanged(draft.scheduling.scheduling, 'filter', query.scheduling.scheduling.filter);
+        updateIfChanged(
+            draft.scheduling.scheduling,
+            'abcServiceFilter',
+            query.scheduling.scheduling.abcServiceFilter,
+        );
         updateIfChanged(
             draft.tables,
             SCHEDULING_POOL_TREE_TABLE_ID,
@@ -66,11 +70,11 @@ export function getSchedulingOverviewPreparedState(state: RootState, {query}: {q
 export const schedulingDetailsParams = {
     ...schedulingParams,
     filter: {
-        stateKey: 'scheduling.poolChildrenFilter',
+        stateKey: 'scheduling.scheduling.poolChildrenFilter',
         initialState: schedulingInitialState.poolChildrenFilter,
     },
     contentMode: {
-        stateKey: 'scheduling.contentMode',
+        stateKey: 'scheduling.scheduling.contentMode',
         initialState: schedulingInitialState.contentMode,
     },
     sortState: {
@@ -94,11 +98,15 @@ export function getSchedulingDetailsPreparedState(state: RootState, {query}: {qu
     state = getSchedulingPreparedState(state, {query});
     return produce(state, (draft) => {
         updateIfChanged(
-            draft.scheduling,
+            draft.scheduling.scheduling,
             'poolChildrenFilter',
-            query.scheduling.poolChildrenFilter,
+            query.scheduling.scheduling.poolChildrenFilter,
         );
-        updateIfChanged(draft.scheduling, 'contentMode', query.scheduling.contentMode);
+        updateIfChanged(
+            draft.scheduling.scheduling,
+            'contentMode',
+            query.scheduling.scheduling.contentMode,
+        );
         updateIfChanged(
             draft.tables,
             SCHEDULING_POOL_CHILDREN_TABLE_ID,

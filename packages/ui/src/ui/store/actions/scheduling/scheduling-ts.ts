@@ -35,7 +35,7 @@ import {RumWrapper, YTApiId, ytApiV3Id, ytApiV4Id} from '../../../rum/rum-wrap-a
 import {getCluster} from '../../../store/selectors/global';
 import {RumMeasureTypes} from '../../../rum/rum-measure-types';
 import type {RootState} from '../../../store/reducers';
-import type {SchedulingAction} from '../../../store/reducers/scheduling';
+import type {SchedulingAction} from '../../../store/reducers/scheduling/scheduling';
 import type {PoolInfo} from '../../../store/selectors/scheduling/scheduling-pools';
 import {USE_CACHE} from '../../../constants';
 
@@ -102,7 +102,11 @@ export function loadSchedulingData(): SchedulingThunkAction {
                 const state = getState();
 
                 const trees = prepareTrees(rawTrees);
-                const tree = prepareCurrentTree(defaultTree, trees, state.scheduling.tree);
+                const tree = prepareCurrentTree(
+                    defaultTree,
+                    trees,
+                    state.scheduling.scheduling.tree,
+                );
 
                 dispatch({
                     type: SCHEDULING_DATA_PARTITION,

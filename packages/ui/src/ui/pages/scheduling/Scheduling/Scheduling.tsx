@@ -33,7 +33,9 @@ const block = cn('scheduling');
 const SchedulingDialogsMemo = React.memo(SchedulingDialogs);
 
 function Scheduling() {
-    const {loading, loaded, error, errorData} = useSelector((state: RootState) => state.scheduling);
+    const {loading, loaded, error, errorData} = useSelector(
+        (state: RootState) => state.scheduling.scheduling,
+    );
     const initialLoading = loading && !loaded;
     const dispatch = useDispatch();
 
@@ -83,7 +85,7 @@ function SchedulingDialogs() {
     const dispatch = useDispatch();
 
     const {deleteVisibility, deleteItem, poolErrorData} = useSelector(
-        (state: RootState) => state.scheduling,
+        (state: RootState) => state.scheduling.scheduling,
     );
 
     const deleteConfirmHandler = React.useCallback(

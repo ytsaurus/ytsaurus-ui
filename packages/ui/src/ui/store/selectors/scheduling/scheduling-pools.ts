@@ -12,10 +12,10 @@ import {RumWrapper} from '../../../rum/rum-wrap-api';
 import {RumMeasureTypes} from '../../../rum/rum-measure-types';
 import {EMPTY_OBJECT} from '../../../constants/empty';
 
-export const getTree = (state: RootState) => state.scheduling.tree;
-const getPoolsRaw = (state: RootState) => state.scheduling.rawPools;
-const getTreeAttributesRaw = (state: RootState) => state.scheduling.rawTreeAttributes;
-const getTreeResources = (state: RootState) => state.scheduling.treeResources;
+export const getTree = (state: RootState) => state.scheduling.scheduling.tree;
+const getPoolsRaw = (state: RootState) => state.scheduling.scheduling.rawPools;
+const getTreeAttributesRaw = (state: RootState) => state.scheduling.scheduling.rawTreeAttributes;
+const getTreeResources = (state: RootState) => state.scheduling.scheduling.treeResources;
 
 const getTreeAttributesFlatten = createSelector([getTreeAttributesRaw], (attrs) => {
     return flattenAttributes(attrs);
