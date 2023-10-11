@@ -30,6 +30,7 @@ import {
     getCurrentPool,
     getPollChildrenTableItems,
     getPoolChildrenFilter,
+    getSchedulingIsInitialLoading,
     getSortedPoolChildren,
 } from '../../../../../store/selectors/scheduling/scheduling';
 
@@ -190,6 +191,8 @@ class Details extends Component {
         openEditModal: PropTypes.func.isRequired,
         openPoolDeleteModal: PropTypes.func.isRequired,
         changePool: PropTypes.func.isRequired,
+
+        isInitialLoading: PropTypes.bool,
     };
 
     get columnsSets() {
@@ -535,7 +538,7 @@ class Details extends Component {
     }
 
     render() {
-        const {items, mode} = this.props;
+        const {items, mode, isInitialLoading} = this.props;
 
         return (
             <ErrorBoundary>
@@ -547,6 +550,7 @@ class Details extends Component {
                             cssTableMods={{mode}}
                             {...this.tableSettings}
                             items={items}
+                            isLoading={isInitialLoading}
                         />
                     </StickyContainer>
                 </div>
@@ -563,7 +567,9 @@ const mapStateToProps = (state) => {
     const cluster = getCluster(state);
     const children = getSortedPoolChildren(state);
 
-    return {currentPool, mode, filter, items, children, cluster};
+    const isInitialLoading = getSchedulingIsInitialLoading(state);
+
+    return {currentPool, mode, filter, items, children, cluster, isInitialLoading};
 };
 
 const mapDispatchToProps = {

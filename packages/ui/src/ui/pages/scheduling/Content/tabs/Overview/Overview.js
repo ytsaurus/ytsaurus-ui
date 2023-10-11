@@ -30,6 +30,7 @@ import {
     getFilter,
     getIsRoot,
     getSchedulingAbcFilter,
+    getSchedulingIsInitialLoading,
     getSchedulingOverviewMaxDepth,
     getSchedulingTreeState,
     getTableItems,
@@ -106,6 +107,8 @@ class Overview extends Component {
         openEditModal: PropTypes.func.isRequired,
         changeTableTreeState: PropTypes.func.isRequired,
         changeAbcServiceFilter: PropTypes.func.isRequired,
+
+        isInitialLoading: PropTypes.bool,
     };
 
     static poolModeTheme = {
@@ -446,7 +449,7 @@ class Overview extends Component {
     };
 
     render() {
-        const {items, treeStateExpanded} = this.props;
+        const {items, treeStateExpanded, isInitialLoading} = this.props;
 
         return (
             <ErrorBoundary>
@@ -462,6 +465,7 @@ class Overview extends Component {
                                 items={items}
                                 rowClassName={this.rowClassName}
                                 onItemToggleState={this.onItemToggleState}
+                                isLoading={isInitialLoading}
                             />
                         </ResetExpandedPoolsOnTreeChange>
                     </StickyContainer>
@@ -488,6 +492,8 @@ const mapStateToProps = (state) => {
     const treeState = getSchedulingTreeState(state);
     const isRoot = getIsRoot(state);
 
+    const isInitialLoading = getSchedulingIsInitialLoading(state);
+
     return {
         cluster,
         filter,
@@ -497,6 +503,7 @@ const mapStateToProps = (state) => {
         treeState,
         treeStateExpanded: isRoot || !items[0] ? undefined : [items[0].key],
         abcServiceFilter: getSchedulingAbcFilter(state),
+        isInitialLoading,
     };
 };
 
