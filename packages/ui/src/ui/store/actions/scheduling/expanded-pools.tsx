@@ -69,10 +69,6 @@ export function loadExpandedPools(tree: string): ExpandedPoolsThunkAction {
                     },
                 };
             });
-            requests.push({
-                command: 'get' as const,
-                parameters: {path: `${prefix}/${ROOT_POOL_NAME}`},
-            });
         }
 
         if (!requests.length) {
