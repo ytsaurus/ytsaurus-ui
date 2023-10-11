@@ -3,8 +3,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import cn from 'bem-cn-lite';
 import _ from 'lodash';
 
-import LoadDataHandler from '../../../components/LoadDataHandler/LoadDataHandler';
-import {Dialog as DeleteDialog, Loader} from '@gravity-ui/uikit';
+import {Dialog as DeleteDialog} from '@gravity-ui/uikit';
 import ErrorBoundary from '../../../components/ErrorBoundary/ErrorBoundary';
 import Error from '../../../components/Error/Error';
 
@@ -33,10 +32,10 @@ const block = cn('scheduling');
 const SchedulingDialogsMemo = React.memo(SchedulingDialogs);
 
 function Scheduling() {
-    const {loading, loaded, error, errorData} = useSelector(
-        (state: RootState) => state.scheduling.scheduling,
-    );
-    const initialLoading = loading && !loaded;
+    const error = useSelector((state: RootState) => {
+        const {error: hasError, errorData} = state.scheduling.scheduling;
+        return hasError ? errorData : undefined;
+    });
     const dispatch = useDispatch();
 
     const updateFn = React.useCallback(() => {
@@ -48,16 +47,11 @@ function Scheduling() {
     return (
         <div className={block(null, 'elements-main-section')}>
             <ErrorBoundary>
-                <div className={block('wrapper', {loading: initialLoading})}>
-                    {initialLoading ? (
-                        <Loader />
-                    ) : (
-                        <LoadDataHandler loaded={loaded} error={error} errorData={errorData}>
-                            <Alerts className={block('alerts')} />
-                            <SchedulingResources />
-                            <Content {...{className: block('content')}} />
-                        </LoadDataHandler>
-                    )}
+                {error && <Error error={error} />}
+                <div className={block('wrapper')}>
+                    <Alerts className={block('alerts')} />
+                    <SchedulingResources />
+                    <Content {...{className: block('content')}} />
                 </div>
                 <SchedulingDialogsMemo />
             </ErrorBoundary>
