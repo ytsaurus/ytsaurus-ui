@@ -21,6 +21,7 @@ import {getClusterPools} from './controllers/scheduling-pools';
 import {markdownToHtmlHandler} from './controllers/markdown-to-html';
 import {odinProxyApi} from './controllers/odin-proxy-api';
 import {getClustersAvailability} from './controllers/availability';
+import {handleOauthCallback, handleOauthConfig} from './controllers/ytauth';
 
 const HOME_INDEX_TARGET: AppRouteDescription = {handler: homeIndex, ui: true};
 
@@ -32,6 +33,10 @@ const routes: AppRoutes = {
     'GET /api/cluster-params/:cluster': {handler: clusterParams},
     'GET /api/clusters/versions': {handler: clusterVersions},
     'GET /api/pool-names/:cluster': {handler: getClusterPools},
+
+    'GET /api/oauth/config': {handler: handleOauthConfig, skipAuth: true},
+    'GET /api/oauth/callback': {handler: handleOauthCallback, ui: true, skipAuth: true},
+
     'POST /api/yt/login': {handler: handleLogin, ui: true},
     'POST /api/yt/logout': {handler: handleLogout, ui: true},
     'POST /api/yt/change-password': {handler: handleChangePassword, ui: true},

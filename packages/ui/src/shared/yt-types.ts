@@ -214,3 +214,17 @@ export interface ConfigData {
     odinBaseUrl?: string;
     odinPageEnabled: boolean;
 }
+
+export interface UserInfo {
+    username: string;
+    firstName?: string;
+    lastName?: string;
+    avatar?: string;
+}
+
+export interface OauthConfig {
+    name: string;
+    imageUrl: string;
+    clientId: string;
+    authorizeUrl: string;
+}

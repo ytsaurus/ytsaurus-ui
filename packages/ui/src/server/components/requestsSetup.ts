@@ -93,6 +93,11 @@ export function getUserYTApiSetup(cluster: string, req: Request): YTApiUserSetup
 
     Object.assign(setup, {requestHeaders: {...authHeaders}});
 
+    console.log("authHeaders", authHeaders);
+    console.log("cluster", cluster);
+    console.log("req.headers", req.headers);
+    console.log("req", req);
+
     return {
         ...rest,
         setup,
