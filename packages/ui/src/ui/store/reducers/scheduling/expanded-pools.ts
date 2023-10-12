@@ -18,7 +18,7 @@ export interface ExpandedPoolsState {
     error?: YTError;
 
     rawOperations: Record<string, OperationInfo>;
-    rawOperationsTree: string;
+    expandedPoolsTree: string;
 
     expandedPools: Record<string, Set<string>>; // Record<tree_name, Set<pool_name>>
     loadAll: boolean;
@@ -34,7 +34,7 @@ const ephemeralState: Omit<ExpandedPoolsState, keyof typeof persistentState> = {
     error: undefined,
 
     rawOperations: EMPTY_OBJECT,
-    rawOperationsTree: '',
+    expandedPoolsTree: '',
 
     expandedPools: EMPTY_OBJECT, //
 };
@@ -69,7 +69,7 @@ export type ExpandedPoolsAction =
     | ActionD<typeof SCHEDULING_EXPANDED_POOLS_FAILURE, Pick<ExpandedPoolsState, 'error'>>
     | ActionD<
           typeof SCHEDULING_EXPANDED_POOLS_SUCCESS,
-          Pick<ExpandedPoolsState, 'rawOperations' | 'rawOperationsTree'>
+          Pick<ExpandedPoolsState, 'rawOperations' | 'expandedPoolsTree'>
       >
     | ActionD<
           typeof SCHEDULING_EXPANDED_POOLS_PARTITION,

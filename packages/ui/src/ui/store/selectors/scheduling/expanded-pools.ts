@@ -4,8 +4,8 @@ import {RootState} from '../../reducers';
 
 export const getSchedulingOperations = (state: RootState) =>
     state.scheduling.expandedPools.rawOperations;
-export const getSchedulingOperationsTree = (state: RootState) =>
-    state.scheduling.expandedPools.rawOperationsTree;
+export const getExpandedPoolsTree = (state: RootState) =>
+    state.scheduling.expandedPools.expandedPoolsTree;
 export const getSchedulingOperationsError = (state: RootState) =>
     state.scheduling.expandedPools.error;
 export const getSchedulingOperationsLoading = (state: RootState) =>

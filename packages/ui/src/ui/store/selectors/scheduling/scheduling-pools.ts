@@ -6,7 +6,7 @@ import {ROOT_POOL_NAME} from '../../../constants/scheduling';
 import {flattenAttributes, preparePools} from '../../../utils/scheduling/scheduling';
 import ypath from '../../../common/thor/ypath';
 import {updatePoolChild} from '../../../utils/scheduling/pool-child';
-import {getSchedulingOperations, getSchedulingOperationsTree} from './expanded-pools';
+import {getExpandedPoolsTree, getSchedulingOperations} from './expanded-pools';
 import {getCluster} from '../../../store/selectors/global';
 import {RumWrapper} from '../../../rum/rum-wrap-api';
 import {RumMeasureTypes} from '../../../rum/rum-measure-types';
@@ -22,9 +22,9 @@ const getTreeAttributesFlatten = createSelector([getTreeAttributesRaw], (attrs) 
 });
 
 const getSchedulingTreeOperations = createSelector(
-    [getSchedulingOperations, getSchedulingOperationsTree, getTree],
-    (rawOperations, rawOperationsTree, tree) => {
-        if (tree !== rawOperationsTree) {
+    [getSchedulingOperations, getExpandedPoolsTree, getTree],
+    (rawOperations, expandedPoolsTree, tree) => {
+        if (tree !== expandedPoolsTree) {
             return EMPTY_OBJECT as typeof rawOperations;
         }
 

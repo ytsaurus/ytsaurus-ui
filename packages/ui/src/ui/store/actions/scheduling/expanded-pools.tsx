@@ -76,7 +76,7 @@ export function loadExpandedPools(tree: string): ExpandedPoolsThunkAction {
 
             return dispatch({
                 type: SCHEDULING_EXPANDED_POOLS_SUCCESS,
-                data: {rawOperations: EMPTY_OBJECT, rawOperationsTree: tree},
+                data: {rawOperations: EMPTY_OBJECT, expandedPoolsTree: tree},
             });
         }
 
@@ -101,7 +101,7 @@ export function loadExpandedPools(tree: string): ExpandedPoolsThunkAction {
 
                 dispatch({
                     type: SCHEDULING_EXPANDED_POOLS_SUCCESS,
-                    data: {rawOperations, rawOperationsTree: tree},
+                    data: {rawOperations, expandedPoolsTree: tree},
                 });
 
                 if (error) {
