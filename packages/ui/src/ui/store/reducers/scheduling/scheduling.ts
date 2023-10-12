@@ -44,7 +44,6 @@ export interface SchedulingEphemeralState {
     treeResources: TreeResources;
     trees: Array<string>;
 
-    rawPools: Record<string, PoolInfo>;
     rawTreeAttributes: unknown;
 
     editVisibility: boolean;
@@ -93,7 +92,6 @@ const ephemeralState: SchedulingEphemeralState = {
     treeResources: {},
     trees: [],
 
-    rawPools: {},
     rawTreeAttributes: {},
 
     editVisibility: false,

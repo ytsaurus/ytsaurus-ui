@@ -27,8 +27,9 @@ import {
     getExpandedPoolsLoadAll,
     getSchedulingOperationsExpandedPools,
 } from '../../selectors/scheduling/expanded-pools';
-import {getSchedulingPoolsMapByName} from '../../selectors/scheduling/scheduling-pools';
 import {EMPTY_OBJECT} from '../../../constants/empty';
+import {PoolInfo, getSchedulingPoolsMapByName} from '../../selectors/scheduling/scheduling-pools';
+import {BatchSubRequest} from '../../../../shared/yt-types';
 
 type ExpandedPoolsThunkAction = ThunkAction<any, RootState, any, ExpandedPoolsAction>;
 
@@ -38,12 +39,46 @@ function saveCancellation(canceler?: {cancel: (msg: string) => void}) {
     loadCanceler = canceler;
 }
 
+const POOL_FIELDS_TO_LOAD = [
+    'accumulated_resource_ratio_volume',
+    'accumulated_resource_volume',
+    'demand_ratio',
+    'detailed_fair_share',
+    'dominant_resource',
+    'estimated_burst_usage_duration_sec',
+    'fair_share_ratio',
+    'fifo_index',
+    'integral_guarantee_type',
+    'is_ephemeral',
+    'max_operation_count',
+    'max_running_operation_count',
+    'max_share_ratio',
+    'min_share_ratio',
+    'mode',
+    'operation_count',
+    'parent',
+    'pool_operation_count',
+    'resource_demand',
+    'resource_limits',
+    'resource_usage',
+    'promised_fair_share_resources',
+    'running_operation_count',
+    'specified_burst_guarantee_resources',
+    'specified_resource_flow',
+    'starvation_status',
+    'starving',
+    'strong_guarantee_resources',
+    'usage_ratio',
+    'weight',
+];
+
 export function loadExpandedPools(tree: string): ExpandedPoolsThunkAction {
     return (dispatch, getState) => {
         const state = getState();
 
-        let requests = [];
-        if (getExpandedPoolsLoadAll(state)) {
+        const loadAll = getExpandedPoolsLoadAll(state);
+        let requests: Array<BatchSubRequest> = [];
+        if (loadAll) {
             requests = [
                 {
                     command: 'get' as const,
@@ -71,6 +106,27 @@ export function loadExpandedPools(tree: string): ExpandedPoolsThunkAction {
             });
         }
 
+        const lastOperationByPoolLenght = requests.length;
+
+        // let pool = getPool(getState());
+        // if (!pools[pool]) {
+        //     pool = ROOT_POOL_NAME;
+        //     dispatch({type: SCHEDULING_DATA_SUCCESS, {pool}})
+        // }
+
+        const loadAllPools = true;
+        if (loadAllPools) {
+            requests.push({
+                command: 'get' as const,
+                parameters: {
+                    path: `//sys/scheduler/orchid/scheduler/pool_trees/${tree}/pools`,
+                    fields: POOL_FIELDS_TO_LOAD,
+                },
+            });
+        } else {
+            console.log('Not implemented');
+        }
+
         if (!requests.length) {
             saveCancellation();
 
@@ -87,21 +143,35 @@ export function loadExpandedPools(tree: string): ExpandedPoolsThunkAction {
                 cancellation: saveCancellation,
             })
             .then((batchRestuls) => {
-                const {error, results} = splitBatchResults(
+                const {error} = splitBatchResults(
                     batchRestuls,
-                    "Failed to load some pools' operations",
+                    'Failed to load some expanded pools info',
                 );
+
+                const operationsResponse = batchRestuls.slice(0, lastOperationByPoolLenght);
+                const {results: operations} = splitBatchResults(operationsResponse);
                 const rawOperations = _.reduce(
-                    results,
+                    operations,
                     (acc, data) => {
                         return Object.assign(acc, data);
                     },
                     {},
                 );
 
+                const poolsResponse = batchRestuls.slice(lastOperationByPoolLenght);
+                const {results: pools} = splitBatchResults<PoolInfo>(poolsResponse);
+                const rawPools: Record<string, PoolInfo> = {};
+
+                if (loadAllPools) {
+                    const [value = {}] = pools ?? [];
+                    Object.assign(rawPools, value);
+                } else {
+                    console.log('Not implemented');
+                }
+
                 dispatch({
                     type: SCHEDULING_EXPANDED_POOLS_SUCCESS,
-                    data: {rawOperations, expandedPoolsTree: tree},
+                    data: {rawOperations, expandedPoolsTree: tree, rawPools},
                 });
 
                 if (error) {

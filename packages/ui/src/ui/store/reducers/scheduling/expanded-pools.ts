@@ -1,3 +1,4 @@
+import {Action} from 'redux';
 import {ActionD, YTError} from '../../../types';
 import {mergeStateOnClusterChange} from '../utils';
 import {
@@ -7,16 +8,15 @@ import {
     SCHEDULING_EXPANDED_POOLS_REQUEST,
     SCHEDULING_EXPANDED_POOLS_SUCCESS,
 } from '../../../constants/scheduling';
-import {Action} from 'redux';
-
 import {EMPTY_OBJECT} from '../../../constants/empty';
-import {OperationInfo} from '../../../store/selectors/scheduling/scheduling-pools';
+import {OperationInfo, PoolInfo} from '../../../store/selectors/scheduling/scheduling-pools';
 
 export interface ExpandedPoolsState {
     loading: boolean;
     loaded: boolean;
     error?: YTError;
 
+    rawPools: Record<string, PoolInfo>;
     rawOperations: Record<string, OperationInfo>;
     expandedPoolsTree: string;
 
@@ -32,6 +32,8 @@ const ephemeralState: Omit<ExpandedPoolsState, keyof typeof persistentState> = {
     loading: false,
     loaded: false,
     error: undefined,
+
+    rawPools: EMPTY_OBJECT,
 
     rawOperations: EMPTY_OBJECT,
     expandedPoolsTree: '',
