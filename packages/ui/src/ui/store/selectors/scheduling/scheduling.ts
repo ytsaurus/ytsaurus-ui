@@ -27,7 +27,7 @@ import {getExpandedPoolsLoadAll, getSchedulingOperationsExpandedPools} from './e
 export const getPools = getPoolsImpl;
 
 export const getSchedulingIsInitialLoading = (state: RootState) => {
-    const {loaded, loading} = state.scheduling.scheduling;
+    const {loaded, loading} = state.scheduling.expandedPools;
     return !loaded && loading;
 };
 export const getTreeResources = (state: RootState) => state.scheduling.scheduling.treeResources;

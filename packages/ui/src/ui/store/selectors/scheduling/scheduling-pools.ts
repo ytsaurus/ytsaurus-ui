@@ -13,7 +13,7 @@ import {RumMeasureTypes} from '../../../rum/rum-measure-types';
 import {EMPTY_OBJECT} from '../../../constants/empty';
 
 export const getTree = (state: RootState) => state.scheduling.scheduling.tree;
-const getPoolsRaw = (state: RootState) => state.scheduling.scheduling.rawPools;
+const getPoolsRaw = (state: RootState) => state.scheduling.expandedPools.rawPools;
 const getTreeAttributesRaw = (state: RootState) => state.scheduling.scheduling.rawTreeAttributes;
 const getTreeResources = (state: RootState) => state.scheduling.scheduling.treeResources;
 
