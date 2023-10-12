@@ -11,6 +11,7 @@ import {ExpandedPoolsAction} from '../../reducers/scheduling/expanded-pools';
 import {YTApiId, ytApiV3Id} from '../../../rum/rum-wrap-api';
 import {showErrorPopup, splitBatchResults} from '../../../utils/utils';
 import {
+    CHANGE_POOL,
     ROOT_POOL_NAME,
     SCHEDULING_EXPANDED_POOLS_FAILURE,
     SCHEDULING_EXPANDED_POOLS_PARTITION,
@@ -20,6 +21,7 @@ import {
 import {
     calculatePoolPath,
     getCurrentPool,
+    getPool,
     getPools,
     getTree,
 } from '../../selectors/scheduling/scheduling';
@@ -30,8 +32,14 @@ import {
 import {EMPTY_OBJECT} from '../../../constants/empty';
 import {PoolInfo, getSchedulingPoolsMapByName} from '../../selectors/scheduling/scheduling-pools';
 import {BatchSubRequest} from '../../../../shared/yt-types';
+import {SchedulingAction} from '../../../store/reducers/scheduling/scheduling';
 
-type ExpandedPoolsThunkAction = ThunkAction<any, RootState, any, ExpandedPoolsAction>;
+type ExpandedPoolsThunkAction = ThunkAction<
+    any,
+    RootState,
+    any,
+    ExpandedPoolsAction | SchedulingAction
+>;
 
 let loadCanceler: undefined | {cancel: (msg: string) => void};
 function saveCancellation(canceler?: {cancel: (msg: string) => void}) {
@@ -72,7 +80,60 @@ const POOL_FIELDS_TO_LOAD = [
     'weight',
 ];
 
+class EmptyFullPath extends Error {}
+
 export function loadExpandedPools(tree: string): ExpandedPoolsThunkAction {
+    return (dispatch, getState) => {
+        const pool = getPool(getState());
+
+        if (pool === ROOT_POOL_NAME) {
+            return dispatch(loadExpandedOperationsAndPools(tree));
+        } else {
+            return ytApiV3Id
+                .executeBatch<string>(YTApiId.schedulingPoolFullPath, {
+                    requests: [
+                        {
+                            command: 'get' as const,
+                            parameters: {
+                                path: `//sys/scheduler/orchid/scheduler/pool_trees/${tree}/pools/${pool}/@full_path`,
+                            },
+                        },
+                    ],
+                })
+                .then(([{output: fullPath}]) => {
+                    if (!fullPath) {
+                        throw new EmptyFullPath();
+                    } else {
+                        /**
+                         * `fullPath` value starts from `/`, example: `/mypool/child/subchild`
+                         * so we have to use `.slice(1)` to remove first empty string
+                         */
+                        const expandedPools = fullPath.split('/').slice(1);
+                        dispatch(addToExpandedPoolsNoLoad(tree, expandedPools));
+                        dispatch(loadExpandedOperationsAndPools(tree));
+                    }
+                })
+                .catch((e) => {
+                    if (e instanceof EmptyFullPath) {
+                        dispatch({type: CHANGE_POOL, data: {pool: ROOT_POOL_NAME}});
+                        /**
+                         * We don't need to call `dispatch(loadExpandedOperationsAndPools(tree))` after `CHANGE_POOL`.
+                         * The call will be triggered by SchedulingExpandedPoolsUpdater.
+                         */
+                        // dispatch(loadExpandedOperationsAndPools(tree));
+                    } else {
+                        new Toaster().add({
+                            name: 'schedulingPoolFullPath',
+                            type: 'error',
+                            title: '',
+                        });
+                    }
+                });
+        }
+    };
+}
+
+function loadExpandedOperationsAndPools(tree: string): ExpandedPoolsThunkAction {
     return (dispatch, getState) => {
         const state = getState();
 
@@ -107,12 +168,6 @@ export function loadExpandedPools(tree: string): ExpandedPoolsThunkAction {
         }
 
         const lastOperationByPoolLenght = requests.length;
-
-        // let pool = getPool(getState());
-        // if (!pools[pool]) {
-        //     pool = ROOT_POOL_NAME;
-        //     dispatch({type: SCHEDULING_DATA_SUCCESS, {pool}})
-        // }
 
         const loadAllPools = true;
         if (loadAllPools) {
@@ -222,17 +277,49 @@ export function setExpandedPool(poolName: string, expanded: boolean): ExpandedPo
             treeExpandedPools.delete(poolName);
         }
 
-        const newExpandedPools = {
-            ...expandedPools,
+        dispatch(updateExpandedPoolNoLoad(tree, treeExpandedPools));
+        dispatch(loadExpandedPools(tree));
+    };
+}
+
+function addToExpandedPoolsNoLoad(
+    tree: string,
+    poolsToExpand: Array<string>,
+): ExpandedPoolsThunkAction {
+    return (dispatch, getState) => {
+        const oldExpandedPools = getSchedulingOperationsExpandedPools(getState());
+        const treeExpandedPools = new Set(oldExpandedPools[tree]);
+
+        let updated = false;
+        poolsToExpand.forEach((pool) => {
+            if (treeExpandedPools.has(pool)) {
+                updated = true;
+                treeExpandedPools.add(pool);
+            }
+        });
+
+        if (updated) {
+            dispatch(updateExpandedPoolNoLoad(tree, treeExpandedPools));
+        }
+    };
+}
+
+function updateExpandedPoolNoLoad(
+    tree: string,
+    treeExpandedPools: Set<string>,
+): ExpandedPoolsThunkAction {
+    return (dispatch, getState) => {
+        const oldExpandedPools = getSchedulingOperationsExpandedPools(getState());
+
+        const expandedPools = {
+            ...oldExpandedPools,
             [tree]: treeExpandedPools,
         };
 
         dispatch({
             type: SCHEDULING_EXPANDED_POOLS_PARTITION,
-            data: {expandedPools: newExpandedPools},
+            data: {expandedPools},
         });
-
-        dispatch(loadExpandedPools(tree));
     };
 }
 

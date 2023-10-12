@@ -18,7 +18,11 @@ import {Toaster} from '@gravity-ui/uikit';
 // @ts-expect-error
 import yt from '@ytsaurus/javascript-wrapper/lib/yt';
 
-import {getPools, getTree} from '../../../store/selectors/scheduling/scheduling';
+import {
+    getPools,
+    getSchedulingIsInitialLoading,
+    getTree,
+} from '../../../store/selectors/scheduling/scheduling';
 
 import {
     POOL_TOGGLE_DELETE_VISIBILITY,
@@ -38,6 +42,7 @@ import type {RootState} from '../../../store/reducers';
 import type {SchedulingAction} from '../../../store/reducers/scheduling/scheduling';
 import type {PoolInfo} from '../../../store/selectors/scheduling/scheduling-pools';
 import {USE_CACHE} from '../../../constants';
+import {loadExpandedPools} from './expanded-pools';
 
 const toaster = new Toaster();
 
@@ -71,7 +76,10 @@ export function loadSchedulingData(): SchedulingThunkAction {
     return (dispatch, getState) => {
         dispatch({type: SCHEDULING_DATA_REQUEST});
 
-        const cluster = getCluster(getState());
+        const state = getState();
+        const isInitialLoading = getSchedulingIsInitialLoading(state);
+
+        const cluster = getCluster(state);
         const rumId = new RumWrapper(cluster, RumMeasureTypes.SCHEDULING);
         return rumId
             .fetch(
@@ -130,6 +138,16 @@ export function loadSchedulingData(): SchedulingThunkAction {
                         `//sys/scheduler/orchid/scheduler/pool_trees/${tree}/resource_distribution_info`,
                     ),
                 ];
+
+                if (isInitialLoading) {
+                    /**
+                     * We don't need to call `dispatch(loadExpandedPools(tree))` for this branch of code,
+                     * the call should be triggered by SchedulingExpandedPoolsUpdater
+                     */
+                    //dispatch(loadExpandedPools(tree));
+                } else {
+                    dispatch(loadExpandedPools(tree));
+                }
 
                 return rumId
                     .fetch(

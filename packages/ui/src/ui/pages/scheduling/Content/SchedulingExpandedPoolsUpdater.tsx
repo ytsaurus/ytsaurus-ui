@@ -1,19 +1,17 @@
 import React from 'react';
-import {getCurrentPool, getTree} from '../../../store/selectors/scheduling/scheduling';
+import {getPool, getTree} from '../../../store/selectors/scheduling/scheduling';
 import {useDispatch, useSelector} from 'react-redux';
 import {loadExpandedPools} from '../../../store/actions/scheduling/expanded-pools';
 
 function SchedulingExpandedPoolsUpdater() {
-    const dispatch = useDispatch();
-
     const tree = useSelector(getTree);
-    const pool = useSelector(getCurrentPool);
+    const name = useSelector(getPool);
 
-    const name = pool?.name;
+    const dispatch = useDispatch();
 
     React.useEffect(() => {
         dispatch(loadExpandedPools(tree));
-    }, [dispatch, tree, name]);
+    }, [tree, name]);
 
     return null;
 }
