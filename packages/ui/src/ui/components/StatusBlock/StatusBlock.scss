@@ -10,6 +10,14 @@
     margin: 1px;
     display: inline-block;
     font-size: 0.9em;
+    max-width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+
+    &__container {
+        max-width: 100%;
+    }
 
     &_theme {
         &_warning,
