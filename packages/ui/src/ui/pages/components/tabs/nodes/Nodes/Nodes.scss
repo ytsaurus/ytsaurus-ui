@@ -155,12 +155,15 @@ $elements-table: '.elements-table';
             &_decommissioned,
             &_full,
             &_alerts {
-                width: 40px;
+                width: 45px;
             }
 
-            &_state,
             &_data-center {
                 width: 60px;
+            }
+
+            &_state {
+                width: 70px;
             }
 
             &_role,
@@ -171,6 +174,7 @@ $elements-table: '.elements-table';
                 width: 80px;
             }
 
+            &_flavors,
             &_space-limit,
             &_locations,
             &_sessions,

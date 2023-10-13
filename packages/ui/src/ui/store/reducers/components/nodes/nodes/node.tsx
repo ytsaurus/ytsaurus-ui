@@ -32,6 +32,7 @@ export interface TabletSlots {
 
 export class Node {
     static ATTRIBUTES = [
+        'flavors',
         'state',
         'banned',
         'ban_message',
@@ -107,6 +108,7 @@ export class Node {
     effectiveFlag!: 'decommissioned' | 'full' | 'alerts' | '';
     effectiveState!: Node['state'] | 'banned';
     enabledLocations!: unknown[];
+    flavors?: Array<string>;
     full!: boolean;
     host: string;
     IOWeight!: {[index: string]: number};
@@ -153,14 +155,18 @@ export class Node {
     constructor(node: FIX_MY_TYPE) {
         this.host = ypath.getValue(node);
 
-        this.prepareDefault(ypath.getAttributes(node));
+        const attributes = ypath.getAttributes(node);
+
+        this.prepareDefault(attributes);
         this.prepareEffectiveFlag();
         this.prepareIOWeight();
         this.prepareStorage();
-        this.prepareResources(ypath.getAttributes(node));
+        this.prepareResources(attributes);
         this.prepareMemory();
-        this.prepareTabletsStatistics(ypath.getAttributes(node));
-        this.prepareDisableData(ypath.getAttributes(node));
+        this.prepareTabletsStatistics(attributes);
+        this.prepareDisableData(attributes);
+
+        this.flavors = notEmptyArrayOrUndefined(ypath.getValue(attributes, '/flavors'));
     }
 
     private prepareDefault(attributes: Attributes) {
@@ -468,6 +474,7 @@ export const AttributesByProperty: Record<keyof Node, ReadonlyArray<AttributeNam
     effectiveFlag: _.union(decommissionedAttributes, fullAttributes, alertCountAttributes),
     effectiveState: _.union(bannedAttributes, stateAttributes),
     enabledLocations: locationsAttributes,
+    flavors: ['flavors'],
     full: fullAttributes,
     host: hostAttributes,
     IOWeight: ['/statistics/media'],
@@ -516,3 +523,7 @@ export const AttributesByProperty: Record<keyof Node, ReadonlyArray<AttributeNam
     userTags: userTagsAttributes,
     version: ['version'],
 };
+
+function notEmptyArrayOrUndefined<T>(value?: Array<T>) {
+    return value?.length ? value : undefined;
+}
