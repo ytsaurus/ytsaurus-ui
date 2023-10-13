@@ -50,6 +50,7 @@ export const PropertiesByColumn = {
     none: ['tabletSlots'],
     none_chaos: ['chaosSlots'],
     physical_host: ['physicalHost'],
+    flavors: ['flavors'],
     rack: ['rack'],
     removal_slots: ['removalSlots', 'removalSlotsProgress'],
     repair_slots: ['repairSlots', 'repairSlotsProgress'],
@@ -153,6 +154,14 @@ const nodesTableProps = {
                     return node.physicalHost;
                 },
                 sort: true,
+                align: 'left',
+            },
+            flavors: {
+                get(node) {
+                    return node.flavors;
+                },
+                sort: true,
+                compareFn: compareArraysBySizeThenByItems,
                 align: 'left',
             },
             state: {
@@ -656,8 +665,8 @@ const nodesTableProps = {
 
 export const defaultColumns = nodesTableProps.columns.sets.custom.items;
 
-function getTags(tags: string[]) {
-    return tags.length > 0
+function renderTags(tags?: string[]) {
+    return tags?.length
         ? _.map(tags, (tag) => <StatusBlock key={tag} theme="default" text={tag} />)
         : hammer.format.NO_VALUE;
 }
@@ -711,6 +720,9 @@ export const NODES_TABLE_TEMPLATES: Templates = {
             hammer.format.NO_VALUE
         );
     },
+    flavors(item) {
+        return renderTags(item.flavors);
+    },
     full(item) {
         return item.full ? <StatusBlock text="F" theme="full" /> : hammer.format.NO_VALUE;
     },
@@ -744,11 +756,11 @@ export const NODES_TABLE_TEMPLATES: Templates = {
     },
 
     user_tags(item) {
-        return getTags(item.userTags);
+        return renderTags(item.userTags);
     },
 
     system_tags(item) {
-        return getTags(item.systemTags);
+        return renderTags(item.systemTags);
     },
 
     scheduler_jobs(item) {
