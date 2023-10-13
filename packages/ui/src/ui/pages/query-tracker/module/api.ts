@@ -1,5 +1,5 @@
 import {ThunkAction} from 'redux-thunk';
-import {allowDirectDownload, getQueryTrackerCluster} from '../../../config';
+import {getQueryTrackerCluster} from '../../../config';
 import {extractBatchV4Values, splitBatchResults} from '../../../utils/utils';
 import {BatchResultsItem, BatchSubRequest} from '../../../../shared/yt-types';
 import {YTApiId, ytApiV3, ytApiV4Id} from '../../../rum/rum-wrap-api';
@@ -9,6 +9,7 @@ import {TypeArray} from '../../../components/SchemaDataType/dataTypes';
 import {getClusterConfigByName, getClusterProxy} from '../../../store/selectors/global';
 import {generateQuerySettings, generateQueryText} from '../utils/query_generate';
 import {RootState} from '../../../store/reducers';
+import {makeDirectDownloadPath} from '../../../utils/navigation';
 import {getQueryTrackerRequestOptions} from './query/selectors';
 import {UPDATE_QUERIES_LIST} from './query-tracker-contants';
 import {AnyAction} from 'redux';
@@ -331,9 +332,13 @@ export function getDownloadQueryResultURL(
         }
         const clusterConfig = getClusterConfigByName(getQueryTrackerCluster() || cluster);
         if (clusterConfig) {
-            const base = allowDirectDownload()
-                ? `//${clusterConfig.proxy}/api/v4/read_query_result`
-                : `/api/yt/${clusterConfig.id}/api/v4/read_query_result`;
+            const {proxy, externalProxy} = clusterConfig;
+            const base = makeDirectDownloadPath('read_query_result', {
+                cluster,
+                version: 'v4',
+                proxy,
+                externalProxy,
+            });
             return `${base}?${params.toString()}`;
         }
         return '';

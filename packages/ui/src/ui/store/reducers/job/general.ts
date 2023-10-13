@@ -43,9 +43,9 @@ const reducer = (state = initialState, action: GeneralActionType): GeneralState 
             return {...state, loading: true};
 
         case JOB.LOAD_JOB_DATA_SUCCESS: {
-            const {job, cluster, proxy} = action.data;
+            const {job, clusterConfig} = action.data;
             const operationId: string = job['operation_id'];
-            const preparedJob: Job = new Job({cluster, proxy, job, operationId});
+            const preparedJob: Job = new Job({clusterConfig, job, operationId});
             const events: JobEvents = prepareJobEvents(preparedJob);
             const statistics: JobStatistic = prepareStatistics(preparedJob);
 

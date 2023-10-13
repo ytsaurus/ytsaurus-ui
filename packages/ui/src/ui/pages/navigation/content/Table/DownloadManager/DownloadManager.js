@@ -286,8 +286,8 @@ export class DownloadManager extends Component {
     }
 
     getDownloadLink() {
-        const {cluster, proxy} = this.props;
-        const base = makeDirectDownloadPath('read_table', {cluster, proxy});
+        const {cluster, proxy, externalProxy} = this.props;
+        const base = makeDirectDownloadPath('read_table', {cluster, proxy, externalProxy});
         const {query, error} = this.getDownloadParams();
         return {url: base + '?' + query, error};
     }
@@ -890,7 +890,7 @@ const mapStateToProps = (state) => {
     const columns = getColumns(state);
     const schema = getSchema(state);
     const path = getPath(state);
-    const {proxy} = getCurrentClusterConfig(state);
+    const {proxy, externalProxy} = getCurrentClusterConfig(state);
     const transaction_id = getTransaction(state);
 
     const isSchematicTable = schema.length > 0;
@@ -908,6 +908,7 @@ const mapStateToProps = (state) => {
         showDecoded,
         isSchematicTable,
         proxy,
+        externalProxy,
         transaction_id,
     };
 };

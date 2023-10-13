@@ -8,8 +8,8 @@ import {makeDirectDownloadPath} from '../../../../utils/navigation';
 
 export const getDownloadPath = createSelector(
     [getPath, getCurrentClusterConfig],
-    (cypressPath, {id: cluster, proxy}) => {
-        const path = makeDirectDownloadPath('read_file', {cluster, proxy});
+    (cypressPath, {id: cluster, proxy, externalProxy}) => {
+        const path = makeDirectDownloadPath('read_file', {cluster, proxy, externalProxy});
         const query = [
             'path=' + encodeURIComponent(cypressPath),
             'disposition=attachment',
