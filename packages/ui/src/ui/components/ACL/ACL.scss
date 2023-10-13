@@ -81,7 +81,6 @@
         position: relative;
     }
 
-
     &__row {
         &-transparent {
             opacity: 0.5;
@@ -175,7 +174,7 @@
         }
 
         &_unrecognized {
-            color: var(--warning-text);
+            color: var(--danger-text) !important;
         }
 
         &_link {
