@@ -40,8 +40,6 @@ export async function homeIndex(req: Request, res: Response) {
 
     const {ctx} = req;
 
-    res.set('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
-
     const {clusterConfig, ytConfig} = getClusterConfig(cluster);
     const login = ytConfig.isLocalCluster ? 'root' : req.yt?.login;
     // Refuse to serve localRemoteProxy requests erroneously delegated from main interface to another
