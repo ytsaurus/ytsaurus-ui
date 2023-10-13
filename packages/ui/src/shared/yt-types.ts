@@ -64,6 +64,13 @@ export interface ClusterConfig {
         environmentId: number;
     };
     proxy: string;
+    /**
+     * if defined it will be used instead of `proxy`-field for some direct
+     * heavy url/commands like: read_table, write_table, get-job-stderr, ...
+     * the field should be used only from browser.
+     */
+    externalProxy?: string;
+
     hwOrder?: unknown;
 
     authentication?: 'none' | 'basic' | 'domain' | 'basic';

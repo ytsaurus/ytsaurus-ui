@@ -20,8 +20,7 @@ interface LoadJobDataSuccessAction {
     type: typeof JOB.LOAD_JOB_DATA_SUCCESS;
     data: {
         job: RawJob;
-        cluster: string;
-        proxy: string;
+        clusterConfig: {id: string; proxy: string; externalProxy?: string};
     };
 }
 
@@ -44,7 +43,7 @@ export function loadJobData(
     return (dispatch, getState) => {
         dispatch({type: JOB.LOAD_JOB_DATA_REQUEST});
 
-        const {id: cluster, proxy} = getCurrentClusterConfig(getState());
+        const clusterConfig = getCurrentClusterConfig(getState());
 
         return yt.v3
             .getJob(
@@ -57,7 +56,7 @@ export function loadJobData(
             .then((job: RawJob) => {
                 dispatch({
                     type: JOB.LOAD_JOB_DATA_SUCCESS,
-                    data: {job, cluster, proxy},
+                    data: {job, clusterConfig},
                 });
             })
             .catch((error: YTError) => {

@@ -7,9 +7,12 @@ import ypath from '@ytsaurus/interface-helpers/lib/ypath';
 import {makeDirectDownloadPath} from '../../../../../utils/navigation';
 
 export default class Job {
-    constructor({job, operationId, cluster, proxy}) {
+    constructor({job, operationId, clusterConfig}) {
+        const {id: cluster, proxy, externalProxy} = clusterConfig ?? {};
+
         this.cluster = cluster;
         this.proxy = proxy;
+        this.externalProxy = externalProxy;
         this.operationId = operationId;
         this.computeProperties(job);
         this.attributes = job;
@@ -82,6 +85,7 @@ export default class Job {
         const path = makeDirectDownloadPath(commandName, {
             cluster: this.cluster,
             proxy: this.proxy,
+            externalProxy: this.externalProxy,
         });
 
         return `${path}?${params}`;

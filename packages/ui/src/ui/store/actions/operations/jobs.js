@@ -33,7 +33,7 @@ const getOperation = (state) => state.operations.detail.operation;
 export function getJob() {
     return (dispatch, getState) => {
         const state = getState();
-        const {id: cluster, proxy} = getCurrentClusterConfig(state);
+        const clusterConfig = getCurrentClusterConfig(state);
 
         requests.removeAllRequests();
         return ytApiV3
@@ -43,8 +43,7 @@ export function getJob() {
                     type: GET_JOB.SUCCESS,
                     data: {
                         job,
-                        cluster,
-                        proxy,
+                        clusterConfig,
                         operationId: getOperation(state).$value,
                     },
                 });
@@ -66,7 +65,7 @@ export function getJob() {
 export function getCompetitiveJobs() {
     return (dispatch, getState) => {
         const state = getState();
-        const {id: cluster, proxy} = getCurrentClusterConfig(state);
+        const clusterConfig = getCurrentClusterConfig(state);
 
         requests.removeAllRequests();
         return ytApiV3
@@ -76,8 +75,7 @@ export function getCompetitiveJobs() {
                     type: GET_COMPETITIVE_JOBS.SUCCESS,
                     data: {
                         jobs,
-                        cluster,
-                        proxy,
+                        clusterConfig,
                         operationId: getOperation(state).$value,
                     },
                 });
@@ -125,7 +123,7 @@ export function getJobs() {
             },
         ];
 
-        const {id: cluster, proxy} = getCurrentClusterConfig(state);
+        const clusterConfig = getCurrentClusterConfig(state);
 
         return ytApiV3Id
             .executeBatch(YTApiId.operationGetJobs, {
@@ -146,8 +144,7 @@ export function getJobs() {
                         jobsErrors: errors,
                         addresses: ypath.getValue(addresses.output),
                         operationId: getOperation(state).$value,
-                        cluster,
-                        proxy,
+                        clusterConfig,
                     },
                 });
 

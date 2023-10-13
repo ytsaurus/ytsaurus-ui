@@ -113,14 +113,14 @@ function removeForeignAddresses(addresses, jobs) {
     return _.filter(addresses, (address) => ownAddresses[address]);
 }
 
-function prepareJobs({cluster, jobs, operationId, proxy}) {
+function prepareJobs({jobs, operationId, clusterConfig}) {
     const prepared = jobs.slice(0, JOBS_PER_PAGE_LIMIT);
 
     // Backward compatibility for fail_context
     // TODO: find out, do we still need it?
     return _.map(prepared, (job) => {
         job.fail_context_size = job.fail_context_size || 0;
-        return new Job({cluster, proxy, job, operationId});
+        return new Job({clusterConfig, job, operationId});
     });
 }
 
@@ -163,7 +163,7 @@ export default (state = initialState, action) => {
             return {...state, loading: true};
 
         case GET_JOBS.SUCCESS: {
-            const {jobs, jobsErrors, addresses, operationId, cluster, proxy} = action.data;
+            const {jobs, jobsErrors, addresses, operationId, clusterConfig} = action.data;
             const address = state.filters.address.value;
             const ownAddresses = removeForeignAddresses(addresses, jobs);
             const newState = updateFilter(state, 'address', address, {
@@ -176,7 +176,7 @@ export default (state = initialState, action) => {
                 loaded: true,
                 error: false,
                 loading: false,
-                jobs: prepareJobs({cluster, jobs, operationId, proxy}),
+                jobs: prepareJobs({jobs, operationId, clusterConfig}),
                 jobsErrors: jobsErrors,
                 operationId,
                 pagination: {
@@ -188,22 +188,22 @@ export default (state = initialState, action) => {
         }
 
         case GET_JOB.SUCCESS: {
-            const {job, operationId, cluster, proxy} = action.data;
+            const {job, operationId, clusterConfig} = action.data;
 
             return {
                 ...state,
                 loaded: true,
                 error: false,
                 loading: false,
-                job: new Job({cluster, job, operationId, proxy}),
+                job: new Job({job, operationId, clusterConfig}),
             };
         }
 
         case GET_COMPETITIVE_JOBS.SUCCESS: {
-            const {jobs, operationId, cluster, proxy} = action.data;
+            const {jobs, operationId, clusterConfig} = action.data;
             const jobId = state.filters.jobId.value;
 
-            const competitiveJobs = prepareJobs({cluster, jobs, operationId, proxy});
+            const competitiveJobs = prepareJobs({jobs, operationId, clusterConfig});
 
             return {
                 ...state,

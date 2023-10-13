@@ -475,7 +475,7 @@ class UploadManager extends React.Component<Props, State> {
             return;
         }
 
-        const {path, proxy, cluster} = this.props;
+        const {path, proxy, externalProxy, cluster} = this.props;
 
         this.onStartUpload(file.size);
 
@@ -493,7 +493,7 @@ class UploadManager extends React.Component<Props, State> {
                             onUploadProgress: this.onUploadProgress,
                             proxy: UPLOAD_CONFIG.uploadTableUseLocalmode
                                 ? `${location.host}/localmode/api/yt/${cluster}`
-                                : proxy,
+                                : externalProxy ?? proxy,
                         },
                         parameters: {
                             transaction_id,
@@ -641,13 +641,14 @@ class UploadManager extends React.Component<Props, State> {
 const mapStateToProps = (state: RootState) => {
     const path: string = getPath(state);
     const schema = getSchema(state);
-    const {proxy} = getCurrentClusterConfig(state);
+    const {proxy, externalProxy} = getCurrentClusterConfig(state);
 
     return {
         path,
         schema,
         cluster: getCluster(state),
         proxy,
+        externalProxy,
     };
 };
 

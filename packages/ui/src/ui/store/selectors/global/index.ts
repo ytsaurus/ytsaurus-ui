@@ -65,11 +65,6 @@ export function getClusterProxy(clusterConfig: ClusterConfig): string {
     return clusterConfig.proxy;
 }
 
-export function getClusterProxyURL(clusterConfig: ClusterConfig): string {
-    const proxy = getClusterProxy(clusterConfig);
-    return `${window.location.protocol}//${proxy}`;
-}
-
 export const getHttpProxyVersion = createSelector(
     [getCluster, (state: RootState) => state.global.version],
     (cluster, version) => {

@@ -171,14 +171,20 @@ export function decodeEscapedAbsPath(path: string) {
 
 export function makeDirectDownloadPath(
     command:
-        | 'read_table'
         | 'read_file'
+        | 'read_query_result'
+        | 'read_table'
+        | 'get_job_fail_context'
         | 'get_job_input'
-        | 'get_job_stderr'
-        | 'get_job_fail_context',
-    {cluster, proxy}: {cluster: string; proxy: string},
+        | 'get_job_stderr',
+    {
+        cluster,
+        proxy,
+        externalProxy,
+        version = 'v3',
+    }: {cluster: string; proxy: string; externalProxy: string | undefined; version?: 'v3' | 'v4'},
 ) {
     return allowDirectDownload()
-        ? `//${proxy}/api/v3/${command}`
-        : `/api/yt/${cluster}/api/v3/${command}`;
+        ? `//${externalProxy ?? proxy}/api/${version}/${command}`
+        : `/api/yt/${cluster}/api/${version}/${command}`;
 }
