@@ -6,9 +6,16 @@
 .status-block {
     border-radius: 4px;
     font-weight: 500;
-    padding: 4px 8px;
+    padding: 2px 1ex;
     margin: 1px;
-    font-size: 0.9em;
+    max-width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+
+    &__container {
+        max-width: 100%;
+    }
 
     &_theme {
         &_warning,

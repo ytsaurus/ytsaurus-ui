@@ -1,0 +1,10 @@
+.components-nodes-templates {
+    &__tags-container {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        &_inline {
+            display: inline-flex;
+        }
+    }
+}

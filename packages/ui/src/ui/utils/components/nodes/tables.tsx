@@ -1,11 +1,13 @@
 import React from 'react';
 import _ from 'lodash';
+import cn from 'bem-cn-lite';
+
 import {COMPONENTS_NODES_TABLE_ID} from '../../../constants/components/nodes/nodes';
 import {DESC_ASC_UNORDERED, compareArraysBySizeThenByItems} from '../../../utils/sort-helpers';
 
 import {Progress} from '@gravity-ui/uikit';
 import Version from '../../../pages/components/tabs/nodes/Version';
-import StatusBlock from '../../../components/StatusBlock/StatusBlock';
+import StatusBlock, {StatusBlockTheme} from '../../../components/StatusBlock/StatusBlock';
 import ClipboardButton from '../../../components/ClipboardButton/ClipboardButton';
 import NodeActions from '../../../pages/components/tabs/nodes/NodeActions/NodeActions';
 import MemoryProgress from '../../../pages/components/tabs/nodes/MemoryProgress/MemoryProgress';
@@ -19,6 +21,10 @@ import {
 import type {Node, TabletSlotState} from '../../../store/reducers/components/nodes/nodes/node';
 import type {FIX_MY_TYPE} from '../../../types';
 import {NodeColumnBanned, NodeColumnState} from '../../../pages/components/tabs/NodeColumns';
+
+import './tables.scss';
+
+const block = cn('components-nodes-templates');
 
 export const PropertiesByColumn = {
     __default__: ['IOWeight'],
@@ -665,10 +671,30 @@ const nodesTableProps = {
 
 export const defaultColumns = nodesTableProps.columns.sets.custom.items;
 
-function renderTags(tags?: string[]) {
-    return tags?.length
-        ? _.map(tags, (tag) => <StatusBlock key={tag} theme="default" text={tag} />)
-        : hammer.format.NO_VALUE;
+function renderTags(tags?: Array<string | number>, themes?: StatusBlockTheme[], flexType?: 'flex') {
+    return tags?.length ? (
+        <TagsContainer flexType={flexType}>
+            {_.map(tags, (tag, index) => (
+                <StatusBlock key={tag} theme={themes?.[index]} text={tag} />
+            ))}
+        </TagsContainer>
+    ) : (
+        hammer.format.NO_VALUE
+    );
+}
+
+function TagsContainer({
+    children,
+    flexType = 'inline-flex',
+}: {
+    children: React.ReactNode;
+    flexType?: 'flex' | 'inline-flex';
+}) {
+    return (
+        <div className={block('tags-container', {inline: 'inline-flex' === flexType})}>
+            {children}
+        </div>
+    );
 }
 
 const IO_WEIGHT_PREFIX = 'io_weight_';
@@ -711,28 +737,26 @@ export const NODES_TABLE_TEMPLATES: Templates = {
         return <NodeColumnState state={item.state} />;
     },
     banned(item) {
-        return <NodeColumnBanned banned={item.banned} />;
+        return (
+            <TagsContainer>
+                <NodeColumnBanned banned={item.banned} />
+            </TagsContainer>
+        );
     },
     decommissioned(item) {
-        return item.decommissioned ? (
-            <StatusBlock text="D" theme="decommissioned" />
-        ) : (
-            hammer.format.NO_VALUE
-        );
+        return item.decommissioned ? renderTags(['D'], ['decommissioned']) : hammer.format.NO_VALUE;
     },
     flavors(item) {
         return renderTags(item.flavors);
     },
     full(item) {
-        return item.full ? <StatusBlock text="F" theme="full" /> : hammer.format.NO_VALUE;
+        return item.full ? renderTags(['F'], ['full']) : hammer.format.NO_VALUE;
     },
 
     alert_count(item) {
-        return item.alertCount! > 0 ? (
-            <StatusBlock text={item.alertCount!} theme="alerts" />
-        ) : (
-            hammer.format.NO_VALUE
-        );
+        return item.alertCount! > 0
+            ? renderTags([String(item.alertCount)], ['alerts'])
+            : hammer.format.NO_VALUE;
     },
 
     physical_host(item, columnName) {
@@ -756,11 +780,11 @@ export const NODES_TABLE_TEMPLATES: Templates = {
     },
 
     user_tags(item) {
-        return renderTags(item.userTags);
+        return renderTags(item.userTags, [], 'flex');
     },
 
     system_tags(item) {
-        return renderTags(item.systemTags);
+        return renderTags(item.systemTags, [], 'flex');
     },
 
     scheduler_jobs(item) {
@@ -895,13 +919,17 @@ export const NODES_TABLE_TEMPLATES: Templates = {
         if (item.tabletSlots) {
             const statuses = _.sortBy(_.keys(item.tabletSlots.byState));
 
-            return _.map(statuses, (state: TabletSlotState) => {
-                const tabletSlots = item.tabletSlots.byState[state]!;
-                const {text, theme} = TABLET_SLOTS[state];
-                const label = `${text}: ${tabletSlots.length}`;
+            return (
+                <TagsContainer>
+                    {_.map(statuses, (state: TabletSlotState) => {
+                        const tabletSlots = item.tabletSlots.byState[state]!;
+                        const {text, theme} = TABLET_SLOTS[state];
+                        const label = `${text}: ${tabletSlots.length}`;
 
-                return <StatusBlock theme={theme} text={label} key={state} />;
-            });
+                        return <StatusBlock theme={theme} text={label} key={state} />;
+                    })}
+                </TagsContainer>
+            );
         }
 
         return null;
@@ -910,85 +938,85 @@ export const NODES_TABLE_TEMPLATES: Templates = {
     none(item) {
         const data = item.tabletSlots?.byState.none;
 
-        return data ? <StatusBlock text={data.length} theme="default" /> : hammer.format.NO_VALUE;
+        return data ? renderTags([data.length]) : hammer.format.NO_VALUE;
     },
 
     none_chaos(item) {
         const data = item.chaosSlots?.byState.none;
 
-        return data ? <StatusBlock text={data.length} theme="default" /> : hammer.format.NO_VALUE;
+        return data ? renderTags([data.length]) : hammer.format.NO_VALUE;
     },
 
     leading(item) {
         const data = item.tabletSlots?.byState.leading;
 
-        return data ? <StatusBlock text={data.length} theme="success" /> : hammer.format.NO_VALUE;
+        return data ? renderTags([data.length], ['success']) : hammer.format.NO_VALUE;
     },
 
     leading_chaos(item) {
         const data = item.chaosSlots?.byState.leading;
 
-        return data ? <StatusBlock text={data.length} theme="success" /> : hammer.format.NO_VALUE;
+        return data ? renderTags([data.length], ['success']) : hammer.format.NO_VALUE;
     },
 
     following(item) {
         const data = item.tabletSlots?.byState.following;
 
-        return data ? <StatusBlock text={data.length} theme="info" /> : hammer.format.NO_VALUE;
+        return data ? renderTags([data.length], ['info']) : hammer.format.NO_VALUE;
     },
 
     following_chaos(item) {
         const data = item.chaosSlots?.byState.following;
 
-        return data ? <StatusBlock text={data.length} theme="info" /> : hammer.format.NO_VALUE;
+        return data ? renderTags([data.length], ['info']) : hammer.format.NO_VALUE;
     },
 
     follower_recovery(item) {
         const data = item.tabletSlots?.byState['follower_recovery'];
 
-        return data ? <StatusBlock text={data.length} theme="warning" /> : hammer.format.NO_VALUE;
+        return data ? renderTags([data.length], ['warning']) : hammer.format.NO_VALUE;
     },
 
     follower_recovery_chaos(item) {
         const data = item.chaosSlots?.byState['follower_recovery'];
 
-        return data ? <StatusBlock text={data.length} theme="warning" /> : hammer.format.NO_VALUE;
+        return data ? renderTags([data.length], ['warning']) : hammer.format.NO_VALUE;
     },
 
     leader_recovery(item) {
         const data = item.tabletSlots?.byState['leader_recovery'];
 
-        return data ? <StatusBlock text={data.length} theme="warning" /> : hammer.format.NO_VALUE;
+        return data ? renderTags([data.length], ['warning']) : hammer.format.NO_VALUE;
     },
 
     leader_recovery_chaos(item) {
         const data = item.chaosSlots?.byState['leader_recovery'];
 
-        return data ? <StatusBlock text={data.length} theme="warning" /> : hammer.format.NO_VALUE;
+        return data ? renderTags([data.length], ['warning']) : hammer.format.NO_VALUE;
     },
 
     stopped(item) {
         const data = item.tabletSlots?.byState.stopped;
 
-        return data ? <StatusBlock text={data.length} theme="default" /> : hammer.format.NO_VALUE;
+        return data ? renderTags([data.length]) : hammer.format.NO_VALUE;
     },
 
     stopped_chaos(item) {
         const data = item.chaosSlots?.byState.stopped;
 
-        return data ? <StatusBlock text={data.length} theme="default" /> : hammer.format.NO_VALUE;
+        return data ? renderTags([data.length]) : hammer.format.NO_VALUE;
     },
 
     elections(item) {
         const data = item.tabletSlots?.byState.elections;
 
-        return data ? <StatusBlock text={data.length} theme="warning" /> : hammer.format.NO_VALUE;
+        return data ? renderTags([data.length], ['warning']) : hammer.format.NO_VALUE;
     },
 
     elections_chaos(item) {
         const data = item.chaosSlots?.byState.elections;
 
-        return data ? <StatusBlock text={data.length} theme="warning" /> : hammer.format.NO_VALUE;
+        return data ? renderTags([data.length], ['warning']) : hammer.format.NO_VALUE;
     },
 
     tablet_memory_static(item) {
