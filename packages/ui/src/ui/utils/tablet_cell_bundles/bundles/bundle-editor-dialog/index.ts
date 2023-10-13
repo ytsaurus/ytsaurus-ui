@@ -32,6 +32,7 @@ export const bundleEditorDict: {
             'uncompressed_block_cache',
             'versioned_chunk_meta',
             'lookup_row_cache',
+            'key_filter_block_cache',
         ],
         cpu_limits: ['lookup_thread_pool_size', 'query_thread_pool_size', 'write_thread_pool_size'],
     },
