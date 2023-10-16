@@ -81,6 +81,15 @@ export interface YTCoreConfig {
      */
     defaultUserSettingsOverrides?: Partial<Settings>;
 
+    /**
+     * The field is applicabale only for local-clusters, do not use it for clusters from clusters-config.json.
+     */
+    localmodeClusterUrls?: {
+        icon: string;
+        icon2x: string;
+        iconbig?: string;
+    };
+
     adjustAppConfig?: (nodekit: NodeKit) => void;
 }
 

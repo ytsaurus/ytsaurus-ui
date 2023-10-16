@@ -1,6 +1,7 @@
 import _ from 'lodash';
 import {YT_LOCAL_CLUSTER_ID} from '../shared/constants';
 import {ClusterConfig, YTConfig} from '../shared/yt-types';
+import {getApp} from './ServerFactory';
 
 const localProxy = process.env.PROXY;
 
@@ -19,15 +20,20 @@ function makeClusterConfig(id: string, name: string, proxy: string): ClusterConf
         theme: localThemes[id] ?? 'mint',
         description: 'Local',
         environment: 'development',
+
+        urls: getApp().config?.localmodeClusterUrls,
     };
 }
 
-const localClusters: Record<string, ClusterConfig> = localProxy
-    ? {
-          [YT_LOCAL_CLUSTER_ID]: makeClusterConfig(YT_LOCAL_CLUSTER_ID, 'Local', localProxy),
-          [localProxy]: makeClusterConfig(localProxy, 'Local as remote', localProxy),
-      }
-    : {};
+function makeLocalClusters() {
+    const localClusters: Record<string, ClusterConfig> = localProxy
+        ? {
+              [YT_LOCAL_CLUSTER_ID]: makeClusterConfig(YT_LOCAL_CLUSTER_ID, 'Local', localProxy),
+              [localProxy]: makeClusterConfig(localProxy, 'Local as remote', localProxy),
+          }
+        : {};
+    return localClusters;
+}
 
 export function makeLocalModeConfig(
     proxy?: string,
@@ -41,7 +47,7 @@ export function makeLocalModeConfig(
         isLocalCluster: true,
         environment: 'localmode',
         clusters: {
-            ...localClusters,
+            ...makeLocalClusters(),
             ...proxyClusters,
         },
     };

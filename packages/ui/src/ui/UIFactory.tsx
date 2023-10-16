@@ -24,6 +24,7 @@ import RoleActions, {Props as RoleActionsProps} from './components/ACL/RoleActio
 import OperationDetailMonitorLinks from './pages/operations/OperationDetail/tabs/monitor/OperationDetailsMonitorLinks';
 import {PERMISSIONS_SETTINGS} from './constants/acl';
 import {uiSettings} from './config';
+import YT from './config/yt-config';
 
 type HeaderItemOrPage =
     | {
@@ -349,8 +350,8 @@ export interface UIFactory {
 const adminPages: string[] = [];
 
 const uiFactory: UIFactory = {
-    getClusterAppearance() {
-        return undefined;
+    getClusterAppearance(cluster) {
+        return YT.clusters[cluster!]?.urls;
     },
     isWatchMen() {
         return false;
