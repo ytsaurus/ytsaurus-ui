@@ -234,14 +234,12 @@ export function ClusterImage(props: {
 }) {
     const {cluster, name, forwardRef} = props;
     const clusterAppearance = getClusterAppearance(cluster);
-    const clusterTheme = useClusterColorClassName(cluster);
+    const clusterColorClassName = useClusterColorClassName(cluster);
 
     return (
         <ClusterIcon
-            className={block('cluster-image')}
-            icon={clusterAppearance.iconAvatar}
-            size="m"
-            theme={clusterTheme}
+            className={block('cluster-image', clusterColorClassName)}
+            icon={clusterAppearance.icon2x}
             name={name}
             forwardRef={forwardRef as React.RefObject<HTMLImageElement>}
         />

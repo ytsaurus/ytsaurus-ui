@@ -16,7 +16,7 @@
     "build:lib:ui": "NODE_OPTIONS=\"--max-old-space-size=4096\" NODE_ENV=production app-builder build --config ./build.lib.config.ts && cp -r img assets build",
     "build:lib:server": "tsc -p ./build.server.tsconfig.json",
     "clean": "rm -rf dist/*",
-    "copy:icons": "mkdir -p dist/public && cp img/favicon.png dist/public",
+    "copy:icons": "mkdir -p dist/public && cp img/favicon*.png dist/public",
     "cut:version": "node -e \"const json=require('${npm_config_file}'); delete json.version; console.log(JSON.stringify(json, null, 2))\"",
     "debug": "npm run copy:icons && NODE_OPTIONS=\"--max-http-header-size=204800 ${NODE_OPTIONS}\" app-builder dev --inspect --config ./build.app.config.ts",
     "deps:build": "npm run build",

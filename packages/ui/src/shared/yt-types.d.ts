@@ -1,6 +1,6 @@
-import {YTError} from '../@types/types';
-import {Settings} from './constants/settings-types';
-import {UISettings} from './ui-settings';
+import type {YTError} from '../@types/types';
+import type {Settings} from './constants/settings-types';
+import type {UISettings} from './ui-settings';
 
 export interface YTConfig {
     clusters: Record<string, ClusterConfig>;
@@ -62,6 +62,7 @@ export interface ClusterConfig {
         preset: string;
         serviceId: number;
         environmentId: number;
+        dataCenters?: Array<string>;
     };
     proxy: string;
     /**
@@ -73,11 +74,17 @@ export interface ClusterConfig {
 
     hwOrder?: unknown;
 
-    authentication?: 'none' | 'basic' | 'domain' | 'basic';
+    authentication?: 'none' | 'basic' | 'domain';
     secure?: boolean;
     description?: string;
 
     isLocalCluster?: boolean;
+
+    urls?: {
+        icon: string;
+        icon2x: string;
+        iconbig?: string;
+    };
 }
 
 export interface SubRequest<K extends string, T extends BaseBatchParams> {
