@@ -1,0 +1,25 @@
+name: Docker tag [Manual]
+
+on:
+  workflow_dispatch:
+    inputs:
+      stag:
+        description: 'ytsaurus/ui:[SOURCE_TAG]'
+        required: true
+      ttag:
+        description: 'ytsaurus/ui:[TARGET_TAG]'
+        required: true
+
+jobs:
+  release-docker-tag:
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Docker tag"
+        run: |
+          echo '${{ secrets.DOCKER_HUB_PASSWORD }}' | docker login --username ${{ secrets.DOCKER_HUB_LOGIN}} --password-stdin
+          docker pull ytsaurus/ui:${STAG}
+          docker tag ytsaurus/ui:${STAG} ytsaurus/ui:${TTAG}
+          docker push ytsaurus/ui:${TTAG}
+        env:
+          STAG: ${{ inputs.stag }}
+          TTAG: ${{ inputs.ttag }}
