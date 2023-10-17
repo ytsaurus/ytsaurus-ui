@@ -10,6 +10,9 @@ export interface Settings {
     compact?: boolean;
     asHTML?: boolean;
     break?: boolean;
+    maxListSize?: number;
+    maxStringSize?: number;
+    omitStructNull?: boolean;
 }
 
 interface BaseUnipikaValue {

@@ -3,8 +3,7 @@ import PropTypes from 'prop-types';
 import block from 'bem-cn-lite';
 import _ from 'lodash';
 
-// @ts-ignore
-import unipika from '@gravity-ui/unipika/lib/unipika';
+import unipika from '../../common/thor/unipika';
 
 import ErrorBoundary from '../../components/ErrorBoundary/ErrorBoundary';
 import {Settings, UnipikaValue} from './StructuredYson/StructuredYsonTypes';

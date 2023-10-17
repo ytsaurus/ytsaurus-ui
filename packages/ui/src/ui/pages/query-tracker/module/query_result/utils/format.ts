@@ -1,18 +1,15 @@
-// @ts-ignore
-import unipika from '@gravity-ui/unipika/lib/unipika';
+import unipika from '../../../../../common/thor/unipika';
 import {TypeArray} from '../../../../../components/SchemaDataType/dataTypes';
+import {Settings} from '../../../../../components/Yson/StructuredYson/StructuredYsonTypes';
 
-export type Settings = Record<string, any>;
-
-const defaultSettings = {
+const defaultSettings: Settings = {
     escapeWhitespace: false,
     decodeUTF8: true,
     binaryAsHex: true,
     escapeYQLStrings: true,
     omitStructNull: true,
     maxListSize: 50,
-    maxStringSize: undefined as number | undefined,
-    showYsonAs: 'yson',
+    maxStringSize: undefined,
 };
 
 export function convert(

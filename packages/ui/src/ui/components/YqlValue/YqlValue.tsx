@@ -1,12 +1,25 @@
-import React, {Component} from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import block from 'bem-cn-lite';
-import unipika from '@gravity-ui/unipika/lib/unipika';
+import unipika from '../../common/thor/unipika';
 
 import ErrorBoundary from '../../components/ErrorBoundary/ErrorBoundary';
 import Yson from '../../components/Yson/Yson';
+import {Settings} from '../../components/Yson/StructuredYson/StructuredYsonTypes';
 
-export default class YqlValue extends Component {
+/**
+ * See unipika for more details
+ */
+export type UnipikaValueType = Array<string | UnipikaValueType>;
+
+export type YqlValueProps = {
+    value?: unknown;
+    type: UnipikaValueType;
+    settings: Settings;
+    inline?: boolean;
+};
+
+export default class YqlValue extends React.Component<YqlValueProps> {
     static propTypes = {
         settings: PropTypes.object,
         value: PropTypes.any,
@@ -20,7 +33,7 @@ export default class YqlValue extends Component {
         settings: Yson.defaultUnipikaSettings,
     };
 
-    static getFormattedValue(value, type, settings) {
+    static getFormattedValue(value: unknown, type: UnipikaValueType, settings: Settings) {
         const yqlValue = [value, type];
 
         return settings.format === 'raw-json'

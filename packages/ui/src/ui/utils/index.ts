@@ -2,8 +2,7 @@ import _ from 'lodash';
 // @ts-expect-error
 import yt from '@ytsaurus/javascript-wrapper/lib/yt';
 import hammer from '../common/hammer';
-// @ts-expect-error
-import unipika from '@gravity-ui/unipika/lib/unipika';
+import unipika from '../common/thor/unipika';
 import qs from 'qs';
 import Cookies from 'js-cookie';
 import type {Settings} from '../components/Yson/StructuredYson/StructuredYsonTypes';
