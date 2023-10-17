@@ -1,11 +1,12 @@
+// @ts-expect-error
 import ypath from '@ytsaurus/interface-helpers/lib/ypath';
-import unipika from '@gravity-ui/unipika/lib/unipika';
+import unipika from './unipika';
 import {appendInnerErrors} from '../../utils/errors';
 import {getNumber} from './utils';
 
 const yson = unipika.utils.yson;
 
-function convertToBoolean(value) {
+function convertToBoolean(value?: boolean | string): boolean | undefined {
     value = yson.value(value);
 
     const type = unipika.utils.type(value);
@@ -13,14 +14,14 @@ function convertToBoolean(value) {
     if (type === 'string' && (value === 'true' || value === 'false')) {
         return value === 'true';
     } else if (type === 'boolean' || type === 'undefined') {
-        return value;
+        return value as boolean | undefined;
     } else {
         throw new Error('thorYPath: value cannot be converted to boolean.');
     }
 }
 
 /** @deprecated */
-function convertToNumber(value, defaultValue) {
+function convertToNumber(value: number | string, defaultValue?: number): number | undefined {
     value = yson.value(value);
 
     const type = unipika.utils.type(value);
@@ -37,7 +38,9 @@ function convertToNumber(value, defaultValue) {
             throw new Error('thorYPath: value "' + value + '" cannot be converted to number.');
         }
     } else if (type === 'number' || type === 'undefined') {
-        return isNaN(value) && defaultValue !== undefined ? defaultValue : value;
+        return isNaN(value as number) && defaultValue !== undefined
+            ? defaultValue
+            : (value as number | undefined);
     } else {
         if (defaultValue !== undefined) {
             return isNaN(defaultValue) ? undefined : defaultValue;
@@ -61,7 +64,7 @@ function convertToNumber(value, defaultValue) {
 /** @type {{[key: string] : any} & Thor} */
 const thorYPath = {...ypath};
 
-thorYPath.get = function (node, path) {
+thorYPath.get = function (node: unknown, path: string) {
     if (typeof path === 'undefined') {
         return node;
     } else {
@@ -69,19 +72,19 @@ thorYPath.get = function (node, path) {
     }
 };
 
-thorYPath.getAttributes = function (node, path) {
+thorYPath.getAttributes = function (node: unknown, path: string) {
     return yson.attributes(thorYPath.get(node, path));
 };
 
-thorYPath.getValue = function (node, path) {
+thorYPath.getValue = function (node: unknown, path: string) {
     return yson.value(thorYPath.get(node, path));
 };
 
-thorYPath.getValues = function (node, paths) {
+thorYPath.getValues = function (node: unknown, paths: Array<string>) {
     return ypath.getValues(node, paths);
 };
 
-thorYPath.getBoolean = function (node, path) {
+thorYPath.getBoolean = function (node: unknown, path: string) {
     const value = thorYPath.get(node, path);
 
     return convertToBoolean(value);
@@ -90,7 +93,7 @@ thorYPath.getBoolean = function (node, path) {
 thorYPath.getNumber = getNumber;
 
 /** @deprecated */
-thorYPath.getNumberDeprecated = function (node, path, defaultValue) {
+thorYPath.getNumberDeprecated = function (node: unknown, path: string, defaultValue?: number) {
     try {
         const value = thorYPath.get(node, path);
         return convertToNumber(value, defaultValue);
