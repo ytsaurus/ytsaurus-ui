@@ -8,6 +8,7 @@ import {
     shouldEscapeWhitespace,
     useBinaryAsHex,
 } from '../../../store/selectors/settings';
+import {getUnipikaSettingsFromConfig} from '../../../common/thor/unipika-settings';
 
 interface YsonSettings {
     format: string;
@@ -39,6 +40,7 @@ const getYsonSettings = createSelector(
             escapeWhitespace,
             binaryAsHex,
             asHTML: true,
+            ...getUnipikaSettingsFromConfig(),
         };
     },
 );

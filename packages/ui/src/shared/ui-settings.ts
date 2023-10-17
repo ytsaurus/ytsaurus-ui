@@ -84,6 +84,17 @@ export interface UISettings {
      * @example reShortNameFromTabletNodeAddress: '(?<shortname>[^-]+-[^-]+).*'
      */
     reShortNameFromTabletNodeAddress?: string;
+
+    /**
+     * Allows to define array of regexps for allowed urls of TaggedType of unipika to display media-content (audio/video/images).
+     * If there are no matched items in the array the TaggedType-item will be displayed as a json-object.
+     * @expamle
+     * reUnipikaAllowTaggedSources: [
+     *   "https:\\/\\/image\\.bank\\.my\\/fruits\\/",
+     *   "https:\\/\\/image\\.bank\\.my\\/vegetables\\/"
+     * ]
+     */
+    reUnipikaAllowTaggedSources: Array<string>;
 }
 
 export interface UISettingsMonitoring {

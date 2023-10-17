@@ -11,6 +11,7 @@ import {
     useBinaryAsHex,
 } from '../../store/selectors/settings';
 import {Settings} from '../../components/Yson/StructuredYson/StructuredYsonTypes';
+import {getUnipikaSettingsFromConfig} from './unipika-settings';
 
 const parseSetting = hammer.utils.parseSetting;
 
@@ -19,6 +20,7 @@ const {utf8} = unipika.utils;
 
 unipika.prepareSettings = function (settings: any) {
     settings = settings || {};
+    Object.assign(settings, getUnipikaSettingsFromConfig());
 
     settings.format = parseSetting(settings, 'format', getSettingBySelector(getFormat));
     settings.showDecoded = parseSetting(

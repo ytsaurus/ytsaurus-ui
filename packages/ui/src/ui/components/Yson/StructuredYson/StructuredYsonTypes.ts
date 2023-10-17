@@ -1,4 +1,4 @@
-export interface Settings {
+export type Settings = {
     nonBreakingIndent?: boolean;
     escapeWhitespace?: boolean;
     escapeYQLStrings?: boolean;
@@ -13,7 +13,10 @@ export interface Settings {
     maxListSize?: number;
     maxStringSize?: number;
     omitStructNull?: boolean;
-}
+
+    validateSrcUrl?: (taggedTypeUrl: string) => boolean;
+    normalizeUrl?: (url?: string) => string;
+};
 
 interface BaseUnipikaValue {
     $attributes?: UnipikaMap['$value'];
