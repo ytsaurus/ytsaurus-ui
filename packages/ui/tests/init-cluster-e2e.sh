@@ -151,3 +151,16 @@ yt create --attributes "{schema=[{name=key;type=string};{name=value;type=string}
     done
     set -x
 ) | yt write-table --format json ${STATIC_TABLE}
+
+# Table with tagged data
+TAGGED_TABLE=${E2E_DIR}/tagged-table
+yt create --attributes '{schema=[
+    {name=svgxml;  type_v3={item=string;type_name=tagged;tag="image/svg+xml"}};
+    {name=imageurl;type_v3={item=string;type_name=tagged;tag=imageurl}};
+    {name=imageurl_as_text;type_v3={item=string;type_name=tagged;tag=imageurl}};
+]}' table ${TAGGED_TABLE}
+(
+    echo -ne "svgxml=$(cat $(dirname $0)/../img/svg/calendar.svg | base64 -w 0)\t"
+    echo -ne "imageurl=https://yastatic.net/s3/cloud/yt/static/freeze/assets/images/ui-big.44e3fa56.jpg\t"
+    echo -e "imageurl_as_text=https://deny-yastatic.net/s3/cloud/yt/static/freeze/assets/images/ui-big.44e3fa56.jpg\t"
+) | yt write-table --format dsv ${TAGGED_TABLE}

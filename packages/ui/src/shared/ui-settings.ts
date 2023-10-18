@@ -95,6 +95,13 @@ export interface UISettings {
      * ]
      */
     reUnipikaAllowTaggedSources: Array<string>;
+
+    /**
+     * Allows to define service for removing 'Referer' header for url-s on a page.
+     *
+     * See `@gravity-ui/unipika v3.0.0` details in [CHANGELOG.md](https://github.com/gravity-ui/unipika/blob/main/CHANGELOG.md).
+     */
+    hideReferrerUrl?: string;
 }
 
 export interface UISettingsMonitoring {
