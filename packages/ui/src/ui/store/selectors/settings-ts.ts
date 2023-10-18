@@ -6,7 +6,7 @@ import {AccountUsageViewType} from '../reducers/accounts/usage/accounts-usage-fi
 import {AccountUsageDataItem} from '../../store/reducers/accounts/usage/account-usage-types';
 import {ActiveJobTypesMap} from '../../store/actions/settings/settings';
 import {RootState} from '../../store/reducers';
-import {uiSettings} from '../../config';
+import {uiSettings} from '../../config/ui-settings';
 import _ from 'lodash';
 import {NODE_TYPE} from '../../../shared/constants/system';
 import {ValueOf} from '../../../@types/types';

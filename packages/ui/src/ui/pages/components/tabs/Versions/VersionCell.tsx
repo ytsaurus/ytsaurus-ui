@@ -11,7 +11,7 @@ import './VersionCell.scss';
 import {useDispatch} from 'react-redux';
 import {changeVersionStateTypeFilters} from '../../../../store/actions/components/versions/versions_v2';
 import {Tooltip} from '../../../../components/Tooltip/Tooltip';
-import {uiSettings} from '../../../../config';
+import {uiSettings} from '../../../../config/ui-settings';
 
 const block = cn('version-cell');
 

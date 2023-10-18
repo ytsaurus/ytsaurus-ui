@@ -1,4 +1,4 @@
-import {getConfigData} from '../../config';
+import {getConfigData} from '../../config/ui-settings';
 import YT from '../../config/yt-config';
 import {rumLogError} from '../../rum/rum-counter';
 

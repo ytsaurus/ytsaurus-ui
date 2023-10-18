@@ -133,9 +133,10 @@ export function rumSendFrameworkInited() {
     return RUM.sendTimeMark('3036');
 }
 
-const ENABLE_RUM_DEBUG_2 = -1 !== window.location.search.slice(1).split('&').indexOf('rumdebug=2');
+const ENABLE_RUM_DEBUG_2 =
+    -1 !== window.location?.search?.slice(1).split('&').indexOf('rumdebug=2');
 const ENABLE_RUM_DEBUG =
-    ENABLE_RUM_DEBUG_2 || -1 !== window.location.search.slice(1).split('&').indexOf('rumdebug=1');
+    ENABLE_RUM_DEBUG_2 || -1 !== window.location?.search?.slice(1).split('&').indexOf('rumdebug=1');
 
 const startTime = Date.now();
 

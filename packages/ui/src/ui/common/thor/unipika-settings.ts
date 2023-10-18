@@ -1,5 +1,5 @@
 import {createSelector} from 'reselect';
-import {uiSettings} from '../../config';
+import {uiSettings} from '../../config/ui-settings';
 import {rumLogError} from '../../rum/rum-counter';
 import {Settings} from '../../components/Yson/StructuredYson/StructuredYsonTypes';
 

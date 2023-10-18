@@ -23,7 +23,7 @@ import {YTSubjectSuggest} from './components/ACL/SubjectsControl/YTSubjectSugges
 import RoleActions, {Props as RoleActionsProps} from './components/ACL/RoleActions';
 import OperationDetailMonitorLinks from './pages/operations/OperationDetail/tabs/monitor/OperationDetailsMonitorLinks';
 import {PERMISSIONS_SETTINGS} from './constants/acl';
-import {uiSettings} from './config';
+import {uiSettings} from './config/ui-settings';
 import YT from './config/yt-config';
 
 type HeaderItemOrPage =

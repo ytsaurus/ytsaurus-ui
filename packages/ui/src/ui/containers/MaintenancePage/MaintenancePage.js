@@ -15,7 +15,7 @@ import withBlockedNavigation from '../../hocs/withBlockedNavigation';
 import Icon from '../../components/Icon/Icon';
 import Button from '../../components/Button/Button';
 import {Linkify} from '../../components/Linkify/Linkify';
-import {uiSettings} from '../../config';
+import {uiSettings} from '../../config/ui-settings';
 
 import './MaintenancePage.scss';
 

@@ -23,7 +23,8 @@ import shieldIcon from '../../../../img/svg/shield-icon.svg';
 import tableIcon from '../../../../img/svg/table-icon.svg';
 import infoIcon from '../../../../img/svg/info-icon.svg';
 import {useClusterFromLocation} from '../../hooks/use-cluster';
-import {docsUrl, uiSettings} from '../../config/index';
+import {docsUrl} from '../../config/index';
+import {uiSettings} from '../../config/ui-settings';
 
 import ypath from '../../common/thor/ypath';
 

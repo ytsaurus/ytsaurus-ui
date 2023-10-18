@@ -1,7 +1,7 @@
 // @ts-expect-error
 import yt from '@ytsaurus/javascript-wrapper/lib/yt';
 
-import {YTError} from '../../types';
+import type {YTError} from '../../types';
 
 export function getErrorWithCode(errors: YTError[], code: number): YTError | undefined {
     const queue: YTError[] = [...errors];

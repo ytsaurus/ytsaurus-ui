@@ -10,7 +10,7 @@ import {
     shouldShowDecoded,
     useBinaryAsHex,
 } from '../../store/selectors/settings';
-import {Settings} from '../../components/Yson/StructuredYson/StructuredYsonTypes';
+import type {Settings} from '../../components/Yson/StructuredYson/StructuredYsonTypes';
 import {getUnipikaSettingsFromConfig} from './unipika-settings';
 
 const parseSetting = hammer.utils.parseSetting;

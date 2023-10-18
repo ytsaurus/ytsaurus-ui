@@ -11,7 +11,8 @@ import {Secondary, Warning} from '../../../../../components/Text/Text';
 import Link from '../../../../../components/Link/Link';
 import {getNavigationPathAttributesLoadState} from '../../../../../store/selectors/navigation/navigation';
 import {LOADING_STATUS} from '../../../../../constants';
-import {docsUrl, uiSettings} from '../../../../../config';
+import {docsUrl} from '../../../../../config';
+import {uiSettings} from '../../../../../config/ui-settings';
 import UIFactory from '../../../../../UIFactory';
 
 export default function DataLensButton({className}: {className: string}) {
