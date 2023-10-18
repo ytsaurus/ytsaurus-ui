@@ -1,34 +1,46 @@
-import {Settings} from '../../components/Yson/StructuredYson/StructuredYsonTypes';
+import {createSelector} from 'reselect';
 import {uiSettings} from '../../config';
 import {rumLogError} from '../../rum/rum-counter';
+import {Settings} from '../../components/Yson/StructuredYson/StructuredYsonTypes';
 
-const {reUnipikaAllowTaggedSources = []} = uiSettings;
+const makeValidateSrcUrl = createSelector(
+    [(_v: {}) => uiSettings.reUnipikaAllowTaggedSources],
+    (sourcesRegExps = []) => {
+        const allowedRegexps = sourcesRegExps.reduce((acc, item, index) => {
+            try {
+                acc.push(new RegExp(item));
+            } catch (error: any) {
+                rumLogError(
+                    {
+                        message: `failed to create RegExp instance from reUnipikaAllowTaggedSources[${index}] = '${item}'`,
+                    },
+                    error,
+                );
+            }
+            return acc;
+        }, [] as Array<RegExp>);
 
-let res: undefined | Pick<Settings, 'validateSrcUrl'>;
-
-export function getUnipikaSettingsFromConfig() {
-    if (res) {
-        return res;
-    }
-
-    const allowedRegexps: Array<RegExp> = reUnipikaAllowTaggedSources.reduce((acc, item, index) => {
-        try {
-            acc.push(new RegExp(item));
-        } catch (error: any) {
-            rumLogError(
-                {
-                    message: `failed to create RegExp insatnce from reUnipikaAllowTaggedSources[${index}] = '${item}'`,
-                },
-                error,
-            );
-        }
-        return acc;
-    }, [] as Array<RegExp>);
-
-    res = {
-        validateSrcUrl(url: string) {
+        return function validateSrcUrl(url: string) {
             return allowedRegexps.some((re) => re.test(url));
-        },
+        };
+    },
+);
+
+const makeNormalizeUrl = createSelector(
+    [(_v: {}) => uiSettings.hideReferrerUrl],
+    (hideReferrerUrl) => {
+        if (!hideReferrerUrl) {
+            return undefined;
+        }
+        return function normalizeUrl(url?: string) {
+            return `${hideReferrerUrl}?${encodeURIComponent(url!)}`;
+        };
+    },
+);
+
+export function getUnipikaSettingsFromConfig(): Partial<Settings> {
+    return {
+        validateSrcUrl: makeValidateSrcUrl({}),
+        normalizeUrl: makeNormalizeUrl({}),
     };
-    return res;
 }
