@@ -6,6 +6,8 @@ import {UISettings} from 'shared/ui-settings';
 import {Settings} from '../shared/constants/settings-types';
 import type {NodeKit} from '@gravity-ui/nodekit';
 
+import {ClusterConfig} from '@ytsaurus/ui/build/cjs/shared/yt-types';
+
 export interface YTCoreConfig {
     /**
      *  Path to the file with OAuth-token of special-user ("the OAuthRobot" below) in format: {"oauthToken": "******"}
@@ -84,11 +86,7 @@ export interface YTCoreConfig {
     /**
      * The field is applicabale only for local-clusters, do not use it for clusters from clusters-config.json.
      */
-    localmodeClusterUrls?: {
-        icon: string;
-        icon2x: string;
-        iconbig?: string;
-    };
+    localmodeClusterConfig?: Partial<Pick<ClusterConfig, 'urls' | 'externalProxy'>>;
 
     adjustAppConfig?: (nodekit: NodeKit) => void;
 }

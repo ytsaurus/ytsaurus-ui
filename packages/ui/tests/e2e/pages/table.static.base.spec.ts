@@ -58,3 +58,20 @@ test('Static table: column selector work properly', async ({page}) => {
     const emptyColHeader2 = await page.$('.data-table__table-wrapper th:nth-child(4)');
     expect(emptyColHeader2).toBeNull();
 });
+
+test('Static table: externalProxy', async ({page}) => {
+    const url = makeClusterUrl(`navigation?path=${PATH}`);
+    await page.goto(url);
+
+    await page.waitForSelector('.navigation');
+    await page.waitForFunction(() => {
+        window.__DATA__.uiSettings.directDownload = true;
+        return window.__DATA__.uiSettings;
+    });
+
+    await page.click('button[data-qa="show-download-static-table"]');
+
+    await page.waitForSelector(
+        `a[href^="//external.proxy.my/api/v3/read_table?path=${encodeURIComponent(PATH)}"]`,
+    );
+});

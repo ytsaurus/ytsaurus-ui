@@ -12,6 +12,8 @@ const localThemes: Record<string, ClusterConfig['theme']> = {
 
 function makeClusterConfig(id: string, name: string, proxy: string): ClusterConfig {
     return {
+        ...getApp().config?.localmodeClusterConfig,
+
         id,
         name,
         proxy,
@@ -20,8 +22,6 @@ function makeClusterConfig(id: string, name: string, proxy: string): ClusterConf
         theme: localThemes[id] ?? 'mint',
         description: 'Local',
         environment: 'development',
-
-        urls: getApp().config?.localmodeClusterUrls,
     };
 }
 

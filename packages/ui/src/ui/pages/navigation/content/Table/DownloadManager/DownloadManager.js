@@ -837,6 +837,7 @@ export class DownloadManager extends Component {
                 target="_blank"
                 href={url}
                 disabled={Boolean(error)}
+                qa="download-static-table"
             >
                 Download
             </Button>
@@ -856,7 +857,13 @@ export class DownloadManager extends Component {
 
         return (
             <div className={block(null, className)}>
-                <Button size="m" title="download" disabled={loading} onClick={this.showDialog}>
+                <Button
+                    size="m"
+                    title="download"
+                    disabled={loading}
+                    onClick={this.showDialog}
+                    qa={'show-download-static-table'}
+                >
                     <Icon awesome="download" />
                     &nbsp; Download
                 </Button>
