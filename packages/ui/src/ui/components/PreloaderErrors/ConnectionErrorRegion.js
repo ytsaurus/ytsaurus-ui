@@ -8,7 +8,8 @@ import withBlockedNavigation from '../../hocs/withBlockedNavigation';
 import Button from '../Button/Button';
 import {getGlobalError} from '../../store/selectors/global';
 import {showErrorPopup} from '../../utils/utils';
-import {isDocsAllowed, uiSettings} from '../../config';
+import {isDocsAllowed} from '../../config';
+import {uiSettings} from '../../config/ui-settings';
 import UIFactory from '../../UIFactory';
 
 const b = block('preloader');

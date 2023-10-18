@@ -14,7 +14,7 @@ import {getSchemaStrict} from '../../../../../store/selectors/navigation/tabs/sc
 import {Secondary} from '../../../../../components/Text/Text';
 import ColumnsPresetButton from './ColumnsPresetButton';
 import {RootState} from '../../../../../store/reducers';
-import {getConfigData} from '../../../../../config';
+import {getConfigData} from '../../../../../config/ui-settings';
 
 ColumnSelectorButton.propTypes = {
     // from parent

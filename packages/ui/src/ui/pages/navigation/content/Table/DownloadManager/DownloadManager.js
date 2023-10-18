@@ -36,7 +36,8 @@ import {
 import {getColumns} from '../../../../../store/selectors/navigation/content/table-ts';
 
 import './DownloadManager.scss';
-import {docsUrl, getConfigData} from '../../../../../config';
+import {docsUrl} from '../../../../../config';
+import {uiSettings} from '../../../../../config/ui-settings';
 import SeparatorInput, {prepareSeparatorValue} from './SeparatorInput';
 import UIFactory from '../../../../../UIFactory';
 import {makeDirectDownloadPath} from '../../../../../utils/navigation';
@@ -44,7 +45,7 @@ import {makeDirectDownloadPath} from '../../../../../utils/navigation';
 const block = cn('table-download-manager');
 const messageBlock = cn('elements-message');
 
-const EXCEL_BASE_URL = getConfigData()?.uiSettings?.exportTableBaseUrl;
+const EXCEL_BASE_URL = uiSettings?.exportTableBaseUrl;
 
 function checkExcelExporter(cluster) {
     if (!EXCEL_BASE_URL) {

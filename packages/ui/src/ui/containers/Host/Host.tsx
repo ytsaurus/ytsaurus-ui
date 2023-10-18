@@ -6,7 +6,7 @@ import {getCluster} from '../../store/selectors/global';
 import Link from '../../components/Link/Link';
 import ClipboardButton from '../../components/ClipboardButton/ClipboardButton';
 import {Tooltip} from '../../components/Tooltip/Tooltip';
-import {uiSettings} from '../../config';
+import {uiSettings} from '../../config/ui-settings';
 
 import './Host.scss';
 

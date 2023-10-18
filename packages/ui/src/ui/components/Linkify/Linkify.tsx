@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {Link} from '@gravity-ui/uikit';
-import {uiSettings} from '../../config';
+import {uiSettings} from '../../config/ui-settings';
 
 const {trackerBaseUrl} = uiSettings;
 

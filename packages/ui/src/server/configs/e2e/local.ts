@@ -1,4 +1,5 @@
 import {AppConfig} from '@gravity-ui/nodekit';
+import common from '../common';
 
 const e2eConfig: Partial<AppConfig> = {
     uiSettings: {
@@ -37,6 +38,7 @@ const e2eConfig: Partial<AppConfig> = {
     },
 
     defaultUserSettingsOverrides: {
+        ...common.defaultUserSettingsOverrides,
         ['global::navigation::useSmartSort']: false,
         ['global::development::yqlTypes']: true,
     },

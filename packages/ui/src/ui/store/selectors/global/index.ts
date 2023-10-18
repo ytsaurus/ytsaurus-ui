@@ -13,7 +13,7 @@ import {getClusterNS} from '../settings';
 import {ClusterConfig} from '../../../../shared/yt-types';
 import {FIX_MY_TYPE} from '../../../types';
 import UIFactory from '../../../UIFactory';
-import {getConfigData, ytApiUseCORS} from '../../../config';
+import {getConfigData} from '../../../config/ui-settings';
 import {isSupportedYtTvmAPIGlobal} from '../thor/support';
 
 export const getGlobalError = (state: RootState) => state.global.error.error;
@@ -54,7 +54,7 @@ export function getClusterConfigByName(clusterName: string): ClusterConfig {
 }
 
 export function isAllowYtTwmApi() {
-    return !ytApiUseCORS() && isSupportedYtTvmAPIGlobal();
+    return !getConfigData().ytApiUseCORS && isSupportedYtTvmAPIGlobal();
 }
 
 export function getClusterProxy(clusterConfig: ClusterConfig): string {

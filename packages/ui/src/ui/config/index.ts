@@ -1,13 +1,8 @@
 import _ from 'lodash';
-import {ConfigData} from '../../shared/yt-types';
+// TODO: get rid of the import, the file should not import UIFactory
 import UIFactory from '../UIFactory';
 
-export function getConfigData(): ConfigData {
-    return (window as any).__DATA__;
-}
-
-export const uiSettings: Partial<Required<ConfigData>['uiSettings']> =
-    getConfigData()?.uiSettings || {};
+import {getConfigData, uiSettings} from './ui-settings';
 
 export function hasOdinPage() {
     return getConfigData().odinPageEnabled;
