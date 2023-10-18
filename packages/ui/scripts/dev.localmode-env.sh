@@ -25,8 +25,8 @@ if [ $? -ne 0 ]; then
   echo -e "\n\nrun_local_cluster.sh is downloaded, to run your cluster use command:"
   echo -e "    ./run_local_cluster.sh --yt-version dev --docker-hostname $(hostname) --fqdn localhost --node-count 2 \n"
 
-  read -p "Do you want to start local cluster cluster? [Yn]: " needToStart
-  if [ "${needToStart}" = "y" -o "${needToStart}" = "Y" ]; then
+  read -p "Do you want to start local cluster? [Yn]: " needToStart
+  if [ "${needToStart}" = "" -o "${needToStart}" = "y" -o "${needToStart}" = "Y" ]; then
     ./run_local_cluster.sh --stop
     ./run_local_cluster.sh --yt-version dev --docker-hostname $(hostname) --fqdn localhost --node-count 2
   else
