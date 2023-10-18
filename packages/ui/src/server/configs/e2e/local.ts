@@ -38,12 +38,17 @@ const e2eConfig: Partial<AppConfig> = {
 
     defaultUserSettingsOverrides: {
         ['global::navigation::useSmartSort']: false,
+        ['global::development::yqlTypes']: true,
     },
 
-    localmodeClusterUrls: {
-        icon: 'https://yastatic.net/s3/cloud/yt/static/freeze/assets/images/ui.bab31938.jpg',
-        icon2x: 'https://yastatic.net/s3/cloud/yt/static/freeze/assets/images/ui-2x.38d49f78.jpg',
-        iconbig: 'https://yastatic.net/s3/cloud/yt/static/freeze/assets/images/ui-big.44e3fa56.jpg',
+    localmodeClusterConfig: {
+        urls: {
+            icon: 'https://yastatic.net/s3/cloud/yt/static/freeze/assets/images/ui.bab31938.jpg',
+            icon2x: 'https://yastatic.net/s3/cloud/yt/static/freeze/assets/images/ui-2x.38d49f78.jpg',
+            iconbig:
+                'https://yastatic.net/s3/cloud/yt/static/freeze/assets/images/ui-big.44e3fa56.jpg',
+        },
+        externalProxy: 'external.proxy.my',
     },
 };
 

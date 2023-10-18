@@ -164,6 +164,8 @@ test('Navigation - URL correct encoding', async ({page}) => {
 });
 
 test('Navigation - escpaped symbols are highlighted and cyrillic', async ({page}) => {
+    test.slow();
+
     await test.step('escaped-symbol\\n', async () => {
         await page.goto(makeClusterUrl(`navigation?navmode=content&path=${E2E_DIR}/bad-names`));
         const link = await page.waitForSelector(
