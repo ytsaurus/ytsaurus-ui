@@ -1,5 +1,26 @@
 # Changelog
 
+## [1.1.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.0.2...ui-v1.1.0) (2023-10-20)
+
+
+### Features
+
+* **ClusterAppearance:** add ability to redefine cluster icons [YTFRONT-3879] ([61e27f7](https://github.com/ytsaurus/ytsaurus-ui/commit/61e27f71390f08c101dbfd0df1650ee27a4014c2))
+* **ClusterConfig:** add 'externalProxy' field [YTFRONT-3890] ([c172097](https://github.com/ytsaurus/ytsaurus-ui/commit/c172097b4324fc84ec720e3ba786f0baa6b5f5d2))
+* **Compoents/Nodes:** add 'Flavors' column [YTFRONT-3886] ([0256361](https://github.com/ytsaurus/ytsaurus-ui/commit/0256361235bf0b541f9cba4088408af97c27ede1))
+* **UISettings:** add reShortNameFromAddress [YTFRONT-3861] ([fa433ba](https://github.com/ytsaurus/ytsaurus-ui/commit/fa433baaa65fa3debe895630e5727c8015d3d6f8))
+* **unipika:** add UISettings.hidReferrerUrl (+e2e) [YTFRONT-3875] ([2ee7524](https://github.com/ytsaurus/ytsaurus-ui/commit/2ee75245d638694e5d61dccfc56e394960fddd81))
+* **unipika:** add UISettings.reUnipikaAllowTaggedSources [YTFRONT-3875] ([6039c30](https://github.com/ytsaurus/ytsaurus-ui/commit/6039c3081c2d135ed45c2e330fec4cad1d3727b7))
+
+
+### Bug Fixes
+
+* **ACL:** unrecognized roles should be highlighted [YTFRONT-3885] ([de284ca](https://github.com/ytsaurus/ytsaurus-ui/commit/de284ca31d4c1ccf0e7c79eb3263bb61a2197b22))
+* **BundleEditorDialog:** key_filter_block_cache should affect value of 'Free' memory [YTFRONT-3825] ([2ffc449](https://github.com/ytsaurus/ytsaurus-ui/commit/2ffc44916afe804fd1c5c89727eb2d0ffb78f3db))
+* **Components/Nodes:** User/system tags should not be wider than its table cell ([0562e48](https://github.com/ytsaurus/ytsaurus-ui/commit/0562e48a0e7600bcc974dbfce9dd682a0b051c1c))
+* **controllers/home:** get rid of 'Strict-Transport-Security' header [YTFRONT-3896] ([1fd14b0](https://github.com/ytsaurus/ytsaurus-ui/commit/1fd14b0b3ab76f193730c2909c150dfeaa5e2e19))
+* **Markdown:** YFM should not duplicate headers [YTFRONT-3897] ([cc92e5b](https://github.com/ytsaurus/ytsaurus-ui/commit/cc92e5bcd688aaa601e3cc4bdfe31f21549efefc))
+
 ## [1.0.2](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.0.1...ui-v1.0.2) (2023-10-09)
 
 
