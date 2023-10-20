@@ -10,11 +10,10 @@
     "dist"
   ],
   "scripts": {
-    "prepublishOnly": "npm run build:lib && npm run build",
     "build": "npm run copy:icons &&  NODE_OPTIONS=\"--max-old-space-size=4096\" NODE_ENV=production app-builder build --config ./build.app.config.ts",
     "build:lib": "rm -rf build && npm run build:lib:ui && npm run build:lib:server",
-    "build:lib:ui": "NODE_OPTIONS=\"--max-old-space-size=4096\" NODE_ENV=production app-builder build --config ./build.lib.config.ts && cp -r img assets build",
     "build:lib:server": "tsc -p ./build.server.tsconfig.json",
+    "build:lib:ui": "NODE_OPTIONS=\"--max-old-space-size=4096\" NODE_ENV=production app-builder build --config ./build.lib.config.ts && cp -r img assets build",
     "clean": "rm -rf dist/*",
     "copy:icons": "mkdir -p dist/public && cp img/favicon*.png dist/public",
     "cut:version": "node -e \"const json=require('${npm_config_file}'); delete json.version; console.log(JSON.stringify(json, null, 2))\"",
@@ -30,36 +29,38 @@
     "docker:build": "touch ytsaurus-ui-empty.tgz; docker build ${BUILD_ARGS} --build-arg UI_VERSION=$(npm run show:version | tail -1) . -t ${npm_package_config_docker_image}:${npm_config_dockertag}",
     "docker:build:dev": "npm run build && npm pack && BUILD_ARGS=\"--build-arg DEV=1\" npm run docker:build",
     "docker:push": "docker push ${npm_package_config_docker_image}:${npm_config_dockertag}",
+    "e2e:ci": "cd tests; npm ci",
+    "e2e:localmode:init": "YT_PROXY=${YT_PROXY:-$(hostname):8000} tests/init-cluster-e2e.sh",
+    "e2e:localmode:remote": "CLUSTER=`hostname`:8000 CLUSTER_TITLE='Local as remote' npm run e2e:start",
+    "e2e:localmode:ui": "CLUSTER=ui CLUSTER_TITLE=Local npm run e2e:start",
+    "e2e:notice": "echo \"\\n\\n!!!!!! Do not forget to run 'npm run e2e:localmode:init' !!!!!!\\n\\n\"",
+    "e2e:start": "npm run e2e:notice; cd tests; echo $(cat ../e2e-env.tmp) BASE_URL=${BASE_URL:-http://$(hostname):8001} npm start | bash",
     "lint": "npm run lint:file-names && npm run lint:js && npm run lint:styles",
+    "lint:file-names": "./scripts/check-file-names-for-js-duplicates.sh",
     "lint:fix": "npm run lint:js -- --fix && npm run lint:styles -- --fix",
     "lint:js": "eslint \"src/**/*.{js,jsx,ts,tsx}\" --ignore-pattern src/ui/vendor --quiet",
     "lint:styles": "stylelint 'src/ui/**/*.scss' --customSyntax postcss-scss",
-    "lint:file-names": "./scripts/check-file-names-for-js-duplicates.sh",
-    "show:file-types": "find src -type f | rev | cut -d '.' -f 1 | rev | sort | uniq -c | sort -rn",
     "notify:mail": "node scripts/notify.js",
     "platform-tools": "platform-tools",
+    "prepublishOnly": "npm run build:lib && npm run build",
     "show:docker-image-name": "echo ${npm_package_config_docker_image}",
+    "show:file-types": "find src -type f | rev | cut -d '.' -f 1 | rev | sort | uniq -c | sort -rn",
     "show:version": "echo ${npm_package_version}",
     "start": "NODE_OPTIONS=\"--max-http-header-size=204800 ${NODE_OPTIONS}\" node dist/server",
     "test": "npm run test:unit",
-    "e2e:ci": "cd tests; npm ci",
-    "e2e:localmode:init": "YT_PROXY=${YT_PROXY:-$(hostname):8000} tests/init-cluster-e2e.sh",
-    "e2e:localmode:ui": "CLUSTER=ui CLUSTER_TITLE=Local npm run e2e:start",
-    "e2e:localmode:remote": "CLUSTER=`hostname`:8000 CLUSTER_TITLE='Local as remote' npm run e2e:start",
-    "e2e:start": "npm run e2e:notice; cd tests; echo $(cat ../e2e-env.tmp) BASE_URL=${BASE_URL:-http://$(hostname):8001} npm start | bash",
-    "e2e:notice": "echo \"\\n\\n!!!!!! Do not forget to run 'npm run e2e:localmode:init' !!!!!!\\n\\n\"",
-    "test:unit": "jest --config ./jest.config.js",
     "test:smoke": "cd smoke-tests; npm ci; npm test",
     "test:smoke:noci": "cd smoke-tests; npm test",
+    "test:unit": "jest --config ./jest.config.js",
     "test:watch": "jest --config ./jest.config.js --watchAll"
+  },
+  "config": {
+    "docker_image": "ytsaurus/ui"
   },
   "dependencies": {
     "@doc-tools/transform": "^2.18.3",
     "@gravity-ui/app-layout": "^1.3.0",
     "@gravity-ui/expresskit": "^1.0.0",
-    "@gravity-ui/navigation": "^0.14.0",
     "@gravity-ui/nodekit": "^1.0.0",
-    "@gravity-ui/yagr": "^3.10.4",
     "@ytsaurus/interface-helpers": "0.2.0",
     "@ytsaurus/javascript-wrapper": "0.4.0",
     "axios": "^1.5.0",
@@ -67,7 +68,6 @@
     "highlight.js": "10.7.3",
     "js-cookie": "2.2.1",
     "lodash": "4.17.21",
-    "moment": "^2.29.4",
     "object-hash": "^3.0.0",
     "opentracing": "^0.14.7",
     "qs": "^6.11.2",
@@ -83,12 +83,14 @@
     "@gravity-ui/eslint-config": "^2.2.0",
     "@gravity-ui/i18n": "^1.0.0",
     "@gravity-ui/icons": "^2.4.0",
+    "@gravity-ui/navigation": "^0.14.0",
     "@gravity-ui/prettier-config": "^1.1.0",
     "@gravity-ui/react-data-table": "^1.2.0",
     "@gravity-ui/stylelint-config": "^3.0.0",
     "@gravity-ui/tsconfig": "^1.0.0",
     "@gravity-ui/uikit": "^5.16.0",
     "@gravity-ui/unipika": "^3.0.0",
+    "@gravity-ui/yagr": "^3.10.4",
     "@types/d3": "^7.4.0",
     "@types/express": "^4.17.13",
     "@types/fontfaceobserver": "^2.1.0",
@@ -124,6 +126,7 @@
     "jest-extended": "^4.0.1",
     "luxon": "^1.28.1",
     "lz-string": "~1.4.4",
+    "moment": "^2.29.4",
     "monaco-editor": "^0.40.0",
     "monaco-editor-webpack-plugin": "^7.1.0",
     "postcss": "^8.4.29",
@@ -153,16 +156,6 @@
     "typescript": "^5.2.2",
     "vis-network": "^9.1.2"
   },
-  "overrides": {
-    "react-split-pane": {
-      "react": "$react",
-      "react-dom": "$react-dom"
-    },
-    "react-sortable-hoc": {
-      "react": "$react",
-      "react-dom": "$react-dom"
-    }
-  },
   "peerDependencies": {
     "@gravity-ui/dialog-fields": "^3.0.0",
     "@gravity-ui/expresskit": "^1.0.0",
@@ -181,8 +174,15 @@
   "engines": {
     "node": ">=18"
   },
-  "config": {
-    "docker_image": "ytsaurus/ui"
-  },
-  "gitHead": "aba657f50f894370eaef7f27d5083386e218afe8"
+  "gitHead": "aba657f50f894370eaef7f27d5083386e218afe8",
+  "overrides": {
+    "react-split-pane": {
+      "react": "$react",
+      "react-dom": "$react-dom"
+    },
+    "react-sortable-hoc": {
+      "react": "$react",
+      "react-dom": "$react-dom"
+    }
+  }
 }
