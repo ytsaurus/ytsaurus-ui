@@ -4,6 +4,8 @@ import cn from 'bem-cn-lite';
 import {useSelector} from 'react-redux';
 import axios from 'axios';
 
+import ypath from '../../../../common/thor/ypath';
+
 import {DialogControlProps} from '../../../../components/Dialog/Dialog.types';
 import Suggest from '../../../../components/Suggest/Suggest';
 
@@ -123,7 +125,7 @@ function useLoadedPools(
                     errorTitle: 'Failed to load pools',
                 },
             ).then((names) => {
-                return {names, tree: poolTree};
+                return {names: ypath.getValue(names), tree: poolTree};
             });
         }
     }, [cluster, poolTree]);

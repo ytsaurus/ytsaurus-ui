@@ -10,7 +10,7 @@ import templates from '../../components/templates/utils';
 
 import './Suggest.scss';
 
-const b = block('suggest');
+const b = block('yt-suggest');
 
 // TODO add is scrolled into view logic
 // TODO support custom item height

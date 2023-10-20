@@ -1,9 +1,15 @@
 @import '../../styles/mixins';
 
-.suggest {
+.yt-suggest {
     position: relative;
 
     display: block;
+
+    &__control {
+        .yc-text-input__control {
+            text-overflow: ellipsis;
+        }
+    }
 
     &__items {
         @include reset-ul();
