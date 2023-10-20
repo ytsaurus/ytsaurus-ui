@@ -78,6 +78,7 @@ class ACL extends Component {
 
         path: PropTypes.string.isRequired,
         idmKind: PropTypes.string.isRequired,
+        nodeType: PropTypes.string.isRequired,
         version: PropTypes.string,
         disableAclInheritance: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
         bossApproval: PropTypes.bool,
@@ -429,13 +430,15 @@ class ACL extends Component {
     }
 
     renderColumnGroups() {
-        const {columnGroups, idmKind, path, loadAclData, cluster, aclRequestOptions} = this.props;
+        const {columnGroups, idmKind, path, loadAclData, cluster, aclRequestOptions, nodeType} =
+            this.props;
         const {useEffective} = aclRequestOptions;
         const props = {
             path,
             loadAclDataFn: () => loadAclData({path, idmKind}),
             columnGroups,
             cluster,
+            allowEdit: nodeType === 'map_node',
         };
         return isIdmAclAvailable() && idmKind === IdmObjectType.PATH && !useEffective ? (
             <ColumnGroups {...props} />
