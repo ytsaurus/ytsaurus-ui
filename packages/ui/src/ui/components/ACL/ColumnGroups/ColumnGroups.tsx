@@ -25,9 +25,16 @@ interface Props {
     path: string;
     loadAclDataFn: () => void;
     cluster: string;
+    hasCreateForm?: boolean;
 }
 
-export default function ColumnGroups({columnGroups, path, loadAclDataFn, cluster}: Props) {
+export default function ColumnGroups({
+    columnGroups,
+    path,
+    loadAclDataFn,
+    cluster,
+    hasCreateForm = false,
+}: Props) {
     const [modalProps, setModalProps] = useState({
         title: '',
         confirmText: '',
@@ -164,10 +171,15 @@ export default function ColumnGroups({columnGroups, path, loadAclDataFn, cluster
                 <div className={block()}>
                     <div className="elements-heading elements-heading_size_xs">
                         Column Groups
-                        <Button className={block('button', {add: true})} onClick={handleAddClick}>
-                            <Icon awesome={'plus'} />
-                            Add
-                        </Button>
+                        {hasCreateForm && (
+                            <Button
+                                className={block('button', {add: true})}
+                                onClick={handleAddClick}
+                            >
+                                <Icon awesome={'plus'} />
+                                Add
+                            </Button>
+                        )}
                     </div>
                     {columnGroups.length === 0 ? undefined : (
                         <DataTableYT<ColumnGroup>
