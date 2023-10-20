@@ -17,6 +17,8 @@ import {
     permissionDeletionError,
 } from '../../store/selectors/acl';
 
+import {getType} from '../../store/selectors/navigation';
+
 import {getColumnsColumns} from '../../store/selectors/acl-filters';
 
 import {
@@ -83,6 +85,8 @@ const makeAclMapStateToProps = (inputIdmKind) => {
         const readApprovers = getNotInheritedReadApprovers(state, idmKind);
         const responsible = getNotInheritedResponsibles(state, idmKind);
 
+        const nodeType = getType(state);
+
         return {
             cluster: getCluster(state),
 
@@ -92,6 +96,7 @@ const makeAclMapStateToProps = (inputIdmKind) => {
             errorData,
 
             path,
+            nodeType,
             version: getIdmPathVersion(state, idmKind),
             idmKind,
             disableAclInheritance,
