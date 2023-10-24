@@ -37,6 +37,8 @@ const externalAuthConfig: Partial<AppConfig> =
           }
         : {};
 
+console.log(externalAuthConfig)
+
 const config: Partial<AppConfig> = {
     appName: 'YTSaurus',
     appSocket: 'dist/run/server.sock',
