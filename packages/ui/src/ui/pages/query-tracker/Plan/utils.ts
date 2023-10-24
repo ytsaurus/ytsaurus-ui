@@ -99,23 +99,23 @@ export function performAction(url: string, event?: React.MouseEvent | MouseEvent
     }
 }
 
-export const operationsStateConfig: Record<NodeState | 'NOT_STARTED', {title: string}> = {
-    NOT_STARTED: {
+export const operationsStateConfig: Record<NodeState | 'NotStarted', {title: string}> = {
+    NotStarted: {
         title: 'Not started',
     },
-    STARTED: {
+    Started: {
         title: 'Waiting',
     },
-    IN_PROGRESS: {
+    InProgress: {
         title: 'Running',
     },
-    FINISHED: {
+    Finished: {
         title: 'Completed',
     },
-    FAILED: {
+    Failed: {
         title: 'Failed',
     },
-    ABORTED: {
+    Aborted: {
         title: 'Aborted',
     },
 };
@@ -131,8 +131,12 @@ function ellipsis(input: string) {
 }
 
 function getLabelWithStage(name: string, stages: NodeStages) {
-    const stage = Object.keys(stages[stages.length - 1])[0];
-    return `${ellipsis(name)}\n(${stage})`;
+    try {
+        const stage = Object.keys(stages[stages.length - 1])[0];
+        return `${ellipsis(name)}\n(${stage})`;
+    } catch {
+        return '';
+    }
 }
 
 export function duration(
@@ -150,11 +154,11 @@ export function duration(
 }
 
 export function isOperationFinished(state: NodeState | undefined) {
-    return state && ['FINISHED', 'FAILED', 'ABORTED'].indexOf(state) >= 0;
+    return state && ['Finished', 'Failed', 'Aborted'].indexOf(state) >= 0;
 }
 
 export function isOperationFailed(state: NodeState | undefined) {
-    return state === 'FAILED';
+    return state === 'Failed';
 }
 
 type DrawCircleProps = (
@@ -174,28 +178,27 @@ function drawCircle({type, node, colors: {operation, text}}: DrawCircleProps) {
     const dataset: {label: string; count: number}[] = [];
     const border = 2;
     let textColor = text.operationCount;
-
     if (type === 'update') {
         switch (node?.state) {
-            case 'STARTED': {
+            case 'Started': {
                 dataset.push({label: 'Started', count: 1});
                 colors.push(operation.started);
                 borderColor = operation.startedBorder;
                 break;
             }
-            case 'FAILED': {
+            case 'Failed': {
                 dataset.push({label: 'Failed', count: 1});
                 colors.push(operation.failed);
                 borderColor = operation.failedBorder;
                 break;
             }
-            case 'ABORTED': {
+            case 'Aborted': {
                 dataset.push({label: 'Failed', count: 1});
                 colors.push(operation.aborted);
                 borderColor = operation.abortedBorder;
                 break;
             }
-            case 'IN_PROGRESS': {
+            case 'InProgress': {
                 const totalR = node.total || 1;
 
                 const runningPr = Math.round(((node.running ?? 0) / totalR) * 100);
@@ -221,7 +224,7 @@ function drawCircle({type, node, colors: {operation, text}}: DrawCircleProps) {
                 borderColor = operation.runningBorder;
                 break;
             }
-            case 'FINISHED': {
+            case 'Finished': {
                 dataset.push({label: 'Completed', count: 1});
                 colors.push(operation.completed);
                 borderColor = operation.completedBorder;
@@ -406,6 +409,7 @@ export function updateProgress(
     const itemsToUpdate: ProcessedNode[] = [];
     for (const nodeId of Object.keys(progress)) {
         let visItem = nodes.get(nodeId);
+
         if (!visItem && addNew) {
             const node = progress[nodeId];
             const title = `Node #${nodeId}${node.category ? ` (${node.category})` : ''}`;
@@ -545,12 +549,12 @@ export function useOperationNodesStates(nodes: DataSet<ProcessedNode>) {
 
 const states = Object.keys(operationsStateConfig) as NodeState[];
 function calculateOperationStates(nodes: DataSet<ProcessedNode>) {
-    const counts: Partial<Record<NodeState | 'NOT_STARTED', number>> = {};
+    const counts: Partial<Record<NodeState | 'NotStarted', number>> = {};
     nodes.forEach((node) => {
         if (node.type === 'in' || node.type === 'out') {
             return;
         }
-        const state = node.progress?.state || 'NOT_STARTED';
+        const state = node.progress?.state || 'NotStarted';
         if (counts[state] === undefined) {
             counts[state] = 0;
         }
@@ -580,9 +584,10 @@ export function getFullEdge(
                 if (!hoveredEdges.has(e)) {
                     hoveredEdges.add(e);
                     connectedNodes.push(
+                        //@ts-ignore
                         ...network
                             .getConnectedNodes(e)
-                            // @ts-ignore
+                            //@ts-ignore
                             .filter((id) => typeof id === 'string' && nodeId !== id),
                     );
                 }
@@ -607,3 +612,28 @@ export function getConnectedEdges(
     }
     return connectedEdges;
 }
+
+/*
+export function usePrepareNode() {
+    const buildOperationUrlLocal = useWithClusters(buildOperationUrl);
+    return React.useCallback(
+        (node: ProcessedNode) => {
+            if (node.type === 'in' || node.type === 'out') {
+                const table = parseTablePath(node.title ?? '');
+                if (table) {
+                    node.url = getSourcePathLink({
+                        cluster: table.cluster,
+                        path: table.path,
+                        sourceMode: SOURCE_MODE.TABLE,
+                    });
+                }
+            } else if (node.progress?.remoteId) {
+                node.url = getOperationUrl(node, buildOperationUrlLocal);
+            }
+
+            return node;
+        },
+        [buildOperationUrlLocal],
+    );
+}
+*/

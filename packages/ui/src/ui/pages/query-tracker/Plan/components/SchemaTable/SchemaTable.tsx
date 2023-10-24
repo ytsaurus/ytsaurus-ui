@@ -7,7 +7,7 @@ import cn from 'bem-cn-lite';
 
 import sortUpIcon from '@gravity-ui/icons/svgs/bars-ascending-align-left.svg';
 import sortDownIcon from '@gravity-ui/icons/svgs/bars-descending-align-left.svg';
-import insertIcon from 'assets/icons/paste.svg';
+import insertIcon from '@gravity-ui/icons/svgs/paperclip.svg';
 
 import './SchemaTable.scss';
 
@@ -26,7 +26,7 @@ const block = cn('yql-schema-table');
 const columns: Column<SchemaField>[] = [
     {
         name: 'name',
-        header: 'name.column-header',
+        header: 'Name',
         sortable: false,
         render({row}) {
             if (typeof row.onNameClick === 'function') {
@@ -71,7 +71,7 @@ const columns: Column<SchemaField>[] = [
     },
     {
         name: 'type',
-        header: 'type.column-header',
+        header: 'Type',
         sortable: false,
         render({row}) {
             return <DataType {...row.type} />;

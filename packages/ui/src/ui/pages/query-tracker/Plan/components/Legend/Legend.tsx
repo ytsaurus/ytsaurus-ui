@@ -50,7 +50,7 @@ export function LegendInfo({className, nodes}: LegendButtonProps) {
         <div className={className}>
             {state === 'collapsed' ? (
                 <Button
-                    title={'show-plan-legend.button-title'}
+                    title={'Show legend'}
                     onClick={() => {
                         setState('expanded');
                     }}
@@ -61,7 +61,7 @@ export function LegendInfo({className, nodes}: LegendButtonProps) {
                 <Legend nodes={nodes}>
                     <Button
                         view="flat-secondary"
-                        title={'hide-plan-legend.button-title'}
+                        title={'Hide legend'}
                         onClick={() => {
                             setState('collapsed');
                         }}

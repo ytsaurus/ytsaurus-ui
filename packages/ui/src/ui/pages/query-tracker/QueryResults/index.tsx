@@ -14,6 +14,8 @@ import {QueryResultActions} from './QueryResultActions';
 import {QueryResultTab, useQueryResultTabs} from './hooks/useQueryResultTabs';
 import {YQLStatisticsTable} from '../QueryResultsView/YQLStatistics';
 import NotRenderUntilFirstVisible from '../NotRenderUntilFirstVisible/NotRenderUntilFirstVisible';
+import {PlanProvider} from '../Plan/PlanContext';
+import Plan from '../Plan/Plan';
 
 const b = block('query-results');
 
@@ -82,6 +84,15 @@ export const QueryResults = React.memo(function QueryResults({
                     <NotRenderUntilFirstVisible hide={category !== QueryResultTab.STATISTIC}>
                         <YQLStatisticsTable query={query} />
                     </NotRenderUntilFirstVisible>
+                    {category === QueryResultTab.PROGRESS && (
+                        <PlanProvider
+                            plan={query.progress?.yql_plan}
+                            progress={query.progress?.yql_progress}
+                            defaultView="graph"
+                        >
+                            <Plan isActive={true} />
+                        </PlanProvider>
+                    )}
                 </div>
             </NotRenderUntilFirstVisible>
             <div></div>

@@ -14,7 +14,7 @@ type StageRow = {stage: string; duration: string; footerIndex?: number};
 
 const stagesColumns: Column<StageRow>[] = [
     {name: 'stage', header: 'Stage', sortable: false},
-    {name: 'duration', header: 'Duration', align: DataTable.RIGHT, sortable: false, width: 100},
+    {name: 'duration', header: 'Duration', align: DataTable.RIGHT, sortable: false, width: 115},
 ];
 
 interface NodeStagesProps {

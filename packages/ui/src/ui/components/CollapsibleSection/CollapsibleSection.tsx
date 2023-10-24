@@ -19,7 +19,7 @@ export class CollapsibleSectionStateLess extends Component<PropsStateLess> {
         name: PropTypes.node.isRequired,
         collapsed: PropTypes.bool,
         onToggle: PropTypes.func.isRequired,
-        size: PropTypes.oneOf(['s', 'ss', 'xs', 'm', 'l', 'xl']),
+        size: PropTypes.oneOf(['s', 'ss', 'xs', 'm', 'l', 'xl', 'ns']),
         children: PropTypes.node,
         overview: PropTypes.node,
         className: PropTypes.string,

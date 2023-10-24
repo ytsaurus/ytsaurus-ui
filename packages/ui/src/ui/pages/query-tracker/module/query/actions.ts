@@ -17,6 +17,7 @@ import {getCurrentQuery, getQueryDraft} from './selectors';
 import {getAppBrowserHistory} from '../../../../store/window-store';
 import {QueryState} from './reducer';
 import {wrapApiPromiseByToaster} from '../../../../utils/utils';
+import {prepareQueryPlanIds} from './utills';
 
 export const REQUEST_QUERY = 'query-tracker/REQUEST_QUERY';
 export type RequestQueryAction = Action<typeof REQUEST_QUERY>;
@@ -62,7 +63,7 @@ export function loadQuery(
             dispatch({
                 type: SET_QUERY,
                 data: {
-                    initialQuery: query,
+                    initialQuery: prepareQueryPlanIds(query),
                 },
             });
         } catch (e: unknown) {
