@@ -5,6 +5,7 @@ import {UPDATE_QUERY} from '../../module/query/actions';
 import {getCurrentQuery} from '../../module/query/selectors';
 import {isQueryProgress} from '../../utils/query';
 import {QueryItem} from '../../module/api';
+import {prepareQueryPlanIds} from '../../module/query/utills';
 
 export function useCurrentQuery() {
     const query = useSelector(getCurrentQuery);
@@ -17,7 +18,7 @@ export function useCurrentQuery() {
             ([item]: QueryItem[]) => {
                 dispatch({
                     type: UPDATE_QUERY,
-                    data: item,
+                    data: prepareQueryPlanIds(item),
                 });
             },
         [dispatch],

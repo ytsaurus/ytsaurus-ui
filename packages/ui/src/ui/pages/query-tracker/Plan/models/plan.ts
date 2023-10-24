@@ -67,11 +67,11 @@ export type NodeDetails = PlanOperation;
 export type Progress = Record<string, NodeProgress>;
 
 export const OPERATION_STATE = {
-    STARTED: 'STARTED',
-    IN_PROGRESS: 'IN_PROGRESS',
-    FINISHED: 'FINISHED',
-    FAILED: 'FAILED',
-    ABORTED: 'ABORTED',
+    Started: 'Started',
+    InProgress: 'InProgress',
+    Finished: 'Finished',
+    Failed: 'Failed',
+    Aborted: 'Aborted',
 } as const;
 
 export function isPlan(plan: Record<string, any> | undefined): plan is Plan {

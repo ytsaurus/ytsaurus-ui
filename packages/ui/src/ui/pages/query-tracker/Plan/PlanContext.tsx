@@ -1,6 +1,5 @@
 import * as React from 'react';
 
-// import {useUserSettings} from 'context/user-settings';
 import type {Plan, Progress} from './models/plan';
 
 export type PlanView = 'graph' | 'table' | 'timeline';
@@ -40,7 +39,7 @@ const tablePlanView: PlanViewValues = [
 ];
 
 export function PlanProvider({plan, progress, children, defaultView}: PlanProviderProps) {
-    const experimentShowProgressTable = false; // useUserSettings();
+    const experimentShowProgressTable = false;
 
     const availableViews = React.useMemo(() => {
         if (experimentShowProgressTable) {

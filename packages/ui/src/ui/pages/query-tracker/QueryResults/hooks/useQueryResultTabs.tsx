@@ -14,6 +14,7 @@ export enum QueryResultTab {
     META = 'meta',
     RESULT = 'result',
     STATISTIC = 'statistic',
+    PROGRESS = 'progress',
 }
 
 const isResultTab = (tabId: string) => tabId.startsWith('result/');
@@ -73,6 +74,12 @@ export const useQueryResultTabs = (
             return [];
         }
         const items: TabsItemProps[] = [{id: QueryResultTab.META, title: 'Meta'}];
+        if (query.progress) {
+            items.unshift({
+                id: QueryResultTab.PROGRESS,
+                title: 'Progress',
+            });
+        }
         if (query.state === QueryStatus.FAILED) {
             items.unshift({id: QueryResultTab.ERROR, title: 'Error'});
         } else if (query.state === QueryStatus.COMPLETED) {

@@ -6,11 +6,6 @@ import Loader from './components/Loader/Loader';
 import {NodeDetails, NodeProgress} from './models/plan';
 import {useUpdate} from 'react-use';
 import ResizeObserver from 'resize-observer-polyfill';
-import {getBasicLayoutWorker} from './services/getWorkers';
-import type {LayoutWorkerFunctions} from './services/layout.worker';
-// import {countEvent} from 'services/metrics';
-import cn from 'bem-cn-lite';
-import {PromisifiedWorker, promisifyWorker} from './utils/promisified-worker';
 import {DataSet} from 'vis-data';
 import type {DataSetEdges, Network, Options, Position} from 'vis-network';
 
@@ -34,6 +29,12 @@ import {
     updateColors,
     updateProgress,
 } from './utils';
+
+import {layoutGraph} from './services/layout';
+
+import {openInNewTab} from '../../../utils/utils';
+
+import cn from 'bem-cn-lite';
 
 import minusIcon from '@gravity-ui/icons/svgs/minus.svg';
 import plusIcon from '@gravity-ui/icons/svgs/plus.svg';
@@ -138,12 +139,10 @@ export default function Graph({isActive, className, graph, showMinimap, prepareN
     const prepareNodeRef = useRef(prepareNode);
     React.useEffect(() => {
         let unmounted = false;
-        let layoutWorker: PromisifiedWorker<LayoutWorkerFunctions> | undefined;
         async function prepare() {
-            layoutWorker = await promisifyWorker<LayoutWorkerFunctions>(getBasicLayoutWorker());
-            const {nodes: graphNodes, edges: graphEdges} = (await layoutWorker.layoutGraph(
+            const {nodes: graphNodes, edges: graphEdges} = (await layoutGraph(
                 graph,
-            )) as ProcessedGraph; // incorrect type inference because of Workerized type
+            )) as ProcessedGraph;
             const newNodes = new DataSet(graphNodes);
             if (progressRef.current) {
                 updateProgress(newNodes, progressRef.current);
@@ -168,7 +167,6 @@ export default function Graph({isActive, className, graph, showMinimap, prepareN
         });
         return () => {
             unmounted = true;
-            layoutWorker?.terminate();
         };
     }, [graph, edges, nodes, repaint]);
 
@@ -268,17 +266,13 @@ export default function Graph({isActive, className, graph, showMinimap, prepareN
                 hoveredNodeRef.current = undefined;
             };
 
-            const handleClick = ({event}: {event: any}) => {
+            const handleClick = () => {
                 if (!hoveredNodeRef.current) {
                     return;
                 }
                 const node = hoveredNodeRef.current;
                 if (node.url) {
-                    if (isExternalUrl(node.url)) {
-                        window.open(node.url, '_blank');
-                    } else {
-                        performAction(node.url, event.srcEvent);
-                    }
+                    openInNewTab(node.url);
                 }
             };
 

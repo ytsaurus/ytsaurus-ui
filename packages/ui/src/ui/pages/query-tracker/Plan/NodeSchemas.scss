@@ -1,5 +1,5 @@
 .yql-node-schemas {
-    &__item + &__item {
+    &__item_schema + &__item_schema {
         margin-top: 4px;
     }
 
@@ -9,5 +9,22 @@
 
     &__item .yc-collapse__arrow-wrapper {
         align-self: flex-start;
+    }
+
+    &__item_title {
+        margin-top: 0;
+        .elements-heading {
+            margin-bottom: 4px;
+        }
+    }
+
+    &__item_schema {
+        .elements-heading {
+            color: var(--yc-color-text-secondary);
+        }
+    }
+
+    &__item_schema:nth-child(1) {
+        margin-top: 0;
     }
 }

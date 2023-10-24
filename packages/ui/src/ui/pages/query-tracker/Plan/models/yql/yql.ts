@@ -197,7 +197,7 @@ export interface definitions {
     NodeProgress: {
         category?: string;
         remoteId?: string;
-        state?: 'STARTED' | 'IN_PROGRESS' | 'FINISHED' | 'FAILED' | 'ABORTED';
+        state?: 'Started' | 'InProgress' | 'Finished' | 'Failed' | 'Aborted';
         startedAt?: string;
         finishedAt?: string;
         completed?: number;

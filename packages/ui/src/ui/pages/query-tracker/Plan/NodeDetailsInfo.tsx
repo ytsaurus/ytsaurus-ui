@@ -23,7 +23,7 @@ export default function NodeDetailsInfo({
     return (
         <div className={block()}>
             {Streams && (
-                <Collapse name="Streams" size="s" collapsed={false}>
+                <Collapse name="Streams" size="ns" collapsed={false}>
                     <div className={block('streams')}>
                         {Object.keys(Streams).map((key) => (
                             <OperationStreamEntry key={key} name={key} data={Streams[key]} />
@@ -101,12 +101,7 @@ function OperationInputColumns({
                         columns = [columnsData];
                     }
                     return (
-                        <Collapse
-                            key={index}
-                            name={`${title} #${index + 1}`}
-                            size="s"
-                            // contentMarginTop={4}
-                        >
+                        <Collapse key={index} name={`${title} #${index + 1}`} size="ns">
                             <ExpandableList items={columns} limit={20} />
                         </Collapse>
                     );
@@ -123,7 +118,7 @@ function OperationInputColumns({
     }
 
     return (
-        <Collapse name={title} size="s" collapsed={false}>
+        <Collapse name={title} size="ns" collapsed={false}>
             <ExpandableList items={columns} limit={20} />
         </Collapse>
     );

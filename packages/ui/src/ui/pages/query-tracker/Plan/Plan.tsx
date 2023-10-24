@@ -2,12 +2,9 @@ import * as React from 'react';
 
 import {Button, Text} from '@gravity-ui/uikit';
 import NotRenderUntilFirstVisible from '../NotRenderUntilFirstVisible/NotRenderUntilFirstVisible';
-// import {useUserSettings} from 'context/user-settings';
 import {useUpdate} from 'react-use';
 import cn from 'bem-cn-lite';
 import {DataSet} from 'vis-data';
-
-// import Timeline from '../Timeline/Timeline';
 
 import Graph from './Graph';
 import {GraphColorsProvider} from './GraphColors';
@@ -29,7 +26,7 @@ export default React.memo(function Plan({isActive, className, prepareNode}: Plan
     const plan = useResultPlan();
     const [showLargeGraph, setShowLargeGraph] = React.useState(false);
     const planView = usePlanView();
-    const resultProgressShowMinimap = true; //useUserSettings();
+    const resultProgressShowMinimap = true; // can be setted as user setting on future
 
     const graph = React.useMemo(() => (plan ? preprocess(plan) : undefined), [plan]);
 

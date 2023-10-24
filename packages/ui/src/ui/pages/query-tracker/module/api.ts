@@ -4,7 +4,7 @@ import {extractBatchV4Values, splitBatchResults} from '../../../utils/utils';
 import {BatchResultsItem, BatchSubRequest} from '../../../../shared/yt-types';
 import {YTApiId, ytApiV3, ytApiV4Id} from '../../../rum/rum-wrap-api';
 import ypath from '../../../common/thor/ypath';
-import {Plan} from './types/plan';
+import type {Plan, Progress} from '../Plan/models/plan';
 import {TypeArray} from '../../../components/SchemaDataType/dataTypes';
 import {getClusterConfigByName, getClusterProxy} from '../../../store/selectors/global';
 import {generateQuerySettings, generateQueryText} from '../utils/query_generate';
@@ -84,6 +84,7 @@ export interface QueryItem extends DraftQuery {
     progress?: {
         yql_plan?: Plan;
         yql_statistics?: YQLSstatistics;
+        yql_progress?: Progress;
     };
     error: unknown;
 }

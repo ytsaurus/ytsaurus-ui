@@ -31,7 +31,7 @@
             border-radius: 5px;
 
             &_state {
-                &_not_started {
+                &_notstarted {
                     border: 1px solid var(--yql-graph-color-operation-new-border);
                     background: var(--yql-graph-color-operation-new);
                 }
@@ -39,7 +39,7 @@
                     border: 1px solid var(--yql-graph-color-operation-started-border);
                     background: var(--yql-graph-color-operation-started);
                 }
-                &_in_progress {
+                &_inprogress {
                     background: var(--yql-graph-color-operation-running);
                 }
                 &_finished {

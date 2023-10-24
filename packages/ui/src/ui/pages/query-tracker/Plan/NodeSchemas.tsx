@@ -34,7 +34,7 @@ interface SchemasSectionProps {
 }
 function SchemasSection({title, schemas}: SchemasSectionProps) {
     return (
-        <Collapse className={block('item')} size="m" name={title} collapsed={false}>
+        <Collapse className={block('item', {title: true})} size="ss" name={title} collapsed={false}>
             <div>
                 {schemas.map(({name, type}) => {
                     const result = getResultType(type);
@@ -47,9 +47,9 @@ function SchemasSection({title, schemas}: SchemasSectionProps) {
                     }
                     return (
                         <Collapse
-                            className={block('item')}
+                            className={block('item', {schema: true})}
                             key={name}
-                            size="s"
+                            size="ns"
                             name={name}
                             collapsed={schemas.length !== 1}
                         >
