@@ -11,8 +11,8 @@ import {updateChytListFilters} from '../../../store/actions/chyt/list-fitlers';
 import {
     getChytListAvailableCreators,
     getChytListAvailableStates,
-    getChytListFilterCreator,
     getChytListFilterAlias,
+    getChytListFilterCreator,
     getChytListFilterState,
 } from '../../../store/selectors/chyt';
 import {ChytListFilters} from '../../../store/reducers/chyt/list-filters';
@@ -53,14 +53,14 @@ function ChytPageListToolbar() {
     );
 }
 
-function NameIdFilter({onUpdate}: {onUpdate: (value: {nameIdFilter: string}) => void}) {
+function NameIdFilter({onUpdate}: {onUpdate: (value: {name: string}) => void}) {
     const value = useSelector(getChytListFilterAlias);
 
     return (
         <TextInput
             value={value}
-            onUpdate={(nameIdFilter) => {
-                onUpdate({nameIdFilter});
+            onUpdate={(name) => {
+                onUpdate({name});
             }}
             placeholder="Filter by alias name or id..."
         />
