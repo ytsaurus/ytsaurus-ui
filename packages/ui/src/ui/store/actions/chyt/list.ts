@@ -74,30 +74,74 @@ export function loadChytList(): ChytListThunkAction {
     };
 }
 
-export function chytCliqueAction(
-    action: 'start' | 'stop' | 'remove',
-    alias: string,
-): ChytListThunkAction {
+export type ChytCliqueActionParams =
+    | {action: 'start'; alias: string}
+    | {action: 'stop'; alias: string}
+    | {action: 'remove'; alias: string}
+    | {
+          action: 'create';
+          alias: string;
+      }
+    | {action: 'set_options'; alias: string; options: CliqueOptions};
+
+export type CliqueOptions = {
+    instance_count: number;
+    instance_cpu: number;
+    instance_total_memory: number;
+    pool: string;
+};
+
+export function chytCliqueAction<DataT = void, T extends ChytCliqueActionParams['action'] = never>(
+    action: T,
+    params: Omit<ChytCliqueActionParams & {action: T}, 'action'>,
+    {skipLoadList}: {skipLoadList?: boolean} = {},
+): ChytListThunkAction<DataT> {
     return (dispatch, getState) => {
         const cluster = getCluster(getState());
-
         const extras = action === 'start' ? {untracked: true} : undefined;
 
         return wrapApiPromiseByToaster(
-            axios.request({
+            axios.request<DataT>({
                 method: 'POST',
-                url: `api/chyt/${cluster}/${action}`,
+                url: `/api/chyt/${cluster}/${action}`,
                 data: {
-                    params: {alias, ...extras},
+                    params: {...params, ...extras},
                 },
             }),
             {
-                toasterName: `clique-${action}-${alias}`,
+                toasterName: `clique-${action}`,
                 skipSuccessToast: true,
                 errorTitle: `Failed to ${action} clique`,
             },
-        ).then(() => {
-            dispatch(loadChytList());
+        ).then(({data}) => {
+            if (!skipLoadList) {
+                dispatch(loadChytList());
+            }
+            return data;
+        });
+    };
+}
+
+export function chytCliqueCreate(params: {
+    alias: string;
+    instance_count: number;
+    instance_cpu: number;
+    instance_total_memory: number;
+    pool: string;
+    runAfterCreation: boolean;
+}): ChytListThunkAction {
+    return (dispatch) => {
+        const {alias, runAfterCreation, ...options} = params;
+        return dispatch(chytCliqueAction('create', {alias}, {skipLoadList: true})).then(() => {
+            return dispatch(
+                chytCliqueAction('set_options', {alias, options}, {skipLoadList: true}),
+            ).then(() => {
+                if (runAfterCreation) {
+                    return dispatch(chytCliqueAction('start', {alias}));
+                } else {
+                    return dispatch(loadChytList());
+                }
+            });
         });
     };
 }

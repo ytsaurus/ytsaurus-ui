@@ -4,6 +4,7 @@ import _ from 'lodash';
 import {
     getAccountsNS,
     getBundlesNS,
+    getChytNS,
     getClusterNS,
     makeGetSetting,
 } from '../../store/selectors/settings';

@@ -4,6 +4,8 @@ import cn from 'bem-cn-lite';
 import {useSelector} from 'react-redux';
 import axios from 'axios';
 
+import ypath from '../../../../common/thor/ypath';
+
 import {DialogControlProps} from '../../../../components/Dialog/Dialog.types';
 import Suggest from '../../../../components/Suggest/Suggest';
 
@@ -49,7 +51,7 @@ export function PoolSuggestControl(props: Props) {
         loadedPools.then(({names, tree}) => {
             const noRoot = _.filter(names, (item) => '<Root>' !== item);
             const valueIndex = _.indexOf(noRoot, value);
-            if (-1 === valueIndex) {
+            if (value && -1 === valueIndex) {
                 onChange('');
             }
             setPoolNames({items: _.sortBy(noRoot), itemsTree: tree});
@@ -123,7 +125,7 @@ function useLoadedPools(
                     errorTitle: 'Failed to load pools',
                 },
             ).then((names) => {
-                return {names, tree: poolTree};
+                return {names: ypath.getValue(names), tree: poolTree};
             });
         }
     }, [cluster, poolTree]);
