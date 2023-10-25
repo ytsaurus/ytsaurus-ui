@@ -1,9 +1,11 @@
+import {EMPTY_ARRAY} from '../../../constants/empty';
 import {CHYT_LIST_FILTERS} from '../../../constants/chyt-page';
 import {ActionD, SortState} from '../../../types';
+import {replaceEmpty} from '../../../utils/empty';
 import {ChytInfo} from './list';
 
 export type ChytListFilters = {
-    nameIdFilter: string;
+    name: string;
     creator: string | undefined;
     state: string | undefined;
 
@@ -11,17 +13,17 @@ export type ChytListFilters = {
 };
 
 export const initialState: ChytListFilters = {
-    nameIdFilter: '',
+    name: '',
     creator: undefined,
     state: undefined,
 
-    sortState: [],
+    sortState: EMPTY_ARRAY,
 };
 
 export default function reducer(state = initialState, action: ChytListFiltersAction) {
     switch (action.type) {
         case CHYT_LIST_FILTERS:
-            return {...state, ...action.data};
+            return {...state, ...replaceEmpty(action.data)};
     }
     return state;
 }

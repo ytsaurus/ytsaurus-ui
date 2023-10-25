@@ -97,6 +97,8 @@ import {
     getDraftQueryParameters,
 } from '../pages/query-tracker/module/query/url_mapping';
 
+import {chytListParams, getGhytListPreparedState} from './reducers/chyt/url-mapping';
+
 interface LocationWithState<T = RootState> {
     pathname: string;
     query: T;
@@ -170,6 +172,8 @@ const storeSetup: Array<[string, PathParameters]> = [
     [`/*/${Page.ACCOUNTS}/${AccountsTab.ACL}`, [accountAclParams, getAccountsAclState]],
     [`/*/${Page.ACCOUNTS}/*`, [accountOnlyParams, getAccountOnlyPreparedState]],
     [`/*/${Page.ACCOUNTS}`, [accountOnlyParams, getAccountOnlyPreparedState]],
+
+    [`/*/${Page.CHYT}`, [chytListParams, getGhytListPreparedState]],
 
     [`/*/${Page.DASHBOARD}`, [dashboardParams, getDashboardPreparedState]],
 
