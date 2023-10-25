@@ -7,8 +7,7 @@ import {PathParameters} from './store/location';
 import {ClusterUiConfig} from './store/reducers/global/cluster-ui-config';
 import {TabletBundle} from './store/reducers/tablet_cell_bundles';
 import {PoolInfo} from './store/selectors/scheduling/scheduling-pools';
-import {ClusterConfig} from '../shared/yt-types';
-import {ClusterAppearance} from './appearance';
+import {ClusterConfig, ClusterAppearance} from '../shared/yt-types';
 import AppNavigationComponent, {
     AppNavigationProps,
 } from './containers/AppNavigation/AppNavigationComponent';
@@ -24,6 +23,8 @@ import RoleActions, {Props as RoleActionsProps} from './components/ACL/RoleActio
 import OperationDetailMonitorLinks from './pages/operations/OperationDetail/tabs/monitor/OperationDetailsMonitorLinks';
 import {PERMISSIONS_SETTINGS} from './constants/acl';
 import {uiSettings} from './config';
+import { getClusterConfig } from './utils/index';
+import YT from './config/yt-config';
 
 type HeaderItemOrPage =
     | {
@@ -349,7 +350,11 @@ export interface UIFactory {
 const adminPages: string[] = [];
 
 const uiFactory: UIFactory = {
-    getClusterAppearance() {
+    getClusterAppearance(cluster?: string) {
+        if (cluster) {
+            const config = getClusterConfig(YT.clusters, cluster);
+            return config?.appearance;
+        }
         return undefined;
     },
     isWatchMen() {

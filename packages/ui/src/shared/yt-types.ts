@@ -49,6 +49,14 @@ export type ClusterTheme =
     | 'mediumgray'
     | 'darkgray';
 
+export interface ClusterAppearance {
+    favicon: string;
+    icon: string;
+    icon2x: string;
+    iconAvatar: string;
+    iconbig?: string;
+}
+
 export interface ClusterConfig {
     id: string;
     name: string;
@@ -71,6 +79,8 @@ export interface ClusterConfig {
     description?: string;
 
     isLocalCluster?: boolean;
+
+    appearance?: ClusterAppearance;
 }
 
 export interface SubRequest<K extends string, T extends BaseBatchParams> {

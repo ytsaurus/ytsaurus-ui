@@ -1,15 +1,8 @@
 import {YT_LOCAL_CLUSTER_ID} from '../shared/constants';
+import { ClusterAppearance } from '../shared/yt-types';
 import UIFactory from './UIFactory';
 
 const favicon = require('../../img/favicon.png');
-
-export interface ClusterAppearance {
-    favicon: string;
-    icon: string;
-    icon2x: string;
-    iconAvatar: string;
-    iconbig?: string;
-}
 
 export const defaultClusterAppearance: ClusterAppearance = {
     icon: require('../../img/cluster.svg'),
@@ -30,5 +23,8 @@ export function getClusterAppearance(cluster?: string): ClusterAppearance {
     if (cluster === YT_LOCAL_CLUSTER_ID) {
         return localClusterAppearance;
     }
-    return UIFactory.getClusterAppearance(cluster) || defaultClusterAppearance;
+    return {
+        ...defaultClusterAppearance,
+        ...(UIFactory.getClusterAppearance(cluster) || {}),
+    };
 }
