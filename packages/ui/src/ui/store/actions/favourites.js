@@ -88,6 +88,17 @@ export function accountsToggleFavourite(account) {
     };
 }
 
+export function chytToggleFavourite(clique) {
+    metrics.countEvent({
+        'chyt_toggle-favourites': 'clicked',
+    });
+
+    return (dispatch, getState) => {
+        const chytNS = getChytNS(getState());
+        return dispatch(toggleFavourite(clique, chytNS));
+    };
+}
+
 export function navigationToggleFavourite(path) {
     metrics.countEvent({
         'navigation_toggle-favourites': 'clicked',

@@ -4,6 +4,7 @@ import {createSelector} from 'reselect';
 import {
     getAccountsNS,
     getChaosBundlesNS,
+    getChytNS,
     getClusterNS,
     getSchedulingNS,
     makeGetSetting,
@@ -15,6 +16,7 @@ import {getPool, getTree} from '../../store/selectors/scheduling/scheduling';
 import {getBundlesNS} from './settings';
 import {getTabletsActiveBundle} from './tablet_cell_bundles';
 import {getChaosActiveBundle} from './chaos_cell_bundles';
+import {getChytCurrrentClique} from './chyt';
 
 //************* Selectors for Accounts *****************
 
@@ -32,6 +34,17 @@ export const getPopularAccounts = createSelector([getLastVisitedAccounts], prepa
 
 export const isActiveAcountInFavourites = createSelector(
     [getActiveAccount, getFavouriteAccounts],
+    prepareIsInFavourites,
+);
+
+export const getFavouriteChyt = createSelector([makeGetSetting, getChytNS], prepareFavourites);
+
+export const getLastVisitedChyt = createSelector([makeGetSetting, getChytNS], prepareLastVisited);
+
+export const getPopularChyt = createSelector([getLastVisitedChyt], preparePopulars);
+
+export const isActiveCliqueInFavourites = createSelector(
+    [getChytCurrrentClique, getFavouriteChyt],
     prepareIsInFavourites,
 );
 

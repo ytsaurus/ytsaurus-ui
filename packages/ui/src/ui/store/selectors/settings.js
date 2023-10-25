@@ -36,6 +36,10 @@ export const getChaosBundlesNS = createSelector(getClusterNS, (clusterNS) =>
     createNestedNS('chaosBundles', clusterNS),
 );
 
+export const getChytNS = createSelector(getClusterNS, (clusterNS) => {
+    return createNestedNS('chyt', clusterNS);
+});
+
 export const getSettingTheme = createSelector(makeGetSetting, (getSetting) =>
     getSetting(SettingName.GLOBAL.THEME, NAMESPACES.GLOBAL),
 );

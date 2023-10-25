@@ -1,13 +1,17 @@
 import React from 'react';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import cn from 'bem-cn-lite';
 
 import {Alert, Button} from '@gravity-ui/uikit';
 
+import Favourites from '../../components/Favourites/Favourites';
 import {YTDFDialog} from '../../components/Dialog/Dialog';
 import {Page} from '../../constants';
 import {RowWithName} from '../../containers/AppNavigation/TopRowContent/SectionName';
 import {PoolTreeLoaderWaitDeafultTree} from '../../hooks/global';
+import {getFavouriteChyt, isActiveCliqueInFavourites} from '../../store/selectors/favourites';
+import {chytToggleFavourite} from '../../store/actions/favourites';
+import {getChytCurrrentClique} from '../../store/selectors/chyt';
 import {getCurrentUserName, getGlobalDefaultPoolTreeName} from '../../store/selectors/global';
 import {chytCliqueCreate} from '../../store/actions/chyt/list';
 import {useThunkDispatch} from '../../store/thunkDispatch';
@@ -19,8 +23,35 @@ const block = cn('chyt-page-top-row');
 export default function ChytPageTopRow() {
     return (
         <RowWithName page={Page.CHYT} name="CHYT cliques">
+            <ChytFavourites />
             <CreateChytButton />
         </RowWithName>
+    );
+}
+
+function ChytFavourites() {
+    const isActiveInFavourites = useSelector(isActiveCliqueInFavourites);
+    const favourites = useSelector(getFavouriteChyt);
+    const dispatch = useDispatch();
+    const currentClique = useSelector(getChytCurrrentClique);
+
+    const handleFavouriteItemClick = React.useCallback(() => {
+        // dispatch(setActiveAccount(item.path));
+    }, [dispatch]);
+
+    const handleFavouriteToggle = React.useCallback(() => {
+        dispatch(chytToggleFavourite(currentClique));
+    }, [dispatch, currentClique]);
+
+    return (
+        <Favourites
+            isActive={isActiveInFavourites}
+            items={favourites}
+            onItemClick={handleFavouriteItemClick}
+            onToggle={handleFavouriteToggle}
+            toggleDisabled={!currentClique}
+            theme={'clear'}
+        />
     );
 }
 
