@@ -8,7 +8,7 @@ import {
     SCHEDULING_OPERATIONS_SUCCESS,
 } from '../../../constants/scheduling';
 import {Action} from 'redux';
-import {EMPTY_OBJECT} from '../../../constants/index';
+import {EMPTY_OBJECT} from '../../../constants/empty';
 
 export interface SchedulingOperationsState {
     loading: boolean;

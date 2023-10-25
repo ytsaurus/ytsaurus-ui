@@ -29,7 +29,7 @@ import {
     getSchedulingOperationsLoadAll,
 } from '../../selectors/scheduling/scheduling-operations';
 import {getSchedulingPoolsMapByName} from '../../selectors/scheduling/scheduling-pools';
-import {EMPTY_OBJECT} from '../../../constants/index';
+import {EMPTY_OBJECT} from '../../../constants/empty';
 
 type SchedulingOperationsThunkAction = ThunkAction<any, RootState, any, SchedulingOperationsAction>;
 

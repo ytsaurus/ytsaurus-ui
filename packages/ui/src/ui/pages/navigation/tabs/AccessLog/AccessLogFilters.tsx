@@ -47,7 +47,7 @@ import {
     convertTimeToRequestParams,
     formatInterval,
 } from '../../../../components/common/Timeline';
-import {EMPTY_OBJECT} from '../../../../constants/index';
+import {EMPTY_OBJECT} from '../../../../constants/empty';
 import {Tooltip} from '../../../../components/Tooltip/Tooltip';
 import {
     ACCESS_LOG_FIELD_SELECTOR_ITEMS,
