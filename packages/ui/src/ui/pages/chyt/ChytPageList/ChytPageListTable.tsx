@@ -147,14 +147,14 @@ function ChytCliqueActions({alias}: {alias: string}) {
                 icon: <Icon awesome="play-circle" />,
                 text: 'Start',
                 action: () => {
-                    dispatch(chytCliqueAction('start', alias));
+                    dispatch(chytCliqueAction('start', {alias}));
                 },
             },
             {
                 icon: <Icon awesome="stop-circle" />,
                 text: 'Stop',
                 action: () => {
-                    dispatch(chytCliqueAction('stop', alias));
+                    dispatch(chytCliqueAction('stop', {alias}));
                 },
             },
         ],
@@ -163,7 +163,7 @@ function ChytCliqueActions({alias}: {alias: string}) {
                 icon: <Icon awesome="trash-alt" />,
                 text: 'Remove',
                 action: () => {
-                    dispatch(chytCliqueAction('remove', alias));
+                    dispatch(chytCliqueAction('remove', {alias}));
                 },
             },
         ],

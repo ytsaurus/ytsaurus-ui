@@ -1,8 +1,8 @@
-import React, {useCallback} from 'react';
+import React from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import _ from 'lodash';
 
-import {getAllUserNamesSorted} from '../store/selectors/global';
+import {getAllUserNamesSorted, getGlobalDefaultPoolTreeName} from '../store/selectors/global';
 import {
     loadAccountsIfNotLoaded,
     loadBundlesIfNotLoaded,
@@ -19,7 +19,7 @@ export function useAllUserNamesFiltered() {
 
     const namesSorted = useSelector(getAllUserNamesSorted);
 
-    const getFiltered = useCallback(
+    const getFiltered = React.useCallback(
         (text: string) => {
             const from = _.sortedIndexBy(namesSorted, text, (item) => item.substr(0, text.length));
             const to = _.sortedLastIndexBy(namesSorted, text, (item) =>
@@ -84,4 +84,10 @@ export function usePoolTreesLoaded() {
 export function PoolTreesLoader() {
     usePoolTreesLoaded();
     return null;
+}
+
+export function PoolTreeLoaderWaitDeafultTree({children}: {children: React.ReactNode}) {
+    usePoolTreesLoaded();
+    const defaultPoolTree = useSelector(getGlobalDefaultPoolTreeName);
+    return defaultPoolTree ? children : null;
 }
