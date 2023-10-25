@@ -19,7 +19,7 @@ import {
 } from '../../../store/selectors/chyt';
 import {ChytInfo} from '../../../store/reducers/chyt/list';
 import {Button, DropdownMenu, DropdownMenuItem} from '@gravity-ui/uikit';
-import {chytCliqueAction} from '../../../store/actions/chyt/list';
+import {chytListAction} from '../../../store/actions/chyt/list';
 
 const THEME_MAP = {
     active: 'success',
@@ -147,14 +147,14 @@ function ChytCliqueActions({alias}: {alias: string}) {
                 icon: <Icon awesome="play-circle" />,
                 text: 'Start',
                 action: () => {
-                    dispatch(chytCliqueAction('start', {alias}));
+                    dispatch(chytListAction('start', {alias}));
                 },
             },
             {
                 icon: <Icon awesome="stop-circle" />,
                 text: 'Stop',
                 action: () => {
-                    dispatch(chytCliqueAction('stop', {alias}));
+                    dispatch(chytListAction('stop', {alias}));
                 },
             },
         ],
@@ -163,7 +163,7 @@ function ChytCliqueActions({alias}: {alias: string}) {
                 icon: <Icon awesome="trash-alt" />,
                 text: 'Remove',
                 action: () => {
-                    dispatch(chytCliqueAction('remove', {alias}));
+                    dispatch(chytListAction('remove', {alias}));
                 },
             },
         ],
