@@ -6,8 +6,6 @@ export * from './system/nodes';
 export const HEADER_HEIGHT = 56;
 export const STICKY_VERTICAL_PADDING = 10;
 
-export const EMPTY_OBJECT = {};
-
 export const KeyCode = {
     ESCAPE: 27,
     ENTER: 13,

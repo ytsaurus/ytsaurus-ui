@@ -130,7 +130,9 @@ describe('utils/utils.tsx', () => {
         });
 
         it(':asc,col-name:', () => {
-            expect(serializeSortStateArray([{order: 'asc'}, {column: 'col-name'}])).toEqual('');
+            expect(serializeSortStateArray([{order: 'asc'}, {column: 'col-name'}])).toEqual(
+                undefined,
+            );
         });
     });
 });

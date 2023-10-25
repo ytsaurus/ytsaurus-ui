@@ -1,4 +1,6 @@
 import _ from 'lodash';
+
+import {EMPTY_ARRAY} from '../constants/empty';
 import {SortState} from '../types';
 
 const TO_ENCODE: Record<string, string> = {
@@ -45,7 +47,7 @@ export function parseSortStateArray(s: string) {
         } catch (e) {}
     });
 
-    return res;
+    return res.length ? res : EMPTY_ARRAY;
 }
 
 export function serializeSortStateArray(value: Array<SortState>) {
@@ -60,5 +62,6 @@ export function serializeSortStateArray(value: Array<SortState>) {
         return `${columnEncoded}-${orderEncoded}`;
     });
 
-    return items.filter(Boolean).join(',');
+    const res = items.filter(Boolean).join(',');
+    return res.length ? res : undefined;
 }

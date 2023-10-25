@@ -11,7 +11,7 @@ import {getSchedulingOperations, getSchedulingOperationsTree} from './scheduling
 import {getCluster} from '../../../store/selectors/global';
 import {RumWrapper} from '../../../rum/rum-wrap-api';
 import {RumMeasureTypes} from '../../../rum/rum-measure-types';
-import {EMPTY_OBJECT} from '../../../constants/index';
+import {EMPTY_OBJECT} from '../../../constants/empty';
 
 export const getTree = (state: RootState) => state.scheduling.tree;
 const getPoolsRaw = (state: RootState) => state.scheduling.rawPools;

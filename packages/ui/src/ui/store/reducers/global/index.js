@@ -17,11 +17,10 @@ import {
     UPDATE_TITLE,
 } from '../../../constants/index';
 import {GLOBAL_PARTIAL} from '../../../constants/global';
+import {EMPTY_OBJECT} from '../../../constants/empty';
 
 import {getClusterConfig} from '../../../utils';
 import {defaultClusterUiConfig} from './cluster-ui-config';
-
-const EMPTY_OBJECT = {};
 
 const YT = window.YT;
 const initialState = {
