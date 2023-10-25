@@ -1,6 +1,7 @@
 import React from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 
+import {Button, DropdownMenu, DropdownMenuItem} from '@gravity-ui/uikit';
 import {Column} from '@gravity-ui/react-data-table';
 
 import format from '../../../common/hammer/format';
@@ -11,29 +12,36 @@ import DataTableYT, {
 import ColumnHeader from '../../../components/ColumnHeader/ColumnHeader';
 import Icon from '../../../components/Icon/Icon';
 import Label from '../../../components/Label/Label';
+import Link from '../../../components/Link/Link';
 
 import {chytToggleSortState} from '../../../store/actions/chyt/list-fitlers';
+import {getCluster} from '../../../store/selectors/global';
 import {
     getChytListTableItems,
     getChytListTableSortStateByName,
 } from '../../../store/selectors/chyt';
 import {ChytInfo} from '../../../store/reducers/chyt/list';
-import {Button, DropdownMenu, DropdownMenuItem} from '@gravity-ui/uikit';
 import {chytListAction} from '../../../store/actions/chyt/list';
+import {Page} from '../../../../shared/constants/settings';
+import {ChytCliqueStateType} from '../../../store/actions/chyt/api';
 
-const THEME_MAP = {
+const THEME_MAP: Partial<Record<ChytCliqueStateType, 'danger' | 'success'>> = {
     active: 'success',
     broken: 'danger',
-} as const;
+};
 
-function useChytListColumns() {
+function useChytListColumns(cluster: string) {
     const columns: Array<Column<ChytInfo>> = React.useMemo(() => {
         return [
             {
                 name: 'name',
                 header: <ChytListHeader column="alias" title="CHYT clique alias" />,
                 render({row}) {
-                    return row.alias;
+                    return (
+                        <Link url={`/${cluster}/${Page.CHYT}/${row.alias}`} theme="primary" routed>
+                            {row.alias}
+                        </Link>
+                    );
                 },
             },
             {
@@ -107,7 +115,7 @@ function useChytListColumns() {
                 width: 60,
             },
         ];
-    }, []);
+    }, [cluster]);
 
     return columns;
 }
@@ -183,8 +191,9 @@ function ChytCliqueActions({alias}: {alias: string}) {
 
 function ChytPageListTable() {
     const items = useSelector(getChytListTableItems);
+    const cluster = useSelector(getCluster);
 
-    const columns = useChytListColumns();
+    const columns = useChytListColumns(cluster);
 
     return (
         <DataTableYT
