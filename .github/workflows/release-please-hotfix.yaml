@@ -1,0 +1,61 @@
+on:
+  push:
+    branches:
+      - hotfix-release-ui-*
+name: Run Hotfix Release Please
+jobs:
+  release-please:
+    runs-on: ubuntu-latest
+    steps:
+      - name:
+        run: |
+          echo ${{secrets.GITHUB_TOKEN}} | md5sum
+      - uses: google-github-actions/release-please-action@v3
+        id: release
+        with:
+          command: manifest
+          token: ${{secrets.GITHUB_TOKEN}}
+          default-branch: ${{github.ref_name}}
+
+      # The logic below handles the npm publication:
+      - name: Checkout Repository
+        if: ${{ steps.release.outputs.releases_created }}
+        uses: actions/checkout@v2
+      - name: Setup Node
+        uses: actions/setup-node@v1
+        if: ${{ steps.release.outputs.releases_created }}
+        with:
+          node-version: 18
+          registry-url: "https://registry.npmjs.org"
+      - name: npm ci
+        if: ${{ steps.release.outputs.releases_created }}
+        run: |
+          npm ci
+
+      # Release Please has already incremented versions and published tags, so we just
+      # need to publish all unpublished versions to NPM here
+      # See: https://github.com/lerna/lerna/tree/main/commands/publish#bump-from-package
+      - name: Publish to NPM
+        if: ${{ steps.release.outputs.releases_created }}
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
+        run: npx lerna publish from-package --no-push --no-private --yes --dist-tag hotfix
+
+      - name: "Docker: build & push"
+        if: ${{ steps.release.outputs['packages/ui--release_created'] }}
+        run: |
+          cd packages/ui
+
+          UI_IMAGE=$(npm run show:docker-image-name | tail -n 1)
+          UI_TAG=$(npm run show:version | tail -n 1)
+
+          TARGET_IMAGE=${UI_IMAGE}:${UI_TAG}
+          echo target image and tag: ${TARGET_IMAGE}
+
+          if ! docker pull ${TARGET_IMAGE} ; then
+            npm run docker:build --dockertag=${UI_TAG}
+            echo '${{ secrets.DOCKER_HUB_PASSWORD }}' | docker login --username ${{ secrets.DOCKER_HUB_LOGIN}} --password-stdin
+            npm run docker:push --dockertag=${UI_TAG}
+          else 
+            echo Corresponding image already exists
+          fi
