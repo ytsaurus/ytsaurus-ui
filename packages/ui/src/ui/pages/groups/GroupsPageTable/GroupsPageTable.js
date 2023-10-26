@@ -27,8 +27,6 @@ import {
 } from '../../../store/actions/groups';
 import {STICKY_TOOLBAR_BOTTOM} from '../../../components/WithStickyToolbar/WithStickyToolbar';
 import GroupEditorDialog from '../../../pages/groups/GroupEditorDialog/GroupEditorDialog';
-import {GROUPS_TABLE_UPDATER_ID} from '../../../constants/groups';
-import Updater from '../../../utils/hammer/updater';
 import {
     getGroupEditorVisible,
     getGroupsFlattenTree,
@@ -40,7 +38,6 @@ import './GroupsPageTable.scss';
 import {isIdmAclAvailable} from '../../../config';
 
 const block = cn('groups-page-table');
-const updater = new Updater();
 
 const TABLE_SETTINGS = {
     displayIndices: false,
@@ -120,11 +117,7 @@ class GroupsPageTable extends React.Component {
 
     componentDidMount() {
         const {fetchGroups} = this.props;
-        updater.add(GROUPS_TABLE_UPDATER_ID, () => fetchGroups(), 30 * 1000);
-    }
-
-    componentWillUnmount() {
-        updater.remove(GROUPS_TABLE_UPDATER_ID);
+        fetchGroups();
     }
 
     renderColumnHeader(col, sortable) {
