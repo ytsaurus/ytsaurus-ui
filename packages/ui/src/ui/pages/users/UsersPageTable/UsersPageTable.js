@@ -15,7 +15,6 @@ import Icon from '../../../components/Icon/Icon';
 import Link from '../../../components/Link/Link';
 import LoadDataHandler from '../../../components/LoadDataHandler/LoadDataHandler';
 import {UserCard} from '../../../components/UserLink/UserLink';
-import {USERS_UPDATER_ID} from '../../../constants/users';
 import {STICKY_TOOLBAR_BOTTOM} from '../../../components/WithStickyToolbar/WithStickyToolbar';
 import UsersPageEditor from '../../../pages/users/UsersPageEditor/UsersPageEditor';
 import {getCluster} from '../../../store/selectors/global';
@@ -24,7 +23,6 @@ import {
     getUsersPageEditableUser,
     getUsersTableDataState,
 } from '../../../store/selectors/users';
-import Updater from '../../../utils/hammer/updater';
 import ChartLink from '../../../components/ChartLink/ChartLink';
 import {isIdmAclAvailable} from '../../../config';
 
@@ -32,7 +30,6 @@ import './UsersPageTable.scss';
 import UIFactory from '../../../UIFactory';
 
 const block = cn('users-page-table');
-const updater = new Updater();
 
 const TABLE_SETTINGS = {
     displayIndices: false,
@@ -123,11 +120,7 @@ class UsersPageTable extends React.Component {
 
     componentDidMount() {
         const {fetchUsers} = this.props;
-        updater.add(USERS_UPDATER_ID, () => fetchUsers(), 30 * 1000);
-    }
-
-    componentWillUnmount() {
-        updater.remove(USERS_UPDATER_ID);
+        fetchUsers();
     }
 
     renderColumnHeader = (col, sortable) => {
