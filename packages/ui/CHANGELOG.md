@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.23.1](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v0.23.0...ui-v0.23.1) (2023-10-26)
+
+
+### Bug Fixes
+
+* allow column groups create form only for map_nodes [YTFRONT-3901] ([bba6aef](https://github.com/ytsaurus/ytsaurus-ui/commit/bba6aef5370b2d5823a8c8aeb0694fe5627831f0))
+
 ## [0.23.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v0.22.0...ui-v0.23.0) (2023-10-02)
 
 
