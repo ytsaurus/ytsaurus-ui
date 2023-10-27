@@ -18,7 +18,7 @@ export interface RawJob {
     job_competition_id: string;
     operation_id: string;
     job_id: string;
-    state: string;
+    state: JobState;
     type: string;
     events: RawJobEvent[];
     exec_attributes: object;
@@ -27,6 +27,23 @@ export interface RawJob {
     pool_tree?: string;
     is_stale?: boolean;
 }
+
+export type JobState =
+    | 'aborted'
+    | 'aborting'
+    | 'completed'
+    | 'completing'
+    | 'failed'
+    | 'failing'
+    | 'initializing'
+    | 'materializing'
+    | 'pending'
+    | 'preparing'
+    | 'reviving'
+    | 'running'
+    | 'starting'
+    | 'suspended'
+    | 'running';
 
 export interface CompetitiveJobs {
     archive_job_count: number;

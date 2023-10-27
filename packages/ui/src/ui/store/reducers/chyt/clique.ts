@@ -1,5 +1,5 @@
-import {Action} from 'redux';
 import {CHYT_CLIQUE} from '../../../constants/chyt-page';
+import {ChytStatusResponse} from '../../../store/actions/chyt/api';
 import {ActionD, YTError} from '../../../types';
 
 import {mergeStateOnClusterChange} from '../utils';
@@ -10,10 +10,8 @@ export type ChytCliqueState = {
     error: YTError | undefined;
 
     currentClique: string;
-    data: ChytCliqueInfo | undefined;
+    data: ChytStatusResponse | undefined;
 };
-
-export type ChytCliqueInfo = {};
 
 const persitentState: Pick<ChytCliqueState, 'currentClique'> = {
     currentClique: '',
@@ -34,13 +32,13 @@ const initialState: ChytCliqueState = {
 function reducer(state = initialState, action: ChytCliqueAction): ChytCliqueState {
     switch (action.type) {
         case CHYT_CLIQUE.REQUEST: {
-            return {...initialState, ...action.data};
+            return {...state, ...action.data, loading: true};
         }
         case CHYT_CLIQUE.SUCCESS: {
-            return {...state, ...action.data};
+            return {...state, ...action.data, loaded: true, loading: false};
         }
-        case CHYT_CLIQUE.CANCELLED: {
-            return {...state, loading: false};
+        case CHYT_CLIQUE.FAILURE: {
+            return {...state, ...action.data, loading: false};
         }
         default:
             return state;
@@ -50,6 +48,6 @@ function reducer(state = initialState, action: ChytCliqueAction): ChytCliqueStat
 export type ChytCliqueAction =
     | ActionD<typeof CHYT_CLIQUE.REQUEST, Pick<ChytCliqueState, 'currentClique'>>
     | ActionD<typeof CHYT_CLIQUE.SUCCESS, Pick<ChytCliqueState, 'data'>>
-    | Action<typeof CHYT_CLIQUE.CANCELLED>;
+    | ActionD<typeof CHYT_CLIQUE.FAILURE, Pick<ChytCliqueState, 'error'>>;
 
 export default mergeStateOnClusterChange(ephemeralState, persitentState, reducer);
