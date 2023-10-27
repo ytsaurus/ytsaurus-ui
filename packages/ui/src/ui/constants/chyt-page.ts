@@ -6,6 +6,8 @@ export const CHYT_CLIQUE = createActionTypes('CHYT_CLIQUE');
 
 export const CHYT_LIST_FILTERS = 'CHYT_LIST_FILTERS';
 
-export const ChytPageTab = {
-    LIST: 'list',
+export const ChytCliquePageTab = {
+    MONITORING: 'monitoring',
+    SPECLET: 'speclet',
+    ACL: 'acl',
 };

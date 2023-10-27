@@ -72,7 +72,7 @@ export function fetchAccessLog(): AccessLogThunkAction {
                     url: `${getAccessLogBasePath()}/visible-time-range`,
                     withCredentials: true,
                     data: {cluster: params.cluster},
-                    cancelToken: accesLogCancelHelper.removeAllRequestsAndCreateCancelToken(),
+                    cancelToken: accesLogCancelHelper.removeAllAndGenerateNextToken(),
                 })
                 .catch((e) => {
                     console.log(e);

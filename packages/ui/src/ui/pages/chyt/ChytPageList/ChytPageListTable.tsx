@@ -11,7 +11,6 @@ import DataTableYT, {
 } from '../../../components/DataTableYT/DataTableYT';
 import ColumnHeader from '../../../components/ColumnHeader/ColumnHeader';
 import Icon from '../../../components/Icon/Icon';
-import Label from '../../../components/Label/Label';
 import Link from '../../../components/Link/Link';
 
 import {chytToggleSortState} from '../../../store/actions/chyt/list-fitlers';
@@ -23,12 +22,8 @@ import {
 import {ChytInfo} from '../../../store/reducers/chyt/list';
 import {chytListAction} from '../../../store/actions/chyt/list';
 import {Page} from '../../../../shared/constants/settings';
-import {ChytCliqueStateType} from '../../../store/actions/chyt/api';
 
-const THEME_MAP: Partial<Record<ChytCliqueStateType, 'danger' | 'success'>> = {
-    active: 'success',
-    broken: 'danger',
-};
+import {CliqueState} from '../components/CliqueState';
 
 function useChytListColumns(cluster: string) {
     const columns: Array<Column<ChytInfo>> = React.useMemo(() => {
@@ -88,11 +83,7 @@ function useChytListColumns(cluster: string) {
                 name: 'State',
                 header: <ChytListHeader column="state" title="State" />,
                 render({row}) {
-                    return !row.state ? (
-                        format.NO_VALUE
-                    ) : (
-                        <Label text={row.state} theme={THEME_MAP[row.state]} capitalize />
-                    );
+                    return <CliqueState state={row.state} />;
                 },
                 width: 100,
             },

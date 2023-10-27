@@ -33,18 +33,19 @@ export type ChytApi =
     | {action: 'status'; params: {alias: string}; response: WithResult<ChytStatusResponse>};
 
 export type ChytStatusResponse = {
-    yt_operation_status?: 'running';
-    state: ChytCliqueStateType;
-    pool: string;
-    stage: string;
+    yt_operation_state?: 'running';
+    state?: ChytCliqueStateType;
+    pool?: string;
+    stage?: string;
     start_time?: string;
     finish_time?: string;
     incarnation_index?: number;
     ctl_attributes: {
-        instance_count: number;
-        total_cpu: number;
-        total_memory: number;
+        instance_count?: number;
+        total_cpu?: number;
+        total_memory?: number;
     };
+    operation_id?: string;
 };
 
 export type ChytListResponse = WithResult<Array<ChytListResponseItem>>;

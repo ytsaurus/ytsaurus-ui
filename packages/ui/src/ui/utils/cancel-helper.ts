@@ -18,10 +18,9 @@ export default class CancelHelper {
         }
     };
 
-    removeAllRequestsAndCreateCancelToken() {
-        const source = axios.CancelToken.source();
-        this.removeAllAndSave(source);
-        return source.token;
+    removeAllAndGenerateNextToken() {
+        this.removeAllRequests();
+        return this.generateNextToken();
     }
 
     generateNextToken() {
