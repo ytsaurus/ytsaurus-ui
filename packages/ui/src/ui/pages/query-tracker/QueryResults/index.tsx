@@ -16,6 +16,7 @@ import {YQLStatisticsTable} from '../QueryResultsView/YQLStatistics';
 import NotRenderUntilFirstVisible from '../NotRenderUntilFirstVisible/NotRenderUntilFirstVisible';
 import {PlanProvider} from '../Plan/PlanContext';
 import Plan from '../Plan/Plan';
+import {usePrepareNode} from '../Plan/utils';
 
 const b = block('query-results');
 
@@ -90,7 +91,7 @@ export const QueryResults = React.memo(function QueryResults({
                             progress={query.progress?.yql_progress}
                             defaultView="graph"
                         >
-                            <Plan isActive={true} />
+                            <PlanContainer isActive={true} />
                         </PlanProvider>
                     )}
                 </div>
@@ -99,3 +100,11 @@ export const QueryResults = React.memo(function QueryResults({
         </div>
     ) : null;
 });
+
+interface PlanContainerProps {
+    isActive: boolean;
+}
+
+function PlanContainer({isActive}: PlanContainerProps) {
+    return <Plan isActive={isActive} prepareNode={usePrepareNode()} />;
+}
