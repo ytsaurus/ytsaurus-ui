@@ -14,13 +14,14 @@ import type {
     Progress,
     Provider,
 } from './models/plan';
-import {CtrlCmd, getCurrentSpecialKeys} from './services/keyboard';
 
 import type {DataSet, Edge, Network, Node} from 'vis-network';
 
 import type {GraphColors} from './GraphColors';
 
 import {DateTime} from 'luxon';
+import {parseTablePath} from './services/tables';
+import {genNavigationUrl} from '../../../utils/navigation/navigation';
 
 export type ParsableDate = string | number | Date | DateTime | {} | undefined | null;
 
@@ -37,28 +38,8 @@ export function parseDate(date: ParsableDate) {
     return DateTime.isDateTime(date) ? date : DateTime.now();
 }
 
-export function escapeStringForRegexp(search: string) {
-    return search.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-}
-
-export function handleRefs<T>(...refs: (React.Ref<T> | undefined)[]) {
-    return (node: T) => {
-        refs.forEach((ref) => {
-            if (typeof ref === 'function') {
-                ref(node);
-            } else if (ref) {
-                (ref.current as T) = node;
-            }
-        });
-    };
-}
-
 export function hasKey<T, K extends PropertyKey>(obj: T, key: K): obj is T & Record<K, T[keyof T]> {
     return typeof obj === 'object' && obj && Reflect.has(obj as any, key);
-}
-
-export function isExternalUrl(url: string) {
-    return url.startsWith('https://');
 }
 
 export function rafThrottle<T extends any[]>(callback: (...args: T) => void) {
@@ -88,15 +69,6 @@ export function rafThrottle<T extends any[]>(callback: (...args: T) => void) {
     };
 
     return throttled;
-}
-
-export function performAction(url: string, event?: React.MouseEvent | MouseEvent | KeyboardEvent) {
-    event?.preventDefault();
-    if (event && getCurrentSpecialKeys(event).includes(CtrlCmd)) {
-        window.open(url, '_blank', 'noreferrer');
-    } else {
-        // history.replace(url.slice(1));
-    }
 }
 
 export const operationsStateConfig: Record<NodeState | 'NotStarted', {title: string}> = {
@@ -450,6 +422,7 @@ export function updateProgress(
         if (addNew) {
             nodes.update(itemsToUpdate);
         } else {
+            // @ts-ignore
             nodes.updateOnly(itemsToUpdate);
         }
     }
@@ -613,27 +586,41 @@ export function getConnectedEdges(
     return connectedEdges;
 }
 
-/*
 export function usePrepareNode() {
-    const buildOperationUrlLocal = useWithClusters(buildOperationUrl);
-    return React.useCallback(
-        (node: ProcessedNode) => {
-            if (node.type === 'in' || node.type === 'out') {
-                const table = parseTablePath(node.title ?? '');
-                if (table) {
-                    node.url = getSourcePathLink({
-                        cluster: table.cluster,
-                        path: table.path,
-                        sourceMode: SOURCE_MODE.TABLE,
-                    });
-                }
-            } else if (node.progress?.remoteId) {
-                node.url = getOperationUrl(node, buildOperationUrlLocal);
+    return React.useCallback((node: ProcessedNode) => {
+        if (node.type === 'in' || node.type === 'out') {
+            const table = parseTablePath(node.title ?? '');
+            if (table) {
+                node.url = genNavigationUrl(table.cluster, table.path);
             }
+        } else if (node.progress?.remoteId) {
+            node.url = getOperationUrl(node);
+        }
 
-            return node;
-        },
-        [buildOperationUrlLocal],
-    );
+        return node;
+    }, []);
 }
-*/
+
+function getOperationUrl(node: ProcessedNode) {
+    const remoteId = node.progress?.remoteId;
+    if (!remoteId) {
+        return undefined;
+    }
+    const idParts = remoteId.split('/');
+    const cluster = idParts[0];
+    const clusterName = cluster.split('.')[0];
+    const url = buildOperationUrl(clusterName, idParts[1], idParts[2]);
+    return url ? url : undefined;
+}
+
+function buildOperationUrl(cluster: string, operation: string, tag?: string) {
+    let uri = '';
+
+    if (tag === undefined) {
+        uri = `/operations/${encodeURIComponent(operation)}`;
+    } else if (tag === 'filter') {
+        uri = `/operations?type=all&state=all&filter=${encodeURIComponent(operation)}`;
+    }
+
+    return `/${cluster.split('.')[0]}${uri}`;
+}
