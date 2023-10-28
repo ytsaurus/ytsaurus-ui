@@ -1,7 +1,8 @@
 import {TabsItemProps} from '@gravity-ui/uikit';
 import times_ from 'lodash/times';
 import has_ from 'lodash/has';
-import {QueryItem, QueryStatus} from '../../module/api';
+import find_ from 'lodash/find';
+import {CompletedStates, QueryItem, QueryStatus} from '../../module/api';
 import {QueryStatusIcon} from '../../QueryStatus';
 import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
@@ -111,12 +112,14 @@ export const useQueryResultTabs = (
         return items;
     }, [query, resultsMeta]);
 
+    const isCompleted = find_(CompletedStates, (status) => query?.state === status);
+
     useEffect(() => {
         if (query) {
             dispatch(loadQueryResultsErrors(query));
         }
         setActiveTab(tabs?.[0]?.id, query?.id);
-    }, [dispatch, query]);
+    }, [dispatch, query?.id, isCompleted]);
 
     return [
         tabs,
