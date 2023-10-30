@@ -104,6 +104,7 @@ interface WrapApiOptions<T> {
     successContent?: React.ReactNode | ((res: T) => React.ReactNode);
     skipSuccessToast?: boolean;
     errorContent?: React.ReactNode | ((e: YTError) => React.ReactNode);
+    skipErrorToast?: boolean;
     successTitle?: string;
     errorTitle?: string;
     timeout?: number;
@@ -160,21 +161,23 @@ export function wrapApiPromiseByToaster<T>(p: Promise<T>, options: WrapApiOption
             const data = error?.response?.data || error;
             const {code, message} = data;
 
-            toaster.add({
-                name: options.toasterName,
-                type: 'error',
-                title: options.errorTitle || 'Failure',
-                content:
-                    'function' === typeof errorContent
-                        ? errorContent(error)
-                        : errorContent || (
-                              <span>
-                                  [code {code}] {message}
-                              </span>
-                          ),
-                actions: [{label: ' Details', onClick: () => showErrorPopup(data)}],
-                autoHiding: false,
-            });
+            if (!options.skipErrorToast) {
+                toaster.add({
+                    name: options.toasterName,
+                    type: 'error',
+                    title: options.errorTitle || 'Failure',
+                    content:
+                        'function' === typeof errorContent
+                            ? errorContent(error)
+                            : errorContent || (
+                                  <span>
+                                      [code {code}] {message}
+                                  </span>
+                              ),
+                    actions: [{label: ' Details', onClick: () => showErrorPopup(data)}],
+                    autoHiding: false,
+                });
+            }
             return Promise.reject(error);
         });
 }

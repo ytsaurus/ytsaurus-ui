@@ -1,8 +1,24 @@
 .chyt-page-top-row {
     &__create-clique {
+        flex-shrink: 0;
+        padding-left: 1em;
+    }
+
+    &__breadcrumbs {
+        display: flex;
+        align-items: center;
         flex-grow: 1;
         flex-shrink: 0;
-        text-align: right;
-        padding-left: 1em;
+    }
+
+    &__editable {
+        display: flex;
+        align-items: center;
+        flex-shrink: 0;
+        padding: 0 1ex;
+    }
+
+    &__alias-suggest {
+        min-width: 200px;
     }
 }

@@ -19,7 +19,7 @@ export function chytCliqueLoad(alias: string): ChytCliqueThunkAction {
             'status',
             cluster,
             {alias},
-            cancelHelper.removeAllAndGenerateNextToken(),
+            {cancelToken: cancelHelper.removeAllAndGenerateNextToken(), skipErrorToast: true},
         )
             .then((data) => {
                 dispatch({type: CHYT_CLIQUE.SUCCESS, data: {data: data.result}});
@@ -30,4 +30,8 @@ export function chytCliqueLoad(alias: string): ChytCliqueThunkAction {
                 }
             });
     };
+}
+
+export function chytResetCurrentClique(): ChytCliqueAction {
+    return {type: CHYT_CLIQUE.PARTITION, data: {currentClique: ''}};
 }

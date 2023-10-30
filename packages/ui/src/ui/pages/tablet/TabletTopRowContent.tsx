@@ -29,8 +29,8 @@ function TabletBreadcrumbs() {
     } = useRouteMatch<{id: string}>();
     const cluster = useSelector(getCluster);
 
-    const handleEdit = React.useCallback((tabletId: string) => {
-        getAppBrowserHistory().push(`/${cluster}/${Page.TABLET}/${tabletId}`);
+    const handleEdit = React.useCallback((tabletId?: string) => {
+        getAppBrowserHistory().push(`/${cluster}/${Page.TABLET}/${tabletId || ''}`);
     }, []);
 
     return (

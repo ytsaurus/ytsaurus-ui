@@ -18,7 +18,7 @@ import Link from '../../../components/Link/Link';
 import MetaTable, {MetaTableItem} from '../../../components/MetaTable/MetaTable';
 import StatusLabel from '../../../components/StatusLabel/StatusLabel';
 
-import {chytCliqueLoad} from '../../../store/actions/chyt/clique';
+import {chytCliqueLoad, chytResetCurrentClique} from '../../../store/actions/chyt/clique';
 import {chytListAction} from '../../../store/actions/chyt/list';
 import {
     getChytCliqueData,
@@ -41,6 +41,12 @@ export function ChytPageClique(props: RouteComponentProps<{alias: string}>) {
     const {alias} = props.match.params;
     const update = React.useCallback(() => {
         dispatch(chytCliqueLoad(alias));
+    }, [alias]);
+
+    React.useEffect(() => {
+        return () => {
+            dispatch(chytResetCurrentClique());
+        };
     }, [alias]);
 
     const {yt_operation_state, start_time, finish_time} = useSelector(getChytCliqueData) ?? {};

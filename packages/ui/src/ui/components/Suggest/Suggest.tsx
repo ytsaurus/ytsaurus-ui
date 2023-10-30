@@ -65,6 +65,7 @@ export interface SuggestProps {
 
     zIndexGroupLevel?: number;
     onBlur?: () => void;
+    onKeyDown?: (e: React.KeyboardEvent<HTMLElement>) => void;
     pin?: TextInputProps['pin'];
     onOpenChange?: (p: {open: boolean}) => void;
     popupClassName?: string;
@@ -178,7 +179,7 @@ export default class Suggest extends Component<SuggestProps, State> {
         this.setState({focused: false});
     }
 
-    onKeyDown(evt: React.KeyboardEvent) {
+    onKeyDown(evt: React.KeyboardEvent<HTMLElement>) {
         const key = evt.keyCode;
 
         if (key === ARROW_DOWN) {

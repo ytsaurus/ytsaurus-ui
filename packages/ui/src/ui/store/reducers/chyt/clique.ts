@@ -35,10 +35,13 @@ function reducer(state = initialState, action: ChytCliqueAction): ChytCliqueStat
             return {...state, ...action.data, loading: true};
         }
         case CHYT_CLIQUE.SUCCESS: {
-            return {...state, ...action.data, loaded: true, loading: false};
+            return {...state, ...action.data, error: undefined, loaded: true, loading: false};
         }
         case CHYT_CLIQUE.FAILURE: {
             return {...state, ...action.data, loading: false};
+        }
+        case CHYT_CLIQUE.PARTITION: {
+            return {...state, ...action.data};
         }
         default:
             return state;
@@ -48,6 +51,7 @@ function reducer(state = initialState, action: ChytCliqueAction): ChytCliqueStat
 export type ChytCliqueAction =
     | ActionD<typeof CHYT_CLIQUE.REQUEST, Pick<ChytCliqueState, 'currentClique'>>
     | ActionD<typeof CHYT_CLIQUE.SUCCESS, Pick<ChytCliqueState, 'data'>>
-    | ActionD<typeof CHYT_CLIQUE.FAILURE, Pick<ChytCliqueState, 'error'>>;
+    | ActionD<typeof CHYT_CLIQUE.FAILURE, Pick<ChytCliqueState, 'error'>>
+    | ActionD<typeof CHYT_CLIQUE.PARTITION, Pick<ChytCliqueState, 'currentClique'>>;
 
 export default mergeStateOnClusterChange(ephemeralState, persitentState, reducer);
