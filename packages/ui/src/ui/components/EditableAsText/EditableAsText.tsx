@@ -14,13 +14,23 @@ interface Props {
 
     text?: string;
     children: React.ReactNode;
-    onChange: (v: string) => void;
+    onChange: (v?: string) => void;
+    disableEdit?: boolean;
     withControls?: boolean;
     size?: 's' | 'm' | 'l' | 'xl';
+
+    renderEditor?: (props: {
+        value?: string;
+        onBlur: () => void;
+        onChange: (value?: string) => void;
+        className?: string;
+        onApply: (value?: string) => void;
+    }) => React.ReactNode;
 }
 
 export function EditableAsText(props: Props) {
-    const {children, onChange, text, className, withControls, size} = props;
+    const {children, onChange, text, className, withControls, size, disableEdit, renderEditor} =
+        props;
     const [editMode, setEditMode] = React.useState(false);
     const [input, setInput] = React.useState(text || '');
 
@@ -32,7 +42,7 @@ export function EditableAsText(props: Props) {
         setEditMode(true);
     }, [setEditMode]);
 
-    const handleChange = React.useCallback((val: string) => setInput(val), [setInput]);
+    const handleChange = React.useCallback((val?: string) => setInput(val ?? ''), [setInput]);
 
     const applyValue = useCallback(() => {
         setEditMode(false);
@@ -42,10 +52,18 @@ export function EditableAsText(props: Props) {
     const closeAndResetValue = useCallback(() => {
         setEditMode(false);
         setInput(text || '');
-    }, [setInput, setEditMode, text]);
+    }, [text]);
+
+    const onApply = useCallback(
+        (value?: string) => {
+            setEditMode(false);
+            onChange(value);
+        },
+        [onChange],
+    );
 
     const handleKeyDown = React.useCallback(
-        (evt: React.KeyboardEvent<HTMLInputElement>) => {
+        (evt: React.KeyboardEvent<HTMLElement>) => {
             if (evt.key === 'Enter') {
                 applyValue();
             }
@@ -62,15 +80,25 @@ export function EditableAsText(props: Props) {
         <div className={block(null, className)}>
             {editMode ? (
                 <>
-                    <TextInput
-                        className={block('control')}
-                        autoFocus
-                        size={controlSize}
-                        value={input}
-                        onUpdate={handleChange}
-                        onKeyDown={handleKeyDown}
-                        onBlur={closeEditMode}
-                    />
+                    {renderEditor ? (
+                        renderEditor({
+                            value: input,
+                            onChange: handleChange,
+                            className: block('control'),
+                            onBlur: closeEditMode,
+                            onApply,
+                        })
+                    ) : (
+                        <TextInput
+                            className={block('control')}
+                            autoFocus
+                            size={controlSize}
+                            value={input}
+                            onUpdate={handleChange}
+                            onKeyDown={handleKeyDown}
+                            onBlur={closeEditMode}
+                        />
+                    )}
                     {withControls && (
                         <>
                             <Button
@@ -95,14 +123,16 @@ export function EditableAsText(props: Props) {
             ) : (
                 <React.Fragment>
                     {children}
-                    <Button
-                        className={block('control', {type: 'edit'})}
-                        view="outlined"
-                        onClick={startTextEdit}
-                        size={controlSize}
-                    >
-                        <Icon awesome={'pencil'} size={controlSize} />
-                    </Button>
+                    {!disableEdit && (
+                        <Button
+                            className={block('control', {type: 'edit'})}
+                            view="outlined"
+                            onClick={startTextEdit}
+                            size={controlSize}
+                        >
+                            <Icon awesome={'pencil'} size={controlSize} />
+                        </Button>
+                    )}
                 </React.Fragment>
             )}
         </div>

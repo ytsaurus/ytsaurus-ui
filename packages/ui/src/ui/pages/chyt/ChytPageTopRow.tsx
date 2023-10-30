@@ -1,19 +1,31 @@
 import React from 'react';
 import {useDispatch, useSelector} from 'react-redux';
+import {useHistory} from 'react-router';
 import cn from 'bem-cn-lite';
 
-import {Alert, Button} from '@gravity-ui/uikit';
+import ypath from '../../common/thor/ypath';
 
-import Favourites from '../../components/Favourites/Favourites';
+import {Alert, Breadcrumbs, BreadcrumbsItem, Button} from '@gravity-ui/uikit';
+
+import ClipboardButton from '../../components/ClipboardButton/ClipboardButton';
 import {YTDFDialog} from '../../components/Dialog/Dialog';
+import Favourites from '../../components/Favourites/Favourites';
+import {EditableAsText} from '../../components/EditableAsText/EditableAsText';
+import Link from '../../components/Link/Link';
+import Suggest from '../../components/Suggest/Suggest';
 import {Page} from '../../constants';
 import {RowWithName} from '../../containers/AppNavigation/TopRowContent/SectionName';
 import {PoolTreeLoaderWaitDeafultTree} from '../../hooks/global';
 import {getFavouriteChyt, isActiveCliqueInFavourites} from '../../store/selectors/favourites';
-import {chytToggleFavourite} from '../../store/actions/favourites';
 import {getChytCurrrentClique} from '../../store/selectors/chyt';
-import {getCurrentUserName, getGlobalDefaultPoolTreeName} from '../../store/selectors/global';
+import {
+    getCluster,
+    getCurrentUserName,
+    getGlobalDefaultPoolTreeName,
+} from '../../store/selectors/global';
+import {chytApiAction} from '../../store/actions/chyt/api';
 import {chytCliqueCreate} from '../../store/actions/chyt/list';
+import {chytToggleFavourite} from '../../store/actions/favourites';
 import {useThunkDispatch} from '../../store/thunkDispatch';
 
 import './ChytPageTopRow.scss';
@@ -24,6 +36,7 @@ export default function ChytPageTopRow() {
     return (
         <RowWithName page={Page.CHYT} name="CHYT cliques">
             <ChytFavourites />
+            <ChytBreadcrumsbs />
             <CreateChytButton />
         </RowWithName>
     );
@@ -51,6 +64,107 @@ function ChytFavourites() {
             onToggle={handleFavouriteToggle}
             toggleDisabled={!currentClique}
             theme={'clear'}
+        />
+    );
+}
+
+function ChytBreadcrumsbs() {
+    const history = useHistory();
+    const cluster = useSelector(getCluster);
+    const alias = useSelector(getChytCurrrentClique);
+    const items = React.useMemo(() => {
+        const res: Array<BreadcrumbsItem & {url: string}> = [
+            {
+                text: '<Root>',
+                url: `/${cluster}/${Page.CHYT}`,
+                action: () => {},
+            },
+        ];
+        if (alias) {
+            res.push({text: alias, url: `/${cluster}/${Page.CHYT}/${alias}`, action: () => {}});
+        }
+        return res;
+    }, [alias]);
+
+    return (
+        <div className={block('breadcrumbs')}>
+            <EditableAsText
+                className={block('editable')}
+                onChange={(text) => {
+                    if (!text) {
+                        history.push(`/${cluster}/${Page.CHYT}`);
+                    } else if (text !== alias) {
+                        history.push(`/${cluster}/${Page.CHYT}/${text}`);
+                    }
+                }}
+                text={alias}
+                disableEdit={Boolean(!alias)}
+                renderEditor={(props) => <ChytAliasSuggest cluster={cluster} {...props} />}
+            >
+                <Breadcrumbs
+                    items={items}
+                    lastDisplayedItemsCount={2}
+                    firstDisplayedItemsCount={1}
+                    renderItemContent={(item, isCurrent) => {
+                        return (
+                            <Link url={item.url} theme={isCurrent ? 'primary' : 'secondary'} routed>
+                                {item.text}
+                            </Link>
+                        );
+                    }}
+                />
+            </EditableAsText>
+            {alias && <ClipboardButton text={alias} />}
+        </div>
+    );
+}
+
+function ChytAliasSuggest({
+    value,
+    onChange,
+    className,
+    onApply,
+    cluster,
+    onBlur,
+}: {
+    cluster: string;
+    value?: string;
+    onChange: (value?: string) => void;
+    className?: string;
+    onBlur: () => void;
+    onApply: (value?: string) => void;
+}) {
+    const [items, setItems] = React.useState<Array<string>>([]);
+
+    React.useEffect(() => {
+        chytApiAction('list', cluster, {}).then((data) => {
+            setItems(data.result.map((item) => ypath.getValue(item)));
+        });
+    }, []);
+
+    return (
+        <Suggest
+            className={`${block('alias-suggest')} ${className}`}
+            text={value}
+            filter={(_x, text) => {
+                if (!text) {
+                    return items;
+                }
+                return items.filter((item) => {
+                    return -1 !== item.indexOf(text);
+                });
+            }}
+            apply={(item) => {
+                if ('string' === typeof item) {
+                    onChange(item);
+                } else {
+                    onChange(item.value);
+                }
+            }}
+            onItemClick={(item) => {
+                onApply(typeof item === 'string' ? item : item.value);
+            }}
+            onBlur={onBlur}
         />
     );
 }

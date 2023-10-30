@@ -12,7 +12,7 @@ type CliqueAttributes =
     | 'total_cpu';
 
 export type ChytApi =
-    | {action: 'list'; params: {attributes: Array<CliqueAttributes>}; response: ChytListResponse}
+    | {action: 'list'; params: {attributes?: Array<CliqueAttributes>}; response: ChytListResponse}
     | {action: 'start'; params: {alias: string}; response: void}
     | {action: 'stop'; params: {alias: string}; response: void}
     | {action: 'remove'; params: {alias: string}; response: void}
@@ -67,7 +67,12 @@ export type ChytCliqueStateType = 'active' | 'broken' | 'inactive';
 export function chytApiAction<
     T extends ChytApi['action'] = never,
     ApiItem extends ChytApi & {action: T} = ChytApi & {action: T},
->(action: T, cluster: string, params: ApiItem['params'], cancelToken?: CancelToken) {
+>(
+    action: T,
+    cluster: string,
+    params: ApiItem['params'],
+    {cancelToken, skipErrorToast}: {cancelToken?: CancelToken; skipErrorToast?: boolean} = {},
+) {
     const extras = action === 'start' ? {untracked: true} : undefined;
 
     return wrapApiPromiseByToaster(
@@ -82,6 +87,7 @@ export function chytApiAction<
         {
             toasterName: `clique-${action}`,
             skipSuccessToast: true,
+            skipErrorToast,
             errorTitle: `Failed to ${action} clique`,
         },
     ).then((response) => {

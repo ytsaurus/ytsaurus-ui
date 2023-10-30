@@ -32,7 +32,7 @@ export function loadChytList(): ChytListThunkAction<void> {
                     'total_cpu',
                 ],
             },
-            cancelHelper.generateNextToken(),
+            {cancelToken: cancelHelper.removeAllAndGenerateNextToken()},
         )
             .then((data) => {
                 const items = data?.result?.map(({$value, $attributes = {}}) => {
