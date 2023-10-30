@@ -1,9 +1,5 @@
 .chyt-page-clique {
     &__header {
-        & > * {
-            padding-right: 1em;
-        }
-
         display: flex;
         margin-top: 10px;
         align-items: center;
@@ -11,8 +7,26 @@
         margin-bottom: 20px;
     }
 
+    &__loader,
+    &__header-operation-state {
+        padding: 0 1em;
+    }
+
+    &__header-start-btn {
+        padding: 0 1ex;
+    }
+
+    &__tabs,
+    &__error {
+        margin-bottom: 20px;
+    }
+
     &__operation-id {
         display: inline-block;
         min-width: 280px;
+    }
+
+    &__spacer {
+        flex-grow: 1;
     }
 }

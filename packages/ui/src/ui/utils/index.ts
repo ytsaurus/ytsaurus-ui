@@ -138,6 +138,7 @@ export type TabSettings = {
     url?: string;
     routed?: boolean;
     external?: boolean;
+    title?: string;
 };
 
 export function makeTabProps<TabName extends string>(
@@ -163,11 +164,12 @@ export function makeTabProps<TabName extends string>(
                 counter,
                 routed,
                 external,
+                title,
             } = settings?.[key] ?? {};
 
             return {
                 value: key,
-                text: titleDict[key] || hammer.format['ReadableField'](key),
+                text: titleDict[key] || title || hammer.format['ReadableField'](key),
                 show,
                 url,
                 counter,

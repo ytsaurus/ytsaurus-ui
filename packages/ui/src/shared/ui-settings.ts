@@ -66,6 +66,17 @@ export interface UISettings {
     operationsMonitoring?: UISettingsMonitoring;
 
     /**
+     * chytMonitoring.urlTemplate supports following parameters:
+     *   - {ytCluster}
+     *   - {chytAlias}
+     * All the parameters are optional and the are replaced with corresponding values
+     * @example {
+     *   urlTemplate: `https://my.monitoring.service/chyt?cluster={ytCluster}&alias={chytAlias}`
+     * }
+     */
+    chytMonitoring?: UISettingsMonitoring;
+
+    /**
      * Allows to define regular expression to extract hash-part from version of node by named group 'hash'
      * @example reHashFromNodeVersion: '[^~]+(?<hash>[^+]+)'
      */

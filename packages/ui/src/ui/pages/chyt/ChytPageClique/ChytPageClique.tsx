@@ -1,49 +1,52 @@
 import React from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import {RouteComponentProps, useRouteMatch} from 'react-router';
+import {RouteComponentProps} from 'react-router';
 import cn from 'bem-cn-lite';
 import moment from 'moment';
 
-import {Loader, Text} from '@gravity-ui/uikit';
+import {Button, Loader, Text} from '@gravity-ui/uikit';
 
 import {Page} from '../../../../shared/constants/settings';
 
 import format from '../../../common/hammer/format';
 
-import {ChytCliquePageTab} from '../../../constants/chyt-page';
-
 import {useUpdater} from '../../../hooks/use-updater';
 import Error from '../../../components/Error/Error';
+import Icon from '../../../components/Icon/Icon';
 import Label from '../../../components/Label/Label';
 import Link from '../../../components/Link/Link';
 import MetaTable, {MetaTableItem} from '../../../components/MetaTable/MetaTable';
 import StatusLabel from '../../../components/StatusLabel/StatusLabel';
-import Tabs from '../../../components/Tabs/Tabs';
 
 import {chytCliqueLoad} from '../../../store/actions/chyt/clique';
+import {chytListAction} from '../../../store/actions/chyt/list';
 import {
     getChytCliqueData,
     getChytCliqueError,
     getChytCliqueInitialLoading,
 } from '../../../store/selectors/chyt/clique';
 import {getCluster} from '../../../store/selectors/global';
-import {makeTabProps} from '../../../utils';
 
 import {CliqueState} from '../components/CliqueState';
+
+import {ChytPageCliqueTabs} from './ChytPageCliqueTabs';
 
 import './ChytPageClique.scss';
 
 const block = cn('chyt-page-clique');
 
 export function ChytPageClique(props: RouteComponentProps<{alias: string}>) {
-    const {alias} = props.match.params;
     const dispatch = useDispatch();
+
+    const {alias} = props.match.params;
     const update = React.useCallback(() => {
         dispatch(chytCliqueLoad(alias));
     }, [alias]);
 
-    const {yt_operation_state} = useSelector(getChytCliqueData) ?? {};
+    const {yt_operation_state, start_time, finish_time} = useSelector(getChytCliqueData) ?? {};
     const initialLoading = useSelector(getChytCliqueInitialLoading);
+
+    const started = Boolean(start_time && !finish_time);
 
     useUpdater(update);
 
@@ -51,12 +54,36 @@ export function ChytPageClique(props: RouteComponentProps<{alias: string}>) {
         <div className={block()}>
             <div className={block('header')}>
                 <Text variant="header-1">CHYT clique *{alias}</Text>
-                <StatusLabel className={block('operation-state')} label={yt_operation_state} />
-                {initialLoading && <Loader size="s" />}
+                <StatusLabel
+                    className={block('header-operation-state')}
+                    label={yt_operation_state}
+                />
+                {initialLoading && <Loader className={block('loader')} size="s" />}
+                <span className={block('spacer')} />
+
+                <span className={block('header-start-btn')}>
+                    <Button
+                        disabled={started}
+                        onClick={() => {
+                            dispatch(chytListAction('start', {alias}));
+                        }}
+                    >
+                        <Icon awesome="play-circle" />
+                    </Button>
+                </span>
+
+                <Button
+                    disabled={!started}
+                    onClick={() => {
+                        dispatch(chytListAction('stop', {alias}));
+                    }}
+                >
+                    <Icon awesome="stop-circle" />
+                </Button>
             </div>
             <ChytCliqueError />
             <ChytCliqueMetaTable />
-            <ChytCliqueTabs />
+            <ChytPageCliqueTabs className={block('tabs')} />
         </div>
     );
 }
@@ -136,11 +163,4 @@ function ChytCliqueMetaTable() {
     }, [data, cluster]);
 
     return <MetaTable items={items} />;
-}
-
-function ChytCliqueTabs() {
-    const match = useRouteMatch();
-    const tabProps = makeTabProps(match.url, ChytCliquePageTab);
-
-    return <Tabs {...tabProps} routed />;
 }

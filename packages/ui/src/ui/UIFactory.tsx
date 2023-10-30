@@ -157,6 +157,14 @@ export interface UIFactory {
               to?: number;
           }>;
 
+    getMonitoringComponentForChyt():
+        | undefined
+        | {
+              component?: React.ComponentType<{cluster: string; alias: string}>;
+              urlTemplate?: string;
+              title?: string;
+          };
+
     getStatisticsComponentForAccount():
         | undefined
         | React.ComponentType<{
@@ -436,6 +444,14 @@ const uiFactory: UIFactory = {
     },
     getMonitorComponentForJob() {
         return undefined;
+    },
+    getMonitoringComponentForChyt() {
+        const {urlTemplate, title} = uiSettings.chytMonitoring ?? {};
+        if (!urlTemplate) {
+            return undefined;
+        }
+
+        return {urlTemplate, title};
     },
     getStatisticsComponentForAccount() {
         return undefined;
