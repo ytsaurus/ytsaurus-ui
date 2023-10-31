@@ -1,7 +1,8 @@
 import React from 'react';
 import {useDispatch, useSelector} from 'react-redux';
+import cn from 'bem-cn-lite';
 
-import {Button, DropdownMenu, DropdownMenuItem} from '@gravity-ui/uikit';
+import {Button, DropdownMenu, DropdownMenuItem, Text} from '@gravity-ui/uikit';
 import {Column} from '@gravity-ui/react-data-table';
 
 import format from '../../../common/hammer/format';
@@ -25,6 +26,10 @@ import {Page} from '../../../../shared/constants/settings';
 
 import {CliqueState} from '../components/CliqueState';
 
+import './ChytPageListTable.scss';
+
+const block = cn('chyt-page-list-table');
+
 function useChytListColumns(cluster: string) {
     const columns: Array<Column<ChytInfo>> = React.useMemo(() => {
         return [
@@ -32,10 +37,33 @@ function useChytListColumns(cluster: string) {
                 name: 'name',
                 header: <ChytListHeader column="alias" title="CHYT clique alias" />,
                 render({row}) {
+                    const {operation_id: opId} = row;
+                    const operationId = opId && opId !== '0-0-0-0' ? opId : null;
                     return (
-                        <Link url={`/${cluster}/${Page.CHYT}/${row.alias}`} theme="primary" routed>
-                            {row.alias}
-                        </Link>
+                        <div>
+                            <Link
+                                url={`/${cluster}/${Page.CHYT}/${row.alias}`}
+                                theme="primary"
+                                routed
+                            >
+                                {row.alias}
+                            </Link>
+                            <div>
+                                <Text variant="code-1" color="secondary">
+                                    {operationId ? (
+                                        <Link
+                                            theme="secondary"
+                                            url={`/${cluster}/operations/${operationId}`}
+                                            routed
+                                        >
+                                            {operationId}
+                                        </Link>
+                                    ) : (
+                                        format.NO_VALUE
+                                    )}
+                                </Text>
+                            </div>
+                        </div>
                     );
                 },
             },
@@ -43,16 +71,24 @@ function useChytListColumns(cluster: string) {
                 name: 'creator',
                 header: <ChytListHeader column="creator" title="Owner" />,
                 render({row}) {
-                    return row.creator === undefined ? format.NO_VALUE : row.creator;
+                    return (
+                        <span className={block('one-row-cell')}>
+                            {row.creator === undefined ? format.NO_VALUE : row.creator}
+                        </span>
+                    );
                 },
             },
             {
                 name: 'instance_count',
                 header: <ChytListHeader column="instance_count" title="Instances" />,
                 render({row}) {
-                    return row.instance_count === undefined
-                        ? format.NO_VALUE
-                        : format.Number(row.instance_count);
+                    return (
+                        <span className={block('one-row-cell')}>
+                            {row.instance_count === undefined
+                                ? format.NO_VALUE
+                                : format.Number(row.instance_count)}
+                        </span>
+                    );
                 },
                 align: 'right',
                 width: 120,
@@ -61,9 +97,13 @@ function useChytListColumns(cluster: string) {
                 name: 'cores',
                 header: <ChytListHeader column="total_cpu" title="Cores" />,
                 render({row}) {
-                    return row.total_cpu === undefined
-                        ? format.NO_VALUE
-                        : format.Number(row.total_cpu);
+                    return (
+                        <span className={block('one-row-cell')}>
+                            {row.total_cpu === undefined
+                                ? format.NO_VALUE
+                                : format.Number(row.total_cpu)}
+                        </span>
+                    );
                 },
                 align: 'right',
                 width: 100,
@@ -72,9 +112,13 @@ function useChytListColumns(cluster: string) {
                 name: 'memory',
                 header: <ChytListHeader column="total_memory" title="Memory" />,
                 render({row}) {
-                    return row.total_memory === undefined
-                        ? format.NO_VALUE
-                        : format.Bytes(row.total_memory);
+                    return (
+                        <span className={block('one-row-cell')}>
+                            {row.total_memory === undefined
+                                ? format.NO_VALUE
+                                : format.Bytes(row.total_memory)}
+                        </span>
+                    );
                 },
                 align: 'right',
                 width: 120,
@@ -83,15 +127,38 @@ function useChytListColumns(cluster: string) {
                 name: 'State',
                 header: <ChytListHeader column="state" title="State" />,
                 render({row}) {
-                    return <CliqueState state={row.state} />;
+                    return (
+                        <span className={block('one-row-cell')}>
+                            <CliqueState state={row.state} />
+                        </span>
+                    );
                 },
                 width: 100,
+            },
+            {
+                name: 'creation_time',
+                header: (
+                    <ChytListHeader column="creation_time" title="Creation time" withUndefined />
+                ),
+                render({row}) {
+                    const {creation_time} = row;
+                    return (
+                        <span className={block('one-row-cell')}>
+                            {creation_time ? format.DateTime(creation_time) : format.NO_VALUE}
+                        </span>
+                    );
+                },
+                width: 180,
             },
             {
                 name: 'duration',
                 header: <ChytListHeader column="duration" title="Duration" withUndefined />,
                 render({row}) {
-                    return !row.start_time ? format.NO_VALUE : format.TimeDuration(row.duration);
+                    return (
+                        <span className={block('one-row-cell')}>
+                            {!row.start_time ? format.NO_VALUE : format.TimeDuration(row.duration)}
+                        </span>
+                    );
                 },
                 align: 'right',
                 width: 140,
@@ -100,7 +167,11 @@ function useChytListColumns(cluster: string) {
                 name: 'actions',
                 header: '',
                 render({row}) {
-                    return <ChytCliqueActions alias={row.alias} />;
+                    return (
+                        <span className={block('one-row-cell')}>
+                            <ChytCliqueActions alias={row.alias} />
+                        </span>
+                    );
                 },
                 align: 'center',
                 width: 60,
@@ -188,6 +259,7 @@ function ChytPageListTable() {
 
     return (
         <DataTableYT
+            className={block()}
             settings={DATA_TABLE_YT_SETTINGS_UNDER_TOOLBAR}
             useThemeYT
             columns={columns}

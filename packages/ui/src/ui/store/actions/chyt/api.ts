@@ -9,7 +9,9 @@ type CliqueAttributes =
     | 'start_time'
     | 'instance_count'
     | 'total_memory'
-    | 'total_cpu';
+    | 'total_cpu'
+    | 'operation_id'
+    | 'creation_time';
 
 export type ChytApi =
     | {action: 'list'; params: {attributes?: Array<CliqueAttributes>}; response: ChytListResponse}
@@ -59,6 +61,8 @@ export type ChytListResponseItem = {
         state?: ChytCliqueStateType;
         total_cpu?: number;
         total_memory?: number;
+        operation_id?: string;
+        creation_time?: string;
     };
 };
 

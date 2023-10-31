@@ -15,7 +15,10 @@ export type ChytListState = {
     data: {items?: Array<ChytInfo>};
 };
 
-export type ChytInfo = ChytListResponseItem['$attributes'] & {alias: string; duration?: number};
+export type ChytInfo = ChytListResponseItem['$attributes'] & {
+    alias: string;
+    duration?: number;
+};
 
 const initialState: ChytListState = {
     loading: undefined,

@@ -30,6 +30,8 @@ export function loadChytList(): ChytListThunkAction<void> {
                     'instance_count',
                     'total_memory',
                     'total_cpu',
+                    'operation_id',
+                    'creation_time',
                 ],
             },
             {cancelToken: cancelHelper.removeAllAndGenerateNextToken()},
