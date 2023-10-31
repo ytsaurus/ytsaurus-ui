@@ -4,7 +4,7 @@ import axios from 'axios';
 import type {Request, Response} from 'express';
 import {UNEXPECTED_PIPE_AXIOS_RESPONSE, pipeAxiosResponse, sendAndLogError} from '../utils';
 import {getApp} from '../ServerFactory';
-import {getRobotYTApiSetup} from '../components/requestsSetup';
+import {getUserYTApiSetup} from '../components/requestsSetup';
 
 export async function chytProxyApi(req: Request, res: Response) {
     try {
@@ -47,7 +47,7 @@ async function chytProxyApiImpl(req: Request, res: Response) {
         );
     }
 
-    const {authHeaders} = getRobotYTApiSetup(cluster);
+    const {authHeaders} = getUserYTApiSetup(cluster, req);
     const headers = {
         ...ctx.getMetadata(),
         'accept-encoding': 'gzip',
