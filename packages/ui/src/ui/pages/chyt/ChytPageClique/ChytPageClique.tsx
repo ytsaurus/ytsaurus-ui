@@ -125,7 +125,7 @@ function ChytCliqueMetaTable() {
                 {
                     key: 'Id',
                     value: operation_id ? (
-                        <Link url={`/${cluster}/${Page.OPERATIONS}/${operation_id}`}>
+                        <Link url={`/${cluster}/${Page.OPERATIONS}/${operation_id}`} routed>
                             {operation_id}
                         </Link>
                     ) : (
