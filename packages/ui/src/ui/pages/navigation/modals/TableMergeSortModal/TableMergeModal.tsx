@@ -183,7 +183,7 @@ export default function TableMergeModal() {
                         ),
                     ),
                     extras: ({poolTree}: FormValues) => {
-                        return {poolTree, placeholder: login};
+                        return {poolTree, placeholder: login, allowEphemeral: true};
                     },
                 },
                 {

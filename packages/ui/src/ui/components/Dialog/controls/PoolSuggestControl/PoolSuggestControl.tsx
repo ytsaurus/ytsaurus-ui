@@ -23,6 +23,8 @@ type Props = DialogControlProps<string> & {
     // If not defined then default pool tree should be used
     poolTree?: string;
     calculateValueOnPoolsLoaded?: (params: {loadedPoolNames: Array<string>}) => string;
+
+    allowEphemeral?: boolean;
 };
 
 /**
@@ -32,7 +34,15 @@ type Props = DialogControlProps<string> & {
  */
 export function PoolSuggestControl(props: Props) {
     const defaultPoolTree = useSelector(getGlobalDefaultPoolTreeName);
-    const {value, onChange, placeholder, poolTree, cluster, calculateValueOnPoolsLoaded} = props;
+    const {
+        allowEphemeral,
+        value,
+        onChange,
+        placeholder,
+        poolTree,
+        cluster,
+        calculateValueOnPoolsLoaded,
+    } = props;
 
     // !!! default pool tree of current cluster must be never used for other clusters !!!
     const treeName = cluster ? poolTree : poolTree || defaultPoolTree;
@@ -84,7 +94,10 @@ export function PoolSuggestControl(props: Props) {
             popupClassName={block('popup')}
             text={value}
             filter={getItems}
-            apply={(v) => onChange(typeof v === 'string' ? v : v.value)}
+            apply={allowEphemeral ? (v) => onChange(typeof v === 'string' ? v : v.value) : () => {}}
+            onItemClick={
+                allowEphemeral ? () => {} : (v) => onChange(typeof v === 'string' ? v : v.value)
+            }
             placeholder={placeholder}
         />
     );

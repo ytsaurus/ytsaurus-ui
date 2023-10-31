@@ -8,7 +8,7 @@ import ypath from '../../common/thor/ypath';
 import {Alert, Breadcrumbs, BreadcrumbsItem, Button} from '@gravity-ui/uikit';
 
 import ClipboardButton from '../../components/ClipboardButton/ClipboardButton';
-import {YTDFDialog} from '../../components/Dialog/Dialog';
+import {YTDFDialog, makeErrorFields} from '../../components/Dialog/Dialog';
 import Favourites from '../../components/Favourites/Favourites';
 import {EditableAsText} from '../../components/EditableAsText/EditableAsText';
 import Link from '../../components/Link/Link';
@@ -18,17 +18,14 @@ import {RowWithName} from '../../containers/AppNavigation/TopRowContent/SectionN
 import {PoolTreeLoaderWaitDeafultTree} from '../../hooks/global';
 import {getFavouriteChyt, isActiveCliqueInFavourites} from '../../store/selectors/favourites';
 import {getChytCurrrentClique} from '../../store/selectors/chyt';
-import {
-    getCluster,
-    getCurrentUserName,
-    getGlobalDefaultPoolTreeName,
-} from '../../store/selectors/global';
+import {getCluster, getGlobalDefaultPoolTreeName} from '../../store/selectors/global';
 import {chytApiAction} from '../../store/actions/chyt/api';
 import {chytCliqueCreate} from '../../store/actions/chyt/list';
 import {chytToggleFavourite} from '../../store/actions/favourites';
 import {useThunkDispatch} from '../../store/thunkDispatch';
 
 import './ChytPageTopRow.scss';
+import {YTError} from '../../../@types/types';
 
 const block = cn('chyt-page-top-row');
 
@@ -181,7 +178,8 @@ function CreateChytButton() {
     const dispatch = useThunkDispatch();
     const [visible, setVisible] = React.useState(false);
     const defaultPoolTree = useSelector(getGlobalDefaultPoolTreeName);
-    const currentUser = useSelector(getCurrentUserName);
+
+    const [error, setError] = React.useState<YTError | undefined>();
 
     return (
         <div className={block('create-clique')}>
@@ -203,7 +201,14 @@ function CreateChytButton() {
                                     ...rest,
                                     instance_count: instance_count.value,
                                 }),
-                            );
+                            )
+                                .then(() => {
+                                    setError(undefined);
+                                })
+                                .catch((e) => {
+                                    setError(e);
+                                    return Promise.reject(e);
+                                });
                         }}
                         fields={[
                             {
@@ -250,7 +255,7 @@ function CreateChytButton() {
                                 name: 'pool',
                                 type: 'pool',
                                 caption: 'Pool',
-                                extras: ({tree}) => {
+                                extras: ({tree}: FormValues) => {
                                     return {poolTree: tree, placeholder: 'Pool name...'};
                                 },
                                 required: true,
@@ -260,11 +265,11 @@ function CreateChytButton() {
                                 type: 'tumbler',
                                 caption: 'Run after creation',
                             },
+                            ...makeErrorFields([error]),
                         ]}
                         initialValues={{
                             instance_count: {value: 1},
                             tree: defaultPoolTree,
-                            pool: currentUser,
                             runAfterCreation: true,
                         }}
                     />
