@@ -7,3 +7,5 @@ export const getChytCliqueInitialLoading = (state: RootState) => {
     const {loaded, loading} = state.chyt.clique;
     return !loaded && loading;
 };
+
+export const getChytCliqueStartError = (state: RootState) => state.chyt.clique.data?.error;

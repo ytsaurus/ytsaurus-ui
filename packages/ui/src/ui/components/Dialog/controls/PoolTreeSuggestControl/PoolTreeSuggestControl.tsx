@@ -7,10 +7,10 @@ import {Select} from '@gravity-ui/uikit';
 import {DialogControlProps} from '../../../../components/Dialog/Dialog.types';
 import {getAllPoolTreeNames} from '../../../../store/selectors/global';
 
-type Props = DialogControlProps<string>;
+type Props = DialogControlProps<string> & {disabled?: boolean};
 
 export function PoolTreeSuggestControl(props: Props) {
-    const {value, onChange, placeholder} = props;
+    const {value, onChange, disabled, placeholder} = props;
     const treeNames = useSelector(getAllPoolTreeNames);
 
     const items = React.useMemo(() => {
@@ -21,6 +21,7 @@ export function PoolTreeSuggestControl(props: Props) {
 
     return (
         <Select
+            disabled={disabled}
             value={[value]}
             options={items}
             onUpdate={(values) => onChange(values[0])}

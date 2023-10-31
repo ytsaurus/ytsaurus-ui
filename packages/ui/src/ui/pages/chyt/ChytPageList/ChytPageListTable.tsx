@@ -2,7 +2,7 @@ import React from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import cn from 'bem-cn-lite';
 
-import {Button, DropdownMenu, DropdownMenuItem, Text} from '@gravity-ui/uikit';
+import {Button, DropdownMenu, DropdownMenuItem} from '@gravity-ui/uikit';
 import {Column} from '@gravity-ui/react-data-table';
 
 import format from '../../../common/hammer/format';
@@ -13,6 +13,8 @@ import DataTableYT, {
 import ColumnHeader from '../../../components/ColumnHeader/ColumnHeader';
 import Icon from '../../../components/Icon/Icon';
 import Link from '../../../components/Link/Link';
+import {OperationId} from '../../../components/OperationId/OperationId';
+import {UserCard} from '../../../components/UserLink/UserLink';
 
 import {chytToggleSortState} from '../../../store/actions/chyt/list-fitlers';
 import {getCluster} from '../../../store/selectors/global';
@@ -37,8 +39,6 @@ function useChytListColumns(cluster: string) {
                 name: 'name',
                 header: <ChytListHeader column="alias" title="CHYT clique alias" />,
                 render({row}) {
-                    const {operation_id: opId} = row;
-                    const operationId = opId && opId !== '0-0-0-0' ? opId : null;
                     return (
                         <div>
                             <Link
@@ -49,19 +49,11 @@ function useChytListColumns(cluster: string) {
                                 {row.alias}
                             </Link>
                             <div>
-                                <Text variant="code-1" color="secondary">
-                                    {operationId ? (
-                                        <Link
-                                            theme="secondary"
-                                            url={`/${cluster}/operations/${operationId}`}
-                                            routed
-                                        >
-                                            {operationId}
-                                        </Link>
-                                    ) : (
-                                        format.NO_VALUE
-                                    )}
-                                </Text>
+                                <OperationId
+                                    id={row.operation_id}
+                                    cluster={cluster}
+                                    color="secondary"
+                                />
                             </div>
                         </div>
                     );
@@ -73,7 +65,7 @@ function useChytListColumns(cluster: string) {
                 render({row}) {
                     return (
                         <span className={block('one-row-cell')}>
-                            {row.creator === undefined ? format.NO_VALUE : row.creator}
+                            {!row.creator ? format.NO_VALUE : <UserCard userName={row.creator} />}
                         </span>
                     );
                 },

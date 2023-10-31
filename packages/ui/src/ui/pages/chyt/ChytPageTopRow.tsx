@@ -172,13 +172,10 @@ function ChytAliasSuggest({
 type FormValues = {
     alias: string;
     instance_count: {value: number};
-    instance_cpu: {value: number};
-    instance_total_memory: {value: number};
+    tree: string;
     pool: string;
     runAfterCreation: boolean;
 };
-
-const ONE_GB = 1024 * 1024 * 1024;
 
 function CreateChytButton() {
     const dispatch = useThunkDispatch();
@@ -199,19 +196,12 @@ function CreateChytButton() {
                         onClose={() => setVisible(false)}
                         onAdd={(form) => {
                             const {
-                                values: {
-                                    instance_count,
-                                    instance_cpu,
-                                    instance_total_memory,
-                                    ...rest
-                                },
+                                values: {instance_count, ...rest},
                             } = form.getState();
                             return dispatch(
                                 chytCliqueCreate({
                                     ...rest,
                                     instance_count: instance_count.value,
-                                    instance_cpu: instance_cpu.value,
-                                    instance_total_memory: instance_total_memory.value,
                                 }),
                             );
                         }}
@@ -249,37 +239,19 @@ function CreateChytButton() {
                                 required: true,
                             },
                             {
-                                name: 'instance_cpu',
-                                type: 'number',
-                                caption: 'Instance CPU',
+                                name: 'tree',
+                                type: 'pool-tree',
+                                caption: 'Pool tree',
                                 extras: {
-                                    min: 1,
-                                    max: 16,
-                                    hidePrettyValue: true,
-                                    showHint: true,
+                                    disabled: true,
                                 },
-                                required: true,
-                            },
-                            {
-                                name: 'instance_total_memory',
-                                type: 'number',
-                                caption: 'Instance RAM',
-                                extras: {
-                                    min: ONE_GB,
-                                    max: 67 * ONE_GB,
-                                    format: 'Bytes',
-                                    hidePrettyValue: true,
-                                    showHint: true,
-                                },
-                                required: true,
                             },
                             {
                                 name: 'pool',
                                 type: 'pool',
                                 caption: 'Pool',
-                                extras: {
-                                    poolTree: defaultPoolTree,
-                                    placeholder: 'Pool name...',
+                                extras: ({tree}) => {
+                                    return {poolTree: tree, placeholder: 'Pool name...'};
                                 },
                                 required: true,
                             },
@@ -291,9 +263,9 @@ function CreateChytButton() {
                         ]}
                         initialValues={{
                             instance_count: {value: 1},
-                            instance_cpu: {value: 1},
-                            instance_total_memory: {value: ONE_GB},
+                            tree: defaultPoolTree,
                             pool: currentUser,
+                            runAfterCreation: true,
                         }}
                     />
                 </PoolTreeLoaderWaitDeafultTree>

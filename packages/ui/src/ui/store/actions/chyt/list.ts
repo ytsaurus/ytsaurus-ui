@@ -80,8 +80,6 @@ export function chytListAction<
 export function chytCliqueCreate(params: {
     alias: string;
     instance_count: number;
-    instance_cpu: number;
-    instance_total_memory: number;
     pool: string;
     runAfterCreation: boolean;
 }): ChytListThunkAction<void> {

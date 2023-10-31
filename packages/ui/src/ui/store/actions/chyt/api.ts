@@ -1,5 +1,6 @@
 import axios, {CancelToken} from 'axios';
 import {wrapApiPromiseByToaster} from '../../../utils/utils';
+import {YTError} from '../../../../@types/types';
 
 export type WithResult<T> = {result: T};
 
@@ -24,9 +25,9 @@ export type ChytApi =
           params: {
               alias: string;
               options: {
-                  instance_count: number;
-                  instance_cpu: number;
-                  instance_total_memory: number;
+                  instance_count?: number;
+                  instance_cpu?: number;
+                  instance_total_memory?: number;
                   pool: string;
               };
           };
@@ -48,6 +49,7 @@ export type ChytStatusResponse = {
         total_memory?: number;
     };
     operation_id?: string;
+    error?: YTError;
 };
 
 export type ChytListResponse = WithResult<Array<ChytListResponseItem>>;
