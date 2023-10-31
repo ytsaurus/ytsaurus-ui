@@ -21,7 +21,7 @@ interface Props {
 export function UserCard({userName, className, noLink, internal, children}: Props) {
     const url = internal
         ? `/${YT.cluster}/users?filter=${userName}`
-        : UIFactory.makeUrlForExternalUser(userName);
+        : UIFactory.makeUrlForUserName({login: userName, cluster: YT.cluster});
 
     return <UserName {...{className, userName, url: noLink ? undefined : url, children}} />;
 }

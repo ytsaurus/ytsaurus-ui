@@ -95,7 +95,7 @@ export interface UIFactory {
 
     isWatchMen(login: string): boolean;
 
-    makeUrlForExternalUser(login: string): string | undefined;
+    makeUrlForUserName({cluster, login}: {cluster: string; login: string}): string | undefined;
     makeUrlForTransferTask(operation: unknown): string | undefined;
     makeUrlForNodeIO(cluster: string, host?: string): string | undefined;
     makeUrlForTabletCellBundleDashboard(cluster: string, bundle: string): string | undefined;
@@ -365,8 +365,8 @@ const uiFactory: UIFactory = {
     isWatchMen() {
         return false;
     },
-    makeUrlForExternalUser() {
-        return undefined;
+    makeUrlForUserName({cluster, login}: {cluster?: string; login: string}) {
+        return `/${cluster}/users?filter=${login}`;
     },
     makeUrlForTransferTask() {
         return undefined;

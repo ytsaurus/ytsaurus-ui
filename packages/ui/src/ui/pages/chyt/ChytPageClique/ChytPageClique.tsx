@@ -1,21 +1,20 @@
 import React from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import {RouteComponentProps} from 'react-router';
+import {RouteComponentProps, useHistory} from 'react-router';
 import cn from 'bem-cn-lite';
 import moment from 'moment';
 
 import {Button, Loader, Text} from '@gravity-ui/uikit';
 
-import {Page} from '../../../../shared/constants/settings';
-
 import format from '../../../common/hammer/format';
 
 import {useUpdater} from '../../../hooks/use-updater';
+import Block from '../../../components/Block/Block';
 import Error from '../../../components/Error/Error';
 import Icon from '../../../components/Icon/Icon';
 import Label from '../../../components/Label/Label';
-import Link from '../../../components/Link/Link';
 import MetaTable, {MetaTableItem} from '../../../components/MetaTable/MetaTable';
+import {OperationId} from '../../../components/OperationId/OperationId';
 import StatusLabel from '../../../components/StatusLabel/StatusLabel';
 
 import {chytCliqueLoad, chytResetCurrentClique} from '../../../store/actions/chyt/clique';
@@ -24,6 +23,7 @@ import {
     getChytCliqueData,
     getChytCliqueError,
     getChytCliqueInitialLoading,
+    getChytCliqueStartError,
 } from '../../../store/selectors/chyt/clique';
 import {getCluster} from '../../../store/selectors/global';
 
@@ -32,11 +32,14 @@ import {CliqueState} from '../components/CliqueState';
 import {ChytPageCliqueTabs} from './ChytPageCliqueTabs';
 
 import './ChytPageClique.scss';
+import {Page} from '../../../../shared/constants/settings';
 
 const block = cn('chyt-page-clique');
 
 export function ChytPageClique(props: RouteComponentProps<{alias: string}>) {
     const dispatch = useDispatch();
+    const history = useHistory();
+    const cluster = useSelector(getCluster);
 
     const {alias} = props.match.params;
     const update = React.useCallback(() => {
@@ -49,10 +52,8 @@ export function ChytPageClique(props: RouteComponentProps<{alias: string}>) {
         };
     }, [alias]);
 
-    const {yt_operation_state, start_time, finish_time} = useSelector(getChytCliqueData) ?? {};
+    const {yt_operation_state} = useSelector(getChytCliqueData) ?? {};
     const initialLoading = useSelector(getChytCliqueInitialLoading);
-
-    const started = Boolean(start_time && !finish_time);
 
     useUpdater(update);
 
@@ -67,9 +68,8 @@ export function ChytPageClique(props: RouteComponentProps<{alias: string}>) {
                 {initialLoading && <Loader className={block('loader')} size="s" />}
                 <span className={block('spacer')} />
 
-                <span className={block('header-start-btn')}>
+                <span className={block('header-start')}>
                     <Button
-                        disabled={started}
                         onClick={() => {
                             dispatch(chytListAction('start', {alias}));
                         }}
@@ -79,25 +79,48 @@ export function ChytPageClique(props: RouteComponentProps<{alias: string}>) {
                 </span>
 
                 <Button
-                    disabled={!started}
                     onClick={() => {
                         dispatch(chytListAction('stop', {alias}));
                     }}
                 >
                     <Icon awesome="stop-circle" />
                 </Button>
+
+                <span className={block('header-remove')}>
+                    <Button
+                        onClick={() => {
+                            dispatch(chytListAction('remove', {alias}));
+                            history.push(`/${cluster}/${Page.CHYT}`);
+                        }}
+                    >
+                        <Icon awesome="trash-alt" />
+                    </Button>
+                </span>
             </div>
-            <ChytCliqueError />
+            <ChytCliqueErrors />
             <ChytCliqueMetaTable />
             <ChytPageCliqueTabs className={block('tabs')} />
         </div>
     );
 }
 
-function ChytCliqueError() {
+function ChytCliqueErrors() {
     const error = useSelector(getChytCliqueError);
+    const startError = useSelector(getChytCliqueStartError);
 
-    return error ? <Error className={block('error')} error={error} /> : null;
+    return (
+        <React.Fragment>
+            {error ? <Error className={block('error')} error={error} /> : null}
+            {startError ? (
+                <Block
+                    type="alert"
+                    header="Failed to start"
+                    className={block('error')}
+                    error={{message: startError}}
+                />
+            ) : null}
+        </React.Fragment>
+    );
 }
 
 function ChytCliqueMetaTable() {
@@ -124,12 +147,10 @@ function ChytCliqueMetaTable() {
             [
                 {
                     key: 'Id',
-                    value: operation_id ? (
-                        <Link url={`/${cluster}/${Page.OPERATIONS}/${operation_id}`} routed>
-                            {operation_id}
-                        </Link>
-                    ) : (
-                        <div className={block('operation-id')}>{format.NO_VALUE}</div>
+                    value: (
+                        <div className={block('operation-id')}>
+                            <OperationId id={operation_id} cluster={cluster} />
+                        </div>
                     ),
                 },
                 {
