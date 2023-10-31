@@ -77,7 +77,11 @@ export function chytApiAction<
     action: T,
     cluster: string,
     params: ApiItem['params'],
-    {cancelToken, skipErrorToast}: {cancelToken?: CancelToken; skipErrorToast?: boolean} = {},
+    {
+        cancelToken,
+        skipErrorToast,
+        successTitle,
+    }: {cancelToken?: CancelToken; skipErrorToast?: boolean; successTitle?: string} = {},
 ) {
     const extras = action === 'start' ? {untracked: true} : undefined;
 
@@ -92,7 +96,8 @@ export function chytApiAction<
         }),
         {
             toasterName: `clique-${action}`,
-            skipSuccessToast: true,
+            skipSuccessToast: !successTitle,
+            successTitle,
             skipErrorToast,
             errorTitle: `Failed to ${action} clique`,
         },

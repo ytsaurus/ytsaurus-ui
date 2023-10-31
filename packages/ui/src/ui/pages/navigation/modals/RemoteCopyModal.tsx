@@ -186,6 +186,7 @@ function RemoteCopyModal() {
                                 );
                                 return transferPool || '';
                             },
+                            allowEphemeral: true,
                         };
                     },
                 },

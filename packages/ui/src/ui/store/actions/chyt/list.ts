@@ -83,18 +83,31 @@ export function chytCliqueCreate(params: {
     pool: string;
     runAfterCreation: boolean;
 }): ChytListThunkAction<void> {
-    return (dispatch) => {
+    return (dispatch, getState) => {
+        const cluster = getCluster(getState());
+
         const {alias, runAfterCreation, ...options} = params;
-        return dispatch(chytListAction('create', {alias}, {skipLoadList: true})).then(() => {
-            return dispatch(
-                chytListAction('set_options', {alias, options}, {skipLoadList: true}),
-            ).then(() => {
-                if (runAfterCreation) {
-                    return dispatch(chytListAction('start', {alias}));
-                } else {
-                    return dispatch(loadChytList());
-                }
-            });
+        return chytApiAction(
+            'create',
+            cluster,
+            {alias},
+            {successTitle: `${alias} clique created`, skipErrorToast: true},
+        ).then(() => {
+            return chytApiAction('set_options', cluster, {alias, options}, {skipErrorToast: true})
+                .then(() => {
+                    if (runAfterCreation) {
+                        return chytApiAction(
+                            'start',
+                            cluster,
+                            {alias},
+                            {successTitle: `${alias} clique is started`, skipErrorToast: true},
+                        );
+                    }
+                    return undefined;
+                })
+                .finally(() => {
+                    dispatch(loadChytList());
+                });
         });
     };
 }

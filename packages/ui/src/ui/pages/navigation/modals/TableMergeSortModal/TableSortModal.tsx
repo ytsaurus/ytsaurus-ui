@@ -174,6 +174,7 @@ export default function TableSortModal() {
                         return {
                             placeholder: login,
                             poolTree,
+                            allowEphemeral: true,
                         };
                     },
                 },
