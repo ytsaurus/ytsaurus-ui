@@ -14,7 +14,7 @@ type ChytFiltersThunkAction<T = unknown> = ThunkAction<
     ChytListFiltersAction
 >;
 
-export function updateChytListFilters(data: Partial<ChytListFilters>): ChytListFiltersAction {
+export function chytUpdateListFilters(data: Partial<ChytListFilters>): ChytListFiltersAction {
     return {type: CHYT_LIST_FILTERS, data};
 }
 

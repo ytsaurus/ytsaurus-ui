@@ -7,7 +7,7 @@ import {TextInput} from '@gravity-ui/uikit';
 import {Toolbar} from '../../../components/WithStickyToolbar/Toolbar/Toolbar';
 import {SelectSingle} from '../../../components/Select/Select';
 
-import {updateChytListFilters} from '../../../store/actions/chyt/list-fitlers';
+import {chytUpdateListFilters} from '../../../store/actions/chyt/list-fitlers';
 import {
     getChytListAvailableCreators,
     getChytListAvailableStates,
@@ -26,7 +26,7 @@ function ChytPageListToolbar() {
 
     const onUpdate = React.useCallback(
         (filters: Partial<ChytListFilters>) => {
-            dispatch(updateChytListFilters(filters));
+            dispatch(chytUpdateListFilters(filters));
         },
         [dispatch],
     );

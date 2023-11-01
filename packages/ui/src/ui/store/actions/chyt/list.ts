@@ -13,7 +13,7 @@ type ChytListThunkAction<T> = ThunkAction<Promise<T>, RootState, unknown, ChytLi
 
 const cancelHelper = new CancelHelper();
 
-export function loadChytList(): ChytListThunkAction<void> {
+export function chytLoadList(): ChytListThunkAction<void> {
     return (dispatch, getState) => {
         const cluster = getCluster(getState());
 
@@ -70,7 +70,7 @@ export function chytListAction<
 
         return chytApiAction(action, cluster, params).then((d) => {
             if (!skipLoadList) {
-                dispatch(loadChytList());
+                dispatch(chytLoadList());
             }
             return d;
         });
@@ -91,22 +91,22 @@ export function chytCliqueCreate(params: {
             'create',
             cluster,
             {alias},
-            {successTitle: `${alias} clique created`, skipErrorToast: true},
+            {successTitle: `${alias} clique created`},
         ).then(() => {
-            return chytApiAction('set_options', cluster, {alias, options}, {skipErrorToast: true})
+            return chytApiAction('set_options', cluster, {alias, options})
                 .then(() => {
                     if (runAfterCreation) {
                         return chytApiAction(
                             'start',
                             cluster,
                             {alias},
-                            {successTitle: `${alias} clique is started`, skipErrorToast: true},
+                            {successTitle: `${alias} clique is started`},
                         );
                     }
                     return undefined;
                 })
                 .finally(() => {
-                    dispatch(loadChytList());
+                    dispatch(chytLoadList());
                 });
         });
     };
