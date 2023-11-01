@@ -4,6 +4,16 @@
         padding: 20px 32px;
         overflow: auto;
     }
+
+    &__as-block {
+        display: inline-block;
+        margin-left: -32px;
+        margin-top: -10px;
+
+        &_has-header {
+            margin-top: -20px;
+        }
+    }
 }
 
 .df-dialog_with_vertical_tabs {
