@@ -141,6 +141,7 @@ function ChytAliasSuggest({
 
     return (
         <Suggest
+            autoFocus
             className={`${block('alias-suggest')} ${className}`}
             text={value}
             filter={(_x, text) => {

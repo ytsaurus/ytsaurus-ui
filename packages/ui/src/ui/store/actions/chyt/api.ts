@@ -24,14 +24,14 @@ export type ChytApi =
           action: 'set_options';
           params: {
               alias: string;
-              options: {
-                  instance_count?: number;
-                  instance_cpu?: number;
-                  instance_total_memory?: number;
-                  pool: string;
-              };
+              options: Record<string, unknown>;
           };
           response: void;
+      }
+    | {
+          action: 'describe_options';
+          params: {alias: string};
+          response: WithResult<Array<ChytCliqueOptionsGroup>>;
       }
     | {action: 'status'; params: {alias: string}; response: WithResult<ChytStatusResponse>};
 
@@ -70,6 +70,30 @@ export type ChytListResponseItem = {
 
 export type ChytCliqueStateType = 'active' | 'broken' | 'inactive';
 
+export type ChytCliqueOptionsGroup = {
+    title: string;
+    options: Array<ChytCliqueOptionDescription>;
+    hidden: boolean;
+};
+
+export type ChytCliqueOptionDescription =
+    | ChytCliqueOption<'string', string>
+    | ChytCliqueOption<'bool', boolean>
+    | ChytCliqueOption<'uint64', number>
+    | ChytCliqueOption<'yson', JsonAsString>;
+
+export type ChytCliqueOptionType = ChytCliqueOptionDescription['type'];
+
+export type JsonAsString = string;
+
+export type ChytCliqueOption<TypeName extends string, T> = {
+    name: string;
+    type: TypeName;
+    current_value?: T | null;
+    default_value?: T;
+    description?: string;
+};
+
 export function chytApiAction<
     T extends ChytApi['action'] = never,
     ApiItem extends ChytApi & {action: T} = ChytApi & {action: T},
@@ -99,7 +123,7 @@ export function chytApiAction<
             skipSuccessToast: !successTitle,
             successTitle,
             skipErrorToast,
-            errorTitle: `Failed to ${action} clique`,
+            errorTitle: `'${action}' action is failed`,
         },
     ).then((response) => {
         return response.data;

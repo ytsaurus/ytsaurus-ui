@@ -38,6 +38,7 @@ export default class ErrorBlock extends Component {
         className: PropTypes.string,
         settings: PropTypes.object,
         topMargin: PropTypes.oneOf(['none', 'half']),
+        bottomMargin: PropTypes.bool,
         header: PropTypes.node,
         maxCollapsedDepth: PropTypes.number, // max depth of collapsed inner errors
         disableLogger: PropTypes.bool,
@@ -120,11 +121,12 @@ export default class ErrorBlock extends Component {
     }
 
     render() {
-        const {type, className, topMargin, disableLogger} = this.props;
+        const {type, className, topMargin, bottomMargin, disableLogger} = this.props;
 
-        const classNames = [b({'top-margin': topMargin}, 'elements-' + type), className].filter(
-            Boolean,
-        );
+        const classNames = [
+            b({'top-margin': topMargin, ['bottom-margin']: bottomMargin}, 'elements-' + type),
+            className,
+        ].filter(Boolean);
 
         return (
             <React.Fragment>

@@ -10,6 +10,7 @@ import {makeTabProps} from '../../../utils';
 import {formatByParams} from '../../../utils/format';
 import UIFactory from '../../../UIFactory';
 
+import {ChytPageCliqueSpeclet} from './ChytPageCliqueSpeclet';
 import {ChytPageCliqueMonitoring} from './ChytPageCliqueMonitoring';
 
 export function ChytPageCliqueTabs({className}: {className?: string}) {
@@ -52,7 +53,7 @@ export function ChytPageCliqueTabs({className}: {className?: string}) {
                 )}
                 <Route
                     path={`${match.url}/${ChytCliquePageTab.SPECLET}`}
-                    component={NotImplemented}
+                    component={ChytPageCliqueSpeclet}
                 />
                 <Route path={`${match.url}/${ChytCliquePageTab.ACL}`} component={NotImplemented} />
                 <Redirect to={`${match.url}/${ChytCliquePageTab.SPECLET}`} />

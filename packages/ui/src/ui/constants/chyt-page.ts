@@ -11,3 +11,5 @@ export const ChytCliquePageTab = {
     SPECLET: 'speclet',
     ACL: 'acl',
 };
+
+export const CHYT_SPECLET = createActionTypes('CHYT_SPECLET');
