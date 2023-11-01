@@ -30,7 +30,7 @@ import {PoolTreeSuggestControl} from './controls/PoolTreeSuggestControl/PoolTree
 import {TableSortByControl} from '../../pages/navigation/modals/TableMergeSortModal/TableSortByControl';
 import {TableChunkSize} from '../../pages/navigation/modals/TableMergeSortModal/TableChunkSize';
 import {UsableAccountSuggest} from '../../pages/accounts/UsableAccountSuggest';
-import AnnotationEditor from '../../pages/navigation/AnnotationEditor/AnnotationEditor';
+import {EditAnnotationWithPreview} from '../../components/EditAnnotationWithPreview/EditAnnotationWithPreview';
 import {
     DFDialog,
     DFDialogField,
@@ -95,7 +95,7 @@ registerDialogControl('pool-tree', PoolTreeSuggestControl);
 registerDialogControl('table-sort-by', TableSortByControl);
 registerDialogControl('table-chunk-size', TableChunkSize);
 
-registerDialogControl('annotation', AnnotationEditor);
+registerDialogControl('annotation', EditAnnotationWithPreview);
 
 registerDialogControl('pool-quota-editor', PoolQuotaEditor);
 
@@ -166,7 +166,11 @@ export type DialogField<FormValues = unknown> =
     | RegisteredDialogField<'pool-tree', ComponentProps<typeof PoolTreeSuggestControl>, FormValues>
     | RegisteredDialogField<'table-sort-by', ComponentProps<typeof TableSortByControl>, FormValues>
     | RegisteredDialogField<'table-chunk-size', ComponentProps<typeof TableChunkSize>, FormValues>
-    | RegisteredDialogField<'annotation', ComponentProps<typeof AnnotationEditor>, FormValues>
+    | RegisteredDialogField<
+          'annotation',
+          ComponentProps<typeof EditAnnotationWithPreview>,
+          FormValues
+      >
     | RegisteredDialogField<'pool-quota-editor', ComponentProps<typeof PoolQuotaEditor>, FormValues>
     | RegisteredDialogField<
           'bundle-table-field',

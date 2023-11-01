@@ -301,6 +301,7 @@ function AttributesEditorLoaded() {
             {
                 name: 'annotation',
                 type: 'annotation' as const,
+                fullWidth: true,
                 extras: {
                     valuePath: annotationPath,
                     className: block('full-height'),

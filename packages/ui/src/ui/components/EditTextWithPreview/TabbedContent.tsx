@@ -1,6 +1,6 @@
 import React from 'react';
 import cn from 'bem-cn-lite';
-import Button from '../../../components/Button/Button';
+import Button from '../../components/Button/Button';
 
 import './TabbedContent.scss';
 import {DropdownMenu, DropdownMenuItem} from '@gravity-ui/uikit';
