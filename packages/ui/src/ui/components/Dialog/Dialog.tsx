@@ -189,9 +189,15 @@ export function YTDFDialog<Values, InitialValues = Partial<Values>>(
         InitialValues,
         DialogTabField<DialogField<Values>>,
         DialogField<Values>
-    >,
+    > & {asLeftTopBlock?: boolean},
 ) {
-    return <DFDialog {...(props as any)} />;
+    const {modal, asLeftTopBlock, headerProps} = props;
+    const dialog = <DFDialog {...(props as any)} modal={asLeftTopBlock ? false : modal} />;
+    return asLeftTopBlock ? (
+        <div className={block('as-block', {['has-header']: Boolean(headerProps)})}>{dialog}</div>
+    ) : (
+        dialog
+    );
 }
 
 export function DialogError(props: FIX_MY_TYPE) {
