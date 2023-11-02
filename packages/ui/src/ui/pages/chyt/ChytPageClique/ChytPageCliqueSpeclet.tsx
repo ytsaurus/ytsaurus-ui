@@ -13,6 +13,7 @@ import {
     getChytSpecletDataAlias,
     getChytSpecletError,
 } from '../../../store/selectors/chyt/speclet';
+import {getEditJsonYsonSettings} from '../../../store/selectors/thor/unipika';
 import {chytLoadCliqueSpeclet, chytSetOptions} from '../../../store/actions/chyt/speclet';
 import {ChytCliqueSpecletState} from '../../../store/reducers/chyt/speclet';
 import {useThunkDispatch} from '../../../store/thunkDispatch';
@@ -110,6 +111,8 @@ function ChytSpeclet({
     const dispatch = useThunkDispatch();
     const [error, setError] = React.useState<YTError | undefined>();
 
+    const unipikaSettings = useSelector(getEditJsonYsonSettings);
+
     const {fields, initialValues, fieldTypeByname} = React.useMemo(() => {
         const currentValues: Record<string, any> = {};
         const fieldTypeByname: Record<string, ReturnType<typeof fieldType>> = {};
@@ -136,7 +139,7 @@ function ChytSpeclet({
                             Object.assign(extras, {placeholder: String(item.default_value)});
                         }
                     } else if (type === 'json') {
-                        Object.assign(extras, {minHeight: 200});
+                        Object.assign(extras, {minHeight: 200, unipikaSettings});
                     }
                     return res;
                 });
