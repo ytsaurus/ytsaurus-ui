@@ -6,7 +6,7 @@ const client: ServiceConfig['client'] = {
     icons: ['img/svg'],
     monaco: {
         filename: '[name].[hash:8].worker.js',
-        languages: ['markdown'],
+        languages: ['markdown', 'json'],
     },
     hiddenSourceMap: false,
     disableReactRefresh: true,

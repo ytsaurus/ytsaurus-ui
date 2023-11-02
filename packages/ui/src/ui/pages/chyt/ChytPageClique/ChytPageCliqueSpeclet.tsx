@@ -50,17 +50,53 @@ export function ChytPageCliqueSpeclet() {
 function fieldType(optionType: 'string' | 'bool' | 'uint64' | 'yson') {
     switch (optionType) {
         case 'string':
-            return 'text';
+            return 'text' as const;
         case 'bool':
-            return 'tumbler';
+            return 'tumbler' as const;
         case 'uint64':
-            return 'number';
+            return 'number' as const;
         case 'yson':
-            return 'textarea';
+            return 'json' as const;
         default:
             throw new Error(`Unexpected option type: ${optionType}`);
     }
 }
+
+function makeConverter<T>() {
+    return {
+        toFieldValue(value: any) {
+            return value as T;
+        },
+        fromFieldValue(value: any, _oldV?: any) {
+            return value;
+        },
+    };
+}
+
+const CONVERTER = {
+    number: {
+        toFieldValue(value: unknown) {
+            return {value: value as number | undefined};
+        },
+        fromFieldValue(value: any, _oldV?: any) {
+            return value?.value;
+        },
+    },
+    json: {
+        toFieldValue(value: unknown) {
+            return {value: value !== undefined ? JSON.stringify(value, null, 2) : undefined};
+        },
+        fromFieldValue(value: any, oldV?: any) {
+            try {
+                return JSON.parse(value.value);
+            } catch {
+                return oldV;
+            }
+        },
+    },
+    tumbler: makeConverter<boolean>(),
+    text: makeConverter<string>(),
+};
 
 function ChytSpeclet({
     alias,
@@ -76,30 +112,31 @@ function ChytSpeclet({
 
     const {fields, initialValues, fieldTypeByname} = React.useMemo(() => {
         const currentValues: Record<string, any> = {};
-        const fieldTypeByname: Record<string, DialogField['type']> = {};
+        const fieldTypeByname: Record<string, ReturnType<typeof fieldType>> = {};
         return {
             fieldTypeByname,
             initialValues: currentValues,
             fields: data?.map((group) => {
                 const sectionFields: Array<DialogField> = group.options.map((item) => {
                     const type = (fieldTypeByname[item.name] = fieldType(item.type));
-                    currentValues[item.name] =
-                        type === 'number' ? {value: item.current_value} : item.current_value;
+                    currentValues[item.name] = CONVERTER[type].toFieldValue(item.current_value);
                     fieldTypeByname[item.name] = fieldType(item.type);
                     const res = {
                         name: item.name,
                         type: fieldType(item.type),
                         caption: format.ReadableField(item.name),
                         tooltip: item.description,
-                        extras: {
-                            disabled: !allowEdit,
-                        },
+                        fullWidth: type === 'json',
                     } as const;
+
+                    const {extras} = Object.assign(res, {extras: {disabled: !allowEdit}});
                     if (type === 'number') {
-                        Object.assign(res.extras, {hidePrettyValue: true});
+                        Object.assign(extras, {hidePrettyValue: true});
                         if (item.default_value) {
-                            Object.assign(res.extras, {placeholder: String(item.default_value)});
+                            Object.assign(extras, {placeholder: String(item.default_value)});
                         }
+                    } else if (type === 'json') {
+                        Object.assign(extras, {minHeight: 200});
                     }
                     return res;
                 });
@@ -128,8 +165,8 @@ function ChytSpeclet({
                         (acc, value, key) => {
                             const oldValue = initialValues[key];
                             const type = fieldTypeByname[key];
-                            const v = type === 'number' ? value.value : value;
-                            const oldV = type === 'number' ? oldValue.value : oldValue;
+                            const oldV = CONVERTER[type].fromFieldValue(oldValue);
+                            const v = CONVERTER[type].fromFieldValue(value, oldV);
                             if (v !== oldV) {
                                 acc[key] = v;
                             }

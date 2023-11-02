@@ -4,7 +4,6 @@ import SplitPane from 'react-split-pane';
 
 import {DialogControlProps} from '../../components/Dialog/Dialog.types';
 import MonacoEditor from '../../components/MonacoEditor';
-import {Markdown} from '../../components/Markdown/Markdown';
 import Icon from '../../components/Icon/Icon';
 
 import TabbedContent from './TabbedContent';
@@ -21,7 +20,14 @@ export type EditTextWithPreviewProps = DialogControlProps<
         editorActions: Array<DropdownMenuItem>;
         editorTitle?: string;
         editorSubTitle?: string;
-        editorLang: 'markdown';
+        editorLang: 'markdown' | 'json';
+        disabled?: boolean;
+
+        renderPreview: (value?: string) => React.ReactElement;
+
+        minHeight?: number;
+
+        initialShowPreview?: boolean;
     }
 >;
 
@@ -33,19 +39,20 @@ EditTextWithPreview.getDefaultValue = () => {
     return {value: undefined};
 };
 
-export function EditTextWithPreview(props: EditTextWithPreviewProps) {
-    const {
-        value: valueProp,
-        onChange: onChangeProp,
-        editorActions,
-        className,
-        editorTitle = 'Text',
-        editorSubTitle,
-    } = props;
-
+export function EditTextWithPreview({
+    value: valueProp,
+    onChange: onChangeProp,
+    editorActions,
+    className,
+    editorTitle = 'Text',
+    editorSubTitle,
+    renderPreview,
+    minHeight,
+    initialShowPreview,
+}: EditTextWithPreviewProps) {
     const {value} = valueProp;
 
-    const [showPreview, setShowPreview] = React.useState(false);
+    const [showPreview, setShowPreview] = React.useState(initialShowPreview);
     const togglePreview = React.useCallback(() => {
         setShowPreview(!showPreview);
     }, [setShowPreview, showPreview]);
@@ -86,12 +93,18 @@ export function EditTextWithPreview(props: EditTextWithPreviewProps) {
 
     const sizeRef = React.useRef<number>(350);
 
+    const style = React.useMemo(() => {
+        return minHeight ? {minHeight} : undefined;
+    }, [minHeight]);
+
+    const divProps = {className: block(null, className), style: style};
+
     if (!showPreview) {
-        return <div className={block(null, className)}>{left}</div>;
+        return <div {...divProps}>{left}</div>;
     }
 
     return (
-        <div className={block(null, className)}>
+        <div {...divProps}>
             <SplitPane
                 allowResize={true}
                 minSize={160}
@@ -111,7 +124,7 @@ export function EditTextWithPreview(props: EditTextWithPreviewProps) {
                                 name={'Preview'}
                                 actions={[showHideAction]}
                             >
-                                <Markdown text={value || ''} />
+                                {renderPreview(value)}
                             </TabbedContent>
                         ),
                     ],

@@ -31,6 +31,7 @@ import {TableSortByControl} from '../../pages/navigation/modals/TableMergeSortMo
 import {TableChunkSize} from '../../pages/navigation/modals/TableMergeSortModal/TableChunkSize';
 import {UsableAccountSuggest} from '../../pages/accounts/UsableAccountSuggest';
 import {EditAnnotationWithPreview} from '../../components/EditAnnotationWithPreview/EditAnnotationWithPreview';
+import {EditJsonWithPreview} from '../../components/EditJsonWithPreview/EditJsonWithPreview';
 import {
     DFDialog,
     DFDialogField,
@@ -96,6 +97,8 @@ registerDialogControl('table-sort-by', TableSortByControl);
 registerDialogControl('table-chunk-size', TableChunkSize);
 
 registerDialogControl('annotation', EditAnnotationWithPreview);
+
+registerDialogControl('json', EditJsonWithPreview);
 
 registerDialogControl('pool-quota-editor', PoolQuotaEditor);
 
@@ -171,6 +174,7 @@ export type DialogField<FormValues = unknown> =
           ComponentProps<typeof EditAnnotationWithPreview>,
           FormValues
       >
+    | RegisteredDialogField<'json', ComponentProps<typeof EditJsonWithPreview>, FormValues>
     | RegisteredDialogField<'pool-quota-editor', ComponentProps<typeof PoolQuotaEditor>, FormValues>
     | RegisteredDialogField<
           'bundle-table-field',
