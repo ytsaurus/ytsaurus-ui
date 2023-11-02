@@ -13,7 +13,7 @@ interface Props {
     subTitle?: string;
     actions?: Array<DropdownMenuItem<unknown>>;
     actionAsDropdown?: boolean;
-    children: React.ReactElement;
+    children: React.ReactNode;
     contentClassName?: string;
 }
 

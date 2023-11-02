@@ -5,6 +5,7 @@ import {
     EditTextWithPreview,
     EditTextWithPreviewProps,
 } from '../../components/EditTextWithPreview/EditTextWithPreview';
+import {Markdown} from '../../components/Markdown/Markdown';
 
 export type EditAnnotationProps = DialogControlProps<
     EditTextWithPreviewProps['value'],
@@ -86,6 +87,11 @@ export function EditAnnotationWithPreview(props: EditAnnotationProps) {
             }
             editorActions={resetActions}
             editorLang={'markdown'}
+            renderPreview={renderPreview}
         />
     );
+}
+
+function renderPreview(value?: string) {
+    return <Markdown text={value || ''} />;
 }
