@@ -10,7 +10,7 @@ import {Settings, UnipikaValue} from './StructuredYson/StructuredYsonTypes';
 
 import StructuredYsonVirtualized from './StructuredYsonVirtualized/StructuredYsonVirtualized';
 
-interface Props {
+export interface YsonProps {
     settings?: Settings;
     value: any;
     inline?: boolean;
@@ -23,13 +23,13 @@ interface Props {
 
 interface State {
     convertedValue: UnipikaValue;
-    value: Props['value'];
-    settings: Props['settings'];
+    value: YsonProps['value'];
+    settings: YsonProps['settings'];
 }
 
 const INITIAL = {};
 
-export default class Yson extends Component<Props, State> {
+export default class Yson extends Component<YsonProps, State> {
     static settingsProps = PropTypes.shape({
         nonBreakingIndent: PropTypes.bool,
         escapeWhitespace: PropTypes.bool,
@@ -68,7 +68,7 @@ export default class Yson extends Component<Props, State> {
         settings: Yson.defaultUnipikaSettings,
     };
 
-    static getDerivedStateFromProps(props: Props, state: State) {
+    static getDerivedStateFromProps(props: YsonProps, state: State) {
         const {value: prevValue, settings: prevSettings} = state;
         const {value, settings = {}} = props;
 

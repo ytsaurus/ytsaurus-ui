@@ -6,9 +6,14 @@ import {
     EditTextWithPreview,
     EditTextWithPreviewProps,
 } from '../../components/EditTextWithPreview/EditTextWithPreview';
-import Yson from '../../components/Yson/Yson';
+import Yson, {YsonProps} from '../../components/Yson/Yson';
 
-export type EditJsonProps = EditTextWithPreviewProps & {initialValue?: EditJsonProps['value']};
+export type EditJsonProps = EditTextWithPreviewProps & {
+    initialValue?: EditJsonProps['value'];
+    unipikaSettings?: YsonProps['settings'];
+};
+
+const YsonPreviewMemo = React.memo(YsonPreview);
 
 EditJsonWithPreview.isEmpty = (value: EditTextWithPreviewProps['value']) => {
     return !value;
@@ -22,6 +27,7 @@ export function EditJsonWithPreview({
     value: valueProp,
     onChange: onChangeProp,
     initialValue: initialValueProp,
+    unipikaSettings,
     ...rest
 }: EditJsonProps) {
     const {value: initialValue} = initialValueProp ?? {};
@@ -59,16 +65,12 @@ export function EditJsonWithPreview({
             editorTitle={'Use JSON syntax'}
             editorActions={resetActions}
             editorLang={'json'}
-            renderPreview={renderYsonPreview}
+            renderPreview={(v) => <YsonPreviewMemo value={v} settings={unipikaSettings} />}
         />
     );
 }
 
-function renderYsonPreview(value?: string) {
-    return <YsonPreview value={value} />;
-}
-
-function YsonPreview({value}: {value?: string}) {
+function YsonPreview({value, settings}: {value?: string; settings: YsonProps['settings']}) {
     const obj = React.useMemo(() => {
         try {
             return {value: JSON.parse(value || 'null')};
@@ -80,5 +82,5 @@ function YsonPreview({value}: {value?: string}) {
         return <Text color="danger">{obj.error?.message}</Text>;
     }
 
-    return <Yson value={obj.value} />;
+    return <Yson value={obj.value} settings={settings} />;
 }

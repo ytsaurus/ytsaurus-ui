@@ -56,3 +56,5 @@ export const getOperationAttributesYsonSettings = createSelector([getYsonSetting
 export const getOperationExperimentsYsonSettings = createSelector([getYsonSettings], _.clone);
 
 export const getNavigationMountConfigYsonSettings = createSelector([getYsonSettings], _.clone);
+
+export const getEditJsonYsonSettings = createSelector([getYsonSettings], _.clone);
