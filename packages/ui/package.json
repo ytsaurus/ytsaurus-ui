@@ -75,7 +75,7 @@
     "type-is": "1.6.18"
   },
   "devDependencies": {
-    "@gravity-ui/app-builder": "^0.3.0",
+    "@gravity-ui/app-builder": "^0.7.0",
     "@gravity-ui/chartkit": "^4.7.2",
     "@gravity-ui/components": "^2.4.1",
     "@gravity-ui/dashkit": "^6.0.0",
@@ -108,7 +108,6 @@
     "@types/react-router-dom": "^5.3.3",
     "@types/react-sticky": "^6.0.4",
     "@types/type-is": "^1.6.3",
-    "babel-plugin-inline-react-svg": "^2.0.2",
     "bem-cn-lite": "^4.1.0",
     "bignumber.js": "^9.1.2",
     "copy-to-clipboard": "^3.3.1",

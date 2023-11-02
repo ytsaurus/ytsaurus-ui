@@ -10,8 +10,6 @@ import {getJobPivotKeysData} from '../../../../store/selectors/job/detail';
 import {RootState} from '../../../../store/reducers';
 import unipika from '../../../../common/thor/unipika';
 
-import './PivotKeys.scss';
-
 const block = cn('job-pivot-keys');
 const ElementsTable: any = ElementsTableRaw;
 

@@ -2,7 +2,6 @@ import React from 'react';
 import _ from 'lodash';
 import cn from 'bem-cn-lite';
 
-import './TagSelector.scss';
 import Select from '../../components/Select/Select';
 const block = cn('tag-selector');
 
