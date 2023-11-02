@@ -9,6 +9,7 @@ const client: ServiceConfig['client'] = {
         languages: ['markdown'],
     },
     hiddenSourceMap: false,
+    disableReactRefresh: true,
 };
 
 const server: ServiceConfig['server'] = {

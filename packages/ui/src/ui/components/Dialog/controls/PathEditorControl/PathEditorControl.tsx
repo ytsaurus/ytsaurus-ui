@@ -1,7 +1,6 @@
 import React from 'react';
 import cn from 'bem-cn-lite';
 import PathEditor from '../../../../containers/PathEditor/PathEditor';
-import './PathEditorControl.scss';
 
 const block = cn('path-editor-control');
 
