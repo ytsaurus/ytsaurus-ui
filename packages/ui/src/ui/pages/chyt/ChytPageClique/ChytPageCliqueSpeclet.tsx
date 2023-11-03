@@ -7,7 +7,7 @@ import format from '../../../common/hammer/format';
 import Error from '../../../components/Error/Error';
 import {DialogField, YTDFDialog} from '../../../components/Dialog/Dialog';
 
-import {getChytCurrrentClique} from '../../../store/selectors/chyt';
+import {getChytCurrentAlias} from '../../../store/selectors/chyt';
 import {
     getChytSpecletData,
     getChytSpecletDataAlias,
@@ -21,7 +21,7 @@ import {YTError} from '../../../../@types/types';
 
 export function ChytPageCliqueSpeclet() {
     const dispatch = useDispatch();
-    const alias = useSelector(getChytCurrrentClique);
+    const alias = useSelector(getChytCurrentAlias);
 
     React.useMemo(() => {
         if (alias) {
