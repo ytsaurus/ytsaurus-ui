@@ -113,17 +113,17 @@ function ChytSpeclet({
 
     const unipikaSettings = useSelector(getEditJsonYsonSettings);
 
-    const {fields, initialValues, fieldTypeByname} = React.useMemo(() => {
+    const {fields, initialValues, fieldTypeByName} = React.useMemo(() => {
         const currentValues: Record<string, any> = {};
-        const fieldTypeByname: Record<string, ReturnType<typeof fieldType>> = {};
+        const typeByName: Record<string, ReturnType<typeof fieldType>> = {};
         return {
-            fieldTypeByname,
+            fieldTypeByName: typeByName,
             initialValues: currentValues,
             fields: data?.map((group) => {
                 const sectionFields: Array<DialogField> = group.options.map((item) => {
-                    const type = (fieldTypeByname[item.name] = fieldType(item.type));
+                    const type = (typeByName[item.name] = fieldType(item.type));
                     currentValues[item.name] = CONVERTER[type].toFieldValue(item.current_value);
-                    fieldTypeByname[item.name] = fieldType(item.type);
+                    typeByName[item.name] = fieldType(item.type);
                     const res = {
                         name: item.name,
                         type: fieldType(item.type),
@@ -139,7 +139,10 @@ function ChytSpeclet({
                             Object.assign(extras, {placeholder: String(item.default_value)});
                         }
                     } else if (type === 'json') {
-                        Object.assign(extras, {minHeight: 200, unipikaSettings});
+                        Object.assign(extras, {
+                            minHeight: 200,
+                            unipikaSettings,
+                        });
                     }
                     return res;
                 });
@@ -152,7 +155,7 @@ function ChytSpeclet({
                 };
             }),
         };
-    }, [data]);
+    }, [data, allowEdit, unipikaSettings]);
 
     return (
         <React.Fragment>
@@ -167,7 +170,7 @@ function ChytSpeclet({
                         values as any,
                         (acc, value, key) => {
                             const oldValue = initialValues[key];
-                            const type = fieldTypeByname[key];
+                            const type = fieldTypeByName[key];
                             const oldV = CONVERTER[type].fromFieldValue(oldValue);
                             const v = CONVERTER[type].fromFieldValue(value, oldV);
                             if (v !== oldV) {

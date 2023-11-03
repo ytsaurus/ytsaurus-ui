@@ -9,18 +9,32 @@ const block = cn('compact-error-block');
 
 interface Props {
     error: any;
+    maxMessageLength?: number;
 }
 
-export default function CompactError({error}: Props) {
+function messageFromError(error: {message: string}, maxLength?: number) {
+    if (!maxLength || maxLength < 0 || 'string' !== typeof error?.message) {
+        return undefined;
+    }
+
+    const resLength = Math.min(maxLength, error.message.length);
+    return error.message.length - resLength > 2
+        ? error.message.substring(0, maxLength) + '\u2026'
+        : error.message;
+}
+
+export default function CompactError({error, maxMessageLength}: Props) {
+    const message = messageFromError(error, maxMessageLength);
     return (
         <Text variant="body-1" color="danger" className={block()}>
-            An error occurred{' '}
+            {message ?? 'An error occurred'}
             <Link
+                className={block('link')}
                 onClick={() => {
                     showErrorPopup(error, {hideOopsMsg: true});
                 }}
             >
-                Show error
+                Details
             </Link>
         </Text>
     );

@@ -1,3 +1,7 @@
 .compact-error-block {
-   margin: 10px;
+    margin: 10px;
+
+    &__link {
+        margin: 8px;
+    }
 }

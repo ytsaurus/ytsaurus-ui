@@ -7,11 +7,16 @@ import {
     EditTextWithPreviewProps,
 } from '../../components/EditTextWithPreview/EditTextWithPreview';
 import Yson, {YsonProps} from '../../components/Yson/Yson';
+import ErrorBoundary from '../../components/ErrorBoundary/ErrorBoundary';
+import {DialogControlProps} from '../../components/Dialog/Dialog.types';
 
-export type EditJsonProps = EditTextWithPreviewProps & {
-    initialValue?: EditJsonProps['value'];
-    unipikaSettings?: YsonProps['settings'];
-};
+export type EditJsonProps = DialogControlProps<
+    {value: string | undefined; error?: string},
+    {
+        unipikaSettings?: YsonProps['settings'];
+    }
+> &
+    Omit<EditTextWithPreviewProps, keyof DialogControlProps<unknown>>;
 
 const YsonPreviewMemo = React.memo(YsonPreview);
 
@@ -25,62 +30,80 @@ EditJsonWithPreview.getDefaultValue = () => {
 
 export function EditJsonWithPreview({
     value: valueProp,
-    onChange: onChangeProp,
-    initialValue: initialValueProp,
+    onChange,
     unipikaSettings,
     ...rest
 }: EditJsonProps) {
-    const {value: initialValue} = initialValueProp ?? {};
     const {value} = valueProp;
-    const onChange = React.useCallback(
+    const onTextChange = React.useCallback(
         ({value: newValue}: {value?: string} = {}) => {
             if (value !== newValue) {
                 const prevIsUndefined = value === undefined;
                 if (prevIsUndefined && newValue === '') {
                     // nothing to do
                 } else {
-                    onChangeProp({value: newValue});
+                    onChange({value: newValue});
                 }
             }
         },
-        [onChangeProp, value],
+        [onChange, value],
     );
 
-    const changed = initialValue !== value;
-
-    const resetActions: EditTextWithPreviewProps['editorActions'] = [];
-    if (changed) {
-        resetActions.push({
-            text: 'Restore',
-            action: () => onChangeProp(initialValueProp ?? {value: undefined}),
-        });
-    }
+    const onError = React.useCallback(
+        (e: any) => {
+            onChange({value, error: `${e}`});
+        },
+        [value, onChange],
+    );
 
     return (
         <EditTextWithPreview
             initialShowPreview
             {...rest}
             value={valueProp}
-            onChange={onChange}
+            onChange={onTextChange}
             editorTitle={'Use JSON syntax'}
-            editorActions={resetActions}
             editorLang={'json'}
-            renderPreview={(v) => <YsonPreviewMemo value={v} settings={unipikaSettings} />}
+            renderPreview={() => (
+                // This ErrorBoundary catches some unipika errors
+                <ErrorBoundary
+                    key={value}
+                    maxCompactMessageLength={200}
+                    onError={onError}
+                    disableRum
+                >
+                    <YsonPreviewMemo
+                        value={valueProp}
+                        settings={unipikaSettings}
+                        onError={onError}
+                    />
+                </ErrorBoundary>
+            )}
         />
     );
 }
 
-function YsonPreview({value, settings}: {value?: string; settings: YsonProps['settings']}) {
+function YsonPreview({
+    value: {value, error},
+    settings,
+    onError,
+}: {
+    value: EditJsonProps['value'];
+    settings: YsonProps['settings'];
+    onError: (e: any) => void;
+}) {
     const obj = React.useMemo(() => {
         try {
-            return {value: JSON.parse(value || 'null')};
+            return JSON.parse(value || 'null');
         } catch (e) {
-            return {error: e as Error};
+            onError(e);
+            return undefined;
         }
-    }, [value]);
-    if (obj.error) {
-        return <Text color="danger">{obj.error?.message}</Text>;
+    }, [value, onError]);
+
+    if (error) {
+        return <Text color="danger">{error}</Text>;
     }
 
-    return <Yson value={obj.value} settings={settings} />;
+    return <Yson value={obj} settings={settings} />;
 }
