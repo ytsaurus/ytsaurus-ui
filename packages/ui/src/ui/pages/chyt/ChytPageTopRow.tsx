@@ -17,7 +17,7 @@ import {Page} from '../../constants';
 import {RowWithName} from '../../containers/AppNavigation/TopRowContent/SectionName';
 import {PoolTreeLoaderWaitDeafultTree} from '../../hooks/global';
 import {getFavouriteChyt, isActiveCliqueInFavourites} from '../../store/selectors/favourites';
-import {getChytCurrrentClique} from '../../store/selectors/chyt';
+import {getChytCurrentAlias} from '../../store/selectors/chyt';
 import {getCluster, getGlobalDefaultPoolTreeName} from '../../store/selectors/global';
 import {chytApiAction} from '../../store/actions/chyt/api';
 import {chytCliqueCreate} from '../../store/actions/chyt/list';
@@ -43,7 +43,7 @@ function ChytFavourites() {
     const isActiveInFavourites = useSelector(isActiveCliqueInFavourites);
     const favourites = useSelector(getFavouriteChyt);
     const dispatch = useDispatch();
-    const currentClique = useSelector(getChytCurrrentClique);
+    const currentClique = useSelector(getChytCurrentAlias);
 
     const handleFavouriteItemClick = React.useCallback(() => {
         // dispatch(setActiveAccount(item.path));
@@ -68,7 +68,7 @@ function ChytFavourites() {
 function ChytBreadcrumsbs() {
     const history = useHistory();
     const cluster = useSelector(getCluster);
-    const alias = useSelector(getChytCurrrentClique);
+    const alias = useSelector(getChytCurrentAlias);
     const items = React.useMemo(() => {
         const res: Array<BreadcrumbsItem & {url: string}> = [
             {

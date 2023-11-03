@@ -5,11 +5,12 @@ import {useSelector} from 'react-redux';
 import {ChytCliquePageTab} from '../../../constants/chyt-page';
 import Tabs from '../../../components/Tabs/Tabs';
 import {getCluster} from '../../../store/selectors/global';
-import {getChytCurrrentClique} from '../../../store/selectors/chyt';
+import {getChytCurrentAlias} from '../../../store/selectors/chyt';
 import {makeTabProps} from '../../../utils';
 import {formatByParams} from '../../../utils/format';
 import UIFactory from '../../../UIFactory';
 
+import {ChytPageCliqueAcl} from './ChytPageCliqueAcl';
 import {ChytPageCliqueSpeclet} from './ChytPageCliqueSpeclet';
 import {ChytPageCliqueMonitoring} from './ChytPageCliqueMonitoring';
 
@@ -17,7 +18,7 @@ export function ChytPageCliqueTabs({className}: {className?: string}) {
     const match = useRouteMatch();
 
     const ytCluster = useSelector(getCluster);
-    const chytAlias = useSelector(getChytCurrrentClique);
+    const chytAlias = useSelector(getChytCurrentAlias);
 
     const chytMonitoring = UIFactory.getMonitoringComponentForChyt();
 
@@ -55,13 +56,12 @@ export function ChytPageCliqueTabs({className}: {className?: string}) {
                     path={`${match.url}/${ChytCliquePageTab.SPECLET}`}
                     component={ChytPageCliqueSpeclet}
                 />
-                <Route path={`${match.url}/${ChytCliquePageTab.ACL}`} component={NotImplemented} />
+                <Route
+                    path={`${match.url}/${ChytCliquePageTab.ACL}`}
+                    component={ChytPageCliqueAcl}
+                />
                 <Redirect to={`${match.url}/${ChytCliquePageTab.SPECLET}`} />
             </Switch>
         </React.Fragment>
     );
-}
-
-function NotImplemented() {
-    return 'Not implemented';
 }

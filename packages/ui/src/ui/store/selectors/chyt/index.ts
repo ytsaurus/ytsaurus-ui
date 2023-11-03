@@ -21,7 +21,7 @@ export const getChytListAvailableStates = createSelector([getChytListData], (dat
     return uniq_(items.map((item) => item.state!)).sort();
 });
 
-export const getChytCurrrentClique = (state: RootState) => state.chyt.clique.currentClique;
+export const getChytCurrentAlias = (state: RootState) => state.chyt.clique.currentClique;
 
 export const getChytListFilterAlias = (state: RootState) => state.chyt.listFilters.name;
 export const getChytListFilterCreator = (state: RootState) => state.chyt.listFilters.creator;
