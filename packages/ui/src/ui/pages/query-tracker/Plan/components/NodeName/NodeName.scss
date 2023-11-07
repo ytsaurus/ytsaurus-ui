@@ -1,0 +1,17 @@
+.node-name {
+    &__name {
+        display: flex;
+        align-items: center;
+        *:not(:last-child) {
+            margin-right: 6px;
+        }
+    }
+
+    &__operation-node-info {
+        &-popup {
+            min-width: 330px;
+            height: 332px;
+            padding: 0;
+        }
+    }
+}

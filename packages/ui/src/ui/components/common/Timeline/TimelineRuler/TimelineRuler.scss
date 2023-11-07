@@ -1,0 +1,148 @@
+.yc-timeline-ruler {
+    --tl-side-padding-width: 20px;
+
+    --tl-color-border: var(--g-color-line-generic);
+    --tl-color-tick-minor: var(--g-color-line-generic);
+    --tl-color-tick-major: var(--g-color-text-secondary);
+    --tl-color-tick-now: var(--g-color-base-danger-heavy);
+    --tl-color-text: var(--g-color-text-complementary);
+
+    --tl-color-selection: var(--g-color-infographics-axis);
+    --tl-back-selection: var(--g-color-base-selection);
+    --tl-back-selection-handle: var(--g-color-base-selection);
+
+    display: flex;
+    overflow: hidden;
+    box-shadow: inset 0 1px 0 0 var(--tl-color-border), inset 0 -1px 0 0 var(--tl-color-border);
+    align-items: center;
+    padding: 0 var(--tl-side-padding-width);
+
+    &__zoom {
+        display: flex;
+        flex: 0 0 auto;
+        margin-right: 10px;
+    }
+
+    &__ruler {
+        flex: 1 1 auto;
+        overflow: hidden;
+        position: relative;
+        cursor: move;
+    }
+
+    &__ruler-svg {
+        vertical-align: top;
+        pointer-events: none;
+    }
+
+    &__ruler-border {
+        fill: var(--tl-color-border);
+    }
+
+    &__ticks-major {
+        fill: var(--tl-color-tick-major);
+    }
+
+    &__ticks-minor {
+        fill: var(--tl-color-tick-minor);
+    }
+
+    &__labels-minor {
+        position: absolute;
+        top: 50%;
+        transform: translate(0, -7px);
+        user-select: none;
+        color: var(--tl-color-text);
+    }
+
+    &__label-minor {
+        position: absolute;
+        font-size: 11px;
+        transform: translate(-50%);
+        text-align: center;
+        white-space: nowrap;
+    }
+
+    &__selection {
+        pointer-events: none;
+        position: absolute;
+        top: 0;
+        height: 100%;
+        background: var(--tl-back-selection);
+        box-shadow: inset 0 0 0 1px var(--tl-color-selection);
+        border-radius: 5px;
+        cursor: move;
+    }
+
+    &__container {
+        position: relative;
+    }
+
+    &__controls-container {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+    }
+
+    &__selection-interactive {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        pointer-events: all;
+    }
+
+    &__selection-handle {
+        position: absolute;
+        top: 50%;
+        width: 7px;
+        height: 20px;
+        margin-top: -10px;
+        background: linear-gradient(
+                to right,
+                var(--tl-back-selection-handle),
+                var(--tl-back-selection-handle)
+            ),
+            linear-gradient(
+                to right,
+                var(--g-color-base-background),
+                var(--g-color-base-background)
+            );
+        box-shadow: inset 0 0 0 1px var(--tl-color-selection);
+        cursor: ew-resize;
+        pointer-events: all;
+
+        &:after {
+            content: '';
+            position: absolute;
+            width: 1px;
+            top: 4px;
+            bottom: 4px;
+            left: 3px;
+            box-shadow: inset 0 0 0 1px var(--tl-color-selection);
+        }
+
+        &_position_left {
+            left: -3px;
+        }
+
+        &_position_right {
+            right: -3px;
+        }
+    }
+
+    &__zoom-button {
+        width: 36px;
+    }
+
+    &__now-tick {
+        fill: var(--tl-color-tick-now);
+        opacity: 0.5;
+    }
+
+    &__now-button {
+        margin-left: 6px;
+        margin-right: -6px;
+    }
+}

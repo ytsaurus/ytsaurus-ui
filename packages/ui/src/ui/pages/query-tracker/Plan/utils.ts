@@ -624,3 +624,81 @@ function buildOperationUrl(cluster: string, operation: string, tag?: string) {
 
     return `/${cluster.split('.')[0]}${uri}`;
 }
+
+export function drawRunningIcon(progress: NodeProgress | undefined, {operation}: GraphColors) {
+    const div = document.createElement('div');
+    const colors: string[] = [];
+    const dataset: {label: string; count: number}[] = [];
+
+    const {running = 0, completed = 0, total} = progress ?? {};
+    const totalR = total || 1;
+
+    const runningPr = Math.round((running / totalR) * 100);
+    const completedPr = Math.round((completed / totalR) * 100);
+    const leastPr = Math.round(100 - runningPr - completedPr);
+
+    if (completedPr > 0) {
+        dataset.push({label: 'Completed', count: completedPr});
+        colors.push(operation.completed);
+    }
+
+    if (runningPr > 0) {
+        dataset.push({label: 'Running', count: runningPr});
+        colors.push(operation.running);
+    }
+
+    if (leastPr > 0) {
+        dataset.push({label: 'Least', count: leastPr});
+        colors.push(operation.started);
+    }
+
+    const color = scaleOrdinal(colors);
+
+    const width = 80;
+    const height = 80;
+    const radius = Math.min(width, height) / 2;
+    const svg = select(div)
+        .append('svg')
+        .attr('xmlns', 'http://www.w3.org/2000/svg')
+        .attr('viewBox', `0 0 ${width} ${height}`)
+        .append('g')
+        .attr('transform', 'translate(' + width / 2 + ',' + height / 2 + ')');
+
+    const drawArc = arc<(typeof dataset)[number]>()
+        .innerRadius(radius - 10)
+        .outerRadius(radius);
+
+    const pieData = pie<(typeof dataset)[number]>()
+        .value((d) => {
+            return d.count;
+        })
+        .sort(null);
+
+    svg.selectAll('path')
+        .data(pieData(dataset))
+        .enter()
+        .append('path')
+        // @ts-ignore
+        .attr('d', drawArc)
+        .attr('fill', (d) => {
+            return color(d.data.label);
+        });
+
+    return 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(div.innerHTML);
+}
+
+export function handleRefs<T>(...refs: (React.Ref<T> | undefined)[]) {
+    return (node: T) => {
+        refs.forEach((ref) => {
+            if (typeof ref === 'function') {
+                ref(node);
+            } else if (ref) {
+                (ref.current as T) = node;
+            }
+        });
+    };
+}
+
+export function escapeStringForRegexp(search: string) {
+    return search.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}

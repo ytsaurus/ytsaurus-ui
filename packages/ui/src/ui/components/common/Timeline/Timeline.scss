@@ -1,0 +1,9 @@
+:root {
+    --yc-timeline-line-margin: 5px;
+}
+
+.yc-timeline {
+    .yc-timeline-picker {
+        margin-bottom: var(--yc-timeline-line-margin);
+    }
+}

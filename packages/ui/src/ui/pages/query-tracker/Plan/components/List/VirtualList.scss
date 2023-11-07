@@ -1,0 +1,31 @@
+.yq-virtual-list {
+    display: grid;
+    grid-auto-rows: min-content 1fr;
+
+    width: 100%;
+    height: 100%;
+
+    outline: none;
+
+    &__header {
+        width: 100%;
+    }
+
+    &__list {
+        overflow: auto;
+    }
+
+    &__item {
+        &_active {
+            background: var(--g-color-base-simple-hover);
+        }
+
+        &_selected {
+            background: var(--g-color-base-selection);
+        }
+
+        &_clickable {
+            cursor: pointer;
+        }
+    }
+}
