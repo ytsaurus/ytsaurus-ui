@@ -85,6 +85,7 @@ export type RootState = Omit<ReturnType<ReturnType<typeof makeRootReducer>>, 'gl
         asideHeaderWidth: number;
         schedulerVersion: string;
         masterVersion: string;
+        allowedExperimentalPages: Array<string>;
     };
 };
 

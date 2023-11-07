@@ -2,7 +2,7 @@ import React from 'react';
 
 import {useSelector} from 'react-redux';
 
-import {getAdminPages, getGlobalLoadState, isDeveloper} from '../../../store/selectors/global';
+import {getGlobalLoadState, isQueryTrackerAllowed} from '../../../store/selectors/global';
 
 import {LOADING_STATUS, Page} from '../../../constants/index';
 import {Route, Switch} from 'react-router';
@@ -28,8 +28,7 @@ const QueryTrackerTopRowLazy = React.lazy(
 
 export default function TopRowContent() {
     const loadState = useSelector(getGlobalLoadState);
-    const isAdmin = useSelector(isDeveloper);
-    const adminPages = useSelector(getAdminPages);
+    const allowQT = useSelector(isQueryTrackerAllowed);
 
     return loadState !== LOADING_STATUS.LOADED ? null : (
         <Switch>
@@ -48,7 +47,7 @@ export default function TopRowContent() {
             />
             <Route path={`/:cluster/${Page.DASHBOARD}`} component={DashboardTopRowContent} />
             <Route path={`/:cluster/${Page.COMPONENTS}`} component={ComponentsTopRowContent} />
-            {(!adminPages.includes(Page.QUERIES) || isAdmin) && (
+            {allowQT && (
                 <Route
                     path={`/:cluster/${Page.QUERIES}`}
                     component={withLazyLoading(QueryTrackerTopRowLazy)}
