@@ -5,7 +5,7 @@ import yt from '@ytsaurus/javascript-wrapper/lib/yt';
 import Cookies from 'js-cookie';
 
 import ypath from '../../common/thor/ypath';
-import {prepareCheckIsDeveloperRequests} from '../../../shared/utils/check-is-developer';
+import {prepareCheckIsDeveloperRequests} from '../../../shared/utils/check-permission';
 import {INIT_CLUSTER_PARAMS, LOAD_ERROR, UPDATE_CLUSTER} from '../../constants/index';
 import {getCurrentUserName} from '../../store/selectors/global';
 import {getXsrfCookieName} from '../../utils';

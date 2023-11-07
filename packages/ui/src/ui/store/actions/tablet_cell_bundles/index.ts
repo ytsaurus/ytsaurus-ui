@@ -40,7 +40,7 @@ import {getAppBrowserHistory} from '../../../store/window-store';
 import {BatchSubRequest} from '../../../../shared/yt-types';
 import {
     CheckPermissionResult,
-    makeCheckPermissionBatchSubRequest,
+    makeCheckPermissionBatchSubRequestUI,
 } from '../../../utils/acl/acl-api';
 import CancelHelper, {isCancelled} from '../../../utils/cancel-helper';
 
@@ -180,7 +180,7 @@ export function fetchWritePermissions(
     return (dispatch, getState) => {
         const user = getCurrentUserName(getState());
         const requests: Array<BatchSubRequest> = map_(bundles, (item) => {
-            return makeCheckPermissionBatchSubRequest({
+            return makeCheckPermissionBatchSubRequestUI({
                 path: `//sys/tablet_cell_bundles/${item.bundle}`,
                 user,
                 permission: 'write',
