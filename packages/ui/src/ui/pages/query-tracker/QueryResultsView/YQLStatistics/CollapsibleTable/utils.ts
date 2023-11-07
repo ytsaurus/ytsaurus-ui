@@ -1,6 +1,4 @@
-export function escapeStringForRegexp(search: string) {
-    return search.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-}
+import {escapeStringForRegexp} from '../../../Plan/utils';
 
 type Parent = string | null;
 export type RowsMap = Record<string, Row>;
