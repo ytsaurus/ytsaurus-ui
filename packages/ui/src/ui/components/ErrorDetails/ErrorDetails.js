@@ -29,7 +29,7 @@ export default class ErrorDetails extends Component {
                 }),
             ]),
             inner_errors: PropTypes.array,
-            code: PropTypes.code,
+            code: PropTypes.number,
         }),
         settings: PropTypes.object,
         maxCollapsedDepth: PropTypes.number,

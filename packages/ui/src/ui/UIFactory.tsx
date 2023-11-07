@@ -338,7 +338,8 @@ export interface UIFactory {
         renderYqlOperationLink(yqlOperationId: string): React.ReactNode;
     };
 
-    getAdminPages(): string[];
+    getExperimentalPages(): string[];
+    getAllowedExperimentalPages(login: string): Promise<Array<string>>;
 
     docsUrls: DocsUrls;
 
@@ -347,7 +348,7 @@ export interface UIFactory {
     getAclPermissionsSettings(): typeof PERMISSIONS_SETTINGS;
 }
 
-const adminPages: string[] = [];
+const experimentalPages: string[] = [];
 
 const uiFactory: UIFactory = {
     getClusterAppearance(cluster) {
@@ -569,8 +570,12 @@ const uiFactory: UIFactory = {
         return <YTUserSuggest {...props} />;
     },
 
-    getAdminPages() {
-        return adminPages;
+    getExperimentalPages() {
+        return experimentalPages;
+    },
+
+    getAllowedExperimentalPages() {
+        return Promise.resolve([]);
     },
 
     docsUrls: docsUrls,

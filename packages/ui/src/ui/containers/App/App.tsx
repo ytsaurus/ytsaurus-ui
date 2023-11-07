@@ -18,7 +18,7 @@ import {getSettingTheme, shouldUseSafeColors} from '../../store/selectors/settin
 import {RumUiProvider} from '../../rum/RumUiContext';
 import AppNavigation from '../AppNavigation/AppNavigation';
 import RetryBatchModals from '../RetryBatchModal/RetryBatchModal';
-import {setTheme} from '../../store/actions/global';
+import {loadAllowedExperimentalPages, setTheme} from '../../store/actions/global';
 import {getAuthPagesEnabled, getGlobalShowLoginDialog} from '../../store/selectors/global';
 
 import './App.scss';
@@ -58,6 +58,7 @@ class App extends Component<AppProps> {
     render() {
         return (
             <AppNavigation>
+                <LoadAllowedExperimentalUrls />
                 <div className="elements-page">
                     <Route exact path="/" render={() => <ClustersMenu />} />
                     <Route path="/:cluster/" render={() => <ClusterPageWrapper />} />
@@ -69,6 +70,15 @@ class App extends Component<AppProps> {
             </AppNavigation>
         );
     }
+}
+
+function LoadAllowedExperimentalUrls() {
+    const dispatch = useDispatch();
+
+    React.useMemo(() => {
+        dispatch(loadAllowedExperimentalPages());
+    }, [dispatch]);
+    return null;
 }
 
 function AppWithRum() {

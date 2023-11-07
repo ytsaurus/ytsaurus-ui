@@ -15,6 +15,7 @@ import {FIX_MY_TYPE} from '../../../types';
 import UIFactory from '../../../UIFactory';
 import {getConfigData} from '../../../config/ui-settings';
 import {isSupportedYtTvmAPIGlobal} from '../thor/support';
+import {Page} from '../../../../shared/constants/settings';
 
 export const getGlobalError = (state: RootState) => state.global.error.error;
 
@@ -104,6 +105,9 @@ export const getGlobalUsers = (state: RootState) => state.global.users;
 export const getGlobalGroups = (state: RootState) => state.global.groups;
 export const getCurrentUserName = (state: RootState): string => state?.global?.login;
 
+export const getAllowedExperimentalPages = (state: RootState) =>
+    state?.global.allowedExperimentalPages;
+
 const isCheckedDeveloper = (state: RootState): boolean => state?.global?.isDeveloper;
 
 export const isDeveloperSettings = createSelector(
@@ -113,12 +117,20 @@ export const isDeveloperSettings = createSelector(
     },
 );
 
-export const getAdminPages = () => UIFactory.getAdminPages();
-
 export const isDeveloper = createSelector(
     [isDeveloperSettings, getSettingsRegularUserUI],
     (isDeveloper, regularUserUI) => {
         return !regularUserUI && isDeveloper;
+    },
+);
+
+export const isQueryTrackerAllowed = createSelector(
+    [isDeveloper, getAllowedExperimentalPages],
+    (isDeveloper, allowedPages) => {
+        const expPages = UIFactory.getExperimentalPages();
+        return (
+            isDeveloper || !expPages.includes(Page.QUERIES) || allowedPages.includes(Page.QUERIES)
+        );
     },
 );
 

@@ -4,7 +4,8 @@ import {ClusterConfig} from '../../../shared/yt-types';
 import {RootState} from '../reducers';
 import {PAGE_ICONS_BY_ID} from '../../constants/slideoutMenu';
 import {getSettingsPagesOrder, getSettingsPagesPinned} from './settings-ts';
-import {getAdminPages, isDeveloper} from './global';
+import {getAllowedExperimentalPages, isDeveloper} from './global';
+import UIFactory from '../../UIFactory';
 
 interface RecentInfo<T> {
     all: Array<T>;
@@ -27,13 +28,21 @@ export function getRecentClustersInfo(state: RootState): RecentClustersInfo {
 }
 
 const getRecentPagesInfoRaw = createSelector(
-    [(state: RootState) => state.slideoutMenu.pages, getAdminPages, isDeveloper],
-    (pageInfoRaw, adminsPages, isAdmin) => {
+    [(state: RootState) => state.slideoutMenu.pages, isDeveloper, getAllowedExperimentalPages],
+    (pageInfoRaw, isAdmin, allowExpPages) => {
+        const expPages = UIFactory.getExperimentalPages();
+        const hiddenPages = new Set(
+            expPages.filter((expPages) => {
+                return !allowExpPages.includes(expPages);
+            }),
+        );
+
         return {
             ...pageInfoRaw,
-            all: isAdmin
-                ? pageInfoRaw.all
-                : pageInfoRaw.all.filter((page) => !adminsPages.includes(page.id)),
+            all:
+                isAdmin || hiddenPages.size === 0
+                    ? pageInfoRaw.all
+                    : pageInfoRaw.all.filter((page) => !hiddenPages.has(page.id)),
         };
     },
 );

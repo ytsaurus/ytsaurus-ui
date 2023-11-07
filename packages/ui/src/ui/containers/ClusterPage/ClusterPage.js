@@ -36,7 +36,7 @@ import {joinMenuItemsAction, splitMenuItemsAction, trackVisit} from '../../store
 import {setSetting} from '../../store/actions/settings';
 import {initClusterParams, updateCluster} from '../../store/actions/cluster-params';
 import {updateTitle} from '../../store/actions/global';
-import {getAdminPages, isDeveloper} from '../../store/selectors/global';
+import {isQueryTrackerAllowed} from '../../store/selectors/global';
 import {getClusterConfig} from '../../utils';
 import {NAMESPACES, SettingName} from '../../../shared/constants/settings';
 import {
@@ -69,8 +69,6 @@ class ClusterPage extends Component {
         clusterPagePaneSizes: PropTypes.array,
         login: PropTypes.string,
         queriesPageAllowed: PropTypes.bool,
-        isAdmin: PropTypes.bool,
-        adminPages: PropTypes.array,
         maintenancePageEvent: PropTypes.object,
         startingPage: PropTypes.string.isRequired,
         isLoaded: PropTypes.bool.isRequired,
@@ -91,6 +89,8 @@ class ClusterPage extends Component {
         updateCluster: PropTypes.func.isRequired,
         updateTitle: PropTypes.func.isRequired,
         trackVisit: PropTypes.func.isRequired,
+
+        allowQueryTracker: PropTypes.bool,
     };
 
     state = {
@@ -257,7 +257,7 @@ class ClusterPage extends Component {
     }
 
     renderContent(clusterConfig) {
-        const {cluster, startingPage, isLoaded, hasError, paramsError, adminPages, isAdmin} =
+        const {cluster, startingPage, isLoaded, hasError, paramsError, allowQueryTracker} =
             this.props;
 
         return isLoaded && !this.isParamsLoading() ? (
@@ -287,7 +287,7 @@ class ClusterPage extends Component {
                     <Route path={`/:cluster/${Page.USERS}`} component={UsersPage} />
                     <Route path={`/:cluster/${Page.GROUPS}`} component={GroupsPage} />
                     <Route path={`/:cluster/${Page.SCHEDULING}`} component={Scheduling} />
-                    {(!adminPages.includes(Page.QUERIES) || isAdmin) && (
+                    {allowQueryTracker && (
                         <Route path={`/:cluster/${Page.QUERIES}`} component={QueryTracker} />
                     )}
                     {hasOdinPage() && (
@@ -396,9 +396,8 @@ function mapStateToProps(state) {
         isRecentPagesFirst: isRecentPagesFirst(state),
         clusterPagePaneSizes: getClusterPagePaneSizes(state),
         startingPage: getStartingPage(state),
-        isAdmin: isDeveloper(state),
         paramsCluster,
-        adminPages: getAdminPages(),
+        allowQueryTracker: isQueryTrackerAllowed(state),
     };
 }
 
