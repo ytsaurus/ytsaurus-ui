@@ -28,6 +28,10 @@ import {
     ExecuteBatchParams,
     YTPermissionType,
 } from '../../../shared/yt-types';
+import {
+    CheckPermissionItem,
+    makeCheckPermissionBatchSubRequest,
+} from '../../../shared/utils/check-permission';
 import {RequestPermissionParams} from './external-acl-api';
 import {REGISTER_QUEUE_CONSUMER_VITAL} from '../../constants/acl';
 
@@ -174,36 +178,25 @@ export const checkUserPermissions = (
     return checkPermissions(items);
 };
 
-export interface CheckPermissionItem {
-    user: string;
-    path: string;
+export type CheckPermissionItemUI = Omit<CheckPermissionItem, 'permission'> & {
     permission: YTPermissionType | typeof REGISTER_QUEUE_CONSUMER_VITAL;
-    transaction_id?: string;
-}
+};
 
-export function makeCheckPermissionBatchSubRequest({
+export function makeCheckPermissionBatchSubRequestUI({
     path,
     user,
-    permission,
+    permission: uiPermission,
     transaction_id,
-}: CheckPermissionItem) {
-    const result: BatchSubRequest = {
-        command: 'check_permission' as const,
-        parameters: {
-            path,
-            user,
-            ...convertFromUIPermission(permission),
-            ...(transaction_id ? {transaction_id} : {}),
-        },
-    };
-    return result;
+}: CheckPermissionItemUI): BatchSubRequest {
+    const convertedPermission = convertFromUIPermission(uiPermission);
+    return makeCheckPermissionBatchSubRequest({path, user, ...convertedPermission, transaction_id});
 }
 
 export function checkPermissions(
     arr: Array<CheckPermissionItem>,
     ytApiId?: YTApiId,
 ): Promise<CheckPermissionResult[]> {
-    const requests = map_(arr, makeCheckPermissionBatchSubRequest);
+    const requests = map_(arr, makeCheckPermissionBatchSubRequestUI);
 
     return ytApiV3Id
         .executeBatch(ytApiId ?? YTApiId.checkPermissions, {requests})

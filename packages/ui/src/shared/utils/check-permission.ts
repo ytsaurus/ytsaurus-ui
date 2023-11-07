@@ -1,5 +1,5 @@
 import {FIX_MY_TYPE} from '../../@types/types';
-import {BatchResultsItem} from '../yt-types';
+import {BatchResultsItem, BatchSubRequest, YTPermissionType} from '../yt-types';
 
 const yt = require('@ytsaurus/javascript-wrapper')();
 
@@ -7,8 +7,6 @@ export function prepareCheckIsDeveloperRequests(login: string) {
     const [first] = prepareCheckUserPermissionByAclRequests('admins', login, ['write']);
     return [first];
 }
-
-export type YTPermissionType = 'read' | 'write' | 'use' | 'mount';
 
 function prepareCheckUserPermissionByAclRequests(
     groupName: string,
@@ -46,7 +44,7 @@ function checkUserPermissionByAcl(
     return yt.v3.executeBatch({
         setup,
         parameters: {requests},
-    }) as Promise<Array<BatchResultsItem<{action: 'allow' | 'deny'}>>>;
+    }) as Promise<Array<BatchResultsItem<CheckPermissionItemResult>>>;
 }
 
 export function checkIsDeveloper(login: string, setup: FIX_MY_TYPE = undefined) {
@@ -58,4 +56,36 @@ export function checkIsDeveloper(login: string, setup: FIX_MY_TYPE = undefined) 
         .catch(() => {
             return false;
         });
+}
+
+export type CheckPermissionItem = {
+    user: string;
+    path: string;
+    permission: YTPermissionType;
+    transaction_id?: string;
+    vital?: boolean;
+};
+
+export type CheckPermissionItemResult = {
+    action: 'allow' | 'deny';
+};
+
+export function makeCheckPermissionBatchSubRequest({
+    path,
+    user,
+    permission,
+    transaction_id,
+    vital,
+}: CheckPermissionItem): BatchSubRequest {
+    const result: BatchSubRequest = {
+        command: 'check_permission' as const,
+        parameters: {
+            path,
+            user,
+            permission,
+            ...(transaction_id ? {transaction_id} : {}),
+            ...(vital ? {vital} : {}),
+        },
+    };
+    return result;
 }
