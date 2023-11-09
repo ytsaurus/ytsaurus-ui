@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.2](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.1.1...ui-v1.1.2) (2023-11-09)
+
+
+### Bug Fixes
+
+* babel config app-builder conflict ([e435a25](https://github.com/ytsaurus/ytsaurus-ui/commit/e435a259a040fbf09490873210cca5ad37ff3e9d))
+
 ## [1.1.1](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.1.0...ui-v1.1.1) (2023-10-27)
 
 
