@@ -50,8 +50,8 @@
     "test": "npm run test:unit",
     "test:smoke": "cd smoke-tests; npm ci; npm test",
     "test:smoke:noci": "cd smoke-tests; npm test",
-    "test:unit": "jest --config ./jest.config.js",
-    "test:watch": "jest --config ./jest.config.js --watchAll"
+    "test:unit": "NODE_ENV=test:unit jest --config ./jest.config.js",
+    "test:watch": "NODE_ENV=test:unit jest --config ./jest.config.js --watchAll"
   },
   "config": {
     "docker_image": "ytsaurus/ui"
