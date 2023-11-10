@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.2.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.1.2...ui-v1.2.0) (2023-11-10)
+
+
+### Features
+
+* **QT:** add Progress component [YTFRONT-3840] ([69a787a](https://github.com/ytsaurus/ytsaurus-ui/commit/69a787a25d67f14d3a8687d65c35eb71f654a295))
+
+
+### Bug Fixes
+
+* **QT:** fix result tabs switching when polling [YTFRONT-3840] ([b304c2b](https://github.com/ytsaurus/ytsaurus-ui/commit/b304c2bc96d4018a133fea41e3a5f2bfb37d413a))
+* **QT:** Plan add table and operation urls to nodes [YTFRONT-3840] ([080acbc](https://github.com/ytsaurus/ytsaurus-ui/commit/080acbc879c34e3c979dc81c61b36a488ddff18b))
+
 ## [1.1.2](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.1.1...ui-v1.1.2) (2023-11-09)
 
 
