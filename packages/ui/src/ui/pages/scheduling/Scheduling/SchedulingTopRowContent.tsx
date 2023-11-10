@@ -284,6 +284,7 @@ function SchedulingPhysicalTree() {
                 className={block('path-tree')}
                 placeholder="Select tree..."
                 width="max"
+                disablePortal={false}
             />
         </div>
     );
