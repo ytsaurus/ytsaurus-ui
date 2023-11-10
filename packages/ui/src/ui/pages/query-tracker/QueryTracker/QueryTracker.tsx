@@ -13,7 +13,7 @@ import {
 } from '../module/query/actions';
 import {getQueryGetParams} from '../module/query/selectors';
 import {QueriesList} from '../QueriesList';
-import {QueryEditor} from '../QueryEditor/QueryEditor';
+import {Loader} from '@gravity-ui/uikit';
 import './QueryTracker.scss';
 
 type Props = {
@@ -27,6 +27,8 @@ type Props = {
         search: string;
     };
 };
+
+const QueryEditorLazy = React.lazy(() => import('../QueryEditor/QueryEditor'));
 
 const initialSizes = [23, 77];
 const minSize = 380; // see history list's cells size
@@ -113,7 +115,9 @@ export const QueryTracker = ({match}: Props) => {
                 >
                     <QueriesList />
 
-                    <QueryEditor onStartQuery={goToCreatedQuery}></QueryEditor>
+                    <React.Suspense fallback={<Loader />}>
+                        <QueryEditorLazy onStartQuery={goToCreatedQuery}></QueryEditorLazy>
+                    </React.Suspense>
                 </FlexSplitPane>
             </QueriesPooling>
         </>

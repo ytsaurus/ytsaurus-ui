@@ -26,7 +26,7 @@ export function QueryHeader() {
     );
 }
 
-export function QueryTrackerTopRow() {
+export default function QueryTrackerTopRow() {
     return (
         <RowWithName page={Page.QUERIES}>
             <QueryHeader />
