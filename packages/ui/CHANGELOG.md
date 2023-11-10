@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.2.0...ui-v1.3.0) (2023-11-10)
+
+
+### Features
+
+* add UIFactory.getAllowedExperimentalPages method [YTFRONT-3912] ([fca2666](https://github.com/ytsaurus/ytsaurus-ui/commit/fca266621a7731db5dfe979efde095d0d2c6c4d5))
+
 ## [1.2.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.1.2...ui-v1.2.0) (2023-11-10)
 
 
