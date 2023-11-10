@@ -190,7 +190,11 @@ const ResultView = React.memo(function ResultView({
 });
 
 type ResultMode = 'full' | 'minimized' | 'split';
-export function QueryEditor({onStartQuery}: {onStartQuery?: (queryId: string) => boolean | void}) {
+export default function QueryEditor({
+    onStartQuery,
+}: {
+    onStartQuery?: (queryId: string) => boolean | void;
+}) {
     const query = useCurrentQuery();
 
     const [resultViewMode, setResultViewMode] = useState<ResultMode>('minimized');

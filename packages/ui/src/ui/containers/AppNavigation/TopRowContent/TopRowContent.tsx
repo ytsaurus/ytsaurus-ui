@@ -17,10 +17,14 @@ import SystemTopRowContent from '../../../pages/system/System/SystemTopRowConten
 import DashboardTopRowContent from '../../../pages/dashboard/Dashboard/DashboardTopRowContent';
 import ComponentsTopRowContent from '../../../pages/components/Components/ComponentsTopRowContent';
 import {makeExtraPageTopRowRoutes} from '../../../containers/ClusterPage/ExtraClusterPageRoutes';
-import {QueryTrackerTopRow} from '../../../pages/query-tracker/QueryTrackerTopRow';
 
 import {odinPageInfo} from '../../../pages/odin';
 import {hasOdinPage} from '../../../config';
+import withLazyLoading from '../../../hocs/withLazyLoading';
+
+const QueryTrackerTopRowLazy = React.lazy(
+    () => import('../../../pages/query-tracker/QueryTrackerTopRow'),
+);
 
 export default function TopRowContent() {
     const loadState = useSelector(getGlobalLoadState);
@@ -45,7 +49,10 @@ export default function TopRowContent() {
             <Route path={`/:cluster/${Page.DASHBOARD}`} component={DashboardTopRowContent} />
             <Route path={`/:cluster/${Page.COMPONENTS}`} component={ComponentsTopRowContent} />
             {(!adminPages.includes(Page.QUERIES) || isAdmin) && (
-                <Route path={`/:cluster/${Page.QUERIES}`} component={QueryTrackerTopRow} />
+                <Route
+                    path={`/:cluster/${Page.QUERIES}`}
+                    component={withLazyLoading(QueryTrackerTopRowLazy)}
+                />
             )}
             {hasOdinPage() && (
                 <Route

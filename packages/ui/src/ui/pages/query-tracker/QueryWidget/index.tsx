@@ -1,6 +1,6 @@
 import React from 'react';
 import cn from 'bem-cn-lite';
-import {QueryEditor} from '../QueryEditor/QueryEditor';
+import QueryEditor from '../QueryEditor/QueryEditor';
 import {QueryMetaForm} from '../QueryTrackerTopRow/QueryMetaForm/QueryMetaForm';
 import Icon from '../../../components/Icon/Icon';
 import {useSelector} from 'react-redux';
@@ -15,7 +15,7 @@ const block = cn('query-widget');
 
 export type QueryWidgetProps = {onClose: () => void};
 
-export function QueryWidget({onClose}: QueryWidgetProps) {
+export default function QueryWidget({onClose}: QueryWidgetProps) {
     const cluster = useSelector(getCluster);
     const path = useSelector(getPath);
     return (

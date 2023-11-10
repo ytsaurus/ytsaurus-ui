@@ -5,7 +5,8 @@ import {Button} from '@gravity-ui/uikit';
 import {QueryEngine} from '../../../../query-tracker/module/api';
 import {getPath} from '../../../../../store/selectors/navigation';
 import {getCluster} from '../../../../../store/selectors/global';
-import {QueryWidget, QueryWidgetProps} from '../../../../query-tracker/QueryWidget';
+import type {QueryWidgetProps} from '../../../../query-tracker/QueryWidget';
+import withLazyLoading from '../../../../../hocs/withLazyLoading';
 import {createQueryFromTablePath} from '../../../../query-tracker/module/query/actions';
 import Icon from '../../../../../components/Icon/Icon';
 import {createNewQueryUrl} from '../../../../query-tracker/utils/navigation';
@@ -16,8 +17,10 @@ import './CreateQueryFromTable.scss';
 
 const b = cn('create-query-btn');
 
+const QueryWidgetLazy = React.lazy(() => import('../../../../query-tracker/QueryWidget'));
+
 export const QueryWidgetPortal = withSplit(
-    QueryWidget,
+    withLazyLoading<QueryWidgetProps>(QueryWidgetLazy),
 ) as unknown as ReactElement<QueryWidgetProps>;
 
 export function CreateQueryFromTable({className}: {className: string}) {
