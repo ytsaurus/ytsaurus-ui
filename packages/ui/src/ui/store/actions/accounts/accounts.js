@@ -26,6 +26,10 @@ import {
 import {ACCOUNTS_DATA_FIELDS_ACTION} from '../../../constants/accounts';
 import {USE_CACHE, USE_MAX_SIZE} from '../../../constants/index';
 import {getCluster, getCurrentUserName} from '../../../store/selectors/global';
+import {
+    getAccountsDisabledCacheForNextFetch,
+    getAccountsEditCounter,
+} from '../../../store/selectors/accounts/accounts-ts';
 import {RumWrapper, YTApiId, ytApiV3Id} from '../../../rum/rum-wrap-api';
 import {parseAccountsData} from './accounts-ts';
 import Account from '../../../pages/accounts/selector';
@@ -57,6 +61,9 @@ export function fetchAccounts() {
         const state = getState();
         const cluster = getCluster(state);
         const userName = getCurrentUserName(state);
+        const disableCacheForNextFetch = getAccountsDisabledCacheForNextFetch(state);
+
+        const cacheParams = disableCacheForNextFetch ? {} : USE_CACHE;
 
         const requests = [
             {
@@ -65,7 +72,7 @@ export function fetchAccounts() {
                     path: '//sys/accounts/',
                     attributes: attributesToLoad,
                     ...USE_MAX_SIZE,
-                    ...USE_CACHE,
+                    ...cacheParams,
                 },
             },
             {
@@ -98,6 +105,11 @@ export function fetchAccounts() {
         return rumId
             .fetch(YTApiId.accountsData, ytApiV3Id.executeBatch(YTApiId.accountsData, {requests}))
             .then((batchData) => {
+                dispatch({
+                    type: ACCOUNTS_DATA_FIELDS_ACTION,
+                    data: {disableCacheForNextFetch: false},
+                });
+
                 const [
                     {error: accountsError, output: accounts},
                     {error: resourceError, output: resources},
@@ -167,6 +179,16 @@ export function fetchAccounts() {
                     });
                 }
             });
+    };
+}
+
+export function accountsIncreaseEditCounter() {
+    return (dispatch, getState) => {
+        const editCounter = getAccountsEditCounter(getState());
+        return {
+            type: ACCOUNTS_DATA_FIELDS_ACTION,
+            data: {editCounter: editCounter + 1, disableCacheForNextFetch: true},
+        };
     };
 }
 

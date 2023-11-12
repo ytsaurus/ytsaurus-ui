@@ -49,6 +49,14 @@ const ephemeralState = {
 
     clusterTotalsUsage: {},
     nodesData: {},
+
+    /**
+     * The field is used by AccountsUpdater.
+     * It should be increased after editing of any account to reload data.
+     * see YTFRONT-3920
+     */
+    editCounter: 0,
+    disableCacheForNextFetch: false,
 };
 
 export const initialState = {
