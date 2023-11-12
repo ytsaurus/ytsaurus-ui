@@ -32,17 +32,6 @@ function calcShortNameByRegExp(address: string, asTabletNode?: boolean) {
     return undefined;
 }
 
-function calcShortNameByMinus(address: string) {
-    const first = address.indexOf('-');
-    const second = address.indexOf('-', first + 1);
-    const res = address.substring(0, second);
-    if (res.length) {
-        return res;
-    }
-    const dotIndex = address.indexOf('.');
-    return dotIndex === -1 ? address : address.substring(0, dotIndex);
-}
-
 const block = cn('yt-host');
 
 interface Props {
@@ -65,7 +54,7 @@ export function Host({
     asTabletNode,
 }: Props) {
     const host = React.useMemo(() => {
-        return calcShortNameByRegExp(address, asTabletNode) || calcShortNameByMinus(address);
+        return calcShortNameByRegExp(address, asTabletNode) || address;
     }, [address, asTabletNode]);
 
     const cluster = useSelector(getCluster);
