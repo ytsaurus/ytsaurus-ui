@@ -62,8 +62,6 @@ export const ACCOUNTS_ALLOWED_ROOT_TABS = {
 
 export const ACCOUNTS_DEFAULT_TAB = AccountsTab.GENERAL;
 
-export const ACCOUNTS_UPDATER_ID = 'accounts';
-
 export const ROOT_ACCOUNT_NAME = 'root';
 
 export const AccountResourceName = {
