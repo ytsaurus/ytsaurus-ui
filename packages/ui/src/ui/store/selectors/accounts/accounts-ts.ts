@@ -37,6 +37,10 @@ export const getAccountsMasterMemoryContentMode = (state: RootState) =>
 export const getEditableAccount = (state: RootState) =>
     state.accounts.accounts.editableAccount as AccountSelector;
 
+export const getAccountsDisabledCacheForNextFetch = (state: RootState) =>
+    state.accounts.accounts.disableCacheForNextFetch;
+export const getAccountsEditCounter = (state: RootState) => state.accounts.accounts.editCounter;
+
 export interface AccountSelector {
     name: string;
     alertsCount: number;

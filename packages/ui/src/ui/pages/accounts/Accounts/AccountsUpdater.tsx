@@ -1,20 +1,21 @@
 import React from 'react';
-import {useDispatch} from 'react-redux';
-import {fetchAccounts} from '../../../store/actions/accounts/accounts';
-import {ACCOUNTS_UPDATER_ID} from '../../../constants/accounts/accounts';
-import Updater from '../../../utils/hammer/updater';
+import {useDispatch, useSelector} from 'react-redux';
 
-const updater = new Updater();
+import {fetchAccounts} from '../../../store/actions/accounts/accounts';
+import {getAccountsEditCounter} from '../../../store/selectors/accounts/accounts-ts';
+import {useUpdater} from '../../../hooks/use-updater';
 
 export default function AccountsUpdater() {
     const dispatch = useDispatch();
 
-    React.useEffect(() => {
-        updater.add(ACCOUNTS_UPDATER_ID, () => dispatch(fetchAccounts()), 30 * 1000);
-        return () => {
-            updater.remove(ACCOUNTS_UPDATER_ID);
-        };
-    }, []);
+    const editCounter = useSelector(getAccountsEditCounter);
+
+    const update = React.useCallback(() => {
+        dispatch(fetchAccounts());
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [dispatch, editCounter]);
+
+    useUpdater(update);
 
     return null;
 }

@@ -7,7 +7,7 @@ import {FIX_MY_TYPE} from '../../../types';
 // @ts-ignore
 import yt from '@ytsaurus/javascript-wrapper/lib/yt';
 import {RESOURCES_LIMITS_PREFIX} from '../../../constants/accounts';
-import {fetchAccounts, loadEditedAccount} from './accounts';
+import {accountsIncreaseEditCounter, loadEditedAccount} from './accounts';
 import {wrapApiPromiseByToaster} from '../../../utils/utils';
 
 export interface AccountQuotaParams {
@@ -54,8 +54,8 @@ export function setAccountQuota(params: AccountQuotaParams): EditorAction {
             toasterName,
             successContent: 'The quota is updated',
         }).then(() => {
-            dispatch(fetchAccounts());
             dispatch(loadEditedAccount(params.account));
+            dispatch(accountsIncreaseEditCounter());
         });
     };
 }
