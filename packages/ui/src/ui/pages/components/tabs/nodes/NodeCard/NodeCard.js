@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {connect} from 'react-redux';
+import {connect, useDispatch} from 'react-redux';
 import PropTypes from 'prop-types';
 import {compose} from 'redux';
 import cn from 'bem-cn-lite';
@@ -34,7 +34,7 @@ import NodeStorage, {
     hasStorageMeta,
 } from '../../../../../pages/components/tabs/node/NodeStorage/NodeStorage';
 import NodeTabletSlots from '../../../../../pages/components/tabs/node/NodeTabletSlots/NodeTabletSlots';
-import Updater from '../../../../../utils/hammer/updater';
+import {useUpdater} from '../../../../../hooks/use-updater';
 
 import withSplit from '../../../../../hocs/withSplit';
 
@@ -42,7 +42,6 @@ import './NodeCard.scss';
 import UIFactory from '../../../../../UIFactory';
 
 const block = cn('node-card');
-const updater = new Updater();
 
 export const nodeProps = PropTypes.shape({
     locations: PropTypes.arrayOf(
@@ -72,6 +71,21 @@ export const nodeProps = PropTypes.shape({
     disableWriteSession: PropTypes.bool.isRequired,
 });
 
+function NodeCardUpdater({host}) {
+    const dispatch = useDispatch();
+
+    const updateFn = React.useMemo(() => {
+        if (host) {
+            return () => dispatch(loadNodeAttributes(host));
+        } else {
+            return undefined;
+        }
+    }, [dispatch, host]);
+
+    useUpdater(updateFn, 15 * 1000);
+    return null;
+}
+
 class NodeCard extends Component {
     static propTypes = {
         // from parent
@@ -83,31 +97,8 @@ class NodeCard extends Component {
         loadNodeAttributes: PropTypes.func.isRequired,
     };
 
-    componentDidMount() {
-        this.startUpdatingNode();
-    }
-
-    componentDidUpdate(prevProps) {
-        if (this.props.host !== prevProps.host) {
-            this.stopUpdatingNode();
-            this.startUpdatingNode();
-        }
-    }
-
     componentWillUnmount() {
-        this.stopUpdatingNode();
         this.props.handleClose();
-    }
-
-    startUpdatingNode() {
-        const {loadNodeAttributes, host} = this.props;
-        if (host) {
-            updater.add('node', () => loadNodeAttributes(host), 15 * 1000);
-        }
-    }
-
-    stopUpdatingNode() {
-        updater.remove('node');
     }
 
     renderTop() {
@@ -393,9 +384,12 @@ class NodeCard extends Component {
         const {error, errorData, loaded} = this.props;
 
         return (
-            <LoadDataHandler loaded={loaded} error={error} errorData={errorData}>
-                {this.renderCard()}
-            </LoadDataHandler>
+            <React.Fragment>
+                <NodeCardUpdater host={this.props.host} />
+                <LoadDataHandler loaded={loaded} error={error} errorData={errorData}>
+                    {this.renderCard()}
+                </LoadDataHandler>
+            </React.Fragment>
         );
     }
 }

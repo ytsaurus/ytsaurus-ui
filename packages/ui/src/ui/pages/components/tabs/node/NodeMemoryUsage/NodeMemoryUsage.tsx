@@ -10,15 +10,12 @@ import {
     getNodeMemoryError,
     getNodeMemoryViewMode,
 } from '../../../../../store/selectors/components/node/memory';
-import Updater from '../../../../../utils/hammer/updater';
+import {useUpdater} from '../../../../../hooks/use-updater';
 import ErrorBlock from '../../../../../components/Error/Error';
 import NodeBundlesTotal from '../NodeBundlesTotal/NodeBundlesTotal';
 import NodeMemoryUsageToolbar from './NodeMemoryUsageToolbar';
 
-// import './MemoryUsage.scss';
-
 const block = cn('node-memory-usage');
-const updater = new Updater();
 
 interface RouteParams {
     host: string;
@@ -33,16 +30,11 @@ function NodeMemoryUsage({match}: Props): ReturnType<React.VFC> {
 
     const host = decodeURIComponent(match.params.host);
 
-    React.useEffect(() => {
-        const loadHandler = () => dispatch(loadNodeMemoryUsage(host));
-
-        updater.add('node-memory', loadHandler, 15 * 1000);
-
-        return () => {
-            updater.remove('node-memory');
-            // dispatch(abortAndReset());
-        };
+    const updateFn = React.useCallback(() => {
+        dispatch(loadNodeMemoryUsage(host));
     }, [dispatch, host]);
+
+    useUpdater(updateFn, 15 * 1000);
 
     const viewMode = useSelector(getNodeMemoryViewMode);
 
