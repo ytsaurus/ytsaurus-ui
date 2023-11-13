@@ -95,7 +95,7 @@ export function ActiveAccountBundleControllerUpdater() {
             fetchFn();
         }
     }, [fetchFn, activeBundle, enable_bundle_controller]);
-    useUpdater(checkBundleControllerState, 3000);
+    useUpdater(checkBundleControllerState, {timeout: 3000});
 
     return null;
 }

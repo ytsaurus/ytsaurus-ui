@@ -34,7 +34,7 @@ function NodeMemoryUsage({match}: Props): ReturnType<React.VFC> {
         dispatch(loadNodeMemoryUsage(host));
     }, [dispatch, host]);
 
-    useUpdater(updateFn, 15 * 1000);
+    useUpdater(updateFn, {timeout: 15 * 1000});
 
     const viewMode = useSelector(getNodeMemoryViewMode);
 

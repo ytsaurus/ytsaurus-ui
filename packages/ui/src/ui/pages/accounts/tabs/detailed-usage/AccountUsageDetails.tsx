@@ -379,7 +379,7 @@ function AccountUsageDetailsList() {
         }
     }, [dispatch, currentSnapshot]);
 
-    useUpdater(updateFn, UPDATE_TIMEOUT);
+    useUpdater(updateFn, {timeout: UPDATE_TIMEOUT});
 
     const items = useSelector(getAccountUsageListItems);
     const loading = useSelector(getAccountUsageListLoading);
@@ -449,7 +449,7 @@ function AccountUsageDetailsTree() {
         }
     }, [dispatch, currentSnapshot]);
 
-    useUpdater(updateFn, UPDATE_TIMEOUT);
+    useUpdater(updateFn, {timeout: UPDATE_TIMEOUT});
 
     const items = useSelector(getAccountUsageTreeItems);
     const loading = useSelector(getAccountUsageTreeLoading);

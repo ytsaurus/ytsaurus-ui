@@ -82,7 +82,7 @@ function NodeCardUpdater({host}) {
         }
     }, [dispatch, host]);
 
-    useUpdater(updateFn, 15 * 1000);
+    useUpdater(updateFn, {timeout: 15 * 1000});
     return null;
 }
 
