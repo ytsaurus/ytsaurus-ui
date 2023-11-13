@@ -1,6 +1,6 @@
 import React from 'react';
 import {Sticky, StickyContainer} from 'react-sticky';
-import {ConnectedProps, connect} from 'react-redux';
+import {ConnectedProps, connect, useDispatch, useSelector} from 'react-redux';
 import hammer from '../../../../../common/hammer';
 import {compose} from 'redux';
 import cn from 'bem-cn-lite';
@@ -32,13 +32,17 @@ import {
     getComponentNodesFiltersCount,
     getComponentNodesTableProps,
     getComponentsNodesNodeTypes,
+    getRequiredAttributes,
     getVisibleNodes,
 } from '../../../../../store/selectors/components/nodes/nodes';
 import {getSelectedColumns} from '../../../../../store/selectors/settings';
 import {getSettingsEnableSideBar} from '../../../../../store/selectors/settings-ts';
 import {defaultColumns} from '../../../../../utils/components/nodes/tables';
 import withVisible, {WithVisibleProps} from '../../../../../hocs/withVisible';
-import Updater from '../../../../../utils/hammer/updater';
+import {
+    DEFAULT_UPDATER_TIMEOUT,
+    useUpdaterWithMemoizedParams,
+} from '../../../../../hooks/use-updater';
 import {isPaneSplit} from '../../../../../utils';
 import {
     changeContentMode,
@@ -53,7 +57,6 @@ import {HEADER_HEIGHT, KeyCode} from '../../../../../constants/index';
 import {
     CONTENT_MODE,
     CONTENT_MODE_ITEMS,
-    POLLING_INTERVAL,
     SPLIT_TYPE,
 } from '../../../../../constants/components/nodes/nodes';
 import {RootState} from '../../../../../store/reducers';
@@ -62,7 +65,6 @@ import {NodeMaintenanceModal} from '../../../NodeMaintenanceModal/NodeMaintenanc
 
 import './Nodes.scss';
 
-const updater = new Updater();
 const block = cn('components-nodes');
 
 type ReduxProps = ConnectedProps<typeof connector>;
@@ -74,6 +76,24 @@ type State = {
     nodes: Array<unknown>;
 };
 
+function NodesUpdater() {
+    const dispatch = useDispatch();
+
+    const attributes = useSelector(getRequiredAttributes);
+    const nodeTypes = useSelector(getComponentsNodesNodeTypes);
+
+    const updateFn = React.useCallback(
+        (...args: Parameters<typeof getNodes>) => {
+            dispatch(getNodes(...args));
+        },
+        [dispatch],
+    );
+
+    useUpdaterWithMemoizedParams(updateFn, DEFAULT_UPDATER_TIMEOUT, {attributes, nodeTypes});
+
+    return null;
+}
+
 class Nodes extends React.Component<ReduxProps & WithVisibleProps, State> {
     state: State = {
         preset: '',
@@ -81,25 +101,6 @@ class Nodes extends React.Component<ReduxProps & WithVisibleProps, State> {
         selectedColumns: this.props.selectedColumns,
         nodes: [],
     };
-
-    componentDidMount() {
-        const {getNodes} = this.props;
-
-        updater.add('components/nodes', getNodes, POLLING_INTERVAL);
-    }
-
-    componentDidUpdate(prevProps: ReduxProps) {
-        if (this.props.loading && !prevProps.loading) {
-            updater.remove('components/nodes');
-        }
-        if (!this.props.loading && prevProps.loading) {
-            updater.add('components/nodes', getNodes, POLLING_INTERVAL, {skipInitialCall: true});
-        }
-    }
-
-    componentWillUnmount() {
-        updater.remove('components/nodes');
-    }
 
     get allColumns() {
         const {nodesTableProps} = this.props;
@@ -175,17 +176,15 @@ class Nodes extends React.Component<ReduxProps & WithVisibleProps, State> {
     };
 
     handleSetupModalClose = async () => {
-        const {getNodes, handleClose} = this.props;
+        const {handleClose} = this.props;
 
         await handleClose();
-        getNodes();
     };
 
     handleContentModeChange = async (value: string) => {
-        const {changeContentMode, getNodes} = this.props;
+        const {changeContentMode} = this.props;
 
         await changeContentMode(value as NodesState['contentMode']);
-        getNodes();
     };
 
     selectNextSuggestion() {
@@ -348,6 +347,7 @@ class Nodes extends React.Component<ReduxProps & WithVisibleProps, State> {
 
         return (
             <ErrorBoundary>
+                <NodesUpdater />
                 <LoadDataHandler {...this.props}>
                     <div className={block()} onKeyDown={this.handleKeyDown} tabIndex={-1}>
                         <StickyContainer>
@@ -408,7 +408,6 @@ const mapDispatchToProps = {
     splitScreenAction,
     changeHostFilter,
     mergeScreen,
-    getNodes,
     handleColumnsChange,
 };
 

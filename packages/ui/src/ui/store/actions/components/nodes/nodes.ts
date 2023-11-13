@@ -1,6 +1,5 @@
 // @ts-ignore
 import yt from '@ytsaurus/javascript-wrapper/lib/yt';
-import difference_ from 'lodash/difference';
 import omit_ from 'lodash/omit';
 import forEach_ from 'lodash/forEach';
 import compact_ from 'lodash/compact';
@@ -11,8 +10,6 @@ import ypath from '../../../../common/thor/ypath';
 import {setSetting} from '../../../../store/actions/settings';
 import {NAMESPACES, SettingName} from '../../../../../shared/constants/settings';
 import {
-    getComponentsNodesNodeTypes,
-    getRequestIndex,
     getRequiredAttributes,
     useRacksFromAttributes,
     useTagsFromAttributes,
@@ -59,16 +56,17 @@ export function changeContentMode(
 
 const updateNodeCanceler = new CancelHelper();
 
-export function getNodes(): NodesThunkAction {
-    return (dispatch, getState) => {
-        const state = getState();
-        const index = getRequestIndex(state) + 1;
-        dispatch({type: GET_NODES.REQUEST, data: {index}});
+export function getNodes({
+    attributes,
+    nodeTypes,
+}: {
+    attributes: ReturnType<typeof getRequiredAttributes>;
+    nodeTypes: Array<NodeType>;
+}): NodesThunkAction {
+    return (dispatch) => {
+        dispatch({type: GET_NODES.REQUEST});
 
-        const attributes = getRequiredAttributes(getState());
         const preparedAttrs = prepareAttributes(attributes);
-
-        const nodeTypes = getComponentsNodesNodeTypes(state);
         const requests: Array<BatchSubRequest> = nodeTypes.map((type) => {
             return {
                 command: 'list',
@@ -91,7 +89,6 @@ export function getNodes(): NodesThunkAction {
                 dispatch({
                     type: GET_NODES.SUCCESS,
                     data: {
-                        index,
                         nodes: [].concat(
                             ...results.map((output) => {
                                 return ypath.getValue(output) || [];
@@ -106,12 +103,12 @@ export function getNodes(): NodesThunkAction {
             })
             .catch((error) => {
                 if (error.code === yt.codes.CANCELLED) {
-                    dispatch({type: GET_NODES.CANCELLED, data: {index}});
+                    dispatch({type: GET_NODES.CANCELLED});
                     return;
                 }
                 dispatch({
                     type: GET_NODES.FAILURE,
-                    data: {index, error},
+                    data: {error},
                 });
             });
     };
@@ -148,8 +145,6 @@ export function componentsNodesSetNodeTypes(nodeTypes: Array<NodeType>): NodesTh
             type: CHANGE_NODE_TYPE,
             data: {nodeTypes},
         });
-
-        dispatch(getNodes());
     };
 }
 
@@ -185,9 +180,7 @@ export function removePreset(name: string): NodesThunkAction {
 }
 
 export function handleColumnsChange(selectedColumns: string[]): NodesThunkAction {
-    return async (dispatch, getState) => {
-        const prevAttributes = getRequiredAttributes(getState());
-
+    return async (dispatch) => {
         await dispatch(
             setSetting(
                 SettingName.COMPONENTS.SELECTED_COLUMNS,
@@ -195,11 +188,6 @@ export function handleColumnsChange(selectedColumns: string[]): NodesThunkAction
                 selectedColumns,
             ),
         );
-
-        const currentAttributes = getRequiredAttributes(getState());
-        if (difference_(currentAttributes, prevAttributes).length > 0) {
-            await dispatch(getNodes());
-        }
     };
 }
 

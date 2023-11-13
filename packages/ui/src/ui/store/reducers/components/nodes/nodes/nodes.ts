@@ -21,7 +21,6 @@ import type {ActionD, ValueOf, YTError} from '../../../../../types';
 import {NODE_TYPE, NodeType} from '../../../../../../shared/constants/system';
 
 export interface NodesEphemeralState {
-    index: number;
     loading: boolean;
     loaded: boolean;
     error: boolean;
@@ -41,7 +40,6 @@ export interface NodesPersistedState {
 }
 
 const ephemeralState: NodesEphemeralState = {
-    index: 0,
     loading: false,
     loaded: false,
     error: false,
@@ -73,14 +71,10 @@ const reducer = (state = initialState, action: NodesAction): NodesState => {
             return {...state, contentMode: action.data.contentMode};
 
         case GET_NODES.REQUEST:
-            return {...state, index: action.data.index, loading: true};
+            return {...state, loading: true};
 
         case GET_NODES.SUCCESS: {
-            const {index, nodes} = action.data;
-            if (index !== state.index) {
-                return state;
-            }
-
+            const {nodes} = action.data;
             const preparedNodes = _.map(nodes, (node) => new Node(node));
 
             return {
@@ -108,9 +102,6 @@ const reducer = (state = initialState, action: NodesAction): NodesState => {
         }
 
         case GET_NODES.FAILURE:
-            if (action.data.index !== state.index) {
-                return state;
-            }
             return {
                 ...state,
                 loading: false,
@@ -119,9 +110,6 @@ const reducer = (state = initialState, action: NodesAction): NodesState => {
             };
 
         case GET_NODES.CANCELLED:
-            if (action.data.index !== state.index) {
-                return state;
-            }
             return {
                 ...state,
                 loading: false,
@@ -154,15 +142,15 @@ const reducer = (state = initialState, action: NodesAction): NodesState => {
 };
 
 export type NodesAction =
-    | ActionD<typeof GET_NODES.REQUEST, Pick<NodesEphemeralState, 'index'>>
+    | Action<typeof GET_NODES.REQUEST>
     | ActionD<
           typeof GET_NODES.SUCCESS,
-          Pick<NodesEphemeralState, 'index'> & {
+          {
               nodes: Array<ConstructorParameters<typeof Node>[0]>;
           }
       >
-    | ActionD<typeof GET_NODES.FAILURE, Pick<NodesEphemeralState, 'index'> & {error: YTError}>
-    | ActionD<typeof GET_NODES.CANCELLED, Pick<NodesEphemeralState, 'index'>>
+    | ActionD<typeof GET_NODES.FAILURE, {error: YTError}>
+    | Action<typeof GET_NODES.CANCELLED>
     | ActionD<typeof COMPONENTS_NODES_UPDATE_NODE, ConstructorParameters<typeof Node>[0]>
     | Action<typeof GET_NODES_FILTER_OPTIONS.REQUEST>
     | ActionD<

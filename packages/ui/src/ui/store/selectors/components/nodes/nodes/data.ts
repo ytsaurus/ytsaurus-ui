@@ -33,7 +33,6 @@ import {NODE_TYPE, NodeType} from '../../../../../../shared/constants/system';
 const getContentMode = (state: RootState) => state.components.nodes.nodes.contentMode;
 const getHostFilter = (state: RootState) => state.components.nodes.nodes.hostFilter.toLowerCase();
 const getSortState = (state: RootState) => state.tables[COMPONENTS_NODES_TABLE_ID];
-export const getRequestIndex = (state: RootState) => state.components.nodes.nodes.index;
 const getComponentsNodesNodeTypeRaw = (state: RootState) => state.components.nodes.nodes.nodeTypes;
 
 const getCustomColumns = (state: RootState) => getSelectedColumns(state) || defaultColumns;

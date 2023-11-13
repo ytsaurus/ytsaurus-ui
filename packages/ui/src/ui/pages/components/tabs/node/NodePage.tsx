@@ -11,7 +11,7 @@ import NodeGeneralTab from '../../../../pages/components/tabs/node/NodeGeneralTa
 import NodeMemoryUsage from '../../../../pages/components/tabs/node/NodeMemoryUsage/NodeMemoryUsage';
 import {NodeTab} from '../../../../constants/components/nodes/node';
 import {loadNodeAttributes} from '../../../../store/actions/components/node/node';
-import Updater from '../../../../utils/hammer/updater';
+import {useUpdater} from '../../../../hooks/use-updater';
 import {makeTabProps} from '../../../../utils';
 import type {RootState} from '../../../../store/reducers';
 import {getNodeAlertCount, nodeSelector} from '../../../../store/selectors/components/node/node';
@@ -24,7 +24,6 @@ import NodeLocations from './NodeLocations/NodeLocations';
 import NodeTabletSlotsTab from './NodeTabletSlotsTab/NodeTabletSlotsTab';
 
 const block = cn('node-page');
-const updater = new Updater();
 
 interface RouteParams {
     host: string;
@@ -40,16 +39,11 @@ function NodePage({match}: NodeDetailsProps): ReturnType<React.VFC> {
     const host = decodeURIComponent(match.params.host);
     const alertCount = useSelector(getNodeAlertCount);
 
-    React.useEffect(() => {
-        const loadHandler = () => dispatch(loadNodeAttributes(host));
-
-        updater.add('node', loadHandler, 15 * 1000);
-
-        return () => {
-            updater.remove('node');
-            // dispatch(abortAndReset());
-        };
+    const updateFn = React.useCallback(() => {
+        dispatch(loadNodeAttributes(host));
     }, [dispatch, host]);
+
+    useUpdater(updateFn, 15 * 1000);
 
     const initialLoading = loading && (!loaded || host !== node?.host);
 
