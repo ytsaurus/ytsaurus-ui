@@ -38,11 +38,10 @@ export const isYqlTypesSupported = createSelector(
 export const getClusterUiConfig = (state: RootState) => state.global.clusterUiConfig;
 
 export const getClusterUiConfigEnablePerAccountTabletAccounting = (state: RootState) => {
-    const {enable_per_account_tablet_accounting: value} = state.global.clusterUiConfig;
-    return value === undefined ? true : value;
+    return state.global.clusterUiConfig.enable_per_account_tablet_accounting ?? false;
 };
 export const getClusterUiConfigEnablePerBundleTabletAccounting = (state: RootState) =>
-    state.global.clusterUiConfig.enable_per_bundle_tablet_accounting;
+    state.global.clusterUiConfig.enable_per_bundle_tablet_accounting ?? true;
 export const getClusterUiConfigBundleAccountingHelpLink = (state: RootState) =>
     state.global.clusterUiConfig.per_bundle_accounting_help_link;
 
