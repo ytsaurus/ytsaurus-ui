@@ -1,6 +1,5 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import {connect, useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 
 import {getJobs} from '../../../../../store/actions/operations/jobs';
 import ErrorBoundary from '../../../../../components/ErrorBoundary/ErrorBoundary';
@@ -8,8 +7,7 @@ import LoadDataHandler from '../../../../../components/LoadDataHandler/LoadDataH
 import OperationJobsTable from './OperationJobsTable/OperationJobsTable';
 import OperationJobsToolbar from './OperationJobsToolbar/OperationJobsToolbar';
 
-import Updater from '../../../../../utils/hammer/updater';
-import {POLLING_INTERVAL} from '../../../../../constants/operations/detail';
+import {useUpdater} from '../../../../../hooks/use-updater';
 import {
     getOperationDetailsLoadingStatus,
     getOperationJobsLoadingStatus,
@@ -20,58 +18,32 @@ import {isFinalLoadingStatus} from '../../../../../utils/utils';
 import {useRumMeasureStop} from '../../../../../rum/RumUiContext';
 import OperationJobsErrors from './OperationJobsErrors/OperationJobsErrors';
 
-const updater = new Updater();
+function Jobs() {
+    const dispatch = useDispatch();
+    const loading = useSelector((state) => state.operations.jobs.loading);
+    const loaded = useSelector((state) => state.operations.jobs.loaded);
+    const error = useSelector((state) => state.operations.jobs.error);
+    const errorData = useSelector((state) => state.operations.jobs.errorData);
 
-const OPERATION_JOBS_UPDATE_ID = 'operation.jobs';
+    const updateFn = React.useCallback(() => {
+        dispatch(getJobs());
+    }, [dispatch]);
 
-class Jobs extends React.Component {
-    static propTypes = {
-        // from connect
-        getJobs: PropTypes.func.isRequired,
-        loading: PropTypes.bool.isRequired,
-        loaded: PropTypes.bool.isRequired,
-        error: PropTypes.bool.isRequired,
-        errorData: PropTypes.object.isRequired,
-    };
+    useUpdater(updateFn, {timeout: 15 * 1000});
 
-    componentDidMount() {
-        const {getJobs} = this.props;
-
-        updater.add(OPERATION_JOBS_UPDATE_ID, getJobs, POLLING_INTERVAL);
-    }
-
-    componentWillUnmount() {
-        updater.remove(OPERATION_JOBS_UPDATE_ID);
-    }
-
-    render() {
-        const {loading, loaded} = this.props;
-        const isLoading = loading && !loaded;
-        return (
-            <ErrorBoundary>
-                <div className="operation-detail-jobs">
-                    <OperationJobsToolbar />
-                    <LoadDataHandler {...this.props} alwaysShowError>
-                        <OperationJobsErrors />
-                        <OperationJobsTable isLoading={isLoading} />
-                    </LoadDataHandler>
-                </div>
-            </ErrorBoundary>
-        );
-    }
+    const isLoading = loading && !loaded;
+    return (
+        <ErrorBoundary>
+            <div className="operation-detail-jobs">
+                <OperationJobsToolbar />
+                <LoadDataHandler {...{loaded, loading, error, errorData}} alwaysShowError>
+                    <OperationJobsErrors />
+                    <OperationJobsTable isLoading={isLoading} />
+                </LoadDataHandler>
+            </div>
+        </ErrorBoundary>
+    );
 }
-
-function mapStateToProps({operations}) {
-    const {loading, loaded, error, errorData} = operations.jobs;
-
-    return {loading, loaded, error, errorData};
-}
-
-const mapDispatchToProps = {
-    getJobs,
-};
-
-const JobsConnected = connect(mapStateToProps, mapDispatchToProps)(Jobs);
 
 export default function JobsWithRum() {
     const loadState = useSelector(getOperationJobsLoadingStatus);
@@ -100,5 +72,5 @@ export default function JobsWithRum() {
         },
     });
 
-    return <JobsConnected />;
+    return <Jobs />;
 }
