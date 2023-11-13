@@ -1,6 +1,6 @@
 import {match as MatchType, Redirect, Route, Switch} from 'react-router';
 import React, {Fragment} from 'react';
-import {ConnectedProps, connect, useSelector} from 'react-redux';
+import {ConnectedProps, connect, useDispatch, useSelector} from 'react-redux';
 import hammer from '../../../common/hammer';
 import unipika from '../../../common/thor/unipika';
 import cn from 'bem-cn-lite';
@@ -32,17 +32,12 @@ import OperationAttributes from './tabs/attributes/OperationAttributes';
 import Placeholder from '../../../pages/components/Placeholder';
 
 import {getDetailsTabsShowSettings, performAction} from '../../../utils/operations/detail';
-import {
-    DEFAULT_TAB,
-    OperationTabType,
-    POLLING_INTERVAL,
-    Tab,
-} from '../../../constants/operations/detail';
+import {DEFAULT_TAB, OperationTabType, Tab} from '../../../constants/operations/detail';
 import {showEditPoolsWeightsModal} from '../../../store/actions/operations';
 import {getOperation} from '../../../store/actions/operations/detail';
 import {isOperationId} from '../../../utils/operations/list';
 import {promptAction} from '../../../store/actions/actions';
-import Updater from '../../../utils/hammer/updater';
+import {useUpdater} from '../../../hooks/use-updater';
 import {TabSettings, makeTabProps} from '../../../utils';
 import {Page} from '../../../constants/index';
 import {
@@ -73,28 +68,24 @@ import {operationMonitoringUrl} from '../../../utils/operations/details-ts';
 const detailBlock = cn('operation-detail');
 
 const headingBlock = cn('elements-heading');
-const updater = new Updater();
 
 type RouteProps = {match: MatchType<{operationId: string; tab: OperationTabType}>};
 
 type ReduxProps = ConnectedProps<typeof connector>;
 
+function OperationDetailUpdater({operationId}: {operationId: string}) {
+    const dispatch = useDispatch();
+
+    const updateFn = React.useCallback(() => {
+        dispatch(getOperation(operationId));
+    }, [dispatch, operationId]);
+
+    useUpdater(updateFn, {timeout: 15 * 1000});
+
+    return null;
+}
+
 class OperationDetail extends React.Component<ReduxProps & RouteProps> {
-    componentDidMount() {
-        const {
-            getOperation,
-            match: {
-                params: {operationId},
-            },
-        } = this.props;
-
-        updater.add('operation.detail', () => getOperation(operationId), POLLING_INTERVAL);
-    }
-
-    componentWillUnmount() {
-        updater.remove('operation.detail');
-    }
-
     get settings() {
         return unipika.prepareSettings();
     }
@@ -368,11 +359,19 @@ class OperationDetail extends React.Component<ReduxProps & RouteProps> {
     }
 
     render() {
-        const {error, loading, loaded} = this.props;
+        const {
+            error,
+            loading,
+            loaded,
+            match: {
+                params: {operationId},
+            },
+        } = this.props;
         const isFirstLoading = loading && !loaded;
 
         return (
             <ErrorBoundary>
+                <OperationDetailUpdater operationId={operationId} />
                 <div className={detailBlock({loading: isFirstLoading})}>
                     {error && !loaded ? this.renderError() : this.renderContent(isFirstLoading)}
                 </div>
