@@ -1,6 +1,6 @@
 import {Sticky, StickyContainer} from 'react-sticky';
 import React from 'react';
-import {ConnectedProps, connect} from 'react-redux';
+import {ConnectedProps, connect, useDispatch} from 'react-redux';
 import cn from 'bem-cn-lite';
 
 import CollapsibleSection from '../../../../components/CollapsibleSection/CollapsibleSection';
@@ -33,13 +33,10 @@ import {
     changeVersionFilter,
     getVersions,
 } from '../../../../store/actions/components/versions/versions_v2';
-import {
-    DEBOUNCE_TIME,
-    POLLING_INTERVAL,
-} from '../../../../constants/components/versions/versions_v2';
+import {DEBOUNCE_TIME} from '../../../../constants/components/versions/versions_v2';
 import {detailsTableProps} from '../../../../utils/components/versions/tables_v2';
 import {HEADER_HEIGHT} from '../../../../constants/index';
-import Updater from '../../../../utils/hammer/updater';
+import {useUpdater} from '../../../../hooks/use-updater';
 import VersionsSummary from './VersionSummary';
 import {RootState} from '../../../../store/reducers';
 import {getUISizes} from '../../../../store/selectors/global';
@@ -52,21 +49,22 @@ import {Host} from '../../../../containers/Host/Host';
 import './Versions.scss';
 
 const b = cn('components-versions');
-const updater = new Updater();
+
+function VersionsV2Updater() {
+    const dispatch = useDispatch();
+
+    const updateFn = React.useCallback(() => {
+        dispatch(getVersions());
+    }, [dispatch]);
+
+    useUpdater(updateFn);
+
+    return null;
+}
 
 type ReduxProps = ConnectedProps<typeof connector>;
 
 class VersionsV2 extends React.Component<ReduxProps> {
-    componentDidMount() {
-        const {getVersions} = this.props;
-
-        updater.add('components.versions_v2', getVersions, POLLING_INTERVAL);
-    }
-
-    componentWillUnmount() {
-        updater.remove('components.versions_v2');
-    }
-
     renderFilters() {
         const {
             hostFilter,
@@ -246,6 +244,7 @@ class VersionsV2 extends React.Component<ReduxProps> {
 
         return (
             <ErrorBoundary>
+                <VersionsV2Updater />
                 <LoadDataHandler {...rest} error={Boolean(error)} errorData={error}>
                     <div className={b()}>
                         <CollapsibleSection
@@ -325,7 +324,6 @@ const mapStateToProps = (state: RootState) => {
 };
 
 const mapDispatchToProps = {
-    getVersions,
     changeHostFilter,
     changeVersionFilter,
     changeTypeFilter,
