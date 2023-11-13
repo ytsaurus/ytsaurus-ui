@@ -42,12 +42,8 @@ export function setShowInfo(hours, minutes) {
     };
 }
 
-export function loadMetricAvailability(cluster) {
-    return (dispatch, getState) => {
-        const state = getState();
-        const metric = getMetric(state);
-        const date = getDate(state);
-
+export function loadMetricAvailability({cluster, metric, date}) {
+    return (dispatch) => {
         dispatch({type: GET_METRIC_DATA.REQUEST});
         requests.removeAllRequests();
 
@@ -76,8 +72,12 @@ export function loadMetricAvailability(cluster) {
 }
 
 export function setOdinCluster(odinCluster) {
-    return (dispatch) => {
+    return (dispatch, getState) => {
+        const state = getState();
+        const metric = getMetric(state);
+        const date = getDate(state);
+
         dispatch({type: ODIN_DATA_FIELDS, data: {odinCluster}});
-        return dispatch(loadMetricAvailability(odinCluster));
+        return dispatch(loadMetricAvailability({cluster: odinCluster, metric, date}));
     };
 }

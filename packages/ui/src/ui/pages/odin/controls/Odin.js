@@ -17,7 +17,7 @@ import Toolbar from './OdinToolbar';
 import Monitor from './OdinMonitor';
 
 import Utils from '../odin-utils';
-import Updater from '../../../utils/hammer/updater';
+import {useUpdater} from '../../../hooks/use-updater';
 import {loadMetricAvailability, setOdinCluster} from '../_actions';
 import {
     ODIN_CLUSTER_NAMES_ITEMS,
@@ -37,7 +37,6 @@ import WithStickyToolbar from '../../../components/WithStickyToolbar/WithStickyT
 
 import './Odin.scss';
 
-const updater = new Updater();
 const odinCN = block('odin');
 
 function useLoadMetricAvailability(cluster) {
@@ -46,22 +45,18 @@ function useLoadMetricAvailability(cluster) {
     const useCurrentDate = useSelector(getUseCurrentDate);
     const metric = useSelector(getMetric);
 
-    useEffect(() => {
+    const updateFn = React.useMemo(() => {
         if (useCurrentDate) {
-            updater.add(
-                'odin.loadMetricAvailability',
-                () => {
-                    dispatch(loadMetricAvailability(cluster));
-                },
-                60 * 1000,
-            );
+            return () => {
+                dispatch(loadMetricAvailability({cluster, metric, date}));
+            };
         } else {
-            dispatch(loadMetricAvailability(cluster));
+            dispatch(loadMetricAvailability({cluster, metric, date}));
+            return undefined;
         }
-        return () => {
-            updater.remove('odin.loadMetricAvailability');
-        };
-    }, [useCurrentDate, date, metric]);
+    }, [dispatch, cluster, useCurrentDate, date, metric]);
+
+    useUpdater(updateFn, {timeout: 60 * 1000});
 }
 
 function OdinDetails({cluster}) {
