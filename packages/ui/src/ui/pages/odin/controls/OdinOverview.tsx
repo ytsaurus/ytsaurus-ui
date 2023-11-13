@@ -420,7 +420,7 @@ function OverviewRowImpl(props: OverviewRowProps) {
                     />
                 )}
             </div>
-            <div className={block('name')}>
+            <div className={block('name-cell')}>
                 <Link
                     url={`${absolute('./details')}?metric=${item.name}`}
                     onClick={handleNameClick}
@@ -430,7 +430,7 @@ function OverviewRowImpl(props: OverviewRowProps) {
                     {item.display_name}
                 </Link>
             </div>
-            <div>
+            <div className={block('actions-cell')}>
                 <Link
                     theme={'ghost'}
                     onClick={handleHide}

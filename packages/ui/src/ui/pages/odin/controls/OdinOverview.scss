@@ -38,18 +38,23 @@ $row_width: $size * 30;
 
     &__graph {
         height: $size;
-
-        &-cell {
-            min-width: $row_width;
-        }
+    }
+    &__graph-cell {
+        height: 20px;
+        min-width: $row_width;
     }
     &__hidden-graph {
         color: var(--secondary-text);
         text-align: center;
     }
 
-    &__name {
+    &__name-cell {
+        height: 20px;
         white-space: nowrap;
+    }
+
+    &__actions-cell {
+        height: 20px;
     }
 
     &__svg {
@@ -175,4 +180,3 @@ $row_width: $size * 30;
         font-weight: bold;
     }
 }
-
