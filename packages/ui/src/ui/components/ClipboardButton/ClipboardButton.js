@@ -18,7 +18,7 @@ const block = cn('yt-clipboard-button');
 export default class ClipboardButton extends Component {
     static propTypes = {
         className: PropTypes.string,
-        text: PropTypes.string,
+        text: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
         shiftText: PropTypes.string,
         buttonText: PropTypes.string,
         view: PropTypes.string,
