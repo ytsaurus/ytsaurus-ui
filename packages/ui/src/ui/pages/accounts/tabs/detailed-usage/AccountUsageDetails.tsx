@@ -67,13 +67,13 @@ import {Secondary, Warning} from '../../../../components/Text/Text';
 import PathView from '../../../../containers/PathFragment/PathFragment';
 import {getIconNameForType} from '../../../../utils/navigation/path-editor';
 import {OrderType} from '../../../../utils/sort-helpers';
-import Updater from '../../../../utils/hammer/updater';
 import {NoContent} from '../../../../components/NoContent/NoContent';
 import {AccountUsageDataItem} from '../../../../store/reducers/accounts/usage/account-usage-types';
 import {
     fetchAccountUsageListDiff,
     fetchAccountUsageTreeDiff,
 } from '../../../../store/actions/accounts/account-usage-diff';
+import {useUpdater} from '../../../../hooks/use-updater';
 
 import './AccountUsageDetails.scss';
 
@@ -364,27 +364,22 @@ function useColumnsByPreset(mediums: Array<string>) {
     return columns;
 }
 
-const updater = new Updater();
 const UPDATE_TIMEOUT = 600000;
-const LIST_UPDATER_ID = 'AccountUsageDetailsList';
-const TREE_UPDATER_ID = 'AccountUsageDetailsTree';
 
 function AccountUsageDetailsList() {
     const dispatch = useDispatch();
     const currentSnapshot = useSelector(getAccountUsageCurrentSnapshot);
-    React.useEffect(() => {
+
+    const updateFn = React.useMemo(() => {
         if (currentSnapshot === undefined) {
-            updater.add(LIST_UPDATER_ID, () => dispatch(fetchAccountUsageList()), UPDATE_TIMEOUT);
+            return () => dispatch(fetchAccountUsageList());
         } else {
             dispatch(fetchAccountUsageList());
+            return undefined;
         }
-
-        return () => {
-            if (currentSnapshot === undefined) {
-                updater.remove(LIST_UPDATER_ID);
-            }
-        };
     }, [dispatch, currentSnapshot]);
+
+    useUpdater(updateFn, UPDATE_TIMEOUT);
 
     const items = useSelector(getAccountUsageListItems);
     const loading = useSelector(getAccountUsageListLoading);
@@ -445,19 +440,16 @@ function AccountUsageDetailsListDiff() {
 function AccountUsageDetailsTree() {
     const dispatch = useDispatch();
     const currentSnapshot = useSelector(getAccountUsageCurrentSnapshot);
-    React.useEffect(() => {
+    const updateFn = React.useMemo(() => {
         if (currentSnapshot === undefined) {
-            updater.add(TREE_UPDATER_ID, () => dispatch(fetchAccountUsageTree()), UPDATE_TIMEOUT);
+            return () => dispatch(fetchAccountUsageTree());
         } else {
             dispatch(fetchAccountUsageTree());
+            return undefined;
         }
-
-        return () => {
-            if (currentSnapshot === undefined) {
-                updater.remove(TREE_UPDATER_ID);
-            }
-        };
     }, [dispatch, currentSnapshot]);
+
+    useUpdater(updateFn, UPDATE_TIMEOUT);
 
     const items = useSelector(getAccountUsageTreeItems);
     const loading = useSelector(getAccountUsageTreeLoading);

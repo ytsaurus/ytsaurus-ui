@@ -15,7 +15,6 @@ import {
     setAccountUsageViewType,
 } from '../../../../store/actions/accounts/account-usage';
 import {getCluster} from '../../../../store/selectors/global';
-import Updater from '../../../../utils/hammer/updater';
 import {Toolbar} from '../../../../components/WithStickyToolbar/Toolbar/Toolbar';
 import Select from '../../../../components/Select/Select';
 import {
@@ -44,31 +43,21 @@ import Suggest, {SuggestItem} from '../../../../components/Suggest/Suggest';
 import {Datepicker, DatepickerOutputDates} from '../../../../components/common/Datepicker';
 import {PathFragment} from '../../../../containers/PathFragment/PathFragment';
 import {useAllUserNamesFiltered} from '../../../../hooks/global';
+import {useUpdater} from '../../../../hooks/use-updater';
 
 import './AccountUsageToolbar.scss';
 
 const block = cn('account-usage-toolbar');
 
-const updater = new Updater();
-
-const UPDATER_ID = 'ACCOUNTS_DETAILED_USAGE_UPDATE_ID';
-
 function useFetchSnapshots() {
     const dispatch = useDispatch();
     const cluster = useSelector(getCluster);
 
-    React.useEffect(() => {
-        updater.add(
-            UPDATER_ID,
-            () => {
-                dispatch(fetchAccountsUsageSnapshots(cluster));
-            },
-            5 * 60000,
-        );
-        return () => {
-            updater.remove(UPDATER_ID);
-        };
-    }, [cluster]);
+    const updateFn = React.useCallback(() => {
+        dispatch(fetchAccountsUsageSnapshots(cluster));
+    }, [dispatch, cluster]);
+
+    useUpdater(updateFn, 5 * 60000);
 }
 
 const SnapshotFilterMemo = React.memo(SnapshotFilter);
