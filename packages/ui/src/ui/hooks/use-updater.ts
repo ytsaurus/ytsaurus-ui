@@ -7,7 +7,13 @@ export const DEFAULT_UPDATER_TIMEOUT = 30 * 1000;
 
 const UPDATER_ID = 'UPDATER_ID';
 
-export function useUpdater(fn?: () => unknown, timeout = DEFAULT_UPDATER_TIMEOUT) {
+export function useUpdater(
+    fn?: () => unknown,
+    {
+        timeout = DEFAULT_UPDATER_TIMEOUT,
+        destructFn,
+    }: {timeout?: number; destructFn?: () => void} = {},
+) {
     const [updater] = React.useState(fn ? new Updater() : undefined);
     React.useEffect(() => {
         if (fn) {
@@ -15,8 +21,9 @@ export function useUpdater(fn?: () => unknown, timeout = DEFAULT_UPDATER_TIMEOUT
         }
         return () => {
             updater?.remove(UPDATER_ID);
+            destructFn?.();
         };
-    }, [updater, fn, timeout]);
+    }, [updater, fn, timeout, destructFn]);
 }
 
 export function useUpdaterWithMemoizedParams<ArgsT extends Array<unknown>>(
@@ -37,5 +44,5 @@ export function useUpdaterWithMemoizedParams<ArgsT extends Array<unknown>>(
         fn?.(...params);
     }, [fn, params]);
 
-    useUpdater(updateFn, timeout);
+    useUpdater(updateFn, {timeout});
 }

@@ -10,9 +10,10 @@ function SupportedFeaturesUpdater() {
 
     const updateFn = React.useCallback(() => {
         dispatch(fetchSupportedFeatures());
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [cluster, dispatch]);
 
-    useUpdater(updateFn, 600000);
+    useUpdater(updateFn, {timeout: 600000});
 
     return null;
 }

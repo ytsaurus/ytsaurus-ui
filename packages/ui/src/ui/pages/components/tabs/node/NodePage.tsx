@@ -43,7 +43,7 @@ function NodePage({match}: NodeDetailsProps): ReturnType<React.VFC> {
         dispatch(loadNodeAttributes(host));
     }, [dispatch, host]);
 
-    useUpdater(updateFn, 15 * 1000);
+    useUpdater(updateFn, {timeout: 15 * 1000});
 
     const initialLoading = loading && (!loaded || host !== node?.host);
 

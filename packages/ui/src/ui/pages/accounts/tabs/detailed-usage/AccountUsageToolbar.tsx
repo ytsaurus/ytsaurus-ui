@@ -57,7 +57,7 @@ function useFetchSnapshots() {
         dispatch(fetchAccountsUsageSnapshots(cluster));
     }, [dispatch, cluster]);
 
-    useUpdater(updateFn, 5 * 60000);
+    useUpdater(updateFn, {timeout: 5 * 60000});
 }
 
 const SnapshotFilterMemo = React.memo(SnapshotFilter);

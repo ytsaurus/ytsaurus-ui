@@ -1,6 +1,6 @@
 import {useDispatch, useSelector} from 'react-redux';
 import {useRouteMatch} from 'react-router';
-import React, {useEffect} from 'react';
+import React from 'react';
 import cn from 'bem-cn-lite';
 
 import LoadDataHandler from '../../../components/LoadDataHandler/LoadDataHandler';
@@ -9,14 +9,13 @@ import JobGeneral from '../../../pages/job/JobGeneral/JobGeneral';
 import {Loader} from '@gravity-ui/uikit';
 
 import {abortAndReset, loadJobData} from '../../../store/actions/job/general';
-import Updater from '../../../utils/hammer/updater';
+import {useUpdater} from '../../../hooks/use-updater';
 import {RootState} from '../../../store/reducers';
 import {RouteInfo} from '../../../pages/job/Job';
 
 import './JobDetails.scss';
 
 const block = cn('job-detail');
-const updater = new Updater();
 
 export default function JobDetails() {
     const match = useRouteMatch<RouteInfo>();
@@ -28,15 +27,14 @@ export default function JobDetails() {
     );
     const initialLoading = loading && !loaded;
 
-    useEffect(() => {
-        const loadHandler = () => dispatch(loadJobData(operationID, jobID));
-        updater.add('job', loadHandler, 30 * 1000);
-
-        return () => {
-            updater.remove('job');
-            dispatch(abortAndReset());
+    const {updateFn, destructFn} = React.useMemo(() => {
+        return {
+            updateFn: () => dispatch(loadJobData(operationID, jobID)),
+            destructFn: () => dispatch(abortAndReset()),
         };
     }, [dispatch, operationID, jobID]);
+
+    useUpdater(updateFn, {destructFn});
 
     return (
         <ErrorBoundary>

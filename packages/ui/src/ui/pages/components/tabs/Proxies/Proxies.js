@@ -49,18 +49,14 @@ const block = cn('components-proxies');
 function ProxiesUpdater({type}) {
     const dispatch = useDispatch();
 
-    React.useEffect(() => {
-        return () => {
-            dispatch(resetProxyState());
+    const {updateFn, destructFn} = React.useMemo(() => {
+        return {
+            updateFn: () => dispatch(getProxies(type)),
+            destructFn: () => dispatch(resetProxyState()),
         };
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [type]);
-
-    const updateFn = React.useCallback(() => {
-        dispatch(getProxies(type));
     }, [dispatch, type]);
 
-    useUpdater(updateFn);
+    useUpdater(updateFn, {destructFn});
 
     return null;
 }
