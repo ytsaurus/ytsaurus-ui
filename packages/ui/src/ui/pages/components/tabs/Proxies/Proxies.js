@@ -1,6 +1,6 @@
 import {Sticky, StickyContainer} from 'react-sticky';
 import React, {Component} from 'react';
-import {connect} from 'react-redux';
+import {connect, useDispatch} from 'react-redux';
 import hammer from '../../../../common/hammer';
 import PropTypes from 'prop-types';
 import cn from 'bem-cn-lite';
@@ -31,12 +31,11 @@ import {
 import {mergeScreen, splitScreen as splitScreenAction} from '../../../../store/actions/global';
 import {proxiesTableColumnItems} from '../../../../utils/components/proxies/table';
 import {showNodeMaintenance} from '../../../../store/actions/components/node-maintenance-modal';
-import Updater from '../../../../utils/hammer/updater';
+import {useUpdater} from '../../../../hooks/use-updater';
 import {HEADER_HEIGHT} from '../../../../constants/index';
 import {isPaneSplit} from '../../../../utils';
 import {
     COMPONENTS_PROXIES_TABLE_ID,
-    POLLING_INTERVAL,
     PROXY_TYPE,
     SPLIT_TYPE,
 } from '../../../../constants/components/proxies/proxies';
@@ -46,7 +45,25 @@ import {NodeMaintenanceModal} from '../../NodeMaintenanceModal/NodeMaintenanceMo
 import './Proxies.scss';
 
 const block = cn('components-proxies');
-const updater = new Updater();
+
+function ProxiesUpdater({type}) {
+    const dispatch = useDispatch();
+
+    React.useEffect(() => {
+        return () => {
+            dispatch(resetProxyState());
+        };
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [type]);
+
+    const updateFn = React.useCallback(() => {
+        dispatch(getProxies(type));
+    }, [dispatch, type]);
+
+    useUpdater(updateFn);
+
+    return null;
+}
 
 export class Proxies extends Component {
     static selectProps = PropTypes.arrayOf(
@@ -80,8 +97,6 @@ export class Proxies extends Component {
             type: PropTypes.string.isRequired,
         }).isRequired,
 
-        getProxies: PropTypes.func.isRequired,
-        resetProxyState: PropTypes.func.isRequired,
         changeHostFilter: PropTypes.func.isRequired,
         changeStateFilter: PropTypes.func.isRequired,
         changeRoleFilter: PropTypes.func.isRequired,
@@ -93,19 +108,6 @@ export class Proxies extends Component {
     state = {
         activeProxy: null,
     };
-
-    componentDidMount() {
-        const {getProxies, type} = this.props;
-
-        updater.add(`components.${type}-proxies`, () => getProxies(type), POLLING_INTERVAL);
-    }
-
-    componentWillUnmount() {
-        const {resetProxyState, type} = this.props;
-
-        updater.remove(`components.${type}-proxies`);
-        resetProxyState();
-    }
 
     static renderHost(item, columnName) {
         return (
@@ -339,6 +341,7 @@ export class Proxies extends Component {
     render() {
         return (
             <ErrorBoundary>
+                <ProxiesUpdater type={this.props.type} />
                 <LoadDataHandler {...this.props}>
                     <div className={block()}>
                         <StickyContainer>
@@ -394,8 +397,6 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = {
-    getProxies,
-    resetProxyState,
     changeBannedFilter,
     changeHostFilter,
     changeStateFilter,
