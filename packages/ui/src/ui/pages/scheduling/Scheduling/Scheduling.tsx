@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect} from 'react';
+import React from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import cn from 'bem-cn-lite';
 import _ from 'lodash';
@@ -12,7 +12,7 @@ import Content from '../Content/Content';
 import Alerts from '../Alerts';
 
 import {SCHEDULING_CREATE_POOL_CANCELLED} from '../../../constants/scheduling';
-import Updater from '../../../utils/hammer/updater';
+import {useUpdater} from '../../../hooks/use-updater';
 import {
     abortAndReset,
     closeDeleteModal,
@@ -28,7 +28,6 @@ import SchedulingResources from '../Content/SchedulingResources';
 import {PoolEditorDialog} from './PoolEditorDialog/PoolEditorDialog';
 import {RootState} from '../../../store/reducers';
 
-const updater = new Updater();
 const block = cn('scheduling');
 
 const SchedulingDialogsMemo = React.memo(SchedulingDialogs);
@@ -38,16 +37,14 @@ function Scheduling() {
     const initialLoading = loading && !loaded;
     const dispatch = useDispatch();
 
-    const loadHandler = () => dispatch(loadSchedulingData());
-
-    useEffect(() => {
-        updater.add('scheduling', loadHandler, 30 * 1000);
-
-        return () => {
-            updater.remove('scheduling');
-            dispatch(abortAndReset());
+    const {updateFn, destructFn} = React.useMemo(() => {
+        return {
+            updateFn: () => dispatch(loadSchedulingData()),
+            destructFn: () => dispatch(abortAndReset()),
         };
     }, [dispatch]);
+
+    useUpdater(updateFn, {destructFn});
 
     return (
         <div className={block(null, 'elements-main-section')}>
@@ -92,11 +89,11 @@ function SchedulingDialogs() {
         (state: RootState) => state.scheduling,
     );
 
-    const deleteConfirmHandler = useCallback(
+    const deleteConfirmHandler = React.useCallback(
         () => dispatch(deletePool(deleteItem)),
         [deleteItem, dispatch],
     );
-    const deleteCloseHandler = useCallback(() => {
+    const deleteCloseHandler = React.useCallback(() => {
         dispatch({type: SCHEDULING_CREATE_POOL_CANCELLED});
         dispatch(closeDeleteModal());
     }, [dispatch]);
