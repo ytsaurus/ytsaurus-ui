@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {compose} from 'redux';
-import {connect} from 'react-redux';
+import {connect, useDispatch} from 'react-redux';
 import hammer from '../../../common/hammer';
 import PropTypes from 'prop-types';
 import block from 'bem-cn-lite';
@@ -11,15 +11,15 @@ import withStickyFooter from '../../../components/ElementsTable/hocs/withStickyF
 import {sortStateType} from '../../../components/ElementsTable/ElementsTableHeader';
 import withStickyHead from '../../../components/ElementsTable/hocs/withStickyHead';
 import ElementsTableBase from '../../../components/ElementsTable/ElementsTable';
-import withDataLoader from '../../../hocs/pages/withDataLoader';
 import SystemCounters from '../SystemCounters/SystemCounters';
 import Label from '../../../components/Label/Label';
 
 import {SYSTEM_CHUNKS_TABLE_ID} from '../../../constants/tables';
-import {cancelLoadChunks, loadChunks} from '../../../store/actions/system/chunks';
+import {loadChunks} from '../../../store/actions/system/chunks';
 import {getUISizes} from '../../../store/selectors/global';
 import {getSettingsSystemChunksCollapsed} from '../../../store/selectors/settings-ts';
 import {setSettingsSystemChunksCollapsed} from '../../../store/actions/settings/settings';
+import {useUpdater} from '../../../hooks/use-updater';
 
 import './Chunks.scss';
 
@@ -130,7 +130,7 @@ class Chunks extends Component {
         });
     }
 
-    render() {
+    renderImpl() {
         const {cells, types, sortState, collapsibleSize, collapsed} = this.props;
         const [rest, total] = _.partition(cells, ({cell_tag}) => 'total' !== cell_tag);
 
@@ -233,6 +233,15 @@ class Chunks extends Component {
             </CollapsibleSectionStateLess>
         );
     }
+
+    render() {
+        return (
+            <React.Fragment>
+                <ChunksUpdater />
+                {this.renderImpl()}
+            </React.Fragment>
+        );
+    }
 }
 
 function mapStateToProps(state) {
@@ -252,9 +261,28 @@ function mapStateToProps(state) {
 }
 
 const mapDispatchToProps = {
-    loadData: loadChunks,
-    cancelLoadData: cancelLoadChunks,
     setSettingsSystemChunksCollapsed,
 };
 
-export default compose(connect(mapStateToProps, mapDispatchToProps), withDataLoader)(Chunks);
+function ChunksUpdater() {
+    const dispatch = useDispatch();
+
+    const updateFn = React.useMemo(() => {
+        let allowRetry = true;
+        return () => {
+            if (allowRetry) {
+                dispatch(loadChunks()).then(({isRetryFutile} = {}) => {
+                    if (isRetryFutile) {
+                        allowRetry = false;
+                    }
+                });
+            }
+        };
+    }, [dispatch]);
+
+    useUpdater(updateFn);
+
+    return null;
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Chunks);
