@@ -3,7 +3,6 @@ import ypath from '../../../common/thor/ypath';
 import hammer from '../../../common/hammer';
 import {Toaster} from '@gravity-ui/uikit';
 
-import Updater from '../../../utils/hammer/updater';
 import createActionTypes from '../../../constants/utils';
 import {isRetryFutile} from '../../../utils/index';
 import {showErrorPopup} from '../../../utils/utils';
@@ -11,10 +10,8 @@ import {YTApiId, ytApiV3Id} from '../../../rum/rum-wrap-api';
 import {USE_SUPRESS_SYNC} from '../../../../shared/constants';
 
 export const FETCH_CHUNKS = createActionTypes('CHUNKS');
-const CHUNKS_UPDATER_ID = 'load/system/chunks';
 
 const toaster = new Toaster();
-const updater = new Updater();
 
 const chunkTypes = [
     {name: 'chunks'},
@@ -85,18 +82,6 @@ function prepareChunkCells(chunks) {
 
 export function loadChunks() {
     return (dispatch) => {
-        updater.add(CHUNKS_UPDATER_ID, () => dispatch(getChunks()), 30 * 1000);
-    };
-}
-
-export function cancelLoadChunks() {
-    return () => {
-        updater.remove(CHUNKS_UPDATER_ID);
-    };
-}
-
-function getChunks() {
-    return (dispatch) => {
         const requests = [];
 
         let requestCounter = 0;
@@ -147,7 +132,7 @@ function getChunks() {
             },
         });
 
-        ytApiV3Id.executeBatch(YTApiId.systemChunks, {requests}).then((data) => {
+        return ytApiV3Id.executeBatch(YTApiId.systemChunks, {requests}).then((data) => {
             const chunksData = data.slice(0, data.length - 1);
             _.forEach(chunksData, ({error, output}, index) => {
                 if (error) {
@@ -158,13 +143,13 @@ function getChunks() {
             });
 
             const last = data[data.length - 1];
-            handleLastPromise(
+            return handleLastPromise(
                 last.error ? Promise.reject(last.error) : Promise.resolve(last.output),
             );
         });
 
         function handleLastPromise(promise) {
-            promise
+            return promise
                 .then((res) => {
                     const replication = ypath.getValue(res, '/chunk_replicator_enabled');
                     const sealer = ypath.getValue(res, '/chunk_sealer_enabled');
@@ -202,7 +187,7 @@ function getChunks() {
                         ],
                     });
                     if (isRetryFutile(error.code)) {
-                        dispatch(cancelLoadChunks());
+                        return {isRetryFutile: true};
                     }
                 });
         }
