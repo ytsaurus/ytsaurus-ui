@@ -2,17 +2,17 @@ import React, {Component} from 'react';
 import {ConnectedProps, connect} from 'react-redux';
 import isEmpty_ from 'lodash/isEmpty';
 import map_ from 'lodash/map';
-import {compose} from 'redux';
 
 import {CollapsibleSectionStateLess} from '../../../components/CollapsibleSection/CollapsibleSection';
 import SystemStateOverview from '../SystemStateOverview/SystemStateOverview';
-import withDataLoader from '../../../hocs/pages/withDataLoader';
 
-import {cancelLoadProxies, loadProxies} from '../../../store/actions/system/proxies';
+import {loadSystemProxies} from '../../../store/actions/system/proxies';
 import {getCluster, getUISizes} from '../../../store/selectors/global';
 import {getSettingsSystemHttpProxiesCollapsed} from '../../../store/selectors/settings-ts';
 import {setSettingsSystemHttpProxiesCollapsed} from '../../../store/actions/settings/settings';
 import type {RootState} from '../../../store/reducers';
+import {useThunkDispatch} from '../../../store/thunkDispatch';
+import {useUpdater} from '../../../hooks/use-updater';
 
 import {MakeUrlParams, RoleGroup, RoleGroupsContainer} from './RoleGroup';
 
@@ -29,7 +29,7 @@ class Proxies extends Component<ReduxProps> {
         return <SystemStateOverview tab="http_proxies" counters={counters} />;
     }
 
-    render() {
+    renderImpl() {
         const {roleGroups, counters, collapsibleSize, collapsed} = this.props;
         if (isEmpty_(roleGroups) && isEmpty_(counters)) {
             return null;
@@ -62,6 +62,15 @@ class Proxies extends Component<ReduxProps> {
         );
     }
 
+    render() {
+        return (
+            <React.Fragment>
+                <ProxiesUpdater />
+                {this.renderImpl()}
+            </React.Fragment>
+        );
+    }
+
     makeRoleGroupUrl = ({name, state}: MakeUrlParams = {}) => {
         const {cluster} = this.props;
         const params = new URLSearchParams({role: name!});
@@ -88,11 +97,29 @@ function mapStateToProps(state: RootState) {
 }
 
 const mapDispatchToProps = {
-    loadData: loadProxies,
-    cancelLoadData: cancelLoadProxies,
     setSettingsSystemHttpProxiesCollapsed,
 };
 
-const connector = connect(mapStateToProps, mapDispatchToProps);
+function ProxiesUpdater() {
+    const dispatch = useThunkDispatch();
 
-export default compose(connector, withDataLoader)(Proxies);
+    const updateFn = React.useMemo(() => {
+        let allowUpdate = true;
+        return () => {
+            if (allowUpdate) {
+                dispatch(loadSystemProxies()).then((data) => {
+                    if (data?.isRetryFutile) {
+                        allowUpdate = false;
+                    }
+                });
+            }
+        };
+    }, [dispatch]);
+
+    useUpdater(updateFn);
+
+    return null;
+}
+
+const connector = connect(mapStateToProps, mapDispatchToProps);
+export default connector(Proxies);
