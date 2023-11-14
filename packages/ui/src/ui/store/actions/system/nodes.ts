@@ -7,13 +7,11 @@ import {Toaster} from '@gravity-ui/uikit';
 
 import ypath from '../../../common/thor/ypath';
 import hammer from '../../../common/hammer';
-import Updater from '../../../utils/hammer/updater';
 import {isRetryFutile} from '../../../utils/index';
 import {getNodeffectiveState, incrementStateCounter} from '../../../utils/system/proxies';
 import {showErrorPopup, splitBatchResults} from '../../../utils/utils';
 import {SYSTEM_FETCH_NODES, UNAWARE, USE_CACHE, USE_MAX_SIZE} from '../../../constants';
 import {YTApiId, ytApiV3Id} from '../../../rum/rum-wrap-api';
-import {getSystemNodesNodeTypesToLoad} from '../../../store/selectors/system/nodes';
 
 import type {RootState} from '../../../store/reducers';
 import type {
@@ -30,30 +28,15 @@ import type {
     RoleGroupItemInfo,
 } from '../../../store/reducers/system/proxies';
 import {ThunkAction} from 'redux-thunk';
+import {NodeType} from '../../../../shared/constants/system';
 
-const NODES_UPDATER_ID = 'system_nodes';
+type SystemNodesThunkAction<T = void> = ThunkAction<T, RootState, unknown, SystemNodesAction>;
 
-const updater = new Updater();
-
-type SystemNodesThunkAction = ThunkAction<void, RootState, unknown, SystemNodesAction>;
-
-export function loadNodes(): SystemNodesThunkAction {
+export function loadSystemNodes(
+    nodeTypes: Array<NodeType>,
+): SystemNodesThunkAction<Promise<undefined | {isRetryFutile?: boolean}>> {
     return (dispatch) => {
-        updater.add(NODES_UPDATER_ID, () => dispatch(getNodes()), 30 * 1000);
-    };
-}
-
-export function cancelLoadNodes() {
-    return () => {
-        updater.remove(NODES_UPDATER_ID);
-    };
-}
-
-function getNodes(): SystemNodesThunkAction {
-    return (dispatch, getState) => {
         dispatch({type: SYSTEM_FETCH_NODES.REQUEST});
-
-        const nodeTypes = getSystemNodesNodeTypesToLoad(getState());
 
         const requests: Array<BatchSubRequest> = [
             {
@@ -115,6 +98,7 @@ function getNodes(): SystemNodesThunkAction {
                         roleGroups: prepareRoleGroups(rackGroups),
                     },
                 });
+                return undefined;
             })
             .catch((error) => {
                 dispatch({
@@ -140,9 +124,8 @@ function getNodes(): SystemNodesThunkAction {
                         },
                     ],
                 });
-                if (isRetryFutile(error.code)) {
-                    dispatch(cancelLoadNodes());
-                }
+
+                return {isRetryFutile: isRetryFutile(error.code)};
             });
     };
 }
