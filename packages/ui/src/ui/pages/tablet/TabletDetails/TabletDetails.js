@@ -1,5 +1,5 @@
 import {useDispatch, useSelector} from 'react-redux';
-import React, {useEffect} from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import cn from 'bem-cn-lite';
 
@@ -10,12 +10,11 @@ import Partitions from './Partitions';
 import Overview from './Overview';
 
 import {abortAndReset, loadTabletData} from '../../../store/actions/tablet/tablet';
-import Updater from '../../../utils/hammer/updater';
+import {useUpdater} from '../../../hooks/use-updater';
 
 import './TabletDetails.scss';
 
 const block = cn('tablet-details');
-const updater = new Updater();
 
 TabletDetails.propTypes = {
     // from react-router
@@ -32,16 +31,14 @@ function TabletDetails({match}) {
     const {loading, loaded, error, errorData} = useSelector((state) => state.tablet.tablet);
     const {id} = match.params;
 
-    const loadHandler = () => dispatch(loadTabletData(id));
-
-    useEffect(() => {
-        updater.add('tablet', loadHandler, 15 * 1000);
-
-        return () => {
-            updater.remove('tablet');
-            dispatch(abortAndReset());
+    const {updateFn, destructFn} = React.useMemo(() => {
+        return {
+            updateFn: () => dispatch(loadTabletData(id)),
+            destructFn: () => dispatch(abortAndReset()),
         };
     }, [dispatch, id]);
+
+    useUpdater(updateFn, {timeout: 15 * 1000, destructFn});
 
     const initialLoading = loading && !loaded;
 
