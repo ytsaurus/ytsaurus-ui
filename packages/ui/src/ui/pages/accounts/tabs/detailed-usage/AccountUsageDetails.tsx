@@ -370,16 +370,11 @@ function AccountUsageDetailsList() {
     const dispatch = useDispatch();
     const currentSnapshot = useSelector(getAccountUsageCurrentSnapshot);
 
-    const updateFn = React.useMemo(() => {
-        if (currentSnapshot === undefined) {
-            return () => dispatch(fetchAccountUsageList());
-        } else {
-            dispatch(fetchAccountUsageList());
-            return undefined;
-        }
-    }, [dispatch, currentSnapshot]);
+    const updateFn = React.useCallback(() => {
+        dispatch(fetchAccountUsageList());
+    }, [dispatch]);
 
-    useUpdater(updateFn, {timeout: UPDATE_TIMEOUT});
+    useUpdater(updateFn, {timeout: UPDATE_TIMEOUT, onlyOnce: currentSnapshot !== undefined});
 
     const items = useSelector(getAccountUsageListItems);
     const loading = useSelector(getAccountUsageListLoading);
@@ -440,16 +435,11 @@ function AccountUsageDetailsListDiff() {
 function AccountUsageDetailsTree() {
     const dispatch = useDispatch();
     const currentSnapshot = useSelector(getAccountUsageCurrentSnapshot);
-    const updateFn = React.useMemo(() => {
-        if (currentSnapshot === undefined) {
-            return () => dispatch(fetchAccountUsageTree());
-        } else {
-            dispatch(fetchAccountUsageTree());
-            return undefined;
-        }
-    }, [dispatch, currentSnapshot]);
+    const updateFn = React.useCallback(() => {
+        dispatch(fetchAccountUsageTree());
+    }, [dispatch]);
 
-    useUpdater(updateFn, {timeout: UPDATE_TIMEOUT});
+    useUpdater(updateFn, {timeout: UPDATE_TIMEOUT, onlyOnce: currentSnapshot !== undefined});
 
     const items = useSelector(getAccountUsageTreeItems);
     const loading = useSelector(getAccountUsageTreeLoading);

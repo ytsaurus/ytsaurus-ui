@@ -45,18 +45,11 @@ function useLoadMetricAvailability(cluster) {
     const useCurrentDate = useSelector(getUseCurrentDate);
     const metric = useSelector(getMetric);
 
-    const updateFn = React.useMemo(() => {
-        if (useCurrentDate) {
-            return () => {
-                dispatch(loadMetricAvailability({cluster, metric, date}));
-            };
-        } else {
-            dispatch(loadMetricAvailability({cluster, metric, date}));
-            return undefined;
-        }
-    }, [dispatch, cluster, useCurrentDate, date, metric]);
+    const updateFn = React.useCallback(() => {
+        dispatch(loadMetricAvailability({cluster, metric, date}));
+    }, [dispatch, cluster, date, metric]);
 
-    useUpdater(updateFn, {timeout: 60 * 1000});
+    useUpdater(updateFn, {timeout: 60 * 1000, onlyOnce: !useCurrentDate});
 }
 
 function OdinDetails({cluster}) {
