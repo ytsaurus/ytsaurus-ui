@@ -50,7 +50,7 @@ export default function TopRowContent() {
             {allowQT && (
                 <Route
                     path={`/:cluster/${Page.QUERIES}`}
-                    component={withLazyLoading(QueryTrackerTopRowLazy)}
+                    component={withLazyLoading(QueryTrackerTopRowLazy, null)}
                 />
             )}
             {hasOdinPage() && (

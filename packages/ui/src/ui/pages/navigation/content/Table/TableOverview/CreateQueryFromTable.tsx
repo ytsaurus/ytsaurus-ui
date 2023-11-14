@@ -1,7 +1,7 @@
 import React, {ReactElement, useCallback, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import cn from 'bem-cn-lite';
-import {Button} from '@gravity-ui/uikit';
+import {Button, Loader} from '@gravity-ui/uikit';
 import {QueryEngine} from '../../../../query-tracker/module/api';
 import {getPath} from '../../../../../store/selectors/navigation';
 import {getCluster} from '../../../../../store/selectors/global';
@@ -20,7 +20,7 @@ const b = cn('create-query-btn');
 const QueryWidgetLazy = React.lazy(() => import('../../../../query-tracker/QueryWidget'));
 
 export const QueryWidgetPortal = withSplit(
-    withLazyLoading<QueryWidgetProps>(QueryWidgetLazy),
+    withLazyLoading<QueryWidgetProps>(QueryWidgetLazy, <Loader className={b('loader')} />),
 ) as unknown as ReactElement<QueryWidgetProps>;
 
 export function CreateQueryFromTable({className}: {className: string}) {

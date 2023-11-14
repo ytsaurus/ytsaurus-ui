@@ -2,6 +2,7 @@ import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {Route, Switch} from 'react-router';
 import FlexSplitPane from '../../../components/FlexSplitPane/FlexSplitPane';
+import QueryEditor from '../QueryEditor/QueryEditor';
 import {QueriesPooling} from '../hooks/QueriesPooling/context';
 import {QueryEngine, isEngine} from '../module/api';
 import {
@@ -13,8 +14,12 @@ import {
 } from '../module/query/actions';
 import {getQueryGetParams} from '../module/query/selectors';
 import {QueriesList} from '../QueriesList';
-import {Loader} from '@gravity-ui/uikit';
+
+import cn from 'bem-cn-lite';
+
 import './QueryTracker.scss';
+
+const b = cn('query-tracker-page');
 
 type Props = {
     match: {
@@ -27,8 +32,6 @@ type Props = {
         search: string;
     };
 };
-
-const QueryEditorLazy = React.lazy(() => import('../QueryEditor/QueryEditor'));
 
 const initialSizes = [23, 77];
 const minSize = 380; // see history list's cells size
@@ -85,7 +88,7 @@ function QueryPage(props: Props) {
     return null;
 }
 
-export const QueryTracker = ({match}: Props) => {
+export default function QueryTracker({match}: Props) {
     const [sizes, setSize] = useState(initialSizes);
     const getSize = useMemo(() => {
         return () => sizes;
@@ -107,19 +110,22 @@ export const QueryTracker = ({match}: Props) => {
             </Switch>
             <QueriesPooling>
                 <FlexSplitPane
-                    className="query-tracker-page-container"
+                    className={b('container')}
                     direction={FlexSplitPane.HORIZONTAL}
                     onResizeEnd={setSize}
                     minSize={minSize}
                     getInitialSizes={getSize}
                 >
                     <QueriesList />
-
-                    <React.Suspense fallback={<Loader />}>
-                        <QueryEditorLazy onStartQuery={goToCreatedQuery}></QueryEditorLazy>
-                    </React.Suspense>
+                    <QueryEditor
+                        onStartQuery={goToCreatedQuery}
+                        listVisible={{
+                            visible: listVisible,
+                            setVisibility: setListVisible,
+                        }}
+                    ></QueryEditor>
                 </FlexSplitPane>
             </QueriesPooling>
         </>
     );
-};
+}
