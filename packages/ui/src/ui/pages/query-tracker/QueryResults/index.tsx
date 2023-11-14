@@ -5,8 +5,6 @@ import {Tabs} from '@gravity-ui/uikit';
 import {useDispatch} from 'react-redux';
 import {QueryResultsView} from '../QueryResultsView';
 import Error from '../../../components/Error/Error';
-
-import './index.scss';
 import {QueryMetaInfo} from './QueryMetaRow';
 import QueryMetaTable from '../QueryMetaTable';
 import {loadQueryResult} from '../module/query_result/actions';
@@ -17,6 +15,9 @@ import NotRenderUntilFirstVisible from '../NotRenderUntilFirstVisible/NotRenderU
 import {PlanProvider} from '../Plan/PlanContext';
 import Plan from '../Plan/Plan';
 import {usePrepareNode} from '../Plan/utils';
+import PlanActions from '../Plan/PlanActions';
+
+import './index.scss';
 
 const b = block('query-results');
 
@@ -56,45 +57,46 @@ export const QueryResults = React.memo(function QueryResults({
                 <div className={b('toolbar')}>{toolbar}</div>
             </div>
             <NotRenderUntilFirstVisible className={b('result', {minimized})} hide={minimized}>
-                <div className={b('header')}>
-                    <Tabs
-                        className={b('tabs')}
-                        items={tabs}
-                        activeTab={activeTabId}
-                        onSelectTab={(tabId: string) => setTab(tabId)}
-                    />
-                    {category === QueryResultTab.RESULT && Number.isInteger(resultIndex) && (
-                        <div className={b('tab_actions')}>
-                            <QueryResultActions query={query} resultIndex={resultIndex ?? 0} />
-                        </div>
-                    )}
-                </div>
-                <div className={b('content')}>
-                    <NotRenderUntilFirstVisible
-                        hide={category !== QueryResultTab.RESULT && !Number.isInteger(resultIndex)}
-                        className={b('result-wrap')}
-                    >
-                        <QueryResultContainer
-                            query={query}
-                            activeResultParams={activeResultParams}
+                <PlanProvider
+                    plan={query.progress?.yql_plan}
+                    progress={query.progress?.yql_progress}
+                    defaultView="graph"
+                >
+                    <div className={b('header')}>
+                        <Tabs
+                            className={b('tabs')}
+                            items={tabs}
+                            activeTab={activeTabId}
+                            onSelectTab={(tabId: string) => setTab(tabId, query?.id)}
                         />
-                    </NotRenderUntilFirstVisible>
-                    {category === QueryResultTab.ERROR && <Error error={query.error} />}
-                    {category === QueryResultTab.META && <QueryMetaTable query={query} />}
-
-                    <NotRenderUntilFirstVisible hide={category !== QueryResultTab.STATISTIC}>
-                        <YQLStatisticsTable query={query} />
-                    </NotRenderUntilFirstVisible>
-                    {category === QueryResultTab.PROGRESS && (
-                        <PlanProvider
-                            plan={query.progress?.yql_plan}
-                            progress={query.progress?.yql_progress}
-                            defaultView="graph"
+                        {category === QueryResultTab.RESULT && Number.isInteger(resultIndex) && (
+                            <div className={b('tab_actions')}>
+                                <QueryResultActions query={query} resultIndex={resultIndex ?? 0} />
+                            </div>
+                        )}
+                        {category === QueryResultTab.PROGRESS && <PlanActions />}
+                    </div>
+                    <div className={b('content')}>
+                        <NotRenderUntilFirstVisible
+                            hide={
+                                category !== QueryResultTab.RESULT && !Number.isInteger(resultIndex)
+                            }
+                            className={b('result-wrap')}
                         >
-                            <PlanContainer isActive={true} />
-                        </PlanProvider>
-                    )}
-                </div>
+                            <QueryResultContainer
+                                query={query}
+                                activeResultParams={activeResultParams}
+                            />
+                        </NotRenderUntilFirstVisible>
+                        {category === QueryResultTab.ERROR && <Error error={query.error} />}
+                        {category === QueryResultTab.META && <QueryMetaTable query={query} />}
+
+                        <NotRenderUntilFirstVisible hide={category !== QueryResultTab.STATISTIC}>
+                            <YQLStatisticsTable query={query} />
+                        </NotRenderUntilFirstVisible>
+                        {category === QueryResultTab.PROGRESS && <PlanContainer isActive={true} />}
+                    </div>
+                </PlanProvider>
             </NotRenderUntilFirstVisible>
             <div></div>
         </div>

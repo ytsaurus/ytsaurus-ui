@@ -68,13 +68,13 @@ export class TimelineCanvas extends YaTimeline {
         yaTimelineConfig.ZOOM_MAX = YEAR * 3;
 
         yaTimelineConfig.PRIMARY_BACKGROUND_COLOR = getCSSPropertyValue(
-            '--g-color-base-background',
+            '--yc-color-base-background',
         );
 
-        yaTimelineConfig.SECONDARY_MARK_COLOR = getCSSPropertyValue('--g-color-line-generic');
-        yaTimelineConfig.BOUNDARY_MARK_COLOR = getCSSPropertyValue('--g-color-line-generic');
-        yaTimelineConfig.PRIMARY_MARK_COLOR = getCSSPropertyValue('--g-color-line-generic-hover');
-        yaTimelineConfig.COUNTER_FONT_COLOR = getCSSPropertyValue('--g-color-text-complementary');
+        yaTimelineConfig.SECONDARY_MARK_COLOR = getCSSPropertyValue('--yc-color-line-generic');
+        yaTimelineConfig.BOUNDARY_MARK_COLOR = getCSSPropertyValue('--yc-color-line-generic');
+        yaTimelineConfig.PRIMARY_MARK_COLOR = getCSSPropertyValue('--yc-color-line-generic-hover');
+        yaTimelineConfig.COUNTER_FONT_COLOR = getCSSPropertyValue('--yc-color-text-complementary');
     }
 }
 
