@@ -39,10 +39,7 @@ import {getSelectedColumns} from '../../../../../store/selectors/settings';
 import {getSettingsEnableSideBar} from '../../../../../store/selectors/settings-ts';
 import {defaultColumns} from '../../../../../utils/components/nodes/tables';
 import withVisible, {WithVisibleProps} from '../../../../../hocs/withVisible';
-import {
-    DEFAULT_UPDATER_TIMEOUT,
-    useUpdaterWithMemoizedParams,
-} from '../../../../../hooks/use-updater';
+import {useUpdaterWithMemoizedParams} from '../../../../../hooks/use-updater';
 import {isPaneSplit} from '../../../../../utils';
 import {
     changeContentMode,
@@ -89,7 +86,7 @@ function NodesUpdater() {
         [dispatch],
     );
 
-    useUpdaterWithMemoizedParams(updateFn, DEFAULT_UPDATER_TIMEOUT, {attributes, nodeTypes});
+    useUpdaterWithMemoizedParams(updateFn, undefined, {attributes, nodeTypes});
 
     return null;
 }

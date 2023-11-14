@@ -9,6 +9,8 @@ import {
     SHOW_EDIT_WEIGHT_POOL_MODAL,
 } from '../../../constants/operations';
 import {Page} from '../../../constants';
+import {getCluster} from '../../../store/selectors/global';
+import {getListRequestParameters} from './utils';
 
 export * from '../../../store/actions/operations/list';
 
@@ -40,7 +42,7 @@ export function setPoolsAndWeights(operation, pools, weights) {
         {},
     );
 
-    return (dispatch) => {
+    return (dispatch, getState) => {
         dispatch({
             type: SET_PULLS_AND_WEIGHTS.REQUEST,
         });
@@ -71,7 +73,10 @@ export function setPoolsAndWeights(operation, pools, weights) {
             })
             .then(() => {
                 if (inOperationsList) {
-                    dispatch(updateOperations());
+                    const state = getState();
+                    const cluster = getCluster(state);
+                    const parameters = getListRequestParameters(state);
+                    dispatch(updateOperations(cluster, parameters));
                 } else {
                     dispatch(getOperation(operationId));
                 }
