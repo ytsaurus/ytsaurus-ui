@@ -2,10 +2,8 @@ import _ from 'lodash';
 import ypath from '../../../common/thor/ypath';
 import {Toaster} from '@gravity-ui/uikit';
 
-import Updater from '../../../utils/hammer/updater';
 import createActionTypes from '../../../constants/utils';
 import {isRetryFutile} from '../../../utils/index';
-import {MASTERS_UPDATER_ID} from '../../../constants/system/masters';
 import {getBatchError, showErrorPopup} from '../../../utils/utils';
 
 import yt from '@ytsaurus/javascript-wrapper/lib/yt';
@@ -16,7 +14,6 @@ export const FETCH_MASTER_CONFIG = createActionTypes('MASTER_CONFIG');
 export const FETCH_MASTER_DATA = createActionTypes('MASTER_DATA');
 
 const toaster = new Toaster();
-const updater = new Updater();
 
 function loadMastersConfig() {
     const requests = [
@@ -338,18 +335,6 @@ function loadHydra(requests, masterInfo, type, masterEntry) {
 
 export function loadMasters() {
     return (dispatch) => {
-        updater.add(MASTERS_UPDATER_ID, () => dispatch(loadMastersImpl()), 30 * 1000);
-    };
-}
-
-export function cancelLoadMasters() {
-    return () => {
-        updater.remove(MASTERS_UPDATER_ID);
-    };
-}
-
-function loadMastersImpl() {
-    return (dispatch) => {
         dispatch({
             type: FETCH_MASTER_CONFIG.REQUEST,
         });
@@ -403,10 +388,8 @@ function loadMastersImpl() {
                 });
 
                 if (isRetryFutile(error.code)) {
-                    dispatch(cancelLoadMasters());
+                    return {isRetryFutile: true};
                 }
-
-                return Promise.reject(error);
             });
     };
 }

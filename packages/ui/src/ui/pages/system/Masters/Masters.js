@@ -1,23 +1,22 @@
 import React, {Component} from 'react';
-import {connect} from 'react-redux';
+import {connect, useDispatch} from 'react-redux';
 import PropTypes from 'prop-types';
 import block from 'bem-cn-lite';
-import {compose} from 'redux';
 import _ from 'lodash';
 
 import {CollapsibleSectionStateLess} from '../../../components/CollapsibleSection/CollapsibleSection';
 import VisibleHostTypeRadioButton from '../../../pages/system/VisibleHostTypeRadioButton';
 import {sortStateProgress} from '../../../utils';
 import SystemStateOverview from '../SystemStateOverview/SystemStateOverview';
-import withDataLoader from '../../../hocs/pages/withDataLoader';
 import MasterGroup from './MasterGroup';
 
-import {cancelLoadMasters, loadMasters} from '../../../store/actions/system/masters';
+import {loadMasters} from '../../../store/actions/system/masters';
 import {getUISizes} from '../../../store/selectors/global';
+import {getSettingsSystemMastersCollapsed} from '../../../store/selectors/settings-ts';
 import {setSettingsSystemMastersCollapsed} from '../../../store/actions/settings/settings';
+import {useUpdater} from '../../../hooks/use-updater';
 
 import './Masters.scss';
-import {getSettingsSystemMastersCollapsed} from '../../../store/selectors/settings-ts';
 
 const b = block('system-master');
 const headingCN = block('elements-heading')({size: 's'});
@@ -215,7 +214,7 @@ class Masters extends Component {
         );
     }
 
-    render() {
+    renderImpl() {
         const {initialized, collapsibleSize, collapsed} = this.props;
 
         if (!initialized) {
@@ -237,6 +236,15 @@ class Masters extends Component {
             </CollapsibleSectionStateLess>
         );
     }
+
+    render() {
+        return (
+            <React.Fragment>
+                <MastersUpdater />
+                {this.renderImpl()}
+            </React.Fragment>
+        );
+    }
 }
 
 function mapStateToProps(state) {
@@ -256,9 +264,28 @@ function mapStateToProps(state) {
 }
 
 const mapDispatchToProps = {
-    loadData: loadMasters,
-    cancelLoadData: cancelLoadMasters,
     setSettingsSystemMastersCollapsed,
 };
 
-export default compose(connect(mapStateToProps, mapDispatchToProps), withDataLoader)(Masters);
+function MastersUpdater() {
+    const dispatch = useDispatch();
+
+    const updateFn = React.useMemo(() => {
+        let allowUpdate = true;
+        return () => {
+            if (allowUpdate) {
+                dispatch(loadMasters()).then(({isRetryFutile} = {}) => {
+                    if (isRetryFutile) {
+                        allowUpdate = false;
+                    }
+                });
+            }
+        };
+    }, [dispatch]);
+
+    useUpdater(updateFn);
+
+    return null;
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Masters);
