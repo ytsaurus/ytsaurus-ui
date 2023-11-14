@@ -3,7 +3,6 @@ import map_ from 'lodash/map';
 
 import {Toaster} from '@gravity-ui/uikit';
 
-import Updater from '../../../utils/hammer/updater';
 import {isRetryFutile} from '../../../utils/index';
 import {showErrorPopup} from '../../../utils/utils';
 import {getCluster} from '../../../store/selectors/global';
@@ -13,24 +12,9 @@ import {ThunkAction} from 'redux-thunk';
 import type {RootState} from '../../../store/reducers';
 import {FETCH_PROXIES} from '../../../constants/system/nodes';
 
-const PROXIES_UPDATER_ID = 'system_proxies';
-
 const toaster = new Toaster();
-const updater = new Updater();
 
-type ProxiesThunkAction = ThunkAction<void, RootState, unknown, HttpProxiesAction>;
-
-export function loadProxies(): ProxiesThunkAction {
-    return (dispatch) => {
-        updater.add(PROXIES_UPDATER_ID, () => dispatch(getProxies()), 30 * 1000);
-    };
-}
-
-export function cancelLoadProxies() {
-    return () => {
-        updater.remove(PROXIES_UPDATER_ID);
-    };
-}
+type ProxiesThunkAction<T = void> = ThunkAction<T, RootState, unknown, HttpProxiesAction>;
 
 function makeProxyInfo(data: any): RoleGroupItemInfo {
     const state = data.dead ? 'offline' : 'online';
@@ -44,7 +28,9 @@ function makeProxyInfo(data: any): RoleGroupItemInfo {
     };
 }
 
-function getProxies(): ProxiesThunkAction {
+export function loadSystemProxies(): ProxiesThunkAction<
+    Promise<undefined | {isRetryFutile: boolean}>
+> {
     return (dispatch, getState) => {
         const cluster = getCluster(getState());
 
@@ -62,6 +48,7 @@ function getProxies(): ProxiesThunkAction {
                         counters: extractProxyCounters(proxies),
                     },
                 });
+                return undefined;
             })
             .catch((error) => {
                 dispatch({
@@ -86,9 +73,7 @@ function getProxies(): ProxiesThunkAction {
                     ],
                 });
 
-                if (isRetryFutile(error.code)) {
-                    dispatch(cancelLoadProxies());
-                }
+                return {isRetryFutile: isRetryFutile(error.code)};
             });
     };
 }
