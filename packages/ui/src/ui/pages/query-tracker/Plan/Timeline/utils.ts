@@ -18,12 +18,12 @@ export const MIN_RANGE = 60_000;
 const RESERVE_TO_EVENT = 1_000;
 
 const eventStatusToColorName = {
-    NOT_STARTED: 'new',
-    STARTED: 'started',
-    IN_PROGRESS: 'running',
-    FINISHED: 'completed',
-    FAILED: 'failed',
-    ABORTED: 'aborted',
+    NotStarted: 'new',
+    Started: 'started',
+    InProgress: 'running',
+    Finished: 'completed',
+    Failed: 'failed',
+    Aborted: 'aborted',
 } as const;
 
 export type OperationColorsType = Record<string, {percentage: number; color: string}>;
@@ -121,30 +121,33 @@ function prepareEvents({
         id: eventIndex++,
     });
 
-    stages?.forEach((stage, index) => {
-        const nextStage = stages[index + 1] ?? {};
-        const [stageName, stageStartedAt] = Object.entries(stage)[0];
-        const stageFinishedAt = Object.values(nextStage)[0] ?? dataProgressFinishedAt;
+    if (stages) {
+        Object.values(stages).forEach((stage, index) => {
+            const nextStage = stages[index + 1] ?? {};
+            const [stageName, stageStartedAt] = Object.entries(stage)[0];
+            const stageFinishedAt = Object.values(nextStage)[0] ?? dataProgressFinishedAt;
 
-        if (index === 0 && dataProgressStartedAt !== stageStartedAt) {
+            if (index === 0 && dataProgressStartedAt !== stageStartedAt) {
+                events.push({
+                    ...eventDraft,
+                    trackIndex: currentStageIndex++,
+                    from: dataProgressStartedAtMillis,
+                    to: new Date(stageStartedAt).getTime(),
+                    name: 'init',
+                    id: eventIndex++,
+                });
+            }
             events.push({
                 ...eventDraft,
                 trackIndex: currentStageIndex++,
-                from: dataProgressStartedAtMillis,
-                to: new Date(stageStartedAt).getTime(),
-                name: 'init',
+                from: new Date(stageStartedAt).getTime(),
+                to: new Date(stageFinishedAt).getTime(),
+                name: stageName,
                 id: eventIndex++,
             });
-        }
-        events.push({
-            ...eventDraft,
-            trackIndex: currentStageIndex++,
-            from: new Date(stageStartedAt).getTime(),
-            to: new Date(stageFinishedAt).getTime(),
-            name: stageName,
-            id: eventIndex++,
         });
-    });
+    }
+
     return events;
 }
 
@@ -224,13 +227,10 @@ export function parseGraph(data: {
 
         current.isExpandable = events.length > 1;
 
-        // @ts-ignore
         const eventMajorColor = colors.operation[eventStatusToColorName[operationStatus]];
         const eventBorderColor =
-            // @ts-ignore
             colors.operation[`${eventStatusToColorName[operationStatus]}Border`];
         const eventBackgroundColor =
-            // @ts-ignore
             colors.operation[`${eventStatusToColorName[operationStatus]}Background`];
 
         const operationDuration = dataProgressFinishedAtMillis - dataProgressStartedAtMillis;

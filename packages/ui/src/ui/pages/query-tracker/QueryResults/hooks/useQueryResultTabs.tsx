@@ -35,7 +35,7 @@ type ResultCurrentState = {
 
 export const useQueryResultTabs = (
     query?: QueryItem,
-): [TabsItemProps[], (tab: string) => void, ResultCurrentState] => {
+): [TabsItemProps[], (tab: string, queryId?: string) => void, ResultCurrentState] => {
     const [tab, setTab] = useState<QueryResultTab>(QueryResultTab.META);
     const [activeResultParams, setResultParams] =
         useState<ResultCurrentState['activeResultParams']>(undefined);

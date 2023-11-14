@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import Loader from '../Loader/Loader';
-import {useVirtual} from 'react-virtual';
+import {useVirtual} from '@tanstack/react-virtual';
 
 import {handleRefs, hasKey} from '../../utils';
 

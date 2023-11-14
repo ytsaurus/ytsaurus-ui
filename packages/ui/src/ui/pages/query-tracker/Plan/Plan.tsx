@@ -12,6 +12,8 @@ import {usePlanView, useResultPlan, useResultProgress} from './PlanContext';
 import {Legend} from './components/Legend/Legend';
 import {ProcessedGraph, ProcessedNode, preprocess, updateProgress} from './utils';
 
+import Timeline from './Timeline/Timeline';
+
 import './Plan.scss';
 
 const block = cn('plan');
@@ -49,6 +51,12 @@ export default React.memo(function Plan({isActive, className, prepareNode}: Plan
                             prepareNode={prepareNode}
                         />
                     )}
+                </NotRenderUntilFirstVisible>
+                <NotRenderUntilFirstVisible
+                    hide={planView !== 'timeline'}
+                    className={block('table')}
+                >
+                    <Timeline graph={graph} prepareNode={prepareNode} />
                 </NotRenderUntilFirstVisible>
             </GraphColorsProvider>
         </div>
