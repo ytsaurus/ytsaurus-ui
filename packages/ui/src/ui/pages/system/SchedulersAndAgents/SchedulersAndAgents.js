@@ -1,12 +1,10 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import {connect} from 'react-redux';
+import {connect, useDispatch} from 'react-redux';
 import _ from 'lodash';
 import block from 'bem-cn-lite';
-import {compose} from 'redux';
 
 import {CollapsibleSectionStateLess} from '../../../components/CollapsibleSection/CollapsibleSection';
-import withDataLoader from '../../../hocs/pages/withDataLoader';
 import VisibleHostTypeRadioButton from '../../../pages/system/VisibleHostTypeRadioButton';
 import {
     getSystemAgentsWithState,
@@ -17,10 +15,7 @@ import {
 import Scheduler from './Scheduler/Scheduler';
 import Alert from '../../../components/Alert/Alert';
 
-import {
-    cancelSchedulersAndAgentsLoading,
-    loadSchedulersAndAgents,
-} from '../../../store/actions/system';
+import {loadSchedulersAndAgents} from '../../../store/actions/system';
 
 import prepareTags from './prepareTags';
 
@@ -28,6 +23,7 @@ import './Schedulers.scss';
 import {getUISizes} from '../../../store/selectors/global';
 import {getSettingsSystemSchedulersCollapsed} from '../../../store/selectors/settings-ts';
 import {setSettingsSystemSchedulersCollapsed} from '../../../store/actions/settings/settings';
+import {useUpdater} from '../../../hooks/use-updater';
 
 const b = block('system');
 const headingCN = block('elements-heading')({size: 's'});
@@ -120,7 +116,7 @@ class SchedulersAndAgents extends Component {
         setSettingsSystemSchedulersCollapsed(!collapsed);
     };
 
-    render() {
+    renderImpl() {
         const {schedulers, agents, alerts, collapsibleSize, collapsed} = this.props;
 
         if (!schedulers.length && !agents.length) {
@@ -150,6 +146,15 @@ class SchedulersAndAgents extends Component {
             </CollapsibleSectionStateLess>
         );
     }
+
+    render() {
+        return (
+            <React.Fragment>
+                <SchedulersAndAgentsUpdater />
+                {this.renderImpl()}
+            </React.Fragment>
+        );
+    }
 }
 
 function mapStateToProps(state) {
@@ -164,12 +169,28 @@ function mapStateToProps(state) {
 }
 
 const mapDispatchToProps = {
-    loadData: loadSchedulersAndAgents,
-    cancelLoadData: cancelSchedulersAndAgentsLoading,
     setSettingsSystemSchedulersCollapsed,
 };
 
-export default compose(
-    connect(mapStateToProps, mapDispatchToProps),
-    withDataLoader,
-)(SchedulersAndAgents);
+function SchedulersAndAgentsUpdater() {
+    const dispatch = useDispatch();
+
+    const updateFn = React.useMemo(() => {
+        let allowUpdate = true;
+        return () => {
+            if (allowUpdate) {
+                dispatch(loadSchedulersAndAgents()).then(({isRetryFutile} = {}) => {
+                    if (isRetryFutile) {
+                        allowUpdate = false;
+                    }
+                });
+            }
+        };
+    }, [dispatch]);
+
+    useUpdater(updateFn);
+
+    return null;
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(SchedulersAndAgents);
