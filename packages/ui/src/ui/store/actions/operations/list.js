@@ -25,16 +25,11 @@ import {
 } from '../../../constants/operations';
 import {ListOperationSelector} from '../../../pages/operations/selectors';
 import {removeSetting, setSetting} from '../../../store/actions/settings';
-import {
-    getDefaultFromTime,
-    getDefaultToTime,
-    getListRequestParameters,
-} from '../../../store/actions/operations/utils';
+import {getDefaultFromTime, getDefaultToTime} from '../../../store/actions/operations/utils';
 import CancelHelper from '../../../utils/cancel-helper';
 import {NAMESPACES} from '../../../../shared/constants/settings';
 import {RumWrapper, YTApiId, ytApiV3Id} from '../../../rum/rum-wrap-api';
 import {RumMeasureTypes} from '../../../rum/rum-measure-types';
-import {getCluster} from '../../../store/selectors/global';
 
 const cancellableRequests = new CancelHelper();
 
@@ -80,18 +75,14 @@ export function updatePager(incomplete) {
     };
 }
 
-export function updateOperations() {
-    return (dispatch, getState) => {
-        const state = getState();
+export function updateOperations(cluster, parameters) {
+    return (dispatch) => {
+        cancellableRequests.removeAllRequests();
 
         dispatch({
             type: UPDATE_OPERATIONS_REQUEST,
         });
 
-        const parameters = getListRequestParameters(state);
-        cancellableRequests.removeAllRequests();
-
-        const cluster = getCluster(state);
         const rumId = new RumWrapper(cluster, RumMeasureTypes.OPERATIONS_LIST);
         return rumId
             .fetch(
@@ -151,7 +142,6 @@ export function updateFilter(name, value) {
             data: {name, value},
         });
         dispatch(resetCursor());
-        dispatch(updateOperations());
     };
 }
 
@@ -177,7 +167,6 @@ export function showArchiveOperations(from, to) {
             data: {dataMode: OPERATIONS_DATA_MODE.ARCHIVE, from, to},
         });
         dispatch(resetCursor());
-        dispatch(updateOperations());
     };
 }
 
@@ -188,7 +177,6 @@ export function showCurrentOperations() {
             data: {dataMode: OPERATIONS_DATA_MODE.CURRENT},
         });
         dispatch(resetCursor());
-        dispatch(updateOperations());
     };
 }
 
@@ -202,7 +190,6 @@ export function gotoOperationsPage(where) {
                 if (dataMode === OPERATIONS_DATA_MODE.CURRENT) {
                     dispatch(resetTimeRange());
                 }
-                dispatch(updateOperations());
                 break;
 
             case OPERATIONS_PAGE.LAST:
@@ -218,7 +205,6 @@ export function gotoOperationsPage(where) {
                         lastPageReached: true,
                     }),
                 );
-                dispatch(updateOperations());
                 break;
 
             case OPERATIONS_PAGE.NEXT:
@@ -237,8 +223,6 @@ export function gotoOperationsPage(where) {
                             firstPageReached: false,
                         }),
                     );
-
-                    dispatch(updateOperations());
                 }
                 break;
 
@@ -255,8 +239,6 @@ export function gotoOperationsPage(where) {
                             lastPageReached: false,
                         }),
                     );
-
-                    dispatch(updateOperations());
                 }
                 break;
         }
@@ -272,7 +254,6 @@ export function applyFilterPreset(preset, reload = true) {
 
         if (reload) {
             dispatch(resetCursor());
-            dispatch(updateOperations());
         }
     };
 }

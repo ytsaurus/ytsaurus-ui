@@ -1,23 +1,53 @@
 import React, {Component} from 'react';
-import {connect, useSelector} from 'react-redux';
+import {connect, useDispatch, useSelector} from 'react-redux';
 import PropTypes from 'prop-types';
 import cn from 'bem-cn-lite';
 import moment from 'moment';
 
 import Error from '../../../components/Error/Error';
 
-import {POLLING_INTERVAL} from '../../../constants/operations/list';
 import OperationsListTable from './OperationsListTable/OperationsListTable';
 import OperationsListToolbar from './OperationsListToolbar/OperationsListToolbar';
 import {updateOperations} from '../../../store/actions/operations/list';
-import Updater from '../../../utils/hammer/updater';
+import {useMemoizedIfEqual, useUpdater} from '../../../hooks/use-updater';
 import {useAppRumMeasureStart} from '../../../rum/rum-app-measures';
 import {RumMeasureTypes} from '../../../rum/rum-measure-types';
 import {useRumMeasureStop} from '../../../rum/RumUiContext';
 import {getOperationsListIsFinalState} from '../../../store/selectors/operations/operations-list';
+import {getCluster} from '../../../store/selectors/global';
+import {getListRequestParameters} from '../../../store/actions/operations/utils';
 
 const block = cn('operations-list');
-const updater = new Updater();
+
+function OperationListUpdater({timeRange}) {
+    const dispatch = useDispatch();
+
+    const cluster = useSelector(getCluster);
+    const parameters = useSelector(getListRequestParameters);
+
+    const params = useMemoizedIfEqual(cluster, parameters);
+
+    const updateFn = React.useCallback(() => {
+        dispatch(updateOperations(...params));
+    }, [dispatch, params]);
+
+    useUpdater(updateFn, {onlyOnce: isBigTimeRange(timeRange)});
+
+    return null;
+}
+
+function isBigTimeRange(timeRange) {
+    const {from, to} = timeRange;
+    if (typeof from === 'string' && typeof to === 'string') {
+        const dateFrom = moment(from);
+        const dateTo = moment(to);
+        const diff = dateTo.diff(dateFrom);
+
+        return moment.duration(diff).asDays() >= 1;
+    }
+
+    return false;
+}
 
 class OperationsList extends Component {
     static propTypes = {
@@ -42,48 +72,6 @@ class OperationsList extends Component {
         inDashboard: false,
     };
 
-    componentDidMount() {
-        this.props.updateOperations();
-        this.handlePolling();
-    }
-
-    componentDidUpdate(prevProps) {
-        const {timeRange: prevTimeRange} = prevProps;
-
-        if (this.isTimeRangeChanged(prevTimeRange)) {
-            this.handlePolling();
-        }
-    }
-
-    componentWillUnmount() {
-        updater.remove('operation.list');
-    }
-
-    get isBigTimeRange() {
-        const {from, to} = this.props.timeRange;
-        if (typeof from === 'string' && typeof to === 'string') {
-            const dateFrom = moment(from);
-            const dateTo = moment(to);
-            const diff = dateTo.diff(dateFrom);
-
-            return moment.duration(diff).asDays() >= 1;
-        }
-
-        return false;
-    }
-
-    handlePolling() {
-        const {updateOperations} = this.props;
-
-        if (this.isBigTimeRange) {
-            updater.remove('operation.list');
-        } else {
-            updater.add('operation.list', updateOperations, POLLING_INTERVAL, {
-                skipInitialCall: true,
-            });
-        }
-    }
-
     isTimeRangeChanged(prevTimeRange) {
         const {timeRange} = this.props;
 
@@ -103,10 +91,11 @@ class OperationsList extends Component {
     }
 
     render() {
-        const {hasError, inDashboard} = this.props;
+        const {hasError, inDashboard, timeRange} = this.props;
 
         return (
             <div className={block()}>
+                <OperationListUpdater timeRange={timeRange} />
                 {inDashboard && (
                     <div className={cn('elements-heading')({size: 'l'})}>Operations</div>
                 )}
