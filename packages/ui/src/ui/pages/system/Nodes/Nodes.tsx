@@ -23,7 +23,7 @@ import {
     ComponentsNodesLinkParams,
     makeComponentsNodesLink,
 } from '../../../utils/components/nodes/node';
-import {useUpdater} from '../../../hooks/use-updater';
+import {useMemoizedIfEqual, useUpdater} from '../../../hooks/use-updater';
 import {useThunkDispatch} from '../../../store/thunkDispatch';
 import {getSystemNodesNodeTypesToLoad} from '../../../store/selectors/system/nodes';
 
@@ -219,19 +219,20 @@ function NodesUpdater() {
     const dispatch = useThunkDispatch();
 
     const nodeTypes = useSelector(getSystemNodesNodeTypesToLoad);
+    const params = useMemoizedIfEqual(nodeTypes);
 
     const updateFn = React.useMemo(() => {
         let allowUpdate = true;
         return () => {
             if (allowUpdate) {
-                dispatch(loadSystemNodes(nodeTypes)).then((data) => {
+                dispatch(loadSystemNodes(...params)).then((data) => {
                     if (data?.isRetryFutile) {
                         allowUpdate = false;
                     }
                 });
             }
         };
-    }, [dispatch, nodeTypes]);
+    }, [dispatch, params]);
 
     useUpdater(updateFn);
 
