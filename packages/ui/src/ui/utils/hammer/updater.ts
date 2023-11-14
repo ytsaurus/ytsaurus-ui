@@ -1,56 +1,58 @@
-import {getUseAutoRefresh} from '../../store/selectors/settings';
-import {getWindowStore} from '../../store/window-store';
+export type UpdaterOptions = {
+    getSkipNextCall: () => boolean;
+};
 
-export default class Updater {
-    private _updaters: Record<string, null | number> = {};
+export class Updater {
+    private callback?: () => unknown;
+    private timeout: number;
+    private options?: UpdaterOptions;
 
-    remove(id: string) {
-        this._removeTimer(id);
-        delete this._updaters[id];
+    private inProgress = false;
+    private lastCallTime = 0;
+    private frozen = false;
+    private timerId?: number;
+
+    constructor(callback: () => unknown, timeout: number, dynamicOptions?: UpdaterOptions) {
+        this.callback = callback;
+        this.timeout = Math.max(3000, timeout);
+        this.options = dynamicOptions;
+
+        this.repeat();
     }
 
-    add(id: string, updater: () => void, time: number, settings: {skipInitialCall?: boolean} = {}) {
-        const {skipInitialCall} = settings;
+    destroy() {
+        window.clearTimeout(this.timerId);
+        delete this.callback;
+        delete this.options;
+    }
 
-        if (this._updaters[id]) {
-            this.remove(id);
+    freeze = () => {
+        this.frozen = true;
+    };
+
+    unfreeze = () => {
+        this.frozen = false;
+        if (!this.inProgress && Date.now() - this.lastCallTime >= this.timeout) {
+            this.repeat();
+        }
+    };
+
+    private repeat = async () => {
+        window.clearTimeout(this.timerId);
+
+        if (this.frozen) {
+            return;
         }
 
-        this._addTimer(id, updater, time, skipInitialCall);
-    }
-
-    private _repeat(id: string, callback: () => void, time: number) {
-        const useAutoRefresh = getUseAutoRefresh(getWindowStore().getState());
-
-        const finallyHandler = () => {
-            if (this._updaters[id] || this._updaters[id] === null) {
-                this._updaters[id] = window.setTimeout(
-                    () => this._repeat(id, callback, time),
-                    time,
-                );
+        try {
+            this.inProgress = true;
+            if (this.lastCallTime === 0 || !this.options?.getSkipNextCall()) {
+                await this.callback?.();
             }
-        };
-
-        const doRequest = useAutoRefresh || this._updaters[id] === null;
-
-        /* eslint-disable callback-return */
-        Promise.resolve(doRequest ? callback() : null)
-            .then(finallyHandler)
-            .catch(finallyHandler);
-        /* eslint-enable callback-return */
-    }
-
-    private _addTimer(id: string, callback: () => void, time: number, skipInitialCall?: boolean) {
-        this._updaters[id] = null;
-
-        if (!skipInitialCall) {
-            this._repeat(id, callback, time);
-        } else {
-            this._updaters[id] = window.setTimeout(() => this._repeat(id, callback, time), time);
+        } finally {
+            this.inProgress = false;
+            this.lastCallTime = Date.now();
+            this.timerId = window.setTimeout(this.repeat, this.timeout);
         }
-    }
-
-    private _removeTimer(id: string) {
-        window.clearTimeout(this._updaters[id]!);
-    }
+    };
 }

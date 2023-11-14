@@ -1,11 +1,11 @@
 import React from 'react';
+import {useSelector} from 'react-redux';
 import isEqual_ from 'lodash/isEqual';
 
-import Updater from '../utils/hammer/updater';
+import {Updater} from '../utils/hammer/updater';
+import {getUseAutoRefresh} from '../store/selectors/settings';
 
 export const DEFAULT_UPDATER_TIMEOUT = 30 * 1000;
-
-const UPDATER_ID = 'UPDATER_ID';
 
 export type UseUpdaterOptions = {
     /**
@@ -13,7 +13,7 @@ export type UseUpdaterOptions = {
      */
     timeout?: number;
     /**
-     * a callback that will be callad at destruction stage of React.useEffect(...)
+     * a callback that will be called at destruction stage of React.useEffect(...)
      */
     destructFn?: () => void;
     /**
@@ -26,20 +26,30 @@ export function useUpdater(
     fn?: () => unknown,
     {timeout = DEFAULT_UPDATER_TIMEOUT, destructFn, onlyOnce}: UseUpdaterOptions = {},
 ) {
-    const [updater] = React.useState(fn ? new Updater() : undefined);
+    const useAutoRefresh = useSelector(getUseAutoRefresh) as boolean;
+    const optionsRef = React.useRef({skipNextCall: !useAutoRefresh});
+
+    optionsRef.current.skipNextCall = !useAutoRefresh;
+
     React.useEffect(() => {
-        if (fn) {
-            if (onlyOnce) {
-                fn();
-            } else {
-                updater?.add(UPDATER_ID, fn, timeout);
-            }
+        let updater: Updater | undefined;
+        if (onlyOnce) {
+            fn?.();
+        } else {
+            updater = fn
+                ? new Updater(fn, timeout, {
+                      getSkipNextCall() {
+                          return optionsRef.current.skipNextCall;
+                      },
+                  })
+                : undefined;
         }
+
         return () => {
-            updater?.remove(UPDATER_ID);
+            updater?.destroy();
             destructFn?.();
         };
-    }, [updater, fn, timeout, destructFn, onlyOnce]);
+    }, [fn, timeout, destructFn, onlyOnce]);
 }
 
 export function useUpdaterWithMemoizedParams<ArgsT extends Array<unknown>>(
