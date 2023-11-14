@@ -1,8 +1,7 @@
 import React, {Component} from 'react';
-import {ConnectedProps, connect} from 'react-redux';
+import {ConnectedProps, connect, useSelector} from 'react-redux';
 import cn from 'bem-cn-lite';
 import map_ from 'lodash/map';
-import {compose} from 'redux';
 
 import format from '../../../common/hammer/format';
 
@@ -10,10 +9,9 @@ import {CollapsibleSectionStateLess} from '../../../components/CollapsibleSectio
 import {NoContent} from '../../../components/NoContent/NoContent';
 import Link from '../../../components/Link/Link';
 
-import withDataLoader from '../../../hocs/pages/withDataLoader';
 import SystemStateOverview from '../SystemStateOverview/SystemStateOverview';
 
-import {cancelLoadNodes, loadNodes} from '../../../store/actions/system/nodes';
+import {loadSystemNodes} from '../../../store/actions/system/nodes';
 import {getCluster, getUISizes} from '../../../store/selectors/global';
 import {setSettingsSystemNodesCollapsed} from '../../../store/actions/settings/settings';
 import {
@@ -25,6 +23,9 @@ import {
     ComponentsNodesLinkParams,
     makeComponentsNodesLink,
 } from '../../../utils/components/nodes/node';
+import {useUpdater} from '../../../hooks/use-updater';
+import {useThunkDispatch} from '../../../store/thunkDispatch';
+import {getSystemNodesNodeTypesToLoad} from '../../../store/selectors/system/nodes';
 
 import {MakeUrlParams, RoleGroup, RoleGroupsContainer} from '../Proxies/RoleGroup';
 
@@ -163,7 +164,7 @@ class Nodes extends Component<ReduxProps> {
         );
     }
 
-    render() {
+    renderImpl() {
         const {roleGroups, collapsibleSize, loaded, collapsed} = this.props;
 
         if (!loaded && !roleGroups) {
@@ -180,6 +181,15 @@ class Nodes extends Component<ReduxProps> {
             >
                 {this.renderContent()}
             </CollapsibleSectionStateLess>
+        );
+    }
+
+    render() {
+        return (
+            <React.Fragment>
+                <NodesUpdater />
+                {this.renderImpl()}
+            </React.Fragment>
         );
     }
 }
@@ -200,11 +210,32 @@ function mapStateToProps(state: RootState) {
 }
 
 const mapDispatchToProps = {
-    loadData: loadNodes,
-    cancelLoadData: cancelLoadNodes,
     setSettingsSystemNodesCollapsed,
 };
 
 const connector = connect(mapStateToProps, mapDispatchToProps);
 
-export default compose(connector, withDataLoader)(Nodes);
+function NodesUpdater() {
+    const dispatch = useThunkDispatch();
+
+    const nodeTypes = useSelector(getSystemNodesNodeTypesToLoad);
+
+    const updateFn = React.useMemo(() => {
+        let allowUpdate = true;
+        return () => {
+            if (allowUpdate) {
+                dispatch(loadSystemNodes(nodeTypes)).then((data) => {
+                    if (data?.isRetryFutile) {
+                        allowUpdate = false;
+                    }
+                });
+            }
+        };
+    }, [dispatch, nodeTypes]);
+
+    useUpdater(updateFn);
+
+    return null;
+}
+
+export default connector(Nodes);
