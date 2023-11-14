@@ -6,7 +6,6 @@ import {Toaster} from '@gravity-ui/uikit';
 
 import {isRetryFutile} from '../../../utils/index';
 import {showErrorPopup} from '../../../utils/utils';
-import Updater from '../../../utils/hammer/updater';
 import {YTApiId, ytApiV3Id} from '../../../rum/rum-wrap-api';
 import {FETCH_RPC_PROXIES} from '../../../constants/system/nodes';
 import {extractProxyCounters, extractRoleGroups} from '../../../utils/system/proxies';
@@ -16,23 +15,12 @@ import {RootState} from '../../../store/reducers';
 import {RpcProxiesAction} from '../../../store/reducers/system/rpc-proxies';
 import {USE_SUPRESS_SYNC} from '../../../../shared/constants';
 
-const RPC_PROXIES_UPDATER_ID = 'system_rpcproxies';
-
-const updater = new Updater();
-
-type RPCProxiesThunkAction = ThunkAction<void, RootState, unknown, RpcProxiesAction>;
-
-export function loadRPCProxies(): RPCProxiesThunkAction {
-    return (dispatch) => {
-        updater.add(RPC_PROXIES_UPDATER_ID, () => dispatch(getRPCProxies()), 30 * 1000);
-    };
-}
-
-export function cancelLoadRPCProxies() {
-    return () => {
-        updater.remove(RPC_PROXIES_UPDATER_ID);
-    };
-}
+type RPCProxiesThunkAction<T = void> = ThunkAction<
+    Promise<T>,
+    RootState,
+    unknown,
+    RpcProxiesAction
+>;
 
 function extractRpcProxy(data: object): Array<RoleGroupItemInfo> {
     return reduce_(
@@ -54,7 +42,9 @@ function extractRpcProxy(data: object): Array<RoleGroupItemInfo> {
     );
 }
 
-function getRPCProxies(): RPCProxiesThunkAction {
+export function loadSystemRPCProxies(): RPCProxiesThunkAction<
+    undefined | {isRetryFutile: boolean}
+> {
     return (dispatch) => {
         dispatch({
             type: FETCH_RPC_PROXIES.REQUEST,
@@ -76,6 +66,7 @@ function getRPCProxies(): RPCProxiesThunkAction {
                         counters: extractProxyCounters(rpcProxies),
                     },
                 });
+                return undefined;
             })
             .catch((error) => {
                 dispatch({
@@ -101,9 +92,7 @@ function getRPCProxies(): RPCProxiesThunkAction {
                     ],
                 });
 
-                if (isRetryFutile(error.code)) {
-                    dispatch(cancelLoadRPCProxies());
-                }
+                return {isRetryFutile: isRetryFutile(error.code)};
             });
     };
 }
