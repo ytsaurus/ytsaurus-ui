@@ -1,6 +1,5 @@
 import {Toaster} from '@gravity-ui/uikit';
 
-import Updater from '../../../utils/hammer/updater';
 import createActionTypes from '../../../constants/utils';
 import {isRetryFutile} from '../../../utils/index';
 import {showErrorPopup} from '../../../utils/utils';
@@ -9,24 +8,10 @@ import {USE_SUPRESS_SYNC} from '../../../../shared/constants';
 
 export const FETCH_RESOURCES = createActionTypes('RESOURCES');
 export const FETCH_NODE_ATTRS = createActionTypes('NODE_ATTRS');
-const RESOURCES_UPDATER_ID = 'system_resources';
 
 const toaster = new Toaster();
-const updater = new Updater();
 
-export function loadResources() {
-    return (dispatch) => {
-        updater.add(RESOURCES_UPDATER_ID, () => dispatch(getResources()), 30 * 1000);
-    };
-}
-
-export function cancelLoadResources() {
-    return () => {
-        updater.remove(RESOURCES_UPDATER_ID);
-    };
-}
-
-function getResources() {
+export function loadSystemResources() {
     return (dispatch) => {
         dispatch({
             type: FETCH_RESOURCES.REQUEST,
@@ -74,6 +59,10 @@ function getResources() {
                         data: attrs.output,
                     });
                 }
+
+                return {
+                    isRetryFutile: isRetryFutile(cluster?.error) || isRetryFutile(attrs?.error),
+                };
             })
             .catch(handleError);
 
@@ -90,9 +79,7 @@ function getResources() {
                 actions: [{label: ' view', onClick: () => showErrorPopup(error)}],
             });
 
-            if (isRetryFutile(error.code)) {
-                dispatch(cancelLoadResources());
-            }
+            return {isRetryFutile: isRetryFutile(error.code)};
         }
     };
 }
