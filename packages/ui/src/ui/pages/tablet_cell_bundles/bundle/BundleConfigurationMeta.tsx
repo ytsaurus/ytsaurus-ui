@@ -41,7 +41,7 @@ export function ActiveAccountBundleControllerUpdater() {
         if (activeBundle) {
             dispatch(fetchTabletCellBundleEditor(activeBundle));
         }
-    }, [activeBundle]);
+    }, [dispatch, activeBundle]);
     useUpdater(fetchFn);
 
     const prevBundleControllerState = React.useRef<null | 'failed' | 'changing' | 'good'>(null);

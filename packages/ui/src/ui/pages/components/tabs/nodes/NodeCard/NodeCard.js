@@ -74,15 +74,11 @@ export const nodeProps = PropTypes.shape({
 function NodeCardUpdater({host}) {
     const dispatch = useDispatch();
 
-    const updateFn = React.useMemo(() => {
-        if (host) {
-            return () => dispatch(loadNodeAttributes(host));
-        } else {
-            return undefined;
-        }
+    const updateFn = React.useCallback(() => {
+        dispatch(loadNodeAttributes(host));
     }, [dispatch, host]);
 
-    useUpdater(updateFn, {timeout: 15 * 1000});
+    useUpdater(updateFn, {timeout: 15 * 1000, onlyOnce: !host});
     return null;
 }
 

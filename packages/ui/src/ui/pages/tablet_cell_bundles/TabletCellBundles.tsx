@@ -59,10 +59,9 @@ export default function TabletCellBundles() {
     const {enable_bundle_controller: enableBundleController = false} =
         useSelector(getTabletsActiveBundleData) || ({} as Partial<TabletBundle>);
     const dispatch = useDispatch();
-    const fetchFn = React.useMemo(
-        () => () => Promise.all([dispatch(fetchChaosBundles()), dispatch(fetchTabletsBundles())]),
-        [dispatch],
-    );
+    const fetchFn = React.useCallback(() => {
+        Promise.all([dispatch(fetchChaosBundles()), dispatch(fetchTabletsBundles())]);
+    }, [dispatch]);
     useUpdater(fetchFn);
 
     const showEditor = React.useCallback(() => {
