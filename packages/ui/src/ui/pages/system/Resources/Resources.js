@@ -2,16 +2,16 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import block from 'bem-cn-lite';
-import {compose} from 'redux';
 import _ from 'lodash';
 
-import Block from '../../../components/Block/Block';
 import {Progress} from '@gravity-ui/uikit';
 
+import Block from '../../../components/Block/Block';
 import hammer from '../../../common/hammer';
 import {getMediumList} from '../../../store/selectors/thor';
-import withDataLoader from '../../../hocs/pages/withDataLoader';
-import {cancelLoadResources, loadResources} from '../../../store/actions/system/resources';
+import {loadSystemResources} from '../../../store/actions/system/resources';
+import {useThunkDispatch} from '../../../store/thunkDispatch';
+import {useUpdater} from '../../../hooks/use-updater';
 
 import './Resources.scss';
 
@@ -129,7 +129,7 @@ class Resources extends Component {
         });
     }
 
-    render() {
+    renderImpl() {
         const headingCN = b('resources-heading');
         const resources = this.prepareResources();
         const diskResources = this.prepareDiskResources();
@@ -157,6 +157,15 @@ class Resources extends Component {
             </div>
         );
     }
+
+    render() {
+        return (
+            <React.Fragment>
+                <ResourcesUpdater />
+                {this.renderImpl()}
+            </React.Fragment>
+        );
+    }
 }
 
 function mapStateToProps(state) {
@@ -168,9 +177,25 @@ function mapStateToProps(state) {
     };
 }
 
-const mapDispatchToProps = {
-    loadData: loadResources,
-    cancelLoadData: cancelLoadResources,
-};
+function ResourcesUpdater() {
+    const dispatch = useThunkDispatch();
 
-export default compose(connect(mapStateToProps, mapDispatchToProps), withDataLoader)(Resources);
+    const updateFn = React.useMemo(() => {
+        let allowUpdate = true;
+        return () => {
+            if (allowUpdate) {
+                dispatch(loadSystemResources()).then((data) => {
+                    if (data?.isRetryFutile) {
+                        allowUpdate = false;
+                    }
+                });
+            }
+        };
+    }, [dispatch]);
+
+    useUpdater(updateFn);
+
+    return null;
+}
+
+export default connect(mapStateToProps)(Resources);
