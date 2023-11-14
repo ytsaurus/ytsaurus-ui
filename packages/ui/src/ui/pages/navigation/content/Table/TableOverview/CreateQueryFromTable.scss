@@ -4,4 +4,9 @@
     &__btn + &__btn {
         margin-left: 1px;
     }
+
+    &__loader {
+        flex: 1 1 100%;
+        justify-content: center;
+    }
 }

@@ -19,7 +19,7 @@ import TabletCellBundles from '../../pages/tablet_cell_bundles/TabletCellBundles
 import GroupsPage from '../../pages/groups/GroupsPage';
 import UsersPage from '../../pages/users/UsersPage';
 import Scheduling from '../../pages/scheduling/Scheduling/Scheduling';
-import {QueryTracker} from '../../pages/query-tracker/QueryTracker/QueryTracker';
+import QueryTracker from '../../pages/query-tracker/QueryTracker';
 import Job from '../../pages/job/Job';
 
 import ClusterPageHeader from '../ClusterPageHeader/ClusterPageHeader';
