@@ -10,12 +10,10 @@ import {showErrorPopup} from '../../../utils/utils';
 import {isOperationId} from '../../../utils/operations/list';
 import {TYPED_OUTPUT_FORMAT} from '../../../constants/index';
 import {Toaster} from '@gravity-ui/uikit';
-import Updater from '../../../utils/hammer/updater';
 import CancelHelper from '../../../utils/cancel-helper';
 import {YTApiId, ytApiV3, ytApiV3Id} from '../../../rum/rum-wrap-api';
 import {getJobsMonitoringDescriptors} from '../../../store/actions/operations/jobs-monitor';
 
-const updater = new Updater();
 const toaster = new Toaster();
 const operationDetailsRequests = new CancelHelper();
 
@@ -142,7 +140,6 @@ export function getOperation(id) {
                 if (operation.inIntermediateState()) {
                     dispatch(loadIntermediateResourceUsage(operation, dispatchOperationSuccess));
                 } else {
-                    updater.remove('operation.detail');
                     dispatchOperationSuccess();
                 }
 
@@ -176,8 +173,6 @@ export function getOperation(id) {
                             details: error,
                         },
                     });
-
-                    updater.remove('operation.detail');
                 }
             });
     };
