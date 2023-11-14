@@ -17,20 +17,31 @@ export class Updater {
         this.timeout = Math.max(3000, timeout);
         this.options = dynamicOptions;
 
+        document.addEventListener('visibilitychange', this.onVisibilityChange);
+
         this.repeat();
     }
 
     destroy() {
+        document.removeEventListener('visibilitychange', this.onVisibilityChange);
         window.clearTimeout(this.timerId);
         delete this.callback;
         delete this.options;
     }
 
-    freeze = () => {
+    private onVisibilityChange = () => {
+        if (document.hidden) {
+            this.freeze();
+        } else {
+            this.unfreeze();
+        }
+    };
+
+    private freeze = () => {
         this.frozen = true;
     };
 
-    unfreeze = () => {
+    private unfreeze = () => {
         this.frozen = false;
         if (!this.inProgress && Date.now() - this.lastCallTime >= this.timeout) {
             this.repeat();
