@@ -58,14 +58,16 @@ class SchedulersAndAgents extends Component {
     };
 
     renderHosts(connectedHosts) {
-        return _.map(connectedHosts, ({host, state, maintenanceMessage}) => (
-            <Scheduler
-                key={host}
-                host={host}
-                state={state}
-                maintenanceMessage={maintenanceMessage}
-            />
-        ));
+        return _.map(connectedHosts, ({host, state, maintenanceMessage}, index) => {
+            return (
+                <Scheduler
+                    key={host ?? index}
+                    host={host}
+                    state={state}
+                    maintenanceMessage={maintenanceMessage}
+                />
+            );
+        });
     }
 
     renderSection(name, heading, showHostTypeButton) {
@@ -134,8 +136,8 @@ class SchedulersAndAgents extends Component {
                 {_.map(alerts.schedulers, (alert) => (
                     <Alert key={alert.attributes.host} error={alert} />
                 ))}
-                {_.map(alerts.agents, (alert) => (
-                    <Alert error={alert} />
+                {_.map(alerts.agents, (alert, index) => (
+                    <Alert key={index} error={alert} />
                 ))}
 
                 <div className={b('schedulers-agents')}>
