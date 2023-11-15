@@ -4,10 +4,9 @@ import _ from 'lodash';
 import React from 'react';
 import {Reducer} from 'redux';
 import {PathParameters} from './store/location';
-import {ClusterUiConfig} from './store/reducers/global/cluster-ui-config';
 import {TabletBundle} from './store/reducers/tablet_cell_bundles';
 import {PoolInfo} from './store/selectors/scheduling/scheduling-pools';
-import {ClusterConfig} from '../shared/yt-types';
+import {ClusterConfig, ClusterUiConfig} from '../shared/yt-types';
 import {ClusterAppearance} from './appearance';
 import AppNavigationPageLayout, {
     AppNavigationProps,

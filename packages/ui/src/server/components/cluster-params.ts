@@ -9,6 +9,7 @@ import {getRobotYTApiSetup} from './requestsSetup';
 import {getApp} from '../ServerFactory';
 import {FIX_MY_TYPE} from '../../@types/types';
 import {USE_SUPRESS_SYNC} from '../../shared/constants';
+import {ClusterUiConfig} from '../../shared/yt-types';
 
 const yt = ytLib();
 
@@ -264,4 +265,17 @@ export async function getPreloadedClusterParams(cluster: string, ctx: AppContext
     }
 
     return response;
+}
+
+export async function getPreloadedClusterUiConfig(
+    cluster: string,
+    ctx: AppContext,
+    isDeveloper: boolean,
+): Promise<ClusterUiConfig> {
+    try {
+        const {uiConfig, uiDevConfig} = await getPreloadedClusterParams(cluster, ctx);
+        return {...uiConfig.output, ...(isDeveloper ? uiDevConfig.output : {})};
+    } catch {
+        return {};
+    }
 }

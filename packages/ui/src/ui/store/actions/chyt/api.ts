@@ -105,14 +105,20 @@ export function chytApiAction<
         cancelToken,
         skipErrorToast,
         successTitle,
-    }: {cancelToken?: CancelToken; skipErrorToast?: boolean; successTitle?: string} = {},
+        isAdmin,
+    }: {
+        cancelToken?: CancelToken;
+        skipErrorToast?: boolean;
+        successTitle?: string;
+        isAdmin?: boolean;
+    } = {},
 ) {
     const extras = action === 'start' ? {untracked: true} : undefined;
-
+    const query = isAdmin ? '?isDeveloper=true' : '';
     return wrapApiPromiseByToaster(
         axios.request<ApiItem['response']>({
             method: 'POST',
-            url: `/api/chyt/${cluster}/${action}`,
+            url: `/api/chyt/${cluster}/${action}${query}`,
             data: {
                 params: {...params, ...extras},
             },

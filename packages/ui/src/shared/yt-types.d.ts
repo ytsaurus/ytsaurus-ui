@@ -16,6 +16,15 @@ export interface YTConfig {
     environment?: 'development' | 'production' | 'farm' | 'localmode';
 }
 
+export interface ClusterUiConfig {
+    enable_per_bundle_tablet_accounting?: boolean;
+    enable_per_account_tablet_accounting?: boolean;
+    per_bundle_accounting_help_link?: string;
+    enable_maintenance_api_nodes?: boolean;
+    enable_maintenance_api_proxies?: boolean;
+    chyt_controller_base_url?: string;
+}
+
 export type CypressNode<AttributesT extends Record<string, unknown>, ValueT> = {
     $attributes: AttributesT;
     $value: ValueT;
@@ -226,5 +235,4 @@ export interface ConfigData {
     allowLoginDialog?: boolean;
     allowUserColumnPresets?: boolean;
     odinPageEnabled: boolean;
-    chytPageEnabled: boolean;
 }
