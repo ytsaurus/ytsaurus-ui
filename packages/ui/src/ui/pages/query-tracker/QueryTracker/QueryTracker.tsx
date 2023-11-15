@@ -90,6 +90,7 @@ function QueryPage(props: Props) {
 
 export default function QueryTracker({match}: Props) {
     const [sizes, setSize] = useState(initialSizes);
+    const [listVisible, setListVisible] = useState<boolean>(true);
     const getSize = useMemo(() => {
         return () => sizes;
     }, [sizes]);
@@ -116,7 +117,7 @@ export default function QueryTracker({match}: Props) {
                     minSize={minSize}
                     getInitialSizes={getSize}
                 >
-                    <QueriesList />
+                    {listVisible && <QueriesList />}
                     <QueryEditor
                         onStartQuery={goToCreatedQuery}
                         listVisible={{

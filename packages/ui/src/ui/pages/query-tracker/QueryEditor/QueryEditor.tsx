@@ -17,9 +17,11 @@ import {
 import {SET_QUERY_PATCH, runQuery} from '../module/query/actions';
 import FlexSplitPane from '../../../components/FlexSplitPane/FlexSplitPane';
 import {QueryResults} from '../QueryResults';
-import maximizeBlockIcon from '../../../../../img/svg/square.svg';
-import minimazeBlockIcon from '../../../../../img/svg/square-semifill.svg';
-import closeIcon from '../../../../../img/svg/close-icon.svg';
+import SquareIcon from '@gravity-ui/icons/svgs/square.svg';
+import LayoutFooterIcon from '@gravity-ui/icons/svgs/layout-footer.svg';
+
+import LayoutSideContentIcon from '@gravity-ui/icons/svgs/layout-side-content.svg';
+import XmarkIcon from '@gravity-ui/icons/svgs/xmark.svg';
 
 import './QueryEditor.scss';
 import {QueryItem} from '../module/api';
@@ -145,10 +147,12 @@ const ResultView = React.memo(function ResultView({
     query,
     resultViewMode,
     setResultViewMode,
+    listVisible,
 }: {
     query: QueryItem;
     resultViewMode: ResultMode;
     setResultViewMode: (v: ResultMode) => void;
+    listVisible?: QueryListVisible;
 }) {
     return (
         <QueryResults
@@ -157,13 +161,22 @@ const ResultView = React.memo(function ResultView({
             minimized={resultViewMode === 'minimized'}
             toolbar={
                 <>
+                    {listVisible && (
+                        <Button
+                            className={b('meta-action')}
+                            view={listVisible.visible ? 'flat' : 'outlined'}
+                            onClick={() => listVisible.setVisibility(!listVisible.visible)}
+                        >
+                            <Icon data={LayoutSideContentIcon} size={16} />
+                        </Button>
+                    )}
                     {resultViewMode === 'split' ? (
                         <Button
                             className={b('meta-action')}
                             view="flat"
                             onClick={() => setResultViewMode('full')}
                         >
-                            <Icon data={maximizeBlockIcon} />
+                            <Icon data={SquareIcon} size={16} />
                         </Button>
                     ) : (
                         <Button
@@ -171,7 +184,7 @@ const ResultView = React.memo(function ResultView({
                             view="flat"
                             onClick={() => setResultViewMode('split')}
                         >
-                            <Icon data={minimazeBlockIcon} />
+                            <Icon data={LayoutFooterIcon} size={16} />
                         </Button>
                     )}
                     {resultViewMode !== 'minimized' && (
@@ -180,7 +193,7 @@ const ResultView = React.memo(function ResultView({
                             view="flat"
                             onClick={() => setResultViewMode('minimized')}
                         >
-                            <Icon data={closeIcon} />
+                            <Icon data={XmarkIcon} size={16} />
                         </Button>
                     )}
                 </>
@@ -190,10 +203,16 @@ const ResultView = React.memo(function ResultView({
 });
 
 type ResultMode = 'full' | 'minimized' | 'split';
+type QueryListVisible = {
+    visible: boolean;
+    setVisibility: (visible: boolean) => void;
+};
 export default function QueryEditor({
     onStartQuery,
+    listVisible,
 }: {
     onStartQuery?: (queryId: string) => boolean | void;
+    listVisible?: QueryListVisible;
 }) {
     const query = useCurrentQuery();
 
@@ -228,6 +247,7 @@ export default function QueryEditor({
                         query={query}
                         setResultViewMode={setResultViewMode}
                         resultViewMode={resultViewMode}
+                        listVisible={listVisible}
                     />
                 )}
             </FlexSplitPane>
