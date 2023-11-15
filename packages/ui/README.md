@@ -73,8 +73,7 @@ Available flags (**default values** are highlighted in bold):
 | per_bundle_accounting_help_link      | **null**, url as string | Help link for resources of tablets to display from AccountEditorDialog about moving the resources to bundles [YTFRONT-2851](https://nda.ya.ru/t/xnLq-3Dm6fPYPo)                    |
 | enable_maintenance_api_nodes         | **null**, boolean       | Allows to use `add_maintenance`/`remove_maintenance` commands from `Comopnents/Nodes` page [YTFRONT-3792](https://nda.ya.ru/t/RvueJLzN6fWx3h)                                      |
 | enable_maintenance_api_proxies       | **null**, boolean       | Allows to use `add_maintenance`/`remove_maintenance` commands from `Components/HTTP Proxies` and `Components/RPC Proxies` pages [YTFRONT-3792](https://nda.ya.ru/t/RvueJLzN6fWx3h) |
-
-|
+| chyt_controller_base_url             | **null**, url as string | Base url for chyt-controller                                                                                                                                                       |
 
 ### Configuration
 

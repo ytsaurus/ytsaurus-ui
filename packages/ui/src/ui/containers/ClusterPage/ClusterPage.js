@@ -37,7 +37,7 @@ import {joinMenuItemsAction, splitMenuItemsAction, trackVisit} from '../../store
 import {setSetting} from '../../store/actions/settings';
 import {initClusterParams, updateCluster} from '../../store/actions/cluster-params';
 import {updateTitle} from '../../store/actions/global';
-import {isQueryTrackerAllowed} from '../../store/selectors/global';
+import {getClusterUiConfig, isQueryTrackerAllowed} from '../../store/selectors/global';
 import {getClusterConfig} from '../../utils';
 import {NAMESPACES, SettingName} from '../../../shared/constants/settings';
 import {
@@ -91,6 +91,7 @@ class ClusterPage extends Component {
         updateTitle: PropTypes.func.isRequired,
         trackVisit: PropTypes.func.isRequired,
 
+        allowChyt: PropTypes.bool,
         allowQueryTracker: PropTypes.bool,
     };
 
@@ -258,8 +259,15 @@ class ClusterPage extends Component {
     }
 
     renderContent(clusterConfig) {
-        const {cluster, startingPage, isLoaded, hasError, paramsError, allowQueryTracker} =
-            this.props;
+        const {
+            cluster,
+            startingPage,
+            isLoaded,
+            hasError,
+            paramsError,
+            allowChyt,
+            allowQueryTracker,
+        } = this.props;
 
         return isLoaded && !this.isParamsLoading() ? (
             <Fragment>
@@ -288,7 +296,7 @@ class ClusterPage extends Component {
                     <Route path={`/:cluster/${Page.USERS}`} component={UsersPage} />
                     <Route path={`/:cluster/${Page.GROUPS}`} component={GroupsPage} />
                     <Route path={`/:cluster/${Page.SCHEDULING}`} component={Scheduling} />
-                    <Route path={`/:cluster/${Page.CHYT}`} component={ChytPage} />
+                    {allowChyt && <Route path={`/:cluster/${Page.CHYT}`} component={ChytPage} />}
                     {allowQueryTracker && (
                         <Route path={`/:cluster/${Page.QUERIES}`} component={QueryTracker} />
                     )}
@@ -400,6 +408,7 @@ function mapStateToProps(state) {
         startingPage: getStartingPage(state),
         paramsCluster,
         allowQueryTracker: isQueryTrackerAllowed(state),
+        allowChyt: Boolean(getClusterUiConfig(state).chyt_controller_base_url),
     };
 }
 

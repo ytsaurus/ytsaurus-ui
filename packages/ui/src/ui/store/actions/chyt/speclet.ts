@@ -3,7 +3,7 @@ import {ThunkAction} from 'redux-thunk';
 import CancelHelper, {isCancelled} from '../../../utils/cancel-helper';
 import {ChytCliqueSpecletAction} from '../../../store/reducers/chyt/speclet';
 import {RootState} from '../../../store/reducers';
-import {getCluster} from '../../../store/selectors/global';
+import {getCluster, isDeveloper} from '../../../store/selectors/global';
 import {chytApiAction} from './api';
 import {CHYT_SPECLET} from '../../../constants/chyt-page';
 
@@ -13,14 +13,20 @@ const cancelHelper = new CancelHelper();
 
 export function chytLoadCliqueSpeclet(alias: string): SpecletThunkAction {
     return (dispatch, getState) => {
-        const cluster = getCluster(getState());
+        const state = getState();
+        const cluster = getCluster(state);
+        const isAdmin = isDeveloper(state);
         dispatch({type: CHYT_SPECLET.REQUEST, data: {dataAlias: ''}});
 
         return chytApiAction(
             'describe_options',
             cluster,
             {alias},
-            {cancelToken: cancelHelper.removeAllAndGenerateNextToken(), skipErrorToast: true},
+            {
+                isAdmin,
+                cancelToken: cancelHelper.removeAllAndGenerateNextToken(),
+                skipErrorToast: true,
+            },
         )
             .then((data) => {
                 dispatch({type: CHYT_SPECLET.SUCCESS, data: {data: data.result, dataAlias: alias}});
@@ -38,8 +44,11 @@ export function chytSetOptions(
     options: Record<string, unknown>,
 ): SpecletThunkAction {
     return (dispatch, getState) => {
-        const cluster = getCluster(getState());
-        return chytApiAction('set_options', cluster, {alias, options}).then(() => {
+        const state = getState();
+        const cluster = getCluster(state);
+        const isAdmin = isDeveloper(state);
+
+        return chytApiAction('set_options', cluster, {alias, options}, {isAdmin}).then(() => {
             dispatch(chytLoadCliqueSpeclet(alias));
         });
     };

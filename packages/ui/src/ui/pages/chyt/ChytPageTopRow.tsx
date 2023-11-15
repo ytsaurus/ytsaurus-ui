@@ -18,7 +18,7 @@ import {RowWithName} from '../../containers/AppNavigation/TopRowContent/SectionN
 import {PoolTreeLoaderWaitDeafultTree} from '../../hooks/global';
 import {getFavouriteChyt, isActiveCliqueInFavourites} from '../../store/selectors/favourites';
 import {getChytCurrentAlias} from '../../store/selectors/chyt';
-import {getCluster, getGlobalDefaultPoolTreeName} from '../../store/selectors/global';
+import {getCluster, getGlobalDefaultPoolTreeName, isDeveloper} from '../../store/selectors/global';
 import {chytApiAction} from '../../store/actions/chyt/api';
 import {chytCliqueCreate} from '../../store/actions/chyt/list';
 import {chytToggleFavourite} from '../../store/actions/favourites';
@@ -133,11 +133,13 @@ function ChytAliasSuggest({
 }) {
     const [items, setItems] = React.useState<Array<string>>([]);
 
+    const isAdmin = useSelector(isDeveloper);
+
     React.useEffect(() => {
-        chytApiAction('list', cluster, {}).then((data) => {
+        chytApiAction('list', cluster, {}, {isAdmin}).then((data) => {
             setItems(data.result.map((item) => ypath.getValue(item)));
         });
-    }, []);
+    }, [isAdmin]);
 
     return (
         <Suggest

@@ -29,7 +29,7 @@ import tablet_cell_bundles from './tablet_cell_bundles';
 import tabletCellBundleEditor from './tablet_cell_bundles/tablet-cell-bundle-editor';
 import chaos_cell_bundles from './chaos_cell_bundles';
 import chaosCellBundleEditor from './chaos_cell_bundles/tablet-cell-bundle-editor';
-import {ClusterUiConfig} from '../../store/reducers/global/cluster-ui-config';
+import {ClusterUiConfig} from '../../../shared/yt-types';
 import executeBatch from '../../store/reducers/execute-batch';
 import UIFactory, {UIFactoryClusterPageInfo} from '../../UIFactory';
 import {registerExtraPage} from '../../pages';

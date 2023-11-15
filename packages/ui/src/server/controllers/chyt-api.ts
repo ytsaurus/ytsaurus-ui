@@ -3,8 +3,8 @@ import axios from 'axios';
 
 import type {Request, Response} from 'express';
 import {UNEXPECTED_PIPE_AXIOS_RESPONSE, pipeAxiosResponse, sendAndLogError} from '../utils';
-import {getApp} from '../ServerFactory';
 import {getUserYTApiSetup} from '../components/requestsSetup';
+import {getPreloadedClusterUiConfig} from '../components/cluster-params';
 
 export async function chytProxyApi(req: Request, res: Response) {
     try {
@@ -19,14 +19,7 @@ export async function chytProxyApi(req: Request, res: Response) {
 }
 
 async function chytProxyApiImpl(req: Request, res: Response) {
-    const baseUrl = getApp().config?.chytApiBaseUrl;
-    if (!baseUrl) {
-        return sendAndLogError(req.ctx, res, 500, new Error('chytApiBaseUrl is not configured'));
-    }
-    const {ctx} = req;
-
     const {action, cluster} = req.params;
-
     const ALLOWED_ACTIONS = new Set([
         'list',
         'create',
@@ -46,6 +39,24 @@ async function chytProxyApiImpl(req: Request, res: Response) {
             new Error(`CHYT action - '${action}', is not supported`),
         );
     }
+
+    const isDeveloper = req.query.isDeveloper === 'true';
+
+    const {chyt_controller_base_url: baseUrl} = await getPreloadedClusterUiConfig(
+        cluster,
+        req.ctx,
+        isDeveloper,
+    );
+
+    if (!baseUrl) {
+        return sendAndLogError(
+            req.ctx,
+            res,
+            500,
+            new Error('//sys/@ui_config/chyt_controller_base_url is not defined'),
+        );
+    }
+    const {ctx} = req;
 
     const {authHeaders} = getUserYTApiSetup(cluster, req);
     const headers = {

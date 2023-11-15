@@ -29,7 +29,7 @@ import {calcProgressProps} from '../../../utils/utils';
 
 import './BundlesTable.scss';
 import UIFactory from '../../../UIFactory';
-import {ClusterUiConfig} from '../../../store/reducers/global/cluster-ui-config';
+import {ClusterUiConfig} from '../../../../shared/yt-types';
 
 const block = cn('bundles-table');
 

@@ -5,7 +5,7 @@ import type {RootState} from '../../reducers';
 import type {ChytListAction} from '../../reducers/chyt/list';
 import {CHYT_LIST} from '../../../constants/chyt-page';
 import CancelHelper, {isCancelled} from '../../../utils/cancel-helper';
-import {getCluster} from '../../../store/selectors/global';
+import {getCluster, isDeveloper} from '../../../store/selectors/global';
 
 import {ChytApi, chytApiAction} from './api';
 
@@ -15,7 +15,9 @@ const cancelHelper = new CancelHelper();
 
 export function chytLoadList(): ChytListThunkAction<void> {
     return (dispatch, getState) => {
-        const cluster = getCluster(getState());
+        const state = getState();
+        const cluster = getCluster(state);
+        const isAdmin = isDeveloper(state);
 
         dispatch({type: CHYT_LIST.REQUEST});
 
@@ -34,7 +36,7 @@ export function chytLoadList(): ChytListThunkAction<void> {
                     'creation_time',
                 ],
             },
-            {cancelToken: cancelHelper.removeAllAndGenerateNextToken()},
+            {isAdmin, cancelToken: cancelHelper.removeAllAndGenerateNextToken()},
         )
             .then((data) => {
                 const items = data?.result?.map(({$value, $attributes = {}}) => {
@@ -66,9 +68,11 @@ export function chytListAction<
     {skipLoadList}: {skipLoadList?: boolean} = {},
 ): ChytListThunkAction<ApiItem['response']> {
     return (dispatch, getState) => {
-        const cluster = getCluster(getState());
+        const state = getState();
+        const cluster = getCluster(state);
+        const isAdmin = isDeveloper(state);
 
-        return chytApiAction(action, cluster, params).then((d) => {
+        return chytApiAction(action, cluster, params, {isAdmin}).then((d) => {
             if (!skipLoadList) {
                 dispatch(chytLoadList());
             }
@@ -84,14 +88,16 @@ export function chytCliqueCreate(params: {
     runAfterCreation: boolean;
 }): ChytListThunkAction<void> {
     return (dispatch, getState) => {
-        const cluster = getCluster(getState());
+        const state = getState();
+        const cluster = getCluster(state);
+        const isAdmin = isDeveloper(state);
 
         const {alias, runAfterCreation, ...options} = params;
         return chytApiAction(
             'create',
             cluster,
             {alias},
-            {successTitle: `${alias} clique created`},
+            {isAdmin, successTitle: `${alias} clique created`},
         ).then(() => {
             return chytApiAction('set_options', cluster, {alias, options})
                 .then(() => {
@@ -100,7 +106,7 @@ export function chytCliqueCreate(params: {
                             'start',
                             cluster,
                             {alias},
-                            {successTitle: `${alias} clique is started`},
+                            {isAdmin, successTitle: `${alias} clique is started`},
                         );
                     }
                     return undefined;
