@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 
 import hammer from '../../../../common/hammer';
 import block from 'bem-cn-lite';
@@ -13,14 +12,21 @@ import '../Schedulers.scss';
 
 const b = block('system');
 
-export default function Scheduler({host, state, maintenanceMessage}) {
-    const theme = {
-        active: 'online',
-        connected: 'online',
-        standby: 'banned',
-        disconnected: 'banned',
-        offline: 'offline',
-    }[state];
+export type SchedulerProps = {
+    host?: string;
+    state: 'active' | 'connected' | 'standby' | 'disconnected' | 'offline';
+    maintenanceMessage?: React.ReactNode;
+};
+export default function Scheduler({host, state, maintenanceMessage}: SchedulerProps) {
+    const theme = (
+        {
+            active: 'online',
+            connected: 'online',
+            standby: 'banned',
+            disconnected: 'banned',
+            offline: 'offline',
+        } as const
+    )[state];
 
     const address = hammer.format['Address'](host);
 
@@ -38,15 +44,9 @@ export default function Scheduler({host, state, maintenanceMessage}) {
             <div title={address} className={b('scheduler-host')}>
                 <div className={b('scheduler-host-address')}>{address}</div>
                 <div className={b('scheduler-host-copy-btn')}>
-                    <ClipboardButton view="flat-secondary" text={host} />
+                    {host && <ClipboardButton view="flat-secondary" text={host} />}
                 </div>
             </div>
         </div>
     );
 }
-
-Scheduler.propTypes = {
-    host: PropTypes.string.isRequired,
-    state: PropTypes.oneOf(['offline', 'active', 'connected', 'standby', 'disconnected']),
-    maintenanceMessage: PropTypes.string,
-};
