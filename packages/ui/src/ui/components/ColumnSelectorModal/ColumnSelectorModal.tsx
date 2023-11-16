@@ -1,5 +1,4 @@
-import React, {Component} from 'react';
-import PropTypes from 'prop-types';
+import React from 'react';
 import hammer from '../../common/hammer';
 import block from 'bem-cn-lite';
 import _ from 'lodash';
@@ -12,36 +11,36 @@ import './ColumnSelectorModal.scss';
 
 const b = block('column-selector-modal');
 
-export default class ColumnSelectorModal extends Component {
-    static itemsPropTypes = PropTypes.arrayOf(
-        PropTypes.shape({
-            name: PropTypes.string.isRequired,
-            checked: PropTypes.bool.isRequired,
-            data: PropTypes.shape({
-                title: PropTypes.string,
-                caption: PropTypes.string,
-            }),
-            disabled: PropTypes.bool,
-            keyColumn: PropTypes.bool,
-        }),
-    );
+export type ColumnSelectorModalProps<DataT> = {
+    items: Array<ColumnSelectorItem<DataT>>;
+    srcItems: Array<ColumnSelectorItem<DataT>>;
+    isVisible?: boolean;
+    onChange: (items: Array<ColumnSelectorItem<DataT>>) => void;
+    onConfirm: (items: Array<ColumnSelectorItem<DataT>>) => void;
+    onCancel: () => void;
 
-    static propTypes = {
-        items: ColumnSelectorModal.itemsPropTypes.isRequired,
-        srcItems: ColumnSelectorModal.itemsPropTypes,
-        isVisible: PropTypes.bool,
-        onChange: PropTypes.func,
-        onConfirm: PropTypes.func.isRequired,
-        onCancel: PropTypes.func.isRequired,
-        itemRenderer: PropTypes.func,
-        entity: PropTypes.string,
-    };
+    itemRenderer: (item: ColumnSelectorItem<DataT>) => React.ReactNode;
+    entity: string;
+};
 
-    static defaultProps = {
+export type ColumnSelectorItem<DataT> = {
+    name: string;
+    checked: boolean;
+    data: DataT;
+    disabled?: boolean;
+    keyColumn?: boolean;
+};
+
+type Props<T> = ColumnSelectorModalProps<T>;
+
+type State<T> = Pick<Props<T>, 'items' | 'srcItems'> & {itemsOrder: Array<string>};
+
+export default class ColumnSelectorModal<T = never> extends React.Component<Props<T>, State<T>> {
+    static defaultProps: Partial<Props<unknown>> = {
         entity: 'columns',
     };
 
-    state = {
+    state: State<T> = {
         srcItems: this.props.srcItems || this.props.items,
         items: makeItemsCopy(this.props.items),
         itemsOrder: this._getItemsOrder(this.props.items),
@@ -49,7 +48,7 @@ export default class ColumnSelectorModal extends Component {
 
     // in React 16.3 there is another way to do it: getDerivedStateFromProps;
     // revise this place once received data is managed by Redux
-    componentDidUpdate(prevProps) {
+    componentDidUpdate(prevProps: Props<T>) {
         const {items, srcItems} = this.props;
         if (prevProps.items !== items || prevProps.srcItems !== srcItems) {
             // don't update itemsOrder
@@ -70,21 +69,21 @@ export default class ColumnSelectorModal extends Component {
         const order = this._getItemsOrder(items);
         // reset state to initial on cancel
         this.setState({
-            items: this._getOrderedItems(makeItemsCopy(items, order)),
+            items: this._getOrderedItems(makeItemsCopy(items)),
             itemsOrder: order,
         });
         this.props.onCancel();
     };
 
-    _getItemsOrder(items) {
+    _getItemsOrder(items: Props<T>['items']) {
         return _.map(items, (item) => item.name);
     }
 
-    _getOrderedItems(items, order = this.state.itemsOrder) {
+    _getOrderedItems(items: Props<T>['items'], order = this.state.itemsOrder) {
         return items.sort((a, b) => order.indexOf(a.name) - order.indexOf(b.name));
     }
 
-    _getSelectorProps(props, items) {
+    _getSelectorProps<P>(props: P, items: Props<T>['items']) {
         return {
             ...props,
             items,
@@ -95,7 +94,7 @@ export default class ColumnSelectorModal extends Component {
         };
     }
 
-    _getSortableSelectorProps(props, items) {
+    _getSortableSelectorProps<P>(props: P, items: Props<T>['items']) {
         return {
             ...props,
             items,
@@ -106,7 +105,7 @@ export default class ColumnSelectorModal extends Component {
         };
     }
 
-    calculateSrcItems(newItemsMap) {
+    calculateSrcItems(newItemsMap: Record<string, ColumnSelectorItem<T>>) {
         return _.map(this.state.srcItems, (item) => {
             const newItem = newItemsMap[item.name];
 
@@ -118,7 +117,7 @@ export default class ColumnSelectorModal extends Component {
         });
     }
 
-    onSourceChange = ({items: newItems}) => {
+    onSourceChange = ({items: newItems}: Pick<Props<T>, 'items'>) => {
         const {items} = this.state;
         const newItemsMap = _.reduce(
             newItems,
@@ -126,11 +125,11 @@ export default class ColumnSelectorModal extends Component {
                 acc[data.name] = data;
                 return acc;
             },
-            {},
+            {} as Record<string, ColumnSelectorItem<T>>,
         );
 
-        const unchanged = [];
-        const changed = [];
+        const unchanged: Props<T>['items'] = [];
+        const changed: Props<T>['items'] = [];
         _.forEach(items, (item) => {
             const newItem = newItemsMap[item.name];
             if (newItem && newItem.checked !== item.checked) {
@@ -149,14 +148,14 @@ export default class ColumnSelectorModal extends Component {
         });
     };
 
-    onDestinationChange = ({items: newItems}) => {
+    onDestinationChange = ({items: newItems}: Pick<Props<T>, 'items'>) => {
         const newItemsMap = _.reduce(
             newItems,
             (acc, data) => {
                 acc[data.name] = data;
                 return acc;
             },
-            {},
+            {} as Record<string, ColumnSelectorItem<T>>,
         );
 
         const order = this._getItemsOrder(newItems);
@@ -168,7 +167,17 @@ export default class ColumnSelectorModal extends Component {
         });
     };
 
-    renderColumnSelector({props, title, description, className}) {
+    renderColumnSelector({
+        props,
+        title,
+        description,
+        className,
+    }: {
+        props: object;
+        title: string;
+        description: string;
+        className?: string;
+    }) {
         return (
             <ColumnSelector {...props} className={className}>
                 <div className={b('no-content')}>
