@@ -44,7 +44,7 @@ function AccountUsageColumnsDialog({visible, onClose}: DialogProps) {
     const visibleColumns = useSelector(getAccountUsageVisibleDataColumns);
     const availableColumns = useSelector(getAccountUsageSelectableColumns);
 
-    const handleChange = React.useCallback((newValue: Array<{data: {caption: string}}>) => {
+    const handleChange = React.useCallback((newValue: typeof value) => {
         const checked = _.filter(newValue, 'checked');
         dispatch(setAccountUsageColumns(_.map(checked, ({data: {caption}}) => caption)));
         onClose();
@@ -75,7 +75,7 @@ function AccountUsageColumnsDialog({visible, onClose}: DialogProps) {
             onCancel={onClose}
             onConfirm={handleChange}
             items={value}
-            itemRenderer={(item: {name: string; data: {isMedium: boolean; caption: string}}) => {
+            itemRenderer={(item) => {
                 const {
                     name,
                     data: {isMedium, caption},

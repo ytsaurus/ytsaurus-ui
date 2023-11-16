@@ -16,7 +16,10 @@ const ColumnsButton: React.VFC<Props> = ({allColumns, selectedColumns, onChange}
     const items = useMemo(() => {
         const selectedSet = new Set(selectedColumns);
         const allColumnsMap = new Map(
-            allColumns.map((x) => [x.key, {...x, checked: selectedSet.has(x.key)}]),
+            allColumns.map(({key, ...rest}) => [
+                key,
+                {...rest, checked: selectedSet.has(key), data: {key}},
+            ]),
         );
 
         return [
@@ -34,8 +37,8 @@ const ColumnsButton: React.VFC<Props> = ({allColumns, selectedColumns, onChange}
     }, [setVisible]);
 
     const handleChange = React.useCallback(
-        (items: Array<{key: string; name: string; checked: boolean}>) => {
-            onChange(items.filter((x) => x.checked).map((x) => x.key));
+        (newValue: typeof items) => {
+            onChange(newValue.filter((x) => x.checked).map((x) => x.data.key));
         },
         [onChange],
     );
