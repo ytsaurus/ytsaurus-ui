@@ -1,4 +1,3 @@
-import {EMPTY_ARRAY} from '../../../constants/empty';
 import {CHYT_LIST_FILTERS} from '../../../constants/chyt-page';
 import {ActionD, SortState} from '../../../types';
 import {replaceEmpty} from '../../../utils/empty';
@@ -17,7 +16,7 @@ export const initialState: ChytListFilters = {
     creator: undefined,
     state: undefined,
 
-    sortState: EMPTY_ARRAY,
+    sortState: [{column: 'alias', order: 'asc'}],
 };
 
 export default function reducer(state = initialState, action: ChytListFiltersAction) {

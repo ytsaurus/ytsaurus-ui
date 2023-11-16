@@ -18,7 +18,7 @@ export function chytCliqueLoad(alias: string): ChytCliqueThunkAction {
         const cluster = getCluster(state);
         const isAdmin = isDeveloper(state);
         return chytApiAction(
-            'status',
+            'get_brief_info',
             cluster,
             {alias},
             {

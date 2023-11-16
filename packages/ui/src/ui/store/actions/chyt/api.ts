@@ -4,22 +4,38 @@ import {YTError} from '../../../../@types/types';
 
 export type WithResult<T> = {result: T};
 
-type CliqueAttributes =
+type ChytListAttributes =
     | 'creator'
     | 'state'
-    | 'start_time'
+    | 'yt_operation_id'
     | 'instance_count'
     | 'total_memory'
     | 'total_cpu'
-    | 'operation_id'
-    | 'creation_time';
+    | 'creation_time'
+    | 'speclet_modification_time'
+    | 'strawberry_state_modification_time'
+    | 'stage'
+    | 'health'
+    | 'yt_operation_start_time'
+    | 'yt_operation_finish_time';
 
 export type ChytApi =
-    | {action: 'list'; params: {attributes?: Array<CliqueAttributes>}; response: ChytListResponse}
+    | {action: 'list'; params: {attributes?: Array<ChytListAttributes>}; response: ChytListResponse}
     | {action: 'start'; params: {alias: string}; response: void}
     | {action: 'stop'; params: {alias: string}; response: void}
     | {action: 'remove'; params: {alias: string}; response: void}
-    | {action: 'create'; params: {alias: string}; response: void}
+    | {
+          action: 'create';
+          params: {
+              alias: string;
+              speclet_options: {
+                  active: boolean;
+                  pool: string;
+                  instance_count: number;
+              };
+          };
+          response: void;
+      }
     | {
           action: 'set_options';
           params: {
@@ -33,15 +49,19 @@ export type ChytApi =
           params: {alias: string};
           response: WithResult<Array<ChytCliqueOptionsGroup>>;
       }
-    | {action: 'status'; params: {alias: string}; response: WithResult<ChytStatusResponse>};
+    | {action: 'get_brief_info'; params: {alias: string}; response: WithResult<ChytStatusResponse>};
 
 export type ChytStatusResponse = {
-    yt_operation_state?: 'running';
+    yt_operation: {
+        start_time?: string;
+        finish_time?: string;
+        operation_id?: string;
+        state?: string;
+    };
     state?: ChytCliqueStateType;
     pool?: string;
     stage?: string;
-    start_time?: string;
-    finish_time?: string;
+    status?: string;
     incarnation_index?: number;
     ctl_attributes: {
         instance_count?: number;
@@ -61,14 +81,16 @@ export type ChytListResponseItem = {
         instance_count?: number;
         start_time?: string;
         state?: ChytCliqueStateType;
+        health?: ChytCliqueHealthType;
         total_cpu?: number;
         total_memory?: number;
-        operation_id?: string;
+        yt_operation_id?: string;
         creation_time?: string;
     };
 };
 
-export type ChytCliqueStateType = 'active' | 'broken' | 'inactive';
+export type ChytCliqueHealthType = 'good' | 'pending' | 'failed';
+export type ChytCliqueStateType = 'active' | 'inactive' | 'untracked';
 
 export type ChytCliqueOptionsGroup = {
     title: string;
@@ -113,14 +135,13 @@ export function chytApiAction<
         isAdmin?: boolean;
     } = {},
 ) {
-    const extras = action === 'start' ? {untracked: true} : undefined;
     const query = isAdmin ? '?isDeveloper=true' : '';
     return wrapApiPromiseByToaster(
         axios.request<ApiItem['response']>({
             method: 'POST',
             url: `/api/chyt/${cluster}/${action}${query}`,
             data: {
-                params: {...params, ...extras},
+                params: {...params},
             },
             cancelToken,
         }),
@@ -129,7 +150,7 @@ export function chytApiAction<
             skipSuccessToast: !successTitle,
             successTitle,
             skipErrorToast,
-            errorTitle: `'${action}' action is failed`,
+            errorTitle: `'${action}' action failed`,
         },
     ).then((response) => {
         return response.data;

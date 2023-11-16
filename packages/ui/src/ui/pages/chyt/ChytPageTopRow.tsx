@@ -5,7 +5,7 @@ import cn from 'bem-cn-lite';
 
 import ypath from '../../common/thor/ypath';
 
-import {Alert, Breadcrumbs, BreadcrumbsItem, Button} from '@gravity-ui/uikit';
+import {Breadcrumbs, BreadcrumbsItem, Button} from '@gravity-ui/uikit';
 
 import ClipboardButton from '../../components/ClipboardButton/ClipboardButton';
 import {YTDFDialog, makeErrorFields} from '../../components/Dialog/Dialog';
@@ -23,9 +23,10 @@ import {chytApiAction} from '../../store/actions/chyt/api';
 import {chytCliqueCreate} from '../../store/actions/chyt/list';
 import {chytToggleFavourite} from '../../store/actions/favourites';
 import {useThunkDispatch} from '../../store/thunkDispatch';
+import {YTError} from '../../../@types/types';
+import {ChytCliquePageTab} from '../../constants/chyt-page';
 
 import './ChytPageTopRow.scss';
-import {YTError} from '../../../@types/types';
 
 const block = cn('chyt-page-top-row');
 
@@ -179,6 +180,8 @@ type FormValues = {
 
 function CreateChytButton() {
     const dispatch = useThunkDispatch();
+    const history = useHistory();
+    const cluster = useSelector(getCluster);
     const [visible, setVisible] = React.useState(false);
     const defaultPoolTree = useSelector(getGlobalDefaultPoolTreeName);
 
@@ -207,6 +210,9 @@ function CreateChytButton() {
                             )
                                 .then(() => {
                                     setError(undefined);
+                                    history.push(
+                                        `/${cluster}/chyt/${rest.alias}/${ChytCliquePageTab.SPECLET}`,
+                                    );
                                 })
                                 .catch((e) => {
                                     setError(e);
@@ -214,20 +220,6 @@ function CreateChytButton() {
                                 });
                         }}
                         fields={[
-                            {
-                                name: 'alert',
-                                type: 'block',
-                                extras: {
-                                    children: (
-                                        <Alert
-                                            message={
-                                                "The vast majority of ClickHouse's functionality is available in CHYT. " +
-                                                'You can get acquainted with the capabilities of ClickHouse in the official documentation.'
-                                            }
-                                        />
-                                    ),
-                                },
-                            },
                             {
                                 name: 'alias',
                                 type: 'text',

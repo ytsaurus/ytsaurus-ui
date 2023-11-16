@@ -26,7 +26,7 @@ async function chytProxyApiImpl(req: Request, res: Response) {
         'remove',
         'start',
         'stop',
-        'status',
+        'get_brief_info',
         'describe_options',
         'set_options',
     ]);

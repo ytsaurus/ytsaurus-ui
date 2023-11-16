@@ -50,7 +50,7 @@ function useChytListColumns(cluster: string) {
                             </Link>
                             <div>
                                 <OperationId
-                                    id={row.operation_id}
+                                    id={row.yt_operation_id}
                                     cluster={cluster}
                                     color="secondary"
                                 />
@@ -61,7 +61,7 @@ function useChytListColumns(cluster: string) {
             },
             {
                 name: 'creator',
-                header: <ChytListHeader column="creator" title="Owner" />,
+                header: <ChytListHeader column="creator" title="Creator" />,
                 render({row}) {
                     return (
                         <span className={block('one-row-cell')}>
@@ -125,6 +125,20 @@ function useChytListColumns(cluster: string) {
                         </span>
                     );
                 },
+                align: 'center',
+                width: 100,
+            },
+            {
+                name: 'Health',
+                header: <ChytListHeader column="health" title="Health" />,
+                render({row}) {
+                    return (
+                        <span className={block('one-row-cell')}>
+                            <CliqueState state={row.health} />
+                        </span>
+                    );
+                },
+                align: 'center',
                 width: 100,
             },
             {
@@ -141,19 +155,6 @@ function useChytListColumns(cluster: string) {
                     );
                 },
                 width: 180,
-            },
-            {
-                name: 'duration',
-                header: <ChytListHeader column="duration" title="Duration" withUndefined />,
-                render({row}) {
-                    return (
-                        <span className={block('one-row-cell')}>
-                            {!row.start_time ? format.NO_VALUE : format.TimeDuration(row.duration)}
-                        </span>
-                    );
-                },
-                align: 'right',
-                width: 140,
             },
             {
                 name: 'actions',
