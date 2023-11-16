@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.3.1](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.3.0...ui-v1.3.1) (2023-11-16)
+
+
+### Bug Fixes
+
+* **Accounts,Bundles:** better defaults for accounting settings [YTFRONT-3891] ([8a79e4b](https://github.com/ytsaurus/ytsaurus-ui/commit/8a79e4b0bc1c2156e0dd10646cb069bd4b1e1dd0))
+* **Accounts:** do not use cache after editing [YTFRONT-3920] ([0ab91a0](https://github.com/ytsaurus/ytsaurus-ui/commit/0ab91a0bdc80ef08c51d79894b4121afa6f9435e))
+* **Jobs:** do not use uppercase for job-type [YTFRONT-3917] ([1f4e1bf](https://github.com/ytsaurus/ytsaurus-ui/commit/1f4e1bf45082c1e77a7a5f989b080e08196f069f))
+* **Navigation/Consumer:** fix for Target Queue selector [YTFRONT-3910] ([5358127](https://github.com/ytsaurus/ytsaurus-ui/commit/5358127d57339867b2124239eeb48ac8ca47555d))
+* **Navigation/MapNode:** truncate long names with ellipsis [YTFRONT-3913] ([67eddcb](https://github.com/ytsaurus/ytsaurus-ui/commit/67eddcb5d1a2529068610b7fdb7e60ab17506ed1))
+* **Odin:** minor layout fix [YTFRONT-3909] ([8012884](https://github.com/ytsaurus/ytsaurus-ui/commit/8012884b26849902a19358937893695023c42b26))
+* **reShortNameFromAddress:** better default [YTFRONT-3861] ([39f07ad](https://github.com/ytsaurus/ytsaurus-ui/commit/39f07ad0b9b98863033b2beccd3c6f8798a19006))
+* **Scheduling:** fix for pool-tree selector [YTFRONT-3918] ([3fb86bb](https://github.com/ytsaurus/ytsaurus-ui/commit/3fb86bb7f192afda9a5103184f65403117a75d6b))
+
 ## [1.3.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.2.0...ui-v1.3.0) (2023-11-10)
 
 
