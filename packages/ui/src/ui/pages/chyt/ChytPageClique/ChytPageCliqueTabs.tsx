@@ -42,11 +42,12 @@ export function ChytPageCliqueTabs({className}: {className?: string}) {
         );
     }, [ytCluster, chytAlias, match.url, chytMonitoring]);
 
+    const allowMonitoring = Boolean(chytMonitoring?.component);
     return (
         <React.Fragment>
             <Tabs className={className} {...tabProps} routed />
             <Switch>
-                {Boolean(chytMonitoring?.component) && (
+                {allowMonitoring && (
                     <Route
                         path={`${match.url}/${ChytCliquePageTab.MONITORING}`}
                         component={ChytPageCliqueMonitoring}
@@ -60,7 +61,11 @@ export function ChytPageCliqueTabs({className}: {className?: string}) {
                     path={`${match.url}/${ChytCliquePageTab.ACL}`}
                     component={ChytPageCliqueAcl}
                 />
-                <Redirect to={`${match.url}/${ChytCliquePageTab.SPECLET}`} />
+                <Redirect
+                    to={`${match.url}/${
+                        allowMonitoring ? ChytCliquePageTab.MONITORING : ChytCliquePageTab.SPECLET
+                    }`}
+                />
             </Switch>
         </React.Fragment>
     );

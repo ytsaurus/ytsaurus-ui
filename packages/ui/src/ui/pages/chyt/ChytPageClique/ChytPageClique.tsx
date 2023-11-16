@@ -52,7 +52,7 @@ export function ChytPageClique(props: RouteComponentProps<{alias: string}>) {
         };
     }, [alias]);
 
-    const {yt_operation_state} = useSelector(getChytCliqueData) ?? {};
+    const {yt_operation} = useSelector(getChytCliqueData) ?? {};
     const initialLoading = useSelector(getChytCliqueInitialLoading);
 
     useUpdater(update);
@@ -63,13 +63,14 @@ export function ChytPageClique(props: RouteComponentProps<{alias: string}>) {
                 <Text variant="header-1">CHYT clique *{alias}</Text>
                 <StatusLabel
                     className={block('header-operation-state')}
-                    label={yt_operation_state}
+                    label={yt_operation?.state as any}
                 />
                 {initialLoading && <Loader className={block('loader')} size="s" />}
                 <span className={block('spacer')} />
 
                 <span className={block('header-start')}>
                     <Button
+                        title="Start"
                         onClick={() => {
                             dispatch(chytListAction('start', {alias}));
                         }}
@@ -79,6 +80,7 @@ export function ChytPageClique(props: RouteComponentProps<{alias: string}>) {
                 </span>
 
                 <Button
+                    title="Stop"
                     onClick={() => {
                         dispatch(chytListAction('stop', {alias}));
                     }}
@@ -88,6 +90,7 @@ export function ChytPageClique(props: RouteComponentProps<{alias: string}>) {
 
                 <span className={block('header-remove')}>
                     <Button
+                        title="Remove"
                         onClick={() => {
                             dispatch(chytListAction('remove', {alias}));
                             history.push(`/${cluster}/${Page.CHYT}`);
@@ -128,8 +131,9 @@ function ChytCliqueMetaTable() {
     const data = useSelector(getChytCliqueData);
 
     const items: Array<Array<MetaTableItem>> = React.useMemo(() => {
-        const {operation_id, pool, state, stage, start_time, finish_time, ctl_attributes} =
-            data ?? {};
+        const {operation_id, pool, state, stage, ctl_attributes, yt_operation} = data ?? {};
+
+        const {start_time, finish_time} = yt_operation ?? {};
 
         const start_time_number = start_time ? moment(start_time).valueOf() : undefined;
         const finish_time_number = finish_time

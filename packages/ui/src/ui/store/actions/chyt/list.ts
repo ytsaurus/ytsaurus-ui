@@ -26,13 +26,13 @@ export function chytLoadList(): ChytListThunkAction<void> {
             cluster,
             {
                 attributes: [
+                    'yt_operation_id',
                     'creator',
-                    'state',
-                    'start_time',
                     'instance_count',
-                    'total_memory',
                     'total_cpu',
-                    'operation_id',
+                    'total_memory',
+                    'health',
+                    'state',
                     'creation_time',
                 ],
             },
@@ -92,28 +92,14 @@ export function chytCliqueCreate(params: {
         const cluster = getCluster(state);
         const isAdmin = isDeveloper(state);
 
-        const {alias, runAfterCreation, ...options} = params;
+        const {alias, runAfterCreation, pool, instance_count} = params;
         return chytApiAction(
             'create',
             cluster,
-            {alias},
+            {alias, speclet_options: {active: runAfterCreation, pool, instance_count}},
             {isAdmin, successTitle: `${alias} clique created`},
-        ).then(() => {
-            return chytApiAction('set_options', cluster, {alias, options})
-                .then(() => {
-                    if (runAfterCreation) {
-                        return chytApiAction(
-                            'start',
-                            cluster,
-                            {alias},
-                            {isAdmin, successTitle: `${alias} clique is started`},
-                        );
-                    }
-                    return undefined;
-                })
-                .finally(() => {
-                    dispatch(chytLoadList());
-                });
+        ).finally(() => {
+            dispatch(chytLoadList());
         });
     };
 }

@@ -2,13 +2,16 @@ import React from 'react';
 
 import format from '../../../common/hammer/format';
 import Label from '../../../components/Label/Label';
-import {ChytCliqueStateType} from '../../../store/actions/chyt/api';
+import {ChytCliqueHealthType, ChytCliqueStateType} from '../../../store/actions/chyt/api';
 
-const THEME_MAP: Partial<Record<ChytCliqueStateType, 'danger' | 'success'>> = {
-    active: 'success',
-    broken: 'danger',
-};
+const THEME_MAP: Partial<Record<ChytCliqueStateType | ChytCliqueHealthType, 'danger' | 'success'>> =
+    {
+        good: 'success',
+        failed: 'danger',
+        active: 'success',
+        inactive: 'danger',
+    };
 
-export function CliqueState({state}: {state?: ChytCliqueStateType}) {
+export function CliqueState({state}: {state?: ChytCliqueStateType | ChytCliqueHealthType}) {
     return !state ? format.NO_VALUE : <Label text={state} theme={THEME_MAP[state]} capitalize />;
 }

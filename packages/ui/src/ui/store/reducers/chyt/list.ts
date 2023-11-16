@@ -17,7 +17,6 @@ export type ChytListState = {
 
 export type ChytInfo = ChytListResponseItem['$attributes'] & {
     alias: string;
-    duration?: number;
 };
 
 const initialState: ChytListState = {

@@ -59,7 +59,7 @@ function fieldType(optionType: 'string' | 'bool' | 'uint64' | 'yson') {
         case 'yson':
             return 'json' as const;
         default:
-            throw new Error(`Unexpected option type: ${optionType}`);
+            return 'plain' as const;
     }
 }
 
@@ -97,6 +97,14 @@ const CONVERTER = {
     },
     tumbler: makeConverter<boolean>(),
     text: makeConverter<string>(),
+    plain: {
+        toFieldValue(value: unknown) {
+            return JSON.stringify(value);
+        },
+        fromFieldValue(value: any, _oldV?: any) {
+            return value !== undefined ? JSON.parse(value) : undefined;
+        },
+    },
 };
 
 function ChytSpeclet({
