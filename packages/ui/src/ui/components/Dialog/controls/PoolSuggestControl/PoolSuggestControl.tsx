@@ -25,6 +25,8 @@ type Props = DialogControlProps<string> & {
     calculateValueOnPoolsLoaded?: (params: {loadedPoolNames: Array<string>}) => string;
 
     allowEphemeral?: boolean;
+
+    disabled?: boolean;
 };
 
 /**
@@ -42,6 +44,7 @@ export function PoolSuggestControl(props: Props) {
         poolTree,
         cluster,
         calculateValueOnPoolsLoaded,
+        disabled,
     } = props;
 
     // !!! default pool tree of current cluster must be never used for other clusters !!!
@@ -99,6 +102,7 @@ export function PoolSuggestControl(props: Props) {
                 allowEphemeral ? () => {} : (v) => onChange(typeof v === 'string' ? v : v.value)
             }
             placeholder={placeholder}
+            disabled={disabled}
         />
     );
 }
