@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.4.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.3.1...ui-v1.4.0) (2023-11-17)
+
+
+### Features
+
+* **Updater:** handle 'visibilitychange' events of window.document [YTFRONT-3835] ([76fe005](https://github.com/ytsaurus/ytsaurus-ui/commit/76fe0050e2d0c0c1fe969336cbfe57ba6c70432a))
+
 ## [1.3.1](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.3.0...ui-v1.3.1) (2023-11-16)
 
 
