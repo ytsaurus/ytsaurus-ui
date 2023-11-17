@@ -1,7 +1,8 @@
 import {Button, Icon, List, Popup, Text, TextInput} from '@gravity-ui/uikit';
 import cn from 'bem-cn-lite';
 import React, {KeyboardEvent, useCallback, useEffect, useMemo, useRef, useState} from 'react';
-import dots from '../../../../../img/svg/icons/ellipsis-h.svg';
+import GearIcon from '@gravity-ui/icons/svgs/gear.svg';
+import GearDotIcon from '@gravity-ui/icons/svgs/gear-dot.svg';
 import closeIcon from '../../../../../img/svg/close-icon.svg';
 import checkIcon from '../../../../../img/svg/icons/check.svg';
 import pencilIcon from '../../../../../img/svg/icons/pencil.svg';
@@ -301,7 +302,7 @@ export const QuerySettingsButton = ({
     return (
         <>
             <Button className={className} onClick={toggleOpened} ref={ref} view="outlined" size="l">
-                <Icon data={dots} size={16} />
+                <Icon data={settingsList.length ? GearDotIcon : GearIcon} size={16} />
             </Button>
             <Popup anchorRef={ref} open={opened} className={b()} onOutsideClick={toggleOpened}>
                 <div className={b('header')}>

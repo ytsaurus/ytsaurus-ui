@@ -234,7 +234,7 @@ export function startQuery(
                 engine,
                 annotations,
                 settings: {
-                    stage: yqlAgentStage ? yqlAgentStage : undefined,
+                    stage: engine === 'yql' ? yqlAgentStage : undefined,
                     ...settings,
                 },
                 output_format: {
