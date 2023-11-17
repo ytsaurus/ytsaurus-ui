@@ -14,10 +14,10 @@ import {chytUpdateListFilters} from '../../../store/actions/chyt/list-fitlers';
 import {
     getChytListAvailableCreators,
     getChytListAvailableStates,
+    getChytListColumns,
     getChytListFilterAlias,
     getChytListFilterCreator,
     getChytListFilterState,
-    getChytListColumns,
 } from '../../../store/selectors/chyt';
 import {ChytListFilters} from '../../../store/reducers/chyt/list-filters';
 import {chytSetVisibleColumns} from '../../../store/actions/chyt/list';

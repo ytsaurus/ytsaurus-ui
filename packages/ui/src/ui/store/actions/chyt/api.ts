@@ -8,7 +8,7 @@ export type ChytListAttributes = keyof Required<ChytListResponseItem>['$attribut
 
 export type ChytApi =
     | {action: 'list'; params: {attributes?: Array<ChytListAttributes>}; response: ChytListResponse}
-    | {action: 'start'; params: {alias: string}; response: void}
+    | {action: 'start'; params: {alias: string; untracked?: boolean}; response: void}
     | {action: 'stop'; params: {alias: string}; response: void}
     | {action: 'remove'; params: {alias: string}; response: void}
     | {

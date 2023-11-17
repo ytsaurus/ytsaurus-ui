@@ -4,21 +4,19 @@ import {RouteComponentProps, useHistory} from 'react-router';
 import cn from 'bem-cn-lite';
 import moment from 'moment';
 
-import {Button, Loader, Text} from '@gravity-ui/uikit';
+import {Loader, Text} from '@gravity-ui/uikit';
 
 import format from '../../../common/hammer/format';
 
 import {useUpdater} from '../../../hooks/use-updater';
 import Block from '../../../components/Block/Block';
 import Error from '../../../components/Error/Error';
-import Icon from '../../../components/Icon/Icon';
 import Label from '../../../components/Label/Label';
 import MetaTable, {MetaTableItem} from '../../../components/MetaTable/MetaTable';
 import {OperationId} from '../../../components/OperationId/OperationId';
 import StatusLabel from '../../../components/StatusLabel/StatusLabel';
 
 import {chytCliqueLoad, chytResetCurrentClique} from '../../../store/actions/chyt/clique';
-import {chytListAction} from '../../../store/actions/chyt/list';
 import {
     getChytCliqueData,
     getChytCliqueError,
@@ -33,6 +31,7 @@ import {ChytPageCliqueTabs} from './ChytPageCliqueTabs';
 
 import './ChytPageClique.scss';
 import {Page} from '../../../../shared/constants/settings';
+import {ChytCliqueActions} from '../ChytCliqueActions/ChytCliqueActions';
 
 const block = cn('chyt-page-clique');
 
@@ -68,37 +67,15 @@ export function ChytPageClique(props: RouteComponentProps<{alias: string}>) {
                 {initialLoading && <Loader className={block('loader')} size="s" />}
                 <span className={block('spacer')} />
 
-                <span className={block('header-start')}>
-                    <Button
-                        title="Start"
-                        onClick={() => {
-                            dispatch(chytListAction('start', {alias}));
-                        }}
-                    >
-                        <Icon awesome="play-circle" />
-                    </Button>
-                </span>
-
-                <Button
-                    title="Stop"
-                    onClick={() => {
-                        dispatch(chytListAction('stop', {alias}));
-                    }}
-                >
-                    <Icon awesome="stop-circle" />
-                </Button>
-
-                <span className={block('header-remove')}>
-                    <Button
-                        title="Remove"
-                        onClick={() => {
-                            dispatch(chytListAction('remove', {alias}));
+                <ChytCliqueActions
+                    alias={alias}
+                    showAllButtons
+                    onAction={(action) => {
+                        if (action === 'remove') {
                             history.push(`/${cluster}/${Page.CHYT}`);
-                        }}
-                    >
-                        <Icon awesome="trash-alt" />
-                    </Button>
-                </span>
+                        }
+                    }}
+                />
             </div>
             <ChytCliqueErrors />
             <ChytCliqueMetaTable />

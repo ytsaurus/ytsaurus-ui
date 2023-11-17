@@ -2,7 +2,6 @@ import React from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import cn from 'bem-cn-lite';
 
-import {Button, DropdownMenu, DropdownMenuItem} from '@gravity-ui/uikit';
 import {Column} from '@gravity-ui/react-data-table';
 
 import format from '../../../common/hammer/format';
@@ -11,7 +10,6 @@ import DataTableYT, {
     DATA_TABLE_YT_SETTINGS_UNDER_TOOLBAR,
 } from '../../../components/DataTableYT/DataTableYT';
 import ColumnHeader from '../../../components/ColumnHeader/ColumnHeader';
-import Icon from '../../../components/Icon/Icon';
 import Link from '../../../components/Link/Link';
 import {OperationId} from '../../../components/OperationId/OperationId';
 import {UserCard} from '../../../components/UserLink/UserLink';
@@ -25,12 +23,11 @@ import {
     getChytListTableSortStateByName,
 } from '../../../store/selectors/chyt';
 import {ChytInfo} from '../../../store/reducers/chyt/list';
-import {chytListAction} from '../../../store/actions/chyt/list';
 import {Page} from '../../../../shared/constants/settings';
-import {showErrorPopup} from '../../../utils/utils';
 
 import {CliqueState} from '../components/CliqueState';
 
+import {ChytCliqueActions} from '../ChytCliqueActions/ChytCliqueActions';
 import './ChytPageListTable.scss';
 
 const block = cn('chyt-page-list-table');
@@ -284,54 +281,6 @@ function ChytListHeader({
                 dispatch(chytToggleSortState(col, nextOrder, options));
             }}
         />
-    );
-}
-
-function ChytCliqueActions({alias}: {alias: string}) {
-    const dispatch = useDispatch();
-
-    const menuItems: Array<Array<DropdownMenuItem>> = [
-        [
-            {
-                icon: <Icon awesome="play-circle" />,
-                text: 'Start',
-                action: () => {
-                    dispatch(chytListAction('start', {alias}));
-                },
-            },
-            {
-                icon: <Icon awesome="stop-circle" />,
-                text: 'Stop',
-                action: () => {
-                    dispatch(chytListAction('stop', {alias}));
-                },
-            },
-        ],
-        [
-            {
-                icon: <Icon awesome="trash-alt" />,
-                text: 'Remove',
-                action: () => {
-                    dispatch(chytListAction('remove', {alias}));
-                },
-            },
-        ],
-    ];
-
-    return (
-        <React.Fragment>
-            <Button view="flat" onClick={() => showErrorPopup(new Error('not implemented'))}>
-                <Icon awesome="sql" />
-            </Button>
-            <DropdownMenu
-                switcher={
-                    <Button view="flat">
-                        <Icon awesome="ellipsis-h" />
-                    </Button>
-                }
-                items={menuItems}
-            />
-        </React.Fragment>
     );
 }
 
