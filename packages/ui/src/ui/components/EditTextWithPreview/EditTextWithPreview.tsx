@@ -17,12 +17,12 @@ export type EditTextWithPreviewProps = DialogControlProps<
     {value: string | undefined},
     {
         className?: string;
-        editorActions: Array<DropdownMenuItem>;
+        editorActions?: Array<DropdownMenuItem>;
         editorTitle?: string;
         editorSubTitle?: string;
-        editorLang: 'markdown' | 'json';
         disabled?: boolean;
 
+        editorLang: 'markdown' | 'json';
         renderPreview: (value?: string) => React.ReactElement;
 
         minHeight?: number;
@@ -42,6 +42,7 @@ EditTextWithPreview.getDefaultValue = () => {
 export function EditTextWithPreview({
     value: valueProp,
     onChange: onChangeProp,
+    editorLang,
     editorActions,
     className,
     editorTitle = 'Text',
@@ -84,7 +85,7 @@ export function EditTextWithPreview({
         >
             <MonacoEditor
                 value={value || ''}
-                language={'markdown'}
+                language={editorLang}
                 className={block('monaco')}
                 onChange={onChange}
             />
@@ -124,7 +125,7 @@ export function EditTextWithPreview({
                                 name={'Preview'}
                                 actions={[showHideAction]}
                             >
-                                {renderPreview(value)}
+                                {renderPreview ? renderPreview(value) : value}
                             </TabbedContent>
                         ),
                     ],
