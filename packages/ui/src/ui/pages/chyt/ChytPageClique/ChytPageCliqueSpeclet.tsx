@@ -50,38 +50,64 @@ export function ChytPageCliqueSpeclet() {
     );
 }
 
-function descriptionToDialogField(
+function descriptionToDialogField<T = unknown>(
     item: ChytCliqueOptionDescription,
     unipikaSettings: UnipikaSettings,
     allowEdit?: boolean,
-): DialogField {
+): DialogField<T> & {initialValue?: unknown} {
     const common = {
         name: item.name,
         caption: format.ReadableField(item.name),
         tooltip: item.description,
     };
-    const extras = {disabled: !allowEdit};
+    const {default_value} = item;
+    const extras = {
+        disabled: !allowEdit,
+        placeholder:
+            default_value !== null && default_value !== undefined
+                ? String(item.default_value)
+                : undefined,
+    };
 
     switch (item.type) {
         case 'string': {
             if (!item.choices?.length) {
                 return {...common, type: 'text', extras};
             } else {
-                console.warn('Use "select". Not implemented!');
-                return {...common, type: 'text', extras};
+                return {
+                    ...common,
+                    type: 'select',
+                    extras: {
+                        ...extras,
+                        width: 'max',
+                        options: item.choices.map((value) => {
+                            return {value, content: value};
+                        }),
+                        hasClear: true,
+                    },
+                };
             }
         }
         case 'bool':
-            return {...common, type: 'tumbler', extras};
-        case 'uint64':
             return {
                 ...common,
-                type: 'number',
+                type: 'tumbler',
+                extras,
+                initialValue: item.current_value ?? item.default_value,
+            };
+        case 'int64':
+        case 'uint64':
+        case 'byte_count':
+            return {
+                ...common,
+                type: item.type === 'byte_count' ? 'bytes' : 'number',
                 extras: {
                     ...extras,
                     hidePrettyValue: true,
                     placeholder:
                         item.default_value !== undefined ? String(item.default_value) : undefined,
+                    min: item.min_value,
+                    max: item.max_value,
                 },
             };
         case 'yson':
@@ -92,8 +118,13 @@ function descriptionToDialogField(
                 extras: {
                     ...extras,
                     unipikaSettings,
+                    minHeight: 200,
                 },
             };
+        case 'path':
+            return {...common, type: 'path', extras};
+        case 'pool':
+            return {...common, type: 'pool', extras};
         default:
             return {...common, type: 'plain'};
     }
@@ -172,11 +203,16 @@ function ChytSpeclet({
             initialValues: currentValues,
             fields: data?.map((group) => {
                 const sectionFields: Array<DialogField> = group.options.map((item) => {
-                    const res = descriptionToDialogField(item, unipikaSettings, allowEdit);
-
+                    const {initialValue, ...res} = descriptionToDialogField(
+                        item,
+                        unipikaSettings,
+                        false,
+                    );
                     const {type} = res;
+
                     const converter = converterByType(type);
-                    currentValues[item.name] = converter.toFieldValue(item.current_value);
+                    currentValues[item.name] =
+                        initialValue ?? converter.toFieldValue(item.current_value);
                     typeByName[item.name] = {type, converter};
 
                     return res;
@@ -223,6 +259,7 @@ function ChytSpeclet({
                 }}
                 fields={fields ?? []}
                 initialValues={initialValues}
+                footerProps={{hidden: true}}
             />
         </React.Fragment>
     );

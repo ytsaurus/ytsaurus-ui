@@ -24,6 +24,7 @@ export interface ExtProps {
     onChange: (value: string) => void;
     monacoConfig?: MonacoEditorConfig;
     editorRef?: MutableRefObject<monaco.editor.IStandaloneCodeEditor | undefined>;
+    readOnly?: boolean;
 }
 
 type Props = ExtProps & ConnectedProps<typeof connector>;
@@ -43,13 +44,14 @@ class MonacoEditor extends React.Component<Props> {
     silent = false;
 
     componentDidMount() {
-        const {theme, monacoConfig, editorRef} = this.props;
+        const {theme, monacoConfig, editorRef, readOnly} = this.props;
         this.model.setValue(this.props.value);
         this.editor = monaco.editor.create(this.ref.current!, {
             model: this.model,
             renderLineHighlight: 'none',
             colorDecorators: true,
             automaticLayout: true,
+            readOnly,
             minimap: {
                 enabled: false,
             },
@@ -69,7 +71,7 @@ class MonacoEditor extends React.Component<Props> {
     }
 
     componentDidUpdate(prevProps: Readonly<Props>): void {
-        const {theme, value, monacoConfig} = this.props;
+        const {theme, value, monacoConfig, readOnly} = this.props;
         const options: monaco.editor.IStandaloneEditorConstructionOptions = {};
         if (prevProps.theme !== theme) {
             options.theme = THEMES[theme];
@@ -81,6 +83,9 @@ class MonacoEditor extends React.Component<Props> {
             this.silent = true;
             this.model.setValue(value);
             this.silent = false;
+        }
+        if (readOnly !== prevProps.readOnly) {
+            this.editor?.updateOptions({readOnly});
         }
 
         this.editor?.updateOptions(options);

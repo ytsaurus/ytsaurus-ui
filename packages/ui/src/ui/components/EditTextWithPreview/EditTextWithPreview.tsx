@@ -50,6 +50,7 @@ export function EditTextWithPreview({
     renderPreview,
     minHeight,
     initialShowPreview,
+    disabled,
 }: EditTextWithPreviewProps) {
     const {value} = valueProp;
 
@@ -88,6 +89,7 @@ export function EditTextWithPreview({
                 language={editorLang}
                 className={block('monaco')}
                 onChange={onChange}
+                readOnly={disabled}
             />
         </TabbedContent>
     );

@@ -65,7 +65,7 @@ export function EditJsonWithPreview({
             {...rest}
             value={valueProp}
             onChange={onTextChange}
-            editorTitle={'Use JSON syntax'}
+            editorTitle={'Use JSON syntax' + (rest.disabled ? ' (readonly)' : '')}
             editorLang={'json'}
             renderPreview={() => (
                 // This ErrorBoundary catches some unipika errors
