@@ -121,7 +121,7 @@ export class NumberInputWithError extends React.Component<NumberInputWithErrorPr
             return error;
         }
 
-        if (value === undefined) {
+        if (value === undefined || value === null) {
             return undefined;
         }
 

@@ -48,6 +48,10 @@ export class NumberControl extends Component<NumberInputWithErrorProps> {
         return value === undefined || value === ('' as any);
     }
 
+    static isEqual(l: NumberInputWithErrorProps['value'], r: NumberInputWithErrorProps['value']) {
+        return l?.value === r?.value && l?.error === r?.error;
+    }
+
     static validate(v: NumberInputWithErrorProps['value']) {
         return v?.error ? v?.error : undefined;
     }

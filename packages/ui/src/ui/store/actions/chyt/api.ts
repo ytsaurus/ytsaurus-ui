@@ -90,10 +90,14 @@ export type ChytCliqueOptionsGroup = {
 };
 
 export type ChytCliqueOptionDescription =
-    | ChytCliqueOption<'string', string>
+    | (ChytCliqueOption<'string', string> & {choices?: Array<string>})
     | ChytCliqueOption<'bool', boolean>
-    | ChytCliqueOption<'uint64', number>
-    | ChytCliqueOption<'yson', JsonAsString>;
+    | (ChytCliqueOption<'uint64' | 'int64' | 'byte_count', number> & {
+          max_value?: number;
+          min_value?: number;
+      })
+    | ChytCliqueOption<'yson', JsonAsString>
+    | ChytCliqueOption<'path' | 'pool', string>;
 
 export type ChytCliqueOptionType = ChytCliqueOptionDescription['type'];
 

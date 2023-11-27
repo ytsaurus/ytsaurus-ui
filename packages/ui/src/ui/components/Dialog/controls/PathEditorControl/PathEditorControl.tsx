@@ -7,11 +7,12 @@ const block = cn('path-editor-control');
 interface Props {
     value: string;
     onChange: (value: string) => void;
-    placeholder: string;
+    placeholder?: string;
+    disabled?: boolean;
 }
 
 export function PathEditorControl(props: Props) {
-    const {value, placeholder, onChange} = props;
+    const {value, placeholder, onChange, ...rest} = props;
 
     const handleApply = React.useCallback(
         (value: Props['value']) => {
@@ -27,6 +28,7 @@ export function PathEditorControl(props: Props) {
             placeholder={placeholder}
             onApply={handleApply}
             onChange={handleApply}
+            {...rest}
         />
     );
 }
