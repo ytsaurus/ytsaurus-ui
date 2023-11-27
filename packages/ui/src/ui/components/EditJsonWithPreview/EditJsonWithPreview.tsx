@@ -16,7 +16,10 @@ export type EditJsonProps = DialogControlProps<
         unipikaSettings?: YsonProps['settings'];
     }
 > &
-    Omit<EditTextWithPreviewProps, keyof DialogControlProps<unknown>>;
+    Omit<
+        EditTextWithPreviewProps,
+        keyof DialogControlProps<unknown> | 'renderPreview' | 'editorLang'
+    >;
 
 const YsonPreviewMemo = React.memo(YsonPreview);
 

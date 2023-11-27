@@ -14,10 +14,12 @@ import {
     getChytSpecletError,
 } from '../../../store/selectors/chyt/speclet';
 import {getEditJsonYsonSettings} from '../../../store/selectors/thor/unipika';
+import {ChytCliqueOptionDescription} from '../../../store/actions/chyt/api';
 import {chytLoadCliqueSpeclet, chytSetOptions} from '../../../store/actions/chyt/speclet';
 import {ChytCliqueSpecletState} from '../../../store/reducers/chyt/speclet';
 import {useThunkDispatch} from '../../../store/thunkDispatch';
 import {YTError} from '../../../../@types/types';
+import {UnipikaSettings} from '../../../components/Yson/StructuredYson/StructuredYsonTypes';
 
 export function ChytPageCliqueSpeclet() {
     const dispatch = useDispatch();
@@ -48,18 +50,52 @@ export function ChytPageCliqueSpeclet() {
     );
 }
 
-function fieldType(optionType: 'string' | 'bool' | 'uint64' | 'yson') {
-    switch (optionType) {
-        case 'string':
-            return 'text' as const;
+function descriptionToDialogField(
+    item: ChytCliqueOptionDescription,
+    unipikaSettings: UnipikaSettings,
+    allowEdit?: boolean,
+): DialogField {
+    const common = {
+        name: item.name,
+        caption: format.ReadableField(item.name),
+        tooltip: item.description,
+    };
+    const extras = {disabled: !allowEdit};
+
+    switch (item.type) {
+        case 'string': {
+            if (!item.choices?.length) {
+                return {...common, type: 'text', extras};
+            } else {
+                console.warn('Use "select". Not implemented!');
+                return {...common, type: 'text', extras};
+            }
+        }
         case 'bool':
-            return 'tumbler' as const;
+            return {...common, type: 'tumbler', extras};
         case 'uint64':
-            return 'number' as const;
+            return {
+                ...common,
+                type: 'number',
+                extras: {
+                    ...extras,
+                    hidePrettyValue: true,
+                    placeholder:
+                        item.default_value !== undefined ? String(item.default_value) : undefined,
+                },
+            };
         case 'yson':
-            return 'json' as const;
+            return {
+                ...common,
+                type: 'json',
+                fullWidth: true,
+                extras: {
+                    ...extras,
+                    unipikaSettings,
+                },
+            };
         default:
-            return 'plain' as const;
+            return {...common, type: 'plain'};
     }
 }
 
@@ -74,7 +110,7 @@ function makeConverter<T>() {
     };
 }
 
-const CONVERTER = {
+const CONVERTER: Record<string, ReturnType<typeof makeConverter>> = {
     number: {
         toFieldValue(value: unknown) {
             return {value: value as number | undefined};
@@ -107,6 +143,10 @@ const CONVERTER = {
     },
 };
 
+function converterByType(type: DialogField['type']) {
+    return CONVERTER[type!] ?? makeConverter<any>();
+}
+
 function ChytSpeclet({
     alias,
     data,
@@ -123,35 +163,22 @@ function ChytSpeclet({
 
     const {fields, initialValues, fieldTypeByName} = React.useMemo(() => {
         const currentValues: Record<string, any> = {};
-        const typeByName: Record<string, ReturnType<typeof fieldType>> = {};
+        const typeByName: Record<
+            string,
+            {type: DialogField['type']; converter: ReturnType<typeof makeConverter>}
+        > = {};
         return {
             fieldTypeByName: typeByName,
             initialValues: currentValues,
             fields: data?.map((group) => {
                 const sectionFields: Array<DialogField> = group.options.map((item) => {
-                    const type = (typeByName[item.name] = fieldType(item.type));
-                    currentValues[item.name] = CONVERTER[type].toFieldValue(item.current_value);
-                    typeByName[item.name] = fieldType(item.type);
-                    const res = {
-                        name: item.name,
-                        type: fieldType(item.type),
-                        caption: format.ReadableField(item.name),
-                        tooltip: item.description,
-                        fullWidth: type === 'json',
-                    } as const;
+                    const res = descriptionToDialogField(item, unipikaSettings, allowEdit);
 
-                    const {extras} = Object.assign(res, {extras: {disabled: !allowEdit}});
-                    if (type === 'number') {
-                        Object.assign(extras, {hidePrettyValue: true});
-                        if (item.default_value) {
-                            Object.assign(extras, {placeholder: String(item.default_value)});
-                        }
-                    } else if (type === 'json') {
-                        Object.assign(extras, {
-                            minHeight: 200,
-                            unipikaSettings,
-                        });
-                    }
+                    const {type} = res;
+                    const converter = converterByType(type);
+                    currentValues[item.name] = converter.toFieldValue(item.current_value);
+                    typeByName[item.name] = {type, converter};
+
                     return res;
                 });
 
@@ -178,9 +205,9 @@ function ChytSpeclet({
                         values as any,
                         (acc, value, key) => {
                             const oldValue = initialValues[key];
-                            const type = fieldTypeByName[key];
-                            const oldV = CONVERTER[type].fromFieldValue(oldValue);
-                            const v = CONVERTER[type].fromFieldValue(value, oldV);
+                            const {converter} = fieldTypeByName[key];
+                            const oldV = converter.fromFieldValue(oldValue);
+                            const v = converter.fromFieldValue(value, oldV);
                             if (v !== oldV) {
                                 acc[key] = v;
                             }
