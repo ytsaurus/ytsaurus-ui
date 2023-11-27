@@ -84,7 +84,7 @@ export default function TableSortModal() {
     const title = paths?.length > 1 ? 'Sort tables' : 'Sort table';
     const outputPath = paths?.length === 1 ? paths[0] : undefined;
 
-    const errorFields: Array<DialogField> = [];
+    const errorFields: Array<DialogField<FormValues>> = [];
     if (error) {
         errorFields.push({
             name: 'error',

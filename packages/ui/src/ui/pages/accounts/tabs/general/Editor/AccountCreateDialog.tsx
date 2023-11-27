@@ -68,7 +68,7 @@ class AccountCreateDialog extends React.Component<ConnectedProps<typeof connecto
                                   },
                               },
                           ]
-                        : []) as Array<DialogField>),
+                        : []) as Array<DialogField<FormValues>>),
                     {
                         name: 'account',
                         type: 'text',
@@ -102,7 +102,7 @@ class AccountCreateDialog extends React.Component<ConnectedProps<typeof connecto
                                   },
                               },
                           ]
-                        : []) as Array<DialogField>),
+                        : []) as Array<DialogField<FormValues>>),
                     ...(isAdmin
                         ? [
                               {

@@ -264,7 +264,7 @@ export function BundleEditorDialog() {
                 name: 'tablet_node_resource_guarantee',
                 caption: 'Instance configuration',
                 fullWidth: true,
-                extras: function (values, form) {
+                extras: function (values, {form}) {
                     const onRadioClick = (value: BundleResourceGuarantee) => {
                         const nodeConfigurationType = value.type || '';
 
@@ -362,7 +362,7 @@ export function BundleEditorDialog() {
                 name: 'memory_reset',
                 type: 'bundle-title',
                 caption: 'Memory',
-                extras: (allValues, form) => {
+                extras: (allValues, {form}) => {
                     const tablet_node_resource_guarantee =
                         allValues.resources?.tablet_node_resource_guarantee;
 
@@ -490,7 +490,7 @@ export function BundleEditorDialog() {
                 name: 'error',
                 validator: (v: any) => (v ? v : undefined),
                 fullWidth: true,
-                extras(allValues, form) {
+                extras(allValues, {form}) {
                     const hasError = _.get(allValues, 'memory_limits.error');
                     const errorText = validateMemoryLimits(allValues);
 
@@ -524,7 +524,7 @@ export function BundleEditorDialog() {
                 name: 'threadPool_reset',
                 type: 'bundle-title',
                 caption: 'vCPU',
-                extras: (allValues, form) => {
+                extras: (allValues, {form}) => {
                     const tablet_node_resource_guarantee =
                         allValues.resources?.tablet_node_resource_guarantee;
 
