@@ -5,7 +5,7 @@ import _ from 'lodash';
 // @ts-ignore
 import unipika from '@gravity-ui/unipika/lib/unipika';
 
-import {Settings, UnipikaValue} from '../StructuredYson/StructuredYsonTypes';
+import {UnipikaSettings, UnipikaValue} from '../StructuredYson/StructuredYsonTypes';
 import {
     BlockType,
     CollapsedState,
@@ -29,7 +29,7 @@ const block = cn('structured-yson-virtualized');
 
 interface Props {
     value: UnipikaValue;
-    settings: Settings;
+    settings: UnipikaSettings;
     extraTools?: React.ReactNode;
 }
 
@@ -58,7 +58,7 @@ function calculateState(
     value: State['value'],
     collapsedState: CollapsedState,
     filter: string,
-    settings: Settings,
+    settings: UnipikaSettings,
 ) {
     const flattenResult = flattenUnipika(value, {
         isJson: settings.format !== 'yson',
@@ -412,7 +412,7 @@ interface CellProps {
     matched: SearchInfo;
     row: UnipikaFlattenTreeItem;
     yson: boolean;
-    settings: Settings;
+    settings: UnipikaSettings;
     collapsedState?: {readonly [key: string]: boolean};
     onToggleCollapse: (path: string) => void;
     filter?: string;
@@ -497,7 +497,7 @@ function Cell(props: CellProps) {
 interface KeyProps {
     text: UnipikaFlattenTreeItem['key'] | UnipikaFlattenTreeItem['value'];
     yson?: boolean;
-    settings: Settings;
+    settings: UnipikaSettings;
     isAfterAttributes?: boolean;
     filter?: string;
     matched?: Array<number>;
@@ -658,7 +658,7 @@ function ToggleCollapseButton(props: ToggleCollapseProps) {
 
 function formatValue(
     value: UnipikaFlattenTreeItem['key'] | UnipikaFlattenTreeItem['value'],
-    settings: Settings,
+    settings: UnipikaSettings,
 ) {
     const __html = unipika.formatValue(value, settings, 0);
     return <span className={'unipika'} dangerouslySetInnerHTML={{__html}} />;

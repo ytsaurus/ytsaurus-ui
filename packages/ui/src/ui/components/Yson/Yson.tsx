@@ -6,12 +6,12 @@ import _ from 'lodash';
 import unipika from '../../common/thor/unipika';
 
 import ErrorBoundary from '../../components/ErrorBoundary/ErrorBoundary';
-import {Settings, UnipikaValue} from './StructuredYson/StructuredYsonTypes';
+import {UnipikaSettings, UnipikaValue} from './StructuredYson/StructuredYsonTypes';
 
 import StructuredYsonVirtualized from './StructuredYsonVirtualized/StructuredYsonVirtualized';
 
 export interface YsonProps {
-    settings?: Settings;
+    settings?: UnipikaSettings;
     value: any;
     inline?: boolean;
     folding?: boolean;

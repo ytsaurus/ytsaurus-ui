@@ -1,4 +1,4 @@
-export type Settings = {
+export type UnipikaSettings = {
     nonBreakingIndent?: boolean;
     escapeWhitespace?: boolean;
     escapeYQLStrings?: boolean;

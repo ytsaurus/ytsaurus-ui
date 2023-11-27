@@ -10,7 +10,7 @@ import {
     shouldShowDecoded,
     useBinaryAsHex,
 } from '../../store/selectors/settings';
-import type {Settings} from '../../components/Yson/StructuredYson/StructuredYsonTypes';
+import type {UnipikaSettings} from '../../components/Yson/StructuredYson/StructuredYsonTypes';
 import {getUnipikaSettingsFromConfig} from './unipika-settings';
 
 const parseSetting = hammer.utils.parseSetting;
@@ -45,10 +45,10 @@ unipika.prepareSettings = function (settings: any) {
     return settings;
 };
 
-unipika.prettyprint = function (value: unknown, settings: Settings) {
+unipika.prettyprint = function (value: unknown, settings: UnipikaSettings) {
     settings = unipika.prepareSettings(settings);
 
-    function _prettyprint(value: unknown, settings: Settings) {
+    function _prettyprint(value: unknown, settings: UnipikaSettings) {
         return settings.format === 'raw-json'
             ? unipika.formatRaw(value, settings)
             : unipika.formatFromYSON(value, settings);
