@@ -5,7 +5,7 @@ import unipika from '../../common/thor/unipika';
 
 import ErrorBoundary from '../../components/ErrorBoundary/ErrorBoundary';
 import Yson from '../../components/Yson/Yson';
-import {Settings} from '../../components/Yson/StructuredYson/StructuredYsonTypes';
+import {UnipikaSettings} from '../../components/Yson/StructuredYson/StructuredYsonTypes';
 
 /**
  * See unipika for more details
@@ -15,7 +15,7 @@ export type UnipikaValueType = Array<string | UnipikaValueType>;
 export type YqlValueProps = {
     value?: unknown;
     type: UnipikaValueType;
-    settings: Settings;
+    settings: UnipikaSettings;
     inline?: boolean;
 };
 
@@ -33,7 +33,7 @@ export default class YqlValue extends React.Component<YqlValueProps> {
         settings: Yson.defaultUnipikaSettings,
     };
 
-    static getFormattedValue(value: unknown, type: UnipikaValueType, settings: Settings) {
+    static getFormattedValue(value: unknown, type: UnipikaValueType, settings: UnipikaSettings) {
         const yqlValue = [value, type];
 
         return settings.format === 'raw-json'

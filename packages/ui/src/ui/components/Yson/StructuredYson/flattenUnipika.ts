@@ -1,9 +1,9 @@
 import {
-    Settings,
     UnipikaList,
     UnipikaMap,
     UnipikaMapKey,
     UnipikaPrimitive,
+    UnipikaSettings,
     UnipikaString,
     UnipikaValue,
 } from './StructuredYsonTypes';
@@ -49,7 +49,7 @@ interface FlattenUnipikaOptions {
     isJson?: boolean;
     collapsedState?: CollapsedState;
     matchedState?: {};
-    settings?: Settings;
+    settings?: UnipikaSettings;
     filter?: string;
 }
 
@@ -437,7 +437,7 @@ function fromUnipikaPrimitive(value: UnipikaPrimitive, level: number): UnipikaFl
 }
 
 interface SearchParams {
-    settings?: Settings;
+    settings?: UnipikaSettings;
 }
 
 export interface SearchInfo {
@@ -455,7 +455,7 @@ export function makeSearchIndex(
     if (!filter) {
         return {};
     }
-    const settings = Object.assign<Settings, Settings | undefined, Settings>(
+    const settings = Object.assign<UnipikaSettings, UnipikaSettings | undefined, UnipikaSettings>(
         {},
         options?.settings,
         {asHTML: false},
@@ -477,7 +477,7 @@ type SearchValue = undefined | UnipikaMapKey | UnipikaString | UnipikaPrimitive;
 function rowSearchInfo(
     v: SearchValue,
     filter: string,
-    settings: Settings,
+    settings: UnipikaSettings,
 ): Array<number> | undefined {
     if (!v) {
         return undefined;

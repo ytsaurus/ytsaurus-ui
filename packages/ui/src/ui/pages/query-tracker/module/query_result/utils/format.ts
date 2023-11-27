@@ -1,8 +1,8 @@
 import unipika from '../../../../../common/thor/unipika';
 import {TypeArray} from '../../../../../components/SchemaDataType/dataTypes';
-import {Settings} from '../../../../../components/Yson/StructuredYson/StructuredYsonTypes';
+import {UnipikaSettings} from '../../../../../components/Yson/StructuredYson/StructuredYsonTypes';
 
-const defaultSettings: Settings = {
+const defaultSettings: UnipikaSettings = {
     escapeWhitespace: false,
     decodeUTF8: true,
     binaryAsHex: true,
@@ -15,7 +15,7 @@ const defaultSettings: Settings = {
 export function convert(
     value: unknown,
     dataType: TypeArray,
-    settings: Settings,
+    settings: UnipikaSettings,
 ): {$type: string; $value: any; $tag?: any} {
     try {
         return unipika.converters.yql([value, dataType], settings);
@@ -36,7 +36,7 @@ export function convert(
 
 export function formatResults(
     value: {$type: string; $value: unknown; $tag?: unknown},
-    settings: Settings = defaultSettings,
+    settings: UnipikaSettings = defaultSettings,
 ) {
     try {
         return unipika.format(value, settings);
@@ -59,7 +59,7 @@ const maxFormattedLength = 10000;
 export function prepareFormattedValue(
     value: unknown,
     type: TypeArray,
-    settings: Settings = defaultSettings,
+    settings: UnipikaSettings = defaultSettings,
 ) {
     const convertedValue = convert(value, type, settings);
 

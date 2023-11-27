@@ -5,7 +5,7 @@ import hammer from '../common/hammer';
 import unipika from '../common/thor/unipika';
 import qs from 'qs';
 import Cookies from 'js-cookie';
-import type {Settings} from '../components/Yson/StructuredYson/StructuredYsonTypes';
+import type {UnipikaSettings} from '../components/Yson/StructuredYson/StructuredYsonTypes';
 import type {ClusterConfig, YTConfig} from '../../shared/yt-types';
 import {customEncodeURIComponent} from './url-mapping';
 
@@ -18,7 +18,7 @@ export const flags = new Map<'false' | 'FALSE' | false | 'true' | 'TRUE' | true,
     [true, true],
 ]);
 
-export function prepareAttributes(attributes: any, settings: Settings): unknown {
+export function prepareAttributes(attributes: any, settings: UnipikaSettings): unknown {
     const getPreparedValue = <T>({$attributes}: any, value: T) => {
         if (!$attributes) {
             return value;
