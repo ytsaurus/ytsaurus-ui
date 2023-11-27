@@ -34,7 +34,7 @@ export default function LinkToModal() {
         dispatch(hideLinkToModal());
     }, [dispatch]);
 
-    const errorFields: Array<DialogField> = [];
+    const errorFields: Array<DialogField<LinkToModalState>> = [];
     if (error) {
         errorFields.push({
             name: 'error',

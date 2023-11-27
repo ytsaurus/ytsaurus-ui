@@ -195,7 +195,7 @@ function ManageAcl(props: Props) {
                     caption: 'Comment for IDM',
                     type: 'textarea',
                 },
-            } as Record<ManageAclFieldsNames, DialogField>),
+            } as Record<ManageAclFieldsNames, DialogField<FormValues>>),
         [hasWarning],
     );
 

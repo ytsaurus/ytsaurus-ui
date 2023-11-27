@@ -186,7 +186,7 @@ function RequestPermissions(props: Props) {
                 ({
                     ...requestPermissionsFields[name],
                     name: name,
-                } as DialogField),
+                } as DialogField<FormValues>),
         );
     }, [requestPermissionsFields]);
 
