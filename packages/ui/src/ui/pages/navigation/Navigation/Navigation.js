@@ -316,7 +316,7 @@ class Navigation extends Component {
             <div className={block('edit-metadata')}>
                 <Button size="m" title={'Edit metadata'} onClick={this.onEditButtonClick}>
                     <Icon awesome={'pencil'} />
-                    &nbsp;Edit metadata
+                    Edit metadata
                 </Button>
             </div>
         );

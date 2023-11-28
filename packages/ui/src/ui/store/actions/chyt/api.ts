@@ -1,10 +1,13 @@
 import axios, {CancelToken} from 'axios';
 import {wrapApiPromiseByToaster} from '../../../utils/utils';
 import {YTError} from '../../../../@types/types';
+import {OptionsGroup} from '../../../components/Dialog/df-dialog-utils';
 
 export type WithResult<T> = {result: T};
 
 export type ChytListAttributes = keyof Required<ChytListResponseItem>['$attributes'];
+
+export type ChytDescribeOptionsType = Array<OptionsGroup>;
 
 export type ChytApi =
     | {action: 'list'; params: {attributes?: Array<ChytListAttributes>}; response: ChytListResponse}
@@ -34,7 +37,7 @@ export type ChytApi =
     | {
           action: 'describe_options';
           params: {alias: string};
-          response: WithResult<Array<ChytCliqueOptionsGroup>>;
+          response: WithResult<ChytDescribeOptionsType>;
       }
     | {action: 'get_brief_info'; params: {alias: string}; response: WithResult<ChytStatusResponse>};
 
@@ -82,34 +85,6 @@ export type ChytListResponseItem = {
 
 export type ChytCliqueHealthType = 'good' | 'pending' | 'failed';
 export type ChytCliqueStateType = 'active' | 'inactive' | 'untracked';
-
-export type ChytCliqueOptionsGroup = {
-    title: string;
-    options: Array<ChytCliqueOptionDescription>;
-    hidden: boolean;
-};
-
-export type ChytCliqueOptionDescription =
-    | (ChytCliqueOption<'string', string> & {choices?: Array<string>})
-    | ChytCliqueOption<'bool', boolean>
-    | (ChytCliqueOption<'uint64' | 'int64' | 'byte_count', number> & {
-          max_value?: number;
-          min_value?: number;
-      })
-    | ChytCliqueOption<'yson', JsonAsString>
-    | ChytCliqueOption<'path' | 'pool', string>;
-
-export type ChytCliqueOptionType = ChytCliqueOptionDescription['type'];
-
-export type JsonAsString = string;
-
-export type ChytCliqueOption<TypeName extends string, T> = {
-    name: string;
-    type: TypeName;
-    current_value?: T | null;
-    default_value?: T;
-    description?: string;
-};
 
 export function chytApiAction<
     T extends ChytApi['action'] = never,

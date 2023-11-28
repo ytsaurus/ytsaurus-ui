@@ -126,7 +126,7 @@ export default class ClipboardButton extends Component {
                                     }}
                                 >
                                     <Icon awesome={this.iconByState[state]} face={face} />
-                                    &nbsp;{buttonText}
+                                    {buttonText}
                                 </Button>
                             ) : (
                                 <Button
