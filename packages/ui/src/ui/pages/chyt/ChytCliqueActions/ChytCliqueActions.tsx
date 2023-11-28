@@ -1,11 +1,18 @@
 import React from 'react';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
+import {useHistory} from 'react-router';
 import cn from 'bem-cn-lite';
 
 import {Button, DropdownMenu, DropdownMenuItem} from '@gravity-ui/uikit';
+
+import {Page} from '../../../../shared/constants/settings';
+
 import Icon from '../../../components/Icon/Icon';
 import {chytListAction} from '../../../store/actions/chyt/list';
-import {showErrorPopup} from '../../../utils/utils';
+import {getCluster, isQueryTrackerAllowed} from '../../../store/selectors/global';
+import {updateQueryDraft} from '../../../pages/query-tracker/module/query/actions';
+import {QueryEngine} from '../../../pages/query-tracker/module/api';
+import UIFactory from '../../../UIFactory';
 
 import {ChytConfirmation} from '../ChytConfirmation/ChytConfirmation';
 
@@ -25,6 +32,9 @@ export function ChytCliqueActions({
     onAction?: (action: 'remove' | 'start') => void;
 }) {
     const dispatch = useDispatch();
+    const history = useHistory();
+    const allowQueryTracker = useSelector(isQueryTrackerAllowed);
+
     const [visibleConfirmation, setVisibleConirmation] = React.useState<
         undefined | 'remove' | 'start'
     >();
@@ -54,8 +64,28 @@ export function ChytCliqueActions({
 
     const menuItems: Array<Array<DropdownMenuItem>> = [[start, stop], [remove]];
 
+    const cluster = useSelector(getCluster);
+
     const sqlButton = (
-        <Button view="flat" onClick={() => showErrorPopup(new Error('not implemented'))}>
+        <Button
+            view="flat"
+            onClick={() => {
+                if (allowQueryTracker) {
+                    history.push(`/${cluster}/${Page.QUERIES}`);
+                    setTimeout(() => {
+                        dispatch(
+                            updateQueryDraft({
+                                engine: QueryEngine.CHYT,
+                                query: `SELECT 1;`,
+                                settings: {cluster, clique: alias},
+                            }),
+                        );
+                    }, 500);
+                } else {
+                    UIFactory.onChytAliasSqlClick({alias, cluster});
+                }
+            }}
+        >
             <Icon awesome="sql" />
         </Button>
     );

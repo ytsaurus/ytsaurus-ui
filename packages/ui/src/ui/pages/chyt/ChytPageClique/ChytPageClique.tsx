@@ -1,7 +1,6 @@
 import React from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {RouteComponentProps, useHistory} from 'react-router';
-import cn from 'bem-cn-lite';
 import moment from 'moment';
 
 import {Loader, Text} from '@gravity-ui/uikit';
@@ -29,7 +28,7 @@ import {Page} from '../../../../shared/constants/settings';
 import {CliqueState} from '../components/CliqueState';
 import {ChytCliqueActions} from '../ChytCliqueActions/ChytCliqueActions';
 import {ChytPageCliqueTabs} from './ChytPageCliqueTabs';
-import {ChytSpecletEditButton} from './ChytPageCliqueSpeclet';
+import cn from 'bem-cn-lite';
 
 import './ChytPageClique.scss';
 
@@ -79,9 +78,6 @@ export function ChytPageClique(props: RouteComponentProps<{alias: string}>) {
             </div>
             <ChytCliqueErrors />
             <ChytCliqueMetaTable />
-            <div className={block('edit-speclet')}>
-                <ChytSpecletEditButton />
-            </div>
             <ChytPageCliqueTabs className={block('tabs')} />
         </div>
     );

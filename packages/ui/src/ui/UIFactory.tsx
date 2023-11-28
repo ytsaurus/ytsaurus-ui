@@ -353,6 +353,8 @@ export interface UIFactory {
     getComponentForAclRoleActions(): undefined | React.ComponentType<RoleActionsProps>;
 
     getAclPermissionsSettings(): typeof PERMISSIONS_SETTINGS;
+
+    onChytAliasSqlClick(params: {alias: string; cluster: string}): void;
 }
 
 const experimentalPages: string[] = [];
@@ -602,6 +604,8 @@ const uiFactory: UIFactory = {
     getAclPermissionsSettings() {
         return PERMISSIONS_SETTINGS;
     },
+
+    onChytAliasSqlClick() {},
 };
 
 function configureUIFactoryItem<K extends keyof UIFactory>(k: K, redefinition: UIFactory[K]) {

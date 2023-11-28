@@ -1,6 +1,7 @@
 import React from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import reduce_ from 'lodash/reduce';
+import cn from 'bem-cn-lite';
 
 import Button from '../../../components/Button/Button';
 import Error from '../../../components/Error/Error';
@@ -23,6 +24,10 @@ import {chytLoadCliqueSpeclet, chytSetOptions} from '../../../store/actions/chyt
 import {ChytCliqueSpecletState} from '../../../store/reducers/chyt/speclet';
 import {useThunkDispatch} from '../../../store/thunkDispatch';
 import {YTError} from '../../../../@types/types';
+
+import './ChytPageCliqueSpeclet.scss';
+
+const block = cn('yt-chyt-clique-speclet');
 
 function useSpecletData() {
     const dispatch = useDispatch();
@@ -49,7 +54,16 @@ export function ChytPageCliqueSpeclet() {
         <React.Fragment>
             {error && <Error bottomMargin error={error} />}
             {!specletData ? null : (
-                <ChytSpeclet key={dataAlias} data={specletData} unipikaSettings={unipikaSettings} />
+                <React.Fragment>
+                    <div className={block('edit')}>
+                        <ChytSpecletEditButton />
+                    </div>
+                    <ChytSpeclet
+                        key={dataAlias}
+                        data={specletData}
+                        unipikaSettings={unipikaSettings}
+                    />
+                </React.Fragment>
             )}
         </React.Fragment>
     );
@@ -67,7 +81,7 @@ function ChytSpeclet({
     }, [data, unipikaSettings]);
 
     return (
-        <React.Fragment>
+        <div className={block()}>
             <YTDFDialog
                 visible
                 asLeftTopBlock
@@ -78,7 +92,7 @@ function ChytSpeclet({
                 initialValues={initialValues}
                 footerProps={{hidden: true}}
             />
-        </React.Fragment>
+        </div>
     );
 }
 
@@ -102,7 +116,7 @@ export function ChytSpecletEditButton() {
             )}
             <Button size="m" title={'Edit speclet'} onClick={() => setVisible(!visible)}>
                 <Icon awesome={'pencil'} />
-                Edit metadata
+                Edit speclet
             </Button>
         </React.Fragment>
     );
