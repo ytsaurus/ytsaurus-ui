@@ -1,4 +1,6 @@
 .chyt-page-clique {
+    min-width: 900px;
+
     &__header {
         display: flex;
         margin-top: 10px;
@@ -29,5 +31,14 @@
 
     &__spacer {
         flex-grow: 1;
+    }
+
+    &__edit-speclet {
+        height: 0px;
+        text-align: right;
+
+        .yc-button {
+            margin-top: 6px;
+        }
     }
 }

@@ -10,8 +10,10 @@ import format from '../../../common/hammer/format';
 
 import {useUpdater} from '../../../hooks/use-updater';
 import Block from '../../../components/Block/Block';
+import Button from '../../../components/Button/Button';
 import Error from '../../../components/Error/Error';
 import Label from '../../../components/Label/Label';
+import Icon from '../../../components/Icon/Icon';
 import MetaTable, {MetaTableItem} from '../../../components/MetaTable/MetaTable';
 import {OperationId} from '../../../components/OperationId/OperationId';
 import StatusLabel from '../../../components/StatusLabel/StatusLabel';
@@ -79,6 +81,12 @@ export function ChytPageClique(props: RouteComponentProps<{alias: string}>) {
             </div>
             <ChytCliqueErrors />
             <ChytCliqueMetaTable />
+            <div className={block('edit-speclet')}>
+                <Button size="m" title={'Edit speclet'}>
+                    <Icon awesome={'pencil'} />
+                    Edit metadata
+                </Button>
+            </div>
             <ChytPageCliqueTabs className={block('tabs')} />
         </div>
     );

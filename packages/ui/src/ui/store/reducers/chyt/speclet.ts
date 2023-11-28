@@ -1,7 +1,7 @@
 import {ActionD, YTError} from '../../../types';
 import {mergeStateOnClusterChange} from '../utils';
 import {CHYT_SPECLET} from '../../../constants/chyt-page';
-import {ChytCliqueOptionsGroup} from '../../../store/actions/chyt/api';
+import {ChytDescribeOptionsType} from '../../../store/actions/chyt/api';
 
 export type ChytCliqueSpecletState = {
     loaded: boolean;
@@ -9,10 +9,8 @@ export type ChytCliqueSpecletState = {
     error: YTError | undefined;
 
     dataAlias: string;
-    data: ChytSpecletData | undefined;
+    data: ChytDescribeOptionsType | undefined;
 };
-
-export type ChytSpecletData = Array<ChytCliqueOptionsGroup>;
 
 const initialState: ChytCliqueSpecletState = {
     loaded: false,
