@@ -149,7 +149,7 @@ export async function generateQueryFromTable(
     const node = await ytApiV3.get({
         parameters: {
             path: `${path}/@`,
-            attributes: ['type', 'schema'],
+            attributes: ['type', 'schema', 'dynamic'],
             output_format: {
                 $value: 'json',
                 $attributes: {
@@ -170,6 +170,7 @@ export async function generateQueryFromTable(
                 columns: schema.map(({name}) => name),
                 pageSize: 50,
                 schemaExists: Boolean(schema.length),
+                dynamic: node.dynamic,
             }),
             annotations: {},
             settings: generateQuerySettings(engine, cluster),

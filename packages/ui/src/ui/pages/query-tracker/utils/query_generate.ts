@@ -15,6 +15,7 @@ export type GenerateTableQueryParams = {
     columns: string[];
     pageSize: number;
     schemaExists: boolean;
+    dynamic: boolean;
     maxColumnsLength?: number;
 };
 export function generateYQLQuery(tableParams: GenerateTableQueryParams, cluster: string): string {
@@ -40,6 +41,13 @@ export function generateYTQLQuery(tableParams: GenerateTableQueryParams): string
     return `${columnsToQuery}\nFROM [${path}]\nLIMIT ${pageSize}\n`;
 }
 
+export function generateSPYTQuery(tableParams: GenerateTableQueryParams): string {
+    const {columns, pageSize = 1, path, dynamic, maxColumnsLength} = tableParams;
+    const columnsToQuery = prepareColumns(columns, {maxSize: maxColumnsLength});
+    const pathModifiers = dynamic ? '/@latest_version' : ''
+    return `SELECT\n${INDENT}${columnsToQuery}\nFROM yt.\`ytTable:/${path}${pathModifiers}\`\nLIMIT ${pageSize};\n`;
+}
+
 export function generateQuerySettings(
     engine: QueryEngine,
     cluster: string,
@@ -47,6 +55,7 @@ export function generateQuerySettings(
     switch (engine) {
         case QueryEngine.CHYT:
         case QueryEngine.YT_QL:
+        case QueryEngine.SPYT:
             return {
                 cluster,
             };
@@ -66,6 +75,8 @@ export function generateQueryText(
             return generateCHYTQuery(tableParams);
         case QueryEngine.YT_QL:
             return generateYTQLQuery(tableParams);
+        case QueryEngine.SPYT:
+            return generateSPYTQuery(tableParams);
     }
     return '';
 }
