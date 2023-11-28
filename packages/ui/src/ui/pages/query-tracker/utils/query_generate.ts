@@ -44,7 +44,7 @@ export function generateYTQLQuery(tableParams: GenerateTableQueryParams): string
 export function generateSPYTQuery(tableParams: GenerateTableQueryParams): string {
     const {columns, pageSize = 1, path, dynamic, maxColumnsLength} = tableParams;
     const columnsToQuery = prepareColumns(columns, {maxSize: maxColumnsLength});
-    const pathModifiers = dynamic ? '/@latest_version' : ''
+    const pathModifiers = dynamic ? '/@latest_version' : '';
     return `SELECT\n${INDENT}${columnsToQuery}\nFROM yt.\`ytTable:/${path}${pathModifiers}\`\nLIMIT ${pageSize};\n`;
 }
 
