@@ -32,11 +32,12 @@ export type Option<TypeName extends string, T> = {
 export function descriptionToDialogField<T = unknown>(
     item: OptionDescription,
     {unipikaSettings, allowEdit}: MakeDialogFieldsOptions,
-): DialogField<T> & {initialValue?: unknown} {
+): DialogField<T> & {initialValue?: unknown; converter: Converter} {
     const common = {
         name: item.name,
         caption: format.ReadableField(item.name),
         tooltip: item.description,
+        converter: makeConverter<any>(),
     };
     const {default_value} = item;
     const extras = {
@@ -63,6 +64,7 @@ export function descriptionToDialogField<T = unknown>(
                         }),
                         hasClear: true,
                     },
+                    converter: CONVERTER.string_with_choices,
                 };
             }
         }
@@ -78,7 +80,7 @@ export function descriptionToDialogField<T = unknown>(
         case 'byte_count':
             return {
                 ...common,
-                type: item.type === 'byte_count' ? 'bytes' : 'number',
+                type: 'number',
                 extras: {
                     ...extras,
                     hidePrettyValue: true,
@@ -86,7 +88,9 @@ export function descriptionToDialogField<T = unknown>(
                         item.default_value !== undefined ? String(item.default_value) : undefined,
                     min: item.min_value,
                     max: item.max_value,
+                    format: item.type === 'byte_count' ? 'Bytes' : undefined,
                 },
+                converter: CONVERTER.number,
             };
         case 'yson':
             return {
@@ -98,6 +102,7 @@ export function descriptionToDialogField<T = unknown>(
                     unipikaSettings,
                     minHeight: 200,
                 },
+                converter: CONVERTER.json,
             };
         case 'path':
             return {...common, type: 'path', extras};
@@ -122,7 +127,7 @@ function makeConverter<T>() {
 const CONVERTER: Record<string, ReturnType<typeof makeConverter>> = {
     number: {
         toFieldValue(value: unknown) {
-            return {value: value as number | undefined};
+            return {value: value === null ? undefined : (value as number | undefined)};
         },
         fromFieldValue(value: any, _oldV?: any) {
             return value?.value;
@@ -148,10 +153,18 @@ const CONVERTER: Record<string, ReturnType<typeof makeConverter>> = {
             return value !== undefined ? JSON.parse(value) : undefined;
         },
     },
+    string_with_choices: {
+        toFieldValue(value: string) {
+            return value ? [value] : [];
+        },
+        fromFieldValue(value: Array<string>, _oldV?: any) {
+            return value?.[0];
+        },
+    },
 };
 
-function converterByType(type: DialogField['type']) {
-    return CONVERTER[type!] ?? makeConverter<any>();
+function converterByType(item: OptionDescription) {
+    return CONVERTER[item.type] ?? makeConverter<any>();
 }
 
 type Converter = ReturnType<typeof converterByType>;
@@ -162,10 +175,9 @@ function makeDialogField<FormValues = any>(
     dstConvertersByName: Record<string, {type: DialogField['type']; converter: Converter}>,
     options: MakeDialogFieldsOptions,
 ) {
-    const {initialValue, ...res} = descriptionToDialogField<FormValues>(item, options);
+    const {initialValue, converter, ...res} = descriptionToDialogField<FormValues>(item, options);
     const {type} = res;
 
-    const converter = converterByType(type);
     dstInitialValues[item.name] = initialValue ?? converter.toFieldValue(item.current_value);
     dstConvertersByName[item.name] = {type: type!, converter};
 
