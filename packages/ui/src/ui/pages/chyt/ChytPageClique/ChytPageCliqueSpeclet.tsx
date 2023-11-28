@@ -181,13 +181,11 @@ function ChytSpecletEditDialog({
                         },
                         {} as Record<string, unknown>,
                     );
-                    return diff
-                        ? Promise.resolve(console.log(diff))
-                        : dispatch(chytSetOptions(alias, diff))
-                              .then(() => {
-                                  setError(undefined);
-                              })
-                              .catch((e: any) => setError(e));
+                    return dispatch(chytSetOptions(alias, diff))
+                        .then(() => {
+                            setError(undefined);
+                        })
+                        .catch((e: any) => setError(e));
                 }}
                 fields={fields}
                 initialValues={initialValues}
