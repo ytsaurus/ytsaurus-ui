@@ -10,10 +10,8 @@ import format from '../../../common/hammer/format';
 
 import {useUpdater} from '../../../hooks/use-updater';
 import Block from '../../../components/Block/Block';
-import Button from '../../../components/Button/Button';
 import Error from '../../../components/Error/Error';
 import Label from '../../../components/Label/Label';
-import Icon from '../../../components/Icon/Icon';
 import MetaTable, {MetaTableItem} from '../../../components/MetaTable/MetaTable';
 import {OperationId} from '../../../components/OperationId/OperationId';
 import StatusLabel from '../../../components/StatusLabel/StatusLabel';
@@ -26,14 +24,14 @@ import {
     getChytCliqueStartError,
 } from '../../../store/selectors/chyt/clique';
 import {getCluster} from '../../../store/selectors/global';
+import {Page} from '../../../../shared/constants/settings';
 
 import {CliqueState} from '../components/CliqueState';
-
+import {ChytCliqueActions} from '../ChytCliqueActions/ChytCliqueActions';
 import {ChytPageCliqueTabs} from './ChytPageCliqueTabs';
+import {ChytSpecletEditButton} from './ChytPageCliqueSpeclet';
 
 import './ChytPageClique.scss';
-import {Page} from '../../../../shared/constants/settings';
-import {ChytCliqueActions} from '../ChytCliqueActions/ChytCliqueActions';
 
 const block = cn('chyt-page-clique');
 
@@ -82,10 +80,7 @@ export function ChytPageClique(props: RouteComponentProps<{alias: string}>) {
             <ChytCliqueErrors />
             <ChytCliqueMetaTable />
             <div className={block('edit-speclet')}>
-                <Button size="m" title={'Edit speclet'}>
-                    <Icon awesome={'pencil'} />
-                    Edit metadata
-                </Button>
+                <ChytSpecletEditButton />
             </div>
             <ChytPageCliqueTabs className={block('tabs')} />
         </div>

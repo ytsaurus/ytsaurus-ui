@@ -31,8 +31,7 @@ export type Option<TypeName extends string, T> = {
 
 export function descriptionToDialogField<T = unknown>(
     item: OptionDescription,
-    unipikaSettings: UnipikaSettings,
-    {allowEdit}: {allowEdit: boolean},
+    {unipikaSettings, allowEdit}: MakeDialogFieldsOptions,
 ): DialogField<T> & {initialValue?: unknown} {
     const common = {
         name: item.name,
@@ -155,34 +154,43 @@ function converterByType(type: DialogField['type']) {
     return CONVERTER[type!] ?? makeConverter<any>();
 }
 
-export function makeDialogFieldsFromDescription<FormValues = unknown>(
-    data: Array<OptionsGroup>,
-    unipikaSettings: UnipikaSettings,
-    {allowEdit}: {allowEdit: boolean},
+type Converter = ReturnType<typeof converterByType>;
+
+function makeDialogField<FormValues = any>(
+    item: OptionDescription,
+    dstInitialValues: any,
+    dstConvertersByName: Record<string, {type: DialogField['type']; converter: Converter}>,
+    options: MakeDialogFieldsOptions,
 ) {
-    const currentValues: Record<string, any> = {};
+    const {initialValue, ...res} = descriptionToDialogField<FormValues>(item, options);
+    const {type} = res;
+
+    const converter = converterByType(type);
+    dstInitialValues[item.name] = initialValue ?? converter.toFieldValue(item.current_value);
+    dstConvertersByName[item.name] = {type: type!, converter};
+
+    return res;
+}
+
+type MakeDialogFieldsOptions = {
+    allowEdit: boolean;
+    unipikaSettings: UnipikaSettings;
+};
+
+export function makeDialogFieldsFromDescription<
+    FormValues extends Record<string, unknown> = Record<string, unknown>,
+>(data: Array<OptionsGroup>, options: MakeDialogFieldsOptions) {
+    const initialValues: Record<string, any> = {};
     const typeByName: Record<
         string,
         {type: DialogField['type']; converter: ReturnType<typeof makeConverter>}
     > = {};
     return {
         fieldTypeByName: typeByName,
-        initialValues: currentValues,
+        initialValues: initialValues,
         fields: data?.map((group) => {
             const sectionFields: Array<DialogField<FormValues>> = group.options.map((item) => {
-                const {initialValue, ...res} = descriptionToDialogField<FormValues>(
-                    item,
-                    unipikaSettings,
-                    {allowEdit},
-                );
-                const {type} = res;
-
-                const converter = converterByType(type);
-                currentValues[item.name] =
-                    initialValue ?? converter.toFieldValue(item.current_value);
-                typeByName[item.name] = {type, converter};
-
-                return res;
+                return makeDialogField(item, initialValues, typeByName, options);
             });
 
             return {
@@ -190,6 +198,37 @@ export function makeDialogFieldsFromDescription<FormValues = unknown>(
                 fields: sectionFields,
                 collapsible: true,
                 initialCollapsed: group.hidden,
+            };
+        }),
+    };
+}
+
+export function makeTabbedDialogFieldsFromDescription<
+    FormValues extends Record<string, Record<string, unknown>> = Record<
+        string,
+        Record<string, unknown>
+    >,
+>(data: Array<OptionsGroup>, options: MakeDialogFieldsOptions) {
+    const initialValues: Partial<FormValues> = {};
+    const typeByName: Record<
+        string,
+        {type: DialogField['type']; converter: ReturnType<typeof makeConverter>}
+    > = {};
+    return {
+        fieldTypeByName: typeByName,
+        initialValues: initialValues,
+        fields: data?.map((group, index) => {
+            const group_name = `group_${index}`;
+            const groupInitialValues = ((initialValues as any)[group_name] = {});
+            const sectionFields: Array<DialogField<FormValues>> = group.options.map((item) => {
+                return makeDialogField(item, groupInitialValues, typeByName, options);
+            });
+
+            return {
+                name: group_name,
+                title: group.title,
+                type: 'tab' as const,
+                fields: sectionFields,
             };
         }),
     };

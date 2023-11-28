@@ -2,9 +2,15 @@ import React from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import reduce_ from 'lodash/reduce';
 
+import Button from '../../../components/Button/Button';
 import Error from '../../../components/Error/Error';
+import Icon from '../../../components/Icon/Icon';
 import {YTDFDialog} from '../../../components/Dialog/Dialog';
-import {makeDialogFieldsFromDescription} from '../../../components/Dialog/df-dialog-utils';
+import {UnipikaSettings} from '../../../components/Yson/StructuredYson/StructuredYsonTypes';
+import {
+    makeDialogFieldsFromDescription,
+    makeTabbedDialogFieldsFromDescription,
+} from '../../../components/Dialog/df-dialog-utils';
 
 import {getChytCurrentAlias} from '../../../store/selectors/chyt';
 import {
@@ -18,7 +24,7 @@ import {ChytCliqueSpecletState} from '../../../store/reducers/chyt/speclet';
 import {useThunkDispatch} from '../../../store/thunkDispatch';
 import {YTError} from '../../../../@types/types';
 
-export function ChytPageCliqueSpeclet() {
+function useSpecletData() {
     const dispatch = useDispatch();
     const alias = useSelector(getChytCurrentAlias);
 
@@ -31,38 +37,126 @@ export function ChytPageCliqueSpeclet() {
     const specletData = useSelector(getChytSpecletData);
     const dataAlias = useSelector(getChytSpecletDataAlias);
     const error = useSelector(getChytSpecletError);
+    const unipikaSettings = useSelector(getEditJsonYsonSettings);
+
+    return {alias, specletData, dataAlias, error, unipikaSettings};
+}
+
+export function ChytPageCliqueSpeclet() {
+    const {error, specletData, dataAlias, unipikaSettings} = useSpecletData();
 
     return (
         <React.Fragment>
             {error && <Error bottomMargin error={error} />}
-            {!specletData ? null : <ChytSpeclet key={dataAlias} alias={alias} data={specletData} />}
+            {!specletData ? null : (
+                <ChytSpeclet key={dataAlias} data={specletData} unipikaSettings={unipikaSettings} />
+            )}
         </React.Fragment>
     );
 }
 
-function ChytSpeclet({alias, data}: {alias: string; data: ChytCliqueSpecletState['data']}) {
+function ChytSpeclet({
+    data,
+    unipikaSettings,
+}: {
+    unipikaSettings: UnipikaSettings;
+    data: ChytCliqueSpecletState['data'];
+}) {
+    const {fields, initialValues} = React.useMemo(() => {
+        return makeDialogFieldsFromDescription(data ?? [], {allowEdit: false, unipikaSettings});
+    }, [data, unipikaSettings]);
+
+    return (
+        <React.Fragment>
+            <YTDFDialog
+                visible
+                asLeftTopBlock
+                onAdd={() => {
+                    return Promise.resolve();
+                }}
+                fields={fields}
+                initialValues={initialValues}
+                footerProps={{hidden: true}}
+            />
+        </React.Fragment>
+    );
+}
+
+export function ChytSpecletEditButton() {
+    const [visible, setVisible] = React.useState(false);
+
+    const {error, specletData, dataAlias, alias, unipikaSettings} = useSpecletData();
+
+    return (
+        <React.Fragment>
+            {error && <Error bottomMargin error={error} />}
+            {!visible || !specletData ? null : (
+                <ChytSpecletEditDialog
+                    key={dataAlias}
+                    data={specletData}
+                    alias={alias}
+                    unipikaSettings={unipikaSettings}
+                    allowEdit={dataAlias === alias}
+                    onClose={() => setVisible(false)}
+                />
+            )}
+            <Button size="m" title={'Edit speclet'} onClick={() => setVisible(!visible)}>
+                <Icon awesome={'pencil'} />
+                Edit metadata
+            </Button>
+        </React.Fragment>
+    );
+}
+
+function ChytSpecletEditDialog({
+    alias,
+    data,
+    allowEdit,
+    unipikaSettings,
+    onClose,
+}: {
+    allowEdit: boolean;
+    alias: string;
+    data: ChytCliqueSpecletState['data'];
+    unipikaSettings: UnipikaSettings;
+    onClose: () => void;
+}) {
     const dispatch = useThunkDispatch();
     const [error, setError] = React.useState<YTError | undefined>();
 
-    const unipikaSettings = useSelector(getEditJsonYsonSettings);
-
     const {fields, initialValues, fieldTypeByName} = React.useMemo(() => {
-        return makeDialogFieldsFromDescription(data ?? [], unipikaSettings, {allowEdit: false});
-    }, [data, unipikaSettings]);
+        return makeTabbedDialogFieldsFromDescription(data ?? [], {
+            allowEdit,
+            unipikaSettings,
+        });
+    }, [data, allowEdit, unipikaSettings]);
 
     return (
         <React.Fragment>
             {error && <Error bottomMargin error={error} />}
             <YTDFDialog
-                asLeftTopBlock
                 visible
-                modal={false}
+                onClose={onClose}
                 onAdd={(form) => {
-                    const {values} = form.getState();
+                    const {values: formValues} = form.getState();
+                    const values = reduce_(
+                        formValues,
+                        (acc, tabValues) => {
+                            return {...acc, ...tabValues};
+                        },
+                        {},
+                    );
+                    const initials = reduce_(
+                        initialValues,
+                        (acc, tabValues) => {
+                            return {...acc, ...tabValues};
+                        },
+                        {},
+                    );
                     const diff = reduce_(
                         values as any,
                         (acc, value, key) => {
-                            const oldValue = initialValues[key];
+                            const oldValue = initials[key as keyof typeof initials];
                             const {converter} = fieldTypeByName[key];
                             const oldV = converter.fromFieldValue(oldValue);
                             const v = converter.fromFieldValue(value, oldV);
@@ -73,15 +167,17 @@ function ChytSpeclet({alias, data}: {alias: string; data: ChytCliqueSpecletState
                         },
                         {} as Record<string, unknown>,
                     );
-                    return dispatch(chytSetOptions(alias, diff))
-                        .then(() => {
-                            setError(undefined);
-                        })
-                        .catch((e: any) => setError(e));
+                    return diff
+                        ? Promise.resolve(console.log(diff))
+                        : dispatch(chytSetOptions(alias, diff))
+                              .then(() => {
+                                  setError(undefined);
+                              })
+                              .catch((e: any) => setError(e));
                 }}
-                fields={fields ?? []}
+                fields={fields}
                 initialValues={initialValues}
-                footerProps={{hidden: true}}
+                headerProps={{title: `Edit ${alias}`}}
             />
         </React.Fragment>
     );
