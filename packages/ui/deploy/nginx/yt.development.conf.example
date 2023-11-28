@@ -51,6 +51,4 @@ server {
     location ^~ /ace/ {
         alias $PROJECT_ROOT/dist/public/ace/;
     }
-
-    include /path/to/the/repo/deploy/nginx/includes/yqlkit.conf;
 }
