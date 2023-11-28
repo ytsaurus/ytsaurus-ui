@@ -6,7 +6,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {getQuery, getQueryDraft} from '../../module/query/selectors';
 import {QuerySettingsButton} from '../../QuerySettingsButton';
 import {QueryFilesButton} from '../../QueryFilesButton';
-import {SET_QUERY_PATCH} from '../../module/query/actions';
+import {updateQueryDraft} from '../../module/query/actions';
 import {QueryEngineSelector} from './QueryEngineSelector/QueryEngineSelector';
 
 import './QueryMetaForm.scss';
@@ -27,37 +27,19 @@ export function QueryMetaForm({
     const originalQuery = useSelector(getQuery);
 
     const onNameChange = useCallback(
-        (name: string) => {
-            dispatch({
-                type: SET_QUERY_PATCH,
-                data: {
-                    annotations: {
-                        title: name,
-                    },
-                },
-            });
+        (name?: string) => {
+            dispatch(updateQueryDraft({annotations: {title: name}}));
         },
         [dispatch],
     );
 
     const onSettingsChange = useCallback(
-        (settings: Record<string, string>) => {
-            dispatch({
-                type: SET_QUERY_PATCH,
-                data: {
-                    settings,
-                },
-            });
-        },
+        (settings: Record<string, string>) => dispatch(updateQueryDraft({settings})),
         [dispatch],
     );
 
     const onFilesChange = useCallback(
-        (files: QueryFile[]) =>
-            dispatch({
-                type: SET_QUERY_PATCH,
-                data: {files},
-            }),
+        (files: QueryFile[]) => dispatch(updateQueryDraft({files})),
         [dispatch],
     );
 
