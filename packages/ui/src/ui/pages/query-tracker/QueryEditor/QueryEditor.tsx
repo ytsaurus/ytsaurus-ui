@@ -14,7 +14,7 @@ import {
     isQueryExecuted,
     isQueryLoading,
 } from '../module/query/selectors';
-import {SET_QUERY_PATCH, runQuery} from '../module/query/actions';
+import {runQuery, updateQueryDraft} from '../module/query/actions';
 import FlexSplitPane from '../../../components/FlexSplitPane/FlexSplitPane';
 import {QueryResults} from '../QueryResults';
 import SquareIcon from '@gravity-ui/icons/svgs/square.svg';
@@ -106,7 +106,7 @@ const QueryEditorView = React.memo(function QueryEditorView({
     const dispatch = useDispatch();
     const upadteQueryText = useCallback(
         function (text: string) {
-            dispatch({type: SET_QUERY_PATCH, data: {query: text, error: undefined}});
+            dispatch(updateQueryDraft({query: text, error: undefined}));
         },
         [dispatch],
     );

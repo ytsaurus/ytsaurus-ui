@@ -72,6 +72,10 @@ export function loadQuery(
     };
 }
 
+export function updateQueryDraft(data: Partial<QueryState['draft']>) {
+    return {type: SET_QUERY_PATCH, data};
+}
+
 export function createQueryFromTablePath(
     engine: QueryEngine,
     cluster: string,

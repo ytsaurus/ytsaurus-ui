@@ -3,7 +3,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {ModalWithoutHandledScrollBar as Modal} from '../../../../../components/Modal/Modal';
 import {QueryEnginesNames} from '../../../utils/query';
 import {Engines, QueryEngine} from '../../../module/api';
-import {SET_QUERY_PATCH, createQueryFromTablePath} from '../../../module/query/actions';
+import {createQueryFromTablePath, updateQueryDraft} from '../../../module/query/actions';
 import {
     getQueryDraft,
     hasLoadedQueryItem,
@@ -33,12 +33,7 @@ export function QueryEngineSelector({className, cluster, path}: Props) {
 
     const updateEngine = useCallback(
         (engine: QueryEngine) => {
-            dispatch({
-                type: SET_QUERY_PATCH,
-                data: {
-                    engine: engine,
-                },
-            });
+            dispatch(updateQueryDraft({engine: engine}));
             if (cluster && path) {
                 dispatch(createQueryFromTablePath(engine, cluster, path));
             }
