@@ -1,8 +1,10 @@
 .yt-clipboard-button {
     color: var(--g-color-text-secondary);
 
-    &_inline-margins {
-        margin: -5px 1ex;
+    &_inline-margin {
+        & .yt-tooltip {
+            margin: -5px 1ex;
+        }
     }
 }
 
