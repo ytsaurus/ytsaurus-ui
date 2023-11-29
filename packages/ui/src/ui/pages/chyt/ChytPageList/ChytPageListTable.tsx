@@ -9,6 +9,7 @@ import format from '../../../common/hammer/format';
 import DataTableYT, {
     DATA_TABLE_YT_SETTINGS_UNDER_TOOLBAR,
 } from '../../../components/DataTableYT/DataTableYT';
+import ClipboardButton from '../../../components/ClipboardButton/ClipboardButton';
 import ColumnHeader from '../../../components/ColumnHeader/ColumnHeader';
 import Link from '../../../components/Link/Link';
 import {OperationId} from '../../../components/OperationId/OperationId';
@@ -162,11 +163,18 @@ function useChytListColumns(cluster: string) {
                             >
                                 {row.alias}
                             </Link>
+                            <ClipboardButton
+                                text={row.alias}
+                                view="clear"
+                                visibleOnRowHover
+                                inlineMargins
+                            />
                             <div>
                                 <OperationId
                                     id={row.yt_operation_id}
                                     cluster={cluster}
                                     color="secondary"
+                                    allowCopy
                                 />
                             </div>
                         </div>
