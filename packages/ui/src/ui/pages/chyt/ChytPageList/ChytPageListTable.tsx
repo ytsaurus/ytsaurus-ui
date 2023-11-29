@@ -18,12 +18,13 @@ import Label from '../../../components/Label/Label';
 import {chytToggleSortState} from '../../../store/actions/chyt/list-fitlers';
 import {getCluster} from '../../../store/selectors/global';
 import {
-    getChytListColumns,
     getChytListTableItems,
     getChytListTableSortStateByName,
+    getChytListVisibleColumns,
 } from '../../../store/selectors/chyt';
 import {ChytInfo} from '../../../store/reducers/chyt/list';
 import {Page} from '../../../../shared/constants/settings';
+import {CHYT_TABLE_TITLES} from '../../../constants/chyt-page';
 
 import {CliqueState} from '../components/CliqueState';
 
@@ -33,13 +34,13 @@ import './ChytPageListTable.scss';
 const block = cn('chyt-page-list-table');
 
 function useChytListColumns(cluster: string) {
-    const checkedColumns = useSelector(getChytListColumns).filter((i) => i.checked);
+    const checkedColumns = useSelector(getChytListVisibleColumns);
 
     const columns: Array<Column<ChytInfo>> = React.useMemo(() => {
         const columnsByName = {
             instance_count: {
                 name: 'instance_count',
-                header: <ChytListHeader column="instance_count" title="Instances" />,
+                header: <ChytListHeader column="instance_count" />,
                 render({row}) {
                     return (
                         <span className={block('one-row-cell')}>
@@ -54,7 +55,7 @@ function useChytListColumns(cluster: string) {
             } as Column<ChytInfo>,
             total_cpu: {
                 name: 'cores',
-                header: <ChytListHeader column="total_cpu" title="Cores" />,
+                header: <ChytListHeader column="total_cpu" />,
                 render({row}) {
                     return (
                         <span className={block('one-row-cell')}>
@@ -69,7 +70,7 @@ function useChytListColumns(cluster: string) {
             } as Column<ChytInfo>,
             total_memory: {
                 name: 'memory',
-                header: <ChytListHeader column="total_memory" title="Memory" />,
+                header: <ChytListHeader column="total_memory" />,
                 render({row}) {
                     return (
                         <span className={block('one-row-cell')}>
@@ -99,28 +100,17 @@ function useChytListColumns(cluster: string) {
                 name: 'creation_time',
                 header: <ChytListHeader column="creation_time" withUndefined />,
                 render({row}) {
-                    const {creation_time} = row;
-                    return (
-                        <span className={block('one-row-cell')}>
-                            {creation_time ? format.DateTime(creation_time) : format.NO_VALUE}
-                        </span>
-                    );
+                    return <DateTimeCell value={row.creation_time} />;
                 },
-                width: 180,
+                width: 120,
             } as Column<ChytInfo>,
             speclet_modification_time: {
                 name: 'speclet_modification_time',
-                header: (
-                    <ChytListHeader column="speclet_modification_time" title="Modification time" />
-                ),
+                header: <ChytListHeader column="speclet_modification_time" />,
                 render({row}) {
-                    const {speclet_modification_time: value} = row;
-                    return (
-                        <span className={block('one-row-cell')}>
-                            {value ? format.DateTime(value) : format.NO_VALUE}
-                        </span>
-                    );
+                    return <DateTimeCell value={row.speclet_modification_time} />;
                 },
+                width: 120,
             } as Column<ChytInfo>,
             stage: {
                 name: 'stage',
@@ -133,66 +123,35 @@ function useChytListColumns(cluster: string) {
             } as Column<ChytInfo>,
             strawberry_state_modification_time: {
                 name: 'strawberry_state_modification_time',
-                header: (
-                    <ChytListHeader
-                        column="strawberry_state_modification_time"
-                        title="Strawberrry modification time"
-                    />
-                ),
+                header: <ChytListHeader column="strawberry_state_modification_time" />,
                 render({row}) {
-                    const {strawberry_state_modification_time: value} = row;
-                    return (
-                        <span className={block('one-row-cell')}>
-                            {value ? format.DateTime(value) : format.NO_VALUE}
-                        </span>
-                    );
+                    return <DateTimeCell value={row.strawberry_state_modification_time} />;
                 },
+                width: 120,
             } as Column<ChytInfo>,
             yt_operation_finish_time: {
                 name: 'yt_operation_finish_time',
-                header: (
-                    <ChytListHeader
-                        column="yt_operation_finish_time"
-                        title="Finish time"
-                        withUndefined
-                    />
-                ),
+                header: <ChytListHeader column="yt_operation_finish_time" withUndefined />,
                 render({row}) {
-                    const {yt_operation_finish_time: value} = row;
-                    return (
-                        <span className={block('one-row-cell')}>
-                            {value ? format.DateTime(value) : format.NO_VALUE}
-                        </span>
-                    );
+                    return <DateTimeCell value={row.yt_operation_finish_time} />;
                 },
-                width: 180,
+                width: 120,
             } as Column<ChytInfo>,
             yt_operation_start_time: {
                 name: 'yt_operation_start_time',
-                header: (
-                    <ChytListHeader
-                        column="yt_operation_start_time"
-                        title="Start time"
-                        withUndefined
-                    />
-                ),
+                header: <ChytListHeader column="yt_operation_start_time" withUndefined />,
                 render({row}) {
-                    const {yt_operation_start_time: value} = row;
-                    return (
-                        <span className={block('one-row-cell')}>
-                            {value ? format.DateTime(value) : format.NO_VALUE}
-                        </span>
-                    );
+                    return <DateTimeCell value={row.yt_operation_start_time} />;
                 },
-                width: 180,
+                width: 120,
             } as Column<ChytInfo>,
         };
 
-        const res = checkedColumns.map((i) => columnsByName[i.column]);
+        const res = checkedColumns.map((i) => columnsByName[i]);
         return [
             {
                 name: 'alias',
-                header: <ChytListHeader column="alias" title="CHYT clique alias" />,
+                header: <ChytListHeader column="alias" />,
                 render({row}) {
                     return (
                         <div>
@@ -216,7 +175,7 @@ function useChytListColumns(cluster: string) {
             } as Column<ChytInfo>,
             {
                 name: 'creator',
-                header: <ChytListHeader column="creator" title="Creator" />,
+                header: <ChytListHeader column="creator" />,
                 render({row}) {
                     return (
                         <span className={block('one-row-cell')}>
@@ -258,13 +217,16 @@ function useChytListColumns(cluster: string) {
     return columns;
 }
 
+const SHORT_TITLES: Partial<Record<keyof ChytInfo, string>> = {
+    speclet_modification_time: 'Modif. time',
+    strawberry_state_modification_time: 'SB mod. time',
+};
+
 function ChytListHeader({
     column,
-    title,
     withUndefined,
 }: {
     column: keyof ChytInfo;
-    title?: string;
     withUndefined?: boolean;
 }) {
     const dispatch = useDispatch();
@@ -274,13 +236,29 @@ function ChytListHeader({
             allowUnordered
             withUndefined={withUndefined}
             column={column}
-            title={title ?? format.ReadableField(column)}
+            title={CHYT_TABLE_TITLES[column] ?? format.ReadableField(column)}
+            shortTitle={SHORT_TITLES[column]}
             sortable
             {...sortState[column]}
             toggleSort={(col, nextOrder, options) => {
                 dispatch(chytToggleSortState(col, nextOrder, options));
             }}
         />
+    );
+}
+
+function DateTimeCell({value}: {value?: string}) {
+    if (!value) {
+        return <span className={block('one-row-cell')}>{format.NO_VALUE}</span>;
+    }
+
+    const time: string = format.DateTime(value);
+    const lastSpace = time.lastIndexOf(' ');
+    return (
+        <React.Fragment>
+            <span>{time.substring(0, lastSpace)}</span>
+            <div>{time.substring(lastSpace + 1)}</div>
+        </React.Fragment>
     );
 }
 

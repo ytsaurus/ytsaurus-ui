@@ -10,7 +10,6 @@ const THEME_MAP: Partial<
     good: 'success',
     failed: 'danger',
     active: 'success',
-    inactive: 'danger',
     pending: 'info',
 };
 

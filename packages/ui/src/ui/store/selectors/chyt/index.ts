@@ -60,6 +60,22 @@ export const getChytListColumnsFromSettings = (state: RootState) => {
     );
 };
 
+export const getChytListVisibleColumns = createSelector(
+    [getChytListColumnsFromSettings],
+    (columns): Array<ChytListColumns> => {
+        const userColumns = new Set(columns);
+        return compact_(
+            columns.map((k) => {
+                return CHYT_LIST_SELECTABLE_COLUMNS[
+                    k as keyof typeof CHYT_LIST_SELECTABLE_COLUMNS
+                ] && userColumns.has(k)
+                    ? (k as ChytListColumns)
+                    : null;
+            }),
+        );
+    },
+);
+
 export const getChytListColumns = createSelector(
     [getChytListColumnsFromSettings],
     (columns): Array<ChytColumnItem> => {

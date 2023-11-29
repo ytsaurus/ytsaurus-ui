@@ -21,6 +21,7 @@ import {
 } from '../../../store/selectors/chyt';
 import {ChytListFilters} from '../../../store/reducers/chyt/list-filters';
 import {chytSetVisibleColumns} from '../../../store/actions/chyt/list';
+import {CHYT_TABLE_TITLES} from '../../../constants/chyt-page';
 
 import './ChytPageListToolbar.scss';
 
@@ -138,7 +139,7 @@ function ChytListColumnsButton() {
             isVisible={visible}
             items={columns.map((i) => {
                 return {
-                    name: format.ReadableField(i.column),
+                    name: CHYT_TABLE_TITLES[i.column] ?? format.ReadableField(i.column),
                     checked: i.checked,
                     data: {
                         column: i.column,
