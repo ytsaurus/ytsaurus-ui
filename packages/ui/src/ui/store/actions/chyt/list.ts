@@ -5,7 +5,7 @@ import type {ChytListAction} from '../../reducers/chyt/list';
 import {CHYT_LIST} from '../../../constants/chyt-page';
 import CancelHelper, {isCancelled} from '../../../utils/cancel-helper';
 import {getCluster, isDeveloper} from '../../../store/selectors/global';
-import {getChytListColumns} from '../../../store/selectors/chyt';
+import {getChytListVisibleColumns} from '../../../store/selectors/chyt';
 
 import {ChytApi, chytApiAction} from './api';
 import {SettingsThunkAction, setSettingByKey} from '../settings';
@@ -19,7 +19,7 @@ export function chytLoadList(): ChytListThunkAction<void> {
         const state = getState();
         const cluster = getCluster(state);
         const isAdmin = isDeveloper(state);
-        const columns = getChytListColumns(state);
+        const columns = getChytListVisibleColumns(state);
 
         dispatch({type: CHYT_LIST.REQUEST});
 
@@ -31,7 +31,7 @@ export function chytLoadList(): ChytListThunkAction<void> {
                     'yt_operation_id' as const,
                     'creator' as const,
                     'state' as const,
-                    ...columns.map((i) => i.column),
+                    ...columns,
                 ],
             },
             {isAdmin, cancelToken: cancelHelper.removeAllAndGenerateNextToken()},
