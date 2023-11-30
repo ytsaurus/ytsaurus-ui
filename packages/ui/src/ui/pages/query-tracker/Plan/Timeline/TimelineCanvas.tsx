@@ -1,3 +1,4 @@
+import {wrapWc} from 'wc-react';
 import {
     AreaSelectionComponent,
     Axes,
@@ -13,10 +14,9 @@ import {
     TimelineMarker,
     YaTimeline,
     yaTimelineConfig,
-} from '@yandex-nirvana/ya-timeline';
-import {YEAR} from '@yandex-nirvana/ya-timeline/dist/definitions';
+} from '../../../../packages/ya-timeline';
+import {YEAR} from '../../../../packages/ya-timeline/definitions';
 import {getCSSPropertyValue} from '../styles';
-import {wrapWc} from 'wc-react';
 
 import {OperationRenderer} from './OperationRenderer';
 
