@@ -121,6 +121,9 @@ export enum YTApiId {
     schedulingLoadTree,
     schedulingTransferPoolQuota,
     schedulingPoolFullPath,
+    schedulingLoadPoolsAll,
+    schedulingLoadPoolsPerPool,
+    schedulingLoadChildrenPerPool,
 
     systemCAInstances,
     systemCAStates,

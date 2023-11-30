@@ -76,7 +76,7 @@ class Overview extends Component {
     });
 
     static tableItemPropTypes = PropTypes.shape({
-        abc: PropTypes.object.isRequired,
+        abc: PropTypes.object,
         name: PropTypes.string.isRequired,
         fairShareRatio: PropTypes.number,
         usageRatio: PropTypes.number,
@@ -288,7 +288,7 @@ class Overview extends Component {
     static renderName(item, tab, cluster, currentPool) {
         const isCurrentPool = item.name === currentPool.name;
         const linkText = {
-            pool: item.name,
+            pool: item.incomplete ? '' : item.name,
             operation: item.id,
         };
 

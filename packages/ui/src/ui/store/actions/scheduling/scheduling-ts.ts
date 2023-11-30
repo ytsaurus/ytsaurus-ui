@@ -9,6 +9,7 @@ import {
     prepareTrees,
 } from '../../../utils/scheduling/scheduling';
 import {extractBatchV4Values, getBatchError, splitBatchResults} from '../../../utils/utils';
+import {makeGet, makeList} from '../../../utils/batch';
 import {updateNodeAttributes} from '../../../utils/cypress-attributes';
 
 import {ThunkAction} from 'redux-thunk';
@@ -42,13 +43,10 @@ import type {RootState} from '../../../store/reducers';
 import type {SchedulingAction} from '../../../store/reducers/scheduling/scheduling';
 import type {PoolInfo} from '../../../store/selectors/scheduling/scheduling-pools';
 import {USE_CACHE} from '../../../constants';
-import {loadExpandedPools} from './expanded-pools';
 
 const toaster = new Toaster();
 
 const POOL_TREE_GET_ATTRS = [
-    'acl',
-    'abc',
     'integral_guarantees',
     'weight',
     'max_operation_count',
@@ -61,14 +59,6 @@ const POOL_TREE_GET_ATTRS = [
     'config',
     'folder_id',
 ];
-
-function makeSubRequest(
-    path: string,
-    rest?: {attributes?: Array<string>; fields?: Array<string>},
-    command: 'get' | 'list' = 'get',
-) {
-    return {command, parameters: {path, ...rest, ...USE_CACHE}};
-}
 
 type SchedulingThunkAction<T = unknown> = ThunkAction<T, RootState, unknown, SchedulingAction>;
 
@@ -86,13 +76,9 @@ export function loadSchedulingData(): SchedulingThunkAction {
                 YTApiId.schedulingData,
                 ytApiV3Id.executeBatch(YTApiId.schedulingData, {
                     requests: [
-                        makeSubRequest('//sys/scheduler/@alerts'),
-                        makeSubRequest(
-                            '//sys/scheduler/orchid/scheduler/scheduling_info_per_pool_tree',
-                            {},
-                            'list',
-                        ),
-                        makeSubRequest('//sys/scheduler/orchid/scheduler/default_fair_share_tree'),
+                        makeGet('//sys/scheduler/@alerts'),
+                        makeList('//sys/scheduler/orchid/scheduler/scheduling_info_per_pool_tree'),
+                        makeGet('//sys/scheduler/orchid/scheduler/default_fair_share_tree'),
                     ],
                     ...USE_CACHE,
                 }),
@@ -121,20 +107,14 @@ export function loadSchedulingData(): SchedulingThunkAction {
                     data: {schedulerAlerts, trees, tree},
                 });
 
-                dispatch(loadExpandedPools(tree));
-
                 const treeRequests = [
-                    makeSubRequest(`//sys/pool_trees/${tree}`, {
+                    makeGet(`//sys/pool_trees/${tree}`, {
                         attributes: POOL_TREE_GET_ATTRS,
                     }),
-                    makeSubRequest(
-                        `//sys/scheduler/orchid/scheduler/pool_trees/${tree}/resource_usage`,
-                    ),
-                    makeSubRequest(
-                        `//sys/scheduler/orchid/scheduler/pool_trees/${tree}/resource_limits`,
-                    ),
-                    makeSubRequest(`//sys/scheduler/orchid/scheduler/pool_trees/${tree}/config`),
-                    makeSubRequest(
+                    makeGet(`//sys/scheduler/orchid/scheduler/pool_trees/${tree}/resource_usage`),
+                    makeGet(`//sys/scheduler/orchid/scheduler/pool_trees/${tree}/resource_limits`),
+                    makeGet(`//sys/scheduler/orchid/scheduler/pool_trees/${tree}/config`),
+                    makeGet(
                         `//sys/scheduler/orchid/scheduler/pool_trees/${tree}/resource_distribution_info`,
                     ),
                 ];

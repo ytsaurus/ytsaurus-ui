@@ -1,7 +1,6 @@
 import React from 'react';
 import {ThunkAction} from 'redux-thunk';
 import {RootState} from '../../reducers';
-import axios from 'axios';
 import _ from 'lodash';
 
 import {Toaster} from '@gravity-ui/uikit';
@@ -10,6 +9,7 @@ import {ExpandedPoolsAction} from '../../reducers/scheduling/expanded-pools';
 
 import {YTApiId, ytApiV3Id} from '../../../rum/rum-wrap-api';
 import {showErrorPopup, splitBatchResults} from '../../../utils/utils';
+import {makeGet} from '../../../utils/batch';
 import {
     CHANGE_POOL,
     ROOT_POOL_NAME,
@@ -18,13 +18,7 @@ import {
     SCHEDULING_EXPANDED_POOLS_REQUEST,
     SCHEDULING_EXPANDED_POOLS_SUCCESS,
 } from '../../../constants/scheduling';
-import {
-    calculatePoolPath,
-    getCurrentPool,
-    getPool,
-    getPools,
-    getTree,
-} from '../../selectors/scheduling/scheduling';
+import {calculatePoolPath, getPool, getPools, getTree} from '../../selectors/scheduling/scheduling';
 import {
     getExpandedPoolsLoadAll,
     getSchedulingOperationsExpandedPools,
@@ -33,6 +27,10 @@ import {EMPTY_OBJECT} from '../../../constants/empty';
 import {PoolInfo, getSchedulingPoolsMapByName} from '../../selectors/scheduling/scheduling-pools';
 import {BatchSubRequest} from '../../../../shared/yt-types';
 import {SchedulingAction} from '../../../store/reducers/scheduling/scheduling';
+import {isSupportedSchedulingChildrenByPool} from '../../../store/selectors/thor/support';
+import {YTError} from '../../../../@types/types';
+import CancelHelper, {isCancelled} from '../../../utils/cancel-helper';
+import {EMPTY_OBJECT} from '../../../constants';
 
 type ExpandedPoolsThunkAction = ThunkAction<
     any,
@@ -41,11 +39,7 @@ type ExpandedPoolsThunkAction = ThunkAction<
     ExpandedPoolsAction | SchedulingAction
 >;
 
-let loadCanceler: undefined | {cancel: (msg: string) => void};
-function saveCancellation(canceler?: {cancel: (msg: string) => void}) {
-    loadCanceler?.cancel('another request started');
-    loadCanceler = canceler;
-}
+const cancelHelper = new CancelHelper();
 
 const POOL_FIELDS_TO_LOAD = [
     'accumulated_resource_ratio_volume',
@@ -66,6 +60,7 @@ const POOL_FIELDS_TO_LOAD = [
     'operation_count',
     'parent',
     'pool_operation_count',
+    'child_pool_count',
     'resource_demand',
     'resource_limits',
     'resource_usage',
@@ -78,6 +73,7 @@ const POOL_FIELDS_TO_LOAD = [
     'strong_guarantee_resources',
     'usage_ratio',
     'weight',
+    'abc',
 ];
 
 class EmptyFullPath extends Error {}
@@ -95,7 +91,7 @@ export function loadExpandedPools(tree: string): ExpandedPoolsThunkAction {
                         {
                             command: 'get' as const,
                             parameters: {
-                                path: `//sys/scheduler/orchid/scheduler/pool_trees/${tree}/pools/${pool}/@full_path`,
+                                path: `//sys/scheduler/orchid/scheduler/pool_trees/${tree}/pools/${pool}/full_path`,
                             },
                         },
                     ],
@@ -138,73 +134,85 @@ function loadExpandedOperationsAndPools(tree: string): ExpandedPoolsThunkAction 
         const state = getState();
 
         const loadAll = getExpandedPoolsLoadAll(state);
-        let requests: Array<BatchSubRequest> = [];
+        const expandedPools = loadAll
+            ? new Set<string>()
+            : getSchedulingOperationsExpandedPools(state)[tree] ?? new Set<string>();
+
+        const operationsExpandedPools = [...expandedPools];
+
+        const operationsRequests: Array<BatchSubRequest> = [];
         if (loadAll) {
-            requests = [
-                {
-                    command: 'get' as const,
-                    parameters: {
-                        path: `//sys/scheduler/orchid/scheduler/scheduling_info_per_pool_tree/${tree}/fair_share_info/operations`,
-                    },
-                },
-            ];
+            operationsRequests.push(
+                makeGet(
+                    `//sys/scheduler/orchid/scheduler/scheduling_info_per_pool_tree/${tree}/fair_share_info/operations`,
+                ),
+            );
         } else {
-            const expandedPools = getSchedulingOperationsExpandedPools(state)[tree] || new Set();
-            const currentPool = getCurrentPool(state)?.name;
-            const pools =
-                !currentPool || currentPool === ROOT_POOL_NAME || expandedPools.has(currentPool)
-                    ? [...expandedPools]
-                    : [currentPool, ...expandedPools];
-
             const prefix = `//sys/scheduler/orchid/scheduler/pool_trees/${tree}/operations_by_pool`;
-            requests = _.map(pools, (item) => {
-                return {
-                    command: 'get' as const,
-                    parameters: {
-                        path: `${prefix}/${item}`,
-                    },
-                };
+            operationsExpandedPools.forEach((item) => {
+                operationsRequests.push(makeGet(`${prefix}/${item}`));
             });
         }
 
-        const lastOperationByPoolLenght = requests.length;
-
-        const loadAllPools = true;
+        const loadAllPools = loadAll || !isSupportedSchedulingChildrenByPool(state);
+        const poolsRequests: Array<BatchSubRequest> = [];
+        const poolsChildrenRequests: Array<BatchSubRequest> = [];
+        const poolsExpandedPools = expandedPools.has(ROOT_POOL_NAME)
+            ? [...expandedPools]
+            : [ROOT_POOL_NAME, ...expandedPools];
         if (loadAllPools) {
-            requests.push({
-                command: 'get' as const,
-                parameters: {
-                    path: `//sys/scheduler/orchid/scheduler/pool_trees/${tree}/pools`,
+            operationsRequests.push(
+                makeGet(`//sys/scheduler/orchid/scheduler/pool_trees/${tree}/pools`, {
                     fields: POOL_FIELDS_TO_LOAD,
-                },
-            });
+                }),
+            );
         } else {
-            console.log('Not implemented');
-        }
-
-        if (!requests.length) {
-            saveCancellation();
-
-            return dispatch({
-                type: SCHEDULING_EXPANDED_POOLS_SUCCESS,
-                data: {rawOperations: EMPTY_OBJECT, expandedPoolsTree: tree},
+            poolsExpandedPools.forEach((pool) => {
+                poolsRequests.push(
+                    makeGet(`//sys/scheduler/orchid/scheduler/pool_trees/${tree}/pools/${pool}`, {
+                        fields: POOL_FIELDS_TO_LOAD,
+                    }),
+                );
+                poolsChildrenRequests.push(
+                    makeGet(
+                        `//sys/scheduler/orchid/scheduler/pool_trees/${tree}/child_pools_by_pool/${pool}`,
+                        {
+                            fields: POOL_FIELDS_TO_LOAD,
+                        },
+                    ),
+                );
             });
         }
+
+        cancelHelper.removeAllRequests();
 
         dispatch({type: SCHEDULING_EXPANDED_POOLS_REQUEST});
-        return ytApiV3Id
-            .executeBatch(YTApiId.schedulingLoadOperationsPerPool, {
-                parameters: {requests},
-                cancellation: saveCancellation,
-            })
-            .then((batchRestuls) => {
-                const {error} = splitBatchResults(
-                    batchRestuls,
-                    'Failed to load some expanded pools info',
-                );
-
-                const operationsResponse = batchRestuls.slice(0, lastOperationByPoolLenght);
-                const {results: operations} = splitBatchResults(operationsResponse);
+        return Promise.all([
+            operationsRequests.length
+                ? ytApiV3Id.executeBatch(YTApiId.schedulingLoadOperationsPerPool, {
+                      parameters: {requests: operationsRequests},
+                      cancellation: cancelHelper.saveCancelToken,
+                  })
+                : Promise.resolve([]),
+            loadAllPools
+                ? ytApiV3Id.executeBatch(YTApiId.schedulingLoadPoolsAll, {
+                      parameters: {requests: poolsRequests},
+                      cancellation: cancelHelper.saveCancelToken,
+                  })
+                : ytApiV3Id.executeBatch(YTApiId.schedulingLoadPoolsPerPool, {
+                      parameters: {requests: poolsRequests},
+                      cancellation: cancelHelper.saveCancelToken,
+                  }),
+            loadAllPools
+                ? Promise.resolve([])
+                : ytApiV3Id.executeBatch(YTApiId.schedulingLoadChildrenPerPool, {
+                      parameters: {requests: poolsChildrenRequests},
+                      cancellation: cancelHelper.saveCancelToken,
+                  }),
+        ])
+            .then(([operationsResults, poolsResults, poolsChildrenResults]) => {
+                const error: YTError = {message: 'Failed to load pools'};
+                const {results: operations} = splitBatchResults(operationsResults, error);
                 const rawOperations = _.reduce(
                     operations,
                     (acc, data) => {
@@ -213,28 +221,51 @@ function loadExpandedOperationsAndPools(tree: string): ExpandedPoolsThunkAction 
                     {},
                 );
 
-                const poolsResponse = batchRestuls.slice(lastOperationByPoolLenght);
-                const {results: pools} = splitBatchResults<PoolInfo>(poolsResponse);
                 const rawPools: Record<string, PoolInfo> = {};
 
                 if (loadAllPools) {
+                    const {results: pools} = splitBatchResults<Record<string, PoolInfo>>(
+                        poolsResults,
+                        error,
+                    );
                     const [value = {}] = pools ?? [];
                     Object.assign(rawPools, value);
                 } else {
-                    console.log('Not implemented');
+                    const {results: pools, resultIndices} = splitBatchResults<PoolInfo>(
+                        poolsResults,
+                        error,
+                    );
+                    pools.forEach((poolInfo, index) => {
+                        const name = poolsExpandedPools[resultIndices[index]];
+                        rawPools[name] = poolInfo;
+                    });
+
+                    const {results: poolChildren} = splitBatchResults<Record<string, PoolInfo>>(
+                        poolsChildrenResults,
+                        error,
+                    );
+                    poolChildren.forEach((children) => {
+                        Object.assign(rawPools, children);
+                    });
                 }
 
                 dispatch({
                     type: SCHEDULING_EXPANDED_POOLS_SUCCESS,
-                    data: {rawOperations, expandedPoolsTree: tree, rawPools},
+                    data: {
+                        expandedPoolsTree: tree,
+                        rawOperations: Object.keys(rawOperations).length
+                            ? rawOperations
+                            : EMPTY_OBJECT,
+                        rawPools: Object.keys(rawPools).length ? rawPools : EMPTY_OBJECT,
+                    },
                 });
 
-                if (error) {
+                if (error.inner_errors?.length) {
                     throw error;
                 }
             })
             .catch((error) => {
-                if (!axios.isCancel(error) && (!error?.code as any) === 'cancelled') {
+                if (!isCancelled(error)) {
                     dispatch({
                         type: SCHEDULING_EXPANDED_POOLS_FAILURE,
                         data: {error},
@@ -292,7 +323,7 @@ function addToExpandedPoolsNoLoad(
 
         let updated = false;
         poolsToExpand.forEach((pool) => {
-            if (treeExpandedPools.has(pool)) {
+            if (!treeExpandedPools.has(pool)) {
                 updated = true;
                 treeExpandedPools.add(pool);
             }
