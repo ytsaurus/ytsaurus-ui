@@ -144,3 +144,28 @@ Example of usage:
   },
 };
 ```
+
+
+#### Authentication
+
+### OAuth
+To use authentication, it is necessary to define configurations `ytAuthCluster` and `ytOAuthSettings`.  
+
+`ytAuthCluster` - cluster to authorize users.
+`ytOAuthSettings` - OAuth config
+
+An example of configuration:
+```js
+ytAuthCluster: 'cluster-name',
+ytOAuthSettings: {
+    baseURL: 'http://keycloak.some-domain.com',
+    authPath: 'realms/test-realm/protocol/openid-connect/auth',
+    tokenPath: 'realms/test-realm/protocol/openid-connect/token',
+    logoutPath: 'realms/test-realm/protocol/openid-connect/logout',
+    clientId: 'test-client',
+    clientSecret: process.env.KEYCLOAK_CLIENT_SECRET,
+    scope: 'openid profile',
+    buttonLabel: 'Login via Keycloak', // OPTIONAL. By default equal `Login via SSO`
+}
+```
+

@@ -16,6 +16,7 @@ import UIFactory from '../../../UIFactory';
 import {getConfigData} from '../../../config/ui-settings';
 import {isSupportedYtTvmAPIGlobal} from '../thor/support';
 import {Page} from '../../../../shared/constants/settings';
+import {AuthWay} from '../../../../shared/constants';
 
 export const getGlobalError = (state: RootState) => state.global.error.error;
 
@@ -94,6 +95,7 @@ export const getBundles = (state: RootState) => state?.global.bundles;
 export const getGlobalUsers = (state: RootState) => state.global.users;
 export const getGlobalGroups = (state: RootState) => state.global.groups;
 export const getCurrentUserName = (state: RootState): string => state?.global?.login;
+export const getAuthWay = (state: RootState): AuthWay => state?.global?.authWay;
 
 export const getAllowedExperimentalPages = (state: RootState) =>
     state?.global.allowedExperimentalPages;
@@ -201,6 +203,14 @@ export const getGlobalShowLoginDialog = (state: RootState) => {
 
 export const getAuthPagesEnabled = () => {
     return getConfigData().allowLoginDialog;
+};
+
+export const getOAuthEnabled = () => {
+    return getConfigData().allowOAuth;
+};
+
+export const getOAuthButtonLabel = () => {
+    return getConfigData().oauthButtonLabel;
 };
 
 export const getGlobalAsideHeaderWidth = (state: RootState) => state.global.asideHeaderWidth;

@@ -5,8 +5,11 @@ import {ExpressKit} from '@gravity-ui/expresskit';
 
 import {configureApp} from './configure-app';
 
-import {createYTAuthMiddleware} from './middlewares/yt-auth';
+import {createYTAuthorizationResolver} from './middlewares/yt-auth';
 import routes from './routes';
+import {createOAuthAuthorizationResolver} from './middlewares/oauth';
+import {createAuthMiddleware} from './middlewares/authorization';
+import {authorizationResolver} from './utils/authorization';
 
 const nodekit = new NodeKit({configsPath: path.resolve(__dirname, './configs')});
 
@@ -29,7 +32,12 @@ if (ytAuthCluster) {
         );
     }
 
-    nodekit.config.appAuthHandler = createYTAuthMiddleware(ytAuthCluster);
+    nodekit.config.appBeforeAuthMiddleware = [
+        ...(nodekit.config.appBeforeAuthMiddleware || []),
+        authorizationResolver(createOAuthAuthorizationResolver()),
+        authorizationResolver(createYTAuthorizationResolver()),
+    ];
+    nodekit.config.appAuthHandler = createAuthMiddleware(ytAuthCluster);
 }
 
 nodekit.config.adjustAppConfig?.(nodekit);

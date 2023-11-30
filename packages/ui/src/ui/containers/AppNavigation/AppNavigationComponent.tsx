@@ -1,9 +1,6 @@
 import React, {useState} from 'react';
 import cn from 'bem-cn-lite';
-import axios from 'axios';
-import {useHistory} from 'react-router';
 import {FooterItem, PageLayoutAside} from '@gravity-ui/navigation';
-import {Menu} from '@gravity-ui/uikit';
 
 import Logo from '../../../../img/svg/appLogo.svg';
 import GearIcon from '@gravity-ui/icons/svgs/gear.svg';
@@ -12,6 +9,8 @@ import unknown from '../../../../img/user-avatar.svg';
 import {AppNavigationProps} from './AppNavigationPageLayout';
 
 import './AppNavigationComponent.scss';
+import {Menu} from '@gravity-ui/uikit';
+import {useHistory} from 'react-router';
 
 const block = cn('yt-app-navigation');
 
@@ -19,6 +18,7 @@ function AppNavigationComponent({
     logoClassName,
     menuItems,
     currentUser,
+    authWay,
 
     panelContent,
     panelVisible,
@@ -113,18 +113,14 @@ function AppNavigationComponent({
                                 return (
                                     <div className={block('settings-ul')}>
                                         <Menu>
-                                            <Menu.Item
-                                                onClick={() => history.push('/change-password')}
-                                            >
-                                                Change password
-                                            </Menu.Item>
-                                            <Menu.Item
-                                                onClick={() => {
-                                                    axios.post('/api/yt/logout').catch(() => {});
-                                                }}
-                                            >
-                                                Logout
-                                            </Menu.Item>
+                                            {authWay === 'passwd' && (
+                                                <Menu.Item
+                                                    onClick={() => history.push('/change-password')}
+                                                >
+                                                    Change password
+                                                </Menu.Item>
+                                            )}
+                                            <Menu.Item href={'/api/yt/logout'}>Logout</Menu.Item>
                                         </Menu>
                                     </div>
                                 );

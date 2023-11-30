@@ -2,6 +2,7 @@ import React from 'react';
 import {AsideFallback, MenuItem, PageLayout} from '@gravity-ui/navigation';
 
 import {ClusterConfig} from '../../../shared/yt-types';
+import {AuthWay} from '../../../shared/constants';
 
 export interface AppNavigationProps {
     initialCompact?: boolean;
@@ -15,6 +16,8 @@ export interface AppNavigationProps {
         Omit<MenuItem, 'title' | 'type'> & {itemUrl?: string; current?: boolean; title: string}
     >;
     currentUser: string;
+
+    authWay: AuthWay;
 
     panelVisible: boolean;
     panelContent: React.ReactNode;

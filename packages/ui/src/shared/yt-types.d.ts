@@ -233,6 +233,8 @@ export interface ConfigData {
     uiSettings?: UISettings;
     metrikaCounterId?: number;
     allowLoginDialog?: boolean;
+    allowOAuth?: boolean;
+    oauthButtonLabel?: string;
     allowUserColumnPresets?: boolean;
     odinPageEnabled: boolean;
 }

@@ -1,10 +1,11 @@
-import _ from 'lodash';
-import {getInterfaceVersion, isProductionEnv} from '../utils';
 import type {Request} from 'express';
 import {YTCoreConfig} from '../../@types/core';
 import {ConfigData, YTConfig} from '../../shared/yt-types';
 import {AppLayoutConfig} from '../render-layout';
 import {isUserColumnPresetsEnabled} from '../controllers/table-column-preset';
+import {getInterfaceVersion, isProductionEnv} from '../utils';
+import {getAuthWay} from '../utils/authorization';
+import {getOAuthSettings, isOAuthAllowed} from './oauth';
 
 interface Params {
     login?: string;
@@ -26,6 +27,7 @@ export async function getLayoutConfig(req: Request, params: Params): Promise<App
             version: uiVersion,
         },
         login,
+        authWay: getAuthWay(req),
     };
 
     const isProduction = isProductionEnv();
@@ -52,6 +54,8 @@ export async function getLayoutConfig(req: Request, params: Params): Promise<App
             uiSettings,
             metrikaCounterId: metrikaCounter?.[0]?.id,
             allowLoginDialog: Boolean(ytAuthCluster),
+            allowOAuth: isOAuthAllowed(req),
+            oauthButtonLabel: isOAuthAllowed(req) ? getOAuthSettings(req).buttonLabel : undefined,
             allowUserColumnPresets: isUserColumnPresetsEnabled(req),
             odinPageEnabled: Boolean(odinBaseUrl),
         },

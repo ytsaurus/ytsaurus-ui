@@ -72,6 +72,44 @@ export interface YTCoreConfig {
      * Enables YT-password authentication when defined
      */
     ytAuthCluster?: string;
+
+    /**
+     * OpenID Connect configuration
+     */
+    ytOAuthSettings?: {
+        /**
+         * URL of the OpenID connect server without the trailing slash
+         */
+        baseURL: string;
+        /**
+         *  Authorization endpoint
+         */
+        authPath: string;
+        /**
+         *  Authorization endpoint
+         */
+        logoutPath: string;
+        /**
+         *  Authorization endpoint
+         */
+        tokenPath: string;
+        /**
+         *  OpenID Client id
+         */
+        clientId: string;
+        /**
+         *  OpenID Client secret
+         */
+        clientSecret: string;
+        /**
+         *  OpenID Scope(Details https://auth0.com/docs/get-started/apis/scopes/openid-connect-scopes)
+         */
+        scope: string;
+        /**
+         *  Label on the Login via OpenID button
+         */
+        buttonLabel?: string;
+    };
     /**
      * Modifies headers of /api/yt/login request:
      * if enabled removes 'Secure'-option from 'Set-Cookie: YTCypressCookie=...; ...' response-header

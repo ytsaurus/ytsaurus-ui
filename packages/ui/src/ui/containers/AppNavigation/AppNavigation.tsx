@@ -9,6 +9,7 @@ import {useDispatch, useSelector} from 'react-redux';
 
 import {PagesSettingsEditor, usePagesMenuItems} from './PagesSettingsEditor';
 import {
+    getAuthWay,
     getClusterConfigByName,
     getCurrentUserName,
     getRootPagesCluster,
@@ -45,6 +46,7 @@ export default function AppNavigation({children}: ExtProps) {
 
     const items = usePagesMenuItems(cluster);
     const currentUser = useSelector(getCurrentUserName);
+    const authWay = useSelector(getAuthWay);
 
     const [settingsVisible, setSettingsVisible] = React.useState(false);
     const [panelVisible, setPanelVisible] = React.useState(false);
@@ -108,6 +110,7 @@ export default function AppNavigation({children}: ExtProps) {
         clusterConfig,
         logoClassName: block('logo-icon', {'no-cluster': !cluster}),
         currentUser,
+        authWay,
         menuItems: _isEmpty(clusterConfig) ? [] : menuItems,
         panelContent: (
             <PagesSettingsEditor
