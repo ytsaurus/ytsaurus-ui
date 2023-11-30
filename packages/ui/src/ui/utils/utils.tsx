@@ -22,7 +22,7 @@ export function getBatchError<T = unknown>(
     batchResults: Array<BatchResultsItem<T>>,
     message: string = BATCH_ERROR_MESSAGE,
 ): YTError | undefined {
-    return splitBatchResults(batchResults, message).error;
+    return splitBatchResults(batchResults, {message}).error;
 }
 
 const COMMANDS_V4_WITH_VALUE: Record<string, boolean> = {
@@ -66,7 +66,7 @@ export interface SplitedBatchResults<T> {
 
 export function splitBatchResults<T = unknown>(
     batchResults: Array<BatchResultsItem<T>>,
-    message: string = BATCH_ERROR_MESSAGE,
+    dstError: YTError = {message: BATCH_ERROR_MESSAGE},
 ): SplitedBatchResults<T> {
     const innerErrors: Array<YTError> = [];
     const results: Array<T> = [];
@@ -85,7 +85,12 @@ export function splitBatchResults<T = unknown>(
         }
     });
 
-    const error = !innerErrors.length ? undefined : {inner_errors: innerErrors, message, results};
+    if (innerErrors.length) {
+        dstError.inner_errors = dstError.inner_errors ?? [];
+        dstError.inner_errors.concat(innerErrors);
+    }
+
+    const error = !innerErrors.length ? undefined : dstError;
     return {error, results, outputs, errorIndices, resultIndices};
 }
 

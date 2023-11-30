@@ -67,6 +67,20 @@ export function updatePoolChild(data, cypressData, type, treeResources) {
                 return updatePoolChild(leaf, {}, 'operation', treeResources);
             });
 
+            const child_pool_count = ypath.getNumber(attributes, '/child_pool_count');
+            if (child_pool_count > 0 && !data.children.length) {
+                for (let i = 0; i < child_pool_count; ++i) {
+                    data.children.push({
+                        parent: data.name,
+                        type: 'pool',
+                        name: `#key_${data.name}_${i}`,
+                        attributes: {},
+                        leaves: [],
+                        incomplete: true,
+                    });
+                }
+            }
+
             if (!data.leaves?.length) {
                 data.pool_operation_count = ypath.getNumber(
                     attributes,
@@ -166,8 +180,7 @@ export function updatePoolChild(data, cypressData, type, treeResources) {
             fifoSortParams.length > 0
                 ? fifoSortParams
                 : ['start_time', 'weight', 'pending_job_count'];
-        data.abc = ypath.getValue(cypressAttributes, '/abc') || {};
-        data.acl = ypath.getValue(cypressAttributes, '/acl') || [];
+        data.abc = ypath.getValue(attributes, '/abc') || {};
         data.forbidImmediateOperations =
             ypath.getBoolean(cypressAttributes, '/forbid_immediate_operations') || false;
         data.createEphemeralSubpools =

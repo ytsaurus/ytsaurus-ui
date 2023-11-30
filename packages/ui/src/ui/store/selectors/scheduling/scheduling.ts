@@ -26,10 +26,16 @@ import {visitTreeItems} from '../../../utils/utils';
 import {getExpandedPoolsLoadAll, getSchedulingOperationsExpandedPools} from './expanded-pools';
 export const getPools = getPoolsImpl;
 
-export const getSchedulingIsInitialLoading = (state: RootState) => {
+const getExpandedPoolsIsInitialLoading = (state: RootState) => {
     const {loaded, loading} = state.scheduling.expandedPools;
     return !loaded && loading;
 };
+
+export const getSchedulingIsInitialLoading = (state: RootState) => {
+    const {loaded, loading} = state.scheduling.scheduling;
+    return (!loaded && loading) || getExpandedPoolsIsInitialLoading(state);
+};
+
 export const getTreeResources = (state: RootState) => state.scheduling.scheduling.treeResources;
 export const getFilter = (state: RootState) => state.scheduling.scheduling.filter;
 export const getSchedulingAbcFilter = (state: RootState) =>

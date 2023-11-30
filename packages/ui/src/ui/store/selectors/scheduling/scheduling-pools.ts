@@ -58,7 +58,8 @@ const getPoolsPrepared = createSelector(
         const rumId = new RumWrapper(cluster, RumMeasureTypes.SCHEDULING);
 
         return rumId.wrap('prepareData', () => {
-            return _.map(preparePools(rawPools!, rawOperations), (pool) => {
+            const preparedPools = preparePools(rawPools!, rawOperations);
+            return _.map(preparedPools, (pool) => {
                 const cypressAttributes = ypath.getValue(attributes)[pool.name];
                 return updatePoolChild(pool, cypressAttributes, 'pool', treeResources);
             });
@@ -150,6 +151,7 @@ export interface OperationInfo {
 
 export interface PoolInfo extends Omit<OperationInfo, 'type' | 'pool'> {
     type: 'pool';
+    incomplete?: boolean;
     children?: Array<PoolInfo>;
     leaves: Array<OperationInfo>;
 }

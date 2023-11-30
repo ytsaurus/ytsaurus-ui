@@ -120,6 +120,10 @@ const features = createSelector(
                 prestable: '23.1.11106567',
                 component: proxy,
             },
+            schedulingChildrenByPool: {
+                prestable: '23.1.11146742',
+                component: scheduler,
+            },
         };
     },
 );
@@ -193,5 +197,12 @@ export const isSupportedNodeMaintenanceApi = createSelector(
     [isSupportedSelector],
     (isSupported) => {
         return isSupported('nodeMaintenanceApi');
+    },
+);
+
+export const isSupportedSchedulingChildrenByPool = createSelector(
+    [isSupportedSelector],
+    (isSupported) => {
+        return isSupported('schedulingChildrenByPool');
     },
 );

@@ -11,7 +11,7 @@ function SchedulingExpandedPoolsUpdater() {
 
     React.useEffect(() => {
         dispatch(loadExpandedPools(tree));
-    }, [tree, name]);
+    }, [dispatch, tree, name]);
 
     return null;
 }
