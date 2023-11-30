@@ -111,6 +111,18 @@
             --yc-button-background-color: var(--login-button-solid);
             --yc-button-background-color-hover: var(--login-button-solid-hover);
         }
+
+        &_link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        &_submit {
+            &:not(:last-child) {
+                margin-bottom: 10px;
+            }
+        }
     }
 
     .yc-button_loading {

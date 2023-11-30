@@ -16,12 +16,14 @@ import {handleClusterInfo} from './controllers/cluster-info';
 import {clusterVersions} from './controllers/clusters';
 import {tableColumnPresetGet, tableColumnPresetSave} from './controllers/table-column-preset';
 import {ping} from './controllers/ping';
-import {handleChangePassword, handleLogin, handleLogout} from './controllers/login';
+import {handleChangePassword, handleLogin} from './controllers/login';
 import {getClusterPools} from './controllers/scheduling-pools';
 import {markdownToHtmlHandler} from './controllers/markdown-to-html';
 import {odinProxyApi} from './controllers/odin-proxy-api';
 import {getClustersAvailability} from './controllers/availability';
 import {chytProxyApi} from './controllers/chyt-api';
+import {oauthCallback, oauthLogin, oauthLogout} from './controllers/oauth-login';
+import {handleLogout} from './controllers/logout';
 
 const HOME_INDEX_TARGET: AppRouteDescription = {handler: homeIndex, ui: true};
 
@@ -34,7 +36,12 @@ const routes: AppRoutes = {
     'GET /api/clusters/versions': {handler: clusterVersions},
     'GET /api/pool-names/:cluster': {handler: getClusterPools},
     'POST /api/yt/login': {handler: handleLogin, ui: true},
-    'POST /api/yt/logout': {handler: handleLogout, ui: true},
+    'GET /api/yt/logout': {handler: handleLogout, ui: true},
+
+    'GET /oauth/login': {handler: oauthLogin, ui: true},
+    'GET /api/oauth/callback': {handler: oauthCallback, ui: true},
+    'GET /api/oauth/logout/callback': {handler: oauthLogout, ui: true},
+
     'POST /api/yt/change-password': {handler: handleChangePassword, ui: true},
     'POST /api/remote-copy': {handler: handleRemoteCopy},
 

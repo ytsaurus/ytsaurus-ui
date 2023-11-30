@@ -1,11 +1,12 @@
 import React, {useCallback, useState} from 'react';
 import axios, {AxiosError} from 'axios';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {Button, Text, TextInput} from '@gravity-ui/uikit';
 import {onSuccessLogin} from '../../../store/actions/global';
 import ytLocalStorage from '../../../utils/yt-local-storage';
+import {getOAuthButtonLabel, getOAuthEnabled} from '../../../store/selectors/global';
 import LoginPageWrapper from '../LoginPageWrapper/LoginPageWrapper';
-import _ from 'lodash';
+import isEmpty from 'lodash/isEmpty';
 
 import cn from 'bem-cn-lite';
 
@@ -40,6 +41,8 @@ const validate = ({
 function LoginForm({theme}: Props) {
     const dispatch = useDispatch();
     const [username, setUsername] = useState(ytLocalStorage.get('loginDialog')?.username || '');
+    const allowOAuth = useSelector(getOAuthEnabled);
+    const buttonLabel = useSelector(getOAuthButtonLabel);
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState<boolean>(false);
     const [errors, setErrors] = React.useState<ErrorFields>({});
@@ -49,7 +52,7 @@ function LoginForm({theme}: Props) {
             e.preventDefault();
             setErrors({});
             const validationErrors = validate({username, password});
-            if (!_.isEmpty(validationErrors)) {
+            if (!isEmpty(validationErrors)) {
                 setErrors(validationErrors);
                 return;
             }
@@ -79,8 +82,10 @@ function LoginForm({theme}: Props) {
         <>
             <h1 className={block('title')}>Welcome to YTsaurus!</h1>
             <p className={block('text')}>
-                Single scalable platform for high volume storage and handling data. Login to your
-                account.
+                A unified scalable platform for storing and processing large volumes of data.
+                <br />
+                <br />
+                Login to your account.
             </p>
             <form onSubmit={handleFormSubmit}>
                 <TextInput
@@ -103,8 +108,9 @@ function LoginForm({theme}: Props) {
                     onUpdate={setPassword}
                     error={errors.password}
                 />
+
                 <Button
-                    className={block('button', {solid: true})}
+                    className={block('button', {solid: true, submit: true})}
                     type="submit"
                     width="max"
                     size="l"
@@ -114,6 +120,22 @@ function LoginForm({theme}: Props) {
                 >
                     Login
                 </Button>
+
+                {allowOAuth && (
+                    <Button
+                        className={block('button', {solid: true, link: true, submit: true})}
+                        type="submit"
+                        href="/oauth/login"
+                        width="max"
+                        size="l"
+                        pin="circle-circle"
+                        view={theme === 'light' ? 'action' : 'normal-contrast'}
+                        loading={loading}
+                    >
+                        {buttonLabel || 'Login via SSO'}
+                    </Button>
+                )}
+
                 {errors.response && (
                     <Text as="p" color="danger" className={block('error')}>
                         {errors.response}

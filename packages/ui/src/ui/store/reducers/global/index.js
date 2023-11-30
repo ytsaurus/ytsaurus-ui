@@ -54,6 +54,7 @@ const initialState = {
     schedulerVersion: null,
     masterVersion: null,
     login: YT.parameters.login,
+    authWay: YT.parameters.authWay,
 
     // cluster-params
     paramsLoading: false,

@@ -9,21 +9,13 @@ import crypto from 'crypto';
 // @ts-ignore
 import ytLib from '@ytsaurus/javascript-wrapper';
 import {getXSRFToken} from '../components/cluster-queries';
+import {getAuthCluster} from '../components/yt-auth';
 
 const yt = ytLib();
 
-function throwAuthDisabled() {
-    throw new Error(
-        'Cluster for password authentication is disabled. You have to define ytAuthCluster to use it.',
-    );
-}
-
 export async function handleLogin(req: Request, res: Response) {
     try {
-        const {ytAuthCluster} = req.ctx.config;
-        if (!ytAuthCluster) {
-            return throwAuthDisabled();
-        }
+        const ytAuthCluster = getAuthCluster(req.ctx.config);
 
         const {username, password} = JSON.parse(req.body) || {};
         if (!username || !password) {
@@ -91,25 +83,9 @@ function removeSecureFlagIfOriginInsecure(
     );
 }
 
-export async function handleLogout(req: Request, res: Response) {
-    try {
-        const {ytAuthCluster} = req.ctx.config;
-        if (!ytAuthCluster) {
-            return throwAuthDisabled();
-        }
-        res.setHeader('set-cookie', `${YT_CYPRESS_COOKIE_NAME}=deleted; Path=/; Max-Age=0;`);
-        res.status(401).send('Logout');
-    } catch (e: any) {
-        sendAndLogError(req.ctx, res, 500, e);
-    }
-}
-
 export async function handleChangePassword(req: Request, res: Response) {
     try {
-        const {ytAuthCluster} = req.ctx.config;
-        if (!ytAuthCluster) {
-            return throwAuthDisabled();
-        }
+        const ytAuthCluster = getAuthCluster(req.ctx.config);
 
         const {newPassword, currentPassword} = JSON.parse(req.body) || {};
         if (!newPassword || !currentPassword) {
