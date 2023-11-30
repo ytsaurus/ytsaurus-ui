@@ -1,6 +1,6 @@
-import {TimelineEvent, yaTimelineConfig} from '@yandex-nirvana/ya-timeline';
-import {AbstractEventRenderer} from '@yandex-nirvana/ya-timeline/dist/components/Events';
-import {Hitbox} from '@yandex-nirvana/ya-timeline/dist/components/Events/AbstractEventRenderer';
+import {TimelineEvent, yaTimelineConfig} from '../../../../packages/ya-timeline';
+import {AbstractEventRenderer} from '../../../../packages/ya-timeline/components/Events';
+import {Hitbox} from '../../../../packages/ya-timeline/components/Events/AbstractEventRenderer';
 
 import {duration as calcDuration} from '../utils';
 

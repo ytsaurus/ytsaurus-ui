@@ -1,11 +1,11 @@
 import * as React from 'react';
 
-import {TimelineEvent} from '@yandex-nirvana/ya-timeline';
 import {colord, extend} from 'colord';
 import mixPlugin from 'colord/plugins/mix';
 import _ from 'lodash';
-import {Progress} from '../models/plan';
 import {DataSet} from 'vis-data';
+import {TimelineEvent} from '../../../../packages/ya-timeline';
+import {Progress} from '../models/plan';
 
 import {GraphColors} from '../GraphColors';
 import {ProcessedNode} from '../utils';

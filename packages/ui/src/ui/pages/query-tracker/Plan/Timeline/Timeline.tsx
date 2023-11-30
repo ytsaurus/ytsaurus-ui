@@ -2,12 +2,12 @@ import * as React from 'react';
 
 import {Select, TextInput, useThemeValue} from '@gravity-ui/uikit';
 
-import {Timeline as TimelineRuler} from '../../../../components/common/Timeline/Timeline';
-import {BoundsChangedEvent, yaTimelineConfig} from '@yandex-nirvana/ya-timeline';
-import _ from 'lodash';
-import {NodeState} from '../models/plan';
 import cn from 'bem-cn-lite';
+import _ from 'lodash';
 import {DataSet} from 'vis-data';
+import {Timeline as TimelineRuler} from '../../../../components/common/Timeline/Timeline';
+import {BoundsChangedEvent, yaTimelineConfig} from '../../../../packages/ya-timeline';
+import {NodeState} from '../models/plan';
 
 import {useGraphColors} from '../GraphColors';
 import {useResultProgress} from '../PlanContext';
