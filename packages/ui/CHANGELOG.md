@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.5.1](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.5.0...ui-v1.5.1) (2023-12-01)
+
+
+### Bug Fixes
+
+* readme Development section improve ([c06921b](https://github.com/ytsaurus/ytsaurus-ui/commit/c06921ba3956cd861411927c025607884d991f8b))
+
 ## [1.5.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.4.0...ui-v1.5.0) (2023-12-01)
 
 
