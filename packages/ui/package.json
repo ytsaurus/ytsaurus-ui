@@ -116,7 +116,6 @@
     "@types/react-router-dom": "^5.3.3",
     "@types/react-sticky": "^6.0.4",
     "@types/type-is": "^1.6.3",
-    "@yandex-nirvana/ya-timeline": "file:yandex-nirvana-ya-timeline-1.4.4.tgz",
     "bem-cn-lite": "^4.1.0",
     "bignumber.js": "^9.1.2",
     "copy-to-clipboard": "^3.3.1",
