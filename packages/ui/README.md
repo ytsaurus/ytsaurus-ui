@@ -21,10 +21,8 @@ To run the development environment you need to prepare and run nginx:
 1. Install nginx
 2. Copy file `deploy/nginx/yt.development.conf.example` to `/etc/nginx/sites-enabled/yt.development.conf`
 3. Modify `/etc/nginx/sites-enabled/yt.development.conf`
-
-- change `server_name`
-- replace all `/path/to/the/repo` to correct path
-
+    - change `server_name`
+    - replace all `/path/to/the/repo` to correct path
 4. `sudo systemctl restart nginx`
 
 Install required dependencies:
