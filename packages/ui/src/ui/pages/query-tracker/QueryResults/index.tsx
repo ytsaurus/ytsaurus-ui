@@ -47,7 +47,8 @@ export const QueryResults = React.memo(function QueryResults({
     toolbar: React.ReactChild;
     minimized: boolean;
 }) {
-    const [tabs, setTab, {activeTabId, category, activeResultParams}] = useQueryResultTabs(query);
+    const [tabs, setActiveTab, {activeTabId, category, activeResultParams}] = useQueryResultTabs(query);
+    const setTab = (tabId: string) => setActiveTab(tabId, query.id);
     const resultIndex = activeResultParams?.resultIndex;
     return query ? (
         <div className={b(null, className)}>
@@ -61,7 +62,7 @@ export const QueryResults = React.memo(function QueryResults({
                         className={b('tabs')}
                         items={tabs}
                         activeTab={activeTabId}
-                        onSelectTab={(tabId: string) => setTab(tabId)}
+                        onSelectTab={setTab}
                     />
                     {category === QueryResultTab.RESULT && Number.isInteger(resultIndex) && (
                         <div className={b('tab_actions')}>
