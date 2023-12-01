@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.5.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.4.0...ui-v1.5.0) (2023-12-01)
+
+
+### Features
+
+* **QT:** add query list visible toggle button ([1ba0ccd](https://github.com/ytsaurus/ytsaurus-ui/commit/1ba0ccdc2c7e095c86660f472f72eee62210c710))
+* **QT:** Progress and timeline component [YTFRONT-3840] ([a092966](https://github.com/ytsaurus/ytsaurus-ui/commit/a092966199317abc8a637569bd28e9249ab8c5ac))
+
+
+### Bug Fixes
+
+* **QT:** fallback Loader center alignment ([3c1ad2b](https://github.com/ytsaurus/ytsaurus-ui/commit/3c1ad2bb88ca0c489de4d0afc511c28650b2d62a))
+* **QT:** yql stage setting should not affect other engines requests ([1f2b253](https://github.com/ytsaurus/ytsaurus-ui/commit/1f2b253d7305ea870f27ed5cc28edfffe0fdeb43))
+
 ## [1.4.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.3.1...ui-v1.4.0) (2023-11-17)
 
 
