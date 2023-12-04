@@ -1,4 +1,4 @@
-import {Loader} from '@gravity-ui/uikit';
+import {Loader, Text} from '@gravity-ui/uikit';
 import React from 'react';
 import {useSelector} from 'react-redux';
 import block from 'bem-cn-lite';
@@ -20,14 +20,30 @@ import './index.scss';
 
 const b = block('query-result-table');
 
+const getResultRowsInfo = (result: QueryResultReadyState) => {
+    const {row_count: total} = result.meta.data_statistics;
+    const {is_truncated: truncated} = result.meta;
+    const {pageSize} = result.settings;
+    const start = pageSize * result.page + 1;
+    const end = Math.min(pageSize * result.page + pageSize, total);
+    return {start, end, total, truncated};
+};
+
 function QueryReadyResultView({result}: {result: QueryResultReadyState}) {
     const mode = result?.settings?.viewMode;
+    const {start, end, total, truncated} = getResultRowsInfo(result);
     return (
         <>
             <NotRenderUntilFirstVisible hide={mode !== QueryResultsViewMode.Scheme}>
                 <YQLSchemeTable result={result} />
             </NotRenderUntilFirstVisible>
             <NotRenderUntilFirstVisible hide={mode !== QueryResultsViewMode.Table}>
+                <div className={b('result-info')}>
+                    <Text>
+                        Rows {start}-{end} of {total}
+                        {`${truncated ? ' (truncated)' : ''}`}
+                    </Text>
+                </div>
                 <ResultsTable result={result} />
             </NotRenderUntilFirstVisible>
         </>
