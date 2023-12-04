@@ -397,6 +397,7 @@ export type QueryResultMeta = {
         };
         $value: QueryResultMetaScheme[];
     };
+    is_truncated: boolean;
     data_statistics: {
         chunk_count: number;
         row_count: number;

@@ -3,6 +3,10 @@
     position: relative;
     overflow: auto;
 
+    &__result-info {
+        margin-bottom: 10px;
+    }
+
     &__loading {
         display: flex;
         align-items: center;
