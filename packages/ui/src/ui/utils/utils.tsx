@@ -87,7 +87,7 @@ export function splitBatchResults<T = unknown>(
 
     if (innerErrors.length) {
         dstError.inner_errors = dstError.inner_errors ?? [];
-        dstError.inner_errors.concat(innerErrors);
+        dstError.inner_errors.push(...innerErrors);
     }
 
     const error = !innerErrors.length ? undefined : dstError;

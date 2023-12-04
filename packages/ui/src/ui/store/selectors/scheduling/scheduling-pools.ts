@@ -3,10 +3,14 @@ import {createSelector} from 'reselect';
 
 import {RootState} from '../../../store/reducers';
 import {ROOT_POOL_NAME} from '../../../constants/scheduling';
-import {flattenAttributes, preparePools} from '../../../utils/scheduling/scheduling';
+import {preparePools} from '../../../utils/scheduling/scheduling';
 import ypath from '../../../common/thor/ypath';
 import {updatePoolChild} from '../../../utils/scheduling/pool-child';
-import {getExpandedPoolsTree, getSchedulingOperations} from './expanded-pools';
+import {
+    getExpandedPoolCypressData,
+    getExpandedPoolsTree,
+    getSchedulingOperations,
+} from './expanded-pools';
 import {getCluster} from '../../../store/selectors/global';
 import {RumWrapper} from '../../../rum/rum-wrap-api';
 import {RumMeasureTypes} from '../../../rum/rum-measure-types';
@@ -14,12 +18,7 @@ import {EMPTY_OBJECT} from '../../../constants/empty';
 
 export const getTree = (state: RootState) => state.scheduling.scheduling.tree;
 const getPoolsRaw = (state: RootState) => state.scheduling.expandedPools.rawPools;
-const getTreeAttributesRaw = (state: RootState) => state.scheduling.scheduling.rawTreeAttributes;
 const getTreeResources = (state: RootState) => state.scheduling.scheduling.treeResources;
-
-const getTreeAttributesFlatten = createSelector([getTreeAttributesRaw], (attrs) => {
-    return flattenAttributes(attrs);
-});
 
 const getSchedulingTreeOperations = createSelector(
     [getSchedulingOperations, getExpandedPoolsTree, getTree],
@@ -49,7 +48,7 @@ const getOperationsFiltered = createSelector(
 );
 
 const getPoolsPrepared = createSelector(
-    [getPoolsRaw, getOperationsFiltered, getTreeAttributesFlatten, getTreeResources, getCluster],
+    [getPoolsRaw, getOperationsFiltered, getExpandedPoolCypressData, getTreeResources, getCluster],
     (rawPools, rawOperations, attributes, treeResources, cluster) => {
         if (_.isEmpty(rawPools)) {
             return [];
@@ -154,6 +153,7 @@ export interface PoolInfo extends Omit<OperationInfo, 'type' | 'pool'> {
     incomplete?: boolean;
     children?: Array<PoolInfo>;
     leaves: Array<OperationInfo>;
+    isEphemeral?: boolean;
 }
 
 export const getPools = createSelector(

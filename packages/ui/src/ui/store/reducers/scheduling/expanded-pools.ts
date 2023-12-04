@@ -10,6 +10,11 @@ import {
 } from '../../../constants/scheduling';
 import {EMPTY_OBJECT} from '../../../constants/empty';
 import {OperationInfo, PoolInfo} from '../../../store/selectors/scheduling/scheduling-pools';
+import {CypressNode} from '../../../../shared/yt-types';
+
+export type PoolCypressData = CypressNode<Record<string, unknown>, string>;
+
+export type ExpandedPoolInfo = {parentPoolPath: string; isEphemeral?: boolean};
 
 export interface ExpandedPoolsState {
     loading: boolean;
@@ -18,9 +23,14 @@ export interface ExpandedPoolsState {
 
     rawPools: Record<string, PoolInfo>;
     rawOperations: Record<string, OperationInfo>;
+    flattenCypressData: Record<string, PoolCypressData>;
     expandedPoolsTree: string;
 
-    expandedPools: Record<string, Set<string>>; // Record<tree_name, Set<pool_name>>
+    /**
+     * expandedPools: Record<tree_name, Map<pool_name, ExpandedPoolInfo>>
+     * example: `{'childPoolName': {parentPoolPath: 'parentPoolName/subParentName', isEphemeral: true}}`
+     */
+    expandedPools: Record<string, Map<string, ExpandedPoolInfo>>;
     loadAll: boolean;
 }
 
@@ -34,8 +44,9 @@ const ephemeralState: Omit<ExpandedPoolsState, keyof typeof persistentState> = {
     error: undefined,
 
     rawPools: EMPTY_OBJECT,
-
     rawOperations: EMPTY_OBJECT,
+    flattenCypressData: EMPTY_OBJECT,
+
     expandedPoolsTree: '',
 
     expandedPools: EMPTY_OBJECT, //
@@ -71,7 +82,10 @@ export type ExpandedPoolsAction =
     | ActionD<typeof SCHEDULING_EXPANDED_POOLS_FAILURE, Pick<ExpandedPoolsState, 'error'>>
     | ActionD<
           typeof SCHEDULING_EXPANDED_POOLS_SUCCESS,
-          Pick<ExpandedPoolsState, 'rawOperations' | 'expandedPoolsTree'>
+          Pick<
+              ExpandedPoolsState,
+              'rawOperations' | 'rawPools' | 'expandedPoolsTree' | 'flattenCypressData'
+          >
       >
     | ActionD<
           typeof SCHEDULING_EXPANDED_POOLS_PARTITION,

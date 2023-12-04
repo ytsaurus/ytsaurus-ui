@@ -44,8 +44,6 @@ export interface SchedulingEphemeralState {
     treeResources: TreeResources;
     trees: Array<string>;
 
-    rawTreeAttributes: unknown;
-
     editVisibility: boolean;
     editItem?: PoolInfo;
 
@@ -91,8 +89,6 @@ const ephemeralState: SchedulingEphemeralState = {
     schedulerAlerts: [],
     treeResources: {},
     trees: [],
-
-    rawTreeAttributes: {},
 
     editVisibility: false,
     editItem: undefined,
@@ -222,7 +218,7 @@ const reducer = (state = initialState, action: SchedulingAction) => {
 export type SchedulingAction =
     | Action<typeof SCHEDULING_DATA_REQUEST>
     | ActionD<typeof SCHEDULING_DATA_PARTITION, Partial<SchedulingState>>
-    | ActionD<typeof SCHEDULING_DATA_SUCCESS, Partial<SchedulingState>>
+    | ActionD<typeof SCHEDULING_DATA_SUCCESS, Pick<SchedulingState, 'treeResources'>>
     | ActionD<typeof SCHEDULING_DATA_FAILURE, {error: YTError}>
     | Action<typeof SCHEDULING_DATA_CANCELLED>
     | Action<typeof SCHEDULING_DELETE_POOL_REQUEST | typeof SCHEDULING_EDIT_POOL_REQUEST>
