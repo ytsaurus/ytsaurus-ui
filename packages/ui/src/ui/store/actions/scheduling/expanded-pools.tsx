@@ -1,15 +1,18 @@
-import React from 'react';
 import {ThunkAction} from 'redux-thunk';
 import {RootState} from '../../reducers';
 import _ from 'lodash';
 
 import {Toaster} from '@gravity-ui/uikit';
 
-import {ExpandedPoolsAction} from '../../reducers/scheduling/expanded-pools';
+import {
+    ExpandedPoolInfo,
+    ExpandedPoolsAction,
+    PoolCypressData,
+} from '../../reducers/scheduling/expanded-pools';
 
 import {YTApiId, ytApiV3Id} from '../../../rum/rum-wrap-api';
-import {showErrorPopup, splitBatchResults} from '../../../utils/utils';
-import {makeGet} from '../../../utils/batch';
+import {splitBatchResults} from '../../../utils/utils';
+import {makeGet, makeList} from '../../../utils/batch';
 import {
     CHANGE_POOL,
     ROOT_POOL_NAME,
@@ -31,6 +34,7 @@ import {isSupportedSchedulingChildrenByPool} from '../../../store/selectors/thor
 import {YTError} from '../../../../@types/types';
 import CancelHelper, {isCancelled} from '../../../utils/cancel-helper';
 import {EMPTY_OBJECT} from '../../../constants';
+import {flattenAttributes} from '../../../utils/scheduling/scheduling';
 
 type ExpandedPoolsThunkAction = ThunkAction<
     any,
@@ -76,6 +80,20 @@ const POOL_FIELDS_TO_LOAD = [
     'abc',
 ];
 
+const POOL_TREE_GET_ATTRS = [
+    'integral_guarantees',
+    'weight',
+    'max_operation_count',
+    'max_running_operation_count',
+    'strong_guarantee_resources',
+    'resource_limits',
+    'forbid_immediate_operations',
+    'create_ephemeral_subpools',
+    'fifo_sort_parameters',
+    'config',
+    'folder_id',
+];
+
 class EmptyFullPath extends Error {}
 
 export function loadExpandedPools(tree: string): ExpandedPoolsThunkAction {
@@ -86,26 +104,26 @@ export function loadExpandedPools(tree: string): ExpandedPoolsThunkAction {
             return dispatch(loadExpandedOperationsAndPools(tree));
         } else {
             return ytApiV3Id
-                .executeBatch<string>(YTApiId.schedulingPoolFullPath, {
-                    requests: [
-                        {
-                            command: 'get' as const,
-                            parameters: {
-                                path: `//sys/scheduler/orchid/scheduler/pool_trees/${tree}/pools/${pool}/full_path`,
+                .executeBatch<{full_path: string; is_ephemeral?: boolean}>(
+                    YTApiId.schedulingPoolFullPath,
+                    {
+                        requests: [
+                            {
+                                command: 'get' as const,
+                                parameters: {
+                                    path: `//sys/scheduler/orchid/scheduler/pool_trees/${tree}/pools/${pool}`,
+                                    fields: ['is_ephemeral', 'full_path'],
+                                },
                             },
-                        },
-                    ],
-                })
-                .then(([{output: fullPath}]) => {
-                    if (!fullPath) {
+                        ],
+                    },
+                )
+                .then(([{output}]) => {
+                    const {full_path, is_ephemeral} = output ?? {};
+                    if (!full_path) {
                         throw new EmptyFullPath();
                     } else {
-                        /**
-                         * `fullPath` value starts from `/`, example: `/mypool/child/subchild`
-                         * so we have to use `.slice(1)` to remove first empty string
-                         */
-                        const expandedPools = fullPath.split('/').slice(1);
-                        dispatch(addToExpandedPoolsNoLoad(tree, expandedPools));
+                        dispatch(addFullPathToExpandedPoolsNoLoad(tree, full_path, is_ephemeral));
                         dispatch(loadExpandedOperationsAndPools(tree));
                     }
                 })
@@ -134,11 +152,12 @@ function loadExpandedOperationsAndPools(tree: string): ExpandedPoolsThunkAction 
         const state = getState();
 
         const loadAll = getExpandedPoolsLoadAll(state);
-        const expandedPools = loadAll
-            ? new Set<string>()
-            : getSchedulingOperationsExpandedPools(state)[tree] ?? new Set<string>();
+        const expandedPools: Map<string, ExpandedPoolInfo> = loadAll
+            ? new Map()
+            : getSchedulingOperationsExpandedPools(state)[tree] ?? new Map();
+        const expandedPoolNames: Array<string> = [...expandedPools.keys()];
 
-        const operationsExpandedPools = [...expandedPools];
+        const operationsExpandedPools: Array<string> = [...expandedPoolNames];
 
         const operationsRequests: Array<BatchSubRequest> = [];
         if (loadAll) {
@@ -157,14 +176,21 @@ function loadExpandedOperationsAndPools(tree: string): ExpandedPoolsThunkAction 
         const loadAllPools = loadAll || !isSupportedSchedulingChildrenByPool(state);
         const poolsRequests: Array<BatchSubRequest> = [];
         const poolsChildrenRequests: Array<BatchSubRequest> = [];
-        const poolsExpandedPools = expandedPools.has(ROOT_POOL_NAME)
-            ? [...expandedPools]
-            : [ROOT_POOL_NAME, ...expandedPools];
+        const poolsCypressDataRequests: Array<BatchSubRequest> = [];
+
+        const poolsExpandedPools: Array<string> =
+            -1 !== expandedPoolNames.indexOf(ROOT_POOL_NAME)
+                ? expandedPoolNames
+                : [ROOT_POOL_NAME, ...expandedPoolNames];
+
         if (loadAllPools) {
-            operationsRequests.push(
+            poolsRequests.push(
                 makeGet(`//sys/scheduler/orchid/scheduler/pool_trees/${tree}/pools`, {
                     fields: POOL_FIELDS_TO_LOAD,
                 }),
+            );
+            poolsCypressDataRequests.push(
+                makeGet(`//sys/pool_trees/${tree}`, {attributes: POOL_TREE_GET_ATTRS}),
             );
         } else {
             poolsExpandedPools.forEach((pool) => {
@@ -181,6 +207,20 @@ function loadExpandedOperationsAndPools(tree: string): ExpandedPoolsThunkAction 
                         },
                     ),
                 );
+                const {parentPoolPath, isEphemeral} = expandedPools.get(pool) ?? {};
+                const cypressDataPath = parentPoolPath
+                    ? `//sys/pool_trees/${tree}/${parentPoolPath}/${pool}`
+                    : `//sys/pool_trees/${tree}/${pool}`;
+                if (pool === ROOT_POOL_NAME || !isEphemeral) {
+                    poolsCypressDataRequests.push(
+                        makeList(
+                            pool === ROOT_POOL_NAME ? `//sys/pool_trees/${tree}` : cypressDataPath,
+                            {
+                                attributes: POOL_TREE_GET_ATTRS,
+                            },
+                        ),
+                    );
+                }
             });
         }
 
@@ -209,9 +249,15 @@ function loadExpandedOperationsAndPools(tree: string): ExpandedPoolsThunkAction 
                       parameters: {requests: poolsChildrenRequests},
                       cancellation: cancelHelper.saveCancelToken,
                   }),
+            !poolsCypressDataRequests.length
+                ? Promise.resolve([])
+                : ytApiV3Id.executeBatch(YTApiId.schedulingLoadCypressDataPerPool, {
+                      parameters: {requests: poolsCypressDataRequests},
+                      cancellation: cancelHelper.saveCancelToken,
+                  }),
         ])
-            .then(([operationsResults, poolsResults, poolsChildrenResults]) => {
-                const error: YTError = {message: 'Failed to load pools'};
+            .then(([operationsResults, poolsResults, poolsChildrenResults, poolsCypressData]) => {
+                const error: YTError = {message: 'Failed to load expanded pools'};
                 const {results: operations} = splitBatchResults(operationsResults, error);
                 const rawOperations = _.reduce(
                     operations,
@@ -222,6 +268,7 @@ function loadExpandedOperationsAndPools(tree: string): ExpandedPoolsThunkAction 
                 );
 
                 const rawPools: Record<string, PoolInfo> = {};
+                const cypressData: Record<string, PoolCypressData> = {};
 
                 if (loadAllPools) {
                     const {results: pools} = splitBatchResults<Record<string, PoolInfo>>(
@@ -230,6 +277,11 @@ function loadExpandedOperationsAndPools(tree: string): ExpandedPoolsThunkAction 
                     );
                     const [value = {}] = pools ?? [];
                     Object.assign(rawPools, value);
+
+                    const {
+                        results: [data],
+                    } = splitBatchResults(poolsCypressData, error);
+                    Object.assign(cypressData, flattenAttributes(data));
                 } else {
                     const {results: pools, resultIndices} = splitBatchResults<PoolInfo>(
                         poolsResults,
@@ -247,6 +299,15 @@ function loadExpandedOperationsAndPools(tree: string): ExpandedPoolsThunkAction 
                     poolChildren.forEach((children) => {
                         Object.assign(rawPools, children);
                     });
+
+                    const {results: cypressDataChildrenPerPool} = splitBatchResults<
+                        Array<PoolCypressData>
+                    >(poolsCypressData, error);
+                    cypressDataChildrenPerPool.forEach((poolChildrenCypressData) => {
+                        poolChildrenCypressData.forEach((item) => {
+                            cypressData[item.$value] = item;
+                        });
+                    });
                 }
 
                 dispatch({
@@ -257,6 +318,9 @@ function loadExpandedOperationsAndPools(tree: string): ExpandedPoolsThunkAction 
                             ? rawOperations
                             : EMPTY_OBJECT,
                         rawPools: Object.keys(rawPools).length ? rawPools : EMPTY_OBJECT,
+                        flattenCypressData: Object.keys(cypressData).length
+                            ? cypressData
+                            : EMPTY_OBJECT,
                     },
                 });
 
@@ -270,26 +334,6 @@ function loadExpandedOperationsAndPools(tree: string): ExpandedPoolsThunkAction 
                         type: SCHEDULING_EXPANDED_POOLS_FAILURE,
                         data: {error},
                     });
-
-                    const data = error?.response?.data || error;
-                    const {code, message} = data;
-
-                    new Toaster().add({
-                        name: 'load-scheduling-operations',
-                        type: 'error',
-                        title: 'Failed to load operations',
-                        content: (
-                            <span>
-                                [code {code}] {message}
-                            </span>
-                        ),
-                        actions: [
-                            {
-                                label: ' Details',
-                                onClick: () => showErrorPopup(data),
-                            },
-                        ],
-                    });
                 }
             });
     };
@@ -301,9 +345,12 @@ export function setExpandedPool(poolName: string, expanded: boolean): ExpandedPo
         const tree = getTree(getState());
         const expandedPools = getSchedulingOperationsExpandedPools(state);
 
-        const treeExpandedPools = new Set(expandedPools[tree]);
+        const poolsByName = getSchedulingPoolsMapByName(state);
+
+        const treeExpandedPools = new Map(expandedPools[tree]);
         if (expanded) {
-            treeExpandedPools.add(poolName);
+            const expandedPoolInfo = calcExpandedPoolInfo(poolName, poolsByName);
+            treeExpandedPools.set(poolName, expandedPoolInfo);
         } else {
             treeExpandedPools.delete(poolName);
         }
@@ -313,31 +360,38 @@ export function setExpandedPool(poolName: string, expanded: boolean): ExpandedPo
     };
 }
 
-function addToExpandedPoolsNoLoad(
+function addFullPathToExpandedPoolsNoLoad(
     tree: string,
-    poolsToExpand: Array<string>,
+    /**
+     * elements of the array should have the same format as `//sys/scheduler/orchid/scheduler/pool_trees/${tree}/pools/${pool}/full_path`
+     */
+    fullPath: string,
+    isEphemeral?: boolean,
 ): ExpandedPoolsThunkAction {
     return (dispatch, getState) => {
-        const oldExpandedPools = getSchedulingOperationsExpandedPools(getState());
-        const treeExpandedPools = new Set(oldExpandedPools[tree]);
+        const state = getState();
+        const oldExpandedPools = getSchedulingOperationsExpandedPools(state);
+        const treeExpandedPools = new Map(oldExpandedPools[tree]);
 
-        let updated = false;
-        poolsToExpand.forEach((pool) => {
-            if (!treeExpandedPools.has(pool)) {
-                updated = true;
-                treeExpandedPools.add(pool);
-            }
-        });
+        /**
+         * `fullPath` value starts from `/`, example: `/mypool/child/subchild`
+         * so we have to use `.slice(1)` to remove first empty string
+         */
+        const parts = fullPath.split('/').slice(1);
 
-        if (updated) {
-            dispatch(updateExpandedPoolNoLoad(tree, treeExpandedPools));
+        for (let i = 0; i < parts.length; ++i) {
+            const poolName = parts[i];
+            const parentPoolPath = parts.slice(0, i).join('/');
+            treeExpandedPools.set(poolName, {parentPoolPath, isEphemeral});
         }
+
+        dispatch(updateExpandedPoolNoLoad(tree, treeExpandedPools));
     };
 }
 
 function updateExpandedPoolNoLoad(
     tree: string,
-    treeExpandedPools: Set<string>,
+    treeExpandedPools: Map<string, ExpandedPoolInfo>,
 ): ExpandedPoolsThunkAction {
     return (dispatch, getState) => {
         const oldExpandedPools = getSchedulingOperationsExpandedPools(getState());
@@ -369,7 +423,7 @@ export function resetExpandedPools(tree: string): ExpandedPoolsThunkAction {
                 data: {
                     expandedPools: {
                         ...rest,
-                        [tree]: new Set<string>(),
+                        [tree]: new Map<string, ExpandedPoolInfo>(),
                     },
                 },
             });
@@ -413,4 +467,18 @@ export function setLoadAllOperations(loadAll: boolean): ExpandedPoolsThunkAction
         const tree = getTree(state);
         dispatch(loadExpandedPools(tree));
     };
+}
+
+function calcExpandedPoolInfo(
+    poolName: string,
+    poolsByName: Record<string, PoolInfo>,
+): ExpandedPoolInfo {
+    let data = poolsByName[poolName];
+    const isEphemeral = data?.isEphemeral;
+    let res = '';
+    while (data?.parent && data.parent !== ROOT_POOL_NAME) {
+        res = res ? `${data.parent}/${res}` : data.parent;
+        data = poolsByName[data.parent];
+    }
+    return {parentPoolPath: res, isEphemeral};
 }

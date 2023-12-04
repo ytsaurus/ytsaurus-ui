@@ -2,6 +2,9 @@ import {createSelector} from 'reselect';
 
 import {RootState} from '../../reducers';
 
+export const getExpandedPoolCypressData = (state: RootState) =>
+    state.scheduling.expandedPools.flattenCypressData;
+
 export const getSchedulingOperations = (state: RootState) =>
     state.scheduling.expandedPools.rawOperations;
 export const getExpandedPoolsTree = (state: RootState) =>

@@ -1,3 +1,4 @@
+import {USE_CACHE, USE_MAX_SIZE} from '../constants';
 import {BatchSubRequest} from '../../shared/yt-types';
 
 export function makeGet(
@@ -9,6 +10,7 @@ export function makeGet(
         parameters: {
             path,
             ...parameters,
+            ...USE_CACHE,
         },
     };
 }
@@ -22,6 +24,8 @@ export function makeList(
         parameters: {
             path,
             ...parameters,
+            ...USE_CACHE,
+            ...USE_MAX_SIZE,
         },
     };
 }

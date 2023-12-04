@@ -46,20 +46,6 @@ import {USE_CACHE} from '../../../constants';
 
 const toaster = new Toaster();
 
-const POOL_TREE_GET_ATTRS = [
-    'integral_guarantees',
-    'weight',
-    'max_operation_count',
-    'max_running_operation_count',
-    'strong_guarantee_resources',
-    'resource_limits',
-    'forbid_immediate_operations',
-    'create_ephemeral_subpools',
-    'fifo_sort_parameters',
-    'config',
-    'folder_id',
-];
-
 type SchedulingThunkAction<T = unknown> = ThunkAction<T, RootState, unknown, SchedulingAction>;
 
 export function loadSchedulingData(): SchedulingThunkAction {
@@ -108,9 +94,6 @@ export function loadSchedulingData(): SchedulingThunkAction {
                 });
 
                 const treeRequests = [
-                    makeGet(`//sys/pool_trees/${tree}`, {
-                        attributes: POOL_TREE_GET_ATTRS,
-                    }),
                     makeGet(`//sys/scheduler/orchid/scheduler/pool_trees/${tree}/resource_usage`),
                     makeGet(`//sys/scheduler/orchid/scheduler/pool_trees/${tree}/resource_limits`),
                     makeGet(`//sys/scheduler/orchid/scheduler/pool_trees/${tree}/config`),
@@ -146,30 +129,21 @@ export function loadSchedulingData(): SchedulingThunkAction {
                         return results;
                     });
             })
-            .then(
-                ([
-                    treeAttributes,
+            .then(([resource_usage, resource_limits, config, resource_distribution_info]) => {
+                const treeResources = {
                     resource_usage,
                     resource_limits,
                     config,
                     resource_distribution_info,
-                ]) => {
-                    const treeResources = {
-                        resource_usage,
-                        resource_limits,
-                        config,
-                        resource_distribution_info,
-                    };
+                };
 
-                    dispatch({
-                        type: SCHEDULING_DATA_SUCCESS,
-                        data: {
-                            treeResources,
-                            rawTreeAttributes: treeAttributes,
-                        },
-                    });
-                },
-            )
+                dispatch({
+                    type: SCHEDULING_DATA_SUCCESS,
+                    data: {
+                        treeResources,
+                    },
+                });
+            })
             .catch((error) => {
                 if (error.code !== yt.codes.CANCELLED) {
                     dispatch({
