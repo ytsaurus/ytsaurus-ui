@@ -13,10 +13,12 @@ import ColumnSelectorModal from '../../../components/ColumnSelectorModal/ColumnS
 import {chytUpdateListFilters} from '../../../store/actions/chyt/list-fitlers';
 import {
     getChytListAvailableCreators,
+    getChytListAvailableHealths,
     getChytListAvailableStates,
     getChytListColumns,
     getChytListFilterAlias,
     getChytListFilterCreator,
+    getChytListFilterHealth,
     getChytListFilterState,
 } from '../../../store/selectors/chyt';
 import {ChytListFilters} from '../../../store/reducers/chyt/list-filters';
@@ -53,6 +55,10 @@ function ChytPageListToolbar() {
                 {
                     name: 'state',
                     node: <StateFilter onUpdate={onUpdate} />,
+                },
+                {
+                    name: 'health',
+                    node: <HealthFilter onUpdate={onUpdate} />,
                 },
                 {
                     name: 'columns',
@@ -98,6 +104,32 @@ function CreatorFilter({onUpdate}: {onUpdate: (value: {creator?: string}) => voi
             items={items}
             onChange={(creator) => {
                 onUpdate({creator});
+            }}
+        />
+    );
+}
+
+function HealthFilter({onUpdate}: {onUpdate: (value: {health?: string}) => void}) {
+    const value = useSelector(getChytListFilterHealth);
+    const choices = useSelector(getChytListAvailableHealths);
+
+    const items = React.useMemo(() => {
+        return choices.map((item) => {
+            return {
+                value: item,
+                text: item,
+            };
+        });
+    }, [choices]);
+
+    return (
+        <SelectSingle
+            className={block('select-filter')}
+            label="Health:"
+            value={value}
+            items={items}
+            onChange={(health) => {
+                onUpdate({health});
             }}
         />
     );

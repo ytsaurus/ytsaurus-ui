@@ -7,6 +7,7 @@ export type ChytListFilters = {
     name: string;
     creator: string | undefined;
     state: string | undefined;
+    health: string | undefined;
 
     sortState: Array<SortState<keyof ChytInfo>>;
 };
@@ -15,6 +16,7 @@ export const initialState: ChytListFilters = {
     name: '',
     creator: undefined,
     state: undefined,
+    health: undefined,
 
     sortState: [{column: 'alias', order: 'asc'}],
 };

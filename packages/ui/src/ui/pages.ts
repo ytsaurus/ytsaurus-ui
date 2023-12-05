@@ -86,7 +86,7 @@ const pages: Array<HeaderItem> = [
     },
     {
         id: Page.CHYT,
-        name: 'Cliqueues',
+        name: 'Cliques',
     },
 ];
 
