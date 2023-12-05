@@ -81,9 +81,12 @@ export function ResultPaginator({queryId, resultIndex, className}: Props) {
         [dispatch],
     );
 
-    const goToPage = useCallback((page: number) => {
-        dispatch(updateQueryResult(queryId, resultIndex, page));
-    }, []);
+    const goToPage = useCallback(
+        (page: number) => {
+            dispatch(updateQueryResult(queryId, resultIndex, page));
+        },
+        [queryId],
+    );
 
     return (
         <div className={b(null, className)}>
