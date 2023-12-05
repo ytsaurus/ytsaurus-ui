@@ -301,6 +301,7 @@ export function readQueryResults(
                         value_format: 'yql',
                         field_weight_limit: settings?.cellsSize,
                         encode_utf8: 'false',
+                        max_selected_column_count: 3000,
                     },
                 },
             },
