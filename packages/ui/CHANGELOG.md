@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.5.2](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.5.1...ui-v1.5.2) (2023-12-05)
+
+
+### Bug Fixes
+
+* pagination callback not rerendering when switching queries ([99db6af](https://github.com/ytsaurus/ytsaurus-ui/commit/99db6af890cbce0213223d605fe604e5ea64b19c))
+* **query tracker:** row count and truncated flag are now displayed above results table [[#210](https://github.com/ytsaurus/ytsaurus-ui/issues/210)] ([fe200b9](https://github.com/ytsaurus/ytsaurus-ui/commit/fe200b9a2f964f484aa0e820ea9c68c7b12d8d32))
+* **query-tracker:** Query results with more than 50 columns are not shown properly [#208](https://github.com/ytsaurus/ytsaurus-ui/issues/208) ([8e2ddc7](https://github.com/ytsaurus/ytsaurus-ui/commit/8e2ddc77b3b2691a346a3bd22be8b5d2558b61f5))
+
 ## [1.5.1](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.5.0...ui-v1.5.1) (2023-12-01)
 
 
