@@ -10,7 +10,8 @@ import hammer from '../../../common/hammer';
 import {isRetryFutile} from '../../../utils/index';
 import {getNodeffectiveState, incrementStateCounter} from '../../../utils/system/proxies';
 import {showErrorPopup, splitBatchResults} from '../../../utils/utils';
-import {SYSTEM_FETCH_NODES, UNAWARE, USE_CACHE, USE_MAX_SIZE} from '../../../constants';
+import {SYSTEM_FETCH_NODES, UNAWARE} from '../../../constants';
+import {USE_CACHE, USE_MAX_SIZE} from '../../../../shared/constants/yt-api';
 import {YTApiId, ytApiV3Id} from '../../../rum/rum-wrap-api';
 
 import type {RootState} from '../../../store/reducers';

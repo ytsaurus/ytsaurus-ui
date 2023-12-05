@@ -21,7 +21,9 @@ import {
 } from '../../../store/actions/operations/utils';
 import {OPERATIONS_PAGE} from '../../../constants/operations/list';
 import {getCurrentClusterConfig} from '../../../store/selectors/global';
-import {TYPED_OUTPUT_FORMAT, USE_CACHE, USE_MAX_SIZE} from '../../../constants/index';
+import {TYPED_OUTPUT_FORMAT} from '../../../constants/index';
+import {USE_CACHE, USE_MAX_SIZE} from '../../../../shared/constants/yt-api';
+
 import {getShowCompetitiveJobs} from '../../../pages/operations/selectors';
 import CancelHelper, {isCancelled} from '../../../utils/cancel-helper';
 import {YTApiId, ytApiV3, ytApiV3Id} from '../../../rum/rum-wrap-api';

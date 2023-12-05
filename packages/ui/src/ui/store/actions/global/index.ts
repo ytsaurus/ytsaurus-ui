@@ -26,9 +26,8 @@ import {
     SET_MAINTENANCE_PAGE_EVENT,
     SPLIT_SCREEN,
     UPDATE_TITLE,
-    USE_CACHE,
-    USE_MAX_SIZE,
 } from '../../../constants/index';
+import {USE_CACHE, USE_MAX_SIZE} from '../../../../shared/constants/yt-api';
 import {YTApiId, ytApiV3Id} from '../../../rum/rum-wrap-api';
 import {getWindowStore} from '../../../store/window-store';
 import {reloadUserSettings} from '../settings';

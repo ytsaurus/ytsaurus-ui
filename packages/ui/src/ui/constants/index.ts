@@ -89,15 +89,4 @@ export const SPLIT_PANE_ID = 'split-portal';
 
 export const DASHBOARD_VIEW_CONTEXT = 'dashboard';
 
-const LIST_MAX_SIZE = 1000000;
-
-export const USE_CACHE = {
-    read_from: 'cache',
-    disable_per_user_cache: true,
-} as const;
-
-export const USE_MAX_SIZE = {
-    max_size: LIST_MAX_SIZE,
-};
-
 export const GENERIC_ERROR_MESSAGE = ' If the problem persists please report it via Bug Reporter.';

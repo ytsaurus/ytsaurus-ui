@@ -7,7 +7,7 @@ import {
     getOperationsListTimeRange,
     getValueIfNotDefault,
 } from '../../../store/selectors/operations';
-import {USE_CACHE} from '../../../constants';
+import {USE_CACHE} from '../../../../shared/constants/yt-api';
 
 // Operations
 

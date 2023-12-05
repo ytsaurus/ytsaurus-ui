@@ -4,6 +4,7 @@ import cn from 'bem-cn-lite';
 import {useSelector} from 'react-redux';
 import axios from 'axios';
 
+import {USE_MAX_SIZE} from '../../../../../shared/constants/yt-api';
 import ypath from '../../../../common/thor/ypath';
 
 import {DialogControlProps} from '../../../../components/Dialog/Dialog.types';
@@ -135,6 +136,7 @@ function useLoadedPools(
             return wrapApiPromiseByToaster(
                 ytApiV3Id.list(YTApiId.listPoolNames, {
                     path: `//sys/scheduler/orchid/scheduler/pool_trees/${poolTree}/pools`,
+                    ...USE_MAX_SIZE,
                 }),
                 {
                     skipSuccessToast: true,

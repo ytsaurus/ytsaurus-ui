@@ -24,7 +24,7 @@ import {
     UPDATE_EDITABLE_ACCOUNT,
 } from '../../../constants/accounts/accounts';
 import {ACCOUNTS_DATA_FIELDS_ACTION} from '../../../constants/accounts';
-import {USE_CACHE, USE_MAX_SIZE} from '../../../constants/index';
+import {USE_CACHE, USE_MAX_SIZE} from '../../../../shared/constants/yt-api';
 import {getCluster, getCurrentUserName} from '../../../store/selectors/global';
 import {
     getAccountsDisabledCacheForNextFetch,
