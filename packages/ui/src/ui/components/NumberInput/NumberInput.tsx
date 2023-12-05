@@ -65,6 +65,8 @@ export interface NumberInputWithErrorProps
     validator?: (v?: number) => string | undefined;
     min?: number;
     max?: number;
+    integerOnly?: boolean;
+
     showHint?: boolean;
 
     hidePrettyValue?: boolean;
@@ -114,7 +116,7 @@ export class NumberInputWithError extends React.Component<NumberInputWithErrorPr
     }
 
     static errorFromValue(v: NumberInputWithErrorProps['value'], props: NumberInputWithErrorProps) {
-        const {validator = () => undefined, min, max} = props;
+        const {validator = () => undefined, min, max, integerOnly} = props;
         const {value, error} = v || {};
 
         if (error) {
@@ -136,6 +138,10 @@ export class NumberInputWithError extends React.Component<NumberInputWithErrorPr
             }
         } catch (error) {
             return String(error);
+        }
+
+        if (integerOnly && value % 1 !== 0) {
+            return `The value must be an integer`;
         }
 
         if (min !== undefined && value < min) {

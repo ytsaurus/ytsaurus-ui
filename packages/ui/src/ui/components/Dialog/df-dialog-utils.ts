@@ -77,21 +77,27 @@ export function descriptionToDialogField<T = unknown>(
             };
         case 'int64':
         case 'uint64':
-        case 'byte_count':
+        case 'byte_count': {
+            const valueFormat = item.type === 'byte_count' ? 'Bytes' : undefined;
+            const defaultFormatted =
+                valueFormat === 'Bytes'
+                    ? format.Bytes(item.default_value)
+                    : format.Number(item.default_value);
             return {
                 ...common,
                 type: 'number',
                 extras: {
                     ...extras,
                     hidePrettyValue: true,
-                    placeholder:
-                        item.default_value !== undefined ? String(item.default_value) : undefined,
+                    placeholder: item.default_value !== undefined ? defaultFormatted : undefined,
                     min: item.min_value,
                     max: item.max_value,
-                    format: item.type === 'byte_count' ? 'Bytes' : undefined,
+                    format: valueFormat,
+                    integerOnly: true,
                 },
                 converter: CONVERTER.number,
             };
+        }
         case 'yson':
             return {
                 ...common,
