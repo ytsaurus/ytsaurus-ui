@@ -31,7 +31,7 @@ import {
     GET_NODES,
     GET_NODES_FILTER_OPTIONS,
 } from '../../../../constants/components/nodes/nodes';
-import {USE_CACHE, USE_MAX_SIZE} from '../../../../constants';
+import {USE_CACHE, USE_MAX_SIZE} from '../../../../../shared/constants/yt-api';
 import CancelHelper from '../../../../utils/cancel-helper';
 import {YTApiId, ytApiV3Id} from '../../../../rum/rum-wrap-api';
 import type {ActionD, FIX_MY_TYPE, PartialDeep} from '../../../../types';

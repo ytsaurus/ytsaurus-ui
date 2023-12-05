@@ -4,6 +4,8 @@ import type {Request, Response} from 'express';
 // @ts-ignore
 import ytLib from '@ytsaurus/javascript-wrapper';
 
+import {USE_MAX_SIZE} from '../../shared/constants/yt-api';
+
 import {sendAndLogError} from '../utils';
 import {getUserYTApiSetup} from '../components/requestsSetup';
 import {YTError} from '../../@types/types';
@@ -42,7 +44,10 @@ async function loadPoolTree(
     const poolTreesRoot = await getPoolTreeRootPath(setup);
 
     const tree = poolTree ? poolTree : await loadDefaultPoolTree(setup, poolTreesRoot);
-    const data: PoolTree = await yt.v3.get({setup, parameters: {path: `${poolTreesRoot}/${tree}`}});
+    const data: PoolTree = await yt.v3.get({
+        setup,
+        parameters: {path: `${poolTreesRoot}/${tree}`, ...USE_MAX_SIZE},
+    });
 
     const names: Array<string> = [];
     const stack = [data];

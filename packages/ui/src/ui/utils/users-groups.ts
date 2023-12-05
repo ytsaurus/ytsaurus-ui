@@ -1,5 +1,5 @@
 import {YTApiId, ytApiV3Id} from '../rum/rum-wrap-api';
-import {USE_CACHE, USE_MAX_SIZE} from '../constants';
+import {USE_CACHE, USE_MAX_SIZE} from '../../shared/constants/yt-api';
 
 interface Params {
     path: string;

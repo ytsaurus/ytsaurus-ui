@@ -11,7 +11,7 @@ import {getAccountNames} from '../../store/selectors/accounts/accounts-ts';
 
 import './AccountsSuggest.scss';
 import {fetchFullList1M} from '../../utils/users-groups';
-import {USE_CACHE} from '../../constants';
+import {USE_CACHE} from '../../../shared/constants/yt-api';
 import {RootState} from '../../store/reducers';
 import {YTApiId} from '../../rum/rum-wrap-api';
 import {SelectSingle} from '../../components/Select/Select';
