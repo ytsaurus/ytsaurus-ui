@@ -18,6 +18,11 @@ export const getChytListAvailableCreators = createSelector([getChytListData], (d
     return uniq_(items.map((item) => item.creator!)).sort();
 });
 
+export const getChytListAvailableHealths = createSelector([getChytListData], (data) => {
+    const {items = []} = data;
+    return compact_(uniq_(items.map((item) => item.health)).sort());
+});
+
 export const getChytListAvailableStates = createSelector([getChytListData], (data) => {
     const {items = []} = data;
     return uniq_(items.map((item) => item.state!)).sort();
@@ -26,6 +31,7 @@ export const getChytListAvailableStates = createSelector([getChytListData], (dat
 export const getChytCurrentAlias = (state: RootState) => state.chyt.clique.currentClique;
 
 export const getChytListFilterAlias = (state: RootState) => state.chyt.listFilters.name;
+export const getChytListFilterHealth = (state: RootState) => state.chyt.listFilters.health;
 export const getChytListFilterCreator = (state: RootState) => state.chyt.listFilters.creator;
 export const getChytListFilterState = (state: RootState) => state.chyt.listFilters.state;
 
@@ -107,12 +113,18 @@ export const getChytListTableSortStateByName = createSelector(
 );
 
 const getChytFilterPredicate = createSelector(
-    [getChytListFilterAlias, getChytListFilterCreator, getChytListFilterState],
-    (alias, creator, state) => {
+    [
+        getChytListFilterAlias,
+        getChytListFilterCreator,
+        getChytListFilterState,
+        getChytListFilterHealth,
+    ],
+    (alias, creator, state, health) => {
         const predicates = compact_([
             alias ? (item: ChytInfo) => -1 !== item.alias.indexOf(alias) : undefined,
             creator !== undefined ? (item: ChytInfo) => creator === item.creator : undefined,
             state ? (item: ChytInfo) => state === item.state : undefined,
+            health ? (item: ChytInfo) => health === item.health : undefined,
         ]);
 
         return predicates.length ? concatByAnd(...predicates) : undefined;
