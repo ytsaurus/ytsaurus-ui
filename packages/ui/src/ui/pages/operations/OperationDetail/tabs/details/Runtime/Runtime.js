@@ -6,7 +6,6 @@ import _ from 'lodash';
 
 import MetaTable, {
     Template,
-    TemplatePool,
     TemplateWeight,
 } from '../../../../../../components/MetaTable/MetaTable';
 
@@ -14,6 +13,7 @@ import {formatShare} from '../../../../../../utils/operations/tabs/details/runti
 import {showEditPoolsWeightsModal} from '../../../../../../store/actions/operations';
 import hammer from '../../../../../../common/hammer';
 import {isSupportedOperationStarvationStatus} from '../../../../../../store/selectors/thor/support';
+import {OperationPool} from '../../../../../../components/OperationPool/OperationPool';
 
 const headingBlock = cn('elements-heading');
 const runtimeBlock = cn('runtime');
@@ -90,7 +90,7 @@ class Runtime extends Component {
                             {
                                 key: 'pool',
                                 value: (
-                                    <TemplatePool
+                                    <OperationPool
                                         onEdit={this.handlePoolEditClick}
                                         cluster={cluster}
                                         state={state}

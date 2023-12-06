@@ -6,7 +6,7 @@ import _ from 'lodash';
 import qs from 'qs';
 
 import OperationWeight from '../../../pages/operations/OperationWeight/OperationWeight';
-import OperationPool from '../../../pages/operations/OperationPool/OperationPool';
+import {OperationPool} from '../../../components/OperationPool/OperationPool';
 import CollapsibleList from '../../../components/CollapsibleList/CollapsibleList';
 import Icon from '../../../components/Icon/Icon';
 import Link from '../../../components/Link/Link';
@@ -19,24 +19,6 @@ import CollapsableText from '../../../components/CollapsableText/CollapsableText
 
 const itemBlock = cn('meta-table-item');
 const detailBlock = cn('operation-detail');
-
-/* ----------------------------------------------------------------------------------------------------------------- */
-
-export function TemplatePool({pool, state, cluster, onEdit, compact, reserveEditButton}) {
-    return (
-        <OperationPool
-            pool={pool}
-            state={state}
-            onEdit={onEdit}
-            cluster={cluster}
-            compact={compact}
-            reserveEditButton={reserveEditButton}
-        />
-    );
-}
-
-TemplatePool.propTypes = OperationPool.propTypes;
-TemplatePool.defaultProps = OperationPool.defaultProps;
 
 /* ----------------------------------------------------------------------------------------------------------------- */
 
@@ -210,7 +192,6 @@ export function TemplateWeight({operation, pool, onEdit}) {
 
 TemplateWeight.propTypes = {
     operation: PropTypes.object.isRequired,
-    pool: OperationPool.poolType.isRequired,
     onEdit: PropTypes.func.isRequired,
 };
 

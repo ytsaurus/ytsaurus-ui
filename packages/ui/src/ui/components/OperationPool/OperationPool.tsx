@@ -1,32 +1,15 @@
 import React from 'react';
 import cn from 'bem-cn-lite';
-import PropTypes from 'prop-types';
 
-import Icon from '../../../components/Icon/Icon';
-import Link from '../../../components/Link/Link';
-import Button from '../../../components/Button/Button';
+import Icon from '../../components/Icon/Icon';
+import Link from '../../components/Link/Link';
+import Button from '../../components/Button/Button';
+import {Tooltip} from '../../components/Tooltip/Tooltip';
 
-import {Page} from '../../../constants/index';
-import {Tab} from '../../../constants/scheduling';
+import {Page} from '../../constants/index';
+import {Tab} from '../../constants/scheduling';
 
 import './OperationPool.scss';
-import {Tooltip} from '../../../components/Tooltip/Tooltip';
-
-OperationPool.poolType = PropTypes.shape({
-    tree: PropTypes.string.isRequired,
-    pool: PropTypes.string.isRequired,
-    weight: PropTypes.number,
-    isEphemeral: PropTypes.bool,
-});
-
-OperationPool.propTypes = {
-    pool: OperationPool.poolType.isRequired,
-    cluster: PropTypes.string.isRequired,
-
-    state: PropTypes.string,
-    onEdit: PropTypes.func,
-    compact: PropTypes.bool,
-};
 
 OperationPool.defaultProps = {
     compact: false,
@@ -34,7 +17,7 @@ OperationPool.defaultProps = {
 
 const block = cn('operation-pool');
 
-const renderButton = (onEdit, reserve) => {
+const renderButton = (onEdit?: () => void, reserve?: boolean) => {
     return !onEdit ? null : (
         <Button
             size="s"
@@ -48,7 +31,22 @@ const renderButton = (onEdit, reserve) => {
     );
 };
 
-function OperationPool(props) {
+export type OperationPoolProps = {
+    cluster: string;
+    reserveEditButton?: boolean;
+    compact?: boolean;
+    onEdit?: () => void;
+    state?: 'completed' | 'failed' | 'aborted';
+    pool: {
+        pool: string;
+        tree: string;
+        isEphemeral?: boolean;
+        weight?: number;
+    };
+    erased?: boolean;
+};
+
+export function OperationPool(props: OperationPoolProps) {
     const {cluster, reserveEditButton, compact, onEdit, pool, state, erased} = props;
     const url = `/${cluster}/${Page.SCHEDULING}/${Tab.OVERVIEW}?pool=${pool.pool}&tree=${pool.tree}`;
     const isCorrectState = state !== 'completed' && state !== 'failed' && state !== 'aborted';
@@ -87,5 +85,3 @@ function OperationPool(props) {
         </li>
     );
 }
-
-export default OperationPool;

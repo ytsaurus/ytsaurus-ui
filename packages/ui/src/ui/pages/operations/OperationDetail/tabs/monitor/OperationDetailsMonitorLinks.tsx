@@ -6,7 +6,7 @@ import Icon from '../../../../../components/Icon/Icon';
 import Link from '../../../../../components/Link/Link';
 import Error from '../../../../../components/Error/Error';
 import MetaTable, {MetaTableItem} from '../../../../../components/MetaTable/MetaTable';
-import OperationPool from '../../../../../pages/operations/OperationPool/OperationPool';
+import {OperationPool} from '../../../../../components/OperationPool/OperationPool';
 import {operationMonitoringUrl} from '../../../../../utils/operations/details-ts';
 
 const block = cn('operation-detail-monitor-links');
