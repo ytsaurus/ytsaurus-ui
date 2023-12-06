@@ -173,6 +173,7 @@ function ChytSpecletEditDialog({
                         },
                         {},
                     );
+                    const {restart_on_speclet_change} = values as any;
                     const initials = reduce_(
                         initialValues,
                         (acc, tabValues) => {
@@ -192,7 +193,7 @@ function ChytSpecletEditDialog({
                             }
                             return acc;
                         },
-                        {} as Record<string, unknown>,
+                        {restart_on_speclet_change} as Record<string, unknown>,
                     );
                     return dispatch(chytSetOptions(alias, diff))
                         .then(() => {

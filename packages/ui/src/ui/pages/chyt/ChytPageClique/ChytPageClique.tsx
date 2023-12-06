@@ -148,36 +148,21 @@ function ChytCliqueMetaTable() {
 
         return [
             [
-                {
-                    key: 'Pool',
-                    value: pool ? pool : format.NO_VALUE,
-                },
+                {key: 'Health', value: <CliqueState state={health} />},
+                {key: 'State', value: <CliqueState state={state} />},
+                {key: 'Pool', value: pool ? pool : format.NO_VALUE},
+                {key: 'Instances', value: format.Number(ctl_attributes?.instance_count)},
+                {key: 'Cores', value: format.Number(ctl_attributes?.total_cpu)},
+                {key: 'Memory', value: format.Bytes(ctl_attributes?.total_memory)},
+            ],
+            [
+                {key: 'Stage', value: stage ? <Label capitalize text={stage} /> : format.NO_VALUE},
+                {key: 'Incarnation index', value: format.Number(incarnation_index)},
                 {
                     key: 'Creator',
                     value: creator ? <UserCard userName={creator} /> : format.NO_VALUE,
                 },
-                {
-                    key: 'Instances',
-                    value: format.Number(ctl_attributes?.instance_count),
-                },
-                {
-                    key: 'Cores',
-                    value: format.Number(ctl_attributes?.total_cpu),
-                },
-                {
-                    key: 'Memory',
-                    value: format.Bytes(ctl_attributes?.total_memory),
-                },
-                {
-                    key: 'Modification time',
-                    value: format.DateTime(speclet_modification_time),
-                },
-            ],
-            [
-                {key: 'State', value: <CliqueState state={state} />},
-                {key: 'Health', value: <CliqueState state={health} />},
-                {key: 'Incarnation index', value: format.Number(incarnation_index)},
-                {key: 'Stage', value: stage ? <Label capitalize text={stage} /> : format.NO_VALUE},
+                {key: 'Modification time', value: format.DateTime(speclet_modification_time)},
                 {
                     key: 'SB modification time',
                     value: format.DateTime(strawberry_state_modification_time),
@@ -185,7 +170,7 @@ function ChytCliqueMetaTable() {
             ],
             [
                 {
-                    key: 'Operation id',
+                    key: 'YT operation id',
                     value: (
                         <div className={block('operation-id')}>
                             <OperationId id={id} cluster={cluster} />
@@ -193,8 +178,10 @@ function ChytCliqueMetaTable() {
                     ),
                 },
                 {
-                    key: 'Operation state',
-                    value: format.ReadableField(yt_operation?.state),
+                    key: 'YT operation state',
+                    value: yt_operation?.state
+                        ? format.ReadableField(yt_operation?.state)
+                        : format.NO_VALUE,
                 },
                 {
                     key: 'Start time',
