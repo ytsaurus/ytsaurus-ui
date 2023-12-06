@@ -7,7 +7,7 @@ import CancelHelper, {isCancelled} from '../../../utils/cancel-helper';
 import {getCluster, isDeveloper} from '../../../store/selectors/global';
 import {getChytListVisibleColumns} from '../../../store/selectors/chyt';
 
-import {ChytApi, chytApiAction} from './api';
+import {ChytApi, ChytListAttributes, chytApiAction} from './api';
 import {SettingsThunkAction, setSettingByKey} from '../settings';
 
 type ChytListThunkAction<T> = ThunkAction<Promise<T>, RootState, unknown, ChytListAction>;
@@ -91,7 +91,14 @@ export function chytCliqueCreate(params: {
         return chytApiAction(
             'create',
             cluster,
-            {alias, speclet_options: {active: runAfterCreation, pool, instance_count}},
+            {
+                alias,
+                speclet_options: {
+                    active: runAfterCreation && Boolean(pool),
+                    instance_count,
+                    ...(pool ? {pool} : undefined),
+                },
+            },
             {isAdmin, successTitle: `${alias} clique created`},
         ).finally(() => {
             dispatch(chytLoadList());

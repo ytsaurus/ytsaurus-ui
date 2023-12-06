@@ -96,7 +96,13 @@ function ChytSpeclet({
     );
 }
 
-export function ChytSpecletEditButton() {
+export function ChytSpecletEditButton({
+    compact,
+    className,
+}: {
+    compact?: boolean;
+    className?: string;
+}) {
     const [visible, setVisible] = React.useState(false);
 
     const {error, specletData, dataAlias, alias, unipikaSettings} = useSpecletData();
@@ -114,9 +120,15 @@ export function ChytSpecletEditButton() {
                     onClose={() => setVisible(false)}
                 />
             )}
-            <Button size="m" title={'Edit speclet'} onClick={() => setVisible(!visible)}>
+            <Button
+                size="m"
+                view={compact ? 'normal' : undefined}
+                className={className}
+                title={'Edit speclet'}
+                onClick={() => setVisible(!visible)}
+            >
                 <Icon awesome={'pencil'} />
-                Edit speclet
+                {!compact && 'Edit speclet'}
             </Button>
         </React.Fragment>
     );
@@ -149,6 +161,7 @@ function ChytSpecletEditDialog({
         <React.Fragment>
             {error && <Error bottomMargin error={error} />}
             <YTDFDialog
+                size="l"
                 visible
                 onClose={onClose}
                 onAdd={(form) => {

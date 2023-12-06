@@ -1,43 +1,51 @@
 import React from 'react';
 
+import format from '../../../common/hammer/format';
+
 import {YTDFDialog, makeErrorFields} from '../../../components/Dialog/Dialog';
 import {YTError} from '../../../types';
 import {useThunkDispatch} from '../../../store/thunkDispatch';
 import {chytListAction} from '../../../store/actions/chyt/list';
-import {getCluster} from '../../../store/selectors/global';
-import {chytApiAction} from '../../../store/actions/chyt/api';
 import {Text} from '@gravity-ui/uikit';
-import {useSelector} from 'react-redux';
 
-export function ChytConfirmation({
-    action,
-    alias,
-    onClose,
-    onAction,
-}: {
-    action?: 'remove' | 'start';
+export type ChytConfirmationProps = {
+    action: 'remove' | 'start' | 'stop';
     alias: string;
+    pool?: string;
     onClose: () => void;
-    onAction?: (action: 'remove' | 'start') => void;
-}) {
+    onAction?: (action: ChytConfirmationProps['action']) => void;
+};
+
+export function ChytConfirmation({action, alias, pool, onClose, onAction}: ChytConfirmationProps) {
     const onConfirm = () => {
         if (action) {
             onAction?.(action);
         }
     };
     switch (action) {
+        case 'stop':
         case 'remove':
-            return <ChytDeleteConfirmation {...{alias, onClose, onConfirm}} />;
+            return <ChytSimpleConfirmation {...{alias, action, onClose, onConfirm}} />;
         case 'start':
-            return <ChytStartConfirmation {...{alias, onClose, onConfirm}} />;
+            return <ChytStartConfirmation {...{alias, onClose, onConfirm, pool}} />;
         default:
             return null;
     }
 }
 
-type ConfirmationProps = {alias: string; onClose: () => void; onConfirm: () => void};
+type ConfirmationProps = {
+    alias: string;
+    pool?: string;
+    onClose: () => void;
+    onConfirm: () => void;
+};
 
-function ChytDeleteConfirmation({alias, onClose, onConfirm}: ConfirmationProps) {
+function ChytSimpleConfirmation({
+    alias,
+    action,
+    onClose,
+    onConfirm,
+}: ConfirmationProps & {action: 'remove' | 'stop'}) {
     const dispatch = useThunkDispatch();
 
     const [error, setError] = React.useState<YTError | undefined>();
@@ -46,12 +54,16 @@ function ChytDeleteConfirmation({alias, onClose, onConfirm}: ConfirmationProps) 
         <YTDFDialog
             visible
             pristineSubmittable
-            headerProps={{title: `Remove '${alias}'`}}
-            footerProps={{textApply: `Yes, remove '${alias}'`}}
+            headerProps={{title: `${format.ReadableField(action)} '${alias}'`}}
+            footerProps={{textApply: `Yes, ${action} '${alias}'`}}
             onAdd={() => {
-                return dispatch(chytListAction('stop', {alias}))
+                return dispatch(chytListAction('stop', {alias: alias}))
                     .then(() => {
-                        return dispatch(chytListAction('remove', {alias}));
+                        if (action === 'remove') {
+                            return dispatch(chytListAction('remove', {alias}));
+                        } else {
+                            return null;
+                        }
                     })
                     .then(() => {
                         onConfirm();
@@ -67,7 +79,7 @@ function ChytDeleteConfirmation({alias, onClose, onConfirm}: ConfirmationProps) 
                     type: 'block',
                     name: 'text',
                     extras: {
-                        children: `You are sure you want to remove clique '${alias}'?`,
+                        children: `You are sure you want to ${action} clique '${alias}'?`,
                     },
                 },
                 ...makeErrorFields([error]),
@@ -82,25 +94,22 @@ type StartFormValues = {
     untracked: boolean;
 };
 
-function ChytStartConfirmation({alias, onClose, onConfirm}: ConfirmationProps) {
+function ChytStartConfirmation({
+    alias,
+    onClose,
+    pool,
+    onConfirm,
+}: Omit<ConfirmationProps, 'action'>) {
     const dispatch = useThunkDispatch();
     const [error, setError] = React.useState();
-    const [poolData, setPool] = React.useState<{pool?: string; loaded: boolean} | undefined>();
-    const cluster = useSelector(getCluster);
 
-    React.useEffect(() => {
-        chytApiAction('get_brief_info', cluster, {alias}).then(({result}) => {
-            setPool({pool: result.pool, loaded: true});
-        });
-    }, [alias, cluster]);
-
-    return !poolData?.loaded ? null : (
+    return (
         <YTDFDialog<StartFormValues>
             visible
             headerProps={{title: `Start '${alias}'`}}
             footerProps={{textApply: `Start '${alias}'`}}
             onClose={onClose}
-            //            initialValues={{pool: poolData?.pool}}
+            initialValues={{pool}}
             onAdd={(form) => {
                 const {untracked} = form.getState().values;
                 return dispatch(chytListAction('start', {alias, untracked}))
@@ -121,7 +130,7 @@ function ChytStartConfirmation({alias, onClose, onConfirm}: ConfirmationProps) {
             }}
             fields={[
                 {
-                    type: 'pool',
+                    type: 'text',
                     name: 'pool',
                     caption: 'Pool',
                     extras: {

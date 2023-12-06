@@ -258,12 +258,16 @@ function CreateChytButton() {
                                 extras: ({tree}: FormValues) => {
                                     return {poolTree: tree, placeholder: 'Pool name...'};
                                 },
-                                required: true,
                             },
                             {
                                 name: 'runAfterCreation',
                                 type: 'tumbler',
                                 caption: 'Run after creation',
+                                extras: ({pool}: FormValues) => {
+                                    return {
+                                        disabled: !pool,
+                                    };
+                                },
                             },
                             ...makeErrorFields([error]),
                         ]}
