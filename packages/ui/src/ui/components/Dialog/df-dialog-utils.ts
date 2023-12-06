@@ -94,6 +94,7 @@ export function descriptionToDialogField<T = unknown>(
                     max: item.max_value,
                     format: valueFormat,
                     integerOnly: true,
+                    showHint: true,
                 },
                 converter: CONVERTER.number,
             };

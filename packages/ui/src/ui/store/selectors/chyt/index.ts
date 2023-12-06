@@ -36,7 +36,7 @@ export const getChytListFilterCreator = (state: RootState) => state.chyt.listFil
 export const getChytListFilterState = (state: RootState) => state.chyt.listFilters.state;
 
 type ChytListColumns = Exclude<ChytListAttributes, 'creator' | 'state' | 'yt_operation_id'>;
-const CHYT_LIST_SELECTABLE_COLUMNS: Record<ChytListColumns, true> = {
+const CHYT_LIST_SELECTABLE_COLUMNS: Record<Exclude<ChytListColumns, 'health_reason'>, true> = {
     instance_count: true,
     total_cpu: true,
     total_memory: true,
@@ -49,6 +49,8 @@ const CHYT_LIST_SELECTABLE_COLUMNS: Record<ChytListColumns, true> = {
     strawberry_state_modification_time: true,
     pool: true,
 };
+
+export type ChytSelectableColumn = keyof typeof CHYT_LIST_SELECTABLE_COLUMNS;
 
 type ChytColumnItem = {checked: boolean; column: ChytListColumns};
 
@@ -69,14 +71,14 @@ export const getChytListColumnsFromSettings = (state: RootState) => {
 
 export const getChytListVisibleColumns = createSelector(
     [getChytListColumnsFromSettings],
-    (columns): Array<ChytListColumns> => {
+    (columns): Array<ChytSelectableColumn> => {
         const userColumns = new Set(columns);
         return compact_(
             columns.map((k) => {
                 return CHYT_LIST_SELECTABLE_COLUMNS[
                     k as keyof typeof CHYT_LIST_SELECTABLE_COLUMNS
                 ] && userColumns.has(k)
-                    ? (k as ChytListColumns)
+                    ? (k as ChytSelectableColumn)
                     : null;
             }),
         );

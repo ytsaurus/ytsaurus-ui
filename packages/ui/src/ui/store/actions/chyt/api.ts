@@ -75,6 +75,7 @@ export type ChytListResponseItem = {
         creator?: string;
         creation_time?: string;
         health?: ChytCliqueHealthType;
+        health_reason?: string;
         instance_count?: number;
         speclet_modification_time?: string;
         stage?: string;

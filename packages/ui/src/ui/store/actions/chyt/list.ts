@@ -23,6 +23,12 @@ export function chytLoadList(): ChytListThunkAction<void> {
 
         dispatch({type: CHYT_LIST.REQUEST});
 
+        const extraColumns: Array<ChytListAttributes> = [];
+
+        if (-1 !== columns.indexOf('health')) {
+            extraColumns.push('health_reason');
+        }
+
         return chytApiAction(
             'list',
             cluster,
@@ -32,6 +38,7 @@ export function chytLoadList(): ChytListThunkAction<void> {
                     'creator' as const,
                     'state' as const,
                     ...columns,
+                    ...extraColumns,
                 ],
             },
             {isAdmin, cancelToken: cancelHelper.removeAllAndGenerateNextToken()},
