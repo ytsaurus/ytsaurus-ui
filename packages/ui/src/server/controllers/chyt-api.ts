@@ -29,6 +29,7 @@ async function chytProxyApiImpl(req: Request, res: Response) {
         'get_brief_info',
         'describe_options',
         'set_options',
+        'get_speclet',
     ]);
 
     if (!ALLOWED_ACTIONS.has(action)) {

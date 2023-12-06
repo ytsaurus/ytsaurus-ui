@@ -3,4 +3,12 @@
         text-align: right;
         height: 0px;
     }
+
+    &__raw-speclet {
+        margin-top: -10px;
+    }
+
+    &__raw-speclet-error {
+        margin-top: 40px;
+    }
 }

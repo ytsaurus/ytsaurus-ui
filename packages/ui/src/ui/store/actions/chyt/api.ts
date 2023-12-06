@@ -39,6 +39,7 @@ export type ChytApi =
           params: {alias: string};
           response: WithResult<ChytDescribeOptionsType>;
       }
+    | {action: 'get_speclet'; params: {alias: string}; response: WithResult<unknown>}
     | {action: 'get_brief_info'; params: {alias: string}; response: WithResult<ChytStatusResponse>};
 
 export type ChytStatusResponse = {

@@ -7,11 +7,11 @@ import Button from '../../../components/Button/Button';
 import Error from '../../../components/Error/Error';
 import Icon from '../../../components/Icon/Icon';
 import {YTDFDialog} from '../../../components/Dialog/Dialog';
+import Yson from '../../../components/Yson/Yson';
 import {UnipikaSettings} from '../../../components/Yson/StructuredYson/StructuredYsonTypes';
-import {
-    makeDialogFieldsFromDescription,
-    makeTabbedDialogFieldsFromDescription,
-} from '../../../components/Dialog/df-dialog-utils';
+import {makeTabbedDialogFieldsFromDescription} from '../../../components/Dialog/df-dialog-utils';
+
+import {useUpdater} from '../../../hooks/use-updater';
 
 import {getChytCurrentAlias} from '../../../store/selectors/chyt';
 import {
@@ -20,8 +20,10 @@ import {
     getChytSpecletError,
 } from '../../../store/selectors/chyt/speclet';
 import {getEditJsonYsonSettings} from '../../../store/selectors/thor/unipika';
+import {chytApiAction} from '../../../store/actions/chyt/api';
 import {chytLoadCliqueSpeclet, chytSetOptions} from '../../../store/actions/chyt/speclet';
 import {ChytCliqueSpecletState} from '../../../store/reducers/chyt/speclet';
+import {getCluster} from '../../../store/selectors/global';
 import {useThunkDispatch} from '../../../store/thunkDispatch';
 import {YTError} from '../../../../@types/types';
 
@@ -37,7 +39,7 @@ function useSpecletData() {
         if (alias) {
             dispatch(chytLoadCliqueSpeclet(alias));
         }
-    }, [alias]);
+    }, [alias, dispatch]);
 
     const specletData = useSelector(getChytSpecletData);
     const dataAlias = useSelector(getChytSpecletDataAlias);
@@ -48,7 +50,7 @@ function useSpecletData() {
 }
 
 export function ChytPageCliqueSpeclet() {
-    const {error, specletData, dataAlias, unipikaSettings} = useSpecletData();
+    const {error, alias, specletData, unipikaSettings} = useSpecletData();
 
     return (
         <React.Fragment>
@@ -58,40 +60,45 @@ export function ChytPageCliqueSpeclet() {
                     <div className={block('edit')}>
                         <ChytSpecletEditButton />
                     </div>
-                    <ChytSpeclet
-                        key={dataAlias}
-                        data={specletData}
-                        unipikaSettings={unipikaSettings}
-                    />
+                    <ChytSpeclet alias={alias} unipikaSettings={unipikaSettings} />
                 </React.Fragment>
             )}
         </React.Fragment>
     );
 }
 
-function ChytSpeclet({
-    data,
-    unipikaSettings,
-}: {
-    unipikaSettings: UnipikaSettings;
-    data: ChytCliqueSpecletState['data'];
-}) {
-    const {fields, initialValues} = React.useMemo(() => {
-        return makeDialogFieldsFromDescription(data ?? [], {allowEdit: false, unipikaSettings});
-    }, [data, unipikaSettings]);
+function ChytSpeclet({alias, unipikaSettings}: {alias: string; unipikaSettings: UnipikaSettings}) {
+    const [data, setData] = React.useState<{
+        loaded?: boolean;
+        speclet?: unknown;
+    }>({});
+    const [error, setError] = React.useState<undefined | YTError>();
+    const cluster = useSelector(getCluster);
+
+    const update = React.useCallback(() => {
+        chytApiAction('get_speclet', cluster, {alias})
+            .then((res) => {
+                setData({loaded: true, speclet: res.result});
+                setError(undefined);
+            })
+            .catch((e) => {
+                setError(e);
+            });
+    }, [alias, cluster]);
+
+    useUpdater(update);
 
     return (
         <div className={block()}>
-            <YTDFDialog
-                visible
-                asLeftTopBlock
-                onAdd={() => {
-                    return Promise.resolve();
-                }}
-                fields={fields}
-                initialValues={initialValues}
-                footerProps={{hidden: true}}
-            />
+            {error && <Error className={block('raw-speclet-error')} error={error} bottomMargin />}
+            {data.loaded && (
+                <Yson
+                    className={block('raw-speclet')}
+                    value={data.speclet}
+                    settings={unipikaSettings}
+                    folding
+                />
+            )}
         </div>
     );
 }
