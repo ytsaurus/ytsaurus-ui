@@ -14,6 +14,7 @@ export type EditJsonProps = DialogControlProps<
     {value: string | undefined; error?: string},
     {
         unipikaSettings?: YsonProps['settings'];
+        nullPreview?: any;
     }
 > &
     Omit<
@@ -35,6 +36,7 @@ export function EditJsonWithPreview({
     value: valueProp,
     onChange,
     unipikaSettings,
+    nullPreview,
     ...rest
 }: EditJsonProps) {
     const {value} = valueProp;
@@ -77,6 +79,7 @@ export function EditJsonWithPreview({
                 >
                     <YsonPreviewMemo
                         value={valueProp}
+                        nullPreview={nullPreview}
                         settings={unipikaSettings}
                         onError={onError}
                     />
@@ -90,10 +93,12 @@ function YsonPreview({
     value: {value, error},
     settings,
     onError,
+    nullPreview,
 }: {
     value: EditJsonProps['value'];
     settings: YsonProps['settings'];
     onError: (e: any) => void;
+    nullPreview: any;
 }) {
     const obj = React.useMemo(() => {
         try {
@@ -106,6 +111,15 @@ function YsonPreview({
 
     if (error) {
         return <Text color="danger">{error}</Text>;
+    }
+
+    if (obj === null || obj === undefined) {
+        return (
+            <React.Fragment>
+                Default value:
+                <Yson value={nullPreview ?? null} settings={settings} />
+            </React.Fragment>
+        );
     }
 
     return <Yson value={obj} settings={settings} />;

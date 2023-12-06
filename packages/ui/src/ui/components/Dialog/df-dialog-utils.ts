@@ -108,6 +108,7 @@ export function descriptionToDialogField<T = unknown>(
                     ...extras,
                     unipikaSettings,
                     minHeight: 200,
+                    nullPreview: item.default_value,
                 },
                 converter: CONVERTER.json,
             };
