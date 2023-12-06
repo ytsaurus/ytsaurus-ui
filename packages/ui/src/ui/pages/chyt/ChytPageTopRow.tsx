@@ -9,7 +9,7 @@ import {Breadcrumbs, BreadcrumbsItem, Button} from '@gravity-ui/uikit';
 
 import ClipboardButton from '../../components/ClipboardButton/ClipboardButton';
 import {YTDFDialog, makeErrorFields} from '../../components/Dialog/Dialog';
-import Favourites from '../../components/Favourites/Favourites';
+import Favourites, {FavouritesItem} from '../../components/Favourites/Favourites';
 import {EditableAsText} from '../../components/EditableAsText/EditableAsText';
 import Link from '../../components/Link/Link';
 import Suggest from '../../components/Suggest/Suggest';
@@ -41,14 +41,19 @@ export default function ChytPageTopRow() {
 }
 
 function ChytFavourites() {
+    const history = useHistory();
+    const cluster = useSelector(getCluster);
     const isActiveInFavourites = useSelector(isActiveCliqueInFavourites);
     const favourites = useSelector(getFavouriteChyt);
     const dispatch = useDispatch();
     const currentClique = useSelector(getChytCurrentAlias);
 
-    const handleFavouriteItemClick = React.useCallback(() => {
-        // dispatch(setActiveAccount(item.path));
-    }, [dispatch]);
+    const handleFavouriteItemClick = React.useCallback(
+        (item: FavouritesItem) => {
+            history.push(`/${cluster}/${Page.CHYT}/${item.path}`);
+        },
+        [history, cluster],
+    );
 
     const handleFavouriteToggle = React.useCallback(() => {
         dispatch(chytToggleFavourite(currentClique));
