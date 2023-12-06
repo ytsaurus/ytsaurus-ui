@@ -277,18 +277,37 @@ type QueryResult = {
     yql_type_registry: TypeArray[];
 };
 
+type QueryResultRows = QueryResult['rows'];
+type QueryResultRowSet = QueryResultRows[number];
+
+/**
+ * Format limitations dictate system column names being prefixed by double dollar sign instead
+ * of a single on, here we just replace the stuff
+ */
+const mapQueryRowNames = (rows: QueryResultRows) => {
+    const replaceReg = /^\$\$/;
+    const replaceRows = (rowSet: QueryResultRowSet) =>
+        Object.keys(rowSet).reduce(
+            (result, next) => ({...result, [next.replace(replaceReg, '$')]: rowSet[next]}),
+            {} as QueryResultRowSet,
+        );
+
+    return rows.map(replaceRows);
+};
+
 export function readQueryResults(
     query_id: string,
     result_index = 0,
     cursor: {start: number; end: number},
+    columns: string[],
     settings: {
         cellsSize: number;
     },
 ): ThunkAction<Promise<QueryResult>, RootState, any, any> {
-    return (_dispatch, getState) => {
+    return async (_dispatch, getState) => {
         const state = getState();
         const {stage} = getQueryTrackerRequestOptions(state);
-        return ytApiV4Id.readQueryResults(YTApiId.readQueryResults, {
+        const result = (await ytApiV4Id.readQueryResults(YTApiId.readQueryResults, {
             parameters: {
                 stage,
                 query_id,
@@ -298,6 +317,7 @@ export function readQueryResults(
                 output_format: {
                     $value: 'web_json',
                     $attributes: {
+                        column_names: columns,
                         value_format: 'yql',
                         field_weight_limit: settings?.cellsSize,
                         encode_utf8: 'false',
@@ -306,7 +326,8 @@ export function readQueryResults(
                 },
             },
             setup: getQTApiSetup(),
-        });
+        })) as QueryResult;
+        return {...result, rows: mapQueryRowNames(result.rows)};
     };
 }
 

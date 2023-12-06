@@ -149,6 +149,7 @@ export function loadQueryResult(
                             start: 0,
                             end: settings.pageSize,
                         },
+                        columns.map(({name}) => name),
                         {cellsSize: settings.cellSize},
                     ),
                 ),
@@ -205,6 +206,8 @@ export function updateQueryResult(
 
             const startPage = page * settings.pageSize;
             const endPage = startPage + settings.pageSize;
+            const cols =
+                (await dispatch(getQueryResultMeta(queryId, resultIndex)))?.schema.$value ?? [];
             const result = await wrapApiPromiseByToaster(
                 dispatch(
                     readQueryResults(
@@ -214,6 +217,7 @@ export function updateQueryResult(
                             start: page * settings.pageSize,
                             end: endPage,
                         },
+                        cols.map(({name}) => name),
                         {cellsSize: settings.cellSize},
                     ),
                 ),
