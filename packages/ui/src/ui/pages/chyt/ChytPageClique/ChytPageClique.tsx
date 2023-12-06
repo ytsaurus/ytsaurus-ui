@@ -14,6 +14,7 @@ import Label from '../../../components/Label/Label';
 import MetaTable, {MetaTableItem} from '../../../components/MetaTable/MetaTable';
 import {OperationId} from '../../../components/OperationId/OperationId';
 import StatusLabel from '../../../components/StatusLabel/StatusLabel';
+import {UserCard} from '../../../components/UserLink/UserLink';
 
 import {chytCliqueLoad, chytResetCurrentClique} from '../../../store/actions/chyt/clique';
 import {
@@ -107,9 +108,21 @@ function ChytCliqueMetaTable() {
     const data = useSelector(getChytCliqueData);
 
     const items: Array<Array<MetaTableItem>> = React.useMemo(() => {
-        const {operation_id, pool, state, stage, ctl_attributes, yt_operation} = data ?? {};
+        const {
+            pool,
+            state,
+            stage,
+            ctl_attributes,
+            yt_operation,
+            health,
+            health_reason,
+            incarnation_index,
+            creator,
+            speclet_modification_time,
+            strawberry_state_modification_time,
+        } = data ?? {};
 
-        const {start_time, finish_time} = yt_operation ?? {};
+        const {start_time, finish_time, id} = yt_operation ?? {};
 
         const start_time_number = start_time ? moment(start_time).valueOf() : undefined;
         const finish_time_number = finish_time
@@ -126,33 +139,54 @@ function ChytCliqueMetaTable() {
         return [
             [
                 {
-                    key: 'Id',
-                    value: (
-                        <div className={block('operation-id')}>
-                            <OperationId id={operation_id} cluster={cluster} />
-                        </div>
-                    ),
-                },
-                {
                     key: 'Pool',
                     value: pool ? pool : format.NO_VALUE,
                 },
                 {
-                    key: 'Instance count',
+                    key: 'Creator',
+                    value: creator ? <UserCard userName={creator} /> : format.NO_VALUE,
+                },
+                {
+                    key: 'Instances',
                     value: format.Number(ctl_attributes?.instance_count),
                 },
                 {
-                    key: 'Total cpu',
+                    key: 'Cores',
                     value: format.Number(ctl_attributes?.total_cpu),
                 },
                 {
-                    key: 'Total memory',
+                    key: 'Memory',
                     value: format.Bytes(ctl_attributes?.total_memory),
+                },
+                {
+                    key: 'Modification time',
+                    value: format.DateTime(speclet_modification_time),
                 },
             ],
             [
                 {key: 'State', value: <CliqueState state={state} />},
+                {key: 'Health', value: <CliqueState state={health} />},
+                {key: 'Health reason', value: format.ReadableField(health_reason)},
+                {key: 'Incarnation index', value: format.Number(incarnation_index)},
                 {key: 'Stage', value: stage ? <Label capitalize text={stage} /> : format.NO_VALUE},
+                {
+                    key: 'SB modification time',
+                    value: format.DateTime(strawberry_state_modification_time),
+                },
+            ],
+            [
+                {
+                    key: 'Operation id',
+                    value: (
+                        <div className={block('operation-id')}>
+                            <OperationId id={id} cluster={cluster} />
+                        </div>
+                    ),
+                },
+                {
+                    key: 'Operation state',
+                    value: format.ReadableField(yt_operation?.state),
+                },
                 {
                     key: 'Start time',
                     value: format.DateTime(start_time),

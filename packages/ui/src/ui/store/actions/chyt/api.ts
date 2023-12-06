@@ -42,23 +42,27 @@ export type ChytApi =
     | {action: 'get_brief_info'; params: {alias: string}; response: WithResult<ChytStatusResponse>};
 
 export type ChytStatusResponse = {
-    yt_operation: {
-        start_time?: string;
-        finish_time?: string;
-        operation_id?: string;
-        state?: string;
-    };
-    state?: ChytCliqueStateType;
-    pool?: string;
-    stage?: string;
-    status?: string;
-    incarnation_index?: number;
     ctl_attributes: {
         instance_count?: number;
         total_cpu?: number;
         total_memory?: number;
     };
-    operation_id?: string;
+    yt_operation: {
+        id?: string;
+        state?: string;
+        start_time?: string;
+        finish_time?: string;
+    };
+    state?: ChytCliqueStateType;
+    health?: ChytCliqueHealthType;
+    health_reason?: unknown;
+    incarnation_index?: number;
+    creator?: string;
+    speclet_modification_time?: string;
+    strawberry_state_modification_time?: string;
+    stage?: string;
+
+    pool?: string;
     error?: YTError;
 };
 

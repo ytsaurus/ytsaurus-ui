@@ -245,7 +245,7 @@ export function makeTabbedDialogFieldsFromDescription<
             return {
                 name: group_name,
                 title: group.title,
-                type: 'tab' as const,
+                type: 'tab-vertical' as const,
                 fields: sectionFields,
             };
         }),
