@@ -8,7 +8,6 @@ import {Button, DropdownMenu, DropdownMenuItem} from '@gravity-ui/uikit';
 import {Page} from '../../../../shared/constants/settings';
 
 import Icon from '../../../components/Icon/Icon';
-import {chytListAction} from '../../../store/actions/chyt/list';
 import {getCluster, isQueryTrackerAllowed} from '../../../store/selectors/global';
 import {updateQueryDraft} from '../../../pages/query-tracker/module/query/actions';
 import {QueryEngine} from '../../../pages/query-tracker/module/api';
@@ -22,6 +21,7 @@ const block = cn('chyt-clique-actions');
 
 export function ChytCliqueActions({
     alias,
+    pool,
     showAllButtons,
     allButtonsClassName,
     onAction,
@@ -29,21 +29,21 @@ export function ChytCliqueActions({
     showAllButtons?: boolean;
     allButtonsClassName?: string;
     alias: string;
-    onAction?: (action: 'remove' | 'start') => void;
+    pool?: string;
+    onAction?: (action: 'remove' | 'start' | 'stop') => void;
 }) {
     const dispatch = useDispatch();
     const history = useHistory();
     const allowQueryTracker = useSelector(isQueryTrackerAllowed);
 
     const [visibleConfirmation, setVisibleConirmation] = React.useState<
-        undefined | 'remove' | 'start'
+        undefined | 'remove' | 'start' | 'stop'
     >();
 
     const start = {
         icon: <Icon awesome="play-circle" />,
         text: 'Start',
         action: () => {
-            //dispatch(chytListAction('start', {alias}));
             setVisibleConirmation('start');
         },
     };
@@ -51,7 +51,7 @@ export function ChytCliqueActions({
         icon: <Icon awesome="stop-circle" />,
         text: 'Stop',
         action: () => {
-            dispatch(chytListAction('stop', {alias}));
+            setVisibleConirmation('stop');
         },
     };
     const remove = {
@@ -92,12 +92,15 @@ export function ChytCliqueActions({
 
     return (
         <React.Fragment>
-            <ChytConfirmation
-                alias={alias}
-                action={visibleConfirmation}
-                onClose={() => setVisibleConirmation(undefined)}
-                onAction={onAction}
-            />
+            {visibleConfirmation !== undefined && (
+                <ChytConfirmation
+                    alias={alias}
+                    pool={pool}
+                    action={visibleConfirmation}
+                    onClose={() => setVisibleConirmation(undefined)}
+                    onAction={onAction}
+                />
+            )}
             {showAllButtons ? (
                 <span className={block('chyt-clique-actions', allButtonsClassName)}>
                     <span className={block('item')}>{sqlButton}</span>

@@ -47,6 +47,7 @@ const CHYT_LIST_SELECTABLE_COLUMNS: Record<ChytListColumns, true> = {
     yt_operation_finish_time: true,
     speclet_modification_time: true,
     strawberry_state_modification_time: true,
+    pool: true,
 };
 
 type ChytColumnItem = {checked: boolean; column: ChytListColumns};

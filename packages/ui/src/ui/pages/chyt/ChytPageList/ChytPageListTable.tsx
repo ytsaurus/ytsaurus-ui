@@ -26,6 +26,7 @@ import {
 import {ChytInfo} from '../../../store/reducers/chyt/list';
 import {Page} from '../../../../shared/constants/settings';
 import {CHYT_TABLE_TITLES} from '../../../constants/chyt-page';
+import {OperationPool} from '../../../components/OperationPool/OperationPool';
 
 import {CliqueState} from '../components/CliqueState';
 
@@ -39,6 +40,20 @@ function useChytListColumns(cluster: string) {
 
     const columns: Array<Column<ChytInfo>> = React.useMemo(() => {
         const columnsByName = {
+            pool: {
+                name: 'pool',
+                header: <ChytListHeader column="pool" />,
+                render({row}) {
+                    return !row.pool ? (
+                        format.NO_VALUE
+                    ) : (
+                        <OperationPool
+                            cluster={cluster}
+                            pool={{pool: row.pool, tree: 'physical'}}
+                        />
+                    );
+                },
+            } as Column<ChytInfo>,
             instance_count: {
                 name: 'instance_count',
                 header: <ChytListHeader column="instance_count" />,
@@ -212,7 +227,7 @@ function useChytListColumns(cluster: string) {
                 render({row}) {
                     return (
                         <span className={block('one-row-cell')}>
-                            <ChytCliqueActions alias={row.alias} />
+                            <ChytCliqueActions alias={row.alias} pool={row.pool} />
                         </span>
                     );
                 },

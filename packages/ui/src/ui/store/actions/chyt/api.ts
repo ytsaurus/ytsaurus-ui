@@ -20,7 +20,7 @@ export type ChytApi =
               alias: string;
               speclet_options: {
                   active: boolean;
-                  pool: string;
+                  pool?: string;
                   instance_count: number;
               };
           };
@@ -71,6 +71,7 @@ export type ChytListResponse = WithResult<Array<ChytListResponseItem>>;
 export type ChytListResponseItem = {
     $value: string;
     $attributes?: {
+        pool?: string;
         creator?: string;
         creation_time?: string;
         health?: ChytCliqueHealthType;

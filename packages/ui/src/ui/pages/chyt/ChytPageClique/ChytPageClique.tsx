@@ -29,6 +29,7 @@ import {Page} from '../../../../shared/constants/settings';
 import {CliqueState} from '../components/CliqueState';
 import {ChytCliqueActions} from '../ChytCliqueActions/ChytCliqueActions';
 import {ChytPageCliqueTabs} from './ChytPageCliqueTabs';
+import {ChytSpecletEditButton} from './ChytPageCliqueSpeclet';
 import cn from 'bem-cn-lite';
 
 import './ChytPageClique.scss';
@@ -51,7 +52,7 @@ export function ChytPageClique(props: RouteComponentProps<{alias: string}>) {
         };
     }, [alias]);
 
-    const {yt_operation} = useSelector(getChytCliqueData) ?? {};
+    const {yt_operation, pool} = useSelector(getChytCliqueData) ?? {};
     const initialLoading = useSelector(getChytCliqueInitialLoading);
 
     useUpdater(update);
@@ -69,13 +70,19 @@ export function ChytPageClique(props: RouteComponentProps<{alias: string}>) {
 
                 <ChytCliqueActions
                     alias={alias}
+                    pool={pool}
                     showAllButtons
                     onAction={(action) => {
                         if (action === 'remove') {
                             history.push(`/${cluster}/${Page.CHYT}`);
+                        } else {
+                            update();
                         }
                     }}
                 />
+                <span className={block('edit')}>
+                    <ChytSpecletEditButton compact />
+                </span>
             </div>
             <ChytCliqueErrors />
             <ChytCliqueMetaTable />
