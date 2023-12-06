@@ -3,6 +3,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import cn from 'bem-cn-lite';
 
 import {Column} from '@gravity-ui/react-data-table';
+import {Text} from '@gravity-ui/uikit';
 
 import format from '../../../common/hammer/format';
 
@@ -11,10 +12,12 @@ import DataTableYT, {
 } from '../../../components/DataTableYT/DataTableYT';
 import ClipboardButton from '../../../components/ClipboardButton/ClipboardButton';
 import ColumnHeader from '../../../components/ColumnHeader/ColumnHeader';
+import Icon from '../../../components/Icon/Icon';
 import Link from '../../../components/Link/Link';
 import {OperationId} from '../../../components/OperationId/OperationId';
 import {UserCard} from '../../../components/UserLink/UserLink';
 import Label from '../../../components/Label/Label';
+import {Tooltip} from '../../../components/Tooltip/Tooltip';
 
 import {chytToggleSortState} from '../../../store/actions/chyt/list-fitlers';
 import {getCluster} from '../../../store/selectors/global';
@@ -104,12 +107,20 @@ function useChytListColumns(cluster: string) {
                 header: <ChytListHeader column="health" />,
                 render({row}) {
                     return (
-                        <span className={block('one-row-cell')}>
+                        <Tooltip
+                            className={block('one-row-cell')}
+                            content={format.ReadableField(row.health_reason)}
+                        >
                             <CliqueState state={row.health} />
-                        </span>
+                            {row.health_reason && (
+                                <Text color="secondary">
+                                    {' '}
+                                    <Icon awesome={'question-circle'} />
+                                </Text>
+                            )}
+                        </Tooltip>
                     );
                 },
-                align: 'center',
                 width: 100,
             } as Column<ChytInfo>,
             creation_time: {
@@ -217,7 +228,6 @@ function useChytListColumns(cluster: string) {
                         </span>
                     );
                 },
-                align: 'center',
                 width: 100,
             } as Column<ChytInfo>,
             ...res,

@@ -8,7 +8,7 @@ import {Loader, Text} from '@gravity-ui/uikit';
 import format from '../../../common/hammer/format';
 
 import {useUpdater} from '../../../hooks/use-updater';
-import Block from '../../../components/Block/Block';
+import Alert from '../../../components/Alert/Alert';
 import Error from '../../../components/Error/Error';
 import Label from '../../../components/Label/Label';
 import MetaTable, {MetaTableItem} from '../../../components/MetaTable/MetaTable';
@@ -94,17 +94,21 @@ export function ChytPageClique(props: RouteComponentProps<{alias: string}>) {
 function ChytCliqueErrors() {
     const error = useSelector(getChytCliqueError);
     const startError = useSelector(getChytCliqueStartError);
+    const {health_reason} = useSelector(getChytCliqueData) ?? {};
 
     return (
         <React.Fragment>
-            {error ? <Error className={block('error')} error={error} /> : null}
+            {error ? <Error className={block('error')} error={error} bottomMargin /> : null}
             {startError ? (
-                <Block
-                    type="alert"
+                <Error
                     header="Failed to start"
                     className={block('error')}
                     error={{message: startError}}
+                    bottomMargin
                 />
+            ) : null}
+            {health_reason ? (
+                <Alert header="Health reason" type="alert" message={health_reason} bottomMargin />
             ) : null}
         </React.Fragment>
     );
@@ -122,7 +126,6 @@ function ChytCliqueMetaTable() {
             ctl_attributes,
             yt_operation,
             health,
-            health_reason,
             incarnation_index,
             creator,
             speclet_modification_time,
@@ -173,7 +176,6 @@ function ChytCliqueMetaTable() {
             [
                 {key: 'State', value: <CliqueState state={state} />},
                 {key: 'Health', value: <CliqueState state={health} />},
-                {key: 'Health reason', value: format.ReadableField(health_reason)},
                 {key: 'Incarnation index', value: format.Number(incarnation_index)},
                 {key: 'Stage', value: stage ? <Label capitalize text={stage} /> : format.NO_VALUE},
                 {
