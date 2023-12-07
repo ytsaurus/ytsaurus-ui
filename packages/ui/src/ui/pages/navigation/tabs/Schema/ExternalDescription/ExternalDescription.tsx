@@ -14,19 +14,19 @@ export interface ExternalSchemaDescription {
     type: string;
     glossaryEntity: {
         description: string;
+        title: string;
     };
 }
 
 interface Props {
     type: string;
     data: ExternalSchemaDescription;
+    column: keyof ExternalSchemaDescription['glossaryEntity'];
 }
 
-export function ExternalDescription({type, data}: Props) {
+export function ExternalDescription({type, data, column}: Props) {
     const hasWarning = type !== data.type;
-    const {description} = data.glossaryEntity;
-    const {name: title} = data;
-    const hasDescription = Boolean(description) && description !== '';
+    const {[column]: markdown} = data.glossaryEntity ?? {};
 
     const typeMismatchElement = (
         <>
@@ -61,11 +61,11 @@ export function ExternalDescription({type, data}: Props) {
                     <Icon className={block('icon')} awesome="exclamation-triangle" face="solid" />
                 </Popover>
             ) : null}
-            {hasDescription ? (
+            {markdown ? (
                 <MarkdownLinePreview
                     className={block('preview')}
-                    text={description}
-                    title={title}
+                    text={markdown}
+                    title={data.name}
                     allowHTML={true}
                 />
             ) : (

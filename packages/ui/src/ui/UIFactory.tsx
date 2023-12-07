@@ -314,7 +314,7 @@ export interface UIFactory {
     wrapApp(app: React.ReactElement): React.ReactElement;
 
     externalSchemaDescriptionSetup: {
-        caption?: string;
+        columns?: Record<keyof ExternalSchemaDescription['glossaryEntity'], string>;
         load(cluster: string, path: string): Promise<ExternalSchemaDescriptionResponse>;
     };
 
