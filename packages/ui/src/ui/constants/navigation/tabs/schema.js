@@ -4,4 +4,4 @@ import {Tab} from '../index';
 
 const PREFIX = createPrefix(Page.NAVIGATION, Tab.SCHEMA);
 
-export const UPDATE_FILTER = PREFIX + 'UPDATE_FILTER';
+export const SCHEMA_UPDATE_FILTER = PREFIX + 'UPDATE_FILTER';

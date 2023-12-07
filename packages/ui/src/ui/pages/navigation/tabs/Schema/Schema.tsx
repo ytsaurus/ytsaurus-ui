@@ -24,7 +24,7 @@ import {
     getSchema,
     getSchemaMeta,
 } from '../../../../store/selectors/navigation/tabs/schema';
-import {updateFilter} from '../../../../store/actions/navigation/tabs/schema';
+import {updateSchemaFilter} from '../../../../store/actions/navigation/tabs/schema';
 import {getCluster} from '../../../../store/selectors/global';
 import hammer from '../../../../common/hammer';
 
@@ -281,7 +281,7 @@ const mapStateToProps = (state: RootState) => {
 };
 
 const mapDispatchToProps = {
-    updateFilter,
+    updateFilter: updateSchemaFilter,
 };
 
 const SchemaConnected = connect(mapStateToProps, mapDispatchToProps)(Schema);

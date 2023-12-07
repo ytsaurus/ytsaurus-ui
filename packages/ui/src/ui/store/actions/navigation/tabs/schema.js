@@ -1,8 +1,8 @@
-import {UPDATE_FILTER} from '../../../../constants/navigation/tabs/schema';
+import {SCHEMA_UPDATE_FILTER} from '../../../../constants/navigation/tabs/schema';
 
-export function updateFilter(column) {
+export function updateSchemaFilter(column) {
     return {
-        type: UPDATE_FILTER,
+        type: SCHEMA_UPDATE_FILTER,
         data: {column},
     };
 }

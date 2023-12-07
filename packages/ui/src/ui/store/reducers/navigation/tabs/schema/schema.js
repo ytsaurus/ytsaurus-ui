@@ -1,4 +1,4 @@
-import {UPDATE_FILTER} from '../../../../../constants/navigation/tabs/schema';
+import {SCHEMA_UPDATE_FILTER} from '../../../../../constants/navigation/tabs/schema';
 
 export const initialState = {
     column: '',
@@ -6,7 +6,7 @@ export const initialState = {
 
 export default (state = initialState, action) => {
     switch (action.type) {
-        case UPDATE_FILTER:
+        case SCHEMA_UPDATE_FILTER:
             return {...state, column: action.data.column};
 
         default:
