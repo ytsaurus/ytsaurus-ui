@@ -46,7 +46,7 @@ const COLUMNS_TO_HIDE: Partial<Record<SchemaColumnNames, boolean>> = {
     type: true,
 };
 
-export type SchemaColumnNames = keyof SchemaItem | 'description';
+export type SchemaColumnNames = keyof SchemaItem | 'description' | 'title';
 
 export type SchemaProps = {
     cluster: string;
@@ -74,7 +74,12 @@ type SchemaMetaItem = {
 };
 
 type SchemaComputedColumns<ColumnName extends string = string> = {
-    items: Partial<Record<ColumnName, {caption: string; sort: boolean; align: 'left'}>>;
+    items: Partial<
+        Record<
+            ColumnName,
+            {caption: string; sort: boolean; align: 'left'; render?: () => React.ReactNode}
+        >
+    >;
     set: Array<ColumnName>;
 };
 
@@ -101,7 +106,6 @@ class Schema extends Component<SchemaProps> {
     }
 
     get templates() {
-        const {externalSchema} = this.state;
         return {
             __default__(
                 item: SchemaItem,
@@ -139,14 +143,20 @@ class Schema extends Component<SchemaProps> {
                 const {type_v3} = item;
                 return <SchemaDataType type_v3={type_v3} />;
             },
-            description(item: SchemaItem) {
-                const {type, name} = item;
-                const descriptionData = externalSchema && externalSchema.get(name);
-                return descriptionData ? (
-                    <ExternalDescription type={type} data={descriptionData} />
-                ) : null;
+            description: (item: SchemaItem) => {
+                return this.renderExternalColumn(item, 'description');
+            },
+            title: (item: SchemaItem) => {
+                return this.renderExternalColumn(item, 'title');
             },
         };
+    }
+
+    renderExternalColumn(item: SchemaItem, column: 'description' | 'title') {
+        const {externalSchema} = this.state;
+        const {type, name} = item;
+        const data = externalSchema?.get(name);
+        return data ? <ExternalDescription type={type} data={data} column={column} /> : null;
     }
 
     get tableSettings() {
@@ -158,11 +168,11 @@ class Schema extends Component<SchemaProps> {
         const preparedItems = _.omit(items, 'type_v2');
 
         if (externalSchema) {
-            const caption =
-                UIFactory.externalSchemaDescriptionSetup.caption || 'External description';
-            _.assign(preparedItems, {
-                description: {
-                    caption: caption,
+            (['title', 'description'] as const).forEach((column) => {
+                const {columns} = UIFactory.externalSchemaDescriptionSetup;
+                const caption = columns?.[column] ?? `External ${column}`;
+                preparedItems[column] = {
+                    caption,
                     sort: false,
                     align: 'left',
                     render: () => (
@@ -178,10 +188,9 @@ class Schema extends Component<SchemaProps> {
                             ) : null}
                         </div>
                     ),
-                },
+                };
+                preparedSet.push(column);
             });
-
-            preparedSet.push('description');
         }
 
         return {
