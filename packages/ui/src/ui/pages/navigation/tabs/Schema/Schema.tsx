@@ -1,6 +1,5 @@
 import React, {Component, Fragment} from 'react';
 import {connect, useSelector} from 'react-redux';
-import PropTypes from 'prop-types';
 import cn from 'bem-cn-lite';
 import _ from 'lodash';
 
@@ -14,7 +13,10 @@ import Icon from '../../../../components/Icon/Icon';
 import ErrorIcon from '../../../../components/ErrorIcon/ErrorIcon';
 import SchemaDataType from '../../../../components/SchemaDataType/SchemaDataType';
 import UIFactory from '../../../../UIFactory';
-import {ExternalDescription} from './ExternalDescription/ExternalDescription';
+import {
+    ExternalDescription,
+    ExternalSchemaDescription,
+} from './ExternalDescription/ExternalDescription';
 
 import {
     getComputedColumns,
@@ -33,46 +35,59 @@ import {useAppRumMeasureStart} from '../../../../rum/rum-app-measures';
 import {getAttributesPath, getLoadState} from '../../../../store/selectors/navigation';
 import {isFinalLoadingStatus} from '../../../../utils/utils';
 import {docsUrl} from '../../../../config';
+import {YTError} from '../../../../../@types/types';
+import {RootState} from '../../../../store/reducers';
 
 const block = cn('navigation-schema');
 const elementsBlock = cn('elements-message');
 
-const COLUMNS_TO_HIDE = {
+const COLUMNS_TO_HIDE: Partial<Record<SchemaColumnNames, boolean>> = {
     required: true,
     type: true,
 };
 
-class Schema extends Component {
-    static schemaProps = PropTypes.arrayOf(
-        PropTypes.shape({
-            index: PropTypes.number.isRequired,
-            type: PropTypes.string.isRequired,
-            name: PropTypes.string.isRequired,
-            required: PropTypes.bool.isRequired,
-            type_v3: PropTypes.oneOfType([
-                PropTypes.string.isRequired,
-                PropTypes.object.isRequired,
-            ]),
-        }),
-    );
+export type SchemaColumnNames = keyof SchemaItem | 'description';
 
-    static propTypes = {
-        // from connect
-        path: PropTypes.string.isRequired,
-        cluster: PropTypes.string.isRequired,
-        column: PropTypes.string.isRequired,
-        meta: PropTypes.arrayOf(MetaTable.itemProps).isRequired,
-        schema: Schema.schemaProps.isRequired,
-        filteredSchema: Schema.schemaProps.isRequired,
-        computedColumns: PropTypes.shape({
-            set: PropTypes.arrayOf(PropTypes.string).isRequired,
-            items: PropTypes.object.isRequired,
-        }).isRequired,
+export type SchemaProps = {
+    cluster: string;
+    column?: string;
+    path: string;
+    schema: Array<SchemaItem>;
+    filteredSchema?: Array<SchemaItem>;
+    meta: Array<SchemaMetaItem>;
+    computedColumns: SchemaComputedColumns<SchemaColumnNames>;
 
-        updateFilter: PropTypes.func.isRequired,
-    };
+    updateFilter: (filter: string) => void;
+};
 
-    constructor(props) {
+type SchemaItem = {
+    index: number;
+    name: string;
+    required: boolean;
+    type: string;
+    type_v3: unknown;
+};
+
+type SchemaMetaItem = {
+    value: 'strong' | boolean;
+    key: 'schema_mode' | 'strict' | 'unique_keys' | string;
+};
+
+type SchemaComputedColumns<ColumnName extends string = string> = {
+    items: Partial<Record<ColumnName, {caption: string; sort: boolean; align: 'left'}>>;
+    set: Array<ColumnName>;
+};
+
+type SchemaState = {
+    externalSchema?: Map<string, ExternalSchemaDescription>;
+    externalSchemaUrl?: string;
+    externalSchemaError?: YTError;
+};
+
+class Schema extends Component<SchemaProps> {
+    state: SchemaState;
+
+    constructor(props: SchemaProps) {
         super(props);
         this.state = {
             externalSchemaUrl: undefined,
@@ -88,10 +103,13 @@ class Schema extends Component {
     get templates() {
         const {externalSchema} = this.state;
         return {
-            __default__(item, column) {
+            __default__(
+                item: SchemaItem,
+                column: Exclude<keyof SchemaItem, 'type_v3' | 'name' | 'required'>,
+            ) {
                 return <FormattedText text={item[column]} />;
             },
-            name(item, column) {
+            name(item: Record<string, string>, column: string) {
                 const {sort_order} = item;
                 return (
                     <span>
@@ -109,19 +127,19 @@ class Schema extends Component {
                     </span>
                 );
             },
-            required(item, column) {
-                const required = item[column];
+            required(item: SchemaItem) {
+                const {required} = item;
                 return (
                     <span>
                         {typeof required === 'boolean' ? String(required) : hammer.format.NO_VALUE}
                     </span>
                 );
             },
-            type_v3(item, column) {
-                const schemaV3 = item[column];
-                return <SchemaDataType type_v3={schemaV3} />;
+            type_v3(item: SchemaItem) {
+                const {type_v3} = item;
+                return <SchemaDataType type_v3={type_v3} />;
             },
-            description(item) {
+            description(item: SchemaItem) {
                 const {type, name} = item;
                 const descriptionData = externalSchema && externalSchema.get(name);
                 return descriptionData ? (
@@ -180,7 +198,7 @@ class Schema extends Component {
             virtualType: 'simple',
             theme: 'light',
             striped: false,
-            computeKey(item) {
+            computeKey(item: SchemaItem) {
                 return item.name;
             },
         };
@@ -213,7 +231,7 @@ class Schema extends Component {
                     placeholder="Filter by name..."
                     className={block('filter')}
                     onChange={updateFilter}
-                    value={column}
+                    value={column ?? ''}
                     size="m"
                 />
 
@@ -243,13 +261,13 @@ class Schema extends Component {
 
                 <MetaTable items={meta} />
 
-                {schema.length > 0 ? this.renderContent() : this.renderPlaceholder()}
+                {schema?.length > 0 ? this.renderContent() : this.renderPlaceholder()}
             </div>
         );
     }
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state: RootState) => {
     const {column} = state.navigation.tabs.schema;
 
     const cluster = getCluster(state);
