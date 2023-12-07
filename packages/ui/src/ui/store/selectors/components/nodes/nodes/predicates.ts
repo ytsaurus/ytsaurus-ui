@@ -112,10 +112,11 @@ export const getComponentNodesIndexByRack = createSelector([getNodes], (nodes) =
     return reduce_(
         nodes,
         (acc, node) => {
-            if (!acc.has(node.rack)) {
-                acc.set(node.rack, new Set([node]));
+            const rack = node.rack ?? UNAWARE;
+            if (!acc.has(rack)) {
+                acc.set(rack, new Set([node]));
             } else {
-                acc.get(node.rack)?.add(node);
+                acc.get(rack)?.add(node);
             }
             return acc;
         },
