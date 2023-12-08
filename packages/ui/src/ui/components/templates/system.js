@@ -12,7 +12,7 @@ const b = block('system');
 templates.add('system/chunk-cells', {
     __default__(item, columnName) {
         const column = this.getColumn(columnName);
-        const value = column?.get(item);
+        const value = column?.get?.(item);
         const theme = column?.label?.(value) || 'default';
         const text = hammer.format['Number'](value);
 
@@ -20,7 +20,7 @@ templates.add('system/chunk-cells', {
     },
     cell_tag(item, columnName) {
         const column = this.getColumn(columnName);
-        const cellTag = column.get(item);
+        const cellTag = column?.get?.(item);
 
         const cellTagClassNames = b('master-quorum-cell');
         const cellTagIconClassNames = b('master-quorum-cell-icon');
