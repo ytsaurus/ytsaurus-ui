@@ -27,6 +27,7 @@ export function PoolTreeSuggestControl(props: Props) {
             placeholder={placeholder}
             width="max"
             disablePortal
+            filterable={items?.length > 5}
         />
     );
 }
