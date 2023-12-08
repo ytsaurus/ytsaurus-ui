@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.6.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.5.2...ui-v1.6.0) (2023-12-08)
+
+
+### Features
+
+* **Table/Schema:** add external title column [YTFRONT-3939] ([074f638](https://github.com/ytsaurus/ytsaurus-ui/commit/074f6386e104989531b0d2432c581f5296f3b60d))
+
+
+### Bug Fixes
+
+* **query-tracker:** dynamic system columns' content is now displayed correctly [[#192](https://github.com/ytsaurus/ytsaurus-ui/issues/192)] ([271b1f6](https://github.com/ytsaurus/ytsaurus-ui/commit/271b1f6660627a5c10fbae1a60145e03c111acc6))
+
 ## [1.5.2](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.5.1...ui-v1.5.2) (2023-12-05)
 
 
