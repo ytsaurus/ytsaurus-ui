@@ -67,6 +67,8 @@ const config: Partial<AppConfig> = {
         },
     },
 
+    odinBaseUrl: process.env.ODIN_BASE_URL,
+
     uiSettings: {
         reHashFromNodeVersion: '[^~]+~(?<hash>[^+]+)',
         directDownload: true,
