@@ -4,7 +4,6 @@ import _ from 'lodash';
 
 import {DialogError, FormApi, YTDFDialog} from '../../../components/Dialog/Dialog';
 import {
-    getRemoteCopyCodecs,
     getRemoteCopyModalPaths,
     getRemoteCopyModalVisible,
 } from '../../../store/selectors/navigation/modals/remote-copy-modal';
@@ -13,10 +12,6 @@ import {
     remoteCopy,
 } from '../../../store/actions/navigation/modals/remote-copy-modal';
 import {getCluster} from '../../../store/selectors/global';
-import {
-    getCompressionCodecs,
-    getErasureCodecs,
-} from '../../../store/selectors/global/supported-features';
 import {makeLink} from '../../../navigation/Navigation/PathEditorModal/CreateTableModal/CreateTableModal';
 import {YTError} from '../../../types';
 import {RemoteCopyParams} from '../../../../@types/types';
@@ -24,9 +19,8 @@ import {AxiosError} from 'axios';
 import {docsUrl} from '../../../config';
 import UIFactory from '../../../UIFactory';
 
-type Values = Omit<RemoteCopyParams, 'input_table_paths' | 'compression_codec'> & {
+type Values = Omit<RemoteCopyParams, 'input_table_paths'> & {
     input_table_paths: Array<{title: string}>;
-    compression_codec: Array<string>;
 };
 
 function RemoteCopyModal() {
@@ -42,12 +36,11 @@ function RemoteCopyModal() {
             try {
                 setError(undefined);
                 const {values} = form.getState();
-                const {input_table_paths, pool, compression_codec, ...rest} = values;
+                const {input_table_paths, pool, ...rest} = values;
                 await dispatch(
                     remoteCopy({
                         ...rest,
                         input_table_paths: _.map(input_table_paths, 'title'),
-                        compression_codec: compression_codec.join(''),
                         pool: pool,
                     }),
                 );
@@ -73,11 +66,6 @@ function RemoteCopyModal() {
         [paths],
     );
 
-    const compressionCodecs = useSelector(getCompressionCodecs);
-    const erasureCodecs = useSelector(getErasureCodecs);
-
-    const {compression_codec, erasure_codec} = useSelector(getRemoteCopyCodecs);
-
     return !visible ? null : (
         <YTDFDialog<Values>
             visible={true}
@@ -91,8 +79,6 @@ function RemoteCopyModal() {
                 input_table_paths: pathsValues,
                 schema_inference_mode: 'auto',
                 output_table_path: pathsValues[0]?.title,
-                compression_codec,
-                erasure_codec,
                 override: false,
             }}
             fields={[
@@ -133,26 +119,6 @@ function RemoteCopyModal() {
                     name: 'override',
                     type: 'tumbler',
                     caption: 'Override output',
-                },
-                {
-                    name: 'compression_codec',
-                    type: 'select-with-subitems' as const,
-                    caption: 'Compression',
-                    tooltip: docsUrl(
-                        makeLink(UIFactory.docsUrls['storage:compression#compression_codecs']),
-                    ),
-                    extras: compressionCodecs,
-                },
-                {
-                    name: 'erasure_codec',
-                    type: 'yt-select-single',
-                    caption: 'Erasure codec',
-                    tooltip: docsUrl(makeLink(UIFactory.docsUrls['storage:replication#erasure'])),
-                    extras: {
-                        items: erasureCodecs,
-                        hideFilter: true,
-                        width: 'max',
-                    },
                 },
                 {
                     name: 'copy_attributes',
