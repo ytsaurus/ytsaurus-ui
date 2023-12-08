@@ -17,8 +17,6 @@ export interface RemoteCopyParams {
     input_table_paths: Array<string>;
     dstCluster: string;
     output_table_path: string;
-    compression_codec: string;
-    erasure_codec: string;
     copy_attributes: boolean;
     schema_inference_mode: 'auto' | 'from_input' | 'from_output';
     pool: string;
