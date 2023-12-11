@@ -25,6 +25,7 @@ type Props = DialogControlProps<string> & {
     poolTree?: string;
     calculateValueOnPoolsLoaded?: (params: {loadedPoolNames: Array<string>}) => string;
 
+    allowEmpty?: boolean;
     allowEphemeral?: boolean;
 
     disabled?: boolean;
@@ -38,6 +39,7 @@ type Props = DialogControlProps<string> & {
 export function PoolSuggestControl(props: Props) {
     const defaultPoolTree = useSelector(getGlobalDefaultPoolTreeName);
     const {
+        allowEmpty,
         allowEphemeral,
         value,
         onChange,
@@ -98,10 +100,9 @@ export function PoolSuggestControl(props: Props) {
             popupClassName={block('popup')}
             text={value}
             filter={getItems}
-            apply={allowEphemeral ? (v) => onChange(typeof v === 'string' ? v : v.value) : () => {}}
-            onItemClick={
-                allowEphemeral ? () => {} : (v) => onChange(typeof v === 'string' ? v : v.value)
-            }
+            apply={(v) => allowEphemeral && onChange(typeof v === 'string' ? v : v.value)}
+            onItemClick={(v) => onChange(typeof v === 'string' ? v : v.value)}
+            onTextUpdate={allowEmpty ? (text) => !text && onChange('') : undefined}
             placeholder={placeholder}
             disabled={disabled}
         />
