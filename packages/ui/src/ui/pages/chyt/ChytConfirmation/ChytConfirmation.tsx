@@ -109,7 +109,7 @@ function ChytStartConfirmation({
             headerProps={{title: `Start '${alias}'`}}
             footerProps={{textApply: `Start '${alias}'`}}
             onClose={onClose}
-            initialValues={{pool}}
+            initialValues={{pool: pool ?? format.NO_VALUE}}
             onAdd={(form) => {
                 const {untracked} = form.getState().values;
                 return dispatch(chytListAction('start', {alias, untracked}))
@@ -130,12 +130,9 @@ function ChytStartConfirmation({
             }}
             fields={[
                 {
-                    type: 'text',
+                    type: 'plain',
                     name: 'pool',
                     caption: 'Pool',
-                    extras: {
-                        disabled: true,
-                    },
                 },
                 {
                     type: 'block',
