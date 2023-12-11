@@ -5,10 +5,12 @@ import {EditableAsText} from '../../../../components/EditableAsText/EditableAsTe
 import {useDispatch, useSelector} from 'react-redux';
 import {getQuery, getQueryDraft} from '../../module/query/selectors';
 import {QuerySettingsButton} from '../../QuerySettingsButton';
+import {QueryFilesButton} from '../../QueryFilesButton';
 import {SET_QUERY_PATCH} from '../../module/query/actions';
 import {QueryEngineSelector} from './QueryEngineSelector/QueryEngineSelector';
 
 import './QueryMetaForm.scss';
+import {QueryFile} from '../../module/api';
 
 const block = cn('query-tracker-meta-form');
 export function QueryMetaForm({
@@ -50,6 +52,15 @@ export function QueryMetaForm({
         [dispatch],
     );
 
+    const onFilesChange = useCallback(
+        (files: QueryFile[]) =>
+            dispatch({
+                type: SET_QUERY_PATCH,
+                data: {files},
+            }),
+        [dispatch],
+    );
+
     const queryName = draft.annotations?.title;
     return (
         <div className={block(null, className)}>
@@ -75,6 +86,11 @@ export function QueryMetaForm({
                 className={block('control')}
                 settings={draft.settings}
                 onChange={onSettingsChange}
+            />
+            <QueryFilesButton
+                files={draft.files}
+                onChange={onFilesChange}
+                queryId={originalQuery?.id ?? ''}
             />
         </div>
     );

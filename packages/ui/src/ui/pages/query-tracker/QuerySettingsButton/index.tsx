@@ -3,11 +3,11 @@ import cn from 'bem-cn-lite';
 import React, {KeyboardEvent, useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import GearIcon from '@gravity-ui/icons/svgs/gear.svg';
 import GearDotIcon from '@gravity-ui/icons/svgs/gear-dot.svg';
-import closeIcon from '../../../../../img/svg/close-icon.svg';
-import checkIcon from '../../../../../img/svg/icons/check.svg';
-import pencilIcon from '../../../../../img/svg/icons/pencil.svg';
-import trashIcon from '../../../../../img/svg/icons/trash-alt.svg';
-import plusIcon from '../../../../../img/svg/icons/plus.svg';
+import closeIcon from '@gravity-ui/icons/svgs/xmark.svg';
+import checkIcon from '@gravity-ui/icons/svgs/check.svg';
+import pencilIcon from '@gravity-ui/icons/svgs/pencil.svg';
+import trashIcon from '@gravity-ui/icons/svgs/trash-bin.svg';
+import plusIcon from '@gravity-ui/icons/svgs/plus.svg';
 import './index.scss';
 
 type QuerySetting = {name: string; value: string};
