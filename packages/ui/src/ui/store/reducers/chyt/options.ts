@@ -1,9 +1,9 @@
 import {ActionD, YTError} from '../../../types';
 import {mergeStateOnClusterChange} from '../utils';
-import {CHYT_SPECLET} from '../../../constants/chyt-page';
-import {ChytDescribeOptionsType} from '../../../store/actions/chyt/api';
+import {CHYT_OPTIONS} from '../../../constants/chyt-page';
+import {ChytDescribeOptionsType} from '../../actions/chyt/api';
 
-export type ChytCliqueSpecletState = {
+export type ChytCliqueOptionsState = {
     loaded: boolean;
     loading: boolean;
     error: YTError | undefined;
@@ -12,7 +12,7 @@ export type ChytCliqueSpecletState = {
     data: ChytDescribeOptionsType | undefined;
 };
 
-const initialState: ChytCliqueSpecletState = {
+const initialState: ChytCliqueOptionsState = {
     loaded: false,
     loading: false,
     error: undefined,
@@ -20,22 +20,22 @@ const initialState: ChytCliqueSpecletState = {
     data: undefined,
 };
 
-function reducer(state = initialState, action: ChytCliqueSpecletAction) {
+function reducer(state = initialState, action: ChytCliqueOptionsAction) {
     switch (action.type) {
-        case CHYT_SPECLET.REQUEST:
+        case CHYT_OPTIONS.REQUEST:
             return {...state, ...action.data, loading: true};
-        case CHYT_SPECLET.SUCCESS:
+        case CHYT_OPTIONS.SUCCESS:
             return {...state, ...action.data, loading: false, loaded: true, error: undefined};
-        case CHYT_SPECLET.FAILURE:
+        case CHYT_OPTIONS.FAILURE:
             return {...state, ...action.data, loading: false};
         default:
             return state;
     }
 }
 
-export type ChytCliqueSpecletAction =
-    | ActionD<typeof CHYT_SPECLET.REQUEST, Pick<ChytCliqueSpecletState, 'dataAlias'>>
-    | ActionD<typeof CHYT_SPECLET.SUCCESS, Pick<ChytCliqueSpecletState, 'data' | 'dataAlias'>>
-    | ActionD<typeof CHYT_SPECLET.FAILURE, Pick<ChytCliqueSpecletState, 'error'>>;
+export type ChytCliqueOptionsAction =
+    | ActionD<typeof CHYT_OPTIONS.REQUEST, Pick<ChytCliqueOptionsState, 'dataAlias'>>
+    | ActionD<typeof CHYT_OPTIONS.SUCCESS, Pick<ChytCliqueOptionsState, 'data' | 'dataAlias'>>
+    | ActionD<typeof CHYT_OPTIONS.FAILURE, Pick<ChytCliqueOptionsState, 'error'>>;
 
 export default mergeStateOnClusterChange(initialState, {}, reducer);

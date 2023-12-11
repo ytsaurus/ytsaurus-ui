@@ -1,22 +1,22 @@
 import {ThunkAction} from 'redux-thunk';
 
 import CancelHelper, {isCancelled} from '../../../utils/cancel-helper';
-import {ChytCliqueSpecletAction} from '../../../store/reducers/chyt/speclet';
-import {RootState} from '../../../store/reducers';
-import {getCluster, isDeveloper} from '../../../store/selectors/global';
+import {ChytCliqueOptionsAction} from '../../reducers/chyt/options';
+import {RootState} from '../../reducers';
+import {getCluster, isDeveloper} from '../../selectors/global';
 import {ChytListAttributes, ChytListResponseItem, chytApiAction} from './api';
-import {CHYT_SPECLET} from '../../../constants/chyt-page';
+import {CHYT_OPTIONS} from '../../../constants/chyt-page';
 
-type SpecletThunkAction = ThunkAction<Promise<void>, RootState, unknown, ChytCliqueSpecletAction>;
+type OptionsThunkAction = ThunkAction<Promise<void>, RootState, unknown, ChytCliqueOptionsAction>;
 
 const cancelHelper = new CancelHelper();
 
-export function chytLoadCliqueSpeclet(alias: string): SpecletThunkAction {
+export function chytLoadCliqueOptions(alias: string): OptionsThunkAction {
     return (dispatch, getState) => {
         const state = getState();
         const cluster = getCluster(state);
         const isAdmin = isDeveloper(state);
-        dispatch({type: CHYT_SPECLET.REQUEST, data: {dataAlias: ''}});
+        dispatch({type: CHYT_OPTIONS.REQUEST, data: {dataAlias: ''}});
 
         return chytApiAction(
             'describe_options',
@@ -29,20 +29,20 @@ export function chytLoadCliqueSpeclet(alias: string): SpecletThunkAction {
             },
         )
             .then((data) => {
-                dispatch({type: CHYT_SPECLET.SUCCESS, data: {data: data.result, dataAlias: alias}});
+                dispatch({type: CHYT_OPTIONS.SUCCESS, data: {data: data.result, dataAlias: alias}});
             })
             .catch((error) => {
                 if (!isCancelled(error)) {
-                    dispatch({type: CHYT_SPECLET.FAILURE, data: {error}});
+                    dispatch({type: CHYT_OPTIONS.FAILURE, data: {error}});
                 }
             });
     };
 }
 
-export function chytSetOptions(
+export function chytEditOptions(
     alias: string,
     options: Required<ChytListResponseItem>['$attributes'],
-): SpecletThunkAction {
+): OptionsThunkAction {
     return (dispatch, getState) => {
         const state = getState();
         const cluster = getCluster(state);
@@ -66,7 +66,7 @@ export function chytSetOptions(
             {alias, options_to_set, options_to_remove},
             {isAdmin},
         ).then(() => {
-            dispatch(chytLoadCliqueSpeclet(alias));
+            dispatch(chytLoadCliqueOptions(alias));
         });
     };
 }
