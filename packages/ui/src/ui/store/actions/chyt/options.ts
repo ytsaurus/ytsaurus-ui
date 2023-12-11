@@ -6,6 +6,8 @@ import {RootState} from '../../reducers';
 import {getCluster, isDeveloper} from '../../selectors/global';
 import {ChytListAttributes, ChytListResponseItem, chytApiAction} from './api';
 import {CHYT_OPTIONS} from '../../../constants/chyt-page';
+import {chytCliqueLoad} from './clique';
+import {chytLoadCliqueSpeclet} from './speclet';
 
 type OptionsThunkAction = ThunkAction<Promise<void>, RootState, unknown, ChytCliqueOptionsAction>;
 
@@ -67,6 +69,8 @@ export function chytEditOptions(
             {isAdmin},
         ).then(() => {
             dispatch(chytLoadCliqueOptions(alias));
+            dispatch(chytCliqueLoad(alias));
+            dispatch(chytLoadCliqueSpeclet(alias));
         });
     };
 }

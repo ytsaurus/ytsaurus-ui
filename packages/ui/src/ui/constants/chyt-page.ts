@@ -14,6 +14,7 @@ export const ChytCliquePageTab = {
 };
 
 export const CHYT_OPTIONS = createActionTypes('CHYT_OPTIONS');
+export const CHYT_SPECLET = createActionTypes('CHYT_SPECLET');
 
 export const CHYT_TABLE_TITLES: Partial<Record<keyof ChytInfo, string>> = {
     alias: 'CHYT clique alias',
