@@ -27,10 +27,11 @@ export type ChytApi =
           response: void;
       }
     | {
-          action: 'set_options';
+          action: 'edit_options';
           params: {
               alias: string;
-              options: Record<string, unknown>;
+              options_to_set: Partial<ChytListResponseItem['$attributes']>;
+              options_to_remove: Array<ChytListAttributes>;
           };
           response: void;
       }

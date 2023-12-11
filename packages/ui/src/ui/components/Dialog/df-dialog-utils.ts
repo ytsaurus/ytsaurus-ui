@@ -115,7 +115,7 @@ export function descriptionToDialogField<T = unknown>(
         case 'path':
             return {...common, type: 'path', extras};
         case 'pool':
-            return {...common, type: 'pool', extras};
+            return {...common, type: 'pool', extras: {...extras, allowEmpty: true}};
         default:
             return {...common, type: 'plain'};
     }

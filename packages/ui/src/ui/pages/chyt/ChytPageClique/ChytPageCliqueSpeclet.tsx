@@ -76,14 +76,16 @@ function ChytSpeclet({alias, unipikaSettings}: {alias: string; unipikaSettings: 
     const cluster = useSelector(getCluster);
 
     const update = React.useCallback(() => {
-        chytApiAction('get_speclet', cluster, {alias})
-            .then((res) => {
-                setData({loaded: true, speclet: res.result});
-                setError(undefined);
-            })
-            .catch((e) => {
-                setError(e);
-            });
+        if (alias) {
+            chytApiAction('get_speclet', cluster, {alias})
+                .then((res) => {
+                    setData({loaded: true, speclet: res.result});
+                    setError(undefined);
+                })
+                .catch((e) => {
+                    setError(e);
+                });
+        }
     }, [alias, cluster]);
 
     useUpdater(update);
@@ -180,6 +182,7 @@ function ChytSpecletEditDialog({
                         },
                         {},
                     );
+
                     const {restart_on_speclet_change} = values as any;
                     const initials = reduce_(
                         initialValues,
@@ -202,6 +205,11 @@ function ChytSpecletEditDialog({
                         },
                         {restart_on_speclet_change} as Record<string, unknown>,
                     );
+
+                    if ('pool' in diff && !diff.pool) {
+                        diff.pool = undefined;
+                    }
+
                     return dispatch(chytSetOptions(alias, diff))
                         .then(() => {
                             setError(undefined);
