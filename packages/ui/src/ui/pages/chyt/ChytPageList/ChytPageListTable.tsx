@@ -172,6 +172,29 @@ function useChytListColumns(cluster: string) {
                 },
                 width: 120,
             } as Column<ChytInfo>,
+            creator: {
+                name: 'creator',
+                header: <ChytListHeader column="creator" />,
+                render({row}) {
+                    return (
+                        <span className={block('one-row-cell')}>
+                            {!row.creator ? format.NO_VALUE : <UserCard userName={row.creator} />}
+                        </span>
+                    );
+                },
+            } as Column<ChytInfo>,
+            state: {
+                name: 'state',
+                header: <ChytListHeader column="state" />,
+                render({row}) {
+                    return (
+                        <span className={block('one-row-cell')}>
+                            <CliqueState state={row.state} />
+                        </span>
+                    );
+                },
+                width: 100,
+            } as Column<ChytInfo>,
         };
 
         const res = checkedColumns.map((i) => columnsByName[i]);
@@ -206,29 +229,6 @@ function useChytListColumns(cluster: string) {
                         </div>
                     );
                 },
-            } as Column<ChytInfo>,
-            {
-                name: 'creator',
-                header: <ChytListHeader column="creator" />,
-                render({row}) {
-                    return (
-                        <span className={block('one-row-cell')}>
-                            {!row.creator ? format.NO_VALUE : <UserCard userName={row.creator} />}
-                        </span>
-                    );
-                },
-            } as Column<ChytInfo>,
-            {
-                name: 'state',
-                header: <ChytListHeader column="state" />,
-                render({row}) {
-                    return (
-                        <span className={block('one-row-cell')}>
-                            <CliqueState state={row.state} />
-                        </span>
-                    );
-                },
-                width: 100,
             } as Column<ChytInfo>,
             ...res,
             {
