@@ -11,6 +11,7 @@ import {useUpdater} from '../../../hooks/use-updater';
 import Alert from '../../../components/Alert/Alert';
 import Error from '../../../components/Error/Error';
 import Label from '../../../components/Label/Label';
+import {OperationPool} from '../../../components/OperationPool/OperationPool';
 import MetaTable, {MetaTableItem} from '../../../components/MetaTable/MetaTable';
 import {OperationId} from '../../../components/OperationId/OperationId';
 import StatusLabel from '../../../components/StatusLabel/StatusLabel';
@@ -150,7 +151,14 @@ function ChytCliqueMetaTable() {
             [
                 {key: 'Health', value: <CliqueState state={health} />},
                 {key: 'State', value: <CliqueState state={state} />},
-                {key: 'Pool', value: pool ? pool : format.NO_VALUE},
+                {
+                    key: 'Pool',
+                    value: pool ? (
+                        <OperationPool cluster={cluster} pool={{pool, tree: 'physical'}} />
+                    ) : (
+                        format.NO_VALUE
+                    ),
+                },
                 {key: 'Instances', value: format.Number(ctl_attributes?.instance_count)},
                 {key: 'Cores', value: format.Number(ctl_attributes?.total_cpu)},
                 {key: 'Memory', value: format.Bytes(ctl_attributes?.total_memory)},
