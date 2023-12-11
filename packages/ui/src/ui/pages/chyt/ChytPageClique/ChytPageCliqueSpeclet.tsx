@@ -20,10 +20,15 @@ import {
     getChytOptionsError,
 } from '../../../store/selectors/chyt/options';
 import {getEditJsonYsonSettings} from '../../../store/selectors/thor/unipika';
-import {chytApiAction} from '../../../store/actions/chyt/api';
-import {chytLoadCliqueOptions, chytEditOptions} from '../../../store/actions/chyt/options';
+import {chytLoadCliqueSpeclet} from '../../../store/actions/chyt/speclet';
+import {chytEditOptions, chytLoadCliqueOptions} from '../../../store/actions/chyt/options';
 import {ChytCliqueOptionsState} from '../../../store/reducers/chyt/options';
-import {getCluster} from '../../../store/selectors/global';
+import {
+    getChytSpecletData,
+    getChytSpecletDataAlias,
+    getChytSpecletError,
+    getChytSpecletLoaded,
+} from '../../../store/selectors/chyt/speclet';
 import {useThunkDispatch} from '../../../store/thunkDispatch';
 import {YTError} from '../../../../@types/types';
 
@@ -67,36 +72,28 @@ export function ChytPageCliqueSpeclet() {
     );
 }
 
-function ChytSpeclet({alias, unipikaSettings}: {alias: string; unipikaSettings: UnipikaSettings}) {
-    const [data, setData] = React.useState<{
-        loaded?: boolean;
-        speclet?: unknown;
-    }>({});
-    const [error, setError] = React.useState<undefined | YTError>();
-    const cluster = useSelector(getCluster);
-
+function ChytSpeclet({alias, unipikaSettings}: {alias?: string; unipikaSettings: UnipikaSettings}) {
+    const dispatch = useDispatch();
     const update = React.useCallback(() => {
         if (alias) {
-            chytApiAction('get_speclet', cluster, {alias})
-                .then((res) => {
-                    setData({loaded: true, speclet: res.result});
-                    setError(undefined);
-                })
-                .catch((e) => {
-                    setError(e);
-                });
+            dispatch(chytLoadCliqueSpeclet(alias));
         }
-    }, [alias, cluster]);
+    }, [alias, dispatch]);
 
     useUpdater(update);
 
-    return (
+    const data = useSelector(getChytSpecletData);
+    const error = useSelector(getChytSpecletError);
+    const dataAlias = useSelector(getChytSpecletDataAlias);
+    const loaded = useSelector(getChytSpecletLoaded);
+
+    return dataAlias !== alias ? null : (
         <div className={block()}>
             {error && <Error className={block('raw-speclet-error')} error={error} bottomMargin />}
-            {data.loaded && (
+            {loaded && (
                 <Yson
                     className={block('raw-speclet')}
-                    value={data.speclet}
+                    value={data}
                     settings={unipikaSettings}
                     folding
                 />
