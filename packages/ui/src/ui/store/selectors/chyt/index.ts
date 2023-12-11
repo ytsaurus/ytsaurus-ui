@@ -35,12 +35,11 @@ export const getChytListFilterHealth = (state: RootState) => state.chyt.listFilt
 export const getChytListFilterCreator = (state: RootState) => state.chyt.listFilters.creator;
 export const getChytListFilterState = (state: RootState) => state.chyt.listFilters.state;
 
-type ChytListColumns = Exclude<ChytListAttributes, 'creator' | 'state' | 'yt_operation_id'>;
+type ChytListColumns = Exclude<ChytListAttributes, 'yt_operation_id'>;
 const CHYT_LIST_SELECTABLE_COLUMNS: Record<Exclude<ChytListColumns, 'health_reason'>, true> = {
     instance_count: true,
     total_cpu: true,
     total_memory: true,
-    health: true,
     creation_time: true,
     stage: true,
     yt_operation_start_time: true,
@@ -48,6 +47,9 @@ const CHYT_LIST_SELECTABLE_COLUMNS: Record<Exclude<ChytListColumns, 'health_reas
     speclet_modification_time: true,
     strawberry_state_modification_time: true,
     pool: true,
+    health: true,
+    creator: true,
+    state: true,
 };
 
 export type ChytSelectableColumn = keyof typeof CHYT_LIST_SELECTABLE_COLUMNS;
@@ -58,12 +60,12 @@ export const getChytListColumnsFromSettings = (state: RootState) => {
     return (
         getSettingsData(state)['global::chyt::list_columns'] ??
         ([
-            'creator',
+            'health',
+            'state',
             'instance_count',
             'total_cpu',
             'total_memory',
-            'state',
-            'health',
+            'creator',
             'creation_time',
         ] as const)
     );
@@ -86,15 +88,21 @@ export const getChytListVisibleColumns = createSelector(
 );
 
 export const getChytListColumns = createSelector(
-    [getChytListColumnsFromSettings],
+    [getChytListVisibleColumns],
     (columns): Array<ChytColumnItem> => {
         const userColumns = new Set(columns);
-        return Object.keys(CHYT_LIST_SELECTABLE_COLUMNS).map((k) => {
-            return {
-                checked: userColumns.has(k),
-                column: k as ChytListColumns,
-            };
+        const res = columns.map((column) => {
+            return {checked: true, column};
         });
+
+        Object.keys(CHYT_LIST_SELECTABLE_COLUMNS).forEach((k) => {
+            const column = k as ChytSelectableColumn;
+            if (!userColumns.has(column)) {
+                res.push({checked: false, column});
+            }
+        });
+
+        return res;
     },
 );
 

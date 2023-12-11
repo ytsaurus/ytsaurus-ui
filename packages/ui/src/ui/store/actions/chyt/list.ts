@@ -7,7 +7,7 @@ import CancelHelper, {isCancelled} from '../../../utils/cancel-helper';
 import {getCluster, isDeveloper} from '../../../store/selectors/global';
 import {getChytListVisibleColumns} from '../../../store/selectors/chyt';
 
-import {ChytApi, ChytListAttributes, chytApiAction} from './api';
+import {ChytApi, chytApiAction} from './api';
 import {SettingsThunkAction, setSettingByKey} from '../settings';
 
 type ChytListThunkAction<T> = ThunkAction<Promise<T>, RootState, unknown, ChytListAction>;
@@ -23,24 +23,19 @@ export function chytLoadList(): ChytListThunkAction<void> {
 
         dispatch({type: CHYT_LIST.REQUEST});
 
-        const extraColumns: Array<ChytListAttributes> = [];
-
-        if (-1 !== columns.indexOf('health')) {
-            extraColumns.push('health_reason');
-        }
+        const attributesSet = new Set([
+            'yt_operation_id' as const,
+            'creator' as const,
+            'state' as const,
+            'health' as const,
+            'health_reason' as const,
+            ...columns,
+        ]);
 
         return chytApiAction(
             'list',
             cluster,
-            {
-                attributes: [
-                    'yt_operation_id' as const,
-                    'creator' as const,
-                    'state' as const,
-                    ...columns,
-                    ...extraColumns,
-                ],
-            },
+            {attributes: [...attributesSet]},
             {isAdmin, cancelToken: cancelHelper.removeAllAndGenerateNextToken()},
         )
             .then((data) => {
