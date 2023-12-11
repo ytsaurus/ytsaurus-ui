@@ -15,14 +15,14 @@ import {useUpdater} from '../../../hooks/use-updater';
 
 import {getChytCurrentAlias} from '../../../store/selectors/chyt';
 import {
-    getChytSpecletData,
-    getChytSpecletDataAlias,
-    getChytSpecletError,
-} from '../../../store/selectors/chyt/speclet';
+    getChytOptionsData,
+    getChytOptionsDataAlias,
+    getChytOptionsError,
+} from '../../../store/selectors/chyt/options';
 import {getEditJsonYsonSettings} from '../../../store/selectors/thor/unipika';
 import {chytApiAction} from '../../../store/actions/chyt/api';
-import {chytLoadCliqueSpeclet, chytSetOptions} from '../../../store/actions/chyt/speclet';
-import {ChytCliqueSpecletState} from '../../../store/reducers/chyt/speclet';
+import {chytLoadCliqueOptions, chytEditOptions} from '../../../store/actions/chyt/options';
+import {ChytCliqueOptionsState} from '../../../store/reducers/chyt/options';
 import {getCluster} from '../../../store/selectors/global';
 import {useThunkDispatch} from '../../../store/thunkDispatch';
 import {YTError} from '../../../../@types/types';
@@ -37,13 +37,13 @@ function useSpecletData() {
 
     React.useMemo(() => {
         if (alias) {
-            dispatch(chytLoadCliqueSpeclet(alias));
+            dispatch(chytLoadCliqueOptions(alias));
         }
     }, [alias, dispatch]);
 
-    const specletData = useSelector(getChytSpecletData);
-    const dataAlias = useSelector(getChytSpecletDataAlias);
-    const error = useSelector(getChytSpecletError);
+    const specletData = useSelector(getChytOptionsData);
+    const dataAlias = useSelector(getChytOptionsDataAlias);
+    const error = useSelector(getChytOptionsError);
     const unipikaSettings = useSelector(getEditJsonYsonSettings);
 
     return {alias, specletData, dataAlias, error, unipikaSettings};
@@ -152,7 +152,7 @@ function ChytSpecletEditDialog({
 }: {
     allowEdit: boolean;
     alias: string;
-    data: ChytCliqueSpecletState['data'];
+    data: ChytCliqueOptionsState['data'];
     unipikaSettings: UnipikaSettings;
     onClose: () => void;
 }) {
@@ -210,7 +210,7 @@ function ChytSpecletEditDialog({
                         diff.pool = undefined;
                     }
 
-                    return dispatch(chytSetOptions(alias, diff))
+                    return dispatch(chytEditOptions(alias, diff))
                         .then(() => {
                             setError(undefined);
                         })
