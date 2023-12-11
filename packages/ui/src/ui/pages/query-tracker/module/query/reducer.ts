@@ -32,6 +32,7 @@ export interface QueryState {
 const initialQueryDraftState: QueryState['draft'] = {
     engine: QueryEngine.YQL,
     query: '',
+    files: [],
     settings: {},
 };
 

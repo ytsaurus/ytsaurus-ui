@@ -1,0 +1,9 @@
+.button-popup {
+    min-width: 620px;
+    padding: 16px 20px;
+
+    &__top-row {
+        display: flex;
+        justify-content: space-between;
+    }
+}

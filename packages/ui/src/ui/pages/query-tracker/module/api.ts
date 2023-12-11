@@ -63,9 +63,16 @@ export type YQLStatistic = {sum?: number; count?: number; avg?: number; max?: nu
 
 export type YQLSstatistics = Record<string, any>;
 
+export type QueryFile = {
+    name: string;
+    content: string;
+    type: 'url' | 'raw_inline_data';
+};
+
 export interface DraftQuery {
     id?: QueryItemId;
     engine: QueryEngine;
+    files: QueryFile[];
     query: string;
     annotations?: {
         title?: string;
@@ -172,6 +179,7 @@ export async function generateQueryFromTable(
                 schemaExists: Boolean(schema.length),
                 dynamic: node.dynamic,
             }),
+            files: [],
             annotations: {},
             settings: generateQuerySettings(engine, cluster),
         };
@@ -227,11 +235,12 @@ export function startQuery(
     return async (_dispatch, getState) => {
         const state = getState();
         const {stage, yqlAgentStage} = getQueryTrackerRequestOptions(state);
-        const {query, engine, settings, annotations} = queryInstance;
+        const {query, engine, settings, annotations, files} = queryInstance;
         return ytApiV4Id.startQuery(YTApiId.startQuery, {
             parameters: {
                 stage,
                 query,
+                files,
                 engine,
                 annotations,
                 settings: {
