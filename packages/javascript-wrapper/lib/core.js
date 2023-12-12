@@ -1,4 +1,5 @@
 var axios = require('axios');
+var JSONbig = require('json-bigint')({ useNativeBigInt: true });
 
 var useInterceptors = require('./utils/interceptors.js');
 var meta = require('./utils/meta.js');
@@ -45,11 +46,16 @@ core._makeSubscribable = function (yt) {
     yt.notify = core.notify;
 };
 
+core._getJsonSerializer = function (localSetup) {
+    return setup.getOption(localSetup, 'useJsonBig') ? JSONbig : JSON;
+}
+
 function appendEncodedParameters(headers, localSetup, parameters) {
     var settings = setup.getOption(localSetup, 'encodedParametersSettings');
+    var serializer = core._getJsonSerializer(localSetup);
 
     var encodedParameters = settings.encoder(
-        JSON.stringify(parameters)
+        serializer.stringify(parameters)
     );
 
     if (encodedParameters.length > settings.maxCount * settings.maxSize) {
@@ -70,13 +76,14 @@ function appendEncodedParameters(headers, localSetup, parameters) {
 
 function appendParametersHeaders(headers, localSetup, parameters) {
     var encode = setup.getOption(localSetup, 'useEncodedParameters');
+    var serializer = core._getJsonSerializer(localSetup);
 
     if (encode) {
         appendEncodedParameters(headers, localSetup, parameters);
 
         headers['X-YT-Header-Format'] = '<encode_utf8=%false>json';
     } else {
-        headers['X-YT-Parameters'] = JSON.stringify(parameters);
+        headers['X-YT-Parameters'] = serializer.stringify(parameters);
     }
 }
 
@@ -84,10 +91,12 @@ function prepareProtocol(localSetup) {
     return setup.getOption(localSetup, 'secure') ? 'https://' : 'http://';
 }
 
-core._parseResponse = function (data) {
+core._parseResponse = function (localSetup, data) {
+    var serializer = core._getJsonSerializer(localSetup);
+
     if (typeof data === 'string') {
         try {
-            data = JSON.parse(data);
+            data = serializer.parse(data);
         } catch (ex) {
             return data;
         }
@@ -99,7 +108,7 @@ core._makeSuccessHandler = function (localSetup) {
     return function (response) {
         core.notify('requestEnd', response.config);
 
-        var data = response.config.responseType === 'json' ? core._parseResponse(response.data) : response.data;
+        var data = response.config.responseType === 'json' ? core._parseResponse(localSetup, response.data) : response.data;
 
         var transformResponse =
             setup.getLocalOption(localSetup, 'transformResponse') ||
@@ -128,7 +137,7 @@ core._makeErrorHandler = function (localSetup) {
             }
         }
 
-        var errorData = axios.isCancel(error) ? {code: codes.CANCELLED} : core._parseResponse(data);
+        var errorData = axios.isCancel(error) ? {code: codes.CANCELLED} : core._parseResponse(localSetup, data);
 
         var transformError =
             setup.getLocalOption(localSetup, 'transformError') ||
@@ -199,7 +208,8 @@ core._prepareURL = function (localSetup, command) {
 core._prepareData = function (localSetup, command) {
     var config = command.config;
     var data = command.data;
-    var prepareData = config.prepareData || JSON.stringify;
+    var serializer = core._getJsonSerializer(localSetup);
+    var prepareData = config.prepareData || serializer.stringify;
 
     return (config.method === 'POST' || config.method === 'PUT') ? prepareData(data) : data;
 };
@@ -254,7 +264,8 @@ core._prepareRequestSettings = function (localSetup, command) {
         if (requestParameters.data) {
             throw new Error('Unexpected behavior: Request body already defined');
         }
-        requestParameters.data = setup.encodeForYt(JSON.stringify(preparedParameters));
+        var serializer = core._getJsonSerializer(localSetup);
+        requestParameters.data = setup.encodeForYt(serializer.stringify(preparedParameters));
     }
 
     return requestParameters;
