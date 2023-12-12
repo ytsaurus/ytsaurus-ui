@@ -121,7 +121,7 @@ setup.createOption('transformResponse', 'function');
 
 setup.createOption('transformError', 'function');
 
-setup.createOption('useJsonBig', 'boolean', false);
+setup.createOption('JSONSerializer', 'object', JSON);
 
 /**
  * Allows to send some custom headers.
