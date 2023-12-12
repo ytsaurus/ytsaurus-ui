@@ -121,6 +121,8 @@ setup.createOption('transformResponse', 'function');
 
 setup.createOption('transformError', 'function');
 
+setup.createOption('useJsonBig', 'boolean', false);
+
 /**
  * Allows to send some custom headers.
  * Names of custom headers should be chosen carefully cause values of the library specific headers will be overridden.
