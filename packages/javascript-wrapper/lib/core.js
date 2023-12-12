@@ -204,9 +204,13 @@ core._prepareData = function (localSetup, command) {
     var config = command.config;
     var data = command.data;
     var serializer = setup.getOption(localSetup, 'JSONSerializer');
-    var prepareData = config.prepareData || serializer.stringify;
 
-    return (config.method === 'POST' || config.method === 'PUT') ? prepareData(data) : data;
+    if (config.method === 'POST' || config.method === 'PUT') {
+        if (config.prepareData) return config.prepareData(localSetup, data);
+        return serializer.stringify(data);
+    }
+
+    return data;
 };
 
 core._identity = function (data) {
