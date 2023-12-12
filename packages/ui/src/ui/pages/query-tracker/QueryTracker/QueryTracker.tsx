@@ -87,7 +87,7 @@ function QueryPage(props: Props) {
 }
 
 export const QueryTracker = ({match}: Props) => {
-    const isVisibleQueriesListSidebar = useSelector(getVisibilityQueriesListUiSetting);
+    const isQueriesListSidebarVisible = useSelector(getVisibilityQueriesListUiSetting);
     const [sizes, setSize] = useState(initialSizes);
     const getSize = useMemo(() => {
         return () => sizes;
@@ -115,7 +115,7 @@ export const QueryTracker = ({match}: Props) => {
                     minSize={minSize}
                     getInitialSizes={getSize}
                 >
-                    {isVisibleQueriesListSidebar ? <QueriesList /> : null }
+                    {isQueriesListSidebarVisible ? <QueriesList /> : null }
                     <React.Suspense fallback={<Loader />}>
                         <QueryEditorLazy onStartQuery={goToCreatedQuery}></QueryEditorLazy>
                     </React.Suspense>
