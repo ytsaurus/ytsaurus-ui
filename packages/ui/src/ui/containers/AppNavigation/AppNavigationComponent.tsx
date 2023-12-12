@@ -1,50 +1,22 @@
 import React, {useState} from 'react';
 import cn from 'bem-cn-lite';
 import axios from 'axios';
-
-import {AsideHeader, FooterItem, MenuItem} from '@gravity-ui/navigation';
-import Logo from '../../../../img/svg/appLogo.svg';
-import settingsIcon from '../../../../img/svg/settings.svg';
-import Link from '../../components/Link/Link';
-import {ClusterConfig} from '../../../shared/yt-types';
-import unknown from '../../../../img/user-avatar.svg';
-import './AppNavigationComponent.scss';
-import {Menu} from '@gravity-ui/uikit';
 import {useHistory} from 'react-router';
+import {FooterItem, PageLayoutAside} from '@gravity-ui/navigation';
+import {Menu} from '@gravity-ui/uikit';
+
+import Logo from '../../../../img/svg/appLogo.svg';
+import GearIcon from '@gravity-ui/icons/svgs/gear.svg';
+import Link from '../../components/Link/Link';
+import unknown from '../../../../img/user-avatar.svg';
+import {AppNavigationProps} from './AppNavigationPageLayout';
+
+import './AppNavigationComponent.scss';
 
 const block = cn('yt-app-navigation');
 
-export interface AppNavigationProps {
-    initialCompact?: boolean;
-    className: string;
-    children?: React.ReactNode;
-
-    clusterConfig?: ClusterConfig;
-    logoClassName: string;
-
-    menuItems: Array<
-        Omit<MenuItem, 'title' | 'type'> & {itemUrl?: string; current?: boolean; title: string}
-    >;
-    currentUser: string;
-
-    panelVisible: boolean;
-    panelContent: React.ReactNode;
-    panelClassName: string;
-    onClosePanel: () => void;
-
-    settingsContent: React.ReactNode;
-    settingsVisible: boolean;
-    toggleSettingsVisible: () => void;
-
-    compact: boolean;
-    onChangeCompact: (compact: boolean) => void;
-    rememberSize: (asideWidth: number) => void;
-}
-
 function AppNavigationComponent({
-    className,
     logoClassName,
-    children,
     menuItems,
     currentUser,
 
@@ -57,11 +29,8 @@ function AppNavigationComponent({
     settingsContent,
     toggleSettingsVisible,
 
-    compact,
     onChangeCompact,
-
-    rememberSize,
-}: AppNavigationProps) {
+}: Omit<AppNavigationProps, 'compact' | 'rememberSize' | 'className'>) {
     const panelItems = React.useMemo(() => {
         return [
             {
@@ -82,12 +51,12 @@ function AppNavigationComponent({
     const history = useHistory();
 
     return (
-        <AsideHeader
-            className={block(null, className)}
+        <PageLayoutAside
             multipleTooltip
             panelItems={panelItems}
             onClosePanel={onClosePanel}
             menuItems={menuItems}
+            headerDecoration
             logo={{
                 text: () => 'YTsaurus',
                 textSize: 22,
@@ -102,22 +71,7 @@ function AppNavigationComponent({
                     );
                 },
             }}
-            compact={compact}
             onChangeCompact={onChangeCompact}
-            renderContent={(size) => {
-                rememberSize(size.size);
-                return (
-                    <div
-                        style={{
-                            ...({
-                                '--nv-aside-header-size': `${size.size}px`,
-                            } as any),
-                        }}
-                    >
-                        {children}
-                    </div>
-                );
-            }}
             renderFooter={({compact}) => {
                 return (
                     <>
@@ -127,7 +81,7 @@ function AppNavigationComponent({
                                 id: 'settings',
                                 title: 'Settings',
                                 onItemClick: toggleSettingsVisible,
-                                icon: settingsIcon,
+                                icon: GearIcon,
                             }}
                         />
                         <FooterItem

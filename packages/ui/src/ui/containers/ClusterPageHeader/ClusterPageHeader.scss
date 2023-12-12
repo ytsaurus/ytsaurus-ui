@@ -3,7 +3,7 @@
 .cluster-page-header {
     position: fixed;
     top: 0;
-    left: var(--nv-aside-header-size);
+    left: var(--gn-aside-header-size);
     right: 0;
     height: var(--app-header-height);
     overflow: hidden;
@@ -16,7 +16,7 @@
     padding-left: 5px;
     //    min-width: 1200px;
     width: 100%;
-    max-width: calc(100vw - var(--nv-aside-header-size));
+    max-width: calc(100vw - var(--gn-aside-header-size));
 
     &__spacer {
         height: 24px;
