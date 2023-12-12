@@ -1,6 +1,7 @@
 import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {Route, Switch} from 'react-router';
+import {Loader} from '@gravity-ui/uikit';
 import FlexSplitPane from '../../../components/FlexSplitPane/FlexSplitPane';
 import {QueriesPooling} from '../hooks/QueriesPooling/context';
 import {QueryEngine, isEngine} from '../module/api';
@@ -12,10 +13,9 @@ import {
     loadQuery,
 } from '../module/query/actions';
 import {getQueryGetParams} from '../module/query/selectors';
+import {getVisibilityQueriesListUiSetting} from '../module/ui_settings/selectors';
 import {QueriesList} from '../QueriesList';
-import {Loader} from '@gravity-ui/uikit';
 import './QueryTracker.scss';
-import {getQueriesListSetting} from "../module/ui_settings/selectors";
 
 type Props = {
     match: {
@@ -87,7 +87,7 @@ function QueryPage(props: Props) {
 }
 
 export const QueryTracker = ({match}: Props) => {
-    const isShowQueriesSettingPanel = useSelector(getQueriesListSetting);
+    const isVisibleQueriesListSidebar = useSelector(getVisibilityQueriesListUiSetting);
     const [sizes, setSize] = useState(initialSizes);
     const getSize = useMemo(() => {
         return () => sizes;
@@ -115,7 +115,7 @@ export const QueryTracker = ({match}: Props) => {
                     minSize={minSize}
                     getInitialSizes={getSize}
                 >
-                    {isShowQueriesSettingPanel ? <QueriesList /> : null }
+                    {isVisibleQueriesListSidebar ? <QueriesList /> : null }
                     <React.Suspense fallback={<Loader />}>
                         <QueryEditorLazy onStartQuery={goToCreatedQuery}></QueryEditorLazy>
                     </React.Suspense>

@@ -1,6 +1,6 @@
 import {
-    TOGGLE_QUERIES_LIST,
-    ToggleResultPanelAction
+    ToggleQueriesListSidebarAction,
+    TOGGLE_QUERIES_LIST_SIDEBAR
 } from './actions';
 
 export interface QueryTrackerUiSettingsState {
@@ -8,12 +8,12 @@ export interface QueryTrackerUiSettingsState {
 }
 
 const initState: QueryTrackerUiSettingsState = {
-    showQueriesList: true,
+    showQueriesList: true
 };
 
 export function reducer(state = initState, action: Actions): QueryTrackerUiSettingsState {
     switch (action.type) {
-        case TOGGLE_QUERIES_LIST: {
+        case TOGGLE_QUERIES_LIST_SIDEBAR: {
             return {
                 ...state,
                 showQueriesList: ! state.showQueriesList
@@ -24,4 +24,4 @@ export function reducer(state = initState, action: Actions): QueryTrackerUiSetti
     return state;
 }
 
-type Actions = ToggleResultPanelAction;
+type Actions = ToggleQueriesListSidebarAction;
