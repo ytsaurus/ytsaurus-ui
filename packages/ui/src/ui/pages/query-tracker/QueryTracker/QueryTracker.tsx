@@ -15,6 +15,7 @@ import {getQueryGetParams} from '../module/query/selectors';
 import {QueriesList} from '../QueriesList';
 import {Loader} from '@gravity-ui/uikit';
 import './QueryTracker.scss';
+import {getQueriesListSetting} from "../module/ui_settings/selectors";
 
 type Props = {
     match: {
@@ -86,6 +87,7 @@ function QueryPage(props: Props) {
 }
 
 export const QueryTracker = ({match}: Props) => {
+    const isShowQueriesSettingPanel = useSelector(getQueriesListSetting);
     const [sizes, setSize] = useState(initialSizes);
     const getSize = useMemo(() => {
         return () => sizes;
@@ -113,8 +115,7 @@ export const QueryTracker = ({match}: Props) => {
                     minSize={minSize}
                     getInitialSizes={getSize}
                 >
-                    <QueriesList />
-
+                    {isShowQueriesSettingPanel ? <QueriesList /> : null }
                     <React.Suspense fallback={<Loader />}>
                         <QueryEditorLazy onStartQuery={goToCreatedQuery}></QueryEditorLazy>
                     </React.Suspense>
