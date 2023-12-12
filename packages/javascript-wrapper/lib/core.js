@@ -46,13 +46,9 @@ core._makeSubscribable = function (yt) {
     yt.notify = core.notify;
 };
 
-core._getJsonSerializer = function (localSetup) {
-    return setup.getOption(localSetup, 'useJsonBig') ? JSONbig : JSON;
-}
-
 function appendEncodedParameters(headers, localSetup, parameters) {
     var settings = setup.getOption(localSetup, 'encodedParametersSettings');
-    var serializer = core._getJsonSerializer(localSetup);
+    var serializer = setup.getOption(localSetup, 'JSONSerializer');
 
     var encodedParameters = settings.encoder(
         serializer.stringify(parameters)
@@ -76,7 +72,7 @@ function appendEncodedParameters(headers, localSetup, parameters) {
 
 function appendParametersHeaders(headers, localSetup, parameters) {
     var encode = setup.getOption(localSetup, 'useEncodedParameters');
-    var serializer = core._getJsonSerializer(localSetup);
+    var serializer = setup.getOption(localSetup, 'JSONSerializer');
 
     if (encode) {
         appendEncodedParameters(headers, localSetup, parameters);
@@ -92,7 +88,7 @@ function prepareProtocol(localSetup) {
 }
 
 core._parseResponse = function (localSetup, data) {
-    var serializer = core._getJsonSerializer(localSetup);
+    var serializer = setup.getOption(localSetup, 'JSONSerializer');
 
     if (typeof data === 'string') {
         try {
@@ -208,7 +204,7 @@ core._prepareURL = function (localSetup, command) {
 core._prepareData = function (localSetup, command) {
     var config = command.config;
     var data = command.data;
-    var serializer = core._getJsonSerializer(localSetup);
+    var serializer = setup.getOption(localSetup, 'JSONSerializer');
     var prepareData = config.prepareData || serializer.stringify;
 
     return (config.method === 'POST' || config.method === 'PUT') ? prepareData(data) : data;
@@ -264,7 +260,7 @@ core._prepareRequestSettings = function (localSetup, command) {
         if (requestParameters.data) {
             throw new Error('Unexpected behavior: Request body already defined');
         }
-        var serializer = core._getJsonSerializer(localSetup);
+        var serializer = setup.getOption(localSetup, 'JSONSerializer');
         requestParameters.data = setup.encodeForYt(serializer.stringify(preparedParameters));
     }
 
