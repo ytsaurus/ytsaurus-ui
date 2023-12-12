@@ -19,7 +19,7 @@ import {useClusterFromLocation} from '../../hooks/use-cluster';
 
 import './AppNavigation.scss';
 import UIFactory from '../../UIFactory';
-import {AppNavigationProps} from './AppNavigationComponent';
+import {AppNavigationProps} from './AppNavigationPageLayout';
 import {getSettingNavigationPanelExpanded} from '../../store/selectors/settings';
 import {setSettingNavigationPanelExpanded} from '../../store/actions/settings/settings';
 import {setAsideHeaderWidth} from '../../store/actions/global';
@@ -81,23 +81,30 @@ export default function AppNavigation({children}: ExtProps) {
         ];
     }, [items, cluster, togglePanelVisibility]);
 
+    const className = block();
+
     const expanded = useSelector(getSettingNavigationPanelExpanded);
     const onChangeCompact = React.useCallback(
         (newCompact: boolean) => {
             dispatch(setSettingNavigationPanelExpanded(!newCompact));
-        },
-        [dispatch],
-    );
 
-    const rememberSize = React.useCallback(
-        (size: number) => {
-            dispatch(setAsideHeaderWidth(size));
+            setTimeout(() => {
+                const el = window.document.querySelector(`.${className}`);
+                if (el) {
+                    const widthStr =
+                        getComputedStyle(el)?.getPropertyValue('--gn-aside-header-size');
+                    const width = Number(widthStr?.slice?.(0, -2)); // '236px' or '56px'
+                    if (!isNaN(width)) {
+                        dispatch(setAsideHeaderWidth(width));
+                    }
+                }
+            }, 500);
         },
         [dispatch],
     );
 
     const props: AppNavigationProps = {
-        className: block(),
+        className,
         clusterConfig,
         logoClassName: block('logo-icon', {'no-cluster': !cluster}),
         currentUser,
@@ -119,7 +126,6 @@ export default function AppNavigation({children}: ExtProps) {
         compact: !expanded,
         onChangeCompact,
         children,
-        rememberSize,
     };
 
     return UIFactory.renderAppNavigation(props);

@@ -75,7 +75,7 @@ $stickyVerticalPadding: 10px;
 @mixin sticky-style() {
     position: fixed;
     top: var(--app-header-height);
-    left: var(--nv-aside-header-size);
+    left: var(--gn-aside-header-size);
     right: 0;
 
     padding: $stickyVerticalPadding 20px;

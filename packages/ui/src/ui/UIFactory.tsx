@@ -9,9 +9,9 @@ import {TabletBundle} from './store/reducers/tablet_cell_bundles';
 import {PoolInfo} from './store/selectors/scheduling/scheduling-pools';
 import {ClusterConfig} from '../shared/yt-types';
 import {ClusterAppearance} from './appearance';
-import AppNavigationComponent, {
+import AppNavigationPageLayout, {
     AppNavigationProps,
-} from './containers/AppNavigation/AppNavigationComponent';
+} from './containers/AppNavigation/AppNavigationPageLayout';
 import {ExternalSchemaDescription} from './pages/navigation/tabs/Schema/ExternalDescription/ExternalDescription';
 import {AclApi, defaultAclApi} from './utils/acl/external-acl-api';
 import {SubjectsControlProps} from './components/ACL/SubjectsControl/SubjectsControl';
@@ -533,7 +533,7 @@ const uiFactory: UIFactory = {
     },
 
     renderAppNavigation(props) {
-        return <AppNavigationComponent {...props} />;
+        return <AppNavigationPageLayout {...props} />;
     },
 
     createNotificationUrl() {
