@@ -1,5 +1,4 @@
 var axios = require('axios');
-var JSONbig = require('json-bigint')({ useNativeBigInt: true });
 
 var useInterceptors = require('./utils/interceptors.js');
 var meta = require('./utils/meta.js');
