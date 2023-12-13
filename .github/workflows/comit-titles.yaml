@@ -1,40 +1,27 @@
+name: Check commit titles
+
 on:
-    push:
-      branches:
-        - main
-  name: Check commit titles
-  jobs:
-    release-please:
-      runs-on: ubuntu-latest
-      steps:
-        - name:
-          run: |
-            echo ${{secrets.GITHUB_TOKEN}} | md5sum
-        - uses: google-github-actions/release-please-action@v3
-          id: release
-          with:
-            command: manifest
-            token: ${{secrets.GITHUB_TOKEN}}
-            default-branch: main
-  
-        # The logic below handles the npm publication:
-        - name: Checkout Repository
-          if: ${{ steps.release.outputs.releases_created }}
-          uses: actions/checkout@v2
-        - name: Check commit titles
-          if: ${{ steps.release.outputs.releases_created }}
-          run: |
-            git log --format="%s" ${{ github.event.pull_request.base.sha }}..
-            git log --format="%s" ${{ github.event.pull_request.base.sha }} | grep -vE '(chore|feat|fix|refactor)(\(\S+\))?!?: [a-z]+' || \
-                (
-                    echo "Please check your commit titles, they should correspond to https://www.conventionalcommits.org/en/v1.0.0/";
-                    false
-                )
-            git log --format="%s" ${{ github.event.pull_request.base.sha }} | grep -vE '(feat|fix)(\(\S+\))?!?: [a-z]+' || \
+  pull_request:
+
+jobs:
+  release-please:
+    runs-on: ubuntu-latest
+    steps:
+      # The logic below handles the npm publication:
+    - name: Checkout Repository
+      uses: actions/checkout@v2
+    - name: Check commit titles
+      run: |
+        git log --format="%s" ${{ github.event.pull_request.base.sha }}..
+        git log --format="%s" ${{ github.event.pull_request.base.sha }} | grep -vE '(chore|feat|fix|refactor)(\(\S+\))?!?: [a-z]+' || \
             (
-                echo "You have to provice at least one 'feat'|'fix' commit to publish new version of changed packages.";
-                echo "If you don't want to release new version then just ignore the check.";
+                echo "Please check your commit titles, they should correspond to https://www.conventionalcommits.org/en/v1.0.0/";
                 false
             )
+        git log --format="%s" ${{ github.event.pull_request.base.sha }} | grep -vE '(feat|fix)(\(\S+\))?!?: [a-z]+' || \
+        (
+            echo "You have to provice at least one 'feat'|'fix' commit to publish new version of changed packages.";
+            echo "If you don't want to release new version then just ignore the check.";
+            false
+        )
 
-  
