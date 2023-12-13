@@ -1,4 +1,4 @@
-name: CI
+name: "[ci]: Base"
 
 on:
   pull_request:

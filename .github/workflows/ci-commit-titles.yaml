@@ -1,4 +1,4 @@
-name: Check commit titles
+name: "[ci]: Commit titles"
 
 on:
   pull_request:

@@ -1,13 +1,13 @@
-name: Docker tag [Manual]
+name: "[manual]: Docker tag"
 
 on:
   workflow_dispatch:
     inputs:
       stag:
-        description: 'ytsaurus/ui:[SOURCE_TAG]'
+        description: "ytsaurus/ui:[SOURCE_TAG]"
         required: true
       ttag:
-        description: 'ytsaurus/ui:[TARGET_TAG]'
+        description: "ytsaurus/ui:[TARGET_TAG]"
         required: true
 
 jobs:

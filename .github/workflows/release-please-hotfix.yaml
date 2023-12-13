@@ -1,8 +1,8 @@
+name: "[release]: Hotfix please"
 on:
   push:
     branches:
       - hotfix-release-ui-*
-name: Run Hotfix Release Please
 jobs:
   release-please:
     runs-on: ubuntu-latest

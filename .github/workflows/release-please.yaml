@@ -1,8 +1,8 @@
+name: "[release]: Release please"
 on:
   push:
     branches:
       - main
-name: Run Release Please
 jobs:
   release-please:
     runs-on: ubuntu-latest

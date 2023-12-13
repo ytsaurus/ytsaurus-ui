@@ -1,11 +1,19 @@
-name: Docker build [Manual]
+name: "Docker build [Manual]"
 
 on:
   workflow_dispatch:
     inputs:
-      ref:
-        description: "Checkout branch"
+      prefix:
+        description: Prefix of tag
+        default: dev
         required: true
+      ref:
+        description: "Checkout branch (suffix of tag)"
+        required: true
+      override:
+        description: "Allow override tag"
+        required: false
+        type: boolean
 
 jobs:
   build:
@@ -24,27 +32,20 @@ jobs:
         run: |
           npm ci
 
-      - name: Publish to NPM
-        env:
-          NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
-        run: npx lerna publish from-package --no-push --no-private --yes
-
       - name: "Docker: build & push"
         run: |
           cd packages/ui
 
           UI_IMAGE=$( npm run show:docker-image-name | tail -n 1 )
-          UI_TAG=$( echo ${{ inputs.ref }} | sed -E 's/(\W|\D)/-/g' )
+          UI_TAG=$( echo "${{ inputs.prefix }}-${{ inputs.ref }}" | sed -E 's/\W/-/g' )
 
           TARGET_IMAGE=${UI_IMAGE}:${UI_TAG}
           echo target image and tag: ${TARGET_IMAGE}
 
-          if ! docker pull ${TARGET_IMAGE} ; then
-            npm run docker:build --dockertag=${UI_TAG}
+          if ( test "true" = "${{ inputs.override }}" || ! docker pull ${TARGET_IMAGE} ) ; then
+            npm run docker:build:dev --dockertag=${UI_TAG}
             echo '${{ secrets.DOCKER_HUB_PASSWORD }}' | docker login --username ${{ secrets.DOCKER_HUB_LOGIN}} --password-stdin
             npm run docker:push --dockertag=${UI_TAG}
-            docker tag ${TARGET_IMAGE} ${UI_IMAGE}:pre-stable
-            docker push ${UI_IMAGE}:pre-stable
           else 
             echo Corresponding image already exists: $TARGET_IMAGE
           fi
