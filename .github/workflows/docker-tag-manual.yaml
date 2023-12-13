@@ -11,7 +11,7 @@ on:
         required: true
 
 jobs:
-  release-docker-tag:
+  docker-tag:
     runs-on: ubuntu-latest
     steps:
       - name: "Docker tag"

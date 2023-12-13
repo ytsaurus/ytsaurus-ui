@@ -4,11 +4,11 @@ on:
   workflow_dispatch:
     inputs:
       ref:
-        description: "HASH | branch"
+        description: "Checkout branch"
         required: true
 
 jobs:
-  release-docker-tag:
+  build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
