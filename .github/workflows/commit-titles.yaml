@@ -4,7 +4,7 @@ on:
   pull_request:
 
 jobs:
-  release-please:
+  check:
     runs-on: ubuntu-latest
     steps:
       - name: Check commit titles
