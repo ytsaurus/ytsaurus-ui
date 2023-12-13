@@ -18,7 +18,8 @@ jobs:
               false
           )
 
-      - name: 'feat|fix'
+      - name: "feat|fix"
+        run: |
           grep -E '(feat|fix)(\(\S+\))?!?: [a-z]+' titles.txt || (
               echo "You have to provide at least one 'feat'|'fix' commit to publish new versions of changed packages.";
               echo "If you don't want to release new version then just ignore the check.";
