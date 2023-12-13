@@ -1,5 +1,20 @@
 # Changelog
 
+## [1.7.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.6.0...ui-v1.7.0) (2023-12-13)
+
+
+### Features
+
+* **query-tracker:** added file attachments to queries [[#221](https://github.com/ytsaurus/ytsaurus-ui/issues/221)] ([16d4138](https://github.com/ytsaurus/ytsaurus-ui/commit/16d41384621d368e83b34bfc5d1de933afc7d7b9))
+
+
+### Bug Fixes
+
+* **Components/SetupModal:** fix Racks filter [YTFRONT-3944] ([0662e07](https://github.com/ytsaurus/ytsaurus-ui/commit/0662e07355402c5cbed8ffc3dd39997397532ea0))
+* **RemoteCopy:** get rid of erasure_codec, compression_codec for a while [YTFRONT-3935] ([8518c96](https://github.com/ytsaurus/ytsaurus-ui/commit/8518c968200e92f6fe7242635515435fb70b1505))
+* **Scheduling:** tree selector should be filterable [YTFRONT-3948] ([3102f5e](https://github.com/ytsaurus/ytsaurus-ui/commit/3102f5ea9a04d03f75420999dbbeb776e481afbf))
+* **System/Chunks:** i.get is not a function [YTFRONT-3943] ([8c6a9e5](https://github.com/ytsaurus/ytsaurus-ui/commit/8c6a9e59f5f9ca31ab9f8fd7b881c847d130bd8a))
+
 ## [1.6.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.5.2...ui-v1.6.0) (2023-12-08)
 
 
