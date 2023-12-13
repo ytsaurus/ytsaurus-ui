@@ -13,17 +13,17 @@ jobs:
       - name: Check commit titles
         run: |
           curl ${{ github.event.pull_request.commits_url }} > commits.txt
-          jq --version
-          cat commits.txt | jq -r '.[].commit.message' | tee titles.txt
+          cat commits.txt | jq -r '.[].commit.message' > titles.txt
 
           grep -vE '(chore|feat|fix|refactor)(\(\S+\))?!?: [a-z]+' titles.txt || \
               (
+                  echo -e "\nThe titles above should be fixed.";
                   echo "Please check your commit titles, they should correspond to https://www.conventionalcommits.org/en/v1.0.0/";
                   false
               )
 
 
-          grep -vE '(feat|fix)(\(\S+\))?!?: [a-z]+' titles.txt || \
+          grep -E '(feat|fix)(\(\S+\))?!?: [a-z]+' titles.txt || \
           (
               echo "You have to provice at least one 'feat'|'fix' commit to publish new version of changed packages.";
               echo "If you don't want to release new version then just ignore the check.";
