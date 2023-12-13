@@ -9,49 +9,49 @@ The library helps to make requests to YTsaurus platform backend over HTTP API.
 ### Usage
 
 ```javascript
-const yt = require("@ytsaurus/javascript-wrapper")();
+const yt = require('@ytsaurus/javascript-wrapper')();
 
 // The example show how to set global options for all commands.
 // But if you need to communicate with several cluster then you have to provide proxy and token for each separate command.
-yt.setup.setGlobalOption("proxy", "plato.yt.my-domain.com");
-yt.setup.setGlobalOption("secure", true);
+yt.setup.setGlobalOption('proxy', 'plato.yt.my-domain.com');
+yt.setup.setGlobalOption('secure', true);
 
-yt.setup.setGlobalOption("authentication", {
-  type: "domain",
+yt.setup.setGlobalOption('authentication', {
+  type: 'domain',
 });
 
-yt.setup.setGlobalOption("timeout", 15000);
+yt.setup.setGlobalOption('timeout', 15000);
 
 // Example 1
-yt.v3.get({ path: "//sys/users/yozhik/@" });
+yt.v3.get({path: '//sys/users/yozhik/@'});
 
 yt.v3
   .get({
     setup: {
-      proxy: "hahn.yt.my-domain.com",
+      proxy: 'hahn.yt.my-domain.com',
       authentication: {
-        type: "none",
+        type: 'none',
       },
     },
-    parameters: { path: "//sys/users/yozhik/@" },
+    parameters: {path: '//sys/users/yozhik/@'},
   })
   .done(function (userAttributes) {
     // ...
   });
 
 // Example 2
-yt.v3.set({ path: "//sys/users/yozhik/@banned" }, true);
+yt.v3.set({path: '//sys/users/yozhik/@banned'}, true);
 
 yt.v3
   .set({
     setup: {
-      proxy: "banach.yt.my-domain.com",
+      proxy: 'banach.yt.my-domain.com',
       authentication: {
-        type: "oauth",
-        token: "abcdefghijklmnopqrstuvwxyz",
+        type: 'oauth',
+        token: 'abcdefghijklmnopqrstuvwxyz',
       },
     },
-    parameters: { path: "//sys/users/yozhik/@banned" },
+    parameters: {path: '//sys/users/yozhik/@banned'},
     data: true,
   })
   .done(function () {
@@ -103,8 +103,8 @@ If you don't need to override local configuration options you can use syntax:
 
 ```js
 // yt.<version>.<command>(<parameters>[, <data>])
-yt.v3.get({ path: "//home/user/@account" });
-yt.v3.set({ path: "//home/user/@account" }, "default");
+yt.v3.get({path: '//home/user/@account'});
+yt.v3.set({path: '//home/user/@account'}, 'default');
 ```
 
 also there is ability to define options by `setup` field:
@@ -117,9 +117,9 @@ also there is ability to define options by `setup` field:
  *    setup: <setup>
  * })
  */
-const setup = { timeout: 3000 };
-yt.v3.get({ setup, parameters: { path: "//home/user/@account" } });
-yt.v3.set({ setup, parameters: { path: "//home/user/@account" } }, "default");
+const setup = {timeout: 3000};
+yt.v3.get({setup, parameters: {path: '//home/user/@account'}});
+yt.v3.set({setup, parameters: {path: '//home/user/@account'}}, 'default');
 ```
 
 ### Error codes
