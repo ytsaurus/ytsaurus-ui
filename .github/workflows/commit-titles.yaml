@@ -7,9 +7,6 @@ jobs:
   release-please:
     runs-on: ubuntu-latest
     steps:
-      # The logic below handles the npm publication:
-      - name: Checkout Repository
-        uses: actions/checkout@v2
       - name: Check commit titles
         run: |
           curl ${{ github.event.pull_request.commits_url }} > commits.txt
