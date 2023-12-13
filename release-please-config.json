@@ -2,8 +2,15 @@
   "separate-pull-requests": true,
   "plugins": ["node-workspace"],
   "packages": {
-    "packages/javascript-wrapper": {},
-    "packages/interface-helpers": {},
-    "packages/ui": {}
-  }
+    "packages/javascript-wrapper": {
+      "release-type": "node"
+    },
+    "packages/interface-helpers": {
+      "release-type": "node"
+    },
+    "packages/ui": {
+      "release-type": "node"
+    }
+  },
+  "last-release-sha": "445762ecf3ff562f8ee67acbcf3bf6f00ac6aee1"
 }
