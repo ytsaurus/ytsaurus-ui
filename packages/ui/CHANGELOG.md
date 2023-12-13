@@ -6,6 +6,13 @@
   * dependencies
     * @ytsaurus/javascript-wrapper bumped from 0.4.0 to 0.5.0
 
+## [1.7.2](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.7.1...ui-v1.7.2) (2023-12-13)
+
+
+### Bug Fixes
+
+* sync packages/ui/package-lock.json ([381a97f](https://github.com/ytsaurus/ytsaurus-ui/commit/381a97f8ce0fde3ed85a316b133b0045d55af51e))
+
 ## [1.7.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.6.0...ui-v1.7.0) (2023-12-13)
 
 
