@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.5.0](https://github.com/ytsaurus/ytsaurus-ui/compare/javascript-wrapper-v0.4.0...javascript-wrapper-v0.5.0) (2023-12-13)
+
+
+### Features
+
+* add `JSONSerializer` option, usage: `yt.setup.setGlobalOption('JSONSerializer', MyJSONSerializer)` ([4ef70ea](https://github.com/ytsaurus/ytsaurus-ui/commit/4ef70eafef8143ee840c594ff72b66d84af5fc8f))
+
 ## [0.4.0](https://github.com/ytsaurus/ytsaurus-ui/compare/javascript-wrapper-v0.3.0...javascript-wrapper-v0.4.0) (2023-07-27)
 
 
