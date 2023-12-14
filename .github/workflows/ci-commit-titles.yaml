@@ -12,15 +12,16 @@ jobs:
           curl ${{ github.event.pull_request.commits_url }} > commits.txt
           cat commits.txt | jq -r '.[].commit.message' > titles.txt
 
-          grep -vE '(chore|feat|fix|refactor|revert)(\(\S+\))?!?: [a-z]+' titles.txt && (
+          grep -vE '^(chore|feat|fix|refactor|revert)(\(\S+\))?!?: [a-z]+' titles.txt > bad_titles.txt || true
+          if [ "$(cat bad_titles.txt | wc -c)" -gt 0 ]; then
               echo -e "\nThe titles above should be fixed.";
               echo "Please check your commit titles, they should correspond to https://www.conventionalcommits.org/en/v1.0.0/";
               false
-          )
+          fi
 
       - name: "feat|fix"
         run: |
-          grep -E '(feat|fix)(\(\S+\))?!?: [a-z]+' titles.txt || (
+          grep -E '^(feat|fix)(\(\S+\))?!?: [a-z]+' titles.txt || (
               echo "You have to provide at least one 'feat'|'fix' commit to publish new versions of changed packages.";
               echo "If you don't want to release new version then just ignore the check.";
               false
