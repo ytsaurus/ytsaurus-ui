@@ -1,11 +1,8 @@
 import React from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import {useHistory} from 'react-router';
 import cn from 'bem-cn-lite';
 
 import {Button, DropdownMenu, DropdownMenuItem} from '@gravity-ui/uikit';
-
-import {Page} from '../../../../shared/constants/settings';
 
 import Icon from '../../../components/Icon/Icon';
 import {getCluster, isQueryTrackerAllowed} from '../../../store/selectors/global';
@@ -19,23 +16,47 @@ import './ChytCliqueActions.scss';
 
 const block = cn('chyt-clique-actions');
 
+export function useCliqueOnSqlAction(openWidget: () => void) {
+    const cluster = useSelector(getCluster);
+    const allowQueryTracker = useSelector(isQueryTrackerAllowed);
+    const dispatch = useDispatch();
+
+    return React.useCallback(
+        (alias: string) => {
+            if (allowQueryTracker) {
+                setTimeout(() => {
+                    dispatch(
+                        updateQueryDraft({
+                            engine: QueryEngine.CHYT,
+                            query: `SELECT 1;`,
+                            settings: {cluster, clique: alias},
+                        }),
+                    );
+                }, 500);
+                openWidget();
+            } else {
+                UIFactory.onChytAliasSqlClick({alias, cluster});
+            }
+        },
+        [cluster, openWidget, allowQueryTracker, dispatch],
+    );
+}
+
 export function ChytCliqueActions({
     alias,
     pool,
     showAllButtons,
     allButtonsClassName,
     onAction,
+    onSqlClick,
 }: {
     showAllButtons?: boolean;
     allButtonsClassName?: string;
     alias: string;
     pool?: string;
+    onSqlClick: (alias: string) => void;
     onAction?: (action: 'remove' | 'start' | 'stop') => void;
 }) {
-    const dispatch = useDispatch();
-    const history = useHistory();
-    const allowQueryTracker = useSelector(isQueryTrackerAllowed);
-
     const [visibleConfirmation, setVisibleConirmation] = React.useState<
         undefined | 'remove' | 'start' | 'stop'
     >();
@@ -64,28 +85,8 @@ export function ChytCliqueActions({
 
     const menuItems: Array<Array<DropdownMenuItem>> = [[start, stop], [remove]];
 
-    const cluster = useSelector(getCluster);
-
     const sqlButton = (
-        <Button
-            view="flat"
-            onClick={() => {
-                if (allowQueryTracker) {
-                    history.push(`/${cluster}/${Page.QUERIES}`);
-                    setTimeout(() => {
-                        dispatch(
-                            updateQueryDraft({
-                                engine: QueryEngine.CHYT,
-                                query: `SELECT 1;`,
-                                settings: {cluster, clique: alias},
-                            }),
-                        );
-                    }, 500);
-                } else {
-                    UIFactory.onChytAliasSqlClick({alias, cluster});
-                }
-            }}
-        >
+        <Button view="flat" onClick={() => onSqlClick(alias)}>
             <Icon awesome="sql" />
         </Button>
     );

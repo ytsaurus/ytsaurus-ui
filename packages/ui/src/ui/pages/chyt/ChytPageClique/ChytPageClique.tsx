@@ -17,6 +17,8 @@ import {OperationId} from '../../../components/OperationId/OperationId';
 import StatusLabel from '../../../components/StatusLabel/StatusLabel';
 import {UserCard} from '../../../components/UserLink/UserLink';
 
+import {useQueryWidgetSidePanel} from '../../../pages/query-tracker/QueryWidget/side-panel';
+
 import {chytCliqueLoad, chytResetCurrentClique} from '../../../store/actions/chyt/clique';
 import {
     getChytCliqueData,
@@ -28,7 +30,7 @@ import {getCluster} from '../../../store/selectors/global';
 import {Page} from '../../../../shared/constants/settings';
 
 import {CliqueState} from '../components/CliqueState';
-import {ChytCliqueActions} from '../ChytCliqueActions/ChytCliqueActions';
+import {ChytCliqueActions, useCliqueOnSqlAction} from '../ChytCliqueActions/ChytCliqueActions';
 import {ChytPageCliqueTabs} from './ChytPageCliqueTabs';
 import {ChytSpecletEditButton} from './ChytPageCliqueSpeclet';
 import cn from 'bem-cn-lite';
@@ -58,6 +60,9 @@ export function ChytPageClique(props: RouteComponentProps<{alias: string}>) {
 
     useUpdater(update);
 
+    const {openWidget, widgetContent} = useQueryWidgetSidePanel();
+    const onSqlClick = useCliqueOnSqlAction(openWidget);
+
     return (
         <div className={block()}>
             <div className={block('header')}>
@@ -80,6 +85,7 @@ export function ChytPageClique(props: RouteComponentProps<{alias: string}>) {
                             update();
                         }
                     }}
+                    onSqlClick={onSqlClick}
                 />
                 <span className={block('edit')}>
                     <ChytSpecletEditButton compact />
@@ -88,6 +94,7 @@ export function ChytPageClique(props: RouteComponentProps<{alias: string}>) {
             <ChytCliqueErrors />
             <ChytCliqueMetaTable />
             <ChytPageCliqueTabs className={block('tabs')} />
+            {widgetContent}
         </div>
     );
 }
