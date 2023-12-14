@@ -2,6 +2,7 @@ import {ThunkAction} from 'redux-thunk';
 import {RootState} from '../../../store/reducers';
 import {SettingsAction} from '../../../store/reducers/settings';
 import {SettingNS, getPath} from '../../../../shared/utils/settings';
+import {SettingKey} from '../../../../shared/constants/settings-types';
 
 import {
     SET_SETTING_VALUE,
@@ -14,15 +15,25 @@ function logError(action: string, name: string) {
     console.error('Failed to "%s" setting "%s", settings provider is disabled.', action, name);
 }
 
-type SettingsThunkAction<T = Promise<void>> = ThunkAction<T, RootState, unknown, SettingsAction>;
+export type SettingsThunkAction<T = Promise<void>> = ThunkAction<
+    T,
+    RootState,
+    unknown,
+    SettingsAction
+>;
 
 export function setSetting<T>(
     settingName: string,
     settingNS: SettingNS,
     value: T,
 ): SettingsThunkAction {
-    const path = getPath(settingName, settingNS);
+    return (dispatch) => {
+        const path = getPath(settingName, settingNS);
+        return dispatch(setSettingByKey(path as SettingKey, value));
+    };
+}
 
+export function setSettingByKey<T>(path: SettingKey, value: T): SettingsThunkAction {
     return (dispatch, getState) => {
         const {
             settings: {provider, data},
@@ -37,7 +48,7 @@ export function setSetting<T>(
 
         return provider.set(login, path, value).catch((error) => {
             if (error === 'disabled') {
-                logError('set', settingName);
+                logError('set', path);
                 return;
             }
 

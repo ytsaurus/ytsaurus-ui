@@ -82,9 +82,10 @@ export interface DefaultSettings {
     A11Y: A11YSettings;
     MENU: MenuSettings;
     ACCOUNTS: AccountsSettings;
+    CHYT: ChytSettings;
 }
 
-export type Settings = GlobalSettings &
+type DescribedSettings = GlobalSettings &
     YsonSettings &
     DevelopmentSettings &
     SystemSettings &
@@ -93,4 +94,8 @@ export type Settings = GlobalSettings &
     A11YSettings &
     MenuSettings &
     AccountsSettings &
-    OtherSettings;
+    ChytSettings;
+
+export type Settings = DescribedSettings & OtherSettings;
+
+export type SettingKey = keyof DescribedSettings;
