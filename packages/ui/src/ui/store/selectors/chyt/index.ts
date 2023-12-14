@@ -8,6 +8,8 @@ import {RootState} from '../../../store/reducers';
 import {ChytInfo} from '../../../store/reducers/chyt/list';
 import {SortState} from '../../../types';
 import {multiSortBySortStateArray} from '../../../utils/sort-helpers';
+import {ChytListAttributes} from '../../../store/actions/chyt/api';
+import {getSettingsData} from '../settings-base';
 
 export const getChytListData = (state: RootState) => state.chyt.list.data;
 
@@ -26,6 +28,50 @@ export const getChytCurrentAlias = (state: RootState) => state.chyt.clique.curre
 export const getChytListFilterAlias = (state: RootState) => state.chyt.listFilters.name;
 export const getChytListFilterCreator = (state: RootState) => state.chyt.listFilters.creator;
 export const getChytListFilterState = (state: RootState) => state.chyt.listFilters.state;
+
+type ChytListColumns = Exclude<ChytListAttributes, 'creator' | 'state' | 'yt_operation_id'>;
+const CHYT_LIST_SELECTABLE_COLUMNS: Record<ChytListColumns, true> = {
+    instance_count: true,
+    total_cpu: true,
+    total_memory: true,
+    health: true,
+    creation_time: true,
+    stage: true,
+    yt_operation_start_time: true,
+    yt_operation_finish_time: true,
+    speclet_modification_time: true,
+    strawberry_state_modification_time: true,
+};
+
+type ChytColumnItem = {checked: boolean; column: ChytListColumns};
+
+export const getChytListColumnsFromSettings = (state: RootState) => {
+    return (
+        getSettingsData(state)['global::chyt::list_columns'] ??
+        ([
+            'creator',
+            'instance_count',
+            'total_cpu',
+            'total_memory',
+            'state',
+            'health',
+            'creation_time',
+        ] as const)
+    );
+};
+
+export const getChytListColumns = createSelector(
+    [getChytListColumnsFromSettings],
+    (columns): Array<ChytColumnItem> => {
+        const userColumns = new Set(columns);
+        return Object.keys(CHYT_LIST_SELECTABLE_COLUMNS).map((k) => {
+            return {
+                checked: userColumns.has(k),
+                column: k as ChytListColumns,
+            };
+        });
+    },
+);
 
 export const getChytListTableSortState = (state: RootState) => state.chyt.listFilters.sortState;
 

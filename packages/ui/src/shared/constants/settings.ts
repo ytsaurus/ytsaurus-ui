@@ -114,6 +114,9 @@ export const SettingName = {
         YQL_AGENT_STAGE: 'yqlAgentStage',
         QUERIES_LIST_SIDEBAR_VISIBILITY_MODE: 'queriesListSidebarVisibilityMode',
     },
+    CHYT: {
+        LIST_COLUMNS: 'list_columns',
+    },
 } as const;
 
 const GLOBAL = createNS('global');
@@ -133,6 +136,7 @@ const OPERATION_PRESETS = createNestedNS('presets', OPERATION);
 const ACCOUNTS = createNestedNS('accounts', GLOBAL);
 const SCHEDULING = createNestedNS('scheduling', GLOBAL);
 const QUERY_TRACKER = createNestedNS('query-tracker', GLOBAL);
+const CHYT = createNestedNS('chyt', GLOBAL);
 
 export const NAMESPACES = {
     GLOBAL,
@@ -152,6 +156,7 @@ export const NAMESPACES = {
     ACCOUNTS,
     SCHEDULING,
     QUERY_TRACKER,
+    CHYT,
 };
 
 export const FAVOURITES = 'favourites';

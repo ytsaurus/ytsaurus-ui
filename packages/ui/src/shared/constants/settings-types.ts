@@ -72,6 +72,10 @@ interface QueryTrackerSettings {
     'global::queryTracker::queriesListSidebarVisibilityMode': boolean;
 }
 
+interface ChytSettings {
+    'global::chyt::list_columns': Array<string>;
+}
+
 interface OtherSettings {
     [key: string]: any;
 }

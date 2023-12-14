@@ -4,20 +4,7 @@ import {YTError} from '../../../../@types/types';
 
 export type WithResult<T> = {result: T};
 
-type ChytListAttributes =
-    | 'creator'
-    | 'state'
-    | 'yt_operation_id'
-    | 'instance_count'
-    | 'total_memory'
-    | 'total_cpu'
-    | 'creation_time'
-    | 'speclet_modification_time'
-    | 'strawberry_state_modification_time'
-    | 'stage'
-    | 'health'
-    | 'yt_operation_start_time'
-    | 'yt_operation_finish_time';
+export type ChytListAttributes = keyof Required<ChytListResponseItem>['$attributes'];
 
 export type ChytApi =
     | {action: 'list'; params: {attributes?: Array<ChytListAttributes>}; response: ChytListResponse}
@@ -78,14 +65,18 @@ export type ChytListResponseItem = {
     $value: string;
     $attributes?: {
         creator?: string;
-        instance_count?: number;
-        start_time?: string;
-        state?: ChytCliqueStateType;
+        creation_time?: string;
         health?: ChytCliqueHealthType;
+        instance_count?: number;
+        speclet_modification_time?: string;
+        stage?: string;
+        state?: ChytCliqueStateType;
+        strawberry_state_modification_time?: string;
         total_cpu?: number;
         total_memory?: number;
         yt_operation_id?: string;
-        creation_time?: string;
+        yt_operation_finish_time?: string;
+        yt_operation_start_time?: string;
     };
 };
 

@@ -1,13 +1,14 @@
 import type {ThunkAction} from 'redux-thunk';
-import moment from 'moment';
 
 import type {RootState} from '../../reducers';
 import type {ChytListAction} from '../../reducers/chyt/list';
 import {CHYT_LIST} from '../../../constants/chyt-page';
 import CancelHelper, {isCancelled} from '../../../utils/cancel-helper';
 import {getCluster, isDeveloper} from '../../../store/selectors/global';
+import {getChytListColumns} from '../../../store/selectors/chyt';
 
 import {ChytApi, chytApiAction} from './api';
+import {SettingsThunkAction, setSettingByKey} from '../settings';
 
 type ChytListThunkAction<T> = ThunkAction<Promise<T>, RootState, unknown, ChytListAction>;
 
@@ -18,6 +19,7 @@ export function chytLoadList(): ChytListThunkAction<void> {
         const state = getState();
         const cluster = getCluster(state);
         const isAdmin = isDeveloper(state);
+        const columns = getChytListColumns(state);
 
         dispatch({type: CHYT_LIST.REQUEST});
 
@@ -26,25 +28,18 @@ export function chytLoadList(): ChytListThunkAction<void> {
             cluster,
             {
                 attributes: [
-                    'yt_operation_id',
-                    'creator',
-                    'instance_count',
-                    'total_cpu',
-                    'total_memory',
-                    'health',
-                    'state',
-                    'creation_time',
+                    'yt_operation_id' as const,
+                    'creator' as const,
+                    'state' as const,
+                    ...columns.map((i) => i.column),
                 ],
             },
             {isAdmin, cancelToken: cancelHelper.removeAllAndGenerateNextToken()},
         )
             .then((data) => {
                 const items = data?.result?.map(({$value, $attributes = {}}) => {
-                    const {start_time} = $attributes;
-                    const startTime = moment(start_time).valueOf();
                     return {
                         alias: $value,
-                        duration: isNaN(startTime) ? undefined : Date.now() - startTime,
                         ...$attributes,
                     };
                 });
@@ -99,6 +94,14 @@ export function chytCliqueCreate(params: {
             {alias, speclet_options: {active: runAfterCreation, pool, instance_count}},
             {isAdmin, successTitle: `${alias} clique created`},
         ).finally(() => {
+            dispatch(chytLoadList());
+        });
+    };
+}
+
+export function chytSetVisibleColumns(columns: Array<string>): SettingsThunkAction {
+    return (dispatch) => {
+        return dispatch(setSettingByKey('global::chyt::list_columns', columns)).then(() => {
             dispatch(chytLoadList());
         });
     };
