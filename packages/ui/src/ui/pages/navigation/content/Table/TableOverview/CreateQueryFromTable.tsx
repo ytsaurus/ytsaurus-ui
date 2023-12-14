@@ -2,7 +2,7 @@ import React, {ReactElement, useCallback, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import cn from 'bem-cn-lite';
 import {Button, Loader} from '@gravity-ui/uikit';
-import {QueryEngine} from '../../../../query-tracker/module/api';
+import {QueryEngine} from '../../../../query-tracker/module/engines';
 import {getPath} from '../../../../../store/selectors/navigation';
 import {getCluster} from '../../../../../store/selectors/global';
 import type {QueryWidgetProps} from '../../../../query-tracker/QueryWidget';

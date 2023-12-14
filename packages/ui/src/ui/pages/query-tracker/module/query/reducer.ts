@@ -1,4 +1,5 @@
-import {DraftQuery, QueryEngine, QueryItem} from '../api';
+import {DraftQuery, QueryItem} from '../api';
+import {QueryEngine} from '../engines';
 import {
     REQUEST_QUERY,
     RequestQueryAction,

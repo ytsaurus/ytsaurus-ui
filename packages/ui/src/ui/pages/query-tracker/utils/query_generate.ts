@@ -1,4 +1,4 @@
-import {QueryEngine} from '../module/api';
+import {QueryEngine} from '../module/engines';
 
 const INDENT = '    ';
 

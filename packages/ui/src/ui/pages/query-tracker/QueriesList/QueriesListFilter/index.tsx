@@ -5,7 +5,7 @@ import {QueriesListAuthorFilter, QueriesListMode} from '../../module/queries_lis
 
 import './index.scss';
 import {QueryEngineFilter} from './QueryEngineFilter';
-import {QueryEngine} from '../../module/api';
+import {QueryEngine} from '../../module/engines';
 import {QueryTextFilter} from './QueryTextFilter';
 import {useQuriesHistoryFilter} from '../../hooks/QueryListFilter';
 
