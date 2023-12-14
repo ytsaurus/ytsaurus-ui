@@ -11,6 +11,5 @@
     "packages/ui": {
       "release-type": "node"
     }
-  },
-  "last-release-sha": "445762ecf3ff562f8ee67acbcf3bf6f00ac6aee1"
+  }
 }
