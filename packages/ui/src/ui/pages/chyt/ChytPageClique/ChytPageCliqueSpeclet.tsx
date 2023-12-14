@@ -198,16 +198,16 @@ function ChytSpecletEditDialog({
                             const oldV = converter.fromFieldValue(oldValue);
                             const v = converter.fromFieldValue(value, oldV);
                             if (v !== oldV) {
-                                acc[key] = v;
+                                if (v !== null && v !== undefined && v !== '') {
+                                    acc[key] = v;
+                                } else {
+                                    acc[key] = undefined;
+                                }
                             }
                             return acc;
                         },
                         {restart_on_speclet_change} as Record<string, unknown>,
                     );
-
-                    if ('pool' in diff && !diff.pool) {
-                        diff.pool = undefined;
-                    }
 
                     return dispatch(chytEditOptions(alias, diff))
                         .then(() => {
