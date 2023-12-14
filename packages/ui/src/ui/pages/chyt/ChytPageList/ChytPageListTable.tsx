@@ -30,15 +30,16 @@ import {ChytInfo} from '../../../store/reducers/chyt/list';
 import {Page} from '../../../../shared/constants/settings';
 import {CHYT_TABLE_TITLES} from '../../../constants/chyt-page';
 import {OperationPool} from '../../../components/OperationPool/OperationPool';
+import {useQueryWidgetSidePanel} from '../../../pages/query-tracker/QueryWidget/side-panel';
 
 import {CliqueState} from '../components/CliqueState';
 
-import {ChytCliqueActions} from '../ChytCliqueActions/ChytCliqueActions';
+import {ChytCliqueActions, useCliqueOnSqlAction} from '../ChytCliqueActions/ChytCliqueActions';
 import './ChytPageListTable.scss';
 
 const block = cn('chyt-page-list-table');
 
-function useChytListColumns(cluster: string) {
+function useChytListColumns(cluster: string, onSqlClick: (alias: string) => void) {
     const checkedColumns = useSelector(getChytListVisibleColumns);
 
     const columns: Array<Column<ChytInfo>> = React.useMemo(() => {
@@ -237,7 +238,11 @@ function useChytListColumns(cluster: string) {
                 render({row}) {
                     return (
                         <span className={block('one-row-cell')}>
-                            <ChytCliqueActions alias={row.alias} pool={row.pool} />
+                            <ChytCliqueActions
+                                alias={row.alias}
+                                pool={row.pool}
+                                onSqlClick={onSqlClick}
+                            />
                         </span>
                     );
                 },
@@ -245,7 +250,7 @@ function useChytListColumns(cluster: string) {
                 width: 60,
             } as Column<ChytInfo>,
         ];
-    }, [cluster, checkedColumns]);
+    }, [cluster, checkedColumns, onSqlClick]);
 
     return columns;
 }
@@ -299,16 +304,22 @@ function ChytPageListTable() {
     const items = useSelector(getChytListTableItems);
     const cluster = useSelector(getCluster);
 
-    const columns = useChytListColumns(cluster);
+    const {openWidget, widgetContent} = useQueryWidgetSidePanel();
+    const onSqlClick = useCliqueOnSqlAction(openWidget);
+
+    const columns = useChytListColumns(cluster, onSqlClick);
 
     return (
-        <DataTableYT
-            className={block()}
-            settings={DATA_TABLE_YT_SETTINGS_UNDER_TOOLBAR}
-            useThemeYT
-            columns={columns}
-            data={items}
-        />
+        <React.Fragment>
+            <DataTableYT
+                className={block()}
+                settings={DATA_TABLE_YT_SETTINGS_UNDER_TOOLBAR}
+                useThemeYT
+                columns={columns}
+                data={items}
+            />
+            {widgetContent}
+        </React.Fragment>
     );
 }
 

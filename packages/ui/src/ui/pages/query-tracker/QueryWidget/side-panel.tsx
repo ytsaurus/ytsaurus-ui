@@ -11,7 +11,7 @@ import Loader from '../../../components/Loader/Loader';
 export const QueryWidgetLazy = React.lazy(() => import('./index'));
 
 export const QueryWidgetPortal = withSplit(
-    withLazyLoading<QueryWidgetProps>(QueryWidgetLazy, <Loader />),
+    withLazyLoading<QueryWidgetProps>(QueryWidgetLazy, <Loader visible centered size="l" />),
 );
 
 export function useQueryWidgetSidePanel() {
