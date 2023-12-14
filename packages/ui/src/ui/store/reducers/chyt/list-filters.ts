@@ -23,8 +23,9 @@ export default function reducer(state = initialState, action: ChytListFiltersAct
     switch (action.type) {
         case CHYT_LIST_FILTERS:
             return {...state, ...replaceEmpty(action.data)};
+        default:
+            return state;
     }
-    return state;
 }
 
 export type ChytListFiltersAction = ActionD<typeof CHYT_LIST_FILTERS, Partial<ChytListFilters>>;
