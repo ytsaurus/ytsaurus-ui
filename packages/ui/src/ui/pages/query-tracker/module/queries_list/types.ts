@@ -1,4 +1,5 @@
-import {QueriesHistoryCursorDirection, QueryEngine} from '../api';
+import {QueriesHistoryCursorDirection} from '../api';
+import {QueryEngine} from '../engines';
 
 export enum QueriesListAuthorFilter {
     All = 'all',

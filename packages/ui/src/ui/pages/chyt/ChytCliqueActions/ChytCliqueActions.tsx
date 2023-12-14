@@ -10,7 +10,7 @@ import {Page} from '../../../../shared/constants/settings';
 import Icon from '../../../components/Icon/Icon';
 import {getCluster, isQueryTrackerAllowed} from '../../../store/selectors/global';
 import {updateQueryDraft} from '../../../pages/query-tracker/module/query/actions';
-import {QueryEngine} from '../../../pages/query-tracker/module/api';
+import {QueryEngine} from '../../../pages/query-tracker/module/engines';
 import UIFactory from '../../../UIFactory';
 
 import {ChytConfirmation} from '../ChytConfirmation/ChytConfirmation';

@@ -2,7 +2,8 @@ import React, {useCallback, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {ModalWithoutHandledScrollBar as Modal} from '../../../../../components/Modal/Modal';
 import {QueryEnginesNames} from '../../../utils/query';
-import {Engines, QueryEngine} from '../../../module/api';
+import {Engines} from '../../../module/api';
+import {QueryEngine} from '../../../module/engines';
 import {createQueryFromTablePath, updateQueryDraft} from '../../../module/query/actions';
 import {
     getQueryDraft,

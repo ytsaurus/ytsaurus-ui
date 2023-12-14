@@ -4,14 +4,8 @@ import {ThunkAction} from 'redux-thunk';
 import {RootState} from '../../../../store/reducers';
 import {getCluster} from '../../../../store/selectors/global';
 import {ActionD} from '../../../../types';
-import {
-    QueryEngine,
-    QueryItem,
-    abortQuery,
-    generateQueryFromTable,
-    getQuery,
-    startQuery,
-} from '../api';
+import {QueryEngine} from '../engines';
+import {QueryItem, abortQuery, generateQueryFromTable, getQuery, startQuery} from '../api';
 import {requestQueriesList} from '../queries_list/actions';
 import {getCurrentQuery, getQueryDraft} from './selectors';
 import {getAppBrowserHistory} from '../../../../store/window-store';

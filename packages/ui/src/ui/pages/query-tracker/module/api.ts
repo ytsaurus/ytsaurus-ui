@@ -13,6 +13,7 @@ import {makeDirectDownloadPath} from '../../../utils/navigation';
 import {getQueryTrackerRequestOptions} from './query/selectors';
 import {UPDATE_QUERIES_LIST} from './query-tracker-contants';
 import {AnyAction} from 'redux';
+import {QueryEngine} from './engines';
 
 function getQTApiSetup(): {proxy?: string} {
     const QT_CLUSTER = getQueryTrackerCluster();
@@ -43,13 +44,6 @@ export type QTRequestOptions = {
     stage?: string;
     yqlAgentStage?: string;
 };
-
-export enum QueryEngine {
-    YT_QL = 'ql',
-    YQL = 'yql',
-    CHYT = 'chyt',
-    SPYT = 'spyt',
-}
 
 export const Engines = Object.values(QueryEngine);
 
