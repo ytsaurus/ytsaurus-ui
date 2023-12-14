@@ -2,10 +2,13 @@ import React from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import cn from 'bem-cn-lite';
 
-import {TextInput} from '@gravity-ui/uikit';
+import {Button, TextInput} from '@gravity-ui/uikit';
+
+import format from '../../../common/hammer/format';
 
 import {Toolbar} from '../../../components/WithStickyToolbar/Toolbar/Toolbar';
 import {SelectSingle} from '../../../components/Select/Select';
+import ColumnSelectorModal from '../../../components/ColumnSelectorModal/ColumnSelectorModal';
 
 import {chytUpdateListFilters} from '../../../store/actions/chyt/list-fitlers';
 import {
@@ -14,8 +17,10 @@ import {
     getChytListFilterAlias,
     getChytListFilterCreator,
     getChytListFilterState,
+    getChytListColumns,
 } from '../../../store/selectors/chyt';
 import {ChytListFilters} from '../../../store/reducers/chyt/list-filters';
+import {chytSetVisibleColumns} from '../../../store/actions/chyt/list';
 
 import './ChytPageListToolbar.scss';
 
@@ -47,6 +52,10 @@ function ChytPageListToolbar() {
                 {
                     name: 'state',
                     node: <StateFilter onUpdate={onUpdate} />,
+                },
+                {
+                    name: 'columns',
+                    node: <ChytListColumnsButton />,
                 },
             ]}
         />
@@ -115,6 +124,43 @@ function StateFilter({onUpdate}: {onUpdate: (value: {state?: string}) => void}) 
                 onUpdate({state});
             }}
         />
+    );
+}
+
+function ChytListColumnsButton() {
+    const dispatch = useDispatch();
+
+    const [visible, setVisible] = React.useState(false);
+    const columns = useSelector(getChytListColumns);
+
+    const dialog = (
+        <ColumnSelectorModal
+            isVisible={visible}
+            items={columns.map((i) => {
+                return {
+                    name: format.ReadableField(i.column),
+                    checked: i.checked,
+                    data: {
+                        column: i.column,
+                    },
+                };
+            })}
+            onConfirm={(value) => {
+                const newColumns = value.filter((i) => i.checked).map((i) => i.data.column);
+                dispatch(chytSetVisibleColumns(newColumns));
+                setVisible(false);
+            }}
+            onCancel={() => setVisible(false)}
+        />
+    );
+
+    return (
+        <React.Fragment>
+            {visible && dialog}
+            <Button view="outlined" onClick={() => setVisible(true)}>
+                Columns
+            </Button>
+        </React.Fragment>
     );
 }
 
