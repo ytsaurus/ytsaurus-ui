@@ -3,6 +3,8 @@ import {useDispatch, useSelector} from 'react-redux';
 import reduce_ from 'lodash/reduce';
 import cn from 'bem-cn-lite';
 
+import {Text} from '@gravity-ui/uikit';
+
 import Button from '../../../components/Button/Button';
 import Error from '../../../components/Error/Error';
 import Icon from '../../../components/Icon/Icon';
@@ -215,7 +217,16 @@ function ChytSpecletEditDialog({
                 }}
                 fields={fields}
                 initialValues={initialValues}
-                headerProps={{title: `Edit ${alias}`}}
+                headerProps={{
+                    title: (
+                        <span>
+                            Edit clique{' '}
+                            <Text ellipsis variant="header-1" color="secondary">
+                                {alias}
+                            </Text>
+                        </span>
+                    ),
+                }}
             />
         </React.Fragment>
     );
