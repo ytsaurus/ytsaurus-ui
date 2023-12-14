@@ -87,6 +87,7 @@ export interface DefaultSettings {
     MENU: MenuSettings;
     ACCOUNTS: AccountsSettings;
     QUERY_TRACKER: QueryTrackerSettings;
+    CHYT: ChytSettings;
 }
 
 type DescribedSettings = GlobalSettings &
@@ -98,7 +99,8 @@ type DescribedSettings = GlobalSettings &
     A11YSettings &
     MenuSettings &
     AccountsSettings &
-    QueryTrackerSettings;
+    QueryTrackerSettings &
+    ChytSettings;
 
 export type Settings = DescribedSettings & OtherSettings;
 
