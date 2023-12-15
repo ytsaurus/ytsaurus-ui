@@ -13,6 +13,7 @@ import {
     loadQuery,
 } from '../module/query/actions';
 import {getQueryGetParams} from '../module/query/selectors';
+import {useQueriesListSidebarToggle} from '../hooks/QueriesList';
 import {QueriesList} from '../QueriesList';
 
 import cn from 'bem-cn-lite';
@@ -89,8 +90,8 @@ function QueryPage(props: Props) {
 }
 
 export default function QueryTracker({match}: Props) {
+    const {isQueriesListSidebarVisible} = useQueriesListSidebarToggle();
     const [sizes, setSize] = useState(initialSizes);
-    const [listVisible, setListVisible] = useState<boolean>(true);
     const getSize = useMemo(() => {
         return () => sizes;
     }, [sizes]);
@@ -117,14 +118,8 @@ export default function QueryTracker({match}: Props) {
                     minSize={minSize}
                     getInitialSizes={getSize}
                 >
-                    {listVisible && <QueriesList />}
-                    <QueryEditor
-                        onStartQuery={goToCreatedQuery}
-                        listVisible={{
-                            visible: listVisible,
-                            setVisibility: setListVisible,
-                        }}
-                    ></QueryEditor>
+                    {isQueriesListSidebarVisible ? <QueriesList /> : null}
+                    <QueryEditor onStartQuery={goToCreatedQuery} />
                 </FlexSplitPane>
             </QueriesPooling>
         </>

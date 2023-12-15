@@ -68,6 +68,10 @@ interface AccountsSettings {
     'global::accounts::dashboardVisibilityMode': 'string';
 }
 
+interface QueryTrackerSettings {
+    'global::queryTracker::queriesListSidebarVisibilityMode': boolean;
+}
+
 interface OtherSettings {
     [key: string]: any;
 }
@@ -82,7 +86,7 @@ export interface DefaultSettings {
     A11Y: A11YSettings;
     MENU: MenuSettings;
     ACCOUNTS: AccountsSettings;
-    CHYT: ChytSettings;
+    QUERY_TRACKER: QueryTrackerSettings;
 }
 
 type DescribedSettings = GlobalSettings &
@@ -94,7 +98,7 @@ type DescribedSettings = GlobalSettings &
     A11YSettings &
     MenuSettings &
     AccountsSettings &
-    ChytSettings;
+    QueryTrackerSettings;
 
 export type Settings = DescribedSettings & OtherSettings;
 

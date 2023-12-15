@@ -111,6 +111,7 @@ export const SettingName = {
     QUERY_TRACKER: {
         STAGE: 'queryTrackerStage',
         YQL_AGENT_STAGE: 'yqlAgentStage',
+        QUERIES_LIST_SIDEBAR_VISIBILITY_MODE: 'queriesListSidebarVisibilityMode',
     },
 } as const;
 
