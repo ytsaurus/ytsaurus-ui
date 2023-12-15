@@ -1,4 +1,8 @@
 .yt-loader {
     padding-left: 15px;
     transform: scale(0.75);
+
+    &_centered {
+        margin: auto;
+    }
 }
