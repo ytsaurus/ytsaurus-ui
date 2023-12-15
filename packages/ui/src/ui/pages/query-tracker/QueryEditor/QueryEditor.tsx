@@ -20,7 +20,6 @@ import {QueryResults} from '../QueryResults';
 import SquareIcon from '@gravity-ui/icons/svgs/square.svg';
 import LayoutFooterIcon from '@gravity-ui/icons/svgs/layout-footer.svg';
 
-import LayoutSideContentIcon from '@gravity-ui/icons/svgs/layout-side-content.svg';
 import XmarkIcon from '@gravity-ui/icons/svgs/xmark.svg';
 
 import './QueryEditor.scss';
@@ -147,12 +146,10 @@ const ResultView = React.memo(function ResultView({
     query,
     resultViewMode,
     setResultViewMode,
-    listVisible,
 }: {
     query: QueryItem;
     resultViewMode: ResultMode;
     setResultViewMode: (v: ResultMode) => void;
-    listVisible?: QueryListVisible;
 }) {
     return (
         <QueryResults
@@ -161,15 +158,6 @@ const ResultView = React.memo(function ResultView({
             minimized={resultViewMode === 'minimized'}
             toolbar={
                 <>
-                    {listVisible && (
-                        <Button
-                            className={b('meta-action')}
-                            view={listVisible.visible ? 'flat' : 'outlined'}
-                            onClick={() => listVisible.setVisibility(!listVisible.visible)}
-                        >
-                            <Icon data={LayoutSideContentIcon} size={16} />
-                        </Button>
-                    )}
                     {resultViewMode === 'split' ? (
                         <Button
                             className={b('meta-action')}
@@ -203,16 +191,10 @@ const ResultView = React.memo(function ResultView({
 });
 
 type ResultMode = 'full' | 'minimized' | 'split';
-type QueryListVisible = {
-    visible: boolean;
-    setVisibility: (visible: boolean) => void;
-};
 export default function QueryEditor({
     onStartQuery,
-    listVisible,
 }: {
     onStartQuery?: (queryId: string) => boolean | void;
-    listVisible?: QueryListVisible;
 }) {
     const query = useCurrentQuery();
 
@@ -247,7 +229,6 @@ export default function QueryEditor({
                         query={query}
                         setResultViewMode={setResultViewMode}
                         resultViewMode={resultViewMode}
-                        listVisible={listVisible}
                     />
                 )}
             </FlexSplitPane>

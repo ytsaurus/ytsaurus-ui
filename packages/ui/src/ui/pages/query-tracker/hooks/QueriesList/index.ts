@@ -8,6 +8,8 @@ import {
     isQueriesListLoading,
 } from '../../module/queries_list/selectors';
 import {loadNextQueriesList, resetCursor} from '../../module/queries_list/actions';
+import {setSettingByKey} from '../../../../store/actions/settings';
+import {getSettingQueryTrackerQueriesListSidebarVisibilityMode} from '../../module/settings/selector';
 
 export function useQueryList(): [QueryItem[], boolean] {
     const items = useSelector(getQueriesList);
@@ -40,5 +42,26 @@ export const useQueriesPagination = () => {
         goNext,
         goBack,
         goFirst: reset,
+    };
+};
+
+export const useQueriesListSidebarToggle = () => {
+    const dispatch = useDispatch();
+    const isQueriesListSidebarVisible = useSelector(
+        getSettingQueryTrackerQueriesListSidebarVisibilityMode,
+    );
+
+    const toggleQueriesListSideBarToggle = () => {
+        dispatch(
+            setSettingByKey<boolean>(
+                'global::queryTracker::queriesListSidebarVisibilityMode',
+                !isQueriesListSidebarVisible,
+            ),
+        );
+    };
+
+    return {
+        isQueriesListSidebarVisible,
+        toggleQueriesListSideBarToggle,
     };
 };

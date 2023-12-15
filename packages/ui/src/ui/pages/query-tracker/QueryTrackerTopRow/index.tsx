@@ -7,6 +7,7 @@ import {QueryMetaForm} from './QueryMetaForm/QueryMetaForm';
 
 import './index.scss';
 import {getQueryGetParams} from '../module/query/selectors';
+import {QueriesListSidebarToggleButton} from '../QueriesListSidebarToggleButton/QueriesListSidebarToggleButton';
 
 const block = cn('query-tracker-top-row-content');
 
@@ -30,6 +31,7 @@ export default function QueryTrackerTopRow() {
     return (
         <RowWithName page={Page.QUERIES}>
             <QueryHeader />
+            <QueriesListSidebarToggleButton />
         </RowWithName>
     );
 }
