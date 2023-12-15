@@ -14,8 +14,9 @@ jobs:
 
           grep -vE '^(chore|feat|fix|refactor|revert)(\(\S+\))?!?: [a-z]+' titles.txt > bad_titles.txt || true
           if [ "$(cat bad_titles.txt | wc -c)" -gt 0 ]; then
-              echo -e "\nThe titles above should be fixed.";
               echo "Please check your commit titles, they should correspond to https://www.conventionalcommits.org/en/v1.0.0/";
+              echo -e "\nThe titles below should be fixed:";
+              cat bad_titles.txt
               false
           fi
 
