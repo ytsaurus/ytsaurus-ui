@@ -1,5 +1,5 @@
 import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
-import MonacoEditor, {MonacoEditorConfig} from '../../../components/MonacoEditor/MonacoEditor';
+import MonacoEditor, {MonacoEditorConfig} from '../../../components/MonacoEditor';
 import block from 'bem-cn-lite';
 import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
 import {Button, Icon, Loader} from '@gravity-ui/uikit';

@@ -2,7 +2,7 @@ import React from 'react';
 import cn from 'bem-cn-lite';
 
 import {DialogControlProps} from '../../../components/Dialog/Dialog.types';
-import MonacoEditor from '../../../components/MonacoEditor/MonacoEditor';
+import MonacoEditor from '../../../components/MonacoEditor';
 import {Markdown} from '../../../components/Markdown/Markdown';
 import TabbedContent from './TabbedContent';
 import SplitPane from 'react-split-pane';

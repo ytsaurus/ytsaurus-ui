@@ -17,7 +17,7 @@ import '../../libs/monaco-yql-languages/monaco.contribution';
 const block = cn('yt-monaco-editor');
 
 export type MonacoEditorConfig = Omit<monaco.editor.IStandaloneEditorConstructionOptions, 'theme'>;
-interface ExtProps {
+export interface ExtProps {
     className?: string;
     value: string;
     language?: string;
