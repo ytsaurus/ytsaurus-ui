@@ -12,8 +12,9 @@ import {
     goToQuery,
     loadQuery,
 } from '../module/query/actions';
-import {getQueryGetParams} from '../module/query/selectors';
+import {usePreventUnload} from '../../../hooks/use-prevent-unload';
 import {useQueriesListSidebarToggle} from '../hooks/QueriesList';
+import {getDirtySinceLastSubmit, getQueryGetParams} from '../module/query/selectors';
 import {QueriesList} from '../QueriesList';
 
 import cn from 'bem-cn-lite';
@@ -91,6 +92,8 @@ function QueryPage(props: Props) {
 
 export default function QueryTracker({match}: Props) {
     const {isQueriesListSidebarVisible} = useQueriesListSidebarToggle();
+    const isQueryStateDirty = useSelector(getDirtySinceLastSubmit);
+    usePreventUnload({shouldListen: isQueryStateDirty});
     const [sizes, setSize] = useState(initialSizes);
     const getSize = useMemo(() => {
         return () => sizes;
@@ -104,6 +107,7 @@ export default function QueryTracker({match}: Props) {
         },
         [dispatch],
     );
+
     return (
         <>
             <Switch>

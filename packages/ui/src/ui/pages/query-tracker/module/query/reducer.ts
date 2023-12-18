@@ -26,6 +26,7 @@ export interface QueryState {
         cluster?: string;
         useDraft?: boolean;
     };
+    dirtySinceLastSubmit: boolean;
     state: 'init' | 'loading' | 'ready' | 'error';
 }
 
@@ -40,6 +41,7 @@ const initState: QueryState = {
     queryItem: undefined,
     draft: {...initialQueryDraftState},
     params: {},
+    dirtySinceLastSubmit: false,
     state: 'init',
 };
 
@@ -57,6 +59,7 @@ export function reducer(state = initState, action: Actions): QueryState {
                           })
                         : {}),
                 },
+                dirtySinceLastSubmit: false,
                 state: 'ready',
             };
         }
@@ -89,12 +92,15 @@ export function reducer(state = initState, action: Actions): QueryState {
             };
         }
         case SET_QUERY_PATCH: {
+            const hasQuery = Boolean(action?.data?.query);
+
             return {
                 ...state,
                 draft: {
                     ...state.draft,
                     ...action.data,
                 },
+                dirtySinceLastSubmit: hasQuery,
             };
         }
         case SET_QUERY_PARAMS: {
