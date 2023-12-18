@@ -6,6 +6,13 @@
   * dependencies
     * @ytsaurus/javascript-wrapper bumped from 0.4.0 to 0.5.0
 
+## [1.7.3](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.7.2...ui-v1.7.3) (2023-12-18)
+
+
+### Bug Fixes
+
+* **main.js:** extract MonacoEditor to a separate chunk [YTFRONT-3814] ([2492c78](https://github.com/ytsaurus/ytsaurus-ui/commit/2492c78a187e1ba5be76b8254ffb5c2927b75c9d))
+
 ## [1.7.2](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.7.1...ui-v1.7.2) (2023-12-13)
 
 
