@@ -41,7 +41,7 @@ export const SET_QUERY_LOAD_ERROR = 'query-tracker/SET_QUERY_LOAD_ERROR';
 export type SetQueryErrorLoadAction = ActionD<typeof SET_QUERY_LOAD_ERROR, Error | string>;
 
 export const SET_QUERY_PATCH = 'query-tracker/SET_QUERY_PATCH';
-export type SetQueryPatchAction = ActionD<typeof SET_QUERY_PATCH, Pick<QueryState, 'draft'>>;
+export type SetQueryPatchAction = ActionD<typeof SET_QUERY_PATCH, QueryState['draft']>;
 
 export const SET_QUERY_PARAMS = 'query-tracker/SET_QUERY_PARAMS';
 export type SetQueryParamsAction = ActionD<

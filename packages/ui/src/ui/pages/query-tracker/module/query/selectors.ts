@@ -84,3 +84,6 @@ export const getQueryEditorErrors = (state: RootState): QTEditorError[] => {
 
     return res;
 };
+
+export const getDirtySinceLastSubmit = (state: RootState) =>
+    state.queryTracker.query.dirtySinceLastSubmit;
