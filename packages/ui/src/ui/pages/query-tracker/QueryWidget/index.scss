@@ -33,6 +33,10 @@
         justify-content: flex-end;
     }
 
+    &__meta-form {
+        margin-right: 12px;
+    }
+
     .flex-split__pane:nth-child(1) {
         overflow: visible;
     }

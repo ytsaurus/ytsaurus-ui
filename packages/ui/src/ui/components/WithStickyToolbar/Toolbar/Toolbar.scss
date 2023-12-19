@@ -27,5 +27,9 @@ $TOOLBAR_COMPONENT_HEIGHT: 48px;
         &_shrinkable {
             flex-shrink: 1;
         }
+
+        &_margin-right_half {
+            margin-right: 12px;
+        }
     }
 }
