@@ -183,3 +183,15 @@ export function goToQuery(query_id: string): ThunkAction<any, RootState, any, ne
         history.push(createQueryUrl(cluster, query_id));
     };
 }
+
+export function resetQueryTracker(): ThunkAction<any, RootState, any, never> {
+    return (dispatch, getState) => {
+        const state = getState();
+        const cluster = getCluster(state);
+        const history = getAppBrowserHistory();
+
+        history.push(createQueryUrl(cluster, ''));
+
+        dispatch(createEmptyQuery());
+    };
+}

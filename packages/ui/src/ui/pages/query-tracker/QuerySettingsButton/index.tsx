@@ -265,7 +265,7 @@ export const QuerySettingsButton = ({
     className,
     onChange,
 }: {
-    className: string;
+    className?: string;
     onChange: (settings: Record<string, string>) => void;
     settings?: Record<string, string>;
 }) => {

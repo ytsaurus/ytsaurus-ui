@@ -12,6 +12,7 @@ const ToolbarItemPropTypes = {
     wrapperClassName: PropTypes.string,
     growable: PropTypes.bool,
     shrinkable: PropTypes.bool,
+    marginRight: PropTypes.string,
 };
 
 interface Props {
@@ -22,6 +23,7 @@ interface Props {
         wrapperClassName?: string;
         growable?: boolean;
         shrinkable?: boolean;
+        marginRight?: 'half';
     }>;
     children?: React.ReactNode;
 }
@@ -44,15 +46,21 @@ export class Toolbar extends React.Component<Props> {
 
     renderItems() {
         const {itemsToWrap = []} = this.props;
-        return itemsToWrap.map(({name, node, growable, shrinkable, wrapperClassName}, index) => {
-            return node ? (
-                <div
-                    key={name || index}
-                    className={block('item', {name, growable, shrinkable}, wrapperClassName)}
-                >
-                    {node}
-                </div>
-            ) : null;
-        });
+        return itemsToWrap.map(
+            ({name, node, growable, shrinkable, wrapperClassName, marginRight}, index) => {
+                return node ? (
+                    <div
+                        key={name || index}
+                        className={block(
+                            'item',
+                            {name, growable, shrinkable, 'margin-right': marginRight},
+                            wrapperClassName,
+                        )}
+                    >
+                        {node}
+                    </div>
+                ) : null;
+            },
+        );
     }
 }

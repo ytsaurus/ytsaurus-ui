@@ -129,6 +129,7 @@ const QueryEditorView = React.memo(function QueryEditorView({
             <div className={b('actions')}>
                 <div className="query-run-action">
                     <Button
+                        qa="qt-run"
                         className="query-run-action-button"
                         view="action"
                         onClick={runQueryCallback}
