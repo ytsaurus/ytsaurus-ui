@@ -40,6 +40,7 @@ import withSplit from '../../../../../hocs/withSplit';
 
 import './NodeCard.scss';
 import UIFactory from '../../../../../UIFactory';
+import ClipboardButton from '../../../../../components/ClipboardButton/ClipboardButton';
 
 const block = cn('node-card');
 
@@ -57,6 +58,7 @@ export const nodeProps = PropTypes.shape({
             sick: PropTypes.bool.isRequired,
             full: PropTypes.bool.isRequired,
             medium_name: PropTypes.string.isRequired,
+            location_uuid: PropTypes.string.isRequired,
         }),
     ),
     tabletSlots: PropTypes.shape({
@@ -108,6 +110,20 @@ class NodeCard extends Component {
             <div className={block('location')} key={index}>
                 <MetaTable
                     items={[
+                        {
+                            key: 'uuid',
+                            value: (
+                                <span>
+                                    {location.location_uuid}
+                                    &nbsp;
+                                    <ClipboardButton
+                                        view="flat-secondary"
+                                        text={location.location_uuid}
+                                        size="s"
+                                    />
+                                </span>
+                            ),
+                        },
                         {key: 'location number', value: index + 1},
                         {key: 'enabled', value: location.enabled.toString()},
                         {key: 'full', value: location.full.toString()},

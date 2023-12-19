@@ -8,10 +8,12 @@ import format from '../../../../../common/hammer/format';
 import DataTableYT from '../../../../../components/DataTableYT/DataTableYT';
 import {nodeSelector} from '../../../../../store/selectors/components/node/node';
 import Label from '../../../../../components/Label/Label';
+import ClipboardButton from '../../../../../components/ClipboardButton/ClipboardButton';
 
 interface LocationInfo {
     enabled?: boolean;
     full?: boolean;
+    location_uuid?: string;
     medium_name?: string;
     session_count?: number;
     chunk_count?: number;
@@ -33,6 +35,19 @@ const columns: Array<Column<LocationInfo>> = [
                 </Label>
             );
         },
+    },
+    {
+        name: 'Uuid',
+        render({row}) {
+            return (
+                <span>
+                    {row.location_uuid}
+                    &nbsp;
+                    <ClipboardButton view="flat-secondary" text={row.location_uuid} size="s" />
+                </span>
+            );
+        },
+        align: 'left',
     },
     {
         name: 'Full',
