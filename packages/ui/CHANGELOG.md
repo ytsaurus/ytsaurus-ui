@@ -6,6 +6,13 @@
   * dependencies
     * @ytsaurus/javascript-wrapper bumped from 0.4.0 to 0.5.0
 
+## [1.8.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.7.3...ui-v1.8.0) (2023-12-19)
+
+
+### Features
+
+* update @gravity-ui/navigation v1.8.0 ([e5530e1](https://github.com/ytsaurus/ytsaurus-ui/commit/e5530e16155d9bf124acf41d825093e92206462a))
+
 ## [1.7.3](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.7.2...ui-v1.7.3) (2023-12-18)
 
 
