@@ -3,7 +3,7 @@ import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import block from 'bem-cn-lite';
 
-import {Checkbox} from '@gravity-ui/uikit';
+import {Checkbox, Switch} from '@gravity-ui/uikit';
 
 import {setSetting} from '../../store/actions/settings';
 import {makeGetSetting} from '../../store/selectors/settings';
@@ -25,6 +25,8 @@ class SettingsMenuItem extends Component {
         annotationHighlight: PropTypes.string,
 
         oneLine: PropTypes.bool,
+
+        useSwitch: PropTypes.bool,
     };
 
     render() {
@@ -37,6 +39,7 @@ class SettingsMenuItem extends Component {
             settingNS,
             label,
             oneLine,
+            useSwitch,
         } = this.props;
         const checked = getSetting(settingName, settingNS);
 
@@ -49,11 +52,18 @@ class SettingsMenuItem extends Component {
                 })}
                 title={label}
             >
-                <Checkbox
-                    content={label}
-                    checked={checked}
-                    onChange={() => setSetting(settingName, settingNS, !checked)}
-                />
+                {useSwitch ? (
+                    <Switch
+                        checked={checked}
+                        onUpdate={(value) => setSetting(settingName, settingNS, value)}
+                    />
+                ) : (
+                    <Checkbox
+                        content={label}
+                        checked={checked}
+                        onUpdate={(value) => setSetting(settingName, settingNS, value)}
+                    />
+                )}
                 <div className={b('settings-annotation', 'elements-secondary-text')}>
                     <span dangerouslySetInnerHTML={{__html: annotation}} />
                     {annotationHighlight && (
