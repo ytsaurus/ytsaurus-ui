@@ -2,6 +2,8 @@
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
+    width: 100%;
+    height: 100%;
 
     &__editor {
         flex-grow: 1;

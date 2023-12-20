@@ -1,5 +1,6 @@
 import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import MonacoEditor, {MonacoEditorConfig} from '../../../components/MonacoEditor';
+import {QueryFilesEditor} from '../QueryFilesEditor';
 import block from 'bem-cn-lite';
 import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
 import {Button, Icon, Loader} from '@gravity-ui/uikit';
@@ -119,14 +120,17 @@ const QueryEditorView = React.memo(function QueryEditorView({
     );
     return (
         <div className={b('query')}>
-            <MonacoEditor
-                editorRef={editorRef}
-                value={text || ''}
-                language={'yql'}
-                className={b('editor')}
-                onChange={upadteQueryText}
-                monacoConfig={monacoConfig}
-            />
+            <FlexSplitPane view={FlexSplitPane.HORIZONTAL} className={b('editor')}>
+                <MonacoEditor
+                    editorRef={editorRef}
+                    value={text || ''}
+                    language={'yql'}
+                    className={b('editor')}
+                    onChange={upadteQueryText}
+                    monacoConfig={monacoConfig}
+                />
+                <QueryFilesEditor />
+            </FlexSplitPane>
             <div className={b('actions')}>
                 <div className="query-run-action">
                     <Button

@@ -12,7 +12,9 @@ import {
     SetQueryParamsAction,
     SetQueryPatchAction,
     SetQueryReadyAction,
+    UPDATE_DRAFT_FILES,
     UPDATE_QUERY,
+    UpdateDraftFilesAction,
     UpdateQueryAction,
 } from './actions';
 import {cleanupQueryForDraft} from './utills';
@@ -26,6 +28,8 @@ export interface QueryState {
         cluster?: string;
         useDraft?: boolean;
     };
+    openFilesTabs: string[];
+    openTabsQueue: string[];
     state: 'init' | 'loading' | 'ready' | 'error';
 }
 
@@ -40,6 +44,8 @@ const initState: QueryState = {
     queryItem: undefined,
     draft: {...initialQueryDraftState},
     params: {},
+    openFilesTabs: [],
+    openTabsQueue: [],
     state: 'init',
 };
 
@@ -57,6 +63,8 @@ export function reducer(state = initState, action: Actions): QueryState {
                           })
                         : {}),
                 },
+                openTabsQueue: [],
+                openFilesTabs: [],
                 state: 'ready',
             };
         }
@@ -105,6 +113,18 @@ export function reducer(state = initState, action: Actions): QueryState {
                 },
             };
         }
+        case UPDATE_DRAFT_FILES: {
+            const {files, openFilesTabs, openTabsQueue} = action.data;
+            return {
+                ...state,
+                draft: {
+                    ...state.draft,
+                    files: files ?? state.draft.files,
+                },
+                openFilesTabs: openFilesTabs ?? state.openFilesTabs,
+                openTabsQueue: openTabsQueue ?? state.openTabsQueue,
+            };
+        }
     }
     return state;
 }
@@ -116,4 +136,5 @@ type Actions =
     | SetQueryPatchAction
     | UpdateQueryAction
     | SetQueryParamsAction
-    | SetQueryReadyAction;
+    | SetQueryReadyAction
+    | UpdateDraftFilesAction;

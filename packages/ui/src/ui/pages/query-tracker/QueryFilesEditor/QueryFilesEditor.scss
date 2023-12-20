@@ -1,0 +1,19 @@
+.query-files-editor {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+
+    &__header {
+        display: grid;
+        grid-template-columns: 1fr min-content;
+    }
+
+    &__file-tab {
+        padding-left: 10px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        max-width: 180px;
+    }
+}

@@ -10,7 +10,6 @@ import {updateQueryDraft} from '../../module/query/actions';
 import {QueryEngineSelector} from './QueryEngineSelector/QueryEngineSelector';
 
 import './QueryMetaForm.scss';
-import {QueryFile} from '../../module/api';
 
 const block = cn('query-tracker-meta-form');
 export function QueryMetaForm({
@@ -35,11 +34,6 @@ export function QueryMetaForm({
 
     const onSettingsChange = useCallback(
         (settings: Record<string, string>) => dispatch(updateQueryDraft({settings})),
-        [dispatch],
-    );
-
-    const onFilesChange = useCallback(
-        (files: QueryFile[]) => dispatch(updateQueryDraft({files})),
         [dispatch],
     );
 
@@ -70,8 +64,8 @@ export function QueryMetaForm({
                 onChange={onSettingsChange}
             />
             <QueryFilesButton
+                className={block('control')}
                 files={draft.files}
-                onChange={onFilesChange}
                 queryId={originalQuery?.id ?? ''}
             />
         </div>

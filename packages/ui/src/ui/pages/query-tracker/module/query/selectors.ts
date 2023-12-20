@@ -84,3 +84,11 @@ export const getQueryEditorErrors = (state: RootState): QTEditorError[] => {
 
     return res;
 };
+
+export const getDraftFiles = (state: RootState) => getState(state).draft.files;
+export const getOpenDraftFiles = (state: RootState) => getState(state).openFilesTabs;
+export const getDraftFilesQueue = (state: RootState) => getState(state).openTabsQueue;
+export const getCurrentDraftFile = createSelector(
+    [getDraftFilesQueue],
+    (queue) => queue[queue.length - 1],
+);

@@ -6,6 +6,7 @@ import {getCluster} from '../../../../store/selectors/global';
 import {ActionD} from '../../../../types';
 import {
     QueryEngine,
+    QueryFile,
     QueryItem,
     abortQuery,
     generateQueryFromTable,
@@ -13,11 +14,19 @@ import {
     startQuery,
 } from '../api';
 import {requestQueriesList} from '../queries_list/actions';
-import {getCurrentQuery, getQueryDraft} from './selectors';
 import {getAppBrowserHistory} from '../../../../store/window-store';
 import {QueryState} from './reducer';
 import {wrapApiPromiseByToaster} from '../../../../utils/utils';
 import {prepareQueryPlanIds} from './utills';
+
+import {
+    getCurrentDraftFile,
+    getCurrentQuery,
+    getDraftFiles,
+    getDraftFilesQueue,
+    getOpenDraftFiles,
+    getQueryDraft,
+} from './selectors';
 
 export const REQUEST_QUERY = 'query-tracker/REQUEST_QUERY';
 export type RequestQueryAction = Action<typeof REQUEST_QUERY>;
@@ -49,6 +58,17 @@ export type SetQueryParamsAction = ActionD<
     Partial<Pick<QueryState, 'params'>>
 >;
 
+export const UPDATE_DRAFT_FILES = 'query-tracker/UPDATE_DRAFT_FILES';
+type UpdateDraftFilesActionPayload = Partial<
+    Pick<QueryState, 'openFilesTabs' | 'openTabsQueue'> & {
+        files: QueryState['draft']['files'];
+    }
+>;
+export type UpdateDraftFilesAction = ActionD<
+    typeof UPDATE_DRAFT_FILES,
+    Partial<UpdateDraftFilesActionPayload>
+>;
+
 export function loadQuery(
     queryId: string,
 ): ThunkAction<any, RootState, any, SetQueryAction | RequestQueryAction | SetQueryErrorLoadAction> {
@@ -74,6 +94,125 @@ export function loadQuery(
 
 export function updateQueryDraft(data: Partial<QueryState['draft']>) {
     return {type: SET_QUERY_PATCH, data};
+}
+
+const getDraftFilesData = (state: RootState) => ({
+    files: [...getDraftFiles(state)],
+    openFilesTabs: [...getOpenDraftFiles(state)],
+    openTabsQueue: [...getDraftFilesQueue(state)],
+    currentFile: getCurrentDraftFile(state),
+});
+
+export function openDraftFile(
+    fileName: string,
+): ThunkAction<any, RootState, any, UpdateDraftFilesAction> {
+    return (dispatch, getState) => {
+        const {files, openFilesTabs, openTabsQueue} = getDraftFilesData(getState());
+
+        if (!files.some(({name}) => name === fileName)) {
+            return;
+        }
+
+        const index = openTabsQueue.indexOf(fileName);
+        if (index > -1) {
+            openTabsQueue.splice(index, 1);
+            openTabsQueue.push(fileName);
+        } else {
+            openFilesTabs.push(fileName);
+            openTabsQueue.push(fileName);
+        }
+        dispatch({type: UPDATE_DRAFT_FILES, data: {files, openFilesTabs, openTabsQueue}});
+    };
+}
+
+export function closeDraftFiles(
+    ...data: string[]
+): ThunkAction<any, RootState, any, UpdateDraftFilesAction> {
+    return (dispatch, getState) => {
+        const {files, openFilesTabs, openTabsQueue} = getDraftFilesData(getState());
+        const fileNames = new Set(data);
+
+        dispatch({
+            type: UPDATE_DRAFT_FILES,
+            data: {
+                files,
+                openFilesTabs: openFilesTabs.filter((name) => !fileNames.has(name)),
+                openTabsQueue: openTabsQueue.filter((name) => !fileNames.has(name)),
+            },
+        });
+    };
+}
+
+export function updateDraftFileContent({
+    name,
+    content,
+    oldName,
+}: {
+    name: string;
+    content: string;
+    oldName: string;
+}): ThunkAction<any, RootState, any, UpdateDraftFilesAction> {
+    return (dispatch, getState) => {
+        const {files, openFilesTabs, openTabsQueue} = getDraftFilesData(getState());
+        const index = files.findIndex((f) => f.name === oldName);
+        if (index < 0) {
+            return;
+        }
+        const newFile = {...files[index], content, name};
+        files.splice(index, 1, newFile);
+        if (oldName !== name) {
+            const tabIndex = openFilesTabs.indexOf(oldName);
+            if (tabIndex > -1) {
+                openFilesTabs[tabIndex] = name;
+                const queueIndex = openTabsQueue.indexOf(oldName);
+                openTabsQueue[queueIndex] = name;
+            }
+        }
+        dispatch({type: UPDATE_DRAFT_FILES, data: {files, openFilesTabs, openTabsQueue}});
+    };
+}
+
+export function updateOpenFile(
+    content: string,
+): ThunkAction<any, RootState, any, UpdateDraftFilesAction> {
+    return (dispatch, getState) => {
+        const {files, openFilesTabs, openTabsQueue, currentFile} = getDraftFilesData(getState());
+        const index = files.findIndex(({name}) => name === currentFile);
+        if (index < 0) {
+            return;
+        }
+
+        const newFile = {name: currentFile, content, type: files[index].type};
+        files.splice(index, 1, newFile);
+        dispatch({type: UPDATE_DRAFT_FILES, data: {files, openFilesTabs, openTabsQueue}});
+    };
+}
+
+export function removeDraftFile(
+    fileName: string,
+): ThunkAction<any, RootState, any, UpdateDraftFilesAction> {
+    return (dispatch, getState) => {
+        const {files, openFilesTabs, openTabsQueue} = getDraftFilesData(getState());
+        dispatch({
+            type: UPDATE_DRAFT_FILES,
+            data: {
+                files: files.filter(({name}) => name !== fileName),
+                openFilesTabs: openFilesTabs.filter((name) => name !== fileName),
+                openTabsQueue: openTabsQueue.filter((name) => name !== fileName),
+            },
+        });
+    };
+}
+
+export function createDraftFile(
+    data: QueryFile,
+): ThunkAction<any, RootState, any, UpdateDraftFilesAction> {
+    return (dispatch, getState) => {
+        const {files} = getDraftFilesData(getState());
+        files.push(data);
+
+        dispatch({type: UPDATE_DRAFT_FILES, data: {files}});
+    };
 }
 
 export function createQueryFromTablePath(

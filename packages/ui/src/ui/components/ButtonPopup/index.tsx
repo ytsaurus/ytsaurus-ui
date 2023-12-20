@@ -9,18 +9,19 @@ const b = cn('button-popup');
 
 type ButtonPopupProps = {
     icon: IconData;
+    className?: string;
     header: React.ReactNode;
     children: React.ReactNode;
     counter?: number;
 };
 
-export const ButtonWithPopup = ({icon, header, children, counter}: ButtonPopupProps) => {
+export const ButtonWithPopup = ({icon, className, header, children, counter}: ButtonPopupProps) => {
     const btnRef = useRef(null);
     const [open, setOpen] = useState(false);
     const toggle = () => setOpen(!open);
     return (
         <>
-            <Button ref={btnRef} onClick={toggle} view="outlined" size="l">
+            <Button className={className} ref={btnRef} onClick={toggle} view="outlined" size="l">
                 <Icon data={icon} size={16} />
                 {counter ? <Text>{counter}</Text> : undefined}
             </Button>

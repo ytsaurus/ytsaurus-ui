@@ -25,6 +25,9 @@
         grid-template-columns: 1fr min-content;
         align-items: center;
         gap: 10px;
+        &_action {
+            cursor: pointer;
+        }
         &-icon {
             min-width: fit-content;
         }

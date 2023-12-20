@@ -14,7 +14,6 @@ import {
     Button,
     Icon,
     IconData,
-    Link,
     List,
     Tabs,
     TabsItemProps,
@@ -34,18 +33,23 @@ import uploadIcon from '@gravity-ui/icons/svgs/arrow-up-from-square.svg';
 import {ButtonWithPopup} from '../../../components/ButtonPopup';
 
 import './QueryFilesButton.scss';
+import {
+    createDraftFile,
+    openDraftFile,
+    removeDraftFile,
+    updateDraftFileContent,
+} from '../module/query/actions';
+import {useDispatch} from 'react-redux';
 
 const b = cn('query-files-popup');
 
 type QueryFilesState = ReturnType<typeof useQueryFiles>;
 
-const fileIsNew = (file: QueryFile) => [!file.name, !file.content].some(Boolean);
+const fileIsUrl = (file: QueryFile) => file.type === 'url';
+const fileIsNew = (file: QueryFile) => [!file.name, fileIsUrl(file) && !file.content].some(Boolean);
 
-const useQueryFiles = (
-    files: QueryFile[],
-    queryId: string,
-    updateFiles: (files: QueryFile[]) => void,
-) => {
+const useQueryFiles = (files: QueryFile[], queryId: string) => {
+    const dispatch = useDispatch();
     const [deletedFiles, setDeletedFiles] = useState<QueryFile[]>([]);
     useEffect(() => setDeletedFiles([]), [queryId]);
     const [filesMap, setFilesMap] = useState(new Map<string, QueryFile>());
@@ -57,18 +61,17 @@ const useQueryFiles = (
             if (existing && existing !== updating) {
                 return 'This name is already in use';
             }
-            const getFilesToUpdate = () => {
-                if (!updating) {
-                    return [...files, file];
-                }
 
-                const index = files.indexOf(updating);
-                return [...files.slice(0, index), file, ...files.slice(index + 1)];
-            };
-            updateFiles(getFilesToUpdate());
+            if (!updating) {
+                dispatch(createDraftFile(file));
+            } else {
+                const {name, content} = file;
+                dispatch(updateDraftFileContent({name, content, oldName: updating.name}));
+            }
+
             return;
         },
-        [files, filesMap, updateFiles],
+        [filesMap, dispatch],
     );
     const createFile = useCallback(
         (fileType: QueryFile['type']) => {
@@ -80,8 +83,8 @@ const useQueryFiles = (
         [upsertFile, hasNewFiles],
     );
     const discardFile = useCallback(
-        (file: QueryFile) => updateFiles(files.filter((f) => f !== file)),
-        [files],
+        (file: QueryFile) => dispatch(removeDraftFile(file.name)),
+        [dispatch],
     );
     const removeFile = useCallback(
         (file: QueryFile) => {
@@ -100,6 +103,16 @@ const useQueryFiles = (
         },
         [upsertFile, deletedFiles],
     );
+    const openFile = useCallback(
+        (file: QueryFile) => {
+            if (fileIsUrl(file)) {
+                window.open(file.content, '_blank');
+            } else {
+                dispatch(openDraftFile(file.name));
+            }
+        },
+        [files, dispatch],
+    );
     return {
         files,
         deletedFiles,
@@ -108,6 +121,7 @@ const useQueryFiles = (
         removeFile,
         restoreFile,
         discardFile,
+        openFile,
     };
 };
 
@@ -117,24 +131,15 @@ type FileItemWrapperProps = {
     body: React.ReactNode;
     controls: React.ReactNode;
     customModifier?: string;
-    link?: string;
+    action?: () => void;
 };
 
-const FileItemWrapper = ({body, controls, customModifier, link}: FileItemWrapperProps) => {
-    const bodyElement = (
-        <div className={b('file-item-body', customModifier ? {[customModifier]: true} : null)}>
-            {body}
-        </div>
-    );
+const FileItemWrapper = ({body, controls, customModifier, action}: FileItemWrapperProps) => {
     return (
-        <div className={b('file-item')}>
-            {link ? (
-                <Link view="secondary" href={link} target="_blank">
-                    {bodyElement}
-                </Link>
-            ) : (
-                bodyElement
-            )}
+        <div className={b('file-item', {action: Boolean(action)})} onClick={() => action?.()}>
+            <div className={b('file-item-body', customModifier ? {[customModifier]: true} : null)}>
+                {body}
+            </div>
             <div
                 className={b(
                     'file-item-controls',
@@ -156,23 +161,28 @@ const ControlButton = ({
     disabled?: boolean;
     action: () => void;
 }) => (
-    <Button size="xs" view="flat" disabled={disabled} onClick={action}>
+    <Button
+        size="xs"
+        view="flat"
+        disabled={disabled}
+        onClick={(e) => {
+            e.stopPropagation();
+            action();
+        }}
+    >
         <Icon data={icon} size={16} />
     </Button>
 );
 
 const FileTypeIcon = ({file}: {file: QueryFile}) => (
-    <Icon
-        className={b('file-item-icon')}
-        data={file.type === 'url' ? linkIcon : fileIcon}
-        size={16}
-    />
+    <Icon className={b('file-item-icon')} data={fileIsUrl(file) ? linkIcon : fileIcon} size={16} />
 );
 
 const DeletedFileItem = ({file}: {file: QueryFile}) => {
     const [error, setError] = useState('');
     const textColor = useMemo(() => (error ? 'danger' : undefined), [error]);
-    const {restoreFile} = useContext(QueryFilesContext);
+    const {restoreFile, openFile} = useContext(QueryFilesContext);
+    const action = useCallback(() => openFile(file), [openFile, file]);
     const tryRestore = useCallback(() => {
         setError(restoreFile(file) ?? '');
     }, [file, restoreFile]);
@@ -188,14 +198,15 @@ const DeletedFileItem = ({file}: {file: QueryFile}) => {
                 </>
             }
             controls={<ControlButton icon={restoreIcon} action={tryRestore} />}
-            link={file.type === 'url' ? file.content : undefined}
+            action={action}
             customModifier="deleted"
         />
     );
 };
 
 const ViewFileItem = ({file, toggleEdit}: {file: QueryFile; toggleEdit: () => void}) => {
-    const {removeFile} = useContext(QueryFilesContext);
+    const {removeFile, openFile} = useContext(QueryFilesContext);
+    const action = useCallback(() => openFile(file), [openFile, file]);
     const remove = useCallback(() => removeFile(file), [file, removeFile]);
     return (
         <FileItemWrapper
@@ -211,7 +222,7 @@ const ViewFileItem = ({file, toggleEdit}: {file: QueryFile; toggleEdit: () => vo
                     <ControlButton icon={trashIcon} action={remove} />
                 </>
             }
-            link={file.type === 'url' ? file.content : undefined}
+            action={action}
         />
     );
 };
@@ -255,7 +266,7 @@ const EditFileItem = ({file, toggleEdit}: {file: QueryFile; toggleEdit: () => vo
     const [content, setContent] = useState(file.content);
     useEffect(() => setContent(file.content), [file]);
     const invalid = useMemo(
-        () => [validationState, !name, !content].some(Boolean),
+        () => [validationState, !name, fileIsUrl(file) && !content].some(Boolean),
         [validationState, name, content],
     );
     const close = () => {
@@ -272,7 +283,7 @@ const EditFileItem = ({file, toggleEdit}: {file: QueryFile; toggleEdit: () => vo
             toggleEdit();
         }
     };
-    const isUrl = useMemo(() => file.type === 'url', [file]);
+    const isUrl = useMemo(() => fileIsUrl(file), [file]);
     return (
         <FileItemWrapper
             customModifier="edit"
@@ -286,12 +297,14 @@ const EditFileItem = ({file, toggleEdit}: {file: QueryFile; toggleEdit: () => vo
                         onUpdate={setName}
                         placeholder="File name"
                     />
-                    <TextInput
-                        validationState={validationState}
-                        value={content}
-                        onUpdate={setContent}
-                        placeholder={isUrl ? 'Link to file' : 'File contents'}
-                    />
+                    {isUrl ? (
+                        <TextInput
+                            validationState={validationState}
+                            value={content}
+                            onUpdate={setContent}
+                            placeholder={'Link to file'}
+                        />
+                    ) : undefined}
                 </>
             }
             controls={
@@ -344,13 +357,13 @@ enum FileTabs {
 export const QueryFilesButton = ({
     files,
     queryId,
-    onChange,
+    className,
 }: {
     files: QueryFile[];
     queryId: string;
-    onChange: (files: QueryFile[]) => void;
+    className?: string;
 }) => {
-    const context = useQueryFiles(files, queryId, onChange);
+    const context = useQueryFiles(files, queryId);
     const {deletedFiles, createFile} = context;
     const [activeTab, setActiveTab] = useState(FileTabs.Current);
     const createNewFile = useCallback(
@@ -387,6 +400,7 @@ export const QueryFilesButton = ({
     }, [files, deletedFiles]);
     return (
         <ButtonWithPopup
+            className={className}
             header={
                 <div className={b('header')}>
                     <Text variant="subheader-3">Attachments</Text>
