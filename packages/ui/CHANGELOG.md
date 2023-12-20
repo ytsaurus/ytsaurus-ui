@@ -6,6 +6,13 @@
   * dependencies
     * @ytsaurus/javascript-wrapper bumped from 0.4.0 to 0.5.0
 
+## [1.9.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.8.0...ui-v1.9.0) (2023-12-20)
+
+
+### Features
+
+* add SettingMenuItem.props.useSwitch ([c3f5154](https://github.com/ytsaurus/ytsaurus-ui/commit/c3f5154212c4d30b81fed8910996be686444e95b))
+
 ## [1.8.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.7.3...ui-v1.8.0) (2023-12-19)
 
 
