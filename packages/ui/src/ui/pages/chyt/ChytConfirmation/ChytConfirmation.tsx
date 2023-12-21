@@ -54,8 +54,17 @@ function ChytSimpleConfirmation({
         <YTDFDialog
             visible
             pristineSubmittable
-            headerProps={{title: `${format.ReadableField(action)} '${alias}'`}}
-            footerProps={{textApply: `Yes, ${action} '${alias}'`}}
+            headerProps={{
+                title: (
+                    <>
+                        {format.ReadableField(action)}{' '}
+                        <Text variant="header-1" color="secondary">
+                            {alias}
+                        </Text>
+                    </>
+                ),
+            }}
+            footerProps={{textApply: `Yes, ${action} ${alias}`}}
             onAdd={() => {
                 return dispatch(chytListAction('stop', {alias: alias}))
                     .then(() => {
@@ -106,8 +115,17 @@ function ChytStartConfirmation({
     return (
         <YTDFDialog<StartFormValues>
             visible
-            headerProps={{title: `Start '${alias}'`}}
-            footerProps={{textApply: `Start '${alias}'`}}
+            headerProps={{
+                title: (
+                    <>
+                        Start clique{' '}
+                        <Text variant="header-1" color="secondary">
+                            {alias}
+                        </Text>
+                    </>
+                ),
+            }}
+            footerProps={{textApply: `Start clique '${alias}'`}}
             onClose={onClose}
             initialValues={{pool: pool ?? format.NO_VALUE}}
             onAdd={(form) => {
