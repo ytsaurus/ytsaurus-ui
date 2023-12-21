@@ -14,7 +14,6 @@ import Label from '../../../components/Label/Label';
 import {OperationPool} from '../../../components/OperationPool/OperationPool';
 import MetaTable, {MetaTableItem} from '../../../components/MetaTable/MetaTable';
 import {OperationId} from '../../../components/OperationId/OperationId';
-import StatusLabel from '../../../components/StatusLabel/StatusLabel';
 import {UserCard} from '../../../components/UserLink/UserLink';
 
 import {useQueryWidgetSidePanel} from '../../../pages/query-tracker/QueryWidget/side-panel';
@@ -47,15 +46,15 @@ export function ChytPageClique(props: RouteComponentProps<{alias: string}>) {
     const {alias} = props.match.params;
     const update = React.useCallback(() => {
         dispatch(chytCliqueLoad(alias));
-    }, [alias]);
+    }, [alias, dispatch]);
 
     React.useEffect(() => {
         return () => {
             dispatch(chytResetCurrentClique());
         };
-    }, [alias]);
+    }, [alias, dispatch]);
 
-    const {yt_operation, pool} = useSelector(getChytCliqueData) ?? {};
+    const {pool} = useSelector(getChytCliqueData) ?? {};
     const initialLoading = useSelector(getChytCliqueInitialLoading);
 
     useUpdater(update);
@@ -66,11 +65,12 @@ export function ChytPageClique(props: RouteComponentProps<{alias: string}>) {
     return (
         <div className={block()}>
             <div className={block('header')}>
-                <Text variant="header-1">CHYT clique *{alias}</Text>
-                <StatusLabel
-                    className={block('header-operation-state')}
-                    label={yt_operation?.state as any}
-                />
+                <Text variant="header-1">
+                    CHYT clique{' '}
+                    <Text variant="header-1" color="secondary">
+                        {alias}
+                    </Text>
+                </Text>
                 {initialLoading && <Loader className={block('loader')} size="s" />}
                 <span className={block('spacer')} />
 

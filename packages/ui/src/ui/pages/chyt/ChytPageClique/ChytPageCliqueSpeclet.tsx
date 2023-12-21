@@ -169,6 +169,7 @@ function ChytSpecletEditDialog({
         <React.Fragment>
             {error && <Error bottomMargin error={error} />}
             <YTDFDialog
+                className={block('dialog')}
                 size="l"
                 visible
                 onClose={onClose}

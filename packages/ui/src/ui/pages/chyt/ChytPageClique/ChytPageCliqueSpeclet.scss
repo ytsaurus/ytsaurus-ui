@@ -11,4 +11,10 @@
     &__raw-speclet-error {
         margin-top: 40px;
     }
+
+    &__dialog {
+        .df-dialog {
+            min-height: 500px;
+        }
+    }
 }
