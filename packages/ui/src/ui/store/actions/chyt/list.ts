@@ -23,6 +23,8 @@ export function chytLoadList(): ChytListThunkAction<void> {
 
         dispatch({type: CHYT_LIST.REQUEST});
 
+        const extraColumns = -1 === columns.indexOf('pool') ? ['pool' as const] : [];
+
         const attributesSet = new Set([
             'yt_operation_id' as const,
             'creator' as const,
@@ -30,6 +32,7 @@ export function chytLoadList(): ChytListThunkAction<void> {
             'health' as const,
             'health_reason' as const,
             ...columns,
+            ...extraColumns,
         ]);
 
         return chytApiAction(
