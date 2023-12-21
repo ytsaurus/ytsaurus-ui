@@ -21,19 +21,10 @@ export const getGlobalError = (state: RootState) => state.global.error.error;
 
 export const getCluster = (state: RootState): string => state?.global?.cluster || '';
 export const getRootPagesCluster = (state: RootState) => state?.global.rootPagesCluster;
-export const getClusterUiConfigWebJsonValueFormat = (state: RootState) =>
-    state.global.clusterUiConfig.web_json_value_format;
 
 export const getGlobalLoadState = (state: RootState) => state.global.loadState;
 
 export const getTheme = (state: RootState): '' | 'dark' | 'light' => state.global.theme;
-
-export const isYqlTypesSupported = createSelector(
-    [getClusterUiConfigWebJsonValueFormat],
-    (format) => {
-        return format === 'yql';
-    },
-);
 
 export const getClusterUiConfig = (state: RootState) => state.global.clusterUiConfig;
 
