@@ -10,7 +10,7 @@ jobs:
       - name: titles
         run: |
           curl ${{ github.event.pull_request.commits_url }} > commits.txt
-          cat commits.txt | jq -r '.[].commit.message' > titles.txt
+          cat commits.txt | jq '.[].commit.message' | sed -E 's/\\n.*/"/g' | jq -r > titles.txt
 
           grep -vE '^(chore|feat|fix|refactor|revert)(\(\S+\))?!?: [a-z]+' titles.txt > bad_titles.txt || true
           if [ "$(cat bad_titles.txt | wc -c)" -gt 0 ]; then
