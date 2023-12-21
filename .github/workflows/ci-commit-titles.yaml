@@ -22,8 +22,17 @@ jobs:
 
       - name: "feat|fix"
         run: |
-          grep -E '^(feat|fix)(\(\S+\))?!?: [a-z]+' titles.txt || (
+          grep -E '^(feat|fix)(\(\S+\))?!?: [a-z]+' titles.txt > feat-fix.txt || (
               echo "You have to provide at least one 'feat'|'fix' commit to publish new versions of changed packages.";
               echo "If you don't want to release new version then just ignore the check.";
               false
+          )
+      - name: "issue|ticket"
+        run: |
+          grep -P '\[(#\d+)|(YTFRONT-\d+)\]$' feat-fix.txt || (
+            echo "At least one of your commits should be linked with an issue or a ticket.";
+            echo "Such commit should contain '[#xxx]' or '[YTFRONT-xxx]' at the end of title".;
+            echo "If you don't want to link your PR with any issue/ticket then just ignore the check";
+            cat feat-fix.txt;
+            false
           )
