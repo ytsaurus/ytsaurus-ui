@@ -8,7 +8,6 @@ import {shouldUseYqlTypes} from '../../../../store/selectors/settings';
 import Columns from '../../../../utils/navigation/content/table/columns';
 import Query from '../../../../utils/navigation/content/table/query';
 import {getColumnsValues} from '../../../../utils/navigation/content/table/table';
-import {isYqlTypesSupported} from '../../global';
 import {
     getColumns,
     getColumnsOrder,
@@ -197,6 +196,6 @@ export const isYqlSchemaExists = createSelector([getAttributes], (attributes) =>
 });
 
 export const isYqlTypesEnabled = createSelector(
-    [shouldUseYqlTypes, isYqlTypesSupported],
-    (isSettingEnabled, isSupported) => isSettingEnabled && isSupported,
+    [shouldUseYqlTypes],
+    (isSettingEnabled) => isSettingEnabled,
 );

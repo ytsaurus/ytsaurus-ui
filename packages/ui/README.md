@@ -68,7 +68,6 @@ Available flags (**default values** are highlighted in bold):
 
 | Flag name                            | Allowed values          | Description                                                                                                                                                                        |
 | :----------------------------------- | :---------------------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| web_json_value_format                | **"schemaless"**, "yql" | Allows to use `YQLv3 types` [YTFRONT-2804](https://nda.ya.ru/t/bgh9NWJ16fPRp4)                                                                                                     |
 | enable_per_bundle_tablet_accounting  | **true**, false         | Allows editing of resources of tablets through BundleEditorDialog [YTFRONT-2851](https://nda.ya.ru/t/xnLq-3Dm6fPYPo)                                                               |
 | enable_per_account_tablet_accounting | **false**, true         | Allows editing of resources of tablets through AccountEditorDialog [YTFRONT-2851](https://nda.ya.ru/t/xnLq-3Dm6fPYPo)                                                              |
 | per_bundle_accounting_help_link      | **null**, url as string | Help link for resources of tablets to display from AccountEditorDialog about moving the resources to bundles [YTFRONT-2851](https://nda.ya.ru/t/xnLq-3Dm6fPYPo)                    |

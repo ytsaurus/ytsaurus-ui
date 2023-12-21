@@ -41,7 +41,6 @@ import {
     getGlobalSchedulerVersion,
     getHttpProxyVersion,
     isDeveloperSettings,
-    isYqlTypesSupported,
 } from '../../store/selectors/global';
 import {
     cellSizeRadioButtonItems,
@@ -79,7 +78,6 @@ function wrapEscapeText(text: string) {
 function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
     const clusterNS = useSelector(getCurrentClusterNS);
 
-    const isSupportedYqlTypes = useSelector(isYqlTypesSupported);
     const httpProxyVersion: string = useSelector(getHttpProxyVersion);
     const schedulerVersion: string = useSelector(getGlobalSchedulerVersion);
     const masterVersion: string = useSelector(getGlobalMasterVersion);
@@ -395,16 +393,15 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
             'Table',
             tableIcon,
             _compact([
-                isSupportedYqlTypes &&
-                    makeItem(
-                        'YQL V3 types',
-                        'top',
-                        <SettingsMenuItem
-                            settingName={SettingName.DEVELOPMENT.YQL_TYPES}
-                            settingNS={NAMESPACES.DEVELOPMENT}
-                            oneLine
-                        />,
-                    ),
+                makeItem(
+                    'YQL V3 types',
+                    'top',
+                    <SettingsMenuItem
+                        settingName={SettingName.DEVELOPMENT.YQL_TYPES}
+                        settingNS={NAMESPACES.DEVELOPMENT}
+                        oneLine
+                    />,
+                ),
                 makeItem(
                     'Rows per page',
                     'top',
