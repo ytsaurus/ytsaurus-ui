@@ -88,7 +88,12 @@ function ChytSimpleConfirmation({
                     type: 'block',
                     name: 'text',
                     extras: {
-                        children: `Are you sure you want to ${action} the clique '${alias}'?`,
+                        children: (
+                            <>
+                                Are you sure you want to ${action} the clique{' '}
+                                <Text color="secondary">{alias}</Text>?
+                            </>
+                        ),
                     },
                 },
                 ...makeErrorFields([error]),
