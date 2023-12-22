@@ -75,7 +75,10 @@ export const useQueryResultTabs = (
             return [];
         }
         const items: TabsItemProps[] = [{id: QueryResultTab.META, title: 'Meta'}];
-        if (query.progress) {
+        const emptyProgress =
+            !query.progress?.yql_plan?.Basic.nodes.length &&
+            !query.progress?.yql_plan?.Basic.links?.length;
+        if (query.progress && !emptyProgress) {
             items.unshift({
                 id: QueryResultTab.PROGRESS,
                 title: 'Progress',
