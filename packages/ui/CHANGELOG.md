@@ -1,10 +1,19 @@
 # Changelog
 
-### Dependencies
+## [1.10.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.9.0...ui-v1.10.0) (2023-12-22)
 
-* The following workspace dependencies were updated
-  * dependencies
-    * @ytsaurus/javascript-wrapper bumped from 0.4.0 to 0.5.0
+
+### Features
+
+* **Components/Nods**: display location ids on data node table [[#204](https://github.com/ytsaurus/ytsaurus-ui/issues/204)] ([29ff849](https://github.com/ytsaurus/ytsaurus-ui/commit/29ff849f75af54056b471ea0546cce96b9f7037d))
+* **Quereis**: prevent user from closing the browser window with unsaved query text [[#226](https://github.com/ytsaurus/ytsaurus-ui/issues/226)] ([e3d12e8](https://github.com/ytsaurus/ytsaurus-ui/commit/e3d12e8e9c65639f6892b5be1ab9031581400c11))
+* **query-tracker:** hide query history sidebar [[#211](https://github.com/ytsaurus/ytsaurus-ui/issues/211)] ([5602087](https://github.com/ytsaurus/ytsaurus-ui/commit/5602087899f0bf07eeb20312ee31cab66a055719))
+
+
+### Bug Fixes
+
+* **Queries:** do not display empty progress tab [YTFRONT-3952] ([858b11f](https://github.com/ytsaurus/ytsaurus-ui/commit/858b11f1ba262456953a75121e430f686c6a6e36))
+* **Queries**: render complex types in navigation [[#229](https://github.com/ytsaurus/ytsaurus-ui/issues/229)] ([1bef4ae](https://github.com/ytsaurus/ytsaurus-ui/commit/1bef4ae7493dfed7f30bb2a64ac81d65e189bb7c))
 
 ## [1.9.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.8.0...ui-v1.9.0) (2023-12-20)
 
