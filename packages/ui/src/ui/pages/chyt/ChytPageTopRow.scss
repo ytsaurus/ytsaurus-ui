@@ -21,4 +21,10 @@
     &__alias-suggest {
         min-width: 200px;
     }
+
+    &__create-dialog {
+        .df-dialog {
+            min-height: 280px;
+        }
+    }
 }

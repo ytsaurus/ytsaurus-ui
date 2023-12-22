@@ -5,7 +5,7 @@ import cn from 'bem-cn-lite';
 
 import ypath from '../../common/thor/ypath';
 
-import {Breadcrumbs, BreadcrumbsItem, Button} from '@gravity-ui/uikit';
+import {Breadcrumbs, BreadcrumbsItem, Button, Text} from '@gravity-ui/uikit';
 
 import ClipboardButton from '../../components/ClipboardButton/ClipboardButton';
 import {YTDFDialog, makeErrorFields} from '../../components/Dialog/Dialog';
@@ -201,6 +201,7 @@ function CreateChytButton() {
                 <PoolTreeLoaderWaitDeafultTree>
                     <YTDFDialog<FormValues>
                         visible
+                        className={block('create-dialog')}
                         headerProps={{title: 'Create clique'}}
                         onClose={() => setVisible(false)}
                         onAdd={(form) => {
@@ -256,17 +257,39 @@ function CreateChytButton() {
                                 type: 'pool',
                                 caption: 'Pool',
                                 extras: ({tree}: FormValues) => {
-                                    return {poolTree: tree, placeholder: 'Pool name...'};
+                                    return {
+                                        poolTree: tree,
+                                        placeholder: 'Pool name...',
+                                        allowEmpty: true,
+                                    };
+                                },
+                            },
+                            {
+                                name: 'poolNotice',
+                                type: 'block',
+                                visibilityCondition: {
+                                    when: 'pool',
+                                    isActive(pool) {
+                                        return !pool;
+                                    },
+                                },
+                                extras: {
+                                    children: (
+                                        <Text color="info-heavy" variant="body-2">
+                                            Select a pool to start the clique after creation.
+                                        </Text>
+                                    ),
                                 },
                             },
                             {
                                 name: 'runAfterCreation',
                                 type: 'tumbler',
-                                caption: 'Run after creation',
-                                extras: ({pool}: FormValues) => {
-                                    return {
-                                        disabled: !pool,
-                                    };
+                                caption: 'Start after creation',
+                                visibilityCondition: {
+                                    when: 'pool',
+                                    isActive(v) {
+                                        return Boolean(v);
+                                    },
                                 },
                             },
                             ...makeErrorFields([error]),
