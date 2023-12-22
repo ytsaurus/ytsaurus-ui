@@ -5,12 +5,13 @@ import Label from '../../../components/Label/Label';
 import {ChytCliqueHealthType, ChytCliqueStateType} from '../../../store/actions/chyt/api';
 
 const THEME_MAP: Partial<
-    Record<ChytCliqueStateType | ChytCliqueHealthType, 'danger' | 'success' | 'info'>
+    Record<ChytCliqueStateType | ChytCliqueHealthType, 'danger' | 'success' | 'info' | 'warning'>
 > = {
     good: 'success',
     failed: 'danger',
     active: 'success',
     pending: 'info',
+    untracked: 'warning',
 };
 
 export function CliqueState({state}: {state?: ChytCliqueStateType | ChytCliqueHealthType}) {
