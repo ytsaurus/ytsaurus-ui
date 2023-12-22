@@ -1,4 +1,7 @@
 import React from 'react';
+import cn from 'bem-cn-lite';
+
+import {Text} from '@gravity-ui/uikit';
 
 import format from '../../../common/hammer/format';
 
@@ -6,7 +9,10 @@ import {YTDFDialog, makeErrorFields} from '../../../components/Dialog/Dialog';
 import {YTError} from '../../../types';
 import {useThunkDispatch} from '../../../store/thunkDispatch';
 import {chytListAction} from '../../../store/actions/chyt/list';
-import {Text} from '@gravity-ui/uikit';
+
+import './ChytConfirmation.scss';
+
+const block = cn('chyt-confirmation');
 
 export type ChytConfirmationProps = {
     action: 'remove' | 'start' | 'stop';
@@ -120,6 +126,7 @@ function ChytStartConfirmation({
     return (
         <YTDFDialog<StartFormValues>
             visible
+            className={block('start')}
             headerProps={{
                 title: (
                     <>
@@ -130,7 +137,7 @@ function ChytStartConfirmation({
                     </>
                 ),
             }}
-            footerProps={{textApply: `Start clique '${alias}'`}}
+            footerProps={{textApply: `Start clique ${alias}`}}
             onClose={onClose}
             initialValues={{pool: pool ?? format.NO_VALUE}}
             onAdd={(form) => {
@@ -180,6 +187,8 @@ function ChytStartConfirmation({
                 {
                     type: 'tumbler',
                     name: 'untracked',
+                    tooltip:
+                        "YT Operation for a clique in untracked mode is started using the current user's credentials in the user's default pool. Such clique is not tracked by the controller and will not be restarted in case of any failures or speclet updates.",
                     caption: 'Untracked',
                 },
                 {
@@ -191,19 +200,11 @@ function ChytStartConfirmation({
                     },
                     extras: {
                         children: (
-                            <Text color="warning">
-                                {`YT Operation for a clique in untracked mode is started using the
-                                    current user's credentials in the user's default pool. Such
-                                    clique is not tracked by the controller and will not be restarted in
-                                    case of any failures or speclet updates. Usage of untracked cliques
-                                    is strictly discouraged.`}
+                            <Text color="warning" variant="body-2">
+                                {`Usage of untracked cliques is strictly discouraged.`}
                             </Text>
                         ),
                     },
-                },
-                {
-                    type: 'block',
-                    name: 'validationError',
                 },
                 ...makeErrorFields([error]),
             ]}
