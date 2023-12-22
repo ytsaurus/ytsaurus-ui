@@ -16,13 +16,17 @@ export const ChytCliquePageTab = {
 export const CHYT_OPTIONS = createActionTypes('CHYT_OPTIONS');
 export const CHYT_SPECLET = createActionTypes('CHYT_SPECLET');
 
-export const CHYT_TABLE_TITLES: Partial<Record<keyof ChytInfo, string>> = {
+export const CHYT_TABLE_TITLES: Record<
+    'speclet_modification_time' | 'strawberry_state_modification_time',
+    string
+> &
+    Partial<Record<keyof ChytInfo, string>> = {
     alias: 'CHYT clique alias',
     instance_count: 'Instances',
     total_cpu: 'Cores',
     total_memory: 'Memory',
-    speclet_modification_time: 'Modification time',
-    strawberry_state_modification_time: 'Strawberrry modification time',
+    speclet_modification_time: 'Speclet changed',
+    strawberry_state_modification_time: 'Handled by ctl',
     yt_operation_finish_time: 'Finish time',
     yt_operation_start_time: 'Start time',
 };
