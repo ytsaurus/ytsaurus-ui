@@ -139,7 +139,7 @@ function ChytStartConfirmation({
             }}
             footerProps={{textApply: `Start clique ${alias}`}}
             onClose={onClose}
-            initialValues={{pool: pool ?? format.NO_VALUE}}
+            initialValues={{pool: pool}}
             onAdd={(form) => {
                 const {untracked} = form.getState().values;
                 return dispatch(chytListAction('start', {alias, untracked}))
@@ -163,25 +163,8 @@ function ChytStartConfirmation({
                     type: 'plain',
                     name: 'pool',
                     caption: 'Pool',
-                },
-                {
-                    type: 'block',
-                    name: 'poolNotice',
-                    visibilityCondition: {
-                        when: 'pool',
-                        isActive: (v) => !v,
-                    },
-                    extras: ({pool, untracked}: StartFormValues) => {
-                        return {
-                            children:
-                                !pool && !untracked ? (
-                                    <Text color="warning">
-                                        Pool is not set. Clique without a pool can be started only
-                                        in untracked mode. Set the pool in speclet options to start
-                                        the clique in normal mode.
-                                    </Text>
-                                ) : null,
-                        };
+                    extras: {
+                        placeholder: format.NO_VALUE,
                     },
                 },
                 {
