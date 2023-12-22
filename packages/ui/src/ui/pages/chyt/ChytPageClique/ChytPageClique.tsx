@@ -2,6 +2,7 @@ import React from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {RouteComponentProps, useHistory} from 'react-router';
 import moment from 'moment';
+import cn from 'bem-cn-lite';
 
 import {Loader, Text} from '@gravity-ui/uikit';
 
@@ -28,11 +29,11 @@ import {
 import {getCluster} from '../../../store/selectors/global';
 import {Page} from '../../../../shared/constants/settings';
 
+import {CHYT_TABLE_TITLES} from '../../../constants/chyt-page';
 import {CliqueState} from '../components/CliqueState';
 import {ChytCliqueActions, useCliqueOnSqlAction} from '../ChytCliqueActions/ChytCliqueActions';
 import {ChytPageCliqueTabs} from './ChytPageCliqueTabs';
 import {ChytSpecletEditButton} from './ChytPageCliqueSpeclet';
-import cn from 'bem-cn-lite';
 
 import './ChytPageClique.scss';
 
@@ -177,9 +178,12 @@ function ChytCliqueMetaTable() {
                     key: 'Creator',
                     value: creator ? <UserCard userName={creator} /> : format.NO_VALUE,
                 },
-                {key: 'Modification time', value: format.DateTime(speclet_modification_time)},
                 {
-                    key: 'SB modification time',
+                    key: CHYT_TABLE_TITLES['speclet_modification_time'],
+                    value: format.DateTime(speclet_modification_time),
+                },
+                {
+                    key: CHYT_TABLE_TITLES['strawberry_state_modification_time'],
                     value: format.DateTime(strawberry_state_modification_time),
                 },
             ],

@@ -96,7 +96,7 @@ function ChytSimpleConfirmation({
                     extras: {
                         children: (
                             <>
-                                Are you sure you want to ${action} the clique{' '}
+                                Are you sure you want to {action} the clique{' '}
                                 <Text color="secondary">{alias}</Text>?
                             </>
                         ),

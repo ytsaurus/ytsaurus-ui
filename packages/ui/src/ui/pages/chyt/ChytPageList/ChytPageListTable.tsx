@@ -255,11 +255,6 @@ function useChytListColumns(cluster: string, onSqlClick: (alias: string) => void
     return columns;
 }
 
-const SHORT_TITLES: Partial<Record<keyof ChytInfo, string>> = {
-    speclet_modification_time: 'Modif. time',
-    strawberry_state_modification_time: 'SB mod. time',
-};
-
 function ChytListHeader({
     column,
     withUndefined,
@@ -275,7 +270,6 @@ function ChytListHeader({
             withUndefined={withUndefined}
             column={column}
             title={CHYT_TABLE_TITLES[column] ?? format.ReadableField(column)}
-            shortTitle={SHORT_TITLES[column]}
             sortable
             {...sortState[column]}
             toggleSort={(col, nextOrder, options) => {
