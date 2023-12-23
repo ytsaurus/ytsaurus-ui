@@ -131,24 +131,19 @@ setup.createOption('requestHeaders', 'object', {});
 
 setup.createOption('suppressAccessTracking', 'boolean', false);
 
-var btoa = function (string) {
-    return Buffer(string).toString('base64');
-};
-
-if (typeof window !== 'undefined') {
-    btoa = window.btoa;
-}
-
 setup.encodeForYt = function (str) {
-    return unescape(encodeURIComponent(str));
+    if (typeof window !== 'undefined') {
+        // https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/btoa#Unicode_strings
+        return window.btoa(unescape(encodeURIComponent(str)));
+    }
+    return Buffer.from(str).toString('base64');
 };
 
 setup.createOption('encodedParametersSettings', 'object', {
     maxSize: 64 * 1024,
     maxCount: 2,
     encoder: function (string) {
-        // https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/btoa#Unicode_strings
-        return btoa(setup.encodeForYt(string));
+        return setup.encodeForYt(string);
     },
 });
 
