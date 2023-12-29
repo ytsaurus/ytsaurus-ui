@@ -114,12 +114,15 @@ export const getEffectiveAcl = (sysPath: string) => {
     });
 };
 
-export const getCombinedAcl = (sysPath: string) => {
+export const getCombinedAcl = ({sysPath, kind}: {sysPath: string; kind: IdmKindType}) => {
+    const aclAttr = getAclAttr(kind);
+    const isPrincipalAcl = aclAttr === 'principal_acl';
+
     return ytApiV3
         .executeBatch<string>({
             requests: [
                 {command: 'get', parameters: {path: sysPath + '/@effective_acl'}},
-                {command: 'get', parameters: {path: sysPath + '/@acl'}},
+                {command: 'get', parameters: {path: sysPath + `/@${aclAttr}`}},
                 {command: 'get', parameters: {path: sysPath + '/@revision'}},
             ],
         })
@@ -128,16 +131,20 @@ export const getCombinedAcl = (sysPath: string) => {
             if (error) {
                 throw error;
             }
+
             const [{output: effective_acl}, {output: acl}, {output: revision}] = results;
             const effective_acl_dif = filter_(
                 effective_acl,
                 (e_item) => !some_(acl, (a_item) => isEqual_(a_item, e_item)),
             );
+
             return [
-                ...effective_acl_dif.map((e_item) => ({
-                    inherited: true,
-                    ...e_item,
-                })),
+                ...(isPrincipalAcl
+                    ? []
+                    : effective_acl_dif.map((e_item) => ({
+                          inherited: true,
+                          ...e_item,
+                      }))),
                 ...(acl as any[]).map((a_item, index) => ({
                     aclIndex: index,
                     revision,
@@ -203,12 +210,13 @@ export function checkPermissions(
 }
 
 export function requestPermissions(params: RequestPermissionParams): Promise<UpdateResponse> {
-    const {roles_grouped, sysPath} = params;
+    const {roles_grouped, sysPath, kind} = params;
+    const aclAttr = getAclAttr(kind);
     const batchParams: ExecuteBatchParams = {
         requests: roles_grouped.map(({permissions, subject, inheritance_mode}) => {
             return {
                 command: 'set',
-                parameters: {path: `${sysPath}/@acl/end`},
+                parameters: {path: `${sysPath}/@${aclAttr}/end`},
                 input: {
                     action: 'allow',
                     inheritance_mode: inheritance_mode,
@@ -257,14 +265,21 @@ export function deleteAclItemOrSubjectByIndex(params: {
     const {revision, aclIndex, isSplitted, subjectIndex} = itemToDelete;
     const allowUnsafeDelete =
         UIFactory.getAclPermissionsSettings()[idmKind].allowDeleteWithoutRevisionCheck;
+
+    const aclAttr = getAclAttr(idmKind);
+
     if (isSplitted) {
         return yt.v3.remove({
-            path: `${sysPath}/@acl/${aclIndex}/subjects/${subjectIndex}`,
+            path: `${sysPath}/@${aclAttr}/${aclIndex}/subjects/${subjectIndex}`,
             ...(allowUnsafeDelete ? {} : {prerequisite_revisions: [{revision, path: sysPath}]}),
         });
     }
     return yt.v3.remove({
-        path: `${sysPath}/@acl/${aclIndex}`,
+        path: `${sysPath}/@${aclAttr}/${aclIndex}`,
         ...(allowUnsafeDelete ? {} : {prerequisite_revisions: [{revision, path: sysPath}]}),
     });
+}
+
+function getAclAttr(kind: IdmKindType) {
+    return kind === 'access_control_object' ? 'principal_acl' : 'acl';
 }

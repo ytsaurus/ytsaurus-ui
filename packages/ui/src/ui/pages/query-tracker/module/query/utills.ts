@@ -31,5 +31,10 @@ export const prepareQueryPlanIds = (query: QueryItem): QueryItem => {
             }
         });
     }
+
+    if (!query.access_control_object) {
+        query.access_control_object = 'nobody';
+    }
+
     return query;
 };

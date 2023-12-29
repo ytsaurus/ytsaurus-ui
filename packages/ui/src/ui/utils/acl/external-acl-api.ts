@@ -59,7 +59,7 @@ export interface GetAclParams {
     cluster: string;
     path: string;
     sysPath: string;
-    kind: string;
+    kind: IdmKindType;
     poolTree?: string;
 }
 
@@ -99,7 +99,7 @@ export interface RequestPermissionParams {
 export const defaultAclApi: AclApi = {
     isAllowed: false,
 
-    getAcl: ({sysPath}) => getCombinedAcl(sysPath),
+    getAcl: ({sysPath, kind}) => getCombinedAcl({sysPath, kind}),
     updateAcl: (...args) => updateAclAttributes(...args),
     manageAclFields: ['inheritAcl', 'inheritAcl_warning'],
 

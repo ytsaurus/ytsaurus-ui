@@ -18,6 +18,7 @@ import {map} from 'lodash';
 
 import {docsUrl} from '../../../config';
 import {makeLink} from '../../../utils/utils';
+import {IdmKindType} from '../../../utils/acl/acl-types';
 
 const block = cn('acl-request-permissions');
 
@@ -37,7 +38,7 @@ export interface Props extends WithVisibleProps {
     cluster?: string;
     normalizedPoolTree?: string;
     path: string;
-    idmKind: string;
+    idmKind: IdmKindType;
     requestPermissions: (params: {values: FormValues; idmKind: string}) => Promise<void>;
     cancelRequestPermissions: (params: {idmKind: string}) => unknown;
     error: YTError;
@@ -80,11 +81,12 @@ function RequestPermissions(props: Props) {
     }, [handleClose, cancelRequestPermissions, idmKind]);
 
     const onAdd = useCallback(
-        (form: FormApi<FormValues, Partial<FormValues>>) =>
-            requestPermissions({
+        (form: FormApi<FormValues, Partial<FormValues>>) => {
+            return requestPermissions({
                 values: form.getState().values,
                 idmKind,
-            }),
+            });
+        },
         [requestPermissions, idmKind],
     );
 

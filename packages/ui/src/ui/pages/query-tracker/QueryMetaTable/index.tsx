@@ -7,6 +7,7 @@ import {QueryItem} from '../module/api';
 import {Button} from '@gravity-ui/uikit';
 import Yson from '../../../components/Yson/Yson';
 import SimpleModal from '../../../components/Modal/SimpleModal';
+import EditQueryACOModal from '../QueryACO/EditQueryACOModal/EditQueryACOModal';
 
 interface MetaTableProps {
     query: QueryItem;
@@ -36,21 +37,45 @@ export default function QueryMetaTable({query, className}: MetaTableProps) {
             })
             .map(([title, value]) => {
                 const isObject = typeof value === 'object';
+
+                let finalValue = null;
+
+                switch (true) {
+                    case isObject: {
+                        finalValue = (
+                            <Button
+                                view="outlined"
+                                onClick={() => {
+                                    setSelectedOption(value);
+                                    setModalOpened(true);
+                                }}
+                            >
+                                View details
+                            </Button>
+                        );
+
+                        break;
+                    }
+
+                    case title === 'access_control_object': {
+                        finalValue = (
+                            <React.Fragment>
+                                {value}
+                                &nbsp;
+                                <EditQueryACOModal query_id={query.id} />
+                            </React.Fragment>
+                        );
+
+                        break;
+                    }
+
+                    default:
+                        finalValue = value;
+                }
+
                 return {
                     title,
-                    value: isObject ? (
-                        <Button
-                            view="outlined"
-                            onClick={() => {
-                                setSelectedOption(value);
-                                setModalOpened(true);
-                            }}
-                        >
-                            View detals
-                        </Button>
-                    ) : (
-                        value
-                    ),
+                    value: finalValue,
                 };
             });
     }, [query]);

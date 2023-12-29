@@ -12,7 +12,7 @@ import RoleListControl, {
     roleListValueToSubjectList,
 } from '../../../components/Dialog/controls/RoleListControl/RoleListControl';
 
-import {RoleConverted} from '../../../utils/acl/acl-types';
+import {IdmKindType, RoleConverted} from '../../../utils/acl/acl-types';
 import {PreparedRole} from '../../../utils/acl';
 import {YTError} from '../../../types';
 
@@ -42,7 +42,7 @@ export type ManageAclFieldsNames =
 interface Props extends WithVisibleProps {
     className?: string;
     path: string;
-    idmKind: string;
+    idmKind: IdmKindType;
     version: string;
     normalizedPoolTree?: string;
     loading: boolean;
@@ -108,6 +108,7 @@ function ManageAcl(props: Props) {
     const onAdd = useCallback(
         (form: FormApi<FormValues, Partial<FormValues>>) => {
             const {auditors, readApprovers, responsible, ...rest} = form.getState().values;
+
             return updateAcl({
                 path,
                 idmKind,

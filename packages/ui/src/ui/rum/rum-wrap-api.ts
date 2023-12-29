@@ -38,6 +38,17 @@ type YTApiV3WithId = {
     get<Value = any>(id: YTApiId, ...args: ApiMethodParameters<GetParams>): Promise<Value>;
     list<Value = any>(id: YTApiId, ...args: ApiMethodParameters<GetParams>): Promise<Value>;
     exists(id: YTApiId, ...args: ApiMethodParameters<PathParams>): Promise<boolean>;
+    alterQuery(
+        id: YTApiId,
+        ...args: ApiMethodParameters<{
+            stage?: string;
+            query_id: string;
+            access_control_object?: string;
+            annotations?: {
+                title?: string;
+            };
+        }>
+    ): Promise<any>;
     [method: string]: (id: YTApiId, ...args: ApiMethodParameters<any>) => Promise<any>;
 };
 

@@ -56,6 +56,7 @@ import NodesTypes from './NodesTypes/NodesTypes';
 
 import {NoWrap} from '../../../../components/Text/Text';
 import {showLinkToModal} from '../../../../store/actions/navigation/modals/link-to-modal';
+import {openCreateACOModal} from '../../../../store/actions/navigation/modals/create-aco';
 import NavigationExtraActions from '../../../../containers/NavigationExtraActions/NavigationExtraActions';
 
 import './MapNode.scss';
@@ -84,6 +85,8 @@ class MapNode extends Component {
         setMediumType: PropTypes.func.isRequired,
         openEditingPopup: PropTypes.func.isRequired,
         openCreateTableModal: PropTypes.func.isRequired,
+        openCreateACOModal: PropTypes.func.isRequired,
+        showACOCreateButton: PropTypes.bool.isRequired,
     };
 
     componentDidMount() {
@@ -148,11 +151,14 @@ class MapNode extends Component {
 }
 
 function mapStateToProps(state) {
+    const path = getPath(state);
+
     return {
+        path,
+        showACOCreateButton: path === '//sys/access_control_object_namespaces/queries',
         loadState: getLoadState(state),
         error: getError(state),
         contentMode: getContentMode(state),
-        path: getPath(state),
         filterState: getFilterState(state),
         transaction: getTransaction(state),
         mediumList: getMediumList(state),
@@ -170,6 +176,7 @@ const mapDispatchToProps = {
     openEditingPopup,
     openCreateTableModal,
     showLinkToModal,
+    openCreateACOModal,
 };
 
 const MapNodeConnected = connect(mapStateToProps, mapDispatchToProps)(MapNode);
@@ -211,6 +218,12 @@ class MapNodeToolbar extends React.PureComponent {
         this.props.showLinkToModal({path: `${path}/New link`});
     };
 
+    createACOButtonClick = () => {
+        const {path} = this.props;
+
+        this.props.openCreateACOModal({path, namespace: 'queries'});
+    };
+
     render() {
         const {
             setFilter,
@@ -222,6 +235,7 @@ class MapNodeToolbar extends React.PureComponent {
             filterState,
             path,
             attributes,
+            showACOCreateButton,
         } = this.props;
 
         return (
@@ -305,6 +319,11 @@ class MapNodeToolbar extends React.PureComponent {
                                     action: this.createLinkButtonClick,
                                     text: <NoWrap>Link</NoWrap>,
                                     icon: <Icon awesome={'link'} />,
+                                },
+                                showACOCreateButton && {
+                                    action: this.createACOButtonClick,
+                                    text: <NoWrap>ACO</NoWrap>,
+                                    icon: <Icon awesome={'acl-object'} />,
                                 },
                             ]}
                             switcher={

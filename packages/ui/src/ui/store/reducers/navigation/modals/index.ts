@@ -12,6 +12,7 @@ import tableMergeSortModal from './table-merge-sort-modal';
 import remoteCopyModal from './remote-copy-modal';
 import dynTablesStateModal from './dyn-tables-state-modal';
 import linkToModal from './link-to-modal';
+import createACOModal from './create-aco';
 
 export default combineReducers({
     attributesEditor,
@@ -26,4 +27,5 @@ export default combineReducers({
     remoteCopyModal,
     dynTablesStateModal,
     linkToModal,
+    createACOModal,
 });
