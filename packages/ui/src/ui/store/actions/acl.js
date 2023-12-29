@@ -59,7 +59,7 @@ function getPathToCheckPermissions(idmKind, state, entityName, poolTree) {
 }
 
 export function loadAclData(
-    {path, idmKind},
+    {path, idmKind, aclType},
     {normalizedPoolTree} = {},
     options = {useEffective: false, skipResponsible: false, userPermissionsPath: undefined},
 ) {
@@ -88,6 +88,7 @@ export function loadAclData(
                 poolTree,
                 sysPath: pathToCheckPermissions,
                 useEffective,
+                aclType,
             }),
             checkUserPermissions(pathToCheckUserPermissions, login, permissionTypes),
             getResponsible({
@@ -131,7 +132,7 @@ export function loadAclData(
 }
 
 export function deletePermissions(
-    {roleKey, idmKind, path, itemToDelete},
+    {roleKey, idmKind, path, itemToDelete, aclType},
     {normalizedPoolTree} = {},
 ) {
     return (dispatch, getState) => {
@@ -157,6 +158,7 @@ export function deletePermissions(
                 path,
                 sysPath: deletePermissionsPath,
                 itemToDelete,
+                aclType,
             })
             .then(() => {
                 dispatch({
@@ -188,7 +190,7 @@ function dateToDaysAfterNow(date) {
     return Math.round((date.getTime() - Date.now()) / 3600 / 24 / 1000);
 }
 
-export function requestPermissions({values, idmKind}, {normalizedPoolTree} = {}) {
+export function requestPermissions({values, idmKind, aclType}, {normalizedPoolTree} = {}) {
     return (dispatch, getState) => {
         const state = getState();
         const {
@@ -243,6 +245,7 @@ export function requestPermissions({values, idmKind}, {normalizedPoolTree} = {})
                 comment: values.comment,
                 kind: idmKind,
                 poolTree,
+                aclType,
             })
             .then(() => {
                 dispatch({

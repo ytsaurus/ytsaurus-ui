@@ -36,6 +36,7 @@ export default class DeletePermissionModal extends Component {
         isPermissionDeleted: PropTypes.bool.isRequired,
         error: PropTypes.object,
         lastItemKey: PropTypes.string,
+        aclType: PropTypes.string,
     };
 
     state = {
@@ -46,7 +47,7 @@ export default class DeletePermissionModal extends Component {
     toggleConfirm = () => this.setState((prevState) => ({confirm: !prevState.confirm}));
 
     deleteItem = () => {
-        const {idmKind, path, itemToDelete} = this.props;
+        const {idmKind, path, itemToDelete, aclType} = this.props;
         const {
             itemToDelete: {key},
             deletePermissions,
@@ -56,6 +57,7 @@ export default class DeletePermissionModal extends Component {
             idmKind,
             path,
             itemToDelete,
+            aclType,
         }).then((error) => {
             if (!error) {
                 this.onClose();

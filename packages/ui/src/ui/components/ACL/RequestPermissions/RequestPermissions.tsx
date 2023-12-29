@@ -18,6 +18,7 @@ import {map} from 'lodash';
 
 import {docsUrl} from '../../../config';
 import {makeLink} from '../../../utils/utils';
+import {ACLType} from '../../../utils/acl/acl-types';
 
 const block = cn('acl-request-permissions');
 
@@ -38,10 +39,15 @@ export interface Props extends WithVisibleProps {
     normalizedPoolTree?: string;
     path: string;
     idmKind: string;
-    requestPermissions: (params: {values: FormValues; idmKind: string}) => Promise<void>;
-    cancelRequestPermissions: (params: {idmKind: string}) => unknown;
+    requestPermissions: (params: {
+        values: FormValues;
+        idmKind: string;
+        aclType: ACLType;
+    }) => Promise<void>;
+    cancelRequestPermissions: (params: {idmKind: string; aclType: ACLType}) => unknown;
     error: YTError;
     onSuccess?: () => void;
+    aclType: ACLType;
 }
 
 interface FormValues {
@@ -71,21 +77,24 @@ function RequestPermissions(props: Props) {
         cancelRequestPermissions,
         error,
         cluster,
+        aclType,
         /*denyColumns,*/
     } = props;
 
     const onClose = useCallback(() => {
         handleClose();
-        cancelRequestPermissions({idmKind});
-    }, [handleClose, cancelRequestPermissions, idmKind]);
+        cancelRequestPermissions({idmKind, aclType});
+    }, [handleClose, cancelRequestPermissions, idmKind, aclType]);
 
     const onAdd = useCallback(
-        (form: FormApi<FormValues, Partial<FormValues>>) =>
-            requestPermissions({
+        (form: FormApi<FormValues, Partial<FormValues>>) => {
+            return requestPermissions({
                 values: form.getState().values,
                 idmKind,
-            }),
-        [requestPermissions, idmKind],
+                aclType,
+            });
+        },
+        [requestPermissions, idmKind, aclType],
     );
 
     const currentCaption = `Current ${idmKind}`;

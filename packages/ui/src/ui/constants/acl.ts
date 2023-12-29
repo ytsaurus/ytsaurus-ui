@@ -54,12 +54,22 @@ export const PERMISSIONS_SETTINGS = {
     },
     [IdmObjectType.ACCESS_CONTROL_OBJECT]: {
         permissionTypes: PERMISSION_TYPES,
-        permissionsToRequest: [['read'], ['write'], ['remove'], ['mount']],
+        permissionsToRequest: [
+            ['read'],
+            ['write'],
+            ['use'],
+            ['administer'],
+            ['create'],
+            ['remove'],
+            ['mount'],
+            ['manage'],
+        ],
         allowBossApprovals: true,
         allowReadApprovers: true,
         allowAuditors: true,
         allowInheritAcl: true,
         allowInheritResponsibles: true,
+        allowDeleteWithoutRevisionCheck: true,
     },
     [IdmObjectType.ACCOUNT]: {
         permissionTypes: ACCOUNTS_PERMISSION_TYPES,

@@ -198,6 +198,38 @@ export class DeleteObjectModal extends Component {
         const diskSpace = ypath.get(resourceUsage, '/disk_space');
         const nodeCount = ypath.get(resourceUsage, '/node_count');
 
+        const buildItems = () => {
+            const items = [
+                {
+                    key: 'Disk space',
+                    value: hammer.format['Bytes'](diskSpace),
+                },
+            ];
+
+            switch (type) {
+                case 'table':
+                    items.push({
+                        key: 'Rows',
+                        value: unmergedRows
+                            ? `≈ ${hammer.format['Number'](unmergedRows)}`
+                            : hammer.format['Number'](rows),
+                    });
+
+                    return items;
+
+                case 'access_control_object':
+                    return [];
+
+                default:
+                    items.push({
+                        key: 'Node count',
+                        value: hammer.format['Number'](nodeCount),
+                    });
+
+                    return items;
+            }
+        };
+
         return (
             <ErrorBoundary>
                 <div className={block()}>
@@ -207,27 +239,7 @@ export class DeleteObjectModal extends Component {
                             <span className={block('path')}>{item.path}</span>
                         </p>
 
-                        <MetaTable
-                            className={block('meta')}
-                            items={[
-                                {
-                                    key: 'Disk space',
-                                    value: hammer.format['Bytes'](diskSpace),
-                                },
-                                {
-                                    key: 'Node count',
-                                    value: hammer.format['Number'](nodeCount),
-                                    visible: type !== 'table',
-                                },
-                                {
-                                    key: 'Rows',
-                                    value: unmergedRows
-                                        ? `≈ ${hammer.format['Number'](unmergedRows)}`
-                                        : hammer.format['Number'](rows),
-                                    visible: type === 'table',
-                                },
-                            ]}
-                        />
+                        <MetaTable className={block('meta')} items={buildItems()} />
 
                         {this.renderPermanentlyCheckbox()}
                     </div>

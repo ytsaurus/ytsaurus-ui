@@ -264,8 +264,8 @@ function AttributesEditorLoaded() {
     );
 
     const forEachStaticTable = !hasStaticTables ? '' : ' for each static table ';
-
     const mergeNoticeAndError: Array<DialogField<FormValues>> = [];
+
     if (hasStaticTables) {
         mergeNoticeAndError.push({
             name: 'runMergeNotice',
@@ -296,6 +296,7 @@ function AttributesEditorLoaded() {
     }
 
     const annotationTab: Array<DialogTabField<DialogField<FormValues>>> = [];
+
     if (singleMode) {
         const fields: Array<DialogField<FormValues>> = [
             {

@@ -124,6 +124,7 @@ class ACL extends Component {
         }),
 
         columnsFilter: PropTypes.string,
+        aclType: PropTypes.string,
     };
 
     static tableColumns = {
@@ -235,17 +236,17 @@ class ACL extends Component {
     };
 
     componentDidMount() {
-        const {path, idmKind, loadAclData} = this.props;
+        const {path, idmKind, loadAclData, aclType} = this.props;
 
         if (path) {
-            loadAclData({path, idmKind});
+            loadAclData({path, idmKind, aclType});
         }
     }
 
     componentDidUpdate(prevProps) {
-        const {path, idmKind, loadAclData} = this.props;
+        const {path, idmKind, loadAclData, aclType} = this.props;
         if (prevProps.path !== path) {
-            loadAclData({path, idmKind});
+            loadAclData({path, idmKind, aclType});
         }
     }
 
@@ -430,12 +431,20 @@ class ACL extends Component {
     }
 
     renderColumnGroups() {
-        const {columnGroups, idmKind, path, loadAclData, cluster, aclRequestOptions, nodeType} =
-            this.props;
+        const {
+            columnGroups,
+            idmKind,
+            path,
+            loadAclData,
+            cluster,
+            aclRequestOptions,
+            nodeType,
+            aclType,
+        } = this.props;
         const {useEffective} = aclRequestOptions;
         const props = {
             path,
-            loadAclDataFn: () => loadAclData({path, idmKind}),
+            loadAclDataFn: () => loadAclData({path, idmKind, aclType}),
             columnGroups,
             cluster,
             allowEdit: nodeType === 'map_node',
@@ -475,9 +484,9 @@ class ACL extends Component {
     }
 
     deletePermissionsFn = (...args) => {
-        const {deletePermissionsFn, loadAclData, idmKind, path} = this.props;
+        const {deletePermissionsFn, loadAclData, idmKind, path, aclType} = this.props;
         return deletePermissionsFn(...args).then((d) => {
-            loadAclData({path, idmKind});
+            loadAclData({path, idmKind, aclType});
             return d;
         });
     };
@@ -512,6 +521,7 @@ class ACL extends Component {
             userPermissionsUpdateAclError,
             userPermissionsCancelUpdateAcl,
             cluster,
+            aclType,
         } = this.props;
         const {deleteItem} = this.state;
 
@@ -525,6 +535,7 @@ class ACL extends Component {
 
                 {loaded && (
                     <UserPermissions
+                        aclType={aclType}
                         cluster={cluster}
                         className={block('user-permissions')}
                         path={path}
@@ -554,6 +565,7 @@ class ACL extends Component {
                 )}
 
                 <DeletePermissionModal
+                    aclType={aclType}
                     idmKind={idmKind}
                     path={path}
                     key={deleteItem?.key}

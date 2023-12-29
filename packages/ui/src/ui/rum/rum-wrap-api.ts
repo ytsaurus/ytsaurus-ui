@@ -7,7 +7,7 @@ import {YT_API_REQUEST_ID_HEADER} from '../../shared/constants';
 import {isSupportedYtTvmAPIGlobal} from '../store/selectors/thor/support';
 import {RumMeasureTypes} from './rum-measure-types';
 import {BatchResultsItem, BatchSubRequest, GetParams, OutputFormat} from '../../shared/yt-types';
-import type {ValueOf} from '../types';
+import {ValueOf} from '../types';
 import YT from '../config/yt-config';
 
 export enum YTApiId {
@@ -184,6 +184,17 @@ export interface RumWrapApiWithId {
         ...args: ApiMethodParameters<BatchParameters>
     ): Promise<Array<BatchResultsItem<T>>>;
     get<Value = any>(id: YTApiId, ...args: ApiMethodParameters<GetParams>): Promise<Value>;
+    alterQuery(
+        id: YTApiId,
+        ...args: ApiMethodParameters<{
+            stage?: string;
+            query_id: string;
+            access_control_object?: string;
+            annotations?: {
+                title?: string;
+            };
+        }>
+    ): Promise<any>;
     [method: string]: (id: YTApiId, ...args: ApiMethodParameters<any>) => Promise<any>;
 }
 

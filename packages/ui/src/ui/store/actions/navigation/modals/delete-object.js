@@ -58,7 +58,7 @@ export function togglePermanentlyDelete() {
 }
 
 const getPath = (path, type) => {
-    return type === 'link'
+    return ['link', 'access_control_object'].includes(type)
         ? Promise.resolve(path)
         : ytApiV3Id.get(YTApiId.navigationGetPath, {
               path: path + '/@path',
@@ -150,9 +150,14 @@ export function getRealPaths(items) {
                 if (error) {
                     return Promise.reject(error.error);
                 }
-                const multipleInfo = _.map(responses, (res) => {
-                    const path = ypath.get(res.output, '/path');
+                const multipleInfo = _.map(responses, (res, index) => {
                     const type = ypath.get(res.output, '/type');
+
+                    if (type === 'access_control_object') {
+                        return {type, path: items[index].path};
+                    }
+
+                    const path = ypath.get(res.output, '/path');
                     const account = ypath.get(res.output, '/account');
                     const resourceUsage = ypath.get(res.output, '/recursive_resource_usage');
                     const name = path.split('/').reverse()[0];

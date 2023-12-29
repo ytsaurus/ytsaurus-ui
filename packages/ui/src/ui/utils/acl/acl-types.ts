@@ -147,6 +147,7 @@ export interface AclRequestParams {
     poolTree?: string;
     sysPath: string;
     useEffective?: boolean;
+    aclType: ACLType;
 }
 
 export interface GetAclParams extends AclRequestParams {
@@ -248,3 +249,5 @@ export interface UpdateAclParams {
     poolTree?: string;
     comment?: string;
 }
+
+export type ACLType = '@acl' | '@principal_acl';

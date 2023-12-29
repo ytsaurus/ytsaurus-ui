@@ -148,6 +148,10 @@ const features = createSelector(
                 prestable: '23.1.11106567',
                 component: proxy,
             },
+            qtACO: {
+                prestable: '1.30.0',
+                component: proxy,
+            },
         };
     },
 );
@@ -257,6 +261,10 @@ export const isSupportedNodeMaintenanceApi = createSelector(
         return isSupported('nodeMaintenanceApi');
     },
 );
+
+export const isSupportedQtACO = createSelector([isSupportedSelector], (isSupported) => {
+    return isSupported('qtACO');
+});
 
 /**
  This function function is recommended for usage inside utils and old knockout components, where it is difficult

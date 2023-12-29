@@ -12,7 +12,7 @@ import RoleListControl, {
     roleListValueToSubjectList,
 } from '../../../components/Dialog/controls/RoleListControl/RoleListControl';
 
-import {RoleConverted} from '../../../utils/acl/acl-types';
+import {ACLType, RoleConverted} from '../../../utils/acl/acl-types';
 import {PreparedRole} from '../../../utils/acl';
 import {YTError} from '../../../types';
 
@@ -55,9 +55,10 @@ interface Props extends WithVisibleProps {
     error: boolean;
     manageAclError: YTError;
     errorData?: YTError;
-    loadAclData: (args: {path: string; idmKind: string}) => void;
+    loadAclData: (args: {path: string; idmKind: string; aclType: ACLType}) => void;
     updateAcl: (args: unknown) => Promise<void>;
     cancelUpdateAcl: (args: {idmKind: string}) => void;
+    aclType: ACLType;
 }
 
 interface FormValues {
@@ -91,12 +92,13 @@ function ManageAcl(props: Props) {
         loadAclData,
         cancelUpdateAcl,
         updateAcl,
+        aclType,
     } = props;
 
     const [hasWarning, setHasWarning] = useState(false);
 
     const handleModalOpen = useCallback(() => {
-        loadAclData({path, idmKind});
+        loadAclData({path, idmKind, aclType});
         handleShow();
     }, [handleShow, idmKind, loadAclData, path]);
 
@@ -108,9 +110,11 @@ function ManageAcl(props: Props) {
     const onAdd = useCallback(
         (form: FormApi<FormValues, Partial<FormValues>>) => {
             const {auditors, readApprovers, responsible, ...rest} = form.getState().values;
+
             return updateAcl({
                 path,
                 idmKind,
+                aclType,
                 values: {
                     ...rest,
                     responsibleApproval: roleListValueToSubjectList(responsible),
@@ -120,7 +124,7 @@ function ManageAcl(props: Props) {
                 version,
             });
         },
-        [idmKind, path, updateAcl, version],
+        [idmKind, path, updateAcl, version, aclType],
     );
 
     const manageAclDialogFields = useMemo(

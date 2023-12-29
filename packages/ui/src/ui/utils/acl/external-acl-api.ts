@@ -8,6 +8,7 @@ import {
 } from './acl-api';
 import {
     ACLResponsible,
+    ACLType,
     ColumnGroup,
     Group,
     GroupACL,
@@ -44,6 +45,7 @@ export interface AclApi {
         roleKey: string;
         itemToDelete: PreparedAclSubject;
         idmKind: IdmKindType;
+        aclType: ACLType;
     }): Promise<UpdateResponse>;
 
     createColumnGroup(
@@ -61,6 +63,7 @@ export interface GetAclParams {
     sysPath: string;
     kind: string;
     poolTree?: string;
+    aclType: ACLType;
 }
 
 export interface UpdateGroupParams {
@@ -94,12 +97,13 @@ export interface RequestPermissionParams {
     comment: string;
     /*columns, */ kind: IdmKindType;
     poolTree?: string;
+    aclType: ACLType;
 }
 
 export const defaultAclApi: AclApi = {
     isAllowed: false,
 
-    getAcl: ({sysPath}) => getCombinedAcl(sysPath),
+    getAcl: ({sysPath, aclType}) => getCombinedAcl({sysPath, aclType}),
     updateAcl: (...args) => updateAclAttributes(...args),
     manageAclFields: ['inheritAcl', 'inheritAcl_warning'],
 
@@ -113,8 +117,8 @@ export const defaultAclApi: AclApi = {
     requestPermissions: (params) => requestPermissions(params),
     requestPermissionsFields: ['cluster', 'path', 'permissions', 'inheritance_mode', 'subjects'],
 
-    deleteRole: ({sysPath, itemToDelete, idmKind}) => {
-        return deleteAclItemOrSubjectByIndex({sysPath, itemToDelete, idmKind});
+    deleteRole: ({sysPath, itemToDelete, idmKind, aclType}) => {
+        return deleteAclItemOrSubjectByIndex({sysPath, itemToDelete, idmKind, aclType});
     },
 
     createColumnGroup: () => methodNotSupported('createColumnGroup'),

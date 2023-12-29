@@ -8,8 +8,6 @@ import CollapsibleList from '../../../components/CollapsibleList/CollapsibleList
 import ErrorBoundary from '../../../components/ErrorBoundary/ErrorBoundary';
 import Icon from '../../../components/Icon/Icon';
 
-import {IdmObjectType} from '../../../constants/acl';
-
 import RequestPermissions from '../RequestPermissions/RequestPermissions';
 import ManageAcl from '../ManageAcl/ManageAcl';
 
@@ -63,6 +61,7 @@ export default class UserPermissions extends Component {
         updateAcl: PropTypes.func.isRequired,
         updateAclError: PropTypes.object,
         cancelUpdateAcl: PropTypes.func.isRequired,
+        aclType: PropTypes.string,
     };
 
     renderPermissions() {
@@ -127,9 +126,9 @@ export default class UserPermissions extends Component {
     }
 
     requestPermissions = (...args) => {
-        const {requestPermissions, loadAclData, path, idmKind} = this.props;
+        const {requestPermissions, loadAclData, path, idmKind, aclType} = this.props;
         return requestPermissions(...args).then((d) => {
-            loadAclData({path, idmKind});
+            loadAclData({path, idmKind, aclType});
             return d;
         });
     };
@@ -169,6 +168,7 @@ export default class UserPermissions extends Component {
             cancelUpdateAcl,
             cluster,
             aclRequestOptions,
+            aclType,
         } = this.props;
 
         const {useEffective} = aclRequestOptions;
@@ -177,11 +177,12 @@ export default class UserPermissions extends Component {
             <ErrorBoundary>
                 <div className={block(null, className)}>
                     {this.renderCard()}
-                    {idmKind !== IdmObjectType.ACCESS_CONTROL_OBJECT && !useEffective && (
+                    {!useEffective && (
                         <React.Fragment>
                             <RequestPermissions
                                 className={block('request')}
                                 path={path}
+                                aclType={aclType}
                                 idmKind={idmKind}
                                 error={requestPermissionsError}
                                 requestPermissions={this.requestPermissions}
@@ -207,6 +208,7 @@ export default class UserPermissions extends Component {
                                 updateAcl={this.updateAcl}
                                 manageAclError={updateAclError}
                                 cancelUpdateAcl={cancelUpdateAcl}
+                                aclType={aclType}
                             />
                         </React.Fragment>
                     )}

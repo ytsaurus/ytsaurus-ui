@@ -44,14 +44,20 @@ const makeComponentWithRum = (idmKind) => {
 };
 
 const makeMapStateToProps = (idmKind) => {
-    return (state) => {
+    return (state, props) => {
         const attributes = getAttributes(state);
         let {path} = attributes;
         if (!path) path = getRawPath(state);
 
+        const isPrincipalACLtab =
+            props.mode === 'content' && props.type === 'access_control_object';
+
+        const aclType = isPrincipalACLtab ? '@principal_acl' : '@acl';
+
         return {
             loadState: getAclLoadState(state, idmKind),
             path: path,
+            aclType,
         };
     };
 };

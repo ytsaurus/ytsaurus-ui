@@ -12,6 +12,7 @@ import UIFactory from '../../UIFactory';
 import {
     ACE,
     ACLResponsible,
+    ACLType,
     GetAclParams,
     GetResponsibleParams,
     IdmKindType,
@@ -49,13 +50,14 @@ export function getAcl({
     kind,
     poolTree,
     sysPath,
+    aclType,
     useEffective = false,
 }: GetAclParams) {
     const api = UIFactory.getAclApi();
     if (useEffective) {
         return getEffectiveAcl(sysPath);
     }
-    return api.getAcl({cluster, path, kind, poolTree, sysPath});
+    return api.getAcl({cluster, path, kind, poolTree, sysPath, aclType});
 }
 
 export function updateAcl(cluster: string, path: string, params: UpdateAclParams) {
@@ -121,12 +123,14 @@ export const getEffectiveAcl = (sysPath: string) => {
     });
 };
 
-export const getCombinedAcl = (sysPath: string) => {
+export const getCombinedAcl = ({sysPath, aclType}: {sysPath: string; aclType: ACLType}) => {
+    const isPrincipalAcl = aclType === '@principal_acl';
+
     return ytApiV3
         .executeBatch<string>({
             requests: [
                 {command: 'get', parameters: {path: sysPath + '/@effective_acl'}},
-                {command: 'get', parameters: {path: sysPath + '/@acl'}},
+                {command: 'get', parameters: {path: sysPath + `/${aclType}`}},
                 {command: 'get', parameters: {path: sysPath + '/@revision'}},
             ],
         })
@@ -135,16 +139,20 @@ export const getCombinedAcl = (sysPath: string) => {
             if (error) {
                 throw error;
             }
+
             const [{output: effective_acl}, {output: acl}, {output: revision}] = results;
             const effective_acl_dif = filter_(
                 effective_acl,
                 (e_item) => !some_(acl, (a_item) => isEqual_(a_item, e_item)),
             );
+
             return [
-                ...effective_acl_dif.map((e_item) => ({
-                    inherited: true,
-                    ...e_item,
-                })),
+                ...(isPrincipalAcl
+                    ? []
+                    : effective_acl_dif.map((e_item) => ({
+                          inherited: true,
+                          ...e_item,
+                      }))),
                 ...(acl as any[]).map((a_item, index) => ({
                     aclIndex: index,
                     revision,
@@ -210,12 +218,12 @@ export function checkPermissions(
 }
 
 export function requestPermissions(params: RequestPermissionParams): Promise<UpdateResponse> {
-    const {roles_grouped, sysPath} = params;
+    const {roles_grouped, sysPath, aclType} = params;
     const batchParams: ExecuteBatchParams = {
         requests: roles_grouped.map(({permissions, subject, inheritance_mode}) => {
             return {
                 command: 'set',
-                parameters: {path: `${sysPath}/@acl/end`},
+                parameters: {path: `${sysPath}/${aclType}/end`},
                 input: {
                     action: 'allow',
                     inheritance_mode: inheritance_mode,
@@ -259,19 +267,21 @@ export function deleteAclItemOrSubjectByIndex(params: {
     sysPath: string;
     itemToDelete: PreparedAclSubject;
     idmKind: IdmKindType;
+    aclType: ACLType;
 }) {
-    const {sysPath, itemToDelete, idmKind} = params;
+    const {sysPath, itemToDelete, idmKind, aclType} = params;
     const {revision, aclIndex, isSplitted, subjectIndex} = itemToDelete;
     const allowUnsafeDelete =
         UIFactory.getAclPermissionsSettings()[idmKind].allowDeleteWithoutRevisionCheck;
+
     if (isSplitted) {
         return yt.v3.remove({
-            path: `${sysPath}/@acl/${aclIndex}/subjects/${subjectIndex}`,
+            path: `${sysPath}/${aclType}/${aclIndex}/subjects/${subjectIndex}`,
             ...(allowUnsafeDelete ? {} : {prerequisite_revisions: [{revision, path: sysPath}]}),
         });
     }
     return yt.v3.remove({
-        path: `${sysPath}/@acl/${aclIndex}`,
+        path: `${sysPath}/${aclType}/${aclIndex}`,
         ...(allowUnsafeDelete ? {} : {prerequisite_revisions: [{revision, path: sysPath}]}),
     });
 }

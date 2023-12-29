@@ -52,12 +52,9 @@
         background: var(--main-background);
 
         .query-run-action {
+            display: flex;
             padding-right: 12px;
             margin-right: 12px;
-
-            .query-run-action-button:first-child {
-                margin-right: 4px;
-            }
         }
     }
 
