@@ -15,6 +15,7 @@ import forOwn_ from 'lodash/forOwn';
 const QT_STAGE = getQueryTrackerStage();
 const getState = (state: RootState) => state.queryTracker.query;
 
+const DEFAULT_QUERY_ACO = 'nobody';
 export const getQuery = (state: RootState) => getState(state).queryItem;
 export const getQueryGetParams = (state: RootState) => getState(state).params;
 
@@ -87,3 +88,14 @@ export const getQueryEditorErrors = (state: RootState): QTEditorError[] => {
 
 export const getDirtySinceLastSubmit = (state: RootState) =>
     state.queryTracker.query.dirtySinceLastSubmit;
+
+export const getCurrentQueryACO = (state: RootState) =>
+    state.queryTracker.query?.queryItem?.access_control_object || DEFAULT_QUERY_ACO;
+
+export const getCurrentDraftQueryACO = (state: RootState) =>
+    state.queryTracker.query?.draft?.access_control_object || DEFAULT_QUERY_ACO;
+
+export const getLoadedQueryItemId = (state: RootState) => {
+    const queryItem = getState(state).queryItem;
+    return queryItem?.id;
+};

@@ -14,6 +14,8 @@ import {getQueryTrackerRequestOptions} from './query/selectors';
 import {UPDATE_QUERIES_LIST} from './query-tracker-contants';
 import {AnyAction} from 'redux';
 import {QueryEngine} from './engines';
+import {getLastSelectedACONamespaces} from './query_aco_list/selectors';
+import {setSettingByKey} from '../../../store/actions/settings';
 
 function getQTApiSetup(): {proxy?: string} {
     const QT_CLUSTER = getQueryTrackerCluster();
@@ -73,6 +75,7 @@ export interface DraftQuery {
     };
     settings?: {};
     error?: unknown;
+    access_control_object: string;
 }
 
 export interface QueryItem extends DraftQuery {
@@ -87,6 +90,7 @@ export interface QueryItem extends DraftQuery {
         yql_statistics?: YQLSstatistics;
         yql_progress?: Progress;
     };
+    access_control_object: string;
     error: unknown;
 }
 
@@ -175,6 +179,7 @@ export async function generateQueryFromTable(
             }),
             files: [],
             annotations: {},
+            access_control_object: 'nobody',
             settings: generateQuerySettings(engine, cluster),
         };
     }
@@ -229,7 +234,8 @@ export function startQuery(
     return async (_dispatch, getState) => {
         const state = getState();
         const {stage, yqlAgentStage} = getQueryTrackerRequestOptions(state);
-        const {query, engine, settings, annotations, files} = queryInstance;
+        const {query, engine, settings, annotations, files, access_control_object} = queryInstance;
+
         return ytApiV4Id.startQuery(YTApiId.startQuery, {
             parameters: {
                 stage,
@@ -237,6 +243,7 @@ export function startQuery(
                 files,
                 engine,
                 annotations,
+                access_control_object,
                 settings: {
                     stage: engine === 'yql' ? yqlAgentStage : undefined,
                     ...settings,
@@ -497,5 +504,47 @@ export function setQueryName(
             type: UPDATE_QUERIES_LIST,
             data: [query],
         });
+    };
+}
+
+export function addACOToLastSelected(
+    aco: string,
+): ThunkAction<Promise<any>, RootState, any, AnyAction> {
+    return async (dispatch, getState) => {
+        const state = getState();
+        const lastSelectedACONamespaces = getLastSelectedACONamespaces(state);
+
+        await dispatch(
+            setSettingByKey('global::queryTracker::lastSelectedACOs', [
+                aco,
+                ...lastSelectedACONamespaces.filter((item) => item !== aco).slice(0, 9),
+            ]),
+        );
+    };
+}
+
+export function updateACOQuery({
+    aco,
+    query_id,
+}: {
+    aco: string;
+    query_id: string;
+}): ThunkAction<Promise<any>, RootState, any, AnyAction> {
+    return async (dispatch, getState) => {
+        const state = getState();
+        const {stage} = getQueryTrackerRequestOptions(state);
+
+        return ytApiV4Id
+            .alterQuery(YTApiId.alterQuery, {
+                parameters: {
+                    stage,
+                    query_id,
+                    access_control_object: aco,
+                },
+                setup: getQTApiSetup(),
+            })
+            .then(() => {
+                return dispatch(addACOToLastSelected(aco));
+            });
     };
 }

@@ -51,6 +51,7 @@ import TableSortModal from '../modals/TableMergeSortModal/TableSortModal';
 import TableMergeModal from '../modals/TableMergeSortModal/TableMergeModal';
 import DynTablesStateModal from '../modals/DynTablesStateModal';
 import LinkToModal from '../modals/LinkToModal';
+import CreateACOModal from '../modals/CreateACOModal';
 import Button from '../../../components/Button/Button';
 import Icon from '../../../components/Icon/Icon';
 import {showNavigationAttributesEditor} from '../../../store/actions/navigation/modals/attributes-editor';
@@ -77,6 +78,7 @@ function renderModals() {
             <TableMergeModal />
             <DynTablesStateModal />
             <LinkToModal />
+            <CreateACOModal />
             <RemoteCopyModal />
         </Fragment>
     );
@@ -147,6 +149,7 @@ class Navigation extends Component {
 
     get items() {
         const {setMode, attributes, tabletErrorsCount} = this.props;
+        const isACO = attributes?.type === 'access_control_object';
 
         return [
             {
@@ -163,6 +166,7 @@ class Navigation extends Component {
             {
                 value: Tab.CONTENT,
                 title: 'Go to content [Alt+C]',
+                text: isACO ? 'Principal ACL' : undefined,
                 hotkey: [
                     {
                         keys: 'alt+c',

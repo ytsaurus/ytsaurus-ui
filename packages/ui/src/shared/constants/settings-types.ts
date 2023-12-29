@@ -75,6 +75,9 @@ interface QueryTrackerSettings {
 interface ChytSettings {
     'global::chyt::list_columns': Array<string>;
 }
+interface QueryTrackerLastSelectedACOsSettings {
+    'global::queryTracker::lastSelectedACOs': string[];
+}
 
 interface OtherSettings {
     [key: string]: any;
@@ -104,7 +107,8 @@ type DescribedSettings = GlobalSettings &
     MenuSettings &
     AccountsSettings &
     QueryTrackerSettings &
-    ChytSettings;
+    ChytSettings &
+    QueryTrackerLastSelectedACOsSettings;
 
 export type Settings = DescribedSettings & OtherSettings;
 

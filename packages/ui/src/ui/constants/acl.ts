@@ -9,14 +9,14 @@ export const REQUEST_PERMISSION = createActionTypes(PREFIX + 'REQUEST_PERMISSION
 export const UPDATE_ACL = createActionTypes(PREFIX + 'UPDATE_ACL');
 export const ACL_CHANGE_FILTERS = `${PREFIX}ACL_CHANGE_FILTERS` as const;
 
-export const IdmObjectType: {[key: string]: IdmKindType} = {
+export const IdmObjectType = {
     ACCOUNT: 'account',
     PATH: 'path',
     POOL: 'pool',
     TABLET_CELL_BUNDLE: 'tablet_cell_bundle',
     ACCESS_CONTROL_OBJECT: 'access_control_object',
     UI_EFFECTIVE_ACL: 'ui_effective_acl',
-};
+} as const;
 
 export const REGISTER_QUEUE_CONSUMER = 'register_queue_consumer';
 export const REGISTER_QUEUE_CONSUMER_VITAL = 'register_queue_consumer_vital';
@@ -51,9 +51,21 @@ const PATH_SETTINGS = {
     allowAuditors: true,
     allowInheritAcl: true,
     allowInheritResponsibles: true,
+    allowDeleteWithoutRevisionCheck: false,
 };
 
-export const PERMISSIONS_SETTINGS = {
+export type PermissionSettings = {
+    permissionTypes: Array<string>;
+    permissionsToRequest: Array<Array<string>>;
+    allowBossApprovals: boolean;
+    allowReadApprovers: boolean;
+    allowAuditors: boolean;
+    allowInheritAcl: boolean;
+    allowInheritResponsibles: boolean;
+    allowDeleteWithoutRevisionCheck?: boolean;
+};
+
+export const PERMISSIONS_SETTINGS: Record<IdmKindType, PermissionSettings> = {
     [IdmObjectType.UI_EFFECTIVE_ACL]: {...PATH_SETTINGS, permissionsToRequest: []},
     [IdmObjectType.PATH]: PATH_SETTINGS,
     [IdmObjectType.ACCESS_CONTROL_OBJECT]: {

@@ -27,6 +27,7 @@ import {QueryItem} from '../module/api';
 import {useCurrentQuery} from '../QueryResults/hooks/useCurrentQuery';
 import forEach_ from 'lodash/forEach';
 import uniqBy_ from 'lodash/uniqBy';
+import {QueryACOSelect} from '../QueryACO/QueryACOSelect';
 
 const b = block('query-container');
 
@@ -130,6 +131,7 @@ const QueryEditorView = React.memo(function QueryEditorView({
                 <div className="query-run-action">
                     <Button
                         qa="qt-run"
+                        pin="round-brick"
                         className="query-run-action-button"
                         view="action"
                         onClick={runQueryCallback}
@@ -137,6 +139,7 @@ const QueryEditorView = React.memo(function QueryEditorView({
                         <Icon data={playIcon} />
                         Run
                     </Button>
+                    <QueryACOSelect />
                 </div>
             </div>
         </div>
