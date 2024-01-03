@@ -187,6 +187,18 @@ class MasterGroup extends Component {
         );
     }
 
+    renderAddress({$physicalAddress, $rowAddress, $address, hostType}) {
+        const isK8S = Boolean($rowAddress?.attributes?.annotations?.k8s_pod_name);
+
+        if (isK8S) {
+            return hostType === 'host'
+                ? $rowAddress?.attributes?.annotations?.k8s_pod_name
+                : $address;
+        }
+
+        return hostType === 'host' ? $address : $physicalAddress;
+    }
+
     render() {
         const {className, instances, hostType, gridRowStart, allowVoting} = this.props;
 
@@ -196,12 +208,18 @@ class MasterGroup extends Component {
                 {_.map(
                     instances,
                     ({state, $address, $physicalAddress, $attributes, $rowAddress}) => {
-                        const address = hostType === 'host' ? $address : $physicalAddress;
+                        const address = this.renderAddress({
+                            hostType,
+                            $physicalAddress,
+                            $rowAddress,
+                            $address,
+                        });
                         const maintenance = ypath.getValue($rowAddress, '/attributes/maintenance');
                         const maintenanceMessage = maintenance
                             ? ypath.getValue($rowAddress, '/attributes/maintenance_message') ||
                               'Maintenance'
                             : '';
+
                         return (
                             <Instance
                                 key={$address}

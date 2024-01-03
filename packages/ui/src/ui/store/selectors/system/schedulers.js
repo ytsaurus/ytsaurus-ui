@@ -9,15 +9,20 @@ export const getSystemSchedulers = (state) => state.system.schedulersAndAgents.s
 export const getSystemSchedulerAlerts = (state) => state.system.schedulersAndAgents.schedulerAlerts;
 export const getSystemAgents = (state) => state.system.schedulersAndAgents.agents;
 export const getSystemAgentAlerts = (state) => state.system.schedulersAndAgents.agentAlerts;
-export const getSystemSchedulerAndAgentVisibleHostType = (state) =>
-    state.system.schedulersAndAgents.hostType;
+
+const hasK8SAnnotations = (items) =>
+    items.some((item) => Boolean(item.host?.$attributes?.annotations?.k8s_pod_name));
 
 export const getSystemSchedulersWithState = createSelector(
     [getSystemSchedulers, getMastersHostType],
     (schedulers, hostType) => {
-        const path = hostType === VisibleHostType.host ? '' : '/@annotations/physical_host';
+        const isK8S = hasK8SAnnotations(schedulers);
+        const hostPath = isK8S ? '/@annotations/k8s_pod_name' : '';
+        const path = hostType === VisibleHostType.host ? hostPath : '/@annotations/physical_host';
+
         return _.map(schedulers, (sheduler) => {
             const res = connectedSchedulersToState(path, sheduler);
+
             return {
                 ...res,
                 maintenanceMessage: !ypath.getValue(sheduler, '/host/@maintenance')
@@ -31,7 +36,10 @@ export const getSystemSchedulersWithState = createSelector(
 export const getSystemAgentsWithState = createSelector(
     [getSystemAgents, getMastersHostType],
     (agents, hostType) => {
-        const path = hostType === VisibleHostType.host ? '' : '/@annotations/physical_host';
+        const isK8S = hasK8SAnnotations(agents);
+        const hostPath = isK8S ? '/@annotations/k8s_pod_name' : '';
+        const path = hostType === VisibleHostType.host ? hostPath : '/@annotations/physical_host';
+
         return _.map(agents, (agent) => {
             const res = connectedAgentsToState(path, agent);
             return {
