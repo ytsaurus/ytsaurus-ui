@@ -71,6 +71,10 @@ const config: Partial<AppConfig> = {
         reHashFromNodeVersion: '[^~]+~(?<hash>[^+]+)',
         directDownload: true,
         docsBaseUrl: process.env.YT_DOCS_BASE_URL || 'https://ytsaurus.tech/docs/en',
+        systemPage: {
+            hostPath: '/host', //physicalAddress // '/@annotations/physical_host'
+            containerPath: '/@/annotations/k8s_pod_name',
+        },
     },
 };
 

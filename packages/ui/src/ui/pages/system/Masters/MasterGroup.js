@@ -16,6 +16,7 @@ import {Tooltip} from '../../../components/Tooltip/Tooltip';
 import NodeQuad from '../NodeQuad/NodeQuad';
 
 import './MasterGroup.scss';
+import {uiSettings} from '../../../config/ui-settings';
 
 const b = block('master-group');
 
@@ -187,16 +188,16 @@ class MasterGroup extends Component {
         );
     }
 
-    renderAddress({$physicalAddress, $rowAddress, $address, hostType}) {
-        const isK8S = Boolean($rowAddress?.attributes?.annotations?.k8s_pod_name);
+    renderAddress({$rowAddress, hostType}) {
+        switch (hostType) {
+            case 'host': {
+                return ypath.getValue($rowAddress, uiSettings?.systemPage?.containerPath);
+            }
 
-        if (isK8S) {
-            return hostType === 'host'
-                ? $rowAddress?.attributes?.annotations?.k8s_pod_name
-                : $address;
+            case 'physicalHost': {
+                return ypath.getValue($rowAddress, uiSettings?.systemPage?.hostPath);
+            }
         }
-
-        return hostType === 'host' ? $address : $physicalAddress;
     }
 
     render() {
@@ -205,33 +206,28 @@ class MasterGroup extends Component {
         return (
             <div className={b('group', {'grid-row-start': gridRowStart}, className)}>
                 {this.renderQuorum()}
-                {_.map(
-                    instances,
-                    ({state, $address, $physicalAddress, $attributes, $rowAddress}) => {
-                        const address = this.renderAddress({
-                            hostType,
-                            $physicalAddress,
-                            $rowAddress,
-                            $address,
-                        });
-                        const maintenance = ypath.getValue($rowAddress, '/attributes/maintenance');
-                        const maintenanceMessage = maintenance
-                            ? ypath.getValue($rowAddress, '/attributes/maintenance_message') ||
-                              'Maintenance'
-                            : '';
+                {_.map(instances, ({state, $address, $attributes, $rowAddress}) => {
+                    const address = this.renderAddress({
+                        hostType,
+                        $rowAddress,
+                    });
 
-                        return (
-                            <Instance
-                                key={$address}
-                                address={address}
-                                state={state}
-                                attributes={$attributes}
-                                maintenanceMessage={maintenanceMessage}
-                                allowVoting={allowVoting}
-                            />
-                        );
-                    },
-                )}
+                    const maintenance = ypath.getValue($rowAddress, '/@/maintenance');
+                    const maintenanceMessage = maintenance
+                        ? ypath.getValue($rowAddress, '/@/maintenance_message') || 'Maintenance'
+                        : '';
+                    console.log('address', $address);
+                    return (
+                        <Instance
+                            key={$address}
+                            address={address}
+                            state={state}
+                            attributes={$attributes}
+                            maintenanceMessage={maintenanceMessage}
+                            allowVoting={allowVoting}
+                        />
+                    );
+                })}
             </div>
         );
     }
