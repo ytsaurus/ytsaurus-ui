@@ -4,6 +4,7 @@ import {createSelector} from 'reselect';
 import ypath from '@ytsaurus/interface-helpers/lib/ypath';
 import {VisibleHostType} from '../../../constants/system/masters';
 import {getMastersHostType} from '../../../store/selectors/settings';
+import {uiSettings} from "../../../config/ui-settings";
 
 export const getSystemSchedulers = (state) => state.system.schedulersAndAgents.schedulers;
 export const getSystemSchedulerAlerts = (state) => state.system.schedulersAndAgents.schedulerAlerts;
@@ -15,7 +16,11 @@ export const getSystemSchedulerAndAgentVisibleHostType = (state) =>
 export const getSystemSchedulersWithState = createSelector(
     [getSystemSchedulers, getMastersHostType],
     (schedulers, hostType) => {
-        const path = hostType === VisibleHostType.host ? '' : '/@annotations/physical_host';
+        const path =
+            hostType === VisibleHostType.host
+                ? uiSettings.systemPage.schedulersAndAgentsContainerPath
+                : uiSettings.systemPage.schedulersAndAgentsHostPath;
+
         return _.map(schedulers, (sheduler) => {
             const res = connectedSchedulersToState(path, sheduler);
             return {
@@ -31,7 +36,11 @@ export const getSystemSchedulersWithState = createSelector(
 export const getSystemAgentsWithState = createSelector(
     [getSystemAgents, getMastersHostType],
     (agents, hostType) => {
-        const path = hostType === VisibleHostType.host ? '' : '/@annotations/physical_host';
+        const path =
+            hostType === VisibleHostType.host
+                ? uiSettings.systemPage.schedulersAndAgentsContainerPath
+                : uiSettings.systemPage.schedulersAndAgentsHostPath;
+
         return _.map(agents, (agent) => {
             const res = connectedAgentsToState(path, agent);
             return {

@@ -102,6 +102,13 @@ export interface UISettings {
      * See `@gravity-ui/unipika v3.0.0` details in [CHANGELOG.md](https://github.com/gravity-ui/unipika/blob/main/CHANGELOG.md).
      */
     hideReferrerUrl?: string;
+
+    systemPage: {
+        masterContainerPath: string;
+        masterHostPath: string;
+        schedulersAndAgentsContainerPath: string;
+        schedulersAndAgentsHostPath: string;
+    },
 }
 
 export interface UISettingsMonitoring {

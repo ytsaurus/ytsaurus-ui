@@ -122,6 +122,10 @@ function loadMastersConfig() {
                               (value, address) => {
                                   return {
                                       host: address,
+                                      k8sPodName: ypath.getValue(
+                                          value,
+                                          '/@annotations/k8s_pod_name',
+                                      ),
                                       physicalHost: ypath.getValue(
                                           value,
                                           '/@annotations/physical_host',
@@ -141,8 +145,10 @@ function loadMastersConfig() {
                         primaryMaster: {
                             addresses: _.map(_.keys(primaryMaster), (address) => {
                                 const value = primaryMaster[address];
+
                                 return {
                                     host: address,
+                                    k8sPodName: ypath.getValue(value, '/@annotations/k8s_pod_name'),
                                     physicalHost: ypath.getValue(
                                         value,
                                         '/@annotations/physical_host',
@@ -156,8 +162,13 @@ function loadMastersConfig() {
                             return {
                                 addresses: _.map(_.keys(addresses), (address) => {
                                     const value = secondaryMasters[cellTag][address];
+
                                     return {
                                         host: address,
+                                        k8sPodName: ypath.getValue(
+                                            value,
+                                            '/@annotations/k8s_pod_name',
+                                        ),
                                         physicalHost: ypath.getValue(
                                             value,
                                             '/@annotations/physical_host',

@@ -16,6 +16,7 @@ import {Tooltip} from '../../../components/Tooltip/Tooltip';
 import NodeQuad from '../NodeQuad/NodeQuad';
 
 import './MasterGroup.scss';
+import {uiSettings} from '../../../config/ui-settings';
 
 const b = block('master-group');
 
@@ -193,27 +194,27 @@ class MasterGroup extends Component {
         return (
             <div className={b('group', {'grid-row-start': gridRowStart}, className)}>
                 {this.renderQuorum()}
-                {_.map(
-                    instances,
-                    ({state, $address, $physicalAddress, $attributes, $rowAddress}) => {
-                        const address = hostType === 'host' ? $address : $physicalAddress;
-                        const maintenance = ypath.getValue($rowAddress, '/attributes/maintenance');
-                        const maintenanceMessage = maintenance
-                            ? ypath.getValue($rowAddress, '/attributes/maintenance_message') ||
-                              'Maintenance'
-                            : '';
-                        return (
-                            <Instance
-                                key={$address}
-                                address={address}
-                                state={state}
-                                attributes={$attributes}
-                                maintenanceMessage={maintenanceMessage}
-                                allowVoting={allowVoting}
-                            />
-                        );
-                    },
-                )}
+                {_.map(instances, ({state, $address, $attributes, $rowAddress}) => {
+                    const address =
+                        hostType === 'host'
+                            ? ypath.getValue($rowAddress, uiSettings.systemPage.masterContainerPath)
+                            : ypath.getValue($rowAddress, uiSettings.systemPage.masterHostPath);
+                    const maintenance = ypath.getValue($rowAddress, '/attributes/maintenance');
+                    const maintenanceMessage = maintenance
+                        ? ypath.getValue($rowAddress, '/attributes/maintenance_message') ||
+                          'Maintenance'
+                        : '';
+                    return (
+                        <Instance
+                            key={$address}
+                            address={address}
+                            state={state}
+                            attributes={$attributes}
+                            maintenanceMessage={maintenanceMessage}
+                            allowVoting={allowVoting}
+                        />
+                    );
+                })}
             </div>
         );
     }
