@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.11.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.10.0...ui-v1.11.0) (2024-01-09)
+
+
+### Features
+
+* **CHYT:** add CHYT page with list of cliques [YTFRONT-3683] ([de0c74a](https://github.com/ytsaurus/ytsaurus-ui/commit/de0c74a368ab37b5aa953e965efab8d8a4d9b2e1))
+* update @gravity-ui/dialog-fields v4.3.0 ([5f61464](https://github.com/ytsaurus/ytsaurus-ui/commit/5f614647b3c70084d682cbf233df727107425eea))
+
+
+### Bug Fixes
+
+* **PoolSuggestControl:** load all pools ([d56d0df](https://github.com/ytsaurus/ytsaurus-ui/commit/d56d0df20f1e39dd93074283ec5bdc9edc2622e0))
+
 ## [1.10.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.9.0...ui-v1.10.0) (2023-12-22)
 
 
