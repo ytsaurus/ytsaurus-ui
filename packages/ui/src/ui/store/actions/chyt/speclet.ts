@@ -16,7 +16,6 @@ export function chytLoadCliqueSpeclet(alias: string): OptionsThunkAction {
         const state = getState();
         const cluster = getCluster(state);
         const isAdmin = isDeveloper(state);
-        dispatch({type: CHYT_SPECLET.REQUEST, data: {dataAlias: ''}});
 
         return chytApiAction(
             'get_speclet',

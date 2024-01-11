@@ -23,7 +23,12 @@ const initialState: ChytCliqueOptionsState = {
 function reducer(state = initialState, action: ChytCliqueOptionsAction) {
     switch (action.type) {
         case CHYT_OPTIONS.REQUEST:
-            return {...state, ...action.data, loading: true};
+            return {
+                ...(state.dataAlias !== action.data.dataAlias ? initialState : state),
+                ...action.data,
+                error: undefined,
+                loading: true,
+            };
         case CHYT_OPTIONS.SUCCESS:
             return {...state, ...action.data, loading: false, loaded: true, error: undefined};
         case CHYT_OPTIONS.FAILURE:

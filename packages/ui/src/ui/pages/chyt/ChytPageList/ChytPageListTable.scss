@@ -3,4 +3,21 @@
         padding-top: 8px;
         display: inline-block;
     }
+
+    &__creator {
+        width: 180px;
+    }
+
+    &__pool {
+        width: 300px;
+    }
+
+    &__health {
+        display: inline-flex;
+        align-items: center;
+    }
+
+    &__full-width {
+        max-width: 100%;
+    }
 }

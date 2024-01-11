@@ -32,6 +32,7 @@ const renderButton = (onEdit?: () => void, reserve?: boolean) => {
 };
 
 export type OperationPoolProps = {
+    className?: string;
     cluster: string;
     reserveEditButton?: boolean;
     compact?: boolean;
@@ -47,14 +48,14 @@ export type OperationPoolProps = {
 };
 
 export function OperationPool(props: OperationPoolProps) {
-    const {cluster, reserveEditButton, compact, onEdit, pool, state, erased} = props;
+    const {className, cluster, reserveEditButton, compact, onEdit, pool, state, erased} = props;
     const url = `/${cluster}/${Page.SCHEDULING}/${Tab.OVERVIEW}?pool=${pool.pool}&tree=${pool.tree}`;
     const isCorrectState = state !== 'completed' && state !== 'failed' && state !== 'aborted';
     const title = `${pool.pool} [${pool.tree}]`;
     const isEphemeral = pool.isEphemeral;
 
     return (
-        <li className={block()} key={pool.tree}>
+        <li className={block(null, className)} key={pool.tree}>
             <span className="elements-ellipsis">
                 <Link url={url} title={title}>
                     {!compact && <Icon awesome="tasks" />}

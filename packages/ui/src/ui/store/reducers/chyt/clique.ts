@@ -32,7 +32,12 @@ const initialState: ChytCliqueState = {
 function reducer(state = initialState, action: ChytCliqueAction): ChytCliqueState {
     switch (action.type) {
         case CHYT_CLIQUE.REQUEST: {
-            return {...state, ...action.data, loading: true};
+            return {
+                ...(state.currentClique !== action.data.currentClique ? initialState : state),
+                ...action.data,
+                error: undefined,
+                loading: true,
+            };
         }
         case CHYT_CLIQUE.SUCCESS: {
             return {...state, ...action.data, error: undefined, loaded: true, loading: false};
