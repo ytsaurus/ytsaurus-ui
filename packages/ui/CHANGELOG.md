@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.11.1](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.11.0...ui-v1.11.1) (2024-01-11)
+
+
+### Bug Fixes
+
+* **CHYT:** minor fixes [YTFRONT-3863] ([b71db09](https://github.com/ytsaurus/ytsaurus-ui/commit/b71db097642001cf21adc67493da0763443fa931))
+
 ## [1.11.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.10.0...ui-v1.11.0) (2024-01-09)
 
 
