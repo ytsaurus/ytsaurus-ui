@@ -22,7 +22,12 @@ const initialState: ChytCliqueSpecletState = {
 function reducer(state = initialState, action: ChytCliqueSpecletAction) {
     switch (action.type) {
         case CHYT_SPECLET.REQUEST:
-            return {...state, ...action.data, loading: true};
+            return {
+                ...(state.dataAlias !== action.data.dataAlias ? initialState : state),
+                ...action.data,
+                error: undefined,
+                loading: true,
+            };
         case CHYT_SPECLET.SUCCESS:
             return {...state, ...action.data, loading: false, loaded: true, error: undefined};
         case CHYT_SPECLET.FAILURE:

@@ -1,6 +1,7 @@
 import {ThunkAction} from 'redux-thunk';
 
 import CancelHelper, {isCancelled} from '../../../utils/cancel-helper';
+import {wrapApiPromiseByToaster} from '../../../utils/utils';
 import {ChytCliqueOptionsAction} from '../../reducers/chyt/options';
 import {RootState} from '../../reducers';
 import {getCluster, isDeveloper} from '../../selectors/global';
@@ -13,21 +14,31 @@ type OptionsThunkAction = ThunkAction<Promise<void>, RootState, unknown, ChytCli
 
 const cancelHelper = new CancelHelper();
 
-export function chytLoadCliqueOptions(alias: string): OptionsThunkAction {
+export function chytLoadCliqueOptions(
+    alias: string,
+    showTooltipError?: boolean,
+): OptionsThunkAction {
     return (dispatch, getState) => {
         const state = getState();
         const cluster = getCluster(state);
         const isAdmin = isDeveloper(state);
-        dispatch({type: CHYT_OPTIONS.REQUEST, data: {dataAlias: ''}});
+        dispatch({type: CHYT_OPTIONS.REQUEST, data: {dataAlias: alias}});
 
-        return chytApiAction(
-            'describe_options',
-            cluster,
-            {alias},
+        return wrapApiPromiseByToaster(
+            chytApiAction(
+                'describe_options',
+                cluster,
+                {alias},
+                {
+                    isAdmin,
+                    cancelToken: cancelHelper.removeAllAndGenerateNextToken(),
+                    skipErrorToast: true,
+                },
+            ),
             {
-                isAdmin,
-                cancelToken: cancelHelper.removeAllAndGenerateNextToken(),
-                skipErrorToast: true,
+                toasterName: 'chytLoadCliqueOptions_' + alias,
+                skipSuccessToast: true,
+                skipErrorToast: !showTooltipError,
             },
         )
             .then((data) => {

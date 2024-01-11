@@ -52,11 +52,13 @@ function useChytListColumns(cluster: string, onSqlClick: (alias: string) => void
                         format.NO_VALUE
                     ) : (
                         <OperationPool
+                            className={block('pool')}
                             cluster={cluster}
                             pool={{pool: row.pool, tree: 'physical'}}
                         />
                     );
                 },
+                width: 320,
             } as Column<ChytInfo>,
             instance_count: {
                 name: 'instance_count',
@@ -109,20 +111,20 @@ function useChytListColumns(cluster: string, onSqlClick: (alias: string) => void
                 render({row}) {
                     return (
                         <Tooltip
-                            className={block('one-row-cell')}
+                            className={block('health', block('one-row-cell'))}
                             content={format.ReadableField(row.health_reason)}
                         >
                             <CliqueState state={row.health} />
                             {row.health_reason && (
                                 <Text color="secondary">
-                                    {' '}
-                                    <Icon awesome={'question-circle'} />
+                                    &nbsp;
+                                    <Icon awesome={'exclamation-triangle'} />
                                 </Text>
                             )}
                         </Tooltip>
                     );
                 },
-                width: 100,
+                width: 120,
             } as Column<ChytInfo>,
             creation_time: {
                 name: 'creation_time',
@@ -148,6 +150,7 @@ function useChytListColumns(cluster: string, onSqlClick: (alias: string) => void
                         <span className={block('one-row-cell')}>{<Label text={row.stage} />}</span>
                     );
                 },
+                width: 120,
             } as Column<ChytInfo>,
             strawberry_state_modification_time: {
                 name: 'strawberry_state_modification_time',
@@ -178,11 +181,16 @@ function useChytListColumns(cluster: string, onSqlClick: (alias: string) => void
                 header: <ChytListHeader column="creator" />,
                 render({row}) {
                     return (
-                        <span className={block('one-row-cell')}>
-                            {!row.creator ? format.NO_VALUE : <UserCard userName={row.creator} />}
-                        </span>
+                        <div className={block('one-row-cell', block('creator'))}>
+                            {!row.creator ? (
+                                format.NO_VALUE
+                            ) : (
+                                <UserCard className={block('full-width')} userName={row.creator} />
+                            )}
+                        </div>
                     );
                 },
+                width: 120,
             } as Column<ChytInfo>,
             state: {
                 name: 'state',
@@ -194,7 +202,7 @@ function useChytListColumns(cluster: string, onSqlClick: (alias: string) => void
                         </span>
                     );
                 },
-                width: 100,
+                width: 120,
             } as Column<ChytInfo>,
         };
 

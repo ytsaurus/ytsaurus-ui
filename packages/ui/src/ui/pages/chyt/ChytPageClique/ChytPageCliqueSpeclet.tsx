@@ -38,15 +38,18 @@ import './ChytPageCliqueSpeclet.scss';
 
 const block = cn('yt-chyt-clique-speclet');
 
-function useSpecletData() {
+function useSpecletData({
+    showTooltipError,
+    skipLoad,
+}: {showTooltipError?: boolean; skipLoad?: boolean} = {}) {
     const dispatch = useDispatch();
     const alias = useSelector(getChytCurrentAlias);
 
     React.useMemo(() => {
-        if (alias) {
-            dispatch(chytLoadCliqueOptions(alias));
+        if (alias && !skipLoad) {
+            dispatch(chytLoadCliqueOptions(alias, showTooltipError));
         }
-    }, [alias, dispatch]);
+    }, [alias, skipLoad, showTooltipError, dispatch]);
 
     const specletData = useSelector(getChytOptionsData);
     const dataAlias = useSelector(getChytOptionsDataAlias);
@@ -57,7 +60,16 @@ function useSpecletData() {
 }
 
 export function ChytPageCliqueSpeclet() {
-    const {error, alias, specletData, unipikaSettings} = useSpecletData();
+    const dispatch = useDispatch();
+    const {error, alias, specletData, unipikaSettings} = useSpecletData({skipLoad: true});
+
+    const update = React.useCallback(() => {
+        if (alias) {
+            dispatch(chytLoadCliqueSpeclet(alias));
+        }
+    }, [alias, dispatch]);
+
+    useUpdater(update);
 
     return (
         <React.Fragment>
@@ -65,7 +77,7 @@ export function ChytPageCliqueSpeclet() {
             {!specletData ? null : (
                 <React.Fragment>
                     <div className={block('edit')}>
-                        <ChytSpecletEditButton />
+                        <ChytSpecletEditButton skipLoad />
                     </div>
                     <ChytSpeclet alias={alias} unipikaSettings={unipikaSettings} />
                 </React.Fragment>
@@ -75,15 +87,6 @@ export function ChytPageCliqueSpeclet() {
 }
 
 function ChytSpeclet({alias, unipikaSettings}: {alias?: string; unipikaSettings: UnipikaSettings}) {
-    const dispatch = useDispatch();
-    const update = React.useCallback(() => {
-        if (alias) {
-            dispatch(chytLoadCliqueSpeclet(alias));
-        }
-    }, [alias, dispatch]);
-
-    useUpdater(update);
-
     const data = useSelector(getChytSpecletData);
     const error = useSelector(getChytSpecletError);
     const dataAlias = useSelector(getChytSpecletDataAlias);
@@ -107,17 +110,21 @@ function ChytSpeclet({alias, unipikaSettings}: {alias?: string; unipikaSettings:
 export function ChytSpecletEditButton({
     compact,
     className,
+    skipLoad,
 }: {
     compact?: boolean;
     className?: string;
+    skipLoad?: boolean;
 }) {
     const [visible, setVisible] = React.useState(false);
 
-    const {error, specletData, dataAlias, alias, unipikaSettings} = useSpecletData();
+    const {specletData, dataAlias, alias, unipikaSettings} = useSpecletData({
+        showTooltipError: true,
+        skipLoad,
+    });
 
     return (
         <React.Fragment>
-            {error && <Error bottomMargin error={error} />}
             {!visible || !specletData ? null : (
                 <ChytSpecletEditDialog
                     key={dataAlias}
@@ -134,6 +141,7 @@ export function ChytSpecletEditButton({
                 className={className}
                 title={'Edit speclet'}
                 onClick={() => setVisible(!visible)}
+                disabled={!specletData}
             >
                 <Icon awesome={'pencil'} />
                 {!compact && 'Edit speclet'}

@@ -2,6 +2,7 @@
     text-decoration: none;
     display: inline-flex;
     align-items: center;
+    overflow: hidden;
 
     &__name {
         flex-grow: 1;

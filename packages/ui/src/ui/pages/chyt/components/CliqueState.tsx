@@ -15,5 +15,9 @@ const THEME_MAP: Partial<
 };
 
 export function CliqueState({state}: {state?: ChytCliqueStateType | ChytCliqueHealthType}) {
-    return !state ? format.NO_VALUE : <Label text={state} theme={THEME_MAP[state]} capitalize />;
+    return !state ? (
+        format.NO_VALUE
+    ) : (
+        <Label text={state} theme={THEME_MAP[state]} hideTitle capitalize />
+    );
 }
