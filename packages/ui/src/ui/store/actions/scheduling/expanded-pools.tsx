@@ -99,6 +99,10 @@ export function loadExpandedPools(tree: string): ExpandedPoolsThunkAction {
     return (dispatch, getState) => {
         const pool = getPool(getState());
 
+        if (!tree) {
+            return undefined;
+        }
+
         if (pool === ROOT_POOL_NAME) {
             return dispatch(loadExpandedOperationsAndPools(tree));
         } else {

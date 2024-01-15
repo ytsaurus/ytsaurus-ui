@@ -64,7 +64,7 @@ export function loadSchedulingData(): SchedulingThunkAction {
         const state = getState();
         const isInitialLoading = getSchedulingIsInitialLoading(state);
 
-        if (isInitialLoading) {
+        if (isInitialLoading && schedulingOverviewHasFilter(state)) {
             dispatch(schedulingLoadFilterAttributes());
         }
 
@@ -330,7 +330,7 @@ function schedulingLoadFilterAttributes(): SchedulingThunkAction {
     return (dispatch, getState) => {
         const state = getState();
         const lastTime = getSchedulingAttributesToFilterTime(state);
-        if (Date.now() - lastTime < 120000 || !schedulingOverviewHasFilter(state)) {
+        if (Date.now() - lastTime < 120000) {
             return undefined;
         }
 
@@ -338,6 +338,7 @@ function schedulingLoadFilterAttributes(): SchedulingThunkAction {
             ytApiV3Id.get(YTApiId.schedulingFilterAttributes, {
                 path: '//sys/scheduler/orchid/scheduler/pool_trees/physical/pools',
                 fields: ['parent', 'abc'],
+                ...USE_CACHE,
             }),
             {
                 skipSuccessToast: true,
@@ -363,12 +364,15 @@ export function schedulingSetFilter(filter: string): SchedulingThunkAction {
     };
 }
 
-export function schedulingSetAbcFilter(slug: string): SchedulingThunkAction {
+export function schedulingSetAbcFilter(abcServiceFilter: {
+    id: number;
+    slug: string;
+}): SchedulingThunkAction {
     return (dispatch) => {
         dispatch(schedulingLoadFilterAttributes());
         dispatch({
             type: SCHEDULING_DATA_PARTITION,
-            data: {abcServiceFilter: {slug}},
+            data: {abcServiceFilter},
         });
     };
 }
