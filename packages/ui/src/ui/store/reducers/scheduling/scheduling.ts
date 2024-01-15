@@ -1,7 +1,6 @@
 import {mergeStateOnClusterChange} from '../../../store/reducers/utils';
 import {
     CHANGE_CONTENT_MODE,
-    CHANGE_FILTER,
     CHANGE_POOL,
     CHANGE_POOL_CHILDREN_FILTER,
     CHANGE_TABLE_TREE_STATE,
@@ -62,7 +61,7 @@ export interface SchedulingAlert {}
 
 export interface SchedulingPersistentState {
     treeState: 'collapsed' | 'expanded';
-    filter: '';
+    filter: string;
     poolChildrenFilter: '';
     contentMode: 'cpu' | 'memory' | 'gpu' | 'user_slots' | 'operations' | 'integral';
 
@@ -183,9 +182,6 @@ const reducer = (state = initialState, action: SchedulingAction) => {
         case CHANGE_TABLE_TREE_STATE:
             return {...state, treeState: action.data.treeState};
 
-        case CHANGE_FILTER:
-            return {...state, filter: action.data.filter};
-
         case CHANGE_POOL:
             return {...state, pool: action.data.pool};
 
@@ -230,7 +226,6 @@ export type SchedulingAction =
     | Action<typeof SCHEDULING_CREATE_POOL_CANCELLED | typeof SCHEDULING_EDIT_POOL_CANCELLED>
     | ActionD<typeof CHANGE_TREE, Pick<SchedulingState, 'tree'>>
     | ActionD<typeof CHANGE_TABLE_TREE_STATE, Pick<SchedulingState, 'treeState'>>
-    | ActionD<typeof CHANGE_FILTER, Pick<SchedulingState, 'filter'>>
     | ActionD<typeof CHANGE_POOL, Pick<SchedulingState, 'pool'>>
     | ActionD<typeof CHANGE_CONTENT_MODE, Pick<SchedulingState, 'contentMode'>>
     | ActionD<typeof CHANGE_POOL_CHILDREN_FILTER, Pick<SchedulingState, 'poolChildrenFilter'>>
