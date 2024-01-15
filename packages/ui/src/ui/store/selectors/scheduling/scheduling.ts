@@ -1,6 +1,5 @@
 import _ from 'lodash';
 import hammer from '../../../common/hammer';
-import ypath from '../../../common/thor/ypath';
 import {createSelector} from 'reselect';
 import {getCluster} from '../../../store/selectors/global';
 
@@ -20,10 +19,10 @@ import {
     getSchedulingPoolsMapByName,
 } from './scheduling-pools';
 import {RootState} from '../../../store/reducers';
-import {FIX_MY_TYPE} from '../../../types';
 import {isAbcPoolName, isTopLevelPool} from '../../../utils/scheduling/scheduling';
 import {visitTreeItems} from '../../../utils/utils';
 import {getExpandedPoolsLoadAll, getSchedulingOperationsExpandedPools} from './expanded-pools';
+import {getSchedulingFilteredPoolNames} from './attributes-to-filter';
 export const getPools = getPoolsImpl;
 
 const getExpandedPoolsIsInitialLoading = (state: RootState) => {
@@ -37,9 +36,6 @@ export const getSchedulingIsInitialLoading = (state: RootState) => {
 };
 
 export const getTreeResources = (state: RootState) => state.scheduling.scheduling.treeResources;
-export const getFilter = (state: RootState) => state.scheduling.scheduling.filter;
-export const getSchedulingAbcFilter = (state: RootState) =>
-    state.scheduling.scheduling.abcServiceFilter;
 export const getPoolChildrenFilter = (state: RootState) =>
     state.scheduling.scheduling.poolChildrenFilter;
 export const getSchedulingTreeState = (state: RootState) => state.scheduling.scheduling.treeState;
@@ -131,20 +127,18 @@ export const getResources = createSelector(
 );
 
 const getFilteredTree = createSelector(
-    [getCurrentPool, getFilter, getSchedulingAbcFilter],
-    (treeRoot, filter, {slug}) => {
+    [getCurrentPool, getSchedulingFilteredPoolNames],
+    (treeRoot, visiblePools) => {
         if (treeRoot) {
             return hammer.treeList.filterTree(
                 treeRoot,
-                (pool: FIX_MY_TYPE) => {
-                    return (
-                        pool.name.indexOf(filter) !== -1 &&
-                        (slug === undefined || slug === ypath.getValue(pool.abc?.slug))
-                    );
+                (pool: {name: string}) => {
+                    return visiblePools === undefined || visiblePools.has(pool.name);
                 },
                 true,
             );
         }
+        return undefined;
     },
 );
 

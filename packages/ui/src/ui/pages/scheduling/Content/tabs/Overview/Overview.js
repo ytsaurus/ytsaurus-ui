@@ -29,15 +29,17 @@ import {
 } from '../../../../../store/actions/scheduling/scheduling-ts';
 import {
     getCurrentPool,
-    getFilter,
     getIsRoot,
-    getSchedulingAbcFilter,
     getSchedulingIsInitialLoading,
     getSchedulingOverviewMaxDepth,
     getSchedulingTreeState,
     getTableItems,
     getTree,
 } from '../../../../../store/selectors/scheduling/scheduling';
+import {
+    getSchedulingAbcFilter,
+    getSchedulingFilter,
+} from '../../../../../store/selectors/scheduling/attributes-to-filter';
 import {SCHEDULING_POOL_TREE_TABLE_ID, Tab} from '../../../../../constants/scheduling';
 import {poolsTableItems} from '../../../../../utils/scheduling/overviewTable';
 import {HEADER_HEIGHT, Page} from '../../../../../constants/index';
@@ -486,7 +488,7 @@ class Overview extends Component {
 }
 
 const mapStateToProps = (state) => {
-    const filter = getFilter(state);
+    const filter = getSchedulingFilter(state);
     const items = getTableItems(state);
     const itemsMaxDepth = getSchedulingOverviewMaxDepth(state);
     const cluster = getCluster(state);
