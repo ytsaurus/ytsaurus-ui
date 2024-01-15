@@ -4,8 +4,9 @@ import {ClusterConfig} from '../../../shared/yt-types';
 import {RootState} from '../reducers';
 import {PAGE_ICONS_BY_ID} from '../../constants/slideoutMenu';
 import {getSettingsPagesOrder, getSettingsPagesPinned} from './settings-ts';
-import {getAllowedExperimentalPages, isDeveloper} from './global';
+import {getAllowedExperimentalPages, getClusterUiConfig, isDeveloper} from './global';
 import UIFactory from '../../UIFactory';
+import {Page} from '../../../shared/constants/settings';
 
 interface RecentInfo<T> {
     all: Array<T>;
@@ -28,8 +29,13 @@ export function getRecentClustersInfo(state: RootState): RecentClustersInfo {
 }
 
 const getRecentPagesInfoRaw = createSelector(
-    [(state: RootState) => state.slideoutMenu.pages, isDeveloper, getAllowedExperimentalPages],
-    (pageInfoRaw, isAdmin, allowExpPages) => {
+    [
+        (state: RootState) => state.slideoutMenu.pages,
+        isDeveloper,
+        getAllowedExperimentalPages,
+        getClusterUiConfig,
+    ],
+    (pageInfoRaw, isAdmin, allowExpPages, uiConfig) => {
         const expPages = UIFactory.getExperimentalPages();
         const hiddenPages = new Set(
             expPages.filter((expPages) => {
@@ -37,12 +43,21 @@ const getRecentPagesInfoRaw = createSelector(
             }),
         );
 
+        const allowChyt = Boolean(uiConfig.chyt_controller_base_url);
+
+        const allPages = pageInfoRaw.all.filter((page) => {
+            if (page.id === Page.CHYT) {
+                return allowChyt;
+            }
+            return true;
+        });
+
         return {
             ...pageInfoRaw,
             all:
                 isAdmin || hiddenPages.size === 0
-                    ? pageInfoRaw.all
-                    : pageInfoRaw.all.filter((page) => !hiddenPages.has(page.id)),
+                    ? allPages
+                    : allPages.filter((page) => !hiddenPages.has(page.id)),
         };
     },
 );
