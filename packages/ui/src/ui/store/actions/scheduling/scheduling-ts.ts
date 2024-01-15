@@ -312,3 +312,10 @@ function transferPoolQuota({poolPath, transferData, tree}: TransferPoolQuotaPara
             return res;
         });
 }
+
+export function schedulingSetFilter(filter: string): SchedulingAction {
+    return {
+        type: SCHEDULING_DATA_PARTITION,
+        data: {filter},
+    };
+}

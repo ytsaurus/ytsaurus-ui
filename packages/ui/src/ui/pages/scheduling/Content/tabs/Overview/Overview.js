@@ -19,12 +19,14 @@ import Icon from '../../../../../components/Icon/Icon';
 
 import {
     changeAbcServiceFilter,
-    changeFilter,
     changePool,
     changeTableTreeState,
     openEditModal,
 } from '../../../../../store/actions/scheduling/scheduling';
-import {openPoolDeleteModal} from '../../../../../store/actions/scheduling/scheduling-ts';
+import {
+    openPoolDeleteModal,
+    schedulingSetFilter,
+} from '../../../../../store/actions/scheduling/scheduling-ts';
 import {
     getCurrentPool,
     getFilter,
@@ -103,7 +105,7 @@ class Overview extends Component {
 
         changePool: PropTypes.func.isRequired,
         openPoolDeleteModal: PropTypes.func.isRequired,
-        changeFilter: PropTypes.func.isRequired,
+        schedulingSetFilter: PropTypes.func.isRequired,
         openEditModal: PropTypes.func.isRequired,
         changeTableTreeState: PropTypes.func.isRequired,
         changeAbcServiceFilter: PropTypes.func.isRequired,
@@ -510,7 +512,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = {
     changePool,
     openPoolDeleteModal,
-    changeFilter,
+    schedulingSetFilter,
     openEditModal,
     changeTableTreeState,
     changeAbcServiceFilter,
@@ -572,7 +574,7 @@ class SchedulingOverviewToolbar extends React.PureComponent {
         confirmExpandDialogVisible: false,
     };
 
-    handleFilterChange = (value) => this.props.changeFilter(value);
+    handleFilterChange = (value) => this.props.schedulingSetFilter(value);
     handleExpand = () => {
         const opCount = this.props.getSchedulingOperationsCount();
         if (opCount <= 2000) {

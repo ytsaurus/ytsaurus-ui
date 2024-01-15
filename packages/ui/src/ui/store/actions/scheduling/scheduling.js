@@ -15,7 +15,6 @@ import {
 
 import {
     CHANGE_CONTENT_MODE,
-    CHANGE_FILTER,
     CHANGE_POOL,
     CHANGE_POOL_CHILDREN_FILTER,
     CHANGE_TABLE_TREE_STATE,
@@ -300,13 +299,6 @@ export function changePool(pool) {
     return {
         type: CHANGE_POOL,
         data: {pool},
-    };
-}
-
-export function changeFilter(filter) {
-    return {
-        type: CHANGE_FILTER,
-        data: {filter},
     };
 }
 
