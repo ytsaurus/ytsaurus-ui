@@ -12,6 +12,11 @@ import produce from 'immer';
 import {updateIfChanged} from '../../../utils/utils';
 import {RootState} from '../../../store/reducers';
 import {aclFiltersParams, getAclFiltersPreparedState} from '../acl/url-mapping';
+import {
+    makeObjectParseSerialize,
+    parseSerializeNumber,
+    parseSerializeString,
+} from '../../../utils/parse-serialize';
 
 export const schedulingParams = {
     pool: {
@@ -47,6 +52,10 @@ export const schedulingOverviewParams = {
         stateKey: 'scheduling.scheduling.abcServiceFilter',
         initialState: schedulingInitialState.abcServiceFilter,
         type: 'object',
+        options: makeObjectParseSerialize(schedulingInitialState.abcServiceFilter, {
+            slug: parseSerializeString,
+            id: parseSerializeNumber,
+        }),
     },
 };
 

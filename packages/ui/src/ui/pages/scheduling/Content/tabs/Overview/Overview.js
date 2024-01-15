@@ -597,8 +597,8 @@ class SchedulingOverviewToolbar extends React.PureComponent {
     };
 
     onAbcServiceFilter = (abcService) => {
-        const {slug} = abcService || {};
-        this.props.schedulingSetAbcFilter(slug);
+        const {slug, id} = abcService || {};
+        this.props.schedulingSetAbcFilter({id, slug});
     };
 
     setConfirmDialogVisibility = (confirmExpandDialogVisible) => {
