@@ -19,7 +19,6 @@ import {
     CHANGE_POOL_CHILDREN_FILTER,
     CHANGE_TABLE_TREE_STATE,
     CHANGE_TREE,
-    SCHEDULING_DATA_PARTITION,
     SCHEDULING_EDIT_POOL_CANCELLED,
     SCHEDULING_EDIT_POOL_FAILURE,
     SCHEDULING_EDIT_POOL_REQUEST,
@@ -299,13 +298,6 @@ export function changePool(pool) {
     return {
         type: CHANGE_POOL,
         data: {pool},
-    };
-}
-
-export function changeAbcServiceFilter(slug) {
-    return {
-        type: SCHEDULING_DATA_PARTITION,
-        data: {abcServiceFilter: {slug}},
     };
 }
 

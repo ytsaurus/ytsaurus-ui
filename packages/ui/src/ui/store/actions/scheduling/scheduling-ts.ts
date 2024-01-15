@@ -319,3 +319,10 @@ export function schedulingSetFilter(filter: string): SchedulingAction {
         data: {filter},
     };
 }
+
+export function schedulingSetAbcFilter(slug: string): SchedulingAction {
+    return {
+        type: SCHEDULING_DATA_PARTITION,
+        data: {abcServiceFilter: {slug}},
+    };
+}
