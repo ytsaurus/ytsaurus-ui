@@ -33,7 +33,6 @@ import {SchedulingAction} from '../../../store/reducers/scheduling/scheduling';
 import {isSupportedSchedulingChildrenByPool} from '../../../store/selectors/thor/support';
 import {YTError} from '../../../../@types/types';
 import CancelHelper, {isCancelled} from '../../../utils/cancel-helper';
-import {EMPTY_OBJECT} from '../../../constants';
 import {flattenAttributes} from '../../../utils/scheduling/scheduling';
 
 type ExpandedPoolsThunkAction = ThunkAction<

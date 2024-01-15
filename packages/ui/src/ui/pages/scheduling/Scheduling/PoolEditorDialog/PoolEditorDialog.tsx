@@ -527,7 +527,7 @@ export function PoolEditorDialog() {
     );
 }
 
-function useTransferNotice(editItem?: PoolInfo): [DialogField<FormValues>] | [] {
+function useTransferNotice(editItem?: PoolInfo): [DialogField<PoolEditorFormValues>] | [] {
     const {parent} = editItem || {};
     //    const abcInfo = abcInfoFromAttributes(cypressAttributes);
     const poolsByName = useSelector(getSchedulingPoolsMapByName);
@@ -556,7 +556,7 @@ function useChangeIntegralTypeNotice(
     editItem: PoolInfo | undefined,
     pools: Array<PoolInfo>,
     tree: string,
-): [DialogField<FormValues>] | [] {
+): [DialogField<PoolEditorFormValues>] | [] {
     const {name, parent} = editItem || {};
 
     const cluster = useSelector(getCluster);

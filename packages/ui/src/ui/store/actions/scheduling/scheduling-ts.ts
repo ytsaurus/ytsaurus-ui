@@ -42,7 +42,7 @@ import {RumMeasureTypes} from '../../../rum/rum-measure-types';
 import type {RootState} from '../../../store/reducers';
 import type {SchedulingAction} from '../../../store/reducers/scheduling/scheduling';
 import type {PoolInfo} from '../../../store/selectors/scheduling/scheduling-pools';
-import {USE_CACHE} from '../../../constants';
+import {USE_CACHE} from '../../../../shared/constants/yt-api';
 
 const toaster = new Toaster();
 
