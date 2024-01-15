@@ -68,7 +68,7 @@ export interface SchedulingPersistentState {
     tree: string;
     pool: string;
     abcServiceFilter: {
-        slug: undefined;
+        slug?: string;
     };
     monitorChartStatus: {};
 }

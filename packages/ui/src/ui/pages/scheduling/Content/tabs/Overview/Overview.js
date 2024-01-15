@@ -18,13 +18,13 @@ import Link from '../../../../../components/Link/Link';
 import Icon from '../../../../../components/Icon/Icon';
 
 import {
-    changeAbcServiceFilter,
     changePool,
     changeTableTreeState,
     openEditModal,
 } from '../../../../../store/actions/scheduling/scheduling';
 import {
     openPoolDeleteModal,
+    schedulingSetAbcFilter,
     schedulingSetFilter,
 } from '../../../../../store/actions/scheduling/scheduling-ts';
 import {
@@ -108,7 +108,7 @@ class Overview extends Component {
         schedulingSetFilter: PropTypes.func.isRequired,
         openEditModal: PropTypes.func.isRequired,
         changeTableTreeState: PropTypes.func.isRequired,
-        changeAbcServiceFilter: PropTypes.func.isRequired,
+        schedulingSetAbcFilter: PropTypes.func.isRequired,
 
         isInitialLoading: PropTypes.bool,
     };
@@ -515,7 +515,7 @@ const mapDispatchToProps = {
     schedulingSetFilter,
     openEditModal,
     changeTableTreeState,
-    changeAbcServiceFilter,
+    schedulingSetAbcFilter,
     setExpandedPool,
     getSchedulingOperationsCount,
     setLoadAllOperations,
@@ -596,8 +596,7 @@ class SchedulingOverviewToolbar extends React.PureComponent {
 
     onAbcServiceFilter = (abcService) => {
         const {slug} = abcService || {};
-        const {changeAbcServiceFilter} = this.props;
-        changeAbcServiceFilter(slug);
+        this.props.schedulingSetAbcFilter(slug);
     };
 
     setConfirmDialogVisibility = (confirmExpandDialogVisible) => {
