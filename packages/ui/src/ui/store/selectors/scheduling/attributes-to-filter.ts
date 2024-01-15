@@ -14,6 +14,18 @@ export const getSchedulingAttributesToFilter = (state: RootState) =>
 export const getSchedulingAttributesToFilterTime = (state: RootState) =>
     state.scheduling.scheduling.attributesToFilterTime;
 
+export const schedulingOverviewHasFilter = (state: RootState) => {
+    const nameFilter = getSchedulingFilter(state);
+    const abcFilter = getSchedulingAbcFilter(state);
+
+    return hasOverviewFilter({nameFilter, abcId: abcFilter?.id});
+};
+
+function hasOverviewFilter(filter: {nameFilter?: string; abcId?: number}) {
+    const {nameFilter, abcId} = filter;
+    return Boolean(nameFilter) || abcId !== undefined;
+}
+
 export const getSchedulingFilteredPoolNames = createSelector(
     [
         getSchedulingAttributesToFilter,
@@ -26,17 +38,17 @@ export const getSchedulingFilteredPoolNames = createSelector(
             return undefined;
         }
 
-        if (!nameFilter && abcFilter?.id === undefined) {
+        if (!hasOverviewFilter({nameFilter, abcId: abcFilter?.id})) {
             return undefined;
         }
 
         const res = reduce_(
             attrsToFilter,
             (acc, attrs, key) => {
-                if (nameFilter && -1 === key.indexOf(nameFilter)) {
+                if (hasOverviewFilter({nameFilter}) && -1 === key.indexOf(nameFilter)) {
                     return acc;
                 }
-                if (abcFilter?.id !== undefined && attrs.abc?.id !== abcFilter?.id) {
+                if (hasOverviewFilter({abcId: abcFilter?.id}) && attrs.abc?.id !== abcFilter?.id) {
                     return acc;
                 }
 

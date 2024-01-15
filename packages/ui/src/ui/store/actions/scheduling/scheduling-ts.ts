@@ -47,7 +47,10 @@ import {RumMeasureTypes} from '../../../rum/rum-measure-types';
 import type {RootState} from '../../../store/reducers';
 import type {SchedulingAction} from '../../../store/reducers/scheduling/scheduling';
 import type {PoolInfo} from '../../../store/selectors/scheduling/scheduling-pools';
-import {getSchedulingAttributesToFilterTime} from '../../../store/selectors/scheduling/attributes-to-filter';
+import {
+    getSchedulingAttributesToFilterTime,
+    schedulingOverviewHasFilter,
+} from '../../../store/selectors/scheduling/attributes-to-filter';
 import {USE_CACHE} from '../../../../shared/constants/yt-api';
 
 const toaster = new Toaster();
@@ -60,6 +63,10 @@ export function loadSchedulingData(): SchedulingThunkAction {
 
         const state = getState();
         const isInitialLoading = getSchedulingIsInitialLoading(state);
+
+        if (isInitialLoading) {
+            dispatch(schedulingLoadFilterAttributes());
+        }
 
         const cluster = getCluster(state);
         const rumId = new RumWrapper(cluster, RumMeasureTypes.SCHEDULING);
@@ -319,10 +326,11 @@ function transferPoolQuota({poolPath, transferData, tree}: TransferPoolQuotaPara
         });
 }
 
-function schedulingFilterAttributes(): SchedulingThunkAction {
+function schedulingLoadFilterAttributes(): SchedulingThunkAction {
     return (dispatch, getState) => {
-        const lastTime = getSchedulingAttributesToFilterTime(getState());
-        if (Date.now() - lastTime < 120000) {
+        const state = getState();
+        const lastTime = getSchedulingAttributesToFilterTime(state);
+        if (Date.now() - lastTime < 120000 || !schedulingOverviewHasFilter(state)) {
             return undefined;
         }
 
@@ -333,7 +341,7 @@ function schedulingFilterAttributes(): SchedulingThunkAction {
             }),
             {
                 skipSuccessToast: true,
-                toasterName: 'laodFilterAttributes',
+                toasterName: 'schedulingLoadFilterAttributes',
                 errorContent: 'Failed to load attributes required for filtering',
             },
         ).then((attributesToFilter) => {
@@ -347,7 +355,7 @@ function schedulingFilterAttributes(): SchedulingThunkAction {
 
 export function schedulingSetFilter(filter: string): SchedulingThunkAction {
     return (dispatch) => {
-        dispatch(schedulingFilterAttributes());
+        dispatch(schedulingLoadFilterAttributes());
         dispatch({
             type: SCHEDULING_DATA_PARTITION,
             data: {filter},
@@ -357,7 +365,7 @@ export function schedulingSetFilter(filter: string): SchedulingThunkAction {
 
 export function schedulingSetAbcFilter(slug: string): SchedulingThunkAction {
     return (dispatch) => {
-        dispatch(schedulingFilterAttributes());
+        dispatch(schedulingLoadFilterAttributes());
         dispatch({
             type: SCHEDULING_DATA_PARTITION,
             data: {abcServiceFilter: {slug}},
