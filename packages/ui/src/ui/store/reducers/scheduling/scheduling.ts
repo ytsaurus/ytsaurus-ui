@@ -48,6 +48,9 @@ export interface SchedulingEphemeralState {
 
     deleteVisibility: boolean;
     deleteItem?: PoolInfo;
+
+    attributesToFilter: undefined | Record<string, {parent?: string; abc: {id: number}}>;
+    attributesToFilterTime: number;
 }
 
 export interface TreeResources {
@@ -69,6 +72,7 @@ export interface SchedulingPersistentState {
     pool: string;
     abcServiceFilter: {
         slug?: string;
+        id?: number;
     };
     monitorChartStatus: {};
 }
@@ -94,6 +98,9 @@ const ephemeralState: SchedulingEphemeralState = {
 
     deleteVisibility: false,
     deleteItem: undefined,
+
+    attributesToFilter: undefined,
+    attributesToFilterTime: 0,
 };
 
 const persistedState: SchedulingPersistentState = {

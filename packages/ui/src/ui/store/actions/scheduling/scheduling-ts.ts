@@ -8,7 +8,12 @@ import {
     prepareCurrentTree,
     prepareTrees,
 } from '../../../utils/scheduling/scheduling';
-import {extractBatchV4Values, getBatchError, splitBatchResults} from '../../../utils/utils';
+import {
+    extractBatchV4Values,
+    getBatchError,
+    splitBatchResults,
+    wrapApiPromiseByToaster,
+} from '../../../utils/utils';
 import {makeGet, makeList} from '../../../utils/batch';
 import {updateNodeAttributes} from '../../../utils/cypress-attributes';
 
@@ -42,6 +47,7 @@ import {RumMeasureTypes} from '../../../rum/rum-measure-types';
 import type {RootState} from '../../../store/reducers';
 import type {SchedulingAction} from '../../../store/reducers/scheduling/scheduling';
 import type {PoolInfo} from '../../../store/selectors/scheduling/scheduling-pools';
+import {getSchedulingAttributesToFilterTime} from '../../../store/selectors/scheduling/attributes-to-filter';
 import {USE_CACHE} from '../../../../shared/constants/yt-api';
 
 const toaster = new Toaster();
@@ -313,16 +319,48 @@ function transferPoolQuota({poolPath, transferData, tree}: TransferPoolQuotaPara
         });
 }
 
-export function schedulingSetFilter(filter: string): SchedulingAction {
-    return {
-        type: SCHEDULING_DATA_PARTITION,
-        data: {filter},
+function schedulingFilterAttributes(): SchedulingThunkAction {
+    return (dispatch, getState) => {
+        const lastTime = getSchedulingAttributesToFilterTime(getState());
+        if (Date.now() - lastTime < 120000) {
+            return undefined;
+        }
+
+        return wrapApiPromiseByToaster(
+            ytApiV3Id.get(YTApiId.schedulingFilterAttributes, {
+                path: '//sys/scheduler/orchid/scheduler/pool_trees/physical/pools',
+                fields: ['parent', 'abc'],
+            }),
+            {
+                skipSuccessToast: true,
+                toasterName: 'laodFilterAttributes',
+                errorContent: 'Failed to load attributes required for filtering',
+            },
+        ).then((attributesToFilter) => {
+            dispatch({
+                type: SCHEDULING_DATA_PARTITION,
+                data: {attributesToFilter, attributesToFilterTime: Date.now()},
+            });
+        });
     };
 }
 
-export function schedulingSetAbcFilter(slug: string): SchedulingAction {
-    return {
-        type: SCHEDULING_DATA_PARTITION,
-        data: {abcServiceFilter: {slug}},
+export function schedulingSetFilter(filter: string): SchedulingThunkAction {
+    return (dispatch) => {
+        dispatch(schedulingFilterAttributes());
+        dispatch({
+            type: SCHEDULING_DATA_PARTITION,
+            data: {filter},
+        });
+    };
+}
+
+export function schedulingSetAbcFilter(slug: string): SchedulingThunkAction {
+    return (dispatch) => {
+        dispatch(schedulingFilterAttributes());
+        dispatch({
+            type: SCHEDULING_DATA_PARTITION,
+            data: {abcServiceFilter: {slug}},
+        });
     };
 }
