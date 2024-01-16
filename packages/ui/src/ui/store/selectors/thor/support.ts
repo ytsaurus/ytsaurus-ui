@@ -1,21 +1,26 @@
-import hammer from '@ytsaurus/interface-helpers/lib/hammer';
-import _ from 'lodash';
 import {createSelector} from 'reselect';
+import map_ from 'lodash/map';
+import isEmpty_ from 'lodash/isEmpty';
+import every_ from 'lodash/every';
+
+// @ts-ignore
+import hammer from '@ytsaurus/interface-helpers/lib/hammer';
+
+import {RootState} from '../../../store/reducers';
 
 export const _LOCAL_ARCADIA_VERSION = '(development)';
-const STABLE = 'stable';
-const PRESTABLE = 'prestable';
-const GREATER = 'greater';
-const SMALLER = 'smaller';
 
-function versionToArray(version, build) {
+function versionToArray(version: string, build?: string) {
     const VERSION_DELIMITER = '.';
     const VERSION_CHUNK_COUNT = 3;
     const VERSION_CHUNK_PLACEHOLDER = 0;
 
-    const versionArray = _.map(version.split(VERSION_DELIMITER), (subversion) => {
-        return parseInt(subversion, 10);
-    });
+    const versionArray: Array<string | number> = map_(
+        version.split(VERSION_DELIMITER),
+        (subversion) => {
+            return parseInt(subversion, 10);
+        },
+    );
 
     while (versionArray.length < VERSION_CHUNK_COUNT) {
         versionArray.push(VERSION_CHUNK_PLACEHOLDER);
@@ -36,12 +41,16 @@ function versionToArray(version, build) {
  * @param {String} versionB
  * @returns {boolean}
  */
-export function _compareVersions(comparator, versionA, versionB) {
+export function _compareVersions(
+    comparator: 'greater' | 'smaller',
+    versionA: string,
+    versionB: string,
+) {
     if (versionA === versionB) {
-        return comparator === GREATER;
+        return comparator === 'greater';
     }
 
-    return comparator === GREATER
+    return comparator === 'greater'
         ? hammer.utils.compareVectors(versionToArray(versionA), versionToArray(versionB)) >= 0
         : hammer.utils.compareVectors(versionToArray(versionA), versionToArray(versionB)) < 0;
 }
@@ -53,12 +62,15 @@ export function _compareVersions(comparator, versionA, versionB) {
  * @param {String|Object} versionInterval
  * @returns {boolean}
  */
-export function _versionInInterval(version, versionInterval) {
+export function _versionInInterval(
+    version: string,
+    versionInterval: MajorMinorPatch | MajorMinorPatchRange | typeof _LOCAL_ARCADIA_VERSION,
+) {
     let supported;
 
     if (typeof versionInterval === 'object') {
         supported = Object.keys(versionInterval).every((comparator) => {
-            if (!(comparator === GREATER || comparator === SMALLER)) {
+            if (!(comparator === 'greater' || comparator === 'smaller')) {
                 throw new Error(
                     'thor.support: feature description has unknown comparator "' +
                         comparator +
@@ -66,108 +78,114 @@ export function _versionInInterval(version, versionInterval) {
                         ' cannot check support.',
                 );
             }
-            return _compareVersions(comparator, version, versionInterval[comparator]);
+            const key = comparator as keyof typeof versionInterval;
+            return _compareVersions(comparator, version, versionInterval[key]!);
         });
     } else {
-        supported = _compareVersions(GREATER, version, versionInterval);
+        supported = _compareVersions('greater', version, versionInterval);
     }
 
     return supported;
 }
 
-function getVersionAndBuild(version) {
-    let parsedVersion = version && version.match(/(\d+)\.(\d+)\.(\d+)/);
+function getVersionAndBuild(version?: string): [string, string | undefined] | undefined {
+    const parsedVersion = version?.match(/(\d+)\.(\d+)\.(\d+)/);
     let parsedBuild;
 
     if (parsedVersion) {
-        parsedVersion = parsedVersion[0];
-        parsedBuild = version.substring(parsedVersion.length);
+        const majorMinorPatch = parsedVersion[0];
+        parsedBuild = version?.substring(parsedVersion.length);
 
-        return [parsedVersion, parsedBuild];
+        return [majorMinorPatch, parsedBuild];
     }
+    return undefined;
 }
 
-const rawProxyVersion = (state) => state.global.version;
-const rawSchedulerVersion = (state) => state.global.schedulerVersion;
-const rawMasterVersion = (state) => state.global.masterVersion;
-export const getProxyVersion = createSelector(rawProxyVersion, getVersionAndBuild);
-export const getSchedulerVersion = createSelector(rawSchedulerVersion, getVersionAndBuild);
-export const getMasterVersion = createSelector(rawMasterVersion, getVersionAndBuild);
+const getRawProxyVersion = (state: RootState) => state.global.version;
+const getRawSchedulerVersion = (state: RootState) => state.global.schedulerVersion;
+const getRawMasterVersion = (state: RootState) => state.global.masterVersion;
 
-const features = createSelector(
-    [getProxyVersion, getSchedulerVersion, getMasterVersion],
-    (proxy, scheduler, master) => {
-        return {
-            fieldsFilter: {
-                prestable: '22.1.9091155',
-                component: scheduler,
-            },
-            effectiveExpiration: {
-                prestable: '23.1.11146445',
-                component: master,
-            },
-            clusterNodeVersion: {
-                prestable: '23.2',
-            },
-            nodeMaintenanceApi: {
-                prestable: '23.1.11106567',
-                component: proxy,
-            },
-            schedulingChildrenByPool: {
-                prestable: '23.1.11146742',
-                component: scheduler,
-            },
-        };
-    },
-);
+type MajorMinorPatch = `${number}.${number}.${number}`;
+type MajorMinorPatchRange = {greater?: MajorMinorPatch; smaller?: MajorMinorPatch};
 
-export const _isFeatureSupported = (rawProxyVersion, features) => (featureName) => {
-    // yt-local in arcadia is meant to be of the freshest version
-    if (rawProxyVersion === _LOCAL_ARCADIA_VERSION) {
-        return true;
-    }
+export type RawVersion = `${MajorMinorPatch}-${string}`;
 
-    function failFeature(message) {
-        console.warn(`thor.support "${featureName}" ${message}`);
-        return false;
-    }
+export type Versions<T> = {proxy?: T | typeof _LOCAL_ARCADIA_VERSION; scheduler?: T; master?: T};
 
-    if (!Object.hasOwnProperty.call(features, featureName)) {
-        return failFeature('feature is unknown, cannot check support.');
-    }
+type FeatureVersions = Versions<MajorMinorPatch | Array<MajorMinorPatchRange>>;
+type RawFeatureVersions = Versions<RawVersion>;
 
-    const feature = features[featureName];
+const FEATURES = {
+    fieldsFilter: {
+        scheduler: '22.1.9091155',
+    } as FeatureVersions,
+    effectiveExpiration: {
+        master: '23.1.11146445',
+    } as FeatureVersions,
+    clusterNodeVersion: {
+        proxy: '23.2.0',
+    } as FeatureVersions,
+    nodeMaintenanceApi: {
+        proxy: '23.1.11106567',
+    } as FeatureVersions,
+    schedulingChildrenByPool: {
+        scheduler: '23.1.11146742',
+    } as FeatureVersions,
+};
 
-    if (typeof feature === 'function') {
-        return feature();
-    } else {
-        const componentVersion = feature.component;
+export function _isFeatureSupported<T extends Record<string, FeatureVersions>>(
+    rawVersions: RawFeatureVersions,
+    features: T,
+) {
+    return (featureName: keyof T) => {
+        function failFeature(message: string) {
+            console.warn(`thor.support "${featureName as string}" ${message}`);
+            return false;
+        }
 
-        if (!componentVersion) {
+        const featureVersions: FeatureVersions = features[featureName];
+
+        if (!featureVersions) {
+            return failFeature(`${featureName as string} is unknown, cannot check support.`);
+        }
+
+        if (isEmpty_(featureVersions)) {
             return failFeature('feature component version is unknown, cannot check support.');
         }
 
-        const currentBranch = componentVersion[1].indexOf('-' + STABLE) === 0 ? STABLE : PRESTABLE;
+        return every_(featureVersions, (value, k) => {
+            const key = k as keyof typeof rawVersions;
+            const rawVersion = rawVersions[key];
 
-        const featureVersionInterval = feature[currentBranch] || feature[PRESTABLE];
+            // yt-local in arcadia is meant to be of the freshest version
+            if (rawVersion === _LOCAL_ARCADIA_VERSION) {
+                return true;
+            }
 
-        if (!featureVersionInterval) {
-            return failFeature(
-                `feature version for branch "${currentBranch}" or branch "${PRESTABLE}" is unknown, cannot check support.`,
-            );
-        }
+            if (!value) {
+                return failFeature(`feature version of '${key}' is unknown, connot check support`);
+            }
 
-        if (Array.isArray(featureVersionInterval)) {
-            return featureVersionInterval.some((interval) =>
-                _versionInInterval(componentVersion[0], interval),
-            );
-        } else {
-            return _versionInInterval(componentVersion[0], featureVersionInterval);
-        }
-    }
-};
+            const buildVersion = getVersionAndBuild(rawVersion);
+            if (!buildVersion) {
+                return failFeature(
+                    `version of '${key}' component is unknown, cannot check support.`,
+                );
+            }
 
-export const isSupportedSelector = createSelector([rawProxyVersion, features], _isFeatureSupported);
+            if (Array.isArray(value)) {
+                return value.some((item) => _versionInInterval(buildVersion[0], item));
+            } else {
+                return _versionInInterval(buildVersion[0], value);
+            }
+        });
+    };
+}
+
+export const isSupportedSelector = createSelector(
+    [getRawProxyVersion, getRawSchedulerVersion, getRawMasterVersion],
+    (proxy, scheduler, master) => _isFeatureSupported({proxy, scheduler, master}, FEATURES),
+);
 
 export const isSupportedEffectiveExpiration = createSelector(
     [isSupportedSelector],
