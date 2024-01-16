@@ -3,7 +3,6 @@ import _ from 'lodash';
 import {createSelector} from 'reselect';
 
 export const _LOCAL_ARCADIA_VERSION = '(development)';
-export const _DEV_PATCH_NUMBER = '0';
 const STABLE = 'stable';
 const PRESTABLE = 'prestable';
 const GREATER = 'greater';
@@ -88,16 +87,10 @@ function getVersionAndBuild(version) {
     }
 }
 
-function extractPatchNumber(version) {
-    const parsedVersion = version && version.match(/(\d+)\.(\d+)\.(\d+)/);
-    return parsedVersion && parsedVersion[3];
-}
-
 const rawProxyVersion = (state) => state.global.version;
 const rawSchedulerVersion = (state) => state.global.schedulerVersion;
 const rawMasterVersion = (state) => state.global.masterVersion;
 export const getProxyVersion = createSelector(rawProxyVersion, getVersionAndBuild);
-const proxyPatchNumber = createSelector(rawProxyVersion, extractPatchNumber);
 export const getSchedulerVersion = createSelector(rawSchedulerVersion, getVersionAndBuild);
 export const getMasterVersion = createSelector(rawMasterVersion, getVersionAndBuild);
 
@@ -128,9 +121,9 @@ const features = createSelector(
     },
 );
 
-export const _isFeatureSupported = (rawProxyVersion, proxyPatch, features) => (featureName) => {
+export const _isFeatureSupported = (rawProxyVersion, features) => (featureName) => {
     // yt-local in arcadia is meant to be of the freshest version
-    if (rawProxyVersion === _LOCAL_ARCADIA_VERSION || proxyPatch === _DEV_PATCH_NUMBER) {
+    if (rawProxyVersion === _LOCAL_ARCADIA_VERSION) {
         return true;
     }
 
@@ -174,10 +167,7 @@ export const _isFeatureSupported = (rawProxyVersion, proxyPatch, features) => (f
     }
 };
 
-export const isSupportedSelector = createSelector(
-    [rawProxyVersion, proxyPatchNumber, features],
-    _isFeatureSupported,
-);
+export const isSupportedSelector = createSelector([rawProxyVersion, features], _isFeatureSupported);
 
 export const isSupportedEffectiveExpiration = createSelector(
     [isSupportedSelector],
