@@ -3,6 +3,8 @@ import {useDispatch, useSelector} from 'react-redux';
 import cn from 'bem-cn-lite';
 import _ from 'lodash';
 
+import {Breadcrumbs, BreadcrumbsItem} from '@gravity-ui/uikit';
+
 import ErrorBoundary from '../../../components/ErrorBoundary/ErrorBoundary';
 import {RowWithName} from '../../../containers/AppNavigation/TopRowContent/SectionName';
 import Favourites from '../../../components/Favourites/Favourites';
@@ -20,10 +22,10 @@ import {
     changeTree,
     togglePoolFavourites,
 } from '../../../store/actions/scheduling/scheduling';
+import {schedulingLoadFilterAttributes} from '../../../store/actions/scheduling/scheduling-ts';
 
 import {ROOT_POOL_NAME, SCHEDULING_ALLOWED_ROOT_TABS, Tab} from '../../../constants/scheduling';
 import ClipboardButton from '../../../components/ClipboardButton/ClipboardButton';
-import {Breadcrumbs, BreadcrumbsItem} from '@gravity-ui/uikit';
 import {getSchedulingBreadcrumbItems} from '../../../store/selectors/scheduling/scheduling-ts';
 import {Page} from '../../../constants';
 import Link from '../../../components/Link/Link';
@@ -32,10 +34,11 @@ import Select from '../../../components/Select/Select';
 import Suggest from '../../../components/Suggest/Suggest';
 import CreatePoolButton from '../Instruments/CreatePoolDialog/CreatePoolDialog';
 
-import './SchedulingTopRowContent.scss';
 import {makeRoutedURL} from '../../../store/location';
 import {getCluster, getClusterUiConfig} from '../../../store/selectors/global';
 import UIFactory from '../../../UIFactory';
+
+import './SchedulingTopRowContent.scss';
 
 const block = cn('scheduling-top-row-content');
 
@@ -215,6 +218,10 @@ function PoolsSuggest(props: {onCancelEdit: () => void}) {
     const {onCancelEdit} = props;
     const poolNames = useSelector(getPoolsNames);
     const dispatch = useDispatch();
+
+    React.useEffect(() => {
+        dispatch(schedulingLoadFilterAttributes());
+    }, [dispatch]);
 
     const getSuggestItems = React.useCallback(
         (_items: any, filter?: string) => {

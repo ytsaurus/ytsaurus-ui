@@ -326,7 +326,7 @@ function transferPoolQuota({poolPath, transferData, tree}: TransferPoolQuotaPara
         });
 }
 
-function schedulingLoadFilterAttributes(): SchedulingThunkAction {
+export function schedulingLoadFilterAttributes(): SchedulingThunkAction {
     return (dispatch, getState) => {
         const state = getState();
         const lastTime = getSchedulingAttributesToFilterTime(state);
