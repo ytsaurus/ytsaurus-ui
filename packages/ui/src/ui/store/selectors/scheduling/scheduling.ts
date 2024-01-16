@@ -22,7 +22,10 @@ import {RootState} from '../../../store/reducers';
 import {isAbcPoolName, isTopLevelPool} from '../../../utils/scheduling/scheduling';
 import {visitTreeItems} from '../../../utils/utils';
 import {getExpandedPoolsLoadAll, getSchedulingOperationsExpandedPools} from './expanded-pools';
-import {getSchedulingFilteredPoolNames} from './attributes-to-filter';
+import {
+    getSchedulingAttributesToFilter,
+    getSchedulingFilteredPoolNames,
+} from './attributes-to-filter';
 export const getPools = getPoolsImpl;
 
 const getExpandedPoolsIsInitialLoading = (state: RootState) => {
@@ -53,8 +56,8 @@ export const getPoolChildrenSortState = (state: RootState) =>
     state.tables[SCHEDULING_POOL_CHILDREN_TABLE_ID];
 
 export const getPoolsNames = createSelector(
-    getPools,
-    (pools): Array<string> => _.map(pools, (pool) => pool.name).sort(),
+    getSchedulingAttributesToFilter,
+    (pools): Array<string> => _.map(pools, (_v, name) => name).sort(),
 );
 
 const DETAILS_CONTENT_MODES = {
