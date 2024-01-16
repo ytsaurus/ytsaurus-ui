@@ -1,13 +1,10 @@
 import {
-    _DEV_PATCH_NUMBER,
     _LOCAL_ARCADIA_VERSION,
     _compareVersions,
     _isFeatureSupported,
     _versionInInterval,
     isSupportedSelector,
 } from './support';
-
-const PATCH_NUMBER = '12345';
 
 describe('support', () => {
     describe('isSupportedSelector', () => {
@@ -40,7 +37,7 @@ describe('support', () => {
         });
 
         it('local cluster version from arcadia supports all the features', () => {
-            const isSupported = _isFeatureSupported(_LOCAL_ARCADIA_VERSION, PATCH_NUMBER, {
+            const isSupported = _isFeatureSupported(_LOCAL_ARCADIA_VERSION, {
                 knownFeature: {
                     prestable: '19.4.29880',
                     component: ['19.3.29880', '-stable-something'],
@@ -51,25 +48,9 @@ describe('support', () => {
             expect(isSupported('unknownFeature')).toBe(true);
         });
 
-        it('development version of proxy supports all the features', () => {
-            const isSupported = _isFeatureSupported(
-                '19.4.' + _DEV_PATCH_NUMBER,
-                _DEV_PATCH_NUMBER,
-                {
-                    knownFeature: {
-                        prestable: '19.5.29880',
-                        component: ['19.4.0', '-local-something'],
-                    },
-                },
-            );
-
-            expect(isSupported('knownFeature')).toBe(true);
-            expect(isSupported('unknownFeature')).toBe(true);
-        });
-
         describe('non-existent facilities', () => {
             it('unknown feature should not be supported and trace should be emitted', () => {
-                const isSupported = _isFeatureSupported('some.version', PATCH_NUMBER, {
+                const isSupported = _isFeatureSupported('some.version', {
                     knownFeature: {
                         prestable: '19.4.29880',
                         component: ['19.4.29880', '-stable-something'],
@@ -81,7 +62,7 @@ describe('support', () => {
             });
 
             it('unknown component version should not be supported and trace should be emitted', () => {
-                const isSupported = _isFeatureSupported('some.version', PATCH_NUMBER, {
+                const isSupported = _isFeatureSupported('some.version', {
                     knownFeature: {
                         prestable: '19.4.29880',
                         component: undefined,
@@ -94,7 +75,7 @@ describe('support', () => {
         });
 
         it('Prestable version supported explicitly', () => {
-            const isSupported = _isFeatureSupported('some.version', PATCH_NUMBER, {
+            const isSupported = _isFeatureSupported('some.version', {
                 knownFeature: {
                     prestable: '19.2.25000',
                     component: ['19.2.26251', '-prestable~3023dc3'],
@@ -106,7 +87,7 @@ describe('support', () => {
 
         describe('Prestable version not supported implicitly, stable requirement does not work', () => {
             it('does not find prestable fallback and yells to console', () => {
-                const isSupported = _isFeatureSupported('some.version', PATCH_NUMBER, {
+                const isSupported = _isFeatureSupported('some.version', {
                     knownFeature: {
                         stable: '19.2.25000',
                         component: ['19.2.26251', '-prestable~3023dc3'],
@@ -118,7 +99,7 @@ describe('support', () => {
             });
 
             it('finds prestable fallback and does not yell to console', () => {
-                const isSupported = _isFeatureSupported('some.version', PATCH_NUMBER, {
+                const isSupported = _isFeatureSupported('some.version', {
                     knownFeature: {
                         stable: '19.2.25000',
                         prestable: '19.3.25000',
@@ -132,7 +113,7 @@ describe('support', () => {
         });
 
         it('Stable version supported explicitly', () => {
-            const isSupported = _isFeatureSupported('some.version', PATCH_NUMBER, {
+            const isSupported = _isFeatureSupported('some.version', {
                 knownFeature: {
                     stable: '19.2.26000',
                     component: ['19.2.26251', '-stable~3023dc3'],
@@ -143,7 +124,7 @@ describe('support', () => {
         });
 
         it('Stable version supported implicitly, by requirement for prestable', () => {
-            const isSupported = _isFeatureSupported('some.version', PATCH_NUMBER, {
+            const isSupported = _isFeatureSupported('some.version', {
                 knownFeature: {
                     prestable: '19.2.25000',
                     component: ['19.2.26251', '-stable~3023dc3'],
@@ -154,7 +135,7 @@ describe('support', () => {
         });
 
         it('Multiple version intervals', () => {
-            const isSupported = _isFeatureSupported('some.version', PATCH_NUMBER, {
+            const isSupported = _isFeatureSupported('some.version', {
                 knownFeature: {
                     prestable: [
                         {greater: '19.2.26123', smaller: '19.3.00000'},
