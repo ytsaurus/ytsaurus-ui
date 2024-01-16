@@ -93,6 +93,12 @@ export interface CPULimits {
     query_thread_pool_size?: number;
 }
 
+export interface BundleDataCenter {
+    rpc_proxy_nanny_service: string;
+    tablet_node_nanny_service: string;
+    yp_cluster: string;
+}
+
 export interface BundleDefaultConfigData {
     tablet_node_sizes: {
         [size: string]: {
@@ -109,6 +115,9 @@ export interface BundleDefaultConfigData {
         [size: string]: {
             resource_guarantee: BundleResourceGuarantee;
         };
+    };
+    data_centers?: {
+        [name: string]: BundleDataCenter;
     };
 }
 

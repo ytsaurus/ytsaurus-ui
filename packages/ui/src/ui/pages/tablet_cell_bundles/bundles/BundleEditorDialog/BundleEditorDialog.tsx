@@ -31,6 +31,7 @@ import {
     bundleEditorDict,
     createConfigurationList,
     createParams,
+    dcBundleValidate,
     getBundleControllerResource,
     getInitialFormValues,
     getResourceData,
@@ -113,15 +114,16 @@ export function BundleEditorDialog() {
         return getInitialFormValues(data, bundleControllerConfig);
     })();
 
-    const [rpcConfigurations, nodeConfigurations] = (() => {
+    const [rpcConfigurations, nodeConfigurations, dcConfigurations] = (() => {
         if (!bundleDefaultConfig) {
-            return [[], []];
+            return [[], [], []];
         }
-        const {rpc_proxy_sizes, tablet_node_sizes} = bundleDefaultConfig;
+        const {rpc_proxy_sizes, tablet_node_sizes, data_centers} = bundleDefaultConfig;
 
         return [
             createConfigurationList(rpc_proxy_sizes),
             createConfigurationList(tablet_node_sizes),
+            data_centers ? [...Object.values(data_centers)] : [],
         ];
     })();
 
@@ -236,7 +238,7 @@ export function BundleEditorDialog() {
                     withoutDetailedBar: true,
                     hasClear: true,
                 },
-                validator: simpleBundleValidate,
+                validator: dcBundleValidate(dcConfigurations),
             },
             {
                 type: 'bundle-table-field',
@@ -257,7 +259,7 @@ export function BundleEditorDialog() {
                     withoutDetailedBar: true,
                     hasClear: true,
                 },
-                validator: simpleBundleValidate,
+                validator: dcBundleValidate(dcConfigurations),
             },
             {
                 type: 'bundle-table-field',

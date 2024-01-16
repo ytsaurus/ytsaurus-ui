@@ -4,6 +4,7 @@ import hammer from '../../../../common/hammer';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import {
     BundleControllerConfig,
+    BundleDataCenter,
     BundleDefaultConfigData,
 } from '../../../../store/reducers/tablet_cell_bundles';
 import {BundleParam} from '../../../../pages/tablet_cell_bundles/bundles/BundleEditorDialog/components/BundleParamsList/BundleParamsList';
@@ -267,6 +268,25 @@ export const simpleBundleValidate = (v?: number | string) => {
     }
 
     return error;
+};
+
+export const dcBundleValidate = ({
+    length,
+}: BundleDataCenter[]): ((input?: number | string) => string | undefined) => {
+    return (input?: number | string): string | undefined => {
+        const number = Number(input);
+        let error: string | undefined;
+
+        if (!Number.isFinite(number)) {
+            error = 'Incorrect value';
+        } else if (number < 0) {
+            error = 'Must be greater than or equal to zero';
+        } else if (length > 0 && number % length !== 0) {
+            error = `Must divide the number of data centers (${length})`;
+        }
+
+        return error;
+    };
 };
 
 export function getBundleControllerResource<K extends 'cpu_limits' | 'memory_limits'>(
