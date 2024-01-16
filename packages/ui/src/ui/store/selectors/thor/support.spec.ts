@@ -8,7 +8,7 @@ import {
 
 describe('support', () => {
     describe('isSupportedSelector', () => {
-        let warnMock, _origWarn;
+        let warnMock: any, _origWarn: any;
         beforeEach(() => {
             warnMock = jest.fn();
             _origWarn = global.console.warn;
@@ -16,58 +16,66 @@ describe('support', () => {
         });
 
         afterEach(() => {
-            global.console.warn = _origWarn;
+            global.console.warn = _origWarn as any;
         });
 
         it('returns the same function if state did not change', () => {
             const isSupported = isSupportedSelector({
                 global: {
                     version: '19.2.25251-prestable~3023dc3',
-                    schedulerVersion: '20.2.12.14',
+                    schedulerVersion: '20.2.12-local~123123',
+                    masterVersion: '21.123.321-stable~123',
                 },
-            });
+            } as any);
             const isSupportedNext = isSupportedSelector({
                 global: {
                     version: '19.2.25251-prestable~3023dc3',
-                    schedulerVersion: '20.2.12.14',
+                    schedulerVersion: '20.2.12-local~123123',
+                    masterVersion: '21.123.321-stable~123',
                 },
-            });
+            } as any);
 
             expect(isSupported).toBe(isSupportedNext);
         });
 
         it('local cluster version from arcadia supports all the features', () => {
-            const isSupported = _isFeatureSupported(_LOCAL_ARCADIA_VERSION, {
-                knownFeature: {
-                    prestable: '19.4.29880',
-                    component: ['19.3.29880', '-stable-something'],
+            const isSupported = _isFeatureSupported(
+                {proxy: _LOCAL_ARCADIA_VERSION},
+                {
+                    knownFeature: {
+                        proxy: '19.4.29880',
+                    },
                 },
-            });
+            );
 
             expect(isSupported('knownFeature')).toBe(true);
-            expect(isSupported('unknownFeature')).toBe(true);
+            expect(isSupported('unknownFeature' as any)).toBe(false);
         });
 
         describe('non-existent facilities', () => {
             it('unknown feature should not be supported and trace should be emitted', () => {
-                const isSupported = _isFeatureSupported('some.version', {
-                    knownFeature: {
-                        prestable: '19.4.29880',
-                        component: ['19.4.29880', '-stable-something'],
+                const isSupported = _isFeatureSupported(
+                    {proxy: '19.4.29880-stable-something'},
+                    {
+                        knownFeature: {
+                            proxy: '19.4.29880',
+                        },
                     },
-                });
+                );
 
-                expect(isSupported('unknownFeature')).toBe(false);
+                expect(isSupported('unknownFeature' as any)).toBe(false);
                 expect(warnMock.mock.calls.length).toBe(1);
             });
 
             it('unknown component version should not be supported and trace should be emitted', () => {
-                const isSupported = _isFeatureSupported('some.version', {
-                    knownFeature: {
-                        prestable: '19.4.29880',
-                        component: undefined,
+                const isSupported = _isFeatureSupported(
+                    {},
+                    {
+                        knownFeature: {
+                            proxy: '19.4.29880',
+                        },
                     },
-                });
+                );
 
                 expect(isSupported('knownFeature')).toBe(false);
                 expect(warnMock.mock.calls.length).toBe(1);
@@ -75,77 +83,220 @@ describe('support', () => {
         });
 
         it('Prestable version supported explicitly', () => {
-            const isSupported = _isFeatureSupported('some.version', {
-                knownFeature: {
-                    prestable: '19.2.25000',
-                    component: ['19.2.26251', '-prestable~3023dc3'],
+            const isSupported = _isFeatureSupported(
+                {proxy: '19.2.26251-prestable~3023dc3'},
+                {
+                    knownFeature: {
+                        proxy: '19.2.25000',
+                    },
                 },
-            });
+            );
 
             expect(isSupported('knownFeature')).toBe(true);
-        });
-
-        describe('Prestable version not supported implicitly, stable requirement does not work', () => {
-            it('does not find prestable fallback and yells to console', () => {
-                const isSupported = _isFeatureSupported('some.version', {
-                    knownFeature: {
-                        stable: '19.2.25000',
-                        component: ['19.2.26251', '-prestable~3023dc3'],
-                    },
-                });
-
-                expect(isSupported('knownFeature')).toBe(false);
-                expect(warnMock.mock.calls.length).toBe(1);
-            });
-
-            it('finds prestable fallback and does not yell to console', () => {
-                const isSupported = _isFeatureSupported('some.version', {
-                    knownFeature: {
-                        stable: '19.2.25000',
-                        prestable: '19.3.25000',
-                        component: ['19.2.26251', '-prestable~3023dc3'],
-                    },
-                });
-
-                expect(isSupported('knownFeature')).toBe(false);
-                expect(warnMock.mock.calls.length).toBe(0);
-            });
         });
 
         it('Stable version supported explicitly', () => {
-            const isSupported = _isFeatureSupported('some.version', {
-                knownFeature: {
-                    stable: '19.2.26000',
-                    component: ['19.2.26251', '-stable~3023dc3'],
+            const isSupported = _isFeatureSupported(
+                {proxy: '19.2.26251-stable~3023dc3', scheduler: '19.2.26251-stable~3023dc3'},
+                {
+                    proxyFeature: {
+                        proxy: '19.2.26000',
+                    },
+                    schedulerFeature: {
+                        scheduler: '20.1.23456',
+                    },
                 },
-            });
+            );
 
-            expect(isSupported('knownFeature')).toBe(true);
+            expect(isSupported('proxyFeature')).toBe(true);
+            expect(isSupported('schedulerFeature')).toBe(false);
         });
 
         it('Stable version supported implicitly, by requirement for prestable', () => {
-            const isSupported = _isFeatureSupported('some.version', {
-                knownFeature: {
-                    prestable: '19.2.25000',
-                    component: ['19.2.26251', '-stable~3023dc3'],
+            const isSupported = _isFeatureSupported(
+                {proxy: '19.2.26251-stable~3023dc3'},
+                {
+                    knownFeature: {
+                        proxy: '19.2.25000',
+                    },
                 },
-            });
+            );
 
             expect(isSupported('knownFeature')).toBe(true);
         });
 
-        it('Multiple version intervals', () => {
-            const isSupported = _isFeatureSupported('some.version', {
-                knownFeature: {
-                    prestable: [
-                        {greater: '19.2.26123', smaller: '19.3.00000'},
-                        {greater: '19.3.25000'},
-                    ],
-                    component: ['19.3.25251', '-prestable~3023dc3'],
-                },
+        describe('Multiple versions of proxy', () => {
+            function makeMultiFeatures() {
+                return {
+                    knownFeature: {
+                        proxy: [
+                            {greater: '19.2.26123', smaller: '19.3.00000'} as const,
+                            {greater: '19.3.25000'} as const,
+                        ],
+                    },
+                };
+            }
+
+            it('should be false for versions less than 19.2.26123', () => {
+                const isSupported = _isFeatureSupported(
+                    {proxy: '10.2.35251-prestable~3023dc3'},
+                    makeMultiFeatures(),
+                );
+
+                expect(isSupported('knownFeature')).toBe(false);
             });
 
-            expect(isSupported('knownFeature')).toBe(true);
+            it('should be true for versions in [19.2.26123; 19.3.0)', () => {
+                const isSupported = _isFeatureSupported(
+                    {proxy: '19.2.35251-prestable~3023dc3'},
+                    makeMultiFeatures(),
+                );
+
+                expect(isSupported('knownFeature')).toBe(true);
+            });
+
+            it('should be false for versions in [19.3.0; 19.3.25000)', () => {
+                const isSupported = _isFeatureSupported(
+                    {proxy: '19.3.15251-prestable~3023dc3'},
+                    makeMultiFeatures(),
+                );
+
+                expect(isSupported('knownFeature')).toBe(false);
+            });
+
+            it('should be false for versions in [19.2.26123; 19.3.0)', () => {
+                const isSupported = _isFeatureSupported(
+                    {proxy: '19.3.15251-prestable~3023dc3'},
+                    makeMultiFeatures(),
+                );
+
+                expect(isSupported('knownFeature')).toBe(false);
+            });
+
+            it('should be true for versions greater than 19.3.25000', () => {
+                const isSupported = _isFeatureSupported(
+                    {proxy: '19.3.25251-prestable~3023dc3'},
+                    makeMultiFeatures(),
+                );
+
+                expect(isSupported('knownFeature')).toBe(true);
+            });
+        });
+
+        describe('Multiple versions of scheduler', () => {
+            function makeMultiFeatures() {
+                return {
+                    knownFeature: {
+                        scheduler: [
+                            {greater: '19.2.26123', smaller: '19.3.00000'} as const,
+                            {greater: '19.3.25000'} as const,
+                        ],
+                    },
+                };
+            }
+
+            it('should be false for versions less than 19.2.26123', () => {
+                const isSupported = _isFeatureSupported(
+                    {scheduler: '10.2.35251-prestable~3023dc3'},
+                    makeMultiFeatures(),
+                );
+
+                expect(isSupported('knownFeature')).toBe(false);
+            });
+
+            it('should be true for versions in [19.2.26123; 19.3.0)', () => {
+                const isSupported = _isFeatureSupported(
+                    {scheduler: '19.2.35251-prestable~3023dc3'},
+                    makeMultiFeatures(),
+                );
+
+                expect(isSupported('knownFeature')).toBe(true);
+            });
+
+            it('should be false for versions in [19.3.0; 19.3.25000)', () => {
+                const isSupported = _isFeatureSupported(
+                    {scheduler: '19.3.15251-prestable~3023dc3'},
+                    makeMultiFeatures(),
+                );
+
+                expect(isSupported('knownFeature')).toBe(false);
+            });
+
+            it('should be false for versions in [19.2.26123; 19.3.0)', () => {
+                const isSupported = _isFeatureSupported(
+                    {scheduler: '19.3.15251-prestable~3023dc3'},
+                    makeMultiFeatures(),
+                );
+
+                expect(isSupported('knownFeature')).toBe(false);
+            });
+
+            it('should be true for versions greater than 19.3.25000', () => {
+                const isSupported = _isFeatureSupported(
+                    {scheduler: '19.3.25251-prestable~3023dc3'},
+                    makeMultiFeatures(),
+                );
+
+                expect(isSupported('knownFeature')).toBe(true);
+            });
+        });
+
+        describe('Multiple versions of master', () => {
+            function makeMultiFeatures() {
+                return {
+                    knownFeature: {
+                        master: [
+                            {greater: '19.2.26123', smaller: '19.3.00000'} as const,
+                            {greater: '19.3.25000'} as const,
+                        ],
+                    },
+                };
+            }
+
+            it('should be false for versions less than 19.2.26123', () => {
+                const isSupported = _isFeatureSupported(
+                    {master: '10.2.35251-prestable~3023dc3'},
+                    makeMultiFeatures(),
+                );
+
+                expect(isSupported('knownFeature')).toBe(false);
+            });
+
+            it('should be true for versions in [19.2.26123; 19.3.0)', () => {
+                const isSupported = _isFeatureSupported(
+                    {master: '19.2.35251-prestable~3023dc3'},
+                    makeMultiFeatures(),
+                );
+
+                expect(isSupported('knownFeature')).toBe(true);
+            });
+
+            it('should be false for versions in [19.3.0; 19.3.25000)', () => {
+                const isSupported = _isFeatureSupported(
+                    {master: '19.3.15251-prestable~3023dc3'},
+                    makeMultiFeatures(),
+                );
+
+                expect(isSupported('knownFeature')).toBe(false);
+            });
+
+            it('should be false for versions in [19.2.26123; 19.3.0)', () => {
+                const isSupported = _isFeatureSupported(
+                    {master: '19.3.15251-prestable~3023dc3'},
+                    makeMultiFeatures(),
+                );
+
+                expect(isSupported('knownFeature')).toBe(false);
+            });
+
+            it('should be true for versions greater than 19.3.25000', () => {
+                const isSupported = _isFeatureSupported(
+                    {master: '19.3.25251-prestable~3023dc3'},
+                    makeMultiFeatures(),
+                );
+
+                expect(isSupported('knownFeature')).toBe(true);
+            });
         });
     });
 

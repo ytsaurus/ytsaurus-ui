@@ -38,6 +38,7 @@ import {queryTracker} from '../../pages/query-tracker/module';
 import {odinPageInfo, odinRootPageInfo} from '../../pages/odin';
 import {hasOdinPage} from '../../config';
 import {chyt} from './chyt';
+import {RawVersion} from '../../store/selectors/thor/support';
 
 const appReducers = {
     acl,
@@ -80,12 +81,15 @@ const appReducers = {
 export type RootState = Omit<ReturnType<ReturnType<typeof makeRootReducer>>, 'global'> & {
     global: {
         [key: string]: any;
+
+        version: RawVersion;
+        schedulerVersion: RawVersion;
+        masterVersion: RawVersion;
+
         clusterUiConfig: ClusterUiConfig;
         cluster?: string;
         rootPagesCluster?: string;
         asideHeaderWidth: number;
-        schedulerVersion: string;
-        masterVersion: string;
         allowedExperimentalPages: Array<string>;
     };
 };
