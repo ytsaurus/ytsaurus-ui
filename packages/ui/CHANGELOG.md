@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.11.2](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.11.1...ui-v1.11.2) (2024-01-16)
+
+
+### Bug Fixes
+
+* **CHYT:** do not display CHYT-page when chyt_controller_base_url is empty [YTFRONT-3863] ([cb66484](https://github.com/ytsaurus/ytsaurus-ui/commit/cb664842ffdd6ae56461afdc85340ba6c9fbd602))
+
 ## [1.11.1](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.11.0...ui-v1.11.1) (2024-01-11)
 
 
