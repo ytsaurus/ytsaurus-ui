@@ -166,7 +166,7 @@ function loadExpandedOperationsAndPools(tree: string): ExpandedPoolsThunkAction 
         if (loadAll) {
             operationsRequests.push(
                 makeGet(
-                    `//sys/scheduler/orchid/scheduler/scheduling_info_per_pool_tree/${tree}/fair_share_info/operations`,
+                    `//sys/scheduler/orchid/scheduler/pool_trees/${tree}/fair_share_info/operations`,
                 ),
             );
         } else {
@@ -454,7 +454,7 @@ export function getPoolPathsByName(
 
         return {
             fullPath: calculatePoolPath(poolName, pools, tree),
-            orchidPath: `//sys/scheduler/orchid/scheduler/scheduling_info_per_pool_tree/${tree}/fair_share_info/pools/${poolName}`,
+            orchidPath: `//sys/scheduler/orchid/scheduler/pool_trees/${tree}/fair_share_info/pools/${poolName}`,
         };
     };
 }

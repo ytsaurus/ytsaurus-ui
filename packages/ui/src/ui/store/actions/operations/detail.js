@@ -37,7 +37,7 @@ function getIsEphemeral([operationAttributes, userTransactionAlive]) {
         return {
             command: 'get',
             parameters: {
-                path: '//sys/scheduler/orchid/scheduler/scheduling_info_per_pool_tree/' + path,
+                path: '//sys/scheduler/orchid/scheduler/pool_trees/' + path,
             },
         };
     });
