@@ -127,7 +127,7 @@ function waitWhilePoolIsReady({name, tree}: {name: string; tree: string}, starte
         setTimeout(() => {
             yt.v3
                 .exists({
-                    path: `//sys/scheduler/orchid/scheduler/scheduling_info_per_pool_tree/${tree}/fair_share_info/pools/${name}`,
+                    path: `//sys/scheduler/orchid/scheduler/pool_trees/${tree}/fair_share_info/pools/${name}`,
                 })
                 .then((res: boolean) => {
                     if (res) {
