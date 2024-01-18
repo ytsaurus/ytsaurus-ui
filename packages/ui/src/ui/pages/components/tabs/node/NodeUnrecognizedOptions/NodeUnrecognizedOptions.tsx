@@ -1,0 +1,41 @@
+import React from 'react';
+import {useDispatch, useSelector} from 'react-redux';
+import cn from 'bem-cn-lite';
+
+import './NodeUnrecognizedOptions.scss';
+
+const block = cn('node-unrecognized-options');
+
+import {loadNodeUnrecognizedOptions} from '../../../../../store/actions/components/node/unrecognized-options';
+import {
+    getNodeUnrecognizedOptionsData,
+    getNodeUnrecognizedOptionsError,
+} from '../../../../../store/selectors/components/node/unrecognized-options';
+import Error from '../../../../../components/Error/Error';
+import Yson from '../../../../../components/Yson/Yson';
+import {getNodeUnrecognizedOptionsYsonSettings} from '../../../../../store/selectors/thor/unipika';
+
+export function NodeUnrecognizedOptions({host}: {host: string}) {
+    const dispatch = useDispatch();
+
+    React.useEffect(() => {
+        dispatch(loadNodeUnrecognizedOptions(host));
+    }, [host, dispatch]);
+
+    const data = useSelector(getNodeUnrecognizedOptionsData);
+    const error = useSelector(getNodeUnrecognizedOptionsError);
+
+    const unipikaSettings = useSelector(getNodeUnrecognizedOptionsYsonSettings);
+
+    return error ? (
+        <Error error={error} />
+    ) : (
+        <Yson
+            className={block('yson')}
+            value={data}
+            settings={unipikaSettings}
+            folding
+            virtualized
+        />
+    );
+}
