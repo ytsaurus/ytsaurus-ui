@@ -22,6 +22,7 @@ import './NodePage.scss';
 import NodeAlerts from './NodeAlerts/NodeAlerts';
 import NodeLocations from './NodeLocations/NodeLocations';
 import NodeTabletSlotsTab from './NodeTabletSlotsTab/NodeTabletSlotsTab';
+import {NodeUnrecognizedOptions} from './NodeUnrecognizedOptions/NodeUnrecognizedOptions';
 
 const block = cn('node-page');
 
@@ -34,7 +35,8 @@ export interface NodeDetailsProps extends RouteComponentProps<RouteParams> {}
 function NodePage({match}: NodeDetailsProps): ReturnType<React.VFC> {
     const dispatch = useDispatch();
 
-    const {node, loading, loaded, error, errorData} = useSelector(nodeSelector);
+    const {node, hasUnrecognizedOptions, loading, loaded, error, errorData} =
+        useSelector(nodeSelector);
 
     const host = decodeURIComponent(match.params.host);
     const alertCount = useSelector(getNodeAlertCount);
@@ -60,6 +62,7 @@ function NodePage({match}: NodeDetailsProps): ReturnType<React.VFC> {
                     [NodeTab.LOCATIONS]: {show: Boolean(node?.locations?.length)},
                     [NodeTab.TABLET_SLOTS]: {show: Boolean(node && tabletSlots.length > 0)},
                     [NodeTab.ALERTS]: {show: Boolean(alertCount), counter: alertCount},
+                    [NodeTab.UNRECOGNIZED_OPTIONS]: {show: Boolean(hasUnrecognizedOptions)},
                 },
                 null,
                 {
@@ -67,7 +70,7 @@ function NodePage({match}: NodeDetailsProps): ReturnType<React.VFC> {
                     [NodeTab.MEMORY_USAGE]: 'Memory usage',
                 },
             ),
-        [matchUrl, alertCount, tabletSlots],
+        [node, matchUrl, alertCount, tabletSlots, hasUnrecognizedOptions],
     );
 
     return (
@@ -110,6 +113,12 @@ function NodePage({match}: NodeDetailsProps): ReturnType<React.VFC> {
                                     <Route
                                         path={`${match.path}/${NodeTab.ALERTS}`}
                                         render={() => <NodeAlerts />}
+                                    />
+                                    <Route
+                                        path={`${match.path}/${NodeTab.UNRECOGNIZED_OPTIONS}`}
+                                        render={() => (
+                                            <NodeUnrecognizedOptions host={match.params.host} />
+                                        )}
                                     />
                                     <Redirect
                                         from={match.url}

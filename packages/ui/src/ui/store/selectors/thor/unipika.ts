@@ -1,5 +1,5 @@
 import {createSelector} from 'reselect';
-import _ from 'lodash';
+import clone_ from 'lodash/clone';
 
 import {
     getFormat,
@@ -45,16 +45,18 @@ const getYsonSettings = createSelector(
     },
 );
 
-export const getJobGeneralYsonSettings = createSelector([getYsonSettings], _.clone);
+export const getJobGeneralYsonSettings = createSelector([getYsonSettings], clone_);
 
-export const getJobSpecificationYsonSettings = createSelector([getYsonSettings], _.clone);
+export const getJobSpecificationYsonSettings = createSelector([getYsonSettings], clone_);
 
-export const getTableYsonSettings = createSelector([getYsonSettings], _.clone);
+export const getTableYsonSettings = createSelector([getYsonSettings], clone_);
 
-export const getOperationAttributesYsonSettings = createSelector([getYsonSettings], _.clone);
+export const getOperationAttributesYsonSettings = createSelector([getYsonSettings], clone_);
 
-export const getOperationExperimentsYsonSettings = createSelector([getYsonSettings], _.clone);
+export const getOperationExperimentsYsonSettings = createSelector([getYsonSettings], clone_);
 
-export const getNavigationMountConfigYsonSettings = createSelector([getYsonSettings], _.clone);
+export const getNavigationMountConfigYsonSettings = createSelector([getYsonSettings], clone_);
 
-export const getEditJsonYsonSettings = createSelector([getYsonSettings], _.clone);
+export const getEditJsonYsonSettings = createSelector([getYsonSettings], clone_);
+
+export const getNodeUnrecognizedOptionsYsonSettings = createSelector([getYsonSettings], clone_);

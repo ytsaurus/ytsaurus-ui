@@ -96,6 +96,7 @@ export enum YTApiId {
 
     nodeAttributes,
     nodeMemoryUsage,
+    nodeUnrecognizedOptions,
 
     schedulingData,
     schedulingEditPool,
