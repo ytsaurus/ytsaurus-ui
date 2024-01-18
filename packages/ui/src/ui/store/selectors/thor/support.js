@@ -149,7 +149,7 @@ const features = createSelector(
                 component: proxy,
             },
             qtACO: {
-                prestable: '1.30.0',
+                prestable: '1.3.0',
                 component: proxy,
             },
         };

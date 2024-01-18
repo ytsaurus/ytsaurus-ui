@@ -27,6 +27,7 @@ import {QueryItem} from '../module/api';
 import {useCurrentQuery} from '../QueryResults/hooks/useCurrentQuery';
 import forEach_ from 'lodash/forEach';
 import uniqBy_ from 'lodash/uniqBy';
+import {isSupportedQtACO} from '../../../store/selectors/thor/support';
 import {QueryACOSelect} from '../QueryACO/QueryACOSelect';
 
 const b = block('query-container');
@@ -41,6 +42,7 @@ const QueryEditorView = React.memo(function QueryEditorView({
     const text = useSelector(getQueryText);
     const engine = useSelector(getQueryEngine);
     const editorErrors = useSelector(getQueryEditorErrors);
+    const isACOSupported = useSelector(isSupportedQtACO);
     const decorationsCollection = useRef<monaco.editor.IEditorDecorationsCollection | undefined>(
         undefined,
     );
@@ -131,7 +133,7 @@ const QueryEditorView = React.memo(function QueryEditorView({
                 <div className="query-run-action">
                     <Button
                         qa="qt-run"
-                        pin="round-brick"
+                        pin={isACOSupported ? 'round-brick' : undefined}
                         className="query-run-action-button"
                         view="action"
                         onClick={runQueryCallback}
@@ -139,7 +141,7 @@ const QueryEditorView = React.memo(function QueryEditorView({
                         <Icon data={playIcon} />
                         Run
                     </Button>
-                    <QueryACOSelect />
+                    {isACOSupported && <QueryACOSelect />}
                 </div>
             </div>
         </div>
