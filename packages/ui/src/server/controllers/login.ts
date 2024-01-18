@@ -98,7 +98,7 @@ export async function handleLogout(req: Request, res: Response) {
             return throwAuthDisabled();
         }
         res.setHeader('set-cookie', `${YT_CYPRESS_COOKIE_NAME}=deleted; Path=/; Max-Age=0;`);
-        res.sendStatus(401).send('Logout');
+        res.status(401).send('Logout');
     } catch (e: any) {
         sendAndLogError(req.ctx, res, 500, e);
     }
