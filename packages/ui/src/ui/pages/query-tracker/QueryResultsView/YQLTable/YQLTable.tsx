@@ -31,6 +31,10 @@ function rowKey(row: unknown, index: number) {
     return index;
 }
 
+function triggerWindowResize() {
+    window.dispatchEvent(new Event('resize'));
+}
+
 const tableSettings: Settings = {
     sortable: false,
     displayIndices: true,
@@ -38,6 +42,7 @@ const tableSettings: Settings = {
     externalSort: true,
     stickyHead: MOVING,
     stickyTop: 0,
+    syncHeadOnResize: true,
 };
 
 const transposeTableSettings: Settings = {
@@ -157,6 +162,7 @@ export default function Table({
                                     </React.Fragment>
                                 ) : (
                                     <ShowMoreInline
+                                        onClick={triggerWindowResize}
                                         strippedDown={strippedDown}
                                         formattedValue={fullFormattedValue}
                                     />
@@ -364,8 +370,9 @@ function visualRowIndex<T>(row: WithIndex<T>) {
 interface ShowMoreInlineProps {
     formattedValue: string;
     strippedDown: string;
+    onClick?(): void;
 }
-function ShowMoreInline({formattedValue, strippedDown}: ShowMoreInlineProps) {
+function ShowMoreInline({formattedValue, strippedDown, onClick}: ShowMoreInlineProps) {
     const [showFull, setShowFull] = React.useState(false);
     return (
         <React.Fragment>
@@ -379,6 +386,10 @@ function ShowMoreInline({formattedValue, strippedDown}: ShowMoreInlineProps) {
             <Link
                 onClick={() => {
                     setShowFull((v) => !v);
+
+                    if (onClick) {
+                        onClick();
+                    }
                 }}
             >
                 {showFull ? 'Show less' : 'Show more'}
