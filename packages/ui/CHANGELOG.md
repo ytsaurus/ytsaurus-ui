@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.12.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.11.2...ui-v1.12.0) (2024-01-22)
+
+
+### Features
+
+* added a new query button [[#238](https://github.com/ytsaurus/ytsaurus-ui/issues/238)] ([b66fa31](https://github.com/ytsaurus/ytsaurus-ui/commit/b66fa31927187debe8361e7866f33dc62b211026))
+* **Components/Node:** add 'Unrecognized options' tab [YTFRONT-3936] ([520916b](https://github.com/ytsaurus/ytsaurus-ui/commit/520916baddf345ff1c5f082dd6be57e4a3514fdb))
+
 ## [1.11.2](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.11.1...ui-v1.11.2) (2024-01-16)
 
 
