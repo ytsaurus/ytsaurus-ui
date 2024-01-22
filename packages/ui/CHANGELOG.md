@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.12.1](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.12.0...ui-v1.12.1) (2024-01-22)
+
+
+### Bug Fixes
+
+* **Queries/Results:** synchronize table header when resizing [[#294](https://github.com/ytsaurus/ytsaurus-ui/issues/294)] ([f625984](https://github.com/ytsaurus/ytsaurus-ui/commit/f6259848aa7159474ce929cc963f065383e3382b))
+
 ## [1.12.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.11.2...ui-v1.12.0) (2024-01-22)
 
 
