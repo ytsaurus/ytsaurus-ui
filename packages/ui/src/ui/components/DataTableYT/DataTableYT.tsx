@@ -29,7 +29,7 @@ export const DATA_TABLE_YT_SETTINGS: Settings = {
     displayIndices: false,
     stickyHead: DataTable.MOVING,
     stickyFooter: DataTable.MOVING,
-    stickyTop: HEADER_HEIGHT,
+    stickyTop: 0,
     stickyBottom: 0,
     syncHeadOnResize: true,
     dynamicRender: true,
@@ -40,7 +40,7 @@ export const DATA_TABLE_YT_SETTINGS: Settings = {
 
 export const DATA_TABLE_YT_SETTINGS_UNDER_TOOLBAR: Settings = {
     ...DATA_TABLE_YT_SETTINGS,
-    stickyTop: STICKY_TOOLBAR_BOTTOM,
+    stickyTop: 0,
 };
 
 export default class DataTableYT<T> extends React.Component<DataTableYtProps<T>> {

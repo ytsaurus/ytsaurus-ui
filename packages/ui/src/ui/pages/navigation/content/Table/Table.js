@@ -133,7 +133,7 @@ const renderTable = (props) => {
     } else if (isFullScreen) {
         stickyTop = 0;
     } else {
-        stickyTop = HEADER_HEIGHT + OVERVIEW_HEIGHT;
+        stickyTop = 0;
     }
 
     const tableSettings = {
