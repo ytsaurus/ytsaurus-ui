@@ -15,6 +15,7 @@ export const IdmObjectType: {[key: string]: IdmKindType} = {
     POOL: 'pool',
     TABLET_CELL_BUNDLE: 'tablet_cell_bundle',
     ACCESS_CONTROL_OBJECT: 'access_control_object',
+    UI_EFFECTIVE_ACL: 'ui_effective_acl',
 };
 
 export const REGISTER_QUEUE_CONSUMER = 'register_queue_consumer';
@@ -42,24 +43,37 @@ export const INHERITANCE_MODE_TYPES = {
 
 const ACCOUNTS_PERMISSION_TYPES = ['administer', 'use'];
 
+const PATH_SETTINGS = {
+    permissionTypes: PERMISSION_TYPES,
+    permissionsToRequest: [['read'], ['write'], ['remove'], ['mount']],
+    allowBossApprovals: true,
+    allowReadApprovers: true,
+    allowAuditors: true,
+    allowInheritAcl: true,
+    allowInheritResponsibles: true,
+};
+
 export const PERMISSIONS_SETTINGS = {
-    [IdmObjectType.PATH]: {
-        permissionTypes: PERMISSION_TYPES,
-        permissionsToRequest: [['read'], ['write'], ['remove'], ['mount']],
-        allowBossApprovals: true,
-        allowReadApprovers: true,
-        allowAuditors: true,
-        allowInheritAcl: true,
-        allowInheritResponsibles: true,
-    },
+    [IdmObjectType.UI_EFFECTIVE_ACL]: {...PATH_SETTINGS, permissionsToRequest: []},
+    [IdmObjectType.PATH]: PATH_SETTINGS,
     [IdmObjectType.ACCESS_CONTROL_OBJECT]: {
         permissionTypes: PERMISSION_TYPES,
-        permissionsToRequest: [['read'], ['write'], ['remove'], ['mount']],
+        permissionsToRequest: [
+            ['read'],
+            ['write'],
+            ['use'],
+            ['administer'],
+            ['create'],
+            ['remove'],
+            ['mount'],
+            ['manage'],
+        ],
         allowBossApprovals: true,
         allowReadApprovers: true,
         allowAuditors: true,
         allowInheritAcl: true,
         allowInheritResponsibles: true,
+        allowDeleteWithoutRevisionCheck: true,
     },
     [IdmObjectType.ACCOUNT]: {
         permissionTypes: ACCOUNTS_PERMISSION_TYPES,

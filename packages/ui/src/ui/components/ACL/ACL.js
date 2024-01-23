@@ -119,7 +119,6 @@ class ACL extends Component {
 
         cluster: PropTypes.string,
         aclRequestOptions: PropTypes.shape({
-            useEffective: PropTypes.bool,
             inheritAcl: PropTypes.bool,
         }),
 
@@ -430,9 +429,7 @@ class ACL extends Component {
     }
 
     renderColumnGroups() {
-        const {columnGroups, idmKind, path, loadAclData, cluster, aclRequestOptions, nodeType} =
-            this.props;
-        const {useEffective} = aclRequestOptions;
+        const {columnGroups, idmKind, path, loadAclData, cluster, nodeType} = this.props;
         const props = {
             path,
             loadAclDataFn: () => loadAclData({path, idmKind}),
@@ -440,7 +437,7 @@ class ACL extends Component {
             cluster,
             allowEdit: nodeType === 'map_node',
         };
-        return isIdmAclAvailable() && idmKind === IdmObjectType.PATH && !useEffective ? (
+        return isIdmAclAvailable() && idmKind === IdmObjectType.PATH ? (
             <ColumnGroups {...props} />
         ) : null;
     }

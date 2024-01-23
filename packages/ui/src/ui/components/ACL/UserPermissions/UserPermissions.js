@@ -7,7 +7,6 @@ import _ from 'lodash';
 import CollapsibleList from '../../../components/CollapsibleList/CollapsibleList';
 import ErrorBoundary from '../../../components/ErrorBoundary/ErrorBoundary';
 import Icon from '../../../components/Icon/Icon';
-
 import {IdmObjectType} from '../../../constants/acl';
 
 import RequestPermissions from '../RequestPermissions/RequestPermissions';
@@ -32,7 +31,6 @@ export default class UserPermissions extends Component {
         path: PropTypes.string.isRequired,
         idmKind: PropTypes.string.isRequired,
         aclRequestOptions: PropTypes.shape({
-            useEffective: PropTypes.bool,
             skipResponsible: PropTypes.bool,
         }),
         version: PropTypes.string,
@@ -168,16 +166,13 @@ export default class UserPermissions extends Component {
             updateAclError,
             cancelUpdateAcl,
             cluster,
-            aclRequestOptions,
         } = this.props;
-
-        const {useEffective} = aclRequestOptions;
 
         return (
             <ErrorBoundary>
                 <div className={block(null, className)}>
                     {this.renderCard()}
-                    {idmKind !== IdmObjectType.ACCESS_CONTROL_OBJECT && !useEffective && (
+                    {idmKind !== IdmObjectType.UI_EFFECTIVE_ACL && (
                         <React.Fragment>
                             <RequestPermissions
                                 className={block('request')}

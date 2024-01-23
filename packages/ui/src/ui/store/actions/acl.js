@@ -27,6 +27,8 @@ const prepareUserPermissions = (userPermissions, idmKind) => {
 
 function getPathToCheckPermissions(idmKind, state, entityName, poolTree) {
     switch (idmKind) {
+        case IdmObjectType.ACCESS_CONTROL_OBJECT:
+        case IdmObjectType.UI_EFFECTIVE_ACL:
         case IdmObjectType.PATH:
             return entityName;
         case IdmObjectType.ACCOUNT:
@@ -50,9 +52,6 @@ function getPathToCheckPermissions(idmKind, state, entityName, poolTree) {
         case IdmObjectType.TABLET_CELL_BUNDLE: {
             return `//sys/tablet_cell_bundles/${entityName}`;
         }
-        case IdmObjectType.ACCESS_CONTROL_OBJECT: {
-            return entityName;
-        }
         default:
             throw new Error('Unexpected value of parameter idmKind');
     }
@@ -61,7 +60,7 @@ function getPathToCheckPermissions(idmKind, state, entityName, poolTree) {
 export function loadAclData(
     {path, idmKind},
     {normalizedPoolTree} = {},
-    options = {useEffective: false, skipResponsible: false, userPermissionsPath: undefined},
+    options = {skipResponsible: false, userPermissionsPath: undefined},
 ) {
     return (dispatch, getState) => {
         const state = getState();
@@ -73,7 +72,7 @@ export function loadAclData(
             idmKind === IdmObjectType.POOL ? normalizedPoolTree || getTree(state) : undefined;
         const {permissionTypes} = UIFactory.getAclPermissionsSettings()[idmKind];
 
-        const {useEffective, skipResponsible, userPermissionsPath} = options;
+        const {skipResponsible, userPermissionsPath} = options;
 
         const pathToCheckPermissions = getPathToCheckPermissions(idmKind, state, path, poolTree);
         const pathToCheckUserPermissions = userPermissionsPath
@@ -87,7 +86,6 @@ export function loadAclData(
                 kind: idmKind,
                 poolTree,
                 sysPath: pathToCheckPermissions,
-                useEffective,
             }),
             checkUserPermissions(pathToCheckUserPermissions, login, permissionTypes),
             getResponsible({

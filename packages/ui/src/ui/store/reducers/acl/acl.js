@@ -40,6 +40,7 @@ export const aclDefaults = {
 const initialState = {
     [IdmObjectType.ACCESS_CONTROL_OBJECT]: {...aclDefaults},
     [IdmObjectType.PATH]: {...aclDefaults},
+    [IdmObjectType.UI_EFFECTIVE_ACL]: {...aclDefaults},
     [IdmObjectType.ACCOUNT]: {...aclDefaults},
     [IdmObjectType.POOL]: {...aclDefaults},
     [IdmObjectType.TABLET_CELL_BUNDLE]: {...aclDefaults},
