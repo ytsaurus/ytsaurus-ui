@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.12.2](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.12.1...ui-v1.12.2) (2024-01-23)
+
+
+### Bug Fixes
+
+* add bundle resources validation [YTFRONT-3931] ([72b17d3](https://github.com/ytsaurus/ytsaurus-ui/commit/72b17d3160dd557c3b3cb4b7c311c4f348be237e))
+* nodejs error during logout [[#292](https://github.com/ytsaurus/ytsaurus-ui/issues/292)] ([3e64d2c](https://github.com/ytsaurus/ytsaurus-ui/commit/3e64d2cef1760f7b40b866e806fc6f835d007cbd))
+
 ## [1.12.1](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.12.0...ui-v1.12.1) (2024-01-22)
 
 
