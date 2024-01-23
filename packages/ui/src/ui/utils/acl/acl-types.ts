@@ -1,6 +1,7 @@
 import {PreparedRole} from './index';
 
 export type IdmKindType =
+    | 'ui_effective_acl' // ui specific type, used to read @effective_acl
     | 'path'
     | 'account'
     | 'pool'
@@ -146,12 +147,9 @@ export interface AclRequestParams {
     kind: IdmKindType;
     poolTree?: string;
     sysPath: string;
-    useEffective?: boolean;
 }
 
-export interface GetAclParams extends AclRequestParams {
-    useEffective?: boolean;
-}
+export interface GetAclParams extends AclRequestParams {}
 
 export interface GetResponsibleParams extends AclRequestParams {
     skipResponsible?: boolean;

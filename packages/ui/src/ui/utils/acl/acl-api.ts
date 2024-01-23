@@ -33,7 +33,7 @@ import {
     makeCheckPermissionBatchSubRequest,
 } from '../../../shared/utils/check-permission';
 import {RequestPermissionParams} from './external-acl-api';
-import {REGISTER_QUEUE_CONSUMER_VITAL} from '../../constants/acl';
+import {IdmObjectType, REGISTER_QUEUE_CONSUMER_VITAL} from '../../constants/acl';
 
 function getInheritAcl(path: string): Promise<ACLResponsible> {
     return yt.v3.get({path: path + '/@inherit_acl'}).then((inherit_acl: boolean) => {
@@ -43,16 +43,9 @@ function getInheritAcl(path: string): Promise<ACLResponsible> {
     });
 }
 
-export function getAcl({
-    cluster,
-    path,
-    kind,
-    poolTree,
-    sysPath,
-    useEffective = false,
-}: GetAclParams) {
+export function getAcl({cluster, path, kind, poolTree, sysPath}: GetAclParams) {
     const api = UIFactory.getAclApi();
-    if (useEffective) {
+    if (kind === IdmObjectType.UI_EFFECTIVE_ACL) {
         return getEffectiveAcl(sysPath);
     }
     return api.getAcl({cluster, path, kind, poolTree, sysPath});

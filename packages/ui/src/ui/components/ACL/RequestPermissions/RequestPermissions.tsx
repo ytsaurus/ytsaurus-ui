@@ -190,7 +190,7 @@ function RequestPermissions(props: Props) {
         );
     }, [requestPermissionsFields]);
 
-    return (
+    return !choices?.length ? null : (
         <ErrorBoundary>
             <div className={block(null, className)}>
                 <Button view={'action'} onClick={handleShow}>

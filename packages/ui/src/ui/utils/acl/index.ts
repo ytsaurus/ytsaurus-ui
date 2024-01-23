@@ -15,11 +15,6 @@ const POOL_TREES_REGEXP = new RegExp('//sys/pool_trees/[^/]+/.+');
 // //sys/tablet_cell_bundles/bundleName
 const TCB_REGEXP = new RegExp('//sys/tablet_cell_bundles/.+');
 
-// //sys/access_control_object_namespaces/namespace/name
-const ACCESS_CONTROL_OBJECT_REGEXP = new RegExp(
-    '//sys/access_control_object_namespaces/[^/]+/[^/]+$',
-);
-
 // //sys/access_control_object_namespaces...
 const ACCESS_CONTROL_OBJECT_ANY_REGEXP = new RegExp(
     '//sys/access_control_object_namespaces[^/+]{0,}',
@@ -29,7 +24,6 @@ interface NormalizedIdmParams {
     idmKind: IdmKindType;
     path: string;
     pool_tree?: string;
-    useEffective?: boolean;
     skipResponsible?: boolean;
     userPermissionsPath?: string;
 }
@@ -61,28 +55,20 @@ export function normalizeIdmParams(idmKind: IdmKindType, path = '') {
             };
         } else if (ACCESS_CONTROL_OBJECT_ANY_REGEXP.test(path)) {
             res = {
-                idmKind: idmKind,
+                idmKind: IdmObjectType.UI_EFFECTIVE_ACL,
                 path: path,
-                useEffective: true,
                 skipResponsible: true,
             };
         }
     }
 
     if (idmKind === IdmObjectType.ACCESS_CONTROL_OBJECT) {
-        if (ACCESS_CONTROL_OBJECT_REGEXP.test(path)) {
-            res = {
-                idmKind: idmKind,
-                path: path,
-                userPermissionsPath: `${path}/principal`,
-                skipResponsible: true,
-            };
-        } else {
-            res = {
-                idmKind: IdmObjectType.PATH,
-                path: path,
-            };
-        }
+        res = {
+            idmKind: idmKind,
+            path: path,
+            userPermissionsPath: `${path}/principal`,
+            skipResponsible: true,
+        };
     }
 
     return res;
