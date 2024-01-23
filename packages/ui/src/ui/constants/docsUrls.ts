@@ -12,6 +12,7 @@ export const docsUrls = {
     'faq:enablepathautocorrection': `${baseUrl}/faq/faq#enablepathautocorrection`,
     'storage:static_tables': `${baseUrl}/user-guide/storage/static-tables`,
     'dynamic-tables:overview': `${baseUrl}/user-guide/dynamic-tables/overview`,
+    'dynamic-tables:cross-dc': `${baseUrl}/user-guide/dynamic-tables/dynamic-tables-resources#georaspredelyonnye-klastery-cross-dc`,
     'storage:compression#compression_codecs': `${baseUrl}/user-guide/storage/compression#compression_codecs`,
     'storage:replication#replication': `${baseUrl}/user-guide/storage/replication#replication`,
     'storage:replication#erasure': `${baseUrl}/user-guide/storage/replication#erasure`,
