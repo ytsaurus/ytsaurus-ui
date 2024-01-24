@@ -45,12 +45,10 @@ const makeAclMapStateToProps = (inputIdmKind) => {
             idmKind,
             path,
             pool_tree: normalizedPoolTree,
-            skipResponsible,
             userPermissionsPath,
         } = normalizedParams;
 
         const aclRequestOptions = {
-            skipResponsible,
             userPermissionsPath,
         };
 

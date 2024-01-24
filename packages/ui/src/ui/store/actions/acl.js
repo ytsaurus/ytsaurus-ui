@@ -60,7 +60,7 @@ function getPathToCheckPermissions(idmKind, state, entityName, poolTree) {
 export function loadAclData(
     {path, idmKind},
     {normalizedPoolTree} = {},
-    options = {skipResponsible: false, userPermissionsPath: undefined},
+    options = {userPermissionsPath: undefined},
 ) {
     return (dispatch, getState) => {
         const state = getState();
@@ -72,7 +72,7 @@ export function loadAclData(
             idmKind === IdmObjectType.POOL ? normalizedPoolTree || getTree(state) : undefined;
         const {permissionTypes} = UIFactory.getAclPermissionsSettings()[idmKind];
 
-        const {skipResponsible, userPermissionsPath} = options;
+        const {userPermissionsPath} = options;
 
         const pathToCheckPermissions = getPathToCheckPermissions(idmKind, state, path, poolTree);
         const pathToCheckUserPermissions = userPermissionsPath
@@ -94,7 +94,6 @@ export function loadAclData(
                 kind: idmKind,
                 poolTree,
                 sysPath: pathToCheckPermissions,
-                skipResponsible,
             }),
         ])
             .then(([acl, userPermissions, responsible]) => {

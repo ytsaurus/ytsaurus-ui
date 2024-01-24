@@ -66,9 +66,11 @@ export const getResponsible = async ({
     kind,
     poolTree,
     sysPath,
-    skipResponsible = false,
 }: GetResponsibleParams): Promise<ACLResponsible> => {
     const api = UIFactory.getAclApi();
+
+    const {skipResponsible} = UIFactory.getAclPermissionsSettings()[kind];
+
     if (skipResponsible || !api.isAllowed) {
         return getInheritAcl(sysPath);
     }
