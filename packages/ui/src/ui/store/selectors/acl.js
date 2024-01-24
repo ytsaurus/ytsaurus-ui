@@ -48,7 +48,7 @@ export const getObjectPermissionsTypesList = (idmKind) => {
             );
             items.forEach((item) => {
                 const {permissions} = item;
-                permissions.forEach((permission) => uniquePermisions.add(permission));
+                permissions?.forEach((permission) => uniquePermisions.add(permission));
             });
             return _.sortBy([...uniquePermisions], (permission) => permission);
         },
