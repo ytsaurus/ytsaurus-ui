@@ -30,9 +30,6 @@ export default class UserPermissions extends Component {
         className: PropTypes.string,
         path: PropTypes.string.isRequired,
         idmKind: PropTypes.string.isRequired,
-        aclRequestOptions: PropTypes.shape({
-            skipResponsible: PropTypes.bool,
-        }),
         version: PropTypes.string,
 
         permissions: UserPermissions.PermissionsType,

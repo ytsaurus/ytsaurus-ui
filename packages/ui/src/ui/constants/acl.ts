@@ -63,6 +63,7 @@ export type PermissionSettings = {
     allowInheritAcl: boolean;
     allowInheritResponsibles: boolean;
     allowDeleteWithoutRevisionCheck?: boolean;
+    skipResponsible?: boolean;
 };
 
 export const PERMISSIONS_SETTINGS: Record<IdmKindType, PermissionSettings> = {
@@ -86,6 +87,7 @@ export const PERMISSIONS_SETTINGS: Record<IdmKindType, PermissionSettings> = {
         allowInheritAcl: true,
         allowInheritResponsibles: true,
         allowDeleteWithoutRevisionCheck: true,
+        skipResponsible: true,
     },
     [IdmObjectType.ACCOUNT]: {
         permissionTypes: ACCOUNTS_PERMISSION_TYPES,

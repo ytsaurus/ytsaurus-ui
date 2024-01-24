@@ -24,7 +24,6 @@ interface NormalizedIdmParams {
     idmKind: IdmKindType;
     path: string;
     pool_tree?: string;
-    skipResponsible?: boolean;
     userPermissionsPath?: string;
 }
 
@@ -57,7 +56,6 @@ export function normalizeIdmParams(idmKind: IdmKindType, path = '') {
             res = {
                 idmKind: IdmObjectType.UI_EFFECTIVE_ACL,
                 path: path,
-                skipResponsible: true,
             };
         }
     }
@@ -67,7 +65,6 @@ export function normalizeIdmParams(idmKind: IdmKindType, path = '') {
             idmKind: idmKind,
             path: path,
             userPermissionsPath: `${path}/principal`,
-            skipResponsible: true,
         };
     }
 
