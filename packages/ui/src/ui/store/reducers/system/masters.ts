@@ -187,7 +187,7 @@ const initialState: MastersState = {
 export interface ResponseItem {
     host: string;
     physicalHost?: string;
-    attirbutes: {
+    attributes: {
         native_cell_tag: number;
         annotations: unknown;
     };

@@ -36,7 +36,7 @@ test('Navigation - Attributes', async ({page}) => {
     await expect(page).toHaveURL(makeClusterUrl('navigation?navmode=attributes&path=/'));
 });
 
-test('Navigation - User attirbutes', async ({page}) => {
+test('Navigation - User attributes', async ({page}) => {
     await page.goto(makeClusterUrl('navigation?navmode=user_attributes'));
     await expect(page).toHaveTitle(makeClusterTille({page: 'Navigation', path: '/'}));
     await expect(page).toHaveURL(makeClusterUrl('navigation?navmode=user_attributes&path=/'));
