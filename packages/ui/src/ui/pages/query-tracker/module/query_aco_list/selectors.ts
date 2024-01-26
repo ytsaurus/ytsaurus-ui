@@ -3,8 +3,11 @@ import {RootState} from '../../../../store/reducers';
 import {getSettingsData} from '../../../../store/selectors/settings-base';
 const getState = (state: RootState) => state.queryTracker.acoList;
 
-export const getLastSelectedACONamespaces = (state: RootState) =>
-    getSettingsData(state)['global::queryTracker::lastSelectedACOs'] ?? [];
+export const getLastSelectedACONamespaces = (state: RootState) => {
+    const cluster = state.global.cluster;
+
+    return getSettingsData(state)[`local::${cluster}::queryTracker::lastSelectedACOs`] ?? [];
+};
 
 export const getQueryACOOptions = (state: RootState): SelectOptionGroup[] => {
     return [
