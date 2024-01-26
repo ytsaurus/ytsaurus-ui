@@ -75,9 +75,12 @@ interface QueryTrackerSettings {
 interface ChytSettings {
     'global::chyt::list_columns': Array<string>;
 }
-interface QueryTrackerLastSelectedACOsSettings {
-    'global::queryTracker::lastSelectedACOs': string[];
-}
+
+type ClusterName = string;
+
+type QueryTrackerLastSelectedACOsSettings = {
+    [key in `local::${ClusterName}::queryTracker::lastSelectedACOs`]: string[];
+};
 
 interface OtherSettings {
     [key: string]: any;

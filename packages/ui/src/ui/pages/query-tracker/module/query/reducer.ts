@@ -14,10 +14,8 @@ import {
     SetQueryPatchAction,
     SetQueryReadyAction,
     UPDATE_ACO_QUERY,
-    UPDATE_DRAFT_ACO_QUERY,
     UPDATE_QUERY,
     UpdateACOQueryAction,
-    UpdateDraftACOQueryAction,
     UpdateQueryAction,
 } from './actions';
 import {cleanupQueryForDraft} from './utills';
@@ -118,31 +116,15 @@ export function reducer(state = initState, action: Actions): QueryState {
             };
         }
 
-        case UPDATE_DRAFT_ACO_QUERY: {
-            const access_control_object = action.data;
-
-            return {
-                ...state,
-                draft: {
-                    ...state.draft,
-                    access_control_object,
-                },
-            };
-        }
-
         case UPDATE_ACO_QUERY: {
             const access_control_object = action.data;
 
-            const queryItem = state.queryItem
-                ? {
-                      ...state.queryItem,
-                      access_control_object,
-                  }
-                : state.queryItem;
-
             return {
                 ...state,
-                queryItem,
+                queryItem: state.queryItem
+                    ? {...state.queryItem, access_control_object}
+                    : undefined,
+                draft: {...state.draft, access_control_object},
             };
         }
     }
@@ -158,5 +140,4 @@ type Actions =
     | UpdateQueryAction
     | SetQueryParamsAction
     | SetQueryReadyAction
-    | UpdateACOQueryAction
-    | UpdateDraftACOQueryAction;
+    | UpdateACOQueryAction;

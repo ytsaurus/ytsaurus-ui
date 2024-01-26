@@ -54,9 +54,6 @@ export type SetQueryParamsAction = ActionD<
 export const UPDATE_ACO_QUERY = 'query-tracker/UPDATE_ACO_QUERY';
 export type UpdateACOQueryAction = ActionD<typeof UPDATE_ACO_QUERY, string>;
 
-export const UPDATE_DRAFT_ACO_QUERY = 'query-tracker/UPDATE_DRAFT_ACO_QUERY';
-export type UpdateDraftACOQueryAction = ActionD<typeof UPDATE_DRAFT_ACO_QUERY, string>;
-
 export function loadQuery(
     queryId: string,
 ): ThunkAction<any, RootState, any, SetQueryAction | RequestQueryAction | SetQueryErrorLoadAction> {
@@ -224,7 +221,6 @@ export function setQueryACO({
             errorTitle: 'Failed to update query ACO',
         }).then(() => {
             dispatch({type: UPDATE_ACO_QUERY, data: aco});
-            dispatch({type: UPDATE_DRAFT_ACO_QUERY, data: aco});
         });
     };
 }
@@ -236,7 +232,7 @@ export function setDraftQueryACO({
 }): ThunkAction<Promise<unknown>, RootState, any, AnyAction> {
     return (dispatch) => {
         return dispatch(addACOToLastSelected(aco)).then(() =>
-            dispatch({type: UPDATE_DRAFT_ACO_QUERY, data: aco}),
+            dispatch(updateQueryDraft({access_control_object: aco})),
         );
     };
 }
