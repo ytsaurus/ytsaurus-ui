@@ -113,6 +113,14 @@ export interface UISettings {
      * See `@gravity-ui/unipika v3.0.0` details in [CHANGELOG.md](https://github.com/gravity-ui/unipika/blob/main/CHANGELOG.md).
      */
     hideReferrerUrl?: string;
+
+    /**
+     * Allows to define the path to lookup container / host values
+     */
+    systemPage?: {
+        containerPath?: string;
+        hostPath?: string;
+    };
 }
 
 export interface UISettingsMonitoring {

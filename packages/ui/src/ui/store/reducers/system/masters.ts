@@ -362,6 +362,7 @@ function masters(state = initialState, action: MastersStateAction): MastersState
         case FETCH_MASTER_CONFIG.REQUEST:
             return {...state, fetchingConfig: true};
         case FETCH_MASTER_CONFIG.SUCCESS:
+            console.log('action.data', action.data);
             return {
                 ...state,
                 ...processMastersConfig(state, action.data),

@@ -4,20 +4,24 @@ import {createSelector} from 'reselect';
 import ypath from '@ytsaurus/interface-helpers/lib/ypath';
 import {VisibleHostType} from '../../../constants/system/masters';
 import {getMastersHostType} from '../../../store/selectors/settings';
+import {uiSettings} from '../../../config/ui-settings';
 
 export const getSystemSchedulers = (state) => state.system.schedulersAndAgents.schedulers;
 export const getSystemSchedulerAlerts = (state) => state.system.schedulersAndAgents.schedulerAlerts;
 export const getSystemAgents = (state) => state.system.schedulersAndAgents.agents;
 export const getSystemAgentAlerts = (state) => state.system.schedulersAndAgents.agentAlerts;
-export const getSystemSchedulerAndAgentVisibleHostType = (state) =>
-    state.system.schedulersAndAgents.hostType;
 
 export const getSystemSchedulersWithState = createSelector(
     [getSystemSchedulers, getMastersHostType],
     (schedulers, hostType) => {
-        const path = hostType === VisibleHostType.host ? '' : '/@annotations/physical_host';
+        const path =
+            hostType === VisibleHostType.host
+                ? uiSettings?.systemPage?.containerPath
+                : uiSettings?.systemPage?.hostPath;
+
         return _.map(schedulers, (sheduler) => {
             const res = connectedSchedulersToState(path, sheduler);
+
             return {
                 ...res,
                 maintenanceMessage: !ypath.getValue(sheduler, '/host/@maintenance')
@@ -31,7 +35,11 @@ export const getSystemSchedulersWithState = createSelector(
 export const getSystemAgentsWithState = createSelector(
     [getSystemAgents, getMastersHostType],
     (agents, hostType) => {
-        const path = hostType === VisibleHostType.host ? '' : '/@annotations/physical_host';
+        const path =
+            hostType === VisibleHostType.host
+                ? uiSettings?.systemPage?.containerPath
+                : uiSettings?.systemPage?.hostPath;
+
         return _.map(agents, (agent) => {
             const res = connectedAgentsToState(path, agent);
             return {
@@ -66,6 +74,7 @@ export const getSystemSchedulerAndAgentAlerts = createSelector(
 
 function connectedSchedulersToState(path, connectedHost) {
     const {connected, host} = connectedHost;
+
     const state = typeof connected !== 'undefined' ? (connected ? 'active' : 'standby') : 'offline';
     return {host: ypath.getValue(host, path), state};
 }

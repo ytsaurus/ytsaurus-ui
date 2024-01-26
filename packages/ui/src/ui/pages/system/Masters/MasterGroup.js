@@ -16,6 +16,7 @@ import {Tooltip} from '../../../components/Tooltip/Tooltip';
 import NodeQuad from '../NodeQuad/NodeQuad';
 
 import './MasterGroup.scss';
+import {uiSettings} from '../../../config/ui-settings';
 
 const b = block('master-group');
 
@@ -187,33 +188,46 @@ class MasterGroup extends Component {
         );
     }
 
+    renderAddress({$rowAddress, hostType}) {
+        switch (hostType) {
+            case 'host': {
+                return ypath.getValue($rowAddress, uiSettings?.systemPage?.containerPath);
+            }
+
+            case 'physicalHost': {
+                return ypath.getValue($rowAddress, uiSettings?.systemPage?.hostPath);
+            }
+        }
+    }
+
     render() {
         const {className, instances, hostType, gridRowStart, allowVoting} = this.props;
 
         return (
             <div className={b('group', {'grid-row-start': gridRowStart}, className)}>
                 {this.renderQuorum()}
-                {_.map(
-                    instances,
-                    ({state, $address, $physicalAddress, $attributes, $rowAddress}) => {
-                        const address = hostType === 'host' ? $address : $physicalAddress;
-                        const maintenance = ypath.getValue($rowAddress, '/attributes/maintenance');
-                        const maintenanceMessage = maintenance
-                            ? ypath.getValue($rowAddress, '/attributes/maintenance_message') ||
-                              'Maintenance'
-                            : '';
-                        return (
-                            <Instance
-                                key={$address}
-                                address={address}
-                                state={state}
-                                attributes={$attributes}
-                                maintenanceMessage={maintenanceMessage}
-                                allowVoting={allowVoting}
-                            />
-                        );
-                    },
-                )}
+                {_.map(instances, ({state, $address, $attributes, $rowAddress}) => {
+                    const address = this.renderAddress({
+                        hostType,
+                        $rowAddress,
+                    });
+
+                    const maintenance = ypath.getValue($rowAddress, '/@/maintenance');
+                    const maintenanceMessage = maintenance
+                        ? ypath.getValue($rowAddress, '/@/maintenance_message') || 'Maintenance'
+                        : '';
+                    console.log('address', $address);
+                    return (
+                        <Instance
+                            key={$address}
+                            address={address}
+                            state={state}
+                            attributes={$attributes}
+                            maintenanceMessage={maintenanceMessage}
+                            allowVoting={allowVoting}
+                        />
+                    );
+                })}
             </div>
         );
     }

@@ -126,7 +126,7 @@ function loadMastersConfig() {
                                           value,
                                           '/@annotations/physical_host',
                                       ),
-                                      attributes: ypath.getValue(value, '/@'),
+                                      $attributes: ypath.getValue(value, '/@'),
                                   };
                               },
                           ),
@@ -147,7 +147,7 @@ function loadMastersConfig() {
                                         value,
                                         '/@annotations/physical_host',
                                     ),
-                                    attributes: ypath.getValue(value, '/@'),
+                                    $attributes: ypath.getValue(value, '/@'),
                                 };
                             }),
                             cellTag: primaryCellTag,
@@ -162,7 +162,7 @@ function loadMastersConfig() {
                                             value,
                                             '/@annotations/physical_host',
                                         ),
-                                        attributes: ypath.getValue(value, '/@'),
+                                        $attributes: ypath.getValue(value, '/@'),
                                     };
                                 }),
                                 cellTag: Number(cellTag),
@@ -253,6 +253,7 @@ function loadMastersConfig() {
                 discoveryServersStatuses,
                 queueAgentsStatuses,
             ]) => {
+                console.log('discoveryServersResult.output', discoveryServersResult.output);
                 mainResult.discoveryServers = discoveryServersResult.output
                     ? {
                           addresses: _.map(
@@ -264,7 +265,7 @@ function loadMastersConfig() {
                                           value,
                                           '/@annotations/physical_host',
                                       ),
-                                      attributes: ypath.getValue(value, '/@'),
+                                      $attributes: ypath.getValue(value, '/@'),
                                       state: discoveryServersStatuses[address],
                                   };
                               },
@@ -287,7 +288,7 @@ function loadMastersConfig() {
                                           value,
                                           '/@annotations/physical_host',
                                       ),
-                                      attributes: ypath.getValue(value, '/@'),
+                                      $attributes: ypath.getValue(value, '/@'),
                                       state: queueAgentsStatuses[address],
                                   };
                               },
