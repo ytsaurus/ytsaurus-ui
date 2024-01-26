@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.13.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.12.2...ui-v1.13.0) (2024-01-26)
+
+
+### Features
+
+* implement an OAuth authorize [YTFRONT-3903] ([38fcda4](https://github.com/ytsaurus/ytsaurus-ui/commit/38fcda40dacbd12be0deba573b9fc32f17d445b5))
+
 ## [1.12.2](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.12.1...ui-v1.12.2) (2024-01-23)
 
 
