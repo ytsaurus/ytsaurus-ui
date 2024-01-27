@@ -14,8 +14,6 @@ export interface NodeEphemeralState {
     error: boolean;
     errorData: YTError | undefined;
     node: Node | null;
-
-    hasUnrecognizedOptions: boolean;
 }
 
 const ephemeralState: NodeEphemeralState = {
@@ -24,8 +22,6 @@ const ephemeralState: NodeEphemeralState = {
     error: false,
     errorData: undefined,
     node: null,
-
-    hasUnrecognizedOptions: false,
 };
 
 export interface NodeState extends NodeEphemeralState {}
@@ -40,13 +36,12 @@ function reducer(state = initialState, action: NodeLoadAction) {
             return {...state, loading: true};
 
         case NODE_LOAD_SUCCESS: {
-            const {host, node, hasUnrecognizedOptions} = action.data;
+            const {host, node} = action.data;
 
             const preparedNode = new Node({...node, $value: host});
 
             return {
                 ...state,
-                hasUnrecognizedOptions,
                 node: preparedNode,
                 loading: false,
                 loaded: true,
@@ -69,7 +64,7 @@ function reducer(state = initialState, action: NodeLoadAction) {
 
 export type NodeLoadAction =
     | Action<typeof NODE_LOAD_REQUEST>
-    | ActionD<typeof NODE_LOAD_SUCCESS, {host: string; node: Node; hasUnrecognizedOptions: boolean}>
+    | ActionD<typeof NODE_LOAD_SUCCESS, {host: string; node: Node}>
     | ActionD<typeof NODE_LOAD_FAILURE, YTError>;
 
 export default mergeStateOnClusterChange(ephemeralState, {}, reducer);

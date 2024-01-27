@@ -35,8 +35,7 @@ export interface NodeDetailsProps extends RouteComponentProps<RouteParams> {}
 function NodePage({match}: NodeDetailsProps): ReturnType<React.VFC> {
     const dispatch = useDispatch();
 
-    const {node, hasUnrecognizedOptions, loading, loaded, error, errorData} =
-        useSelector(nodeSelector);
+    const {node, loading, loaded, error, errorData} = useSelector(nodeSelector);
 
     const host = decodeURIComponent(match.params.host);
     const alertCount = useSelector(getNodeAlertCount);
@@ -62,7 +61,6 @@ function NodePage({match}: NodeDetailsProps): ReturnType<React.VFC> {
                     [NodeTab.LOCATIONS]: {show: Boolean(node?.locations?.length)},
                     [NodeTab.TABLET_SLOTS]: {show: Boolean(node && tabletSlots.length > 0)},
                     [NodeTab.ALERTS]: {show: Boolean(alertCount), counter: alertCount},
-                    [NodeTab.UNRECOGNIZED_OPTIONS]: {show: Boolean(hasUnrecognizedOptions)},
                 },
                 null,
                 {
@@ -70,7 +68,7 @@ function NodePage({match}: NodeDetailsProps): ReturnType<React.VFC> {
                     [NodeTab.MEMORY_USAGE]: 'Memory usage',
                 },
             ),
-        [node, matchUrl, alertCount, tabletSlots, hasUnrecognizedOptions],
+        [node, matchUrl, alertCount, tabletSlots],
     );
 
     return (

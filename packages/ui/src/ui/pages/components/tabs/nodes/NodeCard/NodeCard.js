@@ -5,15 +5,16 @@ import {compose} from 'redux';
 import cn from 'bem-cn-lite';
 import _ from 'lodash';
 
+import {Progress} from '@gravity-ui/uikit';
+
 import Icon from '../../../../../components/Icon/Icon';
 import Link from '../../../../../components/Link/Link';
 import Label from '../../../../../components/Label/Label';
 import Alert from '../../../../../components/Alert/Alert';
 import Button from '../../../../../components/Button/Button';
-import {Progress} from '@gravity-ui/uikit';
+import Error from '../../../../../components/Error/Error';
 import MetaTable, {Template} from '../../../../../components/MetaTable/MetaTable';
 import CollapsibleSection from '../../../../../components/CollapsibleSection/CollapsibleSection';
-import LoadDataHandler from '../../../../../components/LoadDataHandler/LoadDataHandler';
 
 import {renderLabel} from '../../../../../components/templates/components/nodes/nodes';
 import {loadNodeAttributes} from '../../../../../store/actions/components/node/node';
@@ -360,47 +361,47 @@ class NodeCard extends Component {
     }
 
     renderCard() {
-        const {cluster, handleClose, handleKeyDown, node} = this.props;
+        const {cluster, handleClose, handleKeyDown, errorData, node} = this.props;
 
         return (
-            node && (
-                <div className={block()} onKeyDown={handleKeyDown} tabIndex={-1}>
-                    <div className={block('header')}>
-                        <Link
-                            routed
-                            url={`/${cluster}/${Page.COMPONENTS}/${Tab.NODES}/${node.host}/general`}
-                            className={block('node')}
-                        >
-                            {node.host}
-                        </Link>
+            <div className={block()} onKeyDown={handleKeyDown} tabIndex={-1}>
+                <div className={block('header')}>
+                    <Link
+                        routed
+                        url={`/${cluster}/${Page.COMPONENTS}/${Tab.NODES}/${node?.host}/general`}
+                        className={block('node')}
+                    >
+                        {node?.host}
+                    </Link>
 
-                        <Button view="flat-secondary" size="m" onClick={handleClose}>
-                            <Icon awesome="times" face={'light'} />
-                        </Button>
-                    </div>
-
-                    {this.renderTop()}
-                    {this.renderDefault()}
-                    {this.renderAlerts()}
-                    {this.renderLocations()}
-                    {this.renderTabletSlots()}
-                    {this.renderCpuAndMemory()}
-                    {this.renderStorage()}
-                    {this.renderResources()}
+                    <Button view="flat-secondary" size="m" onClick={handleClose}>
+                        <Icon awesome="times" face={'light'} />
+                    </Button>
                 </div>
-            )
+
+                {errorData && <Error error={errorData} />}
+
+                {Boolean(node) && (
+                    <React.Fragment>
+                        {this.renderTop()}
+                        {this.renderDefault()}
+                        {this.renderAlerts()}
+                        {this.renderLocations()}
+                        {this.renderTabletSlots()}
+                        {this.renderCpuAndMemory()}
+                        {this.renderStorage()}
+                        {this.renderResources()}
+                    </React.Fragment>
+                )}
+            </div>
         );
     }
 
     render() {
-        const {error, errorData, loaded} = this.props;
-
         return (
             <React.Fragment>
                 <NodeCardUpdater host={this.props.host} />
-                <LoadDataHandler loaded={loaded} error={error} errorData={errorData}>
-                    {this.renderCard()}
-                </LoadDataHandler>
+                {this.renderCard()}
             </React.Fragment>
         );
     }
