@@ -37,7 +37,9 @@ export function loadNodeAttributes(host: string): NodeLoadThunkAction {
                 ],
             })
             .then((data) => {
-                const {error, results} = splitBatchResults(data, 'Failed to load nodeAttributes');
+                const {error, results} = splitBatchResults(data, {
+                    message: 'Failed to load nodeAttributes',
+                });
                 if (error) {
                     throw error;
                 }
