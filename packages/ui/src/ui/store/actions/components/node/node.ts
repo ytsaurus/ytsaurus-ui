@@ -11,7 +11,6 @@ import type {RootState} from '../../../../store/reducers';
 import type {NodeLoadAction} from '../../../../store/reducers/components/node/node';
 import {YTApiId, ytApiV3Id} from '../../../../rum/rum-wrap-api';
 import {prepareAttributes} from '../../../../utils/cypress-attributes';
-import {splitBatchResults} from '../../../../utils/utils';
 
 type NodeLoadThunkAction = ThunkAction<any, RootState, any, NodeLoadAction>;
 
@@ -19,34 +18,15 @@ export function loadNodeAttributes(host: string): NodeLoadThunkAction {
     return (dispatch) => {
         dispatch({type: NODE_LOAD_REQUEST});
         return ytApiV3Id
-            .executeBatch<Node | boolean>(YTApiId.nodeAttributes, {
-                requests: [
-                    {
-                        command: 'get',
-                        parameters: {
-                            path: `//sys/cluster_nodes/${host}`,
-                            attributes: prepareAttributes(Node.ATTRIBUTES),
-                        },
-                    },
-                    {
-                        command: 'exists',
-                        parameters: {
-                            path: `//sys/cluster_nodes/${host}/orchid/dynamic_config_manager/unrecognized_options`,
-                        },
-                    },
-                ],
+            .get<Node>(YTApiId.nodeAttributes, {
+                path: `//sys/cluster_nodes/${host}`,
+                attributes: prepareAttributes(Node.ATTRIBUTES),
             })
-            .then((data) => {
-                const {error, results} = splitBatchResults(data, {
-                    message: 'Failed to load nodeAttributes',
-                });
-                if (error) {
-                    throw error;
-                }
-                const [node, hasUnrecognizedOptions] = results as [Node, boolean];
+            .then((node) => {
+                if (Date.now() > 10) throw new Error('undexpected error');
                 dispatch({
                     type: NODE_LOAD_SUCCESS,
-                    data: {host, node, hasUnrecognizedOptions},
+                    data: {host, node},
                 });
             })
             .catch((error: Error) => {
