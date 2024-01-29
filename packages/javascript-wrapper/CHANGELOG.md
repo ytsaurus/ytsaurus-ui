@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.5.1](https://github.com/ytsaurus/ytsaurus-ui/compare/javascript-wrapper-v0.5.0...javascript-wrapper-v0.5.1) (2024-01-29)
+
+
+### Bug Fixes
+
+* **Naviagation/Table/Merge:** use body for merge command [YTFRONT-3953] ([4d50cef](https://github.com/ytsaurus/ytsaurus-ui/commit/4d50cef5cce576ae922d470d8fad40357f138b3a))
+
 ## [0.5.0](https://github.com/ytsaurus/ytsaurus-ui/compare/javascript-wrapper-v0.4.0...javascript-wrapper-v0.5.0) (2023-12-13)
 
 
