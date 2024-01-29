@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.13.1](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.13.0...ui-v1.13.1) (2024-01-29)
+
+
+### Bug Fixes
+
+* receive the correct cell_tag [YTFRONT-3946] ([dee458b](https://github.com/ytsaurus/ytsaurus-ui/commit/dee458b1aa052e0d56ae90b2b405e4b662bed2ad))
+
 ## [1.13.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.12.2...ui-v1.13.0) (2024-01-26)
 
 
