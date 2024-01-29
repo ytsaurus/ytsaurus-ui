@@ -44,13 +44,13 @@ export function loadCompetitors(
         dispatch({type: JOB.LOAD_JOB_COMPETITORS_REQUEST});
 
         return yt.v3
-            .listJobs(
-                {
+            .listJobs({
+                parameters: {
                     operation_id: operationID,
                     job_competition_id: jobCompetitionID,
                 },
-                requests.saveCancelToken,
-            )
+                cancellation: requests.saveCancelToken,
+            })
             .then((competitors: CompetitiveJobs) => {
                 dispatch({
                     type: JOB.LOAD_JOB_COMPETITORS_SUCCESS,

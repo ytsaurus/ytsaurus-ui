@@ -46,13 +46,13 @@ export function loadJobData(
         const clusterConfig = getCurrentClusterConfig(getState());
 
         return yt.v3
-            .getJob(
-                {
+            .getJob({
+                parameters: {
                     operation_id: operationID,
                     job_id: jobID,
                 },
-                requests.saveCancelToken,
-            )
+                cancellation: requests.saveCancelToken,
+            })
             .then((job: RawJob) => {
                 dispatch({
                     type: JOB.LOAD_JOB_DATA_SUCCESS,

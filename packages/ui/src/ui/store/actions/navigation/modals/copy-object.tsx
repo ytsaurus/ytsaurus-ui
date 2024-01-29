@@ -36,25 +36,25 @@ interface CopyOptions {
 function copyObjectIntoDirectory(from: string, to: string, {preserve_account}: CopyOptions) {
     const parts = from.split('/');
     const name = parts[parts.length - 1];
-    return yt.v3.copy(
-        {
+    return yt.v3.copy({
+        parameters: {
             source_path: preparePath(from),
             destination_path: prepareDestinationPath(to, name),
             preserve_account,
         },
-        requests.saveCancelToken,
-    );
+        cancellation: requests.saveCancelToken,
+    });
 }
 
 function copyObjectWithRename(from: string, to: string, {preserve_account}: CopyOptions) {
-    return yt.v3.copy(
-        {
+    return yt.v3.copy({
+        parameters: {
             source_path: preparePath(from),
             destination_path: to,
             preserve_account,
         },
-        requests.saveCancelToken,
-    );
+        cancellation: requests.saveCancelToken,
+    });
 }
 
 function copySingleObject(from: string, to: string, {preserve_account}: CopyOptions) {
@@ -64,11 +64,13 @@ function copySingleObject(from: string, to: string, {preserve_account}: CopyOpti
         return copyObjectIntoDirectory(from, to, {preserve_account});
     }
 
-    return yt.v3.exists({path: `${to}&`}, requests.saveCancelToken).then((exist: boolean) => {
-        return exist
-            ? copyObjectIntoDirectory(from, to, {preserve_account})
-            : copyObjectWithRename(from, to, {preserve_account});
-    });
+    return yt.v3
+        .exists({parameters: {path: `${to}&`}, cancellation: requests.saveCancelToken})
+        .then((exist: boolean) => {
+            return exist
+                ? copyObjectIntoDirectory(from, to, {preserve_account})
+                : copyObjectWithRename(from, to, {preserve_account});
+        });
 }
 
 function copyObjects(

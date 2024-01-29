@@ -76,15 +76,15 @@ export function loadJobSpecification(
         dispatch({type: JOB.LOAD_JOB_SPECIFICATION_REQUEST});
 
         return yt.v4
-            .getJobSpec(
-                {
+            .getJobSpec({
+                parameters: {
                     job_id: jobID,
                     omit_node_directory: omitNodeDirectory,
                     omit_input_table_specs: omitInputTableSpecs,
                     omit_output_table_specs: omitOutputTableSpecs,
                 },
-                requests.saveCancelToken,
-            )
+                cancellation: requests.saveCancelToken,
+            })
             .then((req: JobSpecRequest) => {
                 // @ts-ignore
                 const [scheduler_job_spec_ext, job_spec_ext]: JobSpecification = ypath.getValues(

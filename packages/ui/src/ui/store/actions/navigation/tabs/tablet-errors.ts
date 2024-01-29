@@ -59,9 +59,8 @@ export function loadTabletErrorsCount(options: LoadTabletErrorOptions): TabletEr
     const {path} = options;
     return (dispatch) => {
         return wrapApiPromiseByToaster(
-            ytApiV3Id.executeBatch(
-                YTApiId.navigationTypeDynamic,
-                {
+            ytApiV3Id.executeBatch(YTApiId.navigationTypeDynamic, {
+                parameters: {
                     requests: [
                         {
                             command: 'get',
@@ -73,8 +72,8 @@ export function loadTabletErrorsCount(options: LoadTabletErrorOptions): TabletEr
                         },
                     ],
                 },
-                options.saveCancelTokenSource,
-            ),
+                cancellation: options.saveCancelTokenSource,
+            }),
             {
                 toasterName: 'get_type_dynamic',
                 skipSuccessToast: true,
