@@ -15,7 +15,7 @@ export const FETCH_MASTER_DATA = createActionTypes('MASTER_DATA');
 
 const toaster = new Toaster();
 
-function loadMastersConfig() {
+async function loadMastersConfig() {
     const requests = [
         {
             command: 'get',
@@ -25,13 +25,7 @@ function loadMastersConfig() {
                 ...USE_SUPRESS_SYNC,
             },
         },
-        {
-            command: 'get',
-            parameters: {
-                path: '//sys/@cell_tag',
-                ...USE_SUPRESS_SYNC,
-            },
-        },
+        {command: 'get', parameters: {path: '//sys/@cell_tag', ...USE_SUPRESS_SYNC}},
         {
             command: 'get',
             parameters: {
@@ -71,233 +65,173 @@ function loadMastersConfig() {
         },
     ];
 
-    return ytApiV3Id
-        .executeBatch(YTApiId.systemMastersConfig, {requests})
-        .then(
-            ([
-                primaryMasterResult,
-                primaryCellTagResult,
-                secondaryMastersResult,
-                timestampProvidersResult,
-                discoveryServersResult,
-                queueAgentsResult,
-            ]) => {
-                const batchError = getBatchError(
-                    [primaryMasterResult, primaryCellTagResult, secondaryMastersResult],
-                    "Masters' details cannot be loaded",
-                );
-                if (batchError) {
-                    throw batchError;
-                }
-                const error = getBatchError(
-                    [timestampProvidersResult],
-                    'Timestamp providers cannot be loaded',
-                );
-                if (
-                    error &&
-                    timestampProvidersResult.error?.code !== yt.codes.NODE_DOES_NOT_EXIST
-                ) {
-                    throw error;
-                }
-                const queueAgentsError = getBatchError(
-                    [queueAgentsResult],
-                    'Queue agents cannot be loaded',
-                );
-                if (
-                    queueAgentsError &&
-                    queueAgentsResult.error?.code !== yt.codes.NODE_DOES_NOT_EXIST
-                ) {
-                    throw queueAgentsError;
-                }
+    const [
+        primaryMasterResult,
+        primaryCellTagResult,
+        secondaryMastersResult,
+        timestampProvidersResult,
+        discoveryServersResult,
+        queueAgentsResult,
+    ] = await ytApiV3Id.executeBatch(YTApiId.systemMastersConfig, {requests});
 
-                const primaryMaster = primaryMasterResult.output;
-                const secondaryMasters = secondaryMastersResult.output;
-                const primaryCellTag = primaryCellTagResult.output;
+    const batchError = getBatchError(
+        [primaryMasterResult, primaryCellTagResult, secondaryMastersResult],
+        "Masters' details cannot be loaded",
+    );
 
-                const timestampProviders = !timestampProvidersResult.output
-                    ? {}
-                    : {
-                          addresses: _.map(
-                              ypath.getValue(timestampProvidersResult.output),
-                              (value, address) => {
-                                  return {
-                                      host: address,
-                                      physicalHost: ypath.getValue(
-                                          value,
-                                          '/@annotations/physical_host',
-                                      ),
-                                      attributes: ypath.getValue(value, '/@'),
-                                  };
-                              },
-                          ),
-                          cellTag: ypath.getValue(
-                              timestampProvidersResult.output,
-                              '/@native_cell_tag',
-                          ),
+    if (batchError) {
+        throw batchError;
+    }
+
+    const error = getBatchError([timestampProvidersResult], 'Timestamp providers cannot be loaded');
+
+    if (error && timestampProvidersResult.error?.code !== NODE_DOES_NOT_EXIST) {
+        throw error;
+    }
+
+    const queueAgentsError = getBatchError([queueAgentsResult], 'Queue agents cannot be loaded');
+
+    if (queueAgentsError && queueAgentsResult.error?.code !== NODE_DOES_NOT_EXIST) {
+        throw queueAgentsError;
+    }
+
+    const primaryMaster = primaryMasterResult.output;
+    const secondaryMasters = secondaryMastersResult.output;
+    const primaryCellTag = primaryCellTagResult.output;
+
+    const timestampProviders = !timestampProvidersResult.output
+        ? {}
+        : {
+              addresses: _.map(
+                  ypath.getValue(timestampProvidersResult.output),
+                  (value, address) => {
+                      return {
+                          host: address,
+                          physicalHost: ypath.getValue(value, '/@annotations/physical_host'),
+                          attributes: ypath.getValue(value, '/@'),
                       };
+                  },
+              ),
+              cellTag: ypath.getValue(timestampProvidersResult.output, '/@native_cell_tag'),
+          };
 
-                return [
-                    {
-                        primaryMaster: {
-                            addresses: _.map(_.keys(primaryMaster), (address) => {
-                                const value = primaryMaster[address];
-                                return {
-                                    host: address,
-                                    physicalHost: ypath.getValue(
-                                        value,
-                                        '/@annotations/physical_host',
-                                    ),
-                                    attributes: ypath.getValue(value, '/@'),
-                                };
-                            }),
-                            cellTag: primaryCellTag,
-                        },
-                        secondaryMasters: _.map(secondaryMasters, (addresses, cellTag) => {
-                            return {
-                                addresses: _.map(_.keys(addresses), (address) => {
-                                    const value = secondaryMasters[cellTag][address];
-                                    return {
-                                        host: address,
-                                        physicalHost: ypath.getValue(
-                                            value,
-                                            '/@annotations/physical_host',
-                                        ),
-                                        attributes: ypath.getValue(value, '/@'),
-                                    };
-                                }),
-                                cellTag: Number(cellTag),
-                            };
-                        }),
-                        timestampProviders,
-                    },
-                    discoveryServersResult,
-                    queueAgentsResult,
-                ];
-            },
-        )
-        .then(([mainResult, discoveryServersResult, queueAgentsResult]) => {
-            const discoveryRequests = _.map(
-                ypath.getValue(discoveryServersResult.output),
-                (value, address) => ({
-                    command: 'get',
-                    parameters: {
-                        path: `//sys/discovery_servers/${address}/orchid/discovery_server`,
-                        ...USE_SUPRESS_SYNC,
-                    },
-                    address,
+    const mainResult = {
+        primaryMaster: {
+            addresses: _.map(_.keys(primaryMaster), (address) => {
+                const value = primaryMaster[address];
+                return {
+                    host: address,
+                    physicalHost: ypath.getValue(value, '/@annotations/physical_host'),
+                    attributes: ypath.getValue(value, '/@'),
+                };
+            }),
+            cellTag: primaryCellTag,
+        },
+        secondaryMasters: _.map(secondaryMasters, (addresses, cellTag) => {
+            return {
+                addresses: _.map(_.keys(addresses), (address) => {
+                    const value = secondaryMasters[cellTag][address];
+                    return {
+                        host: address,
+                        physicalHost: ypath.getValue(value, '/@annotations/physical_host'),
+                        attributes: ypath.getValue(value, '/@'),
+                    };
                 }),
-            );
+                cellTag: Number(cellTag),
+            };
+        }),
+        timestampProviders,
+    };
 
-            const queueAgentsStateRequests = _.map(
-                ypath.getValue(queueAgentsResult.output),
-                (value, address) => ({
-                    command: 'get',
-                    parameters: {
-                        path: `//sys/queue_agents/instances/${address}/orchid/cypress_synchronizer/active`,
-                        ...USE_SUPRESS_SYNC,
-                    },
-                    address,
-                }),
-            );
-
-            return ytApiV3Id
-                .executeBatch(YTApiId.systemMastersConfigDiscoveryServer, {
-                    requests: [...discoveryRequests, ...queueAgentsStateRequests],
-                })
-                .then((results) => {
-                    const discoveryResults = results.slice(0, discoveryRequests.length);
-                    const queueAgentsStateResults = results.slice(
-                        discoveryRequests.length,
-                        queueAgentsStateRequests.length,
-                    );
-
-                    const discoveryServersStatuses = _.reduce(
-                        discoveryResults,
-                        (acc, item, key) => {
-                            acc[discoveryRequests[key].address] = item?.error
-                                ? 'offline'
-                                : 'online';
-                            return acc;
-                        },
-                        {},
-                    );
-                    const queueAgentsStatuses = _.reduce(
-                        queueAgentsStateResults,
-                        (acc, item, key) => {
-                            acc[queueAgentsStateRequests[key].address] =
-                                typeof item.output !== 'undefined'
-                                    ? item.output
-                                        ? 'active'
-                                        : 'standby'
-                                    : 'offline';
-                            return acc;
-                        },
-                        {},
-                    );
-
-                    return [
-                        mainResult,
-                        discoveryServersResult,
-                        queueAgentsResult,
-                        discoveryServersStatuses,
-                        queueAgentsStatuses,
-                    ];
-                })
-                .catch(() => [mainResult, discoveryServersResult, queueAgentsResult]);
-        })
-        .then(
-            ([
-                mainResult,
-                discoveryServersResult,
-                queueAgentsResult,
-                discoveryServersStatuses,
-                queueAgentsStatuses,
-            ]) => {
-                mainResult.discoveryServers = discoveryServersResult.output
-                    ? {
-                          addresses: _.map(
-                              ypath.getValue(discoveryServersResult.output),
-                              (value, address) => {
-                                  return {
-                                      host: address,
-                                      physicalHost: ypath.getValue(
-                                          value,
-                                          '/@annotations/physical_host',
-                                      ),
-                                      attributes: ypath.getValue(value, '/@'),
-                                      state: discoveryServersStatuses[address],
-                                  };
-                              },
-                          ),
-                          cellTag: ypath.getValue(
-                              discoveryServersResult.output,
-                              '/@native_cell_tag',
-                          ),
-                      }
-                    : {};
-
-                mainResult.queueAgents = queueAgentsResult.output
-                    ? {
-                          addresses: _.map(
-                              ypath.getValue(queueAgentsResult.output),
-                              (value, address) => {
-                                  return {
-                                      host: address,
-                                      physicalHost: ypath.getValue(
-                                          value,
-                                          '/@annotations/physical_host',
-                                      ),
-                                      attributes: ypath.getValue(value, '/@'),
-                                      state: queueAgentsStatuses[address],
-                                  };
-                              },
-                          ),
-                      }
-                    : {};
-
-                return mainResult;
+    const discoveryRequests = _.map(
+        ypath.getValue(discoveryServersResult.output),
+        (_v, address) => ({
+            command: 'get',
+            parameters: {
+                path: `//sys/discovery_servers/${address}/orchid/discovery_server`,
+                ...USE_SUPRESS_SYNC,
             },
+            address,
+        }),
+    );
+
+    const queueAgentsStateRequests = _.map(
+        ypath.getValue(queueAgentsResult.output),
+        (_v, address) => ({
+            command: 'get',
+            parameters: {
+                path: `//sys/queue_agents/instances/${address}/orchid/cypress_synchronizer/active`,
+                ...USE_SUPRESS_SYNC,
+            },
+            address,
+        }),
+    );
+
+    let discoveryServersStatuses = {};
+    let queueAgentsStatuses = {};
+
+    try {
+        const results = await ytApiV3Id.executeBatch(YTApiId.systemMastersConfigDiscoveryServer, {
+            requests: [...discoveryRequests, ...queueAgentsStateRequests],
+        });
+
+        const discoveryResults = results.slice(0, discoveryRequests.length);
+        const queueAgentsStateResults = results.slice(
+            discoveryRequests.length,
+            queueAgentsStateRequests.length,
         );
+
+        discoveryServersStatuses = _.reduce(
+            discoveryResults,
+            (acc, item, key) => {
+            acc[discoveryRequests[key].address] = item?.error ? 'offline' : 'online';
+            return acc;
+            },
+            {},
+        );
+        queueAgentsStatuses = _.reduce(
+            queueAgentsStateResults,
+            (acc, item, key) => {
+            acc[queueAgentsStateRequests[key].address] =
+                typeof item.output !== 'undefined'
+                    ? item.output
+                        ? 'active'
+                        : 'standby'
+                    : 'offline';
+            return acc;
+            },
+            {},
+        );
+    } catch {}
+
+    mainResult.discoveryServers = discoveryServersResult.output
+        ? {
+              addresses: _.map(ypath.getValue(discoveryServersResult.output), (value, address) => {
+                  return {
+                      host: address,
+                      physicalHost: ypath.getValue(value, '/@annotations/physical_host'),
+                      attributes: ypath.getValue(value, '/@'),
+                      state: discoveryServersStatuses[address],
+                  };
+              }),
+              cellTag: ypath.getValue(discoveryServersResult.output, '/@native_cell_tag'),
+          }
+        : {};
+
+    mainResult.queueAgents = queueAgentsResult.output
+        ? {
+              addresses: _.map(ypath.getValue(queueAgentsResult.output), (value, address) => {
+                  return {
+                      host: address,
+                      physicalHost: ypath.getValue(value, '/@annotations/physical_host'),
+                      attributes: ypath.getValue(value, '/@'),
+                      state: queueAgentsStatuses[address],
+                  };
+              }),
+          }
+        : {};
+
+    return mainResult;
 }
 
 function loadHydra(requests, masterInfo, type, masterEntry) {
@@ -334,62 +268,51 @@ function loadHydra(requests, masterInfo, type, masterEntry) {
 }
 
 export function loadMasters() {
-    return (dispatch) => {
-        dispatch({
-            type: FETCH_MASTER_CONFIG.REQUEST,
-        });
-        return loadMastersConfig()
-            .then((config) => {
-                dispatch({
-                    type: FETCH_MASTER_CONFIG.SUCCESS,
-                    data: config,
-                });
-                dispatch({type: FETCH_MASTER_DATA.REQUEST});
+    return async (dispatch) => {
+        dispatch({type: FETCH_MASTER_CONFIG.REQUEST});
 
-                const masterDataRequests = [];
-                const masterInfo = [];
+        try {
+            const config = await loadMastersConfig();
 
-                loadHydra(masterDataRequests, masterInfo, 'primary', config.primaryMaster);
+            dispatch({type: FETCH_MASTER_CONFIG.SUCCESS, data: config});
+            dispatch({type: FETCH_MASTER_DATA.REQUEST});
 
-                _.each(config.secondaryMasters, (currentConfig) => {
-                    loadHydra(masterDataRequests, masterInfo, 'secondary', currentConfig);
-                });
+            const masterDataRequests = [];
+            const masterInfo = [];
 
-                loadHydra(masterDataRequests, masterInfo, 'providers', config.timestampProviders);
-                loadHydra(masterDataRequests, masterInfo, 'discovery', config.discoveryServers);
+            loadHydra(masterDataRequests, masterInfo, 'primary', config.primaryMaster);
 
-                return ytApiV3Id
-                    .executeBatch(YTApiId.systemMasters, {requests: masterDataRequests})
-                    .then((data) => {
-                        dispatch({
-                            type: FETCH_MASTER_DATA.SUCCESS,
-                            data: {masterInfo, data},
-                        });
-                    });
-            })
-            .catch((error) => {
-                dispatch({type: FETCH_MASTER_DATA.FAILURE, data: error});
-
-                const data = error?.response?.data || error;
-                const {code, message} = data;
-
-                toaster.add({
-                    name: 'load/system/masters',
-                    autoHiding: false,
-                    type: 'error',
-                    content: `[code ${code}] ${message}`,
-                    title: 'Could not load Masters',
-                    actions: [
-                        {
-                            label: ' view',
-                            onClick: () => showErrorPopup(error),
-                        },
-                    ],
-                });
-
-                if (isRetryFutile(error.code)) {
-                    return {isRetryFutile: true};
-                }
+            _.each(config.secondaryMasters, (currentConfig) => {
+                loadHydra(masterDataRequests, masterInfo, 'secondary', currentConfig);
             });
+
+            loadHydra(masterDataRequests, masterInfo, 'providers', config.timestampProviders);
+            loadHydra(masterDataRequests, masterInfo, 'discovery', config.discoveryServers);
+
+            const data = await ytApiV3Id.executeBatch(YTApiId.systemMasters, {
+                requests: masterDataRequests,
+            });
+
+            dispatch({type: FETCH_MASTER_DATA.SUCCESS, data: {masterInfo, data}});
+        } catch (error) {
+            dispatch({type: FETCH_MASTER_DATA.FAILURE, data: error});
+
+            const data = error?.response?.data || error;
+
+            const {code, message} = data;
+
+            toaster.add({
+                name: 'load/system/masters',
+                autoHiding: false,
+                type: 'error',
+                content: `[code ${code}] ${message}`,
+                title: 'Could not load Masters',
+                actions: [{label: ' view', onClick: () => showErrorPopup(error)}],
+            });
+
+            if (isRetryFutile(error.code)) {
+                return {isRetryFutile: true};
+            }
+        }
     };
 }
