@@ -3,7 +3,7 @@ import ypath from '../../../common/thor/ypath';
 export interface AddressData {
     host: string;
     physicalHost?: string;
-    state: 'online' | 'offline' | 'unknown';
+    state?: 'online' | 'offline' | 'unknown';
 }
 
 export class MasterInstance {
