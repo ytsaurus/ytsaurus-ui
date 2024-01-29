@@ -23,7 +23,6 @@ export function loadNodeAttributes(host: string): NodeLoadThunkAction {
                 attributes: prepareAttributes(Node.ATTRIBUTES),
             })
             .then((node) => {
-                if (Date.now() > 10) throw new Error('undexpected error');
                 dispatch({
                     type: NODE_LOAD_SUCCESS,
                     data: {host, node},
