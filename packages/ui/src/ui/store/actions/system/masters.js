@@ -6,7 +6,7 @@ import createActionTypes from '../../../constants/utils';
 import {isRetryFutile} from '../../../utils/index';
 import {getBatchError, showErrorPopup} from '../../../utils/utils';
 
-import yt from '@ytsaurus/javascript-wrapper/lib/yt';
+import {YTErrors} from '../../../rum/constants';
 import {YTApiId, ytApiV3Id} from '../../../rum/rum-wrap-api';
 import {USE_SUPRESS_SYNC} from '../../../../shared/constants';
 
@@ -14,6 +14,8 @@ export const FETCH_MASTER_CONFIG = createActionTypes('MASTER_CONFIG');
 export const FETCH_MASTER_DATA = createActionTypes('MASTER_DATA');
 
 const toaster = new Toaster();
+
+const {NODE_DOES_NOT_EXIST} = YTErrors;
 
 async function loadMastersConfig() {
     const requests = [
@@ -25,7 +27,6 @@ async function loadMastersConfig() {
                 ...USE_SUPRESS_SYNC,
             },
         },
-        {command: 'get', parameters: {path: '//sys/@cell_tag', ...USE_SUPRESS_SYNC}},
         {
             command: 'get',
             parameters: {
@@ -38,12 +39,7 @@ async function loadMastersConfig() {
             command: 'get',
             parameters: {
                 path: '//sys/timestamp_providers',
-                attributes: [
-                    'annotations',
-                    'native_cell_tag',
-                    'maintenance',
-                    'maintenance_message',
-                ],
+                attributes: ['annotations', 'maintenance', 'maintenance_message'],
                 ...USE_SUPRESS_SYNC,
             },
         },
@@ -67,7 +63,6 @@ async function loadMastersConfig() {
 
     const [
         primaryMasterResult,
-        primaryCellTagResult,
         secondaryMastersResult,
         timestampProvidersResult,
         discoveryServersResult,
@@ -75,7 +70,7 @@ async function loadMastersConfig() {
     ] = await ytApiV3Id.executeBatch(YTApiId.systemMastersConfig, {requests});
 
     const batchError = getBatchError(
-        [primaryMasterResult, primaryCellTagResult, secondaryMastersResult],
+        [primaryMasterResult, secondaryMastersResult],
         "Masters' details cannot be loaded",
     );
 
@@ -95,9 +90,33 @@ async function loadMastersConfig() {
         throw queueAgentsError;
     }
 
+    const [timestamp_path] = [...Object.keys(ypath.getValue(timestampProvidersResult.output))];
+    const [primary_path] = [...Object.keys(ypath.getValue(primaryMasterResult.output))];
+
+    const tag_cell_requests = [
+        {
+            command: 'get',
+            parameters: {
+                path: `//sys/primary_masters/${primary_path}/orchid/config/primary_master/cell_id`,
+                ...USE_SUPRESS_SYNC,
+            },
+        },
+        {
+            command: 'get',
+            parameters: {
+                path: `//sys/timestamp_providers/${timestamp_path}/orchid/config/clock_cell`,
+                ...USE_SUPRESS_SYNC,
+            },
+        },
+    ];
+
+    const [primaryMasterCellTag, timestampProviderCellTag] = await ytApiV3Id.executeBatch(
+        YTApiId.systemMastersConfig,
+        {requests: [...tag_cell_requests]},
+    );
+
     const primaryMaster = primaryMasterResult.output;
     const secondaryMasters = secondaryMastersResult.output;
-    const primaryCellTag = primaryCellTagResult.output;
 
     const timestampProviders = !timestampProvidersResult.output
         ? {}
@@ -112,7 +131,7 @@ async function loadMastersConfig() {
                       };
                   },
               ),
-              cellTag: ypath.getValue(timestampProvidersResult.output, '/@native_cell_tag'),
+              cellTag: getCellIdTag(ypath.getValue(timestampProviderCellTag.output).cell_id),
           };
 
     const mainResult = {
@@ -125,7 +144,7 @@ async function loadMastersConfig() {
                     attributes: ypath.getValue(value, '/@'),
                 };
             }),
-            cellTag: primaryCellTag,
+            cellTag: getCellIdTag(primaryMasterCellTag.output),
         },
         secondaryMasters: _.map(secondaryMasters, (addresses, cellTag) => {
             return {
@@ -141,6 +160,8 @@ async function loadMastersConfig() {
             };
         }),
         timestampProviders,
+        discoveryServers: {},
+        queueAgents: {},
     };
 
     const discoveryRequests = _.map(
@@ -184,21 +205,21 @@ async function loadMastersConfig() {
         discoveryServersStatuses = _.reduce(
             discoveryResults,
             (acc, item, key) => {
-            acc[discoveryRequests[key].address] = item?.error ? 'offline' : 'online';
-            return acc;
+                acc[discoveryRequests[key].address] = item?.error ? 'offline' : 'online';
+                return acc;
             },
             {},
         );
         queueAgentsStatuses = _.reduce(
             queueAgentsStateResults,
             (acc, item, key) => {
-            acc[queueAgentsStateRequests[key].address] =
-                typeof item.output !== 'undefined'
-                    ? item.output
-                        ? 'active'
-                        : 'standby'
-                    : 'offline';
-            return acc;
+                acc[queueAgentsStateRequests[key].address] =
+                    typeof item.output !== 'undefined'
+                        ? item.output
+                            ? 'active'
+                            : 'standby'
+                        : 'offline';
+                return acc;
             },
             {},
         );
@@ -315,4 +336,9 @@ export function loadMasters() {
             }
         }
     };
+}
+
+function getCellIdTag(uuid) {
+    const [, , third] = uuid.split('-');
+    return Number(`0x${third.substring(0, third.length - 4)}`);
 }
