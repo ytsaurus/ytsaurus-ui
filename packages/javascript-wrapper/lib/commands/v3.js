@@ -240,7 +240,10 @@ module.exports = {
         notImplemented: true,
     },
     erase: v2.erase,
-    merge: v2.merge,
+    merge: {
+        ...v2.merge,
+        useBodyForParameters: true,
+    },
     sort: {
         name: 'sort',
         method: 'POST',
