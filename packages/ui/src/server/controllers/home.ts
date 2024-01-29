@@ -50,7 +50,7 @@ export async function homeIndex(req: Request, res: Response) {
             return;
         }
         res.status(404).send(
-            `No config for cluster '${cluster}' exists.` +
+            `No config for cluster <b>${encodeURIComponent(cluster)}</b> exists.` +
                 '<div>If you are trying to connect to your local cluster please make sure:</div>' +
                 '<ol><li>FQDN of the cluster is correct</li>' +
                 '<li>The port is greater than or equal to 1000.</li></ol>',
