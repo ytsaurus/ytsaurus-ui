@@ -103,16 +103,15 @@ function loadDynamicTable(requestOutputFormat, setup, state, type, useZeroRangeF
         return id
             .fetch(
                 YTApiId.dynTableCheckPerm,
-                ytApiV3Id.checkPermission(
-                    YTApiId.dynTableCheckPerm,
-                    {
+                ytApiV3Id.checkPermission(YTApiId.dynTableCheckPerm, {
+                    parameters: {
                         columns: allColumns,
                         permission: 'read',
                         user: login,
                         path,
                     },
-                    requests.saveCancelToken,
-                ),
+                    cancellation: requests.saveCancelToken,
+                }),
             )
             .then((permissions) => {
                 const keyColumnsNames = _.keyBy(keyColumns);
@@ -156,11 +155,11 @@ function loadDynamicTable(requestOutputFormat, setup, state, type, useZeroRangeF
                 return id
                     .fetch(
                         YTApiId.dynTableSelectRowsPreload,
-                        ytApiV3Id.selectRows(
-                            YTApiId.dynTableSelectRowsPreload,
-                            {setup, parameters},
-                            requests.saveCancelToken,
-                        ),
+                        ytApiV3Id.selectRows(YTApiId.dynTableSelectRowsPreload, {
+                            setup,
+                            parameters,
+                            cancellation: requests.saveCancelToken,
+                        }),
                     )
                     .then(({data}) => {
                         const error = parseErrorFromResponse(data);
@@ -217,11 +216,11 @@ function loadDynamicTable(requestOutputFormat, setup, state, type, useZeroRangeF
         return id
             .fetch(
                 YTApiId.dynTableSelectRows,
-                ytApiV3Id.selectRows(
-                    YTApiId.dynTableSelectRows,
-                    {setup, parameters},
-                    requests.saveCancelToken,
-                ),
+                ytApiV3Id.selectRows(YTApiId.dynTableSelectRows, {
+                    setup,
+                    parameters,
+                    cancellation: requests.saveCancelToken,
+                }),
             )
             .then(({data}) => {
                 const error = parseErrorFromResponse(data);
@@ -286,7 +285,10 @@ function loadStaticTable(requestOutputFormat, setup, state, type, useZeroRangeFo
     const apiId = type === LOAD_TYPE.PRELOAD ? YTApiId.tableReadPreload : YTApiId.tableRead;
 
     return id
-        .fetch(apiId, ytApiV3Id.readTable(apiId, {setup, parameters}, requests.saveCancelToken))
+        .fetch(
+            apiId,
+            ytApiV3Id.readTable(apiId, {setup, parameters, cancellation: requests.saveCancelToken}),
+        )
         .then(({data, headers}) => {
             const error = parseErrorFromResponse(data);
 

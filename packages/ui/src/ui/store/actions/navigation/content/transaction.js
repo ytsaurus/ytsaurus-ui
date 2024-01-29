@@ -10,7 +10,10 @@ export function abortTransaction(id) {
         dispatch({type: ABORT_TRANSACTION.REQUEST});
 
         return ytApiV3
-            .abortTransaction({transaction_id: id}, requests.saveCancelToken)
+            .abortTransaction({
+                parameters: {transaction_id: id},
+                cancellation: requests.saveCancelToken,
+            })
             .then(() => {
                 dispatch(navigateParent());
                 dispatch({type: ABORT_TRANSACTION.SUCCESS});

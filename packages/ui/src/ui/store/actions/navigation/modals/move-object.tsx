@@ -37,25 +37,25 @@ interface MoveOptions {
 function moveObjectIntoDirectory(from: string, to: string, {preserve_account}: MoveOptions) {
     const parts = from.split('/');
     const name = parts[parts.length - 1];
-    return yt.v3.move(
-        {
+    return yt.v3.move({
+        parameters: {
             source_path: preparePath(from),
             destination_path: prepareDestinationPath(to, name),
             preserve_account,
         },
-        requests.saveCancelToken,
-    );
+        cancellation: requests.saveCancelToken,
+    });
 }
 
 function moveObjectWithRename(from: string, to: string, {preserve_account}: MoveOptions) {
-    return yt.v3.move(
-        {
+    return yt.v3.move({
+        parameters: {
             source_path: preparePath(from),
             destination_path: to,
             preserve_account,
         },
-        requests.saveCancelToken,
-    );
+        cancellation: requests.saveCancelToken,
+    });
 }
 
 function moveSingleObject(from: string, to: string, options: MoveOptions): Promise<string> {
@@ -65,11 +65,13 @@ function moveSingleObject(from: string, to: string, options: MoveOptions): Promi
         return moveObjectIntoDirectory(from, to, options);
     }
 
-    return yt.v3.exists({path: `${to}&`}, requests.saveCancelToken).then((exist: boolean) => {
-        return exist
-            ? moveObjectIntoDirectory(from, to, options)
-            : moveObjectWithRename(from, to, options);
-    });
+    return yt.v3
+        .exists({parameters: {path: `${to}&`}, cancellation: requests.saveCancelToken})
+        .then((exist: boolean) => {
+            return exist
+                ? moveObjectIntoDirectory(from, to, options)
+                : moveObjectWithRename(from, to, options);
+        });
 }
 
 function moveObjects(

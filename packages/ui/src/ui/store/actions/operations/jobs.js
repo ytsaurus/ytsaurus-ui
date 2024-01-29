@@ -39,7 +39,10 @@ export function getJob() {
 
         requests.removeAllRequests();
         return ytApiV3
-            .getJob(getJobRequestParameters(state), requests.saveCancelToken)
+            .getJob({
+                parameters: getJobRequestParameters(state),
+                cancellation: requests.saveCancelToken,
+            })
             .then((job) => {
                 dispatch({
                     type: GET_JOB.SUCCESS,
@@ -71,7 +74,10 @@ export function getCompetitiveJobs() {
 
         requests.removeAllRequests();
         return ytApiV3
-            .listJobs(getCompetitiveJobsRequestParameters(state), requests.saveCancelToken)
+            .listJobs({
+                parameters: getCompetitiveJobsRequestParameters(state),
+                cancellation: requests.saveCancelToken,
+            })
             .then(({jobs}) => {
                 dispatch({
                     type: GET_COMPETITIVE_JOBS.SUCCESS,

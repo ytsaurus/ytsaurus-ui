@@ -18,10 +18,10 @@ export function loadFile() {
         requests.removeAllRequests();
 
         return ytApiV3
-            .readFile(
-                prepareRequest({path, transaction, length: MAX_FILE_SIZE}),
-                requests.saveCancelToken,
-            )
+            .readFile({
+                parameters: prepareRequest({path, transaction, length: MAX_FILE_SIZE}),
+                cancellation: requests.saveCancelToken,
+            })
             .then((file) => {
                 dispatch({
                     type: LOAD_FILE.SUCCESS,

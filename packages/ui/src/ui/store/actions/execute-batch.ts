@@ -104,11 +104,10 @@ async function handleBatchSlice<T>(
     options?: ExecuteBatchOptions,
 ): Promise<Array<BatchResultsItem<T>>> {
     try {
-        const results: Array<BatchResultsItem<T>> = await ytApiV3Id.executeBatch(
-            id,
-            {requests},
-            options?.saveCancelSourceCb,
-        );
+        const results: Array<BatchResultsItem<T>> = await ytApiV3Id.executeBatch(id, {
+            parameters: {requests},
+            cancellation: options?.saveCancelSourceCb,
+        });
         const error = getBatchError(results);
         if (error) {
             const errorIndices = new Set(getBatchErrorIndices(results));

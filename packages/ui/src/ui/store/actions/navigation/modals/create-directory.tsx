@@ -30,14 +30,14 @@ export function createDirectory(
         dispatch({type: CREATE_DIRECTORY.REQUEST});
 
         return yt.v3
-            .create(
-                {
+            .create({
+                parameters: {
                     path: path,
                     recursive,
                     type: 'map_node',
                 },
-                requests.saveCancelToken,
-            )
+                cancellation: requests.saveCancelToken,
+            })
             .then(() => {
                 dispatch({type: CREATE_DIRECTORY.SUCCESS});
 

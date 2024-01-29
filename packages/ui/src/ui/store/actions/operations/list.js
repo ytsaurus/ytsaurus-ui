@@ -77,8 +77,6 @@ export function updatePager(incomplete) {
 
 export function updateOperations(cluster, parameters) {
     return (dispatch) => {
-        cancellableRequests.removeAllRequests();
-
         dispatch({
             type: UPDATE_OPERATIONS_REQUEST,
         });
@@ -87,11 +85,10 @@ export function updateOperations(cluster, parameters) {
         return rumId
             .fetch(
                 YTApiId.listOperations,
-                ytApiV3Id.listOperations(
-                    YTApiId.listOperations,
+                ytApiV3Id.listOperations(YTApiId.listOperations, {
                     parameters,
-                    cancellableRequests.saveCancelToken,
-                ),
+                    cancellation: cancellableRequests.removeAllAndSave,
+                }),
             )
             .then((response) => {
                 const {operations, incomplete, ...counters} = response;
