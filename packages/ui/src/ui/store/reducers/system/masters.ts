@@ -191,7 +191,7 @@ export interface ResponseItem {
         native_cell_tag: number;
         annotations: unknown;
     };
-    state: 'online' | 'offline' | 'unknown';
+    state?: 'online' | 'offline' | 'unknown';
 }
 
 export interface ResponseItemsGroup {
