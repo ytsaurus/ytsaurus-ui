@@ -1,5 +1,20 @@
 # Changelog
 
+## [1.14.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.13.1...ui-v1.14.0) (2024-01-29)
+
+
+### Features
+
+* **Scheduling:** load data only for visible pools [YTFRONT-3862] ([056f431](https://github.com/ytsaurus/ytsaurus-ui/commit/056f4319b034173728564cdb4f97f067665ff5af))
+
+
+### Bug Fixes
+
+* **Components/Node:** 'offline' nodes should be handled properly [YTFRONT-3993] ([eb34e49](https://github.com/ytsaurus/ytsaurus-ui/commit/eb34e49e9ec12506f79d99a3cc32ce4ee1949f78))
+* **Scheduling:** use pool_trees instead of scheduling_info_per_pool_tree [YTFRONT-3937] ([f745a67](https://github.com/ytsaurus/ytsaurus-ui/commit/f745a67285b1f649debc061a5938425626a07931))
+* **support.js:** get rid of _DEV_PATCH_NUMBER [YTFRONT-3862] ([35caa4b](https://github.com/ytsaurus/ytsaurus-ui/commit/35caa4b7305a52f7bc8aa75d494e2fc109172756))
+* **support:** scheduler, master should be checked properly [YTFRONT-3862] ([64e5583](https://github.com/ytsaurus/ytsaurus-ui/commit/64e5583485a48d5565964e8be380a68bf96b8910))
+
 ## [1.13.1](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.13.0...ui-v1.13.1) (2024-01-29)
 
 
