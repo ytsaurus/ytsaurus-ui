@@ -178,5 +178,5 @@ function wrappedHrefOrNull(href?: string) {
 function isAllowSendError(error: Error | AxiosError): boolean {
     const err = axios.isAxiosError(error) ? (error.response?.data as YTError) : error;
 
-    return !(isYTError(err) && err.code && YTErrors.includes(err.code));
+    return !(isYTError(err) && err.code && Object.values(YTErrors).includes(err.code));
 }
