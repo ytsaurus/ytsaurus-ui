@@ -45,7 +45,6 @@ interface PageId {
 }
 
 export function isYTError(error: any): error is YTError {
-    const {code, attributes} = error || {};
-    const {trace_id, pid, tid} = attributes || {};
-    return Boolean(code && trace_id && tid && pid);
+    const {yt_javascript_wrapper} = (error as YTError) ?? {};
+    return Boolean(yt_javascript_wrapper?.xYTTraceId && yt_javascript_wrapper?.xYTRequestId);
 }

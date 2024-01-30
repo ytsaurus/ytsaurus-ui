@@ -6,6 +6,7 @@ export interface YTError {
     code?: number;
     attributes?: any;
     inner_errors?: YTError[];
+    yt_javascript_wrapper?: {xYTTraceId?: string; xYTRequestId?: string};
 }
 
 export type ValueOf<T> = T[keyof T];

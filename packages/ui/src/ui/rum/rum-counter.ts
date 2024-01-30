@@ -2,6 +2,7 @@ import axios, {AxiosError} from 'axios';
 import {YTError} from '../../@types/types';
 import {isYTError} from '../../shared/utils';
 import {YTErrors} from './constants';
+import {UIBatchError} from '../utils/errors/ui-error';
 
 const RUM = getRumInstance();
 
@@ -178,5 +179,40 @@ function wrappedHrefOrNull(href?: string) {
 function isAllowSendError(error: Error | AxiosError): boolean {
     const err = axios.isAxiosError(error) ? (error.response?.data as YTError) : error;
 
-    return !(isYTError(err) && err.code && Object.values(YTErrors).includes(err.code));
+    if (!isYTError(err) && !(error instanceof UIBatchError)) {
+        return true;
+    }
+
+    const filteredError = removeErrorsToIgnore(err);
+    return Boolean(filteredError);
+}
+
+const RUM_IGNORE_ERRORS = new Set([
+    YTErrors.NODE_DOES_NOT_EXIST,
+    YTErrors.NO_SUCH_TRANSACTION,
+    YTErrors.PERMISSION_DENIED, // User transaction * has expired or was aborted
+    YTErrors.OPERATION_FAILED_TO_PREPARE,
+    YTErrors.OPERATION_JOBS_LIMIT_EXEEDED,
+]);
+
+function removeErrorsToIgnore(error: YTError): YTError | undefined {
+    if (RUM_IGNORE_ERRORS.has(error.code)) {
+        return undefined;
+    }
+
+    if (error instanceof UIBatchError) {
+        const res = Object.assign(
+            {...error},
+            {
+                inner_errors: error.inner_errors?.filter((e) => !RUM_IGNORE_ERRORS.has(e.code)),
+            },
+        );
+        if (!res.inner_errors?.length) {
+            return undefined;
+        } else {
+            return res;
+        }
+    }
+
+    return error;
 }

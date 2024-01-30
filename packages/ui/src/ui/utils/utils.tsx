@@ -1,4 +1,5 @@
 import React from 'react';
+import axios, {AxiosError} from 'axios';
 import _ from 'lodash';
 
 import {TypedKeys, YTError} from '../types';
@@ -14,15 +15,14 @@ import {LOADING_STATUS} from '../constants';
 import {ErrorInfo} from '../store/reducers/modals/errors';
 import {showErrorModal} from '../store/actions/modals/errors';
 import {BatchResultsItem} from '../../shared/yt-types';
-import axios, {AxiosError} from 'axios';
 
-const BATCH_ERROR_MESSAGE = 'The following sub-requests are failed:';
+import {UIBatchError} from './errors/ui-error';
 
 export function getBatchError<T = unknown>(
     batchResults: Array<BatchResultsItem<T>>,
-    message: string = BATCH_ERROR_MESSAGE,
+    message?: string,
 ): YTError | undefined {
-    return splitBatchResults(batchResults, {message}).error;
+    return splitBatchResults(batchResults, new UIBatchError(message)).error;
 }
 
 const COMMANDS_V4_WITH_VALUE: Record<string, boolean> = {
@@ -66,8 +66,11 @@ export interface SplitedBatchResults<T> {
 
 export function splitBatchResults<T = unknown>(
     batchResults: Array<BatchResultsItem<T>>,
-    dstError: YTError = {message: BATCH_ERROR_MESSAGE},
+    inputError: string | UIBatchError,
 ): SplitedBatchResults<T> {
+    const dstError: UIBatchError =
+        typeof inputError === 'string' ? new UIBatchError(inputError) : inputError;
+
     const innerErrors: Array<YTError> = [];
     const results: Array<T> = [];
     const outputs: Array<T | undefined> = [];
@@ -91,7 +94,7 @@ export function splitBatchResults<T = unknown>(
     }
 
     const error = !innerErrors.length ? undefined : dstError;
-    return {error, results, outputs, errorIndices, resultIndices};
+    return {error: error as UIBatchError, results, outputs, errorIndices, resultIndices};
 }
 
 export function getBatchErrorIndices<T>(results: Array<BatchResultsItem<T>>) {
