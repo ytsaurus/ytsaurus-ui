@@ -31,9 +31,9 @@ import {PoolInfo, getSchedulingPoolsMapByName} from '../../selectors/scheduling/
 import {BatchSubRequest} from '../../../../shared/yt-types';
 import {SchedulingAction} from '../../../store/reducers/scheduling/scheduling';
 import {isSupportedSchedulingChildrenByPool} from '../../../store/selectors/thor/support';
-import {YTError} from '../../../../@types/types';
 import CancelHelper, {isCancelled} from '../../../utils/cancel-helper';
 import {flattenAttributes} from '../../../utils/scheduling/scheduling';
+import {UIBatchError} from '../../../utils/errors/ui-error';
 
 type ExpandedPoolsThunkAction = ThunkAction<
     any,
@@ -260,7 +260,7 @@ function loadExpandedOperationsAndPools(tree: string): ExpandedPoolsThunkAction 
                   }),
         ])
             .then(([operationsResults, poolsResults, poolsChildrenResults, poolsCypressData]) => {
-                const error: YTError = {message: 'Failed to load expanded pools'};
+                const error = new UIBatchError('Failed to load expanded pools');
                 const {results: operations} = splitBatchResults(operationsResults, error);
                 const rawOperations = _.reduce(
                     operations,
