@@ -49,9 +49,7 @@ function appendEncodedParameters(headers, localSetup, parameters) {
     var settings = setup.getOption(localSetup, 'encodedParametersSettings');
     var serializer = setup.getOption(localSetup, 'JSONSerializer');
 
-    var encodedParameters = settings.encoder(
-        serializer.stringify(parameters)
-    );
+    var encodedParameters = settings.encoder(serializer.stringify(parameters));
 
     if (encodedParameters.length > settings.maxCount * settings.maxSize) {
         throw new Error(error.prepare('Encoded parameters string is over size limit'));
@@ -103,7 +101,10 @@ core._makeSuccessHandler = function (localSetup) {
     return function (response) {
         core.notify('requestEnd', response.config);
 
-        var data = response.config.responseType === 'json' ? core._parseResponse(localSetup, response.data) : response.data;
+        var data =
+            response.config.responseType === 'json'
+                ? core._parseResponse(localSetup, response.data)
+                : response.data;
 
         var transformResponse =
             setup.getLocalOption(localSetup, 'transformResponse') ||
@@ -128,11 +129,13 @@ core._makeErrorHandler = function (localSetup) {
         } else {
             data = {
                 message: error.message,
-                code: 0
-            }
+                code: 0,
+            };
         }
 
-        var errorData = axios.isCancel(error) ? {code: codes.CANCELLED} : core._parseResponse(localSetup, data);
+        var errorData = axios.isCancel(error)
+            ? {code: codes.CANCELLED}
+            : core._parseResponse(localSetup, data);
 
         var transformError =
             setup.getLocalOption(localSetup, 'transformError') ||
@@ -146,7 +149,9 @@ core._makeErrorHandler = function (localSetup) {
 core._prepareHeaders = function (localSetup, command, parameters) {
     var config = command.config;
 
-    var headers = Object.assign({}, setup.getOption(localSetup, 'requestHeaders'),{ Accept: 'application/json' });
+    var headers = Object.assign({}, setup.getOption(localSetup, 'requestHeaders'), {
+        Accept: 'application/json',
+    });
 
     var authentication = setup.getOption(localSetup, 'authentication');
 
@@ -179,9 +184,9 @@ core._prepareHeaders = function (localSetup, command, parameters) {
 core._prepareParameters = function (localSetup, command) {
     var config = command.config;
 
-    return typeof config.prepareParameters === 'function' ?
-        config.prepareParameters(command.parameters, localSetup) :
-        command.parameters;
+    return typeof config.prepareParameters === 'function'
+        ? config.prepareParameters(command.parameters, localSetup)
+        : command.parameters;
 };
 
 core._prepareURL = function (localSetup, command) {
@@ -233,26 +238,33 @@ core._prepareRequestSettings = function (localSetup, command) {
     const preparedParameters = core._prepareParameters(localSetup, command);
     const {useBodyForParameters} = command.config;
 
-    var requestParameters = Object.assign({
-        url: core._prepareURL(localSetup, command),
-        headers: core._prepareHeaders(localSetup, command, useBodyForParameters ? undefined : preparedParameters),
-        timeout: timeout,
-        responseType: responseType,
-        transformResponse: [core._identity],
-        method: command.config.method,
-        withCredentials: authentication.type === 'domain',
-        xsrfCookieName: ''
-    },
-        xsrfEnabled ? { xsrfCookieName: xsrfCookieName, xsrfHeaderName: 'X-Csrf-Token' } : undefined,
-        command.config.bigUpload ? {
-            maxContentLength: Infinity,
-            maxBodyLength: Infinity,
-            timeout: 3600 * 24 * 1000,
-        } : undefined
+    var requestParameters = Object.assign(
+        {
+            url: core._prepareURL(localSetup, command),
+            headers: core._prepareHeaders(
+                localSetup,
+                command,
+                useBodyForParameters ? undefined : preparedParameters,
+            ),
+            timeout: timeout,
+            responseType: responseType,
+            transformResponse: [core._identity],
+            method: command.config.method,
+            withCredentials: authentication.type === 'domain',
+            xsrfCookieName: '',
+        },
+        xsrfEnabled ? {xsrfCookieName: xsrfCookieName, xsrfHeaderName: 'X-Csrf-Token'} : undefined,
+        command.config.bigUpload
+            ? {
+                  maxContentLength: Infinity,
+                  maxBodyLength: Infinity,
+                  timeout: 3600 * 24 * 1000,
+              }
+            : undefined,
     );
 
     meta.set(requestParameters, {
-        command: command.config.name
+        command: command.config.name,
     });
 
     if (typeof command.data !== 'undefined') {
@@ -276,7 +288,7 @@ core._createRequestWithCancellation = function (localSetup, requestSettings, cal
 
         callback(cancellation);
 
-        requestSettings = Object.assign(requestSettings, { cancelToken: cancellation.token });
+        requestSettings = Object.assign(requestSettings, {cancelToken: cancellation.token});
     }
 
     // devToolsPublisher.publish({
@@ -289,10 +301,11 @@ core._createRequestWithCancellation = function (localSetup, requestSettings, cal
 
     const onUploadProgress = setup.getOption(localSetup, 'onUploadProgress');
 
-    return axiosInstance.request({
-        onUploadProgress,
-        ...requestSettings
-    })
+    return axiosInstance
+        .request({
+            onUploadProgress,
+            ...requestSettings,
+        })
         .then(core._makeSuccessHandler(localSetup))
         .catch(core._makeErrorHandler(localSetup));
 };
@@ -301,14 +314,10 @@ core._getHeavyProxies = function (localSetup) {
     var proxy = setup.getOption(localSetup, 'proxy');
     var protocol = prepareProtocol(localSetup);
 
-
-    return core._createRequestWithCancellation(
-        localSetup,
-        {
-            url: protocol + proxy + '/hosts',
-            responseType: 'json'
-        }
-    );
+    return core._createRequestWithCancellation(localSetup, {
+        url: protocol + proxy + '/hosts',
+        responseType: 'json',
+    });
 };
 
 core._request = function (localSetup, command) {
@@ -323,22 +332,21 @@ core._request = function (localSetup, command) {
     // XXX New proxy is requested every time, local parameters are ignored at the moment
     var useHeavyProxy = config.heavy && setup.getOption(localSetup, 'useHeavyProxy');
     if (useHeavyProxy) {
-        return core._getHeavyProxies(localSetup)
-            .then(function (proxies) {
-                setup.setGlobalOption('heavyProxy', proxies[0]);
+        return core._getHeavyProxies(localSetup).then(function (proxies) {
+            setup.setGlobalOption('heavyProxy', proxies[0]);
 
-                return core._createRequestWithCancellation(
-                    localSetup,
-                    core._prepareRequestSettings(localSetup, command),
-                    command.cancellation
-                );
-            });
+            return core._createRequestWithCancellation(
+                localSetup,
+                core._prepareRequestSettings(localSetup, command),
+                command.cancellation,
+            );
+        });
     }
 
     return core._createRequestWithCancellation(
         localSetup,
         core._prepareRequestSettings(localSetup, command),
-        command.cancellation
+        command.cancellation,
     );
 };
 
@@ -357,33 +365,37 @@ core._initCommand = function (version, configuration, name) {
      * @param {*} [data] - command data
      */
     return function (/*settings|(parameters[, data[, cancellation]])*/) {
-        var config = Object.assign({ version: version, command: name }, configuration);
+        var config = Object.assign({version: version, command: name}, configuration);
 
         if (config.notImplemented) {
             throw new Error(
-                error.prepare('command ' + config.name + ' is currently not implemented.')
+                error.prepare('command ' + config.name + ' is currently not implemented.'),
             );
         }
 
         if (config.deprecated) {
             throw new Error(
-                error.prepare('command ' + config.name + ' is deprecated for api version ' + version + ' .')
+                error.prepare(
+                    'command ' + config.name + ' is deprecated for api version ' + version + ' .',
+                ),
             );
         }
 
-        var localSetup,
-            parameters,
-            data,
-            cancellation;
+        var localSetup, parameters, data, cancellation;
 
-        if (typeof arguments[0] === 'object' && Object.prototype.hasOwnProperty.call(arguments[0], 'parameters')) {
+        if (
+            typeof arguments[0] === 'object' &&
+            Object.prototype.hasOwnProperty.call(arguments[0], 'parameters')
+        ) {
             localSetup = arguments[0].setup || {};
             parameters = arguments[0].parameters;
             data = arguments[0].data;
             cancellation = arguments[0].cancellation;
 
             if (typeof parameters !== 'object') {
-                throw new Error(error.prepare('bad command arguments - parameters must be an object.'));
+                throw new Error(
+                    error.prepare('bad command arguments - parameters must be an object.'),
+                );
             }
         } else if (typeof arguments[0] === 'object') {
             parameters = arguments[0];
@@ -402,21 +414,20 @@ core._initCommand = function (version, configuration, name) {
             config: config,
             parameters: parameters,
             data: data,
-            cancellation: cancellation
+            cancellation: cancellation,
         });
     };
 };
 
 core._initApiVersion = function (yt, version) {
-    var currentVersion = yt[version] = {};
+    var currentVersion = (yt[version] = {});
     var apiVersion = commands[version];
 
-    Object.keys(apiVersion)
-        .reduce(function (inited, commandName) {
-            inited[commandName] = core._initCommand(version, apiVersion[commandName], commandName);
+    Object.keys(apiVersion).reduce(function (inited, commandName) {
+        inited[commandName] = core._initCommand(version, apiVersion[commandName], commandName);
 
-            return inited;
-        }, currentVersion);
+        return inited;
+    }, currentVersion);
 };
 
 module.exports = core;
