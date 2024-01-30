@@ -70,13 +70,15 @@ export function dynTablesChangeState(
         });
 
         return wrapApiPromiseByToaster(
-            executeBatchWithRetries(YTApiId.navigationDynTableState, requests),
+            executeBatchWithRetries(YTApiId.navigationDynTableState, requests, {
+                errorTitle: 'Failed to change dynamic table(s) state',
+            }),
             {
                 toasterName: 'dyn_tables_change_state_to_' + action,
                 successContent: '',
                 isBatch: true,
                 skipSuccessToast: true,
-                batchError: `Cannot perform ${action} action`,
+                errorTitle: `Cannot perform ${action} action`,
             },
         )
             .then(() => {
@@ -84,7 +86,7 @@ export function dynTablesChangeState(
                     toasterName: 'dyn_tables_wait_while_transient_' + action,
                     successContent: `${_.capitalize(action)} completed`,
                     isBatch: true,
-                    batchError: `Cannot perform ${action} action`,
+                    errorTitle: `Cannot perform ${action} action`,
                 });
             })
             .then(() => {
@@ -102,7 +104,10 @@ function waitWhileThereIsTransient(paths: Array<string>, action: TabletStateActi
     });
 
     const res = delayed(
-        () => executeBatchWithRetries(YTApiId.navigationGetTabletState, requests),
+        () =>
+            executeBatchWithRetries(YTApiId.navigationGetTabletState, requests, {
+                errorTitle: 'Failed to get tablet state',
+            }),
         3000,
     ) as any;
 
@@ -111,7 +116,7 @@ function waitWhileThereIsTransient(paths: Array<string>, action: TabletStateActi
         successContent: `${_.capitalize(action)} completed`,
         skipSuccessToast: true,
         isBatch: true,
-        batchError: `Cannot perform ${action} action`,
+        errorTitle: `Cannot perform ${action} action`,
     }).then((results) => {
         const toRecheck = _.reduce(
             results,

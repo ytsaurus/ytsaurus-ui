@@ -86,7 +86,7 @@ export function loadSchedulingData(): SchedulingThunkAction {
                 const {
                     error,
                     results: [schedulerAlerts, rawTrees, defaultTree],
-                } = splitBatchResults(data);
+                } = splitBatchResults(data, 'Failed to fetch scheduling data');
 
                 if (error) {
                     return Promise.reject(error);
@@ -135,7 +135,10 @@ export function loadSchedulingData(): SchedulingThunkAction {
                     )
                     .then((treeData) => {
                         const extracted = extractBatchV4Values(treeData, treeRequests);
-                        const {error, results} = splitBatchResults(extracted.results);
+                        const {error, results} = splitBatchResults(
+                            extracted.results,
+                            'Failed to fetch tree details',
+                        );
                         if (error) {
                             throw error;
                         }
@@ -318,7 +321,7 @@ function transferPoolQuota({poolPath, transferData, tree}: TransferPoolQuotaPara
     return ytApiV4Id
         .executeBatch(YTApiId.schedulingTransferPoolQuota, {requests})
         .then((res: any) => {
-            const err = getBatchError(res.results);
+            const err = getBatchError(res.results, 'Failed to transfer pool quota');
             if (err) {
                 return Promise.reject(err);
             }

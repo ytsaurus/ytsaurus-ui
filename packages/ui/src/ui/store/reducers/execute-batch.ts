@@ -20,7 +20,7 @@ export interface HandleExecuteBatchRetryParams {
     error: YTError;
     resolveCb: (results: Array<BatchResultsItem<any>>) => void;
     rejectCb: (error: YTError) => void;
-    options?: ExecuteBatchOptions;
+    options: ExecuteBatchOptions;
 }
 
 const initialState: ExecuteBatchState = {};

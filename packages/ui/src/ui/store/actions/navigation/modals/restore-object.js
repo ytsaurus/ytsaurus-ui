@@ -11,7 +11,7 @@ import {NetworkCode} from '../../../../constants/navigation/modals/path-editing-
 import {Toaster} from '@gravity-ui/uikit';
 import {preparePath} from '../../../../utils/navigation';
 import Link from '../../../../components/Link/Link';
-import {showErrorPopup} from '../../../../utils/utils';
+import {showErrorPopup, wrapBatchPromise} from '../../../../utils/utils';
 import {updateView} from '../index';
 import ypath from '../../../../common/thor/ypath';
 import yt from '@ytsaurus/javascript-wrapper/lib/yt';
@@ -21,15 +21,6 @@ import {executeBatchWithRetries} from '../../execute-batch';
 import {YTApiId} from '../../../../rum/rum-wrap-api';
 
 const toaster = new Toaster();
-
-function checkError(responses) {
-    const error = _.find(responses, (res) => res.error);
-    if (error) {
-        return Promise.reject(error.error);
-    }
-
-    return Promise.resolve(responses);
-}
 
 export function restoreObjects(items) {
     return (dispatch) => {
@@ -49,8 +40,12 @@ export function restoreObjects(items) {
                     };
                 });
 
-                return executeBatchWithRetries(YTApiId.navigationRestorePath, requests)
-                    .then(checkError)
+                return wrapBatchPromise(
+                    executeBatchWithRetries(YTApiId.navigationRestorePath, requests, {
+                        errorTitle: 'Failed to get restore path',
+                    }),
+                    'Failed to get restore path',
+                )
                     .then(() => yt.v3.commitTransaction({transaction_id: id}))
                     .catch((err) =>
                         yt.v3

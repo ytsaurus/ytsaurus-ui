@@ -32,7 +32,7 @@ export function loadStoresData(storesId, index, unorderedDynamicTable) {
                 parameters: {requests, output_format: TYPED_OUTPUT_FORMAT},
             })
             .then((data) => {
-                const {error, results} = splitBatchResults(data);
+                const {error, results} = splitBatchResults(data, 'Failed to fetch stores');
                 if (error) {
                     return Promise.reject(error);
                 }

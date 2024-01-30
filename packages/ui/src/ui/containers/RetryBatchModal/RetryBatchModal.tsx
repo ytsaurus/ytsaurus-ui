@@ -19,7 +19,7 @@ const BUTTON_WIDTH_STYLE = {width: 128};
 
 function RetryBatchImpl(props: ExecuteBatchStateItem) {
     const dispatch = useDispatch();
-    const {id, error, showModal, options = {}} = props;
+    const {id, error, showModal, options} = props;
     const {disableSkip} = options;
 
     const handleRetry = React.useCallback(() => {

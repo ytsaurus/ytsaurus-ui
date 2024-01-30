@@ -85,7 +85,7 @@ export function getNodes({
                 cancellation: updateNodeCanceler.removeAllAndSave,
             })
             .then((data) => {
-                const {results, error} = splitBatchResults(data);
+                const {results, error} = splitBatchResults(data, 'Failed to get nodes');
                 dispatch({
                     type: GET_NODES.SUCCESS,
                     data: {

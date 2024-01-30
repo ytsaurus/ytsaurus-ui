@@ -21,6 +21,7 @@ export interface ExecuteBatchOptions {
     saveCancelSourceCb?: (source: CancelTokenSource) => void;
     disableSkip?: boolean;
     allowRetries?: boolean;
+    errorTitle: string;
 }
 
 /**
@@ -33,7 +34,7 @@ export interface ExecuteBatchOptions {
 export async function executeBatchWithRetries<T>(
     id: YTApiId,
     requests: Array<BatchSubRequest>,
-    options?: ExecuteBatchOptions,
+    options: ExecuteBatchOptions,
 ): Promise<Array<BatchResultsItem<T>>> {
     let results: Array<BatchResultsItem<T>> = [];
     let failedRequests: Array<BatchSubRequest> = [];
@@ -78,7 +79,7 @@ export async function executeBatchWithRetries<T>(
             inner_errors: innerErrors,
         };
 
-        const tmp = await handleFailedRequests<T>(id, failedRequests, error);
+        const tmp = await handleFailedRequests<T>(id, failedRequests, error, options);
         return results.concat(tmp);
     }
 
@@ -101,14 +102,14 @@ function isBatchError<T>(error: any): error is BatchError<T> {
 async function handleBatchSlice<T>(
     id: YTApiId,
     requests: Array<BatchSubRequest>,
-    options?: ExecuteBatchOptions,
+    options: ExecuteBatchOptions,
 ): Promise<Array<BatchResultsItem<T>>> {
     try {
         const results: Array<BatchResultsItem<T>> = await ytApiV3Id.executeBatch(id, {
             parameters: {requests},
             cancellation: options?.saveCancelSourceCb,
         });
-        const error = getBatchError(results);
+        const error = getBatchError(results, options.errorTitle);
         if (error) {
             const errorIndices = new Set(getBatchErrorIndices(results));
             const successful_results = _.filter(results, (_item, index) => {
@@ -132,7 +133,7 @@ async function handleBatchSlice<T>(
         } else {
             throw {
                 type: BATCH_ERROR_TYPE,
-                error: getBatchError([{error: e as any}]),
+                error: getBatchError([{error: e as any}], options.errorTitle),
                 failed_requests: requests,
                 successful_results: [],
             };
@@ -144,7 +145,7 @@ async function handleFailedRequests<T>(
     id: YTApiId,
     requests: Array<BatchSubRequest> = [],
     error: YTError,
-    options?: ExecuteBatchOptions,
+    options: ExecuteBatchOptions,
 ): Promise<Array<BatchResultsItem<T>>> {
     return new Promise((res, rej) => {
         (window as any).store.dispatch(

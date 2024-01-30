@@ -396,7 +396,7 @@ export function requestQueries(
         })) as unknown as {results: BatchResultsItem<QueryItem>[]};
 
         const extracted = extractBatchV4Values(resp, requests);
-        const {results} = splitBatchResults(extracted.results ?? []);
+        const {results} = splitBatchResults(extracted.results ?? [], 'Failed to fetch queries');
         return results;
     };
 }

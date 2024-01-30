@@ -14,7 +14,7 @@ export class UIBatchError implements YTError {
      */
     __use_UIBatchError_instead_of_YTERROR?: boolean;
 
-    constructor(msg = 'The following sub-requests are failed:') {
+    constructor(msg: string) {
         this.message = msg;
     }
 }

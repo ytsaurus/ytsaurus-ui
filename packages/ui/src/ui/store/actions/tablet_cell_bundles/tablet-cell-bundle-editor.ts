@@ -76,6 +76,7 @@ export function fetchTabletCellBundleEditor(bundleName: string): TabletCellBundl
                         results[1]?.error?.code === yt.codes.NODE_DOES_NOT_EXIST;
                     const error = getBatchError(
                         bundleControllerIsUnavailable ? [results[0]] : results,
+                        'Failed to get bundle edit data',
                     );
 
                     if (error) {
@@ -234,8 +235,8 @@ export function setBundleEditorController(params: {
             {
                 toasterName: `edit_bundle_${bundleName}`,
                 successContent: `Set bundle edit data`,
-                errorContent: `Cannot set bundle edit data`,
                 isBatch: true,
+                errorTitle: 'Failed to set bundle edit data',
             },
         ).then(() => {
             dispatch(fetchTabletsBundles());
@@ -279,8 +280,8 @@ export function setBunndleAttributes(
             {
                 toasterName: `update-bundle_${bundle}`,
                 successContent: `${bundle} successfully updated`,
-                errorContent: `${bundle} cannot be updated`,
                 isBatch: true,
+                errorTitle: 'Failed to edit bundle',
             },
         ).then(() => {
             dispatch(showTabletCellBundleEditor(bundle));

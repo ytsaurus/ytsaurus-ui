@@ -186,7 +186,7 @@ export function updateResourceUsage() {
                     ),
                 });
 
-                const error = getBatchError(errorResults);
+                const error = getBatchError(errorResults, 'Failed to get resource usage');
                 if (error) {
                     throw error;
                 }
