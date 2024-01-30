@@ -2,6 +2,7 @@ module.exports = {
     CANCELLED: 'cancelled',
     GENERAL_ERROR: 1,
     XSRF_TOKEN_EXPIRED: 110,
+    OPERATION_JOBS_LIMIT_EXEEDED: 215,
     NODE_DOES_NOT_EXIST: 500,
     NODE_ALREADY_EXISTS: 501,
     NO_SUCH_USER: 900,
@@ -10,4 +11,3 @@ module.exports = {
     USER_EXCEEDED_RPS: 904,
     NO_SUCH_TRANSACTION: 11000,
 };
-
