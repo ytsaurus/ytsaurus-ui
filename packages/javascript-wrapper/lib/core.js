@@ -121,8 +121,8 @@ core._makeErrorHandler = function (localSetup) {
 
         core.notify('error', error);
 
-        var response = error.response;
-        var data;
+        const response = error.response;
+        let data;
 
         if (response) {
             data = response.data;
@@ -133,11 +133,16 @@ core._makeErrorHandler = function (localSetup) {
             };
         }
 
-        var errorData = axios.isCancel(error)
+        const errorData = axios.isCancel(error)
             ? {code: codes.CANCELLED}
             : core._parseResponse(localSetup, data);
 
-        var transformError =
+        const {['x-yt-request-id']: xYTRequestId, ['x-yt-trace-id']: xYTTraceId} =
+            (response && response.headers) || {};
+
+        Object.assign(errorData || {}, {yt_javascript_wrapper: {xYTRequestId, xYTTraceId}});
+
+        const transformError =
             setup.getLocalOption(localSetup, 'transformError') ||
             (({parsedData}) => {
                 throw parsedData;
