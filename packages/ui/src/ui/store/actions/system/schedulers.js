@@ -45,7 +45,7 @@ function getSchedulersState(hosts) {
     });
 
     return ytApiV3Id.executeBatch(YTApiId.systemSchedulersState, {requests}).then((data) => {
-        const {outputs} = splitBatchResults(data);
+        const {outputs} = splitBatchResults(data, 'Failed to get scheduler states');
         const alerts = outputs[0];
         const connectedHosts = _.map(hosts, (host, index) => {
             return {
@@ -83,7 +83,7 @@ function getAgentsState(hosts) {
     });
 
     return ytApiV3Id.executeBatch(YTApiId.systemCAStates, {requests}).then((data) => {
-        const {outputs} = splitBatchResults(data);
+        const {outputs} = splitBatchResults(data, 'Failed to get CA states');
         const agents = _.map(hosts, (host, index) => ({
             host,
             connected: outputs[2 * index],

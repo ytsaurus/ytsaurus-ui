@@ -7,7 +7,7 @@ import Link from '../../../../components/Link/Link';
 import {Toaster} from '@gravity-ui/uikit';
 
 import {checkIsTrash, getRawPath} from '../../../../store/selectors/navigation';
-import {showErrorPopup} from '../../../../utils/utils';
+import {showErrorPopup, wrapBatchPromise} from '../../../../utils/utils';
 import {navigateParent, updateView} from '../../../../store/actions/navigation';
 import {decodeEscapedAbsPath, preparePath} from '../../../../utils/navigation';
 import {
@@ -144,7 +144,9 @@ export function getRealPaths(items) {
             };
         });
 
-        return executeBatchWithRetries(YTApiId.navigationDelete, requests)
+        return executeBatchWithRetries(YTApiId.navigationDelete, requests, {
+            errorTitle: 'Failed to get real paths',
+        })
             .then((responses) => {
                 const error = _.find(responses, (res) => res.error);
                 if (error) {
@@ -317,8 +319,12 @@ function permanentlyDeleteObjects(multipleInfo, transaction) {
         };
     });
 
-    return executeBatchWithRetries(YTApiId.navigationDelete, requests)
-        .then(checkError)
+    return wrapBatchPromise(
+        executeBatchWithRetries(YTApiId.navigationDelete, requests, {
+            errorTitle: 'Failed to delete object(s) permanently',
+        }),
+        'Failed to delete object(s) permanently',
+    )
         .then(() => yt.v3.commitTransaction({transaction_id: transaction}))
         .then(() => {
             toaster.add({
@@ -328,15 +334,6 @@ function permanentlyDeleteObjects(multipleInfo, transaction) {
                 title: 'Objects have been permanently deleted.',
             });
         });
-}
-
-function checkError(responses) {
-    const error = _.find(responses, (res) => res.error);
-    if (error) {
-        return Promise.reject(error.error);
-    }
-
-    return Promise.resolve(responses);
 }
 
 function moveObjectsIntoTrash(multipleInfo, transaction, login) {
@@ -375,10 +372,20 @@ function moveObjectsIntoTrash(multipleInfo, transaction, login) {
         };
     });
 
-    return executeBatchWithRetries(YTApiId.navigationMoveToTrashRestorePath, setAttributesRequests)
-        .then(checkError)
-        .then(() => executeBatchWithRetries(YTApiId.navigationMoveToTrash, moveRequests))
-        .then(checkError)
+    return wrapBatchPromise(
+        executeBatchWithRetries(YTApiId.navigationMoveToTrashRestorePath, setAttributesRequests, {
+            errorTitle: 'Failed to set restore path',
+        }),
+        'Failed to set restore path',
+    )
+        .then(() =>
+            wrapBatchPromise(
+                executeBatchWithRetries(YTApiId.navigationMoveToTrash, moveRequests, {
+                    errorTitle: 'Failed to move the object(s) to trash',
+                }),
+                'Failed to move the object(s) to trash',
+            ),
+        )
         .then(() => yt.v3.commitTransaction({transaction_id: transaction}))
         .then(() => {
             toaster.add({

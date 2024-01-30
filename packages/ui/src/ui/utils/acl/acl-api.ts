@@ -98,7 +98,7 @@ export function internalAclWithTypes(items: Array<ACE>) {
     });
 
     return ytApiV3.executeBatch<string>({requests}).then((data) => {
-        const {results} = splitBatchResults(data);
+        const {results} = splitBatchResults(data, 'Failed to fetch acl group names');
         const groups = new Set(results);
         return map_(items, (item) => {
             return {
@@ -201,7 +201,7 @@ export function checkPermissions(
     return ytApiV3Id
         .executeBatch(ytApiId ?? YTApiId.checkPermissions, {requests})
         .then((data: Array<BatchResultsItem<CheckPermissionResult>>) => {
-            const {error, results} = splitBatchResults(data);
+            const {error, results} = splitBatchResults(data, 'Failed to check permissions');
             if (error) {
                 return Promise.reject(error);
             }
@@ -226,7 +226,7 @@ export function requestPermissions(params: RequestPermissionParams): Promise<Upd
         }),
     };
     return yt.v3.executeBatch(batchParams).then((results: BatchResultsItem<unknown>[]) => {
-        const error = getBatchError(results);
+        const error = getBatchError(results, 'Failed to request permissions');
         if (error) {
             throw error;
         }
@@ -246,7 +246,7 @@ export function updateAclAttributes(_cluster: string, path: string, params: Upda
         ],
     };
     return yt.v3.executeBatch(batchParams).then((results: BatchResultsItem<unknown>[]) => {
-        const error = getBatchError(results);
+        const error = getBatchError(results, 'Failed to set @inherit_acl');
         if (error) {
             throw error;
         }

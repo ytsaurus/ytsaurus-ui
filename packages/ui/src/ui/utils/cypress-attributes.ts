@@ -199,7 +199,12 @@ export function updateNodeAttributes(
 
     return Promise.all([
         ...(requests.length
-            ? [wrapBatchPromise(ytApiV3Id.executeBatch(YTApiId.updateNodeAttributes, {requests}))]
+            ? [
+                  wrapBatchPromise(
+                      ytApiV3Id.executeBatch(YTApiId.updateNodeAttributes, {requests}),
+                      'Failed to update node attributes',
+                  ),
+              ]
             : []),
         createParentsBeforeSet(nodePath, oneLevelDiffsParents).then(() => {
             if (isEmpty_(oneLevelDiffs)) {

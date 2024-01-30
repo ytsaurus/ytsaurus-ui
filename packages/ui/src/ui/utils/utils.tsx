@@ -20,7 +20,7 @@ import {UIBatchError} from './errors/ui-error';
 
 export function getBatchError<T = unknown>(
     batchResults: Array<BatchResultsItem<T>>,
-    message?: string,
+    message: string,
 ): YTError | undefined {
     return splitBatchResults(batchResults, new UIBatchError(message)).error;
 }
@@ -110,26 +110,28 @@ export function getBatchErrorIndices<T>(results: Array<BatchResultsItem<T>>) {
     );
 }
 
-interface WrapApiOptions<T> {
+interface CommonWrapApiOptions<T> {
     toasterName: string;
     successContent?: React.ReactNode | ((res: T) => React.ReactNode);
     skipSuccessToast?: boolean;
     errorContent?: React.ReactNode | ((e: YTError) => React.ReactNode);
     skipErrorToast?: boolean;
     successTitle?: string;
-    errorTitle?: string;
     timeout?: number;
     autoHide?: boolean;
-
-    isBatch?: boolean;
-    batchError?: string;
 }
+
+type BatchWrapApiOption =
+    | {isBatch?: false; errorTitle?: string}
+    | {isBatch: true; errorTitle: string};
+
+type WrapApiOptions<T> = CommonWrapApiOptions<T> & BatchWrapApiOption;
 
 const toaster = new Toaster();
 
-export function wrapBatchPromise<T>(p: Promise<T>): Promise<T> {
+export function wrapBatchPromise<T>(p: Promise<T>, errorTitle: string): Promise<T> {
     return p.then((res) => {
-        const error = getBatchError(res as any, 'Batch-request is failed');
+        const error = getBatchError(res as any, errorTitle);
         if (error) {
             throw error;
         }
@@ -145,7 +147,7 @@ export function wrapApiPromiseByToaster<T>(p: Promise<T>, options: WrapApiOption
             if (options.isBatch) {
                 const error = getBatchError(
                     res as any,
-                    options.batchError || 'Batch-request is failed',
+                    options.errorTitle || 'Missing batch error title',
                 );
                 if (error) {
                     throw error;

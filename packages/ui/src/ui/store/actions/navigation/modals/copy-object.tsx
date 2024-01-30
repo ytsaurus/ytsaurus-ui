@@ -13,21 +13,11 @@ import CancelHelper from '../../../../utils/cancel-helper';
 import _ from 'lodash';
 import {executeBatchWithRetries} from '../../execute-batch';
 import {YTApiId} from '../../../../rum/rum-wrap-api';
-import {BatchResultsItem} from '../../../../../shared/yt-types';
-import {splitBatchResults} from '../../../../utils/utils';
+import {wrapBatchPromise} from '../../../../utils/utils';
 import {Dispatch} from 'redux';
 
 const requests = new CancelHelper();
 const toaster = new Toaster();
-
-function checkError(responses: Array<BatchResultsItem>) {
-    const {error} = splitBatchResults(responses);
-    if (error) {
-        return Promise.reject(error);
-    }
-
-    return Promise.resolve(responses);
-}
 
 interface CopyOptions {
     preserve_account?: boolean;
@@ -96,10 +86,13 @@ function copyObjects(
             };
         });
 
-        return executeBatchWithRetries(YTApiId.navigationCopy, copyRequests, {
-            saveCancelSourceCb: requests.saveCancelToken,
-        })
-            .then(checkError)
+        return wrapBatchPromise(
+            executeBatchWithRetries(YTApiId.navigationCopy, copyRequests, {
+                errorTitle: 'Failed to copy the object(s)',
+                saveCancelSourceCb: requests.saveCancelToken,
+            }),
+            'Failed to copy the object(s)',
+        )
             .then(() => yt.v3.commitTransaction({transaction_id: id}))
             .catch((err) =>
                 yt.v3.abortTransaction({transaction_id: id}).then(() => Promise.reject(err)),

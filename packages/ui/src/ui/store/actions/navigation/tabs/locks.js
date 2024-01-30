@@ -39,7 +39,10 @@ function getTransactions(rowLocks) {
         return ytApiV3Id
             .executeBatch(YTApiId.navigationTransactions, {requests})
             .then((data) => {
-                const {error, results: transactions} = splitBatchResults(data);
+                const {error, results: transactions} = splitBatchResults(
+                    data,
+                    'Failed to get transactions',
+                );
                 if (error) {
                     return Promise.reject(error);
                 }

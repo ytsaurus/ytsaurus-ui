@@ -65,7 +65,9 @@ export function showNavigationAttributesEditor(paths: Array<string>): ActionType
                 },
             };
         });
-        return executeBatchWithRetries(YTApiId.attributesEditorGetAttrs, requests)
+        return executeBatchWithRetries(YTApiId.attributesEditorGetAttrs, requests, {
+            errorTitle: 'Attributes cannot be loaded',
+        })
             .then((results: any) => {
                 const error = getBatchError(results, 'Attributes cannot be loaded');
                 if (error) {
@@ -166,7 +168,9 @@ export function navigationSetNodeAttributes(
 
         const staticTables = getNavigationAttributesEditorStaticTables(getState());
 
-        return executeBatchWithRetries(YTApiId.attributesEditorSet, requests)
+        return executeBatchWithRetries(YTApiId.attributesEditorSet, requests, {
+            errorTitle: `Cannot set attributes for ${paths}`,
+        })
             .then((res): Promise<unknown> => {
                 const error = getBatchError(res, `Cannot set attributes for ${paths}`);
                 if (error) {
@@ -223,28 +227,28 @@ export function navigationSetNodeAttributes(
                             parameters: prepareMergeParams(path),
                         };
                     });
-                    return executeBatchWithRetries(YTApiId.attributesEditorMerge, requests).then(
-                        (results: any) => {
-                            const error = getBatchError(results, 'Failed to start some operations');
-                            if (error) {
-                                throw error;
-                            }
+                    return executeBatchWithRetries(YTApiId.attributesEditorMerge, requests, {
+                        errorTitle: 'Failed to start some operations',
+                    }).then((results: any) => {
+                        const error = getBatchError(results, 'Failed to start some operations');
+                        if (error) {
+                            throw error;
+                        }
 
-                            const toaster = new Toaster();
-                            toaster.add({
-                                type: 'success',
-                                name: 'merge_' + staticTables.join(','),
-                                title: `${staticTables.length} operations are started`,
-                                content: (
-                                    <span>
-                                        Please visit
-                                        <Link url={`/${cluster}/operations`}> operations </Link>
-                                        page to see more details
-                                    </span>
-                                ),
-                            });
-                        },
-                    );
+                        const toaster = new Toaster();
+                        toaster.add({
+                            type: 'success',
+                            name: 'merge_' + staticTables.join(','),
+                            title: `${staticTables.length} operations are started`,
+                            content: (
+                                <span>
+                                    Please visit
+                                    <Link url={`/${cluster}/operations`}> operations </Link>
+                                    page to see more details
+                                </span>
+                            ),
+                        });
+                    });
                 }
             })
             .then(() => {

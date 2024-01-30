@@ -74,7 +74,10 @@ export function loadSystemNodes(
         return ytApiV3Id
             .executeBatch(YTApiId.systemNodes, {requests})
             .then((data) => {
-                const {error, results} = splitBatchResults<string | Array<SystemNodeInfo>>(data);
+                const {error, results} = splitBatchResults<string | Array<SystemNodeInfo>>(
+                    data,
+                    'Failed to get system nodes',
+                );
                 if (error) {
                     throw error;
                 }

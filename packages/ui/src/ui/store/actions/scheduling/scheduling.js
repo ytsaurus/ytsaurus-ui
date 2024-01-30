@@ -198,7 +198,7 @@ export function editPool(pool, values, initialValues) {
 
         return Promise.all([
             ytApiV3Id.executeBatch(YTApiId.schedulingEditPool, {requests}).then((data) => {
-                const {error} = splitBatchResults(data);
+                const {error} = splitBatchResults(data, 'Failed to fetch pool details');
                 if (error) {
                     return Promise.reject(error);
                 }

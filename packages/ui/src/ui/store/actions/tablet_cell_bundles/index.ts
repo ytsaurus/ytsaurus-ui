@@ -193,7 +193,10 @@ export function fetchWritePermissions(
                     cancellation: cancelHelper.saveCancelToken,
                 })
                 .then((data) => {
-                    const {error, outputs} = splitBatchResults<CheckPermissionResult>(data);
+                    const {error, outputs} = splitBatchResults<CheckPermissionResult>(
+                        data,
+                        'Failed to get bundle permissions',
+                    );
                     const writableByName = reduce_(
                         outputs,
                         (acc, item, index) => {

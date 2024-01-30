@@ -151,7 +151,7 @@ export function saveUserData(username, attributes, groupsToAdd, groupsToRemove) 
             )
                 // eslint-disable-next-line no-unused-vars
                 .then(([addRes, removeRes, batchRes]) => {
-                    const batchError = getBatchError(batchRes, 'Attributes cannot be modified');
+                    const batchError = getBatchError(batchRes, "Failed to save user's data");
                     if (batchError) {
                         throw batchError;
                     }
