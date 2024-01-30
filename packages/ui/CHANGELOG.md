@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.14.2](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.14.1...ui-v1.14.2) (2024-01-30)
+
+
+### Bug Fixes
+
+* better error message for executeBatch ([1d96e53](https://github.com/ytsaurus/ytsaurus-ui/commit/1d96e539ffa3f2a3a690d3b3b081e8dea6b3a2db))
+* update @ytsaurus/javascript v0.6.1 ([935cee4](https://github.com/ytsaurus/ytsaurus-ui/commit/935cee4ea253b13c8246c1ae740bf2833fb706f0))
+
 ## [1.14.1](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.14.0...ui-v1.14.1) (2024-01-30)
 
 
