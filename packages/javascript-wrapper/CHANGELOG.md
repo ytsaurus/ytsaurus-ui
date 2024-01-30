@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.6.1](https://github.com/ytsaurus/ytsaurus-ui/compare/javascript-wrapper-v0.6.0...javascript-wrapper-v0.6.1) (2024-01-30)
+
+
+### Bug Fixes
+
+* **javascript-wrapper:** better error handler ([f4c9afd](https://github.com/ytsaurus/ytsaurus-ui/commit/f4c9afd8d97c9a82edb8620ef46913f90aa58c63))
+
 ## [0.6.0](https://github.com/ytsaurus/ytsaurus-ui/compare/javascript-wrapper-v0.5.1...javascript-wrapper-v0.6.0) (2024-01-30)
 
 
