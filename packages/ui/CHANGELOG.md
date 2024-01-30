@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.14.1](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.14.0...ui-v1.14.1) (2024-01-30)
+
+
+### Bug Fixes
+
+* **Components/Node:** handle 'offline' nodes properly [YTFRONT-3993] ([53c4d16](https://github.com/ytsaurus/ytsaurus-ui/commit/53c4d169094d441df24b1c0b00210e186d1623af))
+* **Navigation/Table/Merge:** update @ytsaurus/javascript-wrapper [YTFRONT-3953] ([f5b4128](https://github.com/ytsaurus/ytsaurus-ui/commit/f5b412879a8dffc453e2530878600f4723a95b0c))
+* **Operations:** cancle requests properly [YTFRONT-3996] ([d3afc0f](https://github.com/ytsaurus/ytsaurus-ui/commit/d3afc0f4945e2679918f30061359fe70112b34cf))
+* **xss:** fix an xss [YTFRONT-4004] ([7819f8a](https://github.com/ytsaurus/ytsaurus-ui/commit/7819f8a4c54c379d7e8300bbcc56b8192abb3e41))
+
 ## [1.14.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.13.1...ui-v1.14.0) (2024-01-29)
 
 
