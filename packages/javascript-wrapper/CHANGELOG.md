@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.6.0](https://github.com/ytsaurus/ytsaurus-ui/compare/javascript-wrapper-v0.5.1...javascript-wrapper-v0.6.0) (2024-01-30)
+
+
+### Features
+
+* **javascript-wrapper/codes:** add OPERATION_FAILED_TO_PREPARE == 216 ([dc331e4](https://github.com/ytsaurus/ytsaurus-ui/commit/dc331e43d5e043ddeebcff4e7f285b197ab43ab4))
+* **javascript-wrapper/codes:** add OPERATION_JOBS_LIMIT_EXEEDED == 215 ([25b6b82](https://github.com/ytsaurus/ytsaurus-ui/commit/25b6b82ab98187701a92dac159b323f82189a1ad))
+
 ## [0.5.1](https://github.com/ytsaurus/ytsaurus-ui/compare/javascript-wrapper-v0.5.0...javascript-wrapper-v0.5.1) (2024-01-29)
 
 
