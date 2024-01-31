@@ -1,12 +1,8 @@
+import {YT_API_REQUEST_ID_HEADER} from '../constants';
 import {FIX_MY_TYPE} from '../../@types/types';
 import {BatchResultsItem, BatchSubRequest, YTPermissionType} from '../yt-types';
 
 const yt = require('@ytsaurus/javascript-wrapper')();
-
-export function prepareCheckIsDeveloperRequests(login: string) {
-    const [first] = prepareCheckUserPermissionByAclRequests('admins', login, ['write']);
-    return [first];
-}
 
 function prepareCheckUserPermissionByAclRequests(
     groupName: string,
@@ -36,19 +32,20 @@ function checkUserPermissionByAcl(
     user: string,
     permissionTypes: Array<YTPermissionType>,
     setup: FIX_MY_TYPE = undefined,
+    ytApiId: string,
 ) {
     // $ yt --proxy cluster_proxy execute check_permission_by_acl \
     //   '{acl=[{permissions=[write]; subjects=[yt;admins]; action=allow}]; user=max42; permission=write}'
     const requests = prepareCheckUserPermissionByAclRequests(groupName, user, permissionTypes);
 
     return yt.v3.executeBatch({
-        setup,
+        setup: {...setup, requestHeaders: {[YT_API_REQUEST_ID_HEADER]: ytApiId}},
         parameters: {requests},
     }) as Promise<Array<BatchResultsItem<CheckPermissionItemResult>>>;
 }
 
-export function checkIsDeveloper(login: string, setup: FIX_MY_TYPE = undefined) {
-    return checkUserPermissionByAcl('admins', login, ['write'], setup)
+export function checkIsDeveloper(login: string, setup: unknown, ytApiId: string) {
+    return checkUserPermissionByAcl('admins', login, ['write'], setup, ytApiId)
         .then((d) => {
             const {output} = d[0];
             return output?.action === 'allow';

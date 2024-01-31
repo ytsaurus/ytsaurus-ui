@@ -5,7 +5,7 @@ import yt from '@ytsaurus/javascript-wrapper/lib/yt';
 import Cookies from 'js-cookie';
 
 import ypath from '../../common/thor/ypath';
-import {prepareCheckIsDeveloperRequests} from '../../../shared/utils/check-permission';
+import {checkIsDeveloper} from '../../../shared/utils/check-permission';
 import {INIT_CLUSTER_PARAMS, LOAD_ERROR, UPDATE_CLUSTER} from '../../constants/index';
 import {getCurrentUserName} from '../../store/selectors/global';
 import {getXsrfCookieName} from '../../utils';
@@ -13,7 +13,7 @@ import {RESET_STORE_BEFORE_CLUSTER_CHANGE} from '../../constants/utils';
 import {shouldUsePreserveState} from '../../store/selectors/settings';
 import {rumLogError} from '../../rum/rum-counter';
 import {Toaster} from '@gravity-ui/uikit';
-import {RumWrapper, YTApiId, ytApiV3Id} from '../../rum/rum-wrap-api';
+import {RumWrapper, YTApiId} from '../../rum/rum-wrap-api';
 import {RumMeasureTypes} from '../../rum/rum-measure-types';
 import {getBatchError, wrapApiPromiseByToaster} from '../../utils/utils';
 import {BatchResultsItem} from '../../../shared/yt-types';
@@ -72,21 +72,13 @@ export function initClusterParams(cluster: string): GlobalThunkAction<Promise<vo
 
         const rumId = new RumWrapper(cluster, RumMeasureTypes.CLUSTER_PARAMS);
         return wrapApiPromiseByToaster(
-            Promise.all([
-                rumId.fetch(
-                    YTApiId.clusterParamsIsDeveloper,
-                    ytApiV3Id.executeBatch(YTApiId.clusterParamsIsDeveloper, {
-                        requests: prepareCheckIsDeveloperRequests(login),
-                    }),
-                ),
-                rumId.fetch(
-                    YTApiId.clusterParams,
-                    axios.request({
-                        url: '/api/cluster-params/' + cluster,
-                        method: 'GET',
-                    }),
-                ),
-            ]),
+            rumId.fetch(
+                YTApiId.clusterParams,
+                axios.request({
+                    url: '/api/cluster-params/' + cluster,
+                    method: 'GET',
+                }),
+            ),
             {
                 skipSuccessToast: true,
                 toasterName: 'cluster_initialization_failure',
@@ -94,13 +86,9 @@ export function initClusterParams(cluster: string): GlobalThunkAction<Promise<vo
                 errorContent: 'An error occured',
             },
         )
-            .then(([[checkDeveloper], {data}]) => {
-                const isDeveloper = checkDeveloper?.output?.action === 'allow';
+            .then(({data}) => {
                 const {mediumList, schedulerVersion, masterVersion, uiConfig, uiDevConfig} = data;
-                const error = getBatchError(
-                    [mediumList, isDeveloper],
-                    'Cluster initialization failure',
-                );
+                const error = getBatchError([mediumList], 'Cluster initialization failure');
                 if (error) {
                     throw error;
                 }
@@ -113,14 +101,33 @@ export function initClusterParams(cluster: string): GlobalThunkAction<Promise<vo
                     data: {
                         cluster,
                         mediumList: ypath.getValue(mediumList.output),
-                        isDeveloper,
-                        clusterUiConfig: isDeveloper
-                            ? Object.assign({}, uiConfigOutput, uiDevConfigOutput)
-                            : uiConfigOutput,
+                        isDeveloper: false,
+                        clusterUiConfig: uiConfigOutput,
                         schedulerVersion: schedulerVersion.output,
                         masterVersion: masterVersion.output,
                     },
                 });
+
+                return rumId
+                    .fetch(
+                        YTApiId.clusterParamsIsDeveloper,
+                        checkIsDeveloper(
+                            login,
+                            undefined,
+                            YTApiId[YTApiId.clusterParamsIsDeveloper],
+                        ),
+                    )
+                    .then((isDeveloper) => {
+                        if (isDeveloper) {
+                            const clusterUiConfig = isDeveloper
+                                ? Object.assign({}, uiConfigOutput, uiDevConfigOutput)
+                                : uiConfigOutput;
+                            dispatch({type: GLOBAL_PARTIAL, data: {isDeveloper, clusterUiConfig}});
+                        }
+                    })
+                    .catch((e) => {
+                        console.error('Failed to check if current user is admin', e);
+                    });
             })
             .catch((e) => {
                 dispatch({
