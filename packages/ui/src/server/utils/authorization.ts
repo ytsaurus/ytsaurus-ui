@@ -5,7 +5,7 @@ import {isUserOAuthLogged} from '../components/oauth';
 
 export function isAuthorized(req: Request) {
     if (req.yt) {
-        return Boolean(Object.keys(req.yt.ytApiAuthHeaders ?? {}));
+        return Boolean(Object.keys(req.yt.ytApiAuthHeaders ?? {}).length);
     }
     return false;
 }

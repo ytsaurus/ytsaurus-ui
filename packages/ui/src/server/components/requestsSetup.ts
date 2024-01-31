@@ -5,11 +5,20 @@ import {ClusterConfig} from '../../shared/yt-types';
 import {getClusterConfig} from '../components/utils';
 import {getApp} from '../ServerFactory';
 
-function getRobotOAuthToken() {
+function getRobotOAuthToken(ytAuthCluster: string) {
     const {ytInterfaceSecret} = getApp().config as YTCoreConfig;
-    // eslint-disable-next-line security/detect-non-literal-require
-    const secret = ytInterfaceSecret ? require(ytInterfaceSecret).oauthToken : '';
-    return secret;
+
+    let oauthToken = '';
+
+    if (ytInterfaceSecret) {
+        oauthToken =
+            // eslint-disable-next-line security/detect-non-literal-require
+            require(ytInterfaceSecret)?.[ytAuthCluster]?.oauthToken ||
+            // eslint-disable-next-line security/detect-non-literal-require
+            require(ytInterfaceSecret)?.oauthToken; // Backward compatibility
+    }
+
+    return oauthToken;
 }
 
 export interface YTApiSetup {
@@ -46,21 +55,21 @@ function getClusterSetup(clusterConfig: ClusterConfig): {
 export type YTApiClusterSetup = ReturnType<typeof getClusterSetup>;
 
 export function getYTApiClusterSetup(
-    cluster: string,
+    ytAuthCluster: string,
 ): YTApiClusterSetup & {isLocalCluster?: boolean} {
     const {
         clusterConfig,
         ytConfig: {isLocalCluster},
-    } = getClusterConfig(cluster);
+    } = getClusterConfig(ytAuthCluster);
     if (!clusterConfig) {
-        throw new Error(`Cluster '${cluster}' is not found`);
+        throw new Error(`Cluster '${ytAuthCluster}' is not found`);
     }
 
     return {isLocalCluster, ...getClusterSetup(clusterConfig)};
 }
 
 export function getRobotYTApiSetup(cluster: string): YTApiUserSetup {
-    const oauthToken = getRobotOAuthToken();
+    const oauthToken = getRobotOAuthToken(cluster);
     const config = getYTApiClusterSetup(cluster);
 
     const {setup, ...rest} = config;
@@ -93,8 +102,8 @@ export function getRobotYTApiSetup(cluster: string): YTApiUserSetup {
  * @param req
  * @returns undefined when cluster is not found
  */
-export function getUserYTApiSetup(cluster: string, req: Request): YTApiUserSetup {
-    const {setup, ...rest} = getYTApiClusterSetup(cluster);
+export function getUserYTApiSetup(ytAuthCluster: string, req: Request): YTApiUserSetup {
+    const {setup, ...rest} = getYTApiClusterSetup(ytAuthCluster);
     const {authentication} = setup;
 
     const authHeaders =

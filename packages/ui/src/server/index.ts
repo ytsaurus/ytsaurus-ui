@@ -21,23 +21,16 @@ nodekit.ctx.log('AppConfig details', {
     appDevMode,
 });
 
-const {ytAuthCluster, appAuthHandler} = nodekit.config;
+const {allowPasswordAuth} = nodekit.config;
 
-if (ytAuthCluster) {
-    if (appAuthHandler) {
-        nodekit.ctx.fail(
-            new Error(
-                '"appAuthHandler" option will be ignored cause "ytAuthCluster" option is provided.',
-            ),
-        );
-    }
-
+if (allowPasswordAuth) {
     nodekit.config.appBeforeAuthMiddleware = [
         ...(nodekit.config.appBeforeAuthMiddleware || []),
         authorizationResolver(createOAuthAuthorizationResolver()),
         authorizationResolver(createYTAuthorizationResolver()),
     ];
-    nodekit.config.appAuthHandler = createAuthMiddleware(ytAuthCluster);
+
+    nodekit.config.appAuthHandler = createAuthMiddleware();
 }
 
 nodekit.config.adjustAppConfig?.(nodekit);

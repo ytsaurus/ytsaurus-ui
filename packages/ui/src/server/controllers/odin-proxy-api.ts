@@ -26,12 +26,12 @@ async function odinProxyApiImpl(req: Request, res: Response) {
     const {ctx, query} = req;
 
     const search = _.isEmpty(query) ? '' : `?${qs.stringify(query)}`;
-    const {action, cluster} = req.params;
+    const {action, ytAuthCluster} = req.params;
 
     const allowedActionsUrls: Record<string, string> = {
         service_list: `${odinPath}/service_list`,
-        exists: `${odinPath}/${action}/${cluster}`,
-        availability: `${odinPath}/${action}/${cluster}${search}`,
+        exists: `${odinPath}/${action}/${ytAuthCluster}`,
+        availability: `${odinPath}/${action}/${ytAuthCluster}${search}`,
     };
 
     if (!_.has(allowedActionsUrls, action)) {

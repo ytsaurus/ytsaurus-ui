@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import {
+    FETCH_CLUSTER_AUTH_STATUS,
     FETCH_CLUSTER_AVAILABILITY,
     FETCH_CLUSTER_VERSIONS,
     UPDATE_FILTER,
@@ -57,6 +58,12 @@ export default (state = initialState, action) => {
                 {},
             );
             clusters = _.merge({}, state.clusters, availability);
+
+            return {...state, clusters};
+        }
+
+        case FETCH_CLUSTER_AUTH_STATUS.SUCCESS: {
+            clusters = _.merge({}, state.clusters, action.data);
 
             return {...state, clusters};
         }

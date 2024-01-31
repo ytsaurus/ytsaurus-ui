@@ -1,5 +1,6 @@
 import axios from 'axios';
 import {
+    FETCH_CLUSTER_AUTH_STATUS,
     FETCH_CLUSTER_AVAILABILITY,
     FETCH_CLUSTER_VERSIONS,
     UPDATE_FILTER,
@@ -27,6 +28,22 @@ export function fetchClusterVersions() {
             })
             .catch(() => {
                 dispatch({type: FETCH_CLUSTER_VERSIONS.FAILURE, data: {}});
+            });
+    };
+}
+
+export function fetchClusterAuthStatus() {
+    return (dispatch) => {
+        return axios
+            .request({
+                method: 'get',
+                url: '/api/clusters/auth-status',
+            })
+            .then(({data}) => {
+                dispatch({type: FETCH_CLUSTER_AUTH_STATUS.SUCCESS, data});
+            })
+            .catch(() => {
+                dispatch({type: FETCH_CLUSTER_AUTH_STATUS.FAILURE, data: {}});
             });
     };
 }

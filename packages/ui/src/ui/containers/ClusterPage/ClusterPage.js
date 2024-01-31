@@ -36,7 +36,7 @@ import {LOADING_STATUS, LOAD_ERROR, Page, SPLIT_PANE_ID} from '../../constants/i
 import {joinMenuItemsAction, splitMenuItemsAction, trackVisit} from '../../store/actions/menu';
 import {setSetting} from '../../store/actions/settings';
 import {initClusterParams, updateCluster} from '../../store/actions/cluster-params';
-import {updateTitle} from '../../store/actions/global';
+import {handleAuthError, updateTitle} from '../../store/actions/global';
 import {getClusterUiConfig, isQueryTrackerAllowed} from '../../store/selectors/global';
 import {getClusterConfig} from '../../utils';
 import {NAMESPACES, SettingName} from '../../../shared/constants/settings';
@@ -101,7 +101,11 @@ class ClusterPage extends Component {
 
     componentDidMount() {
         const {cluster} = this.props;
-        this.props.updateCluster(cluster, this._onUpdateEnd);
+        this.props.updateCluster(cluster, this._onUpdateEnd).catch((error) => {
+            if (error.response.status === 401) {
+                handleAuthError(true);
+            }
+        });
     }
 
     getSnapshotBeforeUpdate(prevProps) {

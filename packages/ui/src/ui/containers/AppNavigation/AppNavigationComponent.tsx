@@ -7,6 +7,7 @@ import GearIcon from '@gravity-ui/icons/svgs/gear.svg';
 import Link from '../../components/Link/Link';
 import unknown from '../../../../img/user-avatar.svg';
 import {AppNavigationProps} from './AppNavigationPageLayout';
+import YT from '../../config/yt-config';
 
 import './AppNavigationComponent.scss';
 import {Menu} from '@gravity-ui/uikit';
@@ -73,6 +74,10 @@ function AppNavigationComponent({
             }}
             onChangeCompact={onChangeCompact}
             renderFooter={({compact}) => {
+                if (!currentUser) {
+                    return null;
+                }
+
                 return (
                     <>
                         <FooterItem
@@ -120,7 +125,9 @@ function AppNavigationComponent({
                                                     Change password
                                                 </Menu.Item>
                                             )}
-                                            <Menu.Item href={'/api/yt/logout'}>Logout</Menu.Item>
+                                            <Menu.Item href={`/api/yt/${YT.cluster}/logout`}>
+                                                Logout
+                                            </Menu.Item>
                                         </Menu>
                                     </div>
                                 );

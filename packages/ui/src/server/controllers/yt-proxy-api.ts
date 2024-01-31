@@ -25,7 +25,7 @@ const ALLOWED_ACTION: Record<string, string> = {
 
 async function ytProxyApiImpl(req: Request, res: Response) {
     const {ctx, query} = req;
-    const {command, cluster} = req.params;
+    const {command, ytAuthCluster} = req.params;
 
     const proxyAction = ALLOWED_ACTION[command];
     if (!proxyAction) {
@@ -36,7 +36,7 @@ async function ytProxyApiImpl(req: Request, res: Response) {
 
     let cfg;
     try {
-        cfg = getUserYTApiSetup(cluster, req);
+        cfg = getUserYTApiSetup(ytAuthCluster, req);
     } catch (e: any) {
         return sendAndLogError(req.ctx, res, 400, e);
     }

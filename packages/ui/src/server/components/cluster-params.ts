@@ -248,12 +248,12 @@ const CACHE_TIME = 2 * 60 * 1000;
 
 const getCached = createAutoUpdatedCache(fetchClusterParams, CACHE_TIME);
 
-export async function getPreloadedClusterParams(cluster: string, ctx: AppContext) {
+export async function getPreloadedClusterParams(ytAuthCluster: string, ctx: AppContext) {
     const ctxObject: Parameters<typeof fetchClusterParams>[1] = {ctx};
     let response: Awaited<ReturnType<typeof fetchClusterParams>>;
 
     try {
-        response = await getCached(cluster, ctxObject);
+        response = await getCached(ytAuthCluster, ctxObject);
     } catch (error) {
         if (error instanceof BatchSubrequestError) {
             response = error.response;

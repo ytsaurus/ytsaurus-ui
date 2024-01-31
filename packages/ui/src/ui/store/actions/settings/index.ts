@@ -1,4 +1,5 @@
 import {ThunkAction} from 'redux-thunk';
+import YT from '../../../config/yt-config';
 import {RootState} from '../../../store/reducers';
 import {SettingsAction} from '../../../store/reducers/settings';
 import {SettingNS, getPath} from '../../../../shared/utils/settings';
@@ -37,7 +38,7 @@ export function setSettingByKey<T>(path: SettingKey, value: T): SettingsThunkAct
     return (dispatch, getState) => {
         const {
             settings: {provider, data},
-            global: {login},
+            global: {login, cluster: ytAuthCluster = YT.cluster},
         } = getState();
         const previousValue = data[path];
 
@@ -46,7 +47,7 @@ export function setSettingByKey<T>(path: SettingKey, value: T): SettingsThunkAct
             data: {path, value},
         });
 
-        return provider.set(login, path, value).catch((error) => {
+        return provider.set(login, path, value, ytAuthCluster!).catch((error) => {
             if (error === 'disabled') {
                 logError('set', path);
                 return;
@@ -70,7 +71,7 @@ export function removeSetting(settingName: string, settingNS: SettingNS): Settin
     return (dispatch, getState) => {
         const {
             settings: {provider, data},
-            global: {login},
+            global: {login, cluster: ytAuthCluster},
         } = getState();
         const previousValue = data[path];
 
@@ -79,7 +80,7 @@ export function removeSetting(settingName: string, settingNS: SettingNS): Settin
             data: {path},
         });
 
-        return provider.remove(login, path).catch((error) => {
+        return provider.remove(login, path, ytAuthCluster!).catch((error) => {
             if (error === 'disabled') {
                 logError('remove', settingName);
                 return;
@@ -103,11 +104,11 @@ export function reloadSetting(settingName: string, settingNS: SettingNS): Settin
     return (dispatch, getState) => {
         const {
             settings: {provider},
-            global: {login},
+            global: {login, cluster: ytAuthCluster},
         } = getState();
 
         return provider
-            .get(login, path)
+            .get(login, path, ytAuthCluster!)
             .then((value) => {
                 dispatch({
                     type: SET_SETTING_VALUE,
@@ -131,10 +132,11 @@ export function reloadUserSettings(login: string): SettingsThunkAction {
     return async (dispatch, getState) => {
         try {
             const state = getState();
+            const ytAuthCluster = state.global.ytAuthCluster || YT.cluster;
             const {provider} = state.settings;
 
-            await provider.create(login);
-            const data: any = await wrapApiPromiseByToaster(provider.getAll(login), {
+            await provider.create(login, ytAuthCluster);
+            const data: any = await wrapApiPromiseByToaster(provider.getAll(login, ytAuthCluster), {
                 toasterName: 'reload-user-settings',
                 skipSuccessToast: true,
                 errorContent: 'Cannot load user settings',

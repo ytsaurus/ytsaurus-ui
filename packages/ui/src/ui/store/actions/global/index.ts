@@ -313,8 +313,9 @@ export function mergeScreen() {
     };
 }
 
-export function handleAuthError() {
-    if (getConfigData().allowLoginDialog) {
+export function handleAuthError(force?: boolean) {
+    if (getConfigData().allowLoginDialog || force) {
+        getConfigData().allowLoginDialog = force;
         getWindowStore().dispatch({type: GLOBAL_PARTIAL, data: {showLoginDialog: true}});
     }
 }

@@ -9,6 +9,8 @@ import type {NodeKit} from '@gravity-ui/nodekit';
 import {ClusterConfig} from '@ytsaurus/ui/build/cjs/shared/yt-types';
 
 export interface YTCoreConfig {
+    allowPasswordAuth: boolean;
+
     /**
      *  Path to the file with OAuth-token of special-user ("the OAuthRobot" below) in format: {"oauthToken": "******"}
      *  The OAuth-token is used for some service requests, see usages of getRobotYTApiSetup.
@@ -51,7 +53,6 @@ export interface YTCoreConfig {
      *  The OAuthRobot should have read/write access to mapNodePath
      */
     userSettingsConfig?: {
-        cluster: string;
         // path to a map node with user-settings files
         mapNodePath: string;
     };
@@ -64,7 +65,6 @@ export interface YTCoreConfig {
      * The OAuthRobot should have read/write access to the table.
      */
     userColumnPresets?: {
-        cluster: string;
         dynamicTablePath: string;
     };
 

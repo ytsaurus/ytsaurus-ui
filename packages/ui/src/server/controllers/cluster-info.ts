@@ -6,10 +6,10 @@ import {sendAndLogError} from '../utils';
 async function handleClusterInfoImpl(req: Request, res: Response) {
     try {
         const {
-            params: {cluster},
+            params: {ytAuthCluster},
         } = req;
 
-        const cfg = getUserYTApiSetup(cluster, req);
+        const cfg = getUserYTApiSetup(ytAuthCluster, req);
 
         const results = await getClusterInfo(req, cfg);
         return res.send(results);

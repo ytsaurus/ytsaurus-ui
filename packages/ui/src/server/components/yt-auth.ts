@@ -19,6 +19,9 @@ export function getAuthCluster(config: AppConfig) {
     return config.ytAuthCluster;
 }
 
-export function YTAuthLogout(res: Response) {
-    res.setHeader('set-cookie', `${YT_CYPRESS_COOKIE_NAME}=deleted; Path=/; Max-Age=0;`);
+export function YTAuthLogout(res: Response, ytAuthCluster: string) {
+    res.setHeader(
+        'set-cookie',
+        `${ytAuthCluster}:${YT_CYPRESS_COOKIE_NAME}=deleted; Path=/; Max-Age=0;`,
+    );
 }

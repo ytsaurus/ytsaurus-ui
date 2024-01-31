@@ -15,7 +15,7 @@ const yt = ytLib();
 
 export async function handleLogin(req: Request, res: Response) {
     try {
-        const ytAuthCluster = getAuthCluster(req.ctx.config);
+        const ytAuthCluster = req.params.ytAuthCluster;
 
         const {username, password} = JSON.parse(req.body) || {};
         if (!username || !password) {
@@ -41,7 +41,20 @@ export async function handleLogin(req: Request, res: Response) {
                     res,
                     response,
                     undefined,
-                    (headers) => removeSecureFlagIfOriginInsecure(req, headers),
+                    (headers: Record<string, string[]>) => {
+                        if (headers['set-cookie']) {
+                            headers['set-cookie'] = headers['set-cookie'].concat(
+                                headers['set-cookie'].map((item) =>
+                                    item.replace(
+                                        YT_CYPRESS_COOKIE_NAME,
+                                        `${ytAuthCluster}:${YT_CYPRESS_COOKIE_NAME}`,
+                                    ),
+                                ),
+                            );
+                        }
+
+                        return removeSecureFlagIfOriginInsecure(req, headers);
+                    },
                 );
                 if (!pipedSize) {
                     throw new Error(UNEXPECTED_PIPE_AXIOS_RESPONSE);

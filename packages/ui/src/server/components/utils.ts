@@ -32,22 +32,22 @@ export function getClustersFromConfig() {
   * a local cluster pseudo-name
   * an address of a yt-local proxy running in some sandbox
  */
-export function getClusterConfig(cluster?: string) {
+export function getClusterConfig(ytAuthCluster?: string) {
     const ytConfig = getClientConfig();
-    if (!cluster) {
+    if (!ytAuthCluster) {
         return {ytConfig};
     }
     const {clusters} = ytConfig;
-    if (Object.hasOwnProperty.call(clusters, cluster)) {
+    if (Object.hasOwnProperty.call(clusters, ytAuthCluster)) {
         return {
             ytConfig,
-            clusterConfig: applyInternalProxy(clusters[cluster]),
+            clusterConfig: applyInternalProxy(clusters[ytAuthCluster]),
         };
-    } else if (ServerFactory.isLocalClusterId(cluster)) {
-        const config = getClientConfig(cluster);
+    } else if (ServerFactory.isLocalClusterId(ytAuthCluster)) {
+        const config = getClientConfig(ytAuthCluster);
         return {
             ytConfig: config,
-            clusterConfig: applyInternalProxy(config.clusters[cluster]),
+            clusterConfig: applyInternalProxy(config.clusters[ytAuthCluster]),
         };
     } else {
         return {ytConfig};

@@ -10,15 +10,14 @@ import {getOAuthSettings, isOAuthAllowed} from './oauth';
 interface Params {
     login?: string;
     uid?: string;
-    cluster: string | undefined;
+    ytAuthCluster: string | undefined;
     settings: ConfigData['settings'];
     ytConfig: Partial<YTConfig>;
 }
 
 export async function getLayoutConfig(req: Request, params: Params): Promise<AppLayoutConfig> {
     const {login, ytConfig, settings} = params;
-    const {ytApiUseCORS, uiSettings, metrikaCounter, ytAuthCluster, odinBaseUrl} = req.ctx
-        .config as YTCoreConfig;
+    const {ytApiUseCORS, uiSettings, metrikaCounter, odinBaseUrl} = req.ctx.config as YTCoreConfig;
     const YT = ytConfig;
     const uiVersion = getInterfaceVersion();
 
@@ -53,7 +52,7 @@ export async function getLayoutConfig(req: Request, params: Params): Promise<App
             ytApiUseCORS,
             uiSettings,
             metrikaCounterId: metrikaCounter?.[0]?.id,
-            allowLoginDialog: Boolean(ytAuthCluster),
+            allowLoginDialog: Boolean(params.ytAuthCluster),
             allowOAuth: isOAuthAllowed(req),
             oauthButtonLabel: isOAuthAllowed(req) ? getOAuthSettings(req).buttonLabel : undefined,
             allowUserColumnPresets: isUserColumnPresetsEnabled(req),

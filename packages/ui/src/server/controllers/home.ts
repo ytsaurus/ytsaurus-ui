@@ -18,19 +18,19 @@ function isRootPage(page: string) {
 }
 
 export function homeRedirect(req: Request, res: Response) {
-    const cluster = req.params.cluster;
+    const ytAuthCluster = req.params.ytAuthCluster;
     const {referrer} = req.query;
-    const url = referrer ? (referrer as string) : `/${cluster}`;
+    const url = referrer ? (referrer as string) : `/${ytAuthCluster}`;
 
     res.redirect(url);
 }
 
 export async function homeIndex(req: Request, res: Response) {
-    const isRoot = isRootPage(req.params.cluster);
-    const cluster = isRoot ? undefined : req.params.cluster;
+    const isRoot = isRootPage(req.params.ytAuthCluster);
+    const ytAuthCluster = isRoot ? undefined : req.params.ytAuthCluster;
 
     try {
-        const url = await ServerFactory.getHomeRedirectedUrl(cluster, req);
+        const url = await ServerFactory.getHomeRedirectedUrl(ytAuthCluster, req);
         if (url) {
             return res.redirect(url);
         }
@@ -40,17 +40,17 @@ export async function homeIndex(req: Request, res: Response) {
 
     const {ctx} = req;
 
-    const {clusterConfig, ytConfig} = getClusterConfig(cluster);
+    const {clusterConfig, ytConfig} = getClusterConfig(ytAuthCluster);
     const login = ytConfig.isLocalCluster ? 'root' : req.yt?.login;
     // Refuse to serve localRemoteProxy requests erroneously delegated from main interface to another
     // interface running in a container (instead of YT container)
-    if (_.isEmpty(clusterConfig) && cluster) {
+    if (_.isEmpty(clusterConfig) && ytAuthCluster) {
         if (!req.ctx.config.ytAllowRemoteLocalProxy && !isLocalModeByEnvironment()) {
             res.redirect('/');
             return;
         }
         res.status(404).send(
-            `No config for cluster <b>${encodeURIComponent(cluster)}</b> exists.` +
+            `No config for cluster <b>${encodeURIComponent(ytAuthCluster)}</b> exists.` +
                 '<div>If you are trying to connect to your local cluster please make sure:</div>' +
                 '<ol><li>FQDN of the cluster is correct</li>' +
                 '<li>The port is greater than or equal to 1000.</li></ol>',
@@ -68,10 +68,10 @@ export async function homeIndex(req: Request, res: Response) {
         },
     };
 
-    if (login && useRemoteSettings) {
+    if (login && useRemoteSettings && ytAuthCluster) {
         try {
-            await create({ctx, username: login});
-            const userSettings = login ? await get({ctx, username: login}) : {};
+            await create({ctx, username: login, ytAuthCluster});
+            const userSettings = login ? await get({ctx, username: login, ytAuthCluster}) : {};
             settings.data = {...settings.data, ...userSettings};
         } catch (e) {
             const message = `Error in getting user settings for ${login}`;
@@ -93,10 +93,11 @@ export async function homeIndex(req: Request, res: Response) {
     const layoutConfig = await getLayoutConfig(req, {
         login,
         uid: req.yt?.uid,
-        cluster,
+        ytAuthCluster,
         ytConfig,
         settings,
     });
+
     const html = await ServerFactory.renderLayout(layoutConfig, req, res);
     res.send(html);
 }

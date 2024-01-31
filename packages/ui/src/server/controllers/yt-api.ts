@@ -13,7 +13,7 @@ import {getUserYTApiSetup} from '../components/requestsSetup';
 const yt = ytLib();
 
 interface Params {
-    cluster: string;
+    ytAuthCluster: string;
     version: string;
     command: string;
 }
@@ -42,7 +42,7 @@ export async function ytTvmApiHandler(req: Request, res: Response) {
 
     let cfg;
     try {
-        cfg = getUserYTApiSetup(params.cluster, req);
+        cfg = getUserYTApiSetup(params.ytAuthCluster, req);
     } catch (e: any) {
         return sendError(e, 400);
     }
