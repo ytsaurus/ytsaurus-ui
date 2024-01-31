@@ -40,7 +40,7 @@ import {
     getGlobalMasterVersion,
     getGlobalSchedulerVersion,
     getHttpProxyVersion,
-    isDeveloperSettings,
+    isDeveloperOrWatchMen,
 } from '../../store/selectors/global';
 import {
     cellSizeRadioButtonItems,
@@ -524,7 +524,7 @@ export function makeItem(
 }
 
 export function useSettingsDescription(): Array<SettingsPage> {
-    const isAdmin = useSelector(isDeveloperSettings) || true;
+    const isAdmin = useSelector(isDeveloperOrWatchMen) || true;
     const cluster = useClusterFromLocation();
     const login = useSelector(getCurrentUserName);
 

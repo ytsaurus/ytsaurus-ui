@@ -99,17 +99,17 @@ export const getAuthWay = (state: RootState): AuthWay => state?.global?.authWay;
 export const getAllowedExperimentalPages = (state: RootState) =>
     state?.global.allowedExperimentalPages;
 
-const isCheckedDeveloper = (state: RootState): boolean => state?.global?.isDeveloper;
+const isDeveloperRaw = (state: RootState): boolean => state?.global?.isDeveloper;
 
-export const isDeveloperSettings = createSelector(
-    [isCheckedDeveloper, getCurrentUserName],
+export const isDeveloperOrWatchMen = createSelector(
+    [isDeveloperRaw, getCurrentUserName],
     (isDeveloper, login) => {
         return YT.isLocalCluster || UIFactory.isWatchMen(login) || isDeveloper;
     },
 );
 
 export const isDeveloper = createSelector(
-    [isDeveloperSettings, getSettingsRegularUserUI],
+    [isDeveloperOrWatchMen, getSettingsRegularUserUI],
     (isDeveloper, regularUserUI) => {
         return !regularUserUI && isDeveloper;
     },
