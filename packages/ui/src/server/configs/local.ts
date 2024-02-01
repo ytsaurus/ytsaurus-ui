@@ -2,7 +2,6 @@ import typeis from 'type-is';
 
 import {AuthPolicy} from '@gravity-ui/expresskit';
 import {AppConfig} from '@gravity-ui/nodekit';
-import {YT_LOCAL_CLUSTER_ID} from '../../shared/constants';
 
 const localModeConfig: Partial<AppConfig> = {
     appAuthPolicy: AuthPolicy.disabled,
@@ -30,7 +29,6 @@ const localModeConfig: Partial<AppConfig> = {
     },
 
     userSettingsConfig: {
-        cluster: YT_LOCAL_CLUSTER_ID,
         mapNodePath: '//tmp',
     },
 };

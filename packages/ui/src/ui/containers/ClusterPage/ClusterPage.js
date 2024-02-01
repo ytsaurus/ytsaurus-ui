@@ -101,11 +101,7 @@ class ClusterPage extends Component {
 
     componentDidMount() {
         const {cluster} = this.props;
-        this.props.updateCluster(cluster, this._onUpdateEnd).catch((error) => {
-            if (error.response.status === 401) {
-                handleAuthError(true);
-            }
-        });
+        this.props.updateCluster(cluster, this._onUpdateEnd);
     }
 
     getSnapshotBeforeUpdate(prevProps) {

@@ -46,9 +46,9 @@ $ npm run dev:app
 
 ### Environment variables
 
-- `YT_AUTH_ALLOW_INSECURE` - if defined allows insecure (over http) authentication, do not use it for production _(the variable is ignored if `YT_AUTH_CLUSTER_ID` is not defined)_
-- `YT_USER_SETTINGS_PATH` - path to map-node with files of user-settings, if not defined '//tmp' is used _(the variable is ignored if `YT_AUTH_CLUSTER_ID` is not defined)_
-- `YT_USER_COLUMN_PRESETS_PATH` - path to dynamic table with user column presets _(the variable is ignored if `YT_AUTH_CLUSTER_ID` is not defined)_. The table should have two columns: **"name"** _(string, required, sort_order: ascheding)_, **"columns_json"** _(string)_.
+- `YT_AUTH_ALLOW_INSECURE` - if defined allows insecure (over http) authentication, do not use it for production
+- `YT_USER_SETTINGS_PATH` - path to map-node with files of user-settings, if not defined '//tmp' is used
+- `YT_USER_COLUMN_PRESETS_PATH` - path to dynamic table with user column presets. The table should have two columns: **"name"** _(string, required, sort_order: ascheding)_, **"columns_json"** _(string)_.
 
 ### Feature flags
 

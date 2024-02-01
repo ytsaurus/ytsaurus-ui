@@ -2,10 +2,13 @@ import React, {useCallback, useState} from 'react';
 import axios, {AxiosError} from 'axios';
 import {useDispatch, useSelector} from 'react-redux';
 import {Button, Text, TextInput} from '@gravity-ui/uikit';
-import {matchPath, useLocation} from 'react-router';
 import {onSuccessLogin} from '../../../store/actions/global';
 import ytLocalStorage from '../../../utils/yt-local-storage';
-import {getOAuthButtonLabel, getOAuthEnabled} from '../../../store/selectors/global';
+import {
+    getGlobalYTAuthCluster,
+    getOAuthButtonLabel,
+    getOAuthEnabled,
+} from '../../../store/selectors/global';
 import LoginPageWrapper from '../LoginPageWrapper/LoginPageWrapper';
 import isEmpty from 'lodash/isEmpty';
 
@@ -40,16 +43,11 @@ const validate = ({
 };
 
 function LoginForm({theme}: Props) {
-    const location = useLocation();
-    const {params: {cluster = ''} = {}} =
-        matchPath<{cluster: string}>(location.pathname, {
-            path: '/:cluster',
-        }) || {};
-
     const dispatch = useDispatch();
     const [username, setUsername] = useState(ytLocalStorage.get('loginDialog')?.username || '');
     const allowOAuth = useSelector(getOAuthEnabled);
     const buttonLabel = useSelector(getOAuthButtonLabel);
+    const ytAuthCluster = useSelector(getGlobalYTAuthCluster) ?? '';
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState<boolean>(false);
     const [errors, setErrors] = React.useState<ErrorFields>({});
@@ -64,7 +62,7 @@ function LoginForm({theme}: Props) {
                 return;
             }
             setLoading(true);
-            authorize({username, password, ytAuthCluster: cluster})
+            authorize({username, password, ytAuthCluster})
                 .then(async () => {
                     ytLocalStorage.set('loginDialog', {username});
                     dispatch(onSuccessLogin(username));

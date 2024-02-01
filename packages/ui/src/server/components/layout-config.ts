@@ -17,7 +17,7 @@ interface Params {
 
 export async function getLayoutConfig(req: Request, params: Params): Promise<AppLayoutConfig> {
     const {login, ytConfig, settings} = params;
-    const {ytApiUseCORS, uiSettings, metrikaCounter, odinBaseUrl} = req.ctx.config as YTCoreConfig;
+    const {ytApiUseCORS, uiSettings, metrikaCounter, odinBaseUrl, allowPasswordAuth} = req.ctx.config as YTCoreConfig;
     const YT = ytConfig;
     const uiVersion = getInterfaceVersion();
 
@@ -52,7 +52,7 @@ export async function getLayoutConfig(req: Request, params: Params): Promise<App
             ytApiUseCORS,
             uiSettings,
             metrikaCounterId: metrikaCounter?.[0]?.id,
-            allowLoginDialog: Boolean(params.ytAuthCluster),
+            allowLoginDialog: Boolean(allowPasswordAuth),
             allowOAuth: isOAuthAllowed(req),
             oauthButtonLabel: isOAuthAllowed(req) ? getOAuthSettings(req).buttonLabel : undefined,
             allowUserColumnPresets: isUserColumnPresetsEnabled(req),

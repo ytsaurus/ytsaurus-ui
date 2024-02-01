@@ -18,6 +18,6 @@ function onAxiosError(e: any) {
 function onError(e: any) {
     const isAuthError = axios.isAxiosError(e) && e.response?.status === 401;
     if (isAuthError) {
-        handleAuthError();
+        handleAuthError({ytAuthCluster: e?.response?.data?.extraData?.ytAuthCluster});
     }
 }

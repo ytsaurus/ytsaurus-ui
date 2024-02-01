@@ -195,6 +195,14 @@ export const getGlobalDefaultPoolTreeName = (state: RootState) =>
     state.global.poolTreeDefault || 'physical';
 
 export const getGlobalShowLoginDialog = (state: RootState) => {
+    if (state.global.authWay === 'passwd') {
+        return (
+            getConfigData().allowLoginDialog &&
+            state.global.ytAuthCluster &&
+            (!state.global.login || state.global.showLoginDialog)
+        );
+    }
+
     return (
         getConfigData().allowLoginDialog && (!state.global.login || state.global.showLoginDialog)
     );
@@ -213,3 +221,5 @@ export const getOAuthButtonLabel = () => {
 };
 
 export const getGlobalAsideHeaderWidth = (state: RootState) => state.global.asideHeaderWidth;
+
+export const getGlobalYTAuthCluster = (state: RootState) => state.global.ytAuthCluster;

@@ -1,4 +1,4 @@
-import axios, {AxiosError, AxiosResponse} from 'axios';
+import axios, {AxiosResponse} from 'axios';
 
 // @ts-ignore
 import yt from '@ytsaurus/javascript-wrapper/lib/yt';
@@ -154,7 +154,7 @@ export function updateCluster(
     onUpdateEnd: () => Promise<void>,
 ): GlobalThunkAction {
     return (dispatch, getState) => {
-        const dispatchError = (error: AxiosError) => {
+        const dispatchError = (error: any) => {
             if (error instanceof Error) {
                 console.error(error);
             }
@@ -162,8 +162,6 @@ export function updateCluster(
                 type: UPDATE_CLUSTER.FAILURE,
                 data: {error: error?.response?.data || error},
             });
-
-            throw error;
         };
 
         dispatch({
