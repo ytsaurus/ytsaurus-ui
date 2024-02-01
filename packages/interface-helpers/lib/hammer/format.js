@@ -371,7 +371,10 @@ format['Hex'] = function (value, settings) {
     settings.uppercase = parseSetting(settings, 'uppercase', false);
 
     const numberValue = Number(value);
-    const result = isNaN(numberValue) ? value : numberValue.toString(16);
+    const result =
+        isNaN(numberValue) || (typeof value !== 'number' && typeof value !== 'bigint' && !value)
+            ? format.NO_VALUE
+            : numberValue.toString(16);
 
     if (settings.uppercase) {
         result.toUpperCase();
