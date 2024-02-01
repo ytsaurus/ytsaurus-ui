@@ -53,6 +53,7 @@ const POOL_FIELDS_TO_LOAD = [
     'estimated_burst_usage_duration_sec',
     'fair_share_ratio',
     'fifo_index',
+    'fifo_sort_parameters',
     'integral_guarantee_type',
     'is_ephemeral',
     'max_operation_count',
