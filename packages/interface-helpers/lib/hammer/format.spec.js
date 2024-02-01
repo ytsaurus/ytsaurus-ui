@@ -115,4 +115,19 @@ describe('format', () => {
             });
         });
     });
+
+    describe('Hex', () => {
+        expect(format.Hex(0x1000)).toBe('1000');
+        expect(format.Hex(0x0abc)).toBe('abc');
+        expect(format.Hex('0x0abc')).toBe('abc');
+        expect(format.Hex('0xabc')).toBe('abc');
+        expect(format.Hex(0)).toBe('0');
+        expect(format.Hex(0n)).toBe('0');
+        expect(format.Hex()).toBe(format.NO_VALUE);
+        expect(format.Hex(NaN)).toBe(format.NO_VALUE);
+        expect(format.Hex(null)).toBe(format.NO_VALUE);
+        expect(format.Hex('')).toBe(format.NO_VALUE);
+        expect(format.Hex('0abc')).toBe(format.NO_VALUE);
+        expect(format.Hex('abc')).toBe(format.NO_VALUE);
+    });
 });
