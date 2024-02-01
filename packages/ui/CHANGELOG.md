@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.14.3](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.14.2...ui-v1.14.3) (2024-02-01)
+
+
+### Bug Fixes
+
+* do not wait for checkIsDeveloper response [YTFRONT-3862] ([4f0470b](https://github.com/ytsaurus/ytsaurus-ui/commit/4f0470b8a8a0fdd2beae8f911ab7666c0cdc5bbe))
+* **timestampProvider:** update the default value when `clock_cell` is missing [YTFRONT-3946] ([8f44e05](https://github.com/ytsaurus/ytsaurus-ui/commit/8f44e05e1b6d655eab4fecdb1112647466625511))
+
 ## [1.14.2](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.14.1...ui-v1.14.2) (2024-01-30)
 
 
