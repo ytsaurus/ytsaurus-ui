@@ -139,7 +139,7 @@ async function loadMastersConfig(): Promise<MastersConfigResponse> {
                       };
                   },
               ),
-              cellTag: getCellIdTag(ypath.getValue(timestampProviderCellTag.output).cell_id),
+              cellTag: getCellIdTag(ypath.getValue(timestampProviderCellTag.output)?.cell_id),
           };
 
     const mainResult: MastersConfigResponse = {
@@ -349,7 +349,10 @@ export function loadMasters() {
     };
 }
 
-function getCellIdTag(uuid: string): number {
-    const [, , third] = uuid.split('-');
+function getCellIdTag(uuid?: string): number | undefined {
+    if (!uuid) {
+        return undefined;
+    }
+    const [, , third = ''] = uuid.split('-');
     return Number(`0x${third.substring(0, third.length - 4)}`);
 }
