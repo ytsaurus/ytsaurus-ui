@@ -173,7 +173,8 @@ export function updatePoolChild(data, cypressData, type, treeResources) {
         data.burstDuration = ypath.getValue(attributes, '/estimated_burst_usage_duration_sec');
 
         const fifoSortParams = _.map(
-            ypath.getValue(cypressAttributes, '/fifo_sort_parameters'),
+            ypath.getValue(attributes, '/fifo_sort_parameters') ||
+                ypath.getValue(cypressAttributes, '/fifo_sort_parameters'),
             (param) => ypath.getValue(param),
         );
         data.fifoSortParams =
