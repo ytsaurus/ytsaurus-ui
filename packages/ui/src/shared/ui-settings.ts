@@ -18,6 +18,8 @@ export interface UISettings {
     trackerQuoteRequestQueue?: string;
     trackerAdminRequestQueue?: string;
 
+    reportBugUrl?: string;
+
     datalensBaseUrl?: string;
     datalensAllowedCluster?: Array<string>;
 

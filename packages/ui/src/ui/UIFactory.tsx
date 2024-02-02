@@ -15,6 +15,7 @@ import {ExternalSchemaDescription} from './pages/navigation/tabs/Schema/External
 import {AclApi, defaultAclApi} from './utils/acl/external-acl-api';
 import {SubjectsControlProps} from './components/ACL/SubjectsControl/SubjectsControl';
 import {SettingsPage} from './containers/SettingsPanel/settings-description';
+import {SupportComponent} from './containers/SupportComponent/SupportComponent';
 import {UserSuggestProps} from './containers/UserSuggest/UserSuggest';
 import {YTUserSuggest} from './containers/UserSuggest/YTUserSuggest';
 import {DocsUrls, docsUrls} from './constants/docsUrls';
@@ -528,8 +529,13 @@ const uiFactory: UIFactory = {
         return undefined;
     },
 
-    makeSupportContent() {
-        return undefined;
+    makeSupportContent(_x, makeContent) {
+        const {reportBugUrl} = uiSettings;
+        if (!reportBugUrl) {
+            return undefined;
+        }
+
+        return <SupportComponent makeContent={makeContent} />;
     },
 
     getComponentForConsumerMetrics() {
