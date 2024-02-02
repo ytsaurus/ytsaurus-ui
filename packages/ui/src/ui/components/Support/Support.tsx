@@ -18,8 +18,15 @@ export function Support({children}: SupportProps) {
     const cluster = useSelector(getCluster);
 
     const makeContent = React.useCallback(
-        (onSupportClick: () => void) => (
+        ({
+            supportContent,
+            onSupportClick,
+        }: {
+            supportContent?: React.ReactNode;
+            onSupportClick: () => void;
+        }) => (
             <div className={b()} onClick={onSupportClick}>
+                {supportContent}
                 {children || (
                     <div className={b('toggler')}>
                         <svg
