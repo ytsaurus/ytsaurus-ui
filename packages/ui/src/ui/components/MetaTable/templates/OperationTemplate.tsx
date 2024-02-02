@@ -20,14 +20,39 @@ import CollapsableText from '../../../components/CollapsableText/CollapsableText
 const itemBlock = cn('meta-table-item');
 const detailBlock = cn('operation-detail');
 
+export interface Pool {
+    pool: string;
+    tree: string;
+    isEphemeral?: boolean;
+    weight?: number;
+}
+
 /* ----------------------------------------------------------------------------------------------------------------- */
 
-export function TemplatePools({pools, cluster, state, onEdit, compact, erasedTrees = {}}) {
+interface TemplatePoolsProps {
+    className?: string;
+    cluster: string;
+    reserveEditButton?: boolean;
+    compact?: boolean;
+    onEdit?: () => void;
+    state?: 'completed' | 'failed' | 'aborted' | string;
+    pools: Pool[];
+    erasedTrees?: Record<string, boolean | undefined>;
+}
+
+export function TemplatePools({
+    pools,
+    cluster,
+    state,
+    onEdit,
+    compact,
+    erasedTrees = {},
+}: TemplatePoolsProps) {
     return (
         <ul className={itemBlock('pools', 'elements-list elements-list_type_unstyled')}>
             {_.map(pools, (pool) => (
                 <OperationPool
-                    key={pool.name + '/' + pool.tree}
+                    key={pool.pool + '/' + pool.tree}
                     compact={compact}
                     cluster={cluster}
                     onEdit={onEdit}
@@ -41,7 +66,6 @@ export function TemplatePools({pools, cluster, state, onEdit, compact, erasedTre
 }
 
 TemplatePools.propTypes = {
-    pools: PropTypes.arrayOf(OperationPool.poolType).isRequired,
     cluster: PropTypes.string.isRequired,
     state: PropTypes.string,
     onEdit: PropTypes.func,
@@ -54,7 +78,12 @@ TemplatePools.defaultProps = {
 
 /* ----------------------------------------------------------------------------------------------------------------- */
 
-export function TemplateTransferTask({id, url}) {
+interface TemplateTransferTaskProps {
+    id?: string;
+    url?: string;
+}
+
+export function TemplateTransferTask({id, url}: TemplateTransferTaskProps) {
     return !url ? (
         id
     ) : (
@@ -71,7 +100,13 @@ TemplateTransferTask.propTypes = {
 
 /* ----------------------------------------------------------------------------------------------------------------- */
 
-export function TemplateCommand({value, lineCount, settings}) {
+interface TemplateCommandProps {
+    value: string | string[];
+    lineCount?: number;
+    settings?: Record<string, unknown>;
+}
+
+export function TemplateCommand({value, lineCount, settings}: TemplateCommandProps) {
     const command = Array.isArray(value) ? hammer.format['Command'](value) : value;
 
     return <Template.CollapsableText value={command} lineCount={lineCount} settings={settings} />;
@@ -85,7 +120,11 @@ TemplateCommand.propTypes = {
 
 /* ----------------------------------------------------------------------------------------------------------------- */
 
-export function TemplateEnvironment({environments}) {
+interface TemplateEnvironmentProps {
+    environments: {name: string; value: unknown}[];
+}
+
+export function TemplateEnvironment({environments}: TemplateEnvironmentProps) {
     const variables = _.map(environments, ({name, value}) => {
         const preparedValue = ypath.getValue(value);
 
@@ -110,9 +149,17 @@ TemplateEnvironment.propTypes = {
 
 /* ----------------------------------------------------------------------------------------------------------------- */
 
-function TemplateFile({name, path, originalPath, executable, cluster}) {
-    const getQuery = (path) => paramsToQuery({path: path});
-    const getUrl = (path) => `/${cluster}/${Page.NAVIGATION}?${getQuery(path)}`;
+interface TemplateFileProps {
+    cluster: string;
+    path: string;
+    originalPath: string;
+    name?: string;
+    executable?: boolean;
+}
+
+function TemplateFile({name, path, originalPath, executable, cluster}: TemplateFileProps) {
+    const getQuery = (p: string) => paramsToQuery({path: p});
+    const getUrl = (p: string) => `/${cluster}/${Page.NAVIGATION}?${getQuery(p)}`;
 
     return (
         <li className={itemBlock('file')}>
@@ -138,8 +185,13 @@ TemplateFile.propTypes = {
     executable: PropTypes.bool,
 };
 
-export function TemplateFiles({files, cluster}) {
-    const items = _.map(files, (file) => (
+interface TemplateFilesProps {
+    files: Parameters<typeof TemplateFile>[0][];
+    cluster: string;
+}
+
+export function TemplateFiles({files, cluster}: TemplateFilesProps) {
+    const items = files.map((file) => (
         <TemplateFile {...file} cluster={cluster} key={file.path + '/' + file.name} />
     ));
 
@@ -159,7 +211,13 @@ TemplateFiles.propTypes = {
 
 /* ----------------------------------------------------------------------------------------------------------------- */
 
-export function TemplateIntermediate({path, transaction, cluster}) {
+interface TemplateIntermediateProps {
+    path: string;
+    cluster: string;
+    transaction: string;
+}
+
+export function TemplateIntermediate({path, transaction, cluster}: TemplateIntermediateProps) {
     const query = qs.stringify({path, t: transaction}, {encode: false});
     const url = `/${cluster}/${Page.NAVIGATION}?${query}`;
 
@@ -179,7 +237,13 @@ TemplateIntermediate.propTypes = {
 
 /* ----------------------------------------------------------------------------------------------------------------- */
 
-export function TemplateWeight({operation, pool, onEdit}) {
+interface TemplateWeightProps {
+    operation: Record<string, unknown>;
+    onEdit: () => void;
+    pool: Pool;
+}
+
+export function TemplateWeight({operation, pool, onEdit}: TemplateWeightProps) {
     return (
         <OperationWeight
             onEdit={onEdit}
@@ -194,5 +258,3 @@ TemplateWeight.propTypes = {
     operation: PropTypes.object.isRequired,
     onEdit: PropTypes.func.isRequired,
 };
-
-/* ----------------------------------------------------------------------------------------------------------------- */

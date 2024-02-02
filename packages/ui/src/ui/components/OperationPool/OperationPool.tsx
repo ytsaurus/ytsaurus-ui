@@ -37,7 +37,7 @@ export type OperationPoolProps = {
     reserveEditButton?: boolean;
     compact?: boolean;
     onEdit?: () => void;
-    state?: 'completed' | 'failed' | 'aborted';
+    state?: 'completed' | 'failed' | 'aborted' | string;
     pool: {
         pool: string;
         tree: string;

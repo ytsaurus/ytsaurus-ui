@@ -16,35 +16,56 @@ import {prepareOperationEvents} from '../../../utils/operations/tabs/details/eve
 import {prepareRuntime} from '../../../utils/operations/tabs/details/runtime';
 import {prepareAlerts} from '../../../utils/operations/tabs/details/alerts';
 import {prepareError} from '../../../utils/operations/tabs/details/error';
-import {prepareActions} from '../../../utils/operations/details-ts';
+import {OperationAction, prepareActions} from '../../../utils/operations/detail';
 import {mergeStateOnClusterChange} from '../utils';
 
-const initialState = {
+import type {Action} from 'redux';
+import type {DetailedOperationSelector} from '../../../pages/operations/selectors';
+import type {YTError} from './../../../../@types/types';
+import type {ActionD} from './../../../types/index';
+
+export interface OperationDetailState {
+    loading: boolean;
+    loaded: boolean;
+    error: boolean;
+    errorData: {message: string; details?: YTError};
+    operation: DetailedOperationSelector;
+    actions: Array<OperationAction>;
+    details: {
+        alert_events: {alert_type: string; time: string; error: YTError}[];
+    };
+    resourcesStatus: (typeof LOADING_STATUS)[keyof typeof LOADING_STATUS];
+    resources: unknown;
+    monitorChartStates: Record<string, boolean>;
+}
+
+const initialState: OperationDetailState = {
     loading: true,
     loaded: false,
     error: false,
-    errorData: {
-        message: '',
-        details: null,
-    },
-    /** @type {import('../../../pages/operations/selectors').DetailedOperationSelector} */
-    operation: {
-        $value: undefined,
-    },
-    /** @type {ReturnType<typeof prepareActions>} */
+    errorData: {message: ''},
+    operation: {$value: undefined} as unknown as DetailedOperationSelector,
     actions: [],
-    details: {
-        /** @type {Array<{alert_type: string, time: string, error: YTError}>} */
-        alert_events: [], // Array<{alert_type: string, time: string, error: YTError}>
-    },
-
+    details: {alert_events: []},
     resourcesStatus: LOADING_STATUS.UNINITIALIZED,
-    resources: {},
-
-    monitorChartStates: {}, // {[name: string]: boolean}, whether a chart is finished to render
+    resources: [],
+    monitorChartStates: {},
 };
 
-function reducer(state = initialState, action) {
+export type OperationDetailActionType =
+    | ActionD<typeof GET_OPERATION.REQUEST, {id: string; isAlias: boolean}>
+    | ActionD<
+          typeof GET_OPERATION.SUCCESS,
+          Pick<OperationDetailState, 'operation'> & {userTransactionAlive: boolean}
+      >
+    | ActionD<typeof GET_OPERATION.FAILURE, OperationDetailState['errorData']>
+    | Action<typeof LOAD_RESOURCE_USAGE.REQUEST>
+    | ActionD<typeof LOAD_RESOURCE_USAGE.SUCCESS, Pick<OperationDetailState, 'resources'>>
+    | Action<typeof LOAD_RESOURCE_USAGE.FAILURE>
+    | Action<typeof LOAD_RESOURCE_USAGE.CANCELLED>
+    | ActionD<typeof OPERATION_DETAIL_PARTIAL, Pick<OperationDetailState, 'monitorChartStates'>>;
+
+function reducer(state = initialState, action: OperationDetailActionType): OperationDetailState {
     switch (action.type) {
         case GET_OPERATION.REQUEST: {
             const {id, isAlias} = action.data;
@@ -93,19 +114,7 @@ function reducer(state = initialState, action) {
         }
 
         case GET_OPERATION.FAILURE:
-            return {
-                ...state,
-                loading: false,
-                error: true,
-                errorData: action.data,
-            };
-
-        case GET_OPERATION.CANCELLED: {
-            const error = action.data;
-            const operationStatus = LOADING_STATUS.CANCELLED;
-
-            return {...state, operationStatus, error};
-        }
+            return {...state, loading: false, error: true, errorData: action.data};
 
         case LOAD_RESOURCE_USAGE.REQUEST:
             return {...state, resourcesStatus: LOADING_STATUS.LOADING};

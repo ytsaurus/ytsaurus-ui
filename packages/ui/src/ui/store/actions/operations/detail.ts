@@ -1,4 +1,3 @@
-import yt from '@ytsaurus/javascript-wrapper/lib/yt';
 import _ from 'lodash';
 import ypath from '../../../common/thor/ypath';
 
@@ -11,13 +10,20 @@ import {isOperationId} from '../../../utils/operations/list';
 import {TYPED_OUTPUT_FORMAT} from '../../../constants/index';
 import {Toaster} from '@gravity-ui/uikit';
 import CancelHelper from '../../../utils/cancel-helper';
+import {YTErrors} from '../../../rum/constants';
 import {YTApiId, ytApiV3, ytApiV3Id} from '../../../rum/rum-wrap-api';
 import {getJobsMonitoringDescriptors} from '../../../store/actions/operations/jobs-monitor';
+
+import type {RootState} from './../../../store/reducers';
+import type {ThunkAction} from 'redux-thunk';
+import type {OperationDetailActionType} from '../../reducers/operations/detail';
 
 const toaster = new Toaster();
 const operationDetailsRequests = new CancelHelper();
 
-function getIsEphemeral([operationAttributes, userTransactionAlive]) {
+function getIsEphemeral([operationAttributes, userTransactionAlive]: Awaited<
+    ReturnType<typeof checkUserTransaction>
+>) {
     const treesInfo = ypath.get(
         operationAttributes,
         '/runtime_parameters/scheduling_options_per_pool_tree',
@@ -35,7 +41,7 @@ function getIsEphemeral([operationAttributes, userTransactionAlive]) {
     );
     const requests = _.map(poolPaths, (path) => {
         return {
-            command: 'get',
+            command: 'get' as const,
             parameters: {
                 path: '//sys/scheduler/orchid/scheduler/scheduling_info_per_pool_tree/' + path,
             },
@@ -43,40 +49,39 @@ function getIsEphemeral([operationAttributes, userTransactionAlive]) {
     });
     const orchidAttributes = ytApiV3Id
         .executeBatch(YTApiId.operationIsEphemeral, {requests})
-        .then((data) => {
-            return _.map(data, ({error, output}) => {
-                if (error) {
-                    if (ypath.getNumberDeprecated(error.code) === yt.codes.NODE_DOES_NOT_EXIST) {
-                        return true;
-                    }
-                    return false;
-                }
-                return output;
-            });
-        })
-        .then((res) => {
-            return _.reduce(
+        .then((data) =>
+            _.map(data, ({error, output}) =>
+                error
+                    ? ypath.getNumberDeprecated(error.code) === YTErrors.NODE_DOES_NOT_EXIST
+                    : output,
+            ),
+        )
+        .then((res) =>
+            _.reduce(
                 res,
-                (res, poolInfo, index) => {
+                (acc, poolInfo, index) => {
                     const tree = trees[index];
                     const pool = ypath.getValue(treesInfo[tree], '/pool');
                     const isEphemeral = ypath.getBoolean(poolInfo);
 
-                    res[tree] = {
+                    acc[tree] = {
                         [pool]: {isEphemeral},
                     };
 
-                    return res;
+                    return acc;
                 },
-                {},
-            );
-        });
+                {} as Record<string, Record<string, {isEphemeral: boolean}>>,
+            ),
+        );
 
     return Promise.all([operationAttributes, userTransactionAlive, orchidAttributes]);
 }
 
-function loadIntermediateResourceUsage(operation, callback) {
-    return (dispatch) => {
+function loadIntermediateResourceUsage(
+    operation: unknown,
+    callback: () => void,
+): ThunkAction<Promise<void>, RootState, unknown, OperationDetailActionType> {
+    return async (dispatch) => {
         const outputTransaction = ypath.get(operation, '/@output_transaction_id');
 
         if (outputTransaction && outputTransaction !== '0-0-0-0') {
@@ -104,15 +109,14 @@ function loadIntermediateResourceUsage(operation, callback) {
     };
 }
 
-export function getOperation(id) {
+export function getOperation(
+    id: string,
+): ThunkAction<Promise<void>, RootState, unknown, OperationDetailActionType> {
     return (dispatch, getState) => {
         const isAlias = !isOperationId(id);
 
         const params = Object.assign(
-            {
-                include_scheduler: true,
-                output_format: TYPED_OUTPUT_FORMAT,
-            },
+            {include_scheduler: true, output_format: TYPED_OUTPUT_FORMAT},
             isAlias ? {operation_alias: id} : {operation_id: id},
         );
 
@@ -149,7 +153,7 @@ export function getOperation(id) {
                 const {operations} = getState();
                 const isFirstLoading = !operations.detail.loaded;
 
-                if (error.code !== yt.codes.CANCELLED) {
+                if (error.code !== YTErrors.CANCELLED) {
                     if (!isFirstLoading) {
                         toaster.add({
                             name: 'get operation',
@@ -157,12 +161,7 @@ export function getOperation(id) {
                             type: 'error',
                             title: 'Failed to load operation',
                             content: error.message,
-                            actions: [
-                                {
-                                    label: ' view',
-                                    onClick: () => showErrorPopup(error),
-                                },
-                            ],
+                            actions: [{label: ' view', onClick: () => showErrorPopup(error)}],
                         });
                     }
 

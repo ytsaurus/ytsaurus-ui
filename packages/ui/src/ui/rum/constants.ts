@@ -9,4 +9,5 @@ export const YTErrors = {
     NO_SUCH_TRANSACTION: yt.codes.NO_SUCH_TRANSACTION, // User transaction * has expired or was aborted
     OPERATION_JOBS_LIMIT_EXEEDED: yt.codes.OPERATION_JOBS_LIMIT_EXEEDED,
     OPERATION_FAILED_TO_PREPARE: yt.codes.OPERATION_FAILED_TO_PREPARE,
+    CANCELLED: yt.codes.CANCELLED,
 };

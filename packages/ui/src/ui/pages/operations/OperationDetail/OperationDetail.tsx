@@ -31,7 +31,11 @@ import OperationAttributes from './tabs/attributes/OperationAttributes';
 
 import Placeholder from '../../../pages/components/Placeholder';
 
-import {getDetailsTabsShowSettings, performAction} from '../../../utils/operations/detail';
+import {
+    getDetailsTabsShowSettings,
+    operationMonitoringUrl,
+    performAction,
+} from '../../../utils/operations/detail';
 import {DEFAULT_TAB, OperationTabType, Tab} from '../../../constants/operations/detail';
 import {showEditPoolsWeightsModal} from '../../../store/actions/operations';
 import {getOperation} from '../../../store/actions/operations/detail';
@@ -63,7 +67,6 @@ import {
 import UIFactory from '../../../UIFactory';
 import {RootState} from '../../../store/reducers';
 import {getCurrentCluster} from '../../../store/selectors/thor';
-import {operationMonitoringUrl} from '../../../utils/operations/details-ts';
 
 const detailBlock = cn('operation-detail');
 
