@@ -25,6 +25,16 @@
     .gn-aside-header-logo__logo-link {
         display: flex;
     }
+
+    .gn-aside-header {
+        &__aside {
+            position: fixed;
+        }
+
+        &__content {
+            padding-left: var(--gn-aside-header-size);
+        }
+    }
 }
 
 svg.app-navigation {
