@@ -289,7 +289,10 @@ export interface UIFactory {
 
     makeSupportContent(
         params: {login: string; cluster?: string; buttonToWrap?: React.ReactNode},
-        makeContent: (onSupportClick: () => void) => React.ReactNode,
+        makeContent: (params: {
+            supportContent?: React.ReactNode;
+            onSupportClick: () => void;
+        }) => React.ReactNode,
     ): React.ReactNode;
 
     getComponentForConsumerMetrics():
