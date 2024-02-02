@@ -22,8 +22,7 @@ import {
     showEditPoolsWeightsModal,
     updateOperationsList,
 } from '../../../../store/actions/operations';
-import {performAction} from '../../../../utils/operations/detail';
-import {prepareActions} from '../../../../utils/operations/details-ts';
+import {performAction, prepareActions} from '../../../../utils/operations/detail';
 import {promptAction} from '../../../../store/actions/actions';
 import '../../../../components/templates/meta';
 import OperationIOLink from '../../OperationIOLink/OperationIOLink';

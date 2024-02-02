@@ -18,7 +18,7 @@ export const flags = new Map<'false' | 'FALSE' | false | 'true' | 'TRUE' | true,
     [true, true],
 ]);
 
-export function prepareAttributes(attributes: any, settings: UnipikaSettings): unknown {
+export function prepareAttributes(attributes: any, settings?: UnipikaSettings): unknown {
     const getPreparedValue = <T>({$attributes}: any, value: T) => {
         if (!$attributes) {
             return value;

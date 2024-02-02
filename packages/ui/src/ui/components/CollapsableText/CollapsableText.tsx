@@ -26,7 +26,7 @@ type ContentProps =
           value?: never;
           settings?: never;
 
-          children?: React.ReactChild;
+          children?: React.ReactNode;
       };
 
 type State = {

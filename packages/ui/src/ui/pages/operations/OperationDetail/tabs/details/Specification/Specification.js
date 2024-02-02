@@ -51,7 +51,7 @@ const scriptProps = PropTypes.shape({
 export const specificationProps = PropTypes.shape({
     transferTask: PropTypes.shape({
         id: PropTypes.string.isRequired,
-        url: PropTypes.string.isRequired,
+        url: PropTypes.string,
     }),
     mode: PropTypes.string,
     remote: PropTypes.shape({

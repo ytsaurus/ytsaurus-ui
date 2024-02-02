@@ -1,14 +1,80 @@
 import moment from 'moment';
-import ypath from '../../common/thor/ypath';
+import _ from 'lodash';
 
-import {DetailedOperationSelector} from '../../pages/operations/selectors';
+import ypath from '../../common/thor/ypath';
+import metrics from '../../common/utils/metrics';
+import {hasTaskHistograms} from './jobs';
+import {ytApiV3} from '../../..../../rum/rum-wrap-api';
 import {PLEASE_PROCEED_TEXT} from '../../utils/actions';
-import {IconName} from '../../components/Icon/Icon';
 import {formatByParams} from '../../utils/format';
+
+import type {DetailedOperationSelector} from '../../pages/operations/selectors';
+import type {IconName} from '../../components/Icon/Icon';
+
+function isTransactionAlive(transactionId: string): Promise<boolean> {
+    return ytApiV3.exists({path: '#' + transactionId}).then(
+        (flag) => flag,
+        () => false,
+    );
+}
+
+export function checkUserTransaction(operationAttributes: {
+    user_transaction_id?: {$value?: string};
+}) {
+    const transactionId = operationAttributes.user_transaction_id?.$value;
+    return Promise.all(
+        transactionId && transactionId !== '0-0-0-0'
+            ? [Promise.resolve(operationAttributes), isTransactionAlive(transactionId)]
+            : [Promise.resolve(operationAttributes), Promise.resolve(false)],
+    );
+}
+
+type OperationActionName = 'complete' | 'abort' | 'resume' | 'suspend';
+
+interface PerformActionOptions<T = unknown> {
+    operation: DetailedOperationSelector;
+    name: OperationActionName;
+    options?: {value: T; data?: {parameters: Record<string, unknown>}}[];
+    updateOperation?: (data: unknown) => void;
+    currentOption: T;
+}
+
+export function performAction<T = unknown>({
+    updateOperation,
+    operation,
+    currentOption,
+    options = [],
+    name,
+}: PerformActionOptions<T>) {
+    const option = options.find((o) => o?.value === currentOption);
+    let parameters = {operation_id: operation.$value};
+    if (option?.data?.parameters) {
+        parameters = {...parameters, ...option.data.parameters};
+    }
+
+    metrics.countEvent({operation_detail_action: name});
+
+    return ytApiV3[`${name}Operation`](parameters).then(updateOperation);
+}
+
+export function getDetailsTabsShowSettings(operation: unknown) {
+    const progress = ypath.getValue(operation, '/@progress');
+    const showJobSizes =
+        hasTaskHistograms(operation) ||
+        (progress &&
+            (ypath.getValue(progress, '/estimated_input_data_size_histogram') ||
+                ypath.getValue(progress, '/input_data_size_histogram')));
+    const showPartitionSizes = progress && ypath.getValue(progress, '/partition_size_histogram');
+
+    return {
+        job_sizes: {show: Boolean(showJobSizes)},
+        partition_sizes: {show: Boolean(showPartitionSizes)},
+    };
+}
 
 export interface OperationAction {
     modalKey: string;
-    name: string;
+    name: OperationActionName;
     successMessage: string;
     icon: IconName;
     message?: string;

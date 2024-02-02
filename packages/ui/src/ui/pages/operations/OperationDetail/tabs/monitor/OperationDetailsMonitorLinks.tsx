@@ -7,7 +7,7 @@ import Link from '../../../../../components/Link/Link';
 import Error from '../../../../../components/Error/Error';
 import MetaTable, {MetaTableItem} from '../../../../../components/MetaTable/MetaTable';
 import {OperationPool} from '../../../../../components/OperationPool/OperationPool';
-import {operationMonitoringUrl} from '../../../../../utils/operations/details-ts';
+import {operationMonitoringUrl} from '../../../../../utils/operations/detail';
 
 const block = cn('operation-detail-monitor-links');
 

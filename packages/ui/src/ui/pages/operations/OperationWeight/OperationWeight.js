@@ -25,7 +25,7 @@ export default class OperationWeight extends Component {
                 size="s"
                 className={block('weight-edit')}
                 title="Edit operation weight"
-                onClick={onEdit}
+                onClick={() => onEdit()}
             >
                 <Icon awesome="pencil" />
             </Button>
