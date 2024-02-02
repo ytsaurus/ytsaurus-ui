@@ -4,7 +4,7 @@ import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import hammer from '../../../../common/hammer';
 import cn from 'bem-cn-lite';
-import _, {trimEnd} from 'lodash';
+import {trimEnd} from 'lodash';
 
 import unipika from '../../../../common/thor/unipika';
 import OperationProgress from '../../../../pages/operations/OperationProgress/OperationProgress';
@@ -241,7 +241,7 @@ class OperationsListTable extends Component {
 
         return (
             <div className={block('actions')}>
-                {_.map(actions, (action) => {
+                {actions.map((action) => {
                     const {icon, name, $value} = action;
                     const text = hammer.format['Readable'](name);
                     const message = action.message || (

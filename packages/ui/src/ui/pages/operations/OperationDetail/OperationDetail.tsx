@@ -4,7 +4,6 @@ import {ConnectedProps, connect, useDispatch, useSelector} from 'react-redux';
 import hammer from '../../../common/hammer';
 import unipika from '../../../common/thor/unipika';
 import cn from 'bem-cn-lite';
-import _ from 'lodash';
 
 import ypath from '../../../common/thor/ypath';
 
@@ -131,7 +130,7 @@ class OperationDetail extends React.Component<ReduxProps & RouteProps> {
     };
 
     renderHeader() {
-        const {actions} = this.props;
+        const {actions = []} = this.props;
         const {type, user = '', state, suspended, title, $value} = this.props.operation;
         const label = suspended ? 'suspended' : state;
 
@@ -147,7 +146,7 @@ class OperationDetail extends React.Component<ReduxProps & RouteProps> {
                     <Yson value={title || $value} inline />
                 </div>
 
-                <div className={detailBlock('actions')}>{_.map(actions, this.renderAction)}</div>
+                <div className={detailBlock('actions')}>{actions.map(this.renderAction)}</div>
             </div>
         );
     }

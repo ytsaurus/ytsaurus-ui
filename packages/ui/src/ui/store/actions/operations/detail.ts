@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import mapValues from 'lodash/mapValues';
 import ypath from '../../../common/thor/ypath';
 
 import {GET_OPERATION, LOAD_RESOURCE_USAGE} from '../../../constants/operations/detail';
@@ -28,9 +28,9 @@ function getIsEphemeral([operationAttributes, userTransactionAlive]: Awaited<
         operationAttributes,
         '/runtime_parameters/scheduling_options_per_pool_tree',
     );
-    const trees = _.keys(treesInfo);
-    const poolPaths = _.values(
-        _.mapValues(
+    const trees = Object.keys(treesInfo);
+    const poolPaths = Object.values(
+        mapValues(
             treesInfo,
             (infoPerTree, tree) =>
                 `${tree}/fair_share_info/pools/${ypath.getValue(
@@ -39,7 +39,7 @@ function getIsEphemeral([operationAttributes, userTransactionAlive]: Awaited<
                 )}/is_ephemeral`,
         ),
     );
-    const requests = _.map(poolPaths, (path) => {
+    const requests = poolPaths.map((path) => {
         return {
             command: 'get' as const,
             parameters: {
@@ -50,28 +50,24 @@ function getIsEphemeral([operationAttributes, userTransactionAlive]: Awaited<
     const orchidAttributes = ytApiV3Id
         .executeBatch(YTApiId.operationIsEphemeral, {requests})
         .then((data) =>
-            _.map(data, ({error, output}) =>
+            data.map(({error, output}) =>
                 error
                     ? ypath.getNumberDeprecated(error.code) === YTErrors.NODE_DOES_NOT_EXIST
                     : output,
             ),
         )
         .then((res) =>
-            _.reduce(
-                res,
-                (acc, poolInfo, index) => {
-                    const tree = trees[index];
-                    const pool = ypath.getValue(treesInfo[tree], '/pool');
-                    const isEphemeral = ypath.getBoolean(poolInfo);
+            res.reduce((acc, poolInfo, index) => {
+                const tree = trees[index];
+                const pool = ypath.getValue(treesInfo[tree], '/pool');
+                const isEphemeral = ypath.getBoolean(poolInfo);
 
-                    acc[tree] = {
-                        [pool]: {isEphemeral},
-                    };
+                acc[tree] = {
+                    [pool]: {isEphemeral},
+                };
 
-                    return acc;
-                },
-                {} as Record<string, Record<string, {isEphemeral: boolean}>>,
-            ),
+                return acc;
+            }, {} as Record<string, {isEphemeral: boolean}>),
         );
 
     return Promise.all([operationAttributes, userTransactionAlive, orchidAttributes]);
