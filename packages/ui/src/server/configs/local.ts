@@ -27,6 +27,8 @@ const localModeConfig: Partial<AppConfig> = {
         queryTrackerStage: 'testing',
 
         directDownload: false,
+
+        reportBugUrl: 'https://github.com/ytsaurus/ytsaurus-ui/issues/new',
     },
 
     userSettingsConfig: {

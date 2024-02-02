@@ -1,16 +1,18 @@
 import React, {useState} from 'react';
+import {useHistory} from 'react-router';
 import cn from 'bem-cn-lite';
 import {FooterItem, PageLayoutAside} from '@gravity-ui/navigation';
+import {Menu} from '@gravity-ui/uikit';
 
 import Logo from '../../../../img/svg/appLogo.svg';
 import GearIcon from '@gravity-ui/icons/svgs/gear.svg';
+import BugIcon from '@gravity-ui/icons/svgs/bug.svg';
 import Link from '../../components/Link/Link';
 import unknown from '../../../../img/user-avatar.svg';
 import {AppNavigationProps} from './AppNavigationPageLayout';
+import UIFactory from '../../UIFactory';
 
 import './AppNavigationComponent.scss';
-import {Menu} from '@gravity-ui/uikit';
-import {useHistory} from 'react-router';
 
 const block = cn('yt-app-navigation');
 
@@ -75,6 +77,23 @@ function AppNavigationComponent({
             renderFooter={({compact}) => {
                 return (
                     <>
+                        {UIFactory.makeSupportContent(
+                            {login: currentUser},
+                            ({onSupportClick, supportContent}) => (
+                                <React.Fragment>
+                                    <FooterItem
+                                        compact={compact}
+                                        item={{
+                                            id: 'support',
+                                            title: 'Report a bug',
+                                            icon: BugIcon,
+                                            onItemClick: onSupportClick,
+                                        }}
+                                    />
+                                    {supportContent}
+                                </React.Fragment>
+                            ),
+                        )}
                         <FooterItem
                             compact={compact}
                             item={{
