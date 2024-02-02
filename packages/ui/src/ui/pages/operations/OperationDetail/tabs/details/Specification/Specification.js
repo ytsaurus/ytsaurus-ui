@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import cn from 'bem-cn-lite';
-import _ from 'lodash';
 
 import MetaTable, {
     TemplateCommand,
@@ -114,8 +113,8 @@ export default class Specification extends Component {
         );
     }
 
-    renderStartedBy({fields, command}) {
-        const items = _.map(fields, (field) => ({
+    renderStartedBy({fields = [], command}) {
+        const items = fields.map((field) => ({
             key: field.name,
             value: field.value,
         }));
@@ -202,8 +201,8 @@ export default class Specification extends Component {
         );
     }
 
-    renderTasks(tasks) {
-        return _.map(tasks, (task) => task && this.renderScript(task));
+    renderTasks(tasks = []) {
+        return tasks.map((task) => task && this.renderScript(task));
     }
 
     render() {

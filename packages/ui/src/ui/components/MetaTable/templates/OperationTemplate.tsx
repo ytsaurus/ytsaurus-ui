@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import ypath from '../../../common/thor/ypath';
 import cn from 'bem-cn-lite';
-import _ from 'lodash';
 import qs from 'qs';
 
 import OperationWeight from '../../../pages/operations/OperationWeight/OperationWeight';
@@ -41,7 +40,7 @@ interface TemplatePoolsProps {
 }
 
 export function TemplatePools({
-    pools,
+    pools = [],
     cluster,
     state,
     onEdit,
@@ -50,7 +49,7 @@ export function TemplatePools({
 }: TemplatePoolsProps) {
     return (
         <ul className={itemBlock('pools', 'elements-list elements-list_type_unstyled')}>
-            {_.map(pools, (pool) => (
+            {pools.map((pool) => (
                 <OperationPool
                     key={pool.pool + '/' + pool.tree}
                     compact={compact}
@@ -124,8 +123,8 @@ interface TemplateEnvironmentProps {
     environments: {name: string; value: unknown}[];
 }
 
-export function TemplateEnvironment({environments}: TemplateEnvironmentProps) {
-    const variables = _.map(environments, ({name, value}) => {
+export function TemplateEnvironment({environments = []}: TemplateEnvironmentProps) {
+    const variables = environments.map(({name, value}) => {
         const preparedValue = ypath.getValue(value);
 
         return (
@@ -190,7 +189,7 @@ interface TemplateFilesProps {
     cluster: string;
 }
 
-export function TemplateFiles({files, cluster}: TemplateFilesProps) {
+export function TemplateFiles({files = [], cluster}: TemplateFilesProps) {
     const items = files.map((file) => (
         <TemplateFile {...file} cluster={cluster} key={file.path + '/' + file.name} />
     ));
