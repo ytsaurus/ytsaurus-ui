@@ -19,7 +19,7 @@ export async function chytProxyApi(req: Request, res: Response) {
 }
 
 async function chytProxyApiImpl(req: Request, res: Response) {
-    const {action, cluster} = req.params;
+    const {action, ytAuthCluster: cluster} = req.params;
     const ALLOWED_ACTIONS = new Set([
         'list',
         'create',

@@ -18,7 +18,7 @@ function isRootPage(page: string) {
 }
 
 export function homeRedirect(req: Request, res: Response) {
-    const cluster = req.params.cluster;
+    const cluster = req.params.ytAuthCluster;
     const {referrer} = req.query;
     const url = referrer ? (referrer as string) : `/${cluster}`;
 
@@ -26,8 +26,8 @@ export function homeRedirect(req: Request, res: Response) {
 }
 
 export async function homeIndex(req: Request, res: Response) {
-    const isRoot = isRootPage(req.params.cluster);
-    const cluster = isRoot ? undefined : req.params.cluster;
+    const isRoot = isRootPage(req.params.ytAuthCluster);
+    const cluster = isRoot ? undefined : req.params.ytAuthCluster;
 
     try {
         const url = await ServerFactory.getHomeRedirectedUrl(cluster, req);
