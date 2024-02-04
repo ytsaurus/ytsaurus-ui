@@ -31,10 +31,10 @@ const routes: AppRoutes = {
     'GET /change-password/': HOME_INDEX_TARGET,
     'GET /': HOME_INDEX_TARGET,
     'GET /ping': {handler: ping, authPolicy: AuthPolicy.disabled},
-    'GET /api/cluster-info/:cluster': {handler: handleClusterInfo},
-    'GET /api/cluster-params/:cluster': {handler: clusterParams},
+    'GET /api/cluster-info/:ytAuthCluster': {handler: handleClusterInfo},
+    'GET /api/cluster-params/:ytAuthCluster': {handler: clusterParams},
     'GET /api/clusters/versions': {handler: clusterVersions},
-    'GET /api/pool-names/:cluster': {handler: getClusterPools},
+    'GET /api/pool-names/:ytAuthCluster': {handler: getClusterPools},
     'POST /api/yt/login': {handler: handleLogin, ui: true},
     'GET /api/yt/logout': {handler: handleLogout, ui: true},
 
@@ -47,16 +47,16 @@ const routes: AppRoutes = {
 
     'POST /api/markdown-to-html': {handler: markdownToHtmlHandler},
 
-    'GET  /api/yt/:cluster/api/:version/:command': {handler: ytTvmApiHandler},
-    'POST /api/yt/:cluster/api/:version/:command': {handler: ytTvmApiHandler},
-    'PUT  /api/yt/:cluster/api/:version/:command': {handler: ytTvmApiHandler},
+    'GET  /api/yt/:ytAuthCluster/api/:version/:command': {handler: ytTvmApiHandler},
+    'POST /api/yt/:ytAuthCluster/api/:version/:command': {handler: ytTvmApiHandler},
+    'PUT  /api/yt/:ytAuthCluster/api/:version/:command': {handler: ytTvmApiHandler},
 
-    'GET /api/yt-proxy/:cluster/:command': {handler: ytProxyApi},
+    'GET /api/yt-proxy/:ytAuthCluster/:command': {handler: ytProxyApi},
 
-    'GET /api/odin/proxy/:action/:cluster?': {handler: odinProxyApi},
+    'GET /api/odin/proxy/:action/:ytAuthCluster?': {handler: odinProxyApi},
     'GET /api/odin/clusters/availability': {handler: getClustersAvailability},
 
-    'POST /api/chyt/:cluster/:action': {handler: chytProxyApi},
+    'POST /api/chyt/:ytAuthCluster/:action': {handler: chytProxyApi},
 
     'GET    /api/settings/:username': {handler: settingsGet},
     'POST   /api/settings/:username': {handler: settingsCreate},
@@ -69,12 +69,12 @@ const routes: AppRoutes = {
     },
     'POST /api/table-column-preset': {handler: tableColumnPresetSave},
 
-    'GET /:cluster/': HOME_INDEX_TARGET,
-    'GET /:cluster/maintenance': {handler: homeRedirect},
-    'GET /:cluster/:page': HOME_INDEX_TARGET,
-    'GET /:cluster/:page/:tab': HOME_INDEX_TARGET,
-    'GET /:cluster/:page/:operation/:tab': HOME_INDEX_TARGET,
-    'GET /:cluster/:page/:operation/:job/:tab': HOME_INDEX_TARGET,
+    'GET /:ytAuthCluster/': HOME_INDEX_TARGET,
+    'GET /:ytAuthCluster/maintenance': {handler: homeRedirect},
+    'GET /:ytAuthCluster/:page': HOME_INDEX_TARGET,
+    'GET /:ytAuthCluster/:page/:tab': HOME_INDEX_TARGET,
+    'GET /:ytAuthCluster/:page/:operation/:tab': HOME_INDEX_TARGET,
+    'GET /:ytAuthCluster/:page/:operation/:job/:tab': HOME_INDEX_TARGET,
 };
 
 export default routes;

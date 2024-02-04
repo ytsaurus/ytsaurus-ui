@@ -15,11 +15,11 @@ const yt = ytLib();
 export async function getClusterPools(req: Request, res: Response) {
     try {
         req.ctx.log('Test', req.params);
-        const {cluster} = req.params as {cluster: string};
+        const {ytAuthCluster} = req.params as {ytAuthCluster: string};
         const {poolTree} = req.query;
         let cfg;
         try {
-            cfg = getUserYTApiSetup(cluster, req);
+            cfg = getUserYTApiSetup(ytAuthCluster, req);
         } catch (e: any) {
             sendAndLogError(req.ctx, res, 400, e);
             return;
