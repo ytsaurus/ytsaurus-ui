@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.15.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.14.3...ui-v1.15.0) (2024-02-05)
+
+
+### Features
+
+* add UISettings.reportBugUrl [[#336](https://github.com/ytsaurus/ytsaurus-ui/issues/336)] ([e86ccb2](https://github.com/ytsaurus/ytsaurus-ui/commit/e86ccb2865918a7b62c7857a1079c2248b855286))
+
+
+### Bug Fixes
+
+* **Operations/Details:** minor css fix [YTFRONT-3518] ([91d9b01](https://github.com/ytsaurus/ytsaurus-ui/commit/91d9b0172dd8de0c1d610bc9eb1ca8d2117b1dd6))
+* **Scheduling/PoolEditor:** correct value for fifo_sort_parameters [YTFRONT-3957] ([34d5cdb](https://github.com/ytsaurus/ytsaurus-ui/commit/34d5cdb672b0eeadce80f10d1f828f1579e326ac))
+* **SupportForm:** rework api of makeSupportContent [YTFRONT-3994] ([a563179](https://github.com/ytsaurus/ytsaurus-ui/commit/a563179b6ce5d85e79e24a58a4aa425b5708b281))
+
 ## [1.14.3](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.14.2...ui-v1.14.3) (2024-02-01)
 
 
