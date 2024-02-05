@@ -1,11 +1,12 @@
+import _ from 'lodash';
 import hammer from '../../../../../common/hammer';
 import ypath from '../../../../../common/thor/ypath';
-import _ from 'lodash';
 import UIFactory from '../../../../../UIFactory';
+import {DetailedOperationSelector} from '../../../../../pages/operations/selectors';
 
 const TASKS_PREFIX = 'tasks/';
 
-function prepareFile(file) {
+function prepareFile(file: unknown) {
     return {
         path: ypath.getValue(file),
         originalPath: ypath.getValue(file, '/@original_path'),
@@ -14,13 +15,13 @@ function prepareFile(file) {
     };
 }
 
-function prepareMeta(meta) {
+function prepareMeta(meta: Record<string, unknown>) {
     const prepared = _.map(meta, (value, name) => ({name, value}));
 
     return _.sortBy(prepared, 'name');
 }
 
-function prepareStartedBy(operation) {
+function prepareStartedBy(operation: DetailedOperationSelector) {
     const startedBy = ypath.getValue(operation, '/@spec/started_by');
     const command = ypath.getValue(startedBy, '/command') || [];
 
@@ -32,18 +33,21 @@ function prepareStartedBy(operation) {
             command: command,
         };
     }
+
+    return undefined;
 }
 
-function prepareRemote(operation) {
+function prepareRemote(operation: DetailedOperationSelector) {
     if (operation.type === 'remote_copy') {
         return {
             cluster: ypath.getValue(operation, '/@spec/cluster_name'),
             network: ypath.getValue(operation, '/@spec/network_name'),
         };
     }
+    return undefined;
 }
 
-function prepareTransferTask(operation) {
+function prepareTransferTask(operation: DetailedOperationSelector) {
     const task = ypath.getValue(operation, '/@spec/transfer_manager');
 
     if (task) {
@@ -52,9 +56,15 @@ function prepareTransferTask(operation) {
             url: UIFactory.makeUrlForTransferTask(operation),
         };
     }
+    return undefined;
 }
 
-function prepareTransaction(operation, type, table, userTransactionAlive) {
+function prepareTransaction(
+    operation: DetailedOperationSelector,
+    type: PreviewType,
+    table: unknown,
+    userTransactionAlive: boolean,
+) {
     const tableTransaction = ypath.get(table, '/@transaction_id');
 
     if (tableTransaction) {
@@ -67,9 +77,16 @@ function prepareTransaction(operation, type, table, userTransactionAlive) {
     } else if (userTransactionAlive) {
         return ypath.get(operation, '/@user_transaction_id');
     }
+    return undefined;
 }
 
-function prepareLivePreviewPath(operation, type, index) {
+type PreviewType = 'input' | 'output' | 'stderr' | 'intermediate';
+
+function prepareLivePreviewPath(
+    operation: DetailedOperationSelector,
+    type: PreviewType,
+    index?: number | string,
+) {
     const id = operation.$value;
     const basePath = '//sys/operations/' + hammer.utils.extractFirstByte(id) + '/' + id;
 
@@ -81,9 +98,14 @@ function prepareLivePreviewPath(operation, type, index) {
     } else if (type === 'intermediate') {
         return basePath + '/intermediate';
     }
+    return undefined;
 }
 
-function prepareLivePreview(operation, type, index) {
+function prepareLivePreview(
+    operation: DetailedOperationSelector,
+    type: PreviewType,
+    index?: number | string,
+) {
     const previewSupported = ypath.getBoolean(
         operation,
         '/@progress/live_preview/' + type + '_supported',
@@ -99,8 +121,10 @@ function prepareLivePreview(operation, type, index) {
     return {supported: false};
 }
 
-function normalizeTableRanges(table) {
-    let ranges = ypath.getValue(table, '/@ranges');
+type RangeType = {upper_limit?: number; lower_limit?: number};
+
+function normalizeTableRanges(table: unknown) {
+    let ranges: Array<RangeType> = ypath.getValue(table, '/@ranges');
 
     if (typeof ranges === 'undefined') {
         // Fallback attempt to get ranges from attributes
@@ -108,7 +132,7 @@ function normalizeTableRanges(table) {
         const upperLimit = ypath.getValue(table, '/@upper_limit');
         const lowerLimit = ypath.getValue(table, '/@lower_limit');
 
-        let range;
+        let range: RangeType | undefined;
 
         if (typeof upperLimit !== 'undefined') {
             range = range || {};
@@ -132,10 +156,10 @@ function normalizeTableRanges(table) {
     return ranges;
 }
 
-function prepareTableFilters(table) {
+function prepareTableFilters(table: unknown) {
     const ranges = normalizeTableRanges(table);
     const columns = ypath.getValue(table, '/@columns');
-    let filters;
+    let filters: {ranges?: typeof ranges; columns?: typeof columns} | undefined;
 
     if (ranges) {
         filters = filters || {};
@@ -150,7 +174,14 @@ function prepareTableFilters(table) {
     return filters;
 }
 
-function prepareTable(operation, type, table, typedTable, userTransactionAlive, index) {
+function prepareTable(
+    operation: DetailedOperationSelector,
+    type: PreviewType,
+    table: unknown,
+    typedTable: unknown,
+    userTransactionAlive: boolean,
+    index?: number | string,
+) {
     const path = ypath.getValue(table);
     const originalPath = ypath.getValue(table, '/@original_path');
     const transaction = prepareTransaction(operation, type, table, userTransactionAlive);
@@ -169,15 +200,16 @@ function prepareTable(operation, type, table, typedTable, userTransactionAlive, 
     };
 }
 
-function groupTables(tables) {
-    const group = [];
-    let currentFolder;
+function groupTables<T extends {path: string; transaction?: string}>(tables: Array<T>) {
+    const group: Array<{path: string; name?: string; isFolder?: boolean; transaction?: string}> =
+        [];
+    let currentFolder: string;
 
     _.each(tables, (table) => {
         try {
             const path = ypath.YPath.create(table.path, 'absolute');
             const name = path.getKey();
-            const folder = path.toSubpath(-2).stringify();
+            const folder: string = path.toSubpath(-2).stringify();
 
             if (currentFolder !== folder) {
                 currentFolder = folder;
@@ -197,7 +229,10 @@ function groupTables(tables) {
     return group;
 }
 
-function prepareRemoteInput(input, cluster) {
+function prepareRemoteInput<T extends {path: string; transaction?: string}>(
+    input: Array<T>,
+    cluster: string,
+) {
     if (cluster) {
         return _.map(input, (item) => ({
             ...item,
@@ -209,11 +244,11 @@ function prepareRemoteInput(input, cluster) {
     return input;
 }
 
-export function remoteInputUrl(cluster, path, transaction) {
+export function remoteInputUrl(cluster: string, path: string, transaction?: string) {
     return '/' + cluster + '/navigation?path=' + path + (transaction ? '&t=' + transaction : '');
 }
 
-function prepareInput(operation, userTransactionAlive) {
+function prepareInput(operation: DetailedOperationSelector, userTransactionAlive: boolean) {
     const TYPE = 'input';
     let tables;
 
@@ -247,7 +282,7 @@ function prepareInput(operation, userTransactionAlive) {
     return groupTables(tables);
 }
 
-function prepareStderr(operation, userTransactionAlive) {
+function prepareStderr(operation: DetailedOperationSelector, userTransactionAlive: boolean) {
     const TYPE = 'stderr';
     const typedTables = ypath.get(operation.$typedAttributes, '/spec/input_table_paths');
 
@@ -257,7 +292,7 @@ function prepareStderr(operation, userTransactionAlive) {
     return groupTables(tables);
 }
 
-function prepareOutput(operation, userTransactionAlive) {
+function prepareOutput(operation: DetailedOperationSelector, userTransactionAlive: boolean) {
     const TYPE = 'output';
     let tables;
 
@@ -297,7 +332,7 @@ function prepareOutput(operation, userTransactionAlive) {
     return groupTables(tables);
 }
 
-function prepareIntermediate(operation) {
+function prepareIntermediate(operation: DetailedOperationSelector) {
     let livePreview;
 
     switch (operation.type) {
@@ -310,13 +345,15 @@ function prepareIntermediate(operation) {
     if (livePreview && livePreview.supported) {
         return livePreview;
     }
+
+    return undefined;
 }
 
-function prepareScriptCaption(type) {
+function prepareScriptCaption(type: string) {
     return type.indexOf(TASKS_PREFIX) === 0 ? type.substring(TASKS_PREFIX.length) + '_task' : type;
 }
 
-function prepareScript(operation, type) {
+function prepareScript(operation: DetailedOperationSelector, type: string) {
     try {
         const script = ypath.getValue(operation, '/@spec/' + type);
 
@@ -342,9 +379,11 @@ function prepareScript(operation, type) {
     } catch (err) {
         console.error('prepareScript error:', err);
     }
+
+    return undefined;
 }
 
-function prepareTasks(operation) {
+function prepareTasks(operation: DetailedOperationSelector) {
     const tasks = ypath.getValue(operation, '/@spec/tasks');
 
     if (tasks) {
@@ -352,43 +391,50 @@ function prepareTasks(operation) {
             prepareScript(operation, TASKS_PREFIX + taskName),
         );
     }
+
+    return undefined;
 }
 
-export function prepareSpecification(operation, userTransactionAlive) {
-    const specification = {};
+export function prepareSpecification(
+    operation: DetailedOperationSelector,
+    userTransactionAlive: boolean,
+) {
+    const remote = prepareRemote(operation);
 
-    specification.startedBy = prepareStartedBy(operation);
+    const specification = {
+        startedBy: prepareStartedBy(operation),
 
-    // Remote copy
-    specification.remote = prepareRemote(operation);
-    specification.transferTask = prepareTransferTask(operation);
-    // Merge
-    specification.mode = ypath.getValue(operation, '/@spec/mode');
+        // Remote copy
+        remote,
+        transferTask: prepareTransferTask(operation),
+        // Merge
+        mode: ypath.getValue(operation, '/@spec/mode'),
 
-    // Input/Intermediate/Output/Stderr
-    specification.input = prepareRemoteInput(
-        prepareInput(operation, userTransactionAlive),
-        specification.remote?.cluster,
-    );
-    specification.output = prepareOutput(operation, userTransactionAlive);
-    specification.stderr = prepareStderr(operation, userTransactionAlive);
-    specification.intermediate = prepareIntermediate(operation);
+        // Input/Intermediate/Output/Stderr
+        input: prepareRemoteInput(prepareInput(operation, userTransactionAlive), remote?.cluster),
+        output: prepareOutput(operation, userTransactionAlive),
+        stderr: prepareStderr(operation, userTransactionAlive),
+        intermediate: prepareIntermediate(operation),
 
-    // Scripts
-    specification.mapper = prepareScript(operation, 'mapper');
-    specification.reducer = prepareScript(operation, 'reducer');
-    specification.reduceCombiner = prepareScript(operation, 'reduce_combiner');
+        // Scripts
+        mapper: prepareScript(operation, 'mapper'),
+        reducer: prepareScript(operation, 'reducer'),
+        reduceCombiner: prepareScript(operation, 'reduce_combiner'),
 
-    specification.tasks = prepareTasks(operation);
+        tasks: prepareTasks(operation),
+    };
 
     return specification;
 }
 
-export function prepareVisibleItems(items) {
+export function prepareVisibleItems<T extends {isFolder?: boolean}>(items: Array<T>) {
     return _.filter(items, (item) => !item.isFolder);
 }
 
-export function filterVisibleItems(items, itemsCount) {
+export function filterVisibleItems<T extends {isFolder?: boolean}>(
+    items: Array<T>,
+    itemsCount: number,
+) {
     const result = [];
     let count = 0;
 
