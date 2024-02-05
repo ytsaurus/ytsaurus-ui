@@ -2,6 +2,7 @@ import axios from 'axios';
 
 // @ts-expect-error
 import yt from '@ytsaurus/javascript-wrapper/lib/yt';
+import {PromiseOrValue} from '../../../@types/types';
 
 type Method = 'get' | 'put' | 'post' | 'delete';
 
@@ -65,7 +66,7 @@ export interface SettingsProvider {
     get<T>(username: string, path: string): Promise<T | undefined>;
     set<T>(username: string, path: string, value: T): Promise<void>;
     remove(username: string, path: string): Promise<void>;
-    getAll<Data extends object>(username: string): Promise<Data | undefined>;
+    getAll<Data extends object>(username: string): PromiseOrValue<Data | undefined>;
     create(username: string): Promise<void>;
 }
 
