@@ -5,20 +5,9 @@ import {
 } from '../../../constants/operations/detail';
 import {LOADING_STATUS} from '../../../constants/index';
 
-import ypath from '../../../common/thor/ypath';
-
-import {
-    prepareCompletedUsage,
-    prepareIntermediateUsage,
-} from '../../../utils/operations/tabs/details/data-flow';
-import {prepareSpecification} from '../../../utils/operations/tabs/details/specification/specification';
-import {prepareOperationEvents} from '../../../utils/operations/tabs/details/events/events';
-import {prepareRuntime} from '../../../utils/operations/tabs/details/runtime';
-import {prepareAlerts} from '../../../utils/operations/tabs/details/alerts';
-import {prepareError} from '../../../utils/operations/tabs/details/error';
-import {OperationAction, prepareActions} from '../../../utils/operations/detail';
 import {mergeStateOnClusterChange} from '../utils';
 
+import type {OperationAction} from '../../../utils/operations/detail';
 import type {Action} from 'redux';
 import type {DetailedOperationSelector} from '../../../pages/operations/selectors';
 import type {YTError} from './../../../../@types/types';
@@ -35,7 +24,7 @@ export interface OperationDetailState {
         alert_events: {alert_type: string; time: string; error: YTError}[];
     };
     resourcesStatus: (typeof LOADING_STATUS)[keyof typeof LOADING_STATUS];
-    resources: unknown;
+    resources: {intermediateResources?: unknown};
     monitorChartStates: Record<string, boolean>;
 }
 
@@ -48,7 +37,7 @@ const initialState: OperationDetailState = {
     actions: [],
     details: {alert_events: []},
     resourcesStatus: LOADING_STATUS.UNINITIALIZED,
-    resources: [],
+    resources: {},
     monitorChartStates: {},
 };
 
@@ -56,11 +45,15 @@ export type OperationDetailActionType =
     | ActionD<typeof GET_OPERATION.REQUEST, {id: string; isAlias: boolean}>
     | ActionD<
           typeof GET_OPERATION.SUCCESS,
-          Pick<OperationDetailState, 'operation'> & {userTransactionAlive: boolean}
+          Pick<OperationDetailState, 'operation' | 'actions' | 'details'>
       >
     | ActionD<typeof GET_OPERATION.FAILURE, OperationDetailState['errorData']>
     | Action<typeof LOAD_RESOURCE_USAGE.REQUEST>
-    | ActionD<typeof LOAD_RESOURCE_USAGE.SUCCESS, Pick<OperationDetailState, 'resources'>>
+    | ActionD<
+          typeof LOAD_RESOURCE_USAGE.SUCCESS,
+          Pick<OperationDetailState, 'resources'> &
+              Pick<OperationDetailState['resources'], 'intermediateResources'>
+      >
     | Action<typeof LOAD_RESOURCE_USAGE.FAILURE>
     | Action<typeof LOAD_RESOURCE_USAGE.CANCELLED>
     | ActionD<typeof OPERATION_DETAIL_PARTIAL, Pick<OperationDetailState, 'monitorChartStates'>>;
@@ -69,8 +62,8 @@ function reducer(state = initialState, action: OperationDetailActionType): Opera
     switch (action.type) {
         case GET_OPERATION.REQUEST: {
             const {id, isAlias} = action.data;
-            const currentId = ypath.getValue(state.operation);
-            const alias = ypath.getValue(state.operation, '/@spec/alias');
+            const currentId = state.operation.id;
+            const alias = state.operation.alias;
 
             const isSameAlias = isAlias && id === alias;
             const isSameId = !isAlias && id === currentId;
@@ -80,33 +73,9 @@ function reducer(state = initialState, action: OperationDetailActionType): Opera
             return {...stateSource, loading: true};
         }
         case GET_OPERATION.SUCCESS: {
-            const {operation, userTransactionAlive} = action.data;
-
-            const actions = prepareActions(operation);
-
-            const specification = prepareSpecification(operation, userTransactionAlive);
-            const alerts = prepareAlerts(ypath.getValue(operation, '/@alerts'));
-            const alert_events = ypath.getValue(operation, '/@alert_events');
-            const error = prepareError(operation);
-            const runtime = prepareRuntime(operation);
-            const events = prepareOperationEvents(operation);
-            const resources = prepareCompletedUsage(operation);
-
-            const details = {
-                specification,
-                alerts,
-                alert_events,
-                error,
-                runtime,
-                events,
-                resources,
-            };
-
             return {
                 ...state,
-                operation,
-                actions,
-                details,
+                ...action.data,
                 loading: false,
                 loaded: true,
                 error: false,
@@ -120,14 +89,10 @@ function reducer(state = initialState, action: OperationDetailActionType): Opera
             return {...state, resourcesStatus: LOADING_STATUS.LOADING};
 
         case LOAD_RESOURCE_USAGE.SUCCESS: {
-            const {resources} = action.data;
-            const {operation, details: prevDetails} = state;
-
-            const resourcesStatus = LOADING_STATUS.LOADED;
-            const intermediateResources = prepareIntermediateUsage(operation, resources);
+            const {resources, intermediateResources} = action.data;
+            const {details: prevDetails} = state;
             const details = {...prevDetails, intermediateResources};
-
-            return {...state, resources, details, resourcesStatus};
+            return {...state, resources, details, resourcesStatus: LOADING_STATUS.LOADED};
         }
 
         case LOAD_RESOURCE_USAGE.FAILURE:
