@@ -30,7 +30,7 @@ const provider: SettingsProvider = {
             }
         });
 
-        return Promise.resolve(settings as T);
+        return settings as T;
     },
     create() {
         return Promise.resolve();

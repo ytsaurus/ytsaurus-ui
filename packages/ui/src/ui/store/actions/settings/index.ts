@@ -134,11 +134,15 @@ export function reloadUserSettings(login: string): SettingsThunkAction {
             const {provider} = state.settings;
 
             await provider.create(login);
-            const data: any = await wrapApiPromiseByToaster(provider.getAll(login), {
-                toasterName: 'reload-user-settings',
-                skipSuccessToast: true,
-                errorContent: 'Cannot load user settings',
-            });
+            const allData = provider.getAll(login);
+            const data: any =
+                allData instanceof Promise
+                    ? await wrapApiPromiseByToaster(allData, {
+                          toasterName: 'reload-user-settings',
+                          skipSuccessToast: true,
+                          errorContent: 'Cannot load user settings',
+                      })
+                    : allData;
             dispatch({type: UPDATE_SETTING_DATA, data});
         } catch (e) {}
     };
