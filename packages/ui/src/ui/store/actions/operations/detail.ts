@@ -1,9 +1,19 @@
 import mapValues from 'lodash/mapValues';
 import ypath from '../../../common/thor/ypath';
 
+import {
+    prepareCompletedUsage,
+    prepareIntermediateUsage,
+} from '../../../utils/operations/tabs/details/data-flow';
+import {prepareSpecification} from '../../../utils/operations/tabs/details/specification/specification';
+import {prepareOperationEvents} from '../../../utils/operations/tabs/details/events/events';
+import {prepareRuntime} from '../../../utils/operations/tabs/details/runtime';
+import {prepareAlerts} from '../../../utils/operations/tabs/details/alerts';
+import {prepareError} from '../../../utils/operations/tabs/details/error';
+
 import {GET_OPERATION, LOAD_RESOURCE_USAGE} from '../../../constants/operations/detail';
 import {DetailedOperationSelector} from '../../../pages/operations/selectors';
-import {checkUserTransaction} from '../../../utils/operations/detail';
+import {checkUserTransaction, prepareActions} from '../../../utils/operations/detail';
 import {prepareAttributes} from '../../../utils';
 import {showErrorPopup} from '../../../utils/utils';
 import {isOperationId} from '../../../utils/operations/list';
@@ -89,9 +99,12 @@ function loadIntermediateResourceUsage(
                 })
                 .then((resources) => {
                     callback();
+
+                    const intermediateResources = prepareIntermediateUsage(operation, resources);
+
                     dispatch({
                         type: LOAD_RESOURCE_USAGE.SUCCESS,
-                        data: {resources},
+                        data: {resources, intermediateResources},
                     });
                 })
                 .catch(() => {
@@ -131,9 +144,29 @@ export function getOperation(
                 );
 
                 const dispatchOperationSuccess = () => {
+                    const actions = prepareActions(operation);
+
+                    const specification = prepareSpecification(operation, userTransactionAlive);
+                    const alerts = prepareAlerts(ypath.getValue(operation, '/@alerts'));
+                    const alert_events = ypath.getValue(operation, '/@alert_events');
+                    const error = prepareError(operation);
+                    const runtime = prepareRuntime(operation);
+                    const events = prepareOperationEvents(operation);
+                    const resources = prepareCompletedUsage(operation);
+
+                    const details = {
+                        specification,
+                        alerts,
+                        alert_events,
+                        error,
+                        runtime,
+                        events,
+                        resources,
+                    };
+
                     dispatch({
                         type: GET_OPERATION.SUCCESS,
-                        data: {operation, userTransactionAlive},
+                        data: {operation, actions, details},
                     });
                 };
 

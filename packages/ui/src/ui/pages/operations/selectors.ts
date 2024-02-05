@@ -176,6 +176,8 @@ export class DetailedOperationSelector extends OperationSelector {
     $typedAttributes: unknown;
     $orchidAttributes: unknown;
 
+    alias?: string;
+
     type?: string;
     user?: string;
     suspended?: boolean;
@@ -217,6 +219,8 @@ export class DetailedOperationSelector extends OperationSelector {
 
         const spec = ypath.getValue(attributes, '/spec');
         const fullSpec = ypath.getValue(attributes, '/full_spec');
+
+        this.alias = ypath.getValue(spec, '/alias');
 
         this.typedSpec = ypath.getValue(typedAttributes, '/spec');
         this.typedProvidedSpec = ypath.getValue(typedAttributes, '/provided_spec');
