@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.15.1](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.15.0...ui-v1.15.1) (2024-02-05)
+
+
+### Bug Fixes
+
+* **settings:** read settings from localStorage [[#341](https://github.com/ytsaurus/ytsaurus-ui/issues/341)] ([ea6ddbd](https://github.com/ytsaurus/ytsaurus-ui/commit/ea6ddbd7a2d8f8a7ff8b0ab9c2eba7af4acfe3cb))
+
 ## [1.15.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.14.3...ui-v1.15.0) (2024-02-05)
 
 
