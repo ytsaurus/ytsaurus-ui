@@ -96,9 +96,8 @@ class OperationDetail extends React.Component<ReduxProps & RouteProps> {
     };
 
     renderAction = (action: ReduxProps['actions'][0]) => {
-        const {promptAction, operation, getOperation} = this.props;
+        const {promptAction, operation} = this.props;
 
-        const updateOperation = () => getOperation(operation.$value);
         const message = action.message || (
             <span>
                 Are you sure you want to <strong>{action.name}</strong> the operation?
@@ -109,7 +108,8 @@ class OperationDetail extends React.Component<ReduxProps & RouteProps> {
                 ...action,
                 operation,
                 currentOption,
-                updateOperation,
+            }).then(() => {
+                return this.props.getOperation(operation.$value);
             });
 
         return (

@@ -25,11 +25,16 @@ import {
 } from '../../../constants/operations';
 import {ListOperationSelector} from '../../../pages/operations/selectors';
 import {removeSetting, setSetting} from '../../../store/actions/settings';
-import {getDefaultFromTime, getDefaultToTime} from '../../../store/actions/operations/utils';
+import {
+    getDefaultFromTime,
+    getDefaultToTime,
+    getListRequestParameters,
+} from '../../../store/actions/operations/utils';
 import CancelHelper from '../../../utils/cancel-helper';
 import {NAMESPACES} from '../../../../shared/constants/settings';
 import {RumWrapper, YTApiId, ytApiV3Id} from '../../../rum/rum-wrap-api';
 import {RumMeasureTypes} from '../../../rum/rum-measure-types';
+import {getCluster} from '../../../store/selectors/global';
 
 const cancellableRequests = new CancelHelper();
 
@@ -75,7 +80,17 @@ export function updatePager(incomplete) {
     };
 }
 
-export function updateOperations(cluster, parameters) {
+export function updateOperationsList() {
+    return (dispatch, getState) => {
+        const state = getState();
+        const cluster = getCluster(state);
+        const parameters = getListRequestParameters(state);
+
+        return dispatch(updateOperationsByParams(cluster, parameters));
+    };
+}
+
+export function updateOperationsByParams(cluster, parameters) {
     return (dispatch) => {
         dispatch({
             type: UPDATE_OPERATIONS_REQUEST,

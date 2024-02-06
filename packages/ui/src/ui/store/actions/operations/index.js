@@ -2,15 +2,13 @@ import yt from '@ytsaurus/javascript-wrapper/lib/yt';
 import _ from 'lodash';
 
 import {getOperation} from '../../../store/actions/operations/detail';
-import {updateOperations} from '../../../store/actions/operations/list';
+import {updateOperationsList} from '../../../store/actions/operations/list';
 import {
     HIDE_EDIT_WEIGHT_POOL_MODAL,
     SET_PULLS_AND_WEIGHTS,
     SHOW_EDIT_WEIGHT_POOL_MODAL,
 } from '../../../constants/operations';
 import {Page} from '../../../constants';
-import {getCluster} from '../../../store/selectors/global';
-import {getListRequestParameters} from './utils';
 
 export * from '../../../store/actions/operations/list';
 
@@ -42,7 +40,7 @@ export function setPoolsAndWeights(operation, pools, weights) {
         {},
     );
 
-    return (dispatch, getState) => {
+    return (dispatch) => {
         dispatch({
             type: SET_PULLS_AND_WEIGHTS.REQUEST,
         });
@@ -73,10 +71,7 @@ export function setPoolsAndWeights(operation, pools, weights) {
             })
             .then(() => {
                 if (inOperationsList) {
-                    const state = getState();
-                    const cluster = getCluster(state);
-                    const parameters = getListRequestParameters(state);
-                    dispatch(updateOperations(cluster, parameters));
+                    dispatch(updateOperationsList());
                 } else {
                     dispatch(getOperation(operationId));
                 }

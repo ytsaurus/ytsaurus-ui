@@ -18,7 +18,10 @@ import Link from '../../../../components/Link/Link';
 import Icon from '../../../../components/Icon/Icon';
 import {Tooltip} from '../../../../components/Tooltip/Tooltip';
 
-import {showEditPoolsWeightsModal, updateOperations} from '../../../../store/actions/operations';
+import {
+    showEditPoolsWeightsModal,
+    updateOperationsList,
+} from '../../../../store/actions/operations';
 import {performAction} from '../../../../utils/operations/detail';
 import {prepareActions} from '../../../../utils/operations/details-ts';
 import {promptAction} from '../../../../store/actions/actions';
@@ -104,7 +107,7 @@ class OperationsListTable extends Component {
 
         showEditPoolsWeightsModal: PropTypes.func.isRequired,
         promptAction: PropTypes.func.isRequired,
-        updateOperations: PropTypes.func.isRequired,
+        updateOperationsList: PropTypes.func.isRequired,
         // from react-router
         match: PropTypes.shape({
             url: PropTypes.string.isRequired,
@@ -233,7 +236,7 @@ class OperationsListTable extends Component {
     };
 
     renderActions = (operation) => {
-        const {promptAction, updateOperations: updateOperation} = this.props;
+        const {promptAction} = this.props;
 
         const actions = prepareActions(operation);
 
@@ -253,7 +256,8 @@ class OperationsListTable extends Component {
                             ...action,
                             operation,
                             currentOption,
-                            updateOperation,
+                        }).then(() => {
+                            this.props.updateOperationsList();
                         });
 
                     return (
@@ -374,7 +378,7 @@ function mapStateToProps({operations, global}) {
 const mapDispatchToProps = {
     showEditPoolsWeightsModal,
     promptAction,
-    updateOperations,
+    updateOperationsList,
 };
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(OperationsListTable));
