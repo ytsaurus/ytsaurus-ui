@@ -58,16 +58,16 @@ const routes: AppRoutes = {
 
     'POST /api/chyt/:ytAuthCluster/:action': {handler: chytProxyApi},
 
-    'GET    /api/settings/:username': {handler: settingsGet},
-    'POST   /api/settings/:username': {handler: settingsCreate},
-    'GET    /api/settings/:username/:path': {handler: settingsGetItem},
-    'PUT    /api/settings/:username/:path': {handler: settingsSetItem},
-    'DELETE /api/settings/:username/:path': {handler: settingsDeleteItem},
+    'GET    /api/settings/:ytAuthCluster/:username': {handler: settingsGet},
+    'POST   /api/settings/:ytAuthCluster/:username': {handler: settingsCreate},
+    'GET    /api/settings/:ytAuthCluster/:username/:path': {handler: settingsGetItem},
+    'PUT    /api/settings/:ytAuthCluster/:username/:path': {handler: settingsSetItem},
+    'DELETE /api/settings/:ytAuthCluster/:username/:path': {handler: settingsDeleteItem},
 
-    'GET  /api/table-column-preset/:hash': {
+    'GET  /api/table-column-preset/:ytAuthCluster/:hash': {
         handler: tableColumnPresetGet,
     },
-    'POST /api/table-column-preset': {handler: tableColumnPresetSave},
+    'POST /api/table-column-preset/:ytAuthCluster': {handler: tableColumnPresetSave},
 
     'GET /:ytAuthCluster/': HOME_INDEX_TARGET,
     'GET /:ytAuthCluster/maintenance': {handler: homeRedirect},

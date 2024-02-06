@@ -32,7 +32,7 @@ function getInitialState() {
         provider: useRemoteSettings ? remoteProvider : localProvider,
         // In case of disabled remote user settings we have to merge
         // default settings from server with settings from localStorage
-        data: useRemoteSettings ? data : {...data, ...localProvider.getAll(login)},
+        data: useRemoteSettings ? data : {...data, ...localProvider.getAll(login, '')},
     };
 }
 

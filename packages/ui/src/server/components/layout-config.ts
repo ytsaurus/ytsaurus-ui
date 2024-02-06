@@ -17,8 +17,14 @@ interface Params {
 
 export async function getLayoutConfig(req: Request, params: Params): Promise<AppLayoutConfig> {
     const {login, ytConfig, settings} = params;
-    const {ytApiUseCORS, uiSettings, metrikaCounter, allowPasswordAuth, odinBaseUrl} = req.ctx
-        .config as YTCoreConfig;
+    const {
+        ytApiUseCORS,
+        uiSettings,
+        metrikaCounter,
+        allowPasswordAuth,
+        odinBaseUrl,
+        userSettingsConfig,
+    } = req.ctx.config as YTCoreConfig;
     const YT = ytConfig;
     const uiVersion = getInterfaceVersion();
 
@@ -49,6 +55,7 @@ export async function getLayoutConfig(req: Request, params: Params): Promise<App
             `window.YT.environment = window.YT.environment || (${isProduction} ? 'production' : 'development');`,
         ],
         data: {
+            userSettingsCluster: userSettingsConfig?.cluster,
             settings,
             ytApiUseCORS,
             uiSettings,

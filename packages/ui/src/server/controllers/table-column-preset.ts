@@ -4,11 +4,11 @@ import {prepareErrorToSend} from '../utils';
 
 export async function tableColumnPresetGet(req: Request, res: Response) {
     const {
-        params: {hash},
+        params: {hash, ytAuthCluster},
     } = req;
     try {
         const presetsConfig = checkEnabled(req);
-        const columns = await getColumnPreset(presetsConfig, hash);
+        const columns = await getColumnPreset(presetsConfig, hash, ytAuthCluster);
         if (!columns) {
             const err = new Error(`Cannot find column-preset by the hash '${hash}'`);
             req.ctx.logError('Failed to get preset of columns', err);
@@ -24,9 +24,13 @@ export async function tableColumnPresetGet(req: Request, res: Response) {
 
 export async function tableColumnPresetSave(req: Request, res: Response) {
     const {body} = req;
+    const {
+        params: {ytAuthCluster},
+    } = req;
+
     try {
         const presetsConfig = checkEnabled(req);
-        const result = await saveColumnPreset(presetsConfig, body);
+        const result = await saveColumnPreset(presetsConfig, body, ytAuthCluster);
         res.status(200).send(result);
     } catch (err) {
         req.ctx.logError('Failed to save preset of columns', err);

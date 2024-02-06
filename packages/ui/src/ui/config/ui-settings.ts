@@ -6,3 +6,6 @@ export function getConfigData(): ConfigData {
 
 export const uiSettings: Partial<Required<ConfigData>['uiSettings']> =
     getConfigData()?.uiSettings || {};
+
+export const userSettingsCluster: ConfigData['userSettingsCluster'] =
+    getConfigData()?.userSettingsCluster;

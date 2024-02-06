@@ -13,9 +13,9 @@ import unknown from '../../../../img/user-avatar.svg';
 import {AppNavigationProps} from './AppNavigationPageLayout';
 import YT from '../../config/yt-config';
 import UIFactory from '../../UIFactory';
+import {getSettingsCluster} from '../../store/selectors/global';
 
 import './AppNavigationComponent.scss';
-import {getCluster} from '../../store/selectors/global';
 
 const block = cn('yt-app-navigation');
 
@@ -53,15 +53,15 @@ function AppNavigationComponent({
     }, [panelVisible, panelContent, settingsVisible, settingsContent]);
 
     const [popupVisible, setPopupVisible] = useState(false);
-    const cluster = useSelector(getCluster);
+    const settingsCluster = useSelector(getSettingsCluster);
     const history = useHistory();
 
     let showUserIcon = Boolean(currentUser);
-    let showSettings = Boolean(currentUser);
+    let showSettings = settingsCluster && Boolean(currentUser);
 
     if (authWay === 'passwd') {
-        showUserIcon = Boolean(cluster) && Boolean(currentUser);
-        showSettings = Boolean(cluster) && Boolean(currentUser);
+        showUserIcon = Boolean(settingsCluster) && Boolean(currentUser);
+        showSettings = settingsCluster && Boolean(currentUser);
     }
 
     return (
