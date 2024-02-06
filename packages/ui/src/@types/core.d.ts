@@ -57,7 +57,7 @@ export interface YTCoreConfig {
      *  The OAuthRobot should have read/write access to mapNodePath
      */
     userSettingsConfig?: {
-        cluster: string;
+        cluster?: string;
         // path to a map node with user-settings files
         mapNodePath: string;
     };
@@ -70,7 +70,7 @@ export interface YTCoreConfig {
      * The OAuthRobot should have read/write access to the table.
      */
     userColumnPresets?: {
-        cluster: string;
+        cluster?: string;
         dynamicTablePath: string;
     };
 

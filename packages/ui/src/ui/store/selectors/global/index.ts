@@ -13,7 +13,7 @@ import {getClusterNS} from '../settings';
 import {ClusterConfig} from '../../../../shared/yt-types';
 import {FIX_MY_TYPE} from '../../../types';
 import UIFactory from '../../../UIFactory';
-import {getConfigData} from '../../../config/ui-settings';
+import {getConfigData, userSettingsCluster} from '../../../config/ui-settings';
 import {Page} from '../../../../shared/constants/settings';
 import {AuthWay} from '../../../../shared/constants';
 
@@ -223,3 +223,7 @@ export const getOAuthButtonLabel = () => {
 export const getGlobalAsideHeaderWidth = (state: RootState) => state.global.asideHeaderWidth;
 
 export const getGlobalYTAuthCluster = (state: RootState) => state.global.ytAuthCluster;
+
+export const getSettingsCluster = createSelector([getCluster], (cluster) => {
+    return userSettingsCluster ?? cluster;
+});

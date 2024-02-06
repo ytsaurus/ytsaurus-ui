@@ -1,5 +1,4 @@
 import {AppContext} from '@gravity-ui/nodekit';
-import {YTCoreConfig} from '../../@types/core';
 import {getApp} from '../ServerFactory';
 import {getRobotYTApiSetup} from './requestsSetup';
 
@@ -9,13 +8,20 @@ function makeConfigError() {
     return new Error('Remote user settings are not configured. Please provide userSettingsConfig.');
 }
 
-function getSettingsConfig(): Partial<Required<YTCoreConfig>['userSettingsConfig']> {
+export function getSettingsConfig(cluster: string): {
+    cluster: string;
+    mapNodePath?: string;
+} {
     const {userSettingsConfig} = getApp().config;
-    return userSettingsConfig || {};
+
+    return {
+        cluster,
+        ...userSettingsConfig,
+    };
 }
 
-function getSettingsSetup() {
-    return getRobotYTApiSetup(getSettingsConfig().cluster!).setup;
+function getSettingsSetup(cluster: string) {
+    return getRobotYTApiSetup(getSettingsConfig(cluster).cluster).setup;
 }
 
 export function isRemoteSettingsConfigured() {
@@ -26,18 +32,19 @@ export function isRemoteSettingsConfigured() {
 interface Params {
     ctx: AppContext;
     username: string;
+    cluster: string;
 }
 
-export function create({ctx, username}: Params) {
+export function create({ctx, username, cluster}: Params) {
     ctx.log('settings.create', {username});
     if (!isRemoteSettingsConfigured()) {
         return Promise.reject(makeConfigError());
     }
 
     return yt.v3.create({
-        setup: getSettingsSetup(),
+        setup: getSettingsSetup(cluster),
         parameters: {
-            path: getSettingsConfig().mapNodePath + '/' + username,
+            path: getSettingsConfig(cluster).mapNodePath + '/' + username,
             type: 'document',
             ignore_existing: true, // No error if exists
             attributes: {
@@ -47,16 +54,16 @@ export function create({ctx, username}: Params) {
     });
 }
 
-export function get({ctx, username}: Params) {
-    ctx.log('settings.get', {username});
+export function get({ctx, username, cluster}: Params) {
+    ctx.log('settings.get', {username, cluster});
     if (!isRemoteSettingsConfigured()) {
         return Promise.reject(makeConfigError());
     }
 
     return yt.v3.get({
-        setup: getSettingsSetup(),
+        setup: getSettingsSetup(cluster),
         parameters: {
-            path: getSettingsConfig().mapNodePath + '/' + username,
+            path: getSettingsConfig(cluster).mapNodePath + '/' + username,
             output_format: {
                 $value: 'json',
                 $attributes: {
@@ -70,16 +77,16 @@ export function get({ctx, username}: Params) {
 interface GetParams extends Params {
     path: string;
 }
-export function getItem({ctx, username, path}: GetParams) {
+export function getItem({ctx, username, path, cluster}: GetParams) {
     ctx.log('settings.getItem', {username, path});
     if (!isRemoteSettingsConfigured()) {
         return Promise.reject(makeConfigError());
     }
 
     return yt.v3.get({
-        setup: getSettingsSetup(),
+        setup: getSettingsSetup(cluster),
         parameters: {
-            path: getSettingsConfig().mapNodePath + '/' + username + '/' + path,
+            path: getSettingsConfig(cluster).mapNodePath + '/' + username + '/' + path,
             output_format: {
                 $value: 'json',
                 $attributes: {
@@ -93,16 +100,16 @@ export function getItem({ctx, username, path}: GetParams) {
 interface SetParams extends GetParams {
     value: any;
 }
-export function setItem({ctx, username, path, value}: SetParams) {
-    ctx.log('settings.setItem', {username, path, value});
+export function setItem({ctx, username, path, value, cluster}: SetParams) {
+    ctx.log('settings.setItem', {username, path, value, cluster});
     if (!isRemoteSettingsConfigured()) {
         return Promise.reject(makeConfigError());
     }
 
     return yt.v3.set({
-        setup: getSettingsSetup(),
+        setup: getSettingsSetup(cluster),
         parameters: {
-            path: getSettingsConfig().mapNodePath + '/' + username + '/' + path,
+            path: getSettingsConfig(cluster).mapNodePath + '/' + username + '/' + path,
             input_format: {
                 $value: 'json',
                 $attributes: {
@@ -113,16 +120,16 @@ export function setItem({ctx, username, path, value}: SetParams) {
         data: value,
     });
 }
-export function deleteItem({ctx, username, path}: GetParams) {
-    ctx.log('settings.deleteItem', {username, path});
+export function deleteItem({ctx, username, path, cluster}: GetParams) {
+    ctx.log('settings.deleteItem', {username, path, cluster});
     if (!isRemoteSettingsConfigured()) {
         return Promise.reject(makeConfigError());
     }
 
     return yt.v3.remove({
-        setup: getSettingsSetup(),
+        setup: getSettingsSetup(cluster),
         parameters: {
-            path: getSettingsConfig().mapNodePath + '/' + username + '/' + path,
+            path: getSettingsConfig(cluster).mapNodePath + '/' + username + '/' + path,
         },
     });
 }

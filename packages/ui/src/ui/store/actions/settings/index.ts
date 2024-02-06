@@ -10,6 +10,7 @@ import {
     UPDATE_SETTING_DATA,
 } from '../../../constants/index';
 import {showToasterError, wrapApiPromiseByToaster} from '../../../utils/utils';
+import {getSettingsCluster} from '../../selectors/global';
 
 function logError(action: string, name: string) {
     console.error('Failed to "%s" setting "%s", settings provider is disabled.', action, name);
@@ -40,13 +41,14 @@ export function setSettingByKey<T>(path: SettingKey, value: T): SettingsThunkAct
             global: {login},
         } = getState();
         const previousValue = data[path];
+        const cluster = getSettingsCluster(getState());
 
         dispatch({
             type: SET_SETTING_VALUE,
             data: {path, value},
         });
 
-        return provider.set(login, path, value).catch((error) => {
+        return provider.set(login, path, value, cluster!).catch((error) => {
             if (error === 'disabled') {
                 logError('set', path);
                 return;
@@ -73,13 +75,14 @@ export function removeSetting(settingName: string, settingNS: SettingNS): Settin
             global: {login},
         } = getState();
         const previousValue = data[path];
+        const cluster = getSettingsCluster(getState());
 
         dispatch({
             type: UNSET_SETTING_VALUE,
             data: {path},
         });
 
-        return provider.remove(login, path).catch((error) => {
+        return provider.remove(login, path, cluster!).catch((error) => {
             if (error === 'disabled') {
                 logError('remove', settingName);
                 return;
@@ -105,9 +108,10 @@ export function reloadSetting(settingName: string, settingNS: SettingNS): Settin
             settings: {provider},
             global: {login},
         } = getState();
+        const cluster = getSettingsCluster(getState());
 
         return provider
-            .get(login, path)
+            .get(login, path, cluster!)
             .then((value) => {
                 dispatch({
                     type: SET_SETTING_VALUE,
@@ -131,10 +135,12 @@ export function reloadUserSettings(login: string): SettingsThunkAction {
     return async (dispatch, getState) => {
         try {
             const state = getState();
+            const cluster = getSettingsCluster(state);
+            const ytAuthCluster = state.global.ytAuthCluster || cluster;
             const {provider} = state.settings;
+            await provider.create(login, ytAuthCluster);
+            const allData = provider.getAll(login, ytAuthCluster);
 
-            await provider.create(login);
-            const allData = provider.getAll(login);
             const data: any =
                 allData instanceof Promise
                     ? await wrapApiPromiseByToaster(allData, {

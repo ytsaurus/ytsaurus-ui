@@ -234,6 +234,7 @@ export interface SettingsConfig {
 }
 
 export interface ConfigData {
+    userSettingsCluster?: string;
     settings: SettingsConfig;
     ytApiUseCORS?: boolean;
     uiSettings?: UISettings;

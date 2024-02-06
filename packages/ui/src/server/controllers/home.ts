@@ -8,6 +8,7 @@ import ServerFactory, {getApp} from '../ServerFactory';
 import {isLocalModeByEnvironment} from '../utils';
 import {getDafaultUserSettings} from '../utils/default-settings';
 import {ODIN_PAGE_ID} from '../../shared/constants';
+import {getSettingsConfig} from '../../server/components/settings';
 
 function isRootPage(page: string) {
     const rootPages = [
@@ -68,10 +69,14 @@ export async function homeIndex(req: Request, res: Response) {
         },
     };
 
-    if (login && useRemoteSettings) {
+    const settingsConfig = getSettingsConfig(cluster!);
+
+    if (login && useRemoteSettings && settingsConfig.cluster) {
         try {
-            await create({ctx, username: login});
-            const userSettings = login ? await get({ctx, username: login}) : {};
+            await create({ctx, username: login, cluster: settingsConfig.cluster});
+            const userSettings = login
+                ? await get({ctx, username: login, cluster: settingsConfig.cluster})
+                : {};
             settings.data = {...settings.data, ...userSettings};
         } catch (e) {
             const message = `Error in getting user settings for ${login}`;

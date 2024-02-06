@@ -9,51 +9,51 @@ function sendResponse(_req: Request, res: Response, data: object) {
 export function settingsCreate(req: Request, res: Response) {
     const {
         ctx,
-        params: {username},
+        params: {username, ytAuthCluster},
     } = req;
 
-    return create({ctx, username})
+    return create({ctx, username, cluster: ytAuthCluster})
         .then(sendResponse.bind(null, req, res))
         .catch(sendError.bind(null, res));
 }
 export function settingsGet(req: Request, res: Response) {
     const {
         ctx,
-        params: {username},
+        params: {username, ytAuthCluster},
     } = req;
 
-    return get({ctx, username})
+    return get({ctx, username, cluster: ytAuthCluster})
         .then(sendResponse.bind(null, req, res))
         .catch(sendError.bind(null, res));
 }
 export async function settingsGetItem(req: Request, res: Response) {
     const {
         ctx,
-        params: {username, path},
+        params: {username, path, ytAuthCluster},
     } = req;
 
-    return getItem({ctx, username, path})
+    return getItem({ctx, username, path, cluster: ytAuthCluster})
         .then(sendResponse.bind(null, req, res))
         .catch(sendError.bind(null, res));
 }
 export function settingsSetItem(req: Request, res: Response) {
     const {
         ctx,
-        params: {username, path},
+        params: {username, path, ytAuthCluster},
         body: {value} = {},
     } = req;
 
-    return setItem({ctx, username, path, value})
+    return setItem({ctx, username, path, value, cluster: ytAuthCluster})
         .then(sendResponse.bind(null, req, res))
         .catch(sendError.bind(null, res));
 }
 export function settingsDeleteItem(req: Request, res: Response) {
     const {
         ctx,
-        params: {username, path},
+        params: {username, path, ytAuthCluster},
     } = req;
 
-    return deleteItem({ctx, username, path})
+    return deleteItem({ctx, username, path, cluster: ytAuthCluster})
         .then(sendResponse.bind(null, req, res))
         .catch(sendError.bind(null, res));
 }
