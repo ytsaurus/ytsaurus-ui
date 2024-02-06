@@ -20,7 +20,7 @@ export function checkUserTransaction(operationAttributes) {
     );
 }
 
-export function performAction({updateOperation, operation, currentOption, options = [], name}) {
+export function performAction({operation, currentOption, options = [], name}) {
     const option = _.find(options, (option) => option.value === currentOption);
     let parameters = {operation_id: operation.$value};
     if (option?.data?.parameters) {
@@ -31,7 +31,7 @@ export function performAction({updateOperation, operation, currentOption, option
         operation_detail_action: name,
     });
 
-    return yt.v3[name + 'Operation'](parameters).then(updateOperation);
+    return yt.v3[name + 'Operation'](parameters);
 }
 
 export function getDetailsTabsShowSettings(operation) {

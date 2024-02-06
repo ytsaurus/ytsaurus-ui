@@ -8,7 +8,7 @@ import Error from '../../../components/Error/Error';
 
 import OperationsListTable from './OperationsListTable/OperationsListTable';
 import OperationsListToolbar from './OperationsListToolbar/OperationsListToolbar';
-import {updateOperations} from '../../../store/actions/operations/list';
+import {updateOperationsByParams} from '../../../store/actions/operations/list';
 import {useMemoizedIfEqual, useUpdater} from '../../../hooks/use-updater';
 import {useAppRumMeasureStart} from '../../../rum/rum-app-measures';
 import {RumMeasureTypes} from '../../../rum/rum-measure-types';
@@ -28,7 +28,7 @@ function OperationListUpdater({timeRange}) {
     const params = useMemoizedIfEqual(cluster, parameters);
 
     const updateFn = React.useCallback(() => {
-        dispatch(updateOperations(...params));
+        dispatch(updateOperationsByParams(...params));
     }, [dispatch, params]);
 
     useUpdater(updateFn, {onlyOnce: isBigTimeRange(timeRange)});
@@ -63,7 +63,6 @@ class OperationsList extends Component {
             from: PropTypes.string,
             to: PropTypes.string,
         }).isRequired,
-        updateOperations: PropTypes.func.isRequired,
         // from props
         inDashboard: PropTypes.bool,
     };
@@ -119,11 +118,7 @@ function mapStateToProps({operations}) {
     };
 }
 
-const mapDispatchToProps = {
-    updateOperations,
-};
-
-const OperationsListConnected = connect(mapStateToProps, mapDispatchToProps)(OperationsList);
+const OperationsListConnected = connect(mapStateToProps)(OperationsList);
 
 function OperationsListWithRum() {
     const isFinalStatus = useSelector(getOperationsListIsFinalState);
