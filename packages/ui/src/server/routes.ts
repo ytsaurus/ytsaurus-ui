@@ -13,7 +13,7 @@ import {
 import {homeIndex, homeRedirect} from './controllers/home';
 import {handleClusterInfo} from './controllers/cluster-info';
 
-import {clusterVersions} from './controllers/clusters';
+import {clusterAuthStatus, clusterVersions} from './controllers/clusters';
 import {tableColumnPresetGet, tableColumnPresetSave} from './controllers/table-column-preset';
 import {ping} from './controllers/ping';
 import {handleChangePassword, handleLogin} from './controllers/login';
@@ -34,6 +34,7 @@ const routes: AppRoutes = {
     'GET /api/cluster-info/:ytAuthCluster': {handler: handleClusterInfo},
     'GET /api/cluster-params/:ytAuthCluster': {handler: clusterParams},
     'GET /api/clusters/versions': {handler: clusterVersions},
+    'GET /api/clusters/auth-status': {handler: clusterAuthStatus},
     'GET /api/pool-names/:ytAuthCluster': {handler: getClusterPools},
     'POST /api/yt/:ytAuthCluster/login': {handler: handleLogin, ui: true},
     'GET /api/yt/:ytAuthCluster/logout': {handler: handleLogout, ui: true},

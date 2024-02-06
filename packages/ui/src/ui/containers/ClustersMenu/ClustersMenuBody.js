@@ -4,13 +4,18 @@ import {connect} from 'react-redux';
 import block from 'bem-cn-lite';
 import {Link} from 'react-router-dom';
 import _ from 'lodash';
+import {Lock} from '@gravity-ui/icons';
 
 import {CLUSTER_GROUPS, CLUSTER_GROUPS_ORDER, DEFAULT_GROUP} from '../../constants/cluster-menu';
 import format from '@ytsaurus/interface-helpers/lib/hammer/format';
 import {utils} from '../../common/hammer/utils';
 import ElementsTable from '../../components/ElementsTable/ElementsTable';
 import {sortStateType} from '../../components/ElementsTable/ElementsTableHeader';
-import {fetchClusterAvailability, fetchClusterVersions} from '../../store/actions/clusters-menu';
+import {
+    fetchClusterAuthStatus,
+    fetchClusterAvailability,
+    fetchClusterVersions,
+} from '../../store/actions/clusters-menu';
 import {CLUSTER_MENU_TABLE_ID} from '../../constants/tables';
 import {getClusterAppearance} from '../../appearance';
 import YT from '../../config/yt-config';
@@ -25,14 +30,16 @@ class ClustersMenuBody extends Component {
         viewMode: PropTypes.oneOf(['dashboard', 'table']),
         clusters: PropTypes.object,
         fetchClusterVersions: PropTypes.func.isRequired,
+        fetchClusterAuthStatus: PropTypes.func.isRequired,
         fetchClusterAvailability: PropTypes.func.isRequired,
         sortState: sortStateType.isRequired,
     };
 
     componentDidMount() {
-        const {fetchClusterVersions, fetchClusterAvailability} = this.props;
+        const {fetchClusterVersions, fetchClusterAvailability, fetchClusterAuthStatus} = this.props;
 
         fetchClusterVersions();
+        fetchClusterAuthStatus();
         if (YT.environment !== 'localmode') {
             fetchClusterAvailability();
         }
@@ -85,8 +92,17 @@ class ClustersMenuBody extends Component {
     }
 
     renderCluster(cluster, size) {
-        const {status, access, id, name, environment, descriptionEnglish, description, theme} =
-            cluster;
+        const {
+            status,
+            access,
+            id,
+            name,
+            environment,
+            descriptionEnglish,
+            description,
+            theme,
+            authorized,
+        } = cluster;
         const className = b('item', {
             state: status,
             access: status === 'available' && access,
@@ -99,6 +115,11 @@ class ClustersMenuBody extends Component {
         return (
             <Link key={id} className={className} to={'/' + id}>
                 <div className={b('item-body')}>
+                    {authorized ? null : (
+                        <span className={b('item-auth-status')}>
+                            <Lock />
+                        </span>
+                    )}
                     <div className={b('item-heading')}>{name}</div>
 
                     <div className={b('item-image-wrapper')}>
@@ -294,6 +315,7 @@ function mapStateToProps({clustersMenu, tables}) {
 
 const mapDispatchToProps = {
     fetchClusterVersions,
+    fetchClusterAuthStatus,
     fetchClusterAvailability,
 };
 

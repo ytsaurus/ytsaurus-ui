@@ -53,4 +53,10 @@
     &__item-version {
         font-family: var(--g-font-family-monospace);
     }
+
+    &__item-auth-status {
+        top: 3px;
+        right: 3px;
+        position: absolute;
+    }
 }
