@@ -5,25 +5,11 @@ import {AppConfig} from '@gravity-ui/nodekit';
 
 const path = require('path');
 
-const ytAuthConfig: Partial<AppConfig> = process.env.YT_AUTH_CLUSTER_ID
-    ? {
-          ytAuthCluster: process.env.YT_AUTH_CLUSTER_ID,
-          ytAuthAllowInsecure: Boolean(process.env.YT_AUTH_ALLOW_INSECURE),
-          appAuthPolicy: AuthPolicy.required,
-          userSettingsConfig: {
-              cluster: process.env.YT_AUTH_CLUSTER_ID,
-              mapNodePath: process.env.YT_USER_SETTINGS_PATH ?? '//tmp',
-          },
-          ...(process.env.YT_USER_COLUMN_PRESETS_PATH
-              ? {
-                    userColumnPresets: {
-                        cluster: process.env.YT_AUTH_CLUSTER_ID,
-                        dynamicTablePath: process.env.YT_USER_COLUMN_PRESETS_PATH,
-                    },
-                }
-              : {}),
-      }
-    : {};
+const ytAuthConfig: Partial<AppConfig> = {
+    allowPasswordAuth: Boolean(process.env.ALLOW_PASSWORD_AUTH),
+    ytAuthAllowInsecure: Boolean(process.env.YT_AUTH_ALLOW_INSECURE),
+    appAuthPolicy: AuthPolicy.required,
+};
 
 const config: Partial<AppConfig> = {
     appName: 'YTSaurus',
@@ -31,7 +17,6 @@ const config: Partial<AppConfig> = {
     appAuthPolicy: (process.env.AUTH_POLICY as AuthPolicy) || 'redirect',
 
     ...ytAuthConfig,
-
     // TODO: fix me
     // csp: 'disabled',
 

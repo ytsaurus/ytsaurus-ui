@@ -11,6 +11,11 @@ import {Settings} from '../shared/constants/settings-types';
 
 export interface YTCoreConfig {
     /**
+     * Enables YT-password authentication when defined
+     */
+    allowPasswordAuth: boolean;
+
+    /**
      *  Path to the file with OAuth-token of special-user ("the OAuthRobot" below) in format: {"oauthToken": "******"}
      *  The OAuth-token is used for some service requests, see usages of getRobotYTApiSetup.
      */
@@ -68,11 +73,6 @@ export interface YTCoreConfig {
         cluster: string;
         dynamicTablePath: string;
     };
-
-    /**
-     * Enables YT-password authentication when defined
-     */
-    ytAuthCluster?: string;
 
     /**
      * OpenID Connect configuration

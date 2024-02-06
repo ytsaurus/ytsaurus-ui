@@ -35,7 +35,7 @@ import ErrorBlock from '../../components/Error/Error';
 import {LOADING_STATUS, LOAD_ERROR, Page, SPLIT_PANE_ID} from '../../constants/index';
 import {joinMenuItemsAction, splitMenuItemsAction, trackVisit} from '../../store/actions/menu';
 import {setSetting} from '../../store/actions/settings';
-import {initClusterParams, updateCluster} from '../../store/actions/cluster-params';
+import {initClusterParams, unmountCluster, updateCluster} from '../../store/actions/cluster-params';
 import {updateTitle} from '../../store/actions/global';
 import {getClusterUiConfig, isQueryTrackerAllowed} from '../../store/selectors/global';
 import {getClusterConfig} from '../../utils';
@@ -89,6 +89,7 @@ class ClusterPage extends Component {
         initClusterParams: PropTypes.func.isRequired,
         updateCluster: PropTypes.func.isRequired,
         updateTitle: PropTypes.func.isRequired,
+        unmountCluster: PropTypes.func.isRequired,
         trackVisit: PropTypes.func.isRequired,
 
         allowChyt: PropTypes.bool,
@@ -133,6 +134,7 @@ class ClusterPage extends Component {
 
     componentWillUnmount() {
         this.props.updateTitle({path: '', page: ''});
+        this.props.unmountCluster();
     }
 
     contentPaneRef = React.createRef();
@@ -420,6 +422,7 @@ const mapDispatchToProps = {
     updateTitle,
     initClusterParams,
     updateCluster,
+    unmountCluster,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ClusterPage);

@@ -9,13 +9,12 @@ import crypto from 'crypto';
 // @ts-ignore
 import ytLib from '@ytsaurus/javascript-wrapper';
 import {getXSRFToken} from '../components/cluster-queries';
-import {getAuthCluster} from '../components/yt-auth';
 
 const yt = ytLib();
 
 export async function handleLogin(req: Request, res: Response) {
     try {
-        const ytAuthCluster = getAuthCluster(req.ctx.config);
+        const {ytAuthCluster} = req.params;
 
         const {username, password} = JSON.parse(req.body) || {};
         if (!username || !password) {
@@ -41,7 +40,29 @@ export async function handleLogin(req: Request, res: Response) {
                     res,
                     response,
                     undefined,
-                    (headers) => removeSecureFlagIfOriginInsecure(req, headers),
+                    (headers: Record<string, string[]>) => {
+                        if (headers['set-cookie']) {
+                            headers['set-cookie'] = headers['set-cookie'].reduce<string[]>(
+                                (ret, item) => {
+                                    ret.push(item);
+
+                                    if (item.startsWith(YT_CYPRESS_COOKIE_NAME)) {
+                                        ret.push(
+                                            item.replace(
+                                                YT_CYPRESS_COOKIE_NAME,
+                                                `${ytAuthCluster}:${YT_CYPRESS_COOKIE_NAME}`,
+                                            ),
+                                        );
+                                    }
+
+                                    return ret;
+                                },
+                                [],
+                            );
+                        }
+
+                        return removeSecureFlagIfOriginInsecure(req, headers);
+                    },
                 );
                 if (!pipedSize) {
                     throw new Error(UNEXPECTED_PIPE_AXIOS_RESPONSE);
@@ -70,7 +91,7 @@ function removeSecureFlagIfOriginInsecure(
                 acc[k] = v;
             } else {
                 const tmp = _.map(v as Array<string>, (item) => {
-                    if (item.startsWith(YT_CYPRESS_COOKIE_NAME)) {
+                    if (item.includes(YT_CYPRESS_COOKIE_NAME)) {
                         return item.replace(/\s*Secure;/, '');
                     }
                     return item;
@@ -85,7 +106,11 @@ function removeSecureFlagIfOriginInsecure(
 
 export async function handleChangePassword(req: Request, res: Response) {
     try {
-        const ytAuthCluster = getAuthCluster(req.ctx.config);
+        const ytAuthCluster = req.params.ytAuthCluster;
+
+        if (!ytAuthCluster) {
+            throw new Error('You have to define ytAuthCluster.');
+        }
 
         const {newPassword, currentPassword} = JSON.parse(req.body) || {};
         if (!newPassword || !currentPassword) {

@@ -1,6 +1,5 @@
 import {ThunkAction} from 'redux-thunk';
 import _ from 'lodash';
-
 import ypath from '../../../common/thor/ypath';
 
 import {listAllGroups, listAllUsers} from '../../../utils/users-groups';
@@ -313,9 +312,26 @@ export function mergeScreen() {
     };
 }
 
-export function handleAuthError() {
+export function handleAuthError({ytAuthCluster}: {ytAuthCluster?: string} = {}) {
     if (getConfigData().allowLoginDialog) {
-        getWindowStore().dispatch({type: GLOBAL_PARTIAL, data: {showLoginDialog: true}});
+        if (!ytAuthCluster) {
+            const toaster = new Toaster();
+
+            toaster.add({
+                name: `global/ytAuthCluster}`,
+                autoHiding: false,
+                type: 'error',
+                content: 'If the problem persists, please report the error.',
+                title: `Failed to show a login form. ytAuthCluster is not defined`,
+            });
+
+            return;
+        }
+
+        getWindowStore().dispatch({
+            type: GLOBAL_PARTIAL,
+            data: {showLoginDialog: true, ytAuthCluster},
+        });
     }
 }
 
@@ -325,7 +341,10 @@ export function onSuccessLogin(login: string): YTThunkAction {
             await await dispatch(reloadUserSettings(login));
         } catch (e) {}
         YT.parameters.login = login;
-        dispatch({type: GLOBAL_PARTIAL, data: {showLoginDialog: false, login}});
+        dispatch({
+            type: GLOBAL_PARTIAL,
+            data: {showLoginDialog: false, login, ytAuthCluster: undefined},
+        });
     };
 }
 

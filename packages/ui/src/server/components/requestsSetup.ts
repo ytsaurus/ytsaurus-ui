@@ -5,11 +5,20 @@ import {ClusterConfig} from '../../shared/yt-types';
 import {getClusterConfig} from '../components/utils';
 import {getApp} from '../ServerFactory';
 
-function getRobotOAuthToken() {
+function getRobotOAuthToken(cluster: string) {
     const {ytInterfaceSecret} = getApp().config as YTCoreConfig;
-    // eslint-disable-next-line security/detect-non-literal-require
-    const secret = ytInterfaceSecret ? require(ytInterfaceSecret).oauthToken : '';
-    return secret;
+
+    let oauthToken = '';
+
+    if (ytInterfaceSecret) {
+        oauthToken =
+            // eslint-disable-next-line security/detect-non-literal-require
+            require(ytInterfaceSecret)?.[cluster]?.oauthToken ||
+            // eslint-disable-next-line security/detect-non-literal-require
+            require(ytInterfaceSecret)?.oauthToken; // Backward compatibility
+    }
+
+    return oauthToken;
 }
 
 export interface YTApiSetup {
@@ -60,7 +69,7 @@ export function getYTApiClusterSetup(
 }
 
 export function getRobotYTApiSetup(cluster: string): YTApiUserSetup {
-    const oauthToken = getRobotOAuthToken();
+    const oauthToken = getRobotOAuthToken(cluster);
     const config = getYTApiClusterSetup(cluster);
 
     const {setup, ...rest} = config;

@@ -3,6 +3,7 @@ import {useHistory} from 'react-router';
 import cn from 'bem-cn-lite';
 import {FooterItem, PageLayoutAside} from '@gravity-ui/navigation';
 import {Menu} from '@gravity-ui/uikit';
+import {useSelector} from 'react-redux';
 
 import Logo from '../../../../img/svg/appLogo.svg';
 import GearIcon from '@gravity-ui/icons/svgs/gear.svg';
@@ -10,9 +11,11 @@ import BugIcon from '@gravity-ui/icons/svgs/bug.svg';
 import Link from '../../components/Link/Link';
 import unknown from '../../../../img/user-avatar.svg';
 import {AppNavigationProps} from './AppNavigationPageLayout';
+import YT from '../../config/yt-config';
 import UIFactory from '../../UIFactory';
 
 import './AppNavigationComponent.scss';
+import {getCluster} from '../../store/selectors/global';
 
 const block = cn('yt-app-navigation');
 
@@ -50,7 +53,16 @@ function AppNavigationComponent({
     }, [panelVisible, panelContent, settingsVisible, settingsContent]);
 
     const [popupVisible, setPopupVisible] = useState(false);
+    const cluster = useSelector(getCluster);
     const history = useHistory();
+
+    let showUserIcon = Boolean(currentUser);
+    let showSettings = Boolean(currentUser);
+
+    if (authWay === 'passwd') {
+        showUserIcon = Boolean(cluster) && Boolean(currentUser);
+        showSettings = Boolean(cluster) && Boolean(currentUser);
+    }
 
     return (
         <PageLayoutAside
@@ -73,28 +85,33 @@ function AppNavigationComponent({
                     );
                 },
             }}
-            onChangeCompact={onChangeCompact}
+            onChangeCompact={showSettings ? onChangeCompact : undefined}
             renderFooter={({compact}) => {
-                return (
-                    <>
-                        {UIFactory.makeSupportContent(
-                            {login: currentUser},
-                            ({onSupportClick, supportContent}) => (
-                                <React.Fragment>
-                                    <FooterItem
-                                        compact={compact}
-                                        item={{
-                                            id: 'support',
-                                            title: 'Report a bug',
-                                            icon: BugIcon,
-                                            onItemClick: onSupportClick,
-                                        }}
-                                    />
-                                    {supportContent}
-                                </React.Fragment>
-                            ),
-                        )}
+                const footerItems = [
+                    UIFactory.makeSupportContent(
+                        {login: currentUser},
+                        ({onSupportClick, supportContent}) => (
+                            <React.Fragment>
+                                <FooterItem
+                                    key="support"
+                                    compact={compact}
+                                    item={{
+                                        id: 'support',
+                                        title: 'Report a bug',
+                                        icon: BugIcon,
+                                        onItemClick: onSupportClick,
+                                    }}
+                                />
+                                {supportContent}
+                            </React.Fragment>
+                        ),
+                    ),
+                ];
+
+                if (showSettings) {
+                    footerItems.push(
                         <FooterItem
+                            key="settings"
                             compact={compact}
                             item={{
                                 id: 'settings',
@@ -102,8 +119,14 @@ function AppNavigationComponent({
                                 onItemClick: toggleSettingsVisible,
                                 icon: GearIcon,
                             }}
-                        />
+                        />,
+                    );
+                }
+
+                if (showUserIcon) {
+                    footerItems.push(
                         <FooterItem
+                            key="user"
                             compact={compact}
                             item={{
                                 id: 'user',
@@ -139,14 +162,18 @@ function AppNavigationComponent({
                                                     Change password
                                                 </Menu.Item>
                                             )}
-                                            <Menu.Item href={'/api/yt/logout'}>Logout</Menu.Item>
+                                            <Menu.Item href={`/api/yt/${YT.cluster}/logout`}>
+                                                Logout
+                                            </Menu.Item>
                                         </Menu>
                                     </div>
                                 );
                             }}
-                        />
-                    </>
-                );
+                        />,
+                    );
+                }
+
+                return <>{footerItems}</>;
             }}
         />
     );

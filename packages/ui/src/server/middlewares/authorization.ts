@@ -15,8 +15,10 @@ function isAuthError(e: unknown) {
     return e instanceof AuthError || (axios.isAxiosError(e) && e.response?.status === 401);
 }
 
-export function createAuthMiddleware(ytAuthCluster: string): AppMiddleware {
+export function createAuthMiddleware(): AppMiddleware {
     return async function authMiddleware(req, res, next) {
+        const {ytAuthCluster} = req.params;
+
         try {
             if (!isAuthorized(req)) {
                 throw new AuthError();
@@ -27,7 +29,7 @@ export function createAuthMiddleware(ytAuthCluster: string): AppMiddleware {
             req.yt.login = login;
         } catch (e) {
             const isAuthFailed = isAuthError(e);
-            const error = isAuthFailed ? undefined : e;
+            const error = isAuthFailed ? {extraData: {ytAuthCluster}} : e;
 
             if (!req.routeInfo.ui && isAuthFailed) {
                 sendError(res, error, 401);
