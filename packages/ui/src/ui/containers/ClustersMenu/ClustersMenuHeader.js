@@ -18,7 +18,7 @@ ClustersMenuHeader.propTypes = {
     viewMode: PropTypes.oneOf(['dashboard', 'table']).isRequired,
     updateFilter: PropTypes.func.isRequired,
     updateViewMode: PropTypes.func.isRequired,
-    login: PropTypes.string.isRequired,
+    login: PropTypes.string,
 };
 
 function ClustersMenuHeader({viewMode, updateViewMode, clusterFilter, updateFilter}) {

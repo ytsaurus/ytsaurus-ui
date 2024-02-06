@@ -36,16 +36,32 @@ export function getInterfaceVersion() {
     }
 }
 
+type ExtraError = {
+    extraData: Record<string, unknown>;
+};
+
+function isExtraDataError(error: ExtraError | unknown): error is ExtraError {
+    return (error as ExtraError).extraData !== undefined;
+}
+
 export function prepareErrorToSend(e: unknown) {
-    let message = '';
+    const res: Record<string, any> = {
+        message: '',
+    };
+
     if (e instanceof Error) {
-        message = _.toString(e);
+        res.message = _.toString(e);
     } else if (isYTError(e)) {
         return e;
     } else {
-        message = JSON.stringify(e);
+        res.message = JSON.stringify(e);
     }
-    return {message};
+
+    if (isExtraDataError(e)) {
+        res.extraData = e.extraData;
+    }
+
+    return res;
 }
 
 export function sendResponse(res: Response, data: object) {

@@ -6,7 +6,9 @@ export function handleLogout(req: Request, res: Response) {
     if (isOAuthAllowed(req) && isUserOAuthLogged(req)) {
         res.redirect(getOAuthLogoutPath(req));
     } else if (isYtAuthEnabled(req.ctx.config)) {
-        YTAuthLogout(res);
+        const {ytAuthCluster} = req.params;
+
+        YTAuthLogout(res, ytAuthCluster);
     }
     res.redirect('/');
 }

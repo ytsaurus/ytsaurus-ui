@@ -35,14 +35,14 @@ const routes: AppRoutes = {
     'GET /api/cluster-params/:ytAuthCluster': {handler: clusterParams},
     'GET /api/clusters/versions': {handler: clusterVersions},
     'GET /api/pool-names/:ytAuthCluster': {handler: getClusterPools},
-    'POST /api/yt/login': {handler: handleLogin, ui: true},
-    'GET /api/yt/logout': {handler: handleLogout, ui: true},
+    'POST /api/yt/:ytAuthCluster/login': {handler: handleLogin, ui: true},
+    'GET /api/yt/:ytAuthCluster/logout': {handler: handleLogout, ui: true},
 
     'GET /oauth/login': {handler: oauthLogin, ui: true},
     'GET /api/oauth/callback': {handler: oauthCallback, ui: true},
     'GET /api/oauth/logout/callback': {handler: oauthLogout, ui: true},
 
-    'POST /api/yt/change-password': {handler: handleChangePassword, ui: true},
+    'POST /api/yt/:ytAuthCluster/change-password': {handler: handleChangePassword, ui: true},
     'POST /api/remote-copy': {handler: handleRemoteCopy},
 
     'POST /api/markdown-to-html': {handler: markdownToHtmlHandler},

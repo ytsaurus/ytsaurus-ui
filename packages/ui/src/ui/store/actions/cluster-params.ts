@@ -232,3 +232,17 @@ export function updateCluster(
             .catch(dispatchError);
     };
 }
+
+export function unmountCluster(): GlobalThunkAction {
+    return (dispatch) => {
+        YT.parameters.version = '';
+        YT.cluster = '';
+
+        dispatch({
+            type: GLOBAL_PARTIAL,
+            data: {
+                cluster: undefined,
+            },
+        });
+    };
+}

@@ -12,7 +12,7 @@ import {Page} from '../../constants/index';
 class HandleRedirect extends Component {
     static propTypes = {
         location: PropTypes.object.isRequired,
-        cluster: PropTypes.string.isRequired,
+        cluster: PropTypes.string,
         eventsFirstUpdate: PropTypes.bool.isRequired,
         maintenancePageEvent: PropTypes.object,
     };
