@@ -141,5 +141,10 @@ module.exports = {
         name: 'alter_query',
         method: 'POST',
         dataType: 'json'
+    },
+    getQueryTrackerInfo: {
+        name: 'get_query_tracker_info',
+        method: 'GET',
+        dataType: 'json'
     }
 }
