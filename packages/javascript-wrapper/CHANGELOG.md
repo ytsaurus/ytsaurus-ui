@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.7.0](https://github.com/ytsaurus/ytsaurus-ui/compare/javascript-wrapper-v0.6.1...javascript-wrapper-v0.7.0) (2024-02-06)
+
+
+### Features
+
+* add get_query_tracker_info method ([3c0931e](https://github.com/ytsaurus/ytsaurus-ui/commit/3c0931e421b6238cb989664e9e153a8e315e5896))
+
 ## [0.6.1](https://github.com/ytsaurus/ytsaurus-ui/compare/javascript-wrapper-v0.6.0...javascript-wrapper-v0.6.1) (2024-01-30)
 
 
