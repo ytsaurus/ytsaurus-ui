@@ -1,9 +1,13 @@
-import {useCallback, useEffect, useState} from 'react';
+import {useCallback, useState} from 'react';
 import {useSelector} from 'react-redux';
 import {useThunkDispatch} from '../../../store/thunkDispatch';
 import {getCurrentDraftQueryACO, getCurrentQueryACO} from '../module/query/selectors';
-import {getQueryACOOptions} from '../module/query_aco_list/selectors';
-import {getQueryACOList} from '../module/query_aco_list/actions';
+import {
+    getQueryACOOptions,
+    getQueryTrackerInfo,
+    isQueryTrackerInfoLoading as isQueryTrackerInfoLoadingSelector,
+} from '../module/query_aco/selectors';
+import {getQueryACO} from '../module/query_aco/actions';
 import {setDraftQueryACO, setQueryACO} from '../module/query/actions';
 
 export const useQueryACO = () => {
@@ -11,11 +15,9 @@ export const useQueryACO = () => {
     const currentQueryACO = useSelector(getCurrentQueryACO);
     const currentDraftQueryACO = useSelector(getCurrentDraftQueryACO);
     const selectOptions = useSelector(getQueryACOOptions);
-    const [loading, setLoading] = useState(true);
-
-    useEffect(() => {
-        dispatch(getQueryACOList()).finally(() => setLoading(false));
-    }, [dispatch, getQueryACOList]);
+    const isQueryTrackerInfoLoading = useSelector(isQueryTrackerInfoLoadingSelector);
+    const trackerInfo = useSelector(getQueryTrackerInfo);
+    const [loading, setLoading] = useState(false);
 
     const changeCurrentQueryACO = useCallback(
         ({aco, query_id}: {aco: string; query_id: string}) => {
@@ -39,12 +41,19 @@ export const useQueryACO = () => {
         [dispatch],
     );
 
+    const loadQueryTrackerInfo = () => {
+        dispatch(getQueryACO());
+    };
+
     return {
         selectACOOptions: selectOptions,
         currentQueryACO,
         changeDraftQueryACO,
         changeCurrentQueryACO,
         currentDraftQueryACO,
-        isFlight: loading,
+        trackerInfo,
+        loadQueryTrackerInfo,
+        isFlight: loading || isQueryTrackerInfoLoading,
+        isQueryTrackerInfoLoading,
     };
 };

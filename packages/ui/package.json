@@ -64,7 +64,7 @@
     "@gravity-ui/nodekit": "^1.0.0",
     "@types/rbush": "^3.0.0",
     "@ytsaurus/interface-helpers": "^0.3.0",
-    "@ytsaurus/javascript-wrapper": "^0.6.1",
+    "@ytsaurus/javascript-wrapper": "^0.7.0",
     "axios": "^1.5.0",
     "cookie-parser": "1.4.6",
     "dayjs": "^1.11.10",

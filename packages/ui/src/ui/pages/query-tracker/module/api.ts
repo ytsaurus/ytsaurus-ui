@@ -14,7 +14,7 @@ import {getQueryTrackerRequestOptions} from './query/selectors';
 import {UPDATE_QUERIES_LIST} from './query-tracker-contants';
 import {AnyAction} from 'redux';
 import {QueryEngine} from './engines';
-import {getLastSelectedACONamespaces} from './query_aco_list/selectors';
+import {getLastSelectedACONamespaces} from './query_aco/selectors';
 import {setSettingByKey} from '../../../store/actions/settings';
 
 function getQTApiSetup(): {proxy?: string} {
