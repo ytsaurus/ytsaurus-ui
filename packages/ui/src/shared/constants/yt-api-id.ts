@@ -164,4 +164,5 @@ export enum YTApiId {
     addMaintenance,
     removeMaintenance,
     maintenanceRequests,
+    getQueryTrackerInfo,
 }

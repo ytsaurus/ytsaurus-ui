@@ -73,6 +73,14 @@ type YTApiV4WithId = {
         ...args: ApiMethodParameters<GetParams>
     ): Promise<{value: Value}>;
     exists(id: YTApiId, ...args: ApiMethodParameters<PathParams>): Promise<{value: boolean}>;
+    getQueryTrackerInfo(
+        id: YTApiId,
+        ...args: ApiMethodParameters<{stage?: string}>
+    ): Promise<{
+        cluster_name: string;
+        access_control_objects: string[];
+        supported_features: {access_control: boolean};
+    }>;
     [method: string]: (id: YTApiId, ...args: ApiMethodParameters<any>) => Promise<any>;
 };
 

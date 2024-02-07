@@ -59,6 +59,10 @@ interface FormValues {
     comment?: string;
 }
 
+const SHORT_TITLE: Partial<Record<IdmKindType, string>> = {
+    access_control_object: 'ACO',
+};
+
 function RequestPermissions(props: Props) {
     const {
         buttonText = 'Request permissions',
@@ -90,7 +94,7 @@ function RequestPermissions(props: Props) {
         [requestPermissions, idmKind],
     );
 
-    const currentCaption = `Current ${idmKind}`;
+    const currentCaption = `Current ${SHORT_TITLE[idmKind] ?? idmKind}`;
     const {permissionsToRequest: choices} = UIFactory.getAclPermissionsSettings()[idmKind];
 
     const firstItemDisabled = idmKind === IdmObjectType.ACCOUNT;

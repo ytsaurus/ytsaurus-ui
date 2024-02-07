@@ -27,7 +27,9 @@ import {QueryItem} from '../module/api';
 import {useCurrentQuery} from '../QueryResults/hooks/useCurrentQuery';
 import forEach_ from 'lodash/forEach';
 import uniqBy_ from 'lodash/uniqBy';
+import {isSupportedQtACO} from '../module/query_aco/selectors';
 import {QueryACOSelect} from '../QueryACO/QueryACOSelect';
+import {useQueryACO} from '../QueryACO/useQueryACO';
 
 const b = block('query-container');
 
@@ -41,6 +43,7 @@ const QueryEditorView = React.memo(function QueryEditorView({
     const text = useSelector(getQueryText);
     const engine = useSelector(getQueryEngine);
     const editorErrors = useSelector(getQueryEditorErrors);
+    const isACOSupported = useSelector(isSupportedQtACO);
     const decorationsCollection = useRef<monaco.editor.IEditorDecorationsCollection | undefined>(
         undefined,
     );
@@ -131,7 +134,7 @@ const QueryEditorView = React.memo(function QueryEditorView({
                 <div className="query-run-action">
                     <Button
                         qa="qt-run"
-                        pin="round-brick"
+                        pin={isACOSupported ? 'round-brick' : undefined}
                         className="query-run-action-button"
                         view="action"
                         onClick={runQueryCallback}
@@ -139,7 +142,7 @@ const QueryEditorView = React.memo(function QueryEditorView({
                         <Icon data={playIcon} />
                         Run
                     </Button>
-                    <QueryACOSelect />
+                    {isACOSupported && <QueryACOSelect />}
                 </div>
             </div>
         </div>
@@ -201,6 +204,7 @@ export default function QueryEditor({
     onStartQuery?: (queryId: string) => boolean | void;
 }) {
     const query = useCurrentQuery();
+    const {isQueryTrackerInfoLoading} = useQueryACO();
 
     const [resultViewMode, setResultViewMode] = useState<ResultMode>('minimized');
 
@@ -211,7 +215,8 @@ export default function QueryEditor({
     }, [query?.id]);
 
     const isExecuted = useSelector(isQueryExecuted);
-    const isLoading = useSelector(isQueryLoading);
+    const isMainQueryLoading = useSelector(isQueryLoading);
+    const isLoading = isQueryTrackerInfoLoading || isMainQueryLoading;
 
     return (
         <>
