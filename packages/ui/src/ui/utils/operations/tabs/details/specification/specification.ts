@@ -1,8 +1,12 @@
 import _ from 'lodash';
-import hammer from '../../../../../common/hammer';
+
 import ypath from '../../../../../common/thor/ypath';
 import UIFactory from '../../../../../UIFactory';
-import {DetailedOperationSelector} from '../../../../../pages/operations/selectors';
+import {
+    DetailedOperationSelector,
+    OperationPreviewType,
+} from '../../../../../pages/operations/selectors';
+import {genNavigationUrl} from '../../../../../utils/navigation/navigation';
 
 const TASKS_PREFIX = 'tasks/';
 
@@ -61,7 +65,7 @@ function prepareTransferTask(operation: DetailedOperationSelector) {
 
 function prepareTransaction(
     operation: DetailedOperationSelector,
-    type: PreviewType,
+    type: OperationPreviewType,
     table: unknown,
     userTransactionAlive: boolean,
 ) {
@@ -80,42 +84,20 @@ function prepareTransaction(
     return undefined;
 }
 
-type PreviewType = 'input' | 'output' | 'stderr' | 'intermediate';
-
-function prepareLivePreviewPath(
-    operation: DetailedOperationSelector,
-    type: PreviewType,
-    index?: number | string,
-) {
-    const id = operation.$value;
-    const basePath = '//sys/operations/' + hammer.utils.extractFirstByte(id) + '/' + id;
-
-    if (type === 'output') {
-        return basePath + '/output_' + (index || 0);
-    }
-    if (type === 'stderr') {
-        return basePath + '/stderr';
-    } else if (type === 'intermediate') {
-        return basePath + '/intermediate';
-    }
-    return undefined;
-}
-
 function prepareLivePreview(
     operation: DetailedOperationSelector,
-    type: PreviewType,
+    type: OperationPreviewType,
     index?: number | string,
-) {
-    const previewSupported = ypath.getBoolean(
-        operation,
-        '/@progress/live_preview/' + type + '_supported',
-    );
+): {path?: string; supported: boolean; transaction?: string} {
+    if (operation.isRunning()) {
+        const {path, virtualPath} = operation.getLivePreviewPath(type, index);
 
-    if (previewSupported && operation.isRunning()) {
-        const path = prepareLivePreviewPath(operation, type, index);
-        const transaction = ypath.getValue(operation, '/@async_scheduler_transaction_id');
-
-        return {path, transaction, supported: true};
+        if (virtualPath) {
+            return {path: virtualPath, supported: true};
+        } else if (path) {
+            const transaction = ypath.getValue(operation, '/@async_scheduler_transaction_id');
+            return {path, transaction, supported: true};
+        }
     }
 
     return {supported: false};
@@ -176,7 +158,7 @@ function prepareTableFilters(table: unknown) {
 
 function prepareTable(
     operation: DetailedOperationSelector,
-    type: PreviewType,
+    type: OperationPreviewType,
     table: unknown,
     typedTable: unknown,
     userTransactionAlive: boolean,
@@ -237,7 +219,7 @@ function prepareRemoteInput<T extends {path: string; transaction?: string}>(
         return _.map(input, (item) => ({
             ...item,
             remote: true,
-            url: remoteInputUrl(cluster, item.path, item.transaction),
+            url: genNavigationUrl({cluster, ...item}),
         }));
     }
 
@@ -289,6 +271,13 @@ function prepareStderr(operation: DetailedOperationSelector, userTransactionAliv
     let tables = ypath.get(operation, '/@spec/stderr_table_path');
     tables = tables && [prepareTable(operation, TYPE, tables, typedTables, userTransactionAlive)];
 
+    return groupTables(tables);
+}
+
+function prepareCoredumps(operation: DetailedOperationSelector) {
+    const coreTable = ypath.get(operation.$typedAttributes, '/spec/core_table_path');
+
+    const tables = coreTable ? [prepareTable(operation, 'core', coreTable, [], false)] : [];
     return groupTables(tables);
 }
 
@@ -415,6 +404,7 @@ export function prepareSpecification(
         output: prepareOutput(operation, userTransactionAlive),
         stderr: prepareStderr(operation, userTransactionAlive),
         intermediate: prepareIntermediate(operation),
+        coredumps: prepareCoredumps(operation),
 
         // Scripts
         mapper: prepareScript(operation, 'mapper'),
