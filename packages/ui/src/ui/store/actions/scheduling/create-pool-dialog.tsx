@@ -53,7 +53,7 @@ export function createPool(values: FIX_MY_TYPE): CreatePoolDialogThunkAction {
                 attributes: Object.assign(
                     {
                         name: values.name,
-                        parent_name: values.parent,
+                        parent_name: values.parent || undefined,
                         pool_tree: values.tree,
                     },
                     !abcService || !abcService.value
