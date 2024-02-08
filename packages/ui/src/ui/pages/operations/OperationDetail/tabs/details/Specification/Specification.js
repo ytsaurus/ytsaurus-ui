@@ -6,7 +6,7 @@ import MetaTable, {
     TemplateCommand,
     TemplateEnvironment,
     TemplateFiles,
-    TemplateIntermediate,
+    TemplateLivePreivew,
     TemplateTransferTask,
 } from '../../../../../../components/MetaTable/MetaTable';
 import CollapsibleTable from '../../../../../../components/CollapsibleTable/CollapsibleTable';
@@ -196,7 +196,7 @@ export default class Specification extends Component {
             <div className={specificationBlock('intermediate')}>
                 <div className={headingBlock({size: 's'})}>Intermediate</div>
 
-                <TemplateIntermediate {...intermediate} cluster={cluster} />
+                <TemplateLivePreivew {...intermediate} cluster={cluster} />
             </div>
         );
     }
