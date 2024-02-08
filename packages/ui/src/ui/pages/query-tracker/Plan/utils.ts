@@ -591,7 +591,7 @@ export function usePrepareNode() {
         if (node.type === 'in' || node.type === 'out') {
             const table = parseTablePath(node.title ?? '');
             if (table) {
-                node.url = genNavigationUrl(table.cluster, table.path);
+                node.url = genNavigationUrl({cluster: table.cluster, path: table.path});
             }
         } else if (node.progress?.remoteId) {
             node.url = getOperationUrl(node);

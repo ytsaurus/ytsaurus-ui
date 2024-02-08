@@ -55,7 +55,7 @@ export function createTable(path, attributes) {
                     title: 'Table created',
                     content: (
                         <React.Fragment>
-                            {what} <Link url={genNavigationUrl(cluster, path)}>{path}</Link>{' '}
+                            {what} <Link url={genNavigationUrl({cluster, path})}>{path}</Link>{' '}
                             successfully created
                         </React.Fragment>
                     ),

@@ -1,7 +1,20 @@
 import {Page} from '../../constants/index';
 
-export function genNavigationUrl(cluster: string, path: string) {
-    return `/${cluster}/${Page.NAVIGATION}?path=${path}`;
+export function genNavigationUrl({
+    cluster,
+    path,
+    transaction,
+}: {
+    cluster: string;
+    path: string;
+    transaction?: string;
+}) {
+    const p = {path};
+    if (transaction) {
+        Object.assign(p, {t: transaction});
+    }
+    const params = new URLSearchParams(p);
+    return `/${cluster}/${Page.NAVIGATION}?${params}`;
 }
 
 export function findCommonPathParent(v1: string, v2: string) {

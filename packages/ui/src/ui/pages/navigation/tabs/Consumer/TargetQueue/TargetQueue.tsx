@@ -33,7 +33,7 @@ export default function TargetQueue() {
         }
         const cluster = queue.slice(0, firstColon);
         const path = queue.slice(firstColon + 1);
-        clusterQueueUrl = genNavigationUrl(cluster, path);
+        clusterQueueUrl = genNavigationUrl({cluster, path});
     }
 
     return (
