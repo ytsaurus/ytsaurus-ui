@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import ypath from '../../../common/thor/ypath';
 import cn from 'bem-cn-lite';
-import qs from 'qs';
 
 import OperationWeight from '../../../pages/operations/OperationWeight/OperationWeight';
 import {OperationPool} from '../../../components/OperationPool/OperationPool';
@@ -15,6 +14,7 @@ import {paramsToQuery} from '../../../utils';
 import hammer from '../../../common/hammer';
 import {Page} from '../../../constants/index';
 import CollapsableText from '../../../components/CollapsableText/CollapsableText';
+import {genNavigationUrl} from '../../../utils/navigation/navigation';
 
 const itemBlock = cn('meta-table-item');
 const detailBlock = cn('operation-detail');
@@ -210,15 +210,14 @@ TemplateFiles.propTypes = {
 
 /* ----------------------------------------------------------------------------------------------------------------- */
 
-interface TemplateIntermediateProps {
+interface TemplateLivePreivewProps {
     path: string;
     cluster: string;
     transaction: string;
 }
 
-export function TemplateIntermediate({path, transaction, cluster}: TemplateIntermediateProps) {
-    const query = qs.stringify({path, t: transaction}, {encode: false});
-    const url = `/${cluster}/${Page.NAVIGATION}?${query}`;
+export function TemplateLivePreivew({path, transaction, cluster}: TemplateLivePreivewProps) {
+    const url = genNavigationUrl({cluster, path, transaction});
 
     return (
         <Link url={url} title="Live preview">
@@ -228,7 +227,7 @@ export function TemplateIntermediate({path, transaction, cluster}: TemplateInter
     );
 }
 
-TemplateIntermediate.propTypes = {
+TemplateLivePreivew.propTypes = {
     transaction: PropTypes.string.isRequired,
     cluster: PropTypes.string.isRequired,
     path: PropTypes.string.isRequired,

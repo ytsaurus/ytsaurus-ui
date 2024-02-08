@@ -8,7 +8,7 @@ import Label from '../../../components/Label/Label';
 import Link from '../../../components/Link/Link';
 import Icon from '../../../components/Icon/Icon';
 
-import {TemplateIntermediate} from '../../../components/MetaTable/templates/OperationTemplate';
+import {TemplateLivePreivew} from '../../../components/MetaTable/templates/OperationTemplate';
 import templates from '../../../components/templates/utils';
 import {Page} from '../../../constants/index';
 
@@ -73,7 +73,7 @@ templates.add('operations/detail/specification/io', {
         }
 
         return item.livePreview.supported ? (
-            <TemplateIntermediate {...item.livePreview} cluster={YT.cluster} />
+            <TemplateLivePreivew {...item.livePreview} cluster={YT.cluster} />
         ) : (
             hammer.format.NO_VALUE
         );
