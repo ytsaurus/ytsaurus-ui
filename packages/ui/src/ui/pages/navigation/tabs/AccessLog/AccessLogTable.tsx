@@ -80,7 +80,7 @@ function useColumns() {
                         <div className={block('path')}>
                             <span className={block('path-link')}>
                                 <Link
-                                    url={genNavigationUrl(cluster, path)}
+                                    url={genNavigationUrl({cluster, path})}
                                     className={block('path-link-link')}
                                 >
                                     {path}
@@ -198,7 +198,7 @@ function PathTag({
         <Tooltip
             content={
                 <div>
-                    <Link url={genNavigationUrl(cluster, path)}>{path}</Link>
+                    <Link url={genNavigationUrl({cluster, path})}>{path}</Link>
                     <ClipboardButton text={path} view={'flat-secondary'} />
                     {isTarget ? (
                         <div>

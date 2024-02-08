@@ -119,7 +119,7 @@ export function ypath<T>(name: string, getter: (row: T) => string): Column<T> {
             if (!consumer) return null;
 
             const [cluster, path] = consumer.split(':');
-            const url = genNavigationUrl(cluster, path);
+            const url = genNavigationUrl({cluster, path});
 
             return (
                 <Link url={url} routed>
