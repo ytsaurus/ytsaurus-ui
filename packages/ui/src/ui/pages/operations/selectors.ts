@@ -80,6 +80,8 @@ export class OperationSelector implements Record<string, any> {
     }
 }
 
+export type OperationPreviewType = 'input' | 'output' | 'stderr' | 'intermediate' | 'core';
+
 export class ListOperationSelector extends OperationSelector {
     weight?: number;
     title?: string;
@@ -207,6 +209,8 @@ export class DetailedOperationSelector extends OperationSelector {
     typedFullSpec?: any;
     typedUnrecognizedSpec?: any;
 
+    live_preview: unknown;
+
     constructor(data: any, typedData: unknown, orchidData: unknown) {
         super(data);
 
@@ -266,7 +270,47 @@ export class DetailedOperationSelector extends OperationSelector {
                 ? (this.failedJobs! / this.totalFailedJobs) * 100
                 : 0;
         }
+
+        this.live_preview = ypath.getValue(progress, '/live_preview');
     }
+
+    getLivePreviewPath(
+        type: OperationPreviewType,
+        index?: number | string,
+    ): {path?: string; virtualPath?: string} {
+        const hasVirtualPath = ypath.getBoolean(
+            this.live_preview,
+            `/virtual_table_format/${type}_supported`,
+        ) as boolean;
+
+        const hasPath = hasVirtualPath
+            ? false
+            : (ypath.getBoolean(this.live_preview, `/${type}_supported`) as boolean);
+
+        const suffix = hasVirtualPath ? '/controller_orchid/live_previews' : '';
+        const basePath = `//sys/operations/${hammer.utils.extractFirstByte(this.id)}/${
+            this.id
+        }${suffix}`;
+
+        switch (type) {
+            case 'output':
+                return makeLivePreview(`${basePath}/output_${index || 0}`, hasVirtualPath, hasPath);
+            case 'stderr':
+                return makeLivePreview(`${basePath}/stderr`, hasVirtualPath, hasPath);
+            case 'intermediate':
+                return makeLivePreview(`${basePath}/intermediate`, hasVirtualPath, hasPath);
+            case 'core':
+                return hasVirtualPath
+                    ? makeLivePreview(`${basePath}/core`, hasVirtualPath, false)
+                    : {};
+        }
+
+        return {};
+    }
+}
+
+function makeLivePreview(path: string, hasVirtualPath: boolean, hasPath: boolean) {
+    return hasVirtualPath ? {virtualPath: path} : {path: hasPath ? path : undefined};
 }
 
 export function getCounters(name: string, states: FIX_MY_TYPE, rawCounters: FIX_MY_TYPE) {

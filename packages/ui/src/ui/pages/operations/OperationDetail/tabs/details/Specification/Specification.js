@@ -189,12 +189,12 @@ export default class Specification extends Component {
         );
     }
 
-    renderIntermediate(intermediate) {
+    renderIntermediate(intermediate, title) {
         const {cluster} = this.props;
 
         return (
             <div className={specificationBlock('intermediate')}>
-                <div className={headingBlock({size: 's'})}>Intermediate</div>
+                <div className={headingBlock({size: 's'})}>{title}</div>
 
                 <TemplateLivePreivew {...intermediate} cluster={cluster} />
             </div>
@@ -219,6 +219,7 @@ export default class Specification extends Component {
             output,
             stderr,
             tasks,
+            coredumps,
         } = this.props.specification;
 
         return (
@@ -229,9 +230,10 @@ export default class Specification extends Component {
                 {startedBy && this.renderStartedBy(startedBy)}
 
                 {input?.length > 0 && this.renderIO('input', input, inputTableProps)}
-                {intermediate && this.renderIntermediate(intermediate)}
+                {intermediate && this.renderIntermediate(intermediate, 'Intermediate')}
                 {output?.length > 0 && this.renderIO('output', output, outputTableProps)}
                 {stderr?.length > 0 && this.renderIO('stderr', stderr, stderrTableProps)}
+                {coredumps?.length > 0 && this.renderIO('core', coredumps, stderrTableProps)}
 
                 {mapper && this.renderScript(mapper)}
                 {reducer && this.renderScript(reducer)}
