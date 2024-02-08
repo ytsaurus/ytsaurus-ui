@@ -27,6 +27,9 @@ import {FIX_MY_TYPE} from '../../../../types';
 import {SCHEDULING_CREATE_POOL_CANCELLED} from '../../../../constants/scheduling';
 import {docsUrl, isIdmAclAvailable} from '../../../../config';
 import UIFactory from '../../../../UIFactory';
+import {uiSettings} from '../../../../config/ui-settings';
+
+const allowRoot = !uiSettings.schedulingDenyRootAsParent;
 
 export default function CreatePoolButton() {
     const dispatch = useDispatch();
@@ -42,7 +45,7 @@ export default function CreatePoolButton() {
 
     return (
         <React.Fragment>
-            <Button view="action" disabled={isRoot} onClick={handleShow}>
+            <Button view="action" disabled={!allowRoot && isRoot} onClick={handleShow}>
                 Create pool
             </Button>
             {visible && <CreatePoolDialog onClose={handleClose} />}
@@ -202,7 +205,7 @@ function CreatePoolDialog(props: {onClose: () => void}) {
                     caption: 'Parent',
                     tooltip:
                         'Select parent pool, defining a place in pool_tree to place a new pool.',
-                    required: true,
+                    required: !allowRoot,
                     extras: {
                         placeholder: 'Select parent...',
                     },

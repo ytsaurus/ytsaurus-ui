@@ -36,6 +36,11 @@ export interface UISettings {
     fontTypes?: Record<string, {regular: string; monospace: string}>;
 
     /**
+     *  The option denies to create pools with `<Root>` parent from UI.
+     */
+    schedulingDenyRootAsParent?: boolean;
+
+    /**
      * schedulingMonitoring.urlTemplate supports following parameters: {ytCluster}, {ytPool}, {ytPoolTree}.
      * All the parameters are optional and they are replaced with corresponding values.
      * @example {urlTemplate: 'https://my.monitoring.service/scheduling?cluster={ytCluster}&pool={ytPool}&poolTree={ytPoolTree}'}

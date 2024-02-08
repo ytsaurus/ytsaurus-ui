@@ -27,6 +27,10 @@ exports.default = {
 
 `uiSettings` object from config is passed to user's browser "as is" and might it be accessed as `window.__DATA__.uiSettings`.
 
+#### `uiSettings.schedulingDenyRootAsParent`
+
+The opetion denies to create pool with `<Root>` parent from the UI
+
 #### `uiSettings.reShortNameFromAddress`
 
 The option allows to define regular expression with named groups `shortname` and `suffix` to extract short name from address of node. `suffix`-group is optional, but if it is preset it will be concatenated with shortname.
@@ -145,16 +149,17 @@ Example of usage:
 };
 ```
 
-
 #### Authentication
 
 ### OAuth
-To use authentication, it is necessary to define configurations `ytAuthCluster` and `ytOAuthSettings`.  
+
+To use authentication, it is necessary to define configurations `ytAuthCluster` and `ytOAuthSettings`.
 
 `ytAuthCluster` - cluster to authorize users.
 `ytOAuthSettings` - OAuth config
 
 An example of configuration:
+
 ```js
 ytAuthCluster: 'cluster-name',
 ytOAuthSettings: {
@@ -168,4 +173,3 @@ ytOAuthSettings: {
     buttonLabel: 'Login via Keycloak', // OPTIONAL. By default equal `Login via SSO`
 }
 ```
-
