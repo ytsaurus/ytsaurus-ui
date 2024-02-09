@@ -21,14 +21,24 @@ nodekit.ctx.log('AppConfig details', {
     appDevMode,
 });
 
-const {allowPasswordAuth} = nodekit.config;
+const {allowPasswordAuth, ytOAuthSettings} = nodekit.config;
+
+const authMiddlewares = [];
+
+if (ytOAuthSettings) {
+    authMiddlewares.push(authorizationResolver(createOAuthAuthorizationResolver()));
+}
 
 if (allowPasswordAuth) {
+    authMiddlewares.push(authorizationResolver(createYTAuthorizationResolver()));
+}
+
+if (authMiddlewares.length) {
     nodekit.config.appBeforeAuthMiddleware = [
         ...(nodekit.config.appBeforeAuthMiddleware || []),
-        authorizationResolver(createOAuthAuthorizationResolver()),
-        authorizationResolver(createYTAuthorizationResolver()),
+        ...authMiddlewares,
     ];
+
     nodekit.config.appAuthHandler = createAuthMiddleware();
 }
 
