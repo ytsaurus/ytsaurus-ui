@@ -1,5 +1,16 @@
 # Changelog
 
+## [1.15.2](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.15.1...ui-v1.15.2) (2024-02-09)
+
+
+### Bug Fixes
+
+* **layout:** the left menu disappears on long tables [[#225](https://github.com/ytsaurus/ytsaurus-ui/issues/225)] ([d54448a](https://github.com/ytsaurus/ytsaurus-ui/commit/d54448ab86c6ae888128ef485ff03d565331c2b2))
+* **Navigation/MapNode:** do not wrap escaped characters ([60c0893](https://github.com/ytsaurus/ytsaurus-ui/commit/60c089364290fffae0d3ea88476c8a2cc6c52e40))
+* **OperationsList:** fix for 'unexpected error' after aborting an operation [YTFRONT-4013] ([7847e91](https://github.com/ytsaurus/ytsaurus-ui/commit/7847e91ec931654a97b23d0e9c09972cb91ce61a))
+* **Scheduling:** allow to create pools with &lt;Root&gt; parent [[#274](https://github.com/ytsaurus/ytsaurus-ui/issues/274)] ([91aa32e](https://github.com/ytsaurus/ytsaurus-ui/commit/91aa32e45aee7700fd55b12c2a0e77011fdb40a7))
+* **table:** the left menu disappears on long tables [[#225](https://github.com/ytsaurus/ytsaurus-ui/issues/225)] ([4c4b015](https://github.com/ytsaurus/ytsaurus-ui/commit/4c4b015c1c327a9fc26dce39ca373fff3a4d709f))
+
 ## [1.15.1](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.15.0...ui-v1.15.1) (2024-02-05)
 
 
