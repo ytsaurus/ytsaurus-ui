@@ -163,7 +163,7 @@ test('Navigation - URL correct encoding', async ({page}) => {
     });
 });
 
-test('Navigation - escpaped symbols are highlighted and cyrillic', async ({page}) => {
+test('Navigation - escaped symbols are highlighted and cyrillic', async ({page}) => {
     test.slow();
 
     await test.step('escaped-symbol\\n', async () => {
