@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.15.3](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.15.2...ui-v1.15.3) (2024-02-12)
+
+
+### Bug Fixes
+
+* **Operation/DataFlow:** better column name for chunk_count [YTFRONT-3924] ([7477c48](https://github.com/ytsaurus/ytsaurus-ui/commit/7477c4837815b3b96923b81e5e66b32233e9346b))
+
 ## [1.15.2](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.15.1...ui-v1.15.2) (2024-02-09)
 
 
