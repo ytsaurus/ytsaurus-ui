@@ -76,7 +76,7 @@ export function loadSchedulingData(): SchedulingThunkAction {
                 ytApiV3Id.executeBatch(YTApiId.schedulingData, {
                     requests: [
                         makeGet('//sys/scheduler/@alerts'),
-                        makeList('//sys/scheduler/orchid/scheduler/pool_trees'),
+                        makeList('//sys/scheduler/orchid/scheduler/scheduling_info_per_pool_tree'),
                         makeGet('//sys/scheduler/orchid/scheduler/default_fair_share_tree'),
                     ],
                     ...USE_CACHE,
