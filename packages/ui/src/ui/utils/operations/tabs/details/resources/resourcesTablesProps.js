@@ -52,6 +52,7 @@ export const completedTableProps = {
             chunk_count: {
                 sort: false,
                 align: 'right',
+                caption: 'Slices',
             },
             actions: {
                 sort: false,
@@ -82,6 +83,7 @@ export const intermediateTableProps = {
             chunk_count: {
                 sort: false,
                 align: 'right',
+                caption: 'Slices',
             },
             node_count: {
                 sort: false,
