@@ -157,7 +157,11 @@ function AppNavigationComponent({
                                         <Menu>
                                             {authWay === 'passwd' && (
                                                 <Menu.Item
-                                                    onClick={() => history.push('/change-password')}
+                                                    onClick={() =>
+                                                        history.push(
+                                                            `/${YT.cluster}/change-password`,
+                                                        )
+                                                    }
                                                 >
                                                     Change password
                                                 </Menu.Item>
