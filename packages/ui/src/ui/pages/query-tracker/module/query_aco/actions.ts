@@ -1,10 +1,12 @@
 import {Action} from 'redux';
 import {ThunkAction} from 'redux-thunk';
 import {Toaster} from '@gravity-ui/uikit';
+import type {AxiosError} from 'axios';
 import {YTApiId, ytApiV4Id} from '../../../../rum/rum-wrap-api';
 import {getQueryTrackerRequestOptions} from '../query/selectors';
 import {QUERY_ACO_LOADING} from './constants';
 import type {ActionD} from '../../../../types';
+import {showErrorPopup} from '../../../../utils/utils';
 import type {QueryACOState} from './reducer';
 
 export type QueryACOLoadingAction = Action<typeof QUERY_ACO_LOADING.REQUEST>;
@@ -25,6 +27,24 @@ export const getQueryACO = (): ThunkAction<Promise<unknown>, any, any, any> => {
 
         return ytApiV4Id
             .getQueryTrackerInfo(YTApiId.getQueryTrackerInfo, {
+                setup: {
+                    transformError({
+                        parsedData,
+                        rawError,
+                    }: {
+                        parsedData: Awaited<ReturnType<typeof ytApiV4Id.getQueryTrackerInfo>>;
+                        rawError: AxiosError;
+                    }) {
+                        if (rawError?.response?.status === 404) {
+                            throw {
+                                data: parsedData,
+                                status: rawError?.response?.status,
+                            };
+                        }
+
+                        throw parsedData;
+                    },
+                },
                 parameters: {stage},
             })
             .then((data) => {
@@ -35,13 +55,14 @@ export const getQueryACO = (): ThunkAction<Promise<unknown>, any, any, any> => {
             })
             .catch((error) => {
                 // @todo Remove the condition when the method will be implemented on all clusters
-                if (error?.message !== 'Malformed command name') {
+                if (error?.status !== 404) {
                     const toaster = new Toaster();
                     toaster.add({
                         name: 'aco',
                         type: 'error',
                         title: 'Failed to load ACO',
                         content: error?.message,
+                        actions: [{label: ' Details', onClick: () => showErrorPopup(error)}],
                     });
                 }
 
