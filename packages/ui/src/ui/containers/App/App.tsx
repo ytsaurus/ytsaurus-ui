@@ -95,8 +95,13 @@ function AppWithRum() {
         <Switch>
             {hasAuthPages ? (
                 <Route
-                    path="/change-password"
-                    render={() => <ChangePasswordFormPage theme={themeType} />}
+                    path={`/:cluster/change-password`}
+                    render={(props) => (
+                        <ChangePasswordFormPage
+                            theme={themeType}
+                            cluster={props.match.params.cluster}
+                        />
+                    )}
                 />
             ) : null}
             <Route render={() => <App theme={theme} a11y={a11y} fontType={fontType} />} />

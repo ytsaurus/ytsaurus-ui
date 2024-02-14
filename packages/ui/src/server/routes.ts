@@ -28,7 +28,7 @@ import {handleLogout} from './controllers/logout';
 const HOME_INDEX_TARGET: AppRouteDescription = {handler: homeIndex, ui: true};
 
 const routes: AppRoutes = {
-    'GET /change-password/': HOME_INDEX_TARGET,
+    'GET /:ytAuthCluster/change-password/': HOME_INDEX_TARGET,
     'GET /': HOME_INDEX_TARGET,
     'GET /ping': {handler: ping, authPolicy: AuthPolicy.disabled},
     'GET /api/cluster-info/:ytAuthCluster': {handler: handleClusterInfo},

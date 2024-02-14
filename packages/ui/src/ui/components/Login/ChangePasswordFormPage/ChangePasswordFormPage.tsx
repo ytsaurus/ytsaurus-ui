@@ -11,6 +11,7 @@ const block = cn('login-page');
 
 interface Props {
     theme?: 'light' | 'dark';
+    cluster: string;
 }
 
 interface ErrorFields {
@@ -40,7 +41,7 @@ const validate = ({
     return result;
 };
 
-function ChangePasswordForm({theme}: Props) {
+function ChangePasswordForm({theme, cluster}: Props) {
     const history = useHistory();
     const location = useLocation();
     const [currentPassword, setCurrentPassword] = useState('');
@@ -69,7 +70,7 @@ function ChangePasswordForm({theme}: Props) {
             }
 
             setLoading(true);
-            changePassword({newPassword, currentPassword})
+            changePassword({newPassword, currentPassword, cluster})
                 .then(() => {
                     goBack();
                     wrapApiPromiseByToaster(Promise.resolve(), {
@@ -158,20 +159,22 @@ function ChangePasswordForm({theme}: Props) {
 function changePassword({
     newPassword,
     currentPassword,
+    cluster,
 }: {
     newPassword: string;
     currentPassword: string;
+    cluster: string;
 }) {
-    return axios.post(`/api/yt/change-password`, {
+    return axios.post(`/api/yt/${cluster}/change-password`, {
         newPassword,
         currentPassword,
     });
 }
 
-export function ChangePasswordFormPage({theme}: Props) {
+export function ChangePasswordFormPage({theme, cluster}: Props) {
     return (
         <LoginPageWrapper theme={theme}>
-            <ChangePasswordForm theme={theme} />
+            <ChangePasswordForm theme={theme} cluster={cluster} />
         </LoginPageWrapper>
     );
 }
