@@ -1,4 +1,6 @@
 import ypath from '../../../common/thor/ypath';
+import {MasterAlert} from '../../reducers/system/masters';
+import {RootState} from '../../reducers';
 
 export interface AddressData {
     host: string;
@@ -51,3 +53,5 @@ export class MasterInstance {
         return this;
     }
 }
+
+export const selectMasterAlerts = (state: RootState): MasterAlert[] => state.system.masters.alerts;

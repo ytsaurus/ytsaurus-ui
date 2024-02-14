@@ -1,11 +1,15 @@
 import _ from 'lodash';
 import {Action} from 'redux';
-import {MasterInstance} from '../../../store/selectors/system/masters';
+import {MasterInstance} from '../../selectors/system/masters';
 import {ActionD} from '../../../types';
 import {YTError} from '../../../../@types/types';
 import {BatchResultsItem} from '../../../../shared/yt-types';
-import {FETCH_MASTER_CONFIG, FETCH_MASTER_DATA} from '../../../store/actions/system/masters';
-import {mergeStateOnClusterChange} from '../../../store/reducers/utils';
+import {
+    FETCH_MASTER_CONFIG,
+    FETCH_MASTER_DATA,
+    SET_MASTER_ALERTS,
+} from '../../actions/system/masters';
+import {mergeStateOnClusterChange} from '../utils';
 
 function incrementStateCounters(
     counters: MastersState['counters'],
@@ -116,6 +120,15 @@ function getLeader(instances: any) {
     });
 }
 
+export type MasterAlert = {
+    code: number;
+    message: string;
+    attributes: {
+        datetime: string;
+        unrecognized_options: Record<string, string>;
+    };
+};
+
 export interface MastersState {
     fetchingConfig: boolean;
     fetchingData: boolean;
@@ -140,6 +153,7 @@ export interface MastersState {
     providers: MasterGroupData;
     discovery: MasterGroupData;
     queueAgents: MasterGroupData;
+    alerts: MasterAlert[];
 }
 
 export interface MasterGroupData {
@@ -182,6 +196,7 @@ const initialState: MastersState = {
     queueAgents: {
         instances: [],
     },
+    alerts: [],
 };
 
 export interface ResponseItem {
@@ -380,6 +395,8 @@ function masters(state = initialState, action: MastersStateAction): MastersState
             };
         case FETCH_MASTER_DATA.FAILURE:
             return {...state, fetchingData: false, error: action.data};
+        case SET_MASTER_ALERTS:
+            return {...state, alerts: action.data};
         default:
             return state;
     }
@@ -389,6 +406,7 @@ export type MastersStateAction =
     | Action<typeof FETCH_MASTER_CONFIG.REQUEST | typeof FETCH_MASTER_DATA.REQUEST>
     | ActionD<typeof FETCH_MASTER_CONFIG.SUCCESS, MastersConfigResponse>
     | ActionD<typeof FETCH_MASTER_DATA.SUCCESS, MasterDataResponse>
-    | ActionD<typeof FETCH_MASTER_DATA.FAILURE, YTError>;
+    | ActionD<typeof FETCH_MASTER_DATA.FAILURE, YTError>
+    | ActionD<typeof SET_MASTER_ALERTS, MasterAlert[]>;
 
 export default mergeStateOnClusterChange(initialState, {}, masters);
