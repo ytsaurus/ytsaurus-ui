@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.16.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.15.3...ui-v1.16.0) (2024-02-14)
+
+
+### Features
+
+* **Operation/Details:** better live preview [YTFRONT-3956] ([0b1ffb9](https://github.com/ytsaurus/ytsaurus-ui/commit/0b1ffb97fbbc52c24836802c23200661b0ab344e))
+* **query-tracker:** query aco management [[#246](https://github.com/ytsaurus/ytsaurus-ui/issues/246)] ([8b79661](https://github.com/ytsaurus/ytsaurus-ui/commit/8b79661cabc4a949687c407e4abcc08762bd776f))
+
 ## [1.15.3](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.15.2...ui-v1.15.3) (2024-02-12)
 
 
