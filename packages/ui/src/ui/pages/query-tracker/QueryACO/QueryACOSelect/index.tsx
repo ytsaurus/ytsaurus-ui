@@ -39,10 +39,10 @@ export const QueryACOSelect: React.FunctionComponent<{}> = () => {
                     &nbsp; &nbsp;
                     <Link
                         target="_blank"
-                        url={genNavigationUrl(
-                            trackerInfo.cluster_name,
-                            `//sys/access_control_object_namespaces/queries/${currentDraftQueryACO}`,
-                        )}
+                        url={genNavigationUrl({
+                            cluster: trackerInfo.cluster_name,
+                            path: `//sys/access_control_object_namespaces/queries/${currentDraftQueryACO}`,
+                        })}
                     >
                         Edit {currentDraftQueryACO}
                         &nbsp;
