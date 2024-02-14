@@ -17,6 +17,7 @@ import {setSettingsSystemMastersCollapsed} from '../../../store/actions/settings
 import {useUpdater} from '../../../hooks/use-updater';
 
 import './Masters.scss';
+import {SystemAlert} from './SystemAlert';
 
 const b = block('system-master');
 const headingCN = block('elements-heading')({size: 's'});
@@ -43,6 +44,7 @@ function computeStateProgress(counters) {
 class Masters extends Component {
     static propTypes = {
         // from connect
+        alerts: PropTypes.arrayOf(PropTypes.object),
         counters: PropTypes.shape({
             flags: PropTypes.object,
             states: PropTypes.object,
@@ -85,6 +87,10 @@ class Masters extends Component {
         return <VisibleHostTypeRadioButton className={b('container-host-radio')} />;
     }
 
+    renderAlerts() {
+        return <SystemAlert className={b('alerts')} />;
+    }
+
     renderContent() {
         const {primary, secondary, providers, discovery, queueAgents} = this.props;
 
@@ -96,6 +102,7 @@ class Masters extends Component {
 
         return fitIntoSection ? (
             <div className={b('all-masters')}>
+                {this.renderAlerts()}
                 <div className={headingCN}>
                     Primary Masters
                     {this.renderMasterTypeSwitcher()}
@@ -146,6 +153,7 @@ class Masters extends Component {
             </div>
         ) : (
             <div>
+                {this.renderAlerts()}
                 <div className={headingCN}>
                     Primary Masters
                     {this.renderMasterTypeSwitcher()}
@@ -157,7 +165,6 @@ class Masters extends Component {
                         <div className={b('secondary-masters')}>{secondaryGroups}</div>
                     </React.Fragment>
                 )}
-
                 <div className={b('flex')}>
                     {Boolean(providers?.instances?.length) &&
                         this.renderSection('providers', 'Timestamp providers', providers, {
@@ -203,9 +210,19 @@ class Masters extends Component {
             ['no-quorum', 'weak-quorum', 'quorum'],
         ];
 
+        const labels = [];
+        const alertsCount = this.props.alerts.length;
+        if (alertsCount > 0) {
+            labels.push({
+                text: `${alertsCount} alert${alertsCount > 1 ? 's' : ''}`,
+                theme: 'warning',
+            });
+        }
+
         return (
             <SystemStateOverview
                 tab="masters"
+                labels={labels}
                 counters={counters}
                 stateThemeMappings={stateThemeMappings}
                 stateOverview={stateOverview}
@@ -248,7 +265,7 @@ class Masters extends Component {
 }
 
 function mapStateToProps(state) {
-    const {secondary, primary, providers, discovery, queueAgents, counters, initialized} =
+    const {secondary, primary, providers, discovery, queueAgents, counters, initialized, alerts} =
         state.system.masters;
     return {
         initialized,
@@ -258,6 +275,7 @@ function mapStateToProps(state) {
         discovery,
         queueAgents,
         counters,
+        alerts,
         collapsibleSize: getUISizes().collapsibleSize,
         collapsed: getSettingsSystemMastersCollapsed(state),
     };

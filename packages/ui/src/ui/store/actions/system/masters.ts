@@ -3,7 +3,7 @@ import ypath from '../../../common/thor/ypath';
 import {Toaster} from '@gravity-ui/uikit';
 
 import createActionTypes from '../../../constants/utils';
-import {isRetryFutile} from '../../../utils/index';
+import {isRetryFutile} from '../../../utils';
 import {getBatchError, showErrorPopup} from '../../../utils/utils';
 
 import {YTErrors} from '../../../rum/constants';
@@ -13,6 +13,7 @@ import type {AxiosError} from 'axios';
 import type {Dispatch} from 'redux';
 import type {BatchSubRequest} from '../../../../shared/yt-types';
 import type {
+    MasterAlert,
     MasterDataItemInfo,
     MastersConfigResponse,
     ResponseItemsGroup,
@@ -20,12 +21,13 @@ import type {
 
 export const FETCH_MASTER_CONFIG = createActionTypes('MASTER_CONFIG');
 export const FETCH_MASTER_DATA = createActionTypes('MASTER_DATA');
+export const SET_MASTER_ALERTS = 'SET_MASTER_ALERTS';
 
 const toaster = new Toaster();
 
 const {NODE_DOES_NOT_EXIST} = YTErrors;
 
-async function loadMastersConfig(): Promise<MastersConfigResponse> {
+async function loadMastersConfig(): Promise<[MastersConfigResponse, MasterAlert[]]> {
     const requests = [
         {
             command: 'get' as const,
@@ -67,6 +69,13 @@ async function loadMastersConfig(): Promise<MastersConfigResponse> {
                 ...USE_SUPRESS_SYNC,
             },
         },
+        {
+            command: 'get' as const,
+            parameters: {
+                path: '//sys/@master_alerts',
+                ...USE_SUPRESS_SYNC,
+            },
+        },
     ];
 
     const [
@@ -75,6 +84,7 @@ async function loadMastersConfig(): Promise<MastersConfigResponse> {
         timestampProvidersResult,
         discoveryServersResult,
         queueAgentsResult,
+        alertsResult,
     ] = await ytApiV3Id.executeBatch(YTApiId.systemMastersConfig, {requests});
 
     const batchError = getBatchError(
@@ -98,6 +108,7 @@ async function loadMastersConfig(): Promise<MastersConfigResponse> {
         throw queueAgentsError;
     }
 
+    const alerts = alertsResult.output ? (alertsResult.output as MasterAlert[]) : [];
     const [timestamp_path] = [...Object.keys(ypath.getValue(timestampProvidersResult.output))];
     const [primary_path] = [...Object.keys(ypath.getValue(primaryMasterResult.output))];
 
@@ -260,7 +271,7 @@ async function loadMastersConfig(): Promise<MastersConfigResponse> {
           }
         : {};
 
-    return mainResult;
+    return [mainResult, alerts];
 }
 
 function loadHydra(
@@ -302,8 +313,9 @@ export function loadMasters() {
         dispatch({type: FETCH_MASTER_CONFIG.REQUEST});
 
         try {
-            const config = await loadMastersConfig();
+            const [config, alerts] = await loadMastersConfig();
 
+            dispatch({type: SET_MASTER_ALERTS, data: alerts});
             dispatch({type: FETCH_MASTER_CONFIG.SUCCESS, data: config});
             dispatch({type: FETCH_MASTER_DATA.REQUEST});
 

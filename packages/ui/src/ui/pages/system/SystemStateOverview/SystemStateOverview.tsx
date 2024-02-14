@@ -4,21 +4,23 @@ import block from 'bem-cn-lite';
 import SystemCounters, {SystemCountersProps} from '../SystemCounters/SystemCounters';
 import {Progress, ProgressProps} from '@gravity-ui/uikit';
 
-import {computeEffectiveStateProgress} from '../../../utils/index';
+import {computeEffectiveStateProgress} from '../../../utils';
 
 import './SystemStateOverview.scss';
+import {SystemStateLabels, Props as SystemStateLabelsProps} from './SystemStateLabels';
 
 const b = block('system');
 
-export type SystemStateOverviewProps<Flags extends string> = SystemCountersProps<Flags> & {
-    stateOverview?: ProgressProps;
-};
+export type SystemStateOverviewProps<Flags extends string> = Partial<SystemStateLabelsProps> &
+    SystemCountersProps<Flags> & {
+        stateOverview?: ProgressProps;
+    };
 
 export default class SystemStateOverview<Flags extends string> extends React.Component<
     SystemStateOverviewProps<Flags>
 > {
     render() {
-        const {stateOverview: _x, ...rest} = this.props;
+        const {stateOverview: _x, labels, ...rest} = this.props;
         if (!this.props.counters) {
             return null;
         }
@@ -33,6 +35,7 @@ export default class SystemStateOverview<Flags extends string> extends React.Com
 
         return (
             <div className={b('heading-overview')}>
+                {labels && <SystemStateLabels labels={labels} />}
                 <SystemCounters {...rest} />
                 <div className={b('heading-overview-states')}>
                     <Progress {...stateOverview} />
