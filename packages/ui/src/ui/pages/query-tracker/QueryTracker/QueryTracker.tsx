@@ -17,6 +17,7 @@ import {usePreventUnload} from '../../../hooks/use-prevent-unload';
 import {useQueriesListSidebarToggle} from '../hooks/QueriesList';
 import {getDirtySinceLastSubmit, getQueryGetParams} from '../module/query/selectors';
 import {QueriesList} from '../QueriesList';
+import {useQueryACO} from '../QueryACO/useQueryACO';
 
 import cn from 'bem-cn-lite';
 
@@ -100,6 +101,7 @@ export default function QueryTracker({match}: Props) {
         return () => sizes;
     }, [sizes]);
     const dispatch = useDispatch();
+    const {loadQueryTrackerInfo} = useQueryACO();
 
     const goToCreatedQuery = useCallback(
         (queryId: string) => {
@@ -108,6 +110,10 @@ export default function QueryTracker({match}: Props) {
         },
         [dispatch],
     );
+
+    useEffect(() => {
+        loadQueryTrackerInfo();
+    }, []);
 
     return (
         <>

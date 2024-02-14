@@ -3,9 +3,14 @@ import {Select} from '@gravity-ui/uikit';
 import {useCallback} from 'react';
 import {useQueryACO} from '../useQueryACO';
 
+import Link from '../../../../components/Link/Link';
+import {genNavigationUrl} from '../../../../utils/navigation/navigation';
+import Icon from '../../../../components/Icon/Icon';
+
 import './QueryACOSelect.scss';
 export const QueryACOSelect: React.FunctionComponent<{}> = () => {
-    const {selectACOOptions, isFlight, changeDraftQueryACO, currentDraftQueryACO} = useQueryACO();
+    const {selectACOOptions, isFlight, changeDraftQueryACO, currentDraftQueryACO, trackerInfo} =
+        useQueryACO();
 
     const handleACOChange = useCallback(
         (value: string[]) => {
@@ -17,16 +22,34 @@ export const QueryACOSelect: React.FunctionComponent<{}> = () => {
     );
 
     return (
-        <Select<string>
-            filterable
-            disabled={isFlight}
-            width={'auto'}
-            pin="clear-round"
-            label="Query access:"
-            className={'query-aco-select'}
-            options={selectACOOptions}
-            value={[currentDraftQueryACO]}
-            onUpdate={handleACOChange}
-        />
+        <>
+            <Select<string>
+                filterable
+                disabled={isFlight}
+                width={'auto'}
+                pin="clear-round"
+                label="Query access:"
+                className={'query-aco-select'}
+                options={selectACOOptions}
+                value={[currentDraftQueryACO]}
+                onUpdate={handleACOChange}
+            />
+            {currentDraftQueryACO === 'nobody' ? null : (
+                <>
+                    &nbsp; &nbsp;
+                    <Link
+                        target="_blank"
+                        url={genNavigationUrl({
+                            cluster: trackerInfo.cluster_name,
+                            path: `//sys/access_control_object_namespaces/queries/${currentDraftQueryACO}`,
+                        })}
+                    >
+                        Edit {currentDraftQueryACO}
+                        &nbsp;
+                        <Icon awesome="external-link" />
+                    </Link>
+                </>
+            )}
+        </>
     );
 };
