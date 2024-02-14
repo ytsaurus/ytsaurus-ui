@@ -21,8 +21,8 @@ To run the development environment you need to prepare and run nginx:
 1. Install nginx
 2. Copy file `deploy/nginx/yt.development.conf.example` to `/etc/nginx/sites-enabled/yt.development.conf`
 3. Modify `/etc/nginx/sites-enabled/yt.development.conf`
-    - change `server_name`
-    - replace all `/path/to/the/repo` to correct path
+   - change `server_name`
+   - replace all `/path/to/the/repo` to correct path
 4. `sudo systemctl restart nginx`
 
 Install required dependencies:
@@ -53,9 +53,8 @@ $ YT_AUTH_CLUSTER_ID=my-cluster npm run dev:app
 
 ### Feature flags
 
-It is recommended way to link feature with version of proxies or schedulers of cluster.
-But some cases require ability to turn on/off a feature manually on a cluster. Such feature flags
-are placed placed in:
+There is yt-api command get_supported_feature and it is a good place to describe some features.
+But some cases require ability to turn on/off a feature manually on a cluster. Such feature flags are placed placed in:
 
 - `//sys/@ui_config` (values affects all users)
 - `//sys/@ui_config_dev_overrides` (values affects only developers)
