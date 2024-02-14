@@ -9,6 +9,8 @@ export const {
     E2E_OPERATION_2_ID,
     CLUSTER_TITLE,
     CLUSTERS_MENU_EXPECT,
+    USER_LOGIN,
+    USER_PASSWORD,
 } = process.env;
 
 console.log({
@@ -20,6 +22,8 @@ console.log({
     E2E_OPERATION_ID,
     E2E_OPERATION_2_ID,
     CLUSTERS_MENU_EXPECT,
+    USER_LOGIN,
+    USER_PASSWORD,
 });
 
 if (!CLUSTER || !E2E_DIR) {

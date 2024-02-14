@@ -164,3 +164,6 @@ yt create --attributes '{schema=[
     echo -ne "imageurl=https://yastatic.net/s3/cloud/yt/static/freeze/assets/images/ui-big.44e3fa56.jpg\t"
     echo -e "imageurl_as_text=https://deny-yastatic.net/s3/cloud/yt/static/freeze/assets/images/ui-big.44e3fa56.jpg\t"
 ) | yt write-table --format dsv ${TAGGED_TABLE}
+
+yt create user --attributes "{name=test_user}"
+yt set-user-password test_user --new-password password

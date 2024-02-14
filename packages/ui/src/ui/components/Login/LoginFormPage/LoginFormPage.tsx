@@ -87,7 +87,7 @@ function LoginForm({theme}: Props) {
                 <br />
                 Login to your account.
             </p>
-            <form onSubmit={handleFormSubmit}>
+            <form data-qa="login-form" onSubmit={handleFormSubmit}>
                 <TextInput
                     className={block('field')}
                     type="text"
