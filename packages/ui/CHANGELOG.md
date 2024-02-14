@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.16.1](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.16.0...ui-v1.16.1) (2024-02-14)
+
+
+### Bug Fixes
+
+* minor fix for ts-error after rebase ([e5689aa](https://github.com/ytsaurus/ytsaurus-ui/commit/e5689aa02acb9e173b2689af100e76ced0b4e821))
+
 ## [1.16.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.15.3...ui-v1.16.0) (2024-02-14)
 
 
