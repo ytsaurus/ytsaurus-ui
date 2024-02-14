@@ -153,15 +153,13 @@ Example of usage:
 
 ### OAuth
 
-To use authentication, it is necessary to define configurations `ytAuthCluster` and `ytOAuthSettings`.
+To use authentication, it is necessary to define configurations `ytOAuthSettings`.
 
-`ytAuthCluster` - cluster to authorize users.
 `ytOAuthSettings` - OAuth config
 
 An example of configuration:
 
 ```js
-ytAuthCluster: 'cluster-name',
 ytOAuthSettings: {
     baseURL: 'http://keycloak.some-domain.com',
     authPath: 'realms/test-realm/protocol/openid-connect/auth',
