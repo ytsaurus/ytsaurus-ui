@@ -7,9 +7,8 @@ export function isYtAuthEnabled(config: AppConfig) {
 }
 
 export function YTAuthLogout(res: Response, ytAuthCluster: string) {
-    res.setHeader(
-        'set-cookie',
+    res.setHeader('set-cookie', [
+        `${YT_CYPRESS_COOKIE_NAME}=deleted; Path=/; Max-Age=0;`,
         `${ytAuthCluster}:${YT_CYPRESS_COOKIE_NAME}=deleted; Path=/; Max-Age=0;`,
-    );
-    res.setHeader('set-cookie', `${YT_CYPRESS_COOKIE_NAME}=deleted; Path=/; Max-Age=0;`);
+    ]);
 }
