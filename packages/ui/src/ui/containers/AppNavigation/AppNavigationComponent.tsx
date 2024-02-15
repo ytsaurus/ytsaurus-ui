@@ -166,9 +166,7 @@ function AppNavigationComponent({
                                                     Change password
                                                 </Menu.Item>
                                             )}
-                                            <Menu.Item href={`/api/yt/${YT.cluster}/logout`}>
-                                                Logout
-                                            </Menu.Item>
+                                            <Menu.Item href={'/api/yt/logout'}>Logout</Menu.Item>
                                         </Menu>
                                     </div>
                                 );

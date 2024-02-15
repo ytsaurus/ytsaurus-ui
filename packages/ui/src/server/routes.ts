@@ -37,7 +37,7 @@ const routes: AppRoutes = {
     'GET /api/clusters/auth-status': {handler: clusterAuthStatus},
     'GET /api/pool-names/:ytAuthCluster': {handler: getClusterPools},
     'POST /api/yt/:ytAuthCluster/login': {handler: handleLogin, ui: true},
-    'GET /api/yt/:ytAuthCluster/logout': {handler: handleLogout, ui: true},
+    'GET /api/yt/logout': {handler: handleLogout, ui: true},
 
     'GET /oauth/login': {handler: oauthLogin, ui: true},
     'GET /api/oauth/callback': {handler: oauthCallback, ui: true},
