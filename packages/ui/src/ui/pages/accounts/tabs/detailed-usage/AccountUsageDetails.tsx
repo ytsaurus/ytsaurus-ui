@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useCallback} from 'react';
 import _ from 'lodash';
 import cn from 'bem-cn-lite';
 
@@ -8,6 +8,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {
     fetchAccountUsageList,
     fetchAccountUsageTree,
+    openAccountAttributesModal,
     setAccountUsageDataFilter,
     setAccountUsageSortState,
 } from '../../../../store/actions/accounts/account-usage';
@@ -55,20 +56,20 @@ import {
 } from '../../../../components/WithStickyToolbar/WithStickyToolbar';
 import ColumnHeader from '../../../../components/ColumnHeader/ColumnHeader';
 import Icon from '../../../../components/Icon/Icon';
-import Link from '../../../../components/Link/Link';
 import {getCluster} from '../../../../store/selectors/global';
 import Loader from '../../../../components/Loader/Loader';
 
-import {Page} from '../../../../../shared/constants/settings';
-import {makeRoutedURL} from '../../../../store/location';
-import {Tooltip} from '../../../../components/Tooltip/Tooltip';
 import {UserCard} from '../../../../components/UserLink/UserLink';
 import {Secondary, Warning} from '../../../../components/Text/Text';
 import PathView from '../../../../containers/PathFragment/PathFragment';
 import {getIconNameForType} from '../../../../utils/navigation/path-editor';
 import {OrderType} from '../../../../utils/sort-helpers';
 import {NoContent} from '../../../../components/NoContent/NoContent';
-import {AccountUsageDataItem} from '../../../../store/reducers/accounts/usage/account-usage-types';
+import {
+    AccountUsageDataItem,
+    MediumKeyTemplate,
+    VersionedKeyTemplate,
+} from '../../../../store/reducers/accounts/usage/account-usage-types';
 import {
     fetchAccountUsageListDiff,
     fetchAccountUsageTreeDiff,
@@ -76,6 +77,8 @@ import {
 import {useUpdater} from '../../../../hooks/use-updater';
 
 import './AccountUsageDetails.scss';
+import {AccountActionsField, AccountRequestData} from './AccountActionsField';
+import {DetailTableCell} from './DetailTableCell';
 
 const TABLE_SETTINGS: Settings = {
     displayIndices: false,
@@ -143,19 +146,6 @@ function PathHeader() {
 
 const UsageLoaderMemo = React.memo(UsageLoader);
 
-function renderSign(value?: number) {
-    const sign = Math.sign(value!);
-    if (!sign || isNaN(sign)) {
-        return undefined;
-    }
-    return sign > 0 ? '+' : '';
-}
-
-const SIGN = {
-    '+': 'plus' as const,
-    '': 'minus' as const,
-};
-
 function useColumnsByPreset(mediums: Array<string>) {
     const dispatch = useDispatch();
 
@@ -165,29 +155,12 @@ function useColumnsByPreset(mediums: Array<string>) {
     const viewType = useSelector(getAccountUsageViewType);
     const treePath = useSelector(getAccountUsageTreeItemsBasePath);
 
-    const {renderBytes, renderNumber} = React.useMemo(() => {
-        const diff = viewType.endsWith('-diff');
-        return {
-            renderBytes(value?: number) {
-                const sign = !diff ? undefined : renderSign(value);
-                return (
-                    <span className={block('value', {diff: SIGN[sign!]})}>
-                        {sign}
-                        {format.Bytes(value)}
-                    </span>
-                );
-            },
-            renderNumber(value?: number) {
-                const sign = !diff ? undefined : renderSign(value);
-                return (
-                    <span className={block('value', {diff: SIGN[sign!]})}>
-                        {sign}
-                        {format.Number(value)}
-                    </span>
-                );
-            },
-        };
-    }, [viewType]);
+    const handleAttributeButtonClick = useCallback(
+        (accountData: AccountRequestData) => {
+            dispatch(openAccountAttributesModal(accountData));
+        },
+        [dispatch],
+    );
 
     const columnsByName = React.useMemo(() => {
         const res: Map<string, Column<AccountUsageDataItem>> = new Map();
@@ -243,7 +216,14 @@ function useColumnsByPreset(mediums: Array<string>) {
             header: <AccountUsageDetailsHeader column={'disk_space'} />,
             sortable: false,
             render(item) {
-                return renderBytes(item.row.disk_space);
+                return (
+                    <DetailTableCell
+                        value={item.row.disk_space}
+                        additionalValue={item.row['versioned:disk_space']}
+                        viewType={viewType}
+                        formatType="bytes"
+                    />
+                );
             },
             align: 'right',
             width: 120,
@@ -253,7 +233,14 @@ function useColumnsByPreset(mediums: Array<string>) {
             header: <AccountUsageDetailsHeader column={'master_memory'} />,
             sortable: false,
             render(item) {
-                return renderBytes(item.row.master_memory);
+                return (
+                    <DetailTableCell
+                        value={item.row.master_memory}
+                        additionalValue={item.row['versioned:master_memory']}
+                        viewType={viewType}
+                        formatType="bytes"
+                    />
+                );
             },
             align: 'right',
             width: 120,
@@ -269,14 +256,24 @@ function useColumnsByPreset(mediums: Array<string>) {
         });
 
         _.forEach(mediums, (medium) => {
-            const name: keyof AccountUsageDataItem = `medium:${medium}` as any;
+            const name = `medium:${medium}` as MediumKeyTemplate;
+            const versionedName = `versioned:medium:${name}` as VersionedKeyTemplate;
+
             res.set(name, {
                 name,
                 header: <AccountUsageDetailsHeader column={name} />,
                 sortable: false,
                 render(item) {
-                    const v = item.row[name];
-                    return renderBytes(Number(v));
+                    const additionalValue =
+                        versionedName in item.row ? Number(item.row[versionedName]) : null;
+                    return (
+                        <DetailTableCell
+                            value={Number(item.row[name])}
+                            additionalValue={additionalValue}
+                            viewType={viewType}
+                            formatType="bytes"
+                        />
+                    );
                 },
                 align: 'right',
                 width: 120,
@@ -288,30 +285,34 @@ function useColumnsByPreset(mediums: Array<string>) {
                 return;
             }
 
-            let formatFn: (v: any) => React.ReactNode = (v: any) => v;
-            switch (true) {
-                case field.endsWith('_time'):
-                    formatFn = (v: number) => {
-                        return v === null || v === undefined
-                            ? format.NO_VALUE
-                            : format.DateTime(v, {format: 'full'});
-                    };
-                    break;
-                case field.endsWith('_count'):
-                    formatFn = renderNumber;
-                    break;
-            }
-
             res.set(field, {
                 name: field,
                 header: <AccountUsageDetailsHeader column={field} />,
                 sortable: false,
                 render(item) {
                     const {[field]: value} = item.row;
+                    const additionalKey = `versioned:${field}` as VersionedKeyTemplate;
+                    const additionalValue =
+                        additionalKey in item.row ? Number(item.row[additionalKey]) : null;
+
                     if (typeof value === 'boolean') {
                         return value === undefined ? format.NO_VALUE : _.capitalize(String(value));
                     }
-                    return formatFn(value);
+                    if (field.endsWith('_time')) {
+                        return value === null || value === undefined
+                            ? format.NO_VALUE
+                            : format.DateTime(value, {format: 'full'});
+                    }
+                    if (field.endsWith('_count')) {
+                        return (
+                            <DetailTableCell
+                                value={Number(value)}
+                                additionalValue={additionalValue}
+                                viewType={viewType}
+                                formatType="number"
+                            />
+                        );
+                    }
                 },
                 align: 'right',
                 width: 150,
@@ -321,7 +322,7 @@ function useColumnsByPreset(mediums: Array<string>) {
         return res;
     }, [treePath, viewType, mediums, cluster, availableColumns, dispatch]);
 
-    const columns = React.useMemo(() => {
+    return React.useMemo(() => {
         const res: Array<Column<AccountUsageDataItem>> = [];
         visibleColumns.forEach((name) => {
             const item = columnsByName.get(name);
@@ -334,34 +335,19 @@ function useColumnsByPreset(mediums: Array<string>) {
             header: '',
             sortable: false,
             render(item) {
-                return !item.row.path ? null : (
-                    <Link
-                        theme={'secondary'}
-                        url={makeRoutedURL(`/${cluster}/${Page.NAVIGATION}`, {
-                            path: item.row.path,
-                        })}
-                        routed
-                        routedPreserveLocation
-                    >
-                        <Tooltip
-                            content={
-                                <span className={block('no-wrap')}>
-                                    Open original path in Navigation
-                                </span>
-                            }
-                            placement={'left'}
-                        >
-                            <Icon awesome={'folder-tree'} />
-                        </Tooltip>
-                    </Link>
+                return (
+                    <AccountActionsField
+                        path={item.row.path}
+                        cluster={cluster}
+                        account={item.row.account}
+                        onAttributeButtonClick={handleAttributeButtonClick}
+                    />
                 );
             },
             width: 50,
         });
         return res;
-    }, [columnsByName, visibleColumns]);
-
-    return columns;
+    }, [handleAttributeButtonClick, cluster, columnsByName, visibleColumns]);
 }
 
 const UPDATE_TIMEOUT = 600000;

@@ -6,8 +6,8 @@ import {
 import {TYPED_OUTPUT_FORMAT} from '../../../constants/index';
 import {YTApiId, ytApiV3Id} from '../../../rum/rum-wrap-api';
 
-export function openAttributesModal({title, path, exactPath, attribute, attributes}) {
-    return (dispatch) => {
+export function openModal({title, promise}) {
+    return async (dispatch) => {
         dispatch({
             type: OPEN_ATTRIBUTES_MODAL,
             data: {title},
@@ -15,29 +15,35 @@ export function openAttributesModal({title, path, exactPath, attribute, attribut
 
         dispatch({type: LOAD_ATTRIBUTES.REQUEST});
 
-        if (attributes) {
+        try {
+            const attributes = await promise;
             dispatch({
                 type: LOAD_ATTRIBUTES.SUCCESS,
                 data: {attributes},
             });
+        } catch (error) {
+            dispatch({
+                type: LOAD_ATTRIBUTES.FAILURE,
+                data: {error},
+            });
+        }
+    };
+}
+
+export function openAttributesModal({title, path, exactPath, attribute, attributes}) {
+    return (dispatch) => {
+        if (attributes) {
+            dispatch(openModal({title, promise: attributes}));
         } else {
-            ytApiV3Id
-                .get(YTApiId.openAttributesModal, {
-                    path: exactPath ? exactPath : `${path}/@${attribute ? attribute : ''}`,
-                    output_format: TYPED_OUTPUT_FORMAT,
-                })
-                .then((attributes) => {
-                    dispatch({
-                        type: LOAD_ATTRIBUTES.SUCCESS,
-                        data: {attributes},
-                    });
-                })
-                .catch((error) => {
-                    dispatch({
-                        type: LOAD_ATTRIBUTES.FAILURE,
-                        data: {error},
-                    });
-                });
+            dispatch(
+                openModal({
+                    title,
+                    promise: ytApiV3Id.get(YTApiId.openAttributesModal, {
+                        path: exactPath ? exactPath : `${path}/@${attribute ? attribute : ''}`,
+                        output_format: TYPED_OUTPUT_FORMAT,
+                    }),
+                }),
+            );
         }
     };
 }
