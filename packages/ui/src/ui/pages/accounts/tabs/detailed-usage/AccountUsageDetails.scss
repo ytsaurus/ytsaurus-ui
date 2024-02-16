@@ -29,13 +29,4 @@
         text-align: right;
         padding-right: 2em;
     }
-
-    &__value {
-        &_diff_plus {
-            color: var(--danger-color);
-        }
-        &_diff_minus {
-            color: var(--success-color);
-        }
-    }
 }
