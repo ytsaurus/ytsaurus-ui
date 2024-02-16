@@ -1,12 +1,16 @@
+import cn from 'bem-cn-lite';
 import React from 'react';
-import Link from '../../components/Link/Link';
-import {AccountsTab} from '../../constants/accounts/accounts';
-import {Page} from '../../constants';
-import {useSelector} from 'react-redux';
-import {getCluster} from '../../store/selectors/global';
+import { useSelector } from 'react-redux';
 import hammer from '../../common/hammer';
-import {Tooltip} from '../../components/Tooltip/Tooltip';
 import ClipboardButton from '../../components/ClipboardButton/ClipboardButton';
+import Link from '../../components/Link/Link';
+import { Tooltip } from '../../components/Tooltip/Tooltip';
+import { Page } from '../../constants';
+import { AccountsTab } from '../../constants/accounts/accounts';
+import { getCluster } from '../../store/selectors/global';
+import './AccountLink.scss';
+
+const block = cn('account-link');
 
 interface Props {
     className?: string;
@@ -19,7 +23,7 @@ export function genAccountsUrl(cluster: string, account: string) {
 }
 
 export default function AccountLink(props: Props) {
-    const {cluster: propsCluster, account, className} = props;
+    const { cluster: propsCluster, account, className, } = props;
     const currentCluster = useSelector(getCluster);
     const cluster = propsCluster || currentCluster;
 
@@ -35,7 +39,7 @@ export default function AccountLink(props: Props) {
             }
         >
             {account ? (
-                <Link theme={'primary'} routed url={genAccountsUrl(cluster, account)}>
+                <Link className={block()} theme={'primary'} routed url={genAccountsUrl(cluster, account)}>
                     {account}
                 </Link>
             ) : (

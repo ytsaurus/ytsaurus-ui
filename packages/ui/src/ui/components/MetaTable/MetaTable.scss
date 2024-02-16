@@ -37,7 +37,7 @@
 
     display: grid;
     grid-template-columns: repeat(2, auto);
-    grid-gap: 3px 20px;
+    grid-gap: 10px 20px;
 
     &__key,
     &__value {
@@ -46,7 +46,8 @@
     }
 
     &__key {
-        color: var(--secondary-text);
+        color: var(--secondary-link);
+        font-size: 0.9rem;
     }
 
     /* templates */

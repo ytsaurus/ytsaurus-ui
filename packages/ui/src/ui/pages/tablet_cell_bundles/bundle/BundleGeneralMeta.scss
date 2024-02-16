@@ -1,9 +1,9 @@
 .bundle-general-meta {
     .meta-table__group {
-        grid-gap: 6px 27px;
+        grid-gap: 10px 27px;
     }
 
-    $progressWidth: 200px;
+    $progressWidth: 210px;
 
     .yc-progress {
         width: $progressWidth;
@@ -17,9 +17,11 @@
             &_good {
                 color: var(--success-color);
             }
+
             &_failed {
                 color: var(--danger-color);
             }
+
             &_initializing {
                 color: var(--secondary-text);
             }

@@ -1,18 +1,18 @@
 import React from 'react';
 import cn from 'bem-cn-lite';
-import {getTabletsActiveBundleData} from '../../../store/selectors/tablet_cell_bundles';
-import {useSelector} from 'react-redux';
-import MetaTable, {MetaTableItem} from '../../../components/MetaTable/MetaTable';
-import {Progress} from '@gravity-ui/uikit';
+import { getTabletsActiveBundleData } from '../../../store/selectors/tablet_cell_bundles';
+import { useSelector } from 'react-redux';
+import MetaTable, { MetaTableItem } from '../../../components/MetaTable/MetaTable';
+import { Progress } from '@gravity-ui/uikit';
 
 // @ts-ignore
 import hammer from '@ytsaurus/interface-helpers/lib/hammer';
 import ypath from '../../../common/thor/ypath';
 
-import {YTHealth} from '../../../types';
+import { YTHealth } from '../../../types';
 import AccountLink from '../../accounts/AccountLink';
-import Label, {LabelTheme} from '../../../components/Label/Label';
-import {calcProgressProps} from '../../../utils/utils';
+import Label, { LabelTheme } from '../../../components/Label/Label';
+import { calcProgressProps } from '../../../utils/utils';
 import {
     getCluster,
     getClusterUiConfig,
@@ -24,12 +24,12 @@ import UIFactory from '../../../UIFactory';
 
 const block = cn('bundle-general-meta');
 
-export function BundleBalancerValue(props: {value?: boolean; blocking?: boolean}) {
-    const {value = true, blocking} = props;
-    return <span className={block('bb', {success: value, blocking})}>{value ? 'on' : 'off'}</span>;
+export function BundleBalancerValue(props: { value?: boolean; blocking?: boolean }) {
+    const { value = true, blocking } = props;
+    return <span className={block('bb', { success: value, blocking })}>{value ? 'on' : 'off'}</span>;
 }
 
-const HEALTH_TO_THEME: {[health: string]: LabelTheme} = {
+const HEALTH_TO_THEME: { [health: string]: LabelTheme } = {
     good: 'success',
     initializing: 'warning',
     degrading: 'warning',
@@ -37,8 +37,8 @@ const HEALTH_TO_THEME: {[health: string]: LabelTheme} = {
     changing: 'info',
 };
 
-export function Health(props: {value?: YTHealth; className?: string}) {
-    const {value, className} = props;
+export function Health(props: { value?: YTHealth; className?: string }) {
+    const { value, className } = props;
     const theme: LabelTheme = HEALTH_TO_THEME[value || ''];
     return !value ? (
         hammer.format.NO_VALUE
@@ -54,13 +54,14 @@ export default function BundleGeneralMeta() {
     const clusterUiConfig = useSelector(getClusterUiConfig);
     const cluster = useSelector(getCluster);
     const allowTabletAccounting = useSelector(getClusterUiConfigEnablePerBundleTabletAccounting);
+    console.log(bundleData);
 
     if (!bundleData) {
         return null;
     }
 
     const leftGroup: Array<MetaTableItem> = [
-        ...(UIFactory.getExtraMetaTableItemsForBundle({bundle: bundleData, clusterUiConfig}) || []),
+        ...(UIFactory.getExtraMetaTableItemsForBundle({ bundle: bundleData, clusterUiConfig }) || []),
         {
             key: 'Health',
             value: <Health value={bundleData.health} />,

@@ -1,10 +1,10 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import block from 'bem-cn-lite';
 import PropTypes from 'prop-types';
-import {connect} from 'react-redux';
-import {compose} from 'redux';
+import { connect } from 'react-redux';
+import { compose } from 'redux';
 
-import {Select} from '@gravity-ui/uikit';
+import { Select } from '@gravity-ui/uikit';
 
 import WithStickyToolbar, {
     STICKY_TOOLBAR_BOTTOM,
@@ -36,17 +36,17 @@ import ElementsTable from '../../../../components/ElementsTable/ElementsTable';
 import Modal from '../../../../components/Modal/Modal';
 import Editor from './Editor/Editor';
 import AccountAlerts from './AccountAlerts';
-import {Tooltip} from '../../../../components/Tooltip/Tooltip';
+import { Tooltip } from '../../../../components/Tooltip/Tooltip';
 
-import {loadUsers} from '../../../../store/actions/accounts/editor';
-import {accountsToggleFavourite} from '../../../../store/actions/favourites';
+import { loadUsers } from '../../../../store/actions/accounts/editor';
+import { accountsToggleFavourite } from '../../../../store/actions/favourites';
 import getTableProps from '../../../../utils/accounts/tables';
 import {
     ACCOUNTS_CONTENT_MODE_ITEMS,
     genRadioButtonVisibleAccounts,
     makeReadableItems,
 } from '../../../../utils/accounts';
-import {getMediumList} from '../../../../store/selectors/thor';
+import { getMediumList } from '../../../../store/selectors/thor';
 import {
     changeContentFilter,
     changeMediumFilter,
@@ -65,11 +65,11 @@ import {
     getAccountsAbcServiceIdSlugFilter,
     getActiveAccountAggregationRow,
 } from '../../../../store/selectors/accounts/accounts';
-import {isNull} from '../../../../utils';
-import {DASHBOARD_VIEW_CONTEXT} from '../../../../constants/index';
-import {AccountResourceName} from '../../../../constants/accounts/accounts';
+import { isNull } from '../../../../utils';
+import { DASHBOARD_VIEW_CONTEXT } from '../../../../constants/index';
+import { AccountResourceName } from '../../../../constants/accounts/accounts';
 
-import {ProgressStackByTreeItem} from './ProgressStack';
+import { ProgressStackByTreeItem } from './ProgressStack';
 
 import './AccountsGeneralTab.scss';
 import {
@@ -84,9 +84,9 @@ import {
     getClusterUiConfigEnablePerAccountTabletAccounting,
     getUISizes,
 } from '../../../../store/selectors/global';
-import {TabletAccountingNotice} from './Editor/content/TabletsContent';
+import { TabletAccountingNotice } from './Editor/content/TabletsContent';
 import AccountStaticConfiguration from './AccountStaticConfiguration/AccountStaticConfiguration';
-import {Warning} from '../../../../components/Text/Text';
+import { Warning } from '../../../../components/Text/Text';
 import Button from '../../../../components/Button/Button';
 import MasterMemoryTableMode from './MasterMemoryTableMode';
 import UIFactory from '../../../../UIFactory';
@@ -94,7 +94,7 @@ import UIFactory from '../../../../UIFactory';
 const b = block('accounts');
 const progressTooltipClassname = b('progress-tooltip');
 
-function Bytes({bytes, isAggregation}) {
+function Bytes({ bytes, isAggregation }) {
     if (isNull(bytes)) {
         return hammer.format.NO_VALUE;
     }
@@ -136,13 +136,13 @@ function renderBytes(bytes, isAggregation) {
 
 function renderNumber(value, isAggregation = false) {
     return (
-        <div className={b('item', {aggregated: isAggregation})}>
+        <div className={b('item', { aggregated: isAggregation })}>
             {hammer.format['Number'](value)}
         </div>
     );
 }
 
-function VisibilityNotice({mode}) {
+function VisibilityNotice({ mode }) {
     let message = null;
     if (mode === 'usable') {
         message =
@@ -255,7 +255,7 @@ class AccountsGeneralTab extends Component {
             activeMediumFilter,
             activeContentModeFilter,
             dashboardVisibilityMode,
-            abcServiceFilter: {slug, id} = {},
+            abcServiceFilter: { slug, id } = {},
             contextView,
         } = this.props;
 
@@ -291,7 +291,7 @@ class AccountsGeneralTab extends Component {
                 </div>
                 {UIFactory.renderControlAbcService({
                     className: b('abc-service-filter', 'elements-toolbar__component'),
-                    value: {slug, id},
+                    value: { slug, id },
                     onChange: this.onAbcServiceFilter,
                 })}
                 <div className={b('content-mode', 'elements-toolbar__component')}>
@@ -322,13 +322,13 @@ class AccountsGeneralTab extends Component {
     }
 
     onAbcServiceFilter = (value) => {
-        const {id, slug} = value || {};
-        const {setAccountsAbcServiceFilter} = this.props;
+        const { id, slug } = value || {};
+        const { setAccountsAbcServiceFilter } = this.props;
         setAccountsAbcServiceFilter(id, slug);
     };
 
     onDashboardVisibilityModeChange = (event) => {
-        const {viewContext} = this.props;
+        const { viewContext } = this.props;
         if (viewContext === DASHBOARD_VIEW_CONTEXT) {
             this.props.setAccountsVisibilityModeOfDashboard(event.target.value);
         } else {
@@ -337,7 +337,7 @@ class AccountsGeneralTab extends Component {
     };
 
     renderUsableError() {
-        const {usableError} = this.props;
+        const { usableError } = this.props;
 
         return <Error error={usableError} />;
     }
@@ -357,15 +357,15 @@ class AccountsGeneralTab extends Component {
 
         const templates = {
             name(treeItem, name, toggleStateFn, itemState) {
-                const {level = 0} = treeItem;
+                const { level = 0 } = treeItem;
 
                 const OFFSET = 20;
-                const offsetStyle = {paddingLeft: level * OFFSET};
-                const {attributes: item, children, isAggregation} = treeItem;
+                const offsetStyle = { paddingLeft: level * OFFSET };
+                const { attributes: item, children, isAggregation } = treeItem;
 
                 if (isAggregation) {
                     return (
-                        <div className={b('item', {name: true})} style={offsetStyle}>
+                        <div className={b('item', { name: true })} style={offsetStyle}>
                             <div
                                 className={b('item-name', {
                                     aggregation: true,
@@ -380,7 +380,7 @@ class AccountsGeneralTab extends Component {
                 const hasChildren = children && children.length > 0;
                 const toggler = (
                     <div
-                        className={b('item-toggler', {hidden: !hasChildren})}
+                        className={b('item-toggler', { hidden: !hasChildren })}
                         onClick={toggleStateFn}
                     >
                         <Icon awesome={itemState.collapsed ? 'angle-down' : 'angle-up'} />
@@ -398,7 +398,7 @@ class AccountsGeneralTab extends Component {
                     accountsToggleFavourite(item.name);
                 };
                 return (
-                    <div className={b('item', {name: true})} style={offsetStyle}>
+                    <div className={b('item', { name: true })} style={offsetStyle}>
                         {toggler}
                         {nameElement}
                         <div
@@ -421,8 +421,7 @@ class AccountsGeneralTab extends Component {
             },
 
             alerts(treeItem) {
-                const {attributes: account} = treeItem;
-                const {alertsCount} = account;
+                const { attributes: { alertsCount } } = treeItem;
                 const text = alertsCount > 0 ? alertsCount : '';
                 return (
                     text && (
@@ -459,12 +458,12 @@ class AccountsGeneralTab extends Component {
 
             disk_space_limit(treeItem) {
                 const value = columnFields.disk_space_limit.get(treeItem);
-                const {isAggregation} = treeItem;
+                const { isAggregation } = treeItem;
                 return renderBytes(value, isAggregation);
             },
 
             disk_space_free(treeItem) {
-                const {isAggregation} = treeItem;
+                const { isAggregation } = treeItem;
                 const value = columnFields.disk_space_free.get(treeItem);
                 return renderBytes(value, isAggregation);
             },
@@ -485,19 +484,19 @@ class AccountsGeneralTab extends Component {
             },
 
             node_count_usage(treeItem) {
-                const {isAggregation} = treeItem;
+                const { isAggregation } = treeItem;
                 const value = columnFields.node_count_usage.get(treeItem);
                 return renderNumber(value, isAggregation);
             },
 
             node_count_limit(treeItem) {
-                const {isAggregation} = treeItem;
+                const { isAggregation } = treeItem;
                 const value = columnFields.node_count_limit.get(treeItem);
                 return renderNumber(value, isAggregation);
             },
 
             node_count_free(treeItem) {
-                const {isAggregation} = treeItem;
+                const { isAggregation } = treeItem;
                 const value = columnFields.node_count_free.get(treeItem);
                 return renderNumber(value, isAggregation);
             },
@@ -518,19 +517,19 @@ class AccountsGeneralTab extends Component {
             },
 
             chunk_count_usage(treeItem) {
-                const {isAggregation} = treeItem;
+                const { isAggregation } = treeItem;
                 const value = columnFields.chunk_count_usage.get(treeItem);
                 return renderNumber(value, isAggregation);
             },
 
             chunk_count_limit(treeItem) {
-                const {isAggregation} = treeItem;
+                const { isAggregation } = treeItem;
                 const value = columnFields.chunk_count_limit.get(treeItem);
                 return renderNumber(value, isAggregation);
             },
 
             chunk_count_free(treeItem) {
-                const {isAggregation} = treeItem;
+                const { isAggregation } = treeItem;
                 const value = columnFields.chunk_count_free.get(treeItem);
                 return renderNumber(value, isAggregation);
             },
@@ -547,19 +546,19 @@ class AccountsGeneralTab extends Component {
             },
 
             tablet_count_usage(treeItem) {
-                const {isAggregation} = treeItem;
+                const { isAggregation } = treeItem;
                 const value = columnFields.tablet_count_usage.get(treeItem);
                 return renderNumber(value, isAggregation);
             },
 
             tablet_count_limit(treeItem) {
-                const {isAggregation} = treeItem;
+                const { isAggregation } = treeItem;
                 const value = columnFields.tablet_count_limit.get(treeItem);
                 return renderNumber(value, isAggregation);
             },
 
             tablet_count_free(treeItem) {
-                const {isAggregation} = treeItem;
+                const { isAggregation } = treeItem;
                 const value = columnFields.tablet_count_free.get(treeItem);
                 return renderNumber(value, isAggregation);
             },
@@ -576,19 +575,19 @@ class AccountsGeneralTab extends Component {
             },
 
             tablet_static_memory_usage(treeItem) {
-                const {isAggregation} = treeItem;
+                const { isAggregation } = treeItem;
                 const value = columnFields.tablet_static_memory_usage.get(treeItem);
                 return renderBytes(value, isAggregation);
             },
 
             tablet_static_memory_limit(treeItem) {
-                const {isAggregation} = treeItem;
+                const { isAggregation } = treeItem;
                 const value = columnFields.tablet_static_memory_limit.get(treeItem);
                 return renderBytes(value, isAggregation);
             },
 
             tablet_static_memory_free(treeItem) {
-                const {isAggregation} = treeItem;
+                const { isAggregation } = treeItem;
                 const value = columnFields.tablet_static_memory_free.get(treeItem);
                 return renderBytes(value, isAggregation);
             },
@@ -606,53 +605,53 @@ class AccountsGeneralTab extends Component {
             },
 
             master_memory_usage(treeItem) {
-                const {isAggregation} = treeItem;
+                const { isAggregation } = treeItem;
                 const value = columnFields.master_memory_usage.get(treeItem);
                 return renderBytes(value, isAggregation);
             },
 
             master_memory_limit(treeItem) {
-                const {isAggregation} = treeItem;
+                const { isAggregation } = treeItem;
                 const value = columnFields.master_memory_limit.get(treeItem);
                 return renderBytes(value, isAggregation);
             },
 
             master_memory_free(treeItem) {
-                const {isAggregation} = treeItem;
+                const { isAggregation } = treeItem;
                 const value = columnFields.master_memory_free.get(treeItem);
                 return renderBytes(value, isAggregation);
             },
 
             master_memory_detailed_nodes(treeItem) {
-                const {isAggregation} = treeItem;
+                const { isAggregation } = treeItem;
                 return renderBytes(
                     columnFields.master_memory_detailed_nodes.get(treeItem),
                     isAggregation,
                 );
             },
             master_memory_detailed_chunks(treeItem) {
-                const {isAggregation} = treeItem;
+                const { isAggregation } = treeItem;
                 return renderBytes(
                     columnFields.master_memory_detailed_chunks.get(treeItem),
                     isAggregation,
                 );
             },
             master_memory_detailed_attributes(treeItem) {
-                const {isAggregation} = treeItem;
+                const { isAggregation } = treeItem;
                 return renderBytes(
                     columnFields.master_memory_detailed_attributes.get(treeItem),
                     isAggregation,
                 );
             },
             master_memory_detailed_tablets(treeItem) {
-                const {isAggregation} = treeItem;
+                const { isAggregation } = treeItem;
                 return renderBytes(
                     columnFields.master_memory_detailed_tablets.get(treeItem),
                     isAggregation,
                 );
             },
             master_memory_detailed_schemas(treeItem) {
-                const {isAggregation} = treeItem;
+                const { isAggregation } = treeItem;
                 return renderBytes(
                     columnFields.master_memory_detailed_schemas.get(treeItem),
                     isAggregation,
@@ -664,7 +663,7 @@ class AccountsGeneralTab extends Component {
                     return null;
                 }
 
-                const {attributes: item} = treeItem;
+                const { attributes: item } = treeItem;
                 const commonProps = {
                     view: 'flat-secondary',
                     size: 's',
@@ -750,7 +749,7 @@ class AccountsGeneralTab extends Component {
     };
 
     renderEditorModal() {
-        const {closeEditorModal, editableAccount, showEditor} = this.props;
+        const { closeEditorModal, editableAccount, showEditor } = this.props;
 
         return (
             editableAccount.name && (
@@ -768,7 +767,7 @@ class AccountsGeneralTab extends Component {
     }
 
     render() {
-        const {error, usableError, wasLoaded, viewContext, fetching} = this.props;
+        const { error, usableError, wasLoaded, viewContext, fetching } = this.props;
 
         return (
             <div>
@@ -797,10 +796,10 @@ const makeMapStateToProps = () => {
         const favouriteAccountsSet = getFavouriteAccountsSet(state);
 
         const {
-            accounts: {accounts},
+            accounts: { accounts },
         } = state;
 
-        const {viewContext} = ownProps;
+        const { viewContext } = ownProps;
         const isDashboard = viewContext === DASHBOARD_VIEW_CONTEXT;
 
         const contextViewTree = isDashboard

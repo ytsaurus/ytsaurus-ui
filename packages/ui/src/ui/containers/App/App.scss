@@ -85,11 +85,13 @@ body {
     }
 
     .yt-special-background {
+
         .yc-button_disabled.yc-button_view_outlined::before,
         .yc-button_disabled.yc-button_view_outlined-info::before,
         .yc-button_disabled.yc-button_view_outlined-danger::before {
             background-color: var(--yc-button-background-color);
         }
+
         .yc-select-control_disabled.yc-select-control,
         .yc-text-input_disabled {
             .yc-text-input__content {
@@ -132,6 +134,7 @@ body {
     a.link {
         text-decoration: none;
         color: var(--external-link);
+
         &:hover {
             color: var(--hover-link);
         }
