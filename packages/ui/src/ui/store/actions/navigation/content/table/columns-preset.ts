@@ -21,7 +21,7 @@ import {RootState} from '../../../../../store/reducers';
 import {YTApiId} from '../../../../../rum/rum-wrap-api';
 import {makeTableRumId} from './table-rum-id';
 
-const columnPresetEndpoint = '/api/table-column-preset';
+const getColumnPresetEndpoint = (cluster: string) => `/api/table-column-preset/${cluster}`;
 
 type ColumnPresetThunkAction = ThunkAction<any, RootState, any, any>;
 
@@ -49,7 +49,7 @@ export function loadColumnPresetIfDefined(): ColumnPresetThunkAction {
                 YTApiId.ui_loadColumnPreset,
                 axios.request<{columns: Array<string>; hash: string}>({
                     method: 'GET',
-                    url: `${columnPresetEndpoint}/${hashToLoad}`,
+                    url: `${getColumnPresetEndpoint(cluster)}/${hashToLoad}`,
                     headers: {'content-type': 'application/json'},
                 }),
             )
@@ -84,12 +84,12 @@ export function loadColumnPresetIfDefined(): ColumnPresetThunkAction {
     };
 }
 
-export function saveColumnPreset(columnsEncoded: Array<string>): Promise<string> {
+export function saveColumnPreset(columnsEncoded: Array<string>, cluster: string): Promise<string> {
     const columns = _.map(columnsEncoded, utf8.decode);
     return wrapApiPromiseByToaster(
         axios.request<string>({
             method: 'POST',
-            url: columnPresetEndpoint,
+            url: getColumnPresetEndpoint(cluster),
             headers: {'content-type': 'application/json'},
             data: columns,
         }),

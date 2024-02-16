@@ -588,7 +588,8 @@ export function rememberPresetColumnsAsDefault() {
 export function openTableWithPresetOfColumns() {
     return (dispatch, getState) => {
         const visibleColumns = getVisibleColumns(getState());
-        saveColumnPreset(_.map(visibleColumns, 'name')).then((hash) => {
+        const cluster = getCluster(getState());
+        saveColumnPreset(_.map(visibleColumns, 'name'), cluster).then((hash) => {
             const {href} = window.location;
             const url = `${href}&columns=${hash}`;
             openInNewTab(url);
