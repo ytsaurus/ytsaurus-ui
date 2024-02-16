@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.17.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.16.1...ui-v1.17.0) (2024-02-16)
+
+
+### Features
+
+* add multi-cluster passwd-auth [[#349](https://github.com/ytsaurus/ytsaurus-ui/issues/349)] ([ddf4617](https://github.com/ytsaurus/ytsaurus-ui/commit/ddf4617387ab8f88f901f268d72e17eff66d0f57))
+* show authorized clusters [[#349](https://github.com/ytsaurus/ytsaurus-ui/issues/349)] ([d582bfc](https://github.com/ytsaurus/ytsaurus-ui/commit/d582bfcd490b8199e5713f24f7970697ba0513dd))
+
 ## [1.16.1](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.16.0...ui-v1.16.1) (2024-02-14)
 
 
