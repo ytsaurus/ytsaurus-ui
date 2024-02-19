@@ -10,7 +10,9 @@ Additionally you have to provide `secrets/yt-interface-secret.json` file with [a
 
 ```json
 {
-  "oauthToken": "special-user-secret-token"
+    "CLUSTER_ID": {
+        "oauthToken": "special-user-secret-token"
+    }
 }
 ```
 
