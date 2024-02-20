@@ -1,20 +1,23 @@
 import PropTypes from 'prop-types';
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
+import React, {Component} from 'react';
+import {connect} from 'react-redux';
 
 import PathEditorModal from '../PathEditorModal';
 
-import { CircleQuestion } from '@gravity-ui/icons';
-import { Checkbox, Flex } from '@gravity-ui/uikit';
-import { Tooltip } from '../../../../../components/Tooltip/Tooltip';
-import { CLOSE_MOVE_OBJECT_POPUP } from '../../../../../constants/navigation/modals/move-object';
-import { updatePath, updateView } from '../../../../../store/actions/navigation';
+import {CircleQuestion} from '@gravity-ui/icons';
+import {Checkbox, Flex} from '@gravity-ui/uikit';
+import {Tooltip} from '../../../../../components/Tooltip/Tooltip';
+import {CLOSE_MOVE_OBJECT_POPUP} from '../../../../../constants/navigation/modals/move-object';
+import {updatePath, updateView} from '../../../../../store/actions/navigation';
 import {
     abortRequests,
     moveObject,
 } from '../../../../../store/actions/navigation/modals/move-object';
-import { closeEditingPopup, hideError } from '../../../../../store/actions/navigation/modals/path-editing-popup';
-import { getPath } from '../../../../../store/selectors/navigation';
+import {
+    closeEditingPopup,
+    hideError,
+} from '../../../../../store/actions/navigation/modals/path-editing-popup';
+import {getPath} from '../../../../../store/selectors/navigation';
 
 class MoveObjectModal extends Component {
     static propTypes = {
@@ -39,22 +42,22 @@ class MoveObjectModal extends Component {
         updateView: PropTypes.func.isRequired,
         updatePath: PropTypes.func.isRequired,
 
-        hideError: PropTypes.func.isRequired
+        hideError: PropTypes.func.isRequired,
     };
 
     static defaultProps = {
         afterMoveStrategy: 'refresh',
     };
 
-    state = { preserve_account: false, force: false };
+    state = {preserve_account: false, force: false};
 
     handleConfirmButtonClick = () => {
-        const { movedPath } = this.props;
+        const {movedPath} = this.props;
         this.doMove(movedPath);
     };
 
     handleCancelButtonClick = () => {
-        const { closeEditingPopup, abortRequests } = this.props;
+        const {closeEditingPopup, abortRequests} = this.props;
 
         this.resetOptions();
         closeEditingPopup(CLOSE_MOVE_OBJECT_POPUP);
@@ -62,7 +65,7 @@ class MoveObjectModal extends Component {
     };
 
     handleApply = (newPath) => {
-        const { renaming, showError } = this.props;
+        const {renaming, showError} = this.props;
         const disabled = renaming || showError;
 
         if (!disabled) {
@@ -80,7 +83,7 @@ class MoveObjectModal extends Component {
             multipleMode,
             items,
         } = this.props;
-        const { preserve_account } = this.state;
+        const {preserve_account} = this.state;
 
         const onSucess = (destinationPath) => {
             if (destinationPath && afterMoveStrategy === 'redirect') {
@@ -90,13 +93,21 @@ class MoveObjectModal extends Component {
             updateView();
         };
 
-        moveObject(objectPath, toPath, onSucess, multipleMode, items, {
-            preserve_account,
-        }, this.state.force).then(() => this.resetOptions());
+        moveObject(
+            objectPath,
+            toPath,
+            onSucess,
+            multipleMode,
+            items,
+            {
+                preserve_account,
+            },
+            this.state.force,
+        ).then(() => this.resetOptions());
     }
 
     render() {
-        const { popupVisible, renaming, movedPath, showError, errorMessage, error, multipleMode } =
+        const {popupVisible, renaming, movedPath, showError, errorMessage, error, multipleMode} =
             this.props;
 
         const modalTitle = 'Move';
@@ -148,7 +159,7 @@ class MoveObjectModal extends Component {
                         Override
                     </Checkbox>
                     <Tooltip content="Will replace file if it exists">
-                        <CircleQuestion style={{ color: 'grey' }} />
+                        <CircleQuestion style={{color: 'grey'}} />
                     </Tooltip>
                 </Flex>
             </Flex>
@@ -159,15 +170,16 @@ class MoveObjectModal extends Component {
         this.onUpdatePreserveAccount(false);
     }
 
-    onUpdatePreserveAccount = (preserve_account) => this.setState({ ...this.state, preserve_account });
+    onUpdatePreserveAccount = (preserve_account) =>
+        this.setState({...this.state, preserve_account});
     onUpdateForce = (force) => {
-        this.setState({ ...this.state, force });
-        this.props.hideError()
-    }
+        this.setState({...this.state, force});
+        this.props.hideError();
+    };
 }
 
 const mapStateToProps = (state) => {
-    const { navigation } = state;
+    const {navigation} = state;
     const path = getPath(state);
     const {
         error,
@@ -206,6 +218,5 @@ const mapDispatchToProps = {
     updatePath,
     hideError,
 };
-
 
 export default connect(mapStateToProps, mapDispatchToProps)(MoveObjectModal);

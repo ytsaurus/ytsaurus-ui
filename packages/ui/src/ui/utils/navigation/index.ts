@@ -2,15 +2,15 @@ import unipika from '../../common/thor/unipika';
 // @ts-ignore
 import ypath from '../../common/thor/ypath';
 
-import { CancelTokenSource } from 'axios';
+import {CancelTokenSource} from 'axios';
 
 import ContentViewer from '../../pages/navigation/Navigation/ContentViewer/ContentViewer';
 
-import { Page } from '../../constants/index';
-import { SUPPRESS_REDIRECT } from '../../constants/navigation/modals/delete-object';
-import { Tab } from '../../constants/navigation';
-import { YTError } from '../../../@types/types';
-import { allowDirectDownload } from '../../config';
+import {YTError} from '../../../@types/types';
+import {allowDirectDownload} from '../../config';
+import {Page} from '../../constants/index';
+import {Tab} from '../../constants/navigation';
+import {SUPPRESS_REDIRECT} from '../../constants/navigation/modals/delete-object';
 
 export function autoCorrectPath(path: string) {
     // 1) Strip slash from the end
@@ -52,9 +52,9 @@ export function prepareRequest(
         relativePath = parameters.relativePath!;
     }
 
-    const { path, relativePath: _x, transaction, ...rest } = parameters;
+    const {path, relativePath: _x, transaction, ...rest} = parameters;
 
-    const restParameters: { transaction_id?: string } = rest;
+    const restParameters: {transaction_id?: string} = rest;
 
     const resultPath = path + (relativePath ? relativePath : '');
 
@@ -111,7 +111,7 @@ export function prepareNavigationState(
         path = parsedPath;
     }
 
-    return { page: Page.NAVIGATION, t: transaction, path };
+    return {page: Page.NAVIGATION, t: transaction, path};
 }
 
 export function preparePath(path: string) {
@@ -127,9 +127,9 @@ export function preparePath(path: string) {
 export function prepareDestinationPath(dirPath: string, name: String) {
     const lastChar = dirPath.charAt(dirPath.length - 1);
     const nextToLastChar = dirPath.charAt(dirPath.length - 2);
-    const isDir = dirPath[dirPath.length - 1] === '/'
+    const isDir = dirPath[dirPath.length - 1] === '/';
 
-    if (!isDir) return dirPath
+    if (!isDir) return dirPath;
 
     if (lastChar === '/' && nextToLastChar !== '\\') {
         return dirPath + name;
@@ -159,13 +159,13 @@ export function getParentPath(path: string): string {
 }
 
 export function decodeEscapedAbsPath(path: string) {
-    const { fragments } = ypath.YPath.create(path, 'absolute') as { fragments: Array<{ name: string }> };
+    const {fragments} = ypath.YPath.create(path, 'absolute') as {fragments: Array<{name: string}>};
 
     return (
         '//' +
         fragments
             .slice(1)
-            .map(({ name }) => {
+            .map(({name}) => {
                 return unipika.utils.utf8.decode(ypath.YPath.fragmentToYSON(name));
             })
             .join('/')
@@ -185,7 +185,7 @@ export function makeDirectDownloadPath(
         proxy,
         externalProxy,
         version = 'v3',
-    }: { cluster: string; proxy: string; externalProxy: string | undefined; version?: 'v3' | 'v4' },
+    }: {cluster: string; proxy: string; externalProxy: string | undefined; version?: 'v3' | 'v4'},
 ) {
     return allowDirectDownload()
         ? `//${externalProxy ?? proxy}/api/${version}/${command}`

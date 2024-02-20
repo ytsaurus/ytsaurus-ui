@@ -1,16 +1,16 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
+import React, {Component} from 'react';
+import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import block from 'bem-cn-lite';
-import { compose } from 'redux';
+import {compose} from 'redux';
 
 import ErrorMessage from '../../../../components/ErrorMessage/ErrorMessage';
 import PathEditor from '../../../../containers/PathEditor/PathEditor';
 import Modal from '../../../../components/Modal/Modal';
 import Error from '../../../../components/Error/Error';
 
-import { hideError, setPath } from '../../../../store/actions/navigation/modals/path-editing-popup';
-import { getOnlyFolders } from '../../../../utils/navigation/path-editing-popup';
+import {hideError, setPath} from '../../../../store/actions/navigation/modals/path-editing-popup';
+import {getOnlyFolders} from '../../../../utils/navigation/path-editing-popup';
 import withScope from '../../../../hocs/components/Modal/withScope';
 
 import './PathEditorModal.scss';
@@ -64,7 +64,7 @@ class PathEditorModal extends Component {
     }
 
     handleBlur = (newPath) => {
-        const { onBlur } = this.props;
+        const {onBlur} = this.props;
 
         if (typeof onBlur === 'function') {
             onBlur(newPath);
@@ -73,7 +73,7 @@ class PathEditorModal extends Component {
         }
     };
     handleFocus = (newPath) => {
-        const { onFocus } = this.props;
+        const {onFocus} = this.props;
 
         if (typeof onFocus === 'function') {
             onFocus(newPath);
@@ -82,7 +82,7 @@ class PathEditorModal extends Component {
         }
     };
     handleChange = (newPath) => {
-        const { onChange } = this.props;
+        const {onChange} = this.props;
 
         if (typeof onChange === 'function') {
             onChange(newPath);
@@ -91,7 +91,7 @@ class PathEditorModal extends Component {
         }
     };
     handleApply = (newPath) => {
-        const { onApply } = this.props;
+        const {onApply} = this.props;
 
         if (typeof onApply === 'function') {
             onApply(newPath);
@@ -145,7 +145,7 @@ class PathEditorModal extends Component {
     }
 
     render() {
-        const { visible, inProcess, showError, modalTitle } = this.props;
+        const {visible, inProcess, showError, modalTitle} = this.props;
 
         const content = visible && this.renderContent();
         const isDisabled = () => inProcess || showError;
@@ -167,5 +167,5 @@ class PathEditorModal extends Component {
 
 export default compose(
     withScope('path-editor-modal'),
-    connect(null, { setPath, hideError }),
+    connect(null, {setPath, hideError}),
 )(PathEditorModal);

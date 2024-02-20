@@ -3,21 +3,21 @@ import axios from 'axios';
 import _ from 'lodash';
 
 import yt from '@ytsaurus/javascript-wrapper/lib/yt';
-import { Toaster } from '@gravity-ui/uikit';
-import { updateView } from '../../../../store/actions/navigation';
+import {Toaster} from '@gravity-ui/uikit';
+import {updateView} from '../../../../store/actions/navigation';
 
-import { CREATE_TABLE_MODAL_DATA_FIELDS } from '../../../../constants/navigation/modals/create-table';
-import { initialState } from '../../../../store/reducers/navigation/modals/create-table';
-import { showErrorPopup } from '../../../../utils/utils';
+import {CREATE_TABLE_MODAL_DATA_FIELDS} from '../../../../constants/navigation/modals/create-table';
+import {initialState} from '../../../../store/reducers/navigation/modals/create-table';
+import {showErrorPopup} from '../../../../utils/utils';
 import Link from '../../../../components/Link/Link';
-import { genNavigationUrl } from '../../../../utils/navigation/navigation';
-import { getCluster } from '../../../selectors/global';
+import {genNavigationUrl} from '../../../../utils/navigation/navigation';
+import {getCluster} from '../../../selectors/global';
 
 export function openCreateTableModal(parentDirectory) {
     return (dispatch) => {
         dispatch({
             type: CREATE_TABLE_MODAL_DATA_FIELDS,
-            data: { ...initialState, showModal: true, parentDirectory },
+            data: {...initialState, showModal: true, parentDirectory},
         });
     };
 }
@@ -26,7 +26,7 @@ export function closeCreateTableModal() {
     return (dispatch) => {
         dispatch({
             type: CREATE_TABLE_MODAL_DATA_FIELDS,
-            data: { showModal: false },
+            data: {showModal: false},
         });
     };
 }
@@ -56,7 +56,7 @@ export function createTable(path, attributes) {
                     title: 'Table created',
                     content: (
                         <React.Fragment>
-                            {what} <Link url={genNavigationUrl({ cluster, path })}>{path}</Link>{' '}
+                            {what} <Link url={genNavigationUrl({cluster, path})}>{path}</Link>{' '}
                             successfully created
                         </React.Fragment>
                     ),
@@ -66,10 +66,10 @@ export function createTable(path, attributes) {
                 if (!axios.isCancel(error)) {
                     dispatch({
                         type: CREATE_TABLE_MODAL_DATA_FIELDS,
-                        data: { error },
+                        data: {error},
                     });
                     const data = error?.response?.data || error?.response || error;
-                    const { code, message } = data;
+                    const {code, message} = data;
 
                     toaster.add({
                         name: path,
@@ -94,7 +94,7 @@ export function setCreateTableKeyColumns(keyColumns) {
     return (dispatch) => {
         dispatch({
             type: CREATE_TABLE_MODAL_DATA_FIELDS,
-            data: { keyColumns },
+            data: {keyColumns},
         });
     };
 }
@@ -103,7 +103,7 @@ export function setCreateTableColumnsOrder(columnsOrder) {
     return (dispatch) => {
         dispatch({
             type: CREATE_TABLE_MODAL_DATA_FIELDS,
-            data: { columnsOrder },
+            data: {columnsOrder},
         });
     };
 }
@@ -111,13 +111,13 @@ export function setCreateTableColumnsOrder(columnsOrder) {
 export function setCreateTableLockSuggestions(allColumnLockValues = []) {
     return {
         type: CREATE_TABLE_MODAL_DATA_FIELDS,
-        data: { columnLockSuggestions: _.uniq(allColumnLockValues.sort()) },
+        data: {columnLockSuggestions: _.uniq(allColumnLockValues.sort())},
     };
 }
 
 export function setCreateTableGroupSuggestions(allColumnGroups = []) {
     return {
         type: CREATE_TABLE_MODAL_DATA_FIELDS,
-        data: { columnGroupSuggestions: _.uniq(allColumnGroups.sort()) },
+        data: {columnGroupSuggestions: _.uniq(allColumnGroups.sort())},
     };
 }
