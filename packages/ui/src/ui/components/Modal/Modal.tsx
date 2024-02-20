@@ -1,13 +1,13 @@
-import React, {Component} from 'react';
 import block from 'bem-cn-lite';
+import React, {Component} from 'react';
 
 import {Modal as ModalImpl} from '@gravity-ui/uikit';
 import Icon from '../Icon/Icon';
 
 import withHandledScrollBar from '../../hocs/components/Modal/withHandledScrollBar';
 
-import './Modal.scss';
 import Button, {ButtonProps} from '../Button/Button';
+import './Modal.scss';
 
 const b = block('elements-modal');
 
@@ -55,8 +55,8 @@ class Modal extends Component<ModalProps> {
             <div className={b('header', 'elements-ellipsis')} title={title}>
                 {title}
                 <div className={b('close')}>
-                    <Button view="flat-secondary" size="l" onClick={onCancel}>
-                        <Icon awesome={'times'} face={'light'} />
+                    <Button view="normal" size="m" onClick={onCancel}>
+                        <Icon awesome={'times'} size="l" face={'light'} />
                     </Button>
                 </div>
             </div>

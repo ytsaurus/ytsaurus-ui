@@ -2,20 +2,20 @@ import React from 'react';
 // @ts-ignore
 import yt from '@ytsaurus/javascript-wrapper/lib/yt';
 
-import {Toaster} from '@gravity-ui/uikit';
+import { Toaster } from '@gravity-ui/uikit';
 import Link from '../../../../components/Link/Link';
 
-import {MOVE_OBJECT} from '../../../../constants/navigation/modals/move-object';
-import {showErrorInModal} from '../../../../store/actions/navigation/modals/path-editing-popup';
-import {HIDE_ERROR} from '../../../../constants/navigation/modals/path-editing-popup';
-import {prepareDestinationPath, preparePath} from '../../../../utils/navigation';
+import { MOVE_OBJECT } from '../../../../constants/navigation/modals/move-object';
+import { showErrorInModal } from '../../../../store/actions/navigation/modals/path-editing-popup';
+import { HIDE_ERROR } from '../../../../constants/navigation/modals/path-editing-popup';
+import { prepareDestinationPath, preparePath } from '../../../../utils/navigation';
 import CancelHelper from '../../../../utils/cancel-helper';
 import _ from 'lodash';
-import {executeBatchWithRetries} from '../../execute-batch';
-import {YTApiId} from '../../../../rum/rum-wrap-api';
-import {rumLogError} from '../../../../rum/rum-counter';
-import {wrapBatchPromise} from '../../../../utils/utils';
-import {Dispatch} from 'redux';
+import { executeBatchWithRetries } from '../../execute-batch';
+import { YTApiId } from '../../../../rum/rum-wrap-api';
+import { rumLogError } from '../../../../rum/rum-counter';
+import { wrapBatchPromise } from '../../../../utils/utils';
+import { Dispatch } from 'redux';
 
 const requests = new CancelHelper();
 const toaster = new Toaster();
@@ -24,7 +24,7 @@ interface MoveOptions {
     preserve_account?: boolean;
 }
 
-function moveObjectIntoDirectory(from: string, to: string, {preserve_account}: MoveOptions) {
+function moveObjectIntoDirectory(from: string, to: string, { preserve_account }: MoveOptions, force: boolean) {
     const parts = from.split('/');
     const name = parts[parts.length - 1];
     return yt.v3.move({
@@ -32,12 +32,13 @@ function moveObjectIntoDirectory(from: string, to: string, {preserve_account}: M
             source_path: preparePath(from),
             destination_path: prepareDestinationPath(to, name),
             preserve_account,
+            force,
         },
         cancellation: requests.saveCancelToken,
     });
 }
 
-function moveObjectWithRename(from: string, to: string, {preserve_account}: MoveOptions) {
+function moveObjectWithRename(from: string, to: string, { preserve_account }: MoveOptions) {
     return yt.v3.move({
         parameters: {
             source_path: preparePath(from),
@@ -48,30 +49,31 @@ function moveObjectWithRename(from: string, to: string, {preserve_account}: Move
     });
 }
 
-function moveSingleObject(from: string, to: string, options: MoveOptions): Promise<string> {
+function moveSingleObject(from: string, to: string, options: MoveOptions, force: boolean): Promise<string> {
     const lastChar = to.charAt(to.length - 1);
 
     if (lastChar === '/') {
-        return moveObjectIntoDirectory(from, to, options);
+        return moveObjectIntoDirectory(from, to, options, force);
     }
 
     return yt.v3
-        .exists({parameters: {path: `${to}&`}, cancellation: requests.saveCancelToken})
+        .exists({ parameters: { path: `${to}&` }, cancellation: requests.saveCancelToken })
         .then((exist: boolean) => {
             return exist
-                ? moveObjectIntoDirectory(from, to, options)
+                ? moveObjectIntoDirectory(from, to, options, force)
                 : moveObjectWithRename(from, to, options);
         });
 }
 
 function moveObjects(
-    items: Array<{path: string; titleUnquoted: string}>,
+    items: Array<{ path: string; titleUnquoted: string }>,
     to: string,
-    {preserve_account}: MoveOptions,
+    { preserve_account }: MoveOptions,
+    force: boolean
 ) {
     if (items.length === 1) {
-        const [{path}] = items;
-        return moveSingleObject(path, to, {preserve_account});
+        const [{ path }] = items;
+        return moveSingleObject(path, to, { preserve_account }, force);
     }
 
     return yt.v3.startTransaction({}).then((id: string) => {
@@ -94,9 +96,9 @@ function moveObjects(
             }),
             'Failed to move the object(s)',
         )
-            .then(() => yt.v3.commitTransaction({transaction_id: id}))
+            .then(() => yt.v3.commitTransaction({ transaction_id: id }))
             .catch((err) =>
-                yt.v3.abortTransaction({transaction_id: id}).then(() => Promise.reject(err)),
+                yt.v3.abortTransaction({ transaction_id: id }).then(() => Promise.reject(err)),
             );
     });
 }
@@ -123,22 +125,24 @@ export function moveObject(
     movedPath: string,
     onSuccess: (destFullPath: string) => void,
     multipleMode: boolean,
-    items: Array<{path: string; titleUnquoted: string}>,
-    {preserve_account}: MoveOptions,
+    items: Array<{ path: string; titleUnquoted: string }>,
+    { preserve_account }: MoveOptions,
+    force: boolean,
+    onReset: () => void
 ) {
     return (dispatch: Dispatch) => {
-        dispatch({type: MOVE_OBJECT.REQUEST});
+        dispatch({ type: MOVE_OBJECT.REQUEST });
 
         return Promise.resolve()
             .then(() =>
                 multipleMode
-                    ? moveObjects(items, movedPath, {preserve_account}).then(() => movedPath)
-                    : moveSingleObject(objectPath, movedPath, {preserve_account}).then((value) =>
-                          resolveEntityPath(JSON.parse(value)),
-                      ),
+                    ? moveObjects(items, movedPath, { preserve_account }, force).then(() => movedPath)
+                    : moveSingleObject(objectPath, movedPath, { preserve_account }, force).then((value) =>
+                        resolveEntityPath(JSON.parse(value)),
+                    ),
             )
             .then((result) => {
-                dispatch({type: MOVE_OBJECT.SUCCESS});
+                dispatch({ type: MOVE_OBJECT.SUCCESS });
 
                 if (typeof onSuccess === 'function') {
                     onSuccess(result);
@@ -151,6 +155,7 @@ export function moveObject(
                     title: `Object${multipleMode ? 's' : ''} was successfully moved`,
                     content: <Link url={`navigation?path=${result}`}>{result}</Link>,
                 });
+                onReset()
                 return result;
             })
             .catch((error) => {
@@ -159,7 +164,7 @@ export function moveObject(
                         type: MOVE_OBJECT.CANCELLED,
                     });
                 } else {
-                    dispatch({type: MOVE_OBJECT.FAILURE});
+                    dispatch({ type: MOVE_OBJECT.FAILURE });
 
                     const action = showErrorInModal(error);
 
@@ -174,6 +179,6 @@ export function abortRequests() {
     return (dispatch: Dispatch) => {
         requests.removeAllRequests();
 
-        dispatch({type: HIDE_ERROR});
+        dispatch({ type: HIDE_ERROR });
     };
 }

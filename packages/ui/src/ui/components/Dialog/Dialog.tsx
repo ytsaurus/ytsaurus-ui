@@ -1,37 +1,29 @@
-import React, {ComponentProps} from 'react';
 import cn from 'bem-cn-lite';
 import _ from 'lodash';
+import React, {ComponentProps} from 'react';
 
-import SubjectsControl from '../ACL/SubjectsControl/SubjectsControl';
 import PermissionsControl from '../../components/ACL/RequestPermissions/PermissionsControl/PermissionsControl';
 import AccountsSuggest, {AccountsSuggestWithLoading} from '../../pages/accounts/AccountsSuggest';
 import GroupSuggest from '../../pages/components/GroupSuggest/GroupSuggest';
+import SubjectsControl from '../ACL/SubjectsControl/SubjectsControl';
 
 import ClusterSelectControl from './controls/ClusterSelectControl/ClusterSelectControl';
 
-import SortableListControl from '../../components/Dialog/controls/SortableListControl/SortableListControl';
+import Block from '../../components/Block/Block';
 import BytesControl, {NumberControl} from '../../components/Dialog/controls/BytesControl';
-import RoleListControl from './controls/RoleListControl/RoleListControl';
-import CreateTableTabField from '../../navigation/Navigation/PathEditorModal/CreateTableModal/CreateTableTabField/CreateTableTabField';
+import SortableListControl from '../../components/Dialog/controls/SortableListControl/SortableListControl';
 import {
     GroupSuggestControl,
     LockSuggestControl,
 } from '../../navigation/Navigation/PathEditorModal/CreateTableModal/CreateTableSuggests/CreateTableSuggests';
-import SelectWithSubItems from './controls/SelectWithSubItems/SelectWithSubItems';
-import CreatePoolParentSuggest from '../../pages/scheduling/Instruments/CreatePoolDialog/CreatePoolParentSuggest';
+import CreateTableTabField from '../../navigation/Navigation/PathEditorModal/CreateTableModal/CreateTableTabField/CreateTableTabField';
 import TabletCellBundlesSuggest from '../../pages/components/TabletCellBundlesSuggest/TabletCellBundlesSuggest';
-import Block from '../../components/Block/Block';
+import CreatePoolParentSuggest from '../../pages/scheduling/Instruments/CreatePoolDialog/CreatePoolParentSuggest';
 import EditablePathList from './controls/EditablePathList/EditablePathList';
 import {PathEditorControl} from './controls/PathEditorControl/PathEditorControl';
+import RoleListControl from './controls/RoleListControl/RoleListControl';
+import SelectWithSubItems from './controls/SelectWithSubItems/SelectWithSubItems';
 
-import './Dialog.scss';
-import {PoolSuggestControl} from './controls/PoolSuggestControl/PoolSuggestControl';
-import {PoolTreeSuggestControl} from './controls/PoolTreeSuggestControl/PoolTreeSuggestControl';
-import {TableSortByControl} from '../../pages/navigation/modals/TableMergeSortModal/TableSortByControl';
-import {TableChunkSize} from '../../pages/navigation/modals/TableMergeSortModal/TableChunkSize';
-import {UsableAccountSuggest} from '../../pages/accounts/UsableAccountSuggest';
-import {EditAnnotationWithPreview} from '../../components/EditAnnotationWithPreview/EditAnnotationWithPreview';
-import {EditJsonWithPreview} from '../../components/EditJsonWithPreview/EditJsonWithPreview';
 import {
     DFDialog,
     DFDialogField,
@@ -42,18 +34,26 @@ import {
     registerDialogControl,
     registerDialogTabControl,
 } from '@gravity-ui/dialog-fields';
-export {FORM_ERROR} from '@gravity-ui/dialog-fields';
-export type {FormApi} from '@gravity-ui/dialog-fields';
-import {FIX_MY_TYPE, YTError} from '../../types';
+import {EditAnnotationWithPreview} from '../../components/EditAnnotationWithPreview/EditAnnotationWithPreview';
+import {EditJsonWithPreview} from '../../components/EditJsonWithPreview/EditJsonWithPreview';
+import Select, {SelectSingle} from '../../components/Select/Select';
+import {TimeDuration} from '../../components/TimeDuration/TimeDuration';
+import BeforeDatePicker from '../../components/common/BeforeDatePicker/BeforeDatePicker';
+import {UsableAccountSuggest} from '../../pages/accounts/UsableAccountSuggest';
+import {TableChunkSize} from '../../pages/navigation/modals/TableMergeSortModal/TableChunkSize';
+import {TableSortByControl} from '../../pages/navigation/modals/TableMergeSortModal/TableSortByControl';
 import PoolQuotaEditor from '../../pages/scheduling/PoolQoutaEditor/PoolQuotaEditor';
+import {BundleInput} from '../../pages/tablet_cell_bundles/bundles/BundleEditorDialog/components/BundleInput/BundleInput';
 import {BundleTableField} from '../../pages/tablet_cell_bundles/bundles/BundleEditorDialog/components/BundleTableField/BundleTableField';
 import {BundleTitle} from '../../pages/tablet_cell_bundles/bundles/BundleEditorDialog/components/BundleTitle/BundleTitle';
-import {BundleInput} from '../../pages/tablet_cell_bundles/bundles/BundleEditorDialog/components/BundleInput/BundleInput';
+import {FIX_MY_TYPE, YTError} from '../../types';
+import './Dialog.scss';
 import {AbcControl} from './controls/AbcControl/AbcControl';
-import Select, {SelectSingle} from '../../components/Select/Select';
-import BeforeDatePicker from '../../components/common/BeforeDatePicker/BeforeDatePicker';
-import {TimeDuration} from '../../components/TimeDuration/TimeDuration';
 import {DatePickerControl} from './controls/DatePickerControl/DatePickerControl';
+import {PoolSuggestControl} from './controls/PoolSuggestControl/PoolSuggestControl';
+import {PoolTreeSuggestControl} from './controls/PoolTreeSuggestControl/PoolTreeSuggestControl';
+export {FORM_ERROR} from '@gravity-ui/dialog-fields';
+export type {FormApi} from '@gravity-ui/dialog-fields';
 
 const block = cn('yt-dialog');
 
