@@ -1,46 +1,42 @@
-import axios, { AxiosProgressEvent } from 'axios';
+import axios, {AxiosProgressEvent} from 'axios';
 import cn from 'bem-cn-lite';
 import _ from 'lodash';
 import React from 'react';
-import { compose } from 'redux';
+import {compose} from 'redux';
 
 // @ts-ignore
 import yt from '@ytsaurus/javascript-wrapper/lib/yt';
 
-
+import {Progress} from '@gravity-ui/uikit';
+import {ConnectedProps, connect} from 'react-redux';
+import hammer from '../../../../../common/hammer';
+import Error from '../../../../../components/Block/Block';
 import Button from '../../../../../components/Button/Button';
+import {DialogField, YTDFDialog} from '../../../../../components/Dialog/Dialog';
 import Icon from '../../../../../components/Icon/Icon';
 import Modal from '../../../../../components/Modal/Modal';
-import withVisible, { WithVisibleProps } from '../../../../../hocs/withVisible';
-
-import { Progress } from '@gravity-ui/uikit';
-import { ConnectedProps, connect } from 'react-redux';
-import Error from '../../../../../components/Block/Block';
-import { DialogField, YTDFDialog } from '../../../../../components/Dialog/Dialog';
-import { getPath } from '../../../../../store/selectors/navigation';
-
-import hammer from '../../../../../common/hammer';
+import withVisible, {WithVisibleProps} from '../../../../../hocs/withVisible';
+import {getPath} from '../../../../../store/selectors/navigation';
 
 import UIFactory from '../../../../../UIFactory';
 import HelpLink from '../../../../../components/HelpLink/HelpLink';
-import { docsUrl, getConfigUploadTable } from '../../../../../config';
-import { updateView } from '../../../../../store/actions/navigation';
-import { RootState } from '../../../../../store/reducers';
-import { getCluster, getCurrentClusterConfig } from '../../../../../store/selectors/global';
-import { getSchema } from '../../../../../store/selectors/navigation/tabs/schema';
-import { getXsrfCookieName } from '../../../../../utils';
+import {docsUrl, getConfigUploadTable} from '../../../../../config';
+import {updateView} from '../../../../../store/actions/navigation';
+import {RootState} from '../../../../../store/reducers';
+import {getCluster, getCurrentClusterConfig} from '../../../../../store/selectors/global';
+import {getSchema} from '../../../../../store/selectors/navigation/tabs/schema';
+import {getXsrfCookieName} from '../../../../../utils';
 import CancelHelper from '../../../../../utils/cancel-helper';
-import { DragAndDrop } from './DragAndDrop/DragAndDrop';
-import { FileFormats } from './DragAndDrop/types';
+import {DragAndDrop} from './DragAndDrop/DragAndDrop';
+import {FileFormats} from './DragAndDrop/types';
 import './UploadManager.scss';
-
 const block = cn('upload-manager');
 
 type PropsFromRedux = ConnectedProps<typeof connector>;
 
 type Props = PropsFromRedux & WithVisibleProps;
 
-type FileType = Exclude<FileFormats, 'xls' | 'png' | 'pdf'>
+type FileType = Exclude<FileFormats, 'xls' | 'png' | 'pdf'>;
 
 interface State {
     hasUpcomingFile: boolean;
@@ -76,31 +72,31 @@ const WRITE_ATTRIBUTES = {
     xlsx: {},
 };
 
-const FILE_TYPES: Array<{ value: FileType; text: FileType }> = [
-    { value: 'json', text: 'json' },
-    { value: 'yson', text: 'yson' },
-    { value: 'dsv', text: 'dsv' },
-    { value: 'yamr', text: 'yamr' },
-    { value: 'schemaful_dsv', text: 'schemaful_dsv' },
+const FILE_TYPES: Array<{value: FileType; text: FileType}> = [
+    {value: 'json', text: 'json'},
+    {value: 'yson', text: 'yson'},
+    {value: 'dsv', text: 'dsv'},
+    {value: 'yamr', text: 'yamr'},
+    {value: 'schemaful_dsv', text: 'schemaful_dsv'},
 ];
 
 const UPLOAD_CONFIG = getConfigUploadTable();
 
 const EXCEL_BASE_URL = UPLOAD_CONFIG.uploadTableExcelBaseUrl;
 if (EXCEL_BASE_URL) {
-    FILE_TYPES.push({ value: 'xlsx', text: 'xlsx' });
+    FILE_TYPES.push({value: 'xlsx', text: 'xlsx'});
 }
 
 type ProgressState =
-    | { inProgress: false }
-    | { inProgress: true; event: { total?: number; loaded: number } };
+    | {inProgress: false}
+    | {inProgress: true; event: {total?: number; loaded: number}};
 
 class UploadManager extends React.Component<Props, State> {
     state: State = {
         hasUpcomingFile: false,
         file: null,
         fileType: 'json',
-        progress: { inProgress: false },
+        progress: {inProgress: false},
         append: true,
         firstRowAsNames: false,
         secondRowAsTypes: false,
@@ -111,11 +107,11 @@ class UploadManager extends React.Component<Props, State> {
     private cancelHelper = new CancelHelper();
 
     renderContent() {
-        const { progress, file, error } = this.state;
+        const {progress, file, error} = this.state;
         return (
             <DragAndDrop
                 file={file}
-                availableFormats={FILE_TYPES.map(type => type.value) ?? []}
+                availableFormats={FILE_TYPES.map((type) => type.value) ?? []}
                 progress={progress}
                 error={error}
                 onFileChange={this.onFileChange}
@@ -126,12 +122,12 @@ class UploadManager extends React.Component<Props, State> {
     }
 
     onError = (error: string | null) => {
-        this.setState({ error: error !== null ? new Error(error) : null })
-    }
+        this.setState({error: error !== null ? new Error(error) : null});
+    };
 
     onFileChange = (file: File | null, _: string, fileType: FileType | null) => {
-        this.setState({ file, fileType })
-    }
+        this.setState({file, fileType});
+    };
 
     renderFileContent = (file: File) => {
         return (
@@ -140,16 +136,16 @@ class UploadManager extends React.Component<Props, State> {
                 {this.renderProgress()}
             </React.Fragment>
         );
-    }
+    };
 
     renderSettings(file: File) {
         const inProgress = this.inProgress();
 
-        const { fields, initials } = this.typeSpecificFields();
+        const {fields, initials} = this.typeSpecificFields();
         return (
             <YTDFDialog
                 onAdd={() => Promise.resolve()}
-                onClose={() => { }}
+                onClose={() => {}}
                 visible={true}
                 modal={false}
                 initialValues={{
@@ -181,7 +177,7 @@ class UploadManager extends React.Component<Props, State> {
                             disabled: inProgress,
                         },
                         onChange: (append: boolean) => {
-                            this.setState({ append });
+                            this.setState({append});
                         },
                     },
                     {
@@ -207,9 +203,9 @@ class UploadManager extends React.Component<Props, State> {
     }
 
     typeSpecificFields() {
-        const { fileType } = this.state;
+        const {fileType} = this.state;
         const fields: Array<DialogField> = [];
-        const initials: Partial<{ firstRowAsNames: boolean }> = {};
+        const initials: Partial<{firstRowAsNames: boolean}> = {};
         switch (fileType) {
             case 'xlsx': {
                 fields.push(
@@ -219,7 +215,7 @@ class UploadManager extends React.Component<Props, State> {
                         caption: 'Column names',
                         tooltip: 'Interpret first row as column names',
                         onChange: (firstRowAsNames: boolean) => {
-                            this.setState({ firstRowAsNames });
+                            this.setState({firstRowAsNames});
                         },
                     },
                     {
@@ -228,7 +224,7 @@ class UploadManager extends React.Component<Props, State> {
                         caption: 'Types',
                         tooltip: 'There is row with types right before data-rows',
                         onChange: (secondRowAsTypes: boolean) => {
-                            this.setState({ secondRowAsTypes });
+                            this.setState({secondRowAsTypes});
                         },
                     },
                 );
@@ -239,11 +235,11 @@ class UploadManager extends React.Component<Props, State> {
                 break;
             }
         }
-        return { fields, initials };
+        return {fields, initials};
     }
 
     renderFooterContent() {
-        const { file, fileType } = this.state;
+        const {file, fileType} = this.state;
         const inProgress = this.inProgress();
         const url =
             fileType === 'xlsx'
@@ -267,13 +263,13 @@ class UploadManager extends React.Component<Props, State> {
     }
     onReset = () => {
         this.onFileChange(null, '', null);
-        this.setState({ error: null });
+        this.setState({error: null});
     };
 
     renderProgress() {
-        const { progress } = this.state;
-        const event = progress.inProgress ? progress.event : { total: 1, loaded: 0 };
-        const { total, loaded } = event;
+        const {progress} = this.state;
+        const event = progress.inProgress ? progress.event : {total: 1, loaded: 0};
+        const {total, loaded} = event;
         const totalStr = hammer.format['Bytes'](total);
         const loadedStr = hammer.format['Bytes'](loaded);
         return (
@@ -304,12 +300,16 @@ class UploadManager extends React.Component<Props, State> {
     };
 
     inProgress() {
-        const { progress } = this.state;
+        const {progress} = this.state;
         return progress.inProgress;
     }
 
     renderConfirm = (className: string) => {
-        const { progress: { inProgress }, error, file } = this.state
+        const {
+            progress: {inProgress},
+            error,
+            file,
+        } = this.state;
         return (
             <Button
                 className={block('confirm', className)}
@@ -325,7 +325,9 @@ class UploadManager extends React.Component<Props, State> {
     };
 
     renderClose = (className: string) => {
-        const { progress: { inProgress } } = this.state
+        const {
+            progress: {inProgress},
+        } = this.state;
         return (
             <Button
                 className={block('confirm', className)}
@@ -340,11 +342,11 @@ class UploadManager extends React.Component<Props, State> {
     };
 
     getWriteAttributes() {
-        const { schema } = this.props;
-        const { fileType } = this.state;
+        const {schema} = this.props;
+        const {fileType} = this.state;
         const withColumns: any = {};
         if (fileType === 'schemaful_dsv') {
-            withColumns.columns = _.map(schema, ({ name }) => name);
+            withColumns.columns = _.map(schema, ({name}) => name);
         }
 
         return {
@@ -355,28 +357,28 @@ class UploadManager extends React.Component<Props, State> {
 
     onStartUpload(size: number) {
         this.setState({
-            progress: { inProgress: true, event: { loaded: 0, total: size } },
+            progress: {inProgress: true, event: {loaded: 0, total: size}},
             error: undefined,
         });
     }
 
     onUploadProgress = (event: AxiosProgressEvent) => {
-        this.setState({ progress: { inProgress: true, event } });
+        this.setState({progress: {inProgress: true, event}});
     };
 
     onStopUpload(error?: State['error']) {
-        this.setState({ progress: { inProgress: false } });
+        this.setState({progress: {inProgress: false}});
         if (!error) {
             this.props.updateView();
             this.props.handleClose();
         } else if (!axios.isCancel(error) && (!error || error.code !== 'cancelled')) {
             error = error.response?.data || error;
-            this.setState({ error });
+            this.setState({error});
         }
     }
 
     onConfirm = () => {
-        const { append } = this.state;
+        const {append} = this.state;
         if (append) {
             return this.onConfirmImpl();
         }
@@ -385,7 +387,7 @@ class UploadManager extends React.Component<Props, State> {
     };
 
     onConfirmImpl = () => {
-        const { file, fileType, append } = this.state;
+        const {file, fileType, append} = this.state;
 
         if (fileType === 'xlsx') {
             this.onXlsxUpload();
@@ -395,7 +397,7 @@ class UploadManager extends React.Component<Props, State> {
             return;
         }
 
-        const { path, proxy, externalProxy, cluster } = this.props;
+        const {path, proxy, externalProxy, cluster} = this.props;
 
         this.onStartUpload(file.size);
 
@@ -417,7 +419,7 @@ class UploadManager extends React.Component<Props, State> {
                         },
                         parameters: {
                             transaction_id,
-                            path: { $value: path, $attributes: { append } },
+                            path: {$value: path, $attributes: {append}},
                             input_format: {
                                 $value: fileType,
                                 $attributes: this.getWriteAttributes(),
@@ -427,7 +429,7 @@ class UploadManager extends React.Component<Props, State> {
                         data: file,
                     })
                     .then(() => {
-                        return yt.v3.commitTransaction({ transaction_id }).then(() => {
+                        return yt.v3.commitTransaction({transaction_id}).then(() => {
                             this.onStopUpload();
                         });
                     });
@@ -435,18 +437,18 @@ class UploadManager extends React.Component<Props, State> {
             .catch((e: any) => {
                 this.onStopUpload(e);
                 if (transaction_id) {
-                    yt.v3.abortTransaction({ transaction_id });
+                    yt.v3.abortTransaction({transaction_id});
                 }
             });
     };
 
     onXlsxUpload() {
-        const { file, fileType } = this.state;
+        const {file, fileType} = this.state;
         if (!file || fileType !== 'xlsx') {
             return Promise.resolve();
         }
 
-        const { path, cluster } = this.props;
+        const {path, cluster} = this.props;
         this.onStartUpload(file.size);
 
         const readyUrl = `${EXCEL_BASE_URL}/${cluster}/api/ready`;
@@ -455,7 +457,7 @@ class UploadManager extends React.Component<Props, State> {
         this.cancelHelper.removeAllRequests();
         return axios.get(readyUrl).then(
             () => {
-                const { append, firstRowAsNames, secondRowAsTypes } = this.state;
+                const {append, firstRowAsNames, secondRowAsTypes} = this.state;
                 const start_row = [firstRowAsNames, secondRowAsTypes].filter(Boolean).length + 1;
                 const params = new URLSearchParams({
                     path,
@@ -500,11 +502,11 @@ class UploadManager extends React.Component<Props, State> {
     };
 
     setOverwriteConfirmationVisible(showOverwriteConfirmation: boolean) {
-        this.setState({ showOverwriteConfirmation });
+        this.setState({showOverwriteConfirmation});
     }
 
     renderOverwriteConfirmationDialog() {
-        const { showOverwriteConfirmation } = this.state;
+        const {showOverwriteConfirmation} = this.state;
         return !showOverwriteConfirmation ? null : (
             <Modal
                 size={'s'}
@@ -529,7 +531,7 @@ class UploadManager extends React.Component<Props, State> {
     }
 
     render() {
-        const { visible, handleShow } = this.props;
+        const {visible, handleShow} = this.props;
         return (
             <React.Fragment>
                 <Button size="m" title="Upload" onClick={handleShow}>
@@ -561,7 +563,7 @@ class UploadManager extends React.Component<Props, State> {
 const mapStateToProps = (state: RootState) => {
     const path: string = getPath(state);
     const schema = getSchema(state);
-    const { proxy, externalProxy } = getCurrentClusterConfig(state);
+    const {proxy, externalProxy} = getCurrentClusterConfig(state);
 
     return {
         path,
