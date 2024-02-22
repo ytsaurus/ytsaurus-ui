@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.16.2](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.16.1...ui-v1.16.2) (2024-02-22)
+
+
+### Bug Fixes
+
+* scheduling broken aggregation [YTFRONT-4031] ([f2c2246](https://github.com/ytsaurus/ytsaurus-ui/commit/f2c224699e2ef9d1efa9b245ba2716dc5f511376))
+
 ## [1.16.1](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.16.0...ui-v1.16.1) (2024-02-14)
 
 
