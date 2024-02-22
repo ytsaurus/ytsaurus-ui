@@ -1,17 +1,17 @@
-import React from 'react';
-import _ from 'lodash';
 import cn from 'bem-cn-lite';
+import _ from 'lodash';
+import React from 'react';
 
 import {COMPONENTS_NODES_TABLE_ID} from '../../../constants/components/nodes/nodes';
 import {DESC_ASC_UNORDERED, compareArraysBySizeThenByItems} from '../../../utils/sort-helpers';
 
-import {Progress} from '@gravity-ui/uikit';
-import Version from '../../../pages/components/tabs/nodes/Version';
-import StatusBlock, {StatusBlockTheme} from '../../../components/StatusBlock/StatusBlock';
+import {Progress, SelectOption} from '@gravity-ui/uikit';
 import ClipboardButton from '../../../components/ClipboardButton/ClipboardButton';
-import NodeActions from '../../../pages/components/tabs/nodes/NodeActions/NodeActions';
-import MemoryProgress from '../../../pages/components/tabs/nodes/MemoryProgress/MemoryProgress';
+import StatusBlock, {StatusBlockTheme} from '../../../components/StatusBlock/StatusBlock';
 import {Host} from '../../../containers/Host/Host';
+import MemoryProgress from '../../../pages/components/tabs/nodes/MemoryProgress/MemoryProgress';
+import NodeActions from '../../../pages/components/tabs/nodes/NodeActions/NodeActions';
+import Version from '../../../pages/components/tabs/nodes/Version';
 
 import hammer from '../../../common/hammer';
 import {
@@ -19,9 +19,9 @@ import {
     prepareUsageText,
     renderLabel,
 } from '../../../components/templates/components/nodes/nodes';
+import {NodeColumnBanned, NodeColumnState} from '../../../pages/components/tabs/NodeColumns';
 import type {Node, TabletSlotState} from '../../../store/reducers/components/nodes/nodes/node';
 import type {FIX_MY_TYPE} from '../../../types';
-import {NodeColumnBanned, NodeColumnState} from '../../../pages/components/tabs/NodeColumns';
 
 import './tables.scss';
 
@@ -89,8 +89,9 @@ export type NodeWithProps<T extends keyof typeof PropertiesByColumn> = Pick<
 
 type ItemDef<P extends keyof typeof PropertiesByColumn> = {
     align?: 'left' | 'center' | 'right';
-    get?: (node: NodeWithProps<P>) => void;
+    get?: (node: NodeWithProps<P>, anyother: any) => void;
     sort?: ((node: NodeWithProps<P>) => void) | boolean;
+    sortSelectItems?: SelectOption[];
 };
 
 type Items = {
@@ -98,6 +99,30 @@ type Items = {
         group?: boolean;
         items?: Record<string, ItemDef<P>>;
         set?: string[];
+    };
+};
+
+type Sets = {
+    [x: string]: {
+        items: string[];
+    };
+};
+
+type NodeTableProps = {
+    size: 's' | 'm' | 'l';
+    virtual: boolean;
+    virtualType: string;
+    theme: 'light' | 'dark';
+    cssHover: boolean;
+    striped: false;
+    tableId: string;
+    computeKey: (node: NodeWithProps<keyof typeof PropertiesByColumn>) => string;
+    columns: {
+        items: Items;
+        sets: Sets;
+    };
+    templates: {
+        data: Record<string, () => any>;
     };
 };
 
@@ -136,7 +161,7 @@ const ioWeight: NonNullable<Items['io_weight']> = {
     set: ['default', 'ssd_blobs', 'ssd_journals'],
 };
 
-const nodesTableProps = {
+const nodesTableProps: NodeTableProps = {
     size: 's',
     virtual: true,
     virtualType: 'simple',
@@ -337,18 +362,46 @@ const nodesTableProps = {
                 align: 'left',
             },
             cpu: {
-                get(node) {
-                    return node.cpuProgress;
+                get(node, selectedField) {
+                    return _.get(node, selectedField);
                 },
                 sort: true,
                 align: 'center',
+                sortSelectItems: [
+                    {
+                        value: 'cpu.usage',
+                        content: 'Usage',
+                    },
+                    {
+                        value: 'cpu.limit',
+                        content: 'Limit',
+                    },
+                    {
+                        value: 'cpuProgress',
+                        content: 'Usage / Limit',
+                    },
+                ],
             },
             memory: {
-                get(node) {
-                    return node.memoryProgress;
+                get(node, selectedField) {
+                    return _.get(node, selectedField);
                 },
                 sort: true,
                 align: 'center',
+                sortSelectItems: [
+                    {
+                        value: 'memory.total.used',
+                        content: 'Usage',
+                    },
+                    {
+                        value: 'memory.total.limit',
+                        content: 'Limit',
+                    },
+                    {
+                        value: 'memoryProgress',
+                        content: 'Usage / Limit',
+                    },
+                ],
             },
             memory_total: {
                 get(node) {

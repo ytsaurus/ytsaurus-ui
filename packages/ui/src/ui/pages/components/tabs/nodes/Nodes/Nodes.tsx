@@ -1,33 +1,42 @@
-import React from 'react';
-import {Sticky, StickyContainer} from 'react-sticky';
-import {ConnectedProps, connect, useDispatch, useSelector} from 'react-redux';
-import hammer from '../../../../../common/hammer';
-import {compose} from 'redux';
 import cn from 'bem-cn-lite';
-import memoize_ from 'lodash/memoize';
 import filter_ from 'lodash/filter';
-import map_ from 'lodash/map';
 import includes_ from 'lodash/includes';
 import keys_ from 'lodash/keys';
+import map_ from 'lodash/map';
+import memoize_ from 'lodash/memoize';
+import React from 'react';
+import {ConnectedProps, connect, useDispatch, useSelector} from 'react-redux';
+import {Sticky, StickyContainer} from 'react-sticky';
+import {compose} from 'redux';
+import hammer from '../../../../../common/hammer';
 
-import ColumnSelector from '../../../../../components/ColumnSelector/ColumnSelector';
-import ElementsTable from '../../../../../components/ElementsTable/ElementsTable';
-import Radiobutton from '../../../../../components/RadioButton/RadioButton';
-import TableInfo from '../../../../../pages/components/TableInfo/TableInfo';
-import Dropdown from '../../../../../components/Dropdown/Dropdown';
 import Button from '../../../../../components/Button/Button';
+import ColumnSelector from '../../../../../components/ColumnSelector/ColumnSelector';
+import Dropdown from '../../../../../components/Dropdown/Dropdown';
+import ElementsTable from '../../../../../components/ElementsTable/ElementsTable';
 import Filter from '../../../../../components/Filter/Filter';
 import Icon from '../../../../../components/Icon/Icon';
 import Loader from '../../../../../components/Loader/Loader';
+import Radiobutton from '../../../../../components/RadioButton/RadioButton';
+import TableInfo from '../../../../../pages/components/TableInfo/TableInfo';
 
-import LoadDataHandler from '../../../../../components/LoadDataHandler/LoadDataHandler';
 import ErrorBoundary from '../../../../../components/ErrorBoundary/ErrorBoundary';
+import LoadDataHandler from '../../../../../components/LoadDataHandler/LoadDataHandler';
 import FiltersPresets from '../FilterPresets/FiltersPresets';
-import SetupModal from '../SetupModal/SetupModal';
 import NodeCard from '../NodeCard/NodeCard';
+import SetupModal from '../SetupModal/SetupModal';
 
 import {ComponentsNodeTypeSelector} from '../../../../../pages/system/Nodes/NodeTypeSelector';
 
+import withVisible, {WithVisibleProps} from '../../../../../hocs/withVisible';
+import {useUpdaterWithMemoizedParams} from '../../../../../hooks/use-updater';
+import {
+    changeContentMode,
+    changeHostFilter,
+    getNodes,
+    handleColumnsChange,
+} from '../../../../../store/actions/components/nodes/nodes';
+import type {NodesState} from '../../../../../store/reducers/components/nodes/nodes/nodes';
 import {
     getComponentNodesFiltersCount,
     getComponentNodesTableProps,
@@ -37,25 +46,16 @@ import {
 } from '../../../../../store/selectors/components/nodes/nodes';
 import {getSelectedColumns} from '../../../../../store/selectors/settings';
 import {getSettingsEnableSideBar} from '../../../../../store/selectors/settings-ts';
-import {defaultColumns} from '../../../../../utils/components/nodes/tables';
-import withVisible, {WithVisibleProps} from '../../../../../hocs/withVisible';
-import {useUpdaterWithMemoizedParams} from '../../../../../hooks/use-updater';
 import {isPaneSplit} from '../../../../../utils';
-import {
-    changeContentMode,
-    changeHostFilter,
-    getNodes,
-    handleColumnsChange,
-} from '../../../../../store/actions/components/nodes/nodes';
-import type {NodesState} from '../../../../../store/reducers/components/nodes/nodes/nodes';
+import {defaultColumns} from '../../../../../utils/components/nodes/tables';
 
-import {mergeScreen, splitScreen as splitScreenAction} from '../../../../../store/actions/global';
-import {HEADER_HEIGHT, KeyCode} from '../../../../../constants/index';
 import {
     CONTENT_MODE,
     CONTENT_MODE_ITEMS,
     SPLIT_TYPE,
 } from '../../../../../constants/components/nodes/nodes';
+import {HEADER_HEIGHT, KeyCode} from '../../../../../constants/index';
+import {mergeScreen, splitScreen as splitScreenAction} from '../../../../../store/actions/global';
 import {RootState} from '../../../../../store/reducers';
 
 import {NodeMaintenanceModal} from '../../../NodeMaintenanceModal/NodeMaintenanceModal';
@@ -370,6 +370,8 @@ const mapStateToProps = (state: RootState) => {
     const {splitScreen} = state.global;
     const {contentMode, nodes, loading, loaded, error, errorData, hostFilter} =
         state.components.nodes.nodes;
+
+    console.log(state);
 
     const visibleNodes = getVisibleNodes(state);
     const selectedColumns = getSelectedColumns(state) || defaultColumns;

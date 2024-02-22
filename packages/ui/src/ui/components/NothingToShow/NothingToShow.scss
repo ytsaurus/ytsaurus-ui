@@ -1,0 +1,27 @@
+.nothing-to-show {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	gap: 3px;
+
+	span {
+		font-size: 0.93rem;
+		color: var(--default-text);
+	}
+
+	h4{
+		margin: 0;
+	}
+
+	.icon {
+		margin-bottom: 20px;
+
+		svg {
+			color: var(--default-color);
+			width: 150px;
+			height: 150px;
+			
+		}
+	 }
+}

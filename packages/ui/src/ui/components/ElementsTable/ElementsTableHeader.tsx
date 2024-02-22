@@ -1,7 +1,15 @@
-import React, {CSSProperties, Component} from 'react';
-import PropTypes from 'prop-types';
 import block from 'bem-cn-lite';
+import PropTypes from 'prop-types';
+import React, {CSSProperties, Component} from 'react';
 
+import {SelectOption} from '@gravity-ui/uikit';
+import {Tooltip} from '../../components/Tooltip/Tooltip';
+import {ChangeColumnSortOrderParams, ToggleColumnSortOrderParams} from '../../store/actions/tables';
+import {RootState} from '../../store/reducers';
+import {OldSortState} from '../../types';
+import {OrderType, oldSortStateToOrderType} from '../../utils/sort-helpers';
+import SortIcon from '../SortIcon/SortIcon';
+import {HeaderSortSelect} from './HeaderSortSelect';
 import {
     ELEMENTS_TABLE,
     TemplatesPropType,
@@ -11,12 +19,6 @@ import {
     prepareColumnsData,
     prepareGroupCellClassName,
 } from './utils';
-import {OldSortState} from '../../types';
-import {OrderType, oldSortStateToOrderType} from '../../utils/sort-helpers';
-import SortIcon from '../../components/SortIcon/SortIcon';
-import {Tooltip} from '../../components/Tooltip/Tooltip';
-import {ToggleColumnSortOrderParams} from '../../store/actions/tables';
-import {RootState} from '../../store/reducers';
 
 const b = block(ELEMENTS_TABLE);
 
@@ -39,6 +41,7 @@ export interface ElementsTableHeaderProps {
     onItemHover?: () => void;
 
     toggleColumnSortOrder: (params: ToggleColumnSortOrderParams) => void;
+    changeColumnSortOrder: (params: ChangeColumnSortOrderParams) => void;
 
     //sortInfo?: () => OldSortState;
     tableId: keyof RootState['tables'];
@@ -66,6 +69,7 @@ interface State {
         items: Array<string>;
         hasGroups?: boolean;
     };
+    columnSelects: Record<string, string>;
 }
 
 interface ColumnGroupInfo {
@@ -80,6 +84,7 @@ interface ColumnGroupInfo {
     render?: undefined;
     sortWithUndefined?: undefined;
     allowedOrderTypes?: undefined;
+    sortSelectItems: SelectOption[];
 
     caption?: React.ReactNode;
     captionTail?: React.ReactNode; // rendered after sort-order icon
@@ -90,6 +95,7 @@ interface ColumnInfo {
         className?: string;
     };
     sort?: boolean;
+    sortSelectItems: SelectOption[];
     sortWithUndefined?: boolean;
     allowedOrderTypes?: Array<OrderType>;
 
@@ -147,6 +153,7 @@ export default class ElementsTableHeader extends Component<ElementsTableHeaderPr
             columnSet: {
                 items: [],
             },
+            columnSelects: {},
         };
     }
 
@@ -201,22 +208,25 @@ export default class ElementsTableHeader extends Component<ElementsTableHeaderPr
     }
 
     renderSortableHeaderCaption(columnName: string) {
-        const className = block('yc-link')({view: 'primary'});
         const {sortState, onSort} = this.props;
+        const {columnItems} = this.state;
+        const {sortSelectItems} = columnItems[columnName];
 
         const {sortWithUndefined, allowedOrderTypes} = this.state.columnItems[columnName];
-
         let sortInfo: OldSortState | undefined;
-        let sortQuery, toggleOrder;
+        let toggleOrder: (selectField?: string) => void;
+        const defaultSelectValue = sortSelectItems?.length ? [sortSelectItems[0].value] : undefined;
+        const {tableId, toggleColumnSortOrder, changeColumnSortOrder} = this.props;
+
         if (sortState) {
-            const {tableId, toggleColumnSortOrder} = this.props;
             sortInfo = sortState[tableId!];
-            toggleOrder = () => {
+            toggleOrder = (selectField?: string) => {
                 toggleColumnSortOrder({
                     tableId,
                     columnName,
                     withUndefined: sortWithUndefined,
                     allowedOrderTypes,
+                    selectField,
                 });
                 if (typeof onSort === 'function') {
                     onSort(columnName);
@@ -229,11 +239,44 @@ export default class ElementsTableHeader extends Component<ElementsTableHeaderPr
         );
 
         return (
-            <a className={className} href={sortQuery} onClick={toggleOrder}>
+            <div
+                className="column-header"
+                onClick={() => {
+                    toggleOrder(this.state.columnSelects[columnName] ?? defaultSelectValue?.[0]);
+
+                    if (
+                        sortSelectItems.length &&
+                        defaultSelectValue &&
+                        !this.state.columnSelects[columnName]
+                    ) {
+                        this.setState({
+                            columnSelects: {
+                                [columnName]: defaultSelectValue[0],
+                            },
+                        });
+                    }
+                }}
+            >
                 {this.renderCellCaption(columnName)}
                 <SortIcon className={b('cell-sort')} order={orderType} />
+                <HeaderSortSelect
+                    changeColumnSortOrder={changeColumnSortOrder}
+                    value={this.state.columnSelects[columnName]}
+                    orderType={orderType}
+                    columnName={columnName}
+                    tableId={tableId}
+                    defaultValue={defaultSelectValue}
+                    sortSelectItems={sortSelectItems}
+                    onChange={(columnName: string, selectField: string) => {
+                        this.setState({
+                            columnSelects: {
+                                [columnName]: selectField,
+                            },
+                        });
+                    }}
+                />
                 {this.renderCellCaptionTail(columnName)}
-            </a>
+            </div>
         );
     }
 

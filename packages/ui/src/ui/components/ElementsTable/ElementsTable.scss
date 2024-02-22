@@ -23,6 +23,20 @@ $thin-border: 1px solid var(--light-divider);
 @include align-placeholder(left, margin-right);
 @include align-placeholder(center, margin);
 
+// override default popup settings for table header select popup
+.yc-popup:has(.custom-option) {
+    top: 4px !important;
+    .yc-list {
+
+        &__item {
+            height: 21px !important;
+            font-size: 0.75rem;
+            margin: 2px 5px;
+            border-radius: 3px;
+        } 
+    }
+}
+
 .elements-table {
     $elements-table: &;
     overflow: auto;
@@ -63,6 +77,46 @@ $thin-border: 1px solid var(--light-divider);
     .hover-tooltip {
         display: inline-block;
     }
+
+    .custom-select {
+        border-radius: 4px;
+        padding: 2px 6px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        color: var(--default-text);
+        font-weight: 600;
+        gap: 4px;
+        font-size: 0.75rem;
+        transition: 0.15s transform;
+        cursor: pointer;
+        background: var(--hover-background);
+        height: 21px;
+
+        &.selected {
+            background: var(--g-color-private-blue-50);
+            color:var(--bluejeans-color);
+
+            &:hover {
+                filter: brightness(0.96);
+            }
+        }
+
+        svg {
+            width: 12px;
+            height: 12px;
+        }
+
+        &:hover {
+            filter: brightness(0.96);
+        }
+
+        &:active {
+            transform: scale(0.95);
+        }
+    }
+
+    
 
     &__empty-header {
         padding-left: 10px;
@@ -121,20 +175,11 @@ $thin-border: 1px solid var(--light-divider);
         vertical-align: middle;
         white-space: nowrap;
 
-        &-sort {
-            font-size: 13px;
-
-            display: inline-block;
-
-            padding: 2px 0;
-            margin-left: 5px;
-        }
-
         &_type_left,
         &_align_left {
             text-align: left;
 
-            .yc-link {
+            .column-header {
                 justify-content: flex-start;
             }
         }
@@ -143,7 +188,7 @@ $thin-border: 1px solid var(--light-divider);
         &_align_right {
             text-align: right;
 
-            .yc-link {
+            .column-header {
                 justify-content: flex-end;
             }
         }
@@ -152,7 +197,7 @@ $thin-border: 1px solid var(--light-divider);
         &_align_center {
             text-align: center;
 
-            .yc-link {
+            .column-header {
                 justify-content: center;
             }
         }
@@ -182,9 +227,10 @@ $thin-border: 1px solid var(--light-divider);
         border-bottom: $thick-border;
 
         #{$elements-table}__cell {
-            .yc-link {
+            .column-header {
                 display: flex;
                 align-items: center;
+                gap: 2px;
             }
         }
     }

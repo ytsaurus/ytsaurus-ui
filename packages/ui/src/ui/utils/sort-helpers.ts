@@ -277,24 +277,28 @@ export function oldSortStateToOrderType<T = string>(
         : 'undefined-desc';
 }
 
-export function orderTypeToOldSortState(field: string, orderType?: OrderType): OldSortState {
+export function orderTypeToOldSortState(
+    field: string,
+    orderType?: OrderType,
+    selectField?: string,
+): OldSortState {
     if (!orderType || !field) {
         return {};
     }
 
     switch (orderType) {
         case 'asc':
-            return {field, asc: true};
+            return {field, asc: true, selectField};
         case 'desc':
-            return {field, asc: false};
+            return {field, asc: false, selectField};
         case 'asc-undefined':
-            return {field, asc: true, undefinedAsc: true};
+            return {field, asc: true, selectField, undefinedAsc: true};
         case 'desc-undefined':
-            return {field, asc: false, undefinedAsc: true};
+            return {field, asc: false, selectField, undefinedAsc: true};
         case 'undefined-asc':
-            return {field, asc: true, undefinedAsc: false};
+            return {field, asc: true, selectField, undefinedAsc: false};
         case 'undefined-desc':
-            return {field, asc: false, undefinedAsc: false};
+            return {field, asc: false, selectField, undefinedAsc: false};
     }
 }
 

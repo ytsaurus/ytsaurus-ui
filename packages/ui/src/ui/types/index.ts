@@ -23,6 +23,7 @@ export interface OldSortState<T = string> {
     field?: T;
     asc?: boolean;
     undefinedAsc?: boolean;
+    selectField?: string;
 }
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
