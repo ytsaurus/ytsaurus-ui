@@ -24,6 +24,7 @@ import {getClustersAvailability} from './controllers/availability';
 import {chytProxyApi} from './controllers/chyt-api';
 import {oauthCallback, oauthLogin, oauthLogout} from './controllers/oauth-login';
 import {handleLogout} from './controllers/logout';
+import axios from 'axios';
 
 const HOME_INDEX_TARGET: AppRouteDescription = {handler: homeIndex, ui: true};
 
@@ -75,6 +76,43 @@ const routes: AppRoutes = {
     'GET /:cluster/:page/:tab': HOME_INDEX_TARGET,
     'GET /:cluster/:page/:operation/:tab': HOME_INDEX_TARGET,
     'GET /:cluster/:page/:operation/:job/:tab': HOME_INDEX_TARGET,
+
+    'POST /gateway/:scope/:service/:action?': {
+        handler: (req, res) => {
+            axios
+                .request({
+                    method: 'POST',
+                    url: 'https://datalens.yeee737-vm.ui.nebius.com' + req.url,
+                    headers: {
+                        'authority': req.headers['authority'],
+                        'accept': req.headers['accept'],
+                        'accept-language': req.headers['accept-language'],
+                        'content-type': 'application/json',
+                        'cookie': req.headers['cookie'],
+                        'origin': req.headers['origin'], 
+                        'referer': req.headers['referer'],
+                        'sec-ch-ua': req.headers['sec-ch-ua'],
+                        'sec-ch-ua-mobile': req.headers['sec-ch-ua-mobile'],
+                        'sec-ch-ua-platform': req.headers['sec-ch-ua-platform'],
+                        'sec-fetch-dest': req.headers['sec-fetch-dest'],
+                        'sec-fetch-mode': req.headers['sec-fetch-mode'],
+                        'sec-fetch-site': req.headers['sec-fetch-site'],
+                        'user-agent': req.headers['user-agent'],
+                        'x-dl-tenantid': req.headers['x-dl-tenantid'],
+                        'x-request-id': req.headers['x-request-id'],
+                        'x-timezone-offset': req.headers['x-timezone-offset']
+                    },
+                    data: JSON.stringify(req.body),
+                })
+                .then((result) => {
+                    res.json(result.data).send();
+                })
+                .catch((e) => {
+                    req.ctx.logError('error', e);
+                    res.status(400).send();
+                });
+        },
+    },
 };
 
 export default routes;

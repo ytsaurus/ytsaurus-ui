@@ -20,6 +20,9 @@ import './legacy-styles/legacy.scss';
 import './styles/redefinitions/redefinitions.scss';
 import UIFactory, {configureUIFactory} from './UIFactory';
 
+// @ts-ignore
+const DatalensEmbeded = React.lazy(() => import('datalensui/DatalensEmbeded'));
+
 configure({lang: 'en'});
 
 function AppRoot({store, history}: ReturnType<typeof createAppStore>) {
@@ -35,5 +38,10 @@ export function renderApp(overrides: Partial<typeof UIFactory>) {
     const {store, history} = createAppStore();
 
     const root = createRoot(document.getElementById('root')!);
-    root.render(<AppRoot {...{store, history}} />);
+    root.render(<>
+        <React.Suspense fallback="Datalens is loading...">
+            <DatalensEmbeded />
+        </React.Suspense>
+        <AppRoot {...{store, history}} />
+    </>);
 }
