@@ -20,7 +20,10 @@ export function calculateTotalOverPools(pools) {
         });
     });
 
-    return Object.assign(hammer.aggregation.prepare(pools, summedProperties)[0], {
+    // We can aggregate only pools with resources
+    const items = pools.filter((pool) => Boolean(pool.resources));
+
+    return Object.assign(hammer.aggregation.prepare(items, summedProperties)[0], {
         key: 'aggregation',
         name: 'Aggregation',
         type: 'aggregation',
