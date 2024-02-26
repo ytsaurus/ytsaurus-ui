@@ -24,9 +24,10 @@ import {makeTabProps} from '../../../utils';
 import {formatByParams} from '../../../utils/format';
 
 import './Content.scss';
-import {getCluster, getUISizes} from '../../../store/selectors/global';
+import {getCluster} from '../../../store/selectors/global';
 import SchedulingExpandedPoolsUpdater from './SchedulingExpandedPoolsUpdater';
 import UIFactory from '../../../UIFactory';
+import {UI_TAB_SIZE} from '../../../constants/global';
 
 const block = cn('scheduling-content');
 
@@ -106,8 +107,6 @@ function Content({className, match, location}) {
 
     const props = makeTabProps(match.url, localTab, showSettings, {pool, tree}, titleDict);
 
-    const tabSize = useSelector(getUISizes).tabSize;
-
     return (
         <ErrorBoundary>
             <SchedulingExpandedPoolsUpdater />
@@ -117,7 +116,7 @@ function Content({className, match, location}) {
                     active={DEFAULT_TAB}
                     className={block('tabs')}
                     routed
-                    size={tabSize}
+                    size={UI_TAB_SIZE}
                 />
 
                 <Switch>

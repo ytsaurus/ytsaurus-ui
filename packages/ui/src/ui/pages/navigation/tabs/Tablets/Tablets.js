@@ -52,7 +52,6 @@ import {useRumMeasureStop} from '../../../../rum/RumUiContext';
 import {RumMeasureTypes} from '../../../../rum/rum-measure-types';
 import {isFinalLoadingStatus} from '../../../../utils/utils';
 import {useAppRumMeasureStart} from '../../../../rum/rum-app-measures';
-import {getUISizes} from '../../../../store/selectors/global';
 import {Host} from '../../../../containers/Host/Host';
 import {
     getTabletsByName,
@@ -61,6 +60,7 @@ import {
 import {getProgressBarColorByIndex} from '../../../../constants/colors';
 
 import './Tablets.scss';
+import {UI_COLLAPSIBLE_SIZE} from '../../../../constants/global';
 
 const block = cn('navigation-tablets');
 
@@ -642,7 +642,7 @@ const mapStateToProps = (state) => {
         activeHistogram,
         histogram,
         type,
-        collapsibleSize: getUISizes().collapsibleSize,
+        collapsibleSize: UI_COLLAPSIBLE_SIZE,
     };
 };
 

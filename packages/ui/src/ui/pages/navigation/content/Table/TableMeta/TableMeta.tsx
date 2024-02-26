@@ -8,9 +8,7 @@ import {
     tableSize,
     tableStorage,
 } from '../../../../../components/MetaTable/presets/presets';
-import CollapsibleSection, {
-    Props as CollapsibleSectionProps,
-} from '../../../../../components/CollapsibleSection/CollapsibleSection';
+import CollapsibleSection from '../../../../../components/CollapsibleSection/CollapsibleSection';
 import MetaTable from '../../../../../components/MetaTable/MetaTable';
 
 import {getTableType} from '../../../../../store/selectors/navigation/content/table';
@@ -20,13 +18,14 @@ import {getTabletErrorsCount} from '../../../../../store/selectors/navigation/ta
 import {Props as AutomaticModeSwitchProps} from './AutomaticModeSwitch';
 
 import {CypressNodeTypes} from '../../../../../utils/cypress-attributes';
-import {getCluster, getUISizes} from '../../../../../store/selectors/global';
+import {getCluster} from '../../../../../store/selectors/global';
 
 import './TableMeta.scss';
 import {main} from '../../../../../components/MetaTable/presets';
 import {getCommonFields} from './commonFields';
 import ypath from '../../../../../common/thor/ypath';
 import {RootState} from '../../../../../store/reducers';
+import {UI_COLLAPSIBLE_SIZE} from '../../../../../constants/global';
 
 const block = cn('navigation-meta-table');
 
@@ -35,7 +34,6 @@ interface Props {
     mediumList: string[];
     isDynamic: boolean;
     tableType: string;
-    collapsibleSize: CollapsibleSectionProps['size'];
     onEditEnableReplicatedTableTracker: AutomaticModeSwitchProps['onEdit'];
 }
 
@@ -44,7 +42,6 @@ function TableMeta({
     mediumList,
     isDynamic,
     tableType,
-    collapsibleSize,
     onEditEnableReplicatedTableTracker,
 }: Props) {
     const type = ypath.getValue(attributes, '/type');
@@ -114,7 +111,7 @@ function TableMeta({
     }, [type, attributes, isDynamic, mediumList, tableType, cf, cluster, tabletErrorCount]);
 
     return (
-        <CollapsibleSection name="Metadata" size={collapsibleSize}>
+        <CollapsibleSection name="Metadata" size={UI_COLLAPSIBLE_SIZE}>
             <MetaTable className={block()} items={items} />
         </CollapsibleSection>
     );
@@ -132,7 +129,6 @@ const mapStateToProps = (state: RootState) => {
         mediumList,
         isDynamic,
         tableType,
-        collapsibleSize: getUISizes().collapsibleSize,
     };
 };
 

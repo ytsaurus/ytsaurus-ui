@@ -1,66 +1,86 @@
+// @ts-ignore
 import yt from '@ytsaurus/javascript-wrapper/lib/yt';
 import CancelHelper from '../../../../utils/cancel-helper';
 import {prepareRequest} from '../../../../utils/navigation';
-import {getPath, getTransaction} from '../../../../store/selectors/navigation';
-import {GET_ANNOTATION} from '../../../../constants/navigation/tabs/annotation';
+import {getPath, getTransaction} from '../../../selectors/navigation';
+import {
+    GET_ANNOTATION,
+    SET_ANNOTATION,
+    SET_ANNOTATION_EDITING,
+    SET_ANNOTATION_SAVING,
+} from '../../../../constants/navigation/tabs/annotation';
 import {YTApiId, ytApiV3Id} from '../../../../rum/rum-wrap-api';
-import {getBatchError} from '../../../../utils/utils';
+import {getBatchError, wrapApiPromiseByToaster} from '../../../../utils/utils';
+import {ThunkAction} from 'redux-thunk';
+import {RootState} from '../../../reducers';
+import {NavigationTabsAnnotationAction} from '../../../reducers/navigation/tabs/annotation';
 
 const cancelHelper = new CancelHelper();
 
-export function getAnnotation() {
-    return (dispatch, getState) => {
-        const state = getState();
-        const path = getPath(state) || '';
+type TabletErrorsThunkAction = ThunkAction<any, RootState, unknown, NavigationTabsAnnotationAction>;
 
-        const transaction = getTransaction(state);
+export const getAnnotation = (): TabletErrorsThunkAction => (dispatch, getState) => {
+    const state = getState();
+    const path = getPath(state) || '';
 
-        dispatch({type: GET_ANNOTATION.REQUEST});
-        cancelHelper.removeAllRequests();
+    const transaction = getTransaction(state);
 
-        const requests = [
-            {
-                command: 'get',
-                parameters: prepareRequest('/@annotation', {
-                    path,
-                    transaction,
-                }),
-            },
-        ];
+    dispatch({type: GET_ANNOTATION.REQUEST});
+    cancelHelper.removeAllRequests();
 
-        ytApiV3Id
-            .executeBatch(YTApiId.navigationGetAnnotation, {
-                parameters: {requests},
-                cancellation: cancelHelper.saveCancelToken,
-            })
-            .then((results) => {
-                const err = getBatchError(results, 'Cannot fetch annotation');
-                if (yt.codes.NODE_DOES_NOT_EXIST !== results[0]?.error?.code && err) {
-                    throw err;
-                }
+    const requests = [
+        {
+            command: 'get' as const,
+            parameters: prepareRequest('/@annotation', {
+                path,
+                transaction,
+            }),
+        },
+    ];
 
-                const [{output: annotation}] = results;
+    ytApiV3Id
+        .executeBatch(YTApiId.navigationGetAnnotation, {
+            parameters: {requests},
+            cancellation: cancelHelper.saveCancelToken,
+        })
+        .then((results) => {
+            const err = getBatchError(results, 'Cannot fetch annotation');
+            if (yt.codes.NODE_DOES_NOT_EXIST !== results[0]?.error?.code && err) {
+                throw err;
+            }
+
+            const [{output: annotation}] = results;
+            dispatch({
+                type: GET_ANNOTATION.SUCCESS,
+                data: {annotation, path},
+            });
+        })
+        .catch((error) => {
+            if (error.code === yt.codes.CANCELLED) {
+                dispatch({type: GET_ANNOTATION.CANCELLED});
+            } else {
                 dispatch({
-                    type: GET_ANNOTATION.SUCCESS,
-                    data: {annotation, path},
+                    type: GET_ANNOTATION.FAILURE,
+                    data: {error, path},
                 });
+            }
+        });
+};
+
+export const saveAnnotation =
+    ({path, annotation}: {path: string; annotation: string}): TabletErrorsThunkAction =>
+    async (dispatch) => {
+        dispatch({type: SET_ANNOTATION_SAVING, data: true});
+        wrapApiPromiseByToaster(yt.v3.set({path: `${path}/@annotation`}, annotation), {
+            toasterName: 'navigation_save_annotation',
+            successTitle: 'Annotation saved',
+            errorTitle: 'Failed save annotation',
+        })
+            .then(() => {
+                dispatch({type: SET_ANNOTATION, data: annotation});
+                dispatch({type: SET_ANNOTATION_EDITING, data: false});
             })
-            .catch((error) => {
-                if (error.code === yt.codes.CANCELLED) {
-                    dispatch({type: GET_ANNOTATION.CANCELLED});
-                } else {
-                    dispatch({
-                        type: GET_ANNOTATION.FAILURE,
-                        data: {error, path},
-                    });
-                }
+            .finally(() => {
+                dispatch({type: SET_ANNOTATION_SAVING, data: false});
             });
     };
-}
-
-export function abortAndReset() {
-    return (dispatch) => {
-        cancelHelper.removeAllRequests();
-        dispatch({type: GET_ANNOTATION.CANCELLED});
-    };
-}

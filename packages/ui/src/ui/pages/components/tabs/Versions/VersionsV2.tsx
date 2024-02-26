@@ -39,7 +39,6 @@ import {HEADER_HEIGHT} from '../../../../constants/index';
 import {useUpdater} from '../../../../hooks/use-updater';
 import VersionsSummary from './VersionSummary';
 import {RootState} from '../../../../store/reducers';
-import {getUISizes} from '../../../../store/selectors/global';
 
 import templates, {ColumnAsTime, printColumnAsError} from '../../../../components/templates/utils';
 import {VersionHostInfo} from '../../../../store/reducers/components/versions/versions_v2';
@@ -47,6 +46,7 @@ import {ClickableId, NodeColumnBanned, NodeColumnState} from '../NodeColumns';
 import {Host} from '../../../../containers/Host/Host';
 
 import './Versions.scss';
+import {UI_COLLAPSIBLE_SIZE} from '../../../../constants/global';
 
 const b = cn('components-versions');
 
@@ -237,7 +237,7 @@ class VersionsV2 extends React.Component<ReduxProps> {
     }
 
     render() {
-        const {details, loading, loaded, collapsibleSize} = this.props;
+        const {details, loading, loaded} = this.props;
         const initialLoading = loading && !loaded;
 
         const {error, ...rest} = this.props;
@@ -251,7 +251,7 @@ class VersionsV2 extends React.Component<ReduxProps> {
                             name="Summary"
                             className={b('summary')}
                             collapsed={false}
-                            size={collapsibleSize}
+                            size={UI_COLLAPSIBLE_SIZE}
                         >
                             <VersionsSummary />
                         </CollapsibleSection>
@@ -261,7 +261,7 @@ class VersionsV2 extends React.Component<ReduxProps> {
                                 name="Details"
                                 className={b('details')}
                                 collapsed={false}
-                                size={collapsibleSize}
+                                size={UI_COLLAPSIBLE_SIZE}
                             >
                                 {this.renderOverview()}
 
@@ -318,8 +318,6 @@ const mapStateToProps = (state: RootState) => {
         typeSelectItems,
         stateSelectItems,
         bannedSelectItems,
-
-        collapsibleSize: getUISizes().collapsibleSize,
     };
 };
 

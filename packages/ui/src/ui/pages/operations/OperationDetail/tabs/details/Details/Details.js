@@ -27,8 +27,8 @@ import {
 import {useAppRumMeasureStart} from '../../../../../../rum/rum-app-measures';
 
 import './Details.scss';
-import {getUISizes} from '../../../../../../store/selectors/global';
 import AlertEvents from '../AlertEvents/AlertEvents';
+import {UI_COLLAPSIBLE_SIZE} from '../../../../../../constants/global';
 
 export {operationProps} from '../Runtime/Runtime';
 
@@ -209,7 +209,7 @@ const mapStateToProps = (state) => {
         cluster,
         operation,
         ...operations.detail.details,
-        collapsibleSize: getUISizes().collapsibleSize,
+        collapsibleSize: UI_COLLAPSIBLE_SIZE,
         alertEvents: getOperationAlertEventsItems(state),
     };
 };

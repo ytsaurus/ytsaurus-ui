@@ -12,7 +12,7 @@ import Link from '../../../components/Link/Link';
 import SystemStateOverview from '../SystemStateOverview/SystemStateOverview';
 
 import {loadSystemNodes} from '../../../store/actions/system/nodes';
-import {getCluster, getUISizes} from '../../../store/selectors/global';
+import {getCluster} from '../../../store/selectors/global';
 import {setSettingsSystemNodesCollapsed} from '../../../store/actions/settings/settings';
 import {
     getSettingSystemNodesNodeType,
@@ -32,6 +32,7 @@ import {MakeUrlParams, RoleGroup, RoleGroupsContainer} from '../Proxies/RoleGrou
 import {SystemNodeTypeSelector} from './NodeTypeSelector';
 
 import './Nodes.scss';
+import {UI_COLLAPSIBLE_SIZE} from '../../../constants/global';
 
 const block = cn('system-nodes');
 
@@ -165,7 +166,7 @@ class Nodes extends Component<ReduxProps> {
     }
 
     renderImpl() {
-        const {roleGroups, collapsibleSize, loaded, collapsed} = this.props;
+        const {roleGroups, loaded, collapsed} = this.props;
 
         if (!loaded && !roleGroups) {
             return null;
@@ -177,7 +178,7 @@ class Nodes extends Component<ReduxProps> {
                 collapsed={collapsed}
                 onToggle={this.onToggle}
                 name={'Nodes'}
-                size={collapsibleSize}
+                size={UI_COLLAPSIBLE_SIZE}
             >
                 {this.renderContent()}
             </CollapsibleSectionStateLess>
@@ -202,7 +203,6 @@ function mapStateToProps(state: RootState) {
         loaded,
         counters,
         overviewCounters,
-        collapsibleSize: getUISizes().collapsibleSize,
         collapsed: getSettingsSystemNodesCollapsed(state),
         nodeType: getSettingSystemNodesNodeType(state),
         roleGroups,

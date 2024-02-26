@@ -6,7 +6,7 @@ import hammer from '../../../common/hammer';
 import ypath from '../../../common/thor/ypath';
 import cn from 'bem-cn-lite';
 import _ from 'lodash';
-import {getCluster, getUISizes} from '../../../store/selectors/global';
+import {getCluster} from '../../../store/selectors/global';
 import {updateTitle} from '../../../store/actions/global';
 
 import {
@@ -62,6 +62,7 @@ import {getParentPath} from '../../../utils/navigation';
 import UIFactory from '../../../UIFactory';
 
 import './Navigation.scss';
+import {UI_TAB_SIZE} from '../../../constants/global';
 
 const block = cn('navigation');
 
@@ -474,7 +475,7 @@ function mapStateToProps(state) {
         parsedPath: getParsedPath(state),
         transaction: getTransaction(state),
         cluster: getCluster(state),
-        tabSize: getUISizes().tabSize,
+        tabSize: UI_TAB_SIZE,
         tabletErrorsCount: getTabletErrorsCount(state),
     };
 }

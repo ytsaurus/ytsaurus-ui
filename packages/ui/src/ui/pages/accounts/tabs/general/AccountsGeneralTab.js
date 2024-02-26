@@ -82,7 +82,6 @@ import {
     getCluster,
     getClusterUiConfig,
     getClusterUiConfigEnablePerAccountTabletAccounting,
-    getUISizes,
 } from '../../../../store/selectors/global';
 import {TabletAccountingNotice} from './Editor/content/TabletsContent';
 import AccountStaticConfiguration from './AccountStaticConfiguration/AccountStaticConfiguration';
@@ -90,6 +89,7 @@ import {Warning} from '../../../../components/Text/Text';
 import Button from '../../../../components/Button/Button';
 import MasterMemoryTableMode from './MasterMemoryTableMode';
 import UIFactory from '../../../../UIFactory';
+import {UI_COLLAPSIBLE_SIZE} from '../../../../constants/global';
 
 const b = block('accounts');
 const progressTooltipClassname = b('progress-tooltip');
@@ -831,7 +831,7 @@ const makeMapStateToProps = () => {
             enable_per_account_tablet_accounting:
                 getClusterUiConfigEnablePerAccountTabletAccounting(state),
 
-            collapsibleSize: getUISizes().collapsibleSize,
+            collapsibleSize: UI_COLLAPSIBLE_SIZE,
 
             masterMemoryContentMode: getAccountsMasterMemoryContentMode(state),
         };

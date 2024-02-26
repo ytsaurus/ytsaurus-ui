@@ -7,7 +7,7 @@ import {useSelector} from 'react-redux';
 import CollapsibleSection from '../../components/CollapsibleSection/CollapsibleSection';
 import ErrorBoundary from '../../components/ErrorBoundary/ErrorBoundary';
 import Alert from '../../components/Alert/Alert';
-import {getUISizes} from '../../store/selectors/global';
+import {UI_COLLAPSIBLE_SIZE} from '../../constants/global';
 
 const block = cn('scheduling-alerts');
 
@@ -17,7 +17,6 @@ Alerts.propTypes = {
 
 export default function Alerts({className}) {
     const {schedulerAlerts} = useSelector((state) => state.scheduling.scheduling);
-    const {collapsibleSize} = useSelector(getUISizes);
 
     if (!schedulerAlerts?.length) {
         return null;
@@ -27,7 +26,7 @@ export default function Alerts({className}) {
         <ErrorBoundary>
             <div className={block(null, className)}>
                 {!schedulerAlerts?.length ? null : (
-                    <CollapsibleSection name="Alerts" size={collapsibleSize}>
+                    <CollapsibleSection name="Alerts" size={UI_COLLAPSIBLE_SIZE}>
                         {_.map(schedulerAlerts, (alert, index) => {
                             return <Alert key={index} error={alert} />;
                         })}

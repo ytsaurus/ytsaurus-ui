@@ -6,13 +6,14 @@ import {CollapsibleSectionStateLess} from '../../../components/CollapsibleSectio
 import SystemStateOverview from '../SystemStateOverview/SystemStateOverview';
 
 import {loadSystemRPCProxies} from '../../../store/actions/system/rpc-proxies';
-import {getCluster, getUISizes} from '../../../store/selectors/global';
+import {getCluster} from '../../../store/selectors/global';
 import {setSettingsSystemRpcProxiesCollapsed} from '../../../store/actions/settings/settings';
 import {getSettingsSystemRpcProxiesCollapsed} from '../../../store/selectors/settings-ts';
 import {RootState} from '../../../store/reducers';
 import {MakeUrlParams, RoleGroup, RoleGroupsContainer} from '../Proxies/RoleGroup';
 import {useThunkDispatch} from '../../../store/thunkDispatch';
 import {useUpdater} from '../../../hooks/use-updater';
+import {UI_COLLAPSIBLE_SIZE} from '../../../constants/global';
 
 type ReduxProps = ConnectedProps<typeof connector>;
 
@@ -29,7 +30,7 @@ class RpcProxies extends Component<ReduxProps> {
     }
 
     renderImpl() {
-        const {roleGroups, counters, collapsibleSize, collapsed} = this.props;
+        const {roleGroups, counters, collapsed} = this.props;
         const overview = this.renderOverview();
 
         return (
@@ -39,7 +40,7 @@ class RpcProxies extends Component<ReduxProps> {
                     overview={overview}
                     onToggle={this.onToggle}
                     collapsed={collapsed}
-                    size={collapsibleSize}
+                    size={UI_COLLAPSIBLE_SIZE}
                 >
                     <RoleGroupsContainer>
                         {map_(roleGroups, (data) => {
@@ -85,7 +86,6 @@ function mapStateToProps(state: RootState) {
     return {
         counters,
         roleGroups,
-        collapsibleSize: getUISizes().collapsibleSize,
         collapsed: getSettingsSystemRpcProxiesCollapsed(state),
         cluster: getCluster(state),
     };

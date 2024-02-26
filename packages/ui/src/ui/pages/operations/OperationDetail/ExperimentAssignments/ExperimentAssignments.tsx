@@ -5,7 +5,6 @@ import _ from 'lodash';
 
 import ypath from '../../../../common/thor/ypath';
 import {CollapsibleSectionStateLess} from '../../../../components/CollapsibleSection/CollapsibleSection';
-import {getUISizes} from '../../../../store/selectors/global';
 import {
     OperationExperimentItem,
     getOperationExperimentAssignments,
@@ -15,6 +14,7 @@ import StarTrackLink from '../../../../components/StarTrackLink/StarTrackLink';
 import Yson from '../../../../components/Yson/Yson';
 import {getOperationExperimentsYsonSettings} from '../../../../store/selectors/thor/unipika';
 import Link from '../../../../components/Link/Link';
+import {UI_COLLAPSIBLE_SIZE} from '../../../../constants/global';
 
 const block = cn('experiment-assignments');
 
@@ -26,8 +26,6 @@ function ExperimentAssignments({className}: {className: string}) {
     const items = useSelector(getOperationExperimentAssignments);
     const [collapsed, setCollapsed] = React.useState(true);
 
-    const {collapsibleSize} = useSelector(getUISizes);
-
     const onToggleCollapse = React.useCallback(() => {
         setCollapsed(!collapsed);
     }, [collapsed, setCollapsed]);
@@ -38,7 +36,7 @@ function ExperimentAssignments({className}: {className: string}) {
             name="Experiments"
             onToggle={onToggleCollapse}
             collapsed={collapsed}
-            size={collapsibleSize}
+            size={UI_COLLAPSIBLE_SIZE}
         >
             {_.map(items, (item, index) => (
                 <ExperimentsItem key={index} data={item} />
