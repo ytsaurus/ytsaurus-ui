@@ -1,6 +1,7 @@
-@import '../../../styles/common';
-
 .node-quad {
+    $node-width: 14px;
+    $node-margin: 4px;
+
     position: relative;
     top: 2px;
 
@@ -8,12 +9,16 @@
 
     width: $node-width;
     height: $node-width;
-    margin: $node-margin;
+    border-radius: 2px;
+    margin-right: $node-margin;
+    margin-bottom: $node-margin;
 
     overflow: hidden;
     flex-shrink: 0;
 
     text-align: center;
+    font-size: 0.65rem;
+    font-weight: bold;
 
     color: var(--light-text);
 
@@ -21,14 +26,28 @@
         background-color: var(--success-color);
     }
 
+    &_theme_online-letter {
+        background-color: var(--success-text);
+    }
+
     &_theme_banned {
         background-color: var(--warning-color);
+    }
+
+    &_theme_banned-letter {
+        background-color: var(--warning-text);
     }
 
     &_theme_offline {
         background-color: var(--danger-color);
     }
 
+    &_theme_offline-letter {
+        background-color: var(--danger-text);
+    }
+
+    &_theme_other,
+    &_theme_other-letter,
     &_theme_following {
         background-color: var(--info-color);
     }
@@ -36,7 +55,6 @@
     &_theme_mixed,
     &_theme_registered,
     &_theme_unregistered,
-    &_theme_unknown,
     &_theme_nonvoting {
         background-color: var(--default-color);
     }

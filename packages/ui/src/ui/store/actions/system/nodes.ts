@@ -1,19 +1,22 @@
 import each_ from 'lodash/each';
 import filter_ from 'lodash/filter';
-import reduce_ from 'lodash/reduce';
 import map_ from 'lodash/map';
+import reduce_ from 'lodash/reduce';
 
 import {Toaster} from '@gravity-ui/uikit';
 
-import ypath from '../../../common/thor/ypath';
+import {USE_CACHE, USE_MAX_SIZE} from '../../../../shared/constants/yt-api';
 import hammer from '../../../common/hammer';
+import ypath from '../../../common/thor/ypath';
+import {SYSTEM_FETCH_NODES, UNAWARE} from '../../../constants';
+import {YTApiId, ytApiV3Id} from '../../../rum/rum-wrap-api';
 import {isRetryFutile} from '../../../utils/index';
 import {getNodeffectiveState, incrementStateCounter} from '../../../utils/system/proxies';
 import {showErrorPopup, splitBatchResults} from '../../../utils/utils';
-import {SYSTEM_FETCH_NODES, UNAWARE} from '../../../constants';
-import {USE_CACHE, USE_MAX_SIZE} from '../../../../shared/constants/yt-api';
-import {YTApiId, ytApiV3Id} from '../../../rum/rum-wrap-api';
 
+import {ThunkAction} from 'redux-thunk';
+import {NodeType} from '../../../../shared/constants/system';
+import type {BatchSubRequest} from '../../../../shared/yt-types';
 import type {RootState} from '../../../store/reducers';
 import type {
     NodeEffectiveState,
@@ -22,14 +25,11 @@ import type {
     SystemNodesAction,
     SystemNodesState,
 } from '../../../store/reducers/system/nodes';
-import type {BatchSubRequest} from '../../../../shared/yt-types';
 import type {
     HttpProxiesState,
     RoleGroupInfo,
     RoleGroupItemInfo,
 } from '../../../store/reducers/system/proxies';
-import {ThunkAction} from 'redux-thunk';
-import {NodeType} from '../../../../shared/constants/system';
 
 type SystemNodesThunkAction<T = void> = ThunkAction<T, RootState, unknown, SystemNodesAction>;
 
@@ -92,8 +92,10 @@ export function loadSystemNodes(
                 }, []);
 
                 const racks = prepareRacks(rackNames, nodes);
+
                 const overviewCounters = extractNodeCounters(racks);
                 const {rackGroups, counters} = groupRacks(racks);
+
                 dispatch({
                     type: SYSTEM_FETCH_NODES.SUCCESS,
                     data: {
@@ -159,11 +161,11 @@ function groupRacks(racks: Array<RackInfo>) {
     return {rackGroups: groupedRacks, counters};
 }
 
-function increaseFlagCounter<K extends keyof RackInfo['nodes'][number]['$attributes']>(
-    dst: Partial<Record<K, number>>,
-    name: K,
-    attrs: Record<K, boolean>,
-) {
+type ExtendedCalculatedInfo = 'alerts_online' | 'alerts_offline';
+
+function increaseFlagCounter<
+    K extends keyof RackInfo['nodes'][number]['$attributes'] | ExtendedCalculatedInfo,
+>(dst: Partial<Record<K, number>>, name: K, attrs: Record<K, boolean>) {
     if (dst[name] === undefined) {
         dst[name] = attrs[name] ? 1 : 0;
     } else {
@@ -185,7 +187,9 @@ function extractNodeCounters(racks: Array<RackInfo>) {
                 increaseFlagCounter(acc.flags, 'banned', attrs);
 
                 incrementStateCounter(acc.states, attrs.state);
-                incrementStateCounter(acc.effectiveStates, attrs.effectiveState);
+                if (!attrs.banned) {
+                    incrementStateCounter(acc.effectiveStates, attrs.effectiveState);
+                }
             });
 
             return acc;
@@ -296,6 +300,14 @@ function prepareRoleGroups(rackGroups: Record<string, Array<RackInfo>>) {
 
 function rackInfo2roleGroup(data: Array<RackInfo>): Array<RoleGroupInfo> {
     return map_(data, (rack) => {
+        const flags = {
+            dec_online: 0,
+            dec_banned: 0,
+            dec_offline: 0,
+            alerts_banned: 0,
+            alerts_offline: 0,
+            alerts_online: 0,
+        };
         const res: RoleGroupInfo = {
             name: rack.name,
             items: [],
@@ -303,25 +315,48 @@ function rackInfo2roleGroup(data: Array<RackInfo>): Array<RoleGroupInfo> {
                 total: rack.nodes.length,
                 effectiveStates: {},
                 states: {},
-                flags: {},
+                flags,
             },
         };
         rack.nodes.forEach((node) => {
-            const {state, effectiveState, banned} = node.$attributes;
+            const {state, effectiveState, banned, alerts, decommissioned} = node.$attributes;
             const info: RoleGroupItemInfo = {
                 name: node.$value,
                 state,
                 role: rack.name,
                 effectiveState: getNodeffectiveState(effectiveState),
                 banned,
+                alerts,
+                decommissioned,
+                full: node.$attributes?.full,
             };
-            incrementStateCounter(res.counters.effectiveStates, info.effectiveState);
             incrementStateCounter(res.counters.states, info.state);
+            if (!banned) {
+                incrementStateCounter(res.counters.effectiveStates, info.effectiveState);
+            }
 
             increaseFlagCounter(res.counters.flags, 'decommissioned', node.$attributes);
             increaseFlagCounter(res.counters.flags, 'full', node.$attributes);
             increaseFlagCounter(res.counters.flags, 'alerts', node.$attributes);
             increaseFlagCounter(res.counters.flags, 'banned', node.$attributes);
+
+            const isStateOnlineOffline = state === 'online' || state === 'offline';
+
+            if (alerts) {
+                if (banned) {
+                    ++flags['alerts_banned'];
+                } else if (isStateOnlineOffline) {
+                    ++flags[`alerts_${state}`];
+                }
+            }
+
+            if (decommissioned) {
+                if (banned) {
+                    ++flags['dec_banned'];
+                } else if (isStateOnlineOffline) {
+                    ++flags[`dec_${state}`];
+                }
+            }
 
             res.items.push(info);
         });

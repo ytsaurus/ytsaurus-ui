@@ -1,28 +1,65 @@
 .yt-role-group {
+    display: flex;
+    flex-direction: column;
+    min-height: 120px;
+    border-radius: 4px;
+    overflow: hidden;
+
+    padding: 16px;
+    border: 1px solid var(--dark-divider);
+
     &__container {
         padding-bottom: 20px;
     }
 
-    display: inline-block;
-    min-width: 300px;
-    max-width: 450px;
-
-    flex-grow: 1;
-
-    padding: 10px 16px;
-    border: 1px solid var(--dark-divider);
-
-    &__progress {
-        display: flex;
-        overflow: hidden;
+    &__groups-container {
+        margin-bottom: 18px;
     }
 
+    &__name {
+        color: var(--bluejeans-color);
+        --g-text-body-font-weight: 600;
+    }
+
+    &__rack-nodes {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0px;
+        margin-top: 20px;
+    }
+
+    $progressHeight: 82px;
+
     &__progress-text {
-        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        height: $progressHeight;
+        width: 164px;
+    }
+
+    &__expand-btn {
+        margin-top: -4px;
     }
 
     &__progress-number {
-        line-height: 36px;
+        line-height: 20px;
+    }
+
+    &__divider {
+        width: 0;
+        height: $progressHeight;
+        border-left: 1px solid var(--dark-divider);
+        margin: 0 20px;
+    }
+
+    &__bottom-info {
+        color: var(--default-color);
+    }
+
+    &__cube-icon {
+        width: 18px;
+        height: 18px;
     }
 
     &__counters {
@@ -66,7 +103,6 @@
     }
 
     &__status-label {
-        text-transform: uppercase;
         line-height: 14px;
     }
 
