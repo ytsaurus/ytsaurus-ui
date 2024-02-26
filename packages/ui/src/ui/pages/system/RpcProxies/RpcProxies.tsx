@@ -1,18 +1,18 @@
+import map_ from 'lodash/map';
 import React, {Component} from 'react';
 import {ConnectedProps, connect} from 'react-redux';
-import map_ from 'lodash/map';
 
 import {CollapsibleSectionStateLess} from '../../../components/CollapsibleSection/CollapsibleSection';
 import SystemStateOverview from '../SystemStateOverview/SystemStateOverview';
 
-import {loadSystemRPCProxies} from '../../../store/actions/system/rpc-proxies';
-import {getCluster, getUISizes} from '../../../store/selectors/global';
-import {setSettingsSystemRpcProxiesCollapsed} from '../../../store/actions/settings/settings';
-import {getSettingsSystemRpcProxiesCollapsed} from '../../../store/selectors/settings-ts';
-import {RootState} from '../../../store/reducers';
-import {MakeUrlParams, RoleGroup, RoleGroupsContainer} from '../Proxies/RoleGroup';
-import {useThunkDispatch} from '../../../store/thunkDispatch';
 import {useUpdater} from '../../../hooks/use-updater';
+import {setSettingsSystemRpcProxiesCollapsed} from '../../../store/actions/settings/settings';
+import {loadSystemRPCProxies} from '../../../store/actions/system/rpc-proxies';
+import {RootState} from '../../../store/reducers';
+import {getCluster, getUISizes} from '../../../store/selectors/global';
+import {getSettingsSystemRpcProxiesCollapsed} from '../../../store/selectors/settings-ts';
+import {useThunkDispatch} from '../../../store/thunkDispatch';
+import {MakeUrlParams, RoleGroup, RoleGroupsContainer} from '../Proxies/RoleGroup';
 
 type ReduxProps = ConnectedProps<typeof connector>;
 

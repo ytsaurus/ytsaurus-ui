@@ -2,27 +2,88 @@
     &__container {
         padding-bottom: 20px;
     }
+    
+    &__role-groups-container {
+        display: flex;
+        flex-direction: column;
+        gap: 12px
+    }
 
-    display: inline-block;
-    min-width: 300px;
-    max-width: 450px;
+    &__name {
+        color: var(--bluejeans-color);
 
-    flex-grow: 1;
+        &>span {
+            font-weight: 600;
+        }
+    }
 
-    padding: 10px 16px;
+    &__rack-nodes {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0px;
+        margin-top: 20px;
+    }
+
+    .divider {
+        width: 0.5px;
+        height: 100%;
+        background: var(--dark-divider);
+    }
+
+    display: flex;
+    flex-direction: column; 
+    width: 100%;
+    min-height: 126px;
+    height: fit-content;
+    border-radius: 4px;
+    overflow: hidden;
+
+    padding: 16px 20px;
     border: 1px solid var(--dark-divider);
 
     &__progress {
         display: flex;
         overflow: hidden;
+        height: 100%;
+        
+    }
+
+    &__collapse-button {
+        svg {
+            transition: 0.2s;
+            transform: rotate(-90deg);
+        }
+
+        &_collapsed {
+            svg {
+                transform: rotate(0deg);
+            }
+        }
     }
 
     &__progress-text {
-        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        height: 100%;
     }
 
+   
     &__progress-number {
-        line-height: 36px;
+        line-height: 20px;
+    }
+
+    &__bottom-info {
+        color: var(--default-color);
+
+        svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        span {
+            text-transform: uppercase;
+        }
     }
 
     &__counters {

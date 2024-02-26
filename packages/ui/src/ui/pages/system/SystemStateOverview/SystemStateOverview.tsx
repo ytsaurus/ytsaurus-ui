@@ -1,8 +1,8 @@
-import React from 'react';
 import block from 'bem-cn-lite';
+import React from 'react';
 
-import SystemCounters, {SystemCountersProps} from '../SystemCounters/SystemCounters';
 import {Progress, ProgressProps} from '@gravity-ui/uikit';
+import SystemCounters, {SystemCountersProps} from '../SystemCounters/SystemCounters';
 
 import {computeEffectiveStateProgress} from '../../../utils/index';
 
@@ -35,7 +35,7 @@ export default class SystemStateOverview<Flags extends string> extends React.Com
             <div className={b('heading-overview')}>
                 <SystemCounters {...rest} />
                 <div className={b('heading-overview-states')}>
-                    <Progress {...stateOverview} />
+                    <Progress {...stateOverview} size="s" />
                 </div>
             </div>
         );

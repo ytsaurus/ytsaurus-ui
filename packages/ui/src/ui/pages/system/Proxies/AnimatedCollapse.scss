@@ -1,0 +1,16 @@
+.animated-collapse {
+	display: grid;
+	grid-template-rows: 1fr;
+	overflow: hidden;
+	transition: 0.2s grid-template-rows, 0.15s opacity;
+	opacity: 1;
+
+	& > div {
+		overflow: hidden;
+	}
+
+	&.collapsed {
+		opacity: 0;
+		grid-template-rows: 0fr;
+	}
+}

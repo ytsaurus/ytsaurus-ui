@@ -4,16 +4,16 @@ import reduce_ from 'lodash/reduce';
 
 import {Toaster} from '@gravity-ui/uikit';
 
-import {isRetryFutile} from '../../../utils/index';
-import {showErrorPopup} from '../../../utils/utils';
-import {YTApiId, ytApiV3Id} from '../../../rum/rum-wrap-api';
-import {FETCH_RPC_PROXIES} from '../../../constants/system/nodes';
-import {extractProxyCounters, extractRoleGroups} from '../../../utils/system/proxies';
-import {RoleGroupItemInfo} from '../../../store/reducers/system/proxies';
-import ypath from '../../../common/thor/ypath';
-import {RootState} from '../../../store/reducers';
-import {RpcProxiesAction} from '../../../store/reducers/system/rpc-proxies';
 import {USE_SUPRESS_SYNC} from '../../../../shared/constants';
+import ypath from '../../../common/thor/ypath';
+import {FETCH_RPC_PROXIES} from '../../../constants/system/nodes';
+import {YTApiId, ytApiV3Id} from '../../../rum/rum-wrap-api';
+import {RootState} from '../../../store/reducers';
+import {RoleGroupItemInfo} from '../../../store/reducers/system/proxies';
+import {RpcProxiesAction} from '../../../store/reducers/system/rpc-proxies';
+import {isRetryFutile} from '../../../utils/index';
+import {extractProxyCounters, extractRoleGroups} from '../../../utils/system/proxies';
+import {showErrorPopup} from '../../../utils/utils';
 
 type RPCProxiesThunkAction<T = void> = ThunkAction<
     Promise<T>,
@@ -29,6 +29,7 @@ function extractRpcProxy(data: object): Array<RoleGroupItemInfo> {
             const alive = ypath.getValue(value, '/alive');
             const state = alive ? 'online' : 'offline';
             const banned = ypath.getValue(value, '/@banned');
+
             acc.push({
                 name: key,
                 role: ypath.getValue(value, '/@role'), //value.$attributes?.role,

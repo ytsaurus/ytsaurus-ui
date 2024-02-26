@@ -1,36 +1,38 @@
-import React, {Component} from 'react';
-import {ConnectedProps, connect, useSelector} from 'react-redux';
 import cn from 'bem-cn-lite';
 import map_ from 'lodash/map';
+import React, {useState} from 'react';
+import {ConnectedProps, connect, useSelector} from 'react-redux';
 
 import format from '../../../common/hammer/format';
 
 import {CollapsibleSectionStateLess} from '../../../components/CollapsibleSection/CollapsibleSection';
-import {NoContent} from '../../../components/NoContent/NoContent';
 import Link from '../../../components/Link/Link';
+import {NoContent} from '../../../components/NoContent/NoContent';
 
 import SystemStateOverview from '../SystemStateOverview/SystemStateOverview';
 
-import {loadSystemNodes} from '../../../store/actions/system/nodes';
-import {getCluster, getUISizes} from '../../../store/selectors/global';
+import {useMemoizedIfEqual, useUpdater} from '../../../hooks/use-updater';
 import {setSettingsSystemNodesCollapsed} from '../../../store/actions/settings/settings';
+import {loadSystemNodes} from '../../../store/actions/system/nodes';
+import type {RootState} from '../../../store/reducers';
+import {getCluster, getUISizes} from '../../../store/selectors/global';
 import {
     getSettingSystemNodesNodeType,
     getSettingsSystemNodesCollapsed,
 } from '../../../store/selectors/settings-ts';
-import type {RootState} from '../../../store/reducers';
+import {getSystemNodesNodeTypesToLoad} from '../../../store/selectors/system/nodes';
+import {useThunkDispatch} from '../../../store/thunkDispatch';
 import {
     ComponentsNodesLinkParams,
     makeComponentsNodesLink,
 } from '../../../utils/components/nodes/node';
-import {useMemoizedIfEqual, useUpdater} from '../../../hooks/use-updater';
-import {useThunkDispatch} from '../../../store/thunkDispatch';
-import {getSystemNodesNodeTypesToLoad} from '../../../store/selectors/system/nodes';
 
+import {ChevronsExpandVertical} from '@gravity-ui/icons';
 import {MakeUrlParams, RoleGroup, RoleGroupsContainer} from '../Proxies/RoleGroup';
 
 import {SystemNodeTypeSelector} from './NodeTypeSelector';
 
+import {Button, Icon} from '@gravity-ui/uikit';
 import './Nodes.scss';
 
 const block = cn('system-nodes');
@@ -42,14 +44,15 @@ const STATE_THEME_MAPPING = {
 
 type ReduxProps = ConnectedProps<typeof connector>;
 
-class Nodes extends Component<ReduxProps> {
-    onToggle = () => {
-        const {collapsed, setSettingsSystemNodesCollapsed} = this.props;
+const Nodes = (props: ReduxProps) => {
+    const [collapsedAll, setCollapsedAll] = useState(true);
+    const onToggle = () => {
+        const {collapsed, setSettingsSystemNodesCollapsed} = props;
         setSettingsSystemNodesCollapsed(!collapsed);
     };
 
-    renderContent() {
-        const {nodeType, roleGroups, cluster} = this.props;
+    const renderContent = () => {
+        const {nodeType, roleGroups, cluster} = props;
 
         const rackNames = Object.keys(roleGroups ?? {});
 
@@ -66,7 +69,7 @@ class Nodes extends Component<ReduxProps> {
             );
         }
 
-        const {counters} = this.props;
+        const {counters} = props;
 
         const headingCN = cn('elements-heading')({
             size: 's',
@@ -93,7 +96,7 @@ class Nodes extends Component<ReduxProps> {
                                 stateThemeMappings={STATE_THEME_MAPPING}
                                 tab="nodes"
                                 makeUrl={(params) => {
-                                    return this.makeComponentNodesUrl({
+                                    return makeComponentNodesUrl({
                                         rackFilter: groupName,
                                         ...params,
                                     });
@@ -107,8 +110,9 @@ class Nodes extends Component<ReduxProps> {
                                 <RoleGroup
                                     key={group.name}
                                     data={group}
-                                    makeUrl={this.makeRoleGroupUrl}
+                                    makeUrl={makeRoleGroupUrl}
                                     showFlags
+                                    forceCollapse={collapsedAll}
                                 />
                             );
                         })}
@@ -116,10 +120,10 @@ class Nodes extends Component<ReduxProps> {
                 </div>
             );
         });
-    }
+    };
 
-    makeRoleGroupUrl = (params?: MakeUrlParams) => {
-        const {nodeType, cluster} = this.props;
+    const makeRoleGroupUrl = (params?: MakeUrlParams) => {
+        const {nodeType, cluster} = props;
 
         const {name, state: s, flag: f} = params ?? {};
 
@@ -142,13 +146,13 @@ class Nodes extends Component<ReduxProps> {
         return makeComponentsNodesLink(p);
     };
 
-    makeComponentNodesUrl: typeof makeComponentsNodesLink = (params) => {
-        const {cluster, nodeType} = this.props;
+    const makeComponentNodesUrl: typeof makeComponentsNodesLink = (params) => {
+        const {cluster, nodeType} = props;
         return makeComponentsNodesLink({cluster, nodeTypes: nodeType, ...params});
     };
 
-    renderOverview() {
-        const {overviewCounters} = this.props;
+    const renderOverview = () => {
+        const {overviewCounters} = props;
 
         return (
             <React.Fragment>
@@ -160,12 +164,22 @@ class Nodes extends Component<ReduxProps> {
                     stateThemeMappings={STATE_THEME_MAPPING}
                     tab="nodes"
                 />
+                {
+                    <Button
+                        className={block('expand-all-button')}
+                        view="outlined"
+                        onClick={() => setCollapsedAll((prev) => !prev)}
+                    >
+                        {collapsedAll ? 'Expand All' : 'Collapse All'}
+                        <Icon data={ChevronsExpandVertical} size={12} />
+                    </Button>
+                }
             </React.Fragment>
         );
-    }
+    };
 
-    renderImpl() {
-        const {roleGroups, collapsibleSize, loaded, collapsed} = this.props;
+    const renderImpl = () => {
+        const {roleGroups, collapsibleSize, loaded, collapsed} = props;
 
         if (!loaded && !roleGroups) {
             return null;
@@ -173,26 +187,24 @@ class Nodes extends Component<ReduxProps> {
 
         return (
             <CollapsibleSectionStateLess
-                overview={this.renderOverview()}
+                overview={renderOverview()}
                 collapsed={collapsed}
-                onToggle={this.onToggle}
+                onToggle={onToggle}
                 name={'Nodes'}
                 size={collapsibleSize}
             >
-                {this.renderContent()}
+                {renderContent()}
             </CollapsibleSectionStateLess>
         );
-    }
+    };
 
-    render() {
-        return (
-            <React.Fragment>
-                <NodesUpdater />
-                {this.renderImpl()}
-            </React.Fragment>
-        );
-    }
-}
+    return (
+        <React.Fragment>
+            <NodesUpdater />
+            {renderImpl()}
+        </React.Fragment>
+    );
+};
 
 function mapStateToProps(state: RootState) {
     const {roleGroups, counters, loaded, overviewCounters} = state.system.nodes;
