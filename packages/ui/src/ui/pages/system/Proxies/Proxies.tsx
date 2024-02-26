@@ -1,9 +1,9 @@
 import React, {Component} from 'react';
 import {ConnectedProps, connect} from 'react-redux';
 import isEmpty_ from 'lodash/isEmpty';
-import map_ from 'lodash/map';
 
-import {CollapsibleSectionStateLess} from '../../../components/CollapsibleSection/CollapsibleSection';
+import {Flex} from '@gravity-ui/uikit';
+
 import SystemStateOverview from '../SystemStateOverview/SystemStateOverview';
 
 import {loadSystemProxies} from '../../../store/actions/system/proxies';
@@ -14,8 +14,8 @@ import type {RootState} from '../../../store/reducers';
 import {useThunkDispatch} from '../../../store/thunkDispatch';
 import {useUpdater} from '../../../hooks/use-updater';
 
-import {MakeUrlParams, RoleGroup, RoleGroupsContainer} from './RoleGroup';
-import {UI_COLLAPSIBLE_SIZE} from '../../../constants/global';
+import {MakeUrlParams} from './RoleGroup';
+import {ProxiesImpl} from '../ProxiesImpl/ProxiesImpl';
 
 type ReduxProps = ConnectedProps<typeof connector>;
 
@@ -27,6 +27,7 @@ class Proxies extends Component<ReduxProps> {
 
     renderOverview() {
         const {counters} = this.props;
+
         return <SystemStateOverview tab="http_proxies" counters={counters} />;
     }
 
@@ -39,27 +40,14 @@ class Proxies extends Component<ReduxProps> {
         const overview = this.renderOverview();
 
         return (
-            <CollapsibleSectionStateLess
+            <ProxiesImpl
                 name={'HTTP Proxies'}
                 overview={overview}
-                onToggle={this.onToggle}
+                onToggleCollapsed={this.onToggle}
+                roleGroups={roleGroups}
                 collapsed={collapsed}
-                size={UI_COLLAPSIBLE_SIZE}
-            >
-                <RoleGroupsContainer>
-                    {map_(roleGroups, (data) => {
-                        return (
-                            <RoleGroup
-                                key={data.name}
-                                data={data}
-                                makeUrl={this.makeRoleGroupUrl}
-                                hideOthers
-                                bannedAsState
-                            />
-                        );
-                    })}
-                </RoleGroupsContainer>
-            </CollapsibleSectionStateLess>
+                makeUrl={this.makeRoleGroupUrl}
+            />
         );
     }
 
@@ -79,6 +67,7 @@ class Proxies extends Component<ReduxProps> {
             params.append('banned', 'true');
         } else if (state) {
             params.append('state', state);
+            params.append('banned', 'false');
         }
         return `/${cluster}/components/http_proxies?${params}`;
     };

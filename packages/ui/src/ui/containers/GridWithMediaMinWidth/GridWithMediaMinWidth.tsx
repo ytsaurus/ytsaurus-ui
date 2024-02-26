@@ -9,6 +9,7 @@ const block = cn('grid-with-media-min-width');
 
 export type WithMediaMinWidthProps = {
     className?: string;
+    itemClassName: string;
     itemMinWidth: number;
     itemMaxWidth?: number;
     gap?: number;
@@ -18,6 +19,7 @@ export type WithMediaMinWidthProps = {
 
 export function GridWithMediaMinWidth({
     className,
+    itemClassName,
     maxWidth = 2400,
     itemMinWidth,
     itemMaxWidth = itemMinWidth * 1.5,
@@ -33,6 +35,7 @@ export function GridWithMediaMinWidth({
         res += `\n display: grid;`;
         res += `\n gap: ${gap}px;`;
         res += `\n}`;
+        res += `\n.${id} .${itemClassName} {min-width: ${itemMinWidth}px; max-width: ${itemMaxWidth}px;}`;
         let i = 1;
         function calcMinWidth(columnsCount: number) {
             return gap * (columnsCount - 1) + itemMinWidth * columnsCount + pagePadding;

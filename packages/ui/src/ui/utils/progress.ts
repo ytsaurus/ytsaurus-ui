@@ -57,3 +57,25 @@ export function getProgressTheme(
 
     return thresholds[index].theme;
 }
+
+export function addProgressStackSpacers(
+    items: Array<{value: number; color: string}>,
+    spaceSize = 1,
+) {
+    const res: typeof items = [];
+    let sum = 0;
+    for (let i = 0; i < items.length; ++i) {
+        const item = items[i];
+        if (item.value > 0) {
+            if (res.length) {
+                res.push({value: spaceSize, color: 'var(--main-background)'});
+                sum += spaceSize;
+            }
+            res.push(item);
+            sum += item.value;
+        }
+    }
+    return res.map((item) => {
+        return {value: (item.value / sum) * 100, color: item.color};
+    });
+}

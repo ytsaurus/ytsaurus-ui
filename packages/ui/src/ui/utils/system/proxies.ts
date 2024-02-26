@@ -31,6 +31,7 @@ export function extractRoleGroups(proxies: Array<RoleGroupItemInfo>): Array<Role
             }
 
             ++role.counters.total;
+            role.items.push(proxy);
             incrementCounters(proxy, role.counters);
             return roles;
         },
@@ -79,8 +80,10 @@ export function extractProxyCounters(proxies: Array<RoleGroupItemInfo>) {
 
 function incrementCounters(proxy: RoleGroupItemInfo, counters: SystemNodeCounters) {
     incrementStateCounter(counters.states, proxy.state);
-    incrementStateCounter(counters.effectiveStates, proxy.effectiveState);
+
     if (proxy.banned) {
         incrementStateCounter(counters.flags, 'banned');
+    } else {
+        incrementStateCounter(counters.effectiveStates, proxy.effectiveState);
     }
 }
