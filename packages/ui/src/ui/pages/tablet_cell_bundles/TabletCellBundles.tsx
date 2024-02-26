@@ -35,7 +35,6 @@ import Button from '../../components/Button/Button';
 import {
     getCluster,
     getClusterUiConfigEnablePerBundleTabletAccounting,
-    getUISizes,
 } from '../../store/selectors/global';
 import ChartLink from '../../components/ChartLink/ChartLink';
 import {Page} from '../../constants/index';
@@ -45,6 +44,7 @@ import {ChaosCells} from '../../pages/chaos_cell_bundles/cells/Cells';
 import UIFactory from '../../UIFactory';
 import {TabletBundle} from '../../store/reducers/tablet_cell_bundles';
 import {formatByParams} from '../../utils/format';
+import {UI_TAB_SIZE} from '../../constants/global';
 
 const b = cn('tablets');
 
@@ -268,8 +268,6 @@ function TabletsTabsImpl({
     const match = useRouteMatch<{cluster: string}>();
     const {cluster} = match.params;
 
-    const {tabSize} = useSelector(getUISizes);
-
     const tabProps = activeBundle
         ? makeTabProps(match.url, TabletsTab, showSettings, undefined, {
               [TabletsTab.MONITOR]: monitoringTitle,
@@ -283,7 +281,7 @@ function TabletsTabsImpl({
             routed
             routedPreserveLocation
             exactNavLink
-            size={tabSize}
+            size={UI_TAB_SIZE}
         />
     );
 }

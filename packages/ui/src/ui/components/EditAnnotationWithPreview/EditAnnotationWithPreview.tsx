@@ -9,7 +9,12 @@ import {Markdown} from '../../components/Markdown/Markdown';
 
 export type EditAnnotationProps = DialogControlProps<
     EditTextWithPreviewProps['value'],
-    {initialValue: EditAnnotationProps['value']; valuePath: string; className: string}
+    {
+        initialValue: EditAnnotationProps['value'];
+        valuePath: string;
+        hideReset?: boolean;
+        className: string;
+    }
 >;
 
 EditAnnotationWithPreview.isEmpty = (value: EditTextWithPreviewProps['value']) => {
@@ -26,6 +31,7 @@ export function EditAnnotationWithPreview(props: EditAnnotationProps) {
         onChange: onChangeProp,
         initialValue: initialValueProp,
         valuePath: valuePathProp,
+        hideReset,
         className,
     } = props;
 
@@ -47,6 +53,9 @@ export function EditAnnotationWithPreview(props: EditAnnotationProps) {
 
     const valuePath = value === undefined ? undefined : valuePathProp;
     const changed = initialValue !== value;
+
+    let editorSubTitle = value === undefined ? '(reset to inheritance)' : '';
+    if (valuePath) editorSubTitle = `(from ${valuePath})`;
 
     /**
      * value === undefined means it is already inherited or user already pressed 'Reset to inheritance' button
@@ -78,16 +87,11 @@ export function EditAnnotationWithPreview(props: EditAnnotationProps) {
             value={valueProp}
             onChange={onChange}
             editorTitle={'Description'}
-            editorSubTitle={
-                !valuePath
-                    ? value === undefined
-                        ? '(reset to inheritance)'
-                        : ''
-                    : `(from ${valuePath})`
-            }
-            editorActions={resetActions}
+            editorSubTitle={editorSubTitle}
+            editorActions={hideReset ? undefined : resetActions}
             editorLang={'markdown'}
             renderPreview={renderPreview}
+            initialSplitSize="50%"
         />
     );
 }

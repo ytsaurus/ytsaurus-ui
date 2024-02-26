@@ -19,10 +19,11 @@ import {getLastVisitedTabs} from '../../../store/selectors/settings';
 import {makeTabProps} from '../../../utils';
 import {Page} from '../../../constants/index';
 
-import {getCluster, getUISizes} from '../../../store/selectors/global';
+import {getCluster} from '../../../store/selectors/global';
 import {tabletActiveBundleLink} from '../../../utils/components/tablet-cells';
 
 import './Component.scss';
+import {UI_TAB_SIZE} from '../../../constants/global';
 
 const b = block(Page.COMPONENTS);
 
@@ -101,7 +102,7 @@ const mapStateToProps = (state) => {
     const lastVisitedTabs = getLastVisitedTabs(state);
     return {
         lastVisitedTab: lastVisitedTabs[Page.COMPONENTS],
-        tabSize: getUISizes().tabSize,
+        tabSize: UI_TAB_SIZE,
     };
 };
 

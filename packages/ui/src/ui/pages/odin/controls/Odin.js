@@ -8,7 +8,7 @@ import Message from '../../../components/Message/Message';
 import ErrorBoundary from '../../../components/ErrorBoundary/ErrorBoundary';
 import ClusterSelectControl from '../../../components/Dialog/controls/ClusterSelectControl/ClusterSelectControl';
 import {setRootPagesCluster} from '../../../store/actions/global';
-import {getCluster, getUISizes} from '../../../store/selectors/global';
+import {getCluster} from '../../../store/selectors/global';
 import Tabs from '../../../components/Tabs/Tabs';
 import {ODIN_PAGE_ID, OdinTab} from '../odin-constants';
 import {makeTabProps} from '../../../utils';
@@ -36,6 +36,7 @@ import RootPage from '../../../containers/RootPage/RootPage';
 import WithStickyToolbar from '../../../components/WithStickyToolbar/WithStickyToolbar';
 
 import './Odin.scss';
+import {UI_TAB_SIZE} from '../../../constants/global';
 
 const odinCN = block('odin');
 
@@ -94,7 +95,6 @@ OdinTabs.propTypes = {
 function OdinTabs({cluster}) {
     const match = useRouteMatch();
     const lastVisitedTab = useSelector(getOdinLastVisitedTab);
-    const {tabSize} = useSelector(getUISizes);
 
     const props = makeTabProps(match.url, OdinTab);
 
@@ -105,7 +105,7 @@ function OdinTabs({cluster}) {
                 {...props}
                 routed
                 routedPreserveLocation
-                size={tabSize}
+                size={UI_TAB_SIZE}
             />
             <Switch>
                 <Route path={`${match.path}/details`}>

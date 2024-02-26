@@ -54,7 +54,6 @@ import {isFinalLoadingStatus} from '../../../utils/utils';
 
 import './OperationDetail.scss';
 import {updateFilter} from '../../../store/actions/operations/jobs';
-import {getUISizes} from '../../../store/selectors/global';
 import OperationDetailsMonitor from './tabs/monitor/OperationDetailsMonitor';
 import {getJobsMonitorTabVisible} from '../../../store/selectors/operations/jobs-monitor';
 import {
@@ -66,6 +65,7 @@ import {
 import UIFactory from '../../../UIFactory';
 import {RootState} from '../../../store/reducers';
 import {getCurrentCluster} from '../../../store/selectors/thor';
+import {UI_TAB_SIZE} from '../../../constants/global';
 
 const detailBlock = cn('operation-detail');
 
@@ -232,7 +232,6 @@ class OperationDetail extends React.Component<ReduxProps & RouteProps> {
             },
             cluster,
             operation,
-            tabSize,
             hasStatististicsTab,
             jobsMonitorVisible,
             monitorTabVisible,
@@ -273,7 +272,7 @@ class OperationDetail extends React.Component<ReduxProps & RouteProps> {
                     active={DEFAULT_TAB}
                     routed
                     routedPreserveLocation
-                    size={tabSize}
+                    size={UI_TAB_SIZE}
                 />
             </div>
         );
@@ -407,7 +406,6 @@ const mapStateToProps = (state: RootState) => {
         totalJobWallTime,
         cpuTimeSpent,
         erasedTrees,
-        tabSize: getUISizes().tabSize,
         monitorTabVisible,
         monitorTabTitle,
         monitorTabUrlTemplate,

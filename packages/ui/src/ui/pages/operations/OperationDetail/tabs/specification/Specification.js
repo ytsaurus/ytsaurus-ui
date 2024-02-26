@@ -18,10 +18,10 @@ import {useRumMeasureStop} from '../../../../../rum/RumUiContext';
 import {useAppRumMeasureStart} from '../../../../../rum/rum-app-measures';
 
 import './Specification.scss';
-import {getUISizes} from '../../../../../store/selectors/global';
 import ExperimentAssignments from '../../ExperimentAssignments/ExperimentAssignments';
 import {docsUrl} from '../../../../../config';
 import UIFactory from '../../../../../UIFactory';
+import {UI_COLLAPSIBLE_SIZE} from '../../../../../constants/global';
 
 const block = cn('operation-specification');
 
@@ -64,8 +64,6 @@ function Specification({operation}) {
         onResize();
     });
 
-    const {collapsibleSize} = useSelector(getUISizes);
-
     return (
         <ErrorBoundary>
             <div className={block()}>
@@ -79,7 +77,7 @@ function Specification({operation}) {
                     name="Provided specification"
                     onToggle={onToggleProvided}
                     collapsed={collapsed.provided}
-                    size={collapsibleSize}
+                    size={UI_COLLAPSIBLE_SIZE}
                 >
                     <Yson
                         value={providedSpec}
@@ -96,7 +94,7 @@ function Specification({operation}) {
                         name="Unrecognized specification"
                         onToggle={onToggleUnrecognized}
                         collapsed={collapsed.unrecognized}
-                        size={collapsibleSize}
+                        size={UI_COLLAPSIBLE_SIZE}
                     >
                         <Yson
                             value={unrecognizedSpec}
@@ -112,7 +110,7 @@ function Specification({operation}) {
                         name="Resulting specification"
                         onToggle={onToggleResulting}
                         collapsed={collapsed.resulting}
-                        size={collapsibleSize}
+                        size={UI_COLLAPSIBLE_SIZE}
                     >
                         <Yson
                             value={fullSpec}

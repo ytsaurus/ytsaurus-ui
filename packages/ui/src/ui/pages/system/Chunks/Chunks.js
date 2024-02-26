@@ -16,12 +16,12 @@ import Label from '../../../components/Label/Label';
 
 import {SYSTEM_CHUNKS_TABLE_ID} from '../../../constants/tables';
 import {loadChunks} from '../../../store/actions/system/chunks';
-import {getUISizes} from '../../../store/selectors/global';
 import {getSettingsSystemChunksCollapsed} from '../../../store/selectors/settings-ts';
 import {setSettingsSystemChunksCollapsed} from '../../../store/actions/settings/settings';
 import {useUpdater} from '../../../hooks/use-updater';
 
 import './Chunks.scss';
+import {UI_COLLAPSIBLE_SIZE} from '../../../constants/global';
 
 const b = block('system');
 
@@ -255,7 +255,7 @@ function mapStateToProps(state) {
         cells,
         types,
         sortState: state.tables[SYSTEM_CHUNKS_TABLE_ID],
-        collapsibleSize: getUISizes().collapsibleSize,
+        collapsibleSize: UI_COLLAPSIBLE_SIZE,
         collapsed: getSettingsSystemChunksCollapsed(state),
     };
 }

@@ -28,13 +28,14 @@ import AccountsUsageTab from '../tabs/detailed-usage/AccountUsageTab';
 import {useAppRumMeasureStart} from '../../../rum/rum-app-measures';
 import {useRumMeasureStop} from '../../../rum/RumUiContext';
 import {RumMeasureTypes} from '../../../rum/rum-measure-types';
-import {getCluster, getUISizes} from '../../../store/selectors/global';
+import {getCluster} from '../../../store/selectors/global';
 import AccountsUpdater from './AccountsUpdater';
 import {getAccountsUsageBasePath} from '../../../config';
 import {RootState} from '../../../store/reducers';
 
 import './Accounts.scss';
 import UIFactory from '../../../UIFactory';
+import {UI_TAB_SIZE} from '../../../constants/global';
 
 const b = block('accounts');
 
@@ -48,7 +49,7 @@ export class Accounts extends React.Component<
     };
 
     render() {
-        const {match, cluster, lastVisitedTab, activeAccount, tabSize, allowUsageTab} = this.props;
+        const {match, cluster, lastVisitedTab, activeAccount, allowUsageTab} = this.props;
         const showSettings = _.reduce(
             AccountsTab,
             (acc, tab) => {
@@ -102,7 +103,7 @@ export class Accounts extends React.Component<
                                 className={b('tabs')}
                                 routed
                                 routedPreserveLocation
-                                size={tabSize}
+                                size={UI_TAB_SIZE}
                             />
                         </div>
                     </div>
@@ -151,7 +152,6 @@ const mapStateToProps = (state: RootState) => {
     return {
         lastVisitedTab: lastVisitedTabs[Page.ACCOUNTS],
         activeAccount: getActiveAccount(state),
-        tabSize: getUISizes().tabSize,
         allowUsageTab: Boolean(getAccountsUsageBasePath()),
         cluster: getCluster(state),
     };

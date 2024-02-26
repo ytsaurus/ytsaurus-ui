@@ -34,7 +34,6 @@ import {performJobAction} from '../utils';
 import {LOADING_STATUS} from '../../../../../../constants/index';
 import {PLEASE_PROCEED_TEXT} from '../../../../../../utils/actions';
 import {getShowCompetitiveJobs} from '../../../../../../pages/operations/selectors';
-import {getUISizes} from '../../../../../../store/selectors/global';
 import {getJobsOperationId} from '../../../../../../store/selectors/operations/jobs';
 import {getOperationId} from '../../../../../../store/selectors/operations/operation';
 import UIFactory from '../../../../../../UIFactory';
@@ -42,6 +41,7 @@ import {StaleJobIcon} from '../StaleJobIcon';
 
 import JobTemplate from './JobTemplate';
 import './OperationJobsTable.scss';
+import {UI_COLLAPSIBLE_SIZE} from '../../../../../../constants/global';
 
 const block = cn('operation-detail-jobs');
 
@@ -502,7 +502,7 @@ function mapStateToProps(state, props) {
         inputPaths,
         cluster,
         login,
-        collapsibleSize: getUISizes().collapsibleSize,
+        collapsibleSize: UI_COLLAPSIBLE_SIZE,
         isLoading: props.isLoading || operationId !== jobsOperationId,
     };
 }

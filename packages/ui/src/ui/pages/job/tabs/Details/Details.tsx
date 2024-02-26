@@ -16,7 +16,7 @@ import {useSelector} from 'react-redux';
 import {JobError, JobEvents, JobStatistic} from '../../../../types/job';
 
 import './Details.scss';
-import {getUISizes} from '../../../../store/selectors/global';
+import {UI_COLLAPSIBLE_SIZE} from '../../../../constants/global';
 
 const block = cn('job-details');
 
@@ -82,22 +82,21 @@ function renderPivotKeys(type: string | undefined, collapsibleSize: 'm' | 'ss') 
 export default function Details() {
     const {details, job} = useSelector((state: RootState) => state.job.general);
     const {events} = details;
-    const {collapsibleSize} = useSelector(getUISizes);
 
     return (
         <ErrorBoundary>
             <div className={block()}>
                 {events?.length! > 0 && (
                     <div className={block('section')}>
-                        {renderEvents(details.events, collapsibleSize)}
+                        {renderEvents(details.events, UI_COLLAPSIBLE_SIZE)}
                     </div>
                 )}
 
                 <div className={block('section')}>
                     {renderError(job.error)}
-                    {renderStatistics(job.statistics as JobStatistic, collapsibleSize)}
-                    {renderPivotKeys(job.type, collapsibleSize)}
-                    {renderCompetitors(Boolean(job.hasCompetitors), collapsibleSize)}
+                    {renderStatistics(job.statistics as JobStatistic, UI_COLLAPSIBLE_SIZE)}
+                    {renderPivotKeys(job.type, UI_COLLAPSIBLE_SIZE)}
+                    {renderCompetitors(Boolean(job.hasCompetitors), UI_COLLAPSIBLE_SIZE)}
                 </div>
             </div>
         </ErrorBoundary>

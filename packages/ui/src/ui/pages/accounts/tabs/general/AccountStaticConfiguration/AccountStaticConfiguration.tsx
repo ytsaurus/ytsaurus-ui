@@ -7,7 +7,6 @@ import {
     getActiveAccountStaticConfiguration,
 } from '../../../../../store/selectors/accounts/accounts-ts';
 import CollapsibleSection from '../../../../../components/CollapsibleSection/CollapsibleSection';
-import {getUISizes} from '../../../../../store/selectors/global';
 import DataTableYT from '../../../../../components/DataTableYT/DataTableYT';
 import {Column} from '@gravity-ui/react-data-table';
 import hammer from '../../../../../common/hammer';
@@ -15,6 +14,7 @@ import {setSettingsAccountsExpandStaticConfiguration} from '../../../../../store
 
 import './AccountStaticConfiguration.scss';
 import {getSettingsAccountsExpandStaticConfiguration} from '../../../../../store/selectors/settings-ts';
+import {UI_COLLAPSIBLE_SIZE} from '../../../../../constants/global';
 const block = cn('account-static-configuration');
 
 interface Props {
@@ -68,7 +68,6 @@ function AccountStaticConfiguration({className}: Props) {
     const dispatch = useDispatch();
 
     const account = useSelector(getActiveAccount);
-    const {collapsibleSize} = useSelector(getUISizes);
     const items = useSelector(getActiveAccountStaticConfiguration);
     const expandState = useSelector(getSettingsAccountsExpandStaticConfiguration);
 
@@ -89,7 +88,7 @@ function AccountStaticConfiguration({className}: Props) {
         <CollapsibleSection
             name={'Static configuration'}
             className={block(null, className)}
-            size={collapsibleSize}
+            size={UI_COLLAPSIBLE_SIZE}
             collapsed={!expandState}
             onToggle={onToggle}
         >

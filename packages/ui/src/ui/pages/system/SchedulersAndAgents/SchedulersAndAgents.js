@@ -20,10 +20,10 @@ import {loadSchedulersAndAgents} from '../../../store/actions/system';
 import prepareTags from './prepareTags';
 
 import './Schedulers.scss';
-import {getUISizes} from '../../../store/selectors/global';
 import {getSettingsSystemSchedulersCollapsed} from '../../../store/selectors/settings-ts';
 import {setSettingsSystemSchedulersCollapsed} from '../../../store/actions/settings/settings';
 import {useUpdater} from '../../../hooks/use-updater';
+import {UI_COLLAPSIBLE_SIZE} from '../../../constants/global';
 
 const b = block('system');
 const headingCN = block('elements-heading')({size: 's'});
@@ -165,7 +165,7 @@ function mapStateToProps(state) {
         agents: getSystemAgentsWithState(state),
         counters: getSystemSchedulerAndAgentCounters(state),
         alerts: getSystemSchedulerAndAgentAlerts(state),
-        collapsibleSize: getUISizes().collapsibleSize,
+        collapsibleSize: UI_COLLAPSIBLE_SIZE,
         collapsed: getSettingsSystemSchedulersCollapsed(state),
     };
 }

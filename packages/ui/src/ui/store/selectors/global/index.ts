@@ -81,13 +81,6 @@ export const getCurrentClusterNS = createSelector([getCluster, getClusterNS], (c
     return cluster ? ns : undefined;
 });
 
-export const getUISizes = () => {
-    return {
-        tabSize: 'l' as const,
-        collapsibleSize: 'ss' as const,
-    };
-};
-
 export const getPoolTrees = (state: RootState) => state?.global?.poolTrees;
 export const getAllAccounts = (state: RootState) => state.global.accounts;
 export const getBundles = (state: RootState) => state?.global.bundles;

@@ -11,13 +11,13 @@ import SystemStateOverview from '../SystemStateOverview/SystemStateOverview';
 import MasterGroup from './MasterGroup';
 
 import {loadMasters} from '../../../store/actions/system/masters';
-import {getUISizes} from '../../../store/selectors/global';
 import {getSettingsSystemMastersCollapsed} from '../../../store/selectors/settings-ts';
 import {setSettingsSystemMastersCollapsed} from '../../../store/actions/settings/settings';
 import {useUpdater} from '../../../hooks/use-updater';
 
 import './Masters.scss';
 import {SystemAlert} from './SystemAlert';
+import {UI_COLLAPSIBLE_SIZE} from '../../../constants/global';
 
 const b = block('system-master');
 const headingCN = block('elements-heading')({size: 's'});
@@ -276,7 +276,7 @@ function mapStateToProps(state) {
         queueAgents,
         counters,
         alerts,
-        collapsibleSize: getUISizes().collapsibleSize,
+        collapsibleSize: UI_COLLAPSIBLE_SIZE,
         collapsed: getSettingsSystemMastersCollapsed(state),
     };
 }

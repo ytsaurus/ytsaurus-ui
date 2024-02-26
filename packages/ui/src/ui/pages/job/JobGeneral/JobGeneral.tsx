@@ -28,11 +28,12 @@ import ChartLink from '../../../components/ChartLink/ChartLink';
 import Link from '../../../components/Link/Link';
 import {getJob} from '../../../store/selectors/job/detail';
 import ClipboardButton from '../../../components/ClipboardButton/ClipboardButton';
-import {getCluster, getUISizes} from '../../../store/selectors/global';
+import {getCluster} from '../../../store/selectors/global';
 import UIFactory from '../../../UIFactory';
 import {StaleJobIcon} from '../../../pages/operations/OperationDetail/tabs/Jobs/StaleJobIcon';
 
 import './JobGeneral.scss';
+import {UI_TAB_SIZE} from '../../../constants/global';
 
 const block = cn('job-general');
 
@@ -42,7 +43,6 @@ export default function JobGeneral() {
     const settings = useSelector(getJobGeneralYsonSettings);
     const job = useSelector(getJob);
     const {loaded} = useSelector((state: RootState) => state.job.general);
-    const {tabSize} = useSelector(getUISizes);
 
     if (!loaded) {
         return null;
@@ -251,7 +251,7 @@ export default function JobGeneral() {
                 />
 
                 <div className={block('tabs')}>
-                    <Tabs {...tabsProps} active={DEFAULT_TAB} routed size={tabSize} />
+                    <Tabs {...tabsProps} active={DEFAULT_TAB} routed size={UI_TAB_SIZE} />
                 </div>
 
                 <Switch>

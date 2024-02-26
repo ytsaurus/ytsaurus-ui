@@ -1,106 +1,111 @@
-import React from 'react';
+import React, {FC, useCallback, useRef} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import cn from 'bem-cn-lite';
 import ErrorBlock from '../../../components/Error/Error';
-
 import CollapsibleSection from '../../../components/CollapsibleSection/CollapsibleSection';
 import {
     getNavigationAnnotation,
+    getNavigationAnnotationEditing,
     getNavigationAnnotationError,
     getNavigationAnnotationPath,
+    getNavigationAnnotationSaving,
 } from '../../../store/selectors/navigation/tabs/annotation';
 import {getPath} from '../../../store/selectors/navigation';
-
-import Link from '../../../components/Link/Link';
 import {getSettingAnnotationVisibility} from '../../../store/selectors/settings';
 import {setSettingAnnotationVisibility} from '../../../store/actions/settings/settings';
-import {
-    AnnotationVisibility,
-    AnnotationVisibilityType,
-} from '../../../../shared/constants/settings-ts';
-
+import {AnnotationVisibility} from '../../../../shared/constants/settings-ts';
 import './NavigationDescription.scss';
-import {Markdown} from '../../../components/Markdown/Markdown';
-import {getUISizes} from '../../../store/selectors/global';
+import {AnnotationWithPartial} from './AnnotationWithPartial';
+import {ActionButtons} from './ActionButtons';
+import {EditAnnotationWithPreview} from '../../../components/EditAnnotationWithPreview/EditAnnotationWithPreview';
+import {saveAnnotation} from '../../../store/actions/navigation/tabs/annotation';
+import {SET_ANNOTATION_EDITING} from '../../../constants/navigation/tabs/annotation';
+import {UI_COLLAPSIBLE_SIZE} from '../../../constants/global';
 
 const block = cn('navigation-description');
 
-export default function NavigationDescription({className}: {className: string}) {
+type Props = {
+    className: string;
+};
+
+const NavigationDescription: FC<Props> = ({className}) => {
     const dispatch = useDispatch();
-    const annotation = useSelector(getNavigationAnnotation);
+    const annotation = useSelector(getNavigationAnnotation) || '';
     const visibility = useSelector(getSettingAnnotationVisibility);
     const path = useSelector(getPath);
+    const isSaving = useSelector(getNavigationAnnotationSaving);
+    const isEditing = useSelector(getNavigationAnnotationEditing);
     const annotationPath = useSelector(getNavigationAnnotationPath);
     const error = useSelector(getNavigationAnnotationError);
-    const {collapsibleSize} = useSelector(getUISizes);
-
-    const collapsed = visibility === AnnotationVisibility.HIDDEN;
-    const handleChange = React.useCallback(
-        (/*value: boolean*/) => {
-            //console.log(value);
-            //const newValue = collapsed ? AnnotationVisibility.PARTIAL : AnnotationVisibility.HIDDEN;
-            //dispatch(setSettingAnnotationVisibility(newValue));
-        },
-        [dispatch, collapsed],
-    );
-
-    const showContent = path === annotationPath && (error || annotation);
-    return !showContent ? null : (
-        <div className={block(null, className)}>
-            {
-                <CollapsibleSection
-                    className={block('collapsible')}
-                    name={'Description'}
-                    onToggle={handleChange}
-                    collapsed={collapsed}
-                    size={collapsibleSize}
-                >
-                    <div className={block('content')}>
-                        <AnnotationWithPartial annotation={annotation} visibility={visibility} />
-                        {error && <ErrorBlock error={error} />}
-                    </div>
-                </CollapsibleSection>
-            }
-        </div>
-    );
-}
-
-function AnnotationWithPartial({
-    annotation,
-    visibility,
-}: {
-    annotation?: string;
-    visibility: AnnotationVisibilityType;
-}) {
-    const dispatch = useDispatch();
-    const value = annotation || '';
-    const {isFullText, text} = React.useMemo(() => {
-        if ('string' !== typeof value) {
-            throw new Error(
-                `Annotation should be defined as a string but current type is "${typeof value}"`,
-            );
-        }
-        const rows = value.split(/\n+/);
-        return {
-            text: rows.slice(0, 3).join('\n\n'),
-            isFullText: rows.length <= 3,
-        };
-    }, [value]);
+    const newAnnotation = useRef<string>(annotation);
 
     const expanded = visibility === AnnotationVisibility.VISIBLE;
-    const toggleExpand = React.useCallback(() => {
-        const newValue = expanded ? AnnotationVisibility.PARTIAL : AnnotationVisibility.VISIBLE;
-        dispatch(setSettingAnnotationVisibility(newValue));
+    const handleToggleAnnotationCollapse = useCallback(() => {
+        dispatch(
+            setSettingAnnotationVisibility(
+                expanded ? AnnotationVisibility.PARTIAL : AnnotationVisibility.VISIBLE,
+            ),
+        );
     }, [dispatch, expanded]);
 
+    const handleEditClick = useCallback(() => {
+        dispatch({type: SET_ANNOTATION_EDITING, data: true});
+    }, [dispatch]);
+
+    const handleCancelClick = useCallback(() => {
+        newAnnotation.current = annotation;
+        dispatch({type: SET_ANNOTATION_EDITING, data: false});
+    }, [annotation, dispatch]);
+
+    const handleChangeDescription = useCallback(({value}: {value: string | undefined}) => {
+        newAnnotation.current = value || '';
+    }, []);
+
+    const handleSaveClick = useCallback(() => {
+        dispatch(saveAnnotation({path, annotation: newAnnotation.current}));
+    }, [dispatch, path]);
+
+    if (!(path === annotationPath && (error || annotation))) return null;
+
     return (
-        <div>
-            <Markdown text={expanded ? value : text} />
-            {isFullText ? null : (
-                <Link theme={'ghost'} onClick={toggleExpand}>
-                    {expanded ? 'Hide more' : 'Show more'}
-                </Link>
-            )}
+        <div className={block(null, className)}>
+            <CollapsibleSection
+                className={block('collapsible')}
+                name={'Description'}
+                collapsed={false}
+                size={UI_COLLAPSIBLE_SIZE}
+                overview={
+                    <ActionButtons
+                        isSaving={isSaving}
+                        editMode={isEditing}
+                        onEditClick={handleEditClick}
+                        onSaveClick={handleSaveClick}
+                        onCancelClick={handleCancelClick}
+                    />
+                }
+            >
+                <div className={block('content')}>
+                    {isEditing ? (
+                        <EditAnnotationWithPreview
+                            valuePath={path}
+                            value={{value: newAnnotation.current}}
+                            initialValue={{value: annotation}}
+                            onChange={handleChangeDescription}
+                            className={block('edit-block')}
+                            hideReset
+                        />
+                    ) : (
+                        <AnnotationWithPartial
+                            annotation={annotation}
+                            expanded={expanded}
+                            onToggle={handleToggleAnnotationCollapse}
+                        />
+                    )}
+                    {error && <ErrorBlock error={error} />}
+                </div>
+            </CollapsibleSection>
         </div>
     );
-}
+};
+
+export default NavigationDescription;

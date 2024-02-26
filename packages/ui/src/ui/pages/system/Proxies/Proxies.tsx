@@ -7,7 +7,7 @@ import {CollapsibleSectionStateLess} from '../../../components/CollapsibleSectio
 import SystemStateOverview from '../SystemStateOverview/SystemStateOverview';
 
 import {loadSystemProxies} from '../../../store/actions/system/proxies';
-import {getCluster, getUISizes} from '../../../store/selectors/global';
+import {getCluster} from '../../../store/selectors/global';
 import {getSettingsSystemHttpProxiesCollapsed} from '../../../store/selectors/settings-ts';
 import {setSettingsSystemHttpProxiesCollapsed} from '../../../store/actions/settings/settings';
 import type {RootState} from '../../../store/reducers';
@@ -15,6 +15,7 @@ import {useThunkDispatch} from '../../../store/thunkDispatch';
 import {useUpdater} from '../../../hooks/use-updater';
 
 import {MakeUrlParams, RoleGroup, RoleGroupsContainer} from './RoleGroup';
+import {UI_COLLAPSIBLE_SIZE} from '../../../constants/global';
 
 type ReduxProps = ConnectedProps<typeof connector>;
 
@@ -30,7 +31,7 @@ class Proxies extends Component<ReduxProps> {
     }
 
     renderImpl() {
-        const {roleGroups, counters, collapsibleSize, collapsed} = this.props;
+        const {roleGroups, counters, collapsed} = this.props;
         if (isEmpty_(roleGroups) && isEmpty_(counters)) {
             return null;
         }
@@ -43,7 +44,7 @@ class Proxies extends Component<ReduxProps> {
                 overview={overview}
                 onToggle={this.onToggle}
                 collapsed={collapsed}
-                size={collapsibleSize}
+                size={UI_COLLAPSIBLE_SIZE}
             >
                 <RoleGroupsContainer>
                     {map_(roleGroups, (data) => {
@@ -90,7 +91,6 @@ function mapStateToProps(state: RootState) {
         counters,
         roleGroups,
         loaded,
-        collapsibleSize: getUISizes().collapsibleSize,
         collapsed: getSettingsSystemHttpProxiesCollapsed(state),
         cluster: getCluster(state),
     };
