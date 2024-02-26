@@ -1,5 +1,5 @@
 import {createSelector} from 'reselect';
-import {RootState} from '../../../../store/reducers';
+import {RootState} from '../../../reducers';
 import {calculateLoadingStatus} from '../../../../utils/utils';
 
 export const getNavigationDocumentLoadingStatus = createSelector(
@@ -12,3 +12,5 @@ export const getNavigationDocumentLoadingStatus = createSelector(
         return calculateLoadingStatus(loading, loaded, error);
     },
 );
+
+export const selectNavigationDocument = (store: RootState) => store.navigation.content.document;

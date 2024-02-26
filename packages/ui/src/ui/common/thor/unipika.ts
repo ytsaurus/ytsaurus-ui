@@ -18,7 +18,7 @@ const parseSetting = hammer.utils.parseSetting;
 const unipika = _.extend({}, unipikaLib);
 const {utf8} = unipika.utils;
 
-unipika.prepareSettings = function (settings: any) {
+unipika.prepareSettings = function (settings: UnipikaSettings) {
     settings = settings || {};
     Object.assign(settings, getUnipikaSettingsFromConfig());
 

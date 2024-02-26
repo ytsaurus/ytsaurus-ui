@@ -15,6 +15,7 @@ export type EditJsonProps = DialogControlProps<
     {
         unipikaSettings?: YsonProps['settings'];
         nullPreview?: any;
+        folding?: boolean;
     }
 > &
     Omit<
@@ -28,6 +29,16 @@ EditJsonWithPreview.isEmpty = (value: EditTextWithPreviewProps['value']) => {
     return !value;
 };
 
+EditJsonWithPreview.validate = (value: EditTextWithPreviewProps['value']) => {
+    try {
+        if (!value.value) return undefined;
+        JSON.parse(value.value);
+        return undefined;
+    } catch (e) {
+        return (e as Error).message;
+    }
+};
+
 EditJsonWithPreview.getDefaultValue = () => {
     return {value: undefined};
 };
@@ -37,6 +48,7 @@ export function EditJsonWithPreview({
     onChange,
     unipikaSettings,
     nullPreview,
+    folding,
     ...rest
 }: EditJsonProps) {
     const {value} = valueProp;
@@ -47,7 +59,14 @@ export function EditJsonWithPreview({
                 if (prevIsUndefined && newValue === '') {
                     // nothing to do
                 } else {
-                    onChange({value: newValue});
+                    // validate newValue
+                    try {
+                        if (newValue) JSON.parse(newValue);
+                        onChange({value: newValue});
+                    } catch (e) {
+                        if (!(e instanceof Error)) return;
+                        onChange({value: newValue, error: e.message});
+                    }
                 }
             }
         },
@@ -82,6 +101,7 @@ export function EditJsonWithPreview({
                         nullPreview={nullPreview}
                         settings={unipikaSettings}
                         onError={onError}
+                        folding={folding}
                     />
                 </ErrorBoundary>
             )}
@@ -92,11 +112,13 @@ export function EditJsonWithPreview({
 function YsonPreview({
     value: {value, error},
     settings,
+    folding,
     onError,
     nullPreview,
 }: {
     value: EditJsonProps['value'];
     settings: YsonProps['settings'];
+    folding: YsonProps['folding'];
     onError: (e: any) => void;
     nullPreview: any;
 }) {
@@ -117,10 +139,10 @@ function YsonPreview({
         return (
             <React.Fragment>
                 Default value:
-                <Yson value={nullPreview ?? null} settings={settings} />
+                <Yson value={nullPreview ?? null} folding={folding} settings={settings} />
             </React.Fragment>
         );
     }
 
-    return <Yson value={obj} settings={settings} />;
+    return <Yson value={obj} folding={folding} settings={settings} />;
 }

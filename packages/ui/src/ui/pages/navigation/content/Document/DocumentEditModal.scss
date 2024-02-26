@@ -1,0 +1,7 @@
+.document-edit-modal {
+    width: 95vw;
+
+    &__editor {
+        height: calc(90vh - 150px);
+    }
+}
