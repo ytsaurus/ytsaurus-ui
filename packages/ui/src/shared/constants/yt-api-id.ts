@@ -59,6 +59,7 @@ export enum YTApiId {
     navigationDynTableState,
     navigationGetAnnotation,
     navigationGetDocument,
+    navigationSaveDocument,
     navigationGetPath,
     navigationGetPathInfo,
     navigationGetTabletState,

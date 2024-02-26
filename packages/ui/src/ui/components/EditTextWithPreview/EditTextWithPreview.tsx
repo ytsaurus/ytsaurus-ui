@@ -11,6 +11,7 @@ import TabbedContent from './TabbedContent';
 import './EditTextWithPreview.scss';
 import {DropdownMenuItem} from '@gravity-ui/uikit';
 
+const DEFAULT_SIZE = 350;
 const block = cn('edit-text-with-preview');
 
 export type EditTextWithPreviewProps = DialogControlProps<
@@ -29,7 +30,7 @@ export type EditTextWithPreviewProps = DialogControlProps<
 
         initialShowPreview?: boolean;
     }
->;
+> & {initialSplitSize?: number};
 
 EditTextWithPreview.isEmpty = (value: EditTextWithPreviewProps['value']) => {
     return !value;
@@ -51,6 +52,7 @@ export function EditTextWithPreview({
     minHeight,
     initialShowPreview,
     disabled,
+    initialSplitSize,
 }: EditTextWithPreviewProps) {
     const {value} = valueProp;
 
@@ -94,7 +96,7 @@ export function EditTextWithPreview({
         </TabbedContent>
     );
 
-    const sizeRef = React.useRef<number>(350);
+    const sizeRef = React.useRef<number>(initialSplitSize || DEFAULT_SIZE);
 
     const style = React.useMemo(() => {
         return minHeight ? {minHeight} : undefined;

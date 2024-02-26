@@ -19,6 +19,7 @@ import {
 import RequestPermissions from '../../../pages/navigation/tabs/ACL/RequestPermissions/RequestPermissions';
 import ErrorBoundary from '../../../components/ErrorBoundary/ErrorBoundary';
 import ContentViewer from './ContentViewer/ContentViewer';
+import {checkContentIsSupported} from './ContentViewer/helpers';
 import Error from '../../../components/Error/Error';
 import {Info} from '../../../components/Info/Info';
 import Tabs from '../../../components/Tabs/Tabs';
@@ -356,9 +357,7 @@ class Navigation extends Component {
 
     renderView() {
         const {type, mode} = this.props;
-        const isSupported = ContentViewer.isSupported(type, mode);
-
-        if (isSupported) {
+        if (checkContentIsSupported(type, mode)) {
             return <ContentViewer type={type} mode={mode} />;
         }
 

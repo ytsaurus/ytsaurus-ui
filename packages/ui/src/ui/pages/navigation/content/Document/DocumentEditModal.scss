@@ -1,0 +1,15 @@
+.document-edit-modal {
+    &__editor{
+        height: 100%;
+    }
+
+     .yc-modal__content {
+        width: 95%;
+        height: 95%
+    }
+    .yc-dialog {
+        height: 100%;
+        display: grid;
+        grid-template-rows: 55px 1fr 55px;
+    }
+}

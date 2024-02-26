@@ -47,7 +47,14 @@ export function EditJsonWithPreview({
                 if (prevIsUndefined && newValue === '') {
                     // nothing to do
                 } else {
-                    onChange({value: newValue});
+                    // validate newValue
+                    try {
+                        if (newValue) JSON.parse(newValue);
+                        onChange({value: newValue});
+                    } catch (e) {
+                        if (!(e instanceof Error)) return;
+                        onChange({value: newValue, error: e.message});
+                    }
                 }
             }
         },

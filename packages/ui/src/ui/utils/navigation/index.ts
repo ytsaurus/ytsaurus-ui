@@ -4,13 +4,12 @@ import ypath from '../../common/thor/ypath';
 
 import {CancelTokenSource} from 'axios';
 
-import ContentViewer from '../../pages/navigation/Navigation/ContentViewer/ContentViewer';
-
 import {Page} from '../../constants/index';
 import {SUPPRESS_REDIRECT} from '../../constants/navigation/modals/delete-object';
 import {Tab} from '../../constants/navigation';
 import {YTError} from '../../../@types/types';
 import {allowDirectDownload} from '../../config';
+import checkContentIsSupported from '../../pages/navigation/Navigation/ContentViewer/helpers/checkContentIsSupported';
 
 export function autoCorrectPath(path: string) {
     // 1) Strip slash from the end
@@ -69,7 +68,7 @@ export function prepareRequest(
 }
 
 export function hasViewerForType(type: string): boolean {
-    return ContentViewer.isSupported(type, Tab.CONTENT);
+    return checkContentIsSupported(type, Tab.CONTENT);
 }
 
 export function itemNavigationAllowed(item: {
