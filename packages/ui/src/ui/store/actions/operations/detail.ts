@@ -43,17 +43,14 @@ function getIsEphemeral([operationAttributes, userTransactionAlive]: Awaited<
         mapValues(
             treesInfo,
             (infoPerTree, tree) =>
-                `${tree}/fair_share_info/pools/${ypath.getValue(
-                    infoPerTree,
-                    '/pool',
-                )}/is_ephemeral`,
+                `${tree}/pools/${ypath.getValue(infoPerTree, '/pool')}/is_ephemeral`,
         ),
     );
     const requests = poolPaths.map((path) => {
         return {
             command: 'get' as const,
             parameters: {
-                path: '//sys/scheduler/orchid/scheduler/scheduling_info_per_pool_tree/' + path,
+                path: '//sys/scheduler/orchid/scheduler/pool_trees/' + path,
             },
         };
     });
