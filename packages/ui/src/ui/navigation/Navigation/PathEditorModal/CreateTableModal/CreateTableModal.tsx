@@ -1,7 +1,7 @@
-import React from 'react';
 import cn from 'bem-cn-lite';
-import {connect} from 'react-redux';
 import _ from 'lodash';
+import React from 'react';
+import {connect} from 'react-redux';
 
 import Button from '../../../../components/Button/Button';
 import {FormApi, YTDFDialog} from '../../../../components/Dialog/Dialog';
@@ -30,19 +30,19 @@ import {
 } from '../../../../store/selectors/navigation/modals/create-table';
 import {StorageOptions} from '../../../../utils/cypress-attributes';
 
+import {SelectWithSubItemsProps} from '../../../../components/Dialog/controls/SelectWithSubItems/SelectWithSubItems';
+import {docsUrl, getNewTableReplicasCount} from '../../../../config';
 import {RootState} from '../../../../store/reducers';
 import {
     getCompressionCodecs,
     getErasureCodecs,
     getPrimitiveTypes,
 } from '../../../../store/selectors/global/supported-features';
-import {SelectWithSubItemsProps} from '../../../../components/Dialog/controls/SelectWithSubItems/SelectWithSubItems';
-import {docsUrl, getNewTableReplicasCount} from '../../../../config';
 
+import UIFactory from '../../../../UIFactory';
+import {FIX_MY_TYPE} from '../../../../types';
 import './CreateTableModal.scss';
 import {DESCENDING} from './CreateTableTabField/CreateTableTabField';
-import {FIX_MY_TYPE} from '../../../../types';
-import UIFactory from '../../../../UIFactory';
 
 const block = cn('create-table-modal');
 
@@ -231,14 +231,17 @@ class CreateTableModalContentImpl extends React.Component<Props> {
                 replicasCount,
                 erasureCodec,
                 uniqueKeys,
+                recursive,
             },
             [COLUMNS]: columnsRaw,
         } = values;
         const columns = this.reorderColumns(columnsRaw);
 
         const isDynamic = tableType === TableType.DYNAMIC;
+        const isRecursive = recursive === true;
         const attributes: Record<string, any> = {
             dynamic: isDynamic,
+            recursive: isRecursive,
         };
 
         if (!_.isEqual(compCodec, [SELECT_EMPTY_VALUE])) {
@@ -559,6 +562,16 @@ class CreateTableModalContentImpl extends React.Component<Props> {
                                 name: 'name',
                                 type: 'text',
                                 caption: 'Table name',
+                            },
+                            {
+                                name: 'recursive',
+                                type: 'tumbler',
+                                caption: 'Create folders in between',
+                                visibilityCondition: {
+                                    when: `${TABLE_SETTINGS}.name`,
+                                    isActive: (currenttableName: string) =>
+                                        currenttableName.split('/').length > name.split('/').length,
+                                },
                             },
                             {
                                 name: 'tableType',

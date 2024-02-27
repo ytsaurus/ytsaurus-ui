@@ -1,16 +1,10 @@
-import {ThunkAction} from 'redux-thunk';
 import map_ from 'lodash/map';
 import reduce_ from 'lodash/reduce';
+import {ThunkAction} from 'redux-thunk';
 
 // @ts-ignore
 import ypath from '@ytsaurus/interface-helpers/lib/ypath';
 
-import {RootState} from '../../reducers';
-import {
-    TabletBundle,
-    TabletsBundlesAction,
-    TabletsPartialAction,
-} from '../../reducers/tablet_cell_bundles';
 import {
     TABLETS_BUNDLES_ACTIVE_ACCOUNT,
     TABLETS_BUNDLES_LOAD_FAILURE,
@@ -18,31 +12,37 @@ import {
     TABLETS_BUNDLES_LOAD_SUCCESS,
     TABLETS_BUNDLES_PARTIAL,
 } from '../../../constants/tablets';
+import {SortState} from '../../../types';
 import {
     prepareBundles,
     prepareTabletCells,
     tabletActiveBundleLink,
 } from '../../../utils/components/tablet-cells';
-import {SortState} from '../../../types';
-import {bundlesTrackVisit} from '../favourites';
+import {RootState} from '../../reducers';
+import {
+    TabletBundle,
+    TabletsBundlesAction,
+    TabletsPartialAction,
+} from '../../reducers/tablet_cell_bundles';
 import {
     filterTabletCellsByBundle,
     getTabletsBundlesSorted,
     getTabletsCells,
     prepareHostsFromCells,
 } from '../../selectors/tablet_cell_bundles';
+import {bundlesTrackVisit} from '../favourites';
 
 import copy from 'copy-to-clipboard';
-import {getBatchError, splitBatchResults, wrapApiPromiseByToaster} from '../../../utils/utils';
-import {getCluster, getCurrentUserName} from '../../selectors/global';
+import {BatchSubRequest} from '../../../../shared/yt-types';
 import {YTApiId, ytApiV3Id} from '../../../rum/rum-wrap-api';
 import {getAppBrowserHistory} from '../../../store/window-store';
-import {BatchSubRequest} from '../../../../shared/yt-types';
 import {
     CheckPermissionResult,
     makeCheckPermissionBatchSubRequestUI,
 } from '../../../utils/acl/acl-api';
 import CancelHelper, {isCancelled} from '../../../utils/cancel-helper';
+import {getBatchError, splitBatchResults, wrapApiPromiseByToaster} from '../../../utils/utils';
+import {getCluster, getCurrentUserName} from '../../selectors/global';
 
 function getZones(allBundles: TabletBundle[]) {
     const map = new Map<string, boolean>();

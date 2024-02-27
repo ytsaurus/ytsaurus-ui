@@ -38,6 +38,7 @@ export function createTable(path, attributes) {
         const params = {
             path,
             type: 'table',
+            recursive: attributes.recursive,
             attributes,
         };
 

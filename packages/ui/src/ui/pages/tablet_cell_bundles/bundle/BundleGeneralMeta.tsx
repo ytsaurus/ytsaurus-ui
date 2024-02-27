@@ -1,26 +1,26 @@
-import React from 'react';
+import {Progress} from '@gravity-ui/uikit';
 import cn from 'bem-cn-lite';
-import {getTabletsActiveBundleData} from '../../../store/selectors/tablet_cell_bundles';
+import React from 'react';
 import {useSelector} from 'react-redux';
 import MetaTable, {MetaTableItem} from '../../../components/MetaTable/MetaTable';
-import {Progress} from '@gravity-ui/uikit';
+import {getTabletsActiveBundleData} from '../../../store/selectors/tablet_cell_bundles';
 
 // @ts-ignore
 import hammer from '@ytsaurus/interface-helpers/lib/hammer';
 import ypath from '../../../common/thor/ypath';
 
-import {YTHealth} from '../../../types';
-import AccountLink from '../../accounts/AccountLink';
 import Label, {LabelTheme} from '../../../components/Label/Label';
-import {calcProgressProps} from '../../../utils/utils';
 import {
     getCluster,
     getClusterUiConfig,
     getClusterUiConfigEnablePerBundleTabletAccounting,
 } from '../../../store/selectors/global';
+import {YTHealth} from '../../../types';
+import {calcProgressProps} from '../../../utils/utils';
+import AccountLink from '../../accounts/AccountLink';
 
-import './BundleGeneralMeta.scss';
 import UIFactory from '../../../UIFactory';
+import './BundleGeneralMeta.scss';
 
 const block = cn('bundle-general-meta');
 
@@ -54,6 +54,7 @@ export default function BundleGeneralMeta() {
     const clusterUiConfig = useSelector(getClusterUiConfig);
     const cluster = useSelector(getCluster);
     const allowTabletAccounting = useSelector(getClusterUiConfigEnablePerBundleTabletAccounting);
+    console.log(bundleData);
 
     if (!bundleData) {
         return null;

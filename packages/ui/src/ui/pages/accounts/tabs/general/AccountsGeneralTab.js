@@ -421,8 +421,9 @@ class AccountsGeneralTab extends Component {
             },
 
             alerts(treeItem) {
-                const {attributes: account} = treeItem;
-                const {alertsCount} = account;
+                const {
+                    attributes: {alertsCount},
+                } = treeItem;
                 const text = alertsCount > 0 ? alertsCount : '';
                 return (
                     text && (

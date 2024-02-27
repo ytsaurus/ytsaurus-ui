@@ -6,11 +6,11 @@ import {CancelTokenSource} from 'axios';
 
 import ContentViewer from '../../pages/navigation/Navigation/ContentViewer/ContentViewer';
 
-import {Page} from '../../constants/index';
-import {SUPPRESS_REDIRECT} from '../../constants/navigation/modals/delete-object';
-import {Tab} from '../../constants/navigation';
 import {YTError} from '../../../@types/types';
 import {allowDirectDownload} from '../../config';
+import {Page} from '../../constants/index';
+import {Tab} from '../../constants/navigation';
+import {SUPPRESS_REDIRECT} from '../../constants/navigation/modals/delete-object';
 
 export function autoCorrectPath(path: string) {
     // 1) Strip slash from the end
@@ -124,9 +124,12 @@ export function preparePath(path: string) {
     return path;
 }
 
-export function prepareDestinationPath(dirPath: string, name: string) {
+export function prepareDestinationPath(dirPath: string, name: String) {
     const lastChar = dirPath.charAt(dirPath.length - 1);
     const nextToLastChar = dirPath.charAt(dirPath.length - 2);
+    const isDir = dirPath[dirPath.length - 1] === '/';
+
+    if (!isDir) return dirPath;
 
     if (lastChar === '/' && nextToLastChar !== '\\') {
         return dirPath + name;
