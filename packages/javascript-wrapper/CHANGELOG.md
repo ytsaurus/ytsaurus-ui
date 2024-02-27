@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.7.1](https://github.com/ytsaurus/ytsaurus-ui/compare/javascript-wrapper-v0.7.0...javascript-wrapper-v0.7.1) (2024-02-27)
+
+
+### Bug Fixes
+
+* **Queries:** use POST-data for parameters of startQuery-command [YTFRONT-4023] ([64ade59](https://github.com/ytsaurus/ytsaurus-ui/commit/64ade5921d3733409f74f3817bad50ecb9d014b2))
+
 ## [0.7.0](https://github.com/ytsaurus/ytsaurus-ui/compare/javascript-wrapper-v0.6.1...javascript-wrapper-v0.7.0) (2024-02-06)
 
 
