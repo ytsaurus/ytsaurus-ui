@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.17.1](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.17.0...ui-v1.17.1) (2024-02-27)
+
+
+### Bug Fixes
+
+* **Queries:** use POST-data for parameters of startQuery-command [YTFRONT-4023] ([d03c8e0](https://github.com/ytsaurus/ytsaurus-ui/commit/d03c8e0f65800a8332dac4165c43efe46a868885))
+* scheduling broken aggregation [YTFRONT-4031] ([d460549](https://github.com/ytsaurus/ytsaurus-ui/commit/d460549d4073572dff855a962b8e7c1085566415))
+
 ## [1.17.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.16.1...ui-v1.17.0) (2024-02-16)
 
 
