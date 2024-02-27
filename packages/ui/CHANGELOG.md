@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.18.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.17.1...ui-v1.18.0) (2024-02-27)
+
+
+### Features
+
+* **Navigation:** added the ability to edit a document [YTFRONT-3921] ([98b6dba](https://github.com/ytsaurus/ytsaurus-ui/commit/98b6dba191c010b34b282098866ea5dc59ee724c))
+
 ## [1.17.1](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.17.0...ui-v1.17.1) (2024-02-27)
 
 
