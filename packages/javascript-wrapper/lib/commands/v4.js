@@ -120,7 +120,8 @@ module.exports = {
     startQuery: {
         name: 'start_query',
         method: 'POST',
-        dataType: 'json'
+        dataType: 'json',
+        useBodyForParameters: true,
     },
     readQueryResults: {
         name: 'read_query_result',
