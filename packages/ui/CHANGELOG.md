@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.18.1](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.18.0...ui-v1.18.1) (2024-02-27)
+
+
+### Bug Fixes
+
+* **Scheduling:** do not use '.../orchid/scheduler/scheduling_info_per_pool_tree' [YTFRONT-3937] ([a5a93bb](https://github.com/ytsaurus/ytsaurus-ui/commit/a5a93bb5d61a8814c80c7f512ae7a4aaa4bcd764))
+
 ## [1.18.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.17.1...ui-v1.18.0) (2024-02-27)
 
 
