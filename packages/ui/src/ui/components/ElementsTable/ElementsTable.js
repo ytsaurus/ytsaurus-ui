@@ -1,16 +1,17 @@
-import React, {Component, createRef} from 'react';
-import {connect} from 'react-redux';
-import PropTypes from 'prop-types';
-import ReactList from 'react-list';
 import block from 'bem-cn-lite';
 import _ from 'lodash';
+import PropTypes from 'prop-types';
+import React, {Component, createRef} from 'react';
+import ReactList from 'react-list';
+import {connect} from 'react-redux';
 
-import ElementsTableRow from './ElementsTableRow';
-import ElementsTableHeader, {sortStateType} from './ElementsTableHeader';
 import ErrorBoundary from '../../components/ErrorBoundary/ErrorBoundary';
+import ElementsTableHeader, {sortStateType} from './ElementsTableHeader';
+import ElementsTableRow from './ElementsTableRow';
 
-import {toggleColumnSortOrder, changeColumnSortOrder} from '../../store/actions/tables';
 import action from '../../components/action/action';
+import {changeColumnSortOrder, toggleColumnSortOrder} from '../../store/actions/tables';
+import {NothingToShow} from '../NothingToShow/NothingToShow';
 import {
     ELEMENTS_TABLE,
     TemplatesPropType,
@@ -19,7 +20,6 @@ import {
     prepareColumnsData,
     prepareTableClassName,
 } from './utils';
-import {NothingToShow} from '../NothingToShow/NothingToShow';
 
 import './ElementsTable.scss';
 
@@ -379,7 +379,10 @@ class ElementsTable extends Component {
     renderEmptyTableContent = (
         <div>
             <div className={block(ELEMENTS_TABLE)('empty-header')}>
-                <NothingToShow description={this.props.emptyDataDescription} />
+                <NothingToShow
+                    title="No items to show"
+                    description={this.props.emptyDataDescription}
+                />
             </div>
         </div>
     );
@@ -509,15 +512,17 @@ class ElementsTable extends Component {
 
         const visibleItems = tree ? _.filter(items, this.isItemVisible) : items;
 
-        if (isLoading) {
-            return this.renderSkeletonState();
-        } else if (items.length) {
+        console.log(isLoading);
+
+        if (isLoading) return this.renderSkeletonState();
+
+        if (items.length) {
             return virtual
                 ? this.renderDynamicTable(visibleItems)
                 : this.renderSimpleTable(visibleItems);
-        } else {
-            return this.props.body && this.renderEmptyTableContent;
         }
+
+        return this.props.body && this.renderEmptyTableContent;
     }
 
     render() {

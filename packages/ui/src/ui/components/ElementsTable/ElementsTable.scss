@@ -78,11 +78,19 @@ $thin-border: 1px solid var(--light-divider);
         display: inline-block;
     }
 
+    .column-select {
+        position: absolute;
+        right: 1px;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+
     .custom-select {
         border-radius: 4px;
         padding: 2px 6px;
         display: flex;
         align-items: center;
+        
         justify-content: space-between;
         color: var(--default-text);
         font-weight: 600;
@@ -90,12 +98,10 @@ $thin-border: 1px solid var(--light-divider);
         font-size: 0.75rem;
         transition: 0.15s transform;
         cursor: pointer;
-        background: var(--hover-background);
         height: 21px;
 
         &.selected {
-            background: var(--g-color-private-blue-50);
-            color:var(--bluejeans-color);
+            background: var(--dark-background);
 
             &:hover {
                 filter: brightness(0.96);
@@ -231,6 +237,18 @@ $thin-border: 1px solid var(--light-divider);
                 display: flex;
                 align-items: center;
                 gap: 2px;
+                position: relative;
+
+                .column-text {
+                    display: flex;
+                    align-items: center;
+                    gap: 2px;
+                    
+                    &:hover {
+                        color: var(--hover-link);
+                        cursor: pointer;
+                    }
+                }
             }
         }
     }

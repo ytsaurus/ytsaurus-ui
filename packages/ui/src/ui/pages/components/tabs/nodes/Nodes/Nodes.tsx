@@ -371,11 +371,9 @@ const mapStateToProps = (state: RootState) => {
     const {contentMode, nodes, loading, loaded, error, errorData, hostFilter} =
         state.components.nodes.nodes;
 
-    console.log(state);
-
     const visibleNodes = getVisibleNodes(state);
     const selectedColumns = getSelectedColumns(state) || defaultColumns;
-    const initialLoading = loading && !loaded;
+    const initialLoading = (loading || true) && !loaded;
 
     const nodesTableProps = getComponentNodesTableProps(state);
 

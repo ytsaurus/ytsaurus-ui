@@ -378,7 +378,7 @@ const nodesTableProps: NodeTableProps = {
                     },
                     {
                         value: 'cpuProgress',
-                        content: 'Usage / Limit',
+                        content: 'Progress',
                     },
                 ],
             },
@@ -399,7 +399,7 @@ const nodesTableProps: NodeTableProps = {
                     },
                     {
                         value: 'memoryProgress',
-                        content: 'Usage / Limit',
+                        content: 'Progress',
                     },
                 ],
             },

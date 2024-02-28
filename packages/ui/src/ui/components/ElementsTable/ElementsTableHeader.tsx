@@ -2,7 +2,7 @@ import block from 'bem-cn-lite';
 import PropTypes from 'prop-types';
 import React, {CSSProperties, Component} from 'react';
 
-import {SelectOption} from '@gravity-ui/uikit';
+import {SelectOption, Spin, Text} from '@gravity-ui/uikit';
 import {Tooltip} from '../../components/Tooltip/Tooltip';
 import {ChangeColumnSortOrderParams, ToggleColumnSortOrderParams} from '../../store/actions/tables';
 import {RootState} from '../../store/reducers';
@@ -70,6 +70,12 @@ interface State {
         hasGroups?: boolean;
     };
     columnSelects: Record<string, string>;
+    sorting: {
+        columnName: string;
+        loading: boolean;
+        orderType: OrderType | undefined;
+        selectField: string | undefined;
+    } | null;
 }
 
 interface ColumnGroupInfo {
@@ -154,6 +160,7 @@ export default class ElementsTableHeader extends Component<ElementsTableHeaderPr
                 items: [],
             },
             columnSelects: {},
+            sorting: null,
         };
     }
 
@@ -221,16 +228,18 @@ export default class ElementsTableHeader extends Component<ElementsTableHeaderPr
         if (sortState) {
             sortInfo = sortState[tableId!];
             toggleOrder = (selectField?: string) => {
-                toggleColumnSortOrder({
-                    tableId,
-                    columnName,
-                    withUndefined: sortWithUndefined,
-                    allowedOrderTypes,
-                    selectField,
-                });
-                if (typeof onSort === 'function') {
-                    onSort(columnName);
-                }
+                setTimeout(() => {
+                    toggleColumnSortOrder({
+                        tableId,
+                        columnName,
+                        withUndefined: sortWithUndefined,
+                        allowedOrderTypes,
+                        selectField,
+                    });
+                    if (typeof onSort === 'function') {
+                        onSort(columnName);
+                    }
+                }, 1);
             };
         }
 
@@ -238,17 +247,33 @@ export default class ElementsTableHeader extends Component<ElementsTableHeaderPr
             sortInfo?.field === columnName ? sortInfo : undefined,
         );
 
+        const sortingSelectFieldValue = this.state.columnSelects[columnName];
+
+        const showLoading =
+            this.state.sorting?.loading &&
+            this.state.sorting?.columnName === columnName &&
+            (sortInfo?.field !== columnName || orderType === this.state.sorting?.orderType);
+        const sortSelectString = sortSelectItems?.find(
+            (el) => el.value === sortingSelectFieldValue,
+        )?.content;
+        console.log(orderType, this.state.sorting?.orderType);
+
         return (
             <div
                 className="column-header"
                 onClick={() => {
-                    toggleOrder(this.state.columnSelects[columnName] ?? defaultSelectValue?.[0]);
+                    this.setState({
+                        sorting: {
+                            columnName,
+                            loading: true,
+                            orderType,
+                            selectField: this.state.sorting?.selectField,
+                        },
+                    });
 
-                    if (
-                        sortSelectItems.length &&
-                        defaultSelectValue &&
-                        !this.state.columnSelects[columnName]
-                    ) {
+                    toggleOrder(sortingSelectFieldValue ?? defaultSelectValue?.[0]);
+
+                    if (sortSelectItems.length && defaultSelectValue && !sortingSelectFieldValue) {
                         this.setState({
                             columnSelects: {
                                 [columnName]: defaultSelectValue[0],
@@ -257,25 +282,52 @@ export default class ElementsTableHeader extends Component<ElementsTableHeaderPr
                     }
                 }}
             >
-                {this.renderCellCaption(columnName)}
-                <SortIcon className={b('cell-sort')} order={orderType} />
+                <span className="column-text">
+                    {this.renderCellCaption(columnName)}
+                    {showLoading ? (
+                        <Spin size="xs" />
+                    ) : (
+                        <SortIcon className={b('cell-sort')} order={orderType} />
+                    )}
+                    {this.renderCellCaptionTail(columnName)}
+                </span>
+                {sortSelectString && (
+                    <Text variant="caption-2" color="dark-secondary">
+                        {sortSelectString}
+                    </Text>
+                )}
                 <HeaderSortSelect
                     changeColumnSortOrder={changeColumnSortOrder}
-                    value={this.state.columnSelects[columnName]}
+                    value={sortingSelectFieldValue}
                     orderType={orderType}
                     columnName={columnName}
                     tableId={tableId}
                     defaultValue={defaultSelectValue}
                     sortSelectItems={sortSelectItems}
+                    onLoadingFinished={() => {
+                        this.setState({
+                            sorting: {
+                                columnName,
+                                loading: false,
+                                orderType,
+                                selectField: this.state.sorting?.selectField,
+                            },
+                        });
+                    }}
                     onChange={(columnName: string, selectField: string) => {
                         this.setState({
                             columnSelects: {
                                 [columnName]: selectField,
                             },
+                            sorting: {
+                                columnName,
+                                loading: true,
+                                orderType,
+                                selectField,
+                            },
                         });
                     }}
                 />
-                {this.renderCellCaptionTail(columnName)}
             </div>
         );
     }

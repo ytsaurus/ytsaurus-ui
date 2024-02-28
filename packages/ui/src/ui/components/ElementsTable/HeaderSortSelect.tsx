@@ -1,4 +1,4 @@
-import {ChevronDown} from '@gravity-ui/icons';
+import {BarsDescendingAlignLeft} from '@gravity-ui/icons';
 import {Select, SelectOption, SelectRenderControl, SelectRenderOption} from '@gravity-ui/uikit';
 import React from 'react';
 import {ChangeColumnSortOrderParams} from '../../store/actions/tables';
@@ -13,17 +13,19 @@ type Props = {
     sortSelectItems: SelectOption[];
     changeColumnSortOrder: (params: ChangeColumnSortOrderParams) => void;
     onChange: (columnName: string, selectField: string) => void;
+    onLoadingFinished: () => void;
 };
 
 export const HeaderSortSelect = ({
-    changeColumnSortOrder,
     value,
     orderType,
     columnName,
     defaultValue,
     tableId,
     sortSelectItems,
+    changeColumnSortOrder,
     onChange,
+    onLoadingFinished,
 }: Props) => {
     const selectValue = value ? [value] : undefined;
     const defaultSelectValue = orderType?.length !== 0 ? defaultValue : undefined;
@@ -31,9 +33,6 @@ export const HeaderSortSelect = ({
     if (!sortSelectItems || sortSelectItems.length === 0) return null;
 
     const renderControl: SelectRenderControl = ({onClick, onKeyDown, ref}) => {
-        const by = sortSelectItems?.find((el) => el.value === value)?.content ?? '';
-        const text = by ? `by ${by}` : '';
-
         return (
             <div
                 onClick={onClick}
@@ -41,8 +40,7 @@ export const HeaderSortSelect = ({
                 ref={ref as any}
                 className={'custom-select' + (value !== undefined ? ' selected' : '')}
             >
-                {text}
-                <ChevronDown />
+                <BarsDescendingAlignLeft />
             </div>
         );
     };
@@ -52,17 +50,20 @@ export const HeaderSortSelect = ({
     };
 
     const handleUpdate = (option: string[]) => {
-        changeColumnSortOrder({
-            columnName,
-            tableId,
-            asc: orderType === 'asc',
-            selectField: option[0],
-        });
         onChange(columnName, option[0]);
+        setTimeout(() => {
+            changeColumnSortOrder({
+                columnName,
+                tableId,
+                asc: orderType === 'asc',
+                selectField: option[0],
+            });
+            onLoadingFinished();
+        }, 1);
     };
 
     return (
-        <div onClick={(e) => e.stopPropagation()} style={{marginLeft: '8px'}}>
+        <div onClick={(e) => e.stopPropagation()}>
             <Select
                 className={'column-select'}
                 renderControl={renderControl}

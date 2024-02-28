@@ -199,7 +199,7 @@ $elements-table: '.elements-table';
             &_cpu,
             &_memory-total,
             &_network {
-                width: 110px;
+                width: 150px;
             }
 
             &_actions,
@@ -242,7 +242,7 @@ $elements-table: '.elements-table';
             }
 
             &_host {
-                width: 350px;
+                width: 310px;
             }
         }
     }
