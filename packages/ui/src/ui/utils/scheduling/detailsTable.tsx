@@ -1,11 +1,13 @@
 import React from 'react';
+
 import format from '../../common/hammer/format';
 import SchedulingOperationsLoader from '../../pages/scheduling/Content/tabs/ScherdulingOperataionsLoader/SchedulingOperationsLoader';
+import {PoolInfo, PoolResourceType} from '../../store/selectors/scheduling/scheduling-pools';
 
-function prepareDetailedColumn(resource) {
+function prepareDetailedColumn(resource: PoolResourceType) {
     return {
-        get(item) {
-            return item.resources[resource].detailed;
+        get(item: PoolInfo) {
+            return item.resources?.[resource]?.detailed;
         },
         sort: true,
         caption: 'Abs fair share',
@@ -13,10 +15,10 @@ function prepareDetailedColumn(resource) {
     };
 }
 
-function prepareLimitColumn(resource) {
+function prepareLimitColumn(resource: PoolResourceType) {
     return {
-        get(item) {
-            return item.resources[resource].limit;
+        get(item: PoolInfo) {
+            return item.resources?.[resource]?.limit;
         },
         sort: true,
         sortWithUndefined: true,
@@ -25,10 +27,10 @@ function prepareLimitColumn(resource) {
     };
 }
 
-function prepareMinResourcesColumn(resource) {
+function prepareMinResourcesColumn(resource: PoolResourceType) {
     return {
-        get(item) {
-            return item.resources[resource].min;
+        get(item: PoolInfo) {
+            return item.resources?.[resource]?.min;
         },
         sort: true,
         caption: 'Strong guar.',
@@ -37,10 +39,10 @@ function prepareMinResourcesColumn(resource) {
     };
 }
 
-function prepareAbsGuaranteedColumn(resource) {
+function prepareAbsGuaranteedColumn(resource: PoolResourceType) {
     return {
-        get(item) {
-            return item.resources[resource].guaranteed;
+        get(item: PoolInfo) {
+            return item.resources?.[resource]?.guaranteed;
         },
         sort: true,
         caption: 'Estimated guar.',
@@ -49,12 +51,12 @@ function prepareAbsGuaranteedColumn(resource) {
     };
 }
 
-function prepareRelGuaranteedColumn(resource) {
+function prepareRelGuaranteedColumn(resource: PoolResourceType) {
     return {
-        get(item, currentPool) {
+        get(item: PoolInfo, currentPool: PoolInfo) {
             return (
-                prepareAbsGuaranteedColumn(resource).get(item) /
-                prepareAbsGuaranteedColumn(resource).get(currentPool)
+                prepareAbsGuaranteedColumn(resource).get(item)! /
+                prepareAbsGuaranteedColumn(resource).get(currentPool)!
             );
         },
         sort: true,
@@ -63,10 +65,10 @@ function prepareRelGuaranteedColumn(resource) {
     };
 }
 
-function prepareAbsDemandColumn(resource) {
+function prepareAbsDemandColumn(resource: PoolResourceType) {
     return {
-        get(item) {
-            return item.resources[resource].demand;
+        get(item: PoolInfo) {
+            return item.resources?.[resource]?.demand;
         },
         sort: true,
         caption: 'Abs demand',
@@ -74,10 +76,10 @@ function prepareAbsDemandColumn(resource) {
     };
 }
 
-function prepareAbsUsageColumn(resource) {
+function prepareAbsUsageColumn(resource: PoolResourceType) {
     return {
-        get(item) {
-            return item.resources[resource].usage;
+        get(item: PoolInfo) {
+            return item.resources?.[resource]?.usage;
         },
         sort: true,
         caption: 'Abs usage',
@@ -85,12 +87,12 @@ function prepareAbsUsageColumn(resource) {
     };
 }
 
-function prepareRelUsageColumn(resource) {
+function prepareRelUsageColumn(resource: PoolResourceType) {
     return {
-        get(item, currentPool) {
+        get(item: PoolInfo, currentPool: PoolInfo) {
             return (
-                prepareAbsUsageColumn(resource).get(item) /
-                prepareAbsUsageColumn(resource).get(currentPool)
+                prepareAbsUsageColumn(resource).get(item)! /
+                prepareAbsUsageColumn(resource).get(currentPool)!
             );
         },
         sort: true,
@@ -99,9 +101,9 @@ function prepareRelUsageColumn(resource) {
     };
 }
 
-function prepareGuaranteedUsageColumn(resource) {
+function prepareGuaranteedUsageColumn(resource: PoolResourceType) {
     return {
-        get(item, currentPool) {
+        get(item: PoolInfo, currentPool: PoolInfo) {
             return {
                 guaranteed: prepareRelGuaranteedColumn(resource).get(item, currentPool),
                 usage: prepareRelUsageColumn(resource).get(item, currentPool),
@@ -114,7 +116,7 @@ function prepareGuaranteedUsageColumn(resource) {
 
 export const childTableItems = {
     name: {
-        sort(item) {
+        sort(item: PoolInfo) {
             return item.name;
         },
         caption: 'Pool / Operation',
@@ -122,51 +124,51 @@ export const childTableItems = {
         align: 'left',
     },
     mode: {
-        sort(item) {
+        sort(item: PoolInfo) {
             return item.mode;
         },
         align: 'center',
     },
     FI: {
-        sort(item) {
+        sort(item: PoolInfo) {
             return item.fifoIndex;
         },
         align: 'center',
     },
     weight: {
-        sort(item) {
+        sort(item: PoolInfo) {
             return item.weight;
         },
         align: 'right',
     },
     min_share: {
-        sort(item) {
+        sort(item: PoolInfo) {
             return item.minShareRatio;
         },
         align: 'right',
     },
     max_share: {
-        sort(item) {
+        sort(item: PoolInfo) {
             return item.maxShareRatio;
         },
         align: 'right',
     },
     fair_share: {
-        get(item) {
+        get(item: PoolInfo) {
             return item.fairShareRatio;
         },
         sort: true,
         align: 'right',
     },
     usage: {
-        get(item) {
+        get(item: PoolInfo) {
             return item.usageRatio;
         },
         sort: true,
         align: 'right',
     },
     demand: {
-        get(item) {
+        get(item: PoolInfo) {
             return item.demandRatio;
         },
         sort: true,
@@ -177,7 +179,7 @@ export const childTableItems = {
         align: 'left',
     },
     dominant_resource: {
-        sort(item) {
+        sort(item: PoolInfo) {
             return item.dominantResource;
         },
         caption: 'Dom. res.',
@@ -231,7 +233,7 @@ export const childTableItems = {
     guaranteed_usage_user_slots: prepareGuaranteedUsageColumn('user_slots'),
 
     operation_overview: {
-        get(item) {
+        get(item: PoolInfo) {
             return [item.operationCount, item.runningOperationCount];
         },
         caption: 'Operations',
@@ -239,24 +241,24 @@ export const childTableItems = {
         align: 'right',
     },
     operation_count: {
-        get(item) {
+        get(item: PoolInfo) {
             return item.operationCount;
         },
         sort: true,
         align: 'right',
     },
     max_operation_count: {
-        get(item) {
+        get(item: PoolInfo) {
             return item.maxOperationCount;
         },
         sort: true,
         align: 'right',
     },
     operation_progress: {
-        get(item) {
-            return item.operationCount / item.maxOperationCount;
+        get(item: PoolInfo) {
+            return item.operationCount! / item.maxOperationCount!;
         },
-        text(item) {
+        text(item: PoolInfo) {
             return `${format.Number(item.operationCount)} / ${format.Number(
                 item.maxOperationCount,
             )}`;
@@ -266,24 +268,24 @@ export const childTableItems = {
         align: 'center',
     },
     running_operation_count: {
-        get(item) {
+        get(item: PoolInfo) {
             return item.runningOperationCount;
         },
         sort: true,
         align: 'right',
     },
     max_running_operation_count: {
-        get(item) {
+        get(item: PoolInfo) {
             return item.maxRunningOperationCount;
         },
         sort: true,
         align: 'right',
     },
     running_operation_progress: {
-        get(item) {
-            return item.runningOperationCount / item.maxRunningOperationCount;
+        get(item: PoolInfo) {
+            return item.runningOperationCount! / item.maxRunningOperationCount!;
         },
-        text(item) {
+        text(item: PoolInfo) {
             return `${format.Number(item.runningOperationCount)} / ${format.Number(
                 item.maxRunningOperationCount,
             )}`;
@@ -294,7 +296,7 @@ export const childTableItems = {
     },
 
     integral_type: {
-        get(item) {
+        get(item: PoolInfo) {
             const res = item.integralType;
             return res === 'none' ? undefined : res;
         },
@@ -304,10 +306,10 @@ export const childTableItems = {
         sortWithUndefined: true,
     },
     burst_cpu: {
-        get(item) {
+        get(item: PoolInfo) {
             return item.burstCPU;
         },
-        sort(item) {
+        sort(item: PoolInfo) {
             const res = item.burstCPU;
             return isNaN(res) ? undefined : res;
         },
@@ -316,10 +318,10 @@ export const childTableItems = {
         align: 'right',
     },
     flow_cpu: {
-        get(item) {
+        get(item: PoolInfo) {
             return item.flowCPU;
         },
-        sort(item) {
+        sort(item: PoolInfo) {
             const res = item.flowCPU;
             return isNaN(res) ? undefined : res;
         },
@@ -328,7 +330,7 @@ export const childTableItems = {
         align: 'right',
     },
     children_burst_cpu: {
-        get(item) {
+        get(item: PoolInfo) {
             const res = item.childrenBurstCPU;
             return !res ? undefined : res;
         },
@@ -338,7 +340,7 @@ export const childTableItems = {
         align: 'right',
     },
     children_flow_cpu: {
-        get(item) {
+        get(item: PoolInfo) {
             const res = item.childrenFlowCPU;
             return !res ? undefined : res;
         },
@@ -348,7 +350,7 @@ export const childTableItems = {
         align: 'right',
     },
     accumulated: {
-        get(item) {
+        get(item: PoolInfo) {
             return item.accumulated;
         },
         caption: 'Acc ratio volume',
@@ -357,7 +359,7 @@ export const childTableItems = {
         align: 'right',
     },
     accumulated_cpu: {
-        get(item) {
+        get(item: PoolInfo) {
             return item.accumulatedCpu;
         },
         caption: 'Acc CPU volume',
@@ -365,7 +367,7 @@ export const childTableItems = {
         align: 'right',
     },
     burst_duration: {
-        get(item) {
+        get(item: PoolInfo) {
             return item.burstDuration;
         },
         caption: 'Est burst usage duration ',

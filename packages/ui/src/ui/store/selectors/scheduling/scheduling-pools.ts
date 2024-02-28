@@ -154,7 +154,39 @@ export interface PoolInfo extends Omit<OperationInfo, 'type' | 'pool'> {
     children?: Array<PoolInfo>;
     leaves: Array<OperationInfo>;
     isEphemeral?: boolean;
+    resources?: PoolResources;
+    fifoIndex?: number;
+    weight?: number;
+    minShareRatio?: number;
+    maxShareRatio?: number;
+    fairShareRatio?: number;
+    usageRatio?: number;
+    demandRatio?: number;
+    dominantResource?: number;
+    runningOperationCount?: number;
+    operationCount?: number;
+    maxOperationCount?: number;
+    childrenBurstCPU?: number;
+    childrenFlowCPU?: number;
+    accumulated?: number;
+    accumulatedCpu?: number;
+    burstDuration?: number;
 }
+
+export type PoolResources = Partial<
+    Record<'cpu' | 'gpu' | 'user_memory' | 'user_slots', PoolResourceDetails>
+>;
+
+export type PoolResourceType = keyof PoolResources;
+
+export type PoolResourceDetails = {
+    min?: number;
+    usage?: number;
+    limit?: number;
+    demand?: number;
+    detailed?: number;
+    guaranteed?: number;
+};
 
 export const getPools = createSelector(
     [getPoolsPrepared, getSchedulingPoolsExtraInfo],
