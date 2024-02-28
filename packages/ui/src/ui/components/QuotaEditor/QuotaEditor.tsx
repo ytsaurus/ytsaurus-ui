@@ -212,6 +212,10 @@ export default class QuotaEditor extends React.Component<QuotaEditorProps> {
             return 'The same source account';
         }
 
+        if (newLimit <= this.props.prevLimit!) {
+            return undefined;
+        }
+
         const maxLimit = this.getMaxLimit();
 
         if (srcAccount && (maxLimit === undefined || newLimit > maxLimit)) {
