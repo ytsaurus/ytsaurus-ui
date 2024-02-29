@@ -11,6 +11,7 @@ import {
 } from '../../../store/selectors/tablet_cell_bundles';
 import {fetchTabletCellBundleEditor} from '../../../store/actions/tablet_cell_bundles/tablet-cell-bundle-editor';
 import {OrchidBundlesData} from '../../../store/reducers/tablet_cell_bundles';
+import Icon from '../../../components/Icon/Icon';
 import MetaTable, {MetaTableItem} from '../../../components/MetaTable/MetaTable';
 import {BundleMetaResourceProgress} from '../../../components/BundleMetaResourceProgress/BundleMetaResourceProgress';
 import {Health} from './BundleGeneralMeta';
@@ -228,8 +229,14 @@ function getBundleStateField(orchidData: OrchidBundlesData) {
         return {
             key: 'State',
             value: (
-                <Tooltip content={renderDetails(detailsEntries)} placement={'bottom'}>
+                <Tooltip
+                    content={renderDetails(detailsEntries)}
+                    placement={'bottom'}
+                    className={block('state-with-icon')}
+                >
                     <Health className={block('health', {value})} value={value} />
+                    &nbsp;
+                    <Icon awesome="question-circle" />
                 </Tooltip>
             ),
         };
@@ -238,8 +245,14 @@ function getBundleStateField(orchidData: OrchidBundlesData) {
     return {
         key: 'State',
         value: (
-            <Tooltip content={renderErrors(alerts)} placement={'bottom'}>
+            <Tooltip
+                content={renderErrors(alerts)}
+                placement={'bottom'}
+                className={block('state-with-icon')}
+            >
                 <Health className={block('health', {value})} value={value} />
+                &nbsp;
+                <Icon awesome="exclamation-triangle" />
             </Tooltip>
         ),
     };

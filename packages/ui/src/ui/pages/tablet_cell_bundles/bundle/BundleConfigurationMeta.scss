@@ -31,4 +31,10 @@
             padding-left: var(--yc-popover-padding);
         }
     }
+
+    &__state-with-icon {
+        display: flex;
+        align-items: center;
+        color: var(--g-color-text-secondary);
+    }
 }
