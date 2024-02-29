@@ -7,9 +7,11 @@
   },
   "files": [
     "build",
-    "dist"
+    "dist",
+    "scripts/sync-peer-dependencies.js"
   ],
   "scripts": {
+    "postinstall": "node scripts/sync-peer-dependencies.js check ./package.json",
     "build": "npm run copy:icons &&  NODE_OPTIONS=\"--max-old-space-size=4096\" NODE_ENV=production app-builder build --config ./build.app.config.ts",
     "build:lib": "rm -rf build && npm run build:lib:ui && npm run build:lib:server",
     "build:lib:server": "tsc -p ./build.server.tsconfig.json",
@@ -86,7 +88,7 @@
     "@gravity-ui/chartkit": "^4.7.2",
     "@gravity-ui/components": "^2.4.1",
     "@gravity-ui/dashkit": "^6.0.0",
-    "@gravity-ui/dialog-fields": "^4.3.0",
+    "@gravity-ui/dialog-fields": "^4.3.1",
     "@gravity-ui/eslint-config": "^2.2.0",
     "@gravity-ui/i18n": "^1.0.0",
     "@gravity-ui/icons": "^2.4.0",
@@ -166,10 +168,10 @@
     "wc-react": "^0.5.1"
   },
   "peerDependencies": {
-    "@gravity-ui/dialog-fields": "^4.3.0",
+    "@gravity-ui/dialog-fields": "^4.3.1",
     "@gravity-ui/expresskit": "^1.0.0",
     "@gravity-ui/nodekit": "^1.0.0",
-    "@gravity-ui/uikit": "^5.0.0",
+    "@gravity-ui/uikit": "^5.16.0",
     "@gravity-ui/unipika": "^3.0.0",
     "@ytsaurus/interface-helpers": "^0.3.0",
     "js-cookie": "2.2.1",
