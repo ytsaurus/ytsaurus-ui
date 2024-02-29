@@ -39,7 +39,6 @@ export const bundleEditorDict: {
     },
     defaults: {
         memory_limits: {
-            error: false,
             memory_reset: false,
             tablet_static: 0,
             tablet_dynamic: 0,
@@ -115,7 +114,6 @@ export const getInitialFormValues = (
             tablet_node_resource_guarantee: tablet_node_resource_guarantee || undefined,
         },
         memory_limits: {
-            error: false, // system
             memory_reset: false, // system
             reserved: memory_limits?.reserved || 0,
             tablet_static: memory_limits?.tablet_static || 0,

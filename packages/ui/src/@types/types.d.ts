@@ -23,3 +23,17 @@ export interface RemoteCopyParams {
     pool: string;
     override?: boolean;
 }
+
+export type Pick2<
+    T extends object,
+    K1 extends keyof T,
+    K2 extends keyof T[K1],
+    /** R new type for T[K1][K2], do not provide it to infer corresponding types from T */
+    R = never,
+> = {
+    [L1 in K1]: T[L1] extends object
+        ? {[L2 in K2]: R extends never ? T[L1][L2] : R}
+        : R extends never
+        ? T[L1]
+        : R;
+};
