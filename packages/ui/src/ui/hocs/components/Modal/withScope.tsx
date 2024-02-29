@@ -4,14 +4,17 @@ import PropTypes from 'prop-types';
 
 import {getDisplayName} from '../../../utils';
 
-export default function withScope(scope) {
-    return (Component) => {
-        return class WithScope extends React.Component {
+export default function withScope(scope: string) {
+    return function wrap<P>(Component: React.ComponentType<P>) {
+        type Props = P & {visible: true};
+        return class WithScope extends React.Component<Props> {
             static propTypes = {
                 visible: PropTypes.bool.isRequired,
             };
 
             static displayName = `WithScope(${getDisplayName(Component)})`;
+
+            prevScope = '';
 
             componentDidMount() {
                 this.prevScope = key.getScope();
@@ -21,7 +24,7 @@ export default function withScope(scope) {
                 }
             }
 
-            componentDidUpdate(prevProps) {
+            componentDidUpdate(prevProps: Props) {
                 const {visible: prevVisible} = prevProps;
                 const {visible} = this.props;
 
@@ -38,8 +41,6 @@ export default function withScope(scope) {
             componentWillUnmount() {
                 key.setScope(this.prevScope);
             }
-
-            prevScope = null;
 
             render() {
                 return <Component {...this.props} />;
