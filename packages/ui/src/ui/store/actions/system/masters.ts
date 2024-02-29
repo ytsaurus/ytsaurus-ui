@@ -277,7 +277,7 @@ async function loadMastersConfig(): Promise<[MastersConfigResponse, MasterAlert[
 function loadHydra(
     requests: BatchSubRequest[],
     masterInfo: MasterDataItemInfo[],
-    type: string,
+    type: 'primary' | 'providers' | 'secondary',
     masterEntry: ResponseItemsGroup,
 ) {
     const {addresses, cellTag} = masterEntry;
@@ -288,12 +288,10 @@ function loadHydra(
         cypressPath = '//sys/primary_masters';
     } else if (type === 'providers') {
         cypressPath = '//sys/timestamp_providers';
-    } else if (type === 'discovery') {
-        cypressPath = '//sys/discovery_servers';
     } else if (type === 'secondary') {
         cypressPath = '//sys/secondary_masters/' + cellTag;
     } else {
-        cypressPath = '//sys/masters';
+        throw new Error('Unexpected type for loadHydra call');
     }
 
     _.each(
@@ -329,7 +327,6 @@ export function loadMasters() {
             });
 
             loadHydra(masterDataRequests, masterInfo, 'providers', config.timestampProviders);
-            loadHydra(masterDataRequests, masterInfo, 'discovery', config.discoveryServers);
 
             const data = await ytApiV3Id.executeBatch(YTApiId.systemMasters, {
                 requests: masterDataRequests,
