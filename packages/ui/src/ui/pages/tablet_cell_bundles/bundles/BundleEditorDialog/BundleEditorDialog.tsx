@@ -1,7 +1,7 @@
 import React from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import cn from 'bem-cn-lite';
-import _ from 'lodash';
+import isEmpty_ from 'lodash/isEmpty';
 
 import {Info} from '../../../../components/Info/Info';
 import {BundleParamsList} from './components/BundleParamsList/BundleParamsList';
@@ -24,7 +24,10 @@ import {
     getBundleEditorData,
     getTabletBundlesWriteableByName,
 } from '../../../../store/selectors/tablet_cell_bundles';
-import {BundleResourceGuarantee} from '../../../../store/reducers/tablet_cell_bundles';
+import {
+    BundleResourceGuarantee,
+    OrchidBundleResource,
+} from '../../../../store/reducers/tablet_cell_bundles';
 import {getTabletCellBundleEditorState} from '../../../../store/selectors/tablet_cell_bundles/tablet-cell-bundle-editor';
 
 import {
@@ -43,6 +46,7 @@ import {makeLink} from '../../../../utils/utils';
 import {docsUrl} from '../../../../config';
 
 import './BundleEditorDialog.scss';
+import {Pick2} from '../../../../../@types/types';
 
 const block = cn('bundle-editor');
 
@@ -62,7 +66,6 @@ export interface BundleEditorDialogFormValues {
         tablet_static_memory?: number; // pld
     };
     memory_limits: {
-        error?: boolean; // system
         memory_reset: boolean; // system
         reserved?: number;
         tablet_static?: number;
@@ -177,6 +180,7 @@ export function BundleEditorDialog() {
                 name: 'info',
                 type: 'block',
                 fullWidth: true,
+                touched: true,
                 extras: {
                     children: (
                         <Info className={block('info')}>
@@ -366,6 +370,7 @@ export function BundleEditorDialog() {
                 name: 'memory_reset',
                 type: 'bundle-title',
                 caption: 'Memory',
+                touched: true,
                 extras: (allValues, {form}) => {
                     const tablet_node_resource_guarantee =
                         allValues.resources?.tablet_node_resource_guarantee;
@@ -488,28 +493,6 @@ export function BundleEditorDialog() {
                     hasClear: true,
                 },
                 validator: simpleBundleValidate,
-            },
-            {
-                type: 'block',
-                name: 'error',
-                validator: (v: any) => (v ? v : undefined),
-                fullWidth: true,
-                extras(allValues, {form}) {
-                    const hasError = _.get(allValues, 'memory_limits.error');
-                    const errorText = validateMemoryLimits(allValues);
-
-                    if (errorText && !hasError) {
-                        form.change('memory_limits.error', true);
-                    } else if (!errorText && hasError) {
-                        form.change('memory_limits.error', false);
-                    }
-
-                    return {
-                        children: !errorText ? null : (
-                            <DialogError header={'Error'} message={<span>{errorText}</span>} />
-                        ),
-                    };
-                },
             },
         ],
     };
@@ -638,7 +621,7 @@ export function BundleEditorDialog() {
         }
     };
 
-    if (_.isEmpty(data)) {
+    if (isEmpty_(data)) {
         return null;
     }
 
@@ -654,25 +637,60 @@ export function BundleEditorDialog() {
             onAdd={onSubmit}
             onClose={onClose}
             fields={fields}
+            validate={validateFormValues.bind(null, orchidData?.resource_quota)}
         />
     );
 }
 
-function validateMemoryLimits(values: BundleEditorDialogFormValues) {
-    if (values.resources?.tablet_node_resource_guarantee) {
-        const memoryLimits = values.resources.tablet_node_resource_guarantee?.memory || 0;
-        const currentAccLimit =
-            Object.values(values.memory_limits || {}).reduce((acc: number, v: number | boolean) => {
-                if (typeof v !== 'number') {
-                    return acc;
-                }
-                return acc + v;
-            }, 0) || 0;
+function validateFormValues(
+    quota: OrchidBundleResource | undefined,
+    values: BundleEditorDialogFormValues,
+) {
+    const res: Pick2<typeof values, 'resources', 'info', string> &
+        Pick2<typeof values, 'memory_limits', 'memory_reset', string> = {
+        resources: {info: ''},
+        memory_limits: {memory_reset: ''},
+    };
 
-        if (currentAccLimit > memoryLimits) {
-            return 'The sum of the memory limits exceeds the allowed values';
-        }
+    const {resources} = values;
+
+    const currentAccLimit = Object.values(values.memory_limits || {}).reduce(
+        (acc: number, v: number | boolean) => {
+            if (typeof v !== 'number') {
+                return acc;
+            }
+            return acc + v;
+        },
+        0,
+    );
+
+    const tabletNode = resources.tablet_node_resource_guarantee;
+    res.memory_limits.memory_reset =
+        currentAccLimit > (tabletNode?.memory ?? 0)
+            ? 'The sum of the memory limits exceeds the allowed values'
+            : '';
+
+    const {rpc_proxy_count = 0, tablet_node_count = 0} = resources;
+
+    const requiredCpu =
+        (tabletNode?.vcpu ?? 0) * tablet_node_count +
+        (resources.rpc_proxy_resource_guarantee?.vcpu ?? 0) * rpc_proxy_count;
+
+    const violatedResources = [];
+
+    if (requiredCpu > quota?.vcpu!) {
+        violatedResources.push(`${hammer.format.Number(requiredCpu / 1000)} cpu required`);
     }
 
-    return '';
+    const requiredMemory =
+        (tabletNode?.memory ?? 0) * tablet_node_count +
+        (resources.rpc_proxy_resource_guarantee?.memory ?? 0) * rpc_proxy_count;
+
+    if (requiredMemory > quota?.memory!) {
+        violatedResources.push(`${hammer.format.Bytes(requiredMemory)} memory requried`);
+    }
+
+    res.resources.info = violatedResources.length ? violatedResources.join(', ') : '';
+
+    return res;
 }
