@@ -17,6 +17,7 @@ import {showErrorModal} from '../store/actions/modals/errors';
 import {BatchResultsItem} from '../../shared/yt-types';
 
 import {UIBatchError} from './errors/ui-error';
+import {isCancelled} from './cancel-helper';
 
 export function getBatchError<T = unknown>(
     batchResults: Array<BatchResultsItem<T>>,
@@ -174,7 +175,7 @@ export function wrapApiPromiseByToaster<T>(p: Promise<T>, options: WrapApiOption
             const data = error?.response?.data || error;
             const {code, message} = data;
 
-            if (!options.skipErrorToast) {
+            if (!options.skipErrorToast && !isCancelled(error)) {
                 toaster.add({
                     name: options.toasterName,
                     type: 'error',
