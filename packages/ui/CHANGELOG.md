@@ -1,5 +1,21 @@
 # Changelog
 
+## [1.19.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.18.1...ui-v1.19.0) (2024-03-04)
+
+
+### Features
+
+* **System:** add //sys/[@master](https://github.com/master)_alerts [YTFRONT-3960] ([7b2503d](https://github.com/ytsaurus/ytsaurus-ui/commit/7b2503d9c2aa8c2fde4c805d8e91589bafc80d6e))
+
+
+### Bug Fixes
+
+* **Bundles/BundleEditor:** better validation of resources [YTFRONT-4035] ([349ac37](https://github.com/ytsaurus/ytsaurus-ui/commit/349ac37a2163b1c8712101cd19377a62b5df78a9))
+* **Bundles/MetaTable:** add icons for state with details [YTFRONT-4038] ([96f7533](https://github.com/ytsaurus/ytsaurus-ui/commit/96f753355e3076c490591bd388c1561f34849ace))
+* **Navigation:** hide unnecessary error `[code cancelled]` [YTFRONT-4034] ([e31cc61](https://github.com/ytsaurus/ytsaurus-ui/commit/e31cc61f57c6e89d6edf0627873c3f9d17f4d995))
+* **Scheduling/Details:** for 'Cannot read properties of undefined (reading 'cpu')' [YTFRONT-4042] ([d3be924](https://github.com/ytsaurus/ytsaurus-ui/commit/d3be924172b78b2cd8b371d5df9adf02a6cf9a45))
+* **System/Masters:** do not load hydra for discovery servers [YTFRONT-4043] ([d2513ff](https://github.com/ytsaurus/ytsaurus-ui/commit/d2513ff255d287e46540b5156bb3cc47236fc7df))
+
 ## [1.18.1](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.18.0...ui-v1.18.1) (2024-02-27)
 
 
