@@ -1,7 +1,7 @@
 import {Action} from 'redux';
+import {YTError} from '../../../../@types/types';
 import {FETCH_PROXIES} from '../../../constants/system/nodes';
 import {mergeStateOnClusterChange} from '../../../store/reducers/utils';
-import {YTError} from '../../../../@types/types';
 import {ActionD} from '../../../types';
 import {NodeEffectiveFlag, NodeEffectiveState, NodeState} from './nodes';
 
@@ -40,6 +40,9 @@ export type RoleGroupItemInfo = {
     effectiveState: NodeEffectiveState;
     role: string;
     banned: boolean;
+    decommissioned?: boolean;
+    alerts?: boolean;
+    alert_count?: number;
 };
 
 function proxies(state = initialState, action: HttpProxiesAction): HttpProxiesState {

@@ -1,6 +1,6 @@
+import cn from 'bem-cn-lite';
 import React from 'react';
 import {useSelector} from 'react-redux';
-import cn from 'bem-cn-lite';
 
 import guid from '../../common/hammer/guid';
 import {getGlobalAsideHeaderWidth} from '../../store/selectors/global';

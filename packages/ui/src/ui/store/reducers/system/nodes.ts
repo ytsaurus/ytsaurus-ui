@@ -1,11 +1,11 @@
 import {Action} from 'redux';
 
-import {SYSTEM_FETCH_NODES} from '../../../constants/index';
-import {mergeStateOnClusterChange} from '../utils';
 import {YTError} from '../../../../@types/types';
-import {ActionD} from '../../../types';
-import type {HttpProxiesState, RoleGroupInfo} from './proxies';
 import {CypressNode} from '../../../../shared/yt-types';
+import {SYSTEM_FETCH_NODES} from '../../../constants/index';
+import {ActionD} from '../../../types';
+import {mergeStateOnClusterChange} from '../utils';
+import type {HttpProxiesState, RoleGroupInfo} from './proxies';
 
 export type SystemNodesState = {
     fetching: boolean;
@@ -39,7 +39,17 @@ export type SystemNodeInfo = CypressNode<
 
 export type NodeState = 'online' | 'offline' | string;
 export type NodeEffectiveState = 'other' | 'online' | 'offline';
-export type NodeEffectiveFlag = 'decommissioned' | 'full' | 'alerts' | 'banned';
+export type NodeEffectiveFlag =
+    | 'decommissioned'
+    | 'full'
+    | 'alerts'
+    | 'banned'
+    | 'alerts_online'
+    | 'alerts_offline'
+    | 'alerts_banned'
+    | 'dec_online'
+    | 'dec_offline'
+    | 'dec_banned';
 export type RackInfo = {
     name: string;
     empty: boolean;

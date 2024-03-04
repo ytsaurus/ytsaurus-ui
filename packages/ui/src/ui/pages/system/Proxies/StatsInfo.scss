@@ -1,0 +1,23 @@
+.stats-info {
+	display: flex;
+	flex-direction: column;
+	gap: 14px;
+	text-transform: uppercase;
+	min-width: 156px;
+	width: 156px;
+	height: 100%;
+
+	.yc-progress {
+		min-height: 4px;
+		width: 100%;
+	}
+
+	&__info {
+		display: flex;
+		align-items: center;
+	}
+
+	&__subtext {
+		width: 50px;
+	}
+}

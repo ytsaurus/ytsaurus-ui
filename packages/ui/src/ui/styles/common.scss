@@ -17,8 +17,8 @@ $node-margin: 2px;
 
 // node-racks
 $nodes-in-row: 6;
-$node-width: 10px;
-$node-margin: 2px;
+$node-width: 14px;
+$node-margin: 4px;
 $node-offset: $node-width + $node-margin * 2;
 
 $rack-width: $nodes-in-row * $node-offset;
