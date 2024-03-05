@@ -104,7 +104,7 @@ function ellipsis(input: string) {
 
 function getLabelWithStage(name: string, stages: NodeStages) {
     try {
-        const stage = Object.keys(stages[stages.length - 1])[0];
+        const stage = Object.keys(stages[Object.keys(stages).length - 1])[0];
         return `${ellipsis(name)}\n(${stage})`;
     } catch {
         return '';

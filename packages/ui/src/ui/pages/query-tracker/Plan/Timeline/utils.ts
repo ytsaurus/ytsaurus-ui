@@ -192,9 +192,9 @@ export function parseGraph(data: {
             dataProgressFinishedAt = new Date().toString();
         } else if (dataProgress.finishedAt) {
             dataProgressFinishedAt = dataProgress.finishedAt;
-        } else if (dataProgress.stages && dataProgress.stages.length > 0) {
+        } else if (dataProgress.stages && Object.keys(dataProgress.stages).length > 0) {
             dataProgressFinishedAt = Object.values(
-                dataProgress.stages[dataProgress.stages.length - 1],
+                dataProgress.stages[Object.keys(dataProgress.stages).length - 1],
             )[0];
         }
 
