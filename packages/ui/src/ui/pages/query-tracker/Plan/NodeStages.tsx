@@ -23,7 +23,7 @@ interface NodeStagesProps {
     startedAt?: string;
     finishedAt?: string;
 }
-export default function NodeStages({stages = [], state, finishedAt}: NodeStagesProps) {
+export default function NodeStages({stages = {}, state, finishedAt}: NodeStagesProps) {
     const data = prepareData(stages, state, finishedAt);
     return (
         <div className={block()}>
