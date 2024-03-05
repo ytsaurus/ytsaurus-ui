@@ -39,6 +39,7 @@ import {odinPageInfo, odinRootPageInfo} from '../../pages/odin';
 import {hasOdinPage} from '../../config';
 import {chyt} from './chyt';
 import {RawVersion} from '../../store/selectors/thor/support';
+import {manageTokens} from './manage-tokens';
 
 const appReducers = {
     acl,
@@ -76,6 +77,7 @@ const appReducers = {
     queryTracker,
 
     chyt,
+    manageTokens,
 };
 
 export type RootState = Omit<ReturnType<ReturnType<typeof makeRootReducer>>, 'global'> & {

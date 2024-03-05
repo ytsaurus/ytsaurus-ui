@@ -18,6 +18,7 @@ import {getSettingTheme, shouldUseSafeColors} from '../../store/selectors/settin
 import {RumUiProvider} from '../../rum/RumUiContext';
 import AppNavigation from '../AppNavigation/AppNavigation';
 import RetryBatchModals from '../RetryBatchModal/RetryBatchModal';
+import {ManageTokensModal} from '../ManageTokens';
 import {loadAllowedExperimentalPages, setTheme} from '../../store/actions/global';
 import {getAuthPagesEnabled, getGlobalShowLoginDialog} from '../../store/selectors/global';
 
@@ -66,6 +67,7 @@ class App extends Component<AppProps> {
                     <ActionModal />
                     <ModalErrors />
                     <RetryBatchModals />
+                    <ManageTokensModal />
                 </div>
             </AppNavigation>
         );

@@ -74,6 +74,11 @@ export async function handleLogin(req: Request, res: Response) {
                 }
             });
     } catch (e: any) {
+        if (e?.response?.status === 401) {
+            // To avoid redirecting to login page when checking user password
+            e.response.status = 400;
+        }
+
         sendAndLogError(req.ctx, res, 500, e);
     }
 }

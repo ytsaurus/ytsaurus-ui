@@ -85,6 +85,22 @@ type YTApiV4WithId = {
         id: YTApiId,
         ...args: ApiMethodParameters<{cell_id: string; new_leader_address: string}>
     ): Promise<any>;
+    listUserTokens(
+        id: YTApiId,
+        ...args: ApiMethodParameters<{
+            password_sha256: string;
+            user: string;
+            with_metadata: boolean;
+        }>
+    ): Promise<string[]>;
+    revokeToken(
+        id: YTApiId,
+        ...args: ApiMethodParameters<{password_sha256: string; user: string; token_sha256: string}>
+    ): Promise<unknown>;
+    issueToken(
+        id: YTApiId,
+        ...args: ApiMethodParameters<{password_sha256: string; user: string; description: string}>
+    ): Promise<string>;
     [method: string]: (id: YTApiId, ...args: ApiMethodParameters<any>) => Promise<any>;
 };
 

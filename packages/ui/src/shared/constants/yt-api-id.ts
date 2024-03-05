@@ -167,4 +167,7 @@ export enum YTApiId {
     maintenanceRequests,
     getQueryTrackerInfo,
     switchLeader,
+    listUserTokens,
+    revokeToken,
+    issueToken,
 }
