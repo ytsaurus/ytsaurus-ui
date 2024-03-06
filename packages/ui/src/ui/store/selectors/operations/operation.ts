@@ -110,24 +110,19 @@ export const getOperationExperimentAssignments = createSelector(
     },
 );
 
-export const getOperationJobsCount = createSelector([getOperation], (operation) => {
-    const res = ypath.getNumberDeprecated(operation, '/@brief_progress/total_job_counter/total');
+const getOperationMonitoredJobCount = createSelector([getOperation], (operation) => {
+    const res = ypath.getNumberDeprecated(
+        operation,
+        '/@brief_progress/registered_monitoring_descriptor_count',
+    );
     return res;
 });
 
-export const isOperationWithExperiment_ytadmin_11194 = createSelector(
-    [getOperationExperimentAssignments],
-    (effects) => {
-        return _.some(effects, ({experiment}) => {
-            return experiment === 'ytadmin_11194';
-        });
-    },
-);
-
-export const isOperationWithJobsMonitorTab = createSelector(
-    [getOperationJobsCount, isOperationWithExperiment_ytadmin_11194],
-    (jobsCount, hasRequiredExperiment) => {
-        return hasRequiredExperiment && jobsCount > 0 && jobsCount <= 200;
+export const getOperationJobsMonitorTabSettings = createSelector(
+    [getOperationMonitoredJobCount],
+    (jobsCount) => {
+        const maxJobCount = 200;
+        return {visible: jobsCount > 0 && jobsCount <= maxJobCount, maxJobCount};
     },
 );
 
