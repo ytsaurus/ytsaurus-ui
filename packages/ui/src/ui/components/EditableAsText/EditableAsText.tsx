@@ -17,7 +17,11 @@ interface Props {
     onChange: (v?: string) => void;
     disableEdit?: boolean;
     withControls?: boolean;
+    cancelOnClose?: boolean;
+    openOnClick?: boolean;
     size?: 's' | 'm' | 'l' | 'xl';
+    saveButtonView?: ButtonProps['view'];
+    cancelButtonView?: ButtonProps['view'];
 
     renderEditor?: (props: {
         value?: string;
@@ -26,40 +30,69 @@ interface Props {
         className?: string;
         onApply: (value?: string) => void;
     }) => React.ReactNode;
+    onModeChange?: (isEdit: boolean) => void;
 }
 
 export function EditableAsText(props: Props) {
-    const {children, onChange, text, className, withControls, size, disableEdit, renderEditor} =
-        props;
+    const {
+        children,
+        onChange,
+        text,
+        className,
+        withControls,
+        size,
+        disableEdit,
+        cancelOnClose,
+        openOnClick,
+        renderEditor,
+        onModeChange,
+        saveButtonView = 'normal',
+        cancelButtonView = 'normal',
+    } = props;
     const [editMode, setEditMode] = React.useState(false);
     const [input, setInput] = React.useState(text || '');
 
+    const handleChangeMode = useCallback(
+        (isEdit: boolean) => {
+            if (onModeChange) onModeChange(isEdit);
+            setEditMode(isEdit);
+        },
+        [onModeChange],
+    );
+
     const closeEditMode = React.useCallback(() => {
-        setEditMode(false);
-    }, []);
+        handleChangeMode(false);
+        if (cancelOnClose) setInput(text || '');
+    }, [cancelOnClose, handleChangeMode, text]);
 
     const startTextEdit = useCallback(() => {
-        setEditMode(true);
-    }, [setEditMode]);
+        handleChangeMode(true);
+    }, [handleChangeMode]);
+
+    const handleWrapClick = () => {
+        if (!editMode && openOnClick) {
+            startTextEdit();
+        }
+    };
 
     const handleChange = React.useCallback((val?: string) => setInput(val ?? ''), [setInput]);
 
     const applyValue = useCallback(() => {
-        setEditMode(false);
+        handleChangeMode(false);
         onChange(input);
-    }, [onChange, setEditMode, input]);
+    }, [onChange, handleChangeMode, input]);
 
     const closeAndResetValue = useCallback(() => {
-        setEditMode(false);
+        handleChangeMode(false);
         setInput(text || '');
-    }, [text]);
+    }, [handleChangeMode, text]);
 
     const onApply = useCallback(
         (value?: string) => {
-            setEditMode(false);
+            handleChangeMode(false);
             onChange(value);
         },
-        [onChange],
+        [handleChangeMode, onChange],
     );
 
     const handleKeyDown = React.useCallback(
@@ -77,7 +110,10 @@ export function EditableAsText(props: Props) {
     const controlSize = size ? size : 'm';
 
     return (
-        <div className={block(null, className)}>
+        <div
+            className={block(null, [className || '', editMode ? 'edit' : ''])}
+            onClick={handleWrapClick}
+        >
             {editMode ? (
                 <>
                     {renderEditor ? (
@@ -103,7 +139,7 @@ export function EditableAsText(props: Props) {
                         <>
                             <Button
                                 className={block('control')}
-                                view="normal"
+                                view={saveButtonView}
                                 extraProps={{onMouseDown: applyValue}}
                                 size={controlSize}
                             >
@@ -111,7 +147,7 @@ export function EditableAsText(props: Props) {
                             </Button>
                             <Button
                                 className={block('control')}
-                                view="normal"
+                                view={cancelButtonView}
                                 extraProps={{onMouseDown: closeAndResetValue}}
                                 size={controlSize}
                             >

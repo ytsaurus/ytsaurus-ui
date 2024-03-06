@@ -1,16 +1,12 @@
 import React, {useCallback, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import {ModalWithoutHandledScrollBar as Modal} from '../../../../../components/Modal/Modal';
-import {QueryEnginesNames} from '../../../utils/query';
-import {Engines} from '../../../module/api';
-import {QueryEngine} from '../../../module/engines';
-import {createQueryFromTablePath, updateQueryDraft} from '../../../module/query/actions';
-import {
-    getQueryDraft,
-    hasLoadedQueryItem,
-    isQueryDraftEditted,
-} from '../../../module/query/selectors';
-import RadioButton from '../../../../../components/RadioButton/RadioButton';
+import {ModalWithoutHandledScrollBar as Modal} from '../../../components/Modal/Modal';
+import {QueryEnginesNames} from '../utils/query';
+import {Engines} from '../module/api';
+import {QueryEngine} from '../module/engines';
+import {createQueryFromTablePath, updateQueryDraft} from '../module/query/actions';
+import {getQueryDraft, hasLoadedQueryItem, isQueryDraftEditted} from '../module/query/selectors';
+import RadioButton from '../../../components/RadioButton/RadioButton';
 
 const EngineOptions = Engines.map((key) => ({
     value: key,
@@ -21,9 +17,10 @@ interface Props {
     className?: string;
     cluster?: string;
     path?: string;
+    onChange?: (engine: QueryEngine) => void;
 }
 
-export function QueryEngineSelector({className, cluster, path}: Props) {
+export function QueryEngineSelector({className, cluster, path, onChange}: Props) {
     const dispatch = useDispatch();
     const draft = useSelector(getQueryDraft);
     const isEdited = useSelector(isQueryDraftEditted);
@@ -38,8 +35,9 @@ export function QueryEngineSelector({className, cluster, path}: Props) {
             if (cluster && path) {
                 dispatch(createQueryFromTablePath(engine, cluster, path));
             }
+            if (onChange) onChange(engine);
         },
-        [cluster, dispatch, path],
+        [onChange, cluster, dispatch, path],
     );
 
     const onEngineSelected = useCallback(

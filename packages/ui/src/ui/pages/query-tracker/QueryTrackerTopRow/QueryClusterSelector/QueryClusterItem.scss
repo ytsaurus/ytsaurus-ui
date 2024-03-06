@@ -1,0 +1,33 @@
+.query-cluster-item {
+    display: flex;
+    gap: 0 16px;
+    padding: 8px 16px;
+    cursor: pointer;
+    border-radius: var(--g-border-radius-l);
+
+    &__info {
+        display: flex;
+        flex-direction: column;
+        font-size: 13px;
+    }
+
+    &__environment {
+        text-transform: capitalize;
+    }
+}
+
+.query-cluster-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 20px;
+    width: 20px;
+    border-radius: 4px;
+    background: var(--cluster-color);
+    color: #ffffff;
+    text-transform: uppercase;
+
+    .cluster-icon__placeholder {
+        font-size: 9px;
+    }
+}

@@ -20,6 +20,7 @@ import {getAppBrowserHistory} from '../../../../store/window-store';
 import {QueryState} from './reducer';
 import {wrapApiPromiseByToaster} from '../../../../utils/utils';
 import {prepareQueryPlanIds} from './utills';
+import {chytApiAction} from '../../../../store/actions/chyt/api';
 
 export const REQUEST_QUERY = 'query-tracker/REQUEST_QUERY';
 export type RequestQueryAction = Action<typeof REQUEST_QUERY>;
@@ -51,8 +52,28 @@ export type SetQueryParamsAction = ActionD<
     Partial<Pick<QueryState, 'params'>>
 >;
 
+export const SET_QUERY_CLIQUE_LOADING = 'query-tracker/SET_QUERY_CLIQUE_LOADING';
+export type SetQueryCliqueLoading = ActionD<typeof SET_QUERY_CLIQUE_LOADING, boolean>;
+
+export const SET_QUERY_CLUSTER_CLIQUE = 'query-tracker/SET_QUERY_CLUSTER_CLIQUE';
+export type SetQueryClusterClique = ActionD<
+    typeof SET_QUERY_CLUSTER_CLIQUE,
+    {cluster: string; items: {alias: string; yt_operation_id?: string}[]}
+>;
+
 export const UPDATE_ACO_QUERY = 'query-tracker/UPDATE_ACO_QUERY';
 export type UpdateACOQueryAction = ActionD<typeof UPDATE_ACO_QUERY, string>;
+
+export const setCurrentClusterToQuery =
+    (): ThunkAction<void, RootState, unknown, any> => (dispatch, getState) => {
+        const state = getState();
+        const cluster = getCluster(state);
+        const {settings} = getQueryDraft(state);
+
+        if (settings && 'cluster' in settings) return;
+
+        dispatch(updateQueryDraft({settings: {...settings, cluster}}));
+    };
 
 export function loadQuery(
     queryId: string,
@@ -73,6 +94,8 @@ export function loadQuery(
             });
         } catch (e: unknown) {
             dispatch(createEmptyQuery());
+        } finally {
+            dispatch(setCurrentClusterToQuery());
         }
     };
 }
@@ -80,6 +103,40 @@ export function loadQuery(
 export function updateQueryDraft(data: Partial<QueryState['draft']>) {
     return {type: SET_QUERY_PATCH, data};
 }
+
+export const loadCliqueByCluster =
+    (
+        cluster: string,
+    ): ThunkAction<void, RootState, unknown, SetQueryClusterClique | SetQueryCliqueLoading> =>
+    (dispatch, getState) => {
+        const state = getState();
+        if (cluster in state.queryTracker.query.cliqueMap) return;
+
+        dispatch({type: SET_QUERY_CLIQUE_LOADING, data: true});
+        chytApiAction('list', cluster, {attributes: ['yt_operation_id' as const]}, {})
+            .then((data) => {
+                const items = data?.result?.map(({$value, $attributes = {}}) => {
+                    return {
+                        alias: $value,
+                        yt_operation_id: $attributes.yt_operation_id,
+                    };
+                });
+
+                dispatch({
+                    type: SET_QUERY_CLUSTER_CLIQUE,
+                    data: {cluster, items},
+                });
+            })
+            .catch(() => {
+                dispatch({
+                    type: SET_QUERY_CLUSTER_CLIQUE,
+                    data: {cluster, items: []},
+                });
+            })
+            .finally(() => {
+                dispatch({type: SET_QUERY_CLIQUE_LOADING, data: false});
+            });
+    };
 
 export function createQueryFromTablePath(
     engine: QueryEngine,
@@ -148,6 +205,7 @@ export function createEmptyQuery(
                 } as QueryItem,
             },
         });
+        dispatch(setCurrentClusterToQuery());
     };
 }
 

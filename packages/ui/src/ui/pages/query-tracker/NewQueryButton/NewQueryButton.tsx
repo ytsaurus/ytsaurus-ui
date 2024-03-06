@@ -1,10 +1,9 @@
-import * as React from 'react';
-import {useState} from 'react';
+import React, {useState} from 'react';
 import {useSelector} from 'react-redux';
-import {Button} from '@gravity-ui/uikit';
-import Icon from '../../../components/Icon/Icon';
+import {Button, Icon} from '@gravity-ui/uikit';
 import Modal from '../../../components/Modal/Modal';
 import {isQueryDraftEditted} from '../module/query/selectors';
+import FilePlusIcon from '@gravity-ui/icons/svgs/file-plus.svg';
 
 const NewQueryPromt = (props: {cancel: () => void; confirm: () => void; visible: boolean}) => {
     return (
@@ -45,12 +44,12 @@ export const NewQueryButton = ({onClick}: {onClick: () => void}) => {
         <React.Fragment>
             <Button
                 qa="new-query-btn"
-                view="outlined"
+                view="action"
                 size="l"
                 title="New query"
                 onClick={handleClick}
             >
-                <Icon awesome="file" size={16} />
+                <Icon data={FilePlusIcon} size={16} />
                 New
             </Button>
             <NewQueryPromt confirm={handleConfirm} cancel={handleCancel} visible={visible} />
