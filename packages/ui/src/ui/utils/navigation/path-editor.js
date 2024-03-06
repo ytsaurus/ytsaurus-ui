@@ -98,6 +98,7 @@ export function getIconNameForType(type, targetPathBroken) {
         transaction: 'code-branch',
         nested_transaction: 'code-branch',
         link: ypath.getBoolean(targetPathBroken) ? 'unlink' : 'link',
+        rootstock: 'link',
         portal_entrance: 'link',
         cell_node: 'circle',
         cell_node_map: 'far circle',
