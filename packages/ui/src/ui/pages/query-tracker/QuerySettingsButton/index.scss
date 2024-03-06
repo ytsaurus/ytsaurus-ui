@@ -1,41 +1,18 @@
 .query-settings-popup {
-    width: 620px;
+    width: 600px;
+
+    .yc-popup__content{
+        padding: 18px 32px 24px;
+        border-radius: var(--g-border-radius-l);
+    }
 
     &__header {
-        padding: 16px 20px 8px;
+        padding-bottom: 12px;
     }
 
-    &__footer {
-        padding: 8px 20px;
-    }
-
-    &__list-item {
-        padding: 0 20px;
-        flex: 1;
-        display: flex;
-        align-items: center;
-    }
-}
-
-.query-setting-view {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    padding: 12px 0;
-
-    &__value {
-        flex: 1;
-    }
-
-    &__control {
-        margin-right: 8px;
-    }
-}
-
-.query-setting-form {
-    flex: 1;
-    display: flex;
-    &__item {
-        margin-right: 8px;
+    &__body {
+        .settings-item:last-of-type {
+            border-bottom: none;
+        }
     }
 }
