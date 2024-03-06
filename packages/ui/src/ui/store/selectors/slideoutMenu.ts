@@ -62,6 +62,11 @@ const getRecentPagesInfoRaw = createSelector(
     },
 );
 
+export const getClusterList = createSelector([getRecentClustersInfo], (recentInfo) => {
+    const {recent, rest} = recentInfo;
+    return [...recent, ...rest];
+});
+
 const getRecentAllPagesInfoRaw = createSelector(
     [getRecentPagesInfoRaw],
     (pageInfo) => pageInfo.all,

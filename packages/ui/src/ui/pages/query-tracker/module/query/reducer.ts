@@ -4,11 +4,15 @@ import {
     REQUEST_QUERY,
     RequestQueryAction,
     SET_QUERY,
+    SET_QUERY_CLIQUE_LOADING,
+    SET_QUERY_CLUSTER_CLIQUE,
     SET_QUERY_LOAD_ERROR,
     SET_QUERY_PARAMS,
     SET_QUERY_PATCH,
     SET_QUERY_READY,
     SetQueryAction,
+    SetQueryCliqueLoading,
+    SetQueryClusterClique,
     SetQueryErrorLoadAction,
     SetQueryParamsAction,
     SetQueryPatchAction,
@@ -30,6 +34,8 @@ export interface QueryState {
         useDraft?: boolean;
     };
     dirtySinceLastSubmit: boolean;
+    cliqueLoading: boolean;
+    cliqueMap: Record<string, {alias: string; yt_operation_id?: string}[]>;
     state: 'init' | 'loading' | 'ready' | 'error';
 }
 
@@ -46,6 +52,8 @@ const initState: QueryState = {
     draft: {...initialQueryDraftState},
     params: {},
     dirtySinceLastSubmit: false,
+    cliqueMap: {},
+    cliqueLoading: false,
     state: 'init',
 };
 
@@ -115,6 +123,15 @@ export function reducer(state = initState, action: Actions): QueryState {
                 },
             };
         }
+        case SET_QUERY_CLIQUE_LOADING: {
+            return {...state, cliqueLoading: action.data};
+        }
+        case SET_QUERY_CLUSTER_CLIQUE: {
+            return {
+                ...state,
+                cliqueMap: {...state.cliqueMap, [action.data.cluster]: action.data.items},
+            };
+        }
 
         case UPDATE_ACO_QUERY: {
             const access_control_object = action.data;
@@ -140,4 +157,6 @@ type Actions =
     | UpdateQueryAction
     | SetQueryParamsAction
     | SetQueryReadyAction
-    | UpdateACOQueryAction;
+    | UpdateACOQueryAction
+    | SetQueryClusterClique
+    | SetQueryCliqueLoading;

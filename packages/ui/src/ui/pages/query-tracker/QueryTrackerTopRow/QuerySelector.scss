@@ -1,0 +1,31 @@
+.yt-query-selector-control {
+    width: 100%;
+    max-width: 220px;
+}
+
+.yt-query-selector-popup {
+    &__filter {
+        padding: 8px;
+        border-bottom: 1px solid var(--dark-divider);
+    }
+
+    .g-select-list {
+        padding: 4px;
+        margin: 0;
+        max-height: 320px;
+        overflow: auto;
+
+        .g-select-list__item {
+            border-radius: var(--g-border-radius-l);
+        }
+
+        .g-select-list__option {
+            padding: 0;
+        }
+
+        .g-select-list__option-default-label {
+            height: auto;
+            line-height: initial;
+        }
+    }
+}

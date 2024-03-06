@@ -6,7 +6,7 @@ import Icon from '../../../components/Icon/Icon';
 import {getCluster} from '../../../store/selectors/global';
 import {getPath} from '../../../store/selectors/navigation';
 import QueryEditor from '../QueryEditor/QueryEditor';
-import {QueryMetaForm} from '../QueryTrackerTopRow/QueryMetaForm/QueryMetaForm';
+import {QueryMetaForm} from './QueryMetaForm';
 import {QueryTrackerOpenButton} from '../QueryTrackerOpenButton/QueryTrackerOpenButton';
 import {QueriesPooling} from '../hooks/QueriesPooling/context';
 import {createQueryFromTablePath} from '../module/query/actions';

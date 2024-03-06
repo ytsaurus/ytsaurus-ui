@@ -27,6 +27,9 @@ export const getQueryEngine = (state: RootState) => getState(state).draft.engine
 
 export const isQueryLoading = (state: RootState) => getState(state).state === 'loading';
 
+export const getCliqueMap = (state: RootState) => getState(state).cliqueMap;
+export const getCliqueLoading = (state: RootState) => getState(state).cliqueLoading;
+
 export const isQueryExecuted = (state: RootState): boolean => {
     const queryItem = getState(state).queryItem;
     // TODO: Use real query's state
