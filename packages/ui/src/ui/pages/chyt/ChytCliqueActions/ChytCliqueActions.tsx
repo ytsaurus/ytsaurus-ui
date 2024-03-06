@@ -49,6 +49,7 @@ export function ChytCliqueActions({
     allButtonsClassName,
     onAction,
     onSqlClick,
+    color,
 }: {
     showAllButtons?: boolean;
     allButtonsClassName?: string;
@@ -56,6 +57,7 @@ export function ChytCliqueActions({
     pool?: string;
     onSqlClick: (alias: string) => void;
     onAction?: (action: 'remove' | 'start' | 'stop') => void;
+    color?: 'secondary';
 }) {
     const [visibleConfirmation, setVisibleConirmation] = React.useState<
         undefined | 'remove' | 'start' | 'stop'
@@ -86,7 +88,10 @@ export function ChytCliqueActions({
     const menuItems: Array<Array<DropdownMenuItem>> = [[start, stop], [remove]];
 
     const sqlButton = (
-        <Button view="flat" onClick={() => onSqlClick(alias)}>
+        <Button
+            view={color === 'secondary' ? 'flat-secondary' : 'flat'}
+            onClick={() => onSqlClick(alias)}
+        >
             <Icon awesome="sql" />
         </Button>
     );
@@ -109,6 +114,7 @@ export function ChytCliqueActions({
                     <span className={block('item')}>
                         <Button
                             title="Start"
+                            view="outlined"
                             onClick={() => {
                                 start.action();
                             }}
@@ -120,6 +126,7 @@ export function ChytCliqueActions({
                     <span className={block('item')}>
                         <Button
                             title="Stop"
+                            view="outlined"
                             onClick={() => {
                                 stop.action();
                             }}
@@ -130,6 +137,7 @@ export function ChytCliqueActions({
 
                     <Button
                         title="Remove"
+                        view="outlined"
                         onClick={() => {
                             remove.action();
                         }}
@@ -142,7 +150,7 @@ export function ChytCliqueActions({
                     {sqlButton}
                     <DropdownMenu
                         switcher={
-                            <Button view="flat">
+                            <Button view={color === 'secondary' ? 'flat-secondary' : 'flat'}>
                                 <Icon awesome="ellipsis-h" />
                             </Button>
                         }

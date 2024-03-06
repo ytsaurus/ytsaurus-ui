@@ -1,6 +1,6 @@
 .chyt-page-list-table {
     &__one-row-cell {
-        padding-top: 8px;
+        margin-top: 8px;
         display: inline-block;
     }
 
@@ -19,5 +19,9 @@
 
     &__full-width {
         max-width: 100%;
+    }
+
+    &__warn-icon {
+        top: -1px;
     }
 }

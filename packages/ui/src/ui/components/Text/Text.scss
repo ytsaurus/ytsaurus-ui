@@ -8,7 +8,7 @@
     }
 
     &__bold {
-        font-weight: 500;
+        font-weight: var(--yt-font-weight-bold);
     }
 
     &__warning {

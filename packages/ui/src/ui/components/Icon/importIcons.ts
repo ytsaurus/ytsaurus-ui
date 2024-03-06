@@ -64,6 +64,7 @@ import Hashtag from '../../../../img/svg/icons/hashtag.svg';
 import Intersection from '../../../../img/svg/icons/intersection.svg';
 import Key from '../../../../img/svg/icons/key.svg';
 import LevelDownAlt from '../../../../img/svg/icons/level-down-alt.svg';
+import LayoutColumns3Icon from '@gravity-ui/icons/svgs/layout-columns-3.svg';
 import Link from '../../../../img/svg/icons/link.svg';
 import List from '../../../../img/svg/icons/list.svg';
 import NotSuported from '../../../../img/svg/icons/not-suported.svg';
@@ -144,6 +145,7 @@ export const iconNames = {
     ['code-merge']: CodeMerge,
     ['cog']: Cog,
     ['cogs']: Cogs,
+    ['columns']: LayoutColumns3Icon,
     ['compress']: Compress,
     ['copy']: Copy,
     ['digging']: Digging,

@@ -24,6 +24,7 @@ import {
 import {ChytListFilters} from '../../../store/reducers/chyt/list-filters';
 import {chytSetVisibleColumns} from '../../../store/actions/chyt/list';
 import {CHYT_TABLE_TITLES} from '../../../constants/chyt-page';
+import Icon from '../../../components/Icon/Icon';
 
 import './ChytPageListToolbar.scss';
 
@@ -191,6 +192,7 @@ function ChytListColumnsButton() {
         <React.Fragment>
             {visible && dialog}
             <Button view="outlined" onClick={() => setVisible(true)}>
+                <Icon awesome="columns" />
                 Columns
             </Button>
         </React.Fragment>
