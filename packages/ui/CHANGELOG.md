@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.20.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.19.0...ui-v1.20.0) (2024-03-06)
+
+
+### Features
+
+* **Navigation:** added quick header editing [YTFRONT-3783] ([514120a](https://github.com/ytsaurus/ytsaurus-ui/commit/514120a01f48cad3ea3a577a47a12b5aafaa4606))
+
 ## [1.19.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.18.1...ui-v1.19.0) (2024-03-04)
 
 
