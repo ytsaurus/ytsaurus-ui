@@ -3,7 +3,6 @@ import {useDispatch, useSelector} from 'react-redux';
 import cn from 'bem-cn-lite';
 
 import {Column} from '@gravity-ui/react-data-table';
-import {Text} from '@gravity-ui/uikit';
 
 import format from '../../../common/hammer/format';
 
@@ -16,6 +15,7 @@ import Icon from '../../../components/Icon/Icon';
 import Link from '../../../components/Link/Link';
 import {OperationId} from '../../../components/OperationId/OperationId';
 import {UserCard} from '../../../components/UserLink/UserLink';
+import {Secondary} from '../../../components/Text/Text';
 import Label from '../../../components/Label/Label';
 import {Tooltip} from '../../../components/Tooltip/Tooltip';
 
@@ -116,10 +116,13 @@ function useChytListColumns(cluster: string, onSqlClick: (alias: string) => void
                         >
                             <CliqueState state={row.health} />
                             {row.health_reason && (
-                                <Text color="secondary">
+                                <Secondary>
                                     &nbsp;
-                                    <Icon awesome={'exclamation-triangle'} />
-                                </Text>
+                                    <Icon
+                                        className={block('warn-icon')}
+                                        awesome={'exclamation-triangle'}
+                                    />
+                                </Secondary>
                             )}
                         </Tooltip>
                     );
@@ -250,6 +253,7 @@ function useChytListColumns(cluster: string, onSqlClick: (alias: string) => void
                                 alias={row.alias}
                                 pool={row.pool}
                                 onSqlClick={onSqlClick}
+                                color="secondary"
                             />
                         </span>
                     );

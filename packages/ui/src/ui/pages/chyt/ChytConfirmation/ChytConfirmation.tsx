@@ -1,11 +1,13 @@
 import React from 'react';
 import cn from 'bem-cn-lite';
+import capitalize from 'lodash/capitalize';
 
 import {Text} from '@gravity-ui/uikit';
 
 import format from '../../../common/hammer/format';
 
 import {YTDFDialog, makeErrorFields} from '../../../components/Dialog/Dialog';
+import {Bold} from '../../../components/Text/Text';
 import {YTError} from '../../../types';
 import {useThunkDispatch} from '../../../store/thunkDispatch';
 import {chytListAction} from '../../../store/actions/chyt/list';
@@ -59,18 +61,18 @@ function ChytSimpleConfirmation({
     return (
         <YTDFDialog
             visible
+            size="s"
             pristineSubmittable
             headerProps={{
                 title: (
                     <>
-                        {format.ReadableField(action)}{' '}
-                        <Text variant="header-1" color="secondary">
-                            {alias}
-                        </Text>
+                        {format.ReadableField(action)} {alias}
                     </>
                 ),
             }}
-            footerProps={{textApply: `Yes, ${action} ${alias}`}}
+            footerProps={{
+                textApply: capitalize(action),
+            }}
             onAdd={() => {
                 return dispatch(chytListAction('stop', {alias: alias}))
                     .then(() => {
@@ -96,8 +98,7 @@ function ChytSimpleConfirmation({
                     extras: {
                         children: (
                             <>
-                                Are you sure you want to {action} the clique{' '}
-                                <Text color="secondary">{alias}</Text>?
+                                Are you sure you want to {action} the clique <Bold>{alias}</Bold>?
                             </>
                         ),
                     },
@@ -126,18 +127,18 @@ function ChytStartConfirmation({
     return (
         <YTDFDialog<StartFormValues>
             visible
+            size="s"
             className={block('start')}
             headerProps={{
                 title: (
                     <>
-                        Start clique{' '}
-                        <Text variant="header-1" color="secondary">
-                            {alias}
-                        </Text>
+                        Start clique <Bold>{alias}</Bold>
                     </>
                 ),
             }}
-            footerProps={{textApply: `Start clique ${alias}`}}
+            footerProps={{
+                textApply: 'Start',
+            }}
             onClose={onClose}
             initialValues={{pool: pool}}
             onAdd={(form) => {
