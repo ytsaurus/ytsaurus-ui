@@ -14,6 +14,8 @@ const supportedContentTypes = {
     map_node: MapNode,
     portal_entrance: MapNode,
     portal_exit: MapNode,
+    rootstock: MapNode,
+    scion: MapNode,
     cell_node_map: MapNode,
     sys_node: MapNode,
     access_control_object_namespace_map: MapNode,
