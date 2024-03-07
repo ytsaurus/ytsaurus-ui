@@ -37,6 +37,6 @@
     }
 
     &__only-jobs-with-failed-counter {
-        font-weight: 500;
+        font-weight: var(--yt-font-weight-bold);
     }
 }

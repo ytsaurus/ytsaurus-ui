@@ -30,13 +30,13 @@
 
     &__title {
         @include heading-size(l);
-        font-weight: 500;
+        font-weight: var(--yt-font-weight-bold);
         max-width: 350px;
         margin-bottom: 8px;
     }
 
     &__severity {
-        font-weight: 500;
+        font-weight: var(--yt-font-weight-bold);
         margin: 0;
         margin-bottom: 28px;
 
@@ -55,7 +55,7 @@
 
     &__user-title {
         @include heading-size(s);
-        font-weight: 500;
+        font-weight: var(--yt-font-weight-bold);
         margin: 0;
         margin-bottom: 8px;
     }
@@ -67,7 +67,7 @@
     }
 
     &__time-line {
-        font-weight: 500;
+        font-weight: var(--yt-font-weight-bold);
         margin: 0;
         margin-bottom: 12px;
     }

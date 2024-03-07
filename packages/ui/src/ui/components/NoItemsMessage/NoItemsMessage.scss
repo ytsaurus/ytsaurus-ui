@@ -3,7 +3,7 @@
 .no-items-message {
     @include heading-size('m');
     line-height: 5em;
-    font-weight: 500;
+    font-weight: var(--yt-font-weight-bold);
     padding: 0 1ex;
     white-space: nowrap;
 }

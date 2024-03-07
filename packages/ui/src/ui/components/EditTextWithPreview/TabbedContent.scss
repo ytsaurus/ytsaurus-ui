@@ -30,7 +30,7 @@
     &__title {
         padding: 0 1ex;
         flex-shrink: 1;
-        font-weight: 500;
+        font-weight: var(--yt-font-weight-bold);
         color: var(--primary-text);
 
         @include ellipsis();
