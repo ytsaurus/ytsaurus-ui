@@ -75,7 +75,7 @@ $animation-duration: 0.2s;
         @include ellipsis();
 
         font-size: 16px;
-        font-weight: 500;
+        font-weight: var(--yt-font-weight-bold);
         line-height: 18px;
 
         position: relative;

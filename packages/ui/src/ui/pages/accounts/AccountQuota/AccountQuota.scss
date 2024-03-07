@@ -8,7 +8,7 @@
     }
 
     &__name {
-        font-weight: 500;
+        font-weight: var(--yt-font-weight-bold);
         flex: 0 0 150px;
 
         @include ellipsis();

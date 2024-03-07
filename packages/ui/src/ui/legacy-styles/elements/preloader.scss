@@ -28,7 +28,7 @@ $content-offset: 60px;
     &__title {
         @include heading-size(l);
         margin-bottom: 28px;
-        font-weight: 500;
+        font-weight: var(--yt-font-weight-bold);
     }
 
     &__text {

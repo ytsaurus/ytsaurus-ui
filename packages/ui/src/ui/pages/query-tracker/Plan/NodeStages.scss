@@ -13,7 +13,7 @@
     }
 
     &__footer {
-        font-weight: 500;
+        font-weight: var(--yt-font-weight-bold);
 
         td {
             position: sticky;

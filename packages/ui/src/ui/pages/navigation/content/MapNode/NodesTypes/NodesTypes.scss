@@ -37,7 +37,7 @@ $item-margin: 30px;
     }
 
     &__count {
-        font-weight: 500;
+        font-weight: var(--yt-font-weight-bold);
     }
 
     &__actions {

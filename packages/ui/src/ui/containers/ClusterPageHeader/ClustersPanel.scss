@@ -29,7 +29,7 @@
     &__group-name {
         display: flex;
         align-items: center;
-        font-weight: 500;
+        font-weight: var(--yt-font-weight-bold);
     }
 
     &__no-items,
