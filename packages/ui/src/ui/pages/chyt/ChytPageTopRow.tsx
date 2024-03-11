@@ -177,7 +177,7 @@ function ChytAliasSuggest({
 
 type FormValues = {
     alias: string;
-    instance_count: {value: number};
+    instance_count: number;
     tree: string;
     pool: string;
     runAfterCreation: boolean;
@@ -211,7 +211,7 @@ function CreateChytButton() {
                             return dispatch(
                                 chytCliqueCreate({
                                     ...rest,
-                                    instance_count: instance_count.value,
+                                    instance_count: instance_count || 1,
                                 }),
                             )
                                 .then(() => {
@@ -234,13 +234,11 @@ function CreateChytButton() {
                             },
                             {
                                 name: 'instance_count',
-                                type: 'number',
+                                type: 'range-input-picker',
                                 caption: 'Instance count',
                                 extras: {
-                                    min: 1,
-                                    max: 100,
-                                    hidePrettyValue: true,
-                                    showHint: true,
+                                    minValue: 1,
+                                    maxValue: 100,
                                 },
                                 required: true,
                             },
@@ -295,7 +293,7 @@ function CreateChytButton() {
                             ...makeErrorFields([error]),
                         ]}
                         initialValues={{
-                            instance_count: {value: 1},
+                            instance_count: 1,
                             tree: defaultPoolTree,
                             runAfterCreation: true,
                         }}
