@@ -1,5 +1,4 @@
 import path from 'path';
-import _reduce from 'lodash/reduce';
 import {NodeKit} from '@gravity-ui/nodekit';
 import {ExpressKit} from '@gravity-ui/expresskit';
 
@@ -10,6 +9,7 @@ import routes from './routes';
 import {createOAuthAuthorizationResolver} from './middlewares/oauth';
 import {createAuthMiddleware} from './middlewares/authorization';
 import {authorizationResolver} from './utils/authorization';
+import {createConfigurationErrorsMidleware} from './middlewares/check-configuration';
 
 const nodekit = new NodeKit({configsPath: path.resolve(__dirname, './configs')});
 
@@ -43,6 +43,11 @@ if (authMiddlewares.length) {
 }
 
 nodekit.config.adjustAppConfig?.(nodekit);
+
+const configurationErrors = createConfigurationErrorsMidleware(nodekit.config);
+if (configurationErrors) {
+    nodekit.config.appBeforeAuthMiddleware = [configurationErrors];
+}
 
 const app = new ExpressKit(nodekit, routes);
 configureApp(app);

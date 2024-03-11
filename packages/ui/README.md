@@ -10,7 +10,16 @@ Additionally you have to provide `secrets/yt-interface-secret.json` file with [a
 
 ```json
 {
-  "oauthToken": "special-user-secret-token"
+  // common oauth token, the token is used if there is no cluster-specific token in the file
+  "oauthToken": "special-user-secret-tocken",
+  "cluster_id1": {
+    // cluster_id1 specific oauth token
+    "oauthToken": "cluster1-special-user-secret-token"
+  },
+  "cluster_id2": {
+    // cluster_id2 specific oauth token
+    "oauthToken": "cluster2-special-user-secret-token"
+  }
 }
 ```
 
@@ -43,9 +52,20 @@ Another way is to provide `clusters-config.json` and run the command like:
 $ npm run dev:app
 ```
 
+### Docker
+
+There is ability to build docker-image:
+
+```
+$ docker build . -t ytsaurus-ui:my-tag
+```
+
+All application files in a resulting docker-image will be placed in /opt/app, so you have to mount `/opt/app/cluster-config.json` and `/opt/app/secrets/yt-interface-secret.json`.
+
 ### Environment variables
 
 - `YT_AUTH_ALLOW_INSECURE` - if defined allows insecure (over http) authentication, do not use it for production
+- `ALLOW_PASSWORD_AUTH` - If defined, the app requires a password for cluster access
 
 ### Feature flags
 
@@ -74,12 +94,9 @@ Available flags (**default values** are highlighted in bold):
 
 By default the application uses base configuration from `path_to_dist/server/configs/common.js` file. The behavior might be adjusted through `APP_ENV` and `APP_INSTALLATION` environment variables, see [README.config.md](./docs/configuration.md) for more details.
 
-### Docker
+### Migration
 
-There is ability to build docker-image:
+#### v1.17.0
 
-```
-$ docker build . -t ytsaurus-ui:my-tag
-```
-
-All application files in a resulting docker-image will be placed in /opt/app, so you have to mount `/opt/app/cluster-config.json` and `/opt/app/secrets/yt-interface-secret.json`.
+- [`YT_AUTH_CLUSTER_ID`](https://github.com/ytsaurus/ytsaurus-ui/blob/ui-v1.16.1/packages/ui/README.md#environment-variables) environment variable has been replaced by [`ALLOW_PASSWORD_AUTH`](https://github.com/ytsaurus/ytsaurus-ui/blob/main/packages/ui/README.md#environment-variables).
+- [`config.ytAuthCluster`](https://github.com/ytsaurus/ytsaurus-ui/blob/ui-v1.16.1/packages/ui/src/%40types/core.d.ts#L75) option has been replaced by [`config.allowPasswordAuth`](https://github.com/ytsaurus/ytsaurus-ui/blob/ui-v1.17.0/packages/ui/src/%40types/core.d.ts#L16).
