@@ -54,6 +54,7 @@ import Select, {SelectSingle} from '../../components/Select/Select';
 import BeforeDatePicker from '../../components/common/BeforeDatePicker/BeforeDatePicker';
 import {TimeDuration} from '../../components/TimeDuration/TimeDuration';
 import {DatePickerControl} from './controls/DatePickerControl/DatePickerControl';
+import {RangeInputPickerControl} from './controls/RangeInputPickerControl/RangeInputPickerControl';
 
 const block = cn('yt-dialog');
 
@@ -105,6 +106,8 @@ registerDialogControl('pool-quota-editor', PoolQuotaEditor);
 registerDialogControl('bundle-table-field', BundleTableField);
 registerDialogControl('bundle-title', BundleTitle);
 registerDialogControl('bundle-input', BundleInput);
+
+registerDialogControl('range-input-picker', RangeInputPickerControl);
 
 registerDialogControl('before-date', BeforeDatePicker);
 
@@ -183,7 +186,12 @@ export type DialogField<FormValues = unknown> =
       >
     | RegisteredDialogField<'bundle-title', ComponentProps<typeof BundleTitle>, FormValues>
     | RegisteredDialogField<'bundle-input', ComponentProps<typeof BundleInput>, FormValues>
-    | RegisteredDialogField<'before-date', ComponentProps<typeof BeforeDatePicker>, FormValues>;
+    | RegisteredDialogField<'before-date', ComponentProps<typeof BeforeDatePicker>, FormValues>
+    | RegisteredDialogField<
+          'range-input-picker',
+          ComponentProps<typeof RangeInputPickerControl>,
+          FormValues
+      >;
 
 registerDialogTabControl('yt-create-table-tab', CreateTableTabField);
 
