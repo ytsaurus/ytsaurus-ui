@@ -1,0 +1,7 @@
+.yt-expanded-button {
+    &__expand {
+        &_expanded {
+            transform: rotate(90deg);
+        }
+    }
+}

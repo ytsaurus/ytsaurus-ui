@@ -4,7 +4,6 @@ import {QueryItem} from '../module/api';
 import {Tabs} from '@gravity-ui/uikit';
 import {useDispatch} from 'react-redux';
 import {QueryResultsView} from '../QueryResultsView';
-import Error from '../../../components/Error/Error';
 import {QueryMetaInfo} from './QueryMetaRow';
 import QueryMetaTable from '../QueryMetaTable';
 import {loadQueryResult} from '../module/query_result/actions';
@@ -18,6 +17,7 @@ import {usePrepareNode} from '../Plan/utils';
 import PlanActions from '../Plan/PlanActions';
 
 import './index.scss';
+import {ErrorTree} from './ErrorTree';
 
 const b = block('query-results');
 
@@ -49,8 +49,10 @@ export const QueryResults = React.memo(function QueryResults({
     minimized: boolean;
 }) {
     const [tabs, setTab, {activeTabId, category, activeResultParams}] = useQueryResultTabs(query);
+    if (!query) return null;
+
     const resultIndex = activeResultParams?.resultIndex;
-    return query ? (
+    return (
         <div className={b(null, className)}>
             <div className={b('meta')}>
                 <QueryMetaInfo className={b('meta-info')} query={query} />
@@ -88,7 +90,7 @@ export const QueryResults = React.memo(function QueryResults({
                                 activeResultParams={activeResultParams}
                             />
                         </NotRenderUntilFirstVisible>
-                        {category === QueryResultTab.ERROR && <Error error={query.error} />}
+                        {category === QueryResultTab.ERROR && <ErrorTree rootError={query.error} />}
                         {category === QueryResultTab.META && <QueryMetaTable query={query} />}
 
                         <NotRenderUntilFirstVisible hide={category !== QueryResultTab.STATISTIC}>
@@ -100,7 +102,7 @@ export const QueryResults = React.memo(function QueryResults({
             </NotRenderUntilFirstVisible>
             <div></div>
         </div>
-    ) : null;
+    );
 });
 
 interface PlanContainerProps {

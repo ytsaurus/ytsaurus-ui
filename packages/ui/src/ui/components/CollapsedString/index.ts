@@ -1,0 +1,1 @@
+export {CollapsedString} from './CollapsedString';
