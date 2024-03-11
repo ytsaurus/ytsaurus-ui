@@ -78,6 +78,38 @@ export interface DraftQuery {
     access_control_object: string;
 }
 
+export type ErrorPosition = {column: number; row: number};
+
+export type QueryError = {
+    attributes: {
+        address?: string;
+        connection_id?: string;
+        connection_type?: string;
+        datetime?: string;
+        encryption_mode?: string;
+        fid?: number;
+        host?: string;
+        method?: string;
+        pid?: number;
+        realm_id?: string;
+        request_id?: string;
+        service?: string;
+        span_id?: number;
+        thread?: string;
+        tid?: number;
+        timeout?: number;
+        trace_id?: string;
+        verification_mode?: string;
+        end_position?: ErrorPosition;
+        severity?: string;
+        start_position?: ErrorPosition;
+        yql_status?: string;
+    };
+    code: number;
+    inner_errors?: QueryError[];
+    message: string;
+};
+
 export interface QueryItem extends DraftQuery {
     id: QueryItemId;
     start_time: string;
@@ -91,7 +123,7 @@ export interface QueryItem extends DraftQuery {
         yql_progress?: Progress;
     };
     access_control_object: string;
-    error: unknown;
+    error?: QueryError;
 }
 
 export enum QueryStatus {

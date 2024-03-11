@@ -1,5 +1,6 @@
 import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import MonacoEditor, {MonacoEditorConfig} from '../../../components/MonacoEditor';
+import {MonacoContext} from '../context/MonacoContext';
 import block from 'bem-cn-lite';
 import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
 import {Button, Icon, Loader} from '@gravity-ui/uikit';
@@ -30,6 +31,7 @@ import uniqBy_ from 'lodash/uniqBy';
 import {isSupportedQtACO} from '../module/query_aco/selectors';
 import {QueryACOSelect} from '../QueryACO/QueryACOSelect';
 import {useQueryACO} from '../QueryACO/useQueryACO';
+import {useMonaco} from '../hooks/useMonaco';
 
 const b = block('query-container');
 
@@ -39,6 +41,7 @@ const QueryEditorView = React.memo(function QueryEditorView({
     onStartQuery?: (queryId: string) => boolean | void;
 }) {
     const editorRef = useRef<monaco.editor.IStandaloneCodeEditor>();
+    const {setEditor} = useMonaco();
     const activeQuery = useSelector(getQuery);
     const text = useSelector(getQueryText);
     const engine = useSelector(getQueryEngine);
@@ -53,6 +56,12 @@ const QueryEditorView = React.memo(function QueryEditorView({
         editorRef.current?.focus();
         editorRef.current?.setScrollTop(0);
     }, [editorRef.current, activeQuery?.id]);
+
+    useEffect(() => {
+        if (editorRef.current) {
+            setEditor('queryEditor', editorRef.current);
+        }
+    }, [setEditor]);
 
     useEffect(
         function updateErrorMarkers() {
@@ -219,7 +228,7 @@ export default function QueryEditor({
     const isLoading = isQueryTrackerInfoLoading || isMainQueryLoading;
 
     return (
-        <>
+        <MonacoContext.Provider value={new Map()}>
             {isLoading && (
                 <div className={b('loading')}>
                     <Loader />
@@ -241,6 +250,6 @@ export default function QueryEditor({
                     />
                 )}
             </FlexSplitPane>
-        </>
+        </MonacoContext.Provider>
     );
 }

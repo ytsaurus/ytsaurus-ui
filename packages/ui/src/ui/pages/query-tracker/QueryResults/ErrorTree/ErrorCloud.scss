@@ -1,0 +1,18 @@
+.yt-error-cloud {
+    &__errors {
+        padding-left: 24px;
+    }
+
+    &__collapsed-messages {
+        display: flex;
+        align-items: center;
+
+        height: 24px;
+        margin-bottom: 10px;
+        margin-left: 10px;
+
+        &-show-all {
+            margin-left: 6px;
+        }
+    }
+}
