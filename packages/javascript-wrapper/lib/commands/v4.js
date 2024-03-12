@@ -147,5 +147,20 @@ module.exports = {
         name: 'get_query_tracker_info',
         method: 'GET',
         dataType: 'json'
-    }
+    },
+    listUserTokens: {
+        name: 'list_user_tokens',
+        method: 'GET',
+        dataType: 'json'
+    },
+    revokeToken: {
+        name: 'revoke_token',
+        method: 'GET',
+        dataType: 'json'
+    },
+    issueToken: {
+        name: 'issue_token',
+        method: 'GET',
+        dataType: 'json'
+    },
 }
