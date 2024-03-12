@@ -121,6 +121,7 @@ export interface QueryItem extends DraftQuery {
         yql_plan?: Plan;
         yql_statistics?: YQLSstatistics;
         yql_progress?: Progress;
+        spyt_progress?: number;
     };
     access_control_object: string;
     error?: QueryError;
