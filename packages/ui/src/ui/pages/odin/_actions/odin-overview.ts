@@ -52,7 +52,7 @@ export function fetchOdinOverview(cluster: string): OdinOverviewThunkAction {
             });
         }
 
-        return Utils.listMetrics()
+        return Utils.listMetrics(cluster)
             .then((clusterMetrics) => {
                 if (getCluterHelper(getState) !== cluster) {
                     return;
