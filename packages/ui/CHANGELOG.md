@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.21.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.20.0...ui-v1.21.0) (2024-03-12)
+
+
+### Features
+
+* **Navigation:** add new node types: rootstock, scion [YTFRONT-4046] ([1b5bdca](https://github.com/ytsaurus/ytsaurus-ui/commit/1b5bdcaa9f5ebc66fb2d10fae00706cd37eb0c32))
+
+
+### Bug Fixes
+
+* **Operation/JobsMonitor:** better condition of visibility [YTFRONT-3940] ([caedb0c](https://github.com/ytsaurus/ytsaurus-ui/commit/caedb0c27c7464b734b55808fd1dbb074104d286))
+
 ## [1.20.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.19.0...ui-v1.20.0) (2024-03-06)
 
 
