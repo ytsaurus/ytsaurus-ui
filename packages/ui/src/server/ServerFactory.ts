@@ -22,6 +22,9 @@ export function rememberApp(v: ExpressKit) {
     app = v;
 }
 
+/**
+ * @deprecated use req.ctx.config instead of App().config
+ */
 export function getApp() {
     return app!;
 }

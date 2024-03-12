@@ -51,7 +51,7 @@ export interface YTCoreConfig {
      * Odin is a service for monitoring the availability of YTsaurus clusters
      * This parameter sets service base url and enables UI page
      */
-    odinBaseUrl?: string;
+    odinBaseUrl?: Record<string, string> | string;
 
     /**
      *  The OAuthRobot should have read/write access to mapNodePath

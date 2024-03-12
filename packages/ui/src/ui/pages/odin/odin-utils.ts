@@ -54,8 +54,8 @@ export default class Utils {
         return Utils.request('/exists/' + cluster);
     }
 
-    static listMetrics() {
-        return Utils.request<Array<MetricListItem>>('/service_list');
+    static listMetrics(cluster: string) {
+        return Utils.request<Array<MetricListItem>>(`/service_list/${cluster}`);
     }
 
     static getMetric(

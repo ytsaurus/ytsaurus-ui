@@ -3,7 +3,6 @@ import _ from 'lodash';
 import type {Request, Response} from '@gravity-ui/expresskit';
 import {getClustersFromConfig} from '../components/utils';
 import {sendAndLogError, sendError, sendResponse} from '../utils';
-import {getApp} from '../ServerFactory';
 
 function getClusterAvailability(clusterConfig: {id: string}, odinPath: string) {
     const ODIN_PERIOD = 5;
@@ -26,41 +25,69 @@ function getClusterAvailability(clusterConfig: {id: string}, odinPath: string) {
         });
 }
 
-function getAvailability(req: Request, clusters: Record<string, {id: string}>, odinPath: string) {
-    const url = `${odinPath}/is_alive`;
-    return axios
-        .request({url, responseType: 'json'})
-        .then((res) => {
-            if (res.data !== true) {
+function getAvailability(req: Request, clusters: Record<string, {id: string}>) {
+    const odinBaseUrl = req.ctx.config.odinBaseUrl;
+    const isMultiOdinBaseUrl = 'string' !== typeof odinBaseUrl;
+    const makeOdinIsAliveUrl = (odinBaseUrl: string) => `${odinBaseUrl}/is_alive`;
+
+    const commonIsAlive = isMultiOdinBaseUrl
+        ? Promise.resolve({data: true})
+        : axios.request({url: makeOdinIsAliveUrl(odinBaseUrl)});
+
+    return commonIsAlive
+        .then(({data: commonAlive}) => {
+            if (!commonAlive) {
                 return [];
             }
+
             return Promise.all(
                 _.map(clusters, (clusterConfig) => {
-                    const id = clusterConfig.id;
-                    return getClusterAvailability(clusterConfig, odinPath)
-                        .then((availability) => ({id, availability}))
-                        .catch((error) => {
-                            req.ctx.logError('getAvailability error', error);
-                            return {id};
-                        });
+                    const odinPath = isMultiOdinBaseUrl
+                        ? odinBaseUrl?.[clusterConfig.id]
+                        : odinBaseUrl;
+
+                    if (!odinPath) {
+                        return {};
+                    }
+
+                    const alive = isMultiOdinBaseUrl
+                        ? axios.get(makeOdinIsAliveUrl(odinPath)).catch((e) => {
+                              req.ctx.logError(`Error of getting ${odinPath}`, e);
+                              return {data: false};
+                          })
+                        : Promise.resolve({data: true});
+
+                    return alive.then(({data}) => {
+                        if (data != true) {
+                            return {};
+                        }
+
+                        return getClusterAvailability(clusterConfig, odinPath)
+                            .then((availability) => ({id: clusterConfig.id, availability}))
+                            .catch((error) => {
+                                req.ctx.logError('getAvailability error', error);
+                                return {};
+                            });
+                    });
                 }),
             );
         })
         .catch((e) => {
-            req.ctx.logError(`Error of getting ${url}`, e);
+            req.ctx.logError(`Error of getting ${odinBaseUrl}`, e);
             return [];
         });
 }
 
 export async function getClustersAvailability(req: Request, res: Response) {
-    const odinPath = getApp().config?.odinBaseUrl;
-    if (!odinPath) {
+    const odinBaseUrl = req.ctx.config.odinBaseUrl;
+
+    if (!odinBaseUrl) {
         sendAndLogError(req.ctx, res, 500, new Error('odin base url is not configured'));
         return;
     }
     const clusters = getClustersFromConfig();
 
-    await getAvailability(req, clusters, odinPath)
+    await getAvailability(req, clusters)
         .then((data: object) => sendResponse(res, data))
         .catch((error) => sendError(res, error));
 }

@@ -8,7 +8,7 @@ import {Datepicker} from '../../../components/common/Datepicker';
 import block from 'bem-cn-lite';
 import _ from 'lodash';
 
-import {getDate, getMetric, getStat, getUseCurrentDate} from '../_selectors';
+import {getDate, getMetric, getOdinCluster, getStat, getUseCurrentDate} from '../_selectors';
 import {setDate, setMetric, toggleUseCurrentDate} from '../_actions';
 import Utils from '../odin-utils';
 import hammer from '../../../common/hammer';
@@ -19,9 +19,10 @@ const tbBlock = block('elements-toolbar');
 
 function useLoadMetricsList() {
     const [metrics, setMetrics] = useState([]);
+    const cluster = useSelector(getOdinCluster);
 
     useEffect(() => {
-        Utils.listMetrics().then((metrics) => {
+        Utils.listMetrics(cluster).then((metrics) => {
             setMetrics(
                 _.map(metrics, ({name, display_name: text}) => ({
                     value: name,

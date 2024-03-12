@@ -4,7 +4,6 @@ import qs from 'qs';
 
 import type {Request, Response} from 'express';
 import {UNEXPECTED_PIPE_AXIOS_RESPONSE, pipeAxiosResponse, sendAndLogError} from '../utils';
-import {getApp} from '../ServerFactory';
 
 export async function odinProxyApi(req: Request, res: Response) {
     try {
@@ -19,14 +18,16 @@ export async function odinProxyApi(req: Request, res: Response) {
 }
 
 async function odinProxyApiImpl(req: Request, res: Response) {
-    const odinPath = getApp().config?.odinBaseUrl;
+    const {action, ytAuthCluster: cluster} = req.params;
+    const {odinBaseUrl} = req.ctx.config;
+    const odinPath = typeof odinBaseUrl === 'string' ? odinBaseUrl : odinBaseUrl?.[cluster];
+
     if (!odinPath) {
         return sendAndLogError(req.ctx, res, 500, new Error('Odin base url is not configured'));
     }
     const {ctx, query} = req;
 
     const search = _.isEmpty(query) ? '' : `?${qs.stringify(query)}`;
-    const {action, ytAuthCluster: cluster} = req.params;
 
     const allowedActionsUrls: Record<string, string> = {
         service_list: `${odinPath}/service_list`,
