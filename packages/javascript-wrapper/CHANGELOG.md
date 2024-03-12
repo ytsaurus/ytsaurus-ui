@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.8.0](https://github.com/ytsaurus/ytsaurus-ui/compare/javascript-wrapper-v0.7.1...javascript-wrapper-v0.8.0) (2024-03-12)
+
+
+### Features
+
+* **javascript-wrapper:** add token methods [[#241](https://github.com/ytsaurus/ytsaurus-ui/issues/241)] ([8a6df81](https://github.com/ytsaurus/ytsaurus-ui/commit/8a6df81422f83a318084c39578707b937c59c7ea))
+
 ## [0.7.1](https://github.com/ytsaurus/ytsaurus-ui/compare/javascript-wrapper-v0.7.0...javascript-wrapper-v0.7.1) (2024-02-27)
 
 
