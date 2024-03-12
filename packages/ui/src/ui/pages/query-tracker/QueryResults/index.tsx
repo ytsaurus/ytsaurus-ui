@@ -18,6 +18,7 @@ import PlanActions from '../Plan/PlanActions';
 
 import './index.scss';
 import {ErrorTree} from './ErrorTree';
+import {QueryProgress} from './QueryResultActions/QueryProgress';
 
 const b = block('query-results');
 
@@ -58,6 +59,7 @@ export const QueryResults = React.memo(function QueryResults({
                 <QueryMetaInfo className={b('meta-info')} query={query} />
                 <div className={b('toolbar')}>{toolbar}</div>
             </div>
+            <QueryProgress query={query} />
             <NotRenderUntilFirstVisible className={b('result', {minimized})} hide={minimized}>
                 <PlanProvider
                     plan={query.progress?.yql_plan}
