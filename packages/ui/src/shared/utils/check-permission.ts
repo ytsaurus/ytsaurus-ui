@@ -41,7 +41,7 @@ function checkUserPermissionByAcl(
     return yt.v3.executeBatch({
         setup: {...setup, requestHeaders: {[YT_API_REQUEST_ID_HEADER]: ytApiId}},
         parameters: {requests},
-    }) as Promise<Array<BatchResultsItem<CheckPermissionItemResult>>>;
+    }) as Promise<Array<BatchResultsItem<CheckPermissionResult>>>;
 }
 
 export function checkIsDeveloper(login: string, setup: unknown, ytApiId: string) {
@@ -63,7 +63,7 @@ export type CheckPermissionItem = {
     vital?: boolean;
 };
 
-export type CheckPermissionItemResult = {
+export type CheckPermissionResult = {
     action: 'allow' | 'deny';
 };
 

@@ -5,6 +5,8 @@ import reduce_ from 'lodash/reduce';
 // @ts-ignore
 import ypath from '@ytsaurus/interface-helpers/lib/ypath';
 
+import {CheckPermissionResult} from '../../../../shared/utils/check-permission';
+
 import {RootState} from '../../reducers';
 import {
     TabletBundle,
@@ -38,10 +40,7 @@ import {getCluster, getCurrentUserName} from '../../selectors/global';
 import {YTApiId, ytApiV3Id} from '../../../rum/rum-wrap-api';
 import {getAppBrowserHistory} from '../../../store/window-store';
 import {BatchSubRequest} from '../../../../shared/yt-types';
-import {
-    CheckPermissionResult,
-    makeCheckPermissionBatchSubRequestUI,
-} from '../../../utils/acl/acl-api';
+import {makeCheckPermissionBatchSubRequestUI} from '../../../utils/acl/acl-api';
 import CancelHelper, {isCancelled} from '../../../utils/cancel-helper';
 
 function getZones(allBundles: TabletBundle[]) {

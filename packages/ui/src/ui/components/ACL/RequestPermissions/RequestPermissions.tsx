@@ -19,6 +19,7 @@ import {map} from 'lodash';
 import {docsUrl} from '../../../config';
 import {makeLink} from '../../../utils/utils';
 import {IdmKindType} from '../../../utils/acl/acl-types';
+import {YTPermissionTypeUI} from '../../../utils/acl/acl-api';
 
 const block = cn('acl-request-permissions');
 
@@ -48,14 +49,14 @@ export interface Props extends WithVisibleProps {
 interface FormValues {
     path: string;
     cluster: string;
-    permissions: {[x: string]: unknown} | null;
+    permissions: {[x: string]: Array<YTPermissionTypeUI>} | null;
     subjects: Array<{
         value: string;
         type: 'users' | 'groups' | 'app';
         text?: string;
     }>;
     inheritance_mode?: string;
-    duration?: string;
+    duration?: Date;
     comment?: string;
 }
 
