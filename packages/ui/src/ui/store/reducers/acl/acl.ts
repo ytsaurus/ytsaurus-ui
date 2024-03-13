@@ -1,3 +1,6 @@
+import {Action} from 'redux';
+import {YTError} from '../../../../@types/types';
+import {CheckPermissionResult} from '../../../../shared/utils/check-permission';
 import {
     DELETE_PERMISSION,
     IdmObjectType,
@@ -6,12 +9,44 @@ import {
     UPDATE_ACL,
 } from '../../../constants/acl';
 import {RESET_STORE_BEFORE_CLUSTER_CHANGE} from '../../../constants/utils';
+import {YTPermissionTypeUI} from '../../../utils/acl/acl-api';
+import {ColumnGroup, IdmKindType, PreparedAclSubject} from '../../../utils/acl/acl-types';
+import {ActionD} from '../../../types';
+import {PreparedRole} from '../../../utils/acl';
 
-const ephemeralState = {
+export type AclKindState = {
+    loading: boolean;
+    loaded: boolean;
+    error: boolean;
+    errorData: YTError | undefined;
+
+    path: string;
+    userPermissions: Array<{type: YTPermissionTypeUI} & CheckPermissionResult>;
+    objectPermissions: Array<PreparedAclSubject>;
+    columnGroups: Array<ColumnGroup>;
+    inheritAcl: boolean;
+
+    bossApproval: boolean | PreparedRole | undefined;
+    disableAclInheritance: boolean | PreparedRole | undefined;
+    disableInheritanceResponsible: boolean | PreparedRole | undefined;
+    auditors: Array<PreparedRole> | undefined;
+    readApprovers: Array<PreparedRole> | undefined;
+    responsible: Array<PreparedRole> | undefined;
+    version: string | undefined;
+
+    isPermissionDeleted: boolean;
+    deletionError: YTError | undefined;
+    deletedItemKey: string | undefined;
+
+    idmPermissionsRequestError: YTError | undefined;
+    idmManageAclRequestError: YTError | undefined;
+};
+
+const ephemeralState: AclKindState = {
     loading: false,
     loaded: false,
     error: false,
-    errorData: {},
+    errorData: undefined,
 
     path: '//',
     userPermissions: [],
@@ -19,6 +54,7 @@ const ephemeralState = {
     columnGroups: [],
     inheritAcl: false,
     bossApproval: false,
+    disableAclInheritance: false,
     disableInheritanceResponsible: false,
     auditors: [],
     readApprovers: [],
@@ -37,7 +73,9 @@ export const aclDefaults = {
     ...ephemeralState,
 };
 
-const initialState = {
+export type AclState = Record<IdmKindType, AclKindState>;
+
+const initialState: AclState = {
     [IdmObjectType.ACCESS_CONTROL_OBJECT]: {...aclDefaults},
     [IdmObjectType.PATH]: {...aclDefaults},
     [IdmObjectType.UI_EFFECTIVE_ACL]: {...aclDefaults},
@@ -46,12 +84,12 @@ const initialState = {
     [IdmObjectType.TABLET_CELL_BUNDLE]: {...aclDefaults},
 };
 
-function modifyFieldState(state, field, fieldData) {
+function modifyFieldState(state: AclState, field: IdmKindType, fieldData: Partial<AclKindState>) {
     const mergedFieldData = {...state[field], ...fieldData};
     return {...state, [field]: mergedFieldData};
 }
 
-export default (state = initialState, action) => {
+export default (state = initialState, action: AclAction) => {
     switch (action.type) {
         case DELETE_PERMISSION.REQUEST:
             return modifyFieldState(state, action.idmKind, {
@@ -148,12 +186,46 @@ export default (state = initialState, action) => {
             });
 
         case RESET_STORE_BEFORE_CLUSTER_CHANGE: {
-            const fieldData = ephemeralState;
-            const tmp = modifyFieldState(state, IdmObjectType.PATH, fieldData);
-
-            return modifyFieldState(tmp, IdmObjectType.ACCOUNT, fieldData);
+            return initialState;
         }
         default:
             return state;
     }
 };
+
+export type HasIdmKind = {idmKind: IdmKindType};
+
+export type AclActionType =
+    | Action<typeof LOAD_DATA.REQUEST | typeof LOAD_DATA.CANCELLED>
+    | ActionD<typeof LOAD_DATA.FAILURE, {error: AclKindState['errorData']}>
+    | ActionD<
+          typeof LOAD_DATA.SUCCESS,
+          Pick<
+              AclKindState,
+              | 'path'
+              | 'version'
+              | 'auditors'
+              | 'objectPermissions'
+              | 'columnGroups'
+              | 'userPermissions'
+              | 'disableAclInheritance'
+              | 'bossApproval'
+              | 'disableInheritanceResponsible'
+              | 'responsible'
+              | 'readApprovers'
+          >
+      >
+    | Action<typeof DELETE_PERMISSION.SUCCESS | typeof DELETE_PERMISSION.CANCELLED>
+    | ActionD<typeof DELETE_PERMISSION.FAILURE, AclKindState['deletionError']>
+    | ActionD<typeof DELETE_PERMISSION.REQUEST, AclKindState['deletedItemKey']>
+    | Action<
+          | typeof REQUEST_PERMISSION.REQUEST
+          | typeof REQUEST_PERMISSION.SUCCESS
+          | typeof REQUEST_PERMISSION.CANCELLED
+      >
+    | ActionD<typeof REQUEST_PERMISSION.FAILURE, AclKindState['idmPermissionsRequestError']>
+    | Action<typeof UPDATE_ACL.REQUEST | typeof UPDATE_ACL.SUCCESS | typeof UPDATE_ACL.CANCELLED>
+    | ActionD<typeof UPDATE_ACL.FAILURE, AclKindState['idmManageAclRequestError']>
+    | Action<typeof RESET_STORE_BEFORE_CLUSTER_CHANGE>;
+
+export type AclAction = HasIdmKind & AclActionType;

@@ -15,6 +15,7 @@ import {
     GetAclParams,
     GetResponsibleParams,
     IdmKindType,
+    PreparedAclData,
     PreparedAclSubject,
     UpdateAclParams,
     UpdateResponse,
@@ -30,6 +31,7 @@ import {
 } from '../../../shared/yt-types';
 import {
     CheckPermissionItem,
+    CheckPermissionResult,
     makeCheckPermissionBatchSubRequest,
 } from '../../../shared/utils/check-permission';
 import {RequestPermissionParams} from './external-acl-api';
@@ -43,7 +45,13 @@ function getInheritAcl(path: string): Promise<ACLResponsible> {
     });
 }
 
-export function getAcl({cluster, path, kind, poolTree, sysPath}: GetAclParams) {
+export function getAcl({
+    cluster,
+    path,
+    kind,
+    poolTree,
+    sysPath,
+}: GetAclParams): Promise<PreparedAclData> {
     const api = UIFactory.getAclApi();
     if (kind === IdmObjectType.UI_EFFECTIVE_ACL) {
         return getEffectiveAcl(sysPath);
@@ -164,24 +172,22 @@ export const getCombinedAcl = ({sysPath, kind}: {sysPath: string; kind: IdmKindT
         });
 };
 
-export interface CheckPermissionResult {
-    action: 'allow' | 'deny';
-}
-
-export const checkUserPermissions = (
+export const checkUserPermissionsUI = (
     path: string,
     user: string,
-    permissionTypes: Array<YTPermissionType>,
+    permissionTypes: Array<YTPermissionTypeUI>,
 ): Promise<CheckPermissionResult[]> => {
     const items = map_(permissionTypes, (permission) => {
-        return {path, user, permission};
+        return {path, user, ...convertFromUIPermission(permission)};
     });
 
     return checkPermissions(items);
 };
 
+export type YTPermissionTypeUI = YTPermissionType | typeof REGISTER_QUEUE_CONSUMER_VITAL;
+
 export type CheckPermissionItemUI = Omit<CheckPermissionItem, 'permission'> & {
-    permission: YTPermissionType | typeof REGISTER_QUEUE_CONSUMER_VITAL;
+    permission: YTPermissionTypeUI;
 };
 
 export function makeCheckPermissionBatchSubRequestUI({

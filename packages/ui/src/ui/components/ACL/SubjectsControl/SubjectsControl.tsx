@@ -1,5 +1,6 @@
 import React from 'react';
 import UIFactory from '../../../UIFactory';
+import {ResponsibleType} from '../../../utils/acl/acl-types';
 
 export interface ValueWithType {
     value: string;
@@ -11,7 +12,7 @@ export type SubjectsControlItemType = 'users' | 'groups' | 'app';
 
 export interface SubjectsControlProps {
     className?: string;
-    value: Array<ValueWithType>;
+    value: Array<ResponsibleType>;
     onChange: (value: SubjectsControlProps['value']) => void;
     placeholder?: string;
     allowedTypes?: Array<SubjectsControlItemType>;

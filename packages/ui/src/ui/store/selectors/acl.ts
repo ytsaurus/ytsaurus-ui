@@ -8,40 +8,50 @@ import {
     getObjectSubjectFilter,
 } from './acl-filters';
 import UIFactory from '../../UIFactory';
+import {RootState} from '../../store/reducers';
+import {IdmKindType, PreparedAclSubject} from '../../utils/acl/acl-types';
+import {PreparedRole} from '../../utils/acl';
+import {YTPermissionTypeUI} from '../../utils/acl/acl-api';
+//import {ResponsibleType} from '../../utils/acl/acl-types';
 
-const prepareColumnsNames = (columnsPermissions) => {
+function prepareColumnsNames<T extends {columns?: unknown}>(columnsPermissions: Array<T>) {
     const columns = _.map(columnsPermissions, (permission) => permission.columns);
 
     return _.uniq(_.flatten(columns));
-};
+}
 
-const prepareSubjects = (subjects, type) => {
+const prepareSubjects = (
+    subjects: Array<PreparedRole> | undefined,
+    type: 'read_approver' | 'responsible' | 'auditor',
+) => {
     return _.map(subjects, (subject) => ({
         ...subject,
         type,
         subjects: [subject.value],
-        subjectType: subject.type === 'users' ? 'user' : 'group',
+        subjectType: subject.type === 'users' ? ('user' as const) : ('group' as const),
         groupInfo:
             subject.type === 'groups' ? {name: subject.group_name, url: subject.url} : undefined,
     }));
 };
 
-export const getAllUserPermissions = (state, idmKind) => state.acl[idmKind].userPermissions;
-export const getAllObjectPermissions = (state, idmKind) => state.acl[idmKind].objectPermissions;
+export const getAllUserPermissions = (state: RootState, idmKind: IdmKindType) =>
+    state.acl[idmKind].userPermissions;
+export const getAllObjectPermissions = (state: RootState, idmKind: IdmKindType) =>
+    state.acl[idmKind].objectPermissions;
 
 export const getAllObjectPermissionsWithSplittedSubjects = createSelector(
     [getAllObjectPermissions],
-    SplitSubjects,
+    splitSubjects,
 );
 
-export const getObjectPermissionsTypesList = (idmKind) => {
+export const getObjectPermissionsTypesList = (idmKind: IdmKindType) => {
     return createSelector(
         [
             getObjectPermissionsFilter,
             (state) => getAllObjectPermissionsWithSplittedSubjects(state, idmKind),
         ],
         (permissionsFilter, items) => {
-            const uniquePermisions = new Set();
+            const uniquePermisions = new Set<YTPermissionTypeUI>();
             const {permissionTypes} = UIFactory.getAclPermissionsSettings()[idmKind] || {};
             [...permissionTypes, ...permissionsFilter].forEach((permission) =>
                 uniquePermisions.add(permission),
@@ -55,8 +65,13 @@ export const getObjectPermissionsTypesList = (idmKind) => {
     );
 };
 
-function SplitSubjects(items) {
-    const res = [];
+type HasSplitted = {
+    isSplitted?: boolean;
+    subjectIndex?: number;
+};
+
+function splitSubjects<T extends {subjects: Array<unknown>}>(items: Array<T>) {
+    const res: Array<T & HasSplitted> = [];
     _.forEach(items, (item) => {
         const {subjects} = item;
         if (subjects && subjects.length > 1) {
@@ -70,31 +85,38 @@ function SplitSubjects(items) {
     return res;
 }
 
-const subjectFilterPredicate = (item, filter) => {
+function subjectFilterPredicate<
+    T extends {subjectType?: unknown; groupInfo?: unknown; subjects: Array<unknown>},
+>(item: T, filter: string) {
     const {subjectType, groupInfo} = item;
     if (subjectType === 'group') {
-        return _.some(Object.entries(groupInfo), ([key, value]) => {
-            let str = String(value);
+        return _.some(Object.entries(groupInfo ?? {}), ([key, value]) => {
+            let str: string | undefined = String(value);
             if (key === 'url') {
                 if (str[str.length - 1] === '/') str = str.slice(0, -1);
                 str = str.split('/').pop();
             }
-            return -1 !== str.toLowerCase().indexOf(filter);
+            return -1 !== str?.toLowerCase().indexOf(filter);
         });
     }
-    const value = item.subjects[0];
+    const value = String(item.subjects[0] ?? '');
     return -1 !== value.toLowerCase().indexOf(filter);
-};
+}
 
-function FilterBySubject(items, subjectFilter) {
+function FilterBySubject<
+    T extends {subjectType?: unknown; groupInfo?: unknown; subjects: Array<unknown>},
+>(items: Array<T>, subjectFilter?: string) {
     if (!subjectFilter) return items;
     const lowerNameFilter = subjectFilter.toLowerCase();
     return _.filter(items, (item) => subjectFilterPredicate(item, lowerNameFilter));
 }
 
-const permissionsFilterPredicate = (item, filter) => {
+const permissionsFilterPredicate = (
+    item: PreparedAclSubject,
+    filter: Array<YTPermissionTypeUI>,
+) => {
     const {permissions} = item;
-    return _.difference(filter, permissions).length === 0;
+    return _.difference(filter, permissions ?? []).length === 0;
 };
 
 export const getAllObjectPermissionsFiltered = createSelector(
@@ -107,10 +129,14 @@ export const getAllObjectPermissionsFiltered = createSelector(
         const predicates = [];
         if (subjectFilter) {
             const lowerNameFilter = subjectFilter.toLowerCase();
-            predicates.push((item) => subjectFilterPredicate(item, lowerNameFilter));
+            predicates.push((item: PreparedAclSubject & HasSplitted) =>
+                subjectFilterPredicate(item, lowerNameFilter),
+            );
         }
         if (Array.isArray(permissionsFilter) && permissionsFilter.length > 0) {
-            predicates.push((item) => permissionsFilterPredicate(item, permissionsFilter));
+            predicates.push((item: PreparedAclSubject & HasSplitted) =>
+                permissionsFilterPredicate(item, permissionsFilter),
+            );
         }
         return _.filter(items, concatByAnd(...predicates));
     },
@@ -125,17 +151,25 @@ export const getAllObjectPermissionsOrderedByStatus = createSelector(
     [getAllObjectPermissions],
     OrderByRoleStatus,
 );
-export const getAllColumnGroups = (state, idmKind) => state.acl[idmKind].columnGroups;
+export const getAllColumnGroups = (state: RootState, idmKind: IdmKindType) =>
+    state.acl[idmKind].columnGroups;
 export const getAllColumnGroupsActual = createSelector([getAllColumnGroups], (items) => {
     const filtered = _.filter(items, (item) => !item.removed);
     return _.sortBy(filtered, ['name']);
 });
 
-function OrderByRoleStatus(items) {
-    const unrecognized = [];
-    const requested = [];
-    const depriving = [];
-    const rest = [];
+function OrderByRoleStatus<
+    T extends {
+        isDepriving?: boolean;
+        isRequested?: boolean;
+        isUnrecognized?: boolean;
+        isApproved?: boolean;
+    },
+>(items: Array<T>) {
+    const unrecognized: typeof items = [];
+    const requested: typeof items = [];
+    const depriving: typeof items = [];
+    const rest: typeof items = [];
     _.forEach(items, (item) => {
         const {isDepriving, isRequested, isUnrecognized, isApproved} = item;
         if (isUnrecognized) {
@@ -151,16 +185,20 @@ function OrderByRoleStatus(items) {
     return [...requested, ...depriving, ...unrecognized, ...rest];
 }
 
-function OrderByInheritanceAndSubject(items) {
-    return _.sortBy(items, [
+function OrderByInheritanceAndSubject<T extends {inherited?: boolean; subjects: Array<unknown>}>(
+    items: Array<T>,
+) {
+    const res = _.sortBy(items, [
         (item) => !item.inherited,
         (item) => (item.subjects && item.subjects[0]) || true,
     ]);
+    return res;
 }
 
-const getReadApprovers = (state, idmKind) => state.acl[idmKind].readApprovers;
-const getResponsibles = (state, idmKind) => state.acl[idmKind].responsible;
-const getAuditors = (state, idmKind) => state.acl[idmKind].auditors;
+const getReadApprovers = (state: RootState, idmKind: IdmKindType) =>
+    state.acl[idmKind].readApprovers;
+const getResponsibles = (state: RootState, idmKind: IdmKindType) => state.acl[idmKind].responsible;
+const getAuditors = (state: RootState, idmKind: IdmKindType) => state.acl[idmKind].auditors;
 
 export const getNotInheritedReadApprovers = createSelector([getReadApprovers], (readApprovers) =>
     _.filter(readApprovers, (readApprover) => !readApprover.inherited),
@@ -202,7 +240,7 @@ export const getAllAccessColumnsPermissions = createSelector(
     (objectPermissions) => {
         const filteredPermissions = _.filter(
             objectPermissions,
-            (permission) => permission.action === 'allow' && permission.columns?.length > 0,
+            (permission) => permission.action === 'allow' && permission.columns?.length! > 0,
         );
         return _.map(filteredPermissions, (permission) => ({
             ...permission,
@@ -221,7 +259,7 @@ const getAllDenyColumnsPermissions = createSelector(
     (objectPermissions) => {
         const filteredPermissions = _.filter(
             objectPermissions,
-            (permission) => permission.action === 'deny' && permission.columns?.length > 0,
+            (permission) => permission.action === 'deny' && permission.columns?.length! > 0,
         );
 
         return _.map(filteredPermissions, (permission) => ({
@@ -245,18 +283,22 @@ export const getDenyColumnsItems = createSelector([getAllDenyColumnsNames], (nam
     _.map(names, (name) => ({key: name, value: name, title: name})),
 );
 
-export const isPermissionDeleted = (state, idmKind) => state.acl[idmKind].isPermissionDeleted;
-export const permissionDeletionError = (state, idmKind) => state.acl[idmKind].deletionError;
-export const getLastDeletedPermissionKey = (state, idmKind) => state.acl[idmKind].deletedItemKey;
-export const getIdmPermissionsRequestError = (state, idmKind) =>
+export const isPermissionDeleted = (state: RootState, idmKind: IdmKindType) =>
+    state.acl[idmKind].isPermissionDeleted;
+export const permissionDeletionError = (state: RootState, idmKind: IdmKindType) =>
+    state.acl[idmKind].deletionError;
+export const getLastDeletedPermissionKey = (state: RootState, idmKind: IdmKindType) =>
+    state.acl[idmKind].deletedItemKey;
+export const getIdmPermissionsRequestError = (state: RootState, idmKind: IdmKindType) =>
     state.acl[idmKind].idmPermissionsRequestError;
-export const getIdmManageAclRequestError = (state, idmKind) =>
+export const getIdmManageAclRequestError = (state: RootState, idmKind: IdmKindType) =>
     state.acl[idmKind].idmManageAclRequestError;
-export const getIdmPathVersion = (state, idmKind) => state.acl[idmKind].version;
+export const getIdmPathVersion = (state: RootState, idmKind: IdmKindType) =>
+    state.acl[idmKind].version;
 
-const getAclLoading = (state, idmKind) => state.acl[idmKind].loading;
-const getAclLoaded = (state, idmKind) => state.acl[idmKind].loaded;
-const getAclError = (state, idmKind) => state.acl[idmKind].error;
+const getAclLoading = (state: RootState, idmKind: IdmKindType) => state.acl[idmKind].loading;
+const getAclLoaded = (state: RootState, idmKind: IdmKindType) => state.acl[idmKind].loaded;
+const getAclError = (state: RootState, idmKind: IdmKindType) => state.acl[idmKind].error;
 
 export const getAclLoadState = createSelector(
     [getAclLoading, getAclLoaded, getAclError],

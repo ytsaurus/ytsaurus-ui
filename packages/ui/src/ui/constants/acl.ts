@@ -1,12 +1,13 @@
+import {YTPermissionTypeUI} from '../utils/acl/acl-api';
 import createActionTypes, {createPrefix} from '../constants/utils';
 import {IdmKindType} from '../utils/acl/acl-types';
 
 const PREFIX = createPrefix('MANAGE_ACL');
 
-export const LOAD_DATA = createActionTypes(PREFIX + 'LOAD_DATA');
-export const DELETE_PERMISSION = createActionTypes(PREFIX + 'DELETE_PERMISSION');
-export const REQUEST_PERMISSION = createActionTypes(PREFIX + 'REQUEST_PERMISSION');
-export const UPDATE_ACL = createActionTypes(PREFIX + 'UPDATE_ACL');
+export const LOAD_DATA = createActionTypes(`${PREFIX}LOAD_DATA`);
+export const DELETE_PERMISSION = createActionTypes(`${PREFIX}DELETE_PERMISSION`);
+export const REQUEST_PERMISSION = createActionTypes(`${PREFIX}REQUEST_PERMISSION`);
+export const UPDATE_ACL = createActionTypes(`${PREFIX}UPDATE_ACL`);
 export const ACL_CHANGE_FILTERS = `${PREFIX}ACL_CHANGE_FILTERS` as const;
 
 export const IdmObjectType = {
@@ -21,7 +22,7 @@ export const IdmObjectType = {
 export const REGISTER_QUEUE_CONSUMER = 'register_queue_consumer';
 export const REGISTER_QUEUE_CONSUMER_VITAL = 'register_queue_consumer_vital';
 
-const PERMISSION_TYPES = [
+const PERMISSION_TYPES: Array<YTPermissionTypeUI> = [
     'read',
     'write',
     'remove',
@@ -41,11 +42,16 @@ export const INHERITANCE_MODE_TYPES = {
     IMMEDIATE_DESCENDANTS_ONLY: 'immediate_descendants_only',
 };
 
-const ACCOUNTS_PERMISSION_TYPES = ['administer', 'use'];
+const ACCOUNTS_PERMISSION_TYPES = ['administer' as const, 'use' as const];
 
 const PATH_SETTINGS = {
     permissionTypes: PERMISSION_TYPES,
-    permissionsToRequest: [['read'], ['write'], ['remove'], ['mount']],
+    permissionsToRequest: [
+        ['read' as const],
+        ['write' as const],
+        ['remove' as const],
+        ['mount' as const],
+    ],
     allowBossApprovals: true,
     allowReadApprovers: true,
     allowAuditors: true,
@@ -55,8 +61,8 @@ const PATH_SETTINGS = {
 };
 
 export type PermissionSettings = {
-    permissionTypes: Array<string>;
-    permissionsToRequest: Array<Array<string>>;
+    permissionTypes: Array<YTPermissionTypeUI>;
+    permissionsToRequest: Array<Array<YTPermissionTypeUI>>;
     allowBossApprovals: boolean;
     allowReadApprovers: boolean;
     allowAuditors: boolean;
