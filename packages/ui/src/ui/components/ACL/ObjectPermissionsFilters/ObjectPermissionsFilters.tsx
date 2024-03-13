@@ -12,13 +12,14 @@ import {
 } from '../../../store/selectors/acl-filters';
 import {getObjectPermissionsTypesList} from '../../../store/selectors/acl';
 import Filter from '../../../components/Filter/Filter';
+import {IdmKindType} from '../../../utils/acl/acl-types';
 import Select from '../../Select/Select';
 import './ObjectPermissionsFilters.scss';
 
 const block = cn('object-permissions-filters');
 
 interface Props {
-    idmKind: string;
+    idmKind: IdmKindType;
 }
 
 export default function ObjectPermissionsFilters({idmKind, ...rest}: Props) {
@@ -50,7 +51,7 @@ export default function ObjectPermissionsFilters({idmKind, ...rest}: Props) {
                 onUpdate={(value: string[]) => {
                     dispatch(
                         changeObjectPermissionsFilter({
-                            objectPermissions: value,
+                            objectPermissions: value as typeof selectedPermissons,
                         }),
                     );
                 }}

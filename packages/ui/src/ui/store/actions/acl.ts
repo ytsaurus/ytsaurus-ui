@@ -1,5 +1,5 @@
+import {ThunkAction} from 'redux-thunk';
 import _ from 'lodash';
-import yt from '@ytsaurus/javascript-wrapper/lib/yt';
 
 import {
     DELETE_PERMISSION,
@@ -10,12 +10,27 @@ import {
 } from '../../constants/acl';
 import {getPools, getTree} from '../../store/selectors/scheduling/scheduling';
 import {computePathItems} from '../../utils/scheduling/scheduling';
-import {checkUserPermissions, getAcl, getResponsible} from '../../utils/acl/acl-api';
-import {prepareAclSubject} from '../../utils/acl';
+import {
+    YTPermissionTypeUI,
+    checkUserPermissionsUI,
+    getAcl,
+    getResponsible,
+} from '../../utils/acl/acl-api';
+import {convertFromUIPermissions, prepareAclSubject} from '../../utils/acl';
 import {ROOT_POOL_NAME} from '../../constants/scheduling';
 import UIFactory from '../../UIFactory';
+import {AclAction, HasIdmKind} from '../../store/reducers/acl/acl';
+import {isCancelled} from '../../utils/cancel-helper';
+import {RootState} from '../../store/reducers';
+import {IdmKindType, PreparedAclSubject, ResponsibleType, Role} from '../../utils/acl/acl-types';
+import {CheckPermissionResult} from '../../../shared/utils/check-permission';
 
-const prepareUserPermissions = (userPermissions, idmKind) => {
+type ThunkAclAction<T = unknown> = ThunkAction<T, RootState, unknown, AclAction>;
+
+const prepareUserPermissions = (
+    userPermissions: Array<CheckPermissionResult>,
+    idmKind: IdmKindType,
+) => {
     const {permissionTypes} = UIFactory.getAclPermissionsSettings()[idmKind];
     return _.map(userPermissions, (item, index) => {
         return {
@@ -25,7 +40,14 @@ const prepareUserPermissions = (userPermissions, idmKind) => {
     });
 };
 
-function getPathToCheckPermissions(idmKind, state, entityName, poolTree) {
+type HasNormPoolTree = {normalizedPoolTree?: string};
+
+function getPathToCheckPermissions(
+    idmKind: IdmKindType,
+    state: RootState,
+    entityName: string,
+    poolTree?: string,
+) {
     switch (idmKind) {
         case IdmObjectType.ACCESS_CONTROL_OBJECT:
         case IdmObjectType.UI_EFFECTIVE_ACL:
@@ -52,19 +74,18 @@ function getPathToCheckPermissions(idmKind, state, entityName, poolTree) {
         case IdmObjectType.TABLET_CELL_BUNDLE: {
             return `//sys/tablet_cell_bundles/${entityName}`;
         }
-        default:
-            throw new Error('Unexpected value of parameter idmKind');
     }
+    throw new Error('Unexpected value of parameter idmKind');
 }
 
 export function loadAclData(
-    {path, idmKind},
-    {normalizedPoolTree} = {},
-    options = {userPermissionsPath: undefined},
-) {
+    {path, idmKind}: {path: string} & HasIdmKind,
+    {normalizedPoolTree}: HasNormPoolTree = {},
+    options: {userPermissionsPath?: string} = {userPermissionsPath: undefined},
+): ThunkAclAction {
     return (dispatch, getState) => {
         const state = getState();
-        const {login, cluster} = state.global;
+        const {login, cluster = ''} = state.global;
 
         dispatch({type: LOAD_DATA.REQUEST, idmKind});
 
@@ -87,7 +108,7 @@ export function loadAclData(
                 poolTree,
                 sysPath: pathToCheckPermissions,
             }),
-            checkUserPermissions(pathToCheckUserPermissions, login, permissionTypes),
+            checkUserPermissionsUI(pathToCheckUserPermissions, login, permissionTypes),
             getResponsible({
                 cluster,
                 path,
@@ -128,11 +149,16 @@ export function loadAclData(
 }
 
 export function deletePermissions(
-    {roleKey, idmKind, path, itemToDelete},
-    {normalizedPoolTree} = {},
-) {
+    {
+        roleKey,
+        idmKind,
+        path,
+        itemToDelete,
+    }: HasIdmKind & {path: string; roleKey: string; itemToDelete: PreparedAclSubject},
+    {normalizedPoolTree}: HasNormPoolTree = {},
+): ThunkAclAction {
     return (dispatch, getState) => {
-        const {cluster} = getState().global;
+        const {cluster = ''} = getState().global;
         const state = getState();
 
         dispatch({
@@ -163,8 +189,9 @@ export function deletePermissions(
                 });
             })
             .catch((error) => {
-                if (error.code === yt.codes.CANCELLED) {
+                if (isCancelled(error)) {
                     dispatch({type: DELETE_PERMISSION.CANCELLED, idmKind});
+                    return undefined;
                 } else {
                     dispatch({
                         type: DELETE_PERMISSION.FAILURE,
@@ -177,7 +204,7 @@ export function deletePermissions(
     };
 }
 
-function dateToDaysAfterNow(date) {
+function dateToDaysAfterNow(date?: Date) {
     if (!date) {
         return undefined;
     }
@@ -185,11 +212,24 @@ function dateToDaysAfterNow(date) {
     return Math.round((date.getTime() - Date.now()) / 3600 / 24 / 1000);
 }
 
-export function requestPermissions({values, idmKind}, {normalizedPoolTree} = {}) {
+type PermissionToRequest = {
+    path: string;
+    cluster: string;
+    permissions: {[x: string]: Array<YTPermissionTypeUI>} | null;
+    subjects: Array<ResponsibleType>;
+    inheritance_mode?: string;
+    duration?: Date;
+    comment?: string;
+};
+
+export function requestPermissions(
+    {values, idmKind}: {values: PermissionToRequest} & HasIdmKind,
+    {normalizedPoolTree}: HasNormPoolTree = {},
+): ThunkAclAction {
     return (dispatch, getState) => {
         const state = getState();
         const {
-            global: {cluster},
+            global: {cluster = ''},
         } = state;
 
         dispatch({
@@ -198,11 +238,11 @@ export function requestPermissions({values, idmKind}, {normalizedPoolTree} = {})
         });
 
         const daysAfter = dateToDaysAfterNow(values.duration);
-        const roles = [];
+        const roles: Array<Role> = [];
         const rolesGroupedBySubject = [];
         const {inheritance_mode} = values;
         for (const item of values.subjects) {
-            const subject = item.type === 'app' ? {tvm_id: item.value} : prepareAclSubject(item);
+            const subject = prepareAclSubject(item);
             rolesGroupedBySubject.push({
                 permissions: _.flatten(_.map(values.permissions)),
                 subject,
@@ -211,7 +251,7 @@ export function requestPermissions({values, idmKind}, {normalizedPoolTree} = {})
             });
             _.forEach(values.permissions, (permissions) => {
                 roles.push({
-                    permissions,
+                    ...convertFromUIPermissions({permissions}),
                     subject,
                     deprive_after_days: daysAfter,
                     ...(inheritance_mode ? {inheritance_mode} : {}),
@@ -236,8 +276,8 @@ export function requestPermissions({values, idmKind}, {normalizedPoolTree} = {})
                 path: values.path,
                 sysPath: requestPermissionsPath,
                 roles,
-                roles_grouped: rolesGroupedBySubject,
-                comment: values.comment,
+                roles_grouped: rolesGroupedBySubject.map(convertFromUIPermissions),
+                comment: values.comment ?? '',
                 kind: idmKind,
                 poolTree,
             })
@@ -248,8 +288,9 @@ export function requestPermissions({values, idmKind}, {normalizedPoolTree} = {})
                 });
             })
             .catch((error) => {
-                if (error.code === yt.codes.CANCELLED) {
+                if (isCancelled(error)) {
                     dispatch({type: REQUEST_PERMISSION.CANCELLED, idmKind});
+                    return undefined;
                 } else {
                     dispatch({
                         type: REQUEST_PERMISSION.FAILURE,
@@ -262,15 +303,33 @@ export function requestPermissions({values, idmKind}, {normalizedPoolTree} = {})
     };
 }
 
-export function cancelRequestPermissions({idmKind}) {
+export function cancelRequestPermissions({idmKind}: HasIdmKind) {
     return {type: REQUEST_PERMISSION.CANCELLED, idmKind};
 }
 
-export function updateAcl({path, values, version, idmKind}, {normalizedPoolTree} = {}) {
+interface UpdateAclValues {
+    responsibleApproval: Array<ResponsibleType>;
+    auditors: Array<ResponsibleType>;
+    readApprovers: Array<ResponsibleType>;
+    inheritanceResponsible: boolean;
+    bossApproval: Array<ResponsibleType>;
+    inheritAcl: boolean;
+    comment: string;
+}
+
+export function updateAcl(
+    {
+        path,
+        values,
+        version,
+        idmKind,
+    }: {path: string; values: UpdateAclValues; version: string} & HasIdmKind,
+    {normalizedPoolTree}: HasNormPoolTree = {},
+): ThunkAclAction {
     return (dispatch, getState) => {
         const state = getState();
         const {
-            global: {cluster},
+            global: {cluster = ''},
         } = getState();
 
         dispatch({
@@ -300,7 +359,7 @@ export function updateAcl({path, values, version, idmKind}, {normalizedPoolTree}
                 });
             })
             .catch((error) => {
-                if (error.code === yt.codes.CANCELLED) {
+                if (isCancelled(error)) {
                     return dispatch({type: UPDATE_ACL.CANCELLED, idmKind});
                 } else {
                     const data = error?.response?.data || error?.response || error;
@@ -315,6 +374,6 @@ export function updateAcl({path, values, version, idmKind}, {normalizedPoolTree}
     };
 }
 
-export function cancelUpdateAcl({idmKind}) {
+export function cancelUpdateAcl({idmKind}: HasIdmKind): AclAction {
     return {type: UPDATE_ACL.CANCELLED, idmKind};
 }

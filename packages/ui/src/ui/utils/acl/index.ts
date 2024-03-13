@@ -5,6 +5,7 @@ import {
     REGISTER_QUEUE_CONSUMER_VITAL,
 } from '../../constants/acl';
 import {IdmKindType, ResponsibleType, Subject} from '../../utils/acl/acl-types';
+import {YTPermissionTypeUI} from './acl-api';
 
 // //sys/accounts/accountName
 const ACCOUNTS_REGEXP = new RegExp('//sys/accounts/.+');
@@ -78,7 +79,7 @@ export interface PreparedRole {
     inherited?: boolean;
     idmLink?: string;
     key?: string;
-    group?: 'role' | number;
+    group?: 'role' | string | number;
     value?: string | number;
     text?: string;
     isDepriving?: boolean;
@@ -94,25 +95,34 @@ export interface PreparedRole {
 
     state?: string;
     role_type?: string;
-    permissions?: Array<string>;
+    permissions?: Array<YTPermissionTypeUI>;
     inheritance_mode?: string;
     columns?: Array<string>;
     member?: boolean;
     deprive_date?: string;
+
+    url?: string;
 }
 
-export function prepareAclSubject({type, value}: ResponsibleType) {
-    return {[type === 'users' ? 'user' : 'group']: value};
+export function prepareAclSubject(item: ResponsibleType): Subject {
+    switch (item.type) {
+        case 'users':
+            return {user: item.value};
+        case 'groups':
+            return {group: item.value};
+        case 'app':
+            return {tvm_id: item.value};
+    }
 }
 
-export function convertToUIPermissions<T extends {permissions?: Array<string>; vital?: boolean}>(
-    role: T,
-): T {
+export function convertToUIPermissions<
+    T extends {permissions?: Array<YTPermissionType>; vital?: boolean},
+>(role: T): Omit<T, 'permissions'> & {permissions?: Array<YTPermissionTypeUI>} {
     if (!role.vital ?? !role.permissions) {
         return role;
     }
 
-    const uiPermissions: T['permissions'] = role.permissions.map((item) => {
+    const uiPermissions: Array<YTPermissionTypeUI> = role.permissions.map((item) => {
         return item === REGISTER_QUEUE_CONSUMER ? REGISTER_QUEUE_CONSUMER_VITAL : item;
     });
     return {
@@ -121,9 +131,9 @@ export function convertToUIPermissions<T extends {permissions?: Array<string>; v
     };
 }
 
-export function convertFromUIPermissions<T extends {permissions: Array<string>; vital?: boolean}>(
-    data: T,
-): T {
+export function convertFromUIPermissions<
+    T extends {permissions: Array<YTPermissionTypeUI>; vital?: boolean},
+>(data: T): Omit<T, 'permissions'> & {permissions: Array<YTPermissionType>} {
     let vital = data.vital;
     const effectivePermissions = data.permissions.map((item) => {
         if (item === REGISTER_QUEUE_CONSUMER_VITAL) {
@@ -139,9 +149,10 @@ export function convertFromUIPermissions<T extends {permissions: Array<string>; 
     };
 }
 
-export function convertFromUIPermission(
-    permission: YTPermissionType | typeof REGISTER_QUEUE_CONSUMER_VITAL,
-): {permission: YTPermissionType; vital?: true} {
+export function convertFromUIPermission(permission: YTPermissionTypeUI): {
+    permission: YTPermissionType;
+    vital?: true;
+} {
     if (permission === REGISTER_QUEUE_CONSUMER_VITAL) {
         return {permission: REGISTER_QUEUE_CONSUMER, vital: true};
     }

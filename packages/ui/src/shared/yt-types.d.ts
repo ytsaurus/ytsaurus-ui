@@ -184,7 +184,16 @@ export interface GetQueryResultParams extends GetQueryParams {
     result_index: number;
 }
 
-export type YTPermissionType = 'read' | 'write' | 'use' | 'mount' | 'register_queue_consumer';
+export type YTPermissionType =
+    | 'administer'
+    | 'create'
+    | 'read'
+    | 'write'
+    | 'use'
+    | 'manage'
+    | 'mount'
+    | 'remove'
+    | 'register_queue_consumer';
 
 export interface AddMaintenanceParams extends BaseBatchParams {
     component: 'cluster_node' | 'http_proxy' | 'rpc_proxy';

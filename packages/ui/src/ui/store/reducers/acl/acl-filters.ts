@@ -1,3 +1,4 @@
+import {YTPermissionTypeUI} from '../../../utils/acl/acl-api';
 import {ACL_CHANGE_FILTERS} from '../../../constants/acl';
 
 import type {ActionD} from '../../../types';
@@ -5,7 +6,7 @@ import type {ActionD} from '../../../types';
 export interface AclFiltersState {
     approversSubject: string;
     objectSubject: string;
-    objectPermissions: Array<string>;
+    objectPermissions: Array<YTPermissionTypeUI>;
     columnsColumns: string;
 }
 

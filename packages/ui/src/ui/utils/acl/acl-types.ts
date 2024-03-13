@@ -1,3 +1,5 @@
+import {YTPermissionType} from '../../../shared/yt-types';
+import {YTPermissionTypeUI} from './acl-api';
 import {PreparedRole} from './index';
 
 export type IdmKindType =
@@ -15,11 +17,11 @@ export interface Group {
 }
 
 interface GroupSubject {
-    group: number;
-    group_name: string;
+    group: string;
+    group_name?: string;
 
     // url is link to staff or abc page for this subject.
-    url: string;
+    url?: string;
 }
 
 interface TvmSubject {
@@ -50,7 +52,7 @@ export interface Role {
     role_key?: string;
     state?: string;
     role_type?: string;
-    permissions?: Array<AclPermissionType>;
+    permissions?: Array<YTPermissionType>;
     inheritance_mode?: string;
     columns?: Array<string>;
     inherited?: boolean;
@@ -63,9 +65,10 @@ export interface Role {
     is_unrecognized?: boolean;
     is_missing?: boolean;
     vital?: boolean;
+    deprive_after_days?: number;
 }
 
-export interface RoleConverted {
+export type RoleConverted = ResponsibleType & {
     idmLink?: string;
     inherited?: boolean;
     isApproved?: boolean;
@@ -77,12 +80,8 @@ export interface RoleConverted {
     role_type?: string;
     state?: string;
     text: string;
-    type: string;
-    value?: string;
     group?: string;
-}
-
-export type AclPermissionType = string;
+};
 
 export interface ResponsibleSettingsV2 {
     responsible: Array<Role>;
@@ -133,7 +132,7 @@ export interface SuccessColumnGroupCreate {
 }
 
 export interface ACE {
-    permissions: Array<AclPermissionType>;
+    permissions: Array<YTPermissionType>;
     action: string;
     subjects: Array<string>;
     inheritance_mode?: string;
@@ -177,14 +176,15 @@ export type TypedAclSubject =
           subjectUrl?: never;
           types: Array<string>;
           internal: boolean;
+          groupInfo?: undefined;
       }
     | {
           subjectType: 'group';
           subjectUrl?: never;
           groupInfo: {
-              name: string;
-              url: string;
-              group: number;
+              name?: string;
+              url?: string;
+              group: string;
           };
           tvmInfo?: undefined;
           types?: undefined;
@@ -193,8 +193,8 @@ export type TypedAclSubject =
     | {
           subjectType: 'tvm';
           subjectUrl?: string;
-          tvmInfo: {
-              name: string;
+          tvmInfo?: {
+              name?: string;
           };
           groupInfo?: undefined;
           types?: undefined;
@@ -213,7 +213,7 @@ export type PreparedAclSubject = TypedAclSubject & {
     inheritance_mode?: string;
     inherited?: boolean;
     key?: string;
-    permissions?: Array<AclPermissionType>;
+    permissions?: Array<YTPermissionTypeUI>;
     subjects: Array<string | number>;
     action?: string;
     group?: string;
@@ -230,9 +230,13 @@ export type PreparedAclSubject = TypedAclSubject & {
     aclIndex?: number;
     isSplitted?: boolean;
     subjectIndex?: number;
+    vital?: boolean;
 };
 
-export type ResponsibleType = {type: 'users' | 'groups'; value: string};
+export type ResponsibleType =
+    | {type: 'users'; value: string}
+    | {type: 'groups'; value: string; group_name?: string}
+    | {type: 'app'; value: string};
 
 export interface UpdateAclParams {
     idmKind: IdmKindType;

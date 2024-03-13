@@ -6,10 +6,11 @@ import {getAllGroupNames, getAllUserNames} from '../../../store/selectors/global
 import Select from '../../Select/Select';
 import {UserName} from '../../UserLink/UserLink';
 import {useAllUserNamesFiltered, useGroupsLoaded} from '../../../hooks/global';
-import {SubjectsControlProps, ValueWithType} from './SubjectsControl';
+import {SubjectsControlProps} from './SubjectsControl';
 
 import './YTSubjectSuggest.scss';
 import LabelsGroup from '../../LabelsGroup/LabelsGroup';
+import {ResponsibleType} from '../../../utils/acl/acl-types';
 
 const block = cn('yt-subject-suggest');
 
@@ -39,7 +40,7 @@ export function YTSubjectSuggest({className, value, onChange, ...rest}: Subjects
 
     const handleUsersChange = React.useCallback(
         (newValues: string[]) => {
-            const newUsersValues: ValueWithType[] = newValues.map((val) => {
+            const newUsersValues: Array<ResponsibleType> = newValues.map((val) => {
                 return {
                     value: val,
                     text: val,
@@ -53,11 +54,11 @@ export function YTSubjectSuggest({className, value, onChange, ...rest}: Subjects
 
     const handleGroupChange = React.useCallback(
         (newValues: string[]) => {
-            const newGroupsValues: ValueWithType[] = newValues.map((val) => {
+            const newGroupsValues: Array<ResponsibleType> = newValues.map((val) => {
                 return {
                     value: val,
                     text: val,
-                    type: 'groups',
+                    type: 'groups' as const,
                 };
             });
             return onChange([...newGroupsValues, ...userValue]);
