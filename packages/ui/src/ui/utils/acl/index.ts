@@ -101,7 +101,12 @@ export interface PreparedRole {
     member?: boolean;
     deprive_date?: string;
 
+    internal?: boolean;
+
     url?: string;
+
+    types?: undefined;
+    subjectType?: undefined;
 }
 
 export function prepareAclSubject(item: ResponsibleType): Subject {

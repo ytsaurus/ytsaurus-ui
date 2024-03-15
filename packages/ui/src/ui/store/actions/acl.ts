@@ -156,7 +156,7 @@ export function deletePermissions(
         itemToDelete,
     }: HasIdmKind & {path: string; roleKey: string; itemToDelete: PreparedAclSubject},
     {normalizedPoolTree}: HasNormPoolTree = {},
-): ThunkAclAction {
+): ThunkAclAction<Promise<void>> {
     return (dispatch, getState) => {
         const {cluster = ''} = getState().global;
         const state = getState();
@@ -307,14 +307,14 @@ export function cancelRequestPermissions({idmKind}: HasIdmKind) {
     return {type: REQUEST_PERMISSION.CANCELLED, idmKind};
 }
 
-interface UpdateAclValues {
+export interface UpdateAclValues {
     responsibleApproval: Array<ResponsibleType>;
     auditors: Array<ResponsibleType>;
     readApprovers: Array<ResponsibleType>;
     inheritanceResponsible: boolean;
-    bossApproval: Array<ResponsibleType>;
+    bossApproval: boolean;
     inheritAcl: boolean;
-    comment: string;
+    comment?: string;
 }
 
 export function updateAcl(
@@ -323,7 +323,7 @@ export function updateAcl(
         values,
         version,
         idmKind,
-    }: {path: string; values: UpdateAclValues; version: string} & HasIdmKind,
+    }: {path: string; values: UpdateAclValues; version?: string} & HasIdmKind,
     {normalizedPoolTree}: HasNormPoolTree = {},
 ): ThunkAclAction {
     return (dispatch, getState) => {

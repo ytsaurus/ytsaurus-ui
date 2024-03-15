@@ -40,9 +40,9 @@ export interface Props extends WithVisibleProps {
     normalizedPoolTree?: string;
     path: string;
     idmKind: IdmKindType;
-    requestPermissions: (params: {values: FormValues; idmKind: string}) => Promise<void>;
-    cancelRequestPermissions: (params: {idmKind: string}) => unknown;
-    error: YTError;
+    requestPermissions: (params: {values: FormValues; idmKind: IdmKindType}) => Promise<void>;
+    cancelRequestPermissions: (params: {idmKind: IdmKindType}) => unknown;
+    error?: YTError;
     onSuccess?: () => void;
 }
 
@@ -241,7 +241,9 @@ function RequestPermissions(props: Props) {
     );
 }
 
-export default compose(withVisible)(RequestPermissions);
+export default compose(withVisible)(RequestPermissions) as unknown as React.ComponentType<
+    Omit<Props, keyof WithVisibleProps>
+>;
 
 function valueWithCheckedFirstChoice(choices: string | any[]) {
     if (!choices || choices.length < 1) {

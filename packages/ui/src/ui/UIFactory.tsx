@@ -25,6 +25,8 @@ import OperationDetailMonitorLinks from './pages/operations/OperationDetail/tabs
 import {PERMISSIONS_SETTINGS} from './constants/acl';
 import {uiSettings} from './config/ui-settings';
 import YT from './config/yt-config';
+import {PreparedAclSubject} from './utils/acl/acl-types';
+import {PreparedRole} from './utils/acl';
 
 type HeaderItemOrPage =
     | {
@@ -89,6 +91,10 @@ export interface OperationMonitoringTabProps {
         pools?: Array<{pool: string; tree: string; slotIndex?: number}>;
     };
 }
+
+export type AclRoleActionsType = Partial<Omit<PreparedAclSubject | PreparedRole, 'type'>> & {
+    type?: string;
+};
 
 export interface UIFactory {
     getClusterAppearance(cluster?: string): undefined | ClusterAppearance;
