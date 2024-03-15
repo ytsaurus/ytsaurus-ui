@@ -124,7 +124,13 @@ export const getEffectiveAcl = (sysPath: string) => {
     });
 };
 
-export const getCombinedAcl = ({sysPath, kind}: {sysPath: string; kind: IdmKindType}) => {
+export const getCombinedAcl = ({
+    sysPath,
+    kind,
+}: {
+    sysPath: string;
+    kind: IdmKindType;
+}): Promise<PreparedAclData> => {
     const aclAttr = getAclAttr(kind);
     const isPrincipalAcl = aclAttr === 'principal_acl';
 
@@ -164,10 +170,11 @@ export const getCombinedAcl = ({sysPath, kind}: {sysPath: string; kind: IdmKindT
         })
         .then((items) => {
             return internalAclWithTypes(items).then((data) => {
-                return {
+                const res: PreparedAclData = {
                     permissions: data.map(convertToUIPermissions),
                     column_groups: [],
                 };
+                return res;
             });
         });
 };

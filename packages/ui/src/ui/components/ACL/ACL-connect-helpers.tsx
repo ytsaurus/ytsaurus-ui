@@ -1,3 +1,5 @@
+import {ConnectedProps, connect} from 'react-redux';
+
 import {
     getAllAccessColumnsNames,
     getAllAccessColumnsPermissionsOrderedByInheritanceAndSubject,
@@ -35,11 +37,17 @@ import {changeColumnsColumns} from '../../store/actions/acl-filters';
 import {getCluster} from '../../store/selectors/global';
 import {normalizeIdmParams} from '../../utils/acl';
 import {IdmObjectType} from '../../constants/acl';
-import {connect} from 'react-redux';
+import {IdmKindType} from '../../utils/acl/acl-types';
+import {RootState} from '../../store/reducers';
+
 import ACL from './ACL';
 
-const makeAclMapStateToProps = (inputIdmKind) => {
-    return (state, ownProps) => {
+export type ACLOwnProps = {
+    path: string;
+};
+
+const makeAclMapStateToProps = (inputIdmKind: IdmKindType) => {
+    return (state: RootState, ownProps: ACLOwnProps) => {
         const normalizedParams = normalizeIdmParams(inputIdmKind, ownProps.path);
         const {
             idmKind,
@@ -134,7 +142,10 @@ const makeAclMapDispatchToProps = () => ({
     deletePermissionsFn: deletePermissions,
 });
 
-const mergeProps = (stateProps, dispatchProps, ownProps) => {
+type StateProps = ReturnType<ReturnType<typeof makeAclMapStateToProps>>;
+type DispatchProps = ReturnType<typeof makeAclMapDispatchToProps>;
+
+function mergeProps(stateProps: StateProps, dispatchProps: DispatchProps, ownProps: ACLOwnProps) {
     const {normalizedPoolTree, aclRequestOptions} = stateProps;
     const {
         loadAclData,
@@ -147,26 +158,34 @@ const mergeProps = (stateProps, dispatchProps, ownProps) => {
         ...ownProps,
         ...stateProps,
         ...restDispatchProps,
-        loadAclData: (params) => {
+        loadAclData: (params: Parameters<typeof loadAclData>[0]) => {
             return loadAclData({...params}, {normalizedPoolTree}, aclRequestOptions);
         },
-        deletePermissionsFn: (params) => {
+        deletePermissionsFn: (params: Parameters<typeof deletePermissionsFn>[0]) => {
             return deletePermissionsFn(params, {normalizedPoolTree});
         },
-        userPermissionsRequestFn: (params) => {
+        userPermissionsRequestFn: (params: Parameters<typeof userPermissionsRequestFn>[0]) => {
             return userPermissionsRequestFn(params, {normalizedPoolTree});
         },
-        userPermissionsUpdateAcl: (params) => {
+        userPermissionsUpdateAcl: (params: Parameters<typeof userPermissionsUpdateAcl>[0]) => {
             return userPermissionsUpdateAcl(params, {normalizedPoolTree});
         },
     };
-};
+}
 
-function createACLComponent(idmKind) {
+function createACLConnector(idmKind: IdmKindType) {
     const mapStateToProps = makeAclMapStateToProps(idmKind);
     const mapDispatchToProps = makeAclMapDispatchToProps();
-    return connect(mapStateToProps, mapDispatchToProps, mergeProps)(ACL);
+    return connect(mapStateToProps, mapDispatchToProps, mergeProps);
 }
+
+function createACLComponent(idmKind: IdmKindType) {
+    return createACLConnector(idmKind)(ACL) as unknown as React.ComponentType<{path: string}>;
+}
+
+type ConnectorType = ReturnType<typeof createACLConnector>;
+
+export type ACLReduxProps = ConnectedProps<ConnectorType>;
 
 export const AccessContentAcl = createACLComponent(IdmObjectType.ACCESS_CONTROL_OBJECT);
 
