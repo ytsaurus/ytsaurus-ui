@@ -10,29 +10,41 @@ import {
 import UIFactory from '../../UIFactory';
 import {RootState} from '../../store/reducers';
 import {IdmKindType, PreparedAclSubject} from '../../utils/acl/acl-types';
-import {PreparedRole} from '../../utils/acl';
 import {YTPermissionTypeUI} from '../../utils/acl/acl-api';
+import {PreparedRole} from '../../utils/acl';
 //import {ResponsibleType} from '../../utils/acl/acl-types';
 
-function prepareColumnsNames<T extends {columns?: unknown}>(columnsPermissions: Array<T>) {
+export type PreparedAclSubjectColumn = Omit<PreparedAclSubject, 'type'> & {type: 'columns'};
+
+function prepareColumnsNames(columnsPermissions: Array<{columns?: Array<string>}>) {
     const columns = _.map(columnsPermissions, (permission) => permission.columns);
 
-    return _.uniq(_.flatten(columns));
+    return _.compact(_.uniq(_.flatten(columns)));
 }
 
-const prepareSubjects = (
-    subjects: Array<PreparedRole> | undefined,
+function prepareApprovers(
+    approvers: Array<PreparedRole> | undefined,
     type: 'read_approver' | 'responsible' | 'auditor',
-) => {
-    return _.map(subjects, (subject) => ({
-        ...subject,
-        type,
-        subjects: [subject.value],
-        subjectType: subject.type === 'users' ? ('user' as const) : ('group' as const),
-        groupInfo:
-            subject.type === 'groups' ? {name: subject.group_name, url: subject.url} : undefined,
-    }));
-};
+) {
+    return _.map(approvers, (subject) => {
+        const extra = {
+            type,
+            subjects: [subject.value],
+            subjectType: subject.type === 'users' ? ('user' as const) : ('group' as const),
+            groupInfo:
+                subject.type === 'groups'
+                    ? {name: subject.group_name, url: subject.url, group: undefined}
+                    : undefined,
+            action: undefined,
+        };
+        return {
+            ...subject,
+            ...extra,
+        };
+    });
+}
+
+export type PreparedApprover = ReturnType<typeof prepareApprovers>[number];
 
 export const getAllUserPermissions = (state: RootState, idmKind: IdmKindType) =>
     state.acl[idmKind].userPermissions;
@@ -214,9 +226,9 @@ const getAllApprovers = createSelector(
     [getReadApprovers, getResponsibles, getAuditors],
     (readApprovers, responsibles, auditros) => {
         return [
-            ...prepareSubjects(readApprovers, 'read_approver'),
-            ...prepareSubjects(responsibles, 'responsible'),
-            ...prepareSubjects(auditros, 'auditor'),
+            ...prepareApprovers(readApprovers, 'read_approver'),
+            ...prepareApprovers(responsibles, 'responsible'),
+            ...prepareApprovers(auditros, 'auditor'),
         ];
     },
 );
@@ -242,10 +254,12 @@ export const getAllAccessColumnsPermissions = createSelector(
             objectPermissions,
             (permission) => permission.action === 'allow' && permission.columns?.length! > 0,
         );
-        return _.map(filteredPermissions, (permission) => ({
-            ...permission,
-            type: 'columns',
-        }));
+
+        return _.map(filteredPermissions, (item) => {
+            const tmp: typeof item = {...item};
+            tmp.type = 'columns';
+            return tmp;
+        });
     },
 );
 
@@ -262,10 +276,14 @@ const getAllDenyColumnsPermissions = createSelector(
             (permission) => permission.action === 'deny' && permission.columns?.length! > 0,
         );
 
-        return _.map(filteredPermissions, (permission) => ({
-            ...permission,
-            type: 'columns',
-        }));
+        return _.map(
+            filteredPermissions,
+            (permission) =>
+                ({
+                    ...permission,
+                    type: 'columns',
+                } as PreparedAclSubjectColumn),
+        );
     },
 );
 

@@ -12,7 +12,7 @@ import RoleListControl, {
     roleListValueToSubjectList,
 } from '../../../components/Dialog/controls/RoleListControl/RoleListControl';
 
-import {IdmKindType, RoleConverted} from '../../../utils/acl/acl-types';
+import {IdmKindType} from '../../../utils/acl/acl-types';
 import {PreparedRole} from '../../../utils/acl';
 import {YTError} from '../../../types';
 
@@ -26,6 +26,7 @@ import withVisible, {WithVisibleProps} from '../../../hocs/withVisible';
 import './ManageAcl.scss';
 import UIFactory from '../../../UIFactory';
 import ErrorBlock from '../../Block/Block';
+import {ACLReduxProps} from '../ACL-connect-helpers';
 
 const block = cn('acl-manage');
 
@@ -43,21 +44,21 @@ interface Props extends WithVisibleProps {
     className?: string;
     path: string;
     idmKind: IdmKindType;
-    version: string;
+    version?: string;
     normalizedPoolTree?: string;
     loading: boolean;
-    auditors: Array<RoleConverted>;
-    responsible: Array<RoleConverted>;
-    readApprovers: Array<RoleConverted>;
-    disableInheritanceResponsible?: PreparedRole;
+    auditors: Array<PreparedRole>;
+    responsible: Array<PreparedRole>;
+    readApprovers: Array<PreparedRole>;
+    disableInheritanceResponsible?: boolean | PreparedRole;
     bossApproval?: PreparedRole;
-    inheritAcl: boolean;
+    inheritAcl?: boolean | PreparedRole;
     error: boolean;
-    manageAclError: YTError;
+    manageAclError?: YTError;
     errorData?: YTError;
-    loadAclData: (args: {path: string; idmKind: string}) => void;
-    updateAcl: (args: unknown) => Promise<void>;
-    cancelUpdateAcl: (args: {idmKind: string}) => void;
+    loadAclData: (args: {path: string; idmKind: IdmKindType}) => void;
+    updateAcl: (...args: Parameters<ACLReduxProps['userPermissionsUpdateAcl']>) => Promise<void>;
+    cancelUpdateAcl: (args: {idmKind: IdmKindType}) => void;
 }
 
 interface FormValues {
@@ -67,6 +68,7 @@ interface FormValues {
     inheritanceResponsible: boolean;
     bossApproval: boolean;
     inheritAcl: boolean;
+    comment?: string;
 }
 
 function ManageAcl(props: Props) {
@@ -277,4 +279,6 @@ function ManageAcl(props: Props) {
     );
 }
 
-export default compose(withVisible)(ManageAcl);
+export default compose(withVisible)(ManageAcl) as unknown as React.ComponentType<
+    Omit<Props, keyof WithVisibleProps>
+>;

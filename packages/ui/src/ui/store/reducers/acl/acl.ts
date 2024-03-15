@@ -26,7 +26,7 @@ export type AclKindState = {
     columnGroups: Array<ColumnGroup>;
     inheritAcl: boolean;
 
-    bossApproval: boolean | PreparedRole | undefined;
+    bossApproval: PreparedRole | undefined;
     disableAclInheritance: boolean | PreparedRole | undefined;
     disableInheritanceResponsible: boolean | PreparedRole | undefined;
     auditors: Array<PreparedRole> | undefined;
@@ -53,7 +53,7 @@ const ephemeralState: AclKindState = {
     objectPermissions: [],
     columnGroups: [],
     inheritAcl: false,
-    bossApproval: false,
+    bossApproval: undefined,
     disableAclInheritance: false,
     disableInheritanceResponsible: false,
     auditors: [],

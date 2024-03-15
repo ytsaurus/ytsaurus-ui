@@ -1,65 +1,58 @@
 import React, {Component, Fragment} from 'react';
-import PropTypes from 'prop-types';
 import hammer from '../../../common/hammer';
 import cn from 'bem-cn-lite';
 import _ from 'lodash';
 
-import CollapsibleList from '../../../components/CollapsibleList/CollapsibleList';
-import ErrorBoundary from '../../../components/ErrorBoundary/ErrorBoundary';
-import Icon from '../../../components/Icon/Icon';
+import CollapsibleList from '../../CollapsibleList/CollapsibleList';
+import ErrorBoundary from '../../ErrorBoundary/ErrorBoundary';
+import Icon from '../../Icon/Icon';
 import {IdmObjectType} from '../../../constants/acl';
 
 import RequestPermissions from '../RequestPermissions/RequestPermissions';
 import ManageAcl from '../ManageAcl/ManageAcl';
+import {ACLReduxProps} from '../ACL-connect-helpers';
+import {IdmKindType} from '../../../utils/acl/acl-types';
 
 import './UserPermissions.scss';
 
 const block = cn('acl-user-permissions');
 
-export default class UserPermissions extends Component {
-    static PermissionsType = PropTypes.arrayOf(
-        PropTypes.shape({
-            type: PropTypes.string.isRequired,
-            action: PropTypes.string.isRequired,
-        }),
-    ).isRequired;
+type Props = Pick<
+    ACLReduxProps,
+    | 'path'
+    | 'cluster'
+    | 'version'
+    | 'loadAclData'
+    | 'loaded'
+    | 'loading'
+    | 'error'
+    | 'errorData'
+    | 'responsible'
+    | 'auditors'
+    | 'readApprovers'
+    | 'bossApproval'
+    | 'disableInheritanceResponsible'
+> & {
+    className?: string;
+    idmKind: IdmKindType;
 
-    static propTypes = {
-        // from parent
-        cluster: PropTypes.string,
-        className: PropTypes.string,
-        path: PropTypes.string.isRequired,
-        idmKind: PropTypes.string.isRequired,
-        version: PropTypes.string,
+    permissions: ACLReduxProps['userPermissions'];
+    accessColumns: ACLReduxProps['userPermissionsAccessColumns'];
 
-        permissions: UserPermissions.PermissionsType,
-        accessColumns: PropTypes.arrayOf(PropTypes.string).isRequired,
+    // for RequestPermissions
+    requestPermissions: ACLReduxProps['userPermissionsRequestFn'];
+    requestPermissionsError: ACLReduxProps['userPermissionsRequestError'];
+    cancelRequestPermissions: ACLReduxProps['userPermissionsCancelRequestFn'];
 
-        // for RequestPermissions
-        requestPermissions: PropTypes.func.isRequired,
-        requestPermissionsError: PropTypes.any,
-        cancelRequestPermissions: PropTypes.func.isRequired,
+    // for ManageAcl
+    inheritAcl: ACLReduxProps['disableAclInheritance'];
 
-        // for ManageAcl
-        loadAclData: PropTypes.func.isRequired,
-        loading: PropTypes.bool.isRequired,
-        loaded: PropTypes.bool.isRequired,
-        error: PropTypes.bool.isRequired,
-        errorData: PropTypes.object.isRequired,
+    updateAcl: ACLReduxProps['userPermissionsUpdateAcl'];
+    updateAclError: ACLReduxProps['userPermissionsUpdateAclError'];
+    cancelUpdateAcl: ACLReduxProps['userPermissionsCancelUpdateAcl'];
+};
 
-        inheritAcl: PropTypes.bool,
-        bossApproval: PropTypes.object,
-        disableInheritanceResponsible: PropTypes.object,
-
-        auditors: PropTypes.arrayOf(PropTypes.object),
-        readApprovers: PropTypes.arrayOf(PropTypes.object),
-        responsible: PropTypes.arrayOf(PropTypes.object),
-
-        updateAcl: PropTypes.func.isRequired,
-        updateAclError: PropTypes.object,
-        cancelUpdateAcl: PropTypes.func.isRequired,
-    };
-
+export default class UserPermissions extends Component<Props> {
     renderPermissions() {
         const {permissions} = this.props;
 
@@ -121,20 +114,16 @@ export default class UserPermissions extends Component {
         );
     }
 
-    requestPermissions = (...args) => {
+    requestPermissions = async (...args: Parameters<ACLReduxProps['userPermissionsRequestFn']>) => {
         const {requestPermissions, loadAclData, path, idmKind} = this.props;
-        return requestPermissions(...args).then((d) => {
-            loadAclData({path, idmKind});
-            return d;
-        });
+        await requestPermissions(...args);
+        await loadAclData({path, idmKind});
     };
 
-    updateAcl = (...args) => {
+    updateAcl = async (...args: Parameters<ACLReduxProps['userPermissionsUpdateAcl']>) => {
         const {updateAcl, loadAclData, path, idmKind} = this.props;
-        return updateAcl(...args).then((d) => {
-            loadAclData({path, idmKind});
-            return d;
-        });
+        await updateAcl(...args);
+        await loadAclData({path, idmKind});
     };
 
     render() {
@@ -148,7 +137,6 @@ export default class UserPermissions extends Component {
 
             loadAclData,
             loading,
-            loaded,
             error,
             errorData,
 
@@ -184,7 +172,6 @@ export default class UserPermissions extends Component {
                             <ManageAcl
                                 loadAclData={loadAclData}
                                 loading={loading}
-                                loaded={loaded}
                                 error={error}
                                 errorData={errorData}
                                 path={path}

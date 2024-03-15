@@ -231,6 +231,8 @@ export type PreparedAclSubject = TypedAclSubject & {
     isSplitted?: boolean;
     subjectIndex?: number;
     vital?: boolean;
+
+    type?: 'columns';
 };
 
 export type ResponsibleType =
@@ -242,7 +244,7 @@ export interface UpdateAclParams {
     idmKind: IdmKindType;
     responsible?: Array<ResponsibleType>;
     auditors?: Array<ResponsibleType>;
-    bossApproval?: Array<ResponsibleType>;
+    bossApproval?: boolean;
     readApprovers?: Array<ResponsibleType>;
     disableInheritance?: boolean;
     inheritAcl?: boolean;
