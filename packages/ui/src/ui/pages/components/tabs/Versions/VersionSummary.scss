@@ -50,11 +50,20 @@
             background-color: var(--light-background);
         }
     }
-}
 
-.hide-offline-checkbox {
-    position: relative;
-    top: -33px;
-    right: 10px;
-    float: right;
+    &__monitoring-link {
+        display: flex;
+        align-items: center;
+        gap: 0 4px;
+    }
+
+    &__header-actions {
+        display: flex;
+        align-items: center;
+        gap: 0 10px;
+        position: relative;
+        right: 10px;
+        top: -33px;
+        float: right;
+    }
 }

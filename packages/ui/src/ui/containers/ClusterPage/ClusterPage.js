@@ -11,7 +11,7 @@ import Components from '../../pages/components/Components/Components';
 import Operations from '../../pages/operations/Operations/Operations';
 import Accounts from '../../pages/accounts/Accounts/Accounts';
 import Dashboard from '../../pages/dashboard/Dashboard/Dashboard';
-import System from '../../pages/system/System/System';
+import {System} from '../../pages/system/System/System';
 import Navigation from '../../pages/navigation/Navigation/Navigation';
 import PathViewer from '../../pages/path-viewer/PathViewer';
 import Tablet from '../../pages/tablet/Tablet';

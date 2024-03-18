@@ -28,6 +28,9 @@ import {VersionCellWithAction} from './VersionCell';
 import {VersionSummaryItem} from '../../../../store/reducers/components/versions/versions_v2';
 
 import './VersionSummary.scss';
+import UIFactory from '../../../../UIFactory';
+import {getCluster} from '../../../../store/selectors/global';
+import {formatByParams} from '../../../../utils/format';
 
 const block = cn('versions-summary');
 
@@ -151,17 +154,28 @@ class VersionsSummary extends React.Component<Props> {
             ...visibleColumns.map((item) => this.makeColumnInfo(item)),
         ];
 
-        const {items, loading, loaded, checkedHideOffline} = this.props;
+        const {items, loading, loaded, cluster, checkedHideOffline} = this.props;
+        const monitoringLink = UIFactory.getVersionMonitoringLink(cluster);
 
         return (
             <div className={block()}>
-                <Checkbox
-                    className={'hide-offline-checkbox'}
-                    title={'Hide offline'}
-                    content={'Hide offline'}
-                    defaultChecked={checkedHideOffline}
-                    onUpdate={this.handleHideOffline}
-                />
+                <div className={block('header-actions')}>
+                    {monitoringLink && (
+                        <Link
+                            url={formatByParams(monitoringLink.urlTemplate, {ytCluster: cluster})}
+                            target="_blank"
+                            className={block('monitoring-link')}
+                        >
+                            {monitoringLink.title || 'Monitoring'} <Icon awesome="external-link" />
+                        </Link>
+                    )}
+                    <Checkbox
+                        title={'Hide offline'}
+                        content={'Hide offline'}
+                        defaultChecked={checkedHideOffline}
+                        onUpdate={this.handleHideOffline}
+                    />
+                </div>
                 <DataTableYT
                     loaded={loaded}
                     loading={loading}
@@ -201,6 +215,7 @@ class VersionsSummary extends React.Component<Props> {
 
 const mapStateToProps = (state: RootState) => {
     const {loading, loaded} = state.components.versionsV2;
+    const cluster = getCluster(state);
 
     const items = getVersionsSummaryData(state);
     const sortState = getSummarySortState(state);
@@ -210,6 +225,7 @@ const mapStateToProps = (state: RootState) => {
     return {
         loading: loading as boolean,
         loaded: loaded as boolean,
+        cluster,
         items,
         sortState,
         checkedHideOffline: getHideOfflineValue(state),
