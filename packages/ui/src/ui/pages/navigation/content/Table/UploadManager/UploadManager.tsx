@@ -1,44 +1,42 @@
-import React from 'react';
-import _ from 'lodash';
-import {compose} from 'redux';
 import axios, {AxiosProgressEvent} from 'axios';
 import cn from 'bem-cn-lite';
+import _ from 'lodash';
+import React from 'react';
+import {compose} from 'redux';
 
 // @ts-ignore
 import yt from '@ytsaurus/javascript-wrapper/lib/yt';
 
-import format from '../../../../../common/hammer/format';
-
-import withVisible, {WithVisibleProps} from '../../../../../hocs/withVisible';
+import {Progress} from '@gravity-ui/uikit';
+import {ConnectedProps, connect} from 'react-redux';
+import hammer from '../../../../../common/hammer';
+import Error from '../../../../../components/Block/Block';
 import Button from '../../../../../components/Button/Button';
+import {DialogField, YTDFDialog} from '../../../../../components/Dialog/Dialog';
 import Icon from '../../../../../components/Icon/Icon';
 import Modal from '../../../../../components/Modal/Modal';
-
+import withVisible, {WithVisibleProps} from '../../../../../hocs/withVisible';
 import {getPath} from '../../../../../store/selectors/navigation';
-import {ConnectedProps, connect} from 'react-redux';
-import Error from '../../../../../components/Block/Block';
-import {DialogField, YTDFDialog} from '../../../../../components/Dialog/Dialog';
-import {Progress} from '@gravity-ui/uikit';
 
-import hammer from '../../../../../common/hammer';
-
-import './UploadManager.scss';
-import {updateView} from '../../../../../store/actions/navigation';
-import FilePicker from '../../../../../components/FilePicker/FilePicker';
-import {getSchema} from '../../../../../store/selectors/navigation/tabs/schema';
-import {getCluster, getCurrentClusterConfig} from '../../../../../store/selectors/global';
-import {RootState} from '../../../../../store/reducers';
-import {getXsrfCookieName} from '../../../../../utils';
-import {docsUrl, getConfigUploadTable} from '../../../../../config';
-import HelpLink from '../../../../../components/HelpLink/HelpLink';
-import CancelHelper from '../../../../../utils/cancel-helper';
 import UIFactory from '../../../../../UIFactory';
-
+import HelpLink from '../../../../../components/HelpLink/HelpLink';
+import {docsUrl, getConfigUploadTable} from '../../../../../config';
+import {updateView} from '../../../../../store/actions/navigation';
+import {RootState} from '../../../../../store/reducers';
+import {getCluster, getCurrentClusterConfig} from '../../../../../store/selectors/global';
+import {getSchema} from '../../../../../store/selectors/navigation/tabs/schema';
+import {getXsrfCookieName} from '../../../../../utils';
+import CancelHelper from '../../../../../utils/cancel-helper';
+import {DragAndDrop} from './DragAndDrop/DragAndDrop';
+import {FileFormats} from './DragAndDrop/types';
+import './UploadManager.scss';
 const block = cn('upload-manager');
 
 type PropsFromRedux = ConnectedProps<typeof connector>;
 
 type Props = PropsFromRedux & WithVisibleProps;
+
+type FileType = Exclude<FileFormats, 'xls' | 'png' | 'pdf'>;
 
 interface State {
     hasUpcomingFile: boolean;
@@ -46,7 +44,7 @@ interface State {
     error?: any;
 
     file: File | null;
-    fileType: FileType;
+    fileType: FileType | null;
     append: boolean;
 
     // xlsx
@@ -73,8 +71,6 @@ const WRITE_ATTRIBUTES = {
     },
     xlsx: {},
 };
-
-type FileType = 'json' | 'yson' | 'yamr' | 'dsv' | 'schemaful_dsv' | 'xlsx';
 
 const FILE_TYPES: Array<{value: FileType; text: FileType}> = [
     {value: 'json', text: 'json'},
@@ -111,44 +107,36 @@ class UploadManager extends React.Component<Props, State> {
     private cancelHelper = new CancelHelper();
 
     renderContent() {
-        const {hasUpcomingFile, file, error} = this.state;
+        const {progress, file, error} = this.state;
         return (
-            <React.Fragment>
-                <div
-                    className={block('drag-area', {
-                        dropable: hasUpcomingFile,
-                        empty: !file,
-                    })}
-                    onDrop={this.onDrop}
-                    onDragEnter={this.onDragEnter}
-                    onDragLeave={this.onDragLeave}
-                    onDragOver={this.onDragOver}
-                >
-                    {file ? (
-                        this.renderFileContent(file)
-                    ) : (
-                        <div>
-                            <div>Drag a file here</div>
-                            or
-                            <div>
-                                <FilePicker onChange={this.onFile}>Pick a file</FilePicker>
-                            </div>
-                        </div>
-                    )}
-                </div>
-                {error && <Error error={error} message={'The file upload has failed'} />}
-            </React.Fragment>
+            <DragAndDrop
+                file={file}
+                availableFormats={FILE_TYPES.map((type) => type.value) ?? []}
+                progress={progress}
+                error={error}
+                onFileChange={this.onFileChange}
+                onError={this.onError}
+                renderFileContent={this.renderFileContent}
+            />
         );
     }
 
-    renderFileContent(file: File) {
+    onError = (error: string | null) => {
+        this.setState({error: error !== null ? new Error(error) : null});
+    };
+
+    onFileChange = (file: File | null, _: string, fileType: FileType | null) => {
+        this.setState({file, fileType});
+    };
+
+    renderFileContent = (file: File) => {
         return (
             <React.Fragment>
                 {this.renderSettings(file)}
                 {this.renderProgress()}
             </React.Fragment>
         );
-    }
+    };
 
     renderSettings(file: File) {
         const inProgress = this.inProgress();
@@ -273,9 +261,8 @@ class UploadManager extends React.Component<Props, State> {
             </React.Fragment>
         );
     }
-
     onReset = () => {
-        this.onFile(null);
+        this.onFileChange(null, '', null);
         this.setState({error: null});
     };
 
@@ -317,102 +304,36 @@ class UploadManager extends React.Component<Props, State> {
         return progress.inProgress;
     }
 
-    onDragOver = (event: React.DragEvent<HTMLDivElement>) => {
-        event.preventDefault();
-        event.stopPropagation();
-
-        if (this.inProgress()) {
-            return;
-        }
-
-        if (!this.state.hasUpcomingFile) {
-            this.setState({hasUpcomingFile: true});
-        }
-    };
-
-    onDrop = (event: React.DragEvent<HTMLDivElement>) => {
-        event.preventDefault();
-        event.stopPropagation();
-
-        if (this.inProgress()) {
-            return;
-        }
-
-        const {files} = event.dataTransfer;
-        if (!files) {
-            return;
-        }
-
-        this.onFile(files);
-    };
-
-    onFile = (files: FileList | null) => {
-        const file = files && files[0];
-        this.setState({file, hasUpcomingFile: false});
-        if (file) {
-            const lastDotIndex = file.name.lastIndexOf('.');
-            const extStr = file.name.substr(lastDotIndex + 1);
-            const item = FILE_TYPES.find(({value}) => value === extStr);
-            if (item) {
-                this.setState({fileType: item.value});
-            }
-
-            const fileError = this.checkFile(file);
-            if (fileError) {
-                this.setState({error: {message: fileError}});
-            }
-        }
-    };
-
-    onDragEnter = () => {
-        if (!this.inProgress()) {
-            this.setState({hasUpcomingFile: true});
-        }
-    };
-
-    onDragLeave = () => {
-        if (!this.inProgress()) {
-            this.setState({hasUpcomingFile: false});
-        }
-    };
-
-    renderConfirm = () => {
-        const fileError = this.checkFile(this.state.file);
+    renderConfirm = (className: string) => {
+        const {
+            progress: {inProgress},
+            error,
+            file,
+        } = this.state;
         return (
             <Button
-                className={block('confirm')}
+                className={block('confirm', className)}
                 size="m"
                 view="action"
                 title="Upload"
-                disabled={Boolean(fileError) || this.inProgress()}
-                onClick={this.onConfirm}
+                disabled={!file || Boolean(error) || inProgress}
+                onClick={this.onXlsxUpload}
             >
                 Upload
             </Button>
         );
     };
 
-    checkFile(file: State['file']): string | null {
-        if (!file) {
-            return 'file is not selected';
-        }
-
-        if (file.size > UPLOAD_CONFIG.uploadTableMaxSize) {
-            return `File size must not be greater than ${format.Bytes(
-                UPLOAD_CONFIG.uploadTableMaxSize,
-            )}`;
-        }
-
-        return null;
-    }
-
     renderClose = (className: string) => {
+        const {
+            progress: {inProgress},
+        } = this.state;
         return (
             <Button
-                className={block('close', className)}
+                className={block('confirm', className)}
                 size="m"
                 title="Close"
-                disabled={this.inProgress()}
+                disabled={inProgress}
                 onClick={this.handleClose}
             >
                 Close
@@ -427,9 +348,10 @@ class UploadManager extends React.Component<Props, State> {
         if (fileType === 'schemaful_dsv') {
             withColumns.columns = _.map(schema, ({name}) => name);
         }
+
         return {
             ...withColumns,
-            ...WRITE_ATTRIBUTES[fileType],
+            ...WRITE_ATTRIBUTES[fileType ?? 'json'],
         };
     }
 

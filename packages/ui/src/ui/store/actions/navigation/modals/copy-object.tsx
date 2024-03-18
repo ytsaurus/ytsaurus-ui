@@ -5,16 +5,16 @@ import yt from '@ytsaurus/javascript-wrapper/lib/yt';
 import {Toaster} from '@gravity-ui/uikit';
 import Link from '../../../../components/Link/Link';
 
-import {COPY_OBJECT} from '../../../../constants/navigation/modals/copy-object';
-import {showErrorInModal} from '../../../../store/actions/navigation/modals/path-editing-popup';
-import {HIDE_ERROR} from '../../../../constants/navigation/modals/path-editing-popup';
-import {prepareDestinationPath, preparePath} from '../../../../utils/navigation';
-import CancelHelper from '../../../../utils/cancel-helper';
 import _ from 'lodash';
-import {executeBatchWithRetries} from '../../execute-batch';
-import {YTApiId} from '../../../../rum/rum-wrap-api';
-import {wrapBatchPromise} from '../../../../utils/utils';
 import {Dispatch} from 'redux';
+import {COPY_OBJECT} from '../../../../constants/navigation/modals/copy-object';
+import {HIDE_ERROR} from '../../../../constants/navigation/modals/path-editing-popup';
+import {YTApiId} from '../../../../rum/rum-wrap-api';
+import {showErrorInModal} from '../../../../store/actions/navigation/modals/path-editing-popup';
+import CancelHelper from '../../../../utils/cancel-helper';
+import {prepareDestinationPath, preparePath} from '../../../../utils/navigation';
+import {wrapBatchPromise} from '../../../../utils/utils';
+import {executeBatchWithRetries} from '../../execute-batch';
 
 const requests = new CancelHelper();
 const toaster = new Toaster();
@@ -107,6 +107,7 @@ export function copyObject(
     multipleMode: boolean,
     items: Array<{path: string; titleUnquoted: string}>,
     {preserve_account}: CopyOptions,
+    onReset: () => void,
 ) {
     return (dispatch: Dispatch) => {
         dispatch({type: COPY_OBJECT.REQUEST});
@@ -133,6 +134,7 @@ export function copyObject(
                         : 'Object was successfully copied',
                     content: <Link url={`navigation?path=${copyingPath}`}>{copyingPath}</Link>,
                 });
+                onReset();
             })
             .catch((error) => {
                 if (error.code === yt.codes.CANCELLED) {

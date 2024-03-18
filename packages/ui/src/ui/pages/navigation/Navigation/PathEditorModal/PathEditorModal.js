@@ -160,6 +160,7 @@ class PathEditorModal extends Component {
                 title={modalTitle}
                 content={content}
                 visible={visible}
+                size="s"
             />
         );
     }

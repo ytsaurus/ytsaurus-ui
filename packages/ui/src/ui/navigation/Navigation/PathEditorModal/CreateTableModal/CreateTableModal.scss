@@ -3,6 +3,31 @@
         min-height: 470px;
     }
 
+    .yc-dialog-header {
+        padding: 20px;
+
+
+        &__caption {
+            .df-dialog {
+                &__caption {
+                    font-size: 16px;
+                    font-weight: 600;
+                }
+            }
+        }
+
+    }
+
+    .yc-dialog-footer {
+        padding: 20px;
+    }
+
+    .df-dialog {
+        &__tabs-content.df-dialog__tabs-content_with_vertical_tabs {
+            padding: 20px;
+        }
+    }
+
     &__title {
         font-size: var(--g-text-subheader-3-font-size);
     }
