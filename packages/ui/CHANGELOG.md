@@ -1,5 +1,16 @@
 # Changelog
 
+## [1.22.2](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.22.1...ui-v1.22.2) (2024-03-18)
+
+
+### Bug Fixes
+
+* **CHYT/CreateModal:** use RangeInputPicker for 'Instances count' field [YTFRONT-3863] ([efdf7a5](https://github.com/ytsaurus/ytsaurus-ui/commit/efdf7a5b883381d1081acf3dc8fce8a28c4a077b))
+* **CHYT:** default pool tree should be loaded properly [YTFRONT-3683] ([4ef42f4](https://github.com/ytsaurus/ytsaurus-ui/commit/4ef42f4597961af707ddeecd73eb36f751270e88))
+* **CHYT:** minor fixes [YTFRONT-3863] ([fedd43d](https://github.com/ytsaurus/ytsaurus-ui/commit/fedd43dae9928c298da02fb60d427a91c9143245))
+* **main:** Added missing used deps to package.json ([be505ec](https://github.com/ytsaurus/ytsaurus-ui/commit/be505ec0a489406a5dfda6503cbf52ad23b475f9))
+* use var(--yt-font-weight) css variable ([847ba30](https://github.com/ytsaurus/ytsaurus-ui/commit/847ba308553e18507053800c888bfc5586a1815b))
+
 ## [1.22.1](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.22.0...ui-v1.22.1) (2024-03-17)
 
 
