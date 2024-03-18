@@ -76,12 +76,32 @@ export interface UISettings {
      * chytMonitoring.urlTemplate supports following parameters:
      *   - {ytCluster}
      *   - {chytAlias}
-     * All the parameters are optional and the are replaced with corresponding values
+     * All the parameters are optional and they are replaced with corresponding values
      * @example {
      *   urlTemplate: `https://my.monitoring.service/chyt?cluster={ytCluster}&alias={chytAlias}`
      * }
      */
     chytMonitoring?: UISettingsMonitoring;
+
+    /**
+     * systemMonitoring.urlTemplate supports following parameters:
+     *  - {ytCluster}
+     *  All the parameters are optional and they are replaced with corresponding values
+     *  @example {
+     *      urlTemplate: 'https://my.monitoring.service/system?cluster={ytCluster}'
+     *  }
+     */
+    systemMonitoring?: UISettingsMonitoring;
+
+    /**
+     * componentVersionsMonitoring.urlTemplate supports following parameters:
+     *  - {ytCluster}
+     *  All the parameters are optional and they are replaced with corresponding values
+     *  @example {
+     *      urlTemplate: 'https://my.monitoring.service/component-versions?cluster={ytCluster}'
+     *  }
+     */
+    componentVersionsMonitoring?: UISettingsMonitoring;
 
     /**
      * Allows to define regular expression to extract hash-part from version of node by named group 'hash'
