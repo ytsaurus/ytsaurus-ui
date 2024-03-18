@@ -64,6 +64,9 @@
     "@gravity-ui/expresskit": "^1.0.0",
     "@gravity-ui/navigation": "^1.8.0",
     "@gravity-ui/nodekit": "^1.0.0",
+    "@gravity-ui/i18n": "^1.0.0",
+    "@gravity-ui/icons": "^2.4.0",
+    "@gravity-ui/date-utils": "^1.4.1",
     "@types/rbush": "^3.0.0",
     "@ytsaurus/interface-helpers": "^0.3.0",
     "@ytsaurus/javascript-wrapper": "^0.7.1",
@@ -81,7 +84,12 @@
     "source-map-support": "0.5.21",
     "type-is": "1.6.18",
     "vis-data": "^7.1.7",
-    "zod": "^3.21.4"
+    "zod": "^3.21.4",
+    "prop-types": "^15.6.0",
+    "d3-shape": "3",
+    "d3-scale": "4",
+    "d3-selection": "3",
+    "colord": "^2.9.1"
   },
   "devDependencies": {
     "@gravity-ui/app-builder": "^0.7.0",
@@ -90,8 +98,6 @@
     "@gravity-ui/dashkit": "^6.0.0",
     "@gravity-ui/dialog-fields": "^4.3.1",
     "@gravity-ui/eslint-config": "^2.2.0",
-    "@gravity-ui/i18n": "^1.0.0",
-    "@gravity-ui/icons": "^2.4.0",
     "@gravity-ui/prettier-config": "^1.1.0",
     "@gravity-ui/react-data-table": "^1.2.0",
     "@gravity-ui/stylelint-config": "^3.0.0",
