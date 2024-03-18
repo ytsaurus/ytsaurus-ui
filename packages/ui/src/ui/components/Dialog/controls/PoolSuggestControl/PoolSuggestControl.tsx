@@ -1,4 +1,5 @@
 import React from 'react';
+
 import _ from 'lodash';
 import cn from 'bem-cn-lite';
 import axios from 'axios';
@@ -11,6 +12,7 @@ import Suggest from '../../../../components/Suggest/Suggest';
 
 import {YTApiId, ytApiV3Id} from '../../../../rum/rum-wrap-api';
 import {wrapApiPromiseByToaster} from '../../../../utils/utils';
+import {usePoolTreeOrLoadDefault} from '../../../../hooks/global-pool-trees';
 
 import './PoolSuggestControl.scss';
 
@@ -57,8 +59,12 @@ export function PoolSuggestControl(props: Props) {
 
     const loadedPools = useLoadedPools(cluster, poolTree);
 
-    React.useEffect(() => {
-        loadedPools.then(({names, tree}) => {
+    React.useEffect(
+        function onPoolLoaded() {
+            const {names, tree} = loadedPools;
+            if (!tree) {
+                return;
+            }
             const noRoot = _.filter(names, (item) => '<Root>' !== item);
             const valueIndex = _.indexOf(noRoot, value);
             if (value && -1 === valueIndex) {
@@ -68,8 +74,10 @@ export function PoolSuggestControl(props: Props) {
             if (calculateValueOnPoolsLoaded) {
                 onChange(calculateValueOnPoolsLoaded({loadedPoolNames: noRoot}));
             }
-        });
-    }, [loadedPools, setPoolNames, onChange]);
+        },
+        // value should not affect the useEffect
+        [loadedPools, setPoolNames, onChange, calculateValueOnPoolsLoaded /*, value */],
+    );
 
     const getItems = React.useCallback(
         (_items: unknown, filter?: string) => {
@@ -86,7 +94,7 @@ export function PoolSuggestControl(props: Props) {
             const res = _.slice(poolNames, from, to);
             return res;
         },
-        [poolNames, value],
+        [poolNames],
     );
 
     return (
@@ -111,26 +119,25 @@ PoolSuggestControl.isEmpty = (value: Props['value']) => {
     return !value;
 };
 
-function useLoadedPools(
-    cluster?: string,
-    poolTree = '',
-): Promise<{names: Array<string>; tree: string}> {
-    return React.useMemo(() => {
+function useLoadedPools(cluster?: string, poolTree = ''): {names: Array<string>; tree?: string} {
+    const [result, setResult] = React.useState<{names: Array<string>; tree?: string}>({names: []});
+
+    const currentClusterTree = usePoolTreeOrLoadDefault(poolTree);
+
+    React.useMemo(() => {
         if (cluster) {
-            return wrapApiPromiseByToaster(
-                axios.get(`/api/pool-names/${cluster}?poolTree=${poolTree}`),
-                {
-                    skipSuccessToast: true,
-                    toasterName: 'load-pool-names',
-                    errorTitle: 'Failed to load pools',
-                },
-            ).then(({data}) => {
-                return data;
+            wrapApiPromiseByToaster(axios.get(`/api/pool-names/${cluster}?poolTree=${poolTree}`), {
+                skipSuccessToast: true,
+                toasterName: 'load-pool-names',
+                errorTitle: 'Failed to load pools',
+            }).then(({data}) => {
+                setResult(data);
             });
-        } else {
-            return wrapApiPromiseByToaster(
+        } else if (poolTree || currentClusterTree) {
+            const localPoolTree = poolTree || currentClusterTree;
+            wrapApiPromiseByToaster(
                 ytApiV3Id.list(YTApiId.listPoolNames, {
-                    path: `//sys/scheduler/orchid/scheduler/pool_trees/${poolTree}/pools`,
+                    path: `//sys/scheduler/orchid/scheduler/pool_trees/${localPoolTree}/pools`,
                     ...USE_MAX_SIZE,
                 }),
                 {
@@ -139,8 +146,10 @@ function useLoadedPools(
                     errorTitle: 'Failed to load pools',
                 },
             ).then((names) => {
-                return {names: ypath.getValue(names), tree: poolTree};
+                setResult({names: ypath.getValue(names), tree: localPoolTree});
             });
         }
-    }, [cluster, poolTree]);
+    }, [cluster, currentClusterTree, poolTree]);
+
+    return result;
 }

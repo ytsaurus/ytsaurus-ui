@@ -66,6 +66,14 @@ function RemoteCopyModal() {
         [paths],
     );
 
+    const calculateValueOnPoolsLoaded = React.useCallback(
+        ({loadedPoolNames}: {loadedPoolNames: Array<string>}) => {
+            const transferPool = _.find(loadedPoolNames, (name) => name === `transfer_${cluster}`);
+            return transferPool || '';
+        },
+        [cluster],
+    );
+
     return !visible ? null : (
         <YTDFDialog<Values>
             visible={true}
@@ -179,13 +187,7 @@ function RemoteCopyModal() {
                         return {
                             cluster: dstCluster,
                             placeholder: `(cluster: ${dstCluster}) pool name`,
-                            calculateValueOnPoolsLoaded({loadedPoolNames}) {
-                                const transferPool = _.find(
-                                    loadedPoolNames,
-                                    (name) => name === `transfer_${cluster}`,
-                                );
-                                return transferPool || '';
-                            },
+                            calculateValueOnPoolsLoaded,
                             allowEphemeral: true,
                         };
                     },

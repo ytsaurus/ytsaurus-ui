@@ -17,18 +17,24 @@ export function PoolTreesLoader() {
     return null;
 }
 
-export function WaitForDefaultPoolTree({
-    children,
-}: {
-    children: ({defaultPoolTree}: {defaultPoolTree: string}) => React.ReactNode;
-}) {
-    const [defaultPoolTree, setDefaultPoolTree] = React.useState<string | undefined>(undefined);
+export function usePoolTreeOrLoadDefault(poolTree?: string) {
+    const [defaultPoolTree, setDefaultPoolTree] = React.useState<string | undefined>(poolTree);
 
     React.useEffect(() => {
         loadDefaultPoolTree().then((value) => {
             setDefaultPoolTree(value);
         });
     }, []);
+
+    return defaultPoolTree;
+}
+
+export function WaitForDefaultPoolTree({
+    children,
+}: {
+    children: ({defaultPoolTree}: {defaultPoolTree: string}) => React.ReactNode;
+}) {
+    const defaultPoolTree = usePoolTreeOrLoadDefault();
 
     return defaultPoolTree ? children({defaultPoolTree}) : null;
 }
