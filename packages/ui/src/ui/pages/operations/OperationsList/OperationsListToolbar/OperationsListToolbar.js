@@ -25,7 +25,7 @@ import {
 import {getOperationsListFixedStartedByFilter_FOR_YTFRONT_2838} from '../../../../store/selectors/operations';
 import Button, {SelectButton} from '../../../../components/Button/Button';
 import Icon from '../../../../components/Icon/Icon';
-import {PoolTreesLoader} from '../../../../hooks/global';
+import {PoolTreesLoader} from '../../../../hooks/global-pool-trees';
 
 import './OperationsListToolbar.scss';
 

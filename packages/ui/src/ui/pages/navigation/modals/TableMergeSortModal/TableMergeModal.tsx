@@ -15,11 +15,12 @@ import {
     runTableMerge,
     tableSortModalLoadColumns,
 } from '../../../../store/actions/navigation/modals/table-merge-sort-modal';
-import {getCurrentUserName, getGlobalDefaultPoolTreeName} from '../../../../store/selectors/global';
+import {getCurrentUserName} from '../../../../store/selectors/global';
 import {makeLink} from '../../../../navigation/Navigation/PathEditorModal/CreateTableModal/CreateTableModal';
 import {parseBytes} from '../../../../utils';
 import {docsUrl} from '../../../../config';
 import UIFactory from '../../../../UIFactory';
+import {WaitForDefaultPoolTree} from '../../../../hooks/global-pool-trees';
 
 export default function TableMergeModal() {
     const login = useSelector(getCurrentUserName);
@@ -27,7 +28,6 @@ export default function TableMergeModal() {
     const paths = useSelector(getNavigationTableSortPaths);
     const suggestError = useSelector(getNavigationTableSortError);
     const suggestColumns = useSelector(getNavigationTableSortSuggestColumns);
-    const defaultPoolTree = useSelector(getGlobalDefaultPoolTreeName);
 
     const [error, setError] = React.useState<any>();
 
@@ -91,130 +91,135 @@ export default function TableMergeModal() {
     const outputPath = paths?.length === 1 ? paths[0] : undefined;
 
     return (
-        <YTDFDialog<FormValues>
-            visible={visible}
-            headerProps={{
-                title: 'Merge',
-            }}
-            pristineSubmittable={true}
-            onAdd={handleAdd}
-            onClose={handleClose}
-            initialValues={{
-                paths,
-                mode: 'unordered',
-                outputPath,
-                columns: [],
-                force_transform: true,
-                poolTree: defaultPoolTree,
-                combine_chunks: true,
-            }}
-            fields={[
-                {
-                    name: 'mode',
-                    type: 'radio',
-                    caption: 'Mode',
-                    tooltip: docsUrl(makeLink(UIFactory.docsUrls['operations:merge'])),
-                    extras: {
-                        options: [
-                            {value: 'unordered', label: 'Unordered'},
-                            {value: 'sorted', label: 'Sorted'},
-                            {value: 'ordered', label: 'Ordered'},
-                        ],
-                    },
-                },
-                {
-                    name: 'paths',
-                    type: 'editable-path-list',
-                    caption: 'Input paths',
-                    required: true,
-                    onChange: handlePathsChange,
-                    extras: {
-                        placeholder: 'Enter a path to add',
-                    },
-                },
-                {
-                    name: 'outputPath',
-                    type: 'path',
-                    caption: 'Output path',
-                    required: true,
-                    validator: isPathStaticTable,
-                    touched: true,
-                    extras: {
-                        placeholder: 'Enter path for output',
-                    },
-                    tooltip: (
-                        <span>
-                            If the path is not an exist then started operation will be failed
-                        </span>
-                    ),
-                },
-                {
-                    name: 'columns',
-                    type: 'table-sort-by',
-                    caption: 'Merge by columns',
-                    extras: {
-                        suggestColumns,
-                    },
-                },
-                {
-                    name: 'chunkSize',
-                    type: 'table-chunk-size',
-                    caption: 'Chunk size',
-                },
-                {
-                    name: 'combine_chunks',
-                    type: 'tumbler',
-                    caption: 'Combine chunks',
-                },
-                {
-                    name: 'poolTree',
-                    type: 'pool-tree',
-                    caption: 'Pool tree',
-                },
-                {
-                    name: 'pool',
-                    type: 'pool',
-                    caption: 'Pool',
-                    tooltip: docsUrl(
-                        makeLink(
-                            UIFactory.docsUrls[
-                                'operations:operations_options#obshie-opcii-dlya-vseh-tipov-operacij'
-                            ],
-                        ),
-                    ),
-                    extras: ({poolTree}: FormValues) => {
-                        return {poolTree, placeholder: login, allowEphemeral: true};
-                    },
-                },
-                {
-                    name: 'force_transform',
-                    type: 'tumbler',
-                    caption: 'Force transform',
-                },
-                ...(!error
-                    ? []
-                    : [
-                          {
-                              name: 'error',
-                              type: 'block' as const,
-                              extras: {
-                                  children: <DialogError error={error} />,
-                              },
-                          },
-                      ]),
-                ...(!suggestError
-                    ? []
-                    : [
-                          {
-                              name: 'suggestError',
-                              type: 'block' as const,
-                              extras: {
-                                  children: <DialogError error={suggestError} />,
-                              },
-                          },
-                      ]),
-            ]}
-        />
+        <WaitForDefaultPoolTree>
+            {({defaultPoolTree}) => (
+                <YTDFDialog<FormValues>
+                    visible={visible}
+                    headerProps={{
+                        title: 'Merge',
+                    }}
+                    pristineSubmittable={true}
+                    onAdd={handleAdd}
+                    onClose={handleClose}
+                    initialValues={{
+                        paths,
+                        mode: 'unordered',
+                        outputPath,
+                        columns: [],
+                        force_transform: true,
+                        poolTree: defaultPoolTree,
+                        combine_chunks: true,
+                    }}
+                    fields={[
+                        {
+                            name: 'mode',
+                            type: 'radio',
+                            caption: 'Mode',
+                            tooltip: docsUrl(makeLink(UIFactory.docsUrls['operations:merge'])),
+                            extras: {
+                                options: [
+                                    {value: 'unordered', label: 'Unordered'},
+                                    {value: 'sorted', label: 'Sorted'},
+                                    {value: 'ordered', label: 'Ordered'},
+                                ],
+                            },
+                        },
+                        {
+                            name: 'paths',
+                            type: 'editable-path-list',
+                            caption: 'Input paths',
+                            required: true,
+                            onChange: handlePathsChange,
+                            extras: {
+                                placeholder: 'Enter a path to add',
+                            },
+                        },
+                        {
+                            name: 'outputPath',
+                            type: 'path',
+                            caption: 'Output path',
+                            required: true,
+                            validator: isPathStaticTable,
+                            touched: true,
+                            extras: {
+                                placeholder: 'Enter path for output',
+                            },
+                            tooltip: (
+                                <span>
+                                    If the path is not an exist then started operation will be
+                                    failed
+                                </span>
+                            ),
+                        },
+                        {
+                            name: 'columns',
+                            type: 'table-sort-by',
+                            caption: 'Merge by columns',
+                            extras: {
+                                suggestColumns,
+                            },
+                        },
+                        {
+                            name: 'chunkSize',
+                            type: 'table-chunk-size',
+                            caption: 'Chunk size',
+                        },
+                        {
+                            name: 'combine_chunks',
+                            type: 'tumbler',
+                            caption: 'Combine chunks',
+                        },
+                        {
+                            name: 'poolTree',
+                            type: 'pool-tree',
+                            caption: 'Pool tree',
+                        },
+                        {
+                            name: 'pool',
+                            type: 'pool',
+                            caption: 'Pool',
+                            tooltip: docsUrl(
+                                makeLink(
+                                    UIFactory.docsUrls[
+                                        'operations:operations_options#obshie-opcii-dlya-vseh-tipov-operacij'
+                                    ],
+                                ),
+                            ),
+                            extras: ({poolTree}: FormValues) => {
+                                return {poolTree, placeholder: login, allowEphemeral: true};
+                            },
+                        },
+                        {
+                            name: 'force_transform',
+                            type: 'tumbler',
+                            caption: 'Force transform',
+                        },
+                        ...(!error
+                            ? []
+                            : [
+                                  {
+                                      name: 'error',
+                                      type: 'block' as const,
+                                      extras: {
+                                          children: <DialogError error={error} />,
+                                      },
+                                  },
+                              ]),
+                        ...(!suggestError
+                            ? []
+                            : [
+                                  {
+                                      name: 'suggestError',
+                                      type: 'block' as const,
+                                      extras: {
+                                          children: <DialogError error={suggestError} />,
+                                      },
+                                  },
+                              ]),
+                    ]}
+                />
+            )}
+        </WaitForDefaultPoolTree>
     );
 }
 

@@ -2,12 +2,11 @@ import React from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import _ from 'lodash';
 
-import {getAllUserNamesSorted, getGlobalDefaultPoolTreeName} from '../store/selectors/global';
+import {getAllUserNamesSorted} from '../store/selectors/global';
 import {
     loadAccountsIfNotLoaded,
     loadBundlesIfNotLoaded,
     loadGroupsIfNotLoaded,
-    loadPoolTreesIfNotLoaded,
     loadUsersIfNotLoaded,
 } from '../store/actions/global';
 
@@ -71,23 +70,4 @@ export function useBundlesLoaded() {
 export function BundlesLoader() {
     useBundlesLoaded();
     return null;
-}
-
-export function usePoolTreesLoaded() {
-    const dispatch = useDispatch();
-
-    React.useEffect(() => {
-        dispatch(loadPoolTreesIfNotLoaded());
-    }, []);
-}
-
-export function PoolTreesLoader() {
-    usePoolTreesLoaded();
-    return null;
-}
-
-export function PoolTreeLoaderWaitDeafultTree({children}: {children: React.ReactNode}) {
-    usePoolTreesLoaded();
-    const defaultPoolTree = useSelector(getGlobalDefaultPoolTreeName);
-    return defaultPoolTree ? children : null;
 }

@@ -184,9 +184,6 @@ export const getAllIdmGroupNamesSorted = createSelector(
     },
 );
 
-export const getGlobalDefaultPoolTreeName = (state: RootState) =>
-    state.global.poolTreeDefault || 'physical';
-
 export const getGlobalShowLoginDialog = (state: RootState) => {
     if (state.global.authWay) {
         return (
