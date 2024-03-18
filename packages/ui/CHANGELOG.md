@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.22.3](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.22.2...ui-v1.22.3) (2024-03-18)
+
+
+### Bug Fixes
+
+* **CHYT:** do not load pools while defaultPoolTree is empty [YTFRONT-3863] ([0b2e823](https://github.com/ytsaurus/ytsaurus-ui/commit/0b2e823adcc8f794fc4ec11c3951b2d444d9fb68))
+
 ## [1.22.2](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.22.1...ui-v1.22.2) (2024-03-18)
 
 
