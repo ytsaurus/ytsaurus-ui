@@ -15,10 +15,10 @@ import Link from '../../components/Link/Link';
 import Suggest from '../../components/Suggest/Suggest';
 import {Page} from '../../constants';
 import {RowWithName} from '../../containers/AppNavigation/TopRowContent/SectionName';
-import {PoolTreeLoaderWaitDeafultTree} from '../../hooks/global';
+import {WaitForDefaultPoolTree} from '../../hooks/global-pool-trees';
 import {getFavouriteChyt, isActiveCliqueInFavourites} from '../../store/selectors/favourites';
 import {getChytCurrentAlias} from '../../store/selectors/chyt';
-import {getCluster, getGlobalDefaultPoolTreeName, isDeveloper} from '../../store/selectors/global';
+import {getCluster, isDeveloper} from '../../store/selectors/global';
 import {chytApiAction} from '../../store/actions/chyt/api';
 import {chytCliqueCreate} from '../../store/actions/chyt/list';
 import {chytToggleFavourite} from '../../store/actions/favourites';
@@ -188,7 +188,6 @@ function CreateChytButton() {
     const history = useHistory();
     const cluster = useSelector(getCluster);
     const [visible, setVisible] = React.useState(false);
-    const defaultPoolTree = useSelector(getGlobalDefaultPoolTreeName);
 
     const [error, setError] = React.useState<YTError | undefined>();
 
@@ -198,107 +197,109 @@ function CreateChytButton() {
                 Create clique
             </Button>
             {visible && (
-                <PoolTreeLoaderWaitDeafultTree>
-                    <YTDFDialog<FormValues>
-                        visible
-                        className={block('create-dialog')}
-                        headerProps={{title: 'Create clique'}}
-                        onClose={() => setVisible(false)}
-                        onAdd={(form) => {
-                            const {
-                                values: {instance_count, ...rest},
-                            } = form.getState();
-                            return dispatch(
-                                chytCliqueCreate({
-                                    ...rest,
-                                    instance_count: instance_count || 1,
-                                }),
-                            )
-                                .then(() => {
-                                    setError(undefined);
-                                    history.push(
-                                        `/${cluster}/chyt/${rest.alias}/${ChytCliquePageTab.SPECLET}`,
-                                    );
-                                })
-                                .catch((e) => {
-                                    setError(e);
-                                    return Promise.reject(e);
-                                });
-                        }}
-                        fields={[
-                            {
-                                name: 'alias',
-                                type: 'text',
-                                caption: 'Alias name',
-                                required: true,
-                            },
-                            {
-                                name: 'instance_count',
-                                type: 'range-input-picker',
-                                caption: 'Instance count',
-                                extras: {
-                                    minValue: 1,
-                                    maxValue: 100,
+                <WaitForDefaultPoolTree>
+                    {({defaultPoolTree}) => (
+                        <YTDFDialog<FormValues>
+                            visible
+                            className={block('create-dialog')}
+                            headerProps={{title: 'Create clique'}}
+                            onClose={() => setVisible(false)}
+                            onAdd={(form) => {
+                                const {
+                                    values: {instance_count, ...rest},
+                                } = form.getState();
+                                return dispatch(
+                                    chytCliqueCreate({
+                                        ...rest,
+                                        instance_count: instance_count || 1,
+                                    }),
+                                )
+                                    .then(() => {
+                                        setError(undefined);
+                                        history.push(
+                                            `/${cluster}/chyt/${rest.alias}/${ChytCliquePageTab.SPECLET}`,
+                                        );
+                                    })
+                                    .catch((e) => {
+                                        setError(e);
+                                        return Promise.reject(e);
+                                    });
+                            }}
+                            fields={[
+                                {
+                                    name: 'alias',
+                                    type: 'text',
+                                    caption: 'Alias name',
+                                    required: true,
                                 },
-                                required: true,
-                            },
-                            {
-                                name: 'tree',
-                                type: 'pool-tree',
-                                caption: 'Pool tree',
-                                extras: {
-                                    disabled: true,
+                                {
+                                    name: 'instance_count',
+                                    type: 'range-input-picker',
+                                    caption: 'Instance count',
+                                    extras: {
+                                        minValue: 1,
+                                        maxValue: 100,
+                                    },
+                                    required: true,
                                 },
-                            },
-                            {
-                                name: 'pool',
-                                type: 'pool',
-                                caption: 'Pool',
-                                extras: ({tree}: FormValues) => {
-                                    return {
-                                        poolTree: tree,
-                                        placeholder: 'Pool name...',
-                                        allowEmpty: true,
-                                    };
-                                },
-                            },
-                            {
-                                name: 'poolNotice',
-                                type: 'block',
-                                visibilityCondition: {
-                                    when: 'pool',
-                                    isActive(pool) {
-                                        return !pool;
+                                {
+                                    name: 'tree',
+                                    type: 'pool-tree',
+                                    caption: 'Pool tree',
+                                    extras: {
+                                        disabled: true,
                                     },
                                 },
-                                extras: {
-                                    children: (
-                                        <Text color="info-heavy" variant="body-2">
-                                            Select a pool to start the clique after creation.
-                                        </Text>
-                                    ),
-                                },
-                            },
-                            {
-                                name: 'runAfterCreation',
-                                type: 'tumbler',
-                                caption: 'Start after creation',
-                                visibilityCondition: {
-                                    when: 'pool',
-                                    isActive(v) {
-                                        return Boolean(v);
+                                {
+                                    name: 'pool',
+                                    type: 'pool',
+                                    caption: 'Pool',
+                                    extras: ({tree}: FormValues) => {
+                                        return {
+                                            poolTree: tree,
+                                            placeholder: 'Pool name...',
+                                            allowEmpty: true,
+                                        };
                                     },
                                 },
-                            },
-                            ...makeErrorFields([error]),
-                        ]}
-                        initialValues={{
-                            instance_count: 1,
-                            tree: defaultPoolTree,
-                            runAfterCreation: true,
-                        }}
-                    />
-                </PoolTreeLoaderWaitDeafultTree>
+                                {
+                                    name: 'poolNotice',
+                                    type: 'block',
+                                    visibilityCondition: {
+                                        when: 'pool',
+                                        isActive(pool) {
+                                            return !pool;
+                                        },
+                                    },
+                                    extras: {
+                                        children: (
+                                            <Text color="info-heavy" variant="body-2">
+                                                Select a pool to start the clique after creation.
+                                            </Text>
+                                        ),
+                                    },
+                                },
+                                {
+                                    name: 'runAfterCreation',
+                                    type: 'tumbler',
+                                    caption: 'Start after creation',
+                                    visibilityCondition: {
+                                        when: 'pool',
+                                        isActive(v) {
+                                            return Boolean(v);
+                                        },
+                                    },
+                                },
+                                ...makeErrorFields([error]),
+                            ]}
+                            initialValues={{
+                                instance_count: 1,
+                                tree: defaultPoolTree,
+                                runAfterCreation: true,
+                            }}
+                        />
+                    )}
+                </WaitForDefaultPoolTree>
             )}
         </div>
     );

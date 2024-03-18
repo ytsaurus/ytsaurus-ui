@@ -67,6 +67,7 @@ const initialState = {
     users: undefined,
     bundles: undefined,
     accounts: [],
+    defaultPoolTree: undefined,
     poolTrees: undefined,
     clusterUiConfig: defaultClusterUiConfig,
 

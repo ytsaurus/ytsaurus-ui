@@ -1,7 +1,6 @@
 import React from 'react';
 import _ from 'lodash';
 import cn from 'bem-cn-lite';
-import {useSelector} from 'react-redux';
 import axios from 'axios';
 
 import {USE_MAX_SIZE} from '../../../../../shared/constants/yt-api';
@@ -10,7 +9,6 @@ import ypath from '../../../../common/thor/ypath';
 import {DialogControlProps} from '../../../../components/Dialog/Dialog.types';
 import Suggest from '../../../../components/Suggest/Suggest';
 
-import {getGlobalDefaultPoolTreeName} from '../../../../store/selectors/global';
 import {YTApiId, ytApiV3Id} from '../../../../rum/rum-wrap-api';
 import {wrapApiPromiseByToaster} from '../../../../utils/utils';
 
@@ -37,7 +35,6 @@ type Props = DialogControlProps<string> & {
  * @returns
  */
 export function PoolSuggestControl(props: Props) {
-    const defaultPoolTree = useSelector(getGlobalDefaultPoolTreeName);
     const {
         allowEmpty,
         allowEphemeral,
@@ -50,9 +47,6 @@ export function PoolSuggestControl(props: Props) {
         disabled,
     } = props;
 
-    // !!! default pool tree of current cluster must be never used for other clusters !!!
-    const treeName = cluster ? poolTree : poolTree || defaultPoolTree;
-
     const [{items: poolNames}, setPoolNames] = React.useState<{
         items: Array<string>;
         itemsTree: string;
@@ -61,7 +55,7 @@ export function PoolSuggestControl(props: Props) {
         itemsTree: '',
     });
 
-    const loadedPools = useLoadedPools(cluster, treeName);
+    const loadedPools = useLoadedPools(cluster, poolTree);
 
     React.useEffect(() => {
         loadedPools.then(({names, tree}) => {

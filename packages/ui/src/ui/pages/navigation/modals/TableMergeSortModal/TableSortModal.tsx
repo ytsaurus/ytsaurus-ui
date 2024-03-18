@@ -16,12 +16,13 @@ import {
     runTableSort,
     tableSortModalLoadColumns,
 } from '../../../../store/actions/navigation/modals/table-merge-sort-modal';
-import {getCurrentUserName, getGlobalDefaultPoolTreeName} from '../../../../store/selectors/global';
+import {getCurrentUserName} from '../../../../store/selectors/global';
 import {makeLink} from '../../../../navigation/Navigation/PathEditorModal/CreateTableModal/CreateTableModal';
 import './TableSortModal.scss';
 import {ColumnSortByInfo} from './TableSortByControl';
 import {docsUrl} from '../../../../config';
 import UIFactory from '../../../../UIFactory';
+import {WaitForDefaultPoolTree} from '../../../../hooks/global-pool-trees';
 
 const block = cn('table-sort-modal');
 
@@ -31,7 +32,6 @@ export default function TableSortModal() {
     const paths = useSelector(getNavigationTableSortPaths);
     const suggestError = useSelector(getNavigationTableSortError);
     const suggestColumns = useSelector(getNavigationTableSortSuggestColumns);
-    const defaultPoolTree = useSelector(getGlobalDefaultPoolTreeName);
 
     const [error, setError] = React.useState<any>();
 
@@ -105,82 +105,88 @@ export default function TableSortModal() {
     }
 
     return !visible ? null : (
-        <YTDFDialog<FormValues>
-            className={block()}
-            visible={visible}
-            headerProps={{
-                title,
-            }}
-            onAdd={handleAdd}
-            onClose={handleClose}
-            initialValues={{
-                paths,
-                outputPath,
-                columns: [],
-                poolTree: defaultPoolTree,
-            }}
-            fields={[
-                {
-                    name: 'paths',
-                    type: 'editable-path-list',
-                    caption: 'Input paths',
-                    required: true,
-                    onChange: handlePathsChange,
-                    extras: {
-                        placeholder: 'Enter a path to add',
-                    },
-                },
-                {
-                    name: 'outputPath',
-                    type: 'path',
-                    caption: 'Output path',
-                    required: true,
-                    validator: isPathStaticTable,
-                    extras: {
-                        placeholder: 'Enter path for output',
-                    },
-                    tooltip: (
-                        <span>If the path is not exists then started operation will be failed</span>
-                    ),
-                },
-                {
-                    name: 'columns',
-                    type: 'table-sort-by',
-                    caption: 'Sort by columns',
-                    required: true,
-                    extras: {
-                        suggestColumns,
-                        allowDescending: true,
-                    },
-                },
-                {
-                    name: 'poolTree',
-                    type: 'pool-tree',
-                    caption: 'Pool tree',
-                },
-                {
-                    name: 'pool',
-                    type: 'pool',
-                    caption: 'Pool',
-                    tooltip: docsUrl(
-                        makeLink(
-                            UIFactory.docsUrls[
-                                'operations:operations_options#obshie-opcii-dlya-vseh-tipov-operacij'
-                            ],
-                        ),
-                    ),
-                    extras: (values: FormValues) => {
-                        const {poolTree} = values;
-                        return {
-                            placeholder: login,
-                            poolTree,
-                            allowEphemeral: true,
-                        };
-                    },
-                },
-                ...errorFields,
-            ]}
-        />
+        <WaitForDefaultPoolTree>
+            {({defaultPoolTree}) => (
+                <YTDFDialog<FormValues>
+                    className={block()}
+                    visible={visible}
+                    headerProps={{
+                        title,
+                    }}
+                    onAdd={handleAdd}
+                    onClose={handleClose}
+                    initialValues={{
+                        paths,
+                        outputPath,
+                        columns: [],
+                        poolTree: defaultPoolTree,
+                    }}
+                    fields={[
+                        {
+                            name: 'paths',
+                            type: 'editable-path-list',
+                            caption: 'Input paths',
+                            required: true,
+                            onChange: handlePathsChange,
+                            extras: {
+                                placeholder: 'Enter a path to add',
+                            },
+                        },
+                        {
+                            name: 'outputPath',
+                            type: 'path',
+                            caption: 'Output path',
+                            required: true,
+                            validator: isPathStaticTable,
+                            extras: {
+                                placeholder: 'Enter path for output',
+                            },
+                            tooltip: (
+                                <span>
+                                    If the path is not exists then started operation will be failed
+                                </span>
+                            ),
+                        },
+                        {
+                            name: 'columns',
+                            type: 'table-sort-by',
+                            caption: 'Sort by columns',
+                            required: true,
+                            extras: {
+                                suggestColumns,
+                                allowDescending: true,
+                            },
+                        },
+                        {
+                            name: 'poolTree',
+                            type: 'pool-tree',
+                            caption: 'Pool tree',
+                        },
+                        {
+                            name: 'pool',
+                            type: 'pool',
+                            caption: 'Pool',
+                            tooltip: docsUrl(
+                                makeLink(
+                                    UIFactory.docsUrls[
+                                        'operations:operations_options#obshie-opcii-dlya-vseh-tipov-operacij'
+                                    ],
+                                ),
+                            ),
+                            extras: (values: FormValues) => {
+                                const {poolTree} = values;
+                                return {
+                                    placeholder: login,
+                                    poolTree,
+                                    allowEphemeral: true,
+                                };
+                            },
+                        },
+                        ...errorFields,
+                    ]}
+                />
+            )}
+        </WaitForDefaultPoolTree>
     );
 }
 
