@@ -156,11 +156,25 @@ const QueryEditorView = React.memo(function QueryEditorView({
         };
     }, [engine]);
 
-    const upadteQueryText = useCallback(
+    const updateQueryText = useCallback(
         function (text: string) {
             dispatch(updateQueryDraft({query: text, error: undefined}));
         },
         [dispatch],
+    );
+
+    const validateQueryCallback = useCallback(
+        function () {
+            dispatch(runQuery(onStartQuery, {execution_mode: 'validate'}));
+        },
+        [dispatch, onStartQuery],
+    );
+
+    const explainQueryCallback = useCallback(
+        function () {
+            dispatch(runQuery(onStartQuery, {execution_mode: 'optimize'}));
+        },
+        [dispatch, onStartQuery],
     );
 
     return (
@@ -170,21 +184,38 @@ const QueryEditorView = React.memo(function QueryEditorView({
                 value={text || ''}
                 language={getLanguageByEngine(engine)}
                 className={b('editor')}
-                onChange={upadteQueryText}
+                onChange={updateQueryText}
                 monacoConfig={monacoConfig}
             />
             <div className={b('actions')}>
                 <div className="query-run-action">
                     <Button
                         qa="qt-run"
-                        pin={isACOSupported ? 'round-brick' : undefined}
-                        className="query-run-action-button"
                         view="action"
                         onClick={runQueryCallback}
+                        className={b('action-button')}
                     >
                         <Icon data={playIcon} />
                         Run
                     </Button>
+                    {engine === QueryEngine.YQL ? (
+                        <>
+                            <Button
+                                qa="qt-validate"
+                                className={b('action-button')}
+                                onClick={validateQueryCallback}
+                            >
+                                Validate
+                            </Button>
+                            <Button
+                                qa="qt-explain"
+                                className={b('action-button')}
+                                onClick={explainQueryCallback}
+                            >
+                                Explain
+                            </Button>
+                        </>
+                    ) : null}
                     {isACOSupported && <QueryACOSelect />}
                 </div>
             </div>

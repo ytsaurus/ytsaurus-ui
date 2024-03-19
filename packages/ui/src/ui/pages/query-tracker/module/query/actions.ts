@@ -211,11 +211,12 @@ export function createEmptyQuery(
 
 export function runQuery(
     afterCreate?: (query_id: string) => boolean | void,
+    options?: {execution_mode: 'validate' | 'optimize'},
 ): ThunkAction<any, RootState, any, SetQueryAction> {
     return async (dispatch, getState) => {
         const state = getState();
         const query = getQueryDraft(state);
-        const {query_id} = await wrapApiPromiseByToaster(dispatch(startQuery(query)), {
+        const {query_id} = await wrapApiPromiseByToaster(dispatch(startQuery(query, options)), {
             toasterName: 'start_query',
             skipSuccessToast: true,
             errorTitle: 'Failed to start query',
