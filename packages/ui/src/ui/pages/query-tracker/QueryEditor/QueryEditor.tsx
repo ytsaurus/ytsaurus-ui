@@ -32,6 +32,7 @@ import {isSupportedQtACO} from '../module/query_aco/selectors';
 import {QueryACOSelect} from '../QueryACO/QueryACOSelect';
 import {useQueryACO} from '../QueryACO/useQueryACO';
 import {useMonaco} from '../hooks/useMonaco';
+import {QueryEngine} from '../module/engines';
 
 const b = block('query-container');
 
@@ -116,7 +117,7 @@ const QueryEditorView = React.memo(function QueryEditorView({
         };
     }, [engine]);
     const dispatch = useDispatch();
-    const upadteQueryText = useCallback(
+    const updateQueryText = useCallback(
         function (text: string) {
             dispatch(updateQueryDraft({query: text, error: undefined}));
         },
@@ -129,6 +130,21 @@ const QueryEditorView = React.memo(function QueryEditorView({
         },
         [dispatch, onStartQuery],
     );
+
+    const validateQueryCallback = useCallback(
+        function () {
+            dispatch(runQuery(onStartQuery, {execution_mode: 'validate'}));
+        },
+        [dispatch, onStartQuery],
+    );
+
+    const explainQueryCallback = useCallback(
+        function () {
+            dispatch(runQuery(onStartQuery, {execution_mode: 'optimize'}));
+        },
+        [dispatch, onStartQuery],
+    );
+
     return (
         <div className={b('query')}>
             <MonacoEditor
@@ -136,21 +152,38 @@ const QueryEditorView = React.memo(function QueryEditorView({
                 value={text || ''}
                 language={'yql'}
                 className={b('editor')}
-                onChange={upadteQueryText}
+                onChange={updateQueryText}
                 monacoConfig={monacoConfig}
             />
             <div className={b('actions')}>
                 <div className="query-run-action">
                     <Button
                         qa="qt-run"
-                        pin={isACOSupported ? 'round-brick' : undefined}
-                        className="query-run-action-button"
+                        className={b('action-button')}
                         view="action"
                         onClick={runQueryCallback}
                     >
                         <Icon data={playIcon} />
                         Run
                     </Button>
+                    {engine === QueryEngine.YQL ? (
+                        <Button
+                            qa="qt-validate"
+                            className={b('action-button')}
+                            onClick={validateQueryCallback}
+                        >
+                            Validate
+                        </Button>
+                    ) : null}
+                    {engine === QueryEngine.YQL ? (
+                        <Button
+                            qa="qt-explain"
+                            className={b('action-button')}
+                            onClick={explainQueryCallback}
+                        >
+                            Explain
+                        </Button>
+                    ) : null}
                     {isACOSupported && <QueryACOSelect />}
                 </div>
             </div>

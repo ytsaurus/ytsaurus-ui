@@ -27,7 +27,6 @@ export const QueryACOSelect: React.FunctionComponent<{}> = () => {
                 filterable
                 disabled={isFlight}
                 width={'auto'}
-                pin="clear-round"
                 label="Query access:"
                 className={'query-aco-select'}
                 options={selectACOOptions}
