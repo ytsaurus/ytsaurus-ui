@@ -150,6 +150,9 @@ class ClusterPage extends Component {
         } = this.props;
 
         return Promise.resolve().then(() => {
+            initClusterParams(cluster);
+            updateTitle({cluster});
+
             // todo: get rid of redirectToBetaSwitched setting.
             // It`s exist for set default value of redirectToBeta setting, when settings document is empty yet.
             // Set redirectToBeta on server after get all user settings (home.js). Or get rid of this logic at all.
@@ -162,11 +165,9 @@ class ClusterPage extends Component {
                 setSetting(SettingName.DEVELOPMENT.REDIRECT_TO_BETA, NAMESPACES.DEVELOPMENT, true);
             }
 
-            initClusterParams(cluster);
             this._initMenuCollection('cluster');
             this._initMenuCollection('page');
             trackVisit('cluster', cluster);
-            updateTitle({cluster});
         });
     };
 
