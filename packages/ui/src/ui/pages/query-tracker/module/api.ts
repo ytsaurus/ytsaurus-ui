@@ -266,6 +266,7 @@ export function getQuery(query_id: string): ThunkAction<Promise<QueryItem>, Root
 
 export function startQuery(
     queryInstance: DraftQuery,
+    options?: {execution_mode: 'validate' | 'optimize'},
 ): ThunkAction<Promise<{query_id: QueryItemId}>, RootState, any, any> {
     return async (_dispatch, getState) => {
         const state = getState();
@@ -280,6 +281,7 @@ export function startQuery(
                 engine,
                 annotations,
                 access_control_object,
+                execution_mode: options?.execution_mode,
                 settings: {
                     stage: engine === 'yql' ? yqlAgentStage : undefined,
                     ...settings,
