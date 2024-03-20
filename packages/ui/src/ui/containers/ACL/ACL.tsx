@@ -289,8 +289,14 @@ class ACL extends Component<Props> {
             isDepriving: depriving,
             isRequested: requested,
             isApproved: approved,
+            isMissing: missing,
         } = item;
-        return block('row', {unrecognized, depriving, requested, approved});
+        return block('row', {
+            unrecognized: unrecognized || missing,
+            depriving,
+            requested,
+            approved,
+        });
     }
 
     renderApprovers() {
