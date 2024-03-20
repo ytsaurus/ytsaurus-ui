@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.23.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.22.3...ui-v1.23.0) (2024-03-20)
+
+
+### Features
+
+* **Query:** new query error component [YTFRONT-4000] ([9d781f4](https://github.com/ytsaurus/ytsaurus-ui/commit/9d781f4633b57a287554b91e56ecde182e86abd4))
+
 ## [1.22.3](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.22.2...ui-v1.22.3) (2024-03-18)
 
 
