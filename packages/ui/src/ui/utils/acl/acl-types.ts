@@ -111,7 +111,7 @@ export interface GroupACL {
 export interface GetACLResponse {
     acl: ACL;
     roles: Array<Role>;
-    column_groups: Array<ColumnGroup>;
+    column_groups: Array<AclColumnGroup>;
 }
 
 export interface ACL {
@@ -119,7 +119,7 @@ export interface ACL {
     acl: Array<ACE>;
 }
 
-export interface ColumnGroup {
+export interface AclColumnGroup {
     id: string;
     name: string;
     columns?: Array<string>;
@@ -167,7 +167,7 @@ export interface ACLResponsible {
 
 export interface PreparedAclData {
     permissions: Array<PreparedAclSubject>;
-    column_groups: Array<ColumnGroup>;
+    column_groups: Array<AclColumnGroup>;
 }
 
 export type TypedAclSubject =

@@ -10,7 +10,7 @@ import {
 } from '../../../constants/acl';
 import {RESET_STORE_BEFORE_CLUSTER_CHANGE} from '../../../constants/utils';
 import {YTPermissionTypeUI} from '../../../utils/acl/acl-api';
-import {ColumnGroup, IdmKindType, PreparedAclSubject} from '../../../utils/acl/acl-types';
+import {AclColumnGroup, IdmKindType, PreparedAclSubject} from '../../../utils/acl/acl-types';
 import {ActionD} from '../../../types';
 import {PreparedRole} from '../../../utils/acl';
 
@@ -23,7 +23,7 @@ export type AclKindState = {
     path: string;
     userPermissions: Array<{type: YTPermissionTypeUI} & CheckPermissionResult>;
     objectPermissions: Array<PreparedAclSubject>;
-    columnGroups: Array<ColumnGroup>;
+    columnGroups: Array<AclColumnGroup>;
     inheritAcl: boolean;
 
     bossApproval: PreparedRole | undefined;

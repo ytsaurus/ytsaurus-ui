@@ -1,14 +1,14 @@
 import React, {useMemo, useState} from 'react';
 import {YTDFDialog, makeErrorFields} from '../../../components/Dialog/Dialog';
-import {ColumnGroup} from '../../../utils/acl/acl-types';
+import {AclColumnGroup} from '../../../utils/acl/acl-types';
 import _ from 'lodash';
 
 export interface Props {
     title: string;
     confirmText: string;
     handleClose: () => void;
-    handleSubmit: (value: Partial<ColumnGroup>) => Promise<void>;
-    initialData?: Partial<ColumnGroup>;
+    handleSubmit: (value: Partial<AclColumnGroup>) => Promise<void>;
+    initialData?: Partial<AclColumnGroup>;
     disabledFields?: Array<keyof FormValues>;
     visible: boolean;
 }
@@ -51,7 +51,7 @@ export default function EditColumnGroupModal({
             }}
             onAdd={(form) => {
                 const {name, columns, enabled} = form.getState().values;
-                const submitResult: Partial<ColumnGroup> = {
+                const submitResult: Partial<AclColumnGroup> = {
                     name: name,
                     columns: _.map(columns, (el) => el.name),
                     enabled: enabled,

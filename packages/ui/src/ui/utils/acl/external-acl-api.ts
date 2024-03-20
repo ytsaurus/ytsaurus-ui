@@ -8,7 +8,7 @@ import {
 } from './acl-api';
 import {
     ACLResponsible,
-    ColumnGroup,
+    AclColumnGroup,
     Group,
     GroupACL,
     IdmKindType,
@@ -57,9 +57,9 @@ export interface AclApi {
     createColumnGroup(
         cluster: string,
         path: string,
-        data: Partial<ColumnGroup>,
+        data: Partial<AclColumnGroup>,
     ): Promise<SuccessColumnGroupCreate>;
-    editColumnGroup(cluster: string, columnGroupValue: Partial<ColumnGroup>): Promise<void>;
+    editColumnGroup(cluster: string, columnGroupValue: Partial<AclColumnGroup>): Promise<void>;
     deleteColumnGroup(cluster: string, id: string): Promise<void>;
 }
 
