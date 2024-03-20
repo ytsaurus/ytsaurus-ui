@@ -212,7 +212,7 @@ function dateToDaysAfterNow(date?: Date) {
     return Math.round((date.getTime() - Date.now()) / 3600 / 24 / 1000);
 }
 
-type PermissionToRequest = {
+export type PermissionToRequest = {
     path: string;
     cluster: string;
     permissions: {[x: string]: Array<YTPermissionTypeUI>} | null;
@@ -221,6 +221,7 @@ type PermissionToRequest = {
     duration?: Date;
     comment?: string;
     readColumnGroup?: string;
+    permissionFlags?: Record<string, boolean>;
 };
 
 export function requestPermissions(
@@ -241,12 +242,13 @@ export function requestPermissions(
         const daysAfter = dateToDaysAfterNow(values.duration);
         const roles: Array<Role> = [];
         const rolesGroupedBySubject = [];
-        const {inheritance_mode, readColumnGroup} = values;
+        const {inheritance_mode, readColumnGroup, permissionFlags} = values;
         for (const item of values.subjects) {
             const subject = prepareAclSubject(item);
             const commonPart = {
                 subject,
                 deprive_after_days: daysAfter,
+                ...permissionFlags,
             };
             rolesGroupedBySubject.push({
                 permissions: _.flatten(_.map(values.permissions)),

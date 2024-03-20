@@ -36,6 +36,7 @@ export interface AclApi {
 
     requestPermissions(params: RequestPermissionParams): Promise<UpdateResponse>;
     requestPermissionsFields: Array<RequestPermissionsFieldsNames>;
+    requestPermissionsFlags?: Record<string, {title: String; invert?: boolean}>;
 
     deleteRole(params: {
         path: string;
