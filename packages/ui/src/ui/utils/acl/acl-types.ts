@@ -52,6 +52,7 @@ export interface Role {
     role_key?: string;
     state?: string;
     role_type?: string;
+    column_group_id?: string;
     permissions?: Array<YTPermissionType>;
     inheritance_mode?: string;
     columns?: Array<string>;

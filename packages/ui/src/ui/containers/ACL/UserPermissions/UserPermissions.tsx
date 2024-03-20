@@ -32,6 +32,7 @@ type Props = Pick<
     | 'readApprovers'
     | 'bossApproval'
     | 'disableInheritanceResponsible'
+    | 'columnGroups'
 > & {
     className?: string;
     idmKind: IdmKindType;
@@ -151,6 +152,8 @@ export default class UserPermissions extends Component<Props> {
             updateAclError,
             cancelUpdateAcl,
             cluster,
+
+            columnGroups,
         } = this.props;
 
         return (
@@ -167,6 +170,7 @@ export default class UserPermissions extends Component<Props> {
                                 requestPermissions={this.requestPermissions}
                                 cancelRequestPermissions={cancelRequestPermissions}
                                 cluster={cluster}
+                                columnGroups={columnGroups}
                             />
 
                             <ManageAcl

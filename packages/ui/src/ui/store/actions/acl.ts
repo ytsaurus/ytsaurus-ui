@@ -220,6 +220,7 @@ type PermissionToRequest = {
     inheritance_mode?: string;
     duration?: Date;
     comment?: string;
+    readColumnGroup?: string;
 };
 
 export function requestPermissions(
@@ -240,23 +241,32 @@ export function requestPermissions(
         const daysAfter = dateToDaysAfterNow(values.duration);
         const roles: Array<Role> = [];
         const rolesGroupedBySubject = [];
-        const {inheritance_mode} = values;
+        const {inheritance_mode, readColumnGroup} = values;
         for (const item of values.subjects) {
             const subject = prepareAclSubject(item);
-            rolesGroupedBySubject.push({
-                permissions: _.flatten(_.map(values.permissions)),
+            const commonPart = {
                 subject,
                 deprive_after_days: daysAfter,
+            };
+            rolesGroupedBySubject.push({
+                permissions: _.flatten(_.map(values.permissions)),
+                ...commonPart,
                 ...(inheritance_mode ? {inheritance_mode} : {}),
             });
             _.forEach(values.permissions, (permissions) => {
                 roles.push({
                     ...convertFromUIPermissions({permissions}),
-                    subject,
-                    deprive_after_days: daysAfter,
+                    ...commonPart,
                     ...(inheritance_mode ? {inheritance_mode} : {}),
                 });
             });
+            if (readColumnGroup) {
+                roles.push({
+                    role_type: 'column_read',
+                    column_group_id: readColumnGroup,
+                    ...commonPart,
+                });
+            }
         }
 
         const poolTree =
