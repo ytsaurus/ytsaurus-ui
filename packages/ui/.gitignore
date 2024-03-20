@@ -35,3 +35,4 @@ clusters-config-oss.json
 run_local_cluster.sh
 
 *.tmp
+*.bak
