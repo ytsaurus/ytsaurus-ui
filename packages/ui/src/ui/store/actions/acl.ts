@@ -221,6 +221,7 @@ export type PermissionToRequest = {
     duration?: Date;
     comment?: string;
     permissionFlags?: Record<string, boolean>;
+    readColumnGroup?: string;
 };
 
 export function requestPermissions(
@@ -243,7 +244,7 @@ export function requestPermissions(
         const daysAfter = dateToDaysAfterNow(values.duration);
         const roles: Array<Role> = [];
         const rolesGroupedBySubject = [];
-        const {inheritance_mode, permissionFlags} = values;
+        const {inheritance_mode, permissionFlags, readColumnGroup} = values;
         for (const item of values.subjects) {
             const subject = prepareAclSubject(item);
             const commonPart = {
@@ -254,7 +255,6 @@ export function requestPermissions(
             Object.entries(requestPermissionsFlags).forEach(([key, flagInfo]) => {
                 flagInfo?.applyToRequestedRole(commonPart, permissionFlags?.[key]);
             });
-
             rolesGroupedBySubject.push({
                 permissions: _.flatten(_.map(values.permissions)),
                 ...commonPart,
@@ -265,6 +265,13 @@ export function requestPermissions(
                     ...commonPart,
                 });
             });
+            if (readColumnGroup) {
+                roles.push({
+                    role_type: 'column_read',
+                    column_group_id: readColumnGroup,
+                    ...commonPart,
+                });
+            }
         }
 
         const poolTree =

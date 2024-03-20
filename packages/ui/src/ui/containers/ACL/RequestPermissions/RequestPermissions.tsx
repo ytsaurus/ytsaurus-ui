@@ -18,7 +18,7 @@ import {map} from 'lodash';
 
 import {docsUrl} from '../../../config';
 import {makeLink} from '../../../utils/utils';
-import {IdmKindType} from '../../../utils/acl/acl-types';
+import {AclColumnGroup, IdmKindType} from '../../../utils/acl/acl-types';
 import {YTPermissionTypeUI} from '../../../utils/acl/acl-api';
 import {PermissionToRequest} from '../../../store/actions/acl';
 
@@ -35,7 +35,8 @@ export type RequestPermissionsFieldsNames =
     | 'commentHeader'
     | 'comment'
     | 'inheritance_mode'
-    | 'permissionFlags';
+    | 'permissionFlags'
+    | 'readColumnGroup';
 
 export interface Props extends WithVisibleProps {
     buttonText?: string;
@@ -51,6 +52,7 @@ export interface Props extends WithVisibleProps {
     cancelRequestPermissions: (params: {idmKind: IdmKindType}) => unknown;
     error?: YTError;
     onSuccess?: () => void;
+    columnGroups?: Array<AclColumnGroup>;
 }
 
 type FormValues = {
@@ -65,6 +67,7 @@ type FormValues = {
     inheritance_mode?: string;
     duration?: Date;
     comment?: string;
+    readColumnGroup?: string;
 } & Record<`${typeof FLAG_NAME_PREFIX}${string}`, boolean>;
 
 const SHORT_TITLE: Partial<Record<IdmKindType, string>> = {
@@ -84,6 +87,7 @@ function RequestPermissions(props: Props) {
         cancelRequestPermissions,
         error,
         cluster,
+        columnGroups,
         /*denyColumns,*/
     } = props;
 
@@ -149,10 +153,16 @@ function RequestPermissions(props: Props) {
                         )}
                     </>
                 ),
-                required: true,
                 extras: {
                     choices: choices,
                     disabledChoices,
+                },
+            },
+            readColumnGroup: {
+                type: 'acl-column-group',
+                caption: 'Column permissions',
+                extras: {
+                    columnGroups,
                 },
             },
             subjects: {
