@@ -2,9 +2,10 @@
 
 .acl-user-permissions {
     &__card {
-        padding: 24px;
+        border-radius: 6px;
+        padding: 20px;
         margin-bottom: 12px;
-        background-color: var(--light-background);
+        background-color: var(--g-color-base-neutral-light);
     }
 
     &__list {
@@ -49,6 +50,6 @@
     }
 
     &__request:not(:last-child) {
-        margin-bottom: 12px;
+        margin-bottom: 8px;
     }
 }
