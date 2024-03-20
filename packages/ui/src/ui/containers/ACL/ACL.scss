@@ -161,6 +161,14 @@
         }
     }
 
+    &__row_unrecognized {
+        background-color: var(--g-color-base-danger-light);
+
+        &:hover {
+            --hover-background: var(--g-color-base-danger-light-hover);
+        }
+    }
+
     &__icon {
         margin-left: 1ex;
         color: var(--secondary-text) !important;
@@ -217,5 +225,9 @@
     &__subjects-list {
         display: flex;
         flex-flow: wrap;
+    }
+
+    .data-table__row:not(:last-child) {
+        border-bottom: 1px solid var(--g-color-line-generic);
     }
 }
