@@ -432,6 +432,7 @@ class ACL extends Component<Props> {
             userPermissionsUpdateAclError,
             userPermissionsCancelUpdateAcl,
             cluster,
+            columnGroups,
         } = this.props;
         const {deleteItem} = this.state;
 
@@ -469,6 +470,7 @@ class ACL extends Component<Props> {
                         updateAcl={userPermissionsUpdateAcl}
                         updateAclError={userPermissionsUpdateAclError}
                         cancelUpdateAcl={userPermissionsCancelUpdateAcl}
+                        columnGroups={columnGroups}
                     />
                 )}
                 <DeletePermissionModal
