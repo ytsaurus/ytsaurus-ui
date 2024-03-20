@@ -12,7 +12,7 @@ import Button from '../../../components/Button/Button';
 import StatusBulb from '../../../components/StatusBulb/StatusBulb';
 
 import EditColumnGroupModal, {Props as ModalProps} from './EditColumnGroupModal';
-import {ColumnGroup} from '../../../utils/acl/acl-types';
+import {AclColumnGroup} from '../../../utils/acl/acl-types';
 import UIFactory from '../../../UIFactory';
 
 import './ColumnGroups.scss';
@@ -21,7 +21,7 @@ import {renderText} from '../../../components/templates/utils';
 const block = cn('column-groups');
 
 interface Props {
-    columnGroups: Array<ColumnGroup>;
+    columnGroups: Array<AclColumnGroup>;
     path: string;
     loadAclDataFn: () => void;
     cluster: string;
@@ -47,7 +47,7 @@ export default function ColumnGroups({
                 visible: false,
             }));
         },
-        handleSubmit: (_value: Partial<ColumnGroup>) => Promise.resolve(),
+        handleSubmit: (_value: Partial<AclColumnGroup>) => Promise.resolve(),
     } as ModalProps);
 
     const handleAddClick = () => {
@@ -62,7 +62,7 @@ export default function ColumnGroups({
                 columns: [],
                 enabled: false,
             },
-            handleSubmit: (value: Partial<ColumnGroup>) => {
+            handleSubmit: (value: Partial<AclColumnGroup>) => {
                 return UIFactory.getAclApi()
                     .createColumnGroup(cluster, path, value)
                     .then(() => {
@@ -72,7 +72,7 @@ export default function ColumnGroups({
         }));
     };
 
-    const handleEditClick = (item: ColumnGroup) => {
+    const handleEditClick = (item: AclColumnGroup) => {
         setModalProps((prevProps) => ({
             ...prevProps,
             title: 'Edit column group',
@@ -80,7 +80,7 @@ export default function ColumnGroups({
             initialData: {...item},
             disabledFields: [],
             visible: true,
-            handleSubmit: (value: Partial<ColumnGroup>) => {
+            handleSubmit: (value: Partial<AclColumnGroup>) => {
                 return UIFactory.getAclApi()
                     .editColumnGroup(cluster, {...value, id: item.id})
                     .then(() => {
@@ -90,7 +90,7 @@ export default function ColumnGroups({
         }));
     };
 
-    const handleDeleteClick = (item: ColumnGroup) => {
+    const handleDeleteClick = (item: AclColumnGroup) => {
         setModalProps((prevProps) => ({
             ...prevProps,
             title: 'Delete column group',
@@ -109,7 +109,7 @@ export default function ColumnGroups({
         }));
     };
 
-    const columns: Array<Column<ColumnGroup>> = [
+    const columns: Array<Column<AclColumnGroup>> = [
         {
             name: 'Empty',
             className: block('empty'),
@@ -182,7 +182,7 @@ export default function ColumnGroups({
                         )}
                     </div>
                     {columnGroups.length === 0 ? undefined : (
-                        <DataTableYT<ColumnGroup>
+                        <DataTableYT<AclColumnGroup>
                             data={columnGroups}
                             columns={columns}
                             theme={'yt-borderless'}
