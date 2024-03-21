@@ -29,7 +29,7 @@ export const LOAD_ERROR = {
 };
 
 export const TYPED_OUTPUT_FORMAT = {
-    $value: 'json',
+    $value: 'json' as const,
     $attributes: {
         stringify: true,
         annotate_with_types: true,

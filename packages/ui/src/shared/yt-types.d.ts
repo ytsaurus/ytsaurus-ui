@@ -122,7 +122,11 @@ export interface PathParams extends BaseBatchParams {
         | 'json'
         | {
               $value: 'json';
-              $attributes: {encode_utf8?: 'true' | 'false'};
+              $attributes: {
+                  encode_utf8?: 'true' | 'false';
+                  annotate_with_types?: boolean;
+                  stringify?: boolean;
+              };
           };
 }
 
