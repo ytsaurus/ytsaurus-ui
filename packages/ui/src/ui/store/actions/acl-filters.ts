@@ -33,3 +33,7 @@ export function changeColumnsColumns({columnsColumns}: Pick<AclFiltersState, 'co
         data: {columnsColumns},
     };
 }
+
+export function updateAclFilters(data: Partial<AclFiltersState>) {
+    return {type: ACL_CHANGE_FILTERS, data};
+}

@@ -170,7 +170,7 @@ export default function ColumnGroups({
             <ErrorBoundary>
                 <div className={block()}>
                     <div className="elements-heading elements-heading_size_xs">
-                        Column Groups
+                        Column groups
                         {allowEdit && (
                             <Button
                                 className={block('button', {add: true})}

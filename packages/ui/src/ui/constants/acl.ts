@@ -126,3 +126,8 @@ export const PERMISSIONS_SETTINGS: Record<IdmKindType, PermissionSettings> = {
         allowDeleteWithoutRevisionCheck: true,
     },
 };
+
+export const enum AclMode {
+    MAIN_PERMISSIONS = 'main_permisssions',
+    COLUMN_GROUPS_PERMISSISONS = 'column_groups_permissions',
+}

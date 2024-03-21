@@ -21,6 +21,10 @@ export const aclFiltersParams = {
         stateKey: 'aclFilters.columnsColumns',
         initialState: initialState.columnsColumns,
     },
+    aclMode: {
+        stateKey: 'aclFilters.aclCurrentTab',
+        initialState: initialState.aclCurrentTab,
+    },
 };
 
 export function getAclFiltersPreparedState(state: RootState, {query}: {query: RootState}) {
@@ -29,5 +33,6 @@ export function getAclFiltersPreparedState(state: RootState, {query}: {query: Ro
         updateIfChanged(draft.aclFilters, 'objectSubject', query.aclFilters.objectSubject);
         updateIfChanged(draft.aclFilters, 'objectPermissions', query.aclFilters.objectPermissions);
         updateIfChanged(draft.aclFilters, 'columnsColumns', query.aclFilters.columnsColumns);
+        updateIfChanged(draft.aclFilters, 'aclCurrentTab', query.aclFilters.aclCurrentTab);
     });
 }
