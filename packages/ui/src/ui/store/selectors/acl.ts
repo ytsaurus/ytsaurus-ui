@@ -19,7 +19,7 @@ export type PreparedAclSubjectColumn = Omit<PreparedAclSubject, 'type'> & {type:
 function prepareColumnsNames(columnsPermissions: Array<{columns?: Array<string>}>) {
     const columns = _.map(columnsPermissions, (permission) => permission.columns);
 
-    return _.compact(_.uniq(_.flatten(columns)));
+    return _.compact(_.uniq(_.flatten(columns))).sort();
 }
 
 function prepareApprovers(
@@ -48,10 +48,10 @@ export type PreparedApprover = ReturnType<typeof prepareApprovers>[number];
 
 export const getAllUserPermissions = (state: RootState, idmKind: IdmKindType) =>
     state.acl[idmKind].userPermissions;
-export const getAllObjectPermissions = (state: RootState, idmKind: IdmKindType) =>
+const getAllObjectPermissions = (state: RootState, idmKind: IdmKindType) =>
     state.acl[idmKind].objectPermissions;
 
-export const getAllObjectPermissionsWithSplittedSubjects = createSelector(
+const getAllObjectPermissionsWithSplittedSubjects = createSelector(
     [getAllObjectPermissions],
     splitSubjects,
 );
@@ -150,13 +150,16 @@ export const getAllObjectPermissionsFiltered = createSelector(
                 permissionsFilterPredicate(item, permissionsFilter),
             );
         }
-        return _.filter(items, concatByAnd(...predicates));
-    },
-);
 
-export const getAllObjectPermissionsOrderedByInheritanceAndSubject = createSelector(
-    [getAllObjectPermissionsFiltered],
-    OrderByInheritanceAndSubject,
+        const allPermissions = OrderByInheritanceAndSubject(
+            _.filter(items, concatByAnd(...predicates)),
+        );
+        const [mainPermissions, columnsPermissions] = _.partition(
+            allPermissions,
+            (item) => !item.columns?.length,
+        );
+        return {mainPermissions, columnsPermissions};
+    },
 );
 
 export const getAllObjectPermissionsOrderedByStatus = createSelector(
@@ -261,11 +264,6 @@ export const getAllAccessColumnsPermissions = createSelector(
             return tmp;
         });
     },
-);
-
-export const getAllAccessColumnsPermissionsOrderedByInheritanceAndSubject = createSelector(
-    [getAllAccessColumnsPermissions],
-    OrderByInheritanceAndSubject,
 );
 
 const getAllDenyColumnsPermissions = createSelector(

@@ -6,7 +6,7 @@ import _ from 'lodash';
 import CollapsibleList from '../../../components/CollapsibleList/CollapsibleList';
 import ErrorBoundary from '../../../components/ErrorBoundary/ErrorBoundary';
 import Icon from '../../../components/Icon/Icon';
-import {IdmObjectType} from '../../../constants/acl';
+import {AclMode, IdmObjectType} from '../../../constants/acl';
 
 import RequestPermissions from '../RequestPermissions/RequestPermissions';
 import ManageAcl from '../ManageAcl/ManageAcl';
@@ -33,6 +33,7 @@ type Props = Pick<
     | 'bossApproval'
     | 'disableInheritanceResponsible'
     | 'columnGroups'
+    | 'aclMode'
 > & {
     className?: string;
     idmKind: IdmKindType;
@@ -59,6 +60,10 @@ export default class UserPermissions extends Component<Props> {
 
         return (
             <Fragment>
+                <div className="elements-heading elements-heading_size_m">
+                    <b>My permissions</b>
+                </div>
+
                 <div className="elements-heading elements-heading_size_xs">General</div>
 
                 <ul className={block('list', block('permissions-list'))}>
@@ -103,14 +108,12 @@ export default class UserPermissions extends Component<Props> {
     }
 
     renderCard() {
+        const {aclMode} = this.props;
         return (
             <div className={block('card')}>
-                <div className="elements-heading elements-heading_size_m">
-                    <b>My permissions</b>
-                </div>
-
-                {this.renderPermissions()}
-                {this.renderColumns()}
+                {aclMode === AclMode.COLUMN_GROUPS_PERMISSISONS
+                    ? this.renderColumns()
+                    : this.renderPermissions()}
             </div>
         );
     }

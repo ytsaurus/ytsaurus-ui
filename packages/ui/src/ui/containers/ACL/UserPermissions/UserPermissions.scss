@@ -43,6 +43,7 @@
 
     &__columns-item {
         margin-right: 5px;
+        line-break: anywhere;
 
         &:not(:last-child)::after {
             content: ',';
