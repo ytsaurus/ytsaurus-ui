@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.24.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.23.1...ui-v1.24.0) (2024-03-21)
+
+
+### Features
+
+* **Accounts:** add attribute modal [YTFRONT-3829] ([0af6f85](https://github.com/ytsaurus/ytsaurus-ui/commit/0af6f85395fdbdd2b0168d360a8d213dbde920a9))
+
 ## [1.23.1](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.23.0...ui-v1.23.1) (2024-03-21)
 
 
