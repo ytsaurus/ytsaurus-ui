@@ -646,10 +646,10 @@ function validateFormValues(
     quota: OrchidBundleResource | undefined,
     values: BundleEditorDialogFormValues,
 ) {
-    const res: Pick2<typeof values, 'resources', 'info', string> &
-        Pick2<typeof values, 'memory_limits', 'memory_reset', string> = {
-        resources: {info: ''},
-        memory_limits: {memory_reset: ''},
+    const res: Pick2<typeof values, 'resources', 'info', string | undefined> &
+        Pick2<typeof values, 'memory_limits', 'memory_reset', string | undefined> = {
+        resources: {info: undefined},
+        memory_limits: {memory_reset: undefined},
     };
 
     const {resources} = values;
@@ -668,7 +668,7 @@ function validateFormValues(
     res.memory_limits.memory_reset =
         currentAccLimit > (tabletNode?.memory ?? 0)
             ? 'The sum of the memory limits exceeds the allowed values'
-            : '';
+            : undefined;
 
     const {rpc_proxy_count = 0, tablet_node_count = 0} = resources;
 
@@ -690,7 +690,7 @@ function validateFormValues(
         violatedResources.push(`${hammer.format.Bytes(requiredMemory)} memory requried`);
     }
 
-    res.resources.info = violatedResources.length ? violatedResources.join(', ') : '';
+    res.resources.info = violatedResources.length ? violatedResources.join(', ') : undefined;
 
     return res;
 }
