@@ -82,6 +82,10 @@ export const getQueryEditorErrors = (state: RootState): QTEditorError[] => {
             });
         }
     }
+    const currentQuery = getCurrentQuery(state);
+    if (currentQuery && currentQuery.error) {
+        checkIsEditorError(currentQuery.error);
+    }
 
     return res;
 };
