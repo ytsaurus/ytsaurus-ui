@@ -2,9 +2,8 @@ import {ConnectedProps, connect} from 'react-redux';
 
 import {
     getAllAccessColumnsNames,
-    getAllAccessColumnsPermissionsOrderedByInheritanceAndSubject,
     getAllColumnGroupsActual,
-    getAllObjectPermissionsOrderedByInheritanceAndSubject,
+    getAllObjectPermissionsFiltered,
     getAllUserPermissions,
     getApproversFilteredAndOrdered,
     getHasApprovers,
@@ -21,7 +20,7 @@ import {
 
 import {getType} from '../../store/selectors/navigation';
 
-import {getColumnsColumns} from '../../store/selectors/acl-filters';
+import {getAclCurrentTab, getColumnsColumns} from '../../store/selectors/acl-filters';
 
 import {
     cancelRequestPermissions,
@@ -72,11 +71,7 @@ const makeAclMapStateToProps = (inputIdmKind: IdmKindType) => {
 
         const hasApprovers = getHasApprovers(state, idmKind);
         const approversFiltered = getApproversFilteredAndOrdered(state, idmKind);
-        const columnsPermissions = getAllAccessColumnsPermissionsOrderedByInheritanceAndSubject(
-            state,
-            idmKind,
-        );
-        const objectPermissions = getAllObjectPermissionsOrderedByInheritanceAndSubject(
+        const {mainPermissions, columnsPermissions} = getAllObjectPermissionsFiltered(
             state,
             idmKind,
         );
@@ -106,8 +101,8 @@ const makeAclMapStateToProps = (inputIdmKind: IdmKindType) => {
             disableAclInheritance,
             bossApproval,
             disableInheritanceResponsible,
-            objectPermissions,
             columnGroups,
+            mainPermissions,
             columnsPermissions,
             hasApprovers,
             approversFiltered,
@@ -128,6 +123,8 @@ const makeAclMapStateToProps = (inputIdmKind: IdmKindType) => {
 
             normalizedPoolTree,
             aclRequestOptions,
+
+            aclMode: idmKind !== 'path' ? undefined : getAclCurrentTab(state),
         };
     };
 };

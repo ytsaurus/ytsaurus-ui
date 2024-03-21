@@ -1,5 +1,5 @@
 import {YTPermissionTypeUI} from '../../../utils/acl/acl-api';
-import {ACL_CHANGE_FILTERS} from '../../../constants/acl';
+import {ACL_CHANGE_FILTERS, AclMode} from '../../../constants/acl';
 
 import type {ActionD} from '../../../types';
 
@@ -8,6 +8,8 @@ export interface AclFiltersState {
     objectSubject: string;
     objectPermissions: Array<YTPermissionTypeUI>;
     columnsColumns: string;
+
+    aclCurrentTab: AclMode;
 }
 
 export const initialState: AclFiltersState = {
@@ -15,6 +17,8 @@ export const initialState: AclFiltersState = {
     objectSubject: '',
     objectPermissions: [],
     columnsColumns: '',
+
+    aclCurrentTab: AclMode.MAIN_PERMISSIONS,
 };
 
 export default (state = initialState, action: AclFiltersAction): AclFiltersState => {
