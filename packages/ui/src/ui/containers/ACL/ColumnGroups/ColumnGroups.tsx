@@ -3,13 +3,14 @@ import React, {useState} from 'react';
 import _ from 'lodash';
 import cn from 'bem-cn-lite';
 
+import {Power} from '@gravity-ui/icons';
+
 import ErrorBoundary from '../../../components/ErrorBoundary/ErrorBoundary';
 
 import DataTableYT from '../../../components/DataTableYT/DataTableYT';
 import type {Column} from '@gravity-ui/react-data-table';
 import Icon from '../../../components/Icon/Icon';
 import Button from '../../../components/Button/Button';
-import StatusBulb from '../../../components/StatusBulb/StatusBulb';
 
 import EditColumnGroupModal, {Props as ModalProps} from './EditColumnGroupModal';
 import {AclColumnGroup} from '../../../utils/acl/acl-types';
@@ -114,6 +115,9 @@ export default function ColumnGroups({
             name: 'Empty',
             className: block('empty'),
             header: null,
+            render({row}) {
+                return <Power className={block('active-icon', {enabled: row.enabled})}/>;
+            }
         },
         {
             name: 'Name',
@@ -130,15 +134,6 @@ export default function ColumnGroups({
             },
             className: block('columns'),
             align: 'left',
-        },
-        {
-            name: 'Enabled',
-            className: block('enabled'),
-            render({row}) {
-                const theme = row.enabled ? 'enabled' : 'unknown';
-                return <StatusBulb theme={theme} />;
-            },
-            align: 'center',
         },
         {
             name: '',
