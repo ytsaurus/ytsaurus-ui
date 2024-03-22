@@ -13,6 +13,14 @@
         }
     }
 
+    &__active-icon {
+        margin-bottom: -3px;
+        color: var(--g-color-text-hint);
+        &_enabled {
+            color: var(--g-color-text-positive);
+        }
+    }
+
     &__icon {
         margin-left: 1ex;
         color: var(--secondary-text);
@@ -42,10 +50,6 @@
     & &__columns {
         width: 410px;
         white-space: normal;
-    }
-
-    & &__enabled {
-        width: 60px;
     }
 
     & &__actions {
