@@ -1,6 +1,5 @@
 import React from 'react';
 
-import '../../../../utils/acl/acl-types';
 import {AclColumnGroup} from '../../../../utils/acl/acl-types';
 import {Checkbox, Flex, Select, SelectOption} from '@gravity-ui/uikit';
 

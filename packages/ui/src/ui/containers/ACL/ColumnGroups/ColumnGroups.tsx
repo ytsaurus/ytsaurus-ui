@@ -4,6 +4,7 @@ import _ from 'lodash';
 import cn from 'bem-cn-lite';
 
 import {Power} from '@gravity-ui/icons';
+import {Select} from '@gravity-ui/uikit';
 
 import ErrorBoundary from '../../../components/ErrorBoundary/ErrorBoundary';
 
@@ -18,10 +19,19 @@ import UIFactory from '../../../UIFactory';
 
 import './ColumnGroups.scss';
 import {renderText} from '../../../components/templates/utils';
+import WithStickyToolbar from '../../../components/WithStickyToolbar/WithStickyToolbar';
+import {Toolbar} from '../../../components/WithStickyToolbar/Toolbar/Toolbar';
+import {ACLReduxProps} from '../ACL-connect-helpers';
 
 const block = cn('column-groups');
 
-interface Props {
+interface ColumnGropsToolbarProps
+    extends Pick<
+        ACLReduxProps,
+        'updadeAclFilters' | 'columnsFilter' | 'userPermissionsAccessColumns'
+    > {}
+
+interface Props extends ColumnGropsToolbarProps {
     columnGroups: Array<AclColumnGroup>;
     path: string;
     loadAclDataFn: () => void;
@@ -31,6 +41,9 @@ interface Props {
 
 export default function ColumnGroups({
     columnGroups,
+    userPermissionsAccessColumns,
+    columnsFilter,
+    updadeAclFilters,
     path,
     loadAclDataFn,
     cluster,
@@ -116,8 +129,8 @@ export default function ColumnGroups({
             className: block('empty'),
             header: null,
             render({row}) {
-                return <Power className={block('active-icon', {enabled: row.enabled})}/>;
-            }
+                return <Power className={block('active-icon', {enabled: row.enabled})} />;
+            },
         },
         {
             name: 'Name',
@@ -163,33 +176,76 @@ export default function ColumnGroups({
     return (
         <>
             <ErrorBoundary>
-                <div className={block()}>
-                    <div className="elements-heading elements-heading_size_xs">
-                        Column groups
-                        {allowEdit && (
-                            <Button
-                                className={block('button', {add: true})}
-                                onClick={handleAddClick}
-                            >
-                                <Icon awesome={'plus'} />
-                                Add
-                            </Button>
-                        )}
-                    </div>
-                    {columnGroups.length === 0 ? undefined : (
-                        <DataTableYT<AclColumnGroup>
-                            data={columnGroups}
-                            columns={columns}
-                            theme={'yt-borderless'}
-                            settings={{
-                                sortable: false,
-                                displayIndices: false,
-                            }}
+                <WithStickyToolbar
+                    disableToolbarTopPadding
+                    className={block()}
+                    toolbar={
+                        <ColumnGroupsToolbar
+                            {...{userPermissionsAccessColumns, columnsFilter, updadeAclFilters}}
                         />
-                    )}
-                </div>
+                    }
+                    content={
+                        Boolean(columnGroups.length) && (
+                            <>
+                                <div className="elements-heading elements-heading_size_xs">
+                                    Column groups
+                                    {allowEdit && (
+                                        <Button
+                                            className={block('button', {add: true})}
+                                            onClick={handleAddClick}
+                                        >
+                                            <Icon awesome={'plus'} />
+                                            Add
+                                        </Button>
+                                    )}
+                                </div>
+                                <DataTableYT<AclColumnGroup>
+                                    data={columnGroups}
+                                    columns={columns}
+                                    theme={'yt-borderless'}
+                                    settings={{
+                                        sortable: false,
+                                        displayIndices: false,
+                                    }}
+                                />
+                            </>
+                        )
+                    }
+                />
                 {modalProps.visible ? <EditColumnGroupModal {...modalProps} /> : null}
             </ErrorBoundary>
         </>
+    );
+}
+
+function ColumnGroupsToolbar({
+    columnsFilter: value,
+    userPermissionsAccessColumns,
+    updadeAclFilters,
+}: ColumnGropsToolbarProps) {
+    const options = React.useMemo(() => {
+        return userPermissionsAccessColumns?.map((value) => {
+            return {value, content: value};
+        });
+    }, [userPermissionsAccessColumns]);
+    return (
+        <Toolbar
+            itemsToWrap={[
+                {
+                    node: (
+                        <Select
+                            multiple
+                            hasClear
+                            filterable
+                            label="Columns"
+                            placeholder="filter"
+                            options={options}
+                            value={value}
+                            onUpdate={(columnsFilter) => updadeAclFilters({columnsFilter})}
+                        />
+                    ),
+                },
+            ]}
+        />
     );
 }

@@ -1,27 +1,25 @@
 import React from 'react';
-import {useDispatch, useSelector} from 'react-redux';
 
 import {RadioButton} from '@gravity-ui/uikit';
 
-import {getAclCurrentTab} from '../../store/selectors/acl-filters';
 import {AclMode} from '../../constants/acl';
 import format from '../../common/hammer/format';
-import {updateAclFilters} from '../../store/actions/acl-filters';
+import {ACLReduxProps} from './ACL-connect-helpers';
 
-export function AclModeControl() {
-    const dispatch = useDispatch();
-    const currentTab = useSelector(getAclCurrentTab);
-
+export function AclModeControl({
+    updadeAclFilters,
+    aclMode,
+}: Pick<ACLReduxProps, 'aclMode' | 'updadeAclFilters'>) {
     const options = [AclMode.MAIN_PERMISSIONS, AclMode.COLUMN_GROUPS_PERMISSISONS].map((value) => {
         return {value, content: format.ReadableField(value)};
     });
 
     return (
         <RadioButton
-            value={currentTab}
+            value={aclMode}
             options={options}
             onUpdate={(value) => {
-                dispatch(updateAclFilters({aclCurrentTab: value}));
+                updadeAclFilters({aclCurrentTab: value as AclMode});
             }}
         />
     );

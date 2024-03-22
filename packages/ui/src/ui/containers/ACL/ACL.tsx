@@ -368,11 +368,24 @@ class ACL extends Component<Props> {
     }
 
     renderColumnGroups() {
-        const {columnGroups, idmKind, path, loadAclData, cluster, nodeType} = this.props;
+        const {
+            columnGroups,
+            columnsFilter,
+            userPermissionsAccessColumns,
+            updadeAclFilters,
+            idmKind,
+            path,
+            loadAclData,
+            cluster,
+            nodeType,
+        } = this.props;
         const props = {
             path,
             loadAclDataFn: () => loadAclData({path, idmKind}),
             columnGroups,
+            columnsFilter,
+            updadeAclFilters,
+            userPermissionsAccessColumns,
             cluster,
             allowEdit: nodeType === 'map_node',
         };
@@ -419,6 +432,7 @@ class ACL extends Component<Props> {
             cluster,
             columnGroups,
             aclMode,
+            updadeAclFilters,
         } = this.props;
         const {deleteItem} = this.state;
 
@@ -428,7 +442,7 @@ class ACL extends Component<Props> {
             <Fragment>
                 {Boolean(aclMode) && (
                     <div>
-                        <AclModeControl />
+                        <AclModeControl {...{aclMode, updadeAclFilters}} />
                     </div>
                 )}
                 {useColumns ? (

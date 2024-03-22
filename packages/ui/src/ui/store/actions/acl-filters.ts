@@ -27,13 +27,6 @@ export function changeObjectPermissionsFilter({
     };
 }
 
-export function changeColumnsColumns({columnsColumns}: Pick<AclFiltersState, 'columnsColumns'>) {
-    return {
-        type: ACL_CHANGE_FILTERS,
-        data: {columnsColumns},
-    };
-}
-
 export function updateAclFilters(data: Partial<AclFiltersState>) {
     return {type: ACL_CHANGE_FILTERS, data};
 }

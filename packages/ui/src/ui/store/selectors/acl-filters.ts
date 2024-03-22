@@ -7,5 +7,5 @@ export function getExecuteBatchState(state: RootState) {
 export const getApproversSubjectFilter = (state: RootState) => state.aclFilters.approversSubject;
 export const getObjectSubjectFilter = (state: RootState) => state.aclFilters.objectSubject;
 export const getObjectPermissionsFilter = (state: RootState) => state.aclFilters.objectPermissions;
-export const getColumnsColumns = (state: RootState) => state.aclFilters.columnsColumns;
+export const getAclFilterColumns = (state: RootState) => state.aclFilters.columnsFilter;
 export const getAclCurrentTab = (state: RootState) => state.aclFilters.aclCurrentTab;

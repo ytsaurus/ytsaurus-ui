@@ -1,3 +1,4 @@
+import {EMPTY_ARRAY} from '../constants/empty';
 import _ from 'lodash';
 
 type ParseSerialize<T> = {
@@ -30,9 +31,13 @@ export function parseSerializeSymbolCreate<K extends string>(): Serialization<K>
 
 export const parseSerializeArrayString: Serialization<Array<string>> = {
     parse(v: string) {
-        return _.split(v, '|');
+        const res = _.split(v, '|');
+        return !res.length ? EMPTY_ARRAY : res;
     },
     serialize(v: Array<string>) {
+        if (!v?.length) {
+            return undefined;
+        }
         return _.join(v, '|');
     },
 };
