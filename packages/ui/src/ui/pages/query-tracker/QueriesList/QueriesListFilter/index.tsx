@@ -1,6 +1,6 @@
 import React, {useCallback} from 'react';
 import block from 'bem-cn-lite';
-import {ControlGroupOption, Icon, RadioButton, Tooltip} from '@gravity-ui/uikit';
+import {ControlGroupOption, Icon as GravityIcon, RadioButton, Tooltip} from '@gravity-ui/uikit';
 import {QueriesListAuthorFilter, QueriesListMode} from '../../module/queries_list/types';
 import CircleQuestionIcon from '@gravity-ui/icons/svgs/circle-question.svg';
 
@@ -9,6 +9,11 @@ import {QueryEngineFilter} from './QueryEngineFilter';
 import {QueryEngine} from '../../module/engines';
 import {QueryTextFilter} from './QueryTextFilter';
 import {useQuriesHistoryFilter} from '../../hooks/QueryListFilter';
+import Dropdown from '../../../../components/Dropdown/Dropdown';
+import Button from '../../../../components/Button/Button';
+import Icon from '../../../../components/Icon/Icon';
+import ColumnSelector from '../../../../components/ColumnSelector/ColumnSelector';
+import {useQueryHistoryListColumns} from '../QueriesHistoryList/useQueryListColumns';
 
 const AuthorFilter: ControlGroupOption[] = [
     {
@@ -26,8 +31,10 @@ const b = block('queries-history-filter');
 type QueriesHistoryListFilterProps = {
     className?: string;
 };
+
 export function QueriesHistoryListFilter({className}: QueriesHistoryListFilterProps) {
     const [filter, filterViewMode, onChange] = useQuriesHistoryFilter();
+    const {allowedColumns, handleColumnChange} = useQueryHistoryListColumns({type: filter.user});
 
     const onChangeAuthorFilter = useCallback(
         (user: string) => {
@@ -78,8 +85,20 @@ export function QueriesHistoryListFilter({className}: QueriesHistoryListFilterPr
                             </>
                         }
                     >
-                        <Icon data={CircleQuestionIcon} size={16} />
+                        <GravityIcon data={CircleQuestionIcon} size={16} />
                     </Tooltip>
+                    <Dropdown
+                        trigger="click"
+                        directions={['bottom']}
+                        button={
+                            <Button pin={'round-round'} className={b('columns-button')}>
+                                <Icon awesome="table" face="light" />
+                            </Button>
+                        }
+                        template={
+                            <ColumnSelector items={allowedColumns} onChange={handleColumnChange} />
+                        }
+                    />
                 </div>
             )}
         </div>

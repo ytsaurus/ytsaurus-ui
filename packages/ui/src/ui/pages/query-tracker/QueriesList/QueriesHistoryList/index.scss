@@ -32,15 +32,31 @@
 
     &__name-edit {
         visibility: hidden;
-        width: 0;
+        flex: 1px;
+        overflow: hidden;
         z-index: 1;
         margin: -14px 0;
     }
 
     &:hover &__name-edit {
+        flex: 1;
         padding-left: 5px;
         visibility: visible;
         width: auto;
+        overflow: visible;
+    }
+
+    &_header {
+        padding: 8px 0;
+
+        &:hover {
+            background: transparent;
+            cursor: auto;
+        }
+    }
+
+    &__separator {
+        text-align: center;
     }
 }
 
