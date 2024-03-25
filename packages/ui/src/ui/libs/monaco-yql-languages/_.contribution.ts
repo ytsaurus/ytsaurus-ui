@@ -1,5 +1,9 @@
 import {Emitter, IDisposable, IEvent, languages} from './fillers/monaco-editor-core';
 import {CompletionLists, getCompletionItemsProvider} from './completion';
+import * as monaco from 'monaco-editor';
+import {createProvideSuggestionsFunction} from './helpers/createProvideSuggestionsFunction';
+import {parseClickHouseQuery, parseYqlQuery} from '@gravity-ui/websql-autocomplete';
+import {MonacoLanguage} from '../../constants/monaco';
 
 interface ILang extends languages.ILanguageExtensionPoint {
     loader: () => Promise<ILangImpl>;
@@ -72,6 +76,15 @@ export function registerLanguage(def: ILang): void {
         lazyLanguageLoader.load().then((mod) => {
             languages.setLanguageConfiguration(languageId, mod.conf);
         });
+
+        if (languageId === MonacoLanguage.YQL || languageId === MonacoLanguage.CHYT) {
+            monaco.languages.registerCompletionItemProvider(languageId, {
+                triggerCharacters: [' ', '\n', '', '.', ',', '`', '('],
+                provideCompletionItems: createProvideSuggestionsFunction(
+                    languageId === MonacoLanguage.CHYT ? parseClickHouseQuery : parseYqlQuery,
+                ),
+            });
+        }
     });
     lazyLanguageLoader.whenLoaded().then((mod) => {
         if (mod.completions) {
