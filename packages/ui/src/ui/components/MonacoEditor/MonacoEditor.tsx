@@ -71,7 +71,7 @@ class MonacoEditor extends React.Component<Props> {
     }
 
     componentDidUpdate(prevProps: Readonly<Props>): void {
-        const {theme, value, monacoConfig, readOnly} = this.props;
+        const {theme, value, monacoConfig, readOnly, language} = this.props;
         const options: monaco.editor.IStandaloneEditorConstructionOptions = {};
         if (prevProps.theme !== theme) {
             options.theme = THEMES[theme];
@@ -83,6 +83,11 @@ class MonacoEditor extends React.Component<Props> {
             this.silent = true;
             this.model.setValue(value);
             this.silent = false;
+        }
+        if (language !== prevProps.language) {
+            this.model = monaco.editor.createModel(this.model.getValue(), this.props.language);
+            this.model.onDidChangeContent(this.onContentChanged); // the new model needs to re-specify the callback
+            this.editor?.setModel(this.model);
         }
         if (readOnly !== prevProps.readOnly) {
             this.editor?.updateOptions({readOnly});

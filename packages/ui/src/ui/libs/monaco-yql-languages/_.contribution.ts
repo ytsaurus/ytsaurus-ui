@@ -1,5 +1,4 @@
-import {Emitter, IDisposable, IEvent, languages} from './fillers/monaco-editor-core';
-import {CompletionLists, getCompletionItemsProvider} from './completion';
+import {CancellationToken, Emitter, IEvent, Position, editor, languages} from 'monaco-editor';
 
 interface ILang extends languages.ILanguageExtensionPoint {
     loader: () => Promise<ILangImpl>;
@@ -8,7 +7,12 @@ interface ILang extends languages.ILanguageExtensionPoint {
 interface ILangImpl {
     conf: languages.LanguageConfiguration;
     language: languages.IMonarchLanguage;
-    completions?: CompletionLists;
+    provideSuggestionsFunction?: (
+        model: editor.ITextModel,
+        monacoCursorPosition: Position,
+        _context: languages.CompletionContext,
+        _token: CancellationToken,
+    ) => {suggestions: languages.CompletionItem[]};
 }
 
 const languageDefinitions: {[languageId: string]: ILang} = {};
@@ -53,10 +57,6 @@ class LazyLanguageLoader {
     }
 }
 
-export function loadLanguage(languageId: string): Promise<ILangImpl> {
-    return LazyLanguageLoader.getOrCreate(languageId).load();
-}
-
 export function registerLanguage(def: ILang): void {
     const languageId = def.id;
 
@@ -74,44 +74,12 @@ export function registerLanguage(def: ILang): void {
         });
     });
     lazyLanguageLoader.whenLoaded().then((mod) => {
-        if (mod.completions) {
-            registerCompletionItemProvider(languageId, mod.completions);
+        if (mod.provideSuggestionsFunction) {
+            languages.registerCompletionItemProvider(languageId, {
+                provideCompletionItems: mod.provideSuggestionsFunction,
+            });
         }
     });
-}
-
-function registerCompletionItemProvider(languageId: string, completions: CompletionLists) {
-    const disposables: IDisposable[] = [];
-
-    function unregister() {
-        while (disposables.length > 0) {
-            disposables.pop()?.dispose();
-        }
-    }
-
-    const defaults: LanguageServiceDefaults | undefined = (languages as any)[languageId];
-
-    if (!defaults || defaults.modeConfiguration.completionItems) {
-        disposables.push(
-            languages.registerCompletionItemProvider(
-                languageId,
-                getCompletionItemsProvider(completions, languages.CompletionItemKind),
-            ),
-        );
-    }
-
-    if (defaults) {
-        disposables.push(
-            defaults.onDidChange(() => {
-                unregister();
-                registerCompletionItemProvider(languageId, completions);
-            }),
-        );
-    }
-}
-
-export interface ICreateData {
-    languageId: string;
 }
 
 export interface ModeConfiguration {
