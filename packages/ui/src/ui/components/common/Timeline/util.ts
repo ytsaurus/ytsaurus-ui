@@ -60,6 +60,10 @@ export const formatInterval = (from: MomentInput, to: MomentInput) => {
     }
 };
 
+export const formatTime = (date: MomentInput) => {
+    return moment(date).format('HH:mm');
+};
+
 export const formatDateCompact = (date: MomentInput) => {
     return moment(date).format('DD.MM.YY, HH:mm');
 };

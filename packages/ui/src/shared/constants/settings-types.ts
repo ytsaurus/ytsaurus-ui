@@ -68,15 +68,19 @@ interface AccountsSettings {
     'global::accounts::dashboardVisibilityMode': 'string';
 }
 
+type ClusterName = string;
+
 interface QueryTrackerSettings {
     'global::queryTracker::queriesListSidebarVisibilityMode': boolean;
 }
 
+type QueryTrackerHistoryColumnsSettings = {
+    [key in `local::${ClusterName}::queryTracker::history::Columns`]: string[];
+};
+
 interface ChytSettings {
     'global::chyt::list_columns': Array<string>;
 }
-
-type ClusterName = string;
 
 type QueryTrackerLastSelectedACOsSettings = {
     [key in `local::${ClusterName}::queryTracker::lastSelectedACOs`]: string[];
@@ -96,7 +100,7 @@ export interface DefaultSettings {
     A11Y: A11YSettings;
     MENU: MenuSettings;
     ACCOUNTS: AccountsSettings;
-    QUERY_TRACKER: QueryTrackerSettings;
+    QUERY_TRACKER: QueryTrackerSettings | QueryTrackerHistoryColumnsSettings;
     CHYT: ChytSettings;
 }
 
@@ -111,7 +115,8 @@ type DescribedSettings = GlobalSettings &
     AccountsSettings &
     QueryTrackerSettings &
     ChytSettings &
-    QueryTrackerLastSelectedACOsSettings;
+    QueryTrackerLastSelectedACOsSettings &
+    QueryTrackerHistoryColumnsSettings;
 
 export type Settings = DescribedSettings & OtherSettings;
 
