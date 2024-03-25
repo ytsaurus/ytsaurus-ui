@@ -92,6 +92,7 @@ class ElementsTable extends Component {
 
         rowClassName: PropTypes.func,
         colSpan: PropTypes.func,
+        headerClassName: PropTypes.string,
     };
 
     static defaultProps = {
