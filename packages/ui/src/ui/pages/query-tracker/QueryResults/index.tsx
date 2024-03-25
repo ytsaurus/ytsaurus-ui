@@ -144,7 +144,7 @@ export const QueryResults = React.memo(function QueryResults({
                         {category === QueryResultTab.META && <QueryMetaTable query={query} />}
 
                         <NotRenderUntilFirstVisible hide={category !== QueryResultTab.STATISTIC}>
-                            <YQLStatisticsTable query={query} />
+                            <YQLStatisticsTable />
                         </NotRenderUntilFirstVisible>
                         {category === QueryResultTab.PROGRESS && (
                             <PlanContainer
