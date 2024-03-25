@@ -1,4 +1,4 @@
-import type {languages} from '../fillers/monaco-editor-core';
+import type {languages} from 'monaco-editor';
 import {
     constants,
     dataTypeFamiliesCaseInsensitive,
@@ -10,8 +10,6 @@ import {
     tableEngines,
     tableFunctions,
 } from './clickhouse.keywords';
-
-export {completionLists} from './clickhouse.keywords';
 
 export const conf: languages.LanguageConfiguration = {
     comments: {

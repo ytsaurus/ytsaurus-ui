@@ -32,8 +32,23 @@ import {isSupportedQtACO} from '../module/query_aco/selectors';
 import {QueryACOSelect} from '../QueryACO/QueryACOSelect';
 import {useQueryACO} from '../QueryACO/useQueryACO';
 import {useMonaco} from '../hooks/useMonaco';
+import {QueryEngine} from '../module/engines';
+import {MonacoLanguage} from '../../../constants/monaco';
 
 const b = block('query-container');
+
+const getLanguageByEngine = (engine: QueryEngine): MonacoLanguage => {
+    switch (engine) {
+        case QueryEngine.CHYT:
+            return MonacoLanguage.CHYT;
+        case QueryEngine.SPYT:
+            return MonacoLanguage.SPYT;
+        case QueryEngine.YT_QL:
+            return MonacoLanguage.YTQL;
+        default:
+            return MonacoLanguage.YQL;
+    }
+};
 
 const QueryEditorView = React.memo(function QueryEditorView({
     onStartQuery,
@@ -153,7 +168,7 @@ const QueryEditorView = React.memo(function QueryEditorView({
             <MonacoEditor
                 editorRef={editorRef}
                 value={text || ''}
-                language={'yql'}
+                language={getLanguageByEngine(engine)}
                 className={b('editor')}
                 onChange={upadteQueryText}
                 monacoConfig={monacoConfig}

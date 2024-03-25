@@ -1,4 +1,6 @@
-import type {CompletionLists} from '../completion';
+import {ClickHouseAutocompleteResult} from '@gravity-ui/websql-autocomplete';
+import {IRange, languages} from 'monaco-editor';
+import {generateSuggestion} from '../helpers/generateSuggestions';
 
 export const keywords = [
     'AND',
@@ -1295,12 +1297,56 @@ export const dataTypeFamiliesCaseInsensitive = [
     'VARCHAR2',
 ];
 
-export const completionLists: CompletionLists = {
-    keywordList: keywords.concat(keywordsDouble),
-    constantList: constants,
-    typeParameterList: dataTypeFamiliesCaseSensitive.concat(
-        dataTypeFamiliesCaseInsensitive,
-        tableEngines,
-    ),
-    functionList: functionsCaseSensitive.concat(functionsCaseInsensitive, tableFunctions),
+export const generateClickhouseAdditionalSuggestion = (
+    rangeToInsertSuggestion: IRange,
+    parserResult: ClickHouseAutocompleteResult,
+) => {
+    let result: languages.CompletionItem[] = [
+        ...generateSuggestion({
+            kind: languages.CompletionItemKind.TypeParameter,
+            detail: 'Type',
+            suggestionType: 'suggestSimpleTypes',
+            rangeToInsertSuggestion,
+            items: [
+                ...dataTypeFamiliesCaseSensitive,
+                ...dataTypeFamiliesCaseInsensitive,
+                ...tableEngines,
+            ],
+        }),
+        ...generateSuggestion({
+            kind: languages.CompletionItemKind.Constant,
+            detail: 'Constant',
+            suggestionType: 'suggestConstants',
+            rangeToInsertSuggestion,
+            items: constants,
+        }),
+    ];
+
+    if (parserResult.suggestFunctions) {
+        result = [
+            ...result,
+            ...generateSuggestion({
+                kind: languages.CompletionItemKind.Function,
+                detail: 'Function',
+                suggestionType: 'suggestFunctions',
+                rangeToInsertSuggestion,
+                items: [...functionsCaseSensitive, ...functionsCaseInsensitive, ...tableFunctions],
+            }),
+        ];
+    }
+
+    if (parserResult.suggestKeywords) {
+        result = [
+            ...result,
+            ...generateSuggestion({
+                kind: languages.CompletionItemKind.Keyword,
+                detail: 'Keyword',
+                suggestionType: 'suggestKeywords',
+                rangeToInsertSuggestion,
+                items: [...keywords, ...keywordsDouble],
+            }),
+        ];
+    }
+
+    return result;
 };
