@@ -54,6 +54,13 @@ export type SetQueryParamsAction = ActionD<
 export const UPDATE_ACO_QUERY = 'query-tracker/UPDATE_ACO_QUERY';
 export type UpdateACOQueryAction = ActionD<typeof UPDATE_ACO_QUERY, string>;
 
+export const PROGRESS_YQL_STATISTIC_CHANGE_FILTER_TEXT =
+    'query-tracker/PROGRESS_YQL_STATISTIC:CHANGE_FILTER_TEXT';
+export type ChangeProgressYQLStatisticFilterTextAction = ActionD<
+    typeof PROGRESS_YQL_STATISTIC_CHANGE_FILTER_TEXT,
+    {filter: string}
+>;
+
 export function loadQuery(
     queryId: string,
 ): ThunkAction<any, RootState, any, SetQueryAction | RequestQueryAction | SetQueryErrorLoadAction> {
@@ -234,5 +241,13 @@ export function setDraftQueryACO({
         return dispatch(addACOToLastSelected(aco)).then(() =>
             dispatch(updateQueryDraft({access_control_object: aco})),
         );
+    };
+}
+
+export function changeProgressYQLStatisticsFilter(
+    filter: string,
+): ThunkAction<unknown, RootState, any, ChangeProgressYQLStatisticFilterTextAction> {
+    return (dispatch) => {
+        return dispatch({type: PROGRESS_YQL_STATISTIC_CHANGE_FILTER_TEXT, data: {filter}});
     };
 }
