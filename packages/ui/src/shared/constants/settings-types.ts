@@ -68,15 +68,16 @@ interface AccountsSettings {
     'global::accounts::dashboardVisibilityMode': 'string';
 }
 
+type ClusterName = string;
+
 interface QueryTrackerSettings {
     'global::queryTracker::queriesListSidebarVisibilityMode': boolean;
+    'global::queryTracker::history::Columns': string[];
 }
 
 interface ChytSettings {
     'global::chyt::list_columns': Array<string>;
 }
-
-type ClusterName = string;
 
 type QueryTrackerLastSelectedACOsSettings = {
     [key in `local::${ClusterName}::queryTracker::lastSelectedACOs`]: string[];

@@ -14,4 +14,12 @@
             margin-bottom: 8px;
         }
     }
+
+    &__row-item:not(:first-child) {
+        margin-left: 8px;
+    }
+
+    &__columns-button {
+        margin-left: 8px;
+    }
 }

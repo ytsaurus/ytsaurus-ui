@@ -1,28 +1,31 @@
-import hammer from '../../../../common/hammer';
+import moment from 'moment';
+import groupBy from 'lodash/groupBy';
+import noop from 'lodash/noop';
 import {Text} from '@gravity-ui/uikit';
 import block from 'bem-cn-lite';
-import React, {useCallback, useContext, useEffect, useMemo, useRef, useState} from 'react';
+import React, {useCallback, useContext, useEffect, useMemo, useRef} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
+import DataTable, {Column, Settings} from '@gravity-ui/react-data-table';
 import {QueryItem, QueryStatus} from '../../module/api';
 import {refreshQueriesListIfNeeded} from '../../module/queries_list/actions';
 import {getQueriesListTimestamp, getUncompletedItems} from '../../module/queries_list/selectors';
 import {QueryStatusIcon} from '../../QueryStatus';
+import hammer from '../../../../common/hammer';
 
-import './index.scss';
 import Pagination from '../../../../components/Pagination/Pagination';
-import {noop} from 'lodash';
 import {QueriesPoolingContext} from '../../hooks/QueriesPooling/context';
-import {formatDateCompact} from '../../../../components/common/Timeline/util';
+import {formatTime} from '../../../../components/common/Timeline/util';
 import {QueryEnginesNames} from '../../utils/query';
 import DataTableYT from '../../../../components/DataTableYT/DataTableYT';
-import DataTable, {Column, Settings} from '@gravity-ui/react-data-table';
 import {useQuriesHistoryFilter} from '../../hooks/QueryListFilter';
-import {QueriesListAuthorFilter} from '../../module/queries_list/types';
 import {QueryDuration} from '../../QueryDuration';
 import {useQueryNavigation} from '../../hooks/Query';
 import {useQueriesPagination, useQueryList} from '../../hooks/QueriesList';
 import EditQueryNameModal from '../EditQueryNameModal/EditQueryNameModal';
 import {UPDATE_QUERIES_LIST} from '../../module/query-tracker-contants';
+import {useQueryHistoryListColumns} from './useQueryListColumns';
+
+import './index.scss';
 
 const b = block('queries-history-list');
 
@@ -81,11 +84,22 @@ function useQueryHistoryList() {
     return useQueryList();
 }
 
-const NameColumns: Column<QueryItem> = {
+type HeaderTableItem = {header: string};
+type TableItem = QueryItem | HeaderTableItem;
+
+const isHeaderTableItem = (b: TableItem): b is HeaderTableItem => {
+    return (b as HeaderTableItem).header !== undefined;
+};
+
+export const NameColumns: Column<TableItem> = {
     name: 'Name',
     align: 'left',
     className: itemBlock('name_row'),
     render: ({row}) => {
+        if (isHeaderTableItem(row)) {
+            return <div className={itemBlock('separator')}>{row.header}</div>;
+        }
+
         const name = row.annotations?.title;
         return (
             <div className={itemBlock('name')} title={name}>
@@ -103,11 +117,15 @@ const NameColumns: Column<QueryItem> = {
     },
 };
 
-const TypeColumns: Column<QueryItem> = {
+const TypeColumns: Column<TableItem> = {
     name: 'Type',
     align: 'center',
     width: 60,
     render: ({row}) => {
+        if (isHeaderTableItem(row)) {
+            return null;
+        }
+
         return (
             <Text variant="body-1" color="secondary">
                 {row.engine in QueryEnginesNames ? QueryEnginesNames[row.engine] : row.engine}
@@ -116,11 +134,15 @@ const TypeColumns: Column<QueryItem> = {
     },
 };
 
-const DurationColumns: Column<QueryItem> = {
+const DurationColumns: Column<TableItem> = {
     name: 'Duration',
     align: 'left',
     width: 100,
     render: ({row}) => {
+        if (isHeaderTableItem(row)) {
+            return null;
+        }
+
         if (row.state === QueryStatus.RUNNING) {
             return hammer.format.NO_VALUE;
         }
@@ -128,25 +150,33 @@ const DurationColumns: Column<QueryItem> = {
     },
 };
 
-const StartedColumns: Column<QueryItem> = {
+const StartedColumns: Column<TableItem> = {
     name: 'Started',
     align: 'left',
-    width: 120,
+    width: 60,
     render: ({row}) => {
+        if (isHeaderTableItem(row)) {
+            return null;
+        }
+
         return (
             <Text variant="body-1" color="secondary">
-                {formatDateCompact(row.start_time)}
+                {formatTime(row.start_time)}
             </Text>
         );
     },
 };
 
-const AuthorColumns: Column<QueryItem> = {
+export const AuthorColumns: Column<TableItem> = {
     name: 'Author',
     align: 'left',
     width: 120,
     className: itemBlock('author_row'),
     render: ({row}) => {
+        if (isHeaderTableItem(row)) {
+            return null;
+        }
+
         return (
             <Text variant="body-1" ellipsis title={row.user}>
                 {row.user}
@@ -155,13 +185,38 @@ const AuthorColumns: Column<QueryItem> = {
     },
 };
 
-const MyColumns: Column<QueryItem>[] = [NameColumns, TypeColumns, DurationColumns, StartedColumns];
-const AllColumns: Column<QueryItem>[] = [
+const ACOColumns: Column<TableItem> = {
+    name: 'ACO',
+    align: 'left',
+    width: 60,
+    className: itemBlock('access_control_object'),
+    render: ({row}) => {
+        if (isHeaderTableItem(row)) {
+            return null;
+        }
+
+        return (
+            <Text variant="body-1" ellipsis title={row.access_control_object}>
+                {row.access_control_object}
+            </Text>
+        );
+    },
+};
+
+export const MyColumns: Column<TableItem>[] = [
+    NameColumns,
+    TypeColumns,
+    DurationColumns,
+    StartedColumns,
+    ACOColumns,
+];
+export const AllColumns: Column<TableItem>[] = [
     NameColumns,
     TypeColumns,
     DurationColumns,
     AuthorColumns,
     StartedColumns,
+    ACOColumns,
 ];
 
 const tableSettings: Settings = {
@@ -173,24 +228,12 @@ const tableSettings: Settings = {
 
 export function QueriesHistoryList() {
     const [items, isLoading] = useQueryHistoryList();
-
     const [filter] = useQuriesHistoryFilter();
-
+    const {columns} = useQueryHistoryListColumns({type: filter.user});
     const timestamp = useSelector(getQueriesListTimestamp);
-
     const {first, last, goBack, goNext, goFirst} = useQueriesPagination();
-
     const [selectedId, goToQuery] = useQueryNavigation();
-
-    const [columns, setColumns] = useState<Column<QueryItem>[]>([]);
-
     const scrollElemRef = useRef<HTMLDivElement | null>(null);
-
-    useEffect(() => {
-        if (!isLoading || !items?.length) {
-            setColumns(filter.user === QueriesListAuthorFilter.My ? MyColumns : AllColumns);
-        }
-    }, [items, setColumns, filter.user, isLoading]);
 
     useEffect(() => {
         if (scrollElemRef?.current) {
@@ -199,12 +242,32 @@ export function QueriesHistoryList() {
     }, [scrollElemRef, timestamp]);
 
     const setClassName = useCallback(
-        (item: QueryItem) => {
+        (item: TableItem) => {
+            if (isHeaderTableItem(item)) {
+                return itemBlock({
+                    header: Boolean(item.header),
+                });
+            }
+
             return itemBlock({
                 selected: item.id === selectedId,
             });
         },
         [selectedId],
+    );
+
+    const itemsByDate = useMemo(
+        () =>
+            Object.entries(
+                groupBy(items, (item) => moment(item.start_time).format('DD MMMM YYYY')),
+            ).reduce((ret, [header, items]) => {
+                ret.push({
+                    header,
+                });
+
+                return ret.concat(items.map((item) => item));
+            }, [] as Array<TableItem>),
+        [items],
     );
 
     return (
@@ -214,13 +277,32 @@ export function QueriesHistoryList() {
                     className={b('list')}
                     loading={isLoading}
                     columns={columns}
-                    data={items}
+                    data={itemsByDate}
                     useThemeYT={true}
-                    rowKey={(row) => row.id}
-                    onRowClick={goToQuery}
+                    rowKey={(row) => {
+                        if (isHeaderTableItem(row)) {
+                            return row.header;
+                        }
+
+                        return row.id;
+                    }}
+                    onRowClick={(item) => {
+                        if (!isHeaderTableItem(item)) {
+                            goToQuery(item);
+                        }
+                    }}
                     disableRightGap={true}
                     settings={tableSettings}
                     rowClassName={setClassName}
+                    getColSpansOfRow={({row}) => {
+                        if (isHeaderTableItem(row)) {
+                            return {
+                                Name: columns.length,
+                            };
+                        }
+
+                        return undefined;
+                    }}
                 />
                 <div className={b('pagination')}>
                     {(!first || !last) && (
