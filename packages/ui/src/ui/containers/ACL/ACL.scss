@@ -23,10 +23,6 @@
         }
     }
 
-    &__approvers {
-        margin-bottom: 20px;
-    }
-
     &__object-permissions {
         grid-column: 1 / -2;
 
@@ -187,6 +183,17 @@
             &:hover {
                 cursor: pointer;
             }
+        }
+    }
+
+    &__flags {
+        margin-bottom: -10px;
+    }
+
+    &__flags-item {
+        margin-bottom: 10px;
+        &_flags {
+            margin-right: 16px;
         }
     }
 

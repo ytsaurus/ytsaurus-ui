@@ -2,6 +2,9 @@ import React, {Component, Fragment} from 'react';
 import hammer from '../../common/hammer';
 import cn from 'bem-cn-lite';
 import _ from 'lodash';
+
+import {Flex} from '@gravity-ui/uikit';
+
 import {IdmObjectType} from '../../constants/acl';
 
 import ColumnGroups from './ColumnGroups/ColumnGroups';
@@ -12,7 +15,6 @@ import UserPermissions from './UserPermissions/UserPermissions';
 import LoadDataHandler from '../../components/LoadDataHandler/LoadDataHandler';
 import ErrorBoundary from '../../components/ErrorBoundary/ErrorBoundary';
 import DataTableYT from '../../components/DataTableYT/DataTableYT';
-import MetaTable from '../../components/MetaTable/MetaTable';
 import {ClipboardButton, Loader, Popover} from '@gravity-ui/uikit';
 import Icon from '../../components/Icon/Icon';
 import Link from '../../components/Link/Link';
@@ -33,27 +35,10 @@ import {PreparedApprover} from '../../store/selectors/acl';
 
 import './ACL.scss';
 import {Column} from '@gravity-ui/react-data-table';
+import {SegmentControl, SegmentControlItem} from '../../components/SegmentControl/SegmentControl';
+import {PreparedRole} from '../../utils/acl';
 
 const block = cn('navigation-acl');
-
-function FlagRole<T extends {inherited?: boolean}>({
-    role,
-    invert,
-}: {
-    role?: T | boolean;
-    invert?: boolean;
-}) {
-    const RoleActions = UIFactory.getComponentForAclRoleActions();
-    const value = invert ? !role : Boolean(role);
-    return (
-        <React.Fragment>
-            {String(value)}
-            {'boolean' !== typeof role && role && RoleActions !== undefined && (
-                <RoleActions role={role} />
-            )}
-        </React.Fragment>
-    );
-}
 
 type Props = ACLReduxProps & WithVisibleProps;
 
@@ -483,7 +468,6 @@ class ACL extends Component<Props> {
                         cancelUpdateAcl={userPermissionsCancelUpdateAcl}
                     />
                 )}
-
                 <DeletePermissionModal
                     idmKind={idmKind}
                     path={path}
@@ -506,46 +490,41 @@ class ACL extends Component<Props> {
         const {allowBossApprovals, allowInheritAcl, allowInheritResponsibles} =
             UIFactory.getAclPermissionsSettings()[idmKind];
 
-        const {inherited: bossApprovalInherited} = bossApproval || {};
-        const aclInherited =
-            'boolean' === typeof disableAclInheritance
-                ? disableAclInheritance
-                : disableAclInheritance?.inherited;
-
-        const items = _.compact([
-            allowInheritAcl && [
-                {
-                    icon: Boolean(aclInherited) && (
-                        <Icon className={block('flag-icon')} awesome={'level-down-alt'} />
-                    ),
-                    key: 'inherit ACL',
-                    value: <FlagRole role={disableAclInheritance} invert />,
-                },
-            ],
-            isIdmAclAvailable() &&
-                allowBossApprovals && [
-                    {
-                        icon: Boolean(bossApprovalInherited) && (
-                            <Icon className={block('flag-icon')} awesome={'level-down-alt'} />
-                        ),
-                        key: 'boss approval',
-                        value: <FlagRole role={bossApproval} />,
-                    },
-                ],
-            isIdmAclAvailable() &&
-                allowInheritResponsibles && [
-                    {
-                        key: 'inherit responsibles',
-                        value: <FlagRole role={disableInheritanceResponsible} invert />,
-                    },
-                ],
-        ]);
-
-        if (!items.length) {
-            return null;
+        function toSegmentItem(name: string, role?: boolean | PreparedRole, invert?: boolean) {
+            return {
+                name,
+                value: invert ? !role : Boolean(role),
+                url: 'boolean' === typeof role ? 'https://yt.yandex-team.ru' : role?.idmLink,
+            };
         }
 
-        return <MetaTable className={block('meta')} items={items} />;
+        const segments: Array<SegmentControlItem> = _.compact([
+            allowInheritAcl && toSegmentItem('Inherit ACL', disableAclInheritance, true),
+            isIdmAclAvailable() &&
+                allowBossApprovals &&
+                toSegmentItem('Boss approval', bossApproval),
+            isIdmAclAvailable() &&
+                allowInheritResponsibles &&
+                toSegmentItem('Inherit responsibles', disableInheritanceResponsible, true),
+        ]);
+
+        const {objectPermissions, approversFiltered, columnGroups} = this.props;
+
+        const counters: Array<SegmentControlItem> = [
+            {name: 'Responsibles', value: approversFiltered.length},
+            {name: 'Object permissions', value: objectPermissions.length},
+            {name: 'Column groups', value: columnGroups.length},
+        ];
+
+        return (
+            <Flex className={block('meta')} wrap>
+                <SegmentControl
+                    className={block('meta-overview')}
+                    background="neutral-light"
+                    groups={[segments, counters]}
+                />
+            </Flex>
+        );
     }
 
     render() {
