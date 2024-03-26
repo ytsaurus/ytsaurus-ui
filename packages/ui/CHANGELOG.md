@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.24.1](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.24.0...ui-v1.24.1) (2024-03-26)
+
+
+### Bug Fixes
+
+* **Query:** underline in monaco [YTFRONT-4069] ([d2bc351](https://github.com/ytsaurus/ytsaurus-ui/commit/d2bc35179fd924a2150f28f4aa2d278213592d7b))
+
 ## [1.24.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.23.1...ui-v1.24.0) (2024-03-21)
 
 
