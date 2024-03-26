@@ -25,7 +25,7 @@ import withVisible, {WithVisibleProps} from '../../../hocs/withVisible';
 
 import './ManageAcl.scss';
 import UIFactory from '../../../UIFactory';
-import ErrorBlock from '../../Block/Block';
+import ErrorBlock from '../../../components/Block/Block';
 import {ACLReduxProps} from '../ACL-connect-helpers';
 
 const block = cn('acl-manage');

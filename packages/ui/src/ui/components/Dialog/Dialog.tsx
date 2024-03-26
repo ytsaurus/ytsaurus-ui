@@ -2,8 +2,8 @@ import React, {ComponentProps} from 'react';
 import cn from 'bem-cn-lite';
 import _ from 'lodash';
 
-import SubjectsControl from '../ACL/SubjectsControl/SubjectsControl';
-import PermissionsControl from '../../components/ACL/RequestPermissions/PermissionsControl/PermissionsControl';
+import SubjectsControl from '../../containers/ACL/SubjectsControl/SubjectsControl';
+import PermissionsControl from '../../containers/ACL/RequestPermissions/PermissionsControl/PermissionsControl';
 import AccountsSuggest, {AccountsSuggestWithLoading} from '../../pages/accounts/AccountsSuggest';
 import GroupSuggest from '../../pages/components/GroupSuggest/GroupSuggest';
 
