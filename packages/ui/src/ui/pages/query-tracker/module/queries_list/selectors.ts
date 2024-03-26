@@ -1,9 +1,10 @@
 import {createSelector} from 'reselect';
 import {RootState} from '../../../../store/reducers';
-import {getCurrentUserName} from '../../../../store/selectors/global';
+import {getCurrentUserName, getSettingsCluster} from '../../../../store/selectors/global';
 import {QueriesListParams} from '../api';
 import {isQueryProgress} from '../../utils/query';
 import {QueriesListFilterPresets} from './types';
+import {getSettingsData} from '../../../../store/selectors/settings-base';
 
 export const getQueriesListState = (state: RootState) => state.queryTracker.list;
 
@@ -74,4 +75,10 @@ export function getQueriesListFilterParams(state: RootState): QueriesListParams 
         ...filter,
         user: undefined,
     };
+}
+
+export function getQueryListHistoryColumns(state: RootState) {
+    const cluster = getSettingsCluster(state);
+
+    return getSettingsData(state)[`local::${cluster}::queryTracker::history::Columns`];
 }
