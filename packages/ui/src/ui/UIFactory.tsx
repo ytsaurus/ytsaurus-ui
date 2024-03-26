@@ -13,14 +13,14 @@ import AppNavigationPageLayout, {
 } from './containers/AppNavigation/AppNavigationPageLayout';
 import {ExternalSchemaDescription} from './pages/navigation/tabs/Schema/ExternalDescription/ExternalDescription';
 import {AclApi, defaultAclApi} from './utils/acl/external-acl-api';
-import {SubjectsControlProps} from './components/ACL/SubjectsControl/SubjectsControl';
+import {SubjectsControlProps} from './containers/ACL/SubjectsControl/SubjectsControl';
 import {SettingsPage} from './containers/SettingsPanel/settings-description';
 import {SupportComponent} from './containers/SupportComponent/SupportComponent';
 import {UserSuggestProps} from './containers/UserSuggest/UserSuggest';
 import {YTUserSuggest} from './containers/UserSuggest/YTUserSuggest';
 import {DocsUrls, docsUrls} from './constants/docsUrls';
-import {YTSubjectSuggest} from './components/ACL/SubjectsControl/YTSubjectSuggest';
-import RoleActions, {Props as RoleActionsProps} from './components/ACL/RoleActions';
+import {YTSubjectSuggest} from './containers/ACL/SubjectsControl/YTSubjectSuggest';
+import RoleActions, {Props as RoleActionsProps} from './containers/ACL/RoleActions';
 import OperationDetailMonitorLinks from './pages/operations/OperationDetail/tabs/monitor/OperationDetailsMonitorLinks';
 import {PERMISSIONS_SETTINGS} from './constants/acl';
 import {uiSettings} from './config/ui-settings';

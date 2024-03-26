@@ -10,7 +10,7 @@ import {
 
 import {UserCard} from '../../../UserLink/UserLink';
 import {ResponsibleType, RoleConverted} from '../../../../utils/acl/acl-types';
-import SubjectsControl from '../../../ACL/SubjectsControl/SubjectsControl';
+import SubjectsControl from '../../../../containers/ACL/SubjectsControl/SubjectsControl';
 import './RoleListControl.scss';
 import {PreparedRole} from '../../../../utils/acl';
 

@@ -1,6 +1,6 @@
 import {connect} from 'react-redux';
 
-import RequestPermissions from '../../../../../components/ACL/RequestPermissions/RequestPermissions';
+import RequestPermissions from '../../../../../containers/ACL/RequestPermissions/RequestPermissions';
 import {
     getDenyColumnsItems,
     getIdmPermissionsRequestError,

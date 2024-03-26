@@ -3,13 +3,13 @@ import {useSelector} from 'react-redux';
 import cn from 'bem-cn-lite';
 
 import {getAllGroupNames, getAllUserNames} from '../../../store/selectors/global';
-import Select from '../../Select/Select';
-import {UserName} from '../../UserLink/UserLink';
+import Select from '../../../components/Select/Select';
+import {UserName} from '../../../components/UserLink/UserLink';
 import {useAllUserNamesFiltered, useGroupsLoaded} from '../../../hooks/global';
 import {SubjectsControlProps} from './SubjectsControl';
 
 import './YTSubjectSuggest.scss';
-import LabelsGroup from '../../LabelsGroup/LabelsGroup';
+import LabelsGroup from '../../../components/LabelsGroup/LabelsGroup';
 import {ResponsibleType} from '../../../utils/acl/acl-types';
 
 const block = cn('yt-subject-suggest');
