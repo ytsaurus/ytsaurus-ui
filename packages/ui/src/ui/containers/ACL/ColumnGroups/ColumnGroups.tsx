@@ -16,7 +16,7 @@ import {ColumnGroup} from '../../../utils/acl/acl-types';
 import UIFactory from '../../../UIFactory';
 
 import './ColumnGroups.scss';
-import {renderText} from '../../templates/utils';
+import {renderText} from '../../../components/templates/utils';
 
 const block = cn('column-groups');
 

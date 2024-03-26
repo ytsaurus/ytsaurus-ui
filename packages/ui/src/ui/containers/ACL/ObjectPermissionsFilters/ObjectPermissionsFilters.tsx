@@ -13,7 +13,7 @@ import {
 import {getObjectPermissionsTypesList} from '../../../store/selectors/acl';
 import Filter from '../../../components/Filter/Filter';
 import {IdmKindType} from '../../../utils/acl/acl-types';
-import Select from '../../Select/Select';
+import Select from '../../../components/Select/Select';
 import './ObjectPermissionsFilters.scss';
 
 const block = cn('object-permissions-filters');

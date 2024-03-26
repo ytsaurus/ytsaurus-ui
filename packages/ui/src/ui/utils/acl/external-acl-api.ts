@@ -1,5 +1,5 @@
-import {ManageAclFieldsNames} from '../../components/ACL/ManageAcl/ManageAcl';
-import {RequestPermissionsFieldsNames} from '../../components/ACL/RequestPermissions/RequestPermissions';
+import {ManageAclFieldsNames} from '../../containers/ACL/ManageAcl/ManageAcl';
+import {RequestPermissionsFieldsNames} from '../../containers/ACL/RequestPermissions/RequestPermissions';
 import {
     deleteAclItemOrSubjectByIndex,
     getCombinedAcl,

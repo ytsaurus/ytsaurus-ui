@@ -10,7 +10,7 @@ import {
     getPools,
     getTree,
 } from '../../../../../store/selectors/scheduling/scheduling';
-import {PoolAclPanel} from '../../../../../components/ACL/ACL-connect-helpers';
+import {PoolAclPanel} from '../../../../../containers/ACL/ACL-connect-helpers';
 import {RumMeasureTypes} from '../../../../../rum/rum-measure-types';
 import {useRumMeasureStop} from '../../../../../rum/RumUiContext';
 import {isFinalLoadingStatus} from '../../../../../utils/utils';

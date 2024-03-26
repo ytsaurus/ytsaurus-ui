@@ -3,9 +3,9 @@ import hammer from '../../../common/hammer';
 import cn from 'bem-cn-lite';
 import _ from 'lodash';
 
-import CollapsibleList from '../../CollapsibleList/CollapsibleList';
-import ErrorBoundary from '../../ErrorBoundary/ErrorBoundary';
-import Icon from '../../Icon/Icon';
+import CollapsibleList from '../../../components/CollapsibleList/CollapsibleList';
+import ErrorBoundary from '../../../components/ErrorBoundary/ErrorBoundary';
+import Icon from '../../../components/Icon/Icon';
 import {IdmObjectType} from '../../../constants/acl';
 
 import RequestPermissions from '../RequestPermissions/RequestPermissions';
