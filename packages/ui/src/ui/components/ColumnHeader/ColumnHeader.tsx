@@ -1,11 +1,11 @@
-import React from 'react';
 import cn from 'bem-cn-lite';
 import _ from 'lodash';
+import React from 'react';
 import SortIcon from '../../components/SortIcon/SortIcon';
 
-import {OrderType, calculateNextOrderValue, nextSortOrderValue} from '../../utils/sort-helpers';
-import PageCounter, {PageCounterProps} from '../../components/PageCounter/PageCounter';
 import Loader from '../../components/Loader/Loader';
+import PageCounter, {PageCounterProps} from '../../components/PageCounter/PageCounter';
+import {OrderType, calculateNextOrderValue, nextSortOrderValue} from '../../utils/sort-helpers';
 
 import './ColumnHeader.scss';
 

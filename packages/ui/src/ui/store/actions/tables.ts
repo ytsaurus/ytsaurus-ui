@@ -1,3 +1,4 @@
+import {ThunkAction} from 'redux-thunk';
 import {CHANGE_COLUMN_SORT_ORDER, TOGGLE_COLUMN_SORT_ORDER} from '../../constants/tables';
 import {
     OrderType,
@@ -6,7 +7,6 @@ import {
     oldSortStateToOrderType,
     orderTypeToOldSortState,
 } from '../../utils/sort-helpers';
-import {ThunkAction} from 'redux-thunk';
 import {RootState} from '../reducers';
 
 export type ToggleColumnSortOrderParams = {
@@ -16,6 +16,7 @@ export type ToggleColumnSortOrderParams = {
     withUndefined?: boolean;
     /** When defined **withUndefined** is ignored */
     allowedOrderTypes?: Array<OrderType>;
+    selectField?: string;
 };
 
 type TablesThunkAction = ThunkAction<any, RootState, any, any>;
@@ -25,6 +26,7 @@ export function toggleColumnSortOrder({
     tableId,
     withUndefined,
     allowedOrderTypes,
+    selectField,
 }: ToggleColumnSortOrderParams): TablesThunkAction {
     return (dispatch, getState) => {
         const {tables} = getState();
@@ -33,13 +35,14 @@ export function toggleColumnSortOrder({
         const orderType = sortInfo.field === columnName ? oldSortStateToOrderType(sortInfo) : '';
 
         let newOrderType;
+
         if (allowedOrderTypes?.length) {
             newOrderType = calculateNextOrderValue(orderType, allowedOrderTypes);
         } else {
             newOrderType = nextSortOrderValue(orderType, false, withUndefined);
         }
 
-        const newSortInfo = orderTypeToOldSortState(columnName, newOrderType);
+        const newSortInfo = orderTypeToOldSortState(columnName, newOrderType, selectField);
 
         dispatch({
             type: TOGGLE_COLUMN_SORT_ORDER,
@@ -48,15 +51,21 @@ export function toggleColumnSortOrder({
     };
 }
 
-interface ChangeColumnSortOrderParams {
+export interface ChangeColumnSortOrderParams {
     columnName: string;
     tableId: string;
     asc?: boolean;
+    selectField?: string;
 }
 
-export function changeColumnSortOrder({columnName, tableId, asc}: ChangeColumnSortOrderParams) {
+export function changeColumnSortOrder({
+    columnName,
+    tableId,
+    asc,
+    selectField,
+}: ChangeColumnSortOrderParams) {
     return {
         type: CHANGE_COLUMN_SORT_ORDER,
-        data: {columnName, tableId, asc},
+        data: {columnName, tableId, asc, selectField},
     };
 }

@@ -1,5 +1,5 @@
-import React from 'react';
 import cn from 'bem-cn-lite';
+import React from 'react';
 
 import Icon from '../../components/Icon/Icon';
 import {OrderType, nextSortOrderValue} from '../../utils/sort-helpers';
@@ -28,9 +28,16 @@ interface Props {
     withUndefined?: boolean;
 }
 
-export default class SortIcon extends React.Component<Props> {
-    onClick = () => {
-        const {order, onChange, allowUnordered, withUndefined} = this.props;
+export default function SortIcon({
+    className,
+    label,
+    order,
+    hidden,
+    onChange,
+    allowUnordered,
+    withUndefined,
+}: Props) {
+    const onClick = () => {
         if (!onChange) {
             return;
         }
@@ -39,17 +46,14 @@ export default class SortIcon extends React.Component<Props> {
         onChange(nextOrder);
     };
 
-    render() {
-        const {className, label, order, hidden} = this.props;
-        const icon = ICON_BY_TYPE[order || ''];
+    const icon = ICON_BY_TYPE[order || ''];
 
-        return (
-            <span className={block({hidden}, className)} onClick={this.onClick}>
-                {label && <span className={block('label')}>{label}</span>}
-                <span className={block('icon')}>
-                    <Icon awesome={icon} face="solid" />
-                </span>
+    return (
+        <span className={block({hidden}, className)} onClick={onClick}>
+            {label && <span className={block('label')}>{label}</span>}
+            <span className={block('icon')}>
+                <Icon awesome={icon} face="solid" />
             </span>
-        );
-    }
+        </span>
+    );
 }

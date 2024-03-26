@@ -44,7 +44,6 @@ utils.sortInPredefinedOrder = function (predefinedOrder, list, property) {
     list.sort((itemA, itemB) => {
         const itemAValue = property ? itemA[property] : itemA;
         const itemBValue = property ? itemB[property] : itemB;
-
         const predifinedAIndex = predefinedOrder.indexOf(itemAValue);
         const predifinedBIndex = predefinedOrder.indexOf(itemBValue);
 
@@ -97,7 +96,6 @@ function wrapCompareFnByAsc(compareFn, asc, undefinedAsk = true) {
 
 utils.sort = function (data, sortInfo, fields, options) {
     options = options || {};
-
     const unwrappedSortInfo = sortInfo;
     const unwrappedData = data;
     const fieldSelectors = prepareFieldSelectors(fields);
@@ -106,45 +104,48 @@ utils.sort = function (data, sortInfo, fields, options) {
         return unwrappedData;
     }
 
-    const {field, asc, undefinedAsc} = unwrappedSortInfo;
+    const {field, asc, undefinedAsc, selectField} = unwrappedSortInfo;
     const fieldData = (fields || {})[field];
     const fieldSelector = fieldSelectors[field];
-    const groupBy = options.groupBy,
-        addGetParams = options.addGetParams || [];
+
+    const groupBy = options.groupBy;
+    const addGetParams = options.addGetParams || [];
 
     const compareFn =
         fieldData?.compareFn ||
         (fieldData?.sortWithUndefined ? compareWithUndefined : compareVectors);
     const cmp = wrapCompareFnByAsc(compareFn, asc, undefinedAsc);
 
-    if (fieldSelector) {
-        let result = unwrappedData;
-        result = result.slice(0).sort((left, right) => {
-            const compareResult = cmp(
-                fieldSelector(left, ...addGetParams),
-                fieldSelector(right, ...addGetParams),
-                asc,
-                undefinedAsc,
-            );
-
-            if (groupBy) {
-                const groupByCompareResult = utils.compareVectors(
-                    groupBy.get(left, ...addGetParams),
-                    groupBy.get(right, ...addGetParams),
-                    groupBy.asc ? 'asc' : 'desc',
-                );
-
-                if (groupByCompareResult !== 0) {
-                    return groupByCompareResult;
-                }
-            }
-
-            return compareResult;
-        });
-        return result;
+    if (!fieldSelector) {
+        return unwrappedData;
     }
 
-    return unwrappedData;
+    let result = unwrappedData;
+
+    result = result.slice(0).sort((left, right) => {
+        const compareResult = cmp(
+            fieldSelector(left, ...addGetParams, selectField),
+            fieldSelector(right, ...addGetParams, selectField),
+            asc,
+            undefinedAsc,
+        );
+
+        if (groupBy) {
+            const groupByCompareResult = utils.compareVectors(
+                groupBy.get(left, ...addGetParams),
+                groupBy.get(right, ...addGetParams),
+                groupBy.asc ? 'asc' : 'desc',
+            );
+
+            if (groupByCompareResult !== 0) {
+                return groupByCompareResult;
+            }
+        }
+
+        return compareResult;
+    });
+
+    return result;
 };
 
 utils.getSortByFieldAction = function (sortInfo, fieldName) {

@@ -34,7 +34,6 @@ class MemoryProgress extends Component {
 
     renderProgress() {
         const {memoryText, memoryData} = this.props;
-
         return <Progress stack={memoryData} text={memoryText} />;
     }
 

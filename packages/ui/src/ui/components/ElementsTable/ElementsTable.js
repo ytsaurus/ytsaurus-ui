@@ -1,16 +1,17 @@
-import React, {Component, createRef} from 'react';
-import {connect} from 'react-redux';
-import PropTypes from 'prop-types';
-import ReactList from 'react-list';
 import block from 'bem-cn-lite';
 import _ from 'lodash';
+import PropTypes from 'prop-types';
+import React, {Component, createRef} from 'react';
+import ReactList from 'react-list';
+import {connect} from 'react-redux';
 
-import ElementsTableRow from './ElementsTableRow';
-import ElementsTableHeader, {sortStateType} from './ElementsTableHeader';
 import ErrorBoundary from '../../components/ErrorBoundary/ErrorBoundary';
+import ElementsTableHeader, {sortStateType} from './ElementsTableHeader';
+import ElementsTableRow from './ElementsTableRow';
 
-import {toggleColumnSortOrder} from '../../store/actions/tables';
 import action from '../../components/action/action';
+import {changeColumnSortOrder, toggleColumnSortOrder} from '../../store/actions/tables';
+import {NothingToShow} from '../NothingToShow/NothingToShow';
 import {
     ELEMENTS_TABLE,
     TemplatesPropType,
@@ -49,6 +50,7 @@ class ElementsTable extends Component {
         getItemLink: PropTypes.func,
         onItemHover: PropTypes.func,
         toggleColumnSortOrder: PropTypes.func,
+        changeColumnSortOrder: PropTypes.func,
         // TREE DATA
         tree: PropTypes.bool,
         treeState: PropTypes.oneOf(['collapsed', 'expanded', 'mixed']),
@@ -376,12 +378,12 @@ class ElementsTable extends Component {
     // render methods start
     renderEmptyTableContent = (
         <div>
-            <div className={block(ELEMENTS_TABLE)('empty-header')}>No items to show </div>
-            {this.props.emptyDataDescription && (
-                <div className={block(ELEMENTS_TABLE)('empty-content')}>
-                    {this.props.emptyDataDescription}
-                </div>
-            )}
+            <div className={block(ELEMENTS_TABLE)('empty-header')}>
+                <NothingToShow
+                    title="No items to show"
+                    description={this.props.emptyDataDescription}
+                />
+            </div>
         </div>
     );
 
@@ -473,12 +475,14 @@ class ElementsTable extends Component {
         );
     }
 
-    renderTableContent = (items, ref) => (
-        <table className={prepareTableClassName(this.props)}>
-            {this.props.header && <ElementsTableHeader {...this.props} />}
-            {this.props.body && this.renderTableBody(items, ref)}
-        </table>
-    );
+    renderTableContent = (items, ref) => {
+        return (
+            <table className={prepareTableClassName(this.props)}>
+                {this.props.header && <ElementsTableHeader {...this.props} />}
+                {this.props.body && this.renderTableBody(items, ref)}
+            </table>
+        );
+    };
 
     renderDynamicTable(items) {
         const {virtualType, selectedIndex} = this.props;
@@ -508,20 +512,21 @@ class ElementsTable extends Component {
 
         const visibleItems = tree ? _.filter(items, this.isItemVisible) : items;
 
-        if (isLoading) {
-            return this.renderSkeletonState();
-        } else if (items.length) {
+        console.log(isLoading);
+
+        if (isLoading) return this.renderSkeletonState();
+
+        if (items.length) {
             return virtual
                 ? this.renderDynamicTable(visibleItems)
                 : this.renderSimpleTable(visibleItems);
-        } else {
-            return this.props.body && this.renderEmptyTableContent;
         }
+
+        return this.props.body && this.renderEmptyTableContent;
     }
 
     render() {
         const {virtual} = this.props;
-
         // FIXME: the elements-table-wrapper className was added to account for the <thead> height and get correct container size
         return (
             <ErrorBoundary>
@@ -539,6 +544,7 @@ const mapStateToProps = ({tables}) => {
 
 const mapDispatchToProps = {
     toggleColumnSortOrder,
+    changeColumnSortOrder,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ElementsTable);

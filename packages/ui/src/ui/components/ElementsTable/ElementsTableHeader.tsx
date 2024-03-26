@@ -1,7 +1,15 @@
-import React, {CSSProperties, Component} from 'react';
-import PropTypes from 'prop-types';
 import block from 'bem-cn-lite';
+import PropTypes from 'prop-types';
+import React, {CSSProperties, Component} from 'react';
 
+import {SelectOption, Spin, Text} from '@gravity-ui/uikit';
+import {Tooltip} from '../../components/Tooltip/Tooltip';
+import {ChangeColumnSortOrderParams, ToggleColumnSortOrderParams} from '../../store/actions/tables';
+import {RootState} from '../../store/reducers';
+import {OldSortState} from '../../types';
+import {OrderType, oldSortStateToOrderType} from '../../utils/sort-helpers';
+import SortIcon from '../SortIcon/SortIcon';
+import {HeaderSortSelect} from './HeaderSortSelect';
 import {
     ELEMENTS_TABLE,
     TemplatesPropType,
@@ -11,12 +19,6 @@ import {
     prepareColumnsData,
     prepareGroupCellClassName,
 } from './utils';
-import {OldSortState} from '../../types';
-import {OrderType, oldSortStateToOrderType} from '../../utils/sort-helpers';
-import SortIcon from '../../components/SortIcon/SortIcon';
-import {Tooltip} from '../../components/Tooltip/Tooltip';
-import {ToggleColumnSortOrderParams} from '../../store/actions/tables';
-import {RootState} from '../../store/reducers';
 
 const b = block(ELEMENTS_TABLE);
 
@@ -39,6 +41,7 @@ export interface ElementsTableHeaderProps {
     onItemHover?: () => void;
 
     toggleColumnSortOrder: (params: ToggleColumnSortOrderParams) => void;
+    changeColumnSortOrder: (params: ChangeColumnSortOrderParams) => void;
 
     //sortInfo?: () => OldSortState;
     tableId: keyof RootState['tables'];
@@ -66,6 +69,13 @@ interface State {
         items: Array<string>;
         hasGroups?: boolean;
     };
+    columnSelects: Record<string, string>;
+    sorting: {
+        columnName: string;
+        loading: boolean;
+        orderType: OrderType | undefined;
+        selectField: string | undefined;
+    } | null;
 }
 
 interface ColumnGroupInfo {
@@ -80,6 +90,7 @@ interface ColumnGroupInfo {
     render?: undefined;
     sortWithUndefined?: undefined;
     allowedOrderTypes?: undefined;
+    sortSelectItems: SelectOption[];
 
     caption?: React.ReactNode;
     captionTail?: React.ReactNode; // rendered after sort-order icon
@@ -90,6 +101,7 @@ interface ColumnInfo {
         className?: string;
     };
     sort?: boolean;
+    sortSelectItems: SelectOption[];
     sortWithUndefined?: boolean;
     allowedOrderTypes?: Array<OrderType>;
 
@@ -147,6 +159,8 @@ export default class ElementsTableHeader extends Component<ElementsTableHeaderPr
             columnSet: {
                 items: [],
             },
+            columnSelects: {},
+            sorting: null,
         };
     }
 
@@ -201,26 +215,31 @@ export default class ElementsTableHeader extends Component<ElementsTableHeaderPr
     }
 
     renderSortableHeaderCaption(columnName: string) {
-        const className = block('yc-link')({view: 'primary'});
         const {sortState, onSort} = this.props;
+        const {columnItems} = this.state;
+        const {sortSelectItems} = columnItems[columnName];
 
         const {sortWithUndefined, allowedOrderTypes} = this.state.columnItems[columnName];
-
         let sortInfo: OldSortState | undefined;
-        let sortQuery, toggleOrder;
+        let toggleOrder: (selectField?: string) => void;
+        const defaultSelectValue = sortSelectItems?.length ? [sortSelectItems[0].value] : undefined;
+        const {tableId, toggleColumnSortOrder, changeColumnSortOrder} = this.props;
+
         if (sortState) {
-            const {tableId, toggleColumnSortOrder} = this.props;
             sortInfo = sortState[tableId!];
-            toggleOrder = () => {
-                toggleColumnSortOrder({
-                    tableId,
-                    columnName,
-                    withUndefined: sortWithUndefined,
-                    allowedOrderTypes,
-                });
-                if (typeof onSort === 'function') {
-                    onSort(columnName);
-                }
+            toggleOrder = (selectField?: string) => {
+                setTimeout(() => {
+                    toggleColumnSortOrder({
+                        tableId,
+                        columnName,
+                        withUndefined: sortWithUndefined,
+                        allowedOrderTypes,
+                        selectField,
+                    });
+                    if (typeof onSort === 'function') {
+                        onSort(columnName);
+                    }
+                }, 1);
             };
         }
 
@@ -228,12 +247,88 @@ export default class ElementsTableHeader extends Component<ElementsTableHeaderPr
             sortInfo?.field === columnName ? sortInfo : undefined,
         );
 
+        const sortingSelectFieldValue = this.state.columnSelects[columnName];
+
+        const showLoading =
+            this.state.sorting?.loading &&
+            this.state.sorting?.columnName === columnName &&
+            (sortInfo?.field !== columnName || orderType === this.state.sorting?.orderType);
+        const sortSelectString = sortSelectItems?.find(
+            (el) => el.value === sortingSelectFieldValue,
+        )?.content;
+        console.log(orderType, this.state.sorting?.orderType);
+
         return (
-            <a className={className} href={sortQuery} onClick={toggleOrder}>
-                {this.renderCellCaption(columnName)}
-                <SortIcon className={b('cell-sort')} order={orderType} />
-                {this.renderCellCaptionTail(columnName)}
-            </a>
+            <div
+                className="column-header"
+                onClick={() => {
+                    this.setState({
+                        sorting: {
+                            columnName,
+                            loading: true,
+                            orderType,
+                            selectField: this.state.sorting?.selectField,
+                        },
+                    });
+
+                    toggleOrder(sortingSelectFieldValue ?? defaultSelectValue?.[0]);
+
+                    if (sortSelectItems.length && defaultSelectValue && !sortingSelectFieldValue) {
+                        this.setState({
+                            columnSelects: {
+                                [columnName]: defaultSelectValue[0],
+                            },
+                        });
+                    }
+                }}
+            >
+                <span className="column-text">
+                    {this.renderCellCaption(columnName)}
+                    {showLoading ? (
+                        <Spin size="xs" />
+                    ) : (
+                        <SortIcon className={b('cell-sort')} order={orderType} />
+                    )}
+                    {this.renderCellCaptionTail(columnName)}
+                </span>
+                {sortSelectString && (
+                    <Text variant="caption-2" color="dark-secondary">
+                        {sortSelectString}
+                    </Text>
+                )}
+                <HeaderSortSelect
+                    changeColumnSortOrder={changeColumnSortOrder}
+                    value={sortingSelectFieldValue}
+                    orderType={orderType}
+                    columnName={columnName}
+                    tableId={tableId}
+                    defaultValue={defaultSelectValue}
+                    sortSelectItems={sortSelectItems}
+                    onLoadingFinished={() => {
+                        this.setState({
+                            sorting: {
+                                columnName,
+                                loading: false,
+                                orderType,
+                                selectField: this.state.sorting?.selectField,
+                            },
+                        });
+                    }}
+                    onChange={(columnName: string, selectField: string) => {
+                        this.setState({
+                            columnSelects: {
+                                [columnName]: selectField,
+                            },
+                            sorting: {
+                                columnName,
+                                loading: true,
+                                orderType,
+                                selectField,
+                            },
+                        });
+                    }}
+                />
+            </div>
         );
     }
 

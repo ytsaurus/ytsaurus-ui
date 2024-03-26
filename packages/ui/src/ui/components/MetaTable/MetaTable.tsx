@@ -1,20 +1,20 @@
-import React, {Component, Fragment} from 'react';
-import PropTypes from 'prop-types';
-import _ from 'lodash';
 import cn from 'bem-cn-lite';
+import _ from 'lodash';
+import PropTypes from 'prop-types';
+import React, {Component, Fragment} from 'react';
 
 import hammer from '../../common/hammer';
 
-import Link from '../Link/Link';
 import Icon from '../Icon/Icon';
+import Link from '../Link/Link';
 
 import './MetaTable.scss';
 
 const block = cn('meta-table');
 const itemBlock = cn('meta-table-item');
 
-export * from './templates/Template';
 export * from './templates/OperationTemplate';
+export * from './templates/Template';
 
 export interface MetaTableProps {
     className?: string;

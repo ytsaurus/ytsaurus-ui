@@ -57,11 +57,11 @@ export default (state = initialState, action) => {
             return {...state, [tableId]: sortInfo};
         }
         case CHANGE_COLUMN_SORT_ORDER: {
-            const {tableId, columnName: field, asc} = action.data;
+            const {tableId, columnName: field, asc, selectField} = action.data;
 
             return {
                 ...state,
-                [tableId]: {field, asc},
+                [tableId]: {field, asc, selectField},
             };
         }
 
