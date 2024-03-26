@@ -1,5 +1,4 @@
 import React, {Component, Fragment} from 'react';
-import PropTypes from 'prop-types';
 import _ from 'lodash';
 import cn from 'bem-cn-lite';
 
@@ -22,6 +21,7 @@ export interface MetaTableProps {
     title?: string;
     subTitles?: Array<string>;
     qa?: string;
+    rowGap?: 4;
 }
 
 export interface MetaTableItem {
@@ -53,28 +53,6 @@ function splitItems(items: MetaTableProps['items'], subTitles?: Array<string>) {
 }
 
 export default class MetaTable extends Component<MetaTableProps> {
-    static itemProps = PropTypes.shape({
-        icon: PropTypes.node,
-        key: PropTypes.string.isRequired,
-        label: PropTypes.node,
-        value: PropTypes.oneOfType([
-            PropTypes.string,
-            PropTypes.bool,
-            PropTypes.array,
-            PropTypes.number,
-            PropTypes.element,
-        ]),
-        visible: PropTypes.bool,
-    });
-
-    static propTypes = {
-        items: PropTypes.arrayOf(
-            PropTypes.oneOfType([MetaTable.itemProps, PropTypes.arrayOf(MetaTable.itemProps)]),
-        ).isRequired,
-        className: PropTypes.string,
-        title: PropTypes.string,
-    };
-
     renderKey(key: string, icon: React.ReactNode, label?: React.ReactChild) {
         return (
             <div className={itemBlock('key')} key={key + '-key'}>
@@ -113,11 +91,12 @@ export default class MetaTable extends Component<MetaTableProps> {
     }
 
     renderGroup(group: Array<MetaTableItem>, index: number, groupTitles?: Array<string>) {
+        const {rowGap} = this.props;
         const title = !groupTitles?.length ? null : groupTitles[index!] ?? <>&nbsp;</>;
         const visibleItems = _.filter(group, (item) => item.visible !== false);
 
         return !visibleItems?.length ? null : (
-            <div className={block('group', itemBlock())} key={index}>
+            <div className={block('group', itemBlock({'row-gap': String(rowGap)}))} key={index}>
                 {title && (
                     <>
                         <h2 className={block('sub-title')}>{title}</h2>

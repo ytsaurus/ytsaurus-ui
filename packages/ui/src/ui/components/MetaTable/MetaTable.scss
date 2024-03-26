@@ -39,6 +39,10 @@
     grid-template-columns: repeat(2, auto);
     grid-gap: 3px 20px;
 
+    &_row-gap_4 {
+        row-gap: 4px * 4;
+    }
+
     &__key,
     &__value {
         @include ellipsis();
