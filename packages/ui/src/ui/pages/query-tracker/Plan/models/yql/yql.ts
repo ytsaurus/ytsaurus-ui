@@ -203,7 +203,7 @@ export interface definitions {
         completed?: number;
         running?: number;
         total?: number;
-        stages?: definitions['EntryStringInstant'][];
+        stages?: definitions['EntryStringInstant'];
     };
     OperationErrorDto: {
         file?: string;
