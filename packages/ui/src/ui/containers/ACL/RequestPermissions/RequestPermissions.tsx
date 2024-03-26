@@ -20,8 +20,11 @@ import {docsUrl} from '../../../config';
 import {makeLink} from '../../../utils/utils';
 import {IdmKindType} from '../../../utils/acl/acl-types';
 import {YTPermissionTypeUI} from '../../../utils/acl/acl-api';
+import {PermissionToRequest} from '../../../store/actions/acl';
 
 const block = cn('acl-request-permissions');
+
+const FLAG_NAME_PREFIX = '##_flag_';
 
 export type RequestPermissionsFieldsNames =
     | 'cluster'
@@ -31,7 +34,8 @@ export type RequestPermissionsFieldsNames =
     | 'duration'
     | 'commentHeader'
     | 'comment'
-    | 'inheritance_mode';
+    | 'inheritance_mode'
+    | 'permissionFlags';
 
 export interface Props extends WithVisibleProps {
     buttonText?: string;
@@ -40,13 +44,16 @@ export interface Props extends WithVisibleProps {
     normalizedPoolTree?: string;
     path: string;
     idmKind: IdmKindType;
-    requestPermissions: (params: {values: FormValues; idmKind: IdmKindType}) => Promise<void>;
+    requestPermissions: (params: {
+        values: PermissionToRequest;
+        idmKind: IdmKindType;
+    }) => Promise<void>;
     cancelRequestPermissions: (params: {idmKind: IdmKindType}) => unknown;
     error?: YTError;
     onSuccess?: () => void;
 }
 
-interface FormValues {
+type FormValues = {
     path: string;
     cluster: string;
     permissions: {[x: string]: Array<YTPermissionTypeUI>} | null;
@@ -58,7 +65,7 @@ interface FormValues {
     inheritance_mode?: string;
     duration?: Date;
     comment?: string;
-}
+} & Record<`${typeof FLAG_NAME_PREFIX}${string}`, boolean>;
 
 const SHORT_TITLE: Partial<Record<IdmKindType, string>> = {
     access_control_object: 'ACO',
@@ -85,10 +92,20 @@ function RequestPermissions(props: Props) {
         cancelRequestPermissions({idmKind});
     }, [handleClose, cancelRequestPermissions, idmKind]);
 
+    const {requestPermissionsFields, requestPermissionsFlags = {}} = UIFactory.getAclApi();
+
     const onAdd = useCallback(
         (form: FormApi<FormValues, Partial<FormValues>>) => {
+            const values = {...form.getState().values};
+            const permissionFlags: Record<string, boolean> = {};
+            Object.keys(requestPermissionsFlags).forEach((k) => {
+                const key = `${FLAG_NAME_PREFIX}${k}` as keyof typeof values;
+                permissionFlags[k] = Boolean(values[key]);
+
+                delete values[key];
+            });
             return requestPermissions({
-                values: form.getState().values,
+                values: {...values, permissionFlags},
                 idmKind,
             });
         },
@@ -101,7 +118,7 @@ function RequestPermissions(props: Props) {
     const firstItemDisabled = idmKind === IdmObjectType.ACCOUNT;
     const permissions = firstItemDisabled ? valueWithCheckedFirstChoice(choices) : null;
 
-    const requestPermissionsFields: Record<
+    const availableFields: Record<
         RequestPermissionsFieldsNames,
         Omit<DialogField, 'name'>
     > = useMemo(() => {
@@ -184,18 +201,40 @@ function RequestPermissions(props: Props) {
                     with: 'max',
                 },
             },
+            permissionFlags: {
+                type: 'block',
+                caption: 'Permission flags',
+                extras: {children: 'Not implemented'},
+            },
         };
     }, [choices, currentCaption, error, idmKind]);
 
     const dialogFields = useMemo(() => {
-        return UIFactory.getAclApi().requestPermissionsFields.map(
-            (name) =>
-                ({
-                    ...requestPermissionsFields[name],
-                    name: name,
-                } as DialogField<FormValues>),
-        );
-    }, [requestPermissionsFields]);
+        let flagsIndex = -1;
+        const res = requestPermissionsFields.map((name, index) => {
+            if (name === 'permissionFlags') {
+                flagsIndex = index;
+            }
+
+            return {
+                ...availableFields[name],
+                name: name,
+            } as DialogField<FormValues>;
+        });
+        if (flagsIndex !== -1) {
+            const flags: typeof res = Object.keys(requestPermissionsFlags ?? []).map((key) => {
+                const flagInfo = requestPermissionsFlags[key];
+                return {
+                    type: 'tumbler',
+                    caption: hammer.format.ReadableField(flagInfo?.title),
+                    name: `${FLAG_NAME_PREFIX}${key}`,
+                    tooltip: flagInfo.help,
+                };
+            });
+            res.splice(flagsIndex, 1, ...flags);
+        }
+        return res;
+    }, [availableFields, requestPermissionsFields]);
 
     return !choices?.length ? null : (
         <ErrorBoundary>

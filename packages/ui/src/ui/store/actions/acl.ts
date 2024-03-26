@@ -212,7 +212,7 @@ function dateToDaysAfterNow(date?: Date) {
     return Math.round((date.getTime() - Date.now()) / 3600 / 24 / 1000);
 }
 
-type PermissionToRequest = {
+export type PermissionToRequest = {
     path: string;
     cluster: string;
     permissions: {[x: string]: Array<YTPermissionTypeUI>} | null;
@@ -220,6 +220,7 @@ type PermissionToRequest = {
     inheritance_mode?: string;
     duration?: Date;
     comment?: string;
+    permissionFlags?: Record<string, boolean>;
 };
 
 export function requestPermissions(
@@ -237,24 +238,31 @@ export function requestPermissions(
             idmKind,
         });
 
+        const {requestPermissionsFlags = {}} = UIFactory.getAclApi();
+
         const daysAfter = dateToDaysAfterNow(values.duration);
         const roles: Array<Role> = [];
         const rolesGroupedBySubject = [];
-        const {inheritance_mode} = values;
+        const {inheritance_mode, permissionFlags} = values;
         for (const item of values.subjects) {
             const subject = prepareAclSubject(item);
-            rolesGroupedBySubject.push({
-                permissions: _.flatten(_.map(values.permissions)),
+            const commonPart = {
                 subject,
                 deprive_after_days: daysAfter,
                 ...(inheritance_mode ? {inheritance_mode} : {}),
+            };
+            Object.entries(requestPermissionsFlags).forEach(([key, flagInfo]) => {
+                flagInfo?.applyToRequestedRole(commonPart, permissionFlags?.[key]);
+            });
+
+            rolesGroupedBySubject.push({
+                permissions: _.flatten(_.map(values.permissions)),
+                ...commonPart,
             });
             _.forEach(values.permissions, (permissions) => {
                 roles.push({
                     ...convertFromUIPermissions({permissions}),
-                    subject,
-                    deprive_after_days: daysAfter,
-                    ...(inheritance_mode ? {inheritance_mode} : {}),
+                    ...commonPart,
                 });
             });
         }

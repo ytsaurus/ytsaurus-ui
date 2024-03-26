@@ -36,6 +36,14 @@ export interface AclApi {
 
     requestPermissions(params: RequestPermissionParams): Promise<UpdateResponse>;
     requestPermissionsFields: Array<RequestPermissionsFieldsNames>;
+    requestPermissionsFlags?: Record<
+        string,
+        {
+            title: String;
+            applyToRequestedRole: (role: Role, value?: boolean) => void;
+            help?: React.ReactNode;
+        }
+    >;
 
     deleteRole(params: {
         path: string;
