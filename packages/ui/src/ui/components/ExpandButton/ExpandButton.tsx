@@ -18,7 +18,7 @@ export const ExpandButton: FC<Props> = ({expanded, toggleExpanded}) => {
             title={expanded ? 'Collapse' : 'Expand'}
             onClick={toggleExpanded}
         >
-            <Icon className={block('expand', {expanded})} data={expandedIcon} />
+            <Icon className={block('expand', {expanded})} data={expandedIcon} size={16} />
         </Button>
     );
 };
