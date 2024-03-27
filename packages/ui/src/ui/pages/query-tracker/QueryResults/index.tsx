@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react';
 import block from 'bem-cn-lite';
-import {QueryItem} from '../module/api';
+import {QueryItem, YQLSstatistics} from '../module/api';
 import {Tabs} from '@gravity-ui/uikit';
 import {useDispatch} from 'react-redux';
 import {QueryResultsView} from '../QueryResultsView';
@@ -38,6 +38,26 @@ function QueryResultContainer({
     return <QueryResultsView query={query} index={activeResultParams?.resultIndex || 0} />;
 }
 
+function extractOperationIdToCluster(obj: YQLSstatistics | undefined): Map<string, string> {
+    const clusterNames: Map<string, string> = new Map();
+
+    if (!obj) return clusterNames;
+
+    const traverse = (o: YQLSstatistics) => {
+        for (const key in o) {
+            if (key === '_cluster_name') {
+                clusterNames.set(o._id, o._cluster_name);
+            } else if (typeof o[key] === 'object' && o[key] !== null) {
+                traverse(o[key]);
+            }
+        }
+    };
+
+    traverse(obj);
+
+    return clusterNames;
+}
+
 export const QueryResults = React.memo(function QueryResults({
     query,
     className,
@@ -50,9 +70,15 @@ export const QueryResults = React.memo(function QueryResults({
     minimized: boolean;
 }) {
     const [tabs, setTab, {activeTabId, category, activeResultParams}] = useQueryResultTabs(query);
+    const operationIdToCluster = React.useMemo(
+        () => extractOperationIdToCluster(query?.progress?.yql_statistics),
+        [query?.progress?.yql_statistics],
+    );
+
     if (!query) return null;
 
     const resultIndex = activeResultParams?.resultIndex;
+
     return (
         <div className={b(null, className)}>
             <div className={b('meta')}>
@@ -98,7 +124,12 @@ export const QueryResults = React.memo(function QueryResults({
                         <NotRenderUntilFirstVisible hide={category !== QueryResultTab.STATISTIC}>
                             <YQLStatisticsTable query={query} />
                         </NotRenderUntilFirstVisible>
-                        {category === QueryResultTab.PROGRESS && <PlanContainer isActive={true} />}
+                        {category === QueryResultTab.PROGRESS && (
+                            <PlanContainer
+                                isActive={true}
+                                operationIdToCluster={operationIdToCluster}
+                            />
+                        )}
                     </div>
                 </PlanProvider>
             </NotRenderUntilFirstVisible>
@@ -109,8 +140,9 @@ export const QueryResults = React.memo(function QueryResults({
 
 interface PlanContainerProps {
     isActive: boolean;
+    operationIdToCluster: Map<string, string>;
 }
 
-function PlanContainer({isActive}: PlanContainerProps) {
-    return <Plan isActive={isActive} prepareNode={usePrepareNode()} />;
+function PlanContainer({isActive, operationIdToCluster}: PlanContainerProps) {
+    return <Plan isActive={isActive} prepareNode={usePrepareNode(operationIdToCluster)} />;
 }
