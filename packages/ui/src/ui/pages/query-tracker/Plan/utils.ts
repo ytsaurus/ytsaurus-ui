@@ -586,7 +586,7 @@ export function getConnectedEdges(
     return connectedEdges;
 }
 
-export function usePrepareNode() {
+export function usePrepareNode(operationIdToCluster: Map<string, string>) {
     return React.useCallback((node: ProcessedNode) => {
         if (node.type === 'in' || node.type === 'out') {
             const table = parseTablePath(node.title ?? '');
@@ -594,7 +594,15 @@ export function usePrepareNode() {
                 node.url = genNavigationUrl({cluster: table.cluster, path: table.path});
             }
         } else if (node.progress?.remoteId) {
-            node.url = getOperationUrl(node);
+            const id = node.progress?.remoteId.split('/').pop();
+
+            if (id && operationIdToCluster.has(id)) {
+                const cluster = operationIdToCluster.get(id)!;
+
+                node.url = buildOperationUrl(cluster, id);
+            } else {
+                node.url = getOperationUrl(node);
+            }
         }
 
         return node;
