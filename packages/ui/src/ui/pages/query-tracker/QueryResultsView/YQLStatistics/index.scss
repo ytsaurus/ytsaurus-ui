@@ -1,3 +1,21 @@
 .yql-statistics-table {
     display: flex;
+    flex-direction: column;
+
+    &__filters {
+        display: flex;
+        padding: 12px 0;
+
+        &-col {
+            margin-right: 12px;
+        }
+    }
+
+    &__header {
+        width: 100%;
+        position: sticky;
+        top: 0;
+        z-index: 1;
+        background-color: rgba(256, 256, 256, 1);
+    }
 }
