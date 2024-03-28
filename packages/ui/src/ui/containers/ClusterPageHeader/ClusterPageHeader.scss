@@ -18,11 +18,6 @@
     width: 100%;
     max-width: calc(100vw - var(--gn-aside-header-size));
 
-    &__spacer {
-        height: 24px;
-        border-left: 1px solid var(--dark-divider);
-    }
-
     &__cluster {
         display: flex;
         align-items: center;

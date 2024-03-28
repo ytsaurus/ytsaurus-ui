@@ -1,0 +1,30 @@
+.settings-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--g-color-line-generic);
+
+    &__info {
+        display: flex;
+        align-items: center;
+        gap: 0 8px;
+        overflow: hidden;
+    }
+
+    &__icon {
+        flex-shrink: 0;
+    }
+
+    &__value {
+        max-width: 338px;
+    }
+
+    &__actions {
+        display: flex;
+        gap: 0 4px;
+    }
+
+    &_edit {
+        padding: 4px 0;
+    }
+}

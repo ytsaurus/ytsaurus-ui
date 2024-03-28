@@ -2,15 +2,15 @@ import React, {useCallback} from 'react';
 import cn from 'bem-cn-lite';
 import {Text} from '@gravity-ui/uikit';
 import {useDispatch, useSelector} from 'react-redux';
-import {EditableAsText} from '../../../../components/EditableAsText/EditableAsText';
-import {Toolbar} from '../../../../components/WithStickyToolbar/Toolbar/Toolbar';
-import {getQuery, getQueryDraft} from '../../module/query/selectors';
-import {QuerySettingsButton} from '../../QuerySettingsButton';
-import {QueryFilesButton} from '../../QueryFilesButton';
-import {updateQueryDraft} from '../../module/query/actions';
-import {QueryFile} from '../../module/api';
-import {NewQueryButton} from '../../NewQueryButton/NewQueryButton';
-import {QueryEngineSelector} from './QueryEngineSelector/QueryEngineSelector';
+import {EditableAsText} from '../../../components/EditableAsText/EditableAsText';
+import {Toolbar} from '../../../components/WithStickyToolbar/Toolbar/Toolbar';
+import {getQuery, getQueryDraft} from '../module/query/selectors';
+import {QuerySettingsButton} from '../QuerySettingsButton';
+import {QueryFilesButton} from '../QueryFilesButton';
+import {updateQueryDraft} from '../module/query/actions';
+import {QueryFile} from '../module/api';
+import {NewQueryButton} from '../NewQueryButton';
+import {QueryEngineSelector} from '../QueryEngineSelector';
 
 import './QueryMetaForm.scss';
 
