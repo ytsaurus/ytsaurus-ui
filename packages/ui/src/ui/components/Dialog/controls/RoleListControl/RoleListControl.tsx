@@ -9,22 +9,17 @@ import {
 } from '@gravity-ui/dialog-fields';
 
 import {UserCard} from '../../../UserLink/UserLink';
-import {RoleConverted} from '../../../../utils/acl/acl-types';
-import SubjectsControl from '../../../ACL/SubjectsControl/SubjectsControl';
+import {ResponsibleType, RoleConverted} from '../../../../utils/acl/acl-types';
+import SubjectsControl from '../../../../containers/ACL/SubjectsControl/SubjectsControl';
 import './RoleListControl.scss';
+import {PreparedRole} from '../../../../utils/acl';
 
 const block = cn('role-list-control');
-
-interface NewItemsItem {
-    text?: string;
-    type: 'users' | 'groups';
-    value: string;
-}
 
 interface Props {
     className?: string;
     value: {
-        newItems: Array<NewItemsItem>;
+        newItems: Array<ResponsibleType>;
         current: EditableManyListsItemType<RoleConverted>;
         toAdd: EditableManyListsItemType<RoleConverted>;
         toRemove: EditableManyListsItemType<RoleConverted>;
@@ -118,10 +113,7 @@ export default class RoleListControl extends React.Component<Props> {
     }
 }
 
-export function prepareRoleListValue(
-    roles: Array<RoleConverted>,
-    otherMembers: Array<string> = [],
-) {
+export function prepareRoleListValue(roles: Array<PreparedRole>, otherMembers: Array<string> = []) {
     const current: typeof roles = [];
     const toAdd: typeof roles = [];
     const toRemove: typeof roles = [];
@@ -167,7 +159,7 @@ export function prepareRoleListValue(
     };
 }
 
-function prepareItemOfCurrent(role: RoleConverted, extraProps: any = {}) {
+function prepareItemOfCurrent(role: PreparedRole, extraProps: any = {}) {
     return {
         title: role.text || role.value,
         data: role,
@@ -175,7 +167,7 @@ function prepareItemOfCurrent(role: RoleConverted, extraProps: any = {}) {
     };
 }
 
-export function roleListValueToSubjectList(value: Props['value']) {
+export function roleListValueToSubjectList(value: Props['value']): Array<ResponsibleType> {
     const {current, newItems, toAdd} = value;
     return [
         ...newItems,
@@ -184,20 +176,22 @@ export function roleListValueToSubjectList(value: Props['value']) {
     ];
 }
 
-function manyListDataItemToSubjectList(manyListDataItem: EditableManyListsItemType<RoleConverted>) {
+function manyListDataItemToSubjectList(
+    manyListDataItem: EditableManyListsItemType<RoleConverted>,
+): Array<ResponsibleType> {
     const {data} = manyListDataItem || {};
     return _.map(
         _.filter(data, ({removed}) => !removed),
         ({data}) => {
             const {type, value} = data || {};
-            return {type, value};
+            return {type: type!, value: value!};
         },
     );
 }
 
 export function extractChangedSubjects(value: {
     current: EditableManyListsItemType<RoleConverted>;
-    newItems: Array<NewItemsItem>;
+    newItems: Array<ResponsibleType>;
 }) {
     const {current, newItems} = value;
     const added = newItems || [];

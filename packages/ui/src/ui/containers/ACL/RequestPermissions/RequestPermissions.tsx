@@ -18,9 +18,13 @@ import {map} from 'lodash';
 
 import {docsUrl} from '../../../config';
 import {makeLink} from '../../../utils/utils';
-import {IdmKindType} from '../../../utils/acl/acl-types';
+import {AclColumnGroup, IdmKindType} from '../../../utils/acl/acl-types';
+import {YTPermissionTypeUI} from '../../../utils/acl/acl-api';
+import {PermissionToRequest} from '../../../store/actions/acl';
 
 const block = cn('acl-request-permissions');
+
+const FLAG_NAME_PREFIX = '##_flag_';
 
 export type RequestPermissionsFieldsNames =
     | 'cluster'
@@ -30,7 +34,9 @@ export type RequestPermissionsFieldsNames =
     | 'duration'
     | 'commentHeader'
     | 'comment'
-    | 'inheritance_mode';
+    | 'inheritance_mode'
+    | 'readColumnGroup'
+    | 'permissionFlags';
 
 export interface Props extends WithVisibleProps {
     buttonText?: string;
@@ -39,25 +45,30 @@ export interface Props extends WithVisibleProps {
     normalizedPoolTree?: string;
     path: string;
     idmKind: IdmKindType;
-    requestPermissions: (params: {values: FormValues; idmKind: string}) => Promise<void>;
-    cancelRequestPermissions: (params: {idmKind: string}) => unknown;
-    error: YTError;
+    requestPermissions: (params: {
+        values: PermissionToRequest;
+        idmKind: IdmKindType;
+    }) => Promise<void>;
+    cancelRequestPermissions: (params: {idmKind: IdmKindType}) => unknown;
+    error?: YTError;
     onSuccess?: () => void;
+    columnGroups?: Array<AclColumnGroup>;
 }
 
-interface FormValues {
+type FormValues = {
     path: string;
     cluster: string;
-    permissions: {[x: string]: unknown} | null;
+    permissions: {[x: string]: Array<YTPermissionTypeUI>} | null;
     subjects: Array<{
         value: string;
         type: 'users' | 'groups' | 'app';
         text?: string;
     }>;
     inheritance_mode?: string;
-    duration?: string;
+    duration?: Date;
     comment?: string;
-}
+    readColumnGroup?: string;
+} & Record<`${typeof FLAG_NAME_PREFIX}${string}`, boolean>;
 
 const SHORT_TITLE: Partial<Record<IdmKindType, string>> = {
     access_control_object: 'ACO',
@@ -76,6 +87,7 @@ function RequestPermissions(props: Props) {
         cancelRequestPermissions,
         error,
         cluster,
+        columnGroups,
         /*denyColumns,*/
     } = props;
 
@@ -84,10 +96,22 @@ function RequestPermissions(props: Props) {
         cancelRequestPermissions({idmKind});
     }, [handleClose, cancelRequestPermissions, idmKind]);
 
+    const {requestPermissionsFields, requestPermissionsFlags = {}} = UIFactory.getAclApi();
+
     const onAdd = useCallback(
         (form: FormApi<FormValues, Partial<FormValues>>) => {
+            const values = {...form.getState().values};
+            const permissionFlags: Record<string, boolean> = {};
+            Object.keys(requestPermissionsFlags).forEach((k) => {
+                const {invert} = requestPermissionsFlags[k];
+                const key = `${FLAG_NAME_PREFIX}${k}` as keyof typeof values;
+                const v = Boolean(values[key]);
+                permissionFlags[k] = invert ? !v : v;
+
+                delete values[key];
+            });
             return requestPermissions({
-                values: form.getState().values,
+                values: {...values, permissionFlags},
                 idmKind,
             });
         },
@@ -100,7 +124,7 @@ function RequestPermissions(props: Props) {
     const firstItemDisabled = idmKind === IdmObjectType.ACCOUNT;
     const permissions = firstItemDisabled ? valueWithCheckedFirstChoice(choices) : null;
 
-    const requestPermissionsFields: Record<
+    const availableFields: Record<
         RequestPermissionsFieldsNames,
         Omit<DialogField, 'name'>
     > = useMemo(() => {
@@ -131,10 +155,16 @@ function RequestPermissions(props: Props) {
                         )}
                     </>
                 ),
-                required: true,
                 extras: {
                     choices: choices,
                     disabledChoices,
+                },
+            },
+            readColumnGroup: {
+                type: 'acl-column-group',
+                caption: 'Column permissions',
+                extras: {
+                    columnGroups,
                 },
             },
             subjects: {
@@ -183,18 +213,38 @@ function RequestPermissions(props: Props) {
                     with: 'max',
                 },
             },
+            permissionFlags: {
+                type: 'block',
+                caption: 'Permission flags',
+                extras: {children: 'Not implemented'},
+            },
         };
     }, [choices, currentCaption, error, idmKind]);
 
     const dialogFields = useMemo(() => {
-        return UIFactory.getAclApi().requestPermissionsFields.map(
-            (name) =>
-                ({
-                    ...requestPermissionsFields[name],
-                    name: name,
-                } as DialogField<FormValues>),
-        );
-    }, [requestPermissionsFields]);
+        let flagsIndex = -1;
+        const res = requestPermissionsFields.map((name, index) => {
+            if (name === 'permissionFlags') {
+                flagsIndex = index;
+            }
+
+            return {
+                ...availableFields[name],
+                name: name,
+            } as DialogField<FormValues>;
+        });
+        if (flagsIndex !== -1) {
+            const flags: typeof res = Object.keys(requestPermissionsFlags ?? []).map((key) => {
+                return {
+                    type: 'tumbler',
+                    caption: hammer.format.ReadableField(requestPermissionsFlags[key]?.title),
+                    name: `${FLAG_NAME_PREFIX}${key}`,
+                };
+            });
+            res.splice(flagsIndex, 1, ...flags);
+        }
+        return res;
+    }, [availableFields, requestPermissionsFields]);
 
     return !choices?.length ? null : (
         <ErrorBoundary>
@@ -240,7 +290,9 @@ function RequestPermissions(props: Props) {
     );
 }
 
-export default compose(withVisible)(RequestPermissions);
+export default compose(withVisible)(RequestPermissions) as unknown as React.ComponentType<
+    Omit<Props, keyof WithVisibleProps>
+>;
 
 function valueWithCheckedFirstChoice(choices: string | any[]) {
     if (!choices || choices.length < 1) {

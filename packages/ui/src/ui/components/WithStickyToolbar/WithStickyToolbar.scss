@@ -9,10 +9,22 @@ $stickySpacerHeight: 6px;
     &__toolbar {
         height: $height;
 
+        &_disable-top-padding {
+            margin-top: -10px;
+            margin-bottom: 10px;
+        }
+
+        $toolbar: &;
+
         &_sticky {
             @include sticky-style();
             padding: 0px 20px;
             z-index: var(--fixed-toolbar-z-index);
+
+            &#{$toolbar}_disable-top-padding {
+                margin-top: unset;
+                margin-bottom: unset;
+            }
         }
 
         &_x2 {

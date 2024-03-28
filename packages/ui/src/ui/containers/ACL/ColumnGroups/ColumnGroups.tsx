@@ -3,25 +3,36 @@ import React, {useState} from 'react';
 import _ from 'lodash';
 import cn from 'bem-cn-lite';
 
+import {Power} from '@gravity-ui/icons';
+import {Select} from '@gravity-ui/uikit';
+
 import ErrorBoundary from '../../../components/ErrorBoundary/ErrorBoundary';
 
 import DataTableYT from '../../../components/DataTableYT/DataTableYT';
 import type {Column} from '@gravity-ui/react-data-table';
 import Icon from '../../../components/Icon/Icon';
 import Button from '../../../components/Button/Button';
-import StatusBulb from '../../../components/StatusBulb/StatusBulb';
 
 import EditColumnGroupModal, {Props as ModalProps} from './EditColumnGroupModal';
-import {ColumnGroup} from '../../../utils/acl/acl-types';
+import {AclColumnGroup} from '../../../utils/acl/acl-types';
 import UIFactory from '../../../UIFactory';
 
 import './ColumnGroups.scss';
-import {renderText} from '../../templates/utils';
+import {renderText} from '../../../components/templates/utils';
+import WithStickyToolbar from '../../../components/WithStickyToolbar/WithStickyToolbar';
+import {Toolbar} from '../../../components/WithStickyToolbar/Toolbar/Toolbar';
+import {ACLReduxProps} from '../ACL-connect-helpers';
 
 const block = cn('column-groups');
 
-interface Props {
-    columnGroups: Array<ColumnGroup>;
+interface ColumnGropsToolbarProps
+    extends Pick<
+        ACLReduxProps,
+        'updadeAclFilters' | 'columnsFilter' | 'userPermissionsAccessColumns'
+    > {}
+
+interface Props extends ColumnGropsToolbarProps {
+    columnGroups: Array<AclColumnGroup>;
     path: string;
     loadAclDataFn: () => void;
     cluster: string;
@@ -30,6 +41,9 @@ interface Props {
 
 export default function ColumnGroups({
     columnGroups,
+    userPermissionsAccessColumns,
+    columnsFilter,
+    updadeAclFilters,
     path,
     loadAclDataFn,
     cluster,
@@ -47,7 +61,7 @@ export default function ColumnGroups({
                 visible: false,
             }));
         },
-        handleSubmit: (_value: Partial<ColumnGroup>) => Promise.resolve(),
+        handleSubmit: (_value: Partial<AclColumnGroup>) => Promise.resolve(),
     } as ModalProps);
 
     const handleAddClick = () => {
@@ -62,7 +76,7 @@ export default function ColumnGroups({
                 columns: [],
                 enabled: false,
             },
-            handleSubmit: (value: Partial<ColumnGroup>) => {
+            handleSubmit: (value: Partial<AclColumnGroup>) => {
                 return UIFactory.getAclApi()
                     .createColumnGroup(cluster, path, value)
                     .then(() => {
@@ -72,7 +86,7 @@ export default function ColumnGroups({
         }));
     };
 
-    const handleEditClick = (item: ColumnGroup) => {
+    const handleEditClick = (item: AclColumnGroup) => {
         setModalProps((prevProps) => ({
             ...prevProps,
             title: 'Edit column group',
@@ -80,7 +94,7 @@ export default function ColumnGroups({
             initialData: {...item},
             disabledFields: [],
             visible: true,
-            handleSubmit: (value: Partial<ColumnGroup>) => {
+            handleSubmit: (value: Partial<AclColumnGroup>) => {
                 return UIFactory.getAclApi()
                     .editColumnGroup(cluster, {...value, id: item.id})
                     .then(() => {
@@ -90,7 +104,7 @@ export default function ColumnGroups({
         }));
     };
 
-    const handleDeleteClick = (item: ColumnGroup) => {
+    const handleDeleteClick = (item: AclColumnGroup) => {
         setModalProps((prevProps) => ({
             ...prevProps,
             title: 'Delete column group',
@@ -109,11 +123,14 @@ export default function ColumnGroups({
         }));
     };
 
-    const columns: Array<Column<ColumnGroup>> = [
+    const columns: Array<Column<AclColumnGroup>> = [
         {
             name: 'Empty',
             className: block('empty'),
             header: null,
+            render({row}) {
+                return <Power className={block('active-icon', {enabled: row.enabled})} />;
+            },
         },
         {
             name: 'Name',
@@ -130,15 +147,6 @@ export default function ColumnGroups({
             },
             className: block('columns'),
             align: 'left',
-        },
-        {
-            name: 'Enabled',
-            className: block('enabled'),
-            render({row}) {
-                const theme = row.enabled ? 'enabled' : 'unknown';
-                return <StatusBulb theme={theme} />;
-            },
-            align: 'center',
         },
         {
             name: '',
@@ -168,33 +176,76 @@ export default function ColumnGroups({
     return (
         <>
             <ErrorBoundary>
-                <div className={block()}>
-                    <div className="elements-heading elements-heading_size_xs">
-                        Column Groups
-                        {allowEdit && (
-                            <Button
-                                className={block('button', {add: true})}
-                                onClick={handleAddClick}
-                            >
-                                <Icon awesome={'plus'} />
-                                Add
-                            </Button>
-                        )}
-                    </div>
-                    {columnGroups.length === 0 ? undefined : (
-                        <DataTableYT<ColumnGroup>
-                            data={columnGroups}
-                            columns={columns}
-                            theme={'yt-borderless'}
-                            settings={{
-                                sortable: false,
-                                displayIndices: false,
-                            }}
+                <WithStickyToolbar
+                    disableToolbarTopPadding
+                    className={block()}
+                    toolbar={
+                        <ColumnGroupsToolbar
+                            {...{userPermissionsAccessColumns, columnsFilter, updadeAclFilters}}
                         />
-                    )}
-                </div>
+                    }
+                    content={
+                        Boolean(columnGroups.length) && (
+                            <>
+                                <div className="elements-heading elements-heading_size_xs">
+                                    Column groups
+                                    {allowEdit && (
+                                        <Button
+                                            className={block('button', {add: true})}
+                                            onClick={handleAddClick}
+                                        >
+                                            <Icon awesome={'plus'} />
+                                            Add
+                                        </Button>
+                                    )}
+                                </div>
+                                <DataTableYT<AclColumnGroup>
+                                    data={columnGroups}
+                                    columns={columns}
+                                    theme={'yt-borderless'}
+                                    settings={{
+                                        sortable: false,
+                                        displayIndices: false,
+                                    }}
+                                />
+                            </>
+                        )
+                    }
+                />
                 {modalProps.visible ? <EditColumnGroupModal {...modalProps} /> : null}
             </ErrorBoundary>
         </>
+    );
+}
+
+function ColumnGroupsToolbar({
+    columnsFilter: value,
+    userPermissionsAccessColumns,
+    updadeAclFilters,
+}: ColumnGropsToolbarProps) {
+    const options = React.useMemo(() => {
+        return userPermissionsAccessColumns?.map((value) => {
+            return {value, content: value};
+        });
+    }, [userPermissionsAccessColumns]);
+    return (
+        <Toolbar
+            itemsToWrap={[
+                {
+                    node: (
+                        <Select
+                            multiple
+                            hasClear
+                            filterable
+                            label="Columns"
+                            placeholder="filter"
+                            options={options}
+                            value={value}
+                            onUpdate={(columnsFilter) => updadeAclFilters({columnsFilter})}
+                        />
+                    ),
+                },
+            ]}
+        />
     );
 }

@@ -1,7 +1,7 @@
 import React from 'react';
 import {connect} from 'react-redux';
 
-import {AccessContentAcl, NavigationAcl} from '../../../../components/ACL/ACL-connect-helpers';
+import {AccessContentAcl, NavigationAcl} from '../../../../containers/ACL/ACL-connect-helpers';
 import {getAclLoadState} from '../../../../store/selectors/acl';
 import {getAttributes, getRawPath} from '../../../../store/selectors/navigation';
 import {IdmObjectType} from '../../../../constants/acl';

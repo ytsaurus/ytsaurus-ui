@@ -1,8 +1,9 @@
+import {ConnectedProps, connect} from 'react-redux';
+
 import {
     getAllAccessColumnsNames,
-    getAllAccessColumnsPermissionsOrderedByInheritanceAndSubject,
     getAllColumnGroupsActual,
-    getAllObjectPermissionsOrderedByInheritanceAndSubject,
+    getAllObjectPermissionsFiltered,
     getAllUserPermissions,
     getApproversFilteredAndOrdered,
     getHasApprovers,
@@ -19,7 +20,7 @@ import {
 
 import {getType} from '../../store/selectors/navigation';
 
-import {getColumnsColumns} from '../../store/selectors/acl-filters';
+import {getAclCurrentTab, getAclFilterColumns} from '../../store/selectors/acl-filters';
 
 import {
     cancelRequestPermissions,
@@ -30,16 +31,21 @@ import {
     updateAcl,
 } from '../../store/actions/acl';
 
-import {changeColumnsColumns} from '../../store/actions/acl-filters';
-
 import {getCluster} from '../../store/selectors/global';
 import {normalizeIdmParams} from '../../utils/acl';
 import {IdmObjectType} from '../../constants/acl';
-import {connect} from 'react-redux';
-import ACL from './ACL';
+import {IdmKindType} from '../../utils/acl/acl-types';
+import {RootState} from '../../store/reducers';
 
-const makeAclMapStateToProps = (inputIdmKind) => {
-    return (state, ownProps) => {
+import ACL from './ACL';
+import {updateAclFilters} from '../../store/actions/acl-filters';
+
+export type ACLOwnProps = {
+    path: string;
+};
+
+const makeAclMapStateToProps = (inputIdmKind: IdmKindType) => {
+    return (state: RootState, ownProps: ACLOwnProps) => {
         const normalizedParams = normalizeIdmParams(inputIdmKind, ownProps.path);
         const {
             idmKind,
@@ -64,18 +70,14 @@ const makeAclMapStateToProps = (inputIdmKind) => {
 
         const hasApprovers = getHasApprovers(state, idmKind);
         const approversFiltered = getApproversFilteredAndOrdered(state, idmKind);
-        const columnsPermissions = getAllAccessColumnsPermissionsOrderedByInheritanceAndSubject(
-            state,
-            idmKind,
-        );
-        const objectPermissions = getAllObjectPermissionsOrderedByInheritanceAndSubject(
+        const {mainPermissions, columnsPermissions} = getAllObjectPermissionsFiltered(
             state,
             idmKind,
         );
         const columnGroups = getAllColumnGroupsActual(state, idmKind);
         const userPermissions = getAllUserPermissions(state, idmKind);
 
-        const columnsFilter = getColumnsColumns(state);
+        const columnsFilter = getAclFilterColumns(state);
 
         const auditors = getNotInheritedAuditors(state, idmKind);
         const readApprovers = getNotInheritedReadApprovers(state, idmKind);
@@ -98,8 +100,8 @@ const makeAclMapStateToProps = (inputIdmKind) => {
             disableAclInheritance,
             bossApproval,
             disableInheritanceResponsible,
-            objectPermissions,
             columnGroups,
+            mainPermissions,
             columnsPermissions,
             hasApprovers,
             approversFiltered,
@@ -120,21 +122,26 @@ const makeAclMapStateToProps = (inputIdmKind) => {
 
             normalizedPoolTree,
             aclRequestOptions,
+
+            aclMode: idmKind !== 'path' ? undefined : getAclCurrentTab(state),
         };
     };
 };
 
 const makeAclMapDispatchToProps = () => ({
     loadAclData,
-    changeColumnsColumns,
     userPermissionsRequestFn: requestPermissions,
     userPermissionsCancelRequestFn: cancelRequestPermissions,
     userPermissionsUpdateAcl: updateAcl,
     userPermissionsCancelUpdateAcl: cancelUpdateAcl,
     deletePermissionsFn: deletePermissions,
+    updadeAclFilters: updateAclFilters,
 });
 
-const mergeProps = (stateProps, dispatchProps, ownProps) => {
+type StateProps = ReturnType<ReturnType<typeof makeAclMapStateToProps>>;
+type DispatchProps = ReturnType<typeof makeAclMapDispatchToProps>;
+
+function mergeProps(stateProps: StateProps, dispatchProps: DispatchProps, ownProps: ACLOwnProps) {
     const {normalizedPoolTree, aclRequestOptions} = stateProps;
     const {
         loadAclData,
@@ -147,26 +154,34 @@ const mergeProps = (stateProps, dispatchProps, ownProps) => {
         ...ownProps,
         ...stateProps,
         ...restDispatchProps,
-        loadAclData: (params) => {
+        loadAclData: (params: Parameters<typeof loadAclData>[0]) => {
             return loadAclData({...params}, {normalizedPoolTree}, aclRequestOptions);
         },
-        deletePermissionsFn: (params) => {
+        deletePermissionsFn: (params: Parameters<typeof deletePermissionsFn>[0]) => {
             return deletePermissionsFn(params, {normalizedPoolTree});
         },
-        userPermissionsRequestFn: (params) => {
+        userPermissionsRequestFn: (params: Parameters<typeof userPermissionsRequestFn>[0]) => {
             return userPermissionsRequestFn(params, {normalizedPoolTree});
         },
-        userPermissionsUpdateAcl: (params) => {
+        userPermissionsUpdateAcl: (params: Parameters<typeof userPermissionsUpdateAcl>[0]) => {
             return userPermissionsUpdateAcl(params, {normalizedPoolTree});
         },
     };
-};
+}
 
-function createACLComponent(idmKind) {
+function createACLConnector(idmKind: IdmKindType) {
     const mapStateToProps = makeAclMapStateToProps(idmKind);
     const mapDispatchToProps = makeAclMapDispatchToProps();
-    return connect(mapStateToProps, mapDispatchToProps, mergeProps)(ACL);
+    return connect(mapStateToProps, mapDispatchToProps, mergeProps);
 }
+
+function createACLComponent(idmKind: IdmKindType) {
+    return createACLConnector(idmKind)(ACL) as unknown as React.ComponentType<{path: string}>;
+}
+
+type ConnectorType = ReturnType<typeof createACLConnector>;
+
+export type ACLReduxProps = ConnectedProps<ConnectorType>;
 
 export const AccessContentAcl = createACLComponent(IdmObjectType.ACCESS_CONTROL_OBJECT);
 

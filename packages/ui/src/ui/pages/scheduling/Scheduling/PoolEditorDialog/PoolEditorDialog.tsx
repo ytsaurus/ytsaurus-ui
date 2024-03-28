@@ -27,7 +27,7 @@ import {
 } from '../../../../utils/scheduling/scheduling';
 import {closeEditModal, editPool} from '../../../../store/actions/scheduling/scheduling';
 
-import {checkUserPermissions} from '../../../../utils/acl/acl-api';
+import {checkUserPermissionsUI} from '../../../../utils/acl/acl-api';
 import {getCluster, getCurrentUserName} from '../../../../store/selectors/global';
 import {getCurrentTreeGpuLimit} from '../../../../store/selectors/scheduling/scheduling-ts';
 
@@ -185,7 +185,7 @@ export function PoolEditorDialog() {
             return;
         }
         const pathToCheck = calculatePoolPath(editItem.name, pools, tree);
-        checkUserPermissions(pathToCheck, user, ['write'])
+        checkUserPermissionsUI(pathToCheck, user, ['write'])
             .then(([{action}]) => {
                 const newHasWarning = action !== 'allow';
                 if (newHasWarning !== hasWarning) {

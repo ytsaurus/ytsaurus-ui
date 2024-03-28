@@ -1,19 +1,25 @@
-import {ACL_CHANGE_FILTERS} from '../../../constants/acl';
+import {YTPermissionTypeUI} from '../../../utils/acl/acl-api';
+import {ACL_CHANGE_FILTERS, AclMode} from '../../../constants/acl';
 
 import type {ActionD} from '../../../types';
+import {EMPTY_ARRAY} from '../../../constants/empty';
 
 export interface AclFiltersState {
     approversSubject: string;
     objectSubject: string;
-    objectPermissions: Array<string>;
-    columnsColumns: string;
+    objectPermissions: Array<YTPermissionTypeUI>;
+    columnsFilter: Array<string>;
+
+    aclCurrentTab: AclMode;
 }
 
 export const initialState: AclFiltersState = {
     approversSubject: '',
     objectSubject: '',
     objectPermissions: [],
-    columnsColumns: '',
+    columnsFilter: EMPTY_ARRAY,
+
+    aclCurrentTab: AclMode.MAIN_PERMISSIONS,
 };
 
 export default (state = initialState, action: AclFiltersAction): AclFiltersState => {

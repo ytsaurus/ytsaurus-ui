@@ -1,9 +1,8 @@
 import React, {Component, Fragment} from 'react';
-import PropTypes from 'prop-types';
 import hammer from '../../common/hammer';
 import cn from 'bem-cn-lite';
 import _ from 'lodash';
-import {IdmObjectType} from '../../constants/acl';
+import {AclMode, IdmObjectType} from '../../constants/acl';
 
 import ColumnGroups from './ColumnGroups/ColumnGroups';
 
@@ -13,118 +12,39 @@ import UserPermissions from './UserPermissions/UserPermissions';
 import LoadDataHandler from '../../components/LoadDataHandler/LoadDataHandler';
 import ErrorBoundary from '../../components/ErrorBoundary/ErrorBoundary';
 import DataTableYT from '../../components/DataTableYT/DataTableYT';
-import MetaTable from '../../components/MetaTable/MetaTable';
 import {ClipboardButton, Loader, Popover} from '@gravity-ui/uikit';
 import Icon from '../../components/Icon/Icon';
 import Link from '../../components/Link/Link';
 import {Tooltip} from '../../components/Tooltip/Tooltip';
-import {UserName} from '../UserLink/UserLink';
+import {UserName} from '../../components/UserLink/UserLink';
 
-import withVisible from '../../hocs/withVisible';
+import withVisible, {WithVisibleProps} from '../../hocs/withVisible';
 import {renderText} from '../../components/templates/utils';
 import Label from '../../components/Label/Label';
 import {isIdmAclAvailable} from '../../config';
 import ApproversFilters from './ApproversFilters/ApproversFilters';
 import ObjectPermissionsFilters from './ObjectPermissionsFilters/ObjectPermissionsFilters';
-import UIFactory from '../../UIFactory';
+import UIFactory, {AclRoleActionsType} from '../../UIFactory';
+
+import {ACLReduxProps} from './ACL-connect-helpers';
+import {PreparedAclSubject} from '../../utils/acl/acl-types';
+import {PreparedApprover} from '../../store/selectors/acl';
+
+import {Column} from '@gravity-ui/react-data-table';
+import {SegmentControl, SegmentControlItem} from '../../components/SegmentControl/SegmentControl';
+import {PreparedRole} from '../../utils/acl';
+import {AclModeControl} from './AclModeControl';
 
 import './ACL.scss';
 
 const block = cn('navigation-acl');
 
-function FlagRole({role, invert}) {
-    const RoleActions = UIFactory.getComponentForAclRoleActions();
-    const value = invert ? !role : Boolean(role);
-    return (
-        <React.Fragment>
-            {String(value)}
-            {role && <RoleActions role={role} />}
-        </React.Fragment>
-    );
-}
+type Props = ACLReduxProps & WithVisibleProps;
 
-class ACL extends Component {
-    static permissionProps = PropTypes.arrayOf(
-        PropTypes.shape({
-            permissions: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
-            subjects: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
-            columns: PropTypes.arrayOf(PropTypes.string.isRequired),
-            inheritance_mode: PropTypes.string.isRequired,
-            action: PropTypes.string.isRequired,
-            inherited: PropTypes.bool,
-        }),
-    );
+type ApproverRow = Props['approversFiltered'][number];
+type PermissionsRow = Props['mainPermissions'][number];
 
-    static columnGroupsProps = PropTypes.arrayOf(
-        PropTypes.shape({
-            columns: PropTypes.arrayOf(PropTypes.string.isRequired),
-            id: PropTypes.string.isRequired,
-            name: PropTypes.string.isRequired,
-            enabled: PropTypes.bool,
-        }),
-    );
-
-    static propTypes = {
-        // from withVisible
-        visible: PropTypes.bool.isRequired,
-        handleClose: PropTypes.func.isRequired,
-        handleShow: PropTypes.func.isRequired,
-
-        // from connect
-        loading: PropTypes.bool.isRequired,
-        loaded: PropTypes.bool.isRequired,
-        error: PropTypes.bool.isRequired,
-        errorData: PropTypes.object.isRequired,
-
-        path: PropTypes.string.isRequired,
-        idmKind: PropTypes.string.isRequired,
-        nodeType: PropTypes.string.isRequired,
-        version: PropTypes.string,
-        disableAclInheritance: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
-        bossApproval: PropTypes.bool,
-        disableInheritanceResponsible: PropTypes.bool,
-        objectPermissions: ACL.permissionProps.isRequired,
-        columnGroups: ACL.columnGroupsProps.isRequired,
-        columnsPermissions: ACL.permissionProps.isRequired,
-        hasApprovers: PropTypes.bool.isRequired,
-        approversFiltered: PropTypes.arrayOf(
-            PropTypes.shape({
-                type: PropTypes.string.isRequired,
-                inherited: PropTypes.bool,
-                value: PropTypes.string.isRequired,
-                subjectType: PropTypes.string.isRequired,
-            }),
-        ).isRequired,
-        auditors: PropTypes.arrayOf(PropTypes.object),
-        readApprovers: PropTypes.arrayOf(PropTypes.object),
-        responsible: PropTypes.arrayOf(PropTypes.object),
-
-        userPermissions: UserPermissions.PermissionsType,
-        userPermissionsRequestError: PropTypes.any,
-        userPermissionsAccessColumns: PropTypes.arrayOf(PropTypes.string).isRequired,
-        userPermissionsRequestFn: PropTypes.func.isRequired,
-        userPermissionsCancelRequestFn: PropTypes.func.isRequired,
-
-        userPermissionsUpdateAcl: PropTypes.func.isRequired,
-        userPermissionsUpdateAclError: PropTypes.object,
-        userPermissionsCancelUpdateAcl: PropTypes.func.isRequired,
-
-        isPermissionDeleted: PropTypes.bool.isRequired,
-        deletePermissionsLastItemKey: PropTypes.string,
-        deletePermissionsError: PropTypes.object,
-        deletePermissionsFn: PropTypes.func.isRequired,
-
-        loadAclData: PropTypes.func.isRequired,
-        changeColumnsColumns: PropTypes.func.isRequired,
-
-        cluster: PropTypes.string,
-        aclRequestOptions: PropTypes.shape({
-            inheritAcl: PropTypes.bool,
-        }),
-
-        columnsFilter: PropTypes.string,
-    };
-
+class ACL extends Component<Props> {
     static tableColumns = {
         items: {
             inherited: {
@@ -176,28 +96,28 @@ class ACL extends Component {
     };
 
     // eslint-disable-next-line react/sort-comp
-    static renderSubjectLink(item) {
+    static renderSubjectLink(item: PreparedAclSubject | PreparedApprover | PermissionsRow) {
         if (item.subjectType === 'user') {
             const {subjectUrl} = item;
             const username = item.subjects[0];
             return (
-                <UserName key={username} url={subjectUrl} userName={username}>
+                <UserName key={username} url={subjectUrl} userName={username as string}>
                     <span className={block('subject-name')}>{username}</span>
                 </UserName>
             );
         }
 
         if (item.subjectType === 'tvm') {
-            const {subjectUrl} = item;
             const tvmId = item.subjects[0];
-            const {name} = item.tvmInfo;
+            const {name} = item.tvmInfo ?? {};
+
             const text = `${name} (${tvmId})`;
             return (
                 <div className={block('subject-column')}>
                     <Link
                         key={name}
                         className={block('subject-link')}
-                        url={subjectUrl}
+                        url={item.subjectUrl}
                         theme="primary"
                         title={text}
                     >
@@ -230,7 +150,7 @@ class ACL extends Component {
     }
 
     state = {
-        deleteItem: {},
+        deleteItem: {} as {key?: string},
     };
 
     componentDidMount() {
@@ -241,14 +161,14 @@ class ACL extends Component {
         }
     }
 
-    componentDidUpdate(prevProps) {
+    componentDidUpdate(prevProps: Props) {
         const {path, idmKind, loadAclData} = this.props;
         if (prevProps.path !== path) {
             loadAclData({path, idmKind});
         }
     }
 
-    get columnsTemplates() {
+    getColumnsTemplates<T extends ApproverRow | PermissionsRow>() {
         const openDeleteModal = this.handleDeletePermissionClick;
         const {cluster, idmKind} = this.props;
         return {
@@ -265,15 +185,15 @@ class ACL extends Component {
                         )
                     );
                 },
-            },
+            } as Column<T>,
             subjects: {
                 name: 'Subjects',
                 align: 'left',
                 className: block('table-item', {type: 'subjects'}),
                 render({row}) {
-                    const {type, internal} = row;
+                    const {internal} = row;
                     if (!internal) {
-                        return ACL.renderSubjectLink(row, type);
+                        return ACL.renderSubjectLink(row);
                     }
 
                     const nodes = _.map(row.subjects, (subject, index) => {
@@ -291,7 +211,7 @@ class ACL extends Component {
                     if (nodes.length === 1) return nodes[0];
                     return <div className={block('subjects-list')}>{nodes}</div>;
                 },
-            },
+            } as Column<T>,
             permissions: {
                 name: 'Permissions',
                 align: 'left',
@@ -309,7 +229,7 @@ class ACL extends Component {
                         </div>
                     );
                 },
-            },
+            } as Column<T>,
             inheritance_mode: {
                 name: 'Inheritance mode',
                 render({row}) {
@@ -317,7 +237,7 @@ class ACL extends Component {
                 },
                 align: 'left',
                 className: block('table-item', {type: 'inheritance-mode'}),
-            },
+            } as Column<T>,
             actions: {
                 name: 'actions',
                 header: '',
@@ -325,9 +245,13 @@ class ACL extends Component {
                 className: block('table-item', {type: 'actions'}),
                 render({row}) {
                     const RoleActions = UIFactory.getComponentForAclRoleActions();
-                    return <RoleActions role={row} idmKind={idmKind} onDelete={openDeleteModal} />;
+                    return (
+                        RoleActions !== undefined && (
+                            <RoleActions role={row} idmKind={idmKind} onDelete={openDeleteModal} />
+                        )
+                    );
                 },
-            },
+            } as Column<T>,
             approve_type: {
                 name: 'Type',
                 align: 'left',
@@ -335,7 +259,7 @@ class ACL extends Component {
                 render({row}) {
                     return hammer.format['Readable'](row.type);
                 },
-            },
+            } as Column<T>,
             columns: {
                 name: 'Private columns',
                 align: 'left',
@@ -343,11 +267,11 @@ class ACL extends Component {
                 render({row}) {
                     return renderText(row.columns?.map((column) => `"${column}"`).join(', '));
                 },
-            },
+            } as Column<T>,
         };
     }
 
-    handleDeletePermissionClick = (deleteItem) => {
+    handleDeletePermissionClick = (deleteItem: AclRoleActionsType) => {
         const {handleShow} = this.props;
         this.setState({deleteItem}, handleShow);
     };
@@ -357,20 +281,26 @@ class ACL extends Component {
         this.setState({deleteItem: {}}, handleClose);
     };
 
-    rowClassNameByFlags(item, mixin) {
+    rowClassNameByFlags<T extends ApproverRow | PermissionsRow>(item: T) {
         const {
             isUnrecognized: unrecognized,
             isDepriving: depriving,
             isRequested: requested,
             isApproved: approved,
+            isMissing: missing,
         } = item;
-        return block('row', {unrecognized, depriving, requested, approved}, mixin);
+        return block('row', {
+            unrecognized: unrecognized || missing,
+            depriving,
+            requested,
+            approved,
+        });
     }
 
     renderApprovers() {
         const {hasApprovers, approversFiltered} = this.props;
-        const tableColumns = ['inherited', 'subjects', 'approve_type', 'actions'].map(
-            (name) => this.columnsTemplates[name],
+        const tableColumns = (['inherited', 'subjects', 'approve_type', 'actions'] as const).map(
+            (name) => this.getColumnsTemplates<ApproverRow>()[name],
         );
         return (
             hasApprovers && (
@@ -397,24 +327,33 @@ class ACL extends Component {
     }
 
     renderObjectPermissions() {
-        const {objectPermissions, idmKind} = this.props;
-        const tableColumns = [
-            'inherited',
-            'subjects',
-            'permissions',
-            'inheritance_mode',
-            'actions',
-        ].map((name) => this.columnsTemplates[name]);
+        const {aclMode, mainPermissions, columnsPermissions, idmKind} = this.props;
+        const useColumns = aclMode === AclMode.COLUMN_GROUPS_PERMISSISONS;
+        const extraColumns = useColumns ? ['columns' as const] : [];
+
+        const tableColumns: Array<Column<PermissionsRow>> = (
+            [
+                'inherited',
+                'subjects',
+                'permissions',
+                ...extraColumns,
+                'inheritance_mode',
+                'actions',
+            ] as const
+        ).map((name) => this.getColumnsTemplates<PermissionsRow>()[name]);
+
+        const data = useColumns ? columnsPermissions : mainPermissions;
+
         return (
             <ErrorBoundary>
                 <div className={block('object-permissions')}>
                     <div className="elements-heading elements-heading_size_xs">
-                        Object Permissions
+                        {useColumns ? 'Private columns permissions' : 'Object permissions'}
                     </div>
                     <ObjectPermissionsFilters idmKind={idmKind} />
 
                     <DataTableYT
-                        data={objectPermissions}
+                        data={data}
                         columns={tableColumns}
                         theme={'yt-borderless'}
                         rowClassName={this.rowClassNameByFlags}
@@ -429,11 +368,24 @@ class ACL extends Component {
     }
 
     renderColumnGroups() {
-        const {columnGroups, idmKind, path, loadAclData, cluster, nodeType} = this.props;
+        const {
+            columnGroups,
+            columnsFilter,
+            userPermissionsAccessColumns,
+            updadeAclFilters,
+            idmKind,
+            path,
+            loadAclData,
+            cluster,
+            nodeType,
+        } = this.props;
         const props = {
             path,
             loadAclDataFn: () => loadAclData({path, idmKind}),
             columnGroups,
+            columnsFilter,
+            updadeAclFilters,
+            userPermissionsAccessColumns,
             cluster,
             allowEdit: nodeType === 'map_node',
         };
@@ -442,41 +394,11 @@ class ACL extends Component {
         ) : null;
     }
 
-    renderColumnsPermissions() {
-        const {userPermissionsAccessColumns, columnsPermissions} = this.props;
-        const tableColumns = ['inherited', 'subjects', 'columns'].map(
-            (name) => this.columnsTemplates[name],
-        );
-
-        return (
-            userPermissionsAccessColumns.length > 0 && (
-                <ErrorBoundary>
-                    <div className={block('columns-permissions')}>
-                        <div className="elements-heading elements-heading_size_xs">
-                            Private columns permissions
-                        </div>
-
-                        <DataTableYT
-                            data={columnsPermissions}
-                            columns={tableColumns}
-                            theme={'yt-borderless'}
-                            settings={{
-                                sortable: false,
-                                displayIndices: false,
-                            }}
-                        />
-                    </div>
-                </ErrorBoundary>
-            )
-        );
-    }
-
-    deletePermissionsFn = (...args) => {
+    deletePermissionsFn = async (...args: Parameters<Props['deletePermissionsFn']>) => {
         const {deletePermissionsFn, loadAclData, idmKind, path} = this.props;
-        return deletePermissionsFn(...args).then((d) => {
-            loadAclData({path, idmKind});
-            return d;
-        });
+        const res = await deletePermissionsFn(...args);
+        await loadAclData({path, idmKind});
+        return res;
     };
 
     renderContent() {
@@ -487,7 +409,6 @@ class ACL extends Component {
             disableInheritanceResponsible,
             path,
             idmKind,
-            aclRequestOptions,
             version,
             userPermissions,
             userPermissionsRequestError,
@@ -509,16 +430,30 @@ class ACL extends Component {
             userPermissionsUpdateAclError,
             userPermissionsCancelUpdateAcl,
             cluster,
+            columnGroups,
+            aclMode,
+            updadeAclFilters,
         } = this.props;
         const {deleteItem} = this.state;
 
+        const useColumns = aclMode && aclMode === AclMode.COLUMN_GROUPS_PERMISSISONS;
+
         return (
             <Fragment>
-                {this.renderFlags()}
-                {this.renderApprovers()}
+                {Boolean(aclMode) && (
+                    <div>
+                        <AclModeControl {...{aclMode, updadeAclFilters}} />
+                    </div>
+                )}
+                {useColumns ? (
+                    this.renderColumnGroups()
+                ) : (
+                    <>
+                        {this.renderFlags()}
+                        {this.renderApprovers()}
+                    </>
+                )}
                 {this.renderObjectPermissions()}
-                {this.renderColumnGroups()}
-                {this.renderColumnsPermissions()}
 
                 {loaded && (
                     <UserPermissions
@@ -526,7 +461,6 @@ class ACL extends Component {
                         className={block('user-permissions')}
                         path={path}
                         idmKind={idmKind}
-                        aclRequestOptions={aclRequestOptions}
                         version={version}
                         accessColumns={userPermissionsAccessColumns}
                         permissions={userPermissions}
@@ -547,9 +481,9 @@ class ACL extends Component {
                         updateAcl={userPermissionsUpdateAcl}
                         updateAclError={userPermissionsUpdateAclError}
                         cancelUpdateAcl={userPermissionsCancelUpdateAcl}
+                        columnGroups={columnGroups}
                     />
                 )}
-
                 <DeletePermissionModal
                     idmKind={idmKind}
                     path={path}
@@ -572,43 +506,44 @@ class ACL extends Component {
         const {allowBossApprovals, allowInheritAcl, allowInheritResponsibles} =
             UIFactory.getAclPermissionsSettings()[idmKind];
 
-        const {inherited: bossApprovalInherited} = bossApproval || {};
-        const {inherited: aclInherited} = disableAclInheritance || {};
-
-        const items = [
-            allowInheritAcl && [
-                {
-                    icon: Boolean(aclInherited) && (
-                        <Icon className={block('flag-icon')} awesome={'level-down-alt'} />
-                    ),
-                    key: 'inherit ACL',
-                    value: <FlagRole role={disableAclInheritance} invert />,
-                },
-            ],
-            isIdmAclAvailable() &&
-                allowBossApprovals && [
-                    {
-                        icon: Boolean(bossApprovalInherited) && (
-                            <Icon className={block('flag-icon')} awesome={'level-down-alt'} />
-                        ),
-                        key: 'boss approval',
-                        value: <FlagRole role={bossApproval} />,
-                    },
-                ],
-            isIdmAclAvailable() &&
-                allowInheritResponsibles && [
-                    {
-                        key: 'inherit responsibles',
-                        value: <FlagRole role={disableInheritanceResponsible} invert />,
-                    },
-                ],
-        ].filter(Boolean);
-
-        if (!items.length) {
-            return null;
+        function toSegmentItem(name: string, role?: boolean | PreparedRole, invert?: boolean) {
+            return {
+                name,
+                value: invert ? !role : Boolean(role),
+                url: 'boolean' === typeof role ? 'https://yt.yandex-team.ru' : role?.idmLink,
+            };
         }
 
-        return <MetaTable className={block('meta')} items={items} />;
+        const segments: Array<SegmentControlItem> = _.compact([
+            allowInheritAcl && toSegmentItem('Inherit ACL', disableAclInheritance, true),
+            isIdmAclAvailable() &&
+                allowBossApprovals &&
+                toSegmentItem('Boss approval', bossApproval),
+            isIdmAclAvailable() &&
+                allowInheritResponsibles &&
+                toSegmentItem('Inherit responsibles', disableInheritanceResponsible, true),
+        ]);
+
+        const {mainPermissions, columnsPermissions, approversFiltered, columnGroups} = this.props;
+
+        const counters: Array<SegmentControlItem> = [
+            {name: 'Responsibles', value: approversFiltered.length},
+            {name: 'Object permissions', value: mainPermissions.length + columnsPermissions.length},
+            {name: 'Column groups', value: columnGroups.length},
+        ];
+
+        return (
+            <div className={block('flags')}>
+                {segments.length > 0 && (
+                    <SegmentControl
+                        className={block('flags-item', {flags: true})}
+                        background="neutral-light"
+                        items={segments}
+                    />
+                )}
+                <SegmentControl className={block('segments')} gap="small" items={counters} />
+            </div>
+        );
     }
 
     render() {

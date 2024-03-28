@@ -1,0 +1,51 @@
+.yt-segment-control {
+    --yt-segment-item-padding: 49px;
+    --yt-segment-background-color: unset;
+
+    border-radius: 6px;
+    padding: 20px 32px;
+
+    &_background_neutral-light {
+        --yt-segment-background-color: var(--g-color-base-neutral-light);
+    }
+
+    &_gap_small {
+        --yt-segment-item-padding: 38px;
+    }
+
+    background-color: var(--yt-segment-background-color);
+
+    &__item {
+        &:not(:first-child) {
+            padding-left: var(--yt-segment-item-padding);
+        }
+
+        &:not(:last-child) {
+            padding-right: var(--yt-segment-item-padding);
+
+            &::after {
+                content: '';
+                display: block;
+                position: relative;
+                top: -100%;
+                left: 100%;
+
+                margin-left: var(--yt-segment-item-padding);
+
+                width: 0px;
+                height: 100%;
+
+                border-left: 1px solid var(--g-color-line-generic);
+            }
+        }
+    }
+
+    &__value {
+        font-weight: var(--yt-font-weight-bold);
+        padding-right: 4px;
+    }
+
+    &__link {
+        margin-top: -1px;
+    }
+}

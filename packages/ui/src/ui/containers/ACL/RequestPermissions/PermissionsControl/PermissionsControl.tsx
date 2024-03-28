@@ -5,16 +5,17 @@ import _ from 'lodash';
 import {Checkbox} from '@gravity-ui/uikit';
 
 import format from '../../../../common/hammer/format';
+import {YTPermissionTypeUI} from '../../../../utils/acl/acl-api';
 
 import './PermissionsControl.scss';
 
 const block = cn('acl-permissions-control');
 
 interface Props {
-    value: Record<string, Array<string>>;
+    value: Record<string, Array<YTPermissionTypeUI>>;
     onChange: (value: Props['value']) => void;
     disabled?: boolean;
-    choices?: Array<Array<string>>;
+    choices?: Array<Array<YTPermissionTypeUI>>;
     disabledChoices?: Array<number>; // array of indices
     validate?: (value: Props['value']) => string | undefined;
 
@@ -40,7 +41,10 @@ export default class PermissionsControl extends Component<Props, State> {
 
     state: State = {};
 
-    handleCheckboxChange = (permissionName: string, permissionsToSet: Array<string>) => {
+    handleCheckboxChange = (
+        permissionName: string,
+        permissionsToSet: Array<YTPermissionTypeUI>,
+    ) => {
         const {value, onChange} = this.props;
         const {[permissionName]: permissions, ...rest} = value || {};
 
@@ -50,7 +54,7 @@ export default class PermissionsControl extends Component<Props, State> {
 
     renderPermissionCheckbox(
         permissionName: string,
-        permissionsToSet: Array<string>,
+        permissionsToSet: Array<YTPermissionTypeUI>,
         index: number,
     ) {
         const {value, disabled, disabledChoices} = this.props;
