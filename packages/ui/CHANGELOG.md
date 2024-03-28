@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.25.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.24.1...ui-v1.25.0) (2024-03-28)
+
+
+### Features
+
+* **ACL:** add ability to describe custom permissionFlags [YTFRONT-4073] ([17be3da](https://github.com/ytsaurus/ytsaurus-ui/commit/17be3da4a03c6f807a13216215fb724f77b6f44e))
+* **Query:** progress for spyt engine [YTFRONT-3981] ([14a59b0](https://github.com/ytsaurus/ytsaurus-ui/commit/14a59b01712146e99113a27dba6a556c10f8ca69))
+
+
+### Bug Fixes
+
+* **navigation:** corrected the description change form [YTFRONT-4083] ([93ee0d1](https://github.com/ytsaurus/ytsaurus-ui/commit/93ee0d16c088e3aaebf7e71f825864ee945ba4be))
+
 ## [1.24.1](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.24.0...ui-v1.24.1) (2024-03-26)
 
 
