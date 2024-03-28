@@ -28,7 +28,7 @@ interface Props<ValueT extends string = string> {
     exactNavLink?: boolean;
 }
 
-interface TabItem<ValueT extends string = string> {
+export interface TabItem<ValueT extends string = string> {
     value: ValueT;
 
     text?: React.ReactNode;

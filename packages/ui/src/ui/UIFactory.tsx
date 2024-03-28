@@ -27,6 +27,7 @@ import {uiSettings} from './config/ui-settings';
 import YT from './config/yt-config';
 import {PreparedAclSubject} from './utils/acl/acl-types';
 import {PreparedRole} from './utils/acl';
+import {UISettingsMonitoring} from '../shared/ui-settings';
 
 type HeaderItemOrPage =
     | {
@@ -55,7 +56,7 @@ export interface UIFactoryClusterPageInfo {
     title: string;
     pageId: string; // also used as urlMatch for <Route path={`/:cluster/${pageId}`} ... />
     svgIcon?: SVGIconData;
-    reducers?: Record<string, Reducer>;
+    reducers?: Record<string, Reducer<any, any>>;
     reactComponent: React.ComponentType<any>; // used as component for <Route ... component={reactComponent} />
     topRowComponent?: React.ComponentType<any>; // used as component for <Route ... component={topRowComponent} />
     urlMapping?: Record<string, PathParameters>;
@@ -67,7 +68,7 @@ export interface ExternalSchemaDescriptionResponse {
 }
 
 export interface ReducersAndUrlMapping {
-    reducers?: Record<string, Reducer>;
+    reducers?: Record<string, Reducer<any, any>>;
     urlMapping?: Record<string, PathParameters>;
 }
 
@@ -125,6 +126,17 @@ export interface UIFactory {
             isEphemeral?: boolean | undefined;
         };
     }): Array<SchedulingExtraTab>;
+    getSystemMonitoringTab():
+        | {
+              title?: string;
+              urlTemplate: string;
+          }
+        | {
+              title?: string;
+              component: React.ComponentType<any>;
+          }
+        | undefined;
+    getVersionMonitoringLink(cluster: string): UISettingsMonitoring | undefined;
 
     getMonitoringForAccounts():
         | undefined
@@ -420,6 +432,14 @@ const uiFactory: UIFactory = {
                 urlTemplate,
             },
         ];
+    },
+    getSystemMonitoringTab() {
+        if (!uiSettings?.systemMonitoring) return undefined;
+        return uiSettings.systemMonitoring;
+    },
+    getVersionMonitoringLink() {
+        if (!uiSettings?.componentVersionsMonitoring) return undefined;
+        return uiSettings.componentVersionsMonitoring;
     },
     getMonitoringForAccounts() {
         if (!uiSettings?.accountsMonitoring?.urlTemplate) {
