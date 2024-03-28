@@ -17,6 +17,8 @@ import {QueryEngine} from './engines';
 import {getLastSelectedACONamespaces} from './query_aco/selectors';
 import {setSettingByKey} from '../../../store/actions/settings';
 
+import unipika from '../../../common/thor/unipika';
+
 function getQTApiSetup(): {proxy?: string} {
     const QT_CLUSTER = getQueryTrackerCluster();
     if (QT_CLUSTER) {
@@ -35,9 +37,7 @@ function makeGetQueryParams(query_id: string) {
         query_id,
         output_format: {
             $value: 'json',
-            $attributes: {
-                encode_utf8: 'false',
-            },
+            $attributes: {},
         },
     };
 }
@@ -190,9 +190,7 @@ export async function generateQueryFromTable(
             attributes: ['type', 'schema', 'dynamic'],
             output_format: {
                 $value: 'json',
-                $attributes: {
-                    encode_utf8: 'false',
-                },
+                $attributes: {},
             },
         },
         setup: {
@@ -240,9 +238,7 @@ export function loadQueriesList({params, cursor, limit}: QueriesListRequestParam
                 limit,
                 output_format: {
                     $value: 'json',
-                    $attributes: {
-                        encode_utf8: 'false',
-                    },
+                    $attributes: {},
                 },
             },
             setup: getQTApiSetup(),
@@ -256,7 +252,21 @@ export function getQuery(query_id: string): ThunkAction<Promise<QueryItem>, Root
         const {stage} = getQueryTrackerRequestOptions(state);
         return ytApiV4Id.getQuery(YTApiId.getQuery, {
             parameters: {stage, ...makeGetQueryParams(query_id)},
-            setup: getQTApiSetup(),
+            setup: {
+                ...getQTApiSetup(),
+                JSONSerializer: {
+                    stringify(data: unknown) {
+                        return JSON.stringify(data);
+                    },
+                    parse(data: string) {
+                        const res = JSON.parse(data);
+
+                        res.query = unipika.utils.utf8.decode(res.query);
+
+                        return res;
+                    },
+                },
+            },
         });
     };
 }
@@ -283,12 +293,25 @@ export function startQuery(
                 },
                 output_format: {
                     $value: 'json',
-                    $attributes: {
-                        encode_utf8: 'false',
+                    $attributes: {},
+                },
+            },
+            setup: {
+                ...getQTApiSetup(),
+                encodeForYt(str: unknown) {
+                    return str;
+                },
+                JSONSerializer: {
+                    stringify(data: {query: string}) {
+                        data.query = unipika.utils.utf8.encode(data.query);
+
+                        return JSON.stringify(data);
+                    },
+                    parse(data: string) {
+                        return JSON.parse(data);
                     },
                 },
             },
-            setup: getQTApiSetup(),
         });
     };
 }
@@ -363,7 +386,6 @@ export function readQueryResults(
                         column_names: columns,
                         value_format: 'yql',
                         field_weight_limit: settings?.cellsSize,
-                        encode_utf8: 'false',
                         max_selected_column_count: 3000,
                     },
                 },
@@ -427,12 +449,24 @@ export function requestQueries(
                 requests: requests,
                 output_format: {
                     $value: 'json',
-                    $attributes: {
-                        encode_utf8: 'false',
+                    $attributes: {},
+                },
+            },
+            setup: {
+                ...getQTApiSetup(),
+                JSONSerializer: {
+                    stringify(data: unknown) {
+                        return JSON.stringify(data);
+                    },
+                    parse(data: string) {
+                        const res = JSON.parse(data);
+
+                        res.query = unipika.utils.utf8.decode(res.query);
+
+                        return res;
                     },
                 },
             },
-            setup: getQTApiSetup(),
         })) as unknown as {results: BatchResultsItem<QueryItem>[]};
 
         const extracted = extractBatchV4Values(resp, requests);
@@ -506,9 +540,7 @@ export function getQueryResultMetaList(
                 requests: requests,
                 output_format: {
                     $value: 'json',
-                    $attributes: {
-                        encode_utf8: 'false',
-                    },
+                    $attributes: {},
                 },
             },
             setup: getQTApiSetup(),

@@ -281,7 +281,8 @@ core._prepareRequestSettings = function (localSetup, command) {
             throw new Error('Unexpected behavior: Request body already defined');
         }
         var serializer = setup.getOption(localSetup, 'JSONSerializer');
-        requestParameters.data = setup.encodeForYt(serializer.stringify(preparedParameters));
+        var encodeForYt = setup.getOption(localSetup, 'encodeForYt');
+        requestParameters.data = encodeForYt(serializer.stringify(preparedParameters));
     }
 
     return requestParameters;
