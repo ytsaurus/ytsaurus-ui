@@ -143,6 +143,8 @@ setup.encodeForYt = function (str) {
     return unescape(encodeURIComponent(str));
 };
 
+setup.createOption('encodeForYt', 'function', setup.encodeForYt);
+
 setup.createOption('encodedParametersSettings', 'object', {
     maxSize: 64 * 1024,
     maxCount: 2,
