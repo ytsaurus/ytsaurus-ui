@@ -19,6 +19,7 @@ import {Type, parseV3Type} from '../../../../components/SchemaDataType/dateTypes
 import ypath from '../../../../common/thor/ypath';
 import {getFontFamilies} from '../../../../store/selectors/settings-ts';
 import forEach_ from 'lodash/forEach';
+import unipika from '../../../../common/thor/unipika';
 
 export const REQUEST_QUERY_RESULTS = 'query-tracker/REQUEST_QUERY_RESULTS';
 export type RequestQueryResultsAction = ActionD<
@@ -135,7 +136,7 @@ export function loadQueryResult(
                     return {
                         name,
                         type: getType(parseV3Type(type_v3 as Type, typeMap)),
-                        displayName: name,
+                        displayName: unipika.utils.utf8.decode(name),
                     };
                 }) || [];
 
@@ -159,7 +160,6 @@ export function loadQueryResult(
                     errorTitle: 'Failed to load query result',
                 },
             );
-
             const {rows, yql_type_registry: types} = result;
 
             const formattedResult = rows.map((v) => {
