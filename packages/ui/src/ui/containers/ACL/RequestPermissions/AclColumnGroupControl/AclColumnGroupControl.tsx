@@ -1,6 +1,5 @@
 import React from 'react';
 
-import '../../../../utils/acl/acl-types';
 import {AclColumnGroup} from '../../../../utils/acl/acl-types';
 import {Select, SelectOption} from '@gravity-ui/uikit';
 
@@ -13,19 +12,16 @@ export type Props = {
 
 export function AclColumnGroupControl({value, onChange, columnGroups, disabled}: Props) {
     const options = React.useMemo(() => {
-        return columnGroups?.reduce(
-            (acc, data) => {
-                if (!data.removed) {
-                    acc.push({
-                        value: data.id,
-                        content: data.name,
-                        data,
-                    });
-                }
-                return acc;
-            },
-            [] as Array<SelectOption<AclColumnGroup>>,
-        );
+        return columnGroups?.reduce((acc, data) => {
+            if (!data.removed) {
+                acc.push({
+                    value: data.id,
+                    content: data.name,
+                    data,
+                });
+            }
+            return acc;
+        }, [] as Array<SelectOption<AclColumnGroup>>);
     }, [columnGroups]);
 
     return (

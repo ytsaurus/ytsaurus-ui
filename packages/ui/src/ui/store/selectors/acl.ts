@@ -1,8 +1,12 @@
 import {createSelector} from 'reselect';
 import _ from 'lodash';
+import partition from 'lodash/partition';
+import compact from 'lodash/compact';
+import sortBy from 'lodash/sortBy';
 import {calculateLoadingStatus} from '../../utils/utils';
 import {concatByAnd} from '../../common/hammer/predicate';
 import {
+    getAclFilterColumns,
     getApproversSubjectFilter,
     getObjectPermissionsFilter,
     getObjectSubjectFilter,
@@ -136,29 +140,47 @@ export const getAllObjectPermissionsFiltered = createSelector(
         getAllObjectPermissionsWithSplittedSubjects,
         getObjectSubjectFilter,
         getObjectPermissionsFilter,
+        getAclFilterColumns,
     ],
-    (items, subjectFilter, permissionsFilter) => {
-        const predicates = [];
-        if (subjectFilter) {
-            const lowerNameFilter = subjectFilter.toLowerCase();
-            predicates.push((item: PreparedAclSubject & HasSplitted) =>
-                subjectFilterPredicate(item, lowerNameFilter),
-            );
-        }
-        if (Array.isArray(permissionsFilter) && permissionsFilter.length > 0) {
-            predicates.push((item: PreparedAclSubject & HasSplitted) =>
-                permissionsFilterPredicate(item, permissionsFilter),
-            );
-        }
+    (items, subjectFilter, permissionsFilter, columns) => {
+        type ItemType = PreparedAclSubject & HasSplitted;
 
-        const allPermissions = OrderByInheritanceAndSubject(
-            _.filter(items, concatByAnd(...predicates)),
-        );
-        const [mainPermissions, columnsPermissions] = _.partition(
-            allPermissions,
+        const [mainPermissions, columnPermissions] = partition(
+            items,
             (item) => !item.columns?.length,
         );
-        return {mainPermissions, columnsPermissions};
+
+        const withColumns = columnPermissions.map((item) => {
+            return {...item, columns: sortBy(item.columns)};
+        });
+
+        const lowerNameFilter = subjectFilter?.toLocaleLowerCase();
+        const filterBySubject = lowerNameFilter
+            ? (item: ItemType) => subjectFilterPredicate(item, lowerNameFilter)
+            : undefined;
+
+        const filterByPermissions =
+            Array.isArray(permissionsFilter) && permissionsFilter.length > 0
+                ? (item: ItemType) => permissionsFilterPredicate(item, permissionsFilter)
+                : undefined;
+
+        const visibleColumns = new Set(columns);
+        const filterByColumns = visibleColumns.size
+            ? ({columns}: ItemType) => {
+                  return columns?.some((colName) => visibleColumns.has(colName)) ?? false;
+              }
+            : undefined;
+
+        const mainPredicates = compact([filterBySubject, filterByPermissions]);
+        const columnsPredicates = compact([filterBySubject, filterByColumns]);
+        return {
+            mainPermissions: mainPredicates.length
+                ? mainPermissions.filter(concatByAnd(...mainPredicates))
+                : mainPermissions,
+            columnsPermissions: columnsPredicates.length
+                ? withColumns.filter(concatByAnd(...columnsPredicates))
+                : withColumns,
+        };
     },
 );
 
@@ -168,10 +190,25 @@ export const getAllObjectPermissionsOrderedByStatus = createSelector(
 );
 export const getAllColumnGroups = (state: RootState, idmKind: IdmKindType) =>
     state.acl[idmKind].columnGroups;
-export const getAllColumnGroupsActual = createSelector([getAllColumnGroups], (items) => {
-    const filtered = _.filter(items, (item) => !item.removed);
-    return _.sortBy(filtered, ['name']);
-});
+export const getAllColumnGroupsActual = createSelector(
+    [getAllColumnGroups, getAclFilterColumns],
+    (items, columnsFilter) => {
+        const visibleColumns = new Set(columnsFilter);
+        type ItemType = (typeof items)[number];
+        const predicates = _.compact([
+            (item: ItemType) => {
+                return !item.removed;
+            },
+            visibleColumns.size > 0
+                ? (item: ItemType) => {
+                      return item.columns?.some((name) => visibleColumns.has(name)) ?? false;
+                  }
+                : undefined,
+        ]);
+        const filtered = _.filter(items, concatByAnd(...predicates));
+        return _.sortBy(filtered, ['name']);
+    },
+);
 
 function OrderByRoleStatus<
     T extends {

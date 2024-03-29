@@ -2,8 +2,10 @@ import produce from 'immer';
 import {RootState} from '..';
 import {initialState} from './acl-filters';
 import {updateIfChanged} from '../../../utils/utils';
+import {LocationParameters} from '../../../store/location';
+import {parseSerializeArrayString} from '../../../utils/parse-serialize';
 
-export const aclFiltersParams = {
+export const aclFiltersParams: LocationParameters = {
     approversSubject: {
         stateKey: 'aclFilters.approversSubject',
         initialState: initialState.approversSubject,
@@ -18,8 +20,11 @@ export const aclFiltersParams = {
         type: 'array',
     },
     cColumns: {
-        stateKey: 'aclFilters.columnsColumns',
-        initialState: initialState.columnsColumns,
+        stateKey: 'aclFilters.columnsFilter',
+        initialState: initialState.columnsFilter,
+        options: {
+            ...parseSerializeArrayString,
+        },
     },
     aclMode: {
         stateKey: 'aclFilters.aclCurrentTab',
@@ -32,7 +37,7 @@ export function getAclFiltersPreparedState(state: RootState, {query}: {query: Ro
         updateIfChanged(draft.aclFilters, 'approversSubject', query.aclFilters.approversSubject);
         updateIfChanged(draft.aclFilters, 'objectSubject', query.aclFilters.objectSubject);
         updateIfChanged(draft.aclFilters, 'objectPermissions', query.aclFilters.objectPermissions);
-        updateIfChanged(draft.aclFilters, 'columnsColumns', query.aclFilters.columnsColumns);
+        updateIfChanged(draft.aclFilters, 'columnsFilter', query.aclFilters.columnsFilter);
         updateIfChanged(draft.aclFilters, 'aclCurrentTab', query.aclFilters.aclCurrentTab);
     });
 }
