@@ -72,6 +72,11 @@ export const ErrorTreeNode: FC<Props> = ({
                                 size={16}
                             />
                         </Button>
+                        {position && (
+                            <span className={block('place-text')} title="Position">
+                                {position}
+                            </span>
+                        )}
                     </span>
                     {position ? (
                         <Link
@@ -79,18 +84,11 @@ export const ErrorTreeNode: FC<Props> = ({
                             className={block('message')}
                             onClick={handleIssueClick}
                         >
-                            <span className={block('place-text')} title="Position">
-                                {position}
-                            </span>
-                            <div className={block('message-text')}>
-                                <CollapsedString value={error.message} />
-                            </div>
+                            <CollapsedString value={error.message} />
                         </Link>
                     ) : (
                         <span className={block('message')}>
-                            <div className={block('message-text')}>
-                                <CollapsedString value={error.message} />
-                            </div>
+                            <CollapsedString value={error.message} />
                         </span>
                     )}
                     {error.code ? <span className={block('code')}>Code: {error.code}</span> : null}
