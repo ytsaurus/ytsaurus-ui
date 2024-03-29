@@ -35,11 +35,18 @@ interface Props {
     toolbar: React.ReactNode;
     content: React.ReactNode;
     doubleHeight?: boolean;
+    disableToolbarTopPadding?: boolean;
 }
 
 const StickySpacerMemo = React.memo(StickySpacer);
 
-export default function WithStickyToolbar({className, toolbar, content, doubleHeight}: Props) {
+export default function WithStickyToolbar({
+    className,
+    toolbar,
+    content,
+    doubleHeight,
+    disableToolbarTopPadding,
+}: Props) {
     return (
         <StickyContainer className={block(null, className)}>
             <Sticky topOffset={-HEADER_HEIGHT} disableCompensation>
@@ -49,6 +56,7 @@ export default function WithStickyToolbar({className, toolbar, content, doubleHe
                             isSticky={isSticky}
                             toolbar={toolbar}
                             doubleHeight={doubleHeight}
+                            disableTopPadding={disableToolbarTopPadding}
                         />
                         {isSticky && <StickySpacerMemo doubleHeight={doubleHeight} />}
                     </div>
@@ -67,16 +75,18 @@ interface ToolbarWrapperProps {
     isSticky?: boolean;
     toolbar: React.ReactNode;
     doubleHeight?: boolean;
+    disableTopPadding?: boolean;
 }
 
 function ToolbarWrapperImpl(props: ToolbarWrapperProps) {
-    const {isSticky, toolbar, doubleHeight} = props;
+    const {isSticky, toolbar, doubleHeight, disableTopPadding} = props;
     return (
         <React.Fragment>
             <div
                 className={block('toolbar', {
                     sticky: isSticky,
                     x2: doubleHeight,
+                    'disable-top-padding': disableTopPadding,
                 })}
             >
                 {toolbar}
