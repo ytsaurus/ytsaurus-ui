@@ -32,38 +32,17 @@ body .yt-select {
         display: flex;
         align-items: center;
         flex-shrink: 1;
+        flex-grow: 1;
         overflow: hidden;
-    }
-
-    &__control-value-item {
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
     }
 
     &__control-label {
         padding-right: 0.5ex;
     }
 
-    &__spacer {
-        display: inline-block;
-        flex-grow: 1;
-        flex-shrink: 1;
-        text-align: left;
-        min-width: 4px;
-    }
-
     &__chevron {
+        margin-left: 4px;
         color: var(--secondary-text);
-    }
-
-    &__counter {
-        padding-left: 2px;
-    }
-    &__counter-value {
-        background-color: var(--g-color-base-selection);
-        border-radius: 4px;
-        padding: 2px 4px;
     }
 
     &__filter {

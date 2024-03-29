@@ -8,6 +8,8 @@ import {Button, Select, SelectOption, SelectProps, Text, TextInput} from '@gravi
 import {Chevron} from '../../icons/Chevron';
 import hammer from '../../common/hammer';
 
+import {VisibleValues} from '../../components/VisibleValues/VisibleValues';
+
 import './Select.scss';
 
 const block = cn('yt-select');
@@ -16,6 +18,7 @@ export interface YTSelectProps extends Omit<SelectProps, 'options' | 'filter' | 
     className?: string;
     items: Array<Item>;
     maxVisibleValues?: number;
+    maxVisibleValuesTextLength?: number;
     hideClear?: boolean;
     hideFilter?: boolean;
     onChange?: (v: Required<YTSelectProps>['value']) => void;
@@ -134,7 +137,10 @@ function renderItemContent(item: Item, useNoValue = false) {
 class CustomSelect extends React.Component<
     SelectProps &
         Pick<ValueControlProps, 'hashByValue' | 'maxVisibleValues'> &
-        Pick<YTSelectProps, 'hideClear' | 'hideFilter' | 'renderItem'>
+        Pick<
+            YTSelectProps,
+            'hideClear' | 'hideFilter' | 'renderItem' | 'maxVisibleValuesTextLength'
+        >
 > {
     static defaultProps = {
         width: 'max',
@@ -166,6 +172,7 @@ class CustomSelect extends React.Component<
             width,
             hashByValue,
             maxVisibleValues,
+            maxVisibleValuesTextLength,
         } = this.props;
         return (
             <ValueControl
@@ -182,6 +189,7 @@ class CustomSelect extends React.Component<
                     pin,
                     disabled,
                     maxVisibleValues,
+                    maxVisibleValuesTextLength,
                 }}
             />
         );
@@ -258,16 +266,15 @@ function ValueControl({
     pin,
     disabled,
     maxVisibleValues,
+    maxVisibleValuesTextLength,
     placeholder,
     renderItem,
 }: ValueControlProps &
     Pick<SelectProps, 'value' | 'pin' | 'label' | 'width' | 'disabled'> &
-    Pick<Required<YTSelectProps>, 'renderItem'>) {
-    const options = _map(value, (v) => hashByValue.get(v));
+    Pick<Required<YTSelectProps>, 'renderItem'> &
+    Pick<YTSelectProps, 'maxVisibleValuesTextLength'>) {
     const {w, style} =
         typeof width !== 'number' ? {w: width, style: undefined} : {style: {width}, w: undefined};
-
-    const visbileItems = options.slice(0, maxVisibleValues ?? 1);
 
     return (
         <Button
@@ -284,36 +291,21 @@ function ValueControl({
                 {!value?.length ? (
                     <Text color="hint">{placeholder ?? hammer.format.NO_VALUE}</Text>
                 ) : (
-                    _map(visbileItems, (option, index) => {
-                        const content = option ? (
-                            renderItem(option.data, true)
-                        ) : (
-                            <Text color="secondary">
-                                {renderItem({value: value[index]!}, true)}
-                            </Text>
-                        );
-                        return (
-                            <span key={index} className={block('control-value-item')}>
-                                {index !== 0 && <>,&nbsp;</>}
-                                {content}
-                            </span>
-                        );
-                    })
+                    <VisibleValues
+                        value={value}
+                        maxVisibleValues={maxVisibleValues}
+                        maxTextLength={maxVisibleValuesTextLength}
+                        renderItem={(item: string) => {
+                            const option = hashByValue.get(item);
+                            if (option) {
+                                return renderItem(option.data, true);
+                            }
+                            return <Text color="secondary">{renderItem({value: item}, true)}</Text>;
+                        }}
+                    />
                 )}
             </span>
-            <span className={block('spacer')}>
-                {options.length > visbileItems.length && ', ...'}
-            </span>
-            <SelectedCount value={options.length} />
             <Chevron className={block('chevron')} />
         </Button>
     );
-}
-
-function SelectedCount({value}: {value?: number}) {
-    return value! >= 2 ? (
-        <div className={block('counter')}>
-            <span className={block('counter-value')}>{value}</span>
-        </div>
-    ) : null;
 }

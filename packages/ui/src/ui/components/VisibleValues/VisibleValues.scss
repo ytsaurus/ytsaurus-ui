@@ -1,0 +1,44 @@
+.yt-visible-values {
+    display: inline-flex;
+    align-items: center;
+    flex-shrink: 1;
+    overflow: hidden;
+
+    max-width: 100%;
+
+    &__values {
+        display: flex;
+        align-items: center;
+        flex-shrink: 1;
+        overflow: hidden;
+    }
+
+    &__values-item {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        flex-shrink: 1;
+    }
+
+    &__spacer {
+        display: inline-block;
+        flex-grow: 1;
+        flex-shrink: 1;
+        text-align: left;
+        min-width: 4px;
+        white-space: nowrap;
+        &_missing {
+            min-width: 3ex;
+        }
+    }
+
+    &__counter {
+        padding-left: 2px;
+    }
+
+    &__counter-value {
+        background-color: var(--g-color-base-selection);
+        border-radius: 4px;
+        padding: 2px 4px;
+    }
+}
