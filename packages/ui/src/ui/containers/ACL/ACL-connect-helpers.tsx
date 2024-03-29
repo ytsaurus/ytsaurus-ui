@@ -20,7 +20,7 @@ import {
 
 import {getType} from '../../store/selectors/navigation';
 
-import {getAclCurrentTab, getColumnsColumns} from '../../store/selectors/acl-filters';
+import {getAclCurrentTab, getAclFilterColumns} from '../../store/selectors/acl-filters';
 
 import {
     cancelRequestPermissions,
@@ -31,13 +31,12 @@ import {
     updateAcl,
 } from '../../store/actions/acl';
 
-import {changeColumnsColumns} from '../../store/actions/acl-filters';
-
 import {getCluster} from '../../store/selectors/global';
 import {normalizeIdmParams} from '../../utils/acl';
 import {IdmObjectType} from '../../constants/acl';
 import {IdmKindType} from '../../utils/acl/acl-types';
 import {RootState} from '../../store/reducers';
+import {updateAclFilters} from '../../store/actions/acl-filters';
 
 import ACL from './ACL';
 
@@ -78,7 +77,7 @@ const makeAclMapStateToProps = (inputIdmKind: IdmKindType) => {
         const columnGroups = getAllColumnGroupsActual(state, idmKind);
         const userPermissions = getAllUserPermissions(state, idmKind);
 
-        const columnsFilter = getColumnsColumns(state);
+        const columnsFilter = getAclFilterColumns(state);
 
         const auditors = getNotInheritedAuditors(state, idmKind);
         const readApprovers = getNotInheritedReadApprovers(state, idmKind);
@@ -131,12 +130,12 @@ const makeAclMapStateToProps = (inputIdmKind: IdmKindType) => {
 
 const makeAclMapDispatchToProps = () => ({
     loadAclData,
-    changeColumnsColumns,
     userPermissionsRequestFn: requestPermissions,
     userPermissionsCancelRequestFn: cancelRequestPermissions,
     userPermissionsUpdateAcl: updateAcl,
     userPermissionsCancelUpdateAcl: cancelUpdateAcl,
     deletePermissionsFn: deletePermissions,
+    updateAclFilters,
 });
 
 type StateProps = ReturnType<ReturnType<typeof makeAclMapStateToProps>>;

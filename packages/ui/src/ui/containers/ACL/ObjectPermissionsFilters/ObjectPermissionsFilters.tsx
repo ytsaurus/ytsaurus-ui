@@ -15,17 +15,27 @@ import {
 } from '../../../store/selectors/acl-filters';
 import {getObjectPermissionsTypesList} from '../../../store/selectors/acl';
 import Filter from '../../../components/Filter/Filter';
-import {IdmKindType} from '../../../utils/acl/acl-types';
 import Select from '../../../components/Select/Select';
 import './ObjectPermissionsFilters.scss';
+import {ACLReduxProps} from '../ACL-connect-helpers';
+import {AclMode} from '../../../constants/acl';
+import {ColumnGroupsFilter} from '../ColumnGroups/ColumnGroups';
 
 const block = cn('object-permissions-filters');
 
-interface Props {
-    idmKind: IdmKindType;
-}
+type Props = Pick<
+    ACLReduxProps,
+    'aclMode' | 'idmKind' | 'columnsFilter' | 'updateAclFilters' | 'userPermissionsAccessColumns'
+>;
 
-export default function ObjectPermissionsFilters({idmKind, ...rest}: Props) {
+export default function ObjectPermissionsFilters({
+    aclMode,
+    idmKind,
+    columnsFilter,
+    updateAclFilters,
+    userPermissionsAccessColumns,
+    ...rest
+}: Props) {
     const dispatch = useDispatch();
     const subjectFilter = useSelector(getObjectSubjectFilter);
     const selectedPermissons = useSelector(getObjectPermissionsFilter);
@@ -46,23 +56,29 @@ export default function ObjectPermissionsFilters({idmKind, ...rest}: Props) {
                 value={subjectFilter}
                 size="m"
             />
-            <Select
-                className={block('filter')}
-                multiple
-                placeholder={'filter'}
-                value={selectedPermissons}
-                items={map(permissionList, (p) => ({value: p, text: format.ReadableField(p)}))}
-                onUpdate={(value: string[]) => {
-                    dispatch(
-                        changeObjectPermissionsFilter({
-                            objectPermissions: value as typeof selectedPermissons,
-                        }),
-                    );
-                }}
-                label={'Permissions'}
-                maxVisibleValues={4}
-                width="auto"
-            />
+            {aclMode === AclMode.COLUMN_GROUPS_PERMISSISONS ? (
+                <ColumnGroupsFilter
+                    {...{columnsFilter, updateAclFilters, userPermissionsAccessColumns}}
+                />
+            ) : (
+                <Select
+                    className={block('filter')}
+                    multiple
+                    placeholder={'filter'}
+                    value={selectedPermissons}
+                    items={map(permissionList, (p) => ({value: p, text: format.ReadableField(p)}))}
+                    onUpdate={(value: string[]) => {
+                        dispatch(
+                            changeObjectPermissionsFilter({
+                                objectPermissions: value as typeof selectedPermissons,
+                            }),
+                        );
+                    }}
+                    label={'Permissions'}
+                    maxVisibleValuesTextLength={60}
+                    width="auto"
+                />
+            )}
         </div>
     );
 }

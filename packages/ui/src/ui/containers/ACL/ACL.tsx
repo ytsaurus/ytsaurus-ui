@@ -330,7 +330,15 @@ class ACL extends Component<Props> {
     }
 
     renderObjectPermissions() {
-        const {aclMode, mainPermissions, columnsPermissions, idmKind} = this.props;
+        const {
+            aclMode,
+            mainPermissions,
+            columnsPermissions,
+            idmKind,
+            columnsFilter,
+            updateAclFilters,
+            userPermissionsAccessColumns,
+        } = this.props;
         const useColumns = aclMode === AclMode.COLUMN_GROUPS_PERMISSISONS;
         const extraColumns = useColumns ? ['columns' as const] : [];
 
@@ -353,7 +361,15 @@ class ACL extends Component<Props> {
                     <div className="elements-heading elements-heading_size_xs">
                         {useColumns ? 'Private columns permissions' : 'Object permissions'}
                     </div>
-                    <ObjectPermissionsFilters idmKind={idmKind} />
+                    <ObjectPermissionsFilters
+                        {...{
+                            aclMode,
+                            idmKind,
+                            columnsFilter,
+                            updateAclFilters,
+                            userPermissionsAccessColumns,
+                        }}
+                    />
 
                     <DataTableYT
                         data={data}
@@ -371,13 +387,26 @@ class ACL extends Component<Props> {
     }
 
     renderColumnGroups() {
-        const {columnGroups, idmKind, path, loadAclData, cluster, nodeType} = this.props;
+        const {
+            columnGroups,
+            idmKind,
+            path,
+            loadAclData,
+            cluster,
+            nodeType,
+            updateAclFilters,
+            columnsFilter,
+            userPermissionsAccessColumns,
+        } = this.props;
         const props = {
             path,
             loadAclDataFn: () => loadAclData({path, idmKind}),
             columnGroups,
             cluster,
             allowEdit: nodeType === 'map_node',
+            updateAclFilters,
+            columnsFilter,
+            userPermissionsAccessColumns,
         };
         return isIdmAclAvailable() && idmKind === IdmObjectType.PATH ? (
             <ColumnGroups {...props} />
@@ -422,6 +451,7 @@ class ACL extends Component<Props> {
             cluster,
             columnGroups,
             aclMode,
+            updateAclFilters,
         } = this.props;
         const {deleteItem} = this.state;
 
