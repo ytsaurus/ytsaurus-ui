@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.26.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.25.0...ui-v1.26.0) (2024-03-29)
+
+
+### Features
+
+* **System:** monitoring tab [YTFRONT-4022] ([24d1885](https://github.com/ytsaurus/ytsaurus-ui/commit/24d18859a40226347efc4475db199b526063aa21))
+
 ## [1.25.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.24.1...ui-v1.25.0) (2024-03-28)
 
 
