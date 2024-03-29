@@ -22,7 +22,6 @@ import {chaosActiveBundleLink} from '../../../utils/components/tablet-cells';
 const columns: ComponentProps<typeof BundlesTable>['columns'] = [
     'bundle',
     'health',
-    'nodes',
     'tabletCells',
     'enable_bundle_balancer',
     'changelog_account',
