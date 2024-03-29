@@ -27,18 +27,10 @@
     &__message {
         display: flex;
         margin-right: auto;
-        margin-left: 10px;
-        padding: 3px 0;
+        padding: 4px 0;
         font-family: var(--g-font-family-monospace);
         font-size: var(--g-text-code-2-font-size);
         line-height: var(--g-text-code-2-line-height);
-    }
-
-    &__message-text {
-        flex: 1 1 auto;
-        min-width: 240px;
-        white-space: pre-wrap;
-        word-break: break-word;
     }
 
     &__code {
