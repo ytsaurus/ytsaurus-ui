@@ -2,6 +2,9 @@ import React from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import cn from 'bem-cn-lite';
 import {map} from 'lodash';
+
+import format from '../../../common/hammer/format';
+
 import {
     changeObjectPermissionsFilter,
     changeObjectSubjectFilter,
@@ -31,6 +34,7 @@ export default function ObjectPermissionsFilters({idmKind, ...rest}: Props) {
     return (
         <div className={block()} {...rest}>
             <Filter
+                className={block('filter')}
                 placeholder="Filter by subject"
                 onChange={(value: string) => {
                     dispatch(
@@ -39,15 +43,15 @@ export default function ObjectPermissionsFilters({idmKind, ...rest}: Props) {
                         }),
                     );
                 }}
-                className={block('subject-filter')}
                 value={subjectFilter}
                 size="m"
             />
             <Select
+                className={block('filter')}
                 multiple
-                placeholder={'select'}
+                placeholder={'filter'}
                 value={selectedPermissons}
-                items={map(permissionList, (p) => ({value: p, text: p}))}
+                items={map(permissionList, (p) => ({value: p, text: format.ReadableField(p)}))}
                 onUpdate={(value: string[]) => {
                     dispatch(
                         changeObjectPermissionsFilter({
@@ -56,8 +60,8 @@ export default function ObjectPermissionsFilters({idmKind, ...rest}: Props) {
                     );
                 }}
                 label={'Permissions'}
-                hideFilter={true}
                 maxVisibleValues={4}
+                width="auto"
             />
         </div>
     );
