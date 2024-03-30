@@ -16,6 +16,7 @@ import {
 import {getObjectPermissionsTypesList} from '../../../store/selectors/acl';
 import Filter from '../../../components/Filter/Filter';
 import Select from '../../../components/Select/Select';
+import {Toolbar} from '../../../components/WithStickyToolbar/Toolbar/Toolbar';
 import './ObjectPermissionsFilters.scss';
 import {ACLReduxProps} from '../ACL-connect-helpers';
 import {AclMode} from '../../../constants/acl';
@@ -34,7 +35,6 @@ export default function ObjectPermissionsFilters({
     columnsFilter,
     updateAclFilters,
     userPermissionsAccessColumns,
-    ...rest
 }: Props) {
     const dispatch = useDispatch();
     const subjectFilter = useSelector(getObjectSubjectFilter);
@@ -42,43 +42,57 @@ export default function ObjectPermissionsFilters({
     const permissionList = useSelector(getObjectPermissionsTypesList(idmKind));
 
     return (
-        <div className={block()} {...rest}>
-            <Filter
-                className={block('filter')}
-                placeholder="Filter by subject"
-                onChange={(value: string) => {
-                    dispatch(
-                        changeObjectSubjectFilter({
-                            objectSubject: value,
-                        }),
-                    );
-                }}
-                value={subjectFilter}
-                size="m"
-            />
-            {aclMode === AclMode.COLUMN_GROUPS_PERMISSISONS ? (
-                <ColumnGroupsFilter
-                    {...{columnsFilter, updateAclFilters, userPermissionsAccessColumns}}
-                />
-            ) : (
-                <Select
-                    className={block('filter')}
-                    multiple
-                    placeholder={'filter'}
-                    value={selectedPermissons}
-                    items={map(permissionList, (p) => ({value: p, text: format.ReadableField(p)}))}
-                    onUpdate={(value: string[]) => {
-                        dispatch(
-                            changeObjectPermissionsFilter({
-                                objectPermissions: value as typeof selectedPermissons,
-                            }),
-                        );
-                    }}
-                    label={'Permissions'}
-                    maxVisibleValuesTextLength={60}
-                    width="auto"
-                />
-            )}
-        </div>
+        <Toolbar
+            itemsToWrap={[
+                {
+                    node: (
+                        <Filter
+                            className={block('filter')}
+                            placeholder="Filter by subject"
+                            onChange={(value: string) => {
+                                dispatch(
+                                    changeObjectSubjectFilter({
+                                        objectSubject: value,
+                                    }),
+                                );
+                            }}
+                            value={subjectFilter}
+                            size="m"
+                        />
+                    ),
+                },
+                {
+                    shrinkable: true,
+                    node:
+                        aclMode === AclMode.COLUMN_GROUPS_PERMISSISONS ? (
+                            <ColumnGroupsFilter
+                                {...{columnsFilter, updateAclFilters, userPermissionsAccessColumns}}
+                            />
+                        ) : (
+                            <Select
+                                className={block('filter')}
+                                multiple
+                                placeholder={'filter'}
+                                value={selectedPermissons}
+                                items={map(permissionList, (p) => ({
+                                    value: p,
+                                    text: format.ReadableField(p),
+                                }))}
+                                onUpdate={(value: string[]) => {
+                                    dispatch(
+                                        changeObjectPermissionsFilter({
+                                            objectPermissions: value as typeof selectedPermissons,
+                                        }),
+                                    );
+                                }}
+                                label={'Permissions'}
+                                maxVisibleValuesTextLength={60}
+                                width="auto"
+                                disablePortal={false}
+                            />
+                        ),
+                },
+            ]}
+        />
     );
 }

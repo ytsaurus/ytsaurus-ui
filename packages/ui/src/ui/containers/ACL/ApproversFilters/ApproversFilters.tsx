@@ -3,6 +3,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import cn from 'bem-cn-lite';
 import {changeApproversSubjectFilter} from '../../../store/actions/acl-filters';
 import {getApproversSubjectFilter} from '../../../store/selectors/acl-filters';
+import {Toolbar} from '../../../components/WithStickyToolbar/Toolbar/Toolbar';
 import Filter from '../../../components/Filter/Filter';
 import './ApproversFilters.scss';
 
@@ -13,14 +14,22 @@ export default function ApproversFilters() {
     const subjectFilter = useSelector(getApproversSubjectFilter);
 
     return (
-        <Filter
-            placeholder="Filter by subject"
-            onChange={(value: string) => {
-                dispatch(changeApproversSubjectFilter({approversSubject: value}));
-            }}
-            className={block('subject-filter')}
-            value={subjectFilter}
-            size="m"
+        <Toolbar
+            itemsToWrap={[
+                {
+                    node: (
+                        <Filter
+                            placeholder="Filter by subject"
+                            onChange={(value: string) => {
+                                dispatch(changeApproversSubjectFilter({approversSubject: value}));
+                            }}
+                            className={block('subject-filter')}
+                            value={subjectFilter}
+                            size="m"
+                        />
+                    ),
+                },
+            ]}
         />
     );
 }
