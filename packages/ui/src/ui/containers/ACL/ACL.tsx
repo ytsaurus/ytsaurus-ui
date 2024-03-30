@@ -35,6 +35,7 @@ import {PreparedApprover} from '../../store/selectors/acl';
 
 import {Column} from '@gravity-ui/react-data-table';
 import {SegmentControl, SegmentControlItem} from '../../components/SegmentControl/SegmentControl';
+import WithStickyToolbar from '../../components/WithStickyToolbar/WithStickyToolbar';
 import {PreparedRole} from '../../utils/acl';
 import {AclModeControl} from './AclModeControl';
 
@@ -312,16 +313,20 @@ class ACL extends Component<Props> {
                         <div className="elements-heading elements-heading_size_xs">
                             Responsibles
                         </div>
-                        <ApproversFilters />
-                        <DataTableYT
-                            data={approversFiltered}
-                            columns={tableColumns}
-                            theme={'yt-borderless'}
-                            rowClassName={this.rowClassNameByFlags}
-                            settings={{
-                                sortable: false,
-                                displayIndices: false,
-                            }}
+                        <WithStickyToolbar
+                            toolbar={<ApproversFilters />}
+                            content={
+                                <DataTableYT
+                                    data={approversFiltered}
+                                    columns={tableColumns}
+                                    theme={'yt-borderless'}
+                                    rowClassName={this.rowClassNameByFlags}
+                                    settings={{
+                                        sortable: false,
+                                        displayIndices: false,
+                                    }}
+                                />
+                            }
                         />
                     </div>
                 </ErrorBoundary>
@@ -361,25 +366,31 @@ class ACL extends Component<Props> {
                     <div className="elements-heading elements-heading_size_xs">
                         {useColumns ? 'Private columns permissions' : 'Object permissions'}
                     </div>
-                    <ObjectPermissionsFilters
-                        {...{
-                            aclMode,
-                            idmKind,
-                            columnsFilter,
-                            updateAclFilters,
-                            userPermissionsAccessColumns,
-                        }}
-                    />
-
-                    <DataTableYT
-                        data={data}
-                        columns={tableColumns}
-                        theme={'yt-borderless'}
-                        rowClassName={this.rowClassNameByFlags}
-                        settings={{
-                            sortable: false,
-                            displayIndices: false,
-                        }}
+                    <WithStickyToolbar
+                        disableToolbarTopPadding
+                        toolbar={
+                            <ObjectPermissionsFilters
+                                {...{
+                                    aclMode,
+                                    idmKind,
+                                    columnsFilter,
+                                    updateAclFilters,
+                                    userPermissionsAccessColumns,
+                                }}
+                            />
+                        }
+                        content={
+                            <DataTableYT
+                                data={data}
+                                columns={tableColumns}
+                                theme={'yt-borderless'}
+                                rowClassName={this.rowClassNameByFlags}
+                                settings={{
+                                    sortable: false,
+                                    displayIndices: false,
+                                }}
+                            />
+                        }
                     />
                 </div>
             </ErrorBoundary>

@@ -14,6 +14,7 @@ import Button from '../../../components/Button/Button';
 import {renderText} from '../../../components/templates/utils';
 import {Toolbar} from '../../../components/WithStickyToolbar/Toolbar/Toolbar';
 import Select from '../../../components/Select/Select';
+import WithStickyToolbar from '../../../components/WithStickyToolbar/WithStickyToolbar';
 
 import EditColumnGroupModal, {Props as ModalProps} from './EditColumnGroupModal';
 import {AclColumnGroup} from '../../../utils/acl/acl-types';
@@ -187,41 +188,49 @@ export default function ColumnGroups({
                         </Button>
                     )}
                 </div>
-                <Toolbar
-                    itemsToWrap={[
-                        {
-                            node: (
-                                <TextInputWithDebounce
-                                    placeholder="Filter by name"
-                                    className={block('filter')}
-                                    value={columnGroupNameFilter}
-                                    onUpdate={(columnGroupNameFilter) =>
-                                        updateAclFilters({columnGroupNameFilter})
-                                    }
-                                />
-                            ),
-                        },
-                        {
-                            node: (
-                                <ColumnGroupsFilter
-                                    {...{
-                                        columnsFilter,
-                                        updateAclFilters,
-                                        userPermissionsAccessColumns,
-                                    }}
-                                />
-                            ),
-                        },
-                    ]}
-                />
-                <DataTableYT<AclColumnGroup>
-                    data={columnGroups}
-                    columns={columns}
-                    theme={'yt-borderless'}
-                    settings={{
-                        sortable: false,
-                        displayIndices: false,
-                    }}
+                <WithStickyToolbar
+                    disableToolbarTopPadding
+                    toolbar={
+                        <Toolbar
+                            itemsToWrap={[
+                                {
+                                    node: (
+                                        <TextInputWithDebounce
+                                            placeholder="Filter by name"
+                                            className={block('filter')}
+                                            value={columnGroupNameFilter}
+                                            onUpdate={(columnGroupNameFilter) =>
+                                                updateAclFilters({columnGroupNameFilter})
+                                            }
+                                        />
+                                    ),
+                                },
+                                {
+                                    node: (
+                                        <ColumnGroupsFilter
+                                            {...{
+                                                columnsFilter,
+                                                updateAclFilters,
+                                                userPermissionsAccessColumns,
+                                            }}
+                                        />
+                                    ),
+                                    shrinkable: true,
+                                },
+                            ]}
+                        />
+                    }
+                    content={
+                        <DataTableYT<AclColumnGroup>
+                            data={columnGroups}
+                            columns={columns}
+                            theme={'yt-borderless'}
+                            settings={{
+                                sortable: false,
+                                displayIndices: false,
+                            }}
+                        />
+                    }
                 />
             </div>
             {modalProps.visible ? <EditColumnGroupModal {...modalProps} /> : null}
@@ -246,20 +255,19 @@ export function ColumnGroupsFilter({
         });
     }, [userPermissionsAccessColumns]);
     return (
-        <div className={block('columns-container')}>
-            <Select
-                className={block('columns-filter')}
-                multiple
-                hasClear
-                filterable
-                label="Columns"
-                placeholder="filter"
-                items={options}
-                value={value}
-                onUpdate={(columnsFilter) => updateAclFilters({columnsFilter})}
-                maxVisibleValuesTextLength={60}
-                disablePortal={false}
-            />
-        </div>
+        <Select
+            className={block('columns-filter')}
+            multiple
+            hasClear
+            filterable
+            label="Columns"
+            placeholder="filter"
+            items={options}
+            value={value}
+            onUpdate={(columnsFilter) => updateAclFilters({columnsFilter})}
+            maxVisibleValuesTextLength={60}
+            disablePortal={false}
+            width="max"
+        />
     );
 }

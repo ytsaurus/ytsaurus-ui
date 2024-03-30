@@ -24,6 +24,7 @@ interface Props {
         growable?: boolean;
         shrinkable?: boolean;
         marginRight?: 'half';
+        overflow?: 'hidden';
     }>;
     children?: React.ReactNode;
 }
