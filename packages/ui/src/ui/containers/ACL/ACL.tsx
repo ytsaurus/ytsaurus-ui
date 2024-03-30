@@ -396,6 +396,7 @@ class ACL extends Component<Props> {
             nodeType,
             updateAclFilters,
             columnsFilter,
+            columnGroupNameFilter,
             userPermissionsAccessColumns,
         } = this.props;
         const props = {
@@ -406,6 +407,7 @@ class ACL extends Component<Props> {
             allowEdit: nodeType === 'map_node',
             updateAclFilters,
             columnsFilter,
+            columnGroupNameFilter,
             userPermissionsAccessColumns,
         };
         return isIdmAclAvailable() && idmKind === IdmObjectType.PATH ? (
