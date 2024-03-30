@@ -6,6 +6,7 @@ import sortBy from 'lodash/sortBy';
 import {calculateLoadingStatus} from '../../utils/utils';
 import {concatByAnd} from '../../common/hammer/predicate';
 import {
+    getAclFilterColumnGroupName,
     getAclFilterColumns,
     getApproversSubjectFilter,
     getObjectPermissionsFilter,
@@ -127,12 +128,15 @@ function FilterBySubject<
     return _.filter(items, (item) => subjectFilterPredicate(item, lowerNameFilter));
 }
 
-const permissionsFilterPredicate = (
-    item: PreparedAclSubject,
-    filter: Array<YTPermissionTypeUI>,
-) => {
+const permissionsFilterPredicate = (item: PreparedAclSubject, filter: Set<YTPermissionTypeUI>) => {
     const {permissions} = item;
-    return _.difference(filter, permissions ?? []).length === 0;
+    let foundCount = 0;
+    return permissions?.some((p) => {
+        if (filter.has(p)) {
+            foundCount++;
+        }
+        return foundCount >= filter.size;
+    });
 };
 
 export const getAllObjectPermissionsFiltered = createSelector(
@@ -159,10 +163,10 @@ export const getAllObjectPermissionsFiltered = createSelector(
             ? (item: ItemType) => subjectFilterPredicate(item, lowerNameFilter)
             : undefined;
 
-        const filterByPermissions =
-            Array.isArray(permissionsFilter) && permissionsFilter.length > 0
-                ? (item: ItemType) => permissionsFilterPredicate(item, permissionsFilter)
-                : undefined;
+        const permissionsFilterSet = new Set<YTPermissionTypeUI>(permissionsFilter);
+        const filterByPermissions = permissionsFilterSet.size
+            ? (item: ItemType) => permissionsFilterPredicate(item, permissionsFilterSet) ?? false
+            : undefined;
 
         const visibleColumns = new Set(columns);
         const filterByColumns = visibleColumns.size
@@ -191,10 +195,11 @@ export const getAllObjectPermissionsOrderedByStatus = createSelector(
 export const getAllColumnGroups = (state: RootState, idmKind: IdmKindType) =>
     state.acl[idmKind].columnGroups;
 export const getAllColumnGroupsActual = createSelector(
-    [getAllColumnGroups, getAclFilterColumns],
-    (items, columnsFilter) => {
+    [getAllColumnGroups, getAclFilterColumns, getAclFilterColumnGroupName],
+    (items, columnsFilter, nameFilter) => {
         const visibleColumns = new Set(columnsFilter);
         type ItemType = (typeof items)[number];
+        const nameFilterLower = nameFilter?.toLowerCase();
         const predicates = _.compact([
             (item: ItemType) => {
                 return !item.removed;
@@ -203,6 +208,10 @@ export const getAllColumnGroupsActual = createSelector(
                 ? (item: ItemType) => {
                       return item.columns?.some((name) => visibleColumns.has(name)) ?? false;
                   }
+                : undefined,
+            nameFilterLower?.length
+                ? (item: ItemType) =>
+                      -1 !== item.name?.toLowerCase().indexOf(nameFilterLower) ?? false
                 : undefined,
         ]);
         const filtered = _.filter(items, concatByAnd(...predicates));

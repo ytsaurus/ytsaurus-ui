@@ -28,7 +28,11 @@ const block = cn('column-groups');
 type Props = ColumnGropsToolbarProps &
     Pick<
         ACLReduxProps,
-        'columnGroups' | 'columnsFilter' | 'updateAclFilters' | 'userPermissionsAccessColumns'
+        | 'columnGroups'
+        | 'columnsFilter'
+        | 'columnGroupNameFilter'
+        | 'updateAclFilters'
+        | 'userPermissionsAccessColumns'
     > & {
         path: string;
         loadAclDataFn: () => void;
@@ -44,6 +48,7 @@ export default function ColumnGroups({
     allowEdit = false,
     updateAclFilters,
     columnsFilter,
+    columnGroupNameFilter,
     userPermissionsAccessColumns,
 }: Props) {
     const [modalProps, setModalProps] = useState({
@@ -184,6 +189,18 @@ export default function ColumnGroups({
                 </div>
                 <Toolbar
                     itemsToWrap={[
+                        {
+                            node: (
+                                <TextInputWithDebounce
+                                    placeholder="Filter by name"
+                                    className={block('filter')}
+                                    value={columnGroupNameFilter}
+                                    onUpdate={(columnGroupNameFilter) =>
+                                        updateAclFilters({columnGroupNameFilter})
+                                    }
+                                />
+                            ),
+                        },
                         {
                             node: (
                                 <ColumnGroupsFilter

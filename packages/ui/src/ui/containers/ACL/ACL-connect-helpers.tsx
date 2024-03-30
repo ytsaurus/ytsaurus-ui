@@ -20,7 +20,11 @@ import {
 
 import {getType} from '../../store/selectors/navigation';
 
-import {getAclCurrentTab, getAclFilterColumns} from '../../store/selectors/acl-filters';
+import {
+    getAclCurrentTab,
+    getAclFilterColumnGroupName,
+    getAclFilterColumns,
+} from '../../store/selectors/acl-filters';
 
 import {
     cancelRequestPermissions,
@@ -119,6 +123,7 @@ const makeAclMapStateToProps = (inputIdmKind: IdmKindType) => {
             deletePermissionsError: permissionDeletionError(state, idmKind),
 
             columnsFilter,
+            columnGroupNameFilter: getAclFilterColumnGroupName(state),
 
             normalizedPoolTree,
             aclRequestOptions,

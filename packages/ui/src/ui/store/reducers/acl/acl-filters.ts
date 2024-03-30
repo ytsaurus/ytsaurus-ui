@@ -9,6 +9,7 @@ export interface AclFiltersState {
     objectSubject: string;
     objectPermissions: Array<YTPermissionTypeUI>;
     columnsFilter: Array<string>;
+    columnGroupNameFilter: string;
 
     aclCurrentTab: AclMode;
 }
@@ -18,6 +19,7 @@ export const initialState: AclFiltersState = {
     objectSubject: '',
     objectPermissions: [],
     columnsFilter: EMPTY_ARRAY,
+    columnGroupNameFilter: '',
 
     aclCurrentTab: AclMode.MAIN_PERMISSIONS,
 };
