@@ -47,10 +47,15 @@ const QueryEditorView = React.memo(function QueryEditorView({
     const engine = useSelector(getQueryEngine);
     const editorErrors = useSelector(getQueryEditorErrors);
     const isACOSupported = useSelector(isSupportedQtACO);
+    const dispatch = useDispatch();
     const decorationsCollection = useRef<monaco.editor.IEditorDecorationsCollection | undefined>(
         undefined,
     );
     const model = editorRef.current?.getModel();
+
+    const runQueryCallback = useCallback(() => {
+        dispatch(runQuery(onStartQuery));
+    }, [dispatch, onStartQuery]);
 
     useEffect(() => {
         editorRef.current?.focus();
@@ -62,6 +67,26 @@ const QueryEditorView = React.memo(function QueryEditorView({
             setEditor('queryEditor', editorRef.current);
         }
     }, [setEditor]);
+
+    useEffect(() => {
+        const runQueryByKey = (e: KeyboardEvent) => {
+            if (e.ctrlKey || e.metaKey) {
+                if (e.key === 'Enter' || e.key === 'e') {
+                    runQueryCallback();
+                    e.preventDefault();
+                }
+            }
+            if (e.key === 'F8') {
+                runQueryCallback();
+                e.preventDefault();
+            }
+        };
+
+        document.addEventListener('keyup', runQueryByKey);
+        return () => {
+            document.removeEventListener('keyup', runQueryByKey);
+        };
+    }, [runQueryCallback]);
 
     useEffect(
         function updateErrorMarkers() {
@@ -115,7 +140,7 @@ const QueryEditorView = React.memo(function QueryEditorView({
             },
         };
     }, [engine]);
-    const dispatch = useDispatch();
+
     const upadteQueryText = useCallback(
         function (text: string) {
             dispatch(updateQueryDraft({query: text, error: undefined}));
@@ -123,12 +148,6 @@ const QueryEditorView = React.memo(function QueryEditorView({
         [dispatch],
     );
 
-    const runQueryCallback = useCallback(
-        function () {
-            dispatch(runQuery(onStartQuery));
-        },
-        [dispatch, onStartQuery],
-    );
     return (
         <div className={b('query')}>
             <MonacoEditor
