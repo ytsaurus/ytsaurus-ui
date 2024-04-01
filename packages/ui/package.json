@@ -106,6 +106,7 @@
     "@gravity-ui/uikit": "^5.16.0",
     "@gravity-ui/unipika": "^3.0.0",
     "@gravity-ui/yagr": "^3.10.4",
+    "@reduxjs/toolkit": "^2.2.3",
     "@tanstack/react-virtual": "^3.0.0-alpha.0",
     "@types/d3": "^7.4.0",
     "@types/express": "^4.17.13",
