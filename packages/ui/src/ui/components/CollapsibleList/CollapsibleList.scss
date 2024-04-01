@@ -2,6 +2,11 @@
 
 .collapsible-list {
     &__list {
+        &_use-flex {
+            display: flex;
+            flex-wrap: wrap;
+        }
+
         @include reset-ul();
 
         li {

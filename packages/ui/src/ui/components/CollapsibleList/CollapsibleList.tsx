@@ -1,5 +1,4 @@
-import React, {Component} from 'react';
-import PropTypes from 'prop-types';
+import React from 'react';
 import cn from 'bem-cn-lite';
 
 import withCollapsible from '../../hocs/withCollapsible';
@@ -8,24 +7,21 @@ import './CollapsibleList.scss';
 
 const block = cn('collapsible-list');
 
-class CollapsibleList extends Component {
-    static propTypes = {
-        items: PropTypes.arrayOf(PropTypes.element).isRequired,
-        renderToggler: PropTypes.func,
-        className: PropTypes.string,
-    };
+type Props = {
+    className?: string;
+    items: Array<React.ReactElement<HTMLLIElement>>;
+    renderToggler: () => React.ReactNode;
+    useFlex?: boolean;
+};
 
-    render() {
-        const {className, items, renderToggler} = this.props;
+function CollapsibleList({className, useFlex, items, renderToggler}: Props) {
+    return (
+        <div className={block(null, className)}>
+            <ul className={block('list', {'use-flex': useFlex})}>{items}</ul>
 
-        return (
-            <div className={block()}>
-                <ul className={block('list', className)}>{items}</ul>
-
-                {renderToggler()}
-            </div>
-        );
-    }
+            {renderToggler()}
+        </div>
+    );
 }
 
 export default withCollapsible(CollapsibleList);
