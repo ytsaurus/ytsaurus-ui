@@ -194,7 +194,7 @@ export function TemplateFiles({files = [], cluster}: TemplateFilesProps) {
         <TemplateFile {...file} cluster={cluster} key={file.path + '/' + file.name} />
     ));
 
-    return <CollapsibleList className={itemBlock('files')} items={items} />;
+    return <CollapsibleList items={items} />;
 }
 
 TemplateFiles.propTypes = {

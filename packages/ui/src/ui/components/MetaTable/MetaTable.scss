@@ -65,10 +65,6 @@
         align-items: center;
     }
 
-    &__files {
-        @include reset-ul();
-    }
-
     &__file {
         @include reset-li();
     }
