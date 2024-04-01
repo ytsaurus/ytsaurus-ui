@@ -3,7 +3,7 @@ import hammer from '../../common/hammer';
 import cn from 'bem-cn-lite';
 import _ from 'lodash';
 
-import {Flex} from '@gravity-ui/uikit';
+import {ClipboardButton, Flex, Loader, Popover} from '@gravity-ui/uikit';
 
 import {AclMode, IdmObjectType} from '../../constants/acl';
 
@@ -15,7 +15,6 @@ import UserPermissions from './UserPermissions/UserPermissions';
 import LoadDataHandler from '../../components/LoadDataHandler/LoadDataHandler';
 import ErrorBoundary from '../../components/ErrorBoundary/ErrorBoundary';
 import DataTableYT from '../../components/DataTableYT/DataTableYT';
-import {ClipboardButton, Loader, Popover} from '@gravity-ui/uikit';
 import Icon from '../../components/Icon/Icon';
 import Link from '../../components/Link/Link';
 import {Tooltip} from '../../components/Tooltip/Tooltip';
@@ -45,8 +44,8 @@ const block = cn('navigation-acl');
 
 type Props = ACLReduxProps & WithVisibleProps;
 
-type ApproverRow = Props['approversFiltered'][number];
-type PermissionsRow = Props['mainPermissions'][number];
+type ApproverRow = PreparedApprover;
+type PermissionsRow = PreparedAclSubject;
 
 class ACL extends Component<Props> {
     static tableColumns = {
@@ -196,24 +195,38 @@ class ACL extends Component<Props> {
                 className: block('table-item', {type: 'subjects'}),
                 render({row}) {
                     const {internal} = row;
-                    if (!internal) {
-                        return ACL.renderSubjectLink(row);
-                    }
 
-                    const nodes = _.map(row.subjects, (subject, index) => {
-                        const isGroup = row.types?.[index] === 'group';
-                        const url = isGroup
-                            ? `/${cluster}/groups?groupFilter=${subject}`
-                            : `/${cluster}/users?filter=${subject}`;
-                        return (
-                            <Link key={index} theme={'primary'} routed url={url}>
-                                <span className={block('subject-name')}>{subject}</span>
-                            </Link>
-                        );
-                    });
+                    const nodes = internal
+                        ? _.map(row.subjects, (subject, index) => {
+                              const isGroup = row.types?.[index] === 'group';
+                              const url = isGroup
+                                  ? `/${cluster}/groups?groupFilter=${subject}`
+                                  : `/${cluster}/users?filter=${subject}`;
+                              return (
+                                  <Link key={index} theme={'primary'} routed url={url}>
+                                      <span className={block('subject-name')}>{subject}</span>
+                                  </Link>
+                              );
+                          })
+                        : ACL.renderSubjectLink(row);
 
-                    if (nodes.length === 1) return nodes[0];
-                    return <div className={block('subjects-list')}>{nodes}</div>;
+                    const {requestPermissionsFlags = {}} = UIFactory.getAclApi();
+
+                    return (
+                        <Flex wrap gap={1}>
+                            <Flex grow wrap gap={1}>
+                                {nodes}
+                            </Flex>
+                            {Object.keys(requestPermissionsFlags).map((key, index) => {
+                                const flagInfo = requestPermissionsFlags[key];
+                                return (
+                                    <React.Fragment key={index}>
+                                        {flagInfo.renderIcon(row)}
+                                    </React.Fragment>
+                                );
+                            })}
+                        </Flex>
+                    );
                 },
             } as Column<T>,
             permissions: {

@@ -222,11 +222,6 @@
         flex-shrink: 0;
     }
 
-    &__subjects-list {
-        display: flex;
-        flex-flow: wrap;
-    }
-
     .data-table__row:not(:last-child) {
         border-bottom: 1px solid var(--g-color-line-generic);
     }

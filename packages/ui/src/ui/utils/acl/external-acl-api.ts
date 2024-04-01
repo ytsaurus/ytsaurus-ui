@@ -1,3 +1,4 @@
+import React from 'react';
 import {ManageAclFieldsNames} from '../../containers/ACL/ManageAcl/ManageAcl';
 import {RequestPermissionsFieldsNames} from '../../containers/ACL/RequestPermissions/RequestPermissions';
 import {
@@ -19,6 +20,7 @@ import {
     UpdateAclParams,
     UpdateResponse,
 } from './acl-types';
+import {PreparedApprover} from '../../store/selectors/acl';
 
 export interface AclApi {
     isAllowed: boolean;
@@ -41,6 +43,7 @@ export interface AclApi {
         {
             title: String;
             applyToRequestedRole: (role: Role, value?: boolean) => void;
+            renderIcon: (dst: PreparedAclSubject | PreparedApprover) => React.ReactNode;
             help?: React.ReactNode;
         }
     >;
