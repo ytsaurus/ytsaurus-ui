@@ -28,6 +28,18 @@
         animation-iteration-count: infinite;
         animation-timing-function: linear;
     }
+
+    &_color_secondary {
+        color: var(--secondary-text);
+    }
+
+    &_color_danger {
+        color: var(--danger-text);
+    }
+
+    &_color_warning {
+        color: var(--warning-text);
+    }
 }
 
 @keyframes shake {

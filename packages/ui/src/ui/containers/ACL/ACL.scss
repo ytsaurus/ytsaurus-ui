@@ -155,31 +155,6 @@
         }
     }
 
-    &__icon {
-        margin-left: 1ex;
-        color: var(--secondary-text) !important;
-
-        &:last-child {
-            margin-right: 1ex;
-        }
-
-        &_unrecognized {
-            color: var(--danger-text) !important;
-        }
-
-        &_link {
-            &:hover {
-                color: var(--hover-link) !important;
-            }
-        }
-
-        &_delete {
-            &:hover {
-                cursor: pointer;
-            }
-        }
-    }
-
     &__flags {
         margin-bottom: -10px;
     }

@@ -44,9 +44,17 @@ export interface IconProps {
     face?: 'solid' | 'light' | 'regular' | 'brands';
     spin?: boolean;
     size?: number | 's' | 'm' | 'l' | 'xl';
+    color?: 'secondary' | 'danger' | 'warning';
 }
 
-export default function Icon({className = '', face, awesome, spin, size: propSize}: IconProps) {
+export default function Icon({
+    className = '',
+    face,
+    awesome,
+    spin,
+    color,
+    size: propSize,
+}: IconProps) {
     const inputEl = useRef(null);
     const [size, setSize] = useState(13);
 
@@ -79,6 +87,7 @@ export default function Icon({className = '', face, awesome, spin, size: propSiz
             className={`${block({
                 'not-exist': !hasIcon,
                 spin,
+                color,
                 name: iconName || undefined,
             })} icon icon_awesome ${className}`}
         >
