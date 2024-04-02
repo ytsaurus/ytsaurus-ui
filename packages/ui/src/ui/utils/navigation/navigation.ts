@@ -9,12 +9,9 @@ export function genNavigationUrl({
     path: string;
     transaction?: string;
 }) {
-    const p = {path};
-    if (transaction) {
-        Object.assign(p, {t: transaction});
-    }
-    const params = new URLSearchParams(p);
-    return `/${cluster}/${Page.NAVIGATION}?${params}`;
+    return `/${cluster}/${Page.NAVIGATION}?path=${encodeURI(path)}${
+        transaction ? '&t=' + encodeURI(transaction) : ''
+    }`;
 }
 
 export function findCommonPathParent(v1: string, v2: string) {
