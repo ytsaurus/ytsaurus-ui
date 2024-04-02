@@ -65,7 +65,6 @@
 |hashtag|<img src='../../../../img/svg/icons/hashtag.svg'>|| |  
 |intersection|<img src='../../../../img/svg/icons/intersection.svg'>|| |  
 |key|<img src='../../../../img/svg/icons/key.svg'>|key.svg|<img src='../../../../node_modules/@gravity-ui/icons/svgs/key.svg'>|  
-|level-down-alt|<img src='../../../../img/svg/icons/level-down-alt.svg'>|| |  
 |link|<img src='../../../../img/svg/icons/link.svg'>|link.svg|<img src='../../../../node_modules/@gravity-ui/icons/svgs/link.svg'>|  
 |list|<img src='../../../../img/svg/icons/list.svg'>|| |  
 |not-suported|<img src='../../../../img/svg/icons/not-suported.svg'>|| |  
