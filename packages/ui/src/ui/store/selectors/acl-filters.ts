@@ -10,4 +10,5 @@ export const getObjectPermissionsFilter = (state: RootState) => state.aclFilters
 export const getAclFilterColumns = (state: RootState) => state.aclFilters.columnsFilter;
 export const getAclFilterColumnGroupName = (state: RootState) =>
     state.aclFilters.columnGroupNameFilter;
+export const getAclFilterExpandedSubjects = (state: RootState) => state.aclFilters.expandedSubjects;
 export const getAclCurrentTab = (state: RootState) => state.aclFilters.aclCurrentTab;

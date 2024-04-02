@@ -1,6 +1,9 @@
+import {ThunkAction} from 'redux-thunk';
+import {getAclFilterExpandedSubjects} from '../../store/selectors/acl-filters';
 import {ACL_CHANGE_FILTERS} from '../../constants/acl';
 
-import {AclFiltersState} from '../reducers/acl/acl-filters';
+import {AclFiltersAction, AclFiltersState} from '../reducers/acl/acl-filters';
+import {RootState} from '../../store/reducers';
 
 export function changeApproversSubjectFilter({
     approversSubject,
@@ -29,4 +32,22 @@ export function changeObjectPermissionsFilter({
 
 export function updateAclFilters(data: Partial<AclFiltersState>) {
     return {type: ACL_CHANGE_FILTERS, data};
+}
+
+type AclFilterThunkAction = ThunkAction<void, RootState, unknown, AclFiltersAction>;
+
+export function toggleExpandAclSubject(subject?: string | number): AclFilterThunkAction {
+    return (dispatch, getState) => {
+        if (!subject) {
+            return;
+        }
+
+        const expandedSubjects = new Set(getAclFilterExpandedSubjects(getState()));
+        if (expandedSubjects.has(subject)) {
+            expandedSubjects.delete(subject);
+        } else {
+            expandedSubjects.add(subject);
+        }
+        dispatch({type: ACL_CHANGE_FILTERS, data: {expandedSubjects}});
+    };
 }

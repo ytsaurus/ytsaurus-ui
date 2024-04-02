@@ -3,7 +3,6 @@ import {ConnectedProps, connect} from 'react-redux';
 import {
     getAllAccessColumnsNames,
     getAllColumnGroupsActual,
-    getAllObjectPermissionsFiltered,
     getAllUserPermissions,
     getApproversFilteredAndOrdered,
     getHasApprovers,
@@ -14,6 +13,7 @@ import {
     getNotInheritedAuditors,
     getNotInheritedReadApprovers,
     getNotInheritedResponsibles,
+    getObjectPermissionsAggregated,
     isPermissionDeleted,
     permissionDeletionError,
 } from '../../store/selectors/acl';
@@ -40,7 +40,7 @@ import {normalizeIdmParams} from '../../utils/acl';
 import {IdmObjectType} from '../../constants/acl';
 import {IdmKindType} from '../../utils/acl/acl-types';
 import {RootState} from '../../store/reducers';
-import {updateAclFilters} from '../../store/actions/acl-filters';
+import {toggleExpandAclSubject, updateAclFilters} from '../../store/actions/acl-filters';
 
 import ACL from './ACL';
 
@@ -74,7 +74,7 @@ const makeAclMapStateToProps = (inputIdmKind: IdmKindType) => {
 
         const hasApprovers = getHasApprovers(state, idmKind);
         const approversFiltered = getApproversFilteredAndOrdered(state, idmKind);
-        const {mainPermissions, columnsPermissions} = getAllObjectPermissionsFiltered(
+        const {mainPermissions, columnsPermissions} = getObjectPermissionsAggregated(
             state,
             idmKind,
         );
@@ -141,6 +141,7 @@ const makeAclMapDispatchToProps = () => ({
     userPermissionsCancelUpdateAcl: cancelUpdateAcl,
     deletePermissionsFn: deletePermissions,
     updateAclFilters,
+    toggleExpandAclSubject,
 });
 
 type StateProps = ReturnType<ReturnType<typeof makeAclMapStateToProps>>;
