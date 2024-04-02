@@ -99,7 +99,7 @@ export default class UserPermissions extends Component<Props> {
 
                     <CollapsibleList
                         useFlex
-                        listClassName={block('list', block('columns-list'))}
+                        className={block('list', block('columns-list'))}
                         itemsCount={15}
                         items={items}
                     />

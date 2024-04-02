@@ -61,15 +61,6 @@
         }
     }
 
-    &__columns-permissions {
-        grid-column: 1 / -2;
-
-        #{$acl}__filters-group {
-            display: flex;
-            align-items: center;
-        }
-    }
-
     &__user-permissions {
         grid-row: 1 / -1;
         grid-column: 2 / -1;
@@ -116,7 +107,6 @@
         }
 
         &_type_permissions {
-            width: 270px;
             max-width: 320px;
         }
 
@@ -131,10 +121,6 @@
 
         &_type_actions {
             width: 85px;
-            max-width: 85px;
-            .navigation-acl__icon {
-                margin-right: 0px;
-            }
         }
 
         &_type_columns {
