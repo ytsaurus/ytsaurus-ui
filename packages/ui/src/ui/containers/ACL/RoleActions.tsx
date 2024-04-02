@@ -1,9 +1,13 @@
 import React from 'react';
 import cn from 'bem-cn-lite';
 
+import {Button} from '@gravity-ui/uikit';
+
 import Icon from '../../components/Icon/Icon';
 import {IdmKindType} from '../../utils/acl/acl-types';
 import {AclRoleActionsType} from '../../UIFactory';
+
+import './RoleActions.scss';
 
 const block = cn('navigation-acl');
 
@@ -24,9 +28,9 @@ export default function RoleActions(props: Props) {
     return (
         <React.Fragment>
             {!inherited && onDelete !== undefined && (
-                <span className={block('icon', {delete: true})} onClick={() => handleDelete()}>
+                <Button className={block('button')} onClick={() => handleDelete()}>
                     <Icon awesome="trash-alt" />
-                </span>
+                </Button>
             )}
         </React.Fragment>
     );
