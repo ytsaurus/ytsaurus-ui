@@ -8,13 +8,10 @@
         display: flex;
         align-items: center;
         flex-direction: row;
+        gap: 0 8px;
 
         &:not(:last-child) {
             margin-bottom: 8px;
         }
-    }
-
-    &__row-item:not(:first-child) {
-        margin-left: 8px;
     }
 }
