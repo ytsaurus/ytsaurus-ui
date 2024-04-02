@@ -6,10 +6,17 @@
         padding: 20px;
         margin-bottom: 12px;
         background-color: var(--g-color-base-neutral-light);
+
+        max-height: 520px;
+        display: flex;
+        flex-direction: column;
     }
 
     &__list {
         @include reset-ul();
+
+        overflow: auto;
+        flex-shrink: 1;
     }
 
     &__item {
