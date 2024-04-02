@@ -3,7 +3,8 @@ import hammer from '../../common/hammer';
 import cn from 'bem-cn-lite';
 import _ from 'lodash';
 
-import {ClipboardButton, Flex, Loader, Popover} from '@gravity-ui/uikit';
+import {ClipboardButton, Flex, Icon, Loader, Popover} from '@gravity-ui/uikit';
+import {Column} from '@gravity-ui/react-data-table';
 
 import {AclMode, IdmObjectType} from '../../constants/acl';
 
@@ -15,7 +16,6 @@ import UserPermissions from './UserPermissions/UserPermissions';
 import LoadDataHandler from '../../components/LoadDataHandler/LoadDataHandler';
 import ErrorBoundary from '../../components/ErrorBoundary/ErrorBoundary';
 import DataTableYT from '../../components/DataTableYT/DataTableYT';
-import Icon from '../../components/Icon/Icon';
 import Link from '../../components/Link/Link';
 import {Tooltip} from '../../components/Tooltip/Tooltip';
 import {UserName} from '../../components/UserLink/UserLink';
@@ -32,11 +32,12 @@ import {ACLReduxProps} from './ACL-connect-helpers';
 import {PreparedAclSubject} from '../../utils/acl/acl-types';
 import {PreparedApprover} from '../../store/selectors/acl';
 
-import {Column} from '@gravity-ui/react-data-table';
 import {SegmentControl, SegmentControlItem} from '../../components/SegmentControl/SegmentControl';
 import WithStickyToolbar from '../../components/WithStickyToolbar/WithStickyToolbar';
 import {PreparedRole} from '../../utils/acl';
 import {AclModeControl} from './AclModeControl';
+
+import aclInheritedSvg from '../../../../img/svg/acl-inherited.svg';
 
 import './ACL.scss';
 
@@ -183,7 +184,7 @@ class ACL extends Component<Props> {
                     return (
                         row.inherited && (
                             <Popover content={'Role is inherited'}>
-                                <Icon awesome="level-down-alt" />
+                                <Icon data={aclInheritedSvg} />
                             </Popover>
                         )
                     );

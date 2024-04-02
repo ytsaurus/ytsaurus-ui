@@ -63,7 +63,6 @@ import HandPaper from '../../../../img/svg/icons/hand-paper.svg';
 import Hashtag from '../../../../img/svg/icons/hashtag.svg';
 import Intersection from '../../../../img/svg/icons/intersection.svg';
 import Key from '../../../../img/svg/icons/key.svg';
-import LevelDownAlt from '../../../../img/svg/icons/level-down-alt.svg';
 import LayoutColumns3Icon from '@gravity-ui/icons/svgs/layout-columns-3.svg';
 import Link from '../../../../img/svg/icons/link.svg';
 import List from '../../../../img/svg/icons/list.svg';
@@ -174,7 +173,6 @@ export const iconNames = {
     ['hashtag']: Hashtag,
     ['intersection']: Intersection,
     ['key']: Key,
-    ['level-down-alt']: LevelDownAlt,
     ['link']: Link,
     ['list']: List,
     ['not-suported']: NotSuported,
