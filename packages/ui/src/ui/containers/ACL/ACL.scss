@@ -89,12 +89,12 @@
         padding-left: 4px;
         padding-right: 4px;
 
-        &_type_inherited {
-            width: 25px;
+        &_type_expand {
+            padding-left: 2px;
+            padding-right: 2px;
         }
 
         &_type_subjects {
-            width: 270px;
             max-width: 320px;
             .user-link {
                 display: flex;
@@ -210,5 +210,11 @@
 
     .data-table__row:not(:last-child) {
         border-bottom: 1px solid var(--g-color-line-generic);
+    }
+
+    &__subject {
+        &_level_1 {
+            padding-left: 16px;
+        }
     }
 }

@@ -12,6 +12,7 @@ export interface AclFiltersState {
     columnGroupNameFilter: string;
 
     aclCurrentTab: AclMode;
+    expandedSubjects: Set<string | number>;
 }
 
 export const initialState: AclFiltersState = {
@@ -20,6 +21,8 @@ export const initialState: AclFiltersState = {
     objectPermissions: [],
     columnsFilter: EMPTY_ARRAY,
     columnGroupNameFilter: '',
+
+    expandedSubjects: new Set<string>(),
 
     aclCurrentTab: AclMode.MAIN_PERMISSIONS,
 };
@@ -34,4 +37,4 @@ export default (state = initialState, action: AclFiltersAction): AclFiltersState
     }
 };
 
-type AclFiltersAction = ActionD<typeof ACL_CHANGE_FILTERS, Partial<AclFiltersState>>;
+export type AclFiltersAction = ActionD<typeof ACL_CHANGE_FILTERS, Partial<AclFiltersState>>;

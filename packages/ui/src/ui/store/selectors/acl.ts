@@ -8,6 +8,7 @@ import {concatByAnd} from '../../common/hammer/predicate';
 import {
     getAclFilterColumnGroupName,
     getAclFilterColumns,
+    getAclFilterExpandedSubjects,
     getApproversSubjectFilter,
     getObjectPermissionsFilter,
     getObjectSubjectFilter,
@@ -139,6 +140,8 @@ const permissionsFilterPredicate = (item: PreparedAclSubject, filter: Set<YTPerm
     });
 };
 
+type ObjectPermissionsRow = PreparedAclSubject & HasSplitted;
+
 export const getAllObjectPermissionsFiltered = createSelector(
     [
         getAllObjectPermissionsWithSplittedSubjects,
@@ -147,8 +150,6 @@ export const getAllObjectPermissionsFiltered = createSelector(
         getAclFilterColumns,
     ],
     (items, subjectFilter, permissionsFilter, columns) => {
-        type ItemType = PreparedAclSubject & HasSplitted;
-
         const [mainPermissions, columnPermissions] = partition(
             items,
             (item) => !item.columns?.length,
@@ -160,17 +161,18 @@ export const getAllObjectPermissionsFiltered = createSelector(
 
         const lowerNameFilter = subjectFilter?.toLocaleLowerCase();
         const filterBySubject = lowerNameFilter
-            ? (item: ItemType) => subjectFilterPredicate(item, lowerNameFilter)
+            ? (item: ObjectPermissionsRow) => subjectFilterPredicate(item, lowerNameFilter)
             : undefined;
 
         const permissionsFilterSet = new Set<YTPermissionTypeUI>(permissionsFilter);
         const filterByPermissions = permissionsFilterSet.size
-            ? (item: ItemType) => permissionsFilterPredicate(item, permissionsFilterSet) ?? false
+            ? (item: ObjectPermissionsRow) =>
+                  permissionsFilterPredicate(item, permissionsFilterSet) ?? false
             : undefined;
 
         const visibleColumns = new Set(columns);
         const filterByColumns = visibleColumns.size
-            ? ({columns}: ItemType) => {
+            ? ({columns}: ObjectPermissionsRow) => {
                   return columns?.some((colName) => visibleColumns.has(colName)) ?? false;
               }
             : undefined;
@@ -187,6 +189,108 @@ export const getAllObjectPermissionsFiltered = createSelector(
         };
     },
 );
+
+export const getObjectPermissionsAggregated = createSelector(
+    [getAllObjectPermissionsFiltered, getAclFilterExpandedSubjects],
+    ({mainPermissions, columnsPermissions}, expandedSubjects) => {
+        return {
+            mainPermissions: {
+                ...aggregateBySubject(mainPermissions, expandedSubjects),
+                count: mainPermissions.length,
+            },
+            columnsPermissions: {
+                ...aggregateBySubject(columnsPermissions, expandedSubjects),
+                count: columnsPermissions.length,
+            },
+        };
+    },
+);
+
+class AggregateBySubject {
+    allPermissions = new Set<YTPermissionTypeUI>();
+    children = new Array<ObjectPermissionsRow & {expanded?: boolean; level?: number}>();
+
+    subject: string | number;
+
+    constructor(subject: AggregateBySubject['subject']) {
+        this.subject = subject;
+    }
+
+    add(item: ObjectPermissionsRow) {
+        if (this.subject !== item.subjects[0] || item.subjects.length !== 1) {
+            throw new Error(
+                `Unexpected behavior: subjects should be the same: ${
+                    this.subject
+                } !== ${item.subjects.join(',')}`,
+            );
+        }
+
+        this.children.push(item);
+        item.permissions?.forEach((p) => {
+            this.allPermissions.add(p);
+        });
+    }
+
+    getItems(expanded: boolean): {
+        items: AggregateBySubject['children'];
+        hasExpandable?: boolean;
+        hasDenyAction?: boolean;
+    } {
+        if (this.children.length === 1) {
+            return {items: this.children};
+        }
+
+        const first: (typeof this.children)[0] & {level?: number; expanded?: boolean} = {
+            ...this.children[0],
+            level: 0,
+            expanded,
+        };
+        first.inheritance_mode = undefined;
+        first.inherited = undefined;
+        first.columns = undefined;
+        first.permissions = [...this.allPermissions];
+
+        let hasDenyAction = false;
+        const items = !expanded
+            ? [first]
+            : [
+                  first,
+                  ...this.children.map((i) => {
+                      hasDenyAction ||= i.action === 'deny';
+                      return {...i, level: 1};
+                  }),
+              ];
+
+        return {items, hasExpandable: true, hasDenyAction};
+    }
+}
+
+export type ObjectPermissionRowWithExpand = AggregateBySubject['children'][number];
+
+function aggregateBySubject(
+    objPermissions: Array<ObjectPermissionsRow>,
+    expandedSubjects: Set<string | number>,
+) {
+    const aggregated: Record<AggregateBySubject['subject'], AggregateBySubject> = {};
+
+    objPermissions.forEach((item) => {
+        const [subject] = item.subjects;
+        const agg = aggregated[subject] ?? (aggregated[subject] = new AggregateBySubject(subject));
+        agg.add(item);
+    });
+
+    const items = Object.values(aggregated).reduce(
+        (acc, item) => {
+            const {items, hasExpandable} = item.getItems(expandedSubjects.has(item.subject));
+            acc.items = acc.items.concat(items);
+            acc.hasExpandable ||= hasExpandable;
+            return acc;
+        },
+        {items: [], hasExpandable: false} as ReturnType<AggregateBySubject['getItems']>,
+    );
+
+    return items;
+}
 
 export const getAllObjectPermissionsOrderedByStatus = createSelector(
     [getAllObjectPermissions],

@@ -9,11 +9,13 @@ const block = cn('yt-expanded-button');
 type Props = {
     expanded: boolean;
     toggleExpanded: () => void;
+    inline?: boolean;
 };
 
-export const ExpandButton: FC<Props> = ({expanded, toggleExpanded}) => {
+export const ExpandButton: FC<Props> = ({expanded, inline, toggleExpanded}) => {
     return (
         <Button
+            className={block({inline})}
             view="flat-secondary"
             title={expanded ? 'Collapse' : 'Expand'}
             onClick={toggleExpanded}

@@ -1,4 +1,9 @@
 .yt-expanded-button {
+    &_inline {
+        margin-top: -4px;
+        margin-bottom: -4px;
+    }
+
     &__expand {
         &_expanded {
             transform: rotate(90deg);
