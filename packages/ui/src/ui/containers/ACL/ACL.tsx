@@ -37,6 +37,7 @@ import WithStickyToolbar from '../../components/WithStickyToolbar/WithStickyTool
 import {PreparedRole} from '../../utils/acl';
 import {AclModeControl} from './AclModeControl';
 import {ExpandButton} from '../../components/ExpandButton';
+import {AclColumnsCell} from './AclColumnsCell';
 
 import aclInheritedSvg from '../../../../img/svg/acl-inherited.svg';
 
@@ -260,7 +261,10 @@ class ACL extends Component<Props> {
                             <Label className={block('action-label')} theme={theme}>
                                 {action}
                             </Label>
-                            {renderText(row.permissions?.map(hammer.format.Readable).join(', '))}
+                            <AclColumnsCell
+                                items={row.permissions?.map(hammer.format.Readable)}
+                                expanadable={'expanded' in row}
+                            />
                         </div>
                     );
                 },
@@ -308,10 +312,7 @@ class ACL extends Component<Props> {
                 align: 'left',
                 className: block('table-item', {type: 'columns'}),
                 render({row}) {
-                    const {columns} = row;
-                    return !columns
-                        ? hammer.format.NO_VALUE
-                        : renderText(columns?.map((column) => `"${column}"`).join(', '));
+                    return <AclColumnsCell items={row.columns} expanadable={'expanded' in row} />;
                 },
             } as Column<T>,
         };

@@ -18,7 +18,6 @@ import {RootState} from '../../store/reducers';
 import {IdmKindType, PreparedAclSubject} from '../../utils/acl/acl-types';
 import {YTPermissionTypeUI} from '../../utils/acl/acl-api';
 import {PreparedRole} from '../../utils/acl';
-//import {ResponsibleType} from '../../utils/acl/acl-types';
 
 export type PreparedAclSubjectColumn = Omit<PreparedAclSubject, 'type'> & {type: 'columns'};
 
@@ -208,6 +207,7 @@ export const getObjectPermissionsAggregated = createSelector(
 
 class AggregateBySubject {
     allPermissions = new Set<YTPermissionTypeUI>();
+    columns = new Set<string>();
     children = new Array<ObjectPermissionsRow & {expanded?: boolean; level?: number}>();
 
     subject: string | number;
@@ -229,6 +229,7 @@ class AggregateBySubject {
         item.permissions?.forEach((p) => {
             this.allPermissions.add(p);
         });
+        item.columns?.forEach((column) => this.columns.add(column));
     }
 
     getItems(expanded: boolean): {
@@ -236,7 +237,7 @@ class AggregateBySubject {
         hasExpandable?: boolean;
         hasDenyAction?: boolean;
     } {
-        if (this.children.length === 1) {
+        if (this.children.length <= 1) {
             return {items: this.children};
         }
 
@@ -247,8 +248,8 @@ class AggregateBySubject {
         };
         first.inheritance_mode = undefined;
         first.inherited = undefined;
-        first.columns = undefined;
         first.permissions = [...this.allPermissions];
+        first.columns = [...this.columns];
 
         let hasDenyAction = false;
         const items = !expanded
