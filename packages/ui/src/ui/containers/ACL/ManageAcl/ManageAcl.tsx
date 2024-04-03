@@ -263,7 +263,7 @@ function ManageAcl(props: Props) {
     return (
         <ErrorBoundary>
             <div className={block(null, className)}>
-                <Button onClick={handleModalOpen}>Manage ACL</Button>
+                <Button onClick={handleModalOpen}>Manage responsibles</Button>
 
                 <CommonDialog
                     size="m"
@@ -271,7 +271,7 @@ function ManageAcl(props: Props) {
                     onClose={handleClose}
                     className={block('modal', {loading, error})}
                 >
-                    <CommonDialog.Header caption="Manage ACL" />
+                    <CommonDialog.Header caption="Manage responsibles" />
                     <CommonDialog.Body>{renderForm()}</CommonDialog.Body>
                 </CommonDialog>
             </div>
