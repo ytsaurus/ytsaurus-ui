@@ -33,7 +33,7 @@ type QueriesHistoryListFilterProps = {
 
 export function QueriesHistoryListFilter({className}: QueriesHistoryListFilterProps) {
     const [filter, filterViewMode, onChange] = useQuriesHistoryFilter();
-    const {allowedColumns, handleColumnChange} = useQueryHistoryListColumns({type: filter.user});
+    const {allColumns, handleColumnChange} = useQueryHistoryListColumns({type: filter.user});
 
     const onChangeAuthorFilter = useCallback(
         (user: string) => {
@@ -86,7 +86,7 @@ export function QueriesHistoryListFilter({className}: QueriesHistoryListFilterPr
                             </Button>
                         }
                         template={
-                            <ColumnSelector items={allowedColumns} onChange={handleColumnChange} />
+                            <ColumnSelector items={allColumns} onChange={handleColumnChange} />
                         }
                     />
                 </div>
