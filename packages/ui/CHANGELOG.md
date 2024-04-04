@@ -1,5 +1,25 @@
 # Changelog
 
+## [1.27.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.26.0...ui-v1.27.0) (2024-04-04)
+
+
+### Features
+
+* **Query:** add tooltip to search field qt [YTFRONT-4096] ([f5b2c7e](https://github.com/ytsaurus/ytsaurus-ui/commit/f5b2c7e8cc0000708b2407ed69dde7ce07ef4115))
+* **Query:** add yql and chyt autocomplete [YTFRONT-4074] ([2e025aa](https://github.com/ytsaurus/ytsaurus-ui/commit/2e025aa8dab454e9d3a0fcc9c47967a8202d4af8))
+* **Query:** page header redesign [YTFRONT-4041] ([b2d6696](https://github.com/ytsaurus/ytsaurus-ui/commit/b2d66969c46fae1bd68884298c92fda3be7183db))
+
+
+### Bug Fixes
+
+* **Bundles/Editor:** allow to edit Memory/Reserved through 'Reset to default' [YTFRONT-4098] ([2b371fc](https://github.com/ytsaurus/ytsaurus-ui/commit/2b371fc64f137f5c18a9f839ede5a95131527269))
+* **Bundles:** fix request params [YTFRONT-4072] ([92fd224](https://github.com/ytsaurus/ytsaurus-ui/commit/92fd2245d1c02e9fa50e37d2b969312a98e0bad9))
+* delete unnecessary column [YTFRONT-4072] ([cc800a8](https://github.com/ytsaurus/ytsaurus-ui/commit/cc800a873c94cbbdf43622e1100b1886ebd75547))
+* **Navigation:** wrong path to table in notification [YTFRONT-4091] ([21d87c1](https://github.com/ytsaurus/ytsaurus-ui/commit/21d87c193c24e82891a9b7457e11b516e11f29cf))
+* **Navigation:** wrong schema col width [YTFRONT-4092] ([32e80d9](https://github.com/ytsaurus/ytsaurus-ui/commit/32e80d90ca8a3bd7748ac7cec5c87e551583dabc))
+* **Query:** fix progress stages view [YTFRONT-4097] ([0098222](https://github.com/ytsaurus/ytsaurus-ui/commit/00982227f7219e864ec487cc8571b7d834c1a84b))
+* **Query:** fixed error text selection [YTFRONT-4089] ([be5d802](https://github.com/ytsaurus/ytsaurus-ui/commit/be5d80270163541e7a77085b8d1c02391301c685))
+
 ## [1.26.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.25.0...ui-v1.26.0) (2024-03-29)
 
 
