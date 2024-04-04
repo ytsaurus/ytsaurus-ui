@@ -1,4 +1,7 @@
 import _ from 'lodash';
+
+import {KeysByDot} from '../../../../../shared/keys-by-dot';
+
 import ypath from '../../../../common/thor/ypath';
 import hammer from '../../../../common/hammer';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -180,7 +183,11 @@ export const prepareSubmitBundle = (form: FormApi<BundleEditorDialogFormValues>)
     const prepare: {[path: string]: any} = {};
     const {dirtyFields, values} = form.getState();
 
-    function addToChange(attr: string, field: string, prepareValue?: Function) {
+    function addToChange(
+        attr: string,
+        field: KeysByDot<BundleEditorDialogFormValues>,
+        prepareValue?: Function,
+    ) {
         if (!dirtyFields[field]) {
             return;
         }
@@ -209,6 +216,10 @@ export const prepareSubmitBundle = (form: FormApi<BundleEditorDialogFormValues>)
         'resources.tablet_node_resource_guarantee',
     );
     // Memory_limits
+    addToChange(
+        '@bundle_controller_target_config/memory_limits/reserved',
+        'memory_limits.reserved',
+    );
     addToChange(
         '@bundle_controller_target_config/memory_limits/tablet_static',
         'memory_limits.tablet_static',
