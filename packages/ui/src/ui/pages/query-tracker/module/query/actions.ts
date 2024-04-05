@@ -75,35 +75,6 @@ export const setCurrentClusterToQuery =
         dispatch(updateQueryDraft({settings: {...settings, cluster}}));
     };
 
-export function loadQuery(
-    queryId: string,
-): ThunkAction<any, RootState, any, SetQueryAction | RequestQueryAction | SetQueryErrorLoadAction> {
-    return async (dispatch, _getState) => {
-        dispatch({type: REQUEST_QUERY});
-        try {
-            const query = await wrapApiPromiseByToaster(dispatch(getQuery(queryId)), {
-                toasterName: 'load_query',
-                skipSuccessToast: true,
-                errorTitle: 'Failed to load query',
-            });
-            dispatch({
-                type: SET_QUERY,
-                data: {
-                    initialQuery: prepareQueryPlanIds(query),
-                },
-            });
-        } catch (e: unknown) {
-            dispatch(createEmptyQuery());
-        } finally {
-            dispatch(setCurrentClusterToQuery());
-        }
-    };
-}
-
-export function updateQueryDraft(data: Partial<QueryState['draft']>) {
-    return {type: SET_QUERY_PATCH, data};
-}
-
 export const loadCliqueByCluster =
     (
         cluster: string,
@@ -137,6 +108,40 @@ export const loadCliqueByCluster =
                 dispatch({type: SET_QUERY_CLIQUE_LOADING, data: false});
             });
     };
+
+export function loadQuery(
+    queryId: string,
+): ThunkAction<any, RootState, any, SetQueryAction | RequestQueryAction | SetQueryErrorLoadAction> {
+    return async (dispatch, _getState) => {
+        dispatch({type: REQUEST_QUERY});
+        try {
+            const query = await wrapApiPromiseByToaster(dispatch(getQuery(queryId)), {
+                toasterName: 'load_query',
+                skipSuccessToast: true,
+                errorTitle: 'Failed to load query',
+            });
+
+            if (query.engine === QueryEngine.CHYT && query.settings?.cluster) {
+                dispatch(loadCliqueByCluster(query.settings.cluster as string));
+            }
+
+            dispatch({
+                type: SET_QUERY,
+                data: {
+                    initialQuery: prepareQueryPlanIds(query),
+                },
+            });
+        } catch (e: unknown) {
+            dispatch(createEmptyQuery());
+        } finally {
+            dispatch(setCurrentClusterToQuery());
+        }
+    };
+}
+
+export function updateQueryDraft(data: Partial<QueryState['draft']>) {
+    return {type: SET_QUERY_PATCH, data};
+}
 
 export function createQueryFromTablePath(
     engine: QueryEngine,

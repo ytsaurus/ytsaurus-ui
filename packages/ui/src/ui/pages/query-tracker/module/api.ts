@@ -73,7 +73,10 @@ export interface DraftQuery {
     annotations?: {
         title?: string;
     };
-    settings?: {};
+    settings?: {cluster?: string; clique?: string; discovery_path?: string} & Record<
+        string,
+        string
+    >;
     error?: unknown;
     access_control_object: string;
 }
