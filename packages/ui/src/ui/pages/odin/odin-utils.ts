@@ -54,15 +54,15 @@ export default class Utils {
         return Utils.request('/exists/' + cluster);
     }
 
-    static listMetrics(cluster: string) {
-        return Utils.request<Array<MetricListItem>>(`/service_list/${cluster}`);
+    static listMetrics(cluster: string, saveCancelToken: SaveCancelToken) {
+        return Utils.request<Array<MetricListItem>>(`/service_list/${cluster}`, saveCancelToken);
     }
 
     static getMetric(
         cluster: string,
         metric: string,
-        from: Date,
-        to: Date,
+        from: Date | number,
+        to: Date | number,
         saveCT: SaveCancelToken,
     ) {
         return Utils.request<Availability>(

@@ -10,6 +10,30 @@ $row_width: $size * 30;
         column-gap: 1em;
     }
 
+    &__navigation {
+        display: flex;
+        height: 48px;
+        align-items: center;
+
+        &-button {
+            height: 28px;
+            display: inline-flex;
+            align-items: center;
+
+            &_reset {
+                margin: 0 5px;
+            }
+
+            &_icon {
+                padding-top: 3px;
+            }
+        }
+
+        &-date-picker {
+            width: 145px;
+        }
+    }
+
     &__dates {
         display: flex;
         justify-content: space-between;
@@ -132,10 +156,6 @@ $row_width: $size * 30;
         word-break: break-all;
         word-wrap: break-word;
         white-space: pre-wrap;
-    }
-
-    &__presets {
-        padding-bottom: 1em;
     }
 
     &__preset {

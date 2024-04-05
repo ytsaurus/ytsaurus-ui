@@ -10,6 +10,7 @@ import {
     ODIN_OVERVIEW_FAILED,
     ODIN_OVERVIEW_HIDDEN_METRICS,
     ODIN_OVERVIEW_PARTIAL,
+    ODIN_OVERVIEW_REQUEST,
     ODIN_OVERVIEW_SUCCESS,
 } from '../odin-constants';
 import {
@@ -17,9 +18,10 @@ import {
     getOdinOverviewClusterMetrics,
     getOdinOverviewData,
     getOdinOverviewDataCluster,
-    getOdinOverviewDateFrom,
-    getOdinOverviewDateTo,
     getOdinOverviewHiddenMetrics,
+    getOdinOverviewTimeFrom,
+    getOdinOverviewTimeFromFilter,
+    getOdinOverviewTimeTo,
     getOdinOverviewVisiblePresets,
 } from '../_selectors/odin-overview';
 import {reloadSetting, setSetting} from '../../../store/actions/settings';
@@ -31,45 +33,66 @@ import {OdinRootState} from '../_reducers';
 
 type OdinOverviewThunkAction = ThunkAction<any, OdinRootState & RootState, any, OdinOverviewAction>;
 
-function getCluterHelper(gs: () => OdinRootState) {
+function getClusterHelper(gs: () => OdinRootState) {
     return getOdinOverviewDataCluster(gs());
 }
 
 const COUNT_OF_MINUTES = 30;
 
-export function fetchOdinOverview(cluster: string): OdinOverviewThunkAction {
+export const ODIN_OVERVIEW_TIME_RANGE = COUNT_OF_MINUTES * 60 * 1000;
+
+let cancelMetrics: {cancel: () => void} = {cancel: () => {}};
+
+function fetchOdinOverview(cluster: string, time?: number): OdinOverviewThunkAction {
     return (dispatch, getState) => {
-        if (getCluterHelper(getState) !== cluster) {
-            const data = getOdinOverviewData(getState());
-            _forEach(data, ({cancel}) => {
-                if (cancel) {
-                    cancel();
-                }
-            });
+        cancelMetrics.cancel();
+        const data = getOdinOverviewData(getState());
+        _forEach(data, (item) => item.cancel?.());
+
+        const oldCluster = getClusterHelper(getState);
+
+        dispatch({
+            type: ODIN_OVERVIEW_REQUEST,
+        });
+
+        if (oldCluster !== cluster) {
             dispatch({
                 type: ODIN_OVERVIEW_PARTIAL,
                 data: {data: {}, clusterMetrics: [], dataCluster: cluster},
             });
         }
 
-        return Utils.listMetrics(cluster)
+        return Utils.listMetrics(cluster, (c) => {
+            cancelMetrics = c;
+        })
             .then((clusterMetrics) => {
-                if (getCluterHelper(getState) !== cluster) {
+                if (getClusterHelper(getState) !== cluster) {
                     return;
                 }
 
-                const to = new Date();
-                const from = new Date(to.getTime() - COUNT_OF_MINUTES * 60 * 1000);
+                const timeFrom = time ? time : Date.now() - ODIN_OVERVIEW_TIME_RANGE;
+                const timeTo = timeFrom + ODIN_OVERVIEW_TIME_RANGE;
+
                 dispatch({
-                    type: ODIN_OVERVIEW_SUCCESS,
-                    data: {clusterMetrics, dateFrom: from, dateTo: to},
+                    type: ODIN_OVERVIEW_PARTIAL,
+                    data: {
+                        clusterMetrics,
+                        timeFrom,
+                        timeTo,
+                    },
                 });
 
                 const hiddenMetrics = getOdinOverviewHiddenMetrics(getState());
-                clusterMetrics.forEach(({name}) => {
-                    if (!hiddenMetrics[name]) {
-                        dispatch(fetchMetricData(cluster, name, from, to));
-                    }
+                Promise.all(
+                    clusterMetrics.map(({name}) => {
+                        if (!hiddenMetrics[name]) {
+                            return dispatch(fetchMetricData(cluster, name, timeFrom, timeTo));
+                        } else {
+                            return Promise.resolve();
+                        }
+                    }),
+                ).then(() => {
+                    dispatch({type: ODIN_OVERVIEW_SUCCESS});
                 });
             })
             .catch((error) => {
@@ -78,16 +101,63 @@ export function fetchOdinOverview(cluster: string): OdinOverviewThunkAction {
                 } else {
                     dispatch({type: ODIN_OVERVIEW_FAILED, data: error});
                 }
-                return Promise.reject(error);
             });
     };
 }
 
-export function fetchMetricData(
+export function odinOverviewSetPreviousTimeRange(): OdinOverviewThunkAction {
+    return (dispatch, getState) => {
+        const state = getState();
+        const timeFromFilter = getOdinOverviewTimeFromFilter(state);
+        if (!timeFromFilter) {
+            dispatch(setOdinOverviewFromTimeFilter(Date.now() - 2 * ODIN_OVERVIEW_TIME_RANGE));
+        } else {
+            dispatch(setOdinOverviewFromTimeFilter(timeFromFilter - ODIN_OVERVIEW_TIME_RANGE));
+        }
+    };
+}
+
+export function odinOverviewSetNextTimeRange(): OdinOverviewThunkAction {
+    return (dispatch, getState) => {
+        const state = getState();
+        const timeFromFilter = getOdinOverviewTimeFromFilter(state);
+        if (!timeFromFilter) {
+            return;
+        } else {
+            const nextFilter = timeFromFilter + ODIN_OVERVIEW_TIME_RANGE;
+            if (Date.now() - nextFilter < ODIN_OVERVIEW_TIME_RANGE) {
+                dispatch(setOdinOverviewFromTimeFilter(undefined));
+            } else {
+                dispatch(setOdinOverviewFromTimeFilter(nextFilter));
+            }
+        }
+    };
+}
+
+export function setOdinOverviewFromTimeFilter(time: number | undefined): OdinOverviewAction {
+    return {type: ODIN_OVERVIEW_PARTIAL, data: {timeFromFilter: time}};
+}
+
+export function reloadOdinOverview(
+    cluster: string,
+    timeFromFilter: number | undefined,
+): OdinOverviewThunkAction {
+    return (dispatch, getState) => {
+        const state = getState();
+        const timeFilter = getOdinOverviewTimeFromFilter(state);
+        const timeFrom = getOdinOverviewTimeFrom(state);
+
+        if (!timeFilter || timeFilter !== timeFrom) {
+            dispatch(fetchOdinOverview(cluster, timeFromFilter));
+        }
+    };
+}
+
+function fetchMetricData(
     cluster: string,
     name: string,
-    from: Date,
-    to: Date,
+    from: number,
+    to: number,
 ): OdinOverviewThunkAction {
     return (dispatch, getState) => {
         let {cancel} = getOdinOverviewData(getState())[name] || {};
@@ -99,7 +169,7 @@ export function fetchMetricData(
             cancel = c.cancel;
         })
             .then((d) => {
-                if (getCluterHelper(getState) !== cluster) {
+                if (getClusterHelper(getState) !== cluster) {
                     return;
                 }
 
@@ -120,7 +190,6 @@ export function fetchMetricData(
                     };
                     dispatch({type: ODIN_OVERVIEW_PARTIAL, data: {data}});
                 }
-                return Promise.reject(error);
             });
     };
 }
@@ -129,8 +198,8 @@ export function reloadOdinOverviewMetricData(metricName: string): OdinOverviewTh
     return (dispatch, getState) => {
         const state = getState();
         const cluster = getOdinOverviewDataCluster(state);
-        const from = getOdinOverviewDateFrom(state);
-        const to = getOdinOverviewDateTo(state);
+        const from = getOdinOverviewTimeFrom(state);
+        const to = getOdinOverviewTimeTo(state);
         if (from && to) {
             dispatch(fetchMetricData(cluster, metricName, from, to));
         }
