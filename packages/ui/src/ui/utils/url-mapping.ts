@@ -19,14 +19,19 @@ const TO_ENCODE_WITH_DASH = {
 
 export function customEncodeURIComponent(value: string, toEncode = TO_ENCODE) {
     let res = '';
-    for (let i = 0; i < value.length; ++i) {
-        const c = value[i];
-        const encoded = toEncode[c];
-        if (encoded) {
-            res += encoded;
-        } else {
-            res += encodeURI(c);
+    try {
+        for (let i = 0; i < value.length; ++i) {
+            const c = value[i];
+            const encoded = toEncode[c];
+            if (encoded) {
+                res += encoded;
+            } else {
+                res += encodeURI(c);
+            }
         }
+    } catch (e) {
+        // emoji fix
+        return encodeURI(value);
     }
     return res;
 }
