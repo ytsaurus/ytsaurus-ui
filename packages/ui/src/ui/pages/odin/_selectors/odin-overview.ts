@@ -7,8 +7,11 @@ import {OdinTab} from '../odin-constants';
 import {ODIN_LAST_VISITED_TAB} from '../odin-settings';
 import {NAMESPACES} from '../../../../shared/constants/settings';
 
-export const getOdinOverviewDateFrom = (state: OdinRootState) => state.odin.overview.dateFrom;
-export const getOdinOverviewDateTo = (state: OdinRootState) => state.odin.overview.dateTo;
+export const getOdinOverviewTimeFromFilter = (state: OdinRootState) =>
+    state.odin.overview.timeFromFilter;
+export const getOdinOverviewTimeFrom = (state: OdinRootState) => state.odin.overview.timeFrom;
+export const getOdinOverviewTimeTo = (state: OdinRootState) => state.odin.overview.timeTo;
+export const getOdinOverviewLoading = (state: OdinRootState) => state.odin.overview.loading;
 export const getOdinOverviewData = (state: OdinRootState) => state.odin.overview.data;
 export const getOdinOverviewDataCluster = (state: OdinRootState) => state.odin.overview.dataCluster;
 const getOdinOverviewHiddenMetricsRaw = (state: OdinRootState) => state.odin.overview.hiddenMetrics;

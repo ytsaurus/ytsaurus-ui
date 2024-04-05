@@ -4,6 +4,7 @@ import Odin, {IndependentOdin} from './controls/Odin';
 import OdinTopRowContent from './controls/OdinTopRowContent';
 import reducers from './_reducers';
 import {
+    getOdinOverviewPreparedState,
     getOdinPreparedState,
     odinIndependentParams,
     odinOverviewParams,
@@ -20,6 +21,7 @@ export const odinPageInfo: UIFactoryClusterPageInfo = {
     topRowComponent: OdinTopRowContent,
     urlMapping: {
         [`/*/odin/details`]: [odinParams, getOdinPreparedState],
+        [`/*/odin/overview`]: [odinOverviewParams, getOdinOverviewPreparedState],
     },
 };
 
@@ -30,6 +32,6 @@ export const odinRootPageInfo: UIFactoryRootPageInfo = {
     reducers: {},
     urlMapping: {
         [`/odin/details`]: [odinIndependentParams, getOdinPreparedState],
-        [`/odin/overview`]: [odinOverviewParams, getOdinPreparedState],
+        [`/odin/overview`]: [odinOverviewParams, getOdinOverviewPreparedState],
     },
 };

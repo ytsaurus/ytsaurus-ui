@@ -4,29 +4,43 @@ import * as d3 from 'd3';
 import moment from 'moment';
 import _map from 'lodash/map';
 
+import {DatePicker} from '@gravity-ui/date-components';
+
+import {absolute} from '../../../common/utils/url-ts';
+
+import {ChevronLeft, ChevronRight} from '@gravity-ui/icons';
+
 import hammer from '../../../common/hammer';
+
+import {dateTime} from '@gravity-ui/date-utils';
 
 import {useDispatch, useSelector} from 'react-redux';
 import {
-    fetchOdinOverview,
+    ODIN_OVERVIEW_TIME_RANGE,
     odinOverviewRemovePreset,
     odinOverviewSelectPreset,
     odinOverviewSetAllMetricsVisible,
+    odinOverviewSetNextTimeRange,
     odinOverviewSetPresetToRemove,
+    odinOverviewSetPreviousTimeRange,
     odinOverviewShowCreatePresetDialog,
     odinOverviewToggleDefaultPreset,
+    reloadOdinOverview,
     reloadOdinOverviewMetricData,
     setOdinLastVisitedTab,
+    setOdinOverviewFromTimeFilter,
     toggleOdinOverviewMetricVisibility,
 } from '../_actions/odin-overview';
 import {
     OdinOverviewPreset,
     getOdinOverviewClusterMetrics,
     getOdinOverviewData,
-    getOdinOverviewDateFrom,
-    getOdinOverviewDateTo,
     getOdinOverviewHiddenMetrics,
+    getOdinOverviewLoading,
     getOdinOverviewPresetToRemove,
+    getOdinOverviewTimeFrom,
+    getOdinOverviewTimeFromFilter,
+    getOdinOverviewTimeTo,
     getOdinOverviewVisiblePresets,
 } from '../_selectors/odin-overview';
 import {MetricData, MetricListItem} from '../odin-utils';
@@ -36,7 +50,7 @@ import Link from '../../../components/Link/Link';
 import {YTDFDialog} from '../../../components/Dialog/Dialog';
 
 import ErrorBoundary from '../../../components/ErrorBoundary/ErrorBoundary';
-import {Dialog, Popup} from '@gravity-ui/uikit';
+import {Button, Dialog, Loader, Popup} from '@gravity-ui/uikit';
 import {setMetric} from '../_actions';
 import Icon from '../../../components/Icon/Icon';
 import OdinOverviewCreatePresetDialog from './OdinOverviewCreatePresetDialog';
@@ -44,22 +58,20 @@ import OdinOverviewCreatePresetDialog from './OdinOverviewCreatePresetDialog';
 import {ODIN_CELL_SIZE, OdinTab} from '../odin-constants';
 
 import './OdinOverview.scss';
-import {absolute} from '../../../common/utils/url-ts';
+import WithStickyToolbar from '../../../components/WithStickyToolbar/WithStickyToolbar';
+import {useUpdater} from '../../../hooks/use-updater';
 
 const block = cn('odin-overview');
 
 function useOdinOverviewDataLoader(cluster: string) {
     const dispatch = useDispatch();
-    React.useEffect(() => {
-        const f = () => {
-            dispatch(fetchOdinOverview(cluster));
-        };
-        f();
-        const id = window.setInterval(f, 60 * 1000);
-        return () => {
-            clearInterval(id);
-        };
-    }, [cluster]);
+
+    const timeFromFilter = useSelector(getOdinOverviewTimeFromFilter);
+    const updateFn = React.useCallback(() => {
+        dispatch(reloadOdinOverview(cluster, timeFromFilter));
+    }, [cluster, timeFromFilter, dispatch]);
+
+    useUpdater(updateFn, {timeout: 60 * 1000});
 }
 
 const DATE_FORMAT = 'D MMM ';
@@ -188,8 +200,11 @@ function OdinOverview(props: OdinOverviewProps) {
     const {cluster} = props;
     useOdinOverviewDataLoader(cluster);
 
-    const from = useSelector(getOdinOverviewDateFrom);
-    const to = useSelector(getOdinOverviewDateTo);
+    const fromFilter = useSelector(getOdinOverviewTimeFromFilter);
+    const from = useSelector(getOdinOverviewTimeFrom);
+    const to = useSelector(getOdinOverviewTimeTo);
+    const loading = useSelector(getOdinOverviewLoading);
+
     const clusterMetrics = useSelector(getOdinOverviewClusterMetrics);
     const data = useSelector(getOdinOverviewData);
     const hiddenMap = useSelector(getOdinOverviewHiddenMetrics);
@@ -233,63 +248,134 @@ function OdinOverview(props: OdinOverviewProps) {
         return null;
     }
 
-    const format = formatByDates(from, to);
+    const fromDate = new Date(from);
+    const toDate = new Date(to);
+    const format = formatByDates(fromDate, toDate);
+
     return (
         <ErrorBoundary>
-            <div className={block()}>
-                <div className={block('grid')}>
-                    <div className={block('dates')}>
-                        <div className={block('dates-item')}>
-                            <span>{moment(from).format(format)}</span>
+            <WithStickyToolbar
+                toolbar={
+                    <div className={block('navigation')}>
+                        <Button
+                            view="outlined"
+                            size="xs"
+                            onClick={() => {
+                                dispatch(odinOverviewSetPreviousTimeRange());
+                            }}
+                            className={block('navigation-button', {icon: true})}
+                            pin="round-brick"
+                        >
+                            <ChevronLeft />
+                        </Button>
+                        <DatePicker
+                            className={block('navigation-date-picker')}
+                            size="m"
+                            format="MM/DD/YYYY HH:mm"
+                            maxValue={dateTime({input: Date.now() - ODIN_OVERVIEW_TIME_RANGE})}
+                            onUpdate={(value) => {
+                                dispatch(setOdinOverviewFromTimeFilter(value?.valueOf()));
+                            }}
+                            value={dateTime({input: Number(fromFilter ?? from)})}
+                            pin="clear-clear"
+                        />
+                        <Button
+                            view="outlined"
+                            size="xs"
+                            onClick={() => {
+                                dispatch(odinOverviewSetNextTimeRange());
+                            }}
+                            disabled={fromFilter === undefined}
+                            className={block('navigation-button', {icon: true})}
+                            pin="brick-round"
+                        >
+                            <ChevronRight />
+                        </Button>
+
+                        <Button
+                            view="flat-action"
+                            size="xs"
+                            disabled={fromFilter === undefined}
+                            onClick={() => {
+                                dispatch(setOdinOverviewFromTimeFilter(undefined));
+                            }}
+                            className={block('navigation-button', {reset: true})}
+                        >
+                            Now
+                        </Button>
+
+                        {loading && <Loader />}
+                    </div>
+                }
+                content={
+                    <>
+                        <div className={block()}>
+                            <div className={block('grid')}>
+                                <div className={block('dates')}>
+                                    <div className={block('dates-item')}>
+                                        <span>{moment(from).format(format)}</span>
+                                    </div>
+                                    <div className={block('dates-item')}>
+                                        <span className={block('dates-item-to')}>
+                                            {moment(to).add(-1, 'minute').format(format)}
+                                        </span>
+                                    </div>
+                                </div>
+                                <div className={block('show-hide-all')}>
+                                    <Link
+                                        theme={'ghost'}
+                                        onClick={() =>
+                                            dispatch(odinOverviewSetAllMetricsVisible(true))
+                                        }
+                                    >
+                                        Show all
+                                    </Link>
+                                    <span> / </span>
+                                    <Link
+                                        theme={'ghost'}
+                                        onClick={() =>
+                                            dispatch(odinOverviewSetAllMetricsVisible(false))
+                                        }
+                                    >
+                                        Hide all
+                                    </Link>
+                                </div>
+                                <div className={block('save')}>
+                                    <Link
+                                        theme={'ghost'}
+                                        onClick={() =>
+                                            dispatch(odinOverviewShowCreatePresetDialog(true))
+                                        }
+                                    >
+                                        <Icon awesome={'save'} />
+                                    </Link>
+                                </div>
+                                {clusterMetrics.map((item) => {
+                                    return (
+                                        <OverviewRow
+                                            key={item.name}
+                                            item={item}
+                                            data={data[item.name]}
+                                            onTooltip={onTooltip}
+                                            onClick={onClick}
+                                            hidden={hiddenMap[item.name]}
+                                        />
+                                    );
+                                })}
+                            </div>
                         </div>
-                        <div className={block('dates-item')}>
-                            <span className={block('dates-item-to')}>
-                                {moment(to).add(-1, 'minute').format(format)}
-                            </span>
-                        </div>
-                    </div>
-                    <div className={block('show-hide-all')}>
-                        <Link
-                            theme={'ghost'}
-                            onClick={() => dispatch(odinOverviewSetAllMetricsVisible(true))}
-                        >
-                            Show all
-                        </Link>
-                        <span> / </span>
-                        <Link
-                            theme={'ghost'}
-                            onClick={() => dispatch(odinOverviewSetAllMetricsVisible(false))}
-                        >
-                            Hide all
-                        </Link>
-                    </div>
-                    <div className={block('save')}>
-                        <Link
-                            theme={'ghost'}
-                            onClick={() => dispatch(odinOverviewShowCreatePresetDialog(true))}
-                        >
-                            <Icon awesome={'save'} />
-                        </Link>
-                    </div>
-                    {clusterMetrics.map((item) => {
-                        return (
-                            <OverviewRow
-                                key={item.name}
-                                item={item}
-                                data={data[item.name]}
-                                onTooltip={onTooltip}
-                                onClick={onClick}
-                                hidden={hiddenMap[item.name]}
+                        <OdinOverviewTooltip {...tooltipData} from={new Date(from)} />
+                        {dialogData && (
+                            <OdinOverviewDetailsDialog
+                                {...dialogData}
+                                from={new Date(from)}
+                                onClose={onClose}
                             />
-                        );
-                    })}
-                </div>
-            </div>
-            <OdinOverviewTooltip {...tooltipData} from={from} />
-            {dialogData && (
-                <OdinOverviewDetailsDialog {...dialogData} from={from} onClose={onClose} />
-            )}
-            <OdinOverviewRemoveConfirmationDialog />
+                        )}
+                        <OdinOverviewRemoveConfirmationDialog />
+                    </>
+                }
+            />
         </ErrorBoundary>
     );
 }

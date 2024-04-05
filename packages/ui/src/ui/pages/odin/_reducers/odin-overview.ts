@@ -20,8 +20,10 @@ export interface OdinOverviewState {
     dataCluster: string;
     clusterMetrics: Array<MetricListItem>;
     data: {[metricName: string]: OdinOverviewStateDataItem};
-    dateFrom: Date | null;
-    dateTo: Date | null;
+    timeFrom: number | null;
+    timeTo: number | null;
+
+    timeFromFilter: number | undefined;
 
     hiddenMetrics: {[metricName: string]: boolean};
     showCreatePresetDialog: boolean;
@@ -36,7 +38,7 @@ export interface OdinOverviewStateDataItem {
     error?: any;
 }
 
-const initialState: OdinOverviewState = {
+export const initialState: OdinOverviewState = {
     error: null,
     loaded: false,
     loading: false,
@@ -44,8 +46,10 @@ const initialState: OdinOverviewState = {
     dataCluster: '', // the field is required to skip responces from another clusters
     clusterMetrics: [],
     data: {},
-    dateFrom: null,
-    dateTo: null,
+    timeFrom: null,
+    timeTo: null,
+
+    timeFromFilter: undefined,
 
     hiddenMetrics: {},
     showCreatePresetDialog: false,
@@ -64,7 +68,6 @@ function reducer(
         case ODIN_OVERVIEW_SUCCESS:
             return {
                 ...state,
-                ...action.data,
                 loaded: true,
                 loading: false,
                 error: null,
@@ -93,10 +96,7 @@ function reducer(
 
 export type OdinOverviewAction =
     | Action<typeof ODIN_OVERVIEW_REQUEST>
-    | ActionD<
-          typeof ODIN_OVERVIEW_SUCCESS,
-          Pick<OdinOverviewState, 'clusterMetrics' | 'dateFrom' | 'dateTo'>
-      >
+    | Action<typeof ODIN_OVERVIEW_SUCCESS>
     | ActionD<
           typeof ODIN_OVERVIEW_PARTIAL,
           Partial<
