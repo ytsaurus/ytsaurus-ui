@@ -50,7 +50,7 @@ export interface SchedulingEphemeralState {
     deleteItem?: PoolInfo;
 
     attributesToFilter: undefined | Record<string, {parent?: string; abc: {id: number}}>;
-    attributesToFilterTime: number;
+    attributesToFilterParams: {lastTime: number; lastTree: string};
 }
 
 export interface TreeResources {
@@ -100,7 +100,7 @@ const ephemeralState: SchedulingEphemeralState = {
     deleteItem: undefined,
 
     attributesToFilter: undefined,
-    attributesToFilterTime: 0,
+    attributesToFilterParams: {lastTime: 0, lastTree: ''},
 };
 
 const persistedState: SchedulingPersistentState = {

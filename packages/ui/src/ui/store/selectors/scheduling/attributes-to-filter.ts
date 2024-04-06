@@ -11,8 +11,8 @@ export const getSchedulingAbcFilter = (state: RootState) =>
 
 export const getSchedulingAttributesToFilter = (state: RootState) =>
     state.scheduling.scheduling.attributesToFilter;
-export const getSchedulingAttributesToFilterTime = (state: RootState) =>
-    state.scheduling.scheduling.attributesToFilterTime;
+export const getSchedulingAttributesToFilterParams = (state: RootState) =>
+    state.scheduling.scheduling.attributesToFilterParams;
 
 export const schedulingOverviewHasFilter = (state: RootState) => {
     const nameFilter = getSchedulingFilter(state);

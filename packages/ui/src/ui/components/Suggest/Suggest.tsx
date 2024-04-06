@@ -65,6 +65,7 @@ export interface SuggestProps {
 
     zIndexGroupLevel?: number;
     onBlur?: () => void;
+    onFocus?: () => void;
     onKeyDown?: (e: React.KeyboardEvent<HTMLElement>) => void;
     pin?: TextInputProps['pin'];
     onOpenChange?: (p: {open: boolean}) => void;
@@ -166,6 +167,7 @@ export default class Suggest extends Component<SuggestProps, State> {
         this.isClearClicked = false;
         this.loadSuggestions(this.state.text);
         this.skipApplyForNextBlur = false;
+        this.props.onFocus?.();
     }
 
     onBlur() {
