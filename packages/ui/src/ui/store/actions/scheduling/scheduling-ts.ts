@@ -48,7 +48,7 @@ import type {RootState} from '../../../store/reducers';
 import type {SchedulingAction} from '../../../store/reducers/scheduling/scheduling';
 import type {PoolInfo} from '../../../store/selectors/scheduling/scheduling-pools';
 import {
-    getSchedulingAttributesToFilterTime,
+    getSchedulingAttributesToFilterParams,
     schedulingOverviewHasFilter,
 } from '../../../store/selectors/scheduling/attributes-to-filter';
 import {USE_CACHE} from '../../../../shared/constants/yt-api';
@@ -63,10 +63,6 @@ export function loadSchedulingData(): SchedulingThunkAction {
 
         const state = getState();
         const isInitialLoading = getSchedulingIsInitialLoading(state);
-
-        if (isInitialLoading && schedulingOverviewHasFilter(state)) {
-            dispatch(schedulingLoadFilterAttributes());
-        }
 
         const cluster = getCluster(state);
         const rumId = new RumWrapper(cluster, RumMeasureTypes.SCHEDULING);
@@ -100,6 +96,10 @@ export function loadSchedulingData(): SchedulingThunkAction {
                     trees,
                     state.scheduling.scheduling.tree,
                 );
+
+                if (isInitialLoading) {
+                    dispatch(schedulingLoadFilterAttributes(tree, {checkFilters: true}));
+                }
 
                 dispatch({
                     type: SCHEDULING_DATA_PARTITION,
@@ -329,17 +329,25 @@ function transferPoolQuota({poolPath, transferData, tree}: TransferPoolQuotaPara
         });
 }
 
-export function schedulingLoadFilterAttributes(): SchedulingThunkAction {
+export function schedulingLoadFilterAttributes(
+    tree: string,
+    {checkFilters}: {checkFilters?: boolean} = {},
+): SchedulingThunkAction {
     return (dispatch, getState) => {
         const state = getState();
-        const lastTime = getSchedulingAttributesToFilterTime(state);
-        if (Date.now() - lastTime < 120000) {
+
+        if (checkFilters && !schedulingOverviewHasFilter(state)) {
+            return undefined;
+        }
+
+        const {lastTime, lastTree} = getSchedulingAttributesToFilterParams(state);
+        if (tree === lastTree && Date.now() - lastTime < 120000) {
             return undefined;
         }
 
         return wrapApiPromiseByToaster(
             ytApiV3Id.get(YTApiId.schedulingFilterAttributes, {
-                path: '//sys/scheduler/orchid/scheduler/pool_trees/physical/pools',
+                path: `//sys/scheduler/orchid/scheduler/pool_trees/${tree}/pools`,
                 fields: ['parent', 'abc'],
                 ...USE_CACHE,
             }),
@@ -351,15 +359,18 @@ export function schedulingLoadFilterAttributes(): SchedulingThunkAction {
         ).then((attributesToFilter) => {
             dispatch({
                 type: SCHEDULING_DATA_PARTITION,
-                data: {attributesToFilter, attributesToFilterTime: Date.now()},
+                data: {
+                    attributesToFilter,
+                    attributesToFilterParams: {lastTime: Date.now(), lastTree: tree},
+                },
             });
         });
     };
 }
 
 export function schedulingSetFilter(filter: string): SchedulingThunkAction {
-    return (dispatch) => {
-        dispatch(schedulingLoadFilterAttributes());
+    return (dispatch, getState) => {
+        dispatch(schedulingLoadFilterAttributes(getTree(getState())));
         dispatch({
             type: SCHEDULING_DATA_PARTITION,
             data: {filter},
@@ -371,8 +382,8 @@ export function schedulingSetAbcFilter(abcServiceFilter: {
     id: number;
     slug: string;
 }): SchedulingThunkAction {
-    return (dispatch) => {
-        dispatch(schedulingLoadFilterAttributes());
+    return (dispatch, getState) => {
+        dispatch(schedulingLoadFilterAttributes(getTree(getState())));
         dispatch({
             type: SCHEDULING_DATA_PARTITION,
             data: {abcServiceFilter},

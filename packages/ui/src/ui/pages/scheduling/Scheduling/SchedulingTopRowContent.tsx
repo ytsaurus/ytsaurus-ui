@@ -217,11 +217,8 @@ function EditableSchedulingBreadcrumbs() {
 function PoolsSuggest(props: {onCancelEdit: () => void}) {
     const {onCancelEdit} = props;
     const poolNames = useSelector(getPoolsNames);
+    const tree = useSelector(getTree);
     const dispatch = useDispatch();
-
-    React.useEffect(() => {
-        dispatch(schedulingLoadFilterAttributes());
-    }, [dispatch]);
 
     const getSuggestItems = React.useCallback(
         (_items: any, filter?: string) => {
@@ -262,14 +259,20 @@ function PoolsSuggest(props: {onCancelEdit: () => void}) {
         [dispatch, onCancelEdit],
     );
 
+    const onFocus = React.useCallback(() => {
+        dispatch(schedulingLoadFilterAttributes(tree));
+    }, [dispatch, tree]);
+
     return (
         <Suggest
             popupClassName={block('pool-suggest-popup')}
             autoFocus
             filter={getSuggestItems}
             onBlur={handleCancelEdit}
+            onFocus={onFocus}
             placeholder="Select pool..."
             onItemClick={(item) => onItemClick('string' === typeof item ? item : item.value)}
+            items={poolNames}
         />
     );
 }
