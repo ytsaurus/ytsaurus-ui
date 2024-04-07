@@ -44,7 +44,7 @@ if (authMiddlewares.length) {
 
 nodekit.config.adjustAppConfig?.(nodekit);
 
-const configurationErrors = createConfigurationErrorsMidleware(nodekit.config);
+const configurationErrors = createConfigurationErrorsMidleware(nodekit);
 if (configurationErrors) {
     nodekit.config.appBeforeAuthMiddleware = [configurationErrors];
 }
