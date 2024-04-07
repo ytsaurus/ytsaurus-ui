@@ -1,6 +1,6 @@
 import type {Request, Response} from 'express';
 import {AppMiddleware} from '@gravity-ui/expresskit';
-import {AppConfig} from '@gravity-ui/nodekit';
+import {NodeKit} from '@gravity-ui/nodekit';
 
 function checkConfigurationMiddleware(errors: Array<string>): AppMiddleware {
     return function checkConfiguration(_req: Request, res: Response) {
@@ -15,11 +15,11 @@ function checkConfigurationMiddleware(errors: Array<string>): AppMiddleware {
     };
 }
 
-export function createConfigurationErrorsMidleware(config: AppConfig) {
+export function createConfigurationErrorsMidleware({ctx, config}: NodeKit) {
     const configurationErrors: Array<string> = [];
     if (process.env.YT_AUTH_CLUSTER_ID) {
-        configurationErrors.push(
-            'The YT_AUTH_CLUSTER_ID environment variable is no longer supported, please replace it with ALLOW_PASSWORD_AUTH',
+        ctx.logError(
+            'The YT_AUTH_CLUSTER_ID environment variable is depricated, please replace it with ALLOW_PASSWORD_AUTH',
         );
     }
 

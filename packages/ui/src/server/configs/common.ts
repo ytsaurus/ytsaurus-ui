@@ -5,9 +5,11 @@ import {AppConfig} from '@gravity-ui/nodekit';
 
 const path = require('path');
 
+const {ALLOW_PASSWORD_AUTH, YT_AUTH_CLUSTER_ID, YT_AUTH_ALLOW_INSECURE} = process.env;
+
 const ytAuthConfig: Partial<AppConfig> = {
-    allowPasswordAuth: Boolean(process.env.ALLOW_PASSWORD_AUTH),
-    ytAuthAllowInsecure: Boolean(process.env.YT_AUTH_ALLOW_INSECURE),
+    allowPasswordAuth: Boolean(ALLOW_PASSWORD_AUTH || YT_AUTH_CLUSTER_ID),
+    ytAuthAllowInsecure: Boolean(YT_AUTH_ALLOW_INSECURE),
     appAuthPolicy: AuthPolicy.required,
 };
 
