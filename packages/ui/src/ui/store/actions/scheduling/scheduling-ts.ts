@@ -368,16 +368,6 @@ export function schedulingLoadFilterAttributes(
     };
 }
 
-export function schedulingSetFilter(filter: string): SchedulingThunkAction {
-    return (dispatch, getState) => {
-        dispatch(schedulingLoadFilterAttributes(getTree(getState())));
-        dispatch({
-            type: SCHEDULING_DATA_PARTITION,
-            data: {filter},
-        });
-    };
-}
-
 export function schedulingSetAbcFilter(abcServiceFilter: {
     id: number;
     slug: string;

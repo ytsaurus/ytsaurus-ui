@@ -199,7 +199,7 @@ function EditableSchedulingBreadcrumbs() {
     return (
         <div className={block('editable-breadcrumbs', {edit: editMode})}>
             {editMode ? (
-                <PoolsSuggest onCancelEdit={toggleEdit} />
+                <PoolsSuggest autoFocus onCancelEdit={toggleEdit} />
             ) : (
                 <React.Fragment>
                     <SchedulingBreadcrumbs />

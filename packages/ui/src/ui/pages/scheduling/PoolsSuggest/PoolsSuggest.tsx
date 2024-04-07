@@ -14,8 +14,15 @@ import './PoolsSuggest.scss';
 
 const block = cn('yt-pools-suggest');
 
-export function PoolsSuggest(props: {onCancelEdit: () => void}) {
-    const {onCancelEdit} = props;
+export function PoolsSuggest({
+    onCancelEdit = () => {},
+    className,
+    autoFocus,
+}: {
+    onCancelEdit?: () => void;
+    className?: string;
+    autoFocus?: boolean;
+}) {
     const poolNames = useSelector(getPoolsNames);
     const tree = useSelector(getTree);
     const dispatch = useDispatch();
@@ -65,8 +72,9 @@ export function PoolsSuggest(props: {onCancelEdit: () => void}) {
 
     return (
         <Suggest
+            className={block(null, className)}
             popupClassName={block('popup')}
-            autoFocus
+            autoFocus={autoFocus}
             filter={getSuggestItems}
             onBlur={handleCancelEdit}
             onFocus={onFocus}

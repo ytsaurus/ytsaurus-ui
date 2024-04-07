@@ -64,7 +64,6 @@ export interface SchedulingAlert {}
 
 export interface SchedulingPersistentState {
     treeState: 'collapsed' | 'expanded';
-    filter: string;
     poolChildrenFilter: '';
     contentMode: 'cpu' | 'memory' | 'gpu' | 'user_slots' | 'operations' | 'integral';
 
@@ -105,7 +104,6 @@ const ephemeralState: SchedulingEphemeralState = {
 
 const persistedState: SchedulingPersistentState = {
     treeState: 'collapsed',
-    filter: '',
     poolChildrenFilter: '',
     contentMode: 'cpu',
     tree: '',

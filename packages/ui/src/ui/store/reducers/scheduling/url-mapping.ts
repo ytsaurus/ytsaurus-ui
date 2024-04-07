@@ -38,10 +38,6 @@ export function getSchedulingPreparedState(state: RootState, {query}: {query: Ro
 
 export const schedulingOverviewParams = {
     ...schedulingParams,
-    filter: {
-        stateKey: 'scheduling.scheduling.filter',
-        initialState: schedulingInitialState.filter,
-    },
     sortState: {
         stateKey: `tables.${SCHEDULING_POOL_TREE_TABLE_ID}`,
         initialState: {...tableSortState[SCHEDULING_POOL_TREE_TABLE_ID]},
@@ -62,7 +58,6 @@ export const schedulingOverviewParams = {
 export function getSchedulingOverviewPreparedState(state: RootState, {query}: {query: RootState}) {
     state = getSchedulingPreparedState(state, {query});
     return produce(state, (draft) => {
-        updateIfChanged(draft.scheduling.scheduling, 'filter', query.scheduling.scheduling.filter);
         updateIfChanged(
             draft.scheduling.scheduling,
             'abcServiceFilter',
