@@ -56,11 +56,6 @@
         flex-grow: 1;
     }
 
-    &__pool-suggest-popup {
-        min-width: 220px;
-        z-index: var(--dialog-suggest-z-index) !important;
-    }
-
     &__actions {
         display: flex;
         align-items: center;
