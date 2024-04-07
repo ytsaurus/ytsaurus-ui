@@ -5,7 +5,6 @@ import forEach_ from 'lodash/forEach';
 import {RootState} from '../../reducers';
 import {getSchedulingPoolsMapByName} from './scheduling-pools';
 
-export const getSchedulingFilter = (state: RootState) => state.scheduling.scheduling.filter;
 export const getSchedulingAbcFilter = (state: RootState) =>
     state.scheduling.scheduling.abcServiceFilter;
 
@@ -15,40 +14,26 @@ export const getSchedulingAttributesToFilterParams = (state: RootState) =>
     state.scheduling.scheduling.attributesToFilterParams;
 
 export const schedulingOverviewHasFilter = (state: RootState) => {
-    const nameFilter = getSchedulingFilter(state);
     const abcFilter = getSchedulingAbcFilter(state);
 
-    return hasOverviewFilter({nameFilter, abcId: abcFilter?.id});
+    return abcFilter?.id !== undefined;
 };
 
-function hasOverviewFilter(filter: {nameFilter?: string; abcId?: number}) {
-    const {nameFilter, abcId} = filter;
-    return Boolean(nameFilter) || abcId !== undefined;
-}
-
 export const getSchedulingFilteredPoolNames = createSelector(
-    [
-        getSchedulingAttributesToFilter,
-        getSchedulingPoolsMapByName,
-        getSchedulingFilter,
-        getSchedulingAbcFilter,
-    ],
-    (attrsToFilter, loadedPools, nameFilter, abcFilter) => {
+    [getSchedulingAttributesToFilter, getSchedulingPoolsMapByName, getSchedulingAbcFilter],
+    (attrsToFilter, loadedPools, abcFilter) => {
         if (!attrsToFilter) {
             return undefined;
         }
 
-        if (!hasOverviewFilter({nameFilter, abcId: abcFilter?.id})) {
+        if (abcFilter?.id === undefined) {
             return undefined;
         }
 
         const res = reduce_(
             attrsToFilter,
             (acc, attrs, key) => {
-                if (hasOverviewFilter({nameFilter}) && -1 === key.indexOf(nameFilter)) {
-                    return acc;
-                }
-                if (hasOverviewFilter({abcId: abcFilter?.id}) && attrs.abc?.id !== abcFilter?.id) {
+                if (attrs.abc?.id !== abcFilter?.id) {
                     return acc;
                 }
 

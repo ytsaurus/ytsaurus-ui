@@ -11,7 +11,6 @@ import {FormattedLink, FormattedText} from '../../../../../components/formatters
 
 import ClickableAttributesButton from '../../../../../components/AttributesButton/ClickableAttributesButton';
 import ErrorBoundary from '../../../../../components/ErrorBoundary/ErrorBoundary';
-import Filter from '../../../../../components/Filter/Filter';
 import Button from '../../../../../components/Button/Button';
 import Label from '../../../../../components/Label/Label';
 import Link from '../../../../../components/Link/Link';
@@ -25,7 +24,6 @@ import {
 import {
     openPoolDeleteModal,
     schedulingSetAbcFilter,
-    schedulingSetFilter,
 } from '../../../../../store/actions/scheduling/scheduling-ts';
 import {
     getCurrentPool,
@@ -36,10 +34,7 @@ import {
     getTableItems,
     getTree,
 } from '../../../../../store/selectors/scheduling/scheduling';
-import {
-    getSchedulingAbcFilter,
-    getSchedulingFilter,
-} from '../../../../../store/selectors/scheduling/attributes-to-filter';
+import {getSchedulingAbcFilter} from '../../../../../store/selectors/scheduling/attributes-to-filter';
 import {SCHEDULING_POOL_TREE_TABLE_ID, Tab} from '../../../../../constants/scheduling';
 import {poolsTableItems} from '../../../../../utils/scheduling/overviewTable';
 import {HEADER_HEIGHT, Page} from '../../../../../constants/index';
@@ -63,6 +58,7 @@ import {
     setExpandedPool,
     setLoadAllOperations,
 } from '../../../../../store/actions/scheduling/expanded-pools';
+import {PoolsSuggest} from '../../../../../pages/scheduling/PoolsSuggest/PoolsSuggest';
 import PoolTags from './PoolTags';
 import UIFactory from '../../../../../UIFactory';
 
@@ -99,7 +95,6 @@ class Overview extends Component {
         // from connect
         treeState: PropTypes.string.isRequired,
         cluster: PropTypes.string.isRequired,
-        filter: PropTypes.string.isRequired,
         items: PropTypes.arrayOf(Overview.tableItemPropTypes).isRequired,
         currentPool: PropTypes.shape({
             name: PropTypes.string.isRequired,
@@ -308,7 +303,6 @@ class Overview extends Component {
                     cluster,
                     pool: item.name,
                     page: Page.SCHEDULING,
-                    filter: '',
                 };
                 return <FormattedLink text={text} state={state} theme="primary" routed />;
             }
@@ -488,7 +482,6 @@ class Overview extends Component {
 }
 
 const mapStateToProps = (state) => {
-    const filter = getSchedulingFilter(state);
     const items = getTableItems(state);
     const itemsMaxDepth = getSchedulingOverviewMaxDepth(state);
     const cluster = getCluster(state);
@@ -500,7 +493,6 @@ const mapStateToProps = (state) => {
 
     return {
         cluster,
-        filter,
         items,
         itemsMaxDepth,
         currentPool,
@@ -514,7 +506,6 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = {
     changePool,
     openPoolDeleteModal,
-    schedulingSetFilter,
     openEditModal,
     changeTableTreeState,
     schedulingSetAbcFilter,
@@ -576,7 +567,6 @@ class SchedulingOverviewToolbar extends React.PureComponent {
         confirmExpandDialogVisible: false,
     };
 
-    handleFilterChange = (value) => this.props.schedulingSetFilter(value);
     handleExpand = () => {
         const opCount = this.props.getSchedulingOperationsCount();
         if (opCount <= 2000) {
@@ -630,22 +620,13 @@ class SchedulingOverviewToolbar extends React.PureComponent {
 
     render() {
         const {
-            filter,
             abcServiceFilter: {slug},
-            currentPool,
         } = this.props;
 
         return (
             <React.Fragment>
                 {this.renderConfirmExpandDialog()}
-                <Filter
-                    key={currentPool?.name}
-                    size="m"
-                    value={filter}
-                    placeholder="Filter..."
-                    className={block('filter')}
-                    onChange={this.handleFilterChange}
-                />
+                <PoolsSuggest className={block('filter')} />
 
                 {UIFactory.renderControlAbcService({
                     className: block('abc-filter'),
