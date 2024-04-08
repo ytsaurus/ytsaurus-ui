@@ -319,7 +319,9 @@ export const getAllColumnGroupsActual = createSelector(
                       -1 !== item.name?.toLowerCase().indexOf(nameFilterLower) ?? false
                 : undefined,
         ]);
-        const filtered = _.filter(items, concatByAnd(...predicates));
+        const filtered = _.filter(items, concatByAnd(...predicates)).map((item) => {
+            return {...item, columns: sortBy(item.columns)};
+        });
         return _.sortBy(filtered, ['name']);
     },
 );
