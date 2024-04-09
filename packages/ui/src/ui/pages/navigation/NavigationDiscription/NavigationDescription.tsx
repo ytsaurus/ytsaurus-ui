@@ -19,7 +19,10 @@ import {AnnotationWithPartial} from './AnnotationWithPartial';
 import {ActionButtons} from './ActionButtons';
 import {EditAnnotationWithPreview} from '../../../components/EditAnnotationWithPreview/EditAnnotationWithPreview';
 import {saveAnnotation} from '../../../store/actions/navigation/tabs/annotation';
-import {SET_ANNOTATION_EDITING} from '../../../constants/navigation/tabs/annotation';
+import {
+    SET_ANNOTATION,
+    SET_ANNOTATION_EDITING,
+} from '../../../constants/navigation/tabs/annotation';
 import {UI_COLLAPSIBLE_SIZE} from '../../../constants/global';
 
 const block = cn('navigation-description');
@@ -37,7 +40,7 @@ const NavigationDescription: FC<Props> = ({className}) => {
     const isEditing = useSelector(getNavigationAnnotationEditing);
     const annotationPath = useSelector(getNavigationAnnotationPath);
     const error = useSelector(getNavigationAnnotationError);
-    const newAnnotation = useRef<string>(annotation);
+    const oldValue = useRef<string>(annotation);
 
     const expanded = visibility === AnnotationVisibility.VISIBLE;
     const handleToggleAnnotationCollapse = useCallback(() => {
@@ -49,20 +52,24 @@ const NavigationDescription: FC<Props> = ({className}) => {
     }, [dispatch, expanded]);
 
     const handleEditClick = useCallback(() => {
+        oldValue.current = annotation;
         dispatch({type: SET_ANNOTATION_EDITING, data: true});
-    }, [dispatch]);
-
-    const handleCancelClick = useCallback(() => {
-        newAnnotation.current = annotation;
-        dispatch({type: SET_ANNOTATION_EDITING, data: false});
     }, [annotation, dispatch]);
 
-    const handleChangeDescription = useCallback(({value}: {value: string | undefined}) => {
-        newAnnotation.current = value || '';
-    }, []);
+    const handleCancelClick = useCallback(() => {
+        dispatch({type: SET_ANNOTATION, data: oldValue.current});
+        dispatch({type: SET_ANNOTATION_EDITING, data: false});
+    }, [dispatch]);
+
+    const handleChangeDescription = useCallback(
+        ({value}: {value: string | undefined}) => {
+            dispatch({type: SET_ANNOTATION, data: value || ''});
+        },
+        [dispatch],
+    );
 
     const handleSaveClick = useCallback(() => {
-        dispatch(saveAnnotation({path, annotation: newAnnotation.current}));
+        dispatch(saveAnnotation(path));
     }, [dispatch, path]);
 
     if (!(path === annotationPath && (error || annotation))) return null;
@@ -88,7 +95,7 @@ const NavigationDescription: FC<Props> = ({className}) => {
                     {isEditing ? (
                         <EditAnnotationWithPreview
                             valuePath={path}
-                            value={{value: newAnnotation.current}}
+                            value={{value: annotation}}
                             initialValue={{value: annotation}}
                             onChange={handleChangeDescription}
                             className={block('edit-block')}
