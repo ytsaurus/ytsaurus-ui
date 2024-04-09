@@ -84,7 +84,9 @@ export function itemNavigationAllowed(item: {
             return false;
         }
 
-        return hasViewerForType(item.type);
+        const noAccess = item.type === undefined;
+
+        return hasViewerForType(item.type) || noAccess;
     }
 
     return false;
