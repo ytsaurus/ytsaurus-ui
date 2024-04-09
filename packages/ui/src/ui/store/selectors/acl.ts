@@ -208,28 +208,42 @@ export const getObjectPermissionsAggregated = createSelector(
 class AggregateBySubject {
     allPermissions = new Set<YTPermissionTypeUI>();
     columns = new Set<string>();
+    first: ObjectPermissionsRow;
+    subject: ObjectPermissionsRow['subjects'][number];
     children = new Array<ObjectPermissionsRow & {expanded?: boolean; level?: number}>();
 
-    subject: string | number;
+    constructor(first: AggregateBySubject['first']) {
+        if (first.subjects.length > 1) {
+            throw new Error(
+                `Unexpected behavior: more than one subject occured: ${first.subjects.join(',')}`,
+            );
+        }
 
-    constructor(subject: AggregateBySubject['subject']) {
-        this.subject = subject;
+        this.subject = first.subjects[0];
+        this.first = {...first};
+        this.add(first);
     }
 
     add(item: ObjectPermissionsRow) {
         if (this.subject !== item.subjects[0] || item.subjects.length !== 1) {
             throw new Error(
                 `Unexpected behavior: subjects should be the same: ${
-                    this.subject
+                    this.first.subjects[0]
                 } !== ${item.subjects.join(',')}`,
             );
         }
 
         this.children.push(item);
+
         item.permissions?.forEach((p) => {
             this.allPermissions.add(p);
         });
         item.columns?.forEach((column) => this.columns.add(column));
+
+        this.first.isMissing ||= Boolean(item.isMissing);
+        this.first.isUnrecognized ||= Boolean(item.isUnrecognized);
+        this.first.isApproved ||= Boolean(item.isApproved);
+        this.first.isRequested ||= Boolean(item.isRequested);
     }
 
     getItems(expanded: boolean): {
@@ -237,19 +251,19 @@ class AggregateBySubject {
         hasExpandable?: boolean;
         hasDenyAction?: boolean;
     } {
-        if (this.children.length <= 1) {
+        if (this.children.length === 1) {
             return {items: this.children};
         }
 
-        const first: (typeof this.children)[0] & {level?: number; expanded?: boolean} = {
-            ...this.children[0],
+        const first: typeof this.first & {level?: number; expanded?: boolean} = {
+            ...this.first,
             level: 0,
             expanded,
         };
-        first.inheritance_mode = undefined;
-        first.inherited = undefined;
         first.permissions = [...this.allPermissions];
         first.columns = [...this.columns];
+        first.inheritance_mode = undefined;
+        first.inherited = undefined;
 
         let hasDenyAction = false;
         const items = !expanded
@@ -272,12 +286,16 @@ function aggregateBySubject(
     objPermissions: Array<ObjectPermissionsRow>,
     expandedSubjects: Set<string | number>,
 ) {
-    const aggregated: Record<AggregateBySubject['subject'], AggregateBySubject> = {};
+    const aggregated: Record<string, AggregateBySubject> = {};
 
     objPermissions.forEach((item) => {
         const [subject] = item.subjects;
-        const agg = aggregated[subject] ?? (aggregated[subject] = new AggregateBySubject(subject));
-        agg.add(item);
+        const dst = aggregated[subject];
+        if (!dst) {
+            aggregated[subject] = new AggregateBySubject(item);
+        } else {
+            dst.add(item);
+        }
     });
 
     const items = Object.values(aggregated).reduce(
