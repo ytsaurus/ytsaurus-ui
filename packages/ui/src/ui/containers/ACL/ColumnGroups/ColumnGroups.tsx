@@ -29,6 +29,7 @@ const block = cn('column-groups');
 type Props = ColumnGropsToolbarProps &
     Pick<
         ACLReduxProps,
+        | 'loaded'
         | 'columnGroups'
         | 'columnsFilter'
         | 'columnGroupNameFilter'
@@ -42,6 +43,7 @@ type Props = ColumnGropsToolbarProps &
     };
 
 export default function ColumnGroups({
+    loaded,
     columnGroups,
     path,
     loadAclDataFn,
@@ -190,6 +192,7 @@ export default function ColumnGroups({
                 </div>
                 <WithStickyToolbar
                     disableToolbarTopPadding
+                    bottomMargin="regular"
                     toolbar={
                         <Toolbar
                             itemsToWrap={[
@@ -222,6 +225,8 @@ export default function ColumnGroups({
                     }
                     content={
                         <DataTableYT<AclColumnGroup>
+                            loaded={loaded}
+                            noItemsText="There are not any column groups"
                             data={columnGroups}
                             columns={columns}
                             theme={'yt-borderless'}

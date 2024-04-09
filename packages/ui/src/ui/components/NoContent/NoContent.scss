@@ -1,18 +1,26 @@
 .no-content {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+    &_padding_large {
+        padding-top: 120px;
+        padding-bottom: 120px;
+    }
 
-    padding-top: 120px;
-    padding-bottom: 120px;
+    &_padding_regular {
+        padding-top: 20px;
+        padding-bottom: 20px;
+    }
 
     &__image {
-        margin-bottom: 40px;
-        max-width: 288px;
+        width: 160px;
+        height: 160px;
+    }
+
+    &__text {
+        padding-left: 20px;
+        max-width: 250px;
     }
 
     &__warning {
-        font-size: 20px;
+        font-size: 15px;
+        line-height: 20px;
     }
 }

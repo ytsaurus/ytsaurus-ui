@@ -11,7 +11,8 @@ import {AclMode, IdmObjectType} from '../../constants/acl';
 import ColumnGroups from './ColumnGroups/ColumnGroups';
 
 import DeletePermissionModal from './DeletePermissionModal/DeletePermissionModal';
-import UserPermissions from './UserPermissions/UserPermissions';
+import {AclActions} from './AclActions/AclActions';
+import {MyPermissions} from './MyPermissinos/MyPermissions';
 
 import LoadDataHandler from '../../components/LoadDataHandler/LoadDataHandler';
 import ErrorBoundary from '../../components/ErrorBoundary/ErrorBoundary';
@@ -345,7 +346,7 @@ class ACL extends Component<Props> {
     }
 
     renderApprovers() {
-        const {hasApprovers, approversFiltered} = this.props;
+        const {hasApprovers, approversFiltered, loaded} = this.props;
         const tableColumns = (['inherited', 'subjects', 'approve_type', 'actions'] as const).map(
             (name) => this.getColumnsTemplates<ApproverRow>()[name],
         );
@@ -358,9 +359,12 @@ class ACL extends Component<Props> {
                         </div>
                         <WithStickyToolbar
                             toolbar={<ApproversFilters />}
+                            bottomMargin="regular"
                             content={
                                 <DataTableYT
                                     data={approversFiltered}
+                                    loaded={loaded}
+                                    noItemsText="Thre are no any responsibles"
                                     columns={tableColumns}
                                     theme={'yt-borderless'}
                                     rowClassName={this.rowClassNameByFlags}
@@ -380,6 +384,8 @@ class ACL extends Component<Props> {
     renderObjectPermissions() {
         const {
             aclMode,
+            loaded,
+            loading,
             mainPermissions,
             columnsPermissions,
             idmKind,
@@ -406,6 +412,7 @@ class ACL extends Component<Props> {
                     </div>
                     <WithStickyToolbar
                         disableToolbarTopPadding
+                        bottomMargin="regular"
                         toolbar={
                             <ObjectPermissionsFilters
                                 {...{
@@ -419,7 +426,14 @@ class ACL extends Component<Props> {
                         }
                         content={
                             <DataTableYT
+                                noItemsText={
+                                    aclMode === AclMode.COLUMN_GROUPS_PERMISSISONS
+                                        ? 'There are no any column group permissions'
+                                        : 'There are no any object permissions'
+                                }
                                 data={items}
+                                loading={loading}
+                                loaded={loaded}
                                 columns={tableColumns}
                                 theme={'yt-borderless'}
                                 rowClassName={this.rowClassNameByFlags}
@@ -437,6 +451,7 @@ class ACL extends Component<Props> {
 
     renderColumnGroups() {
         const {
+            loaded,
             columnGroups,
             idmKind,
             path,
@@ -460,7 +475,7 @@ class ACL extends Component<Props> {
             userPermissionsAccessColumns,
         };
         return isIdmAclAvailable() && idmKind === IdmObjectType.PATH ? (
-            <ColumnGroups {...props} />
+            <ColumnGroups loaded={loaded} {...props} />
         ) : null;
     }
 
@@ -480,9 +495,7 @@ class ACL extends Component<Props> {
             path,
             idmKind,
             version,
-            userPermissions,
             userPermissionsRequestError,
-            userPermissionsAccessColumns,
             userPermissionsRequestFn,
             userPermissionsCancelRequestFn,
             isPermissionDeleted,
@@ -506,49 +519,50 @@ class ACL extends Component<Props> {
         } = this.props;
         const {deleteItem} = this.state;
 
-        const useColumns = aclMode && aclMode === AclMode.COLUMN_GROUPS_PERMISSISONS;
+        const hasColumns = Boolean(aclMode);
+        const useColumns = aclMode === AclMode.COLUMN_GROUPS_PERMISSISONS;
 
         return (
             <Fragment>
-                {Boolean(aclMode) && (
-                    <div>
-                        <AclModeControl {...{aclMode, updateAclFilters}} />
-                    </div>
-                )}
-                {this.renderFlags()}
+                <Flex className={block('toolbar', {'has-columns': hasColumns})}>
+                    {hasColumns && (
+                        <Flex grow>
+                            <AclModeControl {...{aclMode, updateAclFilters}} />
+                        </Flex>
+                    )}
+                    {loaded && (
+                        <AclActions
+                            cluster={cluster}
+                            className={block('acl-actions')}
+                            path={path}
+                            idmKind={idmKind}
+                            version={version}
+                            requestPermissions={userPermissionsRequestFn}
+                            requestPermissionsError={userPermissionsRequestError}
+                            cancelRequestPermissions={userPermissionsCancelRequestFn}
+                            loadAclData={loadAclData}
+                            loading={loading}
+                            error={error}
+                            errorData={errorData}
+                            inheritAcl={!disableAclInheritance}
+                            bossApproval={bossApproval}
+                            disableInheritanceResponsible={disableInheritanceResponsible}
+                            auditors={auditors}
+                            readApprovers={readApprovers}
+                            responsible={responsible}
+                            updateAcl={userPermissionsUpdateAcl}
+                            updateAclError={userPermissionsUpdateAclError}
+                            cancelUpdateAcl={userPermissionsCancelUpdateAcl}
+                            columnGroups={columnGroups}
+                            aclMode={aclMode}
+                        />
+                    )}
+                </Flex>
+                {this.renderMeta()}
+
                 {useColumns ? this.renderColumnGroups() : this.renderApprovers()}
                 {this.renderObjectPermissions()}
 
-                {loaded && (
-                    <UserPermissions
-                        cluster={cluster}
-                        className={block('user-permissions')}
-                        path={path}
-                        idmKind={idmKind}
-                        version={version}
-                        accessColumns={userPermissionsAccessColumns}
-                        permissions={userPermissions}
-                        requestPermissions={userPermissionsRequestFn}
-                        requestPermissionsError={userPermissionsRequestError}
-                        cancelRequestPermissions={userPermissionsCancelRequestFn}
-                        loadAclData={loadAclData}
-                        loading={loading}
-                        loaded={loaded}
-                        error={error}
-                        errorData={errorData}
-                        inheritAcl={!disableAclInheritance}
-                        bossApproval={bossApproval}
-                        disableInheritanceResponsible={disableInheritanceResponsible}
-                        auditors={auditors}
-                        readApprovers={readApprovers}
-                        responsible={responsible}
-                        updateAcl={userPermissionsUpdateAcl}
-                        updateAclError={userPermissionsUpdateAclError}
-                        cancelUpdateAcl={userPermissionsCancelUpdateAcl}
-                        columnGroups={columnGroups}
-                        aclMode={aclMode}
-                    />
-                )}
                 <DeletePermissionModal
                     idmKind={idmKind}
                     path={path}
@@ -565,9 +579,14 @@ class ACL extends Component<Props> {
         );
     }
 
-    renderFlags() {
-        const {idmKind, disableAclInheritance, bossApproval, disableInheritanceResponsible} =
-            this.props;
+    renderMeta() {
+        const {
+            idmKind,
+            disableAclInheritance,
+            bossApproval,
+            disableInheritanceResponsible,
+            userPermissions,
+        } = this.props;
         const {allowBossApprovals, allowInheritAcl, allowInheritResponsibles} =
             UIFactory.getAclPermissionsSettings()[idmKind];
 
@@ -604,12 +623,15 @@ class ACL extends Component<Props> {
                   ];
 
         return (
-            <Flex className={block('meta')} wrap>
+            <Flex className={block('meta')} wrap alignItems="start">
                 <SegmentControl
                     className={block('meta-overview')}
                     background="neutral-light"
                     groups={[segments, counters]}
                 />
+                {aclMode !== AclMode.COLUMN_GROUPS_PERMISSISONS && (
+                    <MyPermissions userPermissions={userPermissions} />
+                )}
             </Flex>
         );
     }

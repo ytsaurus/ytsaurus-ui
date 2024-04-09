@@ -36,6 +36,7 @@ interface Props {
     content: React.ReactNode;
     doubleHeight?: boolean;
     disableToolbarTopPadding?: boolean;
+    bottomMargin?: 'regular';
 }
 
 const StickySpacerMemo = React.memo(StickySpacer);
@@ -46,9 +47,10 @@ export default function WithStickyToolbar({
     content,
     doubleHeight,
     disableToolbarTopPadding,
+    bottomMargin,
 }: Props) {
     return (
-        <StickyContainer className={block(null, className)}>
+        <StickyContainer className={block({'bottom-margin': bottomMargin}, className)}>
             <Sticky topOffset={-HEADER_HEIGHT} disableCompensation>
                 {({isSticky}: {isSticky: boolean}) => (
                     <div>

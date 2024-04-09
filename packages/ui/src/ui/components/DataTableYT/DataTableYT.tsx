@@ -3,7 +3,7 @@ import cn from 'bem-cn-lite';
 import _ from 'lodash';
 
 import DataTable, {Column, DataTableProps, Settings} from '@gravity-ui/react-data-table';
-import {NoItemsMessage} from '../../components/NoItemsMessage/NoItemsMessage';
+import {NoContent} from '../../components/NoContent/NoContent';
 import {STICKY_TOOLBAR_BOTTOM} from '../../components/WithStickyToolbar/WithStickyToolbar';
 import {HEADER_HEIGHT} from '../../constants';
 
@@ -16,6 +16,7 @@ export type DataTableYtProps<T> = {
     loading?: boolean;
     className?: string;
     disableRightGap?: boolean;
+    noItemsText?: string;
 } & Omit<DataTableProps<T>, 'theme'> &
     ThemeProps<T>;
 
@@ -52,20 +53,24 @@ export default class DataTableYT<T> extends React.Component<DataTableYtProps<T>>
     }
 
     renderEmptyRow = () => {
-        const {loaded, loading, data} = this.props;
-        if (loaded && data.length === 0) {
-            return (
-                <tr>
-                    <td>
-                        <NoItemsMessage visible={true} />
-                    </td>
-                </tr>
-            );
-        } else if (loading && !loaded) {
+        const {loaded, loading} = this.props;
+        if (loading && !loaded) {
             return this.renderLoadingSkeleton();
         }
         return null;
     };
+
+    renderNoContent() {
+        const {loaded, data, noItemsText} = this.props;
+        if (loaded && data.length === 0) {
+            return (
+                <div>
+                    <NoContent padding="regular" warning={noItemsText ?? 'No items to display'} />
+                </div>
+            );
+        }
+        return null;
+    }
 
     renderLoadingSkeleton() {
         const {columns} = this.props;
@@ -108,6 +113,7 @@ export default class DataTableYT<T> extends React.Component<DataTableYtProps<T>>
                     renderEmptyRow={this.renderEmptyRow}
                     onError={this.onError}
                 />
+                {this.renderNoContent()}
             </div>
         );
     }

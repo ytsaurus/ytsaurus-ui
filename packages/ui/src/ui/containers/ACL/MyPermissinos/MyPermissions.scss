@@ -1,0 +1,18 @@
+.yt-my-permissions {
+    padding: 8px 32px;
+
+    &__group {
+        &:not(:first-child) {
+            padding-left: 120px;
+        }
+    }
+
+    &__icon {
+        &_color_danger {
+            color: var(--danger-text);
+        }
+        &_color_success {
+            color: var(--success-text);
+        }
+    }
+}
