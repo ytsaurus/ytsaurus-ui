@@ -1,5 +1,20 @@
 # Changelog
 
+## [1.28.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.27.0...ui-v1.28.0) (2024-04-09)
+
+
+### Features
+
+* add redux toolkit [YTFRONT-4094] ([e750edb](https://github.com/ytsaurus/ytsaurus-ui/commit/e750edb38aac578a9d48b92a2e769641cf13534a))
+* **QueryTracker:** new columns to the list of queries [[#267](https://github.com/ytsaurus/ytsaurus-ui/issues/267)] ([22d69a8](https://github.com/ytsaurus/ytsaurus-ui/commit/22d69a89cdcff82346649adcf64fb46f4cec1d66))
+
+
+### Bug Fixes
+
+* **configs:** add backward compatibility for YT_AUTH_CLUSTER_ID [[#349](https://github.com/ytsaurus/ytsaurus-ui/issues/349)] ([0deca57](https://github.com/ytsaurus/ytsaurus-ui/commit/0deca57a1a0ea3c32259ca8a83e340bd63514439))
+* **Scheduling/Overview:** replace name filter with pool-selector [YTFRONT-4075] ([2865e09](https://github.com/ytsaurus/ytsaurus-ui/commit/2865e09cf3ffa91dcfc4378876b9dc881b20e2d8))
+* **Scheduling:** fix for pools filter [[#460](https://github.com/ytsaurus/ytsaurus-ui/issues/460)] ([edf380d](https://github.com/ytsaurus/ytsaurus-ui/commit/edf380df6750cb3f5a2f23872dc4adee9247769d))
+
 ## [1.27.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.26.0...ui-v1.27.0) (2024-04-04)
 
 
