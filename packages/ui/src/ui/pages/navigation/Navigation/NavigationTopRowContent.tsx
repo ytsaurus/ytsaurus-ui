@@ -20,6 +20,7 @@ import metrics from '../../../common/utils/metrics';
 
 import {Breadcrumbs, BreadcrumbsItem} from '@gravity-ui/uikit';
 import {
+    getMode,
     getNavigationBreadcrumbs,
     getNavigationRestorePath,
 } from '../../../store/selectors/navigation/navigation';
@@ -168,19 +169,21 @@ function NavigationBreadcrumbs({onEdit}: {onEdit: () => void}) {
 
     const renderItem = React.useCallback(
         (item: BreadcrumbsItem, isCurrent: boolean) => {
-            return renderBcItem(item, {isCurrent, onEdit});
+            return <NavigationBcItem {...{item, isCurrent, onEdit}} />;
         },
         [cluster, onEdit],
     );
 
     const renderRoot = React.useCallback(
         (item: BreadcrumbsItem, isCurrent: boolean) => {
-            return renderBcItem(
-                {
-                    ...item,
-                    text: '/',
-                },
-                {isCurrent, isRoot: true, onEdit},
+            return (
+                <NavigationBcItem
+                    item={{
+                        ...item,
+                        text: '/',
+                    }}
+                    {...{isCurrent, isRoot: true, onEdit}}
+                />
             );
         },
         [cluster, onEdit],
@@ -200,14 +203,21 @@ function NavigationBreadcrumbs({onEdit}: {onEdit: () => void}) {
     );
 }
 
-function renderBcItem(
-    item: BreadcrumbsItem,
-    options: {isCurrent: boolean; isRoot?: boolean; onEdit: () => void},
-) {
-    const {isCurrent, isRoot, onEdit} = options;
+function NavigationBcItem({
+    item,
+    isCurrent,
+    isRoot,
+    onEdit,
+}: {
+    item: BreadcrumbsItem;
+    isCurrent: boolean;
+    isRoot?: boolean;
+    onEdit: () => void;
+}) {
+    const mode = useSelector(getMode);
     const url = makeRoutedURL(window.location.pathname, {
         path: (item as any).state.path,
-        navmode: Tab.CONTENT,
+        navmode: mode === Tab.ACL ? mode : Tab.CONTENT,
         filter: '',
     });
     return (
