@@ -4,6 +4,9 @@ import axios from 'axios';
 
 import {wrapApiPromiseByToaster} from '../../utils/utils';
 import './Markdown.scss';
+import '@diplodoc/transform/dist/css/yfm.css';
+import '@diplodoc/transform/dist/js/yfm';
+import {OutputType} from '@diplodoc/transform/lib/typings';
 
 const block = cn('yt-markdown');
 
@@ -16,7 +19,12 @@ interface Response {
     result?: {html?: string; plainText?: string};
 }
 
-export async function transformMarkdown({text, allowHTML}: Props) {
+const emptyTransformResponse: OutputType = {
+    result: {html: '', headings: []},
+    logs: {info: [], warn: [], error: [], disabled: []},
+};
+
+export async function transformMarkdown({text, allowHTML}: Props): Promise<OutputType> {
     try {
         const {data} = await wrapApiPromiseByToaster(
             axios.post<Response>('/api/markdown-to-html', {
@@ -29,14 +37,17 @@ export async function transformMarkdown({text, allowHTML}: Props) {
                 errorContent: 'Failed to transform markdown text',
             },
         );
-        return data;
+        return data as OutputType;
     } catch (e) {
-        return {};
+        return {
+            result: {...emptyTransformResponse['result']},
+            logs: {...emptyTransformResponse['logs'], error: [(e as Error).message]},
+        };
     }
 }
 
 export function useMarkdown({text, allowHTML = true}: Props) {
-    const [res, setResult] = React.useState<{result?: {html?: string; plainText?: string}}>({});
+    const [res, setResult] = React.useState<OutputType>(emptyTransformResponse);
 
     React.useEffect(() => {
         async function transform() {
@@ -57,7 +68,7 @@ export function Markdown({text}: Props) {
 
     return (
         <React.Fragment>
-            <div className={block()} dangerouslySetInnerHTML={{__html: html ?? ''}} />
+            <div className={block(null, 'yfm')} dangerouslySetInnerHTML={{__html: html ?? ''}} />
         </React.Fragment>
     );
 }
