@@ -3,11 +3,6 @@
 
     position: relative;
 
-    display: grid;
-    grid-template-columns: minmax(870px, 1fr) 250px;
-    grid-template-rows: repeat(6, min-content);
-    grid-gap: 20px;
-
     &_loading {
         height: 200px;
         display: flex;
@@ -16,16 +11,12 @@
     }
 
     &__meta {
-        grid-column: 1;
-
         & .meta-table__group {
             margin-bottom: 0px;
         }
     }
 
     &__object-permissions {
-        grid-column: 1 / -2;
-
         #{$acl}__permissions {
             display: flex;
             align-items: baseline;
@@ -61,11 +52,9 @@
         }
     }
 
-    &__user-permissions {
-        grid-row: 1 / -1;
-        grid-column: 2 / -1;
-
-        position: relative;
+    &__acl-actions {
+        flex-grow: 1;
+        justify-content: end;
     }
 
     &__row {
@@ -80,7 +69,7 @@
         &_approved,
         &_requested {
             opacity: 0.5;
-            background-color: var(--dark-background);
+            background-color: var(--g-color-base-misc-light);
         }
     }
 
@@ -155,12 +144,11 @@
         }
     }
 
-    &__flags {
-        margin-bottom: -10px;
+    &__meta {
+        margin-bottom: 20px;
     }
 
-    &__flags-item {
-        margin-bottom: 10px;
+    &__meta-item {
         &_flags {
             margin-right: 16px;
         }
@@ -191,5 +179,20 @@
         &_level_1 {
             padding-left: 16px;
         }
+    }
+
+    &__toolbar {
+        height: 0px;
+        min-width: 1000px;
+
+        &_has-columns {
+            min-width: unset;
+            height: unset;
+            padding-bottom: 20px;
+        }
+    }
+
+    &__spacer {
+        flex-grow: 1;
     }
 }
