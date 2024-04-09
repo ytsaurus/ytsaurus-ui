@@ -5,7 +5,6 @@ import {prepareRequest} from '../../../../utils/navigation';
 import {getPath, getTransaction} from '../../../selectors/navigation';
 import {
     GET_ANNOTATION,
-    SET_ANNOTATION,
     SET_ANNOTATION_EDITING,
     SET_ANNOTATION_SAVING,
 } from '../../../../constants/navigation/tabs/annotation';
@@ -14,6 +13,7 @@ import {getBatchError, wrapApiPromiseByToaster} from '../../../../utils/utils';
 import {ThunkAction} from 'redux-thunk';
 import {RootState} from '../../../reducers';
 import {NavigationTabsAnnotationAction} from '../../../reducers/navigation/tabs/annotation';
+import {getNavigationAnnotation} from '../../../selectors/navigation/tabs/annotation';
 
 const cancelHelper = new CancelHelper();
 
@@ -68,8 +68,9 @@ export const getAnnotation = (): TabletErrorsThunkAction => (dispatch, getState)
 };
 
 export const saveAnnotation =
-    ({path, annotation}: {path: string; annotation: string}): TabletErrorsThunkAction =>
-    async (dispatch) => {
+    (path: string): TabletErrorsThunkAction =>
+    async (dispatch, getState) => {
+        const annotation = getNavigationAnnotation(getState());
         dispatch({type: SET_ANNOTATION_SAVING, data: true});
         wrapApiPromiseByToaster(yt.v3.set({path: `${path}/@annotation`}, annotation), {
             toasterName: 'navigation_save_annotation',
@@ -77,7 +78,6 @@ export const saveAnnotation =
             errorTitle: 'Failed save annotation',
         })
             .then(() => {
-                dispatch({type: SET_ANNOTATION, data: annotation});
                 dispatch({type: SET_ANNOTATION_EDITING, data: false});
             })
             .finally(() => {
