@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.28.1](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.28.0...ui-v1.28.1) (2024-04-10)
+
+
+### Bug Fixes
+
+* **Navigation:** emojis in names [YTFRONT-4104] ([fbf8c12](https://github.com/ytsaurus/ytsaurus-ui/commit/fbf8c122a7e2a7f10774ff9a65de62a1c3a0273c))
+* **Query:** clique disabled by history query [YTFRONT-4105] ([747f9e2](https://github.com/ytsaurus/ytsaurus-ui/commit/747f9e2e6bc1966bb8d05b314eb233a33d637fdd))
+
 ## [1.28.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.27.0...ui-v1.28.0) (2024-04-09)
 
 
