@@ -239,6 +239,7 @@ function RequestPermissions(props: Props) {
                     caption: hammer.format.ReadableField(flagInfo?.title),
                     name: `${FLAG_NAME_PREFIX}${key}`,
                     tooltip: flagInfo.help,
+                    initialValue: flagInfo.initialValue,
                 };
             });
             res.splice(flagsIndex, 1, ...flags);
