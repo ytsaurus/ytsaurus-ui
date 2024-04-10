@@ -45,6 +45,7 @@ export interface AclApi {
             applyToRequestedRole: (role: Role, value?: boolean) => void;
             renderIcon: (dst: PreparedAclSubject | PreparedApprover) => React.ReactNode;
             help?: React.ReactNode;
+            initialValue?: boolean;
         }
     >;
 
