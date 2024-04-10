@@ -195,6 +195,14 @@ export default function DataTableWrapper(props) {
     const initialLoading = loading && !loaded;
     const updating = loading && loaded;
 
+    React.useEffect(() => {
+        if (!loading && loaded && rest.data.length > 0) {
+            requestAnimationFrame(() => {
+                window.dispatchEvent(new Event('resize'));
+            });
+        }
+    }, [loading, loaded, rest.data.length]);
+
     return (
         <div
             className={block({
