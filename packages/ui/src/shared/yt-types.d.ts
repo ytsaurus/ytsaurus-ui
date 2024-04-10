@@ -236,7 +236,8 @@ export type OutputFormat =
           $attributes: {
               field_weight_limit?: number;
           };
-      };
+      }
+    | 'json';
 
 export interface SettingsConfig {
     data: Settings;

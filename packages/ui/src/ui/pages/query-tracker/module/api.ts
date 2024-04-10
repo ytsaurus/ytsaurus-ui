@@ -16,6 +16,7 @@ import {AnyAction} from 'redux';
 import {QueryEngine} from './engines';
 import {getLastSelectedACONamespaces} from './query_aco/selectors';
 import {setSettingByKey} from '../../../store/actions/settings';
+import unipika from '../../../common/thor/unipika';
 
 function getQTApiSetup(): {proxy?: string} {
     const QT_CLUSTER = getQueryTrackerCluster();
@@ -33,12 +34,7 @@ function getQTApiSetup(): {proxy?: string} {
 function makeGetQueryParams(query_id: string) {
     return {
         query_id,
-        output_format: {
-            $value: 'json',
-            $attributes: {
-                encode_utf8: 'false',
-            },
-        },
+        output_format: 'json',
     };
 }
 
@@ -159,6 +155,26 @@ export const CompletedStates = [
     QueryStatus.FAILED,
 ];
 
+const JSONParser = {
+    JSONSerializer: {
+        stringify(data: unknown) {
+            return JSON.stringify(data);
+        },
+        parse(data: string) {
+            return JSON.parse(data, (_, value) => {
+                if (typeof value === 'string') {
+                    try {
+                        return unipika.decode(value);
+                    } catch (e) {
+                        return value;
+                    }
+                }
+                return value;
+            });
+        },
+    },
+};
+
 export enum QueriesHistoryCursorDirection {
     PAST = 'past',
     FUTURE = 'future',
@@ -191,12 +207,7 @@ export async function generateQueryFromTable(
         parameters: {
             path: `${path}/@`,
             attributes: ['type', 'schema', 'dynamic'],
-            output_format: {
-                $value: 'json',
-                $attributes: {
-                    encode_utf8: 'false',
-                },
-            },
+            output_format: 'json',
         },
         setup: {
             proxy: getClusterProxy(selectedCluster),
@@ -241,12 +252,7 @@ export function loadQueriesList({params, cursor, limit}: QueriesListRequestParam
                 ...params,
                 ...cursor,
                 limit,
-                output_format: {
-                    $value: 'json',
-                    $attributes: {
-                        encode_utf8: 'false',
-                    },
-                },
+                output_format: 'json',
             },
             setup: getQTApiSetup(),
         });
@@ -259,7 +265,10 @@ export function getQuery(query_id: string): ThunkAction<Promise<QueryItem>, Root
         const {stage} = getQueryTrackerRequestOptions(state);
         return ytApiV4Id.getQuery(YTApiId.getQuery, {
             parameters: {stage, ...makeGetQueryParams(query_id)},
-            setup: getQTApiSetup(),
+            setup: {
+                ...getQTApiSetup(),
+                ...JSONParser,
+            },
         });
     };
 }
@@ -286,12 +295,7 @@ export function startQuery(
                     stage: engine === 'yql' ? yqlAgentStage : undefined,
                     ...settings,
                 },
-                output_format: {
-                    $value: 'json',
-                    $attributes: {
-                        encode_utf8: 'false',
-                    },
-                },
+                output_format: 'json',
             },
             setup: getQTApiSetup(),
         });
@@ -368,7 +372,6 @@ export function readQueryResults(
                         column_names: columns,
                         value_format: 'yql',
                         field_weight_limit: settings?.cellsSize,
-                        encode_utf8: 'false',
                         max_selected_column_count: 3000,
                     },
                 },
@@ -430,12 +433,7 @@ export function requestQueries(
         const resp = (await ytApiV4Id.executeBatch(YTApiId.getQuery, {
             parameters: {
                 requests: requests,
-                output_format: {
-                    $value: 'json',
-                    $attributes: {
-                        encode_utf8: 'false',
-                    },
-                },
+                output_format: 'json',
             },
             setup: getQTApiSetup(),
         })) as unknown as {results: BatchResultsItem<QueryItem>[]};
@@ -490,7 +488,10 @@ export function getQueryResultMeta(
         const {stage} = getQueryTrackerRequestOptions(state);
         return ytApiV4Id.getQueryResults(YTApiId.getQueryResults, {
             parameters: {stage, query_id, result_index},
-            setup: getQTApiSetup(),
+            setup: {
+                ...getQTApiSetup(),
+                ...JSONParser,
+            },
         });
     };
 }
@@ -509,12 +510,7 @@ export function getQueryResultMetaList(
         const {results} = (await ytApiV4Id.executeBatch<QueryResultMeta>(YTApiId.getQueryResults, {
             parameters: {
                 requests: requests,
-                output_format: {
-                    $value: 'json',
-                    $attributes: {
-                        encode_utf8: 'false',
-                    },
-                },
+                output_format: 'json',
             },
             setup: getQTApiSetup(),
         })) as unknown as {results: BatchResultsItem<QueryResultMeta>[]};
