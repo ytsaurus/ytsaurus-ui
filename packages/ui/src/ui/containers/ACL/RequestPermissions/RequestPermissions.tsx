@@ -10,7 +10,7 @@ import withVisible, {WithVisibleProps} from '../../../hocs/withVisible';
 
 import './RequestPermissions.scss';
 import {YTError} from '../../../types';
-import {INHERITANCE_MODE_TYPES, IdmObjectType} from '../../../constants/acl';
+import {AclMode, INHERITANCE_MODE_TYPES, IdmObjectType} from '../../../constants/acl';
 
 import UIFactory from '../../../UIFactory';
 import hammer from '../../../common/hammer';
@@ -39,7 +39,6 @@ export type RequestPermissionsFieldsNames =
     | 'readColumnGroup';
 
 export interface Props extends WithVisibleProps {
-    buttonText?: string;
     className?: string;
     cluster?: string;
     normalizedPoolTree?: string;
@@ -53,6 +52,7 @@ export interface Props extends WithVisibleProps {
     error?: YTError;
     onSuccess?: () => void;
     columnGroups?: Array<AclColumnGroup>;
+    aclMode?: AclMode;
 }
 
 type FormValues = {
@@ -76,7 +76,7 @@ const SHORT_TITLE: Partial<Record<IdmKindType, string>> = {
 
 function RequestPermissions(props: Props) {
     const {
-        buttonText = 'Request permissions',
+        aclMode,
         visible,
         handleShow,
         handleClose,
@@ -145,6 +145,7 @@ function RequestPermissions(props: Props) {
             permissions: {
                 type: 'permissions',
                 caption: 'Permissions',
+                required: true,
                 tooltip: (
                     <>
                         {docsUrl(
@@ -160,7 +161,8 @@ function RequestPermissions(props: Props) {
             },
             readColumnGroup: {
                 type: 'acl-column-group',
-                caption: 'Column permissions',
+                caption: 'Read column group',
+                required: true,
                 extras: {
                     columnGroups,
                 },
@@ -219,18 +221,29 @@ function RequestPermissions(props: Props) {
         };
     }, [choices, currentCaption, error, idmKind]);
 
+    const useColumns = aclMode === AclMode.COLUMN_GROUPS_PERMISSISONS;
+
     const dialogFields = useMemo(() => {
         let flagsIndex = -1;
-        const res = requestPermissionsFields.map((name, index) => {
-            if (name === 'permissionFlags') {
-                flagsIndex = index;
+        const res = requestPermissionsFields.reduce((acc, field) => {
+            const allowField = useColumns ? field !== 'permissions' : field !== 'readColumnGroup';
+
+            if (!allowField) {
+                return acc;
             }
 
-            return {
-                ...availableFields[name],
-                name: name,
-            } as DialogField<FormValues>;
-        });
+            if (field === 'permissionFlags') {
+                flagsIndex = acc.length;
+            }
+
+            acc.push({
+                ...availableFields[field],
+                name: field,
+            } as DialogField<FormValues>);
+
+            return acc;
+        }, [] as Array<DialogField<FormValues>>);
+
         if (flagsIndex !== -1) {
             const flags: typeof res = Object.keys(requestPermissionsFlags ?? []).map((key) => {
                 const flagInfo = requestPermissionsFlags[key];
@@ -245,13 +258,15 @@ function RequestPermissions(props: Props) {
             res.splice(flagsIndex, 1, ...flags);
         }
         return res;
-    }, [availableFields, requestPermissionsFields]);
+    }, [availableFields, requestPermissionsFields, useColumns]);
+
+    const title = useColumns ? 'Request column permissions' : 'Request permissions';
 
     return !choices?.length ? null : (
         <ErrorBoundary>
             <div className={block(null, className)}>
                 <Button view={'action'} onClick={handleShow}>
-                    {buttonText}
+                    {title}
                 </Button>
                 <YTDFDialog<FormValues>
                     pristineSubmittable
@@ -260,7 +275,7 @@ function RequestPermissions(props: Props) {
                     visible={Boolean(visible)}
                     onAdd={onAdd}
                     headerProps={{
-                        title: 'Request permissions',
+                        title,
                     }}
                     initialValues={{
                         path,
