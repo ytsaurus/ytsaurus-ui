@@ -3,7 +3,7 @@ import hammer from '../../common/hammer';
 import cn from 'bem-cn-lite';
 import _ from 'lodash';
 
-import {ClipboardButton, Flex, Icon, Loader, Popover} from '@gravity-ui/uikit';
+import {Button, ClipboardButton, Flex, Icon, Loader, Popover} from '@gravity-ui/uikit';
 import {Column} from '@gravity-ui/react-data-table';
 
 import {AclMode, IdmObjectType} from '../../constants/acl';
@@ -356,8 +356,12 @@ class ACL extends Component<Props> {
                     <div className={block('approvers')}>
                         <div className="elements-heading elements-heading_size_xs">
                             Responsibles
+                            <Button className={block('sync-with-col-groups')}>
+                                Hidden button to sync offsets with column groups
+                            </Button>
                         </div>
                         <WithStickyToolbar
+                            disableToolbarTopPadding
                             toolbar={<ApproversFilters />}
                             bottomMargin="regular"
                             content={

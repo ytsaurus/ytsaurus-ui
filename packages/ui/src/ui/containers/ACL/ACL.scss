@@ -195,4 +195,8 @@
     &__spacer {
         flex-grow: 1;
     }
+
+    &__sync-with-col-groups {
+        visibility: hidden;
+    }
 }
