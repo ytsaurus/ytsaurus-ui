@@ -35,9 +35,7 @@ function makeGetQueryParams(query_id: string) {
         query_id,
         output_format: {
             $value: 'json',
-            $attributes: {
-                encode_utf8: 'false',
-            },
+            $attributes: {},
         },
     };
 }
@@ -193,9 +191,7 @@ export async function generateQueryFromTable(
             attributes: ['type', 'schema', 'dynamic'],
             output_format: {
                 $value: 'json',
-                $attributes: {
-                    encode_utf8: 'false',
-                },
+                $attributes: {},
             },
         },
         setup: {
@@ -243,9 +239,7 @@ export function loadQueriesList({params, cursor, limit}: QueriesListRequestParam
                 limit,
                 output_format: {
                     $value: 'json',
-                    $attributes: {
-                        encode_utf8: 'false',
-                    },
+                    $attributes: {},
                 },
             },
             setup: getQTApiSetup(),
@@ -366,7 +360,6 @@ export function readQueryResults(
                         column_names: columns,
                         value_format: 'yql',
                         field_weight_limit: settings?.cellsSize,
-                        encode_utf8: 'false',
                         max_selected_column_count: 3000,
                     },
                 },
@@ -509,9 +502,7 @@ export function getQueryResultMetaList(
                 requests: requests,
                 output_format: {
                     $value: 'json',
-                    $attributes: {
-                        encode_utf8: 'false',
-                    },
+                    $attributes: {},
                 },
             },
             setup: getQTApiSetup(),
