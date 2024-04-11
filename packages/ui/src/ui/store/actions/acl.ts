@@ -222,6 +222,7 @@ export type PermissionToRequest = {
     comment?: string;
     permissionFlags?: Record<string, boolean>;
     readColumnGroup?: string;
+    readColumns?: Array<string>;
 };
 
 export function requestPermissions(
@@ -244,7 +245,7 @@ export function requestPermissions(
         const daysAfter = dateToDaysAfterNow(values.duration);
         const roles: Array<Role> = [];
         const rolesGroupedBySubject = [];
-        const {inheritance_mode, permissionFlags, readColumnGroup} = values;
+        const {inheritance_mode, permissionFlags, readColumnGroup, readColumns} = values;
         for (const item of values.subjects) {
             const subject = prepareAclSubject(item);
             const commonPart = {
@@ -255,10 +256,21 @@ export function requestPermissions(
             Object.entries(requestPermissionsFlags).forEach(([key, flagInfo]) => {
                 flagInfo?.applyToRequestedRole(commonPart, permissionFlags?.[key]);
             });
-            rolesGroupedBySubject.push({
-                permissions: _.flatten(_.map(values.permissions)),
-                ...commonPart,
-            });
+            const flattenPermissions = _.flatten(_.map(values.permissions));
+            if (flattenPermissions.length) {
+                rolesGroupedBySubject.push({
+                    permissions: flattenPermissions,
+                    ...commonPart,
+                });
+            }
+            if (readColumns?.length) {
+                rolesGroupedBySubject.push({
+                    ...rolesGroupedBySubject[rolesGroupedBySubject.length - 1],
+                    ...commonPart,
+                    columns: readColumns,
+                    permissions: ['read' as const],
+                });
+            }
             _.forEach(values.permissions, (permissions) => {
                 roles.push({
                     ...convertFromUIPermissions({permissions}),

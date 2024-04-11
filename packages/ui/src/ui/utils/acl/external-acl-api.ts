@@ -106,6 +106,7 @@ export interface RequestPermissionParams {
     comment: string;
     /*columns, */ kind: IdmKindType;
     poolTree?: string;
+    columns?: Array<string>;
 }
 
 export const defaultAclApi: AclApi = {
@@ -123,7 +124,14 @@ export const defaultAclApi: AclApi = {
     getResponsible: () => methodNotSupported('getResponsible'),
 
     requestPermissions: (params) => requestPermissions(params),
-    requestPermissionsFields: ['cluster', 'path', 'permissions', 'inheritance_mode', 'subjects'],
+    requestPermissionsFields: [
+        'cluster',
+        'path',
+        'permissions',
+        'readColumns',
+        'inheritance_mode',
+        'subjects',
+    ],
 
     deleteRole: ({sysPath, itemToDelete, idmKind}) => {
         return deleteAclItemOrSubjectByIndex({sysPath, itemToDelete, idmKind});

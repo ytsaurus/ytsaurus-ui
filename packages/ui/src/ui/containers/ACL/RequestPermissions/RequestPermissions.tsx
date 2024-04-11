@@ -36,6 +36,7 @@ export type RequestPermissionsFieldsNames =
     | 'comment'
     | 'inheritance_mode'
     | 'permissionFlags'
+    | 'readColumns'
     | 'readColumnGroup';
 
 export interface Props extends WithVisibleProps {
@@ -73,6 +74,8 @@ type FormValues = {
 const SHORT_TITLE: Partial<Record<IdmKindType, string>> = {
     access_control_object: 'ACO',
 };
+
+const COLUMNS_FELDS = new Set<RequestPermissionsFieldsNames>(['readColumns', 'readColumnGroup']);
 
 function RequestPermissions(props: Props) {
     const {
@@ -159,6 +162,11 @@ function RequestPermissions(props: Props) {
                     disabledChoices,
                 },
             },
+            readColumns: {
+                type: 'acl-columns',
+                caption: 'Read columns',
+                required: true,
+            },
             readColumnGroup: {
                 type: 'acl-column-group',
                 caption: 'Read column group',
@@ -226,8 +234,7 @@ function RequestPermissions(props: Props) {
     const dialogFields = useMemo(() => {
         let flagsIndex = -1;
         const res = requestPermissionsFields.reduce((acc, field) => {
-            const allowField = useColumns ? field !== 'permissions' : field !== 'readColumnGroup';
-
+            const allowField = useColumns ? field !== 'permissions' : !COLUMNS_FELDS.has(field);
             if (!allowField) {
                 return acc;
             }

@@ -15,7 +15,7 @@ export interface Props {
 
 interface FormValues {
     name: string;
-    columns: Array<{name: string}>;
+    columns: Array<string>;
     enabled: boolean;
 }
 
@@ -33,7 +33,7 @@ export default function EditColumnGroupModal({
     const initialValues = useMemo(() => {
         return {
             name: String(initialData?.name),
-            columns: _.map(initialData?.columns, (name) => ({name})),
+            columns: initialData?.columns,
             enabled: Boolean(initialData?.enabled),
         };
     }, [initialData]);
@@ -53,7 +53,7 @@ export default function EditColumnGroupModal({
                 const {name, columns, enabled} = form.getState().values;
                 const submitResult: Partial<AclColumnGroup> = {
                     name: name,
-                    columns: _.map(columns, (el) => el.name),
+                    columns,
                     enabled: enabled,
                 };
                 return handleSubmit(submitResult).catch((err) => {
@@ -75,9 +75,10 @@ export default function EditColumnGroupModal({
                 },
                 {
                     name: 'columns',
-                    type: 'multi-text',
+                    type: 'acl-columns',
                     required: true,
                     caption: 'Columns',
+                    tooltip: 'One column name per line',
                     extras: {
                         disabled: _.includes(disabledFields, 'columns'),
                     },

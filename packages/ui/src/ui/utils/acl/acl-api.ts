@@ -228,7 +228,7 @@ export function requestPermissions(params: RequestPermissionParams): Promise<Upd
     const {roles_grouped, sysPath, kind} = params;
     const aclAttr = getAclAttr(kind);
     const batchParams: ExecuteBatchParams = {
-        requests: roles_grouped.map(({permissions, subject, inheritance_mode}) => {
+        requests: roles_grouped.map(({permissions, subject, inheritance_mode, columns}) => {
             return {
                 command: 'set',
                 parameters: {path: `${sysPath}/@${aclAttr}/end`},
@@ -237,6 +237,7 @@ export function requestPermissions(params: RequestPermissionParams): Promise<Upd
                     inheritance_mode: inheritance_mode,
                     permissions: permissions,
                     subjects: Object.values(subject),
+                    columns,
                 },
             };
         }),
