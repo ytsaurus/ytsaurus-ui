@@ -56,6 +56,7 @@ import BeforeDatePicker from '../../components/common/BeforeDatePicker/BeforeDat
 import {TimeDuration} from '../../components/TimeDuration/TimeDuration';
 import {DatePickerControl} from './controls/DatePickerControl/DatePickerControl';
 import {RangeInputPickerControl} from './controls/RangeInputPickerControl/RangeInputPickerControl';
+import {AclColumnsControl} from '../../containers/ACL/RequestPermissions/AclColumnsControl/AclColumnsControl';
 
 const block = cn('yt-dialog');
 
@@ -69,6 +70,7 @@ registerDialogControl('cluster', ClusterSelectControl);
 registerDialogControl('acl-subjects', SubjectsControl);
 registerDialogControl('acl-roles', RoleListControl);
 registerDialogControl('acl-column-group', AclColumnGroupControl);
+registerDialogControl('acl-columns', AclColumnsControl);
 registerDialogControl('permissions', PermissionsControl);
 
 registerDialogControl('yt-group', GroupSuggest);
@@ -135,6 +137,7 @@ export type DialogField<FormValues = unknown> =
           ComponentProps<typeof AclColumnGroupControl>,
           FormValues
       >
+    | RegisteredDialogField<'acl-columns', ComponentProps<typeof AclColumnsControl>, FormValues>
     | RegisteredDialogField<'permissions', ComponentProps<typeof PermissionsControl>, FormValues>
     | RegisteredDialogField<'yt-group', ComponentProps<typeof GroupSuggest>, FormValues>
     | RegisteredDialogField<'sortable-list', ComponentProps<typeof SortableListControl>, FormValues>
