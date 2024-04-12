@@ -1,5 +1,21 @@
 # Changelog
 
+## [1.29.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.28.1...ui-v1.29.0) (2024-04-12)
+
+
+### Features
+
+* **QueryTracker:** support validate and explain for yql queries [[#370](https://github.com/ytsaurus/ytsaurus-ui/issues/370)] ([2ba362e](https://github.com/ytsaurus/ytsaurus-ui/commit/2ba362e33cbcf3ba36443bb8e3c182b7b3617bb7))
+
+
+### Bug Fixes
+
+* **Navigation/Table:** sync width of headers with data [YTFRONT-4109] ([cfb18df](https://github.com/ytsaurus/ytsaurus-ui/commit/cfb18dfd65e4595a8bc5b4ec29037c7b8841aeb0))
+* **QueryTracker:** yql query progress shows wrong stage for a query step [[#368](https://github.com/ytsaurus/ytsaurus-ui/issues/368)] ([2c0fd6c](https://github.com/ytsaurus/ytsaurus-ui/commit/2c0fd6ca5a877fb2a3d5e513f42cf98ab6e4b06e))
+* **QueryTracker:** yql query steps redirect on a wrong page [[#369](https://github.com/ytsaurus/ytsaurus-ui/issues/369)] ([d5ec33b](https://github.com/ytsaurus/ytsaurus-ui/commit/d5ec33ba72d34fcff628e33f8a518f1b29c2fd41))
+* **Store:** change redux toolkit configuration [YTFRONT-4115] ([891ebdc](https://github.com/ytsaurus/ytsaurus-ui/commit/891ebdc15e4aa805632db5472ace701af16d8cae))
+* **table:** there  is no headers in full window mode for table preview [[#422](https://github.com/ytsaurus/ytsaurus-ui/issues/422)] ([0e82358](https://github.com/ytsaurus/ytsaurus-ui/commit/0e82358d58a3598722edaba69f28a125a07ba44c))
+
 ## [1.28.1](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.28.0...ui-v1.28.1) (2024-04-10)
 
 
