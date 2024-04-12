@@ -12,7 +12,8 @@ export const createAppStore = () => {
 
     const store: Store<RootState, any> = configureStore({
         reducer: reducersWithLocation as ReturnType<typeof makeRootReducer>,
-        middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(locationMiddleware),
+        middleware: (getDefaultMiddleware) =>
+            getDefaultMiddleware({serializableCheck: false}).concat(locationMiddleware),
         devTools: process.env.NODE_ENV !== 'production',
     });
 
