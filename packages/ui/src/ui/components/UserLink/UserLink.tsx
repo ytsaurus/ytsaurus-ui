@@ -8,7 +8,7 @@ import './UserLink.scss';
 
 const block = cn('user-link');
 
-interface Props {
+export interface UserCardProps {
     className?: string;
     noLink?: boolean;
     internal?: boolean; // use YT link
@@ -18,12 +18,17 @@ interface Props {
     children?: React.ReactElement;
 }
 
-export function UserCard({userName, className, noLink, internal, children}: Props) {
+export function DefaultUserCard(props: UserCardProps) {
+    const {userName, className, noLink, internal, children} = props;
     const url = internal
         ? `/${YT.cluster}/users?filter=${userName}`
         : UIFactory.makeUrlForUserName({login: userName, cluster: YT.cluster});
 
     return <UserName {...{className, userName, url: noLink ? undefined : url, children}} />;
+}
+
+export function UserCard(props: UserCardProps) {
+    return UIFactory.renderUserCard(props);
 }
 
 export function UserName({

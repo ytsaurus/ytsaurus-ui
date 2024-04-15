@@ -28,6 +28,7 @@ import YT from './config/yt-config';
 import {PreparedAclSubject} from './utils/acl/acl-types';
 import {PreparedRole} from './utils/acl';
 import {UISettingsMonitoring} from '../shared/ui-settings';
+import {DefaultUserCard, type UserCardProps} from './components/UserLink/UserLink';
 
 type HeaderItemOrPage =
     | {
@@ -306,6 +307,8 @@ export interface UIFactory {
         disabled?: boolean;
     }): React.ReactNode;
 
+    renderUserCard(props: UserCardProps): React.ReactNode;
+
     makeSupportContent(
         params: {login: string; cluster?: string; buttonToWrap?: React.ReactNode},
         makeContent: (params: {
@@ -553,6 +556,10 @@ const uiFactory: UIFactory = {
 
     renderControlAbcService() {
         return undefined;
+    },
+
+    renderUserCard(props: UserCardProps): React.ReactNode {
+        return <DefaultUserCard {...props} />;
     },
 
     makeSupportContent(_x, makeContent) {
