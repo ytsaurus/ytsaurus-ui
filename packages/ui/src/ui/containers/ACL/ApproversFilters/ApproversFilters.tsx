@@ -26,6 +26,7 @@ export default function ApproversFilters() {
                             className={block('subject-filter')}
                             value={subjectFilter}
                             size="m"
+                            autofocus={false}
                         />
                     ),
                 },
