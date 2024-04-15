@@ -1,9 +1,9 @@
 .yt-my-permissions {
-    padding: 8px 32px;
+    padding-left: 32px;
 
     &__group {
         &:not(:first-child) {
-            padding-left: 120px;
+            padding-left: 60px;
         }
     }
 

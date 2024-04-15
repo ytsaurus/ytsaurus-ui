@@ -14,8 +14,8 @@ const block = cn('yt-my-permissions');
 
 export function MyPermissions({userPermissions}: Pick<ACLReduxProps, 'userPermissions'>) {
     const groups: Array<typeof userPermissions> = [];
-    for (let i = 0; i < userPermissions?.length ?? 0; i += 5) {
-        groups.push(userPermissions.slice(i, i + 5));
+    for (let i = 0; i < userPermissions?.length ?? 0; i += 4) {
+        groups.push(userPermissions.slice(i, i + 4));
     }
     return (
         <Flex className={block()}>

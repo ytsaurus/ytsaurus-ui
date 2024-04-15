@@ -28,6 +28,7 @@ const PERMISSION_TYPES: Array<YTPermissionTypeUI> = [
     'remove',
     'administer',
     'manage',
+    'modify_children',
     'mount',
     'use',
     'create',
@@ -46,12 +47,7 @@ const ACCOUNTS_PERMISSION_TYPES = ['administer' as const, 'use' as const];
 
 const PATH_SETTINGS = {
     permissionTypes: PERMISSION_TYPES,
-    permissionsToRequest: [
-        ['read' as const],
-        ['write' as const],
-        ['remove' as const],
-        ['mount' as const],
-    ],
+    permissionsToRequest: PERMISSION_TYPES.map((i) => [i]),
     allowBossApprovals: true,
     allowReadApprovers: true,
     allowAuditors: true,

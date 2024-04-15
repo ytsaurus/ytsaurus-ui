@@ -627,7 +627,7 @@ class ACL extends Component<Props> {
                   ];
 
         return (
-            <Flex className={block('meta')} wrap alignItems="start">
+            <Flex className={block('meta')} wrap alignItems="center">
                 <SegmentControl
                     className={block('meta-overview')}
                     background="neutral-light"
