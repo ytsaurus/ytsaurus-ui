@@ -5,7 +5,6 @@ import {Page} from '../../../../shared/constants/settings';
 import {
     getCliqueLoading,
     getCliqueMap,
-    getQuery,
     getQueryDraft,
     getQueryGetParams,
 } from '../module/query/selectors';
@@ -16,7 +15,6 @@ import {Flex, Text, Tooltip} from '@gravity-ui/uikit';
 import {QueryEngineSelect, QueryEngineSelector} from '../QueryEngineSelector';
 import {QuerySettingsButton} from '../QuerySettingsButton';
 import {QueryFilesButton} from '../QueryFilesButton';
-import {QueryFile} from '../module/api';
 import {getClusterList} from '../../../store/selectors/slideoutMenu';
 import {QuerySelectorsByEngine} from './QuerySelectorsByEngine';
 import {QueryEngine} from '../module/engines';
@@ -31,8 +29,7 @@ const block = cn('query-tracker-top-row');
 const QueryTrackerTopRow: FC = () => {
     const dispatch = useDispatch();
     const {cluster, path} = useSelector(getQueryGetParams);
-    const {annotations, files, settings, engine} = useSelector(getQueryDraft);
-    const originalQuery = useSelector(getQuery);
+    const {annotations, settings, engine} = useSelector(getQueryDraft);
     const clusters = useSelector(getClusterList);
     const cliqueMap = useSelector(getCliqueMap);
     const cliqueLoading = useSelector(getCliqueLoading);
@@ -113,11 +110,6 @@ const QueryTrackerTopRow: FC = () => {
         [dispatch, settings],
     );
 
-    const handleFilesChange = useCallback(
-        (newFiles: QueryFile[]) => dispatch(updateQueryDraft({files: newFiles})),
-        [dispatch],
-    );
-
     const name = annotations?.title || NAME_PLACEHOLDER;
 
     return (
@@ -167,11 +159,7 @@ const QueryTrackerTopRow: FC = () => {
                                 settings={settings}
                                 onChange={handleSettingsChange}
                             />
-                            <QueryFilesButton
-                                files={files}
-                                onChange={handleFilesChange}
-                                queryId={originalQuery?.id ?? ''}
-                            />
+                            <QueryFilesButton />
                         </Flex>
                     </>
                 )}

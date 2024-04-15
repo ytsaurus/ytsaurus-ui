@@ -106,7 +106,6 @@ export const QuerySettingsButton = ({
                     {Object.entries(settings || {}).map(([name, value]) => (
                         <SettingsItem
                             key={name}
-                            icon={GearIcon}
                             name={name}
                             value={value}
                             canEdit={

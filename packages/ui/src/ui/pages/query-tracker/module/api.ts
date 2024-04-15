@@ -55,10 +55,13 @@ export type YQLStatistic = {sum?: number; count?: number; avg?: number; max?: nu
 
 export type YQLSstatistics = Record<string, any>;
 
+export type QueryFileType = 'url' | 'raw_inline_data';
+
 export type QueryFile = {
+    id: string;
     name: string;
     content: string;
-    type: 'url' | 'raw_inline_data';
+    type: QueryFileType;
 };
 
 export interface DraftQuery {

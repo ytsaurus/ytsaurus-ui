@@ -3,54 +3,44 @@ import cn from 'bem-cn-lite';
 import {Button, Icon, TextInput} from '@gravity-ui/uikit';
 import XmarkIcon from '@gravity-ui/icons/svgs/xmark.svg';
 import CheckIcon from '@gravity-ui/icons/svgs/check.svg';
-import './SettingsItemForm.scss';
+import './FileItemForm.scss';
+import {QueryFile} from '../module/api';
 
-const block = cn('settings-item-form');
+const block = cn('file-item-form');
 
-export type ValidatorError = {name?: string; value?: string};
-export type SettingsValidator = (oldName: string, name: string, value: string) => ValidatorError;
-export type SaveFormData = {oldName: string; name: string; value: string};
-export type EditConfig = {name: boolean; value: boolean};
+export type ValidatorError = {name?: string; content?: string};
+export type FileValidator = (oldName: string, file: QueryFile) => ValidatorError;
 
 export type Props = {
-    name: string;
-    value: string;
+    file: QueryFile;
     onCancel: () => void;
-    onSave: (data: SaveFormData) => void;
-    validator: SettingsValidator;
+    onSave: (data: QueryFile) => void;
+    validator: FileValidator;
     className?: string;
-    config?: EditConfig;
 };
 
-export const SettingsItemForm: FC<Props> = ({
-    name,
-    value,
-    validator,
-    onCancel,
-    onSave,
-    className,
-    config,
-}) => {
+export const FileItemForm: FC<Props> = ({file, validator, onCancel, onSave, className}) => {
     const [errors, setErrors] = useState<ValidatorError | undefined>(undefined);
-    const setting = useRef({name, value});
+    const tempFile = useRef({...file});
+    const isLink = file.type === 'url';
 
     const handleChangeName = (e: ChangeEvent<HTMLInputElement>) => {
         setErrors(undefined);
-        setting.current.name = e.currentTarget.value;
+        tempFile.current.name = e.currentTarget.value;
     };
 
-    const handleChangeValue = (e: ChangeEvent<HTMLInputElement>) => {
+    const handleChangeContent = (e: ChangeEvent<HTMLInputElement>) => {
         setErrors(undefined);
-        setting.current.value = e.currentTarget.value;
+        tempFile.current.content = e.currentTarget.value;
     };
 
     const handleSave = useCallback(() => {
-        const validationResult = validator(name, setting.current.name, setting.current.value);
+        const validationResult = validator(file.name, tempFile.current);
         setErrors(validationResult);
-        if (!validationResult.name && !validationResult.value) {
-            onSave({oldName: name, name: setting.current.name, value: setting.current.value});
+        if (!validationResult.name && !validationResult.content) {
+            onSave(tempFile.current);
         }
-    }, [name, onSave, validator]);
+    }, [file.name, onSave, validator]);
 
     const handleKeyDown = useCallback(
         (e: KeyboardEvent) => {
@@ -66,24 +56,25 @@ export const SettingsItemForm: FC<Props> = ({
 
     return (
         <div className={block(null, className)}>
-            <div className={block('form')}>
+            <div className={block(isLink ? 'link-form' : 'form')}>
                 <TextInput
-                    defaultValue={name}
+                    defaultValue={file.name}
                     onChange={handleChangeName}
                     onKeyDown={handleKeyDown}
                     error={errors?.name}
                     size="l"
-                    disabled={config ? !config.name : false}
                 />
-                <TextInput
-                    defaultValue={value}
-                    onChange={handleChangeValue}
-                    onKeyDown={handleKeyDown}
-                    error={errors?.value}
-                    size="l"
-                    disabled={config ? !config.value : false}
-                />
+                {isLink && (
+                    <TextInput
+                        defaultValue={file.content}
+                        onChange={handleChangeContent}
+                        onKeyDown={handleKeyDown}
+                        error={errors?.content}
+                        size="l"
+                    />
+                )}
             </div>
+
             <div className={block('actions')}>
                 <Button view="normal" onClick={handleSave} size="l">
                     <Icon data={CheckIcon} size={16} />

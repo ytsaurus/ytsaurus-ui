@@ -21,6 +21,7 @@ import {QueryState} from './reducer';
 import {wrapApiPromiseByToaster} from '../../../../utils/utils';
 import {prepareQueryPlanIds} from './utills';
 import {chytApiAction} from '../../../../store/actions/chyt/api';
+import guid from '../../../../common/hammer/guid';
 
 export const REQUEST_QUERY = 'query-tracker/REQUEST_QUERY';
 export type RequestQueryAction = Action<typeof REQUEST_QUERY>;
@@ -120,6 +121,8 @@ export function loadQuery(
                 skipSuccessToast: true,
                 errorTitle: 'Failed to load query',
             });
+
+            query.files = query.files.map((file) => ({...file, id: guid()}));
 
             if (query.engine === QueryEngine.CHYT && query.settings?.cluster) {
                 dispatch(loadCliqueByCluster(query.settings.cluster as string));

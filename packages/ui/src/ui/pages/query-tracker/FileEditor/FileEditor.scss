@@ -1,0 +1,22 @@
+.file-editor {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+
+    &__header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 10px 8px;
+    }
+
+    &__header-side {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
+
+    &__editor {
+        height: 100%;
+    }
+}

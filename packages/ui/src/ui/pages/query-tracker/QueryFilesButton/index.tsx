@@ -1,39 +1,34 @@
 import React, {FC, useCallback, useEffect, useRef, useState} from 'react';
 import cn from 'bem-cn-lite';
 import {QueryFile} from '../module/api';
-import {Button, Icon, Text, Toaster} from '@gravity-ui/uikit';
+import {Button, Icon, Text} from '@gravity-ui/uikit';
 import clipIcon from '@gravity-ui/icons/svgs/paperclip.svg';
-import {VALIDATOR_ERRORS_TEXT, formValidator} from '../QuerySettingsButton/formValidator';
+import {VALIDATOR_ERRORS_TEXT} from '../QuerySettingsButton/formValidator';
 import './QueryFilesButton.scss';
 import {PopupWithCloseButton} from '../QuerySettingsButton/PopupWithCloseButton';
-import {FilesAddForm} from './FilesAddForm';
-import {
-    SaveFormData,
-    Props as SettingsItemEditFormProps,
-} from '../QuerySettingsButton/SettingsItemForm';
-import {setAccountLimit} from '../../../utils/accounts/editor';
+import {ActionsWithAddForm} from './ActionsWithAddForm';
 import {FilesTabs} from './FilesTabs';
+import {FileValidator, ValidatorError} from './FileItemForm';
+import {useDispatch, useSelector} from 'react-redux';
+import {
+    QueryFileAddForm,
+    QueryFileEditor,
+    setAddForm,
+    setFileEditor,
+} from '../module/queryFilesForm/queryFilesFormSlice';
+import {selectQueryFilesButtonConfig} from '../module/queryFilesForm/selectors';
+import {changeQueryFile, deleteQueryFile, restoreQueryFile} from '../module/queryFilesForm/actions';
+import {updateQueryDraft} from '../module/query/actions';
 
 const b = cn('query-files-popup');
-const toaster = new Toaster();
 
-enum FileTabs {
-    Current = 'current',
-    Deleted = 'deleted',
-}
-
-type Props = {
-    files: QueryFile[];
-    queryId: string;
-    onChange: (files: QueryFile[]) => void;
-};
-
-export const QueryFilesButton: FC<Props> = ({files, onChange}) => {
+export const QueryFilesButton: FC = () => {
+    const dispatch = useDispatch();
+    const {files, deletedFiles, addFormOpen, addFormType, showTabs} = useSelector(
+        selectQueryFilesButtonConfig,
+    );
     const [filesMap, setFilesMap] = useState(new Map<string, QueryFile>());
-    const [deletedFiles, setDeletedFiles] = useState<QueryFile[]>([]);
     const [open, setOpen] = useState(false);
-    const [formVisible, setFormVisible] = useState(false);
-    const [activeTab, setActiveTab] = useState(FileTabs.Current);
     const btnRef = useRef(null);
 
     useEffect(() => {
@@ -44,89 +39,62 @@ export const QueryFilesButton: FC<Props> = ({files, onChange}) => {
         setOpen((prevState) => !prevState);
     }, []);
 
-    const handleToggleForm = useCallback(() => {
-        setFormVisible((prevState) => !prevState);
-        setActiveTab(FileTabs.Current);
-    }, []);
-
-    const handleAddFile = useCallback(
+    const handleChangeFile = useCallback(
         (file: QueryFile) => {
-            onChange([...files, file]);
-            setFormVisible(false);
+            dispatch(changeQueryFile(file));
         },
-        [files, onChange],
-    );
-
-    const handleEditFile = useCallback(
-        ({name, value, oldName}: SaveFormData) => {
-            const file = filesMap.get(oldName);
-            if (!file) return;
-            file.name = name;
-            file.content = value;
-
-            onChange([...filesMap].map(([_, val]) => val));
-        },
-        [filesMap, onChange],
+        [dispatch],
     );
 
     const handleDeleteFile = useCallback(
-        (name: string) => {
-            const file = filesMap.get(name);
-            if (!file) return;
-
-            setDeletedFiles([...deletedFiles, file]);
-            const newFilesList = files.filter((i) => i.name !== name);
-            if (!newFilesList.length) setAccountLimit(FileTabs.Deleted);
-            onChange(newFilesList);
+        (id: string) => {
+            dispatch(deleteQueryFile(id));
         },
-        [deletedFiles, files, filesMap, onChange],
+        [dispatch],
     );
 
     const handleRestoreFile = useCallback(
-        (name: string) => {
-            if (filesMap.has(name)) {
-                toaster.add({
-                    name: 'restore_query_file',
-                    type: 'error',
-                    title: 'The file could not be restored. The file name already exists in the list of active files.',
-                    autoHiding: false,
-                });
-                return;
-            }
-
-            const [file, newDeletedFiles] = deletedFiles.reduce<[null | QueryFile, QueryFile[]]>(
-                (acc, item) => {
-                    if (item.name === name) {
-                        acc[0] = item;
-                    } else {
-                        acc[1].push(item);
-                    }
-                    return acc;
-                },
-                [null, []],
-            );
-
-            setDeletedFiles(newDeletedFiles);
-            if (file) {
-                onChange([...files, file]);
-            }
+        (id: string) => {
+            dispatch(restoreQueryFile(id));
         },
-        [deletedFiles, files, filesMap, onChange],
+        [dispatch],
     );
 
-    const validator = useCallback<SettingsItemEditFormProps['validator']>(
-        (oldName, name, value) => {
-            const result = formValidator(name, value);
-            if (filesMap.has(name)) {
-                if (oldName === name) return result;
+    const handleAddFile = useCallback(
+        (file: QueryFile) => {
+            dispatch(updateQueryDraft({files: [...files, file]}));
+            dispatch(setAddForm({isOpen: false}));
+        },
+        [dispatch, files],
+    );
+
+    const handleToggleAddForm = useCallback(
+        (data: QueryFileAddForm) => {
+            dispatch(setAddForm(data));
+        },
+        [dispatch],
+    );
+
+    const handleEditFile = useCallback(
+        (fileId: string, fileType: QueryFileEditor['fileType']) => {
+            dispatch(setFileEditor({fileId, fileType, isOpen: true, isFullWidth: false}));
+            setOpen(false);
+        },
+        [dispatch],
+    );
+
+    const validator = useCallback<FileValidator>(
+        (oldName, file) => {
+            const result: ValidatorError = {};
+            if (!file.name) result.name = VALIDATOR_ERRORS_TEXT.NAME_REQUIRED;
+            if (filesMap.has(file.name) && oldName !== file.name)
                 result.name = VALIDATOR_ERRORS_TEXT.NAME_ALREADY_EXIST;
-            }
+            if (file.type === 'url' && !file.content)
+                result.content = VALIDATOR_ERRORS_TEXT.VALUE_REQUIRED;
             return result;
         },
         [filesMap],
     );
-
-    const showTabs = files.length > 0 || deletedFiles.length > 0 || formVisible;
 
     return (
         <>
@@ -138,6 +106,7 @@ export const QueryFilesButton: FC<Props> = ({files, onChange}) => {
                 size="l"
             >
                 <Icon data={clipIcon} size={16} />
+                {files.length > 0 ? ` ${files.length}` : undefined}
             </Button>
             <PopupWithCloseButton
                 anchorRef={btnRef}
@@ -151,23 +120,22 @@ export const QueryFilesButton: FC<Props> = ({files, onChange}) => {
                 {showTabs && (
                     <FilesTabs
                         className={b('body')}
-                        activeTab={activeTab}
                         files={files}
-                        filesCounter={formVisible ? files.length + 1 : files.length}
                         deletedFiles={deletedFiles}
                         deletedFilesCounter={deletedFiles.length}
                         validator={validator}
-                        onTabChange={setActiveTab}
                         onDeleteFile={handleDeleteFile}
-                        onChangeFile={handleEditFile}
+                        onChangeFile={handleChangeFile}
                         onRestoreFile={handleRestoreFile}
+                        onEditFile={handleEditFile}
                     />
                 )}
-                <FilesAddForm
-                    onAddFile={handleAddFile}
+                <ActionsWithAddForm
                     validator={validator}
-                    formVisible={formVisible}
-                    toggleForm={handleToggleForm}
+                    addFormOpen={addFormOpen}
+                    addFormType={addFormType}
+                    onAddFile={handleAddFile}
+                    onFormToggle={handleToggleAddForm}
                 />
             </PopupWithCloseButton>
         </>

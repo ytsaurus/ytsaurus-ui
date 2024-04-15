@@ -1,15 +1,12 @@
-import React, {FC, useMemo} from 'react';
+import React, {FC, useMemo, useState} from 'react';
 import {Tabs} from '@gravity-ui/uikit';
-import {SettingsItem} from '../QuerySettingsButton/SettingsItem';
 import {QueryFile} from '../module/api';
-import {
-    SaveFormData,
-    Props as SettingsItemEditFormProps,
-} from '../QuerySettingsButton/SettingsItemForm';
 import {DeletedFileItem} from './DeletedFileItem';
-import FileIcon from '@gravity-ui/icons/svgs/file.svg';
 import cn from 'bem-cn-lite';
 import './FilesTabs.scss';
+import {FileItem} from './FileItem';
+import {FileValidator} from './FileItemForm';
+import {QueryFileEditor} from '../module/queryFilesForm/queryFilesFormSlice';
 
 const block = cn('files-tabs');
 
@@ -19,52 +16,53 @@ enum FileTabs {
 }
 
 type Props = {
-    activeTab: FileTabs;
     files: QueryFile[];
-    filesCounter: number;
     deletedFiles: QueryFile[];
     deletedFilesCounter: number;
     className?: string;
-    validator: SettingsItemEditFormProps['validator'];
-    onTabChange: (tabId: FileTabs) => void;
-    onDeleteFile: (name: string) => void;
-    onChangeFile: (data: SaveFormData) => void;
-    onRestoreFile: (name: string) => void;
+    validator: FileValidator;
+    onDeleteFile: (id: string) => void;
+    onChangeFile: (file: QueryFile) => void;
+    onRestoreFile: (id: string) => void;
+    onEditFile: (id: string, fileType: QueryFileEditor['fileType']) => void;
 };
 
 export const FilesTabs: FC<Props> = ({
-    activeTab,
     files,
     deletedFiles,
-    filesCounter,
     deletedFilesCounter,
     validator,
-    onTabChange,
     onDeleteFile,
     onChangeFile,
     onRestoreFile,
+    onEditFile,
     className,
 }) => {
+    const [activeTab, setActiveTab] = useState<string>(FileTabs.Current);
+
     const currentFileItems = useMemo(() => {
         return files.map((file) => (
-            <SettingsItem
-                key={file.name}
-                icon={FileIcon}
-                name={file.name}
-                value={file.content}
+            <FileItem
+                key={file.id}
+                file={file}
                 onDelete={onDeleteFile}
                 onChange={onChangeFile}
+                onEditFile={onEditFile}
                 validator={validator}
-                canEdit={{name: true, value: file.type === 'url'}}
             />
         ));
-    }, [files, onDeleteFile, onChangeFile, validator]);
+    }, [files, onDeleteFile, onChangeFile, onEditFile, validator]);
 
     const deletedFileItems = useMemo(() => {
-        return deletedFiles.map((file, i) => (
-            <DeletedFileItem key={`${file.name}-${i}`} name={file.name} onRestore={onRestoreFile} />
+        return deletedFiles.map((file) => (
+            <DeletedFileItem
+                key={file.id}
+                file={file}
+                onRestore={onRestoreFile}
+                onEditFile={onEditFile}
+            />
         ));
-    }, [deletedFiles, onRestoreFile]);
+    }, [deletedFiles, onEditFile, onRestoreFile]);
 
     return (
         <div className={block(null, className)}>
@@ -74,8 +72,8 @@ export const FilesTabs: FC<Props> = ({
                     {
                         id: FileTabs.Current,
                         title: 'Current',
-                        counter: filesCounter,
-                        disabled: !filesCounter,
+                        counter: files.length,
+                        disabled: !files.length,
                     },
                     {
                         id: FileTabs.Deleted,
@@ -84,7 +82,7 @@ export const FilesTabs: FC<Props> = ({
                         disabled: !deletedFilesCounter,
                     },
                 ]}
-                onSelectTab={onTabChange}
+                onSelectTab={setActiveTab}
             />
             <div className={block('list')}>
                 {activeTab === FileTabs.Current ? currentFileItems : deletedFileItems}
