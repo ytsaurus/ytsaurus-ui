@@ -191,6 +191,7 @@ export type YTPermissionType =
     | 'write'
     | 'use'
     | 'manage'
+    | 'modify_children'
     | 'mount'
     | 'remove'
     | 'register_queue_consumer';
