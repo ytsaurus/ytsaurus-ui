@@ -7,7 +7,7 @@ import AccountsNoContent from '../../../../pages/accounts/AccountsNoContent';
 import {getActiveAccount} from '../../../../store/selectors/accounts/accounts';
 import {fetchAccounts} from '../../../../store/actions/accounts/accounts';
 import {loadUsers} from '../../../../store/actions/accounts/editor';
-import {AccountsAcl} from '../../../../containers/ACL/ACL-connect-helpers';
+import {AccountsAcl} from '../../../../containers/ACL';
 
 AccountsAclTab.propTypes = {
     activeAccount: PropTypes.string,
