@@ -2,7 +2,7 @@ import React from 'react';
 import {useSelector} from 'react-redux';
 
 import {getChytCurrentAlias} from '../../../store/selectors/chyt';
-import {AccessContentAcl} from '../../../containers/ACL/ACL-connect-helpers';
+import {AccessContentAcl} from '../../../containers/ACL';
 
 export function ChytPageCliqueAcl() {
     const alias = useSelector(getChytCurrentAlias);
