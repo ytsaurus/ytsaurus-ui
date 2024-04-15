@@ -58,6 +58,7 @@ export default function ObjectPermissionsFilters({
                             }}
                             value={subjectFilter}
                             size="m"
+                            autofocus={false}
                         />
                     ),
                 },
