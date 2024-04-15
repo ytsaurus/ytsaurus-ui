@@ -2,7 +2,6 @@ import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {Route, Switch} from 'react-router';
 import FlexSplitPane from '../../../components/FlexSplitPane/FlexSplitPane';
-import QueryEditor from '../QueryEditor/QueryEditor';
 import {QueriesPooling} from '../hooks/QueriesPooling/context';
 import {isEngine} from '../module/api';
 import {QueryEngine} from '../module/engines';
@@ -22,6 +21,8 @@ import {useQueryACO} from '../QueryACO/useQueryACO';
 import cn from 'bem-cn-lite';
 
 import './QueryTracker.scss';
+import {QueryEditorSplit} from './QueryEditorSplit';
+import {selectFileEditor} from '../module/queryFilesForm/selectors';
 
 const b = cn('query-tracker-page');
 
@@ -95,6 +96,7 @@ function QueryPage(props: Props) {
 export default function QueryTracker({match}: Props) {
     const {isQueriesListSidebarVisible} = useQueriesListSidebarToggle();
     const isQueryStateDirty = useSelector(getDirtySinceLastSubmit);
+    const fileEditor = useSelector(selectFileEditor);
     usePreventUnload({shouldListen: isQueryStateDirty});
     const [sizes, setSize] = useState(initialSizes);
     const getSize = useMemo(() => {
@@ -130,7 +132,11 @@ export default function QueryTracker({match}: Props) {
                     getInitialSizes={getSize}
                 >
                     {isQueriesListSidebarVisible ? <QueriesList /> : null}
-                    <QueryEditor onStartQuery={goToCreatedQuery} />
+                    <QueryEditorSplit
+                        fileEditorFullWidth={fileEditor.isFullWidth}
+                        fileEditorVisible={fileEditor.isOpen}
+                        onStartQuery={goToCreatedQuery}
+                    />
                 </FlexSplitPane>
             </QueriesPooling>
         </>

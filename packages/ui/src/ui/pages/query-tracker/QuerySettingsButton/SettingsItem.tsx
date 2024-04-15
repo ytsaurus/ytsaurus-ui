@@ -1,9 +1,10 @@
 import React, {FC, useState} from 'react';
 import cn from 'bem-cn-lite';
 import './SettingsItem.scss';
-import {Button, Icon, IconData, Text, Tooltip} from '@gravity-ui/uikit';
+import {Button, Icon, Text, Tooltip} from '@gravity-ui/uikit';
 import PencilIcon from '@gravity-ui/icons/svgs/pencil.svg';
 import TrashBinIcon from '@gravity-ui/icons/svgs/trash-bin.svg';
+import GearIcon from '@gravity-ui/icons/svgs/gear.svg';
 import {
     SaveFormData,
     Props as SettingsItemEditFormProps,
@@ -13,7 +14,6 @@ import {
 const block = cn('settings-item');
 
 type Props = {
-    icon: IconData;
     name: string;
     value: string;
     onDelete: (name: string) => void;
@@ -22,15 +22,7 @@ type Props = {
     canEdit?: SettingsItemEditFormProps['config'];
 };
 
-export const SettingsItem: FC<Props> = ({
-    icon,
-    name,
-    value,
-    canEdit,
-    onDelete,
-    validator,
-    onChange,
-}) => {
+export const SettingsItem: FC<Props> = ({name, value, canEdit, onDelete, validator, onChange}) => {
     const [edit, setEdit] = useState(false);
     const handleDelete = () => {
         onDelete(name);
@@ -63,7 +55,7 @@ export const SettingsItem: FC<Props> = ({
     return (
         <div className={block()}>
             <div className={block('info')}>
-                <Icon className={block('icon')} data={icon} size={16} />
+                <Icon className={block('icon')} data={GearIcon} size={16} />
                 <Text variant="subheader-2" ellipsis>
                     {name}
                 </Text>

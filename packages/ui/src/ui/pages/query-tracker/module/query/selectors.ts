@@ -21,6 +21,8 @@ export const getQueryGetParams = (state: RootState) => getState(state).params;
 
 export const getQueryDraft = (state: RootState) => getState(state).draft;
 
+export const getQueryFiles = (state: RootState) => getState(state).draft.files;
+
 export const getQueryText = (state: RootState) => getState(state).draft.query;
 
 export const getQueryEngine = (state: RootState) => getState(state).draft.engine;

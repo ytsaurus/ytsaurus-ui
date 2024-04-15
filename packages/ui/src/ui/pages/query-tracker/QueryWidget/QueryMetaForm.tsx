@@ -8,7 +8,6 @@ import {getQuery, getQueryDraft} from '../module/query/selectors';
 import {QuerySettingsButton} from '../QuerySettingsButton';
 import {QueryFilesButton} from '../QueryFilesButton';
 import {updateQueryDraft} from '../module/query/actions';
-import {QueryFile} from '../module/api';
 import {NewQueryButton} from '../NewQueryButton';
 import {QueryEngineSelector} from '../QueryEngineSelector';
 
@@ -39,11 +38,6 @@ export function QueryMetaForm({
 
     const onSettingsChange = useCallback(
         (settings: Record<string, string>) => dispatch(updateQueryDraft({settings})),
-        [dispatch],
-    );
-
-    const onFilesChange = useCallback(
-        (files: QueryFile[]) => dispatch(updateQueryDraft({files})),
         [dispatch],
     );
 
@@ -94,13 +88,7 @@ export function QueryMetaForm({
                     {
                         name: 'Files',
                         marginRight: 'half',
-                        node: (
-                            <QueryFilesButton
-                                files={draft.files}
-                                onChange={onFilesChange}
-                                queryId={originalQuery?.id ?? ''}
-                            />
-                        ),
+                        node: <QueryFilesButton />,
                     },
                     {
                         name: 'NewQuery',

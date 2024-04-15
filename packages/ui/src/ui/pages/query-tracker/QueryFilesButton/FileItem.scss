@@ -1,4 +1,4 @@
-.deleted-file-item {
+.file-item {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -11,8 +11,16 @@
         overflow: hidden;
     }
 
+    &__icon {
+        flex-shrink: 0;
+    }
+
     &__actions {
         display: flex;
         gap: 0 4px;
+    }
+
+    &_edit {
+        padding: 4px 0;
     }
 }

@@ -3,6 +3,7 @@ import {Button, Icon} from '@gravity-ui/uikit';
 import FilePlusIcon from '@gravity-ui/icons/svgs/file-plus.svg';
 import {QueryFile} from '../module/api';
 import {wrapApiPromiseByToaster} from '../../../utils/utils';
+import guid from '../../../common/hammer/guid';
 
 const readFileAsync = async (file: File): Promise<string> => {
     return new Promise((resolve, reject) => {
@@ -14,9 +15,10 @@ const readFileAsync = async (file: File): Promise<string> => {
 };
 
 type Props = {
+    disabled: boolean;
     onLoad: (file: QueryFile) => void;
 };
-export const AddFileButton: FC<Props> = ({onLoad}) => {
+export const AddFileButton: FC<Props> = ({disabled, onLoad}) => {
     const [loading, setLoading] = useState(false);
     const inputRef = useRef<HTMLInputElement>(null);
 
@@ -35,7 +37,7 @@ export const AddFileButton: FC<Props> = ({onLoad}) => {
                 skipSuccessToast: true,
                 errorTitle: 'Failed to load file',
             });
-            onLoad({name: uploaded.name, content, type: 'raw_inline_data'});
+            onLoad({name: uploaded.name, content, type: 'raw_inline_data', id: guid()});
         } finally {
             setLoading(false);
         }
@@ -43,7 +45,13 @@ export const AddFileButton: FC<Props> = ({onLoad}) => {
 
     return (
         <>
-            <Button width="auto" onClick={handleAddFile} size="l" loading={loading}>
+            <Button
+                width="auto"
+                onClick={handleAddFile}
+                size="l"
+                loading={loading}
+                disabled={disabled}
+            >
                 <Icon data={FilePlusIcon} size={16} />
                 Add file
             </Button>
