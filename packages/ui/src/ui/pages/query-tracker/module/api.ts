@@ -281,8 +281,8 @@ export function startQuery(
                 engine,
                 annotations,
                 access_control_object,
-                execution_mode: options?.execution_mode,
                 settings: {
+                    execution_mode: options?.execution_mode,
                     stage: engine === 'yql' ? yqlAgentStage : undefined,
                     ...settings,
                 },
