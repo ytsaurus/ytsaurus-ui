@@ -34,7 +34,7 @@ import ErrorBlock from '../../components/Error/Error';
 
 import {LOADING_STATUS, LOAD_ERROR, Page, SPLIT_PANE_ID} from '../../constants/index';
 import {joinMenuItemsAction, splitMenuItemsAction, trackVisit} from '../../store/actions/menu';
-import {setSetting} from '../../store/actions/settings';
+import {reloadUserSettings, setSetting} from '../../store/actions/settings';
 import {initClusterParams, unmountCluster, updateCluster} from '../../store/actions/cluster-params';
 import {updateTitle} from '../../store/actions/global';
 import {getClusterUiConfig, isQueryTrackerAllowed} from '../../store/selectors/global';
@@ -141,17 +141,20 @@ class ClusterPage extends Component {
 
     _onUpdateEnd = () => {
         const {
+            login,
             cluster,
             trackVisit,
             updateTitle,
             initClusterParams,
             isRedirectToBetaSwitched,
             setSetting,
+            reloadUserSettings,
         } = this.props;
 
         return Promise.resolve().then(() => {
             initClusterParams(cluster);
             updateTitle({cluster});
+            reloadUserSettings(login);
 
             // todo: get rid of redirectToBetaSwitched setting.
             // It`s exist for set default value of redirectToBeta setting, when settings document is empty yet.
@@ -422,6 +425,7 @@ const mapDispatchToProps = {
     joinMenuItemsAction,
     updateTitle,
     initClusterParams,
+    reloadUserSettings,
     updateCluster,
     unmountCluster,
 };
