@@ -10,7 +10,8 @@ export type SuggestionType =
     | keyof Omit<YqlAutocompleteResult, 'errors' | 'suggestEntity' | 'suggestDatabases'>
     | 'binding'
     | 'suggestConstants'
-    | 'connection';
+    | 'connection'
+    | 'suggestOperators';
 
 const SuggestionsWeight: Record<SuggestionType, number> = {
     suggestTemplates: 0,
@@ -27,6 +28,7 @@ const SuggestionsWeight: Record<SuggestionType, number> = {
     suggestUdfs: 11,
     suggestSimpleTypes: 12,
     suggestConstants: 13,
+    suggestOperators: 14,
 };
 
 export const generateColumnAliasesSuggestion = (
