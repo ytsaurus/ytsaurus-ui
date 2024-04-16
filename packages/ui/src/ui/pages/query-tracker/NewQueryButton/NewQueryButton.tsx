@@ -1,9 +1,11 @@
-import React, {useState} from 'react';
+import React, {MouseEvent, useState} from 'react';
 import {useSelector} from 'react-redux';
 import {Button, Icon} from '@gravity-ui/uikit';
 import Modal from '../../../components/Modal/Modal';
 import {isQueryDraftEditted} from '../module/query/selectors';
 import FilePlusIcon from '@gravity-ui/icons/svgs/file-plus.svg';
+import {Page} from '../../../../shared/constants/settings';
+import {getCluster} from '../../../store/selectors/global';
 
 const NewQueryPromt = (props: {cancel: () => void; confirm: () => void; visible: boolean}) => {
     return (
@@ -21,8 +23,11 @@ const NewQueryPromt = (props: {cancel: () => void; confirm: () => void; visible:
 export const NewQueryButton = ({onClick}: {onClick: () => void}) => {
     const dirtyQuery = useSelector(isQueryDraftEditted);
     const [visible, setVisible] = useState(false);
+    const cluster = useSelector(getCluster);
 
-    const handleClick = () => {
+    const handleClick = (e: MouseEvent<HTMLAnchorElement>) => {
+        e.preventDefault();
+
         if (dirtyQuery) {
             setVisible(true);
         } else {
@@ -47,6 +52,7 @@ export const NewQueryButton = ({onClick}: {onClick: () => void}) => {
                 view="action"
                 size="l"
                 title="New query"
+                href={`/${cluster}/${Page.QUERIES}`}
                 onClick={handleClick}
             >
                 <Icon data={FilePlusIcon} size={16} />
