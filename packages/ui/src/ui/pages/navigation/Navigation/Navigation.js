@@ -408,6 +408,7 @@ class Navigation extends Component {
 
                 <RequestPermissions
                     className={block('error-action-button')}
+                    buttonClassName={block('request-permissions-button')}
                     parentPath={pathForRequest}
                     path={pathForRequest}
                     cluster={cluster}

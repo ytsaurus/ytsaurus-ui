@@ -41,6 +41,7 @@ export type RequestPermissionsFieldsNames =
 
 export interface Props extends WithVisibleProps {
     className?: string;
+    buttonClassName?: string;
     cluster?: string;
     normalizedPoolTree?: string;
     path: string;
@@ -84,6 +85,7 @@ function RequestPermissions(props: Props) {
         handleShow,
         handleClose,
         className,
+        buttonClassName,
         path,
         idmKind,
         requestPermissions,
@@ -272,7 +274,7 @@ function RequestPermissions(props: Props) {
     return !choices?.length ? null : (
         <ErrorBoundary>
             <div className={block(null, className)}>
-                <Button view={'action'} onClick={handleShow}>
+                <Button className={buttonClassName} view={'action'} onClick={handleShow}>
                     {title}
                 </Button>
                 <YTDFDialog<FormValues>
