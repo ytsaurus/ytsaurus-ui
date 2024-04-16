@@ -1,7 +1,46 @@
-import {languages} from '../fillers/monaco-editor-core';
-import {keywordControl, keywordOperator, variables} from './s-expressions.keywords';
+import {Position, editor, languages} from 'monaco-editor';
+import {
+    builtinFunctions,
+    keywords,
+    operators,
+    scopeKeywords,
+    typeKeywords,
+} from './s-expressions.keywords';
+import {generateSuggestion} from '../helpers/generateSuggestions';
+
+import {getRangeToInsertSuggestion} from '../helpers/getRangeToInsertSuggestion';
 
 export const LANGUAGE_ID = 's-expressions';
+
+const TokenClassConsts = {
+    BINARY: 'binary',
+    BINARY_ESCAPE: 'binary.escape',
+    COMMENT: 'comment',
+    COMMENT_QUOTE: 'comment.quote',
+    DELIMITER: 'delimiter',
+    DELIMITER_CURLY: 'delimiter.curly',
+    DELIMITER_PAREN: 'delimiter.paren',
+    DELIMITER_SQUARE: 'delimiter.square',
+    IDENTIFIER: 'identifier',
+    IDENTIFIER_QUOTE: 'identifier.quote',
+    KEYWORD: 'keyword',
+    KEYWORD_SCOPE: 'keyword.scope',
+    NUMBER: 'number',
+    NUMBER_FLOAT: 'number.float',
+    NUMBER_BINARY: 'number.binary',
+    NUMBER_OCTAL: 'number.octal',
+    NUMBER_HEX: 'number.hex',
+    OPERATOR: 'operator',
+    OPERATOR_KEYWORD: 'operator.keyword',
+    OPERATOR_SYMBOL: 'operator.symbol',
+    PREDEFINED: 'predefined',
+    STRING: 'string',
+    STRING_DOUBLE: 'string.double',
+    STRING_ESCAPE: 'string.escape',
+    TYPE: 'type',
+    VARIABLE: 'variable',
+    WHITE: 'white',
+};
 
 export const conf: languages.LanguageConfiguration = {
     comments: {
@@ -16,11 +55,17 @@ export const conf: languages.LanguageConfiguration = {
         {open: '{', close: '}'},
         {open: '[', close: ']'},
         {open: '(', close: ')'},
+        {open: '"', close: '"'},
+        {open: "'", close: "'"},
+        {open: '`', close: '`'},
     ],
     surroundingPairs: [
         {open: '{', close: '}'},
         {open: '[', close: ']'},
         {open: '(', close: ')'},
+        {open: '"', close: '"'},
+        {open: "'", close: "'"},
+        {open: '`', close: '`'},
     ],
 };
 
@@ -35,56 +80,146 @@ export const language: languages.IMonarchLanguage & Record<string, unknown> = {
         {open: '{', close: '}', token: 'delimiter.curly'},
     ],
 
-    keywordControl,
-
-    keywordOperator,
-
-    variables,
+    builtinFunctions,
+    builtinVariables: [],
+    keywords,
+    typeKeywords,
+    scopeKeywords,
+    operators,
+    pseudoColumns: [],
 
     escapes: /\\(?:[abfnrtv\\"']|x[0-9A-Fa-f]{1,4}|u[0-9A-Fa-f]{4}|U[0-9A-Fa-f]{8})/,
 
     tokenizer: {
         root: [
+            {include: '@comments'},
             {include: '@whitespace'},
-            {include: '@comment'},
-            [/(#)((?:\w|[\\+-=<>'"&#])+)/, ['delimiter', 'constant']],
-            [
-                /(?:\b(?:(defun|defmethod|defmacro))\b)(\s+)((?:\w|-|\?)*)/,
-                ['type.function', 'text', 'entity.name'],
-            ],
-            [/(\*)(\S*)(\*)/, ['delimiter', 'variable', 'delimiter']],
+            {include: '@pseudoColumns'},
+            {include: '@numbers'},
+            {include: '@binaries'},
             {include: '@strings'},
-            [/'[^#\s)(]+/, 'variable.parameter'],
+            {include: '@complexIdentifiers'},
+            {include: '@scopes'},
+            {include: '@complexDataTypes'},
+            [/[;,.]/, TokenClassConsts.DELIMITER],
             [/[(){}[\]]/, '@brackets'],
-            // identifiers and keywords
             [
-                /(?:(?:<=?|>=?|==|!=|[-+*/%])|[a-zA-Z][a-zA-Z0-9!]*)/,
+                /[\w@#$]+/,
                 {
                     cases: {
-                        '@keywordControl': {token: 'keyword.operator'},
-                        '@keywordOperator': {token: 'keyword.control'},
-                        '@variables': {token: 'variable'},
-                        '@default': 'identifier',
+                        '@scopeKeywords': TokenClassConsts.KEYWORD_SCOPE,
+                        '@operators': TokenClassConsts.OPERATOR_KEYWORD,
+                        '@typeKeywords': TokenClassConsts.TYPE,
+                        '@builtinVariables': TokenClassConsts.VARIABLE,
+                        '@builtinFunctions': TokenClassConsts.PREDEFINED,
+                        '@keywords': TokenClassConsts.KEYWORD,
+                        '@default': TokenClassConsts.IDENTIFIER,
+                    },
+                },
+            ],
+            [/[<>=!%&+\-*/|~^]/, TokenClassConsts.OPERATOR_SYMBOL],
+        ],
+        whitespace: [[/[\s\t\r\n]+/, TokenClassConsts.WHITE]],
+        comments: [
+            [/--+.*/, TokenClassConsts.COMMENT],
+            [/\/\*/, {token: TokenClassConsts.COMMENT_QUOTE, next: '@comment'}],
+        ],
+        comment: [
+            [/[^*/]+/, TokenClassConsts.COMMENT],
+            [/\*\//, {token: TokenClassConsts.COMMENT_QUOTE, next: '@pop'}],
+            [/./, TokenClassConsts.COMMENT],
+        ],
+        pseudoColumns: [
+            [
+                /[$][A-Za-z_][\w@#$]*/,
+                {
+                    cases: {
+                        '@pseudoColumns': TokenClassConsts.PREDEFINED,
+                        '@default': TokenClassConsts.IDENTIFIER,
                     },
                 },
             ],
         ],
-        whitespace: [[/\s+/, 'white']],
-        comment: [[/#.*/, 'comment']],
+        numbers: [
+            // https://spark.apache.org/docs/latest/sql-ref-literals.html#numeric-literal
+            // TODO: Fractional Literals Syntax
+            [/0[xX][0-9a-fA-F]*/, TokenClassConsts.NUMBER_HEX],
+            [/[$][+-]*\d*(\.\d*)?/, TokenClassConsts.NUMBER],
+            [/((\d+(\.\d*)?)|(\.\d+))([eE][-+]?\d+)?/, TokenClassConsts.NUMBER_FLOAT],
+        ],
+        binaries: [
+            // https://spark.apache.org/docs/latest/sql-ref-literals.html#binary-literal
+            [/X'/i, {token: TokenClassConsts.BINARY, next: '@binarySingle'}],
+            [/X"/i, {token: TokenClassConsts.BINARY, next: '@binaryDouble'}],
+        ],
+        binarySingle: [
+            [/\d+/, TokenClassConsts.BINARY_ESCAPE],
+            [/''/, TokenClassConsts.BINARY],
+            [/'/, {token: TokenClassConsts.BINARY, next: '@pop'}],
+        ],
+        binaryDouble: [
+            [/\d+/, TokenClassConsts.BINARY_ESCAPE],
+            [/""/, TokenClassConsts.BINARY],
+            [/"/, {token: TokenClassConsts.BINARY, next: '@pop'}],
+        ],
         strings: [
-            [/'?"(?=.)/, {token: 'string', next: '@qqstring'}],
-            [/'?[@]{2}/, {token: 'string', next: '@multiline'}],
-            [/'?x"(?:[0-9A-Fa-f]{2})*"/, 'string'],
+            // https://spark.apache.org/docs/latest/sql-ref-literals.html#string-literal
+            [/'/, {token: TokenClassConsts.STRING, next: '@stringSingle'}],
+            [/R'/i, {token: TokenClassConsts.STRING, next: '@stringSingle'}],
+            [/"/, {token: TokenClassConsts.STRING, next: '@stringDouble'}],
+            [/R"/i, {token: TokenClassConsts.STRING, next: '@stringDouble'}],
         ],
-        qqstring: [
-            [/\\(?:[0-3][0-7][0-7]|x[0-9A-Fa-f]{2}|["tnrbfav\\])/, 'string.escape'],
-            [/[^"\\]+/, 'string'],
-            [/"|$/, {token: 'string', next: '@pop'}],
+        stringSingle: [
+            [/[^']+/, TokenClassConsts.STRING_ESCAPE],
+            [/''/, TokenClassConsts.STRING],
+            [/'/, {token: TokenClassConsts.STRING, next: '@pop'}],
         ],
-        multiline: [
-            [/[^@]+/, 'string'],
-            [/[@]{2}/, {token: 'string', next: '@pop'}],
-            [/./, {token: 'string'}],
+        stringDouble: [
+            [/[^"]+/, TokenClassConsts.STRING_ESCAPE],
+            [/""/, TokenClassConsts.STRING],
+            [/"/, {token: TokenClassConsts.STRING, next: '@pop'}],
         ],
+        complexIdentifiers: [
+            [/`/, {token: TokenClassConsts.IDENTIFIER_QUOTE, next: '@quotedIdentifier'}],
+        ],
+        quotedIdentifier: [
+            [/[^`]+/, TokenClassConsts.IDENTIFIER_QUOTE],
+            [/``/, TokenClassConsts.IDENTIFIER_QUOTE],
+            [/`/, {token: TokenClassConsts.IDENTIFIER_QUOTE, next: '@pop'}],
+        ],
+        scopes: [],
+        complexDataTypes: [],
     },
+};
+
+export const provideSuggestionsFunction = (
+    model: editor.ITextModel,
+    monacoCursorPosition: Position,
+): {suggestions: languages.CompletionItem[]} => {
+    const range = getRangeToInsertSuggestion(model, monacoCursorPosition);
+    return {
+        suggestions: [
+            ...generateSuggestion({
+                kind: languages.CompletionItemKind.Keyword,
+                detail: 'Keyword',
+                suggestionType: 'suggestKeywords',
+                rangeToInsertSuggestion: range,
+                items: [...keywords, ...scopeKeywords, ...typeKeywords],
+            }),
+            ...generateSuggestion({
+                kind: languages.CompletionItemKind.Operator,
+                detail: 'Operator',
+                suggestionType: 'suggestOperators',
+                rangeToInsertSuggestion: range,
+                items: [...operators],
+            }),
+            ...generateSuggestion({
+                kind: languages.CompletionItemKind.Function,
+                detail: 'Function',
+                suggestionType: 'suggestFunctions',
+                rangeToInsertSuggestion: range,
+                items: [...builtinFunctions],
+            }),
+        ],
+    };
 };

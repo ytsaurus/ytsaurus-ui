@@ -10,7 +10,7 @@ registerLanguage({
         import('./yql').then((module) => {
             return {
                 conf: module.conf,
-                language: module.getLanguage(),
+                language: module.language,
                 provideSuggestionsFunction: createProvideSuggestionsFunction(parseYqlQuery),
             };
         }),

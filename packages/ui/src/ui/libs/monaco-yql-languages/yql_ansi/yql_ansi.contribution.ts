@@ -1,4 +1,5 @@
 import {registerLanguage} from '../_.contribution';
+import {provideSuggestionsFunction} from './yql_ansi';
 
 export const LANGUAGE_ID = 'yql_ansi';
 
@@ -6,10 +7,11 @@ registerLanguage({
     id: LANGUAGE_ID,
     extensions: [],
     loader: () =>
-        import('./yql').then((module) => {
+        import('./yql_ansi').then((module) => {
             return {
                 conf: module.conf,
-                language: module.getLanguage({ansi: true}),
+                language: module.language,
+                provideSuggestionsFunction: provideSuggestionsFunction,
             };
         }),
 });

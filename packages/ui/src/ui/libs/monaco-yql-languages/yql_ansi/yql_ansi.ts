@@ -1,34 +1,10 @@
-import type {languages} from '../fillers/monaco-editor-core';
-import {builtinFunctions, keywords, typeKeywords} from './yql.keywords';
+import {Position, editor, languages} from 'monaco-editor';
+import {getRangeToInsertSuggestion} from '../helpers/getRangeToInsertSuggestion';
+import {generateSuggestion} from '../helpers/generateSuggestions';
+import {builtinFunctions, keywords, typeKeywords} from '../yql/yql.keywords';
+import {keywords as suggestKeywords} from './yql_ansi.keywords';
 
-export const conf: languages.LanguageConfiguration = {
-    comments: {
-        lineComment: '--',
-        blockComment: ['/*', '*/'],
-    },
-    brackets: [
-        ['{', '}'],
-        ['[', ']'],
-        ['(', ')'],
-    ],
-    autoClosingPairs: [
-        {open: '{', close: '}'},
-        {open: '[', close: ']'},
-        {open: '(', close: ')'},
-        {open: '"', close: '"'},
-        {open: "'", close: "'"},
-        {open: '`', close: '`'},
-    ],
-    surroundingPairs: [
-        {open: '{', close: '}'},
-        {open: '[', close: ']'},
-        {open: '(', close: ')'},
-        {open: '"', close: '"'},
-        {open: "'", close: "'"},
-        {open: '`', close: '`'},
-    ],
-    wordPattern: /(-?\d*\.\d\w*)|([^`~!@#%^&*()\-=+[{\]}\\|;:'",./?\s]+)/g,
-};
+export {conf} from '../yql/yql';
 
 export const language: languages.IMonarchLanguage & Record<string, unknown> = {
     defaultToken: 'text',
@@ -38,15 +14,10 @@ export const language: languages.IMonarchLanguage & Record<string, unknown> = {
         {open: '(', close: ')', token: 'delimiter.parenthesis'},
         {open: '{', close: '}', token: 'delimiter.curly'},
     ],
-
     keywords,
-
     typeKeywords,
-
     constants: ['true', 'false'],
-
     builtinFunctions,
-
     operators: [
         '+',
         '-',
@@ -68,11 +39,9 @@ export const language: languages.IMonarchLanguage & Record<string, unknown> = {
         '<>',
         '=',
     ],
-
     symbols: /[=><!~?:&|+\-*/^%]+/,
     escapes: /\\(?:[abfnrtv\\"'`]|x[0-9A-Fa-f]{1,4}|u[0-9A-Fa-f]{4}|U[0-9A-Fa-f]{8})/,
     variables: /[a-zA-Z_]\w*/,
-
     tokenizer: {
         root: [
             {include: '@whitespace'},
@@ -111,7 +80,7 @@ export const language: languages.IMonarchLanguage & Record<string, unknown> = {
         whitespace: [[/\s+/, 'white']],
         comments: [
             [/--.*/, 'comment'],
-            [/\/\*/, {token: 'comment.quote', next: '@comment'}],
+            [/\/\*/, {token: 'comment.quote', next: '@commentAnsi'}],
         ],
         comment: [
             [/[^*/]+/, 'comment'],
@@ -129,8 +98,8 @@ export const language: languages.IMonarchLanguage & Record<string, unknown> = {
             [/[+-]?(?:\d+|0b[01]+|0o[0-8]+|0x[\da-f]+)(?:u?[lst]?)?\b/, 'number'],
         ],
         strings: [
-            [/'/, {token: 'string', next: '@stringSingle'}],
-            [/"/, {token: 'string', next: '@stringDouble'}],
+            [/'/, {token: 'string', next: '@stringAnsiSingle'}],
+            [/"/, {token: 'string', next: '@stringAnsiDouble'}],
             [/[@]{2}/, {token: 'string', next: '@multilineString'}],
         ],
         stringSingle: [
@@ -181,4 +150,22 @@ export const language: languages.IMonarchLanguage & Record<string, unknown> = {
             [/`/, {token: 'string.tablepath', next: '@pop'}],
         ],
     },
+};
+
+export const provideSuggestionsFunction = (
+    model: editor.ITextModel,
+    monacoCursorPosition: Position,
+): {suggestions: languages.CompletionItem[]} => {
+    const range = getRangeToInsertSuggestion(model, monacoCursorPosition);
+    return {
+        suggestions: [
+            ...generateSuggestion({
+                kind: languages.CompletionItemKind.Keyword,
+                detail: 'Keyword',
+                suggestionType: 'suggestKeywords',
+                rangeToInsertSuggestion: range,
+                items: [...suggestKeywords],
+            }),
+        ],
+    };
 };
