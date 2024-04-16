@@ -390,9 +390,11 @@ class Navigation extends Component {
     }
 
     renderRequestPermission(error) {
-        const {object_type: objectType} = error.attributes;
-        const {path, cluster} = this.props;
+        const {object_type: objectType, path: errorPath} = error.attributes;
+        const {path: currentPath, cluster} = this.props;
         const isRequestPermissionsForPathAllowed = objectType === 'map_node';
+
+        const path = errorPath ?? currentPath;
 
         const pathForRequest = isRequestPermissionsForPathAllowed ? path : getParentPath(path);
         const textForRequest = isRequestPermissionsForPathAllowed
