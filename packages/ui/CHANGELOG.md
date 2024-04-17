@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.30.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.29.0...ui-v1.30.0) (2024-04-17)
+
+
+### Features
+
+* **UserCard:** add UserCard support in UIFactory ([c99fae5](https://github.com/ytsaurus/ytsaurus-ui/commit/c99fae5158143a77fa43b0f92ad7a18aba6d2240))
+
+
+### Bug Fixes
+
+* **Query:** error while parsing yson [YTFRONT-4110] ([11b71cf](https://github.com/ytsaurus/ytsaurus-ui/commit/11b71cf7a4f96bcf788b19a2c87313eaf1596214))
+* **QueryTracker:** fix request parameters for validate and explain buttons in yql query [[#370](https://github.com/ytsaurus/ytsaurus-ui/issues/370)] ([65abfc5](https://github.com/ytsaurus/ytsaurus-ui/commit/65abfc5dbd5b82df1ceca4852b8b6a4bee7c6db8))
+* **userSettings:** user settings are not applied if you go to the cluster from the page with clusters [[#471](https://github.com/ytsaurus/ytsaurus-ui/issues/471)] ([134f5c1](https://github.com/ytsaurus/ytsaurus-ui/commit/134f5c17d6c0880cb6769543429e7476733d9a49))
+
 ## [1.29.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.28.1...ui-v1.29.0) (2024-04-12)
 
 
