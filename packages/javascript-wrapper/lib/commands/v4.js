@@ -163,4 +163,9 @@ module.exports = {
         method: 'GET',
         dataType: 'json'
     },
+    switchLeader: {
+        name: 'switch_leader',
+        method: 'POST',
+        dataType: 'json'
+    },
 }
