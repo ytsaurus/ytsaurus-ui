@@ -69,10 +69,12 @@ export interface DraftQuery {
     annotations?: {
         title?: string;
     };
-    settings?: {cluster?: string; clique?: string; discovery_path?: string} & Record<
-        string,
-        string
-    >;
+    settings?: {
+        cluster?: string;
+        clique?: string;
+        discovery_path?: string;
+        execution_mode?: 'validate' | 'optimize';
+    } & Record<string, string>;
     error?: unknown;
     access_control_object: string;
 }
@@ -291,9 +293,9 @@ export function startQuery(
                 annotations,
                 access_control_object,
                 settings: {
-                    execution_mode: options?.execution_mode,
                     stage: engine === 'yql' ? yqlAgentStage : undefined,
                     ...settings,
+                    execution_mode: options?.execution_mode,
                 },
                 output_format: 'json',
             },
