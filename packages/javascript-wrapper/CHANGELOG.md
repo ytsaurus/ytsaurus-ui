@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.9.0](https://github.com/ytsaurus/ytsaurus-ui/compare/javascript-wrapper-v0.8.0...javascript-wrapper-v0.9.0) (2024-04-17)
+
+
+### Features
+
+* **javascript-wrapper:** added switchLeader method ([05c3b3f](https://github.com/ytsaurus/ytsaurus-ui/commit/05c3b3f13267875462730efe797788859b86496f))
+
 ## [0.8.0](https://github.com/ytsaurus/ytsaurus-ui/compare/javascript-wrapper-v0.7.1...javascript-wrapper-v0.8.0) (2024-03-12)
 
 
