@@ -10,7 +10,7 @@ import ypath from '../../../common/thor/ypath';
 import MetaTable, {Template, TemplatePools} from '../../../components/MetaTable/MetaTable';
 import OperationProgress from '../OperationProgress/OperationProgress';
 import ErrorBoundary from '../../../components/ErrorBoundary/ErrorBoundary';
-import {UserCard} from '../../../components/UserLink/UserLink';
+import {SubjectCard} from '../../../components/SubjectLink/SubjectLink';
 import StatusLabel from '../../../components/StatusLabel/StatusLabel';
 import Button from '../../../components/Button/Button';
 import {Loader} from '@gravity-ui/uikit';
@@ -137,7 +137,7 @@ class OperationDetail extends React.Component<ReduxProps & RouteProps> {
         return (
             <div className={detailBlock('header', 'elements-section')}>
                 <div className={detailBlock('header-heading', headingBlock({size: 'l'}))}>
-                    {hammer.format['ReadableField'](type)} operation by <UserCard userName={user} />
+                    {hammer.format['ReadableField'](type)} operation by <SubjectCard name={user} />
                     &ensp;
                     <StatusLabel label={label} renderPlaque />
                 </div>
@@ -158,7 +158,7 @@ class OperationDetail extends React.Component<ReduxProps & RouteProps> {
         const items = [
             [
                 {key: 'id', value: <Template.Id id={$value} />},
-                {key: 'user', value: <UserCard userName={user} />},
+                {key: 'user', value: <SubjectCard name={user} />},
                 {
                     key: 'pools',
                     value: (

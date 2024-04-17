@@ -38,7 +38,7 @@ import SimplePagination from '../../../../components/Pagination/SimplePagination
 import Link from '../../../../components/Link/Link';
 import Icon from '../../../../components/Icon/Icon';
 import AccountUsageColumnsButton from './AccountUsageColumnsButton';
-import {UserCard} from '../../../../components/UserLink/UserLink';
+import {SubjectCard} from '../../../../components/SubjectLink/SubjectLink';
 import Suggest, {SuggestItem} from '../../../../components/Suggest/Suggest';
 import {Datepicker, DatepickerOutputDates} from '../../../../components/common/Datepicker';
 import {PathFragment} from '../../../../containers/PathFragment/PathFragment';
@@ -311,7 +311,7 @@ function OwnerFilter() {
             placeholder={'Owner...'}
             renderItem={(item) => (
                 <span className={block('owner-item')}>
-                    <UserCard userName={'string' === typeof item ? item : item.value} noLink />
+                    <SubjectCard name={'string' === typeof item ? item : item.value} noLink />
                 </span>
             )}
             popupClassName={block('owner-popup')}

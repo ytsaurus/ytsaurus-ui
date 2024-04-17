@@ -59,7 +59,7 @@ import Icon from '../../../../components/Icon/Icon';
 import {getCluster} from '../../../../store/selectors/global';
 import Loader from '../../../../components/Loader/Loader';
 
-import {UserCard} from '../../../../components/UserLink/UserLink';
+import {SubjectCard} from '../../../../components/SubjectLink/SubjectLink';
 import {Secondary, Warning} from '../../../../components/Text/Text';
 import PathView from '../../../../containers/PathFragment/PathFragment';
 import {getIconNameForType} from '../../../../utils/navigation/path-editor';
@@ -250,7 +250,7 @@ function useColumnsByPreset(mediums: Array<string>) {
             header: <AccountUsageDetailsHeader column={'owner'} />,
             sortable: false,
             render(item) {
-                return <UserCard userName={item.row.owner} />;
+                return <SubjectCard name={item.row.owner} />;
             },
             width: 120,
         });

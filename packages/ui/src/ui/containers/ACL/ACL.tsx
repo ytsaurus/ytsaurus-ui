@@ -19,7 +19,7 @@ import ErrorBoundary from '../../components/ErrorBoundary/ErrorBoundary';
 import DataTableYT from '../../components/DataTableYT/DataTableYT';
 import Link from '../../components/Link/Link';
 import {Tooltip} from '../../components/Tooltip/Tooltip';
-import {UserName} from '../../components/UserLink/UserLink';
+import {SubjectName} from '../../components/SubjectLink/SubjectLink';
 
 import withVisible, {WithVisibleProps} from '../../hocs/withVisible';
 import {renderText} from '../../components/templates/utils';
@@ -108,9 +108,9 @@ class ACL extends Component<Props> {
             const {subjectUrl} = item;
             const username = item.subjects[0];
             return (
-                <UserName key={username} url={subjectUrl} userName={username as string}>
+                <SubjectName key={username} url={subjectUrl} name={username as string}>
                     <span className={block('subject-name')}>{username}</span>
-                </UserName>
+                </SubjectName>
             );
         }
 

@@ -10,7 +10,7 @@ import DataTableYT from '../../../../components/DataTableYT/DataTableYT';
 import Label from '../../../../components/Label/Label';
 import Link from '../../../../components/Link/Link';
 import {Secondary, Warning} from '../../../../components/Text/Text';
-import {UserCard} from '../../../../components/UserLink/UserLink';
+import {SubjectCard} from '../../../../components/SubjectLink/SubjectLink';
 import {Tooltip} from '../../../../components/Tooltip/Tooltip';
 import {STICKY_DOUBLE_TOOLBAR_BOTTOM} from '../../../../components/WithStickyToolbar/WithStickyToolbar';
 import ClipboardButton from '../../../../components/ClipboardButton/ClipboardButton';
@@ -101,7 +101,7 @@ function useColumns() {
             {
                 name: 'User',
                 render({row: {user}}) {
-                    return <UserCard userName={user} />;
+                    return <SubjectCard name={user} />;
                 },
             },
             {

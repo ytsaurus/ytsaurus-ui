@@ -14,7 +14,7 @@ import ColumnHeader from '../../../components/ColumnHeader/ColumnHeader';
 import Icon from '../../../components/Icon/Icon';
 import Link from '../../../components/Link/Link';
 import {OperationId} from '../../../components/OperationId/OperationId';
-import {UserCard} from '../../../components/UserLink/UserLink';
+import {SubjectCard} from '../../../components/SubjectLink/SubjectLink';
 import {Secondary} from '../../../components/Text/Text';
 import Label from '../../../components/Label/Label';
 import {Tooltip} from '../../../components/Tooltip/Tooltip';
@@ -188,7 +188,7 @@ function useChytListColumns(cluster: string, onSqlClick: (alias: string) => void
                             {!row.creator ? (
                                 format.NO_VALUE
                             ) : (
-                                <UserCard className={block('full-width')} userName={row.creator} />
+                                <SubjectCard className={block('full-width')} name={row.creator} />
                             )}
                         </div>
                     );

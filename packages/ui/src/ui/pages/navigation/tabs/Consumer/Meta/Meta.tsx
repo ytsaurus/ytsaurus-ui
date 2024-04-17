@@ -9,7 +9,7 @@ import ErrorBoundary from '../../../../../components/ErrorBoundary/ErrorBoundary
 import Label from '../../../../../components/Label/Label';
 import MetaTable from '../../../../../components/MetaTable/MetaTable';
 import Multimeter from '../../../../../components/Multimeter/Multimeter';
-import {UserCard} from '../../../../../components/UserLink/UserLink';
+import {SubjectCard} from '../../../../../components/SubjectLink/SubjectLink';
 
 import type {TPerformanceCounters} from '../../../../../store/reducers/navigation/tabs/queue/types';
 import {isNull} from '../../../../../utils';
@@ -44,7 +44,7 @@ const Meta: React.FC<Props> = ({owner, partitionCount, readDataWeightRate, readR
                         {
                             key: 'owner',
                             label: 'Owner',
-                            value: owner && <UserCard userName={owner} />,
+                            value: owner && <SubjectCard name={owner} />,
                             visible: !isNull(owner),
                         },
                     ],

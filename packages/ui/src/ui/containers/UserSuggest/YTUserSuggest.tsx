@@ -3,7 +3,7 @@ import {useSelector} from 'react-redux';
 
 import {getAllUserNames} from '../../store/selectors/global';
 import Select from '../../components/Select/Select';
-import {UserName} from '../../components/UserLink/UserLink';
+import {SubjectName} from '../../components/SubjectLink/SubjectLink';
 import {useAllUserNamesFiltered} from '../../hooks/global';
 import {UserSuggestProps} from './UserSuggest';
 
@@ -11,7 +11,7 @@ export function YTUserSuggest({className, value, onUpdate, multiple, ...rest}: U
     const userNames = useSelector(getAllUserNames);
     const items = React.useMemo(() => {
         return userNames.sort().map((name) => {
-            return {value: name, text: <UserName userName={name} />};
+            return {value: name, text: <SubjectName name={name} />};
         });
     }, [userNames]);
 
