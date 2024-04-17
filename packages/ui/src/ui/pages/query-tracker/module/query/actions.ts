@@ -1,5 +1,5 @@
 import {createQueryUrl} from '../../utils/navigation';
-import {Action} from 'redux';
+import {Action, AnyAction} from 'redux';
 import {ThunkAction} from 'redux-thunk';
 import {RootState} from '../../../../store/reducers';
 import {getCluster} from '../../../../store/selectors/global';
@@ -8,9 +8,11 @@ import {QueryEngine} from '../engines';
 import {
     QueryItem,
     abortQuery,
+    addACOToLastSelected,
     generateQueryFromTable,
     getQuery,
     startQuery,
+    updateACOQuery,
 } from '../api';
 import {requestQueriesList} from '../queries_list/actions';
 import {getCurrentQuery, getQueryDraft} from './selectors';
@@ -73,13 +75,6 @@ export const setCurrentClusterToQuery =
 
         dispatch(updateQueryDraft({settings: {...settings, cluster}}));
     };
-
-export const PROGRESS_YQL_STATISTIC_CHANGE_FILTER_TEXT =
-    'query-tracker/PROGRESS_YQL_STATISTIC:CHANGE_FILTER_TEXT';
-export type ChangeProgressYQLStatisticFilterTextAction = ActionD<
-    typeof PROGRESS_YQL_STATISTIC_CHANGE_FILTER_TEXT,
-    {filter: string}
->;
 
 export const loadCliqueByCluster =
     (
@@ -284,5 +279,35 @@ export function resetQueryTracker(): ThunkAction<any, RootState, any, never> {
         history.push(createQueryUrl(cluster, ''));
 
         dispatch(createEmptyQuery());
+    };
+}
+
+export function setQueryACO({
+    aco,
+    query_id,
+}: {
+    aco: string;
+    query_id: string;
+}): ThunkAction<Promise<unknown>, RootState, any, AnyAction> {
+    return (dispatch) => {
+        return wrapApiPromiseByToaster(dispatch(updateACOQuery({query_id, aco})), {
+            toasterName: 'update_aco_query',
+            skipSuccessToast: true,
+            errorTitle: 'Failed to update query ACO',
+        }).then(() => {
+            dispatch({type: UPDATE_ACO_QUERY, data: aco});
+        });
+    };
+}
+
+export function setDraftQueryACO({
+    aco,
+}: {
+    aco: string;
+}): ThunkAction<Promise<unknown>, RootState, any, AnyAction> {
+    return (dispatch) => {
+        return dispatch(addACOToLastSelected(aco)).then(() =>
+            dispatch(updateQueryDraft({access_control_object: aco})),
+        );
     };
 }
