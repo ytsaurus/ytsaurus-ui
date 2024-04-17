@@ -1,8 +1,6 @@
 import {DraftQuery, QueryItem} from '../api';
 import {QueryEngine} from '../engines';
 import {
-    ChangeProgressYQLStatisticFilterTextAction,
-    PROGRESS_YQL_STATISTIC_CHANGE_FILTER_TEXT,
     REQUEST_QUERY,
     RequestQueryAction,
     SET_QUERY,
@@ -39,11 +37,6 @@ export interface QueryState {
     cliqueLoading: boolean;
     cliqueMap: Record<string, {alias: string; yt_operation_id?: string}[]>;
     state: 'init' | 'loading' | 'ready' | 'error';
-    filters?: {
-        progressYQLStatistic?: {
-            text: string;
-        };
-    };
 }
 
 const initialQueryDraftState: QueryState['draft'] = {
@@ -80,7 +73,6 @@ export function reducer(state = initState, action: Actions): QueryState {
                 },
                 dirtySinceLastSubmit: false,
                 state: 'ready',
-                filters: {},
             };
         }
         case UPDATE_QUERY: {
@@ -91,7 +83,6 @@ export function reducer(state = initState, action: Actions): QueryState {
                     ...state.draft,
                     error: action.data?.error,
                 },
-                filters: {},
             };
         }
         case REQUEST_QUERY: {
@@ -153,17 +144,6 @@ export function reducer(state = initState, action: Actions): QueryState {
                 draft: {...state.draft, access_control_object},
             };
         }
-
-        case PROGRESS_YQL_STATISTIC_CHANGE_FILTER_TEXT: {
-            return {
-                ...state,
-                filters: {
-                    progressYQLStatistic: {
-                        text: action.data.filter,
-                    },
-                },
-            };
-        }
     }
 
     return state;
@@ -179,5 +159,4 @@ type Actions =
     | SetQueryReadyAction
     | UpdateACOQueryAction
     | SetQueryClusterClique
-    | SetQueryCliqueLoading
-    | ChangeProgressYQLStatisticFilterTextAction;
+    | SetQueryCliqueLoading;
