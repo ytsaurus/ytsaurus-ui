@@ -72,6 +72,8 @@ export function normalizeIdmParams(idmKind: IdmKindType, path = '') {
     return res;
 }
 
+export type SubjectGroupType = 'service' | 'department' | string;
+
 export interface PreparedRole {
     type?: 'users' | 'groups';
     subject: Subject;
@@ -89,6 +91,7 @@ export interface PreparedRole {
     isMissing?: boolean;
 
     group_name?: string;
+    group_type?: SubjectGroupType;
     user?: string;
     name?: string;
     tvm_id?: string;

@@ -1,6 +1,6 @@
 import {YTPermissionType} from '../../../shared/yt-types';
 import {YTPermissionTypeUI} from './acl-api';
-import {PreparedRole} from './index';
+import {PreparedRole, SubjectGroupType} from './index';
 
 export type IdmKindType =
     | 'ui_effective_acl' // ui specific type, used to read @effective_acl
@@ -19,6 +19,7 @@ export interface Group {
 interface GroupSubject {
     group: string;
     group_name?: string;
+    group_type?: string;
 
     // url is link to staff or abc page for this subject.
     url?: string;
@@ -232,6 +233,7 @@ export type PreparedAclSubject = TypedAclSubject & {
     isSplitted?: boolean;
     subjectIndex?: number;
     vital?: boolean;
+    group_type?: SubjectGroupType;
 
     type?: 'columns';
 };
