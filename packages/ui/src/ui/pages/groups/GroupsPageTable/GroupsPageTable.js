@@ -9,7 +9,7 @@ import ClickableAttributesButton from '../../../components/AttributesButton/Clic
 import ColumnHeader from '../../../components/ColumnHeader/ColumnHeader';
 import CommaSeparatedListWithRestCounter from '../../../components/CommaSeparateListWithRestCounter/CommaSeparateListWithRestCounter';
 import DataTableYT from '../../../components/DataTableYT/DataTableYT';
-import {UserCard} from '../../../components/UserLink/UserLink';
+import {SubjectCard} from '../../../components/SubjectLink/SubjectLink';
 
 import ErrorBoundary from '../../../components/ErrorBoundary/ErrorBoundary';
 import ExpandIcon from '../../../components/ExpandIcon/ExpandIcon';
@@ -191,7 +191,7 @@ class GroupsPageTable extends React.Component {
                         if (item.startsWith('idm-group:')) {
                             return item;
                         } else {
-                            return <UserCard userName={item} />;
+                            return <SubjectCard name={item} />;
                         }
                     }}
                 />

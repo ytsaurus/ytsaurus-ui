@@ -14,7 +14,7 @@ import {Tooltip} from '../../../components/Tooltip/Tooltip';
 import Icon from '../../../components/Icon/Icon';
 import Link from '../../../components/Link/Link';
 import LoadDataHandler from '../../../components/LoadDataHandler/LoadDataHandler';
-import {UserCard} from '../../../components/UserLink/UserLink';
+import {SubjectCard} from '../../../components/SubjectLink/SubjectLink';
 import {STICKY_TOOLBAR_BOTTOM} from '../../../components/WithStickyToolbar/WithStickyToolbar';
 import UsersPageEditor from '../../../pages/users/UsersPageEditor/UsersPageEditor';
 import {getCluster} from '../../../store/selectors/global';
@@ -154,7 +154,7 @@ class UsersPageTable extends React.Component {
         const {name, upravlyator_managed: idm} = row;
         return (
             <div className={block('content', {col})}>
-                <UserCard userName={name} internal={!idm} />
+                <SubjectCard name={name} internal={!idm} />
             </div>
         );
     }

@@ -4,54 +4,62 @@ import cn from 'bem-cn-lite';
 import YT from '../../config/yt-config';
 import UIFactory from '../../UIFactory';
 
-import './UserLink.scss';
+import './SubjectLink.scss';
 
-const block = cn('user-link');
+const block = cn('yt-subject-link');
 
-export interface UserCardProps {
+export type SubjectCardProps = {
     className?: string;
     noLink?: boolean;
-    internal?: boolean; // use YT link
 
-    userName: string;
+    internal?: boolean;
+    url?: string;
 
-    children?: React.ReactElement;
-}
+    name: string;
+    type?: 'user';
+};
 
-export function DefaultUserCard(props: UserCardProps) {
-    const {userName, className, noLink, internal, children} = props;
+export function DefaultSubjectCard({
+    name,
+    type = 'user',
+    className,
+    noLink,
+    internal,
+}: SubjectCardProps) {
     const url = internal
-        ? `/${YT.cluster}/users?filter=${userName}`
-        : UIFactory.makeUrlForUserName({login: userName, cluster: YT.cluster});
+        ? `/${YT.cluster}/users?filter=${name}`
+        : UIFactory.makeUrlForUserName({login: name, cluster: YT.cluster});
 
-    return <UserName {...{className, userName, url: noLink ? undefined : url, children}} />;
+    return <SubjectName {...{className, name, type, url: noLink ? undefined : url}} />;
 }
 
-export function UserCard(props: UserCardProps) {
-    return UIFactory.renderUserCard(props);
+export function SubjectCard(props: SubjectCardProps) {
+    return UIFactory.renderSubjectCard(props);
 }
 
-export function UserName({
-    userName,
+export function SubjectName({
+    name,
+    type = 'user',
     url,
     children,
     className,
 }: {
     className?: string;
-    userName: string;
+    name: string;
+    type?: 'user';
     url?: string;
     children?: React.ReactElement;
 }) {
     return (
         <a
-            key={userName}
-            className={block(null, className)}
+            key={name}
+            className={block({type}, className)}
             href={url}
-            title={userName}
+            title={name}
             target="_blank"
             rel="noopener noreferrer"
         >
-            <span className={block('name')}>{children || userName}</span>
+            <span className={block('name')}>{name ?? children}</span>
         </a>
     );
 }

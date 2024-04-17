@@ -10,7 +10,7 @@ import moment from 'moment';
 
 import hammer from '@ytsaurus/interface-helpers/lib/hammer';
 
-import {UserCard} from '../../components/UserLink/UserLink';
+import {SubjectCard} from '../../components/SubjectLink/SubjectLink';
 import withBlockedNavigation from '../../hocs/withBlockedNavigation';
 import Icon from '../../components/Icon/Icon';
 import Button from '../../components/Button/Button';
@@ -192,7 +192,7 @@ class MaintenancePage extends Component {
 
                         {this.renderTimeLine(maintenancePageEvent)}
 
-                        <UserCard className={b('author')} userName={createdBy} />
+                        <SubjectCard className={b('author')} name={createdBy} />
 
                         <ul className={b('links')}>
                             {announcesMailListUrl && (

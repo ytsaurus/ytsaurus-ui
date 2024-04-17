@@ -15,7 +15,7 @@ import Label from '../../../components/Label/Label';
 import {OperationPool} from '../../../components/OperationPool/OperationPool';
 import MetaTable, {MetaTableItem} from '../../../components/MetaTable/MetaTable';
 import {OperationId} from '../../../components/OperationId/OperationId';
-import {UserCard} from '../../../components/UserLink/UserLink';
+import {SubjectCard} from '../../../components/SubjectLink/SubjectLink';
 
 import {useQueryWidgetSidePanel} from '../../../pages/query-tracker/QueryWidget/side-panel';
 
@@ -176,7 +176,7 @@ function ChytCliqueMetaTable() {
                 {key: 'Incarnation index', value: format.Number(incarnation_index)},
                 {
                     key: 'Creator',
-                    value: creator ? <UserCard userName={creator} /> : format.NO_VALUE,
+                    value: creator ? <SubjectCard name={creator} /> : format.NO_VALUE,
                 },
                 {
                     key: CHYT_TABLE_TITLES['speclet_modification_time'],

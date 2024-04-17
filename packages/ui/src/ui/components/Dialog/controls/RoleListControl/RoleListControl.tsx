@@ -8,7 +8,7 @@ import {
     EditableManyListsItemType,
 } from '@gravity-ui/dialog-fields';
 
-import {UserCard} from '../../../UserLink/UserLink';
+import {SubjectCard} from '../../../SubjectLink/SubjectLink';
 import {ResponsibleType, RoleConverted} from '../../../../utils/acl/acl-types';
 import SubjectsControl from '../../../../containers/ACL/SubjectsControl/SubjectsControl';
 import './RoleListControl.scss';
@@ -82,7 +82,7 @@ export default class RoleListControl extends React.Component<Props> {
         const {title, data} = item;
         const {type} = data || {};
 
-        return type === 'users' ? <UserCard userName={title} /> : title;
+        return type === 'users' ? <SubjectCard name={title} /> : title;
     };
 
     render() {

@@ -12,7 +12,7 @@ import {TemplatePools, TemplateWeight} from '../../../../components/MetaTable/Me
 import templates, {renderText} from '../../../../components/templates/utils';
 import ClipboardButton from '../../../../components/ClipboardButton/ClipboardButton';
 import ElementsTable from '../../../../components/ElementsTable/ElementsTable';
-import {UserCard} from '../../../../components/UserLink/UserLink';
+import {SubjectCard} from '../../../../components/SubjectLink/SubjectLink';
 import Button from '../../../../components/Button/Button';
 import Link from '../../../../components/Link/Link';
 import Icon from '../../../../components/Icon/Icon';
@@ -206,7 +206,7 @@ class OperationsListTable extends Component {
         return (
             <React.Fragment>
                 <UserPoolItem awesomeIcon={'user'} title={'User'}>
-                    <UserCard userName={user} />
+                    <SubjectCard name={user} />
                 </UserPoolItem>
                 <UserPoolItem awesomeIcon={'poll-people'} title={'Pool'}>
                     {multiplePools ? (

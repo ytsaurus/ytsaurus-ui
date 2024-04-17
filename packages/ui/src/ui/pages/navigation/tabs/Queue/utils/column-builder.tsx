@@ -6,7 +6,7 @@ import format from '../../../../../common/hammer/format';
 import Label from '../../../../../components/Label/Label';
 import Link from '../../../../../components/Link/Link';
 import Multimeter from '../../../../../components/Multimeter/Multimeter';
-import {UserCard} from '../../../../../components/UserLink/UserLink';
+import {SubjectCard} from '../../../../../components/SubjectLink/SubjectLink';
 import WarningIcon from '../../../../../components/WarningIcon/WarningIcon';
 import type {TPerformanceCounters} from '../../../../../store/reducers/navigation/tabs/queue/types';
 import {Host} from '../../../../../containers/Host/Host';
@@ -105,7 +105,7 @@ export function user<T>(name: string, getter: (row: T) => string): Column<T> {
     return {
         name,
         render({row}) {
-            return <UserCard userName={getter(row)} />;
+            return <SubjectCard name={getter(row)} />;
         },
         sortAccessor: getter,
     };

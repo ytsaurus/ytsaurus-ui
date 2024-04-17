@@ -1,7 +1,7 @@
 import React from 'react';
 import ypath from '@ytsaurus/interface-helpers/lib/ypath';
 import {Template} from '../../../components/MetaTable/templates/Template';
-import {UserCard} from '../../UserLink/UserLink';
+import {SubjectCard} from '../../SubjectLink/SubjectLink';
 import AccountLink from '../../../pages/accounts/AccountLink';
 import UIFactory from '../../../UIFactory';
 import {makeTTLItems} from './ttl';
@@ -27,7 +27,7 @@ export default function metaTablePresetMain(attributes) {
         },
         {
             key: 'owner',
-            value: <UserCard userName={owner} />,
+            value: <SubjectCard name={owner} />,
         },
         {
             key: 'account',
