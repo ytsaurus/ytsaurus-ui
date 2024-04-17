@@ -39,4 +39,12 @@
         display: inline-block;
         min-width: 550px;
     }
+
+    &__header_fixed {
+        width: 100%;
+        position: sticky;
+        top: 0;
+        z-index: 1;
+        background-color: rgba(256, 256, 256, 1);
+    }
 }
