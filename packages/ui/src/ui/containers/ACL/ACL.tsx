@@ -17,9 +17,8 @@ import {MyPermissions} from './MyPermissinos/MyPermissions';
 import LoadDataHandler from '../../components/LoadDataHandler/LoadDataHandler';
 import ErrorBoundary from '../../components/ErrorBoundary/ErrorBoundary';
 import DataTableYT from '../../components/DataTableYT/DataTableYT';
-import Link from '../../components/Link/Link';
 import {Tooltip} from '../../components/Tooltip/Tooltip';
-import {SubjectName} from '../../components/SubjectLink/SubjectLink';
+import {SubjectCard} from '../../components/SubjectLink/SubjectLink';
 
 import withVisible, {WithVisibleProps} from '../../hocs/withVisible';
 import {renderText} from '../../components/templates/utils';
@@ -104,14 +103,24 @@ class ACL extends Component<Props> {
 
     // eslint-disable-next-line react/sort-comp
     static renderSubjectLink(item: PreparedAclSubject | PreparedApprover | PermissionsRow) {
+        const {internal} = item;
+        if (internal) {
+            const [subject] = item.subjects;
+            const [type] = item.types ?? [];
+            return (
+                <SubjectCard
+                    name={subject!}
+                    type={type === 'group' ? 'group' : 'user'}
+                    internal
+                    showIcon
+                />
+            );
+        }
+
         if (item.subjectType === 'user') {
             const {subjectUrl} = item;
             const username = item.subjects[0];
-            return (
-                <SubjectName key={username} url={subjectUrl} name={username as string}>
-                    <span className={block('subject-name')}>{username}</span>
-                </SubjectName>
-            );
+            return <SubjectCard url={subjectUrl} name={username as string} showIcon />;
         }
 
         if (item.subjectType === 'tvm') {
@@ -120,39 +129,36 @@ class ACL extends Component<Props> {
 
             const text = `${name} (${tvmId})`;
             return (
-                <div className={block('subject-column')}>
-                    <Link
-                        key={name}
-                        className={block('subject-link')}
-                        url={item.subjectUrl}
-                        theme="primary"
-                        title={text}
-                    >
-                        <span className={block('subject-name')}>{text}</span>
-                    </Link>
+                <div className={block('subject-with-tvm')}>
+                    <SubjectCard url={item.subjectUrl} name={text} type="tvm" showIcon />
                     <Label text="TVM" />
                 </div>
             );
         }
 
         const {name, url, group} = item.groupInfo || {};
+        const {group_type} = item;
         return (
-            <Link key={name} url={url} theme="primary">
-                <Tooltip
-                    content={
-                        group && (
-                            <React.Fragment>
-                                idm-group:{group}
-                                <span className={block('copy-idm-group')}>
-                                    <ClipboardButton text={`idm-group:${group}`} size={16} />
-                                </span>
-                            </React.Fragment>
-                        )
-                    }
-                >
-                    <span className={block('subject-name')}>{name}</span>
-                </Tooltip>
-            </Link>
+            <Tooltip
+                content={
+                    group && (
+                        <React.Fragment>
+                            idm-group:{group}
+                            <span className={block('copy-idm-group')}>
+                                <ClipboardButton text={`idm-group:${group}`} size={16} />
+                            </span>
+                        </React.Fragment>
+                    )
+                }
+            >
+                <SubjectCard
+                    name={name ?? group!}
+                    url={url}
+                    type="group"
+                    groupType={group_type}
+                    showIcon
+                />
+            </Tooltip>
         );
     }
 
@@ -177,7 +183,7 @@ class ACL extends Component<Props> {
 
     getColumnsTemplates<T extends ApproverRow | PermissionsRow>() {
         const openDeleteModal = this.handleDeletePermissionClick;
-        const {cluster, idmKind, toggleExpandAclSubject} = this.props;
+        const {idmKind, toggleExpandAclSubject} = this.props;
         return {
             inherited: {
                 name: 'inherited',
@@ -213,29 +219,13 @@ class ACL extends Component<Props> {
                 align: 'left',
                 className: block('table-item', {type: 'subjects'}),
                 render({row}) {
-                    const {internal} = row;
-
-                    const nodes = internal
-                        ? _.map(row.subjects, (subject, index) => {
-                              const isGroup = row.types?.[index] === 'group';
-                              const url = isGroup
-                                  ? `/${cluster}/groups?groupFilter=${subject}`
-                                  : `/${cluster}/users?filter=${subject}`;
-                              return (
-                                  <Link key={index} theme={'primary'} routed url={url}>
-                                      <span className={block('subject-name')}>{subject}</span>
-                                  </Link>
-                              );
-                          })
-                        : ACL.renderSubjectLink(row);
-
                     const {requestPermissionsFlags = {}} = UIFactory.getAclApi();
 
                     const level = 'level' in row ? row.level : undefined;
                     return (
                         <Flex className={block('subject', {level: String(level)})} wrap gap={1}>
                             <Flex grow wrap gap={1}>
-                                {nodes}
+                                {ACL.renderSubjectLink(row)}
                             </Flex>
                             {Object.keys(requestPermissionsFlags).map((key, index) => {
                                 const flagInfo = requestPermissionsFlags[key];

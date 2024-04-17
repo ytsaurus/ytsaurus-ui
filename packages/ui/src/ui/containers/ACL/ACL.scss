@@ -110,6 +110,11 @@
 
         &_type_actions {
             width: 85px;
+
+            .yc-button {
+                margin-top: -4px;
+                margin-bottom: -4px;
+            }
         }
 
         &_type_columns {
@@ -118,22 +123,11 @@
         }
     }
 
-    &__subject-column {
+    &__subject-with-tvm {
+        flex-grow: 1;
         display: flex;
         align-items: baseline;
         justify-content: space-between;
-    }
-
-    &__subject-link {
-        display: block;
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
-
-    &__subject-name {
-        &_highlighted {
-            background-color: var(--action-button-color);
-        }
     }
 
     &__row_unrecognized {
