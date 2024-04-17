@@ -212,6 +212,7 @@ export interface ResponseItem {
 export interface ResponseItemsGroup {
     addresses?: Array<ResponseItem>;
     cellTag?: number;
+    cellId?: string;
 }
 
 export interface MastersConfigResponse {

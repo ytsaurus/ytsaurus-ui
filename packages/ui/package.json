@@ -70,7 +70,7 @@
     "@gravity-ui/websql-autocomplete": "^8.0.2",
     "@types/rbush": "^3.0.0",
     "@ytsaurus/interface-helpers": "^0.3.0",
-    "@ytsaurus/javascript-wrapper": "^0.7.1",
+    "@ytsaurus/javascript-wrapper": "^0.9.0",
     "axios": "^1.5.0",
     "colord": "^2.9.1",
     "cookie-parser": "1.4.6",

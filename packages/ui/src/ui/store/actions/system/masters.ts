@@ -11,6 +11,7 @@ import {YTApiId, ytApiV3Id} from '../../../rum/rum-wrap-api';
 import {USE_SUPRESS_SYNC} from '../../../../shared/constants';
 import type {AxiosError} from 'axios';
 import type {Dispatch} from 'redux';
+import type {ThunkAction} from 'redux-thunk';
 import type {BatchSubRequest} from '../../../../shared/yt-types';
 import type {
     MasterAlert,
@@ -18,6 +19,7 @@ import type {
     MastersConfigResponse,
     ResponseItemsGroup,
 } from '../../reducers/system/masters';
+import type {RootState} from '../../reducers';
 
 export const FETCH_MASTER_CONFIG = createActionTypes('MASTER_CONFIG');
 export const FETCH_MASTER_DATA = createActionTypes('MASTER_DATA');
@@ -76,6 +78,13 @@ async function loadMastersConfig(): Promise<[MastersConfigResponse, MasterAlert[
                 ...USE_SUPRESS_SYNC,
             },
         },
+        {
+            command: 'get' as const,
+            parameters: {
+                path: '//sys/@cluster_connection/primary_master',
+                ...USE_SUPRESS_SYNC,
+            },
+        },
     ];
 
     const [
@@ -85,6 +94,7 @@ async function loadMastersConfig(): Promise<[MastersConfigResponse, MasterAlert[
         discoveryServersResult,
         queueAgentsResult,
         alertsResult,
+        primaryMasterAttributes,
     ] = await ytApiV3Id.executeBatch(YTApiId.systemMastersConfig, {requests});
 
     const batchError = getBatchError(
@@ -157,8 +167,10 @@ async function loadMastersConfig(): Promise<[MastersConfigResponse, MasterAlert[
         primaryMaster: {
             addresses: _.map(_.keys(primaryMaster), (address) => {
                 const value = primaryMaster[address];
+                
                 return {
                     host: address,
+                    cellId: primaryMasterAttributes.output.cell_id,
                     physicalHost: ypath.getValue(value, '/@annotations/physical_host'),
                     attributes: ypath.getValue(value, '/@'),
                 };
@@ -355,6 +367,27 @@ export function loadMasters() {
                 return {isRetryFutile: true};
             }
         }
+    };
+}
+
+type WaitForSwitchLeaderPayload = {
+    newLeaderAddress: string;
+};
+
+export function waitForSwitchLeader({
+    newLeaderAddress,
+}: WaitForSwitchLeaderPayload): ThunkAction<Promise<void>, RootState, any, any> {
+    return async (_dispatch: Dispatch, getState: () => RootState) => {
+        let primary;
+
+        do {
+            primary = getState().system.masters.primary;
+
+            if (primary.leader?.$address !== newLeaderAddress) {
+                const POLL_TIMEOUT = 1000 * 5;
+                await new Promise((resolve) => setTimeout(resolve, POLL_TIMEOUT));
+            }
+        } while (primary.leader?.$address !== newLeaderAddress);
     };
 }
 

@@ -14,6 +14,7 @@ import ypath from '../../../common/thor/ypath';
 import Icon from '../../../components/Icon/Icon';
 import {Tooltip} from '../../../components/Tooltip/Tooltip';
 import NodeQuad from '../NodeQuad/NodeQuad';
+import {SwitchLeaderButton} from './SwitchLeader';
 
 import './MasterGroup.scss';
 
@@ -39,6 +40,8 @@ class Instance extends Component {
     static propTypes = {
         state: PropTypes.oneOf(_.keys(Instance.instanceStateToTheme)),
         address: PropTypes.string.isRequired,
+        currentLeaderAddress: PropTypes.string,
+        cellId: PropTypes.string,
         attributes: PropTypes.shape({
             warming_up: PropTypes.bool,
             read_only: PropTypes.bool,
@@ -46,6 +49,7 @@ class Instance extends Component {
         }),
         maintenanceMessage: PropTypes.string,
         allowVoting: PropTypes.bool,
+        allowSwitchLeader: PropTypes.bool,
     };
 
     render() {
@@ -66,6 +70,7 @@ class Instance extends Component {
                 </div>
                 <div className={b('role')}>
                     <span>{hammer.format['ReadableField'](state ? state : 'unknown')}</span>
+                    {this.renderSwitchLeaderButton()}
                 </div>
                 <div className={b('icon')}>
                     {maintenanceMessage && (
@@ -105,6 +110,24 @@ class Instance extends Component {
         );
         /* eslint-enable camelcase */
     }
+
+    renderSwitchLeaderButton = () => {
+        const {address, currentLeaderAddress, cellId, allowSwitchLeader} = this.props;
+
+        if (!allowSwitchLeader || address === currentLeaderAddress) {
+            return null;
+        }
+
+        return (
+            <SwitchLeaderButton
+                className={b('switch-leader-button')}
+                currentLeaderAddress={currentLeaderAddress}
+                newLeaderAddress={address}
+                cellId={cellId}
+                address={address}
+            />
+        );
+    };
 }
 
 class MasterGroup extends Component {
@@ -131,6 +154,7 @@ class MasterGroup extends Component {
         hostType: PropTypes.oneOf(['host', 'physicalHost']),
         gridRowStart: PropTypes.bool,
         allowVoting: PropTypes.bool,
+        allowSwitchLeader: PropTypes.bool,
     };
 
     renderQuorum() {
@@ -188,7 +212,11 @@ class MasterGroup extends Component {
     }
 
     render() {
-        const {className, instances, hostType, gridRowStart, allowVoting} = this.props;
+        const {className, instances, hostType, gridRowStart, allowVoting, allowSwitchLeader} =
+            this.props;
+
+        const currentLeader =
+            allowSwitchLeader && instances.find((item) => item.state === 'leading');
 
         return (
             <div className={b('group', {'grid-row-start': gridRowStart}, className)}>
@@ -202,14 +230,18 @@ class MasterGroup extends Component {
                             ? ypath.getValue($rowAddress, '/attributes/maintenance_message') ||
                               'Maintenance'
                             : '';
+                        const cellId = $rowAddress.cellId;
                         return (
                             <Instance
                                 key={$address}
+                                currentLeaderAddress={currentLeader?.$address}
                                 address={address}
+                                cellId={cellId}
                                 state={state}
                                 attributes={$attributes}
                                 maintenanceMessage={maintenanceMessage}
                                 allowVoting={allowVoting}
+                                allowSwitchLeader={allowSwitchLeader}
                             />
                         );
                     },

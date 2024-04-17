@@ -107,7 +107,12 @@ class Masters extends Component {
                     Primary Masters
                     {this.renderMasterTypeSwitcher()}
                 </div>
-                <MasterGroup className={b('primary-master')} {...primary} allowVoting />
+                <MasterGroup
+                    className={b('primary-master')}
+                    {...primary}
+                    allowVoting
+                    allowSwitchLeader
+                />
                 {Boolean(secondary?.length) && (
                     <React.Fragment>
                         <div className={headingCN}>Secondary Masters</div>
@@ -158,7 +163,12 @@ class Masters extends Component {
                     Primary Masters
                     {this.renderMasterTypeSwitcher()}
                 </div>
-                <MasterGroup className={b('primary-master')} {...primary} allowVoting />
+                <MasterGroup
+                    className={b('primary-master')}
+                    {...primary}
+                    allowVoting
+                    allowSwitchLeader
+                />
                 {Boolean(secondary?.length) && (
                     <React.Fragment>
                         <div className={headingCN}>Secondary Masters</div>
