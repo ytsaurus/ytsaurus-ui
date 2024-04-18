@@ -1,6 +1,7 @@
 import {ClickHouseAutocompleteResult} from '@gravity-ui/websql-autocomplete';
-import {IRange, languages} from 'monaco-editor';
+import {IRange, Position, editor, languages} from 'monaco-editor';
 import {generateSuggestion} from '../helpers/generateSuggestions';
+import {getRangeToInsertSuggestion} from '../helpers/getRangeToInsertSuggestion';
 
 export const keywords = [
     'AND',
@@ -1296,6 +1297,20 @@ export const dataTypeFamiliesCaseInsensitive = [
     'VARCHAR',
     'VARCHAR2',
 ];
+
+export const generateClickhouseOldSafariSuggestions = (
+    model: editor.ITextModel,
+    monacoCursorPosition: Position,
+) => {
+    const range = getRangeToInsertSuggestion(model, monacoCursorPosition);
+    return {
+        suggestions: generateClickhouseAdditionalSuggestion(range, {
+            suggestFunctions: true,
+            suggestKeywords: [],
+            errors: [],
+        }),
+    };
+};
 
 export const generateClickhouseAdditionalSuggestion = (
     rangeToInsertSuggestion: IRange,
