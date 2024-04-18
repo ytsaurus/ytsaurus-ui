@@ -16,10 +16,38 @@ import withSplit from '../../../../../hocs/withSplit';
 import './ProxyCard.scss';
 import UIFactory from '../../../../../UIFactory';
 import {NodeColumnRole, NodeColumnState} from '../../NodeColumns';
+import type {RootState} from '../../../../../store/reducers';
+
+type ProxyProps = {
+    banMessage: string;
+    effectiveState: string
+    role: "data" | "default" | "control";
+    state: string;
+    host: string;
+    name: string;
+    physicalHost: string;
+    banned: boolean;
+    version: string;
+
+    updatedAt?: string;
+    loadAverage?: number,
+    networkLoad?: number
+};
+
+type OwnProps = {
+    proxy: ProxyProps;
+    handleClose: () => void;
+    isYpCluster: boolean;
+};
+
+type StateProps = ReturnType<typeof mapStateToProps>;
+
+
+type ProxyCardProps = OwnProps & StateProps;
 
 const block = cn('proxy-card');
 
-export class ProxyCard extends Component {
+export class ProxyCard extends Component<ProxyCardProps> {
     static proxyProps = PropTypes.shape({
         banMessage: PropTypes.string.isRequired,
         effectiveState: PropTypes.string.isRequired,
@@ -119,7 +147,7 @@ export class ProxyCard extends Component {
     }
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state: RootState) => {
     return {
         cluster: getCluster(state),
         clusterConfig: getCurrentClusterConfig(state),
