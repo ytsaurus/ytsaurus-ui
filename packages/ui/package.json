@@ -53,7 +53,10 @@
     "test:smoke": "cd smoke-tests; npm ci; npm test",
     "test:smoke:noci": "cd smoke-tests; npm test",
     "test:unit": "NODE_ENV=test:unit jest --config ./jest.config.js",
-    "test:watch": "NODE_ENV=test:unit jest --config ./jest.config.js --watchAll"
+    "test:watch": "NODE_ENV=test:unit jest --config ./jest.config.js --watchAll",
+    "typecheck:ui": "tsc -p src/ui --noEmit",
+    "typecheck:server": "tsc -p src/server --noEmit",
+    "typecheck": "npm run typecheck:server && npm run typecheck:ui"
   },
   "config": {
     "docker_image": "ytsaurus/ui"
