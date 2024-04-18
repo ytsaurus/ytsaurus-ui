@@ -1,5 +1,5 @@
 import React, {Fragment, useState} from 'react';
-import {connect} from 'react-redux';
+import {ResolveThunks, connect} from 'react-redux';
 import PropTypes from 'prop-types';
 
 import {TextInput} from '@gravity-ui/uikit';
@@ -13,6 +13,7 @@ import {
     openNameEditor,
     setShardName,
 } from '../../../../store/actions/components/shards';
+import type {RootState} from '../../../../store/reducers';
 
 Name.propTypes = {
     // from parent
@@ -34,6 +35,18 @@ Name.propTypes = {
     closeNameEditor: PropTypes.func.isRequired,
 };
 
+type OwnProps = {
+    id: string;
+    name: string;
+    className: string;
+};
+
+type StateProps = ReturnType<typeof mapStateToProps>;
+
+type DispatchProps = ResolveThunks<typeof mapDispatchToProps>;
+
+type NameProps = OwnProps & StateProps & DispatchProps;
+
 function Name({
     name: initialName,
     id,
@@ -46,7 +59,7 @@ function Name({
     loading,
     error,
     errorData,
-}) {
+}: NameProps) {
     const [name, changeName] = useState(initialName);
     const handleConfirm = () => setShardName(id, name);
     const handleOpen = () => openNameEditor(id);
@@ -84,7 +97,7 @@ function Name({
     );
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state: RootState) => {
     const {nameId, nameVisible, nameLoading, nameLoaded, nameError, nameErrorData} =
         state.components.shards;
 
