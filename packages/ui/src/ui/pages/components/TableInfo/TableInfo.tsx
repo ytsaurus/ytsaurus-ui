@@ -6,7 +6,12 @@ import './TableInfo.scss';
 
 const block = cn('table-info');
 
-export default function TableInfo({showingItems, totalItems}) {
+type TableInfoProps = {
+    showingItems: number;
+    totalItems: number;
+}
+
+export default function TableInfo({showingItems, totalItems}: TableInfoProps) {
     return (
         <div className={block('info')}>
             <p className={block('showing')}>
