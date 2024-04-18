@@ -10,7 +10,12 @@ import {INIT_CLUSTER_PARAMS, LOAD_ERROR, UPDATE_CLUSTER} from '../../constants/i
 import {getCurrentUserName} from '../../store/selectors/global';
 import {getXsrfCookieName} from '../../utils';
 import {RESET_STORE_BEFORE_CLUSTER_CHANGE} from '../../constants/utils';
-import {shouldUsePreserveState} from '../../store/selectors/settings';
+import {
+    isRecentClustersFirst,
+    isRecentPagesFirst,
+    isRedirectToBetaSwitched,
+    shouldUsePreserveState,
+} from '../../store/selectors/settings';
 import {rumLogError} from '../../rum/rum-counter';
 import {Toaster} from '@gravity-ui/uikit';
 import {RumWrapper, YTApiId} from '../../rum/rum-wrap-api';
@@ -23,6 +28,10 @@ import YT from '../../config/yt-config';
 import {GLOBAL_PARTIAL} from '../../constants/global';
 import {FIX_MY_TYPE, YTError} from '../../../@types/types';
 import {initYTApiClusterParams} from '../../common/yt-api-init';
+import {NAMESPACES, SettingName} from '../../../shared/constants/settings';
+import {updateTitle} from './global';
+import {reloadUserSettings, setSetting} from './settings';
+import {joinMenuItemsAction, splitMenuItemsAction, trackVisit} from './menu';
 
 function handleUiConfigError(path: string, error: any, type?: string) {
     rumLogError(
@@ -138,6 +147,47 @@ export function initClusterParams(cluster: string): GlobalThunkAction<Promise<vo
     };
 }
 
+function initClusterAndUserSettingsAfterClusterChanging(params: {
+    cluster: string;
+    login: string;
+}): GlobalThunkAction<Promise<void>> {
+    return async (dispatch, getState) => {
+        await dispatch(initClusterParams(params.cluster));
+        await dispatch(updateTitle({cluster: params.cluster, path: '', page: ''}));
+        await dispatch(reloadUserSettings(params.login));
+
+        const state = getState();
+        // todo: get rid of redirectToBetaSwitched setting.
+        // It`s exist for set default value of redirectToBeta setting, when settings document is empty yet.
+        // Set redirectToBeta on server after get all user settings (home.js). Or get rid of this logic at all.
+        if (!isRedirectToBetaSwitched(state)) {
+            dispatch(
+                setSetting(
+                    SettingName.DEVELOPMENT.REDIRECT_TO_BETA_SWITCHED,
+                    NAMESPACES.DEVELOPMENT,
+                    true,
+                ),
+            );
+            dispatch(
+                setSetting(SettingName.DEVELOPMENT.REDIRECT_TO_BETA, NAMESPACES.DEVELOPMENT, true),
+            );
+        }
+
+        if (isRecentClustersFirst(state)) {
+            dispatch(splitMenuItemsAction('cluster'));
+        } else {
+            dispatch(joinMenuItemsAction('clusters'));
+        }
+
+        if (isRecentPagesFirst(state)) {
+            dispatch(splitMenuItemsAction('page'));
+        } else {
+            dispatch(joinMenuItemsAction('pages'));
+        }
+
+        dispatch(trackVisit('cluster', params.cluster));
+    };
+}
 interface ClusterInfoData {
     version?: string;
     versionError?: YTError;
@@ -149,10 +199,7 @@ interface ClusterInfoData {
 }
 
 let count = 0;
-export function updateCluster(
-    cluster: string,
-    onUpdateEnd: () => Promise<void>,
-): GlobalThunkAction {
+export function updateCluster(cluster: string): GlobalThunkAction {
     return (dispatch, getState) => {
         const dispatchError = (error: any) => {
             if (error instanceof Error) {
@@ -217,12 +264,15 @@ export function updateCluster(
                         YT.parameters.login = login;
                         dispatch({type: GLOBAL_PARTIAL, data: {login}});
                         Cookies.set(getXsrfCookieName(cluster), csrf_token);
-                        return onUpdateEnd()
-                            .then(() => {
+
+                        return dispatch(
+                            initClusterAndUserSettingsAfterClusterChanging({cluster, login}),
+                        )
+                            .then(() =>
                                 dispatch({
                                     type: UPDATE_CLUSTER.FINAL_SUCCESS,
-                                });
-                            })
+                                }),
+                            )
                             .catch(dispatchError);
                     }
                 }

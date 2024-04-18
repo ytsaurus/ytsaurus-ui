@@ -34,19 +34,13 @@ import ErrorBlock from '../../components/Error/Error';
 
 import {LOADING_STATUS, LOAD_ERROR, Page, SPLIT_PANE_ID} from '../../constants/index';
 import {joinMenuItemsAction, splitMenuItemsAction, trackVisit} from '../../store/actions/menu';
-import {reloadUserSettings, setSetting} from '../../store/actions/settings';
-import {initClusterParams, unmountCluster, updateCluster} from '../../store/actions/cluster-params';
+import {setSetting} from '../../store/actions/settings';
+import {unmountCluster, updateCluster} from '../../store/actions/cluster-params';
 import {updateTitle} from '../../store/actions/global';
 import {getClusterUiConfig, isQueryTrackerAllowed} from '../../store/selectors/global';
 import {getClusterConfig} from '../../utils';
 import {NAMESPACES, SettingName} from '../../../shared/constants/settings';
-import {
-    getClusterPagePaneSizes,
-    getStartingPage,
-    isRecentClustersFirst,
-    isRecentPagesFirst,
-    isRedirectToBetaSwitched,
-} from '../../store/selectors/settings';
+import {getClusterPagePaneSizes, getStartingPage} from '../../store/selectors/settings';
 import SupportedFeaturesUpdater from './SupportedFeaturesUpdater';
 import {useRumMeasureStart, useRumMeasureStop} from '../../rum/RumUiContext';
 import {RumMeasureTypes} from '../../rum/rum-measure-types';
@@ -86,7 +80,6 @@ class ClusterPage extends Component {
         splitMenuItemsAction: PropTypes.func.isRequired,
         setSetting: PropTypes.func.isRequired,
         joinMenuItemsAction: PropTypes.func.isRequired,
-        initClusterParams: PropTypes.func.isRequired,
         updateCluster: PropTypes.func.isRequired,
         updateTitle: PropTypes.func.isRequired,
         unmountCluster: PropTypes.func.isRequired,
@@ -102,7 +95,7 @@ class ClusterPage extends Component {
 
     componentDidMount() {
         const {cluster} = this.props;
-        this.props.updateCluster(cluster, this._onUpdateEnd);
+        this.props.updateCluster(cluster);
     }
 
     getSnapshotBeforeUpdate(prevProps) {
@@ -128,7 +121,7 @@ class ClusterPage extends Component {
         const {cluster} = this.props;
 
         if (cluster !== prevCluster) {
-            this.props.updateCluster(cluster, this._onUpdateEnd);
+            this.props.updateCluster(cluster);
         }
     }
 
@@ -138,56 +131,6 @@ class ClusterPage extends Component {
     }
 
     contentPaneRef = React.createRef();
-
-    _onUpdateEnd = () => {
-        const {
-            login,
-            cluster,
-            trackVisit,
-            updateTitle,
-            initClusterParams,
-            isRedirectToBetaSwitched,
-            setSetting,
-            reloadUserSettings,
-        } = this.props;
-
-        return Promise.resolve().then(() => {
-            initClusterParams(cluster);
-            updateTitle({cluster});
-            reloadUserSettings(login);
-
-            // todo: get rid of redirectToBetaSwitched setting.
-            // It`s exist for set default value of redirectToBeta setting, when settings document is empty yet.
-            // Set redirectToBeta on server after get all user settings (home.js). Or get rid of this logic at all.
-            if (!isRedirectToBetaSwitched) {
-                setSetting(
-                    SettingName.DEVELOPMENT.REDIRECT_TO_BETA_SWITCHED,
-                    NAMESPACES.DEVELOPMENT,
-                    true,
-                );
-                setSetting(SettingName.DEVELOPMENT.REDIRECT_TO_BETA, NAMESPACES.DEVELOPMENT, true);
-            }
-
-            this._initMenuCollection('cluster');
-            this._initMenuCollection('page');
-            trackVisit('cluster', cluster);
-        });
-    };
-
-    _initMenuCollection(itemName) {
-        const {splitMenuItemsAction, joinMenuItemsAction} = this.props;
-
-        const settingsMap = {
-            cluster: 'isRecentClustersFirst',
-            page: 'isRecentPagesFirst',
-        };
-
-        if (this.props[settingsMap[itemName]]) {
-            splitMenuItemsAction(itemName);
-        } else {
-            joinMenuItemsAction(`${itemName}s`);
-        }
-    }
 
     onResize = () => {
         const {splitScreen} = this.props;
@@ -407,9 +350,6 @@ function mapStateToProps(state) {
         login,
         splitScreen,
         maintenancePageEvent,
-        isRedirectToBetaSwitched: isRedirectToBetaSwitched(state),
-        isRecentClustersFirst: isRecentClustersFirst(state),
-        isRecentPagesFirst: isRecentPagesFirst(state),
         clusterPagePaneSizes: getClusterPagePaneSizes(state),
         startingPage: getStartingPage(state),
         paramsCluster,
@@ -424,8 +364,6 @@ const mapDispatchToProps = {
     splitMenuItemsAction,
     joinMenuItemsAction,
     updateTitle,
-    initClusterParams,
-    reloadUserSettings,
     updateCluster,
     unmountCluster,
 };
