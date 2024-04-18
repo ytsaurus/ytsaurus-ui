@@ -1,17 +1,22 @@
 import {registerLanguage} from '../_.contribution';
 import {createProvideSuggestionsFunction} from '../helpers/createProvideSuggestionsFunction';
-import {parseYqlQuery} from '@gravity-ui/websql-autocomplete';
 import {MonacoLanguage} from '../../../constants/monaco';
+import {generateYqlOldSafariSuggestion} from './yql.keywords';
+import {loadWebsqlAutocomplete} from '../loadWebsqlAutocomplete';
 
 registerLanguage({
     id: MonacoLanguage.YQL,
     extensions: [],
-    loader: () =>
-        import('./yql').then((module) => {
-            return {
-                conf: module.conf,
-                language: module.language,
-                provideSuggestionsFunction: createProvideSuggestionsFunction(parseYqlQuery),
-            };
-        }),
+    loader: async () => {
+        const lang = await import(/* webpackChunkName: "yql-lang-yql" */ './yql');
+        const autocomplete = await loadWebsqlAutocomplete();
+
+        return {
+            conf: lang.conf,
+            language: lang.language,
+            provideSuggestionsFunction: autocomplete
+                ? createProvideSuggestionsFunction(autocomplete.parseYqlQuery)
+                : generateYqlOldSafariSuggestion,
+        };
+    },
 });
