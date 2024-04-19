@@ -20,8 +20,8 @@ import type {RootState} from '../../../../../store/reducers';
 
 type ProxyProps = {
     banMessage: string;
-    effectiveState: string
-    role: "data" | "default" | "control";
+    effectiveState: string;
+    role: 'data' | 'default' | 'control';
     state: string;
     host: string;
     name: string;
@@ -30,8 +30,8 @@ type ProxyProps = {
     version: string;
 
     updatedAt?: string;
-    loadAverage?: number,
-    networkLoad?: number
+    loadAverage?: number;
+    networkLoad?: number;
 };
 
 type OwnProps = {
@@ -41,7 +41,6 @@ type OwnProps = {
 };
 
 type StateProps = ReturnType<typeof mapStateToProps>;
-
 
 type ProxyCardProps = OwnProps & StateProps;
 

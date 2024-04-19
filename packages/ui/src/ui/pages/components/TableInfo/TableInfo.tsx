@@ -9,7 +9,7 @@ const block = cn('table-info');
 type TableInfoProps = {
     showingItems: number;
     totalItems: number;
-}
+};
 
 export default function TableInfo({showingItems, totalItems}: TableInfoProps) {
     return (
