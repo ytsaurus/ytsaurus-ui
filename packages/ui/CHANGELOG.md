@@ -1,5 +1,24 @@
 # Changelog
 
+## [1.31.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.30.0...ui-v1.31.0) (2024-04-19)
+
+
+### Features
+
+* **ACL/RequestPermissions:** add all permission for Navigation [[#474](https://github.com/ytsaurus/ytsaurus-ui/issues/474)] ([fb219aa](https://github.com/ytsaurus/ytsaurus-ui/commit/fb219aa6a3b8df0a33848d18b876499a29903fad))
+* **ACL:** request read permission for column group [YTFRONT-3482] ([62e9504](https://github.com/ytsaurus/ytsaurus-ui/commit/62e95048be674fd45f114d35875841689f2003c1))
+* **ACL:** use separate tab for columns [YTFRONT-3836] ([374003a](https://github.com/ytsaurus/ytsaurus-ui/commit/374003ac979bb5a91e2dfff5d447c88c411b51e3))
+* **Query:** change new query button to link [YTFRONT-4093] ([320cd98](https://github.com/ytsaurus/ytsaurus-ui/commit/320cd989a5b88ee93973e97113b243f06bb8968c))
+* **Query:** spyt ytql autocomplete [YTFRONT-4118] ([ca86bb8](https://github.com/ytsaurus/ytsaurus-ui/commit/ca86bb84ceae35aa4b3cda11b38345ec7e26dc9c))
+
+
+### Bug Fixes
+
+* **ACL/RequestPermissions:** handle path from attributes of error [YTFRONT-3502] ([f078a89](https://github.com/ytsaurus/ytsaurus-ui/commit/f078a89950169a642a48366b122492ffbfbd4b60))
+* **Navigation:** allow to open items without access [YTFRONT-3836] ([0ad6f51](https://github.com/ytsaurus/ytsaurus-ui/commit/0ad6f514d9fc11c8f868e6c78ec804d918a7db31))
+* **QueryTracker:** fix request parameters for validate and explain buttons in yql query [[#370](https://github.com/ytsaurus/ytsaurus-ui/issues/370)] ([85c052e](https://github.com/ytsaurus/ytsaurus-ui/commit/85c052ee5abfa3f825739829602c238ddb902e54))
+* **userSettings:** user settings are not applied if you go to the cluster from the page with clusters [[#471](https://github.com/ytsaurus/ytsaurus-ui/issues/471)] ([37c2642](https://github.com/ytsaurus/ytsaurus-ui/commit/37c26422e1aa6923fa5e48929ef7673f4afb038c))
+
 ## [1.30.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.29.0...ui-v1.30.0) (2024-04-17)
 
 
