@@ -6,7 +6,7 @@ import hammer from '../../../../common/hammer';
 import {QueryItem} from '../../module/api';
 import {QueryDuration} from '../../QueryDuration';
 import {QueryStatusView} from '../../QueryStatus';
-import stopIcon from '../../../../../../img/svg/icons/stop-circle.svg';
+import stopIcon from '../../../../assets/img/svg/icons/stop-circle.svg';
 
 import './index.scss';
 import {isAbortable} from '../../utils/query';

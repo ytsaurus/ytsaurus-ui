@@ -5,7 +5,7 @@ import block from 'bem-cn-lite';
 import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
 import {Button, Icon, Loader} from '@gravity-ui/uikit';
 
-import playIcon from '../../../../../img/svg/play.svg';
+import playIcon from '../../../assets/img/svg/play.svg';
 import {useDispatch, useSelector} from 'react-redux';
 import {
     getQuery,

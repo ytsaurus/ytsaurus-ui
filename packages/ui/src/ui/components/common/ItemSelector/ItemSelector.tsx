@@ -4,7 +4,7 @@ import {Button, Icon, List, ListProps} from '@gravity-ui/uikit';
 
 import i18n from './i18n';
 
-import iconRemove from '../../../../../img/svg/remove.svg';
+import iconRemove from '../../../assets/img/svg/remove.svg';
 
 import './ItemSelector.scss';
 

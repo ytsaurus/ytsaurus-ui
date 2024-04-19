@@ -4,7 +4,7 @@ import cn from 'bem-cn-lite';
 import {Button, Icon} from '@gravity-ui/uikit';
 
 import {BundleParam, BundleParamsList} from '../BundleParamsList/BundleParamsList';
-import resetIcon from '../../../../../../../../img/svg/reset-icon.svg';
+import resetIcon from '../../../../../../assets/img/svg/reset-icon.svg';
 
 import {DialogControlProps} from '../../../../../../components/Dialog/Dialog.types';
 

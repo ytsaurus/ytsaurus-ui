@@ -7,8 +7,8 @@ import {Icon, List} from '@gravity-ui/uikit';
 import {PAGE_ICONS_BY_ID} from '../../constants/slideoutMenu';
 import {setPagesItemPosition, togglePinnedPage} from '../../store/actions/slideoutMenu';
 
-import pinIcon from '../../../../img/svg/pin.svg';
-import pinSolidIcon from '../../../../img/svg/pin-solid.svg';
+import pinIcon from '../../assets/img/svg/pin.svg';
+import pinSolidIcon from '../../assets/img/svg/pin-solid.svg';
 
 import './PagesEditorPanel.scss';
 
