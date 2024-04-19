@@ -4,7 +4,7 @@ import {Request, Response} from '@gravity-ui/expresskit';
 import {MetrikaCounter} from '@gravity-ui/app-layout';
 import type {NodeKit} from '@gravity-ui/nodekit';
 
-import {ClusterConfig} from '@ytsaurus/ui/build/cjs/shared/yt-types';
+import {ClusterConfig} from '../shared/yt-types';
 
 import {UISettings} from '../../shared/ui-settings';
 import {Settings} from '../shared/constants/settings-types';
