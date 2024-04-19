@@ -2,13 +2,12 @@ import type {Request, Response} from 'express';
 import _ from 'lodash';
 
 import {getLayoutConfig} from '../components/layout-config';
-import {create, get, isRemoteSettingsConfigured} from '../components/settings';
+import {create, get, getSettingsConfig, isRemoteSettingsConfigured} from '../components/settings';
 import {getClusterConfig} from '../components/utils';
 import ServerFactory, {getApp} from '../ServerFactory';
 import {isLocalModeByEnvironment} from '../utils';
 import {getDafaultUserSettings} from '../utils/default-settings';
 import {ODIN_PAGE_ID} from '../../shared/constants';
-import {getSettingsConfig} from '../../server/components/settings';
 
 function isRootPage(page: string) {
     const rootPages = [
