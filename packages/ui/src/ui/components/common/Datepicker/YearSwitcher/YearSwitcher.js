@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import block from 'bem-cn-lite';
 import {Icon} from '@gravity-ui/uikit';
 
-import iconArrow from '../../../../../../img/svg/chevron-right.svg';
+import iconArrow from '../../../../assets/img/svg/chevron-right.svg';
 
 import './YearSwitcher.scss';
 

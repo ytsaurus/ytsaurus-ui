@@ -1,7 +1,7 @@
 import {QueryResultColumn} from '../../module/query_result/types';
 import React, {useCallback, useMemo} from 'react';
 import {Button, Icon, Text} from '@gravity-ui/uikit';
-import filterIcon from '../../../../../../img/svg/icons/filter.svg';
+import filterIcon from '../../../../assets/img/svg/icons/filter.svg';
 import {ColumnSelector} from '../../../../components/common/ColumnSelector/ColumnSelector';
 type Props = {
     allColumns: QueryResultColumn[];

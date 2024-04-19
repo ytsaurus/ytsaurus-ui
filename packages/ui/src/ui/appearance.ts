@@ -2,21 +2,21 @@ import {ClusterTheme} from '../shared/yt-types';
 import YT from './config/yt-config';
 import UIFactory from './UIFactory';
 
-const favicon = require('../../img/favicon.png');
+const favicon = require('./assets/img/favicon.png');
 
 export const favicons: Record<ClusterTheme, string> = {
-    grapefruit: require('../../img/favicon-grapefruit.png'),
-    bittersweet: require('../../img/favicon-bittersweet.png'),
-    sunflower: require('../../img/favicon-sunflower.png'),
-    grass: require('../../img/favicon-grass.png'),
-    mint: require('../../img/favicon-mint.png'),
-    aqua: require('../../img/favicon-aqua.png'),
-    bluejeans: require('../../img/favicon-bluejeans.png'),
-    lavander: require('../../img/favicon-lavander.png'),
-    pinkrose: require('../../img/favicon-pinkrose.png'),
-    lightgray: require('../../img/favicon-lightgray.png'),
-    mediumgray: require('../../img/favicon-mediumgray.png'),
-    darkgray: require('../../img/favicon-darkgray.png'),
+    grapefruit: require('./assets/img/favicon-grapefruit.png'),
+    bittersweet: require('./assets/img/favicon-bittersweet.png'),
+    sunflower: require('./assets/img/favicon-sunflower.png'),
+    grass: require('./assets/img/favicon-grass.png'),
+    mint: require('./assets/img/favicon-mint.png'),
+    aqua: require('./assets/img/favicon-aqua.png'),
+    bluejeans: require('./assets/img/favicon-bluejeans.png'),
+    lavander: require('./assets/img/favicon-lavander.png'),
+    pinkrose: require('./assets/img/favicon-pinkrose.png'),
+    lightgray: require('./assets/img/favicon-lightgray.png'),
+    mediumgray: require('./assets/img/favicon-mediumgray.png'),
+    darkgray: require('./assets/img/favicon-darkgray.png'),
 };
 
 export interface ClusterAppearance {
@@ -27,16 +27,16 @@ export interface ClusterAppearance {
 }
 
 export const defaultClusterAppearance: ClusterAppearance = {
-    icon: require('../../img/cluster.svg'),
-    icon2x: require('../../img/cluster-2x.svg'),
+    icon: require('./assets/img/cluster.svg'),
+    icon2x: require('./assets/img/cluster-2x.svg'),
     favicon,
 };
 
 const localClusterAppearance: ClusterAppearance = {
     favicon,
-    icon: require('../../img/ui.jpg'),
-    icon2x: require('../../img/ui-2x.jpg'),
-    iconbig: require('../../img/ui-big.jpg'),
+    icon: require('./assets/img/ui.jpg'),
+    icon2x: require('./assets/img/ui-2x.jpg'),
+    iconbig: require('./assets/img/ui-big.jpg'),
 };
 
 const cache: Record<string, ClusterAppearance> = {};
