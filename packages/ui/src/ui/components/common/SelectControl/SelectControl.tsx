@@ -3,7 +3,7 @@ import block from 'bem-cn-lite';
 
 import {Icon} from '@gravity-ui/uikit';
 
-import arrowIcon from '../../../../../img/svg/chevron.svg';
+import arrowIcon from '../../../assets/img/svg/chevron.svg';
 
 import './SelectControl.scss';
 

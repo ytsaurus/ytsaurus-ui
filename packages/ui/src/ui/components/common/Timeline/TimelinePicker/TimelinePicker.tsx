@@ -10,7 +10,7 @@ import {formatInterval, formatTimeCanonical, getTimestampFromDate, humanizeInter
 
 import {EnterInput} from '../../EnterInput/EnterInput';
 import {TimelineDatepicker} from './TimelineDatepicker';
-import iconCalendar from '../../../../../../img/svg/calendar.svg';
+import iconCalendar from '../../../../assets/img/svg/calendar.svg';
 
 import './TimelinePicker.scss';
 

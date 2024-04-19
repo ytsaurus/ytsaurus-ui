@@ -3,7 +3,7 @@ import cn from 'bem-cn-lite';
 import _some from 'lodash/some';
 import _isEmpty from 'lodash/isEmpty';
 
-import ellipsisIcon from '../../../../img/svg/ellipsis.svg';
+import ellipsisIcon from '../../assets/img/svg/ellipsis.svg';
 
 import {useDispatch, useSelector} from 'react-redux';
 

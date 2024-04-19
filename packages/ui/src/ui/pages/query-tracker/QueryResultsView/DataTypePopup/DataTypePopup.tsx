@@ -2,7 +2,7 @@ import React from 'react';
 import {Icon, Popover} from '@gravity-ui/uikit';
 import cn from 'bem-cn-lite';
 import {StrictReactNode} from '../YQLTable/utils';
-import infoIcon from '../../../../../../img/svg/icons/exclamation-circle.svg';
+import infoIcon from '../../../../assets/img/svg/icons/exclamation-circle.svg';
 
 import './DataTypePopup.scss';
 import DataType from '../../../../components/SchemaDataType/DataType/DataType';

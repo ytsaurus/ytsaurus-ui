@@ -1,7 +1,7 @@
 import React from 'react';
 
-import LogoLight from '../../../../../img/svg/YTsaurus-logo-light.svg';
-import LogoDark from '../../../../../img/svg/YTsaurus-logo-dark.svg';
+import LogoLight from '../../../assets/img/svg/YTsaurus-logo-light.svg';
+import LogoDark from '../../../assets/img/svg/YTsaurus-logo-dark.svg';
 
 import cn from 'bem-cn-lite';
 

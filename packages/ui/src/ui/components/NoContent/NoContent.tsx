@@ -4,7 +4,7 @@ import cn from 'bem-cn-lite';
 import {Flex} from '@gravity-ui/uikit';
 
 // @ts-ignore
-import NoContentImage from '../../../../img/svg/no-content.svg';
+import NoContentImage from '../../assets/img/svg/no-content.svg';
 
 import './NoContent.scss';
 
