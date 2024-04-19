@@ -5,11 +5,11 @@ import {FooterItem, PageLayoutAside} from '@gravity-ui/navigation';
 import {Menu} from '@gravity-ui/uikit';
 import {useSelector} from 'react-redux';
 
-import Logo from '../../../../img/svg/appLogo.svg';
+import Logo from '../../assets/img/svg/appLogo.svg';
 import GearIcon from '@gravity-ui/icons/svgs/gear.svg';
 import BugIcon from '@gravity-ui/icons/svgs/bug.svg';
 import Link from '../../components/Link/Link';
-import unknown from '../../../../img/user-avatar.svg';
+import unknown from '../../assets/img/user-avatar.svg';
 import {AppNavigationProps} from './AppNavigationPageLayout';
 import YT from '../../config/yt-config';
 import UIFactory from '../../UIFactory';

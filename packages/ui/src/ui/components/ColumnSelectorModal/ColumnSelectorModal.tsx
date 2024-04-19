@@ -5,7 +5,7 @@ import _ from 'lodash';
 
 import Modal from '../Modal/Modal';
 import ColumnSelector, {makeItemsCopy} from '../ColumnSelector/ColumnSelector';
-import NoContentImage from '../../../../img/svg/modal-no-content.svg';
+import NoContentImage from '../../assets/img/svg/modal-no-content.svg';
 
 import './ColumnSelectorModal.scss';
 

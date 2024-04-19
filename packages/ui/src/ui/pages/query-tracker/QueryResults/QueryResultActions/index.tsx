@@ -4,7 +4,7 @@ import block from 'bem-cn-lite';
 import React, {useCallback} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {RootState} from '../../../../store/reducers';
-import transposeIcon from '../../../../../../img/svg/transpose.svg';
+import transposeIcon from '../../../../assets/img/svg/transpose.svg';
 import {SET_QUERY_RESULTS_SETTINGS} from '../../module/query_result/actions';
 import {QueryItem} from '../../module/api';
 import {QueryResultReadyState, QueryResultsViewMode} from '../../module/query_result/types';

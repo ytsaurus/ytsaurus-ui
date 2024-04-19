@@ -160,7 +160,7 @@ yt create --attributes '{schema=[
     {name=imageurl_as_text;type_v3={item=string;type_name=tagged;tag=imageurl}};
 ]}' table ${TAGGED_TABLE}
 (
-    echo -ne "svgxml=$(cat $(dirname $0)/../img/svg/calendar.svg | base64 -w 0)\t"
+    echo -ne "svgxml=$(cat $(dirname $0)/../src/ui/assets/img/svg/calendar.svg | base64 -w 0)\t"
     echo -ne "imageurl=https://yastatic.net/s3/cloud/yt/static/freeze/assets/images/ui-big.44e3fa56.jpg\t"
     echo -e "imageurl_as_text=https://deny-yastatic.net/s3/cloud/yt/static/freeze/assets/images/ui-big.44e3fa56.jpg\t"
 ) | yt write-table --format dsv ${TAGGED_TABLE}

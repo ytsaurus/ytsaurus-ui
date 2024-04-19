@@ -3,7 +3,7 @@ import cn from 'bem-cn-lite';
 
 import {Icon} from '@gravity-ui/uikit';
 
-import closeIcon from '../../../../img/svg/close-icon.svg';
+import closeIcon from '../../assets/img/svg/close-icon.svg';
 import './Tag.scss';
 
 const block = cn('yt-tag');

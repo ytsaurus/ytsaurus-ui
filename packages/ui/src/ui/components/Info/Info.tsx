@@ -2,7 +2,7 @@ import React, {ReactNode} from 'react';
 import block from 'bem-cn-lite';
 import {Icon} from '@gravity-ui/uikit';
 
-import infoIcon from '../../../../img/svg/info-icon2.svg';
+import infoIcon from '../../assets/img/svg/info-icon2.svg';
 
 import './Info.scss';
 
