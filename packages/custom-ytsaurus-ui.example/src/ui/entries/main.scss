@@ -1,0 +1,6 @@
+body.g-root {
+    .yt-tag__text_as-user::first-letter,
+    .user-link__name::first-letter {
+        color: var(--danger-color);
+    }
+}
