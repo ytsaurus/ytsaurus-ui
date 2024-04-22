@@ -106,7 +106,7 @@
     "@gravity-ui/tsconfig": "^1.0.0",
     "@gravity-ui/uikit": "^5.16.0",
     "@gravity-ui/unipika": "^3.0.0",
-    "@gravity-ui/yagr": "^3.10.4",
+    "@gravity-ui/yagr": "^4.0.3",
     "@reduxjs/toolkit": "^2.2.3",
     "@tanstack/react-virtual": "^3.0.0-alpha.0",
     "@types/d3": "^7.4.0",
@@ -204,6 +204,7 @@
     "react-sortable-hoc": {
       "react": "$react",
       "react-dom": "$react-dom"
-    }
+    },
+    "@gravity-ui/yagr": "$@gravity-ui/yagr"
   }
 }
