@@ -1,0 +1,16 @@
+{
+  "extends": "../../tsconfig",
+  "include": ["../**/*", "@types/*"],
+  "exclude": ["../ytsaurus-ui.server/*"],
+  "compilerOptions": {
+    "module": "ESNext",
+    "isolatedModules": true,
+    "outDir": "../../dist/public/build",
+    "baseUrl": ".",
+    "paths": {
+      "*": ["./*", "../../node_modules/*"]
+    },
+    "jsx": "react",
+    "lib": ["ES2017", "DOM", "DOM.Iterable", "ES2019.Array", "WebWorker"]
+  }
+}

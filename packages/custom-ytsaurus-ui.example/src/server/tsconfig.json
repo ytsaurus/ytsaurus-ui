@@ -1,0 +1,14 @@
+{
+  "extends": "@gravity-ui/tsconfig",
+  "include": ["**/*", "../@types"],
+  "exclude": ["../ytsaurus-ui.ui/*", "../ui/*", "../../node_modules/*"],
+  "compilerOptions": {
+    "noUnusedParameters": false,
+    "outDir": "../../dist",
+    "resolveJsonModule": true,
+    "paths": {
+      "*": ["./*", "../../node_modules/*"]
+    }
+  },
+  "types": ["node"]
+}

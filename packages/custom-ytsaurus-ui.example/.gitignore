@@ -1,0 +1,33 @@
+#npm
+npm-debug.log*
+node_modules
+
+# build
+dist/
+
+#webpack
+webpack.sock
+
+#personal
+.idea/
+.DS_Store
+
+# git merge leftovers
+*.orig
+
+secrets/
+
+.env
+
+clusters-config.json
+
+run_local_cluster.sh
+
+*.tmp
+*.bak
+
+# ytsaurus-ui links
+src/ytsaurus-ui.server
+src/ytsaurus-ui.ui
+src/shared
+src/@types
