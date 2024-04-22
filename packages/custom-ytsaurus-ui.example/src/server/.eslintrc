@@ -1,0 +1,6 @@
+{
+    "extends": "@gravity-ui/eslint-config/server",
+    "rules": {
+        "import/order": 0
+    }
+}
