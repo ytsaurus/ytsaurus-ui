@@ -13,9 +13,6 @@
   "scripts": {
     "postinstall": "node scripts/sync-peer-dependencies.js check ./package.json",
     "build": "npm run copy:icons &&  NODE_OPTIONS=\"--max-old-space-size=4096\" NODE_ENV=production app-builder build --config ./build.app.config.ts",
-    "build:lib": "rm -rf build && npm run build:lib:ui && npm run build:lib:server",
-    "build:lib:server": "tsc -p ./build.server.tsconfig.json",
-    "build:lib:ui": "NODE_OPTIONS=\"--max-old-space-size=4096\" NODE_ENV=production app-builder build --config ./build.lib.config.ts && cp -r img assets build",
     "clean": "rm -rf dist/*",
     "copy:icons": "mkdir -p dist/public && cp src/ui/assets/img/favicon*.png dist/public",
     "cut:version": "node -e \"const json=require('${npm_config_file}'); delete json.version; console.log(JSON.stringify(json, null, 2))\"",
@@ -44,7 +41,7 @@
     "lint:styles": "stylelint 'src/ui/**/*.scss' --customSyntax postcss-scss",
     "notify:mail": "node scripts/notify.js",
     "platform-tools": "platform-tools",
-    "prepublishOnly": "npm run build:lib && npm run build",
+    "prepublishOnly": "npm run build",
     "show:docker-image-name": "echo ${npm_package_config_docker_image}",
     "show:file-types": "find src -type f | rev | cut -d '.' -f 1 | rev | sort | uniq -c | sort -rn",
     "show:version": "echo ${npm_package_version}",

@@ -1,0 +1,7 @@
+{
+  "extends": "@gravity-ui/tsconfig/tsconfig.json",
+  "compilerOptions": {
+    "resolveJsonModule": true,
+    "allowSyntheticDefaultImports": true
+  }
+}

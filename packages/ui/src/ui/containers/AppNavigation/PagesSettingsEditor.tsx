@@ -97,7 +97,7 @@ export function usePagesMenuItems(cluster?: string) {
                 },
             };
         });
-    }, undefined);
+    }, [pages, cluster, pathname]);
 
     if (cluster) {
         return clusterItems;
