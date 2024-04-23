@@ -7,61 +7,54 @@ import axios, {CancelTokenSource} from 'axios';
 // @ts-ignore
 import yt from '@ytsaurus/javascript-wrapper/lib/yt';
 import ypath from '../../../../common/thor/ypath';
-import {TABLE_SORT_MODAL_PARTIAL} from '../../../../constants/navigation/modals/table-sort-modal';
 import {getBatchError, wrapApiPromiseByToaster} from '../../../../utils/utils';
-import {TableSortModalAction} from '../../../../store/reducers/navigation/modals/table-merge-sort-modal';
 import {loadPoolTreesIfNotLoaded} from '../../../../store/actions/global';
 import {OperationShortInfo} from '../../../../pages/components/OperationShortInfo/OperationShortInfo';
 import {AppStoreProvider} from '../../../../containers/App/AppStoreProvider';
 import {CypressNodeTypes, makeUiMarker} from '../../../../utils/cypress-attributes';
 import {Page} from '../../../../constants';
 import {YTApiId, ytApiV3Id} from '../../../../rum/rum-wrap-api';
+import {setModalPartial} from '../../../reducers/navigation/modals/tableMergeSortModalSlice';
+import {Action} from 'redux';
 
-type TableMergeSortThunkAction<T = void> = ThunkAction<T, RootState, any, TableSortModalAction>;
+type TableMergeSortThunkAction<T = void> = ThunkAction<T, RootState, any, Action>;
 
 export function showTableSortModal(paths: Array<string>): TableMergeSortThunkAction<Promise<void>> {
     return (dispatch) => {
         return dispatch(loadPoolTreesIfNotLoaded()).finally(() => {
-            dispatch({
-                type: TABLE_SORT_MODAL_PARTIAL,
-                data: {sortVisible: true, paths},
-            });
+            dispatch(setModalPartial({sortVisible: true, paths}));
             dispatch(tableSortModalLoadColumns(paths));
         });
     };
 }
 
-export function hideTableSortModal(): TableSortModalAction {
-    return {
-        type: TABLE_SORT_MODAL_PARTIAL,
-        data: {sortVisible: false, paths: []},
-    };
+export function hideTableSortModal() {
+    return setModalPartial({sortVisible: false, paths: []});
 }
 
 export function showTableMergeModal(
     paths: Array<string>,
-): ThunkAction<Promise<void>, RootState, any, TableSortModalAction> {
+): ThunkAction<Promise<void>, RootState, any, Action> {
     return (dispatch) => {
         return dispatch(loadPoolTreesIfNotLoaded()).finally(() => {
-            dispatch({
-                type: TABLE_SORT_MODAL_PARTIAL,
-                data: {mergeVisible: true, paths},
-            });
+            dispatch(
+                setModalPartial({
+                    mergeVisible: true,
+                    paths,
+                }),
+            );
             dispatch(tableSortModalLoadColumns(paths));
         });
     };
 }
 
-export function hideTableMergeModal(): TableSortModalAction {
-    return {
-        type: TABLE_SORT_MODAL_PARTIAL,
-        data: {mergeVisible: false, paths: []},
-    };
+export function hideTableMergeModal() {
+    return setModalPartial({mergeVisible: false, paths: []});
 }
 
 export function tableSortModalLoadColumns(
     paths: Array<string>,
-): ThunkAction<any, RootState, any, TableSortModalAction> {
+): ThunkAction<any, RootState, any, Action> {
     return (dispatch) => {
         if (!paths?.length) {
             return undefined;
@@ -80,10 +73,7 @@ export function tableSortModalLoadColumns(
                     'Column names cannot be loaded, autocompletion might not work properly',
                 );
                 if (error) {
-                    dispatch({
-                        type: TABLE_SORT_MODAL_PARTIAL,
-                        data: {error},
-                    });
+                    dispatch(setModalPartial({error}));
                     return;
                 }
                 const columns: {[name: string]: boolean} = {};
@@ -92,21 +82,21 @@ export function tableSortModalLoadColumns(
                         columns[name] = true;
                     });
                 });
-                dispatch({
-                    type: TABLE_SORT_MODAL_PARTIAL,
-                    data: {
+                dispatch(
+                    setModalPartial({
                         suggestColumns: _.sortBy(
                             _.map(columns, (_v, name) => name),
                             (name) => _.toLower(name),
                         ),
-                    },
-                });
+                    }),
+                );
             })
             .catch((error: any) => {
-                return dispatch({
-                    type: TABLE_SORT_MODAL_PARTIAL,
-                    data: {error},
-                });
+                return dispatch(
+                    setModalPartial({
+                        error,
+                    }),
+                );
             });
     };
 }

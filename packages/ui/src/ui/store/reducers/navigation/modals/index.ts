@@ -8,7 +8,7 @@ import createTable from './create-table';
 import moveObject from './move-object';
 import copyObject from './copy-object';
 import tableEraseModal from './table-erase-modal';
-import tableMergeSortModal from './table-merge-sort-modal';
+import tableMergeSortModal from './tableMergeSortModalSlice';
 import remoteCopyModal from './remote-copy-modal';
 import dynTablesStateModal from './dyn-tables-state-modal';
 import linkToModal from './link-to-modal';
