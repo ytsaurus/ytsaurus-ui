@@ -3,6 +3,7 @@ import {renderApp} from '../render-app';
 import yt from '@ytsaurus/javascript-wrapper/lib/yt';
 import axios from 'axios';
 import {handleAuthError} from '../store/actions/global';
+import {YT_UI_CLUSTER_HEADER_NAME} from '../../shared/constants';
 import './main.scss';
 
 yt.subscribe('error', onError);
@@ -17,7 +18,10 @@ function onAxiosError(e: any) {
 
 function onError(e: any) {
     const isAuthError = axios.isAxiosError(e) && e.response?.status === 401;
+
     if (isAuthError) {
-        handleAuthError({ytAuthCluster: e?.response?.data?.extraData?.ytAuthCluster});
+        handleAuthError({
+            ytAuthCluster: e.response?.headers[YT_UI_CLUSTER_HEADER_NAME],
+        });
     }
 }

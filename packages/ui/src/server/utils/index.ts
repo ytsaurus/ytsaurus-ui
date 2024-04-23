@@ -36,14 +36,6 @@ export function getInterfaceVersion() {
     }
 }
 
-type ExtraError = {
-    extraData: Record<string, unknown>;
-};
-
-function isExtraDataError(error: ExtraError | unknown): error is ExtraError {
-    return (error as ExtraError).extraData !== undefined;
-}
-
 export function prepareErrorToSend(e: unknown) {
     const res: Record<string, any> = {
         message: '',
@@ -55,10 +47,6 @@ export function prepareErrorToSend(e: unknown) {
         return e;
     } else {
         res.message = JSON.stringify(e);
-    }
-
-    if (isExtraDataError(e)) {
-        res.extraData = e.extraData;
     }
 
     return res;

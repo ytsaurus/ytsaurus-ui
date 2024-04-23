@@ -29,7 +29,7 @@ export function createAuthMiddleware(): AppMiddleware {
             req.yt.login = login;
         } catch (e) {
             const isAuthFailed = isAuthError(e);
-            const error = isAuthFailed ? {extraData: {ytAuthCluster}} : e;
+            const error = isAuthFailed ? undefined : e;
 
             if (!req.routeInfo.ui && isAuthFailed) {
                 sendError(res, error, 401);
