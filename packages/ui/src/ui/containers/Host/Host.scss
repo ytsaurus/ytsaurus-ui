@@ -3,6 +3,18 @@
     overflow: hidden;
     align-items: center;
 
+    &__link {
+        display: inline-block;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        width: 100%;
+    }
+
+    &__tooltip {
+        width: 100%;
+    }
+
     &_hidden {
         visibility: hidden;
     }

@@ -68,11 +68,15 @@ export function Host({
             onClick={onClick}
         >
             {prefix}
-            <Tooltip content={address}>
+            <Tooltip className={block('tooltip')} content={address}>
                 {useText ? (
                     host
                 ) : (
-                    <Link url={`/${cluster}/components/nodes/${address}`} routed>
+                    <Link
+                        className={block('link')}
+                        url={`/${cluster}/components/nodes/${address}`}
+                        routed
+                    >
                         {host}
                     </Link>
                 )}
