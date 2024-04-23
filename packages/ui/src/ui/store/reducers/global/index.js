@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import {LOCATION_POP} from 'redux-location-state/lib/constants';
 
 import MaintenancePage from '../../../containers/MaintenancePage/MaintenancePage';
 import {
@@ -229,6 +230,9 @@ export default (state = initialState, action) => {
 
         case GLOBAL_PARTIAL:
             return {...state, ...action.data};
+
+        case LOCATION_POP:
+            return {...state, showLoginDialog: false};
 
         default:
             return state;
