@@ -5,6 +5,7 @@ export const ODIN_PAGE_ID = 'odin';
 
 export const YT_OAUTH_ACCESS_TOKEN_NAME = 'yt_oauth_access_token';
 export const YT_OAUTH_REFRESH_TOKEN_NAME = 'yt_oauth_refresh_token';
+export const YT_UI_CLUSTER_HEADER_NAME = 'x-yt-ui-cluster-name';
 
 export type AuthWay = 'oauth' | 'passwd';
 
