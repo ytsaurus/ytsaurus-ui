@@ -72,11 +72,7 @@ export function Host({
                 {useText ? (
                     host
                 ) : (
-                    <Link
-                        className={block('link')}
-                        url={`/${cluster}/components/nodes/${address}`}
-                        routed
-                    >
+                    <Link url={`/${cluster}/components/nodes/${address}`} routed>
                         {host}
                     </Link>
                 )}
