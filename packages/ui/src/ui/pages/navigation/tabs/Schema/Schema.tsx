@@ -33,10 +33,11 @@ import {useRumMeasureStop} from '../../../../rum/RumUiContext';
 import {RumMeasureTypes} from '../../../../rum/rum-measure-types';
 import {useAppRumMeasureStart} from '../../../../rum/rum-app-measures';
 import {getAttributesPath, getLoadState} from '../../../../store/selectors/navigation';
-import {isFinalLoadingStatus} from '../../../../utils/utils';
+import {isFinalLoadingStatus, wrapApiPromiseByToaster} from '../../../../utils/utils';
 import {docsUrl} from '../../../../config';
 import {YTError} from '../../../../../@types/types';
 import {RootState} from '../../../../store/reducers';
+import {ytApiV3} from '../../../../rum/rum-wrap-api';
 
 const block = cn('navigation-schema');
 const elementsBlock = cn('elements-message');
@@ -213,23 +214,37 @@ class Schema extends Component<SchemaProps> {
         };
     }
 
-    loadExternalSchemaData() {
+    async loadExternalSchemaData() {
         const {cluster, path} = this.props;
-        UIFactory.externalSchemaDescriptionSetup
-            .load(cluster, path)
-            .then((res) => {
-                const {url, externalSchema} = res;
-                this.setState({
-                    externalSchemaUrl: url,
-                    externalSchema: externalSchema,
-                });
-            })
-            .catch((err) => {
-                this.setState({
-                    externalSchema: new Map(),
-                    externalSchemaError: err,
-                });
+        const truePath = await wrapApiPromiseByToaster(
+            ytApiV3.get({
+                parameters: {
+                    path: `${path}/@path`,
+                },
+            }),
+            {
+                skipSuccessToast: true,
+                toasterName: 'get_true_path',
+                errorTitle: 'Failed to load true path',
+            },
+        );
+
+        try {
+            const {url, externalSchema} = await UIFactory.externalSchemaDescriptionSetup.load(
+                cluster,
+                truePath || path,
+            );
+
+            this.setState({
+                externalSchemaUrl: url,
+                externalSchema: externalSchema,
             });
+        } catch (err) {
+            this.setState({
+                externalSchema: new Map(),
+                externalSchemaError: err,
+            });
+        }
     }
 
     renderContent() {
