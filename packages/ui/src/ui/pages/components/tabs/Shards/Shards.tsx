@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import {connect} from 'react-redux';
+import {ResolveThunks, connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import cn from 'bem-cn-lite';
 
@@ -14,9 +14,11 @@ import Name from './Name';
 import NodeCount from './NodeCount';
 
 import {abortAllRequests, getShards} from '../../../../store/actions/components/shards';
+import type {Shard} from '../../../../store/reducers/components/shards';
 
 import './Shards.scss';
 import {getCluster} from '../../../../store/selectors/global';
+import type {RootState} from '../../../../store/reducers';
 
 const block = cn('components-shards');
 
@@ -48,24 +50,37 @@ const tableSettings = {
     striped: false,
     cssHover: true,
     css: block('table'),
-    computeKey(item) {
+    computeKey(item: Shard) {
         return item.id;
     },
 };
 
-function Shards(props) {
+type OwnProps = {
+    id: string;
+    name: string;
+    className: string;
+};
+
+type StateProps = ReturnType<typeof mapStateToProps>;
+
+type DispatchProps = ResolveThunks<typeof mapDispatchToProps>;
+
+type ShardsProps = OwnProps & StateProps & DispatchProps;
+
+function Shards(props: ShardsProps) {
     const {cluster, getShards, abortAllRequests} = props;
     useEffect(() => {
         getShards();
         return abortAllRequests;
     }, [cluster]);
 
-    const idTemplate = (item) => <FormattedId id={item.id} />;
-    const nameTemplate = (item) => <Name className={block('name')} name={item.name} id={item.id} />;
-    const nodeCountTemplate = (item) => (
+    const idTemplate = (item: Shard) => <FormattedId id={item.id} />;
+    const nameTemplate = (item: Shard) => (
+        <Name className={block('name')} name={item.name} id={item.id} />
+    );
+    const nodeCountTemplate = (item: Shard) => (
         <NodeCount
             count={item['total_account_statistics']['node_count']}
-            statistics={item['account_statistics']}
             className={block('node-count')}
             name={item.name}
             id={item.id}
@@ -123,7 +138,7 @@ Shards.propTypes = {
     cluster: PropTypes.string.isRequired,
 };
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state: RootState) => {
     const {loading, loaded, error, errorData, shards} = state.components.shards;
 
     return {

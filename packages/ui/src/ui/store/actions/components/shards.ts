@@ -1,3 +1,4 @@
+// @ts-expect-error
 import yt from '@ytsaurus/javascript-wrapper/lib/yt';
 import CancelHelper from '../../../utils/cancel-helper';
 import {
@@ -7,11 +8,13 @@ import {
     SET_SHARD_NAME,
 } from '../../../constants/components/shards';
 import {YTApiId, ytApiV3Id} from '../../../rum/rum-wrap-api';
+import type {AppThunkDispatch} from '../../../store/thunkDispatch';
+import type {ShardsAction} from '../../../store/reducers/components/shards';
 
 const requests = new CancelHelper();
 
 export function getShards() {
-    return (dispatch) => {
+    return (dispatch: AppThunkDispatch<ShardsAction>) => {
         dispatch({type: GET_SHARDS.REQUEST});
 
         requests.removeAllRequests();
@@ -42,8 +45,8 @@ export function getShards() {
     };
 }
 
-export function setShardName(id, name) {
-    return (dispatch) => {
+export function setShardName(id: string, name: string) {
+    return (dispatch: AppThunkDispatch<ShardsAction>) => {
         dispatch({type: SET_SHARD_NAME.REQUEST});
 
         return yt.v3
@@ -53,7 +56,7 @@ export function setShardName(id, name) {
                 dispatch(getShards());
                 dispatch(closeNameEditor());
             })
-            .catch((error) => {
+            .catch((error: unknown) => {
                 dispatch({
                     type: SET_SHARD_NAME.FAILURE,
                     data: {error},
@@ -62,7 +65,7 @@ export function setShardName(id, name) {
     };
 }
 
-export function openNameEditor(id) {
+export function openNameEditor(id: string) {
     return {
         type: OPEN_SHARD_NAME_EDITOR,
         data: {id},
@@ -72,11 +75,11 @@ export function openNameEditor(id) {
 export function closeNameEditor() {
     return {
         type: CLOSE_SHARD_NAME_EDITOR,
-    };
+    } as const;
 }
 
 export function abortAllRequests() {
-    return (dispatch) => {
+    return (dispatch: AppThunkDispatch<ShardsAction>) => {
         requests.removeAllRequests();
         dispatch({type: GET_SHARDS.CANCELLED});
     };
