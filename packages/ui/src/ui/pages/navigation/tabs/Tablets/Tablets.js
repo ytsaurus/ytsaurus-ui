@@ -194,7 +194,14 @@ class Tablets extends Component {
 
     static renderHost(item) {
         const host = item.cell_leader_address;
-        return <Host asTabletNode address={host} copyBtnClassName={block('copy-btn')} />;
+        return (
+            <Host
+                asTabletNode
+                address={host}
+                className={block('host')}
+                copyBtnClassName={block('copy-btn')}
+            />
+        );
     }
 
     static renderIdWithLink(id, url) {
