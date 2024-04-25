@@ -268,6 +268,19 @@ export default class ColumnSelector extends Component {
         });
     };
 
+    _handleDefaultSort = () => {
+        this.withActualItems(({items}) => {
+            return {
+                items: items.sort((a, b) => {
+                    const aCaption = a.caption || a.name;
+                    const bCaption = b.caption || b.name;
+
+                    return aCaption.localeCompare(bCaption);
+                }),
+            };
+        });
+    };
+
     _toggleShownItems = () => {
         this.setState((prevState) => ({
             showSelectedOnly: !prevState.showSelectedOnly,
@@ -290,7 +303,7 @@ export default class ColumnSelector extends Component {
     }
 
     renderControls() {
-        const {isFilterable, isSelectable, isHeadless} = this.props;
+        const {isFilterable, isSelectable, isSortable, isHeadless} = this.props;
         const btnProps = {
             size: 'm',
             className: b('controls-item'),
@@ -328,6 +341,11 @@ export default class ColumnSelector extends Component {
                         onClick={this.deselectAllItems}
                     >
                         Remove all
+                    </Button>
+                )}
+                {isSortable && (
+                    <Button {...btnProps} onClick={this._handleDefaultSort}>
+                        Default sort
                     </Button>
                 )}
             </div>
