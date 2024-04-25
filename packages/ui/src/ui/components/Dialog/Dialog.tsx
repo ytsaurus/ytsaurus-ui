@@ -24,6 +24,7 @@ import TabletCellBundlesSuggest from '../../pages/components/TabletCellBundlesSu
 import Block from '../../components/Block/Block';
 import EditablePathList from './controls/EditablePathList/EditablePathList';
 import {PathEditorControl} from './controls/PathEditorControl/PathEditorControl';
+import {OutputPathControl} from './controls/OutputPathControl';
 
 import './Dialog.scss';
 import {PoolSuggestControl} from './controls/PoolSuggestControl/PoolSuggestControl';
@@ -31,8 +32,8 @@ import {PoolTreeSuggestControl} from './controls/PoolTreeSuggestControl/PoolTree
 import {TableSortByControl} from '../../pages/navigation/modals/TableMergeSortModal/TableSortByControl';
 import {TableChunkSize} from '../../pages/navigation/modals/TableMergeSortModal/TableChunkSize';
 import {UsableAccountSuggest} from '../../pages/accounts/UsableAccountSuggest';
-import {EditAnnotationWithPreview} from '../../components/EditAnnotationWithPreview/EditAnnotationWithPreview';
-import {EditJsonWithPreview} from '../../components/EditJsonWithPreview/EditJsonWithPreview';
+import {EditAnnotationWithPreview} from '../EditAnnotationWithPreview/EditAnnotationWithPreview';
+import {EditJsonWithPreview} from '../EditJsonWithPreview/EditJsonWithPreview';
 import {
     DFDialog,
     DFDialogField,
@@ -93,6 +94,7 @@ registerDialogControl('create-pool-parent', CreatePoolParentSuggest);
 registerDialogControl('tablet-cell-bundle', TabletCellBundlesSuggest);
 
 registerDialogControl('path', PathEditorControl);
+registerDialogControl('output-path', OutputPathControl);
 registerDialogControl('editable-path-list', EditablePathList);
 
 registerDialogControl('pool', PoolSuggestControl);
@@ -173,6 +175,7 @@ export type DialogField<FormValues = unknown> =
           FormValues
       >
     | RegisteredDialogField<'path', ComponentProps<typeof PathEditorControl>, FormValues>
+    | RegisteredDialogField<'output-path', ComponentProps<typeof OutputPathControl>, FormValues>
     | RegisteredDialogField<
           'editable-path-list',
           ComponentProps<typeof EditablePathList>,

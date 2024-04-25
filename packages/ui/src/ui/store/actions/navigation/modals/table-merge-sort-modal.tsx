@@ -14,8 +14,13 @@ import {AppStoreProvider} from '../../../../containers/App/AppStoreProvider';
 import {CypressNodeTypes, makeUiMarker} from '../../../../utils/cypress-attributes';
 import {Page} from '../../../../constants';
 import {YTApiId, ytApiV3Id} from '../../../../rum/rum-wrap-api';
-import {setModalPartial} from '../../../reducers/navigation/modals/tableMergeSortModalSlice';
+import {
+    PathAttribute,
+    changeAttribute,
+    setModalPartial,
+} from '../../../reducers/navigation/modals/tableMergeSortModalSlice';
 import {Action} from 'redux';
+import {getNavigationTableOutputPathAttributes} from '../../../selectors/navigation/modals/table-merge-sort-modal';
 
 type TableMergeSortThunkAction<T = void> = ThunkAction<T, RootState, any, Action>;
 
@@ -103,7 +108,7 @@ export function tableSortModalLoadColumns(
 
 interface SortParams {
     input_table_paths: Array<string>;
-    output_table_path: string;
+    output_table_path: {$value: string; $attributes: Record<string, string>};
     sort_by: Array<{name: string; sort_order: 'ascending' | 'descending'}>;
     pool?: string;
 }
@@ -134,6 +139,36 @@ export function runTableSort(spec: SortParams): TableMergeSortThunkAction {
         });
     };
 }
+
+export const loadStorageAttributes =
+    (path: string): TableMergeSortThunkAction =>
+    async (dispatch, getState) => {
+        const state = getState();
+        const outputPathAttributes = getNavigationTableOutputPathAttributes(state);
+
+        const response: Record<PathAttribute, string> = await wrapApiPromiseByToaster(
+            ytApiV3Id.get(YTApiId.attributesEditorGetAttrs, {
+                parameters: {
+                    path: path + '/@',
+                    attributes: [
+                        PathAttribute.OPTIMIZE_FOR,
+                        PathAttribute.COMPRESSION_CODEC,
+                        PathAttribute.ERASURE_CODEC,
+                    ],
+                },
+            }),
+            {
+                toasterName: 'get_table_attributes',
+                errorTitle: 'Get table attributes request is failed',
+                autoHide: false,
+                skipSuccessToast: true,
+            },
+        );
+
+        Object.entries(outputPathAttributes).forEach(([key, attribute]) => {
+            dispatch(changeAttribute({...attribute, value: response[key as PathAttribute]}));
+        });
+    };
 
 interface MergeParams {
     pool: string;
@@ -174,6 +209,8 @@ export function runTableMerge(spec: MergeParams): TableMergeSortThunkAction {
 let cancelTokenSrc: Pick<CancelTokenSource, 'cancel'> = {cancel: () => {}};
 
 export function isPathStaticTable(path: string) {
+    if (!path) return;
+
     cancelTokenSrc.cancel();
     return ytApiV3Id
         .get(

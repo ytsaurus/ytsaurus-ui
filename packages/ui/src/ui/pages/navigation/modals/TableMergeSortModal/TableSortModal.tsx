@@ -5,6 +5,7 @@ import _ from 'lodash';
 import {DialogError, DialogField, YTDFDialog} from '../../../../components/Dialog/Dialog';
 import {useDispatch, useSelector} from 'react-redux';
 import {
+    getNavigationTableAttributesValues,
     getNavigationTableSortError,
     getNavigationTableSortPaths,
     getNavigationTableSortSuggestColumns,
@@ -32,6 +33,7 @@ export default function TableSortModal() {
     const paths = useSelector(getNavigationTableSortPaths);
     const suggestError = useSelector(getNavigationTableSortError);
     const suggestColumns = useSelector(getNavigationTableSortSuggestColumns);
+    const attributeValues = useSelector(getNavigationTableAttributesValues);
 
     const [error, setError] = React.useState<any>();
 
@@ -46,7 +48,10 @@ export default function TableSortModal() {
                 const spec = Object.assign(
                     {
                         input_table_paths: paths,
-                        output_table_path: outputPath,
+                        output_table_path: {
+                            $value: outputPath,
+                            $attributes: attributeValues,
+                        },
                         sort_by: _.map(columns, (item: ColumnSortByInfo) => {
                             return {
                                 name: item.name,
@@ -67,7 +72,7 @@ export default function TableSortModal() {
                 throw e;
             }
         },
-        [setError, dispatch],
+        [attributeValues, dispatch],
     );
 
     const handleClose = React.useCallback(() => {
@@ -134,7 +139,7 @@ export default function TableSortModal() {
                         },
                         {
                             name: 'outputPath',
-                            type: 'path',
+                            type: 'output-path',
                             caption: 'Output path',
                             required: true,
                             validator: isPathStaticTable,

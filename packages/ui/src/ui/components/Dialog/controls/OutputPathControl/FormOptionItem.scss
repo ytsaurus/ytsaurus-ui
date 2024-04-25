@@ -1,0 +1,17 @@
+.form-option-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    &__tooltip {
+        max-width: 400px;
+    }
+
+    &__info {
+        opacity: 30%;
+
+        &:hover {
+            opacity: 100%;
+        }
+    }
+}
