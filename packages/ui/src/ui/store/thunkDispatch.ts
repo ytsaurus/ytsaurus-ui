@@ -3,6 +3,6 @@ import {ThunkDispatch} from 'redux-thunk';
 import {RootState} from './reducers';
 import {useDispatch} from 'react-redux';
 
-export type AppThunkDispatch = ThunkDispatch<RootState, any, AnyAction>;
+export type AppThunkDispatch<T extends AnyAction> = ThunkDispatch<RootState, any, T>;
 
-export const useThunkDispatch = () => useDispatch<AppThunkDispatch>();
+export const useThunkDispatch = () => useDispatch<AppThunkDispatch<AnyAction>>();
