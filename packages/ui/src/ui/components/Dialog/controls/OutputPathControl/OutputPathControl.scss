@@ -1,0 +1,14 @@
+.output-path-control {
+    &__form {
+        display: flex;
+        gap: 0 10px;
+    }
+
+    &__attributes {
+        display: grid;
+        grid-template-columns: auto 1fr;
+        align-items: center;
+        gap: 10px;
+        margin-top: 10px;
+    }
+}

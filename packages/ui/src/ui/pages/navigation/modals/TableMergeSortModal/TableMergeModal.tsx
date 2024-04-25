@@ -4,6 +4,7 @@ import _ from 'lodash';
 import {DialogError, FormApi, YTDFDialog} from '../../../../components/Dialog/Dialog';
 import {useDispatch, useSelector} from 'react-redux';
 import {
+    getNavigationTableAttributesValues,
     getNavigationTableMergeVisible,
     getNavigationTableSortError,
     getNavigationTableSortPaths,
@@ -28,6 +29,7 @@ export default function TableMergeModal() {
     const paths = useSelector(getNavigationTableSortPaths);
     const suggestError = useSelector(getNavigationTableSortError);
     const suggestColumns = useSelector(getNavigationTableSortSuggestColumns);
+    const attributeValues = useSelector(getNavigationTableAttributesValues);
 
     const [error, setError] = React.useState<any>();
 
@@ -57,7 +59,10 @@ export default function TableMergeModal() {
                             {
                                 mode,
                                 input_table_paths: paths,
-                                output_table_path: outputPath,
+                                output_table_path: {
+                                    $value: outputPath,
+                                    $attributes: attributeValues,
+                                },
                                 merge_by: _.map(columns, 'name'),
                                 pool,
                                 pool_trees,
@@ -74,7 +79,7 @@ export default function TableMergeModal() {
                 throw e;
             }
         },
-        [setError, dispatch],
+        [attributeValues, dispatch],
     );
 
     const handleClose = React.useCallback(() => {
@@ -136,7 +141,7 @@ export default function TableMergeModal() {
                         },
                         {
                             name: 'outputPath',
-                            type: 'path',
+                            type: 'output-path',
                             caption: 'Output path',
                             required: true,
                             validator: isPathStaticTable,
