@@ -1,4 +1,5 @@
 import _ from 'lodash';
+// @ts-expect-error
 import ypath from '@ytsaurus/interface-helpers/lib/ypath';
 import {mergeStateOnClusterChange} from '../../../store/reducers/utils';
 import {
@@ -7,11 +8,13 @@ import {
     OPEN_SHARD_NAME_EDITOR,
     SET_SHARD_NAME,
 } from '../../../constants/components/shards';
+import type {ActionD} from '../../../types';
+import type {Action} from 'redux';
 
-const prepareShards = (shards) => {
+const prepareShards = (shards: RawShard[]): Shard[] => {
     return _.reduce(
         shards,
-        (res, value) => {
+        (res: Shard[], value) => {
             const attributes = ypath.getValue(value, '/@');
             res.push(attributes);
             return res;
@@ -20,7 +23,32 @@ const prepareShards = (shards) => {
     );
 };
 
-const initialState = {
+type RawShard = any;
+
+export type Shard = {
+    id: string;
+    name: string;
+    total_account_statistics: {
+        node_count: number;
+    };
+};
+
+export type ShardsState = {
+    loading: boolean;
+    loaded: boolean;
+    error: boolean;
+    errorData: any;
+    shards: Shard[];
+
+    nameId: string;
+    nameVisible: boolean;
+    nameLoading: boolean;
+    nameLoaded: boolean;
+    nameError: boolean;
+    nameErrorData: any;
+};
+
+const initialState: ShardsState = {
     loading: false,
     loaded: false,
     error: false,
@@ -35,7 +63,7 @@ const initialState = {
     nameErrorData: {},
 };
 
-const reducer = (state = initialState, action) => {
+const reducer = (state: ShardsState = initialState, action: ShardsAction) => {
     switch (action.type) {
         case GET_SHARDS.REQUEST:
             return {...state, loading: true};
@@ -103,5 +131,23 @@ const reducer = (state = initialState, action) => {
             return state;
     }
 };
+
+type SetShardNameAction =
+    | Action<typeof SET_SHARD_NAME.REQUEST>
+    | Action<typeof SET_SHARD_NAME.SUCCESS>
+    | ActionD<typeof SET_SHARD_NAME.FAILURE, {error: any}>
+    | Action<typeof SET_SHARD_NAME.CANCELLED>;
+
+type GetShardsAction =
+    | Action<typeof GET_SHARDS.REQUEST>
+    | ActionD<typeof GET_SHARDS.SUCCESS, {shards: RawShard[]}>
+    | ActionD<typeof GET_SHARDS.FAILURE, {error: any}>
+    | Action<typeof GET_SHARDS.CANCELLED>;
+
+export type ShardsAction =
+    | SetShardNameAction
+    | GetShardsAction
+    | ActionD<typeof OPEN_SHARD_NAME_EDITOR, {id: string}>
+    | Action<typeof CLOSE_SHARD_NAME_EDITOR>;
 
 export default mergeStateOnClusterChange(initialState, {}, reducer);

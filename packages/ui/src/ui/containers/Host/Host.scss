@@ -3,6 +3,12 @@
     overflow: hidden;
     align-items: center;
 
+    &__tooltip {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
     &_hidden {
         visibility: hidden;
     }

@@ -68,7 +68,7 @@ export function Host({
             onClick={onClick}
         >
             {prefix}
-            <Tooltip content={address}>
+            <Tooltip className={block('tooltip')} content={address}>
                 {useText ? (
                     host
                 ) : (

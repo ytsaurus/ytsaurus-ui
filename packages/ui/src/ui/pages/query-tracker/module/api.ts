@@ -216,6 +216,7 @@ export async function generateQueryFromTable(
         },
         setup: {
             proxy: getClusterProxy(selectedCluster),
+            ...JSONParser,
         },
     });
     if (node.type === 'table') {
