@@ -25,11 +25,11 @@ jobs:
           curl https://api.github.com/repos/ytsaurus/ytsaurus-ui/pulls/$PR_ID | jq .body | sed -E 's/<!-- nda-start -->.*<!-- nda-end -->/ /g' > body.txt
           node << __EOF
             const fs = require('fs')
-            const body = fs.readFileSync('./body.txt');
+            const body = JSON.parse(fs.readFileSync('./body.txt'));
             fs.writeFileSync('./new-body.json', JSON.stringify({
               body: [
                 '<!-- nda-start -->$URL<!-- nda-end -->',
-                body.slice(1, -1)
+                body
               ].join("\n")
             }))
           __EOF
