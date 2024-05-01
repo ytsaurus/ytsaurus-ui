@@ -9,6 +9,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {loadQueryResultsErrors} from '../../module/query_result/actions';
 import {getQueryResults} from '../../module/query_result/selectors';
 import {RootState} from '../../../../store/reducers';
+import UIFactory from '../../../../UIFactory';
 
 export enum QueryResultTab {
     ERROR = 'error',
@@ -16,6 +17,7 @@ export enum QueryResultTab {
     RESULT = 'result',
     STATISTIC = 'statistic',
     PROGRESS = 'progress',
+    CUSTOM_TAB = 'custom-tab',
 }
 
 const isResultTab = (tabId: string) => tabId.startsWith('result/');
@@ -87,6 +89,15 @@ export const useQueryResultTabs = (
         if (query.state === QueryStatus.FAILED) {
             items.unshift({id: QueryResultTab.ERROR, title: 'Error'});
         } else if (query.state === QueryStatus.COMPLETED) {
+            const customQueryResultTab = UIFactory.getCustomQueryResultTab();
+
+            if (customQueryResultTab) {
+                items.unshift({
+                    id: QueryResultTab.CUSTOM_TAB,
+                    title: customQueryResultTab.title,
+                });
+            }
+
             if (query.progress?.yql_statistics) {
                 items.unshift({
                     id: QueryResultTab.STATISTIC,
