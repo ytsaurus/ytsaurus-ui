@@ -19,6 +19,7 @@ import PlanActions from '../Plan/PlanActions';
 import './index.scss';
 import {ErrorTree} from './ErrorTree';
 import {QueryProgress} from './QueryResultActions/QueryProgress';
+import UIFactory from '../../../UIFactory';
 
 const b = block('query-results');
 
@@ -36,6 +37,16 @@ function QueryResultContainer({
         }
     }, [activeResultParams, dispatch]);
     return <QueryResultsView query={query} index={activeResultParams?.resultIndex || 0} />;
+}
+
+function CustomQueryTabContainer({query}: {query: QueryItem}) {
+    const customQueryResultTab = UIFactory.getCustomQueryResultTab();
+
+    if (!customQueryResultTab) {
+        return null;
+    }
+
+    return customQueryResultTab.renderContent({query});
 }
 
 function extractOperationIdToCluster(obj: YQLSstatistics | undefined): Map<string, string> {
@@ -117,6 +128,17 @@ export const QueryResults = React.memo(function QueryResults({
                                 query={query}
                                 activeResultParams={activeResultParams}
                             />
+                        </NotRenderUntilFirstVisible>
+                        <NotRenderUntilFirstVisible
+                            hide={
+                                category !== QueryResultTab.CUSTOM_TAB &&
+                                !Number.isInteger(resultIndex)
+                            }
+                            className={b('result-wrap')}
+                        >
+                            {category === QueryResultTab.CUSTOM_TAB && (
+                                <CustomQueryTabContainer query={query} />
+                            )}
                         </NotRenderUntilFirstVisible>
                         {category === QueryResultTab.ERROR && <ErrorTree rootError={query.error} />}
                         {category === QueryResultTab.META && <QueryMetaTable query={query} />}
