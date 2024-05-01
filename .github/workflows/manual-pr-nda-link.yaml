@@ -28,7 +28,9 @@ jobs:
             const body = JSON.parse(fs.readFileSync('./body.txt'));
             fs.writeFileSync('./new-body.json', JSON.stringify({
               body: [
-                '<!-- nda-start -->$URL<!-- nda-end -->',
+                '<!-- nda-start -->',
+                '$URL',
+                '<!-- nda-end -->',
                 body
               ].join("\n")
             }))
