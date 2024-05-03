@@ -255,6 +255,7 @@ function SnapshotFilter() {
             <span className={block('spacer')} />
             <SecondaryBold>Snapshot&nbsp;</SecondaryBold>
             <Select
+                disablePortal={false}
                 placeholder={'Snapshot...'}
                 value={[snapshot2string(currentSnapshot)]}
                 items={items}
@@ -458,6 +459,7 @@ function ViewType() {
 
     return (
         <Select
+            disablePortal={false}
             value={[value]}
             items={VIEW_TYPE_ITEMS}
             onUpdate={(vals) => handleChange(vals[0])}
