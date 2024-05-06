@@ -30,8 +30,7 @@ jobs:
               body: [
                 '<!-- nda-start -->',
                 '$URL',
-                '<!-- nda-end -->',
-                body
+                '<!-- nda-end -->' + body,
               ].join("\n")
             }))
           __EOF
