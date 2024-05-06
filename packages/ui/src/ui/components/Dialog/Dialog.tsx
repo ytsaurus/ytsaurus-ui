@@ -38,12 +38,12 @@ import {
     DFDialogField,
     DFDialogProps,
     DFDialogTabField,
+    FORM_ERROR,
     RegisteredDialogField,
     RegisteredDialogTabField,
     registerDialogControl,
     registerDialogTabControl,
 } from '@gravity-ui/dialog-fields';
-export {FORM_ERROR} from '@gravity-ui/dialog-fields';
 export type {FormApi} from '@gravity-ui/dialog-fields';
 import {FIX_MY_TYPE, YTError} from '../../types';
 import PoolQuotaEditor from '../../pages/scheduling/PoolQoutaEditor/PoolQuotaEditor';
@@ -244,4 +244,12 @@ export function makeErrorFields(errors: Array<YTError | Error | undefined>) {
                 : undefined;
         }),
     );
+}
+
+export function makeFormSubmitError(error: YTError) {
+    return {
+        validationErrors: {
+            [FORM_ERROR]: <DialogError error={error} />,
+        },
+    };
 }
