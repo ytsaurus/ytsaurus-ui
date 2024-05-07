@@ -31,6 +31,8 @@ export interface AccountUsageFiltersState {
 
     diffFromSnapshot?: number;
     diffToSnapshot?: number;
+
+    viewType: AccountUsageViewType | undefined;
 }
 
 export const initialUsageFiltersState: AccountUsageFiltersState = {
@@ -46,6 +48,8 @@ export const initialUsageFiltersState: AccountUsageFiltersState = {
     visibleColumns: [],
 
     pageIndex: 0,
+
+    viewType: undefined,
 };
 
 export default function reducer(

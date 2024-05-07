@@ -11,6 +11,7 @@ import {
     openAccountAttributesModal,
     setAccountUsageDataFilter,
     setAccountUsageSortState,
+    syncAccountsUsageViewTypeWithSettings,
 } from '../../../../store/actions/accounts/account-usage';
 import DataTableYT from '../../../../components/DataTableYT/DataTableYT';
 import {
@@ -517,7 +518,12 @@ function AccountUsageDetailsDiff({children}: {children: React.ReactNode}) {
 const AccountUsageDetailsDiffMemo = React.memo(AccountUsageDetailsDiff);
 
 function AccountUsageDetails() {
+    const dispatch = useDispatch();
     const viewType = useSelector(getAccountUsageViewType);
+
+    React.useEffect(() => {
+        dispatch(syncAccountsUsageViewTypeWithSettings());
+    }, [dispatch]);
 
     let diffContent = `${viewType} is not implemented` as React.ReactNode;
 
@@ -536,7 +542,9 @@ function AccountUsageDetails() {
             break;
     }
 
-    return <AccountUsageDetailsDiffMemo>{diffContent}</AccountUsageDetailsDiffMemo>;
+    return !viewType ? null : (
+        <AccountUsageDetailsDiffMemo>{diffContent}</AccountUsageDetailsDiffMemo>
+    );
 }
 
 const AccountsUsageDetailsListLoaderMemo = React.memo(AccountsUsageDetailsListLoader);

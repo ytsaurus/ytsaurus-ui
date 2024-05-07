@@ -463,7 +463,7 @@ function ViewType() {
     return (
         <Select
             disablePortal={false}
-            value={[value]}
+            value={value ? [value] : []}
             items={VIEW_TYPE_ITEMS}
             onUpdate={(vals) => handleChange(vals[0])}
             width="max"

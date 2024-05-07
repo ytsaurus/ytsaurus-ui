@@ -145,7 +145,8 @@ export const accountUsageParams = {
         initialState: initialUsageFiltersState.dateRangeType,
     },
     view: {
-        stateKey: 'settings.data.global::accounts::accountUsageViewType',
+        stateKey: 'accounts.usage.filters.viewType',
+        initialState: initialUsageFiltersState.viewType,
     },
     path: {
         stateKey: 'accounts.usage.filters.treePath',
@@ -170,6 +171,7 @@ export function getAccountsUsageState(prevState: RootState, {query}: {query: Roo
         const draftFilters = draft.accounts.usage.filters;
         const queryFilters = query.accounts.usage.filters;
 
+        updateIfChanged(draftFilters, 'viewType', queryFilters.viewType);
         updateIfChanged(draftFilters, 'pageIndex', queryFilters.pageIndex);
         updateIfChanged(draftFilters, 'pathFilter', queryFilters.pathFilter);
         updateIfChanged(draftFilters, 'ownerFilter', queryFilters.ownerFilter);

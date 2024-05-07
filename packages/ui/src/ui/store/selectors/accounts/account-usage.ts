@@ -8,7 +8,6 @@ import {
     getSettingsAccountUsageColumnsList,
     getSettingsAccountUsageColumnsListFolders,
     getSettingsAccountUsageColumnsTree,
-    getSettingsAccountUsageViewType,
 } from '../settings-ts';
 import format from '../../../common/hammer/format';
 import {AccountUsageDataItem} from '../../reducers/accounts/usage/account-usage-types';
@@ -41,7 +40,9 @@ export const getAccountUsageCurrentSnapshot = (state: RootState) =>
 export const getAccountUsageTreePath = (state: RootState) => state.accounts.usage.filters.treePath;
 export const getAccountUsageSortState = (state: RootState) =>
     state.accounts.usage.filters.sortState;
-export const getAccountUsageViewType = (state: RootState) => getSettingsAccountUsageViewType(state);
+
+export const getAccountUsageViewType = (state: RootState) => state.accounts.usage.filters.viewType;
+
 export const getAccountUsagePathFilter = (state: RootState) =>
     state.accounts.usage.filters.pathFilter;
 export const getAccountUsageOwnerFilter = (state: RootState) =>
