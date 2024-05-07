@@ -182,6 +182,7 @@ function FromSnapshot() {
 
     return (
         <Select
+            disablePortal={false}
             placeholder={'Snapthot...'}
             items={items}
             value={[snapshot2string(value)]}
@@ -209,6 +210,7 @@ function ToSnapshot() {
 
     return (
         <Select
+            disablePortal={false}
             placeholder={'Snapthot...'}
             items={items}
             value={[snapshot2string(value)]}
@@ -366,6 +368,7 @@ function DateRangeTypeFilter() {
 
     return (
         <Select
+            disablePortal={false}
             pin="clear-round"
             value={[value]}
             onUpdate={(vals) => handleChange(vals[0])}
