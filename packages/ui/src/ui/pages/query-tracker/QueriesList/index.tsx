@@ -1,4 +1,3 @@
-// import {Tabs} from '@gravity-ui/uikit';
 import React, {useCallback, useEffect, useMemo} from 'react';
 import block from 'bem-cn-lite';
 import {Tabs, TabsItemProps} from '@gravity-ui/uikit';
@@ -12,12 +11,14 @@ import {applyListMode, requestQueriesList} from '../module/queries_list/actions'
 import './index.scss';
 import {QueriesTutorialList} from './QueriesTutorialList';
 import {QueriesHistoryListFilter} from './QueriesListFilter';
+import {Vcs} from '../Vcs';
 
 const b = block('queires-list');
 
 const TabNames = {
     [QueriesListMode.History]: 'History',
     [QueriesListMode.Tutorials]: 'Tutorials',
+    [QueriesListMode.VCS]: 'VCS',
 };
 
 const useQueryTabs = (): [TabsItemProps[], string, (tab: string) => void] => {
@@ -47,18 +48,21 @@ export function QueriesList() {
     const dispatch = useDispatch();
     useEffect(() => {
         dispatch(requestQueriesList());
-    }, []);
+    }, [dispatch]);
+
+    const isVsc = tab === QueriesListMode.VCS;
 
     return (
         <div className={b()}>
             <Tabs className={b('tabs')} items={tabs} activeTab={tab} onSelectTab={setTab} />
             <div className={b('content')}>
-                <QueriesHistoryListFilter className={b('filter')} />
+                {!isVsc && <QueriesHistoryListFilter className={b('filter')} />}
 
                 {tab === QueriesListMode.History && <QueriesHistoryList />}
                 {tab === QueriesListMode.Tutorials && (
                     <QueriesTutorialList className={b('list-content')} />
                 )}
+                {isVsc && <Vcs />}
             </div>
         </div>
     );
