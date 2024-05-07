@@ -205,3 +205,12 @@ export async function sendAndLogError(
 export const makeAuthClusterCookieName = (ytAuthCluster: string) => {
     return `${ytAuthCluster}_${YT_CYPRESS_COOKIE_NAME}`;
 };
+
+export class ErrorWithCode extends Error {
+    code: number;
+
+    constructor(code: number, message: string) {
+        super(message);
+        this.code = code;
+    }
+}

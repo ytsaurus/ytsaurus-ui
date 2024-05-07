@@ -1,0 +1,24 @@
+.vcs-list-file {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 5px 0;
+    border-bottom: 1px solid var(--g-color-line-generic);
+
+    &__link {
+        display: flex;
+        align-items: center;
+        gap: 0 8px;
+        overflow: hidden;
+    }
+
+    &__linkIcon {
+        flex-shrink: 0;
+    }
+
+    &__side {
+        display: flex;
+        align-items: center;
+        gap: 0 4px;
+    }
+}

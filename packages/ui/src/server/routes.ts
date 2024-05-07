@@ -24,6 +24,15 @@ import {getClustersAvailability} from './controllers/availability';
 import {chytProxyApi} from './controllers/chyt-api';
 import {oauthCallback, oauthLogin, oauthLogout} from './controllers/oauth-login';
 import {handleLogout} from './controllers/logout';
+import {
+    createToken,
+    getBranches,
+    getDirectoryContent,
+    getFileContent,
+    getRepositories,
+    getVcsConfig,
+    removeToken,
+} from './controllers/vcs';
 
 const HOME_INDEX_TARGET: AppRouteDescription = {handler: homeIndexFactory(), ui: true};
 
@@ -42,6 +51,15 @@ const routes: AppRoutes = {
     'GET /oauth/login': {handler: oauthLogin, ui: true},
     'GET /api/oauth/callback': {handler: oauthCallback, ui: true},
     'GET /api/oauth/logout/callback': {handler: oauthLogout, ui: true},
+
+    'POST /api/vcs/token': {handler: createToken},
+    'DELETE /api/vcs/token': {handler: removeToken},
+
+    'GET /api/vcs': {handler: getDirectoryContent},
+    'GET /api/vcs/file': {handler: getFileContent},
+    'GET /api/vcs/repositories': {handler: getRepositories},
+    'GET /api/vcs/branches': {handler: getBranches},
+    'GET /api/vcs/config': {handler: getVcsConfig},
 
     'POST /api/yt/:ytAuthCluster/change-password': {handler: handleChangePassword, ui: true},
     'POST /api/remote-copy': {handler: handleRemoteCopy},
