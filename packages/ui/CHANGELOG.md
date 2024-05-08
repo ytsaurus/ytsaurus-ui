@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.33.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.32.0...ui-v1.33.0) (2024-05-08)
+
+
+### Features
+
+* **Navigation:** sort button in table columns [YTFRONT-4135] ([44d67a3](https://github.com/ytsaurus/ytsaurus-ui/commit/44d67a3e51a564d4b78a5c9381d8205bd313d473))
+
+
+### Bug Fixes
+
+* **AccountsUsage:** fix for 'view'-parameter [YTFRONT-3737] ([7d31cda](https://github.com/ytsaurus/ytsaurus-ui/commit/7d31cdac26fafb4695a9893b8ad3e9e749bf9ba4))
+* **AccountsUsage:** fix for dropdowns of Select [YTFRONT-4155] ([63645e1](https://github.com/ytsaurus/ytsaurus-ui/commit/63645e1dda2d73155967ed0a47e8b523c46a13fa))
+* **BundleEditorDialog:** better error message [YTFRONT-4148] ([d233f9c](https://github.com/ytsaurus/ytsaurus-ui/commit/d233f9ca8b409626874b77519c5f2c72e1daa77a))
+
 ## [1.32.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.31.0...ui-v1.32.0) (2024-05-07)
 
 
