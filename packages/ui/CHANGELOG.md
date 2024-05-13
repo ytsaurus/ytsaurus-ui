@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.34.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.33.0...ui-v1.34.0) (2024-05-13)
+
+
+### Features
+
+* **Odin:** added timepicker on overview [YTFRONT-2733] ([f3ad6ba](https://github.com/ytsaurus/ytsaurus-ui/commit/f3ad6ba43d55e1133f8f5655a8d20c3868ad68f1))
+
+
+### Bug Fixes
+
+* **login:** error message displayed when entering incorrect login credentials [[#490](https://github.com/ytsaurus/ytsaurus-ui/issues/490)] ([b6d7a34](https://github.com/ytsaurus/ytsaurus-ui/commit/b6d7a34c4ca0e4b1934ed75be252289b32d442df))
+* **login:** user still see the login page after click to browser navigation back ([688043e](https://github.com/ytsaurus/ytsaurus-ui/commit/688043e5fe4babecbe67625fa0004b21e3e676fa))
+
 ## [1.33.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.32.0...ui-v1.33.0) (2024-05-08)
 
 
