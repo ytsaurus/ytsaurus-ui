@@ -39,7 +39,7 @@ import {AclModeControl} from './AclModeControl';
 import {ExpandButton} from '../../components/ExpandButton';
 import {AclColumnsCell} from './AclColumnsCell';
 
-import aclInheritedSvg from '../../../../img/svg/acl-inherited.svg';
+import aclInheritedSvg from '../../assets/img/svg/acl-inherited.svg';
 
 import './ACL.scss';
 
@@ -206,7 +206,7 @@ class ACL extends Component<Props> {
                     return (
                         row.inherited && (
                             <Popover content={'Role is inherited'}>
-                                <Icon data={aclInheritedSvg} />
+                                <Icon data={aclInheritedSvg} size={16} />
                             </Popover>
                         )
                     );

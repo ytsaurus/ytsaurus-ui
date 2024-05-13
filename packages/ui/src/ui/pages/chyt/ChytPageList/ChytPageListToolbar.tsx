@@ -192,7 +192,7 @@ function ChytListColumnsButton() {
         <React.Fragment>
             {visible && dialog}
             <Button view="outlined" onClick={() => setVisible(true)}>
-                <Icon awesome="columns" />
+                <Icon awesome="layout-columns-3" />
                 Columns
             </Button>
         </React.Fragment>

@@ -1,5 +1,40 @@
 # Changelog
 
+## [1.33.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.32.0...ui-v1.33.0) (2024-05-08)
+
+
+### Features
+
+* **Navigation:** sort button in table columns [YTFRONT-4135] ([44d67a3](https://github.com/ytsaurus/ytsaurus-ui/commit/44d67a3e51a564d4b78a5c9381d8205bd313d473))
+
+
+### Bug Fixes
+
+* **AccountsUsage:** fix for 'view'-parameter [YTFRONT-3737] ([7d31cda](https://github.com/ytsaurus/ytsaurus-ui/commit/7d31cdac26fafb4695a9893b8ad3e9e749bf9ba4))
+* **AccountsUsage:** fix for dropdowns of Select [YTFRONT-4155] ([63645e1](https://github.com/ytsaurus/ytsaurus-ui/commit/63645e1dda2d73155967ed0a47e8b523c46a13fa))
+* **BundleEditorDialog:** better error message [YTFRONT-4148] ([d233f9c](https://github.com/ytsaurus/ytsaurus-ui/commit/d233f9ca8b409626874b77519c5f2c72e1daa77a))
+
+## [1.32.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.31.0...ui-v1.32.0) (2024-05-07)
+
+
+### Features
+
+* added ability to render custom query tab at query-tracker page ([193d24b](https://github.com/ytsaurus/ytsaurus-ui/commit/193d24bcf12588579b27331e3553a72fc8b17ab8))
+* **Query:** added file editor [YTFRONT-3984] ([3ca0b33](https://github.com/ytsaurus/ytsaurus-ui/commit/3ca0b33b3a834b090238d71763c833338699d0f2))
+
+
+### Bug Fixes
+
+* **Accounts:** select problem [YTADMINREQ-41653] ([a742969](https://github.com/ytsaurus/ytsaurus-ui/commit/a7429691c93d1884a2e2adf5d5b78b059c63bb9c))
+* fix lint errors ([5250818](https://github.com/ytsaurus/ytsaurus-ui/commit/5250818deead43893caaf8f036493fa88e914442))
+* **Host:** add ellipsis text in host ([2342404](https://github.com/ytsaurus/ytsaurus-ui/commit/2342404235fa050acd6f3046f966f48ca3bbd133))
+* **Host:** remove classname ([70a7558](https://github.com/ytsaurus/ytsaurus-ui/commit/70a75582a7d77832d8402953e4560a0caeb955dd))
+* **Host:** review changes ([5742f26](https://github.com/ytsaurus/ytsaurus-ui/commit/5742f2643ec7db5b67e641edb63ea0497119d74d))
+* **Navigation:** text bug in tablets layout [YTFRONT-4133] ([ca58a9e](https://github.com/ytsaurus/ytsaurus-ui/commit/ca58a9e12eaabf1933ee7dc37bffd4d51581f3a8))
+* **Navigation:** wrong symlinks path [YTFRONT-4128] ([f43e6f7](https://github.com/ytsaurus/ytsaurus-ui/commit/f43e6f7621f770f8fd94c1a1d23a76ad539e029b))
+* **Query:** autocompete error old safari [YTFRONT-4125] ([bacb350](https://github.com/ytsaurus/ytsaurus-ui/commit/bacb350f21499e421c5309bdd5cab4a12a329110))
+* **Query:** generating a query from a table [YTFRONT-4137] ([0fd3271](https://github.com/ytsaurus/ytsaurus-ui/commit/0fd3271fd9b543a4136502a52c749343a177e43f))
+
 ## [1.31.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.30.0...ui-v1.31.0) (2024-04-19)
 
 

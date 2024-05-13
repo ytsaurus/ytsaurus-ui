@@ -16,8 +16,8 @@ import {
     sortTree,
 } from './utils';
 
-import collapse from '../../../../../../../img/svg/icons/chevron-up.svg';
-import expand from '../../../../../../../img/svg/icons/chevron-down.svg';
+import collapse from '../../../../../assets/img/svg/icons/chevron-up.svg';
+import expand from '../../../../../assets/img/svg/icons/chevron-down.svg';
 
 import './CollapsibleTable.scss';
 import {StrictReactNode} from '../../YQLTable/utils';

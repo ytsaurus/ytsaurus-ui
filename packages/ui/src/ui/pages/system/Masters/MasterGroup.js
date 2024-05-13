@@ -5,8 +5,8 @@ import _ from 'lodash';
 import block from 'bem-cn-lite';
 import {Text} from '@gravity-ui/uikit';
 
-import ReadOnlyIcon from '../../../../../img/svg/read-only-icon.svg';
-import WarmUpIcon from '../../../../../img/svg/warmup-icon.svg';
+import ReadOnlyIcon from '../../../assets/img/svg/read-only-icon.svg';
+import WarmUpIcon from '../../../assets/img/svg/warmup-icon.svg';
 import hammer from '../../../common/hammer';
 import ClipboardButton from '../../../components/ClipboardButton/ClipboardButton';
 import {getMastersHostType} from '../../../store/selectors/settings';

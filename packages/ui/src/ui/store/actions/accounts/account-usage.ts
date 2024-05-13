@@ -35,6 +35,7 @@ import {
     getAccountUsageViewType,
 } from '../../selectors/accounts/account-usage';
 import {getActiveAccount} from '../../../store/selectors/accounts/accounts-ts';
+import {getSettingsAccountUsageViewType} from '../../selectors/settings-ts';
 import {SortState} from '../../../types';
 import {
     AccountUsageFiltersState,
@@ -63,6 +64,19 @@ type SnapshotsThunkAction = ThunkAction<any, RootState, any, AccountsSnapshotsAc
 
 export function accountUsageApiUrl(handle: string) {
     return getAccountsUsageBasePath() + handle;
+}
+
+export function syncAccountsUsageViewTypeWithSettings(): FiltersThunkAction {
+    return (dispatch, getState) => {
+        const state = getState();
+        const viewType = getAccountUsageViewType(state);
+        if (!viewType) {
+            const lastViewType = getSettingsAccountUsageViewType(state);
+            dispatch(setAccountUsageFilters({viewType: lastViewType}));
+        } else {
+            dispatch(setSettingsAccountUsageViewType(viewType));
+        }
+    };
 }
 
 export function fetchAccountsUsageSnapshots(cluster: string): SnapshotsThunkAction {
@@ -315,7 +329,7 @@ export function setAccountUsageDataPageIndex(pageIndex: number): FiltersThunkAct
 }
 
 export function setAccountUsageFilters(
-    data: Pick<Partial<AccountUsageFiltersState>, 'visibleColumns'>,
+    data: Pick<Partial<AccountUsageFiltersState>, 'visibleColumns' | 'viewType'>,
 ): FiltersThunkAction {
     return (dispatch) => {
         dispatch({type: ACCOUNTS_USAGE_FILTERS_PARTIAL, data});
@@ -326,7 +340,7 @@ export function setAccountUsageViewType(viewType: AccountUsageViewType): Filters
     return (dispatch) => {
         dispatch({
             type: ACCOUNTS_USAGE_FILTERS_PARTIAL,
-            data: {pageIndex: 0},
+            data: {pageIndex: 0, viewType},
         });
         dispatch(setSettingsAccountUsageViewType(viewType));
     };

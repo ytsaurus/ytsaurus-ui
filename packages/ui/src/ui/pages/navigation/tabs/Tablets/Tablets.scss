@@ -39,6 +39,10 @@
         justify-content: center;
     }
 
+    &__host {
+        white-space: pre-wrap;
+    }
+
     &__table {
         table-layout: fixed;
 
@@ -124,6 +128,7 @@
     &__id-link {
         display: flex;
         align-items: center;
+        white-space: pre-wrap;
     }
 
     &__copy-btn {

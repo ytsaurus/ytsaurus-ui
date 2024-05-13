@@ -182,6 +182,7 @@ function FromSnapshot() {
 
     return (
         <Select
+            disablePortal={false}
             placeholder={'Snapthot...'}
             items={items}
             value={[snapshot2string(value)]}
@@ -209,6 +210,7 @@ function ToSnapshot() {
 
     return (
         <Select
+            disablePortal={false}
             placeholder={'Snapthot...'}
             items={items}
             value={[snapshot2string(value)]}
@@ -255,6 +257,7 @@ function SnapshotFilter() {
             <span className={block('spacer')} />
             <SecondaryBold>Snapshot&nbsp;</SecondaryBold>
             <Select
+                disablePortal={false}
                 placeholder={'Snapshot...'}
                 value={[snapshot2string(currentSnapshot)]}
                 items={items}
@@ -365,6 +368,7 @@ function DateRangeTypeFilter() {
 
     return (
         <Select
+            disablePortal={false}
             pin="clear-round"
             value={[value]}
             onUpdate={(vals) => handleChange(vals[0])}
@@ -458,7 +462,8 @@ function ViewType() {
 
     return (
         <Select
-            value={[value]}
+            disablePortal={false}
+            value={value ? [value] : []}
             items={VIEW_TYPE_ITEMS}
             onUpdate={(vals) => handleChange(vals[0])}
             width="max"

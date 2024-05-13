@@ -6,12 +6,11 @@ import isEmpty_ from 'lodash/isEmpty';
 import {Info} from '../../../../components/Info/Info';
 import {BundleParamsList} from './components/BundleParamsList/BundleParamsList';
 import {
-    DialogError,
     DialogField,
     DialogTabField,
-    FORM_ERROR,
     FormApi,
     YTDFDialog,
+    makeFormSubmitError,
 } from '../../../../components/Dialog/Dialog';
 import hammer from '../../../../common/hammer';
 
@@ -612,12 +611,8 @@ export function BundleEditorDialog() {
                 }),
             );
             return undefined;
-        } catch (error) {
-            return {
-                validationErrors: {
-                    [FORM_ERROR]: <DialogError error={error} />,
-                },
-            };
+        } catch (error: any) {
+            return makeFormSubmitError(error);
         }
     };
 

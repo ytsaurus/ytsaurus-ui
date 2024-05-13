@@ -9,8 +9,8 @@ import UIFactory from '../../UIFactory';
 
 import './SubjectLink.scss';
 
-import userSvg from '../../../../img/svg/page-users.svg';
-import groupSvg from '../../../../img/svg/page-groups.svg';
+import userSvg from '../../assets/img/svg/page-users.svg';
+import groupSvg from '../../assets/img/svg/page-groups.svg';
 
 const block = cn('yt-subject-link');
 

@@ -130,7 +130,7 @@ export function setBunndleAttributes(
                 successContent: `${bundle} successfully updated`,
                 errorContent: `${bundle} cannot be updated`,
                 isBatch: true,
-                errorTitle: 'Failed to set bundle attributes',
+                errorTitle: 'Failed to update bundle configuration',
             },
         ).then(() => {
             dispatch(showChaosCellBundleEditor(bundle));

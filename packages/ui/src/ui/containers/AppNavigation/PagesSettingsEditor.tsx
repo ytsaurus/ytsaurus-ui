@@ -11,7 +11,7 @@ import PagesPanel from './PagesPanel';
 import {PagesEditorPanel} from './PagesEditorPanel';
 import {getPagesOrderedByUserAndPinned} from '../../store/selectors/slideoutMenu';
 import {PAGE_ICONS_BY_ID} from '../../constants/slideoutMenu';
-import settingsIcon from '../../../../img/svg/settings-2.svg';
+import settingsIcon from '../../assets/img/svg/settings-2.svg';
 
 import './PagesSettingsEditor.scss';
 import {getAppBrowserHistory} from '../../store/window-store';
@@ -97,7 +97,7 @@ export function usePagesMenuItems(cluster?: string) {
                 },
             };
         });
-    }, undefined);
+    }, [pages, cluster, pathname]);
 
     if (cluster) {
         return clusterItems;

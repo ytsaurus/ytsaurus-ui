@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import {useSelector} from 'react-redux';
 
 import Button from '../../../../../components/Button/Button';
-import Logo from '../../../../../../../img/svg/jupyter-logo.svg';
+import Logo from '../../../../../assets/img/svg/jupyter-logo.svg';
 
 import {getPath} from '../../../../../store/selectors/navigation';
 import {getCluster} from '../../../../../store/selectors/global';
