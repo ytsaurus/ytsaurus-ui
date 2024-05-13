@@ -20,14 +20,6 @@
 
         max-width: var(--qt-result-table-cell-max-width);
 
-        & .incomplete {
-            background-color: initial;
-
-            &::after {
-                content: none;
-            }
-        }
-
         video {
             max-width: var(--qt-result-table-cell-max-width);
         }
