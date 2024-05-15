@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.35.1](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.35.0...ui-v1.35.1) (2024-05-15)
+
+
+### Bug Fixes
+
+* **TabletCellBundle/Instances:** notice for in-progress allocation [YTFRONT-4167] ([2218d61](https://github.com/ytsaurus/ytsaurus-ui/commit/2218d617dffc89a33cdab5ef4a1de908300a2545))
+* **YQLTable:** fix appearance of truncated value in cell ([f5daaca](https://github.com/ytsaurus/ytsaurus-ui/commit/f5daaca691c0e94e7cfac2b712a2d392d66cfb5e))
+
 ## [1.35.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.34.0...ui-v1.35.0) (2024-05-15)
 
 
