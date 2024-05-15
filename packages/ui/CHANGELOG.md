@@ -1,5 +1,21 @@
 # Changelog
 
+## [1.36.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.35.1...ui-v1.36.0) (2024-05-15)
+
+
+### Features
+
+* **Navigation:** output path attributes [YTFRONT-3869] ([8f90df0](https://github.com/ytsaurus/ytsaurus-ui/commit/8f90df06bfccfb7c7aeca8bc1dc9056a12eb5395))
+* **Odin:** added timepicker on overview [YTFRONT-2733] ([f3ad6ba](https://github.com/ytsaurus/ytsaurus-ui/commit/f3ad6ba43d55e1133f8f5655a8d20c3868ad68f1))
+
+
+### Bug Fixes
+
+* **login:** error message displayed when entering incorrect login credentials [[#490](https://github.com/ytsaurus/ytsaurus-ui/issues/490)] ([b6d7a34](https://github.com/ytsaurus/ytsaurus-ui/commit/b6d7a34c4ca0e4b1934ed75be252289b32d442df))
+* **login:** user still see the login page after click to browser navigation back ([688043e](https://github.com/ytsaurus/ytsaurus-ui/commit/688043e5fe4babecbe67625fa0004b21e3e676fa))
+* **TabletCellBundle/Instances:** notice for in-progress allocation [YTFRONT-4167] ([2218d61](https://github.com/ytsaurus/ytsaurus-ui/commit/2218d617dffc89a33cdab5ef4a1de908300a2545))
+* **YQLTable:** fix appearance of truncated value in cell ([f5daaca](https://github.com/ytsaurus/ytsaurus-ui/commit/f5daaca691c0e94e7cfac2b712a2d392d66cfb5e))
+
 ## [1.35.1](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.35.0...ui-v1.35.1) (2024-05-15)
 
 
