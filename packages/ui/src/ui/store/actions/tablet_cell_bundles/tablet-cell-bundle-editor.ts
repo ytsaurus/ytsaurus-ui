@@ -19,7 +19,10 @@ import {getBatchError, wrapApiPromiseByToaster} from '../../../utils/utils';
 import {makeBatchSubRequest, prepareSetCommandForBatch} from '../../../utils/cypress-attributes';
 // @ts-ignore
 import yt from '@ytsaurus/javascript-wrapper/lib/yt';
-import {getTabletsBundles} from '../../../store/selectors/tablet_cell_bundles';
+import {
+    getTabletsBundles,
+    getTabletsDefaultMemoryConfiguration,
+} from '../../../store/selectors/tablet_cell_bundles';
 import {OrchidBundlesData} from '../../../store/reducers/tablet_cell_bundles';
 import {BatchResults, BatchSubRequest} from '../../../../shared/yt-types';
 
@@ -32,13 +35,15 @@ type TabletCellBundleEditorThunkAction = ThunkAction<
 
 export function fetchTabletCellBundleEditor(bundleName: string): TabletCellBundleEditorThunkAction {
     return (dispatch, getState) => {
+        const state = getState();
         dispatch({type: TABLETS_BUNDLES_EDITOR_LOAD_REQUREST, data: {bundleName}});
 
-        const bundles = getTabletsBundles(getState());
+        const bundles = getTabletsBundles(state);
         const toEdit = bundles.find(({bundle}) => bundle === bundleName);
         if (!toEdit) {
             return Promise.resolve();
         }
+        const defaultReservedMemoryLimit = getTabletsDefaultMemoryConfiguration(state);
 
         const requests: Array<BatchSubRequest> = [
             {
@@ -57,13 +62,6 @@ export function fetchTabletCellBundleEditor(bundleName: string): TabletCellBundl
                 },
             },
         ];
-
-        requests.push({
-            command: 'get',
-            parameters: {
-                path: '//sys/bundle_controller/controller/zones/zone_default/@tablet_node_sizes/nextgen/default_config/memory_limits/reserved',
-            },
-        });
 
         if (toEdit.enable_bundle_controller) {
             requests.push({
@@ -98,15 +96,15 @@ export function fetchTabletCellBundleEditor(bundleName: string): TabletCellBundl
             },
         )
             .then((results) => {
-                const [
-                    {output: data},
-                    {output: defaultReservedMemoryLimit},
-                    {output: bundleControllerData} = {output: undefined},
-                ] = results as BatchResults<[unknown, number, OrchidBundlesData]>;
+                const [{output: data}, {output: bundleControllerData} = {output: undefined}] =
+                    results as BatchResults<[unknown, OrchidBundlesData]>;
 
                 let bundleData = toEdit;
 
-                if (!toEdit.bundle_controller_target_config.memory_limits.reserved) {
+                if (
+                    !toEdit.bundle_controller_target_config.memory_limits.reserved &&
+                    defaultReservedMemoryLimit
+                ) {
                     bundleData = {
                         ...toEdit,
                         bundle_controller_target_config: {
