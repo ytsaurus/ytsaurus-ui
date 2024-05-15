@@ -83,7 +83,7 @@ function prepareBundleInstances(
                 address,
                 data,
                 url: makeUrl(address),
-                allocationState: data.removing ? 'Removing' : undefined,
+                allocationState: data.removing ? ('removing' as const) : undefined,
                 tablet_static_memory,
                 deployUrl,
                 nannyUrl,

@@ -2,6 +2,11 @@
     position: relative;
     display: inline-block;
 
+    &_flex {
+        display: inline-flex;
+        align-items: center;
+    }
+
     &_has-tooltip {
         cursor: pointer;
     }

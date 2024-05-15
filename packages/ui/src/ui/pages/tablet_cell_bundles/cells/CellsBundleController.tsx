@@ -17,7 +17,7 @@ import ChartLink from '../../../components/ChartLink/ChartLink';
 import Icon from '../../../components/Icon/Icon';
 import {Tooltip} from '../../../components/Tooltip/Tooltip';
 
-import {AllocatedInstance} from '../../../store/reducers/tablet_cell_bundles';
+import {AllocatedInstance, InProgressInstance} from '../../../store/reducers/tablet_cell_bundles';
 
 import './CellsBundleController.scss';
 import {lastWord, printUsageLimit} from '../../../utils';
@@ -33,7 +33,7 @@ interface RowData {
     address?: string;
     url?: string;
     data?: AllocatedInstance;
-    allocationState?: string;
+    allocationState?: InProgressInstance['hulk_request_state'] | 'removing';
     hulkRequestPath?: string;
     tablet_static_memory?: {used?: number; limit?: number};
     deployUrl?: string;
@@ -127,10 +127,19 @@ const COLUMNS: Array<Column<RowData>> = [
     {
         name: 'Allocation state',
         render: ({row}) => {
-            return !row.allocationState ? (
+            const {allocationState} = row;
+            const tooltip =
+                allocationState === 'IN_PROGRESS'
+                    ? 'Please note that allocating new instances on MapReduce clusters can take several hours.'
+                    : undefined;
+
+            return !allocationState ? (
                 format.NO_VALUE
             ) : (
-                <Label text={format.ReadableField(row.allocationState.toLocaleLowerCase())} />
+                <Tooltip content={tooltip} useFlex>
+                    <Label text={format.ReadableField(allocationState.toLocaleLowerCase())} />
+                    {Boolean(tooltip) && <Icon awesome="question-circle" color="secondary" />}
+                </Tooltip>
             );
         },
         sortable: false,
