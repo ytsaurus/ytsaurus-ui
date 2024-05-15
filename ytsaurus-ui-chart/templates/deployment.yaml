@@ -1,0 +1,125 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "ytsaurus-ui-chart.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "ytsaurus-ui-chart.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.ui.replicaCount }} 
+  selector:
+    matchLabels:
+      {{- include "ytsaurus-ui-chart.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "ytsaurus-ui-chart.labels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers: 
+        - name: {{ .Chart.Name }}
+          command:
+            - /bin/bash
+            - -c
+            {{- if .Values.ngnix.useCustomConfig }}
+            - cp /opt/app/nginx.app.conf /etc/nginx/sites-enabled/app.conf;
+            {{- end }}
+            - /usr/bin/supervisord -c /etc/supervisor/supervisord.conf
+          {{- with .Values.ui.env }}
+          env:
+            {{- toYaml . | nindent 12}}
+            - name: APP_INSTALLATION
+              value: custom
+            - name: YT_AUTH_ALLOW_INSECURE
+              value: "1"
+          {{- end }}
+          image: "{{ .Values.ui.image.repository }}:{{ .Values.ui.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.ui.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.service.port }}
+              protocol: TCP
+          livenessProbe:
+            {{- toYaml .Values.livenessProbe | nindent 12 }}
+          readinessProbe:
+            {{- toYaml .Values.readinessProbe | nindent 12 }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}          
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+            {{- if .Values.ngnix.useCustomConfig }}
+            - mountPath: /opt/app/nginx.app.conf
+              name: ngnix-config
+              readOnly: true
+              subPath: {{ .Values.ngnix.configMapkey }}
+            {{- end }}
+            - mountPath: /opt/app/clusters-config.json
+              name: config
+              readOnly: true
+              subPath: clusters-config.json
+            - mountPath: /opt/app/dist/server/configs/custom/common.js
+              name: config
+              readOnly: true
+              subPath: common.js
+            - mountPath: /vault
+              name: vault
+              readOnly: true
+            - mountPath: /opt/app/secrets
+              name: secrets
+      initContainers:
+        - command:
+          - bash
+          - -c
+          - cp /vault/{{- .Values.ui.secrets.interfaceSecrets.secretKey }} /opt/app/secrets
+          image: "{{ .Values.ui.image.repository }}:{{ .Values.ui.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.ui.image.pullPolicy }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          name: "{{.Chart.Name }}-prarepare-secret"
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+          - mountPath: /opt/app/clusters-config.json
+            name: config
+            readOnly: true
+            subPath: clusters-config.json
+          - mountPath: /opt/app/dist/server/configs/custom/common.js
+            name: config
+            readOnly: true
+            subPath: common.js
+          - mountPath: /vault
+            name: vault
+            readOnly: true
+          - mountPath: /opt/app/secrets
+            name: secrets
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext:
+        {{- toYaml .Values.securityContext | nindent 8 }}
+      terminationGracePeriodSeconds: 30
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      volumes:
+        {{- if .Values.ngnix.useCustomConfig}}
+        - configMap:
+            defaultMode: 420
+            name: {{ .Values.ngnix.configMapName }}
+          name: ngnix-config
+        {{- end }}
+        - configMap:
+            defaultMode: 420
+            name: {{ include "ytsaurus-ui-chart.fullname" . }}
+          name: config
+        - name: vault
+          secret:
+            defaultMode: 420
+            secretName: {{ .Values.ui.secrets.interfaceSecrets.secretName }}
+        - emptyDir:
+            sizeLimit: 1Mi
+          name: secrets

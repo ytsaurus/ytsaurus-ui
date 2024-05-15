@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "ytsaurus-ui-chart.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "ytsaurus-ui-chart.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.service.port }}
+      targetPort: http
+      protocol: TCP
+      name: http
+      nodePort: 30000
+  selector:
+    {{- include "ytsaurus-ui-chart.selectorLabels" . | nindent 4 }}

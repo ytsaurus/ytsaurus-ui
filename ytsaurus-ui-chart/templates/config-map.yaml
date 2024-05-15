@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "ytsaurus-ui-chart.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+     {{- include "ytsaurus-ui-chart.labels" . | nindent 4 }}
+data:
+  clusters-config.json: |
+    {{ .Values.ui.clusterConfig | toJson }}
+  common.js: |
+    module.exports = { odinBaseUrl: {{ .Values.settings.odinBaseUrl | quote }}, uiSettings: {directDownload: {{ .Values.settings.directDownload | toJson }} }}
