@@ -1,6 +1,5 @@
 import type {Request, Response} from 'express';
 import {getClusterInfo} from '../components/cluster-queries';
-import {getUserYTApiSetup} from '../components/requestsSetup';
 import {sendAndLogError} from '../utils';
 
 async function handleClusterInfoImpl(req: Request, res: Response) {
@@ -9,9 +8,7 @@ async function handleClusterInfoImpl(req: Request, res: Response) {
             params: {ytAuthCluster},
         } = req;
 
-        const cfg = getUserYTApiSetup(ytAuthCluster, req);
-
-        const results = await getClusterInfo(req, cfg);
+        const results = await getClusterInfo(req, ytAuthCluster);
         return res.send(results);
     } catch (err: any) {
         return sendAndLogError(req.ctx, res, 500, err);

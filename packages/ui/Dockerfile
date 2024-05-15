@@ -3,19 +3,17 @@ FROM  ghcr.io/gravity-ui/node-nginx:ubuntu20-nodejs18
 RUN mkdir -p /opt/app
 WORKDIR /opt/app
 
+COPY scripts ./scripts
 COPY deploy ./deploy
 COPY deploy/nginx /etc/nginx
 COPY deploy/supervisor /etc/supervisor
 
-COPY ./ytsaurus-ui-*.tgz ./
+COPY package.json package-lock.json ./
+RUN npm run deps:install
 
-ARG UI_VERSION
-ARG DEV
+COPY . .
 
-RUN UI_PACKAGE=$(test -n "${DEV}" && echo ./ytsaurus-ui-${UI_VERSION}.tgz || echo @ytsaurus/ui@${UI_VERSION}) \
-        && echo "\n  UI_VERSION=${UI_VERSION} \n  DEV=${DEV} \n  UI_PACKAGE=${UI_PACKAGE} \n" >&2 \
-        && npm install --legacy-peer-deps $UI_PACKAGE \
-        && mv node_modules/@ytsaurus/ui . && mv ui/* .
+RUN npm run build && npm run deps:truncate
 
 EXPOSE 80
 
