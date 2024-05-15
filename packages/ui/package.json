@@ -57,7 +57,7 @@
     "update:icons": "./scripts/update-icons.sh"
   },
   "config": {
-    "docker_image": "ytsaurus/ui"
+    "docker_image": "ytsaurus/ui-nightly"
   },
   "dependencies": {
     "@doc-tools/transform": "^2.18.3",

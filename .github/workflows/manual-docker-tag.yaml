@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       stag:
-        description: "ytsaurus/ui:[SOURCE_TAG]"
+        description: "ytsaurus/ui-nightly:[SOURCE_TAG]"
         required: true
       ttag:
         description: "ytsaurus/ui:[TARGET_TAG]"
@@ -17,9 +17,10 @@ jobs:
       - name: "Docker tag"
         run: |
           echo '${{ secrets.DOCKER_HUB_PASSWORD }}' | docker login --username ${{ secrets.DOCKER_HUB_LOGIN}} --password-stdin
-          docker pull ytsaurus/ui:${STAG}
-          docker tag ytsaurus/ui:${STAG} ytsaurus/ui:${TTAG}
-          docker push ytsaurus/ui:${TTAG}
-        env:
-          STAG: ${{ inputs.stag }}
-          TTAG: ${{ inputs.ttag }}
+
+          SOURCE_IMAGE=ytsaurus/ui-nightly:${{ inputs.stag }}
+          TARGET_IMAMGE=ytsaurus/ui:${{ inputs.ttag }}
+
+          docker pull ${SOURCE_IMAGE}
+          docker tag ${SOURCE_IMAGE} ${TARGET_IMAMGE}
+          docker push ${TARGET_IMAMGE}

@@ -56,8 +56,8 @@ jobs:
             npm run docker:build --dockertag=${UI_TAG}
             echo '${{ secrets.DOCKER_HUB_PASSWORD }}' | docker login --username ${{ secrets.DOCKER_HUB_LOGIN}} --password-stdin
             npm run docker:push --dockertag=${UI_TAG}
-            docker tag ${TARGET_IMAGE} ${UI_IMAGE}:pre-stable
-            docker push ${UI_IMAGE}:pre-stable
+            docker tag ${TARGET_IMAGE} ${UI_IMAGE}:latest
+            docker push ${UI_IMAGE}:latest
           else 
             echo Corresponding image already exists
           fi

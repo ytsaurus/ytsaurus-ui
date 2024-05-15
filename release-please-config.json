@@ -1,4 +1,5 @@
 {
+  "skip-github-release": true,
   "separate-pull-requests": true,
   "plugins": ["node-workspace"],
   "packages": {
