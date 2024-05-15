@@ -164,6 +164,7 @@ export interface MasterGroupData {
         leaderCommitedVersion?: string;
     };
     cellTag?: number;
+    cellId?: string;
 }
 
 const initialState: MastersState = {
@@ -181,6 +182,7 @@ const initialState: MastersState = {
         leader: undefined,
         quorum: undefined,
         cellTag: undefined,
+        cellId: undefined,
     },
     secondary: [],
     providers: {
@@ -212,6 +214,7 @@ export interface ResponseItem {
 export interface ResponseItemsGroup {
     addresses?: Array<ResponseItem>;
     cellTag?: number;
+    cellId?: string;
 }
 
 export interface MastersConfigResponse {
@@ -238,6 +241,7 @@ function processMastersConfig(
                 return new MasterInstance(address, 'primary', primaryMaster.cellTag);
             }),
             cellTag: primaryMaster.cellTag,
+            cellId: primaryMaster.cellId,
         },
         secondary: _.map(secondaryMasters, (master) => {
             return {
@@ -311,6 +315,7 @@ function processMastersData(
     const primary: Required<MasterGroupData> = {
         instances: _.orderBy(primaryInstances, (instance) => instance.$address),
         cellTag: state.primary.cellTag!,
+        cellId: state.primary.cellId!,
         quorum: getQuorum(primaryInstances),
         leader: getLeader(primaryInstances),
     };
@@ -324,6 +329,7 @@ function processMastersData(
         const res: Required<MasterGroupData> = {
             instances: _.orderBy(instances, (instance) => instance.$address),
             cellTag: master.cellTag!,
+            cellId: master.cellId!,
             quorum: getQuorum(instances),
             leader: getLeader(instances),
         };
