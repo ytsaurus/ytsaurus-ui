@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.35.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.34.0...ui-v1.35.0) (2024-05-15)
+
+
+### Features
+
+* **Navigation:** output path attributes [YTFRONT-3869] ([8f90df0](https://github.com/ytsaurus/ytsaurus-ui/commit/8f90df06bfccfb7c7aeca8bc1dc9056a12eb5395))
+
 ## [1.34.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.33.0...ui-v1.34.0) (2024-05-13)
 
 
