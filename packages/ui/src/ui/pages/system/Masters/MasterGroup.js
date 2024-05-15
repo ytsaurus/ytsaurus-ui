@@ -1,7 +1,6 @@
 import React, {Component, Fragment} from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
-import _ from 'lodash';
 import block from 'bem-cn-lite';
 import {Text} from '@gravity-ui/uikit';
 
@@ -14,6 +13,8 @@ import ypath from '../../../common/thor/ypath';
 import Icon from '../../../components/Icon/Icon';
 import {Tooltip} from '../../../components/Tooltip/Tooltip';
 import NodeQuad from '../NodeQuad/NodeQuad';
+import {SwitchLeaderButton} from './SwitchLeader';
+import _ from 'lodash';
 
 import './MasterGroup.scss';
 
@@ -134,7 +135,7 @@ class MasterGroup extends Component {
     };
 
     renderQuorum() {
-        const {quorum, cellTag} = this.props;
+        const {quorum, cellTag, cellId, instances, hostType} = this.props;
         const status = quorum ? quorum.status : 'unknown';
         const quorumTitle = quorum && `Leader committed version: ${quorum.leaderCommitedVersion}`;
         const cellTitle = `Cell tag: ${cellTag}`;
@@ -150,6 +151,11 @@ class MasterGroup extends Component {
             'no-quorum': 'missing',
             unknown: 'unknown',
         };
+        const hosts = instances.map(({$address, $physicalAddress}) => {
+            const address = hostType === 'host' ? $address : $physicalAddress;
+
+            return address;
+        });
 
         return (
             <Fragment>
@@ -181,6 +187,7 @@ class MasterGroup extends Component {
                     <div className={b('quorum-cell')} title={cellTitle}>
                         {cellTag && <Icon className={b('icon-glyph')} face="solid" awesome="tag" />}
                         {hammer.format['Hex'](cellTag)}
+                        {cellId && <SwitchLeaderButton cellId={cellId} hosts={hosts} />}
                     </div>
                 </div>
             </Fragment>
