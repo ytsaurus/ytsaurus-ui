@@ -166,4 +166,5 @@ export enum YTApiId {
     removeMaintenance,
     maintenanceRequests,
     getQueryTrackerInfo,
+    switchLeader,
 }

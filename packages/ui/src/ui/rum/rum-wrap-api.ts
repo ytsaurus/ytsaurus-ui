@@ -81,6 +81,10 @@ type YTApiV4WithId = {
         access_control_objects: string[];
         supported_features: {access_control: boolean};
     }>;
+    switchLeader(
+        id: YTApiId,
+        ...args: ApiMethodParameters<{cell_id: string; new_leader_address: string}>
+    ): Promise<any>;
     [method: string]: (id: YTApiId, ...args: ApiMethodParameters<any>) => Promise<any>;
 };
 
