@@ -51,7 +51,7 @@ jobs:
           cd packages/ui
           npm run build
           npm pack
-          npm run docker:build:dev --dockertag=local
+          npm run docker:build --dockertag=local
           docker tag $(npm run -s show:docker-image-name):local ytsaurus/ui:local
       - name: Run containers for 'Local'
         run: |

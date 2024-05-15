@@ -5,7 +5,7 @@ import * as os from 'os';
 import type {Request} from 'express';
 
 import {ClusterConfig} from '../../shared/yt-types';
-import {YTApiUserSetup} from './requestsSetup';
+import {YTApiUserSetup, getUserYTApiSetup, getYTApiClusterSetup} from './requestsSetup';
 
 const REQUEST_TIMEOUT = 15000;
 
@@ -65,15 +65,12 @@ export async function getXSRFToken(req: Request, config: YTApiUserSetup, actionP
         });
 }
 
-function getVersion(clusterConfig: {proxy: string; secure?: boolean}) {
-    const {proxy, secure} = clusterConfig;
-    const protocol = secure ? 'https://' : 'http://';
-
+async function getVersion({proxyBaseUrl}: {proxyBaseUrl: string}) {
     return axios
         .request({
-            url: protocol + proxy + '/version',
+            url: proxyBaseUrl + '/version',
             method: 'GET',
-            timeout: REQUEST_TIMEOUT,
+            timeout: 5000,
             responseType: 'text',
         })
         .then((response) => response.data);
@@ -87,8 +84,8 @@ function parseVersion(version: string) {
 export function getVersions(req: Request, clusters: Record<string, ClusterConfig>) {
     return Promise.all(
         _.map(clusters, (clusterConfig) => {
-            const id = clusterConfig.id;
-            return getVersion(clusterConfig)
+            const {id} = clusterConfig;
+            return getVersion(getYTApiClusterSetup(id))
                 .then((version) => ({id, version: parseVersion(version)}))
                 .catch((error) => {
                     req.ctx.logError('getVersion error', error, getExtra(error));
@@ -118,15 +115,15 @@ function prepareError(message: string, err: AxiosError) {
     };
 }
 
-export async function getClusterInfo(req: Request, config: YTApiUserSetup) {
-    const {setup} = config;
+export async function getClusterInfo(req: Request, cluster: string) {
+    const config = getUserYTApiSetup(cluster, req);
 
     let tokenError, versionError;
     let token, version;
 
     const [tokenResult, versionResult] = await Promise.allSettled([
         getXSRFToken(req, config, 'ui_clusterInfo'),
-        getVersion(setup),
+        getVersion(config),
     ]);
 
     if (versionResult.status === 'fulfilled') {

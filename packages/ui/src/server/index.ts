@@ -57,3 +57,28 @@ if (require.main === module) {
 }
 
 export default app;
+
+/**
+ * In some cases requests to unkonwn hosts might be failed with `Error: getaddrinfo EAI_AGAIN`,
+ * such requests do not fail immedeately they wait for timeout before falling, and during the timeout
+ * all other requests to valid hosts from nodejs are falling too.
+ * Steps to reproduce:
+ * 1. Run UI without the fix
+ *  `./run_local_cluster.sh --yt-version dev --docker-hostname $(hostname) --fqdn localhost --ui-version 1.33.0`
+ * 2. Run api/clusters/versions:
+ *  `curl http://$(hostname):8001/api/clusters/versions &`
+ * 3. Do not wait while request from item 2 is finished and run:
+ *  `curl http://$(hostname):8001/api/cluster-info/ui`
+ *   (in some rare cases it might be successfully finished)
+ 
+ * The solution is taken from https://stackoverflow.com/questions/40182121/whats-the-cause-of-the-error-getaddrinfo-eai-again
+ */
+
+import http from 'http';
+import https from 'https';
+import CacheableLookup from 'cacheable-lookup';
+
+const cacheable = new CacheableLookup();
+
+cacheable.install(http.globalAgent);
+cacheable.install(https.globalAgent);
