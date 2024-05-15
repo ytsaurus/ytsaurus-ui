@@ -58,6 +58,13 @@ export function fetchTabletCellBundleEditor(bundleName: string): TabletCellBundl
             },
         ];
 
+        requests.push({
+            command: 'get',
+            parameters: {
+                path: '//sys/bundle_controller/controller/zones/zone_default/@tablet_node_sizes/nextgen/default_config/memory_limits/reserved',
+            },
+        });
+
         if (toEdit.enable_bundle_controller) {
             requests.push({
                 command: 'get',
@@ -73,7 +80,7 @@ export function fetchTabletCellBundleEditor(bundleName: string): TabletCellBundl
                 .then((results) => {
                     const bundleControllerIsUnavailable =
                         toEdit.enable_bundle_controller &&
-                        results[1]?.error?.code === yt.codes.NODE_DOES_NOT_EXIST;
+                        results[2]?.error?.code === yt.codes.NODE_DOES_NOT_EXIST;
                     const error = getBatchError(
                         bundleControllerIsUnavailable ? [results[0]] : results,
                         'Failed to get bundle edit data',
@@ -91,13 +98,31 @@ export function fetchTabletCellBundleEditor(bundleName: string): TabletCellBundl
             },
         )
             .then((results) => {
-                const [{output: data}, {output: bundleControllerData} = {output: undefined}] =
-                    results as BatchResults<[unknown, OrchidBundlesData]>;
+                const [
+                    {output: data},
+                    {output: defaultReservedMemoryLimit},
+                    {output: bundleControllerData} = {output: undefined},
+                ] = results as BatchResults<[unknown, number, OrchidBundlesData]>;
+
+                let bundleData = toEdit;
+
+                if (!toEdit.bundle_controller_target_config.memory_limits.reserved) {
+                    bundleData = {
+                        ...toEdit,
+                        bundle_controller_target_config: {
+                            ...toEdit.bundle_controller_target_config,
+                            memory_limits: {
+                                ...toEdit.bundle_controller_target_config.memory_limits,
+                                reserved: defaultReservedMemoryLimit,
+                            },
+                        },
+                    };
+                }
 
                 dispatch({
                     type: TABLETS_BUNDLES_EDITOR_LOAD_SUCCESS,
                     data: {
-                        bundleData: toEdit,
+                        bundleData,
                         data,
                         bundleControllerData,
                     },
