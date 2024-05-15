@@ -150,6 +150,7 @@ async function loadMastersConfig(): Promise<[MastersConfigResponse, MasterAlert[
                       };
                   },
               ),
+              cellId: ypath.getValue(timestampProviderCellTag.output)?.cell_id,
               cellTag: getCellIdTag(ypath.getValue(timestampProviderCellTag.output)?.cell_id),
           };
 
@@ -157,12 +158,14 @@ async function loadMastersConfig(): Promise<[MastersConfigResponse, MasterAlert[
         primaryMaster: {
             addresses: _.map(_.keys(primaryMaster), (address) => {
                 const value = primaryMaster[address];
+
                 return {
                     host: address,
                     physicalHost: ypath.getValue(value, '/@annotations/physical_host'),
                     attributes: ypath.getValue(value, '/@'),
                 };
             }),
+            cellId: primaryMasterCellTag.output,
             cellTag: getCellIdTag(primaryMasterCellTag.output),
         },
         secondaryMasters: _.map(secondaryMasters, (addresses, cellTag) => {
@@ -305,6 +308,32 @@ function loadHydra(
         },
     );
 }
+
+export const getStateForHost = async (
+    host: string,
+): Promise<'leading' | 'following' | undefined> => {
+    const cypressPath = '//sys/primary_masters';
+    const hydraPath = '/orchid/monitoring/hydra';
+
+    const masterDataRequests: BatchSubRequest[] = [
+        {
+            command: 'get' as const,
+            parameters: {
+                path: cypressPath + '/' + host + hydraPath,
+                ...USE_SUPRESS_SYNC,
+            },
+        },
+    ];
+
+    const [result] = await ytApiV3Id.executeBatch<{state: 'leading' | 'following'}>(
+        YTApiId.systemMasters,
+        {
+            requests: masterDataRequests,
+        },
+    );
+
+    return result.output?.state;
+};
 
 export function loadMasters() {
     return async (dispatch: Dispatch): Promise<void | {isRetryFutile: true}> => {
