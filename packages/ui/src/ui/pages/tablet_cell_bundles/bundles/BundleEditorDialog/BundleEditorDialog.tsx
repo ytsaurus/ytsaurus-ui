@@ -281,6 +281,9 @@ export function BundleEditorDialog() {
                         const defaultThreadPool =
                             bundleDefaultConfig?.tablet_node_sizes[nodeConfigurationType]
                                 .default_config.cpu_limits || {};
+                        const defaultMemoryLimit =
+                            bundleDefaultConfig?.tablet_node_sizes[nodeConfigurationType]
+                                .default_config.memory_limits?.reserved || undefined;
 
                         const resultMemory = getBundleControllerResource(
                             values.memory_limits,
@@ -292,6 +295,8 @@ export function BundleEditorDialog() {
                             defaultThreadPool,
                             'cpu_limits',
                         );
+
+                        resultMemory.reserved = defaultMemoryLimit;
 
                         form.change('memory_limits', {
                             ...bundleEditorDict.defaults.memory_limits,

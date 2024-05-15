@@ -107,7 +107,7 @@ export interface BundleDefaultConfigData {
                 cpu_limits: {
                     write_thread_pool_size: number;
                 };
-                memory_limits: {};
+                memory_limits: Record<string, number>;
             };
         };
     };
