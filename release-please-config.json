@@ -9,7 +9,6 @@
       "release-type": "node"
     },
     "packages/ui": {
-      "skip-github-release": true,
       "release-type": "node"
     },
     "packages/custom-ytsaurus-ui.example": {

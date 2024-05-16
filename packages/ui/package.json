@@ -18,7 +18,7 @@
     "cut:version": "node -e \"const json=require('${npm_config_file}'); delete json.version; console.log(JSON.stringify(json, null, 2))\"",
     "debug": "npm run copy:icons && NODE_OPTIONS=\"--max-http-header-size=204800 ${NODE_OPTIONS}\" app-builder dev --inspect --config ./build.app.config.ts",
     "deps:build": "npm run build",
-    "deps:install": "npm ci",
+    "deps:install": "npm ci ",
     "deps:truncate": "npm prune --omit=dev",
     "dev": "npm run dev:app",
     "dev:app": "./scripts/check-start-files.sh && npm run copy:icons && APP_ENV=${APP_ENV:-development} APP_DEV_MODE=1 NODE_OPTIONS=\"--max-http-header-size=204800 ${NODE_OPTIONS}\" app-builder dev --config ./build.app.config.ts",
