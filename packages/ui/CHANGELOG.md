@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.38.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.37.0...ui-v1.38.0) (2024-05-16)
+
+### Bug Fixes
+
+* fix for release ([e8019bc](https://github.com/ytsaurus/ytsaurus-ui/commit/e8019bc26ec8a22a81eb2b5aef2683d9a39d3994))
+
 ## [1.37.0](https://github.com/ytsaurus/ytsaurus-ui/compare/v1.36.0...v1.37.0) (2024-05-16)
 
 ### Bug Fixes
