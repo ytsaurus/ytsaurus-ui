@@ -724,7 +724,7 @@ class AccountsGeneralTab extends Component {
 
         return (
             <div className={b('content', 'elements-section')}>
-                {isTCBRelative && <TabletAccountingNotice className={b('tcb-resource-notice')} />}
+                {!allowTable && <TabletAccountingNotice className={b('tcb-resource-notice')} />}
                 {allowTable && <VisibilityNotice mode={dashboardVisibilityMode} />}
                 {allowTable && (
                     <ElementsTableWithHeaderAndFooter
