@@ -91,7 +91,7 @@ export const useQueryResultTabs = (
         } else if (query.state === QueryStatus.COMPLETED) {
             const customQueryResultTab = UIFactory.getCustomQueryResultTab();
 
-            if (customQueryResultTab) {
+            if (customQueryResultTab && query.result_count) {
                 items.unshift({
                     id: QueryResultTab.CUSTOM_TAB,
                     title: customQueryResultTab.title,
