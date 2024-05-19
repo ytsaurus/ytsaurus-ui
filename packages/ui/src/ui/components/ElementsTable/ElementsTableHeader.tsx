@@ -77,7 +77,7 @@ interface ColumnGroupInfo {
 
     tooltipProps?: undefined;
     sort?: undefined;
-    render?: undefined;
+    renderHeader?: undefined;
     sortWithUndefined?: undefined;
     allowedOrderTypes?: undefined;
 
@@ -85,7 +85,9 @@ interface ColumnGroupInfo {
     captionTail?: React.ReactNode; // rendered after sort-order icon
 }
 
-interface ColumnInfo {
+export interface ColumnInfo {
+    align?: 'left' | 'right' | 'center';
+
     tooltipProps?: {
         className?: string;
     };
@@ -93,7 +95,7 @@ interface ColumnInfo {
     sortWithUndefined?: boolean;
     allowedOrderTypes?: Array<OrderType>;
 
-    render: React.ComponentType;
+    renderHeader?: (column: ColumnInfo) => React.ReactNode;
 
     groupName?: undefined;
 
@@ -182,8 +184,8 @@ export default class ElementsTableHeader extends Component<ElementsTableHeaderPr
         const content = getColumnCaption(column, columnName);
         const {className: tooltipClassName, ...restTooltipProps} = column?.tooltipProps || {};
 
-        if (column?.render) {
-            return <column.render />;
+        if (column?.renderHeader) {
+            return column.renderHeader(column);
         }
 
         return withTooltip ? (
