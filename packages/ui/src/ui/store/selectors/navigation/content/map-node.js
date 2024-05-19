@@ -1,3 +1,5 @@
+import React from 'react';
+
 import {createSelector} from 'reselect';
 import _ from 'lodash';
 import moment from 'moment';
@@ -24,7 +26,7 @@ const getTableColumns = createSelector(
         chooser: {
             sort: false,
             align: 'center',
-            render: Chooser,
+            renderHeader: () => <Chooser />,
         },
         icon: {
             sort: false,
@@ -108,7 +110,7 @@ const getTableColumns = createSelector(
         multipleActions: {
             sort: false,
             align: 'center',
-            render: MultipleActions,
+            renderHeader: () => <MultipleActions />,
         },
     }),
 );

@@ -4,6 +4,7 @@ import cn from 'bem-cn-lite';
 import _ from 'lodash';
 
 import ElementsTable from '../../../../components/ElementsTable/ElementsTable';
+import {ColumnInfo} from '../../../../components/ElementsTable/ElementsTableHeader';
 import MetaTable from '../../../../components/MetaTable/MetaTable';
 import HelpLink from '../../../../components/HelpLink/HelpLink';
 import Link from '../../../../components/Link/Link';
@@ -75,12 +76,7 @@ type SchemaMetaItem = {
 };
 
 type SchemaComputedColumns<ColumnName extends string = string> = {
-    items: Partial<
-        Record<
-            ColumnName,
-            {caption: string; sort: boolean; align: 'left'; render?: () => React.ReactNode}
-        >
-    >;
+    items: Partial<Record<ColumnName, ColumnInfo>>;
     set: Array<ColumnName>;
 };
 
@@ -176,9 +172,9 @@ class Schema extends Component<SchemaProps> {
                     caption,
                     sort: false,
                     align: 'left',
-                    render: () => (
+                    renderHeader: () => (
                         <div className={block('description')}>
-                            {caption}
+                            <div className={block('table-item')}>{caption}</div>
                             {externalSchemaUrl ? (
                                 <Link className={block('icon')} url={externalSchemaUrl}>
                                     <Icon awesome="external-link" />

@@ -22,6 +22,9 @@ import {
 
 import './ElementsTable.scss';
 
+/**
+ * @deprecated Please use DataTableYT
+ */
 class ElementsTable extends Component {
     static propTypes = {
         isLoading: PropTypes.bool,
