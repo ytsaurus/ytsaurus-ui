@@ -31,18 +31,21 @@ import {
 } from '../../../utils/components/tablet-cells';
 import {getBatchError} from '../../../utils/utils';
 import {getAppBrowserHistory} from '../../../store/window-store';
+import {USE_MAX_SIZE} from '../../../../shared/constants/yt-api';
+import {BatchSubRequest} from '../../../../shared/yt-types';
 
 type ChaosBundlesThunkAction = ThunkAction<void, RootState, unknown, ChaosBundlesAction>;
 
 export function fetchChaosBundles(): ChaosBundlesThunkAction {
     return (dispatch) => {
         dispatch({type: CHAOS_BUNDLES_LOAD_REQUEST});
-        const requests = [
+        const requests: BatchSubRequest[] = [
             {
                 command: 'list' as const,
                 parameters: {
                     path: '//sys/chaos_cells',
                     attributes: ['health', 'id', 'peers', 'status', 'tablet_cell_bundle'],
+                    ...USE_MAX_SIZE,
                 },
             },
             {
@@ -50,6 +53,7 @@ export function fetchChaosBundles(): ChaosBundlesThunkAction {
                 parameters: {
                     path: '//sys/chaos_cell_bundles',
                     attributes: ['health', 'id', 'options'],
+                    ...USE_MAX_SIZE,
                 },
             },
         ];

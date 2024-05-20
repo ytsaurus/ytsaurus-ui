@@ -42,6 +42,7 @@ import {getAppBrowserHistory} from '../../../store/window-store';
 import {BatchSubRequest} from '../../../../shared/yt-types';
 import {makeCheckPermissionBatchSubRequestUI} from '../../../utils/acl/acl-api';
 import CancelHelper, {isCancelled} from '../../../utils/cancel-helper';
+import {USE_MAX_SIZE} from '../../../../shared/constants/yt-api';
 
 function getZones(allBundles: TabletBundle[]) {
     const map = new Map<string, boolean>();
@@ -68,7 +69,7 @@ const cancelHelper = new CancelHelper();
 export function fetchTabletsBundles(): TabletsBundlesThunkAction {
     return (dispatch) => {
         dispatch({type: TABLETS_BUNDLES_LOAD_REQUEST});
-        const requests = [
+        const requests: BatchSubRequest[] = [
             {
                 command: 'exists' as const,
                 parameters: {
@@ -80,6 +81,7 @@ export function fetchTabletsBundles(): TabletsBundlesThunkAction {
                 parameters: {
                     path: '//sys/tablet_cells',
                     attributes: ['peers', 'id', 'tablet_cell_bundle', 'total_statistics', 'status'],
+                    ...USE_MAX_SIZE,
                 },
             },
             {
@@ -101,6 +103,7 @@ export function fetchTabletsBundles(): TabletsBundlesThunkAction {
                         'enable_bundle_controller',
                         'zone',
                     ],
+                    ...USE_MAX_SIZE,
                 },
             },
         ];
