@@ -138,8 +138,7 @@ class UsersPageTable extends React.Component {
                 title={title}
                 shortTitle={SHOR_COLUMN_NAMES[col] || title}
                 order={isSorted ? order : ''}
-                toggleSort={this.onColumnSort}
-                sortable={sortable}
+                onSort={this.onColumnSort}
                 withUndefined
             />
         );

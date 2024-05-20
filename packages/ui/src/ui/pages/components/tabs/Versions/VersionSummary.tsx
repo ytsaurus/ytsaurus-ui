@@ -123,11 +123,10 @@ class VersionsSummary extends React.Component<Props> {
         const {column, order} = sortState || {};
         return (
             <ColumnHeader<typeof key>
-                sortable={true}
                 column={key}
                 title={name}
                 shortTitle={shortName || name}
-                toggleSort={(column, order) => {
+                onSort={(column, order) => {
                     setVersionsSummarySortState({column, order});
                 }}
                 order={key === column ? order : ''}

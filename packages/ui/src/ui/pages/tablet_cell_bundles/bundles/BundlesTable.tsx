@@ -103,8 +103,7 @@ class BundlesTable extends React.Component<ReduxProps> {
                 title={COLUMN_TITLE[col]}
                 shortTitle={SHORT_TITLE[col]}
                 order={isSorted ? order : undefined}
-                toggleSort={this.onColumnSort}
-                sortable={sortable}
+                onSort={sortable ? this.onColumnSort : undefined}
                 withUndefined
             />
         );
