@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.9.2](https://github.com/ytsaurus/ytsaurus-ui/compare/javascript-wrapper-v0.9.1...javascript-wrapper-v0.9.2) (2024-05-20)
+
+
+### Bug Fixes
+
+* **axios/withXSRFToken:** additional to 19df8249298397c09af6cee2bdc682ffe08c8836 ([9c3e893](https://github.com/ytsaurus/ytsaurus-ui/commit/9c3e893fdfd25eed5cccfa2ac4fab950a4f8c05d))
+
 ## [0.9.1](https://github.com/ytsaurus/ytsaurus-ui/compare/javascript-wrapper-v0.9.0...javascript-wrapper-v0.9.1) (2024-05-20)
 
 
