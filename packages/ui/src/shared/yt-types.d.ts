@@ -134,6 +134,7 @@ export interface GetParams extends PathParams {
     // see more details https://nda.ya.ru/t/OkgJ1bMg6WtqEf
     attributes?: Array<string> | {keys: Array<string>; paths: Array<string>};
     fields?: Array<string>;
+    max_size?: number;
 }
 
 export interface ExecuteBatchParams extends BaseBatchParams {
