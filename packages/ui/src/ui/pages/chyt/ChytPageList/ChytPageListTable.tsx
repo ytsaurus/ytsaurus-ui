@@ -282,9 +282,8 @@ function ChytListHeader({
             withUndefined={withUndefined}
             column={column}
             title={CHYT_TABLE_TITLES[column] ?? format.ReadableField(column)}
-            sortable
             {...sortState[column]}
-            toggleSort={(col, nextOrder, options) => {
+            onSort={(col, nextOrder, options) => {
                 dispatch(chytToggleSortState(col, nextOrder, options));
             }}
         />

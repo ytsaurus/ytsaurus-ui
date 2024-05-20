@@ -82,8 +82,7 @@ class CellsTable extends React.Component<Props & ReduxProps> {
                 column={col}
                 title={COLUMN_TITLE[col] ?? _.capitalize(col)}
                 order={isSorted ? order : undefined}
-                toggleSort={this.onColumnSort}
-                sortable={sortable}
+                onSort={this.onColumnSort}
                 withUndefined
             />
         );

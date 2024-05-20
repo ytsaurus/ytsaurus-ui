@@ -108,7 +108,7 @@ function AccountUsageDetailsHeader(props: {column: keyof AccountUsageDataItem}) 
     const sortOrder = useSelector(getAccountUsageSortStateByColumn);
     const {column} = props;
 
-    const toggleSort = React.useCallback(
+    const onSort = React.useCallback(
         (column: string, nextOrder: OrderType, opts: {multisort?: boolean}) => {
             dispatch(setAccountUsageSortState({column, order: nextOrder}, opts.multisort));
         },
@@ -122,8 +122,7 @@ function AccountUsageDetailsHeader(props: {column: keyof AccountUsageDataItem}) 
             column={column}
             title={readableAccountUsageColumnName(column)}
             order={order}
-            sortable={true}
-            toggleSort={toggleSort}
+            onSort={onSort}
             multisortIndex={multisortIndex}
         />
     );

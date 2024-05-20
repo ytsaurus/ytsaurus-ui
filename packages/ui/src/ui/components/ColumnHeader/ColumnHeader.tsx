@@ -17,7 +17,7 @@ export interface ColumnHeaderProps<T extends string = string> extends PageCounte
     order?: OrderType;
     allowedOrderTypes?: Array<OrderType>;
     multisortIndex?: number;
-    toggleSort?: (
+    onSort?: (
         column: T,
         nextOrder: OrderType,
         options: {currentOrder?: OrderType; multisort?: boolean},
@@ -40,12 +40,11 @@ export interface ColumnHeaderProps<T extends string = string> extends PageCounte
 export default function ColumnHeader<T extends string = string>(props: ColumnHeaderProps<T>) {
     const {
         className,
-        sortable,
         column,
         title,
         shortTitle,
         order,
-        toggleSort = () => {},
+        onSort,
         allowUnordered,
         withUndefined,
         multisortIndex,
@@ -59,15 +58,16 @@ export default function ColumnHeader<T extends string = string>(props: ColumnHea
             const nextOrder = allowedOrderTypes
                 ? calculateNextOrderValue(order, allowedOrderTypes)
                 : nextSortOrderValue(order, allowUnordered, withUndefined);
-            toggleSort(column, nextOrder, {
+            onSort?.(column, nextOrder, {
                 currentOrder: order,
                 multisort: e.ctrlKey || e.metaKey,
             });
         },
-        [column, order, toggleSort, allowUnordered],
+        [column, order, onSort, allowUnordered],
     );
 
     const titleContent = !shortTitle ? title ?? _.capitalize(column) : shortTitle;
+    const sortable = Boolean(onSort);
 
     return (
         <div

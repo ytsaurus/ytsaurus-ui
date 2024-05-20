@@ -67,8 +67,7 @@ function NodeMemoryDetailsTable(props: Props) {
                 name,
                 header: (
                     <ColumnHeader
-                        sortable={true}
-                        toggleSort={toggleSort}
+                        onSort={toggleSort}
                         column={name}
                         title={title}
                         order={sortStateByName[name]}

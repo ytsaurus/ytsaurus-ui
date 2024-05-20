@@ -132,8 +132,7 @@ class GroupsPageTable extends React.Component {
                 column={col}
                 title={COLUMN_NAMES[col]}
                 order={isSorted ? order : ''}
-                toggleSort={this.onColumnSort}
-                sortable={sortable}
+                onSort={this.onColumnSort}
             />
         );
     }
