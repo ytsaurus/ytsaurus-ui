@@ -16,11 +16,8 @@ import {createSelector} from 'reselect';
 import {concatByAnd} from '../../../common/hammer/predicate';
 import {prepareHost} from '../../../utils';
 import {getCluster} from '../global';
-import {
-    multiSortWithUndefined,
-    orderTypeToOrderK,
-    sortArrayBySortState,
-} from '../../../utils/sort-helpers';
+import {sortArrayBySortState} from '../../../utils/sort-helpers';
+import {sortTableBundles} from '../../../utils/tablet_cell_bundles';
 import {makeNodeUrl, makeProxyUrl} from '../../../utils/app-url';
 import {
     getTabletCellBundleControllerInstanceDetailsMap,
@@ -227,21 +224,6 @@ export const getTabletsBundlesFiltered = createSelector(
     },
 );
 
-function compareBundlesByAccount(left: TabletBundle, right: TabletBundle) {
-    if (
-        left.changelog_account === right.changelog_account &&
-        left.snapshot_account === right.snapshot_account
-    ) {
-        return 0;
-    }
-
-    return left.changelog_account < right.changelog_account
-        ? -1
-        : left.snapshot_account < right.snapshot_account
-        ? -1
-        : 1;
-}
-
 export const getTabletsBundlesSorted = createSelector(
     [getTabletsBundlesFiltered, getTabletsBundlesSortState],
     (bundles, sortState) => {
@@ -250,19 +232,7 @@ export const getTabletsBundlesSorted = createSelector(
             return bundles;
         }
 
-        let sorted = bundles;
-
-        const {orderK, undefinedOrderK} = orderTypeToOrderK(order);
-
-        if (column === 'changelog_account') {
-            sorted = [...bundles].sort(compareBundlesByAccount);
-        } else if (column === 'nodes') {
-            sorted = [...bundles].sort(({nodes: l = []}, {nodes: r = []}) => l.length - r.length);
-        } else if (COLUMNS_SORTABLE_AS_IS.has(column)) {
-            return multiSortWithUndefined(bundles, [{key: column, orderK, undefinedOrderK}]);
-        }
-
-        return order === 'asc' ? sorted : sorted.reverse();
+        return sortTableBundles({bundles, column, order, columnsSortable: COLUMNS_SORTABLE_AS_IS});
     },
 );
 
