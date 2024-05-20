@@ -1,6 +1,6 @@
-import UIFactory from '../UIFactory';
-import {Page} from '../constants';
-import {TabletsTab} from '../constants/tablets';
+import UIFactory from '../../UIFactory';
+import {Page} from '../../constants';
+import {TabletsTab} from '../../constants/tablets';
 
 export function tabletCellBundleDashboardUrl(cluster: string, bundle: string) {
     return UIFactory.makeUrlForTabletCellBundleDashboard(cluster, bundle);
