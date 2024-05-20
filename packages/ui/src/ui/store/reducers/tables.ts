@@ -1,5 +1,4 @@
 import {
-    CHANGE_COLUMN_SORT_ORDER,
     CLUSTER_MENU_TABLE_ID,
     SYSTEM_CHUNKS_TABLE_ID,
     TOGGLE_COLUMN_SORT_ORDER,
@@ -20,10 +19,32 @@ import {
     SCHEDULING_POOL_CHILDREN_TABLE_ID,
     SCHEDULING_POOL_TREE_TABLE_ID,
 } from '../../constants/scheduling';
+import {ActionD, OldSortState} from '../../types';
+import {NodesTableColumnNames} from '../../utils/components/nodes/tables';
 
 const NAME_ASC_SORT_VALUE = {field: 'name', asc: true};
 
-export const initialState = {
+export type TablesSortOrderState = Record<
+    | typeof CLUSTER_MENU_TABLE_ID
+    | typeof SYSTEM_CHUNKS_TABLE_ID
+    | typeof NAVIGATION_MAP_NODE_TABLE_ID
+    | typeof NAVIGATION_TABLETS_TABLE_ID
+    | typeof NAVIGATION_TRANSACTION_MAP_TABLE_ID
+    | typeof TABLET_PARTITIONS_TABLE_ID
+    | typeof TABLET_PARTITION_STORES_TABLE_ID
+    | typeof ACCOUNTS_TABLE_ID
+    | typeof OPERATION_JOBS_TABLE_ID
+    | typeof COMPONENTS_VERSIONS_DETAILED_TABLE_ID
+    | typeof COMPONENTS_NODES_NODE_TABLE_ID
+    | typeof COMPONENTS_PROXIES_TABLE_ID
+    | typeof SCHEDULING_POOL_TREE_TABLE_ID
+    | typeof SCHEDULING_POOL_CHILDREN_TABLE_ID,
+    OldSortState
+> & {
+    [COMPONENTS_NODES_TABLE_ID]: OldSortState<NodesTableColumnNames>;
+};
+
+export const initialState: TablesSortOrderState = {
     [CLUSTER_MENU_TABLE_ID]: NAME_ASC_SORT_VALUE,
 
     [SYSTEM_CHUNKS_TABLE_ID]: {field: 'cell_tag', asc: true},
@@ -50,22 +71,18 @@ export const initialState = {
     [SCHEDULING_POOL_CHILDREN_TABLE_ID]: NAME_ASC_SORT_VALUE,
 };
 
-export default (state = initialState, action) => {
+export default (state = initialState, action: TablesSortOrderAction) => {
     switch (action.type) {
         case TOGGLE_COLUMN_SORT_ORDER: {
-            const {tableId, sortInfo} = action.data;
-            return {...state, [tableId]: sortInfo};
-        }
-        case CHANGE_COLUMN_SORT_ORDER: {
-            const {tableId, columnName: field, asc} = action.data;
-
-            return {
-                ...state,
-                [tableId]: {field, asc},
-            };
+            return {...state, ...action.data};
         }
 
         default:
             return state;
     }
 };
+
+export type TablesSortOrderAction = ActionD<
+    typeof TOGGLE_COLUMN_SORT_ORDER,
+    Partial<TablesSortOrderState>
+>;
