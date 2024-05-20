@@ -35,9 +35,7 @@ export function initYTApiClusterParams(cluster: string) {
         yt.setup.setGlobalOption('secure', true);
     }
 
-    if (config.authentication === 'domain') {
-        yt.setup.setGlobalOption('authentication', {type: 'domain'});
-    }
+    yt.setup.setGlobalOption('authentication', {type: config.authentication || 'none'});
 
     yt.subscribe('error', onError);
 }
