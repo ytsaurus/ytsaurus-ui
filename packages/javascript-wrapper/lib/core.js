@@ -243,6 +243,8 @@ core._prepareRequestSettings = function (localSetup, command) {
     const preparedParameters = core._prepareParameters(localSetup, command);
     const {useBodyForParameters} = command.config;
 
+    const withCredentials = authentication.type === 'domain';
+
     var requestParameters = Object.assign(
         {
             url: core._prepareURL(localSetup, command),
@@ -255,7 +257,8 @@ core._prepareRequestSettings = function (localSetup, command) {
             responseType: responseType,
             transformResponse: [core._identity],
             method: command.config.method,
-            withCredentials: authentication.type === 'domain',
+            withCredentials,
+            withXSRFToken: withCredentials,
             xsrfCookieName: '',
         },
         xsrfEnabled ? {xsrfCookieName: xsrfCookieName, xsrfHeaderName: 'X-Csrf-Token'} : undefined,
