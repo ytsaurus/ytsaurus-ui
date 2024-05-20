@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.38.1](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.38.0...ui-v1.38.1) (2024-05-20)
+
+
+### Bug Fixes
+
+* **Bundles:** get list limits [YTFRONT-4177] ([f9dc386](https://github.com/ytsaurus/ytsaurus-ui/commit/f9dc386d3dda10007c42a0b725c32614ba3eb2bc))
+* **Bundles:** sort by node [YTFRONT-4131] ([64b59b1](https://github.com/ytsaurus/ytsaurus-ui/commit/64b59b12a58161141c3a599f65350dc2fe748501))
+
 ## [1.38.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.37.0...ui-v1.38.0) (2024-05-16)
 
 ### Bug Fixes
