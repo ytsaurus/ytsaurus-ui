@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.38.2](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.38.1...ui-v1.38.2) (2024-05-20)
+
+
+### Bug Fixes
+
+* **axios:** use withXSRFToken ([b7738a9](https://github.com/ytsaurus/ytsaurus-ui/commit/b7738a97c3177df02a3a9112112ac97e4afef118))
+
 ## [1.38.1](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.38.0...ui-v1.38.1) (2024-05-20)
 
 
