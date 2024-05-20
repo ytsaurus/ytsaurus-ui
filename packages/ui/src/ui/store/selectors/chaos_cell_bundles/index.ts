@@ -11,11 +11,8 @@ import {
     tabletChaosBundleRootLink,
 } from '../../../utils/components/tablet-cells';
 import {prepareHost} from '../../../utils';
-import {
-    multiSortWithUndefined,
-    orderTypeToOrderK,
-    sortArrayBySortState,
-} from '../../../utils/sort-helpers';
+import {sortArrayBySortState} from '../../../utils/sort-helpers';
+import {sortTableBundles} from '../../../utils/tablet_cell_bundles';
 
 export const getChaosIsLoaded = (state: RootState) => state.chaos_cell_bundles.loaded;
 export const getChaosIsLoading = (state: RootState) => state.chaos_cell_bundles.loading;
@@ -113,21 +110,6 @@ export const getChaosBundlesFiltered = createSelector(
     },
 );
 
-function compareBundlesByAccount(left: ChaosBundle, right: ChaosBundle) {
-    if (
-        left.changelog_account === right.changelog_account &&
-        left.snapshot_account === right.snapshot_account
-    ) {
-        return 0;
-    }
-
-    return left.changelog_account < right.changelog_account
-        ? -1
-        : left.snapshot_account < right.snapshot_account
-        ? -1
-        : 1;
-}
-
 export const getChaosBundlesSorted = createSelector(
     [getChaosBundlesFiltered, getChaosBundlesSortState],
     (bundles, {column, order}) => {
@@ -135,19 +117,7 @@ export const getChaosBundlesSorted = createSelector(
             return bundles;
         }
 
-        let sorted = bundles;
-
-        const {orderK, undefinedOrderK} = orderTypeToOrderK(order);
-
-        if (column === 'changelog_account') {
-            sorted = [...bundles].sort(compareBundlesByAccount);
-        } else if (column === 'nodes') {
-            sorted = [...bundles].sort(({nodes: l = []}, {nodes: r = []}) => l.length - r.length);
-        } else if (COLUMNS_SORTABLE_AS_IS.has(column)) {
-            return multiSortWithUndefined(bundles, [{key: column, orderK, undefinedOrderK}]);
-        }
-
-        return order === 'asc' ? sorted : sorted.reverse();
+        return sortTableBundles({bundles, column, order, columnsSortable: COLUMNS_SORTABLE_AS_IS});
     },
 );
 
