@@ -424,6 +424,7 @@ class UploadManagerCreate extends React.Component<Props, State> {
                     axios.post(`${uploadUrl}?${params}`, formData, {
                         onUploadProgress: this.onUploadProgress,
                         withCredentials: true,
+                        withXSRFToken: true,
                         xsrfCookieName: getXsrfCookieName(cluster),
                         xsrfHeaderName: 'X-Csrf-Token',
                         cancelToken: this.cancelHelper.generateNextToken(),
