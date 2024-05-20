@@ -1,4 +1,4 @@
-import {CHANGE_COLUMN_SORT_ORDER, TOGGLE_COLUMN_SORT_ORDER} from '../../constants/tables';
+import {TOGGLE_COLUMN_SORT_ORDER} from '../../constants/tables';
 import {
     OrderType,
     calculateNextOrderValue,
@@ -8,6 +8,7 @@ import {
 } from '../../utils/sort-helpers';
 import {ThunkAction} from 'redux-thunk';
 import {RootState} from '../reducers';
+import {TablesSortOrderAction, TablesSortOrderState} from '../reducers/tables';
 
 export type ToggleColumnSortOrderParams = {
     columnName: string;
@@ -43,20 +44,24 @@ export function toggleColumnSortOrder({
 
         dispatch({
             type: TOGGLE_COLUMN_SORT_ORDER,
-            data: {tableId, sortInfo: newSortInfo},
+            data: {[tableId]: newSortInfo},
         });
     };
 }
 
-interface ChangeColumnSortOrderParams {
-    columnName: string;
-    tableId: string;
+interface ChangeColumnSortOrderParams<K extends keyof TablesSortOrderState> {
+    tableId: K;
+    columnName: TablesSortOrderState[K]['field'];
     asc?: boolean;
 }
 
-export function changeColumnSortOrder({columnName, tableId, asc}: ChangeColumnSortOrderParams) {
+export function changeColumnSortOrder<K extends keyof TablesSortOrderState>({
+    tableId,
+    columnName,
+    asc,
+}: ChangeColumnSortOrderParams<K>): TablesSortOrderAction {
     return {
-        type: CHANGE_COLUMN_SORT_ORDER,
-        data: {columnName, tableId, asc},
+        type: TOGGLE_COLUMN_SORT_ORDER,
+        data: {[tableId]: {field: columnName, asc}},
     };
 }
