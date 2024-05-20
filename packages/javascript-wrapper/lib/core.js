@@ -243,7 +243,7 @@ core._prepareRequestSettings = function (localSetup, command) {
     const preparedParameters = core._prepareParameters(localSetup, command);
     const {useBodyForParameters} = command.config;
 
-    const withCredentials = authentication.type === 'domain';
+    const withCredentials = Boolean(authentication.type) && authentication.type !== 'none';
 
     var requestParameters = Object.assign(
         {
