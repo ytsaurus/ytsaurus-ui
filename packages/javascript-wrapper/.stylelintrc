@@ -1,0 +1,9 @@
+{
+    "extends": ["@gravity-ui/stylelint-config"],
+    "rules": {
+        "property-case": null,
+        "at-rule-no-unknown": null,
+        "scss/at-rule-no-unknown": true,
+        "declaration-no-important": null
+    }
+}

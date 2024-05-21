@@ -1,0 +1,11 @@
+{
+    "extends": ["@gravity-ui/eslint-config", "@gravity-ui/eslint-config/prettier"],
+    "root": true,
+    "rules": {
+        "new-cap": 0,
+        "import/order": 0
+    },
+    "env": {
+        "jest": true
+    }
+}

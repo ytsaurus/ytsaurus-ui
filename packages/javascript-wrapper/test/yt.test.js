@@ -1,4 +1,4 @@
-const yt = require('../lib')({ exportBrowserModule: false });
+const yt = require('../lib')({exportBrowserModule: false});
 
 // TODO: use Jest
 /*eslint-disable no-console*/
@@ -45,15 +45,13 @@ describe('yt', function () {
 
         beforeEach(function (done) {
             _yt.core._request = _yt.core._prepareRequestSettings;
+            _yt.setup.setGlobalOption('authentication', {type: 'none'});
             done();
         });
 
         var debugMode = false;
 
-        function deeplyCompareAjaxParameters(
-            actualParameters,
-            expectedParameters
-        ) {
+        function deeplyCompareAjaxParameters(actualParameters, expectedParameters) {
             if (debugMode) {
                 console.log('exp = ', expectedParameters);
                 console.log('act = ', actualParameters);
@@ -73,7 +71,7 @@ describe('yt', function () {
                     parameters: {
                         path: PATH,
                     },
-                })
+                }),
             );
 
             deeplyCompareAjaxParameters(
@@ -81,14 +79,14 @@ describe('yt', function () {
                     {
                         path: PATH,
                     },
-                    'Data'
+                    'Data',
                 ),
                 _yt[API_VERSION].set({
                     parameters: {
                         path: PATH,
                     },
                     data: 'Data',
-                })
+                }),
             );
 
             _yt.setup.unsetGlobalOption('proxy');
@@ -134,16 +132,17 @@ describe('yt', function () {
         it('supports predefined proxy', function () {
             _yt.setup.setGlobalOption('proxy', PROXY);
 
-            deeplyCompareAjaxParameters(_yt[API_VERSION].get({ path: PATH }), {
+            deeplyCompareAjaxParameters(_yt[API_VERSION].get({path: PATH}), {
                 url: 'https://' + PROXY + '/api/' + API_VERSION + '/get',
                 headers: Object.assign({}, DEFAULT_HEADERS),
                 timeout: _yt.setup.getDefaultOption('timeout'),
                 responseType: 'json',
                 method: GET_METHOD,
                 withCredentials: false,
+                withXSRFToken: false,
                 transformResponse: [_yt.core._identity],
                 xsrfCookieName: '',
-                meta: { command: 'get' },
+                meta: {command: 'get'},
             });
 
             _yt.setup.unsetGlobalOption('proxy');
@@ -154,8 +153,8 @@ describe('yt', function () {
 
             deeplyCompareAjaxParameters(
                 _yt[API_VERSION].get({
-                    setup: { proxy: OVERRIDEN_PROXY },
-                    parameters: { path: PATH }
+                    setup: {proxy: OVERRIDEN_PROXY},
+                    parameters: {path: PATH},
                 }),
                 {
                     url: 'https://' + OVERRIDEN_PROXY + '/api/' + API_VERSION + '/get',
@@ -164,10 +163,11 @@ describe('yt', function () {
                     responseType: 'json',
                     method: GET_METHOD,
                     withCredentials: false,
+                    withXSRFToken: false,
                     transformResponse: [_yt.core._identity],
                     xsrfCookieName: '',
-                    meta: { command: 'get' },
-                }
+                    meta: {command: 'get'},
+                },
             );
 
             _yt.setup.unsetGlobalOption('proxy');
@@ -175,7 +175,7 @@ describe('yt', function () {
 
         it('verifies that proxy is set', function () {
             expect(function () {
-                _yt[API_VERSION].get({ path: PATH });
+                _yt[API_VERSION].get({path: PATH});
             }).toThrow(Error);
         });
 
@@ -183,7 +183,7 @@ describe('yt', function () {
             _yt.setup.setGlobalOption('proxy', PROXY);
             _yt.setup.setGlobalOption('authentication', OAUTH_AUTHENTICATION);
 
-            deeplyCompareAjaxParameters(_yt[API_VERSION].get({ path: PATH }), {
+            deeplyCompareAjaxParameters(_yt[API_VERSION].get({path: PATH}), {
                 url: 'https://' + PROXY + '/api/' + API_VERSION + '/get',
                 headers: Object.assign({}, DEFAULT_HEADERS, {
                     Authorization: 'OAuth ' + OAUTH_AUTHENTICATION.token,
@@ -191,10 +191,11 @@ describe('yt', function () {
                 timeout: _yt.setup.getDefaultOption('timeout'),
                 responseType: 'json',
                 method: GET_METHOD,
-                withCredentials: false,
+                withCredentials: true,
+                withXSRFToken: true,
                 transformResponse: [_yt.core._identity],
                 xsrfCookieName: '',
-                meta: { command: 'get' },
+                meta: {command: 'get'},
             });
 
             _yt.setup.unsetGlobalOption('proxy');
@@ -210,7 +211,7 @@ describe('yt', function () {
                     setup: {
                         authentication: DOMAIN_AUTHENTICATION,
                     },
-                    parameters: { path: PATH },
+                    parameters: {path: PATH},
                 }),
                 {
                     url: 'https://' + PROXY + '/api/' + API_VERSION + '/get',
@@ -219,10 +220,11 @@ describe('yt', function () {
                     responseType: 'json',
                     method: GET_METHOD,
                     withCredentials: true,
+                    withXSRFToken: true,
                     transformResponse: [_yt.core._identity],
                     xsrfCookieName: '',
-                    meta: { command: 'get' },
-                }
+                    meta: {command: 'get'},
+                },
             );
 
             _yt.setup.unsetGlobalOption('proxy');
@@ -239,9 +241,10 @@ describe('yt', function () {
                 responseType: 'json',
                 method: GET_METHOD,
                 withCredentials: false,
+                withXSRFToken: false,
                 transformResponse: [_yt.core._identity],
                 xsrfCookieName: '',
-                meta: { command: 'get' },
+                meta: {command: 'get'},
             };
 
             deeplyCompareAjaxParameters(
@@ -249,15 +252,12 @@ describe('yt', function () {
                     setup: {
                         authentication: NO_AUTHENTICATION,
                     },
-                    parameters: { path: PATH },
+                    parameters: {path: PATH},
                 }),
-                EXPECTED_PARAMETERS
+                EXPECTED_PARAMETERS,
             );
 
-            deeplyCompareAjaxParameters(
-                _yt[API_VERSION].get({ path: PATH }),
-                EXPECTED_PARAMETERS
-            );
+            deeplyCompareAjaxParameters(_yt[API_VERSION].get({path: PATH}), EXPECTED_PARAMETERS);
 
             _yt.setup.unsetGlobalOption('proxy');
         });
@@ -266,16 +266,17 @@ describe('yt', function () {
             _yt.setup.setGlobalOption('proxy', PROXY);
             _yt.setup.setGlobalOption('timeout', TIMEOUT);
 
-            deeplyCompareAjaxParameters(_yt[API_VERSION].get({ path: PATH }), {
+            deeplyCompareAjaxParameters(_yt[API_VERSION].get({path: PATH}), {
                 url: 'https://' + PROXY + '/api/' + API_VERSION + '/get',
                 headers: Object.assign({}, DEFAULT_HEADERS),
                 timeout: TIMEOUT,
                 responseType: 'json',
                 method: GET_METHOD,
                 withCredentials: false,
+                withXSRFToken: false,
                 transformResponse: [_yt.core._identity],
                 xsrfCookieName: '',
-                meta: { command: 'get' },
+                meta: {command: 'get'},
             });
 
             _yt.setup.unsetGlobalOption('proxy');
@@ -291,7 +292,7 @@ describe('yt', function () {
                     setup: {
                         timeout: OVERRIDEN_TIMEOUT,
                     },
-                    parameters: { path: PATH },
+                    parameters: {path: PATH},
                 }),
                 {
                     url: 'https://' + PROXY + '/api/' + API_VERSION + '/get',
@@ -300,10 +301,11 @@ describe('yt', function () {
                     responseType: 'json',
                     method: GET_METHOD,
                     withCredentials: false,
+                    withXSRFToken: false,
                     transformResponse: [_yt.core._identity],
                     xsrfCookieName: '',
-                    meta: { command: 'get' },
-                }
+                    meta: {command: 'get'},
+                },
             );
 
             _yt.setup.unsetGlobalOption('proxy');
@@ -316,7 +318,7 @@ describe('yt', function () {
 
             deeplyCompareAjaxParameters(
                 _yt[API_VERSION].get({
-                    parameters: { path: PATH },
+                    parameters: {path: PATH},
                 }),
                 {
                     url: 'https://' + PROXY + '/api/' + API_VERSION + '/get',
@@ -325,10 +327,11 @@ describe('yt', function () {
                     responseType: 'json',
                     method: GET_METHOD,
                     withCredentials: false,
+                    withXSRFToken: false,
                     transformResponse: [_yt.core._identity],
                     xsrfCookieName: '',
-                    meta: { command: 'get' },
-                }
+                    meta: {command: 'get'},
+                },
             );
 
             _yt.setup.unsetGlobalOption('proxy');
@@ -344,7 +347,7 @@ describe('yt', function () {
                     setup: {
                         secure: false,
                     },
-                    parameters: { path: PATH },
+                    parameters: {path: PATH},
                 }),
                 {
                     url: 'http://' + PROXY + '/api/' + API_VERSION + '/get',
@@ -353,10 +356,11 @@ describe('yt', function () {
                     responseType: 'json',
                     method: GET_METHOD,
                     withCredentials: false,
+                    withXSRFToken: false,
                     transformResponse: [_yt.core._identity],
                     xsrfCookieName: '',
-                    meta: { command: 'get' },
-                }
+                    meta: {command: 'get'},
+                },
             );
 
             _yt.setup.unsetGlobalOption('proxy');

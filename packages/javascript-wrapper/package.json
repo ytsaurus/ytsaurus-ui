@@ -19,6 +19,9 @@
     "test": "jest 'test/'"
   },
   "dependencies": {
+    "@gravity-ui/eslint-config": "^2.2.0",
+    "@gravity-ui/prettier-config": "^1.1.0",
+    "@gravity-ui/stylelint-config": "^3.0.0",
     "axios": "^0.21.4"
   },
   "devDependencies": {
