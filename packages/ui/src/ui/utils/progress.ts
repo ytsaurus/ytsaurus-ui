@@ -1,16 +1,27 @@
 import _sortedIndexBy from 'lodash/sortedIndexBy';
 import type {ProgressTheme} from '@gravity-ui/uikit';
 
-export function computeProgress(total = 0, limit = 0) {
+import format from '../common/hammer/format';
+
+export function computeProgress(usage: number | undefined, limit: number | undefined) {
     let progress;
 
-    if (limit > 0) {
-        progress = (total / limit) * 100;
+    if (isNaN(usage!) || isNaN(limit!)) {
+        return undefined;
+    }
+
+    if (limit! > 0) {
+        progress = (usage! / limit!) * 100;
     } else {
-        progress = total > 0 ? 100 : 0;
+        progress = usage! > 0 ? 100 : 0;
     }
 
     return Math.max(0, Math.min(progress, 100));
+}
+
+export function progressText(usage?: number, limit?: number, {type}: {type?: 'bytes'} = {}) {
+    const formatFn = type === 'bytes' ? format.Bytes : format.Number;
+    return `${formatFn(usage)} / ${formatFn(limit)}`;
 }
 
 export interface ThemeThreshold {
@@ -35,7 +46,7 @@ export const accountsIoThroughputThresholds: ThemeThreshold[] = [
  * @param thresholds Sorted thresholds
  */
 export function getProgressTheme(
-    progress: number,
+    progress = 0,
     thresholds: ThemeThreshold[] = defaultThemeThresholds,
 ): ProgressTheme {
     const index = _sortedIndexBy(

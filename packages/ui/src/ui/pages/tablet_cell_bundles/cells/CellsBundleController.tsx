@@ -88,7 +88,7 @@ const COLUMNS: Array<Column<RowData>> = [
 
             const {used, limit} = tablet_static_memory;
             const text = printUsageLimit(format.Bytes(used), format.Bytes(limit));
-            const progress = computeProgress(used, limit);
+            const progress = computeProgress(used, limit) ?? 0;
             return <Progress value={progress} theme={getProgressTheme(progress)} text={text} />;
         },
         sortable: false,

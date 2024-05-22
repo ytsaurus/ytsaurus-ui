@@ -244,7 +244,7 @@ function prepareResourceInfo(
         ' / ' +
         formatLib[format](limit);
 
-    const progress = computeProgress(total, limit);
+    const progress = computeProgress(total, limit) ?? 0;
     const theme = getProgressTheme((committed / limit) * 100);
 
     return {

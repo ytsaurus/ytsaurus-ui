@@ -1,14 +1,6 @@
 import React from 'react';
 
 import Label from '../../../../components/Label/Label';
-import hammer from '../../../../common/hammer';
-
-export function prepareUsageText(used: number, limit: number, format: keyof typeof hammer.format) {
-    const left = hammer.format[format](used);
-    const right = hammer.format[format](limit);
-
-    return `${left} / ${right}`;
-}
 
 export function renderLabel(flag: boolean): React.ReactNode {
     return (
