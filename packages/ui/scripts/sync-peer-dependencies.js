@@ -45,8 +45,8 @@ Object.keys(peer).forEach((key) => {
 });
 
 if (needFix) {
-    console.error('\nYou have to fix your peerDependencies, run the command below:');
-    showFixHelp(2);
+    console.error('\nYou have to fix your peerDependencies');
+    process.exit(1);
 }
 
 if (fixed) {

@@ -3,8 +3,26 @@
     flex-wrap: nowrap;
     align-items: center;
 
-    &_sortable {
-        cursor: pointer;
+    &__label-icon {
+        display: flex;
+        overflow: hidden;
+        flex-grow: 1;
+        flex-shrink: 1;
+        align-items: center;
+
+        &_align_center {
+            justify-content: center;
+        }
+        &_align_right {
+            justify-content: right;
+        }
+        &_align_left {
+            justify-content: left;
+        }
+
+        &_sortable {
+            cursor: pointer;
+        }
     }
 
     &__label {
@@ -12,6 +30,10 @@
         text-overflow: ellipsis;
         white-space: nowrap;
         flex-shrink: 1;
+
+        &_sub-column {
+            padding-left: 4px;
+        }
     }
 
     &__tooltip {

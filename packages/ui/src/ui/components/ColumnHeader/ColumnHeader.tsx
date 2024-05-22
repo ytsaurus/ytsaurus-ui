@@ -1,27 +1,22 @@
 import React from 'react';
 import cn from 'bem-cn-lite';
 import _ from 'lodash';
+
+import barsDescendingSvg from '@gravity-ui/icons/svgs/bars-descending-align-left.svg';
+import {Button, DropdownMenu, Icon, Text} from '@gravity-ui/uikit';
+
 import SortIcon from '../../components/SortIcon/SortIcon';
 
 import {OrderType, calculateNextOrderValue, nextSortOrderValue} from '../../utils/sort-helpers';
 import PageCounter, {PageCounterProps} from '../../components/PageCounter/PageCounter';
 import Loader from '../../components/Loader/Loader';
+import {rumLogError} from '../../rum/rum-counter';
 
 import './ColumnHeader.scss';
 
 const block = cn('column-header');
 
-export interface ColumnHeaderProps<T extends string = string> extends PageCounterProps {
-    className?: string;
-    sortable?: boolean;
-    order?: OrderType;
-    allowedOrderTypes?: Array<OrderType>;
-    multisortIndex?: number;
-    onSort?: (
-        column: T,
-        nextOrder: OrderType,
-        options: {currentOrder?: OrderType; multisort?: boolean},
-    ) => void;
+export type ColumnInfo<T> = {
     column: T;
     title?: string;
     shortTitle?: string;
@@ -33,26 +28,90 @@ export interface ColumnHeaderProps<T extends string = string> extends PageCounte
      * Ignored when allowedOrderTypes is defined
      */
     withUndefined?: boolean;
+    allowedOrderTypes?: Array<OrderType>;
+};
 
-    loading?: boolean;
+export type HasSortColumn<T> =
+    | (ColumnInfo<T> & {options?: undefined})
+    | ({
+          title: string;
+          shortTitle?: string;
+          column: T;
+          options: Array<ColumnInfo<T>>;
+      } & Partial<Record<keyof Omit<ColumnInfo<T>, 'column' | 'title' | 'shortTitle'>, undefined>>);
+
+export type ColumnHeaderProps<T extends string = string> = PageCounterProps &
+    HasSortColumn<T> & {
+        className?: string;
+        order?: OrderType;
+        multisortIndex?: number;
+        onSort?: (
+            column: T,
+            nextOrder: OrderType,
+            options: {currentOrder?: OrderType; multisort?: boolean},
+        ) => void;
+
+        loading?: boolean;
+
+        align?: 'center' | 'left' | 'right';
+    };
+
+type NameTitleContent = {
+    nameContent: string;
+    titleContent: string;
+};
+
+function getNameTitle<T extends string>({
+    column,
+    title,
+    shortTitle,
+}: Pick<ColumnInfo<T>, 'column' | 'title' | 'shortTitle'>): NameTitleContent {
+    const t = title ?? _.capitalize(column);
+    const nameContent = !shortTitle ? t : shortTitle;
+    return {nameContent, titleContent: t};
+}
+
+function useColumnInfo<T extends string = string>(
+    props: ColumnHeaderProps<T>,
+): ColumnInfo<T> & NameTitleContent & {subColumn?: NameTitleContent} {
+    if (props.options === undefined) {
+        const {column, allowUnordered, withUndefined, title, shortTitle, allowedOrderTypes} = props;
+        return {
+            column,
+            allowUnordered,
+            withUndefined,
+            allowedOrderTypes,
+            ...getNameTitle({column, title, shortTitle}),
+        };
+    }
+
+    const {column: value, options, title, shortTitle} = props;
+    const columnData = options.find(({column}) => value === column)!;
+    if (!columnData) {
+        rumLogError({
+            message: 'Unexpected behavior: missing value in ColumnHeader.props.options',
+            additional: props,
+        });
+    }
+    return {
+        subColumn: getNameTitle({...columnData}),
+        ...columnData,
+        ...getNameTitle({column: '', title, shortTitle}),
+    };
 }
 
 export default function ColumnHeader<T extends string = string>(props: ColumnHeaderProps<T>) {
+    const {className, align, order, onSort, multisortIndex, loading, pageIndex, pageCount} = props;
     const {
-        className,
         column,
-        title,
-        shortTitle,
-        order,
-        onSort,
         allowUnordered,
         withUndefined,
-        multisortIndex,
+        nameContent,
+        titleContent,
         allowedOrderTypes,
-        loading,
-        pageIndex,
-        pageCount,
-    } = props;
+        subColumn,
+    } = useColumnInfo(props);
+
     const changeHandler = React.useCallback(
         (e: React.MouseEvent) => {
             const nextOrder = allowedOrderTypes
@@ -63,28 +122,40 @@ export default function ColumnHeader<T extends string = string>(props: ColumnHea
                 multisort: e.ctrlKey || e.metaKey,
             });
         },
-        [column, order, onSort, allowUnordered],
+        [column, order, onSort, allowUnordered, allowedOrderTypes, withUndefined],
     );
 
-    const titleContent = !shortTitle ? title ?? _.capitalize(column) : shortTitle;
     const sortable = Boolean(onSort);
 
     return (
-        <div
-            className={block({sortable}, className)}
-            onClick={sortable ? changeHandler : undefined}
-        >
-            <span className={block('label')} title={title ?? _.capitalize(column)}>
-                {titleContent}
-            </span>
-            <span className={block('icon')}>
-                <SortIcon hidden={!sortable} order={order} />
-            </span>
-            {multisortIndex !== undefined && (
-                <span className={block('multisort')}>
-                    &nbsp;<sup>{multisortIndex}</sup>
+        <div className={block(null, className)}>
+            <div
+                className={block('label-icon', {sortable, align})}
+                onClick={sortable ? changeHandler : undefined}
+            >
+                <span className={block('label')} title={titleContent}>
+                    {nameContent}
                 </span>
-            )}
+                <span className={block('icon')}>
+                    <SortIcon hidden={!sortable} order={order} />
+                </span>
+                {multisortIndex !== undefined && (
+                    <span className={block('multisort')}>
+                        &nbsp;<sup>{multisortIndex}</sup>
+                    </span>
+                )}
+                {Boolean(order) && Boolean(subColumn) && (
+                    <Text
+                        className={block('label', {'sub-column': true})}
+                        variant="caption-2"
+                        title={subColumn?.titleContent}
+                        color="dark-secondary"
+                    >
+                        {subColumn?.nameContent}
+                    </Text>
+                )}
+            </div>
+            <SubColumnSelector options={props.options} order={order} onSort={onSort} />
             {loading !== undefined && (
                 <div className={block('loader')}>
                     <Loader visible={loading} />
@@ -98,5 +169,42 @@ export default function ColumnHeader<T extends string = string>(props: ColumnHea
                 />
             )}
         </div>
+    );
+}
+
+function SubColumnSelector<T extends string>({
+    order,
+    options,
+    onSort,
+}: Pick<ColumnHeaderProps<T>, 'onSort'> & {
+    order?: ColumnHeaderProps<T>['order'];
+    options?: Array<ColumnInfo<T>>;
+}) {
+    return !options ? null : (
+        <DropdownMenu
+            items={options.map((x) => {
+                const {titleContent} = getNameTitle(x);
+                return {
+                    text: titleContent,
+                    action() {
+                        if (!onSort) {
+                            return;
+                        }
+                        const {column, allowUnordered, withUndefined, allowedOrderTypes} = x;
+                        const nextOrder = allowedOrderTypes
+                            ? calculateNextOrderValue(order, allowedOrderTypes)
+                            : nextSortOrderValue(order, allowUnordered, withUndefined);
+                        onSort(column, nextOrder, {
+                            currentOrder: order,
+                        });
+                    },
+                };
+            })}
+            renderSwitcher={({onClick}) => (
+                <Button onClick={onClick} view="flat" size="xs">
+                    <Icon size={12} data={barsDescendingSvg} />
+                </Button>
+            )}
+        />
     );
 }
