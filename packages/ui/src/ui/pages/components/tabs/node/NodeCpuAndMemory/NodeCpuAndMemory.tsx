@@ -34,7 +34,7 @@ function NodeCpuAndMemory({node}: {node: NodeCpuAndMemoryProps}): ReturnType<Rea
             items={[
                 {
                     key: 'cpu',
-                    value: <Progress value={cpuProgress} text={cpuText} theme="success" />,
+                    value: <Progress value={cpuProgress || 0} text={cpuText} theme="success" />,
                 },
                 {
                     key: 'memory',
@@ -48,7 +48,9 @@ function NodeCpuAndMemory({node}: {node: NodeCpuAndMemoryProps}): ReturnType<Rea
                 },
                 {
                     key: 'network',
-                    value: <Progress value={networkProgress} text={networkText} theme="success" />,
+                    value: (
+                        <Progress value={networkProgress || 0} text={networkText} theme="success" />
+                    ),
                 },
             ]}
         />

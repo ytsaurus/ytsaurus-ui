@@ -93,8 +93,8 @@ export class Node {
     banned!: boolean;
     chaosSlots!: TabletSlots;
     chunks!: number;
-    cpu: unknown;
-    cpuProgress!: number;
+    cpu!: {usage?: number; limit?: number};
+    cpuProgress: number | undefined;
     cpuText!: string;
     dataCenter!: string;
     decommissioned!: boolean;
@@ -115,24 +115,26 @@ export class Node {
     memoryData?: Array<{color: string; name: string; value: number}>;
     memoryProgress!: number;
     memoryText!: string;
+    memoryTotal!: {usage?: number; limit?: number};
     memoryTotalText!: string;
-    networkProgress!: number;
+    network!: {usage?: number; limit?: number};
+    networkProgress: number | undefined;
     networkText!: string;
     physicalHost!: string;
     rack!: string;
     registerTime!: string;
     removalSlots!: NodeSlots;
-    removalSlotsProgress!: number;
+    removalSlotsProgress: number | undefined;
     repairSlots!: NodeSlots;
-    repairSlotsProgress!: number;
+    repairSlotsProgress: number | undefined;
     replicationSlots!: NodeSlots;
-    replicationSlotsProgress!: number;
+    replicationSlotsProgress: number | undefined;
     resourcesLimit: unknown;
     sealSlots!: NodeSlots;
-    sealSlotsProgress!: number;
+    sealSlotsProgress: number | undefined;
     sessions!: number;
     spaceAvailable!: number;
-    spaceProgress!: number;
+    spaceProgress: number | undefined;
     spaceText!: string;
     spaceTotal!: number;
     spaceUsed!: number;
@@ -143,7 +145,7 @@ export class Node {
     tabletStaticMemory!: Memory;
     tags!: string[];
     userSlots!: NodeSlots;
-    userSlotsProgress!: number;
+    userSlotsProgress: number | undefined;
     userTags!: string[];
     version?: string;
 
@@ -228,18 +230,17 @@ export class Node {
         const spaceUsed = ypath.getValue(this.statistics, '/total_used_space');
         const spaceAvailable = ypath.getValue(this.statistics, '/total_available_space');
         const locations = ypath.getValue(this.statistics, '/locations');
-        const spaceTotal = spaceUsed + spaceAvailable;
+        const spaceTotal =
+            isNaN(spaceUsed) && isNaN(spaceAvailable)
+                ? undefined
+                : (spaceUsed ?? 0) + (spaceAvailable ?? 0);
 
         this.spaceUsed = spaceUsed;
         this.spaceAvailable = spaceAvailable;
         this.spaceTotal = spaceTotal;
 
-        this.spaceProgress = spaceUsed + spaceAvailable ? (spaceUsed / spaceTotal) * 100 : 0;
-        this.spaceText = spaceTotal
-            ? hammer.format['Bytes'](spaceUsed, {digits: 2}) +
-              ' / ' +
-              hammer.format['Bytes'](spaceTotal, {digits: 2})
-            : hammer.format.NO_VALUE;
+        this.spaceProgress = computeProgress(spaceUsed, spaceTotal);
+        this.spaceText = progressText(spaceUsed, spaceTotal, {type: 'bytes'});
 
         this.chunks = ypath.getValue(this.statistics, '/total_stored_chunk_count');
         this.sessions = ypath.getValue(this.statistics, '/total_session_count');
@@ -249,11 +250,8 @@ export class Node {
             const locationTotal = locationUsed + locationAvailable;
             return {
                 ...location,
-                locationProgress: (locationUsed / locationTotal) * 100,
-                locationText:
-                    hammer.format['Bytes'](locationUsed, {digits: 2}) +
-                    ' / ' +
-                    hammer.format['Bytes'](locationTotal, {digits: 2}),
+                locationProgress: computeProgress(locationUsed, locationTotal),
+                locationText: progressText(locationUsed, locationTotal, {type: 'bytes'}),
             };
         });
         this.enabledLocations = _.filter(this.locations, (location) => location.enabled);
@@ -268,33 +266,23 @@ export class Node {
         const networkUsage = ypath.getValue(resourceUsage, '/network');
         const networkLimit = ypath.getValue(resourceLimits, '/network');
 
-        this.networkText =
-            typeof networkLimit !== 'undefined' && networkLimit !== 0
-                ? hammer.format['Percent']((networkUsage / networkLimit) * 100)
-                : hammer.format.NO_VALUE;
-        this.networkProgress =
-            typeof networkLimit !== 'undefined' && networkLimit !== 0
-                ? (networkUsage / networkLimit) * 100
-                : networkLimit && 0;
+        this.networkText = progressText(networkUsage, networkLimit);
+        this.networkProgress = computeProgress(networkUsage, networkLimit);
+        this.network = {usage: networkUsage, limit: networkLimit};
 
         // CPU
         const cpuUsage = ypath.getValue(resourceUsage, '/cpu');
         const cpuLimit = ypath.getValue(resourceLimits, '/cpu');
 
         this.cpu = {usage: cpuUsage, limit: cpuLimit};
-        this.cpuProgress = Node.prepareProgress(cpuUsage, cpuLimit);
-        this.cpuText = cpuLimit
-            ? `${Math.round(cpuUsage * 100) / 100} / ${Math.round(cpuLimit * 100) / 100}`
-            : hammer.format.NO_VALUE;
+        this.cpuProgress = computeProgress(cpuUsage, cpuLimit);
+        this.cpuText = progressText(cpuUsage, cpuLimit);
 
         this.repairSlots = Node.getResourcesSlots(resourceUsage, resourceLimits, '/repair_slots');
-        this.repairSlotsProgress = Node.prepareProgress(
-            this.repairSlots.usage,
-            this.repairSlots.limits,
-        );
+        this.repairSlotsProgress = computeProgress(this.repairSlots.usage, this.repairSlots.limits);
 
         this.removalSlots = Node.getResourcesSlots(resourceUsage, resourceLimits, '/removal_slots');
-        this.removalSlotsProgress = Node.prepareProgress(
+        this.removalSlotsProgress = computeProgress(
             this.removalSlots.usage,
             this.removalSlots.limits,
         );
@@ -304,16 +292,16 @@ export class Node {
             resourceLimits,
             '/replication_slots',
         );
-        this.replicationSlotsProgress = Node.prepareProgress(
+        this.replicationSlotsProgress = computeProgress(
             this.replicationSlots.usage,
             this.replicationSlots.limits,
         );
 
         this.sealSlots = Node.getResourcesSlots(resourceUsage, resourceLimits, '/seal_slots');
-        this.sealSlotsProgress = Node.prepareProgress(this.sealSlots.usage, this.sealSlots.limits);
+        this.sealSlotsProgress = computeProgress(this.sealSlots.usage, this.sealSlots.limits);
 
         this.userSlots = Node.getResourcesSlots(resourceUsage, resourceLimits, '/user_slots');
-        this.userSlotsProgress = Node.prepareProgress(this.userSlots.usage, this.userSlots.limits);
+        this.userSlotsProgress = computeProgress(this.userSlots.usage, this.userSlots.limits);
     }
 
     private prepareMemory() {
@@ -348,16 +336,14 @@ export class Node {
                       digits: 2,
                   })
                 : hammer.format.NO_VALUE;
-        this.memoryText =
-            typeof memoryLimit !== 'undefined'
-                ? hammer.format['Bytes'](memoryUsage, {digits: 2}) +
-                  ' / ' +
-                  hammer.format['Bytes'](memoryLimit, {digits: 2})
-                : hammer.format.NO_VALUE;
+        this.memoryText = progressText(memoryUsage, memoryLimit, {type: 'bytes'});
+
         this.memoryProgress =
             typeof memoryLimit !== 'undefined' && memoryLimit !== 0
                 ? (memoryUsage / memoryLimit) * 100
                 : memoryLimit && 0;
+
+        this.memoryTotal = {usage: memoryUsage, limit: memoryLimit};
 
         // Normalize total progress to not exceed 100% since that would break ProgressBar rendering.
         // At the same time show real values as text labels.
@@ -387,12 +373,12 @@ export class Node {
         this.tabletStaticMemory = {
             used: staticUsed,
             limit: staticLimit,
-            progress: (staticUsed / staticLimit) * 100,
+            progress: computeProgress(staticUsed, staticLimit),
         };
         this.tabletDynamicMemory = {
             used: dynamicUsed,
             limit: dynamicLimit,
-            progress: (dynamicUsed / dynamicLimit) * 100,
+            progress: computeProgress(dynamicUsed, dynamicLimit),
         };
     }
 
@@ -482,6 +468,8 @@ export const AttributesByProperty: Record<keyof Node, ReadonlyArray<AttributeNam
     memoryProgress: memoryAttributes,
     memoryText: memoryAttributes,
     memoryTotalText: memoryAttributes,
+    memoryTotal: memoryAttributes,
+    network: networkAttributes,
     networkProgress: networkAttributes,
     networkText: networkAttributes,
     physicalHost: ['/annotations/physical_host'],
