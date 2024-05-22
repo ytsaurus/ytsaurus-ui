@@ -339,6 +339,8 @@ export interface UIFactory {
         yp_cluster?: string;
     }): string | undefined;
 
+    renderAppFooter(): React.ReactNode;
+
     renderAppNavigation(props: AppNavigationProps): React.ReactElement;
 
     createNotificationUrl(clusterConfig?: ClusterConfig): string | undefined;
@@ -593,6 +595,10 @@ const uiFactory: UIFactory = {
 
     getNodeNannyUrl() {
         return undefined;
+    },
+
+    renderAppFooter() {
+        return null;
     },
 
     renderAppNavigation(props) {

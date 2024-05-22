@@ -50,6 +50,7 @@ import {odinPageInfo} from '../../pages/odin';
 import {hasOdinPage} from '../../config';
 
 import './ClusterPage.scss';
+import UIFactory from '../../UIFactory';
 
 const b = cn('cluster-page');
 
@@ -284,6 +285,7 @@ class ClusterPage extends Component {
 
     render() {
         const {cluster, splitScreen, clusters} = this.props;
+        const footer = UIFactory.renderAppFooter();
 
         // TODO: put current cluster config into redux state to avoid doing things like these here
         const clusterConfig = getClusterConfig(clusters, cluster);
@@ -299,6 +301,7 @@ class ClusterPage extends Component {
                 <FlexSplitPane
                     className={b('panes-wrapper', {
                         'with-pane': splitScreen.isSplit,
+                        'with-footer': Boolean(footer),
                     })}
                     paneClassNames={splitScreen.paneClassNames}
                     direction={FlexSplitPane.HORIZONTAL}
@@ -322,6 +325,7 @@ class ClusterPage extends Component {
 
                     {null}
                 </FlexSplitPane>
+                {footer}
             </Fragment>
         );
     }
