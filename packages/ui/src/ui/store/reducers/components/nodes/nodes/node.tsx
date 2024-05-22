@@ -3,6 +3,7 @@ import ypath from '../../../../../common/thor/ypath';
 import hammer from '../../../../../common/hammer';
 import {STACKED_PROGRESS_BAR_COLORS} from '../../../../../constants/colors';
 import type {FIX_MY_TYPE} from '../../../../../types';
+import {computeProgress, progressText} from '../../../../../utils/progress';
 
 interface NodeSlots {
     usage: number;
@@ -21,7 +22,7 @@ export type TabletSlotState =
 interface Memory {
     used: number;
     limit: number;
-    progress: number;
+    progress: number | undefined;
 }
 
 export interface TabletSlots {
@@ -84,10 +85,6 @@ export class Node {
         const colors = STACKED_PROGRESS_BAR_COLORS;
 
         return colors[index % colors.length];
-    }
-
-    static prepareProgress(usage: number, limit: number) {
-        return limit ? (usage / limit) * 100 : 0;
     }
 
     alertCount?: number;

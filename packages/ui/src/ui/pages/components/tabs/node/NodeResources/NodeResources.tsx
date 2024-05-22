@@ -3,8 +3,8 @@ import React from 'react';
 import {Progress} from '@gravity-ui/uikit';
 import MetaTable from '../../../../../components/MetaTable/MetaTable';
 
-import {prepareUsageText} from '../../../../../components/templates/components/nodes/nodes';
 import type {Node} from '../../../../../store/reducers/components/nodes/nodes/node';
+import {progressText} from '../../../../../utils/progress';
 
 interface NodeResourcesProps {
     removalSlots: Node['removalSlots'];
@@ -24,18 +24,13 @@ export const hasResourcesMeta = (node: NodeResourcesProps) =>
     ].some((item) => typeof item !== 'undefined');
 
 function NodeResources(node: NodeResourcesProps): ReturnType<React.VFC> {
-    const userSlots = prepareUsageText(node.userSlots.usage, node.userSlots.limits, 'Number');
-    const sealSlots = prepareUsageText(node.sealSlots.usage, node.sealSlots.limits, 'Number');
-    const repairSlots = prepareUsageText(node.repairSlots.usage, node.repairSlots.limits, 'Number');
-    const removalSlots = prepareUsageText(
-        node.removalSlots.usage,
-        node.removalSlots.limits,
-        'Number',
-    );
-    const replicationSLots = prepareUsageText(
+    const userSlots = progressText(node.userSlots.usage, node.userSlots.limits);
+    const sealSlots = progressText(node.sealSlots.usage, node.sealSlots.limits);
+    const repairSlots = progressText(node.repairSlots.usage, node.repairSlots.limits);
+    const removalSlots = progressText(node.removalSlots.usage, node.removalSlots.limits);
+    const replicationSLots = progressText(
         node.replicationSlots.usage,
         node.replicationSlots.limits,
-        'Number',
     );
 
     return (

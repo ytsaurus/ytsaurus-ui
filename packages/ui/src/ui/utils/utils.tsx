@@ -204,7 +204,7 @@ export function calcProgressProps(
 ): ProgressProps {
     const value = computeProgress(usage, limit);
     return {
-        value,
+        value: value ?? 0,
         theme: getProgressTheme(value, themeThresholds),
         text: `${formatNumber(usage, format)} / ${formatNumber(limit, format)}`,
     };

@@ -820,7 +820,7 @@ export const NODES_TABLE_TEMPLATES: Templates = {
 
     locations(item) {
         return item.locations
-            ? prepareUsageText(item.enabledLocations.length, item.locations.length, 'Number')
+            ? progressText(item.enabledLocations.length, item.locations.length)
             : null;
     },
 
@@ -867,35 +867,31 @@ export const NODES_TABLE_TEMPLATES: Templates = {
     },
 
     repair_slots(item) {
-        const text = prepareUsageText(item.repairSlots.usage, item.repairSlots.limits, 'Number');
+        const text = progressText(item.repairSlots.usage, item.repairSlots.limits);
 
         return <Progress value={item.repairSlotsProgress} text={text} theme="success" />;
     },
 
     removal_slots(item) {
-        const text = prepareUsageText(item.removalSlots.usage, item.removalSlots.limits, 'Number');
+        const text = progressText(item.removalSlots.usage, item.removalSlots.limits);
 
         return <Progress value={item.removalSlotsProgress} text={text} theme="success" />;
     },
 
     replication_slots(item) {
-        const text = prepareUsageText(
-            item.replicationSlots.usage,
-            item.replicationSlots.limits,
-            'Number',
-        );
+        const text = progressText(item.replicationSlots.usage, item.replicationSlots.limits);
 
         return <Progress value={item.replicationSlotsProgress} text={text} theme="success" />;
     },
 
     seal_slots(item) {
-        const text = prepareUsageText(item.sealSlots.usage, item.sealSlots.limits, 'Number');
+        const text = progressText(item.sealSlots.usage, item.sealSlots.limits);
 
         return <Progress value={item.sealSlotsProgress} text={text} theme="success" />;
     },
 
     user_slots(item) {
-        const text = prepareUsageText(item.userSlots.usage, item.userSlots.limits, 'Number');
+        const text = progressText(item.userSlots.usage, item.userSlots.limits);
 
         return <Progress value={item.userSlotsProgress} text={text} theme="success" />;
     },
@@ -1005,11 +1001,9 @@ export const NODES_TABLE_TEMPLATES: Templates = {
     },
 
     tablet_memory_static(item) {
-        const text = prepareUsageText(
-            item.tabletStaticMemory.used,
-            item.tabletStaticMemory.limit,
-            'Bytes',
-        );
+        const text = progressText(item.tabletStaticMemory.used, item.tabletStaticMemory.limit, {
+            type: 'bytes',
+        });
 
         return (
             <Progress value={item.tabletStaticMemory.progress || 0} text={text} theme="success" />
@@ -1017,11 +1011,9 @@ export const NODES_TABLE_TEMPLATES: Templates = {
     },
 
     tablet_memory_dynamic(item) {
-        const text = prepareUsageText(
-            item.tabletDynamicMemory.used,
-            item.tabletDynamicMemory.limit,
-            'Bytes',
-        );
+        const text = progressText(item.tabletDynamicMemory.used, item.tabletDynamicMemory.limit, {
+            type: 'bytes',
+        });
 
         return (
             <Progress value={item.tabletDynamicMemory.progress || 0} text={text} theme="success" />
