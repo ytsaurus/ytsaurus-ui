@@ -2,10 +2,11 @@ import React from 'react';
 import _ from 'lodash';
 import cn from 'bem-cn-lite';
 
+import {Progress} from '@gravity-ui/uikit';
+
 import {COMPONENTS_NODES_TABLE_ID} from '../../../constants/components/nodes/nodes';
 import {DESC_ASC_UNORDERED, compareArraysBySizeThenByItems} from '../../../utils/sort-helpers';
 
-import {Progress} from '@gravity-ui/uikit';
 import Version from '../../../pages/components/tabs/nodes/Version';
 import StatusBlock, {StatusBlockTheme} from '../../../components/StatusBlock/StatusBlock';
 import ClipboardButton from '../../../components/ClipboardButton/ClipboardButton';
@@ -14,14 +15,13 @@ import MemoryProgress from '../../../pages/components/tabs/nodes/MemoryProgress/
 import {Host} from '../../../containers/Host/Host';
 
 import hammer from '../../../common/hammer';
-import {
-    TABLET_SLOTS,
-    prepareUsageText,
-    renderLabel,
-} from '../../../components/templates/components/nodes/nodes';
+import {TABLET_SLOTS, renderLabel} from '../../../components/templates/components/nodes/nodes';
 import type {Node, TabletSlotState} from '../../../store/reducers/components/nodes/nodes/node';
 import type {FIX_MY_TYPE} from '../../../types';
 import {NodeColumnBanned, NodeColumnState} from '../../../pages/components/tabs/NodeColumns';
+import {NodesColumnHeader} from '../../../pages/components/tabs/nodes/Nodes/NodesColumnHeader';
+import {ColumnInfo} from '../../../components/ElementsTable/ElementsTableHeader';
+import {progressText} from '../../../utils/progress';
 
 import './tables.scss';
 
@@ -34,6 +34,8 @@ export const PropertiesByColumn = {
     banned: ['banned'],
     chunks: ['chunks'],
     cpu: ['cpuProgress', 'cpuText'],
+    cpu_limit: ['cpu'],
+    cpu_usage: ['cpu'],
     data_center: ['dataCenter'],
     decommissioned: ['decommissioned'],
     elections: ['tabletSlots'],
@@ -53,34 +55,55 @@ export const PropertiesByColumn = {
     locations: ['locations', 'enabledLocations'],
     memory_total: ['memoryProgress', 'memoryTotalText'],
     memory: ['memoryData', 'memoryProgress', 'memoryText'],
+    memory_limit: ['memoryTotal'],
+    memory_usage: ['memoryTotal'],
     network: ['networkProgress', 'networkText'],
+    network_usage: ['network'],
+    network_limit: ['network'],
     none: ['tabletSlots'],
     none_chaos: ['chaosSlots'],
     physical_host: ['physicalHost'],
     flavors: ['flavors'],
     rack: ['rack'],
     removal_slots: ['removalSlots', 'removalSlotsProgress'],
+    removal_slots_usage: ['removalSlots'],
+    removal_slots_limit: ['removalSlots'],
     repair_slots: ['repairSlots', 'repairSlotsProgress'],
+    repair_slots_usage: ['repairSlots'],
+    repair_slots_limit: ['repairSlots'],
     replication_slots: ['replicationSlots', 'replicationSlotsProgress'],
+    replication_slots_usage: ['replicationSlots'],
+    replication_slots_limit: ['replicationSlots'],
     scheduler_jobs: ['disableJobs'],
     seal_slots: ['sealSlots', 'sealSlotsProgress'],
+    seal_slots_usage: ['sealSlots'],
+    seal_slots_limit: ['sealSlots'],
     sessions: ['sessions'],
-    space_limit: ['spaceAvailable', 'spaceUsed'],
-    space: ['spaceAvailable', 'spaceProgress', 'spaceText', 'spaceUsed'],
+    space_limit: ['spaceTotal'],
+    space_usage: ['spaceUsed'],
+    space: ['spaceProgress', 'spaceText'],
     state: ['state'],
     stopped: ['tabletSlots'],
     stopped_chaos: ['chaosSlots'],
     system_tags: ['systemTags'],
     tablet_cells: ['disableTabletCells'],
     tablet_memory_dynamic: ['tabletDynamicMemory'],
+    tablet_memory_dynamic_usage: ['tabletDynamicMemory'],
+    tablet_memory_dynamic_limit: ['tabletDynamicMemory'],
     tablet_memory_static: ['tabletStaticMemory'],
+    tablet_memory_static_usage: ['tabletStaticMemory'],
+    tablet_memory_static_limit: ['tabletStaticMemory'],
     tablet_memory: ['tabletStaticMemory', 'tabletDynamicMemory'],
     tablet_slots: ['tabletSlots'],
     user_slots: ['userSlots', 'userSlotsProgress'],
+    user_slots_usage: ['userSlots'],
+    user_slots_limit: ['userSlots'],
     user_tags: ['userTags'],
     version: ['version'],
     write_sessions: ['disableWriteSession'],
 } as const;
+
+export type NodesTableColumnNames = keyof typeof PropertiesByColumn;
 
 export type NodeWithProps<T extends keyof typeof PropertiesByColumn> = Pick<
     Node & {cluster: string},
@@ -294,21 +317,39 @@ const nodesTableProps = {
             },
             space: {
                 get(node) {
-                    return node.spaceUsed + node.spaceAvailable
-                        ? node.spaceUsed / (node.spaceUsed + node.spaceAvailable)
-                        : undefined;
+                    return node.spaceProgress;
                 },
-                sort: true,
+                renderHeader({align}: ColumnInfo) {
+                    return (
+                        <NodesColumnHeader
+                            align={align}
+                            column="space"
+                            title="Space"
+                            options={[
+                                {column: 'space', title: 'Progress', withUndefined: true},
+                                {column: 'space_usage', title: 'Usage', withUndefined: true},
+                                {column: 'space_limit', title: 'Limit', withUndefined: true},
+                            ]}
+                        />
+                    );
+                },
                 sortWithUndefined: true,
                 align: 'center',
             },
             space_limit: {
                 get(node) {
-                    return node.spaceUsed + node.spaceAvailable || undefined;
+                    return node.spaceTotal;
                 },
                 sort: true,
                 sortWithUndefined: true,
                 align: 'right',
+            },
+            space_usage: {
+                get(node) {
+                    return node.spaceUsed;
+                },
+                sortWithUndefined: true,
+                hidden: true,
             },
             locations: {
                 get(node) {
@@ -340,15 +381,71 @@ const nodesTableProps = {
                 get(node) {
                     return node.cpuProgress;
                 },
-                sort: true,
+                sortWithUndefined: true,
                 align: 'center',
+                renderHeader: ({align}: ColumnInfo) => {
+                    return (
+                        <NodesColumnHeader
+                            align={align}
+                            column="cpu"
+                            options={[
+                                {column: 'cpu', title: 'Progress', withUndefined: true},
+                                {column: 'cpu_usage', title: 'Usage', withUndefined: true},
+                                {column: 'cpu_limit', title: 'Limit', withUndefined: true},
+                            ]}
+                            title="CPU"
+                        />
+                    );
+                },
+            },
+            cpu_limit: {
+                get(node) {
+                    return node.cpu?.limit;
+                },
+                sortWithUndefined: true,
+                hidden: true,
+            },
+            cpu_usage: {
+                get(node) {
+                    return node.cpu?.usage;
+                },
+                sortWithUndefined: true,
+                hidden: true,
             },
             memory: {
                 get(node) {
                     return node.memoryProgress;
                 },
-                sort: true,
+                sortWithUndefined: true,
+                renderHeader: ({align}: ColumnInfo) => {
+                    return (
+                        <NodesColumnHeader
+                            align={align}
+                            column="memory"
+                            title="Memory"
+                            options={[
+                                {column: 'memory', title: 'Progress', withUndefined: true},
+                                {column: 'memory_usage', title: 'Usage', withUndefined: true},
+                                {column: 'memory_limit', title: 'Limit', withUndefined: true},
+                            ]}
+                        />
+                    );
+                },
                 align: 'center',
+            },
+            memory_usage: {
+                get(node) {
+                    return node.memoryTotal.usage;
+                },
+                sortWithUndefined: true,
+                hidden: true,
+            },
+            memory_limit: {
+                get(node) {
+                    return node.memoryTotal.limit;
+                },
+                sortWithUndefined: true,
+                hidden: true,
             },
             memory_total: {
                 get(node) {
@@ -361,43 +458,255 @@ const nodesTableProps = {
                 get(node) {
                     return node.networkProgress;
                 },
-                sort: true,
+                sortWithUndefined: true,
+                renderHeader: ({align}: ColumnInfo) => {
+                    return (
+                        <NodesColumnHeader
+                            align={align}
+                            column="network"
+                            title="Network"
+                            options={[
+                                {column: 'network', title: 'Progress', withUndefined: true},
+                                {column: 'network_usage', title: 'Usage', withUndefined: true},
+                                {column: 'network_limit', title: 'Limit', withUndefined: true},
+                            ]}
+                        />
+                    );
+                },
                 align: 'center',
+            },
+            network_usage: {
+                get(node) {
+                    return node.network.usage;
+                },
+                sortWithUndefined: true,
+                hidden: true,
+            },
+            network_limit: {
+                get(node) {
+                    return node.network.limit;
+                },
+                sortWithUndefined: true,
+                hiddne: true,
             },
             repair_slots: {
                 get(node) {
+                    return node.repairSlotsProgress;
+                },
+                sortWithUndefined: true,
+                renderHeader({align}: ColumnInfo) {
+                    return (
+                        <NodesColumnHeader
+                            align={align}
+                            column="repair_slots"
+                            title="Repair slots"
+                            options={[
+                                {column: 'repair_slots', title: 'Progress', withUndefined: true},
+                                {column: 'repair_slots_usage', title: 'Usage', withUndefined: true},
+                                {column: 'repair_slots_limit', title: 'Limit', withUndefined: true},
+                            ]}
+                        />
+                    );
+                },
+                align: 'center',
+            },
+            repair_slots_usage: {
+                get(node) {
                     return node.repairSlots.usage;
                 },
-                sort: true,
-                align: 'center',
+                sortWithUndefined: true,
+                hidden: true,
+            },
+            repair_slots_limit: {
+                get(node) {
+                    return node.repairSlots.limits;
+                },
+                sortWithUndefined: true,
+                hidden: true,
             },
             removal_slots: {
                 get(node) {
+                    return node.removalSlotsProgress;
+                },
+                sortWithUndefined: true,
+                renderHeader({align}: ColumnInfo) {
+                    return (
+                        <NodesColumnHeader
+                            align={align}
+                            column="removal_slots"
+                            title="Removal slots"
+                            options={[
+                                {column: 'removal_slots', title: 'Progress', withUndefined: true},
+                                {
+                                    column: 'removal_slots_usage',
+                                    title: 'Usage',
+                                    withUndefined: true,
+                                },
+                                {
+                                    column: 'removal_slots_limit',
+                                    title: 'Limit',
+                                    withUndefined: true,
+                                },
+                            ]}
+                        />
+                    );
+                },
+                align: 'center',
+            },
+            removal_slots_usage: {
+                get(node) {
                     return node.removalSlots.usage;
                 },
-                sort: true,
-                align: 'center',
+                sortWithUndefined: true,
+                hidden: true,
+            },
+            removal_slots_limit: {
+                get(node) {
+                    return node.removalSlots.limits;
+                },
+                sortWithUndefined: true,
+                hidden: true,
             },
             replication_slots: {
                 get(node) {
+                    return node.replicationSlotsProgress;
+                },
+                sortWithUndefined: true,
+                renderHeader({align}: ColumnInfo) {
+                    return (
+                        <NodesColumnHeader
+                            align={align}
+                            column="replication_slots"
+                            title="Replication slots"
+                            options={[
+                                {
+                                    column: 'replication_slots',
+                                    title: 'Progress',
+                                    withUndefined: true,
+                                },
+                                {
+                                    column: 'replication_slots_usage',
+                                    title: 'Usage',
+                                    withUndefined: true,
+                                },
+                                {
+                                    column: 'replication_slots_limit',
+                                    title: 'Limit',
+                                    withUndefined: true,
+                                },
+                            ]}
+                        />
+                    );
+                },
+                align: 'center',
+            },
+            replication_slots_usage: {
+                get(node) {
                     return node.replicationSlots.usage;
                 },
-                sort: true,
-                align: 'center',
+                sortWithUndefined: true,
+                hidden: true,
+            },
+            replication_slots_limit: {
+                get(node) {
+                    return node.replicationSlots.limits;
+                },
+                sortWithUndefined: true,
+                hidden: true,
             },
             seal_slots: {
                 get(node) {
+                    return node.sealSlotsProgress;
+                },
+                sortWithUndefined: true,
+                renderHeader({align}: ColumnInfo) {
+                    return (
+                        <NodesColumnHeader
+                            align={align}
+                            column="seal_slots"
+                            title="Seal slots"
+                            options={[
+                                {
+                                    column: 'seal_slots',
+                                    title: 'Progress',
+                                    withUndefined: true,
+                                },
+                                {
+                                    column: 'seal_slots_usage',
+                                    title: 'Usage',
+                                    withUndefined: true,
+                                },
+                                {
+                                    column: 'seal_slots_limit',
+                                    title: 'Limit',
+                                    withUndefined: true,
+                                },
+                            ]}
+                        />
+                    );
+                },
+                align: 'center',
+            },
+            seal_slots_usage: {
+                get(node) {
                     return node.sealSlots.usage;
                 },
-                sort: true,
-                align: 'center',
+                sortWithUndefined: true,
+                hidden: true,
+            },
+            seal_slots_limit: {
+                get(node) {
+                    return node.sealSlots.limits;
+                },
+                sortWithUndefined: true,
+                hidden: true,
             },
             user_slots: {
                 get(node) {
+                    return node.userSlotsProgress;
+                },
+                renderHeader({align}: ColumnInfo) {
+                    return (
+                        <NodesColumnHeader
+                            align={align}
+                            column="user_slots"
+                            title="User slots"
+                            options={[
+                                {
+                                    column: 'user_slots',
+                                    title: 'Progress',
+                                    withUndefined: true,
+                                },
+                                {
+                                    column: 'user_slots_usage',
+                                    title: 'Usage',
+                                    withUndefined: true,
+                                },
+                                {
+                                    column: 'user_slots_limit',
+                                    title: 'Limit',
+                                    withUndefined: true,
+                                },
+                            ]}
+                        />
+                    );
+                },
+                align: 'center',
+            },
+            user_slots_usage: {
+                get(node) {
                     return node.userSlots.usage;
                 },
-                sort: true,
+                sortWithUndefined: true,
+                hidden: true,
+            },
+            user_slots_limit: {
+                get(node) {
+                    return node.userSlots.limits;
+                },
                 align: 'center',
+                sortWithUndefined: true,
+                hidden: true,
             },
             tablet_slots: {
                 get(node) {
@@ -557,19 +866,97 @@ const nodesTableProps = {
                 items: {
                     static: {
                         get(node) {
-                            return node.tabletStaticMemory.used;
+                            return node.tabletStaticMemory.progress;
                         },
-                        sort: true,
+                        renderHeader: (column: ColumnInfo) => {
+                            return (
+                                <NodesColumnHeader
+                                    column="tablet_memory_static"
+                                    align={column.align}
+                                    title="Static memory"
+                                    options={[
+                                        {
+                                            column: 'tablet_memory_static',
+                                            title: 'Progress',
+                                            withUndefined: true,
+                                        },
+                                        {
+                                            column: 'tablet_memory_static_usage',
+                                            title: 'Usage',
+                                            withUndefined: true,
+                                        },
+                                        {
+                                            column: 'tablet_memory_static_limit',
+                                            title: 'Limit',
+                                            withUndefined: true,
+                                        },
+                                    ]}
+                                />
+                            );
+                        },
                         sortWithUndefined: true,
                         align: 'center',
                     },
-                    dynamic: {
+                    static_usage: {
                         get(node) {
-                            return [node.tabletDynamicMemory.limit, node.tabletDynamicMemory.used];
+                            return node.tabletStaticMemory.used;
                         },
                         sortWithUndefined: true,
-                        sort: true,
+                        hidden: true,
+                    },
+                    static_limit: {
+                        get(node) {
+                            return node.tabletStaticMemory.limit;
+                        },
+                        sortWithUndefined: true,
+                        hidden: true,
+                    },
+                    dynamic: {
+                        get(node) {
+                            return node.tabletDynamicMemory.progress;
+                        },
+                        renderHeader: (column: ColumnInfo) => {
+                            return (
+                                <NodesColumnHeader
+                                    column="tablet_memory_dynamic"
+                                    align={column.align}
+                                    title="Static memory"
+                                    options={[
+                                        {
+                                            column: 'tablet_memory_dynamic',
+                                            title: 'Progress',
+                                            withUndefined: true,
+                                        },
+                                        {
+                                            column: 'tablet_memory_dynamic_usage',
+                                            title: 'Usage',
+                                            withUndefined: true,
+                                        },
+                                        {
+                                            column: 'tablet_memory_dynamic_limit',
+                                            title: 'Limit',
+                                            withUndefined: true,
+                                        },
+                                    ]}
+                                />
+                            );
+                        },
+                        sortWithUndefined: true,
                         align: 'center',
+                    },
+                    dynamic_usage: {
+                        get(node) {
+                            return node.tabletDynamicMemory.used;
+                        },
+                        sortWithUndefined: true,
+                        hidden: true,
+                    },
+                    dynamic_limit: {
+                        get(node) {
+                            return node.tabletDynamicMemory.limit;
+                        },
+                        sortWithUndefined: true,
+                        hidden: true,
                     },
                 },
                 set: ['static', 'dynamic'],
@@ -811,11 +1198,11 @@ export const NODES_TABLE_TEMPLATES: Templates = {
     },
 
     space(item) {
-        return <Progress value={item.spaceProgress} text={item.spaceText} theme="success" />;
+        return <Progress value={item.spaceProgress || 0} text={item.spaceText} theme="success" />;
     },
 
     space_limit(item) {
-        return hammer.format['Bytes'](item.spaceUsed + item.spaceAvailable);
+        return hammer.format['Bytes'](item.spaceTotal);
     },
 
     locations(item) {
@@ -837,7 +1224,7 @@ export const NODES_TABLE_TEMPLATES: Templates = {
     },
 
     cpu(item) {
-        return <Progress value={item.cpuProgress} text={item.cpuText} theme="success" />;
+        return <Progress value={item.cpuProgress || 0} text={item.cpuText} theme="success" />;
     },
 
     memory(item) {
@@ -869,31 +1256,31 @@ export const NODES_TABLE_TEMPLATES: Templates = {
     repair_slots(item) {
         const text = progressText(item.repairSlots.usage, item.repairSlots.limits);
 
-        return <Progress value={item.repairSlotsProgress} text={text} theme="success" />;
+        return <Progress value={item.repairSlotsProgress || 0} text={text} theme="success" />;
     },
 
     removal_slots(item) {
         const text = progressText(item.removalSlots.usage, item.removalSlots.limits);
 
-        return <Progress value={item.removalSlotsProgress} text={text} theme="success" />;
+        return <Progress value={item.removalSlotsProgress || 0} text={text} theme="success" />;
     },
 
     replication_slots(item) {
         const text = progressText(item.replicationSlots.usage, item.replicationSlots.limits);
 
-        return <Progress value={item.replicationSlotsProgress} text={text} theme="success" />;
+        return <Progress value={item.replicationSlotsProgress || 0} text={text} theme="success" />;
     },
 
     seal_slots(item) {
         const text = progressText(item.sealSlots.usage, item.sealSlots.limits);
 
-        return <Progress value={item.sealSlotsProgress} text={text} theme="success" />;
+        return <Progress value={item.sealSlotsProgress || 0} text={text} theme="success" />;
     },
 
     user_slots(item) {
         const text = progressText(item.userSlots.usage, item.userSlots.limits);
 
-        return <Progress value={item.userSlotsProgress} text={text} theme="success" />;
+        return <Progress value={item.userSlotsProgress || 0} text={text} theme="success" />;
     },
 
     tablet_slots(item) {

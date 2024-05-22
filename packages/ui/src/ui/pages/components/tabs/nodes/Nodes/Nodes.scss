@@ -174,13 +174,12 @@ $elements-table: '.elements-table';
                 width: 80px;
             }
 
+            &_actions,
             &_flavors,
             &_space-limit,
             &_locations,
             &_sessions,
             &_chunks,
-            &_seal-slots,
-            &_user-slots,
             &_none,
             &_leading,
             &_following,
@@ -202,10 +201,14 @@ $elements-table: '.elements-table';
                 width: 110px;
             }
 
-            &_actions,
             &_repair-slots,
             &_removal-slots,
             &_replication-slots,
+            &_seal-slots,
+            &_user-slots {
+                width: 150px;
+            }
+
             &_rack,
             &_scheduler-jobs,
             &_write-sessions,

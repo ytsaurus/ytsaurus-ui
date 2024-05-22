@@ -6,9 +6,9 @@ import {compose} from 'redux';
 import cn from 'bem-cn-lite';
 import memoize_ from 'lodash/memoize';
 import filter_ from 'lodash/filter';
+import reduce_ from 'lodash/reduce';
 import map_ from 'lodash/map';
 import includes_ from 'lodash/includes';
-import keys_ from 'lodash/keys';
 
 import ColumnSelector from '../../../../../components/ColumnSelector/ColumnSelector';
 import ElementsTable from '../../../../../components/ElementsTable/ElementsTable';
@@ -103,7 +103,17 @@ class Nodes extends React.Component<ReduxProps & WithVisibleProps, State> {
         const {nodesTableProps} = this.props;
         const {selectedColumns} = this.state;
 
-        const columns = filter_(keys_(nodesTableProps.columns.items), (key) => key !== 'actions');
+        const columns = reduce_(
+            nodesTableProps.columns.items,
+            (acc, colInfo = {}, key) => {
+                const hidden = 'hidden' in colInfo && colInfo.hidden;
+                if (!hidden && key !== 'actions') {
+                    acc.push(key);
+                }
+                return acc;
+            },
+            [] as Array<string>,
+        );
 
         return map_(columns, (column) => ({
             name: column,

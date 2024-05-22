@@ -39,7 +39,7 @@ function NodeStorage(node: NodeStorageProps): ReturnType<React.VFC> {
                         key: 'space',
                         value: (
                             <Progress
-                                value={node.spaceProgress}
+                                value={node.spaceProgress || 0}
                                 text={node.spaceText}
                                 theme="success"
                             />
