@@ -1,5 +1,6 @@
 .yt-root-page {
     &__content {
+        flex-grow: 1;
         margin-top: var(--app-header-height);
         padding-top: 4px;
     }

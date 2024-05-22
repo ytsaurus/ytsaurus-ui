@@ -5,6 +5,7 @@ import PageHead from '../../components/PageHead/PageHead';
 
 import ClustersMenuHeader from './ClustersMenuHeader';
 import ClustersMenuBody from './ClustersMenuBody';
+import UIFactory from '../../UIFactory';
 
 function ClustersMenu() {
     const title = useSelector((state) => state.global.title);
@@ -14,6 +15,7 @@ function ClustersMenu() {
             <PageHead title={title} />
             <ClustersMenuHeader />
             <ClustersMenuBody />
+            {UIFactory.renderAppFooter()}
         </Fragment>
     );
 }

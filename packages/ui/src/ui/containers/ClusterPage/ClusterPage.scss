@@ -19,6 +19,10 @@
         }
     }
 
+    &__panes-wrapper_with-footer {
+        overflow: auto;
+    }
+
     &__content-pane {
         width: 100%;
         max-width: 100vw;
