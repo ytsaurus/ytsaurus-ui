@@ -15,6 +15,7 @@ import NodeStorage, {
 import {nodeSelector} from '../../../../../store/selectors/components/node/node';
 
 import './NodeGeneralTab.scss';
+import Alert from '../../../../../components/Alert/Alert';
 
 const block = cn('node-general');
 
@@ -23,6 +24,10 @@ function NodeGeneralTab(): ReturnType<React.VFC> {
 
     if (!node) {
         return null;
+    }
+
+    if (node.state === 'offline') {
+        return <Alert message="Node is Offline" />;
     }
 
     return (
