@@ -43,6 +43,7 @@ const e2eConfig: Partial<AppConfig> = {
 
         reUnipikaAllowTaggedSources: ['^https://yastatic\\.net/'],
         hideReferrerUrl: 'https://h.yandex-team.ru/',
+        reUseEffectiveAclForPath: '//sys/access_control_object_namespaces[^/+]{0,}',
     },
 
     defaultUserSettingsOverrides: {

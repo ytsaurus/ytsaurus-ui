@@ -24,9 +24,7 @@ const localModeConfig: Partial<AppConfig> = {
         uploadTableMaxSize: 50 * 1024 * 1024,
         uploadTableUseLocalmode: true,
         queryTrackerStage: 'testing',
-
         directDownload: false,
-
         reportBugUrl: 'https://github.com/ytsaurus/ytsaurus-ui/issues/new',
     },
 };

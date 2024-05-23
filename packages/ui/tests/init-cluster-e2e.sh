@@ -164,3 +164,6 @@ yt create --attributes '{schema=[
     echo -ne "imageurl=https://yastatic.net/s3/cloud/yt/static/freeze/assets/images/ui-big.44e3fa56.jpg\t"
     echo -e "imageurl_as_text=https://deny-yastatic.net/s3/cloud/yt/static/freeze/assets/images/ui-big.44e3fa56.jpg\t"
 ) | yt write-table --format dsv ${TAGGED_TABLE}
+
+yt create access_control_object_namespace --attr '{name=queries}'
+yt create access_control_object --attr '{namespace=queries;name=nobody}'

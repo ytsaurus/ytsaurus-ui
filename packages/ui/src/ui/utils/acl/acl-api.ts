@@ -53,9 +53,11 @@ export function getAcl({
     sysPath,
 }: GetAclParams): Promise<PreparedAclData> {
     const api = UIFactory.getAclApi();
+
     if (kind === IdmObjectType.UI_EFFECTIVE_ACL) {
         return getEffectiveAcl(sysPath);
     }
+
     return api.getAcl({cluster, path, kind, poolTree, sysPath});
 }
 

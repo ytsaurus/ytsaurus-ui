@@ -6,6 +6,8 @@ import {
 } from '../../constants/acl';
 import {IdmKindType, ResponsibleType, Subject} from '../../utils/acl/acl-types';
 import {YTPermissionTypeUI} from './acl-api';
+import {makeRegexpFromSettings} from '../../../shared/utils';
+import {uiSettings} from '../../config/ui-settings';
 
 // //sys/accounts/accountName
 const ACCOUNTS_REGEXP = new RegExp('//sys/accounts/.+');
@@ -15,11 +17,6 @@ const POOL_TREES_REGEXP = new RegExp('//sys/pool_trees/[^/]+/.+');
 
 // //sys/tablet_cell_bundles/bundleName
 const TCB_REGEXP = new RegExp('//sys/tablet_cell_bundles/.+');
-
-// //sys/access_control_object_namespaces...
-const ACCESS_CONTROL_OBJECT_ANY_REGEXP = new RegExp(
-    '//sys/access_control_object_namespaces[^/+]{0,}',
-);
 
 interface NormalizedIdmParams {
     idmKind: IdmKindType;
@@ -53,7 +50,8 @@ export function normalizeIdmParams(idmKind: IdmKindType, path = '') {
                 idmKind: IdmObjectType.TABLET_CELL_BUNDLE,
                 path: path.substr('//sys/tablet_cell_bundles/'.length),
             };
-        } else if (ACCESS_CONTROL_OBJECT_ANY_REGEXP.test(path)) {
+        } else if (makeRegexpFromSettings(uiSettings.reUseEffectiveAclForPath)?.test(path)) {
+            // //sys/access_control_object_namespaces...
             res = {
                 idmKind: IdmObjectType.UI_EFFECTIVE_ACL,
                 path: path,

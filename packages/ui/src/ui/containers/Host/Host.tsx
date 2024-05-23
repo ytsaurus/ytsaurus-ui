@@ -7,16 +7,9 @@ import Link from '../../components/Link/Link';
 import ClipboardButton from '../../components/ClipboardButton/ClipboardButton';
 import {Tooltip} from '../../components/Tooltip/Tooltip';
 import {uiSettings} from '../../config/ui-settings';
+import {makeRegexpFromSettings} from '../../../shared/utils';
 
 import './Host.scss';
-
-function makeRegexpFromSettings(value?: string) {
-    try {
-        return new RegExp(value!);
-    } catch {
-        return undefined;
-    }
-}
 
 const reShortName = makeRegexpFromSettings(uiSettings.reShortNameFromAddress);
 const reTabletNodeShortName = makeRegexpFromSettings(uiSettings.reShortNameFromTabletNodeAddress);
