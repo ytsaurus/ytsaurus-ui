@@ -38,6 +38,7 @@ type ResultCurrentState = {
 export const useQueryResultTabs = (
     query?: QueryItem,
 ): [TabsItemProps[], (tab: string, queryId?: string) => void, ResultCurrentState] => {
+    const [progressActive, setProgressActive] = useState(false);
     const [tab, setTab] = useState<QueryResultTab>(QueryResultTab.META);
     const [activeResultParams, setResultParams] =
         useState<ResultCurrentState['activeResultParams']>(undefined);
@@ -134,6 +135,14 @@ export const useQueryResultTabs = (
         }
         setActiveTab(tabs?.[0]?.id, query?.id);
     }, [dispatch, query?.id, isCompleted]);
+
+    useEffect(() => {
+        const hasResultTab = tabs.some((tab) => tab.id === QueryResultTab.PROGRESS);
+        if (hasResultTab && query?.state === QueryStatus.RUNNING && !progressActive) {
+            setProgressActive(true);
+            setTab(QueryResultTab.PROGRESS);
+        }
+    }, [progressActive, query?.state, tabs]);
 
     return [
         tabs,

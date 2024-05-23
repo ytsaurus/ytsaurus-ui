@@ -112,8 +112,10 @@ export const loadCliqueByCluster =
 
 export function loadQuery(
     queryId: string,
+    config?: {dontReplaceQueryText?: boolean},
 ): ThunkAction<any, RootState, any, SetQueryAction | RequestQueryAction | SetQueryErrorLoadAction> {
-    return async (dispatch, _getState) => {
+    return async (dispatch, getState) => {
+        const state = getState();
         dispatch({type: REQUEST_QUERY});
         try {
             const query = await wrapApiPromiseByToaster(dispatch(getQuery(queryId)), {
@@ -128,10 +130,16 @@ export function loadQuery(
                 dispatch(loadCliqueByCluster(query.settings.cluster as string));
             }
 
+            const queryItem = prepareQueryPlanIds(query);
+
+            if (config?.dontReplaceQueryText) {
+                queryItem.query = state.queryTracker.query.draft.query;
+            }
+
             dispatch({
                 type: SET_QUERY,
                 data: {
-                    initialQuery: prepareQueryPlanIds(query),
+                    initialQuery: queryItem,
                 },
             });
         } catch (e: unknown) {
@@ -247,7 +255,7 @@ export function abortCurrentQuery(): ThunkAction<any, RootState, any, SetQueryAc
                 skipSuccessToast: true,
                 errorTitle: 'Failed to abort query',
             });
-            dispatch(loadQuery(currentQuery?.id));
+            dispatch(loadQuery(currentQuery?.id, {dontReplaceQueryText: true}));
             dispatch(requestQueriesList());
         }
     };
