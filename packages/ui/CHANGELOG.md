@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.39.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.38.2...ui-v1.39.0) (2024-05-23)
+
+
+### Features
+
+* **System:** introduce new switch leader button ([43f5034](https://github.com/ytsaurus/ytsaurus-ui/commit/43f5034405fcf58bd045406551a97f52e7a4a3ed))
+
+
+### Bug Fixes
+
+* **axios/withXSRFToken:** additional to b7738a97c3177df02a3a9112112ac97e4afef118 ([88b5efa](https://github.com/ytsaurus/ytsaurus-ui/commit/88b5efafd5d4ec480ea50f75e15314974786f427))
+* **Bundles:** memory limit [YTFRONT-4170] ([4be139c](https://github.com/ytsaurus/ytsaurus-ui/commit/4be139c64a7538e038443cdd8100150c1b8a00f8))
+
 ## [1.38.2](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.38.1...ui-v1.38.2) (2024-05-20)
 
 
