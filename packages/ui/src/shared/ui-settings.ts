@@ -140,6 +140,12 @@ export interface UISettings {
      * See `@gravity-ui/unipika v3.0.0` details in [CHANGELOG.md](https://github.com/gravity-ui/unipika/blob/main/CHANGELOG.md).
      */
     hideReferrerUrl?: string;
+
+    /**
+     * Allows to override idm object type to Effective ACL for objects that match the regex.
+     * @example reUseEffectiveAclForPath: '//sys/access_control_object_namespaces[^/+]{0,}'
+     */
+    reUseEffectiveAclForPath?: string;
 }
 
 export interface UISettingsMonitoring {
