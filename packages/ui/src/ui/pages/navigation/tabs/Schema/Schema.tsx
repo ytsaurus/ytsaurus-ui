@@ -116,6 +116,7 @@ class Schema extends Component<SchemaProps> {
                     <span>
                         {Boolean(sort_order) && (
                             <Icon
+                                className={block('sort-icon')}
                                 awesome={
                                     sort_order === 'descending'
                                         ? 'sort-amount-up'
@@ -123,7 +124,6 @@ class Schema extends Component<SchemaProps> {
                                 }
                             />
                         )}
-                        &nbsp;
                         <FormattedText text={item[column]} />
                     </span>
                 );
