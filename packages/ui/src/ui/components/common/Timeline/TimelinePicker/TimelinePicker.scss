@@ -23,12 +23,18 @@
         }
     }
     &__hot {
+        display: inline-flex;
+        justify-content: center;
         width: 35px;
         margin-right: 4px;
     }
     &__hot-custom {
         width: 72px;
         margin-right: 12px;
+
+        .yc-button__text {
+            padding: 0 10px;
+        }
     }
 
     &__datepicker {
