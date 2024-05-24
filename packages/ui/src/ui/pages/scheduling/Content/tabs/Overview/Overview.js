@@ -55,7 +55,7 @@ import {
     getPoolPathsByName,
     getSchedulingOperationsCount,
     resetExpandedPools,
-    setExpandedPool,
+    setExpandedPools,
     setLoadAllOperations,
 } from '../../../../../store/actions/scheduling/expanded-pools';
 import {PoolsSuggest} from '../../../../../pages/scheduling/PoolsSuggest/PoolsSuggest';
@@ -473,11 +473,11 @@ class Overview extends Component {
     }
 
     onItemToggleState = (poolPath, collapsed) => {
-        const {setExpandedPool} = this.props;
+        const {setExpandedPools} = this.props;
         const parts = poolPath.split('/');
         const poolName = parts[parts.length - 1];
 
-        setExpandedPool(poolName, !collapsed);
+        setExpandedPools({[poolName]: !collapsed});
     };
 }
 
@@ -509,7 +509,7 @@ const mapDispatchToProps = {
     openEditModal,
     changeTableTreeState,
     schedulingSetAbcFilter,
-    setExpandedPool,
+    setExpandedPools,
     getSchedulingOperationsCount,
     setLoadAllOperations,
     getPoolPathsByName,
