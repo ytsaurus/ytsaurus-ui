@@ -36,7 +36,7 @@ function PoolAcl() {
 
     return _.isEmpty(pools) ? null : (
         <ErrorBoundary>
-            <PoolAclPanel path={pool} poolTree={tree} />
+            <PoolAclPanel key={`${tree}_${pool}`} path={pool} poolTree={tree} />
         </ErrorBoundary>
     );
 }
