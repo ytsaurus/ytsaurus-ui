@@ -11,7 +11,7 @@ import {
 } from '../../reducers/scheduling/expanded-pools';
 
 import {YTApiId, ytApiV3Id} from '../../../rum/rum-wrap-api';
-import {splitBatchResults} from '../../../utils/utils';
+import {USE_IGNORE_NODE_DOES_NOT_EXIST, splitBatchResults} from '../../../utils/utils';
 import {makeGet, makeList} from '../../../utils/batch';
 import {
     CHANGE_POOL,
@@ -180,10 +180,7 @@ function loadExpandedOperationsAndPools(tree: string): ExpandedPoolsThunkAction 
         const poolsChildrenRequests: Array<BatchSubRequest> = [];
         const poolsCypressDataRequests: Array<BatchSubRequest> = [];
 
-        const poolsExpandedPools: Array<string> =
-            -1 !== expandedPoolNames.indexOf(ROOT_POOL_NAME)
-                ? expandedPoolNames
-                : [ROOT_POOL_NAME, ...expandedPoolNames];
+        const poolsExpandedPools: Array<string> = [ROOT_POOL_NAME, ...expandedPoolNames];
 
         if (loadAllPools) {
             poolsRequests.push(
@@ -236,15 +233,14 @@ function loadExpandedOperationsAndPools(tree: string): ExpandedPoolsThunkAction 
                       cancellation: cancelHelper.saveCancelToken,
                   })
                 : Promise.resolve([]),
-            loadAllPools
-                ? ytApiV3Id.executeBatch(YTApiId.schedulingLoadPoolsAll, {
-                      parameters: {requests: poolsRequests},
-                      cancellation: cancelHelper.saveCancelToken,
-                  })
-                : ytApiV3Id.executeBatch(YTApiId.schedulingLoadPoolsPerPool, {
-                      parameters: {requests: poolsRequests},
-                      cancellation: cancelHelper.saveCancelToken,
-                  }),
+
+            ytApiV3Id.executeBatch(
+                loadAllPools ? YTApiId.schedulingLoadPoolsAll : YTApiId.schedulingLoadPoolsPerPool,
+                {
+                    parameters: {requests: poolsRequests},
+                    cancellation: cancelHelper.saveCancelToken,
+                },
+            ),
             loadAllPools
                 ? Promise.resolve([])
                 : ytApiV3Id.executeBatch(YTApiId.schedulingLoadChildrenPerPool, {
@@ -260,7 +256,11 @@ function loadExpandedOperationsAndPools(tree: string): ExpandedPoolsThunkAction 
         ])
             .then(([operationsResults, poolsResults, poolsChildrenResults, poolsCypressData]) => {
                 const error = new UIBatchError('Failed to load expanded pools');
-                const {results: operations} = splitBatchResults(operationsResults, error);
+                const {results: operations, errorIgnoredIndices} = splitBatchResults(
+                    operationsResults,
+                    error,
+                    USE_IGNORE_NODE_DOES_NOT_EXIST,
+                );
                 const rawOperations = _.reduce(
                     operations,
                     (acc, data) => {
@@ -268,6 +268,11 @@ function loadExpandedOperationsAndPools(tree: string): ExpandedPoolsThunkAction 
                     },
                     {},
                 );
+
+                const poolsToCollapse: Record<string, false> = {};
+                _.forEach(errorIgnoredIndices, (pos) => {
+                    poolsToCollapse[operationsExpandedPools[pos]] = false;
+                });
 
                 const rawPools: Record<string, PoolInfo> = {};
                 const cypressData: Record<string, PoolCypressData> = {};
@@ -285,31 +290,58 @@ function loadExpandedOperationsAndPools(tree: string): ExpandedPoolsThunkAction 
                     } = splitBatchResults(poolsCypressData, error);
                     Object.assign(cypressData, flattenAttributes(data));
                 } else {
-                    const {results: pools, resultIndices} = splitBatchResults<PoolInfo>(
+                    const {
+                        results: pools,
+                        resultIndices,
+                        errorIgnoredIndices: poolsReqeustsIgnored,
+                    } = splitBatchResults<PoolInfo>(
                         poolsResults,
                         error,
+                        USE_IGNORE_NODE_DOES_NOT_EXIST,
                     );
                     pools.forEach((poolInfo, index) => {
                         const name = poolsExpandedPools[resultIndices[index]];
                         rawPools[name] = poolInfo;
                     });
 
-                    const {results: poolChildren} = splitBatchResults<Record<string, PoolInfo>>(
+                    const {
+                        results: poolChildren,
+                        errorIgnoredIndices: poolsChildrenRequestsIgnored,
+                    } = splitBatchResults<Record<string, PoolInfo>>(
                         poolsChildrenResults,
                         error,
+                        USE_IGNORE_NODE_DOES_NOT_EXIST,
                     );
                     poolChildren.forEach((children) => {
                         Object.assign(rawPools, children);
                     });
 
-                    const {results: cypressDataChildrenPerPool} = splitBatchResults<
-                        Array<PoolCypressData>
-                    >(poolsCypressData, error);
+                    const {
+                        results: cypressDataChildrenPerPool,
+                        errorIgnoredIndices: poolsCypressDataRequestsIgnored,
+                    } = splitBatchResults<Array<PoolCypressData>>(
+                        poolsCypressData,
+                        error,
+                        USE_IGNORE_NODE_DOES_NOT_EXIST,
+                    );
                     cypressDataChildrenPerPool.forEach((poolChildrenCypressData) => {
                         poolChildrenCypressData.forEach((item) => {
                             cypressData[item.$value] = item;
                         });
                     });
+
+                    _.forEach(
+                        [
+                            ...poolsReqeustsIgnored,
+                            ...poolsChildrenRequestsIgnored,
+                            ...poolsCypressDataRequestsIgnored,
+                        ],
+                        (position) => {
+                            const poolName = poolsExpandedPools[position];
+                            poolsToCollapse[poolName] = false;
+                        },
+                    );
+                    setExpandedPools(poolsToCollapse);
                 }
 
                 dispatch({
@@ -341,7 +373,7 @@ function loadExpandedOperationsAndPools(tree: string): ExpandedPoolsThunkAction 
     };
 }
 
-export function setExpandedPool(poolName: string, expanded: boolean): ExpandedPoolsThunkAction {
+export function setExpandedPools(changes: Record<string, boolean>): ExpandedPoolsThunkAction {
     return (dispatch, getState) => {
         const state = getState();
         const tree = getTree(getState());
@@ -350,12 +382,14 @@ export function setExpandedPool(poolName: string, expanded: boolean): ExpandedPo
         const poolsByName = getSchedulingPoolsMapByName(state);
 
         const treeExpandedPools = new Map(expandedPools[tree]);
-        if (expanded) {
-            const expandedPoolInfo = calcExpandedPoolInfo(poolName, poolsByName);
-            treeExpandedPools.set(poolName, expandedPoolInfo);
-        } else {
-            treeExpandedPools.delete(poolName);
-        }
+        _.forEach(changes, (expanded, poolName) => {
+            if (expanded) {
+                const expandedPoolInfo = calcExpandedPoolInfo(poolName, poolsByName);
+                treeExpandedPools.set(poolName, expandedPoolInfo);
+            } else {
+                treeExpandedPools.delete(poolName);
+            }
+        });
 
         dispatch(updateExpandedPoolNoLoad(tree, treeExpandedPools));
         dispatch(loadExpandedPools(tree));

@@ -18,6 +18,7 @@ import {BatchResultsItem} from '../../shared/yt-types';
 
 import {UIBatchError} from './errors/ui-error';
 import {isCancelled} from './cancel-helper';
+import {YTErrors} from '../rum/constants';
 
 export function getBatchError<T = unknown>(
     batchResults: Array<BatchResultsItem<T>>,
@@ -63,14 +64,21 @@ export interface SplitedBatchResults<T> {
     outputs: Array<T | undefined>;
     errorIndices: Array<number>;
     resultIndices: Array<number>;
+    errorIgnoredIndices: Array<number>;
 }
+
+export const USE_IGNORE_NODE_DOES_NOT_EXIST = {ignoreErrorCodes: [YTErrors.NODE_DOES_NOT_EXIST]};
 
 export function splitBatchResults<T = unknown>(
     batchResults: Array<BatchResultsItem<T>>,
     inputError: string | UIBatchError,
+    {ignoreErrorCodes}: {ignoreErrorCodes?: Array<number>} = {},
 ): SplitedBatchResults<T> {
     const dstError: UIBatchError =
         typeof inputError === 'string' ? new UIBatchError(inputError) : inputError;
+
+    const ignoreCodes = new Set<number | undefined>(ignoreErrorCodes);
+    const errorIgnoredIndices: Array<number> = [];
 
     const innerErrors: Array<YTError> = [];
     const results: Array<T> = [];
@@ -81,8 +89,12 @@ export function splitBatchResults<T = unknown>(
         const {error, output} = res;
         outputs.push(output);
         if (error) {
-            innerErrors.push(error);
-            errorIndices.push(index);
+            if (ignoreCodes.has(error.code)) {
+                errorIgnoredIndices.push(index);
+            } else {
+                innerErrors.push(error);
+                errorIndices.push(index);
+            }
         } else {
             results.push(output!);
             resultIndices.push(index);
@@ -95,7 +107,14 @@ export function splitBatchResults<T = unknown>(
     }
 
     const error = !innerErrors.length ? undefined : dstError;
-    return {error: error as UIBatchError, results, outputs, errorIndices, resultIndices};
+    return {
+        error: error as UIBatchError,
+        results,
+        outputs,
+        errorIndices,
+        resultIndices,
+        errorIgnoredIndices,
+    };
 }
 
 export function getBatchErrorIndices<T>(results: Array<BatchResultsItem<T>>) {
