@@ -231,6 +231,7 @@ class CreateTableModalContentImpl extends React.Component<Props> {
                 replicasCount,
                 erasureCodec,
                 uniqueKeys,
+                optimize_for,
             },
             [COLUMNS]: columnsRaw,
         } = values;
@@ -239,6 +240,7 @@ class CreateTableModalContentImpl extends React.Component<Props> {
         const isDynamic = tableType === TableType.DYNAMIC;
         const attributes: Record<string, any> = {
             dynamic: isDynamic,
+            optimize_for,
         };
 
         if (!_.isEqual(compCodec, [SELECT_EMPTY_VALUE])) {
@@ -546,6 +548,7 @@ class CreateTableModalContentImpl extends React.Component<Props> {
                         replicasCount: this.replicasCount,
                         erasureCodec: 'lrc_12_2_2',
                         uniqueKeys: this.uniqueKeys,
+                        optimize_for: 'lookup',
                     },
                     [COLUMNS]: [createNewColumn(1, primitiveTypes[0]?.value)],
                 }}
@@ -610,6 +613,20 @@ class CreateTableModalContentImpl extends React.Component<Props> {
                             },
                             {
                                 separator: true,
+                            },
+                            {
+                                name: 'optimize_for',
+                                type: 'radio',
+                                caption: 'Optimize for',
+                                tooltip: docsUrl(
+                                    makeLink(UIFactory.docsUrls['storage:chunks#optimize_for']),
+                                ),
+                                extras: {
+                                    options: [
+                                        {value: 'scan', label: 'Scan'},
+                                        {value: 'lookup', label: 'Lookup'},
+                                    ],
+                                },
                             },
                             {
                                 name: 'compressionCodec',
