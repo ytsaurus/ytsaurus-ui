@@ -84,6 +84,8 @@ type State = {
     subkeyColumn?: string;
 
     selectedColumns?: Props['columns'];
+
+    number_precision_mode: 'string' | 'error' | 'lose';
 };
 
 export class DownloadManager extends React.Component<Props, State> {
@@ -152,6 +154,7 @@ export class DownloadManager extends React.Component<Props, State> {
             selectedColumns: allColumns,
 
             excelExporter: false,
+            number_precision_mode: 'string',
         };
     }
 
@@ -303,8 +306,10 @@ export class DownloadManager extends React.Component<Props, State> {
         const base = `${EXCEL_BASE_URL}/${cluster}/api/export`;
 
         const {query, error} = this.getDownloadParams();
+        const {number_precision_mode} = this.state;
+        const params = new URLSearchParams({number_precision_mode});
 
-        return {url: base + '?' + query, error};
+        return {url: `${base}?${params}&${query}`, error};
     }
 
     makeDocsUrl(path = '') {
@@ -765,6 +770,25 @@ export class DownloadManager extends React.Component<Props, State> {
         );
     }
 
+    renderExcel() {
+        const {number_precision_mode: excelNumberPrecisionMode} = this.state;
+        return (
+            <React.Fragment>
+                <div className="elements-form__label">Number precision mode</div>
+                <RadioButton
+                    size="m"
+                    value={excelNumberPrecisionMode}
+                    onUpdate={(v) => this.setState({number_precision_mode: v})}
+                    options={[
+                        {value: 'string' as const, content: 'String'},
+                        {value: 'error' as const, content: 'Error'},
+                        {value: 'lose' as const, content: 'Lose'},
+                    ]}
+                />
+            </React.Fragment>
+        );
+    }
+
     renderContent() {
         const {format} = this.state;
         const faqLink = (
@@ -819,6 +843,7 @@ export class DownloadManager extends React.Component<Props, State> {
                             {format === 'yamr' && this.renderYamrColumns()}
                             {format === 'json' && this.renderJson()}
                             {format === 'yson' && this.renderYson()}
+                            {format === 'excel' && this.renderExcel()}
                         </div>
                     </div>
                 </div>
