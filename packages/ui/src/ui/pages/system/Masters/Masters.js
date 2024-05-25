@@ -172,7 +172,7 @@ class Masters extends Component {
                         })}
                     {Boolean(discovery?.instances?.length) &&
                         this.renderSection('discovery', 'Discovery servers', discovery)}
-                    {Boolean(queueAgents?.length) &&
+                    {Boolean(queueAgents?.instances?.length) &&
                         this.renderSection('queueAgents', 'Queue agents', queueAgents)}
                 </div>
             </div>

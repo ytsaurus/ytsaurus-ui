@@ -221,7 +221,7 @@ async function loadMastersConfig(): Promise<[MastersConfigResponse, MasterAlert[
         const discoveryResults = results.slice(0, discoveryRequests.length);
         const queueAgentsStateResults = results.slice(
             discoveryRequests.length,
-            queueAgentsStateRequests.length,
+            discoveryRequests.length + queueAgentsStateRequests.length,
         );
 
         discoveryServersStatuses = _.reduce(
