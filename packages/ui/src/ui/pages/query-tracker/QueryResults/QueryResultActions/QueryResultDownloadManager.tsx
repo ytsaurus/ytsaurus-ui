@@ -1,6 +1,5 @@
 import {QueryResultColumn} from '../../module/query_result/types';
 import qs from 'qs';
-import PropTypes from 'prop-types';
 import React, {useMemo, useState} from 'react';
 import {useSelector} from 'react-redux';
 import {getCluster} from '../../../../store/selectors/global';
@@ -9,15 +8,12 @@ import {getDownloadQueryResultURL} from '../../module/api';
 import {getQueryResult} from '../../module/query_result/selectors';
 import {RootState} from '../../../../store/reducers';
 import {useThunkDispatch} from '../../../../store/thunkDispatch';
+import {FIX_MY_TYPE} from '../../../../../@types/types';
 
+/**
+ * TODO: get rid of inheritance from DownloadManager
+ */
 export class QueryResultTableDownloadManager extends DownloadManager {
-    static propTypes = {
-        ...super.propTypes,
-        queryId: PropTypes.string.isRequired,
-        resultIndex: PropTypes.number.isRequired,
-        getDownloadBaseUrl: PropTypes.func,
-    };
-
     getDownloadParams() {
         const {value: output_format, error} = this.getOutputFormat();
         const {format} = this.state;
@@ -34,10 +30,12 @@ export class QueryResultTableDownloadManager extends DownloadManager {
     }
 
     getDownloadLink() {
-        const {getDownloadBaseUrl} = this.props;
+        const {getDownloadBaseUrl} = this.props as FIX_MY_TYPE;
         const {rowsMode, startRow, numRows} = this.state;
         const cursor =
-            rowsMode === 'range' ? {start: startRow, end: startRow + numRows} : undefined;
+            rowsMode === 'range'
+                ? {start: startRow as number, end: (startRow as number) + (numRows as number)}
+                : undefined;
         const base = getDownloadBaseUrl(cursor);
 
         const {query, error} = this.getDownloadParams();
@@ -76,11 +74,16 @@ export const QueryResultDownloadManager = React.memo(function QueryResultDownloa
     const [opened, setOpened] = useState(false);
     return (
         <QueryResultTableDownloadManager
-            getDownloadBaseUrl={(cursor: {start: number; end: number} | undefined) =>
-                dispatch(getDownloadQueryResultURL(cluster, queryId, resultIndex, cursor))
-            }
-            queryId={queryId}
-            resultIndex={resultIndex}
+            {...{
+                getDownloadBaseUrl: (cursor: {start: number; end: number} | undefined) =>
+                    dispatch(getDownloadQueryResultURL(cluster, queryId, resultIndex, cursor)),
+                proxy: '',
+                externalProxy: '',
+                toggleVisible: () => {},
+                transaction_id: undefined,
+                queryId,
+                resultIndex,
+            }}
             className={className}
             cluster={cluster}
             rowCount={result?.resultReady ? result?.meta.data_statistics.row_count : 0}

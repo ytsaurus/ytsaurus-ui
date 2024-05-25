@@ -1,6 +1,5 @@
-import React, {Component, Fragment} from 'react';
-import {connect} from 'react-redux';
-import PropTypes from 'prop-types';
+import React from 'react';
+import {ConnectedProps, connect} from 'react-redux';
 import unipika from '../../../../../common/thor/unipika';
 import {compose} from 'redux';
 import cn from 'bem-cn-lite';
@@ -26,7 +25,7 @@ import {getRowsPerTablePage, getShowDecoded} from '../../../../../store/selector
 import {getSchema} from '../../../../../store/selectors/navigation/tabs/schema';
 import {getPath, getTransaction} from '../../../../../store/selectors/navigation';
 import {getCluster, getCurrentClusterConfig} from '../../../../../store/selectors/global';
-import withVisible from '../../../../../hocs/withVisible';
+import withVisible, {WithVisibleProps} from '../../../../../hocs/withVisible';
 import {
     getAllColumns,
     getOffsetValue,
@@ -41,13 +40,15 @@ import {uiSettings} from '../../../../../config/ui-settings';
 import SeparatorInput, {prepareSeparatorValue} from './SeparatorInput';
 import UIFactory from '../../../../../UIFactory';
 import {makeDirectDownloadPath} from '../../../../../utils/navigation';
+import {RootState} from '../../../../../store/reducers';
+import {FIX_MY_TYPE} from '../../../../../types';
 
 const block = cn('table-download-manager');
 const messageBlock = cn('elements-message');
 
 const EXCEL_BASE_URL = uiSettings?.exportTableBaseUrl;
 
-function checkExcelExporter(cluster) {
+function checkExcelExporter(cluster: string) {
     if (!EXCEL_BASE_URL) {
         return Promise.resolve(false);
     }
@@ -58,44 +59,49 @@ function checkExcelExporter(cluster) {
         .catch(() => false);
 }
 
-export class DownloadManager extends Component {
-    static propTypes = {
-        // from parent
-        className: PropTypes.string.isRequired,
+type ReduxProps = Omit<ConnectedProps<typeof connector>, 'dispatch'>;
+type Props = ReduxProps & WithVisibleProps & {className?: string};
 
-        // from connect
-        isSchematicTable: PropTypes.bool.isRequired,
-        offsetValue: PropTypes.number.isRequired,
-        showDecoded: PropTypes.bool.isRequired,
-        allColumns: PropTypes.array.isRequired,
-        srcColumns: PropTypes.array.isRequired,
-        pageSize: PropTypes.number.isRequired,
-        rowCount: PropTypes.number.isRequired,
-        cluster: PropTypes.string.isRequired,
-        columns: PropTypes.array.isRequired,
-        loading: PropTypes.bool.isRequired,
-        path: PropTypes.string.isRequired,
+type State = {
+    format: 'dsv' | 'schemaful_dsv' | 'yamr' | 'yson' | 'json' | 'excel';
+    visible?: boolean;
+    excelExporter: boolean;
+    rowsMode: 'range' | 'all';
+    startRow: string | number;
+    numRows: string | number;
+    valueSentinel: string;
+    ysonFormat: 'text' | 'pretty' | 'binary';
+    columnsMode: 'all' | 'custom';
 
-        // from withVisible
-        visible: PropTypes.bool.isRequired,
-        handleShow: PropTypes.func.isRequired,
-        handleClose: PropTypes.func.isRequired,
-    };
+    schemafulDsvMissingMode: 'fail' | 'skip_row' | 'print_sentinel';
+    separators: {keyValue?: string; record?: string; field?: string};
 
-    static prepareValue(value) {
-        const parsedValue = value === '' ? '' : Number(value);
+    encodeUtf: boolean;
+    withHeaders: boolean;
+
+    withSubkey: boolean;
+    keyColumn?: string;
+    valueColumn?: string;
+    subkeyColumn?: string;
+
+    selectedColumns?: Props['columns'];
+};
+
+export class DownloadManager extends React.Component<Props, State> {
+    static prepareValue(value: string): number | string {
+        const parsedValue = Number(value || undefined); // we need `|| undefined` cause Number('') === 0
         return isNaN(parsedValue) ? value : parsedValue;
     }
 
-    static prepareColumns(columns) {
+    static prepareColumns(columns: Array<{checked?: boolean}>) {
         return _.filter(columns, ({checked}) => checked);
     }
 
-    static hasColumn(columns, name) {
-        return _.find(columns, (column) => column.name === name);
+    static hasColumn(columns: Array<{name?: string}>, name: string) {
+        return Boolean(_.find(columns, (column) => column.name === name));
     }
 
-    static getDerivedStateFromProps(nextProps, prevState) {
+    static getDerivedStateFromProps(nextProps: Props, prevState: State) {
         if (nextProps.visible !== prevState.visible) {
             const {columns} = nextProps;
             return {
@@ -105,27 +111,28 @@ export class DownloadManager extends Component {
                 selectedColumns: nextProps.allColumns,
 
                 withSubkey: nextProps.columns.length >= 3,
-                keyColumn: DownloadManager.hasColumn(columns, 'key') && 'key',
-                valueColumn: DownloadManager.hasColumn(columns, 'value') && 'value',
-                subkeyColumn: DownloadManager.hasColumn(columns, 'subkey') && 'subkey',
+                keyColumn: DownloadManager.hasColumn(columns, 'key') ? 'key' : undefined,
+                valueColumn: DownloadManager.hasColumn(columns, 'value') ? 'value' : undefined,
+                subkeyColumn: DownloadManager.hasColumn(columns, 'subkey') ? 'subkey' : undefined,
             };
         }
 
         return null;
     }
 
-    constructor(props) {
+    constructor(props: Props) {
         super(props);
 
         const {columns, visible, pageSize, offsetValue, allColumns} = props;
 
         this.state = {
             format: 'dsv',
+            visible,
             rowsMode: 'all',
             valueSentinel: '',
             ysonFormat: 'text',
             columnsMode: 'all',
-            schemafulDsvMissingMode: 'fail',
+            schemafulDsvMissingMode: 'fail', //print_sentinel
 
             separators: {
                 keyValue: '=',
@@ -137,11 +144,10 @@ export class DownloadManager extends Component {
             withHeaders: true,
 
             withSubkey: columns.length >= 3,
-            keyColumn: DownloadManager.hasColumn(columns, 'key') && 'key',
-            valueColumn: DownloadManager.hasColumn(columns, 'value') && 'value',
-            subkeyColumn: DownloadManager.hasColumn(columns, 'subkey') && 'subkey',
+            keyColumn: DownloadManager.hasColumn(columns, 'key') ? 'key' : undefined,
+            valueColumn: DownloadManager.hasColumn(columns, 'value') ? 'value' : undefined,
+            subkeyColumn: DownloadManager.hasColumn(columns, 'subkey') ? 'subkey' : undefined,
 
-            visible: visible,
             numRows: pageSize,
             startRow: offsetValue,
             selectedColumns: allColumns,
@@ -165,7 +171,7 @@ export class DownloadManager extends Component {
             separators,
         } = this.state;
 
-        const currentAttributes = {};
+        const currentAttributes: Record<string, any> = {};
         const outputFormat = {
             $value: format,
             $attributes: currentAttributes,
@@ -208,14 +214,14 @@ export class DownloadManager extends Component {
             currentAttributes['columns'] = this.prepareColumnsForColumnMode(false);
         }
 
-        const errors = [];
+        const errors: Array<string> = [];
 
-        const collectErrors = ({value, error}) => {
+        function collectErrors<T>({value, error}: {value: T; error?: string}) {
             if (error) {
                 errors.push(error);
             }
             return value;
-        };
+        }
 
         if (format === 'schemaful_dsv' || format === 'dsv') {
             currentAttributes['field_separator'] = collectErrors(
@@ -247,7 +253,7 @@ export class DownloadManager extends Component {
         if (rowsMode === 'range') {
             const {startRow, numRows} = this.state;
 
-            return '[#' + startRow + ':#' + (startRow + numRows) + ']';
+            return '[#' + startRow + ':#' + (String(startRow) + String(numRows)) + ']';
         } else {
             return '';
         }
@@ -312,7 +318,7 @@ export class DownloadManager extends Component {
 
         return {
             dsv: {
-                name: 'dsv',
+                name: 'dsv' as const,
                 caption: 'TSKV',
                 description:
                     'Tab-separated key-value format. ' +
@@ -321,7 +327,7 @@ export class DownloadManager extends Component {
                 show: true,
             },
             schemaful_dsv: {
-                name: 'schemaful_dsv',
+                name: 'schemaful_dsv' as const,
                 caption: 'Schemaful DSV',
                 description: [
                     'Tab-separated format with fixed, ordered set of columns.',
@@ -331,7 +337,7 @@ export class DownloadManager extends Component {
                 show: true,
             },
             yamr: {
-                name: 'yamr',
+                name: 'yamr' as const,
                 caption: 'YAMR',
                 description:
                     'Legacy tab-separated format with fixed set of columns used in YAMR. ' +
@@ -341,14 +347,14 @@ export class DownloadManager extends Component {
                 show: true,
             },
             yson: {
-                name: 'yson',
+                name: 'yson' as const,
                 caption: 'YSON',
                 description: 'Yet-another Serialized Object Notation.',
                 doc: this.makeDocsUrl('#yson'),
                 show: true,
             },
             json: {
-                name: 'json',
+                name: 'json' as const,
                 caption: 'JSON Lines',
                 description:
                     'JSON Lines text format, also called newline-delimited JSON (JavaScript Serialized Object Notation).',
@@ -356,7 +362,7 @@ export class DownloadManager extends Component {
                 show: true,
             },
             excel: {
-                name: 'excel',
+                name: 'excel' as const,
                 caption: 'Excel',
                 description: '',
                 doc: docsUrl(UIFactory.docsUrls['storage:excel#skachivanie']),
@@ -373,32 +379,26 @@ export class DownloadManager extends Component {
         }));
     }
 
-    changeFormat = (format) => this.setState({format});
-    changeNumRows = (numRows) => this.setState({numRows});
-    changeStartRow = (startRow) => this.setState({startRow});
-    changeRowsMode = (rowsMode) => this.setState({rowsMode});
-    changeKeyColumn = (keyColumn) => this.setState({keyColumn});
-    changeYsonFormat = (ysonFormat) => this.setState({ysonFormat});
-    changeValueColumn = (valueColumn) => this.setState({valueColumn});
-    changeColumnsMode = (columnsMode) => this.setState({columnsMode});
-    changeSubkeyColumn = (subkeyColumn) => this.setState({subkeyColumn});
-    changeValueSentinel = (valueSentinel) => this.setState({valueSentinel});
-    changeSelectedColumns = (selectedColumns) => this.setState({selectedColumns});
-    changeSchemafulDsvMissingMode = (schemafulDsvMissingMode) =>
+    changeFormat = (format: State['format']) => this.setState({format});
+    changeNumRows = (numRows: State['numRows']) => this.setState({numRows});
+    changeStartRow = (startRow: State['startRow']) => this.setState({startRow});
+    changeRowsMode = (rowsMode: State['rowsMode']) => this.setState({rowsMode});
+    changeKeyColumn = (keyColumn: State['keyColumn']) => this.setState({keyColumn});
+    changeYsonFormat = (ysonFormat: State['ysonFormat']) => this.setState({ysonFormat});
+    changeValueColumn = (valueColumn: State['valueColumn']) => this.setState({valueColumn});
+    changeColumnsMode = (columnsMode: State['columnsMode']) => this.setState({columnsMode});
+    changeSubkeyColumn = (subkeyColumn: State['subkeyColumn']) => this.setState({subkeyColumn});
+    changeValueSentinel = (valueSentinel: State['valueSentinel']) => this.setState({valueSentinel});
+    changeSelectedColumns = (selectedColumns: State['selectedColumns']) =>
+        this.setState({selectedColumns});
+    changeSchemafulDsvMissingMode = (schemafulDsvMissingMode: State['schemafulDsvMissingMode']) =>
         this.setState({schemafulDsvMissingMode});
 
     toggleEncodeUtf = () => this.setState((prevState) => ({encodeUtf: !prevState.encodeUtf}));
     toggleWithSubkey = () => this.setState((prevState) => ({withSubkey: !prevState.withSubkey}));
     toggleWithHeaders = () => this.setState((prevState) => ({withHeaders: !prevState.withHeaders}));
 
-    handleColumnsChange = ({items}) => this.changeSelectedColumns(items);
-    handleRowsModeChange = (evt) => this.changeRowsMode(evt.target.value);
-    handleYsonFormatChange = (evt) => this.changeYsonFormat(evt.target.value);
-    handleColumnsModeChange = (evt) => this.changeColumnsMode(evt.target.value);
-    handleSchemafulDsvMissingModeChange = (evt) =>
-        this.changeSchemafulDsvMissingMode(evt.target.value);
-
-    parseColumn(column, useQuotes) {
+    parseColumn(column: string, useQuotes: boolean) {
         const {showDecoded} = this.props;
         const parsedColumn = showDecoded ? unipika.decode(column) : column;
 
@@ -435,11 +435,12 @@ export class DownloadManager extends Component {
 
                     return columns;
                 },
-                [],
+                [] as Array<string>,
             );
 
             return _.map(preparedColumns, (column) => this.parseColumn(column, useQuotes));
         }
+        return undefined;
     }
 
     prepareYamrColumns() {
@@ -457,17 +458,19 @@ export class DownloadManager extends Component {
 
     renderPaginator() {
         const {rowCount} = this.props;
-        const {startRow, numRows} = this.state;
 
-        const isStartRowEmpty = startRow === 0;
-        const isNumRowsInvalid = typeof numRows !== 'number';
-        const isStartRowInvalid = typeof startRow !== 'number';
+        const isStartRowEmpty = this.state.startRow === 0;
+        const isNumRowsInvalid = typeof this.state.numRows !== 'number';
+        const isStartRowInvalid = typeof this.state.startRow !== 'number';
+
+        const startRow = Number(this.state.startRow);
+        const numRows = Number(this.state.numRows);
 
         return (
             <Pagination
                 showInput
                 inputValue={String(startRow)}
-                onChange={(value) => {
+                onChange={(value: string) => {
                     const row = DownloadManager.prepareValue(value);
                     this.changeStartRow(row);
                 }}
@@ -479,7 +482,7 @@ export class DownloadManager extends Component {
                 }}
                 previous={{
                     handler: () => {
-                        const row = Math.max(startRow - numRows, 0);
+                        const row = Math.max((startRow as number) - (numRows as number), 0);
                         this.changeStartRow(row);
                     },
                     disabled: isStartRowEmpty || isStartRowInvalid || isNumRowsInvalid,
@@ -511,13 +514,13 @@ export class DownloadManager extends Component {
         const {rowsMode, numRows} = this.state;
 
         return (
-            <Fragment>
+            <React.Fragment>
                 <div className="elements-form__label">Rows</div>
                 <RadioButton
                     size="m"
                     value={rowsMode}
                     name="download-manager-row-mode"
-                    onChange={this.handleRowsModeChange}
+                    onChange={(evt) => this.changeRowsMode(evt.target.value as State['rowsMode'])}
                     items={[
                         {value: 'all', text: 'All'},
                         {value: 'range', text: 'Range'},
@@ -536,7 +539,7 @@ export class DownloadManager extends Component {
                             <Filter
                                 autofocus={false}
                                 value={String(numRows)}
-                                invalid={isNaN(numRows) || numRows === ''}
+                                invalid={isNaN(numRows as number) || numRows === ''}
                                 onChange={(value) => {
                                     const num = DownloadManager.prepareValue(value);
                                     this.changeNumRows(num);
@@ -545,7 +548,7 @@ export class DownloadManager extends Component {
                         </div>
                     </div>
                 )}
-            </Fragment>
+            </React.Fragment>
         );
     }
 
@@ -554,13 +557,15 @@ export class DownloadManager extends Component {
         const {srcColumns} = this.props;
 
         return (
-            <Fragment>
+            <React.Fragment>
                 <div className="elements-form__label">Columns</div>
                 <RadioButton
                     size="m"
                     value={columnsMode}
                     name="download-manager-columns-mode"
-                    onChange={this.handleColumnsModeChange}
+                    onChange={(evt) =>
+                        this.changeColumnsMode(evt.target.value as State['columnsMode'])
+                    }
                     items={[
                         {value: 'all', text: 'All'},
                         {value: 'custom', text: 'Custom'},
@@ -571,13 +576,15 @@ export class DownloadManager extends Component {
                     <ColumnSelector
                         isSortable={format === 'schemaful_dsv'}
                         className={block('columns-selector')}
-                        onChange={this.handleColumnsChange}
+                        onChange={({items}: FIX_MY_TYPE) =>
+                            this.changeSelectedColumns(items as FIX_MY_TYPE)
+                        }
                         items={selectedColumns}
                         srcItems={srcColumns}
                         isHeadless
                     />
                 )}
-            </Fragment>
+            </React.Fragment>
         );
     }
 
@@ -592,7 +599,11 @@ export class DownloadManager extends Component {
                         size="m"
                         value={schemafulDsvMissingMode}
                         name="download-manager-schemaful-dsv-mode"
-                        onChange={this.handleSchemafulDsvMissingModeChange}
+                        onChange={(evt) =>
+                            this.changeSchemafulDsvMissingMode(
+                                evt.target.value as State['schemafulDsvMissingMode'],
+                            )
+                        }
                         items={[
                             {value: 'fail', text: 'Fail'},
                             {value: 'skip_row', text: 'Skip row'},
@@ -643,19 +654,19 @@ export class DownloadManager extends Component {
         );
     }
 
-    setKeyValueSeparator = (v) => {
+    setKeyValueSeparator = (v?: string) => {
         this.onSeparatorChange('keyValue', v);
     };
 
-    setFieldSeparator = (v) => {
+    setFieldSeparator = (v?: string) => {
         this.onSeparatorChange('field', v);
     };
 
-    setRecordSeparator = (v) => {
+    setRecordSeparator = (v?: string) => {
         this.onSeparatorChange('record', v);
     };
 
-    onSeparatorChange(separatorType, value) {
+    onSeparatorChange(separatorType: keyof State['separators'], value?: string) {
         this.setState({
             separators: {
                 ...this.state.separators,
@@ -738,7 +749,9 @@ export class DownloadManager extends Component {
                     size="m"
                     value={ysonFormat}
                     name="download-manager-yson-format"
-                    onChange={this.handleYsonFormatChange}
+                    onChange={(evt) =>
+                        this.changeYsonFormat(evt.target.value as State['ysonFormat'])
+                    }
                     items={[
                         {value: 'text', text: 'Text'},
                         {value: 'pretty', text: 'Pretty'},
@@ -822,7 +835,7 @@ export class DownloadManager extends Component {
         );
     }
 
-    renderConfirmButton = (className) => {
+    renderConfirmButton = (className: string) => {
         const {format} = this.state;
 
         const {url, error} =
@@ -831,7 +844,6 @@ export class DownloadManager extends Component {
         return (
             <Button
                 size="m"
-                type="link"
                 view="action"
                 className={className}
                 title="Download"
@@ -885,17 +897,17 @@ export class DownloadManager extends Component {
     }
 }
 
-const mapStateToProps = (state) => {
-    const {loading} = state.navigation.content.table;
+const mapStateToProps = (state: RootState) => {
+    const {loading}: {loading: boolean} = state.navigation.content.table;
 
-    const pageSize = getRowsPerTablePage(state);
-    const showDecoded = getShowDecoded(state);
+    const pageSize: number = getRowsPerTablePage(state);
+    const showDecoded: boolean = getShowDecoded(state);
     const offsetValue = getOffsetValue(state);
-    const allColumns = getAllColumns(state);
+    const allColumns: Array<{name: string; checked: boolean}> = getAllColumns(state);
     const srcColumns = getSrcColumns(state);
     const rowCount = getRowCount(state);
     const cluster = getCluster(state);
-    const columns = getColumns(state);
+    const columns: typeof allColumns = getColumns(state);
     const schema = getSchema(state);
     const path = getPath(state);
     const {proxy, externalProxy} = getCurrentClusterConfig(state);
@@ -920,5 +932,5 @@ const mapStateToProps = (state) => {
         transaction_id,
     };
 };
-
-export default compose(connect(mapStateToProps), withVisible)(DownloadManager);
+const connector = connect(mapStateToProps);
+export default compose(connector, withVisible)(DownloadManager);

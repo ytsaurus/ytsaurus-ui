@@ -81,9 +81,11 @@ export const getTableType = createSelector(
 // request one more item per page to detect reaching end of the table
 export const getRequestedPageSize = createSelector(getPageSize, (pageSize) => pageSize + 1);
 
-export const getRowCount = createSelector(getAttributes, (attributes) =>
-    ypath.getValue(attributes, '/chunk_row_count'),
-);
+export const getRowCount = createSelector(getAttributes, (attributes) => {
+    /** @type {number} */
+    const res = ypath.getValue(attributes, '/chunk_row_count');
+    return res;
+});
 
 // show one item less than requested unless we got less items than requested
 // This allows to know what the first key of the next page is without
