@@ -69,14 +69,15 @@ class Chunks extends Component {
         const columns = {};
 
         _.each(types, (type) => {
-            columns[type.name] = _.extend(type, {
+            columns[type.name] = {
+                ...type,
                 get: function (cellData) {
                     return cellData[type.name];
                 },
                 caption: Chunks._formatChunkName(type.name),
                 align: 'right',
                 sort: true,
-            });
+            };
         });
 
         columns.cell_tag = {
