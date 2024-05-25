@@ -30,13 +30,18 @@ const userPageSize = settings[getPath(ROWS_PER_TABLE_PAGE, NAVIGATION)];
 const userCellSize = settings[getPath(MAXIMUM_TABLE_STRING_SIZE, NAVIGATION)];
 
 const ephemeralState = {
+    /** @type {boolean} */
     loading: false,
+    /** @type {boolean} */
     loaded: false,
     error: false,
     errorData: {},
 
+    /** @type {Array<{name: string; checked: boolean; keyColumn: boolean; sortOrder: 'ascending' | 'descending'}>} */
     columns: [],
+    /** @type Array<string> */
     columnsOrder: [],
+    /** @type {Array<string>} */
     omittedColumns: [],
     deniedKeyColumns: [],
     rows: [],
@@ -56,7 +61,9 @@ const ephemeralState = {
 const persistedState = {
     isDynamic: false,
     isStrict: false,
+    /** @type {'row' | 'key'} */
     offsetMode: 'row',
+    /** @type {number  | string} */
     offsetValue: '',
     pageSize: userPageSize,
     cellSize: userCellSize,
