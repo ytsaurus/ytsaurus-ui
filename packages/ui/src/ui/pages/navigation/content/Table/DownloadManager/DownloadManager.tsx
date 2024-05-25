@@ -7,10 +7,9 @@ import _ from 'lodash';
 import qs from 'qs';
 import axios from 'axios';
 
-import {Checkbox, TextInput} from '@gravity-ui/uikit';
+import {Checkbox, RadioButton, TextInput} from '@gravity-ui/uikit';
 
 import ColumnSelector from '../../../../../components/ColumnSelector/ColumnSelector';
-import RadioButton from '../../../../../components/RadioButton/RadioButton';
 import Pagination from '../../../../../components/Pagination/Pagination';
 import HelpLink from '../../../../../components/HelpLink/HelpLink';
 import Filter from '../../../../../components/Filter/Filter';
@@ -520,10 +519,10 @@ export class DownloadManager extends React.Component<Props, State> {
                     size="m"
                     value={rowsMode}
                     name="download-manager-row-mode"
-                    onChange={(evt) => this.changeRowsMode(evt.target.value as State['rowsMode'])}
-                    items={[
-                        {value: 'all', text: 'All'},
-                        {value: 'range', text: 'Range'},
+                    onUpdate={(value) => this.changeRowsMode(value)}
+                    options={[
+                        {value: 'all', content: 'All'},
+                        {value: 'range', content: 'Range'},
                     ]}
                 />
 
@@ -563,12 +562,10 @@ export class DownloadManager extends React.Component<Props, State> {
                     size="m"
                     value={columnsMode}
                     name="download-manager-columns-mode"
-                    onChange={(evt) =>
-                        this.changeColumnsMode(evt.target.value as State['columnsMode'])
-                    }
-                    items={[
-                        {value: 'all', text: 'All'},
-                        {value: 'custom', text: 'Custom'},
+                    onUpdate={(value) => this.changeColumnsMode(value)}
+                    options={[
+                        {value: 'all', content: 'All'},
+                        {value: 'custom', content: 'Custom'},
                     ]}
                 />
 
@@ -599,15 +596,11 @@ export class DownloadManager extends React.Component<Props, State> {
                         size="m"
                         value={schemafulDsvMissingMode}
                         name="download-manager-schemaful-dsv-mode"
-                        onChange={(evt) =>
-                            this.changeSchemafulDsvMissingMode(
-                                evt.target.value as State['schemafulDsvMissingMode'],
-                            )
-                        }
-                        items={[
-                            {value: 'fail', text: 'Fail'},
-                            {value: 'skip_row', text: 'Skip row'},
-                            {value: 'print_sentinel', text: 'Print sentinel'},
+                        onUpdate={(value) => this.changeSchemafulDsvMissingMode(value)}
+                        options={[
+                            {value: 'fail', content: 'Fail'},
+                            {value: 'skip_row', content: 'Skip row'},
+                            {value: 'print_sentinel', content: 'Print sentinel'},
                         ]}
                     />
                 </div>
@@ -749,13 +742,11 @@ export class DownloadManager extends React.Component<Props, State> {
                     size="m"
                     value={ysonFormat}
                     name="download-manager-yson-format"
-                    onChange={(evt) =>
-                        this.changeYsonFormat(evt.target.value as State['ysonFormat'])
-                    }
-                    items={[
-                        {value: 'text', text: 'Text'},
-                        {value: 'pretty', text: 'Pretty'},
-                        {value: 'binary', text: 'Binary'},
+                    onUpdate={(value) => this.changeYsonFormat(value)}
+                    options={[
+                        {value: 'text', content: 'Text'},
+                        {value: 'pretty', content: 'Pretty'},
+                        {value: 'binary', content: 'Binary'},
                     ]}
                 />
             </div>
