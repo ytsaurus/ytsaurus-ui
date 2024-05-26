@@ -165,6 +165,8 @@ export function getOperation(
                         type: GET_OPERATION.SUCCESS,
                         data: {operation, actions, details},
                     });
+
+                    dispatch(getJobsMonitoringDescriptors(id));
                 };
 
                 if (operation.inIntermediateState()) {
@@ -172,8 +174,6 @@ export function getOperation(
                 } else {
                     dispatchOperationSuccess();
                 }
-
-                dispatch(getJobsMonitoringDescriptors(id));
             })
             .catch((error) => {
                 const {operations} = getState();
