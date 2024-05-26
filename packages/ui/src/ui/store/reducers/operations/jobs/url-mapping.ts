@@ -75,6 +75,11 @@ export const jobsParams: LocationParameters = {
         initialState: initialWithStderrFilter,
         type: 'bool',
     },
+    withMonitoringDescriptor: {
+        stateKey: 'operations.jobs.filters.withMonitoringDescriptor.value',
+        initialState: jobsInitialState.filters.withMonitoringDescriptor.value,
+        type: 'bool',
+    },
     withFailContext: {
         stateKey: 'operations.jobs.filters.withFailContext.value',
         initialState: initialWithFailContextFilter,
