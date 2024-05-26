@@ -92,7 +92,7 @@ function calculateItemsWithoutCounter(
     );
 }
 
-const attributeItems = [
+export const ATTRIBUTE_ITEMS = [
     {
         value: 'withStderr',
         text: 'With stderr',
@@ -105,14 +105,15 @@ const attributeItems = [
         value: 'withSpec',
         text: 'With full input',
     },
+    {
+        value: 'withCompetitors',
+        text: 'With competitive jobs',
+    },
+    {
+        value: 'withMonitoringDescriptor',
+        text: 'With monitoring descriptor',
+    },
 ];
-
-const competitiveItem = {
-    value: 'withCompetitors',
-    text: 'With competitive jobs',
-};
-
-export const ATTRIBUTE_ITEMS = [...attributeItems, competitiveItem];
 export const ATTRIBUTE_ITEM_NAMES = _.map(ATTRIBUTE_ITEMS, ({value}) => value);
 
 export const getOperationsListFilterParameters = createSelector(

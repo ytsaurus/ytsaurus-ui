@@ -57,6 +57,7 @@ function getJobFilterParameters(filters, sortState) {
         type: getValueIfNotDefault(filters.type),
         address: filterBy === 'address' ? getValueIfNotDefault(filters.address) : undefined,
         with_stderr: getValueIfNotDefault(filters.withStderr),
+        with_monitoring_descriptor: getValueIfNotDefault(filters.withMonitoringDescriptor),
         with_fail_context: getValueIfNotDefault(filters.withFailContext),
         with_spec: getValueIfNotDefault(filters.withSpec),
         with_competitors: getValueIfNotDefault(filters.withCompetitors),

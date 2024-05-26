@@ -70,6 +70,10 @@ export const initialState = {
             value: false,
             defaultValue: false,
         },
+        withMonitoringDescriptor: {
+            value: false,
+            defaultValue: false,
+        },
     },
     inputPaths: {
         status: LOADING_STATUS.UNINITIALIZED,
