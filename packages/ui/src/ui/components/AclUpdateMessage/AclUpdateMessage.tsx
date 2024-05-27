@@ -39,9 +39,9 @@ function AclUpdateMessageImpl(props: Props) {
                 </Link>
             </span>
             for{' '}
-            <div className={block('subject')}>
+            <span className={block('subject')}>
                 <FormattedSubject {...subject} />
-            </div>
+            </span>
             .
         </div>
     );
