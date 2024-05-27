@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.40.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.39.0...ui-v1.40.0) (2024-05-27)
+
+
+### Features
+
+* **Components/Nodes:** use better sorting for progress columns [YTFRONT-3801] ([3502577](https://github.com/ytsaurus/ytsaurus-ui/commit/3502577afb59ee36a05d975e0e69b8647ece9d5d))
+
 ## [1.39.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.38.2...ui-v1.39.0) (2024-05-23)
 
 
