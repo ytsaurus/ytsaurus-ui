@@ -621,7 +621,7 @@ class ACL extends Component<Props> {
                 <SegmentControl
                     className={block('meta-overview')}
                     background="neutral-light"
-                    groups={[segments, counters]}
+                    groups={[segments, counters].filter(({length}) => length > 0)}
                 />
                 {aclMode !== AclMode.COLUMN_GROUPS_PERMISSISONS && (
                     <MyPermissions userPermissions={userPermissions} />
