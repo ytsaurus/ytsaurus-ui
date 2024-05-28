@@ -1,5 +1,27 @@
 # Changelog
 
+## [1.41.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.40.0...ui-v1.41.0) (2024-05-28)
+
+### Features
+
+* **DownloadManager/Excel:** add 'Number precision mode' option [YTFRONT-4150] ([5a3a641](https://github.com/ytsaurus/ytsaurus-ui/commit/5a3a641a0427700df566d5b35f3a1c2581c9ff50))
+* **Navigation/CreateTableModal:** add 'Optimize for' option [YTFRONT-4139] ([be84c6a](https://github.com/ytsaurus/ytsaurus-ui/commit/be84c6a288647b02775e9cbc288b865ffc11538b))
+* **Operation/Jobs:** add 'with_monitoring_descriptor' filter [YTFRONT-4078] ([aa575c9](https://github.com/ytsaurus/ytsaurus-ui/commit/aa575c9e3427c92f6f935fd5b25ef88887f2a911))
+
+
+### Bug Fixes
+
+* **AclUpdateMessage:** minor fix for layout ([ed85d7f](https://github.com/ytsaurus/ytsaurus-ui/commit/ed85d7fab663ddc1a75c614aabb6a062a635b329))
+* **ACL:** minor fix for meta-block [YTFRONT-3836] ([a3859d0](https://github.com/ytsaurus/ytsaurus-ui/commit/a3859d059efff237bbd7f58b25b67f40bca8b99e))
+* **Bundles:** memory limit [YTFRONT-4170] ([26491e0](https://github.com/ytsaurus/ytsaurus-ui/commit/26491e0096c0c95371a88ea0d7d13cf14cf65018))
+* **Bundles:** memory limit [YTFRONT-4170] ([4be139c](https://github.com/ytsaurus/ytsaurus-ui/commit/4be139c64a7538e038443cdd8100150c1b8a00f8))
+* **Operation/JobsMonitor:** tab should be displayed without delay [YTFRONT-4077] ([9673252](https://github.com/ytsaurus/ytsaurus-ui/commit/96732524d0025dff154710c1b5b814da1d01865d))
+* **System/Master:** bring back 'Queue agents' [YTFRONT-4145] ([1a82e8e](https://github.com/ytsaurus/ytsaurus-ui/commit/1a82e8e88e9ce3069c279a4b931866a30734629a))
+* **Table/Schema:** minor css fix [YTFRONT-4166] ([6b9cca4](https://github.com/ytsaurus/ytsaurus-ui/commit/6b9cca40f314fd544f3f90a280b1db72f48404db))
+* **Scheduling/ACL:** reload acl when pool tree changed [YTFRONT-4172] ([b697bf3](https://github.com/ytsaurus/ytsaurus-ui/commit/b697bf3e40fdc97a07d3d009201ec6e5bdafef17))
+* **TimelinePicker:** minor fix [YTFRONT-4180] ([20326c0](https://github.com/ytsaurus/ytsaurus-ui/commit/20326c0bb47889a0d0ffe8fd55b25b6b11681ab1))
+
+
 ## [1.40.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.39.0...ui-v1.40.0) (2024-05-27)
 
 
