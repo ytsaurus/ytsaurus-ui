@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.41.1](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.41.0...ui-v1.41.1) (2024-05-28)
+
+
+### Bug Fixes
+
+* bring back 'npm run build:lib' ([417b21e](https://github.com/ytsaurus/ytsaurus-ui/commit/417b21ea08564e68c07f9081e90dc2cfdb3d504c))
+
 ## [1.41.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.40.0...ui-v1.41.0) (2024-05-28)
 
 ### Features
