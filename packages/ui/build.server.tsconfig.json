@@ -1,0 +1,12 @@
+{
+  "extends": "@gravity-ui/tsconfig/tsconfig.json",
+  "compilerOptions": {
+    "declaration": true,
+    "allowJs": true,
+    "outDir": "build/cjs"
+  },
+  "include": ["src/server/**/*", "src/@types/*.d.ts", "src/shared/**/*"],
+  "exclude": ["src/ui/"],
+  "types": ["node"]
+}
+  
