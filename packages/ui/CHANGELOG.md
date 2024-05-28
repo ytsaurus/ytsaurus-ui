@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.41.2](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.41.1...ui-v1.41.2) (2024-05-28)
+
+
+### Bug Fixes
+
+* bring back assets to package @ytsaurus/ui ([a86e2d0](https://github.com/ytsaurus/ytsaurus-ui/commit/a86e2d06880417b5c19c1859c8f6598f1c611291))
+
 ## [1.41.1](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.41.0...ui-v1.41.1) (2024-05-28)
 
 
