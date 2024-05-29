@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.42.1](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.42.0...ui-v1.42.1) (2024-05-29)
+
+
+### Bug Fixes
+
+* names of cookies with a colon [[#587](https://github.com/ytsaurus/ytsaurus-ui/issues/587)] ([79a4254](https://github.com/ytsaurus/ytsaurus-ui/commit/79a42545c1a2684fb10aaa20e754c9fa60a9ae14))
+
 ## [1.42.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.41.2...ui-v1.42.0) (2024-05-29)
 
 
