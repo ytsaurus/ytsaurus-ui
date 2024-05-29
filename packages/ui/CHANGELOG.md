@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.42.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.41.2...ui-v1.42.0) (2024-05-29)
+
+
+### Features
+
+* add footer factory method [YTFRONT-4173] ([616ff0b](https://github.com/ytsaurus/ytsaurus-ui/commit/616ff0b2d8786df0eb1d05f7f45169984cb20162))
+
+
+### Bug Fixes
+
+* minor fix ([e678639](https://github.com/ytsaurus/ytsaurus-ui/commit/e678639cf25668743326ede2ec11e95907bc6f85))
+
 ## [1.41.2](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.41.1...ui-v1.41.2) (2024-05-28)
 
 
