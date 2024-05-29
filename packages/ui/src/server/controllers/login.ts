@@ -3,7 +3,12 @@ import axios from 'axios';
 import _ from 'lodash';
 import {YT_CYPRESS_COOKIE_NAME} from '../../shared/constants';
 import {getUserYTApiSetup, getYTApiClusterSetup} from '../components/requestsSetup';
-import {UNEXPECTED_PIPE_AXIOS_RESPONSE, pipeAxiosResponse, sendAndLogError} from '../utils';
+import {
+    UNEXPECTED_PIPE_AXIOS_RESPONSE,
+    makeAuthClusterCookieName,
+    pipeAxiosResponse,
+    sendAndLogError,
+} from '../utils';
 import crypto from 'crypto';
 
 // @ts-ignore
@@ -50,7 +55,7 @@ export async function handleLogin(req: Request, res: Response) {
                                         ret.push(
                                             item.replace(
                                                 YT_CYPRESS_COOKIE_NAME,
-                                                `${ytAuthCluster}:${YT_CYPRESS_COOKIE_NAME}`,
+                                                makeAuthClusterCookieName(ytAuthCluster),
                                             ),
                                         );
                                     }
