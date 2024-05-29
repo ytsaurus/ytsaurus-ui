@@ -10,7 +10,7 @@ import {
     settingsGetItem,
     settingsSetItem,
 } from './controllers/settings';
-import {homeIndex, homeRedirect} from './controllers/home';
+import {homeIndexFactory, homeRedirect} from './controllers/home';
 import {handleClusterInfo} from './controllers/cluster-info';
 
 import {clusterAuthStatus, clusterVersions} from './controllers/clusters';
@@ -25,7 +25,7 @@ import {chytProxyApi} from './controllers/chyt-api';
 import {oauthCallback, oauthLogin, oauthLogout} from './controllers/oauth-login';
 import {handleLogout} from './controllers/logout';
 
-const HOME_INDEX_TARGET: AppRouteDescription = {handler: homeIndex, ui: true};
+const HOME_INDEX_TARGET: AppRouteDescription = {handler: homeIndexFactory(), ui: true};
 
 const routes: AppRoutes = {
     'GET /:ytAuthCluster/change-password/': HOME_INDEX_TARGET,

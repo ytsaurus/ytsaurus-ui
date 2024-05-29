@@ -25,82 +25,85 @@ export function homeRedirect(req: Request, res: Response) {
     res.redirect(url);
 }
 
-export async function homeIndex(req: Request, res: Response) {
-    const isRoot = isRootPage(req.params.ytAuthCluster);
-    const cluster = isRoot ? undefined : req.params.ytAuthCluster;
+export function homeIndexFactory(layout: string = 'main') {
+    return async (req: Request, res: Response) => {
+        const isRoot = isRootPage(req.params.ytAuthCluster);
+        const cluster = isRoot ? undefined : req.params.ytAuthCluster;
 
-    try {
-        const url = await ServerFactory.getHomeRedirectedUrl(cluster, req);
-        if (url) {
-            return res.redirect(url);
+        try {
+            const url = await ServerFactory.getHomeRedirectedUrl(cluster, req);
+            if (url) {
+                return res.redirect(url);
+            }
+        } catch (e) {
+            req.ctx.logError('Failed to calculate redirects', e);
         }
-    } catch (e) {
-        req.ctx.logError('Failed to calculate redirects', e);
-    }
 
-    const {ctx} = req;
+        const {ctx} = req;
 
-    const {clusterConfig, ytConfig} = getClusterConfig(cluster);
-    const login = ytConfig.isLocalCluster ? 'root' : req.yt?.login;
-    // Refuse to serve localRemoteProxy requests erroneously delegated from main interface to another
-    // interface running in a container (instead of YT container)
-    if (_.isEmpty(clusterConfig) && cluster) {
-        if (!req.ctx.config.ytAllowRemoteLocalProxy && !isLocalModeByEnvironment()) {
-            res.redirect('/');
+        const {clusterConfig, ytConfig} = getClusterConfig(cluster);
+        const login = ytConfig.isLocalCluster ? 'root' : req.yt?.login;
+        // Refuse to serve localRemoteProxy requests erroneously delegated from main interface to another
+        // interface running in a container (instead of YT container)
+        if (_.isEmpty(clusterConfig) && cluster) {
+            if (!req.ctx.config.ytAllowRemoteLocalProxy && !isLocalModeByEnvironment()) {
+                res.redirect('/');
+                return;
+            }
+            res.status(404).send(
+                `No config for cluster <b>${encodeURIComponent(cluster)}</b> exists.` +
+                    '<div>If you are trying to connect to your local cluster please make sure:</div>' +
+                    '<ol><li>FQDN of the cluster is correct</li>' +
+                    '<li>The port is greater than or equal to 1000.</li></ol>',
+            );
             return;
         }
-        res.status(404).send(
-            `No config for cluster <b>${encodeURIComponent(cluster)}</b> exists.` +
-                '<div>If you are trying to connect to your local cluster please make sure:</div>' +
-                '<ol><li>FQDN of the cluster is correct</li>' +
-                '<li>The port is greater than or equal to 1000.</li></ol>',
-        );
-        return;
-    }
 
-    const useRemoteSettings = isRemoteSettingsConfigured();
+        const useRemoteSettings = isRemoteSettingsConfigured();
 
-    const settings = {
-        data: getDafaultUserSettings(req.ctx.config),
-        meta: {
-            useRemoteSettings,
-            errorMessage: undefined as string | undefined,
-        },
-    };
+        const settings = {
+            data: getDafaultUserSettings(req.ctx.config),
+            meta: {
+                useRemoteSettings,
+                errorMessage: undefined as string | undefined,
+            },
+        };
 
-    const settingsConfig = getSettingsConfig(cluster!);
+        const settingsConfig = getSettingsConfig(cluster!);
 
-    if (login && useRemoteSettings && settingsConfig.cluster) {
-        try {
-            await create({ctx, username: login, cluster: settingsConfig.cluster});
-            const userSettings = login
-                ? await get({ctx, username: login, cluster: settingsConfig.cluster})
-                : {};
-            settings.data = {...settings.data, ...userSettings};
-        } catch (e) {
-            const message = `Error in getting user settings for ${login}`;
-            req.ctx.logError(message, e);
+        if (login && useRemoteSettings && settingsConfig.cluster) {
+            try {
+                await create({ctx, username: login, cluster: settingsConfig.cluster});
+                const userSettings = login
+                    ? await get({ctx, username: login, cluster: settingsConfig.cluster})
+                    : {};
+                settings.data = {...settings.data, ...userSettings};
+            } catch (e) {
+                const message = `Error in getting user settings for ${login}`;
+                req.ctx.logError(message, e);
 
-            const errorMessage =
-                `Oh, no. ${message}. You are using default settings. ` +
-                'All settings changes will be saved in browser only.\n' +
-                'Try to reload page. If problem persists please report it via Bug Reporter.';
+                const errorMessage =
+                    `Oh, no. ${message}. You are using default settings. ` +
+                    'All settings changes will be saved in browser only.\n' +
+                    'Try to reload page. If problem persists please report it via Bug Reporter.';
 
-            settings.meta = {
-                ...settings.meta,
-                useRemoteSettings: false,
-                errorMessage,
-            };
+                settings.meta = {
+                    ...settings.meta,
+                    useRemoteSettings: false,
+                    errorMessage,
+                };
+            }
         }
-    }
 
-    const layoutConfig = await getLayoutConfig(req, {
-        login,
-        uid: req.yt?.uid,
-        cluster,
-        ytConfig,
-        settings,
-    });
-    const html = await ServerFactory.renderLayout(layoutConfig, req, res);
-    res.send(html);
+        const layoutConfig = await getLayoutConfig(req, {
+            login,
+            name: layout,
+            uid: req.yt?.uid,
+            cluster,
+            ytConfig,
+            settings,
+        });
+        const html = await ServerFactory.renderLayout(layoutConfig, req, res);
+        res.send(html);
+    }
 }

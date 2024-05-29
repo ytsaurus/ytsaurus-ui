@@ -238,7 +238,13 @@ export function getParamSetup(): Record<string, LocationParameters> {
 }
 
 export function registerLocationParameters(path: string, data: PathParameters) {
-    if (_.find(storeSetup, ([setupPath]) => setupPath === path)) {
+    const conflictInd = _.findIndex(storeSetup, ([setupPath]) => setupPath === path);
+    if (conflictInd !== -1) {
+        if (path === 'global') {
+            // allow to rewrite global params
+            storeSetup.splice(conflictInd, 1, [path, data]);
+            return;
+        }
         throw new Error(`Location parameters already defined for path '${path}'.`);
     }
     const matchedInd = _.findIndex(storeSetup, ([setupPath]) => match(setupPath, path));
@@ -251,10 +257,15 @@ export function registerLocationParameters(path: string, data: PathParameters) {
 
 export function mapLocationToState(state: RootState, location: LocationWithState) {
     const matchedState = _.find(storeSetup, ([path]) => match(path, location.pathname));
-    const findState = matchedState
-        ? matchedState
-        : _.find(storeSetup, ([setupPath]) => setupPath === 'global');
-    state = findState ? findState[1][1](state, location) : state;
+    const globalState = _.find(storeSetup, ([setupPath]) => setupPath === 'global');
+
+    if (globalState) {
+        state = globalState[1][1](state, location);
+    }
+    if (matchedState) {
+        state = matchedState[1][1](state, location);
+    }
+
     return state;
 }
 
