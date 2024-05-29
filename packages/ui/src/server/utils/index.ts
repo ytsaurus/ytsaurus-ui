@@ -5,6 +5,7 @@ import {AxiosError, AxiosResponse} from 'axios';
 import {AppContext} from '@gravity-ui/nodekit';
 import {isYTError} from '../../shared/utils';
 import {getApp} from '../ServerFactory';
+import {YT_CYPRESS_COOKIE_NAME} from '../../shared/constants';
 import path from 'path';
 
 export function isProductionEnv() {
@@ -200,3 +201,7 @@ export async function sendAndLogError(
 
     return res.status(status || 500).send({message: JSON.stringify(e)});
 }
+
+export const makeAuthClusterCookieName = (ytAuthCluster: string) => {
+    return `${ytAuthCluster}_${YT_CYPRESS_COOKIE_NAME}`;
+};

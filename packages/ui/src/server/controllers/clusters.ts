@@ -1,6 +1,5 @@
 import type {Request, Response} from 'express';
-import {YT_CYPRESS_COOKIE_NAME} from '../../shared/constants';
-import {sendError, sendResponse} from '../utils';
+import {makeAuthClusterCookieName, sendError, sendResponse} from '../utils';
 import {getVersions} from '../components/cluster-queries';
 import {getClustersFromConfig} from '../components/utils';
 
@@ -24,7 +23,7 @@ export function clusterAuthStatus(req: Request, res: Response) {
 
         data = Object.keys(clusters).reduce((ret, cluster) => {
             ret[cluster] = {
-                authorized: Boolean(req.cookies[`${cluster}:${YT_CYPRESS_COOKIE_NAME}`]),
+                authorized: Boolean(req.cookies[makeAuthClusterCookieName(cluster)]),
             };
 
             return ret;
