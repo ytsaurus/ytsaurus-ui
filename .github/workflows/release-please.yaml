@@ -32,6 +32,20 @@ jobs:
         run: |
           npm ci
 
+      - name: Tag for packages/ui
+        if: ${{ steps.release.outputs['packages/ui--release_created'] }}
+        run: |
+          set -x
+
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git remote add gh-token "https://${{ secrets.GITHUB_TOKEN }}@github.com/ytsaurus/ytsaurus-ui.git"
+
+          export TAG=${{ steps.release.outputs['packages/ui--tag_name'] }}
+
+          git tag -m "Release $TAG" -a $TAG ${{ steps.release.outputs['packages/ui--sha'] }}
+          git push gh-token $TAG
+
       # Release Please has already incremented versions and published tags, so we just
       # need to publish all unpublished versions to NPM here
       # See: https://github.com/lerna/lerna/tree/main/commands/publish#bump-from-package
