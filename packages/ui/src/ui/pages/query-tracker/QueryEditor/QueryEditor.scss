@@ -71,4 +71,15 @@
     &__error-line {
         background: var(--error-background);
     }
+
+    .selected-text {
+        z-index: 2;
+        position: absolute;
+        pointer-events: none;
+        opacity: 0.8;
+    }
+
+    .view-lines {
+        z-index: 3;
+    }
 }
