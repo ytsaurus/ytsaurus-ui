@@ -29,7 +29,7 @@ jobs:
             SOURCE_IMAGE=ytsaurus/ui:${{ inputs.stag }}
           fi
 
-          if [ "true" = "${{ inputs.nightly_target }}" ];
+          if [ "true" = "${{ inputs.nightly_target }}" ]; then
             TARGET_IMAMGE=ghcr.io/ytsaurus/ui-nightly:${{ inputs.ttag }}
           else
             TARGET_IMAMGE=ghcr.io/ytsaurus/ui:${{ inputs.ttag }}
