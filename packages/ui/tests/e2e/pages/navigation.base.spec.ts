@@ -13,7 +13,7 @@ test('Navigation - Content', async ({page}) => {
 
     await page.fill('input[placeholder="Filter..."]', 'users');
 
-    await page.waitForSelector('text="users"');
+    await page.waitForSelector('.map-node__content tbody tr:first-child :text("users")');
 
     const rowCount = await page.$eval('.map-node__content tbody', (node) => node.childElementCount);
     expect(rowCount).toBe(1);
