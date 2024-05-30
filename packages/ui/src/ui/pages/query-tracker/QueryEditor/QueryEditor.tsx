@@ -34,6 +34,8 @@ import {useQueryACO} from '../QueryACO/useQueryACO';
 import {useMonaco} from '../hooks/useMonaco';
 import {QueryEngine} from '../module/engines';
 import {MonacoLanguage} from '../../../constants/monaco';
+import hammer from '../../../common/hammer';
+import {updateTitle} from '../../../store/actions/global';
 
 const b = block('query-container');
 
@@ -274,15 +276,36 @@ const ResultView = React.memo(function ResultView({
 type ResultMode = 'full' | 'minimized' | 'split';
 export default function QueryEditor({
     onStartQuery,
+    showStatusInTitle,
 }: {
     onStartQuery?: (queryId: string) => boolean | void;
+    showStatusInTitle?: boolean;
 }) {
+    const dispatch = useDispatch();
     const query = useCurrentQuery();
     const {isQueryTrackerInfoLoading} = useQueryACO();
 
     const [resultViewMode, setResultViewMode] = useState<ResultMode>('minimized');
 
     const [partSizes, setSize] = useState([50, 50]);
+
+    useEffect(() => {
+        if (!query || !showStatusInTitle) return;
+
+        const startDate = query.start_time
+            ? hammer.format['DateTime'](query.start_time, {format: 'short'})
+            : '';
+        const title = query.annotations?.title || '';
+        const state = query.state?.toUpperCase() || '';
+
+        if (startDate || title || state) {
+            dispatch(
+                updateTitle({
+                    path: `${title} ${state} ${startDate} @ ${query.engine}`,
+                }),
+            );
+        }
+    }, [dispatch, query]);
 
     useEffect(() => {
         setResultViewMode('split');

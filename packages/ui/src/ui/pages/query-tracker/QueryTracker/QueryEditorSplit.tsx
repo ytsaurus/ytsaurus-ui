@@ -25,7 +25,7 @@ export const QueryEditorSplit: FC<Props> = ({
             onResizeEnd={setSize}
             getInitialSizes={sizes}
         >
-            {hideQueryEditor && <QueryEditor onStartQuery={onStartQuery} />}
+            {hideQueryEditor && <QueryEditor onStartQuery={onStartQuery} showStatusInTitle />}
             {fileEditorVisible && <FileEditor />}
         </FlexSplitPane>
     );

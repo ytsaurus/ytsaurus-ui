@@ -263,9 +263,9 @@ export function updateTitle({
     page,
     cluster,
 }: {
-    path: string;
-    page: string;
-    cluster: string;
+    path?: string;
+    page?: string;
+    cluster?: string;
 }): YTThunkAction {
     return (dispatch, getState) => {
         const clusters = getState().clustersMenu.clusters;
