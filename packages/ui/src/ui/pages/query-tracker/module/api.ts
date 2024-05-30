@@ -160,6 +160,14 @@ export const CompletedStates = [
     QueryStatus.FAILED,
 ];
 
+const secureDecoding = (value: string) => {
+    try {
+        return unipika.decode(value);
+    } catch (e) {
+        return value;
+    }
+};
+
 const JSONParser = {
     JSONSerializer: {
         stringify(data: unknown) {
@@ -167,13 +175,15 @@ const JSONParser = {
         },
         parse(data: string) {
             return JSON.parse(data, (_, value) => {
-                if (typeof value === 'string') {
-                    try {
-                        return unipika.decode(value);
-                    } catch (e) {
-                        return value;
-                    }
+                if (typeof value === 'object' && value !== null && !Array.isArray(value)) {
+                    return Object.keys(value).reduce<Record<any, any>>((acc, k) => {
+                        acc[secureDecoding(k)] =
+                            typeof value[k] === 'string' ? secureDecoding(value[k]) : value[k];
+
+                        return acc;
+                    }, {});
                 }
+
                 return value;
             });
         },
@@ -382,7 +392,7 @@ export function readQueryResults(
                     },
                 },
             },
-            setup: getQTApiSetup(),
+            setup: {...getQTApiSetup(), ...JSONParser},
         })) as QueryResult;
         return {...result, rows: mapQueryRowNames(result.rows)};
     };
