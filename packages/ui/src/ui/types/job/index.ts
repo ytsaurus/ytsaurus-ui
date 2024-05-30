@@ -26,6 +26,7 @@ export interface RawJob {
     monitoring_descriptor?: string;
     pool_tree?: string;
     is_stale?: boolean;
+    archive_features?: {has_trace?: boolean};
 }
 
 export type JobState =

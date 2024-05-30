@@ -23,6 +23,11 @@ export interface ClusterUiConfig {
     enable_maintenance_api_nodes?: boolean;
     enable_maintenance_api_proxies?: boolean;
     chyt_controller_base_url?: string;
+    job_trace_url_template?: {
+        title: string;
+        url_template: string;
+        enforce_for_trees?: Array<string>;
+    };
 }
 
 export type CypressNode<AttributesT extends Record<string, unknown>, ValueT> = {
