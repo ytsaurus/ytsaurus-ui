@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.42.2](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.42.1...ui-v1.42.2) (2024-05-30)
+
+
+### Bug Fixes
+
+* **e2e:** navigation base ([2e6d633](https://github.com/ytsaurus/ytsaurus-ui/commit/2e6d63340c1676a368cd89b3185b8bbc1f2da381))
+
 ## [1.42.1](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.42.0...ui-v1.42.1) (2024-05-29)
 
 
