@@ -68,10 +68,10 @@ jobs:
 
           if ! docker pull ${TARGET_IMAGE} ; then
             npm run docker:build --dockertag=${UI_TAG}
-            echo '${{ secrets.DOCKER_HUB_PASSWORD }}' | docker login --username ${{ secrets.DOCKER_HUB_LOGIN}} --password-stdin
+            echo '${{ secrets.GITHUB_TOKEN }}' | docker login --username ${{ github.actor }} --password-stdin ghcr.io
             npm run docker:push --dockertag=${UI_TAG}
 
-            STABLE_IMAGE=ytsaurus/ui:stable
+            STABLE_IMAGE=$(echo $UI_IMAGE | sed 's/-nightly$//g'):stable
             docker tag ${TARGET_IMAGE} ${STABLE_IMAGE}
             docker push ${STABLE_IMAGE}
           else 

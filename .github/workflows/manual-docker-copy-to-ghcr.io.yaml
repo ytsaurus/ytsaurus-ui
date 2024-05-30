@@ -1,0 +1,42 @@
+name: "[manual]: Copy docker image to ghcr.io"
+
+on:
+  workflow_dispatch:
+    inputs:
+      stag:
+        description: "ytsaurus/ui:[SOURCE_TAG]"
+        required: true
+      ttag:
+        description: "ghcr.io/ytsaurus/ui:[TARGET_TAG]"
+        required: true
+      nightly:
+        description: "Use '-nightly' suffix for SOURCE image name"
+        type: boolean
+      nigtly_target:
+        description: "Use '-nightly' suffix for TARGET image name"
+        default: true
+        type: boolean
+
+jobs:
+  docker-tag:
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Docker tag"
+        run: |
+          if [ "true" = "${{ inputs.nightly }}" ]; then
+            SOURCE_IMAGE=ytsaurus/ui-nightly:${{ inputs.stag }}
+          else
+            SOURCE_IMAGE=ytsaurus/ui:${{ inputs.stag }}
+          fi
+
+          if [ "true" = "${{ inputs.nightly_target }}" ];
+            TARGET_IMAMGE=ghcr.io/ytsaurus/ui-nightly:${{ inputs.ttag }}
+          else
+            TARGET_IMAMGE=ghcr.io/ytsaurus/ui:${{ inputs.ttag }}
+          fi
+
+          docker pull ${SOURCE_IMAGE}
+          docker tag ${SOURCE_IMAGE} ${TARGET_IMAMGE}
+
+          echo '${{ secrets.GITHUB_TOKEN }}' | docker login --username ${{ github.actor }} --password-stdin ghcr.io
+          docker push ${TARGET_IMAMGE}

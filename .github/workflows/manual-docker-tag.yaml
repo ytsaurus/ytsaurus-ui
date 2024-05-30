@@ -16,11 +16,11 @@ jobs:
     steps:
       - name: "Docker tag"
         run: |
-          echo '${{ secrets.DOCKER_HUB_PASSWORD }}' | docker login --username ${{ secrets.DOCKER_HUB_LOGIN}} --password-stdin
-
-          SOURCE_IMAGE=ytsaurus/ui-nightly:${{ inputs.stag }}
-          TARGET_IMAMGE=ytsaurus/ui:${{ inputs.ttag }}
+          SOURCE_IMAGE=ghcr.io/ytsaurus/ui-nightly:${{ inputs.stag }}
+          TARGET_IMAMGE=ghcr.io/ytsaurus/ui:${{ inputs.ttag }}
 
           docker pull ${SOURCE_IMAGE}
           docker tag ${SOURCE_IMAGE} ${TARGET_IMAMGE}
+
+          echo '${{ secrets.GITHUB_TOKEN }}' | docker login --username ${{ github.actor }} --password-stdin ghcr.io
           docker push ${TARGET_IMAMGE}

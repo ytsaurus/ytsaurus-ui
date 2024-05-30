@@ -44,7 +44,7 @@ jobs:
 
           if ( test "true" = "${{ inputs.override }}" || ! docker pull ${TARGET_IMAGE} ) ; then
             npm run docker:build:dev --dockertag=${UI_TAG}
-            echo '${{ secrets.DOCKER_HUB_PASSWORD }}' | docker login --username ${{ secrets.DOCKER_HUB_LOGIN}} --password-stdin
+            echo '${{ secrets.GITHUB_TOKEN }}' | docker login --username ${{ github.actor }} --password-stdin ghcr.io
             npm run docker:push --dockertag=${UI_TAG}
           else 
             echo Corresponding image already exists: $TARGET_IMAGE
