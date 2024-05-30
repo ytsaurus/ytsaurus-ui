@@ -209,7 +209,7 @@ function ActionBlock(action: Action) {
     );
 }
 
-export default function JobActions() {
+export default function JobActions({className}: {className?: string}) {
     const job = useSelector(getJob);
     const {loaded} = useSelector((state: RootState) => state.job.general);
     const cluster = useSelector(getCluster);
@@ -256,7 +256,7 @@ export default function JobActions() {
 
     return (
         <ErrorBoundary>
-            <div className={block()}>
+            <div className={block(null, className)}>
                 {_.map(actions, (action: Action) => (
                     <ActionBlock {...action} />
                 ))}
