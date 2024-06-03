@@ -254,8 +254,7 @@ export class DownloadManager extends React.Component<Props, State> {
 
         if (rowsMode === 'range') {
             const {startRow, numRows} = this.state;
-
-            return '[#' + startRow + ':#' + (String(startRow) + String(numRows)) + ']';
+            return '[#' + startRow + ':#' + (Number(startRow) + Number(numRows)) + ']';
         } else {
             return '';
         }
@@ -541,6 +540,7 @@ export class DownloadManager extends React.Component<Props, State> {
                         <div className="elements-form__field">
                             <div className="elements-form__label">Number of rows</div>
                             <Filter
+                                qa="download-manager_number-of-rows"
                                 autofocus={false}
                                 value={String(numRows)}
                                 invalid={isNaN(numRows as number) || numRows === ''}
