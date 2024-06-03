@@ -301,7 +301,6 @@ class ClusterPage extends Component {
                 <FlexSplitPane
                     className={b('panes-wrapper', {
                         'with-pane': splitScreen.isSplit,
-                        'with-footer': Boolean(footer),
                     })}
                     paneClassNames={splitScreen.paneClassNames}
                     direction={FlexSplitPane.HORIZONTAL}
