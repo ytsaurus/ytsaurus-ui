@@ -46,10 +46,6 @@
     }
 
     &__shared-settings {
-        .elements-radiobutton {
-            margin-bottom: 20px;
-        }
-
         .column-selector {
             max-height: 25vh;
 
@@ -74,12 +70,6 @@
         overflow: hidden;
 
         background-color: var(--light-background);
-    }
-
-    &__schemaful-dsv,
-    &__yson,
-    &__json {
-        margin-top: 20px;
     }
 
     &__dsv-separators-item {

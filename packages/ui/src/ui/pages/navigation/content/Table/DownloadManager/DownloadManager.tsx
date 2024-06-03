@@ -521,6 +521,7 @@ export class DownloadManager extends React.Component<Props, State> {
                 <div className="elements-form__label">Rows</div>
                 <RadioButton
                     size="m"
+                    className="elements-form__field"
                     value={rowsMode}
                     name="download-manager-row-mode"
                     onUpdate={(value) => this.changeRowsMode(value)}
@@ -565,6 +566,7 @@ export class DownloadManager extends React.Component<Props, State> {
                 <div className="elements-form__label">Columns</div>
                 <RadioButton
                     size="m"
+                    className="elements-form__field"
                     value={columnsMode}
                     name="download-manager-columns-mode"
                     onUpdate={(value) => this.changeColumnsMode(value)}
@@ -741,7 +743,7 @@ export class DownloadManager extends React.Component<Props, State> {
         const {ysonFormat} = this.state;
 
         return (
-            <div className={block('yson', 'elements-form__field')}>
+            <div className={block('yson')}>
                 <div className="elements-form__label">Format</div>
                 <RadioButton
                     size="m"
@@ -830,7 +832,7 @@ export class DownloadManager extends React.Component<Props, State> {
                     </div>
 
                     <div className={block('settings', 'pretty-scroll')}>
-                        <div className={block('shared-settings')}>
+                        <div className={block('shared-settings', 'elements-form__field')}>
                             {this.renderRows()}
                             {format !== 'yamr' && this.renderColumns()}
                             {format === 'yamr' && this.renderYamr()}
