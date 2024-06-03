@@ -1,6 +1,6 @@
 {
   "name": "@ytsaurus/ui",
-  "version": "1.42.3",
+  "version": "1.42.4",
   "repository": {
     "type": "github",
     "url": "https://github.com/YTsaurus/ytsaurus-ui/tree/main/packages/ui"

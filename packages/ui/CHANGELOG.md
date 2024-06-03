@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.42.4](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.42.3...ui-v1.42.4) (2024-06-03)
+
+
+### Bug Fixes
+
+* **DownloadManager:** minor css fix [YTFRONT-4215] ([35ef8c6](https://github.com/ytsaurus/ytsaurus-ui/commit/35ef8c6a8bbd41cb8bbfa31c92231450a84e8c9b))
+
 ## [1.42.3](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.42.2...ui-v1.42.3) (2024-06-03)
 
 
