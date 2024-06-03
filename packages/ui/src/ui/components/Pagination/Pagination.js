@@ -99,6 +99,7 @@ export default class Pagination extends React.Component {
 
         return showInput ? (
             <TextInput
+                qa="yt-pagination_input"
                 size={size}
                 type="text"
                 value={inputValue}
