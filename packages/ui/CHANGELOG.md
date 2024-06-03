@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.42.3](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.42.2...ui-v1.42.3) (2024-06-03)
+
+
+### Bug Fixes
+
+* **DownloadManager:** fix for ranges [YTFRONT-4215] ([0f117ca](https://github.com/ytsaurus/ytsaurus-ui/commit/0f117ca913abd8a57d252b40904d1b050bd5c39e))
+* footer problem in cluster page [YTFRONT-4173] ([8800bbc](https://github.com/ytsaurus/ytsaurus-ui/commit/8800bbc205ffe2bc0211fb4c1ac081967287c695))
+
 ## [1.42.2](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.42.1...ui-v1.42.2) (2024-05-30)
 
 
