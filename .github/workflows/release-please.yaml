@@ -7,9 +7,6 @@ jobs:
   release-please:
     runs-on: ubuntu-latest
     steps:
-      - name:
-        run: |
-          echo ${{secrets.GITHUB_TOKEN}} | md5sum
       - uses: google-github-actions/release-please-action@v3
         id: release
         with:
@@ -21,16 +18,6 @@ jobs:
       - name: Checkout Repository
         if: ${{ steps.release.outputs.releases_created }}
         uses: actions/checkout@v2
-      - name: Setup Node
-        uses: actions/setup-node@v1
-        if: ${{ steps.release.outputs.releases_created }}
-        with:
-          node-version: 18
-          registry-url: "https://registry.npmjs.org"
-      - name: npm ci
-        if: ${{ steps.release.outputs.releases_created }}
-        run: |
-          npm ci
 
       - name: Tag for packages/ui
         if: ${{ steps.release.outputs['packages/ui--release_created'] }}
@@ -45,6 +32,18 @@ jobs:
 
           git tag -m "Release $TAG" -a $TAG ${{ steps.release.outputs['packages/ui--sha'] }}
           git push gh-token $TAG
+
+      - name: Setup Node
+        uses: actions/setup-node@v1
+        if: ${{ steps.release.outputs.releases_created }}
+        with:
+          node-version: 18
+          registry-url: "https://registry.npmjs.org"
+
+      - name: npm ci
+        if: ${{ steps.release.outputs.releases_created }}
+        run: |
+          npm ci
 
       # Release Please has already incremented versions and published tags, so we just
       # need to publish all unpublished versions to NPM here
