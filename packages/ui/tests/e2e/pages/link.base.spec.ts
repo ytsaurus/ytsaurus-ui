@@ -1,5 +1,5 @@
 import {test} from '@playwright/test';
-import {E2E_DIR, makeClusterUrl} from '../utils';
+import {E2E_DIR, makeClusterUrl} from '../../utils';
 
 test('Should create a link', async ({page}) => {
     await page.goto(makeClusterUrl(`navigation?path=${E2E_DIR}`));

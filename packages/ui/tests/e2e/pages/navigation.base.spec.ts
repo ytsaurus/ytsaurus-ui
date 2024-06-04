@@ -1,5 +1,5 @@
 import {expect, test} from '@playwright/test';
-import {CLUSTER, E2E_DIR, makeClusterTille, makeClusterUrl} from '../utils';
+import {CLUSTER, E2E_DIR, makeClusterTille, makeClusterUrl} from '../../utils';
 
 test('Navigation - Content', async ({page}) => {
     await page.goto(makeClusterUrl('navigation'));

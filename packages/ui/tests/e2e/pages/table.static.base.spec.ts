@@ -1,5 +1,5 @@
 import {expect, test} from '@playwright/test';
-import {E2E_DIR, makeClusterTille, makeClusterUrl} from '../utils';
+import {E2E_DIR, makeClusterTille, makeClusterUrl} from '../../utils';
 
 const PATH = `${E2E_DIR}/static-table`;
 

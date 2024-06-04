@@ -5,7 +5,7 @@ import {
     makeClusterTille,
     makeClusterUrl,
     makeUrl,
-} from '../utils';
+} from '../../utils';
 
 test('ClustersMenu', async ({page}) => {
     await page.goto(makeUrl());

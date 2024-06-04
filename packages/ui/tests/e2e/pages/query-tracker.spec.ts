@@ -1,6 +1,6 @@
 import {expect, test} from '@playwright/test';
-import {E2E_DIR, makeClusterUrl} from '../utils';
-import {BasePage} from '../utils/BasePage';
+import {E2E_DIR, makeClusterUrl} from '../../utils';
+import {BasePage} from '../../utils/BasePage';
 
 class QueryTrackerPage extends BasePage {
     readonly newQueryButton = this.page.getByTestId('new-query-btn');
