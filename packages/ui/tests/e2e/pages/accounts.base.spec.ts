@@ -1,5 +1,5 @@
 import {expect, test} from '@playwright/test';
-import {CLUSTER, E2E_SUFFIX, makeClusterTille, makeClusterUrl} from '../utils';
+import {CLUSTER, E2E_SUFFIX, makeClusterTille, makeClusterUrl} from '../../utils';
 
 test('Accounts - General as default page', async ({page}) => {
     await page.goto(makeClusterUrl('accounts'));

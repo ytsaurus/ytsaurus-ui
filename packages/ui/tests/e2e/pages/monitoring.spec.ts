@@ -1,5 +1,5 @@
 import {test} from '@playwright/test';
-import {CLUSTER, E2E_OPERATION_2_ID, E2E_OPERATION_ID, makeClusterUrl} from '../utils';
+import {CLUSTER, E2E_OPERATION_2_ID, E2E_OPERATION_ID, makeClusterUrl} from '../../utils';
 
 test('Accounts - Monitoring', async ({page}) => {
     await page.goto(makeClusterUrl('accounts/general?account=account-for-e2e'));

@@ -1,5 +1,5 @@
 import {test, expect} from '@playwright/test';
-import {makeClusterUrl} from '../utils';
+import {makeClusterUrl} from '../../utils';
 
 test('Components: shortname', async ({page}) => {
     const url = makeClusterUrl(`components/nodes`);

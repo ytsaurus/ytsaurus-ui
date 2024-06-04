@@ -1,5 +1,5 @@
 import {expect, test} from '@playwright/test';
-import {CLUSTER, makeClusterTille, makeClusterUrl} from '../utils';
+import {CLUSTER, makeClusterTille, makeClusterUrl} from '../../utils';
 import page from '../../../src/ui/store/reducers/operations/page';
 
 test('Scheduliing - Overview', async ({page}) => {
