@@ -83,7 +83,7 @@ class Locks extends Component {
             <MetaTable
                 qa="lock-meta-table"
                 items={[
-                    {key: 'id', value: item.id},
+                    {key: 'id', value: item.id, className: block('id')},
                     {key: 'mode', value: item.mode},
                     {key: 'state', value: item.state},
                     {
@@ -164,6 +164,7 @@ class Locks extends Component {
                                 }}
                             />
                         ),
+                        className: block('id'),
                     },
                     {
                         key: 'title',
@@ -187,6 +188,7 @@ class Locks extends Component {
                             <TemplateTime time={transaction.start_time} valueFormat="DateTime" />
                         ),
                         visible: Boolean(transaction.start_time),
+                        className: block('start-time'),
                     },
                     {
                         key: 'operation_id',

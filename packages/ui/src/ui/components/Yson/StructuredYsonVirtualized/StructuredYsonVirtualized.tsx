@@ -198,10 +198,16 @@ export default class StructuredYsonVirtualized extends React.PureComponent<Props
                     data={data}
                     theme={'yson'}
                     settings={this.settings}
+                    rowClassName={this.rowClassName}
                 />
             </div>
         );
     }
+
+    rowClassName = ({key}: UnipikaFlattenTreeItem) => {
+        const k = key?.$decoded_value ?? '';
+        return block('row', {key: asModifier(k)});
+    };
 
     onExpandAll = () => {
         this.updateState({collapsedState: {}}, () => {
@@ -520,6 +526,10 @@ interface ValueProps extends KeyProps {
 
 function Value(props: ValueProps) {
     return <>{renderValueWithFilter(props, block('value', {type: props.text?.$type}))}</>;
+}
+
+function asModifier(path = '') {
+    return path.replace(/[^-\w\d]/g, '_');
 }
 
 function renderValueWithFilter(props: ValueProps, className: string) {

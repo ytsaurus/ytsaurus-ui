@@ -11,6 +11,10 @@ export const {
     CLUSTERS_MENU_EXPECT,
 } = process.env;
 
+const parts = E2E_DIR?.split('/') ?? [];
+
+export const E2E_DIR_NAME = parts[parts.length - 1];
+
 console.log({
     BASE_URL,
     CLUSTER,

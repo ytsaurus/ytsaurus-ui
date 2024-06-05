@@ -112,23 +112,23 @@ function createAccountByPath {
 createAccountByPath //sys/accounts/account-for-e2e
 
 function createAccountNodes {
-    account=$1
+    account=$1-${E2E_SUFFIX}
 
-    yt create -i -r map_node ${E2E_DIR}/${account} --attributes '{account='$account'}'
-    yt create -i -r map_node ${E2E_DIR}/${account}/child-1/0 --attributes '{account='$account'-child-1}'
-    yt create -i -r map_node ${E2E_DIR}/${account}/child-2/0/1 --attributes '{account='$account'-child-2}'
+    yt create -i -r map_node ${E2E_DIR}/${1} --attributes '{account='$account'}'
+    yt create -i -r map_node ${E2E_DIR}/${1}/child-1/0 --attributes '{account='$account'-child-1}'
+    yt create -i -r map_node ${E2E_DIR}/${1}/child-2/0/1 --attributes '{account='$account'-child-2}'
 }
 
 function createAccountForQuotaEditor {
-    account=${1}
+    account=${1}-${E2E_SUFFIX}
     createAccountByPath //sys/accounts/${account} 10
     createAccountByPath //sys/accounts/${account}/${account}-child-1 5
     createAccountByPath //sys/accounts/${account}/${account}-child-2 5
-    createAccountNodes ${account}
+    createAccountNodes ${1}
 }
 
-createAccountForQuotaEditor e2e-parent-${E2E_SUFFIX}
-createAccountForQuotaEditor e2e-overcommit-${E2E_SUFFIX}
+createAccountForQuotaEditor e2e-parent
+createAccountForQuotaEditor e2e-overcommit
 yt set //sys/accounts/e2e-overcommit-${E2E_SUFFIX}/@allow_children_limit_overcommit %true
 
 DYN_TABLE=${E2E_DIR}/dynamic-table
@@ -167,3 +167,11 @@ yt create --attributes '{schema=[
 
 yt create access_control_object_namespace --attr '{name=queries}'
 yt create access_control_object --attr '{namespace=queries;name=nobody}'
+
+yt set ${E2E_DIR}/@acl '[
+    {action=allow;subjects=[admins;];permissions=[write;administer;remove;mount;];inheritance_mode=object_and_descendants;};
+    {action=allow;subjects=[users;];permissions=[read;];inheritance_mode=object_and_descendants;};
+    {action=allow;subjects=[users;];permissions=[read;write;remove];inheritance_mode=object_and_descendants;};
+]'
+
+yt set ${E2E_DIR}/@inherit_acl %false
