@@ -140,4 +140,10 @@ body {
             color: var(--primary-link);
         }
     }
+
+    // Temporary fix for screenshot tests
+    .gn-aside-header__collapse-button {
+        border-top: 1px solid var(--gn-aside-header-collapse-button-divider-line-color);
+        height: 20px;
+    }
 }

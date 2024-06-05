@@ -8,14 +8,14 @@ import {defineConfig, devices} from '@playwright/test';
 
 const headless = process.env.HEADLESS !== 'false';
 
-const {E2E_MATCH = '.spec.'} = process.env;
+const {E2E_MATCH = '.spec.', E2E_TEST_DIR = './e2e'} = process.env;
 const testMatch = new RegExp(E2E_MATCH.replace(/\./g, '\\.'));
 
 /**
  * See https://playwright.dev/docs/test-configuration.
  */
 export default defineConfig({
-    testDir: './e2e',
+    testDir: E2E_TEST_DIR,
     testMatch,
     /* Run tests in files in parallel */
     fullyParallel: headless,
