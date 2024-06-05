@@ -42,11 +42,11 @@ readinessProbe:
     path: /
     port: http
 
-ngnix:
+nginx:
   useCustomConfig: false
   # name of config map where custom config for nginx is located 
   configMapName: "custom-nginx-configmap"
-  configMapkey: "ngnix.conf"
+  configMapkey: "nginx.conf"
 
 ingress:
   enabled: false

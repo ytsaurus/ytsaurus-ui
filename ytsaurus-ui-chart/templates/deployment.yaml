@@ -24,7 +24,7 @@ spec:
           command:
             - /bin/bash
             - -c
-            {{- if .Values.ngnix.useCustomConfig }}
+            {{- if .Values.nginx.useCustomConfig }}
             - cp /opt/app/nginx.app.conf /etc/nginx/sites-enabled/app.conf;
             {{- end }}
             - /usr/bin/supervisord -c /etc/supervisor/supervisord.conf
@@ -51,11 +51,11 @@ spec:
           terminationMessagePath: /dev/termination-log
           terminationMessagePolicy: File
           volumeMounts:
-            {{- if .Values.ngnix.useCustomConfig }}
+            {{- if .Values.nginx.useCustomConfig }}
             - mountPath: /opt/app/nginx.app.conf
-              name: ngnix-config
+              name: nginx-config
               readOnly: true
-              subPath: {{ .Values.ngnix.configMapkey }}
+              subPath: {{ .Values.nginx.configMapkey }}
             {{- end }}
             - mountPath: /opt/app/clusters-config.json
               name: config
@@ -106,11 +106,11 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       volumes:
-        {{- if .Values.ngnix.useCustomConfig}}
+        {{- if .Values.nginx.useCustomConfig}}
         - configMap:
             defaultMode: 420
-            name: {{ .Values.ngnix.configMapName }}
-          name: ngnix-config
+            name: {{ .Values.nginx.configMapName }}
+          name: nginx-config
         {{- end }}
         - configMap:
             defaultMode: 420
