@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "playwright test ${PW_OPTIONS}"
+    "start": "playwright test ${PW_OPTIONS}",
+    "screenshots": "E2E_MATCH=.screen. E2E_TEST_DIR=./screenshots playwright test ${PW_OPTIONS}"
   },
   "keywords": [],
   "author": "",

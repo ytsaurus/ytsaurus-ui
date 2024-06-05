@@ -1,0 +1,11 @@
+{
+    "overrides": [{
+        "files": ["**/*.ts", "**/*.tsx", "**/*.js"],
+        "rules": {
+            "camelcase": "off",
+            "no-negated-condition": "off",
+            "import/order": 0,
+            "no-implicit-globals": "off"
+        }
+    }]
+}
