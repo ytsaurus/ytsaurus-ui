@@ -1,6 +1,6 @@
 import {expect, test} from '@playwright/test';
-import {makeClusterUrl} from '../utils';
-import {BasePage} from '../utils/BasePage';
+import {makeClusterUrl} from '../../utils';
+import {BasePage} from '../../utils/BasePage';
 
 class ACOPage extends BasePage {
     async open() {
@@ -19,7 +19,7 @@ class ACOPage extends BasePage {
     }
 }
 
-test('@ACO: the permissions request button should be visible', async ({page, context}) => {
+test('@ACO: the permissions request button should be visible', async ({page}) => {
     const acoPage = new ACOPage({page});
 
     await acoPage.open();
@@ -35,7 +35,7 @@ test('@ACO: the permissions request button should be visible', async ({page, con
     await expect(page.getByText('Request permissions')).toBeVisible();
 });
 
-test('@ACO: the permissions request button should be hidden', async ({page, context}) => {
+test('@ACO: the permissions request button should be hidden', async ({page}) => {
     const acoPage = new ACOPage({page});
 
     await acoPage.open();
