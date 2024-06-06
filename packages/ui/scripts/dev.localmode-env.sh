@@ -23,12 +23,14 @@ if [ $? -ne 0 ]; then
   fi
 
   echo -e "\n\nrun_local_cluster.sh is downloaded, to run your cluster use command:"
-  echo -e "    ./run_local_cluster.sh --yt-version dev --docker-hostname $(hostname) --fqdn localhost --node-count 2 \n"
+
+  command="    ./run_local_cluster.sh --yt-version dev --docker-hostname $(hostname) --fqdn localhost --node-count 2 --ui-app-installation ${APP_INSTALLATION:-''}"
+  echo -e "    $command \n"
 
   read -p "Do you want to start local cluster? [Yn]: " needToStart
   if [ "${needToStart}" = "" -o "${needToStart}" = "y" -o "${needToStart}" = "Y" ]; then
     ./run_local_cluster.sh --stop
-    ./run_local_cluster.sh --yt-version dev --docker-hostname $(hostname) --fqdn localhost --node-count 2
+    $command
   else
     exit 1
   fi
@@ -42,5 +44,6 @@ else
   echo -e $GREEN
   echo APP_ENV=$APP_ENV
   echo PROXY=$PROXY
+  echo APP_INSTALLATION=$APP_INSTALLATION
   echo -e $NC
 fi
