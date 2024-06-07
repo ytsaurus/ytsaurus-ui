@@ -5,6 +5,7 @@ import {RowsCount} from '../../../pages/navigation/content/Table/TableMeta/RowsC
 import {tabletActiveBundleLink} from '../../../utils/components/tablet-cells';
 import Label, {LabelOnOff} from '../../Label/Label';
 import Link from '../../Link/Link';
+import {Template} from '../templates/Template';
 import compression from './compression';
 import erasureReplication from './erasure-replication';
 import size from './size';
@@ -44,7 +45,7 @@ export function tableSize(attributes: any, isDynamic: boolean, mediumList: strin
         {
             key: 'dataWeight',
             label: 'Data weight',
-            value: hammer.format['Bytes'](dataWeight),
+            value: <Template.FormattedValue value={dataWeight} format="Bytes" />,
             visible: Boolean(chunkCount),
         },
     ];

@@ -1,15 +1,8 @@
 import {Page} from '@playwright/test';
-import {E2E_DIR_NAME} from '../../../utils';
 import {BasePage} from '../../../utils/BasePage';
 import {replaceInnerHtml, replaceInnerHtmlForDateTime} from '../../../utils/dom';
 
-class NavigationPage extends BasePage {
-    async replaceNameOfTestDir() {
-        await replaceInnerHtml(this.page, {
-            [`[title="${E2E_DIR_NAME}"] .unipika .string`]: 'e2e.1970-01-01.00:00:00.xxxxxxxxxxx',
-        });
-    }
-
+export class NavigationPage extends BasePage {
     async replaceAttributes() {
         await replaceInnerHtml(this.page, {
             '.structured-yson-virtualized__row_key_id .structured-yson-virtualized__value':
@@ -45,7 +38,7 @@ class NavigationPage extends BasePage {
             '.navigation-locks__id': '1-222-33333-4444',
         });
 
-        await this.replaceNameOfTestDir();
+        await this.replaceBreadcrumbsTestDir();
     }
 
     async waitForACL() {

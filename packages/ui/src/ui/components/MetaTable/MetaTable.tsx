@@ -32,6 +32,7 @@ export interface MetaTableItem {
     visible?: boolean;
     helpUrl?: string;
     className?: string;
+    qa?: string;
 }
 
 function splitItems(items: MetaTableProps['items'], subTitles?: Array<string>) {
@@ -55,7 +56,7 @@ function splitItems(items: MetaTableProps['items'], subTitles?: Array<string>) {
 export default class MetaTable extends Component<MetaTableProps> {
     renderKey(key: string, icon: React.ReactNode, label?: React.ReactChild) {
         return (
-            <div className={itemBlock('key')} key={key + '-key'}>
+            <div className={itemBlock('key', {key})} key={key + '-key'}>
                 {icon}
                 {label !== undefined ? label : hammer.format['ReadableField'](key)}
             </div>
@@ -63,9 +64,9 @@ export default class MetaTable extends Component<MetaTableProps> {
     }
 
     renderValue(item: MetaTableItem) {
-        const {value, key, helpUrl, className} = item;
+        const {value, key, helpUrl, className, qa} = item;
         return (
-            <div className={itemBlock('value', className)} key={key + '-value'}>
+            <div className={itemBlock('value', className)} key={key + '-value'} data-qa={qa}>
                 {typeof value === 'boolean' ? String(value) : value}
                 {helpUrl && (
                     <Link theme={'ghost'} url={helpUrl}>
