@@ -10,8 +10,7 @@ export async function replaceInnerHtml(page: Page, toReplace: Record<Selector, s
 
     await page.evaluate((toReplace) => {
         Object.entries(toReplace).forEach(([selector, content]) => {
-            document.querySelectorAll(selector).forEach((el, index) => {
-                console.log({index, el});
+            document.querySelectorAll(selector).forEach((el) => {
                 el.innerHTML = content;
             });
         });

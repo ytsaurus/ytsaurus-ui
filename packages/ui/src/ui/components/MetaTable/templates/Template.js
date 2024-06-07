@@ -39,9 +39,11 @@ TemplateValue.propTypes = {
 /* ----------------------------------------------------------------------------------------------------------------- */
 
 export function TemplateFormattedValue({value, format, settings}) {
+    const fmtIsFunc = typeof format === 'function';
+    const fmt = fmtIsFunc ? undefined : format?.toLowerCase();
     return (
-        <span className={itemBlock('value')}>
-            {typeof format === 'function' ? format(value) : hammer.format[format](value, settings)}
+        <span className={itemBlock('value', {format: fmt})}>
+            {fmtIsFunc ? format(value) : hammer.format[format](value, settings)}
         </span>
     );
 }

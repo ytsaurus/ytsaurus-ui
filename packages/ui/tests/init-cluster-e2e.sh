@@ -165,8 +165,8 @@ yt create --attributes '{schema=[
     echo -e "imageurl_as_text=https://deny-yastatic.net/s3/cloud/yt/static/freeze/assets/images/ui-big.44e3fa56.jpg\t"
 ) | yt write-table --format dsv ${TAGGED_TABLE}
 
-yt create access_control_object_namespace --attr '{name=queries}'
-yt create access_control_object --attr '{namespace=queries;name=nobody}'
+yt create -i access_control_object_namespace --attr '{name=queries}'
+yt create -i access_control_object --attr '{namespace=queries;name=nobody}'
 
 yt set ${E2E_DIR}/@acl '[
     {action=allow;subjects=[admins;];permissions=[write;administer;remove;mount;];inheritance_mode=object_and_descendants;};
