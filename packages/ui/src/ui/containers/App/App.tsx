@@ -20,9 +20,9 @@ import AppNavigation from '../AppNavigation/AppNavigation';
 import RetryBatchModals from '../RetryBatchModal/RetryBatchModal';
 import {loadAllowedExperimentalPages, setTheme} from '../../store/actions/global';
 import {getAuthPagesEnabled, getGlobalShowLoginDialog} from '../../store/selectors/global';
+import {getFontType} from '../../store/selectors/global/fonts';
 
 import './App.scss';
-import {getFontType} from '../../store/selectors/settings-ts';
 
 interface AppProps {
     theme?: 'light' | 'dark' | 'system' | 'light-hc' | 'dark-hc';
@@ -40,7 +40,7 @@ class App extends Component<AppProps> {
     componentDidMount() {
         const {theme, fontType} = this.props;
         document.body.classList.add(`theme-${theme}`);
-        if (fontType) document.body.classList.add(`font-${fontType}`);
+        if (fontType) document.body.classList.add(`app-font-${fontType}`);
     }
 
     componentDidUpdate(prevProps: AppProps) {
@@ -50,8 +50,8 @@ class App extends Component<AppProps> {
         }
 
         if (prevProps.fontType !== this.props.fontType) {
-            document.body.classList.remove(`font-${prevProps.fontType}`);
-            document.body.classList.add(`font-${this.props.fontType}`);
+            document.body.classList.remove(`app-font-${prevProps.fontType}`);
+            document.body.classList.add(`app-font-${this.props.fontType}`);
         }
     }
 

@@ -44,10 +44,6 @@ export const getSettingTheme = createSelector(makeGetSetting, (getSetting) =>
     getSetting(SettingName.GLOBAL.THEME, NAMESPACES.GLOBAL),
 );
 
-export const getSettingSelectedFontType = createSelector(makeGetSetting, (getSetting) =>
-    getSetting(SettingName.GLOBAL.FONT_TYPE, NAMESPACES.GLOBAL),
-);
-
 export const getUseAutoRefresh = createSelector(makeGetSetting, (getSetting) =>
     getSetting(SettingName.GLOBAL.AUTO_REFRESH, NAMESPACES.GLOBAL),
 );
