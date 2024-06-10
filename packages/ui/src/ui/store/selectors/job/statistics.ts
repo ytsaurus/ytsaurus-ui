@@ -2,7 +2,7 @@ import hammer from '../../../common/hammer';
 import {createSelector} from 'reselect';
 import {JobTree, JobTreeItem, MetricsEntry} from '../../../types/job';
 import {StatisticsState} from '../../../store/reducers/job/statistics';
-import {getFontFamilies} from '../settings-ts';
+import {getFontFamilies} from '../../../store/selectors/global/fonts';
 
 interface State {
     job: {

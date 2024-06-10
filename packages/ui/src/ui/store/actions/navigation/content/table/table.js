@@ -1,5 +1,4 @@
 import _ from 'lodash';
-import FontFaceObserver from 'fontfaceobserver';
 import {Toaster} from '@gravity-ui/uikit';
 import metrics from '../../../../../common/utils/metrics';
 
@@ -61,13 +60,13 @@ import {
     getTableColumnNamesFromSchema,
 } from '../../../../../store/selectors/navigation/content/table-ts';
 import {mergeScreen} from '../../../../../store/actions/global';
+import {waitForFontFamilies} from '../../../../../store/actions/global/fonts';
 import {injectColumnsFromSchema} from '../../../../../utils/navigation/content/table/table-ts';
 import {YTApiId, ytApiV3, ytApiV3Id} from '../../../../../rum/rum-wrap-api';
 import unipika from '../../../../../common/thor/unipika';
 
 import {loadColumnPresetIfDefined, saveColumnPreset, setTablePresetHash} from './columns-preset';
 import {makeTableRumId} from './table-rum-id';
-import {getFontFamilies} from '../../../../selectors/settings-ts';
 
 const requests = new CancelHelper();
 const toaster = new Toaster();
@@ -367,11 +366,6 @@ function restoreColumns(state) {
         });
 }
 
-// TODO: consider switching back for <link rel="preload"> once it's supported in all major browsers
-function preloadTableFont(fontFamily) {
-    return new FontFaceObserver(fontFamily).load(null, 10000);
-}
-
 export function updateTableData() {
     return (dispatch, getState) => {
         const state = getState();
@@ -453,7 +447,6 @@ export function getTableData() {
         const state = getState();
 
         const attributes = getAttributes(state);
-        const fontFamilies = getFontFamilies(state);
 
         return dispatch(loadColumnPresetIfDefined()).then(() => {
             const updateColumns = ({
@@ -497,11 +490,8 @@ export function getTableData() {
             // 3. If at the previous step was returned an array then building columns based on stored columns and save their in the store.
             // 4. load table rows for columns in the store
 
-            return Promise.all([
-                restoreColumns(getState()),
-                preloadTableFont(fontFamilies.monospace),
-            ])
-                .then(([{columns, omittedColumns, storedColumns, ...rest}]) => {
+            return dispatch(waitForFontFamilies(restoreColumns(getState())))
+                .then(({columns, omittedColumns, storedColumns, ...rest}) => {
                     if (columns) {
                         updateColumns({
                             rows: [],

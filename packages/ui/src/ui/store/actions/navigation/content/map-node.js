@@ -34,6 +34,7 @@ import {RumMeasureTypes} from '../../../../rum/rum-measure-types';
 import hammer from '../../../../common/hammer';
 import {GENERIC_ERROR_MESSAGE} from '../../../../constants';
 import {isSupportedEffectiveExpiration} from '../../../../store/selectors/thor/support';
+import {waitForFontFamilies} from '../../../../store/actions/global/fonts';
 
 function getList(path, transaction, cluster, allowEffectiveExpiration) {
     const id = new RumWrapper(cluster, RumMeasureTypes.NAVIGATION_CONTENT_MAP_NODE);
@@ -80,7 +81,9 @@ export function fetchNodes() {
         const allowEffectiveExpiration = isSupportedEffectiveExpiration(state);
 
         dispatch({type: FETCH_NODES.REQUEST});
-        return getList(path, transaction, cluster, allowEffectiveExpiration)
+        return dispatch(
+            waitForFontFamilies(getList(path, transaction, cluster, allowEffectiveExpiration)),
+        )
             .then(ypath.getValue)
             .then((data) => {
                 dispatch({
