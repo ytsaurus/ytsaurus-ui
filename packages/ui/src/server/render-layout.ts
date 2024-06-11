@@ -7,7 +7,7 @@ import {
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import {ConfigData} from '../shared/yt-types';
 
-const manifestPath = path.resolve(__dirname, '../../dist/public/build/manifest.json');
+const manifestPath = path.resolve(__dirname, '../../dist/public/build/assets-manifest.json');
 
 const renderLayout = createRenderFunction([
     createLayoutPlugin({manifest: manifestPath}),

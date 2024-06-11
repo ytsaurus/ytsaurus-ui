@@ -3,9 +3,9 @@ import {Store, configureStore} from '@reduxjs/toolkit';
 import {listenForHistoryChange} from 'redux-location-state';
 import {createBrowserHistory} from 'history';
 import getLocationMiddleware from '../state-url-mapping';
-import {RootState, makeRootReducer} from './reducers';
+import {RootState, makeRootReducer} from './reducers/index.main';
 
-export const createAppStore = () => {
+export const createMainEntryStore = () => {
     const history = createBrowserHistory();
     const rootReducer = makeRootReducer();
     const {locationMiddleware, reducersWithLocation} = getLocationMiddleware(history, rootReducer);
@@ -23,5 +23,5 @@ export const createAppStore = () => {
     return {store, history};
 };
 
-export type AppBrowserHistory = ReturnType<typeof createAppStore>['history'];
-export type StoreType = ReturnType<typeof createAppStore>['store'];
+export type AppBrowserHistory = ReturnType<typeof createMainEntryStore>['history'];
+export type StoreType = ReturnType<typeof createMainEntryStore>['store'];

@@ -19,7 +19,8 @@ import {RumUiProvider} from '../../rum/RumUiContext';
 import AppNavigation from '../AppNavigation/AppNavigation';
 import RetryBatchModals from '../RetryBatchModal/RetryBatchModal';
 import {ManageTokensModal} from '../ManageTokens';
-import {loadAllowedExperimentalPages, setTheme} from '../../store/actions/global';
+import {setTheme} from '../../store/actions/global';
+import {loadAllowedExperimentalPages} from '../../store/actions/global/experimental-pages';
 import {getAuthPagesEnabled, getGlobalShowLoginDialog} from '../../store/selectors/global';
 import {getFontType} from '../../store/selectors/global/fonts';
 
