@@ -7,7 +7,7 @@ import {createRoot} from 'react-dom/client';
 import {Provider} from 'react-redux';
 import {Router} from 'react-router';
 
-import {createAppStore} from './store';
+import {createMainEntryStore} from './store/store.main';
 
 import App from './containers/App/App';
 
@@ -22,7 +22,7 @@ import UIFactory, {configureUIFactory} from './UIFactory';
 
 configure({lang: 'en'});
 
-function AppRoot({store, history}: ReturnType<typeof createAppStore>) {
+function AppRoot({store, history}: ReturnType<typeof createMainEntryStore>) {
     return (
         <Provider store={store}>
             <Router history={history}>{UIFactory.wrapApp(<App />)}</Router>
@@ -32,7 +32,7 @@ function AppRoot({store, history}: ReturnType<typeof createAppStore>) {
 
 export function renderApp(overrides: Partial<typeof UIFactory>) {
     configureUIFactory(overrides);
-    const {store, history} = createAppStore();
+    const {store, history} = createMainEntryStore();
 
     const root = createRoot(document.getElementById('root')!);
     root.render(<AppRoot {...{store, history}} />);

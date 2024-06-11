@@ -1,7 +1,6 @@
 import _ from 'lodash';
 import {LOCATION_POP} from 'redux-location-state/lib/constants';
 
-import MaintenancePage from '../../../containers/MaintenancePage/MaintenancePage';
 import {
     BAN_USER,
     BLOCK_USER,
@@ -168,7 +167,7 @@ export default (state = initialState, action) => {
 
         case SET_MAINTENANCE_PAGE_EVENT: {
             const {events, isFirstUpdate} = action.data;
-            const maintenancePageEvent = MaintenancePage.getNotificationWithMaintenance(events);
+            const maintenancePageEvent = getNotificationWithMaintenance(events);
 
             return {
                 ...state,
@@ -238,3 +237,15 @@ export default (state = initialState, action) => {
             return state;
     }
 };
+
+function getNotificationWithMaintenance(notifications) {
+    return _.find(notifications, (notification) => {
+        try {
+            const meta = JSON.parse(notification.meta);
+            return meta && meta.show_maintenance_page;
+        } catch (err) {
+            console.error('Failed to parse notification meta', err);
+            return null;
+        }
+    });
+}

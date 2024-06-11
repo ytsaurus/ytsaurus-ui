@@ -5,7 +5,6 @@ import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import block from 'bem-cn-lite';
 import Cookies from 'js-cookie';
-import _ from 'lodash';
 import moment from 'moment';
 
 import hammer from '@ytsaurus/interface-helpers/lib/hammer';
@@ -60,18 +59,6 @@ class MaintenancePage extends Component {
 
     static checkMaintenancePageUrl(location) {
         return location.pathname.endsWith('/maintenance');
-    }
-
-    static getNotificationWithMaintenance(notifications) {
-        return _.find(notifications, (notification) => {
-            try {
-                const meta = JSON.parse(notification.meta);
-                return meta && meta.show_maintenance_page;
-            } catch (err) {
-                console.error('Failed to parse notification meta', err);
-                return null;
-            }
-        });
     }
 
     static parsePath(path) {

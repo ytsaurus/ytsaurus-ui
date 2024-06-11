@@ -8,6 +8,7 @@ import {getAuthWay} from '../utils/authorization';
 import {getOAuthSettings, isOAuthAllowed} from './oauth';
 
 interface Params {
+    name?: string;
     login?: string;
     uid?: string;
     cluster: string | undefined;
@@ -16,7 +17,7 @@ interface Params {
 }
 
 export async function getLayoutConfig(req: Request, params: Params): Promise<AppLayoutConfig> {
-    const {login, ytConfig, settings} = params;
+    const {name = 'main', login, ytConfig, settings} = params;
     const {
         ytApiUseCORS,
         uiSettings,
@@ -71,7 +72,7 @@ export async function getLayoutConfig(req: Request, params: Params): Promise<App
                 counter: metrikaCounter,
             },
             layout: {
-                name: 'main',
+                name,
             },
         },
     };

@@ -7,7 +7,6 @@ import {normalizeResponseWithAttributes} from '../../../utils';
 import {RootState} from '../../../store/reducers';
 import {
     getBundles,
-    getCurrentUserName,
     getGlobalAsideHeaderWidth,
     getGlobalGroups,
     getGlobalUsers,
@@ -32,7 +31,6 @@ import {getWindowStore} from '../../../store/window-store';
 import {reloadUserSettings} from '../settings';
 import YT from '../../../config/yt-config';
 import {getConfigData} from '../../../config/ui-settings';
-import UIFactory from '../../../UIFactory';
 
 export function setTheme(theme: 'light' | 'dark' | 'system' | 'light-hc' | 'dark-hc') {
     return {type: GLOBAL_SET_THEME, data: theme};
@@ -40,7 +38,7 @@ export function setTheme(theme: 'light' | 'dark' | 'system' | 'light-hc' | 'dark
 
 let usersInProgress = false;
 
-type YTThunkAction<T = unknown> = ThunkAction<T, RootState, any, any>;
+export type YTThunkAction<T = unknown> = ThunkAction<T, RootState, any, any>;
 
 export function setAsideHeaderWidth(asideHeaderWidth: number): YTThunkAction {
     return (dispatch, getState) => {
@@ -350,13 +348,4 @@ export function onSuccessLogin(login: string): YTThunkAction {
 
 export function setRootPagesCluster(rootPagesCluster: string | undefined) {
     return {type: GLOBAL_PARTIAL, data: {rootPagesCluster}};
-}
-
-export function loadAllowedExperimentalPages(): YTThunkAction {
-    return (dispatch, getState) => {
-        const login = getCurrentUserName(getState());
-        return UIFactory.getAllowedExperimentalPages(login).then((allowedExperimentalPages) => {
-            dispatch({type: GLOBAL_PARTIAL, data: {allowedExperimentalPages}});
-        });
-    };
 }

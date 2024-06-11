@@ -5,8 +5,8 @@ import MetaTable from '../../../../components/MetaTable/MetaTable';
 import {main} from '../../../../components/MetaTable/presets';
 import Yson from '../../../../components/Yson/Yson';
 import {Alert, Button} from '@gravity-ui/uikit';
-import {Icon} from '../../../../components';
 import {UnipikaSettings} from '../../../../components/Yson/StructuredYson/StructuredYsonTypes';
+import Icon from '../../../../components/Icon/Icon';
 
 type Props = {
     attributes: Record<any, any>;

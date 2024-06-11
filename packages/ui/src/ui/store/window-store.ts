@@ -1,5 +1,4 @@
-import {AppBrowserHistory, StoreType} from './index';
-import {loadSchedulingData} from './actions/scheduling/scheduling-ts';
+import type {AppBrowserHistory, StoreType} from './store.main';
 import {MakeRotedUrlFnType} from './location';
 
 // @ts-ignore
@@ -27,7 +26,8 @@ export function getAppBrowserHistory(): AppBrowserHistory {
                 }),
             });
         } catch {}
-        setTimeout(() => {
+        setTimeout(async () => {
+            const {loadSchedulingData} = await import('./actions/scheduling/scheduling-ts');
             getWindowStore().dispatch(loadSchedulingData());
         }, 1500);
     },
