@@ -9,9 +9,14 @@ $stickySpacerHeight: 6px;
     &__toolbar {
         height: $height;
 
-        &_disable-top-padding {
+        &_padding_skip-vertical {
             margin-top: -10px;
             margin-bottom: 10px;
+        }
+
+        &_padding_skip-horizontal {
+            padding-left: unset;
+            padding-right: unset;
         }
 
         $toolbar: &;
@@ -21,9 +26,14 @@ $stickySpacerHeight: 6px;
             padding: 0px 20px;
             z-index: var(--fixed-toolbar-z-index);
 
-            &#{$toolbar}_disable-top-padding {
+            &#{$toolbar}_padding_skip-vertical {
                 margin-top: unset;
                 margin-bottom: unset;
+            }
+
+            &#{$toolbar}_padding_skip-horizontal {
+                padding-left: unset;
+                padding-right: unset;
             }
         }
 

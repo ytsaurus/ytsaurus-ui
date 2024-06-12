@@ -191,7 +191,7 @@ export default function ColumnGroups({
                     )}
                 </div>
                 <WithStickyToolbar
-                    disableToolbarTopPadding
+                    padding="skip-vertical"
                     bottomMargin="regular"
                     toolbar={
                         <Toolbar
