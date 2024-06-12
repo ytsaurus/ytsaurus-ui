@@ -1,7 +1,6 @@
-import React, {Component} from 'react';
+import React from 'react';
 import {Route, Switch} from 'react-router';
 import {useDispatch, useSelector} from 'react-redux';
-import PropTypes from 'prop-types';
 
 import {ThemeProvider, useThemeType, useThemeValue} from '@gravity-ui/uikit';
 
@@ -23,57 +22,9 @@ import {setTheme} from '../../store/actions/global';
 import {loadAllowedExperimentalPages} from '../../store/actions/global/experimental-pages';
 import {getAuthPagesEnabled, getGlobalShowLoginDialog} from '../../store/selectors/global';
 import {getFontType} from '../../store/selectors/global/fonts';
+import {AppThemeFont, AppThemeFontProps} from './AppThemeFont';
 
 import './App.scss';
-
-interface AppProps {
-    theme?: 'light' | 'dark' | 'system' | 'light-hc' | 'dark-hc';
-    fontType?: string;
-    a11y?: boolean;
-}
-
-class App extends Component<AppProps> {
-    static propTypes = {
-        theme: PropTypes.oneOf(['light', 'dark', 'system', 'light-hc', 'dark-hc']).isRequired,
-        fontType: PropTypes.string,
-        a11y: PropTypes.bool.isRequired,
-    };
-
-    componentDidMount() {
-        const {theme, fontType} = this.props;
-        document.body.classList.add(`theme-${theme}`);
-        if (fontType) document.body.classList.add(`app-font-${fontType}`);
-    }
-
-    componentDidUpdate(prevProps: AppProps) {
-        if (prevProps.theme !== this.props.theme) {
-            document.body.classList.remove(`theme-${prevProps.theme}`);
-            document.body.classList.add(`theme-${this.props.theme}`);
-        }
-
-        if (prevProps.fontType !== this.props.fontType) {
-            document.body.classList.remove(`app-font-${prevProps.fontType}`);
-            document.body.classList.add(`app-font-${this.props.fontType}`);
-        }
-    }
-
-    render() {
-        return (
-            <AppNavigation>
-                <LoadAllowedExperimentalUrls />
-                <div className="elements-page">
-                    <Route exact path="/" render={() => <ClustersMenu />} />
-                    <Route path="/:cluster/" render={() => <ClusterPageWrapper />} />
-                    <AttributesModal />
-                    <ActionModal />
-                    <ModalErrors />
-                    <RetryBatchModals />
-                    <ManageTokensModal />
-                </div>
-            </AppNavigation>
-        );
-    }
-}
 
 function LoadAllowedExperimentalUrls() {
     const dispatch = useDispatch();
@@ -85,9 +36,8 @@ function LoadAllowedExperimentalUrls() {
 }
 
 function AppWithRum() {
-    const theme = useThemeValue() as AppProps['theme'];
+    const theme = useThemeValue() as AppThemeFontProps['theme'];
     const themeType = useThemeType();
-    const a11y = useSelector(shouldUseSafeColors);
     const showLogin = useSelector(getGlobalShowLoginDialog);
     const hasAuthPages = useSelector(getAuthPagesEnabled);
     const fontType = useSelector(getFontType);
@@ -107,7 +57,24 @@ function AppWithRum() {
                     )}
                 />
             ) : null}
-            <Route render={() => <App theme={theme} a11y={a11y} fontType={fontType} />} />
+            <Route
+                render={() => (
+                    <AppThemeFont theme={theme} fontType={fontType}>
+                        <AppNavigation>
+                            <LoadAllowedExperimentalUrls />
+                            <div className="elements-page">
+                                <Route exact path="/" render={() => <ClustersMenu />} />
+                                <Route path="/:cluster/" render={() => <ClusterPageWrapper />} />
+                                <AttributesModal />
+                                <ActionModal />
+                                <ModalErrors />
+                                <RetryBatchModals />
+                                <ManageTokensModal />
+                            </div>
+                        </AppNavigation>
+                    </AppThemeFont>
+                )}
+            />
         </Switch>
     );
 }
@@ -132,7 +99,7 @@ export default React.memo(AppWithRumContext);
 
 function ThemeUpdater() {
     const dispatch = useDispatch();
-    const theme = useThemeValue() as AppProps['theme'];
+    const theme = useThemeValue() as AppThemeFontProps['theme'];
     React.useEffect(() => {
         dispatch(setTheme(theme!));
     }, [theme, dispatch]);
@@ -145,7 +112,7 @@ function useThemeProviderProperties() {
     const useContrastTheme: boolean = useSelector(shouldUseSafeColors);
     const systemLightTheme = useContrastTheme ? 'light-hc' : 'light';
     const systemDarkTheme = useContrastTheme ? 'dark-hc' : 'dark';
-    let theme: AppProps['theme'] = selectedTheme;
+    let theme: AppThemeFontProps['theme'] = selectedTheme;
     if ((theme === 'dark' || theme === 'light') && useContrastTheme) theme = `${theme}-hc`;
     return {
         theme,
