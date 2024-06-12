@@ -4,7 +4,7 @@ import {Toaster} from '@gravity-ui/uikit';
 
 import createActionTypes from '../../../constants/utils';
 import {isRetryFutile} from '../../../utils';
-import {getBatchError, showErrorPopup} from '../../../utils/utils';
+import {getBatchError, showErrorPopup, splitBatchResults} from '../../../utils/utils';
 
 import {YTErrors} from '../../../rum/constants';
 import {YTApiId, ytApiV3Id} from '../../../rum/rum-wrap-api';
@@ -110,16 +110,9 @@ async function loadMastersConfig(): Promise<[MastersConfigResponse, MasterAlert[
 
     const alerts = alertsResult.output ? (alertsResult.output as MasterAlert[]) : [];
     const [timestamp_path] = [...Object.keys(ypath.getValue(timestampProvidersResult.output))];
-    const [primary_path] = [...Object.keys(ypath.getValue(primaryMasterResult.output))];
+    const primaryMasterPaths = [...Object.keys(ypath.getValue(primaryMasterResult.output))];
 
-    const tag_cell_requests = [
-        {
-            command: 'get' as const,
-            parameters: {
-                path: `//sys/primary_masters/${primary_path}/orchid/config/primary_master/cell_id`,
-                ...USE_SUPRESS_SYNC,
-            },
-        },
+    const timestamp_tag_cell_requests = [
         {
             command: 'get' as const,
             parameters: {
@@ -129,10 +122,29 @@ async function loadMastersConfig(): Promise<[MastersConfigResponse, MasterAlert[
         },
     ];
 
-    const [primaryMasterCellTag, timestampProviderCellTag] = await ytApiV3Id.executeBatch(
-        YTApiId.systemMastersConfig,
-        {requests: [...tag_cell_requests]},
-    );
+    const tag_cell_requests = primaryMasterPaths.map((primary_path) => {
+        return {
+            command: 'get' as const,
+            parameters: {
+                path: `//sys/primary_masters/${primary_path}/orchid/config/primary_master/cell_id`,
+                ...USE_SUPRESS_SYNC,
+            },
+        };
+    });
+
+    const [timestampProviderCellTag, ...primaryMasterCellTagResponse] =
+        await ytApiV3Id.executeBatch(YTApiId.systemMastersConfig, {
+            requests: [...timestamp_tag_cell_requests, ...tag_cell_requests],
+        });
+
+    const {
+        results: [masterCellId],
+        error: primaryMasterCellTagError,
+    } = splitBatchResults(primaryMasterCellTagResponse, 'Failed to get primary master cell_id');
+
+    if (!masterCellId) {
+        throw primaryMasterCellTagError;
+    }
 
     const primaryMaster = primaryMasterResult.output;
     const secondaryMasters = secondaryMastersResult.output;
@@ -165,8 +177,8 @@ async function loadMastersConfig(): Promise<[MastersConfigResponse, MasterAlert[
                     attributes: ypath.getValue(value, '/@'),
                 };
             }),
-            cellId: primaryMasterCellTag.output,
-            cellTag: getCellIdTag(primaryMasterCellTag.output),
+            cellId: masterCellId,
+            cellTag: getCellIdTag(masterCellId),
         },
         secondaryMasters: _.map(secondaryMasters, (addresses, cellTag) => {
             return {
