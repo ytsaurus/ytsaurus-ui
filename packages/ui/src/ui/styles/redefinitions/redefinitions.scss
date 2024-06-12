@@ -7,3 +7,24 @@
 @import './common/Breadcrumbs';
 @import '../fonts/manrope.scss';
 @import '../fonts/roboto-mono.scss';
+
+.data-table {
+    &__table {
+        min-width: 100%;
+    }
+
+    &__td,
+    &__th {
+        max-width: 600px;
+    }
+
+    &__head-cell {
+        font-weight: bold;
+    }
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
