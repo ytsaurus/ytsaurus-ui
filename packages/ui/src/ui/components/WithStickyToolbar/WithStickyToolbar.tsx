@@ -35,7 +35,7 @@ interface Props {
     toolbar: React.ReactNode;
     content: React.ReactNode;
     doubleHeight?: boolean;
-    disableToolbarTopPadding?: boolean;
+    padding?: 'skip-vertical' | 'skip-horizontal';
     bottomMargin?: 'regular';
 }
 
@@ -46,7 +46,7 @@ export default function WithStickyToolbar({
     toolbar,
     content,
     doubleHeight,
-    disableToolbarTopPadding,
+    padding,
     bottomMargin,
 }: Props) {
     return (
@@ -58,7 +58,7 @@ export default function WithStickyToolbar({
                             isSticky={isSticky}
                             toolbar={toolbar}
                             doubleHeight={doubleHeight}
-                            disableTopPadding={disableToolbarTopPadding}
+                            padding={padding}
                         />
                         {isSticky && <StickySpacerMemo doubleHeight={doubleHeight} />}
                     </div>
@@ -77,18 +77,18 @@ interface ToolbarWrapperProps {
     isSticky?: boolean;
     toolbar: React.ReactNode;
     doubleHeight?: boolean;
-    disableTopPadding?: boolean;
+    padding?: Props['padding'];
 }
 
 function ToolbarWrapperImpl(props: ToolbarWrapperProps) {
-    const {isSticky, toolbar, doubleHeight, disableTopPadding} = props;
+    const {isSticky, toolbar, doubleHeight, padding} = props;
     return (
         <React.Fragment>
             <div
                 className={block('toolbar', {
                     sticky: isSticky,
                     x2: doubleHeight,
-                    'disable-top-padding': disableTopPadding,
+                    padding,
                 })}
             >
                 {toolbar}
