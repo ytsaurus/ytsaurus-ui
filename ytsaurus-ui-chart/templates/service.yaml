@@ -12,6 +12,5 @@ spec:
       targetPort: http
       protocol: TCP
       name: http
-      nodePort: 30000
   selector:
     {{- include "ytsaurus-ui-chart.selectorLabels" . | nindent 4 }}

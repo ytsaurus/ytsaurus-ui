@@ -9,4 +9,21 @@ data:
   clusters-config.json: |
     {{ .Values.ui.clusterConfig | toJson }}
   common.js: |
-    module.exports = { odinBaseUrl: {{ .Values.settings.odinBaseUrl | quote }}, uiSettings: {directDownload: {{ .Values.settings.directDownload | toJson }} }}
+    module.exports = { 
+      odinBaseUrl: {{ .Values.settings.odinBaseUrl | quote }}, 
+      uiSettings: { directDownload: {{ .Values.settings.directDownload | toJson }} },
+      {{- if .Values.settings.oauth.enabled }}
+      ytOAuthSettings: {
+        baseURL: {{ .Values.settings.oauth.baseURL | quote }},
+        authPath: {{ .Values.settings.oauth.authPath | quote }},
+        logoutPath: {{ .Values.settings.oauth.logoutPath | quote }},
+        tokenPath: {{ .Values.settings.oauth.tokenPath | quote }},
+        clientId: process.env.{{ .Values.settings.oauth.clientIdEnvName }},
+        clientSecret: process.env.{{ .Values.settings.oauth.clientSecretEnvName }},
+        scope: {{ .Values.settings.oauth.scope | quote }},
+        buttonLabel: {{ .Values.settings.oauth.buttonLabel | quote }},
+      },
+      }
+      {{- else -}}
+      }
+      {{- end -}}
