@@ -3,7 +3,7 @@ ui:
   image:
     repository: ytsaurus/ui
     pullPolicy: IfNotPresent
-    tag: ""
+    tag: "1.27.0"
 
   clusterConfig:
     clusters: []
@@ -15,7 +15,7 @@ ui:
       #   name: minisaurus
       #   primaryMaster:
       #     cellTag: 1
-      #   proxy: http-proxies-lb.testing.svc.cluster.local
+      #   proxy: http-proxies-lb.default.svc.cluster.local
       #   secure: false
       #   theme: lavander
 
@@ -73,6 +73,18 @@ fullnameOverride: ""
 settings:
   odinBaseUrl: ""
   directDownload: true
+
+  # see https://github.com/ytsaurus/ytsaurus-ui/blob/main/packages/ui/docs/configuration.md#oauth
+  oauth: 
+    enabled: false
+    baseURL: ""
+    authPath: ""
+    logoutPath: ""
+    tokenPath: ""
+    clientIdEnvName: ""
+    clientSecretEnvName: ""
+    scope: ""
+    buttonLabel: ""
   
 securityContext: {}
 
