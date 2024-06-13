@@ -141,6 +141,7 @@ yt mount-table ${DYN_TABLE}
     done
     set -x
 ) | yt insert-rows --format yson ${DYN_TABLE}
+yt freeze-table ${DYN_TABLE}
 
 STATIC_TABLE=${E2E_DIR}/static-table
 yt create --attributes "{schema=[{name=key;type=string};{name=value;type=string};{name=empty;type=any}]}" table ${STATIC_TABLE}
