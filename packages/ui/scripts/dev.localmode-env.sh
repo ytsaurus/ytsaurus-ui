@@ -24,7 +24,12 @@ if [ $? -ne 0 ]; then
 
   echo -e "\n\nrun_local_cluster.sh is downloaded, to run your cluster use command:"
 
-  command="    ./run_local_cluster.sh --yt-version dev --docker-hostname $(hostname) --fqdn localhost --node-count 2 --ui-app-installation ${APP_INSTALLATION:-''}"
+  command="./run_local_cluster.sh --yt-version dev --docker-hostname $(hostname) --fqdn localhost --node-count 2 --ui-app-installation ${APP_INSTALLATION:-''}"
+  if [ "$UI_VERSION_LOCAL" != "" ]; then
+    docker tag $(npm run -s show:docker-image-name):local $(npm run -s show:docker-image-name:stable):local
+    command="$command --ui-version $UI_VERSION_LOCAL --ui-skip-pull true"
+  fi
+
   echo -e "    $command \n"
 
   read -p "Do you want to start local cluster? [Yn]: " needToStart

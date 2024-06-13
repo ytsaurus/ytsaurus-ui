@@ -51,6 +51,7 @@
     "platform-tools": "platform-tools",
     "prepublishOnly": "npm run build && npm run build:lib",
     "show:docker-image-name": "echo ${npm_package_config_docker_image}",
+    "show:docker-image-name:stable": "npm run -s show:docker-image-name | sed s/-nightly$//",
     "show:file-types": "find src -type f | rev | cut -d '.' -f 1 | rev | sort | uniq -c | sort -rn",
     "show:version": "echo ${npm_package_version}",
     "start": "NODE_OPTIONS=\"--max-http-header-size=204800 ${NODE_OPTIONS}\" node dist/server",
