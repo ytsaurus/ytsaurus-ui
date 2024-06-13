@@ -1,5 +1,25 @@
 # Changelog
 
+## [1.43.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.42.4...ui-v1.43.0) (2024-06-13)
+
+
+### Features
+
+* **Components:** alert for offline node [YTFRONT-4153] ([e95801e](https://github.com/ytsaurus/ytsaurus-ui/commit/e95801ee4abef7b6e47d8a6f5c96e6b8dcd87cbb))
+* **Query:** title with query data [YTFRONT-4186] ([5282fb7](https://github.com/ytsaurus/ytsaurus-ui/commit/5282fb77dc5038bff78d55d25f146882c04adfda))
+
+
+### Bug Fixes
+
+* **AccountsGeneralTab:** do not show TabletAccountingNotice if enable_per_account_tablet_accounting is enabled ([7de2eb5](https://github.com/ytsaurus/ytsaurus-ui/commit/7de2eb5f25e9216b9dd03e3bf2d8131397cd77e9))
+* **Navigation:** widget with footer problem [YTFRONT-4221] ([5b4bbe1](https://github.com/ytsaurus/ytsaurus-ui/commit/5b4bbe152f8ba3701b895b0f8b0bf21726e1bf17))
+* **query/custom-result-tab:** show tab when there is a query result ([bf64b2c](https://github.com/ytsaurus/ytsaurus-ui/commit/bf64b2cf9aef5e5d6281799e45c831eb58f910f3))
+* **Query:** query and progress tab [YTFRONT-4185] ([c74c0fc](https://github.com/ytsaurus/ytsaurus-ui/commit/c74c0fced87cc839839d2128d4e8a910c813b0d2))
+* **Query:** select in error line [YTFRONT-4208] ([85508dc](https://github.com/ytsaurus/ytsaurus-ui/commit/85508dcdd79758f6e1c744b7d2805e7f25056cd7))
+* **Query:** utf decode in result table [[#533](https://github.com/ytsaurus/ytsaurus-ui/issues/533)] ([7cadb62](https://github.com/ytsaurus/ytsaurus-ui/commit/7cadb62ffb276edece14266393a8a9f3b0345dfe))
+* request for ACL for ACO [[#576](https://github.com/ytsaurus/ytsaurus-ui/issues/576)] ([0f46beb](https://github.com/ytsaurus/ytsaurus-ui/commit/0f46beb68fa523ada3200123769ac95927d0b3ff))
+* **System:** nonvoting position [YTFRONT-4209] ([901da6f](https://github.com/ytsaurus/ytsaurus-ui/commit/901da6f484b16cdd4b8c79beb2e53d422be6b48c))
+
 ## [1.42.4](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.42.3...ui-v1.42.4) (2024-06-03)
 
 
