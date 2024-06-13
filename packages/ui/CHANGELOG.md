@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.44.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.43.0...ui-v1.44.0) (2024-06-13)
+
+
+### Features
+
+* prepare code to work with additional entries [YTFRONT-4122] ([66e4933](https://github.com/ytsaurus/ytsaurus-ui/commit/66e4933a2147a67d7a92e9300540484526092411))
+* **tokens:** allow user to issue and manage tokens from ui [[#241](https://github.com/ytsaurus/ytsaurus-ui/issues/241)] ([6bdd6d2](https://github.com/ytsaurus/ytsaurus-ui/commit/6bdd6d2d6ae767a90a2c72f629325b0d6c56db3a))
+
+
+### Bug Fixes
+
+* **Clusters:** change body flex grow [YTFRONT-4221] ([097da73](https://github.com/ytsaurus/ytsaurus-ui/commit/097da73a10fb8ab2f1392313148cb74b2ba00867))
+
 ## [1.43.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.42.4...ui-v1.43.0) (2024-06-13)
 
 
