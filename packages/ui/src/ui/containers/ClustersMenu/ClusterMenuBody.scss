@@ -1,6 +1,8 @@
 @import '../ClusterPageHeader/ClusterColor.scss';
 
 .cluster-menu {
+    flex-grow: 1;
+
     &__item-image {
         @include cluster-styled;
     }
