@@ -363,6 +363,10 @@ class MapNodesTable extends Component {
     printColumnAsBytes = printColumnAsBytes.bind(this);
     printColumnAsNumber = printColumnAsNumber.bind(this);
 
+    rowClassName = ({dynamic}) => {
+        return dynamic ? block('row', {dyntable: true}) : undefined;
+    };
+
     render() {
         const {nodes, columns, contentMode, loadState, selectedIndex} = this.props;
 
@@ -384,6 +388,7 @@ class MapNodesTable extends Component {
                     selectedIndex={selectedIndex}
                     hotkeys={this.hotkeys}
                     key={selectedIndex}
+                    rowClassName={this.rowClassName}
                 />
             )
         );

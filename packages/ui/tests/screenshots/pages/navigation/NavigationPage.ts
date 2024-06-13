@@ -44,6 +44,14 @@ export class NavigationPage extends BasePage {
     async waitForACL() {
         await this.page.waitForSelector('.navigation-acl__row .yt-subject-link');
     }
+
+    async replaceDyntableSize() {
+        await replaceInnerHtml(this.page, {
+            '.map-nodes-table__row_dyntable .map-node_default__table-item_type_disk-space':
+                '000000 KiB',
+            '.map-nodes-table__row_dyntable .map-node_default__table-item_type_rows': '00000',
+        });
+    }
 }
 
 export function navigationPage(page: Page) {
