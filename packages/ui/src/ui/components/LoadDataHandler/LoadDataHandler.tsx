@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 
 import {Toaster} from '@gravity-ui/uikit';
-import Error from '../../components/Error/Error';
+import Error from '../Error/Error';
 import hammer from '../../common/hammer';
 
 import {showErrorPopup} from '../../utils/utils';

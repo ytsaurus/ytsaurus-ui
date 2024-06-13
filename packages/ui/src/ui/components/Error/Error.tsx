@@ -1,19 +1,25 @@
-import React, {Component} from 'react';
-
+import React, {FC, ReactNode} from 'react';
 import Block from '../../components/Block/Block';
 
 import './Error.scss';
+import {YTError} from '../../../@types/types';
+import {AxiosError} from 'axios';
 
-const propTypes = Block.propTypes;
-const defaultProps = Block.defaultProps;
+type Props = {
+    error?: YTError | AxiosError<unknown, any> | string;
+    message?: ReactNode;
+    helpURL?: string;
+    className?: string;
+    settings?: Record<string, any>;
+    topMargin?: 'none' | 'half';
+    bottomMargin?: boolean;
+    header?: ReactNode;
+    maxCollapsedDepth?: number;
+    disableLogger?: boolean;
+};
 
-export default class Error extends Component {
-    render() {
-        const props = this.props;
+const Error: FC<Props> = ({error, ...props}) => {
+    return <Block {...props} error={error} type="error" />;
+};
 
-        return <Block {...props} type="error" />;
-    }
-}
-
-Error.propTypes = propTypes;
-Error.defaultProps = defaultProps;
+export default Error;

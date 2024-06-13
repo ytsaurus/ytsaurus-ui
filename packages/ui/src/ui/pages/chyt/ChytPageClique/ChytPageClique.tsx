@@ -112,7 +112,7 @@ function ChytCliqueErrors() {
                 <Error
                     header="Failed to start"
                     className={block('error')}
-                    error={{message: startError}}
+                    error={startError}
                     bottomMargin
                 />
             ) : null}
