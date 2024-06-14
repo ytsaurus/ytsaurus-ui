@@ -20,7 +20,7 @@ import {getAppBrowserHistory} from '../../../../store/window-store';
 import {QueryState} from './reducer';
 import {wrapApiPromiseByToaster} from '../../../../utils/utils';
 import {prepareQueryPlanIds} from './utills';
-import {chytApiAction} from '../../../../store/actions/chyt/api';
+import {chytApiAction} from '../../../../utils/api';
 import guid from '../../../../common/hammer/guid';
 
 export const REQUEST_QUERY = 'query-tracker/REQUEST_QUERY';

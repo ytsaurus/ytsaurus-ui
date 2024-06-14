@@ -5,7 +5,7 @@ import {wrapApiPromiseByToaster} from '../../../utils/utils';
 import {ChytCliqueOptionsAction} from '../../reducers/chyt/options';
 import {RootState} from '../../reducers';
 import {getCluster, isDeveloper} from '../../selectors/global';
-import {ChytListAttributes, ChytListResponseItem, chytApiAction} from './api';
+import {ChytListAttributes, ChytListResponseItem, chytApiAction} from '../../../utils/api';
 import {CHYT_OPTIONS} from '../../../constants/chyt-page';
 import {chytCliqueLoad} from './clique';
 import {chytLoadCliqueSpeclet} from './speclet';

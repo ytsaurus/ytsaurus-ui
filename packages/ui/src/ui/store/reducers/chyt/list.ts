@@ -3,7 +3,7 @@ import type {Action} from 'redux';
 import type {ActionD, YTError} from '../../../types';
 
 import {CHYT_LIST} from '../../../constants/chyt-page';
-import {ChytListResponseItem} from '../../../store/actions/chyt/api';
+import {ChytListResponseItem} from '../../../utils/api';
 
 import {mergeStateOnClusterChange} from '../utils';
 

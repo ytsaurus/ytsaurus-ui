@@ -1,5 +1,5 @@
 import {CHYT_CLIQUE} from '../../../constants/chyt-page';
-import {ChytStatusResponse} from '../../../store/actions/chyt/api';
+import {ChytStatusResponse} from '../../../utils/api';
 import {ActionD, YTError} from '../../../types';
 
 import {mergeStateOnClusterChange} from '../utils';

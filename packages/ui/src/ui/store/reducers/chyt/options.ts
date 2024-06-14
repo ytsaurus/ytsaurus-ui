@@ -1,7 +1,7 @@
 import {ActionD, YTError} from '../../../types';
 import {mergeStateOnClusterChange} from '../utils';
 import {CHYT_OPTIONS} from '../../../constants/chyt-page';
-import {ChytDescribeOptionsType} from '../../actions/chyt/api';
+import {ChytDescribeOptionsType} from '../../../utils/api';
 
 export type ChytCliqueOptionsState = {
     loaded: boolean;
