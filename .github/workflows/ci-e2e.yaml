@@ -85,22 +85,15 @@ jobs:
         run: |
           cd packages/ui
           npm run e2e:localmode:screenshots
-      - name: Upload e2e:localmode:screenshots
-        uses: actions/upload-artifact@v4
-        if: failure()
-        with:
-          name: screenshots_test-results
-          path: packages/ui/tests/test-results/
-          retention-days: 7
       - name: E2E for 'Local'
         run: |
           cd packages/ui
           npm run e2e:localmode:ui
-      - name: Upload e2e:localmode:ui results
+      - name: Upload local test-results
         uses: actions/upload-artifact@v4
         if: failure()
         with:
-          name: e2e-localmode-ui_test-results
+          name: local_test-results
           path: packages/ui/tests/test-results/
           retention-days: 7
 
@@ -144,6 +137,13 @@ jobs:
           cd packages/ui
           YT_PROXY=`hostname`:8000 npm run e2e:localmode:init
           npm run e2e:localmode:remote
+      - name: Upload local test-results
+        uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: remote_test-results
+          path: packages/ui/tests/test-results/
+          retention-days: 7
 
   stop-vm:
     name: Stop VM
