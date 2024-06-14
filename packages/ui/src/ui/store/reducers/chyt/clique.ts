@@ -1,5 +1,5 @@
 import {CHYT_CLIQUE} from '../../../constants/chyt-page';
-import {ChytStatusResponse} from '../../../utils/strawberryControllerApi';
+import {StrawberryStatusResponse} from '../../../utils/strawberryControllerApi';
 import {ActionD, YTError} from '../../../types';
 
 import {mergeStateOnClusterChange} from '../utils';
@@ -10,7 +10,7 @@ export type ChytCliqueState = {
     error: YTError | undefined;
 
     currentClique: string;
-    data: ChytStatusResponse | undefined;
+    data: StrawberryStatusResponse | undefined;
 };
 
 const persitentState: Pick<ChytCliqueState, 'currentClique'> = {
