@@ -1,5 +1,5 @@
 import {CHYT_CLIQUE} from '../../../constants/chyt-page';
-import {ChytStatusResponse} from '../../../utils/api';
+import {ChytStatusResponse} from '../../../utils/strawberryControllerApi';
 import {ActionD, YTError} from '../../../types';
 
 import {mergeStateOnClusterChange} from '../utils';

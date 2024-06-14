@@ -5,7 +5,7 @@ import {RootState} from '../../../store/reducers';
 import {ChytCliqueAction} from '../../../store/reducers/chyt/clique';
 import {getCluster, isDeveloper} from '../../../store/selectors/global';
 import CancelHelper, {isCancelled} from '../../../utils/cancel-helper';
-import {chytApiAction} from '../../../utils/api';
+import {chytApiAction} from '../../../utils/strawberryControllerApi';
 
 type ChytCliqueThunkAction<T = void> = ThunkAction<T, RootState, unknown, ChytCliqueAction>;
 

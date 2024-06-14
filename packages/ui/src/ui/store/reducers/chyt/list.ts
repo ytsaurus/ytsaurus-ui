@@ -3,7 +3,7 @@ import type {Action} from 'redux';
 import type {ActionD, YTError} from '../../../types';
 
 import {CHYT_LIST} from '../../../constants/chyt-page';
-import {ChytListResponseItem} from '../../../utils/api';
+import {ChytListResponseItem} from '../../../utils/strawberryControllerApi';
 
 import {mergeStateOnClusterChange} from '../utils';
 

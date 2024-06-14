@@ -2,7 +2,7 @@ import React from 'react';
 
 import format from '../../../common/hammer/format';
 import Label from '../../../components/Label/Label';
-import {ChytCliqueHealthType, ChytCliqueStateType} from '../../../utils/api';
+import {ChytCliqueHealthType, ChytCliqueStateType} from '../../../utils/strawberryControllerApi';
 
 const THEME_MAP: Partial<
     Record<ChytCliqueStateType | ChytCliqueHealthType, 'danger' | 'success' | 'info' | 'warning'>

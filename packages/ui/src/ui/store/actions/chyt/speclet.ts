@@ -4,7 +4,7 @@ import CancelHelper, {isCancelled} from '../../../utils/cancel-helper';
 import {ChytCliqueSpecletAction} from '../../reducers/chyt/speclet';
 import {RootState} from '../../reducers';
 import {getCluster, isDeveloper} from '../../selectors/global';
-import {chytApiAction} from '../../../utils/api';
+import {chytApiAction} from '../../../utils/strawberryControllerApi';
 import {CHYT_SPECLET} from '../../../constants/chyt-page';
 
 type OptionsThunkAction = ThunkAction<Promise<void>, RootState, unknown, ChytCliqueSpecletAction>;
