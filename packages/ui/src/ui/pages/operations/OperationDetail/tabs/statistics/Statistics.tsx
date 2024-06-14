@@ -54,7 +54,7 @@ interface ItemState {
     empty?: boolean;
 }
 
-type Props = ConnectedProps<typeof connector>;
+type Props = {className?: string} & ConnectedProps<typeof connector>;
 
 export class Statistics extends Component<Props> {
     componentWillUnmount() {
@@ -227,11 +227,11 @@ export class Statistics extends Component<Props> {
     }
 
     render() {
-        const {treeState, items} = this.props;
+        const {className, treeState, items} = this.props;
 
         return (
             <ErrorBoundary>
-                <div className={statisticsBlock()}>
+                <div className={statisticsBlock(null, className)}>
                     {this.renderToolbar()}
 
                     <ElementsTable
@@ -274,7 +274,7 @@ const connector = connect(mapStateToProps, mapDispatchToProps);
 
 const StatisticsConnected = connector(Statistics);
 
-export default function SpecificationWithRum() {
+export default function SpecificationWithRum(props: {className: string}) {
     const loadState = useSelector(getOperationDetailsLoadingStatus);
 
     useAppRumMeasureStart({
@@ -294,5 +294,5 @@ export default function SpecificationWithRum() {
         },
     });
 
-    return <StatisticsConnected />;
+    return <StatisticsConnected {...props} />;
 }

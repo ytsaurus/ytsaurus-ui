@@ -66,7 +66,7 @@ export default class MetaTable extends Component<MetaTableProps> {
     renderValue(item: MetaTableItem) {
         const {value, key, helpUrl, className, qa} = item;
         return (
-            <div className={itemBlock('value', className)} key={key + '-value'} data-qa={qa}>
+            <div className={itemBlock('value', {key}, className)} key={key + '-value'} data-qa={qa}>
                 {typeof value === 'boolean' ? String(value) : value}
                 {helpUrl && (
                     <Link theme={'ghost'} url={helpUrl}>

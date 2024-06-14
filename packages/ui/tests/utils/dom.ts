@@ -3,7 +3,10 @@ import {Page} from '@playwright/test';
 type Selector = string;
 
 // eslint-disable-next-line no-implicit-globals
-export async function replaceInnerHtml(page: Page, toReplace: Record<Selector, string>) {
+export async function replaceInnerHtml(
+    page: Page,
+    toReplace: Record<Selector, string | {regex: string; replacement: string}>,
+) {
     for (const selector of Object.keys(toReplace)) {
         await page.waitForSelector(selector);
     }
@@ -11,7 +14,10 @@ export async function replaceInnerHtml(page: Page, toReplace: Record<Selector, s
     await page.evaluate((toReplace) => {
         Object.entries(toReplace).forEach(([selector, content]) => {
             document.querySelectorAll(selector).forEach((el) => {
-                el.innerHTML = content;
+                el.innerHTML =
+                    'string' === typeof content
+                        ? content
+                        : el.innerHTML.replace(new RegExp(content.regex), content.replacement);
             });
         });
     }, toReplace);
@@ -60,6 +66,15 @@ export async function setVisibilityHidden(
         if (monospace) {
             acc[s].fontFamily = 'monospace';
         }
+        return acc;
+    }, {} as StylesType);
+    await setStyle(page, styles);
+}
+
+export async function setDisplayNone(page: Page, selectors: Array<string>) {
+    type StylesType = Parameters<typeof setStyle>[1];
+    const styles = selectors.reduce((acc, s) => {
+        acc[s] = {display: 'none'};
         return acc;
     }, {} as StylesType);
     await setStyle(page, styles);

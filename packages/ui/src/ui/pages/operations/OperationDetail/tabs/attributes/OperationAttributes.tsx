@@ -33,13 +33,13 @@ function useOperationAttributesRumMesures() {
     });
 }
 
-function OperationAttributes() {
+function OperationAttributes({className}: {className: string}) {
     const typedAttributes = useSelector(getOperationTypedAttributes);
     const settings = useSelector(getOperationAttributesYsonSettings);
 
     useOperationAttributesRumMesures();
 
-    return <Yson value={typedAttributes} settings={settings} folding />;
+    return <Yson className={className} value={typedAttributes} settings={settings} folding />;
 }
 
 export default React.memo(OperationAttributes);

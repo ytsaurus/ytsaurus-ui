@@ -1,5 +1,11 @@
 .collapsible-section {
-    margin-top: 20px;
+    &_margin_top {
+        margin-top: 20px;
+    }
+
+    &_margin_bottom {
+        margin-bottom: 20px;
+    }
 
     &__title {
         white-space: nowrap;
