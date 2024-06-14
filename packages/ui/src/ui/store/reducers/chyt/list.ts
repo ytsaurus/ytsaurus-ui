@@ -3,7 +3,7 @@ import type {Action} from 'redux';
 import type {ActionD, YTError} from '../../../types';
 
 import {CHYT_LIST} from '../../../constants/chyt-page';
-import {ChytListResponseItem} from '../../../utils/strawberryControllerApi';
+import {StrawberryListResponseItem} from '../../../utils/strawberryControllerApi';
 
 import {mergeStateOnClusterChange} from '../utils';
 
@@ -15,7 +15,7 @@ export type ChytListState = {
     data: {items?: Array<ChytInfo>};
 };
 
-export type ChytInfo = ChytListResponseItem['$attributes'] & {
+export type ChytInfo = StrawberryListResponseItem['$attributes'] & {
     alias: string;
 };
 

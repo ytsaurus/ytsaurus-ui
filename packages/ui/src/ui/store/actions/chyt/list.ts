@@ -7,7 +7,7 @@ import CancelHelper, {isCancelled} from '../../../utils/cancel-helper';
 import {getCluster, isDeveloper} from '../../../store/selectors/global';
 import {getChytListVisibleColumns} from '../../../store/selectors/chyt';
 
-import {ChytApi, chytApiAction} from '../../../utils/strawberryControllerApi';
+import {StrawberryApi, chytApiAction} from '../../../utils/strawberryControllerApi';
 import {SettingsThunkAction, setSettingByKey} from '../settings';
 
 type ChytListThunkAction<T> = ThunkAction<Promise<T>, RootState, unknown, ChytListAction>;
@@ -60,8 +60,8 @@ export function chytLoadList(): ChytListThunkAction<void> {
 }
 
 export function chytListAction<
-    T extends ChytApi['action'],
-    ApiItem extends ChytApi & {action: T} = ChytApi & {action: T},
+    T extends StrawberryApi['action'],
+    ApiItem extends StrawberryApi & {action: T} = StrawberryApi & {action: T},
 >(
     action: T,
     params: ApiItem['params'],

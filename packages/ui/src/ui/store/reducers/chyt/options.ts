@@ -1,7 +1,7 @@
 import {ActionD, YTError} from '../../../types';
 import {mergeStateOnClusterChange} from '../utils';
 import {CHYT_OPTIONS} from '../../../constants/chyt-page';
-import {ChytDescribeOptionsType} from '../../../utils/strawberryControllerApi';
+import {StrawberryDescribeOptionsType} from '../../../utils/strawberryControllerApi';
 
 export type ChytCliqueOptionsState = {
     loaded: boolean;
@@ -9,7 +9,7 @@ export type ChytCliqueOptionsState = {
     error: YTError | undefined;
 
     dataAlias: string;
-    data: ChytDescribeOptionsType | undefined;
+    data: StrawberryDescribeOptionsType | undefined;
 };
 
 const initialState: ChytCliqueOptionsState = {
