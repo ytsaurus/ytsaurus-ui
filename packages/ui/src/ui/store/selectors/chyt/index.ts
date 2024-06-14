@@ -8,7 +8,7 @@ import {RootState} from '../../../store/reducers';
 import {ChytInfo} from '../../../store/reducers/chyt/list';
 import {SortState} from '../../../types';
 import {multiSortBySortStateArray} from '../../../utils/sort-helpers';
-import {ChytListAttributes} from '../../../store/actions/chyt/api';
+import {ChytListAttributes} from '../../../utils/api';
 import {getSettingsData} from '../settings-base';
 
 export const getChytListData = (state: RootState) => state.chyt.list.data;
