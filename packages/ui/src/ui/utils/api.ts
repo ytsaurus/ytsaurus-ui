@@ -1,7 +1,7 @@
 import axios, {CancelToken} from 'axios';
-import {wrapApiPromiseByToaster} from '../../../utils/utils';
-import {YTError} from '../../../../@types/types';
-import {OptionsGroup} from '../../../components/Dialog/df-dialog-utils';
+import {wrapApiPromiseByToaster} from './utils';
+import {YTError} from '../../@types/types';
+import {OptionsGroup} from '../components/Dialog/df-dialog-utils';
 
 export type WithResult<T> = {result: T};
 

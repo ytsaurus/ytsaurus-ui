@@ -7,7 +7,7 @@ import CancelHelper, {isCancelled} from '../../../utils/cancel-helper';
 import {getCluster, isDeveloper} from '../../../store/selectors/global';
 import {getChytListVisibleColumns} from '../../../store/selectors/chyt';
 
-import {ChytApi, chytApiAction} from './api';
+import {ChytApi, chytApiAction} from '../../../utils/api';
 import {SettingsThunkAction, setSettingByKey} from '../settings';
 
 type ChytListThunkAction<T> = ThunkAction<Promise<T>, RootState, unknown, ChytListAction>;

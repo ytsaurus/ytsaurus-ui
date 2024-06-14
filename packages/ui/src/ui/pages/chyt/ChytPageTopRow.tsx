@@ -19,7 +19,7 @@ import {WaitForDefaultPoolTree} from '../../hooks/global-pool-trees';
 import {getFavouriteChyt, isActiveCliqueInFavourites} from '../../store/selectors/favourites';
 import {getChytCurrentAlias} from '../../store/selectors/chyt';
 import {getCluster, isDeveloper} from '../../store/selectors/global';
-import {chytApiAction} from '../../store/actions/chyt/api';
+import {chytApiAction} from '../../utils/api';
 import {chytCliqueCreate} from '../../store/actions/chyt/list';
 import {chytToggleFavourite} from '../../store/actions/favourites';
 import {useThunkDispatch} from '../../store/thunkDispatch';
