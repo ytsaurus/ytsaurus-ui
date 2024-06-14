@@ -2,10 +2,16 @@ import React from 'react';
 
 import format from '../../../common/hammer/format';
 import Label from '../../../components/Label/Label';
-import {ChytCliqueHealthType, ChytCliqueStateType} from '../../../utils/strawberryControllerApi';
+import {
+    StrawberryCliqueHealthType,
+    StrawberryCliqueStateType,
+} from '../../../utils/strawberryControllerApi';
 
 const THEME_MAP: Partial<
-    Record<ChytCliqueStateType | ChytCliqueHealthType, 'danger' | 'success' | 'info' | 'warning'>
+    Record<
+        StrawberryCliqueStateType | StrawberryCliqueHealthType,
+        'danger' | 'success' | 'info' | 'warning'
+    >
 > = {
     good: 'success',
     failed: 'danger',
@@ -14,7 +20,11 @@ const THEME_MAP: Partial<
     untracked: 'warning',
 };
 
-export function CliqueState({state}: {state?: ChytCliqueStateType | ChytCliqueHealthType}) {
+export function CliqueState({
+    state,
+}: {
+    state?: StrawberryCliqueStateType | StrawberryCliqueHealthType;
+}) {
     return !state ? (
         format.NO_VALUE
     ) : (
