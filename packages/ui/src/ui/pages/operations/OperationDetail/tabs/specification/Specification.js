@@ -78,6 +78,7 @@ function Specification({operation}) {
                     onToggle={onToggleProvided}
                     collapsed={collapsed.provided}
                     size={UI_COLLAPSIBLE_SIZE}
+                    marginDirection="bottom"
                 >
                     <Yson
                         value={providedSpec}
@@ -95,6 +96,7 @@ function Specification({operation}) {
                         onToggle={onToggleUnrecognized}
                         collapsed={collapsed.unrecognized}
                         size={UI_COLLAPSIBLE_SIZE}
+                        marginDirection="bottom"
                     >
                         <Yson
                             value={unrecognizedSpec}
@@ -111,6 +113,7 @@ function Specification({operation}) {
                         onToggle={onToggleResulting}
                         collapsed={collapsed.resulting}
                         size={UI_COLLAPSIBLE_SIZE}
+                        marginDirection="bottom"
                     >
                         <Yson
                             value={fullSpec}

@@ -33,7 +33,9 @@ import './JobSizes.scss';
 
 const block = cn('operation-detail-job-sizes');
 
-type ReduxProps = ConnectedProps<typeof connector>;
+type Props = ConnectedProps<typeof connector> & {
+    className?: string;
+};
 
 interface State {
     formatSettings?: {digits: number};
@@ -41,13 +43,13 @@ interface State {
     showEstimated: boolean;
 }
 
-class JobSizes extends React.Component<ReduxProps, State> {
+class JobSizes extends React.Component<Props, State> {
     static propTypes = {
         operation: operationProps.isRequired,
         chartKitTheme: PropTypes.string.isRequired,
     };
 
-    static getDerivedStateFromProps(props: ReduxProps) {
+    static getDerivedStateFromProps(props: Props) {
         const progress = ypath.getValue(props.operation, '/@progress');
         const data = progress && ypath.getValue(progress, '/partition_size_histogram');
 
@@ -62,8 +64,10 @@ class JobSizes extends React.Component<ReduxProps, State> {
     };
 
     render() {
+        const {className} = this.props;
         return (
             <WithStickyToolbar
+                className={className}
                 content={this.renderContent()}
                 toolbar={
                     <Toolbar
@@ -197,7 +201,7 @@ const connector = connect(mapStateToProps);
 
 const JobSizesConnected = connector(JobSizes);
 
-export default function JobSizesWithRum() {
+export default function JobSizesWithRum(props: {className?: string}) {
     const loadState = useSelector(getOperationDetailsLoadingStatus);
 
     useAppRumMeasureStart({
@@ -217,5 +221,5 @@ export default function JobSizesWithRum() {
         },
     });
 
-    return <JobSizesConnected />;
+    return <JobSizesConnected {...props} />;
 }

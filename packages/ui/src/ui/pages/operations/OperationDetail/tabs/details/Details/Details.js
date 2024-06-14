@@ -64,6 +64,7 @@ class Details extends Component {
                     name="Description"
                     className={block('description')}
                     size={collapsibleSize}
+                    marginDirection="bottom"
                 >
                     <OperationDescription description={description} />
                 </CollapsibleSection>
@@ -79,6 +80,7 @@ class Details extends Component {
                 name="Specification"
                 className={block('specification')}
                 size={collapsibleSize}
+                marginDirection="bottom"
             >
                 <Specification specification={specification} cluster={cluster} />
             </CollapsibleSection>
@@ -88,7 +90,7 @@ class Details extends Component {
     renderAlerts() {
         const {alertEvents, collapsibleSize} = this.props;
         return !alertEvents?.length ? null : (
-            <CollapsibleSection name="Alerts" size={collapsibleSize}>
+            <CollapsibleSection name="Alerts" size={collapsibleSize} marginDirection="bottom">
                 <AlertEvents items={alertEvents} />
             </CollapsibleSection>
         );
@@ -130,6 +132,7 @@ class Details extends Component {
                     className={block('runtime')}
                     overview={this.renderRuntimeOverview()}
                     size={collapsibleSize}
+                    marginDirection="bottom"
                 >
                     <Runtime runtime={runtime} operation={operation} cluster={cluster} />
                 </CollapsibleSection>
@@ -151,6 +154,7 @@ class Details extends Component {
                     name="Data flow"
                     className={block('resources')}
                     size={collapsibleSize}
+                    marginDirection="bottom"
                 >
                     <DataFlow
                         operation={operation}
@@ -171,6 +175,7 @@ class Details extends Component {
                     name="Events"
                     className={block('events')}
                     size={collapsibleSize}
+                    marginDirection="bottom"
                 >
                     <Events events={events} />
                 </CollapsibleSection>

@@ -295,13 +295,22 @@ class OperationDetail extends React.Component<ReduxProps & RouteProps> {
                 <Switch>
                     <Route
                         path={`${path}/${Tab.ATTRIBUTES}`}
-                        render={() => <OperationAttributes />}
+                        render={() => <OperationAttributes className={detailBlock('attributes')} />}
                     />
                     <Route path={`${path}/${Tab.DETAILS}`} component={Details} />
                     <Route path={`${path}/${Tab.SPECIFICATION}`} component={Specification} />
-                    <Route path={`${path}/${Tab.STATISTICS}`} component={Statistics} />
-                    <Route path={`${path}/${Tab.JOBS}`} component={Jobs} />
-                    <Route path={`${path}/${Tab.JOB_SIZES}`} component={JobSizes} />
+                    <Route
+                        path={`${path}/${Tab.STATISTICS}`}
+                        render={() => <Statistics className={detailBlock('statistics')} />}
+                    />
+                    <Route
+                        path={`${path}/${Tab.JOBS}`}
+                        render={() => <Jobs className={detailBlock('jobs')} />}
+                    />
+                    <Route
+                        path={`${path}/${Tab.JOB_SIZES}`}
+                        render={() => <JobSizes className={detailBlock('job-sizes')} />}
+                    />
                     <Route path={`${path}/${Tab.PARTITION_SIZES}`} component={PartitionSizes} />
                     {monitorTabVisible && monitoringComponent && (
                         <Route

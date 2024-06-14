@@ -28,6 +28,7 @@ export class CollapsibleSectionStateLess extends Component<PropsStateLess> {
     static defaultProps = {
         size: 'm',
         collapsed: false,
+        marginDirection: 'top',
     };
 
     toggle = () => {
@@ -37,11 +38,11 @@ export class CollapsibleSectionStateLess extends Component<PropsStateLess> {
     };
 
     render() {
-        const {name, children, size, overview, className, collapsed} = this.props;
+        const {name, children, size, overview, className, collapsed, marginDirection} = this.props;
 
         return (
             <ErrorBoundary>
-                <div className={b(null, className)}>
+                <div className={b({margin: marginDirection}, className)}>
                     <div className={headingCN({size, overview: 'yes'})}>
                         <span
                             className={headingCN(
@@ -80,6 +81,8 @@ export interface Props {
     size?: 'unset' | 'xs' | 's' | 'ss' | 'ns' | 'n' | 'm' | 'l';
     children?: React.ReactNode;
     overview?: React.ReactNode;
+
+    marginDirection?: 'top' | 'bottom';
 }
 
 export default function CollapsibleSection(props: Props) {

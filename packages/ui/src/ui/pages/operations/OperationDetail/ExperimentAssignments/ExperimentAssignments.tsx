@@ -37,6 +37,7 @@ function ExperimentAssignments({className}: {className: string}) {
             onToggle={onToggleCollapse}
             collapsed={collapsed}
             size={UI_COLLAPSIBLE_SIZE}
+            marginDirection="bottom"
         >
             {_.map(items, (item, index) => (
                 <ExperimentsItem key={index} data={item} />

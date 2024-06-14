@@ -29,8 +29,6 @@
 
         &-heading {
             grid-area: a;
-
-            margin-bottom: 5px;
         }
 
         &-actions {
@@ -86,4 +84,11 @@
     @include redefinition('bittersweet', var(--bittersweet-color));
     @include redefinition('sunflower', var(--sunflower-color));
     @include redefinition('mediumgray', var(--mediumgray-color));
+
+    &__attributes,
+    &__statistics,
+    &__job-sizes,
+    &__jobs {
+        margin-top: -10px;
+    }
 }

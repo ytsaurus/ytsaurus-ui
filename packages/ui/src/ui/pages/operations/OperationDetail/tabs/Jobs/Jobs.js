@@ -18,7 +18,7 @@ import {isFinalLoadingStatus} from '../../../../../utils/utils';
 import {useRumMeasureStop} from '../../../../../rum/RumUiContext';
 import OperationJobsErrors from './OperationJobsErrors/OperationJobsErrors';
 
-function Jobs() {
+function Jobs({className}) {
     const dispatch = useDispatch();
     const loading = useSelector((state) => state.operations.jobs.loading);
     const loaded = useSelector((state) => state.operations.jobs.loaded);
@@ -34,7 +34,7 @@ function Jobs() {
     const isLoading = loading && !loaded;
     return (
         <ErrorBoundary>
-            <div className="operation-detail-jobs">
+            <div className={`operation-detail-jobs ${className}`}>
                 <OperationJobsToolbar />
                 <LoadDataHandler {...{loaded, loading, error, errorData}} alwaysShowError>
                     <OperationJobsErrors />
@@ -45,7 +45,7 @@ function Jobs() {
     );
 }
 
-export default function JobsWithRum() {
+export default function JobsWithRum(props) {
     const loadState = useSelector(getOperationJobsLoadingStatus);
     /**
      * Selection of this value involves additional rerenders of the component
@@ -72,5 +72,5 @@ export default function JobsWithRum() {
         },
     });
 
-    return <Jobs />;
+    return <Jobs {...props} />;
 }

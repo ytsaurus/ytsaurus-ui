@@ -244,7 +244,12 @@ class Tasks extends React.Component<Props, State> {
     render() {
         const {className, jobs, collapsibleSize} = this.props;
         return !jobs?.items?.length ? null : (
-            <CollapsibleSection name="Tasks" className={className} size={collapsibleSize}>
+            <CollapsibleSection
+                name="Tasks"
+                className={className}
+                size={collapsibleSize}
+                marginDirection="bottom"
+            >
                 {this.renderContent()}
             </CollapsibleSection>
         );
