@@ -6,9 +6,9 @@ import {UNEXPECTED_PIPE_AXIOS_RESPONSE, pipeAxiosResponse, sendAndLogError} from
 import {getUserYTApiSetup} from '../components/requestsSetup';
 import {getPreloadedClusterUiConfig} from '../components/cluster-params';
 
-export async function chytProxyApi(req: Request, res: Response) {
+export async function strawberryProxyApi(req: Request, res: Response) {
     try {
-        await chytProxyApiImpl(req, res);
+        await strawberryProxyApiImpl(req, res);
     } catch (e: any) {
         await sendAndLogError(req.ctx, res, 500, e, {
             method: 'nodejs',
@@ -18,8 +18,18 @@ export async function chytProxyApi(req: Request, res: Response) {
     }
 }
 
-async function chytProxyApiImpl(req: Request, res: Response) {
-    const {action, ytAuthCluster: cluster} = req.params;
+const getBaseUrlConfigParameter = (engine: string) => {
+    const CLUSTER_CONFIG_ENGINE_URL_MAP = {
+        chyt: 'chyt_controller_base_url',
+        spyt: 'livy_controller_base_url',
+    } as const;
+
+    if (!(engine in CLUSTER_CONFIG_ENGINE_URL_MAP)) return null;
+    return CLUSTER_CONFIG_ENGINE_URL_MAP[engine as keyof typeof CLUSTER_CONFIG_ENGINE_URL_MAP];
+};
+
+async function strawberryProxyApiImpl(req: Request, res: Response) {
+    const {action, engine, ytAuthCluster: cluster} = req.params;
     const ALLOWED_ACTIONS = new Set([
         'list',
         'create',
@@ -32,29 +42,31 @@ async function chytProxyApiImpl(req: Request, res: Response) {
         'get_speclet',
     ]);
 
+    const baseUrlConfigParameter = getBaseUrlConfigParameter(engine);
+
+    if (!baseUrlConfigParameter) {
+        return sendAndLogError(req.ctx, res, 400, new Error('api engine is not supported'));
+    }
+
     if (!ALLOWED_ACTIONS.has(action)) {
         return sendAndLogError(
             req.ctx,
             res,
             400,
-            new Error(`CHYT action - '${action}', is not supported`),
+            new Error(`${engine.toUpperCase()} action - '${action}', is not supported`),
         );
     }
 
     const isDeveloper = req.query.isDeveloper === 'true';
-
-    const {chyt_controller_base_url: baseUrl} = await getPreloadedClusterUiConfig(
-        cluster,
-        req.ctx,
-        isDeveloper,
-    );
+    const config = await getPreloadedClusterUiConfig(cluster, req.ctx, isDeveloper);
+    const baseUrl = config[baseUrlConfigParameter];
 
     if (!baseUrl) {
         return sendAndLogError(
             req.ctx,
             res,
             500,
-            new Error('//sys/@ui_config/chyt_controller_base_url is not defined'),
+            new Error(`//sys/@ui_config/${baseUrlConfigParameter} is not defined`),
         );
     }
     const {ctx} = req;
