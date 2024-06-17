@@ -39,15 +39,23 @@ const QueryTrackerTopRow: FC = () => {
     const handleChangeEngine = useCallback(
         (newEngine: QueryEngine) => {
             const newSettings = {...settings};
+            const isSpyt = newEngine === QueryEngine.SPYT;
+            const isChyt = newEngine === QueryEngine.CHYT;
 
-            if (newEngine === QueryEngine.CHYT && settings && 'cluster' in settings) {
-                dispatch(loadCliqueByCluster(settings.cluster as string));
+            if ((isSpyt || isChyt) && settings && 'cluster' in settings) {
+                dispatch(
+                    loadCliqueByCluster(
+                        newEngine === QueryEngine.SPYT ? QueryEngine.SPYT : QueryEngine.CHYT,
+                        settings.cluster as string,
+                    ),
+                );
             }
 
-            if (newEngine !== QueryEngine.SPYT && 'discovery_path' in newSettings) {
-                delete newSettings['discovery_path'];
+            if (!isSpyt && 'discovery_group' in newSettings) {
+                delete newSettings['discovery_group'];
+                delete newSettings['discovery_path']; // old request type. Deprecated
             }
-            if (newEngine !== QueryEngine.CHYT && 'clique' in newSettings) {
+            if (!isChyt && 'clique' in newSettings) {
                 delete newSettings['clique'];
             }
 
@@ -78,8 +86,8 @@ const QueryTrackerTopRow: FC = () => {
             const newSettings: Record<string, string> = settings ? {...settings} : {};
             if (clusterId) {
                 newSettings.cluster = clusterId;
-                if (engine === QueryEngine.CHYT) {
-                    dispatch(loadCliqueByCluster(clusterId));
+                if (engine === QueryEngine.CHYT || engine === QueryEngine.SPYT) {
+                    dispatch(loadCliqueByCluster(engine, clusterId));
                 }
             } else {
                 delete newSettings['cluster'];
@@ -105,7 +113,7 @@ const QueryTrackerTopRow: FC = () => {
 
     const handlePathChange = useCallback(
         (newPath: string) => {
-            dispatch(updateQueryDraft({settings: {...settings, discovery_path: newPath}}));
+            dispatch(updateQueryDraft({settings: {...settings, discovery_group: newPath}}));
         },
         [dispatch, settings],
     );

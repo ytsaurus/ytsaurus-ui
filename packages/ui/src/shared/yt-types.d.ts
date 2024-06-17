@@ -23,6 +23,7 @@ export interface ClusterUiConfig {
     enable_maintenance_api_nodes?: boolean;
     enable_maintenance_api_proxies?: boolean;
     chyt_controller_base_url?: string;
+    livy_controller_base_url?: string;
 }
 
 export type CypressNode<AttributesT extends Record<string, unknown>, ValueT> = {

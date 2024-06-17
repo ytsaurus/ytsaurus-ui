@@ -2,6 +2,7 @@ import axios, {CancelToken} from 'axios';
 import {wrapApiPromiseByToaster} from './utils';
 import {YTError} from '../../@types/types';
 import {OptionsGroup} from '../components/Dialog/df-dialog-utils';
+import {QueryEngine} from '../pages/query-tracker/module/engines';
 
 export type WithResult<T> = {result: T};
 
@@ -110,6 +111,7 @@ type StrawberryApiType = <
     cluster: string,
     params: ApiItem['params'],
     props: {
+        type?: 'chyt' | 'spyt';
         cancelToken?: CancelToken;
         skipErrorToast?: boolean;
         successTitle?: string;
@@ -121,13 +123,13 @@ const strawberryApi: StrawberryApiType = (
     action,
     cluster,
     params,
-    {cancelToken, skipErrorToast, successTitle, isAdmin} = {},
+    {type, cancelToken, skipErrorToast, successTitle, isAdmin} = {},
 ) => {
     const query = isAdmin ? '?isDeveloper=true' : '';
     return wrapApiPromiseByToaster(
         axios.request({
             method: 'POST',
-            url: `/api/chyt/${cluster}/${action}${query}`,
+            url: `/api/strawberry/${type}/${cluster}/${action}${query}`,
             data: {
                 params: {...params},
             },
@@ -146,5 +148,9 @@ const strawberryApi: StrawberryApiType = (
 };
 
 export const chytApiAction: StrawberryApiType = (action, cluster, params, props) => {
-    return strawberryApi(action, cluster, params, props);
+    return strawberryApi(action, cluster, params, {...props, type: QueryEngine.CHYT});
+};
+
+export const spytApiAction: StrawberryApiType = (action, cluster, params, props) => {
+    return strawberryApi(action, cluster, params, {...props, type: QueryEngine.SPYT});
 };

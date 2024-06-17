@@ -75,7 +75,8 @@ export interface DraftQuery {
     settings?: {
         cluster?: string;
         clique?: string;
-        discovery_path?: string;
+        discovery_path?: string; // old request type. Deprecated
+        discovery_group?: string;
         execution_mode?: 'validate' | 'optimize';
     } & Record<string, string>;
     error?: unknown;

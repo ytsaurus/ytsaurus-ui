@@ -20,7 +20,7 @@ import {getAppBrowserHistory} from '../../../../store/window-store';
 import {QueryState} from './reducer';
 import {wrapApiPromiseByToaster} from '../../../../utils/utils';
 import {prepareQueryPlanIds} from './utills';
-import {chytApiAction} from '../../../../utils/strawberryControllerApi';
+import {chytApiAction, spytApiAction} from '../../../../utils/strawberryControllerApi';
 import guid from '../../../../common/hammer/guid';
 
 export const REQUEST_QUERY = 'query-tracker/REQUEST_QUERY';
@@ -59,7 +59,11 @@ export type SetQueryCliqueLoading = ActionD<typeof SET_QUERY_CLIQUE_LOADING, boo
 export const SET_QUERY_CLUSTER_CLIQUE = 'query-tracker/SET_QUERY_CLUSTER_CLIQUE';
 export type SetQueryClusterClique = ActionD<
     typeof SET_QUERY_CLUSTER_CLIQUE,
-    {cluster: string; items: {alias: string; yt_operation_id?: string}[]}
+    {
+        cluster: string;
+        engine: QueryEngine.SPYT | QueryEngine.CHYT;
+        items: {alias: string; yt_operation_id?: string}[];
+    }
 >;
 
 export const UPDATE_ACO_QUERY = 'query-tracker/UPDATE_ACO_QUERY';
@@ -78,14 +82,20 @@ export const setCurrentClusterToQuery =
 
 export const loadCliqueByCluster =
     (
+        engine: QueryEngine.SPYT | QueryEngine.CHYT,
         cluster: string,
     ): ThunkAction<void, RootState, unknown, SetQueryClusterClique | SetQueryCliqueLoading> =>
     (dispatch, getState) => {
         const state = getState();
-        if (cluster in state.queryTracker.query.cliqueMap) return;
+        if (
+            cluster in state.queryTracker.query.cliqueMap &&
+            state.queryTracker.query.cliqueMap[cluster][engine]
+        )
+            return;
 
         dispatch({type: SET_QUERY_CLIQUE_LOADING, data: true});
-        chytApiAction('list', cluster, {attributes: ['yt_operation_id' as const]}, {})
+        const apiAction = engine === QueryEngine.SPYT ? spytApiAction : chytApiAction;
+        apiAction('list', cluster, {attributes: ['yt_operation_id' as const]}, {})
             .then((data) => {
                 const items = data?.result?.map(({$value, $attributes = {}}) => {
                     return {
@@ -96,13 +106,13 @@ export const loadCliqueByCluster =
 
                 dispatch({
                     type: SET_QUERY_CLUSTER_CLIQUE,
-                    data: {cluster, items},
+                    data: {cluster, engine, items},
                 });
             })
             .catch(() => {
                 dispatch({
                     type: SET_QUERY_CLUSTER_CLIQUE,
-                    data: {cluster, items: []},
+                    data: {cluster, engine, items: []},
                 });
             })
             .finally(() => {
@@ -127,7 +137,11 @@ export function loadQuery(
             query.files = query.files.map((file) => ({...file, id: guid()}));
 
             if (query.engine === QueryEngine.CHYT && query.settings?.cluster) {
-                dispatch(loadCliqueByCluster(query.settings.cluster as string));
+                dispatch(loadCliqueByCluster(QueryEngine.CHYT, query.settings.cluster as string));
+            }
+
+            if (query.engine === QueryEngine.SPYT && query.settings?.cluster) {
+                dispatch(loadCliqueByCluster(QueryEngine.SPYT, query.settings.cluster as string));
             }
 
             const queryItem = prepareQueryPlanIds(query);
