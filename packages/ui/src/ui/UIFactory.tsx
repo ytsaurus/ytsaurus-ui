@@ -99,6 +99,19 @@ export type AclRoleActionsType = Partial<Omit<PreparedAclSubject | PreparedRole,
     type?: string;
 };
 
+export type TabName = string;
+
+export type ExtraTab = {
+    value: `extra_${TabName}`;
+    title: string;
+    text?: string;
+    caption?: string;
+    hotkey?: string;
+    component: React.ComponentType;
+    isSupported: (attributes: Record<string, any>) => boolean;
+    position: {before: TabName} | {after: TabName};
+};
+
 export interface UIFactory {
     getClusterAppearance(cluster?: string): undefined | ClusterAppearance;
 
@@ -389,6 +402,8 @@ export interface UIFactory {
     getAclPermissionsSettings(): typeof PERMISSIONS_SETTINGS;
 
     onChytAliasSqlClick(params: {alias: string; cluster: string}): void;
+
+    getNavigationExtraTabs(): Array<ExtraTab>;
 }
 
 const experimentalPages: string[] = [];
@@ -662,6 +677,10 @@ const uiFactory: UIFactory = {
     },
 
     onChytAliasSqlClick() {},
+
+    getNavigationExtraTabs() {
+        return [];
+    },
 };
 
 function configureUIFactoryItem<K extends keyof UIFactory>(k: K, redefinition: UIFactory[K]) {

@@ -11,23 +11,35 @@ import UserAttributes from '../../../../../pages/navigation/tabs/UserAttributes/
 import TableMountConfig from '../../../../../pages/navigation/tabs/TableMountConfig/TableMountConfig';
 import {Tab} from '../../../../../constants/navigation';
 import {Fragment} from 'react';
+import UIFactory from '../../../../../UIFactory';
 
-const supportedAttributeTypes = {
-    acl: ACL,
-    locks: Locks,
-    schema: Schema,
-    tablets: Tablets,
-    attributes: Attributes,
-    tablet_errors: TabletErrors,
-    user_attributes: UserAttributes,
-    [Tab.ACCESS_LOG]: AccessLog,
-    [Tab.AUTO]: Fragment,
-    [Tab.CONSUMER]: Consumer,
-    [Tab.MOUNT_CONFIG]: TableMountConfig,
-    [Tab.QUEUE]: Queue,
+const getSupportedAttributeTypes = () => {
+    const supportedAttributeTypes: Record<string, React.ComponentType> = {
+        acl: ACL,
+        locks: Locks,
+        schema: Schema,
+        tablets: Tablets,
+        attributes: Attributes,
+        tablet_errors: TabletErrors,
+        user_attributes: UserAttributes,
+        [Tab.ACCESS_LOG]: AccessLog,
+        [Tab.AUTO]: Fragment,
+        [Tab.CONSUMER]: Consumer,
+        [Tab.MOUNT_CONFIG]: TableMountConfig,
+        [Tab.QUEUE]: Queue,
+    };
+
+    UIFactory.getNavigationExtraTabs().forEach((tab) => {
+        supportedAttributeTypes[tab.value] = tab.component;
+    });
+
+    return supportedAttributeTypes;
 };
 
-export default (mode: string) =>
-    mode in supportedAttributeTypes
+export default (mode: string) => {
+    const supportedAttributeTypes = getSupportedAttributeTypes();
+
+    return mode in supportedAttributeTypes
         ? supportedAttributeTypes[mode as keyof typeof supportedAttributeTypes]
         : undefined;
+};
