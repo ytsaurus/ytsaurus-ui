@@ -3,7 +3,6 @@ import {StickyContainer} from 'react-sticky';
 import {connect, useSelector} from 'react-redux';
 import PropTypes from 'prop-types';
 import hammer from '../../../common/hammer';
-import ypath from '../../../common/thor/ypath';
 import cn from 'bem-cn-lite';
 import _ from 'lodash';
 import {getCluster} from '../../../store/selectors/global';
@@ -30,7 +29,6 @@ import {LOADING_STATUS} from '../../../constants/index';
 import {onTransactionChange, setMode, updateView} from '../../../store/actions/navigation';
 
 import {
-    getAttributes,
     getError,
     getIdmSupport,
     getLoadState,
@@ -40,7 +38,7 @@ import {
     getType,
     isNavigationFinalLoadState,
 } from '../../../store/selectors/navigation';
-import {getEffectiveMode, getSupportedTabs} from '../../../store/selectors/navigation/navigation';
+import {getEffectiveMode, getTabs} from '../../../store/selectors/navigation/navigation';
 import {NavigationPermissionsNotice} from './NavigationPermissionsNotice';
 import {useRumMeasureStop} from '../../../rum/RumUiContext';
 import {useAppRumMeasureStart} from '../../../rum/rum-app-measures';
@@ -56,7 +54,6 @@ import CreateACOModal from '../modals/CreateACOModal';
 import Button from '../../../components/Button/Button';
 import Icon from '../../../components/Icon/Icon';
 import {showNavigationAttributesEditor} from '../../../store/actions/navigation/modals/attributes-editor';
-import {getTabletErrorsCount} from '../../../store/selectors/navigation/tabs/tablet-errors';
 import {getPermissionDeniedError} from '../../../utils/errors';
 import {getParentPath} from '../../../utils/navigation';
 import UIFactory from '../../../UIFactory';
@@ -96,8 +93,6 @@ class Navigation extends Component {
         transaction: PropTypes.string,
         parsedPath: PropTypes.object,
         type: PropTypes.string,
-        supportedTabs: PropTypes.object.isRequired, // actually it's ES6 Set
-        attributes: PropTypes.object.isRequired,
 
         hasError: PropTypes.bool,
         error: PropTypes.shape({
@@ -150,147 +145,24 @@ class Navigation extends Component {
     }
 
     get items() {
-        const {setMode, attributes, tabletErrorsCount} = this.props;
-        const isACO = attributes?.type === 'access_control_object';
+        const {tabs, setMode} = this.props;
 
-        return [
-            {
-                value: Tab.CONSUMER,
-                title: 'Go to consumer [Alt+R]',
-                hotkey: [
-                    {
-                        keys: 'alt+r',
-                        handler: () => setMode(Tab.CONSUMER),
-                        scope: 'all',
-                    },
-                ],
-            },
-            {
-                value: Tab.CONTENT,
-                title: 'Go to content [Alt+C]',
-                text: isACO ? 'Principal ACL' : undefined,
-                hotkey: [
-                    {
-                        keys: 'alt+c',
-                        handler: () => setMode(Tab.CONTENT),
-                        scope: 'all',
-                    },
-                ],
-            },
-            {
-                value: Tab.QUEUE,
-                title: 'Go to queue [Alt+Q]',
-                hotkey: [
-                    {
-                        keys: 'alt+q',
-                        handler: () => setMode(Tab.QUEUE),
-                        scope: 'all',
-                    },
-                ],
-            },
-            {
-                value: Tab.ATTRIBUTES,
-                title: 'Go to attributes [Alt+A]',
-                hotkey: [
-                    {
-                        keys: 'alt+a',
-                        handler: () => setMode(Tab.ATTRIBUTES),
-                        scope: 'all',
-                    },
-                ],
-                caption: 'Attributes',
-            },
-            {
-                value: Tab.USER_ATTRIBUTES,
-                title: 'Go to user attributes [Alt+U]',
-                hotkey: [
-                    {
-                        keys: 'alt+u',
-                        handler: () => setMode(Tab.USER_ATTRIBUTES),
-                        scope: 'all',
-                    },
-                ],
-                caption: 'User Attributes',
-            },
-            {
-                value: Tab.MOUNT_CONFIG,
-                title: 'Go to mount config',
-                hotkey: [
-                    {
-                        keys: 'alt+m',
-                        handler: () => setMode(Tab.MOUNT_CONFIG),
-                        scope: 'all',
-                    },
-                ],
-            },
-            {
-                value: Tab.ACL,
-                title: 'Go to ACL [Alt+P]',
-                hotkey: [
-                    {
-                        keys: 'alt+p',
-                        handler: () => setMode(Tab.ACL),
-                        scope: 'all',
-                    },
-                ],
-                caption: 'ACL',
-            },
-            {
-                value: Tab.ACCESS_LOG,
-                title: 'Access log',
-            },
-            {
-                value: Tab.LOCKS,
-                title: 'Go to locks [Alt+L]',
-                hotkey: [
-                    {
-                        keys: 'alt+l',
-                        handler: () => setMode(Tab.LOCKS),
-                        scope: 'all',
-                    },
-                ],
-                counter: ypath.getValue(attributes, '/lock_count'),
-            },
-            {
-                value: Tab.ANNOTATION,
-                title: 'Go to annotation [Alt+N]',
-                hotkey: [
-                    {
-                        keys: 'alt+n',
-                        handler: () => setMode(Tab.ACL),
-                        scope: 'all',
-                    },
-                ],
-                caption: 'Annotation',
-            },
-            {
-                value: Tab.SCHEMA,
-                title: 'Go to schema [Alt+S]',
-                hotkey: [
-                    {
-                        keys: 'alt+s',
-                        handler: () => setMode(Tab.SCHEMA),
-                        scope: 'all',
-                    },
-                ],
-            },
-            {
-                value: Tab.TABLETS,
-                title: 'Go to tablets [Alt+T]',
-                hotkey: [
-                    {
-                        keys: 'alt+t',
-                        handler: () => setMode(Tab.TABLETS),
-                        scope: 'all',
-                    },
-                ],
-            },
-            {
-                value: Tab.TABLET_ERRORS,
-                title: 'Go to tablets errors',
-                counter: tabletErrorsCount,
-            },
-        ];
+        return tabs.map((tab) => {
+            if (tab.hotkey) {
+                return {
+                    ...tab,
+                    hotkey: tab.hotkey.map(({keys, tab, scope}) => {
+                        return {
+                            keys,
+                            scope,
+                            handler: () => setMode(tab),
+                        };
+                    }),
+                };
+            }
+
+            return tab;
+        });
     }
 
     onTabChange = (value) => {
@@ -299,11 +171,11 @@ class Navigation extends Component {
     };
 
     renderTabs() {
-        const {mode, supportedTabs, tabSize} = this.props;
+        const {mode, tabSize} = this.props;
         const items = _.map(this.items, (item) => ({
             ...item,
             text: item.text || hammer.format['ReadableField'](item.value),
-            show: supportedTabs.has(item.value),
+            show: true,
         }));
 
         return (
@@ -469,8 +341,6 @@ function mapStateToProps(state) {
         mode: getEffectiveMode(state),
         type: getType(state),
         isIdmSupported: getIdmSupport(state),
-        supportedTabs: getSupportedTabs(state),
-        attributes: getAttributes(state),
         error: getError(state),
         hasError,
         loaded,
@@ -479,7 +349,7 @@ function mapStateToProps(state) {
         transaction: getTransaction(state),
         cluster: getCluster(state),
         tabSize: UI_TAB_SIZE,
-        tabletErrorsCount: getTabletErrorsCount(state),
+        tabs: getTabs(state),
     };
 }
 
