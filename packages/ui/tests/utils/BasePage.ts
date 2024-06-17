@@ -22,4 +22,8 @@ export class BasePage {
     async replaceBreadcrumbsTestDir() {
         await this.replaceBreadcrumbsByTitle(E2E_DIR_NAME, 'e2e.1970-01-01.00:00:00.xxxxxxxxxxx');
     }
+
+    async waitForACL() {
+        await this.page.waitForSelector('.navigation-acl__row .yt-subject-link');
+    }
 }
