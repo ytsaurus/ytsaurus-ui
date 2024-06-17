@@ -6,7 +6,6 @@ import {RumMeasureTypes} from '../../../rum/rum-measure-types';
 
 import {isPathAutoCorrectionSettingEnabled} from '../../../store/selectors/settings';
 import {getPath, getTransaction} from '../../../store/selectors/navigation';
-import {getDefaultMode} from '../../../store/selectors/navigation/navigation';
 
 import {
     autoCorrectPath,
@@ -35,6 +34,7 @@ import {checkPermissions} from '../../../utils/acl/acl-api';
 import {getAnnotation} from './tabs/annotation';
 import {loadTabletErrorsCount} from './tabs/tablet-errors';
 import {isSupportedEffectiveExpiration} from '../../../store/selectors/thor/support';
+import {getTabs} from '../../../store/selectors/navigation/navigation';
 
 export function updateView(settings = {}) {
     return (dispatch, getState) => {
@@ -216,11 +216,11 @@ export function updateView(settings = {}) {
 
 export function setMode(mode) {
     return (dispatch, getState) => {
-        const defaultMode = getDefaultMode(getState());
+        const [firstTab] = getTabs(getState());
 
         dispatch({
             type: SET_MODE,
-            data: mode === defaultMode ? Tab.AUTO : mode,
+            data: mode === firstTab?.value ? Tab.AUTO : mode,
         });
     };
 }
