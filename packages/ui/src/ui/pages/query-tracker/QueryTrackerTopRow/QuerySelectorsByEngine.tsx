@@ -1,15 +1,14 @@
-import React, {ChangeEvent, FC, useCallback} from 'react';
+import React, {FC} from 'react';
 import {QueryClusterSelector} from './QueryClusterSelector';
 import {ClusterConfig} from '../../../../shared/yt-types';
 import {QueryEngine} from '../module/engines';
 import {QueryCliqueSelector} from './QueryCliqueSelector';
-import {TextInput} from '@gravity-ui/uikit';
 
 type Props = {
     settings?: Record<string, string>;
     engine: QueryEngine;
     clusters: ClusterConfig[];
-    cliqueMap: Record<string, {alias: string; yt_operation_id?: string}[]>;
+    cliqueMap: Record<string, Record<string, {alias: string; yt_operation_id?: string}[]>>;
     cliqueLoading: boolean;
     onClusterChange: (clusterId: string) => void;
     onCliqueChange: (alias: string) => void;
@@ -25,15 +24,9 @@ export const QuerySelectorsByEngine: FC<Props> = ({
     onCliqueChange,
     onPathChange,
 }) => {
-    const handlePathChange = useCallback(
-        (e: ChangeEvent<HTMLInputElement>) => {
-            onPathChange(e.currentTarget.value);
-        },
-        [onPathChange],
-    );
-
-    const cliqueList =
-        settings.cluster && settings.cluster in cliqueMap ? cliqueMap[settings.cluster] : [];
+    const clusterCliqueList =
+        settings.cluster && settings.cluster in cliqueMap ? cliqueMap[settings.cluster] : {};
+    const cliqueList = engine in clusterCliqueList ? clusterCliqueList[engine] : [];
 
     if (engine === QueryEngine.CHYT) {
         return (
@@ -61,14 +54,11 @@ export const QuerySelectorsByEngine: FC<Props> = ({
                     value={settings.cluster}
                     onChange={onClusterChange}
                 />
-                <TextInput
-                    placeholder="Discovery path"
-                    value={settings.discovery_path}
-                    onChange={handlePathChange}
-                    size="l"
-                    hasClear
-                    defaultValue={settings.discovery_path}
-                    style={{maxWidth: '200px'}}
+                <QueryCliqueSelector
+                    loading={cliqueLoading}
+                    cliqueList={cliqueList}
+                    value={settings.discovery_group}
+                    onChange={onPathChange}
                 />
             </>
         );

@@ -1,4 +1,4 @@
-import React, {FC, useCallback, useState} from 'react';
+import React, {FC, useCallback, useEffect, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {RowWithName} from '../../../containers/AppNavigation/TopRowContent/SectionName';
 import {Page} from '../../../../shared/constants/settings';
@@ -36,18 +36,23 @@ const QueryTrackerTopRow: FC = () => {
     const [nameEdit, setNameEdit] = useState(false);
     const isDesktop = useIsDesktop();
 
+    useEffect(() => {
+        if ((engine === QueryEngine.CHYT || engine === QueryEngine.SPYT) && settings?.cluster) {
+            dispatch(loadCliqueByCluster(engine, settings.cluster));
+        }
+    }, [engine, settings?.cluster, dispatch]);
+
     const handleChangeEngine = useCallback(
         (newEngine: QueryEngine) => {
             const newSettings = {...settings};
+            const isSpyt = newEngine === QueryEngine.SPYT;
+            const isChyt = newEngine === QueryEngine.CHYT;
 
-            if (newEngine === QueryEngine.CHYT && settings && 'cluster' in settings) {
-                dispatch(loadCliqueByCluster(settings.cluster as string));
+            if (!isSpyt && 'discovery_group' in newSettings) {
+                delete newSettings['discovery_group'];
+                delete newSettings['discovery_path']; // old request type. Deprecated
             }
-
-            if (newEngine !== QueryEngine.SPYT && 'discovery_path' in newSettings) {
-                delete newSettings['discovery_path'];
-            }
-            if (newEngine !== QueryEngine.CHYT && 'clique' in newSettings) {
+            if (!isChyt && 'clique' in newSettings) {
                 delete newSettings['clique'];
             }
 
@@ -78,16 +83,13 @@ const QueryTrackerTopRow: FC = () => {
             const newSettings: Record<string, string> = settings ? {...settings} : {};
             if (clusterId) {
                 newSettings.cluster = clusterId;
-                if (engine === QueryEngine.CHYT) {
-                    dispatch(loadCliqueByCluster(clusterId));
-                }
             } else {
                 delete newSettings['cluster'];
             }
             delete newSettings['clique'];
             dispatch(updateQueryDraft({settings: newSettings}));
         },
-        [dispatch, engine, settings],
+        [dispatch, settings],
     );
 
     const handleCliqueChange = useCallback(
@@ -105,7 +107,7 @@ const QueryTrackerTopRow: FC = () => {
 
     const handlePathChange = useCallback(
         (newPath: string) => {
-            dispatch(updateQueryDraft({settings: {...settings, discovery_path: newPath}}));
+            dispatch(updateQueryDraft({settings: {...settings, discovery_group: newPath}}));
         },
         [dispatch, settings],
     );

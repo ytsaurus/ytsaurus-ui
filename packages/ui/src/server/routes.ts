@@ -21,7 +21,7 @@ import {getClusterPools} from './controllers/scheduling-pools';
 import {markdownToHtmlHandler} from './controllers/markdown-to-html';
 import {odinProxyApi} from './controllers/odin-proxy-api';
 import {getClustersAvailability} from './controllers/availability';
-import {chytProxyApi} from './controllers/chyt-api';
+import {strawberryProxyApi} from './controllers/strawberry-api';
 import {oauthCallback, oauthLogin, oauthLogout} from './controllers/oauth-login';
 import {handleLogout} from './controllers/logout';
 
@@ -57,7 +57,7 @@ const routes: AppRoutes = {
     'GET /api/odin/proxy/:action/:ytAuthCluster?': {handler: odinProxyApi},
     'GET /api/odin/clusters/availability': {handler: getClustersAvailability},
 
-    'POST /api/chyt/:ytAuthCluster/:action': {handler: chytProxyApi},
+    'POST /api/strawberry/:engine/:ytAuthCluster/:action': {handler: strawberryProxyApi},
 
     'GET    /api/settings/:ytAuthCluster/:username': {handler: settingsGet},
     'POST   /api/settings/:ytAuthCluster/:username': {handler: settingsCreate},

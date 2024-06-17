@@ -1,7 +1,7 @@
 import React, {FC} from 'react';
 import {QueryCliqueItem} from './QueryCliqueItem';
 import {QuerySelector} from '../QuerySelector';
-import {Select} from '@gravity-ui/uikit';
+import {Flex, Select} from '@gravity-ui/uikit';
 
 type Props = {
     loading: boolean;
@@ -21,7 +21,8 @@ export const QueryCliqueSelector: FC<Props> = ({cliqueList, value, loading, onCh
             loading={loading}
             onChange={onChange}
             getOptionHeight={() => 52}
-            disabled={!cliqueList.length}
+            disabled={loading && !cliqueList.length}
+            renderEmptyOptions={() => <Flex justifyContent="center">No access clique</Flex>}
         >
             {(items) =>
                 items.map(({alias, yt_operation_id}) => (
