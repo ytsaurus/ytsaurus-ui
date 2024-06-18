@@ -11,7 +11,7 @@ import {getFontFamilies} from '../../store/selectors/global/fonts';
 import Toolbar from './Toolbar';
 import {getMinWidth} from './get-min-width';
 import {filterStatisticTree, prepareStatisticTs} from './prepare-statistic.ts';
-import {Statistic, StatisticTree} from './types';
+import {Statistic, StatisticTree, TreeState} from './types';
 
 import './Statistics.scss';
 
@@ -182,7 +182,7 @@ const useJobStatisticTable = ({
     fontFamilies: {regular: string; monospace: string};
 }) => {
     const [filter, setFilter] = React.useState('');
-    const [treeState, setTreeState] = React.useState('expanded');
+    const [treeState, setTreeState] = React.useState<TreeState>('expanded');
 
     const tree = React.useMemo(() => prepareStatisticTs(statistic), [statistic]);
     const items = React.useMemo(() => filterStatisticTree(tree, filter), [tree, filter]);
@@ -248,8 +248,11 @@ export function StatisticTable({
     return (
         <ErrorBoundary>
             <div className={block()}>
-                <Toolbar onFilterChange={onFilterChange} onTreeStateChange={setTreeState} />
-
+                <Toolbar
+                    onFilterChange={onFilterChange}
+                    onTreeStateChange={setTreeState}
+                    treeState={treeState}
+                />
                 <div className={block('table-container')}>
                     <ElementsTableRow
                         {...tableProps}

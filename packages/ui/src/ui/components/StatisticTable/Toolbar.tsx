@@ -3,20 +3,21 @@ import {useDispatch} from 'react-redux';
 import cn from 'bem-cn-lite';
 
 import Filter from '../Filter/Filter';
-import Button from '../Button/Button';
-import YTIcon from '../Icon/Icon';
 import HelpLink from '../HelpLink/HelpLink';
 
 import {isDocsAllowed} from '../../config';
 import UIFactory from '../../UIFactory';
+import {ExpandButton} from '../ExpandButton';
+import {TreeState} from './types';
 
 const toolbarBlock = cn('elements-toolbar');
 
 const block = cn('job-statistics');
 
 export default function Toolbar(props: {
+    treeState: TreeState;
     onFilterChange: (value: string) => void;
-    onTreeStateChange: (state: 'expanded' | 'mixed' | 'collapsed') => void;
+    onTreeStateChange: (state: TreeState) => void;
 }) {
     const collapseTable = React.useCallback(
         () => props.onTreeStateChange('collapsed'),
@@ -34,6 +35,8 @@ export default function Toolbar(props: {
         [dispatch],
     );
 
+    const isExpanded = props.treeState === 'expanded' || props.treeState === 'mixed';
+
     return (
         <div className={toolbarBlock(null, block('toolbar'))}>
             <div className={toolbarBlock('container')}>
@@ -42,15 +45,10 @@ export default function Toolbar(props: {
                 </div>
                 <div className={toolbarBlock('component', block('expand-collapse'))}>
                     <span className={block('expand-metrics')}>
-                        <Button size="m" title="Expand All" onClick={expandTable}>
-                            <YTIcon awesome="arrow-to-bottom" />
-                        </Button>
-                    </span>
-
-                    <span className={block('collapse-metrics')}>
-                        <Button size="m" title="Collapse All" onClick={collapseTable}>
-                            <YTIcon awesome="arrow-to-top" />
-                        </Button>
+                        <ExpandButton
+                            expanded={isExpanded}
+                            toggleExpanded={isExpanded ? collapseTable : expandTable}
+                        />
                     </span>
                 </div>
                 {isDocsAllowed() && (
