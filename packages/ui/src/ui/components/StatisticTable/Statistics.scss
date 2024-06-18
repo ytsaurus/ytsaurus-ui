@@ -47,4 +47,8 @@
         z-index: 1;
         background-color: rgba(256, 256, 256, 1);
     }
+
+    & &__filter {
+        margin-right: 8px;
+    }
 }
