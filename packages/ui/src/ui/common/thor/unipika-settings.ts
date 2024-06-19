@@ -42,5 +42,6 @@ export function getUnipikaSettingsFromConfig(): Partial<UnipikaSettings> {
     return {
         validateSrcUrl: makeValidateSrcUrl({}),
         normalizeUrl: makeNormalizeUrl({}),
+        treatValAsData: true,
     };
 }

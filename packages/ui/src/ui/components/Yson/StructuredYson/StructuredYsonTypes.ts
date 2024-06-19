@@ -13,6 +13,7 @@ export type UnipikaSettings = {
     maxListSize?: number;
     maxStringSize?: number;
     omitStructNull?: boolean;
+    treatValAsData?: boolean;
 
     validateSrcUrl?: (taggedTypeUrl: string) => boolean;
     normalizeUrl?: (url?: string) => string;
