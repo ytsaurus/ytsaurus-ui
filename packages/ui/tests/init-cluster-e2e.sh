@@ -176,3 +176,8 @@ yt set ${E2E_DIR}/@acl '[
 ]'
 
 yt set ${E2E_DIR}/@inherit_acl %false
+
+if [ "false" = "$(yt exists //sys/tablet_cell_bundles/e2e-bundle)" ]; then
+    yt create tablet_cell_bundle --attributes "{name=e2e-bundle;options=$(yt get //sys/tablet_cell_bundles/default/@options)}"
+    yt create tablet_cell --attributes '{tablet_cell_bundle=e2e-bundle}'
+fi

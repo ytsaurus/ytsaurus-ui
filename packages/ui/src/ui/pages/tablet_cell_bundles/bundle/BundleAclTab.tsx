@@ -6,15 +6,18 @@ import {isPoolAclAllowed} from '../../../store/selectors/scheduling/scheduling';
 import {NoContent} from '../../../components/NoContent/NoContent';
 import {BundleAcl} from '../../../containers/ACL';
 
-export default function BundleAclTab() {
+export default function BundleAclTab({className}: {className: string}) {
     const activeBundle = useSelector(getTabletsActiveBundle);
     const allowAcl = useSelector(isPoolAclAllowed);
     return (
         <ErrorBoundary>
             {allowAcl ? (
-                <BundleAcl {...{path: activeBundle}} />
+                <BundleAcl {...{path: activeBundle, className}} />
             ) : (
-                <NoContent hint={"The cluster is not ready to work with bundle's ACL"} />
+                <NoContent
+                    className={className}
+                    hint={"The cluster is not ready to work with bundle's ACL"}
+                />
             )}
         </ErrorBoundary>
     );

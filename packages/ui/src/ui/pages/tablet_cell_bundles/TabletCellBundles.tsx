@@ -124,7 +124,7 @@ export default function TabletCellBundles() {
     return (
         <div className="elements-page__content">
             <section className={b(null, 'elements-main-section')}>
-                <div className={b('content', 'elements-section')}>
+                <div className={b('content')}>
                     <div className={b('heading')}>
                         {activeBundle && (
                             <div className="elements-heading elements-heading_size_l">
@@ -202,7 +202,7 @@ export default function TabletCellBundles() {
                         )}
                         <Route
                             path={`/${cluster}/${Page.TABLET_CELL_BUNDLES}/${TabletsTab.ACL}`}
-                            component={BundleAclTab}
+                            render={() => <BundleAclTab className={b('acl-tab')} />}
                         />
                         <Route
                             path={`/${cluster}/${Page.TABLET_CELL_BUNDLES}`}

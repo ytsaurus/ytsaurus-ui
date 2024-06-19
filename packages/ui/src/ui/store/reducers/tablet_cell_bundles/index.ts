@@ -193,7 +193,7 @@ export interface TabletBundle {
     tablets: number;
     uncompressed: number;
 
-    bundle_controller_target_config: BundleControllerConfig;
+    bundle_controller_target_config?: BundleControllerConfig;
     enable_bundle_balancer: boolean;
     enable_bundle_controller: boolean;
     changelog_account: string;

@@ -102,15 +102,15 @@ export function fetchTabletCellBundleEditor(bundleName: string): TabletCellBundl
                 let bundleData = toEdit;
 
                 if (
-                    !toEdit.bundle_controller_target_config.memory_limits.reserved &&
+                    !toEdit.bundle_controller_target_config?.memory_limits.reserved &&
                     defaultReservedMemoryLimit
                 ) {
                     bundleData = {
                         ...toEdit,
                         bundle_controller_target_config: {
-                            ...toEdit.bundle_controller_target_config,
+                            ...toEdit.bundle_controller_target_config!,
                             memory_limits: {
-                                ...toEdit.bundle_controller_target_config.memory_limits,
+                                ...toEdit.bundle_controller_target_config?.memory_limits,
                                 reserved: defaultReservedMemoryLimit,
                             },
                         },
