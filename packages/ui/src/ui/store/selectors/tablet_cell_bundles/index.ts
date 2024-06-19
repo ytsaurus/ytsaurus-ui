@@ -67,7 +67,7 @@ export const getTabletsDefaultMemoryConfiguration = createSelector(
         const nodeSizes = config.zone_default.tablet_node_sizes;
 
         const key =
-            editorState.bundleData?.bundle_controller_target_config.tablet_node_resource_guarantee
+            editorState.bundleData?.bundle_controller_target_config?.tablet_node_resource_guarantee
                 .type;
 
         if (!key || !(key in nodeSizes)) return 0;

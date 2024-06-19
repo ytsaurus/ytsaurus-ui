@@ -45,7 +45,7 @@ import './ACL.scss';
 
 const block = cn('navigation-acl');
 
-type Props = ACLReduxProps & WithVisibleProps;
+type Props = ACLReduxProps & WithVisibleProps & {className?: string};
 
 type ApproverRow = PreparedApprover;
 type PermissionsRow = ObjectPermissionRowWithExpand;
@@ -631,13 +631,13 @@ class ACL extends Component<Props> {
     }
 
     render() {
-        const {loading, loaded} = this.props;
+        const {loading, loaded, className} = this.props;
         const initialLoading = loading && !loaded;
 
         return (
             <ErrorBoundary>
                 <LoadDataHandler {...this.props}>
-                    <div className={block({loading: initialLoading})}>
+                    <div className={block({loading: initialLoading}, className)}>
                         {initialLoading ? <Loader /> : this.renderContent()}
                     </div>
                 </LoadDataHandler>

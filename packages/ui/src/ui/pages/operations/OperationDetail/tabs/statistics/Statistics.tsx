@@ -40,6 +40,7 @@ import {isFinalLoadingStatus} from '../../../../../utils/utils';
 import {useAppRumMeasureStart} from '../../../../../rum/rum-app-measures';
 import {docsUrl} from '../../../../../config';
 import UIFactory from '../../../../../UIFactory';
+import {WaitForFont} from '../../../../../containers/WaitForFont/WaitForFont';
 
 import {OperationStatisticName, OperationStatisticValue} from './OperationStatisticName';
 import './Statistics.scss';
@@ -233,14 +234,15 @@ export class Statistics extends Component<Props> {
             <ErrorBoundary>
                 <div className={statisticsBlock(null, className)}>
                     {this.renderToolbar()}
-
-                    <ElementsTable
-                        {...statisticsTableProps}
-                        templates={this.template}
-                        css={statisticsBlock()}
-                        treeState={treeState}
-                        items={items}
-                    />
+                    <WaitForFont>
+                        <ElementsTable
+                            {...statisticsTableProps}
+                            templates={this.template}
+                            css={statisticsBlock()}
+                            treeState={treeState}
+                            items={items}
+                        />
+                    </WaitForFont>
                 </div>
             </ErrorBoundary>
         );
