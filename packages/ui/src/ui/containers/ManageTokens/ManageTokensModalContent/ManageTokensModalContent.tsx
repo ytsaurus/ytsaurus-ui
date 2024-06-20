@@ -45,34 +45,38 @@ const AuthenticationGenerateTokenFormSection: FC<{onClose: () => void}> = ({onCl
 
         setError(undefined);
 
-        return getPassword().then((password_sha256) => {
-            return dispatch(
-                manageTokensCreateToken({
-                    description,
-                    credentials: {
-                        user,
-                        password_sha256,
-                    },
-                }),
-            )
-                .then((token) => {
-                    setToken(token);
-
-                    return dispatch(
-                        manageTokensGetList({
+        return getPassword()
+            .then((password_sha256) => {
+                return dispatch(
+                    manageTokensCreateToken({
+                        description,
+                        credentials: {
                             user,
                             password_sha256,
-                        }),
-                    )
-                        .then(() => undefined)
-                        .catch(() => undefined);
-                })
-                .catch((error) => {
-                    setError(error);
+                        },
+                    }),
+                )
+                    .then((token) => {
+                        setToken(token);
 
-                    return Promise.reject(error);
-                });
-        });
+                        return dispatch(
+                            manageTokensGetList({
+                                user,
+                                password_sha256,
+                            }),
+                        )
+                            .then(() => undefined)
+                            .catch(() => undefined);
+                    })
+                    .catch((error) => {
+                        setError(error);
+
+                        return Promise.reject(error);
+                    });
+            })
+            .catch((error) => {
+                throw error;
+            });
     };
 
     if (token) {
@@ -260,7 +264,7 @@ const AuthenticationTokensSection: FC<{
                 });
             });
         },
-        [getPassword, user, onSuccessRemove],
+        [getPassword, user, onSuccessRemove, tokens, manageTokensRevokeToken, dispatch],
     );
 
     return (
