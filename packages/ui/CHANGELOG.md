@@ -1,5 +1,21 @@
 # Changelog
 
+## [1.45.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.44.0...ui-v1.45.0) (2024-06-20)
+
+
+### Features
+
+* add UIFactory.getNavigationExtraTabs() method ([bddf57c](https://github.com/ytsaurus/ytsaurus-ui/commit/bddf57cf45c52a0ab1002df5827ef49698c7644f))
+* **ManageTokens:** added a copy button for the token hash ([20190ef](https://github.com/ytsaurus/ytsaurus-ui/commit/20190efde1f25b4c6f41373937459a04b992e293))
+
+
+### Bug Fixes
+
+* **manage-tokes:** show null in the token list if tokenPrefix is unknown [[#626](https://github.com/ytsaurus/ytsaurus-ui/issues/626)] ([135c92e](https://github.com/ytsaurus/ytsaurus-ui/commit/135c92e4e31b7776b0e5ce6604e0d143522012ff))
+* **ManageTokens:** fixed freeze of the password  window ([c2e20ab](https://github.com/ytsaurus/ytsaurus-ui/commit/c2e20ab1623d2781a45d0fa4b93781d972cebaf4))
+* **ManageTokens:** horizontal scroll in the table is off ([65e0b6a](https://github.com/ytsaurus/ytsaurus-ui/commit/65e0b6acf270d42a46680e9ea5e4b110eccb8b2c))
+* **System:** now we are trying make a request to another primary masters if first one did not responded correctrly [[#529](https://github.com/ytsaurus/ytsaurus-ui/issues/529)] ([fc25ad4](https://github.com/ytsaurus/ytsaurus-ui/commit/fc25ad493adb410ae66876ca7746dd3665f6a04a))
+
 ## [1.44.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.43.0...ui-v1.44.0) (2024-06-13)
 
 
