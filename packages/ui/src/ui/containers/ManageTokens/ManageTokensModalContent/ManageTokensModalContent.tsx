@@ -27,6 +27,7 @@ import {
     useManageTokensPasswordModalContext,
 } from '../ManageTokensPasswordModal/ManageTokensPasswordModal';
 import {CollapsedString} from '../../../components/CollapsedString';
+import format from '../../../common/hammer/format';
 
 import './ManageTokensModalContent.scss';
 
@@ -289,7 +290,7 @@ const AuthenticationTokensSection: FC<{
                             width: 110,
                             className: block('table-cell'),
                             render: ({value}) => {
-                                return `${String(value)}...`;
+                                return value ? `${String(value)}...` : format.NO_VALUE;
                             },
                         },
                         {
