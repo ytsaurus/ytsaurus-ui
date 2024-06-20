@@ -298,7 +298,17 @@ const AuthenticationTokensSection: FC<{
                             width: 110,
                             className: block('table-cell', {name: 'hash'}),
                             render: ({value}) => {
-                                return truncate(String(value), {length: 12});
+                                return (
+                                    <>
+                                        {truncate(String(value), {length: 12})}
+                                        <ClipboardButton
+                                            title="Copy error"
+                                            view="flat-secondary"
+                                            text={value}
+                                            size="xs"
+                                        />
+                                    </>
+                                );
                             },
                         },
                         {
