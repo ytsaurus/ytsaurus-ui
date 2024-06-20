@@ -27,6 +27,7 @@
     &__tokens-table {
         max-height: 400px;
         overflow-y: scroll;
+        overflow-x: hidden;
     }
 
     &__table-cell {
