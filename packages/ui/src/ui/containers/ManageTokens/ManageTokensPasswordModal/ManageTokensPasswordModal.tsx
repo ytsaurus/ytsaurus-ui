@@ -125,7 +125,7 @@ export function ManageTokensPasswordModalContextProvider({children}: {children: 
     const handleCancel = () => {
         setVisible(false);
 
-        p.current.reject();
+        p.current.reject(new Error('cancel password window'));
     };
 
     const handleConfirm = (hash: string) => {
