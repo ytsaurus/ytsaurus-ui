@@ -40,6 +40,11 @@
         &_name_description {
             white-space: pre-wrap;
         }
+
+        &_name_hash {
+            display: flex;
+            justify-content: space-around;
+        }
     }
 
     &__generate-token-button {
