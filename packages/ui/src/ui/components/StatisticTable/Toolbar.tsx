@@ -5,8 +5,6 @@ import cn from 'bem-cn-lite';
 import Filter from '../Filter/Filter';
 import HelpLink from '../HelpLink/HelpLink';
 
-import {isDocsAllowed} from '../../config';
-import UIFactory from '../../UIFactory';
 import {ExpandButton} from '../ExpandButton';
 import {TreeState} from './types';
 
@@ -15,6 +13,7 @@ const toolbarBlock = cn('elements-toolbar');
 const block = cn('job-statistics');
 
 export default function Toolbar(props: {
+    helpUrl?: string;
     treeState: TreeState;
     onFilterChange: (value: string) => void;
     onTreeStateChange: (state: TreeState) => void;
@@ -51,9 +50,9 @@ export default function Toolbar(props: {
                         />
                     </span>
                 </div>
-                {isDocsAllowed() && (
+                {props.helpUrl && (
                     <div className={toolbarBlock('component', block('help'))}>
-                        <HelpLink url={UIFactory.docsUrls['problems:jobstatistics']} />
+                        <HelpLink url={props.helpUrl} />
                     </div>
                 )}
             </div>
