@@ -73,6 +73,8 @@ fullnameOverride: ""
 settings:
   odinBaseUrl: ""
   directDownload: true
+  uploadTableExcelBaseUrl: ""
+  exportTableBaseUrl: ""
 
   # see https://github.com/ytsaurus/ytsaurus-ui/blob/main/packages/ui/docs/configuration.md#oauth
   oauth: 

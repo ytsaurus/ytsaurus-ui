@@ -11,7 +11,11 @@ data:
   common.js: |
     module.exports = { 
       odinBaseUrl: {{ .Values.settings.odinBaseUrl | quote }}, 
-      uiSettings: { directDownload: {{ .Values.settings.directDownload | toJson }} },
+      uiSettings: { 
+        directDownload: {{ .Values.settings.directDownload | toJson }},
+        uploadTableExcelBaseUrl: {{ .Values.settings.uploadTableExcelBaseUrl | quote }},
+        exportTableBaseUrl: {{ .Values.settings.exportTableBaseUrl | quote }},
+      },
       {{- if .Values.settings.oauth.enabled }}
       ytOAuthSettings: {
         baseURL: {{ .Values.settings.oauth.baseURL | quote }},
