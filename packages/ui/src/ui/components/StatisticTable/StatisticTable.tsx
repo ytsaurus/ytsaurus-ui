@@ -200,11 +200,13 @@ const useJobStatisticTable = ({
 };
 
 export function StatisticTable({
+    helpUrl,
     virtual,
     visibleColumns,
     fixedHeader,
     statistic,
 }: {
+    helpUrl?: string;
     virtual?: boolean;
     fixedHeader?: boolean;
     statistic: StatisticTree;
@@ -250,6 +252,7 @@ export function StatisticTable({
         <ErrorBoundary>
             <div className={block()}>
                 <Toolbar
+                    helpUrl={helpUrl}
                     onFilterChange={onFilterChange}
                     onTreeStateChange={setTreeState}
                     treeState={treeState}
