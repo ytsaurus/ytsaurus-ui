@@ -12,6 +12,7 @@ import Toolbar from './Toolbar';
 import {getMinWidth} from './get-min-width';
 import {filterStatisticTree, prepareStatisticTs} from './prepare-statistic.ts';
 import {Statistic, StatisticTree, TreeState} from './types';
+import {ExpandButton} from '../ExpandButton';
 
 import './Statistics.scss';
 
@@ -110,9 +111,9 @@ export function ExpandedCell({
     } else {
         return (
             <span className={block('group')} style={offsetStyle} onClick={toggleItemAndTreeState}>
-                <Icon
-                    awesome={itemState.collapsed || itemState.empty ? 'angle-down' : 'angle-up'}
-                    className={block('group-icon-toggler')}
+                <ExpandButton
+                    expanded={!(itemState.collapsed || itemState.empty)}
+                    toggleExpanded={() => {}}
                 />
                 <Icon
                     awesome={itemState.collapsed || itemState.empty ? 'folder' : 'folder-open'}
