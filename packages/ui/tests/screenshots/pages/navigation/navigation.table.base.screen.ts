@@ -51,6 +51,16 @@ test('Navigation: table - Content', async ({page}) => {
     await tablePage(page).replaceTableMeta();
 
     await expect(page).toHaveScreenshot();
+
+    await test.step('DownloadManager', async () => {
+        await page.getByText('Download').click();
+        await page.click('.table-download-manager__settings :text("Range")', {force: true});
+        await page.waitForSelector('.table-download-manager__settings :text("Number of rows")');
+        await page.click('.table-download-manager__settings :text("Custom")', {force: true});
+        await page.waitForSelector('.table-download-manager__settings .column-selector');
+
+        await expect(page).toHaveScreenshot();
+    });
 });
 
 test('Navigation: table - Schema', async ({page}) => {
