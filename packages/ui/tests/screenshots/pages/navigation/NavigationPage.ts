@@ -48,6 +48,11 @@ export class NavigationPage extends BasePage {
             '.map-nodes-table__row_dyntable .map-node_default__table-item_type_rows': '00000',
         });
     }
+
+    async mapNodeCreateObject(hasText: 'Table' | 'Directory' | 'Link') {
+        await this.page.getByText('Create object').click();
+        await this.page.getByRole('menuitem').filter({hasText}).click();
+    }
 }
 
 export function navigationPage(page: Page) {
