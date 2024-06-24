@@ -27,6 +27,7 @@ jobs:
           core-fraction: 100
           disk-type: network-ssd-nonreplicated
           disk-size: 93GB
+          public-ip: false
 
   e2e-build:
     name: Build & Run containers for 'Local'
