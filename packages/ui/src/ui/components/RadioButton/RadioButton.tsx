@@ -25,7 +25,7 @@ export default class CustomRadioButton extends React.Component<Props> {
     };
 
     static prepareSimpleValue(value: Props['value']) {
-        if (value === undefined) {
+        if (value === undefined || value === null) {
             throw new Error('CustomRadioButton: unexpected value');
         }
         return {

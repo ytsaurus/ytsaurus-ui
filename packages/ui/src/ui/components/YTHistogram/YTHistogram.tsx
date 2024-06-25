@@ -1,7 +1,11 @@
 import React from 'react';
 import cn from 'bem-cn-lite';
 
-import YagrChartKit, {YagrWidgetData, getSerieColor} from '../YagrChartKit/YagrChartKit';
+import YagrChartKit, {
+    RawSerieData,
+    YagrWidgetData,
+    getSerieColor,
+} from '../YagrChartKit/YagrChartKit';
 import './YTHistogram.scss';
 
 import format from '../../common/hammer/format';
@@ -44,25 +48,25 @@ function YTHistogram({
 }: YTHistogramProps) {
     const yagrData = React.useMemo(() => {
         const {timeline, serieData, step} = genYagrData(data);
+        const graphs: Array<RawSerieData> = [
+            {
+                type: 'column' as const,
+                data: yLogarithmic ? serieData.map((v) => (v === 0 ? NaN : v)) : (serieData as any),
+                color: getSerieColor(0),
+                formatter: yFormat,
+                ...{
+                    renderOptions: {
+                        size: [1],
+                        gap: 1,
+                    },
+                },
+            },
+        ];
+
         const res: YagrWidgetData = {
             data: {
                 timeline,
-                graphs: [
-                    {
-                        type: 'column',
-                        data: yLogarithmic
-                            ? serieData.map((v) => (v === 0 ? NaN : v))
-                            : (serieData as any),
-                        color: getSerieColor(0),
-                        formatter: yFormat,
-                        ...{
-                            renderOptions: {
-                                size: [1],
-                                gap: 1,
-                            },
-                        },
-                    },
-                ],
+                graphs,
             },
             libraryConfig: {
                 axes: {
