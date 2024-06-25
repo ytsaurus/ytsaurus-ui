@@ -75,7 +75,7 @@
     "@gravity-ui/date-utils": "^2.5.3",
     "@gravity-ui/expresskit": "^1.0.0",
     "@gravity-ui/i18n": "^1.0.0",
-    "@gravity-ui/icons": "^2.4.0",
+    "@gravity-ui/icons": "^2.0.0",
     "@gravity-ui/navigation": "^1.8.0",
     "@gravity-ui/nodekit": "^1.0.0",
     "@gravity-ui/websql-autocomplete": "^8.0.2",
