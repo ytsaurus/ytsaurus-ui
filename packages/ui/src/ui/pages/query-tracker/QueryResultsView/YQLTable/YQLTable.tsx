@@ -443,7 +443,7 @@ function TableCell({children, rawValue}: TableCellProps) {
                 <ClipboardButton
                     className={cellCopyToClipboardClassName}
                     text={rawValue}
-                    size={16}
+                    size="s"
                 />
             ) : null}
         </span>

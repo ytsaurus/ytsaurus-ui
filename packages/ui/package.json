@@ -103,7 +103,6 @@
     "@gravity-ui/uikit": "^6.19.0",
     "@gravity-ui/unipika": "^5.1.0",
     "@gravity-ui/websql-autocomplete": "^8.0.2",
-    "@gravity-ui/yagr": "^4.3.0",
     "@reduxjs/toolkit": "^2.2.3",
     "@tanstack/react-virtual": "^3.0.0-alpha.0",
     "@types/d3": "^7.4.0",
@@ -194,7 +193,6 @@
     "react-sortable-hoc": {
       "react": "$react",
       "react-dom": "$react-dom"
-    },
-    "@gravity-ui/yagr": "$@gravity-ui/yagr"
+    }
   }
 }
