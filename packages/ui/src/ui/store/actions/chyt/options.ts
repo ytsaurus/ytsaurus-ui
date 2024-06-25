@@ -5,7 +5,11 @@ import {wrapApiPromiseByToaster} from '../../../utils/utils';
 import {ChytCliqueOptionsAction} from '../../reducers/chyt/options';
 import {RootState} from '../../reducers';
 import {getCluster, isDeveloper} from '../../selectors/global';
-import {ChytListAttributes, ChytListResponseItem, chytApiAction} from './api';
+import {
+    StrawberryListAttributes,
+    StrawberryListResponseItem,
+    chytApiAction,
+} from '../../../utils/strawberryControllerApi';
 import {CHYT_OPTIONS} from '../../../constants/chyt-page';
 import {chytCliqueLoad} from './clique';
 import {chytLoadCliqueSpeclet} from './speclet';
@@ -54,18 +58,18 @@ export function chytLoadCliqueOptions(
 
 export function chytEditOptions(
     alias: string,
-    options: Required<ChytListResponseItem>['$attributes'],
+    options: Required<StrawberryListResponseItem>['$attributes'],
 ): OptionsThunkAction {
     return (dispatch, getState) => {
         const state = getState();
         const cluster = getCluster(state);
         const isAdmin = isDeveloper(state);
 
-        const options_to_remove: Array<ChytListAttributes> = [];
+        const options_to_remove: Array<StrawberryListAttributes> = [];
         const options_to_set: typeof options = {};
 
         Object.keys(options).forEach((k) => {
-            const key = k as ChytListAttributes;
+            const key = k as StrawberryListAttributes;
             if (options[key] === undefined) {
                 options_to_remove.push(key);
             } else {

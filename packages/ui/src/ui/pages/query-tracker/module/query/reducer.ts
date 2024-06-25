@@ -35,7 +35,7 @@ export interface QueryState {
     };
     dirtySinceLastSubmit: boolean;
     cliqueLoading: boolean;
-    cliqueMap: Record<string, {alias: string; yt_operation_id?: string}[]>;
+    cliqueMap: Record<string, Record<string, {alias: string; yt_operation_id?: string}[]>>;
     state: 'init' | 'loading' | 'ready' | 'error';
 }
 
@@ -129,7 +129,13 @@ export function reducer(state = initState, action: Actions): QueryState {
         case SET_QUERY_CLUSTER_CLIQUE: {
             return {
                 ...state,
-                cliqueMap: {...state.cliqueMap, [action.data.cluster]: action.data.items},
+                cliqueMap: {
+                    ...state.cliqueMap,
+                    [action.data.cluster]: {
+                        ...state.cliqueMap[action.data.cluster],
+                        [action.data.engine]: action.data.items,
+                    },
+                },
             };
         }
 
