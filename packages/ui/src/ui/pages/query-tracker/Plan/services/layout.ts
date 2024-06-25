@@ -134,10 +134,13 @@ function twoLayerCrossCount(graph: Graph, northLayer: ID[], southLayer: ID[]) {
     // Sort all of the edges between the north and south layers by their position
     // in the north layer and then the south. Map these edges to the position of
     // their head in the south layer.
-    const southPos = southLayer.reduce((obj, nodeId, i) => {
-        obj[nodeId] = i;
-        return obj;
-    }, {} as Record<string, number>);
+    const southPos = southLayer.reduce(
+        (obj, nodeId, i) => {
+            obj[nodeId] = i;
+            return obj;
+        },
+        {} as Record<string, number>,
+    );
     const southEntries: number[] = [];
     for (const v of northLayer) {
         southEntries.push(...graph[v].out.map((e) => southPos[e]).sort((a, b) => a - b));
@@ -492,14 +495,20 @@ function horizontalCompaction(
     reverse: boolean,
 ) {
     const xs: Record<string, number> = {};
-    const sink = Object.keys(graph).reduce((obj, key) => {
-        obj[key] = key;
-        return obj;
-    }, {} as Record<string, string>);
-    const shift = Object.keys(graph).reduce((obj, key) => {
-        obj[key] = Number.POSITIVE_INFINITY;
-        return obj;
-    }, {} as Record<string, number>);
+    const sink = Object.keys(graph).reduce(
+        (obj, key) => {
+            obj[key] = key;
+            return obj;
+        },
+        {} as Record<string, string>,
+    );
+    const shift = Object.keys(graph).reduce(
+        (obj, key) => {
+            obj[key] = Number.POSITIVE_INFINITY;
+            return obj;
+        },
+        {} as Record<string, number>,
+    );
     function placeBlock(v: ID) {
         if (xs[v] === undefined) {
             xs[v] = 0;
@@ -611,17 +620,20 @@ function alignCoordinates(
 }
 
 function balance(xss: Record<string, Record<string, number>>, align?: string) {
-    return Object.keys(xss.ul).reduce((obj, v) => {
-        if (align) {
-            obj[v] = xss[align.toLowerCase()][v];
-        } else {
-            const vXs = Object.values(xss)
-                .map((xs) => xs[v])
-                .sort((a, b) => a - b);
-            obj[v] = (vXs[1] + vXs[2]) / 2;
-        }
-        return obj;
-    }, {} as Record<string, number>);
+    return Object.keys(xss.ul).reduce(
+        (obj, v) => {
+            if (align) {
+                obj[v] = xss[align.toLowerCase()][v];
+            } else {
+                const vXs = Object.values(xss)
+                    .map((xs) => xs[v])
+                    .sort((a, b) => a - b);
+                obj[v] = (vXs[1] + vXs[2]) / 2;
+            }
+            return obj;
+        },
+        {} as Record<string, number>,
+    );
 }
 
 function mergeConflicts(a: Record<string, ID[]>, b: Record<string, ID[]>) {
