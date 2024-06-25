@@ -235,23 +235,26 @@ function RequestPermissions(props: Props) {
 
     const dialogFields = useMemo(() => {
         let flagsIndex = -1;
-        const res = requestPermissionsFields.reduce((acc, field) => {
-            const allowField = useColumns ? field !== 'permissions' : !COLUMNS_FELDS.has(field);
-            if (!allowField) {
+        const res = requestPermissionsFields.reduce(
+            (acc, field) => {
+                const allowField = useColumns ? field !== 'permissions' : !COLUMNS_FELDS.has(field);
+                if (!allowField) {
+                    return acc;
+                }
+
+                if (field === 'permissionFlags') {
+                    flagsIndex = acc.length;
+                }
+
+                acc.push({
+                    ...availableFields[field],
+                    name: field,
+                } as DialogField<FormValues>);
+
                 return acc;
-            }
-
-            if (field === 'permissionFlags') {
-                flagsIndex = acc.length;
-            }
-
-            acc.push({
-                ...availableFields[field],
-                name: field,
-            } as DialogField<FormValues>);
-
-            return acc;
-        }, [] as Array<DialogField<FormValues>>);
+            },
+            [] as Array<DialogField<FormValues>>,
+        );
 
         if (flagsIndex !== -1) {
             const flags: typeof res = Object.keys(requestPermissionsFlags ?? []).map((key) => {

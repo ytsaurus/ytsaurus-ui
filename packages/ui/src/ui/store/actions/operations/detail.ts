@@ -64,17 +64,20 @@ function getIsEphemeral([operationAttributes, userTransactionAlive]: Awaited<
             ),
         )
         .then((res) =>
-            res.reduce((acc, poolInfo, index) => {
-                const tree = trees[index];
-                const pool = ypath.getValue(treesInfo[tree], '/pool');
-                const isEphemeral = ypath.getBoolean(poolInfo);
+            res.reduce(
+                (acc, poolInfo, index) => {
+                    const tree = trees[index];
+                    const pool = ypath.getValue(treesInfo[tree], '/pool');
+                    const isEphemeral = ypath.getBoolean(poolInfo);
 
-                acc[tree] = {
-                    [pool]: {isEphemeral},
-                };
+                    acc[tree] = {
+                        [pool]: {isEphemeral},
+                    };
 
-                return acc;
-            }, {} as Record<string, {isEphemeral: boolean}>),
+                    return acc;
+                },
+                {} as Record<string, {isEphemeral: boolean}>,
+            ),
         );
 
     return Promise.all([operationAttributes, userTransactionAlive, orchidAttributes]);

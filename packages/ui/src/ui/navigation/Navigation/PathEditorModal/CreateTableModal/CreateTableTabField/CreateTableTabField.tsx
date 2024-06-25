@@ -138,8 +138,8 @@ class ColumnsWrapper extends React.Component<Props & CWProps, CWState> {
             !current
                 ? {icon: 'sort-alt', title: 'Unordered'}
                 : current === DESCENDING
-                ? {icon: 'sort-amount-up', title: 'Descending'}
-                : {icon: 'sort-amount-down-alt', title: 'Ascending'}
+                  ? {icon: 'sort-amount-up', title: 'Descending'}
+                  : {icon: 'sort-amount-down-alt', title: 'Ascending'}
         ) as {icon: IconName; title: string};
 
         return (

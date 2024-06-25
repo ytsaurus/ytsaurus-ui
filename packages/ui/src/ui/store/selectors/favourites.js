@@ -3,6 +3,7 @@ import {createSelector} from 'reselect';
 
 import {
     getAccountsNS,
+    getBundlesNS,
     getChaosBundlesNS,
     getChytNS,
     getClusterNS,
@@ -13,7 +14,6 @@ import {SettingName} from '../../../shared/constants/settings';
 import {getActiveAccount} from '../../store/selectors/accounts/accounts';
 import {getPath} from '../../store/selectors/navigation';
 import {getPool, getTree} from '../../store/selectors/scheduling/scheduling';
-import {getBundlesNS} from './settings';
 import {getTabletsActiveBundle} from './tablet_cell_bundles';
 import {getChaosActiveBundle} from './chaos_cell_bundles';
 import {getChytCurrentAlias} from './chyt';

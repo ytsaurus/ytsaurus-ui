@@ -451,7 +451,7 @@ const getAllDenyColumnsPermissions = createSelector(
                 ({
                     ...permission,
                     type: 'columns',
-                } as PreparedAclSubjectColumn),
+                }) as PreparedAclSubjectColumn,
         );
     },
 );

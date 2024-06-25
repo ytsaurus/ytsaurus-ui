@@ -23,8 +23,8 @@ function compareBundlesByAccount<T extends Record<string, any>>(left: T, right: 
     return left.changelog_account < right.changelog_account
         ? -1
         : left.snapshot_account < right.snapshot_account
-        ? -1
-        : 1;
+          ? -1
+          : 1;
 }
 
 export const sortTableBundles = <T extends Record<string, any>>({

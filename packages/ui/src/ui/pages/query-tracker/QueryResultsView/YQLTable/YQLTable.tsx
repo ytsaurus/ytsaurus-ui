@@ -332,10 +332,13 @@ function getSortedData<T>(
         return indexedData;
     }
     const sortOrderArray = Array.isArray(sortOrder) ? sortOrder : [sortOrder];
-    const sortColumns = sortOrderArray.reduce((obj, {columnId, order}) => {
-        obj[columnId] = order;
-        return obj;
-    }, {} as Record<string, OrderType>);
+    const sortColumns = sortOrderArray.reduce(
+        (obj, {columnId, order}) => {
+            obj[columnId] = order;
+            return obj;
+        },
+        {} as Record<string, OrderType>,
+    );
     const sortFunctionDict: {[colName: string]: Comparator<T>} = {};
     dataColumns.forEach((column) => {
         if (sortColumns[column.name]) {

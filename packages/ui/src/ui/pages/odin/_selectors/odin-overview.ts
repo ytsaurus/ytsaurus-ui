@@ -57,10 +57,13 @@ export const getOdinOverviewHiddenMetrics = createSelector(
             return hiddenMetrics;
         }
 
-        return defaultPreset.hiddenMetricNames.reduce((acc, name) => {
-            acc[name] = true;
-            return acc;
-        }, {} as typeof hiddenMetrics);
+        return defaultPreset.hiddenMetricNames.reduce(
+            (acc, name) => {
+                acc[name] = true;
+                return acc;
+            },
+            {} as typeof hiddenMetrics,
+        );
     },
 );
 
