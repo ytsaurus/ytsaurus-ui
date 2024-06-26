@@ -1,6 +1,6 @@
 import {ErrorPosition, QueryError} from '../../module/api';
 import {useToggle} from 'react-use';
-import {Link, Text} from '@gravity-ui/uikit';
+import {Text} from '@gravity-ui/uikit';
 import React, {FC, useCallback, useState} from 'react';
 import {ErrorTreeNode} from './ErrorTreeNode';
 import {ErrorList} from './ErrorList';
@@ -8,6 +8,7 @@ import cn from 'bem-cn-lite';
 import {calculateCloudLevel} from '../helpers';
 import './ErrorCloud.scss';
 import {ExpandButton} from '../../../../components/ExpandButton';
+import {ClickableText} from '../../../../components/ClickableText/ClickableText';
 
 const block = cn('yt-error-cloud');
 
@@ -41,12 +42,12 @@ export const ErrorCloud: FC<Props> = (props) => {
                 <div className={block('collapsed-messages')}>
                     <ExpandButton expanded={expanded} toggleExpanded={toggleExpanded} />
                     <Text color="secondary">{cloud.length} intermediate messages</Text>
-                    <Link
+                    <ClickableText
                         className={block('collapsed-messages-show-all')}
                         onClick={handleExtractAll}
                     >
                         Show all
-                    </Link>
+                    </ClickableText>
                 </div>
                 {expanded && (
                     <div className={block('errors')}>

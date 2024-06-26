@@ -1,10 +1,12 @@
 import React from 'react';
 import cn from 'bem-cn-lite';
-import {showErrorPopup} from '../../utils/utils';
-import Link from '../Link/Link';
 import {Text} from '@gravity-ui/uikit';
 
+import {showErrorPopup} from '../../utils/utils';
+import {ClickableText} from '../../components/ClickableText/ClickableText';
+
 import './CompactError.scss';
+
 const block = cn('compact-error-block');
 
 interface Props {
@@ -28,14 +30,14 @@ export default function CompactError({error, maxMessageLength}: Props) {
     return (
         <Text variant="body-1" color="danger" className={block()}>
             {message ?? 'An error occurred'}
-            <Link
+            <ClickableText
                 className={block('link')}
                 onClick={() => {
                     showErrorPopup(error, {hideOopsMsg: true});
                 }}
             >
                 Details
-            </Link>
+            </ClickableText>
         </Text>
     );
 }

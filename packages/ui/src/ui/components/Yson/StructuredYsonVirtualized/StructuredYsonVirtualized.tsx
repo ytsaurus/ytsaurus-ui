@@ -2,6 +2,7 @@ import React from 'react';
 import cn from 'bem-cn-lite';
 import _ from 'lodash';
 
+import {Button, Dialog} from '@gravity-ui/uikit';
 // @ts-ignore
 import unipika from '@gravity-ui/unipika/lib/unipika';
 
@@ -23,8 +24,7 @@ import {Toolbar} from '../../WithStickyToolbar/Toolbar/Toolbar';
 import Icon from '../../Icon/Icon';
 import Filter from '../../Filter/Filter';
 import {MultiHighlightedText} from '../../HighlightedText/HighlightedText';
-import Link from '../../Link/Link';
-import {Button, Dialog} from '@gravity-ui/uikit';
+import {ClickableText} from '../../ClickableText/ClickableText';
 const block = cn('structured-yson-virtualized');
 
 interface Props {
@@ -563,7 +563,7 @@ function renderStringWithFilter(props: ValueProps, className: string, maxWidth =
                 length={filter?.length}
             />
             {truncated && (
-                <Link
+                <ClickableText
                     className={block('filtered', {
                         highlighted: hasHiddenMatch,
                     })}
@@ -571,7 +571,7 @@ function renderStringWithFilter(props: ValueProps, className: string, maxWidth =
                 >
                     {'\u2026'}
                     <Icon awesome={'external-link'} />
-                </Link>
+                </ClickableText>
             )}
             &quot;
         </span>

@@ -6,7 +6,7 @@ import Label, {LabelTheme} from '../../../components/Label/Label';
 import StatusBlock from '../../../components/StatusBlock/StatusBlock';
 import ClipboardButton from '../../../components/ClipboardButton/ClipboardButton';
 import {Tooltip} from '../../../components/Tooltip/Tooltip';
-import Link from '../../../components/Link/Link';
+import {ClickableText} from '../../../components/ClickableText/ClickableText';
 
 import './NodeColumns.scss';
 
@@ -65,8 +65,8 @@ export function ClickableId({
 }) {
     return (
         <div className="elements-column_type_id elements-column_with-hover-button">
-            <Link
-                theme="primary"
+            <ClickableText
+                color="primary"
                 onClick={() => onClick?.()}
                 className={'elements-monospace elements-ellipsis'}
             >
@@ -76,7 +76,7 @@ export function ClickableId({
                 >
                     {format(text)}
                 </Tooltip>
-            </Link>
+            </ClickableText>
             &nbsp;
             <ClipboardButton text={text} view="flat-secondary" size="s" />
         </div>

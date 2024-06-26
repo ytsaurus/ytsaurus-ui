@@ -11,7 +11,7 @@ import TableInfo from '../../../../pages/components/TableInfo/TableInfo';
 import Filter from '../../../../components/Filter/Filter';
 import Select from '../../../../components/Select/Select';
 
-import Link from '../../../../components/Link/Link';
+import {ClickableText} from '../../../../components/ClickableText/ClickableText';
 import Icon from '../../../../components/Icon/Icon';
 
 import format from '../../../../common/hammer/format';
@@ -215,8 +215,8 @@ class VersionsV2 extends React.Component<ReduxProps> {
 
                 if (versionIsError || versionIsTotal) {
                     return (
-                        <Link
-                            theme="primary"
+                        <ClickableText
+                            color="primary"
                             onClick={handleClick}
                             className={cn('elements-table')(
                                 `cell_type`,
@@ -226,7 +226,7 @@ class VersionsV2 extends React.Component<ReduxProps> {
                         >
                             {versionIsError && <Icon awesome="exclamation-triangle" />}
                             {format.FirstUppercase(version)}
-                        </Link>
+                        </ClickableText>
                     );
                 } else {
                     return <VersionCellWithAction version={version} />;

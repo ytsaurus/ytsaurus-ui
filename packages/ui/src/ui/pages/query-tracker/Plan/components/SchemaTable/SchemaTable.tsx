@@ -1,5 +1,5 @@
 import React from 'react';
-import {Icon, Link} from '@gravity-ui/uikit';
+import {Icon} from '@gravity-ui/uikit';
 import DataTable, {Column} from '@gravity-ui/react-data-table';
 import DataType from '../DataType/DataType';
 import {DataType as IDataType} from '../../models/dataTypes';
@@ -8,6 +8,8 @@ import cn from 'bem-cn-lite';
 import sortUpIcon from '@gravity-ui/icons/svgs/bars-ascending-align-left.svg';
 import sortDownIcon from '@gravity-ui/icons/svgs/bars-descending-align-left.svg';
 import insertIcon from '@gravity-ui/icons/svgs/paperclip.svg';
+
+import {ClickableText} from '../../../../../components/ClickableText/ClickableText';
 
 import './SchemaTable.scss';
 
@@ -32,9 +34,9 @@ const columns: Column<SchemaField>[] = [
             if (typeof row.onNameClick === 'function') {
                 const handleNameClick = row.onNameClick;
                 return (
-                    <Link
+                    <ClickableText
+                        color="primary"
                         className={block('item')}
-                        view="primary"
                         onClick={() => {
                             handleNameClick(row.name);
                         }}
@@ -50,7 +52,7 @@ const columns: Column<SchemaField>[] = [
                             {row.name}
                         </span>
                         <Icon className={block('insert-icon')} data={insertIcon} size={16} />
-                    </Link>
+                    </ClickableText>
                 );
             }
             return (

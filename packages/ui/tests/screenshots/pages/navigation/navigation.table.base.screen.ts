@@ -60,8 +60,8 @@ test('Navigation: table - Tablets', async ({page}) => {
     await tablePage(page).replaceBreadcrumbsTestDir();
     page.getByTestId('');
     await replaceInnerHtml(page, {
-        '.navigation-tablets__id-link .yc-link': '0-11111-22222-33333333',
-        '.yt-host .yc-link:not(:empty)': 'local:XX',
+        '.navigation-tablets__id-link .g-link': '0-11111-22222-33333333',
+        '.yt-host .g-link:not(:empty)': 'local:XX',
     });
 
     await expect(page).toHaveScreenshot();

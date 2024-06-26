@@ -1,8 +1,9 @@
 import React, {FC, useMemo} from 'react';
-import {Link} from '@gravity-ui/uikit';
-import cn from 'bem-cn-lite';
-import './CollapsedString.scss';
 import {useToggle} from 'react-use';
+import cn from 'bem-cn-lite';
+
+import './CollapsedString.scss';
+import {ClickableText} from '../../components/ClickableText/ClickableText';
 
 type Props = {
     value: string;
@@ -23,9 +24,9 @@ export const CollapsedString: FC<Props> = ({value, limit = 200}) => {
         <div className={block()}>
             {text}
             {hasToggle && (
-                <Link className={block('toggle')} onClick={toggleExpanded}>
+                <ClickableText className={block('toggle')} onClick={toggleExpanded}>
                     {expanded ? 'Hide' : 'Show more'}
-                </Link>
+                </ClickableText>
             )}
         </div>
     );

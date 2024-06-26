@@ -32,7 +32,7 @@ class Bundles extends BasePage {
     async replaceBundleCells() {
         await replaceInnerHtml(this.page, {
             '.cells-table__id-id': '0-11111-22222-33333333',
-            '.yt-host .yc-link': 'local:11',
+            '.yt-host .g-link': 'local:11',
         });
 
         await this.waitForTableSyncedWidth('.cells-table', {useResizeEvent: true});
