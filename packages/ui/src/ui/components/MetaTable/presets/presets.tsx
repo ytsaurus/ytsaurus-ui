@@ -9,6 +9,10 @@ import {Template} from '../templates/Template';
 import compression from './compression';
 import erasureReplication from './erasure-replication';
 import size from './size';
+import {CypressNodeTypes} from '../../../utils/cypress-attributes';
+import {main} from './index';
+import {getCommonFields} from '../../../pages/navigation/content/Table/TableMeta/commonFields';
+import {Props as AutomaticModeSwitchProps} from '../../../pages/navigation/content/Table/TableMeta/AutomaticModeSwitch';
 
 export function replicatedTableTracker(attributes: any) {
     const value = ypath.getValue(
@@ -116,3 +120,69 @@ export function dynTableInfo(attributes: any, cluster: string, tabletErrorCount:
         },
     ];
 }
+
+export const makeMetaItems = ({
+    cluster,
+    attributes,
+    tableType,
+    isDynamic,
+    mediumList = [],
+    tabletErrorCount = 0,
+    onEditEnableReplicatedTableTracker,
+}: {
+    cluster: string;
+    attributes: any;
+    mediumList?: string[];
+    isDynamic: boolean;
+    tableType: string;
+    tabletErrorCount?: number;
+    onEditEnableReplicatedTableTracker?: AutomaticModeSwitchProps['onEdit'];
+}) => {
+    const cf = getCommonFields({
+        cluster,
+        attributes,
+        isDynamic,
+        tableType: attributes.type,
+        tabletErrorCount,
+        onEditEnableReplicatedTableTracker,
+    });
+
+    switch (attributes.type) {
+        case CypressNodeTypes.REPLICATED_TABLE:
+        case CypressNodeTypes.REPLICATION_LOG_TABLE:
+            return [
+                main(attributes),
+                tableSize(attributes, isDynamic, mediumList),
+                tableStorage(attributes, attributes.type),
+                [
+                    cf.sorted,
+                    ...dynTableInfo(attributes, cluster, tabletErrorCount),
+                    cf.automaticModeSwitch,
+                ],
+            ];
+
+        case CypressNodeTypes.CHAOS_REPLICATED_TABLE:
+            return [
+                main(attributes),
+                tableSize(attributes, isDynamic, mediumList),
+                [
+                    cf.tableType,
+                    replicatedTableTracker(attributes),
+                    cf.sorted,
+                    cf.chaosCellBundle,
+                    cf.automaticModeSwitch,
+                ],
+            ];
+
+        default:
+            return [
+                main(attributes),
+                tableSize(attributes, isDynamic, mediumList),
+                tableStorage(attributes, tableType),
+                [
+                    cf.sorted,
+                    ...(isDynamic ? dynTableInfo(attributes, cluster, tabletErrorCount) : []),
+                ],
+            ];
+    }
+};
