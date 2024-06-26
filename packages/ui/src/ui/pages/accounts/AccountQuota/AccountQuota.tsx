@@ -2,8 +2,8 @@ import React from 'react';
 import cn from 'bem-cn-lite';
 import _ from 'lodash';
 
+import {ActiveText} from '../../../components/ActiveText/ActiveText';
 import Icon from '../../../components/Icon/Icon';
-import Link from '../../../components/Link/Link';
 import QuotaEditorWithHide from '../../../components/QuotaEditor/QuotaEditorWithHide';
 import {SelectSingle} from '../../../components/Select/Select';
 
@@ -78,9 +78,13 @@ class AccountQuotaEditor extends React.Component<Props & ReduxProps, State> {
                             popupClassName={block('progress-tooltip-popup')}
                         />
                     </div>
-                    <Link theme={'ghost'} className={block('edit')} onClick={this.toggleShowEditor}>
+                    <ActiveText
+                        color="secondary"
+                        className={block('edit')}
+                        onClick={this.toggleShowEditor}
+                    >
                         <Icon awesome={'pencil'} />
-                    </Link>
+                    </ActiveText>
                 </div>
                 {showEditor && (
                     <QuotaEditorWithHide

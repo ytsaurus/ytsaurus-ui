@@ -3,7 +3,7 @@ import {connect} from 'react-redux';
 import cn from 'bem-cn-lite';
 import {partition} from 'lodash';
 
-import Link from '../../../../../../components/Link/Link';
+import {ActiveText} from '../../../../../../components/ActiveText/ActiveText';
 import {getMediumList} from '../../../../../../store/selectors/thor';
 
 import hammer from '../../../../../../common/hammer';
@@ -72,7 +72,7 @@ class MediumContent extends Component<Props> {
                 {this.renderMediums(account, defined)}
                 {showAllText && (
                     <div className={block('show-all', 'elements-section')}>
-                        <Link onClick={this.toggleShowAll}>{showAllText}</Link>
+                        <ActiveText onClick={this.toggleShowAll}>{showAllText}</ActiveText>
                     </div>
                 )}
                 {showAllMediums && this.renderMediums(account, rest)}

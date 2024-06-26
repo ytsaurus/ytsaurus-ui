@@ -205,7 +205,7 @@ export default class ElementsTableHeader extends Component<ElementsTableHeaderPr
     }
 
     renderSortableHeaderCaption(columnName: string) {
-        const className = block('yc-link')({view: 'primary'});
+        const className = block('g-link')({view: 'primary'});
         const {sortState, onSort} = this.props;
 
         const {sortWithUndefined, allowedOrderTypes} = this.state.columnItems[columnName];

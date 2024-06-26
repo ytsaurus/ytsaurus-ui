@@ -13,6 +13,7 @@ import {ytApiV3} from '../../../../rum/rum-wrap-api';
 import {showErrorPopup, wrapApiPromiseByToaster} from '../../../../utils/utils';
 import {YTError} from '../../../../types';
 import {WithAttrs} from '../../../../utils/cypress-attributes';
+import {ActiveText} from '../../../../components/ActiveText/ActiveText';
 
 type RemoteCopyThunkAction = ThunkAction<any, RootState, any, RemoteCopyModalStateAction>;
 
@@ -39,7 +40,7 @@ export function showRemoteCopyModal(paths: Array<string>): RemoteCopyThunkAction
                     return (
                         <span>
                             Failed to load attributes
-                            <Link onClick={() => showErrorPopup(e)}>Details</Link>
+                            <ActiveText onClick={() => showErrorPopup(e)}>Details</ActiveText>
                         </span>
                     );
                 },

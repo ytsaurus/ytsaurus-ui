@@ -1,6 +1,7 @@
 import React from 'react';
-import Link from '../Link/Link';
 import cn from 'bem-cn-lite';
+
+import {ActiveText} from '../../components/ActiveText/ActiveText';
 
 import './FilePicker.scss';
 
@@ -30,7 +31,7 @@ export default class FilePicker extends React.Component<Props> {
     render() {
         const {children, multiple} = this.props;
         return (
-            <Link onClick={this.onLinkClick}>
+            <ActiveText onClick={this.onLinkClick}>
                 {children}
                 <input
                     ref={this.inputRef}
@@ -39,7 +40,7 @@ export default class FilePicker extends React.Component<Props> {
                     type={'file'}
                     multiple={multiple}
                 />
-            </Link>
+            </ActiveText>
         );
     }
 }
