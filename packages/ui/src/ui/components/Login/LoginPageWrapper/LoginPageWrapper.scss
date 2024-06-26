@@ -85,7 +85,7 @@
         margin-bottom: 20px;
         --yc-text-input-border-radius: 10px;
 
-        .yc-text-input__control {
+        .g-text-input__control {
             @include login-page-font-settings;
             height: 40px;
             padding: 12px 10px;
@@ -95,7 +95,7 @@
         }
 
         &_password {
-            .yc-text-input__control:not(:placeholder-shown) {
+            .g-text-input__control:not(:placeholder-shown) {
                 letter-spacing: 2px;
             }
         }
@@ -103,13 +103,12 @@
 
     &__button {
         @include login-page-font-settings;
-        --yc-button-height: 38px;
+        height: 38px;
         font-size: 15px;
-        line-height: 20px;
 
         &_solid {
-            --yc-button-background-color: var(--login-button-solid);
-            --yc-button-background-color-hover: var(--login-button-solid-hover);
+            --g-color-base-brand: var(--login-button-solid);
+            --g-color-base-brand-hover: var(--login-button-solid-hover);
         }
 
         &_link {
@@ -125,17 +124,17 @@
         }
     }
 
-    .yc-button_loading {
+    .g-button_loading {
         --yc-button-loading-color-1: var(--login-button-loading-color-1);
         --yc-button-loading-color-2: var(--login-button-loading-color-2);
     }
 
-    .yc-button_view_outlined::before {
+    .g-button_view_outlined::before {
         background-color: var(--login-background);
     }
 
-    .yc-button:hover::before {
-        background-color: var(--yc-button-background-color-hover);
+    .g-button:hover::before {
+        background-color: var(--login-button-solid-hover);
     }
 
     &__navigate {
