@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import isEmpty from 'lodash/isEmpty';
 import {stateToParams} from 'redux-location-state/lib/stateToParams';
 
 import {paramsToQuery} from '../utils';
@@ -15,7 +15,7 @@ const match = (path: string, locationPath: string) => {
     const reducedInitialItem = [...initialDeclareditemSplit];
     let deleted = 0;
 
-    _.each(initialDeclareditemSplit, (split, index) => {
+    initialDeclareditemSplit.forEach((split, index) => {
         // if the item has a * remove that query from both the match and the item to match
         if (split === '*') {
             allPathItems.splice(index - deleted, 1);
@@ -49,8 +49,7 @@ export type PathParameters = [LocationParameters, MapLocationToStateFn];
 const storeSetup: Array<[string, PathParameters]> = [];
 
 export function getParamSetup(): Record<string, LocationParameters> {
-    const res = _.reduce(
-        storeSetup,
+    const res = storeSetup.reduce(
         (acc, [key, [params]]) => {
             acc[key] = params;
             return acc;
@@ -61,10 +60,10 @@ export function getParamSetup(): Record<string, LocationParameters> {
 }
 
 export function registerLocationParameters(path: string, data: PathParameters) {
-    if (_.find(storeSetup, ([setupPath]) => setupPath === path)) {
+    if (storeSetup.find(([setupPath]) => setupPath === path)) {
         throw new Error(`Location parameters already defined for path '${path}'.`);
     }
-    const matchedInd = _.findIndex(storeSetup, ([setupPath]) => match(setupPath, path));
+    const matchedInd = storeSetup.findIndex(([setupPath]) => match(setupPath, path));
     if (matchedInd !== -1) {
         storeSetup.splice(matchedInd, 0, [path, data]);
     } else {
@@ -73,10 +72,10 @@ export function registerLocationParameters(path: string, data: PathParameters) {
 }
 
 export function mapLocationToState<T>(state: T, location: LocationWithState<T>) {
-    const matchedState = _.find(storeSetup, ([path]) => match(path, location.pathname));
+    const matchedState = storeSetup.find(([path]) => match(path, location.pathname));
     const findState = matchedState
         ? matchedState
-        : _.find(storeSetup, ([setupPath]) => setupPath === 'global');
+        : storeSetup.find(([setupPath]) => setupPath === 'global');
     state = findState ? findState[1][1](state, location) : state;
     return state;
 }
@@ -88,11 +87,11 @@ function makeRoutedURLByPath(pathname: string, paramOverrides: any = {}) {
     const {search} = location;
     const params = {...paramOverrides};
     new URLSearchParams(search).forEach((v, k) => {
-        if (!_.has(params, k)) {
+        if (!(k in params)) {
             params[k] = v;
         }
     });
-    const p = _.isEmpty(params) ? '' : '?' + paramsToQuery(params);
+    const p = isEmpty(params) ? '' : '?' + paramsToQuery(params);
     return `${pathname}${p}`;
 }
 
