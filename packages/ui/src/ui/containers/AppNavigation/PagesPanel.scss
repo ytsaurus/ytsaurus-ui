@@ -30,7 +30,6 @@
         flex-grow: 1;
         height: 100%;
         &_current {
-
         }
     }
 
@@ -38,7 +37,7 @@
         padding-left: 1ex;
     }
 
-    &__list-item-icon {
+    &__list-item-icon.g-icon {
         color: var(--g-color-text-misc);
     }
 }

@@ -88,7 +88,7 @@ body {
         .yc-button_disabled.yc-button_view_outlined::before,
         .yc-button_disabled.yc-button_view_outlined-info::before,
         .yc-button_disabled.yc-button_view_outlined-danger::before {
-            background-color: var(--yc-button-background-color);
+            background-color: var(--g-color-base-generic-accent-disabled);
         }
         .yc-select-control_disabled.yc-select-control,
         .yc-text-input_disabled {
@@ -142,8 +142,16 @@ body {
     }
 
     // Temporary fix for screenshot tests
-    .gn-aside-header__collapse-button {
+    & .gn-aside-header__collapse-button {
         border-top: 1px solid var(--gn-aside-header-collapse-button-divider-line-color);
         height: 20px;
+    }
+
+    & .g-dialog-footer {
+        padding: 12px 32px;
+    }
+
+    & .g-breadcrumbs__popup {
+        z-index: var(--dialog-suggest-z-index) !important;
     }
 }

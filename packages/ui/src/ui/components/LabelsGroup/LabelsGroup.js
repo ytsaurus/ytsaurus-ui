@@ -76,7 +76,9 @@ class LabelsGroup extends Component {
                 {renderToggler()}
 
                 {onRemoveAll && items.length > 0 && (
-                    <Button size="s" view="flat-secondary" text="Clear all" onClick={onRemoveAll} />
+                    <Button size="s" view="flat-secondary" onClick={onRemoveAll}>
+                        Clear all
+                    </Button>
                 )}
             </ul>
         );
