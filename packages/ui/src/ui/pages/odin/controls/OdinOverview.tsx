@@ -45,6 +45,7 @@ import {
 } from '../_selectors/odin-overview';
 import {MetricData, MetricListItem} from '../odin-utils';
 import {OdinOverviewStateDataItem} from '../_reducers/odin-overview';
+import {ClickableText} from '../../../components/ClickableText/ClickableText';
 import Link from '../../../components/Link/Link';
 // @ts-ignore
 import {YTDFDialog} from '../../../components/Dialog/Dialog';
@@ -118,22 +119,22 @@ function OdinOverviewPresetItem({name, isDefault}: OdinOverviewPreset) {
     const dispatch = useDispatch();
     return (
         <div className={block('preset')} onClick={() => dispatch(odinOverviewSelectPreset(name))}>
-            <Link
+            <ClickableText
                 className={block('preset-star')}
-                theme={'ghost'}
+                color={'secondary'}
                 onClick={() => {
                     dispatch(odinOverviewToggleDefaultPreset(name));
                 }}
                 title={isDefault ? 'Unmark as default' : 'Mark as default'}
             >
                 <Icon awesome={'star'} face={isDefault ? 'solid' : 'regular'} />
-            </Link>
+            </ClickableText>
             <span className={block('preset-name')} title={name}>
                 {name}
             </span>
-            <Link
+            <ClickableText
                 className={block('preset-remove')}
-                theme={'ghost'}
+                color={'secondary'}
                 onClick={(e) => {
                     e.stopPropagation();
                     dispatch(odinOverviewSetPresetToRemove(name));
@@ -141,7 +142,7 @@ function OdinOverviewPresetItem({name, isDefault}: OdinOverviewPreset) {
                 title={'Remove'}
             >
                 <Icon awesome={'times'} />
-            </Link>
+            </ClickableText>
         </div>
     );
 }
@@ -322,33 +323,33 @@ function OdinOverview(props: OdinOverviewProps) {
                                     </div>
                                 </div>
                                 <div className={block('show-hide-all')}>
-                                    <Link
-                                        theme={'ghost'}
+                                    <ClickableText
+                                        color={'secondary'}
                                         onClick={() =>
                                             dispatch(odinOverviewSetAllMetricsVisible(true))
                                         }
                                     >
                                         Show all
-                                    </Link>
+                                    </ClickableText>
                                     <span> / </span>
-                                    <Link
-                                        theme={'ghost'}
+                                    <ClickableText
+                                        color={'secondary'}
                                         onClick={() =>
                                             dispatch(odinOverviewSetAllMetricsVisible(false))
                                         }
                                     >
                                         Hide all
-                                    </Link>
+                                    </ClickableText>
                                 </div>
                                 <div className={block('save')}>
-                                    <Link
-                                        theme={'ghost'}
+                                    <ClickableText
+                                        color={'secondary'}
                                         onClick={() =>
                                             dispatch(odinOverviewShowCreatePresetDialog(true))
                                         }
                                     >
                                         <Icon awesome={'save'} />
-                                    </Link>
+                                    </ClickableText>
                                 </div>
                                 {clusterMetrics.map((item) => {
                                     return (
@@ -517,13 +518,13 @@ function OverviewRowImpl(props: OverviewRowProps) {
                 </Link>
             </div>
             <div className={block('actions-cell')}>
-                <Link
-                    theme={'ghost'}
+                <ClickableText
+                    color="secondary"
                     onClick={handleHide}
                     title={'Click to ' + (hidden ? 'display' : 'hide')}
                 >
                     <Icon awesome={hidden ? 'eye-slash' : 'eye'} />
-                </Link>
+                </ClickableText>
             </div>
         </React.Fragment>
     );
@@ -557,7 +558,7 @@ function OverviewRowError({error, name}: {error: any; name: string}) {
     }, [name]);
     return (
         <div className={'error'}>
-            <Link onClick={handleClick}>Reload. </Link>
+            <ClickableText onClick={handleClick}>Reload. </ClickableText>
             {String(error)}
         </div>
     );

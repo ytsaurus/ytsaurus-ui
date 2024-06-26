@@ -27,7 +27,7 @@ import {
     showTableSortModal,
 } from '../../../../store/actions/navigation/modals/table-merge-sort-modal';
 
-import Link from '../../../../components/Link/Link';
+import {ClickableText} from '../../../../components/ClickableText/ClickableText';
 import {selectAll} from '../../../../store/actions/navigation/content/map-node';
 import {showDynTablesStateModalByNodes} from '../../../../store/actions/navigation/modals/dyn-tables-state-modal';
 import {showRemoteCopyModal} from '../../../../store/actions/navigation/modals/remote-copy-modal';
@@ -268,7 +268,7 @@ export default function MultipleActions(props: {className: string}) {
             </span>
 
             <span className={b('item')}>
-                <Link onClick={handleClearAll}>Clear all</Link>
+                <ClickableText onClick={handleClearAll}>Clear all</ClickableText>
             </span>
         </span>
     );

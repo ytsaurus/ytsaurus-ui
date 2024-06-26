@@ -1,0 +1,13 @@
+.yt-clickable-text {
+    &_color_info {
+        color: var(--g-color-text-info);
+    }
+    &_color_secondary {
+        color: var(--g-color-text-secondary);
+    }
+
+    &:hover {
+        color: var(--g-color-text-danger);
+        cursor: pointer;
+    }
+}

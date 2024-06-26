@@ -1,20 +1,23 @@
 import React from 'react';
 import cn from 'bem-cn-lite';
-import Link from '../../../components/Link/Link';
+import moment from 'moment';
 import {useSelector} from 'react-redux';
-import {getCluster} from '../../../store/selectors/global';
 
 // @ts-ignore
 import yt from '@ytsaurus/javascript-wrapper/lib/yt';
-import ypath from '../../../common/thor/ypath';
-import {TYPED_OUTPUT_FORMAT} from '../../../constants';
 
-import './OperationShortInfo.scss';
+import {getCluster} from '../../../store/selectors/global';
+
 import MetaTable from '../../../components/MetaTable/MetaTable';
 import {showErrorPopup} from '../../../utils/utils';
-import moment from 'moment';
-// @ts-ignore
 import format from '../../../common/hammer/format';
+
+import ypath from '../../../common/thor/ypath';
+import {TYPED_OUTPUT_FORMAT} from '../../../constants';
+import {ClickableText} from '../../../components/ClickableText/ClickableText';
+import Link from '../../../components/Link/Link';
+
+import './OperationShortInfo.scss';
 
 const block = cn('operation-short-info');
 
@@ -100,9 +103,9 @@ export function OperationShortInfo(props: Props) {
                               {
                                   key: 'Error',
                                   value: (
-                                      <Link onClick={() => showErrorPopup(error)}>
+                                      <ClickableText onClick={() => showErrorPopup(error)}>
                                           {ypath.getValue(error, '/message')}
-                                      </Link>
+                                      </ClickableText>
                                   ),
                               },
                           ]),

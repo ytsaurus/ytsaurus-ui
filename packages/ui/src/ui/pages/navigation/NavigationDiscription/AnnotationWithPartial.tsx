@@ -1,6 +1,6 @@
 import React, {FC} from 'react';
 import {Markdown} from '../../../components/Markdown/Markdown';
-import Link from '../../../components/Link/Link';
+import {ClickableText} from '../../../components/ClickableText/ClickableText';
 
 type Props = {
     annotation?: string;
@@ -23,9 +23,9 @@ export const AnnotationWithPartial: FC<Props> = ({annotation, expanded, onToggle
         <>
             <Markdown text={expanded ? value : text} />
             {isFullText ? null : (
-                <Link theme={'ghost'} onClick={onToggle}>
+                <ClickableText color={'secondary'} onClick={onToggle}>
                     {expanded ? 'Hide more' : 'Show more'}
-                </Link>
+                </ClickableText>
             )}
         </>
     );

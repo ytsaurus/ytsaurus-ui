@@ -8,13 +8,14 @@ import ypath from '../../../../../../common/thor/ypath';
 import DataTableYT from '../../../../../../components/DataTableYT/DataTableYT';
 import {Template} from '../../../../../../components/MetaTable/templates/Template';
 
+import {ClickableText} from '../../../../../../components/ClickableText/ClickableText';
+import Icon from '../../../../../../components/Icon/Icon';
 import Link from '../../../../../../components/Link/Link';
 import {showErrorPopup} from '../../../../../../utils/utils';
 import {prepareFaqUrl} from '../../../../../../utils/operations/tabs/details/alerts';
 import {compareWithUndefined} from '../../../../../../utils/sort-helpers';
 
 import './AlertEvents.scss';
-import Icon from '../../../../../../components/Icon/Icon';
 
 const block = cn('alert-events');
 
@@ -80,7 +81,7 @@ const columns: Array<Column<AlertInfo>> = [
         name: '',
         render({row}) {
             return (
-                <Link
+                <ClickableText
                     onClick={() => {
                         showErrorPopup(row.error as any, {
                             type: 'alert',
@@ -90,7 +91,7 @@ const columns: Array<Column<AlertInfo>> = [
                     }}
                 >
                     Details
-                </Link>
+                </ClickableText>
             );
         },
     },
@@ -162,7 +163,9 @@ function AlertEvents({items}: Props) {
                 }}
             />
             {all.length > VISIBLE_COUNT ? (
-                <Link onClick={toggleShowAll}>{allVisible ? 'Less' : 'More'}</Link>
+                <ClickableText onClick={toggleShowAll}>
+                    {allVisible ? 'Less' : 'More'}
+                </ClickableText>
             ) : null}
         </div>
     );
