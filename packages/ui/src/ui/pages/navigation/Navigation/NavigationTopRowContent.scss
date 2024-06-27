@@ -57,7 +57,9 @@
         align-items: center;
     }
 
-    .yc-breadcrumbs__item:first-child {
+    .g-breadcrumbs__switcher:first-child,
+    .g-breadcrumbs__item:first-child {
         text-overflow: unset;
+        padding-right: 0px;
     }
 }

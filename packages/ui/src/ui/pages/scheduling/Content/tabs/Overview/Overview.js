@@ -634,11 +634,17 @@ class SchedulingOverviewToolbar extends React.PureComponent {
                     onChange: this.onAbcServiceFilter,
                 })}
 
-                <Button size="s" theme="normal" title="Expand All" onClick={this.handleExpand}>
+                <Button
+                    size="m"
+                    className={block('toolbar-button')}
+                    theme="normal"
+                    title="Expand All"
+                    onClick={this.handleExpand}
+                >
                     <Icon awesome="arrow-to-bottom" />
                 </Button>
 
-                <Button size="s" theme="normal" title="Collapse All" onClick={this.handleCollapse}>
+                <Button size="m" theme="normal" title="Collapse All" onClick={this.handleCollapse}>
                     <Icon awesome="arrow-to-top" />
                 </Button>
             </React.Fragment>

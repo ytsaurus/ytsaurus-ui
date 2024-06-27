@@ -12,14 +12,14 @@
         flex: 0 0 40px;
         padding-left: 16px;
 
-        & .yc-tabs {
+        & .g-tabs {
             box-shadow: none;
         }
 
         .yc-datepicker_mobile & {
             padding-left: 0;
 
-            & .yc-tabs {
+            & .g-tabs {
                 justify-content: center;
             }
         }

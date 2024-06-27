@@ -12,14 +12,14 @@
 
     &__name,
     &__node-count {
-        .yc-button {
+        .g-button {
             visibility: hidden;
             opacity: 0;
             transition: opacity 300ms ease;
         }
 
         &:hover {
-            .yc-button {
+            .g-button {
                 visibility: visible;
                 opacity: 1;
             }
