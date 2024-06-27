@@ -1,4 +1,4 @@
-.bundle-input {
+.yt-bundle-input {
     --vertical-space: 8px;
     --default-input-width: 200px;
 
@@ -46,7 +46,7 @@
         align-items: center;
     }
 
-    &__input {
+    & &__input {
         width: var(--default-input-width);
     }
 
@@ -54,7 +54,7 @@
         margin-left: var(--vertical-space);
     }
 
-    &__progress {
+    & &__progress {
         width: var(--default-input-width);
         margin: 0;
     }

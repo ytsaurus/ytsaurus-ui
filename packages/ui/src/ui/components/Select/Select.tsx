@@ -289,7 +289,9 @@ function ValueControl({
             <span className={block('control-value')}>
                 {label && <Text className={block('control-label')}>{label}</Text>}
                 {!value?.length ? (
-                    <Text color="hint">{placeholder ?? hammer.format.NO_VALUE}</Text>
+                    <Text color="hint" variant="inherit">
+                        {placeholder ?? hammer.format.NO_VALUE}
+                    </Text>
                 ) : (
                     <VisibleValues
                         value={value}

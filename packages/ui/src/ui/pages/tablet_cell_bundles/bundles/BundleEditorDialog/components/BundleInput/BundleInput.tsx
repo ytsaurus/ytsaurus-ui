@@ -12,7 +12,7 @@ import {ThemeThreshold} from '../../../../../../utils/progress';
 
 import './BundleInput.scss';
 
-const block = cn('bundle-input');
+const block = cn('yt-bundle-input');
 
 function toRawValue(value?: string | number) {
     return value === undefined ? '' : String(value);

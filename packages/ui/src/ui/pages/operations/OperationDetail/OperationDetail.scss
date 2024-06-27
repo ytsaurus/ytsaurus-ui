@@ -1,6 +1,6 @@
 @mixin redefinition($theme, $color) {
     &__events-progress_theme_#{$theme} {
-        .yc-progress__item_theme_default {
+        .g-progress__item_theme_default {
             background-color: $color;
         }
     }

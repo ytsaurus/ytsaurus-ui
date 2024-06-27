@@ -4,11 +4,14 @@ import * as d3 from 'd3';
 import moment from 'moment';
 import _map from 'lodash/map';
 
+import {Button, Dialog, Loader, Popup, Icon as UIKitIcon} from '@gravity-ui/uikit';
+
+import chevronLeftSvg from '@gravity-ui/icons/svgs/chevron-left.svg';
+import chevronRightSvg from '@gravity-ui/icons/svgs/chevron-right.svg';
+
 import {DatePicker} from '@gravity-ui/date-components';
 
 import {absolute} from '../../../common/utils/url-ts';
-
-import {ChevronLeft, ChevronRight} from '@gravity-ui/icons';
 
 import hammer from '../../../common/hammer';
 
@@ -51,7 +54,6 @@ import Link from '../../../components/Link/Link';
 import {YTDFDialog} from '../../../components/Dialog/Dialog';
 
 import ErrorBoundary from '../../../components/ErrorBoundary/ErrorBoundary';
-import {Button, Dialog, Loader, Popup} from '@gravity-ui/uikit';
 import {setMetric} from '../_actions';
 import Icon from '../../../components/Icon/Icon';
 import OdinOverviewCreatePresetDialog from './OdinOverviewCreatePresetDialog';
@@ -260,14 +262,12 @@ function OdinOverview(props: OdinOverviewProps) {
                     <div className={block('navigation')}>
                         <Button
                             view="outlined"
-                            size="xs"
                             onClick={() => {
                                 dispatch(odinOverviewSetPreviousTimeRange());
                             }}
-                            className={block('navigation-button', {icon: true})}
                             pin="round-brick"
                         >
-                            <ChevronLeft />
+                            <UIKitIcon data={chevronLeftSvg} />
                         </Button>
                         <DatePicker
                             className={block('navigation-date-picker')}
@@ -282,25 +282,22 @@ function OdinOverview(props: OdinOverviewProps) {
                         />
                         <Button
                             view="outlined"
-                            size="xs"
                             onClick={() => {
                                 dispatch(odinOverviewSetNextTimeRange());
                             }}
                             disabled={fromFilter === undefined}
-                            className={block('navigation-button', {icon: true})}
                             pin="brick-round"
                         >
-                            <ChevronRight />
+                            <UIKitIcon data={chevronRightSvg} />
                         </Button>
 
                         <Button
                             view="flat-action"
-                            size="xs"
                             disabled={fromFilter === undefined}
                             onClick={() => {
                                 dispatch(setOdinOverviewFromTimeFilter(undefined));
                             }}
-                            className={block('navigation-button', {reset: true})}
+                            className={block('navigation-now')}
                         >
                             Now
                         </Button>
