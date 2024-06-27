@@ -3,7 +3,7 @@
 .yc-item-selector {
     $_: &;
 
-    --yc-list-margin: 16px;
+    --g-list-item-padding: 16px;
     --yc-list-height: 196px;
 
     display: flex;
@@ -24,7 +24,7 @@
         justify-content: space-between;
         align-items: center;
         margin-bottom: 8px;
-        padding: 0 var(--yc-list-margin);
+        padding: 0 var(--g-list-item-padding);
         min-height: 24px;
     }
 

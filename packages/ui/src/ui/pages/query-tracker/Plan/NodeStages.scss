@@ -4,8 +4,8 @@
     overflow: auto;
 
     .data-table {
-        --data-table-color-base: var(--yc-color-base-float);
-        --data-table-border-color: var(--yc-color-base-float);
+        --data-table-color-base: var(--g-color-base-float);
+        --data-table-border-color: var(--g-color-base-float);
 
         th {
             @include sticky-data-table-head();
@@ -19,7 +19,7 @@
             position: sticky;
             bottom: 0;
 
-            background: var(--yc-color-base-float);
+            background: var(--g-color-base-float);
         }
     }
 }

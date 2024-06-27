@@ -19,7 +19,7 @@
         height: 100%;
         max-height: 100%;
 
-        border-right: 1px solid var(--yc-color-line-generic);
+        border-right: 1px solid var(--g-color-line-generic);
     }
 
     &__aside-item {
@@ -55,7 +55,7 @@
         white-space: nowrap;
         text-overflow: ellipsis;
 
-        color: var(--yc-color-text-secondary);
+        color: var(--g-color-text-secondary);
     }
 
     &__container {
