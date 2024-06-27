@@ -1,20 +1,22 @@
-.yc-breadcrumbs__item {
-    border-radius: 4px;
-    &:hover {
-        background-color: var(--g-color-base-simple-hover);
-    }
+.g-breadcrumbs {
+    .g-breadcrumbs__switcher,
+    .g-breadcrumbs__item {
+        min-width: 30px;
+        border-radius: 4px;
+        padding: 0 4px;
 
-    &_current {
-        &:hover {
-            background-color: unset;
+        &:last-child {
+            padding-right: 8px;
         }
     }
-}
 
-.yc-breadcrumbs__item {
-    min-width: 30px;
-}
+    .g-breadcrumbs__switcher-wrapper {
+        .g-breadcrumbs__switcher {
+            min-width: unset;
+        }
+    }
 
-.yc-breadcrumbs__item_current {
-    flex-shrink: 0;
+    .g-breadcrumbs__item_current {
+        flex-shrink: 0;
+    }
 }

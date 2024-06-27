@@ -22,16 +22,4 @@
     &__suggest {
         width: 100%;
     }
-
-    &__suggest-popup {
-        .yc-suggest__list_empty {
-            color: var(--secondary-text);
-        }
-        .yc-list__item {
-            padding: 0.5ex 1ex;
-        }
-        .yc-suggest__item {
-            @include ellipsis();
-        }
-    }
 }

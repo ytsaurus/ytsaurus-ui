@@ -1,14 +1,14 @@
 .acl-manage {
     &__modal {
-        .yc-dialog-body {
-            .yc-dialog-body {
+        .g-dialog-body {
+            .g-dialog-body {
                 padding: 0;
             }
         }
 
         &_loading,
         &_error {
-            .yc-dialog-body {
+            .g-dialog-body {
                 min-height: 372px;
 
                 display: flex;
@@ -18,7 +18,7 @@
         }
 
         &_error {
-            .yc-dialog-body {
+            .g-dialog-body {
                 display: block;
             }
         }
