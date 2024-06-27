@@ -89,7 +89,6 @@ export default function ObjectPermissionsFilters({
                                 label={'Permissions'}
                                 maxVisibleValuesTextLength={60}
                                 width="auto"
-                                disablePortal={false}
                             />
                         ),
                 },

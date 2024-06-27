@@ -112,7 +112,6 @@ export function ConsumerQueueSelector({className, children}: ConsumerQueueSelect
                         width="auto"
                         onChange={handleSelect}
                         placeholder="Select queue... "
-                        disablePortal={false}
                     />
                 </>
             ) : (
