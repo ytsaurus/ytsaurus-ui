@@ -151,7 +151,7 @@ class CustomSelect extends React.Component<
         return (
             <Select
                 className={block(null, className)}
-                disablePortal
+                disablePortal={false}
                 {...props}
                 filterable={!hideFilter}
                 renderOption={this.renderOption}

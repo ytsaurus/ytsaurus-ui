@@ -271,7 +271,6 @@ export function ColumnGroupsFilter({
             value={value}
             onUpdate={(columnsFilter) => updateAclFilters({columnsFilter})}
             maxVisibleValuesTextLength={60}
-            disablePortal={false}
             width="max"
         />
     );
