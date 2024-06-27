@@ -1,10 +1,10 @@
 .yt-markdown {
     a {
-        color: var(--external-link);
+        color: var(--external-link) !important;
         text-decoration: none;
 
         &:hover {
-            color: var(--hover-link);
+            color: var(--hover-link) !important;
         }
     }
 }

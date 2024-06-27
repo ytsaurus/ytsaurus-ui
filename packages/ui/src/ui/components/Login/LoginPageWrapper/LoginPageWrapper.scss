@@ -83,7 +83,7 @@
 
     &__field {
         margin-bottom: 20px;
-        --yc-text-input-border-radius: 10px;
+        --g-text-input-border-radius: 10px;
 
         .g-text-input__control {
             @include login-page-font-settings;
@@ -125,8 +125,8 @@
     }
 
     .g-button_loading {
-        --yc-button-loading-color-1: var(--login-button-loading-color-1);
-        --yc-button-loading-color-2: var(--login-button-loading-color-2);
+        --g-button-loading-color-1: var(--login-button-loading-color-1);
+        --g-button-loading-color-2: var(--login-button-loading-color-2);
     }
 
     .g-button_view_outlined::before {

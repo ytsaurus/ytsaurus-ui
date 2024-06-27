@@ -54,7 +54,7 @@ test('Dynamic table: offset dialog should work properly', async ({page}) => {
     const el = await page.getByTitle('Edit offset');
     await el?.click();
     await page.fill('.offset-selector__item input', '"key98"');
-    await page.click('.yc-modal .offset-selector button[data-qa="modal-confirm"]');
+    await page.click('.g-modal .offset-selector button[data-qa="modal-confirm"]');
 
     await page.waitForSelector(
         '.data-table__table-wrapper tr:nth-child(1) td:nth-child(1) :text("key98")',

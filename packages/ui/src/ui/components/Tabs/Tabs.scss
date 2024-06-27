@@ -1,4 +1,6 @@
 .tabs {
+    --g-color-text-secondary: var(--secondary-text);
+
     &__underline {
         border-bottom: 1px solid var(--dark-divider);
     }
@@ -93,7 +95,7 @@
             margin-left: 5px;
             padding: 1px 3px 0;
 
-            color: var(--g-color-text-secondary);
+            color: var(--secondary-text);
             border-radius: 3px;
         }
 
