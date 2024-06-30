@@ -1,8 +1,8 @@
 import React from 'react';
 import block from 'bem-cn-lite';
 import {Button, Popup, PopupPlacement} from '@gravity-ui/uikit';
+import {ItemSelector, ItemSelectorProps} from '@gravity-ui/components';
 
-import {ItemSelector, ItemSelectorProps} from '../ItemSelector/ItemSelector';
 import {SelectControl} from '../SelectControl/SelectControl';
 
 import i18n from './i18n';
