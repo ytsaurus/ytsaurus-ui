@@ -31,6 +31,7 @@ import {UISettingsMonitoring} from '../shared/ui-settings';
 import {DefaultSubjectCard, type SubjectCardProps} from './components/SubjectLink/SubjectLink';
 import type {QueryItem} from './pages/query-tracker/module/api';
 import type {DropdownMenuItem} from '@gravity-ui/uikit';
+import {CUSTOM_QUERY_REQULT_TAB} from './pages/query-tracker/QueryResultsVisualization';
 
 type HeaderItemOrPage =
     | {
@@ -653,7 +654,7 @@ const uiFactory: UIFactory = {
     },
 
     getCustomQueryResultTab() {
-        return undefined;
+        return CUSTOM_QUERY_REQULT_TAB;
     },
 
     getExternalSettings() {
