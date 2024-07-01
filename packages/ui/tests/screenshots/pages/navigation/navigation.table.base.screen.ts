@@ -10,12 +10,13 @@ class TablePage extends NavigationPage {
         await this.waitForTableSyncedWidth(selector);
     }
 
-    async replaceTableMeta() {
+    async replaceStaticTableMeta() {
         await this.replaceBreadcrumbsTestDir();
         await replaceInnerHtml(this.page, {
             '[data-qa="expiration_timeout_path"]': 'e2e.1970-01-01.00:00:00.xxxxxxxxxxx',
             '.meta-table-item__time': '01 Jan 1970 00:00:00',
             '.meta-table-item__id': '0-11111-22222-33333333',
+            '.meta-table-item__value_format_bytes': '00.00 KiB',
         });
     }
 }
@@ -28,7 +29,7 @@ test('Navigation: table - Content', async ({page}) => {
     await page.goto(makeClusterUrl(`navigation?path=${E2E_DIR}/static-table`));
 
     await tablePage(page).waitForTablContent('.navigation-table', 10);
-    await tablePage(page).replaceTableMeta();
+    await tablePage(page).replaceStaticTableMeta();
 
     await expect(page).toHaveScreenshot();
 

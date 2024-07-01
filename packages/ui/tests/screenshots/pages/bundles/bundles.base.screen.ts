@@ -74,6 +74,7 @@ test('Bundles - Active bundle', async ({page}) => {
     await test.step('Editor', async () => {
         await page.click(':text("Edit bundle")');
         await bundles(page).dfDialog.waitForField('Changelog account');
+        await page.waitForTimeout(1000);
         await expect(page).toHaveScreenshot();
 
         await bundles(page).dfDialog.showTab('Resources');

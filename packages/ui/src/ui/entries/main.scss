@@ -21,4 +21,12 @@ body.g-root {
             --g-color-text-brand-contrast: #ffffff;
         }
     }
+
+    & .g-dialog-footer {
+        padding: 12px 32px;
+    }
+
+    & .g-breadcrumbs__popup {
+        z-index: var(--dialog-suggest-z-index) !important;
+    }
 }
