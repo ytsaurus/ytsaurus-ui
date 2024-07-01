@@ -58,6 +58,7 @@ import {NoWrap} from '../../../../components/Text/Text';
 import {showLinkToModal} from '../../../../store/actions/navigation/modals/link-to-modal';
 import {openCreateACOModal} from '../../../../store/actions/navigation/modals/create-aco';
 import NavigationExtraActions from '../../../../containers/NavigationExtraActions/NavigationExtraActions';
+import UIFactory from '../../../../UIFactory';
 
 import './MapNode.scss';
 
@@ -238,6 +239,38 @@ class MapNodeToolbar extends React.PureComponent {
             showACOCreateButton,
         } = this.props;
 
+        const {menuItems, renderModals} = UIFactory.getMapNodeExtraCreateActions([
+            {
+                action: this.createTableButtonClick,
+                text: <NoWrap>Table</NoWrap>,
+                icon: <Icon awesome={'table'} face={'solid'} />,
+            },
+            {
+                action: this.createDirectoryButtonClick,
+                text: <NoWrap>Directory</NoWrap>,
+                icon: <Icon awesome={'folder'} face={'solid'} />,
+            },
+            ...(!getConfigUploadTable().uploadTableExcelBaseUrl
+                ? []
+                : [
+                      {
+                          action: this.uploadTableButtonClick,
+                          text: <NoWrap>Upload xlsx</NoWrap>,
+                          icon: <Icon awesome={'upload'} />,
+                      },
+                  ]),
+            {
+                action: this.createLinkButtonClick,
+                text: <NoWrap>Link</NoWrap>,
+                icon: <Icon awesome={'link'} />,
+            },
+            showACOCreateButton && {
+                action: this.createACOButtonClick,
+                text: <NoWrap>ACO</NoWrap>,
+                icon: <Icon awesome={'acl-object'} />,
+            },
+        ]);
+
         return (
             <React.Fragment>
                 <div className={tbBlock('container')}>
@@ -295,37 +328,7 @@ class MapNodeToolbar extends React.PureComponent {
                         <DropdownMenu
                             menuSize={'n'}
                             popupClass={block('create-popup')}
-                            items={[
-                                {
-                                    action: this.createTableButtonClick,
-                                    text: <NoWrap>Table</NoWrap>,
-                                    icon: <Icon awesome={'table'} face={'solid'} />,
-                                },
-                                {
-                                    action: this.createDirectoryButtonClick,
-                                    text: <NoWrap>Directory</NoWrap>,
-                                    icon: <Icon awesome={'folder'} face={'solid'} />,
-                                },
-                                ...(!getConfigUploadTable().uploadTableExcelBaseUrl
-                                    ? []
-                                    : [
-                                          {
-                                              action: this.uploadTableButtonClick,
-                                              text: <NoWrap>Upload xlsx</NoWrap>,
-                                              icon: <Icon awesome={'upload'} />,
-                                          },
-                                      ]),
-                                {
-                                    action: this.createLinkButtonClick,
-                                    text: <NoWrap>Link</NoWrap>,
-                                    icon: <Icon awesome={'link'} />,
-                                },
-                                showACOCreateButton && {
-                                    action: this.createACOButtonClick,
-                                    text: <NoWrap>ACO</NoWrap>,
-                                    icon: <Icon awesome={'acl-object'} />,
-                                },
-                            ]}
+                            items={menuItems}
                             switcher={
                                 <Button size="m" title="Create object">
                                     Create object
@@ -338,6 +341,7 @@ class MapNodeToolbar extends React.PureComponent {
                     <NodesTypes />
                 </div>
                 <UploadManagerCreate ref={this.uploadXlsRef} />
+                {renderModals()}
             </React.Fragment>
         );
     }

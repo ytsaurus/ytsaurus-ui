@@ -30,6 +30,7 @@ import {PreparedRole} from './utils/acl';
 import {UISettingsMonitoring} from '../shared/ui-settings';
 import {DefaultSubjectCard, type SubjectCardProps} from './components/SubjectLink/SubjectLink';
 import type {QueryItem} from './pages/query-tracker/module/api';
+import type {DropdownMenuItem} from '@gravity-ui/uikit';
 
 type HeaderItemOrPage =
     | {
@@ -404,6 +405,11 @@ export interface UIFactory {
     onChytAliasSqlClick(params: {alias: string; cluster: string}): void;
 
     getNavigationExtraTabs(): Array<ExtraTab>;
+
+    getMapNodeExtraCreateActions(baseActions: Array<DropdownMenuItem>): {
+        menuItems: Array<DropdownMenuItem>;
+        renderModals: () => React.ReactNode;
+    };
 }
 
 const experimentalPages: string[] = [];
@@ -680,6 +686,13 @@ const uiFactory: UIFactory = {
 
     getNavigationExtraTabs() {
         return [];
+    },
+
+    getMapNodeExtraCreateActions(baseActions) {
+        return {
+            menuItems: baseActions,
+            renderModals: () => undefined,
+        };
     },
 };
 
