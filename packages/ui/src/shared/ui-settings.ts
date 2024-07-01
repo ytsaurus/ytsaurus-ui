@@ -146,6 +146,14 @@ export interface UISettings {
      * @example reUseEffectiveAclForPath: '//sys/access_control_object_namespaces[^/+]{0,}'
      */
     reUseEffectiveAclForPath?: string;
+
+    /**
+     * Allows to override default title and text on login page, accepts HTML string.
+     */
+    loginPageSettings?: {
+        title?: string;
+        text?: string;
+    };
 }
 
 export interface UISettingsMonitoring {
