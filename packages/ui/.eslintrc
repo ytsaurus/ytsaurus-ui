@@ -1,5 +1,6 @@
 {
     "extends": ["@gravity-ui/eslint-config", "@gravity-ui/eslint-config/prettier"],
+    "plugins": ["react"],
     "root": true,
     "rules": {
         "new-cap": 0,

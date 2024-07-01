@@ -8,7 +8,7 @@ test('Navigation: map_node - Content', async ({page}) => {
     await navigationPage(page).replaceMapNodeDateTimes(8);
     await navigationPage(page).replaceMapNodeAccounts(8);
     await navigationPage(page).replaceBreadcrumbsTestDir();
-    await navigationPage(page).replaceDyntableSize();
+    await navigationPage(page).replaceMapNodeBytes();
 
     await expect(page).toHaveScreenshot();
 
