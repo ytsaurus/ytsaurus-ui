@@ -1,0 +1,49 @@
+.placeholder {
+    width: 200px;
+    padding: 12px 0;
+    border-top: 1px solid var(--g-color-line-generic);
+
+    &__header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    &__name {
+        font-weight: bold;
+    }
+
+    &__field {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        cursor: pointer;
+        height: 32px;
+        margin-top: 4px;
+
+        background-color: var(--g-color-base-misc-light);
+
+        &:hover {
+            background-color: var(--g-color-base-simple-hover);
+        }
+    }
+
+    &__field-spacer {
+        display: flex;
+        margin-left: 12px;
+    }
+
+    &__field-title {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        margin-left: 8px;
+    }
+
+    &__field:hover &__field-actions {
+        visibility: visible;
+    }
+
+    &__field-actions {
+        visibility: hidden;
+    }
+}
