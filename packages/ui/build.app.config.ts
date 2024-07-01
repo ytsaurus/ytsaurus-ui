@@ -1,9 +1,12 @@
 import {ServiceConfig} from '@gravity-ui/app-builder';
 
 const client: ServiceConfig['client'] = {
-    includes: ['node_modules/clusters-config', 'src/shared'],
-    images: ['img'],
-    icons: ['img/svg'],
+    watchOptions: {
+        aggregateTimeout: 1000,
+    },
+    includes: ['src/shared'],
+    images: ['src/ui/assets/img'],
+    icons: ['src/ui/assets/img/svg'],
     monaco: {
         filename: '[name].[hash:8].worker.js',
         languages: ['markdown', 'json'],
