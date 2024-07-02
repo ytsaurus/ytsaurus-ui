@@ -59,7 +59,7 @@ export const getQueryACO = (): ThunkAction<Promise<unknown>, any, any, any> => {
                     const toaster = new Toaster();
                     toaster.add({
                         name: 'aco',
-                        type: 'error',
+                        theme: 'danger',
                         title: 'Failed to load ACO',
                         content: error?.message,
                         actions: [{label: ' Details', onClick: () => showErrorPopup(error)}],

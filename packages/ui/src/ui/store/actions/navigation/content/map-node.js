@@ -205,7 +205,7 @@ export function updateResourceUsage() {
                     });
                     const toast = new Toaster();
                     toast.add({
-                        type: 'error',
+                        theme: 'danger',
                         name: 'map_node_update_resources',
                         timeout: 500000,
                         title: 'Resource loading error',

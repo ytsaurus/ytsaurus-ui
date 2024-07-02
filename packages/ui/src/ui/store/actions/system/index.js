@@ -38,7 +38,7 @@ export function loadSchedulersAndAgents() {
                 toaster.add({
                     name: 'load/system/schedulersAndAgents',
                     autoHiding: false,
-                    type: 'error',
+                    theme: 'danger',
                     content: `[code ${code}] ${message}`,
                     title: 'Could not load Schedulers and Agents',
                     actions: [{label: ' view', onClick: () => showErrorPopup(error)}],

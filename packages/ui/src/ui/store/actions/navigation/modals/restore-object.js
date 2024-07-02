@@ -58,7 +58,7 @@ export function restoreObjects(items) {
                 dispatch(updateView());
 
                 toaster.add({
-                    type: 'success',
+                    theme: 'success',
                     name: 'restore objects',
                     timeout: 10000,
                     title: 'Objects restored',
@@ -70,7 +70,7 @@ export function restoreObjects(items) {
 
                 toaster.add({
                     name: 'restore objects',
-                    type: 'error',
+                    theme: 'danger',
                     autoHiding: false,
                     title: 'Could not restore objects.',
                     content: err?.message || 'Oops, something went wrong',
@@ -97,7 +97,7 @@ export function restoreObject(objectPath, restorePath, onSuccess) {
                 }
 
                 toaster.add({
-                    type: 'success',
+                    theme: 'success',
                     name: 'restore object',
                     timeout: 10000,
                     title: 'Object restored',

@@ -9,7 +9,7 @@ export const loadWebsqlAutocomplete = async () => {
         );
     } catch (e) {
         toaster.add({
-            type: 'error',
+            theme: 'danger',
             name: `load_websql_autocomplete`,
             title: 'Autocomplete error',
             content:

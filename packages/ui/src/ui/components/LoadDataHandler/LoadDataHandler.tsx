@@ -23,7 +23,7 @@ export default class LoadDataHandler extends Component<LoadDataHandlerProps> {
 
         if (error && loaded) {
             toaster.add({
-                type: 'error',
+                theme: 'danger',
                 name: 'network',
                 autoHiding: 500000,
                 title: 'Oops! something went wrong.',

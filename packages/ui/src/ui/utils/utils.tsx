@@ -177,7 +177,7 @@ export function wrapApiPromiseByToaster<T>(p: Promise<T>, options: WrapApiOption
             if (!options.skipSuccessToast) {
                 toaster.add({
                     name: options.toasterName,
-                    type: 'success',
+                    theme: 'success',
                     title: options.successTitle || 'Success',
                     content:
                         'function' === typeof successContent ? successContent(res) : successContent,
@@ -197,7 +197,7 @@ export function wrapApiPromiseByToaster<T>(p: Promise<T>, options: WrapApiOption
             if (!options.skipErrorToast && !isCancelled(error)) {
                 toaster.add({
                     name: options.toasterName,
-                    type: 'error',
+                    theme: 'danger',
                     title: options.errorTitle || 'Failure',
                     content:
                         'function' === typeof errorContent
@@ -239,7 +239,7 @@ export function showToasterError(name: string, error: any) {
 
     toaster.add({
         name,
-        type: 'error',
+        theme: 'danger',
         title: `${name} failure`,
         content: (
             <span>

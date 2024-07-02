@@ -81,7 +81,7 @@ export function loadSystemRPCProxies(): RPCProxiesThunkAction<
                 toaster.add({
                     name: 'load/system/rpc-proxies',
                     autoHiding: false,
-                    type: 'error',
+                    theme: 'danger',
                     content: `[code ${code}] ${message}`,
                     title: 'Could not load RPC-Proxies',
                     actions: [

@@ -81,7 +81,7 @@ export function remoteCopy(params: RemoteCopyParams): RemoteCopyThunkAction {
 
             const toaster = new Toaster();
             toaster.add({
-                type: 'success',
+                theme: 'success',
                 name: 'remoteCopyStarted',
                 autoHiding: 500000,
                 title: 'Remote copy',

@@ -176,7 +176,7 @@ export function loadChunks() {
                     toaster.add({
                         name: 'load/system/chunks',
                         autoHiding: false,
-                        type: 'error',
+                        theme: 'danger',
                         content: `[code ${code}] ${message}`,
                         title: 'Could not load Chunks',
                         actions: [
