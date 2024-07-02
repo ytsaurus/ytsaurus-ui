@@ -5,8 +5,8 @@ import {Button, Text, TextInput} from '@gravity-ui/uikit';
 import {onSuccessLogin} from '../../../store/actions/global';
 import ytLocalStorage from '../../../utils/yt-local-storage';
 import {
+    getClusterConfigByName,
     getGlobalYTAuthCluster,
-    getLoginPageText,
     getOAuthButtonLabel,
     getOAuthEnabled,
 } from '../../../store/selectors/global';
@@ -55,8 +55,8 @@ function LoginForm({theme}: Props) {
     const [username, setUsername] = useState(ytLocalStorage.get('loginDialog')?.username || '');
     const allowOAuth = useSelector(getOAuthEnabled);
     const buttonLabel = useSelector(getOAuthButtonLabel);
-    const loginPageSettings = useSelector(getLoginPageText);
     const ytAuthCluster = useSelector(getGlobalYTAuthCluster) ?? '';
+    const ytAuthClusterConfig = useSelector(() => getClusterConfigByName(ytAuthCluster));
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState<boolean>(false);
     const [errors, setErrors] = React.useState<ErrorFields>({});
@@ -92,7 +92,7 @@ function LoginForm({theme}: Props) {
         [username, password, dispatch],
     );
 
-    const {text, title} = loginPageSettings;
+    const {text, title} = ytAuthClusterConfig.loginPageSettings || {};
 
     return (
         <>
