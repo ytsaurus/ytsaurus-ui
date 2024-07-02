@@ -1,5 +1,16 @@
 # Changelog
 
+## [1.46.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.45.0...ui-v1.46.0) (2024-07-02)
+
+
+### Features
+
+* **Login**: added ability to override default text on login page [[#636](https://github.com/ytsaurus/ytsaurus-ui/issues/636)] ([28a47ec](https://github.com/ytsaurus/ytsaurus-ui/commit/28a47ec5ccf66d085e886391ab6fa3ff15b7372d))
+* **Navigation/Table**: add support of new types `date32`/`datetime64`/`timestamp64`/`interval64` [YTFRONT-4087] ([6f2c8e5](https://github.com/ytsaurus/ytsaurus-ui/commit/6f2c8e51c23f0099d1715cf21156fd36f43a34e4))
+* **Job:** add 'Job trace' meta-table item [YTFRONT-4182] ([00c0691](https://github.com/ytsaurus/ytsaurus-ui/commit/00c06919c5a31ea45068c9dbfe3f3ce5e0bbef3b))
+* **Navigation/MapNode:** add UIFactory.getMapNodeExtraCreateActions(...) method ([ae6ae51](https://github.com/ytsaurus/ytsaurus-ui/commit/ae6ae5187e29787d09a26144215736ade9b8d1f4))
+* **QueryTracker:** add search field to statistics tab in query tracker [[#301](https://github.com/ytsaurus/ytsaurus-ui/issues/301)] ([551e66a](https://github.com/ytsaurus/ytsaurus-ui/commit/551e66aaa127c0db31abefa92b41782a598a4899))
+
 ## [1.45.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.44.0...ui-v1.45.0) (2024-06-20)
 
 
