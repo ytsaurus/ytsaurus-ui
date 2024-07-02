@@ -43,7 +43,7 @@ jobs:
           echo target image and tag: ${TARGET_IMAGE}
 
           if ( test "true" = "${{ inputs.override }}" || ! docker pull ${TARGET_IMAGE} ) ; then
-            npm run docker:build:dev --dockertag=${UI_TAG}
+            npm run docker:build --dockertag=${UI_TAG}
             echo '${{ secrets.GITHUB_TOKEN }}' | docker login --username ${{ github.actor }} --password-stdin ghcr.io
             npm run docker:push --dockertag=${UI_TAG}
           else 

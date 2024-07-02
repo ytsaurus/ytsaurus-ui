@@ -1,0 +1,12 @@
+.vcs-navigation-header {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 12px;
+
+    &__top-menu {
+        display: grid;
+        grid-template-columns: repeat(2, calc(50% - 4px));
+        gap: 12px 8px;
+    }
+}

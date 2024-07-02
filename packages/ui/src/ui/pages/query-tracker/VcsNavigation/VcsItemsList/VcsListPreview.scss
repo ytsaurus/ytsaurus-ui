@@ -1,0 +1,22 @@
+.vcs-list-preview {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+
+    &__editor {
+        height: 100%;
+    }
+
+    &__header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 5px 12px 12px;
+    }
+
+    &__header-block{
+        display: flex;
+        align-items: center;
+        gap: 0 8px;
+    }
+}

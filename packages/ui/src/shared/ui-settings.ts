@@ -142,6 +142,31 @@ export interface UISettings {
     hideReferrerUrl?: string;
 
     /**
+     * Allows to customize VCS navigation on the query page
+     * id - unique identifier of VCS
+     * name - name of VCS. The name is displayed in the selector
+     * api - URL to you VCS api
+     * type - 'gitlab' | 'github'
+     *
+     * @example
+     * vcsSettings: [
+     *             {
+     *                 id: 'vcs1',
+     *                 name: 'Github',
+     *                 api: 'https://api.github.com',
+     *                 type: 'github',
+     *             },
+     *             {
+     *                 id: 'vcs2',
+     *                 name: 'Gitlab',
+     *                 api: 'https://gitlab.com/api/v4/projects',
+     *                 type: 'gitlab',
+     *             },
+     *         ],
+     */
+    vcsSettings?: VCSSettings[];
+
+    /**
      * Allows to override idm object type to Effective ACL for objects that match the regex.
      * @example reUseEffectiveAclForPath: '//sys/access_control_object_namespaces[^/+]{0,}'
      */
@@ -154,6 +179,13 @@ export interface UISettings {
         title?: string;
         text?: string;
     };
+}
+
+export interface VCSSettings {
+    id: string;
+    name: string;
+    api: string;
+    type: 'github' | 'gitlab';
 }
 
 export interface UISettingsMonitoring {

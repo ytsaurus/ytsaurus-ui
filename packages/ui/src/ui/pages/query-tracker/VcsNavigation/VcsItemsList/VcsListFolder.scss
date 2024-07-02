@@ -1,0 +1,13 @@
+.vcs-list-folder {
+    display: flex;
+    align-items: center;
+    gap: 0 8px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--g-color-line-generic);
+    cursor: pointer;
+    overflow: hidden;
+
+    &__icon {
+        flex-shrink: 0;
+    }
+}

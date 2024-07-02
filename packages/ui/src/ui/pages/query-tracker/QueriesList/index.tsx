@@ -12,12 +12,14 @@ import {applyListMode, requestQueriesList} from '../module/queries_list/actions'
 import './index.scss';
 import {QueriesTutorialList} from './QueriesTutorialList';
 import {QueriesHistoryListFilter} from './QueriesListFilter';
+import {VcsNavigation} from '../VcsNavigation';
 
 const b = block('queires-list');
 
 const TabNames = {
     [QueriesListMode.History]: 'History',
     [QueriesListMode.Tutorials]: 'Tutorials',
+    [QueriesListMode.VCS]: 'VCS',
 };
 
 const useQueryTabs = (): [TabsItemProps[], string, (tab: string) => void] => {
@@ -47,18 +49,21 @@ export function QueriesList() {
     const dispatch = useDispatch();
     useEffect(() => {
         dispatch(requestQueriesList());
-    }, []);
+    }, [dispatch]);
+
+    const isNavigation = tab === QueriesListMode.VCS;
 
     return (
         <div className={b()}>
             <Tabs className={b('tabs')} items={tabs} activeTab={tab} onSelectTab={setTab} />
             <div className={b('content')}>
-                <QueriesHistoryListFilter className={b('filter')} />
+                {!isNavigation && <QueriesHistoryListFilter className={b('filter')} />}
 
                 {tab === QueriesListMode.History && <QueriesHistoryList />}
                 {tab === QueriesListMode.Tutorials && (
                     <QueriesTutorialList className={b('list-content')} />
                 )}
+                {isNavigation && <VcsNavigation />}
             </div>
         </div>
     );
