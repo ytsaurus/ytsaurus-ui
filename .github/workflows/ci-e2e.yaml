@@ -29,7 +29,7 @@ jobs:
           disk-size: 93GB
 
   e2e-build:
-    name: Build & Run containers for 'Local'
+    name: Build docker image
     runs-on: ${{ needs.start-vm.outputs.label }}
     needs: start-vm
     steps:
@@ -39,6 +39,7 @@ jobs:
           fetch-depth: 0
       - name: Build UI
         run: |
+          pwd
           cd packages/ui
           npm run docker:build --dockertag=local
 
@@ -46,12 +47,6 @@ jobs:
           STABLE_IMAGE_NAME=$(echo $IMAGE_NAME | sed s/-nightly$//g)
 
           docker tag $IMAGE_NAME:local $STABLE_IMAGE_NAME:local
-      - name: Run containers for 'Local'
-        run: |
-          curl https://raw.githubusercontent.com/ytsaurus/ytsaurus/main/yt/docker/local/run_local_cluster.sh > run_local_cluster.sh
-          chmod u+x run_local_cluster.sh
-          ./run_local_cluster.sh --node-count 2 --ui-skip-pull true --ui-version local --yt-version dev --ui-app-installation e2e
-          sleep 10
 
   e2e-local:
     name: E2E for 'Local'
@@ -60,6 +55,13 @@ jobs:
       - start-vm
       - e2e-build
     steps:
+      - name: Run containers for 'Local'
+        run: |
+          pwd
+          curl https://raw.githubusercontent.com/ytsaurus/ytsaurus/main/yt/docker/local/run_local_cluster.sh > run_local_cluster.sh
+          chmod u+x run_local_cluster.sh
+          ./run_local_cluster.sh --node-count 2 --ui-skip-pull true --ui-version local --yt-version dev --ui-app-installation e2e
+          sleep 10
       - name: Checkout
         uses: actions/checkout@v2
         with:
@@ -81,10 +83,6 @@ jobs:
         run: |
           cd packages/ui
           YT_PROXY=`hostname`:8000 npm run e2e:localmode:init
-      - name: Screenshot tests for 'Local'
-        run: |
-          cd packages/ui
-          npm run e2e:localmode:screenshots
       - name: E2E for 'Local'
         run: |
           cd packages/ui
@@ -97,28 +95,22 @@ jobs:
           path: packages/ui/tests/test-results/
           retention-days: 7
 
-  e2e-run-for-local-as-remote:
-    name: Run containers for 'Local as remote'
-    runs-on: ${{ needs.start-vm.outputs.label }}
-    needs:
-      - start-vm
-      - e2e-local
-    steps:
-      - name: Run containers for 'Local as remote'
-        run: |
-          curl https://raw.githubusercontent.com/ytsaurus/ytsaurus/main/yt/docker/local/run_local_cluster.sh > run_local_cluster.sh
-          chmod u+x run_local_cluster.sh
-          ./run_local_cluster.sh --stop
-          ./run_local_cluster.sh --node-count 2 --ui-skip-pull true --ui-version local --yt-version dev --ui-app-installation e2e --docker-hostname `hostname` --fqdn localhost --ui-network bridge
-          sleep 10
-
   e2e-local-as-remote:
     name: E2E for 'Local as remote'
     runs-on: ${{ needs.start-vm.outputs.label }}
     needs:
       - start-vm
-      - e2e-run-for-local-as-remote
+      - e2e-build
+      - e2e-local
     steps:
+      - name: Run containers for 'Local as remote'
+        run: |
+          pwd
+          curl https://raw.githubusercontent.com/ytsaurus/ytsaurus/main/yt/docker/local/run_local_cluster.sh > run_local_cluster.sh
+          chmod u+x run_local_cluster.sh
+          ./run_local_cluster.sh --stop
+          ./run_local_cluster.sh --node-count 2 --ui-skip-pull true --ui-version local --yt-version dev --ui-app-installation e2e --docker-hostname `hostname` --fqdn localhost --ui-network bridge
+          sleep 10
       - name: Checkout
         uses: actions/checkout@v2
         with:
@@ -145,11 +137,61 @@ jobs:
           path: packages/ui/tests/test-results/
           retention-days: 7
 
+  e2e-screenshots:
+    name: E2E-screenshots for 'Local'
+    runs-on: ${{ needs.start-vm.outputs.label }}
+    needs:
+      - start-vm
+      - e2e-build
+      - e2e-local
+      - e2e-local-as-remote
+    steps:
+      - name: Run containers for 'Local'
+        run: |
+          pwd
+          curl https://raw.githubusercontent.com/ytsaurus/ytsaurus/main/yt/docker/local/run_local_cluster.sh > run_local_cluster.sh
+          chmod u+x run_local_cluster.sh
+          ./run_local_cluster.sh --stop
+          ./run_local_cluster.sh --node-count 2 --ui-skip-pull true --ui-version local --yt-version dev --ui-app-installation e2e
+          sleep 10
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Setup Node
+        uses: actions/setup-node@v2
+        with:
+          node-version: "18.x"
+          cache: "npm"
+      - name: npm ci
+        run: |
+          cd packages/ui/tests
+          npm ci
+      - name: Install browsers
+        run: |
+          cd packages/ui/tests
+          npx playwright install chromium
+      - name: Init YT local
+        run: |
+          cd packages/ui
+          YT_PROXY=`hostname`:8000 npm run e2e:localmode:init
+      - name: Screenshot tests for 'Local'
+        run: |
+          cd packages/ui
+          npm run e2e:localmode:screenshots
+      - name: Upload local test-results
+        uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: screenshots_test-results
+          path: packages/ui/tests/test-results/
+          retention-days: 7
+
   stop-vm:
     name: Stop VM
     needs:
       - start-vm
-      - e2e-local-as-remote
+      - e2e-screenshots
     runs-on: ubuntu-latest
     if: ${{ always() }}
     steps:
