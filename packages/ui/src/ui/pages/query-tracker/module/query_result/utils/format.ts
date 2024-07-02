@@ -97,8 +97,8 @@ export function prepareFormattedValue(
             convertedValue === fullValue
                 ? $formattedValue
                 : formatValue
-                ? formatResults(fullValue, {...settings, maxStringSize: undefined})
-                : '',
+                  ? formatResults(fullValue, {...settings, maxStringSize: undefined})
+                  : '',
         $rawValue,
     };
 }

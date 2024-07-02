@@ -1,5 +1,4 @@
-import {createPrefix} from './../utils';
-import createActionTypes from '../../constants/utils';
+import createActionTypes, {createPrefix} from './../utils';
 
 const ACCOUNTS_EDITOR_PREFIX = createPrefix('ACCOUNTS_NEW_EDITOR');
 

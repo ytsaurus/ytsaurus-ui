@@ -192,7 +192,12 @@ class Navigation extends Component {
     renderEditButton() {
         return (
             <div className={block('edit-metadata')}>
-                <Button size="m" title={'Edit metadata'} onClick={this.onEditButtonClick}>
+                <Button
+                    size="m"
+                    className={block('edit-metadata-btn')}
+                    title={'Edit metadata'}
+                    onClick={this.onEditButtonClick}
+                >
                     <Icon awesome={'pencil'} />
                     Edit metadata
                 </Button>

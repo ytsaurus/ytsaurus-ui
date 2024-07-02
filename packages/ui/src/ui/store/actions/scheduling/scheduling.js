@@ -229,7 +229,7 @@ export function editPool(pool, values, initialValues) {
                 toaster.add({
                     name: 'edit pool',
                     timeout: 10000,
-                    type: 'success',
+                    theme: 'success',
                     title: `Successfully edited ${pool.name}. Please wait.`,
                 });
 

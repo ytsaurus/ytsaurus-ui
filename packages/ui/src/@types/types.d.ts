@@ -34,6 +34,6 @@ export type Pick2<
     [L1 in K1]: T[L1] extends object
         ? {[L2 in K2]: R extends never ? T[L1][L2] : R}
         : R extends never
-        ? T[L1]
-        : R;
+          ? T[L1]
+          : R;
 };

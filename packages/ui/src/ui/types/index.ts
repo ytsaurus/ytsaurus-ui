@@ -40,16 +40,16 @@ export type TypedKeys<T, P> = Exclude<
 export type PartialDeep<T> = T extends string
     ? T
     : T extends number
-    ? T
-    : T extends boolean
-    ? T
-    : T extends undefined
-    ? T
-    : T extends null
-    ? T
-    : T extends Array<infer U>
-    ? Array<PartialDeep<U>>
-    : {[K in keyof T]?: PartialDeep<T[K]>};
+      ? T
+      : T extends boolean
+        ? T
+        : T extends undefined
+          ? T
+          : T extends null
+            ? T
+            : T extends Array<infer U>
+              ? Array<PartialDeep<U>>
+              : {[K in keyof T]?: PartialDeep<T[K]>};
 
 export type ArrayElement<T> = T extends Array<infer U> ? U : never;
 

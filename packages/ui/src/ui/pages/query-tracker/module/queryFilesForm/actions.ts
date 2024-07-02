@@ -47,7 +47,7 @@ export const restoreQueryFile =
         if (files.some((file) => file.name === restoreFile.name)) {
             toaster.add({
                 name: 'restore_query_file',
-                type: 'error',
+                theme: 'danger',
                 title: 'The file could not be restored. The file name already exists in the list of active files.',
                 autoHiding: false,
             });

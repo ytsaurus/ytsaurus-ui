@@ -278,7 +278,7 @@ export function odinOverviewAddPreset(name: string, isDefault: boolean): OdinOve
                     new Toaster().add({
                         name: 'add-preset',
                         autoHiding: false,
-                        type: 'error',
+                        theme: 'danger',
                         content: message,
                         title: 'Failed to crete preset',
                         actions: [
@@ -321,7 +321,7 @@ export function odinOverviewRemovePreset(name: string): OdinOverviewThunkAction 
                 new Toaster().add({
                     name: 'delete-preset',
                     autoHiding: false,
-                    type: 'error',
+                    theme: 'danger',
                     content: message,
                     title: 'Failed to delete the preset',
                     actions: [{label: ' view', onClick: () => showErrorPopup(data)}],
@@ -352,7 +352,7 @@ export function odinOverviewToggleDefaultPreset(name: string): OdinOverviewThunk
                 new Toaster().add({
                     name: 'set-deault-preset',
                     autoHiding: false,
-                    type: 'error',
+                    theme: 'danger',
                     content: message,
                     title: 'Failed to set the preset as default',
                     actions: [{label: ' view', onClick: () => showErrorPopup(data)}],

@@ -1,7 +1,11 @@
 import _compact from 'lodash/compact';
 import _map from 'lodash/map';
 import React from 'react';
-import YagrChartKit, {YagrWidgetData, getSerieColor} from '../YagrChartKit/YagrChartKit';
+import YagrChartKit, {
+    RawSerieData,
+    YagrWidgetData,
+    getSerieColor,
+} from '../YagrChartKit/YagrChartKit';
 
 import formatLib from '../../common/hammer/format';
 
@@ -152,30 +156,30 @@ function getColumnData(
     data.push(undefined!);
     lineData.push(undefined!);
 
-    const res: ReturnType<typeof getColumnData> = {
-        timeline,
-        graphs: [
-            {
-                type: 'line' as const,
-                data: lineData,
-                scale: 'y1',
-                color: getSerieColor(1),
-            },
-            {
-                type: 'column' as const,
-                data,
-                color: getSerieColor(0),
-                ...{
-                    renderOptions: {
-                        size: [1],
-                        gap: 1,
-                    },
+    const graphs: RawSerieData[] = [
+        {
+            type: 'line' as const,
+            data: lineData,
+            scale: 'y1',
+            color: getSerieColor(1),
+        },
+        {
+            type: 'column' as const,
+            data,
+            color: getSerieColor(0),
+            ...{
+                renderOptions: {
+                    size: [1],
+                    gap: 1,
                 },
             },
-        ],
+        },
+    ];
+    return {
+        graphs,
+        timeline,
         step: bucketSize,
     };
-    return res;
 }
 
 function getLineOnlyData(
@@ -193,15 +197,17 @@ function getLineOnlyData(
     timeline.push(min + (0.1 + bucketSize) * buckets.length);
     data.push(NaN);
 
+    const graphs: Array<RawSerieData> = [
+        {
+            type: 'line' as const,
+            data,
+            color: getSerieColor(1),
+        },
+    ];
+
     return {
         timeline,
-        graphs: [
-            {
-                type: 'line' as const,
-                data,
-                color: getSerieColor(1),
-            },
-        ],
+        graphs,
         step: NaN,
     };
 }

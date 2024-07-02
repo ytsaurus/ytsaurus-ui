@@ -386,7 +386,7 @@ export function loadMasters() {
             toaster.add({
                 name: 'load/system/masters',
                 autoHiding: false,
-                type: 'error',
+                theme: 'danger',
                 content: `[code ${code}] ${message}`,
                 title: 'Could not load Masters',
                 actions: [{label: ' view', onClick: () => showErrorPopup(error as AxiosError)}],

@@ -16,15 +16,6 @@
         .elements-table__row {
             cursor: pointer;
         }
-        .yc-checkbox__indicator {
-            width: 32px;
-            height: 38px;
-            top: -2px;
-            left: -8px;
-        }
-        .yc-checkbox__indicator::before {
-            inset: 11px 7px 10px 8px;
-        }
     }
 
     .checkbox {
@@ -166,7 +157,6 @@
                 }
             }
         }
-
 
         @media (max-width: 720px) {
             &-item_type {

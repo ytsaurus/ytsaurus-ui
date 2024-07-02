@@ -11,13 +11,13 @@
         z-index: var(--fixed-toolbar-z-index);
         background-color: var(--main-background);
 
-        .yc-button {
-            margin-right: 10px;
-        }
-
         &_sticky {
             @include sticky-style();
         }
+    }
+
+    &__toolbar-button {
+        margin-right: 10px;
     }
 
     &__filter {

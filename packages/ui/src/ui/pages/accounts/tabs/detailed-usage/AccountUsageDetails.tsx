@@ -169,8 +169,8 @@ function useColumnsByPreset(mediums: Array<string>) {
             viewType === 'tree' || viewType === 'tree-diff'
                 ? ''
                 : viewType === 'list' || viewType === 'list-diff'
-                ? 'list'
-                : 'folders';
+                  ? 'list'
+                  : 'folders';
         res.set('type', {
             name: 'type',
             header: iconName === '' ? null : <Icon awesome={iconName} />,

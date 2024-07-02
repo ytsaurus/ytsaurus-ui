@@ -73,7 +73,7 @@ export function loadSystemResources() {
             toaster.add({
                 name: 'load/system/resources',
                 autoHiding: false,
-                type: 'error',
+                theme: 'danger',
                 content: `[code ${code}] ${message}`,
                 title: 'Could not load Resources',
                 actions: [{label: ' view', onClick: () => showErrorPopup(error)}],

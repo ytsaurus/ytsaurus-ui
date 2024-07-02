@@ -76,7 +76,7 @@ yt vanilla \
     --spec '{"pool_trees"=[default;e2e];"scheduling_options_per_pool_tree"={"e2e"={pool=test-e2e}}}' --async >>./e2e-env.tmp
 
 if [ "false" = "$(yt exists //sys/pool_trees/default/yt-e2e-pool-1)" ]; then
-    yt create --type scheduler_pool --attributes '{name="yt-e2e-pool-1";pool_tree="default";parent_name="<Root>"}'
+    yt create --type scheduler_pool --attributes '{name="yt-e2e-pool-1";pool_tree="default";parent_name="<Root>";weight=1}'
 fi
 
 if [ "false" = "$(yt exists //sys/pool_trees/default/yt-e2e-pool-2)" ]; then

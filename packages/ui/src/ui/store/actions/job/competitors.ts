@@ -62,7 +62,7 @@ export function loadCompetitors(
                     dispatch({type: JOB.LOAD_JOB_COMPETITORS_CANCELLED});
                 } else {
                     toaster.add({
-                        type: 'error',
+                        theme: 'danger',
                         name: 'job competitors',
                         autoHiding: 10000,
                         content: error?.message || 'Oops, something went wrong',

@@ -40,7 +40,7 @@ export function RoleGroup({
     bannedAsState,
 }: {
     data: RoleGroupInfo;
-    makeUrl: (params?: MakeUrlParams) => string | undefined;
+    makeUrl: (params?: MakeUrlParams) => string;
     showFlags?: boolean;
     hideOthers?: boolean;
     bannedAsState?: boolean;
@@ -191,7 +191,7 @@ function Status({
     count: number;
     url?: string;
 }) {
-    const withUrl = count > 0 && Boolean(url);
+    const withUrl = hasUrl(count, url);
     const content = (
         <React.Fragment>
             <Text
@@ -216,4 +216,8 @@ function Status({
     ) : (
         <div className={block('status')}>{content}</div>
     );
+}
+
+function hasUrl(count: number, url?: string): url is string {
+    return count > 0 && Boolean(url);
 }

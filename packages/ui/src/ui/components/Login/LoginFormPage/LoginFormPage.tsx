@@ -158,7 +158,7 @@ function LoginForm({theme}: Props) {
                 )}
 
                 {errors.response && (
-                    <Text as="p" color="danger" className={block('error')}>
+                    <Text as={'p' as const} color="danger" className={block('error')}>
                         {errors.response}
                     </Text>
                 )}

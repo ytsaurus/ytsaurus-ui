@@ -35,10 +35,13 @@ export const PAGES_WITH_ICONS = [
     {id: Page.CHYT, icon: pageChyt},
 ];
 
-export const PAGE_ICONS_BY_ID = PAGES_WITH_ICONS.reduce((acc, {id, icon}) => {
-    acc[id] = icon;
-    return acc;
-}, {} as Record<string, any>);
+export const PAGE_ICONS_BY_ID = PAGES_WITH_ICONS.reduce(
+    (acc, {id, icon}) => {
+        acc[id] = icon;
+        return acc;
+    },
+    {} as Record<string, any>,
+);
 
 export const emptyPageIcon = pageNoIcon;
 

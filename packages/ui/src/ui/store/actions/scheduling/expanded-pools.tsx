@@ -142,7 +142,7 @@ export function loadExpandedPools(tree: string): ExpandedPoolsThunkAction {
                     } else {
                         new Toaster().add({
                             name: 'schedulingPoolFullPath',
-                            type: 'error',
+                            theme: 'danger',
                             title: '',
                         });
                     }

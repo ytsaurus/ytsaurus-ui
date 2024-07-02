@@ -147,8 +147,8 @@ function ChytCliqueMetaTable() {
         const finish_time_number = finish_time
             ? moment(finish_time).valueOf()
             : start_time_number
-            ? Date.now()
-            : undefined;
+              ? Date.now()
+              : undefined;
 
         const duration =
             !start_time_number || !finish_time_number

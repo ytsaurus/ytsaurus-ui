@@ -157,10 +157,13 @@ export function loadQueryResult(
             const {rows, yql_type_registry: types} = result;
 
             const formattedResult = rows.map((v) => {
-                return Object.entries(v).reduce((acc, [k, [value, typeIndex]]) => {
-                    acc[k] = prepareFormattedValue(value, types[Number(typeIndex)]);
-                    return acc;
-                }, {} as Record<string, {$type: string; $value: unknown}>);
+                return Object.entries(v).reduce(
+                    (acc, [k, [value, typeIndex]]) => {
+                        acc[k] = prepareFormattedValue(value, types[Number(typeIndex)]);
+                        return acc;
+                    },
+                    {} as Record<string, {$type: string; $value: unknown}>,
+                );
             });
             dispatch({
                 type: SET_QUERY_RESULTS,
@@ -225,10 +228,13 @@ export function updateQueryResult(
             const {rows, yql_type_registry: types} = result;
 
             const formattedResult = result.rows.map((v) => {
-                return Object.entries(v).reduce((acc, [k, [value, typeIndex]]) => {
-                    acc[k] = prepareFormattedValue(value, types[Number(typeIndex)]);
-                    return acc;
-                }, {} as Record<string, {$type: string; $value: unknown}>);
+                return Object.entries(v).reduce(
+                    (acc, [k, [value, typeIndex]]) => {
+                        acc[k] = prepareFormattedValue(value, types[Number(typeIndex)]);
+                        return acc;
+                    },
+                    {} as Record<string, {$type: string; $value: unknown}>,
+                );
             });
 
             if (Array.isArray(rows) && rows.length) {

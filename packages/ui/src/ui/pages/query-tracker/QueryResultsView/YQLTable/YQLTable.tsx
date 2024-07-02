@@ -1,7 +1,7 @@
 // TODO: revisit types
 import * as React from 'react';
 
-import {ClipboardButton, Link, Text} from '@gravity-ui/uikit';
+import {ClipboardButton, Text} from '@gravity-ui/uikit';
 import hammer from '../../../../common/hammer';
 import cn from 'bem-cn-lite';
 import DataTable, {Column, OrderType, Settings, SortOrder} from '@gravity-ui/react-data-table';
@@ -9,6 +9,7 @@ import DataTypePopup from '../DataTypePopup/DataTypePopup';
 import {StrictReactNode, hasKey} from './utils';
 import {MOVING} from '@gravity-ui/react-data-table/build/esm/lib/constants';
 import DataTableYT from '../../../../components/DataTableYT/DataTableYT';
+import {ActiveText} from '../../../../components/ActiveText/ActiveText';
 
 import './YQLTable.scss';
 
@@ -332,10 +333,13 @@ function getSortedData<T>(
         return indexedData;
     }
     const sortOrderArray = Array.isArray(sortOrder) ? sortOrder : [sortOrder];
-    const sortColumns = sortOrderArray.reduce((obj, {columnId, order}) => {
-        obj[columnId] = order;
-        return obj;
-    }, {} as Record<string, OrderType>);
+    const sortColumns = sortOrderArray.reduce(
+        (obj, {columnId, order}) => {
+            obj[columnId] = order;
+            return obj;
+        },
+        {} as Record<string, OrderType>,
+    );
     const sortFunctionDict: {[colName: string]: Comparator<T>} = {};
     dataColumns.forEach((column) => {
         if (sortColumns[column.name]) {
@@ -383,7 +387,7 @@ function ShowMoreInline({formattedValue, strippedDown, onClick}: ShowMoreInlineP
                 }}
             />
             <br />
-            <Link
+            <ActiveText
                 onClick={() => {
                     setShowFull((v) => !v);
 
@@ -391,7 +395,7 @@ function ShowMoreInline({formattedValue, strippedDown, onClick}: ShowMoreInlineP
                 }}
             >
                 {showFull ? 'Show less' : 'Show more'}
-            </Link>
+            </ActiveText>
         </React.Fragment>
     );
 }
@@ -440,7 +444,7 @@ function TableCell({children, rawValue}: TableCellProps) {
                 <ClipboardButton
                     className={cellCopyToClipboardClassName}
                     text={rawValue}
-                    size={16}
+                    size="s"
                 />
             ) : null}
         </span>

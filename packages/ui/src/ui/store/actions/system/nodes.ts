@@ -118,7 +118,7 @@ export function loadSystemNodes(
                 toaster.add({
                     name: 'load/system/nodes',
                     autoHiding: false,
-                    type: 'error',
+                    theme: 'danger',
                     content: `[code ${code}] ${message}`,
                     title: 'Could not load Nodes',
                     actions: [

@@ -3,6 +3,8 @@ import cn from 'bem-cn-lite';
 import {useSelector} from 'react-redux';
 import {Redirect, Route, Switch, useRouteMatch} from 'react-router';
 
+import {Link} from '@gravity-ui/uikit';
+
 import Specification from '../../../pages/job/tabs/Specification/Specification';
 import ErrorBoundary from '../../../components/ErrorBoundary/ErrorBoundary';
 import MetaTable, {Template} from '../../../components/MetaTable/MetaTable';
@@ -25,8 +27,8 @@ import {formatByParams} from '../../../utils/format';
 import hammer from '../../../common/hammer';
 import {RouteInfo} from '../Job';
 
+import {ActiveText} from '../../../components/ActiveText/ActiveText';
 import ChartLink from '../../../components/ChartLink/ChartLink';
-import Link from '../../../components/Link/Link';
 import {getJob} from '../../../store/selectors/job/detail';
 import ClipboardButton from '../../../components/ClipboardButton/ClipboardButton';
 import {getCluster, getClusterUiConfig} from '../../../store/selectors/global';
@@ -192,25 +194,25 @@ export default function JobGeneral() {
                             {
                                 key: 'job_input',
                                 value: (
-                                    <Link
+                                    <ActiveText
                                         onClick={() =>
                                             window.open(job.prepareCommandURL('get_job_input'))
                                         }
                                     >
                                         get_job_input
-                                    </Link>
+                                    </ActiveText>
                                 ),
                             },
                             {
                                 key: 'job_error',
                                 value: (
-                                    <Link
+                                    <ActiveText
                                         onClick={() =>
                                             window.open(job.prepareCommandURL('get_job_stderr'))
                                         }
                                     >
                                         get_job_stderr
-                                    </Link>
+                                    </ActiveText>
                                 ),
                             },
                             ...(job?.state !== 'failed'
@@ -219,7 +221,7 @@ export default function JobGeneral() {
                                       {
                                           key: 'fail_context',
                                           value: (
-                                              <Link
+                                              <ActiveText
                                                   onClick={() =>
                                                       window.open(
                                                           job.prepareCommandURL(
@@ -229,7 +231,7 @@ export default function JobGeneral() {
                                                   }
                                               >
                                                   get_job_fail_context
-                                              </Link>
+                                              </ActiveText>
                                           ),
                                       },
                                   ]),
@@ -258,7 +260,7 @@ export default function JobGeneral() {
                             {
                                 key: 'Job trace',
                                 value: (
-                                    <Link target="_blank" url={traceUrl}>
+                                    <Link target="_blank" href={traceUrl!}>
                                         {traceTitle}
                                     </Link>
                                 ),

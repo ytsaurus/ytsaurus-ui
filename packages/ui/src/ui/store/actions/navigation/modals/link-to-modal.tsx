@@ -50,7 +50,7 @@ export function createLink(params: Pick<LinkToState, 'path' | 'target'>): LinkTo
                 const toast = new Toaster();
                 toast.add({
                     name: 'create-link',
-                    type: 'success',
+                    theme: 'success',
                     title: 'Link created',
                     content: <Link url={`/${cluster}/navigation?path=${path}`}>{path}</Link>,
                 });

@@ -111,15 +111,18 @@ export const getChytListTableSortState = (state: RootState) => state.chyt.listFi
 export const getChytListTableSortStateByName = createSelector(
     [getChytListTableSortState],
     (sortState) => {
-        return sortState.reduce((acc, item, index) => {
-            if (item.column) {
-                acc[item.column] = {
-                    ...item,
-                    multisortIndex: sortState.length > 1 ? index + 1 : undefined,
-                };
-            }
-            return acc;
-        }, {} as Record<keyof ChytInfo, SortState<keyof ChytInfo> & {multisortIndex?: number}>);
+        return sortState.reduce(
+            (acc, item, index) => {
+                if (item.column) {
+                    acc[item.column] = {
+                        ...item,
+                        multisortIndex: sortState.length > 1 ? index + 1 : undefined,
+                    };
+                }
+                return acc;
+            },
+            {} as Record<keyof ChytInfo, SortState<keyof ChytInfo> & {multisortIndex?: number}>,
+        );
     },
 );
 

@@ -42,7 +42,7 @@ export const ClusterPicker: FC<Props> = ({clusterConfig}) => {
     return (
         <div className={block('cluster')} onClick={toggleVisibility}>
             <ClusterGroupItem forwardImageRef={iconRef} {...clusterConfig} shortEnv />
-            <Icon awesome={'chevron-down'} />
+            <Icon awesome={'chevron-down'} size="l" />
             <Popup
                 className={block('popup')}
                 placement={['bottom-start', 'top-start']}

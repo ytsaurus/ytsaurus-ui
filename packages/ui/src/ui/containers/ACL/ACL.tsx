@@ -145,7 +145,7 @@ class ACL extends Component<Props> {
                         <React.Fragment>
                             idm-group:{group}
                             <span className={block('copy-idm-group')}>
-                                <ClipboardButton text={`idm-group:${group}`} size={16} />
+                                <ClipboardButton text={`idm-group:${group}`} size="s" />
                             </span>
                         </React.Fragment>
                     )

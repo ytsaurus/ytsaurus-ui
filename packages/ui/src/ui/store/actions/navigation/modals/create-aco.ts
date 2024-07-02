@@ -51,7 +51,7 @@ export function createACO(
 
                 toast.add({
                     name: 'create-aco',
-                    type: 'success',
+                    theme: 'success',
                     title: 'ACO created',
                     content: '',
                 });

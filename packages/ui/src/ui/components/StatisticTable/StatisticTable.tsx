@@ -239,7 +239,7 @@ export function StatisticTable({
 
                     return null;
                 },
-            } as StatisticTableTemplate<TreeItem>),
+            }) as StatisticTableTemplate<TreeItem>,
         [minWidth],
     );
     const tableProps = React.useMemo(() => {

@@ -193,7 +193,7 @@ export function deletePool(item?: PoolInfo): SchedulingThunkAction {
                 toaster.add({
                     name: 'delete pool',
                     autoHiding: 10000,
-                    type: 'success',
+                    theme: 'success',
                     title: `Successfully deleted ${item.name}. Please wait.`,
                 });
 

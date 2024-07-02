@@ -1,10 +1,10 @@
 type Join<F, S> = F extends ''
     ? S
     : F extends string
-    ? S extends string
-        ? `${F}.${S}`
-        : never
-    : S;
+      ? S extends string
+          ? `${F}.${S}`
+          : never
+      : S;
 
 type ValueOf<T> = T[keyof T];
 

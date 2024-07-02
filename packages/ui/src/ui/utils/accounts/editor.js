@@ -58,7 +58,7 @@ function createAccount(accountName, parentName) {
             toaster.add({
                 name: 'create account',
                 timeout: SUCCESS_TOASTER_TIMEOUT,
-                type: 'success',
+                theme: 'success',
                 title: `${accountName} successfully created`,
             });
             return d;
@@ -67,7 +67,7 @@ function createAccount(accountName, parentName) {
             toaster.add({
                 name: 'create account',
                 timeout: ERRRO_TOASTER_TIMEOUT,
-                type: 'error',
+                theme: 'danger',
                 title: `Failed to create account ${accountName}`,
                 content: err.message,
                 actions: [{label: ' view', onClick: () => showErrorPopup(err)}],
@@ -83,7 +83,7 @@ export function setAccountParent(accountName, parentName) {
             toaster.add({
                 name: 'set parent for account',
                 timeout: SUCCESS_TOASTER_TIMEOUT,
-                type: 'success',
+                theme: 'success',
                 title: `${accountName}'s Parent updated successfully`,
             });
             return d;
@@ -92,7 +92,7 @@ export function setAccountParent(accountName, parentName) {
             toaster.add({
                 name: 'set parent for account',
                 timeout: ERRRO_TOASTER_TIMEOUT,
-                type: 'error',
+                theme: 'danger',
                 title: `Failed to set Parent for ${accountName}`,
                 content: err.message,
                 actions: [{label: ' view', onClick: () => showErrorPopup(err)}],
@@ -111,7 +111,7 @@ export function setAccountAbc(accountName, abcId, abcSlug) {
             toaster.add({
                 name: 'account abc service',
                 timeout: SUCCESS_TOASTER_TIMEOUT,
-                type: 'success',
+                theme: 'success',
                 title: `${accountName}'s ABC Service updated successfully`,
             });
             return d;
@@ -120,7 +120,7 @@ export function setAccountAbc(accountName, abcId, abcSlug) {
             toaster.add({
                 name: 'account abc service',
                 timeout: ERRRO_TOASTER_TIMEOUT,
-                type: 'error',
+                theme: 'danger',
                 title: `Failed to set ABC for ${accountName}`,
                 content: err.message,
                 actions: [{label: ' view', onClick: () => showErrorPopup(err)}],
@@ -150,7 +150,7 @@ export function createAccountHome(accountName) {
                     toaster.add({
                         name: 'account create home',
                         timeout: SUCCESS_TOASTER_TIMEOUT,
-                        type: 'success',
+                        theme: 'success',
                         title: `${accountName}'s home directory created successfully`,
                     });
                     return d;
@@ -160,7 +160,7 @@ export function createAccountHome(accountName) {
             toaster.add({
                 name: 'account create home',
                 timeout: ERRRO_TOASTER_TIMEOUT,
-                type: 'error',
+                theme: 'danger',
                 title: `Failed to create home for ${accountName}`,
                 content: err.message,
                 actions: [{label: ' view', onClick: () => showErrorPopup(err)}],

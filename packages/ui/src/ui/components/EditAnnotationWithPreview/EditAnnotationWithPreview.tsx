@@ -1,7 +1,7 @@
 import React from 'react';
 
 import {DialogControlProps} from '../Dialog/Dialog.types';
-import {EditTextWithPreviewProps, EditTextWithPreviewWithState} from '../EditTextWithPreview';
+import {EditTextWithPreview, EditTextWithPreviewProps} from '../EditTextWithPreview';
 import {Markdown} from '../Markdown/Markdown';
 
 export type EditAnnotationProps = DialogControlProps<
@@ -79,7 +79,7 @@ export function EditAnnotationWithPreview(props: EditAnnotationProps) {
     }
 
     return (
-        <EditTextWithPreviewWithState
+        <EditTextWithPreview
             className={className}
             value={valueProp}
             onChange={onChange}

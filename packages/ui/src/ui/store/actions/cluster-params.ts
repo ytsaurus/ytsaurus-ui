@@ -52,7 +52,7 @@ function prepareClusterUiConfig(uiConfig: BatchResultsItem, uiDevConfig: BatchRe
         handleUiConfigError('//sys/@ui_config', uiConfig.error);
         toast.add({
             name: 'get-ui_config',
-            type: 'error',
+            theme: 'danger',
             autoHiding: false,
             title: 'Failed to load //sys/@ui_config',
             content:

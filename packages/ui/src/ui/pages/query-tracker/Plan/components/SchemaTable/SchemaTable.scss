@@ -20,7 +20,7 @@
     &__sort-icon {
         margin-right: 8px;
 
-        color: var(--yc-color-text-primary);
+        color: var(--g-color-text-primary);
     }
 
     &__name {
@@ -37,7 +37,7 @@
         margin-left: auto;
 
         opacity: 0;
-        color: var(--yc-color-base-generic-medium-hover);
+        color: var(--g-color-base-generic-medium-hover);
 
         transition: opacity 0.1s linear;
     }

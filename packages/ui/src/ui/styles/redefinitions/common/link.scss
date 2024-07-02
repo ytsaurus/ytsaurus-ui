@@ -1,5 +1,5 @@
 .g-root {
-    .yc-link {
+    .g-link {
         &_view_normal {
             color: var(--external-link);
         }
@@ -21,9 +21,9 @@
         }
     }
 
-    .yc-link_view_normal.yc-link_disabled_yes,
-    .yc-link_view_primary.yc-link_disabled_yes,
-    .yc-link_view_ghost.yc-link_disabled_yes {
+    .g-link_view_normal.g-link_disabled_yes,
+    .g-link_view_primary.g-link_disabled_yes,
+    .g-link_view_ghost.g-link_disabled_yes {
         color: var(--disabled-link);
     }
 }

@@ -4,8 +4,8 @@ import cn from 'bem-cn-lite';
 
 import {Text} from '@gravity-ui/uikit';
 
+import {ActiveText} from '../../../../components/ActiveText/ActiveText';
 import ClipboardButton from '../../../../components/ClipboardButton/ClipboardButton';
-import Link from '../../../../components/Link/Link';
 
 import './VersionCell.scss';
 import {useDispatch} from 'react-redux';
@@ -63,9 +63,9 @@ function VersionCell(props: Props) {
 
     return (
         <React.Fragment>
-            <Link className={block('text')} theme={'primary'} onClick={handleClick}>
+            <ActiveText className={block('text')} color={'primary'} onClick={handleClick}>
                 {versionContent}
-            </Link>
+            </ActiveText>
             <ClipboardButton
                 text={version}
                 shiftText={hashPart}

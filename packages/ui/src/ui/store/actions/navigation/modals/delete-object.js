@@ -104,7 +104,7 @@ export function getRealPath({path, type}) {
             .catch((error) => {
                 console.error(error);
                 toaster.add({
-                    type: 'error',
+                    theme: 'danger',
                     name: 'real path',
                     timeout: 10000,
                     title: 'Could not open delete dialog.',
@@ -175,7 +175,7 @@ export function getRealPaths(items) {
             .catch((error) => {
                 console.error(error);
                 toaster.add({
-                    type: 'error',
+                    theme: 'danger',
                     name: 'real path',
                     timeout: 10000,
                     title: 'Could not open delete dialog.',
@@ -207,7 +207,7 @@ function deleteCurrentObject(path, restorePath) {
         if (permanently) {
             return yt.v3.remove({path}).then(() => {
                 toaster.add({
-                    type: 'success',
+                    theme: 'success',
                     name: 'delete object',
                     timeout: 10000,
                     title: 'Object has been permanently deleted.',
@@ -239,7 +239,7 @@ function deleteCurrentObject(path, restorePath) {
                 )
                 .then(() => {
                     toaster.add({
-                        type: 'success',
+                        theme: 'success',
                         name: 'delete object',
                         timeout: 10000,
                         title: 'Object deleted',
@@ -270,7 +270,7 @@ export function deleteObject() {
             dispatch({type: CLOSE_DELETE_OBJECT_POPUP});
 
             toaster.add({
-                type: 'error',
+                theme: 'danger',
                 name: 'delete object',
                 timeout: 10000,
                 title: 'Could not delete the object within transaction.',
@@ -298,7 +298,7 @@ export function deleteObject() {
                     data: {error},
                 });
                 toaster.add({
-                    type: 'error',
+                    theme: 'danger',
                     name: 'delete object',
                     timeout: 10000,
                     title: 'Could not delete the node.',
@@ -333,7 +333,7 @@ function permanentlyDeleteObjects(multipleInfo, transaction) {
         .then(() => yt.v3.commitTransaction({transaction_id: transaction}))
         .then(() => {
             toaster.add({
-                type: 'success',
+                theme: 'success',
                 name: 'delete objects',
                 timeout: 10000,
                 title: 'Objects have been permanently deleted.',
@@ -394,7 +394,7 @@ function moveObjectsIntoTrash(multipleInfo, transaction, login) {
         .then(() => yt.v3.commitTransaction({transaction_id: transaction}))
         .then(() => {
             toaster.add({
-                type: 'success',
+                theme: 'success',
                 name: 'delete objects',
                 timeout: 10000,
                 title: 'Objects deleted',
@@ -414,7 +414,7 @@ export function deleteObjects() {
             dispatch({type: CLOSE_DELETE_OBJECT_POPUP});
 
             toaster.add({
-                type: 'error',
+                theme: 'danger',
                 name: 'delete object',
                 timeout: 10000,
                 title: 'Could not delete the object within transaction.',
@@ -444,7 +444,7 @@ export function deleteObjects() {
                     data: {error},
                 });
                 toaster.add({
-                    type: 'error',
+                    theme: 'danger',
                     name: 'delete objects',
                     timeout: 10000,
                     title: 'Could not delete the nodes.',

@@ -66,7 +66,7 @@ export function YQLSchemeTable({
 }) {
     return (
         <div className={b(null, className)}>
-            <Text variant="subheader-2" as={'div'} className={b('title')}>
+            <Text variant="subheader-2" as={'div' as const} className={b('title')}>
                 Scheme
             </Text>
             <div className={b('table-wrap')}>

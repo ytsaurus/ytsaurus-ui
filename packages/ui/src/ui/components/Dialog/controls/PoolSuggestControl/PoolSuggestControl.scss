@@ -4,13 +4,5 @@
     &__popup {
         max-height: $popupMaxHeight;
         overflow: hidden;
-
-        .yc-list__items {
-            max-height: $popupMaxHeight;
-        }
-
-        .yc-suggest__item {
-            padding-left: 1em;
-        }
     }
 }

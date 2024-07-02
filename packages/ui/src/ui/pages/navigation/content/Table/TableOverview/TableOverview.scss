@@ -33,7 +33,7 @@ $overview-height: 50px;
         margin-right: 20px;
         position: relative;
 
-        .yc-button:before {
+        .g-button:before {
             transition: none;
         }
 
@@ -109,10 +109,6 @@ $overview-height: 50px;
         margin-right: 10px;
 
         display: flex;
-
-        .yc-button:first-child {
-            width: 100px;
-        }
     }
 
     &__jupyter {

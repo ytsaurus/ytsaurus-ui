@@ -95,7 +95,7 @@ export function showNavigationAttributesEditor(paths: Array<string>): ActionType
                 const toaster = new Toaster();
                 toaster.add({
                     name: 'show_attrs_editor_' + _.join(paths),
-                    type: 'error',
+                    theme: 'danger',
                     title: 'Attributes cannot be loaded',
                     content: e?.message,
                     actions: [
@@ -237,7 +237,7 @@ export function navigationSetNodeAttributes(
 
                         const toaster = new Toaster();
                         toaster.add({
-                            type: 'success',
+                            theme: 'success',
                             name: 'merge_' + staticTables.join(','),
                             title: `${staticTables.length} operations are started`,
                             content: (
