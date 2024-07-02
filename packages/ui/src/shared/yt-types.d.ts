@@ -99,6 +99,14 @@ export interface ClusterConfig {
         icon2x: string;
         iconbig?: string;
     };
+
+    /**
+     * Allows to override default title and text on login page, accepts HTML string.
+     */
+    loginPageSettings?: {
+        title?: string;
+        text?: string;
+    };
 }
 
 export interface SubRequest<K extends string, T extends BaseBatchParams> {
