@@ -210,10 +210,6 @@ export const getOAuthButtonLabel = () => {
     return getConfigData().oauthButtonLabel;
 };
 
-export const getLoginPageText = () => {
-    return getConfigData().uiSettings?.loginPageSettings ?? {};
-};
-
 export const getGlobalAsideHeaderWidth = (state: RootState) => state.global.asideHeaderWidth;
 
 export const getGlobalYTAuthCluster = (state: RootState) => state.global.ytAuthCluster;
