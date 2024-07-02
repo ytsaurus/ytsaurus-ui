@@ -41,6 +41,7 @@ import {hasOdinPage} from '../../config';
 import {chyt} from './chyt';
 import {RawVersion} from '../../store/selectors/thor/support';
 import {mainLocations} from '../../store/location.main';
+import {queryResultsVisualization} from '../../pages/query-tracker/QueryResultsVisualization/store/reducer';
 
 const appReducers = {
     acl,
@@ -79,6 +80,7 @@ const appReducers = {
 
     chyt,
     manageTokens,
+    queryResultsVisualization,
 };
 
 export type RootState = Omit<ReturnType<ReturnType<typeof makeRootReducer>>, 'global'> & {
