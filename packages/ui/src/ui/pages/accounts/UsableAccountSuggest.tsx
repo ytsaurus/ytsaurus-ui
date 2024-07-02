@@ -22,7 +22,7 @@ export function UsableAccountSuggest(props: DialogControlProps<string | undefine
                 const toaster = new Toaster();
                 toaster.add({
                     name: 'usable_accounts',
-                    type: 'error',
+                    theme: 'danger',
                     title: 'Failed to load usable accounts',
                     content: e?.message,
                     actions: [{label: ' Details', onClick: () => showErrorPopup(e)}],

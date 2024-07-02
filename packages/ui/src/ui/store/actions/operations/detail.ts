@@ -187,7 +187,7 @@ export function getOperation(
                         toaster.add({
                             name: 'get operation',
                             autoHiding: false,
-                            type: 'error',
+                            theme: 'danger',
                             title: 'Failed to load operation',
                             content: error.message,
                             actions: [{label: ' view', onClick: () => showErrorPopup(error)}],

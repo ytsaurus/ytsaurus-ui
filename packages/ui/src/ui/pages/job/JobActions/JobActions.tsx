@@ -143,7 +143,7 @@ const dumpJobContext = (id: string, path: string, cluster: string) => {
         .dumpJobContext(parameters)
         .then(() => {
             toaster.add({
-                type: 'success',
+                theme: 'success',
                 autoHiding: false,
                 name: 'dump job context',
                 title: 'Job context has been dumped.',
@@ -152,7 +152,7 @@ const dumpJobContext = (id: string, path: string, cluster: string) => {
         })
         .catch((err: YTError) => {
             toaster.add({
-                type: 'error',
+                theme: 'danger',
                 autoHiding: false,
                 name: 'dump job context',
                 title: 'Could not dump job context.',

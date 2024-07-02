@@ -644,7 +644,7 @@ export function mountUnmountTable(action) {
             .then(() => {
                 toaster.add({
                     name: `${action} table`,
-                    type: 'success',
+                    theme: 'success',
                     title: `Success ${action}ing table`,
                 });
                 return dispatch(updateView());
@@ -653,7 +653,7 @@ export function mountUnmountTable(action) {
                 console.error(err);
                 toaster.add({
                     name: `${action} table`,
-                    type: 'error',
+                    theme: 'danger',
                     title: `Could not ${action} table.`,
                     content: err?.message || 'Oops, something went wrong',
                     actions: [{label: ' view', onClick: () => showErrorPopup(err)}],

@@ -147,7 +147,7 @@ export function moveObject(
                 toaster.add({
                     name: 'move',
                     autoHiding: 10000,
-                    type: 'success',
+                    theme: 'success',
                     title: `Object${multipleMode ? 's' : ''} was successfully moved`,
                     content: <Link url={`navigation?path=${result}`}>{result}</Link>,
                 });

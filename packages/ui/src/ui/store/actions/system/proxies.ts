@@ -62,7 +62,7 @@ export function loadSystemProxies(): ProxiesThunkAction<
                 toaster.add({
                     name: 'load/system/proxies',
                     autoHiding: false,
-                    type: 'error',
+                    theme: 'danger',
                     content: `[code ${code}] ${message}`,
                     title: 'Could not load Proxies',
                     actions: [

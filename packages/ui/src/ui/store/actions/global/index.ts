@@ -243,7 +243,7 @@ function showErrorToaster(
     toaster.add({
         name: `global/${listType}`,
         autoHiding: false,
-        type: 'error',
+        theme: 'danger',
         content: 'If the problem persists, please report the error.',
         title: `Failed to load list of ${listType}`,
         actions: [
@@ -318,7 +318,7 @@ export function handleAuthError({ytAuthCluster}: {ytAuthCluster?: string} = {}) 
             toaster.add({
                 name: `global/ytAuthCluster}`,
                 autoHiding: false,
-                type: 'error',
+                theme: 'danger',
                 content: 'If the problem persists, please report the error.',
                 title: `Failed to show a login form. ytAuthCluster is not defined`,
             });

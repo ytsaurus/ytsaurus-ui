@@ -51,7 +51,7 @@ export function createTable(path, attributes) {
                 toaster.add({
                     name: path,
                     timeout: 10000,
-                    type: 'success',
+                    theme: 'success',
                     title: 'Table created',
                     content: (
                         <React.Fragment>
@@ -73,7 +73,7 @@ export function createTable(path, attributes) {
                     toaster.add({
                         name: path,
                         timeout: 10000,
-                        type: 'error',
+                        theme: 'danger',
                         content: `[code ${code}] ${message}`,
                         title: 'Table creation failure',
                         actions: [

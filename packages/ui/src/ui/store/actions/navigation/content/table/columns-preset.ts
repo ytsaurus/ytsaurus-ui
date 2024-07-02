@@ -65,7 +65,7 @@ export function loadColumnPresetIfDefined(): ColumnPresetThunkAction {
                 dispatch(setTablePresetError(error));
 
                 new Toaster().add({
-                    type: 'error',
+                    theme: 'danger',
                     name: 'loadColumnPreset',
                     title: 'Failed to get preset of columns',
                     content: error.message,
