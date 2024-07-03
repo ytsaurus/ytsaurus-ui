@@ -10,6 +10,7 @@ export enum QueriesListMode {
     History = 'history',
     Tutorials = 'tutorials',
     VCS = 'vcs',
+    Navigation = 'navigation',
 }
 
 export const QueriesListModes = Object.values(QueriesListMode);
@@ -24,6 +25,9 @@ export const QueriesListFilterPresets: Record<QueriesListMode, Partial<QueriesLi
     [QueriesListMode.Tutorials]: {
         is_tutorial: true,
     },
+    [QueriesListMode.Navigation]: {
+        is_tutorial: false,
+    },
 };
 
 export const DefaultQueriesListFilter: Record<QueriesListMode, Partial<QueriesListFilter>> = {
@@ -32,6 +36,7 @@ export const DefaultQueriesListFilter: Record<QueriesListMode, Partial<QueriesLi
     },
     [QueriesListMode.Tutorials]: {},
     [QueriesListMode.VCS]: {},
+    [QueriesListMode.Navigation]: {},
 };
 
 export type QueriesListFilter = {

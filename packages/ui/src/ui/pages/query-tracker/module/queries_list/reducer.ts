@@ -34,7 +34,7 @@ export interface QueriesListState {
     listMode: QueriesListMode;
 }
 
-const initialState: QueriesListState = {
+export const initialState: QueriesListState = {
     state: 'loading',
     error: undefined,
     map: {},

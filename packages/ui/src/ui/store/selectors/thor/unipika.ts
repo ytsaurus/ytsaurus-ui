@@ -10,7 +10,7 @@ import {
 } from '../../../store/selectors/settings';
 import {getUnipikaSettingsFromConfig} from '../../../common/thor/unipika-settings';
 
-interface YsonSettings {
+export interface YsonSettings {
     format: string;
     showDecoded: boolean;
     compact: boolean;

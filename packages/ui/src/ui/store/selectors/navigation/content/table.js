@@ -25,6 +25,7 @@ import {
     getRows,
     getYqlTypes,
 } from './table-ts';
+import {getTableTypeByAttributes} from '../../../../utils/navigation/getTableTypeByAttributes';
 
 export const getKeyColumns = createSelector(getAttributes, (attributes) =>
     Columns.getKeyColumns(attributes),
@@ -60,21 +61,7 @@ export const getSrcColumns = createSelector(
 export const getTableType = createSelector(
     [getAttributes, getIsDynamic],
     (attributes, isDynamic) => {
-        if (isDynamic) {
-            const [upstreamReplicaID, type] = ypath.getValues(attributes, [
-                '/upstream_replica_id',
-                '/type',
-            ]);
-            if (String(type).startsWith('chaos')) {
-                return 'chaos';
-            }
-            if (upstreamReplicaID && upstreamReplicaID !== '0-0-0-0') {
-                return 'replica';
-            }
-            return 'dynamic';
-        } else {
-            return 'static';
-        }
+        return getTableTypeByAttributes(isDynamic, attributes);
     },
 );
 

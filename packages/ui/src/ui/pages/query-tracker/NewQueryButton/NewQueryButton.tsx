@@ -7,7 +7,11 @@ import FilePlusIcon from '@gravity-ui/icons/svgs/file-plus.svg';
 import {Page} from '../../../../shared/constants/settings';
 import {getCluster} from '../../../store/selectors/global';
 
-const NewQueryPromt = (props: {cancel: () => void; confirm: () => void; visible: boolean}) => {
+export const NewQueryPromt = (props: {
+    cancel: () => void;
+    confirm: () => void;
+    visible: boolean;
+}) => {
     return (
         <Modal
             title="New query"

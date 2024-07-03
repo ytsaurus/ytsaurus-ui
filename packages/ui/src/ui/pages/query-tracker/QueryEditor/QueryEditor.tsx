@@ -1,6 +1,5 @@
 import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import MonacoEditor, {MonacoEditorConfig} from '../../../components/MonacoEditor';
-import {MonacoContext} from '../context/MonacoContext';
 import block from 'bem-cn-lite';
 import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
 import {Button, Icon, Loader} from '@gravity-ui/uikit';
@@ -316,7 +315,7 @@ export default function QueryEditor({
     const isLoading = isQueryTrackerInfoLoading || isMainQueryLoading;
 
     return (
-        <MonacoContext.Provider value={new Map()}>
+        <>
             {isLoading && (
                 <div className={b('loading')}>
                     <Loader />
@@ -338,6 +337,6 @@ export default function QueryEditor({
                     />
                 )}
             </FlexSplitPane>
-        </MonacoContext.Provider>
+        </>
     );
 }

@@ -125,7 +125,7 @@ export function toggleFavourite(value, parentNS, settingName = SettingName.LOCAL
     return (dispatch, getState) => {
         return dispatch(reloadSetting(settingName, parentNS)).then(() => {
             const state = getState();
-            const current = makeGetSetting(state)(settingName, parentNS) || [];
+            const current = [...makeGetSetting(state)(settingName, parentNS)] || [];
             const currentPathItem = {path: value};
 
             const entry = _.find(current, currentPathItem);

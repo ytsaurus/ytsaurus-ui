@@ -207,7 +207,7 @@ export const getIsAllSelected = createSelector(
     },
 );
 
-const TYPE_WEIGHTS = _.map(
+export const TYPE_WEIGHTS = _.map(
     [
         'tablet_cell',
         'cell_node_map',
