@@ -206,10 +206,13 @@ export const getObjectPermissionsAggregated = createSelector(
 );
 
 class AggregateBySubject {
+    aggrKey: string;
+    subject: ObjectPermissionsRow['subjects'][number];
+    inherited: boolean;
+
     allPermissions = new Set<YTPermissionTypeUI>();
     columns = new Set<string>();
     first: ObjectPermissionsRow;
-    subject: ObjectPermissionsRow['subjects'][number];
     children = new Array<ObjectPermissionsRow & {expanded?: boolean; level?: number}>();
 
     constructor(first: AggregateBySubject['first']) {
@@ -219,17 +222,24 @@ class AggregateBySubject {
             );
         }
 
+        this.aggrKey = aggregationKey(first);
+        this.inherited = Boolean(first.inherited);
         this.subject = first.subjects[0];
         this.first = {...first};
         this.add(first);
     }
 
     add(item: ObjectPermissionsRow) {
-        if (this.subject !== item.subjects[0] || item.subjects.length !== 1) {
+        const aggrKey = aggregationKey(item);
+        if (this.aggrKey !== aggrKey) {
             throw new Error(
-                `Unexpected behavior: subjects should be the same: ${
-                    this.first.subjects[0]
-                } !== ${item.subjects.join(',')}`,
+                `Unexpected behavior: aggregation keys are not queal: ${this.aggrKey} !== ${aggrKey}`,
+            );
+        }
+
+        if (item.subjects.length !== 1) {
+            throw new Error(
+                `Unexpected behavior: item.subjects.length !== 1: ${JSON.stringify(item)}`,
             );
         }
 
@@ -250,9 +260,11 @@ class AggregateBySubject {
         items: AggregateBySubject['children'];
         hasExpandable?: boolean;
         hasDenyAction?: boolean;
+        hasInherited?: boolean;
     } {
+        const hasInherited = this.inherited;
         if (this.children.length === 1) {
-            return {items: this.children};
+            return {items: this.children, hasInherited};
         }
 
         const first: typeof this.first & {level?: number; expanded?: boolean} = {
@@ -262,8 +274,6 @@ class AggregateBySubject {
         };
         first.permissions = [...this.allPermissions];
         first.columns = [...this.columns];
-        first.inheritance_mode = undefined;
-        first.inherited = undefined;
 
         let hasDenyAction = false;
         const items = !expanded
@@ -272,15 +282,26 @@ class AggregateBySubject {
                   first,
                   ...this.children.map((i) => {
                       hasDenyAction ||= i.action === 'deny';
+                      if (i.inheritance_mode !== this.first.inheritance_mode) {
+                          this.first.inheritance_mode = undefined;
+                      }
                       return {...i, level: 1};
                   }),
               ];
 
-        return {items, hasExpandable: true, hasDenyAction};
+        return {items, hasExpandable: true, hasDenyAction, hasInherited};
     }
 }
 
 export type ObjectPermissionRowWithExpand = AggregateBySubject['children'][number];
+
+function aggregationKey(item: ObjectPermissionsRow) {
+    const {
+        inherited,
+        subjects: [subject],
+    } = item;
+    return `subject:${subject}_inherited:${Boolean(inherited)}`;
+}
 
 function aggregateBySubject(
     objPermissions: Array<ObjectPermissionsRow>,
@@ -289,26 +310,34 @@ function aggregateBySubject(
     const aggregated: Record<string, AggregateBySubject> = {};
 
     objPermissions.forEach((item) => {
-        const [subject] = item.subjects;
-        const dst = aggregated[subject];
+        const aggKey = aggregationKey(item);
+        const dst = aggregated[aggKey];
         if (!dst) {
-            aggregated[subject] = new AggregateBySubject(item);
+            aggregated[aggKey] = new AggregateBySubject(item);
         } else {
             dst.add(item);
         }
     });
 
-    const items = Object.values(aggregated).reduce(
+    const res = Object.values(aggregated).reduce(
         (acc, item) => {
-            const {items, hasExpandable} = item.getItems(expandedSubjects.has(item.subject));
+            const {items, hasExpandable, hasInherited} = item.getItems(
+                expandedSubjects.has(item.subject),
+            );
             acc.items = acc.items.concat(items);
             acc.hasExpandable ||= hasExpandable;
+            acc.hasInherited ||= hasInherited;
             return acc;
         },
-        {items: [], hasExpandable: false} as ReturnType<AggregateBySubject['getItems']>,
+        {items: []} as ReturnType<AggregateBySubject['getItems']>,
     );
 
-    return items;
+    const [inherited, other] = partition(res.items, (item) => item.inherited);
+
+    return {
+        ...res,
+        items: [...inherited, ...other],
+    };
 }
 
 export const getAllObjectPermissionsOrderedByStatus = createSelector(
