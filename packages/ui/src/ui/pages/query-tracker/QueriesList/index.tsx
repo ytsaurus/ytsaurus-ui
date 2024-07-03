@@ -12,6 +12,7 @@ import './index.scss';
 import {QueriesTutorialList} from './QueriesTutorialList';
 import {QueriesHistoryListFilter} from './QueriesListFilter';
 import {Vcs} from '../Vcs';
+import {Navigation} from '../Navigation';
 
 const b = block('queires-list');
 
@@ -19,6 +20,7 @@ const TabNames = {
     [QueriesListMode.History]: 'History',
     [QueriesListMode.Tutorials]: 'Tutorials',
     [QueriesListMode.VCS]: 'VCS',
+    [QueriesListMode.Navigation]: 'Navigation',
 };
 
 const useQueryTabs = (): [TabsItemProps[], string, (tab: string) => void] => {
@@ -51,6 +53,16 @@ export function QueriesList() {
     }, [dispatch]);
 
     const isVsc = tab === QueriesListMode.VCS;
+
+    if (tab === QueriesListMode.Navigation)
+        return (
+            <div className={b()}>
+                <Tabs className={b('tabs')} items={tabs} activeTab={tab} onSelectTab={setTab} />
+                <div className={b('content')}>
+                    <Navigation />
+                </div>
+            </div>
+        );
 
     return (
         <div className={b()}>

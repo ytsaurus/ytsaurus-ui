@@ -9,13 +9,13 @@ import {useClusterColorClassName} from '../../../../containers/ClusterPageHeader
 const block = cn('query-cluster-item');
 const IconBlock = cn('query-cluster-icon');
 
-type Props = Pick<ClusterConfig, 'id' | 'name' | 'environment'>;
+type Props = Pick<ClusterConfig, 'id' | 'name' | 'environment'> & {className?: string};
 
-export const QueryClusterItem: FC<Props> = ({id, name, environment}) => {
+export const QueryClusterItem: FC<Props> = ({id, name, environment, className}) => {
     const clusterColorClassName = useClusterColorClassName(id);
 
     return (
-        <div className={block()}>
+        <div className={block(null, className)}>
             <ClusterIcon name={name} className={IconBlock(null, clusterColorClassName)} />
             <div className={block('info')}>
                 {name}

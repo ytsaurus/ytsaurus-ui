@@ -3,22 +3,20 @@ import {useSelector} from 'react-redux';
 import PropTypes from 'prop-types';
 import cn from 'bem-cn-lite';
 import unipika from '../../../../../common/thor/unipika';
-import _ from 'lodash';
 
 import ClipboardButton from '../../../../../components/ClipboardButton/ClipboardButton';
 import YqlValue from '../../../../../components/YqlValue/YqlValue';
 import DataTable from '@gravity-ui/react-data-table';
 import {Loader} from '@gravity-ui/uikit';
 import copyToClipboard from 'copy-to-clipboard';
-import Icon from '../../../../../components/Icon/Icon';
 import Yson from '../../../../../components/Yson/Yson';
 import Label from '../../../../../components/Label/Label';
-import SchemaDataType from '../../../../../components/SchemaDataType/SchemaDataType';
 import {getSettingTableDisplayRawStrings} from '../../../../../store/selectors/settings';
 import {getSchemaByName} from '../../../../../store/selectors/navigation/tabs/schema';
 
 import './DataTableWrapper.scss';
 import {Tooltip} from '../../../../../components/Tooltip/Tooltip';
+import {prepareColumns} from '../../../../../utils/navigation/prepareColumns';
 
 const dataTableBlock = cn('data-table');
 const block = cn('data-table-wrapper');
@@ -39,7 +37,7 @@ ColumnCell.propTypes = {
     allowRawStrings: PropTypes.bool,
 };
 
-function ColumnCell({value = null, yqlTypes, ysonSettings, allowRawStrings}) {
+export function ColumnCell({value = null, yqlTypes, ysonSettings, allowRawStrings}) {
     const [hovered, setHovered] = useState(false);
     const handleMouseEnter = () => setHovered(true);
     const handleMouseLeave = () => setHovered(false);
@@ -124,46 +122,6 @@ function ColumnCell({value = null, yqlTypes, ysonSettings, allowRawStrings}) {
             )}
         </div>
     );
-}
-
-function prepareColumns({
-    columns,
-    keyColumns,
-    yqlTypes,
-    ysonSettings,
-    useRawStrings,
-    schemaByName,
-}) {
-    return _.map(columns, (column) => {
-        // eslint-disable-next-line react/prop-types
-        const render = ({value}) => (
-            <ColumnCell
-                allowRawStrings={useRawStrings}
-                value={value}
-                yqlTypes={yqlTypes}
-                ysonSettings={ysonSettings}
-            />
-        );
-        const {sortOrder} = column;
-        const isKeyColumn = keyColumns.indexOf(column.name) > -1;
-        const {type_v3} = schemaByName[column.name] || {};
-        const header = (
-            <Tooltip content={Boolean(type_v3) && <SchemaDataType type_v3={type_v3} />}>
-                <Yson value={unipika.unescapeKeyValue(column.name)} settings={ysonSettings} inline>
-                    {isKeyColumn && (
-                        <Icon
-                            awesome={
-                                sortOrder === 'descending'
-                                    ? 'sort-amount-up'
-                                    : 'sort-amount-down-alt'
-                            }
-                        />
-                    )}
-                </Yson>
-            </Tooltip>
-        );
-        return Object.assign({}, column, {render, header});
-    });
 }
 
 const rowKey = (row, index) => index;

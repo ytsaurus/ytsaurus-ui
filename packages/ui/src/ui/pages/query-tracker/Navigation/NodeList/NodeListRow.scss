@@ -1,0 +1,38 @@
+.navigation-node-list-row {
+    display: grid;
+    grid-template-columns: 16px 1fr 92px;
+    align-items: center;
+    gap: 0 8px;
+    padding: 5px 15px;
+    min-height: 40px;
+    cursor: pointer;
+
+    $self: &;
+
+    &_unsupported {
+        opacity: 0.5;
+        cursor: initial;
+    }
+
+    &_active, &:hover {
+        background-color: var(--g-color-base-simple-hover-solid);
+        #{$self}__actions {
+            display: flex;
+        }
+    }
+
+    &__actions {
+        gap: 0 4px;
+        display: none;
+    }
+
+    &__icon-wrap {
+        position: relative;
+    }
+
+    &__favorite-icon {
+        position: absolute;
+        bottom: -2px;
+        right: -4px;
+    }
+}

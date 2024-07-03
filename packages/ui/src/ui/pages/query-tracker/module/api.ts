@@ -170,7 +170,7 @@ const secureDecoding = (value: string) => {
     }
 };
 
-const JSONParser = {
+export const JSONParser = {
     JSONSerializer: {
         stringify(data: unknown) {
             return JSON.stringify(data);
