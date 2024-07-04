@@ -3,6 +3,7 @@ import _ from 'lodash';
 import partition from 'lodash/partition';
 import compact from 'lodash/compact';
 import sortBy from 'lodash/sortBy';
+import isEqual from 'lodash/isEqual';
 import {calculateLoadingStatus} from '../../utils/utils';
 import {concatByAnd} from '../../common/hammer/predicate';
 import {
@@ -284,6 +285,9 @@ class AggregateBySubject {
                       hasDenyAction ||= i.action === 'deny';
                       if (i.inheritance_mode !== this.first.inheritance_mode) {
                           this.first.inheritance_mode = undefined;
+                      }
+                      if (!isEqual(this.first.inheritedFrom, i.inheritedFrom)) {
+                          this.first.inheritedFrom = undefined;
                       }
                       return {...i, level: 1};
                   }),

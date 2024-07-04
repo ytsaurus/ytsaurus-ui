@@ -13,3 +13,19 @@ export function makeProxyUrl(cluster: string, address: string) {
 export function makeNavigationLink(path: string, cluster?: string) {
     return `/${cluster || YT.cluster}/${Page.NAVIGATION}?path=${path}`;
 }
+
+export function makeSchedulingUrl({
+    pool,
+    poolTree,
+    cluster,
+}: {
+    pool: string;
+    poolTree: string;
+    cluster?: string;
+}) {
+    return `/${cluster || YT.cluster}/${Page.SCHEDULING}?pool=${pool}&poolTree=${poolTree}`;
+}
+
+export function makeAccountsUrl(account: string, cluster?: string) {
+    return `/${cluster || YT.cluster}/${Page.ACCOUNTS}?account=${account}`;
+}
