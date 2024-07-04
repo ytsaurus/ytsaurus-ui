@@ -42,6 +42,7 @@ import {AclColumnsCell} from './AclColumnsCell';
 import aclInheritedSvg from '../../assets/img/svg/acl-inherited.svg';
 
 import './ACL.scss';
+import {InheritanceMessage} from './InheritanceMessage/InheritanceMessage';
 
 const block = cn('navigation-acl');
 
@@ -212,13 +213,15 @@ class ACL extends Component<Props> {
                 render({row}) {
                     const {requestPermissionsFlags = {}} = UIFactory.getAclApi();
 
+                    const {inheritedFrom} = row;
+
                     const level = 'level' in row ? row.level : undefined;
                     return (
                         <Flex className={block('subject', {level: String(level)})} wrap gap={1}>
                             {Boolean(hasInherited) && (
                                 <Popover
                                     className={block('inherited', {hidden: !row.inherited})}
-                                    content={'Role is inherited'}
+                                    content={<InheritanceMessage data={inheritedFrom} />}
                                 >
                                     <Icon
                                         className={block('inherited-icon')}
