@@ -122,9 +122,27 @@ function RequestPermissions(props: Props) {
     );
 
     const currentCaption = `Current ${SHORT_TITLE[idmKind] ?? idmKind}`;
-    const {permissionsToRequest: choices} = UIFactory.getAclPermissionsSettings()[idmKind];
+    const {permissionsToRequest, getAvailablePermissions} =
+        UIFactory.getAclPermissionsSettings()[idmKind];
+
+    const [availablePermissions, setAvailablePermissions] = React.useState<
+        typeof permissionsToRequest | undefined
+    >(undefined);
+
+    const onShow = useCallback(async () => {
+        try {
+            const value = await getAvailablePermissions?.({path});
+            setAvailablePermissions(value);
+        } catch {
+            setAvailablePermissions(undefined);
+        } finally {
+            handleShow();
+        }
+    }, [path, handleShow, getAvailablePermissions]);
 
     const firstItemDisabled = idmKind === IdmObjectType.ACCOUNT;
+
+    const choices = availablePermissions ?? permissionsToRequest;
     const permissions = firstItemDisabled ? valueWithCheckedFirstChoice(choices) : null;
 
     const availableFields: Record<
@@ -277,7 +295,7 @@ function RequestPermissions(props: Props) {
     return !choices?.length ? null : (
         <ErrorBoundary>
             <div className={block(null, className)}>
-                <Button className={buttonClassName} view={'action'} onClick={handleShow}>
+                <Button className={buttonClassName} view={'action'} onClick={onShow}>
                     {title}
                 </Button>
                 <YTDFDialog<FormValues>
