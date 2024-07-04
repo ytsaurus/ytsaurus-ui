@@ -1,5 +1,5 @@
 import React from 'react';
-import axios, {AxiosError} from 'axios';
+import {AxiosError} from 'axios';
 import _ from 'lodash';
 
 import {TypedKeys, YTError} from '../types';
@@ -136,6 +136,7 @@ interface CommonWrapApiOptions<T> {
     skipSuccessToast?: boolean;
     errorContent?: React.ReactNode | ((e: YTError) => React.ReactNode);
     skipErrorToast?: boolean;
+    skipErrorFn?: (e: any) => boolean;
     successTitle?: string;
     timeout?: number;
     autoHide?: boolean;
@@ -187,29 +188,31 @@ export function wrapApiPromiseByToaster<T>(p: Promise<T>, options: WrapApiOption
             return res;
         })
         .catch((error) => {
-            if (axios.isCancel(error)) {
-                return Promise.reject(error);
-            }
+            if (!isCancelled(error)) {
+                const data = error?.response?.data || error;
+                const {code, message} = data;
 
-            const data = error?.response?.data || error;
-            const {code, message} = data;
+                const {skipErrorFn, skipErrorToast} = options;
 
-            if (!options.skipErrorToast && !isCancelled(error)) {
-                toaster.add({
-                    name: options.toasterName,
-                    theme: 'danger',
-                    title: options.errorTitle || 'Failure',
-                    content:
-                        'function' === typeof errorContent
-                            ? errorContent(error)
-                            : errorContent || (
-                                  <span>
-                                      [code {code}] {message}
-                                  </span>
-                              ),
-                    actions: [{label: ' Details', onClick: () => showErrorPopup(data)}],
-                    autoHiding: false,
-                });
+                const isVisibleError = skipErrorFn ? skipErrorFn : (_e: unknown) => !skipErrorToast;
+
+                if (isVisibleError(error)) {
+                    toaster.add({
+                        name: options.toasterName,
+                        theme: 'danger',
+                        title: options.errorTitle || 'Failure',
+                        content:
+                            'function' === typeof errorContent
+                                ? errorContent(error)
+                                : errorContent || (
+                                      <span>
+                                          [code {code}] {message}
+                                      </span>
+                                  ),
+                        actions: [{label: ' Details', onClick: () => showErrorPopup(data)}],
+                        autoHiding: false,
+                    });
+                }
             }
             return Promise.reject(error);
         });

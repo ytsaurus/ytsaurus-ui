@@ -27,6 +27,7 @@ interface GroupSubject {
 
 interface TvmSubject {
     tvm_id: string;
+    tvm_app_name?: string;
 }
 
 interface UserSubject {
