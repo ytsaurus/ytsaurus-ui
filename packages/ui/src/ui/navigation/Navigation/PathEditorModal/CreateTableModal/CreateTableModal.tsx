@@ -518,7 +518,7 @@ class CreateTableModalContentImpl extends React.Component<Props> {
             primitiveTypes,
             groupSuggestions,
         } = this.props;
-        const name = `${parentDirectory}/New table`;
+        const name = `${parentDirectory}/new_table`;
 
         return (
             <YTDFDialog<FIX_MY_TYPE>
