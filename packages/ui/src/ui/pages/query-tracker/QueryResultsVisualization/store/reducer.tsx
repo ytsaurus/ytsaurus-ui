@@ -5,7 +5,7 @@ import type {
     Visualization,
     VisualizationId,
 } from '../types';
-import type {ActionD} from '../../../../../ui/types';
+import type {ActionD} from '../../../../types';
 import {QueryResult} from '../preparers/types';
 
 export interface QueryResultsVisualizationState {
