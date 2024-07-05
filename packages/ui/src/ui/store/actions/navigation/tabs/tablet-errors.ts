@@ -12,6 +12,7 @@ import {TabletErrorsAction} from '../../../../store/reducers/navigation/tabs/tab
 import {wrapApiPromiseByToaster} from '../../../../utils/utils';
 import {loadReplicas} from '../content/replicated-table';
 import {CancelTokenSource} from 'axios';
+import {TYPED_OUTPUT_FORMAT} from '../../../../constants';
 
 const requests = new CancelHelper();
 
@@ -28,7 +29,7 @@ export function getTabletErrors(): TabletErrorsThunkAction {
 
         ytApiV4Id
             .getTabletErrors(YTApiId.navigationTabletErrors, {
-                parameters: {path},
+                parameters: {path, output_format: TYPED_OUTPUT_FORMAT},
                 cancellation: requests.removeAllAndSave,
             })
             .then((tabletErrors) => {
