@@ -202,10 +202,15 @@ const mapIndependentOdinStateToProps = (state) => {
 
 export const IndependentOdin = connect(mapIndependentOdinStateToProps)(IndependentOdinImpl);
 
-const mapOdinStateToProps = (state) => {
-    return {
-        cluster: getCluster(state),
-    };
-};
+function OdinWrapper() {
+    const cluster = useSelector(getCluster);
+    const dispatch = useDispatch();
 
-export default connect(mapOdinStateToProps)(Odin);
+    useEffect(() => {
+        dispatch(setOdinCluster(cluster));
+    }, []);
+
+    return <Odin cluster={cluster} />;
+}
+
+export default OdinWrapper;
