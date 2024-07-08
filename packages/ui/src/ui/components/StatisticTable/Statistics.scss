@@ -44,7 +44,7 @@
         position: sticky;
         top: 0;
         z-index: 1;
-        background-color: rgba(256, 256, 256, 1);
+        background-color: var(--g-color-base-background);
         box-shadow: inset 0 -1px 0 0 var(--g-color-line-generic);
         border-bottom: none;
     }
