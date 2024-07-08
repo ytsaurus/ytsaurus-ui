@@ -9,6 +9,10 @@ import './index.scss';
 export function YQLStatisticsTable() {
     const statistics = useSelector(getProgressYQLStatistics);
 
+    if (!statistics) {
+        return null;
+    }
+
     return (
         <StatisticTable
             fixedHeader
