@@ -1,5 +1,26 @@
 # Changelog
 
+## [1.47.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.46.0...ui-v1.47.0) (2024-07-09)
+
+
+### Features
+
+* introduce poc of adhoc visualization on query results [[#641](https://github.com/ytsaurus/ytsaurus-ui/issues/641)] ([6dd9896](https://github.com/ytsaurus/ytsaurus-ui/commit/6dd98968ce15cf9667619f0c710d6a3dec8c21dc))
+* **Markdown:** use @diplodoc/transform  [YTFRONT-4108] ([3b33bc9](https://github.com/ytsaurus/ytsaurus-ui/commit/3b33bc9ef85069159b53aa12e7ca4c0eb09bf8b9))
+* **Query:** changing the default name for new tables [YTFRONT-4249] ([cc19d6b](https://github.com/ytsaurus/ytsaurus-ui/commit/cc19d6bc71607751a5d019dfc6ce8fa1261a6e1c))
+* **Query:** spyt clicue selector [YTFRONT-4219] ([6288c73](https://github.com/ytsaurus/ytsaurus-ui/commit/6288c73e4a1919312aae55040ce2baab331e1875))
+* **Query:** vcs navigation [YTFRONT-4147] ([58be722](https://github.com/ytsaurus/ytsaurus-ui/commit/58be72232945ef8bcbf17327e3041a5c263256af))
+* **uikit6:** update dependencies [[#502](https://github.com/ytsaurus/ytsaurus-ui/issues/502)] ([5a92c5f](https://github.com/ytsaurus/ytsaurus-ui/commit/5a92c5fbbfccf43a788946b3ab9e95ebca0e74bf))
+
+
+### Bug Fixes
+
+* **Navigation:** correct output of numbers in tablet errors [YTFRONT-4251] ([fe02b58](https://github.com/ytsaurus/ytsaurus-ui/commit/fe02b5879e092fc1f4d674b7594b6eb8eb3d10fd))
+* now non-standalone odin page recieve correct cluster ([b4739a4](https://github.com/ytsaurus/ytsaurus-ui/commit/b4739a4503028aebcfefc0f8ae42fe3b29e26b50))
+* now we can specify loginPageSettings per cluster ([be872cc](https://github.com/ytsaurus/ytsaurus-ui/commit/be872ccd9a52d5ad3d04f694602713f1b971759b))
+* **QueryTracker:** fix error when switching to another query with open statistics tab ([ef61008](https://github.com/ytsaurus/ytsaurus-ui/commit/ef61008be538119dfc8754b20c06105dbf8058ff))
+* **QueryTracker:** support dark theme in statistic table ([b3f1d57](https://github.com/ytsaurus/ytsaurus-ui/commit/b3f1d5766f880605c6aa975fc515a8cca568a933))
+
 ## [1.46.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.45.0...ui-v1.46.0) (2024-07-02)
 
 
