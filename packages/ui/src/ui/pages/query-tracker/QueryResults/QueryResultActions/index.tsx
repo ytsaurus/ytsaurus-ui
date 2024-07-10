@@ -117,7 +117,7 @@ export function QueryResultActions({query, resultIndex}: Props) {
                             view="normal"
                         >
                             <Icon data={NodesLeftIcon} width={16} />{' '}
-                            {queryAco === SHARED_QUERY_ACO ? 'Unshare' : 'Share'}
+                            {queryAco.includes(SHARED_QUERY_ACO) ? 'Unshare' : 'Share'}
                         </Button>
                     )}
                     <QueryResultDownloadManager

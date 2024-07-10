@@ -8,15 +8,14 @@ import {genNavigationUrl} from '../../../../utils/navigation/navigation';
 import Icon from '../../../../components/Icon/Icon';
 
 import './QueryACOSelect.scss';
+import {SHARED_QUERY_ACO} from '../../module/query/selectors';
 export const QueryACOSelect: React.FunctionComponent<{}> = () => {
     const {selectACOOptions, isFlight, changeDraftQueryACO, currentDraftQueryACO, trackerInfo} =
         useQueryACO();
 
     const handleACOChange = useCallback(
         (value: string[]) => {
-            const aco = value[0];
-
-            return changeDraftQueryACO({aco});
+            return changeDraftQueryACO({aco: value});
         },
         [changeDraftQueryACO],
     );
@@ -30,10 +29,11 @@ export const QueryACOSelect: React.FunctionComponent<{}> = () => {
                 label="Query access:"
                 className={'query-aco-select'}
                 options={selectACOOptions}
-                value={[currentDraftQueryACO]}
+                value={currentDraftQueryACO}
                 onUpdate={handleACOChange}
+                multiple
             />
-            {currentDraftQueryACO === 'nobody' ? null : (
+            {currentDraftQueryACO.includes(SHARED_QUERY_ACO) && (
                 <>
                     &nbsp; &nbsp;
                     <Link

@@ -20,7 +20,7 @@ export default function EditQueryACOModal({query_id, className}: Props) {
     const [visible, setVisible] = useState(false);
 
     const handleSubmit = (values: FormValues) => {
-        return changeCurrentQueryACO({aco: values.aco[0], query_id})
+        return changeCurrentQueryACO({aco: values.aco, query_id})
             .then(() => undefined)
             .catch((err) => {
                 setError(err);
@@ -64,7 +64,7 @@ export default function EditQueryACOModal({query_id, className}: Props) {
                         return handleSubmit(form.getState().values);
                     }}
                     initialValues={{
-                        aco: [currentQueryACO],
+                        aco: currentQueryACO,
                     }}
                     fields={[
                         {

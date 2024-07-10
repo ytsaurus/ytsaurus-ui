@@ -20,7 +20,7 @@ export const useQueryACO = () => {
     const [loading, setLoading] = useState(false);
 
     const changeCurrentQueryACO = useCallback(
-        ({aco, query_id}: {aco: string; query_id: string}) => {
+        ({aco, query_id}: {aco: string[]; query_id: string}) => {
             if (!query_id) {
                 throw new Error('query_id is empty');
             }
@@ -33,7 +33,7 @@ export const useQueryACO = () => {
     );
 
     const changeDraftQueryACO = useCallback(
-        ({aco}: {aco: string}) => {
+        ({aco}: {aco: string[]}) => {
             setLoading(true);
 
             return dispatch(setDraftQueryACO({aco})).finally(() => setLoading(false));

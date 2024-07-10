@@ -195,9 +195,11 @@ const ACOColumns: Column<TableItem> = {
             return null;
         }
 
+        const title = row.access_control_objects?.join(', ');
+
         return (
-            <Text variant="body-1" ellipsis title={row.access_control_object}>
-                {row.access_control_object}
+            <Text variant="body-1" ellipsis title={title}>
+                {title}
             </Text>
         );
     },
