@@ -1,5 +1,6 @@
 import {omit} from 'lodash';
 import {QueryItem} from '../api';
+import {DEFAULT_QUERY_ACO} from './selectors';
 
 export const cleanupQueryForDraft = (query: QueryItem): QueryItem => {
     return {
@@ -32,8 +33,8 @@ export const prepareQueryPlanIds = (query: QueryItem): QueryItem => {
         });
     }
 
-    if (!query.access_control_object) {
-        query.access_control_object = 'nobody';
+    if (!query.access_control_objects) {
+        query.access_control_objects = [DEFAULT_QUERY_ACO];
     }
 
     return query;

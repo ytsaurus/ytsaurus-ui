@@ -73,7 +73,7 @@ export type SetQueryClusterClique = ActionD<
 >;
 
 export const UPDATE_ACO_QUERY = 'query-tracker/UPDATE_ACO_QUERY';
-export type UpdateACOQueryAction = ActionD<typeof UPDATE_ACO_QUERY, string>;
+export type UpdateACOQueryAction = ActionD<typeof UPDATE_ACO_QUERY, string[]>;
 
 export const setCurrentClusterToQuery =
     (): ThunkAction<void, RootState, unknown, any> => (dispatch, getState) => {
@@ -303,7 +303,7 @@ export function setQueryACO({
     aco,
     query_id,
 }: {
-    aco: string;
+    aco: string[];
     query_id: string;
 }): ThunkAction<Promise<unknown>, RootState, any, AnyAction> {
     return (dispatch) => {
@@ -320,11 +320,11 @@ export function setQueryACO({
 export function setDraftQueryACO({
     aco,
 }: {
-    aco: string;
+    aco: string[];
 }): ThunkAction<Promise<unknown>, RootState, any, AnyAction> {
     return (dispatch) => {
         return dispatch(addACOToLastSelected(aco)).then(() =>
-            dispatch(updateQueryDraft({access_control_object: aco})),
+            dispatch(updateQueryDraft({access_control_objects: aco})),
         );
     };
 }
@@ -335,10 +335,14 @@ export const toggleShareQuery =
         const query = selectQuery(state);
 
         if (!query) return;
+        let aco = query.access_control_objects || [DEFAULT_QUERY_ACO];
 
-        const aco = query.access_control_objects?.includes(SHARED_QUERY_ACO)
-            ? DEFAULT_QUERY_ACO
-            : SHARED_QUERY_ACO;
+        if (aco.includes(SHARED_QUERY_ACO)) {
+            aco = aco.filter((i) => i !== SHARED_QUERY_ACO);
+            if (!aco.length) aco = [DEFAULT_QUERY_ACO];
+        } else {
+            aco = [...aco, SHARED_QUERY_ACO];
+        }
 
         await dispatch(updateACOQuery({aco, query_id: query.id}));
         await dispatch(requestQueriesList());

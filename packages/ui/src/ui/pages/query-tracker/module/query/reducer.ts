@@ -23,6 +23,7 @@ import {
     UpdateQueryAction,
 } from './actions';
 import {cleanupQueryForDraft} from './utills';
+import {DEFAULT_QUERY_ACO} from './selectors';
 
 export interface QueryState {
     queryItem?: QueryItem;
@@ -44,7 +45,7 @@ const initialQueryDraftState: QueryState['draft'] = {
     query: '',
     files: [],
     settings: {},
-    access_control_object: 'nobody',
+    access_control_objects: [DEFAULT_QUERY_ACO],
 };
 
 const initState: QueryState = {
@@ -140,14 +141,14 @@ export function reducer(state = initState, action: Actions): QueryState {
         }
 
         case UPDATE_ACO_QUERY: {
-            const access_control_object = action.data;
+            const access_control_objects = action.data;
 
             return {
                 ...state,
                 queryItem: state.queryItem
-                    ? {...state.queryItem, access_control_object}
+                    ? {...state.queryItem, access_control_objects}
                     : undefined,
-                draft: {...state.draft, access_control_object},
+                draft: {...state.draft, access_control_objects},
             };
         }
     }

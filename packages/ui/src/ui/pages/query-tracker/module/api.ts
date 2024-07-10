@@ -10,7 +10,7 @@ import {getClusterConfigByName, getClusterProxy} from '../../../store/selectors/
 import {generateQuerySettings, generateQueryText} from '../utils/query_generate';
 import {RootState} from '../../../store/reducers';
 import {makeDirectDownloadPath} from '../../../utils/navigation';
-import {getQueryTrackerRequestOptions} from './query/selectors';
+import {DEFAULT_QUERY_ACO, getQueryTrackerRequestOptions} from './query/selectors';
 import {UPDATE_QUERIES_LIST} from './query-tracker-contants';
 import {AnyAction} from 'redux';
 import {QueryEngine} from './engines';
@@ -80,7 +80,6 @@ export interface DraftQuery {
         execution_mode?: 'validate' | 'optimize';
     } & Record<string, string>;
     error?: unknown;
-    access_control_object: string;
     access_control_objects?: string[];
 }
 
@@ -129,7 +128,6 @@ export interface QueryItem extends DraftQuery {
         yql_progress?: Progress;
         spyt_progress?: number;
     };
-    access_control_object: string;
     error?: QueryError;
 }
 
@@ -244,7 +242,7 @@ export async function generateQueryFromTable(
             }),
             files: [],
             annotations: {},
-            access_control_object: 'nobody',
+            access_control_objects: [DEFAULT_QUERY_ACO],
             settings: generateQuerySettings(engine, cluster),
         };
     }
@@ -298,7 +296,7 @@ export function startQuery(
     return async (_dispatch, getState) => {
         const state = getState();
         const {stage, yqlAgentStage} = getQueryTrackerRequestOptions(state);
-        const {query, engine, settings, annotations, files, access_control_object} = queryInstance;
+        const {query, engine, settings, annotations, files, access_control_objects} = queryInstance;
 
         return ytApiV4Id.startQuery(YTApiId.startQuery, {
             parameters: {
@@ -307,7 +305,7 @@ export function startQuery(
                 files,
                 engine,
                 annotations,
-                access_control_object,
+                access_control_objects,
                 settings: {
                     stage: engine === 'yql' ? yqlAgentStage : undefined,
                     ...settings,
@@ -560,7 +558,7 @@ export function setQueryName(
 }
 
 export function addACOToLastSelected(
-    aco: string,
+    aco: string[],
 ): ThunkAction<Promise<any>, RootState, any, AnyAction> {
     return async (dispatch, getState) => {
         const state = getState();
@@ -569,8 +567,8 @@ export function addACOToLastSelected(
 
         await dispatch(
             setSettingByKey(`local::${cluster}::queryTracker::lastSelectedACOs`, [
-                aco,
-                ...lastSelectedACONamespaces.filter((item) => item !== aco).slice(0, 9),
+                ...aco,
+                ...lastSelectedACONamespaces.filter((item) => !aco.includes(item)).slice(0, 9),
             ]),
         );
     };
@@ -580,7 +578,7 @@ export function updateACOQuery({
     aco,
     query_id,
 }: {
-    aco: string;
+    aco: string[];
     query_id: string;
 }): ThunkAction<Promise<any>, RootState, any, AnyAction> {
     return async (dispatch, getState) => {
@@ -592,7 +590,7 @@ export function updateACOQuery({
                 parameters: {
                     stage,
                     query_id,
-                    access_control_object: aco,
+                    access_control_objects: aco,
                 },
                 setup: getQTApiSetup(),
             })

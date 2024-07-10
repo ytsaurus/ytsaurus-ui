@@ -101,10 +101,10 @@ export const getDirtySinceLastSubmit = (state: RootState) =>
     state.queryTracker.query.dirtySinceLastSubmit;
 
 export const getCurrentQueryACO = (state: RootState) =>
-    state.queryTracker.query?.queryItem?.access_control_object || DEFAULT_QUERY_ACO;
+    state.queryTracker.query?.queryItem?.access_control_objects || [DEFAULT_QUERY_ACO];
 
 export const getCurrentDraftQueryACO = (state: RootState) =>
-    state.queryTracker.query?.draft?.access_control_object || DEFAULT_QUERY_ACO;
+    state.queryTracker.query?.draft?.access_control_objects || [DEFAULT_QUERY_ACO];
 
 export const getProgressYQLStatistics = (state: RootState) => {
     return state.queryTracker?.query?.queryItem?.progress?.yql_statistics;
