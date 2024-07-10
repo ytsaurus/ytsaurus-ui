@@ -15,7 +15,9 @@ import {getQueryResults} from '../query_result/selectors';
 const QT_STAGE = getQueryTrackerStage();
 const getState = (state: RootState) => state.queryTracker.query;
 
-const DEFAULT_QUERY_ACO = 'nobody';
+export const DEFAULT_QUERY_ACO = 'nobody';
+export const SHARED_QUERY_ACO = 'everyone-share';
+
 export const getQuery = (state: RootState) => getState(state).queryItem;
 export const getQueryGetParams = (state: RootState) => getState(state).params;
 

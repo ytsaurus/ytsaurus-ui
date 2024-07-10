@@ -15,7 +15,13 @@ import {
     updateACOQuery,
 } from '../api';
 import {requestQueriesList} from '../queries_list/actions';
-import {getCurrentQuery, getQueryDraft} from './selectors';
+import {
+    DEFAULT_QUERY_ACO,
+    SHARED_QUERY_ACO,
+    getCurrentQuery,
+    getQueryDraft,
+    getQuery as selectQuery,
+} from './selectors';
 import {getAppBrowserHistory} from '../../../../store/window-store';
 import {QueryState} from './reducer';
 import {wrapApiPromiseByToaster} from '../../../../utils/utils';
@@ -322,3 +328,22 @@ export function setDraftQueryACO({
         );
     };
 }
+
+export const toggleShareQuery =
+    (): ThunkAction<unknown, RootState, any, AnyAction> => async (dispatch, getState) => {
+        const state = getState();
+        const query = selectQuery(state);
+
+        if (!query) return;
+
+        const aco = query.access_control_objects?.includes(SHARED_QUERY_ACO)
+            ? DEFAULT_QUERY_ACO
+            : SHARED_QUERY_ACO;
+
+        await dispatch(updateACOQuery({aco, query_id: query.id}));
+        await dispatch(requestQueriesList());
+        dispatch({
+            type: UPDATE_ACO_QUERY,
+            data: aco,
+        });
+    };

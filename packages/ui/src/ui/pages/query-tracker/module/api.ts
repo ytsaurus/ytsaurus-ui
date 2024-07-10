@@ -81,6 +81,7 @@ export interface DraftQuery {
     } & Record<string, string>;
     error?: unknown;
     access_control_object: string;
+    access_control_objects?: string[];
 }
 
 export type ErrorPosition = {column: number; row: number};
