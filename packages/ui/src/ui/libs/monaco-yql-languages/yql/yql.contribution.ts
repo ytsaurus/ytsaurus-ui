@@ -3,6 +3,7 @@ import {createProvideSuggestionsFunction} from '../helpers/createProvideSuggesti
 import {MonacoLanguage} from '../../../constants/monaco';
 import {generateYqlOldSafariSuggestion} from './yql.keywords';
 import {loadWebsqlAutocomplete} from '../loadWebsqlAutocomplete';
+import {QueryEngine} from '../../../pages/query-tracker/module/engines';
 
 registerLanguage({
     id: MonacoLanguage.YQL,
@@ -15,7 +16,7 @@ registerLanguage({
             conf: lang.conf,
             language: lang.language,
             provideSuggestionsFunction: autocomplete
-                ? createProvideSuggestionsFunction(autocomplete.parseYqlQuery)
+                ? createProvideSuggestionsFunction(autocomplete.parseYqlQuery, QueryEngine.YQL)
                 : generateYqlOldSafariSuggestion,
         };
     },

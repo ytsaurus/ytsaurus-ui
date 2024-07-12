@@ -3,6 +3,8 @@ import {getRangeToInsertSuggestion} from '../helpers/getRangeToInsertSuggestion'
 import {generateSuggestion} from '../helpers/generateSuggestions';
 import {builtinFunctions, keywords, typeKeywords} from '../yql/yql.keywords';
 import {keywords as suggestKeywords} from './yql_ansi.keywords';
+import {getDirectoryContent} from '../helpers/getDirectoryContent';
+import {QueryEngine} from '../../../pages/query-tracker/module/engines';
 
 export {conf} from '../yql/yql';
 
@@ -53,6 +55,7 @@ export const language: languages.IMonarchLanguage & Record<string, unknown> = {
             [/(@variables)::(@variables)/, 'support.function'],
             [/[;,.]/, 'delimiter'],
             [/[(){}[\]]/, '@brackets'],
+            [/(\w+\.)*`\/\/(.*)`/g, {token: 'path'}],
             // identifiers and keywords
             [
                 /@?[a-zA-Z_$]\w*/,
@@ -141,24 +144,25 @@ export const language: languages.IMonarchLanguage & Record<string, unknown> = {
                 {token: '@rematch', next: '@pop', nextEmbedded: '@pop'},
             ],
         ],
-        tablePath: [[/((`)?[\w/]+\2\s*\.\s*)?`/, {token: 'string.tablepath', next: '@table'}]],
-        table: [
-            [/[^\\`]+/, 'string.tablepath'],
-            [/``/, 'string.tablepath'],
-            [/@escapes/, 'string.escape.tablepath'],
-            [/\\./, 'string.escape.invalid.tablepath'],
-            [/`/, {token: 'string.tablepath', next: '@pop'}],
-        ],
+        tablePath: [[/`\/?[\w+]+`/, {token: 'string.tablepath'}]],
     },
 };
 
-export const provideSuggestionsFunction = (
+export const provideSuggestionsFunction = async (
     model: editor.ITextModel,
     monacoCursorPosition: Position,
-): {suggestions: languages.CompletionItem[]} => {
+): Promise<{suggestions: languages.CompletionItem[]}> => {
     const range = getRangeToInsertSuggestion(model, monacoCursorPosition);
+    const pathSuggestions = await getDirectoryContent({
+        model,
+        monacoCursorPosition,
+        engine: QueryEngine.YT_QL,
+        range,
+    });
+
     return {
         suggestions: [
+            ...pathSuggestions,
             ...generateSuggestion({
                 kind: languages.CompletionItemKind.Keyword,
                 detail: 'Keyword',

@@ -56,7 +56,7 @@ class MonacoEditor extends React.Component<Props> {
                 enabled: false,
             },
             lineNumbers: 'on',
-            suggestOnTriggerCharacters: false,
+            suggestOnTriggerCharacters: true,
             wordBasedSuggestions: false,
             theme: THEMES[theme],
             ...monacoConfig,
