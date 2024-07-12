@@ -84,6 +84,7 @@ export const language: languages.IMonarchLanguage & Record<string, unknown> = {
             [/(@variables)::(@variables)/, 'support.function'],
             [/[;,.]/, 'delimiter'],
             [/[(){}[\]]/, '@brackets'],
+            [/(\w+\.)*`\/\/(.*)`/g, {token: 'path'}],
             // identifiers and keywords
             [
                 /@?[a-zA-Z_$]\w*/,
@@ -172,13 +173,6 @@ export const language: languages.IMonarchLanguage & Record<string, unknown> = {
                 {token: '@rematch', next: '@pop', nextEmbedded: '@pop'},
             ],
         ],
-        tablePath: [[/((`)?[\w/]+\2\s*\.\s*)?`/, {token: 'string.tablepath', next: '@table'}]],
-        table: [
-            [/[^\\`]+/, 'string.tablepath'],
-            [/``/, 'string.tablepath'],
-            [/@escapes/, 'string.escape.tablepath'],
-            [/\\./, 'string.escape.invalid.tablepath'],
-            [/`/, {token: 'string.tablepath', next: '@pop'}],
-        ],
+        tablePath: [[/`\/?[\w+]+`/, {token: 'string.tablepath'}]],
     },
 };

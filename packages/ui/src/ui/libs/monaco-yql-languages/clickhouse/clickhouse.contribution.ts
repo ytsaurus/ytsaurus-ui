@@ -13,6 +13,7 @@ import {
 } from './clickhouse.keywords';
 import {MonacoLanguage} from '../../../constants/monaco';
 import {loadWebsqlAutocomplete} from '../loadWebsqlAutocomplete';
+import {QueryEngine} from '../../../pages/query-tracker/module/engines';
 
 registerLanguage({
     id: MonacoLanguage.CHYT,
@@ -27,6 +28,7 @@ registerLanguage({
             provideSuggestionsFunction: autocomplete
                 ? createProvideSuggestionsFunction(
                       autocomplete.parseClickHouseQuery,
+                      QueryEngine.CHYT,
                       generateClickhouseAdditionalSuggestion,
                   )
                 : generateClickhouseOldSafariSuggestions,
