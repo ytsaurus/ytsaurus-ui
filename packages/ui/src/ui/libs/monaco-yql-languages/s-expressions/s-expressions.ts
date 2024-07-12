@@ -9,6 +9,8 @@ import {
 import {generateSuggestion} from '../helpers/generateSuggestions';
 
 import {getRangeToInsertSuggestion} from '../helpers/getRangeToInsertSuggestion';
+import {getDirectoryContent} from '../helpers/getDirectoryContent';
+import {QueryEngine} from '../../../pages/query-tracker/module/engines';
 
 export const LANGUAGE_ID = 's-expressions';
 
@@ -98,11 +100,11 @@ export const language: languages.IMonarchLanguage & Record<string, unknown> = {
             {include: '@numbers'},
             {include: '@binaries'},
             {include: '@strings'},
-            {include: '@complexIdentifiers'},
             {include: '@scopes'},
             {include: '@complexDataTypes'},
             [/[;,.]/, TokenClassConsts.DELIMITER],
             [/[(){}[\]]/, '@brackets'],
+            [/yt\.`(.*)`/, 'path'],
             [
                 /[\w@#$]+/,
                 {
@@ -179,26 +181,26 @@ export const language: languages.IMonarchLanguage & Record<string, unknown> = {
             [/""/, TokenClassConsts.STRING],
             [/"/, {token: TokenClassConsts.STRING, next: '@pop'}],
         ],
-        complexIdentifiers: [
-            [/`/, {token: TokenClassConsts.IDENTIFIER_QUOTE, next: '@quotedIdentifier'}],
-        ],
-        quotedIdentifier: [
-            [/[^`]+/, TokenClassConsts.IDENTIFIER_QUOTE],
-            [/``/, TokenClassConsts.IDENTIFIER_QUOTE],
-            [/`/, {token: TokenClassConsts.IDENTIFIER_QUOTE, next: '@pop'}],
-        ],
         scopes: [],
         complexDataTypes: [],
     },
 };
 
-export const provideSuggestionsFunction = (
+export const provideSuggestionsFunction = async (
     model: editor.ITextModel,
     monacoCursorPosition: Position,
-): {suggestions: languages.CompletionItem[]} => {
+): Promise<{suggestions: languages.CompletionItem[]}> => {
     const range = getRangeToInsertSuggestion(model, monacoCursorPosition);
+    const pathSuggestions = await getDirectoryContent({
+        model,
+        monacoCursorPosition,
+        engine: QueryEngine.SPYT,
+        range,
+    });
+
     return {
         suggestions: [
+            ...pathSuggestions,
             ...generateSuggestion({
                 kind: languages.CompletionItemKind.Keyword,
                 detail: 'Keyword',
