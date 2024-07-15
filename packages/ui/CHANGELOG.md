@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.47.1](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.47.0...ui-v1.47.1) (2024-07-15)
+
+
+### Bug Fixes
+
+* minor fix for build ([7c804d9](https://github.com/ytsaurus/ytsaurus-ui/commit/7c804d914293a1cef947390af17b6e5d8a800a99))
+
 ## [1.47.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.46.0...ui-v1.47.0) (2024-07-09)
 
 
