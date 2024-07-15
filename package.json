@@ -10,7 +10,7 @@
   },
   "scripts": {
     "lint": "lerna run lint",
-    "postinstall": "lerna run deps:install && lerna link",
+    "postinstall": "lerna run deps:install",
     "test": "lerna run test"
   }
 }
