@@ -164,12 +164,14 @@ function prepareTable(
     userTransactionAlive: boolean,
     index?: number | string,
 ) {
-    const path = ypath.getValue(table);
+    const path: string = ypath.getValue(table);
+    const cluster: string | undefined = ypath.getValue(table, '/@cluster');
     const originalPath = ypath.getValue(table, '/@original_path');
     const transaction = prepareTransaction(operation, type, table, userTransactionAlive);
 
     return {
         path,
+        cluster,
         originalPath,
         transaction,
         livePreview: prepareLivePreview(operation, type, index),
