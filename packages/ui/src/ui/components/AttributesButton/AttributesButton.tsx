@@ -3,19 +3,16 @@ import React from 'react';
 import Button, {ButtonProps} from '../../components/Button/Button';
 import Icon from '../../components/Icon/Icon';
 
-const defaultProps: Partial<ButtonProps> = {
-    view: 'flat-secondary',
-    size: 'm',
-};
-
 export interface AttributesButtonProps extends ButtonProps {}
 
-export default function AttributesButton(props: AttributesButtonProps) {
+export default function AttributesButton({
+    view = 'flat-secondary',
+    size = 'm',
+    ...rest
+}: AttributesButtonProps) {
     return (
-        <Button {...props}>
+        <Button view={view} size={size} {...rest}>
             <Icon awesome="at" />
         </Button>
     );
 }
-
-AttributesButton.defaultProps = defaultProps;

@@ -7,7 +7,7 @@ import Link from '../../components/Link/Link';
 import FormattedText from './FormattedText';
 
 function FormattedLink(props) {
-    const {state, theme, className, text, match, onClick, ...rest} = props;
+    const {state, theme = 'ghost', className, text, match, onClick, ...rest} = props;
     const url = computeStateQuery({cluster: match.params.cluster, ...state});
     return (
         <Link routed url={url} theme={theme} onClick={onClick} className={className}>
@@ -31,8 +31,5 @@ FormattedLink.propTypes = {
             cluster: PropTypes.string,
         }),
     }),
-};
-FormattedLink.defaultProps = {
-    theme: 'ghost',
 };
 export default withRouter(FormattedLink);

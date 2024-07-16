@@ -25,18 +25,19 @@ SettingsMenuInput.propTypes = {
     validator: PropTypes.func,
 };
 
-SettingsMenuInput.defaultProps = {
-    validator: () => undefined,
-};
-
-function SettingsMenuInput(props) {
-    const {getSetting, setSetting} = props;
-    const {settingName, settingNS} = props;
-    const {heading, description, placeholder, validator} = props;
-
+function SettingsMenuInput({
+    getSetting,
+    setSetting,
+    settingName,
+    settingNS,
+    heading,
+    description,
+    placeholder,
+    validator,
+}) {
     const initialValue = getSetting(settingName, settingNS);
     const [value, setValue] = useState(initialValue);
-    const error = validator(value);
+    const error = validator?.(value);
     const handleBlur = useCallback(() => {
         if (!error) {
             setSetting(settingName, settingNS, value);

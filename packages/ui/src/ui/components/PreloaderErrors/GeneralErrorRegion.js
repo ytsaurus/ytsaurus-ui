@@ -12,7 +12,9 @@ import {showErrorPopup} from '../../utils/utils';
 
 const b = block('preloader');
 
-export function GeneralErrorRegion({message}) {
+export function GeneralErrorRegion({
+    message = 'Oops! Something went wrong. If problem persists please report it via Bug Reporter.',
+}) {
     const error = useSelector(getGlobalError);
 
     return (
@@ -39,13 +41,7 @@ export function GeneralErrorRegion({message}) {
 }
 
 GeneralErrorRegion.propTypes = {
-    cluster: PropTypes.string,
     message: PropTypes.string,
-};
-
-GeneralErrorRegion.defaultProps = {
-    cluster: 'Cluster',
-    message: 'Oops! Something went wrong. If problem persists please report it via Bug Reporter.',
 };
 
 export default withBlockedNavigation(GeneralErrorRegion);

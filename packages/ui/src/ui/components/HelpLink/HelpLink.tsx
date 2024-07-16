@@ -12,10 +12,6 @@ const propTypes = {
     text: PropTypes.string,
 };
 
-const defaultProps = {
-    text: 'Help',
-};
-
 const block = cn('yt-help-link');
 
 interface Props {
@@ -23,7 +19,7 @@ interface Props {
     text?: string;
 }
 
-function HelpLink({url, text}: Props) {
+function HelpLink({url, text = 'Help'}: Props) {
     return !url ? null : (
         <Link url={url} target="_blank" title="View documentation">
             <Icon awesome="book" />
@@ -33,6 +29,5 @@ function HelpLink({url, text}: Props) {
 }
 
 HelpLink.propTypes = propTypes;
-HelpLink.defaultProps = defaultProps;
 
 export default HelpLink;

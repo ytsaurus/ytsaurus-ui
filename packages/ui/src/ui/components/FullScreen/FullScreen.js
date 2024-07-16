@@ -12,12 +12,7 @@ FullScreen.propTypes = {
     onChange: PropTypes.func,
 };
 
-FullScreen.defaultProps = {
-    enabled: false,
-    onChange: () => {},
-};
-
-export default function FullScreen({enabled, children, className, onChange}) {
+export default function FullScreen({enabled = false, children, className, onChange = () => {}}) {
     const container = useRef(null);
 
     const toggleScreen = () => {

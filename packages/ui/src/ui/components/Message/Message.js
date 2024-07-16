@@ -8,9 +8,13 @@ import Icon from '../../components/Icon/Icon';
 
 const block = cn('elements-message');
 
-export default function Message(props) {
-    const {theme, showClose, dismissCallback, content, buttons} = props;
-
+export default function Message({
+    theme = 'default',
+    showClose = false,
+    dismissCallback,
+    content,
+    buttons,
+}) {
     return (
         <div className={block({theme})}>
             {showClose && (
@@ -56,8 +60,4 @@ Message.propTypes = {
     },
     content: PropTypes.oneOfType([PropTypes.node, PropTypes.arrayOf(PropTypes.string)]).isRequired,
     buttons: PropTypes.arrayOf(PropTypes.object),
-};
-Message.defaultProps = {
-    theme: 'default',
-    showClose: false,
 };

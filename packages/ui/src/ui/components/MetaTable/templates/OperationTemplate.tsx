@@ -44,7 +44,7 @@ export function TemplatePools({
     cluster,
     state,
     onEdit,
-    compact,
+    compact = false,
     erasedTrees = {},
 }: TemplatePoolsProps) {
     return (
@@ -69,10 +69,6 @@ TemplatePools.propTypes = {
     state: PropTypes.string,
     onEdit: PropTypes.func,
     compact: PropTypes.bool,
-};
-
-TemplatePools.defaultProps = {
-    compact: false,
 };
 
 /* ----------------------------------------------------------------------------------------------------------------- */
