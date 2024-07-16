@@ -92,12 +92,13 @@ export function ConnectionErrorRegion({cluster}) {
                     {announcesMailListUrl && (
                         <Button
                             url={announcesMailListUrl}
-                            text="Subscribe to YT announces"
                             target="_blank"
                             view="action"
                             type="link"
                             size="m"
-                        />
+                        >
+                            Subscribe to YT announces
+                        </Button>
                     )}
                 </React.Fragment>
             )}
