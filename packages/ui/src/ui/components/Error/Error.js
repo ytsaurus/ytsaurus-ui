@@ -5,7 +5,6 @@ import Block from '../../components/Block/Block';
 import './Error.scss';
 
 const propTypes = Block.propTypes;
-const defaultProps = Block.defaultProps;
 
 export default class Error extends Component {
     render() {
@@ -16,4 +15,3 @@ export default class Error extends Component {
 }
 
 Error.propTypes = propTypes;
-Error.defaultProps = defaultProps;

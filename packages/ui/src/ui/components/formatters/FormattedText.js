@@ -42,8 +42,12 @@ function prepareTextProps(text, asHTML) {
     return props;
 }
 
-export default function FormattedText(props) {
-    const {text, className: mixedClassName, asHTML, title = text} = props;
+export default function FormattedText({
+    text,
+    className: mixedClassName,
+    asHTML = false,
+    title = text,
+}) {
     const className = mixedClassName ? block(false, mixedClassName) : block();
     const textProps = prepareTextProps(text, asHTML);
 
@@ -54,7 +58,4 @@ FormattedText.propTypes = {
     className: PropTypes.string,
     asHTML: PropTypes.bool,
     title: PropTypes.string,
-};
-FormattedText.defaultProps = {
-    asHTML: false,
 };

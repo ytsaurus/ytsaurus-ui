@@ -5,11 +5,6 @@ import hammer from '../../common/hammer';
 
 import './Label.scss';
 
-const defaultProps = {
-    theme: 'default',
-    type: 'block',
-};
-
 const b = block('elements-label');
 
 interface Props {
@@ -31,7 +26,15 @@ export type LabelTheme =
     | 'complementary'
     | 'misc';
 
-function Label({theme, type, text, hideTitle, className, children, capitalize}: Props) {
+function Label({
+    theme = 'default',
+    type = 'block',
+    text,
+    hideTitle,
+    className,
+    children,
+    capitalize,
+}: Props) {
     return (
         <span
             className={b({theme, type, capitalize}, className)}
@@ -41,8 +44,6 @@ function Label({theme, type, text, hideTitle, className, children, capitalize}: 
         </span>
     );
 }
-
-Label.defaultProps = defaultProps;
 
 export function LabelOnOff({value, className}: {value?: boolean; className?: string}) {
     if (value === undefined) {

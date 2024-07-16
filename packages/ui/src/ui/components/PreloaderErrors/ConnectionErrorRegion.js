@@ -16,7 +16,7 @@ const b = block('preloader');
 
 const {announcesMailListUrl, sslCertFixUrl} = uiSettings;
 
-export function ConnectionErrorRegion({cluster}) {
+export function ConnectionErrorRegion({cluster = 'Cluster'}) {
     const error = useSelector(getGlobalError);
     const clusterName = cluster.toUpperCase();
 
@@ -109,10 +109,6 @@ export function ConnectionErrorRegion({cluster}) {
 ConnectionErrorRegion.propTypes = {
     cluster: PropTypes.string,
     puncherUrl: PropTypes.string,
-};
-
-ConnectionErrorRegion.defaultProps = {
-    cluster: 'Cluster',
 };
 
 export default withBlockedNavigation(ConnectionErrorRegion);

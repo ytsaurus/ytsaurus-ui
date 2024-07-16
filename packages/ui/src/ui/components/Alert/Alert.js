@@ -5,7 +5,6 @@ import Block from '../../components/Block/Block';
 import './Alert.scss';
 
 const propTypes = Block.propTypes;
-const defaultProps = Block.defaultProps;
 
 export default class Alert extends Component {
     render() {
@@ -16,4 +15,3 @@ export default class Alert extends Component {
 }
 
 Alert.propTypes = propTypes;
-Alert.defaultProps = defaultProps;

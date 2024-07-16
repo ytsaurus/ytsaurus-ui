@@ -4,10 +4,6 @@ import block from 'bem-cn-lite';
 import './NodeQuad.scss';
 const b = block('node-quad');
 
-const defaultProps = {
-    theme: 'unknown',
-};
-
 interface Props {
     theme?:
         | 'online'
@@ -21,8 +17,6 @@ interface Props {
         | 'unknown';
 }
 
-export default function NodeQuad({theme}: Props) {
+export default function NodeQuad({theme = 'unknown'}: Props) {
     return <div className={b({theme})} />;
 }
-
-NodeQuad.defaultProps = defaultProps;
