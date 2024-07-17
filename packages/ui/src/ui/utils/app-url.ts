@@ -2,8 +2,10 @@ import {Page} from '../../shared/constants/settings';
 import {Tab as ComponentsTab} from '../constants/components/main';
 import YT from '../config/yt-config';
 
-export function makeNodeUrl(cluster: string, address: string) {
-    return `/${cluster}/${Page.COMPONENTS}/${ComponentsTab.NODES}/${address}`;
+export function makeComponentsNodesUrl({host, cluster}: {host?: string; cluster?: string} = {}) {
+    return host
+        ? `/${cluster || YT.cluster}/${Page.COMPONENTS}/${ComponentsTab.NODES}/${host}`
+        : `/${cluster || YT.cluster}/${Page.COMPONENTS}/${ComponentsTab.NODES}`;
 }
 
 export function makeProxyUrl(cluster: string, address: string) {

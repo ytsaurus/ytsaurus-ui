@@ -11,6 +11,7 @@ import {Page} from '../../../constants/index';
 import {RowWithName} from '../../../containers/AppNavigation/TopRowContent/SectionName';
 import {nodeHostSelector} from '../../../store/selectors/components/node/node';
 import {getCluster} from '../../../store/selectors/global';
+import {makeComponentsNodesUrl} from '../../../utils/app-url';
 
 import './ComponentsTopRowContent.scss';
 
@@ -47,16 +48,14 @@ function ComponentsBreadcrumbs() {
             {
                 text: '',
                 action: noop,
-                href: `/${cluster}/${Page.COMPONENTS}/${ComponentsTab.NODES}`,
+                href: makeComponentsNodesUrl({cluster}),
             },
         ];
         if (nodeHost) {
             _items.push({
                 text: nodeHost,
                 action: noop,
-                href: `/${cluster}/${Page.COMPONENTS}/${ComponentsTab.NODES}/${encodeURIComponent(
-                    nodeHost,
-                )}/general`,
+                href: makeComponentsNodesUrl({cluster, host: nodeHost}),
             });
         }
         return _items;
