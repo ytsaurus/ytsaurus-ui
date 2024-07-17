@@ -149,14 +149,14 @@ export function currentDate() {
 
 export const fetchClustersAvailability = hasOdinPage()
     ? () => {
-          return axios.request({
+          return axios.request<Array<ClusterAvailability>>({
               method: 'get',
               url: '/api/odin/clusters/availability',
-          }) as Promise<
-              {
-                  id: string;
-                  availability?: 1 | undefined;
-              }[]
-          >;
+          });
       }
-    : () => Promise.resolve([]);
+    : () => Promise.resolve({data: [] as Array<ClusterAvailability>});
+
+type ClusterAvailability = {
+    id: string;
+    availability?: 1;
+};

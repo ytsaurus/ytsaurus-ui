@@ -1,81 +1,127 @@
+import {Action} from 'redux';
+
 import _ from 'lodash';
+
 import {
+    CLUSTERS_MENU_UPDATE_FILTER,
+    CLUSTERS_MENU_UPDATE_VIEWMODE,
     FETCH_CLUSTER_AUTH_STATUS,
     FETCH_CLUSTER_AVAILABILITY,
     FETCH_CLUSTER_VERSIONS,
-    UPDATE_FILTER,
-    UPDATE_VIEWMODE,
 } from '../../../constants/index';
 import YT from '../../../config/yt-config';
+import {ValueOf} from '../../../../@types/types';
+import {ActionD} from '../../../types';
 
-export const initialState = {
+export type ClustersMenuState = {
+    clusters: Record<string, ClusterConfigWithStatus>;
+    clusterFilter: string;
+    viewMode: 'dashboard' | 'table';
+};
+
+export type ClusterConfigWithStatus = ValueOf<(typeof YT)['clusters']> & {
+    status: 'unknown' | 'available' | 'unavailable';
+    loadState?: 'loaded';
+    access?: 'granted' | 'none';
+    version?: string;
+    authorized?: boolean;
+};
+
+export const initialState: ClustersMenuState = {
     clusters: _.reduce(
         _.cloneDeep(YT?.clusters),
-        (clusters, config, clusterId) => {
-            config.status = 'unknown';
-            clusters[clusterId] = config;
-            return clusters;
+        (acc, clusterConfig, clusterId) => {
+            acc[clusterId] = {
+                ...clusterConfig,
+                status: 'unknown',
+            };
+            return acc;
         },
-        {},
+        {} as ClustersMenuState['clusters'],
     ),
     viewMode: 'dashboard',
     clusterFilter: '',
 };
 
-export default (state = initialState, action) => {
-    let clusters;
-
+export default (state = initialState, action: ClustersMenuAction) => {
     switch (action.type) {
-        case FETCH_CLUSTER_VERSIONS.SUCCESS:
-        case FETCH_CLUSTER_VERSIONS.FAILURE: {
-            const versions = _.reduce(
+        case FETCH_CLUSTER_VERSIONS.SUCCESS: {
+            const newClusters = _.reduce(
                 action.data,
-                (clusters, {id, version}) => {
-                    clusters[id] = {
-                        loadState: 'loaded',
-                        access: version ? 'granted' : 'none',
-                        version,
-                    };
-                    return clusters;
+                (acc, {id, version}) => {
+                    if (acc[id]) {
+                        acc[id] = {
+                            ...acc[id],
+                            loadState: 'loaded',
+                            access: version ? 'granted' : 'none',
+                            version,
+                        };
+                    }
+                    return acc;
                 },
-                {},
+                {...state.clusters},
             );
-            clusters = _.merge({}, state.clusters, versions);
 
-            return {...state, clusters};
+            return {...state, clusters: newClusters};
         }
 
-        case FETCH_CLUSTER_AVAILABILITY.SUCCESS:
-        case FETCH_CLUSTER_AVAILABILITY.FAILURE: {
-            const availability = _.reduce(
+        case FETCH_CLUSTER_AVAILABILITY.SUCCESS: {
+            const newClusters = _.reduce(
                 action.data,
-                (clusters, {id, availability}) => {
-                    clusters[id] = {
-                        status: availability > 0.5 ? 'available' : 'unavailable',
-                    };
-                    return clusters;
+                (acc, {id, availability}) => {
+                    if (acc[id]) {
+                        acc[id] = {
+                            ...acc[id],
+                            status: availability! > 0.5 ? 'available' : 'unavailable',
+                        };
+                    }
+                    return acc;
                 },
-                {},
+                {...state.clusters},
             );
-            clusters = _.merge({}, state.clusters, availability);
 
-            return {...state, clusters};
+            return {...state, clusters: newClusters};
         }
 
-        case FETCH_CLUSTER_AUTH_STATUS.SUCCESS:
-        case FETCH_CLUSTER_AUTH_STATUS.FAILURE: {
-            clusters = _.merge({}, state.clusters, action.data);
-
-            return {...state, clusters};
+        case FETCH_CLUSTER_AUTH_STATUS.SUCCESS: {
+            return {
+                ...state,
+                clusters: _.reduce(
+                    action.data,
+                    (acc, partialConfig, id) => {
+                        if (acc[id]) {
+                            acc[id] = {...acc[id], ...partialConfig};
+                        }
+                        return acc;
+                    },
+                    {...state.clusters},
+                ),
+            };
         }
 
-        case UPDATE_VIEWMODE:
+        case CLUSTERS_MENU_UPDATE_VIEWMODE:
             return {...state, viewMode: action.data};
 
-        case UPDATE_FILTER:
+        case CLUSTERS_MENU_UPDATE_FILTER:
             return {...state, clusterFilter: action.data};
 
+        case FETCH_CLUSTER_VERSIONS.FAILURE:
+        case FETCH_CLUSTER_AUTH_STATUS.FAILURE:
+        case FETCH_CLUSTER_AVAILABILITY.FAILURE:
         default:
             return state;
     }
 };
+
+export type ClustersMenuAction =
+    | Action<typeof FETCH_CLUSTER_AUTH_STATUS.FAILURE>
+    | Action<typeof FETCH_CLUSTER_VERSIONS.FAILURE>
+    | Action<typeof FETCH_CLUSTER_AVAILABILITY.FAILURE>
+    | ActionD<typeof FETCH_CLUSTER_VERSIONS.SUCCESS, Record<string, {id: string; version: string}>>
+    | ActionD<typeof FETCH_CLUSTER_AVAILABILITY.SUCCESS, Array<{id: string; availability?: number}>>
+    | ActionD<
+          typeof FETCH_CLUSTER_AUTH_STATUS.SUCCESS,
+          Record<string, Pick<ClusterConfigWithStatus, 'authorized'>>
+      >
+    | ActionD<typeof CLUSTERS_MENU_UPDATE_VIEWMODE, ClustersMenuState['viewMode']>
+    | ActionD<typeof CLUSTERS_MENU_UPDATE_FILTER, ClustersMenuState['clusterFilter']>;

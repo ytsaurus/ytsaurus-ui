@@ -1,6 +1,6 @@
 export const DEFAULT_GROUP = 'other';
 
-export const CLUSTER_GROUPS = {
+export const CLUSTER_GROUPS: Record<string, {caption: string; size?: 'l'}> = {
     /** !!! the order is important !!! **/
 
     'primary-mrs': {

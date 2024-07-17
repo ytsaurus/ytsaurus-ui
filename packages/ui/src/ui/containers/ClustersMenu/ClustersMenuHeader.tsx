@@ -1,13 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import block from 'bem-cn-lite';
-import {connect} from 'react-redux';
+import {ConnectedProps, connect} from 'react-redux';
 
 import Filter from '../../components/Filter/Filter';
 import RadioButton from '../../components/RadioButton/RadioButton';
 import {updateFilter, updateViewMode} from '../../store/actions/clusters-menu';
 import {HeaderLinks} from '../../containers/ClustersMenu/HeaderLinks';
 import {LINKS_ITEM_CLUSTERS} from '../../containers/ClustersMenu/header-links-items';
+import {RootState} from '../../store/reducers';
 
 import './ClusterMenuHeader.scss';
 
@@ -21,7 +22,9 @@ ClustersMenuHeader.propTypes = {
     login: PropTypes.string,
 };
 
-function ClustersMenuHeader({viewMode, updateViewMode, clusterFilter, updateFilter}) {
+type Props = ConnectedProps<typeof connector>;
+
+function ClustersMenuHeader({viewMode, updateViewMode, clusterFilter, updateFilter}: Props) {
     return (
         <header className={b('header', 'elements-page__header')}>
             <div className={b('header-inner')}>
@@ -35,11 +38,11 @@ function ClustersMenuHeader({viewMode, updateViewMode, clusterFilter, updateFilt
                     </div>
                 </div>
                 <div className={b('view')}>
-                    <RadioButton
+                    <RadioButton<'table' | 'dashboard'>
                         size="m"
                         name="cluster-menu-mode"
                         value={viewMode}
-                        onChange={(event) => updateViewMode(event.target.value)}
+                        onUpdate={(value) => updateViewMode(value)}
                         items={[
                             {
                                 value: 'table',
@@ -61,9 +64,9 @@ function ClustersMenuHeader({viewMode, updateViewMode, clusterFilter, updateFilt
     );
 }
 
-function mapStateToProps({clustersMenu, global}) {
-    const {viewMode, clusterFilter} = clustersMenu;
-    const {login} = global;
+function mapStateToProps(state: RootState) {
+    const {viewMode, clusterFilter} = state.clustersMenu;
+    const {login} = state.global;
     return {
         viewMode,
         clusterFilter,
@@ -76,4 +79,6 @@ const mapDispatchToProps = {
     updateFilter,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(ClustersMenuHeader);
+const connector = connect(mapStateToProps, mapDispatchToProps);
+
+export default connector(ClustersMenuHeader);
