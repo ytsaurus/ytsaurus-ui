@@ -1,16 +1,16 @@
-import React, {Component} from 'react';
-import PropTypes from 'prop-types';
-import {connect} from 'react-redux';
+import React from 'react';
+import {ConnectedProps, connect} from 'react-redux';
 import block from 'bem-cn-lite';
 import {Link} from 'react-router-dom';
 import _ from 'lodash';
 import {Lock} from '@gravity-ui/icons';
 
-import {CLUSTER_GROUPS, CLUSTER_GROUPS_ORDER, DEFAULT_GROUP} from '../../constants/cluster-menu';
+// @ts-ignore
 import format from '@ytsaurus/interface-helpers/lib/hammer/format';
+
+import {CLUSTER_GROUPS, CLUSTER_GROUPS_ORDER, DEFAULT_GROUP} from '../../constants/cluster-menu';
 import {utils} from '../../common/hammer/utils';
 import ElementsTable from '../../components/ElementsTable/ElementsTable';
-import {sortStateType} from '../../components/ElementsTable/ElementsTableHeader';
 import {
     fetchClusterAuthStatus,
     fetchClusterAvailability,
@@ -20,21 +20,15 @@ import {CLUSTER_MENU_TABLE_ID} from '../../constants/tables';
 import {getClusterAppearance} from '../../appearance';
 import YT from '../../config/yt-config';
 import './ClusterMenuBody.scss';
+import {RootState} from '../../store/reducers';
+import {ClusterConfigWithStatus} from '../../store/reducers/clusters-menu/clusters-menu';
+import {getAppBrowserHistory} from '../../store/window-store';
 
 const b = block('cluster-menu');
 
-class ClustersMenuBody extends Component {
-    static propTypes = {
-        // from connect
-        clusterFilter: PropTypes.string,
-        viewMode: PropTypes.oneOf(['dashboard', 'table']),
-        clusters: PropTypes.object,
-        fetchClusterVersions: PropTypes.func.isRequired,
-        fetchClusterAuthStatus: PropTypes.func.isRequired,
-        fetchClusterAvailability: PropTypes.func.isRequired,
-        sortState: sortStateType.isRequired,
-    };
+type Props = ConnectedProps<typeof connector>;
 
+class ClustersMenuBody extends React.Component<Props> {
     componentDidMount() {
         const {fetchClusterVersions, fetchClusterAvailability, fetchClusterAuthStatus} = this.props;
 
@@ -45,20 +39,20 @@ class ClustersMenuBody extends Component {
         }
     }
 
-    prepareGroups(clusters) {
-        function sortByClusterName(clusterA, clusterB) {
+    prepareGroups(clusters: Array<ClusterConfigWithStatus>) {
+        function sortByClusterName<T extends {name: string}>(clusterA: T, clusterB: T) {
             return clusterA.name > clusterB.name ? 1 : -1;
         }
 
         const groups = _.reduce(
             clusters,
-            (groups, cluster) => {
+            (acc, cluster) => {
                 const currentGroup = cluster.group || DEFAULT_GROUP;
-                groups[currentGroup] = groups[currentGroup] || [];
-                groups[currentGroup].push(cluster);
-                return groups;
+                acc[currentGroup] = acc[currentGroup] || [];
+                acc[currentGroup].push(cluster);
+                return acc;
             },
-            {},
+            {} as Record<string, Array<ClusterConfigWithStatus>>,
         );
 
         _.each(groups, (clusters) => {
@@ -68,9 +62,9 @@ class ClustersMenuBody extends Component {
         return groups;
     }
 
-    renderVersion({loadState, access, version, status}) {
+    renderVersion({loadState, access, version, status}: ClusterConfigWithStatus) {
         let title;
-        let text = '—';
+        let text: typeof version = '—';
         if (loadState === 'loaded') {
             if (access === 'granted') {
                 title = `Current cluster version: ${version}`;
@@ -91,18 +85,8 @@ class ClustersMenuBody extends Component {
         );
     }
 
-    renderCluster(cluster, size) {
-        const {
-            status,
-            access,
-            id,
-            name,
-            environment,
-            descriptionEnglish,
-            description,
-            theme,
-            authorized,
-        } = cluster;
+    renderCluster(cluster: ClusterConfigWithStatus, size?: 'l') {
+        const {status, access, id, name, environment, description, theme, authorized} = cluster;
         const className = b('item', {
             state: status,
             access: status === 'available' && access,
@@ -140,14 +124,14 @@ class ClustersMenuBody extends Component {
                     </div>
 
                     <div className={b('item-description', 'elements-multiline-ellipsis')}>
-                        {descriptionEnglish ? descriptionEnglish : description}
+                        {description}
                     </div>
                 </div>
             </Link>
         );
     }
 
-    renderDashboard(clusters) {
+    renderDashboard(clusters: Array<ClusterConfigWithStatus>) {
         const clusterGroups = this.prepareGroups(clusters);
 
         const unknown = _.filter(
@@ -156,7 +140,7 @@ class ClustersMenuBody extends Component {
         );
 
         return (
-            <main key="body" className={b(false, 'elements-page__content')}>
+            <main key="body" className={b(null, 'elements-page__content')}>
                 {_.map(CLUSTER_GROUPS_ORDER.concat(unknown), (groupName) => {
                     const clusters = clusterGroups[groupName];
                     const {caption, size} = CLUSTER_GROUPS[groupName] ?? {caption: groupName};
@@ -187,19 +171,17 @@ class ClustersMenuBody extends Component {
         );
     }
 
-    renderTable(clusters) {
+    renderTable(clusters: Array<ClusterConfigWithStatus>) {
         const tableSettings = {
             css: 'cluster-menu',
             theme: 'light',
             striped: true,
             tableId: CLUSTER_MENU_TABLE_ID,
-            computeKey: function (item) {
+            computeKey: function (item: {name: string}) {
                 return item.name;
             },
-            onItemClick: function (item) {
-                // FIXME: give back control to react-router once we no longer need to render full page on server
-                // to get cluster credentials
-                window.location = `/${item.id}`;
+            onItemClick: function (item: {id: string}) {
+                getAppBrowserHistory().push(`/${item.id}`);
             },
             columns: {
                 items: {
@@ -209,35 +191,35 @@ class ClustersMenuBody extends Component {
                         sort: false,
                     },
                     name: {
-                        get: function (cluster) {
+                        get: function (cluster: ClusterConfigWithStatus) {
                             return cluster.name;
                         },
                         sort: true,
                         align: 'left',
                     },
                     environment: {
-                        get: function (cluster) {
+                        get: function (cluster: ClusterConfigWithStatus) {
                             return cluster.environment;
                         },
                         sort: true,
                         align: 'left',
                     },
                     version: {
-                        get: function (cluster) {
+                        get: function (cluster: ClusterConfigWithStatus) {
                             return [cluster.version, cluster.id];
                         },
                         sort: true,
                         align: 'right',
                     },
                     status: {
-                        get: function (cluster) {
+                        get: function (cluster: ClusterConfigWithStatus) {
                             return [cluster.status, cluster.id];
                         },
                         sort: true,
                         align: 'center',
                     },
                     access: {
-                        get: function (cluster) {
+                        get: function (cluster: ClusterConfigWithStatus) {
                             return [cluster.access, cluster.id];
                         },
                         sort: true,
@@ -264,7 +246,7 @@ class ClustersMenuBody extends Component {
         });
 
         return (
-            <main key="body" className={b(false, 'elements-page__content')}>
+            <main key="body" className={b(null, 'elements-page__content')}>
                 <div className={b('table-wrapper')}>
                     <ElementsTable {...table} />
                 </div>
@@ -275,7 +257,7 @@ class ClustersMenuBody extends Component {
     renderEmptyContent() {
         const className = b('heading', {position: 'center', size: 'l'});
         return (
-            <main key="body" className={b(false, 'elements-page__content')}>
+            <main key="body" className={b(null, 'elements-page__content')}>
                 <div className={b('message', className)}>No clusters matching your selection</div>
             </main>
         );
@@ -285,7 +267,7 @@ class ClustersMenuBody extends Component {
         const {viewMode, clusterFilter, clusters} = this.props;
         const regexp = new RegExp(clusterFilter, 'i');
 
-        const filterByField = (field) => {
+        const filterByField = (field?: string) => {
             return typeof field === 'string' && field.search(regexp) > -1;
         };
 
@@ -300,16 +282,17 @@ class ClustersMenuBody extends Component {
         } else if (!filteredClusters.length) {
             return this.renderEmptyContent();
         }
+        return null;
     }
 }
 
-function mapStateToProps({clustersMenu, tables}) {
-    const {viewMode, clusterFilter, clusters} = clustersMenu;
+function mapStateToProps(state: RootState) {
+    const {viewMode, clusterFilter, clusters} = state.clustersMenu;
     return {
         viewMode,
         clusterFilter,
         clusters,
-        sortState: tables[CLUSTER_MENU_TABLE_ID],
+        sortState: state.tables[CLUSTER_MENU_TABLE_ID],
     };
 }
 
@@ -319,4 +302,6 @@ const mapDispatchToProps = {
     fetchClusterAvailability,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(ClustersMenuBody);
+const connector = connect(mapStateToProps, mapDispatchToProps);
+
+export default connector(ClustersMenuBody);

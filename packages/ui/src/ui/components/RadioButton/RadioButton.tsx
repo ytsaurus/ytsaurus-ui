@@ -6,19 +6,21 @@ import hammer from '../../common/hammer';
 import Icon from '../Icon/Icon';
 import {RadioButton, RadioButtonProps} from '@gravity-ui/uikit';
 
-interface Props extends RadioButtonProps {
-    items: Array<ItemType>;
+interface Props<T extends string = string> extends RadioButtonProps<T> {
+    items: Array<ItemType<T>>;
 }
 
-export interface ItemType {
+export interface ItemType<T extends string = string> {
     icon?: any;
     text: string;
-    value: string;
+    value: T;
 }
 
 const block = cn('elements-radiobutton');
 
-export default class CustomRadioButton extends React.Component<Props> {
+export default class CustomRadioButton<T extends string = string> extends React.Component<
+    Props<T>
+> {
     static propTypes = {
         value: PropTypes.string,
         items: PropTypes.arrayOf(PropTypes.shape({value: PropTypes.string})),
