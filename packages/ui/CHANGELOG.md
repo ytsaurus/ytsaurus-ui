@@ -1,5 +1,21 @@
 # Changelog
 
+## [1.48.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.47.1...ui-v1.48.0) (2024-07-17)
+
+
+### Features
+
+* **ACL:** add inheritedFrom field [YTFRONT-3836] ([4bd121d](https://github.com/ytsaurus/ytsaurus-ui/commit/4bd121d7b61907997d0e525e73d0312a43d01a50))
+* **ACL:** inherited roles should be displayed separately [YTFRONT-3836] ([7edb2c4](https://github.com/ytsaurus/ytsaurus-ui/commit/7edb2c42293088b865c6205fa3085929f082d10f))
+* **ACL:** use `[@idm](https://github.com/idm)_roles` for ACO (+tvm name) [YTFRONT-3836] ([03f139e](https://github.com/ytsaurus/ytsaurus-ui/commit/03f139ed5c38c2e211bafddab8b5bb4e3805c918))
+* **Query:** share query button [YTFRONT-4239] ([67e84bc](https://github.com/ytsaurus/ytsaurus-ui/commit/67e84bc383ebce81a57928d44d384a5ed7ab0d99))
+
+
+### Bug Fixes
+
+* **Components/Nodes:** get rid of duplicates of nodes [YTFRONT-4268] ([131c857](https://github.com/ytsaurus/ytsaurus-ui/commit/131c8574b6cc1e076bb8076437ea542a7c149415))
+* **Operation/Specification/Input:** links should respect 'cluster' attribute [YTFRONT-4265] ([4fbece7](https://github.com/ytsaurus/ytsaurus-ui/commit/4fbece7a7b6f228b31179af5fc2f4d74a180b221))
+
 ## [1.47.1](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.47.0...ui-v1.47.1) (2024-07-15)
 
 
