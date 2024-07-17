@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.46.1](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.46.0...ui-v1.46.1) (2024-07-17)
+
+
+### Bug Fixes
+
+* **Operation/Specification/Input:** links should respect 'cluster' attribute [YTFRONT-4265] ([6e029b5](https://github.com/ytsaurus/ytsaurus-ui/commit/6e029b564f69e2ba3377964164475edf4669ca2b))
+* **Operation/Specification/Input:** show cluster in links [YTFRONT-4265] ([8bcde04](https://github.com/ytsaurus/ytsaurus-ui/commit/8bcde04cf55facc4a5aa8185a1fb360d9b00d4f5))
+
 ## [1.46.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.45.0...ui-v1.46.0) (2024-07-02)
 
 
