@@ -265,10 +265,16 @@ class ClustersMenuBody extends React.Component<Props> {
 
     render() {
         const {viewMode, clusterFilter, clusters} = this.props;
-        const regexp = new RegExp(clusterFilter, 'i');
+        let regexp: RegExp | undefined;
+        try {
+            regexp = new RegExp(clusterFilter, 'i');
+        } catch {}
 
         const filterByField = (field?: string) => {
-            return typeof field === 'string' && field.search(regexp) > -1;
+            return (
+                typeof field === 'string' &&
+                (regexp ? field.search(regexp) > -1 : field.indexOf(clusterFilter) > -1)
+            );
         };
 
         const filteredClusters = _.filter(clusters, ({id, version, environment}) => {
