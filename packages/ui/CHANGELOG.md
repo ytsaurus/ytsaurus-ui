@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.48.1](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.48.0...ui-v1.48.1) (2024-07-17)
+
+
+### Bug Fixes
+
+* **Operation/Specification/Input:** show cluster in links [YTFRONT-4265] ([bfb59cf](https://github.com/ytsaurus/ytsaurus-ui/commit/bfb59cfebbb3dfd137094e98ebd06c39db7f44b0))
+
 ## [1.48.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.47.1...ui-v1.48.0) (2024-07-17)
 
 
