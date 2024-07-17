@@ -23,8 +23,6 @@ import {getSortedItems} from '../../../../../store/selectors/components/nodes/no
 import {nodeSelector} from '../../../../../store/selectors/components/node/node';
 import {getCluster, getCurrentClusterConfig} from '../../../../../store/selectors/global';
 import hammer from '../../../../../common/hammer';
-import {Page} from '../../../../../constants/index';
-import {Tab} from '../../../../../constants/components/main';
 import NodeCpuAndMemory, {
     hasCpuAndMemoryMeta,
 } from '../../../../../pages/components/tabs/node/NodeCpuAndMemory/NodeCpuAndMemory';
@@ -38,10 +36,11 @@ import NodeTabletSlots from '../../../../../pages/components/tabs/node/NodeTable
 import {useUpdater} from '../../../../../hooks/use-updater';
 
 import withSplit from '../../../../../hocs/withSplit';
-
-import './NodeCard.scss';
 import UIFactory from '../../../../../UIFactory';
 import ClipboardButton from '../../../../../components/ClipboardButton/ClipboardButton';
+import {makeComponentsNodesUrl} from '../../../../../utils/app-url';
+
+import './NodeCard.scss';
 
 const block = cn('node-card');
 
@@ -368,7 +367,7 @@ class NodeCard extends Component {
                 <div className={block('header')}>
                     <Link
                         routed
-                        url={`/${cluster}/${Page.COMPONENTS}/${Tab.NODES}/${node?.host}/general`}
+                        url={makeComponentsNodesUrl({cluster, host: node?.host})}
                         className={block('node')}
                     >
                         {node?.host}

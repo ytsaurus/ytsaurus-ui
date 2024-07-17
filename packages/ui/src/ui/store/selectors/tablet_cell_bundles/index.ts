@@ -18,7 +18,7 @@ import {prepareHost} from '../../../utils';
 import {getCluster} from '../global';
 import {sortArrayBySortState} from '../../../utils/sort-helpers';
 import {sortTableBundles} from '../../../utils/tablet_cell_bundles';
-import {makeNodeUrl, makeProxyUrl} from '../../../utils/app-url';
+import {makeComponentsNodesUrl, makeProxyUrl} from '../../../utils/app-url';
 import {
     getTabletCellBundleControllerInstanceDetailsMap,
     getTabletCellBundleEditorState,
@@ -134,7 +134,7 @@ export const getActiveBundleInstances = createSelector(
             allocated_tablet_nodes,
             allocating_tablet_nodes,
             instanceDetailsMap,
-            (address) => makeNodeUrl(cluster, address),
+            (address) => makeComponentsNodesUrl({host: address, cluster}),
         );
     },
 );

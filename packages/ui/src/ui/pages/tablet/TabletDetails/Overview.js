@@ -17,13 +17,13 @@ import Yson from '../../../components/Yson/Yson';
 
 import {histogramItems} from '../../../utils/tablet/tablet';
 import {getActiveHistogram, getHistogram} from '../../../store/selectors/tablet/tablet';
-import {Tab as ComponentsTab} from '../../../constants/components/main';
 import {changeActiveHistogram} from '../../../store/actions/tablet/tablet';
 import {Tab as NavigationTab} from '../../../constants/navigation';
 import {Page} from '../../../constants/index';
 import {genTabletCellBundlesCellUrl} from '../../../utils/tablet_cell_bundles';
 import StoresDialog from './StoresDialog';
 import {Tooltip} from '../../../components/Tooltip/Tooltip';
+import {makeComponentsNodesUrl} from '../../../utils/app-url';
 
 function makeMetaItem(format, data, key, visible) {
     return {
@@ -245,9 +245,10 @@ function Overview({id, block}) {
                                         <Template.Link
                                             withClipboard
                                             text={cellLeadingPeer.address}
-                                            url={`/${cluster}/${Page.COMPONENTS}/${
-                                                ComponentsTab.NODES
-                                            }/${encodeURIComponent(cellLeadingPeer.address)}/`}
+                                            url={makeComponentsNodesUrl({
+                                                cluster,
+                                                host: cellLeadingPeer.address,
+                                            })}
                                         />
                                     ),
                                     visible: Boolean(cellLeadingPeer),
