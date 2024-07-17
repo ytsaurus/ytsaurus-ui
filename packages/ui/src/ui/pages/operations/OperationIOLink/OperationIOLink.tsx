@@ -44,6 +44,7 @@ export default function OperationIOLink(props: Props) {
 
     return isFolder ? (
         <Link theme={theme} className={className} url={url} title={path}>
+            {cluster ? `${cluster}:` : undefined}
             {path}
         </Link>
     ) : (
@@ -53,6 +54,7 @@ export default function OperationIOLink(props: Props) {
             url={originalPath ? originalUrl : url}
             title={originalPath || path || name}
         >
+            {cluster ? `${cluster}:` : undefined}
             {originalPath || path || name}
         </Link>
     );

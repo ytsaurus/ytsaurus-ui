@@ -3,6 +3,7 @@ import common from '../common';
 
 const e2eConfig: Partial<AppConfig> = {
     uiSettings: {
+        defaultFontType: 'internal',
         newTableReplicasCount: 1,
         uploadTableMaxSize: 50 * 1024 * 1024,
         uploadTableUseLocalmode: true,
