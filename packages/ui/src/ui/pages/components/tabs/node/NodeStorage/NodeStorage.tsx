@@ -44,17 +44,14 @@ function NodeStorage(node: NodeStorageProps): ReturnType<React.VFC> {
                                 theme="success"
                             />
                         ),
-                        visible: Boolean(node.spaceProgress),
                     },
                     {
                         key: 'sessions',
                         value: hammer.format['Number'](node.sessions),
-                        visible: Boolean(node.sessions),
                     },
                     {
                         key: 'chunks',
                         value: hammer.format['Number'](node.chunks),
-                        visible: Boolean(node.chunks),
                     },
                 ]}
             />

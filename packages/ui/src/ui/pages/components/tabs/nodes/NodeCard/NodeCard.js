@@ -237,12 +237,12 @@ class NodeCard extends Component {
                 <MetaTable
                     items={[
                         {
-                            key: 'system tags',
+                            key: 'system_tags',
                             value: _.map(systemTags, (tag) => <Label key={tag} text={tag} />),
                             visible: systemTags?.length > 0,
                         },
                         {
-                            key: 'user tags',
+                            key: 'user_tags',
                             value: _.map(userTags, (tag) => <Label key={tag} text={tag} />),
                             visible: userTags?.length > 0,
                         },
@@ -282,24 +282,24 @@ class NodeCard extends Component {
                             visible: alerts?.length > 0,
                         },
                         {
-                            key: 'scheduler jobs',
+                            key: 'scheduler_jobs',
                             value: renderLabel(disableJobs),
                         },
                         {
-                            key: 'write sessions',
+                            key: 'write_sessions',
                             value: renderLabel(disableWriteSession),
                         },
                         {
-                            key: 'tablet cells',
+                            key: 'tablet_cells',
                             value: renderLabel(disableTabletCells),
                         },
                         {
-                            key: 'data center',
+                            key: 'data_center',
                             value: dataCenter?.toUpperCase(),
                             visible: Boolean(dataCenter),
                         },
                         {
-                            key: 'last seen',
+                            key: 'last_seen',
                             value: hammer.format['DateTime'](lastSeenTime, {
                                 format: 'full',
                             }),
