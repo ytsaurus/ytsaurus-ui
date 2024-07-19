@@ -107,24 +107,24 @@ function NodeMeta({
                 visible: alertCount! > 0,
             },
             {
-                key: 'scheduler jobs',
+                key: 'scheduler_jobs',
                 value: renderLabel(disableJobs),
             },
             {
-                key: 'write sessions',
+                key: 'write_sessions',
                 value: renderLabel(disableWriteSession),
             },
             {
-                key: 'tablet cells',
+                key: 'tablet_cells',
                 value: renderLabel(disableTabletCells),
             },
             {
-                key: 'data center',
+                key: 'data_center',
                 value: dataCenter?.toUpperCase(),
                 visible: Boolean(dataCenter),
             },
             {
-                key: 'last seen',
+                key: 'last_seen',
                 value: hammer.format['DateTime'](lastSeenTime, {
                     format: 'full',
                 }),
@@ -150,12 +150,12 @@ function NodeMeta({
     const tagsItems = React.useMemo(
         () => [
             {
-                key: 'system tags',
+                key: 'system_tags',
                 value: <Tags items={systemTags} />,
                 visible: Boolean(systemTags?.length),
             },
             {
-                key: 'user tags',
+                key: 'user_tags',
                 value: <Tags items={userTags} />,
                 visible: Boolean(userTags?.length),
             },
