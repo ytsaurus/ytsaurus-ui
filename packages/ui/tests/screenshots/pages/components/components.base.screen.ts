@@ -34,6 +34,26 @@ class ComponentsPage extends BasePage {
 
 const components = (page: Page) => new ComponentsPage({page});
 
+test('Components - Nodes - Flavor', async ({page}) => {
+    await page.goto(
+        makeClusterUrl(
+            `components/nodes?nodeType=data_nodes,exec_nodes,tablet_nodes&nodeSort=asc-false,field-user_tags`,
+        ),
+    );
+
+    await page.waitForSelector('tr:nth-child(2) .yt-host');
+
+    await replaceInnerHtml(page, {
+        '.yt-host .g-link': 'local:XXX',
+    });
+
+    await replaceInnerHtmlForDateTime(page, [
+        '.components-nodes__table-item_type_last-seen .elements-ellipsis',
+    ]);
+
+    await expect(page).toHaveScreenshot();
+});
+
 test('Components - Node - Memory popup', async ({page}) => {
     await page.goto(makeClusterUrl(`components/nodes?nodeSort=asc-false,field-user_tags`));
 
