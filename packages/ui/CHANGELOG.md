@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.48.2](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.48.1...ui-v1.48.2) (2024-07-21)
+
+
+### Bug Fixes
+
+* **Operation/Specification/Input:** fix for 'remote_copy' operations [YTFRONT-4265] ([502bd53](https://github.com/ytsaurus/ytsaurus-ui/commit/502bd539edacac20c4f9e6caf7e4360488440cd1))
+
 ## [1.48.1](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.48.0...ui-v1.48.1) (2024-07-17)
 
 
