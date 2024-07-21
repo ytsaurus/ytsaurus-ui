@@ -171,7 +171,7 @@ function prepareTable(
 
     return {
         path,
-        cluster,
+        ...(cluster ? {cluster} : {}),
         originalPath,
         transaction,
         livePreview: prepareLivePreview(operation, type, index),
@@ -210,7 +210,7 @@ function groupTables<T extends {path: string; transaction?: string; cluster?: st
                     path: folder,
                     transaction: table.transaction,
                     isFolder: true,
-                    cluster,
+                    ...(cluster ? {cluster} : {}),
                 });
             }
 
