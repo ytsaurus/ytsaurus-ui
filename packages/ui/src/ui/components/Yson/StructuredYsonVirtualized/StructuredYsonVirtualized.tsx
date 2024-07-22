@@ -2,7 +2,7 @@ import React from 'react';
 import cn from 'bem-cn-lite';
 import _ from 'lodash';
 
-import {Button, Dialog} from '@gravity-ui/uikit';
+import {Button, Dialog, Flex, RadioButton} from '@gravity-ui/uikit';
 // @ts-ignore
 import unipika from '@gravity-ui/unipika/lib/unipika';
 
@@ -31,6 +31,7 @@ interface Props {
     value: UnipikaValue;
     settings: UnipikaSettings;
     extraTools?: React.ReactNode;
+    tableSettings?: DT100.Settings;
 }
 
 interface State {
@@ -120,6 +121,7 @@ export default class StructuredYsonVirtualized extends React.PureComponent<Props
         this.settings = {
             ...SETTINGS,
             dynamicInnerRef: this.dataTable,
+            ...props.tableSettings,
         };
     }
 
@@ -371,20 +373,12 @@ export default class StructuredYsonVirtualized extends React.PureComponent<Props
 
         return (
             value && (
-                <Dialog open={true} onClose={this.onHideFullValue}>
-                    <Dialog.Header caption={'Full value'} />
-                    <Dialog.Divider />
-                    <Dialog.Body>
-                        <div className={block('full-value')}>
-                            <MultiHighlightedText
-                                className={block('filtered')}
-                                starts={searchInfo?.valueMatch || []}
-                                text={tmp.substring(1, tmp.length - 1)}
-                                length={filter.length}
-                            />
-                        </div>
-                    </Dialog.Body>
-                </Dialog>
+                <FullValueDialog
+                    onClose={this.onHideFullValue}
+                    starts={searchInfo?.valueMatch || []}
+                    text={tmp.substring(1, tmp.length - 1)}
+                    length={filter.length}
+                />
             )
         );
     }
@@ -664,6 +658,60 @@ function ToggleCollapseButton(props: ToggleCollapseProps) {
             </Button>
         </span>
     );
+}
+
+interface FullValueDialogProps {
+    onClose: () => void;
+    length: number;
+    text: string;
+    starts: number[];
+}
+function FullValueDialog(props: FullValueDialogProps) {
+    const {onClose, text, starts, length} = props;
+
+    const [type, setType] = React.useState<'raw' | 'parsed'>('parsed');
+
+    return (
+        <Dialog open={true} onClose={onClose}>
+            <Dialog.Header caption={'Full value'} />
+            <Dialog.Divider />
+            <Dialog.Body>
+                <Flex direction="column" gap={2} width="70vw" maxHeight="80vh">
+                    <RadioButton
+                        className={block('full-value-radio-buttons')}
+                        options={[
+                            {value: 'parsed', content: 'Parsed'},
+                            {value: 'raw', content: 'Raw'},
+                        ]}
+                        onUpdate={setType}
+                    />
+                    <div className={block('full-value')}>
+                        {type === 'raw' && (
+                            <MultiHighlightedText
+                                className={block('filtered')}
+                                starts={starts}
+                                text={text}
+                                length={length}
+                            />
+                        )}
+                        {type === 'parsed' && <pre>{getParsedFullValue(text)}</pre>}
+                    </div>
+                </Flex>
+            </Dialog.Body>
+        </Dialog>
+    );
+}
+
+function getParsedFullValue(text: string) {
+    try {
+        return JSON.parse(text);
+    } catch {
+        try {
+            return JSON.parse(`"${text}"`);
+        } catch {
+            return text;
+        }
+    }
 }
 
 function formatValue(
