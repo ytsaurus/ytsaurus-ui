@@ -596,12 +596,18 @@ export function usePrepareNode(operationIdToCluster: Map<string, string>) {
         } else if (node.progress?.remoteId) {
             const id = node.progress?.remoteId.split('/').pop();
 
-            if (id && operationIdToCluster.has(id)) {
-                const cluster = operationIdToCluster.get(id)!;
-
-                node.url = buildOperationUrl(cluster, id);
-            } else {
+            if (!id) {
                 node.url = getOperationUrl(node);
+
+                return node;
+            }
+
+            const cluster = operationIdToCluster.has(id)
+                ? operationIdToCluster.get(id)
+                : node.progress?.remoteData?.cluster_name;
+
+            if (cluster) {
+                node.url = buildOperationUrl(cluster, id);
             }
         }
 
