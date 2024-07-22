@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import PropTypes from 'prop-types';
 import cn from 'bem-cn-lite';
 import unipika from '../../../../../common/thor/unipika';
@@ -7,7 +7,7 @@ import unipika from '../../../../../common/thor/unipika';
 import ClipboardButton from '../../../../../components/ClipboardButton/ClipboardButton';
 import YqlValue from '../../../../../components/YqlValue/YqlValue';
 import DataTable from '@gravity-ui/react-data-table';
-import {Loader} from '@gravity-ui/uikit';
+import {Button, Flex, Loader, Icon as UIKitIcon} from '@gravity-ui/uikit';
 import copyToClipboard from 'copy-to-clipboard';
 import Yson from '../../../../../components/Yson/Yson';
 import Label from '../../../../../components/Label/Label';
@@ -16,6 +16,8 @@ import {getSchemaByName} from '../../../../../store/selectors/navigation/tabs/sc
 
 import './DataTableWrapper.scss';
 import {Tooltip} from '../../../../../components/Tooltip/Tooltip';
+import {Eye} from '@gravity-ui/icons';
+import {showCellPreviewModal} from '../../../../../store/actions/navigation/modals/cell-preview';
 import {prepareColumns} from '../../../../../utils/navigation/prepareColumns';
 
 const dataTableBlock = cn('data-table');
@@ -27,7 +29,17 @@ function unquote(string) {
 }
 
 function isValueEmptyOrTruncated(value) {
-    return !value || value?.$incomplete;
+    return !value || isValueTruncated(value);
+}
+
+function isValueTruncated(value) {
+    return value?.$incomplete || getArrayValue(value)?.inc;
+}
+
+function getArrayValue(value) {
+    const candidate = value?.[0];
+
+    return Array.isArray(candidate) ? candidate[0] : candidate;
 }
 
 ColumnCell.propTypes = {
@@ -37,7 +49,15 @@ ColumnCell.propTypes = {
     allowRawStrings: PropTypes.bool,
 };
 
-export function ColumnCell({value = null, yqlTypes, ysonSettings, allowRawStrings}) {
+export function ColumnCell({
+    value = null,
+    yqlTypes,
+    ysonSettings,
+    allowRawStrings,
+    rowIndex,
+    columnName,
+}) {
+    const dispatch = useDispatch();
     const [hovered, setHovered] = useState(false);
     const handleMouseEnter = () => setHovered(true);
     const handleMouseLeave = () => setHovered(false);
@@ -96,28 +116,43 @@ export function ColumnCell({value = null, yqlTypes, ysonSettings, allowRawString
             ) : (
                 visibleValue
             )}
-            {hovered && !isValueEmptyOrTruncated(value) && (
-                <div className={dataTableBlock('clipboard-button-wrapper')}>
-                    <Tooltip
-                        content={
-                            !allowRawCopy ? undefined : (
-                                <span className={block('copy-value-tooltip')}>{copyTooltip}</span>
-                            )
-                        }
-                    >
-                        <ClipboardButton
-                            view="flat-secondary"
-                            size="m"
-                            text={useRawString ? value.$value : unquote(escapedValue)}
-                            onCopy={() => {
-                                if (window.event?.shiftKey && allowRawCopy) {
-                                    copyToClipboard(
-                                        useRawString ? unquote(escapedValue) : value.$value,
-                                    );
+            {hovered && (
+                <div className={dataTableBlock('control-button-wrapper')}>
+                    <Flex alignItems="center">
+                        {!isValueEmptyOrTruncated(value) && (
+                            <Tooltip
+                                content={
+                                    !allowRawCopy ? undefined : (
+                                        <span className={block('copy-value-tooltip')}>
+                                            {copyTooltip}
+                                        </span>
+                                    )
                                 }
-                            }}
-                        />
-                    </Tooltip>
+                            >
+                                <ClipboardButton
+                                    view="flat-secondary"
+                                    size="m"
+                                    text={useRawString ? value.$value : unquote(escapedValue)}
+                                    onCopy={() => {
+                                        if (window.event?.shiftKey && allowRawCopy) {
+                                            copyToClipboard(
+                                                useRawString ? unquote(escapedValue) : value.$value,
+                                            );
+                                        }
+                                    }}
+                                />
+                            </Tooltip>
+                        )}
+                        {isValueTruncated(value) && (
+                            <Button
+                                view="flat-secondary"
+                                size="m"
+                                onClick={() => dispatch(showCellPreviewModal(columnName, rowIndex))}
+                            >
+                                <UIKitIcon data={Eye} size="12" />
+                            </Button>
+                        )}
+                    </Flex>
                 </div>
             )}
         </div>
