@@ -9,6 +9,7 @@ import ErrorBoundary from '../../components/ErrorBoundary/ErrorBoundary';
 import {UnipikaSettings, UnipikaValue} from './StructuredYson/StructuredYsonTypes';
 
 import StructuredYsonVirtualized from './StructuredYsonVirtualized/StructuredYsonVirtualized';
+import type {Settings} from '@gravity-ui/react-data-table';
 
 export interface YsonProps {
     settings?: UnipikaSettings;
@@ -19,6 +20,7 @@ export interface YsonProps {
     extraTools?: React.ReactNode;
     virtualized?: boolean;
     className?: string;
+    tableSettings?: Settings;
 }
 
 interface State {
@@ -124,7 +126,7 @@ export default class Yson extends Component<YsonProps, State> {
     }
 
     render() {
-        const {inline, children, folding, extraTools, className} = this.props;
+        const {inline, children, folding, extraTools, className, tableSettings} = this.props;
         const {convertedValue, settings} = this.state;
 
         const classes = block('unipika-wrapper')(
@@ -140,6 +142,7 @@ export default class Yson extends Component<YsonProps, State> {
                     <div className={classes} title={this.getFormattedTitle()} dir="auto">
                         {folding ? (
                             <StructuredYsonVirtualized
+                                tableSettings={tableSettings}
                                 value={convertedValue}
                                 settings={settings!}
                                 extraTools={extraTools}
