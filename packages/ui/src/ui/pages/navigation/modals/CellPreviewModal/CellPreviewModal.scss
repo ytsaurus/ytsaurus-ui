@@ -1,0 +1,32 @@
+.cell-preview-modal {
+    &__content {
+        height: 70vh;
+    }
+
+    &__wrapper {
+        width: 65vw;
+    }
+
+    &__command-wrapper {
+        font-family: var(--g-font-family-monospace);
+        background-color: var(--g-color-base-simple-hover);
+        word-break: break-all;
+        border-radius: 5px;
+        padding: 12px;
+        display: flex;
+    }
+
+    &__command {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    &__command-content {
+        display: inline-block;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+}

@@ -21,6 +21,7 @@ interface SimpleModalProps {
     children?: React.ReactNode;
     onOutsideClick?: () => void;
     className?: string;
+    wrapperClassName?: string;
 }
 
 class SimpleModal extends Component<SimpleModalProps> {
@@ -69,11 +70,11 @@ class SimpleModal extends Component<SimpleModalProps> {
     }
 
     render() {
-        const {visible, onOutsideClick, size, className} = this.props;
+        const {visible, onOutsideClick, size, className, wrapperClassName} = this.props;
         return (
             visible && (
                 <ModalImpl className={className} open={visible} onClose={onOutsideClick}>
-                    <div className={b('wrapper', {size})}>
+                    <div className={b('wrapper', {size}, wrapperClassName)}>
                         {this.renderHeader()}
                         {this.renderContent()}
                     </div>
