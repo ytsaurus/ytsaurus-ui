@@ -31,6 +31,7 @@ interface Props {
     value: UnipikaValue;
     settings: UnipikaSettings;
     extraTools?: React.ReactNode;
+    tableSettings?: DT100.Settings;
 }
 
 interface State {
@@ -120,6 +121,7 @@ export default class StructuredYsonVirtualized extends React.PureComponent<Props
         this.settings = {
             ...SETTINGS,
             dynamicInnerRef: this.dataTable,
+            ...props.tableSettings,
         };
     }
 
