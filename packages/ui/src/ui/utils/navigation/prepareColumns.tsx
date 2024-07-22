@@ -25,12 +25,14 @@ export function prepareColumns({
     schemaByName: Record<string, any>;
 }) {
     return _.map(columns, (column) => {
-        const render = ({value}: {value?: any; index: number; row: any}) => (
+        const render = ({value, index}: {value?: any; index: number; row: any}) => (
             <ColumnCell
                 allowRawStrings={useRawStrings}
                 value={value}
                 yqlTypes={yqlTypes}
                 ysonSettings={ysonSettings}
+                rowIndex={index}
+                columnName={column.name}
             />
         );
         const {sortOrder} = column;
