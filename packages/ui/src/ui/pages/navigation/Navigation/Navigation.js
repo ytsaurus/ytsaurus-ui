@@ -60,6 +60,7 @@ import UIFactory from '../../../UIFactory';
 
 import './Navigation.scss';
 import {UI_TAB_SIZE} from '../../../constants/global';
+import {CellPreviewModal} from '../modals/CellPreviewModal/CellPreviewModal';
 
 const block = cn('navigation');
 
@@ -79,6 +80,7 @@ function renderModals() {
             <LinkToModal />
             <CreateACOModal />
             <RemoteCopyModal />
+            <CellPreviewModal />
         </Fragment>
     );
 }
