@@ -60,3 +60,5 @@ export const getNavigationMountConfigYsonSettings = createSelector([getYsonSetti
 export const getEditJsonYsonSettings = createSelector([getYsonSettings], clone_);
 
 export const getNodeUnrecognizedOptionsYsonSettings = createSelector([getYsonSettings], clone_);
+
+export const getPreviewCellYsonSettings = createSelector([getYsonSettings], clone_);
