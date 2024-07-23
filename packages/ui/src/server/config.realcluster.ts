@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import reduce_ from 'lodash/reduce';
 import {ClusterConfig, YTConfig} from '../shared/yt-types';
 import {getApp} from './ServerFactory';
 
@@ -11,7 +11,7 @@ export function getRealClustersConfig(): Pick<YTConfig, 'clusters'> {
     }
 
     return {
-        clusters: _.reduce(
+        clusters: reduce_(
             clusters,
             (acc, item) => {
                 acc[item.id] = item;

@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import {YT_LOCAL_CLUSTER_ID} from '../shared/constants';
 import {ClusterConfig, YTConfig} from '../shared/yt-types';
 import {getApp} from './ServerFactory';
