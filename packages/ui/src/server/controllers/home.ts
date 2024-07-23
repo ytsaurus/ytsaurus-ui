@@ -17,14 +17,6 @@ function isRootPage(page: string) {
     return -1 !== rootPages.indexOf(page);
 }
 
-export function homeRedirect(req: Request, res: Response) {
-    const cluster = req.params.ytAuthCluster;
-    const {referrer} = req.query;
-    const url = referrer ? (referrer as string) : `/${cluster}`;
-
-    res.redirect(url);
-}
-
 export function homeIndexFactory(entryName = 'main') {
     return async (req: Request, res: Response) => {
         const isRoot = isRootPage(req.params.ytAuthCluster);

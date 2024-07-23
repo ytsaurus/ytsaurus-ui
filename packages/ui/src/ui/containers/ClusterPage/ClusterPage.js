@@ -5,8 +5,6 @@ import PropTypes from 'prop-types';
 import cn from 'bem-cn-lite';
 
 import BanPage from '../BanPage/BanPage';
-import MaintenancePage from '../MaintenancePage/MaintenancePage';
-import HandleMaintenanceRedirect from '../MaintenancePage/HandleRedirect';
 import Components from '../../pages/components/Components/Components';
 import Operations from '../../pages/operations/Operations/Operations';
 import Accounts from '../../pages/accounts/Accounts/Accounts';
@@ -31,6 +29,7 @@ import ConnectionErrorRegion from '../../components/PreloaderErrors/ConnectionEr
 import GeneralErrorRegion from '../../components/PreloaderErrors/GeneralErrorRegion';
 import FlexSplitPane from '../../components/FlexSplitPane/FlexSplitPane';
 import ErrorBlock from '../../components/Error/Error';
+import HandleMaintenance from '../../containers/MaintenancePage/HandleMaintenance';
 
 import {LOADING_STATUS, LOAD_ERROR, Page, SPLIT_PANE_ID} from '../../constants/index';
 import {joinMenuItemsAction, splitMenuItemsAction, trackVisit} from '../../store/actions/menu';
@@ -222,11 +221,9 @@ class ClusterPage extends Component {
         return isLoaded && !this.isParamsLoading() ? (
             <Fragment>
                 <SupportedFeaturesUpdater />
-                <HandleMaintenanceRedirect />
                 <RedirectToBanIfNeededMemo to={`/${cluster}/${Page.BAN}`} />
                 <Switch>
                     <Route path={`/:cluster/${Page.BAN}`} component={BanPage} />
-                    <Route path={`/:cluster/${Page.MAINTENANCE}`} component={MaintenancePage} />
                     <Route path={`/:cluster/${Page.COMPONENTS}`} component={Components} />
                     <Route path={`/:cluster/${Page.OPERATIONS}`} component={Operations} />
                     <Route path={`/:cluster/${Page.JOB}`} component={Job} />
@@ -296,7 +293,7 @@ class ClusterPage extends Component {
                 <ClusterPageStopRumMeasure />
                 <PageHeadByCluster cluster={cluster} />
 
-                <ClusterPageHeader />
+                <ClusterPageHeader cluster={cluster} />
 
                 <FlexSplitPane
                     className={b('panes-wrapper', {
@@ -320,7 +317,9 @@ class ClusterPage extends Component {
                             width: this.state.width,
                         })}
                     >
-                        {this.renderContent(clusterConfig)}
+                        <HandleMaintenance cluster={cluster}>
+                            {this.renderContent(clusterConfig)}
+                        </HandleMaintenance>
                     </div>
 
                     {null}
