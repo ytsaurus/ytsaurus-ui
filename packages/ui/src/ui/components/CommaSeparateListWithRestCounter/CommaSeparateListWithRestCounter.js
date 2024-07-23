@@ -1,7 +1,10 @@
 import React from 'react';
 import cn from 'bem-cn-lite';
 import PropTypes from 'prop-types';
-import {isEqual, throttle} from 'lodash';
+
+import isEqual_ from 'lodash/isEqual';
+import throttle_ from 'lodash/throttle';
+
 import SimpleModal from '../../components/Modal/SimpleModal';
 import {Tooltip} from '../Tooltip/Tooltip';
 
@@ -133,11 +136,11 @@ export default class CommaSeparatedListWithRestCounter extends React.Component {
         this.setStateIfChanged(stateToCompare);
     };
 
-    updateState = throttle(this.updateStateImpl, 30);
+    updateState = throttle_(this.updateStateImpl, 30);
 
     setStateIfChanged(toCompare) {
         const changed = Object.keys(toCompare).some((key) => {
-            return !isEqual(this.state[key], toCompare[key]);
+            return !isEqual_(this.state[key], toCompare[key]);
         });
 
         if (changed) {

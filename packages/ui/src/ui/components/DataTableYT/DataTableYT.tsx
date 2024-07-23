@@ -1,6 +1,8 @@
 import React from 'react';
 import cn from 'bem-cn-lite';
-import _ from 'lodash';
+
+import map_ from 'lodash/map';
+import range_ from 'lodash/range';
 
 import DataTable, {Column, DataTableProps, Settings} from '@gravity-ui/react-data-table';
 import {NoContent} from '../../components/NoContent/NoContent';
@@ -74,9 +76,9 @@ export default class DataTableYT<T> extends React.Component<DataTableYtProps<T>>
 
     renderLoadingSkeleton() {
         const {columns} = this.props;
-        return _.map(_.range(4), (index) => (
+        return map_(range_(4), (index) => (
             <tr key={index} className={block('tr', {empty: true}, 'data-table__row')}>
-                {_.map(columns, this.renderEmptyCell)}
+                {map_(columns, this.renderEmptyCell)}
             </tr>
         ));
     }

@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import extend_ from 'lodash/extend';
 // @ts-ignore
 import unipikaLib from '@gravity-ui/unipika/lib/unipika';
 import hammer from '../hammer';
@@ -15,7 +15,7 @@ import {getUnipikaSettingsFromConfig} from './unipika-settings';
 
 const parseSetting = hammer.utils.parseSetting;
 
-const unipika = _.extend({}, unipikaLib);
+const unipika = extend_({}, unipikaLib);
 const {utf8} = unipika.utils;
 
 unipika.prepareSettings = function (settings: UnipikaSettings) {

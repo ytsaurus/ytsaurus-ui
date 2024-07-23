@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import some_ from 'lodash/some';
 import objectHash from 'object-hash';
 // @ts-ignore-next-line
 import ytLib from '@ytsaurus/javascript-wrapper';
@@ -50,7 +50,7 @@ export async function getColumnPreset(
         throw new Error(`Failed to parse ${hash}-preset`);
     }
 
-    if (!Array.isArray(columns) || _.some(columns, (i) => 'string' !== typeof i)) {
+    if (!Array.isArray(columns) || some_(columns, (i) => 'string' !== typeof i)) {
         throw new Error(`${hash}-preset is not an array of strings`);
     }
     return columns;
@@ -61,7 +61,7 @@ export async function saveColumnPreset(
     columns: unknown | Array<string>,
     ytAuthCluster: string,
 ): Promise<string> {
-    if (!Array.isArray(columns) || _.some(columns, (i) => 'string' !== typeof i)) {
+    if (!Array.isArray(columns) || some_(columns, (i) => 'string' !== typeof i)) {
         throw new Error('Request body should contain JSON-array of strings');
     }
 

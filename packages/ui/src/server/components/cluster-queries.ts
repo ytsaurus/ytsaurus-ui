@@ -1,5 +1,9 @@
 import axios, {AxiosError} from 'axios';
-import _ from 'lodash';
+
+import map_ from 'lodash/map';
+import toString_ from 'lodash/toString';
+import compact_ from 'lodash/compact';
+
 import * as os from 'os';
 
 import type {Request} from 'express';
@@ -83,7 +87,7 @@ function parseVersion(version: string) {
 
 export function getVersions(req: Request, clusters: Record<string, ClusterConfig>) {
     return Promise.all(
-        _.map(clusters, (clusterConfig) => {
+        map_(clusters, (clusterConfig) => {
             const {id} = clusterConfig;
             return getVersion(getYTApiClusterSetup(id))
                 .then((version) => ({id, version: parseVersion(version)}))
@@ -109,9 +113,9 @@ function prepareError(message: string, err: AxiosError) {
         error = err;
     }
     return {
-        message: `${message}:${_.toString(err)}`,
+        message: `${message}:${toString_(err)}`,
         code: http_status_code,
-        inner_errors: _.compact([error]),
+        inner_errors: compact_([error]),
     };
 }
 

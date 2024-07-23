@@ -1,5 +1,5 @@
 import axios, {AxiosResponse} from 'axios';
-import _ from 'lodash';
+import map_ from 'lodash/map';
 import type {Request, Response} from '@gravity-ui/expresskit';
 import {getClustersFromConfig} from '../components/utils';
 import {sendAndLogError, sendError, sendResponse} from '../utils';
@@ -41,7 +41,7 @@ function getAvailability(req: Request, clusters: Record<string, {id: string}>) {
             }
 
             return Promise.all(
-                _.map(clusters, (clusterConfig) => {
+                map_(clusters, (clusterConfig) => {
                     const odinPath = isMultiOdinBaseUrl
                         ? odinBaseUrl?.[clusterConfig.id]
                         : odinBaseUrl;

@@ -1,5 +1,3 @@
-import _ from 'lodash';
-
 import hammer from '@ytsaurus/interface-helpers/lib/hammer';
 
 const format = hammer.format;

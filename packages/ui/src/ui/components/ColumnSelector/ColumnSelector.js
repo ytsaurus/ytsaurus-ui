@@ -3,7 +3,14 @@ import PropTypes from 'prop-types';
 import cn from 'bem-cn-lite';
 import {sortableContainer, sortableElement, sortableHandle} from 'react-sortable-hoc';
 import ReactList from 'react-list';
-import _ from 'lodash';
+
+import each_ from 'lodash/each';
+import escapeRegExp_ from 'lodash/escapeRegExp';
+import filter_ from 'lodash/filter';
+import map_ from 'lodash/map';
+import partition_ from 'lodash/partition';
+import reduce_ from 'lodash/reduce';
+
 import {TextInput} from '@gravity-ui/uikit';
 import Icon from '../../components/Icon/Icon';
 
@@ -15,7 +22,7 @@ import Button from '../Button/Button';
 const b = cn('column-selector');
 
 export function makeItemsCopy(items) {
-    return _.map(items, (item) => {
+    return map_(items, (item) => {
         return {...item};
     });
 }
@@ -198,7 +205,7 @@ export default class ColumnSelector extends Component {
         this.withActualItems(({items}) => {
             const visibleMap = this.getVisibleItemsMap();
             items = [...items];
-            _.each(items, (item, index) => {
+            each_(items, (item, index) => {
                 if (!visibleMap[item.name]) {
                     return;
                 }
@@ -215,7 +222,7 @@ export default class ColumnSelector extends Component {
         this.withActualItems(({items}) => {
             const visibleMap = this.getVisibleItemsMap();
             items = [...items];
-            _.each(items, (item, index) => {
+            each_(items, (item, index) => {
                 if (!visibleMap[item.name]) {
                     return;
                 }
@@ -232,7 +239,7 @@ export default class ColumnSelector extends Component {
         this.withActualItems(({items}) => {
             const visibleItems = this.getVisibleItemsMap();
             items = [...items];
-            _.each(items, (item, index) => {
+            each_(items, (item, index) => {
                 if (!visibleItems[item.name]) {
                     return;
                 }
@@ -316,7 +323,7 @@ export default class ColumnSelector extends Component {
                     <Button {...btnProps} onClick={this._toggleShownItems}>
                         Selected &nbsp;
                         <span className="elements-secondary-text">
-                            {_.filter(this.items, (item) => item.checked).length}
+                            {filter_(this.items, (item) => item.checked).length}
                         </span>
                     </Button>
                 )}
@@ -353,28 +360,28 @@ export default class ColumnSelector extends Component {
     }
 
     filterItemsByName(items) {
-        const re = new RegExp(_.escapeRegExp(this.state.filter), 'i');
-        return _.filter(items, (item) => re.test(item.name));
+        const re = new RegExp(escapeRegExp_(this.state.filter), 'i');
+        return filter_(items, (item) => re.test(item.name));
     }
 
     filterItems(items) {
         const {showDisabledItems} = this.props;
-        items = showDisabledItems ? items : _.filter(items, (item) => !item.disabled);
+        items = showDisabledItems ? items : filter_(items, (item) => !item.disabled);
 
         const visibleItems = this.filterItemsByName(items);
         return this.state.showSelectedOnly
-            ? _.filter(visibleItems, (item) => item.checked)
+            ? filter_(visibleItems, (item) => item.checked)
             : visibleItems;
     }
 
     getVisibleItems() {
         const toSplit = this.filterItems(this.items);
-        const [keyItems, items] = _.partition(toSplit, (item) => item.keyColumn);
+        const [keyItems, items] = partition_(toSplit, (item) => item.keyColumn);
         return {items, keyItems};
     }
 
     getVisibleItemsMap() {
-        return _.reduce(
+        return reduce_(
             this.filterItems(this.items),
             (acc, item) => {
                 acc[item.name] = item;

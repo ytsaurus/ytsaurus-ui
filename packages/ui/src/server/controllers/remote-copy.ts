@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import some_ from 'lodash/some';
 
 import type {Request, Response} from 'express';
 // @ts-ignore
@@ -44,7 +44,7 @@ export async function handleRemoteCopy(req: Request, res: Response) {
 
             if (
                 !Array.isArray(body.input_table_paths) ||
-                _.some(body.input_table_paths, (item) => 'string' !== typeof item)
+                some_(body.input_table_paths, (item) => 'string' !== typeof item)
             ) {
                 return sendErrorAndLog(
                     'Wrong params',

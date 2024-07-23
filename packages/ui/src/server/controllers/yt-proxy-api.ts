@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import isEmpty_ from 'lodash/isEmpty';
 import axios from 'axios';
 import qs from 'qs';
 
@@ -32,7 +32,7 @@ async function ytProxyApiImpl(req: Request, res: Response) {
         throw new Error('Unexpected action ' + command);
     }
 
-    const search = _.isEmpty(query) ? '' : `?${qs.stringify(query)}`;
+    const search = isEmpty_(query) ? '' : `?${qs.stringify(query)}`;
 
     let cfg;
     try {
