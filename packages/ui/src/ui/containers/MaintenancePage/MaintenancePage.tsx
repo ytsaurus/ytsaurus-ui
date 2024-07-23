@@ -1,16 +1,12 @@
-import React, {Component} from 'react';
-import {Link} from 'react-router-dom';
-import {Redirect} from 'react-router';
-import {connect} from 'react-redux';
-import PropTypes from 'prop-types';
+import React from 'react';
 import block from 'bem-cn-lite';
-import Cookies from 'js-cookie';
 import moment from 'moment';
 
+// @ts-ignore
 import hammer from '@ytsaurus/interface-helpers/lib/hammer';
 
 import {SubjectCard} from '../../components/SubjectLink/SubjectLink';
-import withBlockedNavigation from '../../hocs/withBlockedNavigation';
+import {BlockNavigation} from '../../hocs/withBlockedNavigation';
 import Icon from '../../components/Icon/Icon';
 import Button from '../../components/Button/Button';
 import {Linkify} from '../../components/Linkify/Linkify';
@@ -19,93 +15,27 @@ import {uiSettings} from '../../config/ui-settings';
 import './MaintenancePage.scss';
 
 const b = block('maintenance');
-const getCookiesClusterName = (cluster) => `override_${cluster}_maintenance`;
 
 const EVENT_TYPE = {
     ISSUE: 'issue',
     MAINTENANCE: 'maintenance',
 };
 
-class MaintenancePage extends Component {
-    static propTypes = {
-        // from connect
-        cluster: PropTypes.string.isRequired,
-        maintenancePageEvent: PropTypes.object,
-        // from react-router
-        location: PropTypes.object.isRequired,
-        history: PropTypes.object.isRequired,
+type Props = {
+    cluster: string;
+    onProceed: () => void;
+    maintenancePageEvent: {
+        type: string;
+        startTime: string;
+        finishTime: string;
+        severity: string;
+        title: string;
+        description: string;
+        createdBy: string;
     };
+};
 
-    static defaultProps = {
-        referrer: null,
-        estimatedFinishTime: null,
-        estimatedStartTime: null,
-        publicationTime: null,
-    };
-
-    static setBypassCookie(cluster) {
-        const name = getCookiesClusterName(cluster);
-
-        Cookies.set(name, cluster, {
-            expires: moment().add(3, 'hours').toDate(),
-        });
-    }
-
-    static getBypassCookie(cluster) {
-        const name = getCookiesClusterName(cluster);
-
-        return Cookies.get(name) === cluster;
-    }
-
-    static checkMaintenancePageUrl(location) {
-        return location.pathname.endsWith('/maintenance');
-    }
-
-    static parsePath(path) {
-        const pagePathRe = new RegExp('^/([^/]+)/(.*)$');
-        const match = pagePathRe.exec(path);
-        return {cluster: match[1], restPath: match[2]};
-    }
-
-    static getReferrerFromProps(props) {
-        const {
-            location: {state},
-        } = props;
-        return state && state.referrer;
-    }
-
-    static getDerivedStateFromProps(props, state) {
-        const referrer = MaintenancePage.getReferrerFromProps(props);
-        if (referrer && (!state || state.referrer !== referrer)) {
-            return {referrer};
-        }
-        return null;
-    }
-
-    state = {referrer: null};
-
-    get referrer() {
-        return this.state.referrer;
-    }
-
-    get redirect() {
-        const {location, maintenancePageEvent} = this.props;
-        const referrer = this.referrer;
-
-        if (referrer) {
-            const {cluster} = MaintenancePage.parsePath(location.pathname);
-            const {cluster: prevCluster, restPath} = MaintenancePage.parsePath(referrer);
-
-            if (cluster === prevCluster) {
-                return !maintenancePageEvent ? referrer : null;
-            } else {
-                return `/${cluster}/${restPath}`;
-            }
-        }
-
-        return null;
-    }
-
+export class MaintenancePage extends React.Component<Props> {
     get title() {
         const {type} = this.props.maintenancePageEvent;
 
@@ -119,13 +49,7 @@ class MaintenancePage extends Component {
         }
     }
 
-    handleGoToClusterClick = () => {
-        const {cluster} = this.props;
-
-        MaintenancePage.setBypassCookie(cluster);
-    };
-
-    renderTimeLine(notification) {
+    renderTimeLine(notification: Props['maintenancePageEvent']) {
         const {startTime, finishTime} = notification;
 
         if ([EVENT_TYPE.ISSUE, EVENT_TYPE.MAINTENANCE].indexOf(notification.type) > -1) {
@@ -149,11 +73,9 @@ class MaintenancePage extends Component {
     }
 
     render() {
-        const {maintenancePageEvent} = this.props;
-        const redirect = this.redirect;
-
-        if (redirect || !maintenancePageEvent) {
-            return <Redirect to={redirect} />;
+        const {maintenancePageEvent, onProceed} = this.props;
+        if (!maintenancePageEvent) {
+            return null;
         }
 
         const {severity, title, description, createdBy} = maintenancePageEvent;
@@ -162,6 +84,7 @@ class MaintenancePage extends Component {
 
         return (
             <div className={b()}>
+                <BlockNavigation />
                 <div className={b('content')}>
                     <div className={b('info')}>
                         <h2 className={b('title')}>{this.title}</h2>
@@ -188,7 +111,6 @@ class MaintenancePage extends Component {
                                         href={announcesMailListUrl}
                                         target="_blank"
                                         view="action"
-                                        type="link"
                                         size="m"
                                     >
                                         Subscribe to YT announces
@@ -197,9 +119,9 @@ class MaintenancePage extends Component {
                             )}
 
                             <li className={b('link')}>
-                                <Link to={this.referrer} onClick={this.handleGoToClusterClick}>
-                                    <Button size="m">Proceed to cluster anyway</Button>
-                                </Link>
+                                <Button size="m" onClick={onProceed}>
+                                    Proceed to cluster anyway
+                                </Button>
                             </li>
                         </ul>
                     </div>
@@ -210,10 +132,3 @@ class MaintenancePage extends Component {
         );
     }
 }
-
-const mapStateToProps = ({global}) => {
-    const {cluster, maintenancePageEvent} = global;
-    return {cluster, maintenancePageEvent};
-};
-
-export default connect(mapStateToProps)(withBlockedNavigation(MaintenancePage));

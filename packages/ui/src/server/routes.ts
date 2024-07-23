@@ -10,7 +10,7 @@ import {
     settingsGetItem,
     settingsSetItem,
 } from './controllers/settings';
-import {homeIndexFactory, homeRedirect} from './controllers/home';
+import {homeIndexFactory} from './controllers/home';
 import {handleClusterInfo} from './controllers/cluster-info';
 
 import {clusterAuthStatus, clusterVersions} from './controllers/clusters';
@@ -89,7 +89,6 @@ const routes: AppRoutes = {
     'POST /api/table-column-preset/:ytAuthCluster': {handler: tableColumnPresetSave},
 
     'GET /:ytAuthCluster/': HOME_INDEX_TARGET,
-    'GET /:ytAuthCluster/maintenance': {handler: homeRedirect},
     'GET /:ytAuthCluster/:page': HOME_INDEX_TARGET,
     'GET /:ytAuthCluster/:page/:tab': HOME_INDEX_TARGET,
     'GET /:ytAuthCluster/:page/:operation/:tab': HOME_INDEX_TARGET,
