@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import cn from 'bem-cn-lite';
-import _ from 'lodash';
+
+import map_ from 'lodash/map';
 
 import {Popover} from '@gravity-ui/uikit';
 
@@ -63,7 +64,7 @@ export default class MultiSubjectHelper<T extends string> extends Component<Prop
 
         return (
             <div className={block('tags')}>
-                {_.map(items, (item) => {
+                {map_(items, (item) => {
                     const {text, value, type} = item;
                     const tagText = type === 'users' ? text || value : text || `${type}:${value}`;
 

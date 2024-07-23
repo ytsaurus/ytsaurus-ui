@@ -1,5 +1,11 @@
 import React from 'react';
-import _ from 'lodash';
+
+import forEach_ from 'lodash/forEach';
+import isEmpty_ from 'lodash/isEmpty';
+import join_ from 'lodash/join';
+import map_ from 'lodash/map';
+import reduce_ from 'lodash/reduce';
+
 import {ThunkAction} from 'redux-thunk';
 
 import {Toaster} from '@gravity-ui/uikit';
@@ -56,7 +62,7 @@ const EDITABLE_ATTRIBUTES = [
 export function showNavigationAttributesEditor(paths: Array<string>): ActionType {
     return (dispatch) => {
         dispatch({type: NAVIGATION_ATTRIBUTES_EDITOR_REQUEST});
-        const requests = _.map(paths, (path) => {
+        const requests = map_(paths, (path) => {
             return {
                 command: 'get' as const,
                 parameters: {
@@ -73,7 +79,7 @@ export function showNavigationAttributesEditor(paths: Array<string>): ActionType
                 if (error) {
                     throw error;
                 }
-                const attributesMap = _.reduce(
+                const attributesMap = reduce_(
                     paths,
                     (acc, path, index) => {
                         acc[path] = {$attributes: results[index].output};
@@ -94,7 +100,7 @@ export function showNavigationAttributesEditor(paths: Array<string>): ActionType
                 dispatch({type: NAVIGATION_ATTRIBUTES_EDITOR_ERROR, data: e});
                 const toaster = new Toaster();
                 toaster.add({
-                    name: 'show_attrs_editor_' + _.join(paths),
+                    name: 'show_attrs_editor_' + join_(paths),
                     theme: 'danger',
                     title: 'Attributes cannot be loaded',
                     content: e?.message,
@@ -128,7 +134,7 @@ export function navigationSetNodeAttributes(
     return (dispatch, getState) => {
         const paths = getNavigationAttributesEditorPath(getState());
 
-        if (_.isEmpty({...generalAttrs, ...storageAttrs})) {
+        if (isEmpty_({...generalAttrs, ...storageAttrs})) {
             console.warn(
                 `Please check your parameters: ${JSON.stringify({
                     path: paths,
@@ -143,7 +149,7 @@ export function navigationSetNodeAttributes(
         const attributesMap = getNavigationAttributesEditorAttributes(getState());
         const {in_memory_mode, tablet_cell_bundle, ...restGeneralAttrs} = generalAttrs;
 
-        const requests = _.reduce(
+        const requests = reduce_(
             paths,
             (acc, path) => {
                 const attrs = attributesMap[path] || {};
@@ -158,7 +164,7 @@ export function navigationSetNodeAttributes(
                     Object.assign(newAttrs, {tablet_cell_bundle});
                 }
 
-                _.forEach(newAttrs, (value, key) => {
+                forEach_(newAttrs, (value, key) => {
                     acc.push(prepareSetCommandForBatch(`${path}/@${key}`, value, EDIT_MARKER));
                 });
                 return acc;
@@ -180,7 +186,7 @@ export function navigationSetNodeAttributes(
                     });
                     return Promise.reject(error);
                 }
-                if (!runMerge || !staticTables.length || _.isEmpty(storageAttrs)) {
+                if (!runMerge || !staticTables.length || isEmpty_(storageAttrs)) {
                     return Promise.resolve(res);
                 }
 
@@ -200,7 +206,7 @@ export function navigationSetNodeAttributes(
                 };
 
                 if (staticTables.length < 6) {
-                    const promises = _.map(staticTables, (path) => {
+                    const promises = map_(staticTables, (path) => {
                         return wrapApiPromiseByToaster(yt.v3.merge(prepareMergeParams(path)), {
                             toasterName: 'storage_attrs_' + path,
                             successContent(res: string) {
@@ -221,7 +227,7 @@ export function navigationSetNodeAttributes(
                     });
                     return Promise.all(promises);
                 } else {
-                    const requests = _.map(staticTables, (path) => {
+                    const requests = map_(staticTables, (path) => {
                         return {
                             command: 'merge' as const,
                             parameters: prepareMergeParams(path),

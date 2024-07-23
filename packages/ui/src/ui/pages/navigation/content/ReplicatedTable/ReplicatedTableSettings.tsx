@@ -1,5 +1,6 @@
 import React from 'react';
-import _ from 'lodash';
+
+import capitalize_ from 'lodash/capitalize';
 import cn from 'bem-cn-lite';
 
 import Button from '../../../../components/Button/Button';
@@ -78,7 +79,7 @@ function ReplicatedTableSettingsDialog(props: Props & SettingsProps) {
                 title: 'Replica settings',
             }}
             initialValues={{
-                cluster: _.capitalize(props.replica_cluster),
+                cluster: capitalize_(props.replica_cluster),
                 path: props.replica_path,
                 state: props.state,
                 mode: props.mode,

@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import values_ from 'lodash/values';
 
 import createActionTypes, {createPrefix} from '../../../constants/utils';
 import {makeRadioButtonProps, makeRadioButtonPropsByKey} from '../../../utils';
@@ -36,11 +36,11 @@ export const FLAG_STATE = {
     ALL: 'all',
 };
 
-export const CONTENT_MODE_OPTIONS = _.values(CONTENT_MODE);
+export const CONTENT_MODE_OPTIONS = values_(CONTENT_MODE);
 export const CONTENT_MODE_ITEMS = makeRadioButtonProps(CONTENT_MODE_OPTIONS);
 export const POLLING_INTERVAL = 30 * 1000;
 
 export const MEDIUM_COLS_PREFIX = 'medium_';
 
-export const NODE_TYPE_OPTIONS = _.values(NODE_TYPE);
+export const NODE_TYPE_OPTIONS = values_(NODE_TYPE);
 export const NODE_TYPE_ITEMS = makeRadioButtonPropsByKey(NODE_TYPE);

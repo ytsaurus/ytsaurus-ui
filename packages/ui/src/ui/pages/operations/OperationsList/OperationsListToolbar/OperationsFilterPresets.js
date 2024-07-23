@@ -3,7 +3,8 @@ import {withRouter} from 'react-router';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import cn from 'bem-cn-lite';
-import _ from 'lodash';
+
+import map_ from 'lodash/map';
 
 import {Button, Checkbox, TextInput} from '@gravity-ui/uikit';
 
@@ -146,7 +147,7 @@ class OperationsFilterPresets extends Component {
         return (
             <div className={block(ELEMENT, tbBlock('container'))}>
                 {this.renderSavePresetDialog()}
-                {_.map(presets, (preset, presetId) => {
+                {map_(presets, (preset, presetId) => {
                     const active = activePresets.has(presetId);
                     return (
                         <div className={block(ELEMENT, tbBlock('component'))} key={presetId}>

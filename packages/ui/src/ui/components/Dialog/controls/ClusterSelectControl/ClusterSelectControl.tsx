@@ -1,7 +1,7 @@
 import React from 'react';
 import cn from 'bem-cn-lite';
-import _map from 'lodash/map';
-import _filter from 'lodash/filter';
+import map_ from 'lodash/map';
+import filter_ from 'lodash/filter';
 
 import Select, {YTSelectProps} from '../../../../components/Select/Select';
 
@@ -41,7 +41,7 @@ function ClusterSelectControl({
     width,
 }: Props) {
     const clusters = React.useMemo(() => {
-        const res = _map(_filter(YT.clusters, filterPredicate), ({name, id}) => ({
+        const res = map_(filter_(YT.clusters, filterPredicate), ({name, id}) => ({
             value: id,
             text: name,
         }));
@@ -55,7 +55,7 @@ function ClusterSelectControl({
         }
 
         const toSkip = new Set(excludeClusters);
-        return _filter(clusters, ({value}) => {
+        return filter_(clusters, ({value}) => {
             return !toSkip.has(value);
         });
     }, [clusters, excludeClusters]);

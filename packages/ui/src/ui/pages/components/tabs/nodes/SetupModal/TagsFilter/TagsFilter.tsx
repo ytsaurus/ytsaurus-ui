@@ -1,6 +1,7 @@
 import React from 'react';
 import cn from 'bem-cn-lite';
-import _ from 'lodash';
+
+import reduce_ from 'lodash/reduce';
 
 import FilterWithRegExp, {
     FilterWithRegExpValue,
@@ -71,7 +72,7 @@ function TagsFilter(props: Props) {
 
     const handleChange = React.useCallback(
         (v: Props['value']) => {
-            const value = _.reduce(
+            const value = reduce_(
                 v,
                 (acc, value, key) => {
                     if (value !== undefined) {

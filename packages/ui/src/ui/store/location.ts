@@ -1,4 +1,4 @@
-import isEmpty from 'lodash/isEmpty';
+import isEmpty_ from 'lodash/isEmpty';
 import {stateToParams} from 'redux-location-state/lib/stateToParams';
 
 import {paramsToQuery} from '../utils';
@@ -91,7 +91,7 @@ function makeRoutedURLByPath(pathname: string, paramOverrides: any = {}) {
             params[k] = v;
         }
     });
-    const p = isEmpty(params) ? '' : '?' + paramsToQuery(params);
+    const p = isEmpty_(params) ? '' : '?' + paramsToQuery(params);
     return `${pathname}${p}`;
 }
 

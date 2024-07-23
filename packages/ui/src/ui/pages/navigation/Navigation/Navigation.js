@@ -4,7 +4,9 @@ import {connect, useSelector} from 'react-redux';
 import PropTypes from 'prop-types';
 import hammer from '../../../common/hammer';
 import cn from 'bem-cn-lite';
-import _ from 'lodash';
+
+import map_ from 'lodash/map';
+
 import {getCluster} from '../../../store/selectors/global';
 import {updateTitle} from '../../../store/actions/global';
 
@@ -174,7 +176,7 @@ class Navigation extends Component {
 
     renderTabs() {
         const {mode, tabSize} = this.props;
-        const items = _.map(this.items, (item) => ({
+        const items = map_(this.items, (item) => ({
             ...item,
             text: item.text || hammer.format['ReadableField'](item.value),
             show: true,

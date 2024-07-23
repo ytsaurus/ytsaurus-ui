@@ -16,7 +16,9 @@ import {updateView} from '../index';
 import ypath from '../../../../common/thor/ypath';
 import yt from '@ytsaurus/javascript-wrapper/lib/yt';
 import React from 'react';
-import _ from 'lodash';
+
+import map_ from 'lodash/map';
+
 import {executeBatchWithRetries} from '../../execute-batch';
 import {YTApiId} from '../../../../rum/rum-wrap-api';
 
@@ -28,7 +30,7 @@ export function restoreObjects(items) {
         return yt.v3
             .startTransaction({})
             .then((id) => {
-                const requests = _.map(items, (node) => {
+                const requests = map_(items, (node) => {
                     const restorePath = ypath.getValue(node, '/@_restore_path');
                     return {
                         command: 'move',

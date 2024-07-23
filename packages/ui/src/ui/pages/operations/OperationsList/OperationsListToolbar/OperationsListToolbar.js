@@ -2,7 +2,8 @@ import React from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import PropTypes from 'prop-types';
 import cn from 'bem-cn-lite';
-import _ from 'lodash';
+
+import map_ from 'lodash/map';
 
 import {getAllUserNames} from '../../../../store/selectors/global';
 import OperationsTextFilter from './OperationsTextFilter';
@@ -53,7 +54,7 @@ class OperationsListToolbar extends React.PureComponent {
             return 'Select...';
         }
 
-        const labels = _.map(permissions, (permission) => permission[0].toUpperCase());
+        const labels = map_(permissions, (permission) => permission[0].toUpperCase());
 
         return labels.join(', ');
     }

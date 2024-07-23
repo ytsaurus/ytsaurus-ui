@@ -1,12 +1,14 @@
-import _ from 'lodash';
+import isEmpty_ from 'lodash/isEmpty';
+import some_ from 'lodash/some';
+
 import ypath from '../../common/thor/ypath';
 
 export function hasTaskHistograms(operation: unknown) {
     const tasks = ypath.getValue(operation, '/@progress/tasks');
-    return _.some(tasks, ({estimated_input_data_weight_histogram, input_data_weight_histogram}) => {
+    return some_(tasks, ({estimated_input_data_weight_histogram, input_data_weight_histogram}) => {
         return (
-            !_.isEmpty(estimated_input_data_weight_histogram) ||
-            !_.isEmpty(input_data_weight_histogram)
+            !isEmpty_(estimated_input_data_weight_histogram) ||
+            !isEmpty_(input_data_weight_histogram)
         );
     });
 }

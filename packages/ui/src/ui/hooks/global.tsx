@@ -1,6 +1,8 @@
 import React from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import _ from 'lodash';
+
+import sortedIndexBy_ from 'lodash/sortedIndexBy';
+import sortedLastIndexBy_ from 'lodash/sortedLastIndexBy';
 
 import {getAllUserNamesSorted} from '../store/selectors/global';
 import {
@@ -20,10 +22,8 @@ export function useAllUserNamesFiltered() {
 
     const getFiltered = React.useCallback(
         (text: string) => {
-            const from = _.sortedIndexBy(namesSorted, text, (item) => item.substr(0, text.length));
-            const to = _.sortedLastIndexBy(namesSorted, text, (item) =>
-                item.substr(0, text.length),
-            );
+            const from = sortedIndexBy_(namesSorted, text, (item) => item.substr(0, text.length));
+            const to = sortedLastIndexBy_(namesSorted, text, (item) => item.substr(0, text.length));
             const res = namesSorted.slice(from, to);
             return res;
         },

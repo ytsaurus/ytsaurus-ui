@@ -1,5 +1,9 @@
 import {createSelector} from 'reselect';
-import _ from 'lodash';
+
+import find_ from 'lodash/find';
+import forEach_ from 'lodash/forEach';
+import map_ from 'lodash/map';
+import sortBy_ from 'lodash/sortBy';
 
 import {RootState} from '../../../store/reducers';
 import {getCluster} from './index';
@@ -28,13 +32,13 @@ const getSupportedFeatures = createSelector(
 );
 
 export const getErasureCodecs = createSelector([getSupportedFeatures], (features) => {
-    return _.map(features.erasure_codecs, (value) => {
+    return map_(features.erasure_codecs, (value) => {
         return {value, text: value};
     }).sort(compareItems);
 });
 
 export const getPrimitiveTypes = createSelector([getSupportedFeatures], (features) => {
-    return _.sortBy(features.primitive_types).map((value) => {
+    return sortBy_(features.primitive_types).map((value) => {
         return {value, text: value};
     });
 });
@@ -53,7 +57,7 @@ export const makeCompressionCodecFinder = createSelector([getCompressionCodecs],
             return undefined;
         }
 
-        const item = _.find(items, (x) => {
+        const item = find_(items, (x) => {
             return x.value === codec;
         });
         if (item) {
@@ -99,7 +103,7 @@ function prepareItemsSubitems(arr: Array<string> = []): CompressionCodecs {
         }
     }
 
-    _.forEach(subItemsMap, (subItems, key) => {
+    forEach_(subItemsMap, (subItems, key) => {
         const index = items.findIndex(({value}) => value === key);
         if (index === -1) {
             return;
@@ -163,7 +167,7 @@ export const getOperationStatisticsDescription = createSelector(
     ({operation_statistics_descriptions}) => {
         const byName: Record<string, OperationStatisticInfo> = {};
         const byRegexp: Array<OperationStatisticInfo & {regexp: RegExp}> = [];
-        _.forEach(operation_statistics_descriptions, (item, key) => {
+        forEach_(operation_statistics_descriptions, (item, key) => {
             const idx = key.indexOf('*');
             if (idx !== -1) {
                 const tmp = key.replace(/\//g, '\\/').replace(/\*/g, '[^/]*');

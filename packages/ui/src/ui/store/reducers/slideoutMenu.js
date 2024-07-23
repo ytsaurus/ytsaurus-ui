@@ -1,4 +1,5 @@
-import _ from 'lodash';
+import forEach_ from 'lodash/forEach';
+
 import hammer from '../../common/hammer';
 import {JOIN_MENU_ITEMS, SPLIT_MENU_ITEMS} from '../../constants';
 import pages from '../../pages';
@@ -39,7 +40,7 @@ function splitRecentItems(
     const rest = [];
     const TWO_WEEKS = 2 * 7 * 24 * 60 * 60;
 
-    _.each(items, (item) => {
+    forEach_(items, (item) => {
         const lastVisited = settings[getLastVisitedSetting(item)] || 0;
 
         // To hide menu title if all the pages are hidden

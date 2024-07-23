@@ -1,4 +1,10 @@
-import _ from 'lodash';
+import filter_ from 'lodash/filter';
+import forEach_ from 'lodash/forEach';
+import get_ from 'lodash/get';
+import isEmpty_ from 'lodash/isEmpty';
+import map_ from 'lodash/map';
+import set_ from 'lodash/set';
+
 import {createSelector} from 'reselect';
 import {ACCOUNTS_TABLE_ID, ROOT_ACCOUNT_NAME} from '../../../constants/accounts/accounts';
 import {getTables} from '../../../store/selectors/tables';
@@ -34,7 +40,7 @@ export const getEditableAccountParentSuggests = createSelector(
     [getAccountNames, getEditableAccountSubtreeNames],
     (allNames, excludeNames) => {
         const excludeNamesSet = new Set(excludeNames);
-        return _.filter(allNames, (name) => !excludeNamesSet.has(name));
+        return filter_(allNames, (name) => !excludeNamesSet.has(name));
     },
 );
 
@@ -70,7 +76,7 @@ export function getAccountName(treeItem) {
 }
 
 function prepareSubtreeNames(tree, account) {
-    if (_.isEmpty(tree) || _.isEmpty(account)) {
+    if (isEmpty_(tree) || isEmpty_(account)) {
         return [];
     }
 
@@ -176,8 +182,8 @@ const AGGREGATION_PER_MEDIUM_FIELDS = ['totalDiskSpace', 'diskSpaceLimit'];
 const AGGREGATION_MASTER_MEMORY_FIELDS = ['total', 'limit'];
 
 function addIfDefined(dst, src, key) {
-    const srcValue = _.get(src, key);
-    const dstValue = _.get(dst, key);
+    const srcValue = get_(src, key);
+    const dstValue = get_(dst, key);
     if (srcValue === null || srcValue === undefined) {
         return dstValue;
     }
@@ -196,14 +202,14 @@ function calcAggregationRow(treeItem, masterMemoryMedia) {
         perMedium: {},
     };
 
-    _.forEach(children, (treeItem) => {
+    forEach_(children, (treeItem) => {
         const {attributes: account} = treeItem;
-        _.forEach(AGGREGATION_FIELDS, (key) => {
-            _.set(aggAccount, key, addIfDefined(aggAccount, account, key));
+        forEach_(AGGREGATION_FIELDS, (key) => {
+            set_(aggAccount, key, addIfDefined(aggAccount, account, key));
         });
 
-        _.forEach(account.perMedium, (data, mediumType) => {
-            _.forEach(AGGREGATION_PER_MEDIUM_FIELDS, (key) => {
+        forEach_(account.perMedium, (data, mediumType) => {
+            forEach_(AGGREGATION_PER_MEDIUM_FIELDS, (key) => {
                 let aggMediumData = aggAccount.perMedium[mediumType];
                 if (!aggMediumData) {
                     aggMediumData = aggAccount.perMedium[mediumType] = {};
@@ -212,11 +218,11 @@ function calcAggregationRow(treeItem, masterMemoryMedia) {
             });
         });
 
-        _.forEach(masterMemoryMedia, (medium) => {
-            _.forEach(AGGREGATION_MASTER_MEMORY_FIELDS, (field) => {
+        forEach_(masterMemoryMedia, (medium) => {
+            forEach_(AGGREGATION_MASTER_MEMORY_FIELDS, (field) => {
                 const srcField = accountMemoryMediumToFieldName('master_memory/' + medium);
                 const key = `${srcField}.${field}`;
-                _.set(aggAccount, key, addIfDefined(aggAccount, account, key));
+                set_(aggAccount, key, addIfDefined(aggAccount, account, key));
             });
         });
     });
@@ -260,7 +266,7 @@ export const getActiveAccountBreadcrumbs = createSelector(
         }
         const items = [
             {text: '<Accounts>', url: '', title: ''},
-            ..._.map(namesArr.reverse(), (name) => {
+            ...map_(namesArr.reverse(), (name) => {
                 return {
                     value: name,
                     text: name,

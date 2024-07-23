@@ -1,5 +1,6 @@
+import reduce_ from 'lodash/reduce';
+
 import yt from '@ytsaurus/javascript-wrapper/lib/yt';
-import _ from 'lodash';
 
 import {EDITOR_TABS} from '../../constants/accounts/editor';
 import hammer from '../../common/hammer';
@@ -181,7 +182,7 @@ export function parseNumber(input) {
     return Math.floor(Number(result));
 }
 
-export const contentTabs = _.reduce(
+export const contentTabs = reduce_(
     EDITOR_TABS,
     (acc, value) => {
         acc.push({

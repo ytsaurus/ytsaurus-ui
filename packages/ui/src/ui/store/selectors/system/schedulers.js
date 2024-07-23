@@ -1,4 +1,6 @@
-import _ from 'lodash';
+import map_ from 'lodash/map';
+import reduce_ from 'lodash/reduce';
+
 import {createSelector} from 'reselect';
 
 import ypath from '@ytsaurus/interface-helpers/lib/ypath';
@@ -16,7 +18,7 @@ export const getSystemSchedulersWithState = createSelector(
     [getSystemSchedulers, getMastersHostType],
     (schedulers, hostType) => {
         const path = hostType === VisibleHostType.host ? '' : '/@annotations/physical_host';
-        return _.map(schedulers, (sheduler) => {
+        return map_(schedulers, (sheduler) => {
             const res = connectedSchedulersToState(path, sheduler);
             return {
                 ...res,
@@ -32,7 +34,7 @@ export const getSystemAgentsWithState = createSelector(
     [getSystemAgents, getMastersHostType],
     (agents, hostType) => {
         const path = hostType === VisibleHostType.host ? '' : '/@annotations/physical_host';
-        return _.map(agents, (agent) => {
+        return map_(agents, (agent) => {
             const res = connectedAgentsToState(path, agent);
             return {
                 ...res,
@@ -78,7 +80,7 @@ function connectedAgentsToState(path, connectedHost) {
 }
 
 const numberOf = (statefulHosts, state) => {
-    return _.reduce(
+    return reduce_(
         statefulHosts,
         (acc, host) => {
             return host.state === state ? acc + 1 : acc;

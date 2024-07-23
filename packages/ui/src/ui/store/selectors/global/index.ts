@@ -1,5 +1,14 @@
 import {createSelector} from 'reselect';
-import _ from 'lodash';
+
+import flatten_ from 'lodash/flatten';
+import filter_ from 'lodash/filter';
+import keys_ from 'lodash/keys';
+import map_ from 'lodash/map';
+import orderBy_ from 'lodash/orderBy';
+import reduce_ from 'lodash/reduce';
+import sortBy_ from 'lodash/sortBy';
+import uniq_ from 'lodash/uniq';
+import values_ from 'lodash/values';
 
 // @ts-ignore
 import ypath from '@ytsaurus/interface-helpers/lib/ypath';
@@ -126,15 +135,15 @@ export const isQueryTrackerAllowed = createSelector(
 );
 
 export const getAllUserNames = createSelector([getGlobalUsers], (usersData) => {
-    return _.map(usersData, ({$value}) => $value as string);
+    return map_(usersData, ({$value}) => $value as string);
 });
 
 export const getAllGroupNames = createSelector([getGlobalGroups], (groupsData) => {
-    return _.map(groupsData, ({$value}) => $value as string);
+    return map_(groupsData, ({$value}) => $value as string);
 });
 
 export const getGlobalGroupAttributesMap = createSelector([getGlobalGroups], (data) => {
-    return _.reduce(
+    return reduce_(
         data,
         (acc, {$value, $attributes}) => {
             acc[$value] = $attributes;
@@ -146,8 +155,8 @@ export const getGlobalGroupAttributesMap = createSelector([getGlobalGroups], (da
 
 export const getAllPoolNames = createSelector(getPoolTrees, (poolTrees) => {
     const getAllKeys = (obj: FIX_MY_TYPE): Array<string> => {
-        return _.reduce(
-            _.keys(obj),
+        return reduce_(
+            keys_(obj),
             (res: FIX_MY_TYPE, key: FIX_MY_TYPE) => {
                 if (typeof obj[key] === 'object' && obj[key] !== null) {
                     return [...res, key, ...getAllKeys(obj[key])];
@@ -159,33 +168,33 @@ export const getAllPoolNames = createSelector(getPoolTrees, (poolTrees) => {
         );
     };
 
-    return _.orderBy(_.uniq(_.flatten(_.map(_.values(poolTrees), getAllKeys))));
+    return orderBy_(uniq_(flatten_(map_(values_(poolTrees), getAllKeys))));
 });
 
 export const getAllPoolTreeNames = createSelector(getPoolTrees, (poolTrees) => {
-    return _.keys(poolTrees);
+    return keys_(poolTrees);
 });
 
 export const getAllBundlesNames = createSelector(getBundles, (bundles) => {
-    const bundleNames = _.map(bundles, (bundle) => ypath.getValue(bundle, ''));
+    const bundleNames = map_(bundles, (bundle) => ypath.getValue(bundle, ''));
 
-    return _.sortBy(bundleNames);
+    return sortBy_(bundleNames);
 });
 
 export const getAllUserNamesSorted = createSelector(
     [getAllUserNames],
-    _.sortBy as (items: Array<unknown>) => Array<string>,
+    sortBy_ as (items: Array<unknown>) => Array<string>,
 );
 
 export const getAllGroupNamesSorted = createSelector(
     [getAllGroupNames],
-    _.sortBy as (items: Array<unknown>) => Array<string>,
+    sortBy_ as (items: Array<unknown>) => Array<string>,
 );
 
 export const getAllIdmGroupNamesSorted = createSelector(
     [getAllGroupNamesSorted, getGlobalGroupAttributesMap],
     (names, attrs) => {
-        return _.filter(names, (name) =>
+        return filter_(names, (name) =>
             flags.get(attrs[name]['upravlyator_managed'] as FIX_MY_TYPE),
         );
     },

@@ -1,4 +1,5 @@
-import _ from 'lodash';
+import map_ from 'lodash/map';
+
 import ypath from '../../../../common/thor/ypath';
 
 import {createSelector} from 'reselect';
@@ -40,7 +41,7 @@ export const getTableSchema = createSelector([getNavigationPathAttributes], (att
 });
 
 export const getTableColumnNamesFromSchema = createSelector([getTableSchema], (schema) => {
-    return _.map(schema, 'name').sort();
+    return map_(schema, 'name').sort();
 });
 
 export const getNavigationTableLoadingState = createSelector(

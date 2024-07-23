@@ -1,6 +1,7 @@
 import React from 'react';
-import _ from 'lodash';
 import cn from 'bem-cn-lite';
+
+import indexOf_ from 'lodash/indexOf';
 
 import {Text} from '@gravity-ui/uikit';
 
@@ -18,7 +19,7 @@ const block = cn('version-cell');
 const {reHashFromNodeVersion} = uiSettings;
 
 function shortHash(version: string) {
-    const tildaIndex = _.indexOf(version, '~');
+    const tildaIndex = indexOf_(version, '~');
     if (-1 === tildaIndex) {
         return version;
     }

@@ -1,5 +1,7 @@
 import yt from '@ytsaurus/javascript-wrapper/lib/yt';
-import _ from 'lodash';
+
+import find_ from 'lodash/find';
+
 import ypath from '@ytsaurus/interface-helpers/lib/ypath';
 import CancelHelper from '../../../utils/cancel-helper';
 import {GENERIC_ERROR_MESSAGE, TYPED_OUTPUT_FORMAT} from '../../../constants/index';
@@ -76,7 +78,7 @@ function loadCellAttributes({id, attributes, tablePath, unorderedDynamicTable}) 
                 path: '//sys/tablet_cells/' + attributes.cell_id + '/@',
             })
             .then((tabletCellAttributes) => {
-                const cellLeadingPeer = _.find(
+                const cellLeadingPeer = find_(
                     tabletCellAttributes.peers,
                     (peer) => peer.state === 'leading',
                 );

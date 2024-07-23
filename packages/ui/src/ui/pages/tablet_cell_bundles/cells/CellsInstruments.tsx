@@ -1,6 +1,7 @@
 import React from 'react';
 import cn from 'bem-cn-lite';
-import _ from 'lodash';
+
+import filter_ from 'lodash/filter';
 
 import ClipboardButton from '../../../components/ClipboardButton/ClipboardButton';
 import Filter from '../../../components/Filter/Filter';
@@ -42,7 +43,7 @@ class CellsTableInstruments extends React.Component<Props & ReduxProps> {
         if (!text) {
             return bundles;
         }
-        return _.filter(bundles, (bundle = '') => bundle.indexOf(text) !== -1);
+        return filter_(bundles, (bundle = '') => bundle.indexOf(text) !== -1);
     };
 
     getHostFilterItems = (text?: string) => {
@@ -50,7 +51,7 @@ class CellsTableInstruments extends React.Component<Props & ReduxProps> {
         if (!text) {
             return hosts;
         }
-        return _.filter(hosts, (host = '') => host.indexOf(text) !== -1);
+        return filter_(hosts, (host = '') => host.indexOf(text) !== -1);
     };
 
     render() {

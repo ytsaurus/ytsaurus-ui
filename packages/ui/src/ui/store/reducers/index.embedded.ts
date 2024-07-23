@@ -1,14 +1,15 @@
 import {combineReducers} from 'redux';
 
 import {PathParameters, registerLocationParameters} from '../../store/location';
-import _ from 'lodash';
+
+import forEach_ from 'lodash/forEach';
 
 export function makeEmbeddedReducer<T extends Parameters<typeof combineReducers>[0]>(
     appReducers: T,
     locationParams: Array<[string, PathParameters]>,
 ) {
     const rootReducer = combineReducers({...appReducers});
-    _.forEach(locationParams, ([path, params]) => {
+    forEach_(locationParams, ([path, params]) => {
         registerLocationParameters(path, params);
     });
     return rootReducer;

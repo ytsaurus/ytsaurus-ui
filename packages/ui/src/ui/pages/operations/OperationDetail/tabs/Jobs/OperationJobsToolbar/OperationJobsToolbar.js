@@ -1,7 +1,8 @@
 import React from 'react';
 import {useSelector} from 'react-redux';
 import cn from 'bem-cn-lite';
-import _ from 'lodash';
+
+import keys_ from 'lodash/keys';
 
 import hammer from '../../../../../../common/hammer';
 import JobsSelectFilter from './JobsSelectFilter';
@@ -22,7 +23,7 @@ function extractJobTypes(operations) {
     const initialTypes = ['all'];
 
     const typeCounters = operations.jobs.filters.type.counters;
-    return hammer.utils.sortInPredefinedOrder(initialTypes, _.keys(typeCounters));
+    return hammer.utils.sortInPredefinedOrder(initialTypes, keys_(typeCounters));
 }
 
 const tbComp = tbBlock('component');

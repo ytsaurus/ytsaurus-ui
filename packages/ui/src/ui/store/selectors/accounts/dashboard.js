@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import map_ from 'lodash/map';
 import {createSelector} from 'reselect';
 import {
     getUsableAccounts,
@@ -21,7 +21,7 @@ export const getUsableAccountsSet = createSelector([getUsableAccounts], (items) 
  * because of cyclic dependencies.
  */
 export const getFavouriteAccountsSet = createSelector([getFavouriteAccounts], (items) => {
-    return new Set(_.map(items, 'path'));
+    return new Set(map_(items, 'path'));
 });
 
 export const getFilteredAccountsOfDashboard = createSelector(

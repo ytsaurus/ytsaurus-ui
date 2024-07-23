@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import isEmpty_ from 'lodash/isEmpty';
 
 export default (counters, alerts) => {
     const tags = [];
@@ -13,7 +13,7 @@ export default (counters, alerts) => {
         alerts.agents?.length || 0,
     ];
 
-    if (_.isEmpty(schedulers)) {
+    if (isEmpty_(schedulers)) {
         tags.push({
             theme: 'default',
             label: 'Schedulers: unknown',
@@ -46,7 +46,7 @@ export default (counters, alerts) => {
         tags.push(schedulersAlertsLength > 0 ? withAlerts : withoutAlerts);
     }
 
-    if (_.isEmpty(agents)) {
+    if (isEmpty_(agents)) {
         tags.push({
             theme: 'default',
             label: 'Controller agents: unknown',

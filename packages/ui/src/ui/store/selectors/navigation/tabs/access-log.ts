@@ -1,4 +1,5 @@
-import _ from 'lodash';
+import isEmpty_ from 'lodash/isEmpty';
+import isEqual_ from 'lodash/isEqual';
 
 import {RootState} from '../../../../store/reducers';
 import {createSelector} from 'reselect';
@@ -71,7 +72,7 @@ export const getAccessLogLastLoadedParams = (state: RootState) =>
     state.navigation.tabs.accessLog.accessLog.params;
 
 function skipEmpty<T>(v: T) {
-    return _.isEmpty(v) ? undefined : v;
+    return isEmpty_(v) ? undefined : v;
 }
 
 export const getAccessLogRequestParams = createSelector(
@@ -97,7 +98,7 @@ export const getAccessLogRequestParams = createSelector(
 export const getAccessLogHasChangedFilters = createSelector(
     [getAccessLogLastLoadedParams, getAccessLogRequestParams],
     (lastLoaded, current) => {
-        return Boolean(lastLoaded.path) && !_.isEqual(lastLoaded, current);
+        return Boolean(lastLoaded.path) && !isEqual_(lastLoaded, current);
     },
 );
 

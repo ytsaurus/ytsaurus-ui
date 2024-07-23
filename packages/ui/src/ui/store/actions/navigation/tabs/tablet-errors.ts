@@ -1,4 +1,5 @@
-import _ from 'lodash';
+import reduce_ from 'lodash/reduce';
+
 import CancelHelper, {isCancelled} from '../../../../utils/cancel-helper';
 import {getPath} from '../../../../store/selectors/navigation';
 import {
@@ -133,7 +134,7 @@ function loadTabletErrorsCountOfReplicatedTable({
                 skipSuccessToast: true,
             },
         ).then((data: Record<string, {error_count?: number}>) => {
-            const count = _.reduce(data, (acc, item) => acc + (item.error_count ?? 0), 0);
+            const count = reduce_(data, (acc, item) => acc + (item.error_count ?? 0), 0);
             dispatch(updateTabletErrrosCount(count, path));
         });
     };

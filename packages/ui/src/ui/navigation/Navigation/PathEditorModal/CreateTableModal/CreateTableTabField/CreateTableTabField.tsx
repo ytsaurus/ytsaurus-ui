@@ -1,6 +1,12 @@
 import React from 'react';
 import cn from 'bem-cn-lite';
-import _ from 'lodash';
+
+import differenceBy_ from 'lodash/differenceBy';
+import filter_ from 'lodash/filter';
+import forEach_ from 'lodash/forEach';
+import isEmpty_ from 'lodash/isEmpty';
+import map_ from 'lodash/map';
+import sortBy_ from 'lodash/sortBy';
 
 import {TabFieldVertical} from '@gravity-ui/dialog-fields';
 import {connect} from 'react-redux';
@@ -46,17 +52,17 @@ class ColumnsWrapper extends React.Component<Props & CWProps, CWState> {
 
         if (tabItems !== prevTabItems) {
             const tabItemsMap: Record<string, TabItem> = {};
-            _.forEach(tabItems, (item) => {
+            forEach_(tabItems, (item) => {
                 tabItemsMap[item.id] = item;
             });
 
-            const itemsToAdd = _.differenceBy(tabItems, prevTabItems, ({id}) => id);
+            const itemsToAdd = differenceBy_(tabItems, prevTabItems, ({id}) => id);
             const idsToRemove = new Set<string>(
-                _.differenceBy(prevTabItems, tabItems, ({id}) => id).map((item) => item.id),
+                differenceBy_(prevTabItems, tabItems, ({id}) => id).map((item) => item.id),
             );
 
-            const filtered = _.filter(prevOrderedTabItems, ({id}) => !idsToRemove.has(id));
-            const orderedTabItems = _.map(filtered, ({id}) => ({
+            const filtered = filter_(prevOrderedTabItems, ({id}) => !idsToRemove.has(id));
+            const orderedTabItems = map_(filtered, ({id}) => ({
                 ...tabItemsMap[id],
             }));
 
@@ -64,7 +70,7 @@ class ColumnsWrapper extends React.Component<Props & CWProps, CWState> {
             res.orderedTabItems = orderedTabItems.concat(itemsToAdd);
         }
 
-        return _.isEmpty(res) ? null : res;
+        return isEmpty_(res) ? null : res;
     }
 
     state: CWState = {
@@ -117,7 +123,7 @@ class ColumnsWrapper extends React.Component<Props & CWProps, CWState> {
             keyColumns[item.id] = value;
         }
 
-        const orderedTabItems = _.sortBy(this.state.orderedTabItems, ({id}) => !keyColumns[id]);
+        const orderedTabItems = sortBy_(this.state.orderedTabItems, ({id}) => !keyColumns[id]);
         this.setKeyColumns(keyColumns);
         this.setOrderedTabItems(orderedTabItems);
     };

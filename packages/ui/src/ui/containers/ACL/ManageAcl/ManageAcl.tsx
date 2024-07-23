@@ -2,7 +2,7 @@ import React, {useCallback, useMemo, useState} from 'react';
 import {compose} from 'redux';
 import cn from 'bem-cn-lite';
 
-import _isEqual from 'lodash/isEqual';
+import isEqual_ from 'lodash/isEqual';
 
 import {DialogField, FormApi, YTDFDialog} from '../../../components/Dialog/Dialog';
 import {Dialog as CommonDialog, Loader} from '@gravity-ui/uikit';
@@ -235,7 +235,7 @@ function ManageAcl(props: Props) {
                     bossApproval: Boolean(bossApproval),
                     inheritAcl: Boolean(inheritAcl),
                 }}
-                formExtras={{initialValuesEqual: _isEqual}}
+                formExtras={{initialValuesEqual: isEqual_}}
                 fields={[
                     ...dialogFields,
                     {

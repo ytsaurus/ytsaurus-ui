@@ -1,5 +1,7 @@
 import React from 'react';
-import _ from 'lodash';
+
+import map_ from 'lodash/map';
+
 import {
     getAccountMasterMemoryMedia,
     getAccountsContentMode,
@@ -41,7 +43,7 @@ function MasterMemoryTableMode() {
     );
 
     const items = React.useMemo(() => {
-        return _.map(media, (item) => {
+        return map_(media, (item) => {
             return {
                 value: item,
                 text: <Item text={format.Readable(item)} />,

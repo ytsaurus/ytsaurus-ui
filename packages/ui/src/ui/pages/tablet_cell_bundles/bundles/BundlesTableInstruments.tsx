@@ -1,6 +1,7 @@
 import React from 'react';
 import cn from 'bem-cn-lite';
-import _ from 'lodash';
+
+import compact_ from 'lodash/compact';
 
 import Filter from '../../../components/Filter/Filter';
 import {Toolbar} from '../../../components/WithStickyToolbar/Toolbar/Toolbar';
@@ -35,7 +36,7 @@ class BundlesTableInstruments extends React.Component<Props & ReduxProps> {
         return (
             <Toolbar
                 className={block(null, className)}
-                itemsToWrap={_.compact([
+                itemsToWrap={compact_([
                     {
                         name: 'name',
                         node: (

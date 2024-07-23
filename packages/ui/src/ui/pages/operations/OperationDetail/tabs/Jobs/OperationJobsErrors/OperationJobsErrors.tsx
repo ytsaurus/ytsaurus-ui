@@ -1,5 +1,5 @@
 import React from 'react';
-import _ from 'lodash';
+import map_ from 'lodash/map';
 import cn from 'bem-cn-lite';
 
 import {useSelector} from 'react-redux';
@@ -15,7 +15,7 @@ function OperationJobsErrors() {
 
     return (
         <div className={block()}>
-            {_.map(errors, (error, index) => {
+            {map_(errors, (error, index) => {
                 return <ErrorBlock key={index} error={error} />;
             })}
         </div>

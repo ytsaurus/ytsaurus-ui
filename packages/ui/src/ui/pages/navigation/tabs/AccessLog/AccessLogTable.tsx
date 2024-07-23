@@ -1,7 +1,8 @@
 import React from 'react';
 import {useSelector} from 'react-redux';
 import cn from 'bem-cn-lite';
-import _ from 'lodash';
+
+import compact_ from 'lodash/compact';
 
 import DataTable, {Column, Settings} from '@gravity-ui/react-data-table';
 
@@ -52,7 +53,7 @@ function useColumns() {
     const cluster = useSelector(getCluster);
     const fieldSelector = useSelector(getAccessLogLastLoadedFieldSelector);
     const columns: Array<Column<AccessLogItem>> = React.useMemo(() => {
-        const res: Array<Column<AccessLogItem>> = _.compact([
+        const res: Array<Column<AccessLogItem>> = compact_([
             {
                 name: 'Date',
                 render({row}) {

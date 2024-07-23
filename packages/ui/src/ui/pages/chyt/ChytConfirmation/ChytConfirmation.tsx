@@ -1,6 +1,6 @@
 import React from 'react';
 import cn from 'bem-cn-lite';
-import capitalize from 'lodash/capitalize';
+import capitalize_ from 'lodash/capitalize';
 
 import {Text} from '@gravity-ui/uikit';
 
@@ -71,7 +71,7 @@ function ChytSimpleConfirmation({
                 ),
             }}
             footerProps={{
-                textApply: capitalize(action),
+                textApply: capitalize_(action),
             }}
             onAdd={() => {
                 return dispatch(chytListAction('stop', {alias: alias}))

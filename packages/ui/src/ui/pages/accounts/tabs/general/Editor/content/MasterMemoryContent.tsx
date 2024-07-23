@@ -1,5 +1,7 @@
 import React from 'react';
-import _ from 'lodash';
+
+import map_ from 'lodash/map';
+
 import format from '../../../../../../common/hammer/format';
 
 import AccountQuota from '../../../../AccountQuota/AccountQuota';
@@ -21,7 +23,7 @@ export default function MasterMemoryContent(props: Props) {
     return (
         <div className="elements-section">
             <AccountTransferQuotaMessage />
-            {_.map(media, (medium) => {
+            {map_(media, (medium) => {
                 return (
                     <AccountQuota
                         key={medium}

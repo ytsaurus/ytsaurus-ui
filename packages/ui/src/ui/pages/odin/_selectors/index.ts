@@ -1,4 +1,5 @@
-import _ from 'lodash';
+import map_ from 'lodash/map';
+
 import moment from 'moment';
 import {createSelector} from 'reselect';
 
@@ -51,8 +52,8 @@ export const getExtendedInfo = createSelector(
 
 export const getOdinCluster = (state: OdinRootState) => state.odin.details.odinCluster;
 function makeClusterNameItems() {
-    const names = _.map(YT.clusters, 'id').sort();
-    return _.map(names, (name) => {
+    const names = map_(YT.clusters, 'id').sort();
+    return map_(names, (name) => {
         return {
             key: name,
             value: name,

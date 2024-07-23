@@ -1,8 +1,9 @@
 import React from 'react';
-import _ from 'lodash';
 import {compose} from 'redux';
 import axios, {AxiosProgressEvent} from 'axios';
 import cn from 'bem-cn-lite';
+
+import map_ from 'lodash/map';
 
 // @ts-ignore
 import yt from '@ytsaurus/javascript-wrapper/lib/yt';
@@ -434,7 +435,7 @@ class UploadManager extends React.Component<Props, State> {
         const {fileType} = this.state;
         const withColumns: any = {};
         if (fileType === 'schemaful_dsv') {
-            withColumns.columns = _.map(schema, ({name}) => name);
+            withColumns.columns = map_(schema, ({name}) => name);
         }
         return {
             ...withColumns,

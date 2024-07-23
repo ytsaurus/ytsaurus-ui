@@ -2,7 +2,7 @@ import React, {useMemo, useState} from 'react';
 import {YTDFDialog, makeErrorFields} from '../../../../components/Dialog/Dialog';
 import Button from '../../../../components/Button/Button';
 import Icon from '../../../../components/Icon/Icon';
-import _ from 'lodash';
+
 import {QueryItem, setQueryName} from '../../module/api';
 import {useThunkDispatch} from '../../../../store/thunkDispatch';
 

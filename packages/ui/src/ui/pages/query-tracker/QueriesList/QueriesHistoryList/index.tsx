@@ -1,6 +1,6 @@
 import moment from 'moment';
-import groupBy from 'lodash/groupBy';
-import noop from 'lodash/noop';
+import groupBy_ from 'lodash/groupBy';
+import noop_ from 'lodash/noop';
 import {Text} from '@gravity-ui/uikit';
 import block from 'bem-cn-lite';
 import React, {useCallback, useContext, useEffect, useMemo, useRef} from 'react';
@@ -261,7 +261,7 @@ export function QueriesHistoryList() {
     const itemsByDate = useMemo(
         () =>
             Object.entries(
-                groupBy(items, (item) => moment(item.start_time).format('DD MMMM YYYY')),
+                groupBy_(items, (item) => moment(item.start_time).format('DD MMMM YYYY')),
             ).reduce((ret, [header, items]) => {
                 ret.push({
                     header,
@@ -323,7 +323,7 @@ export function QueriesHistoryList() {
                                 disabled: last,
                             }}
                             last={{
-                                handler: noop,
+                                handler: noop_,
                                 disabled: true,
                             }}
                         />

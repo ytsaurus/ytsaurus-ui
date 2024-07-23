@@ -1,4 +1,11 @@
-import _ from 'lodash';
+import includes_ from 'lodash/includes';
+import keys_ from 'lodash/keys';
+import map_ from 'lodash/map';
+import partition_ from 'lodash/partition';
+import reduce_ from 'lodash/reduce';
+import uniq_ from 'lodash/uniq';
+import union_ from 'lodash/union';
+
 import unipika from '../../../../common/thor/unipika';
 import ypath from '@ytsaurus/interface-helpers/lib/ypath';
 import hammer from '../../../../common/hammer';
@@ -27,17 +34,17 @@ export default class Columns {
     static getColumnsFromRows(rows) {
         let columns;
 
-        columns = _.map(rows, (row) => _.map(_.keys(row), Columns.unescapeSpecialColumn));
-        columns = _.union.apply(null, columns);
+        columns = map_(rows, (row) => map_(keys_(row), Columns.unescapeSpecialColumn));
+        columns = union_(...columns);
 
-        return _.map(columns, (column) => column);
+        return map_(columns, (column) => column);
     }
 
     static _makeIsKeyColumn(meta) {
         const keyColumnNames = Columns.getKeyColumns(meta);
 
         return function isKeyColumn(column) {
-            return _.includes(keyColumnNames, column);
+            return includes_(keyColumnNames, column);
         };
     }
 
@@ -73,11 +80,11 @@ export default class Columns {
     static getSchemaColumns(meta) {
         const schema = ypath.getValue(meta, '/schema');
 
-        return _.map(schema, 'name');
+        return map_(schema, 'name');
     }
 
     static getColumnsOrder(columns) {
-        return _.map(columns, (column) => column.name);
+        return map_(columns, (column) => column.name);
     }
 
     static orderColumns(columns, columnsOrder) {
@@ -98,10 +105,10 @@ export default class Columns {
 
         // Additional columns extracted from webJson format
         if (allColumns) {
-            columns = _.uniq(columns.concat(allColumns));
+            columns = uniq_(columns.concat(allColumns));
         }
 
-        const storedColumnsMap = _.reduce(
+        const storedColumnsMap = reduce_(
             storedColumns,
             (storedColumnsMap, column) => {
                 storedColumnsMap[column.name] = column;
@@ -110,7 +117,7 @@ export default class Columns {
             {},
         );
 
-        const schemaColumnsByName = _.reduce(
+        const schemaColumnsByName = reduce_(
             ypath.getValue(meta, '/schema'),
             (acc, colItem) => {
                 acc[colItem.name] = colItem;
@@ -119,7 +126,7 @@ export default class Columns {
             {},
         );
 
-        columns = _.map(columns, (column) => {
+        columns = map_(columns, (column) => {
             const columnSpec = {
                 name: column,
                 data: {
@@ -144,9 +151,9 @@ export default class Columns {
 
         // Make sure that key columns come first
         const schemaColumns = Columns.getSchemaColumns(meta);
-        const [keyColumns, regularColumns] = _.partition(columns, (column) => column.keyColumn);
+        const [keyColumns, regularColumns] = partition_(columns, (column) => column.keyColumn);
         Columns.sortColumns(
-            storedColumns ? _.map(storedColumns, 'name') : schemaColumns,
+            storedColumns ? map_(storedColumns, 'name') : schemaColumns,
             regularColumns,
             'name',
         );
@@ -170,7 +177,7 @@ export default class Columns {
     static prepareOmittedColumns(meta, omittedColumns) {
         const isKeyColumn = Columns._makeIsKeyColumn(meta);
 
-        return _.map(omittedColumns, (column) => ({
+        return map_(omittedColumns, (column) => ({
             name: column,
             data: {
                 caption: Columns.prepareColumnCaption(column),
@@ -195,7 +202,7 @@ export default class Columns {
         const isKeyColumn = Columns._makeIsKeyColumn(meta);
 
         return hammer.tables.loadSimilarKeys(
-            _.map(allColumns, (name) => ({
+            map_(allColumns, (name) => ({
                 name,
                 keyColumn: isKeyColumn(name),
             })),
@@ -210,7 +217,7 @@ export default class Columns {
 
     // Even if table similarity is switched off, store similarity data for use when the setting is turned on
     static storeAllColumns(meta, columns) {
-        const serializedColumns = _.map(columns, (value) => {
+        const serializedColumns = map_(columns, (value) => {
             const {checked, keyColumn, name} = value;
             return {checked, name, keyColumn};
         });

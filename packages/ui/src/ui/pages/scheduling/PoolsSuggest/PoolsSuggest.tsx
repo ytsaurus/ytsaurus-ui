@@ -1,7 +1,8 @@
 import React from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import cn from 'bem-cn-lite';
-import _ from 'lodash';
+
+import forEach_ from 'lodash/forEach';
 
 import {getPoolsNames, getTree} from '../../../store/selectors/scheduling/scheduling';
 import {changePool} from '../../../store/actions/scheduling/scheduling';
@@ -39,7 +40,7 @@ export function PoolsSuggest({
 
             const lcFilter = filter?.toLowerCase();
 
-            _.forEach(poolNames, (poolName) => {
+            forEach_(poolNames, (poolName) => {
                 const lcPoolName = poolName.toLowerCase();
                 if (lcFilter === lcPoolName) {
                     match.push(poolName);

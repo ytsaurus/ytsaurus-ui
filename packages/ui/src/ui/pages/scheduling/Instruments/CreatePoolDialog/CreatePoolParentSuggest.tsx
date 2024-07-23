@@ -1,6 +1,8 @@
 import React from 'react';
 import {useSelector} from 'react-redux';
-import _ from 'lodash';
+
+import map_ from 'lodash/map';
+
 import cn from 'bem-cn-lite';
 
 import {getCreatePoolDialogFlatTreeItems} from '../../../../store/selectors/scheduling/create-pool-dialog';
@@ -21,7 +23,7 @@ export default function CreatePoolParentSuggest(props: Props) {
 
     const {sortedFlatTree} = useSelector(getCreatePoolDialogFlatTreeItems);
 
-    const ycItems = _.map(sortedFlatTree, (item) => ({
+    const ycItems = map_(sortedFlatTree, (item) => ({
         value: item,
         text: item,
     }));

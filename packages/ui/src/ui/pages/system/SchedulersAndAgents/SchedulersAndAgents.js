@@ -1,7 +1,9 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {connect, useDispatch} from 'react-redux';
-import _ from 'lodash';
+
+import map_ from 'lodash/map';
+
 import block from 'bem-cn-lite';
 
 import {CollapsibleSectionStateLess} from '../../../components/CollapsibleSection/CollapsibleSection';
@@ -58,7 +60,7 @@ class SchedulersAndAgents extends Component {
     };
 
     renderHosts(name, connectedHosts) {
-        return _.map(connectedHosts, ({host, state, maintenanceMessage}, index) => {
+        return map_(connectedHosts, ({host, state, maintenanceMessage}, index) => {
             return (
                 <Scheduler
                     key={host ?? index}
@@ -105,7 +107,7 @@ class SchedulersAndAgents extends Component {
 
         return (
             <div className={b('heading-overview')}>
-                {_.map(tags, ({theme, label}) => (
+                {map_(tags, ({theme, label}) => (
                     <span key={label} className={block('elements-label')({theme})}>
                         {label}
                     </span>
@@ -134,10 +136,10 @@ class SchedulersAndAgents extends Component {
                 onToggle={this.onToggle}
                 size={collapsibleSize}
             >
-                {_.map(alerts.schedulers, (alert) => (
+                {map_(alerts.schedulers, (alert) => (
                     <Alert key={alert.attributes.host} error={alert} />
                 ))}
-                {_.map(alerts.agents, (alert, index) => (
+                {map_(alerts.agents, (alert, index) => (
                     <Alert key={index} error={alert} />
                 ))}
 

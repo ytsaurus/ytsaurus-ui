@@ -1,4 +1,8 @@
-import _ from 'lodash';
+import filter_ from 'lodash/filter';
+import find_ from 'lodash/find';
+import map_ from 'lodash/map';
+import uniq_ from 'lodash/uniq';
+
 import {createSelector} from 'reselect';
 
 import {concatByAnd} from '../../../common/hammer/predicate';
@@ -37,7 +41,7 @@ export const getChaosBundlesTableMode = (state: RootState) =>
 export const getChaosActiveBundleData = createSelector(
     [getChaosBundles, getChaosActiveBundle],
     (bundles, activeBundle) => {
-        return _.find(bundles, (item) => item.bundle === activeBundle);
+        return find_(bundles, (item) => item.bundle === activeBundle);
     },
 );
 
@@ -106,7 +110,7 @@ export const getChaosBundlesFiltered = createSelector(
             });
         }
 
-        return !predicates.length ? bundles : _.filter(bundles, concatByAnd(...predicates));
+        return !predicates.length ? bundles : filter_(bundles, concatByAnd(...predicates));
     },
 );
 
@@ -137,7 +141,7 @@ export const getChaosCellsOfActiveAccount = createSelector(
             return cells;
         }
 
-        return _.filter(cells, (item) => {
+        return filter_(cells, (item) => {
             return Boolean(item.bundle) && activeBundle === item.bundle;
         });
     },
@@ -170,7 +174,7 @@ export const getChaosCellsFiltered = createSelector(
                 return Boolean(item.peerAddress) && -1 !== item.peerAddress.indexOf(hostFilter);
             });
         }
-        return !predicates.length ? cells : _.filter(cells, concatByAnd(...predicates));
+        return !predicates.length ? cells : filter_(cells, concatByAnd(...predicates));
     },
 );
 
@@ -179,7 +183,7 @@ export function filterChaosCellsByBundle(bundle: string, cells: Array<ChaosCell>
         return [];
     }
 
-    return _.filter(cells, (item) => item.bundle === bundle);
+    return filter_(cells, (item) => item.bundle === bundle);
 }
 
 export const getChaosCellsSorted = createSelector(
@@ -190,11 +194,11 @@ export const getChaosCellsSorted = createSelector(
 );
 
 export const getChaosCellsBundles = createSelector([getChaosCells], (cells) => {
-    return _.uniq(_.map(cells, 'bundle')).sort();
+    return uniq_(map_(cells, 'bundle')).sort();
 });
 
 export const getChaosCellsHosts = createSelector([getChaosCellsOfActiveAccount], (cells) => {
-    return _.uniq(_.map(cells, 'peerAddress')).sort();
+    return uniq_(map_(cells, 'peerAddress')).sort();
 });
 
 export const getChaosCellsHostsOfActiveBundle = createSelector(
@@ -208,7 +212,7 @@ export const getChaosCellsHostsOfActiveBundle = createSelector(
 );
 
 export function prepareHostsFromCells(cells: Array<ChaosCell>) {
-    return _.uniq(_.map(cells, ({peerAddress}) => prepareHost(peerAddress)).filter(Boolean))
+    return uniq_(map_(cells, ({peerAddress}) => prepareHost(peerAddress)).filter(Boolean))
         .sort()
         .join('|');
 }

@@ -1,5 +1,5 @@
-import uniq from 'lodash/uniq';
-import map from 'lodash/map';
+import uniq_ from 'lodash/uniq';
+import map_ from 'lodash/map';
 import type {ChartKitWidgetData} from '@gravity-ui/chartkit';
 import type {PrepareLineArgs, QueryResult} from './types';
 import {Field, VisualizationId} from '../types';
@@ -45,7 +45,7 @@ function prepareColoredSeriesData({
         },
         xAxis: {
             type: 'category',
-            categories: uniq(map(rows, xFieldPath) as unknown as string[]),
+            categories: uniq_(map_(rows, xFieldPath) as unknown as string[]),
         },
     };
 }

@@ -1,7 +1,10 @@
 import React from 'react';
 import {connect, useSelector} from 'react-redux';
 import unipika from '../../../../../common/thor/unipika';
-import _ from 'lodash';
+
+import keys_ from 'lodash/keys';
+import throttle_ from 'lodash/throttle';
+
 import cn from 'bem-cn-lite';
 
 import {CollapsibleSectionStateLess} from '../../../../../components/CollapsibleSection/CollapsibleSection';
@@ -25,7 +28,7 @@ import {UI_COLLAPSIBLE_SIZE} from '../../../../../constants/global';
 
 const block = cn('operation-specification');
 
-const onResize = _.throttle(
+const onResize = throttle_(
     () => {
         window.dispatchEvent(new Event('resize'));
     },
@@ -41,7 +44,7 @@ function Specification({operation}) {
     const unrecognizedSpec = operation.typedUnrecognizedSpec || {};
     const fullSpec = operation.typedFullSpec;
 
-    const hasUnrecognized = _.keys(unrecognizedSpec).length > 0;
+    const hasUnrecognized = keys_(unrecognizedSpec).length > 0;
 
     const [collapsed, setCollapsed] = React.useState({
         provided: hasUnrecognized,

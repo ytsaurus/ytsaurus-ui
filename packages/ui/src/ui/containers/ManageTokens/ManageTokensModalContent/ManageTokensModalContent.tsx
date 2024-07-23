@@ -4,7 +4,7 @@ import * as React from 'react';
 import {FC, useMemo, useState} from 'react';
 import {Alert, Button} from '@gravity-ui/uikit';
 import {FormApi} from '@gravity-ui/dialog-fields';
-import truncate from 'lodash/truncate';
+import truncate_ from 'lodash/truncate';
 import Modal from '../../../components/Modal/Modal';
 import {YTDFDialog, makeErrorFields} from '../../../components/Dialog/Dialog';
 import {
@@ -301,7 +301,7 @@ const AuthenticationTokensSection: FC<{
                             render: ({value}) => {
                                 return (
                                     <>
-                                        {truncate(String(value), {length: 12})}
+                                        {truncate_(String(value), {length: 12})}
                                         <ClipboardButton
                                             title="Copy error"
                                             view="flat-secondary"

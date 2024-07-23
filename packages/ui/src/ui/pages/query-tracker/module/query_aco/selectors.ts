@@ -1,4 +1,4 @@
-import intersection from 'lodash/intersection';
+import intersection_ from 'lodash/intersection';
 import {SelectOption} from '@gravity-ui/uikit/build/esm/components/Select/types';
 import {RootState} from '../../../../store/reducers';
 import {getSettingsData} from '../../../../store/selectors/settings-base';
@@ -14,7 +14,7 @@ export const getLastSelectedACONamespaces = (state: RootState) => {
 
 export const getQueryACOOptions = (state: RootState): SelectOption[] => {
     const aco = new Set(
-        intersection(
+        intersection_(
             getLastSelectedACONamespaces(state),
             selectAcoState(state).data.access_control_objects,
         ).concat(selectAcoState(state).data.access_control_objects),

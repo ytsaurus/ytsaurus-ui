@@ -1,5 +1,7 @@
 import {ThunkAction} from 'redux-thunk';
-import _ from 'lodash';
+
+import isEmpty_ from 'lodash/isEmpty';
+
 import ypath from '../../../common/thor/ypath';
 
 import {listAllGroups, listAllUsers} from '../../../utils/users-groups';
@@ -207,7 +209,7 @@ export function loadPoolTreesIfNotLoaded(): ThunkAction<Promise<void>, RootState
         }
 
         const trees = getPoolTrees(getState());
-        if (!_.isEmpty(trees)) {
+        if (!isEmpty_(trees)) {
             return Promise.resolve();
         }
 

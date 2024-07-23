@@ -1,4 +1,8 @@
-import _ from 'lodash';
+import forEach_ from 'lodash/forEach';
+import map_ from 'lodash/map';
+import reduce_ from 'lodash/reduce';
+import sortBy_ from 'lodash/sortBy';
+
 import ypath from '@ytsaurus/interface-helpers/lib/ypath';
 
 import {YTApiId, ytApiV3Id} from '../../../rum/rum-wrap-api';
@@ -19,7 +23,7 @@ export function getSchedulers() {
             ...USE_SUPRESS_SYNC,
         })
         .then((hosts) => {
-            const ordered = _.sortBy(hosts, (host) => {
+            const ordered = sortBy_(hosts, (host) => {
                 return ypath.getValue(host, '');
             });
             return getSchedulersState(ordered);
@@ -38,7 +42,7 @@ function getSchedulersState(hosts) {
         },
     ];
 
-    _.forEach(hosts, (host) => {
+    forEach_(hosts, (host) => {
         const name = ypath.getValue(host, '');
         requests.push({
             command: 'get',
@@ -53,7 +57,7 @@ function getSchedulersState(hosts) {
     return ytApiV3Id.executeBatch(YTApiId.systemSchedulersState, {requests}).then((data) => {
         const {outputs} = splitBatchResults(data, 'Failed to get scheduler states');
         const alerts = outputs[0];
-        const connectedHosts = _.map(hosts, (host, index) => {
+        const connectedHosts = map_(hosts, (host, index) => {
             return {
                 host: host,
                 connected: outputs[index + 1],
@@ -65,7 +69,7 @@ function getSchedulersState(hosts) {
 
 function getAgentsState(hosts) {
     const requests = [];
-    _.forEach(hosts, (host) => {
+    forEach_(hosts, (host) => {
         const basePath = '//sys/controller_agents/instances/' + ypath.getValue(host, '');
 
         requests.push(
@@ -90,11 +94,11 @@ function getAgentsState(hosts) {
 
     return ytApiV3Id.executeBatch(YTApiId.systemCAStates, {requests}).then((data) => {
         const {outputs} = splitBatchResults(data, 'Failed to get CA states');
-        const agents = _.map(hosts, (host, index) => ({
+        const agents = map_(hosts, (host, index) => ({
             host,
             connected: outputs[2 * index],
         }));
-        const agentAlerts = _.reduce(
+        const agentAlerts = reduce_(
             outputs,
             (alerts, value, index) => {
                 if (index % 2) {
@@ -118,7 +122,7 @@ export function getAgents() {
         })
         .then((hosts) => {
             hosts = hosts || [];
-            const res = _.sortBy(hosts, (host) => {
+            const res = sortBy_(hosts, (host) => {
                 return ypath.getValue(host, '');
             });
             return getAgentsState(res);

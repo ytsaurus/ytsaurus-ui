@@ -1,8 +1,10 @@
 import React, {useMemo} from 'react';
 import {useSelector} from 'react-redux';
 import {createSelector} from 'reselect';
-import {compact, isFinite} from 'lodash';
 import cn from 'bem-cn-lite';
+
+import compact_ from 'lodash/compact';
+import isFinite_ from 'lodash/isFinite';
 
 import MetaTable from '../../../../components/MetaTable/MetaTable';
 import ElementsTableRaw from '../../../../components/ElementsTable/ElementsTable';
@@ -92,27 +94,27 @@ const selectItems = createSelector(
         averageGpuPower,
         averageGpuMemory,
     ) =>
-        compact([
+        compact_([
             {key: 'total time waiting to read data', value: hammer.format['TimeDuration'](read)},
             {key: 'total time waiting to write data', value: hammer.format['TimeDuration'](write)},
-            isFinite(averageUserCpuTime) && {
+            isFinite_(averageUserCpuTime) && {
                 key: 'average user cpu time per second',
                 value: hammer.format['Number'](averageUserCpuTime, {digits: 3}),
             },
-            isFinite(averageWaitCpuTime) && {
+            isFinite_(averageWaitCpuTime) && {
                 key: 'average wait cpu time per second',
                 value: hammer.format['Number'](averageWaitCpuTime, {digits: 3}),
             },
             {key: 'gpu devices', value: hammer.format['Number'](gpuDevices)},
-            isFinite(averageGpuUtilization) && {
+            isFinite_(averageGpuUtilization) && {
                 key: 'average gpu utilization',
                 value: hammer.format['Percent'](averageGpuUtilization * 100),
             },
-            isFinite(averageGpuPower) && {
+            isFinite_(averageGpuPower) && {
                 key: 'average gpu power',
                 value: hammer.format['Number'](averageGpuPower, {digits: 3}),
             },
-            isFinite(averageGpuMemory) && {
+            isFinite_(averageGpuMemory) && {
                 key: 'average gpu memory usage',
                 value: hammer.format['Bytes'](averageGpuMemory),
             },

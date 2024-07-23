@@ -1,4 +1,7 @@
-import _ from 'lodash';
+import compact_ from 'lodash/compact';
+import filter_ from 'lodash/filter';
+import map_ from 'lodash/map';
+
 import {createSelector} from 'reselect';
 
 import ypath from '../../../common/thor/ypath';
@@ -38,7 +41,7 @@ export const getNavigationBreadcrumbs = createSelector(
     [getPath, getParsedPath, getTransaction],
     (path: string, parsedPath?: ParsedPath, transaction?: string) => {
         if (parsedPath) {
-            return _.map(parsedPath?.fragments, (item, index) => {
+            return map_(parsedPath?.fragments, (item, index) => {
                 return {
                     text: item.name,
                     state: prepareNavigationState(parsedPath, transaction, index),
@@ -73,7 +76,7 @@ export const getSupportedTabs = createSelector(
         const isDynamic = attributes.dynamic === true;
         const isPipeline = attributes.pipeline_format_version !== undefined;
         const mountConfigVisible = mountConfigHasData || isDynamic;
-        const alwaysSupportedTabs = _.compact([
+        const alwaysSupportedTabs = compact_([
             Tab.CONTENT,
             isPipeline && Tab.FLOW,
             Tab.ATTRIBUTES,
@@ -82,7 +85,7 @@ export const getSupportedTabs = createSelector(
             Tab.ACL,
             Boolean(getAccessLogBasePath()) && Tab.ACCESS_LOG,
         ]);
-        const supportedByAttribute = _.filter<ValueOf<typeof Tab>>(
+        const supportedByAttribute = filter_<ValueOf<typeof Tab>>(
             [Tab.SCHEMA, Tab.LOCKS],
             // eslint-disable-next-line no-prototype-builtins
             (name) => attributes?.hasOwnProperty(name),

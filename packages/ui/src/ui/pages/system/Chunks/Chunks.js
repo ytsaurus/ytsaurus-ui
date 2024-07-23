@@ -4,7 +4,11 @@ import {connect, useDispatch} from 'react-redux';
 import hammer from '../../../common/hammer';
 import PropTypes from 'prop-types';
 import block from 'bem-cn-lite';
-import _ from 'lodash';
+
+import filter_ from 'lodash/filter';
+import forEach_ from 'lodash/forEach';
+import map_ from 'lodash/map';
+import partition_ from 'lodash/partition';
 
 import {CollapsibleSectionStateLess} from '../../../components/CollapsibleSection/CollapsibleSection';
 import withStickyFooter from '../../../components/ElementsTable/hocs/withStickyFooter';
@@ -39,9 +43,9 @@ class Chunks extends Component {
     }
 
     static _prepareColumnSet(types) {
-        let columnSet = _.map(types, 'name');
+        let columnSet = map_(types, 'name');
 
-        columnSet = _.filter(columnSet, (item) => item !== 'chunks');
+        columnSet = filter_(columnSet, (item) => item !== 'chunks');
         columnSet.push('chunks');
         columnSet.unshift('cell_tag');
 
@@ -68,7 +72,7 @@ class Chunks extends Component {
     _prepareColumns(types) {
         const columns = {};
 
-        _.each(types, (type) => {
+        forEach_(types, (type) => {
             columns[type.name] = {
                 ...type,
                 get: function (cellData) {
@@ -116,7 +120,7 @@ class Chunks extends Component {
             },
         ];
 
-        return _.map(labels, (label) => {
+        return map_(labels, (label) => {
             let theme, text;
 
             if (typeof label.value === 'boolean') {
@@ -133,7 +137,7 @@ class Chunks extends Component {
 
     renderImpl() {
         const {cells, types, sortState, collapsibleSize, collapsed} = this.props;
-        const [rest, total] = _.partition(cells, ({cell_tag}) => 'total' !== cell_tag);
+        const [rest, total] = partition_(cells, ({cell_tag}) => 'total' !== cell_tag);
 
         if (!cells || 0 === cells.length) {
             return null;

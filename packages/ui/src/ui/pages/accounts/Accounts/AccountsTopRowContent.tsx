@@ -1,6 +1,6 @@
 import React from 'react';
 import cn from 'bem-cn-lite';
-import _ from 'lodash';
+import some_ from 'lodash/some';
 
 import {RowWithName} from '../../../containers/AppNavigation/TopRowContent/SectionName';
 import Favourites, {FavouritesItem} from '../../../components/Favourites/Favourites';
@@ -158,7 +158,7 @@ function BreadcrumbLink({account, title, isCurrent}: BreadcrumbLinkProps) {
 }
 
 function calcRootPathname(pathname: string, cluster: string) {
-    const isAllowedRootTab = _.some(ACCOUNTS_ALLOWED_ROOT_TABS, (_v, tab) => {
+    const isAllowedRootTab = some_(ACCOUNTS_ALLOWED_ROOT_TABS, (_v, tab) => {
         return pathname.endsWith('/' + tab);
     });
 

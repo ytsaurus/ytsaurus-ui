@@ -1,5 +1,5 @@
 import {yqlModel} from '../models/shared';
-import _ from 'lodash';
+
 import {
     DataType,
     getType,

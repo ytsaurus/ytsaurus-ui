@@ -3,7 +3,9 @@ import * as React from 'react';
 import {Select, TextInput, useThemeValue} from '@gravity-ui/uikit';
 
 import cn from 'bem-cn-lite';
-import _ from 'lodash';
+
+import reduce_ from 'lodash/reduce';
+
 import {DataSet} from 'vis-data';
 import {Timeline as TimelineRuler} from '../../../../components/common/Timeline/Timeline';
 import {BoundsChangedEvent, yaTimelineConfig} from '../../../../packages/ya-timeline';
@@ -100,7 +102,7 @@ function TimelineWithSidebar({graph, prepareNode}: TimelineWithSidebarProps) {
     }, [nodes, prepareNode]);
 
     const {axes, events} = React.useMemo(() => {
-        const queryStartedAtMillis = _.reduce(
+        const queryStartedAtMillis = reduce_(
             progressRef.current,
             (acc, el) => {
                 const start = el.startedAt ? new Date(el.startedAt).getTime() : Infinity;

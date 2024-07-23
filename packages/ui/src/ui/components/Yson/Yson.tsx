@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import block from 'bem-cn-lite';
-import _ from 'lodash';
+
+import isEqual_ from 'lodash/isEqual';
 
 import unipika from '../../common/thor/unipika';
 
@@ -77,8 +78,8 @@ export default class Yson extends Component<YsonProps, State> {
 
         if (
             prevValue === INITIAL ||
-            !_.isEqual(prevValue, value) ||
-            !_.isEqual(prevSettings, settings)
+            !isEqual_(prevValue, value) ||
+            !isEqual_(prevSettings, settings)
         ) {
             // TODO: fix me later
             // The call is required because unipika.format() applies default values to a passed settings inplace.

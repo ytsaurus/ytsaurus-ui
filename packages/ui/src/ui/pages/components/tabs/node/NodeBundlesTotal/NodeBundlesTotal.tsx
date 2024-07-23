@@ -1,7 +1,8 @@
 import React from 'react';
 import {useSelector} from 'react-redux';
 import cn from 'bem-cn-lite';
-import _ from 'lodash';
+
+import map_ from 'lodash/map';
 
 import {Progress} from '@gravity-ui/uikit';
 
@@ -94,7 +95,7 @@ export function TabletDynamicTotal(props: TabletDynamicTotalProps) {
 
     const {stack, text, content} = React.useMemo(() => {
         let usageSum = 0;
-        const stack = _.map(rest, (value, key) => {
+        const stack = map_(rest, (value, key) => {
             usageSum += value || 0;
             const v = (100 * value!) / limit!;
             return {
@@ -111,7 +112,7 @@ export function TabletDynamicTotal(props: TabletDynamicTotalProps) {
                 : `${format.Bytes(usage ?? usageSum)} / ${format.Bytes(limit)}`,
             content: (
                 <div className={block('progress-tooltip')}>
-                    {_.map(stack, (item, index) => {
+                    {map_(stack, (item, index) => {
                         const {key} = item;
                         item.color = COLORS[key] ?? getProgressBarColorByIndex(index, 8);
 
@@ -202,24 +203,21 @@ export function StorePreload(props: {
             text: [completed, allCount].join(' / '),
             content: (
                 <div className={block('progress-tooltip')}>
-                    {_.map(
-                        [...stack, {key: 'allCount' as const, theme: 'info'}],
-                        ({key, theme}) => {
-                            return (
-                                <React.Fragment key={key}>
-                                    <div
-                                        className={block('color-circle', {
-                                            theme,
-                                        })}
-                                    />
-                                    <div className={block('progress-tooltip-title')}>
-                                        {key === 'allCount' ? 'Total' : key}
-                                    </div>
-                                    <div>{format.Number(props.data[key])}</div>
-                                </React.Fragment>
-                            );
-                        },
-                    )}
+                    {map_([...stack, {key: 'allCount' as const, theme: 'info'}], ({key, theme}) => {
+                        return (
+                            <React.Fragment key={key}>
+                                <div
+                                    className={block('color-circle', {
+                                        theme,
+                                    })}
+                                />
+                                <div className={block('progress-tooltip-title')}>
+                                    {key === 'allCount' ? 'Total' : key}
+                                </div>
+                                <div>{format.Number(props.data[key])}</div>
+                            </React.Fragment>
+                        );
+                    })}
                 </div>
             ),
         };

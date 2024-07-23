@@ -2,7 +2,8 @@ import React, {Component, Fragment} from 'react';
 import PropTypes from 'prop-types';
 import hammer from '../../../../common/hammer';
 import block from 'bem-cn-lite';
-import _ from 'lodash';
+
+import map_ from 'lodash/map';
 
 import {Progress} from '@gravity-ui/uikit';
 
@@ -38,7 +39,7 @@ export default class AccountsTotal extends Component<Props> {
         return (
             <table>
                 <tbody>
-                    {_.map(getNodesChunksTotals(clusterTotalsUsage), (item) => (
+                    {map_(getNodesChunksTotals(clusterTotalsUsage), (item) => (
                         <tr key={item.name}>
                             <td className={b('disk-space-medium-type')}>
                                 {hammer.format['ReadableField'](item.name)}

@@ -1,7 +1,7 @@
 import React from 'react';
 import cn from 'bem-cn-lite';
-import _map from 'lodash/map';
-import _reduce from 'lodash/reduce';
+import map_ from 'lodash/map';
+import reduce_ from 'lodash/reduce';
 import {useDispatch, useSelector} from 'react-redux';
 
 import {
@@ -66,7 +66,7 @@ export function ConsumerQueueSelector({className, children}: ConsumerQueueSelect
     };
 
     const {prefix, items, renderItem} = React.useMemo(() => {
-        const pref = _reduce(
+        const pref = reduce_(
             registrations,
             (acc, {queue}) => {
                 return findCommonPathParent(acc, queue);
@@ -74,7 +74,7 @@ export function ConsumerQueueSelector({className, children}: ConsumerQueueSelect
             registrations?.[0]?.queue ?? '',
         );
 
-        const options = _map(registrations, ({queue}) => {
+        const options = map_(registrations, ({queue}) => {
             return {
                 value: `${queue}`,
                 text: queue,

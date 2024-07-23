@@ -1,4 +1,5 @@
-const _ = require('lodash');
+import drop_ from 'lodash/drop';
+
 const LZString = require('lz-string');
 import {tables} from './tables';
 import {STORAGE_KEY, STORAGE_KEY_SIMILAR, StorageBoundExceededError} from './tables-utils';
@@ -102,7 +103,7 @@ describe('hammer.tables', () => {
                 });
 
                 it('significantly different keys do not match the original column set', () => {
-                    const slightlyLessColumns = _.drop(columnSet, 2);
+                    const slightlyLessColumns = drop_(columnSet, 2);
                     const loadedColumns = tables.loadSimilarKeys(slightlyLessColumns);
 
                     expect(loadedColumns).not.toEqual(columnSet);

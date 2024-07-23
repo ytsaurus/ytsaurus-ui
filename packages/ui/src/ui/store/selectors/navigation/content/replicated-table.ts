@@ -1,4 +1,6 @@
-import _ from 'lodash';
+import reduce_ from 'lodash/reduce';
+import some_ from 'lodash/some';
+
 import {createSelector} from 'reselect';
 
 import ypath from '../../../../common/thor/ypath';
@@ -25,7 +27,7 @@ export const getReplicatedTableData = (state: RootState) =>
 export const getAllowEnableReplicatedTracker = createSelector(
     [getReplicatedTableReplicas],
     (replicas) => {
-        return _.some(replicas, (item) => {
+        return some_(replicas, (item) => {
             return Boolean(ypath.getValue(item, '/@replicated_table_tracker_enabled'));
         });
     },
@@ -34,7 +36,7 @@ export const getAllowEnableReplicatedTracker = createSelector(
 export const getReplicatedTableReplicasMap = createSelector(
     [getReplicatedTableReplicas],
     (replicas) => {
-        return _.reduce(
+        return reduce_(
             replicas,
             (acc, {$value, $attributes}) => {
                 acc[$value] = {

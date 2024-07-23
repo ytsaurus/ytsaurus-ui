@@ -2,7 +2,9 @@ import React, {useCallback, useMemo, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import copy from 'copy-to-clipboard';
 import cn from 'bem-cn-lite';
-import _ from 'lodash';
+
+import map_ from 'lodash/map';
+
 // @ts-ignore
 import yt from '@ytsaurus/javascript-wrapper/lib/yt';
 
@@ -257,7 +259,7 @@ export default function JobActions({className}: {className?: string}) {
     return (
         <ErrorBoundary>
             <div className={block(null, className)}>
-                {_.map(actions, (action: Action) => (
+                {map_(actions, (action: Action) => (
                     <ActionBlock {...action} />
                 ))}
                 <DropdownMenu items={additionalActions} />

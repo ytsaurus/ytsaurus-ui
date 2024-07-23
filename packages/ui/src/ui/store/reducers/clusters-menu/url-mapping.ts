@@ -1,5 +1,3 @@
-import _ from 'lodash';
-
 import {initialState as clustersMenuInitialState} from './clusters-menu';
 import {initialState as tableSortState} from '../tables';
 

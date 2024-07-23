@@ -1,5 +1,4 @@
 import {ThunkAction} from 'redux-thunk';
-import _ from 'lodash';
 
 import {RootState} from '../../../store/reducers';
 import {TabletCellBundlesSuggestAction} from '../../../store/reducers/suggests/tablet-cell-bundless';

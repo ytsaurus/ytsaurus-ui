@@ -3,7 +3,11 @@ import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 
 import cn from 'bem-cn-lite';
-import _ from 'lodash';
+
+import escapeRegExp_ from 'lodash/escapeRegExp';
+import filter_ from 'lodash/filter';
+import isEmpty_ from 'lodash/isEmpty';
+import map_ from 'lodash/map';
 
 import {TextInput} from '@gravity-ui/uikit';
 import Modal from '../../../../../components/Modal/Modal';
@@ -63,8 +67,8 @@ class OffsetSelectorModal extends Component {
         const {items} = this.state;
         const {isTableSorted, moveOffset, closeOffsetSelectorModal} = this.props;
         const minKeyValue = isTableSorted ? 'null' : '0';
-        const offsetValues = _.map(items, (item) => {
-            return _.isEmpty(item.value) ? minKeyValue : item.value;
+        const offsetValues = map_(items, (item) => {
+            return isEmpty_(item.value) ? minKeyValue : item.value;
         });
         moveOffset(Query.prepareKey(offsetValues));
         closeOffsetSelectorModal();
@@ -108,8 +112,8 @@ class OffsetSelectorModal extends Component {
     }
 
     filterItemsByName(items, filter) {
-        const re = new RegExp(_.escapeRegExp(filter), 'i');
-        return _.filter(items, (item) => re.test(item.name));
+        const re = new RegExp(escapeRegExp_(filter), 'i');
+        return filter_(items, (item) => re.test(item.name));
     }
 
     renderItems() {
@@ -118,7 +122,7 @@ class OffsetSelectorModal extends Component {
         return (
             <div className={block('items')}>
                 <div className={block('item-group')}>{this.renderSearchBox()}</div>
-                {_.map(visibleItems, (item) => {
+                {map_(visibleItems, (item) => {
                     return (
                         <label
                             key={item.name}

@@ -1,7 +1,11 @@
 import React from 'react';
 import cn from 'bem-cn-lite';
 import {useDispatch, useSelector} from 'react-redux';
-import _ from 'lodash';
+
+import entries_ from 'lodash/entries';
+import map_ from 'lodash/map';
+import pick_ from 'lodash/pick';
+import reduce_ from 'lodash/reduce';
 
 import hammer from '../../../common/hammer';
 
@@ -58,7 +62,7 @@ export function ActiveAccountBundleControllerUpdater() {
                     path: `//sys/bundle_controller/orchid/bundle_controller/state/bundles/${activeBundle}/alerts`,
                 },
             },
-            ..._.map(DETAILS_KEYS, (attr) => {
+            ...map_(DETAILS_KEYS, (attr) => {
                 return {
                     command: 'get' as const,
                     parameters: {
@@ -77,7 +81,7 @@ export function ActiveAccountBundleControllerUpdater() {
             },
         ).catch(() => []);
 
-        const inProgressCount = _.reduce(
+        const inProgressCount = reduce_(
             rest,
             (acc, {output}) => {
                 return acc + (output ?? 0);
@@ -208,8 +212,8 @@ function getState(alerts?: OrchidBundlesData['alerts'], totalCounts = 0) {
 
 export function getBundleStateData(orchidData: OrchidBundlesData) {
     const alerts = orchidData.alerts;
-    const detailsEntries = _.entries(_.pick(orchidData, DETAILS_KEYS));
-    const totalCounts = _.reduce(detailsEntries, (acc, [_k, v]) => acc + v, 0);
+    const detailsEntries = entries_(pick_(orchidData, DETAILS_KEYS));
+    const totalCounts = reduce_(detailsEntries, (acc, [_k, v]) => acc + v, 0);
     const state = getState(alerts, totalCounts);
     return {state, detailsEntries};
 }

@@ -2,7 +2,8 @@ import React, {Component} from 'react';
 import {connect, useDispatch} from 'react-redux';
 import PropTypes from 'prop-types';
 import block from 'bem-cn-lite';
-import _ from 'lodash';
+
+import map_ from 'lodash/map';
 
 import {CollapsibleSectionStateLess} from '../../../components/CollapsibleSection/CollapsibleSection';
 import VisibleHostTypeRadioButton from '../../../pages/system/VisibleHostTypeRadioButton';
@@ -26,7 +27,7 @@ function computeStateProgress(counters) {
     const total = counters.total;
 
     return sortStateProgress(
-        _.map(counters.states, (count, state) => {
+        map_(counters.states, (count, state) => {
             return {
                 value: total && (count / total) * 100,
                 title: 'State: ' + state,
@@ -74,7 +75,7 @@ class Masters extends Component {
     }
 
     renderMastersGroups = (masters, gridRowStart, {allowVoting} = {allowVoting: false}) =>
-        _.map(masters, (master) => (
+        map_(masters, (master) => (
             <MasterGroup
                 key={master.cellTag}
                 {...master}

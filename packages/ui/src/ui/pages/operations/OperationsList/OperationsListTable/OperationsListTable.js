@@ -4,7 +4,7 @@ import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import hammer from '../../../../common/hammer';
 import cn from 'bem-cn-lite';
-import {trimEnd} from 'lodash';
+import trimEnd_ from 'lodash/trimEnd';
 
 import unipika from '../../../../common/thor/unipika';
 import OperationProgress from '../../../../pages/operations/OperationProgress/OperationProgress';
@@ -62,7 +62,7 @@ function renderTitle(item, url) {
         <Link
             routed
             className="elements-ellipsis"
-            url={`${trimEnd(url, '/')}/${item.$value}`}
+            url={`${trimEnd_(url, '/')}/${item.$value}`}
             theme="primary"
         >
             <span>{unipika.decode(title)}</span>

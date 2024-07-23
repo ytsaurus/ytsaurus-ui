@@ -1,5 +1,3 @@
-import _ from 'lodash';
-
 import {initialState as schedulingInitialState} from './scheduling';
 import {initialState as tableSortState} from '../../../store/reducers/tables';
 

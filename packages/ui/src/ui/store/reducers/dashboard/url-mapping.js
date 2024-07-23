@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import reduce_ from 'lodash/reduce';
 
 import {getListPreparedState, listParams} from '../operations/list/url-mapping';
 import {
@@ -8,7 +8,7 @@ import {
 import {initialState} from './index';
 import {Page} from '../../../constants/index';
 
-const preparedListParams = _.reduce(
+const preparedListParams = reduce_(
     listParams,
     (result, value, key) => {
         result[Page.OPERATIONS + '_' + key] = {...value};
@@ -17,7 +17,7 @@ const preparedListParams = _.reduce(
     {},
 );
 
-const preparedAccountsParams = _.reduce(
+const preparedAccountsParams = reduce_(
     accountsParams,
     (result, value, key) => {
         result[Page.ACCOUNTS + '_' + key] = {...value};

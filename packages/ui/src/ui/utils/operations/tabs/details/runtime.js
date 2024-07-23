@@ -1,4 +1,5 @@
-import _ from 'lodash';
+import map_ from 'lodash/map';
+
 import ypath from '../../../../common/thor/ypath';
 import hammer from '../../../../common/hammer';
 
@@ -14,7 +15,7 @@ export function prepareRuntime(operation) {
 
         trees =
             trees &&
-            _.map(trees, (treeFairShareInfo, treeName) => ({
+            map_(trees, (treeFairShareInfo, treeName) => ({
                 progress: treeFairShareInfo,
                 name: treeName,
             }));

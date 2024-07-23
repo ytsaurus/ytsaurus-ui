@@ -1,7 +1,8 @@
 import React from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import cn from 'bem-cn-lite';
-import _ from 'lodash';
+
+import capitalize_ from 'lodash/capitalize';
 
 import {Dialog, Progress} from '@gravity-ui/uikit';
 
@@ -295,7 +296,7 @@ function ChaosBundleAccountEditor(props: ChaosBundleAccountEditorProps) {
     }, []);
 
     return (
-        <WithHeader header={`${_.capitalize(attributeName)} account`}>
+        <WithHeader header={`${capitalize_(attributeName)} account`}>
             <AccountsSuggestWithLoading
                 value={account || ''}
                 onChange={onChange}

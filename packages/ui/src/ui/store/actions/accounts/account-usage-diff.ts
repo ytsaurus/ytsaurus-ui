@@ -1,4 +1,5 @@
-import _ from 'lodash';
+import isEqual_ from 'lodash/isEqual';
+
 import axios from 'axios';
 import {ThunkAction} from 'redux-thunk';
 import {RootState} from '../../../store/reducers';
@@ -74,7 +75,7 @@ export function fetchAccountUsageListDiff(): UsageListThunkAction {
             })
             .then((response) => {
                 const params = getAccountUsageListDiffRequestParams(getState());
-                if (!_.isEqual(params, requestParams)) {
+                if (!isEqual_(params, requestParams)) {
                     return;
                 }
 
@@ -85,7 +86,7 @@ export function fetchAccountUsageListDiff(): UsageListThunkAction {
             })
             .catch((error: any) => {
                 const params = getAccountUsageListDiffRequestParams(getState());
-                if (!_.isEqual(params, requestParams)) {
+                if (!isEqual_(params, requestParams)) {
                     return;
                 }
 
@@ -133,7 +134,7 @@ export function fetchAccountUsageTreeDiff(): UsageTreeThunkAction {
             })
             .then((response) => {
                 const params = getAccountUsageTreeDiffRequestParams(getState());
-                if (!_.isEqual(params, requestParams)) {
+                if (!isEqual_(params, requestParams)) {
                     return;
                 }
 
@@ -147,7 +148,7 @@ export function fetchAccountUsageTreeDiff(): UsageTreeThunkAction {
             })
             .catch((error: any) => {
                 const params = getAccountUsageTreeDiffRequestParams(getState());
-                if (!_.isEqual(params, requestParams)) {
+                if (!isEqual_(params, requestParams)) {
                     return;
                 }
 

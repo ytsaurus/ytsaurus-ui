@@ -1,6 +1,7 @@
 import React from 'react';
 import cn from 'bem-cn-lite';
-import _ from 'lodash';
+
+import reduce_ from 'lodash/reduce';
 
 import Tabs from '../../components/Tabs/Tabs';
 import {TabletsTab} from '../../constants/tablets';
@@ -79,7 +80,7 @@ export default function TabletCellBundles() {
     const allowAccounting = useSelector(getClusterUiConfigEnablePerBundleTabletAccounting);
 
     const showSettings = React.useMemo(() => {
-        return _.reduce(
+        return reduce_(
             TabletsTab,
             (acc, v) => {
                 if (v === TabletsTab.CHAOS_CELLS) {

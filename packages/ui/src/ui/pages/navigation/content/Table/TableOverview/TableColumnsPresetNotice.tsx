@@ -1,7 +1,8 @@
 import React from 'react';
 import {useSelector} from 'react-redux';
 import cn from 'bem-cn-lite';
-import _ from 'lodash';
+
+import map_ from 'lodash/map';
 
 import {
     getColumnsPresetColumns,
@@ -46,7 +47,7 @@ function TableColumnsPresetNotice() {
             >
                 {!columns?.length ? null : (
                     <span>
-                        {_.map(columns, (item, index) => {
+                        {map_(columns, (item, index) => {
                             return (
                                 <React.Fragment key={index}>
                                     <Yson key={index} value={item} className={block('column')} />

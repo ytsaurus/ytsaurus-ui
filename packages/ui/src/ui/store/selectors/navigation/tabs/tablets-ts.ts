@@ -1,4 +1,9 @@
-import _ from 'lodash';
+import forEach_ from 'lodash/forEach';
+import map_ from 'lodash/map';
+import max_ from 'lodash/max';
+import reduce_ from 'lodash/reduce';
+import toArray_ from 'lodash/toArray';
+
 import {createSelector} from 'reselect';
 import {getPreparedDataForColumns, getTabletsMode, getTabletsSortState} from './tablets';
 import {
@@ -51,10 +56,10 @@ function addHostItem(
         children: [],
     });
 
-    _.forEach(SUM_FIELDS, (k) => {
+    forEach_(SUM_FIELDS, (k) => {
         dst.attributes[k] += item[k];
 
-        maxDst[k] = _.max([maxDst[k], item[k]])!;
+        maxDst[k] = max_([maxDst[k], item[k]])!;
     });
 }
 
@@ -65,9 +70,9 @@ export const getTabletsMax = createSelector([getPreparedDataForColumns], (items)
         compressed_data_size: 0,
         disk_space: 0,
     };
-    _.forEach(items, (item) => {
-        _.forEach(SUM_FIELDS, (k) => {
-            max[k] = _.max([max[k], item[k]])!;
+    forEach_(items, (item) => {
+        forEach_(SUM_FIELDS, (k) => {
+            max[k] = max_([max[k], item[k]])!;
         });
     });
     return max;
@@ -86,7 +91,7 @@ const getTabletsByNameRoot = createSelector(
         };
         const maxHost = {...maxDst};
         const mapByName: Record<string, TreeNode<TabletInfo, TabletInfo>> = {};
-        _.forEach(sortedAndFilteredItems, (item) => {
+        forEach_(sortedAndFilteredItems, (item) => {
             const {[groupByKey]: groupBy, cell_leader_address, cell_id} = item;
             const dst = (mapByName[groupBy] = mapByName[groupBy] || {
                 name: groupBy,
@@ -109,15 +114,15 @@ const getTabletsByNameRoot = createSelector(
 
         const root = {
             name: '',
-            children: _.toArray(mapByName),
+            children: toArray_(mapByName),
             leaves: [],
             attributes: {} as any,
         };
 
-        _.forEach(root.children, (item) => {
+        forEach_(root.children, (item) => {
             item.attributes.childrenCount = item.children.length;
-            _.forEach(SUM_FIELDS, (k) => {
-                maxHost[k] = _.max([maxHost[k], item.attributes[k]])!;
+            forEach_(SUM_FIELDS, (k) => {
+                maxHost[k] = max_([maxHost[k], item.attributes[k]])!;
             });
         });
 
@@ -133,7 +138,7 @@ export const getTabletsByName = createSelector(
     [getTabletsByNameRoot, getTabletsExpandedHosts],
     ({root, maxByLevel}, expandedHosts) => {
         const expanded = new Set(expandedHosts);
-        const children = _.map(root.children, (item) => {
+        const children = map_(root.children, (item) => {
             const {name} = item;
             const isCollapsed = !expanded.has(name);
             return {
@@ -148,7 +153,7 @@ export const getTabletsByName = createSelector(
 
         return {
             maxByLevel,
-            items: _.map(flattenTree({...root, children}), 'attributes'),
+            items: map_(flattenTree({...root, children}), 'attributes'),
         };
     },
 );
@@ -169,7 +174,7 @@ function sortTreeInPlace(root: TreeNode<TabletInfo, TabletInfo>, sortState?: Old
                 return item.attributes.name;
             },
         },
-        ..._.reduce(
+        ...reduce_(
             Object.keys(root.children[0]?.attributes! || {}) as Array<keyof TabletInfo>,
             (acc, k) => {
                 acc[k] = {

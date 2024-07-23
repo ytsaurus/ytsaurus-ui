@@ -1,6 +1,9 @@
 import React from 'react';
 import {AxiosError} from 'axios';
-import _ from 'lodash';
+
+import forEach_ from 'lodash/forEach';
+import map_ from 'lodash/map';
+import reduce_ from 'lodash/reduce';
 
 import {TypedKeys, YTError} from '../types';
 import {Link, ProgressProps, Toaster} from '@gravity-ui/uikit';
@@ -42,7 +45,7 @@ export function extractBatchV4Values<V, T extends {value?: V}>(
     const {results, ...rest} = data;
     const res = !results
         ? []
-        : _.map(results, (itemData, index) => {
+        : map_(results, (itemData, index) => {
               const hasValue = COMMANDS_V4_WITH_VALUE[requests[index]?.command];
               if (!hasValue) {
                   return itemData;
@@ -85,7 +88,7 @@ export function splitBatchResults<T = unknown>(
     const outputs: Array<T | undefined> = [];
     const errorIndices: Array<number> = [];
     const resultIndices: Array<number> = [];
-    _.forEach(batchResults, (res, index) => {
+    forEach_(batchResults, (res, index) => {
         const {error, output} = res;
         outputs.push(output);
         if (error) {
@@ -118,7 +121,7 @@ export function splitBatchResults<T = unknown>(
 }
 
 export function getBatchErrorIndices<T>(results: Array<BatchResultsItem<T>>) {
-    return _.reduce(
+    return reduce_(
         results,
         (acc, {error}, index) => {
             if (error) {
@@ -391,7 +394,7 @@ function visitTreeItemsImpl<T>(
         return;
     }
 
-    _.forEach(treeItem.children, (child) => visitTreeItemsImpl(child, visitorFn, options));
+    forEach_(treeItem.children, (child) => visitTreeItemsImpl(child, visitorFn, options));
 }
 
 export function openInNewTab(href: string) {
@@ -410,7 +413,7 @@ export function showChangedProps(key: string, props: object, verbose?: boolean) 
         console.log(key, Date.now(), Object.keys(props));
     } else {
         const changed: Array<string> = [];
-        _.forEach(props, (v, k) => {
+        forEach_(props, (v, k) => {
             if (v !== prevProps[k]) {
                 changed.push(k);
                 if (verbose) {

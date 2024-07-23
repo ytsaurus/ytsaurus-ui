@@ -1,4 +1,6 @@
-import _ from 'lodash';
+import map_ from 'lodash/map';
+import reduce_ from 'lodash/reduce';
+
 import {createSelector} from 'reselect';
 
 import {RootState} from '../../../store/reducers';
@@ -13,7 +15,7 @@ const getOperationErasedTreesRaw = (state: RootState) => {
 export const getOperationErasedTrees = createSelector(
     [getOperationErasedTreesRaw],
     (rawTrees: Array<unknown>) => {
-        return _.reduce(
+        return reduce_(
             rawTrees,
             (acc, item) => {
                 const poolTree = ypath.getValue(item);
@@ -43,7 +45,7 @@ export const getOperationTasks = createSelector(
 export const getOperationTasksNames = createSelector(
     [getOperationTasks],
     (tasks?: Array<{task_name: string}>) => {
-        return _.map(tasks, 'task_name').sort();
+        return map_(tasks, 'task_name').sort();
     },
 );
 
@@ -68,13 +70,13 @@ export const getOperationPools = (state: RootState) =>
     (state.operations.detail.operation as FIX_MY_TYPE).pools;
 
 export const getOperationPoolNames = createSelector([getOperationPools], (pools): Array<string> => {
-    return _.map(pools, 'pool');
+    return map_(pools, 'pool');
 });
 
 export const getOperationsMonitorChartStatesFinishedCount = createSelector(
     [getOperationMonitorChartStates],
     (states) => {
-        return _.reduce(
+        return reduce_(
             states,
             (acc, value) => {
                 return value ? acc + 1 : acc;

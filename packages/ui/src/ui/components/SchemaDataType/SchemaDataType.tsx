@@ -1,5 +1,4 @@
 import React from 'react';
-import _ from 'lodash';
 
 import {getPrimitiveTypesMap} from '../../store/selectors/global/supported-features';
 import {useSelector} from 'react-redux';

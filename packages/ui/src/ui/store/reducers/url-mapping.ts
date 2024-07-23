@@ -1,5 +1,5 @@
 import produce from 'immer';
-import _ from 'lodash';
+
 import {LocationParameters} from '../../store/location';
 import {updateIfChanged} from '../../utils/utils';
 import {RootState} from '.';

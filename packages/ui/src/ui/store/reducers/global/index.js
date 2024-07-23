@@ -1,4 +1,7 @@
-import _ from 'lodash';
+import filter_ from 'lodash/filter';
+import find_ from 'lodash/find';
+import sortBy_ from 'lodash/sortBy';
+
 import {LOCATION_POP} from 'redux-location-state/lib/constants';
 
 import {
@@ -87,7 +90,7 @@ function updatedTitle(state, {cluster, page, path, clusters}) {
 
     const clusterConfig = getClusterConfig(clusters, cluster);
     const clusterName = clusterConfig.name || cluster;
-    const title = _.filter([path, page, clusterName], _.identity).join(' - ');
+    const title = filter_([path, page, clusterName], Boolean).join(' - ');
 
     return {cluster, page, path, title};
 }
@@ -146,7 +149,7 @@ export default (state = initialState, action) => {
 
             return {
                 ...state,
-                accounts: _.sortBy(accounts),
+                accounts: sortBy_(accounts),
                 mediumList,
                 isDeveloper,
                 clusterUiConfig,
@@ -239,7 +242,7 @@ export default (state = initialState, action) => {
 };
 
 function getNotificationWithMaintenance(notifications) {
-    return _.find(notifications, (notification) => {
+    return find_(notifications, (notification) => {
         try {
             const meta = JSON.parse(notification.meta);
             return meta && meta.show_maintenance_page;

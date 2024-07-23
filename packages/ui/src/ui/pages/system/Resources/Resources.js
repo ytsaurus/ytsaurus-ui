@@ -2,7 +2,8 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import block from 'bem-cn-lite';
-import _ from 'lodash';
+
+import forEach_ from 'lodash/forEach';
 
 import {Progress} from '@gravity-ui/uikit';
 
@@ -71,7 +72,7 @@ class Resources extends Component {
                 used_space_per_medium: usedSpacePerMedium,
             } = nodeAttributes;
 
-            _.each(mediumList, (medium) => {
+            forEach_(mediumList, (medium) => {
                 const available = availableSpacePerMedium[medium];
                 const used = usedSpacePerMedium[medium];
 

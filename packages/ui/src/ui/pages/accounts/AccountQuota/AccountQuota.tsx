@@ -1,6 +1,7 @@
 import React from 'react';
 import cn from 'bem-cn-lite';
-import _ from 'lodash';
+
+import map_ from 'lodash/map';
 
 import {ClickableText} from '../../../components/ClickableText/ClickableText';
 import Icon from '../../../components/Icon/Icon';
@@ -115,7 +116,7 @@ class AccountQuotaEditor extends React.Component<Props & ReduxProps, State> {
             <SelectSingle
                 value={value}
                 onChange={onChange}
-                items={_.map(sources, (value) => {
+                items={map_(sources, (value) => {
                     return {
                         value,
                         text: value,

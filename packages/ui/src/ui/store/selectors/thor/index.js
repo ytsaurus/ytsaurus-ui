@@ -1,4 +1,4 @@
-import _filter from 'lodash/filter';
+import filter_ from 'lodash/filter';
 import {createSelector} from 'reselect';
 
 import hammer from '../../../common/hammer';
@@ -11,7 +11,7 @@ export const getMediumList = createSelector(
 );
 
 export const getMediumListNoCache = createSelector([getMediumList], (mediums) =>
-    _filter(mediums, (item) => item !== 'cache'),
+    filter_(mediums, (item) => item !== 'cache'),
 );
 
 export const getCurrentCluster = (state) => state.global.cluster;

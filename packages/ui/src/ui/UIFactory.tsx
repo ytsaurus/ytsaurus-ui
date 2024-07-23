@@ -1,6 +1,6 @@
 import {SVGIconData} from '@gravity-ui/uikit/build/esm/components/Icon/types';
 import {MetaTableItem} from './components/MetaTable/MetaTable';
-import _ from 'lodash';
+import forEach_ from 'lodash/forEach';
 import React from 'react';
 import {Reducer} from 'redux';
 import {PathParameters} from './store/location';
@@ -726,7 +726,7 @@ function configureUIFactoryItem<K extends keyof UIFactory>(k: K, redefinition: U
 }
 
 export function configureUIFactory(overrides: Partial<UIFactory>) {
-    _.forEach(overrides, (_v, k) => {
+    forEach_(overrides, (_v, k) => {
         const key = k as keyof UIFactory;
         configureUIFactoryItem(key, overrides[key]!);
     });

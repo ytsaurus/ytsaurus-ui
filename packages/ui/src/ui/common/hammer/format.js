@@ -1,6 +1,6 @@
-import _ from 'lodash';
-
 import hammer from '@ytsaurus/interface-helpers/lib/hammer';
+
+import forEach_ from 'lodash/forEach';
 
 const format = hammer.format;
 
@@ -22,7 +22,7 @@ function preformat(value) {
         [/_data_size$/, '_size'],
     ];
 
-    _.each(replacements, (replacementSettings) => {
+    forEach_(replacements, (replacementSettings) => {
         value = value.replace.apply(value, replacementSettings);
     });
 
@@ -50,7 +50,7 @@ function postformat(value) {
         ['lastVisited', 'Visited'],
     ];
 
-    _.each(replacements, (replacementSettings) => {
+    forEach_(replacements, (replacementSettings) => {
         const regex = new RegExp('(^|\\s)(' + replacementSettings[0] + ')($|\\s)', 'i');
         const replacement = '$1' + replacementSettings[1] + '$3';
         value = value.replace(regex, replacement);

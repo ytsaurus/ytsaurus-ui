@@ -2,7 +2,7 @@ import React from 'react';
 import cn from 'bem-cn-lite';
 import * as d3 from 'd3';
 import moment from 'moment';
-import _map from 'lodash/map';
+import map_ from 'lodash/map';
 
 import {Button, Dialog, Loader, Popup, Icon as UIKitIcon} from '@gravity-ui/uikit';
 
@@ -110,7 +110,7 @@ function OdinOverviewPresets() {
     const presets = useSelector(getOdinOverviewVisiblePresets);
     return (
         <div className={block('presets')}>
-            {_map(presets, (item) => (
+            {map_(presets, (item) => (
                 <OdinOverviewPresetItem key={item.name} {...item} />
             ))}
         </div>

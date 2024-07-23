@@ -1,5 +1,6 @@
 import React from 'react';
-import _ from 'lodash';
+import map_ from 'lodash/map';
+
 import cn from 'bem-cn-lite';
 
 import Select from '../../components/Select/Select';
@@ -28,7 +29,7 @@ function TagSelector(props: TagSelectorProps) {
     const {className, onChange, items, placeholder, value, ...rest} = props;
 
     const options = React.useMemo(() => {
-        return _.map(items, (value) => ({value, text: value}));
+        return map_(items, (value) => ({value, text: value}));
     }, [items]);
 
     return (

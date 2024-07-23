@@ -1,5 +1,10 @@
 import {EMPTY_ARRAY} from '../constants/empty';
-import _ from 'lodash';
+
+import indexOf_ from 'lodash/indexOf';
+import isEqual_ from 'lodash/isEqual';
+import join_ from 'lodash/join';
+import reduce_ from 'lodash/reduce';
+import split_ from 'lodash/split';
 
 type ParseSerialize<T> = {
     [K in keyof T]: Serialization<T[K]>;
@@ -31,14 +36,14 @@ export function parseSerializeSymbolCreate<K extends string>(): Serialization<K>
 
 export const parseSerializeArrayString: Serialization<Array<string>> = {
     parse(v: string) {
-        const res = _.split(v, '|');
+        const res = split_(v, '|');
         return !res.length ? EMPTY_ARRAY : res;
     },
     serialize(v: Array<string>) {
         if (!v?.length) {
             return undefined;
         }
-        return _.join(v, '|');
+        return join_(v, '|');
     },
 };
 
@@ -101,11 +106,11 @@ export function parseSerializeSymbolArrayCreate<K extends string>(): Serializati
 export function makeObjectParseSerialize<T extends object>(initialValue: T, io: ParseSerialize<T>) {
     return {
         parse(v = '') {
-            const parts = _.split(v, ',');
-            const res = _.reduce(
+            const parts = split_(v, ',');
+            const res = reduce_(
                 parts,
                 (acc, item) => {
-                    const nameEnd = _.indexOf(item, '-');
+                    const nameEnd = indexOf_(item, '-');
                     if (nameEnd === -1) {
                         return acc;
                     }
@@ -126,11 +131,11 @@ export function makeObjectParseSerialize<T extends object>(initialValue: T, io: 
             return res;
         },
         serialize(obj: T) {
-            const res = _.reduce(
+            const res = reduce_(
                 obj,
                 (acc, v, key) => {
                     const k = key as keyof T;
-                    if (_.isEqual(initialValue[k], v)) {
+                    if (isEqual_(initialValue[k], v)) {
                         return acc;
                     }
 

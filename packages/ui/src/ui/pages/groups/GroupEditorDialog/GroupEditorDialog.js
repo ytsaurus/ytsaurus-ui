@@ -3,7 +3,8 @@ import React from 'react';
 import cn from 'bem-cn-lite';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
-import _ from 'lodash';
+
+import map_ from 'lodash/map';
 
 import {closeGroupEditorModal, saveGroupData} from '../../../store/actions/groups';
 import {
@@ -30,7 +31,7 @@ const MemberPropType = {
 
 class GroupEditorDialog extends React.Component {
     static prepareMembers(subjects) {
-        return _.map(subjects, ({user, group, group_name: name, ...rest}) => {
+        return map_(subjects, ({user, group, group_name: name, ...rest}) => {
             if (group) {
                 return {group, name: name || group};
             }
@@ -46,7 +47,7 @@ class GroupEditorDialog extends React.Component {
         };
 
         const namedSubjects = GroupEditorDialog.prepareMembers(subjects);
-        current.data = _.map(namedSubjects, ({name, frozen, ...rest}) => {
+        current.data = map_(namedSubjects, ({name, frozen, ...rest}) => {
             return {
                 title: name,
                 frozen,
@@ -54,7 +55,7 @@ class GroupEditorDialog extends React.Component {
             };
         });
 
-        const tmp = _.map(others, (name) => {
+        const tmp = map_(others, (name) => {
             return {title: name, frozen: true};
         });
 

@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import _ from 'lodash';
+
+import map_ from 'lodash/map';
 
 import hammer from '../../../common/hammer';
 import Select from '../../../components/Select/Select';
@@ -28,7 +29,7 @@ export default class OperationSelectFilter extends Component {
         const {value, states, counters, withCounters} = this.props;
 
         let found = false;
-        const res = _.map(states, (state) => {
+        const res = map_(states, (state) => {
             const stateName = typeof state === 'string' ? state : state.name;
             const count = counters && (counters[stateName] || 0);
 

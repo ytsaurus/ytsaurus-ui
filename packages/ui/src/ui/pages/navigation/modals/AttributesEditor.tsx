@@ -1,5 +1,11 @@
 import React from 'react';
-import _ from 'lodash';
+
+import isEmpty_ from 'lodash/isEmpty';
+import isEqual_ from 'lodash/isEqual';
+import map_ from 'lodash/map';
+import pickBy_ from 'lodash/pickBy';
+import reduce_ from 'lodash/reduce';
+
 import cn from 'bem-cn-lite';
 
 import ypath from '../../../common/thor/ypath';
@@ -106,7 +112,7 @@ function AttributesEditorLoaded() {
 
     const pathsValues = React.useMemo(
         () =>
-            _.map(paths, (item) => {
+            map_(paths, (item) => {
                 return {
                     title: item,
                 };
@@ -160,10 +166,10 @@ function AttributesEditorLoaded() {
                     ...initialValues.storage,
                 };
 
-                const dataDiff = _.reduce(
+                const dataDiff = reduce_(
                     {...general, ...storage, ...description},
                     (acc, value, key) => {
-                        if (!_.isEqual(value, (initials as any)[key])) {
+                        if (!isEqual_(value, (initials as any)[key])) {
                             (acc as any)[key] = value;
                         }
                         return acc;
@@ -229,7 +235,7 @@ function AttributesEditorLoaded() {
                     annotation: {value: annotation},
                 } = description;
 
-                const generalAttrs = _.pickBy(generalAttributes, (v) => v !== undefined);
+                const generalAttrs = pickBy_(generalAttributes, (v) => v !== undefined);
                 if (general.expiration_time.from !== initialValues.general.expiration_time.from) {
                     generalAttrs.expiration_time = general.expiration_time.from;
                 }
@@ -570,6 +576,6 @@ function validateForm({storage}: FormValues) {
     const res: any = {
         storage: validateStorage(storage),
     };
-    const ret = _.pickBy(res, (v) => !_.isEmpty(v));
+    const ret = pickBy_(res, (v) => !isEmpty_(v));
     return ret;
 }

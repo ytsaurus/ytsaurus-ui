@@ -1,4 +1,7 @@
-import _ from 'lodash';
+import capitalize_ from 'lodash/capitalize';
+import map_ from 'lodash/map';
+import reduce_ from 'lodash/reduce';
+
 import {ThunkAction} from 'redux-thunk';
 import {
     DynTablesStateModalAction,
@@ -32,7 +35,7 @@ export function showDynTablesStateModalByNodes(
 ): DynTablesStateThunkAction {
     return (dispatch) => {
         const allowedFrom = DYN_TABLES_ALLOWED_STATES_OF_ACTION[action];
-        const paths = _.reduce(
+        const paths = reduce_(
             selectedNodes,
             (acc, {path, tabletState}) => {
                 if (tabletState && allowedFrom[tabletState]) {
@@ -62,7 +65,7 @@ export function dynTablesChangeState(
     action: TabletStateAction,
 ): DynTablesStateThunkAction {
     return (dispatch) => {
-        const requests = _.map(paths, (path) => {
+        const requests = map_(paths, (path) => {
             return {
                 command: `${action}_table` as const,
                 parameters: {path},
@@ -84,7 +87,7 @@ export function dynTablesChangeState(
             .then(() => {
                 return wrapApiPromiseByToaster(waitWhileThereIsTransient(paths, action), {
                     toasterName: 'dyn_tables_wait_while_transient_' + action,
-                    successContent: `${_.capitalize(action)} completed`,
+                    successContent: `${capitalize_(action)} completed`,
                     isBatch: true,
                     errorTitle: `Cannot perform ${action} action`,
                 });
@@ -96,7 +99,7 @@ export function dynTablesChangeState(
 }
 
 function waitWhileThereIsTransient(paths: Array<string>, action: TabletStateAction): Promise<void> {
-    const requests = _.map(paths, (path) => {
+    const requests = map_(paths, (path) => {
         return {
             command: 'get' as const,
             parameters: {path: `${path}/@tablet_state`},
@@ -113,12 +116,12 @@ function waitWhileThereIsTransient(paths: Array<string>, action: TabletStateActi
 
     return wrapApiPromiseByToaster<Array<{output: string}>>(res, {
         toasterName: 'dyn_tables_wait_while_transient_' + action,
-        successContent: `${_.capitalize(action)} completed`,
+        successContent: `${capitalize_(action)} completed`,
         skipSuccessToast: true,
         isBatch: true,
         errorTitle: `Cannot perform ${action} action`,
     }).then((results) => {
-        const toRecheck = _.reduce(
+        const toRecheck = reduce_(
             results,
             (acc, {output}, index) => {
                 if (output === 'transient') {

@@ -1,9 +1,16 @@
 import {createSelector} from 'reselect';
-import _ from 'lodash';
-import partition from 'lodash/partition';
-import compact from 'lodash/compact';
-import sortBy from 'lodash/sortBy';
-import isEqual from 'lodash/isEqual';
+
+import compact_ from 'lodash/compact';
+import filter_ from 'lodash/filter';
+import flatten_ from 'lodash/flatten';
+import forEach_ from 'lodash/forEach';
+import map_ from 'lodash/map';
+import sortBy_ from 'lodash/sortBy';
+import uniq_ from 'lodash/uniq';
+import partition_ from 'lodash/partition';
+import isEqual_ from 'lodash/isEqual';
+import some_ from 'lodash/some';
+
 import {calculateLoadingStatus} from '../../utils/utils';
 import {concatByAnd} from '../../common/hammer/predicate';
 import {
@@ -23,16 +30,16 @@ import {PreparedRole} from '../../utils/acl';
 export type PreparedAclSubjectColumn = Omit<PreparedAclSubject, 'type'> & {type: 'columns'};
 
 function prepareColumnsNames(columnsPermissions: Array<{columns?: Array<string>}>) {
-    const columns = _.map(columnsPermissions, (permission) => permission.columns);
+    const columns = map_(columnsPermissions, (permission) => permission.columns);
 
-    return _.compact(_.uniq(_.flatten(columns))).sort();
+    return compact_(uniq_(flatten_(columns))).sort();
 }
 
 function prepareApprovers(
     approvers: Array<PreparedRole> | undefined,
     type: 'read_approver' | 'responsible' | 'auditor',
 ) {
-    return _.map(approvers, (subject) => {
+    return map_(approvers, (subject) => {
         const extra = {
             type,
             subjects: [subject.value],
@@ -78,7 +85,7 @@ export const getObjectPermissionsTypesList = (idmKind: IdmKindType) => {
                 const {permissions} = item;
                 permissions?.forEach((permission) => uniquePermisions.add(permission));
             });
-            return _.sortBy([...uniquePermisions], (permission) => permission);
+            return sortBy_([...uniquePermisions], (permission) => permission);
         },
     );
 };
@@ -90,10 +97,10 @@ type HasSplitted = {
 
 function splitSubjects<T extends {subjects: Array<unknown>}>(items: Array<T>) {
     const res: Array<T & HasSplitted> = [];
-    _.forEach(items, (item) => {
+    forEach_(items, (item) => {
         const {subjects} = item;
         if (subjects && subjects.length > 1) {
-            _.forEach(subjects, (subject, index) => {
+            forEach_(subjects, (subject, index) => {
                 res.push({...item, subjects: [subject], isSplitted: true, subjectIndex: index});
             });
         } else {
@@ -108,7 +115,7 @@ function subjectFilterPredicate<
 >(item: T, filter: string) {
     const {subjectType, groupInfo} = item;
     if (subjectType === 'group') {
-        return _.some(Object.entries(groupInfo ?? {}), ([key, value]) => {
+        return some_(Object.entries(groupInfo ?? {}), ([key, value]) => {
             let str: string | undefined = String(value);
             if (key === 'url') {
                 if (str[str.length - 1] === '/') str = str.slice(0, -1);
@@ -126,7 +133,7 @@ function FilterBySubject<
 >(items: Array<T>, subjectFilter?: string) {
     if (!subjectFilter) return items;
     const lowerNameFilter = subjectFilter.toLowerCase();
-    return _.filter(items, (item) => subjectFilterPredicate(item, lowerNameFilter));
+    return filter_(items, (item) => subjectFilterPredicate(item, lowerNameFilter));
 }
 
 const permissionsFilterPredicate = (item: PreparedAclSubject, filter: Set<YTPermissionTypeUI>) => {
@@ -150,13 +157,13 @@ export const getAllObjectPermissionsFiltered = createSelector(
         getAclFilterColumns,
     ],
     (items, subjectFilter, permissionsFilter, columns) => {
-        const [mainPermissions, columnPermissions] = partition(
+        const [mainPermissions, columnPermissions] = partition_(
             items,
             (item) => !item.columns?.length,
         );
 
         const withColumns = columnPermissions.map((item) => {
-            return {...item, columns: sortBy(item.columns)};
+            return {...item, columns: sortBy_(item.columns)};
         });
 
         const lowerNameFilter = subjectFilter?.toLocaleLowerCase();
@@ -177,8 +184,8 @@ export const getAllObjectPermissionsFiltered = createSelector(
               }
             : undefined;
 
-        const mainPredicates = compact([filterBySubject, filterByPermissions]);
-        const columnsPredicates = compact([filterBySubject, filterByColumns]);
+        const mainPredicates = compact_([filterBySubject, filterByPermissions]);
+        const columnsPredicates = compact_([filterBySubject, filterByColumns]);
         return {
             mainPermissions: mainPredicates.length
                 ? mainPermissions.filter(concatByAnd(...mainPredicates))
@@ -286,7 +293,7 @@ class AggregateBySubject {
                       if (i.inheritance_mode !== this.first.inheritance_mode) {
                           this.first.inheritance_mode = undefined;
                       }
-                      if (!isEqual(this.first.inheritedFrom, i.inheritedFrom)) {
+                      if (!isEqual_(this.first.inheritedFrom, i.inheritedFrom)) {
                           this.first.inheritedFrom = undefined;
                       }
                       return {...i, level: 1};
@@ -336,7 +343,7 @@ function aggregateBySubject(
         {items: []} as ReturnType<AggregateBySubject['getItems']>,
     );
 
-    const [inherited, other] = partition(res.items, (item) => item.inherited);
+    const [inherited, other] = partition_(res.items, (item) => item.inherited);
 
     return {
         ...res,
@@ -356,7 +363,7 @@ export const getAllColumnGroupsActual = createSelector(
         const visibleColumns = new Set(columnsFilter);
         type ItemType = (typeof items)[number];
         const nameFilterLower = nameFilter?.toLowerCase();
-        const predicates = _.compact([
+        const predicates = compact_([
             (item: ItemType) => {
                 return !item.removed;
             },
@@ -370,10 +377,10 @@ export const getAllColumnGroupsActual = createSelector(
                       -1 !== item.name?.toLowerCase().indexOf(nameFilterLower) ?? false
                 : undefined,
         ]);
-        const filtered = _.filter(items, concatByAnd(...predicates)).map((item) => {
-            return {...item, columns: sortBy(item.columns)};
+        const filtered = filter_(items, concatByAnd(...predicates)).map((item) => {
+            return {...item, columns: sortBy_(item.columns)};
         });
-        return _.sortBy(filtered, ['name']);
+        return sortBy_(filtered, ['name']);
     },
 );
 
@@ -389,7 +396,7 @@ function OrderByRoleStatus<
     const requested: typeof items = [];
     const depriving: typeof items = [];
     const rest: typeof items = [];
-    _.forEach(items, (item) => {
+    forEach_(items, (item) => {
         const {isDepriving, isRequested, isUnrecognized, isApproved} = item;
         if (isUnrecognized) {
             unrecognized.push(item);
@@ -407,7 +414,7 @@ function OrderByRoleStatus<
 function OrderByInheritanceAndSubject<T extends {inherited?: boolean; subjects: Array<unknown>}>(
     items: Array<T>,
 ) {
-    const res = _.sortBy(items, [
+    const res = sortBy_(items, [
         (item) => !item.inherited,
         (item) => (item.subjects && item.subjects[0]) || true,
     ]);
@@ -420,13 +427,13 @@ const getResponsibles = (state: RootState, idmKind: IdmKindType) => state.acl[id
 const getAuditors = (state: RootState, idmKind: IdmKindType) => state.acl[idmKind].auditors;
 
 export const getNotInheritedReadApprovers = createSelector([getReadApprovers], (readApprovers) =>
-    _.filter(readApprovers, (readApprover) => !readApprover.inherited),
+    filter_(readApprovers, (readApprover) => !readApprover.inherited),
 );
 export const getNotInheritedResponsibles = createSelector([getResponsibles], (responsibles) =>
-    _.filter(responsibles, (responsible) => !responsible.inherited),
+    filter_(responsibles, (responsible) => !responsible.inherited),
 );
 export const getNotInheritedAuditors = createSelector([getAuditors], (auditros) =>
-    _.filter(auditros, (auditro) => !auditro.inherited),
+    filter_(auditros, (auditro) => !auditro.inherited),
 );
 
 const getAllApprovers = createSelector(
@@ -457,12 +464,12 @@ export const getApprovers = createSelector([getAllApprovers], OrderByRoleStatus)
 export const getAllAccessColumnsPermissions = createSelector(
     [getAllObjectPermissions],
     (objectPermissions) => {
-        const filteredPermissions = _.filter(
+        const filteredPermissions = filter_(
             objectPermissions,
             (permission) => permission.action === 'allow' && permission.columns?.length! > 0,
         );
 
-        return _.map(filteredPermissions, (item) => {
+        return map_(filteredPermissions, (item) => {
             const tmp: typeof item = {...item};
             tmp.type = 'columns';
             return tmp;
@@ -473,12 +480,12 @@ export const getAllAccessColumnsPermissions = createSelector(
 const getAllDenyColumnsPermissions = createSelector(
     [getAllObjectPermissions],
     (objectPermissions) => {
-        const filteredPermissions = _.filter(
+        const filteredPermissions = filter_(
             objectPermissions,
             (permission) => permission.action === 'deny' && permission.columns?.length! > 0,
         );
 
-        return _.map(
+        return map_(
             filteredPermissions,
             (permission) =>
                 ({
@@ -500,7 +507,7 @@ export const getAllDenyColumnsNames = createSelector(
 );
 
 export const getDenyColumnsItems = createSelector([getAllDenyColumnsNames], (names) =>
-    _.map(names, (name) => ({key: name, value: name, title: name})),
+    map_(names, (name) => ({key: name, value: name, title: name})),
 );
 
 export const isPermissionDeleted = (state: RootState, idmKind: IdmKindType) =>

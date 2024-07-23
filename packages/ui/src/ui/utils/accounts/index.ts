@@ -4,7 +4,11 @@ import {
     diskSpaceColumnsItems,
 } from '../../utils/accounts/tables';
 import hammer from '../../common/hammer';
-import _ from 'lodash';
+
+import filter_ from 'lodash/filter';
+import forEach_ from 'lodash/forEach';
+import keys_ from 'lodash/keys';
+import map_ from 'lodash/map';
 
 type VisibleAccountsMode = 'favourites' | 'usable' | 'all';
 
@@ -35,10 +39,10 @@ export function filterFlattenTreeByViewContext(
     };
 
     if (mode === 'favourites') {
-        return _.filter(flattenTree, isInFavourites);
+        return filter_(flattenTree, isInFavourites);
     }
     if (mode === 'usable') {
-        return _.filter(flattenTree, isInUsable);
+        return filter_(flattenTree, isInUsable);
     }
 
     return flattenTree;
@@ -62,20 +66,20 @@ export function sortAccounts(
 export function getResponsibleUsers(accounts: Array<{responsibleUsers: Array<string>}>) {
     const responsibleUsersMap: Record<string, boolean> = {};
 
-    _.each(accounts, (account) => {
-        _.each(account.responsibleUsers, (responsibleUser) => {
+    forEach_(accounts, (account) => {
+        forEach_(account.responsibleUsers, (responsibleUser) => {
             responsibleUsersMap[responsibleUser] = true;
         });
     });
 
-    const responsibleUsers = _.keys(responsibleUsersMap);
+    const responsibleUsers = keys_(responsibleUsersMap);
     responsibleUsers.sort();
 
     return responsibleUsers;
 }
 
 export function makeReadableItems(items: Array<string>) {
-    return _.map(items, (item) => {
+    return map_(items, (item) => {
         const text = hammer.format['ReadableField'](item);
         return {
             value: item,
@@ -95,7 +99,7 @@ function genRadioButtonProps(choicesStrs: Array<string>, options = {}) {
 
 function getContentModeOptions() {
     const choices = Object.keys(ACCOUNTS_COLUMN_SETS);
-    return _.map(choices, (value) => {
+    return map_(choices, (value) => {
         return {value, content: hammer.format.ReadableField(value)};
     });
 }

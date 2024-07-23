@@ -2,7 +2,8 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import cn from 'bem-cn-lite';
-import _ from 'lodash';
+
+import map_ from 'lodash/map';
 
 import Icon from '../../../../../components/Icon/Icon';
 
@@ -74,7 +75,7 @@ class FiltersPresets extends Component {
         const {presets} = this.props;
 
         return (
-            <div className={block()}>{_.map(presets, (preset) => this.renderPreset(preset))}</div>
+            <div className={block()}>{map_(presets, (preset) => this.renderPreset(preset))}</div>
         );
     }
 }

@@ -1,11 +1,11 @@
-import {omit} from 'lodash';
+import omit_ from 'lodash/omit';
 import {QueryItem} from '../api';
 import {DEFAULT_QUERY_ACO} from './selectors';
 
 export const cleanupQueryForDraft = (query: QueryItem): QueryItem => {
     return {
         ...query,
-        annotations: omit(query.annotations, 'is_tutorial'),
+        annotations: omit_(query.annotations, 'is_tutorial'),
     };
 };
 

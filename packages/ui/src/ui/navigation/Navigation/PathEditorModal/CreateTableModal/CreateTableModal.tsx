@@ -1,7 +1,15 @@
 import React from 'react';
 import cn from 'bem-cn-lite';
 import {connect} from 'react-redux';
-import _ from 'lodash';
+
+import forEach_ from 'lodash/forEach';
+import isEmpty_ from 'lodash/isEmpty';
+import isEqual_ from 'lodash/isEqual';
+import map_ from 'lodash/map';
+import reduce_ from 'lodash/reduce';
+import some_ from 'lodash/some';
+import sortBy_ from 'lodash/sortBy';
+import set_ from 'lodash/set';
 
 import Button from '../../../../components/Button/Button';
 import {FormApi, YTDFDialog} from '../../../../components/Dialog/Dialog';
@@ -65,7 +73,7 @@ const TableType = {
 };
 
 const AGGREGATE_CHOICES = [{value: SELECT_EMPTY_VALUE, text: 'default'}].concat(
-    _.map(AggrTypes, (i) => ({value: i, text: i})),
+    map_(AggrTypes, (i) => ({value: i, text: i})),
 );
 
 interface WithVisibilityCondition {
@@ -161,7 +169,7 @@ interface TableSettingsTab {
 }
 
 function genNewName(items: Array<{name: string}>, name: string) {
-    const names = new Set(_.map(items, 'name'));
+    const names = new Set(map_(items, 'name'));
     if (!names.has(name)) {
         return name;
     }
@@ -209,7 +217,7 @@ class CreateTableModalContentImpl extends React.Component<Props> {
 
     reorderColumns(columns: Array<ColumnData>) {
         const {columnsOrder} = this.props;
-        const indexById = _.reduce(
+        const indexById = reduce_(
             columnsOrder,
             (acc, item, index) => {
                 acc[item.id] = index as any;
@@ -217,7 +225,7 @@ class CreateTableModalContentImpl extends React.Component<Props> {
             },
             {} as Record<string, number>,
         );
-        return _.sortBy(columns, (item) => indexById[item.id]);
+        return sortBy_(columns, (item) => indexById[item.id]);
     }
 
     onAdd = (form: FormApi<FIX_MY_TYPE>): Promise<void> => {
@@ -243,7 +251,7 @@ class CreateTableModalContentImpl extends React.Component<Props> {
             optimize_for,
         };
 
-        if (!_.isEqual(compCodec, [SELECT_EMPTY_VALUE])) {
+        if (!isEqual_(compCodec, [SELECT_EMPTY_VALUE])) {
             attributes.compression_codec = compCodec.join('');
         }
 
@@ -259,7 +267,7 @@ class CreateTableModalContentImpl extends React.Component<Props> {
         }
 
         const {keyColumns} = this.props;
-        const schemaColumns = _.map(columns, (item) => {
+        const schemaColumns = map_(columns, (item) => {
             const {aggregate, dataType: type, group, id, name, optional, lock} = item;
             const ascending = keyColumns[id];
 
@@ -362,7 +370,7 @@ class CreateTableModalContentImpl extends React.Component<Props> {
         if (lock) {
             res.lock = lock;
         }
-        return _.isEmpty(res) ? undefined : res;
+        return isEmpty_(res) ? undefined : res;
     }
 
     validateReplicasCount(str: string) {
@@ -397,8 +405,8 @@ class CreateTableModalContentImpl extends React.Component<Props> {
 
     validateTableSettings(tableSettings: TableSettingsTab, columns: Array<ColumnData>) {
         const res: Partial<Record<keyof TableSettingsTab, string>> = {};
-        const hasOrderedColumn = _.some(columns, (colData) => this.isOrderedColumn(colData));
-        const hasUnorderedColumn = _.some(columns, (colData) => !this.isOrderedColumn(colData));
+        const hasOrderedColumn = some_(columns, (colData) => this.isOrderedColumn(colData));
+        const hasUnorderedColumn = some_(columns, (colData) => !this.isOrderedColumn(colData));
 
         const {uniqueKeys, name, replicasCount, tableType} = tableSettings;
 
@@ -413,7 +421,7 @@ class CreateTableModalContentImpl extends React.Component<Props> {
         }
 
         if (tableType === TableType.DYNAMIC && !res.tableType) {
-            const hasDescendingColumns = _.some(this.keyColumns, (value) => -1 === value);
+            const hasDescendingColumns = some_(this.keyColumns, (value) => -1 === value);
             if (hasDescendingColumns) {
                 res.tableType = 'Dynamic tables do not support descending-sorted columns';
             }
@@ -428,7 +436,7 @@ class CreateTableModalContentImpl extends React.Component<Props> {
             res.uniqueKeys = 'The table must contain at least one sorted column.';
         }
 
-        return _.isEmpty(res) ? null : res;
+        return isEmpty_(res) ? null : res;
     }
 
     onClose = () => {
@@ -446,7 +454,7 @@ class CreateTableModalContentImpl extends React.Component<Props> {
 
         const setError = (path: string, error: any) => {
             if (error) {
-                _.set(errors, path, error);
+                set_(errors, path, error);
             }
         };
 
@@ -455,7 +463,7 @@ class CreateTableModalContentImpl extends React.Component<Props> {
         const columns: Array<ColumnData> = values[COLUMNS];
         this.columns = columns;
         const nameCounters: Record<string, Array<number>> = {};
-        _.forEach(columns, (columnData, index) => {
+        forEach_(columns, (columnData, index) => {
             const {name} = columnData;
             const nameIndexes = nameCounters[name];
             if (!nameIndexes) {
@@ -470,10 +478,10 @@ class CreateTableModalContentImpl extends React.Component<Props> {
                 this.validateColumnData(columnData, tableType === TableType.DYNAMIC),
             );
         });
-        _.forEach(nameCounters, (indices) => {
+        forEach_(nameCounters, (indices) => {
             if (indices.length > 1) {
                 indices.forEach((index) => {
-                    _.set(
+                    set_(
                         errors,
                         `${COLUMNS}[${index}].name`,
                         'The column with this name already exists',
@@ -531,7 +539,7 @@ class CreateTableModalContentImpl extends React.Component<Props> {
                     title: 'Create Table',
                 }}
                 isApplyDisabled={() => {
-                    return !_.isEmpty(this.lastValidationResult);
+                    return !isEmpty_(this.lastValidationResult);
                 }}
                 validate={this.getFormValidator()}
                 onActiveTabChange={(tab) => {
@@ -827,7 +835,7 @@ class CreateTableModalContentImpl extends React.Component<Props> {
                                     _form: unknown,
                                     {values}: ReturnType<FormApi<FIX_MY_TYPE>['getState']>,
                                 ) => {
-                                    const allGroups = _.map(values?.columns, 'group').filter((v) =>
+                                    const allGroups = map_(values?.columns, 'group').filter((v) =>
                                         Boolean(v),
                                     );
                                     this.props.setCreateTableGroupSuggestions(allGroups);
@@ -862,7 +870,7 @@ class CreateTableModalContentImpl extends React.Component<Props> {
                                     _form: unknown,
                                     {values}: ReturnType<FormApi<FIX_MY_TYPE>['getState']>,
                                 ) => {
-                                    const allLocks = _.map(values?.columns, 'lock').filter((v) =>
+                                    const allLocks = map_(values?.columns, 'lock').filter((v) =>
                                         Boolean(v),
                                     );
                                     this.props.setCreateTableLockSuggestions(allLocks);

@@ -1,7 +1,10 @@
 import React from 'react';
 import hammer from '../../common/hammer';
 import block from 'bem-cn-lite';
-import _ from 'lodash';
+
+import forEach_ from 'lodash/forEach';
+import map_ from 'lodash/map';
+import reduce_ from 'lodash/reduce';
 
 import Modal from '../Modal/Modal';
 import ColumnSelector, {makeItemsCopy} from '../ColumnSelector/ColumnSelector';
@@ -76,7 +79,7 @@ export default class ColumnSelectorModal<T = never> extends React.Component<Prop
     };
 
     _getItemsOrder(items: Props<T>['items']) {
-        return _.map(items, (item) => item.name);
+        return map_(items, (item) => item.name);
     }
 
     _getOrderedItems(items: Props<T>['items'], order = this.state.itemsOrder) {
@@ -106,7 +109,7 @@ export default class ColumnSelectorModal<T = never> extends React.Component<Prop
     }
 
     calculateSrcItems(newItemsMap: Record<string, ColumnSelectorItem<T>>) {
-        return _.map(this.state.srcItems, (item) => {
+        return map_(this.state.srcItems, (item) => {
             const newItem = newItemsMap[item.name];
 
             if (newItem && newItem.checked !== item.checked) {
@@ -119,7 +122,7 @@ export default class ColumnSelectorModal<T = never> extends React.Component<Prop
 
     onSourceChange = ({items: newItems}: Pick<Props<T>, 'items'>) => {
         const {items} = this.state;
-        const newItemsMap = _.reduce(
+        const newItemsMap = reduce_(
             newItems,
             (acc, data) => {
                 acc[data.name] = data;
@@ -130,7 +133,7 @@ export default class ColumnSelectorModal<T = never> extends React.Component<Prop
 
         const unchanged: Props<T>['items'] = [];
         const changed: Props<T>['items'] = [];
-        _.forEach(items, (item) => {
+        forEach_(items, (item) => {
             const newItem = newItemsMap[item.name];
             if (newItem && newItem.checked !== item.checked) {
                 const dst = newItem.keyColumn ? unchanged : changed;
@@ -149,7 +152,7 @@ export default class ColumnSelectorModal<T = never> extends React.Component<Prop
     };
 
     onDestinationChange = ({items: newItems}: Pick<Props<T>, 'items'>) => {
-        const newItemsMap = _.reduce(
+        const newItemsMap = reduce_(
             newItems,
             (acc, data) => {
                 acc[data.name] = data;
@@ -199,7 +202,7 @@ export default class ColumnSelectorModal<T = never> extends React.Component<Prop
 
         const selectorProps = this._getSelectorProps(rest, srcItems);
         const sortableSelectorProps = this._getSortableSelectorProps(selectorProps, items);
-        const selectedItemsCount = _.reduce(
+        const selectedItemsCount = reduce_(
             sortableSelectorProps.items,
             (acc, item) => (item.disabled || !item.checked ? acc : ++acc),
             0,

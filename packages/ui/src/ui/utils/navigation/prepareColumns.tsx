@@ -5,7 +5,9 @@ import Yson from '../../components/Yson/Yson';
 import unipika from '../../common/thor/unipika';
 import Icon from '../../components/Icon/Icon';
 import {ColumnCell} from '../../pages/navigation/content/Table/DataTableWrapper/DataTableWrapper';
-import _ from 'lodash';
+
+import map_ from 'lodash/map';
+
 import {TypeArray} from '../../components/SchemaDataType/dataTypes';
 import {YsonSettings} from '../../store/selectors/thor/unipika';
 
@@ -24,7 +26,7 @@ export function prepareColumns({
     useRawStrings: boolean | null | undefined;
     schemaByName: Record<string, any>;
 }) {
-    return _.map(columns, (column) => {
+    return map_(columns, (column) => {
         const render = ({value, index}: {value?: any; index: number; row: any}) => (
             <ColumnCell
                 allowRawStrings={useRawStrings}

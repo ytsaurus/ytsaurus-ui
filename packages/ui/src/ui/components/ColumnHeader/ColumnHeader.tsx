@@ -1,6 +1,6 @@
 import React from 'react';
 import cn from 'bem-cn-lite';
-import _ from 'lodash';
+import capitalize_ from 'lodash/capitalize';
 
 import barsDescendingSvg from '@gravity-ui/icons/svgs/bars-descending-align-left.svg';
 import {Button, DropdownMenu, Icon, Text} from '@gravity-ui/uikit';
@@ -66,7 +66,7 @@ function getNameTitle<T extends string>({
     title,
     shortTitle,
 }: Pick<ColumnInfo<T>, 'column' | 'title' | 'shortTitle'>): NameTitleContent {
-    const t = title ?? _.capitalize(column);
+    const t = title ?? capitalize_(column);
     const nameContent = !shortTitle ? t : shortTitle;
     return {nameContent, titleContent: t};
 }

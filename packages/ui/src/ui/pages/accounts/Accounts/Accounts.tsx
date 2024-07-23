@@ -1,7 +1,9 @@
 import React from 'react';
 import block from 'bem-cn-lite';
 import {ConnectedProps, connect, useSelector} from 'react-redux';
-import _ from 'lodash';
+
+import reduce_ from 'lodash/reduce';
+
 import {Redirect, Route, Switch} from 'react-router';
 
 import Tabs from '../../../components/Tabs/Tabs';
@@ -50,7 +52,7 @@ export class Accounts extends React.Component<
 
     render() {
         const {match, cluster, lastVisitedTab, activeAccount, allowUsageTab} = this.props;
-        const showSettings = _.reduce(
+        const showSettings = reduce_(
             AccountsTab,
             (acc, tab) => {
                 acc[tab] = {

@@ -1,5 +1,9 @@
 import React, {useCallback, useMemo} from 'react';
-import _ from 'lodash';
+
+import isEmpty_ from 'lodash/isEmpty';
+import map_ from 'lodash/map';
+import some_ from 'lodash/some';
+
 import {useDispatch, useSelector} from 'react-redux';
 import block from 'bem-cn-lite';
 
@@ -47,7 +51,7 @@ export default function MultipleActions(props: {className: string}) {
     const dynTablesActions = useSelector(getSelectedNodesAllowedDynTablesActions);
 
     const hasRestoreButton = useMemo(() => {
-        return !_.some(selectedNodes, ({path}) => !inTrash(path));
+        return !some_(selectedNodes, ({path}) => !inTrash(path));
     }, [selectedNodes]);
 
     const handleDeleteClick = useCallback(() => {
@@ -121,7 +125,7 @@ export default function MultipleActions(props: {className: string}) {
                 text: 'Remote copy selected',
                 icon: <Icon awesome="clone" />,
                 action: () => {
-                    dispatch(showRemoteCopyModal(_.map(selectedNodes, 'path')));
+                    dispatch(showRemoteCopyModal(map_(selectedNodes, 'path')));
                 },
             },
         ];
@@ -132,14 +136,14 @@ export default function MultipleActions(props: {className: string}) {
             text: 'Edit selected',
             icon: <Icon awesome={'pencil-alt'} />,
             action: () => {
-                const paths = _.map(selectedNodes, 'path');
+                const paths = map_(selectedNodes, 'path');
                 dispatch(showNavigationAttributesEditor(paths));
             },
         };
     }, [selectedNodes]);
 
     const mergeSortSection = useMemo(() => {
-        const allowSortMerge = !_.some(selectedNodes, (node) => {
+        const allowSortMerge = !some_(selectedNodes, (node) => {
             return node.type !== 'table';
         });
         if (!allowSortMerge) {
@@ -150,7 +154,7 @@ export default function MultipleActions(props: {className: string}) {
                 text: 'Sort selected',
                 icon: <Icon awesome={'sort'} />,
                 action: () => {
-                    const paths = _.map(selectedNodes, 'path');
+                    const paths = map_(selectedNodes, 'path');
                     dispatch(showTableSortModal(paths));
                 },
             },
@@ -158,7 +162,7 @@ export default function MultipleActions(props: {className: string}) {
                 text: 'Merge selected',
                 icon: <Icon awesome={'code-merge'} />,
                 action: () => {
-                    const paths = _.map(selectedNodes, 'path');
+                    const paths = map_(selectedNodes, 'path');
                     dispatch(showTableMergeModal(paths));
                 },
             },
@@ -166,7 +170,7 @@ export default function MultipleActions(props: {className: string}) {
     }, [dispatch, selectedNodes]);
 
     const dynTablesSection = useMemo(() => {
-        if (_.isEmpty(dynTablesActions)) {
+        if (isEmpty_(dynTablesActions)) {
             return [];
         }
 
@@ -230,7 +234,7 @@ export default function MultipleActions(props: {className: string}) {
     }, [restoreMoveCopy, editItem, mergeSortSection]);
 
     const onCopyPathClick = React.useCallback(() => {
-        const res = _.map(selectedNodes, 'path').join('\n');
+        const res = map_(selectedNodes, 'path').join('\n');
         copyToClipboard(res);
     }, [selectedNodes]);
 

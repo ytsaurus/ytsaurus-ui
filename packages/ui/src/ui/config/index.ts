@@ -1,4 +1,3 @@
-import _ from 'lodash';
 // TODO: get rid of the import, the file should not import UIFactory
 import UIFactory from '../UIFactory';
 

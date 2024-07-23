@@ -1,5 +1,5 @@
 import {createSelector} from 'reselect';
-import get from 'lodash/get';
+import get_ from 'lodash/get';
 import {RootState} from '../../../../store/reducers/index';
 import type {QueryResult} from '../preparers/types';
 import type {Placeholder, PlaceholderId} from '../types';
@@ -70,8 +70,8 @@ export const resultsPlaceholdersValidation = createSelector(
 function scatterValidation(queryResult: QueryResult, placeholders: Placeholder[]) {
     const fields = placeholders.reduce(
         (ret: {x: null | string; y: null | string}, field) => {
-            const fieldName = get(field, 'fields.0.name');
-            const fieldType = get(field, 'id') as 'x' | 'y';
+            const fieldName = get_(field, 'fields.0.name');
+            const fieldType = get_(field, 'id') as 'x' | 'y';
 
             if (fieldName && fieldType) {
                 ret[fieldType] = fieldName;
@@ -120,8 +120,8 @@ function scatterValidation(queryResult: QueryResult, placeholders: Placeholder[]
 function lineAndBarValidation(queryResult: QueryResult, placeholders: Placeholder[]) {
     const fields = placeholders.reduce(
         (ret: {x: null | string; y: null | string}, field) => {
-            const fieldName = get(field, 'fields.0.name');
-            const fieldType = get(field, 'id') as 'x' | 'y';
+            const fieldName = get_(field, 'fields.0.name');
+            const fieldType = get_(field, 'id') as 'x' | 'y';
 
             if (fieldName && fieldType) {
                 ret[fieldType] = fieldName;
@@ -161,7 +161,7 @@ function lineAndBarValidation(queryResult: QueryResult, placeholders: Placeholde
 
 function colorsValidation(queryResult: QueryResult, placeholders: Placeholder[]) {
     const fields = placeholders.reduce((acc: string[], field) => {
-        const fieldName = get(field, 'fields.0.name');
+        const fieldName = get_(field, 'fields.0.name');
 
         if (fieldName) {
             acc.push(fieldName);

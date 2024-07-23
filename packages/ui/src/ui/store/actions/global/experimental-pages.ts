@@ -1,5 +1,3 @@
-import _ from 'lodash';
-
 import {getCurrentUserName} from '../../../store/selectors/global';
 import {GLOBAL_PARTIAL} from '../../../constants/global';
 import UIFactory from '../../../UIFactory';

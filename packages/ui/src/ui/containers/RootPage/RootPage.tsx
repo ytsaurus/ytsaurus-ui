@@ -1,6 +1,7 @@
 import React from 'react';
 import cn from 'bem-cn-lite';
-import _ from 'lodash';
+
+import find_ from 'lodash/find';
 
 import PageHead from '../../components/PageHead/PageHead';
 import {HeaderWithLinks} from '../../containers/ClustersMenu/HeaderLinks';
@@ -24,7 +25,7 @@ function RootPage({title, children, currentPathname}: Props) {
             return {text: title};
         }
 
-        return _.find(ALL_LINKS_ITEMS, ({href}) => href?.startsWith(pathname));
+        return find_(ALL_LINKS_ITEMS, ({href}) => href?.startsWith(pathname));
     }, [title]);
 
     return (

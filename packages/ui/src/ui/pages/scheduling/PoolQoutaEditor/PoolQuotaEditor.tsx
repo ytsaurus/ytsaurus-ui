@@ -1,8 +1,10 @@
 import React from 'react';
-import _ from 'lodash';
+
+import isEqual_ from 'lodash/isEqual';
+import map_ from 'lodash/map';
 
 import QuotaEditor, {QuotaEditorProps} from '../../../components/QuotaEditor/QuotaEditor';
-import _isEmpty from 'lodash/isEmpty';
+import isEmpty_ from 'lodash/isEmpty';
 import {RootState} from '../../../store/reducers';
 import {ConnectedProps, connect, useSelector} from 'react-redux';
 import {getSchedulingPoolsMapByName} from '../../../store/selectors/scheduling/scheduling-pools';
@@ -46,7 +48,7 @@ class PoolQuotaEditorControl extends React.Component<Props & ReduxProps> {
     }
 
     static isEmpty(value: Props['value']) {
-        return _isEmpty(value);
+        return isEmpty_(value);
     }
 
     static validate({error}: Props['value']) {
@@ -54,7 +56,7 @@ class PoolQuotaEditorControl extends React.Component<Props & ReduxProps> {
     }
 
     static isEqual(left: Props['value'], right: Props['value']) {
-        return _.isEqual(left, right);
+        return isEqual_(left, right);
     }
 
     render() {
@@ -101,7 +103,7 @@ class PoolQuotaEditorControl extends React.Component<Props & ReduxProps> {
         const {poolsByName, resourceType} = this.props;
         const data = poolsByName[poolName];
 
-        if (_isEmpty(data)) {
+        if (isEmpty_(data)) {
             return {
                 limit: Infinity,
                 total: Infinity,
@@ -134,7 +136,7 @@ function PoolSourceSuggest(props: {
 
     const items = React.useMemo(() => {
         const res = skipParent ? sourcesNoParent : sources;
-        return _.map(res, (value) => {
+        return map_(res, (value) => {
             return {
                 value,
                 text: value,

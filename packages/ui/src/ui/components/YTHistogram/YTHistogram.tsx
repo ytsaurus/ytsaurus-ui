@@ -9,7 +9,6 @@ import YagrChartKit, {
 import './YTHistogram.scss';
 
 import format from '../../common/hammer/format';
-import _ from 'lodash';
 
 const block = cn('yt-histogram');
 

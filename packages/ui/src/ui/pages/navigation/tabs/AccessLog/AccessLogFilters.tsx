@@ -1,6 +1,6 @@
 import React from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import _ from 'lodash';
+
 import cn from 'bem-cn-lite';
 
 import Button from '../../../../components/Button/Button';

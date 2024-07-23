@@ -1,5 +1,5 @@
-import transform from 'lodash/transform';
-import groupBy from 'lodash/groupBy';
+import transform_ from 'lodash/transform';
+import groupBy_ from 'lodash/groupBy';
 import type {QueryResult} from './types';
 import {getPointValue} from './getPointData';
 
@@ -17,14 +17,14 @@ export const splitDataByColor = ({
     const xFieldPath = `${xFieldName}.$rawValue`;
     const colorFieldPath = `${colorFieldName}.$rawValue`;
 
-    return transform<
+    return transform_<
         Record<string, QueryResult>,
         Array<{name: string; data: {x: string; y: number}[]}>
     >(
-        groupBy(rows, colorFieldPath),
+        groupBy_(rows, colorFieldPath),
         (result, value, key) => {
-            const data = transform<Record<string, QueryResult>, {x: string; y: number}[]>(
-                groupBy(value, xFieldPath),
+            const data = transform_<Record<string, QueryResult>, {x: string; y: number}[]>(
+                groupBy_(value, xFieldPath),
                 (acc, y, x) => {
                     const point = Array.isArray(y) ? y[0] : y;
 

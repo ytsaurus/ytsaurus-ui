@@ -1,6 +1,7 @@
 import React from 'react';
 import cn from 'bem-cn-lite';
-import _ from 'lodash';
+
+import includes_ from 'lodash/includes';
 
 import Error from '../../../../components/Error/Error';
 import PivotKeys from '../PivotKeys/PivotKeys';
@@ -67,7 +68,7 @@ function renderStatistics(statistics: JobStatistic, collapsibleSize: 'm' | 'ss')
 function renderPivotKeys(type: string | undefined, collapsibleSize: 'm' | 'ss') {
     const correctTypes = ['reduce', 'join_reduce', 'sorted_merge'];
 
-    return _.includes(correctTypes, type) ? (
+    return includes_(correctTypes, type) ? (
         <CollapsibleSection
             collapsed
             name="Pivot keys"

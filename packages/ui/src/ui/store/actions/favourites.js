@@ -1,5 +1,6 @@
 import metrics from '../../common/utils/metrics';
-import _ from 'lodash';
+
+import find_ from 'lodash/find';
 
 import {
     getAccountsNS,
@@ -128,7 +129,7 @@ export function toggleFavourite(value, parentNS, settingName = SettingName.LOCAL
             const current = [...(makeGetSetting(state)(settingName, parentNS) || [])];
             const currentPathItem = {path: value};
 
-            const entry = _.find(current, currentPathItem);
+            const entry = find_(current, currentPathItem);
 
             if (entry) {
                 current.splice(current.indexOf(entry), 1);

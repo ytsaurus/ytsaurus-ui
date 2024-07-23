@@ -1,6 +1,7 @@
 import ypath from '@ytsaurus/interface-helpers/lib/ypath';
 import hammer from '../../common/hammer';
-import _ from 'lodash';
+
+import reduce_ from 'lodash/reduce';
 
 function getNetworkResourceText(resourceUsage, resourceLimit) {
     return hammer.format['Percent']((resourceUsage / resourceLimit) * 100);
@@ -48,7 +49,7 @@ export function prepareResources(data) {
     const resourceLimits = ypath.getValue(data, '/resource_limits');
     const resourceTypes = ['cpu', 'user_memory', 'user_slots', 'network', 'gpu'];
 
-    return _.reduce(
+    return reduce_(
         resourceTypes,
         (res, type) => {
             if (resourceUsage && resourceLimits) {

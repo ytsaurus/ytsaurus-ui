@@ -3,7 +3,11 @@ import React from 'react';
 import cn from 'bem-cn-lite';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
-import _ from 'lodash';
+
+import filter_ from 'lodash/filter';
+import isEqual_ from 'lodash/isEqual';
+import map_ from 'lodash/map';
+import reduce_ from 'lodash/reduce';
 
 import {closeUserEditorModal, saveUserData} from '../../../store/actions/users';
 import {getGlobalGroupAttributesMap} from '../../../store/selectors/global';
@@ -129,12 +133,12 @@ class UsersPageEditor extends React.Component<Props, State> {
 
         const {idm: _idm, groups, newGroups, ...rest} = fields;
         const [current] = groups;
-        const groupsToRemove = _.map(_.filter(current?.data, 'removed'), 'title');
+        const groupsToRemove = map_(filter_(current?.data, 'removed'), 'title');
 
-        const changedFields = _.reduce(
+        const changedFields = reduce_(
             rest,
             (acc, value, fieldName) => {
-                if (!_.isEqual(value, this.props[fieldName as keyof Props])) {
+                if (!isEqual_(value, this.props[fieldName as keyof Props])) {
                     (acc as FIX_MY_TYPE)[fieldName] = value;
                 }
                 return acc;

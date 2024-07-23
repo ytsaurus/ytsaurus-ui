@@ -10,7 +10,9 @@ import {showErrorInModal} from '../../../../store/actions/navigation/modals/path
 import {HIDE_ERROR} from '../../../../constants/navigation/modals/path-editing-popup';
 import {prepareDestinationPath, preparePath} from '../../../../utils/navigation';
 import CancelHelper from '../../../../utils/cancel-helper';
-import _ from 'lodash';
+
+import map_ from 'lodash/map';
+
 import {executeBatchWithRetries} from '../../execute-batch';
 import {YTApiId} from '../../../../rum/rum-wrap-api';
 import {wrapBatchPromise} from '../../../../utils/utils';
@@ -74,7 +76,7 @@ function copyObjects(
     }
 
     return yt.v3.startTransaction({timeout: 120000}).then((id: string) => {
-        const copyRequests = _.map(items, (node) => {
+        const copyRequests = map_(items, (node) => {
             return {
                 command: 'copy' as const,
                 parameters: {

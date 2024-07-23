@@ -3,7 +3,7 @@ import {YCLOUD_THEME} from '@gravity-ui/react-data-table/build/esm/lib/constants
 import YQLTable from './YQLTable/YQLTable';
 import {formatResults} from '../module/query_result/utils/format';
 import {QueryResultReadyState} from '../module/query_result/types';
-import isEqual from 'lodash/isEqual';
+import isEqual_ from 'lodash/isEqual';
 
 const settings = {
     escapeWhitespace: false,
@@ -89,7 +89,7 @@ export const ResultsTable = React.memo(
         return (
             prev.result.columns === next.result.columns &&
             prev.result.results === next.result.results &&
-            isEqual(prev.result.settings?.visibleColumns, next.result.settings?.visibleColumns) &&
+            isEqual_(prev.result.settings?.visibleColumns, next.result.settings?.visibleColumns) &&
             prev.result.settings?.transposed === next.result.settings?.transposed
         );
     },

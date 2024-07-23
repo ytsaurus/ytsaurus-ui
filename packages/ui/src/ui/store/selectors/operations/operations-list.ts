@@ -1,8 +1,8 @@
 import {createSelector} from 'reselect';
-import _filter from 'lodash/filter';
-import _reduce from 'lodash/reduce';
-import _every from 'lodash/every';
-import _isEqual from 'lodash/isEqual';
+import filter_ from 'lodash/filter';
+import reduce_ from 'lodash/reduce';
+import every_ from 'lodash/every';
+import isEqual_ from 'lodash/isEqual';
 
 import {RootState} from '../../../store/reducers';
 import {calculateLoadingStatus, isFinalLoadingStatus} from '../../../utils/utils';
@@ -71,12 +71,12 @@ function createPreconfiguredPresets(login: string) {
 export const getOperationsListFilterPresets = createSelector(
     [getSettingsDataRaw, getCurrentUserName],
     (data, login) => {
-        const collectionKeys = _filter(Object.keys(data), (path) =>
+        const collectionKeys = filter_(Object.keys(data), (path) =>
             path.startsWith(NAMESPACES.OPERATION_PRESETS.value),
         );
         return {
             ...createPreconfiguredPresets(login),
-            ..._reduce(
+            ...reduce_(
                 collectionKeys,
                 (collection, path) => {
                     const settingName = path.slice(
@@ -94,12 +94,12 @@ export const getOperationsListFilterPresets = createSelector(
 export const getOperationsListActivePresets = createSelector(
     [getOperationsListFilters, getOperationsListFilterPresets],
     (selectedFilters, presets) => {
-        return _reduce(
+        return reduce_(
             presets,
             (acc, {filters}, presetId) => {
-                const active = _every(filters, (value, k) => {
+                const active = every_(filters, (value, k) => {
                     const key: keyof typeof selectedFilters = k as any;
-                    return _isEqual(selectedFilters[key]?.value, value);
+                    return isEqual_(selectedFilters[key]?.value, value);
                 });
                 if (active) {
                     acc.add(presetId);

@@ -1,6 +1,7 @@
 import React from 'react';
 import cn from 'bem-cn-lite';
-import _ from 'lodash';
+
+import map_ from 'lodash/map';
 
 import {ColumnSelector} from '../../../../components/common/ColumnSelector';
 import {DialogControlProps} from '../../../../components/Dialog/Dialog.types';
@@ -23,13 +24,13 @@ export interface ColumnSortByInfo {
 export function TableSortByControl(props: TableSortByControlProps) {
     const {value, suggestColumns, onChange, allowDescending} = props;
     const columns = React.useMemo(() => {
-        return _.map(value, 'name');
+        return map_(value, 'name');
     }, [value]);
     const [descendingMap, setDescendingMap] = React.useState<Record<string, boolean>>({});
 
     const handleChange = React.useCallback(
         (newColumns: Array<string>) => {
-            const newValue = _.map(newColumns, (name) => {
+            const newValue = map_(newColumns, (name) => {
                 const res: ColumnSortByInfo = {name};
                 if (descendingMap[name]) {
                     res.descending = true;

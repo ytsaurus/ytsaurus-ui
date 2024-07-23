@@ -1,6 +1,8 @@
 import React from 'react';
 import cn from 'bem-cn-lite';
-import _ from 'lodash';
+
+import forEach_ from 'lodash/forEach';
+import reduce_ from 'lodash/reduce';
 
 import hammer from '../../common/hammer';
 
@@ -47,13 +49,13 @@ function getProgressData({data, limit, resourceType, postfix}: ResourceProgress)
         stack: [],
     };
 
-    const sum = _.reduce(data, (acc, v) => acc + Number(v), 0);
+    const sum = reduce_(data, (acc, v) => acc + Number(v), 0);
     const max = limit ?? sum;
 
     const text = `${hammer.format[resourceType](sum)} ${postfix}`.trim();
     const metaItems: Array<MetaTableItem> = [];
 
-    _.forEach(data, (value, name) => {
+    forEach_(data, (value, name) => {
         const formattedValue = hammer.format[resourceType](value);
         const color = getProgressBarColorByIndex(props.stack.length);
 

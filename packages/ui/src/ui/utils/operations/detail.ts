@@ -1,5 +1,4 @@
 import moment from 'moment';
-import _ from 'lodash';
 
 import ypath from '../../common/thor/ypath';
 import metrics from '../../common/utils/metrics';

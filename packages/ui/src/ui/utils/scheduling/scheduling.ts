@@ -1,15 +1,19 @@
-import _ from 'lodash';
+import find_ from 'lodash/find';
+import indexOf_ from 'lodash/indexOf';
+import map_ from 'lodash/map';
+import reduce_ from 'lodash/reduce';
+
 import ypath from '../../common/thor/ypath';
 import {ROOT_POOL_NAME} from '../../constants/scheduling';
 import {OperationInfo, PoolInfo} from '../../store/selectors/scheduling/scheduling-pools';
 import {attachTreeLeaves, prepareTree} from '../../common/hammer/tree-list';
 
 function getPool(pools: Array<PoolInfo>, name: string) {
-    return _.find(pools, (pool) => pool.name === name);
+    return find_(pools, (pool) => pool.name === name);
 }
 
 export function prepareTrees(trees: Array<unknown>) {
-    return _.map(trees, (tree) => ypath.getValue(tree, '')).sort();
+    return map_(trees, (tree) => ypath.getValue(tree, '')).sort();
 }
 
 export function prepareCurrentTree(defaultTree: unknown, trees: Array<string>, tree: string) {
@@ -30,7 +34,7 @@ export function preparePools(
         ypath.getValue(operation, '/pool'),
     );
 
-    return _.map(treeNodesMap);
+    return map_(treeNodesMap);
 }
 
 export function computePathItems(pools: Array<PoolInfo>, name: string) {
@@ -54,7 +58,7 @@ export function computePoolPath(pool: PoolInfo, pools: Array<PoolInfo>) {
 
     while (parent && parent !== ROOT_POOL_NAME) {
         // eslint-disable-next-line @typescript-eslint/no-loop-func
-        const parentPool = _.find(pools, (item) => item.name === parent);
+        const parentPool = find_(pools, (item) => item.name === parent);
         partitions.unshift(parentPool?.name!);
         parent = parentPool?.parent;
     }
@@ -116,7 +120,7 @@ function prepareValueDetails(pool: PoolInfo | undefined, path: string) {
 }
 
 function prepareMinGuaranteed(pool?: PoolInfo, path = '') {
-    const res = _.reduce(
+    const res = reduce_(
         pool?.children,
         (sum, item) => {
             const tmp = Number(ypath.getValue(item, path) || 0);
@@ -199,7 +203,7 @@ export function getPoolResourceInitialValue(
 export function getInitialValues(editItem: PoolInfo | undefined, allowedSources: Array<string>) {
     const slug = ypath.getValue(editItem, '/abc/slug');
 
-    const allowSource = -1 !== _.indexOf(allowedSources, editItem?.parent);
+    const allowSource = -1 !== indexOf_(allowedSources, editItem?.parent);
 
     return {
         general: {

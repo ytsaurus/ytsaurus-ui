@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import reduce_ from 'lodash/reduce';
 import {CancelTokenSource} from 'axios';
 
 // @ts-ignore
@@ -148,7 +148,7 @@ interface ApiMethodParams<ParametersT> {
 function makeApiWithId<
     ApiT extends Record<string, (...args: ApiMethodParameters<any>) => Promise<any>>,
 >(ytApi: ApiT): ApiWithId<ApiT> {
-    return _.reduce(
+    return reduce_(
         ytApi,
         (acc, _fn, k) => {
             const method = k as keyof ApiT;

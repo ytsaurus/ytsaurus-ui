@@ -1,4 +1,5 @@
-import _ from 'lodash';
+import concat_ from 'lodash/concat';
+import filter_ from 'lodash/filter';
 
 import {getBatchError, getBatchErrorIndices} from '../../utils/utils';
 import {YTError} from '../../types';
@@ -47,7 +48,7 @@ export async function executeBatchWithRetries<T>(
 
         try {
             const tmp = await handleBatchSlice<T>(id, current, options);
-            results = _.concat(results, tmp);
+            results = concat_(results, tmp);
         } catch (err) {
             const e = err as any;
             if (!options?.allowRetries) {
@@ -112,10 +113,10 @@ async function handleBatchSlice<T>(
         const error = getBatchError(results, options.errorTitle);
         if (error) {
             const errorIndices = new Set(getBatchErrorIndices(results));
-            const successful_results = _.filter(results, (_item, index) => {
+            const successful_results = filter_(results, (_item, index) => {
                 return !errorIndices.has(index);
             });
-            const failed_requests = _.filter(requests, (_item, index) => {
+            const failed_requests = filter_(requests, (_item, index) => {
                 return errorIndices.has(index);
             });
 

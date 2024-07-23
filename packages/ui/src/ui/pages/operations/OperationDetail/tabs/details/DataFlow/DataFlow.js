@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import cn from 'bem-cn-lite';
-import _ from 'lodash';
+
+import reduce_ from 'lodash/reduce';
 
 import hammer from '../../../../../../common/hammer';
 import ElementsTable from '../../../../../../components/ElementsTable/ElementsTable';
@@ -46,7 +47,7 @@ function prepareState(allowExpand, resources, expandedTasks) {
         allowExpand,
         resources: !allowExpand
             ? resources
-            : _.reduce(
+            : reduce_(
                   resources,
                   (acc, item) => {
                       const {from, to} = item;

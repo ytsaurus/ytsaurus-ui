@@ -1,7 +1,8 @@
 import React, {Component, Fragment} from 'react';
 import hammer from '../../common/hammer';
 import cn from 'bem-cn-lite';
-import _ from 'lodash';
+
+import compact_ from 'lodash/compact';
 
 import {Button, ClipboardButton, Flex, Icon, Loader, Popover} from '@gravity-ui/uikit';
 import {Column} from '@gravity-ui/react-data-table';
@@ -606,7 +607,7 @@ class ACL extends Component<Props> {
             };
         }
 
-        const segments: Array<SegmentControlItem> = _.compact([
+        const segments: Array<SegmentControlItem> = compact_([
             allowInheritAcl && toSegmentItem('Inherit ACL', disableAclInheritance, true),
             isIdmAclAvailable() &&
                 allowBossApprovals &&

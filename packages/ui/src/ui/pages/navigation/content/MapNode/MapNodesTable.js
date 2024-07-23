@@ -2,7 +2,8 @@ import React, {Component} from 'react';
 import {batch, connect, useSelector} from 'react-redux';
 import PropTypes from 'prop-types';
 import cn from 'bem-cn-lite';
-import _ from 'lodash';
+
+import findIndex_ from 'lodash/findIndex';
 
 import {
     FormattedLink,
@@ -166,7 +167,7 @@ class MapNodesTable extends Component {
         );
 
         if (type === 'scheduler_pool') {
-            const poolTreeIndex = _.findIndex(
+            const poolTreeIndex = findIndex_(
                 item.parsedPath.fragments,
                 (fragment) => fragment.name === 'pool_trees',
             );

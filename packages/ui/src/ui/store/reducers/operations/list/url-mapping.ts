@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import moment from 'moment';
 import {RootState} from '../../../../store/reducers';
 import {produce} from 'immer';

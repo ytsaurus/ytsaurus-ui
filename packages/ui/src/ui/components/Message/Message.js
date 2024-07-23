@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import cn from 'bem-cn-lite';
-import _ from 'lodash';
+
+import map_ from 'lodash/map';
 
 import Button from '../../components/Button/Button';
 import Icon from '../../components/Icon/Icon';
@@ -27,7 +28,7 @@ export default function Message({
 
             {React.isValidElement(content)
                 ? {content}
-                : _.map(content, (data, index) => (
+                : map_(content, (data, index) => (
                       <p key={index} className={block('paragraph')}>
                           {data}
                       </p>
@@ -35,7 +36,7 @@ export default function Message({
 
             {buttons && (
                 <div className={block('buttons')}>
-                    {_.map(buttons, (button) => (
+                    {map_(buttons, (button) => (
                         <span className={block('button')} key={button.text}>
                             <Button size="m" title={button.text} onClick={button.callback}>
                                 {button.text}

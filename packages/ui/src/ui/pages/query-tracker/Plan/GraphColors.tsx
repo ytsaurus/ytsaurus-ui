@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import {useThemeValue} from '@gravity-ui/uikit';
-import {isEqual} from 'lodash';
+import isEqual_ from 'lodash/isEqual';
 import {getCSSPropertyValue, getHEXColor} from './styles';
 
 export type GraphColors = ReturnType<typeof getGraphColors>;
@@ -18,7 +18,7 @@ export function GraphColorsProvider({children, container}: GraphColorsProviderPr
     React.useEffect(() => {
         setColors((prevColors) => {
             const newColors = getGraphColors(container);
-            if (isEqual(prevColors, newColors)) {
+            if (isEqual_(prevColors, newColors)) {
                 return prevColors;
             }
             return newColors;

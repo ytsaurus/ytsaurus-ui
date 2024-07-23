@@ -1,5 +1,3 @@
-import _ from 'lodash';
-
 import {AccountsTab} from '../constants/accounts/accounts';
 import {Tab as ComponentsTab} from '../constants/components/main';
 import {Tab as OperationTab} from '../constants/operations/detail';

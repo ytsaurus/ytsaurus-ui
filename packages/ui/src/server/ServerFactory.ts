@@ -1,6 +1,6 @@
 import type {Request, Response} from 'express';
 import type {ExpressKit} from '@gravity-ui/expresskit';
-import _ from 'lodash';
+import forEach_ from 'lodash/forEach';
 import {isLocalClusterId} from '../shared/utils';
 import {ConfigData} from '../shared/yt-types';
 import renderLayout, {AppLayoutConfig} from './render-layout';
@@ -62,7 +62,7 @@ function configureServerFactoryItem<K extends keyof ServerFactory>(
 }
 
 export function configureServerFactory(overrides: Partial<ServerFactory>) {
-    _.forEach(overrides, (_v, k) => {
+    forEach_(overrides, (_v, k) => {
         const key = k as keyof ServerFactory;
         configureServerFactoryItem(key, overrides[key]!);
     });

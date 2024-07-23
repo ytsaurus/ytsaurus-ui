@@ -4,7 +4,7 @@ import {yqlModel} from './models/shared';
 import {scaleOrdinal} from 'd3-scale';
 import {select} from 'd3-selection';
 import {arc, pie} from 'd3-shape';
-import {isEmpty} from 'lodash';
+import isEmpty_ from 'lodash/isEmpty';
 import type {
     NodeDetails,
     NodeProgress,
@@ -397,7 +397,7 @@ export function updateProgress(
             const node = progress[nodeId];
             visItem.progress = node;
 
-            if (node.stages && !isEmpty(node.stages)) {
+            if (node.stages && !isEmpty_(node.stages)) {
                 if (isOperationFinished(node.state)) {
                     visItem.label = ellipsis(visItem.title ?? '');
                 } else {
@@ -486,7 +486,7 @@ export function hasJobsInfo(progress: NodeProgress | undefined) {
 }
 
 export function hasStagesInfo(progress: NodeProgress | undefined) {
-    return !isEmpty(progress?.stages);
+    return !isEmpty_(progress?.stages);
 }
 
 export function nodeHasInfo(node: ProcessedNode) {

@@ -1,4 +1,5 @@
-import _ from 'lodash';
+import map_ from 'lodash/map';
+import some_ from 'lodash/some';
 
 type PredicateFunction<T> = (arg: T) => boolean;
 type PredicateObject<T extends object> = Partial<T>;
@@ -30,7 +31,7 @@ type Predicate<T extends object> = PredicateFunction<T> | PredicateObject<T>;
 export function concatByAnd<T extends object>(
     ...predicates: Array<Predicate<T>>
 ): PredicateFunction<T> {
-    const converted = _.map(predicates, (p) => {
+    const converted = map_(predicates, (p) => {
         if (typeof p === 'function') {
             return p;
         }
@@ -43,13 +44,13 @@ export function concatByAnd<T extends object>(
                 return false;
             }
 
-            return !_.some(keys, (key: keyof T) => {
+            return !some_(keys, (key: keyof T) => {
                 return d[key] !== p[key];
             });
         };
     });
     return (...args) => {
-        return !_.some(converted, (p) => {
+        return !some_(converted, (p) => {
             return !p(...args);
         });
     };
@@ -83,7 +84,7 @@ export function concatByAnd<T extends object>(
 export function concatByOr<T extends object>(
     ...predicates: Array<Predicate<T>>
 ): PredicateFunction<T> {
-    const converted = _.map(predicates, (p) => {
+    const converted = map_(predicates, (p) => {
         if (typeof p === 'function') {
             return p;
         }
@@ -96,13 +97,13 @@ export function concatByOr<T extends object>(
                 return false;
             }
 
-            return _.some(keys, (key: keyof T) => {
+            return some_(keys, (key: keyof T) => {
                 return d[key] === p[key];
             });
         };
     });
     return (...args) => {
-        return _.some(converted, (p) => {
+        return some_(converted, (p) => {
             return p(...args);
         });
     };

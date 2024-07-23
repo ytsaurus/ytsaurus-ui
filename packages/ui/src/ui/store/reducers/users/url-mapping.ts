@@ -1,5 +1,4 @@
 import produce from 'immer';
-import _ from 'lodash';
 import {updateIfChanged} from '../../../utils/utils';
 import {RootState} from '..';
 

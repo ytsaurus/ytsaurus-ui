@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import axios from 'axios';
 
 import type {Request, Response} from 'express';

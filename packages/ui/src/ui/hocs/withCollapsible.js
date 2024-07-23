@@ -1,4 +1,5 @@
-import _ from 'lodash';
+import slice_ from 'lodash/slice';
+
 import React from 'react';
 import PropTypes from 'prop-types';
 import {Button} from '@gravity-ui/uikit';
@@ -20,7 +21,7 @@ export default function withCollapsible(Component) {
             collapsed: true,
             itemsCount: 3,
             prepareVisibleItems: (items) => items,
-            filterVisibleItems: (items, itemsCount) => _.slice(items, 0, itemsCount),
+            filterVisibleItems: (items, itemsCount) => slice_(items, 0, itemsCount),
         };
 
         static displayName = `WithCollapsible(${getDisplayName(Component)})`;

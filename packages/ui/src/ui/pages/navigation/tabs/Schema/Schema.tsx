@@ -1,7 +1,8 @@
 import React, {Component, Fragment} from 'react';
 import {connect, useSelector} from 'react-redux';
 import cn from 'bem-cn-lite';
-import _ from 'lodash';
+
+import omit_ from 'lodash/omit';
 
 import ElementsTable from '../../../../components/ElementsTable/ElementsTable';
 import {ColumnInfo} from '../../../../components/ElementsTable/ElementsTableHeader';
@@ -162,7 +163,7 @@ class Schema extends Component<SchemaProps> {
 
         const preparedSet = set.filter((col) => !COLUMNS_TO_HIDE[col]);
 
-        const preparedItems = _.omit(items, 'type_v2');
+        const preparedItems = omit_(items, 'type_v2');
 
         if (externalSchema) {
             (['title', 'description'] as const).forEach((column) => {

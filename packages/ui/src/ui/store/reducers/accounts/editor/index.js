@@ -1,5 +1,6 @@
-import _ from 'lodash';
 import ypath from '../../../../common/thor/ypath';
+
+import filter_ from 'lodash/filter';
 
 import {mergeStateOnClusterChange} from '../../../../store/reducers/utils';
 import {
@@ -42,7 +43,7 @@ const reducer = (state = initialState, action) => {
             const {newFilter} = action.data;
             const {users} = state;
             const activeUserFilter = newFilter;
-            const filtered = _.filter(users, (user) =>
+            const filtered = filter_(users, (user) =>
                 user.toLowerCase().startsWith(activeUserFilter),
             );
             return {

@@ -1,4 +1,6 @@
-import _ from 'lodash';
+import each_ from 'lodash/each';
+import map_ from 'lodash/map';
+import reduce_ from 'lodash/reduce';
 
 function aggregateSimple(aggregation, item, name, type) {
     switch (type) {
@@ -85,12 +87,12 @@ function aggregate(aggregation, item, property, lastItem) {
  * @param [byProperty] {String}
  */
 export function prepare(items, properties, byProperty) {
-    let prepared = _.reduce(
+    let prepared = reduce_(
         items,
         function (aggregation, item, index) {
             const lastItem = index === items.length - 1;
 
-            _.each(properties, function (property) {
+            each_(properties, function (property) {
                 aggregate(aggregation.total, item, property, lastItem);
 
                 if (byProperty) {
@@ -107,7 +109,7 @@ export function prepare(items, properties, byProperty) {
     );
 
     prepared = [prepared.total].concat(
-        _.map(prepared.byProperty, function (value, name) {
+        map_(prepared.byProperty, function (value, name) {
             value[byProperty] = name;
             return value;
         }),
@@ -123,7 +125,7 @@ export function prepare(items, properties, byProperty) {
  * @param initialResult {Object} - the initial object that will be merged with the result
  */
 export function countValues(items, key, initialResult = {}) {
-    return _.reduce(
+    return reduce_(
         items,
         function (result, item) {
             if (Object.hasOwnProperty.call(result, item[key])) {
