@@ -1,4 +1,8 @@
-import _ from 'lodash';
+import concat_ from 'lodash/concat';
+import difference_ from 'lodash/difference';
+import filter_ from 'lodash/filter';
+import map_ from 'lodash/map';
+
 import ypath from '@ytsaurus/interface-helpers/lib/ypath';
 import {createSelector} from 'reselect';
 
@@ -34,7 +38,7 @@ export const getKeyColumns = createSelector(getAttributes, (attributes) =>
 export const getVisibleColumns = createSelector(
     [getColumns, getColumnsOrder, getColumnsPreset, getColumnsPresetHash],
     (columns, columnsOrder, columnsPreset, columnsPresetHash) => {
-        const visibleColumns = _.filter(columns, (column) => {
+        const visibleColumns = filter_(columns, (column) => {
             // use columns preset first
             if (columnsPresetHash && columnsPreset) {
                 return columnsPreset.columns.includes(column.name);
@@ -50,7 +54,7 @@ export const getVisibleColumns = createSelector(
 
 export const getAllColumns = createSelector(
     [getColumns, getOmittedColumns],
-    (columns, omittedColumns) => _.concat(columns, omittedColumns),
+    (columns, omittedColumns) => concat_(columns, omittedColumns),
 );
 
 export const getSrcColumns = createSelector(
@@ -88,9 +92,9 @@ export const getVisibleRows = createSelector(
 export const getIsAllKeyColumnsSelected = createSelector(
     [getKeyColumns, getVisibleColumns],
     (keyColumns, visibleColumnsItems) => {
-        const visibleColumns = _.map(visibleColumnsItems, ({name}) => name);
+        const visibleColumns = map_(visibleColumnsItems, ({name}) => name);
 
-        return _.difference(keyColumns, visibleColumns).length === 0;
+        return difference_(keyColumns, visibleColumns).length === 0;
     },
 );
 
@@ -125,7 +129,7 @@ export const getBottomBoundKey = createSelector([getRows, getKeyColumns], (rows,
 export const getCurrentOffsetValues = createSelector(
     [getColumns, getBottomBoundKey, getYqlTypes],
     (columns, offsetValues, yqlTypes) => {
-        return _.filter(columns, (column) => column.keyColumn).map(({name, checked}, index) => {
+        return filter_(columns, (column) => column.keyColumn).map(({name, checked}, index) => {
             return {
                 name,
                 checked,

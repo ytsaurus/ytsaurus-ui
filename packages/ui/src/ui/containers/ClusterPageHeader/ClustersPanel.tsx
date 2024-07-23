@@ -1,6 +1,12 @@
 import React from 'react';
 import cn from 'bem-cn-lite';
-import _ from 'lodash';
+
+import filter_ from 'lodash/filter';
+import isEmpty_ from 'lodash/isEmpty';
+import map_ from 'lodash/map';
+import reduce_ from 'lodash/reduce';
+import some_ from 'lodash/some';
+
 import {TextInput} from '@gravity-ui/uikit';
 
 import {getGroupedClusters} from '../../config/yt-config';
@@ -79,7 +85,7 @@ export default function ClustersPanel({className, onSelectCluster}: Props) {
 
             const groupKeys = [...CLUSTER_GROUPS_ORDER];
 
-            _.some(groupKeys, (key) => {
+            some_(groupKeys, (key) => {
                 if (groups[key] && groups[key].length) {
                     firstItem = groups[key][0];
                     return true;
@@ -116,10 +122,10 @@ export default function ClustersPanel({className, onSelectCluster}: Props) {
                 />
             </div>
             <div className={block('groups')}>
-                {_.isEmpty(groups) ? (
+                {isEmpty_(groups) ? (
                     <div className={block('no-items')}>No matching clusters</div>
                 ) : (
-                    _.map(CLUSTER_GROUPS, ({caption}, key) => {
+                    map_(CLUSTER_GROUPS, ({caption}, key) => {
                         if (!groups[key]) {
                             return null;
                         }
@@ -153,7 +159,7 @@ function ClusterGroup(props: ClusterGroupProps) {
     return !items.length ? null : (
         <div className={block('group')}>
             <div className={block('group-name')}>{name}</div>
-            {_.map(items, (item) => {
+            {map_(items, (item) => {
                 return (
                     <ClusterGroupItem
                         key={item.id}
@@ -251,12 +257,12 @@ function getFilteredClusterGroups(filter: string, groups: Record<string, Array<C
         return groups;
     }
 
-    const res = _.reduce(
+    const res = reduce_(
         groups,
         (acc, items, key) => {
             const filtered = !filter
                 ? items
-                : _.filter(items, (item) => {
+                : filter_(items, (item) => {
                       const {name, environment} = item;
                       return (
                           name.toLowerCase().indexOf(filter) !== -1 ||

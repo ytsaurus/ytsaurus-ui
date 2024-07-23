@@ -1,4 +1,14 @@
-import _ from 'lodash';
+import filter_ from 'lodash/filter';
+import flatten_ from 'lodash/flatten';
+import groupBy_ from 'lodash/groupBy';
+import map_ from 'lodash/map';
+import pickBy_ from 'lodash/pickBy';
+import reduce_ from 'lodash/reduce';
+import sortBy_ from 'lodash/sortBy';
+import union_ from 'lodash/union';
+import values_ from 'lodash/values';
+import without_ from 'lodash/without';
+
 import ypath from '../../../../../common/thor/ypath';
 import hammer from '../../../../../common/hammer';
 import {STACKED_PROGRESS_BAR_COLORS} from '../../../../../constants/colors';
@@ -188,9 +198,9 @@ export class Node {
         this.alertCount = ypath.getValue(attributes, '/alert_count');
         this.alerts = ypath.getValue(attributes, '/alerts');
         this.effectiveState = this.banned ? 'banned' : this.state;
-        this.tags = _.sortBy(ypath.getValue(attributes, '/tags'));
-        this.userTags = _.sortBy(ypath.getValue(attributes, '/user_tags'));
-        this.systemTags = _.without(
+        this.tags = sortBy_(ypath.getValue(attributes, '/tags'));
+        this.userTags = sortBy_(ypath.getValue(attributes, '/user_tags'));
+        this.systemTags = without_(
             this.tags,
             ...this.userTags,
             this.rack,
@@ -214,7 +224,7 @@ export class Node {
     private prepareIOWeight() {
         const media = ypath.getValue(this.statistics, '/media');
 
-        this.IOWeight = _.reduce(
+        this.IOWeight = reduce_(
             media,
             (result, medium, mediumName) => {
                 result[mediumName] = medium.io_weight;
@@ -243,7 +253,7 @@ export class Node {
 
         this.chunks = ypath.getValue(this.statistics, '/total_stored_chunk_count');
         this.sessions = ypath.getValue(this.statistics, '/total_session_count');
-        this.locations = _.map(locations, (location) => {
+        this.locations = map_(locations, (location) => {
             const locationUsed = ypath.getValue(location, '/used_space');
             const locationAvailable = ypath.getValue(location, '/available_space');
             const locationTotal = locationUsed + locationAvailable;
@@ -253,7 +263,7 @@ export class Node {
                 locationText: progressText(locationUsed, locationTotal, {type: 'bytes'}),
             };
         });
-        this.enabledLocations = _.filter(this.locations, (location) => location.enabled);
+        this.enabledLocations = filter_(this.locations, (location) => location.enabled);
     }
 
     private prepareResources(attributes: Attributes) {
@@ -324,8 +334,8 @@ export class Node {
         const memoryTotal = ypath.getValue(memory, '/total');
         const memoryLimit = memoryTotal && memoryTotal.limit;
 
-        memory = _.pickBy(memory, (_categoryData, categoryName) => categoryName !== 'total');
-        memory = _.map(memory, (categoryData, categoryName) => ({
+        memory = pickBy_(memory, (_categoryData, categoryName) => categoryName !== 'total');
+        memory = map_(memory, (categoryData, categoryName) => ({
             rawData: categoryData,
             value:
                 typeof memoryLimit !== 'undefined' && memoryLimit !== 0
@@ -333,10 +343,10 @@ export class Node {
                     : memoryLimit && 0,
             name: categoryName,
         }));
-        memory = _.sortBy(memory, 'name');
+        memory = sortBy_(memory, 'name');
 
         let memoryUsage = 0;
-        memory = _.map(memory, (categoryData, index: number) => {
+        memory = map_(memory, (categoryData, index: number) => {
             memoryUsage += categoryData.rawData.used || 0;
             categoryData.color = Node.getColor(index);
             return categoryData;
@@ -365,7 +375,7 @@ export class Node {
             const normalizeBy = 100 / this.memoryProgress;
 
             this.memoryProgress *= normalizeBy;
-            this.memoryData = _.map(memory, (categoryData) => {
+            this.memoryData = map_(memory, (categoryData) => {
                 categoryData.value *= normalizeBy;
                 return categoryData;
             });
@@ -405,12 +415,12 @@ export class Node {
 
 function prepareTabletSlots(tabletSlots: Array<any>): TabletSlots {
     if (tabletSlots) {
-        const states = _.groupBy(tabletSlots, 'state');
+        const states = groupBy_(tabletSlots, 'state');
 
         return {
             raw: tabletSlots,
             byState: states,
-            all: _.flatten(_.values(states)),
+            all: flatten_(values_(states)),
         };
     } else {
         return {
@@ -437,22 +447,22 @@ const stateAttributes: ReadonlyArray<AttributeName> = ['state'];
 const tagsAttributes: ReadonlyArray<AttributeName> = ['tags'];
 const userTagsAttributes: ReadonlyArray<AttributeName> = ['user_tags'];
 
-const cpuAttributes = _.union(resourceUsageAttributes, resourceLimitsAttributes);
+const cpuAttributes = union_(resourceUsageAttributes, resourceLimitsAttributes);
 const gpuAttributes = cpuAttributes;
 const fullAttributes: ReadonlyArray<AttributeName> = ['/statistics/full'];
 const locationsAttributes: ReadonlyArray<AttributeName> = ['/statistics/locations'];
 const memoryAttributes: ReadonlyArray<AttributeName> = ['/statistics/memory'];
-const networkAttributes = _.union(resourceUsageAttributes, resourceLimitsAttributes);
-const removalSlotsAttributes = _.union(resourceUsageAttributes, resourceLimitsAttributes);
-const repairSlotsAttributes = _.union(resourceUsageAttributes, resourceLimitsAttributes);
-const replicationSlotsAttributes = _.union(resourceUsageAttributes, resourceLimitsAttributes);
-const sealSlotsAttributes = _.union(resourceUsageAttributes, resourceLimitsAttributes);
+const networkAttributes = union_(resourceUsageAttributes, resourceLimitsAttributes);
+const removalSlotsAttributes = union_(resourceUsageAttributes, resourceLimitsAttributes);
+const repairSlotsAttributes = union_(resourceUsageAttributes, resourceLimitsAttributes);
+const replicationSlotsAttributes = union_(resourceUsageAttributes, resourceLimitsAttributes);
+const sealSlotsAttributes = union_(resourceUsageAttributes, resourceLimitsAttributes);
 const spaceAvailableAttributes: ReadonlyArray<AttributeName> = [
     '/statistics/total_available_space',
 ];
 const spaceUsedAttributes: ReadonlyArray<AttributeName> = ['/statistics/total_used_space'];
-const spaceTotalAttributes = _.union(spaceUsedAttributes, spaceAvailableAttributes);
-const userSlotsAttributes = _.union(resourceUsageAttributes, resourceLimitsAttributes);
+const spaceTotalAttributes = union_(spaceUsedAttributes, spaceAvailableAttributes);
+const userSlotsAttributes = union_(resourceUsageAttributes, resourceLimitsAttributes);
 
 export const AttributesByProperty: Record<keyof Node, ReadonlyArray<AttributeName>> = {
     alerts: ['alerts'],
@@ -469,8 +479,8 @@ export const AttributesByProperty: Record<keyof Node, ReadonlyArray<AttributeNam
     disableJobs: ['disable_scheduler_jobs'],
     disableTabletCells: ['disable_tablet_cells'],
     disableWriteSession: ['disable_write_sessions'],
-    effectiveFlag: _.union(decommissionedAttributes, fullAttributes, alertCountAttributes),
-    effectiveState: _.union(bannedAttributes, stateAttributes),
+    effectiveFlag: union_(decommissionedAttributes, fullAttributes, alertCountAttributes),
+    effectiveState: union_(bannedAttributes, stateAttributes),
     enabledLocations: locationsAttributes,
     flavors: ['flavors'],
     full: fullAttributes,
@@ -502,12 +512,12 @@ export const AttributesByProperty: Record<keyof Node, ReadonlyArray<AttributeNam
     sealSlotsProgress: sealSlotsAttributes,
     sessions: ['/statistics/total_session_count'],
     spaceAvailable: spaceAvailableAttributes,
-    spaceProgress: _.union(spaceUsedAttributes, spaceAvailableAttributes, spaceTotalAttributes),
-    spaceText: _.union(spaceUsedAttributes, spaceTotalAttributes),
+    spaceProgress: union_(spaceUsedAttributes, spaceAvailableAttributes, spaceTotalAttributes),
+    spaceText: union_(spaceUsedAttributes, spaceTotalAttributes),
     spaceTotal: spaceTotalAttributes,
     spaceUsed: spaceUsedAttributes,
     state: stateAttributes,
-    systemTags: _.union(
+    systemTags: union_(
         tagsAttributes,
         userTagsAttributes,
         rackAttributes,

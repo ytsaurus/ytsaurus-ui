@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import map_ from 'lodash/map';
 
 import {createSelector} from 'reselect';
 import {RootState} from '../../reducers';
@@ -6,5 +6,5 @@ import {RootState} from '../../reducers';
 const getModalErrorsState = (state: RootState) => state.modals.errors;
 
 export const getModalErrors = createSelector([getModalErrorsState], ({errors}) => {
-    return _.map(errors, (error, id) => ({id, error}));
+    return map_(errors, (error, id) => ({id, error}));
 });

@@ -1,7 +1,8 @@
 import React from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import cn from 'bem-cn-lite';
-import _ from 'lodash';
+
+import keys_ from 'lodash/keys';
 
 import {Dialog as DeleteDialog} from '@gravity-ui/uikit';
 import ErrorBoundary from '../../../components/ErrorBoundary/ErrorBoundary';
@@ -104,7 +105,7 @@ function SchedulingDialogs() {
                     <DeleteDialog.Header caption="Delete" />
                     <DeleteDialog.Body>
                         Are you sure you want to delete the <b>{deleteItem?.name}</b> pool?
-                        {_.keys(poolErrorData).length > 0 ? (
+                        {keys_(poolErrorData).length > 0 ? (
                             <Error message="Delete pool failure" error={poolErrorData} />
                         ) : null}
                     </DeleteDialog.Body>

@@ -1,5 +1,7 @@
 import ypath from '../../../common/thor/ypath';
-import _ from 'lodash';
+
+import filter_ from 'lodash/filter';
+import map_ from 'lodash/map';
 
 import {NAMESPACES, SettingName} from '../../../../shared/constants/settings';
 
@@ -121,7 +123,7 @@ export function fetchAccounts() {
                         if (e) {
                             throw e;
                         }
-                        const items = _.filter(
+                        const items = filter_(
                             ypath.getValue(accounts),
                             (item) => ypath.getValue(item) !== ROOT_ACCOUNT_NAME,
                         );
@@ -131,7 +133,7 @@ export function fetchAccounts() {
                                 dispatch({
                                     type: FETCH_ACCOUNTS_RESOURCE.SUCCESS,
                                     data: {
-                                        accounts: _.map(res, (item) => new Account(item)),
+                                        accounts: map_(res, (item) => new Account(item)),
                                     },
                                 });
                             });

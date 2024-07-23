@@ -1,4 +1,9 @@
-import _ from 'lodash';
+import capitalize_ from 'lodash/capitalize';
+import forEach_ from 'lodash/forEach';
+import get_ from 'lodash/get';
+import keys_ from 'lodash/keys';
+import map_ from 'lodash/map';
+
 import {createSelector} from 'reselect';
 
 import {RootState} from '../../../store/reducers';
@@ -113,12 +118,12 @@ const getAccounts = (state: RootState) =>
     state.accounts.accounts.accounts as Array<AccountSelector>;
 
 export const getAccountNames = createSelector(getAccounts, (items: Array<FIX_MY_TYPE>) =>
-    _.map(items, (i) => i.$value).sort(),
+    map_(items, (i) => i.$value).sort(),
 );
 
 export const getAccountsMapByName = createSelector(getAccounts, (accounts) => {
     const nameToAccountMap: Record<string, AccountSelector> = {};
-    _.each(accounts, (item) => {
+    forEach_(accounts, (item) => {
         nameToAccountMap[item.name] = item;
     });
     return nameToAccountMap;
@@ -185,7 +190,7 @@ export const getActiveAccountStaticConfiguration = createSelector(
         for (const i of mediums) {
             mediumsInfo.push(
                 ...makeStaticConfigurationItem(
-                    _.capitalize(i),
+                    capitalize_(i),
                     'Bytes',
                     item.attributes.getDiskSpaceProgressInfo(i, true),
                     1,
@@ -256,7 +261,7 @@ function getAggregatedByType(
             };
         case AccountResourceName.MASTER_MEMORY: {
             const {total, limit} =
-                _.get(aggr, accountMemoryMediumToFieldName('master_memory/' + mediumType)) || {};
+                get_(aggr, accountMemoryMediumToFieldName('master_memory/' + mediumType)) || {};
             return {progress: undefined, total, limit};
         }
     }
@@ -284,7 +289,7 @@ export const getAccountMasterMemoryMedia = createSelector([getAccounts], (items 
     }
 
     const perCell = ypath.getValue(item, '/@resource_usage/master_memory/per_cell');
-    const mediums = _.map(_.keys(perCell), (key) => {
+    const mediums = map_(keys_(perCell), (key) => {
         return `per_cell/${key}`;
     });
 
@@ -610,7 +615,7 @@ function collectSubtreeItems(
         const parentItems = collectSubtreeItems(parent, tree, collected);
         res.push(...parentItems);
     }
-    _.forEach(children, (item) => {
+    forEach_(children, (item) => {
         if (collected.has(item.name)) {
             return;
         }

@@ -1,4 +1,6 @@
-import _ from 'lodash';
+import find_ from 'lodash/find';
+import sortBy_ from 'lodash/sortBy';
+
 import {createSelector} from 'reselect';
 
 import {
@@ -104,7 +106,7 @@ export const isActiveChaosBundleInFavourites = createSelector(
 
 function prepareFavourites(getSetting, parentNS) {
     const items = getSetting(SettingName.LOCAL.FAVOURITES, parentNS);
-    return _.sortBy(items, 'path');
+    return sortBy_(items, 'path');
 }
 
 function prepareLastVisited(settingGetter, parentNS) {
@@ -112,13 +114,13 @@ function prepareLastVisited(settingGetter, parentNS) {
 }
 
 function preparePopulars(lastVisited) {
-    return _.sortBy(lastVisited, (entry) => -entry.count);
+    return sortBy_(lastVisited, (entry) => -entry.count);
 }
 
 function prepareIsInFavourites(value, favourites) {
-    return Boolean(_.find(favourites, ({path}) => path === value));
+    return Boolean(find_(favourites, ({path}) => path === value));
 }
 
 function prepareIsPoolInFavourites(pool, tree, favourites) {
-    return Boolean(_.find(favourites, ({path}) => path === `${pool}[${tree}]`));
+    return Boolean(find_(favourites, ({path}) => path === `${pool}[${tree}]`));
 }

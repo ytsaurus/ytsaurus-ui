@@ -1,9 +1,10 @@
 import {expose} from './promisified-worker';
 import {parseAccountData} from '../utils/accounts/accounts-selector';
-import _ from 'lodash';
+
+import map_ from 'lodash/map';
 
 function parseAccounts(data: Array<unknown>) {
-    return _.map(data, (item) => parseAccountData(item));
+    return map_(data, (item) => parseAccountData(item));
 }
 
 const workerFunctions = {parseAccounts};

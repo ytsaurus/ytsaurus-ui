@@ -1,4 +1,6 @@
-import _ from 'lodash';
+import isEmpty_ from 'lodash/isEmpty';
+import map_ from 'lodash/map';
+
 import unipika from '../../../../common/thor/unipika';
 
 const FROM = 'FROM';
@@ -20,7 +22,7 @@ export default class Query {
     // What if key_column name has unicode symbols ->
     // we won't be able to load attributes (the problem will reveal itself on prev step)
     static prepareColumns(columns) {
-        const selector = _.map(columns, (column) => {
+        const selector = map_(columns, (column) => {
             return ESCAPE_START + (column.name || column) + ESCAPE_END;
         }).join(SEPARATOR + DELIMITER);
 
@@ -43,12 +45,12 @@ export default class Query {
     }
 
     static prepareKey(key, yqlTypes) {
-        if (_.isEmpty(key)) {
+        if (isEmpty_(key)) {
             return '';
         }
         return (
             KEY_START +
-            _.map(key, (columnValue) => {
+            map_(key, (columnValue) => {
                 return typeof columnValue === 'string'
                     ? columnValue
                     : Query.prepareColumnValue(columnValue, yqlTypes);
@@ -60,7 +62,7 @@ export default class Query {
     static prepareOffset(offsetColumns, offsetKey, descending) {
         return (
             KEY_START +
-            _.map(offsetColumns, (columnName) => {
+            map_(offsetColumns, (columnName) => {
                 return ESCAPE_START + columnName + ESCAPE_END;
             }).join(SEPARATOR + DELIMITER) +
             KEY_END +
@@ -72,7 +74,7 @@ export default class Query {
     }
 
     static prepareOrder(keyColumns, descending) {
-        return _.map(keyColumns, (columnName) => {
+        return map_(keyColumns, (columnName) => {
             return (
                 ESCAPE_START +
                 columnName +

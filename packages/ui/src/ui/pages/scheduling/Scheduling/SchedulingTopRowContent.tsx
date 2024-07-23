@@ -1,7 +1,9 @@
 import React from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import cn from 'bem-cn-lite';
-import _ from 'lodash';
+
+import map_ from 'lodash/map';
+import some_ from 'lodash/some';
 
 import {Breadcrumbs, BreadcrumbsItem} from '@gravity-ui/uikit';
 
@@ -116,7 +118,7 @@ function SchedulingBreadcrumbs() {
 
     const items = React.useMemo(() => {
         // @ts-ignore
-        const restItems = _.map(bcItems.slice(1), (name) => {
+        const restItems = map_(bcItems.slice(1), (name) => {
             return {
                 text: name,
                 action: () => {
@@ -184,7 +186,7 @@ function BreadcrumbLink(props: LinkProps) {
 
 function calcRootPathname(pathname: string, cluster: string) {
     // it is not allowed to stay on ACL and Monitor tabs for <Root> link
-    const isAllowedTab = _.some(SCHEDULING_ALLOWED_ROOT_TABS, (_v, tab) =>
+    const isAllowedTab = some_(SCHEDULING_ALLOWED_ROOT_TABS, (_v, tab) =>
         pathname.endsWith('/' + tab),
     );
     return isAllowedTab ? pathname : `/${cluster}/${Page.SCHEDULING}/${Tab.OVERVIEW}`;

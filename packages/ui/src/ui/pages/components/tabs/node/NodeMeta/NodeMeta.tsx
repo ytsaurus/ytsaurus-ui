@@ -1,7 +1,9 @@
 import React from 'react';
 import {useSelector} from 'react-redux';
 import cn from 'bem-cn-lite';
-import _ from 'lodash';
+
+import compact_ from 'lodash/compact';
+import map_ from 'lodash/map';
 
 import hammer from '../../../../../common/hammer';
 import Label from '../../../../../components/Label/Label';
@@ -175,7 +177,7 @@ function NodeMeta({
         <div className={block()}>
             <MetaTable
                 className={block('column', {type: 'meta'})}
-                items={_.compact([metaTableItems, tagsItems, urlItems])}
+                items={compact_([metaTableItems, tagsItems, urlItems])}
             />
         </div>
     );
@@ -184,7 +186,7 @@ function NodeMeta({
 function Tags({items}: {items?: Array<string>}) {
     return (
         <div className={block('tags')}>
-            {_.map(items, (tag) => (
+            {map_(items, (tag) => (
                 <Label key={tag} text={tag} />
             ))}
         </div>

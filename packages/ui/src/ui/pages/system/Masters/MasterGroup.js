@@ -14,7 +14,9 @@ import Icon from '../../../components/Icon/Icon';
 import {Tooltip} from '../../../components/Tooltip/Tooltip';
 import NodeQuad from '../NodeQuad/NodeQuad';
 import {SwitchLeaderButton} from './SwitchLeader';
-import _ from 'lodash';
+
+import keys_ from 'lodash/keys';
+import map_ from 'lodash/map';
 
 import './MasterGroup.scss';
 import {ChangeMaintenanceButton} from './ChangeMaintenanceButton';
@@ -40,7 +42,7 @@ class Instance extends Component {
     };
 
     static propTypes = {
-        state: PropTypes.oneOf(_.keys(Instance.instanceStateToTheme)),
+        state: PropTypes.oneOf(keys_(Instance.instanceStateToTheme)),
         address: PropTypes.string.isRequired,
         attributes: PropTypes.shape({
             warming_up: PropTypes.bool,
@@ -237,7 +239,7 @@ class MasterGroup extends Component {
         return (
             <div className={b('group', {'grid-row-start': gridRowStart}, className)}>
                 {this.renderQuorum()}
-                {_.map(
+                {map_(
                     instances,
                     ({state, $address, $physicalAddress, $attributes, $rowAddress}) => {
                         const address = hostType === 'host' ? $address : $physicalAddress;

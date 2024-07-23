@@ -1,7 +1,11 @@
 import {EditableList, EditableListItemType} from '@gravity-ui/dialog-fields';
 import React from 'react';
 import {connect} from 'react-redux';
-import _ from 'lodash';
+
+import concat_ from 'lodash/concat';
+import filter_ from 'lodash/filter';
+import map_ from 'lodash/map';
+
 import cn from 'bem-cn-lite';
 
 import {SelectProps} from '@gravity-ui/uikit';
@@ -32,21 +36,18 @@ function GroupSuggest(props: Props) {
     const {items, width, multiple, onChange, placeholder, className, showTags, value, ...rest} =
         props;
 
-    const ycItems = _.map(items, (item) => ({
+    const ycItems = map_(items, (item) => ({
         value: item,
         text: item,
     }));
 
     const empty = !value?.length;
 
-    const listValue = React.useMemo(
-        () => _.map(_.concat([], value), (title) => ({title})),
-        [value],
-    );
+    const listValue = React.useMemo(() => map_(concat_([], value), (title) => ({title})), [value]);
 
     const onListChange = React.useCallback(
         (newList: Array<EditableListItemType<any>>) => {
-            const res = _.filter(newList, ({removed}) => !removed).map(({title}) => title);
+            const res = filter_(newList, ({removed}) => !removed).map(({title}) => title);
             onChange(res);
         },
         [value, onChange],

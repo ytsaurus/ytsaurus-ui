@@ -14,7 +14,7 @@ import {AclMode, INHERITANCE_MODE_TYPES, IdmObjectType} from '../../../constants
 
 import UIFactory from '../../../UIFactory';
 import hammer from '../../../common/hammer';
-import {map} from 'lodash';
+import map_ from 'lodash/map';
 
 import {docsUrl} from '../../../config';
 import {makeLink} from '../../../utils/utils';
@@ -232,7 +232,7 @@ function RequestPermissions(props: Props) {
                 type: 'yt-select-single',
                 caption: 'Inheritance mode',
                 extras: {
-                    items: map(INHERITANCE_MODE_TYPES, (value) => ({
+                    items: map_(INHERITANCE_MODE_TYPES, (value) => ({
                         value: value,
                         text: hammer.format['ReadableField'](value),
                     })),

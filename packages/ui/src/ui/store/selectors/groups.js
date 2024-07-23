@@ -1,8 +1,9 @@
-import _ from 'lodash';
-import cloneDeep from 'lodash/cloneDeep';
+import cloneDeep_ from 'lodash/cloneDeep';
+import forEach_ from 'lodash/forEach';
+import map_ from 'lodash/map';
+
 import {createSelector} from 'reselect';
 import {ROOT_GROUP_NAME} from '../../constants/groups';
-import forEach from 'lodash/forEach';
 import {compareWithUndefined, orderTypeToOrderK} from '../../utils/sort-helpers';
 
 import {concatByAnd} from '../../common/hammer/predicate';
@@ -27,7 +28,7 @@ export const getGroupsTree = createSelector([getGroups], (groups) => {
     res[ROOT_GROUP_NAME] = root;
 
     const hasChildren = {};
-    forEach(res, (item) => {
+    forEach_(res, (item) => {
         if (item === root) {
             return;
         }
@@ -73,7 +74,7 @@ const getGroupsTreeFiltered = createSelector(
 const getGroupsTreeFilteredAndExpanded = createSelector(
     [getGroupsTreeFiltered, getGroupsExpanded],
     (root, expanded) => {
-        const res = cloneDeep(root);
+        const res = cloneDeep_(root);
         hammer.treeList.treeForEach(res.children, (node) => {
             const {name} = node;
             if (!expanded[name]) {
@@ -142,8 +143,8 @@ export const getGroupEditorSubjects = createSelector([getGroupEditorIdmData], (i
         group: {members, responsible},
     } = idmData;
     return {
-        responsible: _.map(responsible, ({subject}) => subject),
-        members: _.map(members, ({subject}) => subject),
+        responsible: map_(responsible, ({subject}) => subject),
+        members: map_(members, ({subject}) => subject),
     };
 });
 

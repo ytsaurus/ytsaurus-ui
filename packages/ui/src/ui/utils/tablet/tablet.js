@@ -1,4 +1,6 @@
-import _ from 'lodash';
+import extend_ from 'lodash/extend';
+import map_ from 'lodash/map';
+
 import Partition from '../../utils/tablet/partition';
 
 export const histogramItems = {
@@ -15,18 +17,18 @@ export const histogramItems = {
 };
 
 export function preparePartitions(contents) {
-    const partitions = _.map(contents.partitions, (partition, index) => {
-        partition.attributes = _.assign({}, partition);
+    const partitions = map_(contents.partitions, (partition, index) => {
+        partition.attributes = Object.assign({}, partition);
         partition.index = index;
         return new Partition(partition);
     });
 
     const eden = new Partition(
-        _.extend(
+        extend_(
             {
                 isEden: true,
                 index: -1,
-                attributes: _.extend({}, contents.eden),
+                attributes: extend_({}, contents.eden),
             },
             contents.eden,
         ),

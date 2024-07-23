@@ -2,7 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import cn from 'bem-cn-lite';
 import {compose} from 'redux';
-import _ from 'lodash';
+
+import isEmpty_ from 'lodash/isEmpty';
+
 import ClickableAttributesButton from '../../../../../../components/AttributesButton/ClickableAttributesButton';
 
 import ElementsTableBase from '../../../../../../components/ElementsTable/ElementsTable';
@@ -106,7 +108,7 @@ export default class Events extends React.Component {
             },
             actions: (event) => {
                 const {attributes} = event || {};
-                if (_.isEmpty(attributes)) {
+                if (isEmpty_(attributes)) {
                     return null;
                 }
                 return (

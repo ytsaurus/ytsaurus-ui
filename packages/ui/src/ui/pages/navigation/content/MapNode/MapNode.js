@@ -4,7 +4,8 @@ import {connect, useDispatch, useSelector} from 'react-redux';
 import PropTypes from 'prop-types';
 import cn from 'bem-cn-lite';
 import {Sticky, StickyContainer} from 'react-sticky';
-import _ from 'lodash';
+
+import map_ from 'lodash/map';
 
 import {getConfigUploadTable} from '../../../../config/index';
 
@@ -297,7 +298,7 @@ class MapNodeToolbar extends React.PureComponent {
                             size="m"
                             name="navigation-map-node-content-mode"
                             value={contentMode}
-                            items={_.map(
+                            items={map_(
                                 MapNode.CONTENT_MODE_OPTIONS,
                                 RadioButton.prepareSimpleValue,
                             )}
@@ -315,7 +316,7 @@ class MapNodeToolbar extends React.PureComponent {
                                 label="Medium:"
                                 placeholder="All"
                                 value={mediumType}
-                                items={_.map(mediumList, (type) => ({
+                                items={map_(mediumList, (type) => ({
                                     value: type,
                                     text: hammer.format['ReadableField'](type),
                                 }))}

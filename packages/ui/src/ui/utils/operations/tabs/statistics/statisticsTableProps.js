@@ -1,5 +1,3 @@
-import _ from 'lodash';
-
 const completedHintText =
     'Completed jobs — those which have finished successfully (i.e. consumed entire input and exited with zero exit code). Please note that due to hardware failures some jobs may be run more than once.';
 const abortedHintText =
@@ -43,7 +41,7 @@ export const statisticsTableProps = {
     columns: {
         sets: {
             default: {
-                items: ['metric'].concat(_.keys(STATISTIC_STATE)),
+                items: ['metric'].concat(Object.keys(STATISTIC_STATE)),
             },
         },
         items: {...STATISTIC_STATE, metric: {sort: false, align: 'left'}},

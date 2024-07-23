@@ -1,5 +1,6 @@
 import ypath from '@ytsaurus/interface-helpers/lib/ypath';
-import _ from 'lodash';
+
+import map_ from 'lodash/map';
 
 import Store from '../../utils/tablet/store';
 
@@ -16,7 +17,7 @@ export function preparePath(tabletPath, partitionIndex, storeId) {
 }
 
 export function prepareStores(stores, storesId) {
-    return _.map(
+    return map_(
         stores,
         (store, index) =>
             new Store({

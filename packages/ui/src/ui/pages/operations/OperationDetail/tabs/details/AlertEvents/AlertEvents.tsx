@@ -1,7 +1,8 @@
 import React from 'react';
 import {Column} from '@gravity-ui/react-data-table';
 import cn from 'bem-cn-lite';
-import _ from 'lodash';
+
+import reduce_ from 'lodash/reduce';
 
 import format from '../../../../../../common/hammer/format';
 import ypath from '../../../../../../common/thor/ypath';
@@ -103,7 +104,7 @@ function AlertEvents({items}: Props) {
     const [allVisible, setAllVisible] = React.useState(false);
     const all = React.useMemo(() => {
         const appeared: Record<string, AlertInfo> = {};
-        const res: Array<AlertInfo> = _.reduce(
+        const res: Array<AlertInfo> = reduce_(
             items,
             (acc, item) => {
                 const type = ypath.getValue(item.alert_type);

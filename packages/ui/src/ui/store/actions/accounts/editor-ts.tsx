@@ -1,4 +1,5 @@
-import _ from 'lodash';
+import update_ from 'lodash/update';
+
 import {RootState} from '../../../store/reducers';
 import {setAccountLimit} from '../../../utils/accounts/editor';
 import {ThunkAction} from 'redux-thunk';
@@ -33,7 +34,7 @@ function setAccountQuotaImpl(params: AccountQuotaParams): Promise<void> {
             parameters: {
                 source_account: distributeAccount,
                 destination_account: account,
-                resource_delta: _.update({}, dotPath, () => limitDiff),
+                resource_delta: update_({}, dotPath, () => limitDiff),
             },
         });
     } else {
@@ -41,7 +42,7 @@ function setAccountQuotaImpl(params: AccountQuotaParams): Promise<void> {
             parameters: {
                 source_account: account,
                 destination_account: distributeAccount,
-                resource_delta: _.update({}, dotPath, () => -limitDiff),
+                resource_delta: update_({}, dotPath, () => -limitDiff),
             },
         });
     }

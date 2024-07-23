@@ -1,7 +1,8 @@
 import React from 'react';
 import {useSelector} from 'react-redux';
 import cn from 'bem-cn-lite';
-import _ from 'lodash';
+
+import capitalize_ from 'lodash/capitalize';
 
 import Label from '../../../../../components/Label/Label';
 import UIFactory from '../../../../../UIFactory';
@@ -24,7 +25,7 @@ function PoolTags({pool}: {pool: PoolInfo}) {
             {showGuaranteeType && (
                 <Label
                     className={block('tag')}
-                    text={_.capitalize(integralType)}
+                    text={capitalize_(integralType)}
                     theme={'complementary'}
                 />
             )}

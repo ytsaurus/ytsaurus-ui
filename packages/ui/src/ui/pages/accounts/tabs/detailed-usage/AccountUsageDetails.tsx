@@ -1,5 +1,8 @@
 import React, {useCallback} from 'react';
-import _ from 'lodash';
+
+import capitalize_ from 'lodash/capitalize';
+import forEach_ from 'lodash/forEach';
+
 import cn from 'bem-cn-lite';
 
 import format from '../../../../common/hammer/format';
@@ -255,7 +258,7 @@ function useColumnsByPreset(mediums: Array<string>) {
             width: 120,
         });
 
-        _.forEach(mediums, (medium) => {
+        forEach_(mediums, (medium) => {
             const name = `medium:${medium}` as MediumKeyTemplate;
             const versionedName = `versioned:medium:${name}` as VersionedKeyTemplate;
 
@@ -280,7 +283,7 @@ function useColumnsByPreset(mediums: Array<string>) {
             });
         });
 
-        _.forEach(availableColumns, (field) => {
+        forEach_(availableColumns, (field) => {
             if (res.has(field)) {
                 return;
             }
@@ -296,7 +299,7 @@ function useColumnsByPreset(mediums: Array<string>) {
                         additionalKey in item.row ? Number(item.row[additionalKey]) : null;
 
                     if (typeof value === 'boolean') {
-                        return value === undefined ? format.NO_VALUE : _.capitalize(String(value));
+                        return value === undefined ? format.NO_VALUE : capitalize_(String(value));
                     }
                     if (field.endsWith('_time')) {
                         return value === null || value === undefined

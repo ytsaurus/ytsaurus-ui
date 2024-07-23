@@ -1,5 +1,8 @@
 import qs from 'qs';
-import _ from 'lodash';
+
+import some_ from 'lodash/some';
+import mapKeys_ from 'lodash/mapKeys';
+
 import moment from 'moment';
 
 import ypath from '@ytsaurus/interface-helpers/lib/ypath';
@@ -36,7 +39,7 @@ export default class Job {
     }
 
     computeProperties(attributes) {
-        const mappedAttributes = _.mapKeys(attributes, (value, key) => Job.mapping[key] || key);
+        const mappedAttributes = mapKeys_(attributes, (value, key) => Job.mapping[key] || key);
         Object.assign(this, mappedAttributes);
 
         this.duration = moment(this.finishTime) - moment(this.startTime);
@@ -118,7 +121,7 @@ export default class Job {
         if (error.code === Job.USER_ERROR_CODE) {
             return true;
         } else if (error.inner_errors && error.inner_errors.length) {
-            return _.some(error.inner_errors, Job.hasUserErrorCode);
+            return some_(error.inner_errors, Job.hasUserErrorCode);
         } else {
             return false;
         }

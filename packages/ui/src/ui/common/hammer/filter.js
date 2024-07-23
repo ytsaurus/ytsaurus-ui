@@ -1,3 +1,7 @@
+import filter_ from 'lodash/filter';
+import forEach_ from 'lodash/forEach';
+import map_ from 'lodash/map';
+
 const filter = {};
 
 /**
@@ -8,7 +12,7 @@ const filter = {};
  */
 
 filter.flattenCategoriesNG = (categories, categoryAccessor) => {
-    return _.map(categories, (category) => {
+    return map_(categories, (category) => {
         return category[categoryAccessor];
     });
 };
@@ -27,11 +31,11 @@ filter.flattenCategoriesNG = (categories, categoryAccessor) => {
 filter.countCategoriesNG = function (settings) {
     const count = {};
 
-    _.each(settings.categories, (category) => {
+    forEach_(settings.categories, (category) => {
         count[category] = 0;
     });
 
-    _.each(settings.items, (item) => {
+    forEach_(settings.items, (item) => {
         if (typeof settings.custom === 'function') {
             settings.custom(item, count);
         } else {
@@ -51,7 +55,7 @@ filter.countCategoriesNG = function (settings) {
  * @returns {String}
  */
 filter.calculateFactors = function (item, factors) {
-    const calculated = _.map(factors, (currentFactor) => {
+    const calculated = map_(factors, (currentFactor) => {
         return typeof currentFactor === 'function' ? currentFactor(item) : item[currentFactor];
     });
 
@@ -71,7 +75,7 @@ filter.filter = function (settings) {
     const input = settings.input.toString().toLowerCase(); // May be number
 
     if (input) {
-        data = _.filter(data, (item) => {
+        data = filter_(data, (item) => {
             return filter.calculateFactors(item, settings.factors).indexOf(input) !== -1;
         });
     }
@@ -163,7 +167,7 @@ filter.multifilter = function (settings) {
     const input = settings.input.toString().toLowerCase(); // May be number
 
     if (input) {
-        data = _.filter(data, (item) => {
+        data = filter_(data, (item) => {
             const factors = filter.calculateFactors(item, settings.factors);
 
             return evalFilterExpression(input, factors);

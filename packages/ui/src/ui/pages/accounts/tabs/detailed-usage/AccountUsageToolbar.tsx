@@ -1,5 +1,8 @@
 import React from 'react';
-import _ from 'lodash';
+
+import map_ from 'lodash/map';
+import reverse_ from 'lodash/reverse';
+
 import moment from 'moment';
 import cn from 'bem-cn-lite';
 
@@ -151,7 +154,7 @@ function useSnapshotItems() {
     const snapshots = useSelector(getAccountUsageSnapshots);
 
     const items = React.useMemo(() => {
-        const res = _.map(_.reverse(snapshots.slice()), (item) => {
+        const res = map_(reverse_(snapshots.slice()), (item) => {
             return {
                 value: snapshot2string(item),
                 text: moment(new Date(item * 1000)).format('YYYY-MM-DD HH:mm'),
@@ -471,7 +474,7 @@ export function UsageBreadcrumbs() {
     const pathArr = useSelector(getAccountUsageTreeItemsBasePathSplitted);
 
     const items = React.useMemo(() => {
-        return _.map(pathArr, (item) => {
+        return map_(pathArr, (item) => {
             return {
                 text: item.item,
                 value: item.value,

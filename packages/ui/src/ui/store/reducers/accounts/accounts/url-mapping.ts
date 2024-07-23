@@ -1,5 +1,3 @@
-import _ from 'lodash';
-
 import {initialState} from './index';
 import {initialState as tableSortState} from '../../tables';
 

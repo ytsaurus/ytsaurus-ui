@@ -11,7 +11,7 @@ import {
     getOAuthEnabled,
 } from '../../../store/selectors/global';
 import LoginPageWrapper from '../LoginPageWrapper/LoginPageWrapper';
-import isEmpty from 'lodash/isEmpty';
+import isEmpty_ from 'lodash/isEmpty';
 
 import cn from 'bem-cn-lite';
 
@@ -66,7 +66,7 @@ function LoginForm({theme}: Props) {
             e.preventDefault();
             setErrors({});
             const validationErrors = validate({username, password});
-            if (!isEmpty(validationErrors)) {
+            if (!isEmpty_(validationErrors)) {
                 setErrors(validationErrors);
                 return;
             }

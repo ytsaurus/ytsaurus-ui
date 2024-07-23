@@ -1,4 +1,5 @@
-import _ from 'lodash';
+import map_ from 'lodash/map';
+
 import axios from 'axios';
 import ypath from '../../../../common/thor/ypath';
 
@@ -21,7 +22,7 @@ function getRpcProxies() {
             ytApiV3Id.get(YTApiId.componentGetRpcProxies, {path: '//sys/rpc_proxies'}),
         ])
             .then(([data, proxiesMap]) => {
-                const proxies = _.map(data, (proxyData) => {
+                const proxies = map_(data, (proxyData) => {
                     const name = ypath.getValue(proxyData);
                     const role = ypath.getValue(proxyData, '/role') || 'default';
                     const alive = Boolean(ypath.getValue(proxiesMap, `/${name}`).alive);
@@ -56,7 +57,7 @@ function getHttpProxies() {
             }),
         ])
             .then(([{data}, cypressData]) => {
-                const proxies = _.map(data, (proxyData) => {
+                const proxies = map_(data, (proxyData) => {
                     const cypressAttributes = ypath.getAttributes(
                         ypath.getValue(cypressData)[proxyData.name],
                     );

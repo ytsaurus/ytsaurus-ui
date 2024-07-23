@@ -1,4 +1,6 @@
-import {fromPairs, isEqual, zip} from 'lodash';
+import fromPairs_ from 'lodash/fromPairs';
+import isEqual_ from 'lodash/isEqual';
+import zip_ from 'lodash/zip';
 
 export const STRUCT_TYPE = 'StructType';
 export const LIST_TYPE = 'ListType';
@@ -230,7 +232,7 @@ export function isHistogramType(rawField: TypeArray): rawField is HistogramType[
         field = field[1];
     }
     if (field[0] === STRUCT_TYPE) {
-        const struct = fromPairs(field[1]);
+        const struct = fromPairs_(field[1]);
         return (
             ['Bins', 'Max', 'Min', 'WeightsSum'].every((key) =>
                 Object.prototype.hasOwnProperty.call(struct, key),
@@ -238,7 +240,7 @@ export function isHistogramType(rawField: TypeArray): rawField is HistogramType[
             Array.isArray(struct.Bins) &&
             struct.Bins[0] === LIST_TYPE &&
             struct.Bins[1][0] === STRUCT_TYPE &&
-            isEqual(zip(...struct.Bins[1][1])[0].sort(), ['Frequency', 'Position'])
+            isEqual_(zip_(...struct.Bins[1][1])[0].sort(), ['Frequency', 'Position'])
         );
     }
     return false;

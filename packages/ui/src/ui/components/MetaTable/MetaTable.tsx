@@ -1,5 +1,9 @@
 import React, {Component, Fragment} from 'react';
-import _ from 'lodash';
+
+import filter_ from 'lodash/filter';
+import map_ from 'lodash/map';
+import reduce_ from 'lodash/reduce';
+
 import cn from 'bem-cn-lite';
 
 import hammer from '../../common/hammer';
@@ -39,7 +43,7 @@ function splitItems(items: MetaTableProps['items'], subTitles?: Array<string>) {
     if (Array.isArray(items[0])) {
         const groupTitles = !subTitles?.length
             ? undefined
-            : _.reduce(
+            : reduce_(
                   items,
                   (acc, _item, index) => {
                       acc.push(subTitles[Number(index)]);
@@ -81,7 +85,7 @@ export default class MetaTable extends Component<MetaTableProps> {
     renderItems(visibleItems?: Array<MetaTableItem>) {
         return (
             <Fragment>
-                {_.map(visibleItems, (item) => (
+                {map_(visibleItems, (item) => (
                     <Fragment key={item.key + '-fragment'}>
                         {this.renderKey(item.key, item.icon, item.label)}
                         {this.renderValue(item)}
@@ -94,7 +98,7 @@ export default class MetaTable extends Component<MetaTableProps> {
     renderGroup(group: Array<MetaTableItem>, index: number, groupTitles?: Array<string>) {
         const {rowGap} = this.props;
         const title = !groupTitles?.length ? null : groupTitles[index!] ?? <>&nbsp;</>;
-        const visibleItems = _.filter(group, (item) => item.visible !== false);
+        const visibleItems = filter_(group, (item) => item.visible !== false);
 
         return !visibleItems?.length ? null : (
             <div className={block('group', itemBlock({'row-gap': String(rowGap)}))} key={index}>
@@ -121,7 +125,7 @@ export default class MetaTable extends Component<MetaTableProps> {
             <div className={block(null, className)} data-qa={qa}>
                 {title && this.renderTitle(title)}
                 {withInnerGroups
-                    ? _.map(withInnerGroups, (item, index) =>
+                    ? map_(withInnerGroups, (item, index) =>
                           this.renderGroup(item, index, groupTitles),
                       )
                     : this.renderGroup(groups, 0)}

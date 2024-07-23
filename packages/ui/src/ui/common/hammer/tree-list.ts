@@ -1,5 +1,11 @@
+import each_ from 'lodash/each';
+import forEach_ from 'lodash/forEach';
+import isArray_ from 'lodash/isArray';
+import isEmpty_ from 'lodash/isEmpty';
+import map_ from 'lodash/map';
+
 import {utils} from './utils';
-import _ from 'lodash';
+
 import {OldSortState} from '../../types';
 
 export interface TreeNode<T, L> {
@@ -61,12 +67,12 @@ export function prepareTree<T, L = T>(
 ) {
     const treeNodeMap: Record<string, TreeNode<T, L>> = {};
 
-    _.each(entries, (entry, name) => {
+    each_(entries, (entry, name) => {
         const parentNames = parentGetter(entry);
         const currentEntry = getTreeNode<T, L>(treeNodeMap, name, name);
 
         if (parentNames) {
-            if (_.isArray(parentNames)) {
+            if (isArray_(parentNames)) {
                 parentNames.forEach((parentName) => {
                     getTreeNode(treeNodeMap, parentName, name).children.push(currentEntry);
                 });
@@ -93,7 +99,7 @@ export function attachTreeLeaves<T, L>(
     leaves: Record<string, L>,
     parentGetter: (leaf: L) => string,
 ) {
-    _.each(leaves, (leaf, leafName) => {
+    each_(leaves, (leaf, leafName) => {
         const treeNodeName = parentGetter(leaf);
         const treeNode = treeNodeMap[treeNodeName];
 
@@ -146,7 +152,7 @@ export function filterTree<T, L, FilterLeavesT extends undefined | boolean>(
         treeNodeCopy.leaves = [];
     }
 
-    _.each(treeNode.children, (childEntry) => {
+    each_(treeNode.children, (childEntry) => {
         if (filterPredicate(childEntry)) {
             const copiedChildEntry = filterTree(childEntry, truthyFilterPredicate, filterLeaves);
 
@@ -183,7 +189,7 @@ export function sortTree<T, L, FieldT extends string>(
     treeNode.children = utils.sort(treeNode.children, sortInfo, fields);
     treeNode.leaves = utils.sort(treeNode.leaves, sortInfo, fields);
 
-    treeNode.children = _.map(treeNode.children, (childEntry) => {
+    treeNode.children = map_(treeNode.children, (childEntry) => {
         return sortTree(childEntry, sortInfo, fields);
     });
 
@@ -222,12 +228,12 @@ export function flattenTree<T, L>(
     let tree: Array<FlatItem<T, L>> = [];
 
     tree = tree.concat(
-        _.map(treeNode.leaves, (leaf) => {
+        map_(treeNode.leaves, (leaf) => {
             return augmentTreeNode(leaf, level, basePath);
         }),
     );
 
-    _.each(treeNode.children, (childNode) => {
+    each_(treeNode.children, (childNode) => {
         childNode = augmentTreeNode(childNode, level, basePath);
 
         tree.push(childNode);
@@ -242,12 +248,12 @@ export function treeForEach<T extends {children?: Array<T>}>(
     visitorCb: (item: T, currentDepth: number) => void,
     currentDepth = 0,
 ) {
-    if (!nodeOrArray || _.isEmpty(nodeOrArray)) {
+    if (!nodeOrArray || isEmpty_(nodeOrArray)) {
         return;
     }
 
     if (Array.isArray(nodeOrArray)) {
-        _.forEach(nodeOrArray, (item) => treeForEach(item, visitorCb, currentDepth));
+        forEach_(nodeOrArray, (item) => treeForEach(item, visitorCb, currentDepth));
     } else {
         visitorCb(nodeOrArray, currentDepth);
         treeForEach(nodeOrArray.children, visitorCb, currentDepth + 1);

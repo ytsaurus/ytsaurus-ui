@@ -1,5 +1,11 @@
 import React from 'react';
-import _ from 'lodash';
+
+import keys_ from 'lodash/keys';
+import map_ from 'lodash/map';
+import merge_ from 'lodash/merge';
+import reduce_ from 'lodash/reduce';
+import sortBy_ from 'lodash/sortBy';
+
 import cn from 'bem-cn-lite';
 
 import {Progress} from '@gravity-ui/uikit';
@@ -749,7 +755,7 @@ const nodesTableProps = {
             tablet_slots: {
                 get(node) {
                     if (node.tabletSlots && node.tabletSlots.raw && node.tabletSlots.raw.length) {
-                        return _.reduce(
+                        return reduce_(
                             node.tabletSlots.raw,
                             (sum, slot) => (slot.state === 'none' ? sum : sum + 1),
                             0,
@@ -1100,7 +1106,7 @@ export const defaultColumns = nodesTableProps.columns.sets.custom.items;
 function renderTags(tags?: Array<string | number>, themes?: StatusBlockTheme[], flexType?: 'flex') {
     return tags?.length ? (
         <TagsContainer flexType={flexType}>
-            {_.map(tags, (tag, index) => (
+            {map_(tags, (tag, index) => (
                 <StatusBlock key={tag} theme={themes?.[index]} text={tag} />
             ))}
         </TagsContainer>
@@ -1333,11 +1339,11 @@ export const NODES_TABLE_TEMPLATES: Templates = {
 
     tablet_slots(item) {
         if (item.tabletSlots) {
-            const statuses = _.sortBy(_.keys(item.tabletSlots.byState));
+            const statuses = sortBy_(keys_(item.tabletSlots.byState));
 
             return (
                 <TagsContainer>
-                    {_.map(statuses, (state: TabletSlotState) => {
+                    {map_(statuses, (state: TabletSlotState) => {
                         const tabletSlots = item.tabletSlots.byState[state]!;
                         const {text, theme} = TABLET_SLOTS[state];
                         const label = `${text}: ${tabletSlots.length}`;
@@ -1461,7 +1467,7 @@ export function getNodeTablesProps(mediumList: string[] = []) {
         return nodesTableProps;
     }
     const actions = nodesTableProps.columns.items.actions;
-    const allMediums = _.reduce(
+    const allMediums = reduce_(
         mediumList,
         (acc, key) => {
             acc[key] = {
@@ -1475,7 +1481,7 @@ export function getNodeTablesProps(mediumList: string[] = []) {
         },
         {actions} as {actions: typeof actions} & Record<string, FIX_MY_TYPE>,
     );
-    const res = _.merge({}, nodesTableProps, {
+    const res = merge_({}, nodesTableProps, {
         columns: {
             items: {
                 io_weight: {

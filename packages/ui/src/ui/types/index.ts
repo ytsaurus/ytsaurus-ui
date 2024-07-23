@@ -1,5 +1,5 @@
 import {Action} from 'redux';
-import {OrderType} from '../utils/sort-helpers';
+import type {OrderType} from '../utils/sort-helpers';
 
 export type {YTError} from '../../@types/types.d';
 

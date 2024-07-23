@@ -1,5 +1,4 @@
-import _compact from 'lodash/compact';
-import _map from 'lodash/map';
+import compact_ from 'lodash/compact';
 import React from 'react';
 import YagrChartKit, {
     RawSerieData,
@@ -230,7 +229,7 @@ function renderDefaultTooltip({
     lineOnly?: boolean;
 }) {
     const lp = lineOnly ? '' : '~';
-    return _compact([
+    return compact_([
         colValue !== undefined
             ? `<b>${colValue}</b> partitions contain in range from <b>${colX0}</b> to <b>${colX1}</b> - ${dataName}`
             : undefined,

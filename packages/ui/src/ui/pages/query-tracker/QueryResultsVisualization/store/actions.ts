@@ -1,6 +1,7 @@
 import {YTApiId, ytApiV4Id} from '../../../../rum/rum-wrap-api';
 import {Visualization} from '../types';
-import _ from 'lodash';
+
+import debounce_ from 'lodash/debounce';
 import type {QueryResultVisualizationAction} from './reducer';
 import {QueryResultMetaScheme, getQueryResultMeta, readQueryResults} from '../../module/api';
 import {getPrimitiveTypesMap} from '../../../../store/selectors/global/supported-features';
@@ -21,7 +22,7 @@ type SaveQueryChartConfig = {
 
 const DELAY = 5 * 1000;
 
-const debouncedSaveQueryChartConfig = _.debounce(
+const debouncedSaveQueryChartConfig = debounce_(
     (dispatch: AppThunkDispatch<QueryResultVisualizationAction>, payload: SaveQueryChartConfig) => {
         const promise = ytApiV4Id
             .alterQuery(YTApiId.alterQuery, {

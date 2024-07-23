@@ -6,7 +6,9 @@ import Select from '../../../components/Select/Select';
 import {Datepicker} from '../../../components/common/Datepicker';
 
 import block from 'bem-cn-lite';
-import _ from 'lodash';
+
+import map_ from 'lodash/map';
+import findIndex_ from 'lodash/findIndex';
 
 import {getDate, getMetric, getOdinCluster, getStat, getUseCurrentDate} from '../_selectors';
 import {setDate, setMetric, toggleUseCurrentDate} from '../_actions';
@@ -24,7 +26,7 @@ function useLoadMetricsList() {
     useEffect(() => {
         Utils.listMetrics(cluster).then((metrics) => {
             setMetrics(
-                _.map(metrics, ({name, display_name: text}) => ({
+                map_(metrics, ({name, display_name: text}) => ({
                     value: name,
                     text,
                 })),
@@ -43,7 +45,7 @@ function MetricSelector() {
         dispatch(setMetric(value));
     }, []);
 
-    if (metrics.length > 0 && _.findIndex(metrics, ({value}) => value === metric) === -1) {
+    if (metrics.length > 0 && findIndex_(metrics, ({value}) => value === metric) === -1) {
         dispatch(setMetric(metrics[0].value));
     }
 

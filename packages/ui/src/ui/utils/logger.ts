@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import reduce_ from 'lodash/reduce';
 
 export class Logger {
     private readonly name: string;
@@ -45,7 +45,7 @@ export class Logger {
                 diff = prev;
             } else {
                 const keys = new Set([...Object.keys(prev || {}), ...Object.keys(props || {})]);
-                diff = _.reduce(
+                diff = reduce_(
                     [...keys],
                     (acc, k) => {
                         if (prev[k] !== props[k]) {

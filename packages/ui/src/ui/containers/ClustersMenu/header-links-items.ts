@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import compact_ from 'lodash/compact';
 
 export interface HeaderLinkItem {
     href: string;
@@ -13,7 +13,7 @@ export const LINKS_ITEM_CLUSTERS: HeaderLinkItem = {
     routed: true,
 };
 
-export const ALL_LINKS_ITEMS: Array<HeaderLinkItem> = _.compact([LINKS_ITEM_CLUSTERS]);
+export const ALL_LINKS_ITEMS: Array<HeaderLinkItem> = compact_([LINKS_ITEM_CLUSTERS]);
 
 export function registerHeaderLink(item: HeaderLinkItem) {
     const found = ALL_LINKS_ITEMS.find(({href}) => item.href === href);

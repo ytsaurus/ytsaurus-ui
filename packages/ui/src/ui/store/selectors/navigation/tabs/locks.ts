@@ -1,4 +1,5 @@
-import _ from 'lodash';
+import filter_ from 'lodash/filter';
+
 import {createSelector} from 'reselect';
 import {RootState} from '../../../../store/reducers';
 import {calculateLoadingStatus} from '../../../../utils/utils';
@@ -22,6 +23,6 @@ export const getLocksFiltered = createSelector(
         if (!modeFilter) {
             return items;
         }
-        return _.filter(items, ({mode}) => mode === modeFilter);
+        return filter_(items, ({mode}) => mode === modeFilter);
     },
 );

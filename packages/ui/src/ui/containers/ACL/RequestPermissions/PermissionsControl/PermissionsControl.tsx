@@ -1,6 +1,9 @@
 import React, {Component} from 'react';
 import cn from 'bem-cn-lite';
-import _ from 'lodash';
+
+import indexOf_ from 'lodash/indexOf';
+import isEmpty_ from 'lodash/isEmpty';
+import map_ from 'lodash/map';
 
 import {Checkbox} from '@gravity-ui/uikit';
 
@@ -36,7 +39,7 @@ export default class PermissionsControl extends Component<Props, State> {
 
     static getDefaultValue = () => ({});
     static isEmpty(value: Props['value']) {
-        return _.isEmpty(value);
+        return isEmpty_(value);
     }
 
     state: State = {};
@@ -58,7 +61,7 @@ export default class PermissionsControl extends Component<Props, State> {
         index: number,
     ) {
         const {value, disabled, disabledChoices} = this.props;
-        const itemDisabled = disabled || _.indexOf(disabledChoices, index) !== -1;
+        const itemDisabled = disabled || indexOf_(disabledChoices, index) !== -1;
 
         return (
             <Checkbox
@@ -73,7 +76,7 @@ export default class PermissionsControl extends Component<Props, State> {
     }
 
     renderChoices(choices?: Required<Props>['choices']) {
-        return _.map(choices, (item, index) => {
+        return map_(choices, (item, index) => {
             const name = PermissionsControl.getChoiceName(item);
             return (
                 <React.Fragment key={index}>

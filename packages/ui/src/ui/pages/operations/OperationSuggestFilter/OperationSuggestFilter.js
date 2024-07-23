@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import _ from 'lodash';
+
+import filter_ from 'lodash/filter';
 
 import Suggest, {itemsProps} from '../../../components/Suggest/Suggest';
 
@@ -21,7 +22,7 @@ export default class OperationSuggestFilter extends Component {
     static simpleSuggestLoader(items, text) {
         text = text.toLowerCase();
 
-        items = _.filter(items, (item) => {
+        items = filter_(items, (item) => {
             const itemText = typeof item === 'string' ? item : item.value;
 
             return text ? itemText.toLowerCase().indexOf(text) !== -1 : true;

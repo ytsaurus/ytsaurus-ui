@@ -1,4 +1,5 @@
-import _ from 'lodash';
+import capitalize_ from 'lodash/capitalize';
+import map_ from 'lodash/map';
 
 export type Type = string | ComplexType;
 
@@ -50,7 +51,7 @@ export function parseV3Type(initialType: Type, primitiveTypes: Set<string>) {
 
     function stringToYql(ysonType: string, typesMap: Set<string>) {
         if (typesMap.has(ysonType)) {
-            return ['DataType', _.capitalize(ysonType)] as const;
+            return ['DataType', capitalize_(ysonType)] as const;
         } else {
             return ['UnknownType'] as const;
         }
@@ -88,13 +89,13 @@ export function parseV3Type(initialType: Type, primitiveTypes: Set<string>) {
     }
 
     function tupleToYql(ysonType: VariantElements) {
-        return ['TupleType', _.map(ysonType.elements, ({type}) => ysonTypeToYql(type))] as const;
+        return ['TupleType', map_(ysonType.elements, ({type}) => ysonTypeToYql(type))] as const;
     }
 
     function structToYql(ysonType: VariantMembers) {
         return [
             'StructType',
-            _.map(ysonType.members, ({name, type}) => [name, ysonTypeToYql(type)]),
+            map_(ysonType.members, ({name, type}) => [name, ysonTypeToYql(type)]),
         ] as const;
     }
 

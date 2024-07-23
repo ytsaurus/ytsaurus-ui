@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import cn from 'bem-cn-lite';
-import {partition} from 'lodash';
+import partition_ from 'lodash/partition';
 
 import {ClickableText} from '../../../../../../components/ClickableText/ClickableText';
 import {getMediumList} from '../../../../../../store/selectors/thor';
@@ -56,7 +56,7 @@ class MediumContent extends Component<Props> {
     render() {
         const {account, mediumList} = this.props;
         const mediumTypesWithoutCache = mediumList.filter((item) => item !== 'cache');
-        const [defined, rest] = partition(
+        const [defined, rest] = partition_(
             mediumTypesWithoutCache,
             (mediumType) => account.perMedium[mediumType],
         );

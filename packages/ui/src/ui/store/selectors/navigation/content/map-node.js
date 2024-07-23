@@ -1,7 +1,17 @@
 import React from 'react';
-
 import {createSelector} from 'reselect';
-import _ from 'lodash';
+
+import every_ from 'lodash/every';
+import filter_ from 'lodash/filter';
+import findIndex_ from 'lodash/findIndex';
+import includes_ from 'lodash/includes';
+import keys_ from 'lodash/keys';
+import map_ from 'lodash/map';
+import pickBy_ from 'lodash/pickBy';
+import reduce_ from 'lodash/reduce';
+import transform_ from 'lodash/transform';
+import values_ from 'lodash/values';
+
 import moment from 'moment';
 
 import ypath from '../../../../common/thor/ypath';
@@ -115,7 +125,7 @@ const getTableColumns = createSelector(
     }),
 );
 export const getPreparedTableColumns = createSelector(getTableColumns, (columns) =>
-    _.transform(
+    transform_(
         columns,
         (preparedColumns, column, name) => {
             preparedColumns[name] = {
@@ -139,7 +149,7 @@ export const getNodesData = (state) => state.navigation.content.mapNode.nodesDat
 const getNodes = createSelector(
     [getNodesData, getParsedPath, getTransaction, getContentMode],
     (nodesData, parsedPath, transaction, contentMode) => {
-        return _.map(
+        return map_(
             nodesData,
             (data) =>
                 new Node(data, {
@@ -174,7 +184,7 @@ export const getFilteredNodes = createSelector(
 export const getSelectedNodes = createSelector(
     [getSelected, getNodes, makeGetSetting, getSortState, getTableColumns],
     (selected, allNodes, getSetting, sortState, columns) => {
-        const nodes = _.filter(allNodes, (node) => Boolean(selected[ypath.getValue(node)]));
+        const nodes = filter_(allNodes, (node) => Boolean(selected[ypath.getValue(node)]));
         const groupNodes = getSetting(SettingName.NAVIGATION.GROUP_NODES, NAMESPACES.NAVIGATION);
         const groupByType = groupNodes && {
             get: (node) => TYPE_WEIGHTS[node.type] || 0,
@@ -188,7 +198,7 @@ export const getSelectedNodes = createSelector(
 );
 
 export const getSelectedPathMap = createSelector([getSelectedNodes], (nodes) => {
-    return _.reduce(
+    return reduce_(
         nodes,
         (acc, {path}) => {
             acc[path] = true;
@@ -199,23 +209,23 @@ export const getSelectedPathMap = createSelector([getSelectedNodes], (nodes) => 
 });
 
 export const isSelected = createSelector(getSelected, (selected) => {
-    return _.includes(_.values(selected), true);
+    return includes_(values_(selected), true);
 });
 
 export const getIsAllSelected = createSelector(
     [getSelected, getFilteredNodes],
     (selected, allNodes) => {
-        const selectedNodes = _.keys(selected);
+        const selectedNodes = keys_(selected);
 
         if (allNodes.length === 0) {
             return false;
         }
 
-        return _.every(_.values(selected)) && selectedNodes.length === allNodes.length;
+        return every_(values_(selected)) && selectedNodes.length === allNodes.length;
     },
 );
 
-export const TYPE_WEIGHTS = _.map(
+export const TYPE_WEIGHTS = map_(
     [
         'tablet_cell',
         'cell_node_map',
@@ -260,7 +270,7 @@ export const getSortedNodes = createSelector(
 export const getNodesInfo = createSelector(getSortedNodes, (nodes) => {
     const sumNodesType = hammer.aggregation.countValues(nodes, 'type');
 
-    return _.map(Object.entries(sumNodesType), (keyValue) => {
+    return map_(Object.entries(sumNodesType), (keyValue) => {
         const [key, value] = keyValue;
         const type = key === 'undefined' ? 'Unknown' : key;
         return {
@@ -284,7 +294,7 @@ export const shouldApplyCustomSort = createSelector(
     (nodes, getSetting, sortState) =>
         getSetting(SettingName.NAVIGATION.USE_SMART_SORT, NAMESPACES.NAVIGATION) &&
         sortState?.field === 'name' &&
-        _.every(nodes, (item) => DATE_REGEXP.test(item.name)),
+        every_(nodes, (item) => DATE_REGEXP.test(item.name)),
 );
 
 export const getLoadState = (state) => state.navigation.content.mapNode.loadState;
@@ -294,10 +304,10 @@ export const getSelectedIndex = createSelector(
     [getSortedNodes, getFilterState],
     (nodes, filter) => {
         if (filter) {
-            const strictIndex = _.findIndex(nodes, ({name}) => name === filter);
+            const strictIndex = findIndex_(nodes, ({name}) => name === filter);
 
             if (strictIndex === -1) {
-                return _.findIndex(nodes, ({name}) => name.startsWith(filter));
+                return findIndex_(nodes, ({name}) => name.startsWith(filter));
             }
 
             return strictIndex;
@@ -308,7 +318,7 @@ export const getSelectedIndex = createSelector(
 );
 
 export const getSelectedNodesDynTablesStates = createSelector([getSelectedNodes], (nodes) => {
-    const res = _.reduce(
+    const res = reduce_(
         nodes,
         (acc, item) => {
             if (item.tabletState) {
@@ -324,7 +334,7 @@ export const getSelectedNodesDynTablesStates = createSelector([getSelectedNodes]
 export const getSelectedNodesAllowedDynTablesActions = createSelector(
     [getSelectedNodesDynTablesStates],
     (dynTablesStates) => {
-        const res = _.reduce(
+        const res = reduce_(
             dynTablesStates,
             (acc, value, state) => {
                 if (value) {
@@ -334,6 +344,6 @@ export const getSelectedNodesAllowedDynTablesActions = createSelector(
             },
             {mount: false, unmount: false, freeze: false, unfreeze: false},
         );
-        return _.pickBy(res, Boolean);
+        return pickBy_(res, Boolean);
     },
 );

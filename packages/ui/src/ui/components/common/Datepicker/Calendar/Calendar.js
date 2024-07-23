@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import block from 'bem-cn-lite';
-import _range from 'lodash/range';
-import _throttle from 'lodash/throttle';
+import range_ from 'lodash/range';
+import throttle_ from 'lodash/throttle';
 import {DateTime, Interval} from 'luxon';
 
 import {Month} from '../Month/Month';
@@ -191,7 +191,7 @@ export class Calendar extends React.Component {
     componentDidMount() {
         const browser = checkBrowser();
         this.isNeedScrollOffsetHandling = browser === 'Safari' || browser === 'Firefox';
-        this.containerRef.current.addEventListener('scroll', _throttle(this.onScroll, 5));
+        this.containerRef.current.addEventListener('scroll', throttle_(this.onScroll, 5));
         this.scrollTo();
         this.setState({
             switcherOffset: getOffsetTop(this.containerRef.current),
@@ -625,7 +625,7 @@ export class Calendar extends React.Component {
         return (
             <Years
                 ref={this.contentRef}
-                years={_range(startYear, startYear + yearsCount)}
+                years={range_(startYear, startYear + yearsCount)}
                 from={from}
                 to={to}
                 min={min}

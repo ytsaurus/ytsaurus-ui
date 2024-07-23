@@ -1,4 +1,6 @@
-import _ from 'lodash';
+import findIndex_ from 'lodash/findIndex';
+import map_ from 'lodash/map';
+
 import type {Action} from 'redux';
 
 import {Node} from './node';
@@ -75,7 +77,7 @@ const reducer = (state = initialState, action: NodesAction): NodesState => {
 
         case GET_NODES.SUCCESS: {
             const {nodes} = action.data;
-            const preparedNodes = _.map(nodes, (node) => new Node(node));
+            const preparedNodes = map_(nodes, (node) => new Node(node));
 
             return {
                 ...state,
@@ -90,7 +92,7 @@ const reducer = (state = initialState, action: NodesAction): NodesState => {
             const {nodes} = state;
             const {node} = action.data;
 
-            const index = _.findIndex(state.nodes, ({host}) => host === ypath.getValue(node));
+            const index = findIndex_(state.nodes, ({host}) => host === ypath.getValue(node));
             if (index === -1) {
                 return state;
             }

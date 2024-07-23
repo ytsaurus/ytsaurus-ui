@@ -1,6 +1,7 @@
 import React from 'react';
 import cn from 'bem-cn-lite';
-import _ from 'lodash';
+
+import capitalize_ from 'lodash/capitalize';
 
 import DataTable, {Column, Settings} from '@gravity-ui/react-data-table';
 
@@ -80,7 +81,7 @@ class CellsTable extends React.Component<Props & ReduxProps> {
             <ColumnHeader
                 className={block('header-cell', {col, sortable}, 'data-table__head-cell')}
                 column={col}
-                title={COLUMN_TITLE[col] ?? _.capitalize(col)}
+                title={COLUMN_TITLE[col] ?? capitalize_(col)}
                 order={isSorted ? order : undefined}
                 onSort={this.onColumnSort}
                 withUndefined

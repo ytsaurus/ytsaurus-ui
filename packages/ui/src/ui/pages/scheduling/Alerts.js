@@ -1,4 +1,5 @@
-import _ from 'lodash';
+import map_ from 'lodash/map';
+
 import React from 'react';
 import cn from 'bem-cn-lite';
 import PropTypes from 'prop-types';
@@ -27,7 +28,7 @@ export default function Alerts({className}) {
             <div className={block(null, className)}>
                 {!schedulerAlerts?.length ? null : (
                     <CollapsibleSection name="Alerts" size={UI_COLLAPSIBLE_SIZE}>
-                        {_.map(schedulerAlerts, (alert, index) => {
+                        {map_(schedulerAlerts, (alert, index) => {
                             return <Alert key={index} error={alert} />;
                         })}
                     </CollapsibleSection>

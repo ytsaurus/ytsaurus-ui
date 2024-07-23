@@ -1,6 +1,9 @@
 import React from 'react';
 import cn from 'bem-cn-lite';
-import _ from 'lodash';
+
+import filter_ from 'lodash/filter';
+import forEach_ from 'lodash/forEach';
+import map_ from 'lodash/map';
 
 import {
     EditableListItemType,
@@ -118,7 +121,7 @@ export function prepareRoleListValue(roles: Array<PreparedRole>, otherMembers: A
     const toAdd: typeof roles = [];
     const toRemove: typeof roles = [];
     const unrecognized: typeof roles = [];
-    _.forEach(roles, (item) => {
+    forEach_(roles, (item) => {
         const {isUnrecognized, isRequested, isApproved, isDepriving} = item;
         if (isUnrecognized) {
             unrecognized.push(item);
@@ -180,8 +183,8 @@ function manyListDataItemToSubjectList(
     manyListDataItem: EditableManyListsItemType<RoleConverted>,
 ): Array<ResponsibleType> {
     const {data} = manyListDataItem || {};
-    return _.map(
-        _.filter(data, ({removed}) => !removed),
+    return map_(
+        filter_(data, ({removed}) => !removed),
         ({data}) => {
             const {type, value} = data || {};
             return {type: type!, value: value!};

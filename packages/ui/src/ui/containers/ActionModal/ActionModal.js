@@ -2,7 +2,8 @@ import React from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import cn from 'bem-cn-lite';
-import _ from 'lodash';
+
+import values_ from 'lodash/values';
 
 import Modal from '../../components/Modal/Modal';
 import Error from '../../components/Error/Error';
@@ -21,7 +22,7 @@ class ActionModal extends React.Component {
     static propTypes = {
         dismissAction: PropTypes.func,
         confirmAction: PropTypes.func,
-        status: PropTypes.oneOf(_.values(MODAL_STATES)),
+        status: PropTypes.oneOf(values_(MODAL_STATES)),
         handler: PropTypes.func,
         message: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
         details: PropTypes.string,

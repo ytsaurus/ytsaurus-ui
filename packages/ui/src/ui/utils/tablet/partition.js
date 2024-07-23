@@ -1,5 +1,6 @@
 import ypath from '@ytsaurus/interface-helpers/lib/ypath';
-import _ from 'lodash';
+
+import keys_ from 'lodash/keys';
 
 export default class Partition {
     constructor(data) {
@@ -17,7 +18,7 @@ export default class Partition {
         this.sampleKeyCount = Number(ypath.getValue(data, '/sample_key_count'));
 
         let stores = ypath.getValue(data, '/stores');
-        stores = stores ? _.keys(stores) : [];
+        stores = stores ? keys_(stores) : [];
 
         this.stores = stores;
         this.storeCount = stores.length;

@@ -1,6 +1,7 @@
 import React from 'react';
 import cn from 'bem-cn-lite';
-import _ from 'lodash';
+
+import reduce_ from 'lodash/reduce';
 
 import {Column} from '@gravity-ui/react-data-table';
 
@@ -47,7 +48,7 @@ function NodeMemoryDetailsTable(props: Props) {
     }, []);
 
     const sortStateByName = React.useMemo(() => {
-        return _.reduce(
+        return reduce_(
             sortState,
             (acc, item) => {
                 const {column, order} = item;

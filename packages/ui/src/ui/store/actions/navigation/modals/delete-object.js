@@ -18,7 +18,10 @@ import {
     SUPPRESS_REDIRECT,
     TOGGLE_PERMANENTLY_DELETE,
 } from '../../../../constants/navigation/modals/delete-object';
-import _ from 'lodash';
+
+import find_ from 'lodash/find';
+import map_ from 'lodash/map';
+
 import {executeBatchWithRetries} from '../../execute-batch';
 import {YTApiId, ytApiV3Id} from '../../../../rum/rum-wrap-api';
 
@@ -128,7 +131,7 @@ export function getRealPaths(items) {
     return (dispatch) => {
         dispatch({type: LOAD_REAL_PATH.REQUEST});
 
-        const requests = _.map(items, ({path}) => {
+        const requests = map_(items, ({path}) => {
             return {
                 command: 'get',
                 parameters: {
@@ -148,11 +151,11 @@ export function getRealPaths(items) {
             errorTitle: 'Failed to get real paths',
         })
             .then((responses) => {
-                const error = _.find(responses, (res) => res.error);
+                const error = find_(responses, (res) => res.error);
                 if (error) {
                     return Promise.reject(error.error);
                 }
-                const multipleInfo = _.map(responses, (res, index) => {
+                const multipleInfo = map_(responses, (res, index) => {
                     const type = ypath.get(res.output, '/type');
 
                     if (type === 'access_control_object') {
@@ -315,7 +318,7 @@ export function deleteObject() {
 }
 
 function permanentlyDeleteObjects(multipleInfo, transaction) {
-    const requests = _.map(multipleInfo, (node) => {
+    const requests = map_(multipleInfo, (node) => {
         const path = preparePath(node.path, node.type);
 
         return {
@@ -342,7 +345,7 @@ function permanentlyDeleteObjects(multipleInfo, transaction) {
 }
 
 function moveObjectsIntoTrash(multipleInfo, transaction, login) {
-    const setAttributesRequests = _.map(multipleInfo, (node) => {
+    const setAttributesRequests = map_(multipleInfo, (node) => {
         const restorePath = prepareRestorePath(node.path, node.type);
 
         return {
@@ -361,7 +364,7 @@ function moveObjectsIntoTrash(multipleInfo, transaction, login) {
         };
     });
 
-    const moveRequests = _.map(multipleInfo, (node) => {
+    const moveRequests = map_(multipleInfo, (node) => {
         const path = preparePath(node.path, node.type);
         const destinationPath = createDestinationPath(node.account, node.name, login);
 

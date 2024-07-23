@@ -1,4 +1,9 @@
-import _ from 'lodash';
+import forEach_ from 'lodash/forEach';
+import keys_ from 'lodash/keys';
+import map_ from 'lodash/map';
+import reduce_ from 'lodash/reduce';
+import sortBy_ from 'lodash/sortBy';
+
 import ypath from '../../../common/thor/ypath';
 import {Toaster} from '@gravity-ui/uikit';
 
@@ -158,23 +163,20 @@ async function loadMastersConfig(): Promise<[MastersConfigResponse, MasterAlert[
     const timestampProviders = !timestampProvidersResult.output
         ? {}
         : {
-              addresses: _.map(
-                  ypath.getValue(timestampProvidersResult.output),
-                  (value, address) => {
-                      return {
-                          host: address,
-                          physicalHost: ypath.getValue(value, '/@annotations/physical_host'),
-                          attributes: ypath.getValue(value, '/@'),
-                      };
-                  },
-              ),
+              addresses: map_(ypath.getValue(timestampProvidersResult.output), (value, address) => {
+                  return {
+                      host: address,
+                      physicalHost: ypath.getValue(value, '/@annotations/physical_host'),
+                      attributes: ypath.getValue(value, '/@'),
+                  };
+              }),
               cellId: ypath.getValue(timestampProviderCellTag.output)?.cell_id,
               cellTag: getCellIdTag(ypath.getValue(timestampProviderCellTag.output)?.cell_id),
           };
 
     const mainResult: MastersConfigResponse = {
         primaryMaster: {
-            addresses: _.map(_.keys(primaryMaster), (address) => {
+            addresses: map_(keys_(primaryMaster), (address) => {
                 const value = primaryMaster[address];
 
                 return {
@@ -186,9 +188,9 @@ async function loadMastersConfig(): Promise<[MastersConfigResponse, MasterAlert[
             cellId: masterCellId,
             cellTag: getCellIdTag(masterCellId),
         },
-        secondaryMasters: _.map(secondaryMasters, (addresses, cellTag) => {
+        secondaryMasters: map_(secondaryMasters, (addresses, cellTag) => {
             return {
-                addresses: _.map(_.keys(addresses), (address) => {
+                addresses: map_(keys_(addresses), (address) => {
                     const value = secondaryMasters[cellTag][address];
                     return {
                         host: address,
@@ -204,7 +206,7 @@ async function loadMastersConfig(): Promise<[MastersConfigResponse, MasterAlert[
         queueAgents: {},
     };
 
-    const discoveryRequests = _.map(
+    const discoveryRequests = map_(
         ypath.getValue(discoveryServersResult.output),
         (_v, address) => ({
             command: 'get' as const,
@@ -216,7 +218,7 @@ async function loadMastersConfig(): Promise<[MastersConfigResponse, MasterAlert[
         }),
     );
 
-    const queueAgentsStateRequests = _.map(
+    const queueAgentsStateRequests = map_(
         ypath.getValue(queueAgentsResult.output),
         (_v, address) => ({
             command: 'get' as const,
@@ -242,7 +244,7 @@ async function loadMastersConfig(): Promise<[MastersConfigResponse, MasterAlert[
             discoveryRequests.length + queueAgentsStateRequests.length,
         );
 
-        discoveryServersStatuses = _.reduce(
+        discoveryServersStatuses = reduce_(
             discoveryResults,
             (acc, item, key) => {
                 acc[discoveryRequests[key].address] = item?.error ? 'offline' : 'online';
@@ -250,7 +252,7 @@ async function loadMastersConfig(): Promise<[MastersConfigResponse, MasterAlert[
             },
             {} as {[address: string]: 'offline' | 'online'},
         );
-        queueAgentsStatuses = _.reduce(
+        queueAgentsStatuses = reduce_(
             queueAgentsStateResults,
             (acc, item, key) => {
                 acc[queueAgentsStateRequests[key].address] =
@@ -267,7 +269,7 @@ async function loadMastersConfig(): Promise<[MastersConfigResponse, MasterAlert[
 
     mainResult.discoveryServers = discoveryServersResult.output
         ? {
-              addresses: _.map(ypath.getValue(discoveryServersResult.output), (value, address) => {
+              addresses: map_(ypath.getValue(discoveryServersResult.output), (value, address) => {
                   return {
                       host: address,
                       physicalHost: ypath.getValue(value, '/@annotations/physical_host'),
@@ -281,7 +283,7 @@ async function loadMastersConfig(): Promise<[MastersConfigResponse, MasterAlert[
 
     mainResult.queueAgents = queueAgentsResult.output
         ? {
-              addresses: _.map(ypath.getValue(queueAgentsResult.output), (value, address) => {
+              addresses: map_(ypath.getValue(queueAgentsResult.output), (value, address) => {
                   return {
                       host: address,
                       physicalHost: ypath.getValue(value, '/@annotations/physical_host'),
@@ -315,8 +317,8 @@ function loadHydra(
         throw new Error('Unexpected type for loadHydra call');
     }
 
-    _.each(
-        _.sortBy(addresses, (address) => address.host),
+    forEach_(
+        sortBy_(addresses, (address) => address.host),
         ({host}) => {
             masterInfo.push({host, type, cellTag: cellTag!});
             requests.push({
@@ -369,7 +371,7 @@ export function loadMasters() {
 
             loadHydra(masterDataRequests, masterInfo, 'primary', config.primaryMaster);
 
-            _.each(config.secondaryMasters, (currentConfig) => {
+            forEach_(config.secondaryMasters, (currentConfig) => {
                 loadHydra(masterDataRequests, masterInfo, 'secondary', currentConfig);
             });
 

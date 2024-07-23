@@ -2,7 +2,8 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import cn from 'bem-cn-lite';
-import _ from 'lodash';
+
+import map_ from 'lodash/map';
 
 import MetaTable, {
     Template,
@@ -182,7 +183,7 @@ class Runtime extends Component {
         const {runtime} = this.props;
 
         return (
-            <div className={runtimeBlock()}>{_.map(runtime, (tree) => this.renderTree(tree))}</div>
+            <div className={runtimeBlock()}>{map_(runtime, (tree) => this.renderTree(tree))}</div>
         );
     }
 }

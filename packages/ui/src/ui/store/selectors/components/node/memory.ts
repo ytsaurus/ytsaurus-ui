@@ -1,4 +1,9 @@
-import _ from 'lodash';
+import forEach_ from 'lodash/forEach';
+import map_ from 'lodash/map';
+import max_ from 'lodash/max';
+import sum_ from 'lodash/sum';
+import toArray_ from 'lodash/toArray';
+
 import type {RootState} from '../../../../store/reducers';
 import {createSelector} from 'reselect';
 import {NodeMemoryUsagePreload} from '../../../../types/node/node';
@@ -79,7 +84,7 @@ export const getNodeMemoryUsageTotalTabletDynamic = createSelector(
             active,
             backing,
             passive,
-            other: !usage ? 0 : usage - _.sum([active, passive, backing, ..._.toArray(others)]),
+            other: !usage ? 0 : usage - sum_([active, passive, backing, ...toArray_(others)]),
         };
     },
 );
@@ -107,7 +112,7 @@ const getNodeMemoryUsageBundlesByName = createSelector(
         let maxTabletStatic = 0;
         let maxRowCache = 0;
 
-        _.forEach(bundles, ({total}, bundleName) => {
+        forEach_(bundles, ({total}, bundleName) => {
             const {usage, limit: _ignore, ...rest} = total.tablet_dynamic;
             const tmp = (itemsByName[bundleName] = {
                 name: bundleName,
@@ -118,16 +123,16 @@ const getNodeMemoryUsageBundlesByName = createSelector(
                 tabletStatic: total.tablet_static.usage,
                 tabletStaticLimit: 0,
                 tabletDynamic: total.tablet_dynamic,
-                tabletDynamicSum: usage ?? _.sum(_.toArray(rest)),
+                tabletDynamicSum: usage ?? sum_(toArray_(rest)),
                 isBundle: true,
                 url: `/${cluster}/tablet_cell_bundles/tablet_cells?activeBundle=${bundleName}`,
             });
 
-            maxTabletStatic = _.max([maxTabletStatic, tmp.tabletStatic])!;
-            maxRowCache = _.max([maxRowCache, tmp.rowCache])!;
+            maxTabletStatic = max_([maxTabletStatic, tmp.tabletStatic])!;
+            maxRowCache = max_([maxRowCache, tmp.rowCache])!;
         });
 
-        _.forEach(itemsByName, (item) => {
+        forEach_(itemsByName, (item) => {
             item.tabletStaticLimit = maxTabletStatic;
             item.rowCacheLimit = maxRowCache;
         });
@@ -141,9 +146,9 @@ const getNodeMemoryUsageBundlesTreeRoot = createSelector(
     (bundles, bundlesInfo, cluster) => {
         const itemsByName: Record<string, NodeMemoryInfo> = {...bundlesInfo};
 
-        _.forEach(bundles, ({cells}, bundleName) => {
+        forEach_(bundles, ({cells}, bundleName) => {
             const bundle = itemsByName[bundleName] || {};
-            _.forEach(cells, (item, cellName) => {
+            forEach_(cells, (item, cellName) => {
                 itemsByName[cellName] = {
                     name: cellName,
                     parent: bundleName,
@@ -156,7 +161,7 @@ const getNodeMemoryUsageBundlesTreeRoot = createSelector(
                         ...item.tablet_dynamic,
                         limit: bundle.tabletDynamicSum,
                     },
-                    tabletDynamicSum: _.sum(_.toArray(item.tablet_dynamic)),
+                    tabletDynamicSum: sum_(toArray_(item.tablet_dynamic)),
                     url: `/${cluster}/tablet_cell_bundles/tablet_cells?id=${cellName}&activeBundle=${bundleName}`,
                 };
             });
@@ -181,7 +186,7 @@ export const getNodeMemoryUsageBundlesTreeRootFiltered = createSelector(
                 false,
             );
         } else {
-            res.children = _.map(res.children, (item) => {
+            res.children = map_(res.children, (item) => {
                 if (!collapsed.has(item.name)) {
                     return item;
                 } else {
@@ -250,7 +255,7 @@ function sortTreeInPlace(root: TreeNode<NodeMemoryInfo, NodeMemoryInfo>, sortOrd
 }
 
 const allowBundlesForTables = createSelector([getNodeMemoryUsageTables], (tables) => {
-    const first = _.first(_.toArray(tables));
+    const [first] = toArray_(tables);
     return first?.tablet_cell_bundle !== undefined;
 });
 
@@ -263,7 +268,7 @@ const getNodeMemoryUsageTablesAndBundlesByName = createSelector(
 
         const tablesByName: Record<string, NodeMemoryInfo> = allowBundles ? {...bundles} : {};
 
-        _.forEach(tables, (item, name) => {
+        forEach_(tables, (item, name) => {
             const parent = allowBundles ? item.tablet_cell_bundle : '<Root>';
             const bundle = bundles[parent] || {};
             const tmp = (tablesByName[name] = {
@@ -279,18 +284,18 @@ const getNodeMemoryUsageTablesAndBundlesByName = createSelector(
                     ...item.tablet_dynamic,
                     limit: bundle.tabletDynamicSum,
                 },
-                tabletDynamicSum: _.sum(_.toArray(item.tablet_dynamic)),
+                tabletDynamicSum: sum_(toArray_(item.tablet_dynamic)),
                 url: `/${cluster}/navigation?path=${encodeURIComponent(name)}`,
             });
             if (!allowBundles) {
-                maxDynamic = _.max([maxDynamic, tmp.tabletDynamicSum])!;
-                maxRowCache = _.max([maxRowCache, tmp.rowCache])!;
-                maxStatic = _.max([maxStatic, tmp.tabletStatic])!;
+                maxDynamic = max_([maxDynamic, tmp.tabletDynamicSum])!;
+                maxRowCache = max_([maxRowCache, tmp.rowCache])!;
+                maxStatic = max_([maxStatic, tmp.tabletStatic])!;
             }
         });
 
         if (!allowBundles) {
-            _.forEach(tablesByName, (item) => {
+            forEach_(tablesByName, (item) => {
                 if (item.isBundle) {
                     return;
                 }
@@ -326,7 +331,7 @@ export const getNodeMemoryUsageTablesFiltered = createSelector(
         } else {
             res = {
                 ...root,
-                children: _.map(root?.children, (item) => {
+                children: map_(root?.children, (item) => {
                     if (!collapsed.has(item.name)) {
                         return item;
                     }

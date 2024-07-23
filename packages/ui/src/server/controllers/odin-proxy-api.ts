@@ -1,4 +1,6 @@
-import _ from 'lodash';
+import isEmpty_ from 'lodash/isEmpty';
+import has_ from 'lodash/has';
+
 import axios from 'axios';
 import qs from 'qs';
 
@@ -27,7 +29,7 @@ async function odinProxyApiImpl(req: Request, res: Response) {
     }
     const {ctx, query} = req;
 
-    const search = _.isEmpty(query) ? '' : `?${qs.stringify(query)}`;
+    const search = isEmpty_(query) ? '' : `?${qs.stringify(query)}`;
 
     const allowedActionsUrls: Record<string, string> = {
         service_list: `${odinPath}/service_list`,
@@ -35,7 +37,7 @@ async function odinProxyApiImpl(req: Request, res: Response) {
         availability: `${odinPath}/${action}/${cluster}${search}`,
     };
 
-    if (!_.has(allowedActionsUrls, action)) {
+    if (!has_(allowedActionsUrls, action)) {
         return sendAndLogError(
             req.ctx,
             res,

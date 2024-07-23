@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import merge_ from 'lodash/merge';
 import type {ChartKitWidgetData} from '@gravity-ui/chartkit';
 import {prepareBar} from './bar';
 import {prepareScatter} from './scatter';
@@ -20,5 +20,5 @@ export const prepareWidgetData = (args: PrepareLineArgs): ChartKitWidgetData => 
         }
     }
 
-    return _.merge(data, d3Config);
+    return merge_(data, d3Config);
 };

@@ -1,19 +1,20 @@
-import _ from 'lodash';
+import concat_ from 'lodash/concat';
+import reduce_ from 'lodash/reduce';
 
 export function injectColumnsFromSchema(
     columns: Array<string>,
     omittedColumns: Array<string>,
     schemaColumns: Array<string>,
 ) {
-    const toSkip = _.reduce(
-        _.concat(columns, omittedColumns),
+    const toSkip = reduce_(
+        concat_(columns, omittedColumns),
         (acc, column) => {
             acc[column] = true;
             return acc;
         },
         {} as {[column: string]: true},
     );
-    const toAdd = _.reduce(
+    const toAdd = reduce_(
         schemaColumns,
         (acc, col) => {
             if (!toSkip[col]) {
@@ -23,5 +24,5 @@ export function injectColumnsFromSchema(
         },
         [] as Array<string>,
     );
-    return _.concat(columns, toAdd);
+    return concat_(columns, toAdd);
 }

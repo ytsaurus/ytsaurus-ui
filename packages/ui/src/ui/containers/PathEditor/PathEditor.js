@@ -4,7 +4,10 @@ import ReactList from 'react-list';
 import PropTypes from 'prop-types';
 import block from 'bem-cn-lite';
 import key from 'hotkeys-js';
-import _ from 'lodash';
+
+import debounce_ from 'lodash/debounce';
+import find_ from 'lodash/find';
+import isEmpty_ from 'lodash/isEmpty';
 
 import {Popup, TextInput} from '@gravity-ui/uikit';
 
@@ -77,7 +80,7 @@ export class PathEditor extends Component {
         this.suggestionsList = React.createRef();
         this.input = React.createRef();
 
-        this.debounceLoading = _.debounce(this.debounceLoading, debounceTime);
+        this.debounceLoading = debounce_(this.debounceLoading, debounceTime);
         this.prevScope = null;
 
         this.state = {
@@ -105,7 +108,7 @@ export class PathEditor extends Component {
             });
         }
 
-        return _.isEmpty(res) ? null : res;
+        return isEmpty_(res) ? null : res;
     }
 
     componentDidMount() {
@@ -205,7 +208,7 @@ export class PathEditor extends Component {
             this.setState({path: inputPath, selectedIndex: -1});
             this.callCallback(onApply, inputPath);
         } else {
-            const suggestion = _.find(actualSuggestions, (item, index) => index === selectedIndex);
+            const suggestion = find_(actualSuggestions, (item, index) => index === selectedIndex);
             const completedPath = getCompletedPath(suggestion);
 
             this.handleInputChange(completedPath);

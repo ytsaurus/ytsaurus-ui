@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import cn from 'bem-cn-lite';
-import _ from 'lodash';
 
 import {Flex} from '@gravity-ui/uikit';
 

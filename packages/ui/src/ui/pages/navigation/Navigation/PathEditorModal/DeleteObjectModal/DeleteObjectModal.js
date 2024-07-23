@@ -4,7 +4,8 @@ import PropTypes from 'prop-types';
 import ypath from '@ytsaurus/interface-helpers/lib/ypath';
 import {compose} from 'redux';
 import cn from 'bem-cn-lite';
-import _ from 'lodash';
+
+import map_ from 'lodash/map';
 
 import {renderMapNodesTableIcon} from '../../../../../pages/navigation/content/MapNode/MapNodesTable';
 import ErrorBoundary from '../../../../../components/ErrorBoundary/ErrorBoundary';
@@ -160,7 +161,7 @@ export class DeleteObjectModal extends Component {
                         <div className={block('preview-node-count')}>Node count</div>
                         <div className={block('preview-node-count')}>Row count</div>
 
-                        {_.map(multipleInfo, ({path, resourceUsage}, index) => {
+                        {map_(multipleInfo, ({path, resourceUsage}, index) => {
                             const {type, titleUnquoted, rows, unmergedRows} = item[index];
                             const diskSpace = ypath.get(resourceUsage, '/disk_space');
                             const nodeCount = ypath.get(resourceUsage, '/node_count');

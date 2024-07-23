@@ -3,7 +3,8 @@ import {connect, useDispatch} from 'react-redux';
 import PropTypes from 'prop-types';
 import {compose} from 'redux';
 import cn from 'bem-cn-lite';
-import _ from 'lodash';
+
+import map_ from 'lodash/map';
 
 import {Progress} from '@gravity-ui/uikit';
 
@@ -178,7 +179,7 @@ class NodeCard extends Component {
                     className={block('locations')}
                     collapsed
                 >
-                    {_.map(locations, (location, index) => this.renderLocation(location, index))}
+                    {map_(locations, (location, index) => this.renderLocation(location, index))}
                 </CollapsibleSection>
             )
         );
@@ -190,7 +191,7 @@ class NodeCard extends Component {
         return (
             alerts?.length > 0 && (
                 <CollapsibleSection size="s" name="Alerts" className={block('alerts')} collapsed>
-                    {_.map(alerts, (alert) => (
+                    {map_(alerts, (alert) => (
                         <Alert key={alert.message} error={alert} />
                     ))}
                 </CollapsibleSection>
@@ -238,12 +239,12 @@ class NodeCard extends Component {
                     items={[
                         {
                             key: 'system_tags',
-                            value: _.map(systemTags, (tag) => <Label key={tag} text={tag} />),
+                            value: map_(systemTags, (tag) => <Label key={tag} text={tag} />),
                             visible: systemTags?.length > 0,
                         },
                         {
                             key: 'user_tags',
-                            value: _.map(userTags, (tag) => <Label key={tag} text={tag} />),
+                            value: map_(userTags, (tag) => <Label key={tag} text={tag} />),
                             visible: userTags?.length > 0,
                         },
                         {

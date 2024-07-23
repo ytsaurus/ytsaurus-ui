@@ -3,7 +3,9 @@ import React, {useCallback, useState} from 'react';
 import hammer from '../../../common/hammer';
 import PropTypes from 'prop-types';
 import ypath from '@ytsaurus/interface-helpers/lib/ypath';
-import _ from 'lodash';
+
+import keys_ from 'lodash/keys';
+import map_ from 'lodash/map';
 
 import {Button, Dialog} from '@gravity-ui/uikit';
 
@@ -46,7 +48,7 @@ const renderErrorsDialog = (errors, handleClose) => {
         <Dialog size="l" open={visible} onClose={handleClose} hasButtonClose autoclosable>
             <Dialog.Header caption="Tablet errors" />
             <Dialog.Body>
-                {_.map(errors, (err, index) => {
+                {map_(errors, (err, index) => {
                     const error = {
                         ...err,
                         message: ypath.getValue(err, '/message'),
@@ -59,13 +61,13 @@ const renderErrorsDialog = (errors, handleClose) => {
 };
 
 const renderReplicationErrorsDialog = (replicationErrors, handleClose) => {
-    const visible = _.keys(replicationErrors).length > 0;
+    const visible = keys_(replicationErrors).length > 0;
 
     return (
         <Dialog size="l" open={visible} onClose={handleClose} hasButtonClose autoclosable>
             <Dialog.Header caption="Replication errors" />
             <Dialog.Body>
-                {_.map(replicationErrors, (err, replica) => {
+                {map_(replicationErrors, (err, replica) => {
                     const error = {
                         ...err,
                         message: ypath.getValue(err, '/message'),
@@ -274,7 +276,7 @@ function Overview({id, block}) {
                                     value: (
                                         <span>
                                             {hammer.format['Number'](
-                                                _.keys(replicationErrors).length,
+                                                keys_(replicationErrors).length,
                                             )}
                                             <Button
                                                 view="flat-secondary"
@@ -285,7 +287,7 @@ function Overview({id, block}) {
                                             </Button>
                                         </span>
                                     ),
-                                    visible: _.keys(replicationErrors).length > 0,
+                                    visible: keys_(replicationErrors).length > 0,
                                 },
                                 {
                                     key: 'state',

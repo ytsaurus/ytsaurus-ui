@@ -1,6 +1,8 @@
 import React, {useCallback, useMemo, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import _ from 'lodash';
+
+import sortedIndexOf_ from 'lodash/sortedIndexOf';
+import isEmpty_ from 'lodash/isEmpty';
 
 import Link from '../../../../components/Link/Link';
 import Error from '../../../../components/Error/Error';
@@ -122,10 +124,10 @@ function CreatePoolDialog(props: {onClose: () => void}) {
         (values: FormValues): null | {name?: string} => {
             const {name} = values;
             const res: Partial<Record<keyof FormValues, string>> = {};
-            if (-1 !== _.sortedIndexOf(sortedFlatTree, name)) {
+            if (-1 !== sortedIndexOf_(sortedFlatTree, name)) {
                 res.name = 'the value must be unique';
             }
-            return _.isEmpty(res) ? null : res;
+            return isEmpty_(res) ? null : res;
         },
         [sortedFlatTree],
     );

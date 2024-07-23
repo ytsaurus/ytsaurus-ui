@@ -1,5 +1,7 @@
 import React from 'react';
-import _ from 'lodash';
+
+import map_ from 'lodash/map';
+import pickBy_ from 'lodash/pickBy';
 
 import {DialogError, FormApi, YTDFDialog} from '../../../../components/Dialog/Dialog';
 import {useDispatch, useSelector} from 'react-redux';
@@ -55,7 +57,7 @@ export default function TableMergeModal() {
                 const pool_trees = poolTree ? [poolTree] : undefined;
                 await dispatch(
                     runTableMerge(
-                        _.pickBy(
+                        pickBy_(
                             {
                                 mode,
                                 input_table_paths: paths,
@@ -63,7 +65,7 @@ export default function TableMergeModal() {
                                     $value: outputPath,
                                     $attributes: attributeValues,
                                 },
-                                merge_by: _.map(columns, 'name'),
+                                merge_by: map_(columns, 'name'),
                                 pool,
                                 pool_trees,
                                 data_size_per_job,

@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import block from 'bem-cn-lite';
-import _ from 'lodash';
+
+import map_ from 'lodash/map';
 
 import {Button, ButtonProps, DropdownMenu} from '@gravity-ui/uikit';
 
@@ -71,7 +72,7 @@ export default class Favourites extends Component<Props, State> {
     renderDropDownMenu() {
         const {items} = this.props;
 
-        const dropItems = _.map(items, (item) => {
+        const dropItems = map_(items, (item) => {
             return {
                 text: item.path,
                 action: () => this.onItemClick(item),

@@ -1,4 +1,8 @@
-import _ from 'lodash';
+import filter_ from 'lodash/filter';
+import forEach_ from 'lodash/forEach';
+import map_ from 'lodash/map';
+import reduce_ from 'lodash/reduce';
+
 import ypath from '../../../../common/thor/ypath';
 import hammer from '../../../../common/hammer';
 import {hasProgressTasks} from './data-flow';
@@ -14,7 +18,7 @@ function sortCounters(reasonA, reasonB) {
 
 function prepareCategoryCounters(counters, category) {
     if (typeof counters[category] === 'object') {
-        const prepared = _.reduce(
+        const prepared = reduce_(
             counters[category],
             (statistics, count, key) => {
                 statistics.counters.push({
@@ -66,7 +70,7 @@ function prepareJobTypeOrder(jobTypeOrder) {
     const SINK = 'sink';
 
     // REMOVE source, sink
-    jobTypeOrder = _.filter(jobTypeOrder, (jobType) => {
+    jobTypeOrder = filter_(jobTypeOrder, (jobType) => {
         const type = String(jobType).toLowerCase();
         return type !== SOURCE && type !== SINK;
     });
@@ -90,11 +94,11 @@ export function prepareDataFromGraph(operation) {
         jobTypeOrder = prepareJobTypeOrder(jobTypeOrder);
 
         // In case of inconsistent graph data
-        jobTypeOrder = _.filter(jobTypeOrder, (jobType) => {
+        jobTypeOrder = filter_(jobTypeOrder, (jobType) => {
             return typeof countersByType[jobType] !== 'undefined';
         });
 
-        data = _.map(jobTypeOrder, (taskType) => {
+        data = map_(jobTypeOrder, (taskType) => {
             return {
                 type: taskType,
                 jobType: taskType === 'total' ? taskType : countersByType[taskType].job_type,
@@ -102,7 +106,7 @@ export function prepareDataFromGraph(operation) {
             };
         });
 
-        data = _.map(data, (jobTypeInfo) => {
+        data = map_(data, (jobTypeInfo) => {
             const type = jobTypeInfo.type;
             const counters = jobTypeInfo.counters;
             return {
@@ -120,7 +124,7 @@ export function prepareDataFromGraph(operation) {
 function prepareDataFromGraphByTasks(operation) {
     const tasks = ypath.getValue(operation, '/@progress/tasks');
 
-    const res = _.map(tasks, (task) => {
+    const res = map_(tasks, (task) => {
         const {task_name, job_type, job_counter} = task;
         return {
             type: task_name,
@@ -163,7 +167,7 @@ function prepareColumns() {
         },
     };
 
-    _.each(states, (state) => {
+    forEach_(states, (state) => {
         columns[state] = {
             sort: false,
             align: 'right',
@@ -183,7 +187,7 @@ function prepareColumns() {
                 items: ['job_type'].concat(states),
             },
             withActions: {
-                items: _.map(columns, (_x, name) => name),
+                items: map_(columns, (_x, name) => name),
             },
         },
         mode: 'default',

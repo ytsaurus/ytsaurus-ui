@@ -1,5 +1,3 @@
-import _ from 'lodash';
-
 import type {Request, Response} from 'express';
 // @ts-ignore
 import ytLib from '@ytsaurus/javascript-wrapper';

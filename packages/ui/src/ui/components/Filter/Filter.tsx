@@ -2,7 +2,8 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import cn from 'bem-cn-lite';
 import key from 'hotkeys-js';
-import _ from 'lodash';
+
+import debounce_ from 'lodash/debounce';
 
 import {TextInput, TextInputProps} from '@gravity-ui/uikit';
 import Hotkey from '../../components/Hotkey/Hotkey';
@@ -122,7 +123,7 @@ export default class Filter extends Component<FilterProps, State> {
 
     // eslint-disable-next-line @typescript-eslint/member-ordering
     debouncedOnChange = this.props.debounce
-        ? _.debounce(this.props.onChange, this.props.debounce)
+        ? debounce_(this.props.onChange, this.props.debounce)
         : this.props.onChange;
 
     onChange = (value: FilterProps['value']) => {

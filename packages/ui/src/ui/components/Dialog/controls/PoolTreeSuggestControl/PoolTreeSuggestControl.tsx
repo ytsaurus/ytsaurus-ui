@@ -1,6 +1,6 @@
 import React from 'react';
 import {useSelector} from 'react-redux';
-import _ from 'lodash';
+import map_ from 'lodash/map';
 
 import {Select} from '@gravity-ui/uikit';
 
@@ -14,7 +14,7 @@ export function PoolTreeSuggestControl(props: Props) {
     const treeNames = useSelector(getAllPoolTreeNames);
 
     const items = React.useMemo(() => {
-        return _.map(treeNames, (value) => {
+        return map_(treeNames, (value) => {
             return {value, content: value};
         });
     }, [treeNames]);

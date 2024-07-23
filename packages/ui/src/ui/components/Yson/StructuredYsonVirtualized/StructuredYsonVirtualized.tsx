@@ -1,6 +1,9 @@
 import React from 'react';
 import cn from 'bem-cn-lite';
-import _ from 'lodash';
+
+import fill_ from 'lodash/fill';
+import isEmpty_ from 'lodash/isEmpty';
+import reduce_ from 'lodash/reduce';
 
 import {Button, Dialog, Flex, RadioButton} from '@gravity-ui/uikit';
 // @ts-ignore
@@ -90,13 +93,13 @@ export default class StructuredYsonVirtualized extends React.PureComponent<Props
                 yson,
             });
         }
-        if (prevValue !== value || !_.isEmpty(res)) {
+        if (prevValue !== value || !isEmpty_(res)) {
             Object.assign<Partial<State>, Partial<State>>(res, {
                 value,
                 ...calculateState(value, state.collapsedState, state.filter, settings),
             });
         }
-        return _.isEmpty(res) ? null : res;
+        return isEmpty_(res) ? null : res;
     }
 
     state: State = {
@@ -221,7 +224,7 @@ export default class StructuredYsonVirtualized extends React.PureComponent<Props
     onCollapseAll = () => {
         const {value, yson} = this.state;
         const {data} = flattenUnipika(value, {isJson: !yson});
-        const collapsedState = _.reduce(
+        const collapsedState = reduce_(
             data,
             (acc, {path}) => {
                 if (path) {
@@ -242,7 +245,7 @@ export default class StructuredYsonVirtualized extends React.PureComponent<Props
 
     onNextMatch = (_event: unknown, diff = 1) => {
         const {matchIndex, matchedRows} = this.state;
-        if (_.isEmpty(matchedRows)) {
+        if (isEmpty_(matchedRows)) {
             return;
         }
 
@@ -410,7 +413,7 @@ const OFFSETS_BY_LEVEL: {[key: number]: React.ReactNode} = {};
 function getLevelOffsetSpaces(level: number) {
     let res = OFFSETS_BY_LEVEL[level];
     if (!res) {
-        const __html = _.fill(Array(level * 4), '&nbsp;').join('');
+        const __html = fill_(Array(level * 4), '&nbsp;').join('');
         res = OFFSETS_BY_LEVEL[level] = <span dangerouslySetInnerHTML={{__html}} />;
     }
     return res;

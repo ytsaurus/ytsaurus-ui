@@ -1,6 +1,7 @@
 import React from 'react';
 import axios from 'axios';
-import _ from 'lodash';
+
+import uniq_ from 'lodash/uniq';
 
 import yt from '@ytsaurus/javascript-wrapper/lib/yt';
 import {Toaster} from '@gravity-ui/uikit';
@@ -110,13 +111,13 @@ export function setCreateTableColumnsOrder(columnsOrder) {
 export function setCreateTableLockSuggestions(allColumnLockValues = []) {
     return {
         type: CREATE_TABLE_MODAL_DATA_FIELDS,
-        data: {columnLockSuggestions: _.uniq(allColumnLockValues.sort())},
+        data: {columnLockSuggestions: uniq_(allColumnLockValues.sort())},
     };
 }
 
 export function setCreateTableGroupSuggestions(allColumnGroups = []) {
     return {
         type: CREATE_TABLE_MODAL_DATA_FIELDS,
-        data: {columnGroupSuggestions: _.uniq(allColumnGroups.sort())},
+        data: {columnGroupSuggestions: uniq_(allColumnGroups.sort())},
     };
 }

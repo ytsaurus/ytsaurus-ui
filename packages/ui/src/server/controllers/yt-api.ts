@@ -1,7 +1,7 @@
 import axios, {AxiosError} from 'axios';
 import type {Request, Response} from 'express';
 import qs from 'qs';
-import _ from 'lodash';
+import isEmpty_ from 'lodash/isEmpty';
 // @ts-ignore
 import ytLib from '@ytsaurus/javascript-wrapper';
 import {UNEXPECTED_PIPE_AXIOS_RESPONSE, pipeAxiosResponse, sendAndLogError} from '../utils';
@@ -99,7 +99,7 @@ export async function ytTvmApiHandler(req: Request, res: Response) {
             requestProxy = res.data[0];
         }
 
-        const search = _.isEmpty(req.query) ? '' : `?${qs.stringify(req.query)}`;
+        const search = isEmpty_(req.query) ? '' : `?${qs.stringify(req.query)}`;
         const requestUrl = `${proto}://${requestProxy}/api/${action}${search}`;
 
         // eslint-disable-next-line @typescript-eslint/no-unused-vars

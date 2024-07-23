@@ -1,5 +1,7 @@
 import yt from '@ytsaurus/javascript-wrapper/lib/yt';
-import _ from 'lodash';
+
+import map_ from 'lodash/map';
+
 import CancelHelper from '../../../utils/cancel-helper';
 import {TYPED_OUTPUT_FORMAT} from '../../../constants/index';
 import {LOAD_STORES} from '../../../constants/tablet';
@@ -15,7 +17,7 @@ export function loadStoresData(storesId, index, unorderedDynamicTable) {
 
         const {tabletPath} = getState().tablet.tablet;
 
-        const requests = _.map(storesId, (storeId) => {
+        const requests = map_(storesId, (storeId) => {
             const path = unorderedDynamicTable
                 ? tabletPath + '/stores/' + storeId
                 : preparePath(tabletPath, index, storeId);

@@ -1,5 +1,7 @@
 import axios, {Canceler} from 'axios';
-import _ from 'lodash';
+
+import countBy_ from 'lodash/countBy';
+
 import moment from 'moment';
 
 import {DATE_FORMAT} from './odin-constants';
@@ -124,7 +126,7 @@ export default class Utils {
     }
 
     static computeStat(availability: Array<MetricData>) {
-        const counts = _.countBy(availability, ({state}) => {
+        const counts = countBy_(availability, ({state}) => {
             if (state === 'available') {
                 return 'available';
             } else if (state === 'no_data') {

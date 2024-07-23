@@ -1,7 +1,10 @@
 import React, {useEffect} from 'react';
 import {ConnectedProps, connect, useSelector} from 'react-redux';
 import cn from 'bem-cn-lite';
-import _ from 'lodash';
+
+import capitalize_ from 'lodash/capitalize';
+import isEmpty_ from 'lodash/isEmpty';
+import map_ from 'lodash/map';
 
 import LoadDataHandler from '../../../../components/LoadDataHandler/LoadDataHandler';
 import {Loader} from '@gravity-ui/uikit';
@@ -128,7 +131,7 @@ function ReplicationErrorsBlock({data, cluster}: ReplicationErrorsBlockProps) {
     let counter = 0;
     return (
         <React.Fragment>
-            {_.map(data, (items, replicaId) => {
+            {map_(data, (items, replicaId) => {
                 return (
                     <CollapsibleSection
                         key={replicaId}
@@ -177,7 +180,7 @@ function ReplicaErrorHeader({id}: {id: string}) {
             {id}{' '}
             <Secondary>
                 ({mode ? `${mode} replica to ` : 'Replica to '}
-                {_.capitalize(cluster)}, table path {link})
+                {capitalize_(cluster)}, table path {link})
             </Secondary>
         </React.Fragment>
     );
@@ -190,14 +193,14 @@ interface Props {
 }
 
 function TabletErrorsBlock({items, cluster, sectionClassName}: Props) {
-    if (_.isEmpty(items)) {
+    if (isEmpty_(items)) {
         return null;
     }
 
     let counter = 0;
     return (
         <div className={block('items')}>
-            {_.map(items, (errors, id) => {
+            {map_(items, (errors, id) => {
                 return (
                     <CollapsibleSection
                         key={id}
@@ -206,7 +209,7 @@ function TabletErrorsBlock({items, cluster, sectionClassName}: Props) {
                         name={<TabletErrorsHeader {...{id, cluster}} />}
                         collapsed={0 < counter++}
                     >
-                        {_.map(errors, (error, index) => {
+                        {map_(errors, (error, index) => {
                             return (
                                 <Error
                                     key={index}

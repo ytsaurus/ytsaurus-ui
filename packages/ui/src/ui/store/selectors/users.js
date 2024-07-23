@@ -1,4 +1,6 @@
-import {filter, sortedIndexOf} from 'lodash';
+import filter_ from 'lodash/filter';
+import sortedIndexOf_ from 'lodash/sortedIndexOf';
+
 import {createSelector} from 'reselect';
 import {sortArrayBySortState} from '../../utils/sort-helpers';
 import {concatByAnd} from '../../common/hammer/predicate';
@@ -21,8 +23,8 @@ export const getUsersFiltered = createSelector(
             groupFilter &&
                 (({member_of: memberOf, transitiveGroups}) => {
                     return (
-                        -1 !== sortedIndexOf(memberOf, groupFilter) ||
-                        -1 !== sortedIndexOf(transitiveGroups, groupFilter)
+                        -1 !== sortedIndexOf_(memberOf, groupFilter) ||
+                        -1 !== sortedIndexOf_(transitiveGroups, groupFilter)
                     );
                 }),
             bannedFilter && (({banned}) => banned),
@@ -32,7 +34,7 @@ export const getUsersFiltered = createSelector(
             return users;
         }
 
-        return filter(users, concatByAnd(...predicates));
+        return filter_(users, concatByAnd(...predicates));
     },
 );
 

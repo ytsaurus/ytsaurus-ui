@@ -1,4 +1,6 @@
-import _ from 'lodash';
+import forEach_ from 'lodash/forEach';
+import values_ from 'lodash/values';
+
 import hammer from '../../common/hammer';
 import {
     MetricsEntry,
@@ -37,8 +39,8 @@ function prepareMetricsList(
 ): MetricsList {
     let preparedList: MetricsList = list || {children: {}, leaves: {}};
 
-    _.each(statistics, (statistic: object | Statistic, name: string) => {
-        if (typeof _.values(statistic)[0] === 'object') {
+    forEach_(statistics, (statistic: object | Statistic, name: string) => {
+        if (typeof values_(statistic)[0] === 'object') {
             const metricsChild: MetricsEntry = createMetricsEntry(prefix, name);
 
             preparedList.children[metricsChild.path] = metricsChild;

@@ -1,9 +1,17 @@
+import filter_ from 'lodash/filter';
+import forEach_ from 'lodash/forEach';
+import isArray_ from 'lodash/isArray';
+import map_ from 'lodash/map';
+import sortBy_ from 'lodash/sortBy';
+import takeRight_ from 'lodash/takeRight';
+import union_ from 'lodash/union';
+
 /*
   For theory behind the formulas see
   https://ru.wikipedia.org/wiki/%D0%9A%D0%BE%D1%8D%D1%84%D1%84%D0%B8%D1%86%D0%B8%D0%B5%D0%BD%D1%82_%D1%81%D1%85%D0%BE%D0%B4%D1%81%D1%82%D0%B2%D0%B0
   https://ru.wikipedia.org/wiki/%D0%9A%D0%BE%D1%8D%D1%84%D1%84%D0%B8%D1%86%D0%B8%D0%B5%D0%BD%D1%82_%D0%96%D0%B0%D0%BA%D0%BA%D0%B0%D1%80%D0%B0
  */
-const _ = require('lodash');
+
 const LZString = require('lz-string');
 const hash = require('object-hash');
 import {STORAGE_KEY, STORAGE_KEY_SIMILAR, StorageBoundExceededError} from './tables-utils';
@@ -31,7 +39,7 @@ class BoundedArray {
             const stringifiedData = LZString.decompressFromUTF16(data);
             parsedData = JSON.parse(stringifiedData);
 
-            if (_.isArray(parsedData)) {
+            if (isArray_(parsedData)) {
                 this.data = parsedData;
             } else {
                 console.error(`Got ${typeof parsedData}, while expecting an Array`);
@@ -42,9 +50,9 @@ class BoundedArray {
     }
 
     dropOlderEntries() {
-        const entriesAscendingByAtime = _.sortBy(this.data, (entry) => entry.atime);
+        const entriesAscendingByAtime = sortBy_(this.data, (entry) => entry.atime);
         const elementsToKeep = Math.round(entriesAscendingByAtime.length * REPACK_RATIO);
-        return _.takeRight(entriesAscendingByAtime, elementsToKeep);
+        return takeRight_(entriesAscendingByAtime, elementsToKeep);
     }
 
     serialize() {
@@ -77,7 +85,7 @@ class BoundedMap extends BoundedArray {
     _init(data = []) {
         this.data = data;
         this.indices = {};
-        _.each(data, ({key}, index) => {
+        forEach_(data, ({key}, index) => {
             this.indices[key] = index;
         });
     }
@@ -120,17 +128,17 @@ class InverseIndex extends BoundedArray {
         this.factorsToDataIndex = {};
 
         this.data = data; // (factors, value, atime)
-        _.each(this.data, ({factors}, index) => {
+        forEach_(this.data, ({factors}, index) => {
             this._updateMappings(factors, index);
         });
     }
 
     _updateMappings(factors, dataIndex) {
-        _.each(factors, (val) => {
+        forEach_(factors, (val) => {
             InverseIndex.addToFrequences(this.factorsToFrequences, val);
         });
 
-        _.each(factors, (val) => {
+        forEach_(factors, (val) => {
             if (!Array.isArray(this.factorsToDataIndex[val])) {
                 this.factorsToDataIndex[val] = [];
             }
@@ -151,12 +159,12 @@ class InverseIndex extends BoundedArray {
         const factorsToFrequences = this.factorsToFrequences;
         const data = this.data;
         const factorsToDataIndex = this.factorsToDataIndex;
-        // const searchKeywords = _.map(searchName.replace(/"/g, '').split(/[ \.]/g),function (val) {return val.toLowerCase().trim();});
+        // const searchKeywords = map_(searchName.replace(/"/g, '').split(/[ \.]/g),function (val) {return val.toLowerCase().trim();});
         let objectCandidates = [];
 
-        _.each(factors, function (val) {
+        forEach_(factors, function (val) {
             if (Object.hasOwnProperty.call(factorsToDataIndex, val)) {
-                objectCandidates = _.union(objectCandidates, factorsToDataIndex[val]);
+                objectCandidates = union_(objectCandidates, factorsToDataIndex[val]);
             }
         });
 
@@ -165,7 +173,7 @@ class InverseIndex extends BoundedArray {
 
         function getMeasure(factors) {
             let result = 0;
-            _.each(factors, (val) => {
+            forEach_(factors, (val) => {
                 if (factorsToFrequences[val]) {
                     result += 1 / factorsToFrequences[val];
                 }
@@ -177,7 +185,7 @@ class InverseIndex extends BoundedArray {
 
         function getMeasureLocal(factors) {
             let result = 0;
-            _.each(factors, (val) => {
+            forEach_(factors, (val) => {
                 if (factorsToFrequencesLocal[val]) {
                     result += 1 / factorsToFrequencesLocal[val];
                 }
@@ -185,20 +193,20 @@ class InverseIndex extends BoundedArray {
             return result;
         }
 
-        _.each(objectCandidates, (index, objectIndex) => {
+        forEach_(objectCandidates, (index, objectIndex) => {
             const object = data[objectIndex];
-            _.each(object.factors, (val) => {
+            forEach_(object.factors, (val) => {
                 InverseIndex.addToFrequences(factorsToFrequencesLocal, val);
             });
         });
 
-        _.each(factors, (val) => {
+        forEach_(factors, (val) => {
             InverseIndex.addToFrequences(factorsToFrequencesLocal, val);
         });
 
-        _.each(objectCandidates, (objectIndex) => {
+        forEach_(objectCandidates, (objectIndex) => {
             const object = data[objectIndex];
-            const intersectionOfFactors = _.filter(
+            const intersectionOfFactors = filter_(
                 object.factors,
                 (val) => factors.indexOf(val) !== -1,
             );
@@ -275,7 +283,7 @@ tables.initialize = function () {
 };
 
 tables.loadSimilarKeys = function (columns) {
-    const columnNames = _.map(columns, formatColumnName);
+    const columnNames = map_(columns, formatColumnName);
     const columnSet = this[STORAGE_KEY_SIMILAR].find(columnNames);
     //console.log('Loading columns', columnNames, columnsSet, this.similarColumnSets)
     if (columnSet === null) {
@@ -304,7 +312,7 @@ tables.loadKeys = function (id, schema) {
 };
 
 tables.saveSimilarKeys = function (columns) {
-    const columnNames = _.map(columns, formatColumnName);
+    const columnNames = map_(columns, formatColumnName);
     const columnSet = this[STORAGE_KEY_SIMILAR].find(columnNames);
     if (columnSet === null) {
         this[STORAGE_KEY_SIMILAR].add(columnNames, columns);

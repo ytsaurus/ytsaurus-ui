@@ -1,6 +1,5 @@
 import React from 'react';
-import _map from 'lodash/map';
-import _filter from 'lodash/filter';
+import filter_ from 'lodash/filter';
 import cn from 'bem-cn-lite';
 
 import {Button, Select, SelectOption, SelectProps, Text, TextInput} from '@gravity-ui/uikit';
@@ -50,7 +49,7 @@ export default function SelectFacade(props: YTSelectProps) {
     );
 
     const filteredValue = React.useMemo(() => {
-        const res = _filter(value, Boolean);
+        const res = filter_(value, Boolean);
         return res.length ? res : emptyValue;
     }, [value]);
 

@@ -1,7 +1,8 @@
 import React from 'react';
 import cn from 'bem-cn-lite';
 import {useSelector} from 'react-redux';
-import _ from 'lodash';
+
+import map_ from 'lodash/map';
 
 import ypath from '../../../../common/thor/ypath';
 import {CollapsibleSectionStateLess} from '../../../../components/CollapsibleSection/CollapsibleSection';
@@ -39,7 +40,7 @@ function ExperimentAssignments({className}: {className: string}) {
             size={UI_COLLAPSIBLE_SIZE}
             marginDirection="bottom"
         >
-            {_.map(items, (item, index) => (
+            {map_(items, (item, index) => (
                 <ExperimentsItem key={index} data={item} />
             ))}
         </CollapsibleSectionStateLess>

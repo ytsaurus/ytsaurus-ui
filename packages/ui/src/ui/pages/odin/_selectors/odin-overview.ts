@@ -1,4 +1,6 @@
-import _ from 'lodash';
+import partition_ from 'lodash/partition';
+import sortBy_ from 'lodash/sortBy';
+
 import {createSelector} from 'reselect';
 import {getSettingOdinOverviewVisiblePresets} from './index';
 import {OdinRootState} from '../_reducers';
@@ -70,8 +72,8 @@ export const getOdinOverviewHiddenMetrics = createSelector(
 export const getOdinOverviewClusterMetrics = createSelector(
     [getOdinOverviewClusterMetricsRaw, getOdinOverviewHiddenMetrics],
     (items, hiddenMetrics) => {
-        const sorted = _.sortBy(items, 'display_name');
-        const [hidden, visible] = _.partition(sorted, ({name}) => hiddenMetrics[name]);
+        const sorted = sortBy_(items, 'display_name');
+        const [hidden, visible] = partition_(sorted, ({name}) => hiddenMetrics[name]);
         return visible.concat(hidden);
     },
 );

@@ -10,7 +10,7 @@ import {RootState} from '../../store/reducers';
 
 import './MonacoEditor.scss';
 import {YT_DARK_MONACO_THEME, YT_LIGHT_MONACO_THEME} from './MonacoEditorThemes';
-import isEqual from 'lodash/isEqual';
+import isEqual_ from 'lodash/isEqual';
 
 import '../../libs/monaco-yql-languages/monaco.contribution';
 
@@ -76,7 +76,7 @@ class MonacoEditor extends React.Component<Props> {
         if (prevProps.theme !== theme) {
             options.theme = THEMES[theme];
         }
-        if (!isEqual(prevProps.monacoConfig, monacoConfig)) {
+        if (!isEqual_(prevProps.monacoConfig, monacoConfig)) {
             Object.assign(options, monacoConfig);
         }
         if (value !== this.model.getValue()) {

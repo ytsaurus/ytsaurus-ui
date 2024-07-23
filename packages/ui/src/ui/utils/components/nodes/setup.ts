@@ -1,5 +1,6 @@
 import {MEDIUM_COLS_PREFIX} from '../../../constants/components/nodes/nodes';
-import _ from 'lodash';
+
+import forEach_ from 'lodash/forEach';
 
 import type {Node} from '../../../store/reducers/components/nodes/nodes/node';
 import type {
@@ -30,7 +31,7 @@ const isCorrectRange = (
 export function createMediumsPredicates(setupFilters: NodesSetupState, mediumList: FIX_MY_TYPE) {
     const {storage} = setupFilters;
     const predicates = [] as Array<(node: Pick<Node, 'IOWeight'>) => boolean>;
-    _.forEach(mediumList, (medium) => {
+    forEach_(mediumList, (medium) => {
         const fromTo =
             storage[(MEDIUM_COLS_PREFIX + medium) as FIX_MY_TYPE as keyof typeof storage];
         if (isRangeFilterDefined(fromTo)) {

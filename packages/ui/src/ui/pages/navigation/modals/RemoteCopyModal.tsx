@@ -1,6 +1,8 @@
 import React from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import _ from 'lodash';
+
+import find_ from 'lodash/find';
+import map_ from 'lodash/map';
 
 import {DialogError, FormApi, YTDFDialog} from '../../../components/Dialog/Dialog';
 import {
@@ -40,7 +42,7 @@ function RemoteCopyModal() {
                 await dispatch(
                     remoteCopy({
                         ...rest,
-                        input_table_paths: _.map(input_table_paths, 'title'),
+                        input_table_paths: map_(input_table_paths, 'title'),
                         pool: pool,
                     }),
                 );
@@ -58,7 +60,7 @@ function RemoteCopyModal() {
 
     const pathsValues = React.useMemo(
         () =>
-            _.map(paths, (item) => {
+            map_(paths, (item) => {
                 return {
                     title: item,
                 };
@@ -68,7 +70,7 @@ function RemoteCopyModal() {
 
     const calculateValueOnPoolsLoaded = React.useCallback(
         ({loadedPoolNames}: {loadedPoolNames: Array<string>}) => {
-            const transferPool = _.find(loadedPoolNames, (name) => name === `transfer_${cluster}`);
+            const transferPool = find_(loadedPoolNames, (name) => name === `transfer_${cluster}`);
             return transferPool || '';
         },
         [cluster],

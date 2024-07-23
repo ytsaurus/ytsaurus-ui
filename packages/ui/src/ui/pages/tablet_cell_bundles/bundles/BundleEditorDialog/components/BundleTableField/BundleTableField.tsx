@@ -1,6 +1,5 @@
 import React, {useMemo} from 'react';
 import cn from 'bem-cn-lite';
-import _ from 'lodash';
 
 import {Radio, Table, TableColumnConfig} from '@gravity-ui/uikit';
 

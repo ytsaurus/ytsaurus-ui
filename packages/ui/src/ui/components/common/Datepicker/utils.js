@@ -1,4 +1,4 @@
-import _uniq from 'lodash/uniq';
+import uniq_ from 'lodash/uniq';
 import {DateTime} from 'luxon';
 
 import {MINUTES_IN_HOUR, TABS} from './constants';
@@ -248,7 +248,7 @@ export function hasTimeUnitsInFormat(format) {
 }
 
 export function getTabs(scales = [TABS.DAY, TABS.WEEK, TABS.MONTH, TABS.QUARTER, TABS.YEAR]) {
-    return _uniq(scales).map((tab) => ({
+    return uniq_(scales).map((tab) => ({
         id: tab,
         title: i18n(`tab_${tab}`),
     }));

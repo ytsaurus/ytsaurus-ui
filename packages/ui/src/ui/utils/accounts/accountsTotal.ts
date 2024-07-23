@@ -1,4 +1,8 @@
-import _ from 'lodash';
+import compact_ from 'lodash/compact';
+import forEach_ from 'lodash/forEach';
+import map_ from 'lodash/map';
+import reduce_ from 'lodash/reduce';
+
 import hammer from '../../common/hammer';
 import {accountsIoThroughputThresholds} from '../../utils/progress';
 import {calcProgressProps} from '../../utils/utils';
@@ -67,7 +71,7 @@ function prepareMediumStats<T extends Record<string, MediumStat>>(
     availableSpace: Record<keyof T, number>,
     settings: T,
 ) {
-    return _.each(settings, (stats, type) => {
+    return forEach_(settings, (stats, type) => {
         const used = usedSpace[type] || 0;
         const available = availableSpace[type] || 0;
         stats.usage = used;
@@ -76,7 +80,7 @@ function prepareMediumStats<T extends Record<string, MediumStat>>(
 }
 
 function initMediumStats<T extends readonly string[]>(list: T) {
-    return _.reduce(
+    return reduce_(
         list,
         (list, type: T[number]) => {
             list[type] = {
@@ -119,7 +123,7 @@ function getHardwareLimit(nodesData: NodesData, mediumList: string[]) {
         const usedSpacePerMedia = nodesData.used_space_per_medium || {};
         const availableSpacePerMedia = nodesData.available_space_per_medium || {};
 
-        _.each(mediumList, (mediumType) => {
+        forEach_(mediumList, (mediumType) => {
             const used = usedSpacePerMedia[mediumType] || 0;
             const available = availableSpacePerMedia[mediumType] || 0;
 
@@ -140,7 +144,7 @@ function getReadThroughput(nodesData: NodesData, mediumList: string[]) {
     if (nodesData) {
         const ioStatisticsPerMedia = nodesData.io_statistics_per_medium || {};
 
-        _.each(mediumList, (mediumType) => {
+        forEach_(mediumList, (mediumType) => {
             const rate = ioStatisticsPerMedia[mediumType]?.disk_read_rate || 0;
             const capacity = ioStatisticsPerMedia[mediumType]?.disk_read_capacity || 0;
 
@@ -161,7 +165,7 @@ function getWriteThroughput(nodesData: NodesData, mediumList: string[]) {
     if (nodesData) {
         const ioStatisticsPerMedia = nodesData.io_statistics_per_medium || {};
 
-        _.each(mediumList, (mediumType) => {
+        forEach_(mediumList, (mediumType) => {
             const rate = ioStatisticsPerMedia[mediumType]?.disk_write_rate || 0;
             const capacity = ioStatisticsPerMedia[mediumType]?.disk_write_capacity || 0;
 
@@ -195,7 +199,7 @@ export function getNodesChunksTotals(clusterTotalsUsage: ClusterTotalsUsage) {
     const list = nodesChunksUsageList;
     const clusterExtendedTotal = getClusterExtendedTotal(clusterTotalsUsage).settings;
 
-    const items = _.map(list, (name) => {
+    const items = map_(list, (name) => {
         if (clusterExtendedTotal[name]) {
             const clusterUsage = clusterExtendedTotal[name].usage;
             const clusterLimit = clusterExtendedTotal[name].limit;
@@ -214,7 +218,7 @@ export function getNodesChunksTotals(clusterTotalsUsage: ClusterTotalsUsage) {
 
         return null;
     });
-    return _.compact(items);
+    return compact_(items);
 }
 
 export function getDiskSpace(
@@ -234,7 +238,7 @@ export function getDiskSpace(
     const writeThroughput = getWriteThroughput(nodesData, mediumList).perMedium;
 
     if (clusterTotalPerMedium) {
-        return _.map(mediumList, (mediumType) => {
+        return map_(mediumList, (mediumType) => {
             const clusterUsage = clusterTotalPerMedium[mediumType].usage;
             const clusterLimit = clusterTotalPerMedium[mediumType].limit;
             const hardwareLimit = hardwareLimitPerMedium[mediumType].limit;

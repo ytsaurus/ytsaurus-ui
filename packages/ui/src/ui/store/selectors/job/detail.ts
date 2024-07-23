@@ -1,6 +1,11 @@
 import {createSelector} from 'reselect';
 import ypath from '../../../common/thor/ypath';
-import _ from 'lodash';
+
+import flatten_ from 'lodash/flatten';
+import mapValues_ from 'lodash/mapValues';
+import map_ from 'lodash/map';
+import sumBy_ from 'lodash/sumBy';
+import values_ from 'lodash/values';
 
 import {PLEASE_PROCEED_TEXT} from '../../../utils/actions';
 import {JobPipes, JobSpecification, PipesIO, PreparedJob, StatisticsIO} from '../../../types/job';
@@ -20,7 +25,7 @@ interface State {
 const prepareStatisticsIO = (obj: PipesIO, type: string, index?: number): StatisticsIO => {
     return {
         table: index !== undefined ? `${type}:${index}` : type,
-        ..._.mapValues(obj, (value) => value.sum),
+        ...mapValues_(obj, (value) => value.sum),
     };
 };
 
@@ -34,7 +39,7 @@ const getPipesIO = createSelector(getJob, (job: PreparedJob): JobPipes => {
 export const getTotalTimeIO = createSelector(getPipesIO, ({input, output}: JobPipes) => {
     return {
         read: input?.['idle_time'].sum,
-        write: _.sumBy(_.values(output), (statistics) => statistics['busy_time'].sum),
+        write: sumBy_(values_(output), (statistics) => statistics['busy_time'].sum),
     };
 });
 
@@ -43,7 +48,7 @@ export const getJobStatisticsIO = createSelector(
     ({input, output: {total, ...output}}: JobPipes) => {
         const res = {
             input: [prepareStatisticsIO(input, 'input', 0)],
-            output: _.values(output).map((outputStatistics: PipesIO, index) =>
+            output: values_(output).map((outputStatistics: PipesIO, index) =>
                 prepareStatisticsIO(outputStatistics, 'output', index),
             ),
         };
@@ -105,20 +110,20 @@ export const getAverageGpuMemory = createSelector(
 export const getJobPivotKeysData = createSelector([getJobSpecification], (specification) => {
     const inputTableSpecs = ypath.getValue(specification, '/input_table_specs');
 
-    return _.flatten(
-        _.map(inputTableSpecs, (tableSpec) => {
+    return flatten_(
+        map_(inputTableSpecs, (tableSpec) => {
             const chunkSpecs = ypath.getValue(tableSpec, '/chunk_specs');
 
-            return _.map(chunkSpecs, (chunkSpec) => {
+            return map_(chunkSpecs, (chunkSpec) => {
                 const id = ypath.getValue(chunkSpec, '/chunk_id');
 
-                const fromKey = _.map(ypath.getValue(chunkSpec, '/lower_limit/key'), (key) =>
+                const fromKey = map_(ypath.getValue(chunkSpec, '/lower_limit/key'), (key) =>
                     ypath.getValue(key),
                 );
                 const fromIndex = [ypath.getValue(chunkSpec, '/lower_limit/row_index')];
                 const from = !fromKey || fromKey.length === 0 ? fromIndex : fromKey;
 
-                const toKey = _.map(ypath.getValue(chunkSpec, '/upper_limit/key'), (key) =>
+                const toKey = map_(ypath.getValue(chunkSpec, '/upper_limit/key'), (key) =>
                     ypath.getValue(key),
                 );
                 const toIndex = [ypath.getValue(chunkSpec, '/upper_limit/row_index')];

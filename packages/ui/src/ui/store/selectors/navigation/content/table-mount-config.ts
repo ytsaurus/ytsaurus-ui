@@ -1,4 +1,5 @@
-import _ from 'lodash';
+import isEmpty_ from 'lodash/isEmpty';
+
 import {createSelector} from 'reselect';
 import {RootState} from '../../../../store/reducers';
 
@@ -14,6 +15,6 @@ const getTableMountConfigError = (state: RootState) =>
 export const getTableMountConfigHasData = createSelector(
     [getTableMountConfigData, getTableMountConfigError],
     (data, error) => {
-        return !_.isEmpty(data) || !_.isEmpty(error);
+        return !isEmpty_(data) || !isEmpty_(error);
     },
 );

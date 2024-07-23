@@ -1,4 +1,8 @@
-import _ from 'lodash';
+import filter_ from 'lodash/filter';
+import isEmpty_ from 'lodash/isEmpty';
+import reduce_ from 'lodash/reduce';
+import sumBy_ from 'lodash/sumBy';
+
 import hammer from '../../../../common/hammer';
 import {createSelector} from 'reselect';
 import {detailsTableProps} from '../../../../utils/components/versions/tables_v2';
@@ -8,7 +12,7 @@ import {RootState} from '../../../../store/reducers';
 import {VersionHostInfo} from '../../../../store/reducers/components/versions/versions_v2';
 
 const aggregateItems = (proxies: Array<VersionHostInfo>, key: keyof VersionHostInfo) => {
-    const items = _.reduce(
+    const items = reduce_(
         proxies,
         (acc, item) => {
             const value = item[key];
@@ -38,7 +42,7 @@ function getSelectItems(
     hostFilter: string,
     otherFilters: Partial<ReturnType<typeof getFilters>>,
 ) {
-    const isAllSelected = _.isEmpty(otherFilters);
+    const isAllSelected = isEmpty_(otherFilters);
 
     let items = allItems;
 
@@ -49,7 +53,7 @@ function getSelectItems(
     const allItemsSection = {
         text: 'All',
         value: 'all',
-        count: _.sumBy(items, (item) => item.count),
+        count: sumBy_(items, (item) => item.count),
     };
 
     return [allItemsSection, ...items];
@@ -70,13 +74,13 @@ const getFilteredByHost = createSelector([getDetails, getHostFilter], (details, 
     if (!hostFilter) {
         return details;
     }
-    return _.filter(details, ({address}) => address?.toLowerCase().startsWith(hostFilter));
+    return filter_(details, ({address}) => address?.toLowerCase().startsWith(hostFilter));
 });
 
 const getFilters = createSelector(
     [getVersionFilter, getTypeFilter, getStateFilter, getBannedFilter],
     (version, type, state, banned) => {
-        return _.reduce(
+        return reduce_(
             {
                 version,
                 type,
@@ -121,7 +125,7 @@ const getFiltersSkipBanned = createSelector([getFilters], (filters) => {
 });
 
 const getFilteredDetails = createSelector([getFilteredByHost, getFilters], (data, filters) => {
-    return _.filter(data, filters) as Array<VersionHostInfo>;
+    return filter_(data, filters) as Array<VersionHostInfo>;
 });
 
 export const getVisibleDetails = createSelector(
@@ -141,18 +145,18 @@ const getAllBanned = createSelector([getDetails], (version) => aggregateItems(ve
 const getVisibleVersions = createSelector(
     [getFilteredByHost, getFiltersSkipVersion],
     (data, filters) => {
-        const items = _.filter(data, filters) as Array<VersionHostInfo>;
+        const items = filter_(data, filters) as Array<VersionHostInfo>;
         return aggregateItems(items, 'version');
     },
 );
 const getVisibleTypes = createSelector([getFilteredByHost, getFiltersSkipType], (data, filters) => {
-    const items = _.filter(data, filters) as Array<VersionHostInfo>;
+    const items = filter_(data, filters) as Array<VersionHostInfo>;
     return aggregateItems(items, 'type');
 });
 const getVisibleStates = createSelector(
     [getFilteredByHost, getFiltersSkipState],
     (data, filters) => {
-        const items = _.filter(data, filters) as Array<VersionHostInfo>;
+        const items = filter_(data, filters) as Array<VersionHostInfo>;
         return aggregateItems(items, 'state');
     },
 );
@@ -160,7 +164,7 @@ const getVisibleStates = createSelector(
 const getVisibleBanned = createSelector(
     [getFilteredByHost, getFiltersSkipBanned],
     (data, filters) => {
-        const items = _.filter(data, filters) as Array<VersionHostInfo>;
+        const items = filter_(data, filters) as Array<VersionHostInfo>;
         return aggregateItems(items, 'banned');
     },
 );

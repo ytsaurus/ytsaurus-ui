@@ -1,6 +1,5 @@
 import React, {useState} from 'react';
 
-import _ from 'lodash';
 import cn from 'bem-cn-lite';
 
 import {Power} from '@gravity-ui/icons';

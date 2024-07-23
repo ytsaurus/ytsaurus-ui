@@ -1,4 +1,4 @@
-import _sortedIndexBy from 'lodash/sortedIndexBy';
+import sortedIndexBy_ from 'lodash/sortedIndexBy';
 import type {ProgressTheme} from '@gravity-ui/uikit';
 
 import format from '../common/hammer/format';
@@ -58,7 +58,7 @@ export function getProgressTheme(
     progress = 0,
     thresholds: ThemeThreshold[] = defaultThemeThresholds,
 ): ProgressTheme {
-    const index = _sortedIndexBy(
+    const index = sortedIndexBy_(
         thresholds,
         {max: Number.isFinite(progress) ? progress : 0} as ThemeThreshold,
         'max',

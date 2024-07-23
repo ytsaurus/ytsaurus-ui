@@ -1,6 +1,8 @@
 import React, {ComponentProps} from 'react';
 import cn from 'bem-cn-lite';
-import _ from 'lodash';
+
+import compact_ from 'lodash/compact';
+import map_ from 'lodash/map';
 
 import SubjectsControl from '../../containers/ACL/SubjectsControl/SubjectsControl';
 import PermissionsControl from '../../containers/ACL/RequestPermissions/PermissionsControl/PermissionsControl';
@@ -234,8 +236,8 @@ export function DialogError(props: FIX_MY_TYPE) {
 }
 
 export function makeErrorFields(errors: Array<YTError | Error | undefined>) {
-    return _.compact(
-        _.map(errors, (error, index) => {
+    return compact_(
+        map_(errors, (error, index) => {
             return error
                 ? {
                       name: `error_${index}`,

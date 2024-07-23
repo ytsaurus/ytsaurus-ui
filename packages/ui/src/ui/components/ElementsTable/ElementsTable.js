@@ -3,7 +3,13 @@ import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import ReactList from 'react-list';
 import block from 'bem-cn-lite';
-import _ from 'lodash';
+
+import difference_ from 'lodash/difference';
+import filter_ from 'lodash/filter';
+import forEach_ from 'lodash/forEach';
+import map_ from 'lodash/map';
+import omit_ from 'lodash/omit';
+import range_ from 'lodash/range';
 
 import ElementsTableRow from './ElementsTableRow';
 import ElementsTableHeader, {sortStateType} from './ElementsTableHeader';
@@ -164,13 +170,13 @@ class ElementsTable extends Component {
             const oldKeys = Object.keys(items);
             const newKeys = props.items.map(computeKey);
 
-            const toRemove = _.difference(oldKeys, newKeys);
+            const toRemove = difference_(oldKeys, newKeys);
             let toAdd;
 
             // When new state is 'mixed', table was updated NOT due to clicking
             // 'Expand All'/'Collapse All' button
             if (treeState === 'mixed' || treeState === prevTreeState) {
-                toAdd = _.difference(newKeys, oldKeys);
+                toAdd = difference_(newKeys, oldKeys);
                 // Sort new keys so that the topmost in the tree come first - we rely on this fact in
                 // collapsedAncestorExists() method. However toAdd got in the alternative branch doesn't
                 // need to be sorted since props.items come already in the proper order
@@ -180,11 +186,11 @@ class ElementsTable extends Component {
                 toAdd = newKeys;
             }
 
-            _.each(ElementsTable.getEmptinessStates(newKeys), (state, key) => {
+            forEach_(ElementsTable.getEmptinessStates(newKeys), (state, key) => {
                 items[key] = Object.assign({}, items[key], state);
             });
 
-            items = _.omit(items, toRemove);
+            items = omit_(items, toRemove);
             toAdd.forEach((key) => {
                 // When tree is in mixed state, new subtrees start as collapsed
                 const itemState = {collapsed: treeState !== 'expanded'};
@@ -204,10 +210,10 @@ class ElementsTable extends Component {
         const {items: columnItems, set: columnSet} = prepareColumnsData(columns, columnsMode);
         const nextState = {columnItems, columnSet};
         let items = ElementsTable.updateItemStates(props, state);
-        _.forEach(props.treeStateExpanded, (key) => {
+        forEach_(props.treeStateExpanded, (key) => {
             if (items[key] && items[key].collapsed) {
                 items[key].collapsed = false;
-                const itemKeys = _.map(props.items, computeKey);
+                const itemKeys = map_(props.items, computeKey);
                 items = ElementsTable.updateVisibilityState(itemKeys, items, key);
             }
         });
@@ -413,9 +419,9 @@ class ElementsTable extends Component {
             <table className={tableClassName}>
                 {this.props.header && <ElementsTableHeader {...this.props} />}
                 <tbody className={bodyClassName}>
-                    {_.map(_.range(4), (index) => (
+                    {map_(range_(4), (index) => (
                         <tr key={index} className={rowClassName} style={rowStyle}>
-                            {_.map(this.state.columnItems, this.renderEmptyCell)}
+                            {map_(this.state.columnItems, this.renderEmptyCell)}
                         </tr>
                     ))}
                 </tbody>
@@ -502,7 +508,7 @@ class ElementsTable extends Component {
     }
 
     renderSimpleTable(items) {
-        const rows = _.map(items, (item, index) => this.renderRow(item, index));
+        const rows = map_(items, (item, index) => this.renderRow(item, index));
 
         return this.renderTableContent(rows);
     }
@@ -510,7 +516,7 @@ class ElementsTable extends Component {
     renderTable() {
         const {items, virtual, tree, isLoading} = this.props;
 
-        const visibleItems = tree ? _.filter(items, this.isItemVisible) : items;
+        const visibleItems = tree ? filter_(items, this.isItemVisible) : items;
 
         if (isLoading) {
             return this.renderSkeletonState();

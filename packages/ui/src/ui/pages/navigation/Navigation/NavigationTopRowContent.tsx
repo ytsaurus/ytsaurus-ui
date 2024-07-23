@@ -1,6 +1,7 @@
 import React from 'react';
 import cn from 'bem-cn-lite';
-import _ from 'lodash';
+
+import map_ from 'lodash/map';
 
 import {RowWithName} from '../../../containers/AppNavigation/TopRowContent/SectionName';
 import Favourites from '../../../components/Favourites/Favourites';
@@ -159,7 +160,7 @@ function NavigationBreadcrumbs({onEdit}: {onEdit: () => void}) {
     const mode = useSelector(getMode);
     const history = useHistory();
     const items = React.useMemo(() => {
-        return _.map(bcItems, ({text, state}) => {
+        return map_(bcItems, ({text, state}) => {
             const url = makeRoutedURL(window.location.pathname, {
                 path: state.path,
                 navmode: mode === Tab.ACL ? mode : Tab.CONTENT,

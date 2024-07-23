@@ -1,4 +1,7 @@
-import _ from 'lodash';
+import filter_ from 'lodash/filter';
+import map_ from 'lodash/map';
+import sortBy_ from 'lodash/sortBy';
+
 import unipika from '../../common/thor/unipika';
 import ypath from '../../common/thor/ypath';
 
@@ -8,7 +11,7 @@ import {YTApiId, ytApiV3Id} from '../../rum/rum-wrap-api';
 export const pathEditorRequests = new CancelHelper();
 
 function prepareSuggestions(initialPath, parentPath, children) {
-    let suggestions = _.map(children, (child) => {
+    let suggestions = map_(children, (child) => {
         const prepared = {};
 
         prepared.parentPath = parentPath;
@@ -21,7 +24,7 @@ function prepareSuggestions(initialPath, parentPath, children) {
         return prepared;
     });
 
-    suggestions = _.sortBy(suggestions, 'childPath');
+    suggestions = sortBy_(suggestions, 'childPath');
 
     return suggestions;
 }
@@ -46,7 +49,7 @@ export function loadSuggestions(path, customFilter) {
 export function filterByCurrentPath(currentPath, suggestions) {
     const path = currentPath.toLowerCase();
 
-    return _.filter(suggestions, (child) => {
+    return filter_(suggestions, (child) => {
         const hasPartOfPath = child.path.startsWith(path);
         const isShowCurrentChild = child.path !== path || child.type === 'map_node';
 

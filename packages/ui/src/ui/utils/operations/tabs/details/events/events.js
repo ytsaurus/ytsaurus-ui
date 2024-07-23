@@ -1,8 +1,10 @@
-import _ from 'lodash';
+import map_ from 'lodash/map';
+import reduce_ from 'lodash/reduce';
+
 import moment from 'moment';
 
 import ypath from '../../../../../common/thor/ypath';
-import _isEmpty from 'lodash/isEmpty';
+import isEmpty_ from 'lodash/isEmpty';
 
 export class Event {
     constructor(data) {
@@ -30,7 +32,7 @@ function prepareEvents(events, params) {
 
     if (events) {
         let lastState;
-        let prepared = _.reduce(
+        let prepared = reduce_(
             events,
             (prepared, event, index) => {
                 const nextEvent = events[index + 1];
@@ -49,7 +51,7 @@ function prepareEvents(events, params) {
                     duration = moment(finishTime) - moment(event.time);
                 }
 
-                if (!_isEmpty(event.attributes)) {
+                if (!isEmpty_(event.attributes)) {
                     showAttributesColumn = true;
                 }
 
@@ -71,9 +73,9 @@ function prepareEvents(events, params) {
             {events: [], totalDuration: 0, precedingDuration: 0},
         );
 
-        const eventsDurations = _.map(prepared.events, 'duration');
+        const eventsDurations = map_(prepared.events, 'duration');
 
-        prepared = _.reduce(
+        prepared = reduce_(
             eventsDurations,
             (prepared, duration, index) => {
                 const currentEvent = prepared.events[index];

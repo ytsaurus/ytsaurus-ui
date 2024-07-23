@@ -1,5 +1,5 @@
 import {TextInput} from '@gravity-ui/uikit';
-import debounce from 'lodash/debounce';
+import debounce_ from 'lodash/debounce';
 import React, {useEffect, useMemo, useState} from 'react';
 
 export type QueryTextFilterProps = {
@@ -13,7 +13,7 @@ export function QueryTextFilter({value, placeholder, onChange, delay = 200}: Que
     const [pattern, setPattern] = useState<string>(value || '');
 
     const debouncedChange = useMemo(() => {
-        return debounce((value: string) => {
+        return debounce_((value: string) => {
             onChange(value);
         }, delay);
     }, [onChange, delay]);

@@ -1,6 +1,7 @@
 import React from 'react';
 import {useSelector} from 'react-redux';
-import _ from 'lodash';
+
+import find_ from 'lodash/find';
 import cn from 'bem-cn-lite';
 
 import {getOperationStatisticsDescription} from '../../../../../store/selectors/global/supported-features';
@@ -24,7 +25,7 @@ function useStatisticInfo(name: string) {
             return res;
         }
 
-        return _.find(byRegexp, ({regexp}) => {
+        return find_(byRegexp, ({regexp}) => {
             return regexp.test(key);
         });
     }, [name, byName, byRegexp]);

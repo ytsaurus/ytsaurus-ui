@@ -1,6 +1,5 @@
 import React from 'react';
 import cn from 'bem-cn-lite';
-import _ from 'lodash';
 
 import './Support.scss';
 import UIFactory from '../../UIFactory';

@@ -5,7 +5,8 @@ import LoginPageWrapper from '../LoginPageWrapper/LoginPageWrapper';
 import axios from 'axios';
 import {useHistory, useLocation} from 'react-router';
 import {wrapApiPromiseByToaster} from '../../../utils/utils';
-import _ from 'lodash';
+
+import isEmpty_ from 'lodash/isEmpty';
 
 const block = cn('login-page');
 
@@ -64,7 +65,7 @@ function ChangePasswordForm({theme, cluster}: Props) {
             setErrors({});
 
             const validationErrors = validate({currentPassword, newPassword, confirmPassword});
-            if (!_.isEmpty(validationErrors)) {
+            if (!isEmpty_(validationErrors)) {
                 setErrors(validationErrors);
                 return;
             }

@@ -1,4 +1,5 @@
-import _ from 'lodash';
+import map_ from 'lodash/map';
+
 import {ThunkAction} from 'redux-thunk';
 import {RootState} from '../../../store/reducers';
 import {ACCOUNTS_DATA_FIELDS_ACTION} from '../../../constants/accounts';
@@ -23,5 +24,5 @@ export function setAccountsStateDataFields(
 }
 
 export function parseAccountsData(data: Array<unknown>) {
-    return Promise.all(_.map(data, (item) => Promise.resolve(parseAccountData(item))));
+    return Promise.all(map_(data, (item) => Promise.resolve(parseAccountData(item))));
 }

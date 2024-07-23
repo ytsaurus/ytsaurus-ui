@@ -1,6 +1,7 @@
 import React from 'react';
 import cn from 'bem-cn-lite';
-import _ from 'lodash';
+
+import capitalize_ from 'lodash/capitalize';
 
 import format from '../../../common/hammer/format';
 import ypath from '../../../common/thor/ypath';
@@ -34,7 +35,7 @@ export default function PoolMetaData({className}: Props) {
     const {integralType, mode} = pool;
     const hasIntegralType = integralType && integralType !== 'none';
 
-    const guaranteeType = [hasStrong && 'Strong', hasIntegralType && _.capitalize(integralType)]
+    const guaranteeType = [hasStrong && 'Strong', hasIntegralType && capitalize_(integralType)]
         .filter(Boolean)
         .join(' + ');
     return (

@@ -1,4 +1,8 @@
-import _ from 'lodash';
+import forEach_ from 'lodash/forEach';
+import map_ from 'lodash/map';
+import pick_ from 'lodash/pick';
+import reduce_ from 'lodash/reduce';
+
 import ypath from '../../../../common/thor/ypath';
 import hammer from '../../../../common/hammer';
 import {createSelector} from 'reselect';
@@ -11,10 +15,10 @@ const getColumn = (state) => state.navigation.tabs.schema.column;
 
 export const getSchemaMeta = createSelector([getAttributes], (attributes) => {
     const schemaAttributes = ypath.getValue(attributes, '/schema/@');
-    const tableAttributes = _.pick(attributes, TABLE_ATTRIBUTES_FOR_META);
+    const tableAttributes = pick_(attributes, TABLE_ATTRIBUTES_FOR_META);
 
-    const tableMeta = _.map(tableAttributes, (value, key) => ({value, key}));
-    const schemaMeta = _.map(schemaAttributes, (value, key) => ({
+    const tableMeta = map_(tableAttributes, (value, key) => ({value, key}));
+    const schemaMeta = map_(schemaAttributes, (value, key) => ({
         value,
         key,
     }));
@@ -25,11 +29,11 @@ export const getSchemaMeta = createSelector([getAttributes], (attributes) => {
 export const getSchema = createSelector([getAttributes], (attributes) => {
     const schemaValues = ypath.getValue(attributes.schema);
 
-    return _.map(schemaValues, (item, index) => ({...item, index}));
+    return map_(schemaValues, (item, index) => ({...item, index}));
 });
 
 export const getSchemaByName = createSelector([getSchema], (items) => {
-    return _.reduce(
+    return reduce_(
         items,
         (acc, item) => {
             acc[item.name] = item;
@@ -48,10 +52,10 @@ export const getFilteredSchema = createSelector([getSchema, getColumn], (data, i
 );
 
 export const getComputedColumns = createSelector([getSchema], (schema) => {
-    const items = _.reduce(
+    const items = reduce_(
         schema,
         (res, schemaEntry) => {
-            _.each(schemaEntry, (columnValue, columnName) => {
+            forEach_(schemaEntry, (columnValue, columnName) => {
                 res[columnName] = res[columnName] || {
                     caption: columnName === 'index' ? '#' : undefined,
                     sort: false,
@@ -65,7 +69,7 @@ export const getComputedColumns = createSelector([getSchema], (schema) => {
 
     let set = [];
 
-    _.each(items, (columnConfig, columnName) => {
+    forEach_(items, (columnConfig, columnName) => {
         if (!Object.hasOwnProperty.call(EXCLUDED_COLUMNS, columnName)) {
             set.push(columnName);
         }

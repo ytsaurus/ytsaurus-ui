@@ -1,4 +1,10 @@
-import _ from 'lodash';
+import find_ from 'lodash/find';
+import forEach_ from 'lodash/forEach';
+import map_ from 'lodash/map';
+import orderBy_ from 'lodash/orderBy';
+import reduce_ from 'lodash/reduce';
+import sortBy_ from 'lodash/sortBy';
+
 import {Action} from 'redux';
 import {MasterInstance} from '../../selectors/system/masters';
 import {ActionD} from '../../../types';
@@ -27,7 +33,7 @@ function calculateStatusCounts(masters: Array<MasterDataItem | undefined>) {
         unavailable: 0,
     };
 
-    return _.reduce(
+    return reduce_(
         masters,
         (result, master) => {
             if (!master || !master.state) {
@@ -73,7 +79,7 @@ function extractMasterCounters(
 
     incrementStateCounters(counters, primary.quorum.status);
 
-    _.each(secondary, (masters) => {
+    forEach_(secondary, (masters) => {
         incrementStateCounters(counters, masters.quorum.status);
     });
 
@@ -85,7 +91,7 @@ function getQuorum(masters: Array<MasterInstance>) {
     let existsLeading = false;
     let leaderCommitedVersion;
 
-    _.each(masters, (master) => {
+    forEach_(masters, (master) => {
         const masterData = master.$attributes;
         const state = master.state;
 
@@ -115,7 +121,7 @@ function getQuorum(masters: Array<MasterInstance>) {
 }
 
 function getLeader(instances: any) {
-    return _.find(instances, (instance) => {
+    return find_(instances, (instance) => {
         return instance.state === 'leading';
     });
 }
@@ -237,34 +243,34 @@ function processMastersConfig(
 ) {
     const res = {
         primary: {
-            instances: _.map(_.sortBy(primaryMaster.addresses, 'host'), (address) => {
+            instances: map_(sortBy_(primaryMaster.addresses, 'host'), (address) => {
                 return new MasterInstance(address, 'primary', primaryMaster.cellTag);
             }),
             cellTag: primaryMaster.cellTag,
             cellId: primaryMaster.cellId,
         },
-        secondary: _.map(secondaryMasters, (master) => {
+        secondary: map_(secondaryMasters, (master) => {
             return {
-                instances: _.map(_.sortBy(master.addresses, 'host'), (address) => {
+                instances: map_(sortBy_(master.addresses, 'host'), (address) => {
                     return new MasterInstance(address, 'secondary', master.cellTag);
                 }),
                 cellTag: master.cellTag,
             };
         }),
         providers: {
-            instances: _.map(_.sortBy(timestampProviders.addresses, 'host'), (address) => {
+            instances: map_(sortBy_(timestampProviders.addresses, 'host'), (address) => {
                 return new MasterInstance(address, 'providers', timestampProviders.cellTag);
             }),
             cellTag: timestampProviders.cellTag,
         },
         discovery: {
-            instances: _.map(_.sortBy(discoveryServers.addresses, 'host'), (address) => {
+            instances: map_(sortBy_(discoveryServers.addresses, 'host'), (address) => {
                 return new MasterInstance(address, 'discovery', discoveryServers.cellTag);
             }),
             cellTag: discoveryServers.cellTag,
         },
         queueAgents: {
-            instances: _.map(_.sortBy(queueAgents.addresses, 'host'), (address) => {
+            instances: map_(sortBy_(queueAgents.addresses, 'host'), (address) => {
                 return new MasterInstance(address, 'queue_agent');
             }),
         },
@@ -298,7 +304,7 @@ function processMastersData(
     state: Pick<MastersState, 'primary' | 'secondary' | 'providers' | 'discovery' | 'queueAgents'>,
     {data: rawData, masterInfo}: MasterDataResponse,
 ) {
-    const data = _.map(rawData, (payload) => payload.output);
+    const data = map_(rawData, (payload) => payload.output);
 
     const masterToDataIndex: Record<string, number> = {};
     for (let i = 0; i < masterInfo.length; i++) {
@@ -306,28 +312,28 @@ function processMastersData(
         masterToDataIndex[type + cellTag + host] = i;
     }
 
-    const primaryInstances = _.map(state.primary.instances, (instance) => {
+    const primaryInstances = map_(state.primary.instances, (instance) => {
         const {host, type, cellTag} = instance.toObject();
         const key = type + cellTag + host;
         return instance.clone().update(data[masterToDataIndex[key]]);
     });
 
     const primary: Required<MasterGroupData> = {
-        instances: _.orderBy(primaryInstances, (instance) => instance.$address),
+        instances: orderBy_(primaryInstances, (instance) => instance.$address),
         cellTag: state.primary.cellTag!,
         cellId: state.primary.cellId!,
         quorum: getQuorum(primaryInstances),
         leader: getLeader(primaryInstances),
     };
 
-    const secondary = _.map(state.secondary, (master) => {
-        const instances = _.map(master.instances, (instance) => {
+    const secondary = map_(state.secondary, (master) => {
+        const instances = map_(master.instances, (instance) => {
             const {host, type, cellTag} = instance.toObject();
             const key = type + cellTag + host;
             return instance.clone().update(data[masterToDataIndex[key]]);
         });
         const res: Required<MasterGroupData> = {
-            instances: _.orderBy(instances, (instance) => instance.$address),
+            instances: orderBy_(instances, (instance) => instance.$address),
             cellTag: master.cellTag!,
             cellId: master.cellId!,
             quorum: getQuorum(instances),
@@ -336,34 +342,34 @@ function processMastersData(
         return res;
     });
 
-    const providersInstances = _.map(state.providers.instances, (instance) => {
+    const providersInstances = map_(state.providers.instances, (instance) => {
         const {host, type, cellTag} = instance.toObject();
         const key = type + cellTag + host;
         return instance.clone().update(data[masterToDataIndex[key]]);
     });
 
     const providers = {
-        instances: _.orderBy(providersInstances, (instance) => instance.$address),
+        instances: orderBy_(providersInstances, (instance) => instance.$address),
         cellTag: state.providers.cellTag,
         quorum: getQuorum(providersInstances),
         leader: getLeader(providersInstances),
     };
 
-    const discoveryInstances = _.map(state.discovery.instances, (instance) => {
+    const discoveryInstances = map_(state.discovery.instances, (instance) => {
         return instance.clone().update({state: instance.$state});
     });
 
     const discovery = {
-        instances: _.orderBy(discoveryInstances, (instance) => instance.$address),
+        instances: orderBy_(discoveryInstances, (instance) => instance.$address),
         cellTag: state.providers.cellTag,
     };
 
-    const queueAgentInstances = _.map(state.queueAgents.instances, (instance) => {
+    const queueAgentInstances = map_(state.queueAgents.instances, (instance) => {
         return instance.clone().update({state: instance.$state});
     });
 
     const queueAgents = {
-        instances: _.orderBy(queueAgentInstances, (instance) => instance.$address),
+        instances: orderBy_(queueAgentInstances, (instance) => instance.$address),
     };
 
     const statusCounts: MastersState['counters']['states'] = calculateStatusCounts(data);

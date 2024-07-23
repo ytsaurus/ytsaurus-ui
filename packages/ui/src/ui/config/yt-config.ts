@@ -1,4 +1,5 @@
-import _ from 'lodash';
+import forEach_ from 'lodash/forEach';
+import reduce_ from 'lodash/reduce';
 
 import {DEFAULT_GROUP} from '../constants/cluster-menu';
 import {ClusterConfig, YTConfig} from '../../shared/yt-types';
@@ -12,7 +13,7 @@ export function getGroupedClusters(clusters = YT.clusters) {
         return clusterA.name > clusterB.name ? 1 : -1;
     }
 
-    const groups = _.reduce(
+    const groups = reduce_(
         clusters,
         (groups, cluster) => {
             const currentGroup = cluster.group || DEFAULT_GROUP;
@@ -23,7 +24,7 @@ export function getGroupedClusters(clusters = YT.clusters) {
         {} as Record<string, Array<ClusterConfig>>,
     );
 
-    _.each(groups, (clusters) => {
+    forEach_(groups, (clusters) => {
         clusters.sort(sortByClusterName);
     });
 

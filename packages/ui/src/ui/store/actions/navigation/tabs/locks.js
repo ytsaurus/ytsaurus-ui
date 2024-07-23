@@ -1,5 +1,8 @@
 import yt from '@ytsaurus/javascript-wrapper/lib/yt';
-import _ from 'lodash';
+
+import map_ from 'lodash/map';
+import slice_ from 'lodash/slice';
+
 import CancelHelper from '../../../../utils/cancel-helper';
 import {prepareRequest} from '../../../../utils/navigation';
 import {getPath, getTransaction} from '../../../../store/selectors/navigation';
@@ -14,7 +17,7 @@ import {splitBatchResults} from '../../../../utils/utils';
 const requests = new CancelHelper();
 
 function prepareData(locks, transactions = []) {
-    return _.map(locks, (lock, index) => {
+    return map_(locks, (lock, index) => {
         const item = {...lock};
         item.transaction = transactions[index] || {};
         item.transaction.id = item.transaction_id;
@@ -26,7 +29,7 @@ function prepareData(locks, transactions = []) {
 
 function getTransactions(rowLocks) {
     return (dispatch) => {
-        const requests = _.map(_.slice(rowLocks, 0, MAX_TRANSACTIONS_REQUESTS), (lock) => {
+        const requests = map_(slice_(rowLocks, 0, MAX_TRANSACTIONS_REQUESTS), (lock) => {
             return {
                 command: 'get',
                 parameters: {

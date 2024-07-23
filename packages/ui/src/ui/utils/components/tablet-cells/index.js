@@ -1,13 +1,16 @@
 import ypath from '@ytsaurus/interface-helpers/lib/ypath';
 import hammer from '../../../common/hammer';
-import _ from 'lodash';
+
+import find_ from 'lodash/find';
+import map_ from 'lodash/map';
+import reduce_ from 'lodash/reduce';
 
 import {Page} from '../../../constants';
 import {TabletsTab} from '../../../constants/tablets';
 import {nanToUndefined} from '../../utils';
 
 export function prepareTabletCells(tabletCells) {
-    return _.map(tabletCells, (tabletCell) => {
+    return map_(tabletCells, (tabletCell) => {
         const uncompressed = ypath.getValue(
             tabletCell,
             '/@total_statistics/uncompressed_data_size',
@@ -28,7 +31,7 @@ export function prepareTabletCells(tabletCells) {
         let state;
 
         if (peerCount) {
-            peer = _.find(peers, (peer) => peer.state === 'leading') || peers[0];
+            peer = find_(peers, (peer) => peer.state === 'leading') || peers[0];
             peerAddress = peer.address;
             state = peer.state;
         }
@@ -123,7 +126,7 @@ export function prepareBundles(tabletCells, bundles) {
 
     aggregation.splice(0, 1);
 
-    aggregation = _.reduce(
+    aggregation = reduce_(
         aggregation,
         (res, bundle) => {
             const $attributes = bundles[bundle.bundle].$attributes;
@@ -139,7 +142,7 @@ export function prepareBundles(tabletCells, bundles) {
         {},
     );
 
-    const bundleList = _.reduce(
+    const bundleList = reduce_(
         bundles,
         (res, value, key) => {
             if (aggregation[key]) {
@@ -158,7 +161,7 @@ export function prepareBundles(tabletCells, bundles) {
         [],
     );
 
-    const nodeTags = _.reduce(
+    const nodeTags = reduce_(
         bundleList,
         (res, bundle) => {
             const tag = bundle?.node_tag_filter;

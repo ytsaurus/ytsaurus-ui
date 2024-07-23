@@ -1,6 +1,7 @@
 import {Action} from 'redux';
 
-import _ from 'lodash';
+import cloneDeep_ from 'lodash/cloneDeep';
+import reduce_ from 'lodash/reduce';
 
 import {
     CLUSTERS_MENU_UPDATE_FILTER,
@@ -28,8 +29,8 @@ export type ClusterConfigWithStatus = ValueOf<(typeof YT)['clusters']> & {
 };
 
 export const initialState: ClustersMenuState = {
-    clusters: _.reduce(
-        _.cloneDeep(YT?.clusters),
+    clusters: reduce_(
+        cloneDeep_(YT?.clusters),
         (acc, clusterConfig, clusterId) => {
             acc[clusterId] = {
                 ...clusterConfig,
@@ -46,7 +47,7 @@ export const initialState: ClustersMenuState = {
 export default (state = initialState, action: ClustersMenuAction) => {
     switch (action.type) {
         case FETCH_CLUSTER_VERSIONS.SUCCESS: {
-            const newClusters = _.reduce(
+            const newClusters = reduce_(
                 action.data,
                 (acc, {id, version}) => {
                     if (acc[id]) {
@@ -66,7 +67,7 @@ export default (state = initialState, action: ClustersMenuAction) => {
         }
 
         case FETCH_CLUSTER_AVAILABILITY.SUCCESS: {
-            const newClusters = _.reduce(
+            const newClusters = reduce_(
                 action.data,
                 (acc, {id, availability}) => {
                     if (acc[id]) {
@@ -86,7 +87,7 @@ export default (state = initialState, action: ClustersMenuAction) => {
         case FETCH_CLUSTER_AUTH_STATUS.SUCCESS: {
             return {
                 ...state,
-                clusters: _.reduce(
+                clusters: reduce_(
                     action.data,
                     (acc, partialConfig, id) => {
                         if (acc[id]) {

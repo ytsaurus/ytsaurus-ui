@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import throttle from 'lodash/throttle';
+import throttle_ from 'lodash/throttle';
 import block from 'bem-cn-lite';
 import {type ChartKitRef} from '@gravity-ui/chartkit';
 import {Chart} from '../Chart/Chart';
@@ -74,7 +74,7 @@ export function QueryResultsVisualization({query}: QueryResultsVisualizationProp
     }, [query.id, allVisualizations]);
 
     const debouncedChartResize = React.useMemo(() => {
-        return throttle(() => {
+        return throttle_(() => {
             chartKitRef.current?.reflow();
         }, 300);
     }, [chartKitRef.current]);

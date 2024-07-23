@@ -1,6 +1,8 @@
 import React from 'react';
 import {ThunkAction} from 'redux-thunk';
-import _ from 'lodash';
+
+import map_ from 'lodash/map';
+import reduce_ from 'lodash/reduce';
 
 import {RootState} from '../../../../store/reducers';
 import {RemoteCopyModalStateAction} from '../../../../store/reducers/navigation/modals/remote-copy-modal';
@@ -19,7 +21,7 @@ type RemoteCopyThunkAction = ThunkAction<any, RootState, any, RemoteCopyModalSta
 
 export function showRemoteCopyModal(paths: Array<string>): RemoteCopyThunkAction {
     return (dispatch) => {
-        const requests = _.map(paths, (path) => {
+        const requests = map_(paths, (path) => {
             return {
                 command: 'get' as const,
                 parameters: {
@@ -49,7 +51,7 @@ export function showRemoteCopyModal(paths: Array<string>): RemoteCopyThunkAction
             },
         )
             .then((results) => {
-                const attributesMap = _.reduce(
+                const attributesMap = reduce_(
                     paths,
                     (acc, path, index) => {
                         acc[path] = results[index]?.output?.$attributes;

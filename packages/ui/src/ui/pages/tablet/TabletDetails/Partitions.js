@@ -5,7 +5,8 @@ import hammer from '../../../common/hammer';
 import PropTypes from 'prop-types';
 import unipika from '../../../common/thor/unipika';
 import cn from 'bem-cn-lite';
-import _ from 'lodash';
+
+import keys_ from 'lodash/keys';
 
 import {Button} from '@gravity-ui/uikit';
 
@@ -200,7 +201,7 @@ class Partitions extends Component {
     handleShowStores = (stores) => this.setState({stores});
 
     renderStoresDialog() {
-        const visible = _.keys(this.state.stores).length > 0;
+        const visible = keys_(this.state.stores).length > 0;
 
         if (!visible) {
             return null;

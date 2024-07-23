@@ -2,7 +2,11 @@ import React from 'react';
 import {ConnectedProps, connect} from 'react-redux';
 import block from 'bem-cn-lite';
 import {Link} from 'react-router-dom';
-import _ from 'lodash';
+
+import filter_ from 'lodash/filter';
+import forEach_ from 'lodash/forEach';
+import map_ from 'lodash/map';
+import reduce_ from 'lodash/reduce';
 import {Lock} from '@gravity-ui/icons';
 
 // @ts-ignore
@@ -44,7 +48,7 @@ class ClustersMenuBody extends React.Component<Props> {
             return clusterA.name > clusterB.name ? 1 : -1;
         }
 
-        const groups = _.reduce(
+        const groups = reduce_(
             clusters,
             (acc, cluster) => {
                 const currentGroup = cluster.group || DEFAULT_GROUP;
@@ -55,7 +59,7 @@ class ClustersMenuBody extends React.Component<Props> {
             {} as Record<string, Array<ClusterConfigWithStatus>>,
         );
 
-        _.each(groups, (clusters) => {
+        forEach_(groups, (clusters) => {
             clusters.sort(sortByClusterName);
         });
 
@@ -134,14 +138,14 @@ class ClustersMenuBody extends React.Component<Props> {
     renderDashboard(clusters: Array<ClusterConfigWithStatus>) {
         const clusterGroups = this.prepareGroups(clusters);
 
-        const unknown = _.filter(
+        const unknown = filter_(
             Object.keys(clusterGroups),
             (groupName) => !(groupName in CLUSTER_GROUPS),
         );
 
         return (
             <main key="body" className={b(null, 'elements-page__content')}>
-                {_.map(CLUSTER_GROUPS_ORDER.concat(unknown), (groupName) => {
+                {map_(CLUSTER_GROUPS_ORDER.concat(unknown), (groupName) => {
                     const clusters = clusterGroups[groupName];
                     const {caption, size} = CLUSTER_GROUPS[groupName] ?? {caption: groupName};
 
@@ -159,9 +163,7 @@ class ClustersMenuBody extends React.Component<Props> {
                                     {caption}
                                 </div>
                                 <div className={b('list')}>
-                                    {_.map(clusters, (cluster) =>
-                                        this.renderCluster(cluster, size),
-                                    )}
+                                    {map_(clusters, (cluster) => this.renderCluster(cluster, size))}
                                 </div>
                             </div>
                         )
@@ -277,7 +279,7 @@ class ClustersMenuBody extends React.Component<Props> {
             );
         };
 
-        const filteredClusters = _.filter(clusters, ({id, version, environment}) => {
+        const filteredClusters = filter_(clusters, ({id, version, environment}) => {
             return [id, version, environment].some(filterByField);
         });
 

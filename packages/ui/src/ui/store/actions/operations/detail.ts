@@ -1,4 +1,4 @@
-import mapValues from 'lodash/mapValues';
+import mapValues_ from 'lodash/mapValues';
 import ypath from '../../../common/thor/ypath';
 
 import {
@@ -40,7 +40,7 @@ function getIsEphemeral([operationAttributes, userTransactionAlive]: Awaited<
     );
     const trees = Object.keys(treesInfo);
     const poolPaths = Object.values(
-        mapValues(
+        mapValues_(
             treesInfo,
             (infoPerTree, tree) =>
                 `${tree}/pools/${ypath.getValue(infoPerTree, '/pool')}/is_ephemeral`,

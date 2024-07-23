@@ -1,5 +1,3 @@
-import _ from 'lodash';
-
 import {initialState as jobsInitialState} from '../../../../store/reducers/operations/jobs/jobs';
 import {initialState as tableSortState} from '../../../../store/reducers/tables';
 import {OPERATION_JOBS_TABLE_ID} from '../../../../constants/operations/jobs';

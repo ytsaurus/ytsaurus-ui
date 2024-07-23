@@ -1,4 +1,6 @@
-import _ from 'lodash';
+import mapValues_ from 'lodash/mapValues';
+import map_ from 'lodash/map';
+
 import hammer from '../../../common/hammer';
 import {createSelector} from 'reselect';
 import {histogramItems} from '../../../utils/tablet/tablet';
@@ -30,7 +32,7 @@ export const getPartitions = createSelector(getSortedPartitions, (sortedPartitio
 });
 
 const getHistograms = createSelector(getRawPartitions, (partitions) =>
-    _.mapValues(histogramItems, (settings, key) => {
+    mapValues_(histogramItems, (settings, key) => {
         const partitionsWithoutEden = partitions.slice(1);
 
         return {
@@ -39,7 +41,7 @@ const getHistograms = createSelector(getRawPartitions, (partitions) =>
             dataFormat: settings.format,
             caption: hammer.format['ReadableField'](key),
             dataName: settings.dataName || hammer.format['ReadableField'](key, {caps: 'none'}),
-            data: _.map(partitionsWithoutEden, partitionsTableItems[key].get),
+            data: map_(partitionsWithoutEden, partitionsTableItems[key].get),
         };
     }),
 );

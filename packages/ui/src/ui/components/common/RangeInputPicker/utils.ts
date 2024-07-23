@@ -1,4 +1,4 @@
-import range from 'lodash/range';
+import range_ from 'lodash/range';
 
 export const prepareAvailableValues = (availableValues?: number[]): number[] | undefined => {
     if (!availableValues || !availableValues.length) {
@@ -67,7 +67,7 @@ export const getInfoPoints = ({
         };
     }
 
-    return range(0, infoPointsCount).map(mapInfoPoints);
+    return range_(0, infoPointsCount).map(mapInfoPoints);
 };
 
 export const getParsedValue = (textValue: string, parse?: (value: string) => number): number => {

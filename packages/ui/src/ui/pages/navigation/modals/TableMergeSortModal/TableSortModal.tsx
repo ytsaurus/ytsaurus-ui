@@ -1,6 +1,7 @@
 import React from 'react';
 import cn from 'bem-cn-lite';
-import _ from 'lodash';
+
+import map_ from 'lodash/map';
 
 import {DialogError, DialogField, YTDFDialog} from '../../../../components/Dialog/Dialog';
 import {useDispatch, useSelector} from 'react-redux';
@@ -52,7 +53,7 @@ export default function TableSortModal() {
                             $value: outputPath,
                             $attributes: attributeValues,
                         },
-                        sort_by: _.map(columns, (item: ColumnSortByInfo) => {
+                        sort_by: map_(columns, (item: ColumnSortByInfo) => {
                             return {
                                 name: item.name,
                                 sort_order: item.descending

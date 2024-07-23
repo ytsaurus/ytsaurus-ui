@@ -1,4 +1,6 @@
-import _ from 'lodash';
+import mapValues_ from 'lodash/mapValues';
+import map_ from 'lodash/map';
+
 import hammer from '../../../../common/hammer';
 import {createSelector} from 'reselect';
 import {histogramItems, tableItems} from '../../../../utils/navigation/tabs/tables';
@@ -54,12 +56,12 @@ export const getTablets = createSelector(getPreparedDataForColumns, (filteredTab
 });
 
 const getHistograms = createSelector(getRawTablets, (tablets) => {
-    return _.mapValues(histogramItems, (histogramItem, key) => {
+    return mapValues_(histogramItems, (histogramItem, key) => {
         const get = histogramItem.get || tableItems[key].get;
 
         return {
             ...histogramItem,
-            data: _.map(tablets, get),
+            data: map_(tablets, get),
             dataFormat: histogramItem.format,
             dataName: histogramItem.dataName || hammer.format['ReadableField'](key, {caps: 'none'}),
         };

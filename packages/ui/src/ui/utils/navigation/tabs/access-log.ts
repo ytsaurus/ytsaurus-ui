@@ -1,4 +1,5 @@
-import _ from 'lodash';
+import reduce_ from 'lodash/reduce';
+
 import {
     AccessLogFieldSelectorType,
     AccessLogMethodType,
@@ -7,7 +8,7 @@ import {
 } from '../../../store/reducers/navigation/tabs/access-log/access-log-filters';
 
 export function valueToSelection<KeyType extends string, V>(value: Record<KeyType, V>) {
-    return _.reduce(
+    return reduce_(
         value,
         (acc, v, key) => {
             if (v) {
@@ -26,7 +27,7 @@ function selectionToValue<KeyType extends string, EmptyValue>(
     if (!selected.length) {
         return emptyValue;
     }
-    return _.reduce(
+    return reduce_(
         selected,
         (acc, item) => {
             acc[item as KeyType] = true;
