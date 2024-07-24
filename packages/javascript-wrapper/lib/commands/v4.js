@@ -54,17 +54,17 @@ module.exports = {
     transferAccountResources: {
         name: 'transfer_account_resources',
         method: 'POST',
-        dataType: 'json'
+        dataType: 'json',
     },
     transferPoolResources: {
         name: 'transfer_pool_resources',
         method: 'POST',
-        dataType: 'json'
+        dataType: 'json',
     },
     setUserPassword: {
         name: 'set_user_password',
         method: 'POST',
-        dataType: 'json'
+        dataType: 'json',
     },
 
     // Operations
@@ -98,7 +98,7 @@ module.exports = {
     getJobSpec: {
         name: 'get_job_spec',
         method: 'GET',
-        dataType: 'json'
+        dataType: 'json',
     },
 
     // Other
@@ -110,12 +110,12 @@ module.exports = {
     listQueries: {
         name: 'list_queries',
         method: 'GET',
-        dataType: 'json'
+        dataType: 'json',
     },
     getQuery: {
         name: 'get_query',
         method: 'GET',
-        dataType: 'json'
+        dataType: 'json',
     },
     startQuery: {
         name: 'start_query',
@@ -126,46 +126,105 @@ module.exports = {
     readQueryResults: {
         name: 'read_query_result',
         method: 'GET',
-        dataType: 'json'
+        dataType: 'json',
     },
     getQueryResults: {
         name: 'get_query_result',
         method: 'GET',
-        dataType: 'json'
+        dataType: 'json',
     },
     abortQuery: {
         name: 'abort_query',
         method: 'POST',
-        dataType: 'json'
+        dataType: 'json',
     },
     alterQuery: {
         name: 'alter_query',
         method: 'POST',
-        dataType: 'json'
+        dataType: 'json',
     },
     getQueryTrackerInfo: {
         name: 'get_query_tracker_info',
         method: 'GET',
-        dataType: 'json'
+        dataType: 'json',
     },
     listUserTokens: {
         name: 'list_user_tokens',
         method: 'GET',
-        dataType: 'json'
+        dataType: 'json',
     },
     revokeToken: {
         name: 'revoke_token',
         method: 'GET',
-        dataType: 'json'
+        dataType: 'json',
     },
     issueToken: {
         name: 'issue_token',
         method: 'GET',
-        dataType: 'json'
+        dataType: 'json',
     },
     switchLeader: {
         name: 'switch_leader',
         method: 'POST',
-        dataType: 'json'
+        dataType: 'json',
     },
-}
+
+    getPipelineSpec: {
+        name: 'get_pipeline_spec',
+        method: 'GET',
+        dataType: 'json',
+    },
+    setPipelineSpec: {
+        name: 'set_pipeline_spec',
+        method: 'PUT',
+        dataType: 'json',
+    },
+    removePipelineSpec: {
+        name: 'remove_pipeline_spec',
+        method: 'POST',
+        dataType: 'json',
+    },
+
+    getPipelineDynamicSpec: {
+        name: 'get_pipeline_dynamic_spec',
+        method: 'GET',
+        dataType: 'json',
+    },
+    setPipelineDynamicSpec: {
+        name: 'set_pipeline_dynamic_spec',
+        method: 'PUT',
+        dataType: 'json',
+    },
+    removePipelineDynamicSpec: {
+        name: 'remove_pipeline_dynamic_spec',
+        method: 'POST',
+        dataType: 'json',
+    },
+
+    startPipeline: {
+        name: 'start_pipeline',
+        method: 'POST',
+        dataType: 'json',
+    },
+    stopPipeline: {
+        name: 'stop_pipeline',
+        method: 'POST',
+        dataType: 'json',
+    },
+    pausePipeline: {
+        name: 'pause_pipeline',
+        method: 'POST',
+        dataType: 'json',
+    },
+
+    getPipelineState: {
+        name: 'get_pipeline_state',
+        method: 'GET',
+        dataType: 'json',
+    },
+    getFlowView: {
+        name: 'get_flow_view',
+        method: 'GET',
+        dataType: 'json',
+    },
+};
