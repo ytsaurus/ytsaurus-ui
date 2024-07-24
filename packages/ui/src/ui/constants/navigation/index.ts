@@ -7,6 +7,7 @@ export const Tab = {
     AUTO: 'auto',
     CONSUMER: 'consumer',
     CONTENT: 'content',
+    FLOW: 'flow',
     QUEUE: 'queue',
     ATTRIBUTES: 'attributes',
     USER_ATTRIBUTES: 'user_attributes',

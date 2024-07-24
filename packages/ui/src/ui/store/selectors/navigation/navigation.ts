@@ -71,9 +71,11 @@ export const getSupportedTabs = createSelector(
     [getNavigationPathAttributes, getTableMountConfigHasData, getTabletErrorsCount],
     (attributes, mountConfigHasData, tabletErrorsCount) => {
         const isDynamic = attributes.dynamic === true;
+        const isPipeline = attributes.pipeline_format_version !== undefined;
         const mountConfigVisible = mountConfigHasData || isDynamic;
         const alwaysSupportedTabs = _.compact([
             Tab.CONTENT,
+            isPipeline && Tab.FLOW,
             Tab.ATTRIBUTES,
             Tab.USER_ATTRIBUTES,
             mountConfigVisible && Tab.MOUNT_CONFIG,
@@ -228,6 +230,18 @@ export const getTabs = createSelector(
             {
                 value: Tab.ACCESS_LOG,
                 title: 'Access log',
+            },
+            {
+                value: Tab.FLOW,
+                title: 'Go to content [Alt+F]',
+                text: 'Flow',
+                hotkey: [
+                    {
+                        keys: 'alt+f',
+                        tab: Tab.FLOW,
+                        scope: 'all',
+                    },
+                ],
             },
             {
                 value: Tab.LOCKS,
