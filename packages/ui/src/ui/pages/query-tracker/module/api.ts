@@ -523,13 +523,13 @@ export function getQueryResultMetaList(
             command: 'get_query_result',
             parameters: {stage, query_id, result_index: ind},
         }));
-        const {results} = (await ytApiV4Id.executeBatch<QueryResultMeta>(YTApiId.getQueryResults, {
+        const {results} = await ytApiV4Id.executeBatch<QueryResultMeta>(YTApiId.getQueryResults, {
             parameters: {
                 requests: requests,
                 output_format: 'json',
             },
             setup: getQTApiSetup(),
-        })) as unknown as {results: BatchResultsItem<QueryResultMeta>[]};
+        });
         return results;
     };
 }

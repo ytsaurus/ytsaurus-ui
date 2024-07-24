@@ -275,3 +275,18 @@ export interface ConfigData {
     allowUserColumnPresets?: boolean;
     odinPageEnabled: boolean;
 }
+
+export type PipelineParams = {
+    pipeline_path: string;
+};
+
+export type GetPipelineStateData =
+    | 'Unknown'
+    | 'Stopped'
+    | 'Paused'
+    | 'Working'
+    | 'Draining'
+    | 'Pausing'
+    | 'Completed';
+
+export type GetFlowViewData = {};
