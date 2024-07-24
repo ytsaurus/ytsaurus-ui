@@ -5,12 +5,12 @@ export type FlowFiltersState = {
 };
 
 export const initialState: FlowFiltersState = {
-    flowViewMode: 'control',
+    flowViewMode: 'static_spec',
 };
 
 export const FLOW_VIEW_MODES = [
-    'control',
-    'spec',
+    'static_spec',
+    'dynamic_spec',
     'monitoring',
     'logs',
     'layout',
