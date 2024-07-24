@@ -1,3 +1,5 @@
+import React from 'react';
+
 import Consumer from '../../../../../pages/navigation/tabs/Consumer/Consumer';
 import Queue from '../../../../../pages/navigation/tabs/Queue/Queue';
 import ACL from '../../../../../pages/navigation/tabs/ACL/ACL';
@@ -9,8 +11,9 @@ import AccessLog from '../../../../../pages/navigation/tabs/AccessLog/AccessLog'
 import TabletErrors from '../../../../../pages/navigation/tabs/TabletErrors/TabletErrors';
 import UserAttributes from '../../../../../pages/navigation/tabs/UserAttributes/UserAttributes';
 import TableMountConfig from '../../../../../pages/navigation/tabs/TableMountConfig/TableMountConfig';
+import {Flow} from '../../../../../pages/navigation/tabs/Flow';
+
 import {Tab} from '../../../../../constants/navigation';
-import {Fragment} from 'react';
 import UIFactory from '../../../../../UIFactory';
 
 const getSupportedAttributeTypes = () => {
@@ -23,10 +26,11 @@ const getSupportedAttributeTypes = () => {
         tablet_errors: TabletErrors,
         user_attributes: UserAttributes,
         [Tab.ACCESS_LOG]: AccessLog,
-        [Tab.AUTO]: Fragment,
+        [Tab.AUTO]: React.Fragment,
         [Tab.CONSUMER]: Consumer,
         [Tab.MOUNT_CONFIG]: TableMountConfig,
         [Tab.QUEUE]: Queue,
+        [Tab.FLOW]: Flow,
     };
 
     UIFactory.getNavigationExtraTabs().forEach((tab) => {

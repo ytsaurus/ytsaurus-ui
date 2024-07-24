@@ -42,10 +42,12 @@ import {Tab} from '../../../constants/navigation';
 import {RootState} from '../../../store/reducers';
 import {updateIfChanged} from '../../../utils/utils';
 import {LocationParameters} from '../../../store/location';
+import {getNavigationMapNodeFlowPreparedState, mapNodeFlowParams} from '../flow/url-mapping';
 
 export const navigationParams: LocationParameters = {
     ...tableParams,
     ...mapNodeParams,
+    ...mapNodeFlowParams,
     ...transactionMapParams,
 
     ...consumerParams,
@@ -76,6 +78,7 @@ export const navigationParams: LocationParameters = {
 
 function getNavigationNodeTypesPreparedState(state: RootState, location: {query: RootState}) {
     let res = getNavigationMapNodePreparedState(state, location);
+    res = getNavigationMapNodeFlowPreparedState(state, location);
     res = getNavigationTablePreparedState(res, location);
     res = getNavigationTransactionMapPreparedState(res, location);
     res = getNavigationConsumerPreparedState(res, location);
