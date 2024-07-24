@@ -2,4 +2,10 @@
     &__view-mode {
         margin-bottom: 20px;
     }
+
+    &__content {
+        &_view_static_spec {
+            margin-top: -10px;
+        }
+    }
 }

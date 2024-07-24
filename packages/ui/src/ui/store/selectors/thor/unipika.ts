@@ -62,3 +62,5 @@ export const getEditJsonYsonSettings = createSelector([getYsonSettings], clone_)
 export const getNodeUnrecognizedOptionsYsonSettings = createSelector([getYsonSettings], clone_);
 
 export const getPreviewCellYsonSettings = createSelector([getYsonSettings], clone_);
+
+export const getFlowSpecYsonSettings = createSelector([getYsonSettings], clone_);
