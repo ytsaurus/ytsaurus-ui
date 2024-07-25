@@ -1,5 +1,30 @@
 # Changelog
 
+## [1.49.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.48.2...ui-v1.49.0) (2024-07-25)
+
+
+### Features
+
+* **Query:** new navigation tab [YTFRONT-4235] ([428a72c](https://github.com/ytsaurus/ytsaurus-ui/commit/428a72c7163bc353a5524445e956d4ca1ff50e9e))
+* **Query:** new query aco format [YTFRONT-4238] ([a3ba06a](https://github.com/ytsaurus/ytsaurus-ui/commit/a3ba06a2317b1f54fdd23f52d7bf5795dabc4643))
+* **Table:** add "view" button for truncated cells [[#655](https://github.com/ytsaurus/ytsaurus-ui/issues/655)] ([c688f1f](https://github.com/ytsaurus/ytsaurus-ui/commit/c688f1f6e4b674c1cb79bafc523ded16948e0516))
+
+
+### Bug Fixes
+
+* **ClustersMenu:** the page should not be broken with '[' filter [YTFRONT-4272] ([7eb5c7c](https://github.com/ytsaurus/ytsaurus-ui/commit/7eb5c7cfedc28935034041a82ef989ff44e4c460))
+* **Componens/Nodes/Node:** fix for width of memory popup [[#502](https://github.com/ytsaurus/ytsaurus-ui/issues/502)] ([fc9c882](https://github.com/ytsaurus/ytsaurus-ui/commit/fc9c882e1177cce8f5f007c6a8a0d187724ffb1d))
+* **MaintenancePage:** rework maintenance activation ([c7ed6e4](https://github.com/ytsaurus/ytsaurus-ui/commit/c7ed6e4702add1a9e62dae2e278104f3be01c007))
+* **QueryTracker:** redirect to yt operations from running yql queries [[#522](https://github.com/ytsaurus/ytsaurus-ui/issues/522)] ([2a91613](https://github.com/ytsaurus/ytsaurus-ui/commit/2a916136fee38055f3e85ad1325829dd68e2fcd0))
+* **Tablet:** fix for node url [YTFRONT-4269] ([82de290](https://github.com/ytsaurus/ytsaurus-ui/commit/82de2908b58d2f18f583c6869db6de601064725c))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @ytsaurus/javascript-wrapper bumped from ^0.9.2 to ^0.9.3
+
 ## [1.48.2](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.48.1...ui-v1.48.2) (2024-07-21)
 
 
