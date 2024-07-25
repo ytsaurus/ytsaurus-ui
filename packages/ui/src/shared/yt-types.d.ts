@@ -286,6 +286,10 @@ export type PipelineParams = {
     pipeline_path: string;
 };
 
+export type ExpectedVersion = {
+    expected_version: string;
+};
+
 export type GetPipelineStateData =
     | 'Unknown'
     | 'Stopped'

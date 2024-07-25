@@ -20,7 +20,7 @@ import {
 } from '../../../../store/reducers/flow/filters';
 import {FlowStatus} from '../../../../store/reducers/flow/status';
 
-import {FlowStaticSpec} from './PipelineSpec/PipelineSpec';
+import {FlowDynamicSpec, FlowStaticSpec} from './PipelineSpec/PipelineSpec';
 import './Flow.scss';
 
 const block = cn('yt-navigation-flow');
@@ -54,6 +54,8 @@ function FlowContent({viewMode}: {viewMode: FlowViewMode}) {
     switch (viewMode) {
         case 'static_spec':
             return <FlowStaticSpec />;
+        case 'dynamic_spec':
+            return <FlowDynamicSpec />;
         default:
             return (
                 <Alert
