@@ -20,27 +20,38 @@ const initialState: FlowSpecState = {
     data: undefined,
 };
 
-export const staticSpecSlice = createSlice({
-    name: 'flow.static-spec',
-    initialState,
-    reducers: {
-        onRequest(
-            state,
-            {payload: {pipeline_path}}: PayloadAction<Pick<FlowSpecState, 'pipeline_path'>>,
-        ) {
-            Object.assign(state, {loading: true, error: undefined});
-            if (pipeline_path !== state.pipeline_path) {
-                Object.assign(state, {pipeline_path, data: undefined});
-            }
-        },
-        onSuccess(state, {payload: {data}}: PayloadAction<Pick<FlowSpecState, 'data'>>) {
-            Object.assign(state, {data, loaded: true, loading: true, error: undefined});
-        },
-        onError(state, {payload: {error}}: PayloadAction<Pick<FlowSpecState, 'error'>>) {
-            Object.assign(state, {error, loading: false});
-        },
+const reducers = {
+    onRequest(
+        state: FlowSpecState,
+        {payload: {pipeline_path}}: PayloadAction<Pick<FlowSpecState, 'pipeline_path'>>,
+    ) {
+        Object.assign(state, {loading: true, error: undefined});
+        if (pipeline_path !== state.pipeline_path) {
+            Object.assign(state, {pipeline_path, data: undefined});
+        }
     },
+    onSuccess(state: FlowSpecState, {payload: {data}}: PayloadAction<Pick<FlowSpecState, 'data'>>) {
+        Object.assign(state, {data, loaded: true, loading: false, error: undefined});
+    },
+    onError(state: FlowSpecState, {payload: {error}}: PayloadAction<Pick<FlowSpecState, 'error'>>) {
+        Object.assign(state, {error, loading: false});
+    },
+};
+
+export const staticSpecSlice = createSlice({
+    name: 'flow.staticSpec',
+    initialState,
+    reducers,
 });
 
 export const staticSpecActions = staticSpecSlice.actions;
 export const staticSpec = staticSpecSlice.reducer;
+
+export const dynamicSpecSlice = createSlice({
+    name: 'flow.dynamicSpec',
+    initialState,
+    reducers,
+});
+
+export const dynamicSpecActions = dynamicSpecSlice.actions;
+export const dynamicSpec = dynamicSpecSlice.reducer;
