@@ -5,7 +5,7 @@
   "description": "Simple tool for running YT commands in your browser.",
   "repository": {
     "type": "github",
-    "url": "https://github.com/YTsaurus/ytsaurus-ui/packages/javascript-wrapper"
+    "url": "https://github.com/ytsaurus/ytsaurus-ui/tree/main/packages/javascript-wrapper"
   },
   "files": [
     "lib"
