@@ -1,5 +1,6 @@
 .yt-navigation-flow {
-    &__view-mode {
+    &__toolbar,
+    &__state {
         margin-bottom: 20px;
     }
 
@@ -7,5 +8,9 @@
         &_view_static_spec {
             margin-top: -10px;
         }
+    }
+
+    &__status-toolbar {
+        padding-left: 50px;
     }
 }
