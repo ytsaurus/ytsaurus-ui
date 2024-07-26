@@ -97,6 +97,13 @@ export interface OperationMonitoringTabProps {
     };
 }
 
+export type NavigationFlowMonitoringProps = {
+    cluster: string;
+    monitoring_cluster?: string;
+    monitoring_project?: string;
+    attributes: unknown;
+};
+
 export type AclRoleActionsType = Partial<Omit<PreparedAclSubject | PreparedRole, 'type'>> & {
     type?: string;
 };
@@ -195,6 +202,14 @@ export interface UIFactory {
         | undefined
         | {
               component?: React.ComponentType<{cluster: string; alias: string}>;
+              urlTemplate?: string;
+              title?: string;
+          };
+
+    getMonitoringComponentForNavigationFlow():
+        | undefined
+        | {
+              component?: React.ComponentType<NavigationFlowMonitoringProps>;
               urlTemplate?: string;
               title?: string;
           };
@@ -515,6 +530,15 @@ const uiFactory: UIFactory = {
 
         return {urlTemplate, title};
     },
+    getMonitoringComponentForNavigationFlow() {
+        const {urlTemplate, title} = uiSettings.navigationFlowMonitoring ?? {};
+        if (!urlTemplate) {
+            return undefined;
+        }
+
+        return {urlTemplate, title};
+    },
+
     getStatisticsComponentForAccount() {
         return undefined;
     },

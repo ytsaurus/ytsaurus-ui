@@ -104,6 +104,18 @@ export interface UISettings {
     componentVersionsMonitoring?: UISettingsMonitoring;
 
     /**
+     * navigationFlowMonitoring.urlTemplate supports following parameters:
+     *  - {ytCluster}
+     *  - {monitoring_cluster}
+     *  - {monitoring_project}
+     *  All the parameters are optional and they are replaced with corresponding values
+     *  @example {
+     *      urlTemplate: 'https://my.monitoring.service/navigation-flow?cluster={ytCluster}&monCluster={monitoring_cluster}&monProject={monitoring_project}'
+     *  }
+     */
+    navigationFlowMonitoring?: UISettingsMonitoring;
+
+    /**
      * Allows to define regular expression to extract hash-part from version of node by named group 'hash'
      * @example reHashFromNodeVersion: '[^~]+(?<hash>[^+]+)'
      */
