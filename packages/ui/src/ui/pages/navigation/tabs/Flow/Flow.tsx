@@ -2,47 +2,64 @@ import React from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import cn from 'bem-cn-lite';
 
-import {Button, Flex, Label, LabelProps, RadioButton, Text} from '@gravity-ui/uikit';
+import {Button, Flex, Label, LabelProps, Link, RadioButton, Text} from '@gravity-ui/uikit';
 
 import format from '../../../../common/hammer/format';
 import Alert from '../../../../components/Alert/Alert';
 import Icon from '../../../../components/Icon/Icon';
 import {useUpdater} from '../../../../hooks/use-updater';
 import {useThunkDispatch} from '../../../../store/thunkDispatch';
+import {loadFlowStatus, updateFlowState} from '../../../../store/actions/flow/status';
 import {getFlowViewMode} from '../../../../store/selectors/flow/filters';
 import {getFlowStatusData} from '../../../../store/selectors/flow/status';
-import {loadFlowStatus, updateFlowState} from '../../../../store/actions/flow/status';
-import {getPath} from '../../../../store/selectors/navigation';
+import {getCluster} from '../../../../store/selectors/global';
+import {getAttributes, getPath} from '../../../../store/selectors/navigation';
 import {
     FLOW_VIEW_MODES,
     FlowViewMode,
     setFlowViewMode,
 } from '../../../../store/reducers/flow/filters';
 import {FlowStatus} from '../../../../store/reducers/flow/status';
+import UIFactory from '../../../../UIFactory';
+import {formatByParams} from '../../../../utils/format';
 
 import {FlowDynamicSpec, FlowStaticSpec} from './PipelineSpec/PipelineSpec';
 import './Flow.scss';
 
 const block = cn('yt-navigation-flow');
 
-const MODE_OPTIONS = FLOW_VIEW_MODES.map((value) => {
-    return {value, content: format.ReadableField(value)};
-});
+function useViewModeOptions() {
+    const res = React.useMemo(() => {
+        const {urlTemplate, component} = UIFactory.getMonitoringComponentForNavigationFlow() ?? {};
+        const options =
+            Boolean(component) || Boolean(urlTemplate)
+                ? FLOW_VIEW_MODES
+                : FLOW_VIEW_MODES.filter((item) => item !== 'monitoring');
+
+        return options.map((value) => {
+            return {value, content: format.ReadableField(value)};
+        });
+    }, []);
+    return res;
+}
 
 export function Flow() {
     const dispatch = useDispatch();
     const viewMode = useSelector(getFlowViewMode);
+
+    const options = useViewModeOptions();
+
     return (
         <div className={block()}>
             <Flex className={block('toolbar')}>
                 <RadioButton<FlowViewMode>
-                    options={MODE_OPTIONS}
+                    options={options}
                     value={viewMode}
                     onUpdate={(value) => dispatch(setFlowViewMode(value))}
                 />
                 <FlowStatusToolbar />
             </Flex>
-            <FlowState />
+            {viewMode === 'static_spec' || viewMode === 'dynamic_spec' ? <FlowState /> : null}
             <div className={block('content', {view: viewMode})}>
                 <FlowContent viewMode={viewMode} />
             </div>
@@ -56,6 +73,8 @@ function FlowContent({viewMode}: {viewMode: FlowViewMode}) {
             return <FlowStaticSpec />;
         case 'dynamic_spec':
             return <FlowDynamicSpec />;
+        case 'monitoring':
+            return <FlowMonitoring />;
         default:
             return (
                 <Alert
@@ -117,4 +136,41 @@ function FlowState() {
             </Label>
         </Flex>
     );
+}
+
+function FlowMonitoring() {
+    const {
+        component: Component,
+        title,
+        urlTemplate,
+    } = UIFactory.getMonitoringComponentForNavigationFlow() ?? {};
+    const attributes = useSelector(getAttributes);
+    const {monitoring_cluster, monitoring_project} = attributes;
+    const cluster = useSelector(getCluster);
+
+    if (Component) {
+        return (
+            <Component
+                cluster={cluster}
+                monitoring_cluster={monitoring_cluster}
+                monitoring_project={monitoring_project}
+                attributes={attributes}
+            />
+        );
+    } else if (urlTemplate) {
+        return (
+            <Link
+                target="_blank"
+                href={formatByParams(urlTemplate, {
+                    ytCluster: cluster,
+                    monitoring_cluster,
+                    monitoring_project,
+                })}
+            >
+                {title || 'Monitoring'}
+            </Link>
+        );
+    } else {
+        return null;
+    }
 }
