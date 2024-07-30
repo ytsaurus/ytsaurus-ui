@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.49.1](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.49.0...ui-v1.49.1) (2024-07-30)
+
+
+### Bug Fixes
+
+* **QueryTracker:** use treatValAsData option of unpika by default ([2009d96](https://github.com/ytsaurus/ytsaurus-ui/commit/2009d96f9b822dbbd3e043628faa681731c4cd77))
+
 ## [1.49.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.48.2...ui-v1.49.0) (2024-07-25)
 
 
