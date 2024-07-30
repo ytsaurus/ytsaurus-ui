@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.10.0](https://github.com/ytsaurus/ytsaurus-ui/compare/javascript-wrapper-v0.9.3...javascript-wrapper-v0.10.0) (2024-07-30)
+
+
+### Features
+
+* **javascript-wrapper:** add new commands for pipelines [YTFRONT-3978] ([da70313](https://github.com/ytsaurus/ytsaurus-ui/commit/da70313424b8042e6782d8fe9a642c9703465d54))
+
 ## [0.9.3](https://github.com/ytsaurus/ytsaurus-ui/compare/javascript-wrapper-v0.9.2...javascript-wrapper-v0.9.3) (2024-07-25)
 
 
