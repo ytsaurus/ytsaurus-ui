@@ -42,7 +42,7 @@ export default class Node {
 
     constructor(data, params) {
         const node = this;
-        const {parsedPath, transaction} = params;
+        const {parsedPath, transaction, contentMode} = params;
 
         const name = ypath.getValue(data);
         const attributes = ypath.getAttributes(data);
@@ -71,7 +71,12 @@ export default class Node {
             };
         }
         node.path = node.parsedPath.stringify();
-        node.pathState = prepareNavigationState(node.parsedPath, transaction);
+        node.pathState = prepareNavigationState(
+            node.parsedPath,
+            transaction,
+            undefined,
+            contentMode,
+        );
 
         // RESOURCES
         node.recursiveResourceUsage = attributes.recursive_resource_usage;
