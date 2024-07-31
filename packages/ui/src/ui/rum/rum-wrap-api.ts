@@ -89,10 +89,10 @@ type YTApiV4 = {
         ...args: ApiMethodParameters<{password_sha256: string; user: string; description: string}>
     ): Promise<string>;
 
-    getPipelineSpec(...args: ApiMethodParameters<PipelineParams>): Promise<unknown>;
+    getPipelineSpec(...args: ApiMethodParameters<PipelineParams>): Promise<any>;
     setPipelineSpec(...args: ApiMethodParameters<PipelineParams & ExpectedVersion>): Promise<void>;
     removePipelineSpec(...args: ApiMethodParameters<PipelineParams>): Promise<void>;
-    getPipelineDynamicSpec(...args: ApiMethodParameters<PipelineParams>): Promise<unknown>;
+    getPipelineDynamicSpec(...args: ApiMethodParameters<PipelineParams>): Promise<any>;
     setPipelineDynamicSpec(
         ...args: ApiMethodParameters<PipelineParams & ExpectedVersion>
     ): Promise<void>;

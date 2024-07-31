@@ -23,7 +23,6 @@ import {
     getFlowStaticSpecFirstLoading,
 } from '../../../../../store/selectors/flow/specs';
 import {getFlowSpecYsonSettings} from '../../../../../store/selectors/thor/unipika';
-import {getPath} from '../../../../../store/selectors/navigation';
 import {FlowSpecState} from '../../../../../store/reducers/flow/specs';
 
 import Yson from '../../../../../components/Yson/Yson';
@@ -151,10 +150,9 @@ function EditSpecDialog({
     );
 }
 
-export function FlowStaticSpec() {
+export function FlowStaticSpec({pipeline_path: path}: {pipeline_path: string}) {
     const dispatch = useThunkDispatch();
 
-    const path = useSelector(getPath);
     const data = useSelector(getFlowStaticSpecData);
     const error = useSelector(getFlowStaticSpecError);
     const firstLoading = useSelector(getFlowStaticSpecFirstLoading);
@@ -184,10 +182,9 @@ export function FlowStaticSpec() {
     );
 }
 
-export function FlowDynamicSpec() {
+export function FlowDynamicSpec({pipeline_path: path}: {pipeline_path: string}) {
     const dispatch = useThunkDispatch();
 
-    const path = useSelector(getPath);
     const data = useSelector(getFlowDynamicSpecData);
     const error = useSelector(getFlowStaticSpecError);
     const firstLoading = useSelector(getFlowDynamicSpecFirstLoading);
