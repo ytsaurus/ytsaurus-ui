@@ -12,9 +12,9 @@ export const FLOW_VIEW_MODES = [
     'static_spec',
     'dynamic_spec',
     'monitoring',
-    'logs',
+    //'logs',
     'layout',
-    'graph',
+    //'graph',
 ] as const;
 
 export type FlowViewMode = (typeof FLOW_VIEW_MODES)[number];

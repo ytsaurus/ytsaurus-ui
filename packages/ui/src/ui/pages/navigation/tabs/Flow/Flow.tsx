@@ -23,6 +23,7 @@ import {FlowStatus} from '../../../../store/reducers/flow/status';
 import UIFactory from '../../../../UIFactory';
 import {formatByParams} from '../../../../utils/format';
 
+import {FlowLayout} from './FlowLayout/FlowLayout';
 import {FlowDynamicSpec, FlowStaticSpec} from './PipelineSpec/PipelineSpec';
 import './Flow.scss';
 
@@ -68,13 +69,21 @@ export function Flow() {
 }
 
 function FlowContent({viewMode}: {viewMode: FlowViewMode}) {
+    const path = useSelector(getPath);
+
+    if (!path) {
+        return null;
+    }
+
     switch (viewMode) {
         case 'static_spec':
-            return <FlowStaticSpec />;
+            return <FlowStaticSpec pipeline_path={path} />;
         case 'dynamic_spec':
-            return <FlowDynamicSpec />;
+            return <FlowDynamicSpec pipeline_path={path} />;
         case 'monitoring':
             return <FlowMonitoring />;
+        case 'layout':
+            return <FlowLayout path={path} />;
         default:
             return (
                 <Alert
@@ -88,21 +97,21 @@ function FlowContent({viewMode}: {viewMode: FlowViewMode}) {
 function FlowStatusToolbar() {
     const dispatch = useThunkDispatch();
 
-    const path = useSelector(getPath);
+    const pipeline_path = useSelector(getPath);
 
     const updateFn = React.useCallback(() => {
-        return dispatch(loadFlowStatus(path));
-    }, [path, dispatch]);
+        return dispatch(loadFlowStatus(pipeline_path));
+    }, [pipeline_path, dispatch]);
 
     useUpdater(updateFn);
 
     const {onStart, onStop, onPause} = React.useMemo(() => {
         return {
-            onStart: () => dispatch(updateFlowState({pipeline_path: path, state: 'start'})),
-            onStop: () => dispatch(updateFlowState({pipeline_path: path, state: 'stop'})),
-            onPause: () => dispatch(updateFlowState({pipeline_path: path, state: 'pause'})),
+            onStart: () => dispatch(updateFlowState({pipeline_path, state: 'start'})),
+            onStop: () => dispatch(updateFlowState({pipeline_path, state: 'stop'})),
+            onPause: () => dispatch(updateFlowState({pipeline_path, state: 'pause'})),
         };
-    }, [dispatch, path]);
+    }, [dispatch, pipeline_path]);
 
     return (
         <Flex className={block('status-toolbar')} alignItems="center" gap={3}>

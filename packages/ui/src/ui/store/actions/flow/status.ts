@@ -2,7 +2,7 @@ import {ThunkAction} from 'redux-thunk';
 
 import {ytApiV4} from '../../../rum/rum-wrap-api';
 import {RootState} from '../../../store/reducers';
-import CancelHelper from '../../../utils/cancel-helper';
+import CancelHelper, {isCancelled} from '../../../utils/cancel-helper';
 import {getFlowStatusPipelinePath} from '../../../store/selectors/flow/status';
 import {flowStatusActions} from '../../reducers/flow/status';
 
@@ -24,7 +24,9 @@ export function loadFlowStatus(pipeline_path: string): AsyncAction<Promise<void>
                     dispatch(flowStatusActions.onSuccess({data}));
                 },
                 (error) => {
-                    dispatch(flowStatusActions.onError({error}));
+                    if (!isCancelled(error)) {
+                        dispatch(flowStatusActions.onError({error}));
+                    }
                 },
             );
     };
