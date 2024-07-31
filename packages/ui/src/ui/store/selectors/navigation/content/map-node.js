@@ -9,7 +9,7 @@ import hammer from '../../../../common/hammer';
 import {getParsedPath, getTransaction} from '../../../../store/selectors/navigation';
 import {makeGetSetting} from '../../../../store/selectors/settings';
 import {NAMESPACES, SettingName} from '../../../../../shared/constants/settings';
-import {NAVIGATION_MAP_NODE_TABLE_ID} from '../../../../constants/navigation';
+import {ContentMode, NAVIGATION_MAP_NODE_TABLE_ID} from '../../../../constants/navigation';
 import Node from '../../../../utils/navigation/content/map-nodes/node';
 import {MediumType} from '../../../../constants/index';
 import Chooser from '../../../../pages/navigation/content/MapNode/Chooser';
@@ -137,9 +137,17 @@ const getSortState = (state) => state.tables[NAVIGATION_MAP_NODE_TABLE_ID];
 export const getNodesData = (state) => state.navigation.content.mapNode.nodesData;
 
 const getNodes = createSelector(
-    [getNodesData, getParsedPath, getTransaction],
-    (nodesData, parsedPath, transaction) => {
-        return _.map(nodesData, (data) => new Node(data, {parsedPath, transaction}));
+    [getNodesData, getParsedPath, getTransaction, getContentMode],
+    (nodesData, parsedPath, transaction, contentMode) => {
+        return _.map(
+            nodesData,
+            (data) =>
+                new Node(data, {
+                    parsedPath,
+                    transaction,
+                    contentMode: contentMode !== ContentMode.DEFAULT ? contentMode : undefined,
+                }),
+        );
     },
 );
 
