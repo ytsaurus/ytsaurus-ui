@@ -3,6 +3,8 @@ import {
     getAllPoolNames,
     getAllPoolTreeNames,
     getAllUserNames,
+    getCluster,
+    getClusterConfigByName,
     getCurrentUserName,
 } from '../../../store/selectors/global';
 import _ from 'lodash';
@@ -154,8 +156,14 @@ export function getOperationsListTimeRange(state: RootState) {
 }
 
 export const getOperationsListFiltersParameters_FOR_YTFRONT_2838 = createSelector(
-    [getOperationsListFilterParameters, getCurrentUserName, getOperationsListTimeRange],
-    (filters, login, {from_time, to_time}) => {
+    [getOperationsListFilterParameters, getCurrentUserName, getOperationsListTimeRange, getCluster],
+    (filters, login, {from_time, to_time}, cluster) => {
+        const clusterConfig = getClusterConfigByName(cluster);
+
+        if (clusterConfig.operationPageSettings?.disableOptimizationForYTFRONT2838) {
+            return filters;
+        }
+
         const {state, ...rest} = filters;
         if (Boolean(from_time || to_time) && !_.some(rest, Boolean)) {
             rest.user = login;

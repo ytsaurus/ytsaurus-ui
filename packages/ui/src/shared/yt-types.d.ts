@@ -108,6 +108,10 @@ export interface ClusterConfig {
         title?: string;
         text?: string;
     };
+
+    operationPageSettings?: {
+        disableOptimizationForYTFRONT2838: boolean;
+    };
 }
 
 export interface SubRequest<K extends string, T extends BaseBatchParams> {
