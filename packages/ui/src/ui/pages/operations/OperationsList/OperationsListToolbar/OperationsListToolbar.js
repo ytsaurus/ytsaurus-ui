@@ -222,7 +222,7 @@ class OperationsListToolbar extends React.PureComponent {
 
     renderWarning_uiissue_2838() {
         return (
-            <div className={block('ytfront-2383')}>
+            <div className={block('ytfront-2838')}>
                 At the moment there is the unresolved performance issue with getting unfiltered list
                 of operations from archive,
                 <br />
