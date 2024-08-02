@@ -2,4 +2,19 @@
     &__show-attributes {
         margin: -4px 0;
     }
+
+    &__name {
+        min-width: 400px;
+    }
+
+    &__name-title {
+        padding-left: 4px;
+        &_level_1 {
+            padding-left: 44px;
+        }
+    }
+
+    & &__td-name {
+        padding-left: 4px;
+    }
 }
