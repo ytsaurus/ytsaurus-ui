@@ -14,6 +14,7 @@ export type FlowLayoutState = {
     data: GetFlowViewData | undefined;
 
     expandedComputations: Record<string, true>;
+    expandedWorkers: Record<string, true>;
 };
 
 export const initialState: FlowLayoutState = {
@@ -25,6 +26,7 @@ export const initialState: FlowLayoutState = {
     data: undefined,
 
     expandedComputations: EMPTY_OBJECT,
+    expandedWorkers: EMPTY_OBJECT,
 };
 
 export const layoutSlice = createSlice({
@@ -54,6 +56,16 @@ export const layoutSlice = createSlice({
                 delete state.expandedComputations[computation_id];
             } else {
                 state.expandedComputations[computation_id] = true;
+            }
+        },
+        onExpandWorker(
+            state,
+            {payload: {worker_address}}: PayloadAction<{worker_address: string}>,
+        ) {
+            if (state.expandedWorkers[worker_address] === true) {
+                delete state.expandedWorkers[worker_address];
+            } else {
+                state.expandedWorkers[worker_address] = true;
             }
         },
     },
