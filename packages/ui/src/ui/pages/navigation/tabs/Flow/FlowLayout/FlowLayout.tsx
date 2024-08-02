@@ -16,6 +16,7 @@ import {ExpandButton} from '../../../../../components/ExpandButton';
 import {useUpdater} from '../../../../../hooks/use-updater';
 import {
     expandFlowLayoutComputation,
+    expandFlowLayoutWorker,
     loadFlowLayout,
 } from '../../../../../store/actions/flow/layout';
 import {
@@ -29,15 +30,19 @@ import './FlowLayout.scss';
 
 const block = cn('yt-navigation-flow-layout');
 
-export function FlowLayout({path}: {path: string}) {
+export function FlowLayout({path, viewMode}: {path: string; viewMode: 'computations' | 'workers'}) {
     const dispatch = useDispatch();
 
     const pipeline_path = useSelector(getFlowLayoutPipelinePath);
     const error = useSelector(getFlowLayoutError);
-    const data = useSelector(getFlowLayoutData);
+    const getData = useSelector(getFlowLayoutData);
+
+    const data = React.useMemo(() => {
+        return getData(viewMode);
+    }, [viewMode, getData]);
 
     const samePath = path === pipeline_path;
-    const columns = useFlowLayoutColumn();
+    const columns = useFlowLayoutColumn(viewMode);
 
     const updateFn = React.useCallback(() => {
         dispatch(loadFlowLayout(path));
@@ -61,38 +66,48 @@ export function FlowLayout({path}: {path: string}) {
     );
 }
 
-function useFlowLayoutColumn() {
+function useFlowLayoutColumn(type: 'computations' | 'workers') {
     const dispatch = useDispatch();
 
     const res = React.useMemo(() => {
+        const isComputations = type === 'computations';
         const columns: Array<Column<FlowLayoutDataItem>> = [
             {
-                name: 'Computation Id / Partition Id',
+                name: isComputations
+                    ? 'Computation / Partition Id'
+                    : 'Worker address / Partition Id',
                 className: block('td-name'),
                 render({row}) {
                     let content;
                     if ('$attributes' in row) {
                         const {
-                            $attributes: {computation_id, expanded},
+                            $attributes: {name, expanded},
                         } = row;
                         content = (
                             <>
                                 <ExpandButton
+                                    className={block('expand', {hidden: row.$value.length === 0})}
                                     expanded={expanded}
                                     toggleExpanded={() => {
-                                        dispatch(expandFlowLayoutComputation({computation_id}));
+                                        dispatch(
+                                            isComputations
+                                                ? expandFlowLayoutComputation({
+                                                      computation_id: name,
+                                                  })
+                                                : expandFlowLayoutWorker({worker_address: name}),
+                                        );
                                         requestAnimationFrame(() => {
                                             window.dispatchEvent(new Event('resize'));
                                         });
                                     }}
                                 />
-                                <span className={block('name-title')}>{computation_id}</span>
+                                <span className={block('name-title')}>{name}</span>
                             </>
                         );
                     } else {
                         content = (
                             <span className={block('name-title', {level: '1'})}>
-                                {row.partition.partition_id}
+                                {row.partition?.partition_id}
                             </span>
                         );
                     }
@@ -103,7 +118,7 @@ function useFlowLayoutColumn() {
                 name: 'Partition state',
                 render({row}) {
                     return 'partition' in row
-                        ? row.partition.state
+                        ? row.partition?.state
                         : format.Number(row.$value.length);
                 },
                 width: 120,
@@ -112,20 +127,30 @@ function useFlowLayoutColumn() {
                 name: 'Job',
                 render({row}) {
                     return 'partition' in row
-                        ? row.partition.current_job_id
+                        ? row.partition?.current_job_id
                         : format.Number(row.$attributes.job_count);
                 },
                 width: 400,
             },
-            {
-                name: 'Worker address',
-                render({row}) {
-                    return 'job' in row
-                        ? row.job?.worker_address
-                        : format.Number(row.$attributes.worker_count);
-                },
-                width: 400,
-            },
+            isComputations
+                ? {
+                      name: 'Worker address',
+                      render({row}) {
+                          return 'job' in row
+                              ? row.job?.worker_address
+                              : format.Number(row.$attributes.worker_count);
+                      },
+                      width: 400,
+                  }
+                : {
+                      name: 'Computation',
+                      render({row}) {
+                          return 'partition' in row
+                              ? row.partition?.computation_id
+                              : format.Number(row.$attributes.partition_count);
+                      },
+                      width: 400,
+                  },
             {
                 name: 'actions',
                 header: null,
@@ -143,6 +168,6 @@ function useFlowLayoutColumn() {
             },
         ];
         return columns;
-    }, []);
+    }, [type]);
     return res;
 }

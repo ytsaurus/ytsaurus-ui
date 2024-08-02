@@ -60,7 +60,7 @@ export function Flow() {
                 />
                 <FlowStatusToolbar />
             </Flex>
-            {viewMode === 'static_spec' || viewMode === 'dynamic_spec' ? <FlowState /> : null}
+            {viewMode !== 'monitoring' ? <FlowState /> : null}
             <div className={block('content', {view: viewMode})}>
                 <FlowContent viewMode={viewMode} />
             </div>
@@ -82,8 +82,9 @@ function FlowContent({viewMode}: {viewMode: FlowViewMode}) {
             return <FlowDynamicSpec pipeline_path={path} />;
         case 'monitoring':
             return <FlowMonitoring />;
-        case 'layout':
-            return <FlowLayout path={path} />;
+        case 'workers':
+        case 'computations':
+            return <FlowLayout path={path} viewMode={viewMode} />;
         default:
             return (
                 <Alert

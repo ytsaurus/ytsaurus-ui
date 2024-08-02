@@ -5,16 +5,17 @@ export type FlowFiltersState = {
 };
 
 export const initialState: FlowFiltersState = {
-    flowViewMode: 'static_spec',
+    flowViewMode: 'graph',
 };
 
 export const FLOW_VIEW_MODES = [
-    'static_spec',
-    'dynamic_spec',
+    'graph',
+    'computations',
+    'workers',
     'monitoring',
     //'logs',
-    'layout',
-    //'graph',
+    'static_spec',
+    'dynamic_spec',
 ] as const;
 
 export type FlowViewMode = (typeof FLOW_VIEW_MODES)[number];

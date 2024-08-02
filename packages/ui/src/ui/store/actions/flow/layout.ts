@@ -40,3 +40,13 @@ export function expandFlowLayoutComputation({
         dispatch(flowLayoutActions.onExpandComputation({computation_id}));
     };
 }
+
+export function expandFlowLayoutWorker({
+    worker_address,
+}: {
+    worker_address: string;
+}): AsyncAction<void> {
+    return (dispatch) => {
+        dispatch(flowLayoutActions.onExpandWorker({worker_address}));
+    };
+}
