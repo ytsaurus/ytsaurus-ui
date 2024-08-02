@@ -30,3 +30,13 @@ export function loadFlowLayout(pipeline_path: string): AsyncAction<Promise<void>
             );
     };
 }
+
+export function expandFlowLayoutComputation({
+    computation_id,
+}: {
+    computation_id: string;
+}): AsyncAction<void> {
+    return (dispatch) => {
+        dispatch(flowLayoutActions.onExpandComputation({computation_id}));
+    };
+}

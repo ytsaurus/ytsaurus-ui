@@ -1,6 +1,9 @@
 import {PayloadAction, createSlice} from '@reduxjs/toolkit';
+
 import {YTError} from '../../../../@types/types';
 import {GetFlowViewData} from '../../../../shared/yt-types';
+
+import {EMPTY_OBJECT} from '../../../constants/empty';
 
 export type FlowLayoutState = {
     loaded: boolean;
@@ -9,6 +12,8 @@ export type FlowLayoutState = {
 
     pipeline_path: string | undefined;
     data: GetFlowViewData | undefined;
+
+    expandedComputations: Record<string, true>;
 };
 
 export const initialState: FlowLayoutState = {
@@ -18,6 +23,8 @@ export const initialState: FlowLayoutState = {
 
     pipeline_path: undefined,
     data: undefined,
+
+    expandedComputations: EMPTY_OBJECT,
 };
 
 export const layoutSlice = createSlice({
@@ -38,6 +45,16 @@ export const layoutSlice = createSlice({
         },
         onError(state, {payload: {error}}: PayloadAction<Pick<FlowLayoutState, 'error'>>) {
             Object.assign(state, {error});
+        },
+        onExpandComputation(
+            state,
+            {payload: {computation_id}}: PayloadAction<{computation_id: string}>,
+        ) {
+            if (state.expandedComputations[computation_id] === true) {
+                delete state.expandedComputations[computation_id];
+            } else {
+                state.expandedComputations[computation_id] = true;
+            }
         },
     },
 });
