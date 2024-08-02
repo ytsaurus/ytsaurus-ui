@@ -10,6 +10,7 @@ const defaultSettings: UnipikaSettings = {
     omitStructNull: true,
     maxListSize: 50,
     maxStringSize: undefined,
+    treatValAsData: true,
 };
 
 export function convert(
