@@ -1,11 +1,12 @@
-import type {ActionD, YTError} from '../../../../types';
-import {CELL_PREVIEW} from '../../../../constants/navigation/modals/cell-preview';
+import type {ActionD, YTError} from '../../../types';
+import {CELL_PREVIEW} from '../../../constants/modals/cell-preview';
 
 export interface CellPreviewState {
     visible: boolean;
     loading: boolean;
     data: any | undefined;
-    cellPath: string;
+    ytCliDownloadCommand?: string;
+    noticeText?: string;
     error?: YTError;
 }
 
@@ -13,7 +14,6 @@ export const initialState: CellPreviewState = {
     visible: false,
     loading: false,
     data: undefined,
-    cellPath: '',
 };
 
 export default function cellPreviewReducer(
@@ -22,10 +22,20 @@ export default function cellPreviewReducer(
 ): CellPreviewState {
     switch (action.type) {
         case CELL_PREVIEW.REQUEST: {
-            return {...state, cellPath: action.data.cellPath, loading: true, error: undefined};
+            return {
+                ...state,
+                ytCliDownloadCommand: action.data.ytCliDownloadCommand,
+                loading: true,
+                error: undefined,
+            };
         }
         case CELL_PREVIEW.SUCCESS: {
-            return {...state, data: action.data.data, loading: false};
+            return {
+                ...state,
+                data: action.data.data,
+                noticeText: action.data.noticeText,
+                loading: false,
+            };
         }
         case CELL_PREVIEW.FAILURE: {
             return {...state, error: action.data.error, loading: false};
@@ -40,7 +50,7 @@ export default function cellPreviewReducer(
 }
 
 export type CellPreviewAction =
-    | ActionD<typeof CELL_PREVIEW.REQUEST, Pick<CellPreviewState, 'cellPath'>>
-    | ActionD<typeof CELL_PREVIEW.SUCCESS, Pick<CellPreviewState, 'data'>>
+    | ActionD<typeof CELL_PREVIEW.REQUEST, Pick<CellPreviewState, 'ytCliDownloadCommand'>>
+    | ActionD<typeof CELL_PREVIEW.SUCCESS, Pick<CellPreviewState, 'data' | 'noticeText'>>
     | ActionD<typeof CELL_PREVIEW.FAILURE, Pick<CellPreviewState, 'error'>>
     | ActionD<typeof CELL_PREVIEW.PARTITION, Partial<CellPreviewState>>;
