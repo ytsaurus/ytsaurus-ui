@@ -21,6 +21,7 @@ export interface YsonProps {
     virtualized?: boolean;
     className?: string;
     tableSettings?: Settings;
+    customLayout?: (args: {toolbar: React.ReactNode; content: React.ReactNode}) => React.ReactNode;
 }
 
 interface State {
@@ -126,7 +127,8 @@ export default class Yson extends Component<YsonProps, State> {
     }
 
     render() {
-        const {inline, children, folding, extraTools, className, tableSettings} = this.props;
+        const {inline, children, folding, extraTools, className, tableSettings, customLayout} =
+            this.props;
         const {convertedValue, settings} = this.state;
 
         const classes = block('unipika-wrapper')(
@@ -146,6 +148,7 @@ export default class Yson extends Component<YsonProps, State> {
                                 value={convertedValue}
                                 settings={settings!}
                                 extraTools={extraTools}
+                                customLayout={customLayout}
                             />
                         ) : (
                             <pre

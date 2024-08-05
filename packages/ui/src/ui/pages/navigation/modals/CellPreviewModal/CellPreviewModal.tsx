@@ -69,6 +69,14 @@ export const CellPreviewModal: React.FC = () => {
                         value={data}
                         tableSettings={{dynamicRenderScrollParentGetter: undefined}}
                         settings={unipikaSettings}
+                        customLayout={({toolbar, content}) => {
+                            return (
+                                <>
+                                    <div className={b('toolbar')}>{toolbar}</div>
+                                    {content}
+                                </>
+                            );
+                        }}
                     />
                 )}
             </Flex>
