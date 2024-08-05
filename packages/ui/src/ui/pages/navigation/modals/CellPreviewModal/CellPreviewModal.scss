@@ -29,4 +29,12 @@
         white-space: nowrap;
         text-overflow: ellipsis;
     }
+
+    &__toolbar {
+        position: sticky;
+        width: 100%;
+        z-index: 2;
+        top: -15px;
+        background-color: var(--g-color-base-background);
+    }
 }

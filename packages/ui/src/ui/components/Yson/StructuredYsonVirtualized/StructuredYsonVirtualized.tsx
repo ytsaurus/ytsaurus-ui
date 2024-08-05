@@ -32,6 +32,7 @@ interface Props {
     settings: UnipikaSettings;
     extraTools?: React.ReactNode;
     tableSettings?: DT100.Settings;
+    customLayout?: (args: {toolbar: React.ReactNode; content: React.ReactNode}) => React.ReactNode;
 }
 
 interface State {
@@ -386,11 +387,18 @@ export default class StructuredYsonVirtualized extends React.PureComponent<Props
     render() {
         return (
             <React.Fragment>
-                <WithStickyToolbar
-                    className={block()}
-                    toolbar={this.renderToolbar()}
-                    content={this.renderTable()}
-                />
+                {this.props.customLayout ? (
+                    this.props.customLayout({
+                        toolbar: this.renderToolbar(),
+                        content: this.renderTable(),
+                    })
+                ) : (
+                    <WithStickyToolbar
+                        className={block()}
+                        toolbar={this.renderToolbar()}
+                        content={this.renderTable()}
+                    />
+                )}
                 {this.renderFullValueModal()}
             </React.Fragment>
         );
