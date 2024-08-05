@@ -1,6 +1,19 @@
 .cell-preview-modal {
     &__content {
         height: 70vh;
+
+        .data-table__head {
+            display: none;
+        }
+
+        .data-table__td {
+            padding: 0;
+            overflow: visible;
+        }
+
+        .data-table__row {
+            height: 20px;
+        }
     }
 
     &__wrapper {
@@ -32,9 +45,13 @@
 
     &__toolbar {
         position: sticky;
-        width: 100%;
         z-index: 2;
-        top: -15px;
+        top: 0;
+        left: 0;
         background-color: var(--g-color-base-background);
+    }
+
+    &__yson-container {
+        overflow: auto;
     }
 }
