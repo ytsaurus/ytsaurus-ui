@@ -255,6 +255,12 @@ export function runQuery(
         const query = getQueryDraft(state);
 
         const newQuery = {...query};
+        if ('access_control_objects' in newQuery) {
+            newQuery.access_control_objects = newQuery.access_control_objects?.filter(
+                (i) => i !== SHARED_QUERY_ACO,
+            );
+        }
+
         const {query_id} = await wrapApiPromiseByToaster(dispatch(startQuery(newQuery, options)), {
             toasterName: 'start_query',
             skipSuccessToast: true,

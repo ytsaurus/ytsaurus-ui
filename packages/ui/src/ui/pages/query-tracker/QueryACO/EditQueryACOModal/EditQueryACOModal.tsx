@@ -36,7 +36,7 @@ export const EditQueryACOModal: FC<Props> = ({query_id}) => {
     return (
         <>
             <Button view="flat" onClick={toggleVisible}>
-                Edit ACO <Icon data={PencilIcon} size={16} />
+                <Icon data={PencilIcon} size={16} /> Edit ACO
             </Button>
             {visible && (
                 <YTDFDialog<FormValues>

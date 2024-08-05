@@ -36,6 +36,8 @@ import {MonacoLanguage} from '../../../constants/monaco';
 import hammer from '../../../common/hammer';
 import {updateTitle} from '../../../store/actions/global';
 import {EditQueryACOModal} from '../QueryACO/EditQueryACOModal/EditQueryACOModal';
+import {ShareButton} from '../QueryResults/ShareButton';
+import {WaitForFont} from '../../../containers/WaitForFont/WaitForFont';
 
 const b = block('query-container');
 
@@ -181,39 +183,28 @@ const QueryEditorView = React.memo(function QueryEditorView({
 
     return (
         <div className={b('query')}>
-            <MonacoEditor
-                editorRef={editorRef}
-                value={text || ''}
-                language={getLanguageByEngine(engine)}
-                className={b('editor')}
-                onChange={updateQueryText}
-                monacoConfig={monacoConfig}
-            />
+            <WaitForFont>
+                <MonacoEditor
+                    editorRef={editorRef}
+                    value={text || ''}
+                    language={getLanguageByEngine(engine)}
+                    className={b('editor')}
+                    onChange={updateQueryText}
+                    monacoConfig={monacoConfig}
+                />
+            </WaitForFont>
             <div className={b('actions')}>
                 <div className="query-run-action">
-                    <Button
-                        qa="qt-run"
-                        view="action"
-                        onClick={runQueryCallback}
-                        className={b('action-button')}
-                    >
+                    <Button qa="qt-run" view="action" onClick={runQueryCallback}>
                         <Icon data={playIcon} />
                         Run
                     </Button>
                     {engine === QueryEngine.YQL ? (
                         <>
-                            <Button
-                                qa="qt-validate"
-                                className={b('action-button')}
-                                onClick={validateQueryCallback}
-                            >
+                            <Button qa="qt-validate" onClick={validateQueryCallback}>
                                 Validate
                             </Button>
-                            <Button
-                                qa="qt-explain"
-                                className={b('action-button')}
-                                onClick={explainQueryCallback}
-                            >
+                            <Button qa="qt-explain" onClick={explainQueryCallback}>
                                 Explain
                             </Button>
                         </>
@@ -241,6 +232,7 @@ const ResultView = React.memo(function ResultView({
             minimized={resultViewMode === 'minimized'}
             toolbar={
                 <>
+                    <ShareButton />
                     <EditQueryACOModal query_id={query.id} />
                     {resultViewMode === 'split' ? (
                         <Button

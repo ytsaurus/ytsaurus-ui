@@ -5,7 +5,6 @@ import React, {useCallback} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {RootState} from '../../../../store/reducers';
 import transposeIcon from '../../../../assets/img/svg/transpose.svg';
-import NodesLeftIcon from '@gravity-ui/icons/svgs/nodes-left.svg';
 import {SET_QUERY_RESULTS_SETTINGS} from '../../module/query_result/actions';
 import {QueryItem} from '../../module/api';
 import {QueryResultReadyState, QueryResultsViewMode} from '../../module/query_result/types';
@@ -13,9 +12,6 @@ import {TableColumnsSelector} from './TableColumnsSelector';
 import {QueryResultDownloadManager} from './QueryResultDownloadManager';
 
 import './index.scss';
-import {isSupportedShareQuery} from '../../module/query_aco/selectors';
-import {toggleShareQuery} from '../../module/query/actions';
-import {SHARED_QUERY_ACO, getCurrentQueryACO} from '../../module/query/selectors';
 
 type Props = {
     query: QueryItem;
@@ -40,8 +36,6 @@ export function QueryResultActions({query, resultIndex}: Props) {
     const queryResult = useSelector((state: RootState) =>
         getQueryResult(state, query.id, resultIndex),
     );
-    const showShareButton = useSelector(isSupportedShareQuery);
-    const queryAco = useSelector(getCurrentQueryACO);
 
     const handleTransposedChange = useCallback(() => {
         dispatch({
@@ -89,10 +83,6 @@ export function QueryResultActions({query, resultIndex}: Props) {
         [(queryResult as QueryResultReadyState)?.settings, dispatch],
     );
 
-    const handleToggleShareQuery = useCallback(() => {
-        dispatch(toggleShareQuery());
-    }, [dispatch]);
-
     return queryResult?.resultReady === true ? (
         <div className={b()}>
             {queryResult?.settings?.viewMode === QueryResultsViewMode.Table && (
@@ -110,16 +100,6 @@ export function QueryResultActions({query, resultIndex}: Props) {
                         columns={queryResult.settings?.visibleColumns}
                         onChange={handleColumnsChange}
                     />
-                    {showShareButton && (
-                        <Button
-                            className={b('item')}
-                            onClick={handleToggleShareQuery}
-                            view="normal"
-                        >
-                            <Icon data={NodesLeftIcon} width={16} />{' '}
-                            {queryAco.includes(SHARED_QUERY_ACO) ? 'Unshare' : 'Share'}
-                        </Button>
-                    )}
                     <QueryResultDownloadManager
                         queryId={query.id}
                         resultIndex={resultIndex}
