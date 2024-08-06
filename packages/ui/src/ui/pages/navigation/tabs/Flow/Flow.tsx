@@ -2,11 +2,12 @@ import React from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import cn from 'bem-cn-lite';
 
-import {Button, Flex, Label, LabelProps, Link, RadioButton, Text} from '@gravity-ui/uikit';
+import {Button, Flex, Link, RadioButton, Text} from '@gravity-ui/uikit';
 
 import format from '../../../../common/hammer/format';
 import Alert from '../../../../components/Alert/Alert';
 import Icon from '../../../../components/Icon/Icon';
+import StatusLabel from '../../../../components/StatusLabel/StatusLabel';
 import {useUpdater} from '../../../../hooks/use-updater';
 import {useThunkDispatch} from '../../../../store/thunkDispatch';
 import {loadFlowStatus, updateFlowState} from '../../../../store/actions/flow/status';
@@ -19,7 +20,6 @@ import {
     FlowViewMode,
     setFlowViewMode,
 } from '../../../../store/reducers/flow/filters';
-import {FlowStatus} from '../../../../store/reducers/flow/status';
 import UIFactory from '../../../../UIFactory';
 import {formatByParams} from '../../../../utils/format';
 
@@ -58,7 +58,6 @@ export function Flow() {
                     value={viewMode}
                     onUpdate={(value) => dispatch(setFlowViewMode(value))}
                 />
-                <FlowStatusToolbar />
             </Flex>
             {viewMode !== 'monitoring' ? <FlowState /> : null}
             <div className={block('content', {view: viewMode})}>
@@ -115,35 +114,27 @@ function FlowStatusToolbar() {
     }, [dispatch, pipeline_path]);
 
     return (
-        <Flex className={block('status-toolbar')} alignItems="center" gap={3}>
+        <Flex className={block('status-toolbar')} alignItems="center" gap={2}>
             <Button view="outlined" onClick={onStart}>
-                <Icon awesome="play-circle" />
+                <Icon awesome="play-circle" /> Start
             </Button>
             <Button view="outlined" onClick={onPause}>
-                <Icon awesome="pause-circle" />
+                <Icon awesome="pause-circle" /> Pause
             </Button>
             <Button view="outlined" onClick={onStop}>
-                <Icon awesome="stop-circle" />
+                <Icon awesome="stop-circle" /> Stop
             </Button>
         </Flex>
     );
 }
 
-const STATE_TO_THEME: Partial<Record<FlowStatus, LabelProps['theme']>> = {
-    Completed: 'success',
-    Working: 'info',
-    Pausing: 'info',
-    Stopped: 'danger',
-};
-
 function FlowState() {
     const value = useSelector(getFlowStatusData);
     return (
-        <Flex className={block('state')} alignItems="center" gap={1}>
+        <Flex className={block('state')} alignItems="center" gap={2}>
             <Text variant="header-1">Processing catalog: </Text>
-            <Label size="m" theme={STATE_TO_THEME[value!]}>
-                <Text variant="code-3">{value}</Text>
-            </Label>
+            <StatusLabel label={value} />
+            <FlowStatusToolbar />
         </Flex>
     );
 }
