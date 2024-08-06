@@ -64,11 +64,13 @@
         }
     }
 
-    &__cell-copy-to-clipboard {
+    &__cell-content {
+        padding-right: 30px;
+    }
+
+    &__cell-action {
         position: absolute;
         top: 4px;
         right: 4px;
-        width: 16px;
-        height: 16px;
     }
 }

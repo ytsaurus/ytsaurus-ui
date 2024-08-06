@@ -17,6 +17,7 @@ import {QueryEngine} from './engines';
 import {getLastSelectedACONamespaces} from './query_aco/selectors';
 import {setSettingByKey} from '../../../store/actions/settings';
 import unipika from '../../../common/thor/unipika';
+import {CancelTokenSource} from 'axios';
 
 function getQTApiSetup(): {proxy?: string} {
     const QT_CLUSTER = getQueryTrackerCluster();
@@ -371,6 +372,7 @@ export function readQueryResults(
     settings: {
         cellsSize: number;
     },
+    cancellation?: (token: CancelTokenSource) => void,
 ): ThunkAction<Promise<QueryResult>, RootState, any, any> {
     return async (_dispatch, getState) => {
         const state = getState();
@@ -393,6 +395,7 @@ export function readQueryResults(
                 },
             },
             setup: {...getQTApiSetup(), ...JSONParser},
+            cancellation,
         })) as QueryResult;
         return {...result, rows: mapQueryRowNames(result.rows)};
     };
