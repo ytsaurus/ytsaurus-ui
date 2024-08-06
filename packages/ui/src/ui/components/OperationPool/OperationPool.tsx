@@ -15,15 +15,11 @@ const block = cn('operation-pool');
 
 const renderButton = (onEdit?: () => void, reserve?: boolean) => {
     return !onEdit ? null : (
-        <Button
-            size="s"
-            view="flat-secondary"
-            onClick={onEdit}
-            title="Edit pool"
-            className={block('pool-edit', {reserve})}
-        >
-            <Icon awesome="pencil" />
-        </Button>
+        <span className={block('pool-edit', {reserve})}>
+            <Button size="s" view="flat-secondary" onClick={onEdit} title="Edit pool">
+                <Icon awesome="pencil" />
+            </Button>
+        </span>
     );
 };
 
