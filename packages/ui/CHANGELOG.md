@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.50.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.49.1...ui-v1.50.0) (2024-08-06)
+
+
+### Features
+
+* **javascript-wrapper:** add new commands for pipelines [YTFRONT-3978] ([da70313](https://github.com/ytsaurus/ytsaurus-ui/commit/da70313424b8042e6782d8fe9a642c9703465d54))
+* now we can disable filter optimization on the operations page via cluster config [[#700](https://github.com/ytsaurus/ytsaurus-ui/issues/700)] ([771294a](https://github.com/ytsaurus/ytsaurus-ui/commit/771294ab5bb33b2b11413da2c52ec8e85d175f3d))
+
+
+### Bug Fixes
+
+* **Navigation:** do not reset contentMode on navigation [[#511](https://github.com/ytsaurus/ytsaurus-ui/issues/511)] ([916ede3](https://github.com/ytsaurus/ytsaurus-ui/commit/916ede342fac224d6c077704be929999ab326863))
+* **Navigation:** now breadcrumbs dropdown items are clickable [[#528](https://github.com/ytsaurus/ytsaurus-ui/issues/528)] ([2df7319](https://github.com/ytsaurus/ytsaurus-ui/commit/2df73197d827d0912ef8203f0357f1dfda681ecd))
+
 ## [1.49.1](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.49.0...ui-v1.49.1) (2024-07-30)
 
 
