@@ -33,12 +33,9 @@ export const getFlowLayoutData = createSelector(
     [getFlowLayoutRawData, getFlowLayoutExpandedComputations, getFlowLayoutExpandedWorkers],
     (data, expandedComputations, expandedWorkers) => {
         return (mode: 'computations' | 'workers') => {
-            switch (mode) {
-                case 'computations':
-                    return handleExpandedNames(getFlowLayoutPartitions(data), expandedComputations);
-                case 'workers':
-                    return handleExpandedNames(getFlowLayoutWorkers(data), expandedWorkers);
-            }
+            return mode === 'computations'
+                ? handleExpandedNames(getFlowLayoutPartitions(data), expandedComputations)
+                : handleExpandedNames(getFlowLayoutWorkers(data), expandedWorkers);
         };
     },
 );

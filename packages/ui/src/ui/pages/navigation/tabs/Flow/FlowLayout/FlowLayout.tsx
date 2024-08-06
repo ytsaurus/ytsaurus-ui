@@ -21,7 +21,7 @@ import {
 } from '../../../../../store/actions/flow/layout';
 import {
     FlowLayoutDataItem,
-    getFlowLayoutData,
+    getFlowLayoutData,  
     getFlowLayoutError,
     getFlowLayoutPipelinePath,
 } from '../../../../../store/selectors/flow/layout';

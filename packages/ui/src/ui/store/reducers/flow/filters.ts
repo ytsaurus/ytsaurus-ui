@@ -13,7 +13,6 @@ export const FLOW_VIEW_MODES = [
     'computations',
     'workers',
     'monitoring',
-    //'logs',
     'static_spec',
     'dynamic_spec',
 ] as const;
