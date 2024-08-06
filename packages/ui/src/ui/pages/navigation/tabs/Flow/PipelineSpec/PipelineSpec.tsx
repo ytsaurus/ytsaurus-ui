@@ -70,9 +70,9 @@ function PipelineSpec({path, data, error, name, onSave}: PipelineSpecProps) {
                 path={path}
                 name={name}
                 visible={showEdit}
-                onSave={onSave}
+                onSpecApply={(spec) => onSave({...data!, spec})}
                 onClose={() => setShowEdit(false)}
-                data={data}
+                spec={data?.spec}
                 settings={settings}
             />
         </React.Fragment>
@@ -87,21 +87,23 @@ type FormValues = {
 function EditSpecDialog({
     path,
     visible,
-    data,
+    spec,
     onClose,
-    onSave,
+    onSpecApply,
     name,
     settings,
-}: Pick<PipelineSpecProps, 'name' | 'path' | 'data' | 'onSave'> & {
+}: Pick<PipelineSpecProps, 'name' | 'path'> & {
+    spec?: unknown;
     visible: boolean;
     onClose: () => void;
     settings: UnipikaSettings;
+    onSpecApply: (spec: unknown) => Promise<void>;
 }) {
     const [error, setError] = React.useState<YTError | undefined>();
 
     const text = React.useMemo(() => {
-        return {value: JSON.stringify(data, null, 4)};
-    }, [data]);
+        return {value: JSON.stringify(spec, null, 4)};
+    }, [spec]);
 
     return (
         visible && (
@@ -118,9 +120,10 @@ function EditSpecDialog({
                     const {text} = f.getState().values;
                     if (text.value) {
                         try {
-                            return onSave(JSON.parse(text.value));
+                            return await onSpecApply(JSON.parse(text.value));
                         } catch (e: any) {
                             setError(e);
+                            return Promise.reject(e);
                         }
                     } else {
                         return Promise.resolve();
