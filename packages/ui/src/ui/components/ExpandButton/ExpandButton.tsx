@@ -7,15 +7,16 @@ import './ExpandButton.scss';
 const block = cn('yt-expanded-button');
 
 type Props = {
+    className?: string;
     expanded: boolean;
     toggleExpanded: () => void;
     inline?: boolean;
 };
 
-export const ExpandButton: FC<Props> = ({expanded, inline, toggleExpanded}) => {
+export const ExpandButton: FC<Props> = ({expanded, inline, toggleExpanded, className}) => {
     return (
         <Button
-            className={block({inline})}
+            className={block({inline}, className)}
             view="flat-secondary"
             title={expanded ? 'Collapse' : 'Expand'}
             onClick={toggleExpanded}

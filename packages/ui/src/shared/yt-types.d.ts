@@ -284,6 +284,10 @@ export type PipelineParams = {
     pipeline_path: string;
 };
 
+export type ExpectedVersion = {
+    expected_version?: string | number;
+};
+
 export type GetPipelineStateData =
     | 'Unknown'
     | 'Stopped'
@@ -293,4 +297,42 @@ export type GetPipelineStateData =
     | 'Pausing'
     | 'Completed';
 
-export type GetFlowViewData = {};
+export type GetFlowViewData = {
+    execution_spec: {
+        layout: {
+            value: {
+                jobs: Record<FlowViewJobId, FlowViewJobInfo>;
+                partitions: Record<FlowViewPartitionId, FlwoViewPartitionInfo>;
+            };
+        };
+    };
+    workers: Record<FlowViewWorkerId, FlowViewWorkerInfo>;
+};
+
+type FlowViewJobId = string;
+type FlowViewPartitionId = string;
+type FlowViewWorkerId = string;
+
+export type FlwoViewPartitionInfo = {
+    computation_id: FlowViewPartitionId;
+    lower_key: Array<unkonwn>;
+    upper_key: Arary<unknown>;
+    parameters: unknown;
+    partition_id: string;
+    state: 'executing';
+    state_epoch: number;
+    state_timestamp: string;
+    current_job_id?: FlowViewJobId;
+};
+
+export type FlowViewJobInfo = {
+    job_id: FlowViewJobId;
+    lease_id: string;
+    partition_id: FlowViewPartitionId;
+    worker_address: string;
+    worker_incarnation_id: string;
+};
+
+export type FlowViewWorkerInfo = {
+    address: FlowViewWorkerId;
+};

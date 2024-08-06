@@ -8,6 +8,7 @@ import {YT_API_REQUEST_ID_HEADER} from '../../shared/constants';
 import {
     BatchResultsItem,
     BatchSubRequest,
+    ExpectedVersion,
     GetFlowViewData,
     GetParams,
     GetPipelineStateData,
@@ -88,11 +89,13 @@ type YTApiV4 = {
         ...args: ApiMethodParameters<{password_sha256: string; user: string; description: string}>
     ): Promise<string>;
 
-    getPipelineSpec(...args: ApiMethodParameters<PipelineParams>): Promise<unknown>;
-    setPipelineSpec(...args: ApiMethodParameters<PipelineParams>): Promise<void>;
+    getPipelineSpec(...args: ApiMethodParameters<PipelineParams>): Promise<any>;
+    setPipelineSpec(...args: ApiMethodParameters<PipelineParams & ExpectedVersion>): Promise<void>;
     removePipelineSpec(...args: ApiMethodParameters<PipelineParams>): Promise<void>;
-    getPipelineDynamicSpec(...args: ApiMethodParameters<PipelineParams>): Promise<unknown>;
-    setPipelineDynamicSpec(...args: ApiMethodParameters<PipelineParams>): Promise<void>;
+    getPipelineDynamicSpec(...args: ApiMethodParameters<PipelineParams>): Promise<any>;
+    setPipelineDynamicSpec(
+        ...args: ApiMethodParameters<PipelineParams & ExpectedVersion>
+    ): Promise<void>;
     startPipeline(...args: ApiMethodParameters<PipelineParams>): Promise<void>;
     stopPipeline(...args: ApiMethodParameters<PipelineParams>): Promise<void>;
     pausePipeline(...args: ApiMethodParameters<PipelineParams>): Promise<void>;
