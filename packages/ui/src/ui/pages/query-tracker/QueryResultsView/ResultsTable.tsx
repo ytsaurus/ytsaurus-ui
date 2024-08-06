@@ -61,7 +61,13 @@ const useYqlTable = (
 };
 
 export const ResultsTable = React.memo(
-    function ResultsTable({result}: {result: QueryResultReadyState}) {
+    function ResultsTable({
+        result,
+        onShowPreview,
+    }: {
+        result: QueryResultReadyState;
+        onShowPreview: (colName: string, rowIndex: number) => void;
+    }) {
         const [results, columns, visibleColumns, transposed, startIndex] = useYqlTable(result);
         return (
             <YQLTable
@@ -75,6 +81,7 @@ export const ResultsTable = React.memo(
                 defaultNumberAlign={'right'}
                 startIndex={startIndex}
                 theme={YCLOUD_THEME}
+                onShowPreview={onShowPreview}
             />
         );
     },
