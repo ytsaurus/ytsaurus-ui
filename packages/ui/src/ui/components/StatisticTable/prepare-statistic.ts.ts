@@ -75,7 +75,11 @@ export function prepareMetricsTree(statistics: StatisticTree): StatisticTreeInne
     return metricsTree[TREE_ROOT_NAME];
 }
 
-export function filterStatisticTree(tree: StatisticTreeInner, currentFilter = '') {
+export function filterStatisticTree(tree?: StatisticTreeInner, currentFilter = '') {
+    if (!tree) {
+        return [];
+    }
+
     const filteredTree = hammer.treeList.filterTree(
         tree,
         (entry: MetricsEntry) => entry.name.indexOf(currentFilter) !== -1,
