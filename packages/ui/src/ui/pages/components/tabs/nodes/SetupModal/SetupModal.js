@@ -400,7 +400,7 @@ export class SetupModal extends Component {
                     },
                     {
                         key: 'alerts',
-                        value: this.renderRadioGroup(section, 'alerts'),
+                        value: this.renderRadioGroup(section, 'alertCount'),
                     },
                     {
                         key: 'scheduler jobs',
