@@ -45,6 +45,7 @@ const initialQueryDraftState: QueryState['draft'] = {
     query: '',
     files: [],
     settings: {},
+    access_control_object: DEFAULT_QUERY_ACO, // deprecated parameter
     access_control_objects: [DEFAULT_QUERY_ACO],
 };
 
@@ -141,14 +142,10 @@ export function reducer(state = initState, action: Actions): QueryState {
         }
 
         case UPDATE_ACO_QUERY: {
-            const access_control_objects = action.data;
-
             return {
                 ...state,
-                queryItem: state.queryItem
-                    ? {...state.queryItem, access_control_objects}
-                    : undefined,
-                draft: {...state.draft, access_control_objects},
+                queryItem: state.queryItem ? {...state.queryItem, ...action.data} : undefined,
+                draft: {...state.draft, ...action.data},
             };
         }
     }

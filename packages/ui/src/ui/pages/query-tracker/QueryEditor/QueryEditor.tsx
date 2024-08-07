@@ -35,6 +35,7 @@ import {QueryEngine} from '../module/engines';
 import {MonacoLanguage} from '../../../constants/monaco';
 import hammer from '../../../common/hammer';
 import {updateTitle} from '../../../store/actions/global';
+import {EditQueryACOModal} from '../QueryACO/EditQueryACOModal/EditQueryACOModal';
 
 const b = block('query-container');
 
@@ -240,6 +241,7 @@ const ResultView = React.memo(function ResultView({
             minimized={resultViewMode === 'minimized'}
             toolbar={
                 <>
+                    <EditQueryACOModal query_id={query.id} />
                     {resultViewMode === 'split' ? (
                         <Button
                             className={b('meta-action')}

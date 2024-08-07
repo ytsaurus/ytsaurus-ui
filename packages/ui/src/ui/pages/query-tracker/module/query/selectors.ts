@@ -1,7 +1,7 @@
 import forOwn_ from 'lodash/forOwn';
 import {createSelector} from 'reselect';
 import {RootState} from '../../../../store/reducers';
-import {QTRequestOptions, QueryStatus} from '../api';
+import {DraftQuery, QTRequestOptions, QueryItem, QueryStatus} from '../api';
 import {
     getSettingQueryTrackerStage,
     getSettingQueryTrackerYQLAgentStage,
@@ -11,6 +11,7 @@ import {QTEditorError} from '../types/editor';
 import {YTError} from '../../../../types';
 import {isYTError} from '../../../../../shared/utils';
 import {getQueryResults} from '../query_result/selectors';
+import {selectIsMultipleAco} from '../query_aco/selectors';
 
 const QT_STAGE = getQueryTrackerStage();
 const getState = (state: RootState) => state.queryTracker.query;
@@ -100,11 +101,19 @@ export const getQueryEditorErrors = (state: RootState): QTEditorError[] => {
 export const getDirtySinceLastSubmit = (state: RootState) =>
     state.queryTracker.query.dirtySinceLastSubmit;
 
-export const getCurrentQueryACO = (state: RootState) =>
-    state.queryTracker.query?.queryItem?.access_control_objects || [DEFAULT_QUERY_ACO];
+const getAco = (isMultipleAco: boolean, state?: QueryItem | DraftQuery): string[] => {
+    if (isMultipleAco) return state?.access_control_objects ?? [DEFAULT_QUERY_ACO];
 
-export const getCurrentDraftQueryACO = (state: RootState) =>
-    state.queryTracker.query?.draft?.access_control_objects || [DEFAULT_QUERY_ACO];
+    return state?.access_control_object ? [state?.access_control_object] : [DEFAULT_QUERY_ACO];
+};
+
+export const getCurrentQueryACO = (state: RootState) => {
+    return getAco(selectIsMultipleAco(state), state.queryTracker.query?.queryItem);
+};
+
+export const getCurrentDraftQueryACO = (state: RootState) => {
+    return getAco(selectIsMultipleAco(state), state.queryTracker.query?.draft);
+};
 
 export const getProgressYQLStatistics = (state: RootState) => {
     return state.queryTracker?.query?.queryItem?.progress?.yql_statistics;

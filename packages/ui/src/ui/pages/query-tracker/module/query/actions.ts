@@ -28,6 +28,7 @@ import {wrapApiPromiseByToaster} from '../../../../utils/utils';
 import {prepareQueryPlanIds} from './utills';
 import {chytApiAction, spytApiAction} from '../../../../utils/strawberryControllerApi';
 import guid from '../../../../common/hammer/guid';
+import {selectIsMultipleAco} from '../query_aco/selectors';
 
 export const REQUEST_QUERY = 'query-tracker/REQUEST_QUERY';
 export type RequestQueryAction = Action<typeof REQUEST_QUERY>;
@@ -73,7 +74,10 @@ export type SetQueryClusterClique = ActionD<
 >;
 
 export const UPDATE_ACO_QUERY = 'query-tracker/UPDATE_ACO_QUERY';
-export type UpdateACOQueryAction = ActionD<typeof UPDATE_ACO_QUERY, string[]>;
+export type UpdateACOQueryAction = ActionD<
+    typeof UPDATE_ACO_QUERY,
+    {access_control_object: string} | {access_control_objects: Array<string>}
+>;
 
 export const setCurrentClusterToQuery =
     (): ThunkAction<void, RootState, unknown, any> => (dispatch, getState) => {
@@ -249,7 +253,9 @@ export function runQuery(
     return async (dispatch, getState) => {
         const state = getState();
         const query = getQueryDraft(state);
-        const {query_id} = await wrapApiPromiseByToaster(dispatch(startQuery(query, options)), {
+
+        const newQuery = {...query};
+        const {query_id} = await wrapApiPromiseByToaster(dispatch(startQuery(newQuery, options)), {
             toasterName: 'start_query',
             skipSuccessToast: true,
             errorTitle: 'Failed to start query',
@@ -306,13 +312,19 @@ export function setQueryACO({
     aco: string[];
     query_id: string;
 }): ThunkAction<Promise<unknown>, RootState, any, AnyAction> {
-    return (dispatch) => {
+    return (dispatch, getState) => {
+        const isMultipleAco = selectIsMultipleAco(getState());
         return wrapApiPromiseByToaster(dispatch(updateACOQuery({query_id, aco})), {
             toasterName: 'update_aco_query',
             skipSuccessToast: true,
             errorTitle: 'Failed to update query ACO',
         }).then(() => {
-            dispatch({type: UPDATE_ACO_QUERY, data: aco});
+            dispatch({
+                type: UPDATE_ACO_QUERY,
+                data: isMultipleAco
+                    ? {access_control_objects: aco}
+                    : {access_control_object: aco[0]},
+            });
         });
     };
 }
@@ -322,9 +334,14 @@ export function setDraftQueryACO({
 }: {
     aco: string[];
 }): ThunkAction<Promise<unknown>, RootState, any, AnyAction> {
-    return (dispatch) => {
+    return (dispatch, getState) => {
+        const isMultipleAco = selectIsMultipleAco(getState());
         return dispatch(addACOToLastSelected(aco)).then(() =>
-            dispatch(updateQueryDraft({access_control_objects: aco})),
+            dispatch(
+                updateQueryDraft(
+                    isMultipleAco ? {access_control_objects: aco} : {access_control_object: aco[0]},
+                ),
+            ),
         );
     };
 }
@@ -333,8 +350,8 @@ export const toggleShareQuery =
     (): ThunkAction<unknown, RootState, any, AnyAction> => async (dispatch, getState) => {
         const state = getState();
         const query = selectQuery(state);
-
         if (!query) return;
+
         let aco = query.access_control_objects || [DEFAULT_QUERY_ACO];
 
         if (aco.includes(SHARED_QUERY_ACO)) {
@@ -348,6 +365,6 @@ export const toggleShareQuery =
         await dispatch(requestQueriesList());
         dispatch({
             type: UPDATE_ACO_QUERY,
-            data: aco,
+            data: {access_control_objects: aco},
         });
     };
