@@ -1,55 +1,44 @@
-import * as React from 'react';
-import {useState} from 'react';
+import React, {FC, useState} from 'react';
+import {Button, Icon} from '@gravity-ui/uikit';
 import {YTDFDialog, makeErrorFields} from '../../../../components/Dialog/Dialog';
-import Button from '../../../../components/Button/Button';
-import Icon from '../../../../components/Icon/Icon';
 import {useQueryACO} from '../useQueryACO';
+import {useToggle} from 'react-use';
+import PencilIcon from '@gravity-ui/icons/svgs/pencil.svg';
+import {useDispatch, useSelector} from 'react-redux';
+import {selectIsMultipleAco} from '../../module/query_aco/selectors';
+import {requestQueriesList} from '../../module/queries_list/actions';
 
-export interface Props {
+type Props = {
     query_id: string;
-    className?: string;
-}
+};
 
 interface FormValues {
     aco: string[];
 }
 
-export default function EditQueryACOModal({query_id, className}: Props) {
-    const {selectACOOptions, changeCurrentQueryACO, isFlight, currentQueryACO} = useQueryACO();
-    const [error, setError] = useState(undefined);
-    const [visible, setVisible] = useState(false);
+export const EditQueryACOModal: FC<Props> = ({query_id}) => {
+    const dispatch = useDispatch();
+    const isMultipleAco = useSelector(selectIsMultipleAco);
+    const {selectACOOptions, changeCurrentQueryACO, currentQueryACO} = useQueryACO();
+    const [error, setError] = useState<Error | undefined>(undefined);
+    const [visible, toggleVisible] = useToggle(false);
 
-    const handleSubmit = (values: FormValues) => {
-        return changeCurrentQueryACO({aco: values.aco, query_id})
-            .then(() => undefined)
-            .catch((err) => {
-                setError(err);
-                throw err;
-            });
+    const handleSubmit = async (values: FormValues) => {
+        try {
+            await changeCurrentQueryACO({aco: values.aco, query_id});
+            await dispatch(requestQueriesList());
+        } catch (err) {
+            setError(err as Error);
+            throw err;
+        }
     };
 
     return (
-        <span
-            className={className}
-            onClick={(event) => {
-                event.stopPropagation();
-            }}
-            onKeyDown={(event) => {
-                event.stopPropagation();
-            }}
-        >
-            <Button
-                onClick={() => {
-                    setVisible(true);
-                }}
-                disabled={isFlight}
-                view={'flat-secondary'}
-                size={'m'}
-                width={'auto'}
-            >
-                <Icon awesome="pencil"></Icon>
+        <>
+            <Button view="flat" onClick={toggleVisible}>
+                Edit ACO <Icon data={PencilIcon} size={16} />
             </Button>
-            {visible ? (
+            {visible && (
                 <YTDFDialog<FormValues>
                     pristineSubmittable
                     visible={visible}
@@ -58,7 +47,7 @@ export default function EditQueryACOModal({query_id, className}: Props) {
                     footerProps={{textApply: 'Update'}}
                     onClose={() => {
                         setError(undefined);
-                        setVisible(false);
+                        toggleVisible();
                     }}
                     onAdd={(form) => {
                         return handleSubmit(form.getState().values);
@@ -76,12 +65,13 @@ export default function EditQueryACOModal({query_id, className}: Props) {
                                 placeholder: 'ACO',
                                 width: 'max',
                                 filterable: true,
+                                multiple: isMultipleAco,
                             },
                         },
                         ...makeErrorFields([error]),
                     ]}
                 />
-            ) : null}
-        </span>
+            )}
+        </>
     );
-}
+};

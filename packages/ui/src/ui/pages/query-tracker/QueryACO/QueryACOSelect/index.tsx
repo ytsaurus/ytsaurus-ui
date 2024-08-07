@@ -3,15 +3,12 @@ import {Select} from '@gravity-ui/uikit';
 import {useCallback} from 'react';
 import {useQueryACO} from '../useQueryACO';
 
-import Link from '../../../../components/Link/Link';
-import {genNavigationUrl} from '../../../../utils/navigation/navigation';
-import Icon from '../../../../components/Icon/Icon';
-
 import './QueryACOSelect.scss';
-import {SHARED_QUERY_ACO} from '../../module/query/selectors';
+import {selectIsMultipleAco} from '../../module/query_aco/selectors';
+import {useSelector} from 'react-redux';
 export const QueryACOSelect: React.FunctionComponent<{}> = () => {
-    const {selectACOOptions, isFlight, changeDraftQueryACO, currentDraftQueryACO, trackerInfo} =
-        useQueryACO();
+    const isMultipleAco = useSelector(selectIsMultipleAco);
+    const {selectACOOptions, isFlight, changeDraftQueryACO, currentDraftQueryACO} = useQueryACO();
 
     const handleACOChange = useCallback(
         (value: string[]) => {
@@ -31,24 +28,8 @@ export const QueryACOSelect: React.FunctionComponent<{}> = () => {
                 options={selectACOOptions}
                 value={currentDraftQueryACO}
                 onUpdate={handleACOChange}
-                multiple
+                multiple={isMultipleAco}
             />
-            {currentDraftQueryACO.includes(SHARED_QUERY_ACO) && (
-                <>
-                    &nbsp; &nbsp;
-                    <Link
-                        target="_blank"
-                        url={genNavigationUrl({
-                            cluster: trackerInfo.cluster_name,
-                            path: `//sys/access_control_object_namespaces/queries/${currentDraftQueryACO}`,
-                        })}
-                    >
-                        Edit {currentDraftQueryACO}
-                        &nbsp;
-                        <Icon awesome="external-link" />
-                    </Link>
-                </>
-            )}
         </>
     );
 };

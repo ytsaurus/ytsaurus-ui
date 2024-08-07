@@ -14,7 +14,7 @@ import {DEFAULT_QUERY_ACO, getQueryTrackerRequestOptions} from './query/selector
 import {UPDATE_QUERIES_LIST} from './query-tracker-contants';
 import {AnyAction} from 'redux';
 import {QueryEngine} from './engines';
-import {getLastSelectedACONamespaces} from './query_aco/selectors';
+import {getLastSelectedACONamespaces, selectIsMultipleAco} from './query_aco/selectors';
 import {setSettingByKey} from '../../../store/actions/settings';
 import unipika from '../../../common/thor/unipika';
 
@@ -80,6 +80,7 @@ export interface DraftQuery {
         execution_mode?: 'validate' | 'optimize';
     } & Record<string, string>;
     error?: unknown;
+    access_control_object: string;
     access_control_objects?: string[];
 }
 
@@ -242,6 +243,7 @@ export async function generateQueryFromTable(
             }),
             files: [],
             annotations: {},
+            access_control_object: DEFAULT_QUERY_ACO,
             access_control_objects: [DEFAULT_QUERY_ACO],
             settings: generateQuerySettings(engine, cluster),
         };
@@ -295,8 +297,17 @@ export function startQuery(
 ): ThunkAction<Promise<{query_id: QueryItemId}>, RootState, any, any> {
     return async (_dispatch, getState) => {
         const state = getState();
+        const isMultipleAco = selectIsMultipleAco(state);
         const {stage, yqlAgentStage} = getQueryTrackerRequestOptions(state);
-        const {query, engine, settings, annotations, files, access_control_objects} = queryInstance;
+        const {
+            query,
+            engine,
+            settings,
+            annotations,
+            files,
+            access_control_objects,
+            access_control_object,
+        } = queryInstance;
 
         return ytApiV4Id.startQuery(YTApiId.startQuery, {
             parameters: {
@@ -305,7 +316,7 @@ export function startQuery(
                 files,
                 engine,
                 annotations,
-                access_control_objects,
+                ...(isMultipleAco ? {access_control_objects} : {access_control_object}),
                 settings: {
                     stage: engine === 'yql' ? yqlAgentStage : undefined,
                     ...settings,
@@ -583,6 +594,7 @@ export function updateACOQuery({
 }): ThunkAction<Promise<any>, RootState, any, AnyAction> {
     return async (dispatch, getState) => {
         const state = getState();
+        const isMultipleAco = selectIsMultipleAco(state);
         const {stage} = getQueryTrackerRequestOptions(state);
 
         return ytApiV4Id
@@ -590,7 +602,9 @@ export function updateACOQuery({
                 parameters: {
                     stage,
                     query_id,
-                    access_control_objects: aco,
+                    ...(isMultipleAco
+                        ? {access_control_objects: aco}
+                        : {access_control_object: aco[0]}),
                 },
                 setup: getQTApiSetup(),
             })

@@ -27,7 +27,7 @@ export const isSupportedQtACO = (state: RootState) =>
     selectAcoState(state).data.supported_features?.access_control;
 
 export const selectIsMultipleAco = (state: RootState) =>
-    selectAcoState(state).data.supported_features?.multiple_aco;
+    Boolean(selectAcoState(state).data.supported_features?.multiple_aco);
 
 export const selectAvailableAco = (state: RootState) =>
     selectAcoState(state).data.access_control_objects;
@@ -39,6 +39,6 @@ export const getQueryTrackerInfo = (state: RootState) => selectAcoState(state).d
 export const isSupportedShareQuery = createSelector(
     [selectIsMultipleAco, selectAvailableAco],
     (isMultipleAco, aco) => {
-        return Boolean(isMultipleAco) && aco.includes(SHARED_QUERY_ACO);
+        return isMultipleAco && aco.includes(SHARED_QUERY_ACO);
     },
 );
