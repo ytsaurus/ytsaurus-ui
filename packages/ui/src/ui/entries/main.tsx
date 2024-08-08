@@ -5,6 +5,7 @@ import axios from 'axios';
 import {handleAuthError} from '../store/actions/global';
 import {YT_UI_CLUSTER_HEADER_NAME} from '../../shared/constants';
 import './main.scss';
+import './yfm-overrides.scss';
 
 yt.subscribe('error', onError);
 axios.interceptors.response.use(undefined, onAxiosError);
