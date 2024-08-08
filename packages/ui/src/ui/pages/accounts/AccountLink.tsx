@@ -12,6 +12,8 @@ interface Props {
     className?: string;
     account?: string;
     cluster?: string;
+
+    inline?: boolean;
 }
 
 export function genAccountsUrl(cluster: string, account: string) {
@@ -19,12 +21,13 @@ export function genAccountsUrl(cluster: string, account: string) {
 }
 
 export default function AccountLink(props: Props) {
-    const {cluster: propsCluster, account, className} = props;
+    const {cluster: propsCluster, account, className, inline} = props;
     const currentCluster = useSelector(getCluster);
     const cluster = propsCluster || currentCluster;
 
     return (
         <Tooltip
+            ellipsis={inline}
             className={className}
             content={
                 !account ? null : (

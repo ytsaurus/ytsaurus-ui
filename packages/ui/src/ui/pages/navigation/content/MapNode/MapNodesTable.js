@@ -229,7 +229,7 @@ class MapNodesTable extends Component {
     }
 
     static renderAccount(item, columnName) {
-        return <AccountLink account={item[columnName]} />;
+        return <AccountLink account={item[columnName]} inline />;
     }
 
     get hotkeys() {

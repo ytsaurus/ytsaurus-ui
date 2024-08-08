@@ -14,12 +14,13 @@ export type TooltipProps = Omit<
     theme?: PopoverProps['theme'] | 'fix-link-colors';
     children?: React.ReactNode;
     useFlex?: boolean;
+    ellipsis?: boolean;
 };
 
 const SHOW_HIDE_DELAY = 400;
 
 export function Tooltip(props: TooltipProps) {
-    const {content, className, children, theme, useFlex, ...rest} = props;
+    const {content, className, children, theme, useFlex, ellipsis, ...rest} = props;
 
     const anchorRef = React.useRef<HTMLDivElement>(null);
     const popoverRef = React.useRef<PopoverInstanceProps>(null);
@@ -66,7 +67,7 @@ export function Tooltip(props: TooltipProps) {
 
     return (
         <div
-            className={block({flex: useFlex, 'has-tooltip': Boolean(content)}, className)}
+            className={block({flex: useFlex, 'has-tooltip': Boolean(content), ellipsis}, className)}
             ref={anchorRef}
             onMouseOver={handleOpen}
             onMouseOut={handleClose}
