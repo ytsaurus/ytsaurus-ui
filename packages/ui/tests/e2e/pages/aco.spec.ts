@@ -32,7 +32,7 @@ test('@ACO: the permissions request button should be visible', async ({page}) =>
     await acoPage.clickOnACLTab();
     await acoPage.waitForACLTableLoad();
 
-    await expect(page.getByText('Request permissions')).toBeVisible();
+    await expect(page.getByText('Edit ACL')).toBeVisible();
 });
 
 test('@ACO: the permissions request button should be hidden', async ({page}) => {
@@ -42,5 +42,5 @@ test('@ACO: the permissions request button should be hidden', async ({page}) => 
     await acoPage.clickOnACLTab();
     await acoPage.waitForACLTableLoad();
 
-    await expect(page.getByText('Request permissions')).toBeHidden();
+    await expect(page.getByText('Edit ACL')).toBeHidden();
 });

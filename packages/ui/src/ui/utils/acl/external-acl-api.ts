@@ -65,6 +65,11 @@ export interface AclApi {
     ): Promise<SuccessColumnGroupCreate>;
     editColumnGroup(cluster: string, columnGroupValue: Partial<AclColumnGroup>): Promise<void>;
     deleteColumnGroup(cluster: string, id: string): Promise<void>;
+
+    buttonsTitle?: {
+        editAcl: string;
+        editColumnsAcl: string;
+    };
 }
 
 export interface GetAclParams {
