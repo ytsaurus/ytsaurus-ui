@@ -1,8 +1,4 @@
 .navigation-file {
-    .elements-dropdown-menu {
-        margin-left: 20px;
-    }
-
     .elements-code:not(:last-child) {
         margin-bottom: 20px;
     }
@@ -16,5 +12,9 @@
 
     &__actions {
         margin-bottom: 20px;
+    }
+
+    &__download {
+        margin-right: 20px;
     }
 }

@@ -51,7 +51,7 @@ const renderMeta = (attributes, mediumList) => {
 const renderActions = (downloadPath) => {
     return (
         <div className={block('actions')}>
-            <Button href={downloadPath} target="_blank">
+            <Button className={block('download')} href={downloadPath} target="_blank">
                 Download
             </Button>
             <NavigationExtraActions />

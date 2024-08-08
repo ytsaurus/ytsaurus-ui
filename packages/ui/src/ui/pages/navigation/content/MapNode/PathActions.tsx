@@ -284,7 +284,8 @@ function PathActions(props: Props) {
                 action: onMerge,
             },
         ]);
-
+    }
+    if (item.type === 'table' || item.type === 'file') {
         menuItems.push([
             {
                 text: 'Remote copy',
