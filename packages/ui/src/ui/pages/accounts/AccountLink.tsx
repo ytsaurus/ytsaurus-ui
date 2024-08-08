@@ -25,6 +25,7 @@ export default function AccountLink(props: Props) {
 
     return (
         <Tooltip
+            ellipsis
             className={className}
             content={
                 !account ? null : (
