@@ -3,7 +3,7 @@ import _ from 'lodash';
 import moment from 'moment';
 import cn from 'bem-cn-lite';
 
-import {Breadcrumbs} from '@gravity-ui/uikit';
+import {Breadcrumbs, Link} from '@gravity-ui/uikit';
 
 import format from '../../../../common/hammer/format';
 import {useDispatch, useSelector} from 'react-redux';
@@ -35,7 +35,6 @@ import {
 import TextInputWithDebounce from '../../../../components/TextInputWithDebounce/TextInputWithDebounce';
 import {Secondary, SecondaryBold} from '../../../../components/Text/Text';
 import SimplePagination from '../../../../components/Pagination/SimplePagination';
-import Link from '../../../../components/Link/Link';
 import Icon from '../../../../components/Icon/Icon';
 import AccountUsageColumnsButton from './AccountUsageColumnsButton';
 import {SubjectCard} from '../../../../components/SubjectLink/SubjectLink';
@@ -46,6 +45,7 @@ import {useAllUserNamesFiltered} from '../../../../hooks/global';
 import {useUpdater} from '../../../../hooks/use-updater';
 
 import './AccountUsageToolbar.scss';
+import {getAppBrowserHistory, makeRoutedURL} from '../../../../store/window-store';
 
 const block = cn('account-usage-toolbar');
 
@@ -469,6 +469,7 @@ function ViewType() {
 export function UsageBreadcrumbs() {
     const dispatch = useDispatch();
     const pathArr = useSelector(getAccountUsageTreeItemsBasePathSplitted);
+    const history = getAppBrowserHistory();
 
     const items = React.useMemo(() => {
         return _.map(pathArr, (item) => {
@@ -476,11 +477,12 @@ export function UsageBreadcrumbs() {
                 text: item.item,
                 value: item.value,
                 action: () => {
+                    history.push(makeRoutedURL(`${window.location.pathname}?path=${item.value}`));
                     dispatch(fetchAccountUsage());
                 },
             };
         });
-    }, [pathArr, dispatch]);
+    }, [pathArr, dispatch, history]);
 
     return (
         <Breadcrumbs
@@ -489,12 +491,7 @@ export function UsageBreadcrumbs() {
             lastDisplayedItemsCount={1}
             renderRootContent={() => {
                 return (
-                    <Link
-                        theme={'primary'}
-                        url={`${window.location.pathname}?path=/`}
-                        routed={true}
-                        routedPreserveLocation={true}
-                    >
+                    <Link view="secondary">
                         <Secondary>
                             <Icon awesome={'folder-tree'} />
                         </Secondary>
@@ -503,12 +500,7 @@ export function UsageBreadcrumbs() {
             }}
             renderItemContent={(item) => {
                 return (
-                    <Link
-                        theme={'primary'}
-                        url={`${window.location.pathname}?path=${(item as any).value}`}
-                        routed={true}
-                        routedPreserveLocation={true}
-                    >
+                    <Link view="secondary">
                         <PathFragment name={item.text} />
                     </Link>
                 );
