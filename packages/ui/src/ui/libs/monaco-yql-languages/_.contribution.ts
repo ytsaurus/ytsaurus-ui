@@ -12,7 +12,9 @@ interface ILangImpl {
         monacoCursorPosition: Position,
         _context: languages.CompletionContext,
         _token: CancellationToken,
-    ) => {suggestions: languages.CompletionItem[]};
+    ) =>
+        | {suggestions: languages.CompletionItem[]}
+        | Promise<{suggestions: languages.CompletionItem[]}>;
 }
 
 const languageDefinitions: {[languageId: string]: ILang} = {};
@@ -76,6 +78,7 @@ export function registerLanguage(def: ILang): void {
     lazyLanguageLoader.whenLoaded().then((mod) => {
         if (mod.provideSuggestionsFunction) {
             languages.registerCompletionItemProvider(languageId, {
+                triggerCharacters: ['`', '.', ':', '/'],
                 provideCompletionItems: mod.provideSuggestionsFunction,
             });
         }
