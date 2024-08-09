@@ -1,0 +1,31 @@
+.acl-inheritance {
+    &__modal {
+        .g-dialog-body {
+            .g-dialog-body {
+                padding: 0;
+            }
+        }
+
+        &_loading,
+        &_error {
+            .g-dialog-body {
+                min-height: 270px;
+
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+        }
+
+        &_error {
+            .g-dialog-body {
+                display: block;
+            }
+        }
+    }
+
+    &__flag {
+        font-weight: var(--yt-font-weight-bold);
+        color: var(--secondary-text);
+    }
+}
