@@ -1,4 +1,4 @@
-import React, {useCallback, useMemo, useState} from 'react';
+import React, {useCallback, useMemo} from 'react';
 import {compose} from 'redux';
 import cn from 'bem-cn-lite';
 
@@ -27,7 +27,6 @@ import Button from '../../../components/Button/Button';
 import withVisible, {WithVisibleProps} from '../../../hocs/withVisible';
 
 import UIFactory from '../../../UIFactory';
-import ErrorBlock from '../../../components/Block/Block';
 import {ACLReduxProps} from '../ACL-connect-helpers';
 
 import './ManageAcl.scss';
@@ -41,8 +40,9 @@ export type ManageAclFieldsNames =
     | 'auditors'
     | 'bossApproval'
     | 'inheritAcl'
-    | 'inheritAcl_warning'
     | 'comment';
+
+export type ManageInheritanceFieldNames = 'inheritAcl' | 'inheritAcl_warning' | 'comment';
 
 interface Props extends WithVisibleProps {
     className?: string;
@@ -56,7 +56,6 @@ interface Props extends WithVisibleProps {
     readApprovers: Array<PreparedRole>;
     disableInheritanceResponsible?: boolean | PreparedRole;
     bossApproval?: PreparedRole;
-    inheritAcl?: boolean | PreparedRole;
     error: boolean;
     manageAclError?: YTError;
     errorData?: YTError;
@@ -71,7 +70,6 @@ interface FormValues {
     readApprovers: RoleListControlProps['value'];
     inheritanceResponsible: boolean;
     bossApproval: boolean;
-    inheritAcl: boolean;
     comment?: string;
 }
 
@@ -86,7 +84,6 @@ function ManageAcl(props: Props) {
         handleShow,
         handleClose,
         bossApproval,
-        inheritAcl,
         disableInheritanceResponsible,
         auditors,
         responsible,
@@ -98,8 +95,6 @@ function ManageAcl(props: Props) {
         cancelUpdateAcl,
         updateAcl,
     } = props;
-
-    const [hasWarning, setHasWarning] = useState(false);
 
     const handleModalOpen = useCallback(() => {
         loadAclData({path, idmKind});
@@ -113,14 +108,16 @@ function ManageAcl(props: Props) {
 
     const onAdd = useCallback(
         (form: FormApi<FormValues, Partial<FormValues>>) => {
-            const {auditors, readApprovers, responsible, ...rest} = form.getState().values;
+            const {auditors, readApprovers, responsible, inheritanceResponsible, ...rest} =
+                form.getState().values;
 
             return updateAcl({
                 path,
                 idmKind,
                 values: {
                     ...rest,
-                    responsibleApproval: roleListValueToSubjectList(responsible),
+                    disableInheritance: !inheritanceResponsible,
+                    responsible: roleListValueToSubjectList(responsible),
                     auditors: roleListValueToSubjectList(auditors),
                     readApprovers: roleListValueToSubjectList(readApprovers),
                 },
@@ -170,58 +167,31 @@ function ManageAcl(props: Props) {
                     type: 'tumbler',
                     caption: 'Boss approval',
                 },
-                inheritAcl: {
-                    name: 'inheritAcl',
-                    type: 'tumbler',
-                    caption: 'Inherit ACL',
-                    onChange: (value) => {
-                        setHasWarning(!value);
-                    },
-                },
-                inheritAcl_warning: {
-                    name: 'inheritAcl_warning',
-                    type: 'block',
-                    extras: {
-                        children: hasWarning ? (
-                            <ErrorBlock
-                                type={'alert'}
-                                message={
-                                    <>
-                                        Setting <span className={block('flag')}>inherit_acl</span>{' '}
-                                        flag to <span className={block('flag')}>false</span> may
-                                        result in the loss of permissions sufficient to undo this
-                                        operation.{' '}
-                                    </>
-                                }
-                            ></ErrorBlock>
-                        ) : null,
-                    },
-                },
                 comment: {
                     name: 'comment',
                     caption: 'Comment for IDM',
                     type: 'textarea',
                 },
             }) as Record<ManageAclFieldsNames, DialogField<FormValues>>,
-        [hasWarning],
+        [],
     );
 
+    const {manageAclFields} = UIFactory.getAclApi();
     const dialogFields = useMemo(() => {
         const permissionsSettings = UIFactory.getAclPermissionsSettings();
         const idmKindConditions: {[Key in ManageAclFieldsNames]?: boolean} = {
-            inheritAcl: permissionsSettings[idmKind].allowInheritAcl,
             bossApproval: permissionsSettings[idmKind].allowBossApprovals,
             auditors: permissionsSettings[idmKind].allowAuditors,
             readApprovers: permissionsSettings[idmKind].allowReadApprovers,
             inheritanceResponsible: permissionsSettings[idmKind].allowInheritResponsibles,
         };
 
-        return UIFactory.getAclApi()
-            .manageAclFields.filter((name) =>
+        return manageAclFields
+            .filter((name) =>
                 idmKindConditions[name] !== undefined ? idmKindConditions[name] : true,
             )
             .map((name) => manageAclDialogFields[name]);
-    }, [idmKind, manageAclDialogFields]);
+    }, [idmKind, manageAclDialogFields, manageAclFields]);
 
     const renderDialog = () => {
         return (
@@ -237,7 +207,6 @@ function ManageAcl(props: Props) {
                     readApprovers: prepareRoleListValue(readApprovers),
                     auditors: prepareRoleListValue(auditors),
                     bossApproval: Boolean(bossApproval),
-                    inheritAcl: Boolean(inheritAcl),
                 }}
                 formExtras={{initialValuesEqual: isEqual_}}
                 fields={[
@@ -264,7 +233,7 @@ function ManageAcl(props: Props) {
         );
     };
 
-    return (
+    return !manageAclFields?.length ? null : (
         <ErrorBoundary>
             <div className={block(null, className)}>
                 <Button onClick={handleModalOpen}>Manage responsibles</Button>
