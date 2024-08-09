@@ -191,29 +191,16 @@ const QueryEditorView = React.memo(function QueryEditorView({
             />
             <div className={b('actions')}>
                 <div className="query-run-action">
-                    <Button
-                        qa="qt-run"
-                        view="action"
-                        onClick={runQueryCallback}
-                        className={b('action-button')}
-                    >
+                    <Button qa="qt-run" view="action" onClick={runQueryCallback}>
                         <Icon data={playIcon} />
                         Run
                     </Button>
                     {engine === QueryEngine.YQL ? (
                         <>
-                            <Button
-                                qa="qt-validate"
-                                className={b('action-button')}
-                                onClick={validateQueryCallback}
-                            >
+                            <Button qa="qt-validate" onClick={validateQueryCallback}>
                                 Validate
                             </Button>
-                            <Button
-                                qa="qt-explain"
-                                className={b('action-button')}
-                                onClick={explainQueryCallback}
-                            >
+                            <Button qa="qt-explain" onClick={explainQueryCallback}>
                                 Explain
                             </Button>
                         </>

@@ -2,10 +2,11 @@ import * as React from 'react';
 import {Select} from '@gravity-ui/uikit';
 import {useCallback} from 'react';
 import {useQueryACO} from '../useQueryACO';
-
 import './QueryACOSelect.scss';
 import {selectIsMultipleAco} from '../../module/query_aco/selectors';
 import {useSelector} from 'react-redux';
+import {hideSharedAco} from './hideSharedAco';
+
 export const QueryACOSelect: React.FunctionComponent<{}> = () => {
     const isMultipleAco = useSelector(selectIsMultipleAco);
     const {selectACOOptions, isFlight, changeDraftQueryACO, currentDraftQueryACO} = useQueryACO();
@@ -23,10 +24,10 @@ export const QueryACOSelect: React.FunctionComponent<{}> = () => {
                 filterable
                 disabled={isFlight}
                 width={'auto'}
-                label="Query access:"
+                label="Access:"
                 className={'query-aco-select'}
-                options={selectACOOptions}
-                value={currentDraftQueryACO}
+                options={hideSharedAco(selectACOOptions)}
+                value={hideSharedAco(currentDraftQueryACO)}
                 onUpdate={handleACOChange}
                 multiple={isMultipleAco}
             />

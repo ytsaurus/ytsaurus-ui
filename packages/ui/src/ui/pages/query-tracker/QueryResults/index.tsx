@@ -20,6 +20,7 @@ import './index.scss';
 import {ErrorTree} from './ErrorTree';
 import {QueryProgress} from './QueryResultActions/QueryProgress';
 import UIFactory from '../../../UIFactory';
+import {ShareButton} from './ShareButton';
 
 const b = block('query-results');
 
@@ -94,6 +95,7 @@ export const QueryResults = React.memo(function QueryResults({
         <div className={b(null, className)}>
             <div className={b('meta')}>
                 <QueryMetaInfo className={b('meta-info')} query={query} />
+                <ShareButton />
                 <div className={b('toolbar')}>{toolbar}</div>
             </div>
             <QueryProgress query={query} />
