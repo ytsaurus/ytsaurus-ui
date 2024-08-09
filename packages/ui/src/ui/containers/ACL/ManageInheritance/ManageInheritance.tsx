@@ -1,43 +1,31 @@
-import React, {useCallback, useMemo} from 'react';
+import React, {useCallback, useMemo, useState} from 'react';
 import {compose} from 'redux';
 import cn from 'bem-cn-lite';
+
+import {Dialog as CommonDialog, Loader} from '@gravity-ui/uikit';
 
 import _isEqual from 'lodash/isEqual';
 
 import {DialogField, FormApi, YTDFDialog} from '../../../components/Dialog/Dialog';
-import {Dialog as CommonDialog, Loader} from '@gravity-ui/uikit';
-
-import RoleListControl, {
-    prepareRoleListValue,
-    roleListValueToSubjectList,
-} from '../../../components/Dialog/controls/RoleListControl/RoleListControl';
 
 import {IdmKindType} from '../../../utils/acl/acl-types';
 import {PreparedRole} from '../../../utils/acl';
 import {YTError} from '../../../types';
 
-import LoadDataHandler from '../../../components/LoadDataHandler/LoadDataHandler';
+import Button from '../../../components/Button/Button';
 import Error from '../../../components/Error/Error';
 import ErrorBoundary from '../../../components/ErrorBoundary/ErrorBoundary';
-import Button from '../../../components/Button/Button';
+import LoadDataHandler from '../../../components/LoadDataHandler/LoadDataHandler';
 
 import withVisible, {WithVisibleProps} from '../../../hocs/withVisible';
 
-import './ManageAcl.scss';
+import './ManageInheritance.scss';
 import UIFactory from '../../../UIFactory';
+import ErrorBlock from '../../../components/Block/Block';
 import {ACLReduxProps} from '../ACL-connect-helpers';
+import {ManageInheritanceFieldNames} from '../ManageAcl/ManageAcl';
 
-const block = cn('acl-manage');
-
-export type ManageAclFieldsNames =
-    | 'responsible'
-    | 'inheritanceResponsible'
-    | 'readApprovers'
-    | 'auditors'
-    | 'bossApproval'
-    | 'comment';
-
-export type ManageInheritanceFieldNames = 'inheritAcl' | 'inheritAcl_warning' | 'comment';
+const block = cn('acl-inheritance');
 
 interface Props extends WithVisibleProps {
     className?: string;
@@ -46,11 +34,7 @@ interface Props extends WithVisibleProps {
     version?: string;
     normalizedPoolTree?: string;
     loading: boolean;
-    auditors: Array<PreparedRole>;
-    responsible: Array<PreparedRole>;
-    readApprovers: Array<PreparedRole>;
-    disableInheritanceResponsible?: boolean | PreparedRole;
-    bossApproval?: PreparedRole;
+    inheritAcl?: boolean | PreparedRole;
     error: boolean;
     manageAclError?: YTError;
     errorData?: YTError;
@@ -60,15 +44,11 @@ interface Props extends WithVisibleProps {
 }
 
 interface FormValues {
-    auditors: RoleListControl['props']['value'];
-    responsible: RoleListControl['props']['value'];
-    readApprovers: RoleListControl['props']['value'];
-    inheritanceResponsible: boolean;
-    bossApproval: boolean;
+    inheritAcl: boolean;
     comment?: string;
 }
 
-function ManageAcl(props: Props) {
+function ManageInheritance(props: Props) {
     const {
         className,
         path,
@@ -78,18 +58,16 @@ function ManageAcl(props: Props) {
         loading,
         handleShow,
         handleClose,
-        bossApproval,
-        disableInheritanceResponsible,
-        auditors,
-        responsible,
-        readApprovers,
+        inheritAcl,
         manageAclError,
-        error,
-        errorData,
         loadAclData,
         cancelUpdateAcl,
         updateAcl,
+        error,
+        errorData,
     } = props;
+
+    const [hasWarning, setHasWarning] = useState(false);
 
     const handleModalOpen = useCallback(() => {
         loadAclData({path, idmKind});
@@ -103,18 +81,13 @@ function ManageAcl(props: Props) {
 
     const onAdd = useCallback(
         (form: FormApi<FormValues, Partial<FormValues>>) => {
-            const {auditors, readApprovers, responsible, inheritanceResponsible, ...rest} =
-                form.getState().values;
+            const {...rest} = form.getState().values;
 
             return updateAcl({
                 path,
                 idmKind,
                 values: {
                     ...rest,
-                    disableInheritance: !inheritanceResponsible,
-                    responsible: roleListValueToSubjectList(responsible),
-                    auditors: roleListValueToSubjectList(auditors),
-                    readApprovers: roleListValueToSubjectList(readApprovers),
                 },
                 version,
             });
@@ -125,68 +98,55 @@ function ManageAcl(props: Props) {
     const manageAclDialogFields = useMemo(
         () =>
             ({
-                responsible: {
-                    name: 'responsible',
-                    type: 'acl-roles',
-                    caption: 'Responsible',
-                    extras: {
-                        maxVisibleCount: 3,
-                        placeholder: 'Who should approve...',
-                    },
-                },
-                inheritanceResponsible: {
-                    name: 'inheritanceResponsible',
+                inheritAcl: {
+                    name: 'inheritAcl',
                     type: 'tumbler',
-                    caption: 'Inherit responsible',
-                },
-                readApprovers: {
-                    name: 'readApprovers',
-                    type: 'acl-roles',
-                    caption: 'Read approvers',
-                    extras: {
-                        maxVisibleCount: 3,
-                        placeholder: 'Who should approve read requests...',
+                    caption: 'Inherit ACL',
+                    onChange: (value) => {
+                        setHasWarning(!value);
                     },
                 },
-                auditors: {
-                    name: 'auditors',
-                    type: 'acl-roles',
-                    caption: 'Auditors',
+                inheritAcl_warning: {
+                    name: 'inheritAcl_warning',
+                    type: 'block',
                     extras: {
-                        maxVisibleCount: 3,
-                        placeholder: 'Who should audit ACL change...',
+                        children: hasWarning ? (
+                            <ErrorBlock
+                                type={'alert'}
+                                message={
+                                    <>
+                                        Setting <span className={block('flag')}>inherit_acl</span>{' '}
+                                        flag to <span className={block('flag')}>false</span> may
+                                        result in the loss of permissions sufficient to undo this
+                                        operation.{' '}
+                                    </>
+                                }
+                            ></ErrorBlock>
+                        ) : null,
                     },
-                },
-                bossApproval: {
-                    name: 'bossApproval',
-                    type: 'tumbler',
-                    caption: 'Boss approval',
                 },
                 comment: {
                     name: 'comment',
                     caption: 'Comment for IDM',
                     type: 'textarea',
                 },
-            }) as Record<ManageAclFieldsNames, DialogField<FormValues>>,
-        [],
+            }) as Record<ManageInheritanceFieldNames, DialogField<FormValues>>,
+        [hasWarning],
     );
 
-    const {manageAclFields} = UIFactory.getAclApi();
+    const {manageInheritanceFields, buttonsTitle} = UIFactory.getAclApi();
     const dialogFields = useMemo(() => {
         const permissionsSettings = UIFactory.getAclPermissionsSettings();
-        const idmKindConditions: {[Key in ManageAclFieldsNames]?: boolean} = {
-            bossApproval: permissionsSettings[idmKind].allowBossApprovals,
-            auditors: permissionsSettings[idmKind].allowAuditors,
-            readApprovers: permissionsSettings[idmKind].allowReadApprovers,
-            inheritanceResponsible: permissionsSettings[idmKind].allowInheritResponsibles,
+        const idmKindConditions: {[Key in ManageInheritanceFieldNames]?: boolean} = {
+            inheritAcl: permissionsSettings[idmKind].allowInheritAcl,
         };
 
-        return manageAclFields
+        return manageInheritanceFields
             .filter((name) =>
                 idmKindConditions[name] !== undefined ? idmKindConditions[name] : true,
             )
             .map((name) => manageAclDialogFields[name]);
-    }, [idmKind, manageAclDialogFields, manageAclFields]);
+    }, [idmKind, manageAclDialogFields, manageInheritanceFields]);
 
     const renderDialog = () => {
         return (
@@ -197,11 +157,7 @@ function ManageAcl(props: Props) {
                 onClose={handleUpdateAclClose}
                 onAdd={onAdd}
                 initialValues={{
-                    responsible: prepareRoleListValue(responsible),
-                    inheritanceResponsible: !disableInheritanceResponsible,
-                    readApprovers: prepareRoleListValue(readApprovers),
-                    auditors: prepareRoleListValue(auditors),
-                    bossApproval: Boolean(bossApproval),
+                    inheritAcl: Boolean(inheritAcl),
                 }}
                 formExtras={{initialValuesEqual: _isEqual}}
                 fields={[
@@ -228,10 +184,12 @@ function ManageAcl(props: Props) {
         );
     };
 
-    return !manageAclFields?.length ? null : (
+    const {editInheritance = 'Edit inheritance'} = buttonsTitle ?? {};
+
+    return (
         <ErrorBoundary>
             <div className={block(null, className)}>
-                <Button onClick={handleModalOpen}>Manage responsibles</Button>
+                <Button onClick={handleModalOpen}>{editInheritance}</Button>
 
                 <CommonDialog
                     size="m"
@@ -239,7 +197,7 @@ function ManageAcl(props: Props) {
                     onClose={handleClose}
                     className={block('modal', {loading, error})}
                 >
-                    <CommonDialog.Header caption="Manage responsibles" />
+                    <CommonDialog.Header caption={editInheritance} />
                     <CommonDialog.Body>{renderForm()}</CommonDialog.Body>
                 </CommonDialog>
             </div>
@@ -247,6 +205,6 @@ function ManageAcl(props: Props) {
     );
 }
 
-export default compose(withVisible)(ManageAcl) as unknown as React.ComponentType<
+export default compose(withVisible)(ManageInheritance) as unknown as React.ComponentType<
     Omit<Props, keyof WithVisibleProps>
 >;
