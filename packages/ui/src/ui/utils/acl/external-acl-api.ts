@@ -1,5 +1,8 @@
 import React from 'react';
-import {ManageAclFieldsNames} from '../../containers/ACL/ManageAcl/ManageAcl';
+import {
+    ManageAclFieldsNames,
+    ManageInheritanceFieldNames,
+} from '../../containers/ACL/ManageAcl/ManageAcl';
 import {RequestPermissionsFieldsNames} from '../../containers/ACL/RequestPermissions/RequestPermissions';
 import {
     deleteAclItemOrSubjectByIndex,
@@ -28,6 +31,7 @@ export interface AclApi {
     getAcl(params: GetAclParams): Promise<PreparedAclData>;
     updateAcl(cluster: string, path: string, params: UpdateAclParams): Promise<UpdateResponse>;
     manageAclFields: Array<ManageAclFieldsNames>;
+    manageInheritanceFields: Array<ManageInheritanceFieldNames>;
 
     getGroupAcl(cluster: string, group: string): Promise<{group: GroupACL; version: string}>;
     updateGroup(params: UpdateGroupParams): Promise<UpdateResponse>;
@@ -65,6 +69,12 @@ export interface AclApi {
     ): Promise<SuccessColumnGroupCreate>;
     editColumnGroup(cluster: string, columnGroupValue: Partial<AclColumnGroup>): Promise<void>;
     deleteColumnGroup(cluster: string, id: string): Promise<void>;
+
+    buttonsTitle?: {
+        editAcl?: string;
+        editInheritance?: string;
+        editColumnsAcl?: string;
+    };
 }
 
 export interface GetAclParams {
@@ -114,7 +124,8 @@ export const defaultAclApi: AclApi = {
 
     getAcl: ({sysPath, kind}) => getCombinedAcl({sysPath, kind}),
     updateAcl: (...args) => updateAclAttributes(...args),
-    manageAclFields: ['inheritAcl', 'inheritAcl_warning'],
+    manageAclFields: [],
+    manageInheritanceFields: ['inheritAcl', 'inheritAcl_warning'],
 
     getGroupAcl: () => methodNotSupported('getGroupAcl'),
     updateGroup: () => methodNotSupported('updateGruop'),

@@ -335,13 +335,13 @@ export function cancelRequestPermissions({idmKind}: HasIdmKind) {
 }
 
 export interface UpdateAclValues {
-    responsibleApproval: Array<ResponsibleType>;
+    responsible: Array<ResponsibleType>;
     auditors: Array<ResponsibleType>;
     readApprovers: Array<ResponsibleType>;
-    inheritanceResponsible: boolean;
+    disableInheritance: boolean;
     bossApproval: boolean;
     inheritAcl: boolean;
-    comment?: string;
+    comment: string;
 }
 
 export function updateAcl(
@@ -350,7 +350,7 @@ export function updateAcl(
         values,
         version,
         idmKind,
-    }: {path: string; values: UpdateAclValues; version?: string} & HasIdmKind,
+    }: {path: string; values: Partial<UpdateAclValues>; version?: string} & HasIdmKind,
     {normalizedPoolTree}: HasNormPoolTree = {},
 ): ThunkAclAction {
     return (dispatch, getState) => {
@@ -368,16 +368,10 @@ export function updateAcl(
             idmKind === IdmObjectType.POOL ? normalizedPoolTree || getTree(state) : undefined;
         return UIFactory.getAclApi()
             .updateAcl(cluster, path, {
-                responsible: values.responsibleApproval,
-                auditors: values.auditors,
-                disableInheritance: !values.inheritanceResponsible,
-                bossApproval: values.bossApproval,
-                inheritAcl: values.inheritAcl,
-                readApprovers: values.readApprovers,
+                ...values,
                 version,
                 idmKind,
                 poolTree,
-                comment: values.comment,
             })
             .then(() => {
                 dispatch({
