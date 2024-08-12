@@ -112,6 +112,8 @@ export interface ClusterConfig {
     operationPageSettings?: {
         disableOptimizationForYTFRONT2838: boolean;
     };
+
+    uiSettings?: Partial<Pick<UISettings, 'uploadTableExcelBaseUrl' | 'exportTableBaseurl'>>;
 }
 
 export interface SubRequest<K extends string, T extends BaseBatchParams> {

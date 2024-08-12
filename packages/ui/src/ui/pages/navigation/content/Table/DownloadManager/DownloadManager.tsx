@@ -34,8 +34,7 @@ import {
 import {getColumns} from '../../../../../store/selectors/navigation/content/table-ts';
 
 import './DownloadManager.scss';
-import {docsUrl} from '../../../../../config';
-import {uiSettings} from '../../../../../config/ui-settings';
+import {docsUrl, getExportTableBaseUrl} from '../../../../../config';
 import SeparatorInput, {prepareSeparatorValue} from './SeparatorInput';
 import UIFactory from '../../../../../UIFactory';
 import {makeDirectDownloadPath} from '../../../../../utils/navigation';
@@ -45,9 +44,9 @@ import {FIX_MY_TYPE} from '../../../../../types';
 const block = cn('table-download-manager');
 const messageBlock = cn('elements-message');
 
-const EXCEL_BASE_URL = uiSettings?.exportTableBaseUrl;
-
 function checkExcelExporter(cluster: string) {
+    const EXCEL_BASE_URL = getExportTableBaseUrl({cluster});
+
     if (!EXCEL_BASE_URL) {
         return Promise.resolve(false);
     }
@@ -302,7 +301,7 @@ export class DownloadManager extends React.Component<Props, State> {
 
     getExcelDownloadLink() {
         const {cluster} = this.props;
-        const base = `${EXCEL_BASE_URL}/${cluster}/api/export`;
+        const base = `${getExportTableBaseUrl({cluster})}/${cluster}/api/export`;
 
         const {query, error} = this.getDownloadParams();
         const {number_precision_mode} = this.state;
