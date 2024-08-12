@@ -1,6 +1,6 @@
-import {AppRouteHandler, Response} from '@gravity-ui/expresskit';
+import {AppRouteHandler, Request, Response} from '@gravity-ui/expresskit';
 import axios from 'axios';
-import {VcsConfig, VcsRepository} from '../../shared/vcs';
+import {VcsRepository} from '../../shared/vcs';
 import {ErrorWithCode, sendError} from '../utils';
 import {VcsFactory} from '../components/vcs';
 
@@ -16,16 +16,18 @@ const ERROR_MESSAGE = {
     VCS_ID_REQUIRED: 'vcsId is required',
     VCS_NOT_SUPPORTED: 'The current vcsId is missing from the vcsSettings setting in UISettings',
     TOKEN_REQUIRED: 'Token is required',
+    TOKENS_ERROR: 'Error getting vcs tokens availability',
     PATH_REQUIRED: 'Path is required',
     BRANCH_REQUIRED: 'Branch is required',
     REPOSITORY_REQUIRED: 'Repository is required',
     UNAUTHORIZED:
         'The service cannot authorize you. Check the token. You can add new token in the section Settings -> VCS',
 };
+const VCS_COOKIE_PREFIX = 'vcs_token_';
 
 const cookieNameByVcsId = (vcsId?: string) => {
     if (!vcsId) throw new ErrorWithCode(400, ERROR_MESSAGE.VCS_ID_REQUIRED);
-    return `vcs_${vcsId}`;
+    return VCS_COOKIE_PREFIX + vcsId;
 };
 
 const sendApiError = (res: Response, error: unknown) => {
@@ -50,24 +52,29 @@ const sendApiError = (res: Response, error: unknown) => {
     sendError(res, message, status || 500);
 };
 
-export const getVcsConfig: AppRouteHandler = (req, res) => {
-    const cookies = req.cookies;
+export const getVcsTokensAvailability: AppRouteHandler = (req: Request, res: Response) => {
+    const {cookies} = req;
     try {
         const config = VcsFactory.getVcsSettings(req);
-        if (!config.length) throw new ErrorWithCode(404, ERROR_MESSAGE.VCS_CONFIG_NOT_FOUND);
+        if (!config) throw new ErrorWithCode(404, ERROR_MESSAGE.TOKENS_ERROR);
 
-        const response = config.map<VcsConfig>((item) => ({
-            ...item,
-            hasToken: cookieNameByVcsId(item.id) in cookies,
-        }));
-        res.status(200).json(response);
+        const vcsTokenKeys = Object.keys(cookies).filter((name) =>
+            name.startsWith(VCS_COOKIE_PREFIX),
+        );
+        const ids = config.reduce<string[]>((acc, {id}) => {
+            if (vcsTokenKeys.includes(VCS_COOKIE_PREFIX + id)) {
+                acc.push(id);
+            }
+            return acc;
+        }, []);
+        res.status(200).json({ids});
     } catch (e) {
-        req.ctx.logError('Error getting vcs configuration', e);
+        req.ctx.logError(ERROR_MESSAGE.TOKENS_ERROR, e);
         sendApiError(res, e);
     }
 };
 
-export const createToken: AppRouteHandler = (req, res) => {
+export const createToken: AppRouteHandler = (req: Request, res: Response) => {
     const {vcsId, token} = req.body;
 
     try {
@@ -82,7 +89,7 @@ export const createToken: AppRouteHandler = (req, res) => {
     }
 };
 
-export const removeToken: AppRouteHandler = (req, res) => {
+export const removeToken: AppRouteHandler = (req: Request, res: Response) => {
     const {vcsId} = req.body;
     try {
         res.clearCookie(cookieNameByVcsId(vcsId));
@@ -93,13 +100,7 @@ export const removeToken: AppRouteHandler = (req, res) => {
     }
 };
 
-const getProjectIdByRepository = (repository: VcsRepository) => {
-    return 'projectId' in repository
-        ? repository.projectId
-        : `${repository.owner}/${repository.name}`;
-};
-
-export const getRepositories: AppRouteHandler = async (req, res) => {
+export const getRepositories: AppRouteHandler = async (req: Request, res: Response) => {
     const cookies = req.cookies;
     const vcsId = req.query.vcsId as string | undefined;
 
@@ -107,7 +108,7 @@ export const getRepositories: AppRouteHandler = async (req, res) => {
         const token = cookies[cookieNameByVcsId(vcsId)];
         const vcs = VcsFactory.getVcsSettingById(req, vcsId);
         const api = VcsFactory.createVcs(vcs, token);
-        const response = await api.getRepositories();
+        const response = await api.getRepositories({req, res});
 
         res.status(200).json(response);
     } catch (e) {
@@ -116,7 +117,7 @@ export const getRepositories: AppRouteHandler = async (req, res) => {
     }
 };
 
-export const getBranches: AppRouteHandler = async (req, res) => {
+export const getBranches: AppRouteHandler = async (req: Request, res: Response) => {
     const cookies = req.cookies;
     const repository = req.query.repository as VcsRepository | undefined;
 
@@ -126,7 +127,10 @@ export const getBranches: AppRouteHandler = async (req, res) => {
         const token = cookies[cookieNameByVcsId(repository.vcsId)];
         const vcs = VcsFactory.getVcsSettingById(req, repository.vcsId);
         const api = VcsFactory.createVcs(vcs, token);
-        const response = await api.getBranches(getProjectIdByRepository(repository));
+        const response = await api.getBranches({
+            repository,
+            requests: {req, res},
+        });
 
         res.status(200).json(response);
     } catch (e) {
@@ -135,7 +139,7 @@ export const getBranches: AppRouteHandler = async (req, res) => {
     }
 };
 
-export const getDirectoryContent: AppRouteHandler = async (req, res) => {
+export const getDirectoryContent: AppRouteHandler = async (req: Request, res: Response) => {
     const cookies = req.cookies;
     const repository = req.query.repository as VcsRepository | undefined;
     const path = req.query.path as string | undefined;
@@ -149,11 +153,15 @@ export const getDirectoryContent: AppRouteHandler = async (req, res) => {
         const token = cookies[cookieNameByVcsId(repository.vcsId)];
         const vcs = VcsFactory.getVcsSettingById(req, repository.vcsId);
         const api = VcsFactory.createVcs(vcs, token);
-        const response = await api.getRepositoryContent(
-            getProjectIdByRepository(repository),
+        const response = await api.getRepositoryContent({
+            repository,
             branch,
             path,
-        );
+            requests: {
+                req,
+                res,
+            },
+        });
 
         response.sort((a, b) => a.type.localeCompare(b.type));
         res.status(200).json(response);
@@ -163,7 +171,7 @@ export const getDirectoryContent: AppRouteHandler = async (req, res) => {
     }
 };
 
-export const getFileContent: AppRouteHandler = async (req, res) => {
+export const getFileContent: AppRouteHandler = async (req: Request, res: Response) => {
     const cookies = req.cookies;
     const repository = req.query.repository as VcsRepository | undefined;
     const path = req.query.path as string | undefined;
@@ -177,20 +185,19 @@ export const getFileContent: AppRouteHandler = async (req, res) => {
         const token = cookies[cookieNameByVcsId(repository.vcsId)];
         const vcs = VcsFactory.getVcsSettingById(req, repository.vcsId);
         const api = VcsFactory.createVcs(vcs, token);
-        const response = await api.getFileContent(
-            getProjectIdByRepository(repository),
+        const file = await api.getFileContent({
+            repository,
             branch,
             path,
-        );
-
-        res.set('content-type', 'text/json');
-        res.set({
-            'Content-Type': response.headers['content-type'],
-            'Content-Length': response.headers['content-length'],
-            'Content-Disposition': `attachment; filename=${path}`,
+            requests: {
+                req,
+                res,
+            },
         });
 
-        response.data.pipe(res);
+        res.set('content-type', 'text/json');
+        res.set('Content-Disposition', `attachment; filename=${path}`);
+        res.status(200).send({file});
     } catch (e) {
         req.ctx.logError('Error getting file content', e);
         sendApiError(res, e);

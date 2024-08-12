@@ -1,6 +1,6 @@
-import axios, {AxiosResponse} from 'axios';
-import {GitlabRepository} from '../../../shared/vcs';
-import {VcsApi} from './index';
+import axios from 'axios';
+import {GitlabRepository, VcsApi, VcsRepository} from '../../../shared/vcs';
+import {ErrorWithCode} from '../../utils';
 
 export type GitlabNode = {
     id: string;
@@ -12,13 +12,31 @@ export type GitlabNode = {
 
 export class GitlabApi implements VcsApi {
     token: string;
-    api: string;
+    baseUrl: string;
     vcsId: string;
+    maxFileSize: number;
 
-    constructor({token, api, vcsId}: {token: string; api: string; vcsId: string}) {
+    constructor({
+        token,
+        baseUrl,
+        vcsId,
+        maxFileSize,
+    }: {
+        token?: string;
+        baseUrl: string;
+        vcsId: string;
+        maxFileSize: number;
+    }) {
+        if (!token) throw new ErrorWithCode(400, 'Token is required');
+
         this.token = token;
-        this.api = api;
+        this.baseUrl = baseUrl;
         this.vcsId = vcsId;
+        this.maxFileSize = maxFileSize;
+    }
+
+    getProjectId(repository: VcsRepository) {
+        return (repository as GitlabRepository).projectId;
     }
 
     getRequestHeaders() {
@@ -29,12 +47,15 @@ export class GitlabApi implements VcsApi {
 
     getRepositories(): Promise<Record<string, GitlabRepository>> {
         return axios
-            .get<{name: string; id: number; web_url: string; default_branch: string}[]>(this.api, {
-                headers: this.getRequestHeaders(),
-                params: {
-                    owned: true,
+            .get<{name: string; id: number; web_url: string; default_branch: string}[]>(
+                this.baseUrl,
+                {
+                    headers: this.getRequestHeaders(),
+                    params: {
+                        owned: true,
+                    },
                 },
-            })
+            )
             .then((response) => {
                 return response.data.reduce<Record<string, GitlabRepository>>(
                     (acc, repositoryData) => {
@@ -52,28 +73,38 @@ export class GitlabApi implements VcsApi {
             });
     }
 
-    getBranches(projectId: string): Promise<string[]> {
+    getBranches({repository}: {repository: VcsRepository}): Promise<string[]> {
         return axios
-            .get<{name: string}[]>(`${this.api}/${projectId}/repository/branches`, {
-                headers: this.getRequestHeaders(),
-            })
+            .get<{name: string}[]>(
+                `${this.baseUrl}/${this.getProjectId(repository)}/repository/branches`,
+                {
+                    headers: this.getRequestHeaders(),
+                },
+            )
             .then((response) => {
                 return response.data.map((i) => i.name);
             });
     }
 
-    getRepositoryContent(
-        projectId: string,
-        branch: string,
+    getRepositoryContent({
+        repository,
+        branch,
         path = '',
-    ): Promise<{name: string; type: 'tree' | 'blob'; url: string}[]> {
+    }: {
+        repository: VcsRepository;
+        branch: string;
+        path?: string;
+    }): Promise<{name: string; type: 'tree' | 'blob'; url: string}[]> {
         return axios
-            .get<GitlabNode[]>(`${this.api}/${projectId}/repository/tree?path=${path}`, {
-                headers: this.getRequestHeaders(),
-                params: {
-                    ref_name: branch,
+            .get<GitlabNode[]>(
+                `${this.baseUrl}/${this.getProjectId(repository)}/repository/tree?path=${path}`,
+                {
+                    headers: this.getRequestHeaders(),
+                    params: {
+                        ref_name: branch,
+                    },
                 },
-            })
+            )
             .then((response) => {
                 return response.data.map((item) => {
                     return {
@@ -85,13 +116,17 @@ export class GitlabApi implements VcsApi {
             });
     }
 
-    getFileContent(
-        projectId: string,
-        branch: string,
-        path: string,
-    ): Promise<AxiosResponse<NodeJS.ReadableStream>> {
-        return axios.get<NodeJS.ReadableStream>(
-            `${this.api}/${projectId}/repository/files/${path}/raw`,
+    async getFileContent({
+        repository,
+        branch,
+        path,
+    }: {
+        repository: VcsRepository;
+        branch: string;
+        path: string;
+    }): Promise<string> {
+        const response = await axios.get<NodeJS.ReadableStream>(
+            `${this.baseUrl}/${this.getProjectId(repository)}/repository/files/${path}/raw`,
             {
                 headers: this.getRequestHeaders(),
                 params: {
@@ -100,5 +135,24 @@ export class GitlabApi implements VcsApi {
                 responseType: 'stream',
             },
         );
+
+        const fileStream = response.data;
+        return await new Promise<string>((resolve, reject) => {
+            let temp = '';
+            fileStream.on('data', (chunk: string) => {
+                temp += chunk.toString();
+
+                if (Buffer.byteLength(temp) > this.maxFileSize)
+                    reject(new Error(`File is too big. Max size ${this.maxFileSize}Mb`));
+            });
+
+            fileStream.on('end', () => {
+                resolve(temp);
+            });
+
+            fileStream.on('error', (err: Error) => {
+                reject(err);
+            });
+        });
     }
 }

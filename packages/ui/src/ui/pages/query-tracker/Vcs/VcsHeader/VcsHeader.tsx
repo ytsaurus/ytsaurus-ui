@@ -4,21 +4,24 @@ import {
     selectBranch,
     selectBranches,
     selectCurrentVcs,
+    selectListFilter,
     selectRepositories,
     selectRepository,
+    selectShowFilter,
     selectVcsConfig,
 } from '../../module/vcs/selectors';
 import {SelectSingle} from '../../../../components/Select/Select';
 import {
     changeCurrentBranch,
     changeCurrentRepository,
-    getVcsConfig,
     getVcsRepositories,
+    getVcsTokensAvailability,
 } from '../../module/vcs/actions';
 import './VcsHeader.scss';
 import cn from 'bem-cn-lite';
 import CircleQuestionIcon from '@gravity-ui/icons/svgs/circle-question.svg';
-import {Flex, Icon, Tooltip} from '@gravity-ui/uikit';
+import {Flex, Icon, TextInput, Tooltip} from '@gravity-ui/uikit';
+import {setListFilter} from '../../module/vcs/vcsSlice';
 
 const block = cn('vcs-header');
 
@@ -30,9 +33,13 @@ export const VcsHeader: FC = () => {
     const repository = useSelector(selectRepository);
     const branch = useSelector(selectBranch);
     const branches = useSelector(selectBranches);
+    const filter = useSelector(selectListFilter);
+    const showFilter = useSelector(selectShowFilter);
+
+    const showRepositories = Object.keys(repositories).length !== 1;
 
     useEffect(() => {
-        dispatch(getVcsConfig());
+        dispatch(getVcsTokensAvailability());
     }, [dispatch]);
 
     const handleChangeVcs = useCallback(
@@ -57,19 +64,34 @@ export const VcsHeader: FC = () => {
     );
 
     const selectVcsItems = useMemo(() => {
-        return config.map(({id, name, hasToken}) => ({
-            value: id,
-            text: `${name}${hasToken ? '' : ' [no api token]'}`,
-        }));
+        return config.map((item) => {
+            const {id, name, hasToken, auth} = item;
+            const showNoToken = auth === 'none' ? false : !hasToken;
+
+            return {
+                value: id,
+                text: `${name}${showNoToken ? ' [no api token]' : ''}`,
+            };
+        });
     }, [config]);
 
     const selectRepoItems = useMemo(() => {
-        return Object.keys(repositories).map((key) => ({value: key}));
+        return Object.keys(repositories).map((key) => ({value: key, text: repositories[key].name}));
     }, [repositories]);
 
     const selectBranchItems = useMemo(() => {
-        return branches.map((i) => ({value: i}));
+        return branches.map((item) => {
+            if (typeof item === 'object') return item;
+            return {value: item};
+        });
     }, [branches]);
+
+    const handleUpdateFilter = useCallback(
+        (value: string) => {
+            dispatch(setListFilter(value));
+        },
+        [dispatch],
+    );
 
     return (
         <div className={block()}>
@@ -85,15 +107,17 @@ export const VcsHeader: FC = () => {
                     <Icon data={CircleQuestionIcon} size={16} />
                 </Tooltip>
             </Flex>
-            <div className={block('top-menu')}>
-                <SelectSingle
-                    items={selectRepoItems}
-                    value={repository}
-                    onChange={handleChangeRepository}
-                    disabled={!selectRepoItems.length}
-                    placeholder="Select repository"
-                    hideClear
-                />
+            <div className={block('top-menu', {single: !showRepositories})}>
+                {showRepositories && (
+                    <SelectSingle
+                        items={selectRepoItems}
+                        value={repository}
+                        onChange={handleChangeRepository}
+                        disabled={!selectRepoItems.length}
+                        placeholder="Select repository"
+                        hideClear
+                    />
+                )}
                 <SelectSingle
                     items={selectBranchItems}
                     value={branch}
@@ -103,6 +127,14 @@ export const VcsHeader: FC = () => {
                     hideClear
                 />
             </div>
+            {showFilter && (
+                <TextInput
+                    onUpdate={handleUpdateFilter}
+                    value={filter}
+                    placeholder="Filter"
+                    hasClear
+                />
+            )}
         </div>
     );
 };

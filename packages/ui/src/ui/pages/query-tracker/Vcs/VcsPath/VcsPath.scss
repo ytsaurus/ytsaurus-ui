@@ -1,0 +1,15 @@
+.vcs-path {
+    display: grid;
+    grid-template-columns: 24px calc(100% - 52px - 16px) 28px;
+    gap: 0 8px;
+
+    &_open {
+        grid-template-columns: 1fr;
+    }
+
+    .editable-as-text {
+        &__control {
+            margin-left: 0;
+        }
+    }
+}

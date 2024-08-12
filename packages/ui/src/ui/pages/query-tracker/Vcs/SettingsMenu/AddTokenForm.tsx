@@ -1,7 +1,7 @@
-import React, {FC, useMemo, useState} from 'react';
-import {SelectSingle} from '../../../../components/Select/Select';
+import React, {FC, useEffect, useMemo, useState} from 'react';
+import {Item, SelectSingle} from '../../../../components/Select/Select';
 import {Button, TextInput} from '@gravity-ui/uikit';
-import {saveToken} from '../../module/vcs/actions';
+import {getVcsTokensAvailability, saveToken} from '../../module/vcs/actions';
 import {useDispatch, useSelector} from 'react-redux';
 import cn from 'bem-cn-lite';
 import './AddTokenForm.scss';
@@ -15,6 +15,10 @@ export const AddTokenForm: FC = () => {
     const [vcs, setVcs] = useState<string | undefined>();
     const [token, setToken] = useState('');
     const config = useSelector(selectVcsConfig);
+
+    useEffect(() => {
+        dispatch(getVcsTokensAvailability());
+    }, [dispatch]);
 
     const handleSave = async () => {
         if (vcs && token) {
@@ -30,7 +34,13 @@ export const AddTokenForm: FC = () => {
     };
 
     const items = useMemo(() => {
-        return config.map(({id, name}) => ({value: id, text: name}));
+        return config.reduce<Item[]>((acc, item) => {
+            if (item.auth === 'none') return acc;
+
+            const {id, name} = item;
+            acc.push({value: id, text: name});
+            return acc;
+        }, []);
     }, [config]);
 
     return (

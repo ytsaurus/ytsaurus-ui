@@ -5,24 +5,29 @@ import {VcsState} from '../../module/vcs/vcsSlice';
 import './VcsListPreview.scss';
 import cn from 'bem-cn-lite';
 import FileTextIcon from '@gravity-ui/icons/svgs/file-text.svg';
-import {Icon} from '@gravity-ui/uikit';
-import Button from '../../../../components/Button/Button';
+import {Button, Icon, Tooltip} from '@gravity-ui/uikit';
 import XmarkIcon from '@gravity-ui/icons/svgs/xmark.svg';
 import FilePlusIcon from '@gravity-ui/icons/svgs/file-plus.svg';
+import TextIndentIcon from '@gravity-ui/icons/svgs/text-indent.svg';
 
 const block = cn('vcs-list-preview');
 
 type Props = {
     preview: VcsState['preview'];
     onAddFile: (name: string) => void;
+    onInsertFile: (name: string) => void;
     onClose: () => void;
 };
 
-export const VcsListPreview: FC<Props> = ({preview, onAddFile, onClose}) => {
+export const VcsListPreview: FC<Props> = ({preview, onAddFile, onInsertFile, onClose}) => {
     const editorRef = useRef<monaco.editor.IStandaloneCodeEditor>();
 
     const handleAddFile = () => {
         onAddFile(preview.name);
+    };
+
+    const handleInsertClick = () => {
+        onInsertFile(preview.name);
     };
 
     return (
@@ -32,12 +37,21 @@ export const VcsListPreview: FC<Props> = ({preview, onAddFile, onClose}) => {
                     <Icon data={FileTextIcon} size={16} /> {preview.name}
                 </div>
                 <div className={block('header-block')}>
-                    <Button view="flat" onClick={handleAddFile}>
-                        <Icon data={FilePlusIcon} size={16} />
-                    </Button>
-                    <Button view="flat" onClick={onClose}>
-                        <Icon data={XmarkIcon} size={16} />
-                    </Button>
+                    <Tooltip content="Insert into editor">
+                        <Button view="flat" onClick={handleInsertClick}>
+                            <Icon data={TextIndentIcon} size={16} />
+                        </Button>
+                    </Tooltip>
+                    <Tooltip content="Attach file to query">
+                        <Button view="flat" onClick={handleAddFile}>
+                            <Icon data={FilePlusIcon} size={16} />
+                        </Button>
+                    </Tooltip>
+                    <Tooltip content="Close preview">
+                        <Button view="flat" onClick={onClose}>
+                            <Icon data={XmarkIcon} size={16} />
+                        </Button>
+                    </Tooltip>
                 </div>
             </div>
             <MonacoEditor

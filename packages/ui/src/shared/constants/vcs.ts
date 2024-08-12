@@ -1,0 +1,1 @@
+export const VCS_DEFAULT_MAX_FILE_SIZE = 10 * 1024 * 1024; // 10Mb
