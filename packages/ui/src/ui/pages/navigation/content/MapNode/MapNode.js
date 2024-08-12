@@ -59,6 +59,7 @@ import {showLinkToModal} from '../../../../store/actions/navigation/modals/link-
 import {openCreateACOModal} from '../../../../store/actions/navigation/modals/create-aco';
 import NavigationExtraActions from '../../../../containers/NavigationExtraActions/NavigationExtraActions';
 import UIFactory from '../../../../UIFactory';
+import {getCluster} from '../../../../store/selectors/global';
 
 import './MapNode.scss';
 
@@ -88,6 +89,7 @@ class MapNode extends Component {
         openCreateTableModal: PropTypes.func.isRequired,
         openCreateACOModal: PropTypes.func.isRequired,
         showACOCreateButton: PropTypes.bool.isRequired,
+        cluster: PropTypes.bool.isRequired,
     };
 
     componentDidMount() {
@@ -166,6 +168,7 @@ function mapStateToProps(state) {
         mediumType: getMediumType(state),
         showCreateTableModal: isCreateTableModalVisible(state),
         attributes: getNavigationPathAttributes(state),
+        cluster: getCluster(state),
     };
 }
 
@@ -237,7 +240,10 @@ class MapNodeToolbar extends React.PureComponent {
             path,
             attributes,
             showACOCreateButton,
+            cluster,
         } = this.props;
+
+        const {uploadTableExcelBaseUrl} = getConfigUploadTable({cluster});
 
         const {menuItems, renderModals} = UIFactory.getMapNodeExtraCreateActions([
             {
@@ -250,7 +256,7 @@ class MapNodeToolbar extends React.PureComponent {
                 text: <NoWrap>Directory</NoWrap>,
                 icon: <Icon awesome={'folder'} face={'solid'} />,
             },
-            ...(!getConfigUploadTable().uploadTableExcelBaseUrl
+            ...(!uploadTableExcelBaseUrl
                 ? []
                 : [
                       {
