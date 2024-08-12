@@ -114,7 +114,7 @@ const defaultParams = {
         initialState: fullInitialState,
     },
     alerts: {
-        stateKey: 'components.nodes.setup.default.alerts',
+        stateKey: 'components.nodes.setup.default.alertCount',
         initialState: alertsInitialState,
     },
     schedulerJobs: {
