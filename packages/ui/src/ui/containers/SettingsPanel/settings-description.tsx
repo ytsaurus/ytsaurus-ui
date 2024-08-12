@@ -1,5 +1,5 @@
-import React, {useEffect} from 'react';
-import {useDispatch, useSelector} from 'react-redux';
+import React from 'react';
+import {useSelector} from 'react-redux';
 import {IconProps} from '@gravity-ui/uikit';
 import _compact from 'lodash/compact';
 import _filter from 'lodash/filter';
@@ -51,7 +51,6 @@ import YT from '../../config/yt-config';
 import Link from '../../components/Link/Link';
 import Button from '../../components/Button/Button';
 import {AddTokenForm, VcsList} from '../../pages/query-tracker/Vcs/SettingsMenu';
-import {getVcsConfig} from '../../pages/query-tracker/module/vcs/actions';
 import {selectVcsConfig} from '../../pages/query-tracker/module/vcs/selectors';
 
 export interface SettingsPage {
@@ -80,17 +79,12 @@ function wrapEscapeText(text: string) {
 }
 
 function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
-    const dispatch = useDispatch();
     const clusterNS = useSelector(getCurrentClusterNS);
 
     const httpProxyVersion: string = useSelector(getHttpProxyVersion);
     const schedulerVersion: string = useSelector(getGlobalSchedulerVersion);
     const masterVersion: string = useSelector(getGlobalMasterVersion);
     const config = useSelector(selectVcsConfig);
-
-    useEffect(() => {
-        dispatch(getVcsConfig());
-    }, [dispatch]);
 
     return _compact([
         makePage('General', generalIcon, [

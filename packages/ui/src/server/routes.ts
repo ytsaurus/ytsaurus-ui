@@ -30,7 +30,7 @@ import {
     getDirectoryContent,
     getFileContent,
     getRepositories,
-    getVcsConfig,
+    getVcsTokensAvailability,
     removeToken,
 } from './controllers/vcs';
 
@@ -59,7 +59,7 @@ const routes: AppRoutes = {
     'GET /api/vcs/file': {handler: getFileContent},
     'GET /api/vcs/repositories': {handler: getRepositories},
     'GET /api/vcs/branches': {handler: getBranches},
-    'GET /api/vcs/config': {handler: getVcsConfig},
+    'GET /api/vcs/tokens-availability': {handler: getVcsTokensAvailability},
 
     'POST /api/yt/:ytAuthCluster/change-password': {handler: handleChangePassword, ui: true},
     'POST /api/remote-copy': {handler: handleRemoteCopy},

@@ -1,6 +1,7 @@
 import {PayloadAction, createSlice} from '@reduxjs/toolkit';
 import {Reducer} from 'redux';
 import {GithubRepository, GitlabRepository, VcsConfig} from '../../../../../shared/vcs';
+import {uiSettings} from '../../../../config/ui-settings';
 
 export type DirectoryItem = {
     type: 'directory';
@@ -19,8 +20,9 @@ export type Repositories = Record<string, GithubRepository> | Record<string, Git
 export type VcsState = {
     vcsConfig: VcsConfig[];
     repositories: Repositories;
-    branches: string[];
+    branches: {value: string; text: string}[] | string[];
     list: Record<string, DirectoryItem | FileItem>;
+    listFilter: string;
     vcs: string | undefined;
     repository: string | undefined;
     branch: string | undefined;
@@ -29,11 +31,20 @@ export type VcsState = {
         name: string;
         content: string;
     };
+    listError: boolean;
+};
+
+const getVcsConfig = (): VcsConfig[] => {
+    const {vcsSettings} = uiSettings;
+    if (!vcsSettings) return [];
+
+    return vcsSettings.map((item) => ({...item, hasToken: false}));
 };
 
 const initialState: VcsState = {
-    vcsConfig: [],
+    vcsConfig: getVcsConfig(),
     list: {},
+    listFilter: '',
     repositories: {},
     branches: [],
     vcs: undefined,
@@ -44,19 +55,29 @@ const initialState: VcsState = {
         name: '',
         content: '',
     },
+    listError: false,
 };
 
 const vcsSlice = createSlice({
     name: 'vcs',
     initialState,
     reducers: {
+        setVcsTokensAvailability(state, {payload}: PayloadAction<string[]>) {
+            const {vcsSettings} = uiSettings;
+            if (!vcsSettings) return;
+
+            state.vcsConfig = vcsSettings.map<VcsConfig>((item) => ({
+                ...item,
+                hasToken: payload.includes(item.id),
+            }));
+        },
         setVcsConfig(state, {payload}: PayloadAction<VcsConfig[]>) {
             state.vcsConfig = payload;
         },
         setRepositories(state, {payload}: PayloadAction<Repositories>) {
             state.repositories = payload;
         },
-        setBranches(state, {payload}: PayloadAction<string[]>) {
+        setBranches(state, {payload}: PayloadAction<{value: string; text: string}[] | string[]>) {
             state.branches = payload;
         },
         setVcs(state, {payload}: PayloadAction<string | undefined>) {
@@ -87,6 +108,12 @@ const vcsSlice = createSlice({
         setPreview(state, {payload}: PayloadAction<VcsState['preview']>) {
             state.preview = payload;
         },
+        setListFilter(state, {payload}: PayloadAction<string>) {
+            state.listFilter = payload;
+        },
+        setListError(state, {payload}: PayloadAction<boolean>) {
+            state.listError = payload;
+        },
     },
 });
 
@@ -100,6 +127,9 @@ export const {
     setBranch,
     setList,
     setPreview,
+    setListFilter,
+    setListError,
+    setVcsTokensAvailability,
 } = vcsSlice.actions;
 
 export const vcsReducer = vcsSlice.reducer as Reducer<VcsState>;

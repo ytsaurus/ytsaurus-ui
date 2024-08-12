@@ -157,22 +157,43 @@ export interface UISettings {
      * Allows to customize VCS navigation on the query page
      * id - unique identifier of VCS
      * name - name of VCS. The name is displayed in the selector
-     * api - URL to you VCS api
-     * type - 'gitlab' | 'github'
+     * baseUrl - URL to you VCS api
+     * auth - 'token' | 'none'
+     * maxFileSize - max file size in bytes. 10Mb by default
+     * type - 'gitlab' | 'github' | `custom_vsc_type_${string}`
      *
      * @example
      * vcsSettings: [
      *             {
      *                 id: 'vcs1',
      *                 name: 'Github',
-     *                 api: 'https://api.github.com',
+     *                 auth: 'token',
+     *                 baseUrl: 'https://api.github.com',
      *                 type: 'github',
+     *                 maxFileSize: 10485760,
      *             },
      *             {
      *                 id: 'vcs2',
      *                 name: 'Gitlab',
-     *                 api: 'https://gitlab.com/api/v4/projects',
+     *                 auth: 'token',
+     *                 baseUrl: 'https://gitlab.com/api/v4/projects',
      *                 type: 'gitlab',
+     *                 maxFileSize: 10485760,
+     *             },
+     *             {
+     *                 id: 'My VCS realization 1',
+     *                 name: 'MyVCS',
+     *                 auth: 'token',
+     *                 baseUrl: 'https://my_vcs_url',
+     *                 type: 'custom_vsc_type_my-vcs',
+     *                 maxFileSize: 10485760,
+     *             },
+     *             {
+     *                 id: 'My VCS realization 2',
+     *                 name: 'MyVCS',
+     *                 baseUrl: 'https://my_vcs_url',
+     *                 type: 'custom_vsc_type_my-vcs',
+     *                 maxFileSize: 10485760,
      *             },
      *         ],
      */
@@ -185,11 +206,15 @@ export interface UISettings {
     reUseEffectiveAclForPath?: string;
 }
 
+export type CustomVCSType = `custom_vsc_type_${string}`;
+
 export interface VCSSettings {
     id: string;
     name: string;
-    api: string;
-    type: 'github' | 'gitlab';
+    baseUrl: string;
+    auth: 'token' | 'none';
+    type: 'github' | 'gitlab' | CustomVCSType;
+    maxFileSize: number;
 }
 
 export interface UISettingsMonitoring {

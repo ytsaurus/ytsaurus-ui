@@ -5,14 +5,25 @@ import {useDispatch, useSelector} from 'react-redux';
 import {
     selectCurrentRepository,
     selectListArray,
+    selectListError,
     selectPath,
     selectPreview,
+    selectShowFilter,
 } from '../../module/vcs/selectors';
 import {VcsListFolder} from './VcsListFolder';
-import {addFileToQuery, getFolderContent, goBack, openFilePreview} from '../../module/vcs/actions';
+import {
+    addFileToQuery,
+    getContentByPath,
+    getFolderContent,
+    insertFileToQuery,
+    openFilePreview,
+} from '../../module/vcs/actions';
 import {VcsListFile} from './VcsListFile';
 import {VcsListPreview} from './VcsListPreview';
 import {setPreview} from '../../module/vcs/vcsSlice';
+import {NoContent} from '../../../../components/NoContent/NoContent';
+import {VcsPath} from '../VcsPath';
+import {Alert} from '@gravity-ui/uikit';
 
 const block = cn('vcs-items-list');
 
@@ -21,11 +32,20 @@ export const VcsItemsList: FC = () => {
     const list = useSelector(selectListArray);
     const path = useSelector(selectPath);
     const preview = useSelector(selectPreview);
+    const listError = useSelector(selectListError);
+    const showBreadcrumbs = useSelector(selectShowFilter);
     const currentRepository = useSelector(selectCurrentRepository);
 
     const handleOpenFolder = useCallback(
         (name: string) => {
             dispatch(getFolderContent(name));
+        },
+        [dispatch],
+    );
+
+    const handlePathChange = useCallback(
+        async (newPath: string) => {
+            await dispatch(getContentByPath(newPath));
         },
         [dispatch],
     );
@@ -36,10 +56,6 @@ export const VcsItemsList: FC = () => {
         },
         [dispatch],
     );
-
-    const handleBackClick = useCallback(() => {
-        dispatch(goBack());
-    }, [dispatch]);
 
     const handleClosePreview = useCallback(() => {
         dispatch(setPreview({name: '', content: ''}));
@@ -53,41 +69,72 @@ export const VcsItemsList: FC = () => {
         [dispatch],
     );
 
+    const handleInsertFile = useCallback(
+        (name: string) => {
+            dispatch(insertFileToQuery(name));
+        },
+        [dispatch],
+    );
+
     const itemsList = useMemo(() => {
         return list.map((item) => {
             let url = item.url;
             if (currentRepository && 'webUrl' in currentRepository) {
                 url = currentRepository.webUrl + item.url;
             }
-            return item.type === 'file' ? (
-                <VcsListFile
-                    key={item.name}
-                    url={url}
-                    name={item.name}
-                    onAddFile={handleAddFile}
-                    onShowClick={handleShowClick}
-                />
-            ) : (
-                <VcsListFolder key={item.name} name={item.name} onClick={handleOpenFolder} />
-            );
-        });
-    }, [path, currentRepository, handleAddFile, handleShowClick, handleOpenFolder, list]);
 
-    if (!list.length) return <div className={block()}>Empty list</div>;
+            if (item.type === 'file')
+                return (
+                    <VcsListFile
+                        key={item.name}
+                        url={url}
+                        name={item.name}
+                        onAddFile={handleAddFile}
+                        onInsertFile={handleInsertFile}
+                        onShowClick={handleShowClick}
+                    />
+                );
+
+            return <VcsListFolder key={item.name} name={item.name} onClick={handleOpenFolder} />;
+        });
+    }, [
+        list,
+        currentRepository,
+        handleAddFile,
+        handleInsertFile,
+        handleShowClick,
+        handleOpenFolder,
+    ]);
 
     if (preview.content || preview.name)
         return (
             <VcsListPreview
                 preview={preview}
                 onAddFile={handleAddFile}
+                onInsertFile={handleInsertFile}
                 onClose={handleClosePreview}
             />
         );
 
     return (
         <div className={block()}>
-            {Boolean(path) && <VcsListFolder name="..." onClick={handleBackClick} />}
-            {itemsList}
+            {showBreadcrumbs && <VcsPath path={path} onPathChange={handlePathChange} />}
+            {listError ? (
+                <Alert
+                    className={block('error')}
+                    theme="danger"
+                    title="Error"
+                    message="Error when retrieving repository content"
+                />
+            ) : (
+                <>
+                    {itemsList.length ? (
+                        itemsList
+                    ) : (
+                        <NoContent className={block('empty-block')} warning="Empty list" />
+                    )}
+                </>
+            )}
         </div>
     );
 };

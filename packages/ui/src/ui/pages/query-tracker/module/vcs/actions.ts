@@ -10,12 +10,15 @@ import {
     setBranch,
     setBranches,
     setList,
+    setListError,
+    setListFilter,
     setPath,
     setPreview,
     setRepositories,
     setRepository,
     setVcs,
     setVcsConfig,
+    setVcsTokensAvailability,
 } from './vcsSlice';
 import {selectVcs, selectVcsConfig} from './selectors';
 import {getQueryFiles} from '../query/selectors';
@@ -23,7 +26,7 @@ import {updateQueryDraft} from '../query/actions';
 import guid from '../../../../common/hammer/guid';
 import {selectFileEditor} from '../queryFilesForm/selectors';
 import {setFileEditor} from '../queryFilesForm/queryFilesFormSlice';
-import {VcsConfig, VcsRepository} from '../../../../../shared/vcs';
+import {VcsRepository} from '../../../../../shared/vcs';
 
 type AsyncAction = ThunkAction<void, RootState, undefined, Action>;
 
@@ -38,16 +41,15 @@ const makePureRepositoryData = (repository: VcsRepository) => {
     };
 };
 
-export const getVcsConfig = (): AsyncAction => async (dispatch) => {
-    const {data} = await wrapApiPromiseByToaster<{data: VcsConfig[]}>(
-        axios.get('/api/vcs/config'),
+export const getVcsTokensAvailability = (): AsyncAction => async (dispatch) => {
+    const {data} = await wrapApiPromiseByToaster(
+        axios.get<{ids: string[]}>('/api/vcs/tokens-availability'),
         {
             skipSuccessToast: true,
-            toasterName: 'get-vcs-config',
+            toasterName: 'get-vcs-tokens-availability',
         },
     );
-
-    dispatch(setVcsConfig(data));
+    dispatch(setVcsTokensAvailability(data.ids));
 };
 
 export const removeToken =
@@ -95,6 +97,10 @@ export const getVcsRepositories =
         });
 
         dispatch(setRepositories(data));
+        const keys = Object.keys(data);
+        if (keys.length === 1) {
+            dispatch(changeCurrentRepository(data[keys[0]].vcsId));
+        }
     };
 
 export const getRepositoryBranches =
@@ -119,58 +125,81 @@ export const getRepositoryContent =
 
         if (!repository) return;
 
-        const response = await wrapApiPromiseByToaster<{
-            data: {name: string; type: string; url: string}[];
-        }>(
-            axios.get('/api/vcs', {
+        try {
+            const response: {
+                data: {name: string; type: string; url: string}[];
+            } = await axios.get('/api/vcs', {
                 params: {
                     repository: makePureRepositoryData(repositories[repository]),
                     branch,
                     path,
                 },
-            }),
-            {
-                skipSuccessToast: true,
-                toasterName: 'load-repository-content',
-            },
-        );
+            });
 
-        const result = response.data.reduce<Record<string, DirectoryItem | FileItem>>(
-            (acc, item) => {
-                acc[item.name] = {
-                    name: item.name,
-                    type: item.type !== 'tree' && item.type !== 'dir' ? 'file' : 'directory',
-                    url: item.url,
-                };
-                return acc;
-            },
-            {},
-        );
+            const result = response.data.reduce<Record<string, DirectoryItem | FileItem>>(
+                (acc, item) => {
+                    acc[item.name] = {
+                        name: item.name,
+                        type: item.type !== 'tree' && item.type !== 'dir' ? 'file' : 'directory',
+                        url: item.url,
+                    };
+                    return acc;
+                },
+                {},
+            );
 
-        dispatch(setList(result));
-        dispatch(setPath(path));
+            dispatch(setListFilter(''));
+            dispatch(setListError(false));
+            dispatch(setList(result));
+        } catch (e) {
+            dispatch(setListError(true));
+        } finally {
+            dispatch(setPath(path));
+        }
     };
-
-export const goBack = (): AsyncAction => async (dispatch, getState) => {
-    const {path} = selectVcs(getState());
-
-    const parentPath = path.split('/').slice(0, -1).join('/');
-    dispatch(getRepositoryContent(parentPath));
-};
 
 const getObjectPath = (path: string, name: string) => (path ? path + '/' + name : name);
 
 const loadFile = async (params: {path: string; repository: VcsRepository; branch: string}) => {
-    const file = await wrapApiPromiseByToaster<{data: string}>(
-        axios.get('/api/vcs/file', {params, responseType: 'text'}),
+    const file = await wrapApiPromiseByToaster<{data: {file: string}}>(
+        axios.get('/api/vcs/file', {params, responseType: 'json'}),
         {
             skipSuccessToast: true,
             toasterName: 'load-file',
         },
     );
 
-    return file.data;
+    return file.data.file;
 };
+
+export const getContentByPath =
+    (path: string): AsyncAction =>
+    async (dispatch, getState) => {
+        const {repositories, repository, branch} = selectVcs(getState());
+        if (!repository || !branch) return;
+
+        const name = path.includes('/') ? path.split('/').pop()! : path;
+
+        try {
+            const response = await axios.get('/api/vcs/file', {
+                params: {
+                    path,
+                    repository: repositories[repository],
+                    branch,
+                },
+                responseType: 'text',
+            });
+
+            dispatch(
+                setPreview({
+                    name,
+                    content: response.data,
+                }),
+            );
+        } catch (e) {
+            await dispatch(getRepositoryContent(path));
+        }
+    };
 
 export const openFilePreview =
     (name: string): AsyncAction =>
@@ -224,6 +253,26 @@ export const addFileToQuery =
         dispatch(setFileEditor({...editor, isOpen: true, fileId: id}));
     };
 
+export const insertFileToQuery =
+    (name: string): AsyncAction =>
+    async (dispatch, getState) => {
+        const state = getState();
+        const {path, list, branch, repository, repositories} = selectVcs(state);
+        const item = list[name];
+
+        if (item.type !== 'file' || !repository || !branch) return;
+
+        dispatch(
+            updateQueryDraft({
+                query: await loadFile({
+                    path: getObjectPath(path, name),
+                    repository: repositories[repository],
+                    branch,
+                }),
+            }),
+        );
+    };
+
 export const getFolderContent =
     (name: string): AsyncAction =>
     async (dispatch, getState) => {
@@ -237,13 +286,10 @@ export const getFolderContent =
 
 export const changeCurrentRepository =
     (repositoryName: string): AsyncAction =>
-    async (dispatch, getState) => {
-        const {path} = selectVcs(getState());
-
+    async (dispatch) => {
         dispatch(setRepository(repositoryName));
-
         dispatch(getRepositoryBranches(repositoryName));
-        dispatch(getRepositoryContent(path));
+        dispatch(getRepositoryContent(''));
     };
 
 export const changeCurrentBranch =

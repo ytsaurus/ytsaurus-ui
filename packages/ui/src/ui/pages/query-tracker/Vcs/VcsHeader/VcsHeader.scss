@@ -8,5 +8,9 @@
         display: grid;
         grid-template-columns: repeat(2, calc(50% - 4px));
         gap: 12px 8px;
+
+        &_single {
+            grid-template-columns: 1fr;
+        }
     }
 }

@@ -1,6 +1,6 @@
-import axios, {AxiosResponse} from 'axios';
-import {GithubRepository} from '../../../shared/vcs';
-import {VcsApi} from './index';
+import axios from 'axios';
+import {GithubRepository, VcsApi, VcsRepository} from '../../../shared/vcs';
+import {ErrorWithCode} from '../../utils';
 
 export type GithubNode = {
     download_url: string;
@@ -16,13 +16,31 @@ export type GithubNode = {
 
 export class GithubApi implements VcsApi {
     token: string;
-    api: string;
+    baseUrl: string;
     vcsId: string;
+    maxFileSize: number;
 
-    constructor({token, api, vcsId}: {token: string; api: string; vcsId: string}) {
+    constructor({
+        token,
+        baseUrl,
+        vcsId,
+        maxFileSize,
+    }: {
+        token?: string;
+        baseUrl: string;
+        vcsId: string;
+        maxFileSize: number;
+    }) {
+        if (!token) throw new ErrorWithCode(400, 'Token is required');
+
         this.token = token;
-        this.api = api;
+        this.baseUrl = baseUrl;
         this.vcsId = vcsId;
+        this.maxFileSize = maxFileSize;
+    }
+
+    getProjectId(repository: VcsRepository) {
+        return `${(repository as GithubRepository).owner}/${repository.name}`;
     }
 
     getRequestHeaders() {
@@ -34,7 +52,7 @@ export class GithubApi implements VcsApi {
     getRepositories(): Promise<Record<string, GithubRepository>> {
         return axios
             .get<{name: string; owner: {login: string}; default_branch: string}[]>(
-                `${this.api}/user/repos`,
+                `${this.baseUrl}/user/repos`,
                 {
                     headers: this.getRequestHeaders(),
                 },
@@ -55,28 +73,38 @@ export class GithubApi implements VcsApi {
             });
     }
 
-    getBranches(projectId: string): Promise<string[]> {
+    getBranches({repository}: {repository: VcsRepository}): Promise<string[]> {
         return axios
-            .get<{name: string}[]>(`${this.api}/repos/${projectId}/branches`, {
-                headers: this.getRequestHeaders(),
-            })
+            .get<{name: string}[]>(
+                `${this.baseUrl}/repos/${this.getProjectId(repository)}/branches`,
+                {
+                    headers: this.getRequestHeaders(),
+                },
+            )
             .then((response) => {
                 return response.data.map((i) => i.name);
             });
     }
 
-    getRepositoryContent(
-        projectId: string,
-        branch: string,
+    getRepositoryContent({
+        repository,
+        branch,
         path = '',
-    ): Promise<{name: string; type: 'file' | 'dir'; url: string}[]> {
+    }: {
+        repository: VcsRepository;
+        branch: string;
+        path?: string;
+    }): Promise<{name: string; type: 'file' | 'dir'; url: string}[]> {
         return axios
-            .get<GithubNode[]>(`${this.api}/repos/${projectId}/contents/${path}`, {
-                headers: this.getRequestHeaders(),
-                params: {
-                    ref: branch,
+            .get<GithubNode[]>(
+                `${this.baseUrl}/repos/${this.getProjectId(repository)}/contents/${path}`,
+                {
+                    headers: this.getRequestHeaders(),
+                    params: {
+                        ref: branch,
+                    },
                 },
-            })
+            )
             .then((response) => {
                 return response.data.map((item) => {
                     return {
@@ -88,17 +116,45 @@ export class GithubApi implements VcsApi {
             });
     }
 
-    getFileContent(
-        projectId: string,
-        branch: string,
-        path: string,
-    ): Promise<AxiosResponse<NodeJS.ReadableStream>> {
-        return axios.get<NodeJS.ReadableStream>(`${this.api}/repos/${projectId}/contents/${path}`, {
-            headers: this.getRequestHeaders(),
-            params: {
-                ref: branch,
+    async getFileContent({
+        repository,
+        path,
+        branch,
+    }: {
+        repository: VcsRepository;
+        branch: string;
+        path: string;
+    }): Promise<string> {
+        const response = await axios.get<NodeJS.ReadableStream>(
+            `${this.baseUrl}/repos/${this.getProjectId(repository)}/contents/${path}`,
+            {
+                headers: this.getRequestHeaders(),
+                params: {
+                    ref: branch,
+                },
+                responseType: 'stream',
             },
-            responseType: 'stream',
+        );
+
+        const fileStream = response.data;
+        const streamData = await new Promise<string>((resolve, reject) => {
+            let temp = '';
+            fileStream.on('data', (chunk: string) => {
+                temp += chunk.toString();
+
+                if (Buffer.byteLength(temp) > this.maxFileSize)
+                    reject(new Error(`File is too big. Max size ${this.maxFileSize}Mb`));
+            });
+
+            fileStream.on('end', () => {
+                resolve(temp);
+            });
+
+            fileStream.on('error', (err: Error) => {
+                reject(err);
+            });
         });
+
+        return Buffer.from(JSON.parse(streamData).content, 'base64').toString();
     }
 }
