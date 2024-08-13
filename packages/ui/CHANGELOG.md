@@ -1,5 +1,25 @@
 # Changelog
 
+## [1.51.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.50.0...ui-v1.51.0) (2024-08-13)
+
+
+### Features
+
+* **Query:** multiple aco with backward compatible [YTFRONT-4238] ([7efe878](https://github.com/ytsaurus/ytsaurus-ui/commit/7efe87881d5fd69d8a86252c0d401f8c950bb7a2))
+* **Table/Excel:** now we can setup uploadTableExcelBaseUrl and exportTableBaseUrl per cluster [[#717](https://github.com/ytsaurus/ytsaurus-ui/issues/717)] ([88dec84](https://github.com/ytsaurus/ytsaurus-ui/commit/88dec846b765b5e4f9413de245aad6ca956819b9))
+* **YQLTable:** add "view" button for truncated cells [[#702](https://github.com/ytsaurus/ytsaurus-ui/issues/702)] ([ee776c1](https://github.com/ytsaurus/ytsaurus-ui/commit/ee776c1158eaaf21a53ae6226dbd5ba83427c646))
+
+
+### Bug Fixes
+
+* added support for dark and light themes by override yfm styles [[#712](https://github.com/ytsaurus/ytsaurus-ui/issues/712)] ([b7cce12](https://github.com/ytsaurus/ytsaurus-ui/commit/b7cce12fcbf2612d69b528932fc39b160f8bb464))
+* **CellPreviewModal:** fix control to be sticky when scroll [[#703](https://github.com/ytsaurus/ytsaurus-ui/issues/703)] ([c5e91cb](https://github.com/ytsaurus/ytsaurus-ui/commit/c5e91cbee5d122c32784145dbc2d49e76a5ab434))
+* **Components/Nodes:** fix alerts filter [YTFRONT-4301] ([861f57c](https://github.com/ytsaurus/ytsaurus-ui/commit/861f57c5c213c0c22e6df8f46f16e2d0c3d2a188))
+* **Navigation/File:** allow remote-copy for 'file' node type [YTFRONT-4296] ([aff83de](https://github.com/ytsaurus/ytsaurus-ui/commit/aff83def8abee98eb1937b9495f828d553fd4d16))
+* **Navigation/MapNode:** minor fix for css [YTFRONT-4291] ([e5932f8](https://github.com/ytsaurus/ytsaurus-ui/commit/e5932f817c8ceacdca713ad532814d0b8f7b3f39))
+* **Operation/Job/Statistics:** handle undefined [YTFRONT-4300] ([ca0da3c](https://github.com/ytsaurus/ytsaurus-ui/commit/ca0da3c32e34403491a9c68fc78e769ac06989ce))
+* **OperationPool:** minor fix for css ([9f9b32d](https://github.com/ytsaurus/ytsaurus-ui/commit/9f9b32d74c09780b207c6db1c52f327ed3549be1))
+
 ## [1.50.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.49.1...ui-v1.50.0) (2024-08-06)
 
 
