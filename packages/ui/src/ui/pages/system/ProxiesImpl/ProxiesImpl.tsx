@@ -6,7 +6,7 @@ import {CollapsibleSectionStateLess} from '../../../components/CollapsibleSectio
 import {UI_COLLAPSIBLE_SIZE} from '../../../constants/global';
 import {ExpandButton} from '../../../components/ExpandButton';
 import {RoleGroupInfo} from '../../../store/reducers/system/proxies';
-import {MakeUrlParams, RoleGroup, RoleGroupsContainer} from '../Proxies/RoleGroup';
+import {MakeUrlParams, RoleGroup, RoleGroupsContainer} from '../ProxiesImpl/RoleGroup';
 
 export function ProxiesImpl({
     name,
@@ -31,12 +31,14 @@ export function ProxiesImpl({
             name={name}
             overview={
                 <>
-                    <ExpandButton
-                        all
-                        showText
-                        expanded={expandRacks}
-                        toggleExpanded={() => setExpandRacks(!expandRacks)}
-                    />
+                    {!collapsed && (
+                        <ExpandButton
+                            all
+                            showText
+                            expanded={expandRacks}
+                            toggleExpanded={() => setExpandRacks(!expandRacks)}
+                        />
+                    )}
                     {overview}
                 </>
             }

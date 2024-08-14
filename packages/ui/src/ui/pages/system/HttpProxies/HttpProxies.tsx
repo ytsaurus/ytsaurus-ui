@@ -2,8 +2,6 @@ import React, {Component} from 'react';
 import {ConnectedProps, connect} from 'react-redux';
 import isEmpty_ from 'lodash/isEmpty';
 
-import {Flex} from '@gravity-ui/uikit';
-
 import SystemStateOverview from '../SystemStateOverview/SystemStateOverview';
 
 import {loadSystemProxies} from '../../../store/actions/system/proxies';
@@ -14,7 +12,7 @@ import type {RootState} from '../../../store/reducers';
 import {useThunkDispatch} from '../../../store/thunkDispatch';
 import {useUpdater} from '../../../hooks/use-updater';
 
-import {MakeUrlParams} from './RoleGroup';
+import {MakeUrlParams} from '../ProxiesImpl/RoleGroup';
 import {ProxiesImpl} from '../ProxiesImpl/ProxiesImpl';
 
 type ReduxProps = ConnectedProps<typeof connector>;
