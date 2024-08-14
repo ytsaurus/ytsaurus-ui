@@ -5,6 +5,7 @@ import cn from 'bem-cn-lite';
 import {Button, Flex, Link, RadioButton, Text} from '@gravity-ui/uikit';
 
 import Alert from '../../../../components/Alert/Alert';
+import ClipboardButton from '../../../../components/ClipboardButton/ClipboardButton';
 import format from '../../../../common/hammer/format';
 import Icon from '../../../../components/Icon/Icon';
 import MetaTable from '../../../../components/MetaTable/MetaTable';
@@ -148,7 +149,22 @@ function FlowState() {
             <MetaTable
                 items={[
                     [{key: 'status', value: <StatusLabel label={value} />}],
-                    [{key: 'leader_controller_address', value: leader_controller_address}],
+                    [
+                        {
+                            key: 'leader_controller_address',
+                            value: (
+                                <>
+                                    {leader_controller_address}
+                                    <ClipboardButton
+                                        view="flat-secondary"
+                                        text={leader_controller_address}
+                                        inlineMargins
+                                    />
+                                </>
+                            ),
+                            className: block('meta-item'),
+                        },
+                    ],
                 ]}
             />
         </React.Fragment>

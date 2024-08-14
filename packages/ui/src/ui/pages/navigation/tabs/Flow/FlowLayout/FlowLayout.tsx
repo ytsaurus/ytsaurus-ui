@@ -7,6 +7,7 @@ import {Column} from '@gravity-ui/react-data-table';
 import format from '../../../../../common/hammer/format';
 
 import ClickableAttributesButton from '../../../../../components/AttributesButton/ClickableAttributesButton';
+import ClipboardButton from '../../../../../components/ClipboardButton/ClipboardButton';
 import DataTableYT, {
     DATA_TABLE_YT_SETTINGS,
 } from '../../../../../components/DataTableYT/DataTableYT';
@@ -21,7 +22,7 @@ import {
 } from '../../../../../store/actions/flow/layout';
 import {
     FlowLayoutDataItem,
-    getFlowLayoutData,  
+    getFlowLayoutData,
     getFlowLayoutError,
     getFlowLayoutPipelinePath,
 } from '../../../../../store/selectors/flow/layout';
@@ -101,13 +102,27 @@ function useFlowLayoutColumn(type: 'computations' | 'workers') {
                                         });
                                     }}
                                 />
-                                <span className={block('name-title')}>{name}</span>
+                                <span className={block('name-title')}>
+                                    {name}{' '}
+                                    <ClipboardButton
+                                        view="flat-secondary"
+                                        text={name}
+                                        inlineMargins
+                                        visibleOnRowHover
+                                    />
+                                </span>
                             </>
                         );
                     } else {
                         content = (
                             <span className={block('name-title', {level: '1'})}>
                                 {row.partition?.partition_id}
+                                <ClipboardButton
+                                    view="flat-secondary"
+                                    text={row.partition?.partition_id}
+                                    inlineMargins
+                                    visibleOnRowHover
+                                />
                             </span>
                         );
                     }
@@ -124,11 +139,21 @@ function useFlowLayoutColumn(type: 'computations' | 'workers') {
                 width: 120,
             },
             {
-                name: 'Job',
+                name: 'Job Id',
                 render({row}) {
-                    return 'partition' in row
-                        ? row.partition?.current_job_id
-                        : format.Number(row.$attributes.job_count);
+                    return 'partition' in row ? (
+                        <>
+                            {row.partition?.current_job_id}{' '}
+                            <ClipboardButton
+                                view="flat-secondary"
+                                text={row.partition?.current_job_id}
+                                inlineMargins
+                                visibleOnRowHover
+                            />
+                        </>
+                    ) : (
+                        format.Number(row.$attributes.job_count)
+                    );
                 },
                 width: 400,
             },
@@ -136,9 +161,19 @@ function useFlowLayoutColumn(type: 'computations' | 'workers') {
                 ? {
                       name: 'Worker address',
                       render({row}) {
-                          return 'job' in row
-                              ? row.job?.worker_address
-                              : format.Number(row.$attributes.worker_count);
+                          return 'job' in row ? (
+                              <>
+                                  {row.job?.worker_address}
+                                  <ClipboardButton
+                                      view="flat-secondary"
+                                      text={row.job?.worker_address}
+                                      inlineMargins
+                                      visibleOnRowHover
+                                  />
+                              </>
+                          ) : (
+                              format.Number(row.$attributes.worker_count)
+                          );
                       },
                       width: 400,
                   }
