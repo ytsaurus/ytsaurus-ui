@@ -33,7 +33,7 @@ import {
     makeComponentsNodesLink,
 } from '../../../utils/components/nodes/node';
 
-import {MakeUrlParams, RoleGroup, RoleGroupsContainer} from '../Proxies/RoleGroup';
+import {MakeUrlParams, RoleGroup, RoleGroupsContainer} from '../ProxiesImpl/RoleGroup';
 
 import {SystemNodeTypeSelector} from './NodeTypeSelector';
 

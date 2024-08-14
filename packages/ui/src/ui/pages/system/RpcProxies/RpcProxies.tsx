@@ -10,7 +10,7 @@ import {getCluster} from '../../../store/selectors/global';
 import {RootState} from '../../../store/reducers';
 import {getSettingsSystemRpcProxiesCollapsed} from '../../../store/selectors/settings-ts';
 import {useThunkDispatch} from '../../../store/thunkDispatch';
-import {MakeUrlParams} from '../Proxies/RoleGroup';
+import {MakeUrlParams} from '../ProxiesImpl/RoleGroup';
 import {ProxiesImpl} from '../ProxiesImpl/ProxiesImpl';
 
 type ReduxProps = ConnectedProps<typeof connector>;

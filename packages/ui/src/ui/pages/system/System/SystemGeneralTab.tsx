@@ -3,7 +3,7 @@ import Resources from '../Resources/Resources';
 import Masters from '../Masters/Masters';
 import SchedulersAndAgents from '../SchedulersAndAgents/SchedulersAndAgents';
 import Chunks from '../Chunks/Chunks';
-import Proxies from '../Proxies/Proxies';
+import Proxies from '../HttpProxies/HttpProxies';
 import RpcProxies from '../RpcProxies/RpcProxies';
 import Nodes from '../Nodes/Nodes';
 
