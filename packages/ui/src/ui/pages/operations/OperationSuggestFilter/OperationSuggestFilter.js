@@ -36,7 +36,7 @@ export default class OperationSuggestFilter extends Component {
         return (
             <Suggest
                 key={value}
-                apply={(newValue) => updateFilter(name, newValue)}
+                apply={(newValue) => updateFilter(name, newValue || defaultValue)}
                 filter={OperationSuggestFilter.simpleSuggestLoader}
                 text={value !== defaultValue ? value : ''}
                 items={states}
