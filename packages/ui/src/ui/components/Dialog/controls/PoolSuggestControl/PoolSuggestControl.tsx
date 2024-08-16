@@ -102,9 +102,14 @@ export function PoolSuggestControl(props: Props) {
             popupClassName={block('popup')}
             text={value}
             filter={getItems}
-            apply={(v) => allowEphemeral && onChange(typeof v === 'string' ? v : v.value)}
             onItemClick={(v) => onChange(typeof v === 'string' ? v : v.value)}
-            onTextUpdate={allowEmpty ? (text) => !text && onChange('') : undefined}
+            onTextUpdate={(text) => {
+                if (allowEmpty && !text) {
+                    onChange('');
+                } else if (allowEphemeral) {
+                    onChange(text);
+                }
+            }}
             placeholder={placeholder}
             disabled={disabled}
         />
