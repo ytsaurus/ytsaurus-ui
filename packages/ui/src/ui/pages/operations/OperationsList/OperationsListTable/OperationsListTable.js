@@ -218,6 +218,7 @@ class OperationsListTable extends Component {
                             pools={pools}
                             state={state}
                             compact
+                            allowDetachEditBtn
                         />
                     )}
                 </UserPoolItem>
