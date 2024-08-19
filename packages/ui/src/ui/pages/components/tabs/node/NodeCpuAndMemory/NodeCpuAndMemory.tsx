@@ -14,6 +14,7 @@ interface NodeCpuAndMemoryProps {
     memoryText: Node['memoryText'];
     networkProgress: Node['networkProgress'];
     networkText: Node['networkText'];
+    gpu?: Node['gpu'];
 }
 
 export const hasCpuAndMemoryMeta = (node: NodeCpuAndMemoryProps) =>
@@ -28,6 +29,7 @@ function NodeCpuAndMemory({node}: {node: NodeCpuAndMemoryProps}): ReturnType<Rea
         cpuText,
         networkProgress,
         networkText,
+        gpu,
     } = node;
     return (
         <MetaTable
@@ -45,6 +47,17 @@ function NodeCpuAndMemory({node}: {node: NodeCpuAndMemoryProps}): ReturnType<Rea
                             memoryProgress={memoryProgress || 0}
                         />
                     ),
+                },
+                {
+                    key: 'gpu',
+                    value: (
+                        <Progress
+                            value={gpu?.progress || 0}
+                            text={gpu?.progressText}
+                            theme="success"
+                        />
+                    ),
+                    visible: gpu !== undefined,
                 },
                 {
                     key: 'network',
