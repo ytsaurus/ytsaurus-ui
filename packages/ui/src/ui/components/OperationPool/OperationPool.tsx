@@ -13,9 +13,9 @@ import './OperationPool.scss';
 
 const block = cn('operation-pool');
 
-const renderButton = (onEdit?: () => void, reserve?: boolean) => {
+const renderButton = (onEdit?: () => void, detachable?: boolean) => {
     return !onEdit ? null : (
-        <span className={block('pool-edit', {reserve})}>
+        <span className={block('pool-edit', {detachable})}>
             <Button size="s" view="flat-secondary" onClick={onEdit} title="Edit pool">
                 <Icon awesome="pencil" />
             </Button>
@@ -26,7 +26,7 @@ const renderButton = (onEdit?: () => void, reserve?: boolean) => {
 export type OperationPoolProps = {
     className?: string;
     cluster: string;
-    reserveEditButton?: boolean;
+    allowDetachEditBtn?: boolean;
     compact?: boolean;
     onEdit?: () => void;
     state?: 'completed' | 'failed' | 'aborted' | string;
@@ -42,7 +42,7 @@ export type OperationPoolProps = {
 export function OperationPool({
     className,
     cluster,
-    reserveEditButton,
+    allowDetachEditBtn,
     compact = false,
     onEdit,
     pool,
@@ -82,7 +82,7 @@ export function OperationPool({
                     <Icon awesome="ghost" />
                 </Tooltip>
             )}
-            {isCorrectState && renderButton(onEdit, reserveEditButton)}
+            {isCorrectState && renderButton(onEdit, allowDetachEditBtn)}
         </li>
     );
 }

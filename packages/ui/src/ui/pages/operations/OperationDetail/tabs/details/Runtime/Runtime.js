@@ -94,7 +94,6 @@ class Runtime extends Component {
                                         state={state}
                                         pool={pool}
                                         compact
-                                        reserveEditButton
                                     />
                                 ),
                             },
