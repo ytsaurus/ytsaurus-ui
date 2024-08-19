@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.51.1](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.51.0...ui-v1.51.1) (2024-08-19)
+
+
+### Bug Fixes
+
+* **Navigation/RemoteCopy:** fix for disabled 'Confirm' button [YTFRONT-4296] ([a6b7bde](https://github.com/ytsaurus/ytsaurus-ui/commit/a6b7bdebb3db6639174761fe4551066276baaed0))
+* **OperationsList:** fix incorrect filters on OperationSuggestFilter blur [[#705](https://github.com/ytsaurus/ytsaurus-ui/issues/705)] ([a738c5b](https://github.com/ytsaurus/ytsaurus-ui/commit/a738c5b182a192cb0e5c847ab31e90675da1c144))
+* **Query:** empty blocks in result [YTFRONT-4323] ([b39aa3e](https://github.com/ytsaurus/ytsaurus-ui/commit/b39aa3e873f44dd45da2c7bf8005ccb93294a40e))
+
 ## [1.51.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.50.0...ui-v1.51.0) (2024-08-13)
 
 
