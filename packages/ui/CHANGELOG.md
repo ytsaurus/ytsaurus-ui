@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.46.3](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.46.2...ui-v1.46.3) (2024-08-19)
+
+
+### Bug Fixes
+
+* **Navigation/File:** allow remote-copy for 'file' node type [YTFRONT-4296] ([459cef0](https://github.com/ytsaurus/ytsaurus-ui/commit/459cef089c994511aa2d4117acf3bab3e2cd39d8))
+* **Navigation/RemoteCopy:** fix for disabled 'Confirm' button [YTFRONT-4296] ([3ce933a](https://github.com/ytsaurus/ytsaurus-ui/commit/3ce933a38678371fc3675fefa4a0bda71f67e481))
+
 ## [1.46.2](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.46.1...ui-v1.46.2) (2024-07-21)
 
 
