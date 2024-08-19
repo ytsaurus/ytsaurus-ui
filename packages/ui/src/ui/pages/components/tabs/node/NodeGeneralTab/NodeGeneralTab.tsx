@@ -35,7 +35,7 @@ function NodeGeneralTab(): ReturnType<React.VFC> {
             {hasCpuAndMemoryMeta(node) && (
                 <CollapsibleSection
                     size="s"
-                    name="CPU and memory"
+                    name="Compute Resources"
                     className={block('cpu')}
                     collapsed={false}
                 >
@@ -55,7 +55,7 @@ function NodeGeneralTab(): ReturnType<React.VFC> {
             {hasResourcesMeta(node) && (
                 <CollapsibleSection
                     size="s"
-                    name="Resources"
+                    name="Slot Resources"
                     className={block('resources')}
                     collapsed={false}
                 >

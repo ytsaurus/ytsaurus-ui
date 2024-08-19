@@ -2,7 +2,7 @@ import _ from 'lodash';
 import ypath from '../../../../../common/thor/ypath';
 import hammer from '../../../../../common/hammer';
 import {STACKED_PROGRESS_BAR_COLORS} from '../../../../../constants/colors';
-import type {FIX_MY_TYPE} from '../../../../../types';
+import type {FIX_MY_TYPE} from '../../../../../types/index';
 import {computeProgress, progressText} from '../../../../../utils/progress';
 
 interface NodeSlots {
@@ -93,6 +93,7 @@ export class Node {
     banned!: boolean;
     chaosSlots!: TabletSlots;
     chunks!: number;
+    gpu?: {usage?: number; limit?: number; progress?: number; progressText?: string};
     cpu!: {usage?: number; limit?: number};
     cpuProgress: number | undefined;
     cpuText!: string;
@@ -268,6 +269,18 @@ export class Node {
         this.networkProgress = computeProgress(networkUsage, networkLimit);
         this.network = {usage: networkUsage, limit: networkLimit};
 
+        // GPU
+        const gpuUsage = ypath.getValue(resourceUsage, '/gpu');
+        const gpuLimit = ypath.getValue(resourceLimits, '/gpu');
+        if (gpuLimit !== undefined || gpuUsage !== undefined) {
+            this.gpu = {
+                usage: gpuUsage,
+                limit: gpuLimit,
+                progress: computeProgress(gpuUsage, gpuLimit),
+                progressText: progressText(gpuUsage, gpuLimit),
+            };
+        }
+
         // CPU
         const cpuUsage = ypath.getValue(resourceUsage, '/cpu');
         const cpuLimit = ypath.getValue(resourceLimits, '/cpu');
@@ -422,6 +435,7 @@ const tagsAttributes: ReadonlyArray<AttributeName> = ['tags'];
 const userTagsAttributes: ReadonlyArray<AttributeName> = ['user_tags'];
 
 const cpuAttributes = _.union(resourceUsageAttributes, resourceLimitsAttributes);
+const gpuAttributes = cpuAttributes;
 const fullAttributes: ReadonlyArray<AttributeName> = ['/statistics/full'];
 const locationsAttributes: ReadonlyArray<AttributeName> = ['/statistics/locations'];
 const memoryAttributes: ReadonlyArray<AttributeName> = ['/statistics/memory'];
@@ -457,6 +471,7 @@ export const AttributesByProperty: Record<keyof Node, ReadonlyArray<AttributeNam
     enabledLocations: locationsAttributes,
     flavors: ['flavors'],
     full: fullAttributes,
+    gpu: gpuAttributes,
     host: hostAttributes,
     IOWeight: ['/statistics/media'],
     lastSeenTime: ['last_seen_time'],

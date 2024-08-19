@@ -45,6 +45,9 @@ export const PropertiesByColumn = {
     following: ['tabletSlots'],
     following_chaos: ['chaosSlots'],
     full: ['full'],
+    gpu: ['gpu'],
+    gpu_usage: ['gpu'],
+    gpu_limit: ['gpu'],
     host: ['cluster', 'host'],
     io_weight: ['IOWeight'],
     last_seen: ['lastSeenTime'],
@@ -408,6 +411,41 @@ const nodesTableProps = {
             cpu_usage: {
                 get(node) {
                     return node.cpu?.usage;
+                },
+                sortWithUndefined: true,
+                hidden: true,
+            },
+            gpu: {
+                get(node) {
+                    return node.gpu?.progress;
+                },
+                sortWithUndefined: true,
+                align: 'center',
+                renderHeader: ({align}: ColumnInfo) => {
+                    return (
+                        <NodesColumnHeader
+                            align={align}
+                            column="gpu"
+                            options={[
+                                {column: 'gpu', title: 'Progress', withUndefined: true},
+                                {column: 'gpu_usage', title: 'Usage', withUndefined: true},
+                                {column: 'gpu_limit', title: 'Limit', withUndefined: true},
+                            ]}
+                            title="GPU"
+                        />
+                    );
+                },
+            },
+            gpu_limit: {
+                get(node) {
+                    return node.gpu?.limit;
+                },
+                sortWithUndefined: true,
+                hidden: true,
+            },
+            gpu_usage: {
+                get(node) {
+                    return node.gpu?.usage;
                 },
                 sortWithUndefined: true,
                 hidden: true,
@@ -1225,6 +1263,16 @@ export const NODES_TABLE_TEMPLATES: Templates = {
 
     cpu(item) {
         return <Progress value={item.cpuProgress || 0} text={item.cpuText} theme="success" />;
+    },
+
+    gpu(item) {
+        return (
+            <Progress
+                value={item.gpu?.progress || 0}
+                text={item.gpu?.progressText}
+                theme="success"
+            />
+        );
     },
 
     memory(item) {
