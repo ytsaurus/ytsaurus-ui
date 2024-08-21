@@ -244,7 +244,7 @@ export function editPool(pool, values, initialValues) {
                         data: {error},
                     });
 
-                    return Promise.reject();
+                    return Promise.reject(error);
                 }
             });
     };

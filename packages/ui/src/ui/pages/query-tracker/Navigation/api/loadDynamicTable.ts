@@ -59,7 +59,7 @@ export const loadDynamicTableRequest: LoadDynamicTable = async ({
     );
 
     if (!Array.isArray(permissions.columns)) {
-        return Promise.reject();
+        return Promise.reject(new Error('Dynamic table columns is not array'));
     }
 
     const {availableColumns, omittedColumns, deniedKeyColumns} = permissions.columns.reduce<{
@@ -83,7 +83,7 @@ export const loadDynamicTableRequest: LoadDynamicTable = async ({
     );
 
     if (deniedKeyColumns.length !== 0) {
-        return Promise.reject();
+        return Promise.reject(new Error('Dynamic table has denied key columns'));
     }
 
     const aColumns = availableColumns.map(unipika.decode);
