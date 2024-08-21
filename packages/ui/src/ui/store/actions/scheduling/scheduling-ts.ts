@@ -208,7 +208,7 @@ export function deletePool(item?: PoolInfo): SchedulingThunkAction {
                         data: {error},
                     });
 
-                    return Promise.reject();
+                    return Promise.reject(error);
                 }
                 return null;
             });

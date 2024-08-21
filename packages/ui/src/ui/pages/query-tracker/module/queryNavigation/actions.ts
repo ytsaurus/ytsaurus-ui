@@ -179,7 +179,7 @@ export const loadTableAttributesByPath =
                 theme: 'danger',
                 autoHiding: false,
                 name: 'Load table data error',
-                title: "Can't load table data",
+                title: e ? (e as Error).message : "Can't load table data",
             });
         }
     };

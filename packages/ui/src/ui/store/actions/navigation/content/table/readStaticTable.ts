@@ -1,5 +1,6 @@
 import {YTApiId, ytApiV3Id} from '../../../../../rum/rum-wrap-api';
 import {
+    getParsedError,
     parseErrorFromResponse,
     prepareHeaders,
     prepareRows,
@@ -32,7 +33,7 @@ export const readStaticTable: LoadStaticTableRows = async ({
     });
 
     const error = parseErrorFromResponse(data);
-    if (error) return Promise.reject();
+    if (error) return Promise.reject(getParsedError(error));
 
     const {columns, rows, yqlTypes} = prepareRows(data, reverseRows);
     const omittedColumns = prepareHeaders(headers);

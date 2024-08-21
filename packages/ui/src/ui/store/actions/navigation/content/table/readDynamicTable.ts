@@ -1,5 +1,6 @@
 import {YTApiId, ytApiV3Id} from '../../../../../rum/rum-wrap-api';
 import {
+    getParsedError,
     parseErrorFromResponse,
     prepareRows,
 } from '../../../../../utils/navigation/content/table/table';
@@ -30,7 +31,7 @@ export const readDynamicTable: LoadDynamicTableRequest = async ({
     });
 
     const error = parseErrorFromResponse(data);
-    if (error) return Promise.reject();
+    if (error) return Promise.reject(getParsedError(error));
 
     const {columns, rows, yqlTypes} = prepareRows(data, reverseRows);
     return {columns, rows, yqlTypes};
