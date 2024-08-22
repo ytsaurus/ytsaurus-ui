@@ -23,7 +23,7 @@ class ComponentsPage extends BasePage {
         await this.page.waitForTimeout(3000);
         await replaceInnerHtml(this.page, {
             '.node-page__host': {regex: hostname, replacement: HOST_MASK},
-            '.meta-table-item__value_key_system_tags .node-meta__tags .elements-label': 'some tag',
+            '.meta-table-item__value_key_tags .node-meta__tags .elements-label': 'some tag',
             [`.g-breadcrumbs [title="${hostname}"] .g-link`]: {
                 regex: hostname,
                 replacement: HOST_MASK,

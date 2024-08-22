@@ -187,16 +187,14 @@ export class Node {
         this.alertCount = ypath.getValue(attributes, '/alert_count');
         this.alerts = ypath.getValue(attributes, '/alerts');
         this.effectiveState = this.banned ? 'banned' : this.state;
-        this.tags = ypath.getValue(attributes, '/tags');
+        this.tags = _.sortBy(ypath.getValue(attributes, '/tags'));
         this.userTags = _.sortBy(ypath.getValue(attributes, '/user_tags'));
-        this.systemTags = _.sortBy(
-            _.without(
-                this.tags,
-                ...this.userTags,
-                this.rack,
-                this.dataCenter,
-                hammer.format['Address'](this.host),
-            ),
+        this.systemTags = _.without(
+            this.tags,
+            ...this.userTags,
+            this.rack,
+            this.dataCenter,
+            hammer.format['Address'](this.host),
         );
     }
 
