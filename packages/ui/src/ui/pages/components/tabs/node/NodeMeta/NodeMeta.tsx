@@ -28,7 +28,7 @@ function getStateTheme(state: Node['state']) {
 
 interface Props {
     state: Node['state'];
-    systemTags: Node['systemTags'];
+    tags: Node['tags'];
     userTags: Node['userTags'];
     rack: Node['rack'];
     banned: Node['banned'];
@@ -48,7 +48,7 @@ interface Props {
 
 function NodeMeta({
     state,
-    systemTags,
+    tags,
     userTags,
     rack,
     banned,
@@ -150,9 +150,9 @@ function NodeMeta({
     const tagsItems = React.useMemo(
         () => [
             {
-                key: 'system_tags',
-                value: <Tags items={systemTags} />,
-                visible: Boolean(systemTags?.length),
+                key: 'tags',
+                value: <Tags items={tags} />,
+                visible: Boolean(tags?.length),
             },
             {
                 key: 'user_tags',
@@ -160,7 +160,7 @@ function NodeMeta({
                 visible: Boolean(userTags?.length),
             },
         ],
-        [systemTags, userTags],
+        [tags, userTags],
     );
 
     const urlItems = React.useMemo(() => {
