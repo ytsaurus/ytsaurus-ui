@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.52.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.51.1...ui-v1.52.0) (2024-08-23)
+
+
+### Features
+
+* **Query:** share button new design [YTFRONT-4286] ([7d66e6c](https://github.com/ytsaurus/ytsaurus-ui/commit/7d66e6c56bc9f9489bb0ee89a2de3791dfd22103))
+* **Scheduling:** changed validation for name [YTFRONT-4319] ([7bd7852](https://github.com/ytsaurus/ytsaurus-ui/commit/7bd7852ab57bd084b6fe9f24086272a4fd3b7aa9))
+
 ## [1.51.1](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.51.0...ui-v1.51.1) (2024-08-19)
 
 
