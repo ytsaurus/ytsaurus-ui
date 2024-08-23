@@ -2,7 +2,7 @@ import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import MonacoEditor, {MonacoEditorConfig} from '../../../components/MonacoEditor';
 import block from 'bem-cn-lite';
 import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
-import {Button, Icon, Loader} from '@gravity-ui/uikit';
+import {Button, Flex, Icon, Loader} from '@gravity-ui/uikit';
 
 import playIcon from '../../../assets/img/svg/play.svg';
 import {useDispatch, useSelector} from 'react-redux';
@@ -232,8 +232,10 @@ const ResultView = React.memo(function ResultView({
             minimized={resultViewMode === 'minimized'}
             toolbar={
                 <>
-                    <ShareButton />
-                    <EditQueryACOModal query_id={query.id} />
+                    <Flex gap={2} className={b('results-toolbar-buttons')}>
+                        <ShareButton />
+                        <EditQueryACOModal query_id={query.id} />
+                    </Flex>
                     {resultViewMode === 'split' ? (
                         <Button
                             className={b('meta-action')}
