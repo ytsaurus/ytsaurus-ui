@@ -37,6 +37,10 @@
         flex: 1;
     }
 
+    &__results-toolbar-buttons {
+        margin-right: 8px;
+    }
+
     &__editor {
         flex: 1;
         border-bottom: 1px solid var(--dark-divider);
