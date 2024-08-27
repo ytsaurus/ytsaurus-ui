@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.54.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.53.0...ui-v1.54.0) (2024-08-27)
+
+
+### Features
+
+* **Navigation/Flow:** add new tab [YTFRONT-3978] ([1ef39d7](https://github.com/ytsaurus/ytsaurus-ui/commit/1ef39d7cee11e4e6a6f3eb4bfb044e95b4f6fc60))
+
+
+### Bug Fixes
+
+* **Navigation/Favourites:** allow to add items when the value is undefined ([69c9202](https://github.com/ytsaurus/ytsaurus-ui/commit/69c920222ce1f3a0381efc70aa65da190f04b0e0))
+
 ## [1.53.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.52.0...ui-v1.53.0) (2024-08-27)
 
 
