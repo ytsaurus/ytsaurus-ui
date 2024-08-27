@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.53.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.52.0...ui-v1.53.0) (2024-08-27)
+
+
+### Features
+
+* **Query:** path autocomplete [YTFRONT-4264] ([ab9ba1f](https://github.com/ytsaurus/ytsaurus-ui/commit/ab9ba1f4497c70649a8e92df9666c2cf2ff9ed24))
+* **System/Nodes:** allow to expand groups of nodes [YTFRONT-3297] ([7c8330e](https://github.com/ytsaurus/ytsaurus-ui/commit/7c8330e49ead3b01ae7bd962a9887e05940ec10d))
+
+
+### Bug Fixes
+
+* **Navigation:** error message in table [YTFRONT-4312] ([d3e94cd](https://github.com/ytsaurus/ytsaurus-ui/commit/d3e94cd2893970a2982bf3943da0dfd181f649f8))
+* **Operations/Details/MetaTable:** blinking UI when hover on long pool name [YTFRONT-4308] ([395c849](https://github.com/ytsaurus/ytsaurus-ui/commit/395c8496e6770c9da1263c9b9e6589bfd157e991))
+
 ## [1.52.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.51.1...ui-v1.52.0) (2024-08-23)
 
 
