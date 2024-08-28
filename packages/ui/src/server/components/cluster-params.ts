@@ -27,8 +27,9 @@ function fetchClusterParams(cluster: string, {ctx}: {ctx?: AppContext}) {
     const app = getApp();
     return (ctx ?? app.nodekit.ctx).call('fetchClusterParams', async (cx) => {
         if (!cx.get('requestId')) {
-            cx.set('requestId', crypto.randomUUID());
-            cx.setTag('request_id', cx.get('requestId'));
+            const requestId = crypto.randomUUID();
+            cx.set('requestId', requestId);
+            cx.setTag('request_id', requestId);
         }
 
         const timeStart = Date.now();
