@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.56.1](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.56.0...ui-v1.56.1) (2024-08-28)
+
+
+### Bug Fixes
+
+* minor fix for README.md ([aa5ec83](https://github.com/ytsaurus/ytsaurus-ui/commit/aa5ec83230247430731924ec913538e919277026))
+* **packages/ui/package.json:** fix for repository.url ([23f2a54](https://github.com/ytsaurus/ytsaurus-ui/commit/23f2a5405357fcabb1bdfa25bf340018cd9a112a))
+
 ## [1.56.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.55.0...ui-v1.56.0) (2024-08-28)
 
 
