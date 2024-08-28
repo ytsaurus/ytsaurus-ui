@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.56.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.55.0...ui-v1.56.0) (2024-08-28)
+
+
+### Features
+
+* **Components/Nodes:** add gpu progress [YTFRONT-4306] ([7ec1f62](https://github.com/ytsaurus/ytsaurus-ui/commit/7ec1f62eb996fdf10cc0d78a375ed07fd33f9a35))
+
 ## [1.55.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.54.0...ui-v1.55.0) (2024-08-28)
 
 
