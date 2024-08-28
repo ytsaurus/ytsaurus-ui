@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.55.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.54.0...ui-v1.55.0) (2024-08-28)
+
+
+### Features
+
+* **Components:** show tags without filter [YTFRONT-4315] ([723e772](https://github.com/ytsaurus/ytsaurus-ui/commit/723e77216750e3608b284b7953d43cbdee65c0d3))
+
 ## [1.54.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.53.0...ui-v1.54.0) (2024-08-27)
 
 
