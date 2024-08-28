@@ -1,4 +1,5 @@
 {
+  "last-release-sha": "0cad58f25b42659df3ca2ccc665cfe0c67b58179",
   "separate-pull-requests": true,
   "plugins": ["node-workspace"],
   "packages": {
