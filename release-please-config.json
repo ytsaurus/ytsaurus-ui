@@ -10,7 +10,7 @@
     },
     "packages/ui": {
       "draft": true,
-      "release-type": "simple"
+      "release-type": "node"
     },
     "packages/custom-ytsaurus-ui.example": {
       "release-type": "simple"
