@@ -57,7 +57,7 @@ class SchedulersAndAgents extends Component {
         },
     };
 
-    renderHosts(connectedHosts) {
+    renderHosts(name, connectedHosts) {
         return _.map(connectedHosts, ({host, state, maintenanceMessage}, index) => {
             return (
                 <Scheduler
@@ -65,6 +65,7 @@ class SchedulersAndAgents extends Component {
                     host={host}
                     state={state}
                     maintenanceMessage={maintenanceMessage}
+                    type={name}
                 />
             );
         });
@@ -92,7 +93,7 @@ class SchedulersAndAgents extends Component {
                     )}
                 </div>
                 <div className={b(`${name}-hosts`)} style={style}>
-                    {this.renderHosts(objects)}
+                    {this.renderHosts(name, objects)}
                 </div>
             </div>
         );

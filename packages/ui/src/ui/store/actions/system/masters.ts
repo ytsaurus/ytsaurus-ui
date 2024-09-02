@@ -12,12 +12,18 @@ import {USE_SUPRESS_SYNC} from '../../../../shared/constants';
 import type {AxiosError} from 'axios';
 import type {Dispatch} from 'redux';
 import type {BatchSubRequest} from '../../../../shared/yt-types';
-import type {
+import {
     MasterAlert,
     MasterDataItemInfo,
     MastersConfigResponse,
+    MastersStateAction,
     ResponseItemsGroup,
 } from '../../reducers/system/masters';
+import {ThunkAction} from 'redux-thunk';
+import type {RootState} from '../../reducers';
+import {MasterInstance} from '../../selectors/system/masters';
+import {getMastersHostType} from '../../selectors/settings';
+import {VisibleHostType} from '../../../constants/system/masters';
 
 export const FETCH_MASTER_CONFIG = createActionTypes('MASTER_CONFIG');
 export const FETCH_MASTER_DATA = createActionTypes('MASTER_DATA');
@@ -398,6 +404,98 @@ export function loadMasters() {
         }
     };
 }
+
+const getPathByMasterType = (type: string): string | null => {
+    switch (type) {
+        case 'primary':
+        case 'secondary':
+            return '//sys/cluster_masters';
+        case 'providers':
+            return '//sys/timestamp_providers';
+        case 'queue_agent':
+            return '//sys/queue_agents/instances';
+        default:
+            return null;
+    }
+};
+
+export const changeMaintenance = ({
+    path,
+    login,
+    maintenance,
+    message,
+}: {
+    path: string;
+    login: string;
+    maintenance: boolean;
+    message: string;
+}) =>
+    ytApiV3Id.executeBatch(YTApiId.systemMastersMaintenance, {
+        requests: [
+            {
+                command: 'set',
+                parameters: {
+                    path: `${path}/@maintenance`,
+                },
+                input: maintenance,
+            },
+            {
+                command: 'set',
+                parameters: {
+                    path: `${path}/@maintenance_message`,
+                },
+                input: maintenance
+                    ? `Maintenance was set by ${login} at ${new Date().toISOString()} from UI${message ? `. ${message}` : ''}`
+                    : '',
+            },
+        ],
+    });
+
+export const changeMasterMaintenance =
+    ({
+        address,
+        maintenance,
+        message,
+    }: {
+        address: string;
+        maintenance: boolean;
+        message: string;
+    }): ThunkAction<any, RootState, unknown, MastersStateAction> =>
+    async (dispatch, getSate) => {
+        const state = getSate();
+        const hostType = getMastersHostType(state);
+        const {primary, secondary, queueAgents, providers} = state.system.masters;
+        const instances: MasterInstance[] = [
+            ...primary.instances,
+            ...secondary.reduce<MasterInstance[]>((acc, item) => [...acc, ...item.instances], []),
+            ...queueAgents.instances,
+            ...providers.instances,
+        ];
+
+        const master = instances.find((i) => {
+            const {host, physicalHost} = i.toObject();
+            const addressByType = hostType === VisibleHostType.host ? host : physicalHost;
+            return addressByType === address;
+        });
+        if (!master) throw new Error('Cant find master by address');
+
+        const path = getPathByMasterType(master.getType());
+        if (!path) throw new Error('Cant take path by master type');
+
+        const result = await changeMaintenance({
+            path: `${path}/${master.toObject().host}`,
+            login: state.global.login,
+            maintenance,
+            message,
+        });
+
+        const error = getBatchError(result, 'Failed to update master maintenance');
+        if (error) {
+            throw error;
+        }
+
+        dispatch(loadMasters());
+    };
 
 function getCellIdTag(uuid?: string): number | undefined {
     if (!uuid) {

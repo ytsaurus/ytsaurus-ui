@@ -14,7 +14,7 @@ import './Host.scss';
 const reShortName = makeRegexpFromSettings(uiSettings.reShortNameFromAddress);
 const reTabletNodeShortName = makeRegexpFromSettings(uiSettings.reShortNameFromTabletNodeAddress);
 
-function calcShortNameByRegExp(address: string, asTabletNode?: boolean) {
+export function calcShortNameByRegExp(address: string, asTabletNode?: boolean) {
     const re = asTabletNode ? reTabletNodeShortName : reShortName;
     if (re) {
         const res = re?.exec(address);

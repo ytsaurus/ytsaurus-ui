@@ -9,6 +9,8 @@ import {Tooltip} from '../../../../components/Tooltip/Tooltip';
 import NodeQuad from '../../NodeQuad/NodeQuad';
 
 import '../Schedulers.scss';
+import {ChangeMaintenanceButton} from '../../Masters/ChangeMaintenanceButton';
+import {calcShortNameByRegExp} from '../../../../containers/Host/Host';
 
 const b = block('system');
 
@@ -16,8 +18,9 @@ export type SchedulerProps = {
     host?: string;
     state: 'active' | 'connected' | 'standby' | 'disconnected' | 'offline';
     maintenanceMessage?: React.ReactNode;
+    type: 'scheduler' | 'agent';
 };
-export default function Scheduler({host, state, maintenanceMessage}: SchedulerProps) {
+export default function Scheduler({host, state, maintenanceMessage, type}: SchedulerProps) {
     const theme = (
         {
             active: 'online',
@@ -42,10 +45,21 @@ export default function Scheduler({host, state, maintenanceMessage}: SchedulerPr
                 )}
             </div>
             <div title={address} className={b('scheduler-host')}>
-                <div className={b('scheduler-host-address')}>{address}</div>
-                <div className={b('scheduler-host-copy-btn')}>
+                <Tooltip content={address}>
+                    <div className={b('scheduler-host-address')}>
+                        {calcShortNameByRegExp(address) || address}
+                    </div>
+                </Tooltip>
+                <div className={b('scheduler-host-btn')}>
                     {host && <ClipboardButton view="flat-secondary" text={host} />}
                 </div>
+                <ChangeMaintenanceButton
+                    className={b('scheduler-host-btn')}
+                    address={host!}
+                    maintenance={Boolean(maintenanceMessage)}
+                    maintenanceMessage={maintenanceMessage as string}
+                    type={type}
+                />
             </div>
         </div>
     );

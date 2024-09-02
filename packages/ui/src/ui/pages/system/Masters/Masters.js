@@ -80,6 +80,7 @@ class Masters extends Component {
                 {...master}
                 gridRowStart={gridRowStart}
                 allowVoting={allowVoting}
+                allowService
             />
         ));
 
@@ -106,7 +107,12 @@ class Masters extends Component {
                     Primary Masters
                     {this.renderMasterTypeSwitcher()}
                 </div>
-                <MasterGroup className={b('primary-master')} {...primary} allowVoting />
+                <MasterGroup
+                    className={b('primary-master')}
+                    {...primary}
+                    allowVoting
+                    allowService
+                />
                 {Boolean(secondary?.length) && (
                     <React.Fragment>
                         <div className={headingCN}>Secondary Masters</div>
@@ -124,6 +130,7 @@ class Masters extends Component {
                             className={b('timestamp-providers')}
                             gridRowStart
                             allowVoting
+                            allowService
                         />
                     </React.Fragment>
                 )}
@@ -146,7 +153,7 @@ class Masters extends Component {
                             Queue agents
                             {this.renderMasterTypeSwitcher()}
                         </div>
-                        <MasterGroup {...queueAgents} />
+                        <MasterGroup {...queueAgents} allowService />
                     </React.Fragment>
                 )}
             </div>
@@ -156,7 +163,12 @@ class Masters extends Component {
                     Primary Masters
                     {this.renderMasterTypeSwitcher()}
                 </div>
-                <MasterGroup className={b('primary-master')} {...primary} allowVoting />
+                <MasterGroup
+                    className={b('primary-master')}
+                    {...primary}
+                    allowVoting
+                    allowService
+                />
                 {Boolean(secondary?.length) && (
                     <React.Fragment>
                         <div className={headingCN}>Secondary Masters</div>
@@ -167,22 +179,30 @@ class Masters extends Component {
                     {Boolean(providers?.instances?.length) &&
                         this.renderSection('providers', 'Timestamp providers', providers, {
                             allowVoting: true,
+                            allowService: true,
                         })}
                     {Boolean(discovery?.instances?.length) &&
                         this.renderSection('discovery', 'Discovery servers', discovery)}
                     {Boolean(queueAgents?.instances?.length) &&
-                        this.renderSection('queueAgents', 'Queue agents', queueAgents)}
+                        this.renderSection('queueAgents', 'Queue agents', queueAgents, {
+                            allowService: true,
+                        })}
                 </div>
             </div>
         );
     }
 
-    renderSection(name, heading, data, {allowVoting} = {allowVoting: false}) {
+    renderSection(
+        name,
+        heading,
+        data,
+        {allowVoting, allowService} = {allowVoting: false, allowService: false},
+    ) {
         return (
             <div className={b(name)}>
                 <div className={headingCN}>{heading}</div>
                 <div className={b(`${name}-hosts`)}>
-                    <MasterGroup {...data} allowVoting={allowVoting} />
+                    <MasterGroup {...data} allowVoting={allowVoting} allowService={allowService} />
                 </div>
             </div>
         );
