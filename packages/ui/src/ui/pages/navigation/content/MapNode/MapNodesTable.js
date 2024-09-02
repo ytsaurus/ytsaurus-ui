@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {connect, useSelector} from 'react-redux';
+import {batch, connect, useSelector} from 'react-redux';
 import PropTypes from 'prop-types';
 import cn from 'bem-cn-lite';
 import _ from 'lodash';
@@ -31,7 +31,12 @@ import {
 } from '../../../../store/selectors/navigation/content/map-node';
 import {getTransaction} from '../../../../store/selectors/navigation';
 
-import {navigateParent, updatePath, updateView} from '../../../../store/actions/navigation';
+import {
+    navigateParent,
+    setMode,
+    updatePath,
+    updateView,
+} from '../../../../store/actions/navigation';
 import {setSelectedItem} from '../../../../store/actions/navigation/content/map-node';
 
 import {ROOT_POOL_NAME, Tab as SchedulingTab} from '../../../../constants/scheduling';
@@ -316,7 +321,10 @@ class MapNodesTable extends Component {
         if (item.parsedPathError) {
             showErrorPopup(item.parsedPathError, {hideOopsMsg: true, disableLogger: true});
         } else if (itemNavigationAllowed(item)) {
-            this.props.updatePath(item.path);
+            batch(() => {
+                this.props.updatePath(item.path);
+                this.props.setMode('auto');
+            });
         }
     };
 
@@ -412,6 +420,7 @@ const mapDispatchToProps = {
     navigateParent,
     updateView,
     updatePath,
+    setMode,
     showTableEraseModal,
     showTableSortModal,
     showTableMergeModal,
