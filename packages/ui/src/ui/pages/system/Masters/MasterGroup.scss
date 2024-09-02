@@ -51,19 +51,19 @@
         grid-column: host;
         display: flex;
         align-items: center;
-        justify-content: space-between;
+        gap: 0 4px;
 
         &-name {
             flex: 0 1 auto;
             @include ellipsis();
         }
 
-        &-copy-btn {
+        &-btn {
             flex: 0 0 auto;
             visibility: hidden;
         }
 
-        &:hover &-copy-btn {
+        &:hover &-btn {
             visibility: visible;
         }
 

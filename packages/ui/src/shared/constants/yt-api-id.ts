@@ -119,6 +119,7 @@ export enum YTApiId {
     systemMasters,
     systemMastersConfig,
     systemMastersConfigDiscoveryServer,
+    systemMastersMaintenance,
     systemNodes,
     systemProxies,
     systemResources,

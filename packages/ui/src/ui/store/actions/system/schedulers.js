@@ -2,8 +2,14 @@ import _ from 'lodash';
 import ypath from '@ytsaurus/interface-helpers/lib/ypath';
 
 import {YTApiId, ytApiV3Id} from '../../../rum/rum-wrap-api';
-import {splitBatchResults} from '../../../utils/utils';
+import {getBatchError, splitBatchResults} from '../../../utils/utils';
 import {USE_SUPRESS_SYNC} from '../../../../shared/constants';
+import {loadSchedulersAndAgents} from './index';
+import {changeMaintenance} from './masters';
+import {getCurrentUserName} from '../../selectors/global';
+import {getSystemAgents, getSystemSchedulers} from '../../selectors/system/schedulers';
+import {getMastersHostType} from '../../selectors/settings';
+import {VisibleHostType} from '../../../constants/system/masters';
 
 export function getSchedulers() {
     return ytApiV3Id
@@ -118,3 +124,37 @@ export function getAgents() {
             return getAgentsState(res);
         });
 }
+
+export const changeSchedulerMaintenance =
+    ({address, maintenance, message, type}) =>
+    async (dispatch, getSate) => {
+        const state = getSate();
+        const isAgent = type === 'agents';
+        const items = isAgent ? getSystemAgents(state) : getSystemSchedulers(state);
+        const hostType = getMastersHostType(state);
+
+        const master = items.find((i) => {
+            const host = i.host.$value;
+            const annotations = ypath.getValue(i.host, '/@annotations');
+            const addressByType =
+                hostType === VisibleHostType.host ? host : annotations.physical_host;
+            return addressByType === address;
+        });
+
+        if (!master) throw new Error('Cant find master by address');
+
+        const login = getCurrentUserName(getSate());
+        const result = await changeMaintenance({
+            path: `//sys/${isAgent ? 'controller_agents' : 'scheduler'}/instances/${master.host.$value}`, //controller_agents
+            login,
+            maintenance,
+            message,
+        });
+
+        const error = getBatchError(result, 'Failed to update master maintenance');
+        if (error) {
+            throw error;
+        }
+
+        dispatch(loadSchedulersAndAgents());
+    };

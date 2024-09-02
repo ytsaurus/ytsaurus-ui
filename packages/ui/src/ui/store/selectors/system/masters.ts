@@ -38,12 +38,22 @@ export class MasterInstance {
     toObject() {
         return {
             host: this.$address,
+            physicalHost: this.$physicalAddress,
             type: this.$type,
             cellTag: this.$cell,
         };
     }
     clone() {
         return new MasterInstance(this.$rowAddress, this.$type, this.$cell);
+    }
+
+    getMaintenance() {
+        const attributes = ypath.getValue(this.$rowAddress, '/attributes');
+        return attributes.maintenance;
+    }
+
+    getType() {
+        return this.$type;
     }
 
     update(data: unknown) {
