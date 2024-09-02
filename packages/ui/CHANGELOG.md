@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.57.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.56.1...ui-v1.57.0) (2024-09-02)
+
+
+### Features
+
+* **Query:** custom vcs [YTFRONT-4257] ([3e0df9b](https://github.com/ytsaurus/ytsaurus-ui/commit/3e0df9b3b64bb515d748118f8a60d4f88f3274a2))
+
 ## [1.56.1](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.56.0...ui-v1.56.1) (2024-08-28)
 
 
