@@ -1,5 +1,5 @@
 import type {YTError} from '../@types/types';
-import type {Settings} from './constants/settings-types';
+import type {Settings, Stage} from './constants/settings-types';
 import type {UISettings} from './ui-settings';
 
 export interface YTConfig {
@@ -24,6 +24,7 @@ export interface ClusterUiConfig {
     enable_maintenance_api_proxies?: boolean;
     chyt_controller_base_url?: string;
     livy_controller_base_url?: string;
+    query_tracker_default_aco?: Record<Stage, string>;
     job_trace_url_template?: {
         title: string;
         url_template: string;
