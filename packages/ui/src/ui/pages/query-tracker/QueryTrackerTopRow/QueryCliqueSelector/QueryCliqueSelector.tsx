@@ -7,13 +7,20 @@ type Props = {
     loading: boolean;
     cliqueList: {alias: string; yt_operation_id?: string}[];
     value: string | undefined;
+    placeholder?: string;
     onChange: (alias: string) => void;
 };
 
-export const QueryCliqueSelector: FC<Props> = ({cliqueList, value, loading, onChange}) => {
+export const QueryCliqueSelector: FC<Props> = ({
+    cliqueList,
+    value,
+    placeholder = 'Clique alias',
+    loading,
+    onChange,
+}) => {
     return (
         <QuerySelector
-            placeholder="Clique alias"
+            placeholder={placeholder}
             filterPlaceholder="Search"
             hasClear
             items={cliqueList}

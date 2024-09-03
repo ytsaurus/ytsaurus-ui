@@ -89,21 +89,20 @@ const QueryEditorView = React.memo(function QueryEditorView({
 
     useEffect(() => {
         const runQueryByKey = (e: KeyboardEvent) => {
-            if (e.ctrlKey || e.metaKey) {
-                if (e.key === 'Enter' || e.key === 'e') {
-                    runQueryCallback();
-                    e.preventDefault();
-                }
-            }
-            if (e.key === 'F8') {
-                runQueryCallback();
+            const isCtrlOrMetaPressed = e.ctrlKey || e.metaKey;
+            const isEnterOrEKeyPressed = e.key === 'Enter' || e.key === 'e';
+            const isF8KeyPressed = e.key === 'F8';
+
+            if ((isCtrlOrMetaPressed && isEnterOrEKeyPressed) || isF8KeyPressed) {
                 e.preventDefault();
+                e.stopPropagation();
+                runQueryCallback();
             }
         };
 
-        document.addEventListener('keyup', runQueryByKey);
+        document.addEventListener('keydown', runQueryByKey);
         return () => {
-            document.removeEventListener('keyup', runQueryByKey);
+            document.removeEventListener('keydown', runQueryByKey);
         };
     }, [runQueryCallback]);
 

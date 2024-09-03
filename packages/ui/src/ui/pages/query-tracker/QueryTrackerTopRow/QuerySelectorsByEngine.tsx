@@ -55,6 +55,7 @@ export const QuerySelectorsByEngine: FC<Props> = ({
                     onChange={onClusterChange}
                 />
                 <QueryCliqueSelector
+                    placeholder="Discovery path"
                     loading={cliqueLoading}
                     cliqueList={cliqueList}
                     value={settings.discovery_group}

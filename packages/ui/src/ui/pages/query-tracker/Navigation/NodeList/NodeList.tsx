@@ -147,6 +147,7 @@ export const NodeList: FC = () => {
                         template: (node) => (
                             <NodeListRow
                                 node={node as NavigationNode}
+                                queryEngine={engine}
                                 onClick={handleNodeClick}
                                 onFavoriteToggle={handleFavoriteToggle}
                                 onEditorInsert={handleEditorInsert}

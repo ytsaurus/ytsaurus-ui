@@ -82,7 +82,7 @@ export function reducer(state = initialState, action: QueriesListAction): Querie
                 ...state,
                 map: action.data.reduce(
                     (acc: Record<QueryItem['id'], QueryItem>, item: QueryItem) => {
-                        acc[item.id] = item;
+                        if (item.id in acc) acc[item.id] = item;
                         return acc;
                     },
                     {...state.map},
