@@ -9,6 +9,7 @@ import {getQueryResult} from '../../module/query_result/selectors';
 import {RootState} from '../../../../store/reducers';
 import {useThunkDispatch} from '../../../../store/thunkDispatch';
 import {FIX_MY_TYPE} from '../../../../../@types/types';
+import {getExportTableBaseUrl} from '../../../../config';
 
 /**
  * TODO: get rid of inheritance from DownloadManager
@@ -43,6 +44,32 @@ export class QueryResultTableDownloadManager extends DownloadManager {
             url: `${base}&${query}`,
             error,
         };
+    }
+
+    getExcelDownloadLink() {
+        const {cluster, queryId} = this.props as FIX_MY_TYPE;
+        const {number_precision_mode, rowsMode, startRow, numRows} = this.state;
+
+        const base = `${getExportTableBaseUrl({cluster})}/${cluster}/api/export-query-result`;
+        const params = new URLSearchParams({
+            number_precision_mode,
+            result_index: '0',
+            query_id: queryId,
+        });
+
+        if (rowsMode === 'range') {
+            params.append('lower_row_index', startRow.toString());
+            params.append(
+                'upper_row_index',
+                ((startRow as number) + (numRows as number)).toString(),
+            );
+        }
+
+        const columns = this.prepareColumnsForColumnMode(false);
+        const columnsString = columns ? '&' + columns.map((i) => `columns=${i}`).join('&') : '';
+
+        const {error} = this.getDownloadParams();
+        return {url: `${base}?${params}${columnsString}`, error};
     }
 }
 
@@ -98,7 +125,7 @@ export const QueryResultDownloadManager = React.memo(function QueryResultDownloa
             handleShow={() => setOpened(true)}
             handleClose={() => setOpened(false)}
             offsetValue={startRow}
-            isSchematicTable={false}
+            isSchematicTable={true}
         />
     );
 });

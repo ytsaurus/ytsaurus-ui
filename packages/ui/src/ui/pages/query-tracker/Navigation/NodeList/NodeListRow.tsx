@@ -18,6 +18,7 @@ const b = cn('navigation-node-list-row');
 
 type Props = {
     node: NavigationNode;
+    queryEngine: QueryEngine;
     onClick: (path: string, type: string | undefined) => void;
     onFavoriteToggle: (favoritePath: string) => void;
     onClipboardCopy: (path: string, type: 'url' | 'path') => void;
@@ -28,6 +29,7 @@ type Props = {
 
 export const NodeListRow: FC<Props> = ({
     node: {type, broken, dynamic, name, path, isFavorite},
+    queryEngine,
     onClick,
     onFavoriteToggle,
     onClipboardCopy,
@@ -109,25 +111,41 @@ export const NodeListRow: FC<Props> = ({
                                                 onEditorInsert(path, 'path');
                                             },
                                         },
-                                        {
-                                            text: 'SELECT',
-                                            action: (e) => {
-                                                e.stopPropagation();
-                                                onEditorInsert(path, 'select');
-                                            },
-                                        },
+                                        ...(dynamic || queryEngine !== QueryEngine.YT_QL
+                                            ? [
+                                                  {
+                                                      text: 'SELECT',
+                                                      action: (
+                                                          e:
+                                                              | React.MouseEvent<HTMLElement>
+                                                              | KeyboardEvent,
+                                                      ) => {
+                                                          e.stopPropagation();
+                                                          onEditorInsert(path, 'select');
+                                                      },
+                                                  },
+                                              ]
+                                            : []),
                                     ],
                                 },
                                 {
                                     text: 'Create new query',
                                     items: [
-                                        {
-                                            text: 'SELECT (YT QL)',
-                                            action: (e) => {
-                                                e.stopPropagation();
-                                                onNewQuery(path, QueryEngine.YT_QL);
-                                            },
-                                        },
+                                        ...(dynamic
+                                            ? [
+                                                  {
+                                                      text: 'SELECT (YT QL)',
+                                                      action: (
+                                                          e:
+                                                              | React.MouseEvent<HTMLElement>
+                                                              | KeyboardEvent,
+                                                      ) => {
+                                                          e.stopPropagation();
+                                                          onNewQuery(path, QueryEngine.YT_QL);
+                                                      },
+                                                  },
+                                              ]
+                                            : []),
                                         {
                                             text: 'SELECT (YQL)',
                                             action: (e) => {
