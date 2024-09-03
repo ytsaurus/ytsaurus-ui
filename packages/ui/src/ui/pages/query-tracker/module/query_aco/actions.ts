@@ -1,13 +1,23 @@
+import {AnyAction} from 'redux';
 import {ThunkAction} from 'redux-thunk';
 import {Toaster} from '@gravity-ui/uikit';
 import type {AxiosError} from 'axios';
 import {YTApiId, ytApiV4Id} from '../../../../rum/rum-wrap-api';
-import {getQueryTrackerRequestOptions} from '../query/selectors';
+import {getEffectiveApiStage, getQueryTrackerRequestOptions} from '../query/selectors';
 import {QUERY_ACO_LOADING} from './constants';
 import {showErrorPopup} from '../../../../utils/utils';
 import {QueryACOActions} from './reducer';
+import {RootState} from '../../../../store/reducers';
+import {setSettingByKey} from '../../../../store/actions/settings';
 
-export const getQueryACO = (): ThunkAction<Promise<unknown>, any, any, QueryACOActions> => {
+type QueryTrackerInfoResponse = Awaited<ReturnType<typeof ytApiV4Id.getQueryTrackerInfo>>;
+
+export const getQueryACO = (): ThunkAction<
+    Promise<QueryTrackerInfoResponse>,
+    any,
+    any,
+    QueryACOActions
+> => {
     return (dispatch, getState) => {
         const state = getState();
         const {stage} = getQueryTrackerRequestOptions(state);
@@ -41,6 +51,8 @@ export const getQueryACO = (): ThunkAction<Promise<unknown>, any, any, QueryACOA
                     type: QUERY_ACO_LOADING.SUCCESS,
                     data: {data},
                 });
+
+                return data;
             })
             .catch((error) => {
                 // @todo Remove the condition when the method will be implemented on all clusters
@@ -61,3 +73,14 @@ export const getQueryACO = (): ThunkAction<Promise<unknown>, any, any, QueryACOA
             });
     };
 };
+
+export function setUserDefaultACO(
+    aco: string,
+): ThunkAction<Promise<any>, RootState, any, AnyAction> {
+    return async (dispatch, getState) => {
+        const state = getState();
+        const stage = getEffectiveApiStage(state);
+
+        await dispatch(setSettingByKey(`qt-stage::${stage}::queryTracker::defaultACO`, aco));
+    };
+}

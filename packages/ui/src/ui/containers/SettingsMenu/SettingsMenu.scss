@@ -52,6 +52,11 @@
             &_one-line {
                 display: flex;
             }
+
+            &_select {
+                margin-left: 0;
+                margin-bottom: 0;
+            }
         }
 
         &-annotation {
