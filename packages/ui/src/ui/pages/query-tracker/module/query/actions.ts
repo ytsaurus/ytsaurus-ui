@@ -16,7 +16,6 @@ import {
 } from '../api';
 import {requestQueriesList} from '../queries_list/actions';
 import {
-    DEFAULT_QUERY_ACO,
     SHARED_QUERY_ACO,
     getCurrentQuery,
     getQueryDraft,
@@ -28,8 +27,8 @@ import {wrapApiPromiseByToaster} from '../../../../utils/utils';
 import {prepareQueryPlanIds} from './utills';
 import {chytApiAction, spytApiAction} from '../../../../utils/strawberryControllerApi';
 import guid from '../../../../common/hammer/guid';
-import {selectIsMultipleAco} from '../query_aco/selectors';
 import {getSettingQueryTrackerStage} from '../../../../store/selectors/settings-ts';
+import {getDefaultQueryACO, selectIsMultipleAco} from '../query_aco/selectors';
 
 export const REQUEST_QUERY = 'query-tracker/REQUEST_QUERY';
 export type RequestQueryAction = Action<typeof REQUEST_QUERY>;
@@ -157,7 +156,8 @@ export function loadQuery(
             });
 
             query.files = query.files.map((file) => ({...file, id: guid()}));
-            const queryItem = prepareQueryPlanIds(query);
+            const defaultQueryACO = getDefaultQueryACO(state);
+            const queryItem = prepareQueryPlanIds(query, defaultQueryACO);
 
             if (config?.dontReplaceQueryText) {
                 queryItem.query = state.queryTracker.query.draft.query;
@@ -197,11 +197,13 @@ export function createQueryFromTablePath(
     | UpdateQueryAction
     | SetQueryReadyAction
 > {
-    return async (dispatch) => {
+    return async (dispatch, getState) => {
         dispatch({type: REQUEST_QUERY});
         try {
+            const state = getState();
+            const defaultQueryACO = getDefaultQueryACO(state);
             const draft = await wrapApiPromiseByToaster(
-                generateQueryFromTable(engine, {cluster, path}),
+                generateQueryFromTable(engine, {cluster, path, defaultQueryACO}),
                 {
                     toasterName: 'load_query',
                     skipSuccessToast: true,
@@ -237,11 +239,16 @@ export function createEmptyQuery(
     query?: string,
     settings?: Record<string, string>,
 ): ThunkAction<any, RootState, any, SetQueryAction> {
-    return (dispatch) => {
+    return (dispatch, getState) => {
+        const state = getState();
+        const defaultQueryACO = getDefaultQueryACO(state);
+
         dispatch({
             type: SET_QUERY,
             data: {
                 initialQuery: {
+                    access_control_object: defaultQueryACO,
+                    access_control_objects: [defaultQueryACO],
                     query: query || '',
                     engine,
                     settings: settings || {},
@@ -364,11 +371,12 @@ export const toggleShareQuery =
         const query = selectQuery(state);
         if (!query) return;
 
-        let aco = query.access_control_objects || [DEFAULT_QUERY_ACO];
+        const defaultQueryACO = getDefaultQueryACO(state);
+        let aco = query.access_control_objects || [defaultQueryACO];
 
         if (aco.includes(SHARED_QUERY_ACO)) {
             aco = aco.filter((i) => i !== SHARED_QUERY_ACO);
-            if (!aco.length) aco = [DEFAULT_QUERY_ACO];
+            if (!aco.length) aco = [defaultQueryACO];
         } else {
             aco = [...aco, SHARED_QUERY_ACO];
         }

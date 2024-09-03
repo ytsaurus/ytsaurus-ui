@@ -3,12 +3,14 @@ import {useDispatch, useSelector} from 'react-redux';
 import {QueriesPoolingContext} from '../../hooks/QueriesPooling/context';
 import {UPDATE_QUERY} from '../../module/query/actions';
 import {getCurrentQuery} from '../../module/query/selectors';
+import {getDefaultQueryACO} from '../../module/query_aco/selectors';
 import {isQueryProgress} from '../../utils/query';
 import {QueryItem} from '../../module/api';
 import {prepareQueryPlanIds} from '../../module/query/utills';
 
 export function useCurrentQuery() {
     const query = useSelector(getCurrentQuery);
+    const defaultQueryACO = useSelector(getDefaultQueryACO);
     const pollingContext = useContext(QueriesPoolingContext);
 
     const dispatch = useDispatch();
@@ -18,10 +20,10 @@ export function useCurrentQuery() {
             ([item]: QueryItem[]) => {
                 dispatch({
                     type: UPDATE_QUERY,
-                    data: prepareQueryPlanIds(item),
+                    data: prepareQueryPlanIds(item, defaultQueryACO),
                 });
             },
-        [dispatch],
+        [dispatch, defaultQueryACO],
     );
 
     useEffect(

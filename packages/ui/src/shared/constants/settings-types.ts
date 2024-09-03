@@ -70,6 +70,7 @@ interface AccountsSettings {
 }
 
 type ClusterName = string;
+type Stage = string;
 
 interface QueryTrackerSettings {
     'global::queryTracker::queriesListSidebarVisibilityMode': boolean;
@@ -81,7 +82,11 @@ interface ChytSettings {
 }
 
 type QueryTrackerLastSelectedACOsSettings = {
-    [key in `local::${ClusterName}::queryTracker::lastSelectedACOs`]: string[];
+    [key in `qt-stage::${ClusterName}::queryTracker::${Stage}::lastSelectedACOs`]: string[];
+};
+
+type QueryTrackerUserDefaultACOSettings = {
+    [key in `qt-stage::${ClusterName}::queryTracker::${Stage}::defaultACO`]: string;
 };
 
 interface OtherSettings {
@@ -113,7 +118,8 @@ type DescribedSettings = GlobalSettings &
     AccountsSettings &
     QueryTrackerSettings &
     ChytSettings &
-    QueryTrackerLastSelectedACOsSettings;
+    QueryTrackerLastSelectedACOsSettings &
+    QueryTrackerUserDefaultACOSettings;
 
 export type Settings = DescribedSettings & OtherSettings;
 

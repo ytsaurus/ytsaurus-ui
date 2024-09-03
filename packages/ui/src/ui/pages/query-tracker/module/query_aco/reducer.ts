@@ -5,6 +5,7 @@ export interface QueryACOState {
     data: {
         cluster_name: string;
         access_control_objects: string[];
+        query_tracker_stage: string;
         supported_features: {access_control: boolean; multiple_aco?: boolean};
     };
     loading: boolean;
@@ -16,6 +17,7 @@ const initialState: QueryACOState = {
     data: {
         cluster_name: '',
         access_control_objects: [],
+        query_tracker_stage: 'production',
         supported_features: {
             access_control: false,
         },
