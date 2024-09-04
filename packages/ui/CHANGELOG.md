@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.58.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.57.0...ui-v1.58.0) (2024-09-04)
+
+
+### Features
+
+* udpate @gravity-ui/charkit, @gravity-ui/yagr [YTFRONT-4305] ([a65be74](https://github.com/ytsaurus/ytsaurus-ui/commit/a65be74a5d9017a5c0d8159f80982891e3afc8cc))
+
+
+### Bug Fixes
+
+* **Navigation/MapNode:** use 'navmode=auto' when node is clicked ([3d473c4](https://github.com/ytsaurus/ytsaurus-ui/commit/3d473c426daea116c610860e7c15141f963e381f))
+* **Queries:** queries page fixes [YTFRONT-4340] ([676354e](https://github.com/ytsaurus/ytsaurus-ui/commit/676354e75f8b2d8457ceda002f2943b167cd0192))
+
 ## [1.57.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.56.1...ui-v1.57.0) (2024-09-02)
 
 
