@@ -3,7 +3,8 @@ import {ThunkAction} from 'redux-thunk';
 import CancelHelper, {isCancelled} from '../../../utils/cancel-helper';
 import {ChytCliqueSpecletAction} from '../../reducers/chyt/speclet';
 import {RootState} from '../../reducers';
-import {getCluster, isDeveloper} from '../../selectors/global';
+import {getCluster} from '../../selectors/global';
+import {isDeveloper} from '../../selectors/global/is-developer';
 import {chytApiAction} from '../../../utils/strawberryControllerApi';
 import {CHYT_SPECLET} from '../../../constants/chyt-page';
 

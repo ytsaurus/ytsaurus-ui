@@ -5,7 +5,8 @@ import cn from 'bem-cn-lite';
 import {Button, DropdownMenu, DropdownMenuItem} from '@gravity-ui/uikit';
 
 import Icon from '../../../components/Icon/Icon';
-import {getCluster, isQueryTrackerAllowed} from '../../../store/selectors/global';
+import {getCluster} from '../../../store/selectors/global';
+import {isQueryTrackerAllowed} from '../../../store/selectors/global/experimental-pages';
 import {updateQueryDraft} from '../../../pages/query-tracker/module/query/actions';
 import {QueryEngine} from '../../../pages/query-tracker/module/engines';
 import UIFactory from '../../../UIFactory';

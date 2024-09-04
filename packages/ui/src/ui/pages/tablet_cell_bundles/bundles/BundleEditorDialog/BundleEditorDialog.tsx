@@ -14,7 +14,8 @@ import {
 } from '../../../../components/Dialog';
 import hammer from '../../../../common/hammer';
 
-import {getClusterUiConfig, isDeveloper} from '../../../../store/selectors/global';
+import {getClusterUiConfig} from '../../../../store/selectors/global';
+import {isDeveloper} from '../../../../store/selectors/global/is-developer';
 import {
     hideTabletCellBundleEditor,
     setBundleEditorController,

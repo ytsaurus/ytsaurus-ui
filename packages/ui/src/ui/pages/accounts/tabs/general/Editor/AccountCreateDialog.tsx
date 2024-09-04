@@ -6,7 +6,8 @@ import {DialogField, FormApi, YTDFDialog} from '../../../../../components/Dialog
 import {closeCreateModal} from '../../../../../store/actions/accounts/editor';
 import {loadEditedAccount} from '../../../../../store/actions/accounts/accounts';
 import {createAccountFromInfo} from '../../../../../utils/accounts/editor';
-import {getCluster, getCurrentUserName, isDeveloper} from '../../../../../store/selectors/global';
+import {getCluster, getCurrentUserName} from '../../../../../store/selectors/global';
+import {isDeveloper} from '../../../../../store/selectors/global/is-developer';
 import {getActiveAccount} from '../../../../../store/selectors/accounts/accounts';
 import {ROOT_ACCOUNT_NAME} from '../../../../../constants/accounts/accounts';
 

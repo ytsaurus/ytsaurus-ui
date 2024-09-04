@@ -14,17 +14,13 @@ import values_ from 'lodash/values';
 import ypath from '@ytsaurus/interface-helpers/lib/ypath';
 
 import {flags, getClusterConfig} from '../../../utils';
-import {getSettingsRegularUserUI} from '../settings-ts';
 
-import {RootState} from '../../../store/reducers';
+import type {RootState} from '../../../store/reducers';
 import YT from '../../../config/yt-config';
-import {getClusterNS} from '../settings';
-import {ClusterConfig} from '../../../../shared/yt-types';
-import {FIX_MY_TYPE} from '../../../types';
-import UIFactory from '../../../UIFactory';
+import type {ClusterConfig} from '../../../../shared/yt-types';
+import type {FIX_MY_TYPE} from '../../../types';
 import {getConfigData, userSettingsCluster} from '../../../config/ui-settings';
-import {Page} from '../../../../shared/constants/settings';
-import {AuthWay} from '../../../../shared/constants';
+import type {AuthWay} from '../../../../shared/constants';
 
 export const getGlobalError = (state: RootState) => state.global.error.error;
 export const getGlobalErrorType = (state: RootState) => state.global.error.errorType;
@@ -94,10 +90,6 @@ export const getGlobalMasterVersion = createSelector(
     },
 );
 
-export const getCurrentClusterNS = createSelector([getCluster, getClusterNS], (cluster, ns) => {
-    return cluster ? ns : undefined;
-});
-
 export const getPoolTrees = (state: RootState) => state?.global?.poolTrees;
 export const getAllAccounts = (state: RootState) => state.global.accounts;
 export const getBundles = (state: RootState) => state?.global.bundles;
@@ -105,35 +97,6 @@ export const getGlobalUsers = (state: RootState) => state.global.users;
 export const getGlobalGroups = (state: RootState) => state.global.groups;
 export const getCurrentUserName = (state: RootState): string => state?.global?.login;
 export const getAuthWay = (state: RootState): AuthWay => state?.global?.authWay;
-
-export const getAllowedExperimentalPages = (state: RootState) =>
-    state?.global.allowedExperimentalPages;
-
-const isDeveloperRaw = (state: RootState): boolean => state?.global?.isDeveloper;
-
-export const isDeveloperOrWatchMen = createSelector(
-    [isDeveloperRaw, getCurrentUserName],
-    (isDeveloper, login) => {
-        return YT.isLocalCluster || UIFactory.isWatchMen(login) || isDeveloper;
-    },
-);
-
-export const isDeveloper = createSelector(
-    [isDeveloperOrWatchMen, getSettingsRegularUserUI],
-    (isDeveloper, regularUserUI) => {
-        return !regularUserUI && isDeveloper;
-    },
-);
-
-export const isQueryTrackerAllowed = createSelector(
-    [isDeveloper, getAllowedExperimentalPages],
-    (isDeveloper, allowedPages) => {
-        const expPages = UIFactory.getExperimentalPages();
-        return (
-            isDeveloper || !expPages.includes(Page.QUERIES) || allowedPages.includes(Page.QUERIES)
-        );
-    },
-);
 
 export const getAllUserNames = createSelector([getGlobalUsers], (usersData) => {
     return map_(usersData, ({$value}) => $value as string);

@@ -8,7 +8,8 @@ import {
     loadEditedAccount,
     setParentAccountAction,
 } from '../../../../../../store/actions/accounts/accounts';
-import {getCluster, isDeveloper} from '../../../../../../store/selectors/global';
+import {getCluster} from '../../../../../../store/selectors/global';
+import {isDeveloper} from '../../../../../../store/selectors/global/is-developer';
 import {SuggestParentsForEditableAccount} from '../../../../AccountsSuggest';
 
 import './../Editor.scss';

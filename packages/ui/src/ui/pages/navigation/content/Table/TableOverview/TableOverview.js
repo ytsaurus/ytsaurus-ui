@@ -20,7 +20,7 @@ import {HEADER_HEIGHT} from '../../../../../constants/index';
 import './TableOverview.scss';
 import EditTableActions from './EditTableActions';
 import DataLensButton from './DatalensButton';
-import {isQueryTrackerAllowed} from '../../../../../store/selectors/global';
+import {isQueryTrackerAllowed} from '../../../../../store/selectors/global/experimental-pages';
 
 const block = cn('navigation-table-overview');
 

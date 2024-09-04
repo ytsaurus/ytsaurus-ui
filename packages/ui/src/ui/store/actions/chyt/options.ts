@@ -4,7 +4,8 @@ import CancelHelper, {isCancelled} from '../../../utils/cancel-helper';
 import {wrapApiPromiseByToaster} from '../../../utils/utils';
 import {ChytCliqueOptionsAction} from '../../reducers/chyt/options';
 import {RootState} from '../../reducers';
-import {getCluster, isDeveloper} from '../../selectors/global';
+import {getCluster} from '../../selectors/global';
+import {isDeveloper} from '../../selectors/global/is-developer';
 import {
     StrawberryListAttributes,
     StrawberryListResponseItem,
