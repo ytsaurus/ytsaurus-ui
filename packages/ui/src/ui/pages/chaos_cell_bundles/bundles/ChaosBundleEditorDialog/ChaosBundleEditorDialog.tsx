@@ -23,7 +23,7 @@ import type {
     setBunndleAttributes,
 } from '../../../../store/actions/tablet_cell_bundles/tablet-cell-bundle-editor';
 import {ChaosCellBundleEditorState} from '../../../../store/reducers/chaos_cell_bundles/tablet-cell-bundle-editor';
-import {isDeveloper} from '../../../../store/selectors/global';
+import {isDeveloper} from '../../../../store/selectors/global/is-developer';
 import {calcProgressProps} from '../../../../utils/utils';
 
 import './ChaosBundleEditorDialog.scss';

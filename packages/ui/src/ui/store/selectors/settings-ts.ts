@@ -1,13 +1,15 @@
 import {createSelector} from 'reselect';
 
-import {makeGetSetting} from './settings';
+import {NODE_TYPE} from '../../../shared/constants/system';
+import {ValueOf} from '../../../@types/types';
+
+import {getClusterNS, makeGetSetting} from './settings';
 import {NAMESPACES, SettingName} from '../../../shared/constants/settings';
 import {AccountUsageViewType} from '../reducers/accounts/usage/accounts-usage-filters';
 import {AccountUsageDataItem} from '../../store/reducers/accounts/usage/account-usage-types';
 import {ActiveJobTypesMap} from '../../store/actions/settings/settings';
 import {RootState} from '../../store/reducers';
-import {NODE_TYPE} from '../../../shared/constants/system';
-import {ValueOf} from '../../../@types/types';
+import {getCluster} from '../../store/selectors/global';
 
 export const getSettingsDataRaw = (state: RootState) => state.settings.data;
 
@@ -177,3 +179,7 @@ export const getSettingQueryTrackerYQLAgentStage = createSelector(
         return res !== '' ? res : undefined;
     },
 );
+
+export const getCurrentClusterNS = createSelector([getCluster, getClusterNS], (cluster, ns) => {
+    return cluster ? ns : undefined;
+});

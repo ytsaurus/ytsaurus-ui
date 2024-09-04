@@ -13,127 +13,39 @@ import values_ from 'lodash/values';
 // @ts-ignore
 import ypath from '@ytsaurus/interface-helpers/lib/ypath';
 
-import {flags, getClusterConfig} from '../../../utils';
-import {getSettingsRegularUserUI} from '../settings-ts';
-
-import {RootState} from '../../../store/reducers';
-import YT from '../../../config/yt-config';
-import {getClusterNS} from '../settings';
-import {ClusterConfig} from '../../../../shared/yt-types';
 import {FIX_MY_TYPE} from '../../../types';
-import UIFactory from '../../../UIFactory';
+
+import {flags} from '../../../utils';
+
+import type {RootState} from '../../../store/reducers';
 import {getConfigData, userSettingsCluster} from '../../../config/ui-settings';
-import {Page} from '../../../../shared/constants/settings';
-import {AuthWay} from '../../../../shared/constants';
+import type {AuthWay} from '../../../../shared/constants';
+
+export * from './cluster';
+export * from './username';
+
+import {getCluster} from './cluster';
+import {isDeveloper} from './is-developer';
 
 export const getGlobalError = (state: RootState) => state.global.error.error;
 export const getGlobalErrorType = (state: RootState) => state.global.error.errorType;
 
-export const getCluster = (state: RootState): string => state?.global?.cluster || '';
 export const getRootPagesCluster = (state: RootState) => state?.global.rootPagesCluster;
 
 export const getGlobalLoadState = (state: RootState) => state.global.loadState;
 
 export const getTheme = (state: RootState): '' | 'dark' | 'light' => state.global.theme;
 
-export const getClusterUiConfig = (state: RootState) => state.global.clusterUiConfig;
-
-export const getCliqueControllerIsSupported = createSelector([getClusterUiConfig], (uiConfig) => {
-    return {
-        chyt: Boolean(uiConfig.chyt_controller_base_url),
-        spyt: Boolean(uiConfig.livy_controller_base_url),
-    };
-});
-
-export const getClusterUiConfigEnablePerAccountTabletAccounting = (state: RootState) => {
-    return state.global.clusterUiConfig.enable_per_account_tablet_accounting ?? false;
-};
-export const getClusterUiConfigEnablePerBundleTabletAccounting = (state: RootState) =>
-    state.global.clusterUiConfig.enable_per_bundle_tablet_accounting ?? true;
-export const getClusterUiConfigBundleAccountingHelpLink = (state: RootState) =>
-    state.global.clusterUiConfig.per_bundle_accounting_help_link;
-
-export const getCurrentClusterConfig = createSelector([getCluster], (cluster): ClusterConfig => {
-    return getClusterConfig(YT.clusters, cluster);
-});
-
-export function getClusterConfigByName(clusterName: string): ClusterConfig {
-    return getClusterConfig(YT.clusters, clusterName);
-}
-
 export function isAllowYtTwmApi() {
     return !getConfigData().ytApiUseCORS;
 }
-
-export function getClusterProxy(clusterConfig: ClusterConfig): string {
-    const allowYtTvmApi = !getConfigData().ytApiUseCORS;
-    if (allowYtTvmApi) {
-        return `${window.location.host}/api/yt/${clusterConfig.id}`;
-    }
-    return clusterConfig.proxy;
-}
-
-export const getHttpProxyVersion = createSelector(
-    [getCluster, (state: RootState) => state.global.version],
-    (cluster, version) => {
-        return cluster ? version : '';
-    },
-);
-
-export const getGlobalSchedulerVersion = createSelector(
-    [getCluster, (state: RootState) => state.global.schedulerVersion],
-    (cluster, version) => {
-        return cluster ? version : '';
-    },
-);
-
-export const getGlobalMasterVersion = createSelector(
-    [getCluster, (state: RootState) => state.global.masterVersion],
-    (cluster, version) => {
-        return cluster ? version : '';
-    },
-);
-
-export const getCurrentClusterNS = createSelector([getCluster, getClusterNS], (cluster, ns) => {
-    return cluster ? ns : undefined;
-});
 
 export const getPoolTrees = (state: RootState) => state?.global?.poolTrees;
 export const getAllAccounts = (state: RootState) => state.global.accounts;
 export const getBundles = (state: RootState) => state?.global.bundles;
 export const getGlobalUsers = (state: RootState) => state.global.users;
 export const getGlobalGroups = (state: RootState) => state.global.groups;
-export const getCurrentUserName = (state: RootState): string => state?.global?.login;
 export const getAuthWay = (state: RootState): AuthWay => state?.global?.authWay;
-
-export const getAllowedExperimentalPages = (state: RootState) =>
-    state?.global.allowedExperimentalPages;
-
-const isDeveloperRaw = (state: RootState): boolean => state?.global?.isDeveloper;
-
-export const isDeveloperOrWatchMen = createSelector(
-    [isDeveloperRaw, getCurrentUserName],
-    (isDeveloper, login) => {
-        return YT.isLocalCluster || UIFactory.isWatchMen(login) || isDeveloper;
-    },
-);
-
-export const isDeveloper = createSelector(
-    [isDeveloperOrWatchMen, getSettingsRegularUserUI],
-    (isDeveloper, regularUserUI) => {
-        return !regularUserUI && isDeveloper;
-    },
-);
-
-export const isQueryTrackerAllowed = createSelector(
-    [isDeveloper, getAllowedExperimentalPages],
-    (isDeveloper, allowedPages) => {
-        const expPages = UIFactory.getExperimentalPages();
-        return (
-            isDeveloper || !expPages.includes(Page.QUERIES) || allowedPages.includes(Page.QUERIES)
-        );
-    },
-);
 
 export const getAllUserNames = createSelector([getGlobalUsers], (usersData) => {
     return map_(usersData, ({$value}) => $value as string);

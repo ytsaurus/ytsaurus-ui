@@ -2,7 +2,8 @@ import React from 'react';
 
 import {useSelector} from 'react-redux';
 
-import {getGlobalLoadState, isQueryTrackerAllowed} from '../../../store/selectors/global';
+import {getGlobalLoadState} from '../../../store/selectors/global';
+import {isQueryTrackerAllowed} from '../../../store/selectors/global/experimental-pages';
 
 import {LOADING_STATUS, Page} from '../../../constants/index';
 import {Route, Switch} from 'react-router';

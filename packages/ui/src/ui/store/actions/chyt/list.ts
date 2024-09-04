@@ -4,7 +4,8 @@ import type {RootState} from '../../reducers';
 import type {ChytListAction} from '../../reducers/chyt/list';
 import {CHYT_LIST} from '../../../constants/chyt-page';
 import CancelHelper, {isCancelled} from '../../../utils/cancel-helper';
-import {getCluster, isDeveloper} from '../../../store/selectors/global';
+import {getCluster} from '../../../store/selectors/global';
+import {isDeveloper} from '../../../store/selectors/global/is-developer';
 import {getChytListVisibleColumns} from '../../../store/selectors/chyt';
 
 import {StrawberryApi, chytApiAction} from '../../../utils/strawberryControllerApi';

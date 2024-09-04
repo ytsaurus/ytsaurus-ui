@@ -18,7 +18,8 @@ import {RowWithName} from '../../containers/AppNavigation/TopRowContent/SectionN
 import {WaitForDefaultPoolTree} from '../../hooks/global-pool-trees';
 import {getFavouriteChyt, isActiveCliqueInFavourites} from '../../store/selectors/favourites';
 import {getChytCurrentAlias} from '../../store/selectors/chyt';
-import {getCluster, isDeveloper} from '../../store/selectors/global';
+import {getCluster} from '../../store/selectors/global';
+import {isDeveloper} from '../../store/selectors/global/is-developer';
 import {chytApiAction} from '../../utils/strawberryControllerApi';
 import {chytCliqueCreate} from '../../store/actions/chyt/list';
 import {chytToggleFavourite} from '../../store/actions/favourites';
