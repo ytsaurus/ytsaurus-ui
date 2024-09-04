@@ -36,7 +36,8 @@ import {joinMenuItemsAction, splitMenuItemsAction, trackVisit} from '../../store
 import {setSetting} from '../../store/actions/settings';
 import {unmountCluster, updateCluster} from '../../store/actions/cluster-params';
 import {updateTitle} from '../../store/actions/global';
-import {getClusterUiConfig, isQueryTrackerAllowed} from '../../store/selectors/global';
+import {getClusterUiConfig} from '../../store/selectors/global';
+import {isQueryTrackerAllowed} from '../../store/selectors/global/experimental-pages';
 import {getClusterConfig} from '../../utils';
 import {NAMESPACES, SettingName} from '../../../shared/constants/settings';
 import {getClusterPagePaneSizes, getStartingPage} from '../../store/selectors/settings';
