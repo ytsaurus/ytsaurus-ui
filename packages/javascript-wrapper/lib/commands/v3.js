@@ -82,7 +82,7 @@ module.exports = {
     },
     readTable: {
         name: 'read_table',
-        method: 'GET',
+        method: 'POST',
         dataType: 'text',
         version: 'v3',
         heavy: true,
@@ -91,6 +91,7 @@ module.exports = {
 
             return prepareSuppressAccessTracking(parameters, localSetup);
         },
+        useBodyForParameters: true,
     },
     write: {
         name: 'write',
@@ -115,7 +116,7 @@ module.exports = {
     },
     selectRows: {
         name: 'select_rows',
-        method: 'GET',
+        method: 'POST',
         dataType: 'text',
         heavy: true,
         prepareParameters: function (parameters, localSetup) {
@@ -133,6 +134,7 @@ module.exports = {
 
             return prepareSuppressAccessTracking(parameters, localSetup);
         },
+        useBodyForParameters: true,
     },
     mountTable: {
         name: 'mount_table',
@@ -198,7 +200,11 @@ module.exports = {
     // Groups, Users, ACL
     addMember: v2.addMember,
     removeMember: v2.removeMember,
-    checkPermission: v2.checkPermission,
+    checkPermission: {
+        ...v2.checkPermission,
+        method: 'POST',
+        useBodyForParameters: true,
+    },
 
     // Operations and Jobs
     abortOperation: v2.abortOperation,
