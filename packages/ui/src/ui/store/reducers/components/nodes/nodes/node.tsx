@@ -287,7 +287,10 @@ export class Node {
 
         this.cpu = {usage: cpuUsage, limit: cpuLimit};
         this.cpuProgress = computeProgress(cpuUsage, cpuLimit);
-        this.cpuText = progressText(cpuUsage, cpuLimit);
+        this.cpuText = progressText(cpuUsage, cpuLimit, {
+            digits: 2,
+            digitsOnlyForFloat: true,
+        });
 
         this.repairSlots = Node.getResourcesSlots(resourceUsage, resourceLimits, '/repair_slots');
         this.repairSlotsProgress = computeProgress(this.repairSlots.usage, this.repairSlots.limits);

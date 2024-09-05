@@ -19,9 +19,18 @@ export function computeProgress(usage: number | undefined, limit: number | undef
     return Math.max(0, Math.min(progress, 100));
 }
 
-export function progressText(usage?: number, limit?: number, {type}: {type?: 'bytes'} = {}) {
+export function progressText(
+    usage?: number,
+    limit?: number,
+    {
+        type,
+        digits,
+        digitsOnlyForFloat,
+    }: {type?: 'bytes'; digits?: number; digitsOnlyForFloat?: boolean} = {},
+) {
     const formatFn = type === 'bytes' ? format.Bytes : format.Number;
-    return `${formatFn(usage)} / ${formatFn(limit)}`;
+    const settings = {digits, digitsOnlyForFloat};
+    return `${formatFn(usage, settings)} / ${formatFn(limit, settings)}`;
 }
 
 export interface ThemeThreshold {
