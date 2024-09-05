@@ -102,7 +102,6 @@ class Masters extends Component {
 
         return fitIntoSection ? (
             <div className={b('all-masters')}>
-                {this.renderAlerts()}
                 <div className={headingCN}>
                     Primary Masters
                     {this.renderMasterTypeSwitcher()}
@@ -153,7 +152,6 @@ class Masters extends Component {
             </div>
         ) : (
             <div>
-                {this.renderAlerts()}
                 <div className={headingCN}>
                     Primary Masters
                     {this.renderMasterTypeSwitcher()}
@@ -249,6 +247,7 @@ class Masters extends Component {
                 onToggle={this.onToggle}
                 size={collapsibleSize}
             >
+                {this.renderAlerts()}
                 {content}
             </CollapsibleSectionStateLess>
         );
