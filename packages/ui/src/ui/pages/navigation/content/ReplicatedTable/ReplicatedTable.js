@@ -13,6 +13,7 @@ import LoadDataHandler from '../../../../components/LoadDataHandler/LoadDataHand
 import ClipboardButton from '../../../../components/ClipboardButton/ClipboardButton';
 import ElementsTable from '../../../../components/ElementsTable/ElementsTable';
 import StatusBulb from '../../../../components/StatusBulb/StatusBulb';
+import Icon from '../../../../components/Icon/Icon';
 import Link from '../../../../components/Link/Link';
 import {Tooltip} from '../../../../components/Tooltip/Tooltip';
 
@@ -215,6 +216,13 @@ class ReplicatedTable extends Component {
         return (
             <Tooltip content={enableTableTracker ? title : 'Disabled by table settings'}>
                 <StatusBulb theme={theme} className={block('auto-switch', {})} />
+                {!enableTableTracker && (
+                    <Icon
+                        color="secondary"
+                        awesome="question-circle"
+                        className={block('info-icon')}
+                    />
+                )}
             </Tooltip>
         );
     }
