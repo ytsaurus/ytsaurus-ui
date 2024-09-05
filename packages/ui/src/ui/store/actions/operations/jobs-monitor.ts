@@ -21,7 +21,7 @@ export function getJobsMonitoringDescriptors(operation_id: string): JobsMonitorT
 
         return ytApiV3Id
             .listJobs(YTApiId.listJobs100, {
-                parameters: {operation_id, limit: maxJobCount},
+                parameters: {operation_id, limit: maxJobCount, with_monitoring_descriptor: true},
                 cancellation: cancelHerlper.removeAllAndSave,
             })
             .then(({jobs}) => {
