@@ -58,7 +58,7 @@ const Queue: React.VFC<PropsFromRedux> = ({
     const {ExtraControls, View} = useViewByMode(queueMode);
 
     if (statusError) {
-        return <ErrorBlock error={statusError} topMargin="half" />;
+        return <ErrorBlock error={statusError} topMargin="none" />;
     }
 
     return (

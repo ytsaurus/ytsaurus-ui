@@ -2,4 +2,8 @@
     &__table-row {
         --data-table-cell-align: baseline;
     }
+
+    &__error {
+        margin-top: -4px;
+    }
 }

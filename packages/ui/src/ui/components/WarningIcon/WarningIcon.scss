@@ -6,6 +6,8 @@
         color: var(--error-text);
         display: inline-flex;
         vertical-align: middle;
+        align-items: center;
+        gap: 4px;
         span {
             display: inline-flex;
             vertical-align: middle;
@@ -15,5 +17,13 @@
     &__icon {
         position: relative;
         color: var(--primary-text);
+
+        &_color_warning {
+            color: var(--warning-text);
+        }
+
+        &_color_danger {
+            color: var(--danger-text);
+        }
     }
 }

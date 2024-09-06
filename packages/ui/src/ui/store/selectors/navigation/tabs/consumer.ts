@@ -40,6 +40,11 @@ export const getReadDataWeightRate = (state: RootState) =>
 export const getReadRowCountRate = (state: RootState) =>
     getTargetQueueStatusData(state)?.read_row_count_rate ?? emptyRate;
 
+export const getTargetQueueError = (state: RootState) => {
+    const targetQueueStatusData = getTargetQueueStatusData(state);
+    return targetQueueStatusData?.error;
+};
+
 export const getStatusError = (state: RootState) =>
     state.navigation.tabs.consumer.status.statusError;
 

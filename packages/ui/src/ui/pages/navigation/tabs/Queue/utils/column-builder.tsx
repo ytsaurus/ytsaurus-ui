@@ -10,8 +10,10 @@ import {SubjectCard} from '../../../../../components/SubjectLink/SubjectLink';
 import WarningIcon from '../../../../../components/WarningIcon/WarningIcon';
 import type {TPerformanceCounters} from '../../../../../store/reducers/navigation/tabs/queue/types';
 import {Host} from '../../../../../containers/Host/Host';
-import type {FIX_MY_TYPE, YTError} from '../../../../../types';
+import type {YTError} from '../../../../../types';
 import {genNavigationUrl} from '../../../../../utils/navigation/navigation';
+import {ClickableText} from '../../../../../components/ClickableText/ClickableText';
+import {showErrorPopup} from '../../../../../utils/utils';
 
 const DISPLAY_FORMAT = 'DD-MM-YYYY HH:mm:ss';
 
@@ -37,17 +39,38 @@ export function datetime<T>(name: string, getter: (row: T) => string | null): Co
     };
 }
 
-export function error<T>(name: string, getter: (row: T) => YTError | undefined): Column<T> {
+export function error<T>(
+    name: string,
+    getter: (row: T) => YTError | undefined,
+    className?: string,
+): Column<T> {
     return {
         name,
         render({row}) {
             const error = getter(row);
             if (!error) return null;
 
-            return <WarningIcon hoverContent={error as FIX_MY_TYPE} />;
+            return (
+                <WarningIcon
+                    className={className}
+                    color="danger"
+                    hoverContent={<HoverContent error={error} />}
+                >
+                    Error
+                </WarningIcon>
+            );
         },
         sortAccessor: getter,
     };
+}
+
+function HoverContent({error}: {error: YTError}) {
+    return (
+        <span>
+            {error.message ?? 'Error'}{' '}
+            <ClickableText onClick={() => showErrorPopup(error)}>Details</ClickableText>
+        </span>
+    );
 }
 
 export function host<T>(name: string, getter: (row: T) => string, classNames: string): Column<T> {

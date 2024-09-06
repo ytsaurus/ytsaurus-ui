@@ -7,7 +7,9 @@ import {useDispatch, useSelector} from 'react-redux';
 import {
     getConsumerRegisteredQueues,
     getTargetQueue,
+    getTargetQueueError,
 } from '../../../../../store/selectors/navigation/tabs/consumer';
+import ErrorBlock from '../../../../../components/Block/Block';
 import Icon from '../../../../../components/Icon/Icon';
 import Link from '../../../../../components/Link/Link';
 import {findCommonPathParent, genNavigationUrl} from '../../../../../utils/navigation/navigation';
@@ -22,6 +24,7 @@ const block = cn('target-queue');
 
 export default function TargetQueue() {
     const {queue} = useSelector(getTargetQueue) ?? {};
+    const error = useSelector(getTargetQueueError);
 
     let clusterQueueUrl;
     if (queue) {
@@ -46,6 +49,7 @@ export default function TargetQueue() {
                     </Link>
                 )}
             </ConsumerQueueSelector>
+            {error && <ErrorBlock error={error} topMargin="half" />}
         </div>
     );
 }
