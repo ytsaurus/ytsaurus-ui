@@ -514,7 +514,7 @@ function createNodeTagPredicate<K extends keyof typeof PropertiesByPredicate>(
         return (node) => {
             return some_(
                 getTags(node),
-                (item) => -1 !== item.toLowerCase().indexOf(tagFilter.toLowerCase()),
+                (item) => -1 !== item?.toLowerCase().indexOf(tagFilter.toLowerCase()),
             );
         };
     }
