@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.58.1](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.58.0...ui-v1.58.1) (2024-09-10)
+
+
+### Bug Fixes
+
+* **Components/Nodes:** fix filtering by racks ([b58e8ba](https://github.com/ytsaurus/ytsaurus-ui/commit/b58e8ba8de094e635d2d697589d68e2418b5660b))
+* **Components/Node:** show decimal cpus [[#675](https://github.com/ytsaurus/ytsaurus-ui/issues/675)] ([b42b0bb](https://github.com/ytsaurus/ytsaurus-ui/commit/b42b0bb147cc13abe05715e6a0fb453724d2ec50))
+* **Navigation/ReplicatedTable:** add info icon for 'Automatic mode switch' [YTFRONT-4327] ([5446fc3](https://github.com/ytsaurus/ytsaurus-ui/commit/5446fc381fd17695cdbd22b280c53d0deb5e8a86))
+* **Navigation/Table:** use POST-requests to read tables [YTFRONT-4259] ([7281e79](https://github.com/ytsaurus/ytsaurus-ui/commit/7281e79d41f3db5dabe056378b7c276412a4ed5a))
+* **Operations/Operation/JobsMonitor:** use 'with_monitoring_descriptor' flag [YTFRONT-4346] ([bbf5415](https://github.com/ytsaurus/ytsaurus-ui/commit/bbf54154a389895f64eb7e6c04dbdc15aee30e40))
+* **System/Masters:** minor fix for layout with alerts [YTFRONT-4295] ([2134144](https://github.com/ytsaurus/ytsaurus-ui/commit/2134144fb7829d6eb2010d65103376019a932036))
+
 ## [1.58.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.57.0...ui-v1.58.0) (2024-09-04)
 
 
