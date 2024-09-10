@@ -4,7 +4,7 @@ import CancelHelper from '../../../utils/cancel-helper';
 import yt from '@ytsaurus/javascript-wrapper/lib/yt';
 
 import {getCurrentClusterConfig} from '../../../store/selectors/global';
-import {RawJob} from '../../../types/job';
+import {RawJob} from '../../../types/operations/job';
 import {RootState} from '../../../store/reducers';
 import {ThunkAction} from 'redux-thunk';
 import {YTError} from '../../../types';

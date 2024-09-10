@@ -1,7 +1,7 @@
 import {CompetitorsActionType} from '../../../store/actions/job/competitors';
 import {mergeStateOnClusterChange} from '../utils';
 import * as JOB from '../../../constants/job';
-import {RawJob} from '../../../types/job';
+import {RawJob} from '../../../types/operations/job';
 import {YTError} from '../../../types';
 
 export interface CompetitorsState {

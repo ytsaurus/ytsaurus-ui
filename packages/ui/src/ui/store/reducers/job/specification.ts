@@ -1,6 +1,6 @@
 import {YTError} from '../../../types';
 import * as JOB from '../../../constants/job';
-import {JobSpecification} from '../../../types/job';
+import {JobSpecification} from '../../../types/operations/job';
 import {mergeStateOnClusterChange} from '../../../store/reducers/utils';
 import {SpecificationActionType} from '../../../store/actions/job/specification';
 

@@ -8,7 +8,7 @@ import {
 } from '../../../../constants/components/nodes/memory';
 import type {RootState} from '../../../../store/reducers';
 import type {NodeMemoryLoadAction} from '../../../../store/reducers/components/node/memory';
-import type {MemoryUsage} from '../../../../types/node/node';
+import type {MemoryUsage} from '../../../../types/components/node';
 import {
     getNodeMemoryCollapsedBundles,
     getNodeMemoryStateHost,

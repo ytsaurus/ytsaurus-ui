@@ -3,7 +3,7 @@ import {ThunkAction} from 'redux-thunk';
 // @ts-ignore
 import yt from '@ytsaurus/javascript-wrapper/lib/yt';
 
-import {CompetitiveJobs, RawJob} from '../../../types/job';
+import {CompetitiveJobs, RawJob} from '../../../types/operations/job';
 import {RootState} from '../../../store/reducers';
 import CancelHelper from '../../../utils/cancel-helper';
 import * as JOB from '../../../constants/job';

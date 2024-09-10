@@ -20,7 +20,7 @@ import {loadJobData} from '../../../store/actions/job/general';
 import {promptAction} from '../../../store/actions/actions';
 import {getCluster} from '../../../store/selectors/global';
 import {RootState} from '../../../store/reducers';
-import {PreparedJob} from '../../../types/job';
+import {PreparedJob} from '../../../types/operations/job';
 import {showErrorPopup} from '../../../utils/utils';
 import hammer from '../../../common/hammer';
 import {YTError} from '../../../types';
