@@ -18,7 +18,7 @@ import '@gravity-ui/uikit/styles/styles.css';
 
 import './legacy-styles/legacy.scss';
 import './styles/redefinitions/redefinitions.scss';
-import UIFactory, {configureUIFactory} from './UIFactory';
+import UIFactory, {UIFactory as UIFactoryType, configureUIFactory} from './UIFactory';
 
 configure({lang: 'en'});
 
@@ -30,7 +30,7 @@ function AppRoot({store, history}: ReturnType<typeof createMainEntryStore>) {
     );
 }
 
-export function renderApp(overrides: Partial<typeof UIFactory>) {
+export function renderApp(overrides: UIFactoryType) {
     configureUIFactory(overrides);
     const {store, history} = createMainEntryStore();
 

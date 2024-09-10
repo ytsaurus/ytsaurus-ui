@@ -1,38 +1,32 @@
-import {SVGIconData} from '@gravity-ui/uikit/build/esm/components/Icon/types';
-import {MetaTableItem} from './components/MetaTable/MetaTable';
-import forEach_ from 'lodash/forEach';
 import React from 'react';
-import {Reducer} from 'redux';
-import {PathParameters} from './store/location';
-import {TabletBundle} from './store/reducers/tablet_cell_bundles';
-import {PoolInfo} from './store/selectors/scheduling/scheduling-pools';
-import {ClusterConfig, ClusterUiConfig} from '../shared/yt-types';
-import {ClusterAppearance} from './appearance';
-import AppNavigationPageLayout, {
-    AppNavigationProps,
-} from './containers/AppNavigation/AppNavigationPageLayout';
-import {ExternalSchemaDescription} from './pages/navigation/tabs/Schema/ExternalDescription/ExternalDescription';
-import {AclApi, defaultAclApi} from './utils/acl/external-acl-api';
-import {SubjectsControlProps} from './containers/ACL/SubjectsControl/SubjectsControl';
-import {SettingsPage} from './containers/SettingsPanel/settings-description';
-import {SupportComponent} from './containers/SupportComponent/SupportComponent';
-import {UserSuggestProps} from './containers/UserSuggest/UserSuggest';
-import {YTUserSuggest} from './containers/UserSuggest/YTUserSuggest';
-import {DocsUrls, docsUrls} from './constants/docsUrls';
-import {YTSubjectSuggest} from './containers/ACL/SubjectsControl/YTSubjectSuggest';
-import RoleActions, {Props as RoleActionsProps} from './containers/ACL/RoleActions';
-import OperationDetailMonitorLinks from './pages/operations/OperationDetail/tabs/monitor/OperationDetailsMonitorLinks';
-import {PERMISSIONS_SETTINGS} from './constants/acl';
-import {uiSettings} from './config/ui-settings';
-import YT from './config/yt-config';
-import {PreparedAclSubject} from './utils/acl/acl-types';
-import {PreparedRole} from './utils/acl';
-import {UISettingsMonitoring} from '../shared/ui-settings';
-import {DefaultSubjectCard, type SubjectCardProps} from './components/SubjectLink/SubjectLink';
-import type {QueryItem} from './pages/query-tracker/module/api';
+import forEach_ from 'lodash/forEach';
+
+import type {SVGIconData} from '@gravity-ui/uikit/build/esm/components/Icon/types';
+
+import type {MetaTableItem} from '../components/MetaTable/MetaTable';
+import type {Reducer} from 'redux';
+import type {PathParameters} from '../store/location';
+import type {TabletBundle} from '../store/reducers/tablet_cell_bundles';
+import type {PoolInfo} from '../store/selectors/scheduling/scheduling-pools';
+import type {ClusterConfig, ClusterUiConfig} from '../../shared/yt-types';
+import type {ClusterAppearance} from '../appearance';
+import type {AppNavigationProps} from '../containers/AppNavigation/AppNavigationPageLayout';
+import type {ExternalSchemaDescription} from '../pages/navigation/tabs/Schema/ExternalDescription/ExternalDescription';
+import type {AclApi} from '../utils/acl/external-acl-api';
+import type {SubjectsControlProps} from '../containers/ACL/SubjectsControl/SubjectsControl';
+import type {SettingsPage} from '../containers/SettingsPanel/settings-description';
+import type {UserSuggestProps} from '../containers/UserSuggest/UserSuggest';
+import type {DocsUrls} from '../constants/docsUrls';
+import type {Props as RoleActionsProps} from '../containers/ACL/RoleActions';
+
+import type {PERMISSIONS_SETTINGS} from '../constants/acl';
+import type {PreparedAclSubject} from '../utils/acl/acl-types';
+import type {PreparedRole} from '../utils/acl';
+import type {UISettingsMonitoring} from '../../shared/ui-settings';
+import type {SubjectCardProps} from '../components/SubjectLink/SubjectLink';
+import type {QueryItem} from '../pages/query-tracker/module/api';
 import type {DropdownMenuItem} from '@gravity-ui/uikit';
-import {CUSTOM_QUERY_REQULT_TAB} from './pages/query-tracker/QueryResultsVisualization';
-import type Node from './utils/navigation/content/map-nodes/node';
+import type {Node} from '../utils/navigation/content/map-nodes/node';
 
 type HeaderItemOrPage =
     | {
@@ -436,308 +430,14 @@ export interface UIFactory {
           };
 }
 
-const experimentalPages: string[] = [];
-
-const uiFactory: UIFactory = {
-    getClusterAppearance(cluster) {
-        return YT.clusters[cluster!]?.urls;
-    },
-    isWatchMen() {
-        return false;
-    },
-    makeUrlForTransferTask() {
-        return undefined;
-    },
-    makeUrlForNodeIO() {
-        return undefined;
-    },
-    makeUrlForTabletCellBundleDashboard() {
-        return undefined;
-    },
-    makeUrlForMonitoringDescriptor() {
-        return undefined;
-    },
-    makeUrlForUserDashboard() {
-        return undefined;
-    },
-
-    getExtaClusterPages() {
-        return [];
-    },
-    getExtraRootPages() {
-        return [];
-    },
-
-    getExtraReducersAndUrlMapping() {
-        return undefined;
-    },
-
-    getSchedulingExtraTabs() {
-        if (!uiSettings.schedulingMonitoring?.urlTemplate) {
-            return [];
-        }
-
-        const {urlTemplate, title = 'Monitoring'} = uiSettings.schedulingMonitoring;
-
-        return [
-            {
-                name: 'monitoring',
-                title,
-                urlTemplate,
-            },
-        ];
-    },
-    getSystemMonitoringTab() {
-        if (!uiSettings?.systemMonitoring) return undefined;
-        return uiSettings.systemMonitoring;
-    },
-    getVersionMonitoringLink() {
-        if (!uiSettings?.componentVersionsMonitoring) return undefined;
-        return uiSettings.componentVersionsMonitoring;
-    },
-    getMonitoringForAccounts() {
-        if (!uiSettings?.accountsMonitoring?.urlTemplate) {
-            return undefined;
-        }
-
-        const {urlTemplate, title} = uiSettings.accountsMonitoring;
-        return {urlTemplate, title};
-    },
-    getMonitoringForBundle() {
-        if (!uiSettings.bundlesMonitoring?.urlTemplate) {
-            return undefined;
-        }
-
-        const {urlTemplate, title} = uiSettings.bundlesMonitoring;
-        return {urlTemplate, title};
-    },
-    getMonitoringForOperation(params) {
-        if (!uiSettings.operationsMonitoring?.urlTemplate) {
-            return undefined;
-        }
-
-        const {urlTemplate, title} = uiSettings.operationsMonitoring;
-
-        const hasPoolParameter =
-            urlTemplate.indexOf('{ytPool}') !== -1 || urlTemplate.indexOf('{ytPoolTree}') !== -1;
-
-        if (hasPoolParameter && params.pools?.length! > 1) {
-            return {component: OperationDetailMonitorLinks};
-        }
-
-        return {urlTemplate, title};
-    },
-    getMonitorComponentForJob() {
-        return undefined;
-    },
-    getMonitoringComponentForChyt() {
-        const {urlTemplate, title} = uiSettings.chytMonitoring ?? {};
-        if (!urlTemplate) {
-            return undefined;
-        }
-
-        return {urlTemplate, title};
-    },
-    getMonitoringComponentForNavigationFlow() {
-        const {urlTemplate, title} = uiSettings.navigationFlowMonitoring ?? {};
-        if (!urlTemplate) {
-            return undefined;
-        }
-
-        return {urlTemplate, title};
-    },
-
-    getStatisticsComponentForAccount() {
-        return undefined;
-    },
-    getStatisticsComponentForBundle() {
-        return undefined;
-    },
-
-    renderNavigationExtraActions() {
-        return null;
-    },
-
-    renderSchedulingLastDayMaximum() {
-        return undefined;
-    },
-
-    renderComponentsNodeCardTop() {
-        return undefined;
-    },
-
-    getExtraMetaTableItemsForComponentsNode() {
-        return undefined;
-    },
-
-    getExtraMetaTableItemsForPool() {
-        return undefined;
-    },
-
-    getExtraMetaTableItemsForBundle() {
-        return undefined;
-    },
-
-    getComponentsNodeDashboardUrl() {
-        return {};
-    },
-
-    renderTransferQuotaNoticeForPool() {
-        return undefined;
-    },
-
-    renderTransferQuotaNoticeForAccount() {
-        return undefined;
-    },
-
-    renderTopRowExtraControlsForAccount() {
-        return undefined;
-    },
-
-    renderTopRowExtraControlsForPool() {
-        return undefined;
-    },
-
-    renderTopRowExtraControlsForBundle() {
-        return undefined;
-    },
-
-    renderAccountsTableItemExtraControls() {
-        return undefined;
-    },
-
-    renderSchedulingTableItemExtraControls() {
-        return undefined;
-    },
-
-    renderBundlesTableItemExtraControls() {
-        return undefined;
-    },
-
-    renderControlAbcService() {
-        return undefined;
-    },
-
-    renderSubjectCard(props: SubjectCardProps): React.ReactNode {
-        return <DefaultSubjectCard {...props} />;
-    },
-
-    makeSupportContent(_x, makeContent) {
-        const {reportBugUrl} = uiSettings;
-        if (!reportBugUrl) {
-            return undefined;
-        }
-
-        return <SupportComponent makeContent={makeContent} />;
-    },
-
-    getComponentForConsumerMetrics() {
-        return undefined;
-    },
-
-    getComonentForQueueMetrics() {
-        return undefined;
-    },
-
-    renderTableCellBundleEditorNotice() {
-        return undefined;
-    },
-
-    getNodeDeployUrl() {
-        return undefined;
-    },
-
-    getNodeNannyUrl() {
-        return undefined;
-    },
-
-    renderAppFooter() {
-        return null;
-    },
-
-    renderAppNavigation(props) {
-        return <AppNavigationPageLayout {...props} />;
-    },
-
-    createNotificationUrl() {
-        return undefined;
-    },
-
-    wrapApp(app) {
-        return app;
-    },
-
-    externalSchemaDescriptionSetup: {
-        load(_cluster: string, _path: string) {
-            return Promise.resolve({});
-        },
-    },
-
-    getAclApi() {
-        return defaultAclApi;
-    },
-
-    renderAclSubjectsSuggestControl(props) {
-        return <YTSubjectSuggest {...props} />;
-    },
-
-    renderRolesLink() {
-        return undefined;
-    },
-
-    getCustomQueryResultTab() {
-        return CUSTOM_QUERY_REQULT_TAB;
-    },
-
-    getExternalSettings() {
-        return [];
-    },
-
-    renderUserSuggest(props) {
-        return <YTUserSuggest {...props} />;
-    },
-
-    getExperimentalPages() {
-        return experimentalPages;
-    },
-
-    getAllowedExperimentalPages() {
-        return Promise.resolve([]);
-    },
-
-    docsUrls: docsUrls,
-
-    getComponentForAclRoleActions() {
-        return RoleActions;
-    },
-
-    getAclPermissionsSettings() {
-        return PERMISSIONS_SETTINGS;
-    },
-
-    onChytAliasSqlClick() {},
-
-    getNavigationExtraTabs() {
-        return [];
-    },
-
-    getMapNodeExtraCreateActions(baseActions) {
-        return {
-            menuItems: baseActions,
-            renderModals: () => undefined,
-        };
-    },
-
-    getNavigationMapNodeSettings() {
-        return undefined;
-    },
-};
+// All methods comes from `configureUIFactory` method
+const uiFactory: UIFactory = {} as any;
 
 function configureUIFactoryItem<K extends keyof UIFactory>(k: K, redefinition: UIFactory[K]) {
     uiFactory[k] = redefinition;
 }
 
-export function configureUIFactory(overrides: Partial<UIFactory>) {
+export function configureUIFactory(overrides: UIFactory) {
     forEach_(overrides, (_v, k) => {
         const key = k as keyof UIFactory;
         configureUIFactoryItem(key, overrides[key]!);

@@ -2,7 +2,7 @@ import unipika from '../../../../common/thor/unipika';
 import ypath from '../../../../common/thor/ypath';
 import {prepareNavigationState} from '../../../../utils/navigation';
 
-export default class Node {
+export class Node {
     static CAPTION_PRINT_SETTINGS = {
         indent: 0,
         break: false,

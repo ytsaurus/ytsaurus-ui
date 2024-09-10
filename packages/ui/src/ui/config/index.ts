@@ -1,4 +1,3 @@
-// TODO: get rid of the import, the file should not import UIFactory
 import UIFactory from '../UIFactory';
 
 import {getConfigData, uiSettings} from './ui-settings';
