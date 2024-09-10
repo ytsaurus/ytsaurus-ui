@@ -7,7 +7,7 @@ import * as JOB from '../../../constants/job';
 import CancelHelper from '../../../utils/cancel-helper';
 import {ThunkAction} from 'redux-thunk';
 import {RootState} from '../../../store/reducers';
-import {JobSpecification} from '../../../types/job';
+import {JobSpecification} from '../../../types/operations/job';
 
 interface JobSpecRequest {
     type: number;

@@ -10,7 +10,7 @@ import MetaTable from '../../../../components/MetaTable/MetaTable';
 import ElementsTableRaw from '../../../../components/ElementsTable/ElementsTable';
 
 import hammer from '../../../../common/hammer';
-import {StatisticsIO as IStatisticsIO} from '../../../../types/job';
+import {StatisticsIO as IStatisticsIO} from '../../../../types/operations/job';
 import {
     getAverageGpuMemory,
     getAverageGpuPower,

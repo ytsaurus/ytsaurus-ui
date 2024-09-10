@@ -11,7 +11,7 @@ import Statuslabel from '../../../../components/StatusLabel/StatusLabel';
 import Link from '../../../../components/Link/Link';
 
 import ypath from '../../../../common/thor/ypath';
-import {PreparedJob, RawJob} from '../../../../types/job';
+import {PreparedJob, RawJob} from '../../../../types/operations/job';
 import hammer from '../../../../common/hammer';
 import {RootState} from '../../../../store/reducers';
 import {getCluster} from '../../../../store/selectors/global';

@@ -6,7 +6,7 @@ import toArray_ from 'lodash/toArray';
 
 import type {RootState} from '../../../../store/reducers';
 import {createSelector} from 'reselect';
-import {NodeMemoryUsagePreload} from '../../../../types/node/node';
+import {NodeMemoryUsagePreload} from '../../../../types/components/node';
 import {
     TreeNode,
     filterTree,

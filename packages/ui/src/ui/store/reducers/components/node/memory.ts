@@ -6,7 +6,7 @@ import {
 } from '../../../../constants/components/nodes/memory';
 import {mergeStateOnClusterChange} from '../../../../store/reducers/utils';
 import type {ActionD, SortState, YTError} from '../../../../types';
-import type {MemoryUsage} from '../../../../types/node/node';
+import type {MemoryUsage} from '../../../../types/components/node';
 
 interface NodeMemoryEphemeralState {
     loading: boolean;

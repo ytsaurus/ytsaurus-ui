@@ -14,7 +14,7 @@ import CollapsibleSection from '../../../../components/CollapsibleSection/Collap
 import ypath from '../../../../common/thor/ypath';
 import {RootState} from '../../../../store/reducers';
 import {useSelector} from 'react-redux';
-import {JobError, JobEvents, JobStatistic} from '../../../../types/job';
+import {JobError, JobEvents, JobStatistic} from '../../../../types/operations/job';
 
 import './Details.scss';
 import {UI_COLLAPSIBLE_SIZE} from '../../../../constants/global';

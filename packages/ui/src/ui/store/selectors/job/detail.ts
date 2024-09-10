@@ -8,7 +8,13 @@ import sumBy_ from 'lodash/sumBy';
 import values_ from 'lodash/values';
 
 import {PLEASE_PROCEED_TEXT} from '../../../utils/actions';
-import {JobPipes, JobSpecification, PipesIO, PreparedJob, StatisticsIO} from '../../../types/job';
+import {
+    JobPipes,
+    JobSpecification,
+    PipesIO,
+    PreparedJob,
+    StatisticsIO,
+} from '../../../types/operations/job';
 import {Action as JobAction} from '../../../pages/job/JobActions/JobActions';
 
 interface State {
