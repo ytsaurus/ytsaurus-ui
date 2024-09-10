@@ -20,7 +20,7 @@ import {getParsedPath, getTransaction} from '../../../../store/selectors/navigat
 import {makeGetSetting} from '../../../../store/selectors/settings';
 import {NAMESPACES, SettingName} from '../../../../../shared/constants/settings';
 import {ContentMode, NAVIGATION_MAP_NODE_TABLE_ID} from '../../../../constants/navigation';
-import Node from '../../../../utils/navigation/content/map-nodes/node';
+import {Node} from '../../../../utils/navigation/content/map-nodes/node';
 import {MediumType} from '../../../../constants/index';
 import Chooser from '../../../../pages/navigation/content/MapNode/Chooser';
 import MultipleActions from '../../../../pages/navigation/content/MapNode/MultipleActions';
