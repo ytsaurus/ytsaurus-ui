@@ -1,19 +1,21 @@
 import React from 'react';
-import AppNavigationPageLayout from '../../containers/AppNavigation/AppNavigationPageLayout';
-import {defaultAclApi} from '../../utils/acl/external-acl-api';
-import {SupportComponent} from '../../containers/SupportComponent/SupportComponent';
-import {YTUserSuggest} from '../../containers/UserSuggest/YTUserSuggest';
-import {docsUrls} from '../../constants/docsUrls';
-import {YTSubjectSuggest} from '../../containers/ACL/SubjectsControl/YTSubjectSuggest';
-import RoleActions from '../../containers/ACL/RoleActions';
-import OperationDetailMonitorLinks from '../../pages/operations/OperationDetail/tabs/monitor/OperationDetailsMonitorLinks';
-import {PERMISSIONS_SETTINGS} from '../../constants/acl';
-import {uiSettings} from '../../config/ui-settings';
-import YT from '../../config/yt-config';
-import {DefaultSubjectCard, type SubjectCardProps} from '../../components/SubjectLink/SubjectLink';
-import {CUSTOM_QUERY_REQULT_TAB} from '../../pages/query-tracker/QueryResultsVisualization';
+import AppNavigationPageLayout from '../containers/AppNavigation/AppNavigationPageLayout';
+import {defaultAclApi} from '../utils/acl/external-acl-api';
+import {SupportComponentLazy} from '../containers/SupportComponent/lazy';
+import {YTUserSuggestLazy} from '../containers/UserSuggest/YTUserSuggestLazy';
+import {docsUrls} from '../constants/docsUrls';
+import {YTSubjectSuggestLazy} from '../containers/ACL/SubjectsControl/lazy';
+import {RoleActionsLazy} from '../containers/ACL';
+import OperationDetailMonitorLinks from '../pages/operations/OperationDetail/tabs/monitor/OperationDetailsMonitorLinks';
+import {PERMISSIONS_SETTINGS} from '../constants/acl';
+import {uiSettings} from '../config/ui-settings';
+import YT from '../config/yt-config';
+import {DefaultSubjectLinkLazy} from '../components/SubjectLink/lazy';
+import type {SubjectCardProps} from '../components/SubjectLink/SubjectLink';
+import {CUSTOM_QUERY_REQULT_TAB} from '../pages/query-tracker/QueryResultsVisualization';
 
-import {UIFactory} from '../index';
+import {UIFactory} from './index';
+
 const experimentalPages: string[] = [];
 
 export const defaultUIFactory: UIFactory = {
@@ -197,7 +199,7 @@ export const defaultUIFactory: UIFactory = {
     },
 
     renderSubjectCard(props: SubjectCardProps): React.ReactNode {
-        return <DefaultSubjectCard {...props} />;
+        return <DefaultSubjectLinkLazy {...props} />;
     },
 
     makeSupportContent(_x, makeContent) {
@@ -206,7 +208,7 @@ export const defaultUIFactory: UIFactory = {
             return undefined;
         }
 
-        return <SupportComponent makeContent={makeContent} />;
+        return <SupportComponentLazy makeContent={makeContent} />;
     },
 
     getComponentForConsumerMetrics() {
@@ -256,7 +258,7 @@ export const defaultUIFactory: UIFactory = {
     },
 
     renderAclSubjectsSuggestControl(props) {
-        return <YTSubjectSuggest {...props} />;
+        return <YTSubjectSuggestLazy {...props} />;
     },
 
     renderRolesLink() {
@@ -272,7 +274,7 @@ export const defaultUIFactory: UIFactory = {
     },
 
     renderUserSuggest(props) {
-        return <YTUserSuggest {...props} />;
+        return <YTUserSuggestLazy {...props} />;
     },
 
     getExperimentalPages() {
@@ -286,7 +288,7 @@ export const defaultUIFactory: UIFactory = {
     docsUrls: docsUrls,
 
     getComponentForAclRoleActions() {
-        return RoleActions;
+        return RoleActionsLazy;
     },
 
     getAclPermissionsSettings() {

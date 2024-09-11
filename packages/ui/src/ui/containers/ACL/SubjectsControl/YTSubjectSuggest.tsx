@@ -4,7 +4,7 @@ import cn from 'bem-cn-lite';
 
 import {getAllGroupNames, getAllUserNames} from '../../../store/selectors/global';
 import Select from '../../../components/Select/Select';
-import {SubjectName} from '../../../components/SubjectLink/SubjectLink';
+import {SubjectNameLazy} from '../../../components/SubjectLink/lazy';
 import {useAllUserNamesFiltered, useGroupsLoaded} from '../../../hooks/global';
 import {SubjectsControlProps} from './SubjectsControl';
 
@@ -21,7 +21,7 @@ export function YTSubjectSuggest({className, value, onChange, ...rest}: Subjects
     const userNames = useSelector(getAllUserNames);
     const userItems = React.useMemo(() => {
         return userNames.sort().map((name) => {
-            return {value: name, text: <SubjectName name={name} />};
+            return {value: name, text: <SubjectNameLazy name={name} />};
         });
     }, [userNames]);
     const userValue = React.useMemo(() => {

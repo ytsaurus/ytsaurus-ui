@@ -1,10 +1,11 @@
 import React from 'react';
+import type {Reducer} from 'redux';
 import forEach_ from 'lodash/forEach';
 
+import type {DropdownMenuItem} from '@gravity-ui/uikit';
 import type {SVGIconData} from '@gravity-ui/uikit/build/esm/components/Icon/types';
 
 import type {MetaTableItem} from '../components/MetaTable/MetaTable';
-import type {Reducer} from 'redux';
 import type {PathParameters} from '../store/location';
 import type {TabletBundle} from '../store/reducers/tablet_cell_bundles';
 import type {PoolInfo} from '../store/selectors/scheduling/scheduling-pools';
@@ -25,7 +26,6 @@ import type {PreparedRole} from '../utils/acl';
 import type {UISettingsMonitoring} from '../../shared/ui-settings';
 import type {SubjectCardProps} from '../components/SubjectLink/SubjectLink';
 import type {QueryItem} from '../pages/query-tracker/module/api';
-import type {DropdownMenuItem} from '@gravity-ui/uikit';
 import type {Node} from '../utils/navigation/content/map-nodes/node';
 
 type HeaderItemOrPage =
