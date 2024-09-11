@@ -11,7 +11,7 @@ import Accounts from '../../pages/accounts/Accounts/Accounts';
 import Dashboard from '../../pages/dashboard/Dashboard/Dashboard';
 import {System} from '../../pages/system/System/System';
 import Navigation from '../../pages/navigation/Navigation/Navigation';
-import PathViewer from '../../pages/path-viewer/PathViewer';
+import {PathViewerLazy} from '../../pages/path-viewer/lazy';
 import Tablet from '../../pages/tablet/Tablet';
 import TabletCellBundles from '../../pages/tablet_cell_bundles/TabletCellBundles';
 import GroupsPage from '../../pages/groups/GroupsPage';
@@ -238,7 +238,7 @@ class ClusterPage extends Component {
                         component={TabletCellBundles}
                     />
                     <Route path={`/:cluster/${Page.NAVIGATION}`} component={Navigation} />
-                    <Route path={`/:cluster/${Page.PATH_VIEWER}`} component={PathViewer} />
+                    <Route path={`/:cluster/${Page.PATH_VIEWER}`} component={PathViewerLazy} />
                     <Route path={`/:cluster/${Page.TABLET}`} component={Tablet} />
                     <Route path={`/:cluster/${Page.USERS}`} component={UsersPage} />
                     <Route path={`/:cluster/${Page.GROUPS}`} component={GroupsPage} />
