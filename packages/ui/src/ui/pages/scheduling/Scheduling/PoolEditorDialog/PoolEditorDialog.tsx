@@ -26,9 +26,8 @@ import {
     PoolIntegralResourceType,
     PoolStrongResourceType,
     getInitialValues,
-    isAbcPoolName,
-    isTopLevelPool,
 } from '../../../../utils/scheduling/scheduling';
+import {isAbcPoolName, isTopLevelPool} from '../../../../utils/scheduling/pool';
 import {closeEditModal, editPool} from '../../../../store/actions/scheduling/scheduling';
 
 import {checkUserPermissionsUI} from '../../../../utils/acl/acl-api';
