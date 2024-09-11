@@ -29,6 +29,7 @@ import {prepareQueryPlanIds} from './utills';
 import {chytApiAction, spytApiAction} from '../../../../utils/strawberryControllerApi';
 import guid from '../../../../common/hammer/guid';
 import {selectIsMultipleAco} from '../query_aco/selectors';
+import {getSettingQueryTrackerStage} from '../../../../store/selectors/settings-ts';
 
 export const REQUEST_QUERY = 'query-tracker/REQUEST_QUERY';
 export type RequestQueryAction = Action<typeof REQUEST_QUERY>;
@@ -142,12 +143,17 @@ export function loadQuery(
 ): ThunkAction<any, RootState, any, SetQueryAction | RequestQueryAction | SetQueryErrorLoadAction> {
     return async (dispatch, getState) => {
         const state = getState();
+        const stage = getSettingQueryTrackerStage(state);
         dispatch({type: REQUEST_QUERY});
         try {
             const query = await wrapApiPromiseByToaster(dispatch(getQuery(queryId)), {
                 toasterName: 'load_query',
                 skipSuccessToast: true,
-                errorTitle: 'Failed to load query',
+                errorContent: (error) => {
+                    const {code, message} = error;
+                    return `[code ${code}]: ${message}${stage ? `. Your stage is set to "${stage}". Reset it and try again` : ''}`;
+                },
+                errorTitle: `Failed to load query ${stage ? `[stage: ${stage}]` : ''}`,
             });
 
             query.files = query.files.map((file) => ({...file, id: guid()}));

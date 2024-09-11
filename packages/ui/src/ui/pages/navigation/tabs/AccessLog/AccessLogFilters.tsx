@@ -25,7 +25,6 @@ import {
     getAccessLogFilterUserType,
     getAccessLogHasChangedFilters,
     getAccessLogPagesCount,
-    getAccessLogRequestParams,
 } from '../../../../store/selectors/navigation/tabs/access-log';
 import {
     applyAccessLogFilters,
@@ -60,7 +59,7 @@ import {
     accessLogUserTypeSelectionToValue,
     valueToSelection,
 } from '../../../../utils/navigation/tabs/access-log';
-import {getAccessLogBasePath} from '../../../../config';
+import {AccessLogOpenQtButton} from './AccessLogOpenQtButton';
 
 const block = cn('access-log-filters');
 
@@ -77,7 +76,7 @@ function AccessLogFilters() {
                     {node: <AccessLogFieldselector />},
                     {node: <AccessLogMetadata />},
                     {node: <AccessLogDistictBy />},
-                    {node: <AccessLogDownload />},
+                    {node: <AccessLogOpenQtButton />},
                 ]}
             />
             <Toolbar
@@ -442,22 +441,5 @@ function AvailableTimeRange() {
         >
             <Icon awesome="question-circle" />
         </Tooltip>
-    );
-}
-
-function AccessLogDownload() {
-    const params = useSelector(getAccessLogRequestParams);
-
-    const request = React.useMemo(() => {
-        return btoa(unescape(encodeURIComponent(JSON.stringify(params))));
-    }, [params]);
-
-    const url = `${getAccessLogBasePath()}/access_log?format=csv&base64_request=${request}`;
-
-    return (
-        <Button target={'_blank'} href={url}>
-            <Icon awesome="download" />
-            Download
-        </Button>
     );
 }
