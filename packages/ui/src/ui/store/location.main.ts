@@ -93,7 +93,7 @@ import {
 
 import {chytListParams, getGhytListPreparedState} from './reducers/chyt/url-mapping';
 
-import {PathParameters} from './location';
+import type {PathParameters} from '../store/location';
 
 // prettier-ignore
 export const mainLocations:  Array<[string, PathParameters]> = [

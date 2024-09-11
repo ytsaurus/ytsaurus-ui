@@ -198,3 +198,5 @@ export const PoolAclPanel = createACLComponent(IdmObjectType.POOL);
 export const AccountsAcl = createACLComponent(IdmObjectType.ACCOUNT);
 
 export const BundleAcl = createACLComponent(IdmObjectType.TABLET_CELL_BUNDLE);
+
+export {default as RoleActions} from './RoleActions';

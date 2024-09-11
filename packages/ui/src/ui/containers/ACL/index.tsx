@@ -34,3 +34,9 @@ export const BundleAcl = withLazyLoading(
         return {default: (await importAcl()).BundleAcl};
     }),
 );
+
+export const RoleActionsLazy = withLazyLoading(
+    React.lazy(async () => {
+        return {default: (await importAcl()).RoleActions};
+    }),
+);
