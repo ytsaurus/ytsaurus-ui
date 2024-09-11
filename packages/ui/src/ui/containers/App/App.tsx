@@ -6,8 +6,8 @@ import {ThemeProvider, useThemeType, useThemeValue} from '@gravity-ui/uikit';
 
 import ModalErrors from '../../containers/ModalErrors/ModalErrors';
 import AttributesModal from '../../components/AttributesModal/AttributesModal';
-import ClustersMenu from '../ClustersMenu/ClustersMenu';
-import ClusterPageWrapper from '../../containers/ClusterPageWrapper/ClusterPageWrapper';
+import {ClustersMenuLazy} from '../../containers/ClustersMenu/lazy';
+import {ClusterPageWrapperLazy} from '../../containers/ClusterPageWrapper/lazy';
 import ActionModal from '../ActionModal/ActionModal';
 import {ChangePasswordFormPage} from '../../components/Login/ChangePasswordFormPage/ChangePasswordFormPage';
 import {LoginFormPage} from '../../components/Login/LoginFormPage/LoginFormPage';
@@ -63,8 +63,11 @@ function AppWithRum() {
                         <AppNavigation>
                             <LoadAllowedExperimentalUrls />
                             <div className="elements-page">
-                                <Route exact path="/" render={() => <ClustersMenu />} />
-                                <Route path="/:cluster/" render={() => <ClusterPageWrapper />} />
+                                <Route exact path="/" render={() => <ClustersMenuLazy />} />
+                                <Route
+                                    path="/:cluster/"
+                                    render={() => <ClusterPageWrapperLazy />}
+                                />
                                 <AttributesModal />
                                 <ActionModal />
                                 <ModalErrors />
