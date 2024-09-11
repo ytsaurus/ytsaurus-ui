@@ -5,7 +5,7 @@ import reduce_ from 'lodash/reduce';
 
 import ypath from '../../common/thor/ypath';
 import {ROOT_POOL_NAME} from '../../constants/scheduling';
-import {OperationInfo, PoolInfo} from '../../store/selectors/scheduling/scheduling-pools';
+import type {OperationInfo, PoolInfo} from '../../store/selectors/scheduling/scheduling-pools';
 import {attachTreeLeaves, prepareTree} from '../../common/hammer/tree-list';
 
 function getPool(pools: Array<PoolInfo>, name: string) {
@@ -258,14 +258,4 @@ export function getInitialValues(editItem: PoolInfo | undefined, allowedSources:
             createEphemeralSubpools: ypath.getBoolean(editItem, '/createEphemeralSubpools'),
         },
     };
-}
-
-export function isAbcPoolName(name?: string) {
-    return name?.startsWith('abc:');
-}
-
-export function isTopLevelPool(pool?: PoolInfo) {
-    const {parent} = pool || {};
-
-    return parent === ROOT_POOL_NAME;
 }

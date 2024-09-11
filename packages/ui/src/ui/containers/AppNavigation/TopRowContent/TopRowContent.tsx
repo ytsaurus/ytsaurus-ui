@@ -7,25 +7,25 @@ import {getGlobalLoadState, isQueryTrackerAllowed} from '../../../store/selector
 import {LOADING_STATUS, Page} from '../../../constants/index';
 import {Route, Switch} from 'react-router';
 import SectionName from './SectionName';
-import TabletTopRowContent from '../../../pages/tablet/TabletTopRowContent';
-import TabletCellBundlesTopRowContent from '../../../pages/tablet_cell_bundles/TabletCellBundlesTopRowContent.connected';
-import ChaosCellBundlesTopRowContent from '../../../pages/chaos_cell_bundles/ChaosCellBundlesTopRowContent.connected';
-import AccountsTopRowContent from '../../../pages/accounts/Accounts/AccountsTopRowContent';
+import {TabletTopRowLazy} from '../../../pages/tablet/lazy';
+import {
+    ChaosCellBundlesTopRowLazy,
+    TabletCellBundlesTopRowLazy,
+} from '../../../pages/tablet_cell_bundles/lazy';
+import {AccountsTopRowLazy} from '../../../pages/accounts/lazy';
 import SchedulingTopRowContent from '../../../pages/scheduling/Scheduling/SchedulingTopRowContent';
-import NavigationTopRowContent from '../../../pages/navigation/Navigation/NavigationTopRowContent';
-import SystemTopRowContent from '../../../pages/system/System/SystemTopRowContent';
-import DashboardTopRowContent from '../../../pages/dashboard/Dashboard/DashboardTopRowContent';
-import ComponentsTopRowContent from '../../../pages/components/Components/ComponentsTopRowContent';
+import {NavigationTopRowLazy} from '../../../pages/navigation/lazy';
+import {SystemTopRowLazy} from '../../../pages/system/lazy';
+import {DashboardTopRowLazy} from '../../../pages/dashboard/lazy';
+import {ComponentsTopRowLazy} from '../../../pages/components/lazy';
 import {makeExtraPageTopRowRoutes} from '../../../containers/ClusterPage/ExtraClusterPageRoutes';
 
 import {odinPageInfo} from '../../../pages/odin';
 import {hasOdinPage} from '../../../config';
 import withLazyLoading from '../../../hocs/withLazyLoading';
 
-const QueryTrackerTopRowLazy = React.lazy(
-    () => import('../../../pages/query-tracker/QueryTrackerTopRow'),
-);
-import {ChytPageTopRow} from '../../../pages/chyt';
+import {ChytPageTopRowLazy} from '../../../pages/chyt/lazy';
+import {QueryTrackerTopRowLazy} from '../../../pages/query-tracker/lazy';
 
 export default function TopRowContent() {
     const loadState = useSelector(getGlobalLoadState);
@@ -33,22 +33,22 @@ export default function TopRowContent() {
 
     return loadState !== LOADING_STATUS.LOADED ? null : (
         <Switch>
-            <Route path={`/:cluster/${Page.SYSTEM}`} component={SystemTopRowContent} />
-            <Route path={`/:cluster/${Page.NAVIGATION}`} component={NavigationTopRowContent} />
+            <Route path={`/:cluster/${Page.SYSTEM}`} component={SystemTopRowLazy} />
+            <Route path={`/:cluster/${Page.NAVIGATION}`} component={NavigationTopRowLazy} />
             <Route path={`/:cluster/${Page.SCHEDULING}`} component={SchedulingTopRowContent} />
-            <Route path={`/:cluster/${Page.ACCOUNTS}`} component={AccountsTopRowContent} />
-            <Route path={`/:cluster/${Page.TABLET}/:id`} component={TabletTopRowContent} />
+            <Route path={`/:cluster/${Page.ACCOUNTS}`} component={AccountsTopRowLazy} />
+            <Route path={`/:cluster/${Page.TABLET}/:id`} component={TabletTopRowLazy} />
             <Route
                 path={`/:cluster/${Page.TABLET_CELL_BUNDLES}`}
-                component={TabletCellBundlesTopRowContent}
+                component={TabletCellBundlesTopRowLazy}
             />
             <Route
                 path={`/:cluster/${Page.CHAOS_CELL_BUNDLES}`}
-                component={ChaosCellBundlesTopRowContent}
+                component={ChaosCellBundlesTopRowLazy}
             />
-            <Route path={`/:cluster/${Page.DASHBOARD}`} component={DashboardTopRowContent} />
-            <Route path={`/:cluster/${Page.COMPONENTS}`} component={ComponentsTopRowContent} />
-            <Route path={`/:cluster/${Page.CHYT}`} component={ChytPageTopRow} />
+            <Route path={`/:cluster/${Page.DASHBOARD}`} component={DashboardTopRowLazy} />
+            <Route path={`/:cluster/${Page.COMPONENTS}`} component={ComponentsTopRowLazy} />
+            <Route path={`/:cluster/${Page.CHYT}`} component={ChytPageTopRowLazy} />
             {allowQT && (
                 <Route
                     path={`/:cluster/${Page.QUERIES}`}

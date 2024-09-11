@@ -4,22 +4,22 @@ import {connect, useSelector} from 'react-redux';
 import PropTypes from 'prop-types';
 import cn from 'bem-cn-lite';
 
-import BanPage from '../BanPage/BanPage';
-import Components from '../../pages/components/Components/Components';
-import Operations from '../../pages/operations/Operations/Operations';
-import Accounts from '../../pages/accounts/Accounts/Accounts';
-import Dashboard from '../../pages/dashboard/Dashboard/Dashboard';
-import {System} from '../../pages/system/System/System';
-import Navigation from '../../pages/navigation/Navigation/Navigation';
+import {BanPageLazy} from '../BanPage/lazy';
+import {ComponentsLazy} from '../../pages/components/lazy';
+import {OperationsLazy} from '../../pages/operations/lazy';
+import {AccountsLazy} from '../../pages/accounts/lazy';
+import {DashboardLazy} from '../../pages/dashboard/lazy';
+import {SystemLazy} from '../../pages/system/lazy';
+import {NavigationLazy} from '../../pages/navigation/lazy';
 import {PathViewerLazy} from '../../pages/path-viewer/lazy';
-import Tablet from '../../pages/tablet/Tablet';
-import TabletCellBundles from '../../pages/tablet_cell_bundles/TabletCellBundles';
-import GroupsPage from '../../pages/groups/GroupsPage';
-import UsersPage from '../../pages/users/UsersPage';
-import Scheduling from '../../pages/scheduling/Scheduling/Scheduling';
-import QueryTracker from '../../pages/query-tracker/QueryTracker';
-import Job from '../../pages/job/Job';
-import {ChytPage} from '../../pages/chyt';
+import {TabletLazy} from '../../pages/tablet/lazy';
+import {TabletCellBundlesLazy} from '../../pages/tablet_cell_bundles/lazy';
+import {GroupsPageLazy} from '../../pages/groups/lazy';
+import {UsersPageLazy} from '../../pages/users/lazy';
+import {SchedulingLazy} from '../../pages/scheduling/lazy';
+import {QueryTrackerLazy} from '../../pages/query-tracker/lazy';
+import {JobLazy} from '../../pages/job/lazy';
+import {ChytPageLazy} from '../../pages/chyt/lazy';
 
 import ClusterPageHeader from '../ClusterPageHeader/ClusterPageHeader';
 import PageTracker from './PageTracker';
@@ -223,29 +223,31 @@ class ClusterPage extends Component {
                 <SupportedFeaturesUpdater />
                 <RedirectToBanIfNeededMemo to={`/${cluster}/${Page.BAN}`} />
                 <Switch>
-                    <Route path={`/:cluster/${Page.BAN}`} component={BanPage} />
-                    <Route path={`/:cluster/${Page.COMPONENTS}`} component={Components} />
-                    <Route path={`/:cluster/${Page.OPERATIONS}`} component={Operations} />
-                    <Route path={`/:cluster/${Page.JOB}`} component={Job} />
-                    <Route path={`/:cluster/${Page.DASHBOARD}`} component={Dashboard} />
-                    <Route path={`/:cluster/${Page.SYSTEM}`} component={System} />
-                    <Route path={`/:cluster/${Page.ACCOUNTS}`} component={Accounts} />
+                    <Route path={`/:cluster/${Page.BAN}`} component={BanPageLazy} />
+                    <Route path={`/:cluster/${Page.COMPONENTS}`} component={ComponentsLazy} />
+                    <Route path={`/:cluster/${Page.OPERATIONS}`} component={OperationsLazy} />
+                    <Route path={`/:cluster/${Page.JOB}`} component={JobLazy} />
+                    <Route path={`/:cluster/${Page.DASHBOARD}`} component={DashboardLazy} />
+                    <Route path={`/:cluster/${Page.SYSTEM}`} component={SystemLazy} />
+                    <Route path={`/:cluster/${Page.ACCOUNTS}`} component={AccountsLazy} />
                     <Route
                         path={[
                             `/:cluster/${Page.TABLET_CELL_BUNDLES}`,
                             `/:cluster/${Page.CHAOS_CELL_BUNDLES}`,
                         ]}
-                        component={TabletCellBundles}
+                        component={TabletCellBundlesLazy}
                     />
-                    <Route path={`/:cluster/${Page.NAVIGATION}`} component={Navigation} />
+                    <Route path={`/:cluster/${Page.NAVIGATION}`} component={NavigationLazy} />
                     <Route path={`/:cluster/${Page.PATH_VIEWER}`} component={PathViewerLazy} />
-                    <Route path={`/:cluster/${Page.TABLET}`} component={Tablet} />
-                    <Route path={`/:cluster/${Page.USERS}`} component={UsersPage} />
-                    <Route path={`/:cluster/${Page.GROUPS}`} component={GroupsPage} />
-                    <Route path={`/:cluster/${Page.SCHEDULING}`} component={Scheduling} />
-                    {allowChyt && <Route path={`/:cluster/${Page.CHYT}`} component={ChytPage} />}
+                    <Route path={`/:cluster/${Page.TABLET}`} component={TabletLazy} />
+                    <Route path={`/:cluster/${Page.USERS}`} component={UsersPageLazy} />
+                    <Route path={`/:cluster/${Page.GROUPS}`} component={GroupsPageLazy} />
+                    <Route path={`/:cluster/${Page.SCHEDULING}`} component={SchedulingLazy} />
+                    {allowChyt && (
+                        <Route path={`/:cluster/${Page.CHYT}`} component={ChytPageLazy} />
+                    )}
                     {allowQueryTracker && (
-                        <Route path={`/:cluster/${Page.QUERIES}`} component={QueryTracker} />
+                        <Route path={`/:cluster/${Page.QUERIES}`} component={QueryTrackerLazy} />
                     )}
                     {hasOdinPage() && (
                         <Route

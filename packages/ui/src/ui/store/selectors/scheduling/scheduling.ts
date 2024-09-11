@@ -23,7 +23,7 @@ import {
     getSchedulingPoolsMapByName,
 } from './scheduling-pools';
 import {RootState} from '../../../store/reducers';
-import {isAbcPoolName, isTopLevelPool} from '../../../utils/scheduling/scheduling';
+import {isAbcPoolName, isTopLevelPool} from '../../../utils/scheduling/pool';
 import {visitTreeItems} from '../../../utils/utils';
 import {getExpandedPoolsLoadAll, getSchedulingOperationsExpandedPools} from './expanded-pools';
 import {
