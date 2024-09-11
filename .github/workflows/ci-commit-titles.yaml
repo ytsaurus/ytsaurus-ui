@@ -12,7 +12,7 @@ jobs:
           curl ${{ github.event.pull_request.commits_url }} > commits.txt
           cat commits.txt | jq '.[].commit.message' | sed -E 's/\\n.*/"/g' | jq -r > titles.txt
 
-          grep -vE '^(chore|feat|fix|refactor|revert)(\(\S+\))?!?: [a-z]+' titles.txt > bad_titles.txt || true
+          grep -vE '^(build|chore|ci|docs|feat|fix|refactor|revert|test)(\(\S+\))?!?: [a-z]+' titles.txt > bad_titles.txt || true
           if [ "$(cat bad_titles.txt | wc -c)" -gt 0 ]; then
               echo "Please check your commit titles, they should correspond to https://www.conventionalcommits.org/en/v1.0.0/";
               echo -e "\nThe titles below should be fixed:";
