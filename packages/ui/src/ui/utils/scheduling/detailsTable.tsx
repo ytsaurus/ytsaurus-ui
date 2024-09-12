@@ -2,7 +2,7 @@ import React from 'react';
 
 import format from '../../common/hammer/format';
 import SchedulingOperationsLoader from '../../pages/scheduling/Content/tabs/ScherdulingOperataionsLoader/SchedulingOperationsLoader';
-import {PoolInfo, PoolResourceType} from '../../store/selectors/scheduling/scheduling-pools';
+import type {PoolInfo, PoolResourceType} from '../../store/selectors/scheduling/scheduling-pools';
 
 function prepareDetailedColumn(resource: PoolResourceType) {
     return {

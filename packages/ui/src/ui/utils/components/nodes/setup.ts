@@ -7,7 +7,6 @@ import type {
     NodeRange,
     NodesSetupState,
 } from '../../../store/reducers/components/nodes/setup/setup';
-import {isRangeFilterDefined} from '../../../store/selectors/components/nodes/nodes';
 import type {FIX_MY_TYPE} from '../../../types';
 
 const isCorrectRange = (
@@ -41,4 +40,8 @@ export function createMediumsPredicates(setupFilters: NodesSetupState, mediumLis
         }
     });
     return predicates;
+}
+
+export function isRangeFilterDefined({from, to}: NodeRange) {
+    return from.value !== null || to.value !== null;
 }
