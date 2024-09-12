@@ -5,7 +5,16 @@
     "rules": {
         "new-cap": 0,
         "import/order": 0,
-        "lodash/import-scope": "error"
+        "import/dynamic-import-chunkname": [2, {
+            "importFunctions": ["dynamicImport"],
+            "webpackChunknameFormat": "[a-zA-Z-]+",
+            "allowEmpty": false
+        }],
+        "lodash/chaining": [
+            "error",
+            "never"
+        ],
+        "lodash/import-scope": "error",
     },
     "env": {
         "jest": true
