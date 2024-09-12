@@ -1,20 +1,20 @@
-import {QueryItem} from '../api';
-import {
-    LOAD_QUERIES_LIST_ERROR,
-    LOAD_QUERIES_LIST_REQUEST,
-    LOAD_QUERIES_LIST_SUCCESS,
-    QueriesListAction,
-    SET_QUERIES_LIST_CURSOR,
-    SET_QUERIES_LIST_FILTER,
-    SET_QUERIES_LIST_MODE,
-} from './actions';
+import type {QueryItem} from '../api';
+import type {QueriesListAction} from './actions';
 import {
     DefaultQueriesListFilter,
     QueriesListCursor,
     QueriesListFilter,
     QueriesListMode,
 } from './types';
-import {UPDATE_QUERIES_LIST} from '../query-tracker-contants';
+import {
+    LOAD_QUERIES_LIST_ERROR,
+    LOAD_QUERIES_LIST_REQUEST,
+    LOAD_QUERIES_LIST_SUCCESS,
+    SET_QUERIES_LIST_CURSOR,
+    SET_QUERIES_LIST_FILTER,
+    SET_QUERIES_LIST_MODE,
+    UPDATE_QUERIES_LIST,
+} from '../query-tracker-contants';
 
 export interface QueriesListState {
     state: 'loading' | 'ready' | 'error';

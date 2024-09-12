@@ -1,5 +1,6 @@
+import {Action} from 'redux';
+import {ActionD} from '../../../../types';
 import {QUERY_ACO_LOADING} from './constants';
-import {QueryACOActions} from './actions';
 
 export interface QueryACOState {
     data: {
@@ -55,3 +56,8 @@ export function reducer(state = initialState, action: QueryACOActions): QueryACO
             return state;
     }
 }
+
+export type QueryACOActions =
+    | ActionD<typeof QUERY_ACO_LOADING.SUCCESS, Pick<QueryACOState, 'data'>>
+    | Action<typeof QUERY_ACO_LOADING.FAILURE>
+    | Action<typeof QUERY_ACO_LOADING.REQUEST>;

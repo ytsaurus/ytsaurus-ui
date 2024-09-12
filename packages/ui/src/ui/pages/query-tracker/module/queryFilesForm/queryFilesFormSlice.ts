@@ -1,6 +1,6 @@
-import {PayloadAction, createSlice} from '@reduxjs/toolkit';
-import {QueryFile, QueryFileType} from '../api';
 import {Reducer} from 'redux';
+import {PayloadAction, createSlice} from '@reduxjs/toolkit';
+import type {QueryFile, QueryFileType} from '../api';
 import {mergeStateOnClusterChange} from '../../../../store/reducers/utils';
 
 export type QueryFileAddForm = {

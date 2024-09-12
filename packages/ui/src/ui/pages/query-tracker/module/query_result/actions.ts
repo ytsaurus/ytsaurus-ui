@@ -1,6 +1,5 @@
 import {ThunkAction} from 'redux-thunk';
 import {RootState} from '../../../../store/reducers';
-import {ActionD} from '../../../../types';
 import {
     QueryItem,
     QueryResultMetaScheme,
@@ -18,73 +17,15 @@ import {Type, parseV3Type} from '../../../../components/SchemaDataType/dateTypes
 import ypath from '../../../../common/thor/ypath';
 import forEach_ from 'lodash/forEach';
 import {waitForFontFamilies} from '../../../../store/actions/global/fonts';
-
-export const REQUEST_QUERY_RESULTS = 'query-tracker/REQUEST_QUERY_RESULTS';
-export type RequestQueryResultsAction = ActionD<
-    typeof REQUEST_QUERY_RESULTS,
-    {
-        queryId: QueryItem['id'];
-        index: number;
-    }
->;
-
-// To create initial result
-export const SET_QUERY_RESULTS = 'query-tracker/SET_QUERY_RESULTS';
-export type SetQueryResultsAction = ActionD<
-    typeof SET_QUERY_RESULTS,
-    {
-        queryId: QueryItem['id'];
-        index: number;
-        results: QueryResultReadyState['results'];
-        columns: QueryResultReadyState['columns'];
-        meta?: QueryResultReadyState['meta'];
-    }
->;
-
-export const SET_QUERY_RESULTS_PAGE = 'query-tracker/SET_QUERY_RESULTS_PAGE';
-export type SetQueryResultsPageAction = ActionD<
-    typeof SET_QUERY_RESULTS_PAGE,
-    {
-        queryId: QueryItem['id'];
-        index: number;
-        results: QueryResultReadyState['results'];
-        page: number;
-    }
->;
-
-export const SET_QUERY_RESULTS_ERROR = 'query-tracker/SET_QUERY_RESULTS_ERROR';
-export type SetQueryResultsErrorAction = ActionD<
-    typeof SET_QUERY_RESULTS_ERROR,
-    {
-        queryId: QueryItem['id'];
-        index: number;
-        error: Error;
-    }
->;
-
-export const SET_QUERY_RESULTS_ERRORS = 'query-tracker/SET_QUERY_RESULTS_ERRORS';
-export type SetQueryResultsErrorsAction = ActionD<
-    typeof SET_QUERY_RESULTS_ERRORS,
-    {queryId: QueryItem['id']; errors: {[index: number]: QueryResultErrorState}}
->;
-
-export const SET_QUERY_RESULTS_SETTINGS = 'query-tracker/SET_QUERY_RESULTS_SETTINGS';
-export type SetQueryResultsSettingsAction = ActionD<
-    typeof SET_QUERY_RESULTS_SETTINGS,
-    {
-        queryId: QueryItem['id'];
-        index: number;
-        settings: Partial<QueryResultReadyState['settings']>;
-    }
->;
-
-export type QueryResultsActions =
-    | RequestQueryResultsAction
-    | SetQueryResultsAction
-    | SetQueryResultsErrorAction
-    | SetQueryResultsSettingsAction
-    | SetQueryResultsPageAction
-    | SetQueryResultsErrorsAction;
+import {QueryResultsActions} from './reducer';
+import {
+    REQUEST_QUERY_RESULTS,
+    SET_QUERY_RESULTS,
+    SET_QUERY_RESULTS_ERROR,
+    SET_QUERY_RESULTS_ERRORS,
+    SET_QUERY_RESULTS_PAGE,
+    SET_QUERY_RESULTS_SETTINGS,
+} from '../query-tracker-contants';
 
 export function applySettings(
     queryId: QueryItem['id'],

@@ -1,9 +1,8 @@
 import {createQueryUrl} from '../../utils/navigation';
-import {Action, AnyAction} from 'redux';
+import {AnyAction} from 'redux';
 import {ThunkAction} from 'redux-thunk';
 import {RootState} from '../../../../store/reducers';
 import {getCliqueControllerIsSupported, getCluster} from '../../../../store/selectors/global';
-import {ActionD} from '../../../../types';
 import {QueryEngine} from '../engines';
 import {
     QueryItem,
@@ -23,7 +22,17 @@ import {
     getQuery as selectQuery,
 } from './selectors';
 import {getAppBrowserHistory} from '../../../../store/window-store';
-import {QueryState} from './reducer';
+import type {
+    QueryState,
+    RequestQueryAction,
+    SetQueryAction,
+    SetQueryCliqueLoading,
+    SetQueryClusterClique,
+    SetQueryErrorLoadAction,
+    SetQueryPatchAction,
+    SetQueryReadyAction,
+    UpdateQueryAction,
+} from './reducer';
 import {wrapApiPromiseByToaster} from '../../../../utils/utils';
 import {prepareQueryPlanIds} from './utills';
 import {chytApiAction, spytApiAction} from '../../../../utils/strawberryControllerApi';
@@ -31,54 +40,16 @@ import guid from '../../../../common/hammer/guid';
 import {selectIsMultipleAco} from '../query_aco/selectors';
 import {getSettingQueryTrackerStage} from '../../../../store/selectors/settings-ts';
 
-export const REQUEST_QUERY = 'query-tracker/REQUEST_QUERY';
-export type RequestQueryAction = Action<typeof REQUEST_QUERY>;
-
-export const SET_QUERY_READY = 'query-tracker/SET_QUERY_READY';
-export type SetQueryReadyAction = Action<typeof SET_QUERY_READY>;
-
-export const SET_QUERY = 'query-tracker/SET_QUERY';
-export type SetQueryAction = ActionD<
-    typeof SET_QUERY,
-    {
-        initialQuery?: QueryItem;
-        draftText?: string;
-    }
->;
-
-export const UPDATE_QUERY = 'query-tracker/UPDATE_QUERY';
-export type UpdateQueryAction = ActionD<typeof UPDATE_QUERY, QueryItem>;
-
-export const SET_QUERY_LOAD_ERROR = 'query-tracker/SET_QUERY_LOAD_ERROR';
-export type SetQueryErrorLoadAction = ActionD<typeof SET_QUERY_LOAD_ERROR, Error | string>;
-
-export const SET_QUERY_PATCH = 'query-tracker/SET_QUERY_PATCH';
-export type SetQueryPatchAction = ActionD<typeof SET_QUERY_PATCH, QueryState['draft']>;
-
-export const SET_QUERY_PARAMS = 'query-tracker/SET_QUERY_PARAMS';
-export type SetQueryParamsAction = ActionD<
-    typeof SET_QUERY_PARAMS,
-    Partial<Pick<QueryState, 'params'>>
->;
-
-export const SET_QUERY_CLIQUE_LOADING = 'query-tracker/SET_QUERY_CLIQUE_LOADING';
-export type SetQueryCliqueLoading = ActionD<typeof SET_QUERY_CLIQUE_LOADING, boolean>;
-
-export const SET_QUERY_CLUSTER_CLIQUE = 'query-tracker/SET_QUERY_CLUSTER_CLIQUE';
-export type SetQueryClusterClique = ActionD<
-    typeof SET_QUERY_CLUSTER_CLIQUE,
-    {
-        cluster: string;
-        engine: QueryEngine.SPYT | QueryEngine.CHYT;
-        items: {alias: string; yt_operation_id?: string}[];
-    }
->;
-
-export const UPDATE_ACO_QUERY = 'query-tracker/UPDATE_ACO_QUERY';
-export type UpdateACOQueryAction = ActionD<
-    typeof UPDATE_ACO_QUERY,
-    {access_control_object: string} | {access_control_objects: Array<string>}
->;
+import {
+    REQUEST_QUERY,
+    SET_QUERY,
+    SET_QUERY_CLIQUE_LOADING,
+    SET_QUERY_CLUSTER_CLIQUE,
+    SET_QUERY_PATCH,
+    SET_QUERY_READY,
+    UPDATE_ACO_QUERY,
+    UPDATE_QUERY,
+} from '../query-tracker-contants';
 
 export const setCurrentClusterToQuery =
     (): ThunkAction<void, RootState, unknown, any> => (dispatch, getState) => {

@@ -6,7 +6,6 @@ import {QueriesPooling} from '../hooks/QueriesPooling/context';
 import {isEngine} from '../module/api';
 import {QueryEngine} from '../module/engines';
 import {
-    SET_QUERY_PARAMS,
     createEmptyQuery,
     createQueryFromTablePath,
     goToQuery,
@@ -27,6 +26,7 @@ import {selectFileEditor} from '../module/queryFilesForm/selectors';
 import {selectNavigationCluster} from '../module/queryNavigation/selectors';
 import {setSettingByKey} from '../../../store/actions/settings';
 import {CellPreviewModal} from '../../../containers/CellPreviewModal/CellPreviewModal';
+import {SET_QUERY_PARAMS} from '../module/query-tracker-contants';
 
 const b = cn('query-tracker-page');
 
