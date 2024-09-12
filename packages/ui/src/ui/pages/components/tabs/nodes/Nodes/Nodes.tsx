@@ -37,7 +37,7 @@ import {
 } from '../../../../../store/selectors/components/nodes/nodes';
 import {getSelectedColumns} from '../../../../../store/selectors/settings';
 import {getSettingsEnableSideBar} from '../../../../../store/selectors/settings-ts';
-import {defaultColumns} from '../../../../../utils/components/nodes/tables';
+import {defaultColumns} from '../../../../../pages/components/tabs/nodes/tables';
 import withVisible, {WithVisibleProps} from '../../../../../hocs/withVisible';
 import {useUpdaterWithMemoizedParams} from '../../../../../hooks/use-updater';
 import {isPaneSplit} from '../../../../../utils';

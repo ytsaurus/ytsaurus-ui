@@ -20,7 +20,7 @@ import {
     SCHEDULING_POOL_TREE_TABLE_ID,
 } from '../../constants/scheduling';
 import {ActionD, OldSortState} from '../../types';
-import {NodesTableColumnNames} from '../../utils/components/nodes/tables';
+import type {NodesTableColumnNames} from '../../pages/components/tabs/nodes/tables';
 
 const NAME_ASC_SORT_VALUE = {field: 'name', asc: true};
 

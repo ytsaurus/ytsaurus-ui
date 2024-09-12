@@ -1,11 +1,11 @@
-import {COMPONENTS_VERSIONS_DETAILED_TABLE_ID} from '../../../constants/components/versions/versions_v2';
+import {COMPONENTS_VERSIONS_DETAILED_TABLE_ID} from '../../../../constants/components/versions/versions_v2';
 import {
     changeHostFilter,
     changeTypeFilter,
     changeVersionFilter,
-} from '../../../store/actions/components/versions/versions_v2';
-import {getWindowStore} from '../../../store/window-store';
-import {showErrorPopup} from '../../../utils/utils';
+} from '../../../../store/actions/components/versions/versions_v2';
+import {getWindowStore} from '../../../../store/window-store';
+import {showErrorPopup} from '../../../../utils/utils';
 
 export const tableProps = {
     css: 'components-versions',
