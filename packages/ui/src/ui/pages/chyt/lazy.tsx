@@ -16,4 +16,5 @@ export const ChytPageTopRowLazy = withLazyLoading(
     React.lazy(async () => {
         return {default: (await importPage()).ChytPageTopRow};
     }),
+    '',
 );

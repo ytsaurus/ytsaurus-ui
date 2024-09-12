@@ -15,4 +15,5 @@ export const ComponentsTopRowLazy = withLazyLoading(
     React.lazy(async () => {
         return {default: (await importComponents()).ComponentsTopRow};
     }),
+    '',
 );

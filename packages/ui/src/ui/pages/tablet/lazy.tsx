@@ -16,4 +16,5 @@ export const TabletTopRowLazy = withLazyLoading(
     React.lazy(async () => {
         return {default: (await importPage()).TabletTopRow};
     }),
+    '',
 );

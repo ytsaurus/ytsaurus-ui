@@ -21,4 +21,5 @@ export const ChaosCellBundlesTopRowLazy = withLazyLoading(
     React.lazy(async () => {
         return {default: (await importPage()).ChaosCellBundlesTopRow};
     }),
+    '',
 );
