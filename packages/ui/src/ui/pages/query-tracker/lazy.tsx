@@ -2,7 +2,7 @@ import React from 'react';
 import withLazyLoading from '../../hocs/withLazyLoading';
 
 function importQT() {
-    return import('./index');
+    return import(/* webpackChunkName: "query-tracker" */ './index');
 }
 
 export const QueryTrackerLazy = withLazyLoading(

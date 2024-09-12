@@ -8,7 +8,9 @@ import {mergeScreen, splitScreen} from '../../../store/actions/global';
 import {SPLIT_TYPE} from '../../../constants/components/nodes/nodes';
 import Loader from '../../../components/Loader/Loader';
 
-export const QueryWidgetLazy = React.lazy(() => import('./index'));
+export const QueryWidgetLazy = React.lazy(
+    () => import(/* webpackChunkName: "query-widget" */ './index'),
+);
 
 export const QueryWidgetPortal = withSplit(
     withLazyLoading<QueryWidgetProps>(QueryWidgetLazy, <Loader visible centered size="l" />),

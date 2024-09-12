@@ -32,7 +32,9 @@ export interface AppNavigationProps {
     onChangeCompact: (compact: boolean) => void;
 }
 
-const Aside = React.lazy(() => import('./AppNavigationComponent'));
+const Aside = React.lazy(
+    () => import(/* webpackChunkName: "app-navigation" */ './AppNavigationComponent'),
+);
 
 export function AppNavigationPageLayout(props: AppNavigationProps) {
     const {onChangeCompact, className, compact, ...rest} = props;

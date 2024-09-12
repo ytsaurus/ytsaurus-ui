@@ -13,14 +13,14 @@ import {
     TabletCellBundlesTopRowLazy,
 } from '../../../pages/tablet_cell_bundles/lazy';
 import {AccountsTopRowLazy} from '../../../pages/accounts/lazy';
-import SchedulingTopRowContent from '../../../pages/scheduling/Scheduling/SchedulingTopRowContent';
+import {SchedulingTopRowLazy} from '../../../pages/scheduling/lazy';
 import {NavigationTopRowLazy} from '../../../pages/navigation/lazy';
 import {SystemTopRowLazy} from '../../../pages/system/lazy';
 import {DashboardTopRowLazy} from '../../../pages/dashboard/lazy';
 import {ComponentsTopRowLazy} from '../../../pages/components/lazy';
 import {makeExtraPageTopRowRoutes} from '../../../containers/ClusterPage/ExtraClusterPageRoutes';
 
-import {odinPageInfo} from '../../../pages/odin';
+import {odinPageInfo} from '../../../pages/odin/lazy';
 import {hasOdinPage} from '../../../config';
 import withLazyLoading from '../../../hocs/withLazyLoading';
 
@@ -35,7 +35,7 @@ export default function TopRowContent() {
         <Switch>
             <Route path={`/:cluster/${Page.SYSTEM}`} component={SystemTopRowLazy} />
             <Route path={`/:cluster/${Page.NAVIGATION}`} component={NavigationTopRowLazy} />
-            <Route path={`/:cluster/${Page.SCHEDULING}`} component={SchedulingTopRowContent} />
+            <Route path={`/:cluster/${Page.SCHEDULING}`} component={SchedulingTopRowLazy} />
             <Route path={`/:cluster/${Page.ACCOUNTS}`} component={AccountsTopRowLazy} />
             <Route path={`/:cluster/${Page.TABLET}/:id`} component={TabletTopRowLazy} />
             <Route

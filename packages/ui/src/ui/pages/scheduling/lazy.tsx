@@ -2,7 +2,7 @@ import React from 'react';
 import withLazyLoading from '../../hocs/withLazyLoading';
 
 function importPage() {
-    return import('./index');
+    return import(/* webpackChunkName: "scheduling" */ './index');
 }
 
 export const SchedulingLazy = withLazyLoading(

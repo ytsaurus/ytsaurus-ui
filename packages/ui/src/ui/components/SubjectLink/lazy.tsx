@@ -2,7 +2,7 @@ import React from 'react';
 import withLazyLoading from '../../hocs/withLazyLoading';
 
 async function importDefaultSubjectLink() {
-    return import('./DefaultSubjectLink');
+    return import(/* webpackChunkName: "default-subject-link" */ './DefaultSubjectLink');
 }
 
 export const DefaultSubjectLinkLazy = withLazyLoading(
