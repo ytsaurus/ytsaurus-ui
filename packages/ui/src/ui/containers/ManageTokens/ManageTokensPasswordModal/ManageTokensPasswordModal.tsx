@@ -3,7 +3,7 @@ import * as React from 'react';
 import {useSelector} from 'react-redux';
 import {Alert, Dialog} from '@gravity-ui/uikit';
 import {sha256} from '../../../utils/sha256';
-import {YTDFDialog, makeErrorFields} from '../../../components/Dialog/Dialog';
+import {YTDFDialog, makeErrorFields} from '../../../components/Dialog';
 import {getCurrentUserName, getSettingsCluster} from '../../../store/selectors/global';
 import {YTError} from '../../../../@types/types';
 

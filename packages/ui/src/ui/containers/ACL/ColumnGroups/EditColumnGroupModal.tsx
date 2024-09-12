@@ -1,5 +1,5 @@
 import React, {useMemo, useState} from 'react';
-import {YTDFDialog, makeErrorFields} from '../../../components/Dialog/Dialog';
+import {YTDFDialog, makeErrorFields} from '../../../components/Dialog';
 import {AclColumnGroup} from '../../../utils/acl/acl-types';
 import includes_ from 'lodash/includes';
 

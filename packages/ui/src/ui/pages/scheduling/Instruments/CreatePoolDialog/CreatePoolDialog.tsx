@@ -6,7 +6,7 @@ import isEmpty_ from 'lodash/isEmpty';
 
 import Link from '../../../../components/Link/Link';
 import Error from '../../../../components/Error/Error';
-import {FormApi, YTDFDialog} from '../../../../components/Dialog/Dialog';
+import {FormApi, YTDFDialog} from '../../../../components/Dialog';
 import Button from '../../../../components/Button/Button';
 
 import {getCurrentUserName} from '../../../../store/selectors/global';

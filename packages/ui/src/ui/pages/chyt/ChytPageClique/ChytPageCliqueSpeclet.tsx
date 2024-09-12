@@ -6,7 +6,7 @@ import cn from 'bem-cn-lite';
 import Button from '../../../components/Button/Button';
 import Error from '../../../components/Error/Error';
 import Icon from '../../../components/Icon/Icon';
-import {YTDFDialog} from '../../../components/Dialog/Dialog';
+import {YTDFDialog} from '../../../components/Dialog';
 import Yson from '../../../components/Yson/Yson';
 import {UnipikaSettings} from '../../../components/Yson/StructuredYson/StructuredYsonTypes';
 import {makeTabbedDialogFieldsFromDescription} from '../../../components/Dialog/df-dialog-utils';

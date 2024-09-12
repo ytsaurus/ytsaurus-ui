@@ -6,7 +6,7 @@ import {Text} from '@gravity-ui/uikit';
 
 import format from '../../../common/hammer/format';
 
-import {YTDFDialog, makeErrorFields} from '../../../components/Dialog/Dialog';
+import {YTDFDialog, makeErrorFields} from '../../../components/Dialog';
 import {Bold} from '../../../components/Text/Text';
 import {YTError} from '../../../types';
 import {useThunkDispatch} from '../../../store/thunkDispatch';

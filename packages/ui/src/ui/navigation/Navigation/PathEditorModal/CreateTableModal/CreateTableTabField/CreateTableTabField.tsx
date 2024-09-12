@@ -1,4 +1,5 @@
 import React from 'react';
+import {connect} from 'react-redux';
 import cn from 'bem-cn-lite';
 
 import differenceBy_ from 'lodash/differenceBy';
@@ -8,8 +9,9 @@ import isEmpty_ from 'lodash/isEmpty';
 import map_ from 'lodash/map';
 import sortBy_ from 'lodash/sortBy';
 
-import {TabFieldVertical} from '@gravity-ui/dialog-fields';
-import {connect} from 'react-redux';
+import {DropdownMenu} from '@gravity-ui/uikit';
+
+import {TabFieldVertical, TabFieldVerticalProps} from '../../../../../components/Dialog';
 
 import Button from '../../../../../components/Button/Button';
 import Icon, {IconName} from '../../../../../components/Icon/Icon';
@@ -19,7 +21,6 @@ import {
     setCreateTableKeyColumns,
 } from '../../../../../store/actions/navigation/modals/create-table';
 import {ArrayElement} from '../../../../../types';
-import {DropdownMenu} from '@gravity-ui/uikit';
 import {Tooltip} from '../../../../../components/Tooltip/Tooltip';
 
 import './CreateTableTabField.scss';
@@ -223,8 +224,6 @@ const mapDispatchToProps = {
 };
 
 const ColumnsWrapperConnected = connect(null, mapDispatchToProps)(ColumnsWrapper);
-
-type TabFieldVerticalProps = React.ComponentProps<typeof TabFieldVertical>;
 
 type Props = TabFieldVerticalProps;
 

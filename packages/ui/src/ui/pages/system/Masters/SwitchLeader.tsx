@@ -3,7 +3,7 @@ import Icon from '../../../components/Icon/Icon';
 import Button from '../../../components/Button/Button';
 import {YTApiId, ytApiV4Id} from '../../../rum/rum-wrap-api';
 import {wrapApiPromiseByToaster} from '../../../utils/utils';
-import {YTDFDialog, makeErrorFields} from '../../../components/Dialog/Dialog';
+import {YTDFDialog, makeErrorFields} from '../../../components/Dialog';
 import {SwitchLeaderShortInfo} from '../../../pages/components/SwitchLeaderShortInfo/SwitchLeaderShortInfo';
 import {AppStoreProvider} from '../../../containers/App/AppStoreProvider';
 

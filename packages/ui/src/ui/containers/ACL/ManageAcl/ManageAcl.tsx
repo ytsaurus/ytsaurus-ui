@@ -4,13 +4,16 @@ import cn from 'bem-cn-lite';
 
 import isEqual_ from 'lodash/isEqual';
 
-import {DialogField, FormApi, YTDFDialog} from '../../../components/Dialog/Dialog';
 import {Dialog as CommonDialog, Loader} from '@gravity-ui/uikit';
 
-import RoleListControl, {
+import {
+    DialogField,
+    FormApi,
+    RoleListControlProps,
+    YTDFDialog,
     prepareRoleListValue,
     roleListValueToSubjectList,
-} from '../../../components/Dialog/controls/RoleListControl/RoleListControl';
+} from '../../../components/Dialog';
 
 import {IdmKindType} from '../../../utils/acl/acl-types';
 import {PreparedRole} from '../../../utils/acl';
@@ -23,10 +26,11 @@ import Button from '../../../components/Button/Button';
 
 import withVisible, {WithVisibleProps} from '../../../hocs/withVisible';
 
-import './ManageAcl.scss';
 import UIFactory from '../../../UIFactory';
 import ErrorBlock from '../../../components/Block/Block';
 import {ACLReduxProps} from '../ACL-connect-helpers';
+
+import './ManageAcl.scss';
 
 const block = cn('acl-manage');
 
@@ -62,9 +66,9 @@ interface Props extends WithVisibleProps {
 }
 
 interface FormValues {
-    auditors: RoleListControl['props']['value'];
-    responsible: RoleListControl['props']['value'];
-    readApprovers: RoleListControl['props']['value'];
+    auditors: RoleListControlProps['value'];
+    responsible: RoleListControlProps['value'];
+    readApprovers: RoleListControlProps['value'];
     inheritanceResponsible: boolean;
     bossApproval: boolean;
     inheritAcl: boolean;

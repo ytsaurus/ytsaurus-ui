@@ -2,7 +2,7 @@ import cn from 'bem-cn-lite';
 import React from 'react';
 import {ConnectedProps, connect} from 'react-redux';
 
-import {DialogField, FormApi, YTDFDialog} from '../../../../../components/Dialog/Dialog';
+import {DialogField, FormApi, YTDFDialog} from '../../../../../components/Dialog';
 import {closeCreateModal} from '../../../../../store/actions/accounts/editor';
 import {loadEditedAccount} from '../../../../../store/actions/accounts/accounts';
 import {createAccountFromInfo} from '../../../../../utils/accounts/editor';

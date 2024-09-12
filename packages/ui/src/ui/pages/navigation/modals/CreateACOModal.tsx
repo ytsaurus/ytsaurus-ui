@@ -1,7 +1,7 @@
 import React from 'react';
 import cn from 'bem-cn-lite';
 
-import {DialogError, DialogField, FormApi, YTDFDialog} from '../../../components/Dialog/Dialog';
+import {DialogError, DialogField, FormApi, YTDFDialog} from '../../../components/Dialog';
 import {useDispatch, useSelector} from 'react-redux';
 import {getCreateACOModalState} from '../../../store/selectors/navigation/modals/create-aco-modal';
 import {closeCreateACOModal, createACO} from '../../../store/actions/navigation/modals/create-aco';

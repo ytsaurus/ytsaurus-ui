@@ -1,6 +1,6 @@
 import React, {FC, useState} from 'react';
 import {Button, Icon} from '@gravity-ui/uikit';
-import {YTDFDialog, makeErrorFields} from '../../../../components/Dialog/Dialog';
+import {YTDFDialog, makeErrorFields} from '../../../../components/Dialog';
 import {useQueryACO} from '../useQueryACO';
 import {useToggle} from 'react-use';
 import PencilIcon from '@gravity-ui/icons/svgs/pencil.svg';

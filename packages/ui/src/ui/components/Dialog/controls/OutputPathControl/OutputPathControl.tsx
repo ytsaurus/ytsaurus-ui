@@ -1,5 +1,5 @@
 import React, {FC, useCallback, useEffect} from 'react';
-import {ControlStaticApi} from '@gravity-ui/dialog-fields/build/cjs/dialog/types';
+import type {ControlStaticApi} from '../../../../components/Dialog';
 import {PoolTreeSuggestControl} from '../PoolTreeSuggestControl/PoolTreeSuggestControl';
 import {TextInput} from '@gravity-ui/uikit';
 import './OutputPathControl.scss';

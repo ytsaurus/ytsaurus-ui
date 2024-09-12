@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 
 import {FocusBlurContainer} from '@gravity-ui/dialog-fields';
 import {RadioButton, TextInput, TextInputSize} from '@gravity-ui/uikit';
-import {Datepicker, DatepickerOutputDates} from '../../../components/common/Datepicker';
+import {Datepicker, DatepickerOutputDates} from '../../../../components/common/Datepicker';
 
 import './BeforeDatePicker.scss';
 

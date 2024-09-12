@@ -17,7 +17,7 @@ import {
     DialogTabField,
     FormApi,
     YTDFDialog,
-} from '../../../components/Dialog/Dialog';
+} from '../../../components/Dialog';
 import {
     getNavigationAttributesEditorAttributes,
     getNavigationAttributesEditorDynamicTables,

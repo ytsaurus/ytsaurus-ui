@@ -3,10 +3,10 @@ import moment from 'moment';
 import * as React from 'react';
 import {FC, useMemo, useState} from 'react';
 import {Alert, Button} from '@gravity-ui/uikit';
-import {FormApi} from '@gravity-ui/dialog-fields';
+import type {FormApi} from '../../../components/Dialog';
 import truncate_ from 'lodash/truncate';
 import Modal from '../../../components/Modal/Modal';
-import {YTDFDialog, makeErrorFields} from '../../../components/Dialog/Dialog';
+import {YTDFDialog, makeErrorFields} from '../../../components/Dialog';
 import {
     closeManageTokensModal,
     manageTokensCreateToken,

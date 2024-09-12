@@ -3,7 +3,7 @@ import React from 'react';
 import map_ from 'lodash/map';
 import pickBy_ from 'lodash/pickBy';
 
-import {DialogError, FormApi, YTDFDialog} from '../../../../components/Dialog/Dialog';
+import {DialogError, FormApi, YTDFDialog} from '../../../../components/Dialog';
 import {useDispatch, useSelector} from 'react-redux';
 import {
     getNavigationTableAttributesValues,

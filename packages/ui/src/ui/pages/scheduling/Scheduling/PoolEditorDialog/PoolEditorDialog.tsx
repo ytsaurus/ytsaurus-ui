@@ -6,7 +6,7 @@ import isEmpty_ from 'lodash/isEmpty';
 import pick_ from 'lodash/pick';
 import pickBy_ from 'lodash/pickBy';
 
-import {DialogField, FormApi, YTDFDialog} from '../../../../components/Dialog/Dialog';
+import {DialogField, FormApi, YTDFDialog} from '../../../../components/Dialog';
 import Error from '../../../../components/Error/Error';
 
 import {

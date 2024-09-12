@@ -1,7 +1,7 @@
 import {compose} from 'redux';
 import cn from 'bem-cn-lite';
 import React, {useCallback, useMemo} from 'react';
-import {DialogField, FormApi, YTDFDialog, makeErrorFields} from '../../../components/Dialog/Dialog';
+import {DialogField, FormApi, YTDFDialog, makeErrorFields} from '../../../components/Dialog';
 import ErrorBoundary from '../../../components/ErrorBoundary/ErrorBoundary';
 import Button from '../../../components/Button/Button';
 import PermissionsControl from '../RequestPermissions/PermissionsControl/PermissionsControl';

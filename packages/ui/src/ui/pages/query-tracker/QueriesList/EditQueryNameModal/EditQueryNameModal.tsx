@@ -1,5 +1,5 @@
 import React, {useMemo, useState} from 'react';
-import {YTDFDialog, makeErrorFields} from '../../../../components/Dialog/Dialog';
+import {YTDFDialog, makeErrorFields} from '../../../../components/Dialog';
 import Button from '../../../../components/Button/Button';
 import Icon from '../../../../components/Icon/Icon';
 
