@@ -5,7 +5,7 @@ import map_ from 'lodash/map';
 
 import ClusterPage from '../ClusterPage/ClusterPage';
 import UIFactory from '../../UIFactory';
-import {odinRootPageInfo} from '../../pages/odin';
+import {odinRootPageInfo} from '../../pages/odin/lazy';
 import {hasOdinPage} from '../../config';
 
 export default class ClusterPageWrapper extends React.PureComponent {

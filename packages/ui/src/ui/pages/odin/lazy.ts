@@ -13,18 +13,25 @@ import {
 } from './_reducers/url-mapping';
 import {ODIN_PAGE_ID} from './odin-constants';
 
-function importOdin() {
-    return import('./controls/Odin');
+function importPage() {
+    return import(/* webpackChunkName: "odin" */ './index');
 }
 
-const OdinLazy = withLazyLoading(React.lazy(() => importOdin()));
-const IndependentOdinLazy = withLazyLoading(
+const OdinLazy = withLazyLoading(
     React.lazy(async () => {
-        return {default: (await importOdin()).IndependentOdin};
+        return {default: (await importPage()).Odin};
     }),
 );
-const OdinTopRowContentLazy = withLazyLoading(
-    React.lazy(() => import('./controls/OdinTopRowContent')),
+const IndependentOdinLazy = withLazyLoading(
+    React.lazy(async () => {
+        return {default: (await importPage()).IndependentOdin};
+    }),
+);
+const OdinTopRowLazy = withLazyLoading(
+    React.lazy(async () => {
+        return {default: (await importPage()).OdinTopRow};
+    }),
+    '',
 );
 
 export const odinPageInfo: UIFactoryClusterPageInfo = {
@@ -33,7 +40,7 @@ export const odinPageInfo: UIFactoryClusterPageInfo = {
     svgIcon: PageOdin,
     reducers,
     reactComponent: OdinLazy,
-    topRowComponent: OdinTopRowContentLazy,
+    topRowComponent: OdinTopRowLazy,
     urlMapping: {
         [`/*/odin/details`]: [odinParams, getOdinPreparedState],
         [`/*/odin/overview`]: [odinOverviewParams, getOdinOverviewPreparedState],

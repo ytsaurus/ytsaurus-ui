@@ -5,7 +5,9 @@ const QueryResultsVisualizationLazy = withLazyLoading(
     React.lazy(async () => {
         return {
             default: (
-                await import('./containers/QueryResultsVisualization/QueryResultsVisualization')
+                await import(
+                    /* webpackChunkName: "query-results" */ './containers/QueryResultsVisualization/QueryResultsVisualization'
+                )
             ).QueryResultsVisualization,
         };
     }),

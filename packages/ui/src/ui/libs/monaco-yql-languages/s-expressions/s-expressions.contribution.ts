@@ -6,7 +6,7 @@ registerLanguage({
     id: LANGUAGE_ID,
     extensions: [],
     loader: () =>
-        import('./s-expressions').then((module) => {
+        import(/* webpackChunkName: "yql-s-expressions" */ './s-expressions').then((module) => {
             return {
                 conf: module.conf,
                 language: module.language,

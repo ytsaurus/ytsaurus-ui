@@ -45,7 +45,7 @@ import {useRumMeasureStart, useRumMeasureStop} from '../../rum/RumUiContext';
 import {RumMeasureTypes} from '../../rum/rum-measure-types';
 import {useClusterFromLocation} from '../../hooks/use-cluster';
 import {makeExtraPageRoutes} from './ExtraClusterPageRoutes';
-import {odinPageInfo} from '../../pages/odin';
+import {odinPageInfo} from '../../pages/odin/lazy';
 import {hasOdinPage} from '../../config';
 
 import './ClusterPage.scss';

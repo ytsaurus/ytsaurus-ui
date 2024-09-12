@@ -7,7 +7,7 @@ registerLanguage({
     id: LANGUAGE_ID,
     extensions: [],
     loader: () =>
-        import('./yql_ansi').then((module) => {
+        import(/* webpackChunkName: "yql-ansi" */ './yql_ansi').then((module) => {
             return {
                 conf: module.conf,
                 language: module.language,

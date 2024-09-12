@@ -37,7 +37,7 @@ import {registerExtraPage} from '../../pages';
 import {registerLocationParameters} from '../../store/location';
 import {registerHeaderLink} from '../../containers/ClustersMenu/header-links-items';
 import {queryTracker} from '../../pages/query-tracker/module';
-import {odinPageInfo, odinRootPageInfo} from '../../pages/odin';
+import {odinPageInfo, odinRootPageInfo} from '../../pages/odin/lazy';
 import {hasOdinPage} from '../../config';
 import {chyt} from './chyt';
 import {RawVersion} from '../../store/selectors/thor/support';

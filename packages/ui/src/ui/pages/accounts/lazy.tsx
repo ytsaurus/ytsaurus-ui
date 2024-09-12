@@ -2,7 +2,7 @@ import React from 'react';
 import withLazyLoading from '../../hocs/withLazyLoading';
 
 function importPage() {
-    return import('./index');
+    return import(/* webpackChunkName: "accounts" */ './index');
 }
 
 export const AccountsLazy = withLazyLoading(
