@@ -11,14 +11,20 @@ import {
     ACCOUNT_RESOURCE_TYPES_DESCRIPTION,
     AccountResourceName,
     AccountResourceNameType,
+    ROOT_ACCOUNT_NAME,
 } from '../../../constants/accounts/accounts';
 import hammer from '../../../common/hammer';
 import {FIX_MY_TYPE} from '../../../types';
 import {getMediumListNoCache} from '../thor';
 import ypath from '../../../common/thor/ypath';
-import {isTopLevelAccount} from '../../../utils/accounts/accounts';
+
 import {accountMemoryMediumToFieldName} from '../../../utils/accounts/accounts-selector';
 import {calculateLoadingStatus, isFinalLoadingStatus} from '../../../utils/utils';
+
+function isTopLevelAccount(account: AccountSelector) {
+    const parent = ypath.getValue(account, '/@parent_name');
+    return !parent || parent === ROOT_ACCOUNT_NAME;
+}
 
 const getAccountsLoading = (state: RootState) => state.accounts.accounts.fetching;
 const getAccountsLoaded = (state: RootState) => state.accounts.accounts.wasLoaded;

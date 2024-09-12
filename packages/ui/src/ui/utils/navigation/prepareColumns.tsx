@@ -9,7 +9,7 @@ import {ColumnCell} from '../../components/ColumnCell/ColumnCell';
 import map_ from 'lodash/map';
 
 import {TypeArray} from '../../components/SchemaDataType/dataTypes';
-import {YsonSettings} from '../../store/selectors/thor/unipika';
+import type {YsonSettings} from '../../store/selectors/thor/unipika';
 
 export function prepareColumns({
     columns,

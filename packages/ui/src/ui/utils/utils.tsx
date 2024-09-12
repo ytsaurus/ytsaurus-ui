@@ -15,13 +15,14 @@ import {
 } from '../utils/progress';
 import hammer from '../common/hammer';
 import {LOADING_STATUS} from '../constants';
-import {ErrorInfo} from '../store/reducers/modals/errors';
+import type {ErrorInfo} from '../store/reducers/modals/errors';
 import {showErrorModal} from '../store/actions/modals/errors';
 import {BatchResultsItem} from '../../shared/yt-types';
 
 import {UIBatchError} from './errors/ui-error';
 import {isCancelled} from './cancel-helper';
 import {YTErrors} from '../rum/constants';
+import {getWindowStore} from '../store/window-store';
 
 export function getBatchError<T = unknown>(
     batchResults: Array<BatchResultsItem<T>>,
@@ -332,7 +333,7 @@ export function showErrorPopup(
     error: YTError | AxiosError,
     options: Omit<ErrorInfo, 'error'> = {},
 ) {
-    (window as any).store.dispatch(showErrorModal(error, options));
+    getWindowStore().dispatch(showErrorModal(error, options));
 }
 
 export function toggleBooleanInPlace<T, K extends TypedKeys<T, boolean>>(key: K, obj: T) {

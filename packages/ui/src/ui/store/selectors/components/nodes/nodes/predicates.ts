@@ -24,6 +24,7 @@ import {MEDIUM_COLS_PREFIX} from '../../../../../constants/components/nodes/node
 import {getMediumListNoCache} from '../../../../../store/selectors/thor';
 import type {ValueOf} from '../../../../../types';
 import {Node} from '../../../../reducers/components/nodes/nodes/node';
+import {isRangeFilterDefined} from '../../../../../utils/components/nodes/setup';
 
 import {RootState} from '../../../../reducers';
 
@@ -625,8 +626,4 @@ function createRangePredicate<T extends keyof typeof PropertiesByPredicate, U>(
             nodeValue <= (to.value === null ? Infinity : to.value)
         );
     };
-}
-
-export function isRangeFilterDefined({from, to}: NodeRange) {
-    return from.value !== null || to.value !== null;
 }
