@@ -8,7 +8,7 @@ import reduce_ from 'lodash/reduce';
 import format from '../../../common/hammer/format';
 
 import {AddMaintenanceParams} from '../../../../shared/yt-types';
-import {YTDFDialog, makeErrorFields} from '../../../components/Dialog/Dialog';
+import {YTDFDialog, makeErrorFields} from '../../../components/Dialog';
 import type {
     NodeMaintenanceState,
     NodeResourceLimits,

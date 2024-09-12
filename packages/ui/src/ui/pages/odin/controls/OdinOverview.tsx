@@ -51,7 +51,7 @@ import {OdinOverviewStateDataItem} from '../_reducers/odin-overview';
 import {ClickableText} from '../../../components/ClickableText/ClickableText';
 import Link from '../../../components/Link/Link';
 // @ts-ignore
-import {YTDFDialog} from '../../../components/Dialog/Dialog';
+import {YTDFDialog} from '../../../components/Dialog';
 
 import ErrorBoundary from '../../../components/ErrorBoundary/ErrorBoundary';
 import {setMetric} from '../_actions';

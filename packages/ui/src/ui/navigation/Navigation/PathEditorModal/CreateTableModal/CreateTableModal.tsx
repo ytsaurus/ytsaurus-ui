@@ -12,7 +12,7 @@ import sortBy_ from 'lodash/sortBy';
 import set_ from 'lodash/set';
 
 import Button from '../../../../components/Button/Button';
-import {FormApi, YTDFDialog} from '../../../../components/Dialog/Dialog';
+import {FormApi, YTDFDialog} from '../../../../components/Dialog';
 import Icon from '../../../../components/Icon/Icon';
 import Link from '../../../../components/Link/Link';
 

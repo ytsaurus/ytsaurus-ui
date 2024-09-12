@@ -18,7 +18,7 @@ import Modal from '../../../../../components/Modal/Modal';
 import {getPath} from '../../../../../store/selectors/navigation';
 import {ConnectedProps, connect} from 'react-redux';
 import Error from '../../../../../components/Block/Block';
-import {DialogField, YTDFDialog} from '../../../../../components/Dialog/Dialog';
+import {DialogField, YTDFDialog} from '../../../../../components/Dialog';
 import {Progress} from '@gravity-ui/uikit';
 
 import hammer from '../../../../../common/hammer';

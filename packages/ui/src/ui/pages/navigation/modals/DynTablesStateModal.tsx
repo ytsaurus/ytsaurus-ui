@@ -5,7 +5,7 @@ import map_ from 'lodash/map';
 
 import cn from 'bem-cn-lite';
 
-import {DialogError, YTDFDialog} from '../../../components/Dialog/Dialog';
+import {DialogError, YTDFDialog} from '../../../components/Dialog';
 import {useDispatch, useSelector} from 'react-redux';
 import {
     dynTablesChangeState,

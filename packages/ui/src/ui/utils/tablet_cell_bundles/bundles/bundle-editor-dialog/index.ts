@@ -12,7 +12,7 @@ import type {
 } from '../../../../store/reducers/tablet_cell_bundles';
 import type {BundleParam} from '../../../../pages/tablet_cell_bundles/bundles/BundleEditorDialog/components/BundleParamsList/BundleParamsList';
 import type {BundleEditorDialogFormValues} from '../../../../pages/tablet_cell_bundles/bundles/BundleEditorDialog/BundleEditorDialog';
-import type {FormApi} from '../../../../components/Dialog/Dialog';
+import type {FormApi} from '../../../../components/Dialog';
 
 type InnerKeys<T> = {[K in keyof T]: Array<keyof T[K]>};
 type FormKeys = InnerKeys<Required<BundleEditorDialogFormValues>>;

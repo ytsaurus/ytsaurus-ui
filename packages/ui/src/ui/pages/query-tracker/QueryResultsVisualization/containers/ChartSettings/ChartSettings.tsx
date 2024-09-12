@@ -2,12 +2,7 @@ import React, {useCallback, useState} from 'react';
 import {Gear} from '@gravity-ui/icons';
 import {Icon} from '@gravity-ui/uikit';
 import Button from '../../../../../components/Button/Button';
-import {
-    DialogField,
-    DialogTabField,
-    FormApi,
-    YTDFDialog,
-} from '../../../../../components/Dialog/Dialog';
+import {DialogField, DialogTabField, FormApi, YTDFDialog} from '../../../../../components/Dialog';
 import type {ChartSettings} from '../../types';
 import {useSelector} from 'react-redux';
 import {selectQueryResultChartSettings} from '../../store/selectors';

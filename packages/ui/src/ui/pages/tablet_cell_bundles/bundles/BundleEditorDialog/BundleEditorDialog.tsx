@@ -11,7 +11,7 @@ import {
     FormApi,
     YTDFDialog,
     makeFormSubmitError,
-} from '../../../../components/Dialog/Dialog';
+} from '../../../../components/Dialog';
 import hammer from '../../../../common/hammer';
 
 import {getClusterUiConfig, isDeveloper} from '../../../../store/selectors/global';

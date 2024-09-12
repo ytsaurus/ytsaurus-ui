@@ -1,9 +1,6 @@
 import React, {ComponentProps} from 'react';
 import cn from 'bem-cn-lite';
 
-import compact_ from 'lodash/compact';
-import map_ from 'lodash/map';
-
 import SubjectsControl from '../../containers/ACL/SubjectsControl/SubjectsControl';
 import PermissionsControl from '../../containers/ACL/RequestPermissions/PermissionsControl/PermissionsControl';
 import {AclColumnGroupControl} from '../../containers/ACL/RequestPermissions/AclColumnGroupControl/AclColumnGroupControl';
@@ -23,7 +20,6 @@ import {
 import SelectWithSubItems from './controls/SelectWithSubItems/SelectWithSubItems';
 import CreatePoolParentSuggest from '../../pages/scheduling/Instruments/CreatePoolDialog/CreatePoolParentSuggest';
 import TabletCellBundlesSuggest from '../../pages/components/TabletCellBundlesSuggest/TabletCellBundlesSuggest';
-import Block from '../../components/Block/Block';
 import EditablePathList from './controls/EditablePathList/EditablePathList';
 import {PathEditorControl} from './controls/PathEditorControl/PathEditorControl';
 import {OutputPathControl} from './controls/OutputPathControl';
@@ -41,21 +37,18 @@ import {
     DFDialogField,
     DFDialogProps,
     DFDialogTabField,
-    FORM_ERROR,
     RegisteredDialogField,
     RegisteredDialogTabField,
     registerDialogControl,
     registerDialogTabControl,
 } from '@gravity-ui/dialog-fields';
-export type {FormApi} from '@gravity-ui/dialog-fields';
-import {FIX_MY_TYPE, YTError} from '../../types';
 import PoolQuotaEditor from '../../pages/scheduling/PoolQoutaEditor/PoolQuotaEditor';
 import {BundleTableField} from '../../pages/tablet_cell_bundles/bundles/BundleEditorDialog/components/BundleTableField/BundleTableField';
 import {BundleTitle} from '../../pages/tablet_cell_bundles/bundles/BundleEditorDialog/components/BundleTitle/BundleTitle';
 import {BundleInput} from '../../pages/tablet_cell_bundles/bundles/BundleEditorDialog/components/BundleInput/BundleInput';
 import {AbcControl} from './controls/AbcControl/AbcControl';
 import Select, {SelectSingle} from '../../components/Select/Select';
-import BeforeDatePicker from '../../components/common/BeforeDatePicker/BeforeDatePicker';
+import BeforeDatePicker from './controls/BeforeDatePicker/BeforeDatePicker';
 import {TimeDuration} from '../../components/TimeDuration/TimeDuration';
 import {DatePickerControl} from './controls/DatePickerControl/DatePickerControl';
 import {RangeInputPickerControl} from './controls/RangeInputPickerControl/RangeInputPickerControl';
@@ -214,7 +207,8 @@ export type DialogTabField<FieldT> =
     | DFDialogTabField<FieldT>
     | RegisteredDialogTabField<'yt-create-table-tab', any, FieldT>;
 
-export function YTDFDialog<Values, InitialValues = Partial<Values>>(
+export type YTDialogType = typeof YTDialog;
+export function YTDialog<Values, InitialValues = Partial<Values>>(
     props: DFDialogProps<
         Values,
         InitialValues,
@@ -231,30 +225,8 @@ export function YTDFDialog<Values, InitialValues = Partial<Values>>(
     );
 }
 
-export function DialogError(props: FIX_MY_TYPE) {
-    return <Block {...props} className={block('error')} />;
-}
+export {registerDialogControl, registerDialogTabControl, RoleListControl};
 
-export function makeErrorFields(errors: Array<YTError | Error | undefined>) {
-    return compact_(
-        map_(errors, (error, index) => {
-            return error
-                ? {
-                      name: `error_${index}`,
-                      type: 'block' as const,
-                      extras: {
-                          children: <DialogError error={error} />,
-                      },
-                  }
-                : undefined;
-        }),
-    );
-}
-
-export function makeFormSubmitError(error: YTError) {
-    return {
-        validationErrors: {
-            [FORM_ERROR]: <DialogError error={error} />,
-        },
-    };
-}
+export type * from '@gravity-ui/dialog-fields';
+export {EditableList, TabFieldVertical} from '@gravity-ui/dialog-fields';
+export type {ControlStaticApi} from '@gravity-ui/dialog-fields/build/cjs/dialog/types';

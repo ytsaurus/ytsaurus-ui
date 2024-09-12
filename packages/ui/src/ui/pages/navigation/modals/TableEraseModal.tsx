@@ -1,6 +1,6 @@
 import React from 'react';
 
-import {DialogError, FormApi, YTDFDialog} from '../../../components/Dialog/Dialog';
+import {DialogError, FormApi, YTDFDialog} from '../../../components/Dialog';
 import {makeLink} from '../../../navigation/Navigation/PathEditorModal/CreateTableModal/CreateTableModal';
 import {useDispatch, useSelector} from 'react-redux';
 import {

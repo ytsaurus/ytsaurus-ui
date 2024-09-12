@@ -1,4 +1,3 @@
-import {EditableList, EditableListItemType} from '@gravity-ui/dialog-fields';
 import React from 'react';
 import {connect} from 'react-redux';
 
@@ -9,6 +8,8 @@ import map_ from 'lodash/map';
 import cn from 'bem-cn-lite';
 
 import {SelectProps} from '@gravity-ui/uikit';
+
+import {EditableList, EditableListItemType} from '../../../components/Dialog';
 
 import {getAllGroupNamesSorted, getAllIdmGroupNamesSorted} from '../../../store/selectors/global';
 import {RootState} from '../../../store/reducers';

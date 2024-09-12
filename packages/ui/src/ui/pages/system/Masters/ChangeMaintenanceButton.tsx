@@ -4,7 +4,7 @@ import {changeMasterMaintenance} from '../../../store/actions/system/masters';
 import {changeSchedulerMaintenance} from '../../../store/actions/system/schedulers';
 import {useDispatch} from 'react-redux';
 import PencilIcon from '@gravity-ui/icons/svgs/pencil.svg';
-import {FormApi, YTDFDialog, makeErrorFields} from '../../../components/Dialog/Dialog';
+import {FormApi, YTDFDialog, makeErrorFields} from '../../../components/Dialog';
 import hammer from '../../../common/hammer';
 import {useToggle} from 'react-use';
 

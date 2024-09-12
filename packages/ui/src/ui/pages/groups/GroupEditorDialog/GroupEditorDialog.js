@@ -1,4 +1,4 @@
-import {YTDFDialog} from '../../../components/Dialog/Dialog';
+import {YTDFDialog, extractChangedSubjects, prepareRoleListValue} from '../../../components/Dialog';
 import React from 'react';
 import cn from 'bem-cn-lite';
 import PropTypes from 'prop-types';
@@ -7,10 +7,6 @@ import {connect} from 'react-redux';
 import map_ from 'lodash/map';
 
 import {closeGroupEditorModal, saveGroupData} from '../../../store/actions/groups';
-import {
-    extractChangedSubjects,
-    prepareRoleListValue,
-} from '../../../components/Dialog/controls/RoleListControl/RoleListControl';
 import {
     getGroupEditorGroupIdm,
     getGroupEditorGroupName,

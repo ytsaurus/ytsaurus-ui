@@ -1,7 +1,7 @@
 import React from 'react';
 import cn from 'bem-cn-lite';
 
-import {DialogError, DialogField, FormApi, YTDFDialog} from '../../../components/Dialog/Dialog';
+import {DialogError, DialogField, FormApi, YTDFDialog} from '../../../components/Dialog';
 import {useDispatch, useSelector} from 'react-redux';
 import {getLinkToModalState} from '../../../store/selectors/navigation/modals/link-to-modal';
 import {createLink, hideLinkToModal} from '../../../store/actions/navigation/modals/link-to-modal';
