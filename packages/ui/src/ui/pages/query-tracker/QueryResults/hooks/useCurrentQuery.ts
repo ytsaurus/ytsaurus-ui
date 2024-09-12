@@ -1,11 +1,12 @@
 import {useContext, useEffect, useMemo} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {QueriesPoolingContext} from '../../hooks/QueriesPooling/context';
-import {UPDATE_QUERY} from '../../module/query/actions';
+
 import {getCurrentQuery} from '../../module/query/selectors';
 import {isQueryProgress} from '../../utils/query';
 import {QueryItem} from '../../module/api';
 import {prepareQueryPlanIds} from '../../module/query/utills';
+import {UPDATE_QUERY} from '../../../../pages/query-tracker/module/query-tracker-contants';
 
 export function useCurrentQuery() {
     const query = useSelector(getCurrentQuery);

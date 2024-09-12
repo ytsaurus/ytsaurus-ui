@@ -1,5 +1,5 @@
-import {QueriesHistoryCursorDirection} from '../api';
 import {QueryEngine} from '../engines';
+import type {QueriesHistoryCursorDirection} from '../query-tracker-contants';
 
 export enum QueriesListAuthorFilter {
     All = 'all',

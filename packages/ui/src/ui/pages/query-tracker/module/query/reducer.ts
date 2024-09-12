@@ -1,8 +1,11 @@
-import {DraftQuery, QueryItem} from '../api';
+import {Action} from 'redux';
+
+import {ActionD} from '../../../../types';
+
+import type {DraftQuery, QueryItem} from '../api';
 import {QueryEngine} from '../engines';
 import {
     REQUEST_QUERY,
-    RequestQueryAction,
     SET_QUERY,
     SET_QUERY_CLIQUE_LOADING,
     SET_QUERY_CLUSTER_CLIQUE,
@@ -10,18 +13,9 @@ import {
     SET_QUERY_PARAMS,
     SET_QUERY_PATCH,
     SET_QUERY_READY,
-    SetQueryAction,
-    SetQueryCliqueLoading,
-    SetQueryClusterClique,
-    SetQueryErrorLoadAction,
-    SetQueryParamsAction,
-    SetQueryPatchAction,
-    SetQueryReadyAction,
     UPDATE_ACO_QUERY,
     UPDATE_QUERY,
-    UpdateACOQueryAction,
-    UpdateQueryAction,
-} from './actions';
+} from '../query-tracker-contants';
 import {cleanupQueryForDraft} from './utills';
 import {DEFAULT_QUERY_ACO} from './selectors';
 
@@ -164,3 +158,42 @@ type Actions =
     | UpdateACOQueryAction
     | SetQueryClusterClique
     | SetQueryCliqueLoading;
+
+export type RequestQueryAction = Action<typeof REQUEST_QUERY>;
+
+export type SetQueryReadyAction = Action<typeof SET_QUERY_READY>;
+
+export type SetQueryAction = ActionD<
+    typeof SET_QUERY,
+    {
+        initialQuery?: QueryItem;
+        draftText?: string;
+    }
+>;
+
+export type UpdateQueryAction = ActionD<typeof UPDATE_QUERY, QueryItem>;
+
+export type SetQueryErrorLoadAction = ActionD<typeof SET_QUERY_LOAD_ERROR, Error | string>;
+
+export type SetQueryPatchAction = ActionD<typeof SET_QUERY_PATCH, QueryState['draft']>;
+
+export type SetQueryParamsAction = ActionD<
+    typeof SET_QUERY_PARAMS,
+    Partial<Pick<QueryState, 'params'>>
+>;
+
+export type SetQueryCliqueLoading = ActionD<typeof SET_QUERY_CLIQUE_LOADING, boolean>;
+
+export type SetQueryClusterClique = ActionD<
+    typeof SET_QUERY_CLUSTER_CLIQUE,
+    {
+        cluster: string;
+        engine: QueryEngine.SPYT | QueryEngine.CHYT;
+        items: {alias: string; yt_operation_id?: string}[];
+    }
+>;
+
+export type UpdateACOQueryAction = ActionD<
+    typeof UPDATE_ACO_QUERY,
+    {access_control_object: string} | {access_control_objects: Array<string>}
+>;

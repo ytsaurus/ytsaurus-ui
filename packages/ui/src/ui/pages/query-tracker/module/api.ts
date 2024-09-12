@@ -11,7 +11,7 @@ import {generateQuerySettings, generateQueryText} from '../utils/query_generate'
 import {RootState} from '../../../store/reducers';
 import {makeDirectDownloadPath} from '../../../utils/navigation';
 import {DEFAULT_QUERY_ACO, getQueryTrackerRequestOptions} from './query/selectors';
-import {UPDATE_QUERIES_LIST} from './query-tracker-contants';
+import {QueriesHistoryCursorDirection, UPDATE_QUERIES_LIST} from './query-tracker-contants';
 import {AnyAction} from 'redux';
 import {QueryEngine} from './engines';
 import {getLastSelectedACONamespaces, selectIsMultipleAco} from './query_aco/selectors';
@@ -191,11 +191,6 @@ export const JSONParser = {
         },
     },
 };
-
-export enum QueriesHistoryCursorDirection {
-    PAST = 'past',
-    FUTURE = 'future',
-}
 
 export type QueriiesListCursorParams = {
     cursor_time: string;

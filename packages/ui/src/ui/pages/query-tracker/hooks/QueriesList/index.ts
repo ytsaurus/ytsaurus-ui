@@ -1,6 +1,6 @@
 import {useCallback} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import {QueriesHistoryCursorDirection, QueryItem} from '../../module/api';
+import {QueryItem} from '../../module/api';
 import {
     getQueriesList,
     getQueriesListCursor,
@@ -10,6 +10,7 @@ import {
 import {loadNextQueriesList, resetCursor} from '../../module/queries_list/actions';
 import {setSettingByKey} from '../../../../store/actions/settings';
 import {getSettingQueryTrackerQueriesListSidebarVisibilityMode} from '../../module/settings/selector';
+import {QueriesHistoryCursorDirection} from '../../../../pages/query-tracker/module/query-tracker-contants';
 
 export function useQueryList(): [QueryItem[], boolean] {
     const items = useSelector(getQueriesList);

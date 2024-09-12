@@ -1,17 +1,23 @@
+import {ActionD} from '../../../../types';
 import {getSettingsDataFromInitialConfig} from '../../../../config';
 import {NAMESPACES, SettingName} from '../../../../../shared/constants/settings';
 import {getPath} from '../../../../../shared/utils/settings';
-import {QueryItem} from '../api';
+import type {QueryItem} from '../api';
 import {
-    QueryResultsActions,
+    QueryResult,
+    QueryResultErrorState,
+    QueryResultReadyState,
+    QueryResultState,
+    QueryResultsViewMode,
+} from './types';
+import {
     REQUEST_QUERY_RESULTS,
     SET_QUERY_RESULTS,
     SET_QUERY_RESULTS_ERROR,
     SET_QUERY_RESULTS_ERRORS,
     SET_QUERY_RESULTS_PAGE,
     SET_QUERY_RESULTS_SETTINGS,
-} from './actions';
-import {QueryResult, QueryResultReadyState, QueryResultState, QueryResultsViewMode} from './types';
+} from '../query-tracker-contants';
 
 export interface QueryResultsState {
     [id: QueryItem['id']]: {[index: number]: QueryResult};
@@ -127,3 +133,63 @@ export function reducer(state = initialState, action: QueryResultsActions) {
     }
     return state;
 }
+
+export type RequestQueryResultsAction = ActionD<
+    typeof REQUEST_QUERY_RESULTS,
+    {
+        queryId: QueryItem['id'];
+        index: number;
+    }
+>;
+
+export type SetQueryResultsAction = ActionD<
+    typeof SET_QUERY_RESULTS,
+    {
+        queryId: QueryItem['id'];
+        index: number;
+        results: QueryResultReadyState['results'];
+        columns: QueryResultReadyState['columns'];
+        meta?: QueryResultReadyState['meta'];
+    }
+>;
+
+export type SetQueryResultsPageAction = ActionD<
+    typeof SET_QUERY_RESULTS_PAGE,
+    {
+        queryId: QueryItem['id'];
+        index: number;
+        results: QueryResultReadyState['results'];
+        page: number;
+    }
+>;
+
+export type SetQueryResultsErrorAction = ActionD<
+    typeof SET_QUERY_RESULTS_ERROR,
+    {
+        queryId: QueryItem['id'];
+        index: number;
+        error: Error;
+    }
+>;
+
+export type SetQueryResultsErrorsAction = ActionD<
+    typeof SET_QUERY_RESULTS_ERRORS,
+    {queryId: QueryItem['id']; errors: {[index: number]: QueryResultErrorState}}
+>;
+
+export type SetQueryResultsSettingsAction = ActionD<
+    typeof SET_QUERY_RESULTS_SETTINGS,
+    {
+        queryId: QueryItem['id'];
+        index: number;
+        settings: Partial<QueryResultReadyState['settings']>;
+    }
+>;
+
+export type QueryResultsActions =
+    | RequestQueryResultsAction
+    | SetQueryResultsAction
+    | SetQueryResultsErrorAction
+    | SetQueryResultsSettingsAction
+    | SetQueryResultsPageAction
+    | SetQueryResultsErrorsAction;
