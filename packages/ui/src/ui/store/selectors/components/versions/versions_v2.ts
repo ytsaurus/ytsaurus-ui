@@ -5,7 +5,7 @@ import sumBy_ from 'lodash/sumBy';
 
 import hammer from '../../../../common/hammer';
 import {createSelector} from 'reselect';
-import {detailsTableProps} from '../../../../utils/components/versions/tables_v2';
+import {detailsTableProps} from '../../../../pages/components/tabs/Versions/tables_v2';
 
 import {COMPONENTS_VERSIONS_DETAILED_TABLE_ID} from '../../../../constants/components/versions/versions_v2';
 import {RootState} from '../../../../store/reducers';

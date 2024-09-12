@@ -34,7 +34,6 @@ import {
     getVersions,
 } from '../../../../store/actions/components/versions/versions_v2';
 import {DEBOUNCE_TIME} from '../../../../constants/components/versions/versions_v2';
-import {detailsTableProps} from '../../../../utils/components/versions/tables_v2';
 import {HEADER_HEIGHT} from '../../../../constants/index';
 import {useUpdater} from '../../../../hooks/use-updater';
 import VersionsSummary from './VersionSummary';
@@ -44,6 +43,8 @@ import templates, {ColumnAsTime, printColumnAsError} from '../../../../component
 import {VersionHostInfo} from '../../../../store/reducers/components/versions/versions_v2';
 import {ClickableId, NodeColumnBanned, NodeColumnState} from '../NodeColumns';
 import {Host} from '../../../../containers/Host/Host';
+
+import {detailsTableProps} from './tables_v2';
 
 import './Versions.scss';
 import {UI_COLLAPSIBLE_SIZE} from '../../../../constants/global';

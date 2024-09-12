@@ -18,7 +18,7 @@ import {
     PropertiesByColumn,
     defaultColumns,
     getNodeTablesProps,
-} from '../../../../../utils/components/nodes/tables';
+} from '../../../../../pages/components/tabs/nodes/tables';
 import {
     getComponentNodesFilterPredicates,
     getComponentNodesFilterStatePredicate,

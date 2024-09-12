@@ -31,7 +31,7 @@ import {useThunkDispatch} from '../../../store/thunkDispatch';
 import {
     ComponentsNodesLinkParams,
     makeComponentsNodesLink,
-} from '../../../utils/components/nodes/node';
+} from '../../../pages/components/tabs/nodes/node';
 
 import {MakeUrlParams, RoleGroup, RoleGroupsContainer} from '../ProxiesImpl/RoleGroup';
 

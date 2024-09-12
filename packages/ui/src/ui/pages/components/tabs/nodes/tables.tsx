@@ -10,24 +10,24 @@ import cn from 'bem-cn-lite';
 
 import {Progress} from '@gravity-ui/uikit';
 
-import {COMPONENTS_NODES_TABLE_ID} from '../../../constants/components/nodes/nodes';
-import {DESC_ASC_UNORDERED, compareArraysBySizeThenByItems} from '../../../utils/sort-helpers';
+import {COMPONENTS_NODES_TABLE_ID} from '../../../../constants/components/nodes/nodes';
+import {DESC_ASC_UNORDERED, compareArraysBySizeThenByItems} from '../../../../utils/sort-helpers';
 
-import Version from '../../../pages/components/tabs/nodes/Version';
-import StatusBlock, {StatusBlockTheme} from '../../../components/StatusBlock/StatusBlock';
-import ClipboardButton from '../../../components/ClipboardButton/ClipboardButton';
-import NodeActions from '../../../pages/components/tabs/nodes/NodeActions/NodeActions';
-import MemoryProgress from '../../../pages/components/tabs/nodes/MemoryProgress/MemoryProgress';
-import {Host} from '../../../containers/Host/Host';
+import Version from '../../../../pages/components/tabs/nodes/Version';
+import StatusBlock, {StatusBlockTheme} from '../../../../components/StatusBlock/StatusBlock';
+import ClipboardButton from '../../../../components/ClipboardButton/ClipboardButton';
+import NodeActions from '../../../../pages/components/tabs/nodes/NodeActions/NodeActions';
+import MemoryProgress from '../../../../pages/components/tabs/nodes/MemoryProgress/MemoryProgress';
+import {Host} from '../../../../containers/Host/Host';
 
-import hammer from '../../../common/hammer';
-import {TABLET_SLOTS, renderLabel} from '../../../components/templates/components/nodes/nodes';
-import type {Node, TabletSlotState} from '../../../store/reducers/components/nodes/nodes/node';
-import type {FIX_MY_TYPE} from '../../../types';
-import {NodeColumnBanned, NodeColumnState} from '../../../pages/components/tabs/NodeColumns';
-import {NodesColumnHeader} from '../../../pages/components/tabs/nodes/Nodes/NodesColumnHeader';
-import {ColumnInfo} from '../../../components/ElementsTable/ElementsTableHeader';
-import {progressText} from '../../../utils/progress';
+import hammer from '../../../../common/hammer';
+import {TABLET_SLOTS, renderLabel} from '../../../../components/templates/components/nodes/nodes';
+import type {Node, TabletSlotState} from '../../../../store/reducers/components/nodes/nodes/node';
+import type {FIX_MY_TYPE} from '../../../../types';
+import {NodeColumnBanned, NodeColumnState} from '../../../../pages/components/tabs/NodeColumns';
+import {NodesColumnHeader} from '../../../../pages/components/tabs/nodes/Nodes/NodesColumnHeader';
+import {ColumnInfo} from '../../../../components/ElementsTable/ElementsTableHeader';
+import {progressText} from '../../../../utils/progress';
 
 import './tables.scss';
 

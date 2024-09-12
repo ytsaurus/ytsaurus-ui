@@ -8,7 +8,7 @@ import ColumnHeader, {
 } from '../../../../../components/ColumnHeader/ColumnHeader';
 import {toggleColumnSortOrder} from '../../../../../store/actions/tables';
 import {getTables} from '../../../../../store/selectors/tables';
-import {NodesTableColumnNames} from '../../../../../utils/components/nodes/tables';
+import {NodesTableColumnNames} from '../../../../../pages/components/tabs/nodes/tables';
 import {oldSortStateToOrderType} from '../../../../../utils/sort-helpers';
 
 export function NodesColumnHeader(
