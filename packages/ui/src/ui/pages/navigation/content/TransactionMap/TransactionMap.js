@@ -24,7 +24,7 @@ import {
 import {tableItems} from '../../../../utils/navigation/content/transaction-map/table';
 import {getIconNameForType} from '../../../../utils/navigation/path-editor';
 import {getPath, getTransaction} from '../../../../store/selectors/navigation';
-import {itemNavigationAllowed} from '../../../../utils/navigation';
+import {itemNavigationAllowed} from '../../../../pages/navigation/Navigation/ContentViewer/helpers';
 import {HEADER_HEIGHT} from '../../../../constants/index';
 
 import {useRumMeasureStop} from '../../../../rum/RumUiContext';

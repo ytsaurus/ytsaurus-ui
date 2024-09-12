@@ -1,6 +1,6 @@
 import reduce_ from 'lodash/reduce';
 
-import {
+import type {
     AccessLogFieldSelectorType,
     AccessLogMethodType,
     AccessLogScopeType,

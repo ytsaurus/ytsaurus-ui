@@ -4,7 +4,7 @@ import SchemaDataType from '../../components/SchemaDataType/SchemaDataType';
 import Yson from '../../components/Yson/Yson';
 import unipika from '../../common/thor/unipika';
 import Icon from '../../components/Icon/Icon';
-import {ColumnCell} from '../../pages/navigation/content/Table/DataTableWrapper/DataTableWrapper';
+import {ColumnCell} from '../../components/ColumnCell/ColumnCell';
 
 import map_ from 'lodash/map';
 
@@ -18,6 +18,7 @@ export function prepareColumns({
     ysonSettings,
     useRawStrings,
     schemaByName,
+    onShowPreview,
 }: {
     columns: {name: string; sortOrder?: string}[];
     keyColumns: string[];
@@ -25,16 +26,18 @@ export function prepareColumns({
     ysonSettings: YsonSettings;
     useRawStrings: boolean | null | undefined;
     schemaByName: Record<string, any>;
+    onShowPreview: (columnName: string, rowIndex: number) => void;
 }) {
     return map_(columns, (column) => {
         const render = ({value, index}: {value?: any; index: number; row: any}) => (
             <ColumnCell
                 allowRawStrings={useRawStrings}
                 value={value}
-                yqlTypes={yqlTypes}
+                yqlTypes={yqlTypes || []}
                 ysonSettings={ysonSettings}
                 rowIndex={index}
                 columnName={column.name}
+                onShowPreview={onShowPreview}
             />
         );
         const {sortOrder} = column;
