@@ -1,4 +1,5 @@
 import React, {FC, useMemo} from 'react';
+import {useDispatch} from 'react-redux';
 import {
     NavigationTable,
     NavigationTableSchema,
@@ -11,6 +12,7 @@ import ArrowUpRightFromSquareIcon from '@gravity-ui/icons/svgs/arrow-up-right-fr
 import {prepareColumns} from '../../../../utils/navigation/prepareColumns';
 import {TypeArray} from '../../../../components/SchemaDataType/dataTypes';
 import {YsonSettings} from '../../../../store/selectors/thor/unipika';
+import {showCellPreviewModal} from '../../../../store/actions/navigation/modals/cell-preview';
 
 const b = cn('navigation-preview-tab');
 
@@ -21,6 +23,13 @@ type Props = {
 };
 
 export const PreviewTab: FC<Props> = ({table, ysonSettings, onEditorInsert}) => {
+    const dispatch = useDispatch();
+    const onShowPreview = React.useCallback(
+        (columnName: string, rowIndex: number) => {
+            dispatch(showCellPreviewModal(columnName, rowIndex));
+        },
+        [dispatch],
+    );
     const columns = useMemo(() => {
         return prepareColumns({
             columns: table.columns.map((i) => ({name: i})),
@@ -35,6 +44,7 @@ export const PreviewTab: FC<Props> = ({table, ysonSettings, onEditorInsert}) => 
                 },
                 {},
             ),
+            onShowPreview,
         });
     }, [table, ysonSettings]);
 

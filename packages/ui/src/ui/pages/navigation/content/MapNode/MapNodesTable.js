@@ -20,7 +20,7 @@ import Icon from '../../../../components/Icon/Icon';
 import AccountLink from '../../../accounts/AccountLink';
 
 import {getIconNameForType} from '../../../../utils/navigation/path-editor';
-import {itemNavigationAllowed} from '../../../../utils/navigation';
+import {itemNavigationAllowed} from '../../../../pages/navigation/Navigation/ContentViewer/helpers';
 
 import {
     getContentMode,

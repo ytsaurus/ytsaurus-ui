@@ -8,25 +8,6 @@
                 padding: 0;
             }
         }
-
-        &__value {
-            position: relative;
-            padding: var(--data-table-cell-vertical-padding) var(--data-table-cell-horizontal-padding);
-            padding-right: calc(var(--data-table-cell-horizontal-padding) + 20px);
-        }
-
-        &__control-button-wrapper {
-            opacity: 0.3;
-
-            position: absolute;
-            top: 0;
-            right: 0;
-            padding: 0;
-
-            &:hover {
-                opacity: 0.5;
-            }
-        }
     }
 
     &_fullscreen {
@@ -56,10 +37,6 @@
         left: 50%;
         top: 200px;
         transform: translateX(-50%);
-    }
-
-    &__copy-value-tooltip {
-        white-space: nowrap;
     }
 
     .data-table__th:last-child::before {

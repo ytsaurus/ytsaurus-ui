@@ -6,10 +6,7 @@ import {CancelTokenSource} from 'axios';
 
 import {Page} from '../../constants/index';
 import {SUPPRESS_REDIRECT} from '../../constants/navigation/modals/delete-object';
-import {Tab} from '../../constants/navigation';
-import {YTError} from '../../../@types/types';
 import {allowDirectDownload} from '../../config';
-import checkContentIsSupported from '../../pages/navigation/Navigation/ContentViewer/helpers/checkContentIsSupported';
 
 export function autoCorrectPath(path: string) {
     // 1) Strip slash from the end
@@ -65,31 +62,6 @@ export function prepareRequest(
         ...restParameters,
         path: resultPath,
     };
-}
-
-export function hasViewerForType(type: string): boolean {
-    return checkContentIsSupported(type, Tab.CONTENT);
-}
-
-export function itemNavigationAllowed(item: {
-    type: string;
-    targetPathBroken: unknown;
-    parsedPathError?: YTError;
-}) {
-    if (item) {
-        if (
-            item.parsedPathError ||
-            (item.type === 'link' && ypath.getBoolean(item.targetPathBroken))
-        ) {
-            return false;
-        }
-
-        const noAccess = item.type === undefined;
-
-        return hasViewerForType(item.type) || noAccess;
-    }
-
-    return false;
 }
 
 export interface ParsedPath {

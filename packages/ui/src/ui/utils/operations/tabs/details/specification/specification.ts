@@ -6,7 +6,7 @@ import sortBy_ from 'lodash/sortBy';
 
 import ypath from '../../../../../common/thor/ypath';
 import UIFactory from '../../../../../UIFactory';
-import {
+import type {
     DetailedOperationSelector,
     OperationPreviewType,
 } from '../../../../../pages/operations/selectors';

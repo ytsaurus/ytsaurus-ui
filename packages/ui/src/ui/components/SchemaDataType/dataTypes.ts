@@ -140,7 +140,7 @@ export type HistogramListType = [typeof HISTOGRAM_LIST_TYPE, HistogramType];
 export type HistogramTupleType = [typeof HISTOGRAM_TUPLE_TYPE, HistogramType[]];
 
 export type TypeArray =
-    | [typeof DATA_TYPE, DataTypeType, ...unknown[]]
+    | [typeof DATA_TYPE, DataTypeType, ...params: Array<string>]
     | OptionalType
     | [typeof TAGGED_TYPE, string, TypeArray]
     | DictType
