@@ -15,4 +15,5 @@ export const AccountsTopRowLazy = withLazyLoading(
     React.lazy(async () => {
         return {default: (await importPage()).AccountsTopRowContent};
     }),
+    '',
 );

@@ -15,4 +15,5 @@ export const QueryTrackerTopRowLazy = withLazyLoading(
     React.lazy(async () => {
         return {default: (await importQT()).QueryTrackerTopRow};
     }),
+    '',
 );
