@@ -57,6 +57,7 @@ import PathActions from './PathActions';
 import {Tooltip} from '../../../../components/Tooltip/Tooltip';
 import WarningIcon from '../../../../components/WarningIcon/WarningIcon';
 import TTLInfo from '../../../../components/TTLInfo/TTLInfo';
+import UIFactory from '../../../../UIFactory';
 
 import './MapNodesTable.scss';
 
@@ -64,8 +65,10 @@ const block = cn('map-nodes-table');
 const ElementsTable = withKeyboardNavigation(ElementsTableBase);
 
 export function renderMapNodesTableIcon(item) {
-    let icon;
-    if (MapNodesTable.isTrashNode(item) || MapNodesTable.isLinkToTrashNode(item)) {
+    let icon = UIFactory.getNavigationMapNodeSettings()?.renderNodeIcon(item);
+    if (icon) {
+        // do nothing
+    } else if (MapNodesTable.isTrashNode(item) || MapNodesTable.isLinkToTrashNode(item)) {
         icon = <Icon awesome="trash-alt" />;
     } else {
         icon = <Icon awesome={getIconNameForType(item.iconType, item.targetPathBroken)} />;

@@ -26,100 +26,144 @@ export default class Node {
         document: true,
     };
 
-    static prepareTitle(name) {
+    static prepareTitle(name: string) {
         return unipika.prettyprint(name, Node.TITLE_PRINT_SETTINGS);
     }
 
-    static prepareCaption(name) {
+    static prepareCaption(name: string) {
         return unipika.prettyprint(name, Node.CAPTION_PRINT_SETTINGS);
     }
 
-    static getResource(node, name) {
-        return Node.SUPPORTS_RESOURCE_USAGE[ypath.getValue(node, '/@type')]
+    static getResource(node: any, name: string) {
+        return Node.SUPPORTS_RESOURCE_USAGE[
+            ypath.getValue(node, '/@type') as keyof typeof Node.SUPPORTS_RESOURCE_USAGE
+        ]
             ? ypath.getValue(node, '/@resource_usage/' + name)
             : ypath.getValue(node.recursiveResourceUsage, '/' + name);
     }
 
-    constructor(data, params) {
-        const node = this;
+    name: string;
+    $value: string;
+    $attributes?: Record<string, string>;
+    type: string;
+    iconType: string;
+    title: string;
+    caption: string;
+    titleUnquoted: string;
+    parsedPath: ReturnType<typeof ypath.YPath.clone>;
+    parsedPathError?: {
+        message: string;
+        inner_errors: unknown[];
+    };
+    path: string;
+    pathState: ReturnType<typeof prepareNavigationState>;
+    recursiveResourceUsage: boolean;
+    dataWeight: number;
+    size: number;
+    sizePerMedium: number;
+    chunks: number;
+    nodes: number;
+    tabletStaticMemory: number;
+    tablets: number;
+    masterMemory: number;
+    locks: number;
+    account: string;
+    modified: string;
+    created: string;
+    linkParsedPath?: ReturnType<typeof ypath.YPath.clone>;
+    linkPathState?: ReturnType<typeof prepareNavigationState>;
+    targetPath?: string;
+    targetPathBroken?: boolean;
+    targetPathState?: ReturnType<typeof prepareNavigationState>;
+
+    dynamic?: boolean;
+    rows?: number;
+    unmergedRows?: number;
+    chunkRows?: number;
+    tabletState?: string;
+
+    constructor(
+        data: string,
+        params: {parsedPath: string; transaction: string; contentMode: string},
+    ) {
         const {parsedPath, transaction, contentMode} = params;
 
         const name = ypath.getValue(data);
         const attributes = ypath.getAttributes(data);
 
-        node.$value = node.name = name;
-        node.$attributes = attributes;
+        this.$value = this.name = name;
+        this.$attributes = attributes;
 
-        node.type = attributes.type;
-        node.iconType = attributes.type;
+        this.type = attributes.type;
+        this.iconType = attributes.type;
 
-        node.title = Node.prepareTitle(node.name);
-        node.caption = Node.prepareCaption(node.name);
-        node.titleUnquoted = node.title.slice(1, -1);
+        this.title = Node.prepareTitle(this.name);
+        this.caption = Node.prepareCaption(this.name);
+        this.titleUnquoted = this.title.slice(1, -1);
 
         try {
-            node.parsedPath = ypath.YPath.clone(parsedPath).concat(
-                '/' + ypath.YPath.escapeSpecialCharacters(JSON.parse(node.title)),
+            this.parsedPath = ypath.YPath.clone(parsedPath).concat(
+                '/' + ypath.YPath.escapeSpecialCharacters(JSON.parse(this.title)),
             );
         } catch (e) {
-            node.parsedPath = ypath.YPath.clone(parsedPath).concat(
-                '/' + ypath.YPath.escapeSpecialCharacters(node.title),
+            this.parsedPath = ypath.YPath.clone(parsedPath).concat(
+                '/' + ypath.YPath.escapeSpecialCharacters(this.title),
             );
-            node.parsedPathError = {
+            this.parsedPathError = {
                 message: `Node name cannot be parsed, try to enable 'Escape and highlight' option in your settings. `,
                 inner_errors: [e],
             };
         }
-        node.path = node.parsedPath.stringify();
-        node.pathState = prepareNavigationState(
-            node.parsedPath,
+        this.path = this.parsedPath.stringify();
+        this.pathState = prepareNavigationState(
+            this.parsedPath,
             transaction,
             undefined,
             contentMode,
         );
 
         // RESOURCES
-        node.recursiveResourceUsage = attributes.recursive_resource_usage;
+        this.recursiveResourceUsage = attributes.recursive_resource_usage;
 
-        node.dataWeight = ypath.getValue(node, '/@data_weight');
-        node.size = Node.getResource(node, 'disk_space');
-        node.sizePerMedium = Node.getResource(node, 'disk_space_per_medium');
-        node.chunks = Node.getResource(node, 'chunk_count');
-        node.nodes = Node.getResource(node, 'node_count');
-        node.tabletStaticMemory = Node.getResource(node, 'tablet_static_memory');
-        node.tablets = Node.getResource(node, 'tablet_count');
-        node.masterMemory = Node.getResource(node, 'master_memory');
+        this.dataWeight = ypath.getValue(this, '/@data_weight');
+        this.size = Node.getResource(this, 'disk_space');
+        this.sizePerMedium = Node.getResource(this, 'disk_space_per_medium');
+        this.chunks = Node.getResource(this, 'chunk_count');
+        this.nodes = Node.getResource(this, 'node_count');
+        this.tabletStaticMemory = Node.getResource(this, 'tablet_static_memory');
+        this.tablets = Node.getResource(this, 'tablet_count');
+        this.masterMemory = Node.getResource(this, 'master_memory');
 
-        node.locks = attributes.lock_count;
+        this.locks = attributes.lock_count;
 
-        node.account = attributes.account;
-        node.modified = attributes.modification_time;
-        node.created = attributes.creation_time;
+        this.account = attributes.account;
+        this.modified = attributes.modification_time;
+        this.created = attributes.creation_time;
 
         // LINKS
-        if (node.type === 'link') {
-            node.linkParsedPath = ypath.YPath.clone(node.parsedPath).concat('&');
-            node.linkPathState = prepareNavigationState(node.linkParsedPath, transaction);
-            node.targetPath = attributes.target_path;
-            node.targetPathBroken = attributes.broken;
-            node.targetPathState =
-                node.targetPath &&
-                prepareNavigationState(
-                    ypath.YPath.create(node.targetPath, 'absolute'),
-                    transaction,
-                );
+        if (this.type === 'link') {
+            this.linkParsedPath = ypath.YPath.clone(this.parsedPath).concat('&');
+            this.linkPathState = prepareNavigationState(this.linkParsedPath, transaction);
+            this.targetPath = attributes.target_path;
+            this.targetPathBroken = attributes.broken;
+            this.targetPathState = this.targetPath
+                ? prepareNavigationState(
+                      ypath.YPath.create(this.targetPath, 'absolute'),
+                      transaction,
+                  )
+                : undefined;
         }
 
         // TABLE
-        if (node.type === 'table') {
-            node.dynamic = attributes.dynamic;
-            node.rows = attributes.row_count;
-            node.unmergedRows = attributes.unmerged_row_count;
-            node.chunkRows = attributes.chunk_row_count;
-            node.iconType = node.dynamic ? 'table_dynamic' : 'table';
+        if (this.type === 'table') {
+            this.dynamic = attributes.dynamic;
+            this.rows = attributes.row_count;
+            this.unmergedRows = attributes.unmerged_row_count;
+            this.chunkRows = attributes.chunk_row_count;
+            this.iconType = this.dynamic ? 'table_dynamic' : 'table';
 
-            if (node.dynamic) {
-                node.tabletState = attributes.tablet_state;
+            if (this.dynamic) {
+                this.tabletState = attributes.tablet_state;
             }
         }
     }
