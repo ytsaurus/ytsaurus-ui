@@ -41,6 +41,7 @@ import hammer from '../../../../common/hammer';
 import {GENERIC_ERROR_MESSAGE} from '../../../../constants';
 import {isSupportedEffectiveExpiration} from '../../../../store/selectors/thor/support';
 import {waitForFontFamilies} from '../../../../store/actions/global/fonts';
+import UIFactory from '../../../../UIFactory';
 
 function getList(path, transaction, cluster, allowEffectiveExpiration) {
     const id = new RumWrapper(cluster, RumMeasureTypes.NAVIGATION_CONTENT_MAP_NODE);
@@ -68,6 +69,7 @@ function getList(path, transaction, cluster, allowEffectiveExpiration) {
                     'expiration_time',
                     'expiration_timeout',
                     ...(allowEffectiveExpiration ? ['effective_expiration'] : []),
+                    ...(UIFactory.getNavigationMapNodeSettings()?.additionalAttributes || []),
                 ],
                 path,
                 transaction,

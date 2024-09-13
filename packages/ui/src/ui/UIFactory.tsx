@@ -32,6 +32,7 @@ import {DefaultSubjectCard, type SubjectCardProps} from './components/SubjectLin
 import type {QueryItem} from './pages/query-tracker/module/api';
 import type {DropdownMenuItem} from '@gravity-ui/uikit';
 import {CUSTOM_QUERY_REQULT_TAB} from './pages/query-tracker/QueryResultsVisualization';
+import type Node from './utils/navigation/content/map-nodes/node';
 
 type HeaderItemOrPage =
     | {
@@ -426,6 +427,13 @@ export interface UIFactory {
         menuItems: Array<DropdownMenuItem>;
         renderModals: () => React.ReactNode;
     };
+
+    getNavigationMapNodeSettings():
+        | undefined
+        | {
+              additionalAttributes: Array<string>;
+              renderNodeIcon: (item: Node) => React.ReactNode;
+          };
 }
 
 const experimentalPages: string[] = [];
@@ -718,6 +726,10 @@ const uiFactory: UIFactory = {
             menuItems: baseActions,
             renderModals: () => undefined,
         };
+    },
+
+    getNavigationMapNodeSettings() {
+        return undefined;
     },
 };
 
