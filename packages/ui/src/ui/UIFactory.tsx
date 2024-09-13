@@ -120,6 +120,7 @@ export type ExtraTab = {
     component: React.ComponentType;
     isSupported: (attributes: Record<string, any>) => boolean;
     position: {before: TabName} | {after: TabName};
+    canLeaveTab?: () => Promise<boolean>;
 };
 
 export interface UIFactory {
