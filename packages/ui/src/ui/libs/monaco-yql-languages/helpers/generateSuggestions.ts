@@ -13,6 +13,7 @@ export type SuggestionType =
     | 'connection'
     | 'suggestOperators';
 
+// @ts-expect-error
 const SuggestionsWeight: Record<SuggestionType, number> = {
     suggestTemplates: 0,
     suggestPragmas: 1,

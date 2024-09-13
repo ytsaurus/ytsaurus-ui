@@ -305,6 +305,7 @@ export const getTabs = createSelector(
                             : undefined,
                         text: extraTab.text,
                         caption: extraTab.caption,
+                        canLeaveTab: extraTab.canLeaveTab,
                     };
                     tabs.splice(i + indexOffset, 0, newTab);
                     break;

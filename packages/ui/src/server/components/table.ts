@@ -25,6 +25,7 @@ export async function getColumnPreset(
     const {setup: setupConfig} = getRobotYTApiSetup(cluster || ytAuthCluster);
 
     const query = `* FROM [${dynamicTablePath}] WHERE hash="${hash}" LIMIT 1`;
+    console.log('setupConfig', setupConfig)
     const result = await yt.v3.selectRows({
         setup: setupConfig,
         parameters: {

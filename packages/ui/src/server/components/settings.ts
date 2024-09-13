@@ -83,6 +83,7 @@ export function getItem({ctx, username, path, cluster}: GetParams) {
         return Promise.reject(makeConfigError());
     }
 
+    console.log(' getSettingsSetup(cluster),', getSettingsSetup(cluster));
     return yt.v3.get({
         setup: getSettingsSetup(cluster),
         parameters: {
