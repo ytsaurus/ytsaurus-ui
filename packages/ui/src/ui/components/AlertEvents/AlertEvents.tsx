@@ -2,35 +2,25 @@ import React from 'react';
 import {Column} from '@gravity-ui/react-data-table';
 import cn from 'bem-cn-lite';
 
-import reduce_ from 'lodash/reduce';
+import format from '../../common/hammer/format';
+import DataTableYT from '../../components/DataTableYT/DataTableYT';
+import {Template} from '../../components/MetaTable/templates/Template';
 
-import format from '../../../../../../common/hammer/format';
-import ypath from '../../../../../../common/thor/ypath';
-import DataTableYT from '../../../../../../components/DataTableYT/DataTableYT';
-import {Template} from '../../../../../../components/MetaTable/templates/Template';
-
-import {ClickableText} from '../../../../../../components/ClickableText/ClickableText';
-import Icon from '../../../../../../components/Icon/Icon';
-import Link from '../../../../../../components/Link/Link';
-import {showErrorPopup} from '../../../../../../utils/utils';
-import {prepareFaqUrl} from '../../../../../../utils/operations/tabs/details/alerts';
-import {compareWithUndefined} from '../../../../../../utils/sort-helpers';
+import {ClickableText} from '../../components/ClickableText/ClickableText';
+import Icon from '../../components/Icon/Icon';
+import Link from '../../components/Link/Link';
+import {showErrorPopup} from '../../utils/utils';
+import {compareWithUndefined} from '../../utils/sort-helpers';
 
 import './AlertEvents.scss';
 
 const block = cn('alert-events');
 
 interface Props {
-    items: Array<AlertEvent>;
+    items: Array<AlertInfo>;
 }
 
-interface AlertEvent {
-    time: unknown;
-    alert_type: unknown;
-    error: unknown;
-}
-
-interface AlertInfo {
+export interface AlertInfo {
     from?: string;
     to?: string;
     type: string;
@@ -103,38 +93,7 @@ const VISIBLE_COUNT = 5;
 function AlertEvents({items}: Props) {
     const [allVisible, setAllVisible] = React.useState(false);
     const all = React.useMemo(() => {
-        const appeared: Record<string, AlertInfo> = {};
-        const res: Array<AlertInfo> = reduce_(
-            items,
-            (acc, item) => {
-                const type = ypath.getValue(item.alert_type);
-                const code = ypath.getNumberDeprecated(item, '/error/code', NaN);
-                if (!code && appeared[type]) {
-                    const last = appeared[type];
-                    last.to = ypath.getValue(item.time);
-                    delete appeared[type];
-                } else if (code) {
-                    acc.push({
-                        from: ypath.getValue(item.time),
-                        type,
-                        error: item.error,
-                        url: prepareFaqUrl(type),
-                    });
-                    appeared[type] = acc[acc.length - 1];
-                } else {
-                    acc.push({
-                        to: ypath.getValue(item.time),
-                        type,
-                        error: item.error,
-                        url: prepareFaqUrl(type),
-                    });
-                }
-                return acc;
-            },
-            [] as Array<AlertInfo>,
-        );
-
-        return res.sort((l, r) => {
+        return items.sort((l, r) => {
             return (
                 compareWithUndefined(l.to, r.to, -1, -1) ||
                 compareWithUndefined(l.from, r.from, -1, 1)

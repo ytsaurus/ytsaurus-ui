@@ -3,6 +3,7 @@ import {connect, useSelector} from 'react-redux';
 import PropTypes from 'prop-types';
 import cn from 'bem-cn-lite';
 
+import AlertEvents from '../../../../../../components/AlertEvents/AlertEvents';
 import OperationDescription from '../../../../../../pages/operations/OperationDetail/tabs/details/Description';
 import CollapsibleSection from '../../../../../../components/CollapsibleSection/CollapsibleSection';
 import Button from '../../../../../../components/Button/Button';
@@ -21,13 +22,12 @@ import {useRumMeasureStop} from '../../../../../../rum/RumUiContext';
 import {RumMeasureTypes} from '../../../../../../rum/rum-measure-types';
 import {isFinalLoadingStatus} from '../../../../../../utils/utils';
 import {
-    getOperationAlertEventsItems,
+    getOperationAlertEvents,
     getOperationDetailsLoadingStatus,
 } from '../../../../../../store/selectors/operations/operation';
 import {useAppRumMeasureStart} from '../../../../../../rum/rum-app-measures';
 
 import './Details.scss';
-import AlertEvents from '../AlertEvents/AlertEvents';
 import {UI_COLLAPSIBLE_SIZE} from '../../../../../../constants/global';
 
 export {operationProps} from '../Runtime/Runtime';
@@ -215,7 +215,7 @@ const mapStateToProps = (state) => {
         operation,
         ...operations.detail.details,
         collapsibleSize: UI_COLLAPSIBLE_SIZE,
-        alertEvents: getOperationAlertEventsItems(state),
+        alertEvents: getOperationAlertEvents(state),
     };
 };
 
