@@ -17,6 +17,7 @@ import './AlertEvents.scss';
 const block = cn('alert-events');
 
 interface Props {
+    className?: string;
     items: Array<AlertInfo>;
 }
 
@@ -25,7 +26,7 @@ export interface AlertInfo {
     to?: string;
     type: string;
     error: unknown;
-    url: string;
+    url?: string;
 }
 
 const columns: Array<Column<AlertInfo>> = [
@@ -35,10 +36,12 @@ const columns: Array<Column<AlertInfo>> = [
             return (
                 <span>
                     {format.Readable(row.type)}
-                    <Link url={row.url} theme={'secondary'}>
-                        &nbsp;
-                        <Icon awesome={'question-circle'} />
-                    </Link>
+                    {Boolean(row.url) && (
+                        <Link url={row.url} theme={'secondary'}>
+                            &nbsp;
+                            <Icon awesome={'question-circle'} />
+                        </Link>
+                    )}
                 </span>
             );
         },
@@ -90,7 +93,7 @@ const columns: Array<Column<AlertInfo>> = [
 
 const VISIBLE_COUNT = 5;
 
-function AlertEvents({items}: Props) {
+function AlertEvents({className, items}: Props) {
     const [allVisible, setAllVisible] = React.useState(false);
     const all = React.useMemo(() => {
         return items.sort((l, r) => {
@@ -110,7 +113,7 @@ function AlertEvents({items}: Props) {
     }, [allVisible, setAllVisible]);
 
     return (
-        <div>
+        <div className={className}>
             <DataTableYT
                 className={block()}
                 columns={columns}
