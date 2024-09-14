@@ -5,8 +5,10 @@ import {createSelector} from 'reselect';
 
 import {RootState} from '../../../store/reducers';
 import ypath from '../../../common/thor/ypath';
+import {AlertInfo} from '../../../components/AlertEvents/AlertEvents';
 import {calculateLoadingStatus} from '../../../utils/utils';
 import {FIX_MY_TYPE} from '../../../types';
+import {prepareFaqUrl} from '../../../utils/operations/tabs/details/alerts';
 
 const getOperationErasedTreesRaw = (state: RootState) => {
     return ypath.getValue(state.operations.detail, '/operation/@runtime_parameters/erased_trees');
@@ -31,7 +33,41 @@ interface OperationTask {
     task_name: string;
 }
 
-const getOperationAlertEvents = (state: RootState) => state.operations.detail.details.alert_events;
+const getOperationAlertEventsImpl = (state: RootState) =>
+    state.operations.detail.details.alert_events;
+
+export const getOperationAlertEvents = createSelector([getOperationAlertEventsImpl], (items) => {
+    const appeared: Record<string, AlertInfo> = {};
+    return reduce_(
+        items,
+        (acc, item) => {
+            const type = ypath.getValue(item.alert_type);
+            const code = ypath.getNumberDeprecated(item, '/error/code', NaN);
+            if (!code && appeared[type]) {
+                const last = appeared[type];
+                last.to = ypath.getValue(item.time);
+                delete appeared[type];
+            } else if (code) {
+                acc.push({
+                    from: ypath.getValue(item.time),
+                    type,
+                    error: item.error,
+                    url: prepareFaqUrl(type),
+                });
+                appeared[type] = acc[acc.length - 1];
+            } else {
+                acc.push({
+                    to: ypath.getValue(item.time),
+                    type,
+                    error: item.error,
+                    url: prepareFaqUrl(type),
+                });
+            }
+            return acc;
+        },
+        [] as Array<AlertInfo>,
+    );
+});
 
 export const getOperation = (state: RootState) => state.operations.detail.operation;
 export const getOperationId = (state: RootState) =>
@@ -125,12 +161,5 @@ export const getOperationJobsMonitorTabSettings = createSelector(
     (jobsCount) => {
         const maxJobCount = 200;
         return {visible: jobsCount > 0 && jobsCount <= maxJobCount, maxJobCount};
-    },
-);
-
-export const getOperationAlertEventsItems = createSelector(
-    [getOperationAlertEvents],
-    (alertEvents) => {
-        return alertEvents;
     },
 );

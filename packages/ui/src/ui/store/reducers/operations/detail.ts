@@ -13,6 +13,12 @@ import type {DetailedOperationSelector} from '../../../pages/operations/selector
 import type {YTError} from './../../../../@types/types';
 import type {ActionD} from './../../../types/index';
 
+export interface AlertEvent {
+    time: unknown;
+    alert_type: unknown;
+    error: unknown;
+}
+
 export interface OperationDetailState {
     loading: boolean;
     loaded: boolean;
@@ -21,7 +27,7 @@ export interface OperationDetailState {
     operation: DetailedOperationSelector;
     actions: Array<OperationAction>;
     details: {
-        alert_events: {alert_type: string; time: string; error: YTError}[];
+        alert_events: Array<AlertEvent>;
     };
     resourcesStatus: (typeof LOADING_STATUS)[keyof typeof LOADING_STATUS];
     resources: {intermediateResources?: unknown};
