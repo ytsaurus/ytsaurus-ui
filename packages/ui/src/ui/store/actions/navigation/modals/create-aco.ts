@@ -1,4 +1,3 @@
-import {Action} from 'redux';
 import {ThunkAction} from 'redux-thunk';
 import {Toaster} from '@gravity-ui/uikit';
 import {CREATE_ACO_MODAL} from '../../../../constants/navigation/modals';
@@ -31,9 +30,7 @@ export function closeCreateACOModal(): CreateAcoModalThunkAction {
 
 type CreateACOActionParams = {path: string; name: string; namespace: string};
 
-export function createACO(
-    params: CreateACOActionParams,
-): ThunkAction<Promise<unknown>, RootState, unknown, Action<unknown>> {
+export function createACO(params: CreateACOActionParams): CreateAcoModalThunkAction {
     return (dispatch) => {
         const {path, name, namespace} = params;
 

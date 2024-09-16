@@ -2,10 +2,11 @@ import {ActionD} from '../../../../types';
 import {getSettingsDataFromInitialConfig} from '../../../../config';
 import {NAMESPACES, SettingName} from '../../../../../shared/constants/settings';
 import {getPath} from '../../../../../shared/utils/settings';
-import type {QueryItem} from '../api';
+import type {QueryItem, QueryItemId} from '../api';
 import {
     QueryResult,
     QueryResultErrorState,
+    QueryResultLoadingState,
     QueryResultReadyState,
     QueryResultState,
     QueryResultsViewMode,
@@ -19,9 +20,7 @@ import {
     SET_QUERY_RESULTS_SETTINGS,
 } from '../query-tracker-contants';
 
-export interface QueryResultsState {
-    [id: QueryItem['id']]: {[index: number]: QueryResult};
-}
+export type QueryResultsState = Record<QueryItemId, Record<number, QueryResult>>;
 
 const initialState: QueryResultsState = {};
 
@@ -29,16 +28,16 @@ const settings = getSettingsDataFromInitialConfig().data;
 const {ROWS_PER_TABLE_PAGE, MAXIMUM_TABLE_STRING_SIZE} = SettingName.NAVIGATION;
 const {NAVIGATION} = NAMESPACES;
 
-const userPageSize = settings[getPath(ROWS_PER_TABLE_PAGE, NAVIGATION)] as number | undefined;
-const userCellSize = settings[getPath(MAXIMUM_TABLE_STRING_SIZE, NAVIGATION)] as number | undefined;
+const userPageSize = settings[getPath(ROWS_PER_TABLE_PAGE, NAVIGATION)];
+const userCellSize = settings[getPath(MAXIMUM_TABLE_STRING_SIZE, NAVIGATION)];
 
-const initialSettings: Partial<QueryResultReadyState['settings']> = {
+const initialSettings: QueryResultReadyState['settings'] = {
     viewMode: QueryResultsViewMode.Table,
     pageSize: userPageSize,
     cellSize: userCellSize,
 };
 
-export function reducer(state = initialState, action: QueryResultsActions) {
+export function reducer(state = initialState, action: QueryResultsActions): QueryResultsState {
     switch (action.type) {
         case REQUEST_QUERY_RESULTS: {
             const results = state[action.data.queryId] ?? {};
@@ -48,7 +47,7 @@ export function reducer(state = initialState, action: QueryResultsActions) {
                 [action.data.queryId]: {
                     ...results,
                     [action.data.index]: {
-                        ...results[action.data.index],
+                        ...(results[action.data.index] as QueryResultLoadingState),
                         state: QueryResultState.Loading,
                     },
                 },
@@ -83,7 +82,7 @@ export function reducer(state = initialState, action: QueryResultsActions) {
                 [action.data.queryId]: {
                     ...results,
                     [action.data.index]: {
-                        ...results[action.data.index],
+                        ...(results[action.data.index] as QueryResultReadyState),
                         state: QueryResultState.Ready,
                         results: action.data.results,
                         page: action.data.page,
@@ -121,7 +120,7 @@ export function reducer(state = initialState, action: QueryResultsActions) {
                 [action.data.queryId]: {
                     ...results,
                     [action.data.index]: {
-                        ...results[action.data.index],
+                        ...(results[action.data.index] as QueryResultReadyState),
                         settings: {
                             ...(results[action.data.index] as QueryResultReadyState).settings,
                             ...action.data.settings,
@@ -149,7 +148,7 @@ export type SetQueryResultsAction = ActionD<
         index: number;
         results: QueryResultReadyState['results'];
         columns: QueryResultReadyState['columns'];
-        meta?: QueryResultReadyState['meta'];
+        meta: QueryResultReadyState['meta'];
     }
 >;
 

@@ -9,7 +9,7 @@ export enum QueryResultState {
 }
 export type QueryResultLoadingState = {
     state: QueryResultState.Init | QueryResultState.Loading;
-    resultReady: false;
+    resultReady?: false;
 };
 
 export type QueryResultColumn = {
@@ -40,8 +40,8 @@ export type QueryResultReadyState = {
 };
 
 export type QueryResultErrorState = {
-    resultReady: false;
     state: QueryResultState.Error;
+    resultReady?: false;
     error: Error;
 };
 export type QueryResult = QueryResultLoadingState | QueryResultReadyState | QueryResultErrorState;
