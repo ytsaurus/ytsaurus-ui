@@ -1,4 +1,4 @@
-import produce from 'immer';
+import {produce} from 'immer';
 
 import type {RootState} from '../../../../../store/reducers';
 import {initialState} from '../../../../../store/reducers/navigation/tabs/consumer/filters';

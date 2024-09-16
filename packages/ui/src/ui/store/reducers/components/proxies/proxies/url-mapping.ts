@@ -1,4 +1,4 @@
-import produce from 'immer';
+import {produce} from 'immer';
 
 import {initialState as proxiesInitialState} from './proxies';
 import {initialState as tableSortState} from '../../../../../store/reducers/tables';

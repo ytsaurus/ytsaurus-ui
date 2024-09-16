@@ -1,4 +1,4 @@
-import produce from 'immer';
+import {produce} from 'immer';
 import {RootState} from '..';
 import {initialState} from './acl-filters';
 import {updateIfChanged} from '../../../utils/utils';

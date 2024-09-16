@@ -5,7 +5,7 @@ import {CLUSTER_MENU_TABLE_ID} from '../../../constants/tables';
 import {parseSortState} from '../../../utils';
 import {RootState} from '..';
 import {updateIfChanged} from '../../../utils/utils';
-import produce from 'immer';
+import {produce} from 'immer';
 import {LocationParameters} from '../../../store/location';
 
 const initialMode = clustersMenuInitialState.viewMode;

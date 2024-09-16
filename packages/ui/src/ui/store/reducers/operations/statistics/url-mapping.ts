@@ -1,4 +1,4 @@
-import produce from 'immer';
+import {produce} from 'immer';
 import {RootState} from '../../../../store/reducers';
 
 import {initialState as statisticsInitialState} from '../../../../store/reducers/operations/statistics/statistics';

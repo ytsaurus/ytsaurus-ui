@@ -1,6 +1,6 @@
 import {initialState} from '../../../store/reducers/path-viewer';
 import {RootState} from '../../../store/reducers';
-import produce from 'immer';
+import {produce} from 'immer';
 import {updateIfChanged} from '../../../utils/utils';
 
 export const pathViewerParams = {

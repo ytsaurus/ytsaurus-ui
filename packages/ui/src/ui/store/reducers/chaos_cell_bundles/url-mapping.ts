@@ -1,6 +1,6 @@
 import {initialState} from './index';
 import {RootState} from '../../../store/reducers';
-import produce from 'immer';
+import {produce} from 'immer';
 import {updateIfChanged} from '../../../utils/utils';
 import {LocationParameters} from '../../../store/location';
 import {parseSortState} from '../../../utils/index';

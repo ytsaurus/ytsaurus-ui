@@ -2,7 +2,7 @@ import isEqual_ from 'lodash/isEqual';
 
 import {initialState} from './list-filters';
 import {RootState} from '../../../store/reducers';
-import produce from 'immer';
+import {produce} from 'immer';
 import {updateIfChanged} from '../../../utils/utils';
 import {LocationParameters} from '../../../store/location';
 import {parseSortStateArray, serializeSortStateArray} from '../../../utils/url-mapping';

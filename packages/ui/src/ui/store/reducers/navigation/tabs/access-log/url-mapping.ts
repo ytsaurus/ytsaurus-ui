@@ -1,5 +1,5 @@
 import isEqual_ from 'lodash/isEqual';
-import produce from 'immer';
+import {produce} from 'immer';
 import {initialState} from './access-log-filters';
 import {RootState} from '../../../../../store/reducers/index';
 import {updateIfChanged} from '../../../../../utils/utils';
