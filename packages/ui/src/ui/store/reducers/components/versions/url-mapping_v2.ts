@@ -1,4 +1,4 @@
-import produce from 'immer';
+import {produce} from 'immer';
 
 import {initialState as versionsInitialState} from './versions_v2';
 import {initialState as tableSortState} from '../../../../store/reducers/tables';

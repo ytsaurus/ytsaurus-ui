@@ -1,4 +1,4 @@
-import produce from 'immer';
+import {produce} from 'immer';
 
 import {LocationParameters} from '../../store/location';
 import {updateIfChanged} from '../../utils/utils';

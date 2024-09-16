@@ -7,7 +7,7 @@ import filter_ from 'lodash/filter';
 import forEach_ from 'lodash/forEach';
 import map_ from 'lodash/map';
 import reduce_ from 'lodash/reduce';
-import produce_ from 'immer';
+import {produce} from 'immer';
 
 import UIFactory from '../../UIFactory';
 
@@ -548,7 +548,7 @@ export function useSettingsDescription(): Array<SettingsPage> {
 
     const res = React.useMemo(() => {
         const extPages: Record<string, SettingsPage> = hashByTitle(externalSettings);
-        return produce_(settings, (pages) => {
+        return produce(settings, (pages) => {
             forEach_(pages, (page) => {
                 const extPage = extPages[page.title];
                 if (extPage) {

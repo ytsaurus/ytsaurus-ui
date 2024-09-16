@@ -6,7 +6,7 @@ import {
     SCHEDULING_POOL_TREE_TABLE_ID,
 } from '../../../constants/scheduling';
 import {parseSortState} from '../../../utils';
-import produce from 'immer';
+import {produce} from 'immer';
 import {updateIfChanged} from '../../../utils/utils';
 import {RootState} from '../../../store/reducers';
 import {aclFiltersParams, getAclFiltersPreparedState} from '../acl/url-mapping';

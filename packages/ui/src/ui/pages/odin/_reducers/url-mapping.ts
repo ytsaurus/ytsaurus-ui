@@ -1,5 +1,5 @@
 import moment from 'moment';
-import produce from 'immer';
+import {produce} from 'immer';
 
 import {initialState as detailsInitialState} from './odin-details';
 import {initialState as overviewInitialState} from './odin-overview';

@@ -3,7 +3,7 @@ import {initialState as tableSortState} from '../../../store/reducers/tables';
 
 import {TABLET_PARTITIONS_TABLE_ID} from '../../../constants/tablet';
 import {parseSortState} from '../../../utils';
-import produce from 'immer';
+import {produce} from 'immer';
 import {updateIfChanged} from '../../../utils/utils';
 import {RootState} from '../../../store/reducers';
 

@@ -6,7 +6,7 @@ import {parseSortState} from '../../../../utils';
 import {initialUsageFiltersState} from '../usage/accounts-usage-filters';
 import {parseSortStateArray, serializeSortStateArray} from '../../../../utils/url-mapping';
 import {RootState} from '../../../../store/reducers';
-import produce from 'immer';
+import {produce} from 'immer';
 import {updateIfChanged} from '../../../../utils/utils';
 import {aclFiltersParams, getAclFiltersPreparedState} from '../../acl/url-mapping';
 

@@ -1,4 +1,4 @@
-import produce from 'immer';
+import {produce} from 'immer';
 import {RootState} from '../../../../../store/reducers';
 import {updateIfChanged} from '../../../../../utils/utils';
 import {initialState} from './tablets';

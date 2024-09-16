@@ -4,7 +4,7 @@ import keys_ from 'lodash/keys';
 import reduce_ from 'lodash/reduce';
 import set_ from 'lodash/set';
 
-import produce from 'immer';
+import {produce} from 'immer';
 
 import {initialState as nodesInitialState} from '../../../../store/reducers/components/nodes/nodes/nodes';
 import {initialState as tableSortState} from '../../../../store/reducers/tables';
