@@ -507,7 +507,7 @@ export type QueryResultMeta = {
 export function getQueryResultMeta(
     query_id: string,
     result_index = 0,
-): ThunkAction<Promise<QueryResultMeta | undefined>, RootState, any, any> {
+): ThunkAction<Promise<QueryResultMeta>, RootState, any, any> {
     return (_dispatch, getState) => {
         const state = getState();
         const {stage} = getQueryTrackerRequestOptions(state);

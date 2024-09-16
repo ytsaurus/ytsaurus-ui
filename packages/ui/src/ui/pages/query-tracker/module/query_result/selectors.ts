@@ -12,15 +12,18 @@ export const getQueryResultGlobalSettings = (): QueryResultReadyState['settings'
     const {NAVIGATION} = NAMESPACES;
 
     return {
-        pageSize: settings[getPath(ROWS_PER_TABLE_PAGE, NAVIGATION)] as number,
-        cellSize: settings[getPath(MAXIMUM_TABLE_STRING_SIZE, NAVIGATION)] as number,
+        pageSize: settings[getPath(ROWS_PER_TABLE_PAGE, NAVIGATION)],
+        cellSize: settings[getPath(MAXIMUM_TABLE_STRING_SIZE, NAVIGATION)],
     };
 };
 
 export const getQueryResults = (
     state: RootState,
     queryId: string,
-): Record<number, QueryResult> | undefined => getQueryResultsState(state)?.[queryId];
+): Record<number, QueryResult> | undefined => {
+    const res: Record<number, QueryResult> | undefined = getQueryResultsState(state)?.[queryId];
+    return res;
+};
 
 export const getQueryResult = (
     state: RootState,

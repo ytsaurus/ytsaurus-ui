@@ -3,7 +3,7 @@ import type {OrderType} from '../utils/sort-helpers';
 
 export type {YTError} from '../../@types/types.d';
 
-export interface ActionD<T, D> extends Action<T> {
+export interface ActionD<T extends string, D> extends Action<T> {
     data: D;
 }
 

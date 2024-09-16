@@ -288,6 +288,7 @@ class MapNodeToolbar extends React.PureComponent {
                             debounce={300}
                             value={filterState}
                             onChange={setFilter}
+                            qa="map-node-filter"
                         />
                     </div>
 
