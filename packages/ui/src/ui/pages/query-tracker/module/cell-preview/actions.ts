@@ -27,7 +27,13 @@ export const showQueryTrackerCellPreviewModal = (
                 ),
             );
 
-            const data = (response.rows[0][options.columnName][0] as any[])[0].val;
+            const dataRow: unknown = response.rows[0][options.columnName][0];
+
+            const dataObject: {val: any} | undefined = Array.isArray(dataRow)
+                ? dataRow[0]
+                : dataRow;
+
+            const data = dataObject?.val;
 
             dispatch({type: CELL_PREVIEW.SUCCESS, data: {data}});
         } catch (error: any) {
