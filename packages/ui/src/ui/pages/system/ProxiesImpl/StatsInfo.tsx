@@ -24,7 +24,7 @@ type Props = {
 
 const COLORS_BY_STATUS = {
     ONLINE: ['var(--success-color)', 'var(--success-text)', 'var(--default-color)'],
-    OFFLINE: ['var(--danger-color)', 'var(--dnager-text)', 'var(--default-color)'],
+    OFFLINE: ['var(--danger-color)', 'var(--danger-text)', 'var(--default-color)'],
     BANNED: ['var(--warning-color)', 'var(--warning-text)', 'var(--default-color)'],
     OTHER: [],
     FULL: [],
@@ -75,7 +75,7 @@ export const StatsInfo = ({
             <div>
                 <CountUrl count={count} url={url} variant="body-2" />
             </div>
-            <Text className={block('text')} variant="body-short" color="dark-secondary">
+            <Text className={block('text')} variant="body-short">
                 {status}
             </Text>
             <Progress className={block('progress')} stack={stack ?? []} size="xs" />
