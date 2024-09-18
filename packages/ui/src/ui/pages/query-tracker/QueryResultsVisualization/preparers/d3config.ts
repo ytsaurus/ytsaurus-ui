@@ -8,7 +8,7 @@ import {VisualizationId} from '../types';
 export function buildD3Config(args: PrepareLineArgs) {
     const chartSettings = args.visualization.chartSettings;
 
-    const xAxisGridEnabled = chartSettings.xAxis.grid === 'on';
+    const xAxisGridEnabled = true;
     const xAxisIsLegendEnabled = chartSettings.xAxis.legend === 'on';
     const xAxisEnableLabels = chartSettings.xAxis.labels === 'on';
     const xAxisTitle = chartSettings.xAxis.title;

@@ -64,23 +64,6 @@ const xAxisTab: DialogTabField<DialogField<FormValues>> = {
             type: 'text',
         },
         {
-            name: 'grid',
-            caption: 'Grid',
-            type: 'radio',
-            extras: {
-                options: [
-                    {
-                        value: 'on',
-                        label: 'On',
-                    },
-                    {
-                        value: 'off',
-                        label: 'Off',
-                    },
-                ],
-            },
-        },
-        {
             caption: 'Grid step, px',
             name: 'pixelInterval',
             type: 'text',
