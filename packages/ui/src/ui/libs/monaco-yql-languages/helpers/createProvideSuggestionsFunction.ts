@@ -26,15 +26,12 @@ export const createProvideSuggestionsFunction =
         });
 
         const range = getRangeToInsertSuggestion(model, monacoCursorPosition);
-        let pathSuggestions: languages.CompletionItem[] = [];
-        if ('suggestEntity' in parseResult && parseResult.suggestEntity?.includes('table')) {
-            pathSuggestions = await getDirectoryContent({
-                model,
-                monacoCursorPosition,
-                engine,
-                range,
-            });
-        }
+        const pathSuggestions = await getDirectoryContent({
+            model,
+            monacoCursorPosition,
+            engine,
+            range,
+        });
 
         const additionalSuggestion = additionalSuggestions
             ? additionalSuggestions(range, parseResult)
