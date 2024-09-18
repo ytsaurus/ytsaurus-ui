@@ -40,7 +40,12 @@ class SimpleModal extends Component<SimpleModalProps> {
             <div className={b('header', {mix: className})} title={title}>
                 {title}
                 <div className={b('close')}>
-                    <Button view="flat-secondary" size="l" onClick={onCancel}>
+                    <Button
+                        qa="simple-modal-close"
+                        view="flat-secondary"
+                        size="l"
+                        onClick={onCancel}
+                    >
                         <Icon awesome="times" face="light" />
                     </Button>
                 </div>

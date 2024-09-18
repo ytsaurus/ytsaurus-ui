@@ -85,4 +85,18 @@ export class BasePage extends HasPage {
     async waitForACL() {
         await this.page.waitForSelector('.navigation-acl__row .yt-subject-link');
     }
+
+    async resizePageForScreenshot() {
+        const dimensions = await this.page.evaluate(() => {
+            return {
+                width: document.documentElement.scrollWidth,
+                height: document.documentElement.scrollHeight,
+            };
+        });
+
+        await this.page.setViewportSize({
+            width: dimensions.width,
+            height: dimensions.height,
+        });
+    }
 }

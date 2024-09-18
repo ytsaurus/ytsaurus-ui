@@ -181,3 +181,9 @@ if [ "false" = "$(yt exists //sys/tablet_cell_bundles/e2e-bundle)" ]; then
     yt create tablet_cell_bundle --attributes "{name=e2e-bundle;options=$(yt get //sys/tablet_cell_bundles/default/@options)}"
     yt create tablet_cell --attributes '{tablet_cell_bundle=e2e-bundle}'
 fi
+
+TRUNCATED_TABLE=${E2E_DIR}/truncated-table
+TRUNCATED_TABLE_SCHEMA=$(cat $(dirname $0)/data/truncated-table/table.schema)
+yt create --attributes "$TRUNCATED_TABLE_SCHEMA" table ${TRUNCATED_TABLE}
+
+cat $(dirname $0)/data/truncated-table/data.json | yt write-table --format json ${TRUNCATED_TABLE}
