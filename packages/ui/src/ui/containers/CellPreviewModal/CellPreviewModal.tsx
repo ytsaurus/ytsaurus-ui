@@ -18,7 +18,7 @@ import block from 'bem-cn-lite';
 
 import Yson from '../../components/Yson/Yson';
 import Error from '../../components/Error/Error';
-import {getPreviewCellYsonSettings} from '../../store/selectors/thor/unipika';
+import {type YsonSettings, getPreviewCellYsonSettings} from '../../store/selectors/thor/unipika';
 import {closeCellPreviewAndCancelRequest} from '../../store/actions/modals/cell-preview';
 
 import './CellPreviewModal.scss';
@@ -45,7 +45,12 @@ export const CellPreviewModal: React.FC = () => {
             onCancel={() => dispatch(closeCellPreviewAndCancelRequest())}
             wrapperClassName={b('wrapper')}
         >
-            <Flex className={b('content')} gap={2} direction="column">
+            <Flex
+                qa="cell-preview-modal-content"
+                className={b('content')}
+                gap={2}
+                direction="column"
+            >
                 <Flex gap={2} direction="column">
                     <Text variant="subheader-3" color="secondary">
                         {noticeText}
@@ -53,7 +58,11 @@ export const CellPreviewModal: React.FC = () => {
                     {ytCliDownloadCommand ? (
                         <code className={b('command-wrapper')}>
                             <div className={b('command')}>
-                                <div className={b('command-content')} title={ytCliDownloadCommand}>
+                                <div
+                                    data-qa="cell-preview-command"
+                                    className={b('command-content')}
+                                    title={ytCliDownloadCommand}
+                                >
                                     {ytCliDownloadCommand}
                                 </div>
                                 <ClipboardButton
@@ -68,23 +77,43 @@ export const CellPreviewModal: React.FC = () => {
                 {error ? (
                     <Error error={error} />
                 ) : (
-                    <Yson
-                        className={b('yson-container')}
-                        folding={true}
-                        value={data}
-                        tableSettings={{dynamicRenderScrollParentGetter: undefined}}
-                        settings={unipikaSettings}
-                        customLayout={({toolbar, content}) => {
-                            return (
-                                <>
-                                    <div className={b('toolbar')}>{toolbar}</div>
-                                    {content}
-                                </>
-                            );
-                        }}
-                    />
+                    <PreviewContent data={data} unipikaSettings={unipikaSettings} />
                 )}
             </Flex>
         </SimpleModal>
     );
 };
+
+type PreviewContentProps = {
+    data: {$type: string; $value: any} | undefined;
+    unipikaSettings: YsonSettings;
+};
+
+function PreviewContent(props: PreviewContentProps) {
+    const {data, unipikaSettings} = props;
+
+    switch (data?.$type) {
+        case 'yql.string':
+            return <pre>{data.$value}</pre>;
+        case 'yql.json':
+            return <pre>{data.$value}</pre>;
+        default:
+            return (
+                <Yson
+                    className={b('yson-container')}
+                    folding={true}
+                    value={data?.$value}
+                    tableSettings={{dynamicRenderScrollParentGetter: undefined}}
+                    settings={unipikaSettings}
+                    customLayout={({toolbar, content}) => {
+                        return (
+                            <>
+                                <div className={b('toolbar')}>{toolbar}</div>
+                                {content}
+                            </>
+                        );
+                    }}
+                />
+            );
+    }
+}
