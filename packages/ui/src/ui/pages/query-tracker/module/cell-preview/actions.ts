@@ -6,6 +6,8 @@ import {
 import {isCancelled} from '../../../../utils/cancel-helper';
 import {CELL_PREVIEW, PREVIEW_LIMIT} from '../../../../constants/modals/cell-preview';
 import {readQueryResults} from '../api';
+import {prepareFormattedValue} from '../query_result/utils/format';
+import {batch} from 'react-redux';
 
 export const showQueryTrackerCellPreviewModal = (
     queryId: string,
@@ -13,7 +15,10 @@ export const showQueryTrackerCellPreviewModal = (
     options: {columnName: string; rowIndex: number},
 ): CellPreviewActionType => {
     return async (dispatch) => {
-        dispatch(openCellPreview());
+        batch(() => {
+            dispatch({type: CELL_PREVIEW.REQUEST, data: {}});
+            dispatch(openCellPreview());
+        });
 
         try {
             const response = await dispatch(
@@ -28,14 +33,17 @@ export const showQueryTrackerCellPreviewModal = (
             );
 
             const dataRow: unknown = response.rows[0][options.columnName][0];
+            const typeIndex = response.rows[0][options.columnName][1];
 
-            const dataObject: {val: any} | undefined = Array.isArray(dataRow)
-                ? dataRow[0]
-                : dataRow;
+            const type = response.yql_type_registry[Number(typeIndex)];
 
-            const data = dataObject?.val;
+            const {$type} = prepareFormattedValue(dataRow, type, {
+                maxListSize: undefined,
+                maxStringSize: undefined,
+                treatValAsData: true,
+            });
 
-            dispatch({type: CELL_PREVIEW.SUCCESS, data: {data}});
+            dispatch({type: CELL_PREVIEW.SUCCESS, data: {data: {$value: dataRow, $type: $type}}});
         } catch (error: any) {
             if (!isCancelled(error)) {
                 dispatch({type: CELL_PREVIEW.FAILURE, data: {error}});
