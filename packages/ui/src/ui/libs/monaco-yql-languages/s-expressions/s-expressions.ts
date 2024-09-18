@@ -104,7 +104,7 @@ export const language: languages.IMonarchLanguage & Record<string, unknown> = {
             {include: '@complexDataTypes'},
             [/[;,.]/, TokenClassConsts.DELIMITER],
             [/[(){}[\]]/, '@brackets'],
-            [/yt\.`(.*)`/, 'path'],
+            [/yt\.`(\/\/.*)`/g, {token: 'path'}],
             [
                 /[\w@#$]+/,
                 {

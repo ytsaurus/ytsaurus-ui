@@ -16,17 +16,10 @@ export const getPathFromMonacoModel = (
     const useArray = model.getValue().match(/(USE|use)\s\w+/g);
     const useClusterName = useArray ? useArray.pop()?.replace(/(USE|use)\s/, '') : null;
 
-    let path: RegExpMatchArray | null = null;
-    if (engine === QueryEngine.SPYT) {
-        path = editedPart.match(/\/\/(.*)[^`]/);
-    } else {
-        path = editedPart.match(/\/\/[^`]+/g);
-    }
-
+    const path = editedPart.match(/\/\/[^`]+/g);
     let cluster = clusterName || useClusterName;
 
-    if (!cluster) {
-        // get cluster from select
+    if (!cluster || engine === QueryEngine.SPYT) {
         const state = getWindowStore().getState();
         cluster = state.queryTracker.query?.draft.settings?.cluster;
     }
