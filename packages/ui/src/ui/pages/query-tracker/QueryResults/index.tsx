@@ -129,14 +129,12 @@ export const QueryResults = React.memo(function QueryResults({
                                 activeResultParams={activeResultParams}
                             />
                         </NotRenderUntilFirstVisible>
-                        {category === QueryResultTab.CUSTOM_TAB && (
-                            <NotRenderUntilFirstVisible
-                                hide={!Number.isInteger(resultIndex)}
-                                className={b('result-wrap')}
-                            >
-                                <CustomQueryTabContainer query={query} />
-                            </NotRenderUntilFirstVisible>
-                        )}
+                        <NotRenderUntilFirstVisible
+                            hide={category !== QueryResultTab.CUSTOM_TAB}
+                            className={b('result-wrap')}
+                        >
+                            <CustomQueryTabContainer query={query} />
+                        </NotRenderUntilFirstVisible>
                         {category === QueryResultTab.ERROR && <ErrorTree rootError={query.error} />}
                         {category === QueryResultTab.META && <QueryMetaTable query={query} />}
 
