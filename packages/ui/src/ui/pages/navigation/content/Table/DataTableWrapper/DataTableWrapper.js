@@ -147,6 +147,7 @@ export function ColumnCell({
                             <Button
                                 view="flat-secondary"
                                 size="m"
+                                qa="truncated-preview-button"
                                 onClick={() => dispatch(showCellPreviewModal(columnName, rowIndex))}
                             >
                                 <UIKitIcon data={Eye} size="12" />
