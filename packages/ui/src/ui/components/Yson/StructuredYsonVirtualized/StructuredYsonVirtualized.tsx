@@ -705,7 +705,11 @@ function FullValueDialog(props: FullValueDialogProps) {
                                 length={length}
                             />
                         )}
-                        {type === 'parsed' && <pre>{getParsedFullValue(text)}</pre>}
+                        {type === 'parsed' && (
+                            <pre className={block('full-value-parsed')}>
+                                {getParsedFullValue(text)}
+                            </pre>
+                        )}
                     </div>
                 </Flex>
             </Dialog.Body>

@@ -77,6 +77,10 @@
         overflow-x: hidden;
     }
 
+    &__full-value-parsed {
+        overflow-x: auto;
+    }
+
     &__full-value-radio-buttons {
         width: 200px;
     }
