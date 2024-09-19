@@ -10,12 +10,16 @@ import {
     openCellPreview,
 } from '../../modals/cell-preview';
 import unipika from '../../../../common/thor/unipika';
+import {getOffsetValue} from '../../../selectors/navigation/content/table';
 
 export const showCellPreviewModal = (columnName: string, index: number): CellPreviewActionType => {
     return async (dispatch, getState) => {
         const path = getPath(getState());
+        const offset = getOffsetValue(getState());
 
-        const cellPath = `${path}{${columnName}}[#${index}:#${index + 1}]`;
+        const rowIndex = typeof offset === 'number' ? index + offset : index;
+
+        const cellPath = `${path}{${columnName}}[#${rowIndex}:#${rowIndex + 1}]`;
 
         const ytCliDownloadCommand = `yt read-table '${cellPath}' --format json`;
 
