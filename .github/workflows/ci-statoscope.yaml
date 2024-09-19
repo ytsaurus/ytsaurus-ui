@@ -24,15 +24,16 @@ jobs:
           cd packages/ui
           npm run build:analyze
           mv dist/public/build/stats.json .
+          cp statoscope.config.js statoscope.config.js.bak
       - name: Analyze previos build
         run: |
           cd packages/ui
-          # TODO: checkout previous version
-          # npm ci
-          # npm run build:analyze
-          # mv dist/public/build/stats.json ./prev-stats.json
+          git reset --hard ${{ github.event.pull_request.base.sha }}
+          npm ci
+          npm run build:analyze
+          mv dist/public/build/stats.json ./prev-stats.json
       - name: Validate
         run: |
-          # cd packages/ui
-          echo Not implemented yet
-
+          cd packages/ui
+          cp statoscope.config.js.bak statoscope.config.js
+          npx statoscope validate -i ./stats.json -r ./prev-stats.json
