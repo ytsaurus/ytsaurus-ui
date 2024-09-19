@@ -13,9 +13,9 @@ module.exports = {
             // ensures that bundle hasn't package duplicates
             // TODO: akaretnikov@ вернуть no-packages-dups после дедупликации пакетов
             '@statoscope/webpack/no-packages-dups': [
-                'warn',
+                'error',
                 {
-                    exclude: [],
+                    exclude: ['react-is', 'redux', 'screenfull'],
                 },
             ],
             // ensure that the download time of entrypoints is not over the limit (10 sec)
