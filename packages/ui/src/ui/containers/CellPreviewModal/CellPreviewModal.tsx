@@ -94,9 +94,8 @@ function PreviewContent(props: PreviewContentProps) {
 
     switch (data?.$type) {
         case 'yql.string':
-            return <pre>{data.$value}</pre>;
         case 'yql.json':
-            return <pre>{data.$value}</pre>;
+            return <pre className="elements-code">{data.$value}</pre>;
         default:
             return (
                 <Yson
