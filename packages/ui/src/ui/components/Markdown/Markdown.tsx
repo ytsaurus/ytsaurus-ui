@@ -6,6 +6,7 @@ import {wrapApiPromiseByToaster} from '../../utils/utils';
 import './Markdown.scss';
 import '@diplodoc/transform/dist/css/yfm.css';
 import '@diplodoc/transform/dist/js/yfm';
+import './yfm-overrides.scss';
 import {OutputType} from '@diplodoc/transform/lib/typings';
 
 const block = cn('yt-markdown');

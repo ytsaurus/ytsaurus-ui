@@ -5,7 +5,6 @@ import axios from 'axios';
 import {handleAuthError} from '../store/actions/global';
 import {YT_UI_CLUSTER_HEADER_NAME} from '../../shared/constants';
 import './main.scss';
-import './yfm-overrides.scss';
 import {defaultUIFactory} from '../UIFactory/default-ui-factory';
 
 yt.subscribe('error', onError);
