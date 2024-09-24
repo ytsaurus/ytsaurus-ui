@@ -1,5 +1,25 @@
 # Changelog
 
+## [1.59.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.58.1...ui-v1.59.0) (2024-09-24)
+
+
+### Features
+
+* **CellPreviewModal:** add support string preview [[#765](https://github.com/ytsaurus/ytsaurus-ui/issues/765)] ([e779d16](https://github.com/ytsaurus/ytsaurus-ui/commit/e779d161b928bc372be57cfaae199311c99dae1d))
+* **Navigation/MapNode:** allow override node-icon through UIFactory.getNavigationMapNodeSettings ([c97a4a0](https://github.com/ytsaurus/ytsaurus-ui/commit/c97a4a09bcd8cfc40f5e5eeec203ee1aab417948))
+* **Navigation:** open access logs in qt [YTFRONT-4345] ([97a42b8](https://github.com/ytsaurus/ytsaurus-ui/commit/97a42b87d55c78e92224f43c28bac4d9fd8932ca))
+* **System:** maintenance button [YTFRONT-4217] ([3c5d0d2](https://github.com/ytsaurus/ytsaurus-ui/commit/3c5d0d225d244204b87fde6dc182489130ad20e6))
+
+
+### Bug Fixes
+
+* **CellPreviewModal:** fix opening preview for table with offset [[#778](https://github.com/ytsaurus/ytsaurus-ui/issues/778)] ([7347349](https://github.com/ytsaurus/ytsaurus-ui/commit/7347349c9adaedb1a8d7ea4a933a8316f2b296d2))
+* **Queries:** chyt spyt path autocomplete [YTFRONT-4368] ([df3cff1](https://github.com/ytsaurus/ytsaurus-ui/commit/df3cff140ee9d7bee48c19be55cc66d00e06cdcd))
+* **Query:** fix adhoc charts ([2c441c5](https://github.com/ytsaurus/ytsaurus-ui/commit/2c441c5d79cc680000038d2bfc670e247e488e08))
+* **StructuedYsonVirtualized:** fix scroll for parsed string value [[#765](https://github.com/ytsaurus/ytsaurus-ui/issues/765)] ([c696380](https://github.com/ytsaurus/ytsaurus-ui/commit/c69638021e559dd6be4bfa1234982358574ebfae))
+* **System:** fix color of stats text in dark mode ([f1c3ec3](https://github.com/ytsaurus/ytsaurus-ui/commit/f1c3ec3fc73a5bac17c0bffa2c3229a47c710ec3))
+* **YQLTable:** fixed exception in truncated cells preview ([a351378](https://github.com/ytsaurus/ytsaurus-ui/commit/a35137899782ab251f9515db8d87ad92f05c23b1))
+
 ## [1.58.1](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.58.0...ui-v1.58.1) (2024-09-10)
 
 
