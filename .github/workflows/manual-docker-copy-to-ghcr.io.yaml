@@ -12,7 +12,7 @@ on:
       nightly:
         description: "Use '-nightly' suffix for SOURCE image name"
         type: boolean
-      nigtly_target:
+      nightly_target:
         description: "Use '-nightly' suffix for TARGET image name"
         default: true
         type: boolean
