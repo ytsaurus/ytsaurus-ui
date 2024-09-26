@@ -4,6 +4,7 @@ import isEqual_ from 'lodash/isEqual';
 
 import {Updater} from '../utils/hammer/updater';
 import {getUseAutoRefresh} from '../store/selectors/settings';
+import {uiSettings} from '../config/ui-settings';
 
 export const DEFAULT_UPDATER_TIMEOUT = 30 * 1000;
 
@@ -24,7 +25,11 @@ export type UseUpdaterOptions = {
 
 export function useUpdater(
     fn?: () => unknown,
-    {timeout = DEFAULT_UPDATER_TIMEOUT, destructFn, onlyOnce}: UseUpdaterOptions = {},
+    {
+        timeout = uiSettings.useUpdaterTimeoutMs ?? DEFAULT_UPDATER_TIMEOUT,
+        destructFn,
+        onlyOnce,
+    }: UseUpdaterOptions = {},
 ) {
     const useAutoRefresh = useSelector(getUseAutoRefresh) as boolean;
     const optionsRef = React.useRef({skipNextCall: !useAutoRefresh});

@@ -142,6 +142,8 @@ export interface UISettings {
     hideReferrerUrl?: string;
 
     systemPageBatchTimeoutMs?: number;
+
+    useUpdaterTimeoutMs?: number;
 }
 
 export interface UISettingsMonitoring {
