@@ -114,6 +114,7 @@ export interface BaseBatchParams {
     suppress_transaction_coordinator_sync?: boolean;
     suppress_upstream_sync?: boolean;
     annotate_with_types?: boolean;
+    timeout?: number;
 }
 
 export interface PathParams extends BaseBatchParams {

@@ -18,6 +18,7 @@ import type {
     MastersConfigResponse,
     ResponseItemsGroup,
 } from '../../reducers/system/masters';
+import {uiSettings} from '../../../config/ui-settings';
 
 export const FETCH_MASTER_CONFIG = createActionTypes('MASTER_CONFIG');
 export const FETCH_MASTER_DATA = createActionTypes('MASTER_DATA');
@@ -26,6 +27,18 @@ export const SET_MASTER_ALERTS = 'SET_MASTER_ALERTS';
 const toaster = new Toaster();
 
 const {NODE_DOES_NOT_EXIST} = YTErrors;
+
+const executeBatchWithTimeout: (typeof ytApiV3Id)['executeBatch'] = (id, data) => {
+    const {systemPageBatchTimeoutMs} = uiSettings;
+    if (systemPageBatchTimeoutMs! > 0) {
+        const requests = 'parameters' in data ? data.parameters.requests : data.requests;
+        requests.forEach((item) => {
+            const parameters = 'parameters' in item ? item.parameters : item;
+            parameters.timeout = systemPageBatchTimeoutMs;
+        });
+    }
+    return ytApiV3Id.executeBatch(id, data);
+};
 
 async function loadMastersConfig(): Promise<[MastersConfigResponse, MasterAlert[]]> {
     const requests = [
@@ -85,7 +98,7 @@ async function loadMastersConfig(): Promise<[MastersConfigResponse, MasterAlert[
         discoveryServersResult,
         queueAgentsResult,
         alertsResult,
-    ] = await ytApiV3Id.executeBatch(YTApiId.systemMastersConfig, {requests});
+    ] = await executeBatchWithTimeout(YTApiId.systemMastersConfig, {requests});
 
     const batchError = getBatchError(
         [primaryMasterResult, secondaryMastersResult],
@@ -129,7 +142,7 @@ async function loadMastersConfig(): Promise<[MastersConfigResponse, MasterAlert[
         },
     ];
 
-    const [primaryMasterCellTag, timestampProviderCellTag] = await ytApiV3Id.executeBatch(
+    const [primaryMasterCellTag, timestampProviderCellTag] = await executeBatchWithTimeout(
         YTApiId.systemMastersConfig,
         {requests: [...tag_cell_requests]},
     );
@@ -214,7 +227,7 @@ async function loadMastersConfig(): Promise<[MastersConfigResponse, MasterAlert[
     let queueAgentsStatuses: Record<string, any> = {};
 
     try {
-        const results = await ytApiV3Id.executeBatch(YTApiId.systemMastersConfigDiscoveryServer, {
+        const results = await executeBatchWithTimeout(YTApiId.systemMastersConfigDiscoveryServer, {
             requests: [...discoveryRequests, ...queueAgentsStateRequests],
         });
 
@@ -325,7 +338,7 @@ export const getStateForHost = async (
         },
     ];
 
-    const [result] = await ytApiV3Id.executeBatch<{state: 'leading' | 'following'}>(
+    const [result] = await executeBatchWithTimeout<{state: 'leading' | 'following'}>(
         YTApiId.systemMasters,
         {
             requests: masterDataRequests,
@@ -357,7 +370,7 @@ export function loadMasters() {
 
             loadHydra(masterDataRequests, masterInfo, 'providers', config.timestampProviders);
 
-            const data = await ytApiV3Id.executeBatch(YTApiId.systemMasters, {
+            const data = await executeBatchWithTimeout(YTApiId.systemMasters, {
                 requests: masterDataRequests,
             });
 

@@ -140,6 +140,8 @@ export interface UISettings {
      * See `@gravity-ui/unipika v3.0.0` details in [CHANGELOG.md](https://github.com/gravity-ui/unipika/blob/main/CHANGELOG.md).
      */
     hideReferrerUrl?: string;
+
+    systemPageBatchTimeoutMs?: number;
 }
 
 export interface UISettingsMonitoring {
