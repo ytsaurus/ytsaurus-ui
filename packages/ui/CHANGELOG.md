@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.60.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.59.0...ui-v1.60.0) (2024-09-26)
+
+
+### Features
+
+* **Navigation/Queue:** add alerts section [YTFRONT-4144] ([8b0157c](https://github.com/ytsaurus/ytsaurus-ui/commit/8b0157c08dac8757a04a4129c83ea8de332f6861))
+
+
+### Bug Fixes
+
+* **Navigation/Consumer,Navigation/Queue:** show errors [YTFRONT-4144] ([914a6a0](https://github.com/ytsaurus/ytsaurus-ui/commit/914a6a066ce30928673749bd8e2250c51a3e637b))
+
 ## [1.59.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.58.1...ui-v1.59.0) (2024-09-24)
 
 
