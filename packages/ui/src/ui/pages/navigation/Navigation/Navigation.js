@@ -4,7 +4,9 @@ import {connect, useSelector} from 'react-redux';
 import PropTypes from 'prop-types';
 import hammer from '../../../common/hammer';
 import cn from 'bem-cn-lite';
-import _ from 'lodash';
+
+import map_ from 'lodash/map';
+
 import {getCluster} from '../../../store/selectors/global';
 import {updateTitle} from '../../../store/actions/global';
 
@@ -60,6 +62,7 @@ import UIFactory from '../../../UIFactory';
 
 import './Navigation.scss';
 import {UI_TAB_SIZE} from '../../../constants/global';
+import {CellPreviewModal} from '../../../containers/CellPreviewModal/CellPreviewModal';
 
 const block = cn('navigation');
 
@@ -79,6 +82,7 @@ function renderModals() {
             <LinkToModal />
             <CreateACOModal />
             <RemoteCopyModal />
+            <CellPreviewModal />
         </Fragment>
     );
 }
@@ -172,7 +176,7 @@ class Navigation extends Component {
 
     renderTabs() {
         const {mode, tabSize} = this.props;
-        const items = _.map(this.items, (item) => ({
+        const items = map_(this.items, (item) => ({
             ...item,
             text: item.text || hammer.format['ReadableField'](item.value),
             show: true,
@@ -192,7 +196,12 @@ class Navigation extends Component {
     renderEditButton() {
         return (
             <div className={block('edit-metadata')}>
-                <Button size="m" title={'Edit metadata'} onClick={this.onEditButtonClick}>
+                <Button
+                    size="m"
+                    className={block('edit-metadata-btn')}
+                    title={'Edit metadata'}
+                    onClick={this.onEditButtonClick}
+                >
                     <Icon awesome={'pencil'} />
                     Edit metadata
                 </Button>

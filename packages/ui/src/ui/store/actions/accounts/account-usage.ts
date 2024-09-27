@@ -1,4 +1,7 @@
-import _ from 'lodash';
+import isEmpty_ from 'lodash/isEmpty';
+import isEqual_ from 'lodash/isEqual';
+import reduce_ from 'lodash/reduce';
+
 import {ThunkAction} from 'redux-thunk';
 import {RootState} from '../../../store/reducers';
 import {AccountsSnapshotsAction} from '../../reducers/accounts/usage/accounts-usage-snapshots';
@@ -130,7 +133,7 @@ export function getFilterParameters(state: RootState): AccountUsageDataParams {
     return {
         account,
         cluster,
-        sort_order: _.reduce(
+        sort_order: reduce_(
             sortStates,
             (acc, {column, order}) => {
                 if (column && order) {
@@ -174,7 +177,7 @@ export function fetchAccountUsageList(): UsageListThunkAction {
             })
             .then((response) => {
                 const params = getAccountUsageListRequestParams(getState());
-                if (!_.isEqual(params, requestParams)) {
+                if (!isEqual_(params, requestParams)) {
                     return;
                 }
 
@@ -185,7 +188,7 @@ export function fetchAccountUsageList(): UsageListThunkAction {
             })
             .catch((error: any) => {
                 const params = getAccountUsageListRequestParams(getState());
-                if (!_.isEqual(params, requestParams)) {
+                if (!isEqual_(params, requestParams)) {
                     return;
                 }
 
@@ -229,7 +232,7 @@ export function fetchAccountUsageTree(): UsageTreeThunkAction {
             })
             .then((response) => {
                 const params = getAccountUsageTreeRequestParams(getState());
-                if (!_.isEqual(params, requestParams)) {
+                if (!isEqual_(params, requestParams)) {
                     return;
                 }
 
@@ -243,7 +246,7 @@ export function fetchAccountUsageTree(): UsageTreeThunkAction {
             })
             .catch((error: any) => {
                 const params = getAccountUsageTreeRequestParams(getState());
-                if (!_.isEqual(params, requestParams)) {
+                if (!isEqual_(params, requestParams)) {
                     return;
                 }
 
@@ -311,7 +314,7 @@ export function setAccountUsageDataFilter(
         });
 
         const {dateRangeType, ...rest} = data;
-        if (_.isEmpty(rest) && dateRangeType) {
+        if (isEmpty_(rest) && dateRangeType) {
             const {from, to} = getAccountUsageDateRangeFilter(getState());
             if (!from && !to) {
                 return;

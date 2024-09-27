@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import merge_ from 'lodash/merge';
 
 export interface YTStorageData {
     loginDialog: {
@@ -25,7 +25,7 @@ class YTLocalStorage {
     }
 
     merge<K extends keyof YTStorageData, V extends YTStorageData[K]>(k: K, v: Partial<V>) {
-        localStorage.setItem(storageKey(k), JSON.stringify(_.merge(this.get(k), v)));
+        localStorage.setItem(storageKey(k), JSON.stringify(merge_(this.get(k), v)));
     }
 }
 

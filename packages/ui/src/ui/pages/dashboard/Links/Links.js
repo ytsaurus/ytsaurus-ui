@@ -2,7 +2,8 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import cn from 'bem-cn-lite';
-import _ from 'lodash';
+
+import map_ from 'lodash/map';
 
 import Tabs from '../../../components/Tabs/Tabs';
 import Link from '../../../components/Link/Link';
@@ -75,7 +76,7 @@ class Links extends Component {
         const content =
             links.length > 0 ? (
                 <ul className={listBlock({type: 'unstyled'}, linksBlock('list'))}>
-                    {_.map(links, ({path}) => this.renderLink(defaultUrl, path))}
+                    {map_(links, ({path}) => this.renderLink(defaultUrl, path))}
                 </ul>
             ) : (
                 <span className={linksBlock('list', {empty: 'yes'})}>

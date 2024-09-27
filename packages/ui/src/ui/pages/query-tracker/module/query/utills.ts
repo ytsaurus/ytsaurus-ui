@@ -1,10 +1,11 @@
-import {omit} from 'lodash';
+import omit_ from 'lodash/omit';
 import {QueryItem} from '../api';
+import {DEFAULT_QUERY_ACO} from './selectors';
 
 export const cleanupQueryForDraft = (query: QueryItem): QueryItem => {
     return {
         ...query,
-        annotations: omit(query.annotations, 'is_tutorial'),
+        annotations: omit_(query.annotations, 'is_tutorial'),
     };
 };
 
@@ -32,8 +33,8 @@ export const prepareQueryPlanIds = (query: QueryItem): QueryItem => {
         });
     }
 
-    if (!query.access_control_object) {
-        query.access_control_object = 'nobody';
+    if (!query.access_control_objects) {
+        query.access_control_objects = [DEFAULT_QUERY_ACO];
     }
 
     return query;

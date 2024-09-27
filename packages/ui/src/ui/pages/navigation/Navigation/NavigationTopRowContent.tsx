@@ -1,6 +1,7 @@
 import React from 'react';
 import cn from 'bem-cn-lite';
-import _ from 'lodash';
+
+import map_ from 'lodash/map';
 
 import {RowWithName} from '../../../containers/AppNavigation/TopRowContent/SectionName';
 import Favourites from '../../../components/Favourites/Favourites';
@@ -42,6 +43,7 @@ import {Tab} from '../../../constants/navigation';
 
 import './NavigationTopRowContent.scss';
 import {Escaped} from '../../../components/Text/Text';
+import {useHistory} from 'react-router';
 
 const block = cn('navigation-top-row-content');
 
@@ -155,15 +157,32 @@ function NavigationPathEditor({hideEditor}: {hideEditor: () => void}) {
 
 function NavigationBreadcrumbs({onEdit}: {onEdit: () => void}) {
     const bcItems = useSelector(getNavigationBreadcrumbs);
+    const mode = useSelector(getMode);
+    const history = useHistory();
     const items = React.useMemo(() => {
-        return _.map(bcItems, ({text, state}) => {
+        return map_(bcItems, ({text, state}) => {
+            const url = makeRoutedURL(window.location.pathname, {
+                path: state.path,
+                navmode: mode === Tab.ACL ? mode : Tab.CONTENT,
+                filter: '',
+            });
+
             return {
                 text,
-                state: state,
-                action: () => {},
+                url,
+                state,
+                action: (event: any) => {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    if (!event.ctrlKey && !event.metaKey && event.button !== 1) {
+                        history.push(url);
+                    } else {
+                        window.open(url);
+                    }
+                },
             };
         });
-    }, [bcItems]);
+    }, [bcItems, mode]);
 
     const cluster = useSelector(getCluster);
 
@@ -214,12 +233,8 @@ function NavigationBcItem({
     isRoot?: boolean;
     onEdit: () => void;
 }) {
-    const mode = useSelector(getMode);
-    const url = makeRoutedURL(window.location.pathname, {
-        path: (item as any).state.path,
-        navmode: mode === Tab.ACL ? mode : Tab.CONTENT,
-        filter: '',
-    });
+    const url = (item as any).url;
+
     return (
         <Link
             className={block('breadcrumbs-link', {
@@ -230,7 +245,9 @@ function NavigationBcItem({
             routed
             onClick={
                 !isCurrent
-                    ? undefined
+                    ? (e) => {
+                          e.preventDefault();
+                      }
                     : (e) => {
                           onEdit();
                           e.preventDefault();

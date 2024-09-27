@@ -4,7 +4,8 @@ import block from 'bem-cn-lite';
 import Slider, {Marks, SliderRef} from 'rc-slider';
 import {IconProps, TextInput, TextInputSize} from '@gravity-ui/uikit';
 
-import {debounce} from 'lodash';
+import debounce_ from 'lodash/debounce';
+// eslint-disable-next-line lodash/import-scope
 import type {DebouncedFunc} from 'lodash';
 
 import {
@@ -125,8 +126,11 @@ export class RangeInputPicker extends Component<RangeInputPickerProps, RangeInpu
     constructor(props: RangeInputPickerProps) {
         super(props);
 
-        this.debouncedCallOnUpdate = debounce(this.callOnUpdate, props.debounceDelay);
-        this.debouncedHandleOnAfterUpdate = debounce(this.handleOnAfterUpdate, props.debounceDelay);
+        this.debouncedCallOnUpdate = debounce_(this.callOnUpdate, props.debounceDelay);
+        this.debouncedHandleOnAfterUpdate = debounce_(
+            this.handleOnAfterUpdate,
+            props.debounceDelay,
+        );
         this.state = RangeInputPicker.getPreparedState(props);
     }
 

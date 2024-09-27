@@ -1,6 +1,6 @@
 import {ACCOUNTS_TABLE_ID} from '../../constants/accounts/accounts';
-import _cloneDeep from 'lodash/cloneDeep';
-import _forEach from 'lodash/forEach';
+import cloneDeep_ from 'lodash/cloneDeep';
+import forEach_ from 'lodash/forEach';
 
 export const columnsItems = {
     name: {
@@ -259,8 +259,8 @@ export const ACCOUNTS_COLUMN_SETS = {
     },
 };
 
-const TREE_COLUMN_SETS = _cloneDeep(ACCOUNTS_COLUMN_SETS);
-_forEach(TREE_COLUMN_SETS, ({items}) => {
+const TREE_COLUMN_SETS = cloneDeep_(ACCOUNTS_COLUMN_SETS);
+forEach_(TREE_COLUMN_SETS, ({items}) => {
     items.splice(1, 0, 'alerts');
 });
 

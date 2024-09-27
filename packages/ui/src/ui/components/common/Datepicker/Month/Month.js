@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import block from 'bem-cn-lite';
-import _repeat from 'lodash/repeat';
-import _range from 'lodash/range';
+import repeat_ from 'lodash/repeat';
+import range_ from 'lodash/range';
 import {DateTime} from 'luxon';
 
 import i18n from '../i18n';
@@ -174,15 +174,15 @@ export class Month extends React.Component {
         const mergedIntervals =
             !onRangeDateClick && selectedInterval && hovered && selectedInterval.union(hovered);
 
-        return _range(this.titleCells)
+        return range_(this.titleCells)
             .map((titleCell) => this.renderTitleCell({titleCell, month, year}))
             .concat(
-                _range(emptyCells).map((emptyCell) =>
+                range_(emptyCells).map((emptyCell) =>
                     this.renderEmptyCell({emptyCell, month, year}),
                 ),
             )
             .concat(
-                _range(1, this.firstMonthDate.daysInMonth + 1).map((day) =>
+                range_(1, this.firstMonthDate.daysInMonth + 1).map((day) =>
                     this.renderDayCell({day, month, year, mergedIntervals}),
                 ),
             );
@@ -195,7 +195,7 @@ export class Month extends React.Component {
             <div
                 {...(isNeedScroll && {ref: this.scrollRef})}
                 style={{
-                    gridTemplateAreas: `"${_repeat('title ', this.titleCells)}"`,
+                    gridTemplateAreas: `"${repeat_('title ', this.titleCells)}"`,
                 }}
                 className={b()}
                 {...{year: this.firstMonthDate.year, month: this.firstMonthDate.month}}

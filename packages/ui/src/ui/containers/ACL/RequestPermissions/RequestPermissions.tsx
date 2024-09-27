@@ -14,7 +14,7 @@ import {AclMode, INHERITANCE_MODE_TYPES, IdmObjectType} from '../../../constants
 
 import UIFactory from '../../../UIFactory';
 import hammer from '../../../common/hammer';
-import {map} from 'lodash';
+import map_ from 'lodash/map';
 
 import {docsUrl} from '../../../config';
 import {makeLink} from '../../../utils/utils';
@@ -122,9 +122,27 @@ function RequestPermissions(props: Props) {
     );
 
     const currentCaption = `Current ${SHORT_TITLE[idmKind] ?? idmKind}`;
-    const {permissionsToRequest: choices} = UIFactory.getAclPermissionsSettings()[idmKind];
+    const {permissionsToRequest, getAvailablePermissions} =
+        UIFactory.getAclPermissionsSettings()[idmKind];
+
+    const [availablePermissions, setAvailablePermissions] = React.useState<
+        typeof permissionsToRequest | undefined
+    >(undefined);
+
+    const onShow = useCallback(async () => {
+        try {
+            const value = await getAvailablePermissions?.({path});
+            setAvailablePermissions(value);
+        } catch {
+            setAvailablePermissions(undefined);
+        } finally {
+            handleShow();
+        }
+    }, [path, handleShow, getAvailablePermissions]);
 
     const firstItemDisabled = idmKind === IdmObjectType.ACCOUNT;
+
+    const choices = availablePermissions ?? permissionsToRequest;
     const permissions = firstItemDisabled ? valueWithCheckedFirstChoice(choices) : null;
 
     const availableFields: Record<
@@ -214,7 +232,7 @@ function RequestPermissions(props: Props) {
                 type: 'yt-select-single',
                 caption: 'Inheritance mode',
                 extras: {
-                    items: map(INHERITANCE_MODE_TYPES, (value) => ({
+                    items: map_(INHERITANCE_MODE_TYPES, (value) => ({
                         value: value,
                         text: hammer.format['ReadableField'](value),
                     })),
@@ -235,23 +253,26 @@ function RequestPermissions(props: Props) {
 
     const dialogFields = useMemo(() => {
         let flagsIndex = -1;
-        const res = requestPermissionsFields.reduce((acc, field) => {
-            const allowField = useColumns ? field !== 'permissions' : !COLUMNS_FELDS.has(field);
-            if (!allowField) {
+        const res = requestPermissionsFields.reduce(
+            (acc, field) => {
+                const allowField = useColumns ? field !== 'permissions' : !COLUMNS_FELDS.has(field);
+                if (!allowField) {
+                    return acc;
+                }
+
+                if (field === 'permissionFlags') {
+                    flagsIndex = acc.length;
+                }
+
+                acc.push({
+                    ...availableFields[field],
+                    name: field,
+                } as DialogField<FormValues>);
+
                 return acc;
-            }
-
-            if (field === 'permissionFlags') {
-                flagsIndex = acc.length;
-            }
-
-            acc.push({
-                ...availableFields[field],
-                name: field,
-            } as DialogField<FormValues>);
-
-            return acc;
-        }, [] as Array<DialogField<FormValues>>);
+            },
+            [] as Array<DialogField<FormValues>>,
+        );
 
         if (flagsIndex !== -1) {
             const flags: typeof res = Object.keys(requestPermissionsFlags ?? []).map((key) => {
@@ -274,7 +295,7 @@ function RequestPermissions(props: Props) {
     return !choices?.length ? null : (
         <ErrorBoundary>
             <div className={block(null, className)}>
-                <Button className={buttonClassName} view={'action'} onClick={handleShow}>
+                <Button className={buttonClassName} view={'action'} onClick={onShow}>
                     {title}
                 </Button>
                 <YTDFDialog<FormValues>

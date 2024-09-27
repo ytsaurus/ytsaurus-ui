@@ -1,4 +1,5 @@
-import _ from 'lodash';
+import forEach_ from 'lodash/forEach';
+
 import {RootState} from '../../../../store/reducers';
 import {createSelector} from 'reselect';
 import ypath from '../../../../common/thor/ypath';
@@ -25,7 +26,7 @@ const getNavigationAttributesEidtorNodesByTypes = createSelector(
         const mapNodes: Array<string> = [];
         const dynamicTables: Array<string> = [];
 
-        _.forEach(attrsMap, (attrs, path) => {
+        forEach_(attrsMap, (attrs, path) => {
             const type = ypath.getValue(attrs || {}, '/@type');
             if (type === 'map_node') {
                 mapNodes.push(path);

@@ -1,6 +1,7 @@
 import React from 'react';
 import cn from 'bem-cn-lite';
-import _ from 'lodash';
+
+import transform_ from 'lodash/transform';
 
 import {Progress} from '@gravity-ui/uikit';
 import MetaTable from '../../../../../components/MetaTable/MetaTable';
@@ -24,7 +25,7 @@ export const hasStorageMeta = (node: NodeStorageProps) =>
     node.spaceProgress || node.sessions || node.chunks || Object.keys(node.IOWeight).length > 0;
 
 function NodeStorage(node: NodeStorageProps): ReturnType<React.VFC> {
-    const ioItems = _.transform(
+    const ioItems = transform_(
         node.IOWeight,
         (res, value, key) => res.push({key, value}),
         [] as Array<{key: string; value: number}>,
@@ -44,17 +45,14 @@ function NodeStorage(node: NodeStorageProps): ReturnType<React.VFC> {
                                 theme="success"
                             />
                         ),
-                        visible: Boolean(node.spaceProgress),
                     },
                     {
                         key: 'sessions',
                         value: hammer.format['Number'](node.sessions),
-                        visible: Boolean(node.sessions),
                     },
                     {
                         key: 'chunks',
                         value: hammer.format['Number'](node.chunks),
-                        visible: Boolean(node.chunks),
                     },
                 ]}
             />

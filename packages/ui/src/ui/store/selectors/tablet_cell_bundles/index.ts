@@ -1,4 +1,7 @@
-import _ from 'lodash';
+import filter_ from 'lodash/filter';
+import find_ from 'lodash/find';
+import map_ from 'lodash/map';
+import uniq_ from 'lodash/uniq';
 
 import {RootState} from '../../../store/reducers';
 import {
@@ -18,7 +21,7 @@ import {prepareHost} from '../../../utils';
 import {getCluster} from '../global';
 import {sortArrayBySortState} from '../../../utils/sort-helpers';
 import {sortTableBundles} from '../../../utils/tablet_cell_bundles';
-import {makeNodeUrl, makeProxyUrl} from '../../../utils/app-url';
+import {makeComponentsNodesUrl, makeProxyUrl} from '../../../utils/app-url';
 import {
     getTabletCellBundleControllerInstanceDetailsMap,
     getTabletCellBundleEditorState,
@@ -56,7 +59,7 @@ export const getTabletBundlesWriteableByName = (state: RootState) =>
 export const getTabletsActiveBundleData = createSelector(
     [getTabletsBundles, getTabletsActiveBundle],
     (bundles, activeBundle) => {
-        return _.find(bundles, (item) => item.bundle === activeBundle);
+        return find_(bundles, (item) => item.bundle === activeBundle);
     },
 );
 
@@ -67,7 +70,7 @@ export const getTabletsDefaultMemoryConfiguration = createSelector(
         const nodeSizes = config.zone_default.tablet_node_sizes;
 
         const key =
-            editorState.bundleData?.bundle_controller_target_config.tablet_node_resource_guarantee
+            editorState.bundleData?.bundle_controller_target_config?.tablet_node_resource_guarantee
                 .type;
 
         if (!key || !(key in nodeSizes)) return 0;
@@ -82,7 +85,7 @@ function prepareBundleInstances(
     makeUrl: (address: string) => string,
 ) {
     return [
-        ..._.map(allocated, (data, address) => {
+        ...map_(allocated, (data, address) => {
             const details = instanceDetailsMap?.[address] || {};
 
             const {pod_id, yp_cluster} = data || {};
@@ -101,7 +104,7 @@ function prepareBundleInstances(
                 nannyUrl,
             };
         }),
-        ..._.map(inProgresss, (item) => {
+        ...map_(inProgresss, (item) => {
             return {
                 data: item.instance_info,
                 allocationState: item.hulk_request_state,
@@ -134,7 +137,7 @@ export const getActiveBundleInstances = createSelector(
             allocated_tablet_nodes,
             allocating_tablet_nodes,
             instanceDetailsMap,
-            (address) => makeNodeUrl(cluster, address),
+            (address) => makeComponentsNodesUrl({host: address, cluster}),
         );
     },
 );
@@ -235,7 +238,7 @@ export const getTabletsBundlesFiltered = createSelector(
             });
         }
 
-        return !predicates.length ? bundles : _.filter(bundles, concatByAnd(...predicates));
+        return !predicates.length ? bundles : filter_(bundles, concatByAnd(...predicates));
     },
 );
 
@@ -268,7 +271,7 @@ export const getTabletCellsOfActiveAccount = createSelector(
             return cells;
         }
 
-        return _.filter(cells, (item) => {
+        return filter_(cells, (item) => {
             return Boolean(item.bundle) && activeBundle === item.bundle;
         });
     },
@@ -301,7 +304,7 @@ export const getTabletsCellsFiltered = createSelector(
                 return Boolean(item.peerAddress) && -1 !== item.peerAddress.indexOf(hostFilter);
             });
         }
-        return !predicates.length ? cells : _.filter(cells, concatByAnd(...predicates));
+        return !predicates.length ? cells : filter_(cells, concatByAnd(...predicates));
     },
 );
 
@@ -310,7 +313,7 @@ export function filterTabletCellsByBundle(bundle: string, cells: Array<TabletCel
         return [];
     }
 
-    return _.filter(cells, (item) => item.bundle === bundle);
+    return filter_(cells, (item) => item.bundle === bundle);
 }
 
 export const getTabletsCellsSorted = createSelector(
@@ -321,11 +324,11 @@ export const getTabletsCellsSorted = createSelector(
 );
 
 export const getTabletsCellsBundles = createSelector([getTabletsCells], (cells) => {
-    return _.uniq(_.map(cells, 'bundle')).sort();
+    return uniq_(map_(cells, 'bundle')).sort();
 });
 
 export const getTabletsCellsHosts = createSelector([getTabletCellsOfActiveAccount], (cells) => {
-    return _.uniq(_.map(cells, 'peerAddress')).sort();
+    return uniq_(map_(cells, 'peerAddress')).sort();
 });
 
 export const getTabletsCellsHostsOfActiveBundle = createSelector(
@@ -339,7 +342,7 @@ export const getTabletsCellsHostsOfActiveBundle = createSelector(
 );
 
 export function prepareHostsFromCells(cells: Array<TabletCell>) {
-    return _.uniq(_.map(cells, ({peerAddress}) => prepareHost(peerAddress)).filter(Boolean))
+    return uniq_(map_(cells, ({peerAddress}) => prepareHost(peerAddress)).filter(Boolean))
         .sort()
         .join('|');
 }

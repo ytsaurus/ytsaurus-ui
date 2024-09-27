@@ -3,7 +3,9 @@ import React, {useCallback, useState} from 'react';
 import hammer from '../../../common/hammer';
 import PropTypes from 'prop-types';
 import ypath from '@ytsaurus/interface-helpers/lib/ypath';
-import _ from 'lodash';
+
+import keys_ from 'lodash/keys';
+import map_ from 'lodash/map';
 
 import {Button, Dialog} from '@gravity-ui/uikit';
 
@@ -17,13 +19,13 @@ import Yson from '../../../components/Yson/Yson';
 
 import {histogramItems} from '../../../utils/tablet/tablet';
 import {getActiveHistogram, getHistogram} from '../../../store/selectors/tablet/tablet';
-import {Tab as ComponentsTab} from '../../../constants/components/main';
 import {changeActiveHistogram} from '../../../store/actions/tablet/tablet';
 import {Tab as NavigationTab} from '../../../constants/navigation';
 import {Page} from '../../../constants/index';
 import {genTabletCellBundlesCellUrl} from '../../../utils/tablet_cell_bundles';
 import StoresDialog from './StoresDialog';
 import {Tooltip} from '../../../components/Tooltip/Tooltip';
+import {makeComponentsNodesUrl} from '../../../utils/app-url';
 
 function makeMetaItem(format, data, key, visible) {
     return {
@@ -46,7 +48,7 @@ const renderErrorsDialog = (errors, handleClose) => {
         <Dialog size="l" open={visible} onClose={handleClose} hasButtonClose autoclosable>
             <Dialog.Header caption="Tablet errors" />
             <Dialog.Body>
-                {_.map(errors, (err, index) => {
+                {map_(errors, (err, index) => {
                     const error = {
                         ...err,
                         message: ypath.getValue(err, '/message'),
@@ -59,13 +61,13 @@ const renderErrorsDialog = (errors, handleClose) => {
 };
 
 const renderReplicationErrorsDialog = (replicationErrors, handleClose) => {
-    const visible = _.keys(replicationErrors).length > 0;
+    const visible = keys_(replicationErrors).length > 0;
 
     return (
         <Dialog size="l" open={visible} onClose={handleClose} hasButtonClose autoclosable>
             <Dialog.Header caption="Replication errors" />
             <Dialog.Body>
-                {_.map(replicationErrors, (err, replica) => {
+                {map_(replicationErrors, (err, replica) => {
                     const error = {
                         ...err,
                         message: ypath.getValue(err, '/message'),
@@ -245,9 +247,10 @@ function Overview({id, block}) {
                                         <Template.Link
                                             withClipboard
                                             text={cellLeadingPeer.address}
-                                            url={`/${cluster}/${Page.COMPONENTS}/${
-                                                ComponentsTab.NODES
-                                            }/${encodeURIComponent(cellLeadingPeer.address)}/`}
+                                            url={makeComponentsNodesUrl({
+                                                cluster,
+                                                host: cellLeadingPeer.address,
+                                            })}
                                         />
                                     ),
                                     visible: Boolean(cellLeadingPeer),
@@ -273,7 +276,7 @@ function Overview({id, block}) {
                                     value: (
                                         <span>
                                             {hammer.format['Number'](
-                                                _.keys(replicationErrors).length,
+                                                keys_(replicationErrors).length,
                                             )}
                                             <Button
                                                 view="flat-secondary"
@@ -284,7 +287,7 @@ function Overview({id, block}) {
                                             </Button>
                                         </span>
                                     ),
-                                    visible: _.keys(replicationErrors).length > 0,
+                                    visible: keys_(replicationErrors).length > 0,
                                 },
                                 {
                                     key: 'state',

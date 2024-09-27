@@ -1,6 +1,6 @@
 import {Loader, Text} from '@gravity-ui/uikit';
 import React from 'react';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import block from 'bem-cn-lite';
 import {RootState} from '../../../store/reducers';
 import {getQueryResult} from '../module/query_result/selectors';
@@ -17,6 +17,7 @@ import {ResultPaginator} from './ResultPaginator';
 import NotRenderUntilFirstVisible from '../NotRenderUntilFirstVisible/NotRenderUntilFirstVisible';
 
 import './index.scss';
+import {showQueryTrackerCellPreviewModal} from '../module/cell-preview/actions';
 
 const b = block('query-result-table');
 
@@ -29,7 +30,13 @@ const getResultRowsInfo = (result: QueryResultReadyState) => {
     return {start, end, total, truncated};
 };
 
-function QueryReadyResultView({result}: {result: QueryResultReadyState}) {
+function QueryReadyResultView({
+    result,
+    onShowPreview,
+}: {
+    result: QueryResultReadyState;
+    onShowPreview: (colName: string, rowIndex: number) => void;
+}) {
     const mode = result?.settings?.viewMode;
     const {start, end, total, truncated} = getResultRowsInfo(result);
     return (
@@ -44,7 +51,7 @@ function QueryReadyResultView({result}: {result: QueryResultReadyState}) {
                         {`${truncated ? ' (truncated)' : ''}`}
                     </Text>
                 </div>
-                <ResultsTable result={result} />
+                <ResultsTable result={result} onShowPreview={onShowPreview} />
             </NotRenderUntilFirstVisible>
         </>
     );
@@ -52,7 +59,21 @@ function QueryReadyResultView({result}: {result: QueryResultReadyState}) {
 
 export const QueryResultsView = React.memo(
     function QueryResultsView({query, index}: {query: QueryItem; index: number}) {
+        const dispatch = useDispatch();
+
         const result = useSelector((state: RootState) => getQueryResult(state, query.id, index));
+
+        const handleShowPreviewClick = React.useCallback(
+            (columnName: string, rowIndex: number) => {
+                dispatch(
+                    showQueryTrackerCellPreviewModal(query.id, index, {
+                        columnName,
+                        rowIndex,
+                    }),
+                );
+            },
+            [index, query.id],
+        );
 
         return (
             <div className={b()}>
@@ -64,7 +85,10 @@ export const QueryResultsView = React.memo(
                 )}
                 {result?.resultReady && (
                     <>
-                        <QueryReadyResultView result={result} />
+                        <QueryReadyResultView
+                            result={result}
+                            onShowPreview={handleShowPreviewClick}
+                        />
                         {result.settings.viewMode === QueryResultsViewMode.Table && (
                             <ResultPaginator
                                 className={b('pagination')}

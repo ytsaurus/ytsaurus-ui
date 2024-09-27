@@ -5,7 +5,9 @@ import {RootState} from '../../../../store/reducers';
 import {showArchiveOperations, showCurrentOperations} from '../../../../store/actions/operations';
 import {OPERATIONS_DATA_MODE} from '../../../../constants/operations';
 
-import _ from 'lodash';
+import mapValues_ from 'lodash/mapValues';
+import values_ from 'lodash/values';
+
 import moment from 'moment';
 
 import {Button} from '@gravity-ui/uikit';
@@ -121,7 +123,7 @@ export default function OperationsArchiveFilter() {
 
     const updateDate = useCallback(
         (date: Pick<State, 'from' | 'to'>) => {
-            const dateWithHours = _.mapValues(date, (field, key) => {
+            const dateWithHours = mapValues_(date, (field, key) => {
                 if (field) {
                     const {hours, minutes} = moment(state[key as 'from' | 'to']).toObject();
                     return moment(field).add({hours, minutes}).toISOString();
@@ -173,7 +175,7 @@ export default function OperationsArchiveFilter() {
                         <div className={formBlock('button-group')}>
                             <CustomRadioButton
                                 name="time-range"
-                                items={_.values(radioButtonTypes)}
+                                items={values_(radioButtonTypes)}
                                 value={state.activeTypeValue}
                                 onChange={handleActiveTypeChange}
                             />

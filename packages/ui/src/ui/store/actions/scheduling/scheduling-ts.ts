@@ -1,4 +1,8 @@
-import _ from 'lodash';
+import forEach_ from 'lodash/forEach';
+import isEmpty_ from 'lodash/isEmpty';
+import map_ from 'lodash/map';
+import update_ from 'lodash/update';
+
 import {
     INTEGRAL_GUARANTEES_PREFIX,
     InitialPoolResourceInfo,
@@ -193,7 +197,7 @@ export function deletePool(item?: PoolInfo): SchedulingThunkAction {
                 toaster.add({
                     name: 'delete pool',
                     autoHiding: 10000,
-                    type: 'success',
+                    theme: 'success',
                     title: `Successfully deleted ${item.name}. Please wait.`,
                 });
 
@@ -208,7 +212,7 @@ export function deletePool(item?: PoolInfo): SchedulingThunkAction {
                         data: {error},
                     });
 
-                    return Promise.reject();
+                    return Promise.reject(error);
                 }
                 return null;
             });
@@ -248,7 +252,7 @@ interface SetResourceGuaranteeParams {
 
 export function setPoolAttributes(params: SetResourceGuaranteeParams) {
     const {poolPath, values, initials, tree} = params;
-    if (_.isEmpty(values)) {
+    if (isEmpty_(values)) {
         return Promise.resolve();
     }
 
@@ -257,7 +261,7 @@ export function setPoolAttributes(params: SetResourceGuaranteeParams) {
 
     const {guaranteeType, ...restValues} = values;
 
-    _.forEach(restValues, (v, k) => {
+    forEach_(restValues, (v, k) => {
         const {limit, source} = v || {};
         const key = k as keyof typeof restValues;
 
@@ -292,20 +296,20 @@ interface TransferPoolQuotaParams {
 }
 
 function transferPoolQuota({poolPath, transferData, tree}: TransferPoolQuotaParams) {
-    if (_.isEmpty(transferData)) {
+    if (isEmpty_(transferData)) {
         return Promise.resolve();
     }
     const tmp = poolPath.split('/');
     const dstPool = tmp[tmp.length - 1];
 
-    const requests = _.map(transferData, (v) => {
+    const requests = map_(transferData, (v) => {
         const {diff, source, path} = v;
         const transferPath = path.startsWith(INTEGRAL_GUARANTEES_PREFIX)
             ? path.substr(INTEGRAL_GUARANTEES_PREFIX.length)
             : path;
         const dotPath = transferPath.replace(/\//g, '.');
 
-        const delta = _.update({}, dotPath, () => Math.abs(diff));
+        const delta = update_({}, dotPath, () => Math.abs(diff));
 
         return {
             command: 'transfer_pool_resources' as const,

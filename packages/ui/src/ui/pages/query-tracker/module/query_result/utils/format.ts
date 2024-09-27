@@ -10,6 +10,7 @@ const defaultSettings: UnipikaSettings = {
     omitStructNull: true,
     maxListSize: 50,
     maxStringSize: undefined,
+    treatValAsData: true,
 };
 
 export function convert(
@@ -97,8 +98,8 @@ export function prepareFormattedValue(
             convertedValue === fullValue
                 ? $formattedValue
                 : formatValue
-                ? formatResults(fullValue, {...settings, maxStringSize: undefined})
-                : '',
+                  ? formatResults(fullValue, {...settings, maxStringSize: undefined})
+                  : '',
         $rawValue,
     };
 }

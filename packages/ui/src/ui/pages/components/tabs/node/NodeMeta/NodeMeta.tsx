@@ -1,7 +1,9 @@
 import React from 'react';
 import {useSelector} from 'react-redux';
 import cn from 'bem-cn-lite';
-import _ from 'lodash';
+
+import compact_ from 'lodash/compact';
+import map_ from 'lodash/map';
 
 import hammer from '../../../../../common/hammer';
 import Label from '../../../../../components/Label/Label';
@@ -28,7 +30,7 @@ function getStateTheme(state: Node['state']) {
 
 interface Props {
     state: Node['state'];
-    systemTags: Node['systemTags'];
+    tags: Node['tags'];
     userTags: Node['userTags'];
     rack: Node['rack'];
     banned: Node['banned'];
@@ -48,7 +50,7 @@ interface Props {
 
 function NodeMeta({
     state,
-    systemTags,
+    tags,
     userTags,
     rack,
     banned,
@@ -107,24 +109,24 @@ function NodeMeta({
                 visible: alertCount! > 0,
             },
             {
-                key: 'scheduler jobs',
+                key: 'scheduler_jobs',
                 value: renderLabel(disableJobs),
             },
             {
-                key: 'write sessions',
+                key: 'write_sessions',
                 value: renderLabel(disableWriteSession),
             },
             {
-                key: 'tablet cells',
+                key: 'tablet_cells',
                 value: renderLabel(disableTabletCells),
             },
             {
-                key: 'data center',
+                key: 'data_center',
                 value: dataCenter?.toUpperCase(),
                 visible: Boolean(dataCenter),
             },
             {
-                key: 'last seen',
+                key: 'last_seen',
                 value: hammer.format['DateTime'](lastSeenTime, {
                     format: 'full',
                 }),
@@ -150,17 +152,17 @@ function NodeMeta({
     const tagsItems = React.useMemo(
         () => [
             {
-                key: 'system tags',
-                value: <Tags items={systemTags} />,
-                visible: Boolean(systemTags?.length),
+                key: 'tags',
+                value: <Tags items={tags} />,
+                visible: Boolean(tags?.length),
             },
             {
-                key: 'user tags',
+                key: 'user_tags',
                 value: <Tags items={userTags} />,
                 visible: Boolean(userTags?.length),
             },
         ],
-        [systemTags, userTags],
+        [tags, userTags],
     );
 
     const urlItems = React.useMemo(() => {
@@ -175,7 +177,7 @@ function NodeMeta({
         <div className={block()}>
             <MetaTable
                 className={block('column', {type: 'meta'})}
-                items={_.compact([metaTableItems, tagsItems, urlItems])}
+                items={compact_([metaTableItems, tagsItems, urlItems])}
             />
         </div>
     );
@@ -184,7 +186,7 @@ function NodeMeta({
 function Tags({items}: {items?: Array<string>}) {
     return (
         <div className={block('tags')}>
-            {_.map(items, (tag) => (
+            {map_(items, (tag) => (
                 <Label key={tag} text={tag} />
             ))}
         </div>

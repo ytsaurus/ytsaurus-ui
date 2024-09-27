@@ -1,4 +1,7 @@
-import _ from 'lodash';
+import forEach_ from 'lodash/forEach';
+import keys_ from 'lodash/keys';
+import map_ from 'lodash/map';
+
 import ypath from '../../../common/thor/ypath';
 import hammer from '../../../common/hammer';
 import {Toaster} from '@gravity-ui/uikit';
@@ -58,20 +61,20 @@ function prepareChunkCells(chunks) {
         },
     };
 
-    _.each(chunks.chunks.multicell_count, (count, cellTag) => {
+    forEach_(chunks.chunks.multicell_count, (count, cellTag) => {
         cells[cellTag] = {
             total: count,
         };
     });
 
-    _.each(chunkTypes, (type) => {
+    forEach_(chunkTypes, (type) => {
         type = type.name;
 
         if (chunks[type]) {
             // Some chunks types may not exist on cluster, e.g. foreign chunks
             cells['total'][type] = chunks[type].count;
 
-            _.each(chunks[type].multicell_count, (count, cellTag) => {
+            forEach_(chunks[type].multicell_count, (count, cellTag) => {
                 cells[cellTag][type] = count;
             });
         }
@@ -85,7 +88,7 @@ export function loadChunks() {
         const requests = [];
 
         let requestCounter = 0;
-        const totalRequestCounter = _.keys(chunkTypes).length;
+        const totalRequestCounter = keys_(chunkTypes).length;
         const chunks = {};
 
         function applyChangesWhenReady() {
@@ -107,7 +110,7 @@ export function loadChunks() {
             applyChangesWhenReady();
         }
 
-        _.map(chunkTypes, (chunk) => {
+        map_(chunkTypes, (chunk) => {
             requests.push({
                 command: 'get',
                 parameters: {
@@ -134,7 +137,7 @@ export function loadChunks() {
 
         return ytApiV3Id.executeBatch(YTApiId.systemChunks, {requests}).then((data) => {
             const chunksData = data.slice(0, data.length - 1);
-            _.forEach(chunksData, ({error, output}, index) => {
+            forEach_(chunksData, ({error, output}, index) => {
                 if (error) {
                     Promise.reject(error).catch(applyChangesWhenReady);
                 } else {
@@ -176,7 +179,7 @@ export function loadChunks() {
                     toaster.add({
                         name: 'load/system/chunks',
                         autoHiding: false,
-                        type: 'error',
+                        theme: 'danger',
                         content: `[code ${code}] ${message}`,
                         title: 'Could not load Chunks',
                         actions: [

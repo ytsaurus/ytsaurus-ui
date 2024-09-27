@@ -1,6 +1,6 @@
 import {SVGIconData} from '@gravity-ui/uikit/build/esm/components/Icon/types';
 import {MetaTableItem} from './components/MetaTable/MetaTable';
-import _ from 'lodash';
+import forEach_ from 'lodash/forEach';
 import React from 'react';
 import {Reducer} from 'redux';
 import {PathParameters} from './store/location';
@@ -30,6 +30,9 @@ import {PreparedRole} from './utils/acl';
 import {UISettingsMonitoring} from '../shared/ui-settings';
 import {DefaultSubjectCard, type SubjectCardProps} from './components/SubjectLink/SubjectLink';
 import type {QueryItem} from './pages/query-tracker/module/api';
+import type {DropdownMenuItem} from '@gravity-ui/uikit';
+import {CUSTOM_QUERY_REQULT_TAB} from './pages/query-tracker/QueryResultsVisualization';
+import type Node from './utils/navigation/content/map-nodes/node';
 
 type HeaderItemOrPage =
     | {
@@ -94,6 +97,13 @@ export interface OperationMonitoringTabProps {
         pools?: Array<{pool: string; tree: string; slotIndex?: number}>;
     };
 }
+
+export type NavigationFlowMonitoringProps = {
+    cluster: string;
+    monitoring_cluster?: string;
+    monitoring_project?: string;
+    attributes: unknown;
+};
 
 export type AclRoleActionsType = Partial<Omit<PreparedAclSubject | PreparedRole, 'type'>> & {
     type?: string;
@@ -193,6 +203,14 @@ export interface UIFactory {
         | undefined
         | {
               component?: React.ComponentType<{cluster: string; alias: string}>;
+              urlTemplate?: string;
+              title?: string;
+          };
+
+    getMonitoringComponentForNavigationFlow():
+        | undefined
+        | {
+              component?: React.ComponentType<NavigationFlowMonitoringProps>;
               urlTemplate?: string;
               title?: string;
           };
@@ -404,6 +422,18 @@ export interface UIFactory {
     onChytAliasSqlClick(params: {alias: string; cluster: string}): void;
 
     getNavigationExtraTabs(): Array<ExtraTab>;
+
+    getMapNodeExtraCreateActions(baseActions: Array<DropdownMenuItem>): {
+        menuItems: Array<DropdownMenuItem>;
+        renderModals: () => React.ReactNode;
+    };
+
+    getNavigationMapNodeSettings():
+        | undefined
+        | {
+              additionalAttributes: Array<string>;
+              renderNodeIcon: (item: Node) => React.ReactNode;
+          };
 }
 
 const experimentalPages: string[] = [];
@@ -508,6 +538,15 @@ const uiFactory: UIFactory = {
 
         return {urlTemplate, title};
     },
+    getMonitoringComponentForNavigationFlow() {
+        const {urlTemplate, title} = uiSettings.navigationFlowMonitoring ?? {};
+        if (!urlTemplate) {
+            return undefined;
+        }
+
+        return {urlTemplate, title};
+    },
+
     getStatisticsComponentForAccount() {
         return undefined;
     },
@@ -647,7 +686,7 @@ const uiFactory: UIFactory = {
     },
 
     getCustomQueryResultTab() {
-        return undefined;
+        return CUSTOM_QUERY_REQULT_TAB;
     },
 
     getExternalSettings() {
@@ -681,6 +720,17 @@ const uiFactory: UIFactory = {
     getNavigationExtraTabs() {
         return [];
     },
+
+    getMapNodeExtraCreateActions(baseActions) {
+        return {
+            menuItems: baseActions,
+            renderModals: () => undefined,
+        };
+    },
+
+    getNavigationMapNodeSettings() {
+        return undefined;
+    },
 };
 
 function configureUIFactoryItem<K extends keyof UIFactory>(k: K, redefinition: UIFactory[K]) {
@@ -688,7 +738,7 @@ function configureUIFactoryItem<K extends keyof UIFactory>(k: K, redefinition: U
 }
 
 export function configureUIFactory(overrides: Partial<UIFactory>) {
-    _.forEach(overrides, (_v, k) => {
+    forEach_(overrides, (_v, k) => {
         const key = k as keyof UIFactory;
         configureUIFactoryItem(key, overrides[key]!);
     });

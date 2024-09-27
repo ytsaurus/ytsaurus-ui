@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.3.1](https://github.com/ytsaurus/ytsaurus-ui/compare/interface-helpers-v0.3.0...interface-helpers-v0.3.1) (2024-07-25)
+
+
+### Bug Fixes
+
+* **package.json:** fix for 'repository.url' ([72f7a8f](https://github.com/ytsaurus/ytsaurus-ui/commit/72f7a8f95e295b7a267f5ef1627bb013260fbe1f))
+
 ## [0.3.0](https://github.com/ytsaurus/ytsaurus-ui/compare/interface-helpers-v0.2.0...interface-helpers-v0.3.0) (2024-02-01)
 
 

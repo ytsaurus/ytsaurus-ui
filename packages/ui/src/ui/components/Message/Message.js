@@ -1,16 +1,21 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import cn from 'bem-cn-lite';
-import _ from 'lodash';
+
+import map_ from 'lodash/map';
 
 import Button from '../../components/Button/Button';
 import Icon from '../../components/Icon/Icon';
 
 const block = cn('elements-message');
 
-export default function Message(props) {
-    const {theme, showClose, dismissCallback, content, buttons} = props;
-
+export default function Message({
+    theme = 'default',
+    showClose = false,
+    dismissCallback,
+    content,
+    buttons,
+}) {
     return (
         <div className={block({theme})}>
             {showClose && (
@@ -23,7 +28,7 @@ export default function Message(props) {
 
             {React.isValidElement(content)
                 ? {content}
-                : _.map(content, (data, index) => (
+                : map_(content, (data, index) => (
                       <p key={index} className={block('paragraph')}>
                           {data}
                       </p>
@@ -31,7 +36,7 @@ export default function Message(props) {
 
             {buttons && (
                 <div className={block('buttons')}>
-                    {_.map(buttons, (button) => (
+                    {map_(buttons, (button) => (
                         <span className={block('button')} key={button.text}>
                             <Button size="m" title={button.text} onClick={button.callback}>
                                 {button.text}
@@ -56,8 +61,4 @@ Message.propTypes = {
     },
     content: PropTypes.oneOfType([PropTypes.node, PropTypes.arrayOf(PropTypes.string)]).isRequired,
     buttons: PropTypes.arrayOf(PropTypes.object),
-};
-Message.defaultProps = {
-    theme: 'default',
-    showClose: false,
 };

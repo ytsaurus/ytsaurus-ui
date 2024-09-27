@@ -10,6 +10,7 @@ const YT = (window as any).YT;
 
 interface Props {
     name: string;
+    cluster?: string;
     path: string;
     originalPath: string;
     transaction: string;
@@ -23,6 +24,7 @@ interface Props {
 export default function OperationIOLink(props: Props) {
     const {
         name,
+        cluster,
         path,
         originalPath,
         transaction,
@@ -33,13 +35,16 @@ export default function OperationIOLink(props: Props) {
         theme,
     } = props;
 
+    const pathCluster = cluster ?? YT.cluster;
+
     const query = paramsToQuery({path, t: transaction});
-    const url = remote ? itemUrl : `/${YT.cluster}/${Page.NAVIGATION}?${query}`;
+    const url = remote ? itemUrl : `/${pathCluster}/${Page.NAVIGATION}?${query}`;
     const originalQuery = paramsToQuery({path: originalPath});
-    const originalUrl = `/${YT.cluster}/${Page.NAVIGATION}?${originalQuery}`;
+    const originalUrl = `/${pathCluster}/${Page.NAVIGATION}?${originalQuery}`;
 
     return isFolder ? (
         <Link theme={theme} className={className} url={url} title={path}>
+            {cluster ? `${cluster}:` : undefined}
             {path}
         </Link>
     ) : (
@@ -49,6 +54,7 @@ export default function OperationIOLink(props: Props) {
             url={originalPath ? originalUrl : url}
             title={originalPath || path || name}
         >
+            {cluster ? `${cluster}:` : undefined}
             {originalPath || path || name}
         </Link>
     );

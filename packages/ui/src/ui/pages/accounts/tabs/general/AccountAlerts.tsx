@@ -1,5 +1,7 @@
 import React from 'react';
-import _ from 'lodash';
+
+import map_ from 'lodash/map';
+
 import cn from 'bem-cn-lite';
 
 import format from '../../../../common/hammer/format';
@@ -30,7 +32,7 @@ function AccountAlerts({account}: Props) {
                 <br /> by the account or its children:
             </div>
             <MetaTable
-                items={_.map(alerts, (value, path) => {
+                items={map_(alerts, (value, path) => {
                     return {
                         key: path,
                         label: readablePath(path),

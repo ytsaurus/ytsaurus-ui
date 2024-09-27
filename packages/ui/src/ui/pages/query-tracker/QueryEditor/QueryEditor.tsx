@@ -1,9 +1,8 @@
 import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import MonacoEditor, {MonacoEditorConfig} from '../../../components/MonacoEditor';
-import {MonacoContext} from '../context/MonacoContext';
 import block from 'bem-cn-lite';
 import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
-import {Button, Icon, Loader} from '@gravity-ui/uikit';
+import {Button, Flex, Icon, Loader} from '@gravity-ui/uikit';
 
 import playIcon from '../../../assets/img/svg/play.svg';
 import {useDispatch, useSelector} from 'react-redux';
@@ -36,6 +35,9 @@ import {QueryEngine} from '../module/engines';
 import {MonacoLanguage} from '../../../constants/monaco';
 import hammer from '../../../common/hammer';
 import {updateTitle} from '../../../store/actions/global';
+import {EditQueryACOModal} from '../QueryACO/EditQueryACOModal/EditQueryACOModal';
+import {ShareButton} from '../QueryResults/ShareButton';
+import {WaitForFont} from '../../../containers/WaitForFont/WaitForFont';
 
 const b = block('query-container');
 
@@ -87,21 +89,20 @@ const QueryEditorView = React.memo(function QueryEditorView({
 
     useEffect(() => {
         const runQueryByKey = (e: KeyboardEvent) => {
-            if (e.ctrlKey || e.metaKey) {
-                if (e.key === 'Enter' || e.key === 'e') {
-                    runQueryCallback();
-                    e.preventDefault();
-                }
-            }
-            if (e.key === 'F8') {
-                runQueryCallback();
+            const isCtrlOrMetaPressed = e.ctrlKey || e.metaKey;
+            const isEnterOrEKeyPressed = e.key === 'Enter' || e.key === 'e';
+            const isF8KeyPressed = e.key === 'F8';
+
+            if ((isCtrlOrMetaPressed && isEnterOrEKeyPressed) || isF8KeyPressed) {
                 e.preventDefault();
+                e.stopPropagation();
+                runQueryCallback();
             }
         };
 
-        document.addEventListener('keyup', runQueryByKey);
+        document.addEventListener('keydown', runQueryByKey);
         return () => {
-            document.removeEventListener('keyup', runQueryByKey);
+            document.removeEventListener('keydown', runQueryByKey);
         };
     }, [runQueryCallback]);
 
@@ -181,39 +182,28 @@ const QueryEditorView = React.memo(function QueryEditorView({
 
     return (
         <div className={b('query')}>
-            <MonacoEditor
-                editorRef={editorRef}
-                value={text || ''}
-                language={getLanguageByEngine(engine)}
-                className={b('editor')}
-                onChange={updateQueryText}
-                monacoConfig={monacoConfig}
-            />
+            <WaitForFont>
+                <MonacoEditor
+                    editorRef={editorRef}
+                    value={text || ''}
+                    language={getLanguageByEngine(engine)}
+                    className={b('editor')}
+                    onChange={updateQueryText}
+                    monacoConfig={monacoConfig}
+                />
+            </WaitForFont>
             <div className={b('actions')}>
                 <div className="query-run-action">
-                    <Button
-                        qa="qt-run"
-                        view="action"
-                        onClick={runQueryCallback}
-                        className={b('action-button')}
-                    >
+                    <Button qa="qt-run" view="action" onClick={runQueryCallback}>
                         <Icon data={playIcon} />
                         Run
                     </Button>
                     {engine === QueryEngine.YQL ? (
                         <>
-                            <Button
-                                qa="qt-validate"
-                                className={b('action-button')}
-                                onClick={validateQueryCallback}
-                            >
+                            <Button qa="qt-validate" onClick={validateQueryCallback}>
                                 Validate
                             </Button>
-                            <Button
-                                qa="qt-explain"
-                                className={b('action-button')}
-                                onClick={explainQueryCallback}
-                            >
+                            <Button qa="qt-explain" onClick={explainQueryCallback}>
                                 Explain
                             </Button>
                         </>
@@ -241,6 +231,10 @@ const ResultView = React.memo(function ResultView({
             minimized={resultViewMode === 'minimized'}
             toolbar={
                 <>
+                    <Flex gap={2} className={b('results-toolbar-buttons')}>
+                        <ShareButton />
+                        <EditQueryACOModal query_id={query.id} />
+                    </Flex>
                     {resultViewMode === 'split' ? (
                         <Button
                             className={b('meta-action')}
@@ -316,7 +310,7 @@ export default function QueryEditor({
     const isLoading = isQueryTrackerInfoLoading || isMainQueryLoading;
 
     return (
-        <MonacoContext.Provider value={new Map()}>
+        <>
             {isLoading && (
                 <div className={b('loading')}>
                     <Loader />
@@ -338,6 +332,6 @@ export default function QueryEditor({
                     />
                 )}
             </FlexSplitPane>
-        </MonacoContext.Provider>
+        </>
     );
 }

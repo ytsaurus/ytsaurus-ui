@@ -39,7 +39,7 @@ export interface SchedulingEphemeralState {
 
     isNewPools: boolean;
 
-    schedulerAlerts: Array<SchedulingAlert>;
+    schedulerAlerts: Array<YTError>;
     treeResources: TreeResources;
     trees: Array<string>;
 
@@ -59,8 +59,6 @@ export interface TreeResources {
     resource_distribution_info?: Record<string, unknown>;
     config?: unknown;
 }
-
-export interface SchedulingAlert {}
 
 export interface SchedulingPersistentState {
     treeState: 'collapsed' | 'expanded';

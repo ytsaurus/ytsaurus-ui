@@ -8,7 +8,7 @@ import {RootState} from '../../../store/reducers';
 import {ChytInfo} from '../../../store/reducers/chyt/list';
 import {SortState} from '../../../types';
 import {multiSortBySortStateArray} from '../../../utils/sort-helpers';
-import {ChytListAttributes} from '../../../store/actions/chyt/api';
+import {StrawberryListAttributes} from '../../../utils/strawberryControllerApi';
 import {getSettingsData} from '../settings-base';
 
 export const getChytListData = (state: RootState) => state.chyt.list.data;
@@ -35,7 +35,7 @@ export const getChytListFilterHealth = (state: RootState) => state.chyt.listFilt
 export const getChytListFilterCreator = (state: RootState) => state.chyt.listFilters.creator;
 export const getChytListFilterState = (state: RootState) => state.chyt.listFilters.state;
 
-type ChytListColumns = Exclude<ChytListAttributes, 'yt_operation_id'>;
+type ChytListColumns = Exclude<StrawberryListAttributes, 'yt_operation_id'>;
 const CHYT_LIST_SELECTABLE_COLUMNS: Record<Exclude<ChytListColumns, 'health_reason'>, true> = {
     instance_count: true,
     total_cpu: true,
@@ -111,15 +111,18 @@ export const getChytListTableSortState = (state: RootState) => state.chyt.listFi
 export const getChytListTableSortStateByName = createSelector(
     [getChytListTableSortState],
     (sortState) => {
-        return sortState.reduce((acc, item, index) => {
-            if (item.column) {
-                acc[item.column] = {
-                    ...item,
-                    multisortIndex: sortState.length > 1 ? index + 1 : undefined,
-                };
-            }
-            return acc;
-        }, {} as Record<keyof ChytInfo, SortState<keyof ChytInfo> & {multisortIndex?: number}>);
+        return sortState.reduce(
+            (acc, item, index) => {
+                if (item.column) {
+                    acc[item.column] = {
+                        ...item,
+                        multisortIndex: sortState.length > 1 ? index + 1 : undefined,
+                    };
+                }
+                return acc;
+            },
+            {} as Record<keyof ChytInfo, SortState<keyof ChytInfo> & {multisortIndex?: number}>,
+        );
     },
 );
 

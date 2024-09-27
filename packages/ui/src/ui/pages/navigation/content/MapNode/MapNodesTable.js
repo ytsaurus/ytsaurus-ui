@@ -1,8 +1,9 @@
 import React, {Component} from 'react';
-import {connect, useSelector} from 'react-redux';
+import {batch, connect, useSelector} from 'react-redux';
 import PropTypes from 'prop-types';
 import cn from 'bem-cn-lite';
-import _ from 'lodash';
+
+import findIndex_ from 'lodash/findIndex';
 
 import {
     FormattedLink,
@@ -31,7 +32,12 @@ import {
 } from '../../../../store/selectors/navigation/content/map-node';
 import {getTransaction} from '../../../../store/selectors/navigation';
 
-import {navigateParent, updatePath, updateView} from '../../../../store/actions/navigation';
+import {
+    navigateParent,
+    setMode,
+    updatePath,
+    updateView,
+} from '../../../../store/actions/navigation';
 import {setSelectedItem} from '../../../../store/actions/navigation/content/map-node';
 
 import {ROOT_POOL_NAME, Tab as SchedulingTab} from '../../../../constants/scheduling';
@@ -51,6 +57,7 @@ import PathActions from './PathActions';
 import {Tooltip} from '../../../../components/Tooltip/Tooltip';
 import WarningIcon from '../../../../components/WarningIcon/WarningIcon';
 import TTLInfo from '../../../../components/TTLInfo/TTLInfo';
+import UIFactory from '../../../../UIFactory';
 
 import './MapNodesTable.scss';
 
@@ -58,8 +65,10 @@ const block = cn('map-nodes-table');
 const ElementsTable = withKeyboardNavigation(ElementsTableBase);
 
 export function renderMapNodesTableIcon(item) {
-    let icon;
-    if (MapNodesTable.isTrashNode(item) || MapNodesTable.isLinkToTrashNode(item)) {
+    let icon = UIFactory.getNavigationMapNodeSettings()?.renderNodeIcon(item);
+    if (icon) {
+        // do nothing
+    } else if (MapNodesTable.isTrashNode(item) || MapNodesTable.isLinkToTrashNode(item)) {
         icon = <Icon awesome="trash-alt" />;
     } else {
         icon = <Icon awesome={getIconNameForType(item.iconType, item.targetPathBroken)} />;
@@ -161,7 +170,7 @@ class MapNodesTable extends Component {
         );
 
         if (type === 'scheduler_pool') {
-            const poolTreeIndex = _.findIndex(
+            const poolTreeIndex = findIndex_(
                 item.parsedPath.fragments,
                 (fragment) => fragment.name === 'pool_trees',
             );
@@ -229,7 +238,7 @@ class MapNodesTable extends Component {
     }
 
     static renderAccount(item, columnName) {
-        return <AccountLink account={item[columnName]} />;
+        return <AccountLink account={item[columnName]} inline />;
     }
 
     get hotkeys() {
@@ -316,7 +325,10 @@ class MapNodesTable extends Component {
         if (item.parsedPathError) {
             showErrorPopup(item.parsedPathError, {hideOopsMsg: true, disableLogger: true});
         } else if (itemNavigationAllowed(item)) {
-            this.props.updatePath(item.path);
+            batch(() => {
+                this.props.updatePath(item.path);
+                this.props.setMode('auto');
+            });
         }
     };
 
@@ -412,6 +424,7 @@ const mapDispatchToProps = {
     navigateParent,
     updateView,
     updatePath,
+    setMode,
     showTableEraseModal,
     showTableSortModal,
     showTableMergeModal,

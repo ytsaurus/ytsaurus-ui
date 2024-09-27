@@ -1,4 +1,7 @@
-import _ from 'lodash';
+import filter_ from 'lodash/filter';
+import map_ from 'lodash/map';
+import reverse_ from 'lodash/reverse';
+
 import Columns from '../../../../utils/navigation/content/table/columns';
 
 export function parseErrorFromResponse(data) {
@@ -23,7 +26,7 @@ export function parseErrorFromResponse(data) {
 
 export function prepareRows(rowData, reverseRows = false) {
     const data = JSON.parse(rowData);
-    const rows = reverseRows ? _.reverse(data.rows) : data.rows;
+    const rows = reverseRows ? reverse_(data.rows) : data.rows;
     return {
         rows: rows,
         columns: data.all_column_names,
@@ -33,7 +36,7 @@ export function prepareRows(rowData, reverseRows = false) {
 
 export function getColumnsValues(row, keyColumns) {
     return (
-        row && _.map(keyColumns, (keyColumnName) => row[Columns.escapeSpecialColumn(keyColumnName)])
+        row && map_(keyColumns, (keyColumnName) => row[Columns.escapeSpecialColumn(keyColumnName)])
     );
 }
 
@@ -60,17 +63,13 @@ export function getRequestOutputFormat(
     defaultTableColumnLimit,
     useYqlTypes,
 ) {
-    const filteredColumns = _.filter(columns, (column) => column.checked || column.keyColumn);
-    const columnNames = _.map(filteredColumns, (column) => column.name);
-    const outputFormat = {
-        $value: 'web_json',
-        $attributes: {
-            field_weight_limit: stringLimit,
-            string_weight_limit: Math.round(stringLimit / 10),
-            max_selected_column_count: defaultTableColumnLimit,
-            max_all_column_names_count: 3000,
-        },
-    };
+    const filteredColumns = filter_(columns, (column) => column.checked || column.keyColumn);
+    const columnNames = map_(filteredColumns, (column) => column.name);
+    const outputFormat = getDefaultRequestOutputFormat({
+        stringLimit,
+        defaultTableColumnLimit,
+        columnNamesLimit: 3000,
+    });
     if (useYqlTypes) {
         outputFormat.$attributes.value_format = 'yql';
     }
@@ -78,6 +77,22 @@ export function getRequestOutputFormat(
         outputFormat.$attributes.column_names = columnNames;
     }
     return outputFormat;
+}
+
+export function getDefaultRequestOutputFormat({
+    stringLimit,
+    tableColumnLimit = undefined,
+    columnNamesLimit = undefined,
+}) {
+    return {
+        $value: 'web_json',
+        $attributes: {
+            field_weight_limit: stringLimit,
+            string_weight_limit: stringLimit ? Math.round(stringLimit / 10) : undefined,
+            max_selected_column_count: tableColumnLimit,
+            max_all_column_names_count: columnNamesLimit,
+        },
+    };
 }
 
 export function getParsedError(error) {

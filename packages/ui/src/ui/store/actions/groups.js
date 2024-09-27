@@ -1,4 +1,6 @@
-import _ from 'lodash';
+import concat_ from 'lodash/concat';
+import filter_ from 'lodash/filter';
+import forEach_ from 'lodash/forEach';
 
 import {
     GROUPS_TABLE,
@@ -28,7 +30,7 @@ export function fetchGroups() {
         return listAllGroups(YTApiId.groupsData, {attributes: GROUP_ATTRIBUTES})
             .then((data) => {
                 const groups = [];
-                _.forEach(data, (item) => {
+                forEach_(data, (item) => {
                     const {
                         $value: name,
                         $attributes: {members, member_of: memberOf = [], upravlyator_managed: idm},
@@ -153,7 +155,7 @@ function calculateMembers(members, toAdd, toRemove) {
     }
 
     const [rmUsers, rmGroups] = mapsByNameFromSubjects(toRemove);
-    const afterRemove = _.filter(members, ({user, group}) => {
+    const afterRemove = filter_(members, ({user, group}) => {
         if (user) {
             return !rmUsers.has(user);
         } else {
@@ -161,13 +163,13 @@ function calculateMembers(members, toAdd, toRemove) {
         }
     });
 
-    return _.concat(afterRemove, toAdd);
+    return concat_(afterRemove, toAdd);
 }
 
 function mapsByNameFromSubjects(subjects) {
     const userMap = new Map();
     const groupMap = new Map();
-    _.forEach(subjects, (item) => {
+    forEach_(subjects, (item) => {
         const {user, group} = item;
         if (user) {
             userMap.set(user, item);

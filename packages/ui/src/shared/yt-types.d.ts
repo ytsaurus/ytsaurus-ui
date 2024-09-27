@@ -23,6 +23,12 @@ export interface ClusterUiConfig {
     enable_maintenance_api_nodes?: boolean;
     enable_maintenance_api_proxies?: boolean;
     chyt_controller_base_url?: string;
+    livy_controller_base_url?: string;
+    job_trace_url_template?: {
+        title: string;
+        url_template: string;
+        enforce_for_trees?: Array<string>;
+    };
 }
 
 export type CypressNode<AttributesT extends Record<string, unknown>, ValueT> = {
@@ -94,6 +100,20 @@ export interface ClusterConfig {
         icon2x: string;
         iconbig?: string;
     };
+
+    /**
+     * Allows to override default title and text on login page, accepts HTML string.
+     */
+    loginPageSettings?: {
+        title?: string;
+        text?: string;
+    };
+
+    operationPageSettings?: {
+        disableOptimizationForYTFRONT2838: boolean;
+    };
+
+    uiSettings?: Partial<Pick<UISettings, 'uploadTableExcelBaseUrl' | 'exportTableBaseurl'>>;
 }
 
 export interface SubRequest<K extends string, T extends BaseBatchParams> {
@@ -261,3 +281,60 @@ export interface ConfigData {
     allowUserColumnPresets?: boolean;
     odinPageEnabled: boolean;
 }
+
+export type PipelineParams = {
+    pipeline_path: string;
+};
+
+export type ExpectedVersion = {
+    expected_version?: string | number;
+};
+
+export type GetPipelineStateData =
+    | 'Unknown'
+    | 'Stopped'
+    | 'Paused'
+    | 'Working'
+    | 'Draining'
+    | 'Pausing'
+    | 'Completed';
+
+export type GetFlowViewData = {
+    execution_spec: {
+        layout: {
+            value: {
+                jobs: Record<FlowViewJobId, FlowViewJobInfo>;
+                partitions: Record<FlowViewPartitionId, FlwoViewPartitionInfo>;
+            };
+        };
+    };
+    workers: Record<FlowViewWorkerId, FlowViewWorkerInfo>;
+};
+
+type FlowViewJobId = string;
+type FlowViewPartitionId = string;
+type FlowViewWorkerId = string;
+
+export type FlwoViewPartitionInfo = {
+    computation_id: FlowViewPartitionId;
+    lower_key: Array<unkonwn>;
+    upper_key: Arary<unknown>;
+    parameters: unknown;
+    partition_id: string;
+    state: 'executing';
+    state_epoch: number;
+    state_timestamp: string;
+    current_job_id?: FlowViewJobId;
+};
+
+export type FlowViewJobInfo = {
+    job_id: FlowViewJobId;
+    lease_id: string;
+    partition_id: FlowViewPartitionId;
+    worker_address: string;
+    worker_incarnation_id: string;
+};
+
+export type FlowViewWorkerInfo = {
+    address: FlowViewWorkerId;
+};

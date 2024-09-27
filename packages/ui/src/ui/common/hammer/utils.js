@@ -1,4 +1,9 @@
-import _ from 'lodash';
+import each_ from 'lodash/each';
+import extend_ from 'lodash/extend';
+import isFunction_ from 'lodash/isFunction';
+import map_ from 'lodash/map';
+import reduce_ from 'lodash/reduce';
+
 import {compareVectors, compareWithUndefined} from '../../utils/sort-helpers';
 import hammer from '@ytsaurus/interface-helpers/lib/hammer';
 
@@ -21,7 +26,7 @@ utils.objectToArray = function (input, keyName, valueName) {
             if (valueName) {
                 item[valueName] = input[key];
             } else {
-                item = _.extend(item, input[key]);
+                item = extend_(item, input[key]);
             }
 
             if (keyName) {
@@ -63,19 +68,19 @@ utils.sortInPredefinedOrder = function (predefinedOrder, list, property) {
 };
 
 function getSelectorFromField(field) {
-    return field.sort && _.isFunction(field.sort) ? field.sort : field.get;
+    return field.sort && isFunction_(field.sort) ? field.sort : field.get;
 }
 
 function prepareFieldSelectors(fields) {
     const fieldSelectors = {};
 
-    _.each(fields, (field, fieldKey) => {
+    each_(fields, (field, fieldKey) => {
         const isGroupField = field.group;
 
         if (isGroupField) {
             const groupFields = field.items;
 
-            _.each(groupFields, (groupField, groupFieldKey) => {
+            each_(groupFields, (groupField, groupFieldKey) => {
                 const actualFieldKey = fieldKey + '_' + groupFieldKey;
 
                 fieldSelectors[actualFieldKey] = getSelectorFromField(groupField);
@@ -166,7 +171,7 @@ utils.getSortByFieldAction = function (sortInfo, fieldName) {
 utils.getState = function (page, parameters) {
     const state = {page: page};
 
-    _.extend(state, parameters);
+    extend_(state, parameters);
 
     return state;
 };
@@ -197,7 +202,7 @@ utils.getNavigationState = function (path, transaction) {
 utils.toCamelCase = function (property, delimiter) {
     let camelCaseProperty = property.split(delimiter || '_');
 
-    camelCaseProperty = _.map(camelCaseProperty, (item) => {
+    camelCaseProperty = map_(camelCaseProperty, (item) => {
         return item.charAt(0).toUpperCase() + item.slice(1);
     });
 
@@ -217,7 +222,7 @@ utils.toArray = function (value) {
 };
 
 utils.sumArray = function (value) {
-    return _.reduce(
+    return reduce_(
         value,
         (total, summand) => {
             return total + summand;
@@ -227,7 +232,7 @@ utils.sumArray = function (value) {
 };
 
 utils.mapToYSONList = function (map) {
-    return _.map(map, (attributes, value) => {
+    return map_(map, (attributes, value) => {
         return {
             $value: value,
             $attributes: attributes,
@@ -236,7 +241,7 @@ utils.mapToYSONList = function (map) {
 };
 
 utils.listToYSONList = function (list, property) {
-    return _.map(list, (attributes) => {
+    return map_(list, (attributes) => {
         const value = attributes[property];
         return {
             $value: value,

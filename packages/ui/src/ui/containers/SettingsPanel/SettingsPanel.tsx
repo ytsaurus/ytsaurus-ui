@@ -1,7 +1,7 @@
 import React from 'react';
 import cn from 'bem-cn-lite';
-import _map from 'lodash/map';
-import _some from 'lodash/some';
+import map_ from 'lodash/map';
+import some_ from 'lodash/some';
 
 import {Settings} from '@gravity-ui/navigation';
 import {useSettingsDescription} from './settings-description';
@@ -19,15 +19,15 @@ function SettingsPanel() {
     return (
         <div className={block()}>
             <Settings>
-                {_map(data, (page, i) => {
-                    const hasItems = _some(page.sections, ({items}) => items.length > 0);
+                {map_(data, (page, i) => {
+                    const hasItems = some_(page.sections, ({items}) => items.length > 0);
                     return (
                         hasItems && (
                             <Settings.Page key={i} title={page.title} icon={iconData(page.icon)}>
-                                {_map(page.sections, (section, j) => {
+                                {map_(page.sections, (section, j) => {
                                     return (
                                         <Settings.Section key={j} title={section.title}>
-                                            {_map(section.items, (item, k) => {
+                                            {map_(section.items, (item, k) => {
                                                 return (
                                                     <Settings.Item
                                                         key={k}

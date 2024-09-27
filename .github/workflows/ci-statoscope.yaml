@@ -1,0 +1,38 @@
+name: "[ci]: Statoscope"
+
+on:
+  pull_request:
+
+jobs:
+  verify_files:
+    name: Statoscope
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Setup Node
+        uses: actions/setup-node@v2
+        with:
+          node-version: "18.x"
+          cache: "npm"
+      - name: Install Packages
+        run: npm ci
+      - name: Analyze build
+        run: |
+          cd packages/ui
+          npm run build:analyze
+          mv dist/public/build/stats.json .
+      - name: Analyze previos build
+        run: |
+          cd packages/ui
+          # TODO: checkout previous version
+          # npm ci
+          # npm run build:analyze
+          # mv dist/public/build/stats.json ./prev-stats.json
+      - name: Validate
+        run: |
+          # cd packages/ui
+          echo Not implemented yet
+

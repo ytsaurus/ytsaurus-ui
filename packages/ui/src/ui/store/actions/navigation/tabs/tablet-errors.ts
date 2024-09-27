@@ -1,4 +1,5 @@
-import _ from 'lodash';
+import reduce_ from 'lodash/reduce';
+
 import CancelHelper, {isCancelled} from '../../../../utils/cancel-helper';
 import {getPath} from '../../../../store/selectors/navigation';
 import {
@@ -12,6 +13,7 @@ import {TabletErrorsAction} from '../../../../store/reducers/navigation/tabs/tab
 import {wrapApiPromiseByToaster} from '../../../../utils/utils';
 import {loadReplicas} from '../content/replicated-table';
 import {CancelTokenSource} from 'axios';
+import {TYPED_OUTPUT_FORMAT} from '../../../../constants';
 
 const requests = new CancelHelper();
 
@@ -28,7 +30,7 @@ export function getTabletErrors(): TabletErrorsThunkAction {
 
         ytApiV4Id
             .getTabletErrors(YTApiId.navigationTabletErrors, {
-                parameters: {path},
+                parameters: {path, output_format: TYPED_OUTPUT_FORMAT},
                 cancellation: requests.removeAllAndSave,
             })
             .then((tabletErrors) => {
@@ -132,7 +134,7 @@ function loadTabletErrorsCountOfReplicatedTable({
                 skipSuccessToast: true,
             },
         ).then((data: Record<string, {error_count?: number}>) => {
-            const count = _.reduce(data, (acc, item) => acc + (item.error_count ?? 0), 0);
+            const count = reduce_(data, (acc, item) => acc + (item.error_count ?? 0), 0);
             dispatch(updateTabletErrrosCount(count, path));
         });
     };

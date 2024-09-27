@@ -1,5 +1,8 @@
 import {ThunkAction} from 'redux-thunk';
-import _ from 'lodash';
+
+import findIndex_ from 'lodash/findIndex';
+import isEqual_ from 'lodash/isEqual';
+import map_ from 'lodash/map';
 
 import {RootState} from '../reducers';
 import {getSettingsPagesOrder, getSettingsPagesPinned} from '../selectors/settings-ts';
@@ -16,9 +19,9 @@ export function togglePinnedPage(id: string): ThunkAction<any, RootState, any, a
         const orderedPages = getPagesOrderedByUser(state);
 
         const prevOrder = getSettingsPagesOrder(state);
-        const newOrder = _.map(orderedPages, 'id');
+        const newOrder = map_(orderedPages, 'id');
 
-        const itemIndex = _.findIndex(orderedPages, (item) => item.id === id);
+        const itemIndex = findIndex_(orderedPages, (item) => item.id === id);
         if (itemIndex === -1) {
             const login = getCurrentUserName(state);
             rumLogError({
@@ -34,7 +37,7 @@ export function togglePinnedPage(id: string): ThunkAction<any, RootState, any, a
         toggleBooleanInPlace(id, pinned);
         dispatch(setSettingsPagesPinned(pinned));
 
-        const afterPinned = _.findIndex(orderedPages, ({pinned}) => !pinned);
+        const afterPinned = findIndex_(orderedPages, ({pinned}) => !pinned);
 
         if (itemIndex !== -1) {
             const newState = pinned[id];
@@ -46,7 +49,7 @@ export function togglePinnedPage(id: string): ThunkAction<any, RootState, any, a
             }
         }
 
-        if (!_.isEqual(prevOrder, newOrder)) {
+        if (!isEqual_(prevOrder, newOrder)) {
             dispatch(setSettingsPagesOrder(newOrder));
         }
     };
@@ -80,7 +83,7 @@ export function setPagesItemPosition(params: {
             return;
         }
 
-        const order = _.map(orderedPages, 'id');
+        const order = map_(orderedPages, 'id');
         dispatch(setSettingsPagesOrder(order));
 
         const prev = orderedPages[newIndex - 1];

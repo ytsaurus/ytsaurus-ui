@@ -1,4 +1,5 @@
-import _ from 'lodash';
+import map_ from 'lodash/map';
+
 import React from 'react';
 import ypath from '@ytsaurus/interface-helpers/lib/ypath';
 import {Template} from '../../../components/MetaTable/templates/Template';
@@ -14,7 +15,7 @@ export default function metaTablePresetSize(attributes, mediumList) {
         '/disk_space',
     ]);
 
-    const mediumsTemplates = _.map(mediumList, (medium) => {
+    const mediumsTemplates = map_(mediumList, (medium) => {
         const usageMediumDiskSpace = ypath.getValue(
             attributes,
             `/resource_usage/disk_space_per_medium/${medium}`,

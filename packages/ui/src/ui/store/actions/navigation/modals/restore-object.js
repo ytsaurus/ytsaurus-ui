@@ -16,7 +16,9 @@ import {updateView} from '../index';
 import ypath from '../../../../common/thor/ypath';
 import yt from '@ytsaurus/javascript-wrapper/lib/yt';
 import React from 'react';
-import _ from 'lodash';
+
+import map_ from 'lodash/map';
+
 import {executeBatchWithRetries} from '../../execute-batch';
 import {YTApiId} from '../../../../rum/rum-wrap-api';
 
@@ -28,7 +30,7 @@ export function restoreObjects(items) {
         return yt.v3
             .startTransaction({})
             .then((id) => {
-                const requests = _.map(items, (node) => {
+                const requests = map_(items, (node) => {
                     const restorePath = ypath.getValue(node, '/@_restore_path');
                     return {
                         command: 'move',
@@ -58,7 +60,7 @@ export function restoreObjects(items) {
                 dispatch(updateView());
 
                 toaster.add({
-                    type: 'success',
+                    theme: 'success',
                     name: 'restore objects',
                     timeout: 10000,
                     title: 'Objects restored',
@@ -70,7 +72,7 @@ export function restoreObjects(items) {
 
                 toaster.add({
                     name: 'restore objects',
-                    type: 'error',
+                    theme: 'danger',
                     autoHiding: false,
                     title: 'Could not restore objects.',
                     content: err?.message || 'Oops, something went wrong',
@@ -97,7 +99,7 @@ export function restoreObject(objectPath, restorePath, onSuccess) {
                 }
 
                 toaster.add({
-                    type: 'success',
+                    theme: 'success',
                     name: 'restore object',
                     timeout: 10000,
                     title: 'Object restored',

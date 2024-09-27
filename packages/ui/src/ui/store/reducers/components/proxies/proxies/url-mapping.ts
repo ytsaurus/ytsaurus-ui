@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import produce from 'immer';
 
 import {initialState as proxiesInitialState} from './proxies';

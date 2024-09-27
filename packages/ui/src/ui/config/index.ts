@@ -1,8 +1,14 @@
-import _ from 'lodash';
 // TODO: get rid of the import, the file should not import UIFactory
 import UIFactory from '../UIFactory';
 
 import {getConfigData, uiSettings} from './ui-settings';
+import YT from '../config/yt-config';
+
+function getClusterSpecificUISettings(cluster: string) {
+    const clusterConfig = YT.clusters[cluster];
+
+    return {...uiSettings, ...clusterConfig?.uiSettings};
+}
 
 export function hasOdinPage() {
     return getConfigData().odinPageEnabled;
@@ -54,12 +60,20 @@ export function getQueryTrackerCluster() {
     return uiSettings.queryTrackerCluster;
 }
 
-export function getConfigUploadTable() {
+export function getConfigUploadTable({cluster}: {cluster: string}) {
+    const clusterSpecificUISettings = getClusterSpecificUISettings(cluster);
+
     return {
-        uploadTableMaxSize: uiSettings.uploadTableMaxSize ?? 1024 * 1024 * 1024,
-        uploadTableUseLocalmode: uiSettings.uploadTableUseLocalmode,
-        uploadTableExcelBaseUrl: uiSettings.uploadTableExcelBaseUrl,
+        uploadTableMaxSize: clusterSpecificUISettings.uploadTableMaxSize ?? 1024 * 1024 * 1024,
+        uploadTableUseLocalmode: clusterSpecificUISettings.uploadTableUseLocalmode,
+        uploadTableExcelBaseUrl: clusterSpecificUISettings.uploadTableExcelBaseUrl,
     };
+}
+
+export function getExportTableBaseUrl({cluster}: {cluster: string}) {
+    const clusterSpecificUISettings = getClusterSpecificUISettings(cluster);
+
+    return clusterSpecificUISettings.exportTableBaseUrl;
 }
 
 export function allowDirectDownload() {

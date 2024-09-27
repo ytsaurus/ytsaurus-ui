@@ -86,16 +86,26 @@ export function getNodes({
             })
             .then((data) => {
                 const {results, error} = splitBatchResults(data, 'Failed to get nodes');
-                dispatch({
-                    type: GET_NODES.SUCCESS,
-                    data: {
-                        nodes: [].concat(
-                            ...results.map((output) => {
-                                return ypath.getValue(output) || [];
-                            }),
-                        ),
-                    },
+
+                const outputs = results.map((output) => {
+                    return ypath.getValue(output) || [];
                 });
+
+                const nodes = [];
+
+                const collectedItems = new Set<string>();
+
+                for (const output of outputs) {
+                    for (const item of output) {
+                        const {$value: name} = item;
+                        if (!collectedItems.has(name)) {
+                            nodes.push(item);
+                            collectedItems.add(name);
+                        }
+                    }
+                }
+
+                dispatch({type: GET_NODES.SUCCESS, data: {nodes}});
 
                 if (error) {
                     throw error;

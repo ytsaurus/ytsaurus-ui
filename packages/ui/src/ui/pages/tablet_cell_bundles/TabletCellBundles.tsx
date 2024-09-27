@@ -1,6 +1,7 @@
 import React from 'react';
 import cn from 'bem-cn-lite';
-import _ from 'lodash';
+
+import reduce_ from 'lodash/reduce';
 
 import Tabs from '../../components/Tabs/Tabs';
 import {TabletsTab} from '../../constants/tablets';
@@ -79,7 +80,7 @@ export default function TabletCellBundles() {
     const allowAccounting = useSelector(getClusterUiConfigEnablePerBundleTabletAccounting);
 
     const showSettings = React.useMemo(() => {
-        return _.reduce(
+        return reduce_(
             TabletsTab,
             (acc, v) => {
                 if (v === TabletsTab.CHAOS_CELLS) {
@@ -124,7 +125,7 @@ export default function TabletCellBundles() {
     return (
         <div className="elements-page__content">
             <section className={b(null, 'elements-main-section')}>
-                <div className={b('content', 'elements-section')}>
+                <div className={b('content')}>
                     <div className={b('heading')}>
                         {activeBundle && (
                             <div className="elements-heading elements-heading_size_l">
@@ -202,7 +203,7 @@ export default function TabletCellBundles() {
                         )}
                         <Route
                             path={`/${cluster}/${Page.TABLET_CELL_BUNDLES}/${TabletsTab.ACL}`}
-                            component={BundleAclTab}
+                            render={() => <BundleAclTab className={b('acl-tab')} />}
                         />
                         <Route
                             path={`/${cluster}/${Page.TABLET_CELL_BUNDLES}`}

@@ -2,8 +2,8 @@ import React, {Fragment, useCallback} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 
 import cn from 'bem-cn-lite';
-import _map from 'lodash/map';
-import _identity from 'lodash/identity';
+import map_ from 'lodash/map';
+import identity_ from 'lodash/identity';
 
 import Select from '../../../../../../components/Select/Select';
 import JobsSuggestFilter from './JobsSuggestFilter';
@@ -44,7 +44,7 @@ function JobsFilterBy() {
             <div className={block('toolbar-filter-by-select')}>
                 <Select
                     value={[filterBy]}
-                    items={_map(['address', 'id'], (value) => {
+                    items={map_(['address', 'id'], (value) => {
                         return {value};
                     })}
                     onUpdate={(vals) => handleChange(vals[0])}
@@ -57,7 +57,7 @@ function JobsFilterBy() {
                 {filterBy === 'address' && (
                     <JobsSuggestFilter
                         name="address"
-                        statesProvider={_identity}
+                        statesProvider={identity_}
                         pin={'brick-round'}
                     />
                 )}

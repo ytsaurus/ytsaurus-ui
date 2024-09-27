@@ -1,6 +1,12 @@
 import React from 'react';
 
-import _ from 'lodash';
+import filter_ from 'lodash/filter';
+import indexOf_ from 'lodash/indexOf';
+import slice_ from 'lodash/slice';
+import sortBy_ from 'lodash/sortBy';
+import sortedIndexBy_ from 'lodash/sortedIndexBy';
+import sortedLastIndexBy_ from 'lodash/sortedLastIndexBy';
+
 import cn from 'bem-cn-lite';
 import axios from 'axios';
 
@@ -65,12 +71,12 @@ export function PoolSuggestControl(props: Props) {
             if (!tree) {
                 return;
             }
-            const noRoot = _.filter(names, (item) => '<Root>' !== item);
-            const valueIndex = _.indexOf(noRoot, value);
+            const noRoot = filter_(names, (item) => '<Root>' !== item);
+            const valueIndex = indexOf_(noRoot, value);
             if (value && -1 === valueIndex) {
                 onChange('');
             }
-            setPoolNames({items: _.sortBy(noRoot), itemsTree: tree});
+            setPoolNames({items: sortBy_(noRoot), itemsTree: tree});
             if (calculateValueOnPoolsLoaded) {
                 onChange(calculateValueOnPoolsLoaded({loadedPoolNames: noRoot}));
             }
@@ -84,14 +90,14 @@ export function PoolSuggestControl(props: Props) {
             if (!filter) {
                 return poolNames;
             }
-            const from = _.sortedIndexBy(poolNames, filter, (item) =>
+            const from = sortedIndexBy_(poolNames, filter, (item) =>
                 item.substring(0, filter.length),
             );
-            const to = _.sortedLastIndexBy(poolNames, filter, (item) =>
+            const to = sortedLastIndexBy_(poolNames, filter, (item) =>
                 item.substring(0, filter.length),
             );
 
-            const res = _.slice(poolNames, from, to);
+            const res = slice_(poolNames, from, to);
             return res;
         },
         [poolNames],
@@ -102,9 +108,14 @@ export function PoolSuggestControl(props: Props) {
             popupClassName={block('popup')}
             text={value}
             filter={getItems}
-            apply={(v) => allowEphemeral && onChange(typeof v === 'string' ? v : v.value)}
             onItemClick={(v) => onChange(typeof v === 'string' ? v : v.value)}
-            onTextUpdate={allowEmpty ? (text) => !text && onChange('') : undefined}
+            onTextUpdate={(text) => {
+                if (allowEmpty && !text) {
+                    onChange('');
+                } else if (allowEphemeral) {
+                    onChange(text);
+                }
+            }}
             placeholder={placeholder}
             disabled={disabled}
         />

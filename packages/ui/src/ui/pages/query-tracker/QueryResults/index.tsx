@@ -130,21 +130,16 @@ export const QueryResults = React.memo(function QueryResults({
                             />
                         </NotRenderUntilFirstVisible>
                         <NotRenderUntilFirstVisible
-                            hide={
-                                category !== QueryResultTab.CUSTOM_TAB &&
-                                !Number.isInteger(resultIndex)
-                            }
+                            hide={category !== QueryResultTab.CUSTOM_TAB}
                             className={b('result-wrap')}
                         >
-                            {category === QueryResultTab.CUSTOM_TAB && (
-                                <CustomQueryTabContainer query={query} />
-                            )}
+                            <CustomQueryTabContainer query={query} />
                         </NotRenderUntilFirstVisible>
                         {category === QueryResultTab.ERROR && <ErrorTree rootError={query.error} />}
                         {category === QueryResultTab.META && <QueryMetaTable query={query} />}
 
                         <NotRenderUntilFirstVisible hide={category !== QueryResultTab.STATISTIC}>
-                            <YQLStatisticsTable query={query} />
+                            <YQLStatisticsTable />
                         </NotRenderUntilFirstVisible>
                         {category === QueryResultTab.PROGRESS && (
                             <PlanContainer

@@ -1,6 +1,6 @@
 import React from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import intersectionBy from 'lodash/intersectionBy';
+import intersectionBy_ from 'lodash/intersectionBy';
 import {QueriesListAuthorFilter} from '../../module/queries_list/types';
 import {AllColumns, AuthorColumns, MyColumns, NameColumns} from './index';
 import {setSettingByKey} from '../../../../store/actions/settings';
@@ -22,7 +22,7 @@ export const useQueryHistoryListColumns = ({type}: {type?: QueriesListAuthorFilt
     };
 
     return React.useMemo(() => {
-        const ALL_COLUMN_NAMES = intersectionBy(AllColumns, MyColumns, 'name').map(
+        const ALL_COLUMN_NAMES = intersectionBy_(AllColumns, MyColumns, 'name').map(
             (item) => item.name,
         );
         const EXCLUDED_COLUMNS = [NameColumns.name, AuthorColumns.name];

@@ -1,4 +1,10 @@
-import _ from 'lodash';
+import chunk_ from 'lodash/chunk';
+import filter_ from 'lodash/filter';
+import findIndex_ from 'lodash/findIndex';
+import forEach_ from 'lodash/forEach';
+import map_ from 'lodash/map';
+import reduce_ from 'lodash/reduce';
+
 import yt from '@ytsaurus/javascript-wrapper/lib/yt';
 
 import {Toaster} from '@gravity-ui/uikit';
@@ -35,6 +41,7 @@ import hammer from '../../../../common/hammer';
 import {GENERIC_ERROR_MESSAGE} from '../../../../constants';
 import {isSupportedEffectiveExpiration} from '../../../../store/selectors/thor/support';
 import {waitForFontFamilies} from '../../../../store/actions/global/fonts';
+import UIFactory from '../../../../UIFactory';
 
 function getList(path, transaction, cluster, allowEffectiveExpiration) {
     const id = new RumWrapper(cluster, RumMeasureTypes.NAVIGATION_CONTENT_MAP_NODE);
@@ -62,6 +69,7 @@ function getList(path, transaction, cluster, allowEffectiveExpiration) {
                     'expiration_time',
                     'expiration_timeout',
                     ...(allowEffectiveExpiration ? ['effective_expiration'] : []),
+                    ...(UIFactory.getNavigationMapNodeSettings()?.additionalAttributes || []),
                 ],
                 path,
                 transaction,
@@ -141,7 +149,7 @@ export function updateResourceUsage() {
         const state = getState();
 
         let nodes = getFilteredNodes(state);
-        nodes = _.filter(nodes, (node) => !node.$attributes.recursive_resource_usage);
+        nodes = filter_(nodes, (node) => !node.$attributes.recursive_resource_usage);
 
         if (isRootNode(state) || nodes.length === 0) {
             return;
@@ -149,9 +157,9 @@ export function updateResourceUsage() {
 
         dispatch({type: UPDATE_RESOURCE_USAGE.REQUEST});
 
-        const nodesChunks = _.chunk(nodes, BATCH_LIMIT);
-        const batchedRequests = _.map(nodesChunks, (nodesChunk) => {
-            const requests = _.map(nodesChunk, (node) => {
+        const nodesChunks = chunk_(nodes, BATCH_LIMIT);
+        const batchedRequests = map_(nodesChunks, (nodesChunk) => {
+            const requests = map_(nodesChunk, (node) => {
                 return {
                     command: 'get',
                     parameters: {
@@ -170,7 +178,7 @@ export function updateResourceUsage() {
 
                 const errorResults = [];
 
-                _.forEach(nodes, (node, index) => {
+                forEach_(nodes, (node, index) => {
                     const resultChunkIndex = Math.floor(index / BATCH_LIMIT);
                     const resultChunk = resultChunks[resultChunkIndex];
                     const item = resultChunk[index % BATCH_LIMIT];
@@ -184,7 +192,7 @@ export function updateResourceUsage() {
 
                 dispatch({
                     type: UPDATE_RESOURCE_USAGE.SUCCESS,
-                    data: _.map(getNodesData(state), (nodeData) =>
+                    data: map_(getNodesData(state), (nodeData) =>
                         updatedNodeData(nodeData, dataMap[nodeData.$value]),
                     ),
                 });
@@ -205,7 +213,7 @@ export function updateResourceUsage() {
                     });
                     const toast = new Toaster();
                     toast.add({
-                        type: 'error',
+                        theme: 'danger',
                         name: 'map_node_update_resources',
                         timeout: 500000,
                         title: 'Resource loading error',
@@ -264,9 +272,9 @@ export function setSelectedItem(name, shiftKey) {
         const lastSelected = getLastSelected(state);
         if (lastSelected && shiftKey) {
             const nodes = getSortedNodes(state);
-            const lastIndex = _.findIndex(nodes, (item) => lastSelected === item.name);
+            const lastIndex = findIndex_(nodes, (item) => lastSelected === item.name);
             if (-1 !== lastIndex) {
-                const nameIndex = _.findIndex(nodes, (item) => item.name === name);
+                const nameIndex = findIndex_(nodes, (item) => item.name === name);
                 if (-1 !== nameIndex && lastIndex !== nameIndex) {
                     const from = Math.min(lastIndex, nameIndex);
                     const to = Math.max(lastIndex, nameIndex);
@@ -292,7 +300,7 @@ export function selectAll(isAllSelected) {
         if (!isAllSelected) {
             const allNodes = getFilteredNodes(getState());
 
-            selected = _.reduce(
+            selected = reduce_(
                 allNodes,
                 (res, node) => {
                     res[ypath.getValue(node)] = true;

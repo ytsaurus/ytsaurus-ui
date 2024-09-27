@@ -6,23 +6,23 @@
     $self: &;
 
     &__pool-edit {
-        display: none;
-        &_reserve {
-            display: unset;
-            visibility: hidden;
-        }
         margin: -5px 0;
         margin-left: 4px;
+
+        visibility: hidden;
+    }
+
+    &__pool-edit_detachable {
+        display: none;
     }
 
     &:hover {
         #{$self}__pool-edit {
-            display: unset;
-            transition: opacity 300ms ease;
+            visibility: unset;
         }
 
-        #{$self}__pool-edit_reserve {
-            visibility: visible;
+        #{$self}__pool-edit_detachable {
+            display: unset;
         }
     }
 

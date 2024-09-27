@@ -1,0 +1,117 @@
+.yt-role-group {
+    display: flex;
+    flex-direction: column;
+    min-height: 120px;
+    border-radius: 4px;
+    overflow: hidden;
+
+    padding: 16px;
+    border: 1px solid var(--dark-divider);
+
+    &__container {
+        padding-bottom: 20px;
+    }
+
+    &__groups-container {
+        margin-bottom: 18px;
+    }
+
+    &__name {
+        color: var(--bluejeans-color);
+        --g-text-body-font-weight: 600;
+    }
+
+    &__rack-nodes {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0px;
+        margin-top: 20px;
+    }
+
+    $progressHeight: 82px;
+
+    &__progress-text {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        height: $progressHeight;
+        width: 164px;
+    }
+
+    &__expand-btn {
+        margin-top: -4px;
+    }
+
+    &__progress-number {
+        line-height: 20px;
+    }
+
+    &__divider {
+        width: 0;
+        height: $progressHeight;
+        border-left: 1px solid var(--dark-divider);
+        margin: 0 20px;
+    }
+
+    &__bottom-info {
+        color: var(--default-color);
+    }
+
+    &__cube-icon {
+        width: 18px;
+        height: 18px;
+    }
+
+    &__counters {
+        display: grid;
+        grid-template-columns: auto 1fr auto 1fr auto 1fr auto;
+        row-gap: 4px;
+    }
+
+    &__status {
+        display: inline-block;
+    }
+
+    &__status-color {
+        display: inline-block;
+        width: 14px;
+        height: 14px;
+        border-radius: 2px;
+        margin-right: 4px;
+
+        background-color: var(--g-color-base-generic-medium);
+
+        &_theme_online {
+            background-color: var(--success-color);
+        }
+
+        &_theme_offline {
+            background-color: var(--danger-color);
+        }
+
+        &_theme_alert {
+            background-color: var(--warning-color);
+        }
+
+        &_theme_other {
+            background-color: var(--info-color);
+        }
+
+        &_empty {
+            background-color: var(--light-divider);
+        }
+    }
+
+    &__status-label {
+        line-height: 14px;
+    }
+
+    &__status-count {
+        display: flex;
+        align-items: center;
+    }
+
+    &__status-count-number {
+        line-height: 14px;
+    }
+}

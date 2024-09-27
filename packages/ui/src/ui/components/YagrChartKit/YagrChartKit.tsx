@@ -1,6 +1,6 @@
 import ChartKit, {settings} from '@gravity-ui/chartkit';
 import {YagrPlugin} from '@gravity-ui/chartkit/yagr';
-export type {YagrWidgetData} from '@gravity-ui/chartkit/yagr';
+export type {RawSerieData, YagrWidgetData} from '@gravity-ui/chartkit/yagr';
 
 import '@gravity-ui/yagr/dist/index.css';
 

@@ -6,6 +6,7 @@ monaco.editor.defineTheme(YT_LIGHT_MONACO_THEME, {
     inherit: true, // can also be false to completely replace the builtin rules
     rules: [
         {token: 'tablepath', foreground: '3e999f'},
+        {token: 'path', foreground: '3e999f'},
         {token: 'string.sql', foreground: 'a31515'},
     ],
     colors: {
@@ -21,6 +22,7 @@ monaco.editor.defineTheme(YT_DARK_MONACO_THEME, {
     inherit: true,
     rules: [
         {token: 'tablepath', foreground: '3e999f'},
+        {token: 'path', foreground: '3e999f'},
         {token: 'string.sql', foreground: 'ce9178'},
     ],
     colors: {

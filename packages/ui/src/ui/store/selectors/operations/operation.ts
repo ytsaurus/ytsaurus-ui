@@ -1,10 +1,14 @@
-import _ from 'lodash';
+import map_ from 'lodash/map';
+import reduce_ from 'lodash/reduce';
+
 import {createSelector} from 'reselect';
 
 import {RootState} from '../../../store/reducers';
 import ypath from '../../../common/thor/ypath';
+import {AlertInfo} from '../../../components/AlertEvents/AlertEvents';
 import {calculateLoadingStatus} from '../../../utils/utils';
 import {FIX_MY_TYPE} from '../../../types';
+import {prepareFaqUrl} from '../../../utils/operations/tabs/details/alerts';
 
 const getOperationErasedTreesRaw = (state: RootState) => {
     return ypath.getValue(state.operations.detail, '/operation/@runtime_parameters/erased_trees');
@@ -13,7 +17,7 @@ const getOperationErasedTreesRaw = (state: RootState) => {
 export const getOperationErasedTrees = createSelector(
     [getOperationErasedTreesRaw],
     (rawTrees: Array<unknown>) => {
-        return _.reduce(
+        return reduce_(
             rawTrees,
             (acc, item) => {
                 const poolTree = ypath.getValue(item);
@@ -29,7 +33,41 @@ interface OperationTask {
     task_name: string;
 }
 
-const getOperationAlertEvents = (state: RootState) => state.operations.detail.details.alert_events;
+const getOperationAlertEventsImpl = (state: RootState) =>
+    state.operations.detail.details.alert_events;
+
+export const getOperationAlertEvents = createSelector([getOperationAlertEventsImpl], (items) => {
+    const appeared: Record<string, AlertInfo> = {};
+    return reduce_(
+        items,
+        (acc, item) => {
+            const type = ypath.getValue(item.alert_type);
+            const code = ypath.getNumberDeprecated(item, '/error/code', NaN);
+            if (!code && appeared[type]) {
+                const last = appeared[type];
+                last.to = ypath.getValue(item.time);
+                delete appeared[type];
+            } else if (code) {
+                acc.push({
+                    from: ypath.getValue(item.time),
+                    type,
+                    error: item.error,
+                    url: prepareFaqUrl(type),
+                });
+                appeared[type] = acc[acc.length - 1];
+            } else {
+                acc.push({
+                    to: ypath.getValue(item.time),
+                    type,
+                    error: item.error,
+                    url: prepareFaqUrl(type),
+                });
+            }
+            return acc;
+        },
+        [] as Array<AlertInfo>,
+    );
+});
 
 export const getOperation = (state: RootState) => state.operations.detail.operation;
 export const getOperationId = (state: RootState) =>
@@ -43,7 +81,7 @@ export const getOperationTasks = createSelector(
 export const getOperationTasksNames = createSelector(
     [getOperationTasks],
     (tasks?: Array<{task_name: string}>) => {
-        return _.map(tasks, 'task_name').sort();
+        return map_(tasks, 'task_name').sort();
     },
 );
 
@@ -68,13 +106,13 @@ export const getOperationPools = (state: RootState) =>
     (state.operations.detail.operation as FIX_MY_TYPE).pools;
 
 export const getOperationPoolNames = createSelector([getOperationPools], (pools): Array<string> => {
-    return _.map(pools, 'pool');
+    return map_(pools, 'pool');
 });
 
 export const getOperationsMonitorChartStatesFinishedCount = createSelector(
     [getOperationMonitorChartStates],
     (states) => {
-        return _.reduce(
+        return reduce_(
             states,
             (acc, value) => {
                 return value ? acc + 1 : acc;
@@ -123,12 +161,5 @@ export const getOperationJobsMonitorTabSettings = createSelector(
     (jobsCount) => {
         const maxJobCount = 200;
         return {visible: jobsCount > 0 && jobsCount <= maxJobCount, maxJobCount};
-    },
-);
-
-export const getOperationAlertEventsItems = createSelector(
-    [getOperationAlertEvents],
-    (alertEvents) => {
-        return alertEvents;
     },
 );

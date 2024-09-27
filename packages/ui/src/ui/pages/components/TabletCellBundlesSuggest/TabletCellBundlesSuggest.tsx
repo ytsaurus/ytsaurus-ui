@@ -1,5 +1,7 @@
 import React, {ComponentProps} from 'react';
-import _ from 'lodash';
+
+import map_ from 'lodash/map';
+
 import cn from 'bem-cn-lite';
 import {useDispatch, useSelector} from 'react-redux';
 
@@ -25,7 +27,7 @@ function TabletCellBundlesSuggest(props: Props) {
     const {onChange, placeholder, ...rest} = props;
     const value = props.value;
 
-    const ycItems = _.map(items, (item) => ({
+    const ycItems = map_(items, (item) => ({
         value: item,
         text: item,
     }));

@@ -2,7 +2,11 @@ import React, {Fragment, useEffect, useState} from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import cn from 'bem-cn-lite';
-import _ from 'lodash';
+
+import every_ from 'lodash/every';
+import keys_ from 'lodash/keys';
+import map_ from 'lodash/map';
+import reduce_ from 'lodash/reduce';
 
 import {operationProps} from '../../../pages/operations/OperationDetail/tabs/details/Runtime/Runtime';
 import Error from '../../../components/Error/Error';
@@ -35,7 +39,7 @@ PoolsWeightsEditModal.propTypes = {
 
 const block = cn('operation-pools-weights');
 const preparePoolsState = (pools) => {
-    return _.reduce(
+    return reduce_(
         pools,
         (res, {pool, tree}) => {
             res[tree] = pool;
@@ -46,7 +50,7 @@ const preparePoolsState = (pools) => {
 };
 
 const prepareWeightsState = (pools) => {
-    return _.reduce(
+    return reduce_(
         pools,
         (res, {weight, tree}) => {
             res[tree] = String(weight);
@@ -65,7 +69,7 @@ const renderPoolsAndWeights = ({
     setPools,
     setWeights,
 }) => {
-    return _.map(operation.pools, ({tree}) => {
+    return map_(operation.pools, ({tree}) => {
         const pool = pools[tree];
         const title = `${pool} [${tree}]`;
         const url = `/${cluster}/${Page.SCHEDULING}?tree=${tree}&pool=${pool}&tab=monitor`;
@@ -122,12 +126,12 @@ function PoolsWeightsEditModal(props) {
         const state = {operation};
         const isStateCorrect = state !== 'completed' && state !== 'failed' && state !== 'aborted';
 
-        const isWeightCorrect = _.every(_.keys(weights), (tree) => {
+        const isWeightCorrect = every_(keys_(weights), (tree) => {
             const value = Number(weights[tree]);
             return !isNaN(value) && value > 0;
         });
 
-        const isPoolCorrect = _.every(_.keys(pools), (tree) => {
+        const isPoolCorrect = every_(keys_(pools), (tree) => {
             const value = pools[tree];
             return Boolean(value);
         });

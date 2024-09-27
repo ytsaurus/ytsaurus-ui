@@ -3,7 +3,8 @@ import {ConnectedProps, connect, useSelector} from 'react-redux';
 import PropTypes from 'prop-types';
 import ypath from '../../../../../../common/thor/ypath';
 import cn from 'bem-cn-lite';
-import _ from 'lodash';
+
+import map_ from 'lodash/map';
 
 import {Checkbox} from '@gravity-ui/uikit';
 
@@ -139,7 +140,7 @@ class JobSizes extends React.Component<Props, State> {
 
     renderPerTaskCharts(tasks: any) {
         const {showEstimated} = this.state;
-        return _.map(
+        return map_(
             tasks,
             ({task_name, estimated_input_data_weight_histogram, input_data_weight_histogram}) => {
                 return (

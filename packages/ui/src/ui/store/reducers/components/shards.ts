@@ -1,4 +1,5 @@
-import _ from 'lodash';
+import reduce_ from 'lodash/reduce';
+
 // @ts-expect-error
 import ypath from '@ytsaurus/interface-helpers/lib/ypath';
 import {mergeStateOnClusterChange} from '../../../store/reducers/utils';
@@ -12,7 +13,7 @@ import type {ActionD} from '../../../types';
 import type {Action} from 'redux';
 
 const prepareShards = (shards: RawShard[]): Shard[] => {
-    return _.reduce(
+    return reduce_(
         shards,
         (res: Shard[], value) => {
             const attributes = ypath.getValue(value, '/@');

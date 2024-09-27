@@ -1,4 +1,6 @@
-import _ from 'lodash';
+import filter_ from 'lodash/filter';
+import map_ from 'lodash/map';
+import reduce_ from 'lodash/reduce';
 
 import {LOADING_STATUS} from '../../../../constants/index';
 import {
@@ -101,12 +103,12 @@ function updateFilter(state, name, value, extra) {
 }
 
 function addAllCounter(counters) {
-    const totalCount = _.reduce(counters, (total, count) => total + count, 0);
+    const totalCount = reduce_(counters, (total, count) => total + count, 0);
     return {...counters, all: totalCount};
 }
 
 function removeForeignAddresses(addresses, jobs) {
-    const ownAddresses = _.reduce(
+    const ownAddresses = reduce_(
         jobs,
         (addresses, job) => {
             addresses[job.address] = true;
@@ -114,7 +116,7 @@ function removeForeignAddresses(addresses, jobs) {
         },
         {},
     );
-    return _.filter(addresses, (address) => ownAddresses[address]);
+    return filter_(addresses, (address) => ownAddresses[address]);
 }
 
 function prepareJobs({jobs, operationId, clusterConfig}) {
@@ -122,7 +124,7 @@ function prepareJobs({jobs, operationId, clusterConfig}) {
 
     // Backward compatibility for fail_context
     // TODO: find out, do we still need it?
-    return _.map(prepared, (job) => {
+    return map_(prepared, (job) => {
         job.fail_context_size = job.fail_context_size || 0;
         return new Job({clusterConfig, job, operationId});
     });

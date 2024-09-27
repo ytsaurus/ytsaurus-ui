@@ -1,4 +1,7 @@
-import _ from 'lodash';
+import isEmpty_ from 'lodash/isEmpty';
+import map_ from 'lodash/map';
+import reduce_ from 'lodash/reduce';
+
 import {createSelector} from 'reselect';
 
 import {RootState} from '../../../store/reducers';
@@ -34,7 +37,7 @@ const getSchedulingTreeOperations = createSelector(
 const getOperationsFiltered = createSelector(
     [getPoolsRaw, getSchedulingTreeOperations],
     (rawPools, rawOperations) => {
-        return _.reduce(
+        return reduce_(
             rawOperations,
             (acc, item, operationId) => {
                 if (rawPools[item.pool]) {
@@ -50,7 +53,7 @@ const getOperationsFiltered = createSelector(
 const getPoolsPrepared = createSelector(
     [getPoolsRaw, getOperationsFiltered, getExpandedPoolCypressData, getTreeResources, getCluster],
     (rawPools, rawOperations, attributes, treeResources, cluster) => {
-        if (_.isEmpty(rawPools)) {
+        if (isEmpty_(rawPools)) {
             return [];
         }
 
@@ -58,7 +61,7 @@ const getPoolsPrepared = createSelector(
 
         return rumId.wrap('prepareData', () => {
             const preparedPools = preparePools(rawPools!, rawOperations);
-            return _.map(preparedPools, (pool) => {
+            return map_(preparedPools, (pool) => {
                 const cypressAttributes = ypath.getValue(attributes)[pool.name];
                 return updatePoolChild(pool, cypressAttributes, 'pool', treeResources);
             });
@@ -69,7 +72,7 @@ const getPoolsPrepared = createSelector(
 export const getSchedulingPoolsMapByName = createSelector(
     [getPoolsPrepared],
     (pools: Array<PoolInfo>) => {
-        return _.reduce(
+        return reduce_(
             pools,
             (acc, item) => {
                 acc[item.name] = item;
@@ -191,7 +194,7 @@ export type PoolResourceDetails = {
 export const getPools = createSelector(
     [getPoolsPrepared, getSchedulingPoolsExtraInfo],
     (pools, extras) => {
-        const res = _.map(pools, (item) => {
+        const res = map_(pools, (item) => {
             const itemExtra = extras[item.name] || {};
             return Object.assign(item, itemExtra);
         });

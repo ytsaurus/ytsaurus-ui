@@ -1,4 +1,5 @@
-import _ from 'lodash';
+import forEach_ from 'lodash/forEach';
+import map_ from 'lodash/map';
 
 import {EMPTY_ARRAY} from '../constants/empty';
 import {SortState} from '../types';
@@ -40,7 +41,7 @@ export function parseSortStateArray(s: string) {
     const res: Array<SortState> = [];
 
     const parts = s.split(',');
-    _.forEach(parts, (p) => {
+    forEach_(parts, (p) => {
         try {
             const [columnEncoded, orderEncoded] = p.split('-');
             const column = decodeURIComponent(columnEncoded);
@@ -56,7 +57,7 @@ export function parseSortStateArray(s: string) {
 }
 
 export function serializeSortStateArray(value: Array<SortState>) {
-    const items = _.map(value, ({column, order}) => {
+    const items = map_(value, ({column, order}) => {
         if (!column || !order) {
             return '';
         }

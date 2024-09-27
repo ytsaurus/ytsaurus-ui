@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import reduce_ from 'lodash/reduce';
 
 import {
     APPLY_FILTER_PRESET,
@@ -138,7 +138,7 @@ type FiltersNoValues = {
 };
 
 function applyDefaultFilterValues(filters: FiltersNoValues): OperationsListState['filters'] {
-    return _.reduce(
+    return reduce_(
         filters,
         (acc, data, k) => {
             const key: keyof typeof filters = k as any;
@@ -178,7 +178,7 @@ function applyFilterPreset(
     state: OperationsListState,
     presets: Partial<OperationsListState['filters']>,
 ) {
-    return _.reduce(
+    return reduce_(
         presets,
         (state, value, name) => getUpdatedFilter(state, name as any, {value}),
         state,
@@ -256,7 +256,7 @@ function reducer(state = initialState, action: OperationsListStateAction): Opera
 
         case UPDATE_FILTER_COUNTERS: {
             const counters: any = action.data;
-            const filters = _.reduce(
+            const filters = reduce_(
                 state.filters,
                 (filters, value, name) => {
                     switch (value.type) {

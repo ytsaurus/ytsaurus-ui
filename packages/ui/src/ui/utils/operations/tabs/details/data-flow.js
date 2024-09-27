@@ -1,4 +1,10 @@
-import _ from 'lodash';
+import forEach_ from 'lodash/forEach';
+import keys_ from 'lodash/keys';
+import map_ from 'lodash/map';
+import reduce_ from 'lodash/reduce';
+import some_ from 'lodash/some';
+import sortBy_ from 'lodash/sortBy';
+
 import ypath from '../../../../common/thor/ypath';
 
 function prepareGraphData(operation) {
@@ -13,8 +19,8 @@ function prepareGraphData(operation) {
     const data = [];
 
     if (dataFlowGraph) {
-        _.each(jobTypeOrder, (fromJobType) => {
-            _.each(statistics[fromJobType], (value, toJobType) => {
+        forEach_(jobTypeOrder, (fromJobType) => {
+            forEach_(statistics[fromJobType], (value, toJobType) => {
                 data.push({
                     from: fromJobType,
                     to: toJobType,
@@ -31,7 +37,7 @@ function prepareGraphDataByTasks(operation) {
     const dataFlow = ypath.getValue(operation, '/@progress/data_flow');
     const tasks = ypath.getValue(operation, '/@progress/tasks');
 
-    const res = _.reduce(
+    const res = reduce_(
         dataFlow,
         (acc, item) => {
             const {
@@ -44,7 +50,7 @@ function prepareGraphDataByTasks(operation) {
                 from,
                 to,
                 info: item,
-                value: _.keys(job_data_statistics).reduce((acc, key) => {
+                value: keys_(job_data_statistics).reduce((acc, key) => {
                     const jobStat = ypath.getValue(job_data_statistics[key]);
                     const teleportStat = ypath.getValue(teleport_data_statistics[key]);
                     acc[key] = jobStat + teleportStat;
@@ -62,7 +68,7 @@ function prepareGraphDataByTasks(operation) {
         [],
     );
 
-    const tasksIndexMap = _.reduce(
+    const tasksIndexMap = reduce_(
         tasks,
         (acc, {task_name}, index) => {
             acc[task_name] = index;
@@ -71,7 +77,7 @@ function prepareGraphDataByTasks(operation) {
         {},
     );
 
-    return _.sortBy(res, ({from}) => {
+    return sortBy_(res, ({from}) => {
         if (from === 'input') {
             return -1;
         }
@@ -80,7 +86,7 @@ function prepareGraphDataByTasks(operation) {
 }
 
 function isEmptyStatistics(stats) {
-    return !_.some(stats, (value) => {
+    return !some_(stats, (value) => {
         return Boolean(ypath.getValue(value));
     });
 }
@@ -110,7 +116,7 @@ export function prepareCompletedUsage(operation) {
 }
 
 export function prepareIntermediateUsage(operation, intermediate) {
-    return _.map(intermediate, (resources, account) => ({
+    return map_(intermediate, (resources, account) => ({
         ...resources,
         account,
     }));

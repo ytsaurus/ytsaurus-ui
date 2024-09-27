@@ -1,4 +1,10 @@
-import _ from 'lodash';
+import isEmpty_ from 'lodash/isEmpty';
+import map_ from 'lodash/map';
+import mapKeys_ from 'lodash/mapKeys';
+import mapValues_ from 'lodash/mapValues';
+import omit_ from 'lodash/omit';
+import pick_ from 'lodash/pick';
+import pickBy_ from 'lodash/pickBy';
 
 import {Toaster} from '@gravity-ui/uikit';
 
@@ -79,19 +85,19 @@ const makeOtherAttributesCommands = (path, values, initialValues) => {
 };
 
 const setResourceAttributes = (path, values, omittedValues, attribute) => {
-    if (_.isEmpty(values) && _.isEmpty(omittedValues)) {
+    if (isEmpty_(values) && isEmpty_(omittedValues)) {
         return Promise.resolve();
     }
 
     const keyMapper = {userSlots: 'user_slots'};
-    const omittedValuesList = _.map(omittedValues, (value, key) => keyMapper[key] || key);
-    const preparedValues = _.mapKeys(values, (value, key) => keyMapper[key] || key);
+    const omittedValuesList = map_(omittedValues, (value, key) => keyMapper[key] || key);
+    const preparedValues = mapKeys_(values, (value, key) => keyMapper[key] || key);
 
     return ytApiV3Id
         .get(YTApiId.schedulingGetAttrsBeforeEdit, {path: `${path}/@${attribute}`})
         .then((resources) => {
             const result = {...resources, ...preparedValues};
-            const input = _.omit(result, omittedValuesList);
+            const input = omit_(result, omittedValuesList);
 
             return yt.v3.set({path: `${path}/@${attribute}`}, input);
         })
@@ -111,7 +117,7 @@ const makeGeneralCommands = (path, values, initialValues) => {
         Object.prototype.hasOwnProperty.call(omittedValues, value);
 
     //const {name: abcServiceName, slug: abcServiceSlug, id} = prepareAbcService(values.abcService);
-    const omittedValues = _.pickBy(
+    const omittedValues = pickBy_(
         values,
         (value) => value === '' || value === undefined || value === null,
     );
@@ -181,9 +187,9 @@ export function editPool(pool, values, initialValues) {
         const poolPath = computePoolPath(pool, pools);
         const path = `//sys/pool_trees/${tree}/${poolPath}`;
 
-        const filteredResourceLimitsValues = _.pickBy(values.resourceLimits, isValidNumber);
-        const omittedResourceLimitsValues = _.pickBy(values.resourceLimits, isInvalidNumber);
-        const resourceLimitsValues = _.mapValues(filteredResourceLimitsValues, (value) =>
+        const filteredResourceLimitsValues = pickBy_(values.resourceLimits, isValidNumber);
+        const omittedResourceLimitsValues = pickBy_(values.resourceLimits, isInvalidNumber);
+        const resourceLimitsValues = mapValues_(filteredResourceLimitsValues, (value) =>
             Number(value),
         );
         delete resourceLimitsValues['error-block'];
@@ -208,12 +214,12 @@ export function editPool(pool, values, initialValues) {
                 values: {
                     ...values.resourceGuarantee,
                     ...values.integralGuarantee,
-                    ..._.pick(values.general, Object.keys(POOL_GENERAL_TYPE_TO_ATTRIBUTE)),
+                    ...pick_(values.general, Object.keys(POOL_GENERAL_TYPE_TO_ATTRIBUTE)),
                 },
                 initials: {
                     ...initialValues.resourceGuarantee,
                     ...initialValues.integralGuarantee,
-                    ..._.pick(initialValues.general, Object.keys(POOL_GENERAL_TYPE_TO_ATTRIBUTE)),
+                    ...pick_(initialValues.general, Object.keys(POOL_GENERAL_TYPE_TO_ATTRIBUTE)),
                 },
                 tree,
             }),
@@ -229,7 +235,7 @@ export function editPool(pool, values, initialValues) {
                 toaster.add({
                     name: 'edit pool',
                     timeout: 10000,
-                    type: 'success',
+                    theme: 'success',
                     title: `Successfully edited ${pool.name}. Please wait.`,
                 });
 
@@ -244,7 +250,7 @@ export function editPool(pool, values, initialValues) {
                         data: {error},
                     });
 
-                    return Promise.reject();
+                    return Promise.reject(error);
                 }
             });
     };

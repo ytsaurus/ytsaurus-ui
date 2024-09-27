@@ -1,5 +1,7 @@
 import React from 'react';
-import _ from 'lodash';
+import map_ from 'lodash/map';
+import reduce_ from 'lodash/reduce';
+import sortBy_ from 'lodash/sortBy';
 import cn from 'bem-cn-lite';
 
 import PathEditor from '../../../../containers/PathEditor/PathEditor';
@@ -27,7 +29,7 @@ export default class EditablePathList extends React.Component<Props> {
     }
 
     onListChange = (value: FIX_MY_TYPE) => {
-        const newValue = _.reduce(
+        const newValue = reduce_(
             value,
             (acc, {title, removed}) => {
                 if (!removed) {
@@ -49,7 +51,7 @@ export default class EditablePathList extends React.Component<Props> {
 
     render() {
         const {value, defaultPath, placeholder} = this.props;
-        const listItems = _.map(_.sortBy(value), (path) => {
+        const listItems = map_(sortBy_(value), (path) => {
             return {title: path};
         });
         return (

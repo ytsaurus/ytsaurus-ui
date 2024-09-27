@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import React from 'react';
 import {Route} from 'react-router';
 import UIFactory from '../../UIFactory';

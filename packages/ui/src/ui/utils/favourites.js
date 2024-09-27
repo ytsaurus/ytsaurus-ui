@@ -1,4 +1,5 @@
-import _ from 'lodash';
+import find_ from 'lodash/find';
+import sortBy_ from 'lodash/sortBy';
 
 import {FAVOURITES} from '../../shared/constants/settings';
 import {makeGetSetting} from '../store/selectors/settings';
@@ -26,7 +27,7 @@ export class Favourites {
         const current = this._get();
         const currentPathItem = {path: path};
 
-        const entry = _.find(current, currentPathItem);
+        const entry = find_(current, currentPathItem);
 
         if (entry) {
             current.splice(current.indexOf(entry), 1);
@@ -38,12 +39,12 @@ export class Favourites {
     }
 
     get() {
-        return _.sortBy(this._get(), 'path');
+        return sortBy_(this._get(), 'path');
     }
 
     has(path) {
         if (path) {
-            return Boolean(_.find(this._get(), {path}));
+            return Boolean(find_(this._get(), {path}));
         }
     }
 }

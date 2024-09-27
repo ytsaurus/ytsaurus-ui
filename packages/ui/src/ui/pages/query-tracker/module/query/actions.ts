@@ -2,7 +2,7 @@ import {createQueryUrl} from '../../utils/navigation';
 import {Action, AnyAction} from 'redux';
 import {ThunkAction} from 'redux-thunk';
 import {RootState} from '../../../../store/reducers';
-import {getCluster} from '../../../../store/selectors/global';
+import {getCliqueControllerIsSupported, getCluster} from '../../../../store/selectors/global';
 import {ActionD} from '../../../../types';
 import {QueryEngine} from '../engines';
 import {
@@ -15,13 +15,21 @@ import {
     updateACOQuery,
 } from '../api';
 import {requestQueriesList} from '../queries_list/actions';
-import {getCurrentQuery, getQueryDraft} from './selectors';
+import {
+    DEFAULT_QUERY_ACO,
+    SHARED_QUERY_ACO,
+    getCurrentQuery,
+    getQueryDraft,
+    getQuery as selectQuery,
+} from './selectors';
 import {getAppBrowserHistory} from '../../../../store/window-store';
 import {QueryState} from './reducer';
 import {wrapApiPromiseByToaster} from '../../../../utils/utils';
 import {prepareQueryPlanIds} from './utills';
-import {chytApiAction} from '../../../../store/actions/chyt/api';
+import {chytApiAction, spytApiAction} from '../../../../utils/strawberryControllerApi';
 import guid from '../../../../common/hammer/guid';
+import {selectIsMultipleAco} from '../query_aco/selectors';
+import {getSettingQueryTrackerStage} from '../../../../store/selectors/settings-ts';
 
 export const REQUEST_QUERY = 'query-tracker/REQUEST_QUERY';
 export type RequestQueryAction = Action<typeof REQUEST_QUERY>;
@@ -59,11 +67,18 @@ export type SetQueryCliqueLoading = ActionD<typeof SET_QUERY_CLIQUE_LOADING, boo
 export const SET_QUERY_CLUSTER_CLIQUE = 'query-tracker/SET_QUERY_CLUSTER_CLIQUE';
 export type SetQueryClusterClique = ActionD<
     typeof SET_QUERY_CLUSTER_CLIQUE,
-    {cluster: string; items: {alias: string; yt_operation_id?: string}[]}
+    {
+        cluster: string;
+        engine: QueryEngine.SPYT | QueryEngine.CHYT;
+        items: {alias: string; yt_operation_id?: string}[];
+    }
 >;
 
 export const UPDATE_ACO_QUERY = 'query-tracker/UPDATE_ACO_QUERY';
-export type UpdateACOQueryAction = ActionD<typeof UPDATE_ACO_QUERY, string>;
+export type UpdateACOQueryAction = ActionD<
+    typeof UPDATE_ACO_QUERY,
+    {access_control_object: string} | {access_control_objects: Array<string>}
+>;
 
 export const setCurrentClusterToQuery =
     (): ThunkAction<void, RootState, unknown, any> => (dispatch, getState) => {
@@ -78,14 +93,26 @@ export const setCurrentClusterToQuery =
 
 export const loadCliqueByCluster =
     (
+        engine: QueryEngine.SPYT | QueryEngine.CHYT,
         cluster: string,
     ): ThunkAction<void, RootState, unknown, SetQueryClusterClique | SetQueryCliqueLoading> =>
     (dispatch, getState) => {
         const state = getState();
-        if (cluster in state.queryTracker.query.cliqueMap) return;
+        const isSpyt = engine === QueryEngine.SPYT;
+
+        if (
+            cluster in state.queryTracker.query.cliqueMap &&
+            state.queryTracker.query.cliqueMap[cluster][engine]
+        )
+            return;
+
+        const supportedControllers = getCliqueControllerIsSupported(state);
+        if ((isSpyt && !supportedControllers.spyt) || (!isSpyt && !supportedControllers.chyt))
+            return; // Clique selector is not supported on cluster
 
         dispatch({type: SET_QUERY_CLIQUE_LOADING, data: true});
-        chytApiAction('list', cluster, {attributes: ['yt_operation_id' as const]}, {})
+        const apiAction = isSpyt ? spytApiAction : chytApiAction;
+        apiAction('list', cluster, {attributes: ['yt_operation_id' as const]}, {})
             .then((data) => {
                 const items = data?.result?.map(({$value, $attributes = {}}) => {
                     return {
@@ -96,13 +123,13 @@ export const loadCliqueByCluster =
 
                 dispatch({
                     type: SET_QUERY_CLUSTER_CLIQUE,
-                    data: {cluster, items},
+                    data: {cluster, engine, items},
                 });
             })
             .catch(() => {
                 dispatch({
                     type: SET_QUERY_CLUSTER_CLIQUE,
-                    data: {cluster, items: []},
+                    data: {cluster, engine, items: []},
                 });
             })
             .finally(() => {
@@ -116,20 +143,20 @@ export function loadQuery(
 ): ThunkAction<any, RootState, any, SetQueryAction | RequestQueryAction | SetQueryErrorLoadAction> {
     return async (dispatch, getState) => {
         const state = getState();
+        const stage = getSettingQueryTrackerStage(state);
         dispatch({type: REQUEST_QUERY});
         try {
             const query = await wrapApiPromiseByToaster(dispatch(getQuery(queryId)), {
                 toasterName: 'load_query',
                 skipSuccessToast: true,
-                errorTitle: 'Failed to load query',
+                errorContent: (error) => {
+                    const {code, message} = error;
+                    return `[code ${code}]: ${message}${stage ? `. Your stage is set to "${stage}". Reset it and try again` : ''}`;
+                },
+                errorTitle: `Failed to load query ${stage ? `[stage: ${stage}]` : ''}`,
             });
 
             query.files = query.files.map((file) => ({...file, id: guid()}));
-
-            if (query.engine === QueryEngine.CHYT && query.settings?.cluster) {
-                dispatch(loadCliqueByCluster(query.settings.cluster as string));
-            }
-
             const queryItem = prepareQueryPlanIds(query);
 
             if (config?.dontReplaceQueryText) {
@@ -232,7 +259,15 @@ export function runQuery(
     return async (dispatch, getState) => {
         const state = getState();
         const query = getQueryDraft(state);
-        const {query_id} = await wrapApiPromiseByToaster(dispatch(startQuery(query, options)), {
+
+        const newQuery = {...query};
+        if ('access_control_objects' in newQuery) {
+            newQuery.access_control_objects = newQuery.access_control_objects?.filter(
+                (i) => i !== SHARED_QUERY_ACO,
+            );
+        }
+
+        const {query_id} = await wrapApiPromiseByToaster(dispatch(startQuery(newQuery, options)), {
             toasterName: 'start_query',
             skipSuccessToast: true,
             errorTitle: 'Failed to start query',
@@ -286,16 +321,22 @@ export function setQueryACO({
     aco,
     query_id,
 }: {
-    aco: string;
+    aco: string[];
     query_id: string;
 }): ThunkAction<Promise<unknown>, RootState, any, AnyAction> {
-    return (dispatch) => {
+    return (dispatch, getState) => {
+        const isMultipleAco = selectIsMultipleAco(getState());
         return wrapApiPromiseByToaster(dispatch(updateACOQuery({query_id, aco})), {
             toasterName: 'update_aco_query',
             skipSuccessToast: true,
             errorTitle: 'Failed to update query ACO',
         }).then(() => {
-            dispatch({type: UPDATE_ACO_QUERY, data: aco});
+            dispatch({
+                type: UPDATE_ACO_QUERY,
+                data: isMultipleAco
+                    ? {access_control_objects: aco}
+                    : {access_control_object: aco[0]},
+            });
         });
     };
 }
@@ -303,11 +344,39 @@ export function setQueryACO({
 export function setDraftQueryACO({
     aco,
 }: {
-    aco: string;
+    aco: string[];
 }): ThunkAction<Promise<unknown>, RootState, any, AnyAction> {
-    return (dispatch) => {
+    return (dispatch, getState) => {
+        const isMultipleAco = selectIsMultipleAco(getState());
         return dispatch(addACOToLastSelected(aco)).then(() =>
-            dispatch(updateQueryDraft({access_control_object: aco})),
+            dispatch(
+                updateQueryDraft(
+                    isMultipleAco ? {access_control_objects: aco} : {access_control_object: aco[0]},
+                ),
+            ),
         );
     };
 }
+
+export const toggleShareQuery =
+    (): ThunkAction<unknown, RootState, any, AnyAction> => async (dispatch, getState) => {
+        const state = getState();
+        const query = selectQuery(state);
+        if (!query) return;
+
+        let aco = query.access_control_objects || [DEFAULT_QUERY_ACO];
+
+        if (aco.includes(SHARED_QUERY_ACO)) {
+            aco = aco.filter((i) => i !== SHARED_QUERY_ACO);
+            if (!aco.length) aco = [DEFAULT_QUERY_ACO];
+        } else {
+            aco = [...aco, SHARED_QUERY_ACO];
+        }
+
+        await dispatch(updateACOQuery({aco, query_id: query.id}));
+        await dispatch(requestQueriesList());
+        dispatch({
+            type: UPDATE_ACO_QUERY,
+            data: {access_control_objects: aco},
+        });
+    };

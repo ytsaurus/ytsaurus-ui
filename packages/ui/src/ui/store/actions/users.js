@@ -1,4 +1,7 @@
-import _ from 'lodash';
+import difference_ from 'lodash/difference';
+import forEach_ from 'lodash/forEach';
+import map_ from 'lodash/map';
+
 import {
     USERS_EDIT_USER,
     USERS_EDIT_USER_DATA_FIELDS,
@@ -31,7 +34,7 @@ export function prepareUserData(item) {
     groups.sort();
     allGroups.sort();
     item.$attributes.idm = flags.get(idm || false);
-    item.$attributes['transitiveGroups'] = _.difference(allGroups, groups);
+    item.$attributes['transitiveGroups'] = difference_(allGroups, groups);
     return item.$attributes;
 }
 
@@ -42,7 +45,7 @@ export function fetchUsers() {
         return listAllUsers(YTApiId.usersData, {attributes: USER_ATTRIBUTES})
             .then((data) => {
                 const users = [];
-                _.forEach(data, (item) => {
+                forEach_(data, (item) => {
                     users.push(prepareUserData(item));
                 });
                 dispatch({type: USERS_TABLE.SUCCESS, data: {users}});
@@ -107,7 +110,7 @@ export function closeUserEditorModal() {
 
 function removeUserFromGroups(cluster, username, groups) {
     return Promise.all(
-        _.map(groups, (groupname) => {
+        map_(groups, (groupname) => {
             return UIFactory.getAclApi().removeUserFromGroup({cluster, username, groupname});
         }),
     );
@@ -115,7 +118,7 @@ function removeUserFromGroups(cluster, username, groups) {
 
 function addUserToGroups(cluster, username, groups, comment) {
     return Promise.all(
-        _.map(groups, (groupname) => {
+        map_(groups, (groupname) => {
             return UIFactory.getAclApi().addUserToGroup({cluster, username, groupname, comment});
         }),
     );
@@ -128,7 +131,7 @@ export function saveUserData(username, attributes, groupsToAdd, groupsToRemove) 
         const path = `//sys/users/${username}`;
         const requests = [];
         const {comment, ...restAttrs} = attributes;
-        _.forEach(restAttrs, (value, key) => {
+        forEach_(restAttrs, (value, key) => {
             requests.push({
                 command: 'set',
                 parameters: {

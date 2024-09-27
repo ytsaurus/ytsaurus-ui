@@ -2,7 +2,9 @@ import {createSelector} from 'reselect';
 import {RootState} from '../../../../store/reducers';
 import {calculateLoadingStatus} from '../../../../utils/utils';
 import {getPath} from '../../../../store/selectors/navigation/index';
-import _ from 'lodash';
+
+import reduce_ from 'lodash/reduce';
+
 import {ValueOf, YTError} from '../../../../types';
 
 const getTabletErrorsErrorCount = (state: RootState) =>
@@ -58,7 +60,7 @@ export const getTabletErrorCountNoticeVisbile = createSelector(
 );
 
 function calculateSubitemsCount(items?: Record<string, Array<unknown>>) {
-    return _.reduce(
+    return reduce_(
         items,
         (acc, subItems) => {
             return acc + subItems.length;
@@ -71,10 +73,10 @@ type ReplicaId = string;
 type TabletId = string;
 
 export const getTabletErrorsReplicationErrors = createSelector([getTabletErrors], (data) => {
-    return _.reduce(
+    return reduce_(
         data?.replication_errors,
         (acc, errors, replicaId) => {
-            const errorsByTablet = _.reduce(
+            const errorsByTablet = reduce_(
                 errors,
                 (errAcc, error) => {
                     const {tablet_id} = error.attributes || {};

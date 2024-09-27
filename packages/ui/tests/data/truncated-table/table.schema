@@ -1,0 +1,19 @@
+{
+    schema=[
+        {
+            name=string;
+            type_v3=string
+        };
+        {
+            name=json;
+            type_v3=json
+        };
+        {
+            name=yson;
+            type_v3={
+              type_name=optional;
+              item=yson;
+            }
+        }
+    ]
+}

@@ -1,7 +1,8 @@
 // TODO: revisit types
 import * as React from 'react';
 
-import {ClipboardButton, Link, Text} from '@gravity-ui/uikit';
+import {Eye} from '@gravity-ui/icons';
+import {Button, ClipboardButton, Text, Icon as UIKitIcon} from '@gravity-ui/uikit';
 import hammer from '../../../../common/hammer';
 import cn from 'bem-cn-lite';
 import DataTable, {Column, OrderType, Settings, SortOrder} from '@gravity-ui/react-data-table';
@@ -9,6 +10,7 @@ import DataTypePopup from '../DataTypePopup/DataTypePopup';
 import {StrictReactNode, hasKey} from './utils';
 import {MOVING} from '@gravity-ui/react-data-table/build/esm/lib/constants';
 import DataTableYT from '../../../../components/DataTableYT/DataTableYT';
+import {ClickableText} from '../../../../components/ClickableText/ClickableText';
 
 import './YQLTable.scss';
 
@@ -72,6 +74,7 @@ type Props = {
     onSort?: (sortOrder?: SortOrder | SortOrder[]) => void;
     showFullValueInDialog?: boolean;
     containerRef?: React.Ref<HTMLDivElement>;
+    onShowPreview: (colName: string, rowIndex: number) => void;
 };
 
 const emptyArray: any[] = [];
@@ -97,6 +100,7 @@ export default function Table({
     onSort,
     showFullValueInDialog,
     containerRef,
+    onShowPreview,
 }: Props) {
     const sortable = typeof onSort === 'function';
     const columns = React.useMemo(() => {
@@ -114,7 +118,7 @@ export default function Table({
                         return column.render(data);
                     }
 
-                    const {value} = data as any;
+                    const {value, index} = data as any;
                     let formattedValue;
                     if (!value) {
                         return <span className="unipika">&lt;unsupported data type&gt;</span>;
@@ -148,9 +152,20 @@ export default function Table({
                             <Text color="light-hint">{value.$additions}</Text>
                         </React.Fragment>
                     ) : null;
+
+                    const handlePreviewClick = () => {
+                        onShowPreview(name, index);
+                    };
+
+                    const isTruncated = value.$incomplete;
+
                     if (isStrippedDown) {
                         return (
-                            <TableCell rawValue={rawValue}>
+                            <TableCell
+                                rawValue={rawValue}
+                                onPreviewClick={handlePreviewClick}
+                                isTruncated={isTruncated}
+                            >
                                 {showFullValueInDialog ? (
                                     <React.Fragment>
                                         <span
@@ -172,7 +187,11 @@ export default function Table({
                         );
                     }
                     return (
-                        <TableCell rawValue={rawValue}>
+                        <TableCell
+                            rawValue={rawValue}
+                            onPreviewClick={handlePreviewClick}
+                            isTruncated={isTruncated}
+                        >
                             <span
                                 className="unipika"
                                 dangerouslySetInnerHTML={{__html: formattedValue}}
@@ -185,7 +204,15 @@ export default function Table({
             };
         });
         return columns;
-    }, [header, sortable, defaultNumberAlign, format, formatterSettings, showFullValueInDialog]);
+    }, [
+        header,
+        sortable,
+        defaultNumberAlign,
+        format,
+        formatterSettings,
+        showFullValueInDialog,
+        onShowPreview,
+    ]);
 
     const calculatedStartIndex = (page - 1) * pageSize;
     const firstRowIndex = sortable ? 1 : startIndex ?? calculatedStartIndex + 1;
@@ -332,10 +359,13 @@ function getSortedData<T>(
         return indexedData;
     }
     const sortOrderArray = Array.isArray(sortOrder) ? sortOrder : [sortOrder];
-    const sortColumns = sortOrderArray.reduce((obj, {columnId, order}) => {
-        obj[columnId] = order;
-        return obj;
-    }, {} as Record<string, OrderType>);
+    const sortColumns = sortOrderArray.reduce(
+        (obj, {columnId, order}) => {
+            obj[columnId] = order;
+            return obj;
+        },
+        {} as Record<string, OrderType>,
+    );
     const sortFunctionDict: {[colName: string]: Comparator<T>} = {};
     dataColumns.forEach((column) => {
         if (sortColumns[column.name]) {
@@ -383,7 +413,7 @@ function ShowMoreInline({formattedValue, strippedDown, onClick}: ShowMoreInlineP
                 }}
             />
             <br />
-            <Link
+            <ClickableText
                 onClick={() => {
                     setShowFull((v) => !v);
 
@@ -391,7 +421,7 @@ function ShowMoreInline({formattedValue, strippedDown, onClick}: ShowMoreInlineP
                 }}
             >
                 {showFull ? 'Show less' : 'Show more'}
-            </Link>
+            </ClickableText>
         </React.Fragment>
     );
 }
@@ -403,13 +433,16 @@ function unquote(value?: string) {
     return value;
 }
 
-const cellCopyToClipboardClassName = block('cell-copy-to-clipboard');
+const cellActionClassName = block('cell-action');
 
 interface TableCellProps {
     children?: StrictReactNode;
     rawValue?: string;
+    onPreviewClick: () => void;
+    isTruncated?: boolean;
 }
-function TableCell({children, rawValue}: TableCellProps) {
+
+function TableCell({children, rawValue, onPreviewClick, isTruncated}: TableCellProps) {
     const cellNodeRef = React.useRef<HTMLDivElement>(null);
     const [mount, setMount] = React.useState(false);
 
@@ -435,14 +468,24 @@ function TableCell({children, rawValue}: TableCellProps) {
 
     return (
         <span ref={cellNodeRef}>
-            {children}
-            {mount && rawValue ? (
-                <ClipboardButton
-                    className={cellCopyToClipboardClassName}
-                    text={rawValue}
-                    size={16}
-                />
-            ) : null}
+            <span className={block('cell-content')}>{children}</span>
+            {mount && (
+                <>
+                    {rawValue && !isTruncated && (
+                        <ClipboardButton className={cellActionClassName} text={rawValue} size="s" />
+                    )}
+                    {isTruncated && (
+                        <Button
+                            className={cellActionClassName}
+                            view="flat-secondary"
+                            size="s"
+                            onClick={onPreviewClick}
+                        >
+                            <UIKitIcon data={Eye} size="12" />
+                        </Button>
+                    )}
+                </>
+            )}
         </span>
     );
 }

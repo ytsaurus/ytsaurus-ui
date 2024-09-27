@@ -1,6 +1,7 @@
 import React from 'react';
 import cn from 'bem-cn-lite';
-import _ from 'lodash';
+
+import filter_ from 'lodash/filter';
 
 import format from '../../../common/hammer/format';
 
@@ -234,7 +235,7 @@ export function CellsBundleController({items, hideColumns}: CellsBundleControlle
     const [filter, setFilter] = React.useState('');
 
     const data = React.useMemo(() => {
-        return !filter ? items : _.filter(items, ({address}) => -1 !== address?.indexOf(filter));
+        return !filter ? items : filter_(items, ({address}) => -1 !== address?.indexOf(filter));
     }, [items, filter]);
 
     const columns = useColumns(hideColumns);

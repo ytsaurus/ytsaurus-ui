@@ -2,7 +2,8 @@ import React, {Component} from 'react';
 import {connect, useDispatch} from 'react-redux';
 import PropTypes from 'prop-types';
 import block from 'bem-cn-lite';
-import _ from 'lodash';
+
+import map_ from 'lodash/map';
 
 import {CollapsibleSectionStateLess} from '../../../components/CollapsibleSection/CollapsibleSection';
 import VisibleHostTypeRadioButton from '../../../pages/system/VisibleHostTypeRadioButton';
@@ -26,7 +27,7 @@ function computeStateProgress(counters) {
     const total = counters.total;
 
     return sortStateProgress(
-        _.map(counters.states, (count, state) => {
+        map_(counters.states, (count, state) => {
             return {
                 value: total && (count / total) * 100,
                 title: 'State: ' + state,
@@ -74,12 +75,13 @@ class Masters extends Component {
     }
 
     renderMastersGroups = (masters, gridRowStart, {allowVoting} = {allowVoting: false}) =>
-        _.map(masters, (master) => (
+        map_(masters, (master) => (
             <MasterGroup
                 key={master.cellTag}
                 {...master}
                 gridRowStart={gridRowStart}
                 allowVoting={allowVoting}
+                allowService
             />
         ));
 
@@ -102,12 +104,16 @@ class Masters extends Component {
 
         return fitIntoSection ? (
             <div className={b('all-masters')}>
-                {this.renderAlerts()}
                 <div className={headingCN}>
                     Primary Masters
                     {this.renderMasterTypeSwitcher()}
                 </div>
-                <MasterGroup className={b('primary-master')} {...primary} allowVoting />
+                <MasterGroup
+                    className={b('primary-master')}
+                    {...primary}
+                    allowVoting
+                    allowService
+                />
                 {Boolean(secondary?.length) && (
                     <React.Fragment>
                         <div className={headingCN}>Secondary Masters</div>
@@ -125,6 +131,7 @@ class Masters extends Component {
                             className={b('timestamp-providers')}
                             gridRowStart
                             allowVoting
+                            allowService
                         />
                     </React.Fragment>
                 )}
@@ -147,18 +154,22 @@ class Masters extends Component {
                             Queue agents
                             {this.renderMasterTypeSwitcher()}
                         </div>
-                        <MasterGroup {...queueAgents} />
+                        <MasterGroup {...queueAgents} allowService />
                     </React.Fragment>
                 )}
             </div>
         ) : (
             <div>
-                {this.renderAlerts()}
                 <div className={headingCN}>
                     Primary Masters
                     {this.renderMasterTypeSwitcher()}
                 </div>
-                <MasterGroup className={b('primary-master')} {...primary} allowVoting />
+                <MasterGroup
+                    className={b('primary-master')}
+                    {...primary}
+                    allowVoting
+                    allowService
+                />
                 {Boolean(secondary?.length) && (
                     <React.Fragment>
                         <div className={headingCN}>Secondary Masters</div>
@@ -169,22 +180,30 @@ class Masters extends Component {
                     {Boolean(providers?.instances?.length) &&
                         this.renderSection('providers', 'Timestamp providers', providers, {
                             allowVoting: true,
+                            allowService: true,
                         })}
                     {Boolean(discovery?.instances?.length) &&
                         this.renderSection('discovery', 'Discovery servers', discovery)}
                     {Boolean(queueAgents?.instances?.length) &&
-                        this.renderSection('queueAgents', 'Queue agents', queueAgents)}
+                        this.renderSection('queueAgents', 'Queue agents', queueAgents, {
+                            allowService: true,
+                        })}
                 </div>
             </div>
         );
     }
 
-    renderSection(name, heading, data, {allowVoting} = {allowVoting: false}) {
+    renderSection(
+        name,
+        heading,
+        data,
+        {allowVoting, allowService} = {allowVoting: false, allowService: false},
+    ) {
         return (
             <div className={b(name)}>
                 <div className={headingCN}>{heading}</div>
                 <div className={b(`${name}-hosts`)}>
-                    <MasterGroup {...data} allowVoting={allowVoting} />
+                    <MasterGroup {...data} allowVoting={allowVoting} allowService={allowService} />
                 </div>
             </div>
         );
@@ -249,6 +268,7 @@ class Masters extends Component {
                 onToggle={this.onToggle}
                 size={collapsibleSize}
             >
+                {this.renderAlerts()}
                 {content}
             </CollapsibleSectionStateLess>
         );

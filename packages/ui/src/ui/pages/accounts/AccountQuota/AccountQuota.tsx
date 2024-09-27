@@ -1,9 +1,10 @@
 import React from 'react';
 import cn from 'bem-cn-lite';
-import _ from 'lodash';
 
+import map_ from 'lodash/map';
+
+import {ClickableText} from '../../../components/ClickableText/ClickableText';
 import Icon from '../../../components/Icon/Icon';
-import Link from '../../../components/Link/Link';
 import QuotaEditorWithHide from '../../../components/QuotaEditor/QuotaEditorWithHide';
 import {SelectSingle} from '../../../components/Select/Select';
 
@@ -78,9 +79,13 @@ class AccountQuotaEditor extends React.Component<Props & ReduxProps, State> {
                             popupClassName={block('progress-tooltip-popup')}
                         />
                     </div>
-                    <Link theme={'ghost'} className={block('edit')} onClick={this.toggleShowEditor}>
+                    <ClickableText
+                        color="secondary"
+                        className={block('edit')}
+                        onClick={this.toggleShowEditor}
+                    >
                         <Icon awesome={'pencil'} />
-                    </Link>
+                    </ClickableText>
                 </div>
                 {showEditor && (
                     <QuotaEditorWithHide
@@ -111,7 +116,7 @@ class AccountQuotaEditor extends React.Component<Props & ReduxProps, State> {
             <SelectSingle
                 value={value}
                 onChange={onChange}
-                items={_.map(sources, (value) => {
+                items={map_(sources, (value) => {
                     return {
                         value,
                         text: value,

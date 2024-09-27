@@ -18,7 +18,10 @@ import {
     SUPPRESS_REDIRECT,
     TOGGLE_PERMANENTLY_DELETE,
 } from '../../../../constants/navigation/modals/delete-object';
-import _ from 'lodash';
+
+import find_ from 'lodash/find';
+import map_ from 'lodash/map';
+
 import {executeBatchWithRetries} from '../../execute-batch';
 import {YTApiId, ytApiV3Id} from '../../../../rum/rum-wrap-api';
 
@@ -104,7 +107,7 @@ export function getRealPath({path, type}) {
             .catch((error) => {
                 console.error(error);
                 toaster.add({
-                    type: 'error',
+                    theme: 'danger',
                     name: 'real path',
                     timeout: 10000,
                     title: 'Could not open delete dialog.',
@@ -128,7 +131,7 @@ export function getRealPaths(items) {
     return (dispatch) => {
         dispatch({type: LOAD_REAL_PATH.REQUEST});
 
-        const requests = _.map(items, ({path}) => {
+        const requests = map_(items, ({path}) => {
             return {
                 command: 'get',
                 parameters: {
@@ -148,11 +151,11 @@ export function getRealPaths(items) {
             errorTitle: 'Failed to get real paths',
         })
             .then((responses) => {
-                const error = _.find(responses, (res) => res.error);
+                const error = find_(responses, (res) => res.error);
                 if (error) {
                     return Promise.reject(error.error);
                 }
-                const multipleInfo = _.map(responses, (res, index) => {
+                const multipleInfo = map_(responses, (res, index) => {
                     const type = ypath.get(res.output, '/type');
 
                     if (type === 'access_control_object') {
@@ -175,7 +178,7 @@ export function getRealPaths(items) {
             .catch((error) => {
                 console.error(error);
                 toaster.add({
-                    type: 'error',
+                    theme: 'danger',
                     name: 'real path',
                     timeout: 10000,
                     title: 'Could not open delete dialog.',
@@ -207,7 +210,7 @@ function deleteCurrentObject(path, restorePath) {
         if (permanently) {
             return yt.v3.remove({path}).then(() => {
                 toaster.add({
-                    type: 'success',
+                    theme: 'success',
                     name: 'delete object',
                     timeout: 10000,
                     title: 'Object has been permanently deleted.',
@@ -239,7 +242,7 @@ function deleteCurrentObject(path, restorePath) {
                 )
                 .then(() => {
                     toaster.add({
-                        type: 'success',
+                        theme: 'success',
                         name: 'delete object',
                         timeout: 10000,
                         title: 'Object deleted',
@@ -270,7 +273,7 @@ export function deleteObject() {
             dispatch({type: CLOSE_DELETE_OBJECT_POPUP});
 
             toaster.add({
-                type: 'error',
+                theme: 'danger',
                 name: 'delete object',
                 timeout: 10000,
                 title: 'Could not delete the object within transaction.',
@@ -298,7 +301,7 @@ export function deleteObject() {
                     data: {error},
                 });
                 toaster.add({
-                    type: 'error',
+                    theme: 'danger',
                     name: 'delete object',
                     timeout: 10000,
                     title: 'Could not delete the node.',
@@ -315,7 +318,7 @@ export function deleteObject() {
 }
 
 function permanentlyDeleteObjects(multipleInfo, transaction) {
-    const requests = _.map(multipleInfo, (node) => {
+    const requests = map_(multipleInfo, (node) => {
         const path = preparePath(node.path, node.type);
 
         return {
@@ -333,7 +336,7 @@ function permanentlyDeleteObjects(multipleInfo, transaction) {
         .then(() => yt.v3.commitTransaction({transaction_id: transaction}))
         .then(() => {
             toaster.add({
-                type: 'success',
+                theme: 'success',
                 name: 'delete objects',
                 timeout: 10000,
                 title: 'Objects have been permanently deleted.',
@@ -342,7 +345,7 @@ function permanentlyDeleteObjects(multipleInfo, transaction) {
 }
 
 function moveObjectsIntoTrash(multipleInfo, transaction, login) {
-    const setAttributesRequests = _.map(multipleInfo, (node) => {
+    const setAttributesRequests = map_(multipleInfo, (node) => {
         const restorePath = prepareRestorePath(node.path, node.type);
 
         return {
@@ -361,7 +364,7 @@ function moveObjectsIntoTrash(multipleInfo, transaction, login) {
         };
     });
 
-    const moveRequests = _.map(multipleInfo, (node) => {
+    const moveRequests = map_(multipleInfo, (node) => {
         const path = preparePath(node.path, node.type);
         const destinationPath = createDestinationPath(node.account, node.name, login);
 
@@ -394,7 +397,7 @@ function moveObjectsIntoTrash(multipleInfo, transaction, login) {
         .then(() => yt.v3.commitTransaction({transaction_id: transaction}))
         .then(() => {
             toaster.add({
-                type: 'success',
+                theme: 'success',
                 name: 'delete objects',
                 timeout: 10000,
                 title: 'Objects deleted',
@@ -414,7 +417,7 @@ export function deleteObjects() {
             dispatch({type: CLOSE_DELETE_OBJECT_POPUP});
 
             toaster.add({
-                type: 'error',
+                theme: 'danger',
                 name: 'delete object',
                 timeout: 10000,
                 title: 'Could not delete the object within transaction.',
@@ -444,7 +447,7 @@ export function deleteObjects() {
                     data: {error},
                 });
                 toaster.add({
-                    type: 'error',
+                    theme: 'danger',
                     name: 'delete objects',
                     timeout: 10000,
                     title: 'Could not delete the nodes.',

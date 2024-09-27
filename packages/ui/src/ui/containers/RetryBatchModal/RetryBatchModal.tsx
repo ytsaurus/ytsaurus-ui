@@ -1,6 +1,7 @@
 import React from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import _ from 'lodash';
+
+import map_ from 'lodash/map';
 
 import {Button, Dialog} from '@gravity-ui/uikit';
 
@@ -74,7 +75,7 @@ function RetryBatchModals() {
     const state = useSelector(getExecuteBatchState);
     return (
         <React.Fragment>
-            {_.map(state, (data, key) => {
+            {map_(state, (data, key) => {
                 return <RetryBatch key={key} {...data} />;
             })}
         </React.Fragment>

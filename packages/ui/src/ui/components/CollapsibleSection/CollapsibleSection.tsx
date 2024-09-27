@@ -10,8 +10,8 @@ import Icon from '../../components/Icon/Icon';
 const b = block('collapsible-section');
 const headingCN = block('elements-heading');
 
-type PropsStateLess = Props & {
-    onToggle: Required<Props>['onToggle'];
+type PropsStateLess = CollapsibleSectionProps & {
+    onToggle: Required<CollapsibleSectionProps>['onToggle'];
 };
 
 export class CollapsibleSectionStateLess extends Component<PropsStateLess> {
@@ -72,7 +72,7 @@ export class CollapsibleSectionStateLess extends Component<PropsStateLess> {
     }
 }
 
-export interface Props {
+export interface CollapsibleSectionProps {
     className?: string;
     name: React.ReactNode;
     collapsed?: boolean;
@@ -85,7 +85,7 @@ export interface Props {
     marginDirection?: 'top' | 'bottom';
 }
 
-export default function CollapsibleSection(props: Props) {
+export default function CollapsibleSection(props: CollapsibleSectionProps) {
     const {onToggle} = props;
     const [collapsed, setCollapsed] = React.useState(props.collapsed);
 

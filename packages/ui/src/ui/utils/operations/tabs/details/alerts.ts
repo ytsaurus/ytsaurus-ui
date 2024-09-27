@@ -1,5 +1,7 @@
 import {docsUrl} from '../../../../config';
-import _ from 'lodash';
+
+import map_ from 'lodash/map';
+
 import UIFactory from '../../../../UIFactory';
 
 export function prepareFaqUrl(type: string) {
@@ -8,7 +10,7 @@ export function prepareFaqUrl(type: string) {
 
 export function prepareAlerts(alerts?: Record<string, unknown>) {
     if (alerts) {
-        return _.map(alerts, (error, type) => ({
+        return map_(alerts, (error, type) => ({
             error: error,
             helpURL: prepareFaqUrl(type),
         }));

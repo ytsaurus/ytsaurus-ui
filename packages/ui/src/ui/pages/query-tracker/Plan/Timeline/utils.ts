@@ -2,7 +2,11 @@ import * as React from 'react';
 
 import {colord, extend} from 'colord';
 import mixPlugin from 'colord/plugins/mix';
-import _ from 'lodash';
+
+import minBy_ from 'lodash/minBy';
+import maxBy_ from 'lodash/maxBy';
+import sortBy_ from 'lodash/sortBy';
+
 import {DataSet} from 'vis-data';
 import {TimelineEvent} from '../../../../packages/ya-timeline';
 import {Progress} from '../models/plan';
@@ -250,7 +254,7 @@ export function parseGraph(data: {
         }));
         axes.push(current);
     });
-    const sortedAxes = _.sortBy(axes, ['level', 'from']);
+    const sortedAxes = sortBy_(axes, ['level', 'from']);
 
     if (queryStartedAtMillis !== Infinity && preparationFinishedAtMillis !== Infinity) {
         const preparation = {
@@ -340,8 +344,8 @@ export function useTimelineInterval(axes: AxisProps[]) {
     const intervalWasSetByUser = React.useRef(false);
 
     const {queryStart, queryEnd} = React.useMemo(() => {
-        const firstEvent = _.minBy(axes, 'from');
-        const lastEvent: EventGroup = _.maxBy(axes, 'to') ?? Object.create(null);
+        const firstEvent = minBy_(axes, 'from');
+        const lastEvent: EventGroup = maxBy_(axes, 'to') ?? Object.create(null);
 
         const queryStart = firstEvent ? firstEvent.from - RESERVE_TO_EVENT : undefined;
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import block from 'bem-cn-lite';
-import _range from 'lodash/range';
+import range_ from 'lodash/range';
 import {DateTime, Interval} from 'luxon';
 
 import i18n from '../i18n';
@@ -56,7 +56,7 @@ export class Months extends React.PureComponent {
         let currentColumn = 0;
 
         return (
-            _range(1, CELLS_COUNT)
+            range_(1, CELLS_COUNT)
                 // eslint-disable-next-line complexity
                 .map((cell) => {
                     const isTitle = cell === 1;

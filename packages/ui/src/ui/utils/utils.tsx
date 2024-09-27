@@ -1,6 +1,9 @@
 import React from 'react';
-import axios, {AxiosError} from 'axios';
-import _ from 'lodash';
+import {AxiosError} from 'axios';
+
+import forEach_ from 'lodash/forEach';
+import map_ from 'lodash/map';
+import reduce_ from 'lodash/reduce';
 
 import {TypedKeys, YTError} from '../types';
 import {Link, ProgressProps, Toaster} from '@gravity-ui/uikit';
@@ -42,7 +45,7 @@ export function extractBatchV4Values<V, T extends {value?: V}>(
     const {results, ...rest} = data;
     const res = !results
         ? []
-        : _.map(results, (itemData, index) => {
+        : map_(results, (itemData, index) => {
               const hasValue = COMMANDS_V4_WITH_VALUE[requests[index]?.command];
               if (!hasValue) {
                   return itemData;
@@ -85,7 +88,7 @@ export function splitBatchResults<T = unknown>(
     const outputs: Array<T | undefined> = [];
     const errorIndices: Array<number> = [];
     const resultIndices: Array<number> = [];
-    _.forEach(batchResults, (res, index) => {
+    forEach_(batchResults, (res, index) => {
         const {error, output} = res;
         outputs.push(output);
         if (error) {
@@ -118,7 +121,7 @@ export function splitBatchResults<T = unknown>(
 }
 
 export function getBatchErrorIndices<T>(results: Array<BatchResultsItem<T>>) {
-    return _.reduce(
+    return reduce_(
         results,
         (acc, {error}, index) => {
             if (error) {
@@ -136,6 +139,7 @@ interface CommonWrapApiOptions<T> {
     skipSuccessToast?: boolean;
     errorContent?: React.ReactNode | ((e: YTError) => React.ReactNode);
     skipErrorToast?: boolean;
+    skipErrorFn?: (e: any) => boolean;
     successTitle?: string;
     timeout?: number;
     autoHide?: boolean;
@@ -177,7 +181,7 @@ export function wrapApiPromiseByToaster<T>(p: Promise<T>, options: WrapApiOption
             if (!options.skipSuccessToast) {
                 toaster.add({
                     name: options.toasterName,
-                    type: 'success',
+                    theme: 'success',
                     title: options.successTitle || 'Success',
                     content:
                         'function' === typeof successContent ? successContent(res) : successContent,
@@ -187,29 +191,31 @@ export function wrapApiPromiseByToaster<T>(p: Promise<T>, options: WrapApiOption
             return res;
         })
         .catch((error) => {
-            if (axios.isCancel(error)) {
-                return Promise.reject(error);
-            }
+            if (!isCancelled(error)) {
+                const data = error?.response?.data || error;
+                const {code, message} = data;
 
-            const data = error?.response?.data || error;
-            const {code, message} = data;
+                const {skipErrorFn, skipErrorToast} = options;
 
-            if (!options.skipErrorToast && !isCancelled(error)) {
-                toaster.add({
-                    name: options.toasterName,
-                    type: 'error',
-                    title: options.errorTitle || 'Failure',
-                    content:
-                        'function' === typeof errorContent
-                            ? errorContent(error)
-                            : errorContent || (
-                                  <span>
-                                      [code {code}] {message}
-                                  </span>
-                              ),
-                    actions: [{label: ' Details', onClick: () => showErrorPopup(data)}],
-                    autoHiding: false,
-                });
+                const isVisibleError = skipErrorFn ? skipErrorFn : (_e: unknown) => !skipErrorToast;
+
+                if (isVisibleError(error)) {
+                    toaster.add({
+                        name: options.toasterName,
+                        theme: 'danger',
+                        title: options.errorTitle || 'Failure',
+                        content:
+                            'function' === typeof errorContent
+                                ? errorContent(error)
+                                : errorContent || (
+                                      <span>
+                                          [code {code}] {message}
+                                      </span>
+                                  ),
+                        actions: [{label: ' Details', onClick: () => showErrorPopup(data)}],
+                        autoHiding: false,
+                    });
+                }
             }
             return Promise.reject(error);
         });
@@ -239,7 +245,7 @@ export function showToasterError(name: string, error: any) {
 
     toaster.add({
         name,
-        type: 'error',
+        theme: 'danger',
         title: `${name} failure`,
         content: (
             <span>
@@ -388,7 +394,7 @@ function visitTreeItemsImpl<T>(
         return;
     }
 
-    _.forEach(treeItem.children, (child) => visitTreeItemsImpl(child, visitorFn, options));
+    forEach_(treeItem.children, (child) => visitTreeItemsImpl(child, visitorFn, options));
 }
 
 export function openInNewTab(href: string) {
@@ -407,7 +413,7 @@ export function showChangedProps(key: string, props: object, verbose?: boolean) 
         console.log(key, Date.now(), Object.keys(props));
     } else {
         const changed: Array<string> = [];
-        _.forEach(props, (v, k) => {
+        forEach_(props, (v, k) => {
             if (v !== prevProps[k]) {
                 changed.push(k);
                 if (verbose) {

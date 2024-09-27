@@ -3,7 +3,8 @@ import {connect, useDispatch} from 'react-redux';
 import PropTypes from 'prop-types';
 import {compose} from 'redux';
 import cn from 'bem-cn-lite';
-import _ from 'lodash';
+
+import map_ from 'lodash/map';
 
 import {Progress} from '@gravity-ui/uikit';
 
@@ -23,8 +24,6 @@ import {getSortedItems} from '../../../../../store/selectors/components/nodes/no
 import {nodeSelector} from '../../../../../store/selectors/components/node/node';
 import {getCluster, getCurrentClusterConfig} from '../../../../../store/selectors/global';
 import hammer from '../../../../../common/hammer';
-import {Page} from '../../../../../constants/index';
-import {Tab} from '../../../../../constants/components/main';
 import NodeCpuAndMemory, {
     hasCpuAndMemoryMeta,
 } from '../../../../../pages/components/tabs/node/NodeCpuAndMemory/NodeCpuAndMemory';
@@ -38,10 +37,11 @@ import NodeTabletSlots from '../../../../../pages/components/tabs/node/NodeTable
 import {useUpdater} from '../../../../../hooks/use-updater';
 
 import withSplit from '../../../../../hocs/withSplit';
-
-import './NodeCard.scss';
 import UIFactory from '../../../../../UIFactory';
 import ClipboardButton from '../../../../../components/ClipboardButton/ClipboardButton';
+import {makeComponentsNodesUrl} from '../../../../../utils/app-url';
+
+import './NodeCard.scss';
 
 const block = cn('node-card');
 
@@ -179,7 +179,7 @@ class NodeCard extends Component {
                     className={block('locations')}
                     collapsed
                 >
-                    {_.map(locations, (location, index) => this.renderLocation(location, index))}
+                    {map_(locations, (location, index) => this.renderLocation(location, index))}
                 </CollapsibleSection>
             )
         );
@@ -191,7 +191,7 @@ class NodeCard extends Component {
         return (
             alerts?.length > 0 && (
                 <CollapsibleSection size="s" name="Alerts" className={block('alerts')} collapsed>
-                    {_.map(alerts, (alert) => (
+                    {map_(alerts, (alert) => (
                         <Alert key={alert.message} error={alert} />
                     ))}
                 </CollapsibleSection>
@@ -238,13 +238,13 @@ class NodeCard extends Component {
                 <MetaTable
                     items={[
                         {
-                            key: 'system tags',
-                            value: _.map(systemTags, (tag) => <Label key={tag} text={tag} />),
+                            key: 'system_tags',
+                            value: map_(systemTags, (tag) => <Label key={tag} text={tag} />),
                             visible: systemTags?.length > 0,
                         },
                         {
-                            key: 'user tags',
-                            value: _.map(userTags, (tag) => <Label key={tag} text={tag} />),
+                            key: 'user_tags',
+                            value: map_(userTags, (tag) => <Label key={tag} text={tag} />),
                             visible: userTags?.length > 0,
                         },
                         {
@@ -283,24 +283,24 @@ class NodeCard extends Component {
                             visible: alerts?.length > 0,
                         },
                         {
-                            key: 'scheduler jobs',
+                            key: 'scheduler_jobs',
                             value: renderLabel(disableJobs),
                         },
                         {
-                            key: 'write sessions',
+                            key: 'write_sessions',
                             value: renderLabel(disableWriteSession),
                         },
                         {
-                            key: 'tablet cells',
+                            key: 'tablet_cells',
                             value: renderLabel(disableTabletCells),
                         },
                         {
-                            key: 'data center',
+                            key: 'data_center',
                             value: dataCenter?.toUpperCase(),
                             visible: Boolean(dataCenter),
                         },
                         {
-                            key: 'last seen',
+                            key: 'last_seen',
                             value: hammer.format['DateTime'](lastSeenTime, {
                                 format: 'full',
                             }),
@@ -368,7 +368,7 @@ class NodeCard extends Component {
                 <div className={block('header')}>
                     <Link
                         routed
-                        url={`/${cluster}/${Page.COMPONENTS}/${Tab.NODES}/${node?.host}/general`}
+                        url={makeComponentsNodesUrl({cluster, host: node?.host})}
                         className={block('node')}
                     >
                         {node?.host}

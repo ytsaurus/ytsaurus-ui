@@ -3,7 +3,9 @@ import PropTypes from 'prop-types';
 import hammer from '../../common/hammer';
 import cn from 'bem-cn-lite';
 import React from 'react';
-import _ from 'lodash';
+
+import keys_ from 'lodash/keys';
+import map_ from 'lodash/map';
 
 import {
     createGetECDF,
@@ -77,7 +79,7 @@ function Histogram(props) {
                 <Select
                     value={[activeHistogram]}
                     onUpdate={(values) => handleHistogramChange(values[0])}
-                    options={_.map(_.keys(histogramItems), (value) => {
+                    options={map_(keys_(histogramItems), (value) => {
                         return {value, content: value};
                     })}
                     width="max"

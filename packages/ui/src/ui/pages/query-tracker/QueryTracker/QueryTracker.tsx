@@ -17,12 +17,16 @@ import {useQueriesListSidebarToggle} from '../hooks/QueriesList';
 import {getDirtySinceLastSubmit, getQueryGetParams} from '../module/query/selectors';
 import {QueriesList} from '../QueriesList';
 import {useQueryACO} from '../QueryACO/useQueryACO';
+import {MonacoContext} from '../context/MonacoContext';
 
 import cn from 'bem-cn-lite';
 
 import './QueryTracker.scss';
 import {QueryEditorSplit} from './QueryEditorSplit';
 import {selectFileEditor} from '../module/queryFilesForm/selectors';
+import {selectNavigationCluster} from '../module/queryNavigation/selectors';
+import {setSettingByKey} from '../../../store/actions/settings';
+import {CellPreviewModal} from '../../../containers/CellPreviewModal/CellPreviewModal';
 
 const b = cn('query-tracker-page');
 
@@ -44,6 +48,7 @@ const minSize = 380; // see history list's cells size
 function QueryPageDraft() {
     const dispatch = useDispatch();
     const routeParams = useSelector(getQueryGetParams);
+    const cluster = useSelector(selectNavigationCluster);
 
     useEffect(() => {
         const engine =
@@ -69,6 +74,14 @@ function QueryPageDraft() {
             );
         } else {
             dispatch(createEmptyQuery(engine));
+        }
+        if (cluster) {
+            dispatch(
+                setSettingByKey<boolean>(
+                    'global::queryTracker::queriesListSidebarVisibilityMode',
+                    true,
+                ),
+            );
         }
     }, [dispatch]);
     return null;
@@ -123,22 +136,25 @@ export default function QueryTracker({match}: Props) {
                 <Route exact path={match.path} component={QueryPageDraft} />
                 <Route path={`${match.path}/:queryId`} component={QueryPage} />
             </Switch>
-            <QueriesPooling>
-                <FlexSplitPane
-                    className={b('container')}
-                    direction={FlexSplitPane.HORIZONTAL}
-                    onResizeEnd={setSize}
-                    minSize={minSize}
-                    getInitialSizes={getSize}
-                >
-                    {isQueriesListSidebarVisible ? <QueriesList /> : null}
-                    <QueryEditorSplit
-                        fileEditorFullWidth={fileEditor.isFullWidth}
-                        fileEditorVisible={fileEditor.isOpen}
-                        onStartQuery={goToCreatedQuery}
-                    />
-                </FlexSplitPane>
-            </QueriesPooling>
+            <MonacoContext.Provider value={new Map()}>
+                <QueriesPooling>
+                    <FlexSplitPane
+                        className={b('container')}
+                        direction={FlexSplitPane.HORIZONTAL}
+                        onResizeEnd={setSize}
+                        minSize={minSize}
+                        getInitialSizes={getSize}
+                    >
+                        {isQueriesListSidebarVisible ? <QueriesList /> : null}
+                        <QueryEditorSplit
+                            fileEditorFullWidth={fileEditor.isFullWidth}
+                            fileEditorVisible={fileEditor.isOpen}
+                            onStartQuery={goToCreatedQuery}
+                        />
+                    </FlexSplitPane>
+                </QueriesPooling>
+            </MonacoContext.Provider>
+            <CellPreviewModal />
         </>
     );
 }

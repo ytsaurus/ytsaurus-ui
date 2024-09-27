@@ -1,4 +1,11 @@
-import _ from 'lodash';
+import compact_ from 'lodash/compact';
+import filter_ from 'lodash/filter';
+import forEach_ from 'lodash/forEach';
+import map_ from 'lodash/map';
+import partition_ from 'lodash/partition';
+import reduce_ from 'lodash/reduce';
+import sortBy_ from 'lodash/sortBy';
+
 import {createSelector} from 'reselect';
 import {ClusterConfig} from '../../../shared/yt-types';
 import {RootState} from '../reducers';
@@ -87,7 +94,7 @@ export const getRecentPagesInfo = createSelector(
 );
 
 export const getKnownPages = createSelector([getRecentAllPagesInfoRaw], (pages) => {
-    return _.reduce(
+    return reduce_(
         pages,
         (acc, page) => {
             acc[page.id] = page.name;
@@ -98,7 +105,7 @@ export const getKnownPages = createSelector([getRecentAllPagesInfoRaw], (pages) 
 });
 
 export const getPagesInfoMapById = createSelector([getRecentPagesInfo], ({all}) => {
-    const res = _.reduce(
+    const res = reduce_(
         all,
         (acc, item) => {
             acc[item.id] = item;
@@ -110,7 +117,7 @@ export const getPagesInfoMapById = createSelector([getRecentPagesInfo], ({all}) 
 });
 
 export const getPagesOrderedByName = createSelector([getRecentPagesInfo], ({all}) => {
-    return _.sortBy(
+    return sortBy_(
         all.filter((item) => Boolean(PAGE_ICONS_BY_ID[item.id])),
         'name',
     );
@@ -119,7 +126,7 @@ export const getPagesOrderedByName = createSelector([getRecentPagesInfo], ({all}
 export const getPagesOrderedByUser = createSelector(
     [getPagesOrderedByName, getSettingsPagesOrder, getSettingsPagesPinned],
     (pages, order, pinned) => {
-        const pagesById = _.reduce(
+        const pagesById = reduce_(
             pages,
             (acc, item) => {
                 acc[item.id] = item;
@@ -128,8 +135,8 @@ export const getPagesOrderedByUser = createSelector(
             {} as Record<string, PageInfo>,
         );
 
-        const ordered: Array<PageInfo & {pinned?: boolean}> = _.compact(
-            _.map(order, (item) => {
+        const ordered: Array<PageInfo & {pinned?: boolean}> = compact_(
+            map_(order, (item) => {
                 const res = pagesById[item];
                 delete pagesById[item];
                 return res
@@ -141,19 +148,19 @@ export const getPagesOrderedByUser = createSelector(
             }),
         );
 
-        _.forEach(pagesById, (item) => {
+        forEach_(pagesById, (item) => {
             ordered.push({
                 ...item,
                 pinned: pinned[item.id],
             });
         });
 
-        const [pinnedItems, other] = _.partition(ordered, ({pinned}) => pinned);
+        const [pinnedItems, other] = partition_(ordered, ({pinned}) => pinned);
 
         return pinnedItems.concat(other);
     },
 );
 
 export const getPagesOrderedByUserAndPinned = createSelector([getPagesOrderedByUser], (pages) => {
-    return _.filter(pages, 'pinned');
+    return filter_(pages, 'pinned');
 });

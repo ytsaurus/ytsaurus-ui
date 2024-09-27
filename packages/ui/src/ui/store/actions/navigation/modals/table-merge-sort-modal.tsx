@@ -1,5 +1,10 @@
 import React from 'react';
-import _ from 'lodash';
+
+import forEach_ from 'lodash/forEach';
+import map_ from 'lodash/map';
+import sortBy_ from 'lodash/sortBy';
+import toLower_ from 'lodash/toLower';
+
 import {ThunkAction} from 'redux-thunk';
 import {RootState} from '../../../../store/reducers';
 import axios, {CancelTokenSource} from 'axios';
@@ -64,7 +69,7 @@ export function tableSortModalLoadColumns(
         if (!paths?.length) {
             return undefined;
         }
-        const requests = _.map(paths, (path) => {
+        const requests = map_(paths, (path) => {
             return {
                 command: 'get' as const,
                 parameters: {path: `${path}/@schema`},
@@ -82,16 +87,16 @@ export function tableSortModalLoadColumns(
                     return;
                 }
                 const columns: {[name: string]: boolean} = {};
-                _.forEach(results, ({output}) => {
-                    _.forEach(ypath.getValue(output), ({name}) => {
+                forEach_(results, ({output}) => {
+                    forEach_(ypath.getValue(output), ({name}) => {
                         columns[name] = true;
                     });
                 });
                 dispatch(
                     setModalPartial({
-                        suggestColumns: _.sortBy(
-                            _.map(columns, (_v, name) => name),
-                            (name) => _.toLower(name),
+                        suggestColumns: sortBy_(
+                            map_(columns, (_v, name) => name),
+                            (name) => toLower_(name),
                         ),
                     }),
                 );

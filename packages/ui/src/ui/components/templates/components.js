@@ -3,7 +3,10 @@ import './components/nodes/node';
 
 import React from 'react';
 import block from 'bem-cn-lite';
-import _ from 'lodash';
+
+import keys_ from 'lodash/keys';
+import map_ from 'lodash/map';
+
 import {Progress} from '@gravity-ui/uikit';
 
 import Link from '../../components/Link/Link';
@@ -183,7 +186,7 @@ templates.add('components/nodes', {
 
     tablet_slots(item) {
         if (item.tabletSlots) {
-            return _.map(_.keys(item.tabletSlots.byState), (state) => {
+            return map_(keys_(item.tabletSlots.byState), (state) => {
                 const tabletSlots = item.tabletSlots.byState[state];
                 const {text, theme} = TABLET_SLOTS[state];
 

@@ -75,42 +75,42 @@ body {
         z-index: var(--tooltip-z-index);
     }
 
-    .yc-modal {
+    .g-modal {
         z-index: var(--dialog-z-index);
     }
 
-    .yc-popup,
-    .yc-popup-wrapper {
+    .g-popup,
+    .g-popup-wrapper {
         z-index: var(--dialog-z-index);
     }
 
     .yt-special-background {
-        .yc-button_disabled.yc-button_view_outlined::before,
-        .yc-button_disabled.yc-button_view_outlined-info::before,
-        .yc-button_disabled.yc-button_view_outlined-danger::before {
-            background-color: var(--yc-button-background-color);
+        .g-button_disabled.g-button_view_outlined::before,
+        .g-button_disabled.g-button_view_outlined-info::before,
+        .g-button_disabled.g-button_view_outlined-danger::before {
+            background-color: var(--g-color-base-generic-accent-disabled);
         }
         .yc-select-control_disabled.yc-select-control,
-        .yc-text-input_disabled {
-            .yc-text-input__content {
+        .g-text-input_disabled {
+            .g-text-input__content {
                 background-color: var(--g-color-base-generic-accent-disabled);
             }
         }
 
         .yt-select,
-        .yc-button_view_outlined::before,
-        .yc-button_view_outlined-info::before,
-        .yc-button_view_outlined-danger::before {
+        .g-button_view_outlined::before,
+        .g-button_view_outlined-info::before,
+        .g-button_view_outlined-danger::before {
             background-color: var(--main-background);
         }
 
         .yc-select-control,
-        .yc-text-input__content {
+        .g-text-input__content {
             background-color: var(--main-background);
         }
 
         .yc-select-search {
-            .yc-text-input__content {
+            .g-text-input__content {
                 background-color: unset;
             }
         }
@@ -125,7 +125,7 @@ body {
         }
     }
 
-    .yc-popover__tooltip-popup-content {
+    .g-popover__tooltip-popup-content {
         max-width: 600px;
     }
 
@@ -142,8 +142,16 @@ body {
     }
 
     // Temporary fix for screenshot tests
-    .gn-aside-header__collapse-button {
+    & .gn-aside-header__collapse-button {
         border-top: 1px solid var(--gn-aside-header-collapse-button-divider-line-color);
         height: 20px;
+    }
+
+    & .g-dialog-footer {
+        padding: 12px 32px;
+    }
+
+    & .g-breadcrumbs__popup {
+        z-index: var(--dialog-suggest-z-index) !important;
     }
 }

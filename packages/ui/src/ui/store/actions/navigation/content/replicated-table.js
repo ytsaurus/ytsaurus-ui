@@ -15,7 +15,8 @@ import {
     LOAD_REPLICAS_SUCCESS,
 } from '../../../../constants/navigation/content/replicated-table';
 import {updateView} from '..';
-import _ from 'lodash';
+
+import sortBy_ from 'lodash/sortBy';
 
 const requests = new CancelHelper();
 
@@ -42,7 +43,7 @@ export function loadReplicas() {
                 dispatch({
                     type: LOAD_REPLICAS_SUCCESS,
                     data: {
-                        replicas: _.sortBy(replicas, '$value'),
+                        replicas: sortBy_(replicas, '$value'),
                     },
                 });
             })

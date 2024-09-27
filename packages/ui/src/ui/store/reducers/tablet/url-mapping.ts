@@ -1,5 +1,3 @@
-import _ from 'lodash';
-
 import {initialState as tabletInitialState} from './tablet';
 import {initialState as tableSortState} from '../../../store/reducers/tables';
 

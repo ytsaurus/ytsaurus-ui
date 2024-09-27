@@ -1,5 +1,8 @@
 import React from 'react';
-import _ from 'lodash';
+
+import isNumber_ from 'lodash/isNumber';
+import reduce_ from 'lodash/reduce';
+
 import cn from 'bem-cn-lite';
 
 import Icon from '../../../../components/Icon/Icon';
@@ -62,8 +65,8 @@ function ProgressTooltipRow<T extends number | string>({
             </span>
         ) : null;
     const committedValue =
-        formatNumber && _.isNumber(committed) ? formatNumber(committed) : committed;
-    const limitValue = formatNumber && _.isNumber(limit) ? formatNumber(limit) : limit;
+        formatNumber && isNumber_(committed) ? formatNumber(committed) : committed;
+    const limitValue = formatNumber && isNumber_(limit) ? formatNumber(limit) : limit;
 
     return (
         <React.Fragment>
@@ -80,6 +83,6 @@ interface ProgressTooltipTotalRowProps extends Props {
 }
 
 function ProgressTooltipTotalRow({info, limit, mixin, formatNumber}: ProgressTooltipTotalRowProps) {
-    const committed = _.reduce(info, (acc, item) => acc + item.committed, 0);
+    const committed = reduce_(info, (acc, item) => acc + item.committed, 0);
     return <ProgressTooltipRow name="Total" {...{formatNumber, mixin, committed, limit}} />;
 }

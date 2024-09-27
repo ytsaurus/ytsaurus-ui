@@ -53,7 +53,7 @@ const Consumer: React.VFC<PropsFromRedux> = ({
     const {ExtraControls, View} = useViewByMode(consumerMode);
 
     if (statusError) {
-        return <ErrorBlock error={statusError} topMargin="half" />;
+        return <ErrorBlock error={statusError} topMargin="none" />;
     }
 
     return (

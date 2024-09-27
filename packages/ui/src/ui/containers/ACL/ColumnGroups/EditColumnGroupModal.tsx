@@ -1,7 +1,7 @@
 import React, {useMemo, useState} from 'react';
 import {YTDFDialog, makeErrorFields} from '../../../components/Dialog/Dialog';
 import {AclColumnGroup} from '../../../utils/acl/acl-types';
-import _ from 'lodash';
+import includes_ from 'lodash/includes';
 
 export interface Props {
     title: string;
@@ -70,7 +70,7 @@ export default function EditColumnGroupModal({
                     caption: 'Name',
                     extras: {
                         placeholder: 'column group name',
-                        disabled: _.includes(disabledFields, 'name'),
+                        disabled: includes_(disabledFields, 'name'),
                     },
                 },
                 {
@@ -80,7 +80,7 @@ export default function EditColumnGroupModal({
                     caption: 'Columns',
                     tooltip: 'One column name per line',
                     extras: {
-                        disabled: _.includes(disabledFields, 'columns'),
+                        disabled: includes_(disabledFields, 'columns'),
                     },
                 },
                 {
@@ -88,7 +88,7 @@ export default function EditColumnGroupModal({
                     type: 'tumbler',
                     caption: 'Enabled',
                     extras: {
-                        disabled: _.includes(disabledFields, 'enabled'),
+                        disabled: includes_(disabledFields, 'enabled'),
                     },
                 },
                 ...makeErrorFields([error]),

@@ -1,5 +1,8 @@
 import React from 'react';
-import _ from 'lodash';
+
+import capitalize_ from 'lodash/capitalize';
+import map_ from 'lodash/map';
+
 import cn from 'bem-cn-lite';
 
 import {DialogError, YTDFDialog} from '../../../components/Dialog/Dialog';
@@ -49,7 +52,7 @@ export default function DynTablesStateModal() {
 
     const pathsValues = React.useMemo(
         () =>
-            _.map(paths, (item) => {
+            map_(paths, (item) => {
                 return {
                     title: item,
                 };
@@ -70,7 +73,7 @@ export default function DynTablesStateModal() {
             onClose={onClose}
             pristineSubmittable={true}
             headerProps={{
-                title: _.capitalize(action),
+                title: capitalize_(action),
             }}
             initialValues={{
                 paths: pathsValues,

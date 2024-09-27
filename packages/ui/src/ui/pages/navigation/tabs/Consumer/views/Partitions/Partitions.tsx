@@ -51,7 +51,7 @@ const getColumns = createSelector(
             .filter((column) => column.checked)
             .map(({name, caption}) => {
                 if (name === 'error') {
-                    return error<SelectedPartition>(caption, (x) => x[name]);
+                    return error<SelectedPartition>(caption, (x) => x[name], block('error'));
                 } else if (name === 'read_rate') {
                     return multimeter<SelectedPartition>(
                         readRateName[rateMode],

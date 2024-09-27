@@ -27,6 +27,8 @@ import {
 } from '../../../../../store/reducers/navigation/tabs/access-log/access-log-filters';
 import CancelHelper, {isCancelled} from '../../../../../utils/cancel-helper';
 import {getAccessLogBasePath} from '../../../../../config';
+import {wrapApiPromiseByToaster} from '../../../../../utils/utils';
+import {getCluster} from '../../../../selectors/global';
 
 type AccessLogThunkAction<Res = any> = ThunkAction<Res, RootState, any, AccessLogAction>;
 type AccessLogFiltersThunkAction<Res = any> = ThunkAction<
@@ -100,6 +102,31 @@ export function fetchAccessLog(): AccessLogThunkAction {
             });
     };
 }
+
+export const fetchAccessLogQtId = (): AccessLogThunkAction => async (_, getState) => {
+    const state = getState();
+    const cluster = getCluster(state);
+    const params = getAccessLogRequestParams(state);
+
+    const newParams = {...params} as Partial<typeof params>;
+    delete newParams.pagination;
+
+    const {data} = await wrapApiPromiseByToaster(
+        axios.request({
+            method: 'POST',
+            url: `${getAccessLogBasePath()}/qt_access_log`,
+            withCredentials: true,
+            data: newParams,
+        }),
+        {
+            toasterName: 'getAccessLogQtId',
+            errorTitle: 'Failed to load access log query id',
+            skipSuccessToast: true,
+        },
+    );
+
+    window.open(`/${cluster}/queries/${data.query_id}`);
+};
 
 export function applyAccessLogFilters(): AccessLogFiltersThunkAction {
     return (dispatch) => {

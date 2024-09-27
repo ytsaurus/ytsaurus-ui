@@ -2,7 +2,11 @@ import React, {Component} from 'react';
 import {useSelector} from 'react-redux';
 import PropTypes from 'prop-types';
 import block from 'bem-cn-lite';
-import _ from 'lodash';
+
+import map_ from 'lodash/map';
+import orderBy_ from 'lodash/orderBy';
+import reduce_ from 'lodash/reduce';
+import slice_ from 'lodash/slice';
 
 import './NodesTypes.scss';
 import {
@@ -26,13 +30,13 @@ class NodesTypes extends Component {
     };
 
     _prepareNodes(nodes) {
-        const sortedNodes = _.orderBy(nodes, (node) => node.count, 'desc');
+        const sortedNodes = orderBy_(nodes, (node) => node.count, 'desc');
 
-        return _.slice(sortedNodes, 0, DISPLAYED_NODES);
+        return slice_(sortedNodes, 0, DISPLAYED_NODES);
     }
 
     _getSumCount(nodes) {
-        return _.reduce(nodes, (sum, node) => sum + node.count, 0);
+        return reduce_(nodes, (sum, node) => sum + node.count, 0);
     }
 
     renderItem(node) {
@@ -45,7 +49,7 @@ class NodesTypes extends Component {
     }
 
     renderItems(nodes) {
-        return _.map(nodes, (node) => this.renderItem(node));
+        return map_(nodes, (node) => this.renderItem(node));
     }
 
     renderSelected() {

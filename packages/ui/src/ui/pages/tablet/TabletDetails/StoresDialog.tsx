@@ -17,8 +17,8 @@ function StoresDialog(props: Props) {
     const title = unorderedDynamicTable
         ? '/stores'
         : index === -1
-        ? '/eden/stores'
-        : `partitions/${index}/stores`;
+          ? '/eden/stores'
+          : `partitions/${index}/stores`;
 
     return (
         <Dialog open={visible} onClose={onClose} hasCloseButton>

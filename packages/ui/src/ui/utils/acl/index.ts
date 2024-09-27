@@ -4,7 +4,7 @@ import {
     REGISTER_QUEUE_CONSUMER,
     REGISTER_QUEUE_CONSUMER_VITAL,
 } from '../../constants/acl';
-import {IdmKindType, ResponsibleType, Subject} from '../../utils/acl/acl-types';
+import {IdmKindType, InheritedFrom, ResponsibleType, Subject} from '../../utils/acl/acl-types';
 import {YTPermissionTypeUI} from './acl-api';
 import {makeRegexpFromSettings} from '../../../shared/utils';
 import {uiSettings} from '../../config/ui-settings';
@@ -77,6 +77,7 @@ export interface PreparedRole {
     subject: Subject;
     subjectUrl?: string;
     inherited?: boolean;
+    inheritedFrom?: InheritedFrom;
     idmLink?: string;
     key?: string;
     group?: 'role' | string | number;

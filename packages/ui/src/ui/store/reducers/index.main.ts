@@ -1,5 +1,7 @@
 import {combineReducers} from 'redux';
 
+import forEach_ from 'lodash/forEach';
+
 import acl from './acl/acl';
 import aclFilters from './acl/acl-filters';
 import actions from './actions';
@@ -33,7 +35,6 @@ import executeBatch from '../../store/reducers/execute-batch';
 import UIFactory, {UIFactoryClusterPageInfo} from '../../UIFactory';
 import {registerExtraPage} from '../../pages';
 import {registerLocationParameters} from '../../store/location';
-import _ from 'lodash';
 import {registerHeaderLink} from '../../containers/ClustersMenu/header-links-items';
 import {queryTracker} from '../../pages/query-tracker/module';
 import {odinPageInfo, odinRootPageInfo} from '../../pages/odin';
@@ -41,6 +42,8 @@ import {hasOdinPage} from '../../config';
 import {chyt} from './chyt';
 import {RawVersion} from '../../store/selectors/thor/support';
 import {mainLocations} from '../../store/location.main';
+import {queryResultsVisualization} from '../../pages/query-tracker/QueryResultsVisualization/store/reducer';
+import {flow} from '../../store/reducers/flow';
 
 const appReducers = {
     acl,
@@ -79,6 +82,8 @@ const appReducers = {
 
     chyt,
     manageTokens,
+    queryResultsVisualization,
+    flow,
 };
 
 export type RootState = Omit<ReturnType<ReturnType<typeof makeRootReducer>>, 'global'> & {
@@ -102,14 +107,14 @@ export type RootState = Omit<ReturnType<ReturnType<typeof makeRootReducer>>, 'gl
 function registerReducersAndUrlMapping(
     item: Pick<UIFactoryClusterPageInfo, 'reducers' | 'urlMapping'>,
 ) {
-    _.forEach(item.reducers, (reducer, key) => {
+    forEach_(item.reducers, (reducer, key) => {
         if ((appReducers as any)[key] !== undefined) {
             throw new Error('Some reducers from extraPages are trying to override each other.');
         }
         (appReducers as any)[key] = reducer;
     });
 
-    _.forEach(item.urlMapping, (pathData, path) => {
+    forEach_(item.urlMapping, (pathData, path) => {
         registerLocationParameters(path, pathData);
     });
 }

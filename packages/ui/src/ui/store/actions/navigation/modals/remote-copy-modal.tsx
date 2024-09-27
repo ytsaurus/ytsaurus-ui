@@ -1,6 +1,8 @@
 import React from 'react';
 import {ThunkAction} from 'redux-thunk';
-import _ from 'lodash';
+
+import map_ from 'lodash/map';
+import reduce_ from 'lodash/reduce';
 
 import {RootState} from '../../../../store/reducers';
 import {RemoteCopyModalStateAction} from '../../../../store/reducers/navigation/modals/remote-copy-modal';
@@ -13,12 +15,13 @@ import {ytApiV3} from '../../../../rum/rum-wrap-api';
 import {showErrorPopup, wrapApiPromiseByToaster} from '../../../../utils/utils';
 import {YTError} from '../../../../types';
 import {WithAttrs} from '../../../../utils/cypress-attributes';
+import {ClickableText} from '../../../../components/ClickableText/ClickableText';
 
 type RemoteCopyThunkAction = ThunkAction<any, RootState, any, RemoteCopyModalStateAction>;
 
 export function showRemoteCopyModal(paths: Array<string>): RemoteCopyThunkAction {
     return (dispatch) => {
-        const requests = _.map(paths, (path) => {
+        const requests = map_(paths, (path) => {
             return {
                 command: 'get' as const,
                 parameters: {
@@ -39,7 +42,7 @@ export function showRemoteCopyModal(paths: Array<string>): RemoteCopyThunkAction
                     return (
                         <span>
                             Failed to load attributes
-                            <Link onClick={() => showErrorPopup(e)}>Details</Link>
+                            <ClickableText onClick={() => showErrorPopup(e)}>Details</ClickableText>
                         </span>
                     );
                 },
@@ -48,7 +51,7 @@ export function showRemoteCopyModal(paths: Array<string>): RemoteCopyThunkAction
             },
         )
             .then((results) => {
-                const attributesMap = _.reduce(
+                const attributesMap = reduce_(
                     paths,
                     (acc, path, index) => {
                         acc[path] = results[index]?.output?.$attributes;
@@ -81,7 +84,7 @@ export function remoteCopy(params: RemoteCopyParams): RemoteCopyThunkAction {
 
             const toaster = new Toaster();
             toaster.add({
-                type: 'success',
+                theme: 'success',
                 name: 'remoteCopyStarted',
                 autoHiding: 500000,
                 title: 'Remote copy',

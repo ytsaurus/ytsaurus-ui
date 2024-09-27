@@ -1,4 +1,4 @@
-import mapValues from 'lodash/mapValues';
+import mapValues_ from 'lodash/mapValues';
 import ypath from '../../../common/thor/ypath';
 
 import {
@@ -40,7 +40,7 @@ function getIsEphemeral([operationAttributes, userTransactionAlive]: Awaited<
     );
     const trees = Object.keys(treesInfo);
     const poolPaths = Object.values(
-        mapValues(
+        mapValues_(
             treesInfo,
             (infoPerTree, tree) =>
                 `${tree}/pools/${ypath.getValue(infoPerTree, '/pool')}/is_ephemeral`,
@@ -64,17 +64,20 @@ function getIsEphemeral([operationAttributes, userTransactionAlive]: Awaited<
             ),
         )
         .then((res) =>
-            res.reduce((acc, poolInfo, index) => {
-                const tree = trees[index];
-                const pool = ypath.getValue(treesInfo[tree], '/pool');
-                const isEphemeral = ypath.getBoolean(poolInfo);
+            res.reduce(
+                (acc, poolInfo, index) => {
+                    const tree = trees[index];
+                    const pool = ypath.getValue(treesInfo[tree], '/pool');
+                    const isEphemeral = ypath.getBoolean(poolInfo);
 
-                acc[tree] = {
-                    [pool]: {isEphemeral},
-                };
+                    acc[tree] = {
+                        [pool]: {isEphemeral},
+                    };
 
-                return acc;
-            }, {} as Record<string, {isEphemeral: boolean}>),
+                    return acc;
+                },
+                {} as Record<string, {isEphemeral: boolean}>,
+            ),
         );
 
     return Promise.all([operationAttributes, userTransactionAlive, orchidAttributes]);
@@ -184,7 +187,7 @@ export function getOperation(
                         toaster.add({
                             name: 'get operation',
                             autoHiding: false,
-                            type: 'error',
+                            theme: 'danger',
                             title: 'Failed to load operation',
                             content: error.message,
                             actions: [{label: ' view', onClick: () => showErrorPopup(error)}],

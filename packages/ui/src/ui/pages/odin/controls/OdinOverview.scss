@@ -14,24 +14,14 @@ $row_width: $size * 30;
         display: flex;
         height: 48px;
         align-items: center;
+    }
 
-        &-button {
-            height: 28px;
-            display: inline-flex;
-            align-items: center;
+    &__navigation-date-picker {
+        width: 145px;
+    }
 
-            &_reset {
-                margin: 0 5px;
-            }
-
-            &_icon {
-                padding-top: 3px;
-            }
-        }
-
-        &-date-picker {
-            width: 145px;
-        }
+    &__navigation-now {
+        margin-left: 4px;
     }
 
     &__dates {
@@ -130,7 +120,7 @@ $row_width: $size * 30;
     }
 
     &__dialog {
-        .yc-dialog-header__caption {
+        .g-dialog-header__caption {
             flex-grow: 1;
         }
     }

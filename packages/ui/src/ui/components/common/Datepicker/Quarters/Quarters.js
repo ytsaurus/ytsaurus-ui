@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import block from 'bem-cn-lite';
 import {DateTime, Interval} from 'luxon';
-import _range from 'lodash/range';
+import range_ from 'lodash/range';
 
 import {MONTHS} from '../constants';
 
@@ -52,7 +52,7 @@ export class Quarters extends React.PureComponent {
         const {from, to, min, max, selectedInterval, hovered} = this.props;
 
         return (
-            _range(0, CELLS_COUNT)
+            range_(0, CELLS_COUNT)
                 // eslint-disable-next-line complexity
                 .map((cell) => {
                     if (cell === 0) {

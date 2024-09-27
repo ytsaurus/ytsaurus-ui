@@ -2,7 +2,7 @@ import React, {Component, Fragment} from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import block from 'bem-cn-lite';
-import {Text} from '@gravity-ui/uikit';
+import {Flex, Text} from '@gravity-ui/uikit';
 
 import ReadOnlyIcon from '../../../assets/img/svg/read-only-icon.svg';
 import WarmUpIcon from '../../../assets/img/svg/warmup-icon.svg';
@@ -14,9 +14,13 @@ import Icon from '../../../components/Icon/Icon';
 import {Tooltip} from '../../../components/Tooltip/Tooltip';
 import NodeQuad from '../NodeQuad/NodeQuad';
 import {SwitchLeaderButton} from './SwitchLeader';
-import _ from 'lodash';
+
+import keys_ from 'lodash/keys';
+import map_ from 'lodash/map';
 
 import './MasterGroup.scss';
+import {ChangeMaintenanceButton} from './ChangeMaintenanceButton';
+import {calcShortNameByRegExp} from '../../../containers/Host/Host';
 
 const b = block('master-group');
 
@@ -38,19 +42,29 @@ class Instance extends Component {
     };
 
     static propTypes = {
-        state: PropTypes.oneOf(_.keys(Instance.instanceStateToTheme)),
+        state: PropTypes.oneOf(keys_(Instance.instanceStateToTheme)),
         address: PropTypes.string.isRequired,
         attributes: PropTypes.shape({
             warming_up: PropTypes.bool,
             read_only: PropTypes.bool,
             voting: PropTypes.bool,
         }),
+        maintenance: PropTypes.bool,
         maintenanceMessage: PropTypes.string,
         allowVoting: PropTypes.bool,
+        allowService: PropTypes.bool,
     };
 
     render() {
-        const {state, address, attributes, maintenanceMessage, allowVoting} = this.props;
+        const {
+            state,
+            address,
+            attributes,
+            maintenance,
+            maintenanceMessage,
+            allowVoting,
+            allowService,
+        } = this.props;
         const {voting} = attributes ?? {};
         // do not use `!voting` cause `voting === undefined` is the same as `voting === true`
         const denyVoting = allowVoting && voting === false;
@@ -58,6 +72,7 @@ class Instance extends Component {
             denyVoting && state === 'following'
                 ? 'nonvoting'
                 : Instance.instanceStateToTheme[state];
+        const addressWithoutPort = hammer.format['Address'](address);
 
         /* eslint-disable camelcase */
         return (
@@ -90,17 +105,30 @@ class Instance extends Component {
                     )}
                 </div>
                 <div className={b('host')}>
-                    <div className={b('host-name')}>{hammer.format['Address'](address)}</div>
-                    <div>
-                        <span className={b('host-copy-btn')}>
+                    <Tooltip content={addressWithoutPort}>
+                        <div className={b('host-name')}>
+                            {calcShortNameByRegExp(addressWithoutPort) || addressWithoutPort}
+                        </div>
+                    </Tooltip>
+                    <Flex gap={1}>
+                        <span className={b('host-btn')}>
                             <ClipboardButton view="flat-secondary" text={address} />
                         </span>
+                        {allowService && (
+                            <ChangeMaintenanceButton
+                                className={b('host-btn')}
+                                address={address}
+                                maintenance={maintenance}
+                                maintenanceMessage={maintenanceMessage}
+                                type="master"
+                            />
+                        )}
                         {
                             <Text className={b('nonvoting', {show: denyVoting})} color="secondary">
                                 [nonvoting]
                             </Text>
                         }
-                    </div>
+                    </Flex>
                 </div>
             </Fragment>
         );
@@ -132,6 +160,7 @@ class MasterGroup extends Component {
         hostType: PropTypes.oneOf(['host', 'physicalHost']),
         gridRowStart: PropTypes.bool,
         allowVoting: PropTypes.bool,
+        allowService: PropTypes.bool,
     };
 
     renderQuorum() {
@@ -204,12 +233,13 @@ class MasterGroup extends Component {
     }
 
     render() {
-        const {className, instances, hostType, gridRowStart, allowVoting} = this.props;
+        const {className, instances, hostType, gridRowStart, allowVoting, allowService} =
+            this.props;
 
         return (
             <div className={b('group', {'grid-row-start': gridRowStart}, className)}>
                 {this.renderQuorum()}
-                {_.map(
+                {map_(
                     instances,
                     ({state, $address, $physicalAddress, $attributes, $rowAddress}) => {
                         const address = hostType === 'host' ? $address : $physicalAddress;
@@ -225,7 +255,9 @@ class MasterGroup extends Component {
                                 state={state}
                                 attributes={$attributes}
                                 maintenanceMessage={maintenanceMessage}
+                                maintenance={maintenance}
                                 allowVoting={allowVoting}
+                                allowService={allowService}
                             />
                         );
                     },

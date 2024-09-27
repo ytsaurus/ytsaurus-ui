@@ -1,12 +1,13 @@
 import React from 'react';
 import {useSelector} from 'react-redux';
 import {IconProps} from '@gravity-ui/uikit';
-import _compact from 'lodash/compact';
-import _filter from 'lodash/filter';
-import _forEach from 'lodash/forEach';
-import _map from 'lodash/map';
-import _reduce from 'lodash/reduce';
-import produce from 'immer';
+
+import compact_ from 'lodash/compact';
+import filter_ from 'lodash/filter';
+import forEach_ from 'lodash/forEach';
+import map_ from 'lodash/map';
+import reduce_ from 'lodash/reduce';
+import produce_ from 'immer';
 
 import UIFactory from '../../UIFactory';
 
@@ -22,6 +23,7 @@ import navigationIcon from '../../assets/img/svg/page-navigation.svg';
 import shieldIcon from '../../assets/img/svg/shield-icon.svg';
 import tableIcon from '../../assets/img/svg/table-icon.svg';
 import infoIcon from '../../assets/img/svg/info-icon.svg';
+import LogoGitlabIcon from '@gravity-ui/icons/svgs/logo-gitlab.svg';
 import {useClusterFromLocation} from '../../hooks/use-cluster';
 import {docsUrl} from '../../config/index';
 import {uiSettings} from '../../config/ui-settings';
@@ -49,6 +51,8 @@ import {
 import YT from '../../config/yt-config';
 import Link from '../../components/Link/Link';
 import Button from '../../components/Button/Button';
+import {AddTokenForm, VcsList} from '../../pages/query-tracker/Vcs/SettingsMenu';
+import {selectVcsConfig} from '../../pages/query-tracker/module/vcs/selectors';
 
 export interface SettingsPage {
     title: string;
@@ -81,8 +85,9 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
     const httpProxyVersion: string = useSelector(getHttpProxyVersion);
     const schedulerVersion: string = useSelector(getGlobalSchedulerVersion);
     const masterVersion: string = useSelector(getGlobalMasterVersion);
+    const config = useSelector(selectVcsConfig);
 
-    return _compact([
+    return compact_([
         makePage('General', generalIcon, [
             makeItem('Start page', 'top', <StartPageSettingMemo />),
             makeItem(
@@ -147,7 +152,7 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
         makePage(
             'Development',
             closeTagIcon,
-            _compact([
+            compact_([
                 isAdmin &&
                     makeItem(
                         "Show regular user's UI",
@@ -297,7 +302,7 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
         makePage(
             'Navigation',
             navigationIcon,
-            _compact([
+            compact_([
                 clusterNS &&
                     makeItem(
                         'Default path',
@@ -392,7 +397,7 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
         makePage(
             'Table',
             tableIcon,
-            _compact([
+            compact_([
                 makeItem(
                     'YQL V3 types',
                     'top',
@@ -495,9 +500,19 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
             ]),
 
         makePage(
+            'VCS',
+            LogoGitlabIcon,
+            compact_([
+                makeItem('Add or replace token', undefined, <AddTokenForm />),
+                Boolean(config.some((i) => i.hasToken)) &&
+                    makeItem('Existing tokens', undefined, <VcsList config={config} />),
+            ]),
+        ),
+
+        makePage(
             'About',
             infoIcon,
-            _compact([
+            compact_([
                 Boolean(cluster) && makeItem('HTTP proxy version', undefined, httpProxyVersion),
                 Boolean(cluster) && makeItem('Scheduler version', undefined, schedulerVersion),
                 Boolean(cluster) && makeItem('Master version', undefined, masterVersion),
@@ -533,25 +548,25 @@ export function useSettingsDescription(): Array<SettingsPage> {
 
     const res = React.useMemo(() => {
         const extPages: Record<string, SettingsPage> = hashByTitle(externalSettings);
-        return produce(settings, (pages) => {
-            _forEach(pages, (page) => {
+        return produce_(settings, (pages) => {
+            forEach_(pages, (page) => {
                 const extPage = extPages[page.title];
                 if (extPage) {
                     delete extPages[page.title];
                     const extSections = hashByTitle(extPage.sections);
-                    _forEach(page.sections, (section) => {
+                    forEach_(page.sections, (section) => {
                         const s = extSections[section.title];
                         if (s) {
                             delete extSections[section.title];
                             section.items.push(...s.items);
                         }
                     });
-                    _forEach(extSections, (section) => {
+                    forEach_(extSections, (section) => {
                         page.sections.push(section);
                     });
                 }
             });
-            _forEach(extPages, (page) => {
+            forEach_(extPages, (page) => {
                 pages.splice(pages.length - 1, 0, page);
             });
         });
@@ -561,7 +576,7 @@ export function useSettingsDescription(): Array<SettingsPage> {
 }
 
 function hashByTitle<T extends {title: string}>(data: Array<T>) {
-    return _reduce(
+    return reduce_(
         data,
         (acc, item) => {
             acc[item.title] = item;
@@ -575,8 +590,8 @@ function StartPageSetting() {
     const {all} = useSelector(getRecentPagesInfo);
 
     const pageItems = React.useMemo(() => {
-        const headerPages = _filter(all, (page) => Boolean(page.header));
-        return _map(headerPages, (page) => ({
+        const headerPages = filter_(all, (page) => Boolean(page.header));
+        return map_(headerPages, (page) => ({
             value: page.id,
             text: page.name,
         }));

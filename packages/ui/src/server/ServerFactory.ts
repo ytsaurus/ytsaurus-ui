@@ -1,16 +1,23 @@
 import type {Request, Response} from 'express';
 import type {ExpressKit} from '@gravity-ui/expresskit';
-import _ from 'lodash';
+import forEach_ from 'lodash/forEach';
 import {isLocalClusterId} from '../shared/utils';
 import {ConfigData} from '../shared/yt-types';
 import renderLayout, {AppLayoutConfig} from './render-layout';
 import {isLocalModeByEnvironment} from './utils';
+import {VcsApi} from '../shared/vcs';
+import {CustomVCSType, VCSSettings} from '../shared/ui-settings';
 
 export interface ServerFactory {
     getExtraRootPages(): Array<string>;
     isLocalClusterId(cluster: string): boolean;
     getHomeRedirectedUrl(cluster: string | undefined, req: Request): Promise<string | undefined>;
     renderLayout(params: AppLayoutConfig, req: Request, res: Response): Promise<string>;
+    createCustomVcsApi(
+        type: CustomVCSType,
+        vcs: Omit<VCSSettings, 'type'>,
+        token?: string,
+    ): VcsApi | undefined;
 }
 
 let app: ExpressKit;
@@ -42,6 +49,9 @@ const serverFactory: ServerFactory = {
     async renderLayout(params) {
         return await renderLayout<ConfigData>(params);
     },
+    createCustomVcsApi() {
+        return undefined;
+    },
 };
 
 function configureServerFactoryItem<K extends keyof ServerFactory>(
@@ -52,7 +62,7 @@ function configureServerFactoryItem<K extends keyof ServerFactory>(
 }
 
 export function configureServerFactory(overrides: Partial<ServerFactory>) {
-    _.forEach(overrides, (_v, k) => {
+    forEach_(overrides, (_v, k) => {
         const key = k as keyof ServerFactory;
         configureServerFactoryItem(key, overrides[key]!);
     });

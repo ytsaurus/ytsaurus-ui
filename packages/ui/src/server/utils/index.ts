@@ -1,5 +1,9 @@
 import * as stream from 'stream';
-import _ from 'lodash';
+
+import forEach_ from 'lodash/forEach';
+import pick_ from 'lodash/pick';
+import toString_ from 'lodash/toString';
+
 import type {Response} from 'express';
 import {AxiosError, AxiosResponse} from 'axios';
 import {AppContext} from '@gravity-ui/nodekit';
@@ -43,7 +47,7 @@ export function prepareErrorToSend(e: unknown) {
     };
 
     if (e instanceof Error) {
-        res.message = _.toString(e);
+        res.message = toString_(e);
     } else if (isYTError(e)) {
         return e;
     } else {
@@ -115,13 +119,13 @@ export async function pipeResponse(
 ) {
     dst.status(status ?? 500);
 
-    _.forEach(transformHeaders(headers), (value, key) => {
+    forEach_(transformHeaders(headers), (value, key) => {
         if (key !== 'content-length' && key !== 'vary' && key !== 'www-authenticate') {
             dst.setHeader(key, value);
         }
     });
 
-    const headersToLog = _.pick(headers, LOG_HEADERS);
+    const headersToLog = pick_(headers, LOG_HEADERS);
     ctx.log(logMsgPrefix + ' Headers', headersToLog);
 
     const pipedDataSize = await pipeReadableToWriteable(ctx, dst, data, logMsgPrefix);
@@ -170,25 +174,25 @@ export async function sendAndLogError(
 ) {
     const ae = asAxiosError(e);
     if (ae) {
-        ctx.logError('AxiosError', ae.toJSON(), extra);
+        ctx.logError('AxiosError', ae, extra);
         if (await pipeAxiosErrorOrFalse(ctx, res, ae)) {
             return;
         }
 
         if (ae.response?.status) {
-            _.forEach(ae.response.headers, (value, key) => {
+            forEach_(ae.response.headers, (value, key) => {
                 res.append(key, value);
             });
             return res.status(ae.response.status).send(ae.response.data || ae.response.statusText);
         }
 
-        return res.status(504).send({message: _.toString(e)});
+        return res.status(504).send({message: toString_(e)});
     }
 
     ctx.logError('Error', e, extra);
 
     if (e instanceof Error) {
-        return res.status(status || 500).send({message: _.toString(e)});
+        return res.status(status || 500).send({message: toString_(e)});
     }
 
     if (typeof e === 'string') {
@@ -205,3 +209,12 @@ export async function sendAndLogError(
 export const makeAuthClusterCookieName = (ytAuthCluster: string) => {
     return `${ytAuthCluster}_${YT_CYPRESS_COOKIE_NAME}`;
 };
+
+export class ErrorWithCode extends Error {
+    code: number;
+
+    constructor(code: number, message: string) {
+        super(message);
+        this.code = code;
+    }
+}

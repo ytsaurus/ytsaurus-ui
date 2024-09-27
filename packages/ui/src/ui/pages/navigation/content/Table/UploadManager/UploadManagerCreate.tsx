@@ -66,8 +66,9 @@ type ProgressState =
     | {inProgress: false}
     | {inProgress: true; event: {total?: number; loaded: number}};
 
-const UPLOAD_CONFIG = getConfigUploadTable();
-const EXCEL_BASE_URL = UPLOAD_CONFIG.uploadTableExcelBaseUrl;
+const getExcelBaseUrl = (payload: {cluster: string}) => {
+    return getConfigUploadTable(payload);
+};
 
 class UploadManagerCreate extends React.Component<Props, State> {
     state: State = {
@@ -346,6 +347,10 @@ class UploadManagerCreate extends React.Component<Props, State> {
             return 'file is not selected';
         }
 
+        const {cluster} = this.props;
+
+        const UPLOAD_CONFIG = getExcelBaseUrl({cluster});
+
         if (file.size > UPLOAD_CONFIG.uploadTableMaxSize) {
             return `File size must not be greater than ${format.Bytes(
                 UPLOAD_CONFIG.uploadTableMaxSize,
@@ -402,6 +407,8 @@ class UploadManagerCreate extends React.Component<Props, State> {
         const path = `${parentDir}/${name}`;
 
         this.onStartUpload(file.size);
+
+        const EXCEL_BASE_URL = getExcelBaseUrl({cluster}).uploadTableExcelBaseUrl;
 
         const readyUrl = `${EXCEL_BASE_URL}/${cluster}/api/ready`;
         const uploadUrl = `${EXCEL_BASE_URL}/${cluster}/api/upload`;

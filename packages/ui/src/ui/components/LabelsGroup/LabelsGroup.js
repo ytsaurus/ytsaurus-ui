@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import cn from 'bem-cn-lite';
-import _ from 'lodash';
+
+import map_ from 'lodash/map';
 
 import Icon from '../../components/Icon/Icon';
 
@@ -71,12 +72,14 @@ class LabelsGroup extends Component {
 
         return (
             <ul className={block()}>
-                {_.map(items, (label) => this.renderLabel(label))}
+                {map_(items, (label) => this.renderLabel(label))}
 
                 {renderToggler()}
 
                 {onRemoveAll && items.length > 0 && (
-                    <Button size="s" view="flat-secondary" text="Clear all" onClick={onRemoveAll} />
+                    <Button size="s" view="flat-secondary" onClick={onRemoveAll}>
+                        Clear all
+                    </Button>
                 )}
             </ul>
         );

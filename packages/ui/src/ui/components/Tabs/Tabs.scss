@@ -1,19 +1,5 @@
-.g-root .tabs .yc-link_view_normal {
-    color: var(--secondary-text) !important;
-
-    &:hover {
-        color: var(--hover-link) !important;
-    }
-}
-
 .tabs {
-    .yc-link {
-        color: var(--secondary-text);
-
-        &:hover {
-            color: var(--hover-link);
-        }
-    }
+    --g-color-text-secondary: var(--secondary-text);
 
     &__underline {
         border-bottom: 1px solid var(--dark-divider);
@@ -46,10 +32,6 @@
                 background-color: var(--primary-text);
                 transition: background-color 0.15s ease-out;
             }
-
-            .yc-link {
-                color: var(--primary-text);
-            }
         }
     }
 
@@ -71,10 +53,6 @@
 
                 background-color: var(--primary-text);
                 transition: background-color 0.15s ease-out;
-            }
-
-            .yc-link {
-                color: var(--primary-text);
             }
         }
     }

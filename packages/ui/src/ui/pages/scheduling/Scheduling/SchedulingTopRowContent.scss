@@ -35,7 +35,7 @@
     }
 
     &__breadcrumbs {
-        padding-left: 4px;
+        padding-left: 8px;
         flex-shrink: 1;
         overflow: hidden;
     }
@@ -64,8 +64,4 @@
     &__extra-control {
         padding-right: 10px;
     }
-}
-
-.yc-breadcrumbs__popup {
-    z-index: var(--dialog-suggest-z-index) !important;
 }

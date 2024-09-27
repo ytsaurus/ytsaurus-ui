@@ -1,9 +1,9 @@
 {
   "name": "@ytsaurus/interface-helpers",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "repository": {
     "type": "github",
-    "url": "https://github.com/YTsaurus/ytsaurus-ui/tree/main/packages/interface-helpers"
+    "url": "https://github.com/ytsaurus/ytsaurus-ui/tree/main/packages/interface-helpers"
   },
   "peerDependencies": {
     "bignumber.js": "^9.0.1",

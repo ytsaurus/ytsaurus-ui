@@ -1,6 +1,5 @@
 import React from 'react';
 import block from 'bem-cn-lite';
-import _ from 'lodash';
 
 import {Tooltip} from '../../components/Tooltip/Tooltip';
 import ClipboardButton from '../../components/ClipboardButton/ClipboardButton';

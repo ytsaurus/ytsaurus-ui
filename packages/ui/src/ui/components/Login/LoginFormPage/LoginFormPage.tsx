@@ -5,12 +5,13 @@ import {Button, Text, TextInput} from '@gravity-ui/uikit';
 import {onSuccessLogin} from '../../../store/actions/global';
 import ytLocalStorage from '../../../utils/yt-local-storage';
 import {
+    getClusterConfigByName,
     getGlobalYTAuthCluster,
     getOAuthButtonLabel,
     getOAuthEnabled,
 } from '../../../store/selectors/global';
 import LoginPageWrapper from '../LoginPageWrapper/LoginPageWrapper';
-import isEmpty from 'lodash/isEmpty';
+import isEmpty_ from 'lodash/isEmpty';
 
 import cn from 'bem-cn-lite';
 
@@ -42,12 +43,20 @@ const validate = ({
     return result;
 };
 
+const DEFAULT_LOGIN_FORM_TITLE = 'Welcome to YTsaurus!';
+
+const DEFAULT_LOGIN_FORM_TEXT = `A unified scalable platform for storing and processing large volumes of data.
+<br />
+<br />
+Login under your credentials.`;
+
 function LoginForm({theme}: Props) {
     const dispatch = useDispatch();
     const [username, setUsername] = useState(ytLocalStorage.get('loginDialog')?.username || '');
     const allowOAuth = useSelector(getOAuthEnabled);
     const buttonLabel = useSelector(getOAuthButtonLabel);
     const ytAuthCluster = useSelector(getGlobalYTAuthCluster) ?? '';
+    const ytAuthClusterConfig = useSelector(() => getClusterConfigByName(ytAuthCluster));
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState<boolean>(false);
     const [errors, setErrors] = React.useState<ErrorFields>({});
@@ -57,7 +66,7 @@ function LoginForm({theme}: Props) {
             e.preventDefault();
             setErrors({});
             const validationErrors = validate({username, password});
-            if (!isEmpty(validationErrors)) {
+            if (!isEmpty_(validationErrors)) {
                 setErrors(validationErrors);
                 return;
             }
@@ -83,15 +92,22 @@ function LoginForm({theme}: Props) {
         [username, password, dispatch],
     );
 
+    const {text, title} = ytAuthClusterConfig.loginPageSettings || {};
+
     return (
         <>
-            <h1 className={block('title')}>Welcome to YTsaurus!</h1>
-            <p className={block('text')}>
-                A unified scalable platform for storing and processing large volumes of data.
-                <br />
-                <br />
-                Login to your account.
-            </p>
+            <h1
+                className={block('title')}
+                dangerouslySetInnerHTML={{
+                    __html: title === undefined ? DEFAULT_LOGIN_FORM_TITLE : title,
+                }}
+            />
+            <p
+                className={block('text')}
+                dangerouslySetInnerHTML={{
+                    __html: text === undefined ? DEFAULT_LOGIN_FORM_TEXT : text,
+                }}
+            />
             <form onSubmit={handleFormSubmit}>
                 <TextInput
                     className={block('field')}
@@ -142,7 +158,7 @@ function LoginForm({theme}: Props) {
                 )}
 
                 {errors.response && (
-                    <Text as="p" color="danger" className={block('error')}>
+                    <Text as={'p' as const} color="danger" className={block('error')}>
                         {errors.response}
                     </Text>
                 )}

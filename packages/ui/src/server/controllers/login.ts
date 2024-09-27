@@ -1,6 +1,9 @@
 import type {Request, Response} from 'express';
 import axios from 'axios';
-import _ from 'lodash';
+
+import map_ from 'lodash/map';
+import reduce_ from 'lodash/reduce';
+
 import {YT_CYPRESS_COOKIE_NAME} from '../../shared/constants';
 import {getUserYTApiSetup, getYTApiClusterSetup} from '../components/requestsSetup';
 import {
@@ -94,13 +97,13 @@ function removeSecureFlagIfOriginInsecure(
         return headers;
     }
 
-    return _.reduce(
+    return reduce_(
         headers,
         (acc, v, k) => {
             if (k !== 'set-cookie') {
                 acc[k] = v;
             } else {
-                const tmp = _.map(v as Array<string>, (item) => {
+                const tmp = map_(v as Array<string>, (item) => {
                     if (item.includes(YT_CYPRESS_COOKIE_NAME)) {
                         return item.replace(/\s*Secure;/, '');
                     }

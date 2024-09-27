@@ -1,8 +1,10 @@
-import intersection from 'lodash/intersection';
+import intersection_ from 'lodash/intersection';
 import {SelectOption} from '@gravity-ui/uikit/build/esm/components/Select/types';
 import {RootState} from '../../../../store/reducers';
 import {getSettingsData} from '../../../../store/selectors/settings-base';
-const getState = (state: RootState) => state.queryTracker.aco;
+import {createSelector} from 'reselect';
+import {SHARED_QUERY_ACO} from '../query/selectors';
+const selectAcoState = (state: RootState) => state.queryTracker.aco;
 
 export const getLastSelectedACONamespaces = (state: RootState) => {
     const cluster = state.global.cluster;
@@ -12,18 +14,31 @@ export const getLastSelectedACONamespaces = (state: RootState) => {
 
 export const getQueryACOOptions = (state: RootState): SelectOption[] => {
     const aco = new Set(
-        intersection(
+        intersection_(
             getLastSelectedACONamespaces(state),
-            getState(state).data.access_control_objects,
-        ).concat(getState(state).data.access_control_objects),
+            selectAcoState(state).data.access_control_objects,
+        ).concat(selectAcoState(state).data.access_control_objects),
     );
 
     return [...aco].map((text) => ({value: text, content: text}));
 };
 
 export const isSupportedQtACO = (state: RootState) =>
-    getState(state).data.supported_features?.access_control;
+    selectAcoState(state).data.supported_features?.access_control;
 
-export const isQueryTrackerInfoLoading = (state: RootState) => getState(state).loading;
+export const selectIsMultipleAco = (state: RootState) =>
+    Boolean(selectAcoState(state).data.supported_features?.multiple_aco);
 
-export const getQueryTrackerInfo = (state: RootState) => getState(state).data;
+export const selectAvailableAco = (state: RootState) =>
+    selectAcoState(state).data.access_control_objects;
+
+export const isQueryTrackerInfoLoading = (state: RootState) => selectAcoState(state).loading;
+
+export const getQueryTrackerInfo = (state: RootState) => selectAcoState(state).data;
+
+export const isSupportedShareQuery = createSelector(
+    [selectIsMultipleAco, selectAvailableAco],
+    (isMultipleAco, aco) => {
+        return isMultipleAco && aco.includes(SHARED_QUERY_ACO);
+    },
+);

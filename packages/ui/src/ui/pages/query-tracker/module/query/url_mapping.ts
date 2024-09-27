@@ -2,6 +2,8 @@ import produce from 'immer';
 import {updateIfChanged} from '../../../../utils/utils';
 import {LocationParameters} from '../../../../store/location';
 import {RootState} from '../../../../store/reducers';
+import {initialState as listInitialState} from '../queries_list/reducer';
+import {initialState as navigationInitialState} from '../queryNavigation/queryNavigationSlice';
 
 export const draftQueryParameters: LocationParameters = {
     engine: {
@@ -16,6 +18,18 @@ export const draftQueryParameters: LocationParameters = {
     useDraft: {
         stateKey: 'queryTracker.query.params.useDraft',
     },
+    listMode: {
+        stateKey: 'queryTracker.list.listMode',
+        initialState: listInitialState.listMode,
+    },
+    navCluster: {
+        stateKey: 'queryTracker.queryNavigation.cluster',
+        initialState: navigationInitialState.cluster,
+    },
+    navPath: {
+        stateKey: 'queryTracker.queryNavigation.path',
+        initialState: navigationInitialState.path,
+    },
 };
 
 export function getDraftQueryParameters(state: RootState, props: {query: RootState}): RootState {
@@ -25,5 +39,20 @@ export function getDraftQueryParameters(state: RootState, props: {query: RootSta
         updateIfChanged(draft.queryTracker.query.params, 'path', queryParams.path);
         updateIfChanged(draft.queryTracker.query.params, 'cluster', queryParams.cluster);
         updateIfChanged(draft.queryTracker.query.params, 'useDraft', queryParams.useDraft);
+        updateIfChanged(
+            draft.queryTracker.list,
+            'listMode',
+            props.query.queryTracker.list.listMode,
+        );
+        updateIfChanged(
+            draft.queryTracker.queryNavigation,
+            'cluster',
+            props.query.queryTracker.queryNavigation.cluster,
+        );
+        updateIfChanged(
+            draft.queryTracker.queryNavigation,
+            'path',
+            props.query.queryTracker.queryNavigation.path,
+        );
     });
 }

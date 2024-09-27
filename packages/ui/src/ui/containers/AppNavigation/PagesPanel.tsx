@@ -1,5 +1,8 @@
 import React from 'react';
-import _ from 'lodash';
+
+import findIndex_ from 'lodash/findIndex';
+import sortBy_ from 'lodash/sortBy';
+
 import cn from 'bem-cn-lite';
 import {useSelector} from 'react-redux';
 import {PageInfo, getRecentPagesInfo} from '../../store/selectors/slideoutMenu';
@@ -25,7 +28,7 @@ export default function PagesPanel({
     const isRecentFirst = useSelector(isRecentPagesFirst);
 
     const allFiltered = React.useMemo(() => {
-        return _.sortBy(
+        return sortBy_(
             all.filter((item) => Boolean(PAGE_ICONS_BY_ID[item.id])),
             'name',
         );
@@ -68,7 +71,7 @@ function PagesList(props: PagesListProps) {
 
     const {pathname} = window.location;
 
-    const selectedItemIndex = _.findIndex(items, ({id}) => {
+    const selectedItemIndex = findIndex_(items, ({id}) => {
         const path = `/${cluster}/${id}`;
         return pathname.startsWith(path);
     });

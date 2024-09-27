@@ -1,6 +1,5 @@
 import React from 'react';
-import _map from 'lodash/map';
-import _filter from 'lodash/filter';
+import filter_ from 'lodash/filter';
 import cn from 'bem-cn-lite';
 
 import {Button, Select, SelectOption, SelectProps, Text, TextInput} from '@gravity-ui/uikit';
@@ -50,7 +49,7 @@ export default function SelectFacade(props: YTSelectProps) {
     );
 
     const filteredValue = React.useMemo(() => {
-        const res = _filter(value, Boolean);
+        const res = filter_(value, Boolean);
         return res.length ? res : emptyValue;
     }, [value]);
 
@@ -151,7 +150,7 @@ class CustomSelect extends React.Component<
         return (
             <Select
                 className={block(null, className)}
-                disablePortal
+                disablePortal={false}
                 {...props}
                 filterable={!hideFilter}
                 renderOption={this.renderOption}
@@ -289,7 +288,9 @@ function ValueControl({
             <span className={block('control-value')}>
                 {label && <Text className={block('control-label')}>{label}</Text>}
                 {!value?.length ? (
-                    <Text color="hint">{placeholder ?? hammer.format.NO_VALUE}</Text>
+                    <Text color="hint" variant="inherit">
+                        {placeholder ?? hammer.format.NO_VALUE}
+                    </Text>
                 ) : (
                     <VisibleValues
                         value={value}

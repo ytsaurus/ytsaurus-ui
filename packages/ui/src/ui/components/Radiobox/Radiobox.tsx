@@ -4,10 +4,6 @@ import {RadioGroup, RadioGroupProps} from '@gravity-ui/uikit';
 
 import './Radiobox.scss';
 
-const defaultProps = {
-    layout: 'vertical',
-};
-
 const block = cn('elements-radiobox');
 
 export interface CustomRadioboxProps extends RadioGroupProps {
@@ -20,7 +16,7 @@ interface RadioBoxItem {
     value: string;
 }
 
-export default function Radiobox({items, layout, ...props}: CustomRadioboxProps) {
+export default function Radiobox({items, layout = 'vertical', ...props}: CustomRadioboxProps) {
     return (
         <RadioGroup {...props} className={block({layout})}>
             {items.map((option) => (
@@ -31,5 +27,3 @@ export default function Radiobox({items, layout, ...props}: CustomRadioboxProps)
         </RadioGroup>
     );
 }
-
-Radiobox.defaultProps = defaultProps;

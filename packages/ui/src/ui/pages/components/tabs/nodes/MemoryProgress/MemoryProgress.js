@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import cn from 'bem-cn-lite';
-import _ from 'lodash';
+
+import map_ from 'lodash/map';
 
 import {Progress} from '@gravity-ui/uikit';
 
@@ -70,7 +71,7 @@ class MemoryProgress extends Component {
             memoryData.length > 0 && (
                 <div className={block('popup')}>
                     <ul className={block('content')}>
-                        {_.map(memoryData, (category) => this.renderItem(category))}
+                        {map_(memoryData, (category) => this.renderItem(category))}
                     </ul>
                 </div>
             )

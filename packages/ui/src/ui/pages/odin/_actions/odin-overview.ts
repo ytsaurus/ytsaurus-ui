@@ -1,6 +1,6 @@
 import {ThunkAction} from 'redux-thunk';
-import _forEach from 'lodash/forEach';
-import _map from 'lodash/map';
+import forEach_ from 'lodash/forEach';
+import map_ from 'lodash/map';
 
 import Utils from '../odin-utils';
 import {RootState} from '../../../store/reducers';
@@ -47,7 +47,7 @@ function fetchOdinOverview(cluster: string, time?: number): OdinOverviewThunkAct
     return (dispatch, getState) => {
         cancelMetrics.cancel();
         const data = getOdinOverviewData(getState());
-        _forEach(data, (item) => item.cancel?.());
+        forEach_(data, (item) => item.cancel?.());
 
         const oldCluster = getClusterHelper(getState);
 
@@ -236,7 +236,7 @@ export function odinOverviewSetAllMetricsVisible(value: boolean): OdinOverviewTh
                 hiddenMetrics[name] = true;
             });
         } else {
-            toReload = _map(oldHhiddenMetrics, (__: boolean, name: string) => name);
+            toReload = map_(oldHhiddenMetrics, (__: boolean, name: string) => name);
         }
 
         dispatch({
@@ -263,7 +263,7 @@ export function odinOverviewAddPreset(name: string, isDefault: boolean): OdinOve
             const presets = [...getOdinOverviewVisiblePresets(getState())];
             presets.push({
                 name,
-                hiddenMetricNames: _map(toHide, (_, name) => name),
+                hiddenMetricNames: map_(toHide, (_, name) => name),
             });
             return dispatch(setSetting(ODIN_VISIBLE_METRIC_PRESETS, YA_NAMESPACES.ODIN, presets))
                 .then(() => {
@@ -278,7 +278,7 @@ export function odinOverviewAddPreset(name: string, isDefault: boolean): OdinOve
                     new Toaster().add({
                         name: 'add-preset',
                         autoHiding: false,
-                        type: 'error',
+                        theme: 'danger',
                         content: message,
                         title: 'Failed to crete preset',
                         actions: [
@@ -321,7 +321,7 @@ export function odinOverviewRemovePreset(name: string): OdinOverviewThunkAction 
                 new Toaster().add({
                     name: 'delete-preset',
                     autoHiding: false,
-                    type: 'error',
+                    theme: 'danger',
                     content: message,
                     title: 'Failed to delete the preset',
                     actions: [{label: ' view', onClick: () => showErrorPopup(data)}],
@@ -352,7 +352,7 @@ export function odinOverviewToggleDefaultPreset(name: string): OdinOverviewThunk
                 new Toaster().add({
                     name: 'set-deault-preset',
                     autoHiding: false,
-                    type: 'error',
+                    theme: 'danger',
                     content: message,
                     title: 'Failed to set the preset as default',
                     actions: [{label: ' view', onClick: () => showErrorPopup(data)}],
@@ -379,7 +379,7 @@ export function odinOverviewSelectPreset(name: string): OdinOverviewThunkAction 
             });
 
             const oldHiddenMetrics = getOdinOverviewHiddenMetrics(state);
-            _forEach(oldHiddenMetrics, (_, name) => {
+            forEach_(oldHiddenMetrics, (_, name) => {
                 if (!hiddenMetrics[name]) {
                     dispatch(reloadOdinOverviewMetricData(name));
                 }

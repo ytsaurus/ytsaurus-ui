@@ -16,21 +16,22 @@ import {
 
 import hammer from '../../../../common/hammer';
 
+import {ClickableText} from '../../../../components/ClickableText/ClickableText';
+import Icon from '../../../../components/Icon/Icon';
+import Link from '../../../../components/Link/Link';
+import ColumnHeader from '../../../../components/ColumnHeader/ColumnHeader';
 import {
     changeCheckedHideOffline,
     changeVersionStateTypeFilters,
     setVersionsSummarySortState,
 } from '../../../../store/actions/components/versions/versions_v2';
-import Icon from '../../../../components/Icon/Icon';
-import Link from '../../../../components/Link/Link';
-import ColumnHeader from '../../../../components/ColumnHeader/ColumnHeader';
-import {VersionCellWithAction} from './VersionCell';
 import {VersionSummaryItem} from '../../../../store/reducers/components/versions/versions_v2';
-
-import './VersionSummary.scss';
-import UIFactory from '../../../../UIFactory';
 import {getCluster} from '../../../../store/selectors/global';
 import {formatByParams} from '../../../../utils/format';
+import UIFactory from '../../../../UIFactory';
+
+import {VersionCellWithAction} from './VersionCell';
+import './VersionSummary.scss';
 
 const block = cn('versions-summary');
 
@@ -56,15 +57,15 @@ class VersionsSummary extends React.Component<Props> {
         if (version === 'error') {
             content = (
                 <React.Fragment>
-                    <Link
-                        theme={'primary'}
+                    <ClickableText
+                        color="primary"
                         onClick={() => {
                             changeVersionStateTypeFilters({state: 'error'});
                         }}
                     >
                         <Icon awesome={'exclamation-triangle'} />{' '}
                         {hammer.format['Readable'](version)}
-                    </Link>
+                    </ClickableText>
                 </React.Fragment>
             );
         } else if (version === 'total') {

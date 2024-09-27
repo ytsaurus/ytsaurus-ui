@@ -1,0 +1,9 @@
+.vsc {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+
+    &_error {
+        padding: 10px;
+    }
+}

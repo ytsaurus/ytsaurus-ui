@@ -1,0 +1,14 @@
+.navigation-cluster-list {
+    overflow: auto;
+    flex-grow: 1;
+
+    &__table-row {
+        padding: 5px 15px;
+        width: 100%;
+        align-items: center;
+    }
+
+    tbody &__row {
+        padding: 0 !important;
+    }
+}

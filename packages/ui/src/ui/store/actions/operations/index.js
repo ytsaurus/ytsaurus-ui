@@ -1,5 +1,6 @@
 import yt from '@ytsaurus/javascript-wrapper/lib/yt';
-import _ from 'lodash';
+
+import reduce_ from 'lodash/reduce';
 
 import {getOperation} from '../../../store/actions/operations/detail';
 import {updateOperationsList} from '../../../store/actions/operations/list';
@@ -30,7 +31,7 @@ export function setPoolsAndWeights(operation, pools, weights) {
     const inOperationsList = pathItems.length === 3 && pathItems[2] === Page.OPERATIONS;
     const operationId = operation.$value;
 
-    const poolTrees = _.reduce(
+    const poolTrees = reduce_(
         operation.pools,
         (acc, item) => {
             const {tree} = item;
@@ -45,7 +46,7 @@ export function setPoolsAndWeights(operation, pools, weights) {
             type: SET_PULLS_AND_WEIGHTS.REQUEST,
         });
 
-        const params = _.reduce(
+        const params = reduce_(
             pools,
             (res, pool, tree) => {
                 const old = poolTrees[tree];

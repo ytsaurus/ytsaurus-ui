@@ -1,28 +1,41 @@
-import React from 'react';
 import block from 'bem-cn-lite';
+import React from 'react';
 
 import './NodeQuad.scss';
 const b = block('node-quad');
 
-const defaultProps = {
-    theme: 'unknown',
-};
+export type NodeQuadTheme =
+    | 'online'
+    | 'banned'
+    | 'offline'
+    | 'following'
+    | 'mixed'
+    | 'registered'
+    | 'unregistered'
+    | 'nonvoting'
+    | 'unknown'
+    | 'other';
 
 interface Props {
-    theme?:
-        | 'online'
-        | 'banned'
-        | 'offline'
-        | 'following'
-        | 'mixed'
-        | 'registered'
-        | 'unregistered'
-        | 'nonvoting'
-        | 'unknown';
+    theme?: NodeQuadTheme;
+    children?: string;
+    banned?: boolean;
+    alerts?: boolean;
+    decommissioned?: boolean;
+    full?: boolean;
 }
 
-export default function NodeQuad({theme}: Props) {
-    return <div className={b({theme})} />;
-}
+export default function NodeQuad({
+    theme = 'unknown',
+    children = '',
+    banned,
+    alerts,
+    decommissioned,
+    full,
+}: Props) {
+    const text = (alerts && 'A') || (decommissioned && 'D') || (full && 'F') || undefined;
+    const bannedOrTheme = banned ? ('banned' as const) : theme;
 
-NodeQuad.defaultProps = defaultProps;
+    const effectiveTheme = children ? `${bannedOrTheme}-letter` : theme;
+    return <div className={b({theme: effectiveTheme, full})}>{text}</div>;
+}

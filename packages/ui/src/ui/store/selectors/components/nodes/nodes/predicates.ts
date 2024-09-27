@@ -52,7 +52,7 @@ export const getComponentNodesFilterStatePredicate = createSelector(
             if (excludes.size !== state.length) {
                 new Toaster().add({
                     name: 'component-nodes-excludes',
-                    type: 'error',
+                    theme: 'danger',
                     autoHiding: false,
                     title: 'Unexpected behavior',
                     content:
@@ -514,7 +514,7 @@ function createNodeTagPredicate<K extends keyof typeof PropertiesByPredicate>(
         return (node) => {
             return some_(
                 getTags(node),
-                (item) => -1 !== item.toLowerCase().indexOf(tagFilter.toLowerCase()),
+                (item) => -1 !== item?.toLowerCase().indexOf(tagFilter.toLowerCase()),
             );
         };
     }

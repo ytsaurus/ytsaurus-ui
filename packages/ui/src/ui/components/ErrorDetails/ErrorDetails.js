@@ -4,7 +4,8 @@ import Link from '../../components/Link/Link';
 import block from 'bem-cn-lite';
 import ypath from '../../common/thor/ypath';
 import unipika from '../../common/thor/unipika';
-import _ from 'lodash';
+
+import map_ from 'lodash/map';
 
 import Icon from '../Icon/Icon';
 import Tabs from '../../components/Tabs/Tabs';
@@ -96,7 +97,7 @@ export default class ErrorDetails extends Component {
             error: {attributes},
         } = this.props;
 
-        return _.map(this.TABS, (tab) => {
+        return map_(this.TABS, (tab) => {
             if (typeof attributes[tab.value] !== 'undefined') {
                 return Object.assign({}, tab, {show: true});
             } else {

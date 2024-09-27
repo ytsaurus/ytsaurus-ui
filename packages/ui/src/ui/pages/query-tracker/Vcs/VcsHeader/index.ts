@@ -1,0 +1,1 @@
+export {VcsHeader} from './VcsHeader';

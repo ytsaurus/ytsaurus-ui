@@ -27,18 +27,19 @@
 
     &__scheduler-host {
         display: flex;
+        gap: 0 4px;
 
         &-address {
             flex: 0 1 auto;
             @include ellipsis();
         }
 
-        &-copy-btn {
+        &-btn {
             margin-top: -3px;
             visibility: hidden;
         }
 
-        &:hover &-copy-btn {
+        &:hover &-btn {
             visibility: visible;
         }
     }

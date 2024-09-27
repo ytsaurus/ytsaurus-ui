@@ -1,5 +1,7 @@
 const treeList = require('./tree-list');
-const _ = require('lodash');
+
+import cloneDeep_ from 'lodash/cloneDeep';
+import pick_ from 'lodash/pick';
 
 describe('hammer.tree-list', () => {
     const ROOT_NODE = 'Root';
@@ -253,7 +255,7 @@ describe('hammer.tree-list', () => {
 
         const takeEssentials = (data) => {
             return data.map((node) => {
-                return _.pick(node, 'level', 'key', 'name');
+                return pick_(node, 'level', 'key', 'name');
             });
         };
 
@@ -543,7 +545,7 @@ describe('hammer.tree-list', () => {
         let names;
 
         beforeEach(() => {
-            tree = _.cloneDeep(A);
+            tree = cloneDeep_(A);
             names = [];
             visitor = jest.fn((node) => names.push(node.name));
         });

@@ -101,6 +101,7 @@ export function prepareNavigationState(
     parsedPath: string | ParsedPath,
     transaction?: string,
     index?: number,
+    contentMode?: string,
 ) {
     let path: string;
 
@@ -112,7 +113,7 @@ export function prepareNavigationState(
         path = parsedPath;
     }
 
-    return {page: Page.NAVIGATION, t: transaction, path};
+    return {page: Page.NAVIGATION, t: transaction, path, contentMode};
 }
 
 export function preparePath(path: string) {

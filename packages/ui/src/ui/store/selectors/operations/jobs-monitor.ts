@@ -1,4 +1,10 @@
-import _ from 'lodash';
+import filter_ from 'lodash/filter';
+import forEach_ from 'lodash/forEach';
+import isEmpty_ from 'lodash/isEmpty';
+import map_ from 'lodash/map';
+import max_ from 'lodash/max';
+import min_ from 'lodash/min';
+
 import moment from 'moment';
 import {createSelector} from 'reselect';
 import {RootState} from '../../../store/reducers';
@@ -12,7 +18,7 @@ export const getJobsMonitorItems = (state: RootState) => state.operations.jobsMo
 export const getJobsMonitoringItemsWithDescriptor = createSelector(
     [getJobsMonitorItems],
     (items) => {
-        return _.filter(items, ({monitoring_descriptor}) => Boolean(monitoring_descriptor));
+        return filter_(items, ({monitoring_descriptor}) => Boolean(monitoring_descriptor));
     },
 );
 
@@ -21,14 +27,14 @@ export const getJobsMonitorFromTo = createSelector(
     (items) => {
         let from: number | undefined;
         let to: number | undefined;
-        _.forEach(items, ({start_time, finish_time}) => {
+        forEach_(items, ({start_time, finish_time}) => {
             if (start_time) {
                 const start = moment(start_time).valueOf();
-                from = _.min([start, from]);
+                from = min_([start, from]);
             }
             if (finish_time) {
                 const finish = moment(finish_time).valueOf();
-                to = _.max([finish, to]);
+                to = max_([finish, to]);
             }
         });
         return {from, to};
@@ -38,7 +44,7 @@ export const getJobsMonitorFromTo = createSelector(
 export const getJobsMonitorDescriptor = createSelector(
     [getJobsMonitoringItemsWithDescriptor],
     (jobs) => {
-        const tmp = _.map(jobs, 'monitoring_descriptor');
+        const tmp = map_(jobs, 'monitoring_descriptor');
         return tmp.join('|');
     },
 );
@@ -49,7 +55,7 @@ export const getJobsMonitorTabVisible = createSelector(
         if (opId !== jobMonId) {
             return false;
         }
-        if (!_.isEmpty(error)) {
+        if (!isEmpty_(error)) {
             return true;
         }
 

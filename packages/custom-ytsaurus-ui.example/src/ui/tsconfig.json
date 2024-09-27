@@ -11,6 +11,7 @@
       "*": ["./*", "../../node_modules/*"]
     },
     "jsx": "react",
-    "lib": ["ES2017", "DOM", "DOM.Iterable", "ES2019.Array", "WebWorker"]
+    "lib": ["ES2018", "DOM", "DOM.Iterable", "ES2019.Array", "WebWorker"],
+    "target": "ES2018"
   }
 }

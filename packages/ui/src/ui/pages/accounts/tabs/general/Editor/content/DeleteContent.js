@@ -37,7 +37,7 @@ class DeleteContent extends Component {
                 toaster.add({
                     name: 'delete account',
                     timeout: 10000,
-                    type: 'success',
+                    theme: 'success',
                     title: 'Successfully deleted ' + account.name,
                 });
             })

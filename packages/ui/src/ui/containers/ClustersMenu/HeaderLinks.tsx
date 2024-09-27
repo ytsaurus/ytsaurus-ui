@@ -1,7 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import block from 'bem-cn-lite';
-import _ from 'lodash';
+
+import filter_ from 'lodash/filter';
+import forEach_ from 'lodash/forEach';
+import map_ from 'lodash/map';
+import partition_ from 'lodash/partition';
 
 import Link from '../../components/Link/Link';
 import './ClusterMenuHeader.scss';
@@ -60,7 +64,7 @@ function reducer(state: LinksVisibilityState, action: LinksVisibilityAction) {
         case 'add-visible-items':
             return {...state, visibilityByHref: {...state.visibilityByHref, ...action.data}};
         case 'add-requested-hrefs':
-            _.forEach(action.data, (href) => state.requestedHrefs.add(href));
+            forEach_(action.data, (href) => state.requestedHrefs.add(href));
             return {...state};
         default:
             return state;
@@ -74,22 +78,22 @@ function useLinkItems(items: Array<HeaderLinkItem>) {
     );
 
     const [visible, rest] = React.useMemo(() => {
-        return _.partition(items, (item) => {
+        return partition_(items, (item) => {
             return !item.getVisible || visibilityByHref[item.href];
         });
     }, [items, visibilityByHref]);
 
     React.useEffect(() => {
-        const toRequest = _.filter(rest, (item) => !requestedHrefs.has(item.href));
+        const toRequest = filter_(rest, (item) => !requestedHrefs.has(item.href));
 
         if (!toRequest.length) {
             return;
         }
 
-        dispatch({type: 'add-requested-hrefs', data: _.map(toRequest, (item) => item.href)});
+        dispatch({type: 'add-requested-hrefs', data: map_(toRequest, (item) => item.href)});
         const collected: typeof visibilityByHref = {};
         Promise.all(
-            _.map(toRequest, (item) => {
+            map_(toRequest, (item) => {
                 return getItemVisibilityOrFalse(item).then((value) => {
                     collected[item.href] = value;
                 });
@@ -105,7 +109,7 @@ function useLinkItems(items: Array<HeaderLinkItem>) {
 export function HeaderLinks({currentUrl, showTitle}: Props) {
     const items = useLinkItems(ALL_LINKS_ITEMS);
     const [other, [current]] = React.useMemo(
-        () => _.partition(items, ({href}) => href !== currentUrl),
+        () => partition_(items, ({href}) => href !== currentUrl),
         [items, currentUrl],
     );
 
@@ -114,7 +118,7 @@ export function HeaderLinks({currentUrl, showTitle}: Props) {
             {showTitle && Boolean(current) && <div className={b('page-name')}>{current.text}</div>}
             <div className={b('links', {theme: 'expanded'})}>
                 <ul className={b('links-list', block('elements-list')({type: 'unstyled'}))}>
-                    {_.map(other, (link) => (
+                    {map_(other, (link) => (
                         <li key={link.text}>
                             <Link routed={link.routed} url={link.href} className={b('links-item')}>
                                 {link.text}
@@ -132,7 +136,7 @@ export function HeaderLinks({currentUrl, showTitle}: Props) {
                             <Icon awesome={'chevron-down'} />
                         </Button>
                     }
-                    items={_.map(items, (item) => {
+                    items={map_(items, (item) => {
                         return {action() {}, ...item};
                     })}
                     size={'l'}

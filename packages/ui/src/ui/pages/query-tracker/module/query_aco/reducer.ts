@@ -5,7 +5,7 @@ export interface QueryACOState {
     data: {
         cluster_name: string;
         access_control_objects: string[];
-        supported_features: {access_control: boolean};
+        supported_features: {access_control: boolean; multiple_aco?: boolean};
     };
     loading: boolean;
     loaded: boolean;

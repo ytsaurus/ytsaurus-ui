@@ -27,6 +27,7 @@ interface GroupSubject {
 
 interface TvmSubject {
     tvm_id: string;
+    tvm_app_name?: string;
 }
 
 interface UserSubject {
@@ -211,9 +212,12 @@ export type TypedAclSubject =
           internal?: undefined;
       };
 
+export type InheritedFrom = {kind: IdmKindType; name: string; poolTree?: string};
+
 export type PreparedAclSubject = TypedAclSubject & {
     inheritance_mode?: string;
     inherited?: boolean;
+    inheritedFrom?: InheritedFrom;
     key?: string;
     permissions?: Array<YTPermissionTypeUI>;
     subjects: Array<string | number>;

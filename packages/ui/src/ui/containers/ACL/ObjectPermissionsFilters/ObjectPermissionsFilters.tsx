@@ -1,7 +1,7 @@
 import React from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import cn from 'bem-cn-lite';
-import {map} from 'lodash';
+import map_ from 'lodash/map';
 
 import format from '../../../common/hammer/format';
 
@@ -75,7 +75,7 @@ export default function ObjectPermissionsFilters({
                                 multiple
                                 placeholder={'filter'}
                                 value={selectedPermissons}
-                                items={map(permissionList, (p) => ({
+                                items={map_(permissionList, (p) => ({
                                     value: p,
                                     text: format.ReadableField(p),
                                 }))}
@@ -89,7 +89,6 @@ export default function ObjectPermissionsFilters({
                                 label={'Permissions'}
                                 maxVisibleValuesTextLength={60}
                                 width="auto"
-                                disablePortal={false}
                             />
                         ),
                 },

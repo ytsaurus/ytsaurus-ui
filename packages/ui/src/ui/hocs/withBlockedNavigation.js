@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {connect} from 'react-redux';
+import {connect, useDispatch} from 'react-redux';
 import hoistNonReactStatics from 'hoist-non-react-statics';
 
 import {addNavigationBlocker, removeNavigationBlocker} from '../store/actions/global';
@@ -15,16 +15,13 @@ export default function withBlockedNavigation(Component) {
 
         static displayName = `WithBlockedNavigation(${getDisplayName(Component)})`;
 
-        componentDidMount() {
-            this.props.addNavigationBlocker();
-        }
-
-        componentWillUnmount() {
-            this.props.removeNavigationBlocker();
-        }
-
         render() {
-            return <Component {...this.props} />;
+            return (
+                <React.Fragment>
+                    <BlockNavigation />
+                    <Component {...this.props} />
+                </React.Fragment>
+            );
         }
     };
 
@@ -32,4 +29,17 @@ export default function withBlockedNavigation(Component) {
     hoistNonReactStatics(ResComponent, Component);
 
     return connect(null, {addNavigationBlocker, removeNavigationBlocker})(ResComponent);
+}
+
+export function BlockNavigation() {
+    const dispatch = useDispatch();
+
+    React.useEffect(() => {
+        dispatch(addNavigationBlocker());
+        return () => {
+            dispatch(removeNavigationBlocker());
+        };
+    });
+
+    return null;
 }

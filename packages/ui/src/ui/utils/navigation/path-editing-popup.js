@@ -1,15 +1,19 @@
 import {ErrorMessage, NetworkCode} from '../../constants/navigation/modals/path-editing-popup';
-import _ from 'lodash';
+
+import filter_ from 'lodash/filter';
+import find_ from 'lodash/find';
+import some_ from 'lodash/some';
+import values_ from 'lodash/values';
 
 export function getOnlyFolders(suggestions) {
-    return _.filter(suggestions, (child) => child.type === 'map_node');
+    return filter_(suggestions, (child) => child.type === 'map_node');
 }
 
 function getCorrectInnerError(innerErrors = []) {
-    const correctErrorCodes = _.values(NetworkCode);
+    const correctErrorCodes = values_(NetworkCode);
 
-    return _.find(innerErrors, (error) => {
-        return _.some(correctErrorCodes, (code) => code === error.code);
+    return find_(innerErrors, (error) => {
+        return some_(correctErrorCodes, (code) => code === error.code);
     });
 }
 

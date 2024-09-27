@@ -1,8 +1,9 @@
 import React from 'react';
-import _ from 'lodash';
 import {compose} from 'redux';
 import axios, {AxiosProgressEvent} from 'axios';
 import cn from 'bem-cn-lite';
+
+import map_ from 'lodash/map';
 
 // @ts-ignore
 import yt from '@ytsaurus/javascript-wrapper/lib/yt';
@@ -76,20 +77,23 @@ const WRITE_ATTRIBUTES = {
 
 type FileType = 'json' | 'yson' | 'yamr' | 'dsv' | 'schemaful_dsv' | 'xlsx';
 
-const FILE_TYPES: Array<{value: FileType; text: FileType}> = [
-    {value: 'json', text: 'json'},
-    {value: 'yson', text: 'yson'},
-    {value: 'dsv', text: 'dsv'},
-    {value: 'yamr', text: 'yamr'},
-    {value: 'schemaful_dsv', text: 'schemaful_dsv'},
-];
+const getFileTypes = (payload: {cluster: string}) => {
+    const fileTypes: Array<{value: FileType; text: FileType}> = [
+        {value: 'json', text: 'json'},
+        {value: 'yson', text: 'yson'},
+        {value: 'dsv', text: 'dsv'},
+        {value: 'yamr', text: 'yamr'},
+        {value: 'schemaful_dsv', text: 'schemaful_dsv'},
+    ];
 
-const UPLOAD_CONFIG = getConfigUploadTable();
+    const uploadConfig = getConfigUploadTable(payload);
 
-const EXCEL_BASE_URL = UPLOAD_CONFIG.uploadTableExcelBaseUrl;
-if (EXCEL_BASE_URL) {
-    FILE_TYPES.push({value: 'xlsx', text: 'xlsx'});
-}
+    if (uploadConfig.uploadTableExcelBaseUrl) {
+        fileTypes.push({value: 'xlsx', text: 'xlsx'});
+    }
+
+    return fileTypes;
+};
 
 type ProgressState =
     | {inProgress: false}
@@ -151,6 +155,7 @@ class UploadManager extends React.Component<Props, State> {
     }
 
     renderSettings(file: File) {
+        const {cluster} = this.props;
         const inProgress = this.inProgress();
 
         const {fields, initials} = this.typeSpecificFields();
@@ -197,7 +202,7 @@ class UploadManager extends React.Component<Props, State> {
                         type: 'yt-select-single',
                         caption: 'Type',
                         extras: {
-                            items: FILE_TYPES,
+                            items: getFileTypes({cluster}),
                             hideFilter: true,
                             disabled: inProgress,
                             width: 'max',
@@ -347,12 +352,13 @@ class UploadManager extends React.Component<Props, State> {
     };
 
     onFile = (files: FileList | null) => {
+        const {cluster} = this.props;
         const file = files && files[0];
         this.setState({file, hasUpcomingFile: false});
         if (file) {
             const lastDotIndex = file.name.lastIndexOf('.');
             const extStr = file.name.substr(lastDotIndex + 1);
-            const item = FILE_TYPES.find(({value}) => value === extStr);
+            const item = getFileTypes({cluster}).find(({value}) => value === extStr);
             if (item) {
                 this.setState({fileType: item.value});
             }
@@ -397,9 +403,13 @@ class UploadManager extends React.Component<Props, State> {
             return 'file is not selected';
         }
 
-        if (file.size > UPLOAD_CONFIG.uploadTableMaxSize) {
+        const {cluster} = this.props;
+
+        const uploadConfig = getConfigUploadTable({cluster});
+
+        if (file.size > uploadConfig.uploadTableMaxSize) {
             return `File size must not be greater than ${format.Bytes(
-                UPLOAD_CONFIG.uploadTableMaxSize,
+                uploadConfig.uploadTableMaxSize,
             )}`;
         }
 
@@ -425,7 +435,7 @@ class UploadManager extends React.Component<Props, State> {
         const {fileType} = this.state;
         const withColumns: any = {};
         if (fileType === 'schemaful_dsv') {
-            withColumns.columns = _.map(schema, ({name}) => name);
+            withColumns.columns = map_(schema, ({name}) => name);
         }
         return {
             ...withColumns,
@@ -477,6 +487,8 @@ class UploadManager extends React.Component<Props, State> {
 
         const {path, proxy, externalProxy, cluster} = this.props;
 
+        const uploadConfig = getConfigUploadTable({cluster});
+
         this.onStartUpload(file.size);
 
         let transaction_id = '';
@@ -491,7 +503,7 @@ class UploadManager extends React.Component<Props, State> {
                     .writeTable({
                         setup: {
                             onUploadProgress: this.onUploadProgress,
-                            proxy: UPLOAD_CONFIG.uploadTableUseLocalmode
+                            proxy: uploadConfig.uploadTableUseLocalmode
                                 ? `${location.host}/localmode/api/yt/${cluster}`
                                 : externalProxy ?? proxy,
                         },
@@ -529,8 +541,10 @@ class UploadManager extends React.Component<Props, State> {
         const {path, cluster} = this.props;
         this.onStartUpload(file.size);
 
-        const readyUrl = `${EXCEL_BASE_URL}/${cluster}/api/ready`;
-        const uploadUrl = `${EXCEL_BASE_URL}/${cluster}/api/upload`;
+        const uploadConfig = getConfigUploadTable({cluster});
+
+        const readyUrl = `${uploadConfig.uploadTableExcelBaseUrl}/${cluster}/api/ready`;
+        const uploadUrl = `${uploadConfig.uploadTableExcelBaseUrl}/${cluster}/api/upload`;
 
         this.cancelHelper.removeAllRequests();
         return axios.get(readyUrl).then(

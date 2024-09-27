@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import cn from 'bem-cn-lite';
 import {Button, ButtonProps, Icon, Popup} from '@gravity-ui/uikit';
 
-import noop from 'lodash/noop';
+import noop_ from 'lodash/noop';
 import moment, {MomentInput} from 'moment';
 import i18n from '../i18n';
 import {formatInterval, formatTimeCanonical, getTimestampFromDate, humanizeInterval} from '../util';
@@ -203,7 +203,7 @@ export class TimelinePicker extends React.Component<TimelinePickerProps, State> 
                     autoselect={true}
                     onUpdate={this.onInputChange}
                     onDone={this.onInputDone}
-                    onCancel={noop}
+                    onCancel={noop_}
                 />
             </Fragment>
         );

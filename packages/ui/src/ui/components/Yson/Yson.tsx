@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import block from 'bem-cn-lite';
-import _ from 'lodash';
+
+import isEqual_ from 'lodash/isEqual';
 
 import unipika from '../../common/thor/unipika';
 
@@ -9,6 +10,7 @@ import ErrorBoundary from '../../components/ErrorBoundary/ErrorBoundary';
 import {UnipikaSettings, UnipikaValue} from './StructuredYson/StructuredYsonTypes';
 
 import StructuredYsonVirtualized from './StructuredYsonVirtualized/StructuredYsonVirtualized';
+import type {Settings} from '@gravity-ui/react-data-table';
 
 export interface YsonProps {
     settings?: UnipikaSettings;
@@ -19,6 +21,8 @@ export interface YsonProps {
     extraTools?: React.ReactNode;
     virtualized?: boolean;
     className?: string;
+    tableSettings?: Settings;
+    customLayout?: (args: {toolbar: React.ReactNode; content: React.ReactNode}) => React.ReactNode;
 }
 
 interface State {
@@ -74,8 +78,8 @@ export default class Yson extends Component<YsonProps, State> {
 
         if (
             prevValue === INITIAL ||
-            !_.isEqual(prevValue, value) ||
-            !_.isEqual(prevSettings, settings)
+            !isEqual_(prevValue, value) ||
+            !isEqual_(prevSettings, settings)
         ) {
             // TODO: fix me later
             // The call is required because unipika.format() applies default values to a passed settings inplace.
@@ -91,8 +95,8 @@ export default class Yson extends Component<YsonProps, State> {
                     value === undefined
                         ? ''
                         : settings!.format === 'raw-json'
-                        ? unipika.converters.raw(value, settings)
-                        : unipika.converters.yson(value, settings),
+                          ? unipika.converters.raw(value, settings)
+                          : unipika.converters.yson(value, settings),
                 value: value,
                 settings: settings,
             };
@@ -124,7 +128,8 @@ export default class Yson extends Component<YsonProps, State> {
     }
 
     render() {
-        const {inline, children, folding, extraTools, className} = this.props;
+        const {inline, children, folding, extraTools, className, tableSettings, customLayout} =
+            this.props;
         const {convertedValue, settings} = this.state;
 
         const classes = block('unipika-wrapper')(
@@ -140,9 +145,11 @@ export default class Yson extends Component<YsonProps, State> {
                     <div className={classes} title={this.getFormattedTitle()} dir="auto">
                         {folding ? (
                             <StructuredYsonVirtualized
+                                tableSettings={tableSettings}
                                 value={convertedValue}
                                 settings={settings!}
                                 extraTools={extraTools}
+                                customLayout={customLayout}
                             />
                         ) : (
                             <pre

@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import reduce_ from 'lodash/reduce';
 import {CancelTokenSource} from 'axios';
 
 // @ts-ignore
@@ -8,9 +8,13 @@ import {YT_API_REQUEST_ID_HEADER} from '../../shared/constants';
 import {
     BatchResultsItem,
     BatchSubRequest,
+    ExpectedVersion,
+    GetFlowViewData,
     GetParams,
+    GetPipelineStateData,
     OutputFormat,
     PathParams,
+    PipelineParams,
 } from '../../shared/yt-types';
 import {YTApiId} from '../../shared/constants/yt-api-id';
 
@@ -27,19 +31,7 @@ interface YTApiV3 {
     get<Value = any>(...args: ApiMethodParameters<GetParams>): Promise<Value>;
     list<Value = any>(...args: ApiMethodParameters<GetParams>): Promise<Value>;
     exists(...args: ApiMethodParameters<PathParams>): Promise<boolean>;
-    [method: string]: (...args: ApiMethodParameters<any>) => Promise<any>;
-}
-
-type YTApiV3WithId = {
-    executeBatch<T = any>(
-        id: YTApiId,
-        ...args: ApiMethodParameters<BatchParameters>
-    ): Promise<Array<BatchResultsItem<T>>>;
-    get<Value = any>(id: YTApiId, ...args: ApiMethodParameters<GetParams>): Promise<Value>;
-    list<Value = any>(id: YTApiId, ...args: ApiMethodParameters<GetParams>): Promise<Value>;
-    exists(id: YTApiId, ...args: ApiMethodParameters<PathParams>): Promise<boolean>;
     alterQuery(
-        id: YTApiId,
         ...args: ApiMethodParameters<{
             stage?: string;
             query_id: string;
@@ -49,7 +41,22 @@ type YTApiV3WithId = {
             };
         }>
     ): Promise<any>;
-    [method: string]: (id: YTApiId, ...args: ApiMethodParameters<any>) => Promise<any>;
+    [method: string]: (...args: ApiMethodParameters<any>) => Promise<any>;
+}
+
+type YTApiV3OmitT = Omit<YTApiV3, 'get' | 'list' | 'executeBatch'>;
+
+type YTApiV3WithId = {
+    [K in keyof YTApiV3OmitT]: {
+        (id: YTApiId, ...args: Parameters<YTApiV3OmitT[K]>): ReturnType<YTApiV3OmitT[K]>;
+    };
+} & {
+    executeBatch<T = any>(
+        id: YTApiId,
+        ...args: ApiMethodParameters<BatchParameters>
+    ): Promise<Array<BatchResultsItem<T>>>;
+    get<Value = any>(id: YTApiId, ...args: ApiMethodParameters<GetParams>): Promise<Value>;
+    list<Value = any>(id: YTApiId, ...args: ApiMethodParameters<GetParams>): Promise<Value>;
 };
 
 type YTApiV4 = {
@@ -59,10 +66,52 @@ type YTApiV4 = {
     get<Value = any>(...args: ApiMethodParameters<GetParams>): Promise<{value: Value}>;
     list<Value = any>(...args: ApiMethodParameters<GetParams>): Promise<{value: Value}>;
     exists(...args: ApiMethodParameters<PathParams>): Promise<{value: boolean}>;
+
+    getQueryTrackerInfo(...args: ApiMethodParameters<{stage?: string}>): Promise<{
+        cluster_name: string;
+        access_control_objects: string[];
+        supported_features: {access_control: boolean};
+    }>;
+    switchLeader(
+        ...args: ApiMethodParameters<{cell_id: string; new_leader_address: string}>
+    ): Promise<any>;
+    listUserTokens(
+        ...args: ApiMethodParameters<{
+            password_sha256: string;
+            user: string;
+            with_metadata: boolean;
+        }>
+    ): Promise<string[]>;
+    revokeToken(
+        ...args: ApiMethodParameters<{password_sha256: string; user: string; token_sha256: string}>
+    ): Promise<unknown>;
+    issueToken(
+        ...args: ApiMethodParameters<{password_sha256: string; user: string; description: string}>
+    ): Promise<string>;
+
+    getPipelineSpec(...args: ApiMethodParameters<PipelineParams>): Promise<any>;
+    setPipelineSpec(...args: ApiMethodParameters<PipelineParams & ExpectedVersion>): Promise<void>;
+    removePipelineSpec(...args: ApiMethodParameters<PipelineParams>): Promise<void>;
+    getPipelineDynamicSpec(...args: ApiMethodParameters<PipelineParams>): Promise<any>;
+    setPipelineDynamicSpec(
+        ...args: ApiMethodParameters<PipelineParams & ExpectedVersion>
+    ): Promise<void>;
+    startPipeline(...args: ApiMethodParameters<PipelineParams>): Promise<void>;
+    stopPipeline(...args: ApiMethodParameters<PipelineParams>): Promise<void>;
+    pausePipeline(...args: ApiMethodParameters<PipelineParams>): Promise<void>;
+    getPipelineState(...args: ApiMethodParameters<PipelineParams>): Promise<GetPipelineStateData>;
+    getFlowView(...args: ApiMethodParameters<PipelineParams>): Promise<GetFlowViewData>;
+
     [method: string]: (...args: ApiMethodParameters<any>) => Promise<any>;
 };
 
+type YTApiV4OmitT = Omit<YTApiV4, 'get' | 'list' | 'executeBatch'>;
+
 type YTApiV4WithId = {
+    [K in keyof YTApiV4OmitT]: {
+        (id: YTApiId, ...args: Parameters<YTApiV4OmitT[K]>): ReturnType<YTApiV4OmitT[K]>;
+    };
+} & {
     executeBatch<T = any>(
         id: YTApiId,
         ...args: ApiMethodParameters<BatchParameters>
@@ -72,36 +121,6 @@ type YTApiV4WithId = {
         id: YTApiId,
         ...args: ApiMethodParameters<GetParams>
     ): Promise<{value: Value}>;
-    exists(id: YTApiId, ...args: ApiMethodParameters<PathParams>): Promise<{value: boolean}>;
-    getQueryTrackerInfo(
-        id: YTApiId,
-        ...args: ApiMethodParameters<{stage?: string}>
-    ): Promise<{
-        cluster_name: string;
-        access_control_objects: string[];
-        supported_features: {access_control: boolean};
-    }>;
-    switchLeader(
-        id: YTApiId,
-        ...args: ApiMethodParameters<{cell_id: string; new_leader_address: string}>
-    ): Promise<any>;
-    listUserTokens(
-        id: YTApiId,
-        ...args: ApiMethodParameters<{
-            password_sha256: string;
-            user: string;
-            with_metadata: boolean;
-        }>
-    ): Promise<string[]>;
-    revokeToken(
-        id: YTApiId,
-        ...args: ApiMethodParameters<{password_sha256: string; user: string; token_sha256: string}>
-    ): Promise<unknown>;
-    issueToken(
-        id: YTApiId,
-        ...args: ApiMethodParameters<{password_sha256: string; user: string; description: string}>
-    ): Promise<string>;
-    [method: string]: (id: YTApiId, ...args: ApiMethodParameters<any>) => Promise<any>;
 };
 
 type ApiWithId<ApiT extends Record<string, (...args: ApiMethodParameters<any>) => Promise<any>>> = {
@@ -117,7 +136,7 @@ type SaveCancellationCb = (cancel: CancelTokenSource) => void;
 
 type ApiMethodParameters<PrametersT = unknown> =
     | [ApiMethodParams<PrametersT> | ApiMethodParams<PrametersT>['parameters']]
-    | [ApiMethodParams<PrametersT>['parameters'], unknown];
+    | [ApiMethodParams<PrametersT> | ApiMethodParams<PrametersT>['parameters'], unknown];
 
 interface ApiMethodParams<ParametersT> {
     parameters: ParametersT;
@@ -129,7 +148,7 @@ interface ApiMethodParams<ParametersT> {
 function makeApiWithId<
     ApiT extends Record<string, (...args: ApiMethodParameters<any>) => Promise<any>>,
 >(ytApi: ApiT): ApiWithId<ApiT> {
-    return _.reduce(
+    return reduce_(
         ytApi,
         (acc, _fn, k) => {
             const method = k as keyof ApiT;

@@ -3,6 +3,8 @@ import cn from 'bem-cn-lite';
 import {useSelector} from 'react-redux';
 import {Redirect, Route, Switch, useRouteMatch} from 'react-router';
 
+import {Link} from '@gravity-ui/uikit';
+
 import Specification from '../../../pages/job/tabs/Specification/Specification';
 import ErrorBoundary from '../../../components/ErrorBoundary/ErrorBoundary';
 import MetaTable, {Template} from '../../../components/MetaTable/MetaTable';
@@ -21,14 +23,15 @@ import {DEFAULT_TAB, Tab} from '../../../constants/job';
 import {RootState} from '../../../store/reducers';
 import {Page} from '../../../constants/index';
 import {makeTabProps} from '../../../utils';
+import {formatByParams} from '../../../utils/format';
 import hammer from '../../../common/hammer';
 import {RouteInfo} from '../Job';
 
+import {ClickableText} from '../../../components/ClickableText/ClickableText';
 import ChartLink from '../../../components/ChartLink/ChartLink';
-import Link from '../../../components/Link/Link';
 import {getJob} from '../../../store/selectors/job/detail';
 import ClipboardButton from '../../../components/ClipboardButton/ClipboardButton';
-import {getCluster} from '../../../store/selectors/global';
+import {getCluster, getClusterUiConfig} from '../../../store/selectors/global';
 import UIFactory from '../../../UIFactory';
 import {StaleJobIcon} from '../../../pages/operations/OperationDetail/tabs/Jobs/StaleJobIcon';
 
@@ -43,6 +46,14 @@ export default function JobGeneral() {
     const settings = useSelector(getJobGeneralYsonSettings);
     const job = useSelector(getJob);
     const {loaded} = useSelector((state: RootState) => state.job.general);
+
+    const {url: traceUrl, title: traceTitle} = useJobProfilingUrl({
+        operationId: job?.operationId,
+        jobId: job?.id,
+        has_trace: job?.archive_features?.has_trace,
+        pool_tree: job?.pool_tree,
+        cluster,
+    });
 
     if (!loaded) {
         return null;
@@ -83,7 +94,7 @@ export default function JobGeneral() {
 
                     <Statuslabel label={state} renderPlaque />
 
-                    <JobActions />
+                    <JobActions className={block('actions')} />
                 </div>
 
                 {isSpeculativeJob && (
@@ -183,25 +194,25 @@ export default function JobGeneral() {
                             {
                                 key: 'job_input',
                                 value: (
-                                    <Link
+                                    <ClickableText
                                         onClick={() =>
                                             window.open(job.prepareCommandURL('get_job_input'))
                                         }
                                     >
                                         get_job_input
-                                    </Link>
+                                    </ClickableText>
                                 ),
                             },
                             {
                                 key: 'job_error',
                                 value: (
-                                    <Link
+                                    <ClickableText
                                         onClick={() =>
                                             window.open(job.prepareCommandURL('get_job_stderr'))
                                         }
                                     >
                                         get_job_stderr
-                                    </Link>
+                                    </ClickableText>
                                 ),
                             },
                             ...(job?.state !== 'failed'
@@ -210,7 +221,7 @@ export default function JobGeneral() {
                                       {
                                           key: 'fail_context',
                                           value: (
-                                              <Link
+                                              <ClickableText
                                                   onClick={() =>
                                                       window.open(
                                                           job.prepareCommandURL(
@@ -220,7 +231,7 @@ export default function JobGeneral() {
                                                   }
                                               >
                                                   get_job_fail_context
-                                              </Link>
+                                              </ClickableText>
                                           ),
                                       },
                                   ]),
@@ -246,6 +257,15 @@ export default function JobGeneral() {
                                           ),
                                       },
                                   ]),
+                            {
+                                key: 'Job trace',
+                                value: (
+                                    <Link target="_blank" href={traceUrl!}>
+                                        {traceTitle}
+                                    </Link>
+                                ),
+                                visible: Boolean(traceUrl),
+                            },
                         ],
                     ]}
                 />
@@ -275,4 +295,36 @@ export default function JobGeneral() {
             </div>
         </ErrorBoundary>
     );
+}
+
+function useJobProfilingUrl({
+    operationId,
+    jobId,
+    pool_tree,
+    has_trace,
+    cluster,
+}: {
+    operationId?: string;
+    jobId?: string;
+    cluster: string;
+    has_trace?: boolean;
+    pool_tree?: string;
+}) {
+    const {job_trace_url_template: {url_template, title = 'Open trace', enforce_for_trees} = {}} =
+        useSelector(getClusterUiConfig);
+    return React.useMemo(() => {
+        const allowTrace = has_trace || 0 <= enforce_for_trees?.indexOf(pool_tree!)!;
+
+        if (!allowTrace || !cluster || !operationId || !jobId || !url_template) {
+            return {};
+        }
+        return {
+            url: formatByParams(url_template, {
+                operationId,
+                jobId,
+                cluster,
+            }),
+            title,
+        };
+    }, [cluster, operationId, jobId, url_template, title, enforce_for_trees, pool_tree, has_trace]);
 }

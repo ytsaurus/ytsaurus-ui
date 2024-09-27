@@ -1,6 +1,5 @@
 // @ts-ignore
 import yt from '@ytsaurus/javascript-wrapper/lib/yt';
-import _ from 'lodash';
 
 import {TABLE_MOUNT_CONFIG} from '../../../../../constants/navigation/content/table';
 import {ThunkAction} from 'redux-thunk';

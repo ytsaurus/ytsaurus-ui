@@ -1,19 +1,26 @@
 import React, {FC} from 'react';
 import {QueryCliqueItem} from './QueryCliqueItem';
 import {QuerySelector} from '../QuerySelector';
-import {Select} from '@gravity-ui/uikit';
+import {Flex, Select} from '@gravity-ui/uikit';
 
 type Props = {
     loading: boolean;
     cliqueList: {alias: string; yt_operation_id?: string}[];
     value: string | undefined;
+    placeholder?: string;
     onChange: (alias: string) => void;
 };
 
-export const QueryCliqueSelector: FC<Props> = ({cliqueList, value, loading, onChange}) => {
+export const QueryCliqueSelector: FC<Props> = ({
+    cliqueList,
+    value,
+    placeholder = 'Clique alias',
+    loading,
+    onChange,
+}) => {
     return (
         <QuerySelector
-            placeholder="Clique alias"
+            placeholder={placeholder}
             filterPlaceholder="Search"
             hasClear
             items={cliqueList}
@@ -21,7 +28,8 @@ export const QueryCliqueSelector: FC<Props> = ({cliqueList, value, loading, onCh
             loading={loading}
             onChange={onChange}
             getOptionHeight={() => 52}
-            disabled={!cliqueList.length}
+            disabled={loading && !cliqueList.length}
+            renderEmptyOptions={() => <Flex justifyContent="center">No access clique</Flex>}
         >
             {(items) =>
                 items.map(({alias, yt_operation_id}) => (

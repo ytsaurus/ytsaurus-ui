@@ -1,5 +1,7 @@
 import React from 'react';
-import _ from 'lodash';
+
+import filter_ from 'lodash/filter';
+import map_ from 'lodash/map';
 
 import Button from '../../../../components/Button/Button';
 import {
@@ -45,8 +47,8 @@ function AccountUsageColumnsDialog({visible, onClose}: DialogProps) {
     const availableColumns = useSelector(getAccountUsageSelectableColumns);
 
     const handleChange = React.useCallback((newValue: typeof value) => {
-        const checked = _.filter(newValue, 'checked');
-        dispatch(setAccountUsageColumns(_.map(checked, ({data: {caption}}) => caption)));
+        const checked = filter_(newValue, 'checked');
+        dispatch(setAccountUsageColumns(map_(checked, ({data: {caption}}) => caption)));
         onClose();
     }, []);
 
@@ -57,7 +59,7 @@ function AccountUsageColumnsDialog({visible, onClose}: DialogProps) {
         const selectedSet = new Set(selected);
         const other = availableColumns.filter((item) => !selectedSet.has(item));
 
-        return _.map(selected.concat(other), (item) => {
+        return map_(selected.concat(other), (item) => {
             return {
                 name: readableAccountUsageColumnName(item, true),
                 checked: selectedSet.has(item),

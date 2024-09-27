@@ -1,19 +1,17 @@
 import React, {Component} from 'react';
 import {ConnectedProps, connect} from 'react-redux';
-import map_ from 'lodash/map';
 
-import {CollapsibleSectionStateLess} from '../../../components/CollapsibleSection/CollapsibleSection';
 import SystemStateOverview from '../SystemStateOverview/SystemStateOverview';
 
+import {useUpdater} from '../../../hooks/use-updater';
+import {setSettingsSystemRpcProxiesCollapsed} from '../../../store/actions/settings/settings';
 import {loadSystemRPCProxies} from '../../../store/actions/system/rpc-proxies';
 import {getCluster} from '../../../store/selectors/global';
-import {setSettingsSystemRpcProxiesCollapsed} from '../../../store/actions/settings/settings';
-import {getSettingsSystemRpcProxiesCollapsed} from '../../../store/selectors/settings-ts';
 import {RootState} from '../../../store/reducers';
-import {MakeUrlParams, RoleGroup, RoleGroupsContainer} from '../Proxies/RoleGroup';
+import {getSettingsSystemRpcProxiesCollapsed} from '../../../store/selectors/settings-ts';
 import {useThunkDispatch} from '../../../store/thunkDispatch';
-import {useUpdater} from '../../../hooks/use-updater';
-import {UI_COLLAPSIBLE_SIZE} from '../../../constants/global';
+import {MakeUrlParams} from '../ProxiesImpl/RoleGroup';
+import {ProxiesImpl} from '../ProxiesImpl/ProxiesImpl';
 
 type ReduxProps = ConnectedProps<typeof connector>;
 
@@ -35,27 +33,14 @@ class RpcProxies extends Component<ReduxProps> {
 
         return (
             counters.total > 0 && (
-                <CollapsibleSectionStateLess
+                <ProxiesImpl
                     name={'RPC Proxies'}
                     overview={overview}
-                    onToggle={this.onToggle}
+                    onToggleCollapsed={this.onToggle}
+                    roleGroups={roleGroups}
                     collapsed={collapsed}
-                    size={UI_COLLAPSIBLE_SIZE}
-                >
-                    <RoleGroupsContainer>
-                        {map_(roleGroups, (data) => {
-                            return (
-                                <RoleGroup
-                                    key={data.name}
-                                    data={data}
-                                    makeUrl={this.makeRoleGroupUrl}
-                                    hideOthers
-                                    bannedAsState
-                                />
-                            );
-                        })}
-                    </RoleGroupsContainer>
-                </CollapsibleSectionStateLess>
+                    makeUrl={this.makeRoleGroupUrl}
+                />
             )
         );
     }

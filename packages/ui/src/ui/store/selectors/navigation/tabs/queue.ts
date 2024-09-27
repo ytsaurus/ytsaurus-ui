@@ -1,5 +1,7 @@
 import {createSelector} from 'reselect';
+
 import type {RootState} from '../../../../store/reducers';
+import type {YtQueueStatus} from '../../../../store/reducers/navigation/tabs/queue/types';
 
 const metaMock = {cell_id: '890', host: 'lbk-vla-249.search.yandex.net'};
 export const emptyRate = {'1m': 0, '1h': 0, '1d': 0};
@@ -29,6 +31,9 @@ export const getStatusLoading = (state: RootState) =>
 
 export const getStatusLoaded = (state: RootState) =>
     state.navigation.tabs.queue.status.statusLoaded;
+
+export const getQueueStatusDataAlerts = (state: RootState): YtQueueStatus['alerts'] =>
+    state.navigation.tabs.queue.status?.statusData?.alerts;
 
 export const getQueueMode = (state: RootState) => state.navigation.tabs.queue.filters.queueMode;
 

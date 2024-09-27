@@ -10,13 +10,14 @@ import {getClusterConfigByName, getClusterProxy} from '../../../store/selectors/
 import {generateQuerySettings, generateQueryText} from '../utils/query_generate';
 import {RootState} from '../../../store/reducers';
 import {makeDirectDownloadPath} from '../../../utils/navigation';
-import {getQueryTrackerRequestOptions} from './query/selectors';
+import {DEFAULT_QUERY_ACO, getQueryTrackerRequestOptions} from './query/selectors';
 import {UPDATE_QUERIES_LIST} from './query-tracker-contants';
 import {AnyAction} from 'redux';
 import {QueryEngine} from './engines';
-import {getLastSelectedACONamespaces} from './query_aco/selectors';
+import {getLastSelectedACONamespaces, selectIsMultipleAco} from './query_aco/selectors';
 import {setSettingByKey} from '../../../store/actions/settings';
 import unipika from '../../../common/thor/unipika';
+import {CancelTokenSource} from 'axios';
 
 function getQTApiSetup(): {proxy?: string} {
     const QT_CLUSTER = getQueryTrackerCluster();
@@ -75,11 +76,13 @@ export interface DraftQuery {
     settings?: {
         cluster?: string;
         clique?: string;
-        discovery_path?: string;
+        discovery_path?: string; // old request type. Deprecated
+        discovery_group?: string;
         execution_mode?: 'validate' | 'optimize';
     } & Record<string, string>;
     error?: unknown;
     access_control_object: string;
+    access_control_objects?: string[];
 }
 
 export type ErrorPosition = {column: number; row: number};
@@ -127,7 +130,6 @@ export interface QueryItem extends DraftQuery {
         yql_progress?: Progress;
         spyt_progress?: number;
     };
-    access_control_object: string;
     error?: QueryError;
 }
 
@@ -168,7 +170,7 @@ const secureDecoding = (value: string) => {
     }
 };
 
-const JSONParser = {
+export const JSONParser = {
     JSONSerializer: {
         stringify(data: unknown) {
             return JSON.stringify(data);
@@ -242,7 +244,8 @@ export async function generateQueryFromTable(
             }),
             files: [],
             annotations: {},
-            access_control_object: 'nobody',
+            access_control_object: DEFAULT_QUERY_ACO,
+            access_control_objects: [DEFAULT_QUERY_ACO],
             settings: generateQuerySettings(engine, cluster),
         };
     }
@@ -295,8 +298,17 @@ export function startQuery(
 ): ThunkAction<Promise<{query_id: QueryItemId}>, RootState, any, any> {
     return async (_dispatch, getState) => {
         const state = getState();
+        const isMultipleAco = selectIsMultipleAco(state);
         const {stage, yqlAgentStage} = getQueryTrackerRequestOptions(state);
-        const {query, engine, settings, annotations, files, access_control_object} = queryInstance;
+        const {
+            query,
+            engine,
+            settings,
+            annotations,
+            files,
+            access_control_objects,
+            access_control_object,
+        } = queryInstance;
 
         return ytApiV4Id.startQuery(YTApiId.startQuery, {
             parameters: {
@@ -305,7 +317,7 @@ export function startQuery(
                 files,
                 engine,
                 annotations,
-                access_control_object,
+                ...(isMultipleAco ? {access_control_objects} : {access_control_object}),
                 settings: {
                     stage: engine === 'yql' ? yqlAgentStage : undefined,
                     ...settings,
@@ -371,6 +383,7 @@ export function readQueryResults(
     settings: {
         cellsSize: number;
     },
+    cancellation?: (token: CancelTokenSource) => void,
 ): ThunkAction<Promise<QueryResult>, RootState, any, any> {
     return async (_dispatch, getState) => {
         const state = getState();
@@ -393,6 +406,7 @@ export function readQueryResults(
                 },
             },
             setup: {...getQTApiSetup(), ...JSONParser},
+            cancellation,
         })) as QueryResult;
         return {...result, rows: mapQueryRowNames(result.rows)};
     };
@@ -523,13 +537,13 @@ export function getQueryResultMetaList(
             command: 'get_query_result',
             parameters: {stage, query_id, result_index: ind},
         }));
-        const {results} = (await ytApiV4Id.executeBatch<QueryResultMeta>(YTApiId.getQueryResults, {
+        const {results} = await ytApiV4Id.executeBatch<QueryResultMeta>(YTApiId.getQueryResults, {
             parameters: {
                 requests: requests,
                 output_format: 'json',
             },
             setup: getQTApiSetup(),
-        })) as unknown as {results: BatchResultsItem<QueryResultMeta>[]};
+        });
         return results;
     };
 }
@@ -558,7 +572,7 @@ export function setQueryName(
 }
 
 export function addACOToLastSelected(
-    aco: string,
+    aco: string[],
 ): ThunkAction<Promise<any>, RootState, any, AnyAction> {
     return async (dispatch, getState) => {
         const state = getState();
@@ -567,8 +581,8 @@ export function addACOToLastSelected(
 
         await dispatch(
             setSettingByKey(`local::${cluster}::queryTracker::lastSelectedACOs`, [
-                aco,
-                ...lastSelectedACONamespaces.filter((item) => item !== aco).slice(0, 9),
+                ...aco,
+                ...lastSelectedACONamespaces.filter((item) => !aco.includes(item)).slice(0, 9),
             ]),
         );
     };
@@ -578,11 +592,12 @@ export function updateACOQuery({
     aco,
     query_id,
 }: {
-    aco: string;
+    aco: string[];
     query_id: string;
 }): ThunkAction<Promise<any>, RootState, any, AnyAction> {
     return async (dispatch, getState) => {
         const state = getState();
+        const isMultipleAco = selectIsMultipleAco(state);
         const {stage} = getQueryTrackerRequestOptions(state);
 
         return ytApiV4Id
@@ -590,7 +605,9 @@ export function updateACOQuery({
                 parameters: {
                     stage,
                     query_id,
-                    access_control_object: aco,
+                    ...(isMultipleAco
+                        ? {access_control_objects: aco}
+                        : {access_control_object: aco[0]}),
                 },
                 setup: getQTApiSetup(),
             })

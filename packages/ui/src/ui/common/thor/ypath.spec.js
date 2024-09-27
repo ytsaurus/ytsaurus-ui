@@ -1,8 +1,8 @@
-import _ypath from './ypath';
+import ypath from './ypath';
 
 describe('./ypath', () => {
     it('Exports', () => {
-        expect(_ypath).toBeDefined();
+        expect(ypath).toBeDefined();
     });
 
     describe('getValue', () => {
@@ -15,11 +15,11 @@ describe('./ypath', () => {
             };
 
             expect(() => {
-                _ypath.getValue(node, '/some_property');
+                ypath.getValue(node, '/some_property');
             }).toThrow(Error);
 
             expect(() => {
-                _ypath.getValue(node, '/@recursive_resource_usage');
+                ypath.getValue(node, '/@recursive_resource_usage');
             }).not.toThrow();
         });
     });
@@ -34,8 +34,8 @@ describe('./ypath', () => {
                 },
             };
 
-            expect(_ypath.getBoolean(node, '/@append')).toBe(true);
-            expect(_ypath.getBoolean(node, '/@teleport')).toBe(false);
+            expect(ypath.getBoolean(node, '/@append')).toBe(true);
+            expect(ypath.getBoolean(node, '/@teleport')).toBe(false);
         });
 
         it('gets boolean from string', () => {
@@ -47,8 +47,8 @@ describe('./ypath', () => {
                 },
             };
 
-            expect(_ypath.getBoolean(node, '/@append')).toBe(true);
-            expect(_ypath.getBoolean(node, '/@teleport')).toBe(false);
+            expect(ypath.getBoolean(node, '/@append')).toBe(true);
+            expect(ypath.getBoolean(node, '/@teleport')).toBe(false);
         });
 
         it('plays well with undefined', () => {
@@ -60,8 +60,8 @@ describe('./ypath', () => {
                 },
             };
 
-            expect(_ypath.getBoolean(node, '/@append')).toBeUndefined();
-            expect(_ypath.getBoolean(node, '/@teleport')).toBeUndefined();
+            expect(ypath.getBoolean(node, '/@append')).toBeUndefined();
+            expect(ypath.getBoolean(node, '/@teleport')).toBeUndefined();
         });
 
         it('everything else is treated as an error', () => {
@@ -74,10 +74,10 @@ describe('./ypath', () => {
             };
 
             expect(() => {
-                _ypath.getBoolean(node, '/@append');
+                ypath.getBoolean(node, '/@append');
             }).toThrow(Error);
             expect(() => {
-                _ypath.getBoolean(node, '/@teleport');
+                ypath.getBoolean(node, '/@teleport');
             }).toThrow(Error);
         });
     });
@@ -95,35 +95,35 @@ describe('./ypath', () => {
         };
         describe('no default value:', () => {
             it('test', () => {
-                expect(_ypath.getNumberDeprecated(node, '/@test_number')).toBe(2);
-                expect(_ypath.getNumberDeprecated(node, '/@test_valid_string')).toBe(2);
+                expect(ypath.getNumberDeprecated(node, '/@test_number')).toBe(2);
+                expect(ypath.getNumberDeprecated(node, '/@test_valid_string')).toBe(2);
                 expect(() => {
-                    _ypath.getNumberDeprecated(node, '/@test_invalid_string');
+                    ypath.getNumberDeprecated(node, '/@test_invalid_string');
                 }).toThrow(Error);
-                expect(_ypath.getNumberDeprecated(node, '/@test_undefined')).toBeUndefined();
+                expect(ypath.getNumberDeprecated(node, '/@test_undefined')).toBeUndefined();
                 expect(() => {
-                    _ypath.getNumberDeprecated(node, '/@test_null');
+                    ypath.getNumberDeprecated(node, '/@test_null');
                 }).toThrow(Error);
             });
         });
         describe('with default value:', () => {
             it('test', () => {
-                expect(_ypath.getNumberDeprecated(node, '/@test_number', 4)).toBe(2);
-                expect(_ypath.getNumberDeprecated(node, '/@test_valid_string', 4)).toBe(2);
-                expect(_ypath.getNumberDeprecated(node, '/@test_invalid_string', 4)).toBe(4);
-                expect(_ypath.getNumberDeprecated(node, '/@test_undefined', 4)).toBe(4);
-                expect(_ypath.getNumberDeprecated(node, '/@test_null', 4)).toBe(4);
+                expect(ypath.getNumberDeprecated(node, '/@test_number', 4)).toBe(2);
+                expect(ypath.getNumberDeprecated(node, '/@test_valid_string', 4)).toBe(2);
+                expect(ypath.getNumberDeprecated(node, '/@test_invalid_string', 4)).toBe(4);
+                expect(ypath.getNumberDeprecated(node, '/@test_undefined', 4)).toBe(4);
+                expect(ypath.getNumberDeprecated(node, '/@test_null', 4)).toBe(4);
             });
         });
         describe('with default value = NaN:', () => {
             it('test', () => {
-                expect(_ypath.getNumberDeprecated(node, '/@test_number', NaN)).toBe(2);
-                expect(_ypath.getNumberDeprecated(node, '/@test_valid_string', NaN)).toBe(2);
+                expect(ypath.getNumberDeprecated(node, '/@test_number', NaN)).toBe(2);
+                expect(ypath.getNumberDeprecated(node, '/@test_valid_string', NaN)).toBe(2);
                 expect(
-                    _ypath.getNumberDeprecated(node, '/@test_invalid_string', NaN),
+                    ypath.getNumberDeprecated(node, '/@test_invalid_string', NaN),
                 ).toBeUndefined();
-                expect(_ypath.getNumberDeprecated(node, '/@test_undefined', NaN)).toBe(NaN);
-                expect(_ypath.getNumberDeprecated(node, '/@test_null', NaN)).toBeUndefined();
+                expect(ypath.getNumberDeprecated(node, '/@test_undefined', NaN)).toBe(NaN);
+                expect(ypath.getNumberDeprecated(node, '/@test_null', NaN)).toBeUndefined();
             });
         });
     });

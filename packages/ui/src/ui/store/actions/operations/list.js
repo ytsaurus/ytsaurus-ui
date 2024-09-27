@@ -1,4 +1,6 @@
-import _ from 'lodash';
+import map_ from 'lodash/map';
+import reduce_ from 'lodash/reduce';
+
 import moment from 'moment';
 
 import yt from '@ytsaurus/javascript-wrapper/lib/yt';
@@ -112,7 +114,7 @@ export function updateOperationsByParams(cluster, parameters) {
                 dispatch({
                     type: UPDATE_OPERATIONS_SUCCESS,
                     data: rumId.wrap('parse', () => {
-                        return _.map(operations, (data) => new ListOperationSelector(data));
+                        return map_(operations, (data) => new ListOperationSelector(data));
                     }),
                 });
                 dispatch({
@@ -291,7 +293,7 @@ export function updateSaveFilterPresetDialog({name, value}) {
 
 function selectActualFilters(state) {
     const currentFilters = state.operations.list.filters;
-    return _.reduce(
+    return reduce_(
         currentFilters,
         (filters, {value}, key) => {
             return {...filters, [key]: value};

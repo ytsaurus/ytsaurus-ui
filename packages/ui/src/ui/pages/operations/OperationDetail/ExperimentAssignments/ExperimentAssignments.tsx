@@ -1,7 +1,8 @@
 import React from 'react';
 import cn from 'bem-cn-lite';
 import {useSelector} from 'react-redux';
-import _ from 'lodash';
+
+import map_ from 'lodash/map';
 
 import ypath from '../../../../common/thor/ypath';
 import {CollapsibleSectionStateLess} from '../../../../components/CollapsibleSection/CollapsibleSection';
@@ -9,11 +10,11 @@ import {
     OperationExperimentItem,
     getOperationExperimentAssignments,
 } from '../../../../store/selectors/operations/operation';
+import {ClickableText} from '../../../../components/ClickableText/ClickableText';
 import MetaTable from '../../../../components/MetaTable/MetaTable';
 import StarTrackLink from '../../../../components/StarTrackLink/StarTrackLink';
 import Yson from '../../../../components/Yson/Yson';
 import {getOperationExperimentsYsonSettings} from '../../../../store/selectors/thor/unipika';
-import Link from '../../../../components/Link/Link';
 import {UI_COLLAPSIBLE_SIZE} from '../../../../constants/global';
 
 const block = cn('experiment-assignments');
@@ -39,7 +40,7 @@ function ExperimentAssignments({className}: {className: string}) {
             size={UI_COLLAPSIBLE_SIZE}
             marginDirection="bottom"
         >
-            {_.map(items, (item, index) => (
+            {map_(items, (item, index) => (
                 <ExperimentsItem key={index} data={item} />
             ))}
         </CollapsibleSectionStateLess>
@@ -92,9 +93,9 @@ function ExperimentAssignmentsItem(props: ItemProps) {
                         {
                             key: 'Effect',
                             value: (
-                                <Link onClick={toggleEffectVisibility}>
+                                <ClickableText onClick={toggleEffectVisibility}>
                                     {effectVisible ? 'Hide' : 'Show'}
-                                </Link>
+                                </ClickableText>
                             ),
                         },
                     ],

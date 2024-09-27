@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import get_ from 'lodash/get';
 
 import {KeysByDot} from '../../../../../shared/keys-by-dot';
 
@@ -191,7 +191,7 @@ export const prepareSubmitBundle = (form: FormApi<BundleEditorDialogFormValues>)
         if (!dirtyFields[field]) {
             return;
         }
-        const value = _.get(values, field);
+        const value = get_(values, field);
         prepare[attr] = typeof prepareValue === 'function' ? prepareValue(value) : value;
     }
 

@@ -1,7 +1,8 @@
 import React, {Component, Fragment} from 'react';
 import hammer from '../../common/hammer';
 import cn from 'bem-cn-lite';
-import _ from 'lodash';
+
+import compact_ from 'lodash/compact';
 
 import {Button, ClipboardButton, Flex, Icon, Loader, Popover} from '@gravity-ui/uikit';
 import {Column} from '@gravity-ui/react-data-table';
@@ -42,10 +43,11 @@ import {AclColumnsCell} from './AclColumnsCell';
 import aclInheritedSvg from '../../assets/img/svg/acl-inherited.svg';
 
 import './ACL.scss';
+import {InheritanceMessage} from './InheritanceMessage/InheritanceMessage';
 
 const block = cn('navigation-acl');
 
-type Props = ACLReduxProps & WithVisibleProps;
+type Props = ACLReduxProps & WithVisibleProps & {className?: string};
 
 type ApproverRow = PreparedApprover;
 type PermissionsRow = ObjectPermissionRowWithExpand;
@@ -145,7 +147,7 @@ class ACL extends Component<Props> {
                         <React.Fragment>
                             idm-group:{group}
                             <span className={block('copy-idm-group')}>
-                                <ClipboardButton text={`idm-group:${group}`} size={16} />
+                                <ClipboardButton text={`idm-group:${group}`} size="s" />
                             </span>
                         </React.Fragment>
                     )
@@ -181,38 +183,29 @@ class ACL extends Component<Props> {
         }
     }
 
-    getColumnsTemplates<T extends ApproverRow | PermissionsRow>() {
+    getColumnsTemplates<T extends ApproverRow | PermissionsRow>({
+        hasInherited,
+    }: {hasInherited?: boolean} = {}) {
         const openDeleteModal = this.handleDeletePermissionClick;
         const {idmKind, toggleExpandAclSubject} = this.props;
         return {
-            inherited: {
-                name: 'inherited',
-                header: '',
-                className: block('table-item', {type: 'inherited'}),
+            expand: {
+                name: '',
+                align: 'right',
+                className: block('table-item', {type: 'expand'}),
                 render({row}) {
                     const expanded = 'expanded' in row ? row.expanded : undefined;
-                    if (expanded !== undefined) {
-                        return (
-                            <ExpandButton
-                                inline
-                                expanded={expanded}
-                                toggleExpanded={() => {
-                                    toggleExpandAclSubject(row.subjects[0]);
-                                }}
-                            />
-                        );
-                    }
-
-                    return (
-                        row.inherited && (
-                            <Popover content={'Role is inherited'}>
-                                <Icon data={aclInheritedSvg} size={16} />
-                            </Popover>
-                        )
+                    return expanded === undefined ? null : (
+                        <ExpandButton
+                            inline
+                            expanded={expanded}
+                            toggleExpanded={() => {
+                                toggleExpandAclSubject(row.subjects[0]);
+                            }}
+                        />
                     );
                 },
-                align: 'center',
-                width: 32,
+                width: 36,
             } as Column<T>,
             subjects: {
                 name: 'Subjects',
@@ -221,9 +214,23 @@ class ACL extends Component<Props> {
                 render({row}) {
                     const {requestPermissionsFlags = {}} = UIFactory.getAclApi();
 
+                    const {inheritedFrom} = row;
+
                     const level = 'level' in row ? row.level : undefined;
                     return (
                         <Flex className={block('subject', {level: String(level)})} wrap gap={1}>
+                            {Boolean(hasInherited) && (
+                                <Popover
+                                    className={block('inherited', {hidden: !row.inherited})}
+                                    content={<InheritanceMessage data={inheritedFrom} />}
+                                >
+                                    <Icon
+                                        className={block('inherited-icon')}
+                                        data={aclInheritedSvg}
+                                        size={16}
+                                    />
+                                </Popover>
+                            )}
                             <Flex grow wrap gap={1}>
                                 {ACL.renderSubjectLink(row)}
                             </Flex>
@@ -337,8 +344,8 @@ class ACL extends Component<Props> {
 
     renderApprovers() {
         const {hasApprovers, approversFiltered, loaded} = this.props;
-        const tableColumns = (['inherited', 'subjects', 'approve_type', 'actions'] as const).map(
-            (name) => this.getColumnsTemplates<ApproverRow>()[name],
+        const tableColumns = (['subjects', 'approve_type', 'actions'] as const).map(
+            (name) => this.getColumnsTemplates<ApproverRow>({hasInherited: true})[name],
         );
         return (
             hasApprovers && (
@@ -389,14 +396,22 @@ class ACL extends Component<Props> {
         } = this.props;
         const useColumns = aclMode === AclMode.COLUMN_GROUPS_PERMISSISONS;
 
-        const {items, hasDenyAction} = useColumns ? columnsPermissions : mainPermissions;
+        const {items, hasDenyAction, hasExpandable, hasInherited} = useColumns
+            ? columnsPermissions
+            : mainPermissions;
         const extraColumns = useColumns
             ? ([...(hasDenyAction ? ['permissions' as const] : []), 'columns'] as const)
             : (['permissions'] as const);
 
         const tableColumns: Array<Column<PermissionsRow>> = (
-            ['inherited', 'subjects', ...extraColumns, 'inheritance_mode', 'actions'] as const
-        ).map((name) => this.getColumnsTemplates<PermissionsRow>()[name]);
+            [
+                ...(hasExpandable ? ['expand' as const] : []),
+                'subjects',
+                ...extraColumns,
+                'inheritance_mode',
+                'actions',
+            ] as const
+        ).map((name) => this.getColumnsTemplates<PermissionsRow>({hasInherited})[name]);
 
         return (
             <ErrorBoundary>
@@ -592,7 +607,7 @@ class ACL extends Component<Props> {
             };
         }
 
-        const segments: Array<SegmentControlItem> = _.compact([
+        const segments: Array<SegmentControlItem> = compact_([
             allowInheritAcl && toSegmentItem('Inherit ACL', disableAclInheritance, true),
             isIdmAclAvailable() &&
                 allowBossApprovals &&
@@ -631,13 +646,13 @@ class ACL extends Component<Props> {
     }
 
     render() {
-        const {loading, loaded} = this.props;
+        const {loading, loaded, className} = this.props;
         const initialLoading = loading && !loaded;
 
         return (
             <ErrorBoundary>
                 <LoadDataHandler {...this.props}>
-                    <div className={block({loading: initialLoading})}>
+                    <div className={block({loading: initialLoading}, className)}>
                         {initialLoading ? <Loader /> : this.renderContent()}
                     </div>
                 </LoadDataHandler>

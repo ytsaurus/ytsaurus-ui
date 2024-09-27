@@ -48,13 +48,17 @@ function SegmentValue({value, url}: Pick<SegmentControlItem, 'value' | 'url'>) {
     return (
         <Flex>
             <Value value={value} />
-            {Boolean(url) && (
+            {isValidUrl(url) && (
                 <Link view="secondary" className={block('link')} target="_blank" href={url}>
                     <Icon awesome="link" />
                 </Link>
             )}
         </Flex>
     );
+}
+
+function isValidUrl(url?: string): url is string {
+    return Boolean(url);
 }
 
 function Value({value}: Pick<SegmentControlItem, 'value'>) {

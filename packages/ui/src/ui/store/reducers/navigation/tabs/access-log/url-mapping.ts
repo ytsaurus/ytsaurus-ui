@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import isEqual_ from 'lodash/isEqual';
 import produce from 'immer';
 import {initialState} from './access-log-filters';
 import {RootState} from '../../../../../store/reducers/index';
@@ -85,10 +85,10 @@ export function getNavigationAccessLogPreparedState(state: RootState, {query}: L
         updateIfChanged(accessLogFilters, 'path_regex', queryFilters.path_regex);
         updateIfChanged(accessLogFilters, 'user_regex', queryFilters.user_regex);
         updateIfChanged(accessLogFilters, 'method_group', queryFilters.method_group);
-        updateIfChanged(accessLogFilters, 'time', queryFilters.time, _.isEqual);
-        updateIfChanged(accessLogFilters, 'scope', queryFilters.scope, _.isEqual);
-        updateIfChanged(accessLogFilters, 'user_type', queryFilters.user_type, _.isEqual);
-        updateIfChanged(accessLogFilters, 'field_selector', queryFilters.field_selector, _.isEqual);
+        updateIfChanged(accessLogFilters, 'time', queryFilters.time, isEqual_);
+        updateIfChanged(accessLogFilters, 'scope', queryFilters.scope, isEqual_);
+        updateIfChanged(accessLogFilters, 'user_type', queryFilters.user_type, isEqual_);
+        updateIfChanged(accessLogFilters, 'field_selector', queryFilters.field_selector, isEqual_);
         updateIfChanged(accessLogFilters, 'metadata', queryFilters.metadata);
     });
 }

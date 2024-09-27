@@ -1,5 +1,8 @@
 import React from 'react';
-import _ from 'lodash';
+
+import map_ from 'lodash/map';
+import reverse_ from 'lodash/reverse';
+
 import moment from 'moment';
 import cn from 'bem-cn-lite';
 
@@ -151,7 +154,7 @@ function useSnapshotItems() {
     const snapshots = useSelector(getAccountUsageSnapshots);
 
     const items = React.useMemo(() => {
-        const res = _.map(_.reverse(snapshots.slice()), (item) => {
+        const res = map_(reverse_(snapshots.slice()), (item) => {
             return {
                 value: snapshot2string(item),
                 text: moment(new Date(item * 1000)).format('YYYY-MM-DD HH:mm'),
@@ -182,7 +185,6 @@ function FromSnapshot() {
 
     return (
         <Select
-            disablePortal={false}
             placeholder={'Snapthot...'}
             items={items}
             value={[snapshot2string(value)]}
@@ -210,7 +212,6 @@ function ToSnapshot() {
 
     return (
         <Select
-            disablePortal={false}
             placeholder={'Snapthot...'}
             items={items}
             value={[snapshot2string(value)]}
@@ -257,7 +258,6 @@ function SnapshotFilter() {
             <span className={block('spacer')} />
             <SecondaryBold>Snapshot&nbsp;</SecondaryBold>
             <Select
-                disablePortal={false}
                 placeholder={'Snapshot...'}
                 value={[snapshot2string(currentSnapshot)]}
                 items={items}
@@ -368,7 +368,6 @@ function DateRangeTypeFilter() {
 
     return (
         <Select
-            disablePortal={false}
             pin="clear-round"
             value={[value]}
             onUpdate={(vals) => handleChange(vals[0])}
@@ -462,7 +461,6 @@ function ViewType() {
 
     return (
         <Select
-            disablePortal={false}
             value={value ? [value] : []}
             items={VIEW_TYPE_ITEMS}
             onUpdate={(vals) => handleChange(vals[0])}
@@ -476,7 +474,7 @@ export function UsageBreadcrumbs() {
     const pathArr = useSelector(getAccountUsageTreeItemsBasePathSplitted);
 
     const items = React.useMemo(() => {
-        return _.map(pathArr, (item) => {
+        return map_(pathArr, (item) => {
             return {
                 text: item.item,
                 value: item.value,

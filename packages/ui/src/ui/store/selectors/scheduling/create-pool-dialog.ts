@@ -1,4 +1,5 @@
-import _ from 'lodash';
+import forEach_ from 'lodash/forEach';
+
 import {RootState} from '../../reducers';
 import {createSelector} from 'reselect';
 
@@ -23,7 +24,7 @@ function collectTreeKeys(
     dst: Array<string>,
     tree: ReturnType<typeof getCreatePoolDialogTreeItems>,
 ): Array<string> {
-    _.forEach(tree, (value: typeof tree, key: string) => {
+    forEach_(tree, (value: typeof tree, key: string) => {
         dst.push(key);
         collectTreeKeys(dst, value);
     });

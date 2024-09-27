@@ -1,5 +1,4 @@
 import {registerPageIcon} from './constants/slideoutMenu';
-import _ from 'lodash';
 import {UIFactoryClusterPageInfo} from './UIFactory';
 
 // TODO: use { Page } from constants/index.js

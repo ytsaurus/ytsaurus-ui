@@ -76,7 +76,7 @@ yt vanilla \
     --spec '{"pool_trees"=[default;e2e];"scheduling_options_per_pool_tree"={"e2e"={pool=test-e2e}}}' --async >>./e2e-env.tmp
 
 if [ "false" = "$(yt exists //sys/pool_trees/default/yt-e2e-pool-1)" ]; then
-    yt create --type scheduler_pool --attributes '{name="yt-e2e-pool-1";pool_tree="default";parent_name="<Root>"}'
+    yt create --type scheduler_pool --attributes '{name="yt-e2e-pool-1";pool_tree="default";parent_name="<Root>";weight=1}'
 fi
 
 if [ "false" = "$(yt exists //sys/pool_trees/default/yt-e2e-pool-2)" ]; then
@@ -176,3 +176,14 @@ yt set ${E2E_DIR}/@acl '[
 ]'
 
 yt set ${E2E_DIR}/@inherit_acl %false
+
+if [ "false" = "$(yt exists //sys/tablet_cell_bundles/e2e-bundle)" ]; then
+    yt create tablet_cell_bundle --attributes "{name=e2e-bundle;options=$(yt get //sys/tablet_cell_bundles/default/@options)}"
+    yt create tablet_cell --attributes '{tablet_cell_bundle=e2e-bundle}'
+fi
+
+TRUNCATED_TABLE=${E2E_DIR}/truncated-table
+TRUNCATED_TABLE_SCHEMA=$(cat $(dirname $0)/data/truncated-table/table.schema)
+yt create --attributes "$TRUNCATED_TABLE_SCHEMA" table ${TRUNCATED_TABLE}
+
+cat $(dirname $0)/data/truncated-table/data.json | yt write-table --format json ${TRUNCATED_TABLE}

@@ -2,7 +2,9 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import unipika from '../../../../../common/thor/unipika';
 import ypath from '../../../../../common/thor/ypath';
-import _ from 'lodash';
+
+import keys_ from 'lodash/keys';
+import map_ from 'lodash/map';
 
 import CollapsableText from '../../../../../components/CollapsableText/CollapsableText';
 import MetaTable from '../../../../../components/MetaTable/MetaTable';
@@ -36,8 +38,8 @@ export default class Description extends Component {
 
     renderMetaTable(description) {
         const value = ypath.getValue(description);
-        const keys = _.keys(value).sort();
-        const items = _.map(keys, (key) => ({
+        const keys = keys_(value).sort();
+        const items = map_(keys, (key) => ({
             key,
             value: <CollapsableText settings={this.settings} value={value[key]} />,
         }));

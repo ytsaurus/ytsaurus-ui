@@ -2,7 +2,10 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import ReactList from 'react-list';
 import block from 'bem-cn-lite';
-import _ from 'lodash';
+
+import isNumber_ from 'lodash/isNumber';
+import isObject_ from 'lodash/isObject';
+import partition_ from 'lodash/partition';
 
 import {Popup, PopupProps, TextInput, TextInputProps} from '@gravity-ui/uikit';
 
@@ -374,11 +377,11 @@ export default class Suggest extends Component<SuggestProps, State> {
     restrictItems(items: Array<string | Item>) {
         const {maxItems} = this.props;
 
-        if (_.isNumber(maxItems)) {
+        if (isNumber_(maxItems)) {
             return items.slice(0, maxItems || items.length);
-        } else if (_.isObject(maxItems)) {
+        } else if (isObject_(maxItems)) {
             const {totalAmount, groupPredicate} = maxItems;
-            const [positiveGroup, negativeGroup] = _.partition(items, groupPredicate);
+            const [positiveGroup, negativeGroup] = partition_(items, groupPredicate);
             if (positiveGroup.length && negativeGroup.length) {
                 // NOTE: we don't want to one group to be omitted in case there is a large
                 // bias towards another group - hence minimum value of 1

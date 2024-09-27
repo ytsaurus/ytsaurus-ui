@@ -4,6 +4,7 @@
     "declaration": true,
     "allowJs": true,
     "module": "esnext",
+    "target": "ES2018",
     "jsx": "react",
     "resolveJsonModule": true,
     "baseUrl": ".",

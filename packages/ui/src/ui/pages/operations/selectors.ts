@@ -1,4 +1,5 @@
-import _ from 'lodash';
+import map_ from 'lodash/map';
+
 import moment from 'moment';
 
 import ypath from '../../common/thor/ypath';
@@ -64,7 +65,7 @@ export class OperationSelector implements Record<string, any> {
         );
         const poolsIndexes = ypath.getValue(attributes, '/slot_index_per_pool_tree') || {};
 
-        this.pools = _.map(trees, (schedulingInfo, name) => {
+        this.pools = map_(trees, (schedulingInfo, name) => {
             const tree = name;
             const pool = schedulingInfo.pool;
             const isEphemeral = orchidAttributes?.[tree]?.[pool]?.isEphemeral || false;
@@ -317,7 +318,7 @@ export function getCounters(name: string, states: FIX_MY_TYPE, rawCounters: FIX_
     const counters: FIX_MY_TYPE = ypath.getValue(rawCounters, `/${name}_counts`);
 
     return hammer.filter.countCategoriesNG({
-        items: _.map(counters, (count, value) => ({count, value})),
+        items: map_(counters, (count, value) => ({count, value})),
         categories: hammer.filter.flattenCategoriesNG(states, 'name'),
         custom: (item: {value: string; count: number}, counters: Record<string, number>) => {
             counters[item.value] += item.count;

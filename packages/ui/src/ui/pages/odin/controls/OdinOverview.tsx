@@ -2,13 +2,16 @@ import React from 'react';
 import cn from 'bem-cn-lite';
 import * as d3 from 'd3';
 import moment from 'moment';
-import _map from 'lodash/map';
+import map_ from 'lodash/map';
+
+import {Button, Dialog, Loader, Popup, Icon as UIKitIcon} from '@gravity-ui/uikit';
+
+import chevronLeftSvg from '@gravity-ui/icons/svgs/chevron-left.svg';
+import chevronRightSvg from '@gravity-ui/icons/svgs/chevron-right.svg';
 
 import {DatePicker} from '@gravity-ui/date-components';
 
 import {absolute} from '../../../common/utils/url-ts';
-
-import {ChevronLeft, ChevronRight} from '@gravity-ui/icons';
 
 import hammer from '../../../common/hammer';
 
@@ -45,12 +48,12 @@ import {
 } from '../_selectors/odin-overview';
 import {MetricData, MetricListItem} from '../odin-utils';
 import {OdinOverviewStateDataItem} from '../_reducers/odin-overview';
+import {ClickableText} from '../../../components/ClickableText/ClickableText';
 import Link from '../../../components/Link/Link';
 // @ts-ignore
 import {YTDFDialog} from '../../../components/Dialog/Dialog';
 
 import ErrorBoundary from '../../../components/ErrorBoundary/ErrorBoundary';
-import {Button, Dialog, Loader, Popup} from '@gravity-ui/uikit';
 import {setMetric} from '../_actions';
 import Icon from '../../../components/Icon/Icon';
 import OdinOverviewCreatePresetDialog from './OdinOverviewCreatePresetDialog';
@@ -107,7 +110,7 @@ function OdinOverviewPresets() {
     const presets = useSelector(getOdinOverviewVisiblePresets);
     return (
         <div className={block('presets')}>
-            {_map(presets, (item) => (
+            {map_(presets, (item) => (
                 <OdinOverviewPresetItem key={item.name} {...item} />
             ))}
         </div>
@@ -118,22 +121,22 @@ function OdinOverviewPresetItem({name, isDefault}: OdinOverviewPreset) {
     const dispatch = useDispatch();
     return (
         <div className={block('preset')} onClick={() => dispatch(odinOverviewSelectPreset(name))}>
-            <Link
+            <ClickableText
                 className={block('preset-star')}
-                theme={'ghost'}
+                color={'secondary'}
                 onClick={() => {
                     dispatch(odinOverviewToggleDefaultPreset(name));
                 }}
                 title={isDefault ? 'Unmark as default' : 'Mark as default'}
             >
                 <Icon awesome={'star'} face={isDefault ? 'solid' : 'regular'} />
-            </Link>
+            </ClickableText>
             <span className={block('preset-name')} title={name}>
                 {name}
             </span>
-            <Link
+            <ClickableText
                 className={block('preset-remove')}
-                theme={'ghost'}
+                color={'secondary'}
                 onClick={(e) => {
                     e.stopPropagation();
                     dispatch(odinOverviewSetPresetToRemove(name));
@@ -141,7 +144,7 @@ function OdinOverviewPresetItem({name, isDefault}: OdinOverviewPreset) {
                 title={'Remove'}
             >
                 <Icon awesome={'times'} />
-            </Link>
+            </ClickableText>
         </div>
     );
 }
@@ -259,14 +262,12 @@ function OdinOverview(props: OdinOverviewProps) {
                     <div className={block('navigation')}>
                         <Button
                             view="outlined"
-                            size="xs"
                             onClick={() => {
                                 dispatch(odinOverviewSetPreviousTimeRange());
                             }}
-                            className={block('navigation-button', {icon: true})}
                             pin="round-brick"
                         >
-                            <ChevronLeft />
+                            <UIKitIcon data={chevronLeftSvg} />
                         </Button>
                         <DatePicker
                             className={block('navigation-date-picker')}
@@ -281,25 +282,22 @@ function OdinOverview(props: OdinOverviewProps) {
                         />
                         <Button
                             view="outlined"
-                            size="xs"
                             onClick={() => {
                                 dispatch(odinOverviewSetNextTimeRange());
                             }}
                             disabled={fromFilter === undefined}
-                            className={block('navigation-button', {icon: true})}
                             pin="brick-round"
                         >
-                            <ChevronRight />
+                            <UIKitIcon data={chevronRightSvg} />
                         </Button>
 
                         <Button
                             view="flat-action"
-                            size="xs"
                             disabled={fromFilter === undefined}
                             onClick={() => {
                                 dispatch(setOdinOverviewFromTimeFilter(undefined));
                             }}
-                            className={block('navigation-button', {reset: true})}
+                            className={block('navigation-now')}
                         >
                             Now
                         </Button>
@@ -322,33 +320,33 @@ function OdinOverview(props: OdinOverviewProps) {
                                     </div>
                                 </div>
                                 <div className={block('show-hide-all')}>
-                                    <Link
-                                        theme={'ghost'}
+                                    <ClickableText
+                                        color={'secondary'}
                                         onClick={() =>
                                             dispatch(odinOverviewSetAllMetricsVisible(true))
                                         }
                                     >
                                         Show all
-                                    </Link>
+                                    </ClickableText>
                                     <span> / </span>
-                                    <Link
-                                        theme={'ghost'}
+                                    <ClickableText
+                                        color={'secondary'}
                                         onClick={() =>
                                             dispatch(odinOverviewSetAllMetricsVisible(false))
                                         }
                                     >
                                         Hide all
-                                    </Link>
+                                    </ClickableText>
                                 </div>
                                 <div className={block('save')}>
-                                    <Link
-                                        theme={'ghost'}
+                                    <ClickableText
+                                        color={'secondary'}
                                         onClick={() =>
                                             dispatch(odinOverviewShowCreatePresetDialog(true))
                                         }
                                     >
                                         <Icon awesome={'save'} />
-                                    </Link>
+                                    </ClickableText>
                                 </div>
                                 {clusterMetrics.map((item) => {
                                     return (
@@ -517,13 +515,13 @@ function OverviewRowImpl(props: OverviewRowProps) {
                 </Link>
             </div>
             <div className={block('actions-cell')}>
-                <Link
-                    theme={'ghost'}
+                <ClickableText
+                    color="secondary"
                     onClick={handleHide}
                     title={'Click to ' + (hidden ? 'display' : 'hide')}
                 >
                     <Icon awesome={hidden ? 'eye-slash' : 'eye'} />
-                </Link>
+                </ClickableText>
             </div>
         </React.Fragment>
     );
@@ -557,7 +555,7 @@ function OverviewRowError({error, name}: {error: any; name: string}) {
     }, [name]);
     return (
         <div className={'error'}>
-            <Link onClick={handleClick}>Reload. </Link>
+            <ClickableText onClick={handleClick}>Reload. </ClickableText>
             {String(error)}
         </div>
     );

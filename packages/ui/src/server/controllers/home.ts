@@ -1,5 +1,5 @@
 import type {Request, Response} from 'express';
-import _ from 'lodash';
+import isEmpty_ from 'lodash/isEmpty';
 
 import {getLayoutConfig} from '../components/layout-config';
 import {create, get, getSettingsConfig, isRemoteSettingsConfigured} from '../components/settings';
@@ -15,14 +15,6 @@ function isRootPage(page: string) {
         ...ServerFactory.getExtraRootPages(),
     ];
     return -1 !== rootPages.indexOf(page);
-}
-
-export function homeRedirect(req: Request, res: Response) {
-    const cluster = req.params.ytAuthCluster;
-    const {referrer} = req.query;
-    const url = referrer ? (referrer as string) : `/${cluster}`;
-
-    res.redirect(url);
 }
 
 export function homeIndexFactory(entryName = 'main') {
@@ -45,7 +37,7 @@ export function homeIndexFactory(entryName = 'main') {
         const login = ytConfig.isLocalCluster ? 'root' : req.yt?.login;
         // Refuse to serve localRemoteProxy requests erroneously delegated from main interface to another
         // interface running in a container (instead of YT container)
-        if (_.isEmpty(clusterConfig) && cluster) {
+        if (isEmpty_(clusterConfig) && cluster) {
             if (!req.ctx.config.ytAllowRemoteLocalProxy && !isLocalModeByEnvironment()) {
                 res.redirect('/');
                 return;

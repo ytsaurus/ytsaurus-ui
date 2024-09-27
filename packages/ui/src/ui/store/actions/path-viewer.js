@@ -1,5 +1,9 @@
 import yt from '@ytsaurus/javascript-wrapper/lib/yt';
-import _ from 'lodash';
+
+import map_ from 'lodash/map';
+import split_ from 'lodash/split';
+import trim_ from 'lodash/trim';
+
 import CancelHelper from '../../utils/cancel-helper';
 import {
     CHANGE_PARAMETERS,
@@ -10,11 +14,11 @@ import {
 
 const requests = new CancelHelper();
 const prepareAttributes = (attributes) => {
-    if (!_.trim(attributes)) {
+    if (!trim_(attributes)) {
         return;
     }
 
-    return _.map(_.split(attributes, ','), (name) => _.trim(name));
+    return map_(split_(attributes, ','), (name) => trim_(name));
 };
 
 export function loadData() {

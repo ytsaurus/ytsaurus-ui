@@ -1,5 +1,269 @@
 # Changelog
 
+## [1.60.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.59.0...ui-v1.60.0) (2024-09-26)
+
+
+### Features
+
+* **Navigation/Queue:** add alerts section [YTFRONT-4144] ([8b0157c](https://github.com/ytsaurus/ytsaurus-ui/commit/8b0157c08dac8757a04a4129c83ea8de332f6861))
+
+
+### Bug Fixes
+
+* **Navigation/Consumer,Navigation/Queue:** show errors [YTFRONT-4144] ([914a6a0](https://github.com/ytsaurus/ytsaurus-ui/commit/914a6a066ce30928673749bd8e2250c51a3e637b))
+
+## [1.59.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.58.1...ui-v1.59.0) (2024-09-24)
+
+
+### Features
+
+* **CellPreviewModal:** add support string preview [[#765](https://github.com/ytsaurus/ytsaurus-ui/issues/765)] ([e779d16](https://github.com/ytsaurus/ytsaurus-ui/commit/e779d161b928bc372be57cfaae199311c99dae1d))
+* **Navigation/MapNode:** allow override node-icon through UIFactory.getNavigationMapNodeSettings ([c97a4a0](https://github.com/ytsaurus/ytsaurus-ui/commit/c97a4a09bcd8cfc40f5e5eeec203ee1aab417948))
+* **Navigation:** open access logs in qt [YTFRONT-4345] ([97a42b8](https://github.com/ytsaurus/ytsaurus-ui/commit/97a42b87d55c78e92224f43c28bac4d9fd8932ca))
+* **System:** maintenance button [YTFRONT-4217] ([3c5d0d2](https://github.com/ytsaurus/ytsaurus-ui/commit/3c5d0d225d244204b87fde6dc182489130ad20e6))
+
+
+### Bug Fixes
+
+* **CellPreviewModal:** fix opening preview for table with offset [[#778](https://github.com/ytsaurus/ytsaurus-ui/issues/778)] ([7347349](https://github.com/ytsaurus/ytsaurus-ui/commit/7347349c9adaedb1a8d7ea4a933a8316f2b296d2))
+* **Queries:** chyt spyt path autocomplete [YTFRONT-4368] ([df3cff1](https://github.com/ytsaurus/ytsaurus-ui/commit/df3cff140ee9d7bee48c19be55cc66d00e06cdcd))
+* **Query:** fix adhoc charts ([2c441c5](https://github.com/ytsaurus/ytsaurus-ui/commit/2c441c5d79cc680000038d2bfc670e247e488e08))
+* **StructuedYsonVirtualized:** fix scroll for parsed string value [[#765](https://github.com/ytsaurus/ytsaurus-ui/issues/765)] ([c696380](https://github.com/ytsaurus/ytsaurus-ui/commit/c69638021e559dd6be4bfa1234982358574ebfae))
+* **System:** fix color of stats text in dark mode ([f1c3ec3](https://github.com/ytsaurus/ytsaurus-ui/commit/f1c3ec3fc73a5bac17c0bffa2c3229a47c710ec3))
+* **YQLTable:** fixed exception in truncated cells preview ([a351378](https://github.com/ytsaurus/ytsaurus-ui/commit/a35137899782ab251f9515db8d87ad92f05c23b1))
+
+## [1.58.1](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.58.0...ui-v1.58.1) (2024-09-10)
+
+
+### Bug Fixes
+
+* **Components/Nodes:** fix filtering by racks ([b58e8ba](https://github.com/ytsaurus/ytsaurus-ui/commit/b58e8ba8de094e635d2d697589d68e2418b5660b))
+* **Components/Node:** show decimal cpus [[#675](https://github.com/ytsaurus/ytsaurus-ui/issues/675)] ([b42b0bb](https://github.com/ytsaurus/ytsaurus-ui/commit/b42b0bb147cc13abe05715e6a0fb453724d2ec50))
+* **Navigation/ReplicatedTable:** add info icon for 'Automatic mode switch' [YTFRONT-4327] ([5446fc3](https://github.com/ytsaurus/ytsaurus-ui/commit/5446fc381fd17695cdbd22b280c53d0deb5e8a86))
+* **Navigation/Table:** use POST-requests to read tables [YTFRONT-4259] ([7281e79](https://github.com/ytsaurus/ytsaurus-ui/commit/7281e79d41f3db5dabe056378b7c276412a4ed5a))
+* **Operations/Operation/JobsMonitor:** use 'with_monitoring_descriptor' flag [YTFRONT-4346] ([bbf5415](https://github.com/ytsaurus/ytsaurus-ui/commit/bbf54154a389895f64eb7e6c04dbdc15aee30e40))
+* **System/Masters:** minor fix for layout with alerts [YTFRONT-4295] ([2134144](https://github.com/ytsaurus/ytsaurus-ui/commit/2134144fb7829d6eb2010d65103376019a932036))
+
+## [1.58.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.57.0...ui-v1.58.0) (2024-09-04)
+
+
+### Features
+
+* udpate @gravity-ui/charkit, @gravity-ui/yagr [YTFRONT-4305] ([a65be74](https://github.com/ytsaurus/ytsaurus-ui/commit/a65be74a5d9017a5c0d8159f80982891e3afc8cc))
+
+
+### Bug Fixes
+
+* **Navigation/MapNode:** use 'navmode=auto' when node is clicked ([3d473c4](https://github.com/ytsaurus/ytsaurus-ui/commit/3d473c426daea116c610860e7c15141f963e381f))
+* **Queries:** queries page fixes [YTFRONT-4340] ([676354e](https://github.com/ytsaurus/ytsaurus-ui/commit/676354e75f8b2d8457ceda002f2943b167cd0192))
+
+## [1.57.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.56.1...ui-v1.57.0) (2024-09-02)
+
+
+### Features
+
+* **Query:** custom vcs [YTFRONT-4257] ([3e0df9b](https://github.com/ytsaurus/ytsaurus-ui/commit/3e0df9b3b64bb515d748118f8a60d4f88f3274a2))
+
+## [1.56.1](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.56.0...ui-v1.56.1) (2024-08-28)
+
+
+### Bug Fixes
+
+* minor fix for README.md ([aa5ec83](https://github.com/ytsaurus/ytsaurus-ui/commit/aa5ec83230247430731924ec913538e919277026))
+* **packages/ui/package.json:** fix for repository.url ([23f2a54](https://github.com/ytsaurus/ytsaurus-ui/commit/23f2a5405357fcabb1bdfa25bf340018cd9a112a))
+
+## [1.56.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.55.0...ui-v1.56.0) (2024-08-28)
+
+
+### Features
+
+* **Components/Nodes:** add gpu progress [YTFRONT-4306] ([7ec1f62](https://github.com/ytsaurus/ytsaurus-ui/commit/7ec1f62eb996fdf10cc0d78a375ed07fd33f9a35))
+
+## [1.55.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.54.0...ui-v1.55.0) (2024-08-28)
+
+
+### Features
+
+* **Components:** show tags without filter [YTFRONT-4315] ([723e772](https://github.com/ytsaurus/ytsaurus-ui/commit/723e77216750e3608b284b7953d43cbdee65c0d3))
+
+## [1.54.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.53.0...ui-v1.54.0) (2024-08-27)
+
+
+### Features
+
+* **Navigation/Flow:** add new tab [YTFRONT-3978] ([1ef39d7](https://github.com/ytsaurus/ytsaurus-ui/commit/1ef39d7cee11e4e6a6f3eb4bfb044e95b4f6fc60))
+
+
+### Bug Fixes
+
+* **Navigation/Favourites:** allow to add items when the value is undefined ([69c9202](https://github.com/ytsaurus/ytsaurus-ui/commit/69c920222ce1f3a0381efc70aa65da190f04b0e0))
+
+## [1.53.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.52.0...ui-v1.53.0) (2024-08-27)
+
+
+### Features
+
+* **Query:** path autocomplete [YTFRONT-4264] ([ab9ba1f](https://github.com/ytsaurus/ytsaurus-ui/commit/ab9ba1f4497c70649a8e92df9666c2cf2ff9ed24))
+* **System/Nodes:** allow to expand groups of nodes [YTFRONT-3297] ([7c8330e](https://github.com/ytsaurus/ytsaurus-ui/commit/7c8330e49ead3b01ae7bd962a9887e05940ec10d))
+
+
+### Bug Fixes
+
+* **Navigation:** error message in table [YTFRONT-4312] ([d3e94cd](https://github.com/ytsaurus/ytsaurus-ui/commit/d3e94cd2893970a2982bf3943da0dfd181f649f8))
+* **Operations/Details/MetaTable:** blinking UI when hover on long pool name [YTFRONT-4308] ([395c849](https://github.com/ytsaurus/ytsaurus-ui/commit/395c8496e6770c9da1263c9b9e6589bfd157e991))
+
+## [1.52.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.51.1...ui-v1.52.0) (2024-08-23)
+
+
+### Features
+
+* **Query:** share button new design [YTFRONT-4286] ([7d66e6c](https://github.com/ytsaurus/ytsaurus-ui/commit/7d66e6c56bc9f9489bb0ee89a2de3791dfd22103))
+* **Scheduling:** changed validation for name [YTFRONT-4319] ([7bd7852](https://github.com/ytsaurus/ytsaurus-ui/commit/7bd7852ab57bd084b6fe9f24086272a4fd3b7aa9))
+
+## [1.51.1](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.51.0...ui-v1.51.1) (2024-08-19)
+
+
+### Bug Fixes
+
+* **Navigation/RemoteCopy:** fix for disabled 'Confirm' button [YTFRONT-4296] ([a6b7bde](https://github.com/ytsaurus/ytsaurus-ui/commit/a6b7bdebb3db6639174761fe4551066276baaed0))
+* **OperationsList:** fix incorrect filters on OperationSuggestFilter blur [[#705](https://github.com/ytsaurus/ytsaurus-ui/issues/705)] ([a738c5b](https://github.com/ytsaurus/ytsaurus-ui/commit/a738c5b182a192cb0e5c847ab31e90675da1c144))
+* **Query:** empty blocks in result [YTFRONT-4323] ([b39aa3e](https://github.com/ytsaurus/ytsaurus-ui/commit/b39aa3e873f44dd45da2c7bf8005ccb93294a40e))
+
+## [1.51.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.50.0...ui-v1.51.0) (2024-08-13)
+
+
+### Features
+
+* **Query:** multiple aco with backward compatible [YTFRONT-4238] ([7efe878](https://github.com/ytsaurus/ytsaurus-ui/commit/7efe87881d5fd69d8a86252c0d401f8c950bb7a2))
+* **Table/Excel:** now we can setup uploadTableExcelBaseUrl and exportTableBaseUrl per cluster [[#717](https://github.com/ytsaurus/ytsaurus-ui/issues/717)] ([88dec84](https://github.com/ytsaurus/ytsaurus-ui/commit/88dec846b765b5e4f9413de245aad6ca956819b9))
+* **YQLTable:** add "view" button for truncated cells [[#702](https://github.com/ytsaurus/ytsaurus-ui/issues/702)] ([ee776c1](https://github.com/ytsaurus/ytsaurus-ui/commit/ee776c1158eaaf21a53ae6226dbd5ba83427c646))
+
+
+### Bug Fixes
+
+* added support for dark and light themes by override yfm styles [[#712](https://github.com/ytsaurus/ytsaurus-ui/issues/712)] ([b7cce12](https://github.com/ytsaurus/ytsaurus-ui/commit/b7cce12fcbf2612d69b528932fc39b160f8bb464))
+* **CellPreviewModal:** fix control to be sticky when scroll [[#703](https://github.com/ytsaurus/ytsaurus-ui/issues/703)] ([c5e91cb](https://github.com/ytsaurus/ytsaurus-ui/commit/c5e91cbee5d122c32784145dbc2d49e76a5ab434))
+* **Components/Nodes:** fix alerts filter [YTFRONT-4301] ([861f57c](https://github.com/ytsaurus/ytsaurus-ui/commit/861f57c5c213c0c22e6df8f46f16e2d0c3d2a188))
+* **Navigation/File:** allow remote-copy for 'file' node type [YTFRONT-4296] ([aff83de](https://github.com/ytsaurus/ytsaurus-ui/commit/aff83def8abee98eb1937b9495f828d553fd4d16))
+* **Navigation/MapNode:** minor fix for css [YTFRONT-4291] ([e5932f8](https://github.com/ytsaurus/ytsaurus-ui/commit/e5932f817c8ceacdca713ad532814d0b8f7b3f39))
+* **Operation/Job/Statistics:** handle undefined [YTFRONT-4300] ([ca0da3c](https://github.com/ytsaurus/ytsaurus-ui/commit/ca0da3c32e34403491a9c68fc78e769ac06989ce))
+* **OperationPool:** minor fix for css ([9f9b32d](https://github.com/ytsaurus/ytsaurus-ui/commit/9f9b32d74c09780b207c6db1c52f327ed3549be1))
+
+## [1.50.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.49.1...ui-v1.50.0) (2024-08-06)
+
+
+### Features
+
+* **javascript-wrapper:** add new commands for pipelines [YTFRONT-3978] ([da70313](https://github.com/ytsaurus/ytsaurus-ui/commit/da70313424b8042e6782d8fe9a642c9703465d54))
+* now we can disable filter optimization on the operations page via cluster config [[#700](https://github.com/ytsaurus/ytsaurus-ui/issues/700)] ([771294a](https://github.com/ytsaurus/ytsaurus-ui/commit/771294ab5bb33b2b11413da2c52ec8e85d175f3d))
+
+
+### Bug Fixes
+
+* **Navigation:** do not reset contentMode on navigation [[#511](https://github.com/ytsaurus/ytsaurus-ui/issues/511)] ([916ede3](https://github.com/ytsaurus/ytsaurus-ui/commit/916ede342fac224d6c077704be929999ab326863))
+* **Navigation:** now breadcrumbs dropdown items are clickable [[#528](https://github.com/ytsaurus/ytsaurus-ui/issues/528)] ([2df7319](https://github.com/ytsaurus/ytsaurus-ui/commit/2df73197d827d0912ef8203f0357f1dfda681ecd))
+
+## [1.49.1](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.49.0...ui-v1.49.1) (2024-07-30)
+
+
+### Bug Fixes
+
+* **QueryTracker:** use treatValAsData option of unpika by default ([2009d96](https://github.com/ytsaurus/ytsaurus-ui/commit/2009d96f9b822dbbd3e043628faa681731c4cd77))
+
+## [1.49.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.48.2...ui-v1.49.0) (2024-07-25)
+
+
+### Features
+
+* **Query:** new navigation tab [YTFRONT-4235] ([428a72c](https://github.com/ytsaurus/ytsaurus-ui/commit/428a72c7163bc353a5524445e956d4ca1ff50e9e))
+* **Query:** new query aco format [YTFRONT-4238] ([a3ba06a](https://github.com/ytsaurus/ytsaurus-ui/commit/a3ba06a2317b1f54fdd23f52d7bf5795dabc4643))
+* **Table:** add "view" button for truncated cells [[#655](https://github.com/ytsaurus/ytsaurus-ui/issues/655)] ([c688f1f](https://github.com/ytsaurus/ytsaurus-ui/commit/c688f1f6e4b674c1cb79bafc523ded16948e0516))
+
+
+### Bug Fixes
+
+* **ClustersMenu:** the page should not be broken with '[' filter [YTFRONT-4272] ([7eb5c7c](https://github.com/ytsaurus/ytsaurus-ui/commit/7eb5c7cfedc28935034041a82ef989ff44e4c460))
+* **Componens/Nodes/Node:** fix for width of memory popup [[#502](https://github.com/ytsaurus/ytsaurus-ui/issues/502)] ([fc9c882](https://github.com/ytsaurus/ytsaurus-ui/commit/fc9c882e1177cce8f5f007c6a8a0d187724ffb1d))
+* **MaintenancePage:** rework maintenance activation ([c7ed6e4](https://github.com/ytsaurus/ytsaurus-ui/commit/c7ed6e4702add1a9e62dae2e278104f3be01c007))
+* **QueryTracker:** redirect to yt operations from running yql queries [[#522](https://github.com/ytsaurus/ytsaurus-ui/issues/522)] ([2a91613](https://github.com/ytsaurus/ytsaurus-ui/commit/2a916136fee38055f3e85ad1325829dd68e2fcd0))
+* **Tablet:** fix for node url [YTFRONT-4269] ([82de290](https://github.com/ytsaurus/ytsaurus-ui/commit/82de2908b58d2f18f583c6869db6de601064725c))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @ytsaurus/javascript-wrapper bumped from ^0.9.2 to ^0.9.3
+
+## [1.48.2](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.48.1...ui-v1.48.2) (2024-07-21)
+
+
+### Bug Fixes
+
+* **Operation/Specification/Input:** fix for 'remote_copy' operations [YTFRONT-4265] ([502bd53](https://github.com/ytsaurus/ytsaurus-ui/commit/502bd539edacac20c4f9e6caf7e4360488440cd1))
+
+## [1.48.1](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.48.0...ui-v1.48.1) (2024-07-17)
+
+
+### Bug Fixes
+
+* **Operation/Specification/Input:** show cluster in links [YTFRONT-4265] ([bfb59cf](https://github.com/ytsaurus/ytsaurus-ui/commit/bfb59cfebbb3dfd137094e98ebd06c39db7f44b0))
+
+## [1.48.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.47.1...ui-v1.48.0) (2024-07-17)
+
+
+### Features
+
+* **ACL:** add inheritedFrom field [YTFRONT-3836] ([4bd121d](https://github.com/ytsaurus/ytsaurus-ui/commit/4bd121d7b61907997d0e525e73d0312a43d01a50))
+* **ACL:** inherited roles should be displayed separately [YTFRONT-3836] ([7edb2c4](https://github.com/ytsaurus/ytsaurus-ui/commit/7edb2c42293088b865c6205fa3085929f082d10f))
+* **ACL:** use `[@idm](https://github.com/idm)_roles` for ACO (+tvm name) [YTFRONT-3836] ([03f139e](https://github.com/ytsaurus/ytsaurus-ui/commit/03f139ed5c38c2e211bafddab8b5bb4e3805c918))
+* **Query:** share query button [YTFRONT-4239] ([67e84bc](https://github.com/ytsaurus/ytsaurus-ui/commit/67e84bc383ebce81a57928d44d384a5ed7ab0d99))
+
+
+### Bug Fixes
+
+* **Components/Nodes:** get rid of duplicates of nodes [YTFRONT-4268] ([131c857](https://github.com/ytsaurus/ytsaurus-ui/commit/131c8574b6cc1e076bb8076437ea542a7c149415))
+* **Operation/Specification/Input:** links should respect 'cluster' attribute [YTFRONT-4265] ([4fbece7](https://github.com/ytsaurus/ytsaurus-ui/commit/4fbece7a7b6f228b31179af5fc2f4d74a180b221))
+
+## [1.47.1](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.47.0...ui-v1.47.1) (2024-07-15)
+
+
+### Bug Fixes
+
+* minor fix for build ([7c804d9](https://github.com/ytsaurus/ytsaurus-ui/commit/7c804d914293a1cef947390af17b6e5d8a800a99))
+
+## [1.47.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.46.0...ui-v1.47.0) (2024-07-09)
+
+
+### Features
+
+* introduce poc of adhoc visualization on query results [[#641](https://github.com/ytsaurus/ytsaurus-ui/issues/641)] ([6dd9896](https://github.com/ytsaurus/ytsaurus-ui/commit/6dd98968ce15cf9667619f0c710d6a3dec8c21dc))
+* **Markdown:** use @diplodoc/transform  [YTFRONT-4108] ([3b33bc9](https://github.com/ytsaurus/ytsaurus-ui/commit/3b33bc9ef85069159b53aa12e7ca4c0eb09bf8b9))
+* **Query:** changing the default name for new tables [YTFRONT-4249] ([cc19d6b](https://github.com/ytsaurus/ytsaurus-ui/commit/cc19d6bc71607751a5d019dfc6ce8fa1261a6e1c))
+* **Query:** spyt clicue selector [YTFRONT-4219] ([6288c73](https://github.com/ytsaurus/ytsaurus-ui/commit/6288c73e4a1919312aae55040ce2baab331e1875))
+* **Query:** vcs navigation [YTFRONT-4147] ([58be722](https://github.com/ytsaurus/ytsaurus-ui/commit/58be72232945ef8bcbf17327e3041a5c263256af))
+* **uikit6:** update dependencies [[#502](https://github.com/ytsaurus/ytsaurus-ui/issues/502)] ([5a92c5f](https://github.com/ytsaurus/ytsaurus-ui/commit/5a92c5fbbfccf43a788946b3ab9e95ebca0e74bf))
+
+
+### Bug Fixes
+
+* **Navigation:** correct output of numbers in tablet errors [YTFRONT-4251] ([fe02b58](https://github.com/ytsaurus/ytsaurus-ui/commit/fe02b5879e092fc1f4d674b7594b6eb8eb3d10fd))
+* now non-standalone odin page recieve correct cluster ([b4739a4](https://github.com/ytsaurus/ytsaurus-ui/commit/b4739a4503028aebcfefc0f8ae42fe3b29e26b50))
+* now we can specify loginPageSettings per cluster ([be872cc](https://github.com/ytsaurus/ytsaurus-ui/commit/be872ccd9a52d5ad3d04f694602713f1b971759b))
+* **QueryTracker:** fix error when switching to another query with open statistics tab ([ef61008](https://github.com/ytsaurus/ytsaurus-ui/commit/ef61008be538119dfc8754b20c06105dbf8058ff))
+* **QueryTracker:** support dark theme in statistic table ([b3f1d57](https://github.com/ytsaurus/ytsaurus-ui/commit/b3f1d5766f880605c6aa975fc515a8cca568a933))
+
+## [1.46.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.45.0...ui-v1.46.0) (2024-07-02)
+
+
+### Features
+
+* **Login**: added ability to override default text on login page [[#636](https://github.com/ytsaurus/ytsaurus-ui/issues/636)] ([28a47ec](https://github.com/ytsaurus/ytsaurus-ui/commit/28a47ec5ccf66d085e886391ab6fa3ff15b7372d))
+* **Navigation/Table**: add support of new types `date32`/`datetime64`/`timestamp64`/`interval64` [YTFRONT-4087] ([6f2c8e5](https://github.com/ytsaurus/ytsaurus-ui/commit/6f2c8e51c23f0099d1715cf21156fd36f43a34e4))
+* **Job:** add 'Job trace' meta-table item [YTFRONT-4182] ([00c0691](https://github.com/ytsaurus/ytsaurus-ui/commit/00c06919c5a31ea45068c9dbfe3f3ce5e0bbef3b))
+* **Navigation/MapNode:** add UIFactory.getMapNodeExtraCreateActions(...) method ([ae6ae51](https://github.com/ytsaurus/ytsaurus-ui/commit/ae6ae5187e29787d09a26144215736ade9b8d1f4))
+* **QueryTracker:** add search field to statistics tab in query tracker [[#301](https://github.com/ytsaurus/ytsaurus-ui/issues/301)] ([551e66a](https://github.com/ytsaurus/ytsaurus-ui/commit/551e66aaa127c0db31abefa92b41782a598a4899))
+
 ## [1.45.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.44.0...ui-v1.45.0) (2024-06-20)
 
 

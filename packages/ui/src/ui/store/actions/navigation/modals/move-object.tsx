@@ -10,7 +10,9 @@ import {showErrorInModal} from '../../../../store/actions/navigation/modals/path
 import {HIDE_ERROR} from '../../../../constants/navigation/modals/path-editing-popup';
 import {prepareDestinationPath, preparePath} from '../../../../utils/navigation';
 import CancelHelper from '../../../../utils/cancel-helper';
-import _ from 'lodash';
+
+import map_ from 'lodash/map';
+
 import {executeBatchWithRetries} from '../../execute-batch';
 import {YTApiId} from '../../../../rum/rum-wrap-api';
 import {rumLogError} from '../../../../rum/rum-counter';
@@ -75,7 +77,7 @@ function moveObjects(
     }
 
     return yt.v3.startTransaction({}).then((id: string) => {
-        const moveRequests = _.map(items, (node) => {
+        const moveRequests = map_(items, (node) => {
             return {
                 command: 'move' as const,
                 parameters: {
@@ -147,7 +149,7 @@ export function moveObject(
                 toaster.add({
                     name: 'move',
                     autoHiding: 10000,
-                    type: 'success',
+                    theme: 'success',
                     title: `Object${multipleMode ? 's' : ''} was successfully moved`,
                     content: <Link url={`navigation?path=${result}`}>{result}</Link>,
                 });

@@ -16,6 +16,7 @@ export interface YtQueueStatus {
     write_row_count_rate: TPerformanceCounters; // (unimplemented)
     read_row_count_rate: TPerformanceCounters; // (unimplemented)
     registrations: Array<YtQueueConsumer>;
+    alerts?: Record<string, YTError>;
 }
 
 export interface YtQueueConsumer {

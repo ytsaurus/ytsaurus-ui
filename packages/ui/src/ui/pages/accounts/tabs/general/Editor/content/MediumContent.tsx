@@ -1,9 +1,9 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import cn from 'bem-cn-lite';
-import {partition} from 'lodash';
+import partition_ from 'lodash/partition';
 
-import Link from '../../../../../../components/Link/Link';
+import {ClickableText} from '../../../../../../components/ClickableText/ClickableText';
 import {getMediumList} from '../../../../../../store/selectors/thor';
 
 import hammer from '../../../../../../common/hammer';
@@ -56,7 +56,7 @@ class MediumContent extends Component<Props> {
     render() {
         const {account, mediumList} = this.props;
         const mediumTypesWithoutCache = mediumList.filter((item) => item !== 'cache');
-        const [defined, rest] = partition(
+        const [defined, rest] = partition_(
             mediumTypesWithoutCache,
             (mediumType) => account.perMedium[mediumType],
         );
@@ -72,7 +72,7 @@ class MediumContent extends Component<Props> {
                 {this.renderMediums(account, defined)}
                 {showAllText && (
                     <div className={block('show-all', 'elements-section')}>
-                        <Link onClick={this.toggleShowAll}>{showAllText}</Link>
+                        <ClickableText onClick={this.toggleShowAll}>{showAllText}</ClickableText>
                     </div>
                 )}
                 {showAllMediums && this.renderMediums(account, rest)}

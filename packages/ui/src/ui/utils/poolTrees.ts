@@ -43,7 +43,7 @@ export function loadDefaultPoolTree() {
                 const toast = new Toaster();
                 toast.add({
                     name: 'load-default-pool-tree',
-                    type: 'error',
+                    theme: 'danger',
                     title: 'Failed',
                     content: `Failed to load ${path}, 'physical' will be used as defualt.`,
                     actions: [

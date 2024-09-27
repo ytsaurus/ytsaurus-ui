@@ -1,4 +1,9 @@
-import _ from 'lodash';
+import camelCase_ from 'lodash/camelCase';
+import capitalize_ from 'lodash/capitalize';
+import forEach_ from 'lodash/forEach';
+import replace_ from 'lodash/replace';
+import some_ from 'lodash/some';
+
 import ypath from '../../common/thor/ypath';
 
 import {AccountResourceInfo} from '../../constants/accounts/accounts';
@@ -7,7 +12,7 @@ import formatLib from '../../common/hammer/format';
 import {FIX_MY_TYPE} from '../../types';
 
 export function accountMemoryMediumToFieldName(path: string) {
-    return _.replace(path, /\//g, '_');
+    return replace_(path, /\//g, '_');
 }
 
 export interface AccountParsedData {
@@ -83,7 +88,7 @@ function updateMasterMemory(dst: AccountParsedData, attributes: any) {
     prepareResource(dst, attributes, 'master_memory/chunk_host', 'Bytes');
 
     const perCell = ypath.getValue(attributes, '/resource_usage/master_memory/per_cell');
-    _.forEach(perCell, (_value, key) => {
+    forEach_(perCell, (_value, key) => {
         prepareResource(dst, attributes, `master_memory/per_cell/${key}`, 'Bytes');
     });
 
@@ -191,7 +196,7 @@ function updateResourcePerMedium(
     const limitPerMedium = ypath.getValue(attributes, '/resource_limits/' + path);
 
     dst.perMedium = {};
-    _.forEach(totalPerMedium, (mediumData, mediumName) => {
+    forEach_(totalPerMedium, (mediumData, mediumName) => {
         dst.perMedium[mediumName] = updateResourceFields(
             {
                 total: mediumData,
@@ -207,7 +212,7 @@ function updateResourcePerMedium(
     try {
         if (dst.hasRecursiveResources) {
             dst.recursiveResources.perMedium = {};
-            _.forEach(recursiveTotalPerMedium, (mediumData, mediumName) => {
+            forEach_(recursiveTotalPerMedium, (mediumData, mediumName) => {
                 lastMedium = mediumName;
                 (dst.recursiveResources as FIX_MY_TYPE).perMedium[mediumName] =
                     updateResourceFields(
@@ -259,7 +264,7 @@ function prepareResourceInfo(
 }
 
 function capitalizeFirstLetter(text: string) {
-    return _.capitalize(text[0]) + text.slice(1);
+    return capitalize_(text[0]) + text.slice(1);
 }
 
 /**
@@ -279,7 +284,7 @@ function updateResourceFields(
 
     const uncommitted = total - committed;
 
-    const camelCaseName = _.camelCase(name);
+    const camelCaseName = camelCase_(name);
     const capitalizedCamelCaseName = capitalizeFirstLetter(camelCaseName);
 
     target['committed' + capitalizedCamelCaseName] = committed;
@@ -341,7 +346,7 @@ function visitNumberOrGoDeep(
     if (!isNaN(value)) {
         stopFn(value, path);
     } else {
-        _.some(value, (item, key) => {
+        some_(value, (item, key) => {
             visitNumberOrGoDeep(item, path ? `${path}/${key}` : key, stopFn);
         });
     }

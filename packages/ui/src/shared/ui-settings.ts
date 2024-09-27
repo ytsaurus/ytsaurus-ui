@@ -104,6 +104,18 @@ export interface UISettings {
     componentVersionsMonitoring?: UISettingsMonitoring;
 
     /**
+     * navigationFlowMonitoring.urlTemplate supports following parameters:
+     *  - {ytCluster}
+     *  - {monitoring_cluster}
+     *  - {monitoring_project}
+     *  All the parameters are optional and they are replaced with corresponding values
+     *  @example {
+     *      urlTemplate: 'https://my.monitoring.service/navigation-flow?cluster={ytCluster}&monCluster={monitoring_cluster}&monProject={monitoring_project}'
+     *  }
+     */
+    navigationFlowMonitoring?: UISettingsMonitoring;
+
+    /**
      * Allows to define regular expression to extract hash-part from version of node by named group 'hash'
      * @example reHashFromNodeVersion: '[^~]+(?<hash>[^+]+)'
      */
@@ -142,10 +154,67 @@ export interface UISettings {
     hideReferrerUrl?: string;
 
     /**
+     * Allows to customize VCS navigation on the query page
+     * id - unique identifier of VCS
+     * name - name of VCS. The name is displayed in the selector
+     * baseUrl - URL to you VCS api
+     * auth - 'token' | 'none'
+     * maxFileSize - max file size in bytes. 10Mb by default
+     * type - 'gitlab' | 'github' | `custom_vsc_type_${string}`
+     *
+     * @example
+     * vcsSettings: [
+     *             {
+     *                 id: 'vcs1',
+     *                 name: 'Github',
+     *                 auth: 'token',
+     *                 baseUrl: 'https://api.github.com',
+     *                 type: 'github',
+     *                 maxFileSize: 10485760,
+     *             },
+     *             {
+     *                 id: 'vcs2',
+     *                 name: 'Gitlab',
+     *                 auth: 'token',
+     *                 baseUrl: 'https://gitlab.com/api/v4/projects',
+     *                 type: 'gitlab',
+     *                 maxFileSize: 10485760,
+     *             },
+     *             {
+     *                 id: 'My VCS realization 1',
+     *                 name: 'MyVCS',
+     *                 auth: 'token',
+     *                 baseUrl: 'https://my_vcs_url',
+     *                 type: 'custom_vsc_type_my-vcs',
+     *                 maxFileSize: 10485760,
+     *             },
+     *             {
+     *                 id: 'My VCS realization 2',
+     *                 name: 'MyVCS',
+     *                 baseUrl: 'https://my_vcs_url',
+     *                 type: 'custom_vsc_type_my-vcs',
+     *                 maxFileSize: 10485760,
+     *             },
+     *         ],
+     */
+    vcsSettings?: VCSSettings[];
+
+    /**
      * Allows to override idm object type to Effective ACL for objects that match the regex.
      * @example reUseEffectiveAclForPath: '//sys/access_control_object_namespaces[^/+]{0,}'
      */
     reUseEffectiveAclForPath?: string;
+}
+
+export type CustomVCSType = `custom_vsc_type_${string}`;
+
+export interface VCSSettings {
+    id: string;
+    name: string;
+    baseUrl: string;
+    auth: 'token' | 'none';
+    type: 'github' | 'gitlab' | CustomVCSType;
+    maxFileSize: number;
 }
 
 export interface UISettingsMonitoring {

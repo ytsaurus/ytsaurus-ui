@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import produce from 'immer';
 
 import {initialState as versionsInitialState} from './versions_v2';

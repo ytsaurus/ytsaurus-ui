@@ -5,7 +5,7 @@ import Icon from '../Icon/Icon';
 import Modal from '../Modal/Modal';
 import cn from 'bem-cn-lite';
 
-import {useMarkdown} from '../../components/Markdown/Markdown';
+import {useMarkdown} from '../Markdown/Markdown';
 import './MarkdownLinePreview.scss';
 
 const block = cn('one-line-text-preview');
@@ -37,14 +37,13 @@ export function MarkdownLinePreview({text, title, className, allowHTML = false}:
         div.innerHTML = html ?? '';
         const plainText = div.innerText;
         return {html, plainText};
-    }, [result?.plainText, result?.html]);
+    }, [result]);
 
     return (
         <div className={block(null, className)}>
             <Text className={block('preview-text')} color={'primary'} ellipsis>
                 {plainText}
             </Text>
-
             <Button onClick={showModal} view={'flat-secondary'} size={'m'} width={'auto'}>
                 <Icon awesome="window-maximize"></Icon>
             </Button>
@@ -56,7 +55,10 @@ export function MarkdownLinePreview({text, title, className, allowHTML = false}:
                     onCancel={hideModal}
                     footer={false}
                     content={
-                        <div className={mdBlock()} dangerouslySetInnerHTML={{__html: html ?? ''}} />
+                        <div
+                            className={mdBlock(null, 'yfm')}
+                            dangerouslySetInnerHTML={{__html: html ?? ''}}
+                        />
                     }
                 />
             ) : null}

@@ -1,5 +1,8 @@
 import type {ThunkAction} from 'redux-thunk';
-import _ from 'lodash';
+
+import forEach_ from 'lodash/forEach';
+import keys_ from 'lodash/keys';
+import map_ from 'lodash/map';
 
 import hammer from '../../../common/hammer';
 import {
@@ -102,15 +105,15 @@ export function fetchTabletCellBundleEditor(bundleName: string): TabletCellBundl
                 let bundleData = toEdit;
 
                 if (
-                    !toEdit.bundle_controller_target_config.memory_limits.reserved &&
+                    !toEdit.bundle_controller_target_config?.memory_limits.reserved &&
                     defaultReservedMemoryLimit
                 ) {
                     bundleData = {
                         ...toEdit,
                         bundle_controller_target_config: {
-                            ...toEdit.bundle_controller_target_config,
+                            ...toEdit.bundle_controller_target_config!,
                             memory_limits: {
-                                ...toEdit.bundle_controller_target_config.memory_limits,
+                                ...toEdit.bundle_controller_target_config?.memory_limits,
                                 reserved: defaultReservedMemoryLimit,
                             },
                         },
@@ -127,7 +130,7 @@ export function fetchTabletCellBundleEditor(bundleName: string): TabletCellBundl
                 });
 
                 const requestGroups: Array<Array<BatchSubRequest>> = [
-                    ..._.map(bundleControllerData?.allocated_tablet_nodes, (_item, key) => {
+                    ...map_(bundleControllerData?.allocated_tablet_nodes, (_item, key) => {
                         return [
                             makeBatchSubRequest('get', {
                                 path: `//sys/cluster_nodes/${key}/@bundle_controller_annotations/nanny_service`,
@@ -137,7 +140,7 @@ export function fetchTabletCellBundleEditor(bundleName: string): TabletCellBundl
                             }),
                         ];
                     }),
-                    ..._.map(bundleControllerData?.allocated_rpc_proxies, (_item, key) => {
+                    ...map_(bundleControllerData?.allocated_rpc_proxies, (_item, key) => {
                         return [
                             makeBatchSubRequest('get', {
                                 path: `//sys/rpc_proxies/${key}/@bundle_controller_annotations/nanny_service`,
@@ -148,7 +151,7 @@ export function fetchTabletCellBundleEditor(bundleName: string): TabletCellBundl
                 const errors = [];
                 wrapApiPromiseByToaster(
                     ytApiV3Id.executeBatch(YTApiId.tabletCellBundlesInstancesDetails, {
-                        requests: _.map(requestGroups, (item) => {
+                        requests: map_(requestGroups, (item) => {
                             return makeBatchSubRequest('execute_batch', {requests: item});
                         }),
                     }),
@@ -160,11 +163,11 @@ export function fetchTabletCellBundleEditor(bundleName: string): TabletCellBundl
                     },
                 ).then((nodesResults) => {
                     const keys = [
-                        ..._.keys(bundleControllerData?.allocated_tablet_nodes),
-                        ..._.keys(bundleControllerData?.allocated_rpc_proxies),
+                        ...keys_(bundleControllerData?.allocated_tablet_nodes),
+                        ...keys_(bundleControllerData?.allocated_rpc_proxies),
                     ];
                     const instanceDetailsMap: Record<string, BundleControllerInstanceDetails> = {};
-                    _.forEach(nodesResults, ({output, error}, index) => {
+                    forEach_(nodesResults, ({output, error}, index) => {
                         if (error) {
                             errors.push(error);
                         } else {
@@ -247,7 +250,7 @@ export function setBundleEditorController(params: {
 
         const bundlePath = `//sys/tablet_cell_bundles/${bundleName}`;
 
-        const requests = _.map(data, (value, path) =>
+        const requests = map_(data, (value, path) =>
             prepareSetCommandForBatch(`${bundlePath}/${path}`, value),
         );
 
@@ -292,10 +295,10 @@ export function setBunndleAttributes(
         return wrapApiPromiseByToaster(
             ytApiV3Id.executeBatch(YTApiId.tabletCellBundlesSetAttrs, {
                 requests: [
-                    ..._.map(attributes, (v, key) =>
+                    ...map_(attributes, (v, key) =>
                         prepareSetCommandForBatch(`${bundlePath}/@${key}`, v),
                     ),
-                    ..._.map(options, (v, key) =>
+                    ...map_(options, (v, key) =>
                         prepareSetCommandForBatch(`${bundlePath}/@options/${key}`, v),
                     ),
                 ],

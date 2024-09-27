@@ -1,6 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import _ from 'lodash';
+
+import forEach_ from 'lodash/forEach';
+import isEmpty_ from 'lodash/isEmpty';
+import values_ from 'lodash/values';
 
 import {Progress} from '@gravity-ui/uikit';
 
@@ -26,7 +29,7 @@ function prepareProgressStack(treeItem, useChildren, getTreeItemInfoFn) {
     }
 
     const recursiveInfo = getTreeItemInfoFn(treeItem, true);
-    if (_.isEmpty(recursiveInfo)) {
+    if (isEmpty_(recursiveInfo)) {
         return {};
     }
     const {
@@ -45,7 +48,7 @@ function prepareProgressStack(treeItem, useChildren, getTreeItemInfoFn) {
     const progressStack = [];
     const tooltipInfo = [];
 
-    _.forEach(items, (item, index) => {
+    forEach_(items, (item, index) => {
         if (item.isAggregation) {
             return;
         }
@@ -129,7 +132,7 @@ function ProgressStackImpl({
     }
 }
 
-const ProgressStackTypeProp = PropTypes.oneOf(_.values(AccountResourceName));
+const ProgressStackTypeProp = PropTypes.oneOf(values_(AccountResourceName));
 
 ProgressStackByTreeItem.propTypes = {
     className: PropTypes.string,

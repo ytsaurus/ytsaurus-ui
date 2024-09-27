@@ -1,7 +1,7 @@
 import React, {FC, useCallback} from 'react';
 import {ErrorPosition, QueryError} from '../../module/api';
 import {useToggle} from 'react-use';
-import {Button, Icon, Link} from '@gravity-ui/uikit';
+import {Button, Icon} from '@gravity-ui/uikit';
 import showParentIcon from '@gravity-ui/icons/svgs/arrow-up.svg';
 import {getIssuePosition} from '../helpers';
 import cn from 'bem-cn-lite';
@@ -14,6 +14,7 @@ import ChevronUpIcon from '@gravity-ui/icons/svgs/chevron-up.svg';
 import ChevronDownIcon from '@gravity-ui/icons/svgs/chevron-down.svg';
 import unipika from '../../../../common/thor/unipika';
 import Yson from '../../../../components/Yson/Yson';
+import {ClickableText} from '../../../../components/ClickableText/ClickableText';
 
 const block = cn('yt-error-tree-node');
 
@@ -79,13 +80,13 @@ export const ErrorTreeNode: FC<Props> = ({
                         )}
                     </span>
                     {position ? (
-                        <Link
-                            view="primary"
+                        <ClickableText
                             className={block('message')}
+                            color="primary"
                             onClick={handleIssueClick}
                         >
                             <CollapsedString value={error.message} />
-                        </Link>
+                        </ClickableText>
                     ) : (
                         <span className={block('message')}>
                             <CollapsedString value={error.message} />

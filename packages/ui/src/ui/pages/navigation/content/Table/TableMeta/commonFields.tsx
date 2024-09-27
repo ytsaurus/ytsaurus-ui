@@ -2,7 +2,7 @@ import React from 'react';
 import ypath from '../../../../../common/thor/ypath';
 import Link from '../../../../../components/Link/Link';
 import AutomaticModeSwitch, {Props as AutomaticModeSwitchProps} from './AutomaticModeSwitch';
-import reduce from 'lodash/reduce';
+import reduce_ from 'lodash/reduce';
 import {MetaTableItem} from '../../../../../components/MetaTable/MetaTable';
 import {tabletActiveChaosBundleLink} from '../../../../../utils/components/tablet-cells';
 
@@ -61,7 +61,7 @@ export const getCommonFields = ({
 
     type Fields = typeof fields;
 
-    const commonFields = reduce(
+    const commonFields = reduce_(
         fields,
         (acc, item) => {
             acc[item.key] = item;

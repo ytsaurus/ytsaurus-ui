@@ -4,7 +4,10 @@ import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import hammer from '../../../../../common/hammer';
 import cn from 'bem-cn-lite';
-import _ from 'lodash';
+
+import mapValues_ from 'lodash/mapValues';
+import map_ from 'lodash/map';
+import reduce_ from 'lodash/reduce';
 
 import CollapsibleSection from '../../../../../components/CollapsibleSection/CollapsibleSection';
 import RadioButton from '../../../../../components/RadioButton/RadioButton';
@@ -87,7 +90,7 @@ export class SetupModal extends Component {
     };
 
     static createPropTypes(group) {
-        const inner = _.mapValues(initialState[group], () => groupFilterProps.isRequired);
+        const inner = mapValues_(initialState[group], () => groupFilterProps.isRequired);
 
         return PropTypes.shape(inner).isRequired;
     }
@@ -102,7 +105,7 @@ export class SetupModal extends Component {
     static getDerivedStateFromProps(props, state) {
         const {mediumList, setup} = props;
         const {storage} = state;
-        const newStorage = _.reduce(
+        const newStorage = reduce_(
             mediumList,
             (acc, medium) => {
                 const key = MEDIUM_COLS_PREFIX + medium;
@@ -132,7 +135,7 @@ export class SetupModal extends Component {
     }
 
     get states() {
-        return _.map(this.props.nodeStates, (state) => {
+        return map_(this.props.nodeStates, (state) => {
             return {
                 title: hammer.format.Readable(state),
                 value: state,
@@ -400,7 +403,7 @@ export class SetupModal extends Component {
                     },
                     {
                         key: 'alerts',
-                        value: this.renderRadioGroup(section, 'alerts'),
+                        value: this.renderRadioGroup(section, 'alertCount'),
                     },
                     {
                         key: 'scheduler jobs',
@@ -456,7 +459,7 @@ export class SetupModal extends Component {
                 <h4 className={block('heading')}>IO weight</h4>
 
                 <MetaTable
-                    items={_.map(mediumList, (medium) => ({
+                    items={map_(mediumList, (medium) => ({
                         key: hammer.format['Readable'](medium),
                         value: this.renderFiltersGroup(
                             section,

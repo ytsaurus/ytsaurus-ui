@@ -1,6 +1,7 @@
 import React, {ComponentType, useEffect} from 'react';
-import {ConnectedProps, connect} from 'react-redux';
+import {ConnectedProps, connect, useSelector} from 'react-redux';
 
+import {Alerts} from '../../../../components/Alerts/Alerts';
 import ErrorBlock from '../../../../components/Block/Block';
 import ErrorBoundary from '../../../../components/ErrorBoundary/ErrorBoundary';
 import WithStickyToolbar from '../../../../components/WithStickyToolbar/WithStickyToolbar';
@@ -11,6 +12,7 @@ import {
     getFamily,
     getPartitionCount,
     getQueueMode,
+    getQueueStatusDataAlerts,
     getStatusError,
     getWriteDataWeightRate,
     getWriteRowCountRate,
@@ -57,12 +59,15 @@ const Queue: React.VFC<PropsFromRedux> = ({
 
     const {ExtraControls, View} = useViewByMode(queueMode);
 
+    const items = useSelector(getQueueStatusDataAlerts);
+
     if (statusError) {
-        return <ErrorBlock error={statusError} topMargin="half" />;
+        return <ErrorBlock error={statusError} topMargin="none" />;
     }
 
     return (
         <ErrorBoundary>
+            <Alerts items={items} />
             <Meta
                 family={family}
                 partitionCount={partitionCount}

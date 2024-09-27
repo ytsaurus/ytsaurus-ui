@@ -8,9 +8,27 @@ test('Navigation: map_node - Content', async ({page}) => {
     await navigationPage(page).replaceMapNodeDateTimes(8);
     await navigationPage(page).replaceMapNodeAccounts(8);
     await navigationPage(page).replaceBreadcrumbsTestDir();
-    await navigationPage(page).replaceDyntableSize();
+    await navigationPage(page).replaceMapNodeBytes();
 
     await expect(page).toHaveScreenshot();
+
+    await test.step('Create modal', async () => {
+        await navigationPage(page).mapNodeCreateObject('Table');
+
+        await test.step('Table settings', async () => {
+            await navigationPage(page).dfDialog.waitForField('Unique keys');
+            await page.fill('input[name="tableSettings.name"]', '//tmp/New table');
+
+            await expect(page).toHaveScreenshot();
+        });
+
+        await test.step('Column', async () => {
+            await navigationPage(page).dfDialog.showTab('Column_1');
+            await navigationPage(page).dfDialog.waitForField('Aggregate');
+
+            await expect(page).toHaveScreenshot();
+        });
+    });
 });
 
 test('Navigation: map_node - Attributes', async ({page}) => {

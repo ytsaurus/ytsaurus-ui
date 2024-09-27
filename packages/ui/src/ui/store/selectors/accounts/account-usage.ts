@@ -2,7 +2,11 @@ import {RootState} from '../../../store/reducers';
 import {createSelector} from 'reselect';
 import {PAGE_SIZE} from '../../reducers/accounts/usage/accounts-usage-filters';
 import ypath from '../../../common/thor/ypath';
-import _ from 'lodash';
+
+import filter_ from 'lodash/filter';
+import map_ from 'lodash/map';
+import reduce_ from 'lodash/reduce';
+
 import {SortState} from '../../../types';
 import {
     getSettingsAccountUsageColumnsList,
@@ -141,7 +145,7 @@ export const getAccountUsageTreeItemsBasePathSplitted = createSelector(
 
         const fragments: Array<{name: string}> = new ypath.YPath(path, 'absolute').fragments || [];
 
-        return _.map(fragments, (item, index) => {
+        return map_(fragments, (item, index) => {
             return {
                 value: fragments
                     .slice(0, index + 1)
@@ -206,7 +210,7 @@ export const getAccountUsagePageIndex = createSelector(
 export const getAccountUsageSortStateByColumn = createSelector(
     [getAccountUsageSortState],
     (sortState) => {
-        return _.reduce(
+        return reduce_(
             sortState,
             (acc, {column, order}, index) => {
                 if (column && order) {
@@ -309,7 +313,7 @@ const getAccountUsageVisibleColumns = createSelector(
 export const getAccountUsageSelectableColumns = createSelector(
     [getAccountUsageAvailableColumns],
     (columns) => {
-        return _.filter(columns, (item) => !ACCOUNT_USAGE_UNAVAILABLE_FIELDS.has(item));
+        return filter_(columns, (item) => !ACCOUNT_USAGE_UNAVAILABLE_FIELDS.has(item));
     },
 );
 
@@ -328,7 +332,7 @@ export const getAccountUsageVisibleDataColumns = createSelector(
         const columns = new Set<string>(selectableColumns);
 
         return ['type', 'path'].concat(
-            _.filter(userColumns, (item) => {
+            filter_(userColumns, (item) => {
                 return columns.has(item);
             }),
         );

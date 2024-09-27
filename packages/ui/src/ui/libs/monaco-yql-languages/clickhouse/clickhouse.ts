@@ -131,6 +131,7 @@ export const language: languages.IMonarchLanguage & Record<string, unknown> = {
             [/{(@variables)}/, 'variable'],
             [/[?;,.]/, 'delimiter'],
             [/[(){}[\]]/, '@brackets'],
+            [/(\w+\.)*`\/\/(.*)`/g, {token: 'path'}],
             // identifiers and keywords
             [/@keywordsDouble/, 'keyword'],
             [/@typeKeywordsDouble/, 'keyword.type'],
@@ -163,24 +164,20 @@ export const language: languages.IMonarchLanguage & Record<string, unknown> = {
         whitespace: [[/\s+/, 'white']],
         comments: [
             [/--+.*/, 'comment'],
-            [/```/, {token: 'comment.quote', next: '@comment'}],
             [/\/\*/, {token: 'comment.quote', next: '@cppComment'}],
         ],
         comment: [
             [/[^`]+/, 'comment'],
-            [/```/, {token: 'comment.quote', next: '@pop'}],
             [/./, 'comment'],
         ],
         cppComment: [
             [/[^*/]+/, 'comment'],
-            [/\*\//, {token: 'comment.quote', next: '@pop'}],
             [/./, 'comment'],
         ],
         numbers: [[/[+-]?\d+(?:(?:\.\d*)?(?:[eE][+-]?\d+)?)?\b/, 'number']],
         strings: [
             [/'/, {token: 'string', next: '@stringSingle'}],
             [/"/, {token: 'string.tablepath', next: '@stringDouble'}],
-            [/`/, {token: 'string.tablepath', next: '@stringBacktick'}],
         ],
         stringSingle: [
             [/[^\\']/, 'string'],
@@ -193,12 +190,6 @@ export const language: languages.IMonarchLanguage & Record<string, unknown> = {
             [/@escapes/, 'string.tablepath'],
             [/\\./, 'string.tablepath'],
             [/"/, {token: 'string.tablepath', next: '@pop'}],
-        ],
-        stringBacktick: [
-            [/[^\\`]/, 'string.tablepath'],
-            [/@escapes/, 'string.tablepath'],
-            [/\\./, 'string.tablepath'],
-            [/`/, {token: 'string.tablepath', next: '@pop'}],
         ],
     },
 };

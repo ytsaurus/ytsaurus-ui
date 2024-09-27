@@ -32,6 +32,12 @@ export class NavigationPage extends BasePage {
         await replaceInnerHtml(this.page, {'td.map-node_default__table-item_type_account': 'tmp'});
     }
 
+    async replaceMapNodeBytes() {
+        await replaceInnerHtml(this.page, {
+            'tbody .map-node_default__table-item_type_disk-space': '00.00 KiB',
+        });
+    }
+
     async replaceLocksContent() {
         await replaceInnerHtmlForDateTime(this.page, ['.meta-table-item__time']);
         await replaceInnerHtml(this.page, {
@@ -41,12 +47,9 @@ export class NavigationPage extends BasePage {
         await this.replaceBreadcrumbsTestDir();
     }
 
-    async replaceDyntableSize() {
-        await replaceInnerHtml(this.page, {
-            '.map-nodes-table__row_dyntable .map-node_default__table-item_type_disk-space':
-                '000000 KiB',
-            '.map-nodes-table__row_dyntable .map-node_default__table-item_type_rows': '00000',
-        });
+    async mapNodeCreateObject(hasText: 'Table' | 'Directory' | 'Link') {
+        await this.page.getByText('Create object').click();
+        await this.page.getByRole('menuitem').filter({hasText}).click();
     }
 }
 

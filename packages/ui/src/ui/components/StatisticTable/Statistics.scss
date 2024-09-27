@@ -1,0 +1,55 @@
+.job-statistics {
+    .elements-toolbar {
+        margin-top: -10px;
+        margin-bottom: 10px;
+    }
+
+    &__help {
+        display: flex;
+        align-items: center;
+        margin-left: auto;
+    }
+
+    &__group-icon,
+    &__metric-icon {
+        margin-right: 10px;
+    }
+
+    &__metric {
+        display: inline-block;
+    }
+
+    &__table {
+        &-item_type {
+            &_min,
+            &_max,
+            &_last,
+            &_sum,
+            &_count {
+                min-width: 130px;
+            }
+            &_metric {
+                padding-right: 40px;
+            }
+        }
+    }
+
+    &__table-container {
+        display: inline-block;
+        min-width: 550px;
+    }
+
+    &__header_fixed {
+        width: 100%;
+        position: sticky;
+        top: 0;
+        z-index: 1;
+        background-color: var(--g-color-base-background);
+        box-shadow: inset 0 -1px 0 0 var(--g-color-line-generic);
+        border-bottom: none;
+    }
+
+    & &__filter {
+        margin-right: 8px;
+    }
+}

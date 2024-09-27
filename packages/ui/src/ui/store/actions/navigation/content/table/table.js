@@ -1,4 +1,10 @@
-import _ from 'lodash';
+import filter_ from 'lodash/filter';
+import has_ from 'lodash/has';
+import isEmpty_ from 'lodash/isEmpty';
+import keyBy_ from 'lodash/keyBy';
+import map_ from 'lodash/map';
+import reduce_ from 'lodash/reduce';
+
 import {Toaster} from '@gravity-ui/uikit';
 import metrics from '../../../../../common/utils/metrics';
 
@@ -30,7 +36,6 @@ import {
     getParsedError,
     getRequestOutputFormat,
     parseErrorFromResponse,
-    prepareHeaders,
     prepareRows,
 } from '../../../../../utils/navigation/content/table/table';
 
@@ -67,6 +72,8 @@ import unipika from '../../../../../common/thor/unipika';
 
 import {loadColumnPresetIfDefined, saveColumnPreset, setTablePresetHash} from './columns-preset';
 import {makeTableRumId} from './table-rum-id';
+import {readStaticTable} from './readStaticTable';
+import {readDynamicTable} from './readDynamicTable';
 
 const requests = new CancelHelper();
 const toaster = new Toaster();
@@ -86,7 +93,7 @@ function loadDynamicTable(requestOutputFormat, setup, state, type, useZeroRangeF
     const offsetColumns = keyColumns;
 
     let limit = getRequestedPageSize(state);
-    if (_.isEmpty(offset) && descending) {
+    if (isEmpty_(offset) && descending) {
         // If we move to the end of the table, we reduce the limit for correctly determining the end of the table
         limit--;
     }
@@ -113,15 +120,15 @@ function loadDynamicTable(requestOutputFormat, setup, state, type, useZeroRangeF
                 }),
             )
             .then((permissions) => {
-                const keyColumnsNames = _.keyBy(keyColumns);
-                const {availableColumns, omittedColumns, deniedKeyColumns} = _.reduce(
+                const keyColumnsNames = keyBy_(keyColumns);
+                const {availableColumns, omittedColumns, deniedKeyColumns} = reduce_(
                     permissions.columns,
                     (res, permission, index) => {
                         if (permission.action === 'allow') {
                             res.availableColumns.push(allColumns[index]);
                         } else {
                             res.omittedColumns.push(allColumns[index]);
-                            if (_.has(keyColumnsNames, allColumns[index])) {
+                            if (has_(keyColumnsNames, allColumns[index])) {
                                 res.deniedKeyColumns.push({[allColumns[index]]: permission.action});
                             }
                         }
@@ -135,7 +142,7 @@ function loadDynamicTable(requestOutputFormat, setup, state, type, useZeroRangeF
                     return Promise.reject({deniedKeyColumns});
                 }
 
-                const columns = _.map(availableColumns, unipika.decode);
+                const columns = map_(availableColumns, unipika.decode);
                 const parameters = {
                     query: Query.prepareQuery({
                         columns,
@@ -215,32 +222,22 @@ function loadDynamicTable(requestOutputFormat, setup, state, type, useZeroRangeF
         return id
             .fetch(
                 YTApiId.dynTableSelectRows,
-                ytApiV3Id.selectRows(YTApiId.dynTableSelectRows, {
+                readDynamicTable({
                     setup,
                     parameters,
                     cancellation: requests.saveCancelToken,
                 }),
             )
-            .then(({data}) => {
-                const error = parseErrorFromResponse(data);
-
-                if (error) {
-                    return Promise.reject(getParsedError(error));
-                }
-
-                const {columns, rows, yqlTypes} = prepareRows(data, moveBackward);
-
+            .then((data) => {
                 return {
-                    rows,
-                    columns,
-                    yqlTypes,
+                    ...data,
                     omittedColumns,
                 };
             });
     }
 }
 
-function loadStaticTable(requestOutputFormat, setup, state, type, useZeroRangeForPreload) {
+async function loadStaticTable(requestOutputFormat, setup, state, type, useZeroRangeForPreload) {
     const path = getPath(state);
     const stringLimit = getCellSize(state);
     const transaction = getTransaction(state);
@@ -283,23 +280,15 @@ function loadStaticTable(requestOutputFormat, setup, state, type, useZeroRangeFo
     const id = makeTableRumId({cluster, isDynamic});
     const apiId = type === LOAD_TYPE.PRELOAD ? YTApiId.tableReadPreload : YTApiId.tableRead;
 
-    return id
-        .fetch(
-            apiId,
-            ytApiV3Id.readTable(apiId, {setup, parameters, cancellation: requests.saveCancelToken}),
-        )
-        .then(({data, headers}) => {
-            const error = parseErrorFromResponse(data);
-
-            if (error) {
-                return Promise.reject(getParsedError(error));
-            }
-
-            const {columns, rows, yqlTypes} = prepareRows(data, moveBackward);
-            const omittedColumns = prepareHeaders(headers);
-
-            return {columns, omittedColumns, rows, yqlTypes};
-        });
+    return await id.fetch(
+        apiId,
+        readStaticTable({
+            setup,
+            parameters,
+            cancellation: requests.saveCancelToken,
+            reverseRows: moveBackward,
+        }),
+    );
 }
 
 function loadTableRows(type, state, requestOutputFormat) {
@@ -400,7 +389,7 @@ export function updateTableData() {
 
                 if (moveBackward) {
                     let newOffsetValue;
-                    if (!_.isEmpty(offsetValue) && rows.length < requestedPageSize) {
+                    if (!isEmpty_(offsetValue) && rows.length < requestedPageSize) {
                         // If there are not enough rows on the new page on the left:
                         //  - add rows from the current page
                         //  - reset offset value
@@ -555,7 +544,7 @@ export function updateColumns(allColumns) {
         const attributes = getAttributes(state);
         const omittedColumns = getOmittedColumns(state);
         const deniedKeyColumns = getDeniedKeyColumns(state);
-        const columns = _.filter(allColumns, (column) => !column.disabled); // remove omitted columns
+        const columns = filter_(allColumns, (column) => !column.disabled); // remove omitted columns
         const columnsOrder = Columns.getColumnsOrder(columns);
         Columns.storeAllColumns(attributes, columns);
 
@@ -579,7 +568,7 @@ export function openTableWithPresetOfColumns() {
     return (dispatch, getState) => {
         const visibleColumns = getVisibleColumns(getState());
         const cluster = getCluster(getState());
-        saveColumnPreset(_.map(visibleColumns, 'name'), cluster).then((hash) => {
+        saveColumnPreset(map_(visibleColumns, 'name'), cluster).then((hash) => {
             const {href} = window.location;
             const url = `${href}&columns=${hash}`;
             openInNewTab(url);
@@ -644,7 +633,7 @@ export function mountUnmountTable(action) {
             .then(() => {
                 toaster.add({
                     name: `${action} table`,
-                    type: 'success',
+                    theme: 'success',
                     title: `Success ${action}ing table`,
                 });
                 return dispatch(updateView());
@@ -653,7 +642,7 @@ export function mountUnmountTable(action) {
                 console.error(err);
                 toaster.add({
                     name: `${action} table`,
-                    type: 'error',
+                    theme: 'danger',
                     title: `Could not ${action} table.`,
                     content: err?.message || 'Oops, something went wrong',
                     actions: [{label: ' view', onClick: () => showErrorPopup(err)}],
@@ -670,7 +659,7 @@ export function abortAndReset() {
 }
 
 export function decodeNameField(columns) {
-    return _.map(columns, (item) => {
+    return map_(columns, (item) => {
         return {
             ...item,
             name: unipika.decode(item.name),

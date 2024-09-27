@@ -3,7 +3,13 @@ import {ConnectedProps, connect} from 'react-redux';
 import unipika from '../../../../../common/thor/unipika';
 import {compose} from 'redux';
 import cn from 'bem-cn-lite';
-import _ from 'lodash';
+
+import filter_ from 'lodash/filter';
+import find_ from 'lodash/find';
+import map_ from 'lodash/map';
+import reduce_ from 'lodash/reduce';
+import values_ from 'lodash/values';
+
 import qs from 'qs';
 import axios from 'axios';
 
@@ -34,8 +40,7 @@ import {
 import {getColumns} from '../../../../../store/selectors/navigation/content/table-ts';
 
 import './DownloadManager.scss';
-import {docsUrl} from '../../../../../config';
-import {uiSettings} from '../../../../../config/ui-settings';
+import {docsUrl, getExportTableBaseUrl} from '../../../../../config';
 import SeparatorInput, {prepareSeparatorValue} from './SeparatorInput';
 import UIFactory from '../../../../../UIFactory';
 import {makeDirectDownloadPath} from '../../../../../utils/navigation';
@@ -45,9 +50,9 @@ import {FIX_MY_TYPE} from '../../../../../types';
 const block = cn('table-download-manager');
 const messageBlock = cn('elements-message');
 
-const EXCEL_BASE_URL = uiSettings?.exportTableBaseUrl;
-
 function checkExcelExporter(cluster: string) {
+    const EXCEL_BASE_URL = getExportTableBaseUrl({cluster});
+
     if (!EXCEL_BASE_URL) {
         return Promise.resolve(false);
     }
@@ -95,11 +100,11 @@ export class DownloadManager extends React.Component<Props, State> {
     }
 
     static prepareColumns(columns: Array<{checked?: boolean}>) {
-        return _.filter(columns, ({checked}) => checked);
+        return filter_(columns, ({checked}) => checked);
     }
 
     static hasColumn(columns: Array<{name?: string}>, name: string) {
-        return Boolean(_.find(columns, (column) => column.name === name));
+        return Boolean(find_(columns, (column) => column.name === name));
     }
 
     static getDerivedStateFromProps(nextProps: Props, prevState: State) {
@@ -302,7 +307,7 @@ export class DownloadManager extends React.Component<Props, State> {
 
     getExcelDownloadLink() {
         const {cluster} = this.props;
-        const base = `${EXCEL_BASE_URL}/${cluster}/api/export`;
+        const base = `${getExportTableBaseUrl({cluster})}/${cluster}/api/export`;
 
         const {query, error} = this.getDownloadParams();
         const {number_precision_mode} = this.state;
@@ -375,7 +380,7 @@ export class DownloadManager extends React.Component<Props, State> {
     }
 
     get tabItems() {
-        return _.map(_.values(this.formats), ({name, caption, show}) => ({
+        return map_(values_(this.formats), ({name, caption, show}) => ({
             value: name,
             text: caption,
             show,
@@ -425,11 +430,11 @@ export class DownloadManager extends React.Component<Props, State> {
         const {columnsMode, selectedColumns} = this.state;
 
         if (columnsMode === 'all') {
-            const preparedColumns = _.map(selectedColumns, 'name');
+            const preparedColumns = map_(selectedColumns, 'name');
 
-            return _.map(preparedColumns, (column) => this.parseColumn(column, useQuotes));
+            return map_(preparedColumns, (column) => this.parseColumn(column, useQuotes));
         } else if (columnsMode === 'custom') {
-            const preparedColumns = _.reduce(
+            const preparedColumns = reduce_(
                 selectedColumns,
                 (columns, item) => {
                     if (item.checked) {
@@ -441,7 +446,7 @@ export class DownloadManager extends React.Component<Props, State> {
                 [] as Array<string>,
             );
 
-            return _.map(preparedColumns, (column) => this.parseColumn(column, useQuotes));
+            return map_(preparedColumns, (column) => this.parseColumn(column, useQuotes));
         }
         return undefined;
     }
@@ -449,7 +454,7 @@ export class DownloadManager extends React.Component<Props, State> {
     prepareYamrColumns() {
         const {columns} = this.props;
 
-        return _.map(columns, ({name}) => {
+        return map_(columns, ({name}) => {
             const column = this.parseColumn(name, false);
             return {
                 value: column,

@@ -4,7 +4,7 @@ import {getFontFamilies} from '../../../store/selectors/global/fonts';
 import {RootState} from '../../../store/reducers';
 
 // TODO: consider switching back for <link rel="preload"> once it's supported in all major browsers
-function waitForFontFamily(fontFamily: string) {
+export function waitForFontFamily(fontFamily: string) {
     return new FontFaceObserver(fontFamily).load(null, 10000);
 }
 

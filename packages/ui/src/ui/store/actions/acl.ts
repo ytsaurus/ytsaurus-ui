@@ -1,5 +1,8 @@
 import {ThunkAction} from 'redux-thunk';
-import _ from 'lodash';
+
+import flatten_ from 'lodash/flatten';
+import forEach_ from 'lodash/forEach';
+import map_ from 'lodash/map';
 
 import {
     DELETE_PERMISSION,
@@ -32,7 +35,7 @@ const prepareUserPermissions = (
     idmKind: IdmKindType,
 ) => {
     const {permissionTypes} = UIFactory.getAclPermissionsSettings()[idmKind];
-    return _.map(userPermissions, (item, index) => {
+    return map_(userPermissions, (item, index) => {
         return {
             type: permissionTypes[index],
             action: item.action,
@@ -256,7 +259,7 @@ export function requestPermissions(
             Object.entries(requestPermissionsFlags).forEach(([key, flagInfo]) => {
                 flagInfo?.applyToRequestedRole(commonPart, permissionFlags?.[key]);
             });
-            const flattenPermissions = _.flatten(_.map(values.permissions));
+            const flattenPermissions = flatten_(map_(values.permissions));
             if (flattenPermissions.length) {
                 rolesGroupedBySubject.push({
                     permissions: flattenPermissions,
@@ -271,7 +274,7 @@ export function requestPermissions(
                     permissions: ['read' as const],
                 });
             }
-            _.forEach(values.permissions, (permissions) => {
+            forEach_(values.permissions, (permissions) => {
                 roles.push({
                     ...convertFromUIPermissions({permissions}),
                     ...commonPart,

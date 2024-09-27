@@ -37,6 +37,7 @@ interface TemplatePoolsProps {
     state?: 'completed' | 'failed' | 'aborted' | string;
     pools: Pool[];
     erasedTrees?: Record<string, boolean | undefined>;
+    allowDetachEditBtn?: boolean;
 }
 
 export function TemplatePools({
@@ -44,8 +45,9 @@ export function TemplatePools({
     cluster,
     state,
     onEdit,
-    compact,
+    compact = false,
     erasedTrees = {},
+    allowDetachEditBtn,
 }: TemplatePoolsProps) {
     return (
         <ul className={itemBlock('pools', 'elements-list elements-list_type_unstyled')}>
@@ -58,6 +60,7 @@ export function TemplatePools({
                     state={state}
                     pool={pool}
                     erased={erasedTrees[pool.tree]}
+                    allowDetachEditBtn={allowDetachEditBtn}
                 />
             ))}
         </ul>
@@ -69,10 +72,6 @@ TemplatePools.propTypes = {
     state: PropTypes.string,
     onEdit: PropTypes.func,
     compact: PropTypes.bool,
-};
-
-TemplatePools.defaultProps = {
-    compact: false,
 };
 
 /* ----------------------------------------------------------------------------------------------------------------- */

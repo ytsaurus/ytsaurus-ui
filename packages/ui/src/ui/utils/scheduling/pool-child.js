@@ -1,4 +1,5 @@
-import _ from 'lodash';
+import map_ from 'lodash/map';
+
 import ypath from '../../common/thor/ypath';
 import {ROOT_POOL_NAME} from '../../constants/scheduling';
 import {appendInnerErrors} from '../errors';
@@ -63,7 +64,7 @@ export function updatePoolChild(data, cypressData, type, treeResources) {
 
             data.mode = ypath.getValue(attributes, '/mode');
 
-            data.leaves = _.map(data.leaves, (leaf) => {
+            data.leaves = map_(data.leaves, (leaf) => {
                 return updatePoolChild(leaf, {}, 'operation', treeResources);
             });
 
@@ -172,7 +173,7 @@ export function updatePoolChild(data, cypressData, type, treeResources) {
         data.accumulatedCpu = ypath.getValue(attributes, '/accumulated_resource_volume/cpu');
         data.burstDuration = ypath.getValue(attributes, '/estimated_burst_usage_duration_sec');
 
-        const fifoSortParams = _.map(
+        const fifoSortParams = map_(
             ypath.getValue(attributes, '/fifo_sort_parameters') ||
                 ypath.getValue(cypressAttributes, '/fifo_sort_parameters'),
             (param) => ypath.getValue(param),

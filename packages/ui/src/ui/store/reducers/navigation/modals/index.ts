@@ -13,6 +13,7 @@ import remoteCopyModal from './remote-copy-modal';
 import dynTablesStateModal from './dyn-tables-state-modal';
 import linkToModal from './link-to-modal';
 import createACOModal from './create-aco';
+import cellPreviewModal from '../../modals/cell-preview';
 
 export default combineReducers({
     attributesEditor,
@@ -28,4 +29,5 @@ export default combineReducers({
     dynTablesStateModal,
     linkToModal,
     createACOModal,
+    cellPreviewModal,
 });

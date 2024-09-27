@@ -1,6 +1,5 @@
 import type {ThunkAction} from 'redux-thunk';
-import _ from 'lodash';
-
+import map_ from 'lodash/map';
 import hammer from '../../../common/hammer';
 import {
     CHAOS_BUNDLES_EDITOR_LOAD_FAILURE,
@@ -117,10 +116,10 @@ export function setBunndleAttributes(
         return wrapApiPromiseByToaster(
             ytApiV3Id.executeBatch(YTApiId.chaosCellBundlesSetAttrs, {
                 requests: [
-                    ..._.map(attributes, (v, key) =>
+                    ...map_(attributes, (v, key) =>
                         prepareSetCommandForBatch(`${bundlePath}/@${key}`, v),
                     ),
-                    ..._.map(options, (v, key) =>
+                    ...map_(options, (v, key) =>
                         prepareSetCommandForBatch(`${bundlePath}/@options/${key}`, v),
                     ),
                 ],

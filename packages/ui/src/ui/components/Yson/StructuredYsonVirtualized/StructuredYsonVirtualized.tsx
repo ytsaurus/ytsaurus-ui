@@ -1,7 +1,11 @@
 import React from 'react';
 import cn from 'bem-cn-lite';
-import _ from 'lodash';
 
+import fill_ from 'lodash/fill';
+import isEmpty_ from 'lodash/isEmpty';
+import reduce_ from 'lodash/reduce';
+
+import {Button, Dialog, Flex, RadioButton} from '@gravity-ui/uikit';
 // @ts-ignore
 import unipika from '@gravity-ui/unipika/lib/unipika';
 
@@ -23,14 +27,15 @@ import {Toolbar} from '../../WithStickyToolbar/Toolbar/Toolbar';
 import Icon from '../../Icon/Icon';
 import Filter from '../../Filter/Filter';
 import {MultiHighlightedText} from '../../HighlightedText/HighlightedText';
-import Link from '../../Link/Link';
-import {Button, Dialog} from '@gravity-ui/uikit';
+import {ClickableText} from '../../ClickableText/ClickableText';
 const block = cn('structured-yson-virtualized');
 
 interface Props {
     value: UnipikaValue;
     settings: UnipikaSettings;
     extraTools?: React.ReactNode;
+    tableSettings?: DT100.Settings;
+    customLayout?: (args: {toolbar: React.ReactNode; content: React.ReactNode}) => React.ReactNode;
 }
 
 interface State {
@@ -88,13 +93,13 @@ export default class StructuredYsonVirtualized extends React.PureComponent<Props
                 yson,
             });
         }
-        if (prevValue !== value || !_.isEmpty(res)) {
+        if (prevValue !== value || !isEmpty_(res)) {
             Object.assign<Partial<State>, Partial<State>>(res, {
                 value,
                 ...calculateState(value, state.collapsedState, state.filter, settings),
             });
         }
-        return _.isEmpty(res) ? null : res;
+        return isEmpty_(res) ? null : res;
     }
 
     state: State = {
@@ -120,6 +125,7 @@ export default class StructuredYsonVirtualized extends React.PureComponent<Props
         this.settings = {
             ...SETTINGS,
             dynamicInnerRef: this.dataTable,
+            ...props.tableSettings,
         };
     }
 
@@ -218,7 +224,7 @@ export default class StructuredYsonVirtualized extends React.PureComponent<Props
     onCollapseAll = () => {
         const {value, yson} = this.state;
         const {data} = flattenUnipika(value, {isJson: !yson});
-        const collapsedState = _.reduce(
+        const collapsedState = reduce_(
             data,
             (acc, {path}) => {
                 if (path) {
@@ -239,7 +245,7 @@ export default class StructuredYsonVirtualized extends React.PureComponent<Props
 
     onNextMatch = (_event: unknown, diff = 1) => {
         const {matchIndex, matchedRows} = this.state;
-        if (_.isEmpty(matchedRows)) {
+        if (isEmpty_(matchedRows)) {
             return;
         }
 
@@ -371,20 +377,12 @@ export default class StructuredYsonVirtualized extends React.PureComponent<Props
 
         return (
             value && (
-                <Dialog open={true} onClose={this.onHideFullValue}>
-                    <Dialog.Header caption={'Full value'} />
-                    <Dialog.Divider />
-                    <Dialog.Body>
-                        <div className={block('full-value')}>
-                            <MultiHighlightedText
-                                className={block('filtered')}
-                                starts={searchInfo?.valueMatch || []}
-                                text={tmp.substring(1, tmp.length - 1)}
-                                length={filter.length}
-                            />
-                        </div>
-                    </Dialog.Body>
-                </Dialog>
+                <FullValueDialog
+                    onClose={this.onHideFullValue}
+                    starts={searchInfo?.valueMatch || []}
+                    text={tmp.substring(1, tmp.length - 1)}
+                    length={filter.length}
+                />
             )
         );
     }
@@ -392,11 +390,18 @@ export default class StructuredYsonVirtualized extends React.PureComponent<Props
     render() {
         return (
             <React.Fragment>
-                <WithStickyToolbar
-                    className={block()}
-                    toolbar={this.renderToolbar()}
-                    content={this.renderTable()}
-                />
+                {this.props.customLayout ? (
+                    this.props.customLayout({
+                        toolbar: this.renderToolbar(),
+                        content: this.renderTable(),
+                    })
+                ) : (
+                    <WithStickyToolbar
+                        className={block()}
+                        toolbar={this.renderToolbar()}
+                        content={this.renderTable()}
+                    />
+                )}
                 {this.renderFullValueModal()}
             </React.Fragment>
         );
@@ -408,7 +413,7 @@ const OFFSETS_BY_LEVEL: {[key: number]: React.ReactNode} = {};
 function getLevelOffsetSpaces(level: number) {
     let res = OFFSETS_BY_LEVEL[level];
     if (!res) {
-        const __html = _.fill(Array(level * 4), '&nbsp;').join('');
+        const __html = fill_(Array(level * 4), '&nbsp;').join('');
         res = OFFSETS_BY_LEVEL[level] = <span dangerouslySetInnerHTML={{__html}} />;
     }
     return res;
@@ -563,7 +568,7 @@ function renderStringWithFilter(props: ValueProps, className: string, maxWidth =
                 length={filter?.length}
             />
             {truncated && (
-                <Link
+                <ClickableText
                     className={block('filtered', {
                         highlighted: hasHiddenMatch,
                     })}
@@ -571,7 +576,7 @@ function renderStringWithFilter(props: ValueProps, className: string, maxWidth =
                 >
                     {'\u2026'}
                     <Icon awesome={'external-link'} />
-                </Link>
+                </ClickableText>
             )}
             &quot;
         </span>
@@ -664,6 +669,64 @@ function ToggleCollapseButton(props: ToggleCollapseProps) {
             </Button>
         </span>
     );
+}
+
+interface FullValueDialogProps {
+    onClose: () => void;
+    length: number;
+    text: string;
+    starts: number[];
+}
+function FullValueDialog(props: FullValueDialogProps) {
+    const {onClose, text, starts, length} = props;
+
+    const [type, setType] = React.useState<'raw' | 'parsed'>('parsed');
+
+    return (
+        <Dialog open={true} onClose={onClose}>
+            <Dialog.Header caption={'Full value'} />
+            <Dialog.Divider />
+            <Dialog.Body>
+                <Flex direction="column" gap={2} width="70vw" maxHeight="80vh">
+                    <RadioButton
+                        className={block('full-value-radio-buttons')}
+                        options={[
+                            {value: 'parsed', content: 'Parsed'},
+                            {value: 'raw', content: 'Raw'},
+                        ]}
+                        onUpdate={setType}
+                    />
+                    <div className={block('full-value')}>
+                        {type === 'raw' && (
+                            <MultiHighlightedText
+                                className={block('filtered')}
+                                starts={starts}
+                                text={text}
+                                length={length}
+                            />
+                        )}
+                        {type === 'parsed' && (
+                            <pre className={block('full-value-parsed')}>
+                                {getParsedFullValue(text)}
+                            </pre>
+                        )}
+                    </div>
+                </Flex>
+            </Dialog.Body>
+        </Dialog>
+    );
+}
+
+function getParsedFullValue(text: string) {
+    try {
+        return JSON.parse(text);
+    } catch {
+        try {
+            return JSON.parse(`"${text}"`);
+        } catch {
+            return text;
+        }
+    }
 }
 
 function formatValue(

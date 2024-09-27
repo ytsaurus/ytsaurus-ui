@@ -3,7 +3,8 @@ import PropTypes from 'prop-types';
 import {useSelector} from 'react-redux';
 import {Redirect, Route, Switch, withRouter} from 'react-router';
 import cn from 'bem-cn-lite';
-import _ from 'lodash';
+
+import reduce_ from 'lodash/reduce';
 
 import Tabs from '../../../components/Tabs/Tabs';
 import Placeholder from '../../../pages/components/Placeholder';
@@ -54,7 +55,7 @@ function Content({className, match, location}) {
 
     const localTab = {...Tab};
 
-    const showSettings = _.reduce(
+    const showSettings = reduce_(
         Tab,
         (acc, tab) => {
             acc[tab] = {show: SCHEDULING_ALLOWED_ROOT_TABS[tab] || !isRoot};

@@ -2,7 +2,7 @@ import React from 'react';
 import cn from 'bem-cn-lite';
 import Icon from '../../components/Icon/Icon';
 
-import Link from '../../components/Link/Link';
+import {ClickableText} from '../../components/ClickableText/ClickableText';
 import Button from '../../components/Button/Button';
 import NumberInput, {NumberInputProps} from '../../components/NumberInput/NumberInput';
 import {ROOT_ACCOUNT_NAME} from '../../constants/accounts/accounts';
@@ -121,9 +121,9 @@ export default class QuotaEditorWithHide extends React.Component<Props, State> {
             >
                 <div className={block('top')}>
                     Edit Quota limit
-                    <Link className={block('hide')} theme={'ghost'} onClick={onHide}>
+                    <ClickableText className={block('hide')} color="secondary" onClick={onHide}>
                         <Icon awesome={'times'} face={'light'} />
-                    </Link>
+                    </ClickableText>
                 </div>
                 <div className={block('controls')}>
                     {this.renderControl()}

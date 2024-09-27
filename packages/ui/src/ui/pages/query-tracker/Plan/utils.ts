@@ -4,7 +4,7 @@ import {yqlModel} from './models/shared';
 import {scaleOrdinal} from 'd3-scale';
 import {select} from 'd3-selection';
 import {arc, pie} from 'd3-shape';
-import {isEmpty} from 'lodash';
+import isEmpty_ from 'lodash/isEmpty';
 import type {
     NodeDetails,
     NodeProgress,
@@ -397,7 +397,7 @@ export function updateProgress(
             const node = progress[nodeId];
             visItem.progress = node;
 
-            if (node.stages && !isEmpty(node.stages)) {
+            if (node.stages && !isEmpty_(node.stages)) {
                 if (isOperationFinished(node.state)) {
                     visItem.label = ellipsis(visItem.title ?? '');
                 } else {
@@ -486,7 +486,7 @@ export function hasJobsInfo(progress: NodeProgress | undefined) {
 }
 
 export function hasStagesInfo(progress: NodeProgress | undefined) {
-    return !isEmpty(progress?.stages);
+    return !isEmpty_(progress?.stages);
 }
 
 export function nodeHasInfo(node: ProcessedNode) {
@@ -596,12 +596,18 @@ export function usePrepareNode(operationIdToCluster: Map<string, string>) {
         } else if (node.progress?.remoteId) {
             const id = node.progress?.remoteId.split('/').pop();
 
-            if (id && operationIdToCluster.has(id)) {
-                const cluster = operationIdToCluster.get(id)!;
-
-                node.url = buildOperationUrl(cluster, id);
-            } else {
+            if (!id) {
                 node.url = getOperationUrl(node);
+
+                return node;
+            }
+
+            const cluster = operationIdToCluster.has(id)
+                ? operationIdToCluster.get(id)
+                : node.progress?.remoteData?.cluster_name;
+
+            if (cluster) {
+                node.url = buildOperationUrl(cluster, id);
             }
         }
 

@@ -1,0 +1,22 @@
+.stats-info {
+    display: flex;
+    flex-direction: column;
+    text-transform: uppercase;
+    flex-grow: 1;
+
+    &__progress {
+        width: 100%;
+        margin: 4px 0;
+    }
+
+    &__info {
+        display: flex;
+        &_hidden {
+            visibility: hidden;
+        }
+    }
+
+    &__subtext {
+        width: 50px;
+    }
+}

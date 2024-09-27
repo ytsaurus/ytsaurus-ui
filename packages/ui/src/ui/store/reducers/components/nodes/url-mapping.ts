@@ -1,4 +1,9 @@
-import _ from 'lodash';
+import forEach_ from 'lodash/forEach';
+import get_ from 'lodash/get';
+import keys_ from 'lodash/keys';
+import reduce_ from 'lodash/reduce';
+import set_ from 'lodash/set';
+
 import produce from 'immer';
 
 import {initialState as nodesInitialState} from '../../../../store/reducers/components/nodes/nodes/nodes';
@@ -36,7 +41,7 @@ const createParam = (group: string, value: string, direction: string) => ({
     type: 'number',
 });
 const createParams = (group: string, values: Array<string>) =>
-    _.reduce(
+    reduce_(
         values,
         (res, value) => {
             res[`${value}From`] = createParam(group, value, 'from');
@@ -114,7 +119,7 @@ const defaultParams = {
         initialState: fullInitialState,
     },
     alerts: {
-        stateKey: 'components.nodes.setup.default.alerts',
+        stateKey: 'components.nodes.setup.default.alertCount',
         initialState: alertsInitialState,
     },
     schedulerJobs: {
@@ -133,19 +138,19 @@ const defaultParams = {
 
 // storage
 const storageKey = 'storage';
-const storageValues = _.keys(initialState[storageKey]);
+const storageValues = keys_(initialState[storageKey]);
 
 // cpu
 const cpuKey = 'cpu';
-const cpuValues = _.keys(initialState[cpuKey]);
+const cpuValues = keys_(initialState[cpuKey]);
 
 // resources
 const resourcesKey = 'resources';
-const resourcesValues = _.keys(initialState[resourcesKey]);
+const resourcesValues = keys_(initialState[resourcesKey]);
 
 // tablets
 const tabletsKey = 'tablets';
-const tabletsValues = _.keys(initialState[tabletsKey]);
+const tabletsValues = keys_(initialState[tabletsKey]);
 
 // aggregated
 export const setupNodesParams = {
@@ -188,12 +193,12 @@ export const nodesParams: LocationParameters = {
 
 export function getNodesPreparedState(state: RootState, {query}: {query: RootState}) {
     return produce(state, (draft) => {
-        _.forEach(nodesParams, ({stateKey}) => {
+        forEach_(nodesParams, ({stateKey}) => {
             // TODO: Rewrite without _.get
-            const prev = _.get(draft, stateKey);
-            const value = _.get(query, stateKey);
+            const prev = get_(draft, stateKey);
+            const value = get_(query, stateKey);
             if (prev !== value) {
-                _.set(draft, stateKey, value);
+                set_(draft, stateKey, value);
             }
         });
     });

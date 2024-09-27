@@ -10,7 +10,7 @@ import {
     settingsGetItem,
     settingsSetItem,
 } from './controllers/settings';
-import {homeIndexFactory, homeRedirect} from './controllers/home';
+import {homeIndexFactory} from './controllers/home';
 import {handleClusterInfo} from './controllers/cluster-info';
 
 import {clusterAuthStatus, clusterVersions} from './controllers/clusters';
@@ -21,9 +21,18 @@ import {getClusterPools} from './controllers/scheduling-pools';
 import {markdownToHtmlHandler} from './controllers/markdown-to-html';
 import {odinProxyApi} from './controllers/odin-proxy-api';
 import {getClustersAvailability} from './controllers/availability';
-import {chytProxyApi} from './controllers/chyt-api';
+import {strawberryProxyApi} from './controllers/strawberry-api';
 import {oauthCallback, oauthLogin, oauthLogout} from './controllers/oauth-login';
 import {handleLogout} from './controllers/logout';
+import {
+    createToken,
+    getBranches,
+    getDirectoryContent,
+    getFileContent,
+    getRepositories,
+    getVcsTokensAvailability,
+    removeToken,
+} from './controllers/vcs';
 
 const HOME_INDEX_TARGET: AppRouteDescription = {handler: homeIndexFactory(), ui: true};
 
@@ -43,6 +52,15 @@ const routes: AppRoutes = {
     'GET /api/oauth/callback': {handler: oauthCallback, ui: true},
     'GET /api/oauth/logout/callback': {handler: oauthLogout, ui: true},
 
+    'POST /api/vcs/token': {handler: createToken},
+    'DELETE /api/vcs/token': {handler: removeToken},
+
+    'GET /api/vcs': {handler: getDirectoryContent},
+    'GET /api/vcs/file': {handler: getFileContent},
+    'GET /api/vcs/repositories': {handler: getRepositories},
+    'GET /api/vcs/branches': {handler: getBranches},
+    'GET /api/vcs/tokens-availability': {handler: getVcsTokensAvailability},
+
     'POST /api/yt/:ytAuthCluster/change-password': {handler: handleChangePassword, ui: true},
     'POST /api/remote-copy': {handler: handleRemoteCopy},
 
@@ -57,7 +75,7 @@ const routes: AppRoutes = {
     'GET /api/odin/proxy/:action/:ytAuthCluster?': {handler: odinProxyApi},
     'GET /api/odin/clusters/availability': {handler: getClustersAvailability},
 
-    'POST /api/chyt/:ytAuthCluster/:action': {handler: chytProxyApi},
+    'POST /api/strawberry/:engine/:ytAuthCluster/:action': {handler: strawberryProxyApi},
 
     'GET    /api/settings/:ytAuthCluster/:username': {handler: settingsGet},
     'POST   /api/settings/:ytAuthCluster/:username': {handler: settingsCreate},
@@ -71,7 +89,6 @@ const routes: AppRoutes = {
     'POST /api/table-column-preset/:ytAuthCluster': {handler: tableColumnPresetSave},
 
     'GET /:ytAuthCluster/': HOME_INDEX_TARGET,
-    'GET /:ytAuthCluster/maintenance': {handler: homeRedirect},
     'GET /:ytAuthCluster/:page': HOME_INDEX_TARGET,
     'GET /:ytAuthCluster/:page/:tab': HOME_INDEX_TARGET,
     'GET /:ytAuthCluster/:page/:operation/:tab': HOME_INDEX_TARGET,

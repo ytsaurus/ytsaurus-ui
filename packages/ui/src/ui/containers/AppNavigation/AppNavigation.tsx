@@ -1,7 +1,7 @@
 import React from 'react';
 import cn from 'bem-cn-lite';
-import _some from 'lodash/some';
-import _isEmpty from 'lodash/isEmpty';
+import some_ from 'lodash/some';
+import isEmpty_ from 'lodash/isEmpty';
 
 import ellipsisIcon from '../../assets/img/svg/ellipsis.svg';
 
@@ -32,7 +32,7 @@ interface ExtProps {
 }
 
 function isRootPage(cluster = '') {
-    return _some(UIFactory.getExtraRootPages(), (info) => {
+    return some_(UIFactory.getExtraRootPages(), (info) => {
         return cluster === info.pageId;
     });
 }
@@ -111,7 +111,7 @@ export default function AppNavigation({children}: ExtProps) {
         logoClassName: block('logo-icon', {'no-cluster': !cluster}),
         currentUser,
         authWay,
-        menuItems: _isEmpty(clusterConfig) ? [] : menuItems,
+        menuItems: isEmpty_(clusterConfig) ? [] : menuItems,
         panelContent: (
             <PagesSettingsEditor
                 cluster={cluster}

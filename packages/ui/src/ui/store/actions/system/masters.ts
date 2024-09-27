@@ -1,4 +1,9 @@
-import _ from 'lodash';
+import forEach_ from 'lodash/forEach';
+import keys_ from 'lodash/keys';
+import map_ from 'lodash/map';
+import reduce_ from 'lodash/reduce';
+import sortBy_ from 'lodash/sortBy';
+
 import ypath from '../../../common/thor/ypath';
 import {Toaster} from '@gravity-ui/uikit';
 
@@ -12,12 +17,18 @@ import {USE_SUPRESS_SYNC} from '../../../../shared/constants';
 import type {AxiosError} from 'axios';
 import type {Dispatch} from 'redux';
 import type {BatchSubRequest} from '../../../../shared/yt-types';
-import type {
+import {
     MasterAlert,
     MasterDataItemInfo,
     MastersConfigResponse,
+    MastersStateAction,
     ResponseItemsGroup,
 } from '../../reducers/system/masters';
+import {ThunkAction} from 'redux-thunk';
+import type {RootState} from '../../reducers';
+import {MasterInstance} from '../../selectors/system/masters';
+import {getMastersHostType} from '../../selectors/settings';
+import {VisibleHostType} from '../../../constants/system/masters';
 
 export const FETCH_MASTER_CONFIG = createActionTypes('MASTER_CONFIG');
 export const FETCH_MASTER_DATA = createActionTypes('MASTER_DATA');
@@ -152,23 +163,20 @@ async function loadMastersConfig(): Promise<[MastersConfigResponse, MasterAlert[
     const timestampProviders = !timestampProvidersResult.output
         ? {}
         : {
-              addresses: _.map(
-                  ypath.getValue(timestampProvidersResult.output),
-                  (value, address) => {
-                      return {
-                          host: address,
-                          physicalHost: ypath.getValue(value, '/@annotations/physical_host'),
-                          attributes: ypath.getValue(value, '/@'),
-                      };
-                  },
-              ),
+              addresses: map_(ypath.getValue(timestampProvidersResult.output), (value, address) => {
+                  return {
+                      host: address,
+                      physicalHost: ypath.getValue(value, '/@annotations/physical_host'),
+                      attributes: ypath.getValue(value, '/@'),
+                  };
+              }),
               cellId: ypath.getValue(timestampProviderCellTag.output)?.cell_id,
               cellTag: getCellIdTag(ypath.getValue(timestampProviderCellTag.output)?.cell_id),
           };
 
     const mainResult: MastersConfigResponse = {
         primaryMaster: {
-            addresses: _.map(_.keys(primaryMaster), (address) => {
+            addresses: map_(keys_(primaryMaster), (address) => {
                 const value = primaryMaster[address];
 
                 return {
@@ -180,9 +188,9 @@ async function loadMastersConfig(): Promise<[MastersConfigResponse, MasterAlert[
             cellId: masterCellId,
             cellTag: getCellIdTag(masterCellId),
         },
-        secondaryMasters: _.map(secondaryMasters, (addresses, cellTag) => {
+        secondaryMasters: map_(secondaryMasters, (addresses, cellTag) => {
             return {
-                addresses: _.map(_.keys(addresses), (address) => {
+                addresses: map_(keys_(addresses), (address) => {
                     const value = secondaryMasters[cellTag][address];
                     return {
                         host: address,
@@ -198,7 +206,7 @@ async function loadMastersConfig(): Promise<[MastersConfigResponse, MasterAlert[
         queueAgents: {},
     };
 
-    const discoveryRequests = _.map(
+    const discoveryRequests = map_(
         ypath.getValue(discoveryServersResult.output),
         (_v, address) => ({
             command: 'get' as const,
@@ -210,7 +218,7 @@ async function loadMastersConfig(): Promise<[MastersConfigResponse, MasterAlert[
         }),
     );
 
-    const queueAgentsStateRequests = _.map(
+    const queueAgentsStateRequests = map_(
         ypath.getValue(queueAgentsResult.output),
         (_v, address) => ({
             command: 'get' as const,
@@ -236,7 +244,7 @@ async function loadMastersConfig(): Promise<[MastersConfigResponse, MasterAlert[
             discoveryRequests.length + queueAgentsStateRequests.length,
         );
 
-        discoveryServersStatuses = _.reduce(
+        discoveryServersStatuses = reduce_(
             discoveryResults,
             (acc, item, key) => {
                 acc[discoveryRequests[key].address] = item?.error ? 'offline' : 'online';
@@ -244,7 +252,7 @@ async function loadMastersConfig(): Promise<[MastersConfigResponse, MasterAlert[
             },
             {} as {[address: string]: 'offline' | 'online'},
         );
-        queueAgentsStatuses = _.reduce(
+        queueAgentsStatuses = reduce_(
             queueAgentsStateResults,
             (acc, item, key) => {
                 acc[queueAgentsStateRequests[key].address] =
@@ -261,7 +269,7 @@ async function loadMastersConfig(): Promise<[MastersConfigResponse, MasterAlert[
 
     mainResult.discoveryServers = discoveryServersResult.output
         ? {
-              addresses: _.map(ypath.getValue(discoveryServersResult.output), (value, address) => {
+              addresses: map_(ypath.getValue(discoveryServersResult.output), (value, address) => {
                   return {
                       host: address,
                       physicalHost: ypath.getValue(value, '/@annotations/physical_host'),
@@ -275,7 +283,7 @@ async function loadMastersConfig(): Promise<[MastersConfigResponse, MasterAlert[
 
     mainResult.queueAgents = queueAgentsResult.output
         ? {
-              addresses: _.map(ypath.getValue(queueAgentsResult.output), (value, address) => {
+              addresses: map_(ypath.getValue(queueAgentsResult.output), (value, address) => {
                   return {
                       host: address,
                       physicalHost: ypath.getValue(value, '/@annotations/physical_host'),
@@ -309,8 +317,8 @@ function loadHydra(
         throw new Error('Unexpected type for loadHydra call');
     }
 
-    _.each(
-        _.sortBy(addresses, (address) => address.host),
+    forEach_(
+        sortBy_(addresses, (address) => address.host),
         ({host}) => {
             masterInfo.push({host, type, cellTag: cellTag!});
             requests.push({
@@ -363,7 +371,7 @@ export function loadMasters() {
 
             loadHydra(masterDataRequests, masterInfo, 'primary', config.primaryMaster);
 
-            _.each(config.secondaryMasters, (currentConfig) => {
+            forEach_(config.secondaryMasters, (currentConfig) => {
                 loadHydra(masterDataRequests, masterInfo, 'secondary', currentConfig);
             });
 
@@ -386,7 +394,7 @@ export function loadMasters() {
             toaster.add({
                 name: 'load/system/masters',
                 autoHiding: false,
-                type: 'error',
+                theme: 'danger',
                 content: `[code ${code}] ${message}`,
                 title: 'Could not load Masters',
                 actions: [{label: ' view', onClick: () => showErrorPopup(error as AxiosError)}],
@@ -398,6 +406,98 @@ export function loadMasters() {
         }
     };
 }
+
+const getPathByMasterType = (type: string): string | null => {
+    switch (type) {
+        case 'primary':
+        case 'secondary':
+            return '//sys/cluster_masters';
+        case 'providers':
+            return '//sys/timestamp_providers';
+        case 'queue_agent':
+            return '//sys/queue_agents/instances';
+        default:
+            return null;
+    }
+};
+
+export const changeMaintenance = ({
+    path,
+    login,
+    maintenance,
+    message,
+}: {
+    path: string;
+    login: string;
+    maintenance: boolean;
+    message: string;
+}) =>
+    ytApiV3Id.executeBatch(YTApiId.systemMastersMaintenance, {
+        requests: [
+            {
+                command: 'set',
+                parameters: {
+                    path: `${path}/@maintenance`,
+                },
+                input: maintenance,
+            },
+            {
+                command: 'set',
+                parameters: {
+                    path: `${path}/@maintenance_message`,
+                },
+                input: maintenance
+                    ? `Maintenance was set by ${login} at ${new Date().toISOString()} from UI${message ? `. ${message}` : ''}`
+                    : '',
+            },
+        ],
+    });
+
+export const changeMasterMaintenance =
+    ({
+        address,
+        maintenance,
+        message,
+    }: {
+        address: string;
+        maintenance: boolean;
+        message: string;
+    }): ThunkAction<any, RootState, unknown, MastersStateAction> =>
+    async (dispatch, getSate) => {
+        const state = getSate();
+        const hostType = getMastersHostType(state);
+        const {primary, secondary, queueAgents, providers} = state.system.masters;
+        const instances: MasterInstance[] = [
+            ...primary.instances,
+            ...secondary.reduce<MasterInstance[]>((acc, item) => [...acc, ...item.instances], []),
+            ...queueAgents.instances,
+            ...providers.instances,
+        ];
+
+        const master = instances.find((i) => {
+            const {host, physicalHost} = i.toObject();
+            const addressByType = hostType === VisibleHostType.host ? host : physicalHost;
+            return addressByType === address;
+        });
+        if (!master) throw new Error('Cant find master by address');
+
+        const path = getPathByMasterType(master.getType());
+        if (!path) throw new Error('Cant take path by master type');
+
+        const result = await changeMaintenance({
+            path: `${path}/${master.toObject().host}`,
+            login: state.global.login,
+            maintenance,
+            message,
+        });
+
+        const error = getBatchError(result, 'Failed to update master maintenance');
+        if (error) {
+            throw error;
+        }
+
+        dispatch(loadMasters());
+    };
 
 function getCellIdTag(uuid?: string): number | undefined {
     if (!uuid) {

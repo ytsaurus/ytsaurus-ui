@@ -11,9 +11,10 @@ export type SuggestionType =
     | 'binding'
     | 'suggestConstants'
     | 'connection'
-    | 'suggestOperators';
+    | 'suggestOperators'
+    | 'path';
 
-const SuggestionsWeight: Record<SuggestionType, number> = {
+export const SuggestionsWeight: Record<SuggestionType, number> = {
     suggestTemplates: 0,
     suggestPragmas: 1,
     binding: 2,
@@ -29,6 +30,10 @@ const SuggestionsWeight: Record<SuggestionType, number> = {
     suggestSimpleTypes: 12,
     suggestConstants: 13,
     suggestOperators: 14,
+    suggestTableIndexes: 16,
+    suggestTableHints: 17,
+    suggestEntitySettings: 18,
+    path: 19,
 };
 
 export const generateColumnAliasesSuggestion = (

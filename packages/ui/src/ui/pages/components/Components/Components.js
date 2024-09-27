@@ -27,7 +27,7 @@ import {UI_TAB_SIZE} from '../../../constants/global';
 
 const b = block(Page.COMPONENTS);
 
-export function Components({match, lastVisitedTab, tabSize, location}) {
+export function Components({match, lastVisitedTab = DEFAULT_TAB, tabSize, location}) {
     const props = makeTabProps(match.url, Tab);
 
     // Because of the redirect
@@ -92,10 +92,6 @@ Components.propTypes = {
     }).isRequired,
     // from connect
     lastVisitedTab: PropTypes.string,
-};
-
-Components.defaultProps = {
-    lastVisitedTab: DEFAULT_TAB,
 };
 
 const mapStateToProps = (state) => {

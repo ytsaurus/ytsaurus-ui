@@ -3,7 +3,8 @@ import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import {Button, DropdownMenu} from '@gravity-ui/uikit';
 import cn from 'bem-cn-lite';
-import _ from 'lodash';
+
+import map_ from 'lodash/map';
 
 import ypath from '../../../../../../common/thor/ypath';
 import unipika from '../../../../../../common/thor/unipika';
@@ -142,7 +143,7 @@ class OperationJobsTable extends React.Component {
         };
     };
 
-    preparedActions = _.map(this.actions, this.prepareJobAction);
+    preparedActions = map_(this.actions, this.prepareJobAction);
 
     renderIdAddress = (item) => {
         const {cluster} = this.props;
@@ -246,7 +247,7 @@ class OperationJobsTable extends React.Component {
                 <Icon awesome="ellipsis-h" />
             </Button>
         );
-        const firstGroup = _.map(this.preparedActions, ({action, text}) => ({
+        const firstGroup = map_(this.preparedActions, ({action, text}) => ({
             text,
             action: () => action({item}),
         }));
@@ -522,7 +523,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(OperationJobsTable);
 function BriefStatisticsDetails({data}) {
     const items = React.useMemo(
         () =>
-            _.map(ypath.getValue(data), (value, key) => {
+            map_(ypath.getValue(data), (value, key) => {
                 const asBytes = key.endsWith('_data_size') || key.endsWith('_data_weight');
                 const formatValue = asBytes ? hammer.format.Bytes : hammer.format.Number;
                 return {

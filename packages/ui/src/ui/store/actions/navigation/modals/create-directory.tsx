@@ -48,7 +48,7 @@ export function createDirectory(
                 toaster.add({
                     name: CREATE_MESSAGE,
                     autoHiding: 10000,
-                    type: 'success',
+                    theme: 'success',
                     title: CREATE_MESSAGE,
                     content: <Link url={`navigation?path=${path}`}>{path}</Link>,
                 });

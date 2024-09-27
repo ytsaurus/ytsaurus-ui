@@ -3,9 +3,18 @@ import {
     getAllPoolNames,
     getAllPoolTreeNames,
     getAllUserNames,
+    getCluster,
+    getClusterConfigByName,
     getCurrentUserName,
 } from '../../../store/selectors/global';
-import _ from 'lodash';
+
+import concat_ from 'lodash/concat';
+import filter_ from 'lodash/filter';
+import isEqual_ from 'lodash/isEqual';
+import map_ from 'lodash/map';
+import some_ from 'lodash/some';
+import sortBy_ from 'lodash/sortBy';
+
 import {RootState} from '../../reducers';
 import {OperationsListFilterValue} from '../../reducers/operations/list/list';
 
@@ -35,7 +44,7 @@ export const getOperationsPoolTreeItemsWithoutCounter = createSelector(
 
 export const getOperationsPoolTreeSuggestions = createSelector(
     [getOperationsPoolTreeCountersItems, getOperationsPoolTreeItemsWithoutCounter],
-    _.concat,
+    concat_,
 );
 
 export const getOperationsPoolCountersItems = createSelector(
@@ -50,7 +59,7 @@ export const getOperationsPoolItemsWithoutCounter = createSelector(
 
 export const getOperationsPoolSuggestions = createSelector(
     [getOperationsPoolCountersItems, getOperationsPoolItemsWithoutCounter],
-    _.concat,
+    concat_,
 );
 
 export const getOperationsUserCountersItems = createSelector(
@@ -65,12 +74,12 @@ export const getOperationsUserItemsWithoutCounter = createSelector(
 
 export const getOperationsUserSuggestions = createSelector(
     [getOperationsUserCountersItems, getOperationsUserItemsWithoutCounter],
-    _.concat,
+    concat_,
 );
 
 function convertCountersToItems(counters: Record<string, number>) {
-    return _.sortBy(
-        _.map(counters, (count, pool) => ({
+    return sortBy_(
+        map_(counters, (count, pool) => ({
             value: pool,
             text: pool,
             counter: count,
@@ -83,9 +92,9 @@ function calculateItemsWithoutCounter(
     allNames: Array<string>,
     countersMap: Record<string, number>,
 ) {
-    return _.sortBy(
-        _.map(
-            _.filter(allNames, (name) => countersMap[name] === undefined),
+    return sortBy_(
+        map_(
+            filter_(allNames, (name) => countersMap[name] === undefined),
             (name) => ({value: name, text: name}),
         ),
         'text',
@@ -114,7 +123,7 @@ export const ATTRIBUTE_ITEMS = [
         text: 'With monitoring descriptor',
     },
 ];
-export const ATTRIBUTE_ITEM_NAMES = _.map(ATTRIBUTE_ITEMS, ({value}) => value);
+export const ATTRIBUTE_ITEM_NAMES = map_(ATTRIBUTE_ITEMS, ({value}) => value);
 
 export const getOperationsListFilterParameters = createSelector(
     [getOperationsListFilters],
@@ -154,10 +163,16 @@ export function getOperationsListTimeRange(state: RootState) {
 }
 
 export const getOperationsListFiltersParameters_FOR_YTFRONT_2838 = createSelector(
-    [getOperationsListFilterParameters, getCurrentUserName, getOperationsListTimeRange],
-    (filters, login, {from_time, to_time}) => {
+    [getOperationsListFilterParameters, getCurrentUserName, getOperationsListTimeRange, getCluster],
+    (filters, login, {from_time, to_time}, cluster) => {
+        const clusterConfig = getClusterConfigByName(cluster);
+
+        if (clusterConfig.operationPageSettings?.disableOptimizationForYTFRONT2838) {
+            return filters;
+        }
+
         const {state, ...rest} = filters;
-        if (Boolean(from_time || to_time) && !_.some(rest, Boolean)) {
+        if (Boolean(from_time || to_time) && !some_(rest, Boolean)) {
             rest.user = login;
         }
         return {
@@ -170,7 +185,7 @@ export const getOperationsListFiltersParameters_FOR_YTFRONT_2838 = createSelecto
 export const getOperationsListFixedStartedByFilter_FOR_YTFRONT_2838 = createSelector(
     [getOperationsListFilterParameters, getOperationsListFiltersParameters_FOR_YTFRONT_2838],
     (filters, fixedFilters) => {
-        if (_.isEqual(filters, fixedFilters)) {
+        if (isEqual_(filters, fixedFilters)) {
             return undefined;
         }
         return fixedFilters.user;

@@ -1,4 +1,7 @@
-import _ from 'lodash';
+import filter_ from 'lodash/filter';
+import find_ from 'lodash/find';
+import reduce_ from 'lodash/reduce';
+
 import {createSelector} from 'reselect';
 import {getCurrentPool, getIsRoot, getPool, getTree, getTreeResources} from './scheduling';
 
@@ -15,7 +18,7 @@ export const getSchedulingBreadcrumbItems = createSelector(
         while (current) {
             path.push(current);
             const tmp: string = current;
-            const {parent} = _.find(pools, ({name}) => name === tmp) || {};
+            const {parent} = find_(pools, ({name}) => name === tmp) || {};
             current = parent;
         }
         return path.reverse();
@@ -108,11 +111,11 @@ function calcTreeStaticConfigurationByDistributed(
 }
 
 export const getPoolsTopLevel = createSelector([getPools], (pools) => {
-    return _.filter(pools, ({parent}) => parent === ROOT_POOL_NAME);
+    return filter_(pools, ({parent}) => parent === ROOT_POOL_NAME);
 });
 
 const getPoolsAllocatedOperationsCount = createSelector([getPoolsTopLevel], (topPools) => {
-    return _.reduce(
+    return reduce_(
         topPools,
         (acc, item) => {
             acc.maxOperationCount += item.maxOperationCount || 0;

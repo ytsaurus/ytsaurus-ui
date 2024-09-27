@@ -1,4 +1,8 @@
-import _ from 'lodash';
+import compact_ from 'lodash/compact';
+import filter_ from 'lodash/filter';
+import map_ from 'lodash/map';
+import sumBy_ from 'lodash/sumBy';
+
 import hammer from '../../../../common/hammer';
 import {concatByAnd} from '../../../../common/hammer/predicate';
 import {createSelector} from 'reselect';
@@ -8,7 +12,7 @@ import {COMPONENTS_PROXIES_TABLE_ID} from '../../../../constants/components/prox
 const aggregateItems = (proxies, key) => {
     const items = hammer.aggregation.countValues(proxies, key);
 
-    return _.map(items, (count, item) => ({
+    return map_(items, (count, item) => ({
         text: hammer.format['FirstUppercase'](item),
         value: item,
         count,
@@ -25,7 +29,7 @@ const getSelectItems = (allItems, visibleItems, hostFilter, selectFilter) => {
     const allItemsSection = {
         text: 'All',
         value: 'all',
-        count: _.sumBy(items, (item) => item.count),
+        count: sumBy_(items, (item) => item.count),
     };
 
     return [allItemsSection, ...items];
@@ -54,13 +58,13 @@ const getFilteredProxies = createSelector(
 
 function filterProxies(proxies, {hostFilter, stateFilter, roleFilter, bannedFilter}) {
     const bannedFilterAsBool = bannedFilter === 'true';
-    const predicates = _.compact([
+    const predicates = compact_([
         hostFilter ? ({host}) => host?.toLowerCase().startsWith(hostFilter) : undefined,
         stateFilter && stateFilter !== 'all' ? ({state}) => state === stateFilter : undefined,
         roleFilter && roleFilter !== 'all' ? ({role}) => role === roleFilter : undefined,
         bannedFilter !== 'all' ? ({banned}) => banned === bannedFilterAsBool : undefined,
     ]);
-    return predicates.length ? _.filter(proxies, concatByAnd(...predicates)) : proxies;
+    return predicates.length ? filter_(proxies, concatByAnd(...predicates)) : proxies;
 }
 
 const getAllRoles = createSelector([getProxies], (proxy) => aggregateItems(proxy, 'role'));

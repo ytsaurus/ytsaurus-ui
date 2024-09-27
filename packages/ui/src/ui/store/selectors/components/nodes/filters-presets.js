@@ -1,6 +1,6 @@
 import {initialFiltersState} from '../../../../store/reducers/components/nodes/setup/setup';
 import {createSelector} from 'reselect';
-import _ from 'lodash';
+import transform_ from 'lodash/transform';
 import {getTemplates} from '../../../../store/selectors/settings';
 
 const getDefaultPreset = () => ({
@@ -10,7 +10,7 @@ const getDefaultPreset = () => ({
 });
 
 const getSavedPresets = createSelector(getTemplates, (presets = {}) =>
-    _.transform(presets, (res, data, name) => res.push({name, data, isDefault: false}), []),
+    transform_(presets, (res, data, name) => res.push({name, data, isDefault: false}), []),
 );
 
 export const getPresets = createSelector(

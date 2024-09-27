@@ -16,7 +16,7 @@ const b = block('preloader');
 
 const {announcesMailListUrl, sslCertFixUrl} = uiSettings;
 
-export function ConnectionErrorRegion({cluster}) {
+export function ConnectionErrorRegion({cluster = 'Cluster'}) {
     const error = useSelector(getGlobalError);
     const clusterName = cluster.toUpperCase();
 
@@ -92,12 +92,13 @@ export function ConnectionErrorRegion({cluster}) {
                     {announcesMailListUrl && (
                         <Button
                             url={announcesMailListUrl}
-                            text="Subscribe to YT announces"
                             target="_blank"
                             view="action"
                             type="link"
                             size="m"
-                        />
+                        >
+                            Subscribe to YT announces
+                        </Button>
                     )}
                 </React.Fragment>
             )}
@@ -108,10 +109,6 @@ export function ConnectionErrorRegion({cluster}) {
 ConnectionErrorRegion.propTypes = {
     cluster: PropTypes.string,
     puncherUrl: PropTypes.string,
-};
-
-ConnectionErrorRegion.defaultProps = {
-    cluster: 'Cluster',
 };
 
 export default withBlockedNavigation(ConnectionErrorRegion);

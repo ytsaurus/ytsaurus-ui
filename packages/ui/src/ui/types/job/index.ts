@@ -1,5 +1,3 @@
-/* eslint-disable camelcase */
-import * as JOB from '../../constants/job';
 import {Acl, YTError} from '../../types';
 
 export interface RawJobEvent {
@@ -26,6 +24,7 @@ export interface RawJob {
     monitoring_descriptor?: string;
     pool_tree?: string;
     is_stale?: boolean;
+    archive_features?: {has_trace?: boolean};
 }
 
 export type JobState =
@@ -183,47 +182,4 @@ export interface JobSpecification {
     table_reader_options: object;
     user_job_spec: object;
     job_cpu_monitor_config: object;
-}
-
-export interface JobTree {
-    attributes: {
-        name: string;
-        path: string;
-        prefix: string;
-        value?: LeafStatistic;
-    };
-    children: JobTree[];
-    name: string;
-
-    parent?: string;
-    isLeafNode?: boolean;
-
-    readonly _initedBy: string;
-}
-
-export interface JobTreeItem extends JobTree {
-    level: number;
-    key: string;
-}
-
-type TreeStateKeys = keyof typeof JOB.TREE_STATE;
-export type JobTreeState = (typeof JOB.TREE_STATE)[TreeStateKeys];
-
-export interface MetricsEntry {
-    name: string;
-    prefix: string;
-    path: string;
-}
-
-export interface MetricsEntryLeaf extends MetricsEntry {
-    value: LeafStatistic;
-}
-
-export interface MetricsList {
-    children: {
-        [key: string]: MetricsEntry;
-    };
-    leaves: {
-        [key: string]: MetricsEntryLeaf;
-    };
 }

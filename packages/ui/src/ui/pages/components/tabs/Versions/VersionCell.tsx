@@ -1,11 +1,12 @@
 import React from 'react';
-import _ from 'lodash';
 import cn from 'bem-cn-lite';
+
+import indexOf_ from 'lodash/indexOf';
 
 import {Text} from '@gravity-ui/uikit';
 
+import {ClickableText} from '../../../../components/ClickableText/ClickableText';
 import ClipboardButton from '../../../../components/ClipboardButton/ClipboardButton';
-import Link from '../../../../components/Link/Link';
 
 import './VersionCell.scss';
 import {useDispatch} from 'react-redux';
@@ -18,7 +19,7 @@ const block = cn('version-cell');
 const {reHashFromNodeVersion} = uiSettings;
 
 function shortHash(version: string) {
-    const tildaIndex = _.indexOf(version, '~');
+    const tildaIndex = indexOf_(version, '~');
     if (-1 === tildaIndex) {
         return version;
     }
@@ -63,9 +64,9 @@ function VersionCell(props: Props) {
 
     return (
         <React.Fragment>
-            <Link className={block('text')} theme={'primary'} onClick={handleClick}>
+            <ClickableText className={block('text')} color={'primary'} onClick={handleClick}>
                 {versionContent}
-            </Link>
+            </ClickableText>
             <ClipboardButton
                 text={version}
                 shiftText={hashPart}

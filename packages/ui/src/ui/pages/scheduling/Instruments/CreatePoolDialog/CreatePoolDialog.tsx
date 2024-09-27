@@ -1,6 +1,8 @@
 import React, {useCallback, useMemo, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import _ from 'lodash';
+
+import sortedIndexOf_ from 'lodash/sortedIndexOf';
+import isEmpty_ from 'lodash/isEmpty';
 
 import Link from '../../../../components/Link/Link';
 import Error from '../../../../components/Error/Error';
@@ -59,8 +61,6 @@ interface FormValues {
     parent: string;
     responsible: {value: string; id: string | number; title: string};
 }
-
-const NAME_REGEXP = /^[A-Za-z0-9-_]+$/;
 
 function CreatePoolDialog(props: {onClose: () => void}) {
     const dispatch = useDispatch();
@@ -122,15 +122,12 @@ function CreatePoolDialog(props: {onClose: () => void}) {
 
     const validateForm = React.useCallback(
         (values: FormValues): null | {name?: string} => {
-            //const {values} = form.getState();
             const {name} = values;
             const res: Partial<Record<keyof FormValues, string>> = {};
-            if (!NAME_REGEXP.test(name)) {
-                res.name = `the value must match regexp: ${NAME_REGEXP}`;
-            } else if (-1 !== _.sortedIndexOf(sortedFlatTree, name)) {
+            if (-1 !== sortedIndexOf_(sortedFlatTree, name)) {
                 res.name = 'the value must be unique';
             }
-            return _.isEmpty(res) ? null : res;
+            return isEmpty_(res) ? null : res;
         },
         [sortedFlatTree],
     );

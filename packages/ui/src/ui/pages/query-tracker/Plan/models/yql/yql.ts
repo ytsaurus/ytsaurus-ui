@@ -204,6 +204,9 @@ export interface definitions {
         running?: number;
         total?: number;
         stages?: definitions['EntryStringInstant'];
+        remoteData?: {
+            cluster_name?: string;
+        };
     };
     OperationErrorDto: {
         file?: string;

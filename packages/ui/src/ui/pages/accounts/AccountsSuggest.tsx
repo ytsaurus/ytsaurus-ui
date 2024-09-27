@@ -1,6 +1,8 @@
 import React from 'react';
 import {connect} from 'react-redux';
-import _ from 'lodash';
+
+import map_ from 'lodash/map';
+
 import cn from 'bem-cn-lite';
 
 import ErrorBlock from '../../components/Error/Error';
@@ -44,7 +46,7 @@ export function AccountSuggestImpl(props: Props) {
     } = props;
     const value = props.value;
 
-    const options = _.map(items, (item) => ({
+    const options = map_(items, (item) => ({
         value: item,
         text: item,
     }));

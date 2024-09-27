@@ -1,4 +1,9 @@
-import _ from 'lodash';
+import findIndex_ from 'lodash/findIndex';
+import fromPairs_ from 'lodash/fromPairs';
+import map_ from 'lodash/map';
+import mapValues_ from 'lodash/mapValues';
+import reduce_ from 'lodash/reduce';
+
 // @ts-expect-error
 import yt from '@ytsaurus/javascript-wrapper/lib/yt';
 import hammer from '../common/hammer';
@@ -69,8 +74,8 @@ export function prepareAttributes(attributes: any, settings?: UnipikaSettings): 
     };
 
     return Array.isArray(attributes)
-        ? _.map(attributes, prepareAttribute)
-        : _.mapValues(attributes, prepareAttribute);
+        ? map_(attributes, prepareAttribute)
+        : mapValues_(attributes, prepareAttribute);
 }
 
 function normalizeItemWithAttributes(item: any): unknown {
@@ -85,7 +90,7 @@ function normalizeItemWithAttributes(item: any): unknown {
 export function normalizeResponseWithAttributes(data: any): unknown {
     return !Array.isArray(data)
         ? normalizeItemWithAttributes(data)
-        : _.map(data, normalizeItemWithAttributes);
+        : map_(data, normalizeItemWithAttributes);
 }
 
 export function formatCounterName(name: string): string {
@@ -112,7 +117,7 @@ export function computeEffectiveStateProgress(counters): unknown {
     const total = counters.total;
 
     return sortStateProgress(
-        _.map(counters.effectiveStates, (count, state) => {
+        map_(counters.effectiveStates, (count, state) => {
             return {
                 value: total && (count / total) * 100,
                 title: 'State: ' + state,
@@ -183,7 +188,7 @@ export function makeTabProps<TabName extends string>(
 }
 
 export function makeRadioButtonProps(items: string[], allItemValue?: string) {
-    const res = _.map(items, (value) => {
+    const res = map_(items, (value) => {
         return {
             value,
             text: hammer.format['ReadableField'](value),
@@ -216,7 +221,7 @@ export function valueOrDefault<T>(value: T, defaultValue: T): T {
 }
 
 export function prepareTableColumns<T extends {caption?: string}>(columns: Record<string, T>) {
-    return _.reduce(
+    return reduce_(
         columns,
         (preparedColumns, column, name) => {
             preparedColumns[name] = {...column, name, caption: column.caption};
@@ -235,7 +240,7 @@ export function parseBytes(input: string): number {
         const match = input.match(formatRegex)!;
         const value = match[1];
         const dimension = match[3].trim();
-        const dimensionIndex = _.findIndex(
+        const dimensionIndex = findIndex_(
             names,
             (name) => name.toUpperCase() === dimension.toUpperCase(),
         );
@@ -247,8 +252,8 @@ export function parseBytes(input: string): number {
 }
 
 export function parseSortState(stringSortState: string) {
-    const values = _.map(stringSortState.split(','), (value) => value.split(/-(.*)/s));
-    const parsed = _.fromPairs(values);
+    const values = map_(stringSortState.split(','), (value) => value.split(/-(.*)/s));
+    const parsed = fromPairs_(values);
 
     parsed.asc = flags.get(parsed.asc);
 

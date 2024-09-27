@@ -1,8 +1,6 @@
 import React from 'react';
 import cn from 'bem-cn-lite';
 import {useSelector} from 'react-redux';
-import _map from 'lodash/map';
-import _reduce from 'lodash/reduce';
 
 import format from '../../../../../common/hammer/format';
 import ErrorBoundary from '../../../../../components/ErrorBoundary/ErrorBoundary';

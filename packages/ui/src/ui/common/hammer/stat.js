@@ -1,3 +1,7 @@
+import reduce_ from 'lodash/reduce';
+import uniq_ from 'lodash/uniq';
+import countBy_ from 'lodash/countBy';
+
 const MAX_BUCKETS = 20;
 const MIN_BUCKETS = 1;
 const stat = {};
@@ -53,7 +57,7 @@ function findHistogramMedian(histogram) {
         let bucketIndex = 0;
         let partialBucketSum = 0;
 
-        const fullBucketSum = _.reduce(
+        const fullBucketSum = reduce_(
             buckets,
             (memo, bucket) => {
                 memo += bucket;
@@ -87,7 +91,7 @@ function computeHistogramQuartiles(histogram) {
         let bucketIndex = 0;
         let partialBucketSum = 0;
 
-        const fullBucketSum = _.reduce(
+        const fullBucketSum = reduce_(
             buckets,
             (memo, bucket) => {
                 memo += bucket;
@@ -248,8 +252,8 @@ stat.ecdf = function (data) {
     // Sort and copy data
     data = data.slice();
 
-    const condencedData = _.uniq(data).sort(sortNumbers);
-    const dataCounts = _.countBy(data);
+    const condencedData = uniq_(data).sort(sortNumbers);
+    const dataCounts = countBy_(data);
     const n = data.length;
 
     // Calculate min and max

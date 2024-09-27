@@ -1,24 +1,24 @@
 import React, {useState} from 'react';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import PropTypes from 'prop-types';
 import cn from 'bem-cn-lite';
 import unipika from '../../../../../common/thor/unipika';
-import _ from 'lodash';
 
 import ClipboardButton from '../../../../../components/ClipboardButton/ClipboardButton';
 import YqlValue from '../../../../../components/YqlValue/YqlValue';
 import DataTable from '@gravity-ui/react-data-table';
-import {Loader} from '@gravity-ui/uikit';
+import {Button, Flex, Loader, Icon as UIKitIcon} from '@gravity-ui/uikit';
 import copyToClipboard from 'copy-to-clipboard';
-import Icon from '../../../../../components/Icon/Icon';
 import Yson from '../../../../../components/Yson/Yson';
 import Label from '../../../../../components/Label/Label';
-import SchemaDataType from '../../../../../components/SchemaDataType/SchemaDataType';
 import {getSettingTableDisplayRawStrings} from '../../../../../store/selectors/settings';
 import {getSchemaByName} from '../../../../../store/selectors/navigation/tabs/schema';
 
 import './DataTableWrapper.scss';
 import {Tooltip} from '../../../../../components/Tooltip/Tooltip';
+import {Eye} from '@gravity-ui/icons';
+import {showCellPreviewModal} from '../../../../../store/actions/navigation/modals/cell-preview';
+import {prepareColumns} from '../../../../../utils/navigation/prepareColumns';
 
 const dataTableBlock = cn('data-table');
 const block = cn('data-table-wrapper');
@@ -29,7 +29,17 @@ function unquote(string) {
 }
 
 function isValueEmptyOrTruncated(value) {
-    return !value || value?.$incomplete;
+    return !value || isValueTruncated(value);
+}
+
+function isValueTruncated(value) {
+    return value?.$incomplete || getArrayValue(value)?.inc;
+}
+
+function getArrayValue(value) {
+    const candidate = value?.[0];
+
+    return Array.isArray(candidate) ? candidate[0] : candidate;
 }
 
 ColumnCell.propTypes = {
@@ -39,7 +49,15 @@ ColumnCell.propTypes = {
     allowRawStrings: PropTypes.bool,
 };
 
-function ColumnCell({value = null, yqlTypes, ysonSettings, allowRawStrings}) {
+export function ColumnCell({
+    value = null,
+    yqlTypes,
+    ysonSettings,
+    allowRawStrings,
+    rowIndex,
+    columnName,
+}) {
+    const dispatch = useDispatch();
     const [hovered, setHovered] = useState(false);
     const handleMouseEnter = () => setHovered(true);
     const handleMouseLeave = () => setHovered(false);
@@ -98,72 +116,48 @@ function ColumnCell({value = null, yqlTypes, ysonSettings, allowRawStrings}) {
             ) : (
                 visibleValue
             )}
-            {hovered && !isValueEmptyOrTruncated(value) && (
-                <div className={dataTableBlock('clipboard-button-wrapper')}>
-                    <Tooltip
-                        content={
-                            !allowRawCopy ? undefined : (
-                                <span className={block('copy-value-tooltip')}>{copyTooltip}</span>
-                            )
-                        }
-                    >
-                        <ClipboardButton
-                            view="flat-secondary"
-                            size="m"
-                            text={useRawString ? value.$value : unquote(escapedValue)}
-                            onCopy={() => {
-                                if (window.event?.shiftKey && allowRawCopy) {
-                                    copyToClipboard(
-                                        useRawString ? unquote(escapedValue) : value.$value,
-                                    );
+            {hovered && (
+                <div className={dataTableBlock('control-button-wrapper')}>
+                    <Flex alignItems="center">
+                        {!isValueEmptyOrTruncated(value) && (
+                            <Tooltip
+                                content={
+                                    !allowRawCopy ? undefined : (
+                                        <span className={block('copy-value-tooltip')}>
+                                            {copyTooltip}
+                                        </span>
+                                    )
                                 }
-                            }}
-                        />
-                    </Tooltip>
+                            >
+                                <ClipboardButton
+                                    view="flat-secondary"
+                                    size="m"
+                                    text={useRawString ? value.$value : unquote(escapedValue)}
+                                    onCopy={() => {
+                                        if (window.event?.shiftKey && allowRawCopy) {
+                                            copyToClipboard(
+                                                useRawString ? unquote(escapedValue) : value.$value,
+                                            );
+                                        }
+                                    }}
+                                />
+                            </Tooltip>
+                        )}
+                        {isValueTruncated(value) && (
+                            <Button
+                                view="flat-secondary"
+                                size="m"
+                                qa="truncated-preview-button"
+                                onClick={() => dispatch(showCellPreviewModal(columnName, rowIndex))}
+                            >
+                                <UIKitIcon data={Eye} size="12" />
+                            </Button>
+                        )}
+                    </Flex>
                 </div>
             )}
         </div>
     );
-}
-
-function prepareColumns({
-    columns,
-    keyColumns,
-    yqlTypes,
-    ysonSettings,
-    useRawStrings,
-    schemaByName,
-}) {
-    return _.map(columns, (column) => {
-        // eslint-disable-next-line react/prop-types
-        const render = ({value}) => (
-            <ColumnCell
-                allowRawStrings={useRawStrings}
-                value={value}
-                yqlTypes={yqlTypes}
-                ysonSettings={ysonSettings}
-            />
-        );
-        const {sortOrder} = column;
-        const isKeyColumn = keyColumns.indexOf(column.name) > -1;
-        const {type_v3} = schemaByName[column.name] || {};
-        const header = (
-            <Tooltip content={Boolean(type_v3) && <SchemaDataType type_v3={type_v3} />}>
-                <Yson value={unipika.unescapeKeyValue(column.name)} settings={ysonSettings} inline>
-                    {isKeyColumn && (
-                        <Icon
-                            awesome={
-                                sortOrder === 'descending'
-                                    ? 'sort-amount-up'
-                                    : 'sort-amount-down-alt'
-                            }
-                        />
-                    )}
-                </Yson>
-            </Tooltip>
-        );
-        return Object.assign({}, column, {render, header});
-    });
 }
 
 const rowKey = (row, index) => index;

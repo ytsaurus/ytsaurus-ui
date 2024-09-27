@@ -1,4 +1,5 @@
-import _ from 'lodash';
+import sortBy_ from 'lodash/sortBy';
+
 import {createSelector} from 'reselect';
 
 import {createNestedNS, getPath} from '../../../shared/utils/settings';
@@ -62,7 +63,7 @@ export const getLastVisited = createSelector(
 export const getPopular = createSelector(
     getLastVisited,
     // negate count to sort in descending order and make most visited entries come first
-    (lastVisited) => _.sortBy(lastVisited, (entry) => -entry.count),
+    (lastVisited) => sortBy_(lastVisited, (entry) => -entry.count),
 );
 
 export const getFavourites = createSelector(

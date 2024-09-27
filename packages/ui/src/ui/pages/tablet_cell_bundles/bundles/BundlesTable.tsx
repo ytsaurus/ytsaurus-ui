@@ -30,6 +30,7 @@ import {calcProgressProps} from '../../../utils/utils';
 import './BundlesTable.scss';
 import UIFactory from '../../../UIFactory';
 import {ClusterUiConfig} from '../../../../shared/yt-types';
+import {WaitForFont} from '../../../containers/WaitForFont/WaitForFont';
 
 const block = cn('bundles-table');
 
@@ -331,15 +332,17 @@ class BundlesTable extends React.Component<ReduxProps> {
 
         return (
             <div className={block()}>
-                <DataTableYT
-                    loading={loading}
-                    loaded={loaded}
-                    columns={columns}
-                    data={data}
-                    settings={TABLE_SETTINGS}
-                    theme={'bundles-table'}
-                    footerData={data.length ? [total] : undefined}
-                />
+                <WaitForFont>
+                    <DataTableYT
+                        loading={loading}
+                        loaded={loaded}
+                        columns={columns}
+                        data={data}
+                        settings={TABLE_SETTINGS}
+                        theme={'bundles-table'}
+                        footerData={data.length ? [total] : undefined}
+                    />
+                </WaitForFont>
             </div>
         );
     }

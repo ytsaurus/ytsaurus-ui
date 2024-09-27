@@ -1,4 +1,8 @@
-import _ from 'lodash';
+import filter_ from 'lodash/filter';
+import find_ from 'lodash/find';
+import map_ from 'lodash/map';
+import reduce_ from 'lodash/reduce';
+
 import hammer from '../../../common/hammer';
 import {createSelector} from 'reselect';
 import {getCluster} from '../../../store/selectors/global';
@@ -57,7 +61,7 @@ export const getPoolChildrenSortState = (state: RootState) =>
 
 export const getPoolsNames = createSelector(
     getSchedulingAttributesToFilter,
-    (pools): Array<string> => _.map(pools, (_v, name) => name).sort(),
+    (pools): Array<string> => map_(pools, (_v, name) => name).sort(),
 );
 
 const DETAILS_CONTENT_MODES = {
@@ -76,14 +80,14 @@ export const getContentMode = createSelector([getContentModeRaw], (mode) => {
 export const getIsRoot = createSelector(getPool, (pool) => pool === ROOT_POOL_NAME);
 
 export const getTreesSelectItems = createSelector(getTrees, (trees) =>
-    _.map(trees, (tree) => ({
+    map_(trees, (tree) => ({
         value: tree,
         text: hammer.format['Readable'](tree) as string,
     })),
 );
 
 export const getPoolsSelectItems = createSelector(getPoolsNames, (pools) => {
-    const items = _.map(pools, (pool) => ({
+    const items = map_(pools, (pool) => ({
         value: pool,
         text: pool,
     }));
@@ -92,7 +96,7 @@ export const getPoolsSelectItems = createSelector(getPoolsNames, (pools) => {
 });
 
 export const getCurrentPool = createSelector([getPool, getPools], (pool, pools) =>
-    _.find(pools, (item) => item.name === pool),
+    find_(pools, (item) => item.name === pool),
 );
 
 export const getPoolIsEphemeral = createSelector([getCurrentPool], (currentPool) => {
@@ -164,7 +168,7 @@ export const getSchedulingOverviewMaxDepth = createSelector(
     [getTableItems, getExpandedPoolsLoadAll, getTree, getSchedulingOperationsExpandedPools],
     (items: Array<{level: number; name: string}>, allExpanded, tree, expandedPoolsMap) => {
         if (allExpanded) {
-            return _.reduce(
+            return reduce_(
                 items,
                 (acc, item) => {
                     const {level = 0} = item || {};
@@ -179,7 +183,7 @@ export const getSchedulingOverviewMaxDepth = createSelector(
             return 0;
         }
 
-        return _.reduce(
+        return reduce_(
             items,
             (acc, item) => {
                 if (expandedPools.has(item.name)) {
@@ -240,7 +244,7 @@ export const getPollChildrenTableItems = createSelector(
         }
 
         return extras.concat(
-            _.map(sortedPoolChildren, (item) => {
+            map_(sortedPoolChildren, (item) => {
                 return Object.assign({}, item, {isChildPool});
             }),
         );
@@ -271,7 +275,7 @@ export function calculatePoolPath(pool: string, pools: Array<PoolInfo>, tree: st
             path.push(current);
         }
         const tmp = current;
-        const {parent} = _.find(pools, ({name}) => name === tmp) || {};
+        const {parent} = find_(pools, ({name}) => name === tmp) || {};
         current = parent || '';
     }
     const pathStr = !path.length ? '' : '/' + path.reverse().join('/');
@@ -339,6 +343,6 @@ export const getSchedulingSourcesOfEditItemSkipParent = createSelector(
             return sources;
         }
 
-        return _.filter(sources, (item) => item !== pool.parent);
+        return filter_(sources, (item) => item !== pool.parent);
     },
 );

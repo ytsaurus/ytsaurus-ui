@@ -1,7 +1,11 @@
 import React, {useCallback, useMemo} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import cn from 'bem-cn-lite';
-import _ from 'lodash';
+
+import isEmpty_ from 'lodash/isEmpty';
+import pick_ from 'lodash/pick';
+import pickBy_ from 'lodash/pickBy';
+
 import {DialogField, FormApi, YTDFDialog} from '../../../../components/Dialog/Dialog';
 import Error from '../../../../components/Error/Error';
 
@@ -55,7 +59,7 @@ function makePermissionWarning(visible: boolean) {
 }
 
 function makeError(error: any) {
-    return _.isEmpty(error) ? null : <Error className={block('error')} error={error} />;
+    return isEmpty_(error) ? null : <Error className={block('error')} error={error} />;
 }
 
 export interface PoolEditorFormValues {
@@ -123,10 +127,10 @@ export function PoolEditorDialog() {
                 values;
             const data = {
                 general: {
-                    ..._.pick(general, ['name', 'mode']),
+                    ...pick_(general, ['name', 'mode']),
                     weight: general.weight.value,
-                    ..._.pickBy(
-                        _.pick(general, Object.keys(POOL_GENERAL_TYPE_TO_ATTRIBUTE)),
+                    ...pickBy_(
+                        pick_(general, Object.keys(POOL_GENERAL_TYPE_TO_ATTRIBUTE)),
                         (item: {limit: number}, k) => {
                             if (!item) {
                                 return false;
@@ -137,8 +141,8 @@ export function PoolEditorDialog() {
                         },
                     ),
                 },
-                resourceGuarantee: _.pickBy(
-                    _.pick(resourceGuarantee, Object.keys(POOL_STRONG_RESOURCE_TYPE_TO_ATTRIBUTE)),
+                resourceGuarantee: pickBy_(
+                    pick_(resourceGuarantee, Object.keys(POOL_STRONG_RESOURCE_TYPE_TO_ATTRIBUTE)),
                     (item: {limit: number}, k) => {
                         if (!item) {
                             return false;
@@ -148,8 +152,8 @@ export function PoolEditorDialog() {
                         return item.limit !== initialValue;
                     },
                 ),
-                integralGuarantee: _.pickBy(
-                    _.pick(integralGuarantee, Object.keys(POOL_INTEGRAL_GUARANTEE_FIELD_TO_ATTR)),
+                integralGuarantee: pickBy_(
+                    pick_(integralGuarantee, Object.keys(POOL_INTEGRAL_GUARANTEE_FIELD_TO_ATTR)),
                     (item, k) => {
                         if (!item) {
                             return false;
@@ -163,8 +167,8 @@ export function PoolEditorDialog() {
                         }
                     },
                 ),
-                resourceLimits: _.pick(resourceLimits, ['cpu', 'gpu', 'memory', 'userSlots']),
-                otherSettings: _.pick(otherSettings, [
+                resourceLimits: pick_(resourceLimits, ['cpu', 'gpu', 'memory', 'userSlots']),
+                otherSettings: pick_(otherSettings, [
                     'forbidImmediateOperations',
                     'fifoSortParams',
                     'createEphemeralSubpools',

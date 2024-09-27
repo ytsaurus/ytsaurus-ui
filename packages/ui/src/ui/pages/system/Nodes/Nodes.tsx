@@ -1,38 +1,43 @@
-import React, {Component} from 'react';
-import {ConnectedProps, connect, useSelector} from 'react-redux';
 import cn from 'bem-cn-lite';
 import map_ from 'lodash/map';
+import React, {useState} from 'react';
+import {ConnectedProps, connect, useSelector} from 'react-redux';
+
+import {UI_COLLAPSIBLE_SIZE} from '../../../constants/global';
 
 import format from '../../../common/hammer/format';
 
+import {ExpandButton} from '../../../components/ExpandButton';
 import {CollapsibleSectionStateLess} from '../../../components/CollapsibleSection/CollapsibleSection';
-import {NoContent} from '../../../components/NoContent/NoContent';
 import Link from '../../../components/Link/Link';
+import {NoContent} from '../../../components/NoContent/NoContent';
 
 import SystemStateOverview from '../SystemStateOverview/SystemStateOverview';
 
-import {loadSystemNodes} from '../../../store/actions/system/nodes';
-import {getCluster} from '../../../store/selectors/global';
+import {useMemoizedIfEqual, useUpdater} from '../../../hooks/use-updater';
 import {setSettingsSystemNodesCollapsed} from '../../../store/actions/settings/settings';
+import {loadSystemNodes} from '../../../store/actions/system/nodes';
+import {RoleGroupInfo} from '../../../store/reducers/system/proxies';
+
+import {getCluster} from '../../../store/selectors/global';
+import type {RootState} from '../../../store/reducers';
+
 import {
     getSettingSystemNodesNodeType,
     getSettingsSystemNodesCollapsed,
 } from '../../../store/selectors/settings-ts';
-import type {RootState} from '../../../store/reducers';
+import {getSystemNodesNodeTypesToLoad} from '../../../store/selectors/system/nodes';
+import {useThunkDispatch} from '../../../store/thunkDispatch';
 import {
     ComponentsNodesLinkParams,
     makeComponentsNodesLink,
 } from '../../../utils/components/nodes/node';
-import {useMemoizedIfEqual, useUpdater} from '../../../hooks/use-updater';
-import {useThunkDispatch} from '../../../store/thunkDispatch';
-import {getSystemNodesNodeTypesToLoad} from '../../../store/selectors/system/nodes';
 
-import {MakeUrlParams, RoleGroup, RoleGroupsContainer} from '../Proxies/RoleGroup';
+import {MakeUrlParams, RoleGroup, RoleGroupsContainer} from '../ProxiesImpl/RoleGroup';
 
 import {SystemNodeTypeSelector} from './NodeTypeSelector';
 
 import './Nodes.scss';
-import {UI_COLLAPSIBLE_SIZE} from '../../../constants/global';
 
 const block = cn('system-nodes');
 
@@ -43,14 +48,132 @@ const STATE_THEME_MAPPING = {
 
 type ReduxProps = ConnectedProps<typeof connector>;
 
-class Nodes extends Component<ReduxProps> {
-    onToggle = () => {
-        const {collapsed, setSettingsSystemNodesCollapsed} = this.props;
-        setSettingsSystemNodesCollapsed(!collapsed);
+function RackGroup({
+    name: groupName,
+    data: roleGroup,
+    counters,
+    makeComponentNodesUrl,
+    makeRoleGroupUrl,
+}: {
+    name: string;
+    data: Array<RoleGroupInfo>;
+    counters: NodesProps['counters'];
+    makeComponentNodesUrl: typeof makeComponentsNodesLink;
+    makeRoleGroupUrl: (params?: MakeUrlParams) => string;
+}) {
+    const [expandAll, setExpandAll] = useState(false);
+
+    const headingCN = cn('elements-heading')({
+        size: 's',
+        overview: 'yes',
+    });
+
+    return (
+        <div key={groupName} className={block()}>
+            <div className={block('group-summary', headingCN)}>
+                <Link
+                    theme="primary"
+                    url={makeComponentsNodesLink({
+                        rackFilter: groupName,
+                    })}
+                >
+                    {groupName}
+                </Link>
+                <ExpandButton
+                    className={block('expand-btn')}
+                    expanded={expandAll}
+                    toggleExpanded={() => setExpandAll(!expandAll)}
+                    all
+                    showText
+                />
+                <SystemStateOverview
+                    counters={counters?.[groupName]}
+                    stateThemeMappings={STATE_THEME_MAPPING}
+                    tab="nodes"
+                    makeUrl={(params) => {
+                        return makeComponentNodesUrl({
+                            rackFilter: groupName,
+                            ...params,
+                        });
+                    }}
+                />
+            </div>
+            <RoleGroupsContainer>
+                {map_(roleGroup, (group) => {
+                    return (
+                        <RoleGroup
+                            key={group.name}
+                            data={group}
+                            makeUrl={makeRoleGroupUrl}
+                            showFlags
+                            forceExpand={expandAll}
+                        />
+                    );
+                })}
+            </RoleGroupsContainer>
+        </div>
+    );
+}
+
+type NodesProps = ReduxProps;
+
+const Nodes = (props: NodesProps) => {
+    const onToggle = () => {
+        const {collapsed} = props;
+        props.setSettingsSystemNodesCollapsed(!collapsed);
     };
 
-    renderContent() {
-        const {nodeType, roleGroups, cluster} = this.props;
+    const {nodeType, cluster} = props;
+
+    const makeRoleGroupUrl = (params?: MakeUrlParams) => {
+        const {name, state: s, flag: f} = params ?? {};
+
+        const stateAsOthers = s === 'others' ? '!online,!offline' : undefined;
+        const state = s === 'online' || s === 'offline' ? s : stateAsOthers;
+
+        const flags = s === 'banned' ? ['banned' as const] : [f, '!banned' as const];
+
+        const p: ComponentsNodesLinkParams = {
+            cluster,
+            rackSelected: name ? [name] : undefined,
+            nodeTypes: nodeType,
+            state,
+        };
+
+        flags.forEach((flag) => {
+            if (flag === '!banned') {
+                Object.assign(p, {banned: 'disabled'});
+            } else if (flag) {
+                Object.assign(p, {[flag]: 'enabled'});
+            }
+        });
+
+        return makeComponentsNodesLink(p);
+    };
+
+    const makeComponentNodesUrl: typeof makeComponentsNodesLink = (params) => {
+        return makeComponentsNodesLink({cluster, nodeTypes: nodeType, ...params});
+    };
+
+    const renderOverview = () => {
+        const {overviewCounters} = props;
+
+        return (
+            <React.Fragment>
+                <div className={block('node-type')}>
+                    <SystemNodeTypeSelector />
+                </div>
+                <SystemStateOverview
+                    counters={overviewCounters}
+                    stateThemeMappings={STATE_THEME_MAPPING}
+                    tab="nodes"
+                />
+            </React.Fragment>
+        );
+    };
+
+    const renderContent = () => {
+        const {roleGroups} = props;
 
         const rackNames = Object.keys(roleGroups ?? {});
 
@@ -67,106 +190,23 @@ class Nodes extends Component<ReduxProps> {
             );
         }
 
-        const {counters} = this.props;
-
-        const headingCN = cn('elements-heading')({
-            size: 's',
-            overview: 'yes',
-        });
+        const {counters} = props;
 
         return map_(roleGroups, (roleGroup, groupName) => {
-            return !roleGroup ? null : (
-                <div key={groupName} className={block()}>
-                    {rackNames.length > 1 && (
-                        <div className={block('group-summary', headingCN)}>
-                            <Link
-                                theme="primary"
-                                url={makeComponentsNodesLink({
-                                    cluster,
-                                    rackFilter: groupName,
-                                    nodeTypes: nodeType,
-                                })}
-                            >
-                                {groupName}
-                            </Link>
-                            <SystemStateOverview
-                                counters={counters?.[groupName]}
-                                stateThemeMappings={STATE_THEME_MAPPING}
-                                tab="nodes"
-                                makeUrl={(params) => {
-                                    return this.makeComponentNodesUrl({
-                                        rackFilter: groupName,
-                                        ...params,
-                                    });
-                                }}
-                            />
-                        </div>
-                    )}
-                    <RoleGroupsContainer>
-                        {map_(roleGroup, (group) => {
-                            return (
-                                <RoleGroup
-                                    key={group.name}
-                                    data={group}
-                                    makeUrl={this.makeRoleGroupUrl}
-                                    showFlags
-                                />
-                            );
-                        })}
-                    </RoleGroupsContainer>
-                </div>
+            return (
+                <RackGroup
+                    name={groupName}
+                    data={roleGroup}
+                    counters={counters}
+                    makeRoleGroupUrl={makeRoleGroupUrl}
+                    makeComponentNodesUrl={makeComponentNodesUrl}
+                />
             );
         });
-    }
-
-    makeRoleGroupUrl = (params?: MakeUrlParams) => {
-        const {nodeType, cluster} = this.props;
-
-        const {name, state: s, flag: f} = params ?? {};
-
-        const stateAsOthers = s === 'others' ? '!online,!offline' : undefined;
-        const state = s === 'online' || s === 'offline' ? s : stateAsOthers;
-
-        const flag = s === 'banned' ? 'banned' : f;
-
-        const p: ComponentsNodesLinkParams = {
-            cluster,
-            rackSelected: name ? [name] : undefined,
-            nodeTypes: nodeType,
-            state,
-        };
-
-        if (flag) {
-            Object.assign(p, {[flag]: 'enabled'});
-        }
-
-        return makeComponentsNodesLink(p);
     };
 
-    makeComponentNodesUrl: typeof makeComponentsNodesLink = (params) => {
-        const {cluster, nodeType} = this.props;
-        return makeComponentsNodesLink({cluster, nodeTypes: nodeType, ...params});
-    };
-
-    renderOverview() {
-        const {overviewCounters} = this.props;
-
-        return (
-            <React.Fragment>
-                <div className={block('node-type')}>
-                    <SystemNodeTypeSelector />
-                </div>
-                <SystemStateOverview
-                    counters={overviewCounters}
-                    stateThemeMappings={STATE_THEME_MAPPING}
-                    tab="nodes"
-                />
-            </React.Fragment>
-        );
-    }
-
-    renderImpl() {
-        const {roleGroups, loaded, collapsed} = this.props;
+    const renderImpl = () => {
+        const {roleGroups, loaded, collapsed} = props;
 
         if (!loaded && !roleGroups) {
             return null;
@@ -174,26 +214,24 @@ class Nodes extends Component<ReduxProps> {
 
         return (
             <CollapsibleSectionStateLess
-                overview={this.renderOverview()}
+                overview={renderOverview()}
                 collapsed={collapsed}
-                onToggle={this.onToggle}
+                onToggle={onToggle}
                 name={'Nodes'}
                 size={UI_COLLAPSIBLE_SIZE}
             >
-                {this.renderContent()}
+                {renderContent()}
             </CollapsibleSectionStateLess>
         );
-    }
+    };
 
-    render() {
-        return (
-            <React.Fragment>
-                <NodesUpdater />
-                {this.renderImpl()}
-            </React.Fragment>
-        );
-    }
-}
+    return (
+        <React.Fragment>
+            <NodesUpdater />
+            {renderImpl()}
+        </React.Fragment>
+    );
+};
 
 function mapStateToProps(state: RootState) {
     const {roleGroups, counters, loaded, overviewCounters} = state.system.nodes;

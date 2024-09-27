@@ -1,6 +1,7 @@
 import React from 'react';
 import {connect, useSelector} from 'react-redux';
-import _ from 'lodash';
+
+import isEmpty_ from 'lodash/isEmpty';
 
 import ErrorBoundary from '../../../../../components/ErrorBoundary/ErrorBoundary';
 import {NoContent} from '../../../../../components/NoContent/NoContent';
@@ -34,7 +35,7 @@ function PoolAcl() {
         );
     }
 
-    return _.isEmpty(pools) ? null : (
+    return isEmpty_(pools) ? null : (
         <ErrorBoundary>
             <PoolAclPanel key={`${tree}_${pool}`} path={pool} poolTree={tree} />
         </ErrorBoundary>

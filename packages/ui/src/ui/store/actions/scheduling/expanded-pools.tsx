@@ -1,6 +1,8 @@
 import {ThunkAction} from 'redux-thunk';
 import {RootState} from '../../reducers';
-import _ from 'lodash';
+
+import forEach_ from 'lodash/forEach';
+import reduce_ from 'lodash/reduce';
 
 import {Toaster} from '@gravity-ui/uikit';
 
@@ -142,7 +144,7 @@ export function loadExpandedPools(tree: string): ExpandedPoolsThunkAction {
                     } else {
                         new Toaster().add({
                             name: 'schedulingPoolFullPath',
-                            type: 'error',
+                            theme: 'danger',
                             title: '',
                         });
                     }
@@ -261,7 +263,7 @@ function loadExpandedOperationsAndPools(tree: string): ExpandedPoolsThunkAction 
                     error,
                     USE_IGNORE_NODE_DOES_NOT_EXIST,
                 );
-                const rawOperations = _.reduce(
+                const rawOperations = reduce_(
                     operations,
                     (acc, data) => {
                         return Object.assign(acc, data);
@@ -270,7 +272,7 @@ function loadExpandedOperationsAndPools(tree: string): ExpandedPoolsThunkAction 
                 );
 
                 const poolsToCollapse: Record<string, false> = {};
-                _.forEach(errorIgnoredIndices, (pos) => {
+                forEach_(errorIgnoredIndices, (pos) => {
                     poolsToCollapse[operationsExpandedPools[pos]] = false;
                 });
 
@@ -330,7 +332,7 @@ function loadExpandedOperationsAndPools(tree: string): ExpandedPoolsThunkAction 
                         });
                     });
 
-                    _.forEach(
+                    forEach_(
                         [
                             ...poolsReqeustsIgnored,
                             ...poolsChildrenRequestsIgnored,
@@ -382,7 +384,7 @@ export function setExpandedPools(changes: Record<string, boolean>): ExpandedPool
         const poolsByName = getSchedulingPoolsMapByName(state);
 
         const treeExpandedPools = new Map(expandedPools[tree]);
-        _.forEach(changes, (expanded, poolName) => {
+        forEach_(changes, (expanded, poolName) => {
             if (expanded) {
                 const expandedPoolInfo = calcExpandedPoolInfo(poolName, poolsByName);
                 treeExpandedPools.set(poolName, expandedPoolInfo);

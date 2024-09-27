@@ -1,4 +1,8 @@
-import _ from 'lodash';
+import filter_ from 'lodash/filter';
+import forEach_ from 'lodash/forEach';
+import keys_ from 'lodash/keys';
+import map_ from 'lodash/map';
+import sortBy_ from 'lodash/sortBy';
 
 import ypath from '../../../../../common/thor/ypath';
 import UIFactory from '../../../../../UIFactory';
@@ -20,16 +24,16 @@ function prepareFile(file: unknown) {
 }
 
 function prepareMeta(meta: Record<string, unknown>) {
-    const prepared = _.map(meta, (value, name) => ({name, value}));
+    const prepared = map_(meta, (value, name) => ({name, value}));
 
-    return _.sortBy(prepared, 'name');
+    return sortBy_(prepared, 'name');
 }
 
 function prepareStartedBy(operation: DetailedOperationSelector) {
     const startedBy = ypath.getValue(operation, '/@spec/started_by');
     const command = ypath.getValue(startedBy, '/command') || [];
 
-    const fields = _.filter(prepareMeta(startedBy), (option) => option.name !== 'command');
+    const fields = filter_(prepareMeta(startedBy), (option) => option.name !== 'command');
 
     if (fields.length || command.length) {
         return {
@@ -164,12 +168,14 @@ function prepareTable(
     userTransactionAlive: boolean,
     index?: number | string,
 ) {
-    const path = ypath.getValue(table);
+    const path: string = ypath.getValue(table);
+    const cluster: string | undefined = ypath.getValue(table, '/@cluster');
     const originalPath = ypath.getValue(table, '/@original_path');
     const transaction = prepareTransaction(operation, type, table, userTransactionAlive);
 
     return {
         path,
+        ...(cluster ? {cluster} : {}),
         originalPath,
         transaction,
         livePreview: prepareLivePreview(operation, type, index),
@@ -182,23 +188,33 @@ function prepareTable(
     };
 }
 
-function groupTables<T extends {path: string; transaction?: string}>(tables: Array<T>) {
-    const group: Array<{path: string; name?: string; isFolder?: boolean; transaction?: string}> =
-        [];
-    let currentFolder: string;
+function groupTables<T extends {path: string; transaction?: string; cluster?: string}>(
+    tables: Array<T>,
+) {
+    const group: Array<{
+        path: string;
+        name?: string;
+        isFolder?: boolean;
+        transaction?: string;
+        cluster?: string;
+    }> = [];
+    let currentGroup: string;
 
-    _.each(tables, (table) => {
+    forEach_(tables, (table) => {
         try {
+            const {cluster} = table;
             const path = ypath.YPath.create(table.path, 'absolute');
             const name = path.getKey();
-            const folder: string = path.toSubpath(-2).stringify();
+            const folder = path.toSubpath(-2).stringify();
+            const groupKey: string = cluster ? `${cluster}:${folder}` : folder;
 
-            if (currentFolder !== folder) {
-                currentFolder = folder;
+            if (currentGroup !== groupKey) {
+                currentGroup = groupKey;
                 group.push({
                     path: folder,
                     transaction: table.transaction,
                     isFolder: true,
+                    ...(cluster ? {cluster} : {}),
                 });
             }
 
@@ -216,7 +232,7 @@ function prepareRemoteInput<T extends {path: string; transaction?: string}>(
     cluster: string,
 ) {
     if (cluster) {
-        return _.map(input, (item) => ({
+        return map_(input, (item) => ({
             ...item,
             remote: true,
             url: genNavigationUrl({cluster, ...item}),
@@ -245,7 +261,7 @@ function prepareInput(operation: DetailedOperationSelector, userTransactionAlive
             const typedTables = ypath.get(operation.$typedAttributes, '/spec/input_table_paths');
 
             tables = ypath.get(operation, '/@spec/input_table_paths');
-            tables = _.map(tables, (table, index) =>
+            tables = map_(tables, (table, index) =>
                 prepareTable(operation, TYPE, table, typedTables[index], userTransactionAlive),
             );
             break;
@@ -293,7 +309,7 @@ function prepareOutput(operation: DetailedOperationSelector, userTransactionAliv
             const typedTables = ypath.get(operation.$typedAttributes, '/spec/input_table_paths');
 
             tables = ypath.get(operation, '/@spec/output_table_paths');
-            tables = _.map(tables, (table, index) =>
+            tables = map_(tables, (table, index) =>
                 prepareTable(
                     operation,
                     TYPE,
@@ -352,7 +368,7 @@ function prepareScript(operation: DetailedOperationSelector, type: string) {
         const command = ypath.getValue(script, '/command');
         const className = ypath.getValue(script, '/class_name');
         const jobCount = ypath.getValue(script, '/job_count');
-        const files = _.map(ypath.getValue(script, '/file_paths'), prepareFile);
+        const files = map_(ypath.getValue(script, '/file_paths'), prepareFile);
 
         if (command || className || jobCount || files?.length || environment?.length) {
             return {
@@ -376,9 +392,7 @@ function prepareTasks(operation: DetailedOperationSelector) {
     const tasks = ypath.getValue(operation, '/@spec/tasks');
 
     if (tasks) {
-        return _.map(_.keys(tasks), (taskName) =>
-            prepareScript(operation, TASKS_PREFIX + taskName),
-        );
+        return map_(keys_(tasks), (taskName) => prepareScript(operation, TASKS_PREFIX + taskName));
     }
 
     return undefined;
@@ -418,7 +432,7 @@ export function prepareSpecification(
 }
 
 export function prepareVisibleItems<T extends {isFolder?: boolean}>(items: Array<T>) {
-    return _.filter(items, (item) => !item.isFolder);
+    return filter_(items, (item) => !item.isFolder);
 }
 
 export function filterVisibleItems<T extends {isFolder?: boolean}>(

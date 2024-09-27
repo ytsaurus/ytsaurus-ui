@@ -1,5 +1,7 @@
 import {APPLY_SETUP} from '../../../../../constants/components/nodes/nodes';
-import _ from 'lodash';
+
+import cloneDeep_ from 'lodash/cloneDeep';
+import merge_ from 'lodash/merge';
 
 import type {applyPreset} from '../../../../../store/actions/components/nodes/nodes';
 
@@ -130,79 +132,79 @@ export const initialFiltersState: NodesSetupState = {
         alertCount: 'all',
     },
     storage: {
-        sessions: _.cloneDeep(groupFilterInitialState),
-        chunks: _.cloneDeep(groupFilterInitialState),
+        sessions: cloneDeep_(groupFilterInitialState),
+        chunks: cloneDeep_(groupFilterInitialState),
 
-        spaceUsed: _.cloneDeep(groupFilterInitialState),
-        spaceTotal: _.cloneDeep(groupFilterInitialState),
+        spaceUsed: cloneDeep_(groupFilterInitialState),
+        spaceTotal: cloneDeep_(groupFilterInitialState),
 
-        ioDefault: _.cloneDeep(groupFilterInitialState),
-        ioCache: _.cloneDeep(groupFilterInitialState),
-        ioSsdBlobs: _.cloneDeep(groupFilterInitialState),
-        ioSsdJournals: _.cloneDeep(groupFilterInitialState),
+        ioDefault: cloneDeep_(groupFilterInitialState),
+        ioCache: cloneDeep_(groupFilterInitialState),
+        ioSsdBlobs: cloneDeep_(groupFilterInitialState),
+        ioSsdJournals: cloneDeep_(groupFilterInitialState),
     },
     cpu: {
-        blobSession: _.cloneDeep(groupFilterInitialState),
-        blockCache: _.cloneDeep(groupFilterInitialState),
-        chunkBlockMeta: _.cloneDeep(groupFilterInitialState),
-        chunkMeta: _.cloneDeep(groupFilterInitialState),
-        footprint: _.cloneDeep(groupFilterInitialState),
-        query: _.cloneDeep(groupFilterInitialState),
-        systemJobs: _.cloneDeep(groupFilterInitialState),
-        versionedChunkMeta: _.cloneDeep(groupFilterInitialState),
+        blobSession: cloneDeep_(groupFilterInitialState),
+        blockCache: cloneDeep_(groupFilterInitialState),
+        chunkBlockMeta: cloneDeep_(groupFilterInitialState),
+        chunkMeta: cloneDeep_(groupFilterInitialState),
+        footprint: cloneDeep_(groupFilterInitialState),
+        query: cloneDeep_(groupFilterInitialState),
+        systemJobs: cloneDeep_(groupFilterInitialState),
+        versionedChunkMeta: cloneDeep_(groupFilterInitialState),
 
-        tabletDynamicUsed: _.cloneDeep(groupFilterInitialState),
-        tabletDynamicTotal: _.cloneDeep(groupFilterInitialState),
+        tabletDynamicUsed: cloneDeep_(groupFilterInitialState),
+        tabletDynamicTotal: cloneDeep_(groupFilterInitialState),
 
-        tabletStaticUsed: _.cloneDeep(groupFilterInitialState),
-        tabletStaticTotal: _.cloneDeep(groupFilterInitialState),
+        tabletStaticUsed: cloneDeep_(groupFilterInitialState),
+        tabletStaticTotal: cloneDeep_(groupFilterInitialState),
 
-        userJobsUsed: _.cloneDeep(groupFilterInitialState),
-        userJobsTotal: _.cloneDeep(groupFilterInitialState),
+        userJobsUsed: cloneDeep_(groupFilterInitialState),
+        userJobsTotal: cloneDeep_(groupFilterInitialState),
     },
     resources: {
-        userSlotsUsed: _.cloneDeep(groupFilterInitialState),
-        userSlotsTotal: _.cloneDeep(groupFilterInitialState),
+        userSlotsUsed: cloneDeep_(groupFilterInitialState),
+        userSlotsTotal: cloneDeep_(groupFilterInitialState),
 
-        sealSlotsUsed: _.cloneDeep(groupFilterInitialState),
-        sealSlotsTotal: _.cloneDeep(groupFilterInitialState),
+        sealSlotsUsed: cloneDeep_(groupFilterInitialState),
+        sealSlotsTotal: cloneDeep_(groupFilterInitialState),
 
-        repairSlotsUsed: _.cloneDeep(groupFilterInitialState),
-        repairSlotsTotal: _.cloneDeep(groupFilterInitialState),
+        repairSlotsUsed: cloneDeep_(groupFilterInitialState),
+        repairSlotsTotal: cloneDeep_(groupFilterInitialState),
 
-        removalSlotsUsed: _.cloneDeep(groupFilterInitialState),
-        removalSlotsTotal: _.cloneDeep(groupFilterInitialState),
+        removalSlotsUsed: cloneDeep_(groupFilterInitialState),
+        removalSlotsTotal: cloneDeep_(groupFilterInitialState),
 
-        replicationSlotsUsed: _.cloneDeep(groupFilterInitialState),
-        replicationSlotsTotal: _.cloneDeep(groupFilterInitialState),
+        replicationSlotsUsed: cloneDeep_(groupFilterInitialState),
+        replicationSlotsTotal: cloneDeep_(groupFilterInitialState),
     },
     tablets: {
-        all: _.cloneDeep(groupFilterInitialState),
+        all: cloneDeep_(groupFilterInitialState),
 
-        none: _.cloneDeep(groupFilterInitialState),
-        leading: _.cloneDeep(groupFilterInitialState),
-        following: _.cloneDeep(groupFilterInitialState),
-        followerRecovery: _.cloneDeep(groupFilterInitialState),
-        leaderRecovery: _.cloneDeep(groupFilterInitialState),
-        stopped: _.cloneDeep(groupFilterInitialState),
-        elections: _.cloneDeep(groupFilterInitialState),
+        none: cloneDeep_(groupFilterInitialState),
+        leading: cloneDeep_(groupFilterInitialState),
+        following: cloneDeep_(groupFilterInitialState),
+        followerRecovery: cloneDeep_(groupFilterInitialState),
+        leaderRecovery: cloneDeep_(groupFilterInitialState),
+        stopped: cloneDeep_(groupFilterInitialState),
+        elections: cloneDeep_(groupFilterInitialState),
 
-        staticUsed: _.cloneDeep(groupFilterInitialState),
-        staticTotal: _.cloneDeep(groupFilterInitialState),
+        staticUsed: cloneDeep_(groupFilterInitialState),
+        staticTotal: cloneDeep_(groupFilterInitialState),
 
-        dynamicUsed: _.cloneDeep(groupFilterInitialState),
-        dynamicTotal: _.cloneDeep(groupFilterInitialState),
+        dynamicUsed: cloneDeep_(groupFilterInitialState),
+        dynamicTotal: cloneDeep_(groupFilterInitialState),
     },
 };
 
 // We need default filters state for the 'All' filter preset.
 // redux-location-state changes the initialState when query string is not empty.
-export const initialState = _.cloneDeep(initialFiltersState);
+export const initialState = cloneDeep_(initialFiltersState);
 
 export default (state = initialState, action: NodesSetupAction) => {
     switch (action.type) {
         case APPLY_SETUP: {
-            return _.merge({}, state, action.data);
+            return merge_({}, state, action.data);
         }
         default:
             return state;

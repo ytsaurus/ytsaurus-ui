@@ -49,6 +49,7 @@ export interface ElementsTableHeaderProps {
 
     itemHeight?: number;
     selectedIndex?: number;
+    headerClassName?: string;
 }
 
 interface ColumnsItem {
@@ -139,6 +140,7 @@ export default class ElementsTableHeader extends Component<ElementsTableHeaderPr
         itemHeight: PropTypes.number,
         // ROW SELECTION
         selectedIndex: PropTypes.number,
+        headerClassName: PropTypes.string,
     };
 
     constructor(props: ElementsTableHeaderProps) {
@@ -203,7 +205,7 @@ export default class ElementsTableHeader extends Component<ElementsTableHeaderPr
     }
 
     renderSortableHeaderCaption(columnName: string) {
-        const className = block('yc-link')({view: 'primary'});
+        const className = block('g-link')({view: 'primary'});
         const {sortState, onSort} = this.props;
 
         const {sortWithUndefined, allowedOrderTypes} = this.state.columnItems[columnName];
@@ -339,7 +341,7 @@ export default class ElementsTableHeader extends Component<ElementsTableHeaderPr
     render() {
         const {columnSet} = this.state;
         const hasGroups = columnSet.hasGroups;
-        const headerClassName = b('head');
+        const headerClassName = b('head', this.props.headerClassName);
 
         return hasGroups ? (
             <thead className={headerClassName}>

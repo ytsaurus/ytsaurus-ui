@@ -1,7 +1,7 @@
 import React from 'react';
 import cn from 'bem-cn-lite';
-import min from 'lodash/min';
-import max from 'lodash/max';
+import min_ from 'lodash/min';
+import max_ from 'lodash/max';
 
 import './VisibleValues.scss';
 
@@ -41,8 +41,8 @@ export function VisibleValues({
             }
             maxCounts.push(i);
         }
-        const visibleCount = min(maxCounts);
-        return value.slice(0, max([1, visibleCount]));
+        const visibleCount = min_(maxCounts);
+        return value.slice(0, max_([1, visibleCount]));
     }, [value, maxTextLength, maxVisibleValues]);
 
     const hasMissing = value.length > visibleItems.length;

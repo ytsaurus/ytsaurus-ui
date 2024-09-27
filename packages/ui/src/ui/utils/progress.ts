@@ -1,4 +1,4 @@
-import _sortedIndexBy from 'lodash/sortedIndexBy';
+import sortedIndexBy_ from 'lodash/sortedIndexBy';
 import type {ProgressTheme} from '@gravity-ui/uikit';
 
 import format from '../common/hammer/format';
@@ -19,9 +19,18 @@ export function computeProgress(usage: number | undefined, limit: number | undef
     return Math.max(0, Math.min(progress, 100));
 }
 
-export function progressText(usage?: number, limit?: number, {type}: {type?: 'bytes'} = {}) {
+export function progressText(
+    usage?: number,
+    limit?: number,
+    {
+        type,
+        digits,
+        digitsOnlyForFloat,
+    }: {type?: 'bytes'; digits?: number; digitsOnlyForFloat?: boolean} = {},
+) {
     const formatFn = type === 'bytes' ? format.Bytes : format.Number;
-    return `${formatFn(usage)} / ${formatFn(limit)}`;
+    const settings = {digits, digitsOnlyForFloat};
+    return `${formatFn(usage, settings)} / ${formatFn(limit, settings)}`;
 }
 
 export interface ThemeThreshold {
@@ -49,11 +58,33 @@ export function getProgressTheme(
     progress = 0,
     thresholds: ThemeThreshold[] = defaultThemeThresholds,
 ): ProgressTheme {
-    const index = _sortedIndexBy(
+    const index = sortedIndexBy_(
         thresholds,
         {max: Number.isFinite(progress) ? progress : 0} as ThemeThreshold,
         'max',
     );
 
     return thresholds[index].theme;
+}
+
+export function addProgressStackSpacers(
+    items: Array<{value: number; color: string}>,
+    spaceSize = 1,
+) {
+    const res: typeof items = [];
+    let sum = 0;
+    for (let i = 0; i < items.length; ++i) {
+        const item = items[i];
+        if (item.value > 0) {
+            if (res.length) {
+                res.push({value: spaceSize, color: 'var(--main-background)'});
+                sum += spaceSize;
+            }
+            res.push(item);
+            sum += item.value;
+        }
+    }
+    return res.map((item) => {
+        return {value: (item.value / sum) * 100, color: item.color};
+    });
 }

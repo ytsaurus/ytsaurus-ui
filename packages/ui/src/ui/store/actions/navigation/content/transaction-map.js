@@ -1,5 +1,7 @@
 import yt from '@ytsaurus/javascript-wrapper/lib/yt';
-import _ from 'lodash';
+
+import map_ from 'lodash/map';
+
 import ypath from '@ytsaurus/interface-helpers/lib/ypath';
 import CancelHelper from '../../../../utils/cancel-helper';
 import {prepareRequest} from '../../../../utils/navigation';
@@ -38,7 +40,7 @@ export function loadTransactions() {
                 dispatch({
                     type: LOAD_TRANSACTIONS.SUCCESS,
                     data: {
-                        transactions: _.map(
+                        transactions: map_(
                             transactions,
                             (transaction) => new Transaction(transaction, parsedPath),
                         ),

@@ -1,6 +1,5 @@
 import React, {useState} from 'react';
 
-import _ from 'lodash';
 import cn from 'bem-cn-lite';
 
 import {Power} from '@gravity-ui/icons';
@@ -271,7 +270,6 @@ export function ColumnGroupsFilter({
             value={value}
             onUpdate={(columnsFilter) => updateAclFilters({columnsFilter})}
             maxVisibleValuesTextLength={60}
-            disablePortal={false}
             width="max"
         />
     );

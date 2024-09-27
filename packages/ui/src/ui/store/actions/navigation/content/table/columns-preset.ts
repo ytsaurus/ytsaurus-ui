@@ -1,5 +1,7 @@
 import axios from 'axios';
-import _ from 'lodash';
+
+import map_ from 'lodash/map';
+
 import {ThunkAction} from 'redux-thunk';
 
 // @ts-ignore
@@ -65,7 +67,7 @@ export function loadColumnPresetIfDefined(): ColumnPresetThunkAction {
                 dispatch(setTablePresetError(error));
 
                 new Toaster().add({
-                    type: 'error',
+                    theme: 'danger',
                     name: 'loadColumnPreset',
                     title: 'Failed to get preset of columns',
                     content: error.message,
@@ -85,7 +87,7 @@ export function loadColumnPresetIfDefined(): ColumnPresetThunkAction {
 }
 
 export function saveColumnPreset(columnsEncoded: Array<string>, cluster: string): Promise<string> {
-    const columns = _.map(columnsEncoded, utf8.decode);
+    const columns = map_(columnsEncoded, utf8.decode);
     return wrapApiPromiseByToaster(
         axios.request<string>({
             method: 'POST',
@@ -112,7 +114,7 @@ export function setTablePresetHash(hash?: string) {
 }
 
 function setTablePreset(columns: Array<string>, hash: string) {
-    const columnsEncoded = _.map(columns, utf8.encode);
+    const columnsEncoded = map_(columns, utf8.encode);
     return {
         type: SET_TABLE_COLUMNS_PRESET,
         data: {error: undefined, columns: columnsEncoded, hash},
