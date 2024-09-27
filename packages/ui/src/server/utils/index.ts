@@ -174,7 +174,7 @@ export async function sendAndLogError(
 ) {
     const ae = asAxiosError(e);
     if (ae) {
-        ctx.logError('AxiosError', ae.toJSON(), extra);
+        ctx.logError('AxiosError', ae, extra);
         if (await pipeAxiosErrorOrFalse(ctx, res, ae)) {
             return;
         }
