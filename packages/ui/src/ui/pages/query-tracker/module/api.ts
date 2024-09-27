@@ -10,7 +10,7 @@ import {getClusterConfigByName, getClusterProxy} from '../../../store/selectors/
 import {generateQuerySettings, generateQueryText} from '../utils/query_generate';
 import {RootState} from '../../../store/reducers';
 import {makeDirectDownloadPath} from '../../../utils/navigation';
-import {DEFAULT_QUERY_ACO, getQueryTrackerRequestOptions} from './query/selectors';
+import {getCurrentStage, getQueryTrackerRequestOptions} from './query/selectors';
 import {UPDATE_QUERIES_LIST} from './query-tracker-contants';
 import {AnyAction} from 'redux';
 import {QueryEngine} from './engines';
@@ -217,7 +217,7 @@ export type QueriesListRequestParams = {
 
 export async function generateQueryFromTable(
     engine: QueryEngine,
-    {cluster, path}: {cluster: string; path: string},
+    {cluster, path, defaultQueryACO}: {cluster: string; path: string; defaultQueryACO: string},
 ): Promise<DraftQuery | undefined> {
     const selectedCluster = getClusterConfigByName(cluster);
     const node = await ytApiV3.get({
@@ -244,8 +244,8 @@ export async function generateQueryFromTable(
             }),
             files: [],
             annotations: {},
-            access_control_object: DEFAULT_QUERY_ACO,
-            access_control_objects: [DEFAULT_QUERY_ACO],
+            access_control_object: defaultQueryACO,
+            access_control_objects: [defaultQueryACO],
             settings: generateQuerySettings(engine, cluster),
         };
     }
@@ -578,9 +578,10 @@ export function addACOToLastSelected(
         const state = getState();
         const cluster = state.global.cluster;
         const lastSelectedACONamespaces = getLastSelectedACONamespaces(state);
+        const stage = getCurrentStage(state);
 
         await dispatch(
-            setSettingByKey(`local::${cluster}::queryTracker::lastSelectedACOs`, [
+            setSettingByKey(`qt-stage::${cluster}::queryTracker::${stage}::lastSelectedACOs`, [
                 ...aco,
                 ...lastSelectedACONamespaces.filter((item) => !aco.includes(item)).slice(0, 9),
             ]),

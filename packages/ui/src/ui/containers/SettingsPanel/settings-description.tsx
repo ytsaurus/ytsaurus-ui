@@ -53,6 +53,7 @@ import Link from '../../components/Link/Link';
 import Button from '../../components/Button/Button';
 import {AddTokenForm, VcsList} from '../../pages/query-tracker/Vcs/SettingsMenu';
 import {selectVcsConfig} from '../../pages/query-tracker/module/vcs/selectors';
+import {QueryACOSettingsMenuForm} from '../../pages/query-tracker/QueryACO/QueryACOSettingsMenu';
 
 export interface SettingsPage {
     title: string;
@@ -507,6 +508,12 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
                 Boolean(config.some((i) => i.hasToken)) &&
                     makeItem('Existing tokens', undefined, <VcsList config={config} />),
             ]),
+        ),
+
+        makePage(
+            'Query ACO',
+            undefined,
+            compact_([makeItem('Default ACO', undefined, <QueryACOSettingsMenuForm />)]),
         ),
 
         makePage(

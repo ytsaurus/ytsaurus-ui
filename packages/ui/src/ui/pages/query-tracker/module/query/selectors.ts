@@ -11,7 +11,7 @@ import {QTEditorError} from '../types/editor';
 import {YTError} from '../../../../types';
 import {isYTError} from '../../../../../shared/utils';
 import {getQueryResults} from '../query_result/selectors';
-import {selectIsMultipleAco} from '../query_aco/selectors';
+import {getDefaultQueryACO, selectIsMultipleAco} from '../query_aco/selectors';
 
 const QT_STAGE = getQueryTrackerStage();
 const getState = (state: RootState) => state.queryTracker.query;
@@ -101,18 +101,30 @@ export const getQueryEditorErrors = (state: RootState): QTEditorError[] => {
 export const getDirtySinceLastSubmit = (state: RootState) =>
     state.queryTracker.query.dirtySinceLastSubmit;
 
-const getAco = (isMultipleAco: boolean, state?: QueryItem | DraftQuery): string[] => {
-    if (isMultipleAco) return state?.access_control_objects ?? [DEFAULT_QUERY_ACO];
+export const getCurrentStage = (state: RootState) => {
+    return state.queryTracker?.aco?.data?.query_tracker_stage ?? 'production';
+};
 
-    return state?.access_control_object ? [state?.access_control_object] : [DEFAULT_QUERY_ACO];
+const getAco = (
+    defaultACO: string,
+    isMultipleAco: boolean,
+    state?: QueryItem | DraftQuery,
+): string[] => {
+    if (isMultipleAco) return state?.access_control_objects ?? [defaultACO];
+
+    return state?.access_control_object ? [state?.access_control_object] : [defaultACO];
 };
 
 export const getCurrentQueryACO = (state: RootState) => {
-    return getAco(selectIsMultipleAco(state), state.queryTracker.query?.queryItem);
+    const defaultACO = getDefaultQueryACO(state);
+
+    return getAco(defaultACO, selectIsMultipleAco(state), state.queryTracker.query?.queryItem);
 };
 
 export const getCurrentDraftQueryACO = (state: RootState) => {
-    return getAco(selectIsMultipleAco(state), state.queryTracker.query?.draft);
+    const defaultACO = getDefaultQueryACO(state);
+
+    return getAco(defaultACO, selectIsMultipleAco(state), state.queryTracker.query?.draft);
 };
 
 export const getProgressYQLStatistics = (state: RootState) => {

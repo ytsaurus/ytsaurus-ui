@@ -1,0 +1,12 @@
+.query-aco-settings-menu-form {
+    &__item {
+        display: flex;
+        align-items: center;
+
+        margin-bottom: 12px;
+
+        &-header {
+            margin: 0 8px 0 0;
+        }
+    }
+}
