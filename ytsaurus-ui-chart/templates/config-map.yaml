@@ -7,27 +7,20 @@ metadata:
      {{- include "ytsaurus-ui-chart.labels" . | nindent 4 }}
 data:
   clusters-config.json: |
-    {{ .Values.ui.clusterConfig | toJson }}
+    {{ toJson .Values.ui.clusterConfig }}
   common.js: |
     module.exports = { 
       odinBaseUrl: {{ .Values.settings.odinBaseUrl | quote }}, 
-      uiSettings: { 
-        directDownload: {{ .Values.settings.directDownload | toJson }},
-        uploadTableExcelBaseUrl: {{ .Values.settings.uploadTableExcelBaseUrl | quote }},
-        exportTableBaseUrl: {{ .Values.settings.exportTableBaseUrl | quote }},
-      },
+      uiSettings: {{- toJson .Values.settings.uiSettings}},
       {{- if .Values.settings.oauth.enabled }}
       ytOAuthSettings: {
-        baseURL: {{ .Values.settings.oauth.baseURL | quote }},
-        authPath: {{ .Values.settings.oauth.authPath | quote }},
-        logoutPath: {{ .Values.settings.oauth.logoutPath | quote }},
-        tokenPath: {{ .Values.settings.oauth.tokenPath | quote }},
-        clientId: process.env.{{ .Values.settings.oauth.clientIdEnvName }},
-        clientSecret: process.env.{{ .Values.settings.oauth.clientSecretEnvName }},
-        scope: {{ .Values.settings.oauth.scope | quote }},
-        buttonLabel: {{ .Values.settings.oauth.buttonLabel | quote }},
+        {{ range $key, $value :=  .Values.settings.oauth -}}
+        {{- if or (eq $key "clientId") (eq $key "clientSecret") -}}
+          {{ $key }}: process.env.{{ $value }},
+        {{- else -}}
+          {{ $key }}: {{ $value | quote }},
+        {{- end -}}
+        {{- end}}
       },
-      }
-      {{- else -}}
-      }
-      {{- end -}}
+      {{ end }}
+    }

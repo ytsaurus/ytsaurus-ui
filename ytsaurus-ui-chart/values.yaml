@@ -72,9 +72,10 @@ fullnameOverride: ""
 
 settings:
   odinBaseUrl: ""
-  directDownload: true
-  uploadTableExcelBaseUrl: ""
-  exportTableBaseUrl: ""
+  uiSettings:
+    directDownload: true
+    uploadTableExcelBaseUrl: ""
+    exportTableBaseUrl: ""
 
   # see https://github.com/ytsaurus/ytsaurus-ui/blob/main/packages/ui/docs/configuration.md#oauth
   oauth: 
@@ -83,11 +84,12 @@ settings:
     authPath: ""
     logoutPath: ""
     tokenPath: ""
-    clientIdEnvName: ""
-    clientSecretEnvName: ""
+    # clientId and clientSecret are passed as process.env
+    clientId: ""
+    clientSecret: ""
     scope: ""
     buttonLabel: ""
-  
+
 securityContext: {}
 
 resources: {}
