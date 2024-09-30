@@ -154,7 +154,7 @@ export interface UISettings {
     hideReferrerUrl?: string;
 
     /**
-     * Allows to customize VCS navigation on the query page
+     * Allows to customize VCS navigation on the query page, empty array will hide the tab from navigation
      * id - unique identifier of VCS
      * name - name of VCS. The name is displayed in the selector
      * baseUrl - URL to you VCS api

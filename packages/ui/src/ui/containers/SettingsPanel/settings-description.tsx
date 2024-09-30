@@ -52,7 +52,7 @@ import YT from '../../config/yt-config';
 import Link from '../../components/Link/Link';
 import Button from '../../components/Button/Button';
 import {AddTokenForm, VcsList} from '../../pages/query-tracker/Vcs/SettingsMenu';
-import {selectVcsConfig} from '../../pages/query-tracker/module/vcs/selectors';
+import {selectIsVcsVisible, selectVcsConfig} from '../../pages/query-tracker/module/vcs/selectors';
 
 export interface SettingsPage {
     title: string;
@@ -85,7 +85,8 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
     const httpProxyVersion: string = useSelector(getHttpProxyVersion);
     const schedulerVersion: string = useSelector(getGlobalSchedulerVersion);
     const masterVersion: string = useSelector(getGlobalMasterVersion);
-    const config = useSelector(selectVcsConfig);
+    const vcsConfig = useSelector(selectVcsConfig);
+    const isVcsVisible = useSelector(selectIsVcsVisible);
 
     return compact_([
         makePage('General', generalIcon, [
@@ -499,15 +500,16 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
                 ),
             ]),
 
-        makePage(
-            'VCS',
-            LogoGitlabIcon,
-            compact_([
-                makeItem('Add or replace token', undefined, <AddTokenForm />),
-                Boolean(config.some((i) => i.hasToken)) &&
-                    makeItem('Existing tokens', undefined, <VcsList config={config} />),
-            ]),
-        ),
+        isVcsVisible &&
+            makePage(
+                'VCS',
+                LogoGitlabIcon,
+                compact_([
+                    makeItem('Add or replace token', undefined, <AddTokenForm />),
+                    Boolean(vcsConfig.some((i) => i.hasToken)) &&
+                        makeItem('Existing tokens', undefined, <VcsList config={vcsConfig} />),
+                ]),
+            ),
 
         makePage(
             'About',

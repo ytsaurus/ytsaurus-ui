@@ -18,7 +18,7 @@ export type FileItem = {
 export type Repositories = Record<string, GithubRepository> | Record<string, GitlabRepository>;
 
 export type VcsState = {
-    vcsConfig: VcsConfig[];
+    vcsConfig: VcsConfig[] | undefined;
     repositories: Repositories;
     branches: {value: string; text: string}[] | string[];
     list: Record<string, DirectoryItem | FileItem>;
@@ -34,11 +34,10 @@ export type VcsState = {
     listError: boolean;
 };
 
-const getVcsConfig = (): VcsConfig[] => {
+const getVcsConfig = (): VcsConfig[] | undefined => {
     const {vcsSettings} = uiSettings;
-    if (!vcsSettings) return [];
 
-    return vcsSettings.map((item) => ({...item, hasToken: false}));
+    return vcsSettings?.map((item) => ({...item, hasToken: false}));
 };
 
 const initialState: VcsState = {

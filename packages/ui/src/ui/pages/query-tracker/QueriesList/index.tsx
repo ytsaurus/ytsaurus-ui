@@ -5,7 +5,7 @@ import {QueriesHistoryList} from './QueriesHistoryList';
 
 import {getQueriesListMode} from '../module/queries_list/selectors';
 import {useDispatch, useSelector} from 'react-redux';
-import {QueriesListMode, QueriesListModes} from '../module/queries_list/types';
+import {QueriesListMode, getQueriesListModes} from '../module/queries_list/types';
 import {applyListMode, requestQueriesList} from '../module/queries_list/actions';
 
 import './index.scss';
@@ -13,6 +13,7 @@ import {QueriesTutorialList} from './QueriesTutorialList';
 import {QueriesHistoryListFilter} from './QueriesListFilter';
 import {Vcs} from '../Vcs';
 import {Navigation} from '../Navigation';
+import {selectIsVcsVisible} from '../module/vcs/selectors';
 
 const b = block('queires-list');
 
@@ -26,6 +27,7 @@ const TabNames = {
 const useQueryTabs = (): [TabsItemProps[], string, (tab: string) => void] => {
     const dispatch = useDispatch();
     const selectedTab = useSelector(getQueriesListMode);
+    const isVcsVisible = useSelector(selectIsVcsVisible);
     const setTab = useCallback(
         (tab: string) => {
             dispatch(applyListMode(tab as QueriesListMode));
@@ -34,13 +36,13 @@ const useQueryTabs = (): [TabsItemProps[], string, (tab: string) => void] => {
     );
 
     const tabOptions = useMemo<TabsItemProps[]>(() => {
-        return QueriesListModes.map((tab) => {
+        return getQueriesListModes({vcs: isVcsVisible}).map((tab) => {
             return {
                 id: tab as unknown as string,
                 title: TabNames[tab],
             };
         });
-    }, []);
+    }, [isVcsVisible]);
     return [tabOptions, (selectedTab || QueriesListMode.History).toString(), setTab];
 };
 
