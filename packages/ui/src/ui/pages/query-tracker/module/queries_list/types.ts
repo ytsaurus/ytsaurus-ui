@@ -13,7 +13,10 @@ export enum QueriesListMode {
     Navigation = 'navigation',
 }
 
-export const QueriesListModes = Object.values(QueriesListMode);
+export const getQueriesListModes = ({vcs}: {vcs: boolean}): QueriesListMode[] => {
+    const queriesListMode = Object.values(QueriesListMode);
+    return vcs ? queriesListMode : queriesListMode.filter((item) => item !== QueriesListMode.VCS);
+};
 
 export const QueriesListFilterPresets: Record<QueriesListMode, Partial<QueriesListFilter>> = {
     [QueriesListMode.History]: {

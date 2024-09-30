@@ -1,6 +1,8 @@
 import {RootState} from '../../../../store/reducers';
 import {createSelector} from 'reselect';
-export const selectVcsConfig = (state: RootState) => state.queryTracker.vcs.vcsConfig;
+export const selectVcsConfig = (state: RootState) => state.queryTracker.vcs.vcsConfig || [];
+export const selectIsVcsVisible = (state: RootState) =>
+    !state.queryTracker.vcs.vcsConfig || state.queryTracker.vcs.vcsConfig.length !== 0;
 export const selectVcs = (state: RootState) => state.queryTracker.vcs;
 export const selectList = (state: RootState) => state.queryTracker.vcs.list;
 export const selectPath = (state: RootState) => state.queryTracker.vcs.path;
