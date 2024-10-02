@@ -1,5 +1,16 @@
 # Changelog
 
+## [1.60.1](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.60.0...ui-v1.60.1) (2024-10-02)
+
+
+### Bug Fixes
+
+* fix logging of axios error in sendAndLogError function ([b9239dc](https://github.com/ytsaurus/ytsaurus-ui/commit/b9239dc43feab214b4e3520b21e662755be4f33a))
+* **Navigation:** pool tree select popup [YTFRONT-4380] ([f52eb90](https://github.com/ytsaurus/ytsaurus-ui/commit/f52eb90da82306d6bf191a0d1375f3c30eaa3aac))
+* **Query:** do not show vcs if vcsSettings is empty ([7df0b04](https://github.com/ytsaurus/ytsaurus-ui/commit/7df0b045ecba077363d03471b8d196301d6b8a65))
+* **Sort,Merge:** get rid of missing node errors [YTFRONT-4392] ([cf79a79](https://github.com/ytsaurus/ytsaurus-ui/commit/cf79a79ac5366bd5e547eb18ebb2284cc5ae6234))
+* **System:** use correct colors for StatsInfo in light and dark theme ([4897f6f](https://github.com/ytsaurus/ytsaurus-ui/commit/4897f6f4fa1b414e944bf392b08d9dd945514dd8))
+
 ## [1.60.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.59.0...ui-v1.60.0) (2024-09-26)
 
 
