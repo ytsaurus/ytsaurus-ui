@@ -7,7 +7,9 @@ import {Select} from '@gravity-ui/uikit';
 import {DialogControlProps} from '../../../../components/Dialog/Dialog.types';
 import {getAllPoolTreeNames} from '../../../../store/selectors/global';
 
-type Props = DialogControlProps<string> & {disabled?: boolean};
+type Props = DialogControlProps<string> & {
+    disabled?: boolean;
+};
 
 export function PoolTreeSuggestControl(props: Props) {
     const {value, onChange, disabled, placeholder} = props;
@@ -27,7 +29,6 @@ export function PoolTreeSuggestControl(props: Props) {
             onUpdate={(values) => onChange(values[0])}
             placeholder={placeholder}
             width="max"
-            disablePortal
             filterable={items?.length > 5}
         />
     );
