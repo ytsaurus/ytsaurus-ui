@@ -24,6 +24,18 @@ test('Navigation: table - Content', async ({page}) => {
 
         await expect(page).toHaveScreenshot();
     });
+
+    await page.click('.elements-modal__close');
+
+    await test.step('Merge dialog', async () => {
+        await page.click('button.edit-table-actions__button');
+        await page.waitForSelector('.g-popup__content');
+        await page.click('.g-menu__list-item :text("Merge")');
+        await page.waitForSelector('.g-dialog');
+        await page.click('.df-dialog__field-group_type_pool-tree button.g-select-control__button');
+
+        await expect(page).toHaveScreenshot();
+    });
 });
 
 test('Navigation: table - Schema', async ({page}) => {
