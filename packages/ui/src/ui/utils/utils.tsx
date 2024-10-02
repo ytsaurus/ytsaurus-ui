@@ -71,6 +71,12 @@ export interface SplitedBatchResults<T> {
 }
 
 export const USE_IGNORE_NODE_DOES_NOT_EXIST = {ignoreErrorCodes: [YTErrors.NODE_DOES_NOT_EXIST]};
+export const USE_SKIP_ERROR_FN_NODE_DOES_NOT_EXIST: Pick<
+    Required<CommonWrapApiOptions<unknown>>,
+    'skipErrorFn'
+> = {
+    skipErrorFn: ({code}) => code === YTErrors.NODE_DOES_NOT_EXIST,
+};
 
 export function splitBatchResults<T = unknown>(
     batchResults: Array<BatchResultsItem<T>>,
@@ -197,9 +203,9 @@ export function wrapApiPromiseByToaster<T>(p: Promise<T>, options: WrapApiOption
 
                 const {skipErrorFn, skipErrorToast} = options;
 
-                const isVisibleError = skipErrorFn ? skipErrorFn : (_e: unknown) => !skipErrorToast;
+                const isSkippedError = skipErrorFn ? skipErrorFn : (_e: unknown) => skipErrorToast;
 
-                if (isVisibleError(error)) {
+                if (!isSkippedError(error)) {
                     toaster.add({
                         name: options.toasterName,
                         theme: 'danger',

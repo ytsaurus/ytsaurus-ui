@@ -12,7 +12,11 @@ import axios, {CancelTokenSource} from 'axios';
 // @ts-ignore
 import yt from '@ytsaurus/javascript-wrapper/lib/yt';
 import ypath from '../../../../common/thor/ypath';
-import {getBatchError, wrapApiPromiseByToaster} from '../../../../utils/utils';
+import {
+    USE_SKIP_ERROR_FN_NODE_DOES_NOT_EXIST,
+    getBatchError,
+    wrapApiPromiseByToaster,
+} from '../../../../utils/utils';
 import {loadPoolTreesIfNotLoaded} from '../../../../store/actions/global';
 import {OperationShortInfo} from '../../../../pages/components/OperationShortInfo/OperationShortInfo';
 import {AppStoreProvider} from '../../../../containers/App/AppStoreProvider';
@@ -167,6 +171,7 @@ export const loadStorageAttributes =
                 errorTitle: 'Get table attributes request is failed',
                 autoHide: false,
                 skipSuccessToast: true,
+                ...USE_SKIP_ERROR_FN_NODE_DOES_NOT_EXIST,
             },
         );
 
