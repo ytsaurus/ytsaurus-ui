@@ -75,7 +75,7 @@ export const StatsInfo = ({
             <div>
                 <CountUrl count={count} url={url} variant="body-2" />
             </div>
-            <Text className={block('text')} variant="body-short">
+            <Text className={block('text')} variant="body-short" color="secondary">
                 {status}
             </Text>
             <Progress className={block('progress')} stack={stack ?? []} size="xs" />
