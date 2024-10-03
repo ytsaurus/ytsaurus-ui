@@ -28,10 +28,24 @@ test('Navigation: table - Content', async ({page}) => {
     await page.click('.elements-modal__close');
 
     await test.step('Merge dialog', async () => {
+        const tablePath = '//tmp/e2e.1970-01-01.00:00:00.xxxxxxxxxxx.static-table';
         await page.click('button.edit-table-actions__button');
         await page.waitForSelector('.g-popup__content');
         await page.click('.g-menu__list-item :text("Merge")');
+        await page.evaluate(() => {
+            window.scrollTo(0, 0);
+        });
+
         await page.waitForSelector('.g-dialog');
+        await replaceInnerHtml(page, {
+            '.df-editable-list__item-content': tablePath,
+        });
+        await page.evaluate((tablePath) => {
+            const input = document.querySelector<HTMLInputElement>(
+                'input[placeholder="Enter path for output"]',
+            );
+            if (input) input.value = tablePath;
+        }, tablePath);
         await page.click('.df-dialog__field-group_type_pool-tree button.g-select-control__button');
 
         await expect(page).toHaveScreenshot();
