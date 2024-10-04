@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.61.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.60.1...ui-v1.61.0) (2024-10-04)
+
+
+### Features
+
+* **UIFactory:** extract defaultUIFactory to separate file [YTFRONT-3814] ([dfc8930](https://github.com/ytsaurus/ytsaurus-ui/commit/dfc8930d7925f4a6389cd6600f1ce165f2fb2852))
+
 ## [1.60.1](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.60.0...ui-v1.60.1) (2024-10-02)
 
 
