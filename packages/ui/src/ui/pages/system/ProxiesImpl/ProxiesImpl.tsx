@@ -45,6 +45,7 @@ export function ProxiesImpl({
             onToggle={onToggleCollapsed}
             collapsed={collapsed}
             size={UI_COLLAPSIBLE_SIZE}
+            togglerRightPadding="small"
         >
             <RoleGroupsContainer>
                 {map_(roleGroups, (data) => {

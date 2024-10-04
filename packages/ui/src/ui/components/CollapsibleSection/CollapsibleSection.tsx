@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import PropTypes from 'prop-types';
 import block from 'bem-cn-lite';
 
 import ErrorBoundary from '../../components/ErrorBoundary/ErrorBoundary';
@@ -15,16 +14,6 @@ type PropsStateLess = CollapsibleSectionProps & {
 };
 
 export class CollapsibleSectionStateLess extends Component<PropsStateLess> {
-    static propTypes = {
-        name: PropTypes.node.isRequired,
-        collapsed: PropTypes.bool,
-        onToggle: PropTypes.func.isRequired,
-        size: PropTypes.oneOf(['s', 'ss', 'xs', 'm', 'l', 'xl', 'ns']),
-        children: PropTypes.node,
-        overview: PropTypes.node,
-        className: PropTypes.string,
-    };
-
     static defaultProps = {
         size: 'm',
         collapsed: false,
@@ -38,7 +27,16 @@ export class CollapsibleSectionStateLess extends Component<PropsStateLess> {
     };
 
     render() {
-        const {name, children, size, overview, className, collapsed, marginDirection} = this.props;
+        const {
+            name,
+            children,
+            size,
+            overview,
+            className,
+            collapsed,
+            marginDirection,
+            togglerRightPadding,
+        } = this.props;
 
         return (
             <ErrorBoundary>
@@ -57,7 +55,7 @@ export class CollapsibleSectionStateLess extends Component<PropsStateLess> {
                             {name}
                             <a>
                                 <Icon
-                                    className={b('toggler')}
+                                    className={b('toggler', {'right-padding': togglerRightPadding})}
                                     awesome={collapsed ? 'angle-down' : 'angle-up'}
                                 />
                             </a>
@@ -83,6 +81,8 @@ export interface CollapsibleSectionProps {
     overview?: React.ReactNode;
 
     marginDirection?: 'top' | 'bottom';
+
+    togglerRightPadding?: 'small';
 }
 
 export default function CollapsibleSection(props: CollapsibleSectionProps) {
