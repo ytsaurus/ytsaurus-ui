@@ -1,7 +1,9 @@
 import React from 'react';
 import cn from 'bem-cn-lite';
 
+import format from '../../common/hammer/format';
 import Icon from '../../components/Icon/Icon';
+import {Tooltip} from '../../components/Tooltip/Tooltip';
 import {OrderType, nextSortOrderValue} from '../../utils/sort-helpers';
 
 import './SortIcon.scss';
@@ -46,9 +48,12 @@ export default class SortIcon extends React.Component<Props> {
         return (
             <span className={block({hidden}, className)} onClick={this.onClick}>
                 {label && <span className={block('label')}>{label}</span>}
-                <span className={block('icon')}>
+                <Tooltip
+                    className={block('icon')}
+                    content={order ? format.ReadableField(order) : 'Unordered'}
+                >
                     <Icon awesome={icon} face="solid" />
-                </span>
+                </Tooltip>
             </span>
         );
     }

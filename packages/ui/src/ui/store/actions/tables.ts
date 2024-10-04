@@ -15,6 +15,8 @@ export type ToggleColumnSortOrderParams = {
     tableId: keyof RootState['tables'];
     /** The field is ignored when **allowedOrderTypes** is defined */
     withUndefined?: boolean;
+    /** The field is ignored when **allowedOrderTypes** is defined */
+    allowUnordered?: boolean;
     /** When defined **withUndefined** is ignored */
     allowedOrderTypes?: Array<OrderType>;
 };
@@ -25,6 +27,7 @@ export function toggleColumnSortOrder({
     columnName,
     tableId,
     withUndefined,
+    allowUnordered,
     allowedOrderTypes,
 }: ToggleColumnSortOrderParams): TablesThunkAction {
     return (dispatch, getState) => {
@@ -37,7 +40,7 @@ export function toggleColumnSortOrder({
         if (allowedOrderTypes?.length) {
             newOrderType = calculateNextOrderValue(orderType, allowedOrderTypes);
         } else {
-            newOrderType = nextSortOrderValue(orderType, false, withUndefined);
+            newOrderType = nextSortOrderValue(orderType, allowUnordered, withUndefined);
         }
 
         const newSortInfo = orderTypeToOldSortState(columnName, newOrderType);
