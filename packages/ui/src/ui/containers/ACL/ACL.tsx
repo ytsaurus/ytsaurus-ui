@@ -603,7 +603,7 @@ class ACL extends Component<Props> {
             return {
                 name,
                 value: invert ? !role : Boolean(role),
-                url: 'boolean' === typeof role ? 'https://yt.yandex-team.ru' : role?.idmLink,
+                url: 'boolean' === typeof role ? undefined : role?.idmLink,
             };
         }
 
