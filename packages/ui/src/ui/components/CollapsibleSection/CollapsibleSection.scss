@@ -15,6 +15,10 @@
         cursor: pointer;
         margin-left: 4px;
         padding-right: 20px;
+
+        &_right-padding_small {
+            padding-right: 8px;
+        }
     }
 
     .elements {

@@ -26,7 +26,7 @@ const COLORS_BY_STATUS = {
     ONLINE: ['var(--success-color)', 'var(--success-text)', 'var(--default-color)'],
     OFFLINE: ['var(--danger-color)', 'var(--danger-text)', 'var(--default-color)'],
     BANNED: ['var(--warning-color)', 'var(--warning-text)', 'var(--default-color)'],
-    OTHER: [],
+    OTHER: ['var(--info-color)', 'var(--info-text)', 'var(--default-color)'],
     FULL: [],
 };
 
@@ -80,7 +80,7 @@ export const StatsInfo = ({
             </Text>
             <Progress className={block('progress')} stack={stack ?? []} size="xs" />
 
-            <TextCountUrl text="ALERT" count={alertNumber} color="warning" url={alertsUrl} />
+            <TextCountUrl text="ALERT" count={alertNumber} color="primary" url={alertsUrl} />
             <TextCountUrl text="DEC" count={decNumber} color="primary" url={decUrl} />
         </div>
     );
