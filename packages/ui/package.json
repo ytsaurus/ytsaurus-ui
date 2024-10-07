@@ -158,7 +158,7 @@
     "postcss-scss": "^4.0.7",
     "prop-types": "^15.6.0",
     "rbush": "^2.0.2",
-    "rc-slider": "^10.2.1",
+    "rc-slider": "10.5.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-helmet": "^6.1.0",

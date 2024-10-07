@@ -70,7 +70,7 @@ $overview-height: 50px;
         border: 1px solid var(--dark-divider);
         background-color: var(--main-background);
         position: relative;
-        line-height: 24px;
+        line-height: 26px;
         font-size: 13px;
         white-space: nowrap;
         text-overflow: ellipsis;
@@ -80,6 +80,7 @@ $overview-height: 50px;
         .icon {
             margin-right: 5px;
         }
+        border-radius: var(--g-border-radius-m);
     }
 
     &__query-progress {
