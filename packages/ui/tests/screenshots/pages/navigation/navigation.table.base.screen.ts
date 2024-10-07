@@ -76,3 +76,17 @@ test('Navigation: table - Tablets', async ({page}) => {
 
     await expect(page).toHaveScreenshot();
 });
+
+test('Navigation: static-table - rowselector', async ({page}) => {
+    await page.goto(makeClusterUrl(`navigation?path=${E2E_DIR}/static-table`));
+
+    await tablePage(page).replaceStaticTableMeta();
+    await tablePage(page).waitForTablContent('.navigation-table', 10);
+
+    await page.click('.navigation-table-overview__input', {force: true});
+    await page.click('.rc-slider', {force: true, position: {x: 200, y: 0}});
+
+    await page.waitForSelector(':text("key139")');
+
+    await expect(page).toHaveScreenshot();
+});

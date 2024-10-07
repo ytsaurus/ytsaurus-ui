@@ -1,9 +1,8 @@
 import React, {Component, ReactElement} from 'react';
 import block from 'bem-cn-lite';
-// @ts-ignore
-import Slider, {Marks, SliderRef} from 'rc-slider';
-import {IconProps, TextInput, TextInputSize} from '@gravity-ui/uikit';
 
+import Slider, {type SliderProps, type SliderRef} from 'rc-slider';
+import {IconProps, TextInput, TextInputSize} from '@gravity-ui/uikit';
 import debounce_ from 'lodash/debounce';
 // eslint-disable-next-line lodash/import-scope
 import type {DebouncedFunc} from 'lodash';
@@ -51,6 +50,7 @@ export interface RangeInputPickerGeneralProps {
     iconRight?: ReactElement<IconProps>;
     availableValues?: number[];
     className?: string;
+    controlProps?: React.InputHTMLAttributes<HTMLInputElement>;
 }
 
 export type RangeInputPickerProps = RangeInputPickerDefaultProps & RangeInputPickerGeneralProps;
@@ -162,6 +162,7 @@ export class RangeInputPicker extends Component<RangeInputPickerProps, RangeInpu
             size,
             pattern,
             className,
+            controlProps,
         } = this.props;
         const {currentValue, textValue, min, max, values} = this.state;
 
@@ -195,7 +196,7 @@ export class RangeInputPicker extends Component<RangeInputPickerProps, RangeInpu
                     autoFocus={autoFocus}
                     // iconRight={iconRight}
                     // iconLeft={iconLeft}
-                    controlProps={{readOnly, pattern}}
+                    controlProps={{readOnly, pattern, ...controlProps}}
                 />
 
                 <Slider
@@ -208,7 +209,7 @@ export class RangeInputPicker extends Component<RangeInputPickerProps, RangeInpu
                     onChange={this.handleSliderChange}
                     step={this.step}
                     marks={rcSliderInfoItems}
-                    onAfterChange={this.debouncedHandleOnAfterUpdate}
+                    onChangeComplete={this.debouncedHandleOnAfterUpdate}
                 />
 
                 {rangeInfoItems && (
@@ -352,21 +353,24 @@ export class RangeInputPicker extends Component<RangeInputPickerProps, RangeInpu
         );
     };
 
-    private handleSliderChange = (newValue: number | Array<number>) => {
-        const {min, max, values} = this.state;
-        const numValue = Array.isArray(newValue) ? newValue[0] : newValue;
-        const value = getClosestValue(prepareValue({min, max, value: numValue}), values);
+    private handleSliderChange: SliderProps['onChange'] = (newValue) => {
+        if (typeof newValue === 'number') {
+            const {min, max, values} = this.state;
 
-        this.setState(
-            {
-                currentValue: value,
-                textValue: RangeInputPicker.getDisplayTextValue(this.props, value),
-            },
-            this.debouncedCallOnUpdate,
-        );
+            const value = getClosestValue(prepareValue({min, max, value: newValue}), values);
+
+            this.setState(
+                {
+                    currentValue: value,
+                    textValue: RangeInputPicker.getDisplayTextValue(this.props, value),
+                },
+                this.debouncedCallOnUpdate,
+            );
+        }
     };
 
     private handleWrapperClick = (event: React.MouseEvent<HTMLDivElement>) => {
+        // TODO: написать свои тайпинги для Slider, т.к. родные описаны некорректно
         // @ts-ignore
         const slider = this.sliderRef.current && this.sliderRef.current.sliderRef;
         const isSliderContainsTarget = slider && slider.contains(event.target as Node);
@@ -496,19 +500,11 @@ export class RangeInputPicker extends Component<RangeInputPickerProps, RangeInpu
 
         const points = getInfoPoints({infoPointsCount, min, max, values});
 
-        const infoItems: Marks = points.reduce((acc: Marks, point: number): Marks => {
+        const infoItems = points.reduce<NonNullable<SliderProps['marks']>>((acc, point: number) => {
             acc[point] = {label: this.renderItem(point), style: {}};
 
             return acc;
         }, {});
-
-        if (infoItems[min]) {
-            (infoItems[min] as {style: {}; label: string}).style = LEFT_INFO_POINT_STYLE;
-        }
-
-        if (infoItems[max]) {
-            (infoItems[max] as {style: {}; label: string}).style = RIGHT_INFO_POINT_STYLE;
-        }
 
         return infoItems;
     };
