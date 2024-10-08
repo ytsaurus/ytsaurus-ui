@@ -203,6 +203,9 @@ export interface definitions {
         completed?: number;
         running?: number;
         total?: number;
+        pending?: number;
+        aborted?: number;
+        failed?: number;
         stages?: definitions['EntryStringInstant'];
         remoteData?: {
             cluster_name?: string;

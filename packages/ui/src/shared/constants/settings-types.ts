@@ -82,6 +82,7 @@ export type Stage = string;
 interface QueryTrackerSettings {
     'global::queryTracker::queriesListSidebarVisibilityMode': boolean;
     'global::queryTracker::history::Columns': string[];
+    'global::queryTracker::queryTrackerNewGraphType': boolean;
 }
 
 interface ChytSettings {

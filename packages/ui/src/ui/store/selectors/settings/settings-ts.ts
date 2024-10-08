@@ -9,6 +9,7 @@ import {ActiveJobTypesMap} from '../../../store/actions/settings/settings';
 import {RootState} from '../../../store/reducers';
 import {NODE_TYPE} from '../../../../shared/constants/system';
 import {ValueOf} from '../../../types';
+import {getSettingsData} from './settings-base';
 
 export const getSettingsDataRaw = (state: RootState) => state.settings.data;
 
@@ -25,6 +26,10 @@ export const getSettingsPagesPinned = createSelector(
 
 export const getSettingsRegularUserUI = createSelector(makeGetSetting, (getSetting) => {
     return getSetting(SettingName.DEVELOPMENT.REGULAR_USER_UI, NAMESPACES.DEVELOPMENT) || false;
+});
+
+export const getSettingsQueryTrackerNewGraphType = createSelector(getSettingsData, (data) => {
+    return data['global::queryTracker::queryTrackerNewGraphType'] || false;
 });
 
 export const getSettingsSchedulingExpandStaticConfiguration = createSelector(
