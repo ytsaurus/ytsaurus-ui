@@ -561,6 +561,15 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
                         getSetting={() => defaultUserACO}
                     />,
                 ),
+                makeItem(
+                    'Use new graph progress',
+                    'top',
+                    <BooleanSettingItem
+                        settingKey="global::queryTracker::queryTrackerNewGraphType"
+                        description="Enable experimental graph vew for Progress tab of a query"
+                        oneLine
+                    />,
+                ),
             ]),
         ),
 

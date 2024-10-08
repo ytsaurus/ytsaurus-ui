@@ -1,0 +1,21 @@
+.yt-graph-popup {
+    --scale: calc(1 / var(--nv-graph-scale));
+    transform-origin: 0 0;
+    position: absolute;
+    pointer-events: all;
+    margin-left: 8px;
+    opacity: 0;
+
+    &_visible {
+        opacity: 1;
+    }
+
+    &__details {
+        height: auto;
+    }
+
+    .yt-detail-block__icon {
+        max-height: 16px;
+        max-width: 16px;
+    }
+}

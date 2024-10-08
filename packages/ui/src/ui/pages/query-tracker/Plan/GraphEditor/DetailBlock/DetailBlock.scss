@@ -1,0 +1,42 @@
+.yt-detail-block {
+    display: grid;
+    grid-template-rows: min-content 1fr;
+    color: var(--g-color-text-primary);
+    padding: 10px 12px;
+    min-width: 240px;
+    box-sizing: border-box;
+    background: var(--g-popup-background-color, var(--g-color-base-float));
+    border: 1px solid var(--g-popup-border-color, var(--g-color-line-generic-solid));
+    border-radius: 8px;
+    box-shadow: 0 1px 5px 0 var(--g-color-sfx-shadow);
+
+    &__header {
+        display: flex;
+        align-items: center;
+        gap: 0 8px;
+        font-weight: 500;
+    }
+
+    &__content {
+        margin-top: 8px;
+    }
+
+    &__details {
+        height: auto;
+        padding-bottom: 0;
+        margin-top: 10px;
+        overflow-y: auto;
+
+        .node-details-info{
+            grid-gap: 10px;
+        }
+
+        .data-table__row {
+            height: auto;
+        }
+    }
+
+    .graph-block-wrapper{
+        border: none;
+    }
+}
