@@ -113,6 +113,7 @@ export const SettingName = {
         STAGE: 'queryTrackerStage',
         YQL_AGENT_STAGE: 'yqlAgentStage',
         QUERIES_LIST_SIDEBAR_VISIBILITY_MODE: 'queriesListSidebarVisibilityMode',
+        NEW_GRAPH_TYPE: 'queryTrackerNewGraphType',
     },
     CHYT: {
         LIST_COLUMNS: 'list_columns',
