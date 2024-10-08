@@ -1,0 +1,11 @@
+.operation-job-item {
+    display: flex;
+    align-items: center;
+    gap: 0 4px;
+
+    &__block {
+        height: 10px;
+        width: 10px;
+        border-radius: 2px;
+    }
+}
