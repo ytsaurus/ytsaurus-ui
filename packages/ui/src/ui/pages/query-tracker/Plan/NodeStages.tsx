@@ -59,6 +59,8 @@ function prepareData(data: Stages, state?: NodeState, finishedAt?: string) {
     const stages: StageRow[] = [];
     const length = Object.keys(data).length;
 
+    if (!length) return stages;
+
     let [currentStage, currentTime] = Object.entries(data[0])[0];
     const startedTime = currentTime;
     for (let i = 1; i < length; i++) {
