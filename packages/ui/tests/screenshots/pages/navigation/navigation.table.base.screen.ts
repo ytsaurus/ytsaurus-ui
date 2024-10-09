@@ -67,6 +67,7 @@ test('Navigation: table - Tablets', async ({page}) => {
 
     await tablePage(page).waitForTable('.navigation-tablets', 2);
     await tablePage(page).replaceBreadcrumbsTestDir();
+
     page.getByTestId('');
     await replaceInnerHtml(page, {
         '.navigation-tablets__id-link .g-link': '0-11111-22222-33333333',

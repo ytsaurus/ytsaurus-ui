@@ -8,12 +8,21 @@ const defaultSettings = {
         [SettingName.GLOBAL.THEME]: 'system',
         [SettingName.GLOBAL.FONT_TYPE]: '',
         [SettingName.GLOBAL.AUTO_REFRESH]: true,
-        [SettingName.GLOBAL.PAGES_ORDER]: [],
+        [SettingName.GLOBAL.PAGES_ORDER]: [
+            Page.NAVIGATION,
+            Page.QUERIES,
+            Page.OPERATIONS,
+            Page.ACCOUNTS,
+            Page.SCHEDULING,
+            Page.TABLET_CELL_BUNDLES,
+        ],
         [SettingName.GLOBAL.PAGES_PINNED]: {
             [Page.NAVIGATION]: true,
+            [Page.QUERIES]: true,
             [Page.OPERATIONS]: true,
-            [Page.DASHBOARD]: true,
-            [Page.SYSTEM]: true,
+            [Page.ACCOUNTS]: true,
+            [Page.SCHEDULING]: true,
+            [Page.TABLET_CELL_BUNDLES]: true,
         },
         [SettingName.GLOBAL.NAVIGATION_PANEL_EXPAND]: undefined as boolean | undefined,
     },
@@ -96,7 +105,7 @@ const defaultUserSettings: Settings = Object.entries(defaultSettings).reduce(
     {} as Settings,
 );
 
-export function getDafaultUserSettings(config: YTCoreConfig) {
+export function getDefaultUserSettings(config: YTCoreConfig) {
     Object.assign(defaultUserSettings, config.defaultUserSettingsOverrides);
     return defaultUserSettings;
 }

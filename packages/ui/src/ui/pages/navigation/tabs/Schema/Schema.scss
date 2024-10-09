@@ -32,6 +32,10 @@
         &-item {
             text-overflow: ellipsis;
             overflow: hidden;
+
+            .data-type::after {
+                font-family: var(--g-font-family-sans);
+            }
         }
 
         &-item {
