@@ -38,9 +38,11 @@ export async function getLayoutConfig(req: Request, params: Params): Promise<App
     };
 
     const isProduction = isProductionEnv();
+    const selectedFontType = settings.data['global::fontType'];
+    const {defaultFontType} = uiSettings;
 
     const res: AppLayoutConfig = {
-        bodyContent: {root: ''},
+        bodyContent: {root: '', className: `app-font-${selectedFontType || defaultFontType || ''}`},
         title: 'YT',
         lang: 'en',
         meta: [
