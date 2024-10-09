@@ -20,7 +20,7 @@ import map_ from 'lodash/map';
 
 import './MasterGroup.scss';
 import {ChangeMaintenanceButton} from './ChangeMaintenanceButton';
-import {calcShortNameByRegExp} from '../../../containers/Host/Host';
+import {makeShortSystemAddress} from '../helpers/makeShortSystemAddress';
 
 const b = block('master-group');
 
@@ -107,7 +107,7 @@ class Instance extends Component {
                 <div className={b('host')}>
                     <Tooltip content={addressWithoutPort}>
                         <div className={b('host-name')}>
-                            {calcShortNameByRegExp(addressWithoutPort) || addressWithoutPort}
+                            {makeShortSystemAddress(addressWithoutPort) || addressWithoutPort}
                         </div>
                     </Tooltip>
                     <Flex gap={1}>

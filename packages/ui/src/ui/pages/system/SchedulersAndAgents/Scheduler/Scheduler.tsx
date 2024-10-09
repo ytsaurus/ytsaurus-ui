@@ -10,7 +10,7 @@ import NodeQuad from '../../NodeQuad/NodeQuad';
 
 import '../Schedulers.scss';
 import {ChangeMaintenanceButton} from '../../Masters/ChangeMaintenanceButton';
-import {calcShortNameByRegExp} from '../../../../containers/Host/Host';
+import {makeShortSystemAddress} from '../../helpers/makeShortSystemAddress';
 
 const b = block('system');
 
@@ -47,7 +47,7 @@ export default function Scheduler({host, state, maintenanceMessage, type}: Sched
             <div title={address} className={b('scheduler-host')}>
                 <Tooltip content={address}>
                     <div className={b('scheduler-host-address')}>
-                        {calcShortNameByRegExp(address) || address}
+                        {makeShortSystemAddress(address) || address}
                     </div>
                 </Tooltip>
                 <div className={b('scheduler-host-btn')}>
