@@ -19,12 +19,12 @@
     "test": "jest 'test/'"
   },
   "dependencies": {
-    "@gravity-ui/eslint-config": "^3.2.0",
-    "@gravity-ui/prettier-config": "^1.1.0",
-    "@gravity-ui/stylelint-config": "^4.0.1",
     "axios": "^0.21.4"
   },
   "devDependencies": {
+    "@gravity-ui/eslint-config": "^3.2.0",
+    "@gravity-ui/prettier-config": "^1.1.0",
+    "@gravity-ui/stylelint-config": "^4.0.1",
     "axios": "^0.21.4",
     "jest": "27.5.1",
     "nock": "13.2.8"
