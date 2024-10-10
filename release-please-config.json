@@ -12,6 +12,10 @@
       "draft": true,
       "release-type": "node"
     },
+    "packages/ui-helm-chart": {
+      "draft": true,
+      "release-type": "helm"
+    },
     "packages/custom-ytsaurus-ui.example": {
       "release-type": "simple"
     }
