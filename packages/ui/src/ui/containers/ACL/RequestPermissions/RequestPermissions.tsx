@@ -101,7 +101,11 @@ function RequestPermissions(props: Props) {
         cancelRequestPermissions({idmKind});
     }, [handleClose, cancelRequestPermissions, idmKind]);
 
-    const {requestPermissionsFields, requestPermissionsFlags = {}} = UIFactory.getAclApi();
+    const {
+        requestPermissionsFields,
+        requestPermissionsFlags = {},
+        buttonsTitle,
+    } = UIFactory.getAclApi();
 
     const onAdd = useCallback(
         (form: FormApi<FormValues, Partial<FormValues>>) => {
@@ -290,7 +294,8 @@ function RequestPermissions(props: Props) {
         return res;
     }, [availableFields, requestPermissionsFields, useColumns]);
 
-    const title = useColumns ? 'Request column permissions' : 'Request permissions';
+    const {editAcl = 'Edit ACL', editColumnsAcl = 'Edit columns ACL'} = buttonsTitle ?? {};
+    const title = useColumns ? editColumnsAcl : editAcl;
 
     return !choices?.length ? null : (
         <ErrorBoundary>
