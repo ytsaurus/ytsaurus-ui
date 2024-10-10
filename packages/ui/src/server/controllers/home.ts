@@ -6,7 +6,7 @@ import {create, get, getSettingsConfig, isRemoteSettingsConfigured} from '../com
 import {getClusterConfig} from '../components/utils';
 import ServerFactory, {getApp} from '../ServerFactory';
 import {isLocalModeByEnvironment} from '../utils';
-import {getDafaultUserSettings} from '../utils/default-settings';
+import {getDefaultUserSettings} from '../utils/default-settings';
 import {ODIN_PAGE_ID} from '../../shared/constants';
 
 function isRootPage(page: string) {
@@ -54,7 +54,7 @@ export function homeIndexFactory(entryName = 'main') {
         const useRemoteSettings = isRemoteSettingsConfigured();
 
         const settings = {
-            data: getDafaultUserSettings(req.ctx.config),
+            data: getDefaultUserSettings(req.ctx.config),
             meta: {
                 useRemoteSettings,
                 errorMessage: undefined as string | undefined,

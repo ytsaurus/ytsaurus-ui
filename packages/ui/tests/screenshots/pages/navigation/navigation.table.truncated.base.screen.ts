@@ -18,9 +18,7 @@ test('Navigation: truncated table - Content', async ({page}) => {
 
     await test.step('Cell Preview Modal', async () => {
         const columns = await page
-            .locator(
-                '.data-table__table-wrapper tr:nth-child(1) td:nth-child(n+2) .data-table__value',
-            )
+            .locator('.data-table__table-wrapper tr:nth-child(1) td:nth-child(n+2) .yt-column-cell')
             .all();
 
         for (const column of columns) {
