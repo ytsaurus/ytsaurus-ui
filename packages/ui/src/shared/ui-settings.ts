@@ -136,6 +136,12 @@ export interface UISettings {
     reShortNameFromTabletNodeAddress?: string;
 
     /**
+     * Allows you to override the behavior of  'reShortNameFromSystemAddress ` for masters / providers / schedulers / agents.
+     * @example reShortNameFromSystemAddress: '(?<shortname>.*)((\\.msk\\.my-domain\\.ru)|(\\.vla\\.my-domain\\.net))'
+     */
+    reShortNameFromSystemAddress?: string;
+
+    /**
      * Allows to define array of regexps for allowed urls of TaggedType of unipika to display media-content (audio/video/images).
      * If there are no matched items in the array the TaggedType-item will be displayed as a json-object.
      * @expamle

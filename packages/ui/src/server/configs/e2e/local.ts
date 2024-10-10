@@ -40,6 +40,7 @@ const e2eConfig: Partial<AppConfig> = {
         },
 
         reShortNameFromAddress: '(?<shortname>^(loca)).*(?<suffix>:\\d\\d\\d)',
+        reShortNameFromSystemAddress: '(?<shortname>^(loca)).*(?<suffix>:\\d\\d\\d)',
         reShortNameFromTabletNodeAddress: '(?<shortname>^(local))[^:]+(?<suffix>:\\d\\d)',
 
         reUnipikaAllowTaggedSources: ['^https://yastatic\\.net/'],
