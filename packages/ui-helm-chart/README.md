@@ -48,7 +48,10 @@ ui:
         theme: lavander
 _EOF
 )
+```
 
+Then you are redy to install/upgrade the chart:
+```bash
 helm upgrade --install yt-ui github/ytsaurus-ui/packages/ui-helm-chart/ -f values.yaml
 # or run specific version of UI (all versions: https://github.com/ytsaurus/ytsaurus-ui/pkgs/container/ui)
 helm upgrade --install yt-ui github/ytsaurus-ui/packages/ui-helm-chart/ -f values.yaml --set ui.image.tag=1.60.1
