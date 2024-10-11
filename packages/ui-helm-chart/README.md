@@ -4,7 +4,7 @@
 
 See [the documentation](https://ytsaurus.tech/docs/en/overview/try-yt#installing-the-operator1)
 
-## Using with custom cluster
+## Using with a custom cluster
 
 ### Prerequirements 
 
