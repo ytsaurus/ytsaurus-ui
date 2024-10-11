@@ -2,7 +2,11 @@
 
 ## Using with [ytop-chart](https://github.com/ytsaurus/ytsaurus-k8s-operator/pkgs/container/ytop-chart)
 
-See [the documentation](https://ytsaurus.tech/docs/en/overview/try-yt#installing-the-operator1)
+Follow all required steps to [Starting YTsaurus cluster](https://ytsaurus.tech/docs/en/overview/try-yt#starting-ytsaurus-cluster1)
+And then install the chart:
+```bash
+helm upgrade --install ytsaurus-ui github/ytsaurus-ui/packages/ui-helm-chart/
+```
 
 ## Using with a custom cluster
 
@@ -25,7 +29,7 @@ kubectl create secret generic yt-ui-secret --from-literal="yt-interface-secret.j
 
 Also you have to provide description of your cluster:
 ```bash
-read -p "Cluster id: " id_; read -p "Proxy: " proxy_; read -p "Use https [true/false]: " secure_; read -p "NODE_TLS_REJECT_UNAUTHORIZED [1/0]: " tlsrej_; (
+read -p "Cluster id: " id_; read -p "http_proxy hostname: " proxy_; read -p "Use https [true/false]: " secure_; read -p "NODE_TLS_REJECT_UNAUTHORIZED [1/0]: " tlsrej_; (
 tee values.yaml << _EOF
 ui:
   env:
