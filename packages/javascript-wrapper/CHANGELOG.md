@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.10.2](https://github.com/ytsaurus/ytsaurus-ui/compare/javascript-wrapper-v0.10.1...javascript-wrapper-v0.10.2) (2024-10-11)
+
+
+### Bug Fixes
+
+* **javascript-wrapper:** use devDependencies for linting packages ([aef7341](https://github.com/ytsaurus/ytsaurus-ui/commit/aef73412a9f2468121edaed99aaa4a53c5797c7a))
+
 ## [0.10.1](https://github.com/ytsaurus/ytsaurus-ui/compare/javascript-wrapper-v0.10.0...javascript-wrapper-v0.10.1) (2024-09-05)
 
 
