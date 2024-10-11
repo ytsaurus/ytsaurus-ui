@@ -100,9 +100,11 @@ export const getSupportedTabs = createSelector(
         }
 
         if (
-            attributes?.type === 'table' &&
             attributes?.dynamic === true &&
-            attributes?.sorted === false
+            attributes?.sorted === false &&
+            (attributes?.type === 'table' ||
+                attributes?.type === 'replicated_table' ||
+                attributes?.type === 'chaos_replicated_table')
         ) {
             supportedByAttribute.push(Tab.QUEUE);
         }
