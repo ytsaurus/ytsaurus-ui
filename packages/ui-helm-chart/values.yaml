@@ -1,9 +1,9 @@
 ui:
   replicaCount: 1
   image:
-    repository: ytsaurus/ui
+    repository: ghcr.io/ytsaurus/ui
     pullPolicy: IfNotPresent
-    tag: "1.27.0"
+    tag: "1.60.1"
 
   clusterConfig:
     clusters: []
