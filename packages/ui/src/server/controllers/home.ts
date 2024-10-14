@@ -8,6 +8,7 @@ import ServerFactory, {getApp} from '../ServerFactory';
 import {isLocalModeByEnvironment} from '../utils';
 import {getDafaultUserSettings} from '../utils/default-settings';
 import {ODIN_PAGE_ID} from '../../shared/constants';
+//test
 
 function isRootPage(page: string) {
     const rootPages = [
