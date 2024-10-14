@@ -272,7 +272,7 @@ function OdinOverview(props: OdinOverviewProps) {
                         <DatePicker
                             className={block('navigation-date-picker')}
                             size="m"
-                            format="MM/DD/YYYY HH:mm"
+                            format="DD.MM.YYYY HH:mm"
                             maxValue={dateTime({input: Date.now() - ODIN_OVERVIEW_TIME_RANGE})}
                             onUpdate={(value) => {
                                 dispatch(setOdinOverviewFromTimeFilter(value?.valueOf()));
