@@ -56,3 +56,19 @@ test('Navigation - Locks', async ({page}) => {
 
     await expect(page).toHaveScreenshot();
 });
+
+test('Navigation - map_node - select-by-first-cell', async ({page}) => {
+    await page.goto(makeClusterUrl(`navigation?path=${E2E_DIR}`));
+
+    await navigationPage(page).replaceMapNodeDateTimes(8);
+    await navigationPage(page).replaceMapNodeAccounts(8);
+    await navigationPage(page).replaceBreadcrumbsTestDir();
+    await navigationPage(page).replaceMapNodeBytes();
+
+    await page.click('.map-node_default__table tr:nth-child(1) td:nth-child(1)', {
+        force: true,
+        position: {x: 1, y: 1},
+    });
+
+    await expect(page).toHaveScreenshot();
+});
