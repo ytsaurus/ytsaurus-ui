@@ -59,9 +59,9 @@ jobs:
       - name: Run containers for 'Local'
         run: |
           pwd
-          curl https://raw.githubusercontent.com/ytsaurus/ytsaurus/main/yt/docker/local/run_local_cluster.sh > run_local_cluster.sh
+          curl https://raw.githubusercontent.com/ytsaurus/ytsaurus/85b79ee968a7d36258daa705929404ac4bfdc0c4/yt/docker/local/run_local_cluster.sh > run_local_cluster.sh
           chmod u+x run_local_cluster.sh
-          ./run_local_cluster.sh --node-count 2 --ui-skip-pull true --ui-version local --yt-version dev --ui-app-installation e2e
+          ./run_local_cluster.sh --node-count 2 --ui-skip-pull true --ui-version local --yt-version stable --ui-app-installation e2e
           sleep 10
       - name: Checkout
         uses: actions/checkout@v2
@@ -110,7 +110,7 @@ jobs:
           curl https://raw.githubusercontent.com/ytsaurus/ytsaurus/main/yt/docker/local/run_local_cluster.sh > run_local_cluster.sh
           chmod u+x run_local_cluster.sh
           ./run_local_cluster.sh --stop
-          ./run_local_cluster.sh --node-count 2 --ui-skip-pull true --ui-version local --yt-version dev --ui-app-installation e2e --docker-hostname `hostname` --fqdn localhost --ui-network bridge
+          ./run_local_cluster.sh --node-count 2 --ui-skip-pull true --ui-version local --yt-version stable --ui-app-installation e2e --docker-hostname `hostname` --fqdn localhost --ui-network bridge
           sleep 10
       - name: Checkout
         uses: actions/checkout@v2
@@ -153,7 +153,7 @@ jobs:
           curl https://raw.githubusercontent.com/ytsaurus/ytsaurus/main/yt/docker/local/run_local_cluster.sh > run_local_cluster.sh
           chmod u+x run_local_cluster.sh
           ./run_local_cluster.sh --stop
-          ./run_local_cluster.sh --node-count 2 --ui-skip-pull true --ui-version local --yt-version dev --ui-app-installation e2e
+          ./run_local_cluster.sh --node-count 2 --ui-skip-pull true --ui-version local --yt-version stable --ui-app-installation e2e
           sleep 10
       - name: Checkout
         uses: actions/checkout@v2
