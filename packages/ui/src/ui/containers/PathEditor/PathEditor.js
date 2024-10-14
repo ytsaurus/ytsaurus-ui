@@ -179,13 +179,13 @@ export class PathEditor extends Component {
         this.debounceLoading(path);
     };
 
-    handleInputFocus = () => {
+    handleInputFocus = (e) => {
         const {onFocus} = this.props;
         const {path} = this.state;
 
         key.setScope('path-editor');
         this.setState({inputFocus: true});
-        this.callCallback(onFocus, path);
+        onFocus?.(e, {path});
     };
 
     handleInputBlur = () => {
