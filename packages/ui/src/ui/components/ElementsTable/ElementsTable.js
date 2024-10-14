@@ -379,7 +379,7 @@ class ElementsTable extends Component {
         const {items, onItemClick, getItemLink} = this.props;
         const index = Number(evt.currentTarget.dataset.index);
         const handleClick = action.makeEntryClickHandler(evt, onItemClick, getItemLink);
-        handleClick(items[index], index);
+        handleClick(items[index], index, evt);
     };
     // For item click end
 
