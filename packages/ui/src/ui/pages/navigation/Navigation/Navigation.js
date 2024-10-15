@@ -294,6 +294,7 @@ class Navigation extends Component {
                     path={pathForRequest}
                     cluster={cluster}
                     buttonText={textForRequest}
+                    buttonProps={{size: 'l', width: 'max'}}
                 />
             </div>
         );
