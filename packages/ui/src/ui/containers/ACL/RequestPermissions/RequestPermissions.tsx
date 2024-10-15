@@ -3,7 +3,7 @@ import cn from 'bem-cn-lite';
 import React, {useCallback, useMemo} from 'react';
 import {DialogField, FormApi, YTDFDialog, makeErrorFields} from '../../../components/Dialog';
 import ErrorBoundary from '../../../components/ErrorBoundary/ErrorBoundary';
-import Button from '../../../components/Button/Button';
+import {Button, ButtonProps} from '@gravity-ui/uikit';
 import PermissionsControl from '../RequestPermissions/PermissionsControl/PermissionsControl';
 
 import withVisible, {WithVisibleProps} from '../../../hocs/withVisible';
@@ -42,6 +42,7 @@ export type RequestPermissionsFieldsNames =
 export interface Props extends WithVisibleProps {
     className?: string;
     buttonClassName?: string;
+    buttonProps?: ButtonProps;
     cluster?: string;
     normalizedPoolTree?: string;
     path: string;
@@ -93,6 +94,7 @@ function RequestPermissions(props: Props) {
         error,
         cluster,
         columnGroups,
+        buttonProps,
         /*denyColumns,*/
     } = props;
 
@@ -295,9 +297,10 @@ function RequestPermissions(props: Props) {
     return !choices?.length ? null : (
         <ErrorBoundary>
             <div className={block(null, className)}>
-                <Button className={buttonClassName} view={'action'} onClick={onShow}>
+                <Button className={buttonClassName} view="action" {...buttonProps} onClick={onShow}>
                     {title}
                 </Button>
+
                 <YTDFDialog<FormValues>
                     pristineSubmittable
                     onClose={onClose}
