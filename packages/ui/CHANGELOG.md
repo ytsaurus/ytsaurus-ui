@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.62.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.61.0...ui-v1.62.0) (2024-10-16)
+
+
+### Features
+
+* **Settings:** change default pinned pages [YTFRONT-4364] ([bb51fa0](https://github.com/ytsaurus/ytsaurus-ui/commit/bb51fa050c1bac99408c1a10166dae758ec8aa16))
+
+
+### Bug Fixes
+
+* **Odin:** use the same format for DatePicker in odin ([5a25c2f](https://github.com/ytsaurus/ytsaurus-ui/commit/5a25c2f9aec338b39bf49a7e9a8836516d6a0980))
+
 ## [1.61.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.60.1...ui-v1.61.0) (2024-10-04)
 
 
