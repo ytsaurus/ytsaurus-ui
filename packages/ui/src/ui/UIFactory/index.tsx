@@ -1,6 +1,5 @@
 import React from 'react';
 import type {Reducer} from 'redux';
-import forEach_ from 'lodash/forEach';
 
 import type {DropdownMenuItem} from '@gravity-ui/uikit';
 import type {SVGIconData} from '@gravity-ui/uikit/build/esm/components/Icon/types';
@@ -440,15 +439,8 @@ export interface UIFactory {
 // All methods comes from `configureUIFactory` method
 const uiFactory: UIFactory = {} as any;
 
-function configureUIFactoryItem<K extends keyof UIFactory>(k: K, redefinition: UIFactory[K]) {
-    uiFactory[k] = redefinition;
-}
-
 export function configureUIFactory(overrides: UIFactory) {
-    forEach_(overrides, (_v, k) => {
-        const key = k as keyof UIFactory;
-        configureUIFactoryItem(key, overrides[key]!);
-    });
+    Object.assign(uiFactory, overrides);
 }
 
 export default new Proxy(uiFactory, {
