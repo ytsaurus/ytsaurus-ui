@@ -1,12 +1,6 @@
 @import '../../styles/mixins';
-@import '../../styles/common';
 
-$content-offset: 60px;
-
-.preloader {
-    font-size: 16px;
-    margin-top: 60px;
-
+.yt-preload-error {
     &__loading {
         text-align: center;
     }
@@ -27,26 +21,12 @@ $content-offset: 60px;
 
     &__title {
         @include heading-size(l);
-        margin-bottom: 28px;
+        margin-bottom: 20px;
         font-weight: var(--yt-font-weight-bold);
     }
 
     &__text {
         margin: 0;
-        margin-bottom: $content-offset;
-    }
-
-    &__suggestions-list {
-        @include reset-ul();
-        margin-bottom: $content-offset;
-    }
-
-    &__suggestions-item {
-        @include reset-li();
         margin-bottom: 24px;
-    }
-
-    &__suggestions-title {
-        @include heading-size(s);
     }
 }

@@ -6,7 +6,7 @@ import Cookies from 'js-cookie';
 
 import ypath from '../../common/thor/ypath';
 import {checkIsDeveloper} from '../../../shared/utils/check-permission';
-import {INIT_CLUSTER_PARAMS, LOAD_ERROR, UPDATE_CLUSTER} from '../../constants/index';
+import {INIT_CLUSTER_PARAMS, PRELOAD_ERROR, UPDATE_CLUSTER} from '../../constants/index';
 import {getCurrentUserName} from '../../store/selectors/global';
 import {getXsrfCookieName} from '../../utils';
 import {RESET_STORE_BEFORE_CLUSTER_CHANGE} from '../../constants/utils';
@@ -239,7 +239,7 @@ export function updateCluster(cluster: string): GlobalThunkAction {
                 if (!version || versionError) {
                     dispatch({
                         type: UPDATE_CLUSTER.FAILURE,
-                        data: {errorType: LOAD_ERROR.CONNECTION, error: versionError},
+                        data: {errorType: PRELOAD_ERROR.CONNECTION, error: versionError},
                     });
                 } else {
                     dispatch({
@@ -255,7 +255,7 @@ export function updateCluster(cluster: string): GlobalThunkAction {
                         dispatch({
                             type: UPDATE_CLUSTER.FAILURE,
                             data: {
-                                errorType: LOAD_ERROR.AUTHENTICATION,
+                                errorType: PRELOAD_ERROR.AUTHENTICATION,
                                 error: tokenError || new Error('Failed to get CSRF-token'),
                             },
                         });

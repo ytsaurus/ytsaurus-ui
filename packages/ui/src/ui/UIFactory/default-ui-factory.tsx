@@ -310,4 +310,7 @@ export const defaultUIFactory: UIFactory = {
     getNavigationMapNodeSettings() {
         return undefined;
     },
+    renderCustomPreloaderError() {
+        return null;
+    },
 };

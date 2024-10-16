@@ -27,6 +27,7 @@ import {Page} from '../../../../shared/constants/settings';
 import {AuthWay} from '../../../../shared/constants';
 
 export const getGlobalError = (state: RootState) => state.global.error.error;
+export const getGlobalErrorType = (state: RootState) => state.global.error.errorType;
 
 export const getCluster = (state: RootState): string => state?.global?.cluster || '';
 export const getRootPagesCluster = (state: RootState) => state?.global.rootPagesCluster;
