@@ -27,6 +27,7 @@ import type {UISettingsMonitoring} from '../../shared/ui-settings';
 import type {SubjectCardProps} from '../components/SubjectLink/SubjectLink';
 import type {QueryItem} from '../pages/query-tracker/module/api';
 import type {Node} from '../utils/navigation/content/map-nodes/node';
+import type {PreloadErrorType} from '../constants';
 
 type HeaderItemOrPage =
     | {
@@ -428,6 +429,12 @@ export interface UIFactory {
               additionalAttributes: Array<string>;
               renderNodeIcon: (item: Node) => React.ReactNode;
           };
+
+    renderCustomPreloaderError: (params: {
+        cluster: string;
+        errorType: PreloadErrorType;
+        error: Error;
+    }) => React.ReactNode;
 }
 
 // All methods comes from `configureUIFactory` method

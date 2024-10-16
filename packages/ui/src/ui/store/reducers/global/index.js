@@ -12,8 +12,8 @@ import {
     INC_NAV_BLOCKER_COUNTER,
     INIT_CLUSTER_PARAMS,
     LOADING_STATUS,
-    LOAD_ERROR,
     MERGE_SCREEN,
+    PRELOAD_ERROR,
     SET_MAINTENANCE_PAGE_EVENT,
     SPLIT_SCREEN,
     UPDATE_CLUSTER,
@@ -211,7 +211,7 @@ export default (state = initialState, action) => {
                 ...state,
                 error: {
                     error,
-                    errorType: errorType || LOAD_ERROR.GENERAL,
+                    errorType: errorType || PRELOAD_ERROR.GENERAL,
                 },
                 loadState: LOADING_STATUS.ERROR,
             };

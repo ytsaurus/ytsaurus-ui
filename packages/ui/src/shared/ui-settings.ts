@@ -25,7 +25,6 @@ export interface UISettings {
 
     announcesMailListUrl?: string;
 
-    sslCertFixUrl?: string;
     queryTrackerStage?: string;
     queryTrackerCluster?: string;
 

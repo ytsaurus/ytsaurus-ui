@@ -25,13 +25,13 @@ import ClusterPageHeader from '../ClusterPageHeader/ClusterPageHeader';
 import PageTracker from './PageTracker';
 
 import {PageHeadByCluster} from '../../components/PageHead/PageHead';
-import ConnectionErrorRegion from '../../components/PreloaderErrors/ConnectionErrorRegion';
-import GeneralErrorRegion from '../../components/PreloaderErrors/GeneralErrorRegion';
+
 import FlexSplitPane from '../../components/FlexSplitPane/FlexSplitPane';
 import ErrorBlock from '../../components/Error/Error';
 import HandleMaintenance from '../../containers/MaintenancePage/HandleMaintenance';
+import PreloadError from '../../containers/PreloadError/PreloadError';
 
-import {LOADING_STATUS, LOAD_ERROR, Page, SPLIT_PANE_ID} from '../../constants/index';
+import {LOADING_STATUS, Page, SPLIT_PANE_ID} from '../../constants/index';
 import {joinMenuItemsAction, splitMenuItemsAction, trackVisit} from '../../store/actions/menu';
 import {setSetting} from '../../store/actions/settings';
 import {unmountCluster, updateCluster} from '../../store/actions/cluster-params';
@@ -178,30 +178,6 @@ class ClusterPage extends Component {
         return this.props.clusterPagePaneSizes;
     };
 
-    renderError(clusterConfig) {
-        const {errorType} = this.props.error || {};
-
-        switch (errorType) {
-            case LOAD_ERROR.CONNECTION:
-                return <ConnectionErrorRegion cluster={clusterConfig.id} />;
-            case LOAD_ERROR.AUTHENTICATION:
-                return (
-                    <GeneralErrorRegion
-                        cluster={clusterConfig.id}
-                        message={
-                            'Could not fetch the XSRF token, therefore preventing further operations. Sometimes ' +
-                            'token fetching fails due to the network issues. If the  problem persists, please report it ' +
-                            'via Bug Reporter.'
-                        }
-                    />
-                );
-            case LOAD_ERROR.GENERAL:
-                return (
-                    <GeneralErrorRegion message="Unexpected error occurred. If problem persists please report it via Bug Reporter." />
-                );
-        }
-    }
-
     isParamsLoading() {
         const {cluster, paramsCluster} = this.props;
         return cluster !== paramsCluster;
@@ -268,9 +244,9 @@ class ClusterPage extends Component {
             </Fragment>
         ) : (
             <React.Fragment>
-                <div className="preloader">
+                <div className={b('preloader')}>
                     {hasError ? (
-                        this.renderError(clusterConfig)
+                        <PreloadError />
                     ) : (
                         <p className="preloader__loading">Loading {clusterConfig?.id}...</p>
                     )}

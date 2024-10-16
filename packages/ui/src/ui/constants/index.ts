@@ -1,3 +1,4 @@
+import {ValueOf} from '../types/index';
 import createActionTypes, {createPrefix} from './utils';
 export {Page} from '../../shared/constants/settings';
 
@@ -22,11 +23,13 @@ export const LOADING_STATUS = {
     CANCELLED: 'cancelled',
 } as const;
 
-export const LOAD_ERROR = {
+export const PRELOAD_ERROR = {
     GENERAL: 'general',
     CONNECTION: 'connection',
     AUTHENTICATION: 'authentication',
-};
+} as const;
+
+export type PreloadErrorType = ValueOf<typeof PRELOAD_ERROR>;
 
 export const TYPED_OUTPUT_FORMAT = {
     $value: 'json' as const,
