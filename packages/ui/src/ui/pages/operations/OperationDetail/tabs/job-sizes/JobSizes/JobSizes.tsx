@@ -118,7 +118,7 @@ class JobSizes extends React.Component<Props, State> {
                 <YTHistogram
                     className={block('charts')}
                     data={data}
-                    yLabel={'jobs count'}
+                    yLabel={'job count'}
                     xLabel={'job input data weight'}
                     xFormat={this.formatX}
                     yMin={0.5}
