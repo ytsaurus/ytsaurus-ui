@@ -49,19 +49,30 @@ jobs:
 
           docker tag $IMAGE_NAME:local $STABLE_IMAGE_NAME:local
 
+  run-local-cluster-sh:
+    name: Install run_local_cluster.sh
+    runs-on: ${{ needs.start-vm.outputs.label }}
+    needs:
+      - start-vm
+      - e2e-build
+    steps:
+      - name: install
+        run: |
+          curl https://raw.githubusercontent.com/ytsaurus/ytsaurus/main/yt/docker/local/run_local_cluster.sh > run_local_cluster.sh
+          chmod a+x run_local_cluster.sh
+          install run_local_cluster.sh /usr/local/bin
+
   e2e-local:
     name: E2E for 'Local'
     runs-on: ${{ needs.start-vm.outputs.label }}
     needs:
       - start-vm
       - e2e-build
+      - run-local-cluster-sh
     steps:
       - name: Run containers for 'Local'
         run: |
-          pwd
-          curl https://raw.githubusercontent.com/ytsaurus/ytsaurus/85b79ee968a7d36258daa705929404ac4bfdc0c4/yt/docker/local/run_local_cluster.sh > run_local_cluster.sh
-          chmod u+x run_local_cluster.sh
-          ./run_local_cluster.sh --node-count 2 --ui-skip-pull true --ui-version local --yt-version stable --ui-app-installation e2e
+          run_local_cluster.sh --node-count 2 --ui-skip-pull true --ui-version local --yt-version stable --ui-app-installation e2e
           sleep 10
       - name: Checkout
         uses: actions/checkout@v2
@@ -103,14 +114,12 @@ jobs:
       - start-vm
       - e2e-build
       - e2e-local
+      - run-local-cluster-sh
     steps:
       - name: Run containers for 'Local as remote'
         run: |
-          pwd
-          curl https://raw.githubusercontent.com/ytsaurus/ytsaurus/85b79ee968a7d36258daa705929404ac4bfdc0c4/yt/docker/local/run_local_cluster.sh > run_local_cluster.sh
-          chmod u+x run_local_cluster.sh
-          ./run_local_cluster.sh --stop
-          ./run_local_cluster.sh --node-count 2 --ui-skip-pull true --ui-version local --yt-version stable --ui-app-installation e2e --docker-hostname `hostname` --fqdn localhost --ui-network bridge
+          run_local_cluster.sh --stop
+          run_local_cluster.sh --node-count 2 --ui-skip-pull true --ui-version local --yt-version stable --ui-app-installation e2e --docker-hostname `hostname` --fqdn localhost --ui-network bridge
           sleep 10
       - name: Checkout
         uses: actions/checkout@v2
@@ -146,14 +155,12 @@ jobs:
       - e2e-build
       - e2e-local
       - e2e-local-as-remote
+      - run-local-cluster-sh
     steps:
       - name: Run containers for 'Local'
         run: |
-          pwd
-          curl https://raw.githubusercontent.com/ytsaurus/ytsaurus/85b79ee968a7d36258daa705929404ac4bfdc0c4/yt/docker/local/run_local_cluster.sh > run_local_cluster.sh
-          chmod u+x run_local_cluster.sh
-          ./run_local_cluster.sh --stop
-          ./run_local_cluster.sh --node-count 2 --ui-skip-pull true --ui-version local --yt-version stable --ui-app-installation e2e
+          run_local_cluster.sh --stop
+          run_local_cluster.sh --node-count 2 --ui-skip-pull true --ui-version local --yt-version stable --ui-app-installation e2e
           sleep 10
       - name: Checkout
         uses: actions/checkout@v2
