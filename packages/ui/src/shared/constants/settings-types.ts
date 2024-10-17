@@ -69,8 +69,7 @@ interface AccountsSettings {
     'global::accounts::dashboardVisibilityMode': 'string';
 }
 
-type ClusterName = string;
-type Stage = string;
+export type Stage = string;
 
 interface QueryTrackerSettings {
     'global::queryTracker::queriesListSidebarVisibilityMode': boolean;
@@ -82,11 +81,11 @@ interface ChytSettings {
 }
 
 type QueryTrackerLastSelectedACOsSettings = {
-    [key in `qt-stage::${ClusterName}::queryTracker::${Stage}::lastSelectedACOs`]: string[];
+    [key in `qt-stage::${Stage}::queryTracker::lastSelectedACOs`]: string[];
 };
 
 type QueryTrackerUserDefaultACOSettings = {
-    [key in `qt-stage::${ClusterName}::queryTracker::${Stage}::defaultACO`]: string;
+    [key in `qt-stage::${Stage}::queryTracker::defaultACO`]: string;
 };
 
 interface OtherSettings {

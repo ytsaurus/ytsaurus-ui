@@ -5,17 +5,12 @@ import {getSettingsData} from '../../../../store/selectors/settings-base';
 import {createSelector} from 'reselect';
 import {DEFAULT_QUERY_ACO, SHARED_QUERY_ACO, getCurrentStage} from '../query/selectors';
 import {getClusterUiConfig} from '../../../../store/selectors/global';
-import get_ from 'lodash/get';
 const selectAcoState = (state: RootState) => state.queryTracker.aco;
 
 export const getLastSelectedACONamespaces = (state: RootState) => {
-    const cluster = state.global.cluster;
     const stage = getCurrentStage(state);
 
-    return (
-        getSettingsData(state)[`qt-stage::${cluster}::queryTracker::${stage}::lastSelectedACOs`] ??
-        []
-    );
+    return getSettingsData(state)[`qt-stage::${stage}::queryTracker::lastSelectedACOs`] ?? [];
 };
 
 export const getQueryACOOptions = (state: RootState): SelectOption[] => {
@@ -53,14 +48,13 @@ export const getClusterDefaultQueryACO = (state: RootState) => {
     const queryTrackerDefaultACO = getClusterUiConfig(state)?.query_tracker_default_aco;
     const stage = getCurrentStage(state);
 
-    return get_(queryTrackerDefaultACO, stage, DEFAULT_QUERY_ACO);
+    return (queryTrackerDefaultACO && queryTrackerDefaultACO[stage]) || DEFAULT_QUERY_ACO;
 };
 
 export const getUserDefaultQueryACO = (state: RootState) => {
-    const cluster = state.global.cluster;
     const stage = getCurrentStage(state);
 
-    return getSettingsData(state)[`qt-stage::${cluster}::queryTracker::${stage}::defaultACO`];
+    return getSettingsData(state)[`qt-stage::${stage}::queryTracker::defaultACO`];
 };
 
 export const getDefaultQueryACO = (state: RootState) => {

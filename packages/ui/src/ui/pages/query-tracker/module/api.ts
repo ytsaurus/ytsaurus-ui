@@ -571,14 +571,15 @@ export function addACOToLastSelected(
 ): ThunkAction<Promise<any>, RootState, any, AnyAction> {
     return async (dispatch, getState) => {
         const state = getState();
-        const cluster = state.global.cluster;
         const lastSelectedACONamespaces = getLastSelectedACONamespaces(state);
         const stage = getCurrentStage(state);
 
         await dispatch(
-            setSettingByKey(`qt-stage::${cluster}::queryTracker::${stage}::lastSelectedACOs`, [
+            setSettingByKey(`qt-stage::${stage}::queryTracker::lastSelectedACOs`, [
                 ...aco,
-                ...lastSelectedACONamespaces.filter((item) => !aco.includes(item)).slice(0, 9),
+                ...lastSelectedACONamespaces
+                    .filter((item: string) => !aco.includes(item))
+                    .slice(0, 9),
             ]),
         );
     };

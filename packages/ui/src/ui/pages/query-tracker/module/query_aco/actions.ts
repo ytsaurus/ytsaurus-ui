@@ -10,7 +10,14 @@ import {QueryACOActions} from './reducer';
 import {RootState} from '../../../../store/reducers';
 import {setSettingByKey} from '../../../../store/actions/settings';
 
-export const getQueryACO = (): ThunkAction<Promise<unknown>, any, any, QueryACOActions> => {
+type QueryTrackerInfoResponse = Awaited<ReturnType<typeof ytApiV4Id.getQueryTrackerInfo>>;
+
+export const getQueryACO = (): ThunkAction<
+    Promise<QueryTrackerInfoResponse>,
+    any,
+    any,
+    QueryACOActions
+> => {
     return (dispatch, getState) => {
         const state = getState();
         const {stage} = getQueryTrackerRequestOptions(state);
@@ -44,6 +51,8 @@ export const getQueryACO = (): ThunkAction<Promise<unknown>, any, any, QueryACOA
                     type: QUERY_ACO_LOADING.SUCCESS,
                     data: {data},
                 });
+
+                return data;
             })
             .catch((error) => {
                 // @todo Remove the condition when the method will be implemented on all clusters
@@ -70,11 +79,8 @@ export function setUserDefaultACO(
 ): ThunkAction<Promise<any>, RootState, any, AnyAction> {
     return async (dispatch, getState) => {
         const state = getState();
-        const cluster = state.global.cluster;
         const stage = getCurrentStage(state);
 
-        await dispatch(
-            setSettingByKey(`qt-stage::${cluster}::queryTracker::${stage}::defaultACO`, aco),
-        );
+        await dispatch(setSettingByKey(`qt-stage::${stage}::queryTracker::defaultACO`, aco));
     };
 }
