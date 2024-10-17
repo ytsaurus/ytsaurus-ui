@@ -52,6 +52,13 @@ Another way is to provide `clusters-config.json` and run the command like:
 $ npm run dev:app
 ```
 
+## Development without nginx
+You also could run application without nginx, right on localhost port. All that you need to do is specify port:
+
+```bash
+LOCAL_DEV_PORT=8080 YT_AUTH_ALLOW_INSECURE=true ALLOW_PASSWORD_AUTH=true npm run dev:oss
+```
+
 ### Docker
 
 There is ability to build docker-image:
