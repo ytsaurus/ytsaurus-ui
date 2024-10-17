@@ -21,6 +21,7 @@ const cfg: Partial<CustomAppConfig> = {
         reHashFromNodeVersion: '[^~]+~(?<hash>[^+]+)',
 
         reShortNameFromAddress: '(?<shortname>.*)(\\.[^.]+)(\\.yt\\.my\\.domain)',
+        reShortNameSystemPage: '(?<shortname>.*)(\\.[^.]+)(\\.yt\\.my\\.domain)',
         reShortNameFromTabletNodeAddress: '(?<shortname>[^-]+-[^-]+).*',
 
         reUnipikaAllowTaggedSources: [
