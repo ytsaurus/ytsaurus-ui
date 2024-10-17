@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.63.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.62.0...ui-v1.63.0) (2024-10-17)
+
+
+### Features
+
+* **UIFactory:** introduce renderCustomPreloaderError method which allows to render custom error page ([b580749](https://github.com/ytsaurus/ytsaurus-ui/commit/b580749cb803e0bacb830b3a0fd33b9fbe2b9646))
+
+
+### Bug Fixes
+
+* **Navigation:** change request permission button [YTFRONT-4379] ([9eefa05](https://github.com/ytsaurus/ytsaurus-ui/commit/9eefa050f002a9a4dd829b32c4cf75bf4de068cb))
+
 ## [1.62.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.61.0...ui-v1.62.0) (2024-10-16)
 
 
