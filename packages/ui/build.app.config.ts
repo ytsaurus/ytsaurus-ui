@@ -12,6 +12,8 @@ if (debugPort) {
     console.log({debugPort}, '\n');
 }
 
+const usePort = Boolean(process.env.USE_PORT);
+
 const client: ServiceConfig['client'] = {
     watchOptions: {
         aggregateTimeout: 1000,
@@ -26,12 +28,22 @@ const client: ServiceConfig['client'] = {
     hiddenSourceMap: false,
     disableReactRefresh: true,
     analyzeBundle,
+
+    ...(usePort ? {
+        devServer: {
+            port: 8080,
+        }
+    }: null),
 };
 
 const server: ServiceConfig['server'] = {
     watch: ['dist/shared'],
     watchThrottle: 1000,
     inspectBrk: debugPort,
+
+    ...(usePort ? {
+        port: 3000,
+    }: null),
 };
 
 export default {client, server};
