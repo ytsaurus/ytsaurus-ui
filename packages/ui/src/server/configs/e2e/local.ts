@@ -48,6 +48,11 @@ const e2eConfig: Partial<AppConfig> = {
         reUseEffectiveAclForPath: '//sys/access_control_object_namespaces[^/+]{0,}',
     },
 
+    userColumnPresets: {
+        cluster: 'ui',
+        dynamicTablePath: '//tmp/userColumnPresets',
+    },
+
     defaultUserSettingsOverrides: {
         ...common.defaultUserSettingsOverrides,
         ['global::navigation::useSmartSort']: false,

@@ -1,8 +1,7 @@
 #!/bin/bash
+set -xe
 
 EXPIRATION_TIMEOUT=${EXPIRATION_TIMEOUT:-3600000}
-
-set -xe
 
 if ! which yt >/dev/null; then
     echo You have to install YT CLI manually, please 1>&2
@@ -13,6 +12,17 @@ if [ -z "${YT_PROXY}" ]; then
     echo You have to provide YT_PROXY environment variable 1>&2
     exit 2
 fi
+
+function createAndMountDynamicTable {
+    path=$1
+    schema=$2
+    yt create -i --attributes "{dynamic=%true;schema=$schema}" table $path
+    yt mount-table $path
+}
+
+# userColumnPresets
+createAndMountDynamicTable "//tmp/userColumnPresets" "[{name=hash;sort_order=ascending;type=string};{name=columns_json;type=string}]"
+
 
 suffix=E=$(mktemp -u XXXXXX)
 # to lower case
@@ -132,8 +142,7 @@ createAccountForQuotaEditor e2e-overcommit
 yt set //sys/accounts/e2e-overcommit-${E2E_SUFFIX}/@allow_children_limit_overcommit %true
 
 DYN_TABLE=${E2E_DIR}/dynamic-table
-yt create --attributes "{dynamic=%true;schema=[{name=key;sort_order=ascending;type=string};{name=value;type=string};{name=empty;type=any}]}" table ${DYN_TABLE}
-yt mount-table ${DYN_TABLE}
+createAndMountDynamicTable "$DYN_TABLE" "[{name=key;sort_order=ascending;type=string};{name=value;type=string};{name=empty;type=any}]"
 (
     set +x
     for ((i = 0; i < 300; i++)); do

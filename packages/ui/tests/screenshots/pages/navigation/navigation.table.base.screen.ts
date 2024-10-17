@@ -86,7 +86,55 @@ test('Navigation: static-table - rowselector', async ({page}) => {
     await page.click('.navigation-table-overview__input', {force: true});
     await page.click('.rc-slider', {force: true, position: {x: 200, y: 0}});
 
-    await page.waitForSelector(':text("key139")');
+    await page.getByText('key149').waitFor();
 
     await expect(page).toHaveScreenshot();
+});
+
+test('Navigation: table - userColumnPresets', async ({page, context}) => {
+    test.slow();
+
+    await page.goto(makeClusterUrl(`navigation?path=${E2E_DIR}/static-table`));
+
+    await tablePage(page).waitForTablContent('.navigation-table', 10);
+    await tablePage(page).replaceStaticTableMeta();
+
+    await test.step('select only the "key" column', async () => {
+        await page.getByTestId('table-columns-button').click();
+        await page.getByText('Remove all').click();
+        await page.click(
+            '.column-selector__list-item:nth-child(1) .column-selector__list-item-check',
+            {
+                force: true,
+            },
+        );
+        await page.mouse.move(0, 0);
+        await expect(page).toHaveScreenshot();
+        await page.click('button :text("Apply")');
+    });
+
+    const shareBtn = page.getByTestId('table-columns-share-button');
+
+    await test.step('share button should be visible', async () => {
+        await shareBtn.waitFor();
+
+        await expect(page).toHaveScreenshot();
+    });
+
+    await test.step('open preset in new tab', async () => {
+        shareBtn.click();
+
+        await context.waitForEvent('page', {
+            predicate: async (page) => {
+                await tablePage(page).waitForTablContent('.navigation-table', 10);
+                await tablePage(page).replaceStaticTableMeta();
+
+                await page.getByText('key0').waitFor();
+
+                await expect(page).toHaveScreenshot();
+
+                return true;
+            },
+        });
+    });
 });

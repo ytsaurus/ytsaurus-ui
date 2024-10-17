@@ -21,7 +21,12 @@ function SharePresetButton(props: Props) {
 
     return (
         <Tooltip content={'Share current set of columns for the table'}>
-            <Button {...props} pin={'clear-round'} onClick={handleClick}>
+            <Button
+                {...props}
+                pin={'clear-round'}
+                onClick={handleClick}
+                qa="table-columns-share-button"
+            >
                 <Icon awesome={'share'} />
             </Button>
         </Tooltip>
