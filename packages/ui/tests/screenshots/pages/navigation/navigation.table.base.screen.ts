@@ -2,6 +2,7 @@ import {Page, expect, test} from '@playwright/test';
 import {E2E_DIR, makeClusterUrl} from '../../../utils';
 import {replaceInnerHtml} from '../../../utils/dom';
 import {TablePage} from './TablePage';
+import {waitForClipboardText} from '../../../utils/clipboard';
 
 function tablePage(page: Page) {
     return new TablePage({page});
@@ -75,4 +76,50 @@ test('Navigation: table - Tablets', async ({page}) => {
     });
 
     await expect(page).toHaveScreenshot();
+});
+
+test('Navigation: table - userColumnPresets', async ({page}) => {
+    await page.goto(makeClusterUrl(`navigation?path=${E2E_DIR}/static-table`));
+
+    await tablePage(page).waitForTablContent('.navigation-table', 10);
+    await tablePage(page).replaceStaticTableMeta();
+
+    await test.step('select only the "key" column', async () => {
+        await page.getByTestId('table-columns-button').click();
+        await page.getByText('Remove all').click();
+        await page.click(
+            '.column-selector__list-item:nth-child(1) .column-selector__list-item-check',
+            {
+                force: true,
+            },
+        );
+        await page.mouse.move(0, 0);
+        await expect(page).toHaveScreenshot();
+        await page.click('button :text("Apply")');
+    });
+
+    const shareBtn = page.getByTestId('table-columns-share-button');
+
+    await test.step('share button should be visible', async () => {
+        await shareBtn.waitFor();
+
+        await expect(page).toHaveScreenshot();
+    });
+
+    await test.step('open url from clipboard', async () => {
+        await shareBtn.click();
+
+        await page.waitForTimeout(2000);
+
+        const url = await waitForClipboardText(page);
+
+        await page.goto(url!);
+
+        await tablePage(page).waitForTablContent('.navigation-table', 10);
+        await tablePage(page).replaceStaticTableMeta();
+
+        await page.getByText('key0').waitFor();
+
+        await expect(page).toHaveScreenshot();
+    });
 });
