@@ -17,7 +17,7 @@ export enum QueryResultTab {
     RESULT = 'result',
     STATISTIC = 'statistic',
     PROGRESS = 'progress',
-    CUSTOM_TAB = 'custom-tab',
+    CHART_TAB = 'chart-tab',
 }
 
 const isResultTab = (tabId: string) => tabId.startsWith('result/');
@@ -90,12 +90,12 @@ export const useQueryResultTabs = (
         if (query.state === QueryStatus.FAILED) {
             items.unshift({id: QueryResultTab.ERROR, title: 'Error'});
         } else if (query.state === QueryStatus.COMPLETED) {
-            const customQueryResultTab = UIFactory.getCustomQueryResultTab();
+            const queryResultChartTab = UIFactory.getQueryResultChartTab();
 
-            if (customQueryResultTab && query.result_count) {
+            if (queryResultChartTab && query.result_count) {
                 items.unshift({
-                    id: QueryResultTab.CUSTOM_TAB,
-                    title: customQueryResultTab.title,
+                    id: QueryResultTab.CHART_TAB,
+                    title: queryResultChartTab.title,
                 });
             }
 

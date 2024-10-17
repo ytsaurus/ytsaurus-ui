@@ -28,7 +28,6 @@ const b = block('query-result-visualization');
 
 type QueryResultsVisualizationProps = {
     query: QueryItem;
-    index: number;
 };
 
 export function QueryResultsVisualization({query}: QueryResultsVisualizationProps) {
