@@ -64,7 +64,7 @@ class PartitionSizes extends React.Component<ReduxProps, State> {
                     <YTHistogram
                         className={block('charts')}
                         data={data}
-                        yLabel={'jobs count'}
+                        yLabel={'partition count'}
                         xLabel={'job input data weight'}
                         xFormat={this.formatX}
                         yMin={0.5}
