@@ -1,6 +1,5 @@
 import omit_ from 'lodash/omit';
 import {QueryItem} from '../api';
-import {DEFAULT_QUERY_ACO} from './selectors';
 
 export const cleanupQueryForDraft = (query: QueryItem): QueryItem => {
     return {
@@ -9,7 +8,7 @@ export const cleanupQueryForDraft = (query: QueryItem): QueryItem => {
     };
 };
 
-export const prepareQueryPlanIds = (query: QueryItem): QueryItem => {
+export const prepareQueryPlanIds = (query: QueryItem, defaultQueryACO: string): QueryItem => {
     const nodes = query.progress?.yql_plan?.Basic.nodes;
     const links = query.progress?.yql_plan?.Basic.links;
     const operations = query.progress?.yql_plan?.Detailed?.Operations;
@@ -34,7 +33,7 @@ export const prepareQueryPlanIds = (query: QueryItem): QueryItem => {
     }
 
     if (!query.access_control_objects) {
-        query.access_control_objects = [DEFAULT_QUERY_ACO];
+        query.access_control_objects = [defaultQueryACO];
     }
 
     return query;
