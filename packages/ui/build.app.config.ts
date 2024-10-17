@@ -12,6 +12,8 @@ if (debugPort) {
     console.log({debugPort}, '\n');
 }
 
+const port = Number(process.env.LOCAL_DEV_PORT);
+
 const client: ServiceConfig['client'] = {
     watchOptions: {
         aggregateTimeout: 1000,
@@ -26,12 +28,22 @@ const client: ServiceConfig['client'] = {
     hiddenSourceMap: false,
     disableReactRefresh: true,
     analyzeBundle,
+
+    ...(port ? {
+        devServer: {
+            port,
+        }
+    }: null),
 };
 
 const server: ServiceConfig['server'] = {
     watch: ['dist/shared'],
     watchThrottle: 1000,
     inspectBrk: debugPort,
+
+    ...(port ? {
+        port: port + 1,
+    }: null),
 };
 
 export default {client, server};
