@@ -335,9 +335,24 @@ const nodesTableProps = {
                             column="space"
                             title="Space"
                             options={[
-                                {column: 'space', title: 'Progress', withUndefined: true},
-                                {column: 'space_usage', title: 'Usage', withUndefined: true},
-                                {column: 'space_limit', title: 'Limit', withUndefined: true},
+                                {
+                                    column: 'space',
+                                    title: 'Progress',
+                                    withUndefined: true,
+                                    allowUnordered: true,
+                                },
+                                {
+                                    column: 'space_usage',
+                                    title: 'Usage',
+                                    withUndefined: true,
+                                    allowUnordered: true,
+                                },
+                                {
+                                    column: 'space_limit',
+                                    title: 'Limit',
+                                    withUndefined: true,
+                                    allowUnordered: true,
+                                },
                             ]}
                         />
                     );
@@ -398,9 +413,24 @@ const nodesTableProps = {
                             align={align}
                             column="cpu"
                             options={[
-                                {column: 'cpu', title: 'Progress', withUndefined: true},
-                                {column: 'cpu_usage', title: 'Usage', withUndefined: true},
-                                {column: 'cpu_limit', title: 'Limit', withUndefined: true},
+                                {
+                                    column: 'cpu',
+                                    title: 'Progress',
+                                    withUndefined: true,
+                                    allowUnordered: true,
+                                },
+                                {
+                                    column: 'cpu_usage',
+                                    title: 'Usage',
+                                    withUndefined: true,
+                                    allowUnordered: true,
+                                },
+                                {
+                                    column: 'cpu_limit',
+                                    title: 'Limit',
+                                    withUndefined: true,
+                                    allowUnordered: true,
+                                },
                             ]}
                             title="CPU"
                         />
@@ -433,9 +463,24 @@ const nodesTableProps = {
                             align={align}
                             column="gpu"
                             options={[
-                                {column: 'gpu', title: 'Progress', withUndefined: true},
-                                {column: 'gpu_usage', title: 'Usage', withUndefined: true},
-                                {column: 'gpu_limit', title: 'Limit', withUndefined: true},
+                                {
+                                    column: 'gpu',
+                                    title: 'Progress',
+                                    withUndefined: true,
+                                    allowUnordered: true,
+                                },
+                                {
+                                    column: 'gpu_usage',
+                                    title: 'Usage',
+                                    withUndefined: true,
+                                    allowUnordered: true,
+                                },
+                                {
+                                    column: 'gpu_limit',
+                                    title: 'Limit',
+                                    withUndefined: true,
+                                    allowUnordered: true,
+                                },
                             ]}
                             title="GPU"
                         />
@@ -468,9 +513,24 @@ const nodesTableProps = {
                             column="memory"
                             title="Memory"
                             options={[
-                                {column: 'memory', title: 'Progress', withUndefined: true},
-                                {column: 'memory_usage', title: 'Usage', withUndefined: true},
-                                {column: 'memory_limit', title: 'Limit', withUndefined: true},
+                                {
+                                    column: 'memory',
+                                    title: 'Progress',
+                                    withUndefined: true,
+                                    allowUnordered: true,
+                                },
+                                {
+                                    column: 'memory_usage',
+                                    title: 'Usage',
+                                    withUndefined: true,
+                                    allowUnordered: true,
+                                },
+                                {
+                                    column: 'memory_limit',
+                                    title: 'Limit',
+                                    withUndefined: true,
+                                    allowUnordered: true,
+                                },
                             ]}
                         />
                     );
@@ -510,9 +570,24 @@ const nodesTableProps = {
                             column="network"
                             title="Network"
                             options={[
-                                {column: 'network', title: 'Progress', withUndefined: true},
-                                {column: 'network_usage', title: 'Usage', withUndefined: true},
-                                {column: 'network_limit', title: 'Limit', withUndefined: true},
+                                {
+                                    column: 'network',
+                                    title: 'Progress',
+                                    withUndefined: true,
+                                    allowUnordered: true,
+                                },
+                                {
+                                    column: 'network_usage',
+                                    title: 'Usage',
+                                    withUndefined: true,
+                                    allowUnordered: true,
+                                },
+                                {
+                                    column: 'network_limit',
+                                    title: 'Limit',
+                                    withUndefined: true,
+                                    allowUnordered: true,
+                                },
                             ]}
                         />
                     );
@@ -545,9 +620,24 @@ const nodesTableProps = {
                             column="repair_slots"
                             title="Repair slots"
                             options={[
-                                {column: 'repair_slots', title: 'Progress', withUndefined: true},
-                                {column: 'repair_slots_usage', title: 'Usage', withUndefined: true},
-                                {column: 'repair_slots_limit', title: 'Limit', withUndefined: true},
+                                {
+                                    column: 'repair_slots',
+                                    title: 'Progress',
+                                    withUndefined: true,
+                                    allowUnordered: true,
+                                },
+                                {
+                                    column: 'repair_slots_usage',
+                                    title: 'Usage',
+                                    withUndefined: true,
+                                    allowUnordered: true,
+                                },
+                                {
+                                    column: 'repair_slots_limit',
+                                    title: 'Limit',
+                                    withUndefined: true,
+                                    allowUnordered: true,
+                                },
                             ]}
                         />
                     );
@@ -580,7 +670,12 @@ const nodesTableProps = {
                             column="removal_slots"
                             title="Removal slots"
                             options={[
-                                {column: 'removal_slots', title: 'Progress', withUndefined: true},
+                                {
+                                    column: 'removal_slots',
+                                    title: 'Progress',
+                                    withUndefined: true,
+                                    allowUnordered: true,
+                                },
                                 {
                                     column: 'removal_slots_usage',
                                     title: 'Usage',

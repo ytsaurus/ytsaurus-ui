@@ -31,6 +31,7 @@ export function NodesColumnHeader(
                     toggleColumnSortOrder({
                         columnName,
                         withUndefined: colInfo?.withUndefined,
+                        allowUnordered: colInfo?.allowUnordered,
                         tableId: COMPONENTS_NODES_TABLE_ID,
                     }),
                 );

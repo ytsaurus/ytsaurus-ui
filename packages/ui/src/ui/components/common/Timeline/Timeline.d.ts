@@ -83,6 +83,6 @@ export interface TimelineBelowSvgProps {
 
 export const timelineDefaultProps: Partial<TimelineProps>;
 /**
- * @deprecated use ThinTimeline (https://storybook.ui.yandex-team.ru/?path=/docs/компоненты-thintimelineruler--docs)
+ * @deprecated use ThinTimeline (https://nda.ya.ru/t/WriYC26w78gpN7)
  */
 export class Timeline extends Component<TimelineProps> {}

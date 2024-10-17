@@ -32,13 +32,16 @@ TableOverview.propTypes = {
     moveOffset: PropTypes.func.isRequired,
 };
 
-const renderInput = (props, handleEndEditing) => {
+const renderInput = (props, {onEndEditing, onUpdate}) => {
     const {offsetValue, rowCount, isDynamic} = props;
 
     return isDynamic ? (
         <Filter
             iconLeft={<Icon awesome="key" />}
-            onBlur={handleEndEditing}
+            onBlur={(v) => {
+                onEndEditing();
+                onUpdate(v);
+            }}
             value={offsetValue}
             placeholder=""
             size="m"
@@ -48,14 +51,14 @@ const renderInput = (props, handleEndEditing) => {
     ) : (
         <RangeInputPicker
             iconLeft={<Icon awesome="hashtag" />}
-            onOutsideClick={handleEndEditing}
-            onAfterUpdate={handleEndEditing}
-            onSubmit={handleEndEditing}
+            onOutsideClick={onEndEditing}
+            onAfterUpdate={onUpdate}
+            onSubmit={onUpdate}
             maxValue={rowCount - 1}
             infoPointsCount={0}
             value={offsetValue}
             autoFocus
-            size="s"
+            size="m"
         />
     );
 };
@@ -76,11 +79,13 @@ function TableOverview(props) {
     const {block, moveOffset, isDynamic} = props;
     const [editing, changeEditing] = useState(false);
 
-    const handleEndEditing = (value) => {
+    const onUpdate = (value) => moveOffset(value);
+
+    const onEndEditing = () => {
         changeEditing(false);
-        moveOffset(value);
     };
-    const handleStartEditing = () => {
+
+    const onStartEditing = () => {
         changeEditing(true);
     };
 
@@ -88,8 +93,8 @@ function TableOverview(props) {
         <div className={block('input', {edit: editing, dynamic: isDynamic})}>
             {isDynamic && <OffsetSelectorButton disabled={editing} />}
             {editing
-                ? renderInput(props, handleEndEditing)
-                : renderPlaceholder(props, handleStartEditing)}
+                ? renderInput(props, {onEndEditing, onUpdate})
+                : renderPlaceholder(props, onStartEditing)}
             {isDynamic && (
                 <Button
                     size="m"

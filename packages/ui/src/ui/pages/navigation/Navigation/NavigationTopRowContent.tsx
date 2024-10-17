@@ -151,6 +151,7 @@ function NavigationPathEditor({hideEditor}: {hideEditor: () => void}) {
             onApply={handleApply}
             onCancel={hideEditor}
             onBlur={hideEditor}
+            onFocus={(e) => e.target.select()}
         />
     );
 }
