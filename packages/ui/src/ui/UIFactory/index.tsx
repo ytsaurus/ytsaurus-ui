@@ -116,6 +116,11 @@ export type ExtraTab = {
     position: {before: TabName} | {after: TabName};
 };
 
+export type CustomQueryResultTab = {
+    title: string;
+    renderContent: (params: {query: QueryItem}) => React.ReactNode;
+};
+
 export interface UIFactory {
     getClusterAppearance(cluster?: string): undefined | ClusterAppearance;
 
@@ -383,12 +388,7 @@ export interface UIFactory {
 
     renderRolesLink(params: {cluster: string; login: string; className?: string}): React.ReactNode;
 
-    getCustomQueryResultTab():
-        | undefined
-        | {
-              title: string;
-              renderContent: (params: {query: QueryItem}) => React.ReactNode;
-          };
+    getQueryResultChartTab(): CustomQueryResultTab | undefined;
 
     getExternalSettings(params: {
         cluster: string;
