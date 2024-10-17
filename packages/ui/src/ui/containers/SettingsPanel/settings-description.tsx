@@ -187,6 +187,16 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
                         settingNS={NAMESPACES.QUERY_TRACKER}
                     />,
                 ),
+                makeItem(
+                    'Query tracker graph',
+                    'top',
+                    <SettingsMenuItem
+                        label="New graph type"
+                        annotation="Shows the new graph type in the Progress tab for query tracker"
+                        settingName={SettingName.QUERY_TRACKER.NEW_GRAPH_TYPE}
+                        settingNS={NAMESPACES.QUERY_TRACKER}
+                    />,
+                ),
             ]),
         ),
 
