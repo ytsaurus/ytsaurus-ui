@@ -20,8 +20,6 @@ import type {DataSet, Edge, Network, Node} from 'vis-network';
 import type {GraphColors} from './GraphColors';
 
 import {DateTime} from 'luxon';
-import {parseTablePath} from './services/tables';
-import {genNavigationUrl} from '../../../utils/navigation/navigation';
 
 export type ParsableDate = string | number | Date | DateTime | {} | undefined | null;
 
@@ -584,59 +582,6 @@ export function getConnectedEdges(
         }
     }
     return connectedEdges;
-}
-
-export function usePrepareNode(operationIdToCluster: Map<string, string>) {
-    return React.useCallback((node: ProcessedNode) => {
-        if (node.type === 'in' || node.type === 'out') {
-            const table = parseTablePath(node.title ?? '');
-            if (table) {
-                node.url = genNavigationUrl({cluster: table.cluster, path: table.path});
-            }
-        } else if (node.progress?.remoteId) {
-            const id = node.progress?.remoteId.split('/').pop();
-
-            if (!id) {
-                node.url = getOperationUrl(node);
-
-                return node;
-            }
-
-            const cluster = operationIdToCluster.has(id)
-                ? operationIdToCluster.get(id)
-                : node.progress?.remoteData?.cluster_name;
-
-            if (cluster) {
-                node.url = buildOperationUrl(cluster, id);
-            }
-        }
-
-        return node;
-    }, []);
-}
-
-function getOperationUrl(node: ProcessedNode) {
-    const remoteId = node.progress?.remoteId;
-    if (!remoteId) {
-        return undefined;
-    }
-    const idParts = remoteId.split('/');
-    const cluster = idParts[0];
-    const clusterName = cluster.split('.')[0];
-    const url = buildOperationUrl(clusterName, idParts[1], idParts[2]);
-    return url ? url : undefined;
-}
-
-function buildOperationUrl(cluster: string, operation: string, tag?: string) {
-    let uri = '';
-
-    if (tag === undefined) {
-        uri = `/operations/${encodeURIComponent(operation)}`;
-    } else if (tag === 'filter') {
-        uri = `/operations?type=all&state=all&filter=${encodeURIComponent(operation)}`;
-    }
-
-    return `/${cluster.split('.')[0]}${uri}`;
 }
 
 export function drawRunningIcon(progress: NodeProgress | undefined, {operation}: GraphColors) {
