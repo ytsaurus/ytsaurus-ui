@@ -60,6 +60,7 @@ function ColumnSelectorButton({
                 view={view}
                 pin={allowUserColumnPresets ? 'round-brick' : 'round-round'}
                 style={showAllColumns ? undefined : actionStyle}
+                qa="table-columns-button"
             >
                 <Icon awesome="filter" face="solid" />
                 Columns

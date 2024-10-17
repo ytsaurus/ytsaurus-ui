@@ -40,6 +40,8 @@ export default defineConfig({
 
         screenshot: 'only-on-failure',
         video: 'retain-on-failure',
+
+        permissions: ['clipboard-read', 'clipboard-write'],
     },
     expect: {
         toHaveScreenshot: {
