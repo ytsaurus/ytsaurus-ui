@@ -13,6 +13,7 @@ import LoadDataHandler from '../../../components/LoadDataHandler/LoadDataHandler
 import {SubjectCard} from '../../../components/SubjectLink/SubjectLink';
 import {STICKY_TOOLBAR_BOTTOM} from '../../../components/WithStickyToolbar/WithStickyToolbar';
 import UsersPageEditor from '../../../pages/users/UsersPageEditor/UsersPageEditor';
+import {DeleteUserModal} from '../../../pages/users/DeleteUserModal/DeleteUserModal';
 import {getCluster} from '../../../store/selectors/global';
 import {
     getUsersFilteredAndSorted,
@@ -248,6 +249,7 @@ class UsersPageTable extends React.Component {
                 <LoadDataHandler loaded={true} error={Boolean(error)} errorData={error || null}>
                     {this.renderTable()}
                     {showModal && <UsersPageEditor />}
+                    <DeleteUserModal />
                 </LoadDataHandler>
             </div>
         );
