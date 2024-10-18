@@ -4,15 +4,11 @@ import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import DataTable from '@gravity-ui/react-data-table';
 
-import {openAttributesModal} from '../../../store/actions/modals/attributes-modal';
-import {fetchUsers, setUsersPageSorting, showUserEditorModal} from '../../../store/actions/users';
-import ClickableAttributesButton from '../../../components/AttributesButton/ClickableAttributesButton';
+import {fetchUsers, setUsersPageSorting} from '../../../store/actions/users';
 import ColumnHeader from '../../../components/ColumnHeader/ColumnHeader';
 import CommaSeparatedListWithRestCounter from '../../../components/CommaSeparateListWithRestCounter/CommaSeparateListWithRestCounter';
 import DataTableYT from '../../../components/DataTableYT/DataTableYT';
 import {Tooltip} from '../../../components/Tooltip/Tooltip';
-import Icon from '../../../components/Icon/Icon';
-import Link from '../../../components/Link/Link';
 import LoadDataHandler from '../../../components/LoadDataHandler/LoadDataHandler';
 import {SubjectCard} from '../../../components/SubjectLink/SubjectLink';
 import {STICKY_TOOLBAR_BOTTOM} from '../../../components/WithStickyToolbar/WithStickyToolbar';
@@ -23,11 +19,10 @@ import {
     getUsersPageEditableUser,
     getUsersTableDataState,
 } from '../../../store/selectors/users';
-import ChartLink from '../../../components/ChartLink/ChartLink';
 import {isIdmAclAvailable} from '../../../config';
 
 import './UsersPageTable.scss';
-import UIFactory from '../../../UIFactory';
+import {UserActions} from '../UserActions/UserActions';
 
 const block = cn('users-page-table');
 
@@ -38,41 +33,6 @@ const TABLE_SETTINGS = {
     syncHeadOnResize: true,
     dynamicRender: true,
 };
-
-function userOperationsLink(cluster, user) {
-    return `/${cluster}/operations?mode=list&user=${user}&state=all`;
-}
-
-UserActions.propTypes = {
-    className: PropTypes.string,
-    cluster: PropTypes.string.isRequired,
-    username: PropTypes.string.isRequired,
-    edit: PropTypes.func.isRequired,
-    showAttributes: PropTypes.func.isRequired,
-};
-
-function UserActions({className, cluster, username, edit, showAttributes}) {
-    const onEdit = React.useCallback(() => {
-        edit(username);
-    }, [username, edit]);
-
-    return (
-        <div className={className}>
-            <ChartLink url={UIFactory.makeUrlForUserDashboard(cluster, username)} />
-            <Link routed url={userOperationsLink(cluster, username)}>
-                &lt;/&gt;
-            </Link>
-            <ClickableAttributesButton
-                title={username}
-                path={`//sys/users/${username}`}
-                openAttributesModal={showAttributes}
-            />
-            <Link onClick={onEdit} className={block('edit-action')}>
-                <Icon awesome="pencil-alt" />
-            </Link>
-        </div>
-    );
-}
 
 const COLUMN_NAMES = {
     name: 'Name',
@@ -114,8 +74,6 @@ class UsersPageTable extends React.Component {
 
         showModal: PropTypes.bool,
         showUserEditorModal: PropTypes.func,
-
-        openAttributesModal: PropTypes.func.isRequired,
     };
 
     componentDidMount() {
@@ -197,22 +155,14 @@ class UsersPageTable extends React.Component {
     };
 
     renderActionsCell = (col, cluster, {row} = {}) => {
-        const {openAttributesModal} = this.props;
         const {name: username} = row;
         return (
             <UserActions
                 className={block('content', {col})}
-                showAttributes={openAttributesModal}
-                edit={this.editUser}
                 username={username}
                 cluster={cluster}
             />
         );
-    };
-
-    editUser = (username) => {
-        const {showUserEditorModal} = this.props;
-        showUserEditorModal(username);
     };
 
     renderTable() {
@@ -321,8 +271,6 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = {
     fetchUsers,
     setUsersPageSorting,
-    openAttributesModal,
-    showUserEditorModal,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(UsersPageTable);

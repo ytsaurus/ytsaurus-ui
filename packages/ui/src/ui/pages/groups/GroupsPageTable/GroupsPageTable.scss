@@ -105,11 +105,6 @@ $levelPadding: 30px;
         white-space: pre-wrap;
     }
 
-    &__attrs-action,
-    &__edit-action {
-        color: var(--secondary-text) !important;
-    }
-
     &__group-name {
         flex-shrink: 1;
         white-space: nowrap;

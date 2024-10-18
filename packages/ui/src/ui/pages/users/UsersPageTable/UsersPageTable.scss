@@ -82,9 +82,4 @@ $groupsCellWidth: 250px;
         text-overflow: ellipsis;
         white-space: pre-wrap;
     }
-
-    &__attrs-action,
-    &__edit-action {
-        color: var(--secondary-text) !important;
-    }
 }
