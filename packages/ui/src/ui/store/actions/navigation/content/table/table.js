@@ -571,6 +571,9 @@ export function openTableWithPresetOfColumns() {
         saveColumnPreset(map_(visibleColumns, 'name'), cluster).then((hash) => {
             const {href} = window.location;
             const url = `${href}&columns=${hash}`;
+            try {
+                navigator.clipboard.writeText(url);
+            } catch {}
             openInNewTab(url);
 
             metrics.countEvent({
