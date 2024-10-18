@@ -1,0 +1,12 @@
+.yt-zoom-button {
+    height: 32px;
+    color: #657B8F;
+
+    .g-button__icon {
+        height: 32px;
+    }
+
+    &:disabled {
+        color: var(--g-color-text-hint);
+    }
+}

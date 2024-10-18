@@ -1,0 +1,60 @@
+.yt-detail-block {
+    color: #000;
+    padding: 10px 12px;
+    min-height: 70px;
+    min-width: 240px;
+    box-sizing: border-box;
+    background: #fff;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0 1px 5px 0 #00000026;
+
+    &__header {
+        display: flex;
+        align-items: center;
+        gap: 0 8px;
+        font-weight: 500;
+    }
+
+    &__content {
+        margin-top: 8px;
+    }
+
+    &__details {
+        font-size: 11px;
+        height: auto;
+        padding-bottom: 0;
+
+        &_without-padding {
+            padding-top: 0;
+        }
+
+        .node-details-info{
+            grid-gap: 10px;
+        }
+
+        .data-table__row {
+            height: auto;
+        }
+
+        .g-text_variant_body-1 {
+            font-size: 11px;
+        }
+    }
+
+    .graph-block-wrapper{
+        border: none;
+    }
+
+    .data-table__foot {
+        background: none;
+
+        td {
+            background: none;
+        }
+    }
+
+    .data-table__head th:before {
+        display: none;
+    }
+}
