@@ -18,7 +18,7 @@ const ephemeralState = {
 const persistedState = {
     path: '/',
     attributes: '',
-    command: COMMAND.GET,
+    command: COMMAND.LIST,
     maxSize: '',
 
     encodeUTF8: false,
