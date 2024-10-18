@@ -65,7 +65,7 @@ class PartitionSizes extends React.Component<ReduxProps, State> {
                         className={block('charts')}
                         data={data}
                         yLabel={'partition count'}
-                        xLabel={'job input data weight'}
+                        xLabel={'partition data weight'}
                         xFormat={this.formatX}
                         yMin={0.5}
                         yLogarithmic
