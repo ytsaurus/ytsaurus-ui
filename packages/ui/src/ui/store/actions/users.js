@@ -137,7 +137,7 @@ function addUserToGroups(cluster, username, groups, comment) {
     );
 }
 
-export function saveUserData(username, attributes, groupsToAdd, groupsToRemove) {
+export function saveUserData({username, newName, attributes, groupsToAdd, groupsToRemove}) {
     return (dispatch, getState) => {
         dispatch({type: USERS_EDIT_USER.REQUEST});
 
@@ -153,6 +153,16 @@ export function saveUserData(username, attributes, groupsToAdd, groupsToRemove) 
                 input: value,
             });
         });
+
+        if (newName !== username) {
+            requests.push({
+                command: 'set',
+                parameters: {
+                    path: `${path}/@name`,
+                },
+                input: newName,
+            });
+        }
 
         const state = getState();
         const cluster = getCluster(state);

@@ -37,12 +37,15 @@ interface Props {
     groupAttributesMap?: GroupAttributes;
 
     closeUserEditorModal: () => void;
-    saveUserData: (
-        username: string,
-        changedFields: Partial<Pick<Props, Exclude<Level2Keys, 'idm' | 'groups' | 'newGroups'>>>,
-        newGroups: Array<string>,
-        groupsToRemove: Array<string>,
-    ) => Promise<void>;
+    saveUserData: (payload: {
+        username: string;
+        newName: string;
+        attributes: Partial<
+            Pick<Props, Exclude<Level2Keys, 'idm' | 'name' | 'groups' | 'newGroups'>>
+        >;
+        groupsToAdd: Array<string>;
+        groupsToRemove: Array<string>;
+    }) => Promise<void>;
 }
 
 interface State {
@@ -54,6 +57,7 @@ type GroupAttributes = Record<string, {upravlyator_managed: boolean}>;
 interface FormValues {
     general: {
         idm: string;
+        name: string;
         read_request_rate_limit: {value: number};
         request_queue_size_limit: {value: number};
         write_request_rate_limit: {value: number};
@@ -124,6 +128,7 @@ class UsersPageEditor extends React.Component<Props, State> {
         } = form.getState();
         const fields = {
             idm: generalTab.idm,
+            name: generalTab.name,
             read_request_rate_limit: generalTab.read_request_rate_limit.value,
             request_queue_size_limit: generalTab.request_queue_size_limit.value,
             write_request_rate_limit: generalTab.write_request_rate_limit.value,
@@ -131,7 +136,7 @@ class UsersPageEditor extends React.Component<Props, State> {
             ...banTab,
         };
 
-        const {idm: _idm, groups, newGroups, ...rest} = fields;
+        const {idm: _idm, groups, newGroups, name: newName, ...rest} = fields;
         const [current] = groups;
         const groupsToRemove = map_(filter_(current?.data, 'removed'), 'title');
 
@@ -152,7 +157,13 @@ class UsersPageEditor extends React.Component<Props, State> {
         }
 
         const {username, saveUserData} = this.props;
-        return saveUserData(username, changedFields, newGroups, groupsToRemove).catch((error) => {
+        return saveUserData({
+            username,
+            newName,
+            attributes: changedFields,
+            groupsToAdd: newGroups,
+            groupsToRemove: groupsToRemove,
+        }).catch((error) => {
             this.setState({error});
             return Promise.reject(error);
         });
@@ -190,6 +201,7 @@ class UsersPageEditor extends React.Component<Props, State> {
                     initialValues={{
                         general: {
                             idm: idm === undefined ? '' : String(idm),
+                            name: username,
                             read_request_rate_limit: {value: rrrl || 1},
                             request_queue_size_limit: {value: rqsl || 1},
                             write_request_rate_limit: {value: wrrl || 1},
@@ -222,6 +234,12 @@ class UsersPageEditor extends React.Component<Props, State> {
                                               caption: 'IDM',
                                           },
                                       ]),
+                                {
+                                    name: 'name',
+                                    type: 'text',
+                                    required: true,
+                                    caption: 'Name',
+                                },
                                 {
                                     type: 'number',
                                     name: 'request_queue_size_limit',
