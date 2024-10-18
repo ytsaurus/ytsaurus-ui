@@ -135,6 +135,12 @@ export interface UISettings {
     reShortNameFromTabletNodeAddress?: string;
 
     /**
+     * Allows you to override the behavior of  'reShortNameSystemPage ` for masters / providers / schedulers / agents.
+     * @example reShortNameSystemPage: '(?<shortname>.*)((\\.msk\\.my-domain\\.ru)|(\\.vla\\.my-domain\\.net))'
+     */
+    reShortNameSystemPage?: string;
+
+    /**
      * Allows to define array of regexps for allowed urls of TaggedType of unipika to display media-content (audio/video/images).
      * If there are no matched items in the array the TaggedType-item will be displayed as a json-object.
      * @expamle
