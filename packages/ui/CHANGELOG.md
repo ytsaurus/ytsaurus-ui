@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.63.1](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.63.0...ui-v1.63.1) (2024-10-18)
+
+
+### Bug Fixes
+
+* **ColumnHeader/SortIcon:** add tooltip for sort direction (+allowUnordered) [YTFRONT-3801] ([911e457](https://github.com/ytsaurus/ytsaurus-ui/commit/911e45748fc818c50a962ef65b74c2b62b92ed96))
+* **Navigation/MapNode:** allow to select rows by click on first cell [YTFRONT-4391] ([85e915c](https://github.com/ytsaurus/ytsaurus-ui/commit/85e915cf2c72f4137e9b73b87b7c1748db5b5094))
+* **Navigation/Queue:** allow Queue tab for replication_table/chaos_replicated_table [YTFRONT-4144] ([228db6a](https://github.com/ytsaurus/ytsaurus-ui/commit/228db6a3a4c9a57db0d36812d8fd2e412be0c901))
+* **Navigation/Table:** draggable row selector should work properly [YTFRONT-4396] ([d702adb](https://github.com/ytsaurus/ytsaurus-ui/commit/d702adb6b2e50f81a4d60cd67f77308b454ee14e))
+* **Navigation/TopRow/PathEditor:** select text when editor is focused [YTFRONT-4387] ([fd4beb6](https://github.com/ytsaurus/ytsaurus-ui/commit/fd4beb695e05e35d7648ee0ee430ce759f90a825))
+* **PathViewer:** now path viewer run list command by default, because "get /" command might lead to perfomance issue [[#814](https://github.com/ytsaurus/ytsaurus-ui/issues/814)] ([006d215](https://github.com/ytsaurus/ytsaurus-ui/commit/006d21576975feb2d20d6919f88c62542ab4ff30))
+* **System/Nodes:** minor fixes [YTFRONT-3297] ([3d78cfe](https://github.com/ytsaurus/ytsaurus-ui/commit/3d78cfe2b99cec3c779eead885d6e8cd5440f413))
+
 ## [1.63.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.62.0...ui-v1.63.0) (2024-10-17)
 
 
