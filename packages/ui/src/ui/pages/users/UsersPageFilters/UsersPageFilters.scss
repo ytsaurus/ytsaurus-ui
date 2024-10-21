@@ -1,4 +1,8 @@
 .users-page-filters {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
     &__item {
         max-width: 380px;
         min-width: 20ex;
