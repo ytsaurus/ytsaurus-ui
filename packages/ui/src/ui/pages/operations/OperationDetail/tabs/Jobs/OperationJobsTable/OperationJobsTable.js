@@ -36,7 +36,10 @@ import {LOADING_STATUS} from '../../../../../../constants/index';
 import {PLEASE_PROCEED_TEXT} from '../../../../../../utils/actions';
 import {getShowCompetitiveJobs} from '../../../../../../pages/operations/selectors';
 import {getJobsOperationId} from '../../../../../../store/selectors/operations/jobs';
-import {getOperationId} from '../../../../../../store/selectors/operations/operation';
+import {
+    getOperationId,
+    getOperationTasksNames,
+} from '../../../../../../store/selectors/operations/operation';
 import UIFactory from '../../../../../../UIFactory';
 import {StaleJobIcon} from '../StaleJobIcon';
 
@@ -74,6 +77,7 @@ class OperationJobsTable extends React.Component {
         promptAction: PropTypes.func.isRequired,
         getJobs: PropTypes.func.isRequired,
         getCompetitiveJobs: PropTypes.func.isRequired,
+        taskNamesNumber: PropTypes.number,
     };
 
     actions = [
@@ -286,6 +290,12 @@ class OperationJobsTable extends React.Component {
                     caption: 'Id / Address',
                     sort: false,
                 },
+                task_name: {
+                    name: 'task_name',
+                    align: 'left',
+                    caption: 'Task name',
+                    sort: true,
+                },
                 start_time: {
                     name: 'start_time',
                     align: 'left',
@@ -342,8 +352,21 @@ class OperationJobsTable extends React.Component {
                         'actions',
                     ],
                 },
+                withTaskName: {
+                    items: [
+                        'id_address',
+                        'type',
+                        'progress',
+                        'error',
+                        'task_name',
+                        'start_time',
+                        'finish_time',
+                        'duration',
+                        'actions',
+                    ],
+                },
             },
-            mode: 'default',
+            mode: this.props.taskNamesNumber > 1 ? 'withTaskName' : 'default',
         },
         templates: {
             id_address: this.renderIdAddress,
@@ -354,8 +377,13 @@ class OperationJobsTable extends React.Component {
             finish_time: this.renderFinishTime,
             duration: this.renderDuration,
             actions: this.renderActions,
+            task_name: this.renderTaskName,
         },
     };
+
+    renderTaskName(item) {
+        return <div className={block('task-name', 'elements-ellipsis')}>{item.task_name}</div>;
+    }
 
     renderProgress(item) {
         const {state, progress, brief_statistics: statistics} = item;
@@ -492,6 +520,7 @@ function mapStateToProps(state, props) {
     const {operations, global} = state;
     const {cluster, login} = global;
     const showCompetitiveJobs = getShowCompetitiveJobs(state);
+    const taskNamesNumber = getOperationTasksNames(state)?.length;
     const jobsOperationId = getJobsOperationId(state);
     const operationId = getOperationId(state);
     const {jobs, job, competitiveJobs, inputPaths} = operations.jobs;
@@ -505,6 +534,7 @@ function mapStateToProps(state, props) {
         login,
         collapsibleSize: UI_COLLAPSIBLE_SIZE,
         isLoading: props.isLoading || operationId !== jobsOperationId,
+        taskNamesNumber,
     };
 }
 
