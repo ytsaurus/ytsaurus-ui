@@ -6,8 +6,8 @@ const initialState = {
     loading: false,
 };
 
-export const deleteUserModalSlice = createSlice({
-    name: 'deleteUserModal',
+export const createUserModalSlice = createSlice({
+    name: 'createUserModal',
     initialState,
     reducers: {
         setModalState(

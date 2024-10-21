@@ -1,4 +1,4 @@
-import React, {useCallback, useState} from 'react';
+import React, {useCallback} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {RootState} from '../../../store/reducers';
 import {Dialog, Text} from '@gravity-ui/uikit';
@@ -8,25 +8,31 @@ import {fetchUsers} from '../../../store/actions/users';
 
 export const DeleteUserModal: React.FC = () => {
     const dispatch = useDispatch();
-    const [loading, setLoading] = useState(false);
-    const {showModal, username} = useSelector((state: RootState) => state.users.deleteUser);
+    const {showModal, username, loading} = useSelector(
+        (state: RootState) => state.users.deleteUser,
+    );
 
     const onClose = useCallback(() => {
-        dispatch(deleteUserModalSlice.actions.setModalState({showModal: false}));
+        dispatch(
+            deleteUserModalSlice.actions.setModalState({
+                showModal: false,
+                loading: false,
+                username: '',
+            }),
+        );
     }, [dispatch]);
 
     const onApply = useCallback(async () => {
-        setLoading(true);
+        dispatch(deleteUserModalSlice.actions.setModalState({loading: true}));
+
         await deleteUser({username});
 
         await new Promise((resolve) => setTimeout(resolve, 2 * 1000));
 
-        dispatch(deleteUserModalSlice.actions.setModalState({showModal: false}));
-
-        setLoading(false);
+        onClose();
 
         await dispatch(fetchUsers());
-    }, [dispatch, username]);
+    }, [dispatch, username, onClose]);
 
     if (!showModal) {
         return null;
