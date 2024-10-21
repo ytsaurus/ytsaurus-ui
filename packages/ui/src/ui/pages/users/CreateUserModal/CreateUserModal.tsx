@@ -5,7 +5,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {createUserModalSlice} from '../../../store/reducers/users/create-user';
 import {RootState} from '../../../store/reducers';
 import {createUser} from '../../../store/actions/users-typed';
-import { fetchUsers } from '../../../store/actions/users';
+import {fetchUsers} from '../../../store/actions/users';
 
 export const ShowCreateUserModalButton: React.FC = () => {
     const dispatch = useDispatch();
