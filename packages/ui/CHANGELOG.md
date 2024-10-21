@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.64.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.63.1...ui-v1.64.0) (2024-10-21)
+
+
+### Features
+
+* **Queries:** default ACO [[#436](https://github.com/ytsaurus/ytsaurus-ui/issues/436)] ([0eba698](https://github.com/ytsaurus/ytsaurus-ui/commit/0eba6989e45b147a7ddd0ab0bfc753a2c3a68e2b))
+* **System:** new regexp shortname [YTFRONT-4386] ([ebe523f](https://github.com/ytsaurus/ytsaurus-ui/commit/ebe523f7a4323eb765cd41dbd0eccff1231b826c))
+
 ## [1.63.1](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.63.0...ui-v1.63.1) (2024-10-18)
 
 
