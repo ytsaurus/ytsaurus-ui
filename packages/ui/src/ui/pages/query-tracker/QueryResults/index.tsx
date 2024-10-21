@@ -1,84 +1,37 @@
-import React, {useEffect} from 'react';
+import React, {ReactNode} from 'react';
 import block from 'bem-cn-lite';
-import {QueryItem, YQLSstatistics} from '../module/api';
+import {QueryItem} from '../module/api';
 import {Tabs} from '@gravity-ui/uikit';
-import {useDispatch} from 'react-redux';
-import {QueryResultsView} from '../QueryResultsView';
 import {QueryMetaInfo} from './QueryMetaRow';
 import QueryMetaTable from '../QueryMetaTable';
-import {loadQueryResult} from '../module/query_result/actions';
 import {QueryResultActions} from './QueryResultActions';
 import {QueryResultTab, useQueryResultTabs} from './hooks/useQueryResultTabs';
 import {YQLStatisticsTable} from '../QueryResultsView/YQLStatistics';
 import NotRenderUntilFirstVisible from '../NotRenderUntilFirstVisible/NotRenderUntilFirstVisible';
 import {PlanProvider} from '../Plan/PlanContext';
-import Plan from '../Plan/Plan';
-import {usePrepareNode} from '../Plan/utils';
 import PlanActions from '../Plan/PlanActions';
+import {QueryResultContainer} from './QueryResultContainer';
+import {QueryChartTab} from './QueryChartTab';
+import {PlanContainer} from './PlanContainer';
+import {extractOperationIdToCluster} from './helpers/extractOperationIdToCluster';
 
 import './index.scss';
 import {ErrorTree} from './ErrorTree';
 import {QueryProgress} from './QueryResultActions/QueryProgress';
-import UIFactory from '../../../UIFactory';
-
 const b = block('query-results');
 
-function QueryResultContainer({
-    query,
-    activeResultParams,
-}: {
+type Props = {
     query: QueryItem;
-    activeResultParams?: {queryId: string; resultIndex: number};
-}) {
-    const dispatch = useDispatch();
-    useEffect(() => {
-        if (activeResultParams) {
-            dispatch(loadQueryResult(activeResultParams.queryId, activeResultParams.resultIndex));
-        }
-    }, [activeResultParams, dispatch]);
-    return <QueryResultsView query={query} index={activeResultParams?.resultIndex || 0} />;
-}
+    className: string;
+    toolbar: ReactNode;
+    minimized: boolean;
+};
 
-function CustomQueryTabContainer({query}: {query: QueryItem}) {
-    const customQueryResultTab = UIFactory.getCustomQueryResultTab();
-
-    if (!customQueryResultTab) {
-        return null;
-    }
-
-    return customQueryResultTab.renderContent({query});
-}
-
-function extractOperationIdToCluster(obj: YQLSstatistics | undefined): Map<string, string> {
-    const clusterNames: Map<string, string> = new Map();
-
-    if (!obj) return clusterNames;
-
-    const traverse = (o: YQLSstatistics) => {
-        for (const key in o) {
-            if (key === '_cluster_name') {
-                clusterNames.set(o._id, o._cluster_name);
-            } else if (typeof o[key] === 'object' && o[key] !== null) {
-                traverse(o[key]);
-            }
-        }
-    };
-
-    traverse(obj);
-
-    return clusterNames;
-}
-
-export const QueryResults = React.memo(function QueryResults({
+export const QueryResults = React.memo<Props>(function QueryResults({
     query,
     className,
     toolbar,
     minimized = false,
-}: {
-    query: QueryItem;
-    className: string;
-    toolbar: React.ReactChild;
-    minimized: boolean;
 }) {
     const [tabs, setTab, {activeTabId, category, activeResultParams}] = useQueryResultTabs(query);
     const operationIdToCluster = React.useMemo(
@@ -130,10 +83,10 @@ export const QueryResults = React.memo(function QueryResults({
                             />
                         </NotRenderUntilFirstVisible>
                         <NotRenderUntilFirstVisible
-                            hide={category !== QueryResultTab.CUSTOM_TAB}
+                            hide={category !== QueryResultTab.CHART_TAB}
                             className={b('result-wrap')}
                         >
-                            <CustomQueryTabContainer query={query} />
+                            <QueryChartTab query={query} />
                         </NotRenderUntilFirstVisible>
                         {category === QueryResultTab.ERROR && <ErrorTree rootError={query.error} />}
                         {category === QueryResultTab.META && <QueryMetaTable query={query} />}
@@ -154,12 +107,3 @@ export const QueryResults = React.memo(function QueryResults({
         </div>
     );
 });
-
-interface PlanContainerProps {
-    isActive: boolean;
-    operationIdToCluster: Map<string, string>;
-}
-
-function PlanContainer({isActive, operationIdToCluster}: PlanContainerProps) {
-    return <Plan isActive={isActive} prepareNode={usePrepareNode(operationIdToCluster)} />;
-}
