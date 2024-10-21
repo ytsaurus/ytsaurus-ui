@@ -26,6 +26,10 @@ export const getSettingsRegularUserUI = createSelector(makeGetSetting, (getSetti
     return getSetting(SettingName.DEVELOPMENT.REGULAR_USER_UI, NAMESPACES.DEVELOPMENT) || false;
 });
 
+export const getSettingsQueryTrackerNewGraphType = createSelector(makeGetSetting, (getSetting) => {
+    return getSetting(SettingName.QUERY_TRACKER.NEW_GRAPH_TYPE, NAMESPACES.QUERY_TRACKER) || false;
+});
+
 export const getSettingsSchedulingExpandStaticConfiguration = createSelector(
     makeGetSetting,
     (getSetting) => {
