@@ -19,6 +19,7 @@ import {
     getUsersNameFilter,
 } from '../../../store/selectors/users';
 import {GroupsLoader} from '../../../hooks/global';
+import {ShowCreateUserModalButton} from '../CreateUserModal/CreateUserModal';
 
 import './UsersPageFilters.scss';
 
@@ -95,7 +96,9 @@ class UsersPageFilters extends React.Component {
                         ),
                     },
                 ]}
-            />
+            >
+                <ShowCreateUserModalButton />
+            </Toolbar>
         );
     }
 }

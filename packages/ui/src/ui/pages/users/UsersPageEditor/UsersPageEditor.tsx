@@ -37,12 +37,16 @@ interface Props {
     groupAttributesMap?: GroupAttributes;
 
     closeUserEditorModal: () => void;
-    saveUserData: (
-        username: string,
-        changedFields: Partial<Pick<Props, Exclude<Level2Keys, 'idm' | 'groups' | 'newGroups'>>>,
-        newGroups: Array<string>,
-        groupsToRemove: Array<string>,
-    ) => Promise<void>;
+    saveUserData: (payload: {
+        username: string;
+        password: string;
+        newName: string;
+        attributes: Partial<
+            Pick<Props, Exclude<Level2Keys, 'idm' | 'name' | 'groups' | 'newGroups' | 'password'>>
+        >;
+        groupsToAdd: Array<string>;
+        groupsToRemove: Array<string>;
+    }) => Promise<void>;
 }
 
 interface State {
@@ -54,6 +58,7 @@ type GroupAttributes = Record<string, {upravlyator_managed: boolean}>;
 interface FormValues {
     general: {
         idm: string;
+        name: string;
         read_request_rate_limit: {value: number};
         request_queue_size_limit: {value: number};
         write_request_rate_limit: {value: number};
@@ -67,12 +72,16 @@ interface FormValues {
         banned?: string | boolean;
         ban_message?: string;
     };
+    password: {
+        password: string;
+    };
 }
 
 type Level2Keys =
     | keyof FormValues['general']
     | keyof FormValues['groups']
-    | keyof FormValues['ban'];
+    | keyof FormValues['ban']
+    | keyof FormValues['password'];
 
 class UsersPageEditor extends React.Component<Props, State> {
     static propTypes = {
@@ -120,18 +129,27 @@ class UsersPageEditor extends React.Component<Props, State> {
     // eslint-disable-next-line react/sort-comp
     onAdd = async (form: FormApi<FormValues>) => {
         const {
-            values: {general: generalTab, groups: groupsTab, ban: banTab},
+            values: {general: generalTab, groups: groupsTab, ban: banTab, password: passwordTab},
         } = form.getState();
         const fields = {
             idm: generalTab.idm,
+            name: generalTab.name,
             read_request_rate_limit: generalTab.read_request_rate_limit.value,
             request_queue_size_limit: generalTab.request_queue_size_limit.value,
             write_request_rate_limit: generalTab.write_request_rate_limit.value,
+            password: passwordTab.password,
             ...groupsTab,
             ...banTab,
         };
 
-        const {idm: _idm, groups, newGroups, ...rest} = fields;
+        const {
+            idm: _idm,
+            groups,
+            newGroups,
+            name: newName,
+            password: newPassword,
+            ...rest
+        } = fields;
         const [current] = groups;
         const groupsToRemove = map_(filter_(current?.data, 'removed'), 'title');
 
@@ -152,7 +170,14 @@ class UsersPageEditor extends React.Component<Props, State> {
         }
 
         const {username, saveUserData} = this.props;
-        return saveUserData(username, changedFields, newGroups, groupsToRemove).catch((error) => {
+        return saveUserData({
+            username,
+            newName,
+            attributes: changedFields,
+            groupsToAdd: newGroups,
+            groupsToRemove: groupsToRemove,
+            password: newPassword,
+        }).catch((error) => {
             this.setState({error});
             return Promise.reject(error);
         });
@@ -190,6 +215,7 @@ class UsersPageEditor extends React.Component<Props, State> {
                     initialValues={{
                         general: {
                             idm: idm === undefined ? '' : String(idm),
+                            name: username,
                             read_request_rate_limit: {value: rrrl || 1},
                             request_queue_size_limit: {value: rqsl || 1},
                             write_request_rate_limit: {value: wrrl || 1},
@@ -202,6 +228,9 @@ class UsersPageEditor extends React.Component<Props, State> {
                         ban: {
                             banned: banned || false,
                             ban_message: banMessage,
+                        },
+                        password: {
+                            password: '',
                         },
                     }}
                     onAdd={this.onAdd}
@@ -222,6 +251,12 @@ class UsersPageEditor extends React.Component<Props, State> {
                                               caption: 'IDM',
                                           },
                                       ]),
+                                {
+                                    name: 'name',
+                                    type: 'text',
+                                    required: true,
+                                    caption: 'Name',
+                                },
                                 {
                                     type: 'number',
                                     name: 'request_queue_size_limit',
@@ -306,6 +341,20 @@ class UsersPageEditor extends React.Component<Props, State> {
                                     type: 'textarea',
                                     name: 'ban_message',
                                     caption: 'Ban message',
+                                },
+                                ...errors,
+                            ],
+                        },
+                        {
+                            type: 'tab-vertical',
+                            name: 'password',
+                            title: 'Change Password',
+                            fields: [
+                                {
+                                    name: 'password',
+                                    type: 'text',
+                                    caption: 'New passwowrd',
+                                    extras: () => ({type: 'password'}),
                                 },
                                 ...errors,
                             ],

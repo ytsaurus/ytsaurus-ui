@@ -57,8 +57,7 @@ $groupsCellWidth: 250px;
         }
 
         &_col_actions {
-            width: 110px;
-            justify-content: space-between;
+            width: 120px;
         }
     }
 
@@ -81,10 +80,5 @@ $groupsCellWidth: 250px;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: pre-wrap;
-    }
-
-    &__attrs-action,
-    &__edit-action {
-        color: var(--secondary-text) !important;
     }
 }
