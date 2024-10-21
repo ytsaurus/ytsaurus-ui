@@ -6,13 +6,13 @@ const initialState = {
     loading: false,
 };
 
-export const deleteUserModalSlice = createSlice({
-    name: 'deleteUserModal',
+export const createUserModalSlice = createSlice({
+    name: 'createUserModal',
     initialState,
     reducers: {
         setModalState(
             state,
-            {payload}: PayloadAction<Partial<typeof initialState>>,
+            {payload}: PayloadAction<{showModal?: boolean; username?: string; loading?: boolean}>,
         ) {
             if (payload.showModal !== undefined) {
                 state.showModal = payload.showModal;
