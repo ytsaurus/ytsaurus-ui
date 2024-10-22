@@ -4,7 +4,7 @@ import {NAMESPACES, SettingName} from '../../../../../shared/constants/settings'
 import {getPath} from '../../../../../shared/utils/settings';
 import {QueryResult, QueryResultReadyState, QueryResultState} from './types';
 
-const getQueryResultsState = (state: RootState) => state.queryTracker.results;
+export const getQueryResultsState = (state: RootState) => state.queryTracker.results;
 
 export const getQueryResultGlobalSettings = (): QueryResultReadyState['settings'] => {
     const settings = getSettingsDataFromInitialConfig().data;

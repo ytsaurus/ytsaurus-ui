@@ -20,7 +20,7 @@ import {
     SET_QUERY_RESULTS_SETTINGS,
 } from '../query-tracker-contants';
 
-export type QueryResultsState = Record<QueryItemId, Record<number, QueryResult>>;
+export type QueryResultsState = Record<QueryItemId, QueryResult[]>;
 
 const initialState: QueryResultsState = {};
 

@@ -1,6 +1,6 @@
 import React from 'react';
 import {useSelector} from 'react-redux';
-import {selectQueryResultChartSaved} from '../../store/selectors';
+import {selectQueryResultChartSaved} from '../../module/queryChart/selectors';
 import {ArrowsRotateRight, CircleCheck} from '@gravity-ui/icons';
 import {Icon, Tooltip} from '@gravity-ui/uikit';
 import block from 'bem-cn-lite';
@@ -14,7 +14,11 @@ export function SavingIndicator() {
 
     return (
         <Tooltip content={tooltipContent}>
-            <Icon className={b({saved})} data={saved ? CircleCheck : ArrowsRotateRight} size={16} />
+            <Icon
+                className={b({saving: !saved})}
+                data={saved ? CircleCheck : ArrowsRotateRight}
+                size={16}
+            />
         </Tooltip>
     );
 }

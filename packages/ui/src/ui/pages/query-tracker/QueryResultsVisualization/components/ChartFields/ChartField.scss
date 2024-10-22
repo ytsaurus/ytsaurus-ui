@@ -1,0 +1,15 @@
+.yt-chart-field {
+    width: 200px;
+    padding: 12px 0;
+    border-top: 1px solid var(--g-color-line-generic);
+
+    &__header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    &__name {
+        font-weight: bold;
+    }
+}

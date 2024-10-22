@@ -2,7 +2,7 @@ import uniq_ from 'lodash/uniq';
 import map_ from 'lodash/map';
 import type {ChartKitWidgetData} from '@gravity-ui/chartkit';
 import type {PrepareLineArgs, QueryResult} from './types';
-import {Field, VisualizationId} from '../types';
+import {VisualizationId} from '../types';
 import {splitDataByColor} from './splitDataByColor';
 import {getPointValue} from './getPointData';
 import {getVisualizationPlaceholders} from './utils';
@@ -12,9 +12,9 @@ import {getVisualizationPlaceholders} from './utils';
 
 interface PrepareColoredSeriesDataArgs {
     rows: QueryResult;
-    xField: Field;
-    yField: Field;
-    colorField: Field;
+    xField: string;
+    yField: string;
+    colorField: string;
     visualizationId: VisualizationId;
 }
 
@@ -25,15 +25,15 @@ function prepareColoredSeriesData({
     colorField,
     visualizationId,
 }: PrepareColoredSeriesDataArgs): ChartKitWidgetData {
-    const xFieldPath = `${xField.name}.$rawValue`;
+    const xFieldPath = `${xField}.$rawValue`;
 
     return {
         series: {
             data: splitDataByColor({
                 rows,
-                xFieldName: xField.name,
-                yFieldName: yField.name,
-                colorFieldName: colorField?.name,
+                xFieldName: xField,
+                yFieldName: yField,
+                colorFieldName: colorField,
             }).map((item) => {
                 return {
                     type: visualizationId,
@@ -52,16 +52,14 @@ function prepareColoredSeriesData({
 
 interface PrepareSeriesDataArgs {
     rows: QueryResult;
-    xField: Field;
-    yField: Field;
+    xField: string;
+    yField: string;
     visualizationId: VisualizationId;
-    yFields: Field[];
 }
 
 function prepareSeriesData({
     xField,
     yField,
-    yFields,
     rows,
     visualizationId,
 }: PrepareSeriesDataArgs): ChartKitWidgetData {
@@ -72,14 +70,12 @@ function prepareSeriesData({
     const dataMatrix: Record<string, any> = {};
 
     rows.forEach((row) => {
-        const xRowItem = row[xField.name];
+        const xRowItem = row[xField];
         const xValue = xRowItem.$rawValue;
 
         xValues.push(xValue);
 
-        yFields.forEach((field) => {
-            dataMatrix[xValue] = getPointValue(row[field.name]);
-        });
+        dataMatrix[xValue] = getPointValue(row[yField]);
     });
 
     xValues = Array.from(new Set(xValues));
@@ -88,15 +84,13 @@ function prepareSeriesData({
 
     result.graphs = [];
 
-    yFields.forEach(() => {
-        const graph = {
-            data: xValues.map((xValue) => {
-                return dataMatrix[String(xValue)];
-            }),
-        };
+    const graph = {
+        data: xValues.map((xValue) => {
+            return dataMatrix[String(xValue)];
+        }),
+    };
 
-        result.graphs?.push(graph);
-    });
+    result.graphs?.push(graph);
 
     return {
         series: {
@@ -109,7 +103,7 @@ function prepareSeriesData({
                             y: Number(item),
                         };
                     }),
-                    name: yField.name,
+                    name: yField,
                 },
             ],
         },
@@ -127,10 +121,9 @@ export function prepareBar(args: PrepareLineArgs): ChartKitWidgetData {
     const {xPlaceholder, yPlaceholder, colorPlaceholder} =
         getVisualizationPlaceholders(visualization);
 
-    const [xField] = xPlaceholder?.fields || [];
-    const yFields = yPlaceholder?.fields || [];
-    const [yField] = yFields;
-    const [colorField] = colorPlaceholder?.fields || [];
+    const colorField = colorPlaceholder?.field;
+    const xField = xPlaceholder?.field;
+    const yField = yPlaceholder?.field;
 
     if (!xField || !yField) {
         return {
@@ -154,7 +147,6 @@ export function prepareBar(args: PrepareLineArgs): ChartKitWidgetData {
         rows,
         yField,
         xField,
-        yFields,
         visualizationId,
     });
 }
