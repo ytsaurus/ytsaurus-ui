@@ -35,8 +35,10 @@ export const isQueryLoading = (state: RootState) => getState(state).state === 'l
 export const getCliqueMap = (state: RootState) => getState(state).cliqueMap;
 export const getCliqueLoading = (state: RootState) => getState(state).cliqueLoading;
 
+export const getQueryItem = (state: RootState) => getState(state).queryItem;
+
 export const isQueryExecuted = (state: RootState): boolean => {
-    const queryItem = getState(state).queryItem;
+    const queryItem = getQueryItem(state);
     // TODO: Use real query's state
     return Boolean(queryItem?.id) && queryItem?.state !== QueryStatus.DRAFT;
 };

@@ -9,7 +9,7 @@ import {
 } from '../api';
 import {getType} from '../../../../components/SchemaDataType/dataTypes';
 import {getQueryResultGlobalSettings, getQueryResultSettings, hasQueryResult} from './selectors';
-import {QueryResultErrorState, QueryResultReadyState, QueryResultState} from './types';
+import {QueryResultErrorState, QueryResultReadyState, QueryResultState, Result} from './types';
 import {prepareFormattedValue} from './utils/format';
 import {wrapApiPromiseByToaster} from '../../../../utils/utils';
 import {getPrimitiveTypesMap} from '../../../../store/selectors/global/supported-features';
@@ -103,7 +103,7 @@ export function loadQueryResult(
                         acc[k] = prepareFormattedValue(value, types[Number(typeIndex)]);
                         return acc;
                     },
-                    {} as Record<string, {$type: string; $value: unknown}>,
+                    {} as Record<string, Result>,
                 );
             });
             dispatch({
@@ -174,7 +174,7 @@ export function updateQueryResult(
                         acc[k] = prepareFormattedValue(value, types[Number(typeIndex)]);
                         return acc;
                     },
-                    {} as Record<string, {$type: string; $value: unknown}>,
+                    {} as Record<string, Result>,
                 );
             });
 
