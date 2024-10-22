@@ -278,7 +278,7 @@ export interface ConfigData {
     ytApiUseCORS?: boolean;
     uiSettings?: UISettings;
     metrikaCounterId?: number;
-    allowLoginDialog?: boolean;
+    allowPasswordAuth?: boolean;
     allowOAuth?: boolean;
     oauthButtonLabel?: string;
     allowUserColumnPresets?: boolean;

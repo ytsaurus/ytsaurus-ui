@@ -6,6 +6,7 @@ import Link from '../../../components/Link/Link';
 import Icon from '../../../components/Icon/Icon';
 import Button from '../../../components/Button/Button';
 import {showUserDeleteModal, showUserEditorModal} from '../../../store/actions/users';
+import {getUserManagementEnabled} from '../../../store/selectors/global';
 import block from 'bem-cn-lite';
 import {useDispatch} from 'react-redux';
 
@@ -30,6 +31,20 @@ export const UserActions: React.FC<UserActionsProps> = ({className, cluster, use
         dispatch(showUserDeleteModal(username));
     }, [username, dispatch]);
 
+    const isUserManagementEnabled = getUserManagementEnabled();
+
+    let deleteUserButton;
+
+    if (isUserManagementEnabled) {
+        deleteUserButton = (
+            <Button view="flat-secondary" size="m" onClick={onDeleteClick}>
+                <Icon awesome="trash-bin" />
+            </Button>
+        );
+    } else {
+        deleteUserButton = null;
+    }
+
     return (
         <div className={b(null, className)}>
             <ChartLink url={UIFactory.makeUrlForUserDashboard(cluster, username)} />
@@ -40,9 +55,7 @@ export const UserActions: React.FC<UserActionsProps> = ({className, cluster, use
             <Button view="flat-secondary" size="m" onClick={onEditClick}>
                 <Icon awesome="pencil-alt" />
             </Button>
-            <Button view="flat-secondary" size="m" onClick={onDeleteClick}>
-                <Icon awesome="trash-bin" />
-            </Button>
+            {deleteUserButton}
         </div>
     );
 };
