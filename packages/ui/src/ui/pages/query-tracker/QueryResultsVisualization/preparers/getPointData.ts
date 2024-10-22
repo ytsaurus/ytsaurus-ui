@@ -1,6 +1,6 @@
-import {FieldObject} from './types';
+import {Result} from '../../module/query_result/types';
 
-export const getPointValue = (value: FieldObject) => {
+export const getPointValue = (value: Result) => {
     switch (value.$type) {
         case 'yql.interval': {
             return Number(value.$value);

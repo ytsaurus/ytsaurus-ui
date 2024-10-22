@@ -23,10 +23,18 @@ export enum QueryResultsViewMode {
     Scheme = 'scheme',
 }
 
+export type Result = {
+    $formattedValue: string;
+    $fullFormattedValue: string;
+    $rawValue: string;
+    $type: string;
+    $value: unknown;
+};
+
 export type QueryResultReadyState = {
     state: QueryResultState.Ready;
     resultReady: true;
-    results: Record<string, {$type: string; $value: unknown}>[];
+    results: Record<string, Result>[];
     columns: QueryResultColumn[];
     page: number;
     settings: {

@@ -1,12 +1,8 @@
-export type Field = {
-    name: string;
-};
-
 export type PlaceholderId = 'x' | 'y' | 'colors';
 
 export type Placeholder = {
     id: PlaceholderId;
-    fields: Field[];
+    field: string;
 };
 
 type RadioSetting = 'on' | 'off';
@@ -35,12 +31,4 @@ export type Visualization = {
     id: VisualizationId;
     placeholders: Placeholder[];
     chartSettings: ChartSettings;
-};
-
-export type ExtendedQueryItem = {
-    id: string;
-    result_count: number;
-    annotations?: {
-        ui_chart_config: Visualization[];
-    };
 };

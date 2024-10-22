@@ -8,10 +8,10 @@ export function prepareScatter(args: PrepareLineArgs): ChartKitWidgetData {
     const rows = args.result;
     const {xPlaceholder, yPlaceholder, colorPlaceholder} =
         getVisualizationPlaceholders(visualization);
-    const [xField] = xPlaceholder?.fields || [];
-    const yFields = yPlaceholder?.fields || [];
-    const [yField] = yFields;
-    const [colorField] = colorPlaceholder?.fields || [];
+    const [colorField] = [colorPlaceholder?.field] || [];
+
+    const xField = xPlaceholder?.field;
+    const yField = yPlaceholder?.field;
 
     if (!xField || !yField) {
         return {
@@ -26,9 +26,9 @@ export function prepareScatter(args: PrepareLineArgs): ChartKitWidgetData {
             series: {
                 data: splitDataByColor({
                     rows,
-                    yFieldName: yField.name,
-                    xFieldName: xField.name,
-                    colorFieldName: colorField?.name,
+                    yFieldName: yField,
+                    xFieldName: xField,
+                    colorFieldName: colorField,
                 }).map((item) => ({
                     data: item.data.map(({x, y}) => ({
                         x: Number(x),
@@ -41,22 +41,20 @@ export function prepareScatter(args: PrepareLineArgs): ChartKitWidgetData {
         };
     }
 
-    const widgetData: ChartKitWidgetData = {
+    return {
         series: {
             data: [
                 {
                     type: 'scatter',
                     data: rows.map((row) => {
                         return {
-                            x: Number(row[xField.name].$rawValue),
-                            y: Number(row[yField.name].$rawValue),
+                            x: Number(row[xField].$rawValue),
+                            y: Number(row[yField].$rawValue),
                         };
                     }),
-                    name: `${xField.name} x ${yField.name}`,
+                    name: `${xField} x ${yField}`,
                 },
             ],
         },
     };
-
-    return widgetData;
 }

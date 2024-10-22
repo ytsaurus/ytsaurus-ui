@@ -1,213 +1,116 @@
-import type {
-    ChartSettings,
-    ExtendedQueryItem,
-    Field,
-    Visualization,
-    VisualizationId,
-} from '../types';
-import type {ActionD} from '../../../../types';
-import type {QueryResult} from '../preparers/types';
+import type {ChartSettings, Visualization} from '../../QueryResultsVisualization/types';
+import {PayloadAction, createSlice} from '@reduxjs/toolkit';
 
-export interface QueryResultsVisualizationState {
+export type QueryResultsVisualizationState = {
     saved: boolean;
-    query: ExtendedQueryItem | undefined;
-    queryResults: Record<number, QueryResult>;
-    resultIndex: number;
-    visualizations: Visualization[];
-}
+    visualization: Visualization;
+};
 
-function getInitialVisualization(): Visualization {
-    return {
-        id: 'line',
-        placeholders: [
-            {
-                id: 'x',
-                fields: [],
-            },
-            {
-                id: 'y',
-                fields: [],
-            },
-            {
-                id: 'colors',
-                fields: [],
-            },
-        ],
-        chartSettings: {
-            xAxis: {
-                legend: 'on',
-                labels: 'on',
-                title: '',
-                grid: 'on',
-                pixelInterval: '',
-            },
-            yAxis: {
-                labels: 'on',
-                title: '',
-                grid: 'on',
-                pixelInterval: '',
-            },
+export const initialVisualization: Visualization = {
+    id: 'line',
+    placeholders: [
+        {
+            id: 'x',
+            field: '',
         },
-    };
-}
+        {
+            id: 'y',
+            field: '',
+        },
+        {
+            id: 'colors',
+            field: '',
+        },
+    ],
+    chartSettings: {
+        xAxis: {
+            legend: 'on',
+            labels: 'on',
+            title: '',
+            grid: 'on',
+            pixelInterval: '',
+        },
+        yAxis: {
+            labels: 'on',
+            title: '',
+            grid: 'on',
+            pixelInterval: '',
+        },
+    },
+};
 
 export const initialState: QueryResultsVisualizationState = {
     saved: true,
-    query: undefined,
-    queryResults: {},
-    resultIndex: 0,
-    visualizations: [getInitialVisualization()],
+    visualization: initialVisualization,
 };
 
-export type QueryResultVisualizationAction =
-    | ActionD<'set-fields', {placeholderId: string; fields: Field[]}>
-    | ActionD<'remove-field', {placeholderId: string; field: Field}>
-    | ActionD<'set-chart-settings', ChartSettings>
-    | ActionD<'set-visualization', VisualizationId>
-    | ActionD<'set-query', {query: ExtendedQueryItem}>
-    | ActionD<'set-result-index', number>
-    | ActionD<'set-visualization-saved', {saved: boolean}>
-    | ActionD<'set-query-result', {queryResult: QueryResult}>;
-
-export function queryResultsVisualization(
-    state: QueryResultsVisualizationState = initialState,
-    action: QueryResultVisualizationAction,
-): QueryResultsVisualizationState {
-    switch (action.type) {
-        case 'set-visualization-saved': {
-            const {saved} = action.data;
-
+const queryChartSlice = createSlice({
+    initialState,
+    name: 'queryChart',
+    reducers: {
+        setSaved: (state, {payload}: PayloadAction<boolean>) => {
+            state.saved = payload;
+        },
+        setField: (state, {payload}: PayloadAction<{placeholderId: string; fieldName: string}>) => {
             return {
                 ...state,
-                saved,
-            };
-        }
-        case 'set-query': {
-            const {query} = action.data;
-
-            const queryVisualizations = query.annotations?.ui_chart_config || [];
-
-            const visualizations = [];
-
-            for (let i = 0; i < query.result_count; i++) {
-                visualizations.push(queryVisualizations[i] || getInitialVisualization());
-            }
-
-            return {
-                ...state,
-                query,
-                queryResults: {},
-                visualizations,
-            };
-        }
-        case 'set-query-result': {
-            const {queryResult} = action.data;
-
-            return {
-                ...state,
-                queryResults: {
-                    ...state.queryResults,
-                    [state.resultIndex]: queryResult,
-                },
-            };
-        }
-        case 'set-fields': {
-            const visualizations = state.visualizations.map((visualization, index) => {
-                if (index !== state.resultIndex) {
-                    return visualization;
-                }
-
-                return {
-                    ...visualization,
-                    placeholders: visualization.placeholders.map((placeholder) => {
-                        if (placeholder.id === action.data.placeholderId) {
+                visualization: {
+                    ...state.visualization,
+                    placeholders: state.visualization.placeholders.map((placeholder) => {
+                        if (placeholder.id === payload.placeholderId) {
                             return {
                                 ...placeholder,
-                                fields: action.data.fields,
+                                field: payload.fieldName,
                             };
                         }
 
                         return placeholder;
                     }),
-                };
+                },
+            };
+        },
+        removeField: (
+            state,
+            {payload}: PayloadAction<{placeholderId: string; fieldName: string}>,
+        ) => {
+            const placeholders = state.visualization.placeholders.map((placeholder) => {
+                if (placeholder.id === payload.placeholderId) {
+                    return {
+                        ...placeholder,
+                        field: '',
+                    };
+                }
+
+                return placeholder;
             });
 
             return {
                 ...state,
-                visualizations,
-            };
-        }
-        case 'remove-field': {
-            const visualizations = state.visualizations.map((visualization, index) => {
-                if (index !== state.resultIndex) {
-                    return visualization;
-                }
-
-                const placeholders = visualization.placeholders.map((placeholder) => {
-                    if (placeholder.id === action.data.placeholderId) {
-                        return {
-                            ...placeholder,
-                            fields: placeholder.fields.filter(
-                                (field) => field.name !== action.data.field.name,
-                            ),
-                        };
-                    }
-
-                    return placeholder;
-                });
-
-                return {
-                    ...visualization,
+                visualization: {
+                    ...state.visualization,
                     placeholders,
-                };
-            });
-
+                },
+            };
+        },
+        setChartSettings: (state, {payload}: PayloadAction<ChartSettings>) => {
             return {
                 ...state,
-                visualizations,
+                visualization: {
+                    ...state.visualization,
+                    chartSettings: payload,
+                },
             };
-        }
-        case 'set-chart-settings': {
-            const visualizations = state.visualizations.map((visualization, index) => {
-                if (index !== state.resultIndex) {
-                    return visualization;
-                }
-
-                return {
-                    ...visualization,
-                    chartSettings: action.data,
-                };
-            });
-
+        },
+        setVisualization: (state, {payload}: PayloadAction<Visualization>) => {
             return {
                 ...state,
-                visualizations,
+                visualization: payload,
             };
-        }
-        case 'set-visualization': {
-            const visualizations = state.visualizations.map((visualization, index) => {
-                if (index !== state.resultIndex) {
-                    return visualization;
-                }
+        },
+    },
+});
 
-                return {
-                    ...visualization,
-                    id: action.data,
-                };
-            });
+export const {setSaved, setChartSettings, setField, removeField, setVisualization} =
+    queryChartSlice.actions;
 
-            return {
-                ...state,
-                visualizations,
-            };
-        }
-        case 'set-result-index': {
-            return {
-                ...state,
-                resultIndex: action.data,
-            };
-        }
-        default:
-            return state;
-    }
-}
+export const queryChartReducer = queryChartSlice.reducer;

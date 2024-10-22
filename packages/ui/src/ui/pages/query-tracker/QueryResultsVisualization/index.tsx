@@ -7,7 +7,7 @@ const QueryResultsVisualizationLazy = withLazyLoading(
         return {
             default: (
                 await import(
-                    /* webpackChunkName: "query-results" */ './containers/QueryResultsVisualization/QueryResultsVisualization'
+                    /* webpackChunkName: "query-results" */ './components/QueryResultsVisualization'
                 )
             ).QueryResultsVisualization,
         };
