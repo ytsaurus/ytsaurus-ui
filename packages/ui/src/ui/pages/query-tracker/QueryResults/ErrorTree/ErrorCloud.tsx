@@ -14,7 +14,7 @@ const block = cn('yt-error-cloud');
 
 type Props = {
     error: QueryError;
-    expanded: boolean;
+    initialExpanded: boolean;
     disableCloud: boolean;
     level: number;
     onErrorClick: (data: ErrorPosition) => void;
@@ -23,7 +23,7 @@ type Props = {
 };
 export const ErrorCloud: FC<Props> = (props) => {
     const {error, level, disableCloud, onErrorClick, onShowParent, fromCloud} = props;
-    const [expanded, toggleExpanded] = useToggle(props.expanded);
+    const [expanded, toggleExpanded] = useToggle(props.initialExpanded);
     const [extracted, setExtracted] = useState(0);
 
     const handleExtractLevel = useCallback(() => {
