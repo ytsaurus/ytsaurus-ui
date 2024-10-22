@@ -6,6 +6,7 @@ import {createUserModalSlice} from '../../../store/reducers/users/create-user';
 import {RootState} from '../../../store/reducers';
 import {createUser} from '../../../store/actions/users-typed';
 import {fetchUsers} from '../../../store/actions/users';
+import {getUserManagementEnabled} from '../../../store/selectors/global';
 
 export const ShowCreateUserModalButton: React.FC = () => {
     const dispatch = useDispatch();
@@ -13,11 +14,17 @@ export const ShowCreateUserModalButton: React.FC = () => {
         dispatch(createUserModalSlice.actions.setModalState({showModal: true, username: ''}));
     }, []);
 
-    return (
-        <Button view="action" onClick={onClick}>
-            Create new
-        </Button>
-    );
+    const isEnabled = getUserManagementEnabled();
+
+    if (isEnabled) {
+        return (
+            <Button view="action" onClick={onClick}>
+                Create new
+            </Button>
+        );
+    }
+
+    return null;
 };
 
 export const CreateUserModal: React.FC = () => {

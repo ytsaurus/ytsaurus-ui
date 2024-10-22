@@ -204,19 +204,23 @@ export const getAllIdmGroupNamesSorted = createSelector(
 export const getGlobalShowLoginDialog = (state: RootState) => {
     if (state.global.authWay) {
         return (
-            getConfigData().allowLoginDialog &&
+            getConfigData().allowPasswordAuth &&
             state.global.ytAuthCluster &&
             (!state.global.login || state.global.showLoginDialog)
         );
     }
 
     return (
-        getConfigData().allowLoginDialog && (!state.global.login || state.global.showLoginDialog)
+        getConfigData().allowPasswordAuth && (!state.global.login || state.global.showLoginDialog)
     );
 };
 
 export const getAuthPagesEnabled = () => {
-    return getConfigData().allowLoginDialog;
+    return getConfigData().allowPasswordAuth;
+};
+
+export const getUserManagementEnabled = () => {
+    return !getConfigData().allowPasswordAuth;
 };
 
 export const getOAuthEnabled = () => {

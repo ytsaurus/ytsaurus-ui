@@ -313,7 +313,7 @@ export function mergeScreen() {
 }
 
 export function handleAuthError({ytAuthCluster}: {ytAuthCluster?: string} = {}) {
-    if (getConfigData().allowLoginDialog) {
+    if (getConfigData().allowPasswordAuth) {
         if (!ytAuthCluster) {
             const toaster = new Toaster();
 

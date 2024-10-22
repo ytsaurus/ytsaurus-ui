@@ -10,7 +10,10 @@ import map_ from 'lodash/map';
 import reduce_ from 'lodash/reduce';
 
 import {closeUserEditorModal, saveUserData} from '../../../store/actions/users';
-import {getGlobalGroupAttributesMap} from '../../../store/selectors/global';
+import {
+    getGlobalGroupAttributesMap,
+    getUserManagementEnabled,
+} from '../../../store/selectors/global';
 import {getUsersPageEditableUser} from '../../../store/selectors/users';
 import {flags} from '../../../utils';
 
@@ -203,6 +206,8 @@ class UsersPageEditor extends React.Component<Props, State> {
         } = this.props;
 
         const errors = makeErrorFields([this.state.error]);
+        const isUserManagementEnabled = getUserManagementEnabled();
+
         return (
             <React.Fragment>
                 <GroupsLoader />
@@ -251,12 +256,16 @@ class UsersPageEditor extends React.Component<Props, State> {
                                               caption: 'IDM',
                                           },
                                       ]),
-                                {
-                                    name: 'name',
-                                    type: 'text',
-                                    required: true,
-                                    caption: 'Name',
-                                },
+                                ...(isUserManagementEnabled
+                                    ? [
+                                          {
+                                              name: 'name',
+                                              type: 'text' as const,
+                                              required: true,
+                                              caption: 'Name',
+                                          },
+                                      ]
+                                    : []),
                                 {
                                     type: 'number',
                                     name: 'request_queue_size_limit',
@@ -345,20 +354,24 @@ class UsersPageEditor extends React.Component<Props, State> {
                                 ...errors,
                             ],
                         },
-                        {
-                            type: 'tab-vertical',
-                            name: 'password',
-                            title: 'Change Password',
-                            fields: [
-                                {
-                                    name: 'password',
-                                    type: 'text',
-                                    caption: 'New passwowrd',
-                                    extras: () => ({type: 'password'}),
-                                },
-                                ...errors,
-                            ],
-                        },
+                        ...(isUserManagementEnabled
+                            ? [
+                                  {
+                                      type: 'tab-vertical' as const,
+                                      name: 'password',
+                                      title: 'Change Password',
+                                      fields: [
+                                          {
+                                              name: 'password',
+                                              type: 'text' as const,
+                                              caption: 'New passwowrd',
+                                              extras: () => ({type: 'password' as const}),
+                                          },
+                                          ...errors,
+                                      ],
+                                  },
+                              ]
+                            : []),
                     ]}
                 />
             </React.Fragment>
