@@ -1,6 +1,14 @@
 .yt-error-tree-node {
+    $self: &;
+
     &_leaf {
         margin-left: 28px;
+    }
+
+    &_info {
+        #{$self}__icon {
+            color: var(--g-color-text-info);
+        }
     }
 
     &__errors {
