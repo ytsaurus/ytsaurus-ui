@@ -248,7 +248,7 @@ class ClusterPage extends Component {
                     {hasError ? (
                         <PreloadError />
                     ) : (
-                        <p className="preloader__loading">Loading {clusterConfig?.id}...</p>
+                        <p className={b('loading-text')}>Loading {clusterConfig?.id}...</p>
                     )}
                 </div>
                 <div className={b('error')}>
