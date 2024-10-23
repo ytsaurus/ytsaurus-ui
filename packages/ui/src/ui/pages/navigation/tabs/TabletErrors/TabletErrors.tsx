@@ -170,6 +170,8 @@ function TabletErrorsHeader({id, cluster}: {id: string; cluster: string}) {
 function ReplicaErrorHeader({id}: {id: string}) {
     const data = useSelector(getReplicatedTableReplicasMap);
     const {[id]: attrs} = data;
+
+    if (!attrs) return null;
     const {cluster_name: cluster, mode, replica_path: path} = attrs;
 
     const link =
