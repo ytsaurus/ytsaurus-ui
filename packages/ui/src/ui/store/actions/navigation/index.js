@@ -96,8 +96,6 @@ export function updateView(settings = {}) {
 
                 const error = getBatchError(results, 'Failed to get navigation attributes');
                 if (error) {
-                    // Convert typed errors to regular ones
-                    error.inner_errors = error.inner_errors.map(prepareAttributes);
                     throw error;
                 }
 
