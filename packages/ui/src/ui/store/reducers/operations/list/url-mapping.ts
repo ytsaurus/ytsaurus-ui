@@ -53,6 +53,10 @@ export const listParams: LocationParameters = {
         stateKey: 'operations.list.filters.pool.value',
         initialState: initialPoolFilter,
     },
+    poolTree: {
+        stateKey: 'operations.list.filters.poolTree.value',
+        initialState: initialPoolFilter,
+    },
     state: {
         stateKey: 'operations.list.filters.state.value',
         initialState: initialStateFilter,
@@ -110,6 +114,7 @@ export function getListPreparedState(state: RootState, {query}: {query: RootStat
         updateIfChanged(list.filters.subject, 'value', queryList.filters.subject.value);
         updateIfChanged(list.filters.permissions, 'value', queryList.filters.permissions.value);
         updateIfChanged(list.filters.pool, 'value', queryList.filters.pool.value);
+        updateIfChanged(list.filters.poolTree, 'value', queryList.filters.poolTree.value);
         updateIfChanged(list.filters.state, 'value', queryList.filters.state.value);
         updateIfChanged(list.filters.type, 'value', queryList.filters.type.value);
         updateIfChanged(list.filters.failedJobs, 'value', queryList.filters.failedJobs.value);
