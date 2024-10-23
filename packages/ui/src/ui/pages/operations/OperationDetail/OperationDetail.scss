@@ -84,6 +84,8 @@
     @include redefinition('bittersweet', var(--bittersweet-color));
     @include redefinition('sunflower', var(--sunflower-color));
     @include redefinition('mediumgray', var(--mediumgray-color));
+    @include redefinition('dornyellow', var(--dornyellow-color));
+    @include redefinition('rubber', var(--rubber-color));
 
     &__attributes,
     &__statistics,
