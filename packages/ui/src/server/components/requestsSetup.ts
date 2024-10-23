@@ -118,6 +118,16 @@ export function getUserYTApiSetup(cluster: string, req: Request): YTApiUserSetup
     };
 }
 
+export function getUserTabletErrorApiSetup(cluster: string, req: Request) {
+    const {authentication} = getYTApiClusterSetup(cluster).setup;
+    const authHeaders =
+        authentication && authentication !== 'none'
+            ? req.yt.tabletErrorApiAuthHeaders || req.yt.ytApiAuthHeaders || {}
+            : {};
+
+    return {authHeaders};
+}
+
 export type YTApiUserSetup = ReturnType<typeof getYTApiClusterSetup> & {
     authHeaders: Record<string, string>;
 };

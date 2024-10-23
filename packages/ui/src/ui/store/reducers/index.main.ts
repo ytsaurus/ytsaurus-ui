@@ -17,6 +17,7 @@ import settings from './settings';
 import slideoutMenu from './slideoutMenu';
 import system from './system';
 import tables from './tables';
+import tabletErrors from './tablet-errors';
 import accounts from './accounts';
 import pathViewer from './path-viewer';
 import tablet from './tablet';
@@ -63,6 +64,7 @@ const appReducers = {
     accounts,
     pathViewer,
     tablet,
+    tabletErrors,
     tablet_cell_bundles,
     tabletCellBundleEditor,
     chaos_cell_bundles,

@@ -86,7 +86,14 @@ interface PipedResponseSize {
 
 const LOG_HEADERS = ['x-yt-proxy', 'x-yt-request-id', 'x-yt-trace-id', 'content-length'];
 
-export async function pipeAxiosResponse(
+/**
+ * pipeAciosResponse is a helper function to forward stream-content to browser
+ *
+ * `ResponseDataT` just allows to declare response type, it affects nothing,
+ * but allows link highlight connection between modules from src/ui and src/server
+ */
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export async function pipeAxiosResponse<ResponseDataT = unknown>(
     ctx: AppContext,
     dst: Response,
     src?: AxiosResponse<stream.Readable | unknown>,
@@ -190,6 +197,10 @@ export async function sendAndLogError(
     }
 
     ctx.logError('Error', e, extra);
+
+    if (e instanceof ErrorWithCode) {
+        status = e.code;
+    }
 
     if (e instanceof Error) {
         return res.status(status || 500).send({message: toString_(e)});
