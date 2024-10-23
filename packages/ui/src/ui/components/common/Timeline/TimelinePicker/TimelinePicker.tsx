@@ -62,6 +62,8 @@ const formatInputTime = (from?: MomentInput, to?: MomentInput) =>
     `${formatTimeCanonical(from)} - ${formatTimeCanonical(to)}`;
 
 interface TimelinePickerProps {
+    className?: string;
+
     from: number;
     to: number;
 
@@ -281,11 +283,11 @@ export class TimelinePicker extends React.Component<TimelinePickerProps, State> 
         }
     };
     render() {
-        const {from, to, topShortcuts, hasDatePicker} = this.props;
+        const {className, from, to, topShortcuts, hasDatePicker} = this.props;
         const {opened} = this.state;
         const picker = opened ? this.renderOpenedPicker() : this.renderClosedPicker();
         return (
-            <div className={b()}>
+            <div className={b(null, className)}>
                 <div className={b('hot-buttons', {divider: hasDatePicker})}>
                     {topShortcuts?.map(this.renderTopShortcuts)}
                 </div>

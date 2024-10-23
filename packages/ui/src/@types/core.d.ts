@@ -127,6 +127,11 @@ export interface YTCoreConfig {
      */
     localmodeClusterConfig?: Partial<Pick<ClusterConfig, 'urls' | 'externalProxy'>>;
 
+    /**
+     * Base url to TabletErrorsManager service
+     */
+    tabletErrorsBaseUrl?: string;
+
     adjustAppConfig?: (nodekit: NodeKit) => void;
 }
 
@@ -153,6 +158,7 @@ declare global {
                 uid?: string;
                 login?: string;
                 ytApiAuthHeaders?: Record<string, string>;
+                tabletErrorApiAuthHeaders?: Record<string, string>;
             };
         }
     }
@@ -164,6 +170,7 @@ declare module 'express' {
             uid?: string;
             login?: string;
             ytApiAuthHeaders?: Record<string, string>;
+            tabletErrorApiAuthHeaders?: Record<string, string>;
         };
         ctx: AppContext;
     }

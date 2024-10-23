@@ -281,6 +281,7 @@ export interface ConfigData {
     oauthButtonLabel?: string;
     allowUserColumnPresets?: boolean;
     odinPageEnabled: boolean;
+    allowTabletErrors: boolean;
 }
 
 export type PipelineParams = {

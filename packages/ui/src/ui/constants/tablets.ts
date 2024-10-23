@@ -29,4 +29,5 @@ export const TabletsTab = {
     ACL: 'acl',
     // We need to think if it is better to have separate set of tabs for active chaos-cell-bundle
     CHAOS_CELLS: 'chaos_cells',
+    TABLET_ERRORS: 'tablet_errors',
 } as const;

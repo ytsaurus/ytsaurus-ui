@@ -33,6 +33,7 @@ import {
     getVcsTokensAvailability,
     removeToken,
 } from './controllers/vcs';
+import {ytTabletErrorsApi} from './controllers/yt-tablet-errors-api';
 
 const HOME_INDEX_TARGET: AppRouteDescription = {handler: homeIndexFactory(), ui: true};
 
@@ -87,6 +88,8 @@ const routes: AppRoutes = {
         handler: tableColumnPresetGet,
     },
     'POST /api/table-column-preset/:ytAuthCluster': {handler: tableColumnPresetSave},
+
+    'POST /api/tablet-errors/:ytAuthCluster/:action': {handler: ytTabletErrorsApi},
 
     'GET /:ytAuthCluster/': HOME_INDEX_TARGET,
     'GET /:ytAuthCluster/:page': HOME_INDEX_TARGET,

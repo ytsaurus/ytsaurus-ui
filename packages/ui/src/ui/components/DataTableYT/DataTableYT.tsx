@@ -5,8 +5,12 @@ import map_ from 'lodash/map';
 import range_ from 'lodash/range';
 
 import DataTable, {Column, DataTableProps, Settings} from '@gravity-ui/react-data-table';
+export type {Column};
 import {NoContent} from '../../components/NoContent/NoContent';
-import {STICKY_TOOLBAR_BOTTOM} from '../../components/WithStickyToolbar/WithStickyToolbar';
+import {
+    STICKY_DOUBLE_TOOLBAR_BOTTOM,
+    STICKY_TOOLBAR_BOTTOM,
+} from '../../components/WithStickyToolbar/WithStickyToolbar';
 import {HEADER_HEIGHT} from '../../constants';
 
 import './DataTableYT.scss';
@@ -44,6 +48,11 @@ export const DATA_TABLE_YT_SETTINGS: Settings = {
 export const DATA_TABLE_YT_SETTINGS_UNDER_TOOLBAR: Settings = {
     ...DATA_TABLE_YT_SETTINGS,
     stickyTop: STICKY_TOOLBAR_BOTTOM,
+};
+
+export const DATA_TABLE_YT_SETTINGS_UNDER_TOOLBAR_DOUBLE_HEIGHT: Settings = {
+    ...DATA_TABLE_YT_SETTINGS,
+    stickyTop: STICKY_DOUBLE_TOOLBAR_BOTTOM,
 };
 
 export default class DataTableYT<T> extends React.Component<DataTableYtProps<T>> {

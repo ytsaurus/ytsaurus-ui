@@ -3,6 +3,8 @@
 }
 
 .yc-timeline {
+    display: flex;
+
     .yc-timeline-picker {
         margin-bottom: var(--yc-timeline-line-margin);
     }

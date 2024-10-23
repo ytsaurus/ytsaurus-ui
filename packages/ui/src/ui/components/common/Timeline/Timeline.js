@@ -175,6 +175,7 @@ export class Timeline extends React.Component {
         } = this.props;
         return (
             <TimelineRuler
+                className={b('ruler')}
                 leftBound={leftBound}
                 rightBound={rightBound}
                 from={from}
@@ -212,6 +213,7 @@ export class Timeline extends React.Component {
 
         return (
             <TimelinePicker
+                className={b('picker')}
                 from={from}
                 to={to}
                 hasDatePicker={hasDatePicker}
