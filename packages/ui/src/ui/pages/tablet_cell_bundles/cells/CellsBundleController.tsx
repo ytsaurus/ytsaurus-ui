@@ -114,7 +114,7 @@ const COLUMNS: Array<Column<RowData>> = [
                     />
                     <Link
                         className={block('alloc-request-url')}
-                        url={makeNavigationLink(hulkRequestPath)}
+                        url={makeNavigationLink({path: hulkRequestPath})}
                     >
                         {uuid}
                     </Link>
