@@ -402,9 +402,9 @@ export class TimelineRuler extends React.Component {
         );
     }
     render() {
-        const {titles, hasZoomButtons, hasNowButton} = this.props;
+        const {className, titles, hasZoomButtons, hasNowButton} = this.props;
         return (
-            <div className={b()}>
+            <div className={b(null, className)}>
                 {hasZoomButtons && (
                     <div className={b('zoom')}>
                         <Button

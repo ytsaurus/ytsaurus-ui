@@ -17,7 +17,7 @@ import {
     getTabletsActiveBundle,
     getTabletsActiveBundleData,
     getTabletsError,
-} from '../../store/selectors/tablet_cell_bundles';
+} from '../../store/selectors/tablet_cell_bundles/index';
 import Error from '../../components/Error/Error';
 import Bundles from './bundles/Bundles';
 
@@ -46,10 +46,30 @@ import UIFactory from '../../UIFactory';
 import {TabletBundle} from '../../store/reducers/tablet_cell_bundles';
 import {formatByParams} from '../../utils/format';
 import {UI_TAB_SIZE} from '../../constants/global';
+import {TabletErrorsLazy} from '../../pages/tablet-errors/lazy';
+import {getConfigData} from '../../config/ui-settings';
 
 const b = cn('tablets');
 
 const TabletsTabs = React.memo(TabletsTabsImpl);
+
+function useShowSettings(activeBundle: string | undefined, enableBundleController: boolean) {
+    return React.useMemo(() => {
+        return reduce_(
+            TabletsTab,
+            (acc, v) => {
+                if (v === TabletsTab.CHAOS_CELLS) {
+                    // TODO: fix me when a page of active chaos-cell-bundle is ready
+                    acc[v] = {show: false};
+                } else {
+                    acc[v] = {show: v === TabletsTab.TABLET_CELLS || Boolean(activeBundle)};
+                }
+                return acc;
+            },
+            {} as Record<(typeof TabletsTab)[keyof typeof TabletsTab], TabSettings>,
+        );
+    }, [activeBundle, enableBundleController]);
+}
 
 export default function TabletCellBundles() {
     const match = useRouteMatch();
@@ -65,35 +85,13 @@ export default function TabletCellBundles() {
     }, [dispatch]);
     useUpdater(fetchFn);
 
-    const showEditor = React.useCallback(() => {
-        if (activeBundle) {
-            dispatch(showTabletCellBundleEditor(activeBundle));
-        }
-    }, [activeBundle, dispatch]);
-
     const writeableByName = useSelector(getTabletBundlesWriteableByName);
 
     const bundleWritable = writeableByName.get(activeBundle);
 
     const allowEdit = enableBundleController || bundleWritable;
 
-    const allowAccounting = useSelector(getClusterUiConfigEnablePerBundleTabletAccounting);
-
-    const showSettings = React.useMemo(() => {
-        return reduce_(
-            TabletsTab,
-            (acc, v) => {
-                if (v === TabletsTab.CHAOS_CELLS) {
-                    // TODO: fix me when a page of active chaos-cell-bundle is ready
-                    acc[v] = {show: false};
-                } else {
-                    acc[v] = {show: v === TabletsTab.TABLET_CELLS || Boolean(activeBundle)};
-                }
-                return acc;
-            },
-            {} as Record<(typeof TabletsTab)[keyof typeof TabletsTab], TabSettings>,
-        );
-    }, [activeBundle, enableBundleController]);
+    const showSettings = useShowSettings(activeBundle, enableBundleController);
 
     const statsTab = showSettings[TabletsTab.STATISTICS];
     statsTab.show = statsTab.show && Boolean(UIFactory.getStatisticsComponentForBundle());
@@ -122,41 +120,19 @@ export default function TabletCellBundles() {
     const proxyTab = showSettings[TabletsTab.PROXIES];
     proxyTab.show = proxyTab.show && enableBundleController;
 
+    const errorsTab = showSettings[TabletsTab.TABLET_ERRORS];
+    errorsTab.show = errorsTab.show && getConfigData().allowTabletErrorsAPI;
+
     return (
         <div className="elements-page__content">
             <section className={b(null, 'elements-main-section')}>
                 <div className={b('content')}>
                     <div className={b('heading')}>
-                        {activeBundle && (
-                            <div className="elements-heading elements-heading_size_l">
-                                <div className={b('bundle-name')}>
-                                    <div className={b('bundle-name-left')}>
-                                        {activeBundle}
-                                        <ChartLink
-                                            className={b('dashboard-link')}
-                                            theme={'ghost'}
-                                            url={tabletCellBundleDashboardUrl(
-                                                cluster,
-                                                activeBundle,
-                                            )}
-                                        />
-                                    </div>
-                                    {allowAccounting && allowEdit && (
-                                        <div className={b('tabs-edit-btn')}>
-                                            <Button
-                                                className={b('edit-btn')}
-                                                size={'m'}
-                                                onClick={showEditor}
-                                            >
-                                                <Icon awesome={'pencil'} />
-                                                Edit Bundle
-                                            </Button>
-                                        </div>
-                                    )}
-                                </div>
-                            </div>
-                        )}
-                        <BundleMetaTable />
+                        <ActiveBundleDetails
+                            allowEdit={allowEdit}
+                            activeBundle={activeBundle}
+                            cluster={cluster}
+                        />
                         <div className={b('tabs')}>
                             <TabletsTabs
                                 activeBundle={activeBundle}
@@ -179,6 +155,12 @@ export default function TabletCellBundles() {
                             <Route
                                 path={`${match.path}/${TabletsTab.PROXIES}`}
                                 component={BundleProxiesTab}
+                            />
+                        )}
+                        {errorsTab.show && (
+                            <Route
+                                path={`/${cluster}/${Page.TABLET_CELL_BUNDLES}/${TabletsTab.TABLET_ERRORS}`}
+                                render={() => <TabletErrorsLazy bundle={activeBundle} />}
                             />
                         )}
                         <Route
@@ -223,6 +205,53 @@ export default function TabletCellBundles() {
             <TabletBundleEditorDialog />
             <ChaosBundleEditorDialog />
         </div>
+    );
+}
+
+function ActiveBundleDetails({
+    activeBundle,
+    allowEdit,
+    cluster,
+}: {
+    activeBundle?: string;
+    allowEdit?: boolean;
+    cluster: string;
+}) {
+    const dispatch = useDispatch();
+    const allowAccounting = useSelector(getClusterUiConfigEnablePerBundleTabletAccounting);
+
+    const showEditor = React.useCallback(() => {
+        if (activeBundle) {
+            dispatch(showTabletCellBundleEditor(activeBundle));
+        }
+    }, [activeBundle, dispatch]);
+
+    return (
+        <React.Fragment>
+            {activeBundle && (
+                <div className="elements-heading elements-heading_size_l">
+                    <div className={b('bundle-name')}>
+                        <div className={b('bundle-name-left')}>
+                            {activeBundle}
+                            <ChartLink
+                                className={b('dashboard-link')}
+                                theme={'ghost'}
+                                url={tabletCellBundleDashboardUrl(cluster, activeBundle)}
+                            />
+                        </div>
+                        {allowAccounting && allowEdit && (
+                            <div className={b('tabs-edit-btn')}>
+                                <Button className={b('edit-btn')} size={'m'} onClick={showEditor}>
+                                    <Icon awesome={'pencil'} />
+                                    Edit Bundle
+                                </Button>
+                            </div>
+                        )}
+                    </div>
+                </div>
+            )}
+            <BundleMetaTable />
+        </React.Fragment>
     );
 }
 
