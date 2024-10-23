@@ -8,7 +8,7 @@ import {makeAccountsUrl, makeNavigationLink, makeSchedulingUrl} from '../../../u
 function urlFromData(data?: InheritedFrom) {
     switch (data?.kind) {
         case IdmObjectType.PATH: {
-            return makeNavigationLink(data.name);
+            return makeNavigationLink({path: data.name});
         }
         case IdmObjectType.POOL: {
             return makeSchedulingUrl({pool: data.name, poolTree: data.poolTree!});
