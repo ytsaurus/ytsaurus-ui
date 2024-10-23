@@ -6,6 +6,7 @@ import {getPath} from '../../../../store/selectors/navigation/index';
 import reduce_ from 'lodash/reduce';
 
 import {ValueOf, YTError} from '../../../../types';
+import ypath from '../../../../common/thor/ypath';
 
 const getTabletErrorsErrorCount = (state: RootState) =>
     state.navigation.tabs.tabletErrors.errorsCount;
@@ -80,10 +81,12 @@ export const getTabletErrorsReplicationErrors = createSelector([getTabletErrors]
                 errors,
                 (errAcc, error) => {
                     const {tablet_id} = error.attributes || {};
+                    const id =
+                        typeof tablet_id === 'object' ? ypath.getValue(tablet_id, '') : tablet_id;
                     if (!errAcc[tablet_id]) {
-                        errAcc[tablet_id] = [];
+                        errAcc[id] = [];
                     }
-                    errAcc[tablet_id].push(error);
+                    errAcc[id].push(error);
                     return errAcc;
                 },
                 {} as ValueOf<typeof acc>,
