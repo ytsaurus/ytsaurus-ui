@@ -35,7 +35,7 @@ export function makeTTLItems(attrs: unknown, {showTTLLabel}: {showTTLLabel?: fal
         res.push({
             key: 'effective_expiration_time_path',
             qa: 'expiration_timeout_path',
-            value: <Template.Link url={makeNavigationLink(time.path)} text={time.path} />,
+            value: <Template.Link url={makeNavigationLink({path: time.path})} text={time.path} />,
         });
     }
     if (expiration_time) {
@@ -55,7 +55,9 @@ export function makeTTLItems(attrs: unknown, {showTTLLabel}: {showTTLLabel?: fal
         res.push({
             key: 'effective_expiration_timeout_path',
             qa: 'expiration_timeout_path',
-            value: <Template.Link url={makeNavigationLink(timeout.path)} text={timeout.path} />,
+            value: (
+                <Template.Link url={makeNavigationLink({path: timeout.path})} text={timeout.path} />
+            ),
         });
     }
     if (expiration_timeout) {
