@@ -172,4 +172,6 @@ export enum YTApiId {
     listUserTokens,
     revokeToken,
     issueToken,
+
+    setUserPassword,
 }

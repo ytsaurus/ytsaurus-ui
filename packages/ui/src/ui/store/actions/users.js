@@ -12,8 +12,9 @@ import {getCluster} from '../../store/selectors/global';
 import {listAllUsers} from '../../utils/users-groups';
 import {flags} from '../../utils/index';
 import {getBatchError} from '../../utils/utils';
-import {YTApiId, ytApiV3Id} from '../../rum/rum-wrap-api';
+import {YTApiId, ytApiV3Id, ytApiV4Id} from '../../rum/rum-wrap-api';
 import UIFactory from '../../UIFactory';
+import {sha256} from '../../utils/sha256';
 
 const USER_ATTRIBUTES = [
     'name',
@@ -81,6 +82,16 @@ export function setUsersPageSorting({column, order}) {
 
 export function showUserEditorModal(username) {
     return (dispatch) => {
+        const isNewUser = !username;
+
+        if (isNewUser) {
+            dispatch({
+                type: USERS_EDIT_USER_DATA_FIELDS,
+                data: {showModal: true},
+            });
+            return;
+        }
+
         dispatch({type: USERS_EDIT_USER.REQUEST});
         const path = `//sys/users/${username}`;
         return ytApiV3Id
@@ -124,7 +135,29 @@ function addUserToGroups(cluster, username, groups, comment) {
     );
 }
 
-export function saveUserData(username, attributes, groupsToAdd, groupsToRemove) {
+function changeUserPassword({username, password}) {
+    if (password) {
+        return sha256(password).then((new_password_sha256) => {
+            return ytApiV4Id.setUserPassword(YTApiId.setUserPassword, {
+                parameters: {
+                    user: username,
+                    new_password_sha256,
+                },
+            });
+        });
+    }
+
+    return Promise.resolve();
+}
+
+export function saveUserData({
+    username,
+    newName,
+    attributes,
+    groupsToAdd,
+    groupsToRemove,
+    password,
+}) {
     return (dispatch, getState) => {
         dispatch({type: USERS_EDIT_USER.REQUEST});
 
@@ -141,6 +174,16 @@ export function saveUserData(username, attributes, groupsToAdd, groupsToRemove) 
             });
         });
 
+        if (newName !== username) {
+            requests.push({
+                command: 'set',
+                parameters: {
+                    path: `${path}/@name`,
+                },
+                input: newName,
+            });
+        }
+
         const state = getState();
         const cluster = getCluster(state);
 
@@ -149,11 +192,12 @@ export function saveUserData(username, attributes, groupsToAdd, groupsToRemove) 
                 [
                     addUserToGroups(cluster, username, groupsToAdd, comment),
                     removeUserFromGroups(cluster, username, groupsToRemove),
+                    changeUserPassword({username, password}),
                     requests.length && ytApiV3Id.executeBatch(YTApiId.usersSaveData, {requests}),
                 ].filter(Boolean),
             )
                 // eslint-disable-next-line no-unused-vars
-                .then(([addRes, removeRes, batchRes]) => {
+                .then(([addRes, removeRes, changePasswordRes, batchRes]) => {
                     const batchError = getBatchError(batchRes, "Failed to save user's data");
                     if (batchError) {
                         throw batchError;

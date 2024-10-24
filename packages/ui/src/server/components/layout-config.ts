@@ -63,7 +63,7 @@ export async function getLayoutConfig(req: Request, params: Params): Promise<App
             ytApiUseCORS,
             uiSettings,
             metrikaCounterId: metrikaCounter?.[0]?.id,
-            allowLoginDialog: Boolean(allowPasswordAuth),
+            allowPasswordAuth: Boolean(allowPasswordAuth),
             allowOAuth: isOAuthAllowed(req),
             oauthButtonLabel: isOAuthAllowed(req) ? getOAuthSettings(req).buttonLabel : undefined,
             allowUserColumnPresets: isUserColumnPresetsEnabled(req),
