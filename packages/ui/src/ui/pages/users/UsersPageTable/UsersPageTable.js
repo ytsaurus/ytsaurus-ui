@@ -22,7 +22,6 @@ import {
 } from '../../../store/selectors/users';
 import {isIdmAclAvailable} from '../../../config';
 import {UserActions} from '../UserActions/UserActions';
-import {CreateUserModal} from '../CreateUserModal/CreateUserModal';
 
 import './UsersPageTable.scss';
 
@@ -251,7 +250,6 @@ class UsersPageTable extends React.Component {
                     {this.renderTable()}
                     {showModal && <UsersPageEditor />}
                     <DeleteUserModal />
-                    <CreateUserModal />
                 </LoadDataHandler>
             </div>
         );

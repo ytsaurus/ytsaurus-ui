@@ -9,7 +9,7 @@ import isEqual_ from 'lodash/isEqual';
 import map_ from 'lodash/map';
 import reduce_ from 'lodash/reduce';
 
-import {closeUserEditorModal, saveUserData} from '../../../store/actions/users';
+import {closeUserEditorModal, fetchUsers, saveUserData} from '../../../store/actions/users';
 import {
     getGlobalGroupAttributesMap,
     getUserManagementEnabled,
@@ -22,6 +22,7 @@ import {GroupsLoader} from '../../../hooks/global';
 import {RootState} from '../../../store/reducers';
 import {FIX_MY_TYPE, YTError} from '../../../types';
 import {isIdmAclAvailable} from '../../../config';
+import {createUser} from '../../../store/actions/users-typed';
 
 const block = cn('users-page-editor');
 
@@ -40,6 +41,7 @@ interface Props {
     groupAttributesMap?: GroupAttributes;
 
     closeUserEditorModal: () => void;
+    fetchUsers: () => void;
     saveUserData: (payload: {
         username: string;
         password: string;
@@ -143,7 +145,6 @@ class UsersPageEditor extends React.Component<Props, State> {
         } = form.getState();
         const fields = {
             idm: generalTab.idm,
-            name: generalTab.name,
             read_request_rate_limit: generalTab.read_request_rate_limit.value,
             request_queue_size_limit: generalTab.request_queue_size_limit.value,
             write_request_rate_limit: generalTab.write_request_rate_limit.value,
@@ -152,14 +153,7 @@ class UsersPageEditor extends React.Component<Props, State> {
             ...banTab,
         };
 
-        const {
-            idm: _idm,
-            groups,
-            newGroups,
-            name: newName,
-            password: newPassword,
-            ...rest
-        } = fields;
+        const {idm: _idm, groups, newGroups, password: newPassword, ...rest} = fields;
         const [current] = groups;
         const groupsToRemove = map_(filter_(current?.data, 'removed'), 'title');
 
@@ -179,23 +173,44 @@ class UsersPageEditor extends React.Component<Props, State> {
             delete changedFields['ban_message'];
         }
 
-        const {username, saveUserData} = this.props;
-        return saveUserData({
-            username,
-            newName,
-            attributes: changedFields,
-            groupsToAdd: newGroups,
-            groupsToRemove: groupsToRemove,
-            password: newPassword,
-        }).catch((error) => {
-            this.setState({error});
-            return Promise.reject(error);
-        });
+        let username;
+        let newName;
+
+        if (this.isNewUser()) {
+            username = generalTab.name;
+            newName = username;
+            await createUser({username});
+        } else {
+            username = this.props.username;
+            newName = generalTab.name;
+        }
+
+        return this.props
+            .saveUserData({
+                username,
+                newName,
+                attributes: changedFields,
+                groupsToAdd: newGroups,
+                groupsToRemove: groupsToRemove,
+                password: newPassword,
+            })
+            .then(() => {
+                // we don't need to wait for the end of the action
+                this.props.fetchUsers();
+            })
+            .catch((error) => {
+                this.setState({error});
+                return Promise.reject(error);
+            });
     };
 
     onClose = () => {
         this.props.closeUserEditorModal();
     };
+
+    isNewUser() {
+        return !this.props.username;
+    }
 
     render() {
         const {
@@ -221,7 +236,7 @@ class UsersPageEditor extends React.Component<Props, State> {
                 <YTDFDialog<FormValues>
                     className={block(null, className)}
                     headerProps={{
-                        title: `User ${username}`,
+                        title: this.isNewUser() ? 'Create user' : `User ${username}`,
                     }}
                     size={'l'}
                     initialValues={{
@@ -418,6 +433,7 @@ const mapStateToProps = (state: RootState) => {
 const mapDispatchToProps = {
     closeUserEditorModal,
     saveUserData,
+    fetchUsers,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(UsersPageEditor);

@@ -82,6 +82,16 @@ export function setUsersPageSorting({column, order}) {
 
 export function showUserEditorModal(username) {
     return (dispatch) => {
+        const isNewUser = !username;
+
+        if (isNewUser) {
+            dispatch({
+                type: USERS_EDIT_USER_DATA_FIELDS,
+                data: {showModal: true},
+            });
+            return;
+        }
+
         dispatch({type: USERS_EDIT_USER.REQUEST});
         const path = `//sys/users/${username}`;
         return ytApiV3Id
