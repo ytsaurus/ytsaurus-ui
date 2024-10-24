@@ -1059,7 +1059,7 @@ const nodesTableProps = {
                                 <NodesColumnHeader
                                     column="tablet_memory_dynamic"
                                     align={column.align}
-                                    title="Static memory"
+                                    title="Dynamic memory"
                                     options={[
                                         {
                                             column: 'tablet_memory_dynamic',
