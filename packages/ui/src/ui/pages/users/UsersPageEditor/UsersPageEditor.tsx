@@ -45,7 +45,13 @@ interface Props {
         password: string;
         newName: string;
         attributes: Partial<
-            Pick<Props, Exclude<Level2Keys, 'idm' | 'name' | 'groups' | 'newGroups' | 'password'>>
+            Pick<
+                Props,
+                Exclude<
+                    Level2Keys,
+                    'idm' | 'name' | 'groups' | 'newGroups' | 'password' | 'passwordConfirm'
+                >
+            >
         >;
         groupsToAdd: Array<string>;
         groupsToRemove: Array<string>;
@@ -77,6 +83,7 @@ interface FormValues {
     };
     password: {
         password: string;
+        passwordConfirm: string;
     };
 }
 
@@ -236,6 +243,7 @@ class UsersPageEditor extends React.Component<Props, State> {
                         },
                         password: {
                             password: '',
+                            passwordConfirm: '',
                         },
                     }}
                     onAdd={this.onAdd}
@@ -364,7 +372,13 @@ class UsersPageEditor extends React.Component<Props, State> {
                                           {
                                               name: 'password',
                                               type: 'text' as const,
-                                              caption: 'New passwowrd',
+                                              caption: 'New password',
+                                              extras: () => ({type: 'password' as const}),
+                                          },
+                                          {
+                                              name: 'passwordConfirm',
+                                              type: 'text' as const,
+                                              caption: 'Confirm password',
                                               extras: () => ({type: 'password' as const}),
                                           },
                                           ...errors,
@@ -373,6 +387,17 @@ class UsersPageEditor extends React.Component<Props, State> {
                               ]
                             : []),
                     ]}
+                    validate={({password}) => {
+                        const passwordErrors: Partial<
+                            Record<keyof typeof password, string | undefined>
+                        > = {};
+
+                        if (password.password !== password.passwordConfirm) {
+                            passwordErrors.password = 'New and confirm password must be equal';
+                        }
+
+                        return {password: passwordErrors};
+                    }}
                 />
             </React.Fragment>
         );
