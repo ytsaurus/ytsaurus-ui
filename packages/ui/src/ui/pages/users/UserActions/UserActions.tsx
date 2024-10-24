@@ -9,7 +9,7 @@ import {showUserEditorModal} from '../../../store/actions/users';
 import {showUserDeleteModal} from '../../../store/actions/users-typed';
 import {getUserManagementEnabled} from '../../../store/selectors/global';
 import block from 'bem-cn-lite';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 
 import './UserActions.scss';
 
@@ -32,7 +32,7 @@ export const UserActions: React.FC<UserActionsProps> = ({className, cluster, use
         dispatch(showUserDeleteModal(username));
     }, [username, dispatch]);
 
-    const isUserManagementEnabled = getUserManagementEnabled();
+    const isUserManagementEnabled = useSelector(getUserManagementEnabled);
 
     let deleteUserButton;
 

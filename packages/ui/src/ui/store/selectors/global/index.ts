@@ -219,9 +219,9 @@ export const getAuthPagesEnabled = () => {
     return getConfigData().allowPasswordAuth;
 };
 
-export const getUserManagementEnabled = () => {
-    return getConfigData().allowPasswordAuth;
-};
+export const getUserManagementEnabled = createSelector([isDeveloper], (isAdmin) => {
+    return isAdmin && getConfigData().allowPasswordAuth;
+});
 
 export const getOAuthEnabled = () => {
     return getConfigData().allowOAuth;
