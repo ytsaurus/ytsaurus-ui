@@ -63,7 +63,9 @@ export type ClusterTheme =
     | 'pinkrose'
     | 'lightgray'
     | 'mediumgray'
-    | 'darkgray';
+    | 'darkgray'
+    | 'dornyellow'
+    | 'rubber';
 
 export interface ClusterConfig {
     id: string;
