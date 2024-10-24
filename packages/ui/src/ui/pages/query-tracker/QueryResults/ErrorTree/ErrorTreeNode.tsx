@@ -3,6 +3,7 @@ import {ErrorPosition, QueryError} from '../../module/api';
 import {useToggle} from 'react-use';
 import {Button, Icon} from '@gravity-ui/uikit';
 import showParentIcon from '@gravity-ui/icons/svgs/arrow-up.svg';
+import CircleInfoFillIcon from '@gravity-ui/icons/svgs/circle-info-fill.svg';
 import {getIssuePosition} from '../helpers';
 import cn from 'bem-cn-lite';
 import {ErrorList} from './ErrorList';
@@ -15,6 +16,7 @@ import ChevronDownIcon from '@gravity-ui/icons/svgs/chevron-down.svg';
 import unipika from '../../../../common/thor/unipika';
 import Yson from '../../../../components/Yson/Yson';
 import {ClickableText} from '../../../../components/ClickableText/ClickableText';
+import {isInfoNode} from './helpers/isInfoNode';
 
 const block = cn('yt-error-tree-node');
 
@@ -41,6 +43,7 @@ export const ErrorTreeNode: FC<Props> = ({
     const [expandedAttributes, toggleExpandedAttributes] = useToggle(false);
     const hasIssues = error.inner_errors && error.inner_errors.length > 0;
     const position = getIssuePosition(error);
+    const isInfo = isInfoNode(error);
 
     const handleIssueClick = useCallback(() => {
         if (error.attributes?.start_position) {
@@ -49,7 +52,7 @@ export const ErrorTreeNode: FC<Props> = ({
     }, [error.attributes.start_position, onErrorClick]);
 
     return (
-        <div className={block({leaf: !hasIssues})}>
+        <div className={block({leaf: !hasIssues, info: isInfo})}>
             <div className={block('error-body')}>
                 <div className={block('line')}>
                     {hasIssues && (
@@ -64,8 +67,12 @@ export const ErrorTreeNode: FC<Props> = ({
                         </Button>
                     )}
                     <span className={block('header')}>
-                        <Icon className={block('icon')} data={errorIcon} size={16} />
-                        <span className={block('title')}>Error</span>
+                        <Icon
+                            className={block('icon')}
+                            data={isInfo ? CircleInfoFillIcon : errorIcon}
+                            size={16}
+                        />
+                        <span className={block('title')}>{isInfo ? 'Info' : 'Error'}</span>
                         <Button view="flat-secondary" onClick={toggleExpandedAttributes}>
                             Attributes{' '}
                             <Icon
