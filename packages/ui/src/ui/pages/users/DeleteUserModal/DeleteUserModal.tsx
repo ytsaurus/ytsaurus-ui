@@ -1,12 +1,15 @@
 import React, {useCallback} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {RootState} from '../../../store/reducers';
-import {Dialog, Text} from '@gravity-ui/uikit';
+import {Text} from '@gravity-ui/uikit';
 import {closeUserDeleteModal, deleteUser} from '../../../store/actions/users-typed';
 import {fetchUsers} from '../../../store/actions/users';
+import {YTDFDialog, makeErrorFields} from '../../../components/Dialog';
+import {YTError} from '../../../types';
 
 export const DeleteUserModal: React.FC = () => {
     const dispatch = useDispatch();
+    const [error, setError] = React.useState<YTError | undefined>(undefined);
     const usernameToDelete = useSelector(
         (state: RootState) => state.users.deleteUser.usernameToDelete,
     );
@@ -15,32 +18,42 @@ export const DeleteUserModal: React.FC = () => {
         dispatch(closeUserDeleteModal());
     }, [dispatch]);
 
-    const onApply = useCallback(async () => {
-        await deleteUser({username: usernameToDelete});
+    const onAdd = useCallback(async () => {
+        try {
+            setError(undefined);
 
-        await new Promise((resolve) => setTimeout(resolve, 2 * 1000));
+            await deleteUser({username: usernameToDelete});
 
-        onClose();
+            onClose();
 
-        await dispatch(fetchUsers());
+            // we don't need to wait for the end of the action
+            dispatch(fetchUsers());
+        } catch (error) {
+            setError(error as YTError);
+        }
     }, [dispatch, usernameToDelete, onClose]);
 
-    if (!usernameToDelete) {
-        return null;
-    }
-
     return (
-        <Dialog open={true} onClose={onClose}>
-            <Dialog.Header caption={'Delete user'} />
-            <Dialog.Body>
-                <Text>Are you sure you want to delete &quot;{usernameToDelete}&quot;?</Text>
-            </Dialog.Body>
-            <Dialog.Footer
-                onClickButtonCancel={onClose}
-                onClickButtonApply={onApply}
-                textButtonCancel="Cancel"
-                textButtonApply="Delete"
-            />
-        </Dialog>
+        <YTDFDialog
+            visible={Boolean(usernameToDelete)}
+            headerProps={{title: `Delete user ${usernameToDelete}`}}
+            pristineSubmittable={true}
+            onClose={onClose}
+            onAdd={onAdd}
+            fields={[
+                {
+                    name: 'username',
+                    type: 'block',
+                    extras: {
+                        children: (
+                            <Text>
+                                Are you sure you want to delete &quot;{usernameToDelete}&quot;?
+                            </Text>
+                        ),
+                    },
+                },
+                ...makeErrorFields([error]),
+            ]}
+        />
     );
 };
