@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import {RadioButton, RadioButtonOption} from '@gravity-ui/uikit';
+import {RadioButton, RadioButtonOption, RadioButtonWidth} from '@gravity-ui/uikit';
 import {NodeDetails, NodeProgress} from './models/plan';
 import cn from 'bem-cn-lite';
 
@@ -19,6 +19,8 @@ export interface OperationNodeInfoProps {
     details?: NodeDetails;
     schemas?: OperationSchemas;
     containerRef?: React.Ref<HTMLDivElement>;
+    className?: string;
+    radioWidth?: RadioButtonWidth;
 }
 
 export default function OperationNodeInfo({
@@ -26,6 +28,8 @@ export default function OperationNodeInfo({
     details,
     schemas,
     containerRef,
+    radioWidth,
+    className,
 }: OperationNodeInfoProps) {
     const items: RadioButtonOption[] = [];
     if (hasStagesInfo(progress)) {
@@ -42,17 +46,16 @@ export default function OperationNodeInfo({
     }
     const [item, setItem] = React.useState(items[0]?.value);
     return (
-        <div ref={containerRef} className={block()}>
-            <div>
-                {items.length > 1 && (
-                    <RadioButton
-                        className={block('selector')}
-                        value={item}
-                        options={items}
-                        onUpdate={setItem}
-                    />
-                )}
-            </div>
+        <div ref={containerRef} className={block(null, className)}>
+            {items.length > 1 && (
+                <RadioButton
+                    className={block('selector')}
+                    value={item}
+                    options={items}
+                    onUpdate={setItem}
+                    width={radioWidth}
+                />
+            )}
             {item === 'stages' && <NodeStages {...progress} />}
             {item === 'details' && <NodeDetailsInfo {...details} />}
             {item === 'jobs' && <NodeJobs {...progress} />}
