@@ -24,9 +24,9 @@ export function generateYQLQuery(tableParams: GenerateTableQueryParams, cluster:
         ? ''
         : `-- Please note that table schema not specified, so we're telling YQL to infer it from data.
 PRAGMA yt.InferSchema = '1';\n`;
-    const yqlCluster = cluster.replace(/-/g, '').toLowerCase();
+    const yqlCluster = cluster.toLowerCase();
     const columnsToQuery = prepareColumns(columns, {maxSize: maxColumnsLength});
-    return `${pragma}USE ${yqlCluster};\n\nSELECT\n${INDENT}${columnsToQuery}\nFROM \`${path}\`\nLIMIT ${pageSize};\n`;
+    return `${pragma}USE \`${yqlCluster}\`;\n\nSELECT\n${INDENT}${columnsToQuery}\nFROM \`${path}\`\nLIMIT ${pageSize};\n`;
 }
 
 export function generateCHYTQuery(tableParams: GenerateTableQueryParams): string {
