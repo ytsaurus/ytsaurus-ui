@@ -78,3 +78,12 @@ test('Components - Node - Memory popup', async ({page}) => {
 
     await expect(page).toHaveScreenshot();
 });
+
+test('Components - Tablets', async ({page}) => {
+    await page.goto(makeClusterUrl(`components/nodes?contentMode=tablets`));
+    await page.waitForSelector('.elements-table');
+    await replaceInnerHtml(page, {
+        '.yt-host .g-link': 'local:XXX',
+    });
+    await expect(page).toHaveScreenshot();
+});
