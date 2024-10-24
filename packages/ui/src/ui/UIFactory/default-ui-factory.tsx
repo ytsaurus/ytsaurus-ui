@@ -12,7 +12,7 @@ import {uiSettings} from '../config/ui-settings';
 import YT from '../config/yt-config';
 import {DefaultSubjectLinkLazy} from '../components/SubjectLink/lazy';
 import type {SubjectCardProps} from '../components/SubjectLink/SubjectLink';
-import {CUSTOM_QUERY_REQULT_TAB} from '../pages/query-tracker/QueryResultsVisualization';
+import {QUERY_RESULT_CHART_TAB} from '../pages/query-tracker/QueryResultsVisualization';
 
 import {UIFactory} from './index';
 
@@ -265,8 +265,8 @@ export const defaultUIFactory: UIFactory = {
         return undefined;
     },
 
-    getCustomQueryResultTab() {
-        return CUSTOM_QUERY_REQULT_TAB;
+    getQueryResultChartTab() {
+        return QUERY_RESULT_CHART_TAB;
     },
 
     getExternalSettings() {

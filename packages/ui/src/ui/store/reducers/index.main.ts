@@ -42,7 +42,6 @@ import {hasOdinPage} from '../../config';
 import {chyt} from './chyt';
 import {RawVersion} from '../../store/selectors/thor/support';
 import {mainLocations} from '../../store/location.main';
-import {queryResultsVisualization} from '../../pages/query-tracker/QueryResultsVisualization/store/reducer';
 import {flow} from '../../store/reducers/flow';
 
 const appReducers = {
@@ -82,7 +81,6 @@ const appReducers = {
 
     chyt,
     manageTokens,
-    queryResultsVisualization,
     flow,
 };
 

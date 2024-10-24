@@ -1,0 +1,14 @@
+.saving-indicator {
+    width: 28px;
+    color: var(--g-color-line-positive);
+
+    &_saving {
+        animation: spin 2s linear infinite;
+        color: var(--g-color-line-warning);
+    }
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}

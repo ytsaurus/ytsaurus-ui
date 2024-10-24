@@ -49,6 +49,7 @@ import {
     UPDATE_ACO_QUERY,
     UPDATE_QUERY,
 } from '../query-tracker-contants';
+import {loadVisualization} from '../queryChart/actions';
 
 export const setCurrentClusterToQuery =
     (): ThunkAction<void, RootState, unknown, any> => (dispatch, getState) => {
@@ -140,6 +141,7 @@ export function loadQuery(
                     initialQuery: queryItem,
                 },
             });
+            dispatch(loadVisualization());
         } catch (e: unknown) {
             dispatch(createEmptyQuery());
         } finally {
