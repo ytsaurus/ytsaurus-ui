@@ -14,7 +14,6 @@ import {flags} from '../../utils/index';
 import {getBatchError} from '../../utils/utils';
 import {YTApiId, ytApiV3Id, ytApiV4Id} from '../../rum/rum-wrap-api';
 import UIFactory from '../../UIFactory';
-import {deleteUserModalSlice} from '../../store/reducers/users/delete-user';
 import {sha256} from '../../utils/sha256';
 
 const USER_ATTRIBUTES = [
@@ -107,18 +106,6 @@ export function closeUserEditorModal() {
     return {
         type: USERS_EDIT_USER_DATA_FIELDS,
         data: {showModal: false, username: ''},
-    };
-}
-
-export function showUserDeleteModal(username) {
-    return (dispatch) => {
-        dispatch(deleteUserModalSlice.actions.setModalState({username, showModal: true}));
-    };
-}
-
-export function closeUserDeleteModal() {
-    return (dispatch) => {
-        dispatch(deleteUserModalSlice.actions.setModalState({username: '', showModal: false}));
     };
 }
 
