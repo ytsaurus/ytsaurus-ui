@@ -220,7 +220,7 @@ export const getAuthPagesEnabled = () => {
 };
 
 export const getUserManagementEnabled = () => {
-    return !getConfigData().allowPasswordAuth;
+    return getConfigData().allowPasswordAuth;
 };
 
 export const getOAuthEnabled = () => {
