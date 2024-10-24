@@ -47,7 +47,7 @@ test('Navigation - User attributes', async ({page}) => {
 test('Navigation - ACL', async ({page}) => {
     await page.goto(makeClusterUrl('navigation?navmode=acl'));
 
-    await page.waitForSelector(`:text('"Write", "Administer", "Remove", "Mount"')`);
+    await page.getByText(`"Administer", "Mount", "Remove", "Write"`).waitFor();
 
     await expect(page).toHaveTitle(makeClusterTille({page: 'Navigation', path: '/'}));
     await expect(page).toHaveURL(makeClusterUrl('navigation?navmode=acl&path=/'));

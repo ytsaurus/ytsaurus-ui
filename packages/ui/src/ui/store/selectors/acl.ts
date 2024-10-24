@@ -253,6 +253,7 @@ class AggregateBySubject {
 
         this.children.push(item);
 
+        item.permissions?.sort();
         item.permissions?.forEach((p) => {
             this.allPermissions.add(p);
         });
@@ -280,25 +281,28 @@ class AggregateBySubject {
             level: 0,
             expanded,
         };
-        first.permissions = [...this.allPermissions];
-        first.columns = [...this.columns];
+        first.permissions = [...this.allPermissions].sort();
+        first.columns = [...this.columns].sort();
 
         let hasDenyAction = false;
         const items = !expanded
             ? [first]
             : [
                   first,
-                  ...this.children.map((i) => {
+                  ...sortBy_(this.children, ['inheritance_mode', 'permissions']).map((i) => {
                       hasDenyAction ||= i.action === 'deny';
-                      if (i.inheritance_mode !== this.first.inheritance_mode) {
-                          this.first.inheritance_mode = undefined;
-                      }
-                      if (!isEqual_(this.first.inheritedFrom, i.inheritedFrom)) {
-                          this.first.inheritedFrom = undefined;
-                      }
                       return {...i, level: 1};
                   }),
               ];
+
+        this.children.forEach((i) => {
+            if (i.inheritance_mode !== first.inheritance_mode) {
+                first.inheritance_mode = undefined;
+            }
+            if (!isEqual_(this.first.inheritedFrom, i.inheritedFrom)) {
+                first.inheritedFrom = undefined;
+            }
+        });
 
         return {items, hasExpandable: true, hasDenyAction, hasInherited};
     }
