@@ -202,6 +202,7 @@ class ACL extends Component<Props> {
                             toggleExpanded={() => {
                                 toggleExpandAclSubject(row.subjects[0]);
                             }}
+                            qa="acl-expand"
                         />
                     );
                 },

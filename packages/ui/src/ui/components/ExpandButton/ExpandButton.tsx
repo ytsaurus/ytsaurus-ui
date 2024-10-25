@@ -1,5 +1,5 @@
 import React, {FC} from 'react';
-import {Button, Icon} from '@gravity-ui/uikit';
+import {Button, ButtonProps, Icon} from '@gravity-ui/uikit';
 import shevronRightSvg from '@gravity-ui/icons/svgs/chevron-right.svg';
 import doubleShevronRightSvg from '@gravity-ui/icons/svgs/chevrons-right.svg';
 import cn from 'bem-cn-lite';
@@ -14,6 +14,7 @@ type Props = {
     inline?: boolean;
     all?: boolean;
     showText?: boolean;
+    qa?: ButtonProps['qa'];
 };
 
 export const ExpandButton: FC<Props> = ({
@@ -23,6 +24,7 @@ export const ExpandButton: FC<Props> = ({
     toggleExpanded,
     all,
     showText,
+    qa,
 }) => {
     const titleExpanded = all ? 'Collapse All' : 'Collapse';
     const titleCollapsed = all ? 'Expand All' : 'Expand';
@@ -32,6 +34,7 @@ export const ExpandButton: FC<Props> = ({
             view="flat-secondary"
             title={expanded ? titleExpanded : titleCollapsed}
             onClick={toggleExpanded}
+            qa={qa}
         >
             {showText && (expanded ? titleExpanded : titleCollapsed) + ' '}
             <Icon
