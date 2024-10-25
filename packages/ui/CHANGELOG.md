@@ -1,5 +1,22 @@
 # Changelog
 
+## [1.65.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.64.0...ui-v1.65.0) (2024-10-25)
+
+
+### Features
+
+* **OperationJobsTable:** add TaskName column in table [[#828](https://github.com/ytsaurus/ytsaurus-ui/issues/828)] ([90c8586](https://github.com/ytsaurus/ytsaurus-ui/commit/90c8586df5bbb50ec08da012e0eab1b37dd64b36))
+* **System:** new cluster colors [YTFRONT-4409] ([f7cb2c0](https://github.com/ytsaurus/ytsaurus-ui/commit/f7cb2c06fa65bd6bf59f7a45cd8ef8bc7cdba8d7))
+
+
+### Bug Fixes
+
+* **ACL:** permissions should be sorted [YTFRONT-4432] ([881c08c](https://github.com/ytsaurus/ytsaurus-ui/commit/881c08c2c2883c6d0288682c12fbbf3e3dafd4d6))
+* **ClusterPage:** align "Loading &lt;cluster name&gt;..." text to center of the page ([f367d5b](https://github.com/ytsaurus/ytsaurus-ui/commit/f367d5b3bc5b7b612b611a7aa0b70f00f909ebf5))
+* **Components:** wrong tablet memory column name [YTFRONT-4408] ([21cc198](https://github.com/ytsaurus/ytsaurus-ui/commit/21cc198c475c62f2ee6041fc9a1b2c3057a39155))
+* **Navigation:** correct cluster name in yql query [YTFRONT-4274] ([4b9cab5](https://github.com/ytsaurus/ytsaurus-ui/commit/4b9cab511c4ba1b65d02df8923a44cea0beba3ee))
+* **Operations:** save pool tree in url [YTFRONT-4355] ([ee2fe0e](https://github.com/ytsaurus/ytsaurus-ui/commit/ee2fe0e5b7bc6e64c26cdc4290c7887fc554cedf))
+
 ## [1.64.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.63.1...ui-v1.64.0) (2024-10-21)
 
 
