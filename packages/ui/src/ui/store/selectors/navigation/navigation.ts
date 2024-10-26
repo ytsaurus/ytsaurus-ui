@@ -15,7 +15,7 @@ import {Tab} from '../../../constants/navigation/index';
 
 import {getTableMountConfigHasData} from '../../../store/selectors/navigation/content/table-mount-config';
 import {getAccessLogBasePath} from '../../../config';
-import {getTabletErrorsBackgroundCount} from '../../../store/selectors/navigation/tabs/tablet-errors';
+import {getTabletErrorsBackgroundCount} from '../../../store/selectors/navigation/tabs/tablet-errors-background';
 import UIFactory from '../../../UIFactory';
 
 export function getNavigationPathAttributesLoadState(state: RootState) {

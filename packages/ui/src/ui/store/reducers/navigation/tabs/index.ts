@@ -7,7 +7,7 @@ import queue from './queue';
 import schema from './schema/schema';
 import annotation from './annotation';
 import tablets from './tablets/tablets';
-import tabletErrors from './tablet-errors';
+import tabletErrorsBackground from './tablet-errors/tablet-errors-background';
 import userAttributes from './user-attributes';
 
 export default combineReducers({
@@ -18,6 +18,6 @@ export default combineReducers({
     schema,
     tablets,
     annotation,
-    tabletErrors,
+    tabletErrorsBackground,
     userAttributes,
 });

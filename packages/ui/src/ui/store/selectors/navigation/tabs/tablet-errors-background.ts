@@ -9,18 +9,19 @@ import {ValueOf, YTError} from '../../../../types';
 import ypath from '../../../../common/thor/ypath';
 
 const getTabletErrorsErrorCount = (state: RootState) =>
-    state.navigation.tabs.tabletErrors.errorsCount;
+    state.navigation.tabs.tabletErrorsBackground.errorsCount;
 const getTabletErrorsErrorCountPath = (state: RootState) =>
-    state.navigation.tabs.tabletErrors.errorsCountPath;
-const getTabletErrorsRaw = (state: RootState) => state.navigation.tabs.tabletErrors.tabletErrors;
+    state.navigation.tabs.tabletErrorsBackground.errorsCountPath;
+const getTabletErrorsRaw = (state: RootState) =>
+    state.navigation.tabs.tabletErrorsBackground.tabletErrors;
 const getTabletErrorsPathRaw = (state: RootState) =>
-    state.navigation.tabs.tabletErrors.tabletErrorsPath;
+    state.navigation.tabs.tabletErrorsBackground.tabletErrorsPath;
 
 export const getTabletErrorsLoadingStatus = createSelector(
     [
-        (state: RootState) => state.navigation.tabs.tabletErrors.loading,
-        (state: RootState) => state.navigation.tabs.tabletErrors.loaded,
-        (state: RootState) => state.navigation.tabs.tabletErrors.error,
+        (state: RootState) => state.navigation.tabs.tabletErrorsBackground.loading,
+        (state: RootState) => state.navigation.tabs.tabletErrorsBackground.loaded,
+        (state: RootState) => state.navigation.tabs.tabletErrorsBackground.error,
     ],
     (loading, loaded, error) => {
         return calculateLoadingStatus(loading, loaded, error);

@@ -1,19 +1,22 @@
 import reduce_ from 'lodash/reduce';
 
-import CancelHelper, {isCancelled} from '../../../../utils/cancel-helper';
-import {getPath} from '../../../../store/selectors/navigation';
+import CancelHelper, {isCancelled} from '../../../../../utils/cancel-helper';
+import {getPath} from '../../../../../store/selectors/navigation';
 import {
     GET_TABLET_ERRORS,
     GET_TABLET_ERRORS_COUNT,
-} from '../../../../constants/navigation/tabs/tablet-errors';
-import {YTApiId, ytApiV3Id, ytApiV4Id} from '../../../../rum/rum-wrap-api';
+} from '../../../../../constants/navigation/tabs/tablet-errors';
+import {YTApiId, ytApiV3Id, ytApiV4Id} from '../../../../../rum/rum-wrap-api';
 import {ThunkAction} from 'redux-thunk';
-import {RootState} from '../../../../store/reducers';
-import {TabletErrorsAction} from '../../../../store/reducers/navigation/tabs/tablet-errors';
-import {wrapApiPromiseByToaster} from '../../../../utils/utils';
-import {loadReplicas} from '../content/replicated-table';
+import {RootState} from '../../../../../store/reducers';
+import {
+    NavigationTabletErrorsMode,
+    TabletErrorsAction,
+} from '../../../../../store/reducers/navigation/tabs/tablet-errors/tablet-errors-background';
+import {wrapApiPromiseByToaster} from '../../../../../utils/utils';
+import {loadReplicas} from '../../content/replicated-table';
 import {CancelTokenSource} from 'axios';
-import {TYPED_OUTPUT_FORMAT} from '../../../../constants';
+import {TYPED_OUTPUT_FORMAT} from '../../../../../constants';
 
 const requests = new CancelHelper();
 
