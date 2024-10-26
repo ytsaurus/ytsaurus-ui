@@ -1,9 +1,6 @@
-import {
-    GET_TABLET_ERRORS,
-    GET_TABLET_ERRORS_COUNT,
-} from '../../../../constants/navigation/tabs/tablet-errors';
+import {GET_TABLET_ERRORS} from '../../../../../constants/navigation/tabs/tablet-errors';
 import {Action} from 'redux';
-import {ActionD, YTError} from '../../../../types';
+import {ActionD, YTError} from '../../../../../types';
 
 export interface TabletErrorsState {
     loading: boolean;
@@ -18,7 +15,11 @@ export interface TabletErrorsState {
 
     errorsCount: number;
     errorsCountPath: string;
+
+    viewMode: NavigationTabletErrorsMode;
 }
+
+export type NavigationTabletErrorsMode = 'request_errors' | 'background_errors';
 
 export const initialState: TabletErrorsState = {
     loading: false,
@@ -30,6 +31,8 @@ export const initialState: TabletErrorsState = {
 
     errorsCount: 0,
     errorsCountPath: '',
+
+    viewMode: 'background_errors',
 };
 
 export default (state = initialState, action: TabletErrorsAction) => {
@@ -42,7 +45,7 @@ export default (state = initialState, action: TabletErrorsAction) => {
             return {...state, ...action.data, loading: false, loaded: false};
         case GET_TABLET_ERRORS.CANCELLED:
             return {...state, loading: false};
-        case GET_TABLET_ERRORS_COUNT:
+        case GET_TABLET_ERRORS.PARTITION:
             return {...state, ...action.data};
         default:
             return state;
@@ -58,6 +61,7 @@ export type TabletErrorsAction =
           Pick<TabletErrorsState, 'tabletErrors' | 'tabletErrorsPath'>
       >
     | ActionD<
-          typeof GET_TABLET_ERRORS_COUNT,
-          Pick<TabletErrorsState, 'errorsCount' | 'errorsCountPath'>
+          typeof GET_TABLET_ERRORS.PARTITION,
+          | Pick<TabletErrorsState, 'errorsCount' | 'errorsCountPath'>
+          | Pick<TabletErrorsState, 'viewMode'>
       >;

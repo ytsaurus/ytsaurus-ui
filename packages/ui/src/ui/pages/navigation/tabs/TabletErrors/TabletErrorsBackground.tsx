@@ -13,7 +13,7 @@ import Link from '../../../../components/Link/Link';
 import CollapsibleSection from '../../../../components/CollapsibleSection/CollapsibleSection';
 import {Secondary} from '../../../../components/Text/Text';
 
-import {getTabletErrors} from '../../../../store/actions/navigation/tabs/tablet-errors';
+import {getTabletErrors} from '../../../../store/actions/navigation/tabs/tablet-errors/tablet-errors-background';
 import {getPath} from '../../../../store/selectors/navigation';
 import {getEffectiveMode} from '../../../../store/selectors/navigation/navigation';
 import {getCluster} from '../../../../store/selectors/global';
@@ -21,7 +21,7 @@ import {
     getTabletErrorsBackgroundCountNoticeVisbile,
     getTabletErrorsLoadingStatus,
     getTabletErrorsReplicationErrors,
-} from '../../../../store/selectors/navigation/tabs/tablet-errors';
+} from '../../../../store/selectors/navigation/tabs/tablet-errors-background';
 import {getReplicatedTableReplicasMap} from '../../../../store/selectors/navigation/content/replicated-table';
 import {RootState} from '../../../../store/reducers';
 
@@ -31,9 +31,9 @@ import {useRumMeasureStop} from '../../../../rum/RumUiContext';
 import {isFinalLoadingStatus} from '../../../../utils/utils';
 import {YTError} from '../../../../types';
 
-import './TabletErrors.scss';
+import './TabletErrorsBackground.scss';
 
-const block = cn('navigation-tablet-errors');
+const block = cn('navigation-tablet-errors-background');
 
 function TabletErrors(props: ConnectedProps<typeof connector>) {
     const {path, mode, cluster, getTabletErrors} = props;
@@ -74,7 +74,7 @@ function TabletErrors(props: ConnectedProps<typeof connector>) {
 }
 
 const mapStateToProps = (state: RootState) => {
-    const {loading, loaded, error, tabletErrors} = state.navigation.tabs.tabletErrors;
+    const {loading, loaded, error, tabletErrors} = state.navigation.tabs.tabletErrorsBackground;
     const path = getPath(state);
     const mode = getEffectiveMode(state);
     const cluster = getCluster(state);

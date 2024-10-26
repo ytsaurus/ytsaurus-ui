@@ -9,7 +9,7 @@ import MetaTable from '../../../../../components/MetaTable/MetaTable';
 import {getTableType} from '../../../../../store/selectors/navigation/content/table';
 import {getIsDynamic} from '../../../../../store/selectors/navigation/content/table-ts';
 import {getAttributes} from '../../../../../store/selectors/navigation';
-import {getTabletErrorsBackgroundCount} from '../../../../../store/selectors/navigation/tabs/tablet-errors';
+import {getTabletErrorsBackgroundCount} from '../../../../../store/selectors/navigation/tabs/tablet-errors-background';
 import {Props as AutomaticModeSwitchProps} from './AutomaticModeSwitch';
 
 import {getCluster} from '../../../../../store/selectors/global';
