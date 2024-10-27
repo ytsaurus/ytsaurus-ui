@@ -15,7 +15,7 @@ import {Tab} from '../../../constants/navigation/index';
 
 import {getTableMountConfigHasData} from '../../../store/selectors/navigation/content/table-mount-config';
 import {getAccessLogBasePath} from '../../../config';
-import {getTabletErrorsCount} from '../../../store/selectors/navigation/tabs/tablet-errors';
+import {getTabletErrorsBackgroundCount} from '../../../store/selectors/navigation/tabs/tablet-errors';
 import UIFactory from '../../../UIFactory';
 
 export function getNavigationPathAttributesLoadState(state: RootState) {
@@ -71,7 +71,7 @@ export const getNavigationRestorePath = createSelector([getNavigationPathAttribu
 });
 
 export const getSupportedTabs = createSelector(
-    [getNavigationPathAttributes, getTableMountConfigHasData, getTabletErrorsCount],
+    [getNavigationPathAttributes, getTableMountConfigHasData, getTabletErrorsBackgroundCount],
     (attributes, mountConfigHasData, tabletErrorsCount) => {
         const isDynamic = attributes.dynamic === true;
         const isPipeline = attributes.pipeline_format_version !== undefined;
@@ -135,7 +135,7 @@ export const getSupportedTabs = createSelector(
 );
 
 export const getTabs = createSelector(
-    [getSupportedTabs, getTabletErrorsCount, getAttributes],
+    [getSupportedTabs, getTabletErrorsBackgroundCount, getAttributes],
     (supportedTabs, tabletErrorsCount, attributes) => {
         const isACO = attributes?.type === 'access_control_object';
 
