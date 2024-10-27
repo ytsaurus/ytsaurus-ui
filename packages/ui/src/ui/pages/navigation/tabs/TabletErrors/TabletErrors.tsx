@@ -18,7 +18,7 @@ import {getPath} from '../../../../store/selectors/navigation';
 import {getEffectiveMode} from '../../../../store/selectors/navigation/navigation';
 import {getCluster} from '../../../../store/selectors/global';
 import {
-    getTabletErrorCountNoticeVisbile,
+    getTabletErrorsBackgroundCountNoticeVisbile,
     getTabletErrorsLoadingStatus,
     getTabletErrorsReplicationErrors,
 } from '../../../../store/selectors/navigation/tabs/tablet-errors';
@@ -148,7 +148,7 @@ function ReplicationErrorsBlock({data, cluster}: ReplicationErrorsBlockProps) {
 }
 
 function TabletErrorsCountNotice() {
-    const visible = useSelector(getTabletErrorCountNoticeVisbile);
+    const visible = useSelector(getTabletErrorsBackgroundCountNoticeVisbile);
     if (!visible) {
         return null;
     }

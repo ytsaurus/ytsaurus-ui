@@ -9,7 +9,7 @@ import MetaTable from '../../../../../components/MetaTable/MetaTable';
 import {getTableType} from '../../../../../store/selectors/navigation/content/table';
 import {getIsDynamic} from '../../../../../store/selectors/navigation/content/table-ts';
 import {getAttributes} from '../../../../../store/selectors/navigation';
-import {getTabletErrorsCount} from '../../../../../store/selectors/navigation/tabs/tablet-errors';
+import {getTabletErrorsBackgroundCount} from '../../../../../store/selectors/navigation/tabs/tablet-errors';
 import {Props as AutomaticModeSwitchProps} from './AutomaticModeSwitch';
 
 import {getCluster} from '../../../../../store/selectors/global';
@@ -35,7 +35,7 @@ function TableMeta({
     isDynamic,
     onEditEnableReplicatedTableTracker,
 }: Props) {
-    const tabletErrorCount = useSelector(getTabletErrorsCount);
+    const tabletErrorCount = useSelector(getTabletErrorsBackgroundCount);
     const cluster = useSelector(getCluster);
 
     const items = useMemo(() => {

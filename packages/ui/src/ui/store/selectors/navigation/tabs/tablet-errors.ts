@@ -27,7 +27,7 @@ export const getTabletErrorsLoadingStatus = createSelector(
     },
 );
 
-export const getTabletErrorsCount = createSelector(
+export const getTabletErrorsBackgroundCount = createSelector(
     [getPath, getTabletErrorsErrorCountPath, getTabletErrorsErrorCount],
     (path, errorCountPath, errorCount) => {
         if (path !== errorCountPath) {
@@ -49,8 +49,8 @@ export const getTabletErrors = createSelector(
     },
 );
 
-export const getTabletErrorCountNoticeVisbile = createSelector(
-    [getTabletErrorsCount, getTabletErrors],
+export const getTabletErrorsBackgroundCountNoticeVisbile = createSelector(
+    [getTabletErrorsBackgroundCount, getTabletErrors],
     (count, data) => {
         const {tablet_errors, replication_errors} = data || {};
         const tabletErrorsCount = calculateSubitemsCount(tablet_errors);
