@@ -1,3 +1,4 @@
+import {CancelTokenSource} from 'axios';
 import reduce_ from 'lodash/reduce';
 
 import CancelHelper, {isCancelled} from '../../../../../utils/cancel-helper';
@@ -11,8 +12,8 @@ import {
     TabletErrorsAction,
 } from '../../../../../store/reducers/navigation/tabs/tablet-errors/tablet-errors-background';
 import {wrapApiPromiseByToaster} from '../../../../../utils/utils';
+
 import {loadReplicas} from '../../content/replicated-table';
-import {CancelTokenSource} from 'axios';
 import {TYPED_OUTPUT_FORMAT} from '../../../../../constants';
 
 const requests = new CancelHelper();

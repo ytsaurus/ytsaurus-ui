@@ -12,4 +12,9 @@
     &_hidden {
         visibility: hidden;
     }
+
+    &_inline-margins {
+        margin-top: -4px;
+        margin-bottom: -4px;
+    }
 }

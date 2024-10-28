@@ -35,6 +35,7 @@ interface Props {
     useText?: boolean;
     prefix?: React.ReactNode;
     asTabletNode?: boolean;
+    inlineMargins?: boolean;
 }
 
 export function Host({
@@ -45,6 +46,7 @@ export function Host({
     onClick,
     useText,
     asTabletNode,
+    inlineMargins,
 }: Props) {
     const host = React.useMemo(() => {
         return calcShortNameByRegExp(address, asTabletNode) || address;
@@ -55,7 +57,7 @@ export function Host({
     return (
         <span
             className={block(
-                {hidden: !host},
+                {hidden: !host, 'inline-margins': inlineMargins},
                 ['elements-monospace', className].filter(Boolean).join(' '),
             )}
             onClick={onClick}

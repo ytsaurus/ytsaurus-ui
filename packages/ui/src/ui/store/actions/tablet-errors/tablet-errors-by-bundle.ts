@@ -1,7 +1,6 @@
 import {ThunkAction} from 'redux-thunk';
 import {RootState} from '../../../store/reducers';
-import axios, {AxiosResponse} from 'axios';
-import {TabletErrorsApi} from '../../../../shared/tablet-errors-manager';
+import {fetchFromTabletErrorsApi, TabletErrorsApi} from '../../../../shared/tablet-errors-manager';
 import {getCluster} from '../../../store/selectors/global';
 import {tabletErrorsByBundleActions} from '../../../store/reducers/tablet-errors/tablet-errors-by-bundle';
 import CancelHelper from '../../../utils/cancel-helper';
@@ -23,15 +22,18 @@ export function loadTabletErrorsByBundle(
         const state = getState();
         const cluster = getCluster(state);
 
-        return axios
-            .post<
-                TabletErrorsApi['tablet_errors_by_bundle']['response'],
-                AxiosResponse<TabletErrorsApi['tablet_errors_by_bundle']['response']>,
-                TabletErrorsApi['tablet_errors_by_bundle']['body']
-            >(`/api/tablet-errors/${cluster}/tablet_errors_by_bundle`, {...params, cluster, count_limit: 100, offset: page * 100}, {cancelToken: cancelHelper.removeAllAndGenerateNextToken()})
-            .then(({data}) => {
-                dispatch(tabletErrorsByBundleActions.onSuccess({data}));
-            });
+        return fetchFromTabletErrorsApi(
+            'tablet_errors_by_bundle',
+            cluster,
+            {
+                ...params,
+                offset: page * 100,
+                count_limit: 100,
+            },
+            cancelHelper.removeAllAndGenerateNextToken(),
+        ).then(({data}) => {
+            dispatch(tabletErrorsByBundleActions.onSuccess({data}));
+        });
     };
 }
 

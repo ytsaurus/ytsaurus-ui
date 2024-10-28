@@ -1,14 +1,21 @@
 import React, {Component, Fragment} from 'react';
 import PropTypes from 'prop-types';
+import cn from 'bem-cn-lite';
 
 import Hotkey, {HotkeyProps} from '../../components/Hotkey/Hotkey';
 import {Button as ButtonImpl, ButtonProps as ButtonImplProps} from '@gravity-ui/uikit';
 import {Tooltip, TooltipProps} from '../Tooltip/Tooltip';
 
+import './Button.scss';
+
+const block = cn('yt-button');
+
 export interface ButtonProps extends ButtonImplProps {
     withTooltip?: boolean;
     tooltipProps?: TooltipProps;
     hotkey?: HotkeyProps['settings'];
+
+    inlineMargins?: boolean;
 }
 
 export default class Button extends Component<ButtonProps> {
@@ -38,12 +45,16 @@ export default class Button extends Component<ButtonProps> {
             // Do not pass tooltipProps with buttonProps into IslandsButton
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
             tooltipProps,
+            className,
+            inlineMargins,
             ...buttonProps
         } = this.props;
 
         return (
             <Fragment>
-                <ButtonImpl {...buttonProps}>{children}</ButtonImpl>
+                <ButtonImpl className={block({inline: inlineMargins}, className)} {...buttonProps}>
+                    {children}
+                </ButtonImpl>
                 {hotkey && <Hotkey settings={hotkey} />}
             </Fragment>
         );

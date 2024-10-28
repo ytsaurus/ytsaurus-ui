@@ -2,11 +2,10 @@ import React from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import cn from 'bem-cn-lite';
 
-import {calculateShortcutTime} from '../../components/common/Timeline/util';
 import Select from '../../components/Select/Select';
 import SimplePagination from '../../components/Pagination/SimplePagination';
 import {Toolbar} from '../../components/WithStickyToolbar/Toolbar/Toolbar';
-import {YTTimeline} from '../../components/common/YTTimeline';
+import {calcFromTo, YTTimeline} from '../../components/common/YTTimeline';
 
 import {
     getTabletErrorsByBundleMethodsFilter,
@@ -18,21 +17,9 @@ import {
     type TabletErrorsByBundleState,
 } from '../../store/reducers/tablet-errors/tablet-errors-by-bundle';
 import {loadTabletErrorsByBundle} from '../../store/actions/tablet-errors/tablet-errors-by-bundle';
+import {TABLET_ERRORS_ALL_METHODS} from '../../constants/navigation/tabs/tablet-errors';
 
 const block = cn('yt-tablet-errors-toolbar');
-
-const ALL_METHODS = [
-    'Execute',
-    'Multiread',
-    'PullRows',
-    'GetTabletInfo',
-    'ReadDynamicStore',
-    'FetchTabletStores',
-    'FetchTableRows',
-    'GetOrderedTabletSafeTrimRowCount',
-    'Write',
-    'Trim',
-].map((value) => ({value, text: value}));
 
 export function TabletErrorsToolbar({bundle, className}: {bundle: string; className: string}) {
     const dispatch = useDispatch();
@@ -49,7 +36,6 @@ export function TabletErrorsToolbar({bundle, className}: {bundle: string; classN
                 to={to}
                 shortcut={timeRangeFilter.shortcutValue}
                 onUpdate={(data) => {
-                    console.log({data});
                     dispatch(tabletErrorsByBundleActions.updateFilter({timeRangeFilter: data}));
                 }}
                 hasRuler={true}
@@ -76,7 +62,7 @@ export function TabletErrorsToolbar({bundle, className}: {bundle: string; classN
                                 multiple
                                 label="Methods:"
                                 value={methodsFilter}
-                                items={ALL_METHODS}
+                                items={TABLET_ERRORS_ALL_METHODS}
                                 onUpdate={(v) =>
                                     dispatch(
                                         tabletErrorsByBundleActions.updateFilter({
@@ -118,13 +104,4 @@ function useTabletErrorsLoad(
         );
     }, [bundle, dispatch, timeRangeFilter, methodsFilter, pageFilter]);
     return calcFromTo(timeRangeFilter);
-}
-
-function calcFromTo(timeRange: TabletErrorsByBundleState['timeRangeFilter']) {
-    const {from = Math.floor(Date.now() - 24 * 3600 * 1000), to = Math.ceil(Date.now())} =
-        timeRange.shortcutValue !== undefined
-            ? calculateShortcutTime(timeRange.shortcutValue)
-            : timeRange;
-
-    return {...timeRange, from, to};
 }

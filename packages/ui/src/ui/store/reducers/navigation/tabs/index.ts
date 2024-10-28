@@ -8,6 +8,7 @@ import schema from './schema/schema';
 import annotation from './annotation';
 import tablets from './tablets/tablets';
 import tabletErrorsBackground from './tablet-errors/tablet-errors-background';
+import {tabletErrorsByPath} from './tablet-errors/tablet-errors-by-path';
 import userAttributes from './user-attributes';
 
 export default combineReducers({
@@ -19,5 +20,6 @@ export default combineReducers({
     tablets,
     annotation,
     tabletErrorsBackground,
+    tabletErrorsByPath,
     userAttributes,
 });

@@ -72,7 +72,7 @@ function useTabletErrorsColumns(loading: boolean) {
                 errorTypes.add(method);
             });
         });
-        
+
         const res: Array<Column<TableMethodErrorsCount>> = [
             {
                 name: 'path',
@@ -86,7 +86,13 @@ function useTabletErrorsColumns(loading: boolean) {
                 ),
                 render({row}) {
                     return (
-                        <Link url={makeNavigationLink({path: row.table_path})}>
+                        <Link
+                            url={makeNavigationLink({
+                                path: row.table_path,
+                                navmode: 'tablet_errors',
+                                teMode: 'request_errors',
+                            })}
+                        >
                             {row.table_path}
                         </Link>
                     );
