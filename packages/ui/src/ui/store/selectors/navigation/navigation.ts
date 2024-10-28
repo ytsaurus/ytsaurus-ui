@@ -17,6 +17,7 @@ import {getTableMountConfigHasData} from '../../../store/selectors/navigation/co
 import {getAccessLogBasePath} from '../../../config';
 import {getTabletErrorsBackgroundCount} from '../../../store/selectors/navigation/tabs/tablet-errors-background';
 import UIFactory from '../../../UIFactory';
+import {getConfigData} from '../../../config/ui-settings';
 
 export function getNavigationPathAttributesLoadState(state: RootState) {
     return state.navigation.navigation.loadState;
@@ -114,7 +115,7 @@ export const getSupportedTabs = createSelector(
         }
 
         let supportedTabletErrors: Array<ValueOf<typeof Tab>> = [];
-        if (tabletErrorsCount > 0) {
+        if (tabletErrorsCount > 0 || getConfigData().allowTabletErrorsAPI) {
             supportedTabletErrors = [Tab.TABLET_ERRORS];
         }
 
@@ -297,7 +298,7 @@ export const getTabs = createSelector(
             {
                 value: Tab.TABLET_ERRORS,
                 title: 'Go to tablets errors',
-                counter: tabletErrorsCount,
+                counter: getConfigData().allowTabletErrorsAPI ? undefined : tabletErrorsCount,
             },
         ];
 

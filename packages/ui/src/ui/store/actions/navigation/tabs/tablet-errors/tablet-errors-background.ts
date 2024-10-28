@@ -2,10 +2,7 @@ import reduce_ from 'lodash/reduce';
 
 import CancelHelper, {isCancelled} from '../../../../../utils/cancel-helper';
 import {getPath} from '../../../../../store/selectors/navigation';
-import {
-    GET_TABLET_ERRORS,
-    GET_TABLET_ERRORS_COUNT,
-} from '../../../../../constants/navigation/tabs/tablet-errors';
+import {GET_TABLET_ERRORS} from '../../../../../constants/navigation/tabs/tablet-errors';
 import {YTApiId, ytApiV3Id, ytApiV4Id} from '../../../../../rum/rum-wrap-api';
 import {ThunkAction} from 'redux-thunk';
 import {RootState} from '../../../../../store/reducers';
@@ -147,5 +144,9 @@ export function updateTabletErrrosCount(
     errorsCount: number,
     errorsCountPath: string,
 ): TabletErrorsAction {
-    return {type: GET_TABLET_ERRORS_COUNT, data: {errorsCountPath, errorsCount}};
+    return {type: GET_TABLET_ERRORS.PARTITION, data: {errorsCountPath, errorsCount}};
+}
+
+export function updateTabletErrorsViewMode(viewMode: NavigationTabletErrorsMode) {
+    return {type: GET_TABLET_ERRORS.PARTITION, data: {viewMode}};
 }

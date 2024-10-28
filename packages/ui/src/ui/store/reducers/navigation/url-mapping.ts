@@ -43,6 +43,11 @@ import {RootState} from '../../../store/reducers';
 import {updateIfChanged} from '../../../utils/utils';
 import {LocationParameters} from '../../../store/location';
 import {getNavigationMapNodeFlowPreparedState, mapNodeFlowParams} from '../flow/url-mapping';
+import {
+    getNavigationTabletErrorsPreparedState,
+    navigationTabletErrorsParams,
+} from './tabs/tablet-errors/url-mapping';
+
 import UIFactory from '../../../UIFactory';
 
 export const getNavigationParams = (): LocationParameters => {
@@ -59,6 +64,7 @@ export const getNavigationParams = (): LocationParameters => {
         ...tabletsParams,
 
         ...navigationAccessLogParams,
+        ...navigationTabletErrorsParams,
 
         navmode: {
             stateKey: 'navigation.navigation.mode',
@@ -107,6 +113,7 @@ function getNavigationNodeTypesPreparedState(state: RootState, location: {query:
     res = getAclFiltersPreparedState(res, location);
     res = getNavigationSchemaPreparedState(res, location);
     res = getNavigationTabletsPreparedState(res, location);
+    res = getNavigationTabletErrorsPreparedState(res, location);
     return res;
 }
 

@@ -17,6 +17,9 @@ const getTabletErrorsRaw = (state: RootState) =>
 const getTabletErrorsPathRaw = (state: RootState) =>
     state.navigation.tabs.tabletErrorsBackground.tabletErrorsPath;
 
+export const getTabletErrorsViewMode = (state: RootState) =>
+    state.navigation.tabs.tabletErrorsBackground.viewMode;
+
 export const getTabletErrorsLoadingStatus = createSelector(
     [
         (state: RootState) => state.navigation.tabs.tabletErrorsBackground.loading,
