@@ -4,13 +4,14 @@ import {useDispatch, useSelector} from 'react-redux';
 import {RadioButton} from '@gravity-ui/uikit';
 
 import {getConfigData} from '../../../../config/ui-settings';
-import {updateTabletErrorsViewMode} from '../../../../store/actions/navigation/tabs/tablet-errors-background';
+import {updateTabletErrorsViewMode} from '../../../../store/actions/navigation/tabs/tablet-errors/tablet-errors-background';
 import {
     getTabletErrorsBackgroundCount,
     getTabletErrorsViewMode,
 } from '../../../../store/selectors/navigation/tabs/tablet-errors-background';
 
 import TabletErrorsBackground from './TabletErrorsBackground';
+import {TabletErrorsRequest} from './TabletErrorsByPath/TabletErrorsByPath';
 
 export default function TabletErrors() {
     const dispatch = useDispatch();
@@ -21,7 +22,7 @@ export default function TabletErrors() {
     const allowTabletErrorsAPI = getConfigData().allowTabletErrorsAPI;
 
     const content =
-        viewMode === 'request_errors' ? <div>Not implemented</div> : <TabletErrorsBackground />;
+        viewMode === 'request_errors' ? <TabletErrorsRequest /> : <TabletErrorsBackground />;
 
     return (
         <div>

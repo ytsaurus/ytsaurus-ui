@@ -12,7 +12,7 @@ export type TabletErrorsByBundleState = {
     data: TabletErrorsApi['tablet_errors_by_bundle']['response'] | undefined;
 
     timeRangeFilter:
-        | {shortcutValue: string; from?: number; to?: number}
+        | {shortcutValue?: string; from?: number; to?: number}
         | {from: number; to: number; shortcutValue?: undefined};
 
     methodsFilter: Array<string>;

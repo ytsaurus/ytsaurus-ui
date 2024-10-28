@@ -1,9 +1,10 @@
 import React from 'react';
 import cn from 'bem-cn-lite';
 
-import {Timeline, TimelineProps} from './Timeline/Timeline';
-
 import useResizeObserver from '../../hooks/useResizeObserver';
+
+import {Timeline, TimelineProps} from './Timeline/Timeline';
+import {calculateShortcutTime} from './Timeline/util';
 
 import './YTTimeline.scss';
 
@@ -79,3 +80,14 @@ function YTTimelineImpl({className, topShortcuts, ...rest}: Props) {
 export type TimelineUpdateValue = Parameters<Required<TimelineProps>['onUpdate']>[0];
 
 export const YTTimeline = React.memo(YTTimelineImpl);
+
+const ONE_DAY_MS = 24 * 3600 * 1000;
+
+export function calcFromTo(timeRange: {from?: number; to?: number; shortcutValue?: string}) {
+    const {from = Math.floor(Date.now() - ONE_DAY_MS), to = Math.ceil(Date.now())} =
+        timeRange.shortcutValue !== undefined
+            ? calculateShortcutTime(timeRange.shortcutValue)
+            : timeRange;
+
+    return {...timeRange, from, to};
+}

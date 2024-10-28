@@ -14,17 +14,16 @@ export function makeProxyUrl(cluster: string, address: string) {
     return `/${cluster}/${Page.COMPONENTS}/${ComponentsTab.RPC_PROXIES}?host=${address}`;
 }
 
-export function makeNavigationLink({
-    path,
-    cluster,
-    navmode,
-}: {
+export function makeNavigationLink(params: {
     path: string;
     cluster?: string;
     navmode?: ValueOf<typeof NavigationTab>;
+    teMode?: 'request_errors';
 }) {
-    const res = `/${cluster || YT.cluster}/${Page.NAVIGATION}?path=${path}`;
-    return navmode ? `${res}&navmode=${navmode}` : res;
+    const {cluster, ...rest} = params;
+    const res = `/${cluster || YT.cluster}/${Page.NAVIGATION}`;
+    const search = new URLSearchParams(rest).toString();
+    return search ? `${res}?${search}` : res;
 }
 
 export function makeSchedulingUrl({

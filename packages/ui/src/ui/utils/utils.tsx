@@ -1,9 +1,13 @@
 import React from 'react';
 import {AxiosError} from 'axios';
+import {WritableDraft} from 'immer';
 
 import forEach_ from 'lodash/forEach';
+import get_ from 'lodash/get';
+import isEqual_ from 'lodash/isEqual';
 import map_ from 'lodash/map';
 import reduce_ from 'lodash/reduce';
+import set_ from 'lodash/set';
 
 import {TypedKeys, YTError} from '../types';
 import {Link, ProgressProps, Toaster} from '@gravity-ui/uikit';
@@ -17,6 +21,7 @@ import hammer from '../common/hammer';
 import {LOADING_STATUS} from '../constants';
 import type {ErrorInfo} from '../store/reducers/modals/errors';
 import {showErrorModal} from '../store/actions/modals/errors';
+import {LocationParameters} from '../store/location';
 import {BatchResultsItem} from '../../shared/yt-types';
 
 import {UIBatchError} from './errors/ui-error';
@@ -454,4 +459,17 @@ export function updateIfChanged<T, K extends keyof T>(
     if (isEqual ? !isEqual(obj[key], value) : obj[key] !== value) {
         obj[key] = value;
     }
+}
+
+export function updateByLocationParams<T extends object>(
+    {draft, query}: {draft: WritableDraft<T>; query: T},
+    params: LocationParameters,
+) {
+    Object.values(params).forEach(({stateKey}) => {
+        const newValue = get_(query, stateKey);
+        const currValue = get_(draft, stateKey);
+        if (!isEqual_(newValue, currValue)) {
+            set_(draft, stateKey, newValue);
+        }
+    });
 }
