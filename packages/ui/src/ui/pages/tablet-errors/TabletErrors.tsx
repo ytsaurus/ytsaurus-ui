@@ -72,7 +72,7 @@ function useTabletErrorsColumns(loading: boolean) {
                 errorTypes.add(method);
             });
         });
-
+        
         const res: Array<Column<TableMethodErrorsCount>> = [
             {
                 name: 'path',

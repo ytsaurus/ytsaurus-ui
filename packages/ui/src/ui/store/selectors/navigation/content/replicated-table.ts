@@ -58,15 +58,16 @@ export const getReplicatedTableReplicasMap = createSelector(
             },
             {} as Record<
                 string,
-                {
-                    error_count: number;
-                    cluster_name: string;
-                    mode: string;
-                    replica_path: string;
-                    replicated_table_tracker_enabled: boolean;
-                    replication_lag_time: number;
-                    state: string;
-                }
+                | {
+                      error_count: number;
+                      cluster_name: string;
+                      mode: string;
+                      replica_path: string;
+                      replicated_table_tracker_enabled: boolean;
+                      replication_lag_time: number;
+                      state: string;
+                  }
+                | undefined
             >,
         );
     },
