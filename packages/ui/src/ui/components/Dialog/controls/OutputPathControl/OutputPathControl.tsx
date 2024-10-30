@@ -1,6 +1,5 @@
 import React, {FC, useCallback, useEffect} from 'react';
 import type {ControlStaticApi} from '../../../../components/Dialog';
-import {PoolTreeSuggestControl} from '../PoolTreeSuggestControl/PoolTreeSuggestControl';
 import {TextInput} from '@gravity-ui/uikit';
 import './OutputPathControl.scss';
 import cn from 'bem-cn-lite';
@@ -108,6 +107,6 @@ export const OutputPathControl: FC<Props> & ControlStaticApi<any> = ({
 
 OutputPathControl.getDefaultValue = () => '';
 
-PoolTreeSuggestControl.isEmpty = (value: Props['value']) => {
+OutputPathControl.isEmpty = (value: Props['value']) => {
     return !value;
 };
