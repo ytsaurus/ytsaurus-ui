@@ -183,7 +183,7 @@ export default function TableSortModal() {
                                 const {poolTree} = values;
                                 return {
                                     placeholder: login,
-                                    poolTree,
+                                    poolTrees: [poolTree],
                                     allowEphemeral: true,
                                 };
                             },

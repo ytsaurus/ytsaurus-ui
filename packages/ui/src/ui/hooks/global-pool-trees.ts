@@ -17,8 +17,8 @@ export function PoolTreesLoader() {
     return null;
 }
 
-export function usePoolTreeOrLoadDefault(poolTree?: string) {
-    const [defaultPoolTree, setDefaultPoolTree] = React.useState<string | undefined>(poolTree);
+export function useDefaultPoolTree() {
+    const [defaultPoolTree, setDefaultPoolTree] = React.useState<string | undefined>();
 
     React.useEffect(() => {
         loadDefaultPoolTree().then((value) => {
@@ -34,7 +34,7 @@ export function WaitForDefaultPoolTree({
 }: {
     children: ({defaultPoolTree}: {defaultPoolTree: string}) => React.ReactNode;
 }) {
-    const defaultPoolTree = usePoolTreeOrLoadDefault();
+    const defaultPoolTree = useDefaultPoolTree();
 
     return defaultPoolTree ? children({defaultPoolTree}) : null;
 }
