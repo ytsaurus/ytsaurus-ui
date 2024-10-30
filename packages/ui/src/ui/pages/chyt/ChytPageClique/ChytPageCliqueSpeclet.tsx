@@ -9,7 +9,10 @@ import Icon from '../../../components/Icon/Icon';
 import {YTDFDialog} from '../../../components/Dialog';
 import Yson from '../../../components/Yson/Yson';
 import {UnipikaSettings} from '../../../components/Yson/StructuredYson/StructuredYsonTypes';
-import {makeTabbedDialogFieldsFromDescription} from '../../../components/Dialog/df-dialog-utils';
+import {
+    linkPoolWithPoolTree,
+    makeTabbedDialogFieldsFromDescription,
+} from '../../../components/Dialog/df-dialog-utils';
 
 import {useUpdater} from '../../../hooks/use-updater';
 
@@ -31,6 +34,7 @@ import {
 } from '../../../store/selectors/chyt/speclet';
 import {useThunkDispatch} from '../../../store/thunkDispatch';
 import {YTError} from '../../../../@types/types';
+import {WaitForDefaultPoolTree} from '../../../hooks/global-pool-trees';
 
 import './ChytPageCliqueSpeclet.scss';
 
@@ -124,14 +128,19 @@ export function ChytSpecletEditButton({
     return (
         <React.Fragment>
             {!visible || !specletData ? null : (
-                <ChytSpecletEditDialog
-                    key={dataAlias}
-                    data={specletData}
-                    alias={alias}
-                    unipikaSettings={unipikaSettings}
-                    allowEdit={dataAlias === alias}
-                    onClose={() => setVisible(false)}
-                />
+                <WaitForDefaultPoolTree>
+                    {({defaultPoolTree}) => (
+                        <ChytSpecletEditDialog
+                            key={dataAlias}
+                            data={specletData}
+                            alias={alias}
+                            unipikaSettings={unipikaSettings}
+                            allowEdit={dataAlias === alias}
+                            onClose={() => setVisible(false)}
+                            defaultPoolTree={defaultPoolTree}
+                        />
+                    )}
+                </WaitForDefaultPoolTree>
             )}
             <Button
                 view={compact ? 'outlined' : undefined}
@@ -153,21 +162,28 @@ function ChytSpecletEditDialog({
     allowEdit,
     unipikaSettings,
     onClose,
+    defaultPoolTree,
 }: {
     allowEdit: boolean;
     alias: string;
     data: ChytCliqueOptionsState['data'];
     unipikaSettings: UnipikaSettings;
     onClose: () => void;
+    defaultPoolTree: string;
 }) {
     const dispatch = useThunkDispatch();
     const [error, setError] = React.useState<YTError | undefined>();
 
     const {fields, initialValues, fieldTypeByName} = React.useMemo(() => {
-        return makeTabbedDialogFieldsFromDescription(data ?? [], {
+        const groups = makeTabbedDialogFieldsFromDescription(data ?? [], {
             allowEdit,
             unipikaSettings,
+            defaultPoolTree,
         });
+
+        linkPoolWithPoolTree(groups);
+
+        return groups;
     }, [data, allowEdit, unipikaSettings]);
 
     return (

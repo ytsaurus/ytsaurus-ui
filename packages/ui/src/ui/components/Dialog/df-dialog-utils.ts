@@ -1,4 +1,4 @@
-import {DialogField} from './Dialog';
+import {ControlField, DialogField} from './Dialog';
 
 import format from '../../common/hammer/format';
 import {UnipikaSettings} from '../Yson/StructuredYson/StructuredYsonTypes';
@@ -17,7 +17,8 @@ export type OptionDescription =
           min_value?: number;
       })
     | Option<'yson', JsonAsString>
-    | Option<'path' | 'pool', string>;
+    | Option<'path' | 'pool', string>
+    | Option<'pool_trees', string[]>;
 
 export type JsonAsString = string;
 
@@ -31,7 +32,7 @@ export type Option<TypeName extends string, T> = {
 
 export function descriptionToDialogField<T = unknown>(
     item: OptionDescription,
-    {unipikaSettings, allowEdit}: MakeDialogFieldsOptions,
+    {unipikaSettings, allowEdit, defaultPoolTree}: MakeDialogFieldsOptions,
 ): DialogField<T> & {initialValue?: unknown; converter: Converter} {
     const common = {
         name: item.name,
@@ -115,7 +116,19 @@ export function descriptionToDialogField<T = unknown>(
         case 'path':
             return {...common, type: 'path', extras};
         case 'pool':
-            return {...common, type: 'pool', extras: {...extras, allowEmpty: true}};
+            return {
+                ...common,
+                type: 'pool',
+                extras: {...extras, allowEmpty: true},
+                initialValue: item.current_value ?? item.default_value,
+            };
+        case 'pool_trees':
+            return {
+                ...common,
+                type: 'pool-tree',
+                extras,
+                initialValue: item.current_value ?? item.default_value ?? [defaultPoolTree],
+            };
         default:
             return {...common, type: 'plain'};
     }
@@ -195,6 +208,7 @@ function makeDialogField<FormValues = any>(
 type MakeDialogFieldsOptions = {
     allowEdit: boolean;
     unipikaSettings: UnipikaSettings;
+    defaultPoolTree: string;
 };
 
 export function makeDialogFieldsFromDescription<
@@ -252,4 +266,38 @@ export function makeTabbedDialogFieldsFromDescription<
             };
         }),
     };
+}
+
+export function linkPoolWithPoolTree<
+    FormValues extends Record<string, Record<string, unknown>> = Record<
+        string,
+        Record<string, unknown>
+    >,
+>(data: ReturnType<typeof makeTabbedDialogFieldsFromDescription>) {
+    for (const group of data.fields) {
+        type FieldType = (typeof data)['fields'][number]['fields'][number];
+        type FieldPoolType = FieldType & {type: 'pool'};
+        type FieldPoolTreesType = FieldType & {type: 'pool-tree'};
+
+        let pool: undefined | FieldPoolType;
+        let poolTrees: undefined | FieldPoolTreesType;
+
+        group.fields.some((field) => {
+            if (field.type === 'pool-tree') {
+                poolTrees = field;
+            }
+            if (field.type === 'pool') {
+                pool = field;
+            }
+            return Boolean(pool && poolTrees);
+        });
+
+        if (pool && poolTrees) {
+            const extras = pool.extras;
+            (pool as ControlField).extras = (values: FormValues) => ({
+                ...extras,
+                poolTrees: values[group.name].pool_trees,
+            });
+        }
+    }
 }

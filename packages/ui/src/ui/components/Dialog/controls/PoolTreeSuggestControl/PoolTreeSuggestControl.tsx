@@ -6,14 +6,17 @@ import {Select} from '@gravity-ui/uikit';
 
 import {DialogControlProps} from '../../../../components/Dialog/Dialog.types';
 import {getAllPoolTreeNames} from '../../../../store/selectors/global';
+import {usePoolTreesLoaded} from '../../../../hooks/global-pool-trees';
 
-type Props = DialogControlProps<string> & {
+type Props = DialogControlProps<string[]> & {
     disabled?: boolean;
 };
 
 export function PoolTreeSuggestControl(props: Props) {
     const {value, onChange, disabled, placeholder} = props;
     const treeNames = useSelector(getAllPoolTreeNames);
+
+    usePoolTreesLoaded();
 
     const items = React.useMemo(() => {
         return map_(treeNames, (value) => {
@@ -24,20 +27,21 @@ export function PoolTreeSuggestControl(props: Props) {
     return (
         <Select
             disabled={disabled}
-            value={[value]}
+            value={value}
             options={items}
-            onUpdate={(values) => onChange(values[0])}
+            onUpdate={onChange}
             placeholder={placeholder}
             width="max"
             filterable={items?.length > 5}
+            multiple
         />
     );
 }
 
 PoolTreeSuggestControl.getDefaultValue = () => {
-    return '';
+    return [];
 };
 
 PoolTreeSuggestControl.isEmpty = (value: Props['value']) => {
-    return !value;
+    return !value.length;
 };

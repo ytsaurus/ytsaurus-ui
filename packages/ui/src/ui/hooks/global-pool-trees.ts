@@ -4,7 +4,7 @@ import {useDispatch} from 'react-redux';
 import {loadPoolTreesIfNotLoaded} from '../store/actions/global';
 import {loadDefaultPoolTree} from '../utils/poolTrees';
 
-function usePoolTreesLoaded() {
+export function usePoolTreesLoaded() {
     const dispatch = useDispatch();
 
     React.useEffect(() => {

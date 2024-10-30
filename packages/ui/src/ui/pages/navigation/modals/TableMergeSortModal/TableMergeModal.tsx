@@ -54,7 +54,7 @@ export default function TableMergeModal() {
                 } = values;
                 const chunkSizeBytes = parseBytes(chunkSize);
                 const data_size_per_job = isNaN(chunkSizeBytes) ? undefined : chunkSizeBytes;
-                const pool_trees = poolTree ? [poolTree] : undefined;
+                const pool_trees = poolTree.length ? poolTree : undefined;
                 await dispatch(
                     runTableMerge(
                         pickBy_(
@@ -114,7 +114,7 @@ export default function TableMergeModal() {
                         outputPath,
                         columns: [],
                         force_transform: true,
-                        poolTree: defaultPoolTree,
+                        poolTree: [defaultPoolTree],
                         combine_chunks: true,
                     }}
                     fields={[
@@ -194,7 +194,7 @@ export default function TableMergeModal() {
                             ),
                             extras: ({poolTree}: FormValues) => {
                                 return {
-                                    poolTrees: [poolTree],
+                                    poolTrees: poolTree,
                                     placeholder: login,
                                     allowEphemeral: true,
                                 };
@@ -237,7 +237,7 @@ export default function TableMergeModal() {
 interface FormValues {
     mode: string;
     pool: string;
-    poolTree: string;
+    poolTree: string[];
 
     paths: Array<string>;
     outputPath: string;
