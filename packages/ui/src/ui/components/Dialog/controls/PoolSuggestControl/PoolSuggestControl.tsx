@@ -57,11 +57,13 @@ export function PoolSuggestControl(props: Props) {
 
     const [poolNames, setPoolNames] = React.useState<Array<string>>([]);
 
-    const loadedPools = useLoadedPools(cluster, poolTrees);
+    const names = useLoadedPools(cluster, poolTrees);
 
     React.useEffect(
         function onPoolLoaded() {
-            const {names} = loadedPools;
+            if (!names) {
+                return;
+            }
             const noRoot = filter_(names, (item) => '<Root>' !== item);
             const valueIndex = indexOf_(noRoot, value);
             if (value && -1 === valueIndex) {
@@ -73,7 +75,7 @@ export function PoolSuggestControl(props: Props) {
             }
         },
         // value should not affect the useEffect
-        [loadedPools, setPoolNames, onChange, calculateValueOnPoolsLoaded /*, value */],
+        [names && names.join(), setPoolNames, onChange, calculateValueOnPoolsLoaded /*, value */],
     );
 
     const getItems = React.useCallback(
@@ -121,13 +123,19 @@ PoolSuggestControl.isEmpty = (value: Props['value']) => {
     return !value;
 };
 
-function useLoadedPools(cluster?: string, poolTrees: string[] = []): {names: Array<string>} {
-    const [poolNames, setPoolNames] = React.useState<Array<string>>([]);
+function useLoadedPools(cluster?: string, poolTrees?: string[]): Array<string> | null {
+    poolTrees = poolTrees || [];
+
+    const [poolNames, setPoolNames] = React.useState<Array<string> | null>(null);
 
     const defaultPoolTree = useDefaultPoolTree();
 
     React.useMemo(() => {
-        const localPoolTrees: string[] = poolTrees.length ? poolTrees : defaultPoolTree ? [defaultPoolTree] : [];
+        const localPoolTrees: string[] = poolTrees.length
+            ? poolTrees
+            : defaultPoolTree
+              ? [defaultPoolTree]
+              : [];
 
         if (!localPoolTrees.length) {
             return;
@@ -150,9 +158,7 @@ function useLoadedPools(cluster?: string, poolTrees: string[] = []): {names: Arr
         });
     }, [cluster, defaultPoolTree, poolTrees.join()]);
 
-    return {
-        names: poolNames,
-    };
+    return poolNames;
 }
 
 function fetchPoolNamesByCluster(cluster: string, poolTrees: string[]): Promise<string[]> {

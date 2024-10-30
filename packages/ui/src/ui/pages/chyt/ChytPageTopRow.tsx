@@ -178,7 +178,7 @@ function ChytAliasSuggest({
 type FormValues = {
     alias: string;
     instance_count: number;
-    tree: string;
+    tree: string[];
     pool: string;
     runAfterCreation: boolean;
 };
@@ -246,9 +246,6 @@ function CreateChytButton() {
                                     name: 'tree',
                                     type: 'pool-tree',
                                     caption: 'Pool tree',
-                                    extras: {
-                                        disabled: true,
-                                    },
                                 },
                                 {
                                     name: 'pool',
@@ -256,7 +253,7 @@ function CreateChytButton() {
                                     caption: 'Pool',
                                     extras: ({tree}: FormValues) => {
                                         return {
-                                            poolTrees: [tree],
+                                            poolTrees: tree,
                                             placeholder: 'Pool name...',
                                             allowEmpty: true,
                                         };
@@ -294,7 +291,7 @@ function CreateChytButton() {
                             ]}
                             initialValues={{
                                 instance_count: 1,
-                                tree: defaultPoolTree,
+                                tree: [defaultPoolTree],
                                 runAfterCreation: true,
                             }}
                         />

@@ -63,7 +63,7 @@ export default function TableSortModal() {
                         }),
                     },
                     pool ? {pool} : {},
-                    poolTree ? {pool_trees: [poolTree]} : {},
+                    poolTree.length ? {pool_trees: poolTree} : {},
                 );
 
                 await dispatch(runTableSort(spec));
@@ -125,7 +125,7 @@ export default function TableSortModal() {
                         paths,
                         outputPath,
                         columns: [],
-                        poolTree: defaultPoolTree,
+                        poolTree: [defaultPoolTree],
                     }}
                     fields={[
                         {
@@ -183,7 +183,7 @@ export default function TableSortModal() {
                                 const {poolTree} = values;
                                 return {
                                     placeholder: login,
-                                    poolTrees: [poolTree],
+                                    poolTrees: poolTree,
                                     allowEphemeral: true,
                                 };
                             },
@@ -200,6 +200,6 @@ interface FormValues {
     paths: Array<string>;
     outputPath: string;
     columns: Array<string>;
-    poolTree: string;
+    poolTree: string[];
     pool: string;
 }
