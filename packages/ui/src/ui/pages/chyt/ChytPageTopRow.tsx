@@ -256,7 +256,7 @@ function CreateChytButton() {
                                     caption: 'Pool',
                                     extras: ({tree}: FormValues) => {
                                         return {
-                                            poolTree: tree,
+                                            poolTrees: [tree],
                                             placeholder: 'Pool name...',
                                             allowEmpty: true,
                                         };
