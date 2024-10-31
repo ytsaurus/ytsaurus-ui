@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {FocusEvent} from 'react';
 import cn from 'bem-cn-lite';
 import {RowWithName} from '../../../containers/AppNavigation/TopRowContent/SectionName';
 import Favourites from '../../../components/Favourites/Favourites';
@@ -140,6 +140,10 @@ function NavigationPathEditor({hideEditor}: {hideEditor: () => void}) {
         [hideEditor],
     );
 
+    const handleFocus = React.useCallback((event: FocusEvent<HTMLInputElement>) => {
+        event.target?.select();
+    }, []);
+
     return (
         <PathEditor
             className={block('path-editor')}
@@ -148,7 +152,7 @@ function NavigationPathEditor({hideEditor}: {hideEditor: () => void}) {
             onApply={handleApply}
             onCancel={hideEditor}
             onBlur={hideEditor}
-            onFocus={(e) => e.target.select()}
+            onFocus={handleFocus}
         />
     );
 }
