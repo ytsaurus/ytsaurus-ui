@@ -63,22 +63,22 @@ class PathEditorModal extends Component {
         this.props.hideError();
     }
 
-    handleBlur = (newPath) => {
+    handleBlur = (path) => {
         const {onBlur} = this.props;
 
         if (typeof onBlur === 'function') {
-            onBlur(newPath);
+            onBlur(path);
         } else {
-            this._handleBlur(newPath);
+            this._handleBlur(path);
         }
     };
-    handleFocus = (newPath) => {
+    handleFocus = (event, {path}) => {
         const {onFocus} = this.props;
 
         if (typeof onFocus === 'function') {
-            onFocus(newPath);
+            onFocus(path);
         } else {
-            this._handleFocus(newPath);
+            this._handleFocus(path);
         }
     };
     handleChange = (newPath) => {
