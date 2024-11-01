@@ -10,6 +10,7 @@ import MetaTable, {
     TemplateTransferTask,
 } from '../../../../../../components/MetaTable/MetaTable';
 import CollapsibleTable from '../../../../../../components/CollapsibleTable/CollapsibleTable';
+import Yson from '../../../../../../components/Yson/Yson';
 
 import {
     inputTableProps,
@@ -116,7 +117,7 @@ export default class Specification extends Component {
     renderStartedBy({fields = [], command}) {
         const items = fields.map((field) => ({
             key: field.name,
-            value: field.value,
+            value: typeof field.value === 'object' ? <Yson value={field.value} /> : field.value,
         }));
 
         items.push({
