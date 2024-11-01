@@ -1,5 +1,20 @@
 # Changelog
 
+## [1.66.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.65.0...ui-v1.66.0) (2024-11-01)
+
+
+### Features
+
+* **Users:** introduce "Change password" tab in UsersPageEditor, now we can change user passwords via UI [[#633](https://github.com/ytsaurus/ytsaurus-ui/issues/633)] ([2a06c23](https://github.com/ytsaurus/ytsaurus-ui/commit/2a06c237ce10a94d7970a2b09462fdc31aa9a352))
+* **Users:** introduce "create new" button which allows to create new user [[#633](https://github.com/ytsaurus/ytsaurus-ui/issues/633)] ([543dcf0](https://github.com/ytsaurus/ytsaurus-ui/commit/543dcf04764d9158cdc222fcccac71f1a3840836))
+* **Users:** introduce "Name" field in UsersPageEditor dialog, now we can rename users via UI [[#633](https://github.com/ytsaurus/ytsaurus-ui/issues/633)] ([bcfaead](https://github.com/ytsaurus/ytsaurus-ui/commit/bcfaead8bb9f2e65ed78f0da3099130b3930626f))
+* **Users:** introduce remove button which allows to remove user [[#633](https://github.com/ytsaurus/ytsaurus-ui/issues/633)] ([461f6d9](https://github.com/ytsaurus/ytsaurus-ui/commit/461f6d9ee5dce37d49b4e5452e1739e6b7630001))
+
+
+### Bug Fixes
+
+* **Operation/Details:** Minified React error [#31](https://github.com/ytsaurus/ytsaurus-ui/issues/31) [YTFRONT-4417] ([6324642](https://github.com/ytsaurus/ytsaurus-ui/commit/6324642bfd1474cb9c688637d61a90e3cbd5c42b))
+
 ## [1.65.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.64.0...ui-v1.65.0) (2024-10-25)
 
 
