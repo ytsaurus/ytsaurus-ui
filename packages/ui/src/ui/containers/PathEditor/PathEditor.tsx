@@ -1,7 +1,6 @@
-import React, {Component} from 'react';
+import React, {Component, FocusEvent, Key, KeyboardEvent, MouseEvent} from 'react';
 import {connect} from 'react-redux';
 import ReactList from 'react-list';
-import PropTypes from 'prop-types';
 import block from 'bem-cn-lite';
 import key from 'hotkeys-js';
 
@@ -25,45 +24,61 @@ import {
     loadSuggestionsList,
     removeActiveRequests,
 } from '../../store/actions/navigation/path-editor/path-editor';
+import {RootState} from '../../store/reducers';
 import {KeyCode} from '../../constants/index';
 
 import './PathEditor.scss';
 
+interface Suggestion {
+    parentPath: string;
+    childPath: string;
+    path: string;
+    targetPathBroken?: boolean;
+    type?: string;
+    dynamic?: unknown;
+}
+
+type SuggestionFilter = (suggestions: Suggestion[]) => Suggestion[];
+
+export interface EventPayload {
+    path: string;
+}
+
+export interface PathEditorProps {
+    suggestions: Suggestion[];
+    suggestionsError?: boolean;
+    errorMessage?: string;
+    loadSuggestionsList: (path: string, customFilter?: SuggestionFilter) => void;
+    removeActiveRequests: () => void;
+    // from parent component
+    className?: string;
+    placeholder?: string;
+    defaultPath?: string;
+    disabled?: boolean;
+    autoFocus?: boolean;
+    hasClear?: boolean;
+    showErrors?: boolean;
+    customFilter?: SuggestionFilter;
+    onChange?: (newPath: string) => void;
+    onFocus?: (e: FocusEvent<HTMLInputElement>, payload: EventPayload) => void;
+    onBlur?: (path: string) => void;
+    onApply?: (newPath: string) => void;
+    onCancel?: () => void;
+}
+
+interface PathEditorState {
+    path: string;
+    actualSuggestions: Suggestion[];
+    inputFocus: boolean;
+    inputChange: boolean;
+    selectedIndex: number;
+}
+
 const debounceTime = 300;
 const b = block('path-editor');
 
-export class PathEditor extends Component {
-    static propTypes = {
-        // from connect
-        suggestions: PropTypes.arrayOf(
-            PropTypes.shape({
-                path: PropTypes.string.isRequired,
-                targetPathBroken: PropTypes.bool,
-                type: PropTypes.string,
-            }),
-        ).isRequired,
-        suggestionsError: PropTypes.bool,
-        errorMessage: PropTypes.string,
-
-        loadSuggestionsList: PropTypes.func.isRequired,
-        removeActiveRequests: PropTypes.func.isRequired,
-        // from parent component
-        className: PropTypes.string,
-        placeholder: PropTypes.string,
-        customFilter: PropTypes.func,
-        onChange: PropTypes.func,
-        onFocus: PropTypes.func,
-        onBlur: PropTypes.func,
-        onApply: PropTypes.func,
-        onCancel: PropTypes.func,
-        defaultPath: PropTypes.string,
-        disabled: PropTypes.bool,
-        autoFocus: PropTypes.bool,
-        hasClear: PropTypes.bool,
-        showErrors: PropTypes.bool,
-    };
-
-    static defaultProps = {
+export class PathEditor extends Component<PathEditorProps, PathEditorState> {
+    static defaultProps: Partial<PathEditorProps> = {
         errorMessage: 'Oops, something went wrong',
         placeholder: 'Enter the path...',
         suggestionsError: false,
@@ -74,17 +89,19 @@ export class PathEditor extends Component {
         hasClear: false,
     };
 
-    constructor(props) {
+    state: PathEditorState;
+
+    private suggestionsList = React.createRef<HTMLDivElement>();
+    private input = React.createRef<HTMLInputElement>();
+    private prevScope = '';
+
+    constructor(props: PathEditorProps) {
         super(props);
 
-        this.suggestionsList = React.createRef();
-        this.input = React.createRef();
-
         this.debounceLoading = debounce_(this.debounceLoading, debounceTime);
-        this.prevScope = null;
 
         this.state = {
-            path: props.defaultPath,
+            path: props.defaultPath ?? '',
             actualSuggestions: [],
             inputFocus: false,
             inputChange: false,
@@ -92,7 +109,7 @@ export class PathEditor extends Component {
         };
     }
 
-    static getDerivedStateFromProps(props, state) {
+    static getDerivedStateFromProps(props: PathEditorProps, state: PathEditorState) {
         const res = {};
         if (state.inputFocus && state.inputChange) {
             Object.assign(res, {
@@ -124,7 +141,7 @@ export class PathEditor extends Component {
         }
     }
 
-    componentDidUpdate(prevProps) {
+    componentDidUpdate(prevProps: PathEditorProps) {
         if (prevProps.disabled && !this.props.disabled && this.input.current) {
             this._setFocus();
         }
@@ -135,7 +152,7 @@ export class PathEditor extends Component {
     }
 
     _setFocus() {
-        this.input.current.focus();
+        this.input.current?.focus();
     }
 
     get inputWidth() {
@@ -143,13 +160,23 @@ export class PathEditor extends Component {
         return this.input.current && this.input.current.offsetWidth - 2;
     }
 
-    callCallback(cb, ...params) {
+    /**
+     * @deprecated Please replace usages of it to direct call.\
+     *             For example: use `onFocus?.(event, payload)` instead `callCallback(onFocus, [event, payload])`.\
+     *             Also, pass event as first agument of callback.
+     */
+    callCallback<T extends unknown[] = unknown[]>(
+        cb: undefined | ((...args: T) => unknown),
+        ...params: T
+    ) {
         if (typeof cb === 'function') {
             return cb(...params);
         }
+
+        return undefined;
     }
 
-    debounceLoading(path) {
+    debounceLoading(path: string) {
         const {loadSuggestionsList, customFilter, onChange} = this.props;
 
         loadSuggestionsList(path, customFilter);
@@ -174,12 +201,12 @@ export class PathEditor extends Component {
         this.setState({selectedIndex: nextIndex});
     }
 
-    handleInputChange = (path) => {
+    handleInputChange = (path: string) => {
         this.setState({path, selectedIndex: -1, inputChange: true});
         this.debounceLoading(path);
     };
 
-    handleInputFocus = (e) => {
+    handleInputFocus = (e: FocusEvent<HTMLInputElement>) => {
         const {onFocus} = this.props;
         const {path} = this.state;
 
@@ -197,18 +224,18 @@ export class PathEditor extends Component {
         this.callCallback(onBlur, path);
     };
 
-    handleEnterClick(evt) {
-        evt.preventDefault();
+    handleEnterClick(event: KeyboardEvent<HTMLInputElement>) {
+        event.preventDefault();
 
         const {selectedIndex, actualSuggestions} = this.state;
         const {onApply} = this.props;
-        const inputPath = evt.target.value;
+        const inputPath = event.currentTarget.value;
 
         if (selectedIndex === -1) {
             this.setState({path: inputPath, selectedIndex: -1});
             this.callCallback(onApply, inputPath);
         } else {
-            const suggestion = find_(actualSuggestions, (item, index) => index === selectedIndex);
+            const suggestion = find_(actualSuggestions, (_, index) => index === selectedIndex);
             const completedPath = getCompletedPath(suggestion);
 
             this.handleInputChange(completedPath);
@@ -218,12 +245,12 @@ export class PathEditor extends Component {
     handleEscClick() {
         const {onCancel} = this.props;
 
-        this.input.current.blur();
+        this.input.current?.blur();
         this.callCallback(onCancel);
     }
 
-    handleTabClick(evt) {
-        evt.preventDefault();
+    handleTabClick(event: KeyboardEvent<HTMLInputElement>) {
+        event.preventDefault();
         const {actualSuggestions} = this.state;
 
         if (actualSuggestions.length === 1) {
@@ -235,8 +262,8 @@ export class PathEditor extends Component {
         }
     }
 
-    handleKeyDown = (evt) => {
-        const key = evt.keyCode;
+    handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
+        const key = event.keyCode;
 
         switch (key) {
             case KeyCode.ARROW_DOWN:
@@ -246,13 +273,13 @@ export class PathEditor extends Component {
                 this.selectPrevSuggestion();
                 break;
             case KeyCode.ENTER:
-                this.handleEnterClick(evt);
+                this.handleEnterClick(event);
                 break;
             case KeyCode.ESCAPE:
                 this.handleEscClick();
                 break;
             case KeyCode.TAB:
-                this.handleTabClick(evt);
+                this.handleTabClick(event);
                 break;
         }
     };
@@ -277,7 +304,7 @@ export class PathEditor extends Component {
         );
     }
 
-    renderItem = (index, key) => {
+    renderItem = (index: number, key: Key) => {
         const {selectedIndex, actualSuggestions} = this.state;
 
         const item = actualSuggestions[index];
@@ -287,9 +314,9 @@ export class PathEditor extends Component {
         const isSelected = index === selectedIndex ? 'yes' : 'no';
         const iconName = getIconNameForType(iconType, item.targetPathBroken);
 
-        const mouseDownHandler = (evt) => {
+        const mouseDownHandler = (event: MouseEvent<HTMLDivElement>) => {
             this.handleInputChange(completedPath);
-            evt.preventDefault();
+            event.preventDefault();
         };
 
         return (
@@ -320,6 +347,10 @@ export class PathEditor extends Component {
     renderError() {
         const {errorMessage} = this.props;
 
+        if (!errorMessage) {
+            return;
+        }
+
         return <ErrorMessage className={b('item', {error: true})} message={errorMessage} />;
     }
 
@@ -328,8 +359,9 @@ export class PathEditor extends Component {
         const {actualSuggestions, inputFocus} = this.state;
 
         const width = this.inputWidth || 0;
-        const isVisible =
-            (actualSuggestions.length || (suggestionsError && showErrors)) && inputFocus;
+        const isVisible = Boolean(
+            (actualSuggestions.length || (suggestionsError && showErrors)) && inputFocus,
+        );
         const content =
             suggestionsError && showErrors ? this.renderError() : this.renderSuggestions();
 
@@ -340,7 +372,7 @@ export class PathEditor extends Component {
                 onClose={this.hideSuggestions}
                 anchorRef={this.input}
                 open={isVisible}
-                offset={[undefined, 0]}
+                offset={[0, 0]}
             >
                 <div className={b('items')} style={{width}} ref={this.suggestionsList}>
                     {content}
@@ -359,7 +391,7 @@ export class PathEditor extends Component {
     }
 }
 
-const mapStateToProps = ({navigation}) => ({
+const mapStateToProps = ({navigation}: RootState) => ({
     suggestions: navigation.pathEditor.suggestions,
     suggestionsError: navigation.pathEditor.suggestionsError,
     errorMessage: navigation.pathEditor.errorMessage,
