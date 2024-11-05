@@ -1,5 +1,5 @@
 import axios, {AxiosResponse, CancelToken} from 'axios';
-import {YTError} from '../ytsaurus-ui.ui/types';
+import {YTError} from '../@types/types';
 
 export const TABLET_ERRORS_MANAGER_POST_ACTIONS = new Set([
     'tablet_errors_by_bundle',
@@ -22,14 +22,21 @@ export type TableMethodErrorsCount = {
     method_counts: Record<string, number>;
 };
 
+export type TabletErrorsByBundleResponse = {
+    all_methods: Array<string>;
+    presented_methods: Array<string>;
+    errors: Array<TableMethodErrorsCount>;
+    fixed_end_timestamp: unknown;
+    total_row_count: number;
+};
+
 export type TabletErrorsBaseParams = {
     start_timestamp: number;
     end_timestamp: number;
     methods?: Array<string>;
     count_limit: number;
     offset: number;
-    tablet_id?: string;
-    fixed_end_timestamp?: number;
+    fixed_end_timestamp?: unknown;
 };
 
 export type TabletMethodError = {
@@ -57,13 +64,11 @@ export type TabletError = {
 
 export type TabletErrorsApi = {
     tablet_errors_by_bundle: {
-        body: TabletErrorsBaseParams & {tablet_cell_bundle: string};
-        response: {
-            errors: Array<TableMethodErrorsCount>;
-        };
+        body: TabletErrorsBaseParams & {tablet_cell_bundle: string; table_path?: string};
+        response: TabletErrorsByBundleResponse;
     };
     tablet_errors_by_table: {
-        body: TabletErrorsBaseParams & {table_path: string; table_id: string};
+        body: TabletErrorsBaseParams & {table_path: string; table_id: string; tablet_id?: string};
         response: MethodErrors;
     };
     tablet_errors_by_table_and_timestamp: {
