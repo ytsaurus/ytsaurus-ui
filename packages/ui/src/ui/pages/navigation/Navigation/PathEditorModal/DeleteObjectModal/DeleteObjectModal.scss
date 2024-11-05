@@ -7,12 +7,27 @@
         font-weight: bold;
     }
 
+    &__content {
+        padding: 0 30px;
+    }
+
     &__table {
         display: grid;
         grid-template-columns: 10px 1fr 70px 80px 75px;
-        grid-template-rows: 20px;
+        grid-template-rows: auto 20px;
         grid-gap: 12px 20px;
         align-items: center;
+    }
+
+    &__table-header {
+        display: grid;
+        grid-template-columns: subgrid;
+        grid-column: 1 / -1;
+        position: sticky;
+        top: 0;
+        padding-top: 15px;
+        background-color: var(--g-color-base-modal);
+        z-index: 1;
     }
 
     &__object {
@@ -38,8 +53,12 @@
     }
 
     &__delete {
+        position: sticky;
+        bottom: 0;
+        padding: 16px 0;
         margin: 0;
-        margin-top: 30px;
+        margin-top: 14px;
+        background: var(--g-color-base-modal);
         display: flex;
         justify-content: space-between;
 
