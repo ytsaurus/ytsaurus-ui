@@ -25,12 +25,12 @@ import Link from '../../components/Link/Link';
 import WithStickyToolbar from '../../components/WithStickyToolbar/WithStickyToolbar';
 import {makeNavigationLink} from '../../utils/app-url';
 
-import './TabletErrors.scss';
-import {TabletErrorsToolbar} from './TabletErrorsToolbar';
+import './TabletErrorsByBundle.scss';
+import {TabletErrorsByBundleToolbar} from './TabletErrorsByBundleToolbar';
 
-const block = cn('yt-bundle-tablet-errors');
+const block = cn('yt-tablet-errors-by-bunlde');
 
-export function TabletErrors({bundle}: {bundle: string}) {
+export function TabletErrorsByBundle({bundle}: {bundle: string}) {
     const loaded = useSelector(getTabletErrorsByBundleLoaded);
     const loading = useSelector(getTabletErrorsByBundleLoading);
     const error = useSelector(getTabletErrorsByBundleError);
@@ -40,7 +40,7 @@ export function TabletErrors({bundle}: {bundle: string}) {
     return (
         <WithStickyToolbar
             className={block()}
-            toolbar={<TabletErrorsToolbar bundle={bundle} className={block('toolbar')} />}
+            toolbar={<TabletErrorsByBundleToolbar bundle={bundle} className={block('toolbar')} />}
             doubleHeight={true}
             content={
                 <div className={block()}>
@@ -86,13 +86,7 @@ function useTabletErrorsColumns(loading: boolean) {
                 ),
                 render({row}) {
                     return (
-                        <Link
-                            url={makeNavigationLink({
-                                path: row.table_path,
-                                navmode: 'tablet_errors',
-                                teMode: 'request_errors',
-                            })}
-                        >
+                        <Link url={makeNavigationLink({path: row.table_path})}>
                             {row.table_path}
                         </Link>
                     );
