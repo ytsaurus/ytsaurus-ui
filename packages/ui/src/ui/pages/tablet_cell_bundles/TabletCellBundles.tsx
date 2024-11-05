@@ -46,7 +46,7 @@ import UIFactory from '../../UIFactory';
 import {TabletBundle} from '../../store/reducers/tablet_cell_bundles';
 import {formatByParams} from '../../utils/format';
 import {UI_TAB_SIZE} from '../../constants/global';
-import {TabletErrorsLazy} from '../../pages/tablet-errors/lazy';
+import {TabletErrorsLazy} from '../../pages/tablet-errors-by-bundle/lazy';
 import {getConfigData} from '../../config/ui-settings';
 
 const b = cn('tablets');

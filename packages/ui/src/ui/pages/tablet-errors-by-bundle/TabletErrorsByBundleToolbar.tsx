@@ -17,11 +17,29 @@ import {
     type TabletErrorsByBundleState,
 } from '../../store/reducers/tablet-errors/tablet-errors-by-bundle';
 import {loadTabletErrorsByBundle} from '../../store/actions/tablet-errors/tablet-errors-by-bundle';
-import {TABLET_ERRORS_ALL_METHODS} from '../../constants/navigation/tabs/tablet-errors';
 
 const block = cn('yt-tablet-errors-toolbar');
 
-export function TabletErrorsToolbar({bundle, className}: {bundle: string; className: string}) {
+const ALL_METHODS = [
+    'Execute',
+    'Multiread',
+    'PullRows',
+    'GetTabletInfo',
+    'ReadDynamicStore',
+    'FetchTabletStores',
+    'FetchTableRows',
+    'GetOrderedTabletSafeTrimRowCount',
+    'Write',
+    'Trim',
+].map((value) => ({value, text: value}));
+
+export function TabletErrorsByBundleToolbar({
+    bundle,
+    className,
+}: {
+    bundle: string;
+    className: string;
+}) {
     const dispatch = useDispatch();
 
     const methodsFilter = useSelector(getTabletErrorsByBundleMethodsFilter);
@@ -36,6 +54,7 @@ export function TabletErrorsToolbar({bundle, className}: {bundle: string; classN
                 to={to}
                 shortcut={timeRangeFilter.shortcutValue}
                 onUpdate={(data) => {
+                    console.log({data});
                     dispatch(tabletErrorsByBundleActions.updateFilter({timeRangeFilter: data}));
                 }}
                 hasRuler={true}
@@ -62,7 +81,7 @@ export function TabletErrorsToolbar({bundle, className}: {bundle: string; classN
                                 multiple
                                 label="Methods:"
                                 value={methodsFilter}
-                                items={TABLET_ERRORS_ALL_METHODS}
+                                items={ALL_METHODS}
                                 onUpdate={(v) =>
                                     dispatch(
                                         tabletErrorsByBundleActions.updateFilter({
