@@ -18,7 +18,9 @@ import {
     getTabletErrorsByBundleError,
     getTabletErrorsByBundleLoaded,
     getTabletErrorsByBundleLoading,
+    getTabletErrorsByBundleMethodsFilter,
     getTabletErrorsByBundlePageFilter,
+    getTabletErrorsByBundleTimeRangeFilter,
 } from '../../store/selectors/tablet-errors/tablet-errors-by-bundle';
 
 import Link from '../../components/Link/Link';
@@ -63,6 +65,8 @@ export function TabletErrorsByBundle({bundle}: {bundle: string}) {
 function useTabletErrorsColumns(loading: boolean) {
     const {errors: data = []} = useSelector(getTabletErrorsByBundle) ?? {};
     const pageFilter = useSelector(getTabletErrorsByBundlePageFilter);
+    const teMethods = useSelector(getTabletErrorsByBundleMethodsFilter);
+    const teTime = useSelector(getTabletErrorsByBundleTimeRangeFilter);
 
     const columns = React.useMemo(() => {
         type Method = keyof (typeof data)[number]['method_counts'];
@@ -86,7 +90,15 @@ function useTabletErrorsColumns(loading: boolean) {
                 ),
                 render({row}) {
                     return (
-                        <Link url={makeNavigationLink({path: row.table_path})}>
+                        <Link
+                            url={makeNavigationLink({
+                                path: row.table_path,
+                                teMethods,
+                                teTime,
+                                navmode: 'tablet_errors',
+                                teMode: 'request_errors',
+                            })}
+                        >
                             {row.table_path}
                         </Link>
                     );
@@ -114,7 +126,7 @@ function useTabletErrorsColumns(loading: boolean) {
         ];
 
         return res;
-    }, [data, loading]);
+    }, [data, loading, teMethods, teTime]);
 
     return {data, columns};
 }

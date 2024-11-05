@@ -3,7 +3,7 @@ import {YTError} from '../../../../../types';
 import {TabletErrorsApi} from '../../../../../../shared/tablet-errors-manager';
 import {mergeStateOnClusterChange} from '../../../utils';
 
-export type TabletErrorsFromApiState = {
+export type TabletErrorsByPathState = {
     loading: boolean;
     loaded: boolean;
     error: YTError | undefined;
@@ -24,7 +24,7 @@ export type TabletErrorsFromApiState = {
 };
 
 const persistentState: Pick<
-    TabletErrorsFromApiState,
+    TabletErrorsByPathState,
     'timeRangeFilter' | 'methodsFilter' | 'pageFilter' | 'tabletIdFilter'
 > = {
     timeRangeFilter: {shortcutValue: '1d'},
@@ -33,7 +33,7 @@ const persistentState: Pick<
     tabletIdFilter: '',
 };
 
-const ephemeralState: Omit<TabletErrorsFromApiState, keyof typeof persistentState> = {
+const ephemeralState: Omit<TabletErrorsByPathState, keyof typeof persistentState> = {
     loading: false,
     loaded: false,
     error: undefined,
@@ -44,7 +44,7 @@ const ephemeralState: Omit<TabletErrorsFromApiState, keyof typeof persistentStat
     dataParams: undefined,
 };
 
-export const initialState: TabletErrorsFromApiState = {...persistentState, ...ephemeralState};
+export const initialState: TabletErrorsByPathState = {...persistentState, ...ephemeralState};
 
 const tabletErrorsByPathSlice = createSlice({
     name: 'navigation.tabs.tabletErrorsByPath',
@@ -52,7 +52,7 @@ const tabletErrorsByPathSlice = createSlice({
     reducers: {
         onRequest(
             state,
-            {payload}: PayloadAction<Pick<TabletErrorsFromApiState, 'table_path' | 'table_id'>>,
+            {payload}: PayloadAction<Pick<TabletErrorsByPathState, 'table_path' | 'table_id'>>,
         ) {
             const {table_path, table_id} = payload;
             if (table_path != state.table_path || table_id !== state.table_id) {
@@ -65,12 +65,12 @@ const tabletErrorsByPathSlice = createSlice({
             {
                 payload,
             }: PayloadAction<
-                Pick<TabletErrorsFromApiState, 'data' | 'total_row_count' | 'dataParams'>
+                Pick<TabletErrorsByPathState, 'data' | 'total_row_count' | 'dataParams'>
             >,
         ) {
             return {...state, ...payload, loading: false, loaded: true, error: undefined};
         },
-        onError(state, {payload: {error}}: PayloadAction<Pick<TabletErrorsFromApiState, 'error'>>) {
+        onError(state, {payload: {error}}: PayloadAction<Pick<TabletErrorsByPathState, 'error'>>) {
             return {...state, error, loading: false};
         },
         updateFilter(state, {payload}: PayloadAction<Partial<typeof persistentState>>) {

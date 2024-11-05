@@ -1,8 +1,8 @@
-import {Page} from '../../shared/constants/settings';
-import {Tab as ComponentsTab} from '../constants/components/main';
-import YT from '../config/yt-config';
-import type {Tab as NavigationTab} from '../constants/navigation';
-import {ValueOf} from '../types';
+import {Page} from '../../../shared/constants/settings';
+import {Tab as ComponentsTab} from '../../constants/components/main';
+import YT from '../../config/yt-config';
+
+export * from './navigation';
 
 export function makeComponentsNodesUrl({host, cluster}: {host?: string; cluster?: string} = {}) {
     return host
@@ -12,18 +12,6 @@ export function makeComponentsNodesUrl({host, cluster}: {host?: string; cluster?
 
 export function makeProxyUrl(cluster: string, address: string) {
     return `/${cluster}/${Page.COMPONENTS}/${ComponentsTab.RPC_PROXIES}?host=${address}`;
-}
-
-export function makeNavigationLink(params: {
-    path: string;
-    cluster?: string;
-    navmode?: ValueOf<typeof NavigationTab>;
-    teMode?: 'request_errors';
-}) {
-    const {cluster, ...rest} = params;
-    const res = `/${cluster || YT.cluster}/${Page.NAVIGATION}`;
-    const search = new URLSearchParams(rest).toString();
-    return search ? `${res}?${search}` : res;
 }
 
 export function makeSchedulingUrl({
