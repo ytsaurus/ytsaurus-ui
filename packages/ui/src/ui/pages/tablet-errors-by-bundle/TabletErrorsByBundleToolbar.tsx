@@ -6,32 +6,25 @@ import Select from '../../components/Select/Select';
 import SimplePagination from '../../components/Pagination/SimplePagination';
 import {Toolbar} from '../../components/WithStickyToolbar/Toolbar/Toolbar';
 import {calcFromTo, YTTimeline} from '../../components/common/YTTimeline';
+import TextInputWithDebounce from '../../components/TextInputWithDebounce/TextInputWithDebounce';
 
 import {
+    getTabletErrorsByBundleData,
     getTabletErrorsByBundleMethodsFilter,
+    getTabletErrorsByBundlePageCount,
     getTabletErrorsByBundlePageFilter,
+    getTabletErrorsByBundleTablePathFilter,
     getTabletErrorsByBundleTimeRangeFilter,
 } from '../../store/selectors/tablet-errors/tablet-errors-by-bundle';
 import {
-    tabletErrorsByBundleActions,
     type TabletErrorsByBundleState,
+    tabletErrorsByBundleActions,
 } from '../../store/reducers/tablet-errors/tablet-errors-by-bundle';
 import {loadTabletErrorsByBundle} from '../../store/actions/tablet-errors/tablet-errors-by-bundle';
 
-const block = cn('yt-tablet-errors-toolbar');
+import './TabletErrorsByBundleToolbar.scss';
 
-const ALL_METHODS = [
-    'Execute',
-    'Multiread',
-    'PullRows',
-    'GetTabletInfo',
-    'ReadDynamicStore',
-    'FetchTabletStores',
-    'FetchTableRows',
-    'GetOrderedTabletSafeTrimRowCount',
-    'Write',
-    'Trim',
-].map((value) => ({value, text: value}));
+const block = cn('yt-tablet-errors-by-bundle-toolbar');
 
 export function TabletErrorsByBundleToolbar({
     bundle,
@@ -42,10 +35,19 @@ export function TabletErrorsByBundleToolbar({
 }) {
     const dispatch = useDispatch();
 
+    const {all_methods = []} = useSelector(getTabletErrorsByBundleData) ?? {};
     const methodsFilter = useSelector(getTabletErrorsByBundleMethodsFilter);
     const timeRangeFilter = useSelector(getTabletErrorsByBundleTimeRangeFilter);
     const pageFilter = useSelector(getTabletErrorsByBundlePageFilter);
-    const {from, to} = useTabletErrorsLoad(bundle, {methodsFilter, timeRangeFilter, pageFilter});
+    const tablePathFilter = useSelector(getTabletErrorsByBundleTablePathFilter);
+    const pageCount = useSelector(getTabletErrorsByBundlePageCount);
+
+    const {from, to} = useTabletErrorsLoad(bundle, {
+        methodsFilter,
+        timeRangeFilter,
+        pageFilter,
+        tablePathFilter,
+    });
 
     return (
         <div className={block(null, className)}>
@@ -53,9 +55,12 @@ export function TabletErrorsByBundleToolbar({
                 from={from}
                 to={to}
                 shortcut={timeRangeFilter.shortcutValue}
-                onUpdate={(data) => {
-                    console.log({data});
-                    dispatch(tabletErrorsByBundleActions.updateFilter({timeRangeFilter: data}));
+                onUpdate={({from, to, shortcutValue}) => {
+                    dispatch(
+                        tabletErrorsByBundleActions.updateFilter({
+                            timeRangeFilter: {from, to, shortcutValue},
+                        }),
+                    );
                 }}
                 hasRuler={true}
             />
@@ -66,10 +71,26 @@ export function TabletErrorsByBundleToolbar({
                             <SimplePagination
                                 value={pageFilter}
                                 min={0}
-                                max={100}
+                                max={Math.max(0, pageCount - 1)}
                                 onChange={(v) => {
                                     dispatch(
                                         tabletErrorsByBundleActions.updateFilter({pageFilter: v}),
+                                    );
+                                }}
+                            />
+                        ),
+                    },
+                    {
+                        node: (
+                            <TextInputWithDebounce
+                                className={block('path-filter')}
+                                placeholder={'Table path...'}
+                                value={tablePathFilter}
+                                onUpdate={(value) => {
+                                    dispatch(
+                                        tabletErrorsByBundleActions.updateFilter({
+                                            tablePathFilter: value,
+                                        }),
                                     );
                                 }}
                             />
@@ -81,7 +102,9 @@ export function TabletErrorsByBundleToolbar({
                                 multiple
                                 label="Methods:"
                                 value={methodsFilter}
-                                items={ALL_METHODS}
+                                items={all_methods.map((value) => {
+                                    return {value, text: value};
+                                })}
                                 onUpdate={(v) =>
                                     dispatch(
                                         tabletErrorsByBundleActions.updateFilter({
@@ -107,7 +130,11 @@ function useTabletErrorsLoad(
         timeRangeFilter,
         methodsFilter,
         pageFilter,
-    }: Pick<TabletErrorsByBundleState, 'timeRangeFilter' | 'methodsFilter' | 'pageFilter'>,
+        tablePathFilter,
+    }: Pick<
+        TabletErrorsByBundleState,
+        'timeRangeFilter' | 'methodsFilter' | 'pageFilter' | 'tablePathFilter'
+    >,
 ) {
     const dispatch = useDispatch();
 
@@ -119,8 +146,9 @@ function useTabletErrorsLoad(
                 start_timestamp: Math.floor(from / 1000),
                 end_timestamp: Math.ceil(to / 1000),
                 methods: methodsFilter.length ? methodsFilter : undefined,
+                ...(tablePathFilter ? {table_path: tablePathFilter} : {}),
             }),
         );
-    }, [bundle, dispatch, timeRangeFilter, methodsFilter, pageFilter]);
+    }, [bundle, dispatch, timeRangeFilter, methodsFilter, pageFilter, tablePathFilter]);
     return calcFromTo(timeRangeFilter);
 }

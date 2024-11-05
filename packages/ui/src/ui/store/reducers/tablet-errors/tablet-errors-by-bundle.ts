@@ -10,6 +10,7 @@ export type TabletErrorsByBundleState = {
 
     bundle: string;
     data: TabletErrorsApi['tablet_errors_by_bundle']['response'] | undefined;
+    total_row_count: number | undefined;
 
     timeRangeFilter:
         | {shortcutValue: string; from?: number; to?: number}
@@ -17,15 +18,17 @@ export type TabletErrorsByBundleState = {
 
     methodsFilter: Array<string>;
     pageFilter: number;
+    tablePathFilter: string;
 };
 
 const persistentState: Pick<
     TabletErrorsByBundleState,
-    `timeRangeFilter` | 'methodsFilter' | 'pageFilter'
+    `timeRangeFilter` | 'methodsFilter' | 'pageFilter' | `tablePathFilter`
 > = {
     timeRangeFilter: {shortcutValue: '1d'},
     methodsFilter: [],
     pageFilter: 0,
+    tablePathFilter: '',
 };
 
 const ephemeralState: Omit<TabletErrorsByBundleState, keyof typeof persistentState> = {
@@ -34,6 +37,7 @@ const ephemeralState: Omit<TabletErrorsByBundleState, keyof typeof persistentSta
     error: undefined,
     bundle: '',
     data: undefined,
+    total_row_count: undefined,
 };
 
 export const initialState: TabletErrorsByBundleState = {...persistentState, ...ephemeralState};
@@ -47,15 +51,23 @@ const tabletErrorsByBundleSlice = createSlice({
             {payload: {bundle}}: PayloadAction<Pick<TabletErrorsByBundleState, 'bundle'>>,
         ) {
             if (bundle != state.bundle) {
-                return {...state, bundle, data: undefined, loading: true};
+                return {
+                    ...state,
+                    bundle,
+                    data: undefined,
+                    total_row_count: undefined,
+                    loading: true,
+                };
             }
             return {...state, loading: true};
         },
         onSuccess(
             state,
-            {payload: {data}}: PayloadAction<Pick<TabletErrorsByBundleState, 'data'>>,
+            {
+                payload,
+            }: PayloadAction<Pick<TabletErrorsByBundleState, 'data'> & {total_row_count?: number}>,
         ) {
-            return {...state, data, loading: false, loaded: true, error: undefined};
+            return {...state, ...payload, loading: false, loaded: true, error: undefined};
         },
         onError(
             state,

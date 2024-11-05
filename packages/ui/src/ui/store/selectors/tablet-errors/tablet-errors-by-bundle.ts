@@ -1,6 +1,7 @@
+import {ROWS_PER_PAGE} from '../../../constants/pagination';
 import {RootState} from '../../../store/reducers';
 
-export const getTabletErrorsByBundle = (state: RootState) =>
+export const getTabletErrorsByBundleData = (state: RootState) =>
     state.tabletErrors.tabletErrorsByBundle.data;
 
 export const getTabletErrorsByBundleLoading = (state: RootState) =>
@@ -20,3 +21,12 @@ export const getTabletErrorsByBundleMethodsFilter = (state: RootState) =>
 
 export const getTabletErrorsByBundlePageFilter = (state: RootState) =>
     state.tabletErrors.tabletErrorsByBundle.pageFilter;
+
+export const getTabletErrorsByBundleTablePathFilter = (state: RootState) =>
+    state.tabletErrors.tabletErrorsByBundle.tablePathFilter;
+
+export const getTabletErrorsByBundlePageCount = (state: RootState) =>
+    Math.max(
+        Math.ceil((state.tabletErrors.tabletErrorsByBundle.total_row_count ?? 0) / ROWS_PER_PAGE),
+        1,
+    );

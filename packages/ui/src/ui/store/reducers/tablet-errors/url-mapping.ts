@@ -25,6 +25,10 @@ export const tabletErrorsByBundleParams: LocationParameters = {
         initialState: initialState.methodsFilter,
         options: parseSerializeArrayString,
     },
+    tePath: {
+        stateKey: 'tabletErrors.tabletErrorsByBundle.tablePathFilter',
+        initialState: initialState.tablePathFilter,
+    },
 };
 
 export function getTabletErrorsByBundlereparedState(state: RootState, {query}: {query: RootState}) {

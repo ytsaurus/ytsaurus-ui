@@ -14,11 +14,12 @@ import DataTableYT, {
 } from '../../components/DataTableYT/DataTableYT';
 import Error from '../../components/Error/Error';
 import {
-    getTabletErrorsByBundle,
+    getTabletErrorsByBundleData,
     getTabletErrorsByBundleError,
     getTabletErrorsByBundleLoaded,
     getTabletErrorsByBundleLoading,
     getTabletErrorsByBundleMethodsFilter,
+    getTabletErrorsByBundlePageCount,
     getTabletErrorsByBundlePageFilter,
     getTabletErrorsByBundleTimeRangeFilter,
 } from '../../store/selectors/tablet-errors/tablet-errors-by-bundle';
@@ -63,10 +64,11 @@ export function TabletErrorsByBundle({bundle}: {bundle: string}) {
 }
 
 function useTabletErrorsColumns(loading: boolean) {
-    const {errors: data = []} = useSelector(getTabletErrorsByBundle) ?? {};
+    const {errors: data = []} = useSelector(getTabletErrorsByBundleData) ?? {};
     const pageFilter = useSelector(getTabletErrorsByBundlePageFilter);
     const teMethods = useSelector(getTabletErrorsByBundleMethodsFilter);
     const teTime = useSelector(getTabletErrorsByBundleTimeRangeFilter);
+    const pageCount = useSelector(getTabletErrorsByBundlePageCount);
 
     const columns = React.useMemo(() => {
         type Method = keyof (typeof data)[number]['method_counts'];
@@ -85,7 +87,7 @@ function useTabletErrorsColumns(loading: boolean) {
                         column="Path"
                         loading={loading}
                         pageIndex={pageFilter}
-                        pageCount={100}
+                        pageCount={pageCount}
                     />
                 ),
                 render({row}) {
@@ -126,7 +128,7 @@ function useTabletErrorsColumns(loading: boolean) {
         ];
 
         return res;
-    }, [data, loading, teMethods, teTime]);
+    }, [data, loading, teMethods, teTime, pageCount]);
 
     return {data, columns};
 }
