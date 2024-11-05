@@ -4,12 +4,17 @@ import {produce} from 'immer';
 import {updateIfChanged} from '../../../utils/utils';
 import {aclFiltersParams, getAclFiltersPreparedState} from '../acl/url-mapping';
 import {parseSortState} from '../../../utils';
+import {
+    getTabletErrorsByBundlereparedState,
+    tabletErrorsByBundleParams,
+} from '../tablet-errors/url-mapping';
 
 export const tabletsBundlesParams = {
     activeBundle: {
         stateKey: 'tablet_cell_bundles.activeBundle',
         initialState: initialState.activeBundle,
     },
+    ...tabletErrorsByBundleParams,
 };
 
 export function getTabletsBundlesPreparedState(
@@ -17,7 +22,7 @@ export function getTabletsBundlesPreparedState(
     {query}: {query: RootState},
 ): RootState {
     const queryTcb = query.tablet_cell_bundles;
-    return produce(state, (draft) => {
+    const res = produce(state, (draft) => {
         const draftTcb = draft.tablet_cell_bundles;
 
         updateIfChanged(draftTcb, 'activeBundle', queryTcb.activeBundle);
@@ -27,6 +32,7 @@ export function getTabletsBundlesPreparedState(
         updateIfChanged(draftTcb, 'bundlesSort', queryTcb.bundlesSort);
         updateIfChanged(draftTcb, 'bundlesTableMode', queryTcb.bundlesTableMode);
     });
+    return getTabletErrorsByBundlereparedState(res, {query});
 }
 
 export const tabletsAllBundlesParams = {

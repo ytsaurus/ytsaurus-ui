@@ -12,7 +12,7 @@ export type TabletErrorsByBundleState = {
     data: TabletErrorsApi['tablet_errors_by_bundle']['response'] | undefined;
 
     timeRangeFilter:
-        | {shortcutValue?: string; from?: number; to?: number}
+        | {shortcutValue: string; from?: number; to?: number}
         | {from: number; to: number; shortcutValue?: undefined};
 
     methodsFilter: Array<string>;
@@ -36,7 +36,7 @@ const ephemeralState: Omit<TabletErrorsByBundleState, keyof typeof persistentSta
     data: undefined,
 };
 
-const initialState: TabletErrorsByBundleState = {...persistentState, ...ephemeralState};
+export const initialState: TabletErrorsByBundleState = {...persistentState, ...ephemeralState};
 
 const tabletErrorsByBundleSlice = createSlice({
     name: 'tabletErrors.tabletErrorsByBundle',
