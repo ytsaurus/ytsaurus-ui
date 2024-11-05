@@ -155,11 +155,13 @@ export class DeleteObjectModal extends Component {
             <ErrorBoundary>
                 <div className={block({multiple: true})}>
                     <div className={block('table')}>
-                        <div className={block('preview-icon')} />
-                        <div className={block('preview-name')}>Name</div>
-                        <div className={block('preview-disk-space')}>Disk space</div>
-                        <div className={block('preview-node-count')}>Node count</div>
-                        <div className={block('preview-node-count')}>Row count</div>
+                        <div className={block('table-header')}>
+                            <div className={block('preview-icon')} />
+                            <div className={block('preview-name')}>Name</div>
+                            <div className={block('preview-disk-space')}>Disk space</div>
+                            <div className={block('preview-node-count')}>Node count</div>
+                            <div className={block('preview-node-count')}>Row count</div>
+                        </div>
 
                         {map_(multipleInfo, ({path, resourceUsage}, index) => {
                             const {type, titleUnquoted, rows, unmergedRows} = item[index];
@@ -265,6 +267,7 @@ export class DeleteObjectModal extends Component {
                 confirmText="Delete"
                 content={this.content}
                 footerContent={helpLink}
+                contentClassName={block('content')}
                 onCancel={closeDeleteModal}
                 onConfirm={this.handleDeleteClick}
             />
