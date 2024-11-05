@@ -89,6 +89,25 @@ export class PathEditor extends Component<PathEditorProps, PathEditorState> {
         hasClear: false,
     };
 
+    static getDerivedStateFromProps(props: PathEditorProps, state: PathEditorState) {
+        const res = {};
+        if (state.inputFocus && state.inputChange) {
+            Object.assign(res, {
+                actualSuggestions: props.suggestions.length
+                    ? filterByCurrentPath(state.path, props.suggestions)
+                    : [],
+            });
+        }
+
+        if (state.path === undefined && props.defaultPath !== undefined) {
+            Object.assign(res, {
+                path: props.defaultPath,
+            });
+        }
+
+        return isEmpty_(res) ? null : res;
+    }
+
     state: PathEditorState;
 
     private suggestionsList = React.createRef<HTMLDivElement>();
@@ -107,25 +126,6 @@ export class PathEditor extends Component<PathEditorProps, PathEditorState> {
             inputChange: false,
             selectedIndex: -1,
         };
-    }
-
-    static getDerivedStateFromProps(props: PathEditorProps, state: PathEditorState) {
-        const res = {};
-        if (state.inputFocus && state.inputChange) {
-            Object.assign(res, {
-                actualSuggestions: props.suggestions.length
-                    ? filterByCurrentPath(state.path, props.suggestions)
-                    : [],
-            });
-        }
-
-        if (state.path === undefined && props.defaultPath !== undefined) {
-            Object.assign(res, {
-                path: props.defaultPath,
-            });
-        }
-
-        return isEmpty_(res) ? null : res;
     }
 
     componentDidMount() {
