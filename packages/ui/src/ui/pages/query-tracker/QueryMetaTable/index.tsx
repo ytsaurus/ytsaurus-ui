@@ -7,6 +7,7 @@ import {QueryItem} from '../module/api';
 import {Button} from '@gravity-ui/uikit';
 import Yson from '../../../components/Yson/Yson';
 import SimpleModal from '../../../components/Modal/SimpleModal';
+import ClipboardButton from '../../../components/ClipboardButton/ClipboardButton';
 
 interface MetaTableProps {
     query: QueryItem;
@@ -21,12 +22,15 @@ const valueClassName = b('value');
 type QueryMetaItem = {
     title: string;
     value: string | number | boolean;
+    showCopy: boolean;
 };
 
 const exceptFields: (keyof QueryItem | 'access_control_object')[] = [
     'query',
     'access_control_object',
 ];
+
+const FIELD_WITH_COPY_BUTTON = 'id';
 
 export default function QueryMetaTable({query, className}: MetaTableProps) {
     const [selectedOption, setSelectedOption] = useState<Record<string, unknown> | null>(null);
@@ -58,6 +62,7 @@ export default function QueryMetaTable({query, className}: MetaTableProps) {
                 return {
                     title,
                     value: finalValue,
+                    showCopy: FIELD_WITH_COPY_BUTTON === title,
                 };
             });
     }, [query]);
@@ -73,6 +78,13 @@ export default function QueryMetaTable({query, className}: MetaTableProps) {
                             {valueItems.map((value, index) => (
                                 <dd key={index} className={valueClassName}>
                                     {typeof value === 'boolean' ? String(value) : value}
+                                    {item.showCopy && (
+                                        <ClipboardButton
+                                            size="s"
+                                            text={value}
+                                            inlineMargins={true}
+                                        />
+                                    )}
                                 </dd>
                             ))}
                         </React.Fragment>
