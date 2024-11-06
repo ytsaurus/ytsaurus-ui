@@ -110,3 +110,38 @@ By default the application uses base configuration from `path_to_dist/server/con
 
 - [`YT_AUTH_CLUSTER_ID`](https://github.com/ytsaurus/ytsaurus-ui/blob/ui-v1.16.1/packages/ui/README.md#environment-variables) environment variable has been replaced by [`ALLOW_PASSWORD_AUTH`](https://github.com/ytsaurus/ytsaurus-ui/blob/main/packages/ui/README.md#environment-variables).
 - [`config.ytAuthCluster`](https://github.com/ytsaurus/ytsaurus-ui/blob/ui-v1.16.1/packages/ui/src/%40types/core.d.ts#L75) option has been replaced by [`config.allowPasswordAuth`](https://github.com/ytsaurus/ytsaurus-ui/blob/ui-v1.17.0/packages/ui/src/%40types/core.d.ts#L16).
+
+
+### How to run e2e on local machine
+
+Here is an example of run & update of screenshot tests:
+```bash
+# Prerequsites: install docker and YTsaurus CLI
+# https://www.docker.com/products/docker-desktop/
+# https://ytsaurus.tech/docs/en/api/cli/install
+
+# Terminal 1: launch local dev mode on 8080 port
+LOCAL_DEV_PORT=8080 npm run dev:localmode:e2e
+
+# Terminal 2: init local cluster
+npm run e2e:localmode:init
+
+# Terminal 2: mount repo in docker image and prepare everyting for tests run
+# Make sure that you specify correct BASE_URL for e2e tests
+# For linux use http://localhost:8080
+# For macos use http://host.docker.internal:8080
+
+print "Enter base url of your development stand: "; \
+read BASE_URL; \
+docker run --rm --network host -it -w /work \
+    -v $(pwd):/work \
+    -e BASE_URL=${BASE_URL} \
+    "ghcr.io/gravity-ui/node-nginx:ubuntu20-nodejs18" \
+    /bin/bash -c '
+            cd tests 
+            npm ci 
+            npx playwright install --with-deps chromium
+            cd ..
+            npm run e2e:localmode:screenshots:update
+'
+```
