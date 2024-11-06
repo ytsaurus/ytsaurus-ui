@@ -1,12 +1,7 @@
-.create-query-btn {
+.yt-open-query-button {
     display: inline-flex;
     flex-wrap: nowrap;
     &__btn + &__btn {
         margin-left: 1px;
-    }
-
-    &__loader {
-        flex: 1 1 100%;
-        justify-content: center;
     }
 }
