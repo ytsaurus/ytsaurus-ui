@@ -10,13 +10,14 @@ import unipika from '../../../common/thor/unipika';
 import type {RootState} from '../../../store/reducers';
 import type {ValueOf, YTError} from '../../../types';
 import {getAttributes, getParsedPath, getPath, getTransaction} from './index';
-import {ParsedPath, prepareNavigationState} from '../../../utils/navigation';
+import {prepareNavigationState} from '../../../utils/navigation';
 import {Tab} from '../../../constants/navigation/index';
 
 import {getTableMountConfigHasData} from '../../../store/selectors/navigation/content/table-mount-config';
 import {getAccessLogBasePath} from '../../../config';
 import {getTabletErrorsCount} from '../../../store/selectors/navigation/tabs/tablet-errors';
 import UIFactory from '../../../UIFactory';
+import {TabItem} from '../../../components/Tabs/Tabs';
 
 export function getNavigationPathAttributesLoadState(state: RootState) {
     return state.navigation.navigation.loadState;
@@ -39,7 +40,7 @@ export const getNavigationPathAccount = createSelector(
 
 export const getNavigationBreadcrumbs = createSelector(
     [getPath, getParsedPath, getTransaction],
-    (path: string, parsedPath?: ParsedPath, transaction?: string) => {
+    (path, parsedPath, transaction) => {
         if (parsedPath) {
             return map_(parsedPath?.fragments, (item, index) => {
                 return {
@@ -134,23 +135,14 @@ export const getSupportedTabs = createSelector(
     },
 );
 
+const emptyHandler = () => undefined;
+
 export const getTabs = createSelector(
     [getSupportedTabs, getTabletErrorsCount, getAttributes],
-    (supportedTabs, tabletErrorsCount, attributes) => {
-        const isACO = attributes?.type === 'access_control_object';
+    (supportedTabs, tabletErrorsCount, attributes): TabItem[] => {
+        const isACO = (attributes?.type as string | undefined) === 'access_control_object';
 
-        const tabs: {
-            value: string;
-            title: string;
-            hotkey?: {
-                keys: string;
-                tab: string;
-                scope: string;
-            }[];
-            text?: string;
-            caption?: string;
-            counter?: number;
-        }[] = [
+        const tabs: TabItem<string>[] = [
             {
                 value: Tab.CONSUMER,
                 title: 'Go to consumer [Alt+R]',
@@ -159,6 +151,7 @@ export const getTabs = createSelector(
                         keys: 'alt+r',
                         tab: Tab.CONSUMER,
                         scope: 'all',
+                        handler: emptyHandler,
                     },
                 ],
             },
@@ -171,6 +164,7 @@ export const getTabs = createSelector(
                         keys: 'alt+c',
                         tab: Tab.CONTENT,
                         scope: 'all',
+                        handler: emptyHandler,
                     },
                 ],
             },
@@ -182,6 +176,7 @@ export const getTabs = createSelector(
                         keys: 'alt+q',
                         tab: Tab.QUEUE,
                         scope: 'all',
+                        handler: emptyHandler,
                     },
                 ],
             },
@@ -193,6 +188,7 @@ export const getTabs = createSelector(
                         keys: 'alt+a',
                         tab: Tab.ATTRIBUTES,
                         scope: 'all',
+                        handler: emptyHandler,
                     },
                 ],
                 caption: 'Attributes',
@@ -205,6 +201,7 @@ export const getTabs = createSelector(
                         keys: 'alt+u',
                         tab: Tab.USER_ATTRIBUTES,
                         scope: 'all',
+                        handler: emptyHandler,
                     },
                 ],
                 caption: 'User Attributes',
@@ -217,6 +214,7 @@ export const getTabs = createSelector(
                         keys: 'alt+m',
                         tab: Tab.MOUNT_CONFIG,
                         scope: 'all',
+                        handler: emptyHandler,
                     },
                 ],
             },
@@ -228,6 +226,7 @@ export const getTabs = createSelector(
                         keys: 'alt+p',
                         tab: Tab.ACL,
                         scope: 'all',
+                        handler: emptyHandler,
                     },
                 ],
                 caption: 'ACL',
@@ -245,6 +244,7 @@ export const getTabs = createSelector(
                         keys: 'alt+f',
                         tab: Tab.FLOW,
                         scope: 'all',
+                        handler: emptyHandler,
                     },
                 ],
             },
@@ -256,6 +256,7 @@ export const getTabs = createSelector(
                         keys: 'alt+l',
                         tab: Tab.LOCKS,
                         scope: 'all',
+                        handler: emptyHandler,
                     },
                 ],
                 counter: ypath.getValue(attributes, '/lock_count'),
@@ -268,6 +269,7 @@ export const getTabs = createSelector(
                         keys: 'alt+n',
                         tab: Tab.ACL,
                         scope: 'all',
+                        handler: emptyHandler,
                     },
                 ],
                 caption: 'Annotation',
@@ -280,6 +282,7 @@ export const getTabs = createSelector(
                         keys: 'alt+s',
                         tab: Tab.SCHEMA,
                         scope: 'all',
+                        handler: emptyHandler,
                     },
                 ],
             },
@@ -291,6 +294,7 @@ export const getTabs = createSelector(
                         keys: 'alt+t',
                         tab: Tab.TABLETS,
                         scope: 'all',
+                        handler: emptyHandler,
                     },
                 ],
             },
@@ -316,11 +320,18 @@ export const getTabs = createSelector(
                 }
 
                 if (tabs[i].value === tabToFind) {
-                    const newTab = {
+                    const newTab: TabItem = {
                         value: extraTab.value,
                         title: extraTab.title,
                         hotkey: extraTab.hotkey
-                            ? [{keys: extraTab.hotkey, tab: extraTab.value, scope: 'all'}]
+                            ? [
+                                  {
+                                      keys: extraTab.hotkey,
+                                      tab: extraTab.value,
+                                      scope: 'all',
+                                      handler: emptyHandler,
+                                  },
+                              ]
                             : undefined,
                         text: extraTab.text,
                         caption: extraTab.caption,
@@ -335,7 +346,7 @@ export const getTabs = createSelector(
     },
 );
 
-export const getEffectiveMode = createSelector([getMode, getTabs], (mode, tabs) => {
+export const getEffectiveMode = createSelector([getMode, getTabs], (mode, tabs): string => {
     const [firstTab] = tabs;
 
     return mode === Tab.AUTO ? firstTab.value : mode;

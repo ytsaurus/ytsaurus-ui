@@ -254,6 +254,8 @@ export type OutputFormat =
           $value: 'json';
           $attributes: {
               encode_utf8?: 'true' | 'false';
+              annotate_with_types?: boolean;
+              stringify?: boolean;
           };
       }
     | {

@@ -1,12 +1,12 @@
 import React, {Component, Fragment} from 'react';
 import {StickyContainer} from 'react-sticky';
 import {connect, useSelector} from 'react-redux';
-import PropTypes from 'prop-types';
 import hammer from '../../../common/hammer';
 import cn from 'bem-cn-lite';
 
 import map_ from 'lodash/map';
 
+import {RootState} from '../../../store/reducers';
 import {getCluster} from '../../../store/selectors/global';
 import {updateTitle} from '../../../store/actions/global';
 
@@ -17,13 +17,15 @@ import {
     MoveObjectModal,
     RestoreObjectModal,
 } from './PathEditorModal';
-import RequestPermissions from '../../../pages/navigation/tabs/ACL/RequestPermissions/RequestPermissions';
+import RequestPermissions from '../tabs/ACL/RequestPermissions/RequestPermissions';
 import ErrorBoundary from '../../../components/ErrorBoundary/ErrorBoundary';
 import ContentViewer from './ContentViewer/ContentViewer';
 import {checkContentIsSupported} from './ContentViewer/helpers';
 import Error from '../../../components/Error/Error';
 import {Info} from '../../../components/Info/Info';
 import Tabs from '../../../components/Tabs/Tabs';
+import type {TabItem, TabSize} from '../../../components/Tabs/Tabs';
+import type {YPath, YTError} from '../../../types';
 
 import {Tab} from '../../../constants/navigation';
 import {LOADING_STATUS} from '../../../constants/index';
@@ -66,6 +68,30 @@ import {CellPreviewModal} from '../../../containers/CellPreviewModal/CellPreview
 
 const block = cn('navigation');
 
+export interface NavigationProps {
+    cluster: string;
+    path: string;
+    /**
+     * @see {@link Tab} is common variants of tab
+     */
+    mode: string;
+    tabs: TabItem[];
+    tabSize?: TabSize;
+    isIdmSupported: boolean;
+    transaction?: string;
+    parsedPath?: YPath;
+    type?: string;
+    hasError?: boolean;
+    error?: YTError;
+    loaded?: boolean;
+    loading?: boolean;
+    showNavigationAttributesEditor: typeof showNavigationAttributesEditor;
+    setMode: typeof setMode;
+    updateView: typeof updateView;
+    updateTitle: typeof updateTitle;
+    onTransactionChange: typeof onTransactionChange;
+}
+
 function renderModals() {
     return (
         <Fragment>
@@ -87,44 +113,13 @@ function renderModals() {
     );
 }
 
-class Navigation extends Component {
-    static propTypes = {
-        // from connect
-        cluster: PropTypes.string.isRequired,
-        path: PropTypes.string.isRequired,
-        mode: PropTypes.string.isRequired,
-        isIdmSupported: PropTypes.bool.isRequired,
-        transaction: PropTypes.string,
-        parsedPath: PropTypes.object,
-        type: PropTypes.string,
-
-        hasError: PropTypes.bool,
-        error: PropTypes.shape({
-            message: PropTypes.string,
-            inner_errors: PropTypes.arrayOf(
-                PropTypes.shape({
-                    message: PropTypes.string,
-                    details: PropTypes.shape({
-                        code: PropTypes.number,
-                        object_type: PropTypes.string,
-                    }),
-                }),
-            ),
-        }),
-        loaded: PropTypes.bool,
-        loading: PropTypes.bool,
-
-        setMode: PropTypes.func.isRequired,
-        updateView: PropTypes.func.isRequired,
-        onTransactionChange: PropTypes.func.isRequired,
-    };
-
+class Navigation extends Component<NavigationProps> {
     componentDidMount() {
         this.props.updateView({trackVisit: true});
         this.updateTitleWithPath();
     }
 
-    componentDidUpdate(prevProps) {
+    componentDidUpdate(prevProps: NavigationProps) {
         const {transaction, path, updateView, onTransactionChange} = this.props;
         const {transaction: prevTransaction, path: prevPath} = prevProps;
 
@@ -148,7 +143,7 @@ class Navigation extends Component {
         updateTitle({path: parsedPath ? parsedPath.getKey() : ''});
     }
 
-    get items() {
+    get items(): TabItem[] {
         const {tabs, setMode} = this.props;
 
         return tabs.map((tab) => {
@@ -159,17 +154,21 @@ class Navigation extends Component {
                         return {
                             keys,
                             scope,
+                            tab,
                             handler: () => setMode(tab),
                         };
                     }),
-                };
+                } as TabItem;
             }
 
             return tab;
         });
     }
 
-    onTabChange = (value) => {
+    /**
+     * @see {@link Tab} is common variants of tab
+     */
+    onTabChange = (value: string) => {
         const {setMode} = this.props;
         setMode(value);
     };
@@ -239,7 +238,7 @@ class Navigation extends Component {
 
     renderView() {
         const {type, mode} = this.props;
-        if (checkContentIsSupported(type, mode)) {
+        if (type && checkContentIsSupported(type, mode)) {
             return <ContentViewer type={type} mode={mode} />;
         }
 
@@ -247,13 +246,11 @@ class Navigation extends Component {
     }
 
     renderError() {
-        const {
-            error: {message, details},
-            isIdmSupported,
-        } = this.props;
+        const {error, isIdmSupported} = this.props;
+        const {message, details} = error ?? {};
 
         // Looking for permission denied error
-        const permissionDeniedError = getPermissionDeniedError(details);
+        const permissionDeniedError = details ? getPermissionDeniedError(details) : undefined;
         const isPermissionDenied = permissionDeniedError && isIdmSupported;
 
         return (
@@ -270,7 +267,7 @@ class Navigation extends Component {
         );
     }
 
-    renderRequestPermission(error) {
+    renderRequestPermission(error: YTError) {
         const {object_type: objectType, path: errorPath} = error.attributes;
         const {path: currentPath, cluster} = this.props;
         const isRequestPermissionsForPathAllowed = objectType === 'map_node';
@@ -278,9 +275,6 @@ class Navigation extends Component {
         const path = errorPath ?? currentPath;
 
         const pathForRequest = isRequestPermissionsForPathAllowed ? path : getParentPath(path);
-        const textForRequest = isRequestPermissionsForPathAllowed
-            ? 'Request permission'
-            : 'Request permission for parent node';
 
         return (
             <div>
@@ -290,17 +284,15 @@ class Navigation extends Component {
                 <RequestPermissions
                     className={block('error-action-button')}
                     buttonClassName={block('request-permissions-button')}
-                    parentPath={pathForRequest}
                     path={pathForRequest}
                     cluster={cluster}
-                    buttonText={textForRequest}
                     buttonProps={{size: 'l', width: 'max'}}
                 />
             </div>
         );
     }
 
-    renderRequestPermissionIsNotAllowed(objectType) {
+    renderRequestPermissionIsNotAllowed(objectType: string) {
         return (
             <Info className={block('error-block')}>
                 It is not possible to request access to the{' '}
@@ -341,11 +333,12 @@ class Navigation extends Component {
     }
 }
 
-function mapStateToProps(state) {
+function mapStateToProps(state: RootState) {
     const isFinalState = isNavigationFinalLoadState(state);
     const loadState = getLoadState(state);
     const hasError = loadState === LOADING_STATUS.ERROR;
     const loaded = loadState === LOADING_STATUS.LOADED;
+
     return {
         path: getPath(state),
         mode: getEffectiveMode(state),
@@ -356,11 +349,11 @@ function mapStateToProps(state) {
         loaded,
         loading: !isFinalState,
         parsedPath: getParsedPath(state),
-        transaction: getTransaction(state),
+        transaction: getTransaction(state) ?? undefined,
         cluster: getCluster(state),
         tabSize: UI_TAB_SIZE,
         tabs: getTabs(state),
-    };
+    } as NavigationProps;
 }
 
 const mapDispatchToProps = {
@@ -369,9 +362,12 @@ const mapDispatchToProps = {
     updateTitle,
     onTransactionChange,
     showNavigationAttributesEditor,
-};
+} as Partial<NavigationProps>;
 
-const NavigationConnected = connect(mapStateToProps, mapDispatchToProps)(Navigation);
+const NavigationConnected = connect(
+    mapStateToProps, 
+    mapDispatchToProps,
+)(Navigation);
 
 const NavigationWithRumMemo = React.memo(NavigationWithMesure);
 

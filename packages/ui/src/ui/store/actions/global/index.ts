@@ -258,15 +258,13 @@ function showErrorToaster(
     });
 }
 
-export function updateTitle({
-    path,
-    page,
-    cluster,
-}: {
+export interface TitleSettings {
     path?: string;
     page?: string;
     cluster?: string;
-}): YTThunkAction {
+}
+
+export function updateTitle({path, page, cluster}: TitleSettings): YTThunkAction {
     return (dispatch, getState) => {
         const clusters = getState().clustersMenu.clusters;
         dispatch({

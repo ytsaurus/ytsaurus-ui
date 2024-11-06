@@ -26,7 +26,7 @@ import {ThunkAction} from 'redux-thunk';
 import {RootState} from '../../store/reducers';
 import YT from '../../config/yt-config';
 import {GLOBAL_PARTIAL} from '../../constants/global';
-import {FIX_MY_TYPE, YTError} from '../../../@types/types';
+import {FixMyType, YTError} from '../../../@types/types';
 import {initYTApiClusterParams} from '../../common/yt-api-init';
 import {NAMESPACES, SettingName} from '../../../shared/constants/settings';
 import {updateTitle} from './global';
@@ -67,7 +67,7 @@ function prepareClusterUiConfig(uiConfig: BatchResultsItem, uiDevConfig: BatchRe
     return [uiConfig.output || {}, uiDevConfig.output || {}];
 }
 
-type GlobalThunkAction<T = unknown> = ThunkAction<T, RootState, any, FIX_MY_TYPE>;
+type GlobalThunkAction<T = unknown> = ThunkAction<T, RootState, any, FixMyType>;
 
 export function initClusterParams(cluster: string): GlobalThunkAction<Promise<void>> {
     return (dispatch, getState) => {

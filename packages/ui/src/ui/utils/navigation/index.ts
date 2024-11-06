@@ -37,6 +37,8 @@ interface RelativePath {
     path: string;
     relativePath: string;
     transaction?: string;
+    attributes?: string[];
+    transaction_id?: string;
 }
 
 export function prepareRequest(

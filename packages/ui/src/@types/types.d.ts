@@ -1,13 +1,19 @@
 // eslint-disable-next-line @typescript-eslint/naming-convention
-export type FIX_MY_TYPE = any;
+import ypath from '@ytsaurus/interface-helpers/lib/ypath';
+
+export type FixMyType = any;
 
 export interface YTError {
     message: string;
     code?: number;
     attributes?: any;
+    object_type?: string;
     inner_errors?: YTError[];
+    details?: YTError;
     yt_javascript_wrapper?: {xYTTraceId?: string; xYTRequestId?: string};
 }
+
+export type YPath = typeof ypath.YPath;
 
 export type ValueOf<T> = T[keyof T];
 

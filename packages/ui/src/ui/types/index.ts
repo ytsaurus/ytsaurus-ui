@@ -1,7 +1,7 @@
 import {Action} from 'redux';
 import type {OrderType} from '../utils/sort-helpers';
 
-export type {YTError} from '../../@types/types.d';
+export type {YTError, YPath} from '../../@types/types.d';
 
 export interface ActionD<T extends string, D> extends Action<T> {
     data: D;

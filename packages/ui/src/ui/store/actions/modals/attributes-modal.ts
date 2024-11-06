@@ -9,6 +9,7 @@ import {ThunkAction} from 'redux-thunk';
 import {RootState} from '../../reducers';
 import {Action} from 'redux';
 import {ReactNode} from 'react';
+import {GetParams} from '../../../../shared/yt-types';
 
 type ModalThunkAction = ThunkAction<void, RootState, null, Action>;
 
@@ -69,7 +70,7 @@ export const openAttributesModal =
                 title,
                 promise: ytApiV3Id.get(YTApiId.openAttributesModal, {
                     path: exactPath ? exactPath : `${path}/@${attribute ? attribute : ''}`,
-                    output_format: TYPED_OUTPUT_FORMAT,
+                    output_format: TYPED_OUTPUT_FORMAT as GetParams['output_format'],
                 }),
             }),
         );

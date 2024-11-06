@@ -29,6 +29,7 @@ const ephemeralState = {
     isWriteable: false,
     isAccountUsable: false,
     checkPermissionsError: undefined,
+    attributesWithTypes: null,
 };
 
 export const initialState = {

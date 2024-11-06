@@ -12,7 +12,7 @@ export interface HotkeyProps {
     settings: Array<HotkeyItem>;
 }
 
-interface HotkeyItem {
+export interface HotkeyItem {
     keys: string;
     handler: (evt: KeyboardEvent, hotkeyEvent: HotkeysEvent) => void;
     scope: string;
