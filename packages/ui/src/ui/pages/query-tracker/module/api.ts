@@ -223,7 +223,7 @@ export async function generateQueryFromTable(
     const node = await ytApiV3.get({
         parameters: {
             path: `${path}/@`,
-            attributes: ['type', 'schema', 'dynamic'],
+            attributes: ['type', 'schema', 'dynamic', '_yql_type'],
             output_format: 'json',
         },
         setup: {
@@ -231,10 +231,19 @@ export async function generateQueryFromTable(
             ...JSONParser,
         },
     });
+
+    const commonData = {
+        engine,
+        files: [],
+        annotations: {},
+        access_control_object: defaultQueryACO,
+        access_control_objects: [defaultQueryACO],
+        settings: generateQuerySettings(engine, cluster),
+    };
+
     if (node.type === 'table') {
         const schema = ypath.getValue(node.schema) as {name: string}[];
         return {
-            engine,
             query: generateQueryText(cluster, engine, {
                 path,
                 columns: schema.map(({name}) => name),
@@ -242,12 +251,14 @@ export async function generateQueryFromTable(
                 schemaExists: Boolean(schema.length),
                 dynamic: node.dynamic,
             }),
-            files: [],
-            annotations: {},
-            access_control_object: defaultQueryACO,
-            access_control_objects: [defaultQueryACO],
-            settings: generateQuerySettings(engine, cluster),
+            ...commonData,
         };
+    } else if (node.type === 'document' && 'view' === ypath.getValue(node._yql_type)) {
+        const query = await ytApiV3.get({
+            parameters: {path},
+            setup: {proxy: getClusterProxy(selectedCluster), ...JSONParser},
+        });
+        return {query, ...commonData};
     }
     return undefined;
 }
