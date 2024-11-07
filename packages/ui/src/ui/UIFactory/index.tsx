@@ -405,7 +405,7 @@ export interface UIFactory {
 
     yqlWidgetSetup?: {
         renderButton(props: {className?: string; isSplit?: string}): React.ReactNode;
-        renderWidget(props: {cluster: string; path: string; attributes: unknown}): React.ReactNode;
+        renderWidget(props?: {cluster: string; path: string; attributes: unknown}): React.ReactNode;
         renderYqlOperationLink(yqlOperationId: string): React.ReactNode;
     };
 

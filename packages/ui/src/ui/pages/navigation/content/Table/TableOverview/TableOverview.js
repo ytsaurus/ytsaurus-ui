@@ -12,7 +12,6 @@ import TableActions from '../../../../../pages/navigation/content/Table/TableOve
 import OffsetInput from '../../../../../pages/navigation/content/Table/TableOverview/OffsetInput';
 import Paginator from '../../../../../pages/navigation/content/Table/TableOverview/Paginator';
 import ErrorBoundary from '../../../../../components/ErrorBoundary/ErrorBoundary';
-import UIFactory from '../../../../../UIFactory';
 import {CreateQueryFromTable} from './CreateQueryFromTable';
 
 import {HEADER_HEIGHT} from '../../../../../constants/index';
@@ -21,6 +20,7 @@ import './TableOverview.scss';
 import EditTableActions from './EditTableActions';
 import DataLensButton from './DatalensButton';
 import {isQueryTrackerAllowed} from '../../../../../store/selectors/global/experimental-pages';
+import {YQLKitButton} from '../../../../../containers/YQLKitButton/YQLKitButton';
 
 const block = cn('navigation-table-overview');
 
@@ -53,11 +53,7 @@ function TableOverview(props) {
                         {!isFullScreen && allowQueryTracker && (
                             <CreateQueryFromTable className={block('query')} />
                         )}
-                        {!isFullScreen &&
-                            UIFactory.yqlWidgetSetup?.renderButton({
-                                isSplit,
-                                className: block('yql'),
-                            })}
+                        {!isFullScreen && <YQLKitButton className={block('yql')} />}
                         {!isFullScreen && <JupyterButton block={block} />}
                         {!isFullScreen && <DataLensButton className={block('datalens')} />}
                         {!isFullScreen && <TableActions block={block} />}
