@@ -4,22 +4,14 @@ import isEmpty_ from 'lodash/isEmpty';
 import {getLayoutConfig} from '../components/layout-config';
 import {create, get, getSettingsConfig, isRemoteSettingsConfigured} from '../components/settings';
 import {getClusterConfig} from '../components/utils';
-import ServerFactory, {getApp} from '../ServerFactory';
+import ServerFactory from '../ServerFactory';
 import {isLocalModeByEnvironment} from '../utils';
 import {getDefaultUserSettings} from '../utils/default-settings';
-import {ODIN_PAGE_ID} from '../../shared/constants';
-
-function isRootPage(page: string) {
-    const rootPages = [
-        ...(getApp().config?.odinBaseUrl ? [ODIN_PAGE_ID] : []),
-        ...ServerFactory.getExtraRootPages(),
-    ];
-    return -1 !== rootPages.indexOf(page);
-}
+import {isRootPage} from '../utils/is-root-page';
 
 export function homeIndexFactory(entryName = 'main') {
     return async (req: Request, res: Response) => {
-        const isRoot = isRootPage(req.params.ytAuthCluster);
+        const isRoot = isRootPage(req, req.params.ytAuthCluster);
         const cluster = isRoot ? undefined : req.params.ytAuthCluster;
 
         try {
