@@ -1,0 +1,18 @@
+.yt-sticky-container {
+    &__sticky {
+        position: sticky;
+        z-index: 1;
+
+        background-color: var(--main-background);
+        box-shadow: 0 1px 10px var(--opacity-background);
+
+        width: calc(100vw - var(--gn-aside-header-size));
+        margin-left: -20px;
+        padding-left: 20px;
+        padding-right: 20px;
+
+        &_top {
+            top: var(--app-header-height);
+        }
+    }
+}

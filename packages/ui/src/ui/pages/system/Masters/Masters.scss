@@ -8,10 +8,6 @@
 }
 
 .system-master {
-    &__container-host-radio {
-        margin-left: 20px;
-    }
-
     &__all-masters {
         @include three-column-grid(8px);
         grid-auto-flow: column;

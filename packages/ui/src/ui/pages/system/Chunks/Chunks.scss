@@ -1,6 +1,8 @@
 .system {
     &__chunks {
         margin-bottom: 20px;
+        z-index: -1;
+        position: relative;
     }
 
     .chunk-cells {

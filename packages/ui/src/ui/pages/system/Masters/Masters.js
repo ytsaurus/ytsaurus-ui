@@ -19,6 +19,7 @@ import {useUpdater} from '../../../hooks/use-updater';
 import './Masters.scss';
 import {SystemAlert} from './SystemAlert';
 import {UI_COLLAPSIBLE_SIZE} from '../../../constants/global';
+import {StickyContainer} from '../../../components/StickyContainer/StickyContainer';
 
 const b = block('system-master');
 const headingCN = block('elements-heading')({size: 's'});
@@ -104,10 +105,7 @@ class Masters extends Component {
 
         return fitIntoSection ? (
             <div className={b('all-masters')}>
-                <div className={headingCN}>
-                    Primary Masters
-                    {this.renderMasterTypeSwitcher()}
-                </div>
+                <div className={headingCN}>Primary Masters</div>
                 <MasterGroup
                     className={b('primary-master')}
                     {...primary}
@@ -122,10 +120,7 @@ class Masters extends Component {
                 )}
                 {Boolean(providers?.instances?.length) && (
                     <React.Fragment>
-                        <div className={headingCN}>
-                            Timestamp providers
-                            {this.renderMasterTypeSwitcher()}
-                        </div>
+                        <div className={headingCN}>Timestamp providers</div>
                         <MasterGroup
                             {...providers}
                             className={b('timestamp-providers')}
@@ -137,10 +132,7 @@ class Masters extends Component {
                 )}
                 {Boolean(discovery?.instances?.length) && (
                     <React.Fragment>
-                        <div className={headingCN}>
-                            Discovery servers
-                            {this.renderMasterTypeSwitcher()}
-                        </div>
+                        <div className={headingCN}>Discovery servers</div>
                         <MasterGroup
                             {...discovery}
                             className={b('discovery-servers')}
@@ -150,20 +142,14 @@ class Masters extends Component {
                 )}
                 {Boolean(queueAgents?.instances?.length) && (
                     <React.Fragment>
-                        <div className={headingCN}>
-                            Queue agents
-                            {this.renderMasterTypeSwitcher()}
-                        </div>
+                        <div className={headingCN}>Queue agents</div>
                         <MasterGroup {...queueAgents} allowService />
                     </React.Fragment>
                 )}
             </div>
         ) : (
             <div>
-                <div className={headingCN}>
-                    Primary Masters
-                    {this.renderMasterTypeSwitcher()}
-                </div>
+                <div className={headingCN}>Primary Masters</div>
                 <MasterGroup
                     className={b('primary-master')}
                     {...primary}
@@ -239,14 +225,17 @@ class Masters extends Component {
         }
 
         return (
-            <SystemStateOverview
-                tab="masters"
-                labels={labels}
-                counters={counters}
-                stateThemeMappings={stateThemeMappings}
-                stateOverview={stateOverview}
-                counterGroup={counterGroups}
-            />
+            <>
+                {this.renderMasterTypeSwitcher()}
+                <SystemStateOverview
+                    tab="masters"
+                    labels={labels}
+                    counters={counters}
+                    stateThemeMappings={stateThemeMappings}
+                    stateOverview={stateOverview}
+                    counterGroup={counterGroups}
+                />
+            </>
         );
     }
 
@@ -261,16 +250,23 @@ class Masters extends Component {
         const overview = this.renderOverview();
 
         return (
-            <CollapsibleSectionStateLess
-                name={'Masters'}
-                overview={overview}
-                collapsed={collapsed}
-                onToggle={this.onToggle}
-                size={collapsibleSize}
-            >
-                {this.renderAlerts()}
-                {content}
-            </CollapsibleSectionStateLess>
+            <StickyContainer>
+                {({topStickyClassName}) => (
+                    <CollapsibleSectionStateLess
+                        name={'Masters'}
+                        headingClassName={b('heading', topStickyClassName)}
+                        overview={overview}
+                        collapsed={collapsed}
+                        onToggle={this.onToggle}
+                        size={collapsibleSize}
+                    >
+                        <div className={b('content')}>
+                            {this.renderAlerts()}
+                            {content}
+                        </div>
+                    </CollapsibleSectionStateLess>
+                )}
+            </StickyContainer>
         );
     }
 

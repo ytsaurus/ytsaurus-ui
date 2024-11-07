@@ -7,6 +7,7 @@ import {UI_COLLAPSIBLE_SIZE} from '../../../constants/global';
 import {ExpandButton} from '../../../components/ExpandButton';
 import {RoleGroupInfo} from '../../../store/reducers/system/proxies';
 import {MakeUrlParams, RoleGroup, RoleGroupsContainer} from '../ProxiesImpl/RoleGroup';
+import {StickyContainer} from '../../../components/StickyContainer/StickyContainer';
 
 export function ProxiesImpl({
     name,
@@ -27,40 +28,45 @@ export function ProxiesImpl({
     const [expandRacks, setExpandRacks] = React.useState(false);
 
     return (
-        <CollapsibleSectionStateLess
-            name={name}
-            overview={
-                <>
-                    {!collapsed && (
-                        <ExpandButton
-                            all
-                            showText
-                            expanded={expandRacks}
-                            toggleExpanded={() => setExpandRacks(!expandRacks)}
-                        />
-                    )}
-                    {overview}
-                </>
-            }
-            onToggle={onToggleCollapsed}
-            collapsed={collapsed}
-            size={UI_COLLAPSIBLE_SIZE}
-            togglerRightPadding="small"
-        >
-            <RoleGroupsContainer>
-                {map_(roleGroups, (data) => {
-                    return (
-                        <RoleGroup
-                            key={data.name}
-                            data={data}
-                            makeUrl={makeUrl}
-                            hideOthers
-                            bannedAsState
-                            forceExpand={expandRacks}
-                        />
-                    );
-                })}
-            </RoleGroupsContainer>
-        </CollapsibleSectionStateLess>
+        <StickyContainer>
+            {({topStickyClassName}) => (
+                <CollapsibleSectionStateLess
+                    name={name}
+                    headingClassName={topStickyClassName}
+                    overview={
+                        <>
+                            {!collapsed && (
+                                <ExpandButton
+                                    all
+                                    showText
+                                    expanded={expandRacks}
+                                    toggleExpanded={() => setExpandRacks(!expandRacks)}
+                                />
+                            )}
+                            {overview}
+                        </>
+                    }
+                    onToggle={onToggleCollapsed}
+                    collapsed={collapsed}
+                    size={UI_COLLAPSIBLE_SIZE}
+                    togglerRightPadding="small"
+                >
+                    <RoleGroupsContainer>
+                        {map_(roleGroups, (data) => {
+                            return (
+                                <RoleGroup
+                                    key={data.name}
+                                    data={data}
+                                    makeUrl={makeUrl}
+                                    hideOthers
+                                    bannedAsState
+                                    forceExpand={expandRacks}
+                                />
+                            );
+                        })}
+                    </RoleGroupsContainer>
+                </CollapsibleSectionStateLess>
+            )}
+        </StickyContainer>
     );
 }

@@ -11,6 +11,7 @@ import {ExpandButton} from '../../../components/ExpandButton';
 import {CollapsibleSectionStateLess} from '../../../components/CollapsibleSection/CollapsibleSection';
 import Link from '../../../components/Link/Link';
 import {NoContent} from '../../../components/NoContent/NoContent';
+import {StickyContainer} from '../../../components/StickyContainer/StickyContainer';
 
 import SystemStateOverview from '../SystemStateOverview/SystemStateOverview';
 
@@ -213,15 +214,20 @@ const Nodes = (props: NodesProps) => {
         }
 
         return (
-            <CollapsibleSectionStateLess
-                overview={renderOverview()}
-                collapsed={collapsed}
-                onToggle={onToggle}
-                name={'Nodes'}
-                size={UI_COLLAPSIBLE_SIZE}
-            >
-                {renderContent()}
-            </CollapsibleSectionStateLess>
+            <StickyContainer>
+                {({topStickyClassName}) => (
+                    <CollapsibleSectionStateLess
+                        overview={renderOverview()}
+                        headingClassName={topStickyClassName}
+                        collapsed={collapsed}
+                        onToggle={onToggle}
+                        name={'Nodes'}
+                        size={UI_COLLAPSIBLE_SIZE}
+                    >
+                        {renderContent()}
+                    </CollapsibleSectionStateLess>
+                )}
+            </StickyContainer>
         );
     };
 
