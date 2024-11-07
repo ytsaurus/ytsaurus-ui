@@ -17,6 +17,7 @@ import withStickyHead from '../../../components/ElementsTable/hocs/withStickyHea
 import ElementsTableBase from '../../../components/ElementsTable/ElementsTable';
 import SystemCounters from '../SystemCounters/SystemCounters';
 import Label from '../../../components/Label/Label';
+import {StickyContainer} from '../../../components/StickyContainer/StickyContainer';
 
 import {SYSTEM_CHUNKS_TABLE_ID} from '../../../constants/tables';
 import {loadChunks} from '../../../store/actions/system/chunks';
@@ -26,6 +27,7 @@ import {useUpdater} from '../../../hooks/use-updater';
 
 import './Chunks.scss';
 import {UI_COLLAPSIBLE_SIZE} from '../../../constants/global';
+import {HEADER_HEIGHT} from '../../../constants';
 
 const b = block('system');
 
@@ -225,17 +227,22 @@ class Chunks extends Component {
         );
 
         return (
-            <CollapsibleSectionStateLess
-                name={'Chunks'}
-                overview={overview}
-                onToggle={this.onToggle}
-                collapsed={collapsed}
-                size={collapsibleSize}
-            >
-                <div className={b('chunks')}>
-                    <ElementsTable {...table} footer={totalRow} />
-                </div>
-            </CollapsibleSectionStateLess>
+            <StickyContainer>
+                {({topStickyClassName}) => (
+                    <CollapsibleSectionStateLess
+                        name={'Chunks'}
+                        headingClassName={topStickyClassName}
+                        overview={overview}
+                        onToggle={this.onToggle}
+                        collapsed={collapsed}
+                        size={collapsibleSize}
+                    >
+                        <div className={b('chunks')}>
+                            <ElementsTable {...table} top={HEADER_HEIGHT + 64} footer={totalRow} />
+                        </div>
+                    </CollapsibleSectionStateLess>
+                )}
+            </StickyContainer>
         );
     }
 

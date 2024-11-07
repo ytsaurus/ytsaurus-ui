@@ -33,6 +33,7 @@ export class CollapsibleSectionStateLess extends Component<PropsStateLess> {
             size,
             overview,
             className,
+            headingClassName,
             collapsed,
             marginDirection,
             togglerRightPadding,
@@ -41,7 +42,7 @@ export class CollapsibleSectionStateLess extends Component<PropsStateLess> {
         return (
             <ErrorBoundary>
                 <div className={b({margin: marginDirection}, className)}>
-                    <div className={headingCN({size, overview: 'yes'})}>
+                    <div className={headingCN({size, overview: 'yes'}, headingClassName)}>
                         <span
                             className={headingCN(
                                 'heading',
@@ -72,6 +73,7 @@ export class CollapsibleSectionStateLess extends Component<PropsStateLess> {
 
 export interface CollapsibleSectionProps {
     className?: string;
+    headingClassName?: string;
     name: React.ReactNode;
     collapsed?: boolean;
     onToggle?: (value: boolean) => void;

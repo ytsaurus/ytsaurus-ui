@@ -7,6 +7,7 @@ import map_ from 'lodash/map';
 import block from 'bem-cn-lite';
 
 import {CollapsibleSectionStateLess} from '../../../components/CollapsibleSection/CollapsibleSection';
+import {StickyContainer} from '../../../components/StickyContainer/StickyContainer';
 import VisibleHostTypeRadioButton from '../../../pages/system/VisibleHostTypeRadioButton';
 import {
     getSystemAgentsWithState,
@@ -73,7 +74,7 @@ class SchedulersAndAgents extends Component {
         });
     }
 
-    renderSection(name, heading, showHostTypeButton) {
+    renderSection(name, heading) {
         const objects = this.props[name];
         const rows = Math.min(7, objects.length);
         const columns = Math.ceil(objects.length / rows);
@@ -88,12 +89,7 @@ class SchedulersAndAgents extends Component {
 
         return (
             <div className={b(name)} style={containerStyle}>
-                <div className={headingCN}>
-                    {heading}
-                    {showHostTypeButton && (
-                        <VisibleHostTypeRadioButton className={b('container-host-radio')} />
-                    )}
-                </div>
+                <div className={headingCN}>{heading}</div>
                 <div className={b(`${name}-hosts`)} style={style}>
                     {this.renderHosts(name, objects)}
                 </div>
@@ -106,13 +102,16 @@ class SchedulersAndAgents extends Component {
         const tags = prepareTags(counters, alerts);
 
         return (
-            <div className={b('heading-overview')}>
-                {map_(tags, ({theme, label}) => (
-                    <span key={label} className={block('elements-label')({theme})}>
-                        {label}
-                    </span>
-                ))}
-            </div>
+            <>
+                <VisibleHostTypeRadioButton className={b('container-host-radio')} />
+                <div className={b('heading-overview')}>
+                    {map_(tags, ({theme, label}) => (
+                        <span key={label} className={block('elements-label')({theme})}>
+                            {label}
+                        </span>
+                    ))}
+                </div>
+            </>
         );
     }
 
@@ -129,26 +128,31 @@ class SchedulersAndAgents extends Component {
         }
 
         return (
-            <CollapsibleSectionStateLess
-                name="Schedulers and controller agents"
-                overview={this.renderOverview()}
-                collapsed={collapsed}
-                onToggle={this.onToggle}
-                size={collapsibleSize}
-            >
-                {map_(alerts.schedulers, (alert) => (
-                    <Alert key={alert.attributes.host} error={alert} />
-                ))}
-                {map_(alerts.agents, (alert, index) => (
-                    <Alert key={index} error={alert} />
-                ))}
+            <StickyContainer>
+                {({topStickyClassName}) => (
+                    <CollapsibleSectionStateLess
+                        name="Schedulers and controller agents"
+                        headingClassName={topStickyClassName}
+                        overview={this.renderOverview()}
+                        collapsed={collapsed}
+                        onToggle={this.onToggle}
+                        size={collapsibleSize}
+                    >
+                        {map_(alerts.schedulers, (alert) => (
+                            <Alert key={alert.attributes.host} error={alert} />
+                        ))}
+                        {map_(alerts.agents, (alert, index) => (
+                            <Alert key={index} error={alert} />
+                        ))}
 
-                <div className={b('schedulers-agents')}>
-                    {schedulers.length > 0 && this.renderSection('schedulers', 'Schedulers', true)}
-                    {agents.length > 0 &&
-                        this.renderSection('agents', 'Controller agents', schedulers.length === 0)}
-                </div>
-            </CollapsibleSectionStateLess>
+                        <div className={b('schedulers-agents')}>
+                            {schedulers.length > 0 &&
+                                this.renderSection('schedulers', 'Schedulers')}
+                            {agents.length > 0 && this.renderSection('agents', 'Controller agents')}
+                        </div>
+                    </CollapsibleSectionStateLess>
+                )}
+            </StickyContainer>
         );
     }
 

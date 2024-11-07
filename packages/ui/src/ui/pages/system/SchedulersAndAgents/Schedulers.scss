@@ -1,9 +1,6 @@
 @import '../../../styles/mixins';
 
 .system {
-    &__container-host-radio {
-        margin-left: 20px;
-    }
     &__schedulers-agents {
         display: flex;
         flex-wrap: wrap;

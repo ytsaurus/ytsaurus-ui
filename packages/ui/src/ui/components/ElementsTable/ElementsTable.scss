@@ -28,10 +28,7 @@ $thin-border: 1px solid var(--light-divider);
     overflow: auto;
 
     &-wrapper {
-        padding-bottom: 50px;
-
         &_sticky_top {
-            padding: 0;
             position: sticky;
             z-index: var(--elements-table-sticky-top-z-index);
 
@@ -42,8 +39,6 @@ $thin-border: 1px solid var(--light-divider);
         }
 
         &_sticky_bottom {
-            padding: 0;
-            margin-top: -50px;
             position: sticky;
             bottom: 0;
             z-index: var(--elements-table-sticky-top-z-index);
