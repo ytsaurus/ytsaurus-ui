@@ -1,8 +1,5 @@
 import React from 'react';
 import cn from 'bem-cn-lite';
-
-import map_ from 'lodash/map';
-
 import {RowWithName} from '../../../containers/AppNavigation/TopRowContent/SectionName';
 import Favourites from '../../../components/Favourites/Favourites';
 import {useDispatch, useSelector} from 'react-redux';
@@ -19,7 +16,7 @@ import ClipboardButton from '../../../components/ClipboardButton/ClipboardButton
 // @ts-ignore
 import metrics from '../../../common/utils/metrics';
 
-import {Breadcrumbs, BreadcrumbsItem} from '@gravity-ui/uikit';
+import {Breadcrumbs, BreadcrumbsItem} from '../../../components/Breadcrumbs';
 import {
     getMode,
     getNavigationBreadcrumbs,
@@ -160,109 +157,32 @@ function NavigationBreadcrumbs({onEdit}: {onEdit: () => void}) {
     const bcItems = useSelector(getNavigationBreadcrumbs);
     const mode = useSelector(getMode);
     const history = useHistory();
+
     const items = React.useMemo(() => {
-        return map_(bcItems, ({text, state}) => {
+        return bcItems.map(({text, state}, index) => {
+            const isLastItem = index === bcItems.length - 1;
             const url = makeRoutedURL(window.location.pathname, {
                 path: state.path,
                 navmode: mode === Tab.ACL ? mode : Tab.CONTENT,
                 filter: '',
             });
 
-            return {
-                text,
-                url,
-                state,
-                action: (event: any) => {
-                    event.preventDefault();
-                    event.stopPropagation();
-                    if (!event.ctrlKey && !event.metaKey && event.button !== 1) {
-                        history.push(url);
-                    } else {
-                        window.open(url);
-                    }
-                },
-            };
-        });
-    }, [bcItems, mode]);
-
-    const cluster = useSelector(getCluster);
-
-    const renderItem = React.useCallback(
-        (item: BreadcrumbsItem, isCurrent: boolean) => {
-            return <NavigationBcItem {...{item, isCurrent, onEdit}} />;
-        },
-        [cluster, onEdit],
-    );
-
-    const renderRoot = React.useCallback(
-        (item: BreadcrumbsItem, isCurrent: boolean) => {
             return (
-                <NavigationBcItem
-                    item={{
-                        ...item,
-                        text: '/',
-                    }}
-                    {...{isCurrent, isRoot: true, onEdit}}
-                />
+                <BreadcrumbsItem key={text} href={url}>
+                    {index ? (
+                        <Escaped text={text} onClick={isLastItem ? onEdit : undefined} />
+                    ) : (
+                        <Icon awesome={'folder-tree'} face={'solid'} />
+                    )}
+                </BreadcrumbsItem>
             );
-        },
-        [cluster, onEdit],
-    );
+        });
+    }, [bcItems, mode, onEdit]);
 
     return (
-        <div className={block('breadcrumbs')}>
-            <Breadcrumbs
-                className={block('breadcrumbs')}
-                items={items}
-                lastDisplayedItemsCount={2}
-                firstDisplayedItemsCount={1}
-                renderItemContent={renderItem}
-                renderRootContent={renderRoot}
-            />
-        </div>
-    );
-}
-
-function NavigationBcItem({
-    item,
-    isCurrent,
-    isRoot,
-    onEdit,
-}: {
-    item: BreadcrumbsItem;
-    isCurrent: boolean;
-    isRoot?: boolean;
-    onEdit: () => void;
-}) {
-    const url = (item as any).url;
-
-    return (
-        <Link
-            className={block('breadcrumbs-link', {
-                current: isCurrent,
-                root: isRoot,
-            })}
-            url={url}
-            routed
-            onClick={
-                !isCurrent
-                    ? (e) => {
-                          e.preventDefault();
-                      }
-                    : (e) => {
-                          onEdit();
-                          e.preventDefault();
-                      }
-            }
-        >
-            {!isRoot ? (
-                <Escaped text={item.text} />
-            ) : (
-                <span className={block('breadcrumbs-root')}>
-                    <Icon awesome={'folder-tree'} face={'solid'} />
-                </span>
-            )}
-        </Link>
+        <Breadcrumbs navigate={history.push} showRoot className={block('breadcrumbs')}>
+            {items}
+        </Breadcrumbs>
     );
 }
 

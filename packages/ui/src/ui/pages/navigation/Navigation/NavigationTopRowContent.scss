@@ -3,14 +3,11 @@
         padding-right: 15px;
     }
 
-    &__to-clipboard {
-        padding-left: 8px;
-    }
-
     &__editable-breadcrumbs {
-        padding-left: 4px;
+        padding-left: 8px;
         display: flex;
         align-items: center;
+        gap: 0 8px;
         flex-grow: 1;
         flex-shrink: 1;
         overflow: hidden;
@@ -19,22 +16,8 @@
     }
 
     &__breadcrumbs {
-        display: flex;
-        align-items: center;
-        flex-shrink: 1;
+        margin: 0 8px;
         overflow: hidden;
-    }
-
-    &__breadcrumbs-link {
-        color: var(--secondary-text) !important;
-
-        &:hover {
-            color: var(--hover-link) !important;
-        }
-
-        &_current {
-            color: var(--primary-text) !important;
-        }
     }
 
     &__restore {

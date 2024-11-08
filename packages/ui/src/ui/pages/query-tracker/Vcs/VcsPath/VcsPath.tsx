@@ -1,16 +1,8 @@
 import React, {FC, useCallback, useMemo, useState} from 'react';
-import {
-    Breadcrumbs,
-    Button,
-    FirstDisplayedItemsCount,
-    Flex,
-    Icon,
-    LastDisplayedItemsCount,
-    Loader,
-} from '@gravity-ui/uikit';
+import {Button, Flex, Icon, Loader} from '@gravity-ui/uikit';
+import {Breadcrumbs, BreadcrumbsItem} from '../../../../components/Breadcrumbs';
 import FolderTreeIcon from '@gravity-ui/icons/svgs/folder-tree.svg';
 import {EditableAsText} from '../../../../components/EditableAsText/EditableAsText';
-import {BreadcrumbsItem as BreadcrumbsItemType} from '@gravity-ui/uikit/build/esm/components/Breadcrumbs/Breadcrumbs';
 import './VcsPath.scss';
 import cn from 'bem-cn-lite';
 
@@ -26,8 +18,8 @@ export const VcsPath: FC<Props> = ({path, onPathChange}) => {
     const [loading, setLoading] = useState(false);
 
     const handleChangePath = useCallback(
-        async (newPath: string) => {
-            await onPathChange(newPath);
+        async (newPath: string | number) => {
+            await onPathChange(newPath.toString());
         },
         [onPathChange],
     );
@@ -51,21 +43,11 @@ export const VcsPath: FC<Props> = ({path, onPathChange}) => {
 
     const items = useMemo(() => {
         let href = '';
-        return path.split('/').reduce<BreadcrumbsItemType[]>((acc, text) => {
+        return path.split('/').map((text) => {
             href += `${href ? '/' : ''}` + text;
-            acc.push({
-                text,
-                href,
-                action: (function (linkPath: string) {
-                    return (e) => {
-                        e.preventDefault();
-                        handleChangePath(linkPath);
-                    };
-                })(href),
-            });
-            return acc;
-        }, []);
-    }, [handleChangePath, path]);
+            return <BreadcrumbsItem key={href}>{text}</BreadcrumbsItem>;
+        });
+    }, [path]);
 
     if (loading)
         return (
@@ -81,11 +63,9 @@ export const VcsPath: FC<Props> = ({path, onPathChange}) => {
                     <Button size="s" view="flat" onClick={handleRootClick}>
                         <Icon data={FolderTreeIcon} size={16} />
                     </Button>
-                    <Breadcrumbs
-                        items={items}
-                        firstDisplayedItemsCount={FirstDisplayedItemsCount[path ? 'Zero' : 'One']}
-                        lastDisplayedItemsCount={LastDisplayedItemsCount.One}
-                    />
+                    <Breadcrumbs showRoot onAction={handleChangePath}>
+                        {items}
+                    </Breadcrumbs>
                 </>
             )}
             <EditableAsText

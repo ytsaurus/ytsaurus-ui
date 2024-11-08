@@ -1,11 +1,8 @@
 import React from 'react';
 import {useSelector} from 'react-redux';
-import {Route, RouteComponentProps, Switch} from 'react-router';
+import {Route, RouteComponentProps, Switch, useHistory} from 'react-router';
 import cn from 'bem-cn-lite';
-
-import {Breadcrumbs, BreadcrumbsItem} from '@gravity-ui/uikit';
-
-import Link from '../../../components/Link/Link';
+import {Breadcrumbs, BreadcrumbsItem} from '../../../components/Breadcrumbs';
 import {Tab as ComponentsTab} from '../../../constants/components/main';
 import {Page} from '../../../constants/index';
 import {RowWithName} from '../../../containers/AppNavigation/TopRowContent/SectionName';
@@ -37,61 +34,34 @@ function ComponentsNodeTopRowContent() {
     );
 }
 
-function noop() {}
-
 function ComponentsBreadcrumbs() {
     const cluster = useSelector(getCluster);
     const nodeHost = useSelector(nodeHostSelector);
+    const history = useHistory();
 
     const items = React.useMemo(() => {
-        const _items = [
-            {
-                text: '',
-                action: noop,
-                href: makeComponentsNodesUrl({cluster}),
-            },
+        const result = [
+            <BreadcrumbsItem key="<Root>" href={makeComponentsNodesUrl({cluster})}>
+                {'<Root>'}
+            </BreadcrumbsItem>,
         ];
         if (nodeHost) {
-            _items.push({
-                text: nodeHost,
-                action: noop,
-                href: makeComponentsNodesUrl({cluster, host: nodeHost}),
-            });
+            result.push(
+                <BreadcrumbsItem
+                    key="<Root>"
+                    href={makeComponentsNodesUrl({cluster, host: nodeHost})}
+                >
+                    {nodeHost}
+                </BreadcrumbsItem>,
+            );
         }
-        return _items;
+        return result;
     }, [cluster, nodeHost]);
 
     return (
-        <Breadcrumbs
-            className={block('breadcrumbs')}
-            items={items}
-            lastDisplayedItemsCount={2}
-            firstDisplayedItemsCount={1}
-            renderItemContent={renderBcItem}
-        />
-    );
-}
-
-function renderBcItem(item: BreadcrumbsItem, isCurrent: boolean) {
-    return <BreadcrumbLink host={item.text} href={item.href} isCurrent={isCurrent} />;
-}
-
-interface BreadcrumbLinkProps {
-    host: string;
-    href?: string;
-    isCurrent: boolean;
-}
-
-function BreadcrumbLink({host, href, isCurrent}: BreadcrumbLinkProps) {
-    return (
-        <Link
-            className={block('breadcrumbs-item', {current: isCurrent})}
-            theme={'ghost'}
-            url={href}
-            routed
-        >
-            {host || '<Root>'}
-        </Link>
+        <Breadcrumbs navigate={history.push} showRoot className={block('breadcrumbs')}>
+            {items}
+        </Breadcrumbs>
     );
 }
 

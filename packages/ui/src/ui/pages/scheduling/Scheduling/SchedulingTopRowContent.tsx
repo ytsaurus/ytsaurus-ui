@@ -1,11 +1,10 @@
 import React from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import cn from 'bem-cn-lite';
-
-import map_ from 'lodash/map';
 import some_ from 'lodash/some';
 
-import {Breadcrumbs, BreadcrumbsItem} from '@gravity-ui/uikit';
+import {Breadcrumbs, BreadcrumbsItem} from '../../../components/Breadcrumbs';
+import {useHistory} from 'react-router';
 
 import ErrorBoundary from '../../../components/ErrorBoundary/ErrorBoundary';
 import {RowWithName} from '../../../containers/AppNavigation/TopRowContent/SectionName';
@@ -29,7 +28,6 @@ import {ROOT_POOL_NAME, SCHEDULING_ALLOWED_ROOT_TABS, Tab} from '../../../consta
 import ClipboardButton from '../../../components/ClipboardButton/ClipboardButton';
 import {getSchedulingBreadcrumbItems} from '../../../store/selectors/scheduling/scheduling-ts';
 import {Page} from '../../../constants';
-import Link from '../../../components/Link/Link';
 import {EditButton} from '../../../components/EditableAsText/EditableAsText';
 import Select from '../../../components/Select/Select';
 import CreatePoolButton from '../Instruments/CreatePoolDialog/CreatePoolDialog';
@@ -115,72 +113,41 @@ function CurrentPoolToClipboardButton() {
 function SchedulingBreadcrumbs() {
     const bcItems = useSelector(getSchedulingBreadcrumbItems);
     const dispatch = useDispatch();
+    const tree = useSelector(getTree);
+    const cluster = useSelector(getCluster);
+    const history = useHistory();
+
+    const handleChangePool = (name: string | number) => {
+        setTimeout(() => {
+            dispatch(changePool(name.toString()));
+        }, 0);
+    };
 
     const items = React.useMemo(() => {
-        // @ts-ignore
-        const restItems = map_(bcItems.slice(1), (name) => {
-            return {
-                text: name,
-                action: () => {
-                    dispatch(changePool(name));
-                },
-            };
+        return ['<Root>', ...bcItems.slice(1)].map((text) => {
+            const pathname = text
+                ? window.location.pathname
+                : calcRootPathname(window.location.pathname, cluster);
+            return (
+                <BreadcrumbsItem
+                    key={text}
+                    href={makeRoutedURL(pathname, {tree, text, filter: ''})}
+                >
+                    {text}
+                </BreadcrumbsItem>
+            );
         });
-        return [
-            {
-                text: '<Scheduler>',
-                action: () => {
-                    dispatch(changePool('<Root>'));
-                },
-            },
-            ...restItems,
-        ];
-    }, [bcItems]);
-
-    const renderItem = React.useCallback((item: BreadcrumbsItem, isCurrent: boolean) => {
-        return <BreadcrumbLink isCurrent={isCurrent} title={item.text} pool={item.text} />;
-    }, []);
+    }, [bcItems, cluster, tree]);
 
     return (
         <Breadcrumbs
+            navigate={history.push}
+            onAction={handleChangePool}
             className={block('breadcrumbs')}
-            items={items}
-            lastDisplayedItemsCount={2}
-            firstDisplayedItemsCount={1}
-            renderItemContent={renderItem}
-            renderRootContent={renderEmpty}
-        />
-    );
-}
-
-function renderEmpty(_: unknown, isCurrent: boolean) {
-    return <BreadcrumbLink isCurrent={isCurrent} title={'<Root>'} pool={''} />;
-}
-
-interface LinkProps {
-    isCurrent: boolean;
-    title: string;
-    pool: string;
-}
-
-function BreadcrumbLink(props: LinkProps) {
-    const tree = useSelector(getTree);
-    const cluster = useSelector(getCluster);
-    const {isCurrent, title, pool} = props;
-
-    const pathname = pool
-        ? window.location.pathname
-        : calcRootPathname(window.location.pathname, cluster);
-    const url = makeRoutedURL(pathname, {tree, pool, filter: ''});
-    return (
-        <Link
-            className={block('breadcrumbs-link', {current: isCurrent})}
-            theme={'ghost'}
-            routed
-            url={url}
+            showRoot
         >
-            {title}
-        </Link>
+            {items}
+        </Breadcrumbs>
     );
 }
 

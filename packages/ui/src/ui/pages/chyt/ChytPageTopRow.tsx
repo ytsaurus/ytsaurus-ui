@@ -5,13 +5,13 @@ import cn from 'bem-cn-lite';
 
 import ypath from '../../common/thor/ypath';
 
-import {Breadcrumbs, BreadcrumbsItem, Button, Text} from '@gravity-ui/uikit';
+import {Button, Text} from '@gravity-ui/uikit';
+import {Breadcrumbs, BreadcrumbsItem} from '../../components/Breadcrumbs';
 
 import ClipboardButton from '../../components/ClipboardButton/ClipboardButton';
 import {YTDFDialog, makeErrorFields} from '../../components/Dialog';
 import Favourites, {FavouritesItem} from '../../components/Favourites/Favourites';
 import {EditableAsText} from '../../components/EditableAsText/EditableAsText';
-import Link from '../../components/Link/Link';
 import Suggest from '../../components/Suggest/Suggest';
 import {Page} from '../../constants';
 import {RowWithName} from '../../containers/AppNavigation/TopRowContent/SectionName';
@@ -34,7 +34,7 @@ export default function ChytPageTopRow() {
     return (
         <RowWithName page={Page.CHYT} name="CHYT cliques">
             <ChytFavourites />
-            <ChytBreadcrumsbs />
+            <ChytBreadcrumbs />
             <CreateChytButton />
         </RowWithName>
     );
@@ -71,23 +71,28 @@ function ChytFavourites() {
     );
 }
 
-function ChytBreadcrumsbs() {
+function ChytBreadcrumbs() {
     const history = useHistory();
     const cluster = useSelector(getCluster);
     const alias = useSelector(getChytCurrentAlias);
+
     const items = React.useMemo(() => {
-        const res: Array<BreadcrumbsItem & {url: string}> = [
-            {
-                text: '<Root>',
-                url: `/${cluster}/${Page.CHYT}`,
-                action: () => {},
-            },
+        const result = [
+            <BreadcrumbsItem key="<Root>" href={`/${cluster}/${Page.CHYT}`}>
+                {'<Root>'}
+            </BreadcrumbsItem>,
         ];
+
         if (alias) {
-            res.push({text: alias, url: `/${cluster}/${Page.CHYT}/${alias}`, action: () => {}});
+            result.push(
+                <BreadcrumbsItem key={alias} href={`/${cluster}/${Page.CHYT}/${alias}`}>
+                    {alias}
+                </BreadcrumbsItem>,
+            );
         }
-        return res;
-    }, [alias]);
+
+        return result;
+    }, [alias, cluster]);
 
     return (
         <div className={block('breadcrumbs')}>
@@ -104,18 +109,9 @@ function ChytBreadcrumsbs() {
                 disableEdit={Boolean(!alias)}
                 renderEditor={(props) => <ChytAliasSuggest cluster={cluster} {...props} />}
             >
-                <Breadcrumbs
-                    items={items}
-                    lastDisplayedItemsCount={2}
-                    firstDisplayedItemsCount={1}
-                    renderItemContent={(item, isCurrent) => {
-                        return (
-                            <Link url={item.url} theme={isCurrent ? 'primary' : 'secondary'} routed>
-                                {item.text}
-                            </Link>
-                        );
-                    }}
-                />
+                <Breadcrumbs navigate={history.push} showRoot>
+                    {items}
+                </Breadcrumbs>
             </EditableAsText>
             {alias && <ClipboardButton text={alias} />}
         </div>

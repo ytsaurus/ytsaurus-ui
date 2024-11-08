@@ -4,6 +4,7 @@ import some_ from 'lodash/some';
 
 import {RowWithName} from '../../../containers/AppNavigation/TopRowContent/SectionName';
 import Favourites, {FavouritesItem} from '../../../components/Favourites/Favourites';
+import {Breadcrumbs, BreadcrumbsItem} from '../../../components/Breadcrumbs';
 import {
     getFavouriteAccounts,
     isActiveAcountInFavourites,
@@ -15,11 +16,10 @@ import {
 } from '../../../store/selectors/accounts/accounts-ts';
 import {setActiveAccount} from '../../../store/actions/accounts/accounts';
 import {accountsToggleFavourite} from '../../../store/actions/favourites';
-import {Breadcrumbs, BreadcrumbsItem} from '@gravity-ui/uikit';
 import {getActiveAccountBreadcrumbs} from '../../../store/selectors/accounts/accounts';
 
 import AccountCreate from '../tabs/general/Editor/AccountCreate';
-import Link from '../../../components/Link/Link';
+import {useHistory} from 'react-router';
 import {makeRoutedURL} from '../../../store/location';
 import {Page} from '../../../constants';
 
@@ -82,78 +82,44 @@ function AccountsFavourites() {
     );
 }
 
-interface BreadcrumbsItemType {
-    text: string;
-    url: string;
-    title?: string;
-}
+const ROOT_PLACEHOLDER = '<Root>';
 
 function AccountsBreadcrumbs() {
     // @ts-ignore
     const bcItems = useSelector(getActiveAccountBreadcrumbs).slice(1);
     const dispatch = useDispatch();
+    const history = useHistory();
+    const cluster = useSelector(getCluster);
 
-    const handleItemClick = React.useCallback(
-        (item: BreadcrumbsItemType) => {
-            dispatch(setActiveAccount(item.text));
-        },
-        [dispatch, setActiveAccount],
-    );
+    const handleBreadcrumbsClick = (key: string | number) => {
+        dispatch(setActiveAccount(key === ROOT_PLACEHOLDER ? '' : key));
+    };
 
     const items = React.useMemo(() => {
-        return [
-            {
-                text: '',
-                action: () => handleItemClick({text: '', url: ''}),
-            },
-            ...bcItems.map((item) => {
-                return {
-                    ...item,
-                    action: () => handleItemClick(item),
-                };
-            }),
-        ];
-    }, [bcItems, handleItemClick]);
+        return [{text: ''}, ...bcItems].map((item) => {
+            const account = item.text;
+            const text = account || ROOT_PLACEHOLDER;
+            const pathname = account
+                ? window.location.pathname
+                : calcRootPathname(window.location.pathname, cluster);
+
+            return (
+                <BreadcrumbsItem key={text} href={makeRoutedURL(pathname, {account})}>
+                    {text}
+                </BreadcrumbsItem>
+            );
+        });
+    }, [bcItems, cluster]);
 
     return (
         <Breadcrumbs
+            navigate={history.push}
             className={block('breadcrumbs')}
-            items={items}
-            lastDisplayedItemsCount={2}
-            firstDisplayedItemsCount={1}
-            renderItemContent={renderBcItem}
-        />
-    );
-}
-
-function renderBcItem(item: BreadcrumbsItem, isCurrent: boolean) {
-    return (
-        <BreadcrumbLink account={item.text} title={item.text || '<Root>'} isCurrent={isCurrent} />
-    );
-}
-
-interface BreadcrumbLinkProps {
-    account: string;
-    title?: string;
-    isCurrent: boolean;
-}
-
-function BreadcrumbLink({account, title, isCurrent}: BreadcrumbLinkProps) {
-    const cluster = useSelector(getCluster);
-    const pathname = account
-        ? window.location.pathname
-        : calcRootPathname(window.location.pathname, cluster);
-    const url = makeRoutedURL(pathname, {account});
-
-    return (
-        <Link
-            className={block('breadcrumbs-item', {current: isCurrent})}
-            theme={'ghost'}
-            url={url}
-            routed
+            onAction={handleBreadcrumbsClick}
+            showRoot
         >
-            {title || account}
-        </Link>
+            {items}
+        </Breadcrumbs>
     );
 }
 
