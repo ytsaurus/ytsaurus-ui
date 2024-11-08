@@ -8,6 +8,8 @@ import OperationsList from '../OperationsList/OperationsList';
 import OperationDetail from '../OperationDetail/OperationDetail';
 import {DASHBOARD_VIEW_CONTEXT} from '../../../constants/index';
 
+import './Operations.scss';
+
 const block = cn('operations');
 
 function Operations(props) {

@@ -14,7 +14,7 @@ import {SubjectCard} from '../../../components/SubjectLink/SubjectLink';
 import StatusLabel from '../../../components/StatusLabel/StatusLabel';
 import Button from '../../../components/Button/Button';
 import {Loader} from '@gravity-ui/uikit';
-import Error from '../../../components/Error/Error';
+import {PageError, PageErrorType} from '../../../components/PageError';
 import Icon from '../../../components/Icon/Icon';
 import Tabs from '../../../components/Tabs/Tabs';
 import Yson from '../../../components/Yson/Yson';
@@ -365,7 +365,13 @@ class OperationDetail extends React.Component<ReduxProps & RouteProps> {
     renderError() {
         const {errorData} = this.props;
 
-        return <Error message={errorData.message} error={errorData.details} />;
+        return (
+            <PageError
+                type={PageErrorType.NotFound}
+                title={errorData.message}
+                error={errorData.details}
+            />
+        );
     }
 
     render() {

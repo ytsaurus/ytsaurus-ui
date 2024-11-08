@@ -21,7 +21,6 @@ import RequestPermissions from '../tabs/ACL/RequestPermissions/RequestPermission
 import ErrorBoundary from '../../../components/ErrorBoundary/ErrorBoundary';
 import ContentViewer from './ContentViewer/ContentViewer';
 import {checkContentIsSupported} from './ContentViewer/helpers';
-import Error from '../../../components/Error/Error';
 import {Info} from '../../../components/Info/Info';
 import Tabs from '../../../components/Tabs/Tabs';
 import type {TabItem, TabSize} from '../../../components/Tabs/Tabs';
@@ -65,6 +64,12 @@ import UIFactory from '../../../UIFactory';
 import './Navigation.scss';
 import {UI_TAB_SIZE} from '../../../constants/global';
 import {CellPreviewModal} from '../../../containers/CellPreviewModal/CellPreviewModal';
+import {
+    PageError,
+    PageErrorType,
+    TitlePathNotFound,
+    TitlePermissionsDenied,
+} from '../../../components/PageError';
 
 const block = cn('navigation');
 
@@ -246,24 +251,45 @@ class Navigation extends Component<NavigationProps> {
     }
 
     renderError() {
-        const {error, isIdmSupported} = this.props;
-        const {message, details} = error ?? {};
+        const {error, isIdmSupported, path: currentPath} = this.props;
+        const {details} = error ?? {};
 
         // Looking for permission denied error
         const permissionDeniedError = details ? getPermissionDeniedError(details) : undefined;
-        const isPermissionDenied = permissionDeniedError && isIdmSupported;
+
+        const {
+            path: errorPath,
+            permission,
+            user,
+        }: {
+            path?: string;
+            permission?: [string, ...string[]];
+            user: string;
+        } = (permissionDeniedError ?? error)?.attributes ?? {};
+
+        const path = errorPath ?? currentPath;
+
+        // Here is `permission` use only for ts-validation: `perrmission` got from error, like details, that used for detect permissionDeniedError;
+        //  `permission` is set in `error.attirbutes`, it's mean that if `error` does exists, then `permission` exists too.
+        const isPermissionDenied = permission && permissionDeniedError && isIdmSupported;
+
+        const title = isPermissionDenied ? (
+            <TitlePermissionsDenied path={path} types={permission} user={user} />
+        ) : (
+            <TitlePathNotFound path={path} />
+        );
+
+        const footer = isPermissionDenied
+            ? this.renderRequestPermission(permissionDeniedError)
+            : null;
 
         return (
-            <div>
-                <div className={block('error-block')}>
-                    <Error
-                        className={block('error-block')}
-                        message={message}
-                        error={permissionDeniedError ?? details}
-                    />
-                    {isPermissionDenied && this.renderRequestPermission(permissionDeniedError)}
-                </div>
-            </div>
+            <PageError
+                error={permissionDeniedError ?? details}
+                type={isPermissionDenied ? PageErrorType.PermissionsDenied : PageErrorType.NotFound}
+                title={title}
+                footer={footer}
+            />
         );
     }
 
@@ -286,7 +312,7 @@ class Navigation extends Component<NavigationProps> {
                     buttonClassName={block('request-permissions-button')}
                     path={pathForRequest}
                     cluster={cluster}
-                    buttonProps={{size: 'l', width: 'max'}}
+                    buttonProps={{size: 'l'}}
                 />
             </div>
         );
@@ -308,7 +334,7 @@ class Navigation extends Component<NavigationProps> {
         return (
             <ErrorBoundary>
                 <div className="navigation elements-main-section">
-                    <StickyContainer>
+                    <StickyContainer className={block('sticky-container')}>
                         <div className={block('header')}>
                             <NavigationPermissionsNotice />
 
@@ -364,10 +390,7 @@ const mapDispatchToProps = {
     showNavigationAttributesEditor,
 } as Partial<NavigationProps>;
 
-const NavigationConnected = connect(
-    mapStateToProps, 
-    mapDispatchToProps,
-)(Navigation);
+const NavigationConnected = connect(mapStateToProps, mapDispatchToProps)(Navigation);
 
 const NavigationWithRumMemo = React.memo(NavigationWithMesure);
 
