@@ -134,6 +134,7 @@ class ReplicatedTable extends Component {
         },
         automatic_mode_switch: {
             align: 'center',
+            caption: 'Replicated table tracker',
             get(replica) {
                 const flag = ypath.getValue(replica, '/@replicated_table_tracker_enabled');
                 return flag === 'true' || flag === true;
