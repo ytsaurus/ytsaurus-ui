@@ -1,13 +1,12 @@
-import React from 'react';
+import React, {useCallback, useMemo} from 'react';
 
 import map_ from 'lodash/map';
 import reverse_ from 'lodash/reverse';
+import {Breadcrumbs, BreadcrumbsItem} from '../../../../components/Breadcrumbs';
 
 import moment from 'moment';
 import cn from 'bem-cn-lite';
-
-import {Breadcrumbs} from '@gravity-ui/uikit';
-
+import {useHistory} from 'react-router';
 import format from '../../../../common/hammer/format';
 import {useDispatch, useSelector} from 'react-redux';
 import {
@@ -38,7 +37,6 @@ import {
 import TextInputWithDebounce from '../../../../components/TextInputWithDebounce/TextInputWithDebounce';
 import {Secondary, SecondaryBold} from '../../../../components/Text/Text';
 import SimplePagination from '../../../../components/Pagination/SimplePagination';
-import Link from '../../../../components/Link/Link';
 import Icon from '../../../../components/Icon/Icon';
 import AccountUsageColumnsButton from './AccountUsageColumnsButton';
 import {SubjectCard} from '../../../../components/SubjectLink/SubjectLink';
@@ -49,6 +47,7 @@ import {useAllUserNamesFiltered} from '../../../../hooks/global';
 import {useUpdater} from '../../../../hooks/use-updater';
 
 import './AccountUsageToolbar.scss';
+import {makeRoutedURL} from '../../../../store/window-store';
 
 const block = cn('account-usage-toolbar');
 
@@ -472,51 +471,32 @@ function ViewType() {
 export function UsageBreadcrumbs() {
     const dispatch = useDispatch();
     const pathArr = useSelector(getAccountUsageTreeItemsBasePathSplitted);
+    const history = useHistory();
 
-    const items = React.useMemo(() => {
-        return map_(pathArr, (item) => {
-            return {
-                text: item.item,
-                value: item.value,
-                action: () => {
-                    dispatch(fetchAccountUsage());
-                },
-            };
+    const items = useMemo(() => {
+        return map_(pathArr, (item, index) => {
+            const text = item.item;
+            return (
+                <BreadcrumbsItem
+                    key={text}
+                    href={makeRoutedURL(`${window.location.pathname}?path=${item.value}`)}
+                >
+                    {index ? <PathFragment name={text} /> : <Icon awesome={'folder-tree'} />}
+                </BreadcrumbsItem>
+            );
         });
-    }, [pathArr, dispatch]);
+    }, [pathArr]);
+
+    const handleBreadcrumbClick = useCallback(() => {
+        setTimeout(() => {
+            dispatch(fetchAccountUsage());
+        }, 0);
+    }, [dispatch]);
 
     return (
-        <Breadcrumbs
-            items={items}
-            firstDisplayedItemsCount={1}
-            lastDisplayedItemsCount={1}
-            renderRootContent={() => {
-                return (
-                    <Link
-                        theme={'primary'}
-                        url={`${window.location.pathname}?path=/`}
-                        routed={true}
-                        routedPreserveLocation={true}
-                    >
-                        <Secondary>
-                            <Icon awesome={'folder-tree'} />
-                        </Secondary>
-                    </Link>
-                );
-            }}
-            renderItemContent={(item) => {
-                return (
-                    <Link
-                        theme={'primary'}
-                        url={`${window.location.pathname}?path=${(item as any).value}`}
-                        routed={true}
-                        routedPreserveLocation={true}
-                    >
-                        <PathFragment name={item.text} />
-                    </Link>
-                );
-            }}
-        />
+        <Breadcrumbs navigate={history.push} onAction={handleBreadcrumbClick} showRoot>
+            {items}
+        </Breadcrumbs>
     );
 }
 

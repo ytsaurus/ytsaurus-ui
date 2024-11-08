@@ -1,8 +1,7 @@
 import React, {FC, MouseEvent} from 'react';
-import {BreadcrumbsItem as BreadcrumbsItemType} from '@gravity-ui/uikit/build/esm/components/Breadcrumbs/Breadcrumbs';
 
 export const BreadcrumbsItem: FC<{
-    item: BreadcrumbsItemType;
+    item: {text: string; href: string};
     isCurrent: boolean;
     onClick: (path: string) => void;
 }> = ({item, isCurrent, onClick}) => {
@@ -13,5 +12,9 @@ export const BreadcrumbsItem: FC<{
         }
     };
 
-    return <div onClick={handleItemClick}>{item.text}</div>;
+    return (
+        <div data-qa={item.text} onClick={handleItemClick}>
+            {item.text}
+        </div>
+    );
 };

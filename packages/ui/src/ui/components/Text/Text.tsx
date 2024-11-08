@@ -36,10 +36,16 @@ export function NoWrap({children}: Props) {
     return <span className={block('no-wrap')}>{children}</span>;
 }
 
-export function Escaped({text}: {text: string}) {
+export function Escaped({text, onClick}: {text: string; onClick?: (e: React.MouseEvent) => void}) {
     const textNode = unipika.prettyprint(text, {
         ...UNIPIKA_ESCAPED_SETTINGS,
         asHTML: true,
     });
-    return <span className={block('escaped')} dangerouslySetInnerHTML={{__html: textNode}} />;
+    return (
+        <span
+            onClick={onClick}
+            className={block('escaped')}
+            dangerouslySetInnerHTML={{__html: textNode}}
+        />
+    );
 }

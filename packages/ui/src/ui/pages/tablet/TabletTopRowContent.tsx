@@ -9,7 +9,7 @@ import {useSelector} from 'react-redux';
 import {useRouteMatch} from 'react-router';
 
 import './TabletTopRowContent.scss';
-import {Breadcrumbs} from '@gravity-ui/uikit';
+import {Breadcrumbs, BreadcrumbsItem} from '../../components/Breadcrumbs';
 import {getAppBrowserHistory} from '../../store/window-store';
 const block = cn('tablet-top-row-content');
 
@@ -29,24 +29,20 @@ function TabletBreadcrumbs() {
     } = useRouteMatch<{id: string}>();
     const cluster = useSelector(getCluster);
 
-    const handleEdit = React.useCallback((tabletId?: string) => {
-        getAppBrowserHistory().push(`/${cluster}/${Page.TABLET}/${tabletId || ''}`);
-    }, []);
+    const handleEdit = React.useCallback(
+        (tabletId?: string) => {
+            getAppBrowserHistory().push(`/${cluster}/${Page.TABLET}/${tabletId || ''}`);
+        },
+        [cluster],
+    );
 
     return (
-        <EditableAsText className={block('editable')} text={id} onChange={handleEdit}>
-            <Breadcrumbs
-                className={block('control')}
-                items={[
-                    {
-                        text: id,
-                        action: () => {},
-                    },
-                ]}
-                lastDisplayedItemsCount={2}
-                firstDisplayedItemsCount={1}
-                renderItemDivider={() => ''}
-            />
-        </EditableAsText>
+        <>
+            <EditableAsText className={block('editable')} text={id} onChange={handleEdit}>
+                <Breadcrumbs showRoot>
+                    <BreadcrumbsItem>{id}</BreadcrumbsItem>
+                </Breadcrumbs>
+            </EditableAsText>
+        </>
     );
 }

@@ -2,10 +2,10 @@ import React from 'react';
 import {useSelector} from 'react-redux';
 import cn from 'bem-cn-lite';
 
-import {Breadcrumbs, BreadcrumbsItem} from '@gravity-ui/uikit';
+import {Breadcrumbs, BreadcrumbsItem} from '../../components/Breadcrumbs';
+import {useHistory} from 'react-router';
 
 import Favourites, {FavouritesItem} from '../../components/Favourites/Favourites';
-import Link from '../../components/Link/Link';
 import {Page} from '../../constants/index';
 import {TabletsTab} from '../../constants/tablets';
 import {RowWithName} from '../../containers/AppNavigation/TopRowContent/SectionName';
@@ -124,50 +124,35 @@ interface BundleBreadcrumbsProps {
 }
 
 function BundleBreadcrumbs({className, bcItems, setActiveBundle}: BundleBreadcrumbsProps) {
-    const cluster = useSelector(getCluster);
+    const history = useHistory();
 
     const handleItemClick = React.useCallback(
-        (item: TabletsCellBundlesBreadcrumbsItem) => {
-            setActiveBundle(item.text);
+        (item: string | number) => {
+            setActiveBundle(item.toString());
         },
         [setActiveBundle],
     );
 
     const items = React.useMemo(() => {
         return bcItems.map((item) => {
-            return {
-                text: item.text || item.title || '',
-                href: item.href,
-                action: () => handleItemClick(item),
-            };
-        });
-    }, [bcItems, handleItemClick]);
-
-    const renderItem = React.useCallback(
-        (item: BreadcrumbsItem, isCurrent: boolean) => {
+            const text = item.text || item.title || '';
             return (
-                <Link
-                    className={block('breadcrumbs-link', {
-                        current: isCurrent,
-                    })}
-                    routed
-                    url={item.href}
-                >
-                    {item.text}
-                </Link>
+                <BreadcrumbsItem key={text} href={item.href}>
+                    {text}
+                </BreadcrumbsItem>
             );
-        },
-        [cluster],
-    );
+        });
+    }, [bcItems]);
 
     return (
         <Breadcrumbs
+            navigate={history.push}
+            onAction={handleItemClick}
             className={className}
-            items={items}
-            lastDisplayedItemsCount={2}
-            firstDisplayedItemsCount={1}
-            renderItemContent={renderItem}
-        />
+            showRoot
+        >
+            {items}
+        </Breadcrumbs>
     );
 }
 

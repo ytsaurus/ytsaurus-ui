@@ -1,5 +1,4 @@
 import {Page} from '@playwright/test';
-import {replaceInnerHtml} from './dom';
 import {E2E_DIR_NAME} from '.';
 
 class HasPage {
@@ -73,12 +72,22 @@ export class BasePage extends HasPage {
     }
 
     async replaceBreadcrumbsByTitle(title: string, replacement: string) {
-        await replaceInnerHtml(this.page, {
-            [`[title="${title}"] .unipika .string`]: `${replacement}`,
-        });
+        await this.page.evaluate(
+            (data) => {
+                const elements = document.querySelectorAll<HTMLSpanElement>(
+                    '.yt-u-breadcrumbs .string',
+                );
+                const element = Array.from(elements).find((i) => i.innerText === data.title);
+                if (element) {
+                    element.innerText = data.replacement;
+                }
+            },
+            {title, replacement},
+        );
     }
 
     async replaceBreadcrumbsTestDir() {
+        await this.page.waitForSelector('.g-breadcrumbs2');
         await this.replaceBreadcrumbsByTitle(E2E_DIR_NAME, 'e2e.1970-01-01.00:00:00.xxxxxxxxxxx');
     }
 

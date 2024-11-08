@@ -24,11 +24,8 @@ class ComponentsPage extends BasePage {
         await replaceInnerHtml(this.page, {
             '.node-page__host': {regex: hostname, replacement: HOST_MASK},
             '.meta-table-item__value_key_tags .node-meta__tags .elements-label': 'some tag',
-            [`.g-breadcrumbs [title="${hostname}"] .g-link`]: {
-                regex: hostname,
-                replacement: HOST_MASK,
-            },
         });
+        await this.replaceBreadcrumbsByTitle(hostname, HOST_MASK);
     }
 }
 
@@ -59,7 +56,7 @@ test('Components - Node - Memory popup', async ({page}) => {
 
     await components(page).openSecondNode();
 
-    await components(page).replaceBreadcrumbsTestDir;
+    await components(page).replaceBreadcrumbsTestDir();
 
     await components(page).replaceHostName();
 
@@ -84,6 +81,7 @@ test('Components - Tablets', async ({page}) => {
     await page.waitForSelector('.elements-table');
     await replaceInnerHtml(page, {
         '.yt-host .g-link': 'local:XXX',
+        '.g-progress__text': '0 B / X.00 GiB',
     });
     await expect(page).toHaveScreenshot();
 });
