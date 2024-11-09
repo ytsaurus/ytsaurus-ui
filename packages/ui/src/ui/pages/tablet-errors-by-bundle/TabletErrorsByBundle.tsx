@@ -64,21 +64,17 @@ export function TabletErrorsByBundle({bundle}: {bundle: string}) {
 }
 
 function useTabletErrorsColumns(loading: boolean) {
-    const {errors: data = []} = useSelector(getTabletErrorsByBundleData) ?? {};
+    const {
+        errors: data = [],
+        presented_methods = [],
+        all_methods = [],
+    } = useSelector(getTabletErrorsByBundleData) ?? {};
     const pageFilter = useSelector(getTabletErrorsByBundlePageFilter);
     const teMethods = useSelector(getTabletErrorsByBundleMethodsFilter);
     const teTime = useSelector(getTabletErrorsByBundleTimeRangeFilter);
     const pageCount = useSelector(getTabletErrorsByBundlePageCount);
 
     const columns = React.useMemo(() => {
-        type Method = keyof (typeof data)[number]['method_counts'];
-        const errorTypes = new Set<Method>();
-        data.forEach((row) => {
-            Object.keys(row.method_counts ?? {}).forEach((method) => {
-                errorTypes.add(method);
-            });
-        });
-
         const res: Array<Column<TableMethodErrorsCount>> = [
             {
                 name: 'path',
@@ -114,12 +110,12 @@ function useTabletErrorsColumns(loading: boolean) {
                 },
                 width: 180,
             },
-            ...[...errorTypes.values()].map((method) => {
+            ...(all_methods ?? presented_methods).map((method) => {
                 return {
                     name: `method_${method}`,
-                    header: <ColumnHeader column={method} />,
+                    header: <ColumnHeader column={method + ' errors'} />,
                     render({row}) {
-                        return format.Number(row.method_counts?.[method]) ?? format.NO_VALUE;
+                        return format.Number(row.method_counts?.[method]);
                     },
                     align: 'right',
                     width: 140,

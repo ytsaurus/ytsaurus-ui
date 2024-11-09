@@ -136,9 +136,11 @@ export default function ColumnHeader<T extends string = string>(props: ColumnHea
                 <span className={block('label')} title={titleContent}>
                     {nameContent}
                 </span>
-                <span className={block('icon')}>
-                    <SortIcon hidden={!sortable} order={order} />
-                </span>
+                {sortable && (
+                    <span className={block('icon')}>
+                        <SortIcon order={order} />
+                    </span>
+                )}
                 {multisortIndex !== undefined && (
                     <span className={block('multisort')}>
                         &nbsp;<sup>{multisortIndex}</sup>
