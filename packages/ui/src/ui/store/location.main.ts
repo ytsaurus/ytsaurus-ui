@@ -10,8 +10,8 @@ import {
 } from './reducers/clusters-menu/url-mapping';
 
 import {
+    getNavigationParams,
     getNavigationPreparedState,
-    navigationParams,
 } from '../store/reducers/navigation/url-mapping';
 
 import {
@@ -96,9 +96,9 @@ import {chytListParams, getGhytListPreparedState} from './reducers/chyt/url-mapp
 import type {PathParameters} from '../store/location';
 
 // prettier-ignore
-export const mainLocations:  Array<[string, PathParameters]> = [
+export const getMainLocations = (): Array<[string, PathParameters]> => [
     ['/', [clustersMenuParams, getClustersMenuPreparedState]],
-    [`/*/${Page.NAVIGATION}`, [navigationParams, getNavigationPreparedState]],
+    [`/*/${Page.NAVIGATION}`, [getNavigationParams(), getNavigationPreparedState]],
 
     [
         `/*/${Page.COMPONENTS}/${ComponentsTab.VERSIONS}`,

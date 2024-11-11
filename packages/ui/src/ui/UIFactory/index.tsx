@@ -5,7 +5,7 @@ import type {DropdownMenuItem} from '@gravity-ui/uikit';
 import type {SVGIconData} from '@gravity-ui/uikit/build/esm/components/Icon/types';
 
 import type {MetaTableItem} from '../components/MetaTable/MetaTable';
-import type {PathParameters} from '../store/location';
+import type {LocationParameters, PathParameters} from '../store/location';
 import type {TabletBundle} from '../store/reducers/tablet_cell_bundles';
 import type {PoolInfo} from '../store/selectors/scheduling/scheduling-pools';
 import type {ClusterConfig, ClusterUiConfig} from '../../shared/yt-types';
@@ -27,6 +27,7 @@ import type {SubjectCardProps} from '../components/SubjectLink/SubjectLink';
 import type {QueryItem} from '../pages/query-tracker/module/api';
 import type {Node} from '../utils/navigation/content/map-nodes/node';
 import type {PreloadErrorType} from '../constants';
+import type {RootState} from '../store/reducers';
 
 type HeaderItemOrPage =
     | {
@@ -114,6 +115,10 @@ export type ExtraTab = {
     component: React.ComponentType;
     isSupported: (attributes: Record<string, any>) => boolean;
     position: {before: TabName} | {after: TabName};
+    urlMapping?: {
+        params: LocationParameters;
+        getPreparedState: (state: RootState, location: {query: RootState}) => RootState;
+    };
 };
 
 export type QueryResultChartTab = {

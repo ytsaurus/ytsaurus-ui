@@ -41,7 +41,7 @@ import {odinPageInfo, odinRootPageInfo} from '../../pages/odin/lazy';
 import {hasOdinPage} from '../../config';
 import {chyt} from './chyt';
 import {RawVersion} from '../../store/selectors/thor/support';
-import {mainLocations} from '../../store/location.main';
+import {getMainLocations} from '../../store/location.main';
 import {flow} from '../../store/reducers/flow';
 
 const appReducers = {
@@ -118,7 +118,7 @@ function registerReducersAndUrlMapping(
 }
 
 export function makeRootReducer() {
-    mainLocations.forEach(([path, params]) => {
+    getMainLocations().forEach(([path, params]) => {
         registerLocationParameters(path, params);
     });
 
