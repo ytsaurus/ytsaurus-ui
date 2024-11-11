@@ -43,37 +43,58 @@ import {RootState} from '../../../store/reducers';
 import {updateIfChanged} from '../../../utils/utils';
 import {LocationParameters} from '../../../store/location';
 import {getNavigationMapNodeFlowPreparedState, mapNodeFlowParams} from '../flow/url-mapping';
+import UIFactory from '../../../UIFactory';
 
-export const navigationParams: LocationParameters = {
-    ...tableParams,
-    ...mapNodeParams,
-    ...mapNodeFlowParams,
-    ...transactionMapParams,
+export const getNavigationParams = (): LocationParameters => {
+    const params: LocationParameters = {
+        ...tableParams,
+        ...mapNodeParams,
+        ...mapNodeFlowParams,
+        ...transactionMapParams,
 
-    ...consumerParams,
-    ...queueParams,
-    ...aclFiltersParams,
-    ...schemaParams,
-    ...tabletsParams,
+        ...consumerParams,
+        ...queueParams,
+        ...aclFiltersParams,
+        ...schemaParams,
+        ...tabletsParams,
 
-    ...navigationAccessLogParams,
+        ...navigationAccessLogParams,
 
-    navmode: {
-        stateKey: 'navigation.navigation.mode',
-        initialState: initialState.mode,
-        options: {shouldPush: true},
-    },
-    t: {
-        stateKey: 'navigation.navigation.transaction',
-        initialState: initialState.transaction,
-        options: {shouldPush: true},
-    },
-    path: {
-        stateKey: 'navigation.navigation.path',
-        options: {
-            shouldPush: true,
+        navmode: {
+            stateKey: 'navigation.navigation.mode',
+            initialState: initialState.mode,
+            options: {shouldPush: true},
         },
-    },
+        t: {
+            stateKey: 'navigation.navigation.transaction',
+            initialState: initialState.transaction,
+            options: {shouldPush: true},
+        },
+        path: {
+            stateKey: 'navigation.navigation.path',
+            options: {
+                shouldPush: true,
+            },
+        },
+    };
+
+    return UIFactory.getNavigationExtraTabs().reduce((acc, extraTab) => {
+        if (extraTab.urlMapping) {
+            const tabParams = extraTab.urlMapping.params;
+
+            for (const key of Object.keys(tabParams)) {
+                if (acc[key]) {
+                    throw new Error(`Found duplicating param "${key}" in "${extraTab.value}" tab`);
+                }
+            }
+
+            return {
+                ...acc,
+                ...tabParams,
+            };
+        }
+        return acc;
+    }, params);
 };
 
 function getNavigationNodeTypesPreparedState(state: RootState, location: {query: RootState}) {
@@ -92,6 +113,12 @@ function getNavigationNodeTypesPreparedState(state: RootState, location: {query:
 export function getNavigationPreparedState(state: RootState, location: {query: RootState}) {
     const {query} = location;
     let res = getNavigationNodeTypesPreparedState(state, location);
+
+    UIFactory.getNavigationExtraTabs().forEach((extraTab) => {
+        if (extraTab.urlMapping) {
+            res = extraTab.urlMapping.getPreparedState(res, location);
+        }
+    });
 
     res = produce(res, (draft) => {
         updateIfChanged(draft.navigation.navigation, 'mode', query.navigation.navigation.mode);
