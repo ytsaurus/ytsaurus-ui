@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.67.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.66.0...ui-v1.67.0) (2024-11-11)
+
+
+### Features
+
+* **PoolTreeSuggestControl:** now we could select multiply pool trees on clique creation/edit [[#841](https://github.com/ytsaurus/ytsaurus-ui/issues/841)] ([89c79a8](https://github.com/ytsaurus/ytsaurus-ui/commit/89c79a8733128c8ce0214bbe0857b583bce1d449))
+* **Queries:** allow users to copy query id ([f6acc89](https://github.com/ytsaurus/ytsaurus-ui/commit/f6acc897caed62d6a160e657d2e605d8b0182d5a))
+* **Queries:** info nodes in query error [YTFRONT-4342] ([c2f4f3f](https://github.com/ytsaurus/ytsaurus-ui/commit/c2f4f3febff66c4330e3db4b919e7896a244b55f))
+
+
+### Bug Fixes
+
+* **Breadcrumbs:** breadcrumb popup links not working [YTFRONT-4121] ([bad5795](https://github.com/ytsaurus/ytsaurus-ui/commit/bad579593e391bfb73ec0f45e2b99c8e26659063))
+
 ## [1.66.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.65.0...ui-v1.66.0) (2024-11-01)
 
 
