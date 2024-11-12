@@ -76,9 +76,14 @@ export function NodeMaintenanceModal() {
                     rest,
                     (acc, item, t) => {
                         const type = t as keyof typeof rest;
-                        if (Boolean(initialValues?.[type]?.state) !== Boolean(item?.state)) {
+
+                        if (
+                            Boolean(initialValues?.[type]?.state) !== Boolean(item?.state) ||
+                            initialValues?.[type]?.comment !== item?.comment
+                        ) {
                             acc[type] = item;
                         }
+
                         return acc;
                     },
                     {} as Partial<FormValues>,
