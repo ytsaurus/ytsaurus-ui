@@ -100,9 +100,9 @@ const QueryEditorView = React.memo(function QueryEditorView({
             }
         };
 
-        document.addEventListener('keydown', runQueryByKey);
+        document.addEventListener('keydown', runQueryByKey, true);
         return () => {
-            document.removeEventListener('keydown', runQueryByKey);
+            document.removeEventListener('keydown', runQueryByKey, true);
         };
     }, [runQueryCallback]);
 
