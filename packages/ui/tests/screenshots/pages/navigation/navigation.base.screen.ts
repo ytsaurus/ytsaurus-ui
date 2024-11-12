@@ -31,6 +31,15 @@ test('Navigation: map_node - Content', async ({page}) => {
     });
 });
 
+test('Navigation: map_node - bad-names', async ({page}) => {
+    await page.goto(makeClusterUrl(`navigation?path=${E2E_DIR}/bad-names`));
+
+    await navigationPage(page).replaceMapNodeDateTimes(8);
+    await navigationPage(page).replaceBreadcrumbsTestDir();
+
+    await expect(page).toHaveScreenshot();
+});
+
 test('Navigation: map_node - Attributes', async ({page}) => {
     await page.goto(makeClusterUrl(`navigation?navmode=attributes&path=${E2E_DIR}`));
 
