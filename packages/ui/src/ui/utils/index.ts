@@ -23,7 +23,10 @@ export const flags = new Map<'false' | 'FALSE' | false | 'true' | 'TRUE' | true,
     [true, true],
 ]);
 
-export function prepareAttributes(attributes: any, settings?: UnipikaSettings): unknown {
+/**
+ * todo: Has problem with return type – use any, because I don't know how to declare it correct
+ */
+export function prepareAttributes(attributes: any, settings?: UnipikaSettings): any {
     const getPreparedValue = <T>({$attributes}: any, value: T) => {
         if (!$attributes) {
             return value;
@@ -35,7 +38,7 @@ export function prepareAttributes(attributes: any, settings?: UnipikaSettings): 
         };
     };
 
-    const prepareAttribute = (attribute: {$type: string; $value: any}) => {
+    const prepareAttribute = (attribute: any): unknown => {
         if (!attribute) {
             return null;
         } else if (typeof attribute === 'object' && !attribute.$type) {
@@ -69,7 +72,11 @@ export function prepareAttributes(attributes: any, settings?: UnipikaSettings): 
             }
 
             default:
-                prepareAttributes(attribute.$value, unipika.formatFromYSON(attribute, settings));
+                // todo It was not return a value, maybe, it should be removed?
+                return prepareAttributes(
+                    attribute.$value,
+                    unipika.formatFromYSON(attribute, settings),
+                );
         }
     };
 
@@ -90,7 +97,7 @@ function normalizeItemWithAttributes(item: any): unknown {
 export function normalizeResponseWithAttributes(data: any): unknown {
     return !Array.isArray(data)
         ? normalizeItemWithAttributes(data)
-        : map_(data, normalizeItemWithAttributes);
+        : data.map(normalizeItemWithAttributes);
 }
 
 export function formatCounterName(name: string): string {
@@ -117,6 +124,7 @@ export function computeEffectiveStateProgress(counters): unknown {
     const total = counters.total;
 
     return sortStateProgress(
+        // todo: It needs to change to use Array.map, but it has problems with types
         map_(counters.effectiveStates, (count, state) => {
             return {
                 value: total && (count / total) * 100,
@@ -221,6 +229,7 @@ export function valueOrDefault<T>(value: T, defaultValue: T): T {
 }
 
 export function prepareTableColumns<T extends {caption?: string}>(columns: Record<string, T>) {
+    // todo: It needs to change to use Array.reduce, but it has problems with types
     return reduce_(
         columns,
         (preparedColumns, column, name) => {

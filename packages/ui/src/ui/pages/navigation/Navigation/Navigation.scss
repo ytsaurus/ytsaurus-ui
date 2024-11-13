@@ -1,5 +1,18 @@
 .navigation {
     min-width: 1200px;
+    min-height: 100%;
+
+    &__sticky-container {
+        display: flex;
+        flex-direction: column;
+        min-height: 100%;
+    }
+
+    &__main {
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+    }
 
     &__error-action-button {
         margin-top: 20px;

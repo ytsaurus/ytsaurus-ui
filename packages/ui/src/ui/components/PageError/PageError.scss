@@ -1,0 +1,99 @@
+.page-error {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+    min-width: 100%;
+    min-height: 100%;
+
+    &__content {
+        display: flex;
+        flex-direction: row;
+        align-items: stretch;
+        gap: 30px;
+        max-width: 90vw;
+        word-break: break-word;
+    }
+
+    &__icon-container {
+        flex: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    &__icon {
+        position: sticky;
+        top: calc(var(--app-header-height, 0) + 30px);
+        bottom: 30px;
+    }
+
+    &__body {
+        flex: auto;
+        display: flex;
+        flex-direction: column;
+
+        color: var(--g-color-text-complementary);
+        font-family: var(--g-text-body-font-family);
+        font-size: var(--g-text-subheader-1-font-size);
+        line-height: var(--g-text-subheader-1-line-height);
+        font-weight: 500;
+    }
+
+    &__title {
+        font-family: var(--g-text-body-font-family);
+        font-size: var(--g-text-subheader-3-font-size);
+        line-height: var(--g-text-subheader-3-line-height);
+        font-weight: 500;
+
+        margin-bottom: 12px;
+    }
+
+    &__details {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 4px;
+
+        .elements-error-details__tabs {
+            margin: 0;
+        }
+
+        .elements-error-details__details {
+            margin-top: 4px;
+            padding: 8px;
+            border-radius: 8px;
+            background: var(--g-color-base-generic);
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .elements-error-details__errors,
+        .elements-error-details__inner-errors {
+            margin-bottom: 4px;
+        }
+
+        .elements-error-details__message {
+            word-wrap: break-word;
+            word-break: break-all;
+        }
+        
+        .unipika-wrapper {
+            background: none;
+            padding: 0;
+        }
+
+        & > .elements-error-details > .elements-error-details__inner-errors {
+            padding-left: 0;
+        }
+    }
+
+    &__footer {
+        display: flex;
+        flex-direction: row;
+        align-items: flex-start;
+        gap: 8px;
+    }
+}

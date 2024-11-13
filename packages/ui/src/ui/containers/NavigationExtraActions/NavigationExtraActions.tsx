@@ -18,7 +18,7 @@ function NavigationExtraActions({className}: {className?: string}) {
                 className,
                 path,
                 cluster,
-                type,
+                type: type ?? '', // todo What should be here by default? Maybe should throw an error?
                 attributes,
             })}
         </>

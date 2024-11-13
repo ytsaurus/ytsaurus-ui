@@ -1,3 +1,4 @@
+import {OutputFormat} from '../../shared/yt-types';
 import {ValueOf} from '../types/index';
 import createActionTypes, {createPrefix} from './utils';
 export {Page} from '../../shared/constants/settings';
@@ -31,7 +32,7 @@ export const PRELOAD_ERROR = {
 
 export type PreloadErrorType = ValueOf<typeof PRELOAD_ERROR>;
 
-export const TYPED_OUTPUT_FORMAT = {
+export const TYPED_OUTPUT_FORMAT: OutputFormat = {
     $value: 'json' as const,
     $attributes: {
         stringify: true,

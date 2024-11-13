@@ -405,7 +405,8 @@ export interface UIFactory {
 
     yqlWidgetSetup?: {
         renderButton(props: {className?: string; isSplit?: string}): React.ReactNode;
-        renderWidget(props: {cluster: string; path: string; attributes: unknown}): React.ReactNode;
+        // todo Original has required props, but here (in customize-ui-factory.tsx) overrite without props
+        renderWidget(): React.ReactNode;
         renderYqlOperationLink(yqlOperationId: string): React.ReactNode;
     };
 

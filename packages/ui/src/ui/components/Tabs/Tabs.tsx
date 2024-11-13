@@ -3,7 +3,7 @@ import {NavLink} from 'react-router-dom';
 import block from 'bem-cn-lite';
 import partition_ from 'lodash/partition';
 
-import Hotkey, {HotkeyProps} from '../Hotkey/Hotkey';
+import Hotkey, {HotkeyItem} from '../Hotkey/Hotkey';
 import Link from '../Link/Link';
 import Icon from '../Icon/Icon';
 
@@ -14,6 +14,8 @@ import './Tabs.scss';
 
 const b = block('tabs');
 
+export type TabSize = 's' | 'm' | 'l';
+
 interface Props<ValueT extends string = string> {
     className?: string;
 
@@ -21,11 +23,18 @@ interface Props<ValueT extends string = string> {
     active?: ValueT;
     onTabChange: (value: ValueT) => void;
     layout?: 'horizontal' | 'vertical';
-    size?: 's' | 'm' | 'l';
+    size?: TabSize;
     underline?: boolean;
     routed?: boolean;
     routedPreserveLocation?: boolean;
     exactNavLink?: boolean;
+}
+
+export interface TabItemHotkeySettings extends HotkeyItem {
+    /**
+     * @see {@link Tab} is common variants of tab
+     */
+    tab: string;
 }
 
 export interface TabItem<ValueT extends string = string> {
@@ -38,8 +47,9 @@ export interface TabItem<ValueT extends string = string> {
     url?: string;
     routed?: boolean;
     external?: boolean;
+    caption?: string;
 
-    hotkey?: HotkeyProps['settings'];
+    hotkey?: TabItemHotkeySettings[];
 }
 
 class Tabs<ValueT extends string = string> extends React.Component<Props<ValueT>> {

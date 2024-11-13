@@ -8,7 +8,7 @@ import {getDownloadQueryResultURL} from '../../module/api';
 import {getQueryResult} from '../../module/query_result/selectors';
 import {RootState} from '../../../../store/reducers';
 import {useThunkDispatch} from '../../../../store/thunkDispatch';
-import {FIX_MY_TYPE} from '../../../../../@types/types';
+import {FixMyType} from '../../../../../@types/types';
 import {getExportTableBaseUrl} from '../../../../config';
 
 /**
@@ -31,7 +31,7 @@ export class QueryResultTableDownloadManager extends DownloadManager {
     }
 
     getDownloadLink() {
-        const {getDownloadBaseUrl} = this.props as FIX_MY_TYPE;
+        const {getDownloadBaseUrl} = this.props as FixMyType;
         const {rowsMode, startRow, numRows} = this.state;
         const cursor =
             rowsMode === 'range'
@@ -47,7 +47,7 @@ export class QueryResultTableDownloadManager extends DownloadManager {
     }
 
     getExcelDownloadLink() {
-        const {cluster, queryId} = this.props as FIX_MY_TYPE;
+        const {cluster, queryId} = this.props as FixMyType;
         const {number_precision_mode, rowsMode, startRow, numRows} = this.state;
 
         const base = `${getExportTableBaseUrl({cluster})}/${cluster}/api/export-query-result`;

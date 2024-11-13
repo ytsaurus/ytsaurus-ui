@@ -208,7 +208,11 @@ export default class ErrorDetails extends Component {
         return (
             <span className={b('message')}>
                 {text}
-                {code !== undefined && <React.Fragment>[{ypath.getValue(code)}]</React.Fragment>}
+                {code !== undefined && (
+                    <>
+                        &#32;<span className={b('error-code')}>[{ypath.getValue(code)}]</span>
+                    </>
+                )}
             </span>
         );
     }

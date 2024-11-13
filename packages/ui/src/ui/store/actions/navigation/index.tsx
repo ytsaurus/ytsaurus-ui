@@ -1,12 +1,17 @@
+// @ts-expect-error
 import yt from '@ytsaurus/javascript-wrapper/lib/yt';
+import {Action} from 'redux';
+
 import metrics from '../../../common/utils/metrics';
-import {navigationTrackVisit} from '../../../store/actions/favourites';
+import {navigationTrackVisit} from '../favourites';
 import {RumWrapper, YTApiId, ytApiV3, ytApiV3Id} from '../../../rum/rum-wrap-api';
 import {RumMeasureTypes} from '../../../rum/rum-measure-types';
 
-import {isPathAutoCorrectionSettingEnabled} from '../../../store/selectors/settings';
-import {getPath, getTransaction} from '../../../store/selectors/navigation';
+import {isPathAutoCorrectionSettingEnabled} from '../../selectors/settings';
+import {getPath, getTransaction} from '../../selectors/navigation';
 
+import {AppThunkDispatch} from '../../../store/thunkDispatch';
+import {RootState} from '../../../store/reducers';
 import {
     autoCorrectPath,
     cancelRequests,
@@ -27,17 +32,29 @@ import {
     Tab,
     UPDATE_PATH,
     UPDATE_VIEW,
-} from '../../../constants/navigation/index';
-import {getCluster, getCurrentUserName} from '../../../store/selectors/global';
-import {fetchTableMountConfig} from '../../../store/actions/navigation/content/table/table-mount-config';
+} from '../../../constants/navigation';
+import {getCluster, getCurrentUserName} from '../../selectors/global';
+import {fetchTableMountConfig} from './content/table/table-mount-config';
 import {checkPermissions} from '../../../utils/acl/acl-api';
 import {getAnnotation} from './tabs/annotation';
 import {loadTabletErrorsCount} from './tabs/tablet-errors';
-import {isSupportedEffectiveExpiration} from '../../../store/selectors/thor/support';
-import {getTabs} from '../../../store/selectors/navigation/navigation';
+import {isSupportedEffectiveExpiration} from '../../selectors/thor/support';
+import {getTabs} from '../../selectors/navigation/navigation';
+import {YPath, YTError} from '../../../../@types/types';
 
-export function updateView(settings = {}) {
-    return (dispatch, getState) => {
+export interface ViewSettings {
+    trackVisit?: boolean;
+}
+
+interface AccountPermissions {
+    isWriteable?: boolean;
+    isAccountUsable?: boolean;
+    checkPermissionsError?: boolean;
+}
+
+export function updateView(settings: ViewSettings = {}) {
+    // todo Change any-type to specific-type
+    return (dispatch: AppThunkDispatch<Action>, getState: () => RootState) => {
         const state = getState();
         const currentPath = getPath(state);
         const transaction = getTransaction(state);
@@ -88,8 +105,8 @@ export function updateView(settings = {}) {
                 ),
             )
             .then((results) => {
-                const [attrs, {output: opaqueAttrs} = {}] = results;
-                const pathError = prepareAttributes(path.error);
+                const [attrs, {output: opaqueAttrs} = {output: undefined}] = results;
+                const pathError = prepareAttributes(path.error) as YTError | undefined;
                 if (pathError?.code === yt.codes.NODE_DOES_NOT_EXIST) {
                     delete path.error;
                 }
@@ -97,7 +114,9 @@ export function updateView(settings = {}) {
                 const error = getBatchError(results, 'Failed to get navigation attributes');
                 if (error) {
                     // Convert typed errors to regular ones
-                    error.inner_errors = error.inner_errors.map(prepareAttributes);
+                    error.inner_errors = error.inner_errors?.map(
+                        (innerError) => prepareAttributes(innerError) as YTError,
+                    );
                     throw error;
                 }
 
@@ -110,9 +129,12 @@ export function updateView(settings = {}) {
                 };
             })
             .then((attributes) => {
-                const preparedAttributes = prepareAttributes(attributes, {
-                    asHTML: false,
-                });
+                const preparedAttributes = prepareAttributes(
+                    attributes as Record<string, unknown>,
+                    {
+                        asHTML: false,
+                    },
+                );
 
                 if (settings.trackVisit) {
                     dispatch(navigationTrackVisit(path));
@@ -120,12 +142,13 @@ export function updateView(settings = {}) {
 
                 metrics.countEvent({
                     navigation_path: {
+                        // @ts-ignore
                         type: preparedAttributes.type,
                     },
                 });
 
                 const user = getCurrentUserName(state);
-                const {account} = preparedAttributes;
+                const {account} = preparedAttributes as {account: string};
 
                 dispatch({
                     type: UPDATE_VIEW.SUCCESS,
@@ -139,7 +162,7 @@ export function updateView(settings = {}) {
                     isWriteable,
                     isAccountUsable,
                     checkPermissionsError,
-                }) => {
+                }: AccountPermissions) => {
                     dispatch({
                         type: NAVIGATION_PARTIAL,
                         data: {isWriteable, isAccountUsable, checkPermissionsError},
@@ -214,8 +237,18 @@ export function updateView(settings = {}) {
     };
 }
 
-export function setMode(mode) {
-    return (dispatch, getState) => {
+interface SetModeDispatchAction extends Action {
+    /**
+     * @see {@link Tab} is common variants of tab
+     */
+    data: string;
+}
+
+/**
+ * @see {@link Tab} is common variants of tab
+ */
+export function setMode(mode: string) {
+    return (dispatch: AppThunkDispatch<SetModeDispatchAction>, getState: () => RootState) => {
         const [firstTab] = getTabs(getState());
 
         dispatch({
@@ -226,15 +259,26 @@ export function setMode(mode) {
 }
 
 export function onTransactionChange() {
-    return (dispatch) => {
+    return (dispatch: (action: ReturnType<typeof updateView>) => unknown) => {
         dispatch(updateView({trackVisit: true}));
         // Need to update breadcrumbs dimensions after transaction change
         window.dispatchEvent(new Event('resize'));
     };
 }
 
-export function setTransaction(transaction) {
-    return (dispatch) => {
+interface SetTransactionDispatchAction extends Action {
+    data: string;
+}
+
+type ClearTransactionDispatch = AppThunkDispatch<Action>;
+
+type TransactionDispatch = AppThunkDispatch<SetTransactionDispatchAction> &
+    ClearTransactionDispatch &
+    ((action: ReturnType<typeof onTransactionChange>) => unknown);
+
+// todo Check is type of transaction correct
+export function setTransaction(transaction: string) {
+    return (dispatch: TransactionDispatch) => {
         dispatch({
             type: SET_TRANSACTION,
             data: transaction,
@@ -244,7 +288,7 @@ export function setTransaction(transaction) {
 }
 
 export function clearTransaction() {
-    return (dispatch) => {
+    return (dispatch: TransactionDispatch) => {
         dispatch({
             type: CLEAR_TRANSACTION,
         });
@@ -252,8 +296,18 @@ export function clearTransaction() {
     };
 }
 
-export function updatePath(path, shouldUpdateContentMode = true) {
-    return (dispatch, getState) => {
+interface UpdatePathDispatchAction extends Action {
+    data: {
+        path: string;
+        shouldUpdateContentMode: boolean;
+    };
+}
+
+export function updatePath(path: string, shouldUpdateContentMode = true) {
+    return (
+        dispatch: AppThunkDispatch<UpdatePathDispatchAction>,
+        getState: () => RootState,
+    ): string | YPath => {
         const autoCorrectionEnabled = isPathAutoCorrectionSettingEnabled(getState());
 
         const correctedPath = autoCorrectionEnabled ? autoCorrectPath(path) : path;
@@ -271,7 +325,10 @@ export function updatePath(path, shouldUpdateContentMode = true) {
 }
 
 export function navigateParent() {
-    return (dispatch, getState) => {
+    return (
+        dispatch: (data: ReturnType<typeof updatePath>) => string,
+        getState: () => RootState,
+    ) => {
         const {path} = getState().navigation.navigation;
         const nextPath = getParentPath(path);
         dispatch(updatePath(nextPath));

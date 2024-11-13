@@ -7,7 +7,7 @@ import ytLib from '@ytsaurus/javascript-wrapper';
 import {createAutoUpdatedCache} from '../utils/auto-updated-cache';
 import {getRobotYTApiSetup} from './requestsSetup';
 import {getApp} from '../ServerFactory';
-import {FIX_MY_TYPE} from '../../@types/types';
+import {FixMyType} from '../../@types/types';
 import {USE_SUPRESS_SYNC} from '../../shared/constants';
 import {ClusterUiConfig} from '../../shared/yt-types';
 
@@ -63,14 +63,14 @@ function fetchClusterParams(cluster: string, {ctx}: {ctx?: AppContext}) {
                         ...cx.getMetadata(),
                         'X-YT-Correlation-Id': xYTCorrelationId + mlSuffix,
                     },
-                    transformResponse({parsedData, rawResponse}: FIX_MY_TYPE) {
+                    transformResponse({parsedData, rawResponse}: FixMyType) {
                         return {
                             data: parsedData,
                             status: rawResponse?.status,
                             headers: rawResponse?.headers,
                         };
                     },
-                    transformError({parsedData, rawError}: FIX_MY_TYPE) {
+                    transformError({parsedData, rawError}: FixMyType) {
                         throw {
                             data: parsedData,
                             status: rawError?.response?.status,
@@ -90,7 +90,7 @@ function fetchClusterParams(cluster: string, {ctx}: {ctx?: AppContext}) {
                     ],
                 },
             })
-            .then((response: FIX_MY_TYPE) => {
+            .then((response: FixMyType) => {
                 cx.log('List of masters is fetched', {
                     cluster,
                     'x-yt-proxy': response.headers['x-yt-proxy'],
@@ -100,7 +100,7 @@ function fetchClusterParams(cluster: string, {ctx}: {ctx?: AppContext}) {
                 sendStats(response.status, mlSuffix);
                 return response.data[0];
             })
-            .catch((error: FIX_MY_TYPE) => {
+            .catch((error: FixMyType) => {
                 const headers = error?.headers || {};
                 cx.logError('List of masters fetch failed', {
                     cluster,
@@ -117,14 +117,14 @@ function fetchClusterParams(cluster: string, {ctx}: {ctx?: AppContext}) {
                 setup: {
                     ...configSetup,
                     requestHeaders: {...cx.getMetadata(), 'X-YT-Correlation-Id': xYTCorrelationId},
-                    transformResponse({parsedData, rawResponse}: FIX_MY_TYPE) {
+                    transformResponse({parsedData, rawResponse}: FixMyType) {
                         return {
                             data: parsedData,
                             status: rawResponse?.status,
                             headers: rawResponse?.headers,
                         };
                     },
-                    transformError({parsedData, rawError}: FIX_MY_TYPE) {
+                    transformError({parsedData, rawError}: FixMyType) {
                         throw {
                             data: parsedData,
                             status: rawError?.response?.status,
@@ -176,7 +176,7 @@ function fetchClusterParams(cluster: string, {ctx}: {ctx?: AppContext}) {
                     ],
                 },
             })
-            .then((response: FIX_MY_TYPE) => {
+            .then((response: FixMyType) => {
                 cx.log('Fetched cluster config', {
                     cluster,
                     'x-yt-proxy': response.headers['x-yt-proxy'],
@@ -186,7 +186,7 @@ function fetchClusterParams(cluster: string, {ctx}: {ctx?: AppContext}) {
                 sendStats(response.status);
                 return response.data;
             })
-            .catch((error: FIX_MY_TYPE) => {
+            .catch((error: FixMyType) => {
                 const headers = error?.headers || {};
                 cx.logError('Cluster config fetch failed', {
                     cluster,

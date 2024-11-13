@@ -178,7 +178,11 @@ function FlowMonitoring() {
         urlTemplate,
     } = UIFactory.getMonitoringComponentForNavigationFlow() ?? {};
     const attributes = useSelector(getAttributes);
-    const {monitoring_cluster, monitoring_project} = attributes;
+    const {monitoring_cluster, monitoring_project} = attributes as {
+        monitoring_cluster: string;
+        monitoring_project: string;
+    };
+
     const cluster = useSelector(getCluster);
 
     if (Component) {
