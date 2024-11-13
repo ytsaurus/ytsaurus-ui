@@ -316,16 +316,6 @@ module.exports = {
         method: 'GET',
         dataType: 'text',
     },
-    addMaintenance: {
-        name: 'add_maintenance',
-        method: 'POST',
-        dataType: 'json',
-    },
-    removeMaintenance: {
-        name: 'remove_maintenance',
-        method: 'POST',
-        dataType: 'json',
-    },
 
     // Other
     parseYPath: v2.parseYPath,

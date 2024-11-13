@@ -227,4 +227,15 @@ module.exports = {
         method: 'GET',
         dataType: 'json',
     },
+
+    addMaintenance: {
+        name: 'add_maintenance',
+        method: 'POST',
+        dataType: 'json',
+    },
+    removeMaintenance: {
+        name: 'remove_maintenance',
+        method: 'POST',
+        dataType: 'json',
+    },
 };
