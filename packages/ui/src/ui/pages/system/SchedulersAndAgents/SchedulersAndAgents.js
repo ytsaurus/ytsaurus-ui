@@ -61,17 +61,22 @@ class SchedulersAndAgents extends Component {
     };
 
     renderHosts(name, connectedHosts) {
-        return map_(connectedHosts, ({host, state, maintenanceMessage}, index) => {
-            return (
-                <Scheduler
-                    key={host ?? index}
-                    host={host}
-                    state={state}
-                    maintenanceMessage={maintenanceMessage}
-                    type={name}
-                />
-            );
-        });
+        return map_(
+            connectedHosts,
+            ({host, physicalHost, address, state, maintenanceMessage}, index) => {
+                return (
+                    <Scheduler
+                        key={host ?? index}
+                        host={host}
+                        physicalHost={physicalHost}
+                        address={address}
+                        state={state}
+                        maintenanceMessage={maintenanceMessage}
+                        type={name}
+                    />
+                );
+            },
+        );
     }
 
     renderSection(name, heading) {

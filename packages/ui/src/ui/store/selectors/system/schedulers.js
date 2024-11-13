@@ -22,6 +22,8 @@ export const getSystemSchedulersWithState = createSelector(
             const res = connectedSchedulersToState(path, sheduler);
             return {
                 ...res,
+                host: ypath.getValue(sheduler.host, ''),
+                physicalHost: ypath.getValue(sheduler.host, '/@annotations/physical_host'),
                 maintenanceMessage: !ypath.getValue(sheduler, '/host/@maintenance')
                     ? undefined
                     : ypath.getValue(sheduler, '/host/@maintenance_message') || 'Maintenance',
@@ -38,6 +40,8 @@ export const getSystemAgentsWithState = createSelector(
             const res = connectedAgentsToState(path, agent);
             return {
                 ...res,
+                host: ypath.getValue(agent.host, ''),
+                physicalHost: ypath.getValue(agent.host, '/@annotations/physical_host'),
                 maintenanceMessage: !ypath.getValue(agent, '/host/@maintenance')
                     ? undefined
                     : ypath.getValue(agent, '/host/@maintenance_message') || 'Maintenance',
@@ -69,14 +73,14 @@ export const getSystemSchedulerAndAgentAlerts = createSelector(
 function connectedSchedulersToState(path, connectedHost) {
     const {connected, host} = connectedHost;
     const state = typeof connected !== 'undefined' ? (connected ? 'active' : 'standby') : 'offline';
-    return {host: ypath.getValue(host, path), state};
+    return {address: ypath.getValue(host, path), state};
 }
 
 function connectedAgentsToState(path, connectedHost) {
     const {connected, host} = connectedHost;
     const state =
         typeof connected !== 'undefined' ? (connected ? 'connected' : 'disconnected') : 'offline';
-    return {host: ypath.getValue(host, path), state};
+    return {address: ypath.getValue(host, path), state};
 }
 
 const numberOf = (statefulHosts, state) => {

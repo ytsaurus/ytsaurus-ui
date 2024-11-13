@@ -21,14 +21,11 @@ import {
     MasterAlert,
     MasterDataItemInfo,
     MastersConfigResponse,
+    MastersGroup,
     MastersStateAction,
-    ResponseItemsGroup,
 } from '../../reducers/system/masters';
 import {ThunkAction} from 'redux-thunk';
 import type {RootState} from '../../reducers';
-import {MasterInstance} from '../../selectors/system/masters';
-import {getMastersHostType} from '../../selectors/settings';
-import {VisibleHostType} from '../../../constants/system/masters';
 import {ValueOf} from '../../../../@types/types';
 
 export const FETCH_MASTER_CONFIG = createActionTypes('MASTER_CONFIG');
@@ -324,7 +321,7 @@ function loadHydra(
     requests: BatchSubRequest[],
     masterInfo: MasterDataItemInfo[],
     type: 'primary' | 'providers' | 'secondary',
-    masterEntry: ResponseItemsGroup,
+    masterEntry: MastersGroup,
 ) {
     const {addresses, cellTag} = masterEntry;
     const hydraPath = '/orchid/monitoring/hydra';
@@ -432,11 +429,12 @@ export function loadMasters() {
     };
 }
 
-const getPathByMasterType = (type: string): string | null => {
+export const getPathByMasterType = (type: string, cellTag?: string): string | null => {
     switch (type) {
         case 'primary':
+            return '//sys/primary_masters';
         case 'secondary':
-            return '//sys/cluster_masters';
+            return `//sys/secondary_masters/${cellTag}`;
         case 'providers':
             return '//sys/timestamp_providers';
         case 'queue_agent':
@@ -480,37 +478,20 @@ export const changeMaintenance = ({
 
 export const changeMasterMaintenance =
     ({
-        address,
+        path,
         maintenance,
         message,
     }: {
-        address: string;
+        path: string;
         maintenance: boolean;
         message: string;
     }): ThunkAction<any, RootState, unknown, MastersStateAction> =>
-    async (dispatch, getSate) => {
-        const state = getSate();
-        const hostType = getMastersHostType(state);
-        const {primary, secondary, queueAgents, providers} = state.system.masters;
-        const instances: MasterInstance[] = [
-            ...primary.instances,
-            ...secondary.reduce<MasterInstance[]>((acc, item) => [...acc, ...item.instances], []),
-            ...queueAgents.instances,
-            ...providers.instances,
-        ];
-
-        const master = instances.find((i) => {
-            const {host, physicalHost} = i.toObject();
-            const addressByType = hostType === VisibleHostType.host ? host : physicalHost;
-            return addressByType === address;
-        });
-        if (!master) throw new Error('Cant find master by address');
-
-        const path = getPathByMasterType(master.getType());
+    async (dispatch, getState) => {
+        const state = getState();
         if (!path) throw new Error('Cant take path by master type');
 
         const result = await changeMaintenance({
-            path: `${path}/${master.toObject().host}`,
+            path,
             login: state.global.login,
             maintenance,
             message,

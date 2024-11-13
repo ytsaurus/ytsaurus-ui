@@ -1,8 +1,9 @@
-import React, {FC} from 'react';
+import React, {FC, useCallback} from 'react';
 import hammer from '../../../common/hammer';
 import NodeQuad, {NodeQuadTheme} from '../NodeQuad/NodeQuad';
 import {Tooltip} from '../../../components/Tooltip/Tooltip';
 import Icon from '../../../components/Icon/Icon';
+import {useDispatch} from 'react-redux';
 import ReadOnlyIcon from '../../../assets/img/svg/read-only-icon.svg';
 import WarmUpIcon from '../../../assets/img/svg/warmup-icon.svg';
 import {makeShortSystemAddress} from '../helpers/makeShortSystemAddress';
@@ -12,6 +13,8 @@ import {ChangeMaintenanceButton} from './ChangeMaintenanceButton';
 import block from 'bem-cn-lite';
 import {MasterInstance} from '../../../store/selectors/system/masters';
 import './MasterGroup.scss';
+import {changeMasterMaintenance} from '../../../store/actions/system/masters';
+import {CypressNode} from '../../../../shared/yt-types';
 
 const b = block('master-group');
 
@@ -39,8 +42,12 @@ type Props = {
 };
 
 export const Instance: FC<Props> = ({instance, hostType, allowVoting, allowService}) => {
+    const dispatch = useDispatch();
     const {state, $address, $physicalAddress} = instance;
-    const attributes = instance.$attributes as Record<string, any>;
+    const attributes = instance.$attributes as CypressNode<
+        {read_only: boolean; voting: boolean; warming_up: boolean},
+        unknown
+    >['$attributes'];
     const address = hostType === 'host' ? $address : $physicalAddress;
     const maintenance = instance.getMaintenance();
     const maintenanceMessage = maintenance ? instance.getMaintenanceMessage() || 'Maintenance' : '';
@@ -49,6 +56,15 @@ export const Instance: FC<Props> = ({instance, hostType, allowVoting, allowServi
     const denyVoting = allowVoting && voting === false;
     const theme = denyVoting && state === 'following' ? 'nonvoting' : instanceStateToTheme[state!];
     const addressWithoutPort = hammer.format['Address'](address);
+
+    const handleOnMaintenanceChange = useCallback(
+        async (data: {path: string; maintenance: boolean; message: string}) => {
+            await dispatch(changeMasterMaintenance(data));
+        },
+        [dispatch],
+    );
+
+    const shortName = makeShortSystemAddress(addressWithoutPort) || addressWithoutPort;
 
     return (
         <>
@@ -77,9 +93,7 @@ export const Instance: FC<Props> = ({instance, hostType, allowVoting, allowServi
             </div>
             <div className={b('host')}>
                 <Tooltip content={addressWithoutPort}>
-                    <div className={b('host-name')}>
-                        {makeShortSystemAddress(addressWithoutPort) || addressWithoutPort}
-                    </div>
+                    <div className={b('host-name')}>{shortName}</div>
                 </Tooltip>
                 <Flex gap={1}>
                     <span className={b('host-btn')}>
@@ -88,10 +102,13 @@ export const Instance: FC<Props> = ({instance, hostType, allowVoting, allowServi
                     {allowService && (
                         <ChangeMaintenanceButton
                             className={b('host-btn')}
-                            address={address}
+                            path={instance.getPath()}
+                            title={`Edit ${addressWithoutPort}`}
+                            host={$physicalAddress}
+                            container={$address}
                             maintenance={maintenance}
                             maintenanceMessage={maintenanceMessage}
-                            type="master"
+                            onMaintenanceChange={handleOnMaintenanceChange}
                         />
                     )}
                     {

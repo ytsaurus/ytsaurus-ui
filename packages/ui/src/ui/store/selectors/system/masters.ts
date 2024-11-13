@@ -1,22 +1,22 @@
 import ypath from '../../../common/thor/ypath';
-import {MasterAlert} from '../../reducers/system/masters';
+import {MasterAddress, MasterAlert, MasterDataItem} from '../../reducers/system/masters';
 import {RootState} from '../../reducers';
-
-export interface AddressData {
-    host: string;
-    physicalHost?: string;
-    state?: 'online' | 'offline' | 'unknown';
-}
+import {getPathByMasterType} from '../../actions/system/masters';
 
 export class MasterInstance {
-    $attributes: unknown;
+    $attributes: {
+        read_only?: boolean;
+        voting?: boolean;
+        warming_up?: boolean;
+        state?: MasterAddress['state'] | MasterDataItem['state'];
+    };
 
-    $rowAddress: AddressData;
+    $rowAddress: MasterAddress;
     $address: string;
     $physicalAddress: string;
     $type: string;
     $cell?: number;
-    $state: AddressData['state'];
+    $state: MasterAddress['state'];
     state?:
         | 'elections'
         | 'follower_recovery'
@@ -27,13 +27,14 @@ export class MasterInstance {
         | 'unknown';
     committedVersion?: string;
 
-    constructor(address: AddressData, type: string, cell?: number) {
+    constructor(address: MasterAddress, type: string, cell?: number) {
         this.$rowAddress = address;
         this.$address = address.host;
         this.$physicalAddress = address.physicalHost || address.host;
         this.$state = address.state;
         this.$type = type; // 'primary' | 'secondary' | 'provider'
         this.$cell = cell; // Cell tag
+        this.$attributes = {};
     }
     toObject() {
         return {
@@ -55,11 +56,19 @@ export class MasterInstance {
         return ypath.getValue(this.$rowAddress, '/attributes/maintenance_message');
     }
 
+    getHost() {
+        return ypath.getValue(this.$address, '');
+    }
+
     getType() {
         return this.$type;
     }
 
-    update(data: unknown) {
+    getPath() {
+        return `${getPathByMasterType(this.getType(), this.$cell?.toString())}/${this.getHost()}`;
+    }
+
+    update(data: MasterInstance['$attributes'] = {}) {
         this.$attributes = data;
         this.state = ypath.getValue(this.$attributes, '/state') || 'unknown';
         this.committedVersion = ypath.getValue(this.$attributes, '/committed_version');
