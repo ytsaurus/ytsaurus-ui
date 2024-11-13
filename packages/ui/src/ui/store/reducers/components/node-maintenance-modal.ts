@@ -18,7 +18,7 @@ export type NodeMaintenanceState = {
             {
                 state: 'maintenance' | '';
                 comment?: string;
-                othersComment?: string;
+                otherComments?: string;
             }
         >
     >;

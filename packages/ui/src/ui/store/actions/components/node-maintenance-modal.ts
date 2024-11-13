@@ -16,7 +16,7 @@ import {
     isAllowedMaintenanceApiProxies,
 } from '../../../store/selectors/components/node-maintenance-modal';
 import {wrapApiPromiseByToaster} from '../../../utils/utils';
-import {YTApiId, ytApiV3Id} from '../../../rum/rum-wrap-api';
+import {YTApiId, ytApiV3Id, ytApiV4Id} from '../../../rum/rum-wrap-api';
 import {AddMaintenanceParams, BatchSubRequest} from '../../../../shared/yt-types';
 import {updateComponentsNode} from './nodes/nodes';
 import {getCurrentUserName} from '../../../store/selectors/global';
@@ -129,16 +129,20 @@ export function applyMaintenance(
                     }),
                 );
             } else {
-                requests.push({
-                    command,
-                    parameters: {
-                        component,
-                        address,
-                        type,
-                        mine: true,
-                        comment,
-                    },
-                });
+                const parameters = {
+                    component,
+                    address,
+                    type,
+                    comment,
+                };
+                requests.push(
+                    command === 'add_maintenance'
+                        ? {command, parameters}
+                        : {
+                              command,
+                              parameters: {...parameters, mine: true},
+                          },
+                );
             }
         });
 
@@ -153,7 +157,7 @@ export function applyMaintenance(
             }
         };
 
-        return wrapApiPromiseByToaster(ytApiV3Id.executeBatch(YTApiId.addMaintenance, {requests}), {
+        return wrapApiPromiseByToaster(ytApiV4Id.executeBatch(YTApiId.addMaintenance, {requests}), {
             toasterName: 'edit_node_' + address,
             isBatch: true,
             skipSuccessToast: true,
@@ -251,7 +255,7 @@ export function loadNodeMaintenanceData({
                 forEach_(data.maintenance_requests, (item) => {
                     const dst =
                         maintenance[item.type] ??
-                        (maintenance[item.type] = {comment: '', othersComment: '', state: ''});
+                        (maintenance[item.type] = {comment: '', otherComments: '', state: ''});
 
                     if (item.user === user) {
                         dst.state = 'maintenance';
@@ -260,7 +264,7 @@ export function loadNodeMaintenanceData({
                         }
                         dst.comment += item.comment;
                     } else {
-                        dst.othersComment += `${item.timestamp} ${item.user}\t${item.comment}`;
+                        dst.otherComments += `${item.timestamp} ${item.user}\t${item.comment}`;
                     }
                 });
             } else {

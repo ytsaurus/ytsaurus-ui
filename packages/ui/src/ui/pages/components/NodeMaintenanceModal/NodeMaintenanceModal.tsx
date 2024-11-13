@@ -76,7 +76,11 @@ export function NodeMaintenanceModal() {
                     rest,
                     (acc, item, t) => {
                         const type = t as keyof typeof rest;
-                        if (Boolean(initialValues?.[type]?.state) !== Boolean(item?.state)) {
+                        const {state, comment} = initialValues?.[type] ?? {};
+                        if (
+                            Boolean(state) !== Boolean(item?.state) ||
+                            (item?.comment && comment !== item?.comment)
+                        ) {
                             acc[type] = item;
                         }
                         return acc;
