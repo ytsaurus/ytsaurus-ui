@@ -223,7 +223,6 @@ export type YTPermissionType =
 export interface AddMaintenanceParams extends BaseBatchParams {
     component: 'cluster_node' | 'http_proxy' | 'rpc_proxy';
     address: string;
-    mine: boolean;
     comment?: string;
     type:
         | 'ban'
@@ -231,6 +230,10 @@ export interface AddMaintenanceParams extends BaseBatchParams {
         | 'disable_write_sessions'
         | 'disable_tablet_cells'
         | 'decommission';
+}
+
+export interface RemoveMaintenanceParams extends AddMaintenanceParams {
+    mine: boolean;
 }
 
 export type BatchSubRequest =
@@ -247,7 +250,8 @@ export type BatchSubRequest =
     | SubRequest<'check_permission_by_acl', CheckAclParams>
     | SubRequest<'get_query', GetQueryParams>
     | SubRequest<'get_query_result', GetQueryResultParams>
-    | SubRequest<'add_maintenance' | 'remove_maintenance', AddMaintenanceParams>;
+    | SubRequest<'add_maintenance', AddMaintenanceParams>
+    | SubRequest<'remove_maintenance', RemoveMaintenanceParams>;
 
 export type OutputFormat =
     | {

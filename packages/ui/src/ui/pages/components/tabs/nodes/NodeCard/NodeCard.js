@@ -17,7 +17,6 @@ import Error from '../../../../../components/Error/Error';
 import MetaTable, {Template} from '../../../../../components/MetaTable/MetaTable';
 import CollapsibleSection from '../../../../../components/CollapsibleSection/CollapsibleSection';
 
-import {renderLabel} from '../../../../../components/templates/components/nodes/nodes';
 import {loadNodeAttributes} from '../../../../../store/actions/components/node/node';
 import {getSortedItems} from '../../../../../store/selectors/components/nodes/node-card';
 
@@ -40,6 +39,7 @@ import withSplit from '../../../../../hocs/withSplit';
 import UIFactory from '../../../../../UIFactory';
 import ClipboardButton from '../../../../../components/ClipboardButton/ClipboardButton';
 import {makeComponentsNodesUrl} from '../../../../../utils/app-url';
+import {getNodeMetaItems} from '../../../../../utils/components/nodes/node-meta-items';
 
 import './NodeCard.scss';
 
@@ -212,26 +212,7 @@ class NodeCard extends Component {
     }
 
     renderDefault() {
-        const {
-            state,
-            systemTags,
-            userTags,
-            rack,
-            banned,
-            banMessage = '',
-            decommissioned,
-            decommissionedMessage,
-            full,
-            alerts,
-            dataCenter,
-            lastSeenTime,
-            disableJobs,
-            disableTabletCells,
-            disableWriteSession,
-        } = this.props.node;
-
-        const stateText = hammer.format['FirstUppercase'](state);
-        const stateTheme = {online: 'success', offline: 'danger'}[state] || 'default';
+        const {systemTags, userTags} = this.props.node;
 
         return (
             <CollapsibleSection size="s" name="Default" className={block('default')}>
@@ -247,64 +228,7 @@ class NodeCard extends Component {
                             value: map_(userTags, (tag) => <Label key={tag} text={tag} />),
                             visible: userTags?.length > 0,
                         },
-                        {
-                            key: 'state',
-                            value: <Label theme={stateTheme} type="text" text={stateText} />,
-                        },
-                        {
-                            key: 'rack',
-                            value: hammer.format['Address'](rack),
-                            visible: Boolean(rack),
-                        },
-                        {
-                            key: 'banned',
-                            value: <Label text={banMessage} theme="warning" type="text" />,
-                            visible: Boolean(banned),
-                        },
-                        {
-                            key: 'decommissioned',
-                            value: (
-                                <Label
-                                    text={decommissionedMessage || 'Decommissioned'}
-                                    theme="default"
-                                    type="text"
-                                />
-                            ),
-                            visible: Boolean(decommissioned),
-                        },
-                        {
-                            key: 'full',
-                            value: <Label text="Full" theme="danger" type="text" />,
-                            visible: Boolean(full),
-                        },
-                        {
-                            key: 'alerts',
-                            value: <Label text={alerts?.length || 0} theme="danger" type="text" />,
-                            visible: alerts?.length > 0,
-                        },
-                        {
-                            key: 'scheduler_jobs',
-                            value: renderLabel(disableJobs),
-                        },
-                        {
-                            key: 'write_sessions',
-                            value: renderLabel(disableWriteSession),
-                        },
-                        {
-                            key: 'tablet_cells',
-                            value: renderLabel(disableTabletCells),
-                        },
-                        {
-                            key: 'data_center',
-                            value: dataCenter?.toUpperCase(),
-                            visible: Boolean(dataCenter),
-                        },
-                        {
-                            key: 'last_seen',
-                            value: hammer.format['DateTime'](lastSeenTime, {
-                                format: 'full',
-                            }),
-                        },
+                        ...getNodeMetaItems(this.props.node),
                     ]}
                 />
             </CollapsibleSection>

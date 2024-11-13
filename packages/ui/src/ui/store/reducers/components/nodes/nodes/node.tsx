@@ -14,6 +14,7 @@ import hammer from '../../../../../common/hammer';
 import {STACKED_PROGRESS_BAR_COLORS} from '../../../../../constants/colors';
 import type {FIX_MY_TYPE} from '../../../../../types/index';
 import {computeProgress, progressText} from '../../../../../utils/progress';
+import {MaintenanceRequestInfo} from '../../../../../store/actions/components/node-maintenance-modal';
 
 interface NodeSlots {
     usage: number;
@@ -82,6 +83,7 @@ export class Node {
         '/statistics/total_stored_chunk_count',
         '/statistics/total_used_space',
         '/statistics/total_available_space',
+        'maintenance_requests',
     ] as const;
 
     static getResourcesSlots(resourceUsage: unknown, resourceLimits: unknown, key: string) {
@@ -100,6 +102,7 @@ export class Node {
     alertCount?: number;
     alerts?: object[];
     banMessage?: string;
+    maintenanceRequests?: Array<MaintenanceRequestInfo>;
     banned!: boolean;
     chaosSlots!: TabletSlots;
     chunks!: number;
@@ -193,6 +196,7 @@ export class Node {
         this.full = ypath.getValue(this.statistics, '/full');
         this.banned = ypath.getBoolean(attributes, '/banned');
         this.banMessage = ypath.getValue(attributes, '/ban_message');
+        this.maintenanceRequests = ypath.getValue(attributes, '/maintenance_requests') ?? [];
         this.decommissioned = ypath.getBoolean(attributes, '/decommissioned');
         this.decommissionedMessage = ypath.getValue(attributes, '/decommission_message');
         this.alertCount = ypath.getValue(attributes, '/alert_count');
@@ -436,7 +440,7 @@ type AttributeName = (typeof Node.ATTRIBUTES)[number];
 type Attributes = Record<AttributeName, FIX_MY_TYPE>;
 
 const alertCountAttributes: ReadonlyArray<AttributeName> = ['alert_count'];
-const bannedAttributes: ReadonlyArray<AttributeName> = ['banned'];
+const bannedAttributes: ReadonlyArray<AttributeName> = ['banned', 'ban_message'];
 const dataCenterAttributes: ReadonlyArray<AttributeName> = ['data_center'];
 const decommissionedAttributes: ReadonlyArray<AttributeName> = ['decommissioned'];
 const hostAttributes: ReadonlyArray<AttributeName> = [];
@@ -489,6 +493,7 @@ export const AttributesByProperty: Record<keyof Node, ReadonlyArray<AttributeNam
     IOWeight: ['/statistics/media'],
     lastSeenTime: ['last_seen_time'],
     locations: locationsAttributes,
+    maintenanceRequests: ['maintenance_requests'],
     memory: memoryAttributes,
     memoryData: memoryAttributes,
     memoryProgress: memoryAttributes,
