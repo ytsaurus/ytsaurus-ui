@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.10.3](https://github.com/ytsaurus/ytsaurus-ui/compare/javascript-wrapper-v0.10.2...javascript-wrapper-v0.10.3) (2024-11-13)
+
+
+### Bug Fixes
+
+* **javascript-wrapper:** add_maintenance/remove_maintenance are available in v4 [YTFRONT-4480] ([b554a0f](https://github.com/ytsaurus/ytsaurus-ui/commit/b554a0f037a04481c96bd0b5afe6c55e635dc5dd))
+
 ## [0.10.2](https://github.com/ytsaurus/ytsaurus-ui/compare/javascript-wrapper-v0.10.1...javascript-wrapper-v0.10.2) (2024-10-11)
 
 
