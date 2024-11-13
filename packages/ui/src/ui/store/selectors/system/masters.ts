@@ -48,8 +48,11 @@ export class MasterInstance {
     }
 
     getMaintenance() {
-        const attributes = ypath.getValue(this.$rowAddress, '/attributes');
-        return attributes.maintenance;
+        return ypath.getValue(this.$rowAddress, '/attributes/maintenance');
+    }
+
+    getMaintenanceMessage() {
+        return ypath.getValue(this.$rowAddress, '/attributes/maintenance_message');
     }
 
     getType() {
