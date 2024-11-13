@@ -1,55 +1,54 @@
-import React, {FC, useCallback, useState} from 'react';
+import React, {FC, useState} from 'react';
 import {Button, Icon} from '@gravity-ui/uikit';
-import {changeMasterMaintenance} from '../../../store/actions/system/masters';
-import {changeSchedulerMaintenance} from '../../../store/actions/system/schedulers';
-import {useDispatch} from 'react-redux';
 import PencilIcon from '@gravity-ui/icons/svgs/pencil.svg';
 import {FormApi, YTDFDialog, makeErrorFields} from '../../../components/Dialog';
-import hammer from '../../../common/hammer';
 import {useToggle} from 'react-use';
 
 type Props = {
     className?: string;
-    address: string;
+    path: string | null;
+    title?: string;
+    host?: string;
+    container?: string;
     maintenance: boolean;
     maintenanceMessage: string;
-    type: 'master' | 'scheduler' | 'agent';
+    onMaintenanceChange: (data: {
+        path: string;
+        message: string;
+        maintenance: boolean;
+    }) => Promise<void>;
 };
 
-type FormData = {maintenance: string; message: string};
+type FormData = {host: string; container: string; maintenance: string; message: string};
 
 export const ChangeMaintenanceButton: FC<Props> = ({
     className,
+    path,
+    title,
+    host,
+    container,
     maintenance,
     maintenanceMessage,
-    type,
-    address,
+    onMaintenanceChange,
 }) => {
     const [error, setError] = useState<Error | undefined>(undefined);
     const [visible, toggleVisible] = useToggle(false);
-    const dispatch = useDispatch();
 
-    const handleMaintenanceChange = useCallback(
-        async (form: FormApi<FormData>) => {
-            const {values} = form.getState();
-            const action = type === 'master' ? changeMasterMaintenance : changeSchedulerMaintenance;
-            try {
-                await dispatch(
-                    action({
-                        address,
-                        message: values.message,
-                        maintenance: values.maintenance === 'enabled',
-                        type,
-                    }),
-                );
-                setError(undefined);
-            } catch (e) {
-                setError(e as Error);
-                throw e as Error;
-            }
-        },
-        [address, dispatch, type],
-    );
+    if (!path) return;
+
+    const handleMaintenanceChange = async (form: FormApi<FormData>) => {
+        const {values} = form.getState();
+        try {
+            await onMaintenanceChange({
+                path,
+                message: values.message,
+                maintenance: values.maintenance === 'enabled',
+            });
+        } catch (e) {
+            setError(e as Error);
+            throw e as Error;
+        }
+    };
 
     const handleOnClose = () => {
         toggleVisible();
@@ -61,13 +60,25 @@ export const ChangeMaintenanceButton: FC<Props> = ({
             <YTDFDialog<FormData>
                 pristineSubmittable
                 headerProps={{
-                    title: `Edit ${hammer.format['Address'](address)}`,
+                    title,
                 }}
                 initialValues={{
+                    host,
+                    container,
                     maintenance: maintenance ? 'enabled' : 'disabled',
                     message: maintenanceMessage,
                 }}
                 fields={[
+                    {
+                        name: 'host',
+                        type: 'plain',
+                        caption: 'Host',
+                    },
+                    {
+                        name: 'container',
+                        type: 'plain',
+                        caption: 'Container',
+                    },
                     {
                         name: 'maintenance',
                         type: 'radio',

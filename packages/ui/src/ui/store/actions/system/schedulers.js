@@ -11,9 +11,6 @@ import {USE_SUPRESS_SYNC} from '../../../../shared/constants';
 import {loadSchedulersAndAgents} from './index';
 import {changeMaintenance} from './masters';
 import {getCurrentUserName} from '../../selectors/global';
-import {getSystemAgents, getSystemSchedulers} from '../../selectors/system/schedulers';
-import {getMastersHostType} from '../../selectors/settings';
-import {VisibleHostType} from '../../../constants/system/masters';
 
 export function getSchedulers() {
     return ytApiV3Id
@@ -130,26 +127,11 @@ export function getAgents() {
 }
 
 export const changeSchedulerMaintenance =
-    ({address, maintenance, message, type}) =>
+    ({path, maintenance, message}) =>
     async (dispatch, getSate) => {
-        const state = getSate();
-        const isAgent = type === 'agents';
-        const items = isAgent ? getSystemAgents(state) : getSystemSchedulers(state);
-        const hostType = getMastersHostType(state);
-
-        const master = items.find((i) => {
-            const host = i.host.$value;
-            const annotations = ypath.getValue(i.host, '/@annotations');
-            const addressByType =
-                hostType === VisibleHostType.host ? host : annotations.physical_host;
-            return addressByType === address;
-        });
-
-        if (!master) throw new Error('Cant find master by address');
-
         const login = getCurrentUserName(getSate());
         const result = await changeMaintenance({
-            path: `//sys/${isAgent ? 'controller_agents' : 'scheduler'}/instances/${master.host.$value}`, //controller_agents
+            path,
             login,
             maintenance,
             message,

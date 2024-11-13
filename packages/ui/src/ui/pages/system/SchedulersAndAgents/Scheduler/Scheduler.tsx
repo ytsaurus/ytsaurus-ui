@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useCallback} from 'react';
 
 import hammer from '../../../../common/hammer';
 import block from 'bem-cn-lite';
@@ -11,16 +11,29 @@ import NodeQuad from '../../NodeQuad/NodeQuad';
 import '../Schedulers.scss';
 import {ChangeMaintenanceButton} from '../../Masters/ChangeMaintenanceButton';
 import {makeShortSystemAddress} from '../../helpers/makeShortSystemAddress';
+import {useDispatch} from 'react-redux';
+import {changeSchedulerMaintenance} from '../../../../store/actions/system/schedulers';
 
 const b = block('system');
 
 export type SchedulerProps = {
-    host?: string;
+    host: string;
+    address: string;
+    physicalHost: string;
     state: 'active' | 'connected' | 'standby' | 'disconnected' | 'offline';
     maintenanceMessage?: React.ReactNode;
-    type: 'scheduler' | 'agent';
+    type: 'schedulers' | 'agents';
 };
-export default function Scheduler({host, state, maintenanceMessage, type}: SchedulerProps) {
+
+export default function Scheduler({
+    host,
+    physicalHost,
+    address,
+    state,
+    maintenanceMessage,
+    type,
+}: SchedulerProps) {
+    const dispatch = useDispatch();
     const theme = (
         {
             active: 'online',
@@ -31,7 +44,15 @@ export default function Scheduler({host, state, maintenanceMessage, type}: Sched
         } as const
     )[state];
 
-    const address = hammer.format['Address'](host);
+    const formatedAddress = hammer.format['Address'](address);
+    const path = `//sys/${type === 'schedulers' ? 'scheduler' : 'controller_agents'}/instances/${host}`;
+
+    const handleOnMaintenanceChange = useCallback(
+        async (data: {path: string; message: string; maintenance: boolean}) => {
+            await dispatch(changeSchedulerMaintenance(data));
+        },
+        [dispatch],
+    );
 
     return (
         <div className={b('scheduler')}>
@@ -44,10 +65,10 @@ export default function Scheduler({host, state, maintenanceMessage, type}: Sched
                     </Tooltip>
                 )}
             </div>
-            <div title={address} className={b('scheduler-host')}>
-                <Tooltip content={address}>
+            <div title={formatedAddress} className={b('scheduler-host')}>
+                <Tooltip content={formatedAddress}>
                     <div className={b('scheduler-host-address')}>
-                        {makeShortSystemAddress(address) || address}
+                        {makeShortSystemAddress(formatedAddress) || formatedAddress}
                     </div>
                 </Tooltip>
                 <div className={b('scheduler-host-btn')}>
@@ -55,10 +76,13 @@ export default function Scheduler({host, state, maintenanceMessage, type}: Sched
                 </div>
                 <ChangeMaintenanceButton
                     className={b('scheduler-host-btn')}
-                    address={host!}
+                    path={path}
+                    title={`Edit ${address}`}
+                    host={physicalHost}
+                    container={host}
                     maintenance={Boolean(maintenanceMessage)}
                     maintenanceMessage={maintenanceMessage as string}
-                    type={type}
+                    onMaintenanceChange={handleOnMaintenanceChange}
                 />
             </div>
         </div>

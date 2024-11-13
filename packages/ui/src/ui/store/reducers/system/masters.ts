@@ -207,7 +207,7 @@ const initialState: MastersState = {
     alerts: [],
 };
 
-export interface ResponseItem {
+export interface MasterAddress {
     host: string;
     physicalHost?: string;
     attributes: {
@@ -218,18 +218,18 @@ export interface ResponseItem {
     state?: 'online' | 'offline' | 'unknown';
 }
 
-export interface ResponseItemsGroup {
-    addresses?: Array<ResponseItem>;
+export interface MastersGroup {
+    addresses?: Array<MasterAddress>;
     cellTag?: number;
     cellId?: string;
 }
 
 export interface MastersConfigResponse {
-    primaryMaster: ResponseItemsGroup;
-    secondaryMasters: Array<ResponseItemsGroup>;
-    discoveryServers: ResponseItemsGroup;
-    queueAgents: ResponseItemsGroup;
-    timestampProviders: ResponseItemsGroup;
+    primaryMaster: MastersGroup;
+    secondaryMasters: Array<MastersGroup>;
+    discoveryServers: MastersGroup;
+    queueAgents: MastersGroup;
+    timestampProviders: MastersGroup;
 }
 
 function processMastersConfig(
