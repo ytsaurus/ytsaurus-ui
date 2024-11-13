@@ -11,8 +11,9 @@ import {Flex, Text} from '@gravity-ui/uikit';
 import ClipboardButton from '../../../components/ClipboardButton/ClipboardButton';
 import {ChangeMaintenanceButton} from './ChangeMaintenanceButton';
 import block from 'bem-cn-lite';
+import {MasterInstance} from '../../../store/selectors/system/masters';
+import ypath from '../../../common/thor/ypath';
 import './MasterGroup.scss';
-import keys_ from 'lodash/keys';
 
 const b = block('master-group');
 
@@ -34,30 +35,21 @@ export class Instance extends Component {
     };
 
     static propTypes = {
-        state: PropTypes.oneOf(keys_(Instance.instanceStateToTheme)),
-        address: PropTypes.string.isRequired,
-        attributes: PropTypes.shape({
-            warming_up: PropTypes.bool,
-            read_only: PropTypes.bool,
-            voting: PropTypes.bool,
-        }),
-        maintenance: PropTypes.bool,
-        maintenanceMessage: PropTypes.string,
+        instance: MasterInstance,
+        hostType: PropTypes.string.isRequired,
         allowVoting: PropTypes.bool,
         allowService: PropTypes.bool,
     };
 
     render() {
-        const {
-            state,
-            address,
-            attributes,
-            maintenance,
-            maintenanceMessage,
-            allowVoting,
-            allowService,
-        } = this.props;
-        const {voting} = attributes ?? {};
+        const {instance, hostType, allowVoting, allowService} = this.props;
+        const {state, $address, $physicalAddress, $attributes, $rowAddress} = instance;
+        const address = hostType === 'host' ? $address : $physicalAddress;
+        const maintenance = ypath.getValue($rowAddress, '/attributes/maintenance');
+        const maintenanceMessage = maintenance
+            ? ypath.getValue($rowAddress, '/attributes/maintenance_message') || 'Maintenance'
+            : '';
+        const {voting} = $attributes ?? {};
         // do not use `!voting` cause `voting === undefined` is the same as `voting === true`
         const denyVoting = allowVoting && voting === false;
         const theme =
@@ -85,12 +77,12 @@ export class Instance extends Component {
                             />
                         </Tooltip>
                     )}
-                    {attributes?.read_only && (
+                    {$attributes?.read_only && (
                         <span className={b('icon-glyph')} title="Read only">
                             <ReadOnlyIcon width={14} height={14} />
                         </span>
                     )}
-                    {attributes?.warming_up && (
+                    {$attributes?.warming_up && (
                         <span className={b('icon-glyph')} title="Warming up">
                             <WarmUpIcon width={14} height={14} />
                         </span>

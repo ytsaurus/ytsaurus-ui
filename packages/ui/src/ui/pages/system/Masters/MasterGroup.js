@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import block from 'bem-cn-lite';
 import hammer from '../../../common/hammer';
 import {getMastersHostType} from '../../../store/selectors/settings';
-import ypath from '../../../common/thor/ypath';
 import Icon from '../../../components/Icon/Icon';
 import {SwitchLeaderButton} from './SwitchLeader';
 import {Instance} from './Instance';
@@ -117,29 +116,17 @@ class MasterGroup extends Component {
         return (
             <div className={b('group', {'grid-row-start': gridRowStart}, className)}>
                 {this.renderQuorum()}
-                {map_(
-                    instances,
-                    ({state, $address, $physicalAddress, $attributes, $rowAddress}) => {
-                        const address = hostType === 'host' ? $address : $physicalAddress;
-                        const maintenance = ypath.getValue($rowAddress, '/attributes/maintenance');
-                        const maintenanceMessage = maintenance
-                            ? ypath.getValue($rowAddress, '/attributes/maintenance_message') ||
-                              'Maintenance'
-                            : '';
-                        return (
-                            <Instance
-                                key={$address}
-                                address={address}
-                                state={state}
-                                attributes={$attributes}
-                                maintenanceMessage={maintenanceMessage}
-                                maintenance={maintenance}
-                                allowVoting={allowVoting}
-                                allowService={allowService}
-                            />
-                        );
-                    },
-                )}
+                {map_(instances, (instance) => {
+                    return (
+                        <Instance
+                            instance={instance}
+                            key={instance.$address}
+                            hostType={hostType}
+                            allowVoting={allowVoting}
+                            allowService={allowService}
+                        />
+                    );
+                })}
             </div>
         );
     }
