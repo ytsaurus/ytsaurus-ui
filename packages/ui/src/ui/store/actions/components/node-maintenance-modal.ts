@@ -159,7 +159,7 @@ export function applyMaintenance(
 
         return wrapApiPromiseByToaster(ytApiV4Id.executeBatch(YTApiId.addMaintenance, {requests}), {
             toasterName: 'edit_node_' + address,
-            isBatch: true,
+            batchType: 'v4',
             skipSuccessToast: true,
             errorTitle: `Failed to modify ${address}`,
         })

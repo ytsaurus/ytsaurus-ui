@@ -128,7 +128,7 @@ export function setBunndleAttributes(
                 toasterName: `update-bundle_${bundle}`,
                 successContent: `${bundle} successfully updated`,
                 errorContent: `${bundle} cannot be updated`,
-                isBatch: true,
+                batchType: 'v3',
                 errorTitle: 'Failed to update bundle configuration',
             },
         ).then(() => {

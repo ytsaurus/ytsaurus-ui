@@ -152,11 +152,18 @@ interface CommonWrapApiOptions<T> {
     autoHide?: boolean;
 }
 
-type BatchWrapApiOption =
-    | {isBatch?: false; errorTitle?: string}
-    | {isBatch: true; errorTitle: string};
+type BatchWrapApiOption<Type extends 'v3' | 'v4' | undefined> =
+    | {batchType?: undefined; errorTitle?: string}
+    | {batchType: Type; errorTitle: string};
 
-type WrapApiOptions<T> = CommonWrapApiOptions<T> & BatchWrapApiOption;
+type WrapApiOptions<T, BatchTypeT extends 'v3' | 'v4' | undefined> = CommonWrapApiOptions<T> &
+    BatchWrapApiOption<BatchTypeT>;
+
+type BatchResultsOrT<BatchType> = BatchType extends 'v3'
+    ? Array<BatchResultsItem>
+    : BatchType extends 'v4'
+      ? {results: Array<BatchResultsItem>}
+      : unknown;
 
 const toaster = new Toaster();
 
@@ -171,13 +178,18 @@ export function wrapBatchPromise<T>(p: Promise<T>, errorTitle: string): Promise<
     });
 }
 
-export function wrapApiPromiseByToaster<T>(p: Promise<T>, options: WrapApiOptions<T>): Promise<T> {
+export function wrapApiPromiseByToaster<
+    T extends BatchResultsOrT<BatchType>,
+    BatchType extends 'v3' | 'v4' | undefined = undefined,
+>(p: Promise<T>, options: WrapApiOptions<T, BatchType>): Promise<T> {
     const {errorContent, successContent} = options;
     return p
         .then((res) => {
-            if (options.isBatch) {
+            if (options.batchType === 'v3' || options.batchType === 'v4') {
                 const error = getBatchError(
-                    res as any,
+                    options.batchType === 'v3'
+                        ? (res as BatchResultsOrT<'v3'>)
+                        : (res as BatchResultsOrT<'v4'>).results,
                     options.errorTitle || 'Missing batch error title',
                 );
                 if (error) {
