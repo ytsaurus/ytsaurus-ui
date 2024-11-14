@@ -47,7 +47,7 @@ export function showRemoteCopyModal(paths: Array<string>): RemoteCopyThunkAction
                     );
                 },
                 errorTitle: 'Failed to load attributes',
-                isBatch: true,
+                batchType: 'v3',
             },
         )
             .then((results) => {

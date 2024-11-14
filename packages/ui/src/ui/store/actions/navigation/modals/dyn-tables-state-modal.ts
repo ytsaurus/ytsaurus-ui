@@ -16,6 +16,7 @@ import {updateView} from '../index';
 import {DYN_TABLES_ALLOWED_STATES_OF_ACTION} from '../../../selectors/navigation/content/map-node-ts';
 import {executeBatchWithRetries} from '../../execute-batch';
 import {YTApiId} from '../../../../rum/rum-wrap-api';
+import {BatchResultsItem} from '../../../../../shared/yt-types';
 
 type DynTablesStateThunkAction = ThunkAction<any, RootState, any, DynTablesStateModalAction>;
 
@@ -79,7 +80,7 @@ export function dynTablesChangeState(
             {
                 toasterName: 'dyn_tables_change_state_to_' + action,
                 successContent: '',
-                isBatch: true,
+                batchType: 'v3',
                 skipSuccessToast: true,
                 errorTitle: `Cannot perform ${action} action`,
             },
@@ -88,7 +89,7 @@ export function dynTablesChangeState(
                 return wrapApiPromiseByToaster(waitWhileThereIsTransient(paths, action), {
                     toasterName: 'dyn_tables_wait_while_transient_' + action,
                     successContent: `${capitalize_(action)} completed`,
-                    isBatch: true,
+                    batchType: 'v3',
                     errorTitle: `Cannot perform ${action} action`,
                 });
             })
@@ -98,7 +99,10 @@ export function dynTablesChangeState(
     };
 }
 
-function waitWhileThereIsTransient(paths: Array<string>, action: TabletStateAction): Promise<void> {
+function waitWhileThereIsTransient(
+    paths: Array<string>,
+    action: TabletStateAction,
+): Promise<Array<BatchResultsItem<string>>> {
     const requests = map_(paths, (path) => {
         return {
             command: 'get' as const,
@@ -108,17 +112,17 @@ function waitWhileThereIsTransient(paths: Array<string>, action: TabletStateActi
 
     const res = delayed(
         () =>
-            executeBatchWithRetries(YTApiId.navigationGetTabletState, requests, {
+            executeBatchWithRetries<string>(YTApiId.navigationGetTabletState, requests, {
                 errorTitle: 'Failed to get tablet state',
             }),
         3000,
-    ) as any;
+    );
 
-    return wrapApiPromiseByToaster<Array<{output: string}>>(res, {
+    return wrapApiPromiseByToaster(res, {
         toasterName: 'dyn_tables_wait_while_transient_' + action,
         successContent: `${capitalize_(action)} completed`,
         skipSuccessToast: true,
-        isBatch: true,
+        batchType: 'v3',
         errorTitle: `Cannot perform ${action} action`,
     }).then((results) => {
         const toRecheck = reduce_(
@@ -135,6 +139,6 @@ function waitWhileThereIsTransient(paths: Array<string>, action: TabletStateActi
         if (toRecheck.length) {
             return waitWhileThereIsTransient(toRecheck, action);
         }
-        return Promise.resolve();
+        return Promise.resolve([]);
     });
 }

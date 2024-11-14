@@ -261,7 +261,7 @@ export function setBundleEditorController(params: {
             {
                 toasterName: `edit_bundle_${bundleName}`,
                 successContent: `Set bundle edit data`,
-                isBatch: true,
+                batchType: 'v3',
                 errorTitle: 'Failed to set bundle edit data',
             },
         ).then(() => {
@@ -306,7 +306,7 @@ export function setBunndleAttributes(
             {
                 toasterName: `update-bundle_${bundle}`,
                 successContent: `${bundle} successfully updated`,
-                isBatch: true,
+                batchType: 'v3',
                 errorTitle: 'Failed to edit bundle',
             },
         ).then(() => {
