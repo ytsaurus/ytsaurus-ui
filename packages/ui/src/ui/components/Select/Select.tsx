@@ -13,20 +13,23 @@ import './Select.scss';
 
 const block = cn('yt-select');
 
-export interface YTSelectProps extends Omit<SelectProps, 'options' | 'filter' | 'onChange'> {
+export interface YTSelectProps<T extends string = string>
+    extends Omit<SelectProps, 'options' | 'filter' | 'onChange' | 'onUpdate' | 'value'> {
     className?: string;
-    items: Array<Item>;
+    value?: Array<T>;
+    items: Array<Item<T>>;
     maxVisibleValues?: number;
     maxVisibleValuesTextLength?: number;
     hideClear?: boolean;
     hideFilter?: boolean;
     onChange?: (v: Required<YTSelectProps>['value']) => void;
+    onUpdate?: (v: Array<T>) => void;
 
     renderItem?: (item: Item, useNoValue?: boolean) => React.ReactNode;
 }
 
-export interface Item {
-    value: string;
+export interface Item<T extends string = string> {
+    value: T;
     text?: React.ReactNode;
     count?: number;
     icon?: React.ReactNode;
@@ -70,12 +73,13 @@ SelectFacade.getDefaultValue = () => {
     return undefined;
 };
 
-interface SelectSingleProps extends Omit<YTSelectProps, 'value' | 'onUpdate' | 'onChange'> {
+interface SelectSingleProps<T extends string>
+    extends Omit<YTSelectProps<T>, 'value' | 'onUpdate' | 'onChange'> {
     value?: string;
     onChange?: (v?: string) => void;
 }
 
-export function SelectSingle(props: SelectSingleProps) {
+export function SelectSingle<T extends string = string>(props: SelectSingleProps<T>) {
     const {onChange, value, ...rest} = props;
     const handleChange = React.useCallback(
         (vals?: Array<string>) => {
@@ -93,7 +97,7 @@ export function SelectSingle(props: SelectSingleProps) {
     );
 }
 
-SelectSingle.isEmpty = (value: SelectSingleProps['value']) => {
+SelectSingle.isEmpty = (value: SelectSingleProps<string>['value']) => {
     return !value;
 };
 
