@@ -18,18 +18,23 @@ import {flags} from '../../utils/index';
 import {listAllGroups} from '../../utils/users-groups';
 import {YTApiId, ytApiV3Id} from '../../rum/rum-wrap-api';
 import UIFactory from '../../UIFactory';
+import type {Dispatch} from 'redux';
+import type {Group} from '../../store/reducers/groups/table';
+import type {OrderType} from '../../utils/sort-helpers';
+import type {RootState} from '../../store/reducers';
+import type {Subject} from '../../utils/acl/acl-types';
 
 // Table
 
 const GROUP_ATTRIBUTES = ['member_of', 'members', 'upravlyator_managed'];
 
 export function fetchGroups() {
-    return (dispatch) => {
+    return (dispatch: Dispatch) => {
         dispatch({type: GROUPS_TABLE.REQUEST});
 
         return listAllGroups(YTApiId.groupsData, {attributes: GROUP_ATTRIBUTES})
             .then((data) => {
-                const groups = [];
+                const groups: Group[] = [];
                 forEach_(data, (item) => {
                     const {
                         $value: name,
@@ -40,7 +45,7 @@ export function fetchGroups() {
                         name,
                         members,
                         memberOf,
-                        idm: flags.get(idm || false),
+                        idm: flags.get(idm || false)!,
                     });
                 });
                 return dispatch({
@@ -54,19 +59,19 @@ export function fetchGroups() {
     };
 }
 
-export function setGroupsNameFilter(nameFilter) {
+export function setGroupsNameFilter(nameFilter: string) {
     return {type: GROUPS_TABLE_DATA_FIELDS, data: {nameFilter}};
 }
 
-export function setGroupsPageSorting(column, order) {
+export function setGroupsPageSorting(column: string, order: OrderType) {
     return {
         type: GROUPS_TABLE_DATA_FIELDS,
         data: {sort: {column, order}},
     };
 }
 
-export function toggleGroupExpand(groupName) {
-    return (dispatch, getState) => {
+export function toggleGroupExpand(groupName: string) {
+    return (dispatch: Dispatch, getState: () => RootState) => {
         const expanded = {...getGroupsExpanded(getState())};
         const current = expanded[groupName];
         if (current) {
@@ -79,8 +84,8 @@ export function toggleGroupExpand(groupName) {
     };
 }
 
-export function openGroupEditorModal(groupName) {
-    return (dispatch, getState) => {
+export function openGroupEditorModal(groupName: string) {
+    return (dispatch: Dispatch, getState: () => RootState) => {
         const state = getState();
 
         dispatch({
@@ -117,14 +122,14 @@ export function closeGroupEditorModal() {
 }
 
 export function saveGroupData(
-    groupName,
-    usersToAdd,
-    usersToRemove,
-    responsiblesToAdd,
-    responsiblesToRemove,
-    comment,
+    groupName: string,
+    usersToAdd: Subject[],
+    usersToRemove: Subject[],
+    responsiblesToAdd: Subject[],
+    responsiblesToRemove: Subject[],
+    comment: string,
 ) {
-    return (dispatch, getState) => {
+    return (_dispatch: Dispatch, getState: () => RootState) => {
         const state = getState();
         const {members, responsible} = getGroupEditorSubjects(state);
         const version = getGroupEditorIdmDataVersion(state);
@@ -149,13 +154,18 @@ export function saveGroupData(
     };
 }
 
-function calculateMembers(members, toAdd, toRemove) {
+function calculateMembers(
+    members: Subject[],
+    toAdd: Subject[],
+    toRemove: Subject[],
+): undefined | Subject[] {
     if ((!toAdd || !toAdd.length) && (!toRemove || !toRemove.length)) {
         return undefined;
     }
 
     const [rmUsers, rmGroups] = mapsByNameFromSubjects(toRemove);
-    const afterRemove = filter_(members, ({user, group}) => {
+    const afterRemove = filter_(members, (item) => {
+        const {user, group} = item as {user: string; group: string};
         if (user) {
             return !rmUsers.has(user);
         } else {
@@ -166,11 +176,11 @@ function calculateMembers(members, toAdd, toRemove) {
     return concat_(afterRemove, toAdd);
 }
 
-function mapsByNameFromSubjects(subjects) {
+function mapsByNameFromSubjects(subjects: Subject[]) {
     const userMap = new Map();
     const groupMap = new Map();
     forEach_(subjects, (item) => {
-        const {user, group} = item;
+        const {user, group} = item as {user: string; group: string};
         if (user) {
             userMap.set(user, item);
         } else {

@@ -14,7 +14,9 @@ import type {UnipikaSettings} from '../components/Yson/StructuredYson/Structured
 import type {ClusterConfig, YTConfig} from '../../shared/yt-types';
 import {customEncodeURIComponent} from './url-mapping';
 
-export const flags = new Map<'false' | 'FALSE' | false | 'true' | 'TRUE' | true, boolean>([
+export type FlagType = 'false' | 'FALSE' | false | 'true' | 'TRUE' | true;
+
+export const flags = new Map<FlagType, boolean>([
     ['false', false],
     ['FALSE', false],
     [false, false],

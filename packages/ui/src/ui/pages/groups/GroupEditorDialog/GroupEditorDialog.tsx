@@ -1,10 +1,13 @@
-import {YTDFDialog, extractChangedSubjects, prepareRoleListValue} from '../../../components/Dialog';
+import {
+    EditableManyListsItemType,
+    FormApi,
+    YTDFDialog,
+    extractChangedSubjects,
+    prepareRoleListValue,
+} from '../../../components/Dialog';
 import React from 'react';
 import cn from 'bem-cn-lite';
-import PropTypes from 'prop-types';
-import {connect} from 'react-redux';
-
-import map_ from 'lodash/map';
+import {ConnectedProps, connect} from 'react-redux';
 
 import {closeGroupEditorModal, saveGroupData} from '../../../store/actions/groups';
 import {
@@ -14,66 +17,38 @@ import {
     getGroupEditorRoles,
     getGroupEditorVisible,
 } from '../../../store/selectors/groups';
+import type {RootState} from '../../../store/reducers';
+import type {ResponsibleType, RoleConverted} from '../../../utils/acl/acl-types';
 
 import './GroupEditorDialog.scss';
 
 const block = cn('group-editor-dialog');
 
-const MemberPropType = {
-    user: PropTypes.string,
-    group: PropTypes.string,
-    group_name: PropTypes.string,
+interface GroupsPageTableProps extends ConnectedProps<typeof connector> {}
+
+type FormValues = {
+    details: {
+        idm: string;
+        size: string;
+    };
+    members: {
+        members: {
+            current: EditableManyListsItemType<RoleConverted>;
+            newItems: Array<ResponsibleType>;
+        };
+        membersComment?: string;
+    };
+    responsibles: {
+        responsibles: {
+            current: EditableManyListsItemType<RoleConverted>;
+            newItems: Array<ResponsibleType>;
+        };
+        responsiblesComment?: string;
+    };
 };
 
-class GroupEditorDialog extends React.Component {
-    static prepareMembers(subjects) {
-        return map_(subjects, ({user, group, group_name: name, ...rest}) => {
-            if (group) {
-                return {group, name: name || group};
-            }
-            return {...rest, user, name: user};
-        }).filter(Boolean);
-    }
-
-    static prepareCurrent(subjects, others) {
-        const current = {
-            title: 'Current',
-            data: [],
-            itemClassName: block('item', {current: true}),
-        };
-
-        const namedSubjects = GroupEditorDialog.prepareMembers(subjects);
-        current.data = map_(namedSubjects, ({name, frozen, ...rest}) => {
-            return {
-                title: name,
-                frozen,
-                data: rest,
-            };
-        });
-
-        const tmp = map_(others, (name) => {
-            return {title: name, frozen: true};
-        });
-
-        current.data = current.data.concat(tmp);
-
-        return [current].filter(({data}) => data.length);
-    }
-
-    static propTypes = {
-        className: PropTypes.string,
-        visible: PropTypes.bool,
-        groupName: PropTypes.string,
-        idm: PropTypes.bool,
-        members: PropTypes.arrayOf(PropTypes.shape(MemberPropType)),
-        responsible: PropTypes.arrayOf(PropTypes.shape(MemberPropType)),
-        otherMembers: PropTypes.arrayOf(PropTypes.string),
-
-        saveGroupData: PropTypes.func,
-        closeGroupEditorModal: PropTypes.func.isRequired,
-    };
-
-    onSubmit = (form) => {
+class GroupEditorDialog extends React.Component<GroupsPageTableProps> {
+    onSubmit = (form: FormApi<FormValues, Partial<FormValues>>) => {
         const {groupName, saveGroupData} = this.props;
         const {values} = form.getState();
         const {members, membersComment} = values.members;
@@ -100,14 +75,14 @@ class GroupEditorDialog extends React.Component {
             responsiblesToAdd,
             responsiblesToRemove,
             comment,
-        );
+        ).then(() => {});
     };
 
     render() {
         const {visible, closeGroupEditorModal, groupName, idm, members, otherMembers, responsible} =
             this.props;
         return (
-            <YTDFDialog
+            <YTDFDialog<FormValues>
                 size={'l'}
                 className={block(null)}
                 pristineSubmittable={false}
@@ -115,7 +90,6 @@ class GroupEditorDialog extends React.Component {
                 headerProps={{
                     title: groupName,
                 }}
-                confirmText="Confirm"
                 onClose={closeGroupEditorModal}
                 onAdd={this.onSubmit}
                 initialValues={{
@@ -146,7 +120,7 @@ class GroupEditorDialog extends React.Component {
                                 type: 'plain',
                                 caption: 'Size',
                             },
-                        ].filter(Boolean),
+                        ],
                     },
                     {
                         type: 'tab-vertical',
@@ -194,7 +168,7 @@ class GroupEditorDialog extends React.Component {
     }
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state: RootState) => {
     const otherMembers = getGroupEditorIdmDataOtherMembers(state);
     const {responsible, members} = getGroupEditorRoles(state);
     return {
@@ -212,4 +186,6 @@ const mapDispatchToProps = {
     saveGroupData,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(GroupEditorDialog);
+const connector = connect(mapStateToProps, mapDispatchToProps);
+
+export default connector(GroupEditorDialog);

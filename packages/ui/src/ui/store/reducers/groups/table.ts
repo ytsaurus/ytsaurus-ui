@@ -1,7 +1,29 @@
 import {GROUPS_TABLE, GROUPS_TABLE_DATA_FIELDS} from '../../../constants/groups';
 import {mergeStateOnClusterChange} from '../../../store/reducers/utils';
+import type {Action} from 'redux';
+import type {ActionD, YTError} from '../../../types';
+import type {OrderType} from '../../../utils/sort-helpers';
 
-const ephemeralState = {
+export type Group = {
+    name: string;
+    members: string[];
+    memberOf: string[];
+    idm: boolean;
+};
+
+type EphemeralStateType = {
+    loaded: boolean;
+    loading: boolean;
+    error: YTError | null;
+    groups: Group[];
+    sort: {
+        column: string;
+        order: OrderType;
+    };
+    expanded: Record<string, boolean>;
+};
+
+const ephemeralState: EphemeralStateType = {
     loaded: false,
     loading: false,
     error: null,
@@ -13,17 +35,23 @@ const ephemeralState = {
     expanded: {},
 };
 
+type PersistantStateType = {
+    nameFilter: string;
+};
+
 const persistantState = {
     nameFilter: '',
 };
 
-export const groupsTableState = {
+type GroupsTableStateType = EphemeralStateType & PersistantStateType;
+
+export const groupsTableState: GroupsTableStateType = {
     ...ephemeralState,
     ...persistantState,
 };
 
-function reducer(state = groupsTableState, {type, data}) {
-    switch (type) {
+function reducer(state: GroupsTableStateType = groupsTableState, action: GroupsTableAction) {
+    switch (action.type) {
         case GROUPS_TABLE.REQUEST: {
             return {...state, loading: true};
         }
@@ -33,7 +61,7 @@ function reducer(state = groupsTableState, {type, data}) {
                 loading: false,
                 loaded: true,
                 error: null,
-                ...data,
+                ...action.data,
             };
         }
         case GROUPS_TABLE.FAILURE: {
@@ -43,11 +71,36 @@ function reducer(state = groupsTableState, {type, data}) {
             return {...state, loading: false, loaded: false, error: null};
         }
         case GROUPS_TABLE_DATA_FIELDS: {
-            return {...state, ...data};
+            return {...state, ...action.data};
         }
         default:
             return state;
     }
 }
+
+export type GroupsTableAction =
+    | Action<typeof GROUPS_TABLE.REQUEST>
+    | ActionD<
+          typeof GROUPS_TABLE.SUCCESS,
+          {
+              data: {
+                  groups: Group[];
+              };
+          }
+      >
+    | ActionD<typeof GROUPS_TABLE.FAILURE, {error: YTError}>
+    | Action<typeof GROUPS_TABLE.CANCELLED>
+    | ActionD<
+          typeof GROUPS_TABLE_DATA_FIELDS,
+          {
+              data: {
+                  sort?: {
+                      column: string;
+                      order: string;
+                  };
+                  expanded?: Record<string, boolean>;
+              };
+          }
+      >;
 
 export default mergeStateOnClusterChange(ephemeralState, persistantState, reducer);
