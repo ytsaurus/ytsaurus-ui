@@ -5,7 +5,7 @@ import forEach_ from 'lodash/forEach';
 import map_ from 'lodash/map';
 
 import type {EditableManyListsItemType} from '../../../../components/Dialog';
-import type {ResponsibleType, RoleConverted} from '../../../../utils/acl/acl-types';
+import type {ResponsibleType, RoleConverted, Subject} from '../../../../utils/acl/acl-types';
 import type {PreparedRole} from '../../../../utils/acl';
 import {RoleListControlProps} from './RoleListControl';
 
@@ -92,7 +92,10 @@ function manyListDataItemToSubjectList(
 export function extractChangedSubjects(value: {
     current: EditableManyListsItemType<RoleConverted>;
     newItems: Array<ResponsibleType>;
-}) {
+}): {
+    added: Subject[];
+    removed: Subject[];
+} {
     const {current, newItems} = value;
     const added = newItems || [];
     const removed = ((current && current.data) || []).filter(({removed}) => removed);
@@ -102,7 +105,7 @@ export function extractChangedSubjects(value: {
         }),
         removed: removed.map(({data}) => {
             const {value, type} = data || {};
-            return type === 'users' ? {user: value} : {group: value};
+            return type === 'users' ? {user: value!} : {group: value!};
         }),
     };
 }

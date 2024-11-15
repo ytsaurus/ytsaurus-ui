@@ -26,7 +26,7 @@ export interface RoleListControlProps {
 
     onChange: (value: RoleListControlProps['value']) => void;
     placeholder?: string;
-    maxVisibleCount: number;
+    maxVisibleCount?: number;
     allowedTypes?: Array<'users' | 'groups'>;
 }
 

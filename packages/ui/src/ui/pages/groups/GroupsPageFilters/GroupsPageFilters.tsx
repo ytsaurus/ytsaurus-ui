@@ -1,6 +1,5 @@
 import React from 'react';
 import cn from 'bem-cn-lite';
-import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 
 import {setGroupsNameFilter} from '../../../store/actions/groups';
@@ -8,20 +7,19 @@ import ErrorBoundary from '../../../components/ErrorBoundary/ErrorBoundary';
 import Filter from '../../../components/Filter/Filter';
 import {Toolbar} from '../../../components/WithStickyToolbar/Toolbar/Toolbar';
 import {getGroupsNameFilter} from '../../../store/selectors/groups';
+import type {RootState} from '../../../store/reducers';
 
 import './GroupsPageFilters.scss';
 
 const block = cn('groups-page-filters');
 
-class GroupsPageFilters extends React.Component {
-    static propTypes = {
-        className: PropTypes.string,
+type GroupsPageFiltersProps = {
+    className?: string;
+    groupFilter: string;
+    setGroupsNameFilter: (value: string) => void;
+};
 
-        groupFilter: PropTypes.string,
-
-        setGroupsNameFilter: PropTypes.func,
-    };
-
+class GroupsPageFilters extends React.Component<GroupsPageFiltersProps> {
     render() {
         const {className, groupFilter} = this.props;
 
@@ -51,7 +49,7 @@ class GroupsPageFilters extends React.Component {
     }
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state: RootState) => {
     return {
         groupFilter: getGroupsNameFilter(state),
     };

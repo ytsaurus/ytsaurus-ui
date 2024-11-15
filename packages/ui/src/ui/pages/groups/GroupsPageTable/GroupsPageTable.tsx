@@ -1,7 +1,6 @@
 import React from 'react';
 import cn from 'bem-cn-lite';
-import PropTypes from 'prop-types';
-import {connect} from 'react-redux';
+import {ConnectedProps, connect} from 'react-redux';
 import DataTable from '@gravity-ui/react-data-table';
 
 import {openAttributesModal} from '../../../store/actions/modals/attributes-modal';
@@ -28,6 +27,7 @@ import {
 import {STICKY_TOOLBAR_BOTTOM} from '../../../components/WithStickyToolbar/WithStickyToolbar';
 import GroupEditorDialog from '../../../pages/groups/GroupEditorDialog/GroupEditorDialog';
 import {
+    GroupsTreeNode,
     getGroupEditorVisible,
     getGroupsFlattenTree,
     getGroupsSort,
@@ -36,6 +36,8 @@ import {
 
 import './GroupsPageTable.scss';
 import {isIdmAclAvailable} from '../../../config';
+import type {RootState} from '../../../store/reducers';
+import type {OrderType} from '../../../utils/sort-helpers';
 
 const block = cn('groups-page-table');
 
@@ -45,9 +47,9 @@ const TABLE_SETTINGS = {
     stickyTop: STICKY_TOOLBAR_BOTTOM,
     syncHeadOnResize: true,
     dynamicRender: true,
-};
+} as const;
 
-const COLUMN_NAMES = {
+const COLUMN_NAMES: Record<string, string> = {
     name: 'Name',
     idm: 'IDM',
     size: 'Size',
@@ -55,25 +57,20 @@ const COLUMN_NAMES = {
     actions: '',
 };
 
-GroupActions.propTypes = {
-    className: PropTypes.string,
-    groupname: PropTypes.string.isRequired,
-    edit: PropTypes.func,
-    showAttributes: PropTypes.func.isRequired,
+type GroupActionsProps = {
+    className?: string;
+    groupname: string;
+    edit?: (value: string) => void;
 };
 
-function GroupActions({className, groupname, edit, showAttributes}) {
+function GroupActions({className, groupname, edit}: GroupActionsProps) {
     const onEdit = React.useCallback(() => {
-        edit(groupname);
+        edit!(groupname);
     }, [groupname, edit]);
 
     return (
         <div className={className}>
-            <ClickableAttributesButton
-                title={groupname}
-                path={`//sys/groups/${groupname}`}
-                openAttributesModal={showAttributes}
-            />
+            <ClickableAttributesButton title={groupname} path={`//sys/groups/${groupname}`} />
             {edit && (
                 <Link onClick={onEdit} className={block('edit-action')}>
                     <Icon awesome="pencil-alt" />
@@ -83,44 +80,17 @@ function GroupActions({className, groupname, edit, showAttributes}) {
     );
 }
 
-class GroupsPageTable extends React.Component {
-    static GroupPropType = {
-        name: PropTypes.string.isRequired,
-        memberOf: PropTypes.arrayOf(PropTypes.string.isRequired),
-        responsibles: PropTypes.arrayOf(PropTypes.string.isRequired),
-        idm: PropTypes.any, // boolean | string | undefined
-        shift: PropTypes.number,
-        hasChildren: PropTypes.bool,
-    };
+interface GroupsPageTableProps extends ConnectedProps<typeof connector> {
+    className?: string;
+}
 
-    static propTypes = {
-        className: PropTypes.string,
-        loading: PropTypes.bool,
-        loaded: PropTypes.bool.isRequired,
-        error: PropTypes.object,
-
-        groups: PropTypes.arrayOf(PropTypes.shape(GroupsPageTable.GroupPropType)),
-        sort: PropTypes.shape({
-            column: PropTypes.string,
-            order: PropTypes.string,
-        }),
-
-        currentUserName: PropTypes.string,
-
-        showEditor: PropTypes.bool,
-        fetchGroups: PropTypes.func.isRequired,
-        toggleGroupExpand: PropTypes.func.isRequired,
-        setGroupsPageSorting: PropTypes.func.isRequired,
-        openAttributesModal: PropTypes.func.isRequired,
-        openGroupEditorModal: PropTypes.func,
-    };
-
+class GroupsPageTable extends React.Component<GroupsPageTableProps> {
     componentDidMount() {
         const {fetchGroups} = this.props;
         fetchGroups();
     }
 
-    renderColumnHeader(col, sortable) {
+    renderColumnHeader(col: string, sortable: boolean) {
         const {
             sort: {column, order},
         } = this.props;
@@ -137,19 +107,19 @@ class GroupsPageTable extends React.Component {
         );
     }
 
-    onColumnSort = (colName, nextOrder) => {
+    onColumnSort = (colName: string, nextOrder: OrderType) => {
         const {setGroupsPageSorting} = this.props;
         setGroupsPageSorting(colName, nextOrder);
     };
 
-    renderNameCell(col, {row}) {
+    renderNameCell(col: string, {row}: {row: GroupsTreeNode}) {
         const {name, shift, hasChildren, expanded} = row;
         return (
             <div
                 className={block('content', {
                     col,
-                    shift,
-                    level: Math.min(10, shift),
+                    shift: String(shift),
+                    level: String(Math.min(10, shift!)),
                 })}
             >
                 <ExpandIcon
@@ -165,12 +135,12 @@ class GroupsPageTable extends React.Component {
         );
     }
 
-    toggleExpand = (groupName) => {
+    toggleExpand = (groupName: string) => {
         const {toggleGroupExpand} = this.props;
         toggleGroupExpand(groupName);
     };
 
-    renderIdmCell(col, {row}) {
+    renderIdmCell(col: string, {row}: {row: GroupsTreeNode}) {
         const {idm} = row;
         return (
             <div className={block('content', {col})}>
@@ -179,14 +149,14 @@ class GroupsPageTable extends React.Component {
         );
     }
 
-    renderUsersCell(col, {row}) {
+    renderUsersCell(col: 'members', {row}: {row: GroupsTreeNode}) {
         const {[col]: value} = row;
         return (
             <div className={block('content', {col})}>
                 <CommaSeparatedListWithRestCounter
                     className={block('groups')}
                     items={value}
-                    itemRenderer={(item) => {
+                    itemRenderer={(item: string) => {
                         if (item.startsWith('idm-group:')) {
                             return item;
                         } else {
@@ -198,30 +168,28 @@ class GroupsPageTable extends React.Component {
         );
     }
 
-    renderSizeCell(col, {row}) {
+    renderSizeCell(col: string, {row}: {row: GroupsTreeNode}) {
         const {members} = row;
         return (
             <div className={block('content', {col})}>
-                <span>{members.length}</span>
+                <span>{members!.length}</span>
             </div>
         );
     }
 
-    renderActionsCell(col, {row}) {
-        const {openGroupEditorModal} = this.props;
+    renderActionsCell(col: string, {row}: {row: GroupsTreeNode}) {
         const {name: groupname, idm} = row;
         const allowEdit = idm;
         return (
             <GroupActions
                 className={block('content', {col})}
-                showAttributes={openGroupEditorModal}
                 edit={allowEdit ? this.onEdit : undefined}
-                groupname={groupname}
+                groupname={groupname!}
             />
         );
     }
 
-    onEdit = (groupName) => {
+    onEdit = (groupName: string) => {
         const {openGroupEditorModal} = this.props;
         openGroupEditorModal(groupName);
     };
@@ -229,14 +197,14 @@ class GroupsPageTable extends React.Component {
     renderTable() {
         const {loaded, loading, groups} = this.props;
 
-        const columnProps = (name, disableSorting = false) => {
+        const columnProps = (name: string, disableSorting = false) => {
             return {
                 name,
                 align: DataTable.LEFT,
                 sortable: false,
                 className: block('td', {col: name.toLowerCase()}),
                 header: this.renderColumnHeader(name, !disableSorting),
-            };
+            } as const;
         };
 
         const DISABLED_SORTING = true;
@@ -290,7 +258,11 @@ class GroupsPageTable extends React.Component {
         return (
             <ErrorBoundary>
                 <div className={block(null, className)}>
-                    <LoadDataHandler loaded={true} error={Boolean(error)} errorData={error || null}>
+                    <LoadDataHandler
+                        loaded={true}
+                        error={Boolean(error)}
+                        errorData={error || undefined}
+                    >
                         {this.renderTable()}
                     </LoadDataHandler>
                 </div>
@@ -300,7 +272,7 @@ class GroupsPageTable extends React.Component {
     }
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state: RootState) => {
     const {loaded, loading, error} = getGroupsTableDataState(state);
     const groups = getGroupsFlattenTree(state);
     const sort = getGroupsSort(state);
@@ -325,4 +297,6 @@ const mapDispatchToProps = {
     openGroupEditorModal,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(GroupsPageTable);
+const connector = connect(mapStateToProps, mapDispatchToProps);
+
+export default connector(GroupsPageTable);
