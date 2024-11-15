@@ -37,3 +37,5 @@ export type Pick2<
           ? T[L1]
           : R;
 };
+
+export type KeysByType<T, V> = {[K in keyof T]: T[K] extends V ? K : never}[keyof T];

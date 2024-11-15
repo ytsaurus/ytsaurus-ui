@@ -77,10 +77,7 @@ function QueryPageDraft() {
         }
         if (cluster) {
             dispatch(
-                setSettingByKey<boolean>(
-                    'global::queryTracker::queriesListSidebarVisibilityMode',
-                    true,
-                ),
+                setSettingByKey('global::queryTracker::queriesListSidebarVisibilityMode', true),
             );
         }
     }, [dispatch]);
