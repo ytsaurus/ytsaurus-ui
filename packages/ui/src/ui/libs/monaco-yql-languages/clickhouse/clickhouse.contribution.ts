@@ -7,12 +7,8 @@ import {
 } from '../_.contribution';
 import {languages} from 'monaco-editor';
 import {createProvideSuggestionsFunction} from '../helpers/createProvideSuggestionsFunction';
-import {
-    generateClickhouseAdditionalSuggestion,
-    generateClickhouseOldSafariSuggestions,
-} from './clickhouse.keywords';
+import {generateClickhouseOldSafariSuggestions} from './clickhouse.keywords';
 import {MonacoLanguage} from '../../../constants/monaco';
-import {loadWebsqlAutocomplete} from '../loadWebsqlAutocomplete';
 import {QueryEngine} from '../../../pages/query-tracker/module/engines';
 
 registerLanguage({
@@ -20,7 +16,9 @@ registerLanguage({
     extensions: [],
     loader: async () => {
         const lang = await import(/* webpackChunkName: "yql-lang-clickhouse" */ './clickhouse');
-        const autocomplete = await loadWebsqlAutocomplete();
+        const autocomplete = await import(
+            /* webpackChunkName: "clickhouse-autocomplete" */ '@gravity-ui/websql-autocomplete/clickhouse'
+        );
 
         return {
             conf: lang.conf,
@@ -29,7 +27,6 @@ registerLanguage({
                 ? createProvideSuggestionsFunction(
                       autocomplete.parseClickHouseQuery,
                       QueryEngine.CHYT,
-                      generateClickhouseAdditionalSuggestion,
                   )
                 : generateClickhouseOldSafariSuggestions,
         };

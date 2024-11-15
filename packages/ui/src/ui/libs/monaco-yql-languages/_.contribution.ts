@@ -78,7 +78,7 @@ export function registerLanguage(def: ILang): void {
     lazyLanguageLoader.whenLoaded().then((mod) => {
         if (mod.provideSuggestionsFunction) {
             languages.registerCompletionItemProvider(languageId, {
-                triggerCharacters: ['`', '.', ':', '/'],
+                triggerCharacters: ['`', ':', '/', '', ' '],
                 provideCompletionItems: mod.provideSuggestionsFunction,
             });
         }

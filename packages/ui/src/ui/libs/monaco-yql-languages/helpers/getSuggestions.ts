@@ -1,9 +1,7 @@
 import {IRange, languages} from 'monaco-editor';
-import {
-    ClickHouseAutocompleteResult,
-    CursorPosition,
-    YqlAutocompleteResult,
-} from '@gravity-ui/websql-autocomplete';
+import {YqlAutocompleteResult} from '@gravity-ui/websql-autocomplete/yql';
+import {ClickHouseAutocompleteResult} from '@gravity-ui/websql-autocomplete/clickhouse';
+import {CursorPosition} from '@gravity-ui/websql-autocomplete/shared';
 import {generateColumnAliasesSuggestion, generateKeywordsSuggestion} from './generateSuggestions';
 
 export type Parser = (
