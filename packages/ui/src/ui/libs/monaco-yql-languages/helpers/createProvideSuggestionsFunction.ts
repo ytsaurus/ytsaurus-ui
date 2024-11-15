@@ -1,19 +1,13 @@
-import {CancellationToken, IRange, Position, editor, languages} from 'monaco-editor';
+import {CancellationToken, Position, editor, languages} from 'monaco-editor';
 import {Parser, getSuggestions} from './getSuggestions';
 import {getRangeToInsertSuggestion} from './getRangeToInsertSuggestion';
-import {ClickHouseAutocompleteResult} from '@gravity-ui/websql-autocomplete';
 import {getDirectoryContent} from './getDirectoryContent';
 import {QueryEngine} from '../../../pages/query-tracker/module/engines';
+import {getColumnSuggestions} from './getColumnSuggestions';
+import {getTemplateSuggestions} from './getTemplateSuggestions';
 
 export const createProvideSuggestionsFunction =
-    (
-        parser: Parser,
-        engine: QueryEngine,
-        additionalSuggestions?: (
-            rangeToInsertSuggestion: IRange,
-            parserResult: ClickHouseAutocompleteResult,
-        ) => languages.CompletionItem[],
-    ) =>
+    (parser: Parser, engine: QueryEngine) =>
     async (
         model: editor.ITextModel,
         monacoCursorPosition: Position,
@@ -33,15 +27,22 @@ export const createProvideSuggestionsFunction =
             range,
         });
 
-        const additionalSuggestion = additionalSuggestions
-            ? additionalSuggestions(range, parseResult)
-            : [];
+        const columnsSuggestions = await getColumnSuggestions({
+            model,
+            engine,
+            tableSuggestions: parseResult.suggestColumns,
+            range,
+        });
+
+        const templateSuggestions = getTemplateSuggestions({parseResult, range});
+        const suggestions = getSuggestions(parseResult, range);
 
         return {
             suggestions: [
+                ...templateSuggestions,
+                ...columnsSuggestions,
                 ...pathSuggestions,
-                ...getSuggestions(parseResult, range),
-                ...additionalSuggestion,
+                ...suggestions,
             ],
         };
     };
