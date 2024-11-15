@@ -16,7 +16,7 @@ import {YTApiId, ytApiV3Id} from '../../../rum/rum-wrap-api';
 import {USE_SUPRESS_SYNC} from '../../../../shared/constants';
 import type {AxiosError} from 'axios';
 import type {Dispatch} from 'redux';
-import type {BatchSubRequest} from '../../../../shared/yt-types';
+import type {BatchResultsItem, BatchSubRequest, CypressNode} from '../../../../shared/yt-types';
 import {
     MasterAlert,
     MasterDataItemInfo,
@@ -29,6 +29,7 @@ import type {RootState} from '../../reducers';
 import {MasterInstance} from '../../selectors/system/masters';
 import {getMastersHostType} from '../../selectors/settings';
 import {VisibleHostType} from '../../../constants/system/masters';
+import {ValueOf} from '../../../../@types/types';
 
 export const FETCH_MASTER_CONFIG = createActionTypes('MASTER_CONFIG');
 export const FETCH_MASTER_DATA = createActionTypes('MASTER_DATA');
@@ -37,6 +38,25 @@ export const SET_MASTER_ALERTS = 'SET_MASTER_ALERTS';
 const toaster = new Toaster();
 
 const {NODE_DOES_NOT_EXIST} = YTErrors;
+
+function filterOutMaintananceHosts<T extends CypressNode<{maintenance?: boolean}, string>>(
+    value: BatchResultsItem<Record<string, T>>,
+) {
+    const output = value.output;
+
+    if (output) {
+        value.output = Object.keys(output).reduce(
+            (acc, key) => {
+                if (output[key].$attributes?.maintenance) {
+                    acc[key] = output[key];
+                }
+
+                return acc;
+            },
+            {} as Record<string, ValueOf<typeof output>>,
+        );
+    }
+}
 
 async function loadMastersConfig(): Promise<[MastersConfigResponse, MasterAlert[]]> {
     const requests = [
@@ -89,6 +109,10 @@ async function loadMastersConfig(): Promise<[MastersConfigResponse, MasterAlert[
         },
     ];
 
+    const results = await ytApiV3Id.executeBatch(YTApiId.systemMastersConfig, {requests});
+
+    results.forEach((item) => filterOutMaintananceHosts(item));
+
     const [
         primaryMasterResult,
         secondaryMastersResult,
@@ -96,7 +120,7 @@ async function loadMastersConfig(): Promise<[MastersConfigResponse, MasterAlert[
         discoveryServersResult,
         queueAgentsResult,
         alertsResult,
-    ] = await ytApiV3Id.executeBatch(YTApiId.systemMastersConfig, {requests});
+    ] = results;
 
     const batchError = getBatchError(
         [primaryMasterResult, secondaryMastersResult],
@@ -119,9 +143,12 @@ async function loadMastersConfig(): Promise<[MastersConfigResponse, MasterAlert[
         throw queueAgentsError;
     }
 
+    const timestampProvidersResultOutput = ypath.getValue(timestampProvidersResult.output);
+    const primaryMasterResultOutput = ypath.getValue(primaryMasterResult.output);
+
     const alerts = alertsResult.output ? (alertsResult.output as MasterAlert[]) : [];
-    const [timestamp_path] = [...Object.keys(ypath.getValue(timestampProvidersResult.output))];
-    const primaryMasterPaths = [...Object.keys(ypath.getValue(primaryMasterResult.output))];
+    const [timestamp_path] = Object.keys(timestampProvidersResultOutput);
+    const primaryMasterPaths = Object.keys(primaryMasterResultOutput);
 
     const timestamp_tag_cell_requests = [
         {
@@ -157,13 +184,12 @@ async function loadMastersConfig(): Promise<[MastersConfigResponse, MasterAlert[
         throw primaryMasterCellTagError;
     }
 
-    const primaryMaster = primaryMasterResult.output;
-    const secondaryMasters = secondaryMastersResult.output;
+    const secondaryMastersOutput = secondaryMastersResult.output;
 
-    const timestampProviders = !timestampProvidersResult.output
+    const timestampProviders = !timestampProvidersResultOutput
         ? {}
         : {
-              addresses: map_(ypath.getValue(timestampProvidersResult.output), (value, address) => {
+              addresses: map_(timestampProvidersResultOutput, (value, address) => {
                   return {
                       host: address,
                       physicalHost: ypath.getValue(value, '/@annotations/physical_host'),
@@ -176,8 +202,8 @@ async function loadMastersConfig(): Promise<[MastersConfigResponse, MasterAlert[
 
     const mainResult: MastersConfigResponse = {
         primaryMaster: {
-            addresses: map_(keys_(primaryMaster), (address) => {
-                const value = primaryMaster[address];
+            addresses: map_(keys_(primaryMasterResultOutput), (address) => {
+                const value = primaryMasterResultOutput[address];
 
                 return {
                     host: address,
@@ -188,10 +214,10 @@ async function loadMastersConfig(): Promise<[MastersConfigResponse, MasterAlert[
             cellId: masterCellId,
             cellTag: getCellIdTag(masterCellId),
         },
-        secondaryMasters: map_(secondaryMasters, (addresses, cellTag) => {
+        secondaryMasters: map_(secondaryMastersOutput, (addresses, cellTag) => {
             return {
                 addresses: map_(keys_(addresses), (address) => {
-                    const value = secondaryMasters[cellTag][address];
+                    const value = secondaryMastersOutput[cellTag][address];
                     return {
                         host: address,
                         physicalHost: ypath.getValue(value, '/@annotations/physical_host'),
