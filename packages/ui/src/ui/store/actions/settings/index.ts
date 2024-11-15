@@ -2,7 +2,7 @@ import {ThunkAction} from 'redux-thunk';
 import {RootState} from '../../../store/reducers';
 import {SettingsAction} from '../../../store/reducers/settings';
 import {SettingNS, getPath} from '../../../../shared/utils/settings';
-import {SettingKey} from '../../../../shared/constants/settings-types';
+import {DescribedSettings, SettingKey} from '../../../../shared/constants/settings-types';
 
 import {
     SET_SETTING_VALUE,
@@ -12,6 +12,9 @@ import {
 import {showToasterError, wrapApiPromiseByToaster} from '../../../utils/utils';
 import {getSettingsCluster} from '../../selectors/global';
 import {getSettingsDataFromInitialConfig} from '../../../config';
+import {setSettingByKey} from './settings-base';
+
+export * from './settings-base';
 
 function logError(action: string, name: string) {
     console.error('Failed to "%s" setting "%s", settings provider is disabled.', action, name);
@@ -30,40 +33,10 @@ export function setSetting<T>(
     value: T,
 ): SettingsThunkAction {
     return (dispatch) => {
-        const path = getPath(settingName, settingNS);
-        return dispatch(setSettingByKey(path as SettingKey, value));
-    };
-}
-
-export function setSettingByKey<T>(path: SettingKey, value: T): SettingsThunkAction {
-    return (dispatch, getState) => {
-        const {
-            settings: {provider, data},
-            global: {login},
-        } = getState();
-        const previousValue = data[path];
-        const cluster = getSettingsCluster(getState());
-
-        dispatch({
-            type: SET_SETTING_VALUE,
-            data: {path, value},
-        });
-
-        return provider.set(login, path, value, cluster!).catch((error) => {
-            if (error === 'disabled') {
-                logError('set', path);
-                return;
-            }
-
-            dispatch({
-                type: SET_SETTING_VALUE,
-                data: {path, value: previousValue},
-            });
-
-            showToasterError(`Set ${path}`, error);
-
-            throw error;
-        });
+        const path = getPath(settingName, settingNS) as SettingKey;
+        return dispatch(
+            setSettingByKey(path as SettingKey, value as DescribedSettings[typeof path]),
+        );
     };
 }
 

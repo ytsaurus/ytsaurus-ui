@@ -1,13 +1,14 @@
 import React from 'react';
 import cn from 'bem-cn-lite';
 import {Button} from '@gravity-ui/uikit';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 
 import Icon from '../../components/Icon/Icon';
 import {useQueryWidgetSidePanel} from '../../pages/query-tracker/QueryWidget/side-panel';
 import {QueryEngine} from '../../pages/query-tracker/module/engines';
 import {createQueryFromTablePath} from '../../pages/query-tracker/module/query/actions';
 import {createNewQueryUrl} from '../../pages/query-tracker/utils/navigation';
+import {getSettingsData} from '../../store/selectors/settings/settings-base';
 
 import './OpenQueryButton.scss';
 
@@ -23,12 +24,14 @@ export function OpenQueryButton({className, path, cluster}: OpenQueryButtonProps
     const dispatch = useDispatch();
     const {openWidget, widgetOpened, widgetContent} = useQueryWidgetSidePanel();
 
+    const {['global::navigation::sqlService']: mode} = useSelector(getSettingsData);
+
     const handleOpen = React.useCallback(() => {
         dispatch(createQueryFromTablePath(QueryEngine.YQL, cluster, path));
         openWidget();
     }, [dispatch, path, cluster, openWidget]);
 
-    return (
+    return mode?.indexOf('qtkit') !== -1 ? null : (
         <div className={b(null, className)}>
             <Button
                 onClick={handleOpen}

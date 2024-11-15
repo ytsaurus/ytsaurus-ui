@@ -519,7 +519,7 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
             ),
 
         makePage(
-            'Query ACO',
+            'Queries',
             undefined,
             compact_([
                 makeItem(
