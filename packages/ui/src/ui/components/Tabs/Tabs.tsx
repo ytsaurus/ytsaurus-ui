@@ -40,6 +40,8 @@ export interface TabItem<ValueT extends string = string> {
     external?: boolean;
 
     hotkey?: HotkeyProps['settings'];
+
+    canLeaveTab?: () => Promise<boolean>;
 }
 
 class Tabs<ValueT extends string = string> extends React.Component<Props<ValueT>> {
@@ -88,9 +90,16 @@ class Tabs<ValueT extends string = string> extends React.Component<Props<ValueT>
 
     renderLink(item: TabItem<ValueT>) {
         const {active, onTabChange} = this.props;
-        const onTabClick = (evt: React.MouseEvent<Element, MouseEvent>) => {
-            const clickHandler = action.makeEntryClickHandler(evt, onTabChange);
-            clickHandler(item.value);
+
+        const onTabClick = async (evt: React.MouseEvent<Element, MouseEvent>) => {
+            const currentItem = this.getCurrentItem();
+
+            const canLeaveTab = currentItem?.canLeaveTab ? await currentItem.canLeaveTab() : true;
+
+            if (canLeaveTab) {
+                const clickHandler = action.makeEntryClickHandler(evt, onTabChange);
+                clickHandler(item.value);
+            }
         };
 
         return (
@@ -155,6 +164,10 @@ class Tabs<ValueT extends string = string> extends React.Component<Props<ValueT>
         const {underline, layout} = this.props;
 
         return underline && layout === 'horizontal' && <div className={className} />;
+    }
+
+    getCurrentItem() {
+        return this.props.items.find((item) => item.show);
     }
 }
 
