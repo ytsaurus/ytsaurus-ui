@@ -63,6 +63,7 @@ const Document: FC = () => {
                             settings={settings}
                             attributes={attributes}
                             onEditClick={handleEditClick}
+                            queryAutoOpen={loaded}
                         />
                         <DocumentEditModal
                             settings={settings}

@@ -1,14 +1,12 @@
 import React from 'react';
-import {useDispatch, useSelector} from 'react-redux';
+import {useDispatch} from 'react-redux';
 
-import {RootState} from '../../store/reducers/index';
 import {mergeScreen} from '../../store/actions/global';
 
-import UIFactory from '../../UIFactory';
+import UIFactory, {YQLButtonProps} from '../../UIFactory';
 
-export function YQLKitButton({className}: {className?: string}) {
+export function YQLKitButton(props: YQLButtonProps) {
     const dispatch = useDispatch();
-    const {isSplit} = useSelector((state: RootState) => state.global.splitScreen);
 
     React.useEffect(() => {
         return () => {
@@ -16,10 +14,5 @@ export function YQLKitButton({className}: {className?: string}) {
         };
     }, [dispatch]);
 
-    return (
-        <React.Fragment>
-            {UIFactory.yqlWidgetSetup?.renderButton({isSplit, className})}
-            {UIFactory.yqlWidgetSetup?.renderWidget()}
-        </React.Fragment>
-    );
+    return <React.Fragment>{UIFactory.yqlWidgetSetup?.renderButton(props)}</React.Fragment>;
 }
