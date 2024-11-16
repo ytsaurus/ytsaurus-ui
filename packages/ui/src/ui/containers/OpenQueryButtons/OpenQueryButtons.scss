@@ -1,6 +1,11 @@
-.yt-open-query-button {
+.yt-open-query-buttons {
     display: inline-flex;
     flex-wrap: nowrap;
+
+    &__query:not(:last-child) {
+        margin-right: 10px;
+    }
+
     &__btn + &__btn {
         margin-left: 1px;
     }

@@ -53,7 +53,6 @@ function TableOverview(props) {
                         {!isFullScreen && allowQueryTracker && (
                             <CreateQueryFromTable className={block('query')} />
                         )}
-                        {!isFullScreen && <YQLKitButton className={block('yql')} />}
                         {!isFullScreen && <JupyterButton block={block} />}
                         {!isFullScreen && <DataLensButton className={block('datalens')} />}
                         {!isFullScreen && <TableActions block={block} />}

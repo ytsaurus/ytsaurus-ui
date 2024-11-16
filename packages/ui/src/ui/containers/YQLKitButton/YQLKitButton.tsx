@@ -19,6 +19,7 @@ export function YQLKitButton({className}: {className?: string}) {
     return (
         <React.Fragment>
             {UIFactory.yqlWidgetSetup?.renderButton({isSplit, className})}
+            {UIFactory.yqlWidgetSetup?.renderWidget()}
         </React.Fragment>
     );
 }
