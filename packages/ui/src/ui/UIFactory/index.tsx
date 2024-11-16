@@ -126,6 +126,14 @@ export type QueryResultChartTab = {
     renderContent: (params: {query: QueryItem}) => React.ReactNode;
 };
 
+export type YQLButtonProps = {
+    className?: string;
+    disabled?: boolean;
+    opened?: boolean;
+    onOpen(): void;
+    onClose(): void;
+};
+
 export interface UIFactory {
     getClusterAppearance(cluster?: string): undefined | ClusterAppearance;
 
@@ -404,8 +412,8 @@ export interface UIFactory {
     renderUserSuggest(props: UserSuggestProps): React.ReactNode;
 
     yqlWidgetSetup?: {
-        renderButton(props: {className?: string; isSplit?: string}): React.ReactNode;
-        renderWidget(props?: {cluster: string; path: string; attributes: unknown}): React.ReactNode;
+        renderButton(props: YQLButtonProps): React.ReactNode;
+        renderWidget(props?: {visible?: boolean; onClose: () => void}): React.ReactNode;
         renderYqlOperationLink(yqlOperationId: string): React.ReactNode;
     };
 
