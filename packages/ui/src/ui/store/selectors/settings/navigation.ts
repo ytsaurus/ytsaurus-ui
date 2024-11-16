@@ -8,8 +8,8 @@ export const getNavigationSqlService = createSelector(
     [getSettingsData, isDeveloper],
     (data, isAdmin) => {
         const value = data['global::navigation::sqlService'];
-        const isQtKitEnabled = value ? -1 !== value.indexOf('qtkit') : isAdmin;
-        const isYqlKitEnabled = value ? -1 !== value.indexOf('yqlkit') : true;
+        const isQtKitEnabled = value?.length ? -1 !== value.indexOf('qtkit') : isAdmin;
+        const isYqlKitEnabled = value?.length ? -1 !== value.indexOf('yqlkit') : true;
 
         const hasYqlWidget = Boolean(UIFactory.yqlWidgetSetup);
         return {
