@@ -54,11 +54,10 @@ import CreateACOModal from '../modals/CreateACOModal';
 import Button from '../../../components/Button/Button';
 import Icon from '../../../components/Icon/Icon';
 import {showNavigationAttributesEditor} from '../../../store/actions/navigation/modals/attributes-editor';
-import UIFactory from '../../../UIFactory';
-
-import './Navigation.scss';
 import {UI_TAB_SIZE} from '../../../constants/global';
 import {CellPreviewModal} from '../../../containers/CellPreviewModal/CellPreviewModal';
+
+import './Navigation.scss';
 
 const block = cn('navigation');
 
@@ -273,8 +272,6 @@ class Navigation extends Component {
                         <div className={block('main')}>{loaded && this.renderView()}</div>
                     </StickyContainer>
                     {hasError && this.renderError()}
-
-                    {UIFactory.yqlWidgetSetup?.renderWidget()}
 
                     {renderModals()}
                 </div>

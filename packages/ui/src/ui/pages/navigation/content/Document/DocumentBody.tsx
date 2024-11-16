@@ -1,4 +1,6 @@
 import React, {FC, Fragment} from 'react';
+import cn from 'bem-cn-lite';
+
 import {Flex} from '@gravity-ui/uikit';
 
 // @ts-ignore
@@ -9,11 +11,14 @@ import Yson from '../../../../components/Yson/Yson';
 import {Alert, Button} from '@gravity-ui/uikit';
 import {UnipikaSettings} from '../../../../components/Yson/StructuredYson/StructuredYsonTypes';
 import Icon from '../../../../components/Icon/Icon';
-import {OpenQueryButton} from '../../../../containers/OpenQueryButton/OpenQueryButton';
-import {YQLKitButton} from '../../../../containers/YQLKitButton/YQLKitButton';
+import {OpenQueryButtons} from '../../../../containers/OpenQueryButtons/OpenQueryButtons';
 import {useSelector} from 'react-redux';
 import {getPath} from '../../../../store/selectors/navigation';
 import {getCluster} from '../../../../store/selectors/global';
+
+import './DocumentBody.scss';
+
+const block = cn('yt-document-body');
 
 type Props = {
     attributes: Record<any, any>;
@@ -35,7 +40,7 @@ function OpenYqlViewButton() {
     const path: string = useSelector(getPath);
     const cluster = useSelector(getCluster);
 
-    return <OpenQueryButton path={path} cluster={cluster} />;
+    return <OpenQueryButtons path={path} cluster={cluster} className={block('yql')} />;
 }
 
 function DocumentExtraTools({onEditClick, attributes}: Pick<Props, 'attributes' | 'onEditClick'>) {
@@ -43,7 +48,6 @@ function DocumentExtraTools({onEditClick, attributes}: Pick<Props, 'attributes' 
     return (
         <Flex gap={4}>
             {isYqlView && <OpenYqlViewButton />}
-            {isYqlView && <YQLKitButton />}
             <EditButton onEditClick={onEditClick} />
         </Flex>
     );
