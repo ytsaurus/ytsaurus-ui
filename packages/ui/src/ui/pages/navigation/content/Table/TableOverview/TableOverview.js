@@ -20,7 +20,6 @@ import './TableOverview.scss';
 import EditTableActions from './EditTableActions';
 import DataLensButton from './DatalensButton';
 import {isQueryTrackerAllowed} from '../../../../../store/selectors/global/experimental-pages';
-import {YQLKitButton} from '../../../../../containers/YQLKitButton/YQLKitButton';
 
 const block = cn('navigation-table-overview');
 
@@ -53,7 +52,6 @@ function TableOverview(props) {
                         {!isFullScreen && allowQueryTracker && (
                             <CreateQueryFromTable className={block('query')} />
                         )}
-                        {!isFullScreen && <YQLKitButton className={block('yql')} />}
                         {!isFullScreen && <JupyterButton block={block} />}
                         {!isFullScreen && <DataLensButton className={block('datalens')} />}
                         {!isFullScreen && <TableActions block={block} />}
