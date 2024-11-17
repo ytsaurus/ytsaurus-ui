@@ -1,10 +1,13 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
-import hammer from '../../../../../common/hammer';
 import {compose} from 'redux';
 import cn from 'bem-cn-lite';
+import isEmpty_ from 'lodash/isEmpty';
 
+import hammer from '../../../../../common/hammer';
+
+import {MaintenanceRequests} from '../../../../../components/MaintenanceRequests/MaintenanceRequests';
 import MetaTable from '../../../../../components/MetaTable/MetaTable';
 import Button from '../../../../../components/Button/Button';
 import Label from '../../../../../components/Label/Label';
@@ -17,6 +20,7 @@ import './ProxyCard.scss';
 import UIFactory from '../../../../../UIFactory';
 import {NodeColumnRole, NodeColumnState} from '../../NodeColumns';
 import type {RootState} from '../../../../../store/reducers';
+import {MaintenanceRequestInfo} from '../../../../../store/actions/components/node-maintenance-modal';
 
 type ProxyProps = {
     banMessage: string;
@@ -28,6 +32,7 @@ type ProxyProps = {
     physicalHost: string;
     banned: boolean;
     version: string;
+    maintenanceRequests: Record<string, MaintenanceRequestInfo>;
 
     updatedAt?: string;
     loadAverage?: number;
@@ -81,8 +86,17 @@ export class ProxyCard extends Component<ProxyCardProps> {
     }
 
     renderContent() {
-        const {state, banned, banMessage, role, loadAverage, networkLoad, version, updatedAt} =
-            this.props.proxy;
+        const {
+            state,
+            banned,
+            banMessage,
+            role,
+            loadAverage,
+            networkLoad,
+            version,
+            updatedAt,
+            maintenanceRequests,
+        } = this.props.proxy;
 
         return (
             <MetaTable
@@ -97,8 +111,19 @@ export class ProxyCard extends Component<ProxyCardProps> {
                     },
                     {
                         key: 'Banned',
-                        value: <Label text={banMessage} theme="warning" type="text" />,
+                        value: (
+                            <Label
+                                text={banMessage || 'True'}
+                                theme={banMessage ? 'warning' : 'danger'}
+                                type="text"
+                            />
+                        ),
                         visible: Boolean(banned),
+                    },
+                    {
+                        key: 'Maintenance',
+                        value: <MaintenanceRequests requests={maintenanceRequests} />,
+                        visible: !isEmpty_(maintenanceRequests),
                     },
                     {
                         key: 'version',

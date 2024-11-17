@@ -32,6 +32,10 @@ export function Warning({children, className}: Props) {
     return <span className={block('warning', className)}>{children}</span>;
 }
 
+export function WarningLight({children, className}: Props) {
+    return <span className={block('warning-light', className)}>{children}</span>;
+}
+
 export function NoWrap({children}: Props) {
     return <span className={block('no-wrap')}>{children}</span>;
 }

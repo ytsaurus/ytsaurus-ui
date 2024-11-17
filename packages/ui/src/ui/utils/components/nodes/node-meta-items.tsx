@@ -1,17 +1,12 @@
 import React from 'react';
-import cn from 'bem-cn-lite';
-import map_ from 'lodash/map';
+import isEmpty_ from 'lodash/isEmpty';
 
 import hammer from '../../../common/hammer';
 import Label from '../../../components/Label/Label';
+import {MaintenanceRequests} from '../../../components/MaintenanceRequests/MaintenanceRequests';
 import {MetaTableItem} from '../../../components/MetaTable/MetaTable';
 import {renderLabel} from '../../../components/templates/components/nodes/nodes';
-import type {MaintenanceRequestInfo} from '../../../store/actions/components/node-maintenance-modal';
 import type {Node} from '../../../store/reducers/components/nodes/nodes/node';
-
-import './node-meta-items.scss';
-
-const block = cn('yt-node-meta-items');
 
 function getStateTheme(state: Node['state']) {
     switch (state) {
@@ -59,8 +54,6 @@ export function getNodeMetaItems({
     const stateText = hammer.format['FirstUppercase'](state);
     const stateTheme = getStateTheme(state);
 
-    const maintenanceMessage = calcNodeMaintenanceMessage(maintenanceRequests);
-
     return [
         {
             key: 'state',
@@ -84,15 +77,8 @@ export function getNodeMetaItems({
         },
         {
             key: 'maintenance',
-            value: (
-                <Label
-                    className={block('maintenance')}
-                    theme="warning"
-                    type="text"
-                    text={maintenanceMessage}
-                />
-            ),
-            visible: maintenanceMessage.length > 0,
+            value: <MaintenanceRequests requests={maintenanceRequests} />,
+            visible: !isEmpty_(maintenanceRequests),
         },
         {
             key: 'decommissioned',
@@ -139,14 +125,4 @@ export function getNodeMetaItems({
             }),
         },
     ];
-}
-
-export function calcNodeMaintenanceMessage(items?: Array<MaintenanceRequestInfo>) {
-    return (
-        map_(items, ({type, user, comment}) => {
-            return `${type} by ${user}: ${comment}`;
-        })
-            .sort()
-            .join('\n') ?? ''
-    );
 }

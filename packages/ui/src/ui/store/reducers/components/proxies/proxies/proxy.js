@@ -18,7 +18,17 @@ export default class Proxy {
         this.loadAverage = ypath.getValue(this.liveness, '/load_average');
         this.updatedAt = ypath.getValue(this.liveness, '/updated_at');
         this.networkLoad = ypath.getValue(this.liveness, '/network_coef');
+
+        this.maintenanceRequests = ypath.getValue(data, '/maintenance_requests');
     }
 
-    static ATTRIBUTES = ['ban_message', 'banned', 'liveness', 'role', 'version', 'annotations'];
+    static ATTRIBUTES = [
+        'ban_message',
+        'banned',
+        'liveness',
+        'role',
+        'version',
+        'annotations',
+        'maintenance_requests',
+    ];
 }

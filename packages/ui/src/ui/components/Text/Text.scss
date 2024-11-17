@@ -15,6 +15,10 @@
         color: var(--warning-text);
     }
 
+    &__warning-light {
+        color: var(--warning-color);
+    }
+
     &__no-wrap {
         white-space: nowrap;
     }
