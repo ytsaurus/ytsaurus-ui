@@ -102,7 +102,7 @@ export class Node {
     alertCount?: number;
     alerts?: object[];
     banMessage?: string;
-    maintenanceRequests?: Array<MaintenanceRequestInfo>;
+    maintenanceRequests?: Record<string, MaintenanceRequestInfo>;
     banned!: boolean;
     chaosSlots!: TabletSlots;
     chunks!: number;
