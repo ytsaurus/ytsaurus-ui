@@ -1,6 +1,7 @@
 {
   "extends": "../../tsconfig",
   "include": ["**/*", "@types/*"],
+  "exclude": ["../server/*"],
   "compilerOptions": {
     "declaration": true,
     "module": "ESNext",

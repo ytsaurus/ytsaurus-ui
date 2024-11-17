@@ -22,7 +22,7 @@ export const getGroupsNameFilter = (state: RootState) => state.groups.table.name
 export const getGroupsSort = (state: RootState) => state.groups.table.sort;
 export const getGroupsExpanded = (state: RootState) => state.groups.table.expanded;
 
-export type GroupsTreeNode = Partial<Group> & {
+export type GroupsTreeNode = Group & {
     parent?: string;
     children: GroupsTreeNode[];
     leaves: GroupsTreeNode[];
@@ -38,7 +38,7 @@ export const getGroupsTree = createSelector([getGroups], (groups) => {
         acc[item.name] = {...item, children: [], leaves: []};
         return acc;
     }, {});
-    const root = {children: [], leaves: []};
+    const root = {children: [], leaves: [], name: ''};
     res[ROOT_GROUP_NAME] = root;
 
     const hasChildren: Record<string, boolean> = {};

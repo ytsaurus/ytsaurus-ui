@@ -6,9 +6,9 @@ import type {OrderType} from '../../../utils/sort-helpers';
 
 export type Group = {
     name: string;
-    members: string[];
-    memberOf: string[];
-    idm: boolean;
+    members?: string[];
+    memberOf?: string[];
+    idm?: boolean;
 };
 
 type EphemeralStateType = {
