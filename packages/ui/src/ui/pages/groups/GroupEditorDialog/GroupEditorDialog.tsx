@@ -9,7 +9,7 @@ import React from 'react';
 import cn from 'bem-cn-lite';
 import {ConnectedProps, connect} from 'react-redux';
 
-import {closeGroupEditorModal, saveGroupData} from '../../../store/actions/groups';
+import {closeGroupEditorModal, fetchGroups, saveGroupData} from '../../../store/actions/groups';
 import {
     getGroupEditorGroupIdm,
     getGroupEditorGroupName,
@@ -19,6 +19,7 @@ import {
 } from '../../../store/selectors/groups';
 import type {RootState} from '../../../store/reducers';
 import type {ResponsibleType, RoleConverted} from '../../../utils/acl/acl-types';
+import {isIdmAclAvailable} from '../../../config';
 
 import './GroupEditorDialog.scss';
 
@@ -27,6 +28,9 @@ const block = cn('group-editor-dialog');
 interface GroupsPageTableProps extends ConnectedProps<typeof connector> {}
 
 type FormValues = {
+    general: {
+        groupName: string;
+    };
     details: {
         idm: string;
         size: string;
@@ -48,8 +52,8 @@ type FormValues = {
 };
 
 class GroupEditorDialog extends React.Component<GroupsPageTableProps> {
-    onSubmit = (form: FormApi<FormValues, Partial<FormValues>>) => {
-        const {groupName, saveGroupData} = this.props;
+    onSubmit = async (form: FormApi<FormValues, Partial<FormValues>>) => {
+        const {groupName: initialGroupName} = this.props;
         const {values} = form.getState();
         const {members, membersComment} = values.members;
         const {added: membersToAdd, removed: membersToRemove} = extractChangedSubjects(members);
@@ -57,6 +61,8 @@ class GroupEditorDialog extends React.Component<GroupsPageTableProps> {
         const {responsibles, responsiblesComment} = values.responsibles;
         const {added: responsiblesToAdd, removed: responsiblesToRemove} =
             extractChangedSubjects(responsibles);
+
+        const {groupName} = values.general;
 
         let comment = '';
         if (membersComment) {
@@ -68,14 +74,20 @@ class GroupEditorDialog extends React.Component<GroupsPageTableProps> {
             comment += `${responsiblesComment}`;
         }
 
-        return saveGroupData(
-            groupName,
-            membersToAdd,
-            membersToRemove,
-            responsiblesToAdd,
-            responsiblesToRemove,
-            comment,
-        ).then(() => {});
+        return this.props
+            .saveGroupData({
+                initialGroupName,
+                groupName,
+                membersToAdd,
+                membersToRemove,
+                responsiblesToAdd,
+                responsiblesToRemove,
+                comment,
+            })
+            .then(() => {
+                return this.props.fetchGroups();
+            })
+            .then(() => {});
     };
 
     render() {
@@ -88,11 +100,14 @@ class GroupEditorDialog extends React.Component<GroupsPageTableProps> {
                 pristineSubmittable={false}
                 visible={visible}
                 headerProps={{
-                    title: groupName,
+                    title: this.isNewGroup() ? 'Create group' : `Group ${groupName}`,
                 }}
                 onClose={closeGroupEditorModal}
                 onAdd={this.onSubmit}
                 initialValues={{
+                    general: {
+                        groupName,
+                    },
                     details: {
                         idm: String(idm || '-'),
                         size: String(members.length),
@@ -107,41 +122,58 @@ class GroupEditorDialog extends React.Component<GroupsPageTableProps> {
                 fields={[
                     {
                         type: 'tab-vertical',
-                        name: 'details',
-                        title: 'Details',
+                        name: 'general',
+                        title: 'General',
                         fields: [
                             {
-                                name: 'idm',
-                                type: 'plain',
-                                caption: 'Idm managed',
-                            },
-                            {
-                                name: 'size',
-                                type: 'plain',
-                                caption: 'Size',
+                                name: 'groupName',
+                                type: 'text',
+                                required: true,
+                                caption: 'Group name',
                             },
                         ],
                     },
-                    {
-                        type: 'tab-vertical',
-                        name: 'responsibles',
-                        title: 'Responsibles',
-                        fields: [
-                            {
-                                name: 'responsibles',
-                                type: 'acl-roles',
-                                caption: 'Responsibles',
-                                extras: {
-                                    placeholder: 'Enter login or name',
-                                },
-                            },
-                            {
-                                name: 'responsiblesComment',
-                                type: 'textarea',
-                                caption: 'Comment for IDM',
-                            },
-                        ],
-                    },
+                    ...(isIdmAclAvailable()
+                        ? [
+                              {
+                                  type: 'tab-vertical' as const,
+                                  name: 'details',
+                                  title: 'Details',
+                                  fields: [
+                                      {
+                                          name: 'idm',
+                                          type: 'plain' as const,
+                                          caption: 'Idm managed',
+                                      },
+                                      {
+                                          name: 'size',
+                                          type: 'plain' as const,
+                                          caption: 'Size',
+                                      },
+                                  ],
+                              },
+                              {
+                                  type: 'tab-vertical' as const,
+                                  name: 'responsibles',
+                                  title: 'Responsibles',
+                                  fields: [
+                                      {
+                                          name: 'responsibles',
+                                          type: 'acl-roles' as const,
+                                          caption: 'Responsibles',
+                                          extras: {
+                                              placeholder: 'Enter login or name',
+                                          },
+                                      },
+                                      {
+                                          name: 'responsiblesComment',
+                                          type: 'textarea' as const,
+                                          caption: 'Comment for IDM',
+                                      },
+                                  ],
+                              },
+                          ]
+                        : []),
                     {
                         type: 'tab-vertical',
                         name: 'members',
@@ -155,16 +187,25 @@ class GroupEditorDialog extends React.Component<GroupsPageTableProps> {
                                     placeholder: 'Enter login or name',
                                 },
                             },
-                            {
-                                name: 'membersComment',
-                                type: 'textarea',
-                                caption: 'Comment for IDM',
-                            },
+
+                            ...(isIdmAclAvailable()
+                                ? [
+                                      {
+                                          name: 'membersComment',
+                                          type: 'textarea' as const,
+                                          caption: 'Comment for IDM',
+                                      },
+                                  ]
+                                : []),
                         ],
                     },
                 ]}
             />
         );
+    }
+
+    private isNewGroup() {
+        return !this.props.groupName;
     }
 }
 
@@ -184,6 +225,7 @@ const mapStateToProps = (state: RootState) => {
 const mapDispatchToProps = {
     closeGroupEditorModal,
     saveGroupData,
+    fetchGroups,
 };
 
 const connector = connect(mapStateToProps, mapDispatchToProps);

@@ -12,6 +12,8 @@ import hammer from '../../common/hammer';
 import {FlagType, flags} from '../../utils';
 import type {RootState} from '../../store/reducers';
 import type {Group} from '../../store/reducers/groups/table';
+import {isIdmAclAvailable} from '../../config';
+import type {PreparedRole} from '../../utils/acl';
 
 // Table
 
@@ -144,8 +146,8 @@ export const getGroupsFlattenTree = createSelector(
 );
 
 // Editor
-export const getGroupEditorData = (state: RootState) => state.groups.editor;
-export const getGroupEditorVisible = (state: RootState) => state.groups.editor.groupName.length > 0;
+export const getGroupEditorData = (state: RootState) => state.groups.editor.data;
+export const getGroupEditorVisible = (state: RootState) => state.groups.editor.showModal;
 export const getGroupEditorGroupName = (state: RootState) => state.groups.editor.groupName;
 // eslint-disable-next-line camelcase
 export const getGroupEditorGroupIdm = (state: RootState) =>
@@ -166,12 +168,41 @@ export const getGroupEditorSubjects = createSelector([getGroupEditorIdmData], (i
     };
 });
 
-export const getGroupEditorRoles = createSelector([getGroupEditorIdmData], (idmData) => {
-    const {
-        group: {members, responsible},
-    } = idmData;
-    return {
-        responsible,
-        members,
-    };
-});
+export const getGroupEditorRoles = createSelector(
+    [getGroupEditorIdmData, getGroupEditorData],
+    (
+        idmData,
+        data,
+    ): {
+        responsible: PreparedRole[];
+        members: PreparedRole[];
+    } => {
+        if (isIdmAclAvailable()) {
+            const {
+                group: {members, responsible},
+            } = idmData;
+
+            return {
+                responsible,
+                members,
+            };
+        }
+
+        const members = data.$attributes?.members || [];
+
+        return {
+            responsible: [],
+            members: members.map((member) => {
+                return {
+                    text: member,
+                    value: member,
+                    state: 'granted',
+                    role_type: 'member',
+                    subject: {
+                        user: member,
+                    },
+                };
+            }),
+        };
+    },
+);

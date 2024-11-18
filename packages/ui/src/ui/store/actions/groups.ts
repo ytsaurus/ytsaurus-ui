@@ -16,13 +16,14 @@ import {
 } from '../../store/selectors/groups';
 import {flags} from '../../utils/index';
 import {listAllGroups} from '../../utils/users-groups';
-import {YTApiId, ytApiV3Id} from '../../rum/rum-wrap-api';
+import {YTApiId, ytApiV3, ytApiV3Id} from '../../rum/rum-wrap-api';
 import UIFactory from '../../UIFactory';
 import type {Dispatch} from 'redux';
 import type {Group} from '../../store/reducers/groups/table';
 import type {OrderType} from '../../utils/sort-helpers';
 import type {RootState} from '../../store/reducers';
-import type {Subject} from '../../utils/acl/acl-types';
+import type {GroupSubject, Subject, UserSubject} from '../../utils/acl/acl-types';
+import {deleteGroupModalSlice} from '../../store/reducers/groups/delete-group';
 
 // Table
 
@@ -84,7 +85,7 @@ export function toggleGroupExpand(groupName: string) {
     };
 }
 
-export function openGroupEditorModal(groupName: string) {
+export function openGroupEditorModal(groupName = '') {
     return (dispatch: Dispatch, getState: () => RootState) => {
         const state = getState();
 
@@ -92,17 +93,36 @@ export function openGroupEditorModal(groupName: string) {
             type: GROUP_EDITOR_ACTION_DATA_FIELDS,
             data: {showModal: true, groupName},
         });
+
+        if (!groupName) {
+            return Promise.resolve();
+        }
+
         dispatch({type: GROUP_EDITOR_ACTION.REQUEST});
 
         const path = `//sys/groups/${groupName}`;
+
+        let idmDataPromise;
+
+        if (UIFactory.getAclApi().isAllowed) {
+            idmDataPromise = UIFactory.getAclApi().getGroupAcl(getCluster(state), groupName);
+        } else {
+            idmDataPromise = Promise.resolve();
+        }
+
         return Promise.all([
             ytApiV3Id.get(YTApiId.groupsEditData, {path, attributes: GROUP_ATTRIBUTES}),
-            UIFactory.getAclApi().getGroupAcl(getCluster(state), groupName),
+            idmDataPromise,
         ])
-            .then(([data, idmData]) => {
+            .then(([groupsData, idmData]) => {
+                const data = {
+                    data: groupsData,
+                    ...(idmData ? {idmData} : {}),
+                };
+
                 return dispatch({
                     type: GROUP_EDITOR_ACTION.SUCCESS,
-                    data: {data, idmData},
+                    data,
                 });
             })
             .catch((error) => {
@@ -117,39 +137,86 @@ export function openGroupEditorModal(groupName: string) {
 export function closeGroupEditorModal() {
     return {
         type: GROUP_EDITOR_ACTION_DATA_FIELDS,
-        data: {groupData: undefined, groupName: ''},
+        data: {groupData: undefined, groupName: '', showModal: false},
     };
 }
 
-export function saveGroupData(
-    groupName: string,
-    usersToAdd: Subject[],
-    usersToRemove: Subject[],
-    responsiblesToAdd: Subject[],
-    responsiblesToRemove: Subject[],
-    comment: string,
-) {
-    return (_dispatch: Dispatch, getState: () => RootState) => {
-        const state = getState();
-        const {members, responsible} = getGroupEditorSubjects(state);
-        const version = getGroupEditorIdmDataVersion(state);
-        const newMembers = calculateMembers(members, usersToAdd, usersToRemove);
-        const newResponsibles = calculateMembers(
-            responsible,
-            responsiblesToAdd,
-            responsiblesToRemove,
-        );
+export function createGroup({groupName}: {groupName: string}) {
+    return ytApiV3.create({
+        type: 'group',
+        attributes: {name: groupName},
+    });
+}
 
-        const cluster = getCluster(state);
-        return UIFactory.getAclApi().updateGroup({
-            cluster,
+export function deleteGroup({groupName}: {groupName: string}) {
+    return ytApiV3.remove({
+        path: '//sys/groups/' + groupName,
+    });
+}
+
+type SaveGroupDataPayload = {
+    initialGroupName: string;
+    groupName: string;
+    membersToAdd: Subject[];
+    membersToRemove: Subject[];
+    responsiblesToAdd: Subject[];
+    responsiblesToRemove: Subject[];
+    comment: string;
+};
+
+export function saveGroupData({
+    initialGroupName,
+    groupName,
+    membersToAdd,
+    membersToRemove,
+    responsiblesToAdd,
+    responsiblesToRemove,
+    comment,
+}: SaveGroupDataPayload) {
+    return async (_dispatch: Dispatch, getState: () => RootState) => {
+        const isNewGroup = !initialGroupName;
+
+        if (isNewGroup) {
+            await createGroup({groupName});
+        }
+
+        const groupNameChanged = initialGroupName !== groupName;
+
+        if (!isNewGroup && groupNameChanged) {
+            await renameGroup({
+                oldGroupname: initialGroupName,
+                newGroupName: groupName,
+            });
+        }
+
+        if (UIFactory.getAclApi().isAllowed) {
+            const state = getState();
+            const {members, responsible} = getGroupEditorSubjects(state);
+            const version = getGroupEditorIdmDataVersion(state);
+            const newMembers = calculateMembers(members, membersToAdd, membersToRemove);
+            const newResponsibles = calculateMembers(
+                responsible,
+                responsiblesToAdd,
+                responsiblesToRemove,
+            );
+
+            const cluster = getCluster(state);
+            return UIFactory.getAclApi().updateGroup({
+                cluster,
+                groupName,
+                version,
+                groupDiff: {
+                    members: newMembers,
+                    responsible: newResponsibles,
+                },
+                comment,
+            });
+        }
+
+        return changeGroupMembers({
             groupName,
-            version,
-            groupDiff: {
-                members: newMembers,
-                responsible: newResponsibles,
-            },
-            comment,
+            membersToAdd,
+            membersToRemove,
         });
     };
 }
@@ -188,4 +255,59 @@ function mapsByNameFromSubjects(subjects: Subject[]) {
         }
     });
     return [userMap, groupMap];
+}
+
+export function showGroupDeleteModal(groupNameToDelete: string) {
+    return (dispatch: Dispatch) => {
+        dispatch(deleteGroupModalSlice.actions.setModalState({groupNameToDelete}));
+    };
+}
+
+export function closeGroupDeleteModal() {
+    return (dispatch: Dispatch) => {
+        dispatch(deleteGroupModalSlice.actions.setModalState({groupNameToDelete: ''}));
+    };
+}
+
+type RenameGroupPayload = {
+    oldGroupname: string;
+    newGroupName: string;
+};
+
+function renameGroup({oldGroupname, newGroupName}: RenameGroupPayload) {
+    return ytApiV3.set({path: `//sys/groups/${oldGroupname}/@name`}, newGroupName);
+}
+
+type ChangeGroupMembersPayload = {
+    groupName: string;
+    membersToAdd: Subject[];
+    membersToRemove: Subject[];
+};
+
+function changeGroupMembers({groupName, membersToAdd, membersToRemove}: ChangeGroupMembersPayload) {
+    const requestsToAdd = membersToAdd.map((user) => {
+        return {
+            command: 'add_member' as const,
+            parameters: {
+                group: groupName,
+                member: (user as UserSubject).user || (user as GroupSubject).group,
+            },
+        };
+    });
+
+    const requestsToRemove = membersToRemove.map((user) => {
+        return {
+            command: 'remove_member' as const,
+            parameters: {
+                group: groupName,
+                member: (user as UserSubject).user || (user as GroupSubject).group,
+            },
+        };
+    });
+
+    const requests = [...requestsToAdd, ...requestsToRemove];
+
+    return ytApiV3.executeBatch({
+        requests,
+    });
 }

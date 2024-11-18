@@ -4,7 +4,6 @@ import {ConnectedProps, connect} from 'react-redux';
 import DataTable from '@gravity-ui/react-data-table';
 
 import {openAttributesModal} from '../../../store/actions/modals/attributes-modal';
-import ClickableAttributesButton from '../../../components/AttributesButton/ClickableAttributesButton';
 import ColumnHeader from '../../../components/ColumnHeader/ColumnHeader';
 import CommaSeparatedListWithRestCounter from '../../../components/CommaSeparateListWithRestCounter/CommaSeparateListWithRestCounter';
 import DataTableYT from '../../../components/DataTableYT/DataTableYT';
@@ -12,18 +11,11 @@ import {SubjectCard} from '../../../components/SubjectLink/SubjectLink';
 
 import ErrorBoundary from '../../../components/ErrorBoundary/ErrorBoundary';
 import ExpandIcon from '../../../components/ExpandIcon/ExpandIcon';
-import Icon from '../../../components/Icon/Icon';
-import Link from '../../../components/Link/Link';
 import {Tooltip} from '../../../components/Tooltip/Tooltip';
 
 import LoadDataHandler from '../../../components/LoadDataHandler/LoadDataHandler';
 
-import {
-    fetchGroups,
-    openGroupEditorModal,
-    setGroupsPageSorting,
-    toggleGroupExpand,
-} from '../../../store/actions/groups';
+import {fetchGroups, setGroupsPageSorting, toggleGroupExpand} from '../../../store/actions/groups';
 import {STICKY_TOOLBAR_BOTTOM} from '../../../components/WithStickyToolbar/WithStickyToolbar';
 import GroupEditorDialog from '../../../pages/groups/GroupEditorDialog/GroupEditorDialog';
 import {
@@ -38,6 +30,8 @@ import './GroupsPageTable.scss';
 import {isIdmAclAvailable} from '../../../config';
 import type {RootState} from '../../../store/reducers';
 import type {OrderType} from '../../../utils/sort-helpers';
+import {GroupActions} from '../GroupActions/GroupActions';
+import {DeleteGroupModal} from '../DeleteGroupModal/DeleteUserModal';
 
 const block = cn('groups-page-table');
 
@@ -56,29 +50,6 @@ const COLUMN_NAMES: Record<string, string> = {
     responsibles: 'Responsible users',
     actions: '',
 };
-
-type GroupActionsProps = {
-    className?: string;
-    groupname: string;
-    edit?: (value: string) => void;
-};
-
-function GroupActions({className, groupname, edit}: GroupActionsProps) {
-    const onEdit = React.useCallback(() => {
-        edit!(groupname);
-    }, [groupname, edit]);
-
-    return (
-        <div className={className}>
-            <ClickableAttributesButton title={groupname} path={`//sys/groups/${groupname}`} />
-            {edit && (
-                <Link onClick={onEdit} className={block('edit-action')}>
-                    <Icon awesome="pencil-alt" />
-                </Link>
-            )}
-        </div>
-    );
-}
 
 interface GroupsPageTableProps extends ConnectedProps<typeof connector> {
     className?: string;
@@ -178,21 +149,10 @@ class GroupsPageTable extends React.Component<GroupsPageTableProps> {
     }
 
     renderActionsCell(col: string, {row}: {row: GroupsTreeNode}) {
-        const {name: groupname, idm} = row;
-        const allowEdit = idm;
-        return (
-            <GroupActions
-                className={block('content', {col})}
-                edit={allowEdit ? this.onEdit : undefined}
-                groupname={groupname!}
-            />
-        );
-    }
+        const {name: groupname} = row;
 
-    onEdit = (groupName: string) => {
-        const {openGroupEditorModal} = this.props;
-        openGroupEditorModal(groupName);
-    };
+        return <GroupActions className={block('content', {col})} groupname={groupname} />;
+    }
 
     renderTable() {
         const {loaded, loading, groups} = this.props;
@@ -230,15 +190,11 @@ class GroupsPageTable extends React.Component<GroupsPageTableProps> {
                 ...columnProps('size'),
                 render: this.renderSizeCell.bind(this, 'size'),
             },
-            ...(!isIdmAclAvailable()
-                ? []
-                : [
-                      {
-                          ...columnProps('actions'),
-                          header: '',
-                          render: this.renderActionsCell.bind(this, 'actions'),
-                      },
-                  ]),
+            {
+                ...columnProps('actions'),
+                header: '',
+                render: this.renderActionsCell.bind(this, 'actions'),
+            },
         ];
 
         return (
@@ -267,6 +223,7 @@ class GroupsPageTable extends React.Component<GroupsPageTableProps> {
                     </LoadDataHandler>
                 </div>
                 {showEditor && <GroupEditorDialog />}
+                <DeleteGroupModal />
             </ErrorBoundary>
         );
     }
@@ -294,7 +251,6 @@ const mapDispatchToProps = {
     setGroupsPageSorting,
     toggleGroupExpand,
     openAttributesModal,
-    openGroupEditorModal,
 };
 
 const connector = connect(mapStateToProps, mapDispatchToProps);

@@ -236,6 +236,16 @@ export interface RemoveMaintenanceParams extends AddMaintenanceParams {
     mine: boolean;
 }
 
+export interface AddMembersParams extends BaseBatchParams {
+    group: string;
+    member: string;
+}
+
+export interface RemoveMembersParams extends BaseBatchParams {
+    group: string;
+    member: string;
+}
+
 export type BatchSubRequest =
     | SubRequest<'transfer_pool_resources', TransferPoolQuotaParams>
     | SubRequest<'mount_table' | 'unmount_table' | 'freeze_table' | 'unfreeze_table', PathParams>
@@ -251,7 +261,9 @@ export type BatchSubRequest =
     | SubRequest<'get_query', GetQueryParams>
     | SubRequest<'get_query_result', GetQueryResultParams>
     | SubRequest<'add_maintenance', AddMaintenanceParams>
-    | SubRequest<'remove_maintenance', RemoveMaintenanceParams>;
+    | SubRequest<'remove_maintenance', RemoveMaintenanceParams>
+    | SubRequest<'add_member', AddMembersParams>
+    | SubRequest<'remove_member', RemoveMembersParams>;
 
 export type OutputFormat =
     | {
