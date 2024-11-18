@@ -59,7 +59,7 @@ const getFilteredProxies = createSelector(
 function filterProxies(proxies, {hostFilter, stateFilter, roleFilter, bannedFilter}) {
     const bannedFilterAsBool = bannedFilter === 'true';
     const predicates = compact_([
-        hostFilter ? ({host}) => host?.toLowerCase().startsWith(hostFilter) : undefined,
+        hostFilter ? ({host}) => host?.toLowerCase().includes(hostFilter) : undefined,
         stateFilter && stateFilter !== 'all' ? ({state}) => state === stateFilter : undefined,
         roleFilter && roleFilter !== 'all' ? ({role}) => role === roleFilter : undefined,
         bannedFilter !== 'all' ? ({banned}) => banned === bannedFilterAsBool : undefined,
