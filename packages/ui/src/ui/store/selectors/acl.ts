@@ -251,10 +251,11 @@ class AggregateBySubject {
             );
         }
 
-        this.children.push(item);
+        const child = {...item, permissions: [...(item.permissions ?? [])]};
+        this.children.push(child);
 
-        item.permissions?.sort();
-        item.permissions?.forEach((p) => {
+        child.permissions?.sort();
+        child.permissions?.forEach((p) => {
             this.allPermissions.add(p);
         });
         item.columns?.forEach((column) => this.columns.add(column));
