@@ -396,14 +396,16 @@ class MapNodesTable extends Component {
 
         return (
             columns && (
-                <ElementsTable
-                    {...settings}
-                    isLoading={loadState === LOADING_STATUS.LOADING}
-                    selectedIndex={selectedIndex}
-                    hotkeys={this.hotkeys}
-                    key={selectedIndex}
-                    rowClassName={this.rowClassName}
-                />
+                <div className={block()}>
+                    <ElementsTable
+                        {...settings}
+                        isLoading={loadState === LOADING_STATUS.LOADING}
+                        selectedIndex={selectedIndex}
+                        hotkeys={this.hotkeys}
+                        key={selectedIndex}
+                        rowClassName={this.rowClassName}
+                    />
+                </div>
             )
         );
     }
