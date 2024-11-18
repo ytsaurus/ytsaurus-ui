@@ -10,6 +10,7 @@ import {getGroupsNameFilter} from '../../../store/selectors/groups';
 import type {RootState} from '../../../store/reducers';
 
 import './GroupsPageFilters.scss';
+import {ShowCreateGroupModalButton} from '../CreateGroupModal/CreateGroupModal';
 
 const block = cn('groups-page-filters');
 
@@ -43,7 +44,9 @@ class GroupsPageFilters extends React.Component<GroupsPageFiltersProps> {
                             wrapperClassName: block('item'),
                         },
                     ]}
-                />
+                >
+                    <ShowCreateGroupModalButton />
+                </Toolbar>
             </ErrorBoundary>
         );
     }

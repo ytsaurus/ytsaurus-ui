@@ -4,9 +4,14 @@ import {GROUP_EDITOR_ACTION, GROUP_EDITOR_ACTION_DATA_FIELDS} from '../../../con
 import type {Action} from 'redux';
 import type {ActionD, YTError} from '../../../types';
 import type {PreparedRole} from '../../../utils/acl';
+import type {FlagType} from '../../../utils';
 
 type EditorDataType = {
-    $attributes?: Record<string, string>;
+    $attributes?: {
+        member_of: string[];
+        members: string[];
+        upravlyator_managed?: FlagType;
+    };
 };
 
 type IDMDataType = {

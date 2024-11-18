@@ -1,5 +1,6 @@
 $usersCellWidth: 250px;
 $smallCellWidth: 65px;
+$actionsCellWidth: 100px;
 
 $levelPadding: 30px;
 
@@ -51,7 +52,7 @@ $levelPadding: 30px;
         }
 
         &_col_actions {
-            width: $smallCellWidth;
+            width: $actionsCellWidth;
             justify-content: space-between;
         }
 

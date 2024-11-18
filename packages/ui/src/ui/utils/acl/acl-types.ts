@@ -16,7 +16,7 @@ export interface Group {
     other_members?: Array<string>;
 }
 
-interface GroupSubject {
+export interface GroupSubject {
     group: string;
     group_name?: string;
     group_type?: string;
@@ -30,7 +30,7 @@ interface TvmSubject {
     tvm_app_name?: string;
 }
 
-interface UserSubject {
+export interface UserSubject {
     user: string;
 }
 

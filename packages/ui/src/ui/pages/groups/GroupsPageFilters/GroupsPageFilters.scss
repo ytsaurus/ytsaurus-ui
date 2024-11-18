@@ -1,4 +1,8 @@
 .groups-page-filters {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
     &__item {
         flex-grow: 1;
         flex-shrink: 1;
