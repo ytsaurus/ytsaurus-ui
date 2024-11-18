@@ -47,7 +47,7 @@ function filterOutMaintananceHosts<T extends CypressNode<{maintenance?: boolean}
     if (output) {
         value.output = Object.keys(output).reduce(
             (acc, key) => {
-                if (output[key].$attributes?.maintenance) {
+                if (!output[key].$attributes?.maintenance) {
                     acc[key] = output[key];
                 }
 
