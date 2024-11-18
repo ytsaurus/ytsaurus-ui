@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.68.1](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.68.0...ui-v1.68.1) (2024-11-18)
+
+
+### Reverts
+
+* "chore: now primary masters do not request data from endpoinds which a…" ([99b6884](https://github.com/ytsaurus/ytsaurus-ui/commit/99b6884317cb9947f5d47c5c20a54f453d5ce563))
+
 ## [1.68.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.67.0...ui-v1.68.0) (2024-11-18)
 
 
