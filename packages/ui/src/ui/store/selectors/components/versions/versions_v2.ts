@@ -74,7 +74,7 @@ const getFilteredByHost = createSelector([getDetails, getHostFilter], (details, 
     if (!hostFilter) {
         return details;
     }
-    return filter_(details, ({address}) => address?.toLowerCase().startsWith(hostFilter));
+    return filter_(details, ({address}) => address?.toLowerCase().includes(hostFilter));
 });
 
 const getFilters = createSelector(

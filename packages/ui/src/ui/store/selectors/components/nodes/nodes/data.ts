@@ -50,7 +50,7 @@ const getPropertiesRequiredForMediums = createSelector(
 const getFilteredByHost = createSelector([getNodes, getHostFilter], (nodes, hostFilter) => {
     const hostFilters = hostFilter.split(/\s+/);
     return filter_(nodes, (node) => {
-        return some_(hostFilters, (hostFilter) => node?.host?.toLowerCase().startsWith(hostFilter));
+        return some_(hostFilters, (hostFilter) => node?.host?.toLowerCase().includes(hostFilter));
     });
 });
 
