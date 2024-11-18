@@ -1,5 +1,22 @@
 # Changelog
 
+## [1.68.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.67.0...ui-v1.68.0) (2024-11-18)
+
+
+### Features
+
+* **Queries:** change path auto suggest weight [YTFRONT-4479] ([9504939](https://github.com/ytsaurus/ytsaurus-ui/commit/95049392606b78cae579dc9e13734cb5b65f46fd))
+* **System:** headers of sections should be sticky [YTFRONT-4420] ([7e04dae](https://github.com/ytsaurus/ytsaurus-ui/commit/7e04dae01262c2b4cf0c977acd269ef6593ae1e6))
+
+
+### Bug Fixes
+
+* **Components/Nodes:** fixes for add_maintenance/remove_maintenance [YTFRONT-4480] ([85ef77d](https://github.com/ytsaurus/ytsaurus-ui/commit/85ef77dfbb540a0c253e754c2cefaa0db884a191))
+* **Navigation/DeleteModal:** make header of deleting items list and  "permanently delete" checkbox is sticky [YTFRONT-4245] ([3da8d44](https://github.com/ytsaurus/ytsaurus-ui/commit/3da8d4436b3f1fc93e7d764e5e67bfb8dc2524fc))
+* **Navigation/ReplicatedTable:** rename column [YTFRONT-4327] ([79f664b](https://github.com/ytsaurus/ytsaurus-ui/commit/79f664b663de172c8711e3aa255c4b73729514d1))
+* **Navigation:** correct data format in errors [YTFRONT-4251] ([ed6096e](https://github.com/ytsaurus/ytsaurus-ui/commit/ed6096e7f1ce337546a0271506db6f5b7f9798a6))
+* **Queries:** run query hotkeys [YTFRONT-4462] ([7d69305](https://github.com/ytsaurus/ytsaurus-ui/commit/7d6930558cbdd214044e07b16f7f8a63c748efac))
+
 ## [1.67.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.66.0...ui-v1.67.0) (2024-11-11)
 
 
