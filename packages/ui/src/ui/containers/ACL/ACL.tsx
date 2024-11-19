@@ -478,7 +478,7 @@ class ACL extends Component<Props> {
             loadAclDataFn: () => loadAclData({path, idmKind}),
             columnGroups,
             cluster,
-            allowEdit: nodeType === 'map_node',
+            allowEdit: UIFactory.getAclApi().isAllowedToEditColumnGroups({nodeType}),
             updateAclFilters,
             columnsFilter,
             columnGroupNameFilter,
