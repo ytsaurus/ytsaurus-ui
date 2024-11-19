@@ -285,9 +285,9 @@ class ACL extends Component<Props> {
                 align: 'right',
                 className: block('table-item', {type: 'actions'}),
                 render({row}) {
-                    const level = 'level' in row ? row.level : undefined;
+                    const expanded = 'expanded' in row ? row.expanded : undefined;
                     const RoleActions = UIFactory.getComponentForAclRoleActions();
-                    return level === 0
+                    return expanded !== undefined
                         ? null
                         : RoleActions !== undefined && (
                               <RoleActions
