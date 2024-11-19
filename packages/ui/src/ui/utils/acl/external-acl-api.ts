@@ -75,6 +75,8 @@ export interface AclApi {
         editInheritance?: string;
         editColumnsAcl?: string;
     };
+
+    isAllowedToEditColumnGroups(params: {nodeType?: string}): boolean;
 }
 
 export interface GetAclParams {
@@ -151,6 +153,10 @@ export const defaultAclApi: AclApi = {
     createColumnGroup: () => methodNotSupported('createColumnGroup'),
     editColumnGroup: () => methodNotSupported('editColumnGroup'),
     deleteColumnGroup: () => methodNotSupported('deleteColumnGroup'),
+
+    isAllowedToEditColumnGroups({nodeType}) {
+        return nodeType === 'map_node' || nodeType === 'table';
+    },
 };
 
 function methodNotSupported(method: string) {
