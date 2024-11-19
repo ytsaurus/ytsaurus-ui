@@ -213,6 +213,7 @@ export interface ResponseItem {
     attributes: {
         native_cell_tag: number;
         annotations: unknown;
+        maintanance: boolean;
     };
     state?: 'online' | 'offline' | 'unknown';
 }
