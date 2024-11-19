@@ -601,9 +601,10 @@ class ACL extends Component<Props> {
             UIFactory.getAclPermissionsSettings()[idmKind];
 
         function toSegmentItem(name: string, role?: boolean | PreparedRole, invert?: boolean) {
+            const value = 'boolean' === typeof role ? role : role?.state === 'granted';
             return {
                 name,
-                value: invert ? !role : Boolean(role),
+                value: invert ? !value : value,
                 url: 'boolean' === typeof role ? undefined : role?.idmLink,
             };
         }
