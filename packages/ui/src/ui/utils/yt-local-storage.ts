@@ -1,6 +1,8 @@
 import merge_ from 'lodash/merge';
 
 export interface YTStorageData {
+    users_disabled_cache_end_time: number;
+    groups_disabled_cache_end_time: number;
     loginDialog: {
         username?: string;
     };

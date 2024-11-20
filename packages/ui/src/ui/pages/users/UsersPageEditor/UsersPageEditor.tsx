@@ -23,6 +23,7 @@ import {RootState} from '../../../store/reducers';
 import {FIX_MY_TYPE, YTError} from '../../../types';
 import {isIdmAclAvailable} from '../../../config';
 import {createUser} from '../../../store/actions/users-typed';
+import {disableUsersCache} from '../../../utils/users-groups';
 
 const block = cn('users-page-editor');
 
@@ -203,6 +204,7 @@ class UsersPageEditor extends React.Component<Props, State> {
             })
             .then(() => {
                 // we don't need to wait for the end of the action
+                disableUsersCache();
                 this.props.fetchUsers();
             })
             .catch((error) => {
