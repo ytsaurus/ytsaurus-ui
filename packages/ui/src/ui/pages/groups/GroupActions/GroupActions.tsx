@@ -8,7 +8,7 @@ import Icon from '../../../components/Icon/Icon';
 import Button from '../../../components/Button/Button';
 
 import {openGroupEditorModal, showGroupDeleteModal} from '../../../store/actions/groups';
-import {isIdmAclAvailable} from '../../../config';
+import UIFactory from '../../../UIFactory';
 
 type GroupActionsProps = {
     className?: string;
@@ -26,7 +26,7 @@ export function GroupActions({className, groupname}: GroupActionsProps) {
         dispatch(showGroupDeleteModal(groupname));
     }, [groupname]);
 
-    const allowDelete = !isIdmAclAvailable();
+    const {allowDelete} = UIFactory.getAclApi().groups;
 
     return (
         <div className={className}>

@@ -104,8 +104,10 @@ export function openGroupEditorModal(groupName = '') {
 
         let idmDataPromise;
 
-        if (UIFactory.getAclApi().isAllowed) {
-            idmDataPromise = UIFactory.getAclApi().getGroupAcl(getCluster(state), groupName);
+        const {getGroupAcl} = UIFactory.getAclApi();
+
+        if (getGroupAcl) {
+            idmDataPromise = getGroupAcl(getCluster(state), groupName);
         } else {
             idmDataPromise = Promise.resolve();
         }
@@ -189,7 +191,9 @@ export function saveGroupData({
             });
         }
 
-        if (UIFactory.getAclApi().isAllowed) {
+        const {updateGroup} = UIFactory.getAclApi();
+
+        if (updateGroup) {
             const state = getState();
             const {members, responsible} = getGroupEditorSubjects(state);
             const version = getGroupEditorIdmDataVersion(state);
@@ -201,7 +205,7 @@ export function saveGroupData({
             );
 
             const cluster = getCluster(state);
-            return UIFactory.getAclApi().updateGroup({
+            return updateGroup({
                 cluster,
                 groupName,
                 version,

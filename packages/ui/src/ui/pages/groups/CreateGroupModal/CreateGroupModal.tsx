@@ -2,7 +2,7 @@ import Button from '../../../components/Button/Button';
 import React, {useCallback} from 'react';
 import {useDispatch} from 'react-redux';
 import {openGroupEditorModal} from '../../../store/actions/groups';
-import {isIdmAclAvailable} from '../../../config';
+import UIFactory from '../../../UIFactory';
 
 export const ShowCreateGroupModalButton: React.FC = () => {
     const dispatch = useDispatch();
@@ -10,7 +10,7 @@ export const ShowCreateGroupModalButton: React.FC = () => {
         dispatch(openGroupEditorModal());
     }, []);
 
-    if (isIdmAclAvailable()) {
+    if (!UIFactory.getAclApi().groups.allowCreate) {
         return null;
     }
 
