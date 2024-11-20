@@ -20,6 +20,7 @@ import {
 import type {RootState} from '../../../store/reducers';
 import type {ResponsibleType, RoleConverted} from '../../../utils/acl/acl-types';
 import UIFactory from '../../../UIFactory';
+import {disableGroupsCache} from '../../../utils/users-groups';
 
 import './GroupEditorDialog.scss';
 
@@ -83,6 +84,7 @@ class GroupEditorDialog extends React.Component<GroupsPageTableProps> {
                 comment,
             })
             .then(() => {
+                disableGroupsCache();
                 return this.props.fetchGroups();
             })
             .then(() => {});

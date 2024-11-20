@@ -6,6 +6,7 @@ import {closeUserDeleteModal, deleteUser} from '../../../store/actions/users-typ
 import {fetchUsers} from '../../../store/actions/users';
 import {YTDFDialog, makeErrorFields} from '../../../components/Dialog';
 import {YTError} from '../../../types';
+import {disableUsersCache} from '../../../utils/users-groups';
 
 export const DeleteUserModal: React.FC = () => {
     const dispatch = useDispatch();
@@ -26,6 +27,7 @@ export const DeleteUserModal: React.FC = () => {
 
             onClose();
 
+            disableUsersCache();
             // we don't need to wait for the end of the action
             dispatch(fetchUsers());
         } catch (error) {
