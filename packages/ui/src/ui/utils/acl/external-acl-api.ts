@@ -24,13 +24,18 @@ import type {PreparedApprover} from '../../store/selectors/acl';
 
 export interface AclApi {
     isAllowed: boolean;
+    groups: {
+        allowDelete: boolean;
+        allowCreate: boolean;
+        allowRename: boolean;
+    };
 
     getAcl(params: GetAclParams): Promise<PreparedAclData>;
     updateAcl(cluster: string, path: string, params: UpdateAclParams): Promise<UpdateResponse>;
     manageAclFields: Array<ManageAclFieldsNames>;
 
-    getGroupAcl(cluster: string, group: string): Promise<{group: GroupACL; version: string}>;
-    updateGroup(params: UpdateGroupParams): Promise<UpdateResponse>;
+    getGroupAcl?(cluster: string, group: string): Promise<{group: GroupACL; version: string}>;
+    updateGroup?(params: UpdateGroupParams): Promise<UpdateResponse>;
     addUserToGroup(params: AdduserToGroupParams): Promise<UpdateResponse>;
     removeUserFromGroup(params: AdduserToGroupParams): Promise<UpdateResponse>;
 
@@ -111,13 +116,16 @@ export interface RequestPermissionParams {
 
 export const defaultAclApi: AclApi = {
     isAllowed: false,
+    groups: {
+        allowDelete: true,
+        allowCreate: true,
+        allowRename: true,
+    },
 
     getAcl: ({sysPath, kind}) => getCombinedAcl({sysPath, kind}),
     updateAcl: (...args) => updateAclAttributes(...args),
     manageAclFields: ['inheritAcl', 'inheritAcl_warning'],
 
-    getGroupAcl: () => methodNotSupported('getGroupAcl'),
-    updateGroup: () => methodNotSupported('updateGruop'),
     addUserToGroup: () => methodNotSupported('addUserToGroup'),
     removeUserFromGroup: () => methodNotSupported('removeUserFromGroup'),
 

@@ -19,7 +19,7 @@ import {
 } from '../../../store/selectors/groups';
 import type {RootState} from '../../../store/reducers';
 import type {ResponsibleType, RoleConverted} from '../../../utils/acl/acl-types';
-import {isIdmAclAvailable} from '../../../config';
+import UIFactory from '../../../UIFactory';
 
 import './GroupEditorDialog.scss';
 
@@ -30,8 +30,6 @@ interface GroupsPageTableProps extends ConnectedProps<typeof connector> {}
 type FormValues = {
     general: {
         groupName: string;
-    };
-    details: {
         idm: string;
         size: string;
     };
@@ -107,8 +105,6 @@ class GroupEditorDialog extends React.Component<GroupsPageTableProps> {
                 initialValues={{
                     general: {
                         groupName,
-                    },
-                    details: {
                         idm: String(idm || '-'),
                         size: String(members.length),
                     },
@@ -120,60 +116,62 @@ class GroupEditorDialog extends React.Component<GroupsPageTableProps> {
                     },
                 }}
                 fields={[
-                    {
-                        type: 'tab-vertical',
-                        name: 'general',
-                        title: 'General',
-                        fields: [
-                            {
-                                name: 'groupName',
-                                type: 'text',
-                                required: true,
-                                caption: 'Group name',
-                            },
-                        ],
-                    },
-                    ...(isIdmAclAvailable()
-                        ? [
-                              {
-                                  type: 'tab-vertical' as const,
-                                  name: 'details',
-                                  title: 'Details',
-                                  fields: [
-                                      {
-                                          name: 'idm',
-                                          type: 'plain' as const,
-                                          caption: 'Idm managed',
-                                      },
-                                      {
-                                          name: 'size',
-                                          type: 'plain' as const,
-                                          caption: 'Size',
-                                      },
-                                  ],
-                              },
-                              {
-                                  type: 'tab-vertical' as const,
-                                  name: 'responsibles',
-                                  title: 'Responsibles',
-                                  fields: [
-                                      {
-                                          name: 'responsibles',
-                                          type: 'acl-roles' as const,
-                                          caption: 'Responsibles',
-                                          extras: {
-                                              placeholder: 'Enter login or name',
+                    ...[
+                        {
+                            type: 'tab-vertical' as const,
+                            name: 'general',
+                            title: 'General',
+                            fields: [
+                                {
+                                    name: 'groupName',
+                                    type: UIFactory.getAclApi().groups.allowRename
+                                        ? ('text' as const)
+                                        : ('plain' as const),
+                                    required: true,
+                                    caption: 'Group name',
+                                },
+                                ...(UIFactory.getAclApi().getGroupAcl
+                                    ? [
+                                          {
+                                              name: 'idm',
+                                              type: 'plain' as const,
+                                              caption: 'Idm managed',
                                           },
-                                      },
-                                      {
-                                          name: 'responsiblesComment',
-                                          type: 'textarea' as const,
-                                          caption: 'Comment for IDM',
-                                      },
-                                  ],
-                              },
-                          ]
-                        : []),
+                                      ]
+                                    : []),
+
+                                {
+                                    name: 'size',
+                                    type: 'plain' as const,
+                                    caption: 'Size',
+                                },
+                            ],
+                        },
+                        ...(UIFactory.getAclApi().getGroupAcl
+                            ? [
+                                  {
+                                      type: 'tab-vertical' as const,
+                                      name: 'responsibles',
+                                      title: 'Responsibles',
+                                      fields: [
+                                          {
+                                              name: 'responsibles',
+                                              type: 'acl-roles' as const,
+                                              caption: 'Responsibles',
+                                              extras: {
+                                                  placeholder: 'Enter login or name',
+                                              },
+                                          },
+                                          {
+                                              name: 'responsiblesComment',
+                                              type: 'textarea' as const,
+                                              caption: 'Comment for IDM',
+                                          },
+                                      ],
+                                  },
+                              ]
+                            : []),
+                    ],
                     {
                         type: 'tab-vertical',
                         name: 'members',
@@ -188,7 +186,7 @@ class GroupEditorDialog extends React.Component<GroupsPageTableProps> {
                                 },
                             },
 
-                            ...(isIdmAclAvailable()
+                            ...(UIFactory.getAclApi().updateGroup
                                 ? [
                                       {
                                           name: 'membersComment',
