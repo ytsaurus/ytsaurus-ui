@@ -23,7 +23,6 @@ import type {Group} from '../../store/reducers/groups/table';
 import type {OrderType} from '../../utils/sort-helpers';
 import type {RootState} from '../../store/reducers';
 import type {GroupSubject, Subject, UserSubject} from '../../utils/acl/acl-types';
-import {deleteGroupModalSlice} from '../../store/reducers/groups/delete-group';
 
 // Table
 
@@ -259,18 +258,6 @@ function mapsByNameFromSubjects(subjects: Subject[]) {
         }
     });
     return [userMap, groupMap];
-}
-
-export function showGroupDeleteModal(groupNameToDelete: string) {
-    return (dispatch: Dispatch) => {
-        dispatch(deleteGroupModalSlice.actions.setModalState({groupNameToDelete}));
-    };
-}
-
-export function closeGroupDeleteModal() {
-    return (dispatch: Dispatch) => {
-        dispatch(deleteGroupModalSlice.actions.setModalState({groupNameToDelete: ''}));
-    };
 }
 
 type RenameGroupPayload = {

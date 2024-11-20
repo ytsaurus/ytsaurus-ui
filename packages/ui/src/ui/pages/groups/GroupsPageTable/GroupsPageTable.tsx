@@ -31,7 +31,6 @@ import {isIdmAclAvailable} from '../../../config';
 import type {RootState} from '../../../store/reducers';
 import type {OrderType} from '../../../utils/sort-helpers';
 import {GroupActions} from '../GroupActions/GroupActions';
-import {DeleteGroupModal} from '../DeleteGroupModal/DeleteUserModal';
 
 const block = cn('groups-page-table');
 
@@ -223,7 +222,6 @@ class GroupsPageTable extends React.Component<GroupsPageTableProps> {
                     </LoadDataHandler>
                 </div>
                 {showEditor && <GroupEditorDialog />}
-                <DeleteGroupModal />
             </ErrorBoundary>
         );
     }

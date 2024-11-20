@@ -1,27 +1,24 @@
 import React, {useCallback} from 'react';
-import {useDispatch, useSelector} from 'react-redux';
-import {RootState} from '../../../store/reducers';
+import {useDispatch} from 'react-redux';
 import {Text} from '@gravity-ui/uikit';
-import {closeGroupDeleteModal, deleteGroup, fetchGroups} from '../../../store/actions/groups';
+import {deleteGroup, fetchGroups} from '../../../store/actions/groups';
 import {YTDFDialog, makeErrorFields} from '../../../components/Dialog';
 import {YTError} from '../../../types';
 
-export const DeleteGroupModal: React.FC = () => {
+type DeleteGroupModalProps = {
+    group: string;
+    onClose: () => void;
+};
+
+export const DeleteGroupModal: React.FC<DeleteGroupModalProps> = ({group, onClose}) => {
     const dispatch = useDispatch();
     const [error, setError] = React.useState<YTError | undefined>(undefined);
-    const groupNameToDelete = useSelector(
-        (state: RootState) => state.groups.deleteGroup.groupNameToDelete,
-    );
-
-    const onClose = useCallback(() => {
-        dispatch(closeGroupDeleteModal());
-    }, [dispatch]);
 
     const onAdd = useCallback(async () => {
         try {
             setError(undefined);
 
-            await deleteGroup({groupName: groupNameToDelete});
+            await deleteGroup({groupName: group});
 
             onClose();
 
@@ -30,12 +27,12 @@ export const DeleteGroupModal: React.FC = () => {
         } catch (error) {
             setError(error as YTError);
         }
-    }, [dispatch, groupNameToDelete, onClose]);
+    }, [dispatch, group, onClose]);
 
     return (
         <YTDFDialog
-            visible={Boolean(groupNameToDelete)}
-            headerProps={{title: `Delete group ${groupNameToDelete}`}}
+            visible={true}
+            headerProps={{title: `Delete group ${group}`}}
             pristineSubmittable={true}
             onClose={onClose}
             onAdd={onAdd}
@@ -44,11 +41,7 @@ export const DeleteGroupModal: React.FC = () => {
                     name: 'groupname',
                     type: 'block',
                     extras: {
-                        children: (
-                            <Text>
-                                Are you sure you want to delete &quot;{groupNameToDelete}&quot;?
-                            </Text>
-                        ),
+                        children: <Text>Are you sure you want to delete &quot;{group}&quot;?</Text>,
                     },
                 },
                 ...makeErrorFields([error]),
