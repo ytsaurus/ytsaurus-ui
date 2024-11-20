@@ -77,35 +77,14 @@ export const useQueryResultTabs = (
         if (!query) {
             return [];
         }
-        const items: TabsItemProps[] = [{id: QueryResultTab.META, title: 'Meta'}];
-        const emptyProgress =
-            !query.progress?.yql_plan?.Basic.nodes.length &&
-            !query.progress?.yql_plan?.Basic.links?.length;
-        if (query.progress && !emptyProgress) {
-            items.unshift({
-                id: QueryResultTab.PROGRESS,
-                title: 'Progress',
-            });
-        }
+        const items: TabsItemProps[] = [];
+
         if (query.state === QueryStatus.FAILED) {
-            items.unshift({id: QueryResultTab.ERROR, title: 'Error'});
-        } else if (query.state === QueryStatus.COMPLETED) {
-            const queryResultChartTab = UIFactory.getQueryResultChartTab();
+            items.push({id: QueryResultTab.ERROR, title: 'Error'});
+        }
 
-            if (queryResultChartTab && query.result_count) {
-                items.unshift({
-                    id: QueryResultTab.CHART_TAB,
-                    title: queryResultChartTab.title,
-                });
-            }
-
-            if (query.progress?.yql_statistics) {
-                items.unshift({
-                    id: QueryResultTab.STATISTIC,
-                    title: 'Statistics',
-                });
-            }
-            items.unshift(
+        if (query.state === QueryStatus.COMPLETED) {
+            items.push(
                 ...times_(query.result_count, (num) => {
                     let icon;
                     if (resultsMeta && resultsMeta[num] && has_(resultsMeta[num], 'error')) {
@@ -124,6 +103,36 @@ export const useQueryResultTabs = (
                 }),
             );
         }
+
+        const emptyProgress =
+            !query.progress?.yql_plan?.Basic.nodes.length &&
+            !query.progress?.yql_plan?.Basic.links?.length;
+        if (query.progress && !emptyProgress) {
+            items.push({
+                id: QueryResultTab.PROGRESS,
+                title: 'Progress',
+            });
+        }
+
+        if (query.state === QueryStatus.COMPLETED) {
+            const queryResultChartTab = UIFactory.getQueryResultChartTab();
+            if (queryResultChartTab && query.result_count) {
+                items.push({
+                    id: QueryResultTab.CHART_TAB,
+                    title: queryResultChartTab.title,
+                });
+            }
+
+            if (query.progress?.yql_statistics) {
+                items.push({
+                    id: QueryResultTab.STATISTIC,
+                    title: 'Statistics',
+                });
+            }
+        }
+
+        items.push({id: QueryResultTab.META, title: 'Meta'});
+
         return items;
     }, [query, resultsMeta]);
 
