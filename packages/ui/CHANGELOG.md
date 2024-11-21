@@ -1,5 +1,21 @@
 # Changelog
 
+## [1.69.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.68.1...ui-v1.69.0) (2024-11-21)
+
+
+### Features
+
+* **Queries:** alias and column autocomplete [YTFRONT-4486] ([b47d3fb](https://github.com/ytsaurus/ytsaurus-ui/commit/b47d3fb1fc215777c0b594dd7e7643c897e830ba))
+* **Queries:** change engine order [YTFRONT-4498] ([9a8dce8](https://github.com/ytsaurus/ytsaurus-ui/commit/9a8dce8470268a076756c3d8692dd7f5e66ba7d6))
+* **Queries:** change query result tabs order [YTFRONT-4381] ([d851ddf](https://github.com/ytsaurus/ytsaurus-ui/commit/d851ddfac14f6de1e55ee3c4192fcff6ddb92388))
+
+
+### Bug Fixes
+
+* **Components:** use search of substring for 'Filter hosts' ([ac2c477](https://github.com/ytsaurus/ytsaurus-ui/commit/ac2c477abb47c86ba098264c8e7132b40e547422))
+* **Docs:** fix incorrect documentation urls ([9c4a8db](https://github.com/ytsaurus/ytsaurus-ui/commit/9c4a8db47461f14881d128b7887630331cbfbd6f))
+* **System:** fixed typo, now we check correct "maintenance" attribute ([c97f9be](https://github.com/ytsaurus/ytsaurus-ui/commit/c97f9be7cb8db3a8dc1efaeb82252755ad4d5367))
+
 ## [1.68.1](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.68.0...ui-v1.68.1) (2024-11-18)
 
 
