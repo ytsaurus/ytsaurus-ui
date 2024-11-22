@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.70.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.69.0...ui-v1.70.0) (2024-11-22)
+
+
+### Features
+
+* **Groups:** now we can create new group via UI [[#634](https://github.com/ytsaurus/ytsaurus-ui/issues/634)] ([99766cf](https://github.com/ytsaurus/ytsaurus-ui/commit/99766cf33bae8153e1c238899513664c0fb6f12c))
+
 ## [1.69.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.68.1...ui-v1.69.0) (2024-11-21)
 
 
