@@ -88,15 +88,38 @@ const getGroupsTreeFiltered = createSelector(
 );
 
 const getGroupsTreeFilteredAndExpanded = createSelector(
-    [getGroupsTreeFiltered, getGroupsExpanded],
-    (root, expanded) => {
-        const res = cloneDeep_(root);
+    [getGroupsTree, getGroupsTreeFiltered, getGroupsExpanded, getGroupsNameFilter],
+    (groupTree, groupsTreeFiltered, expandedByUser, groupNameFilter) => {
+        const expandedBySearch: Record<string, boolean> = {};
+
+        const res = cloneDeep_(groupsTreeFiltered);
+
         hammer.treeList.treeForEach(res.children, (node: GroupsTreeNode) => {
-            const {name} = node;
-            if (!expanded[name]) {
-                node.children = [];
+            const isNodeMatchedFilter = groupNameFilter && node.name.includes(groupNameFilter);
+
+            if (isNodeMatchedFilter) {
+                let parentName = node.parent!;
+
+                while (groupTree[parentName]) {
+                    expandedBySearch[parentName] = true;
+                    parentName = groupTree[parentName].parent!;
+                }
             }
         });
+
+        hammer.treeList.treeForEach(res.children, (node: GroupsTreeNode) => {
+            const userInteractedWithNode = typeof expandedByUser[node.name] !== 'undefined';
+
+            const expanded = userInteractedWithNode ? expandedByUser : expandedBySearch;
+
+            if (!expanded[node.name]) {
+                node.expanded = false;
+                node.children = [];
+            } else {
+                node.expanded = true;
+            }
+        });
+
         return res;
     },
 );

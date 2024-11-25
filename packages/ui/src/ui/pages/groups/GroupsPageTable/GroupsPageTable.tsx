@@ -105,9 +105,9 @@ class GroupsPageTable extends React.Component<GroupsPageTableProps> {
         );
     }
 
-    toggleExpand = (groupName: string) => {
+    toggleExpand = (groupName?: string, isExpanded?: boolean) => {
         const {toggleGroupExpand} = this.props;
-        toggleGroupExpand(groupName);
+        toggleGroupExpand(groupName!, !isExpanded);
     };
 
     renderIdmCell(col: string, {row}: {row: GroupsTreeNode}) {
