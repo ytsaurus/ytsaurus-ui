@@ -38,7 +38,7 @@ import {
     getAccountUsageViewType,
 } from '../../selectors/accounts/account-usage';
 import {getActiveAccount} from '../../../store/selectors/accounts/accounts-ts';
-import {getSettingsAccountUsageViewType} from '../../selectors/settings-ts';
+import {getSettingsAccountUsageViewType} from '../../../store/selectors/settings/settings-ts';
 import {SortState} from '../../../types';
 import {
     AccountUsageFiltersState,

@@ -6,7 +6,7 @@ import SystemStateOverview from '../SystemStateOverview/SystemStateOverview';
 
 import {loadSystemProxies} from '../../../store/actions/system/proxies';
 import {getCluster} from '../../../store/selectors/global';
-import {getSettingsSystemHttpProxiesCollapsed} from '../../../store/selectors/settings-ts';
+import {getSettingsSystemHttpProxiesCollapsed} from '../../../store/selectors/settings/settings-ts';
 import {setSettingsSystemHttpProxiesCollapsed} from '../../../store/actions/settings/settings';
 import type {RootState} from '../../../store/reducers';
 import {useThunkDispatch} from '../../../store/thunkDispatch';

@@ -23,7 +23,7 @@ import {loadSchedulersAndAgents} from '../../../store/actions/system';
 import prepareTags from './prepareTags';
 
 import './Schedulers.scss';
-import {getSettingsSystemSchedulersCollapsed} from '../../../store/selectors/settings-ts';
+import {getSettingsSystemSchedulersCollapsed} from '../../../store/selectors/settings/settings-ts';
 import {setSettingsSystemSchedulersCollapsed} from '../../../store/actions/settings/settings';
 import {useUpdater} from '../../../hooks/use-updater';
 import {UI_COLLAPSIBLE_SIZE} from '../../../constants/global';

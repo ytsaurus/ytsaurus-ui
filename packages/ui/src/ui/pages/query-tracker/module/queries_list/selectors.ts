@@ -4,7 +4,7 @@ import {getCurrentUserName} from '../../../../store/selectors/global';
 import {QueriesListParams} from '../api';
 import {isQueryProgress} from '../../utils/query';
 import {QueriesListFilterPresets} from './types';
-import {getSettingsData} from '../../../../store/selectors/settings-base';
+import {getSettingsData} from '../../../../store/selectors/settings/settings-base';
 
 export const getQueriesListState = (state: RootState) => state.queryTracker.list;
 

@@ -1,15 +1,14 @@
 import {createSelector} from 'reselect';
 
-import {NODE_TYPE} from '../../../shared/constants/system';
-import {ValueOf} from '../../../@types/types';
-
-import {getClusterNS, makeGetSetting} from './settings';
-import {NAMESPACES, SettingName} from '../../../shared/constants/settings';
-import {AccountUsageViewType} from '../reducers/accounts/usage/accounts-usage-filters';
-import {AccountUsageDataItem} from '../../store/reducers/accounts/usage/account-usage-types';
-import {ActiveJobTypesMap} from '../../store/actions/settings/settings';
-import {RootState} from '../../store/reducers';
-import {getCluster} from '../../store/selectors/global';
+import {getCluster} from '../../../store/selectors/global';
+import {getClusterNS, makeGetSetting} from '../../../store/selectors/settings';
+import {NAMESPACES, SettingName} from '../../../../shared/constants/settings';
+import {AccountUsageViewType} from '../../../store/reducers/accounts/usage/accounts-usage-filters';
+import {AccountUsageDataItem} from '../../../store/reducers/accounts/usage/account-usage-types';
+import {ActiveJobTypesMap} from '../../../store/actions/settings/settings';
+import {RootState} from '../../../store/reducers';
+import {NODE_TYPE} from '../../../../shared/constants/system';
+import {ValueOf} from '../../../types';
 
 export const getSettingsDataRaw = (state: RootState) => state.settings.data;
 
