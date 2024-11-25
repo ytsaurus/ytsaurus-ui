@@ -2,7 +2,7 @@ import {createSelector} from 'reselect';
 
 import YT from '../../../config/yt-config';
 import {RootState} from '../../../store/reducers';
-import {getSettingsRegularUserUI} from '../../../store/selectors/settings-ts';
+import {getSettingsRegularUserUI} from '../../../store/selectors/settings/settings-ts';
 
 import {getCurrentUserName} from './username';
 

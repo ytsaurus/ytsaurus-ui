@@ -8,7 +8,7 @@ import {setSettingsSystemRpcProxiesCollapsed} from '../../../store/actions/setti
 import {loadSystemRPCProxies} from '../../../store/actions/system/rpc-proxies';
 import {getCluster} from '../../../store/selectors/global';
 import {RootState} from '../../../store/reducers';
-import {getSettingsSystemRpcProxiesCollapsed} from '../../../store/selectors/settings-ts';
+import {getSettingsSystemRpcProxiesCollapsed} from '../../../store/selectors/settings/settings-ts';
 import {useThunkDispatch} from '../../../store/thunkDispatch';
 import {MakeUrlParams} from '../ProxiesImpl/RoleGroup';
 import {ProxiesImpl} from '../ProxiesImpl/ProxiesImpl';

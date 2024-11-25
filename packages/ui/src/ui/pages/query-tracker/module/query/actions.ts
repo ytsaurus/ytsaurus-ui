@@ -36,7 +36,7 @@ import {wrapApiPromiseByToaster} from '../../../../utils/utils';
 import {prepareQueryPlanIds} from './utills';
 import {chytApiAction, spytApiAction} from '../../../../utils/strawberryControllerApi';
 import guid from '../../../../common/hammer/guid';
-import {getSettingQueryTrackerStage} from '../../../../store/selectors/settings-ts';
+import {getSettingQueryTrackerStage} from '../../../../store/selectors/settings/settings-ts';
 import {getDefaultQueryACO, selectIsMultipleAco} from '../query_aco/selectors';
 
 import {

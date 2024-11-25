@@ -21,7 +21,7 @@ import {StickyContainer} from '../../../components/StickyContainer/StickyContain
 
 import {SYSTEM_CHUNKS_TABLE_ID} from '../../../constants/tables';
 import {loadChunks} from '../../../store/actions/system/chunks';
-import {getSettingsSystemChunksCollapsed} from '../../../store/selectors/settings-ts';
+import {getSettingsSystemChunksCollapsed} from '../../../store/selectors/settings/settings-ts';
 import {setSettingsSystemChunksCollapsed} from '../../../store/actions/settings/settings';
 import {useUpdater} from '../../../hooks/use-updater';
 

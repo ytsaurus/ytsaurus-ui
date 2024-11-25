@@ -5,7 +5,7 @@ import {DraftQuery, QTRequestOptions, QueryItem, QueryStatus} from '../api';
 import {
     getSettingQueryTrackerStage,
     getSettingQueryTrackerYQLAgentStage,
-} from '../../../../store/selectors/settings-ts';
+} from '../../../../store/selectors/settings/settings-ts';
 import {getQueryTrackerStage} from '../../../../config';
 import {QTEditorError} from '../types/editor';
 import {YTError} from '../../../../types';

@@ -12,7 +12,7 @@ import SystemStateOverview from '../SystemStateOverview/SystemStateOverview';
 import MasterGroup from './MasterGroup';
 
 import {loadMasters} from '../../../store/actions/system/masters';
-import {getSettingsSystemMastersCollapsed} from '../../../store/selectors/settings-ts';
+import {getSettingsSystemMastersCollapsed} from '../../../store/selectors/settings/settings-ts';
 import {setSettingsSystemMastersCollapsed} from '../../../store/actions/settings/settings';
 import {useUpdater} from '../../../hooks/use-updater';
 
