@@ -2,12 +2,15 @@ import React from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import cn from 'bem-cn-lite';
 
+import HelpLink from '../../../../../components/HelpLink/HelpLink';
 import SimplePagination from '../../../../../components/Pagination/SimplePagination';
 import Select from '../../../../../components/Select/Select';
 import {YTTimeline, calcFromTo} from '../../../../../components/common/YTTimeline';
 import WithStickyToolbar from '../../../../../components/WithStickyToolbar/WithStickyToolbar';
 import {Toolbar} from '../../../../../components/WithStickyToolbar/Toolbar/Toolbar';
 import TextInputWithDebounce from '../../../../../components/TextInputWithDebounce/TextInputWithDebounce';
+
+import {docsUrl} from '../../../../../config';
 
 import {getPath} from '../../../../../store/selectors/navigation';
 import {
@@ -21,6 +24,7 @@ import {
 import {tabletErrorsByPathActions} from '../../../../../store/reducers/navigation/tabs/tablet-errors/tablet-errors-by-path';
 import {loadTabletErrorsByTablePath} from '../../../../../store/actions/navigation/tabs/tablet-errors/tablet-errors-by-path';
 import {getNavigationPathAttributes} from '../../../../../store/selectors/navigation/navigation';
+import UIFactory from '../../../../../UIFactory';
 
 import {TabletErrorsByPathTable} from './TabletErrorsByPathTable';
 
@@ -116,6 +120,11 @@ export function TabletErrorsRequestToolbar({className}: {className: string}) {
                                 hasClear
                                 maxVisibleValuesTextLength={80}
                             />
+                        ),
+                    },
+                    {
+                        node: docsUrl(
+                            <HelpLink url={UIFactory.docsUrls['bundles:tablet-errors']} />,
                         ),
                     },
                 ]}
