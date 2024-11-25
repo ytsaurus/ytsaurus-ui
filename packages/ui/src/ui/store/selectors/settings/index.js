@@ -2,10 +2,10 @@ import sortBy_ from 'lodash/sortBy';
 
 import {createSelector} from 'reselect';
 
-import {createNestedNS, getPath} from '../../../shared/utils/settings';
-import {FAVOURITES, NAMESPACES, SettingName} from '../../../shared/constants/settings';
+import {createNestedNS, getPath} from '../../../../shared/utils/settings';
+import {FAVOURITES, NAMESPACES, SettingName} from '../../../../shared/constants/settings';
 
-import {DEFAULT_PATH} from '../../constants/navigation';
+import {DEFAULT_PATH} from '../../../constants/navigation';
 
 function _getSetting(settings) {
     return (name, parentNS) => settings.data[getPath(name, parentNS)];
