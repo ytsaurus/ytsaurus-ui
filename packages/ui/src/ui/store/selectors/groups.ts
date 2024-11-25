@@ -88,12 +88,12 @@ const getGroupsTreeFiltered = createSelector(
 );
 
 const getGroupsTreeFilteredAndExpanded = createSelector(
-    [getGroupsTreeFiltered, getGroupsExpanded],
-    (root, expanded) => {
+    [getGroupsTreeFiltered, getGroupsExpanded, getGroupsNameFilter],
+    (root, expanded, groupNameFilter) => {
         const res = cloneDeep_(root);
         hammer.treeList.treeForEach(res.children, (node: GroupsTreeNode) => {
             const {name} = node;
-            if (!expanded[name]) {
+            if (!expanded[name] && !groupNameFilter) {
                 node.children = [];
             }
         });
