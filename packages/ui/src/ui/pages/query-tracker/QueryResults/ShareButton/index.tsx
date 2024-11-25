@@ -32,11 +32,11 @@ export const ShareButton: FC = () => {
     }, [dispatch]);
 
     const handleToggleShareQuery = useCallback(async () => {
+        navigator.clipboard.writeText(window.location.href);
         if (!isShared) {
             await handleToggleQuery();
         }
 
-        navigator.clipboard.writeText(window.location.href);
         toaster.add({
             name: '',
             autoHiding: 5000,
