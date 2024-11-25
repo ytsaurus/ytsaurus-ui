@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import cn from 'bem-cn-lite';
 
 import Icon from '../../components/Icon/Icon';
@@ -8,23 +7,23 @@ import './ExpandIcon.scss';
 
 const block = cn('expand-icon');
 
-ExpandIcon.propTypes = {
-    className: PropTypes.string,
+type ExpandIconProps = {
+    className?: string;
 
-    expanded: PropTypes.bool,
-    visible: PropTypes.bool,
-    onClick: PropTypes.func,
+    expanded?: boolean;
+    visible?: boolean;
+    onClick?: (data?: string, expanded?: boolean) => void;
 
-    data: PropTypes.any,
+    data?: string;
 };
 
-export default function ExpandIcon({className, data, expanded, visible, onClick}) {
+export default function ExpandIcon({className, data, expanded, visible, onClick}: ExpandIconProps) {
     const icon = expanded ? 'angle-up' : 'angle-down';
     const onClickCb = React.useCallback(() => {
         if (onClick) {
-            onClick(data);
+            onClick(data, expanded);
         }
-    }, [data, onClick]);
+    }, [data, onClick, expanded]);
 
     return (
         <span

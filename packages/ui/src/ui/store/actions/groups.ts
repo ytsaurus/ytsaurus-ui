@@ -70,15 +70,11 @@ export function setGroupsPageSorting(column: string, order: OrderType) {
     };
 }
 
-export function toggleGroupExpand(groupName: string) {
+export function toggleGroupExpand(groupName: string, isExpanded: boolean) {
     return (dispatch: Dispatch, getState: () => RootState) => {
         const expanded = {...getGroupsExpanded(getState())};
-        const current = expanded[groupName];
-        if (current) {
-            delete expanded[groupName];
-        } else {
-            expanded[groupName] = true;
-        }
+
+        expanded[groupName] = isExpanded;
 
         return dispatch({type: GROUPS_TABLE_DATA_FIELDS, data: {expanded}});
     };
