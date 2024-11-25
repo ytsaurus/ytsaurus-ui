@@ -4,6 +4,7 @@ const baseUrl = getDocsBaseUrl() || '';
 
 export const docsUrls = {
     'bundle-controller:reserved-memory': ``,
+    'bundles:tablet-errors': `${baseUrl}/faq/faq#dynamic_tables`,
     'cypress:ttl': `${baseUrl}/user-guide/storage/cypress#TTL`,
     'storage:compression': `${baseUrl}/user-guide/storage/compression`,
     'operations:recommendations#slishkom-melkie-chanki': `${baseUrl}/user-guide/data-processing/operations/recommendations#slishkom-melkie-chanki`,

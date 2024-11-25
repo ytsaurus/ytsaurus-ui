@@ -2,6 +2,9 @@ import React from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import cn from 'bem-cn-lite';
 
+import {docsUrl} from '../../config';
+
+import HelpLink from '../../components/HelpLink/HelpLink';
 import Select from '../../components/Select/Select';
 import SimplePagination from '../../components/Pagination/SimplePagination';
 import {Toolbar} from '../../components/WithStickyToolbar/Toolbar/Toolbar';
@@ -21,6 +24,7 @@ import {
     tabletErrorsByBundleActions,
 } from '../../store/reducers/tablet-errors/tablet-errors-by-bundle';
 import {loadTabletErrorsByBundle} from '../../store/actions/tablet-errors/tablet-errors-by-bundle';
+import UIFactory from '../../UIFactory';
 
 import './TabletErrorsByBundleToolbar.scss';
 
@@ -116,6 +120,11 @@ export function TabletErrorsByBundleToolbar({
                                 hasClear
                                 maxVisibleValuesTextLength={80}
                             />
+                        ),
+                    },
+                    {
+                        node: docsUrl(
+                            <HelpLink url={UIFactory.docsUrls['bundles:tablet-errors']} />,
                         ),
                     },
                 ]}
