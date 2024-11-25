@@ -6,7 +6,6 @@ import keys_ from 'lodash/keys';
 
 import {Dialog as DeleteDialog} from '@gravity-ui/uikit';
 
-import {Alerts} from '../../../components/Alerts/Alerts';
 import ErrorBoundary from '../../../components/ErrorBoundary/ErrorBoundary';
 import Error from '../../../components/Error/Error';
 
@@ -38,7 +37,6 @@ function Scheduling() {
         const {error: hasError, errorData} = state.scheduling.scheduling;
         return hasError ? errorData : undefined;
     });
-    const {schedulerAlerts} = useSelector((state: RootState) => state.scheduling.scheduling);
     const dispatch = useDispatch();
 
     const updateFn = React.useCallback(() => {
@@ -52,11 +50,6 @@ function Scheduling() {
             <ErrorBoundary>
                 {error && <Error error={error} />}
                 <div className={block('wrapper')}>
-                    <Alerts
-                        className={block('alerts')}
-                        items={schedulerAlerts}
-                        marginDirection="top"
-                    />
                     <SchedulingResources />
                     <Content {...{className: block('content')}} />
                 </div>
