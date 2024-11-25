@@ -1,6 +1,6 @@
 import {createSelector} from 'reselect';
 
-import {getSettingSystemNodesNodeType} from '../../../store/selectors/settings-ts';
+import {getSettingSystemNodesNodeType} from '../../../store/selectors/settings/settings-ts';
 import {NODE_TYPE} from '../../../../shared/constants/system';
 
 export const getSystemNodesNodeTypesToLoad = createSelector(

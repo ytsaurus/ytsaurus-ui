@@ -5,7 +5,7 @@ import {
     SET_TREE_STATE,
 } from '../../../constants/operations/statistics';
 import {getOperation} from '../../../store/selectors/operations/operation';
-import {getSettingOperationStatisticsActiveJobTypes} from '../../../store/selectors/settings-ts';
+import {getSettingOperationStatisticsActiveJobTypes} from '../../../store/selectors/settings/settings-ts';
 import {setSettingsStatisticsActiveJobTypes} from '../../../store/actions/settings/settings';
 
 export function setTreeState(treeState) {

@@ -10,10 +10,15 @@ import {createSelector} from 'reselect';
 import {ClusterConfig} from '../../../shared/yt-types';
 import {RootState} from '../reducers';
 import {PAGE_ICONS_BY_ID} from '../../constants/slideoutMenu';
-import {getSettingsPagesOrder, getSettingsPagesPinned} from './settings-ts';
+
+import {
+    getSettingsPagesOrder,
+    getSettingsPagesPinned,
+} from '../../store/selectors/settings/settings-ts';
 import {getClusterUiConfig} from '../../store/selectors/global';
 import {isDeveloper} from '../../store/selectors/global/is-developer';
-import {getAllowedExperimentalPages} from './global/experimental-pages';
+import {getAllowedExperimentalPages} from '../../store/selectors/global/experimental-pages';
+
 import UIFactory from '../../UIFactory';
 import {Page} from '../../../shared/constants/settings';
 

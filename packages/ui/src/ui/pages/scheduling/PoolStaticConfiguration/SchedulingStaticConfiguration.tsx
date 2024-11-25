@@ -15,7 +15,7 @@ import DataTableYT from '../../../components/DataTableYT/DataTableYT';
 import format from '../../../common/hammer/format';
 
 import './SchedulingStaticConfiguration.scss';
-import {getSettingsSchedulingExpandStaticConfiguration} from '../../../store/selectors/settings-ts';
+import {getSettingsSchedulingExpandStaticConfiguration} from '../../../store/selectors/settings/settings-ts';
 import {setSettingsSchedulingExpandStaticConfiguration} from '../../../store/actions/settings/settings';
 import Label from '../../../components/Label/Label';
 import UIFactory from '../../../UIFactory';

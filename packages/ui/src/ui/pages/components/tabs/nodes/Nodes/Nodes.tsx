@@ -36,7 +36,7 @@ import {
     getVisibleNodes,
 } from '../../../../../store/selectors/components/nodes/nodes';
 import {getSelectedColumns} from '../../../../../store/selectors/settings';
-import {getSettingsEnableSideBar} from '../../../../../store/selectors/settings-ts';
+import {getSettingsEnableSideBar} from '../../../../../store/selectors/settings/settings-ts';
 import {defaultColumns} from '../../../../../pages/components/tabs/nodes/tables';
 import withVisible, {WithVisibleProps} from '../../../../../hocs/withVisible';
 import {useUpdaterWithMemoizedParams} from '../../../../../hooks/use-updater';

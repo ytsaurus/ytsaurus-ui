@@ -1,5 +1,5 @@
 import {createSelector} from 'reselect';
-import {getSettingsData} from '../../../../store/selectors/settings-base';
+import {getSettingsData} from '../../../../store/selectors/settings/settings-base';
 
 export const getSettingQueryTrackerQueriesListSidebarVisibilityMode = createSelector(
     getSettingsData,

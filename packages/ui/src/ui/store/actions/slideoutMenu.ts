@@ -5,9 +5,12 @@ import isEqual_ from 'lodash/isEqual';
 import map_ from 'lodash/map';
 
 import {RootState} from '../reducers';
-import {getSettingsPagesOrder, getSettingsPagesPinned} from '../selectors/settings-ts';
-import {setSettingsPagesOrder, setSettingsPagesPinned} from './settings/settings';
-import {getPagesOrderedByUser} from '../selectors/slideoutMenu';
+import {
+    getSettingsPagesOrder,
+    getSettingsPagesPinned,
+} from '../../store/selectors/settings/settings-ts';
+import {setSettingsPagesOrder, setSettingsPagesPinned} from '../../store/actions/settings/settings';
+import {getPagesOrderedByUser} from '../../store/selectors/slideoutMenu';
 import {moveArrayElement, toggleBooleanInPlace} from '../../utils/utils';
 import {rumLogError} from '../../rum/rum-counter';
 import {getCurrentUserName} from '../selectors/global';

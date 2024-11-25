@@ -1,7 +1,7 @@
 import intersection_ from 'lodash/intersection';
 import {SelectOption} from '@gravity-ui/uikit/build/esm/components/Select/types';
 import {RootState} from '../../../../store/reducers';
-import {getSettingsData} from '../../../../store/selectors/settings-base';
+import {getSettingsData} from '../../../../store/selectors/settings/settings-base';
 import {createSelector} from 'reselect';
 import {DEFAULT_QUERY_ACO, SHARED_QUERY_ACO, getEffectiveApiStage} from '../query/selectors';
 import {getClusterUiConfig} from '../../../../store/selectors/global';

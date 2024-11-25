@@ -6,7 +6,7 @@ import isEqual_ from 'lodash/isEqual';
 
 import {RootState} from '../../../store/reducers';
 import {calculateLoadingStatus, isFinalLoadingStatus} from '../../../utils/utils';
-import {getSettingsDataRaw} from '../settings-ts';
+import {getSettingsDataRaw} from '../../../store/selectors/settings/settings-ts';
 import {NAMESPACES} from '../../../../shared/constants/settings';
 import {NS_SEPARATOR} from '../../../../shared/utils/settings';
 import {
