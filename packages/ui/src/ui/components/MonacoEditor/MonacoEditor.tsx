@@ -22,6 +22,7 @@ export interface ExtProps {
     value: string;
     language?: string;
     onChange: (value: string) => void;
+    onClick?: (e: monaco.editor.IEditorMouseEvent) => void;
     monacoConfig?: MonacoEditorConfig;
     editorRef?: MutableRefObject<monaco.editor.IStandaloneCodeEditor | undefined>;
     readOnly?: boolean;
@@ -60,6 +61,16 @@ class MonacoEditor extends React.Component<Props> {
             wordBasedSuggestions: false,
             theme: THEMES[theme],
             ...monacoConfig,
+        });
+
+        this.editor.updateOptions({
+            lineNumbers: (number) => {
+                return `<div class="${block('line-number')}" data-number="${number}">${number}</div>`;
+            },
+        });
+
+        this.editor.onMouseDown((e) => {
+            this.props.onClick?.(e);
         });
 
         this.model.onDidChangeContent(this.onContentChanged);
