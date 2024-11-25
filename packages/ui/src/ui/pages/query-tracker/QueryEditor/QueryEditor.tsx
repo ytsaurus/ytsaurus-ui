@@ -38,6 +38,9 @@ import {updateTitle} from '../../../store/actions/global';
 import {EditQueryACOModal} from '../QueryACO/EditQueryACOModal/EditQueryACOModal';
 import {ShareButton} from '../QueryResults/ShareButton';
 import {WaitForFont} from '../../../containers/WaitForFont/WaitForFont';
+import {getHashLineNumber} from './helpers/getHashLineNumber';
+import {makeHighlightedLineDecorator} from './helpers/makeHighlightedLineDecorator';
+import {getDecorationsWithoutHighlight} from './helpers/getDecorationsWithoutHighlight';
 
 const b = block('query-container');
 
@@ -59,6 +62,7 @@ const QueryEditorView = React.memo(function QueryEditorView({
 }: {
     onStartQuery?: (queryId: string) => boolean | void;
 }) {
+    const [changed, setChanged] = useState(false);
     const editorRef = useRef<monaco.editor.IStandaloneCodeEditor>();
     const {setEditor} = useMonaco();
     const activeQuery = useSelector(getQuery);
@@ -66,6 +70,7 @@ const QueryEditorView = React.memo(function QueryEditorView({
     const engine = useSelector(getQueryEngine);
     const editorErrors = useSelector(getQueryEditorErrors);
     const isACOSupported = useSelector(isSupportedQtACO);
+    const loading = useSelector(isQueryLoading);
     const dispatch = useDispatch();
     const decorationsCollection = useRef<monaco.editor.IEditorDecorationsCollection | undefined>(
         undefined,
@@ -79,7 +84,7 @@ const QueryEditorView = React.memo(function QueryEditorView({
     useEffect(() => {
         editorRef.current?.focus();
         editorRef.current?.setScrollTop(0);
-    }, [editorRef.current, activeQuery?.id]);
+    }, [activeQuery?.id]);
 
     useEffect(() => {
         if (editorRef.current) {
@@ -139,13 +144,19 @@ const QueryEditorView = React.memo(function QueryEditorView({
                     decorations.push(line);
                 });
                 monaco.editor.setModelMarkers(model, 'query-tracker', markers);
+
+                const lineNumber = getHashLineNumber();
+                if (!loading && lineNumber && !changed) {
+                    decorations.push(makeHighlightedLineDecorator(model, lineNumber));
+                }
+
                 decorationsCollection.current?.clear();
                 decorationsCollection.current = editorRef.current?.createDecorationsCollection(
                     uniqBy_(decorations, (d) => d.range.startLineNumber),
                 );
             }
         },
-        [editorErrors, model],
+        [editorErrors, loading, model],
     );
 
     const monacoConfig = useMemo<MonacoEditorConfig>(() => {
@@ -159,9 +170,35 @@ const QueryEditorView = React.memo(function QueryEditorView({
         };
     }, [engine]);
 
+    const handleLineNumberClick = useCallback(
+        ({target}: monaco.editor.IEditorMouseEvent) => {
+            if (target.type !== monaco.editor.MouseTargetType.GUTTER_LINE_NUMBERS || !model) return;
+
+            const lineNumber = (target.element as HTMLDivElement).dataset.number;
+            if (!lineNumber) {
+                editorRef.current?.setSelection(new monaco.Selection(0, 0, 0, 0));
+                return;
+            }
+
+            const newUrl = new URL(window.location.href);
+            newUrl.hash = `#L${lineNumber}`;
+            window.history.pushState(null, '', newUrl.toString());
+
+            const otherDecorations = getDecorationsWithoutHighlight(model, editorRef.current);
+            decorationsCollection.current?.clear();
+            decorationsCollection.current?.set([
+                ...otherDecorations,
+                makeHighlightedLineDecorator(model, parseInt(lineNumber, 10)),
+            ]);
+            editorRef.current?.setSelection(new monaco.Selection(0, 0, 0, 0));
+        },
+        [model],
+    );
+
     const updateQueryText = useCallback(
-        function (text: string) {
-            dispatch(updateQueryDraft({query: text, error: undefined}));
+        function (query: string) {
+            setChanged(true);
+            dispatch(updateQueryDraft({query, error: undefined}));
         },
         [dispatch],
     );
@@ -189,6 +226,7 @@ const QueryEditorView = React.memo(function QueryEditorView({
                     language={getLanguageByEngine(engine)}
                     className={b('editor')}
                     onChange={updateQueryText}
+                    onClick={handleLineNumberClick}
                     monacoConfig={monacoConfig}
                 />
             </WaitForFont>

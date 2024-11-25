@@ -8,4 +8,19 @@
         width: 100%;
         height: 100%;
     }
+
+    &__line-number {
+        float: right;
+        cursor: pointer;
+        opacity: 0.6;
+
+        &:hover {
+            opacity: 1;
+        }
+    }
+
+    &__highlighted-line {
+        background: #bb800926;
+        border: 1px solid #bb800966;
+    }
 }
