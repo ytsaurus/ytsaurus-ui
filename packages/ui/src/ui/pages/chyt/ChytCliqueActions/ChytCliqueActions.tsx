@@ -6,7 +6,6 @@ import {Button, DropdownMenu, DropdownMenuItem} from '@gravity-ui/uikit';
 
 import Icon from '../../../components/Icon/Icon';
 import {getCluster} from '../../../store/selectors/global';
-import {isQueryTrackerAllowed} from '../../../store/selectors/global/experimental-pages';
 import {updateQueryDraft} from '../../../pages/query-tracker/module/query/actions';
 import {QueryEngine} from '../../../pages/query-tracker/module/engines';
 import UIFactory from '../../../UIFactory';
@@ -19,12 +18,11 @@ const block = cn('chyt-clique-actions');
 
 export function useCliqueOnSqlAction(openWidget: () => void) {
     const cluster = useSelector(getCluster);
-    const allowQueryTracker = useSelector(isQueryTrackerAllowed);
     const dispatch = useDispatch();
 
     return React.useCallback(
         (alias: string) => {
-            if (allowQueryTracker) {
+            if (!UIFactory.onChytAliasSqlClick) {
                 setTimeout(() => {
                     dispatch(
                         updateQueryDraft({
@@ -39,7 +37,7 @@ export function useCliqueOnSqlAction(openWidget: () => void) {
                 UIFactory.onChytAliasSqlClick({alias, cluster});
             }
         },
-        [cluster, openWidget, allowQueryTracker, dispatch],
+        [cluster, openWidget, dispatch],
     );
 }
 

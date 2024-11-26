@@ -455,7 +455,7 @@ export interface UIFactory {
 
     getAclPermissionsSettings(): typeof PERMISSIONS_SETTINGS;
 
-    onChytAliasSqlClick(params: {alias: string; cluster: string}): void;
+    onChytAliasSqlClick?: (params: {alias: string; cluster: string}) => void;
 
     getNavigationExtraTabs(): Array<ExtraTab>;
 
