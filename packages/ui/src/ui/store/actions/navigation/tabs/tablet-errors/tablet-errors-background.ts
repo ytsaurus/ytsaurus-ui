@@ -81,7 +81,7 @@ export function loadTabletErrorsCount(options: LoadTabletErrorOptions): TabletEr
                 skipSuccessToast: true,
             },
         ).then(([{output: type}, {output: dynamic}]) => {
-            if (dynamic && type === 'table') {
+            if (dynamic && (type === 'table' || type === 'replication_log_table')) {
                 return dispatch(loadTabletErrorsCountOfDynamicTable(options));
             }
 

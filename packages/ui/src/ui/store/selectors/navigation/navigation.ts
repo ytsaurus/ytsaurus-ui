@@ -115,7 +115,10 @@ export const getSupportedTabs = createSelector(
         }
 
         let supportedTabletErrors: Array<ValueOf<typeof Tab>> = [];
-        if (tabletErrorsCount > 0 || getConfigData().allowTabletErrorsAPI) {
+        if (
+            tabletErrorsCount > 0 ||
+            (getConfigData().allowTabletErrorsAPI && attributes.tablet_error_count >= 0)
+        ) {
             supportedTabletErrors = [Tab.TABLET_ERRORS];
         }
 
@@ -298,7 +301,7 @@ export const getTabs = createSelector(
             {
                 value: Tab.TABLET_ERRORS,
                 title: 'Go to tablets errors',
-                counter: getConfigData().allowTabletErrorsAPI ? undefined : tabletErrorsCount,
+                counter: tabletErrorsCount > 0 ? tabletErrorsCount : undefined,
             },
         ];
 
