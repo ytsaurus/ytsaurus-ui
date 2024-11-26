@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.71.1](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.71.0...ui-v1.71.1) (2024-11-26)
+
+
+### Bug Fixes
+
+* **Navigation:** allow 'Tablet errors' for nodes with `/[@tablet](https://github.com/tablet)_error_count &gt;= 0` [YTFRONT-3951] ([637def7](https://github.com/ytsaurus/ytsaurus-ui/commit/637def78c2c448e0dfd4ce363222a8ba7fbef5a4))
+
 ## [1.71.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.70.0...ui-v1.71.0) (2024-11-26)
 
 
