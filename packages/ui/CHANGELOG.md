@@ -1,5 +1,22 @@
 # Changelog
 
+## [1.71.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.70.0...ui-v1.71.0) (2024-11-26)
+
+
+### Features
+
+* **ACL:** separate dialog for 'Edit inheritance' [YTFRONT-3836] ([83d5965](https://github.com/ytsaurus/ytsaurus-ui/commit/83d5965d2e3cff0d77c38765604c669f2d9a6f63))
+* **Bundles/Bundle:** add 'TabletErrors' tab for bundle page [YTFRONT-4119] ([7ec446a](https://github.com/ytsaurus/ytsaurus-ui/commit/7ec446a64561c842cb7911b9318d9b1b7b16f270))
+* **Navigation/DynTable:** fetch tablet errors from tabletErrosApi [YTFRONT-4119] ([b082a3d](https://github.com/ytsaurus/ytsaurus-ui/commit/b082a3d830d0ef6da12b53ea271c64605738ccde))
+* **Scheduling:** hide all alerts [YTFRONT-4322] ([63d60fa](https://github.com/ytsaurus/ytsaurus-ui/commit/63d60faeb702c451029ee987caf66120d1181255))
+
+
+### Bug Fixes
+
+* **ACL:** better names for buttons [YTFRONT-3836] ([a45be15](https://github.com/ytsaurus/ytsaurus-ui/commit/a45be15d96f4c2c287cda7e28cfb9ab04eac0aa9))
+* **ACL:** inheritAcl/inheritResponsible should be properly checked [YTFRONT-4492] ([dca379f](https://github.com/ytsaurus/ytsaurus-ui/commit/dca379f66f892e74ea8a291aa8074e38449cbba7))
+* **Navigation/ReplicatedTable:** attribute /[@tablet](https://github.com/tablet)_error_count should affect tablet errors count [YTFRONT-4447] ([5860748](https://github.com/ytsaurus/ytsaurus-ui/commit/58607481c9e642774d26b285b02c8f8092982be3))
+
 ## [1.70.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.69.0...ui-v1.70.0) (2024-11-22)
 
 
