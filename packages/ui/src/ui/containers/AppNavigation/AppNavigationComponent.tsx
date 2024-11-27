@@ -17,6 +17,7 @@ import {getSettingsCluster} from '../../store/selectors/global';
 import {importManageTokens} from '../ManageTokens';
 
 import './AppNavigationComponent.scss';
+import {getAllowManageTokens} from '../../store/selectors/manage-tokens';
 
 const block = cn('yt-app-navigation');
 
@@ -56,6 +57,7 @@ function AppNavigationComponent({
 
     const [popupVisible, setPopupVisible] = useState(false);
     const settingsCluster = useSelector(getSettingsCluster);
+    const isManageTokensMenuVisible = useSelector(getAllowManageTokens);
     const history = useHistory();
 
     let showUserIcon = Boolean(currentUser);
@@ -158,29 +160,29 @@ function AppNavigationComponent({
                                     <div className={block('settings-ul')}>
                                         <Menu>
                                             {authWay === 'passwd' && (
-                                                <>
-                                                    <Menu.Item
-                                                        onClick={() =>
-                                                            history.push(
-                                                                `/${YT.cluster}/change-password`,
-                                                            )
-                                                        }
-                                                    >
-                                                        Change password
-                                                    </Menu.Item>
-                                                    <Menu.Item
-                                                        onClick={() =>
-                                                            importManageTokens().then((actions) => {
-                                                                dispatch(
-                                                                    actions.openManageTokensModal(),
-                                                                );
-                                                                setPopupVisible(false);
-                                                            })
-                                                        }
-                                                    >
-                                                        Manage tokens
-                                                    </Menu.Item>
-                                                </>
+                                                <Menu.Item
+                                                    onClick={() =>
+                                                        history.push(
+                                                            `/${YT.cluster}/change-password`,
+                                                        )
+                                                    }
+                                                >
+                                                    Change password
+                                                </Menu.Item>
+                                            )}
+                                            {isManageTokensMenuVisible && (
+                                                <Menu.Item
+                                                    onClick={() =>
+                                                        importManageTokens().then((actions) => {
+                                                            dispatch(
+                                                                actions.openManageTokensModal(),
+                                                            );
+                                                            setPopupVisible(false);
+                                                        })
+                                                    }
+                                                >
+                                                    Manage tokens
+                                                </Menu.Item>
                                             )}
                                             <Menu.Item href={'/api/yt/logout'}>Logout</Menu.Item>
                                         </Menu>

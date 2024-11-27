@@ -14,14 +14,13 @@ import {
     manageTokensRevokeToken,
 } from '../../../store/actions/manage-tokens';
 import {useThunkDispatch} from '../../../store/thunkDispatch';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {AuthenticationToken, manageTokensSelector} from '../../../store/selectors/manage-tokens';
 import {getCurrentUserName} from '../../../store/selectors/global';
 import Icon from '../../../components/Icon/Icon';
 import {YTError} from '../../../../@types/types';
 import ClipboardButton from '../../../components/ClipboardButton/ClipboardButton';
 import DataTableYT from '../../../components/DataTableYT/DataTableYT';
-import {sha256} from '../../../utils/sha256';
 import {
     ManageTokensPasswordModalContextProvider,
     useManageTokensPasswordModalContext,
@@ -138,70 +137,6 @@ const AuthenticationGenerateTokenFormSection: FC<{onClose: () => void}> = ({onCl
     );
 };
 
-const AuthenticationPasswordSection: FC<{onSuccess: () => void}> = ({onSuccess}) => {
-    const [error, setError] = useState<YTError>();
-    type FormData = {password: string};
-    const dispatch = useThunkDispatch();
-    const user = useSelector(getCurrentUserName);
-    const handleSubmit = async (form: FormApi<FormData>) => {
-        const values = form.getState().values;
-
-        setError(undefined);
-
-        await sha256(values.password).then((password_sha256) => {
-            return dispatch(
-                manageTokensGetList({
-                    user,
-                    password_sha256,
-                }),
-            )
-                .then(() => {
-                    onSuccess();
-                })
-                .catch((error) => setError(error?.response?.data || error));
-        });
-    };
-
-    return (
-        <YTDFDialog<FormData>
-            headerProps={{
-                title: 'Authentication',
-            }}
-            pristineSubmittable
-            modal={false}
-            visible={true}
-            initialValues={{}}
-            onAdd={handleSubmit}
-            fields={[
-                {
-                    name: 'error-block',
-                    type: 'block',
-                    extras: {
-                        children: (
-                            <Alert message="To access tokens management, you need enter your password" />
-                        ),
-                    },
-                },
-                {
-                    name: 'password',
-                    type: 'text',
-                    required: true,
-                    caption: 'Password',
-                    extras: () => ({type: 'password'}),
-                },
-                ...makeErrorFields([error]),
-            ]}
-            footerProps={{
-                propsButtonCancel: {
-                    onClick: () => {
-                        dispatch(closeManageTokensModal());
-                    },
-                },
-            }}
-        />
-    );
-};
-
 const RevokeToken = (props: {handleClickRemoveToken: (index: number) => void; index: number}) => {
     const [visible, setVisible] = useState(false);
 
@@ -238,10 +173,11 @@ const RevokeToken = (props: {handleClickRemoveToken: (index: number) => void; in
 const AuthenticationTokensSection: FC<{
     onClickGenerateTokenButton: () => void;
     onSuccessRemove: () => void;
-}> = ({onSuccessRemove, onClickGenerateTokenButton}) => {
+    passwordSha256?: string;
+}> = ({onSuccessRemove, onClickGenerateTokenButton, passwordSha256}) => {
     const {getPassword} = useManageTokensPasswordModalContext();
     const dispatch = useThunkDispatch();
-    const tokens = useSelector(manageTokensSelector)!;
+    const tokens = useSelector(manageTokensSelector);
     const user = useSelector(getCurrentUserName);
 
     const handleClickRemoveToken = React.useCallback(
@@ -267,6 +203,15 @@ const AuthenticationTokensSection: FC<{
         },
         [getPassword, user, onSuccessRemove, tokens, manageTokensRevokeToken, dispatch],
     );
+
+    React.useEffect(() => {
+        dispatch(
+            manageTokensGetList({
+                user,
+                password_sha256: passwordSha256,
+            }),
+        );
+    }, [passwordSha256, getPassword, user, dispatch]);
 
     return (
         <div className={block('tokens')}>
@@ -373,26 +318,23 @@ enum ViewSection {
     generate,
 }
 
-const useViewSectionState = () => {
-    const [section, setSection] = useState<ViewSection>(ViewSection.default);
+const useViewSectionState = (defaultState: ViewSection) => {
+    const [section, setSection] = useState<ViewSection>(defaultState);
 
     return {section, setSection};
 };
 
-export const ManageTokensModalContent = () => {
-    const {section, setSection} = useViewSectionState();
+export const ManageTokensModalSections: React.FC<{passwordSha256?: string}> = ({
+    passwordSha256,
+}) => {
+    const {section, setSection} = useViewSectionState(ViewSection.tokens);
 
     const content = useMemo(() => {
         switch (section) {
-            case ViewSection.default:
-                return (
-                    <AuthenticationPasswordSection
-                        onSuccess={() => setSection(ViewSection.tokens)}
-                    />
-                );
             case ViewSection.tokens:
                 return (
                     <AuthenticationTokensSection
+                        passwordSha256={passwordSha256}
                         onSuccessRemove={() => setSection(ViewSection.tokens)}
                         onClickGenerateTokenButton={() => setSection(ViewSection.generate)}
                     />
@@ -411,6 +353,38 @@ export const ManageTokensModalContent = () => {
     return (
         <ManageTokensPasswordModalContextProvider>
             <div className={block('content')}>{content}</div>
+        </ManageTokensPasswordModalContextProvider>
+    );
+};
+
+const ManageTokenPasswordGuard = () => {
+    const {getPassword} = useManageTokensPasswordModalContext();
+    const dispatch = useDispatch();
+    const [passwordSha256, setPassword] = React.useState<string | undefined>();
+    const [open, setOpen] = React.useState(false);
+
+    React.useEffect(() => {
+        getPassword()
+            .then((passwordSha256) => {
+                setPassword(passwordSha256);
+                setOpen(true);
+            })
+            .catch(() => {
+                dispatch(closeManageTokensModal());
+            });
+    }, [getPassword]);
+
+    if (!open) {
+        return null;
+    }
+
+    return <ManageTokensModalSections passwordSha256={passwordSha256} />;
+};
+
+export const ManageTokensModalContent = () => {
+    return (
+        <ManageTokensPasswordModalContextProvider>
+            <ManageTokenPasswordGuard />
         </ManageTokensPasswordModalContextProvider>
     );
 };
