@@ -300,6 +300,7 @@ export interface ConfigData {
     allowUserColumnPresets?: boolean;
     odinPageEnabled: boolean;
     allowTabletErrorsAPI: boolean;
+    enableOauthModeForManageTokens?: boolean;
 }
 
 export type PipelineParams = {

@@ -5,12 +5,18 @@ import {AppConfig} from '@gravity-ui/nodekit';
 
 const path = require('path');
 
-const {ALLOW_PASSWORD_AUTH, YT_AUTH_CLUSTER_ID, YT_AUTH_ALLOW_INSECURE} = process.env;
+const {
+    ENABLE_OAUTH_MODE_FOR_MANAGE_TOKENS,
+    ALLOW_PASSWORD_AUTH,
+    YT_AUTH_CLUSTER_ID,
+    YT_AUTH_ALLOW_INSECURE,
+} = process.env;
 
 const ytAuthConfig: Partial<AppConfig> = {
     allowPasswordAuth: Boolean(ALLOW_PASSWORD_AUTH || YT_AUTH_CLUSTER_ID),
     ytAuthAllowInsecure: Boolean(YT_AUTH_ALLOW_INSECURE),
     appAuthPolicy: AuthPolicy.required,
+    enableOauthModeForManageTokens: Boolean(ENABLE_OAUTH_MODE_FOR_MANAGE_TOKENS),
 };
 
 const config: Partial<AppConfig> = {

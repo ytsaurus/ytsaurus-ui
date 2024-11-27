@@ -1,5 +1,7 @@
 import {createSelector} from 'reselect';
 import {RootState} from '../../reducers';
+import {getAuthWay} from '../global';
+import {getConfigData} from '../../../config/ui-settings';
 
 export type AuthenticationToken = {
     tokenHash: string;
@@ -29,3 +31,20 @@ export const manageTokensSelector = createSelector(
 );
 
 export const isManageTokensModalOpened = (state: RootState) => state.manageTokens.modal.open;
+
+export const isManageTokensInOAuthMode = createSelector(
+    [getAuthWay, () => getConfigData().enableOauthModeForManageTokens],
+    (authWay, enableOauthModeForManageTokens) => {
+        return authWay === 'oauth' && enableOauthModeForManageTokens;
+    },
+);
+
+export const shouldManageTokens = (state: RootState) => {
+    const authWay = getAuthWay(state);
+
+    if (authWay === 'passwd') {
+        return true;
+    }
+
+    return isManageTokensInOAuthMode(state);
+};

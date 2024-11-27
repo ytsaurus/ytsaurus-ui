@@ -15,7 +15,11 @@ import {
 } from '../../../store/actions/manage-tokens';
 import {useThunkDispatch} from '../../../store/thunkDispatch';
 import {useSelector} from 'react-redux';
-import {AuthenticationToken, manageTokensSelector} from '../../../store/selectors/manage-tokens';
+import {
+    AuthenticationToken,
+    isManageTokensInOAuthMode,
+    manageTokensSelector,
+} from '../../../store/selectors/manage-tokens';
 import {getCurrentUserName} from '../../../store/selectors/global';
 import Icon from '../../../components/Icon/Icon';
 import {YTError} from '../../../../@types/types';
@@ -238,7 +242,8 @@ const RevokeToken = (props: {handleClickRemoveToken: (index: number) => void; in
 const AuthenticationTokensSection: FC<{
     onClickGenerateTokenButton: () => void;
     onSuccessRemove: () => void;
-}> = ({onSuccessRemove, onClickGenerateTokenButton}) => {
+    loadTokens?: boolean;
+}> = ({onSuccessRemove, onClickGenerateTokenButton, loadTokens}) => {
     const {getPassword} = useManageTokensPasswordModalContext();
     const dispatch = useThunkDispatch();
     const tokens = useSelector(manageTokensSelector)!;
@@ -267,6 +272,19 @@ const AuthenticationTokensSection: FC<{
         },
         [getPassword, user, onSuccessRemove, tokens, manageTokensRevokeToken, dispatch],
     );
+
+    React.useEffect(() => {
+        if (loadTokens) {
+            getPassword().then((password_sha256) => {
+                return dispatch(
+                    manageTokensGetList({
+                        user,
+                        password_sha256,
+                    }),
+                ).finally(() => onSuccessRemove());
+            });
+        }
+    }, [loadTokens, getPassword, manageTokensGetList]);
 
     return (
         <div className={block('tokens')}>
@@ -373,14 +391,17 @@ enum ViewSection {
     generate,
 }
 
-const useViewSectionState = () => {
-    const [section, setSection] = useState<ViewSection>(ViewSection.default);
+const useViewSectionState = (defaultState: ViewSection) => {
+    const [section, setSection] = useState<ViewSection>(defaultState);
 
     return {section, setSection};
 };
 
 export const ManageTokensModalContent = () => {
-    const {section, setSection} = useViewSectionState();
+    const isOAuth = useSelector(isManageTokensInOAuthMode);
+    const {section, setSection} = useViewSectionState(
+        isOAuth ? ViewSection.tokens : ViewSection.default,
+    );
 
     const content = useMemo(() => {
         switch (section) {
@@ -393,6 +414,7 @@ export const ManageTokensModalContent = () => {
             case ViewSection.tokens:
                 return (
                     <AuthenticationTokensSection
+                        loadTokens={isOAuth}
                         onSuccessRemove={() => setSection(ViewSection.tokens)}
                         onClickGenerateTokenButton={() => setSection(ViewSection.generate)}
                     />
