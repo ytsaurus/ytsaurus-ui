@@ -30,9 +30,6 @@ const b = block(Page.COMPONENTS);
 export function Components({match, lastVisitedTab = DEFAULT_TAB, tabSize, location}) {
     const props = makeTabProps(match.url, Tab);
 
-    // Because of the redirect
-    const defaultTab = lastVisitedTab === Tab.TABLET_CELLS ? Tab.HTTP_PROXIES : lastVisitedTab;
-
     const nodePageMatch = matchPath(location.pathname, {
         path: `${match.path}/${Tab.NODES}/:host`,
     });
@@ -71,7 +68,7 @@ export function Components({match, lastVisitedTab = DEFAULT_TAB, tabSize, locati
                             component={RedirectToTabletCells}
                         />
                         <Route path={`${match.path}/:tab`} component={Placeholder} />
-                        <Redirect from={match.url} to={`${match.url}/${defaultTab}`} />
+                        <Redirect from={match.url} to={`${match.url}/${lastVisitedTab}`} />
                     </Switch>
                 </div>
             </section>
