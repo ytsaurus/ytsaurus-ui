@@ -186,3 +186,8 @@ export const getOperationStatisticsDescription = createSelector(
         };
     },
 );
+
+export const getRequirePasswordInAuthenticationCommands = createSelector(
+    [getSupportedFeatures],
+    (features) => features.require_password_in_authentication_commands,
+);

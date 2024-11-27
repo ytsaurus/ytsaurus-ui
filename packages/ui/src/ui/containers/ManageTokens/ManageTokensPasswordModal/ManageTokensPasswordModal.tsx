@@ -6,9 +6,10 @@ import {sha256} from '../../../utils/sha256';
 import {YTDFDialog, makeErrorFields} from '../../../components/Dialog';
 import {getCurrentUserName, getSettingsCluster} from '../../../store/selectors/global';
 import {YTError} from '../../../../@types/types';
+import {isManageTokensInOAuthMode} from '../../../store/selectors/manage-tokens';
 
 interface ManageTokensPasswordModalContextValue {
-    getPassword: () => Promise<string>;
+    getPassword: () => Promise<string | undefined>;
 }
 export const ManageTokensPasswordModalContext = React.createContext<
     undefined | ManageTokensPasswordModalContextValue
@@ -110,17 +111,22 @@ class PromiseWaiter<Data> {
 }
 
 export function ManageTokensPasswordModalContextProvider({children}: {children: React.ReactChild}) {
+    const isOAuth = useSelector(isManageTokensInOAuthMode);
     const [visible, setVisible] = React.useState(false);
     const p = React.useRef(new PromiseWaiter<string>());
     const value = React.useMemo(() => {
         return {
             getPassword: () => {
+                if (isOAuth) {
+                    return Promise.resolve(undefined);
+                }
+
                 setVisible(true);
 
                 return p.current.create();
             },
         };
-    }, [setVisible]);
+    }, [setVisible, isOAuth]);
 
     const handleCancel = () => {
         setVisible(false);
