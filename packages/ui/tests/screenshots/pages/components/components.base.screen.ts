@@ -85,3 +85,48 @@ test('Components - Tablets', async ({page}) => {
     });
     await expect(page).toHaveScreenshot();
 });
+
+test('Components - HTTP-Proxies', async ({page}) => {
+    await page.goto(makeClusterUrl(`components/http_proxies`));
+    await page.waitForSelector('.elements-table');
+
+    await replaceInnerHtml(page, {
+        '.components-proxies__table-item_type_host .elements-monospace': 'localhost',
+        '.yt-node-columns__text-content': 'XX.X.X-local-os~XXXXXXXXXXXXXXXX+distbuild',
+        '.components-proxies__table-item_type_load-average span': '5.00',
+        '.components-proxies__table-item_type_network-load span': '0.00',
+    });
+    replaceInnerHtmlForDateTime(page, ['.components-proxies__table-item_type_updated-at span']);
+    await expect(page).toHaveScreenshot();
+});
+
+test('Components - RPC-Proxies', async ({page}) => {
+    await page.goto(makeClusterUrl(`components/rpc_proxies`));
+    await page.waitForSelector('.elements-page__content');
+
+    await expect(page).toHaveScreenshot();
+});
+
+test('Components - Versions', async ({page}) => {
+    await page.goto(makeClusterUrl(`components/versions`));
+    await page.waitForSelector('.versions-summary');
+
+    await replaceInnerHtml(page, {
+        '.versions-summary__version span': 'XX.X.X-local-os~XXXXXXXXXXXXXXXX+distbuild',
+        '.yt-host__tooltip': 'local:XXX',
+    });
+    replaceInnerHtmlForDateTime(page, ['.components-versions__table-item_type_start-time span']);
+
+    await expect(page).toHaveScreenshot();
+});
+
+test('Components - Shards', async ({page}) => {
+    await page.goto(makeClusterUrl(`components/shards`));
+    await page.waitForSelector('.elements-table');
+
+    await replaceInnerHtml(page, {
+        '.components-shards__node-count': 'XXX',
+    });
+
+    await expect(page).toHaveScreenshot();
+});
