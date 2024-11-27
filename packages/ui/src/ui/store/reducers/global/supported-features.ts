@@ -18,6 +18,7 @@ export interface SupportedFeaturesState {
         erasure_codecs?: Array<string>;
         primitive_types?: Array<string>;
         operation_statistics_descriptions?: Record<string, OperationStatisticInfo>;
+        require_password_in_authentication_commands?: boolean;
     };
 }
 
