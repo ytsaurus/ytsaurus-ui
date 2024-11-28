@@ -90,6 +90,11 @@ export function getOAuthLoginPath(req: Request) {
 
 export function getOAuthLogoutPath(req: Request) {
     const config = getOAuthSettings(req);
+
+    if (!config.logoutPath) {
+        return '/api/oauth/logout/callback';
+    }
+
     const host = req.get('host');
     const params = new URLSearchParams({
         post_logout_redirect_uri: `https://${host}/api/oauth/logout/callback`,
