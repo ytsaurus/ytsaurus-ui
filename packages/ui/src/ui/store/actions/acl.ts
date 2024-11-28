@@ -11,8 +11,7 @@ import {
     REQUEST_PERMISSION,
     UPDATE_ACL,
 } from '../../constants/acl';
-import {getPools, getTree} from '../../store/selectors/scheduling/scheduling';
-import {computePathItems} from '../../utils/scheduling/scheduling';
+import {getTree} from '../../store/selectors/scheduling/scheduling';
 import {
     YTPermissionTypeUI,
     checkUserPermissionsUI,
@@ -20,13 +19,13 @@ import {
     getResponsible,
 } from '../../utils/acl/acl-api';
 import {convertFromUIPermissions, prepareAclSubject} from '../../utils/acl';
-import {ROOT_POOL_NAME} from '../../constants/scheduling';
 import UIFactory from '../../UIFactory';
 import {AclAction, HasIdmKind} from '../../store/reducers/acl/acl';
 import {isCancelled} from '../../utils/cancel-helper';
 import {RootState} from '../../store/reducers';
 import {IdmKindType, PreparedAclSubject, ResponsibleType, Role} from '../../utils/acl/acl-types';
 import {CheckPermissionResult} from '../../../shared/utils/check-permission';
+import {YTApiId, ytApiV3Id} from '../../rum/rum-wrap-api';
 
 type ThunkAclAction<T = unknown> = ThunkAction<T, RootState, unknown, AclAction>;
 
@@ -45,9 +44,8 @@ const prepareUserPermissions = (
 
 type HasNormPoolTree = {normalizedPoolTree?: string};
 
-function getPathToCheckPermissions(
+async function getPathToCheckPermissions(
     idmKind: IdmKindType,
-    state: RootState,
     entityName: string,
     poolTree?: string,
 ) {
@@ -59,20 +57,10 @@ function getPathToCheckPermissions(
         case IdmObjectType.ACCOUNT:
             return `//sys/accounts/${entityName}`;
         case IdmObjectType.POOL: {
-            const pools = getPools(state);
-            if (pools?.length) {
-                const poolPath = computePathItems(pools, entityName).filter(
-                    (item) => item !== ROOT_POOL_NAME,
-                );
-                return `//sys/pool_trees/${poolTree}/${poolPath.join('/')}`;
-            } else {
-                const params = new URLSearchParams(window.location.search);
-                const path = params.get('path');
-                if (!path) {
-                    break;
-                }
-                return path;
-            }
+            const fullPath: string = await ytApiV3Id.get(YTApiId.schedulingPoolFullPath, {
+                path: `//sys/scheduler/orchid/scheduler/pool_trees/${poolTree}/pools/${entityName}/full_path`,
+            });
+            return `//sys/pool_trees/${poolTree}${fullPath}`;
         }
         case IdmObjectType.TABLET_CELL_BUNDLE: {
             return `//sys/tablet_cell_bundles/${entityName}`;
@@ -86,7 +74,7 @@ export function loadAclData(
     {normalizedPoolTree}: HasNormPoolTree = {},
     options: {userPermissionsPath?: string} = {userPermissionsPath: undefined},
 ): ThunkAclAction {
-    return (dispatch, getState) => {
+    return async (dispatch, getState) => {
         const state = getState();
         const {login, cluster = ''} = state.global;
 
@@ -98,29 +86,29 @@ export function loadAclData(
 
         const {userPermissionsPath} = options;
 
-        const pathToCheckPermissions = getPathToCheckPermissions(idmKind, state, path, poolTree);
-        const pathToCheckUserPermissions = userPermissionsPath
-            ? getPathToCheckPermissions(idmKind, state, userPermissionsPath, poolTree)
-            : pathToCheckPermissions;
+        try {
+            const pathToCheckPermissions = await getPathToCheckPermissions(idmKind, path, poolTree);
+            const pathToCheckUserPermissions = userPermissionsPath
+                ? await getPathToCheckPermissions(idmKind, userPermissionsPath, poolTree)
+                : pathToCheckPermissions;
 
-        return Promise.all([
-            getAcl({
-                cluster,
-                path,
-                kind: idmKind,
-                poolTree,
-                sysPath: pathToCheckPermissions,
-            }),
-            checkUserPermissionsUI(pathToCheckUserPermissions, login, permissionTypes),
-            getResponsible({
-                cluster,
-                path,
-                kind: idmKind,
-                poolTree,
-                sysPath: pathToCheckPermissions,
-            }),
-        ])
-            .then(([acl, userPermissions, responsible]) => {
+            return await Promise.all([
+                getAcl({
+                    cluster,
+                    path,
+                    kind: idmKind,
+                    poolTree,
+                    sysPath: pathToCheckPermissions,
+                }),
+                checkUserPermissionsUI(pathToCheckUserPermissions, login, permissionTypes),
+                getResponsible({
+                    cluster,
+                    path,
+                    kind: idmKind,
+                    poolTree,
+                    sysPath: pathToCheckPermissions,
+                }),
+            ]).then(([acl, userPermissions, responsible]) => {
                 dispatch({
                     type: LOAD_DATA.SUCCESS,
                     data: {
@@ -138,16 +126,16 @@ export function loadAclData(
                     },
                     idmKind,
                 });
-            })
-            .catch((error) => {
-                dispatch({
-                    type: LOAD_DATA.FAILURE,
-                    data: {
-                        error: error?.response?.data || error?.response || error,
-                    },
-                    idmKind,
-                });
             });
+        } catch (error: any) {
+            dispatch({
+                type: LOAD_DATA.FAILURE,
+                data: {
+                    error,
+                },
+                idmKind,
+            });
+        }
     };
 }
 
@@ -160,7 +148,7 @@ export function deletePermissions(
     }: HasIdmKind & {path: string; roleKey: string; itemToDelete: PreparedAclSubject},
     {normalizedPoolTree}: HasNormPoolTree = {},
 ): ThunkAclAction<Promise<void>> {
-    return (dispatch, getState) => {
+    return async (dispatch, getState) => {
         const {cluster = ''} = getState().global;
         const state = getState();
 
@@ -173,37 +161,38 @@ export function deletePermissions(
         const poolTree =
             idmKind === IdmObjectType.POOL ? normalizedPoolTree || getTree(state) : undefined;
 
-        const deletePermissionsPath = getPathToCheckPermissions(idmKind, state, path, poolTree);
+        try {
+            const deletePermissionsPath = await getPathToCheckPermissions(idmKind, path, poolTree);
 
-        return UIFactory.getAclApi()
-            .deleteRole({
-                idmKind,
-                cluster,
-                roleKey,
-                path,
-                sysPath: deletePermissionsPath,
-                itemToDelete,
-            })
-            .then(() => {
-                dispatch({
-                    type: DELETE_PERMISSION.SUCCESS,
-                    data: roleKey,
+            return await UIFactory.getAclApi()
+                .deleteRole({
                     idmKind,
-                });
-            })
-            .catch((error) => {
-                if (isCancelled(error)) {
-                    dispatch({type: DELETE_PERMISSION.CANCELLED, idmKind});
-                    return undefined;
-                } else {
+                    cluster,
+                    roleKey,
+                    path,
+                    sysPath: deletePermissionsPath,
+                    itemToDelete,
+                })
+                .then(() => {
                     dispatch({
-                        type: DELETE_PERMISSION.FAILURE,
-                        data: error?.response?.data || error?.response || error,
+                        type: DELETE_PERMISSION.SUCCESS,
+                        data: roleKey,
                         idmKind,
                     });
-                    return Promise.reject(error);
-                }
-            });
+                });
+        } catch (error: any) {
+            if (isCancelled(error)) {
+                dispatch({type: DELETE_PERMISSION.CANCELLED, idmKind});
+                return undefined;
+            } else {
+                dispatch({
+                    type: DELETE_PERMISSION.FAILURE,
+                    data: error,
+                    idmKind,
+                });
+                return Promise.reject(error);
+            }
+        }
     };
 }
 
@@ -232,7 +221,7 @@ export function requestPermissions(
     {values, idmKind}: {values: PermissionToRequest} & HasIdmKind,
     {normalizedPoolTree}: HasNormPoolTree = {},
 ): ThunkAclAction {
-    return (dispatch, getState) => {
+    return async (dispatch, getState) => {
         const state = getState();
         const {
             global: {cluster = ''},
@@ -292,44 +281,44 @@ export function requestPermissions(
         const poolTree =
             idmKind === IdmObjectType.POOL ? normalizedPoolTree || getTree(state) : undefined;
 
-        const requestPermissionsPath = getPathToCheckPermissions(
-            idmKind,
-            state,
-            values.path,
-            poolTree,
-        );
-
-        //cluster, path, roles, comment, columns
-        return UIFactory.getAclApi()
-            .requestPermissions({
-                cluster,
-                path: values.path,
-                sysPath: requestPermissionsPath,
-                roles,
-                roles_grouped: rolesGroupedBySubject.map(convertFromUIPermissions),
-                comment: values.comment ?? '',
-                kind: idmKind,
+        try {
+            const requestPermissionsPath = await getPathToCheckPermissions(
+                idmKind,
+                values.path,
                 poolTree,
-            })
-            .then(() => {
-                dispatch({
-                    type: REQUEST_PERMISSION.SUCCESS,
-                    idmKind,
-                });
-            })
-            .catch((error) => {
-                if (isCancelled(error)) {
-                    dispatch({type: REQUEST_PERMISSION.CANCELLED, idmKind});
-                    return undefined;
-                } else {
+            );
+
+            //cluster, path, roles, comment, columns
+            return UIFactory.getAclApi()
+                .requestPermissions({
+                    cluster,
+                    path: values.path,
+                    sysPath: requestPermissionsPath,
+                    roles,
+                    roles_grouped: rolesGroupedBySubject.map(convertFromUIPermissions),
+                    comment: values.comment ?? '',
+                    kind: idmKind,
+                    poolTree,
+                })
+                .then(() => {
                     dispatch({
-                        type: REQUEST_PERMISSION.FAILURE,
-                        data: error?.response?.data || error?.response || error,
+                        type: REQUEST_PERMISSION.SUCCESS,
                         idmKind,
                     });
-                    return Promise.reject(error);
-                }
-            });
+                });
+        } catch (error: any) {
+            if (isCancelled(error)) {
+                dispatch({type: REQUEST_PERMISSION.CANCELLED, idmKind});
+                return undefined;
+            } else {
+                dispatch({
+                    type: REQUEST_PERMISSION.FAILURE,
+                    data: error,
+                    idmKind,
+                });
+                return Promise.reject(error);
+            }
+        }
     };
 }
 
