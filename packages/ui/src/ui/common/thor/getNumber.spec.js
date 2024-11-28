@@ -1,4 +1,4 @@
-import {convertToNumber, getNumber} from './utils';
+import {convertToNumber, getNumber} from './ypath';
 
 describe('./thor/utils', () => {
     describe('convertToNumber', () => {
@@ -34,6 +34,10 @@ describe('./thor/utils', () => {
                 test_invalid_string: 'asdasd',
                 test_undefined: undefined,
                 test_null: null,
+                test_yson: {
+                    $type: 'int64',
+                    $value: '901',
+                },
             },
         };
         describe('no default value:', () => {
@@ -63,6 +67,14 @@ describe('./thor/utils', () => {
                 expect(getNumber(node, '/@test_invalid_string', NaN)).toBe(NaN);
                 expect(getNumber(node, '/@test_undefined', NaN)).toBe(NaN);
                 expect(getNumber(node, '/@test_null', NaN)).toBe(NaN);
+            });
+        });
+
+        describe('yson', () => {
+            it('test', () => {
+                expect(getNumber(node, '/@test_yson')).toBe(901);
+                expect(getNumber(node, '/@test_yson', -1)).toBe(901);
+                expect(getNumber(node, '/@test_yson', NaN)).toBe(901);
             });
         });
     });
