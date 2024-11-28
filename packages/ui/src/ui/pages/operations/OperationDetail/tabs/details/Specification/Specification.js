@@ -123,6 +123,7 @@ export default class Specification extends Component {
         items.push({
             key: 'command',
             value: <TemplateCommand value={command} lineCount={5} />,
+            visible: Boolean(command?.length),
         });
 
         return (
