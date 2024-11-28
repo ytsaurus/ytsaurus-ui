@@ -92,10 +92,9 @@ const LOG_HEADERS = ['x-yt-proxy', 'x-yt-request-id', 'x-yt-trace-id', 'content-
  * `ResponseDataT` just allows to declare response type, it affects nothing,
  * but allows link highlight connection between modules from src/ui and src/server
  */
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export async function pipeAxiosResponse<ResponseDataT = unknown>(
     ctx: AppContext,
-    dst: Response,
+    dst: Response<ResponseDataT>,
     src?: AxiosResponse<stream.Readable | unknown>,
     logMsgPrefix = '',
     transformHeaders: (headers: any) => typeof headers = (v) => v,

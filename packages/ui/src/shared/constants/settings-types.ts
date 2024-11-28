@@ -106,7 +106,7 @@ export interface DefaultSettings {
     CHYT: ChytSettings;
 }
 
-type DescribedSettings = GlobalSettings &
+export type DescribedSettings = GlobalSettings &
     YsonSettings &
     DevelopmentSettings &
     SystemSettings &
