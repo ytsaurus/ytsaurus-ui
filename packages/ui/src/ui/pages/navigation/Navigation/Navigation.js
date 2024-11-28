@@ -7,6 +7,7 @@ import cn from 'bem-cn-lite';
 
 import map_ from 'lodash/map';
 
+import ypath from '../../../common/thor/ypath';
 import {getCluster} from '../../../store/selectors/global';
 import {updateTitle} from '../../../store/actions/global';
 
@@ -271,7 +272,8 @@ class Navigation extends Component {
     }
 
     renderRequestPermission(error) {
-        const {object_type: objectType, path: errorPath} = error.attributes;
+        const objectType = ypath.getValue(error, '/@object_type');
+        const errorPath = ypath.getValue(error, '/@path');
         const {path: currentPath, cluster} = this.props;
         const isRequestPermissionsForPathAllowed = objectType === 'map_node';
 

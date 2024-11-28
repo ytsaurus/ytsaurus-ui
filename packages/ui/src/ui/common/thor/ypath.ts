@@ -2,7 +2,6 @@
 import ypath from '@ytsaurus/interface-helpers/lib/ypath';
 import unipika from './unipika';
 import {appendInnerErrors} from '../../utils/errors';
-import {getNumber} from './utils';
 
 const yson = unipika.utils.yson;
 
@@ -21,7 +20,7 @@ function convertToBoolean(value?: boolean | string): boolean | undefined {
 }
 
 /** @deprecated */
-function convertToNumber(value: number | string, defaultValue?: number): number | undefined {
+function convertToNumberOld(value: number | string, defaultValue?: number): number | undefined {
     value = yson.value(value);
 
     const type = unipika.utils.type(value);
@@ -96,12 +95,41 @@ thorYPath.getNumber = getNumber;
 thorYPath.getNumberDeprecated = function (node: unknown, path: string, defaultValue?: number) {
     try {
         const value = thorYPath.get(node, path);
-        return convertToNumber(value, defaultValue);
+        return convertToNumberOld(value, defaultValue);
     } catch (e) {
         throw appendInnerErrors(e, {
             message: `thorYPath.getNumber: failed to convert field with path: "${path}".`,
         });
     }
 };
+
+export function convertToNumber<T extends number | undefined>(
+    value: any,
+    defaultValue?: T,
+): number | T {
+    if (value === null) return defaultValue as T;
+    if (value === undefined) return defaultValue as T;
+    const res = Number(value);
+    if (isNaN(res) && defaultValue === undefined) {
+        throw new Error('convertToNumber: value "' + value + '" cannot be converted to number.');
+    }
+    return isNaN(res) ? (defaultValue as T) : res;
+}
+
+export function getNumber<T extends number | undefined>(node: any, path: string, defaultValue?: T) {
+    try {
+        let value;
+        if (typeof path === 'undefined') {
+            value = node;
+        } else {
+            value = thorYPath.getValue(node, path);
+        }
+        return convertToNumber(value, defaultValue);
+    } catch (e) {
+        throw appendInnerErrors(e, {
+            message: `getNumber: failed to convert field with path: "${path}".`,
+        });
+    }
+}
 
 export default thorYPath;
