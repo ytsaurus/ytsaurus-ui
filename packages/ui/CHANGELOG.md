@@ -1,5 +1,22 @@
 # Changelog
 
+## [1.72.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.71.1...ui-v1.72.0) (2024-11-29)
+
+
+### Features
+
+* **logout:** make oauth logout optional [[#488](https://github.com/ytsaurus/ytsaurus-ui/issues/488)] ([1b5591a](https://github.com/ytsaurus/ytsaurus-ui/commit/1b5591a6d0a7dda2654a23cc65e439dd0e7e857b))
+
+
+### Bug Fixes
+
+* **Groups:** expand group tree on non-empty group filter [[#853](https://github.com/ytsaurus/ytsaurus-ui/issues/853)] ([1255e14](https://github.com/ytsaurus/ytsaurus-ui/commit/1255e1401e68199eda89c8106061eaec8a067061))
+* **Navigation:** bring back 'Request permissions' button [YTFRONT-4511] ([a62d64a](https://github.com/ytsaurus/ytsaurus-ui/commit/a62d64acbc23a7eff7d4cfb4406fea6b6a1a3887))
+* **Operations/Details/Specifiction:** do not display empty command [YTFRONT-4507] ([cadc5fc](https://github.com/ytsaurus/ytsaurus-ui/commit/cadc5fc9472240a1cb526aa107f777c8774c6bad))
+* **Queries:** share button in safari [YTFRONT-4503] ([38842f4](https://github.com/ytsaurus/ytsaurus-ui/commit/38842f49be3ea945a91dc2f463f8448c5f92173e))
+* **Scheduling/ACL:** error when switch to another pool from ACL tab [YTFRONT-4487] ([06809d8](https://github.com/ytsaurus/ytsaurus-ui/commit/06809d8cb03ea36b6214670c190d526bed2c0ebd))
+* **Settigns:** export DiscribedSettings type [YTFRONT-4499] ([5ab93eb](https://github.com/ytsaurus/ytsaurus-ui/commit/5ab93ebc59c15f9257c39804effa7134181c3c9a))
+
 ## [1.71.1](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.71.0...ui-v1.71.1) (2024-11-26)
 
 
