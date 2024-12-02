@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.73.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.72.0...ui-v1.73.0) (2024-12-02)
+
+
+### Features
+
+* **Queries:** monaco line number in url [YTFRONT-4505] ([2433ed6](https://github.com/ytsaurus/ytsaurus-ui/commit/2433ed6235a9f61833df32c70b0f0b3d711db29c))
+
 ## [1.72.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.71.1...ui-v1.72.0) (2024-11-29)
 
 
