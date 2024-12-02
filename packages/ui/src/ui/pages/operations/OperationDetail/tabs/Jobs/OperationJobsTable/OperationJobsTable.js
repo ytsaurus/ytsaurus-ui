@@ -554,11 +554,17 @@ function BriefStatisticsDetails({data}) {
     const items = React.useMemo(
         () =>
             map_(ypath.getValue(data), (value, key) => {
-                const asBytes = key.endsWith('_data_size') || key.endsWith('_data_weight');
-                const formatValue = asBytes ? hammer.format.Bytes : hammer.format.Number;
+                let result = hammer.format.Number(value);
+
+                if (key.endsWith('_data_size') || key.endsWith('_data_weight')) {
+                    result = hammer.format.Bytes(value);
+                } else if (key.endsWith('_time')) {
+                    result = hammer.format.TimeDuration(value, {format: 'milliseconds'});
+                }
+
                 return {
                     key: hammer.format.Readable(key),
-                    value: <div className={block('state-value')}>{formatValue(value)}</div>,
+                    value: <div className={block('state-value')}>{result}</div>,
                 };
             }),
         [data],
