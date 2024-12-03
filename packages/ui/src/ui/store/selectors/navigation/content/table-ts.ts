@@ -7,6 +7,9 @@ import {createSelector} from 'reselect';
 import type {RootState} from '../../../../store/reducers';
 import {calculateLoadingStatus} from '../../../../utils/utils';
 import {CypressNodeTypes} from '../../../../utils/cypress-attributes';
+import {getAttributes} from '../index';
+import Columns from '../../../../utils/navigation/content/table/columns';
+import {getColumnsValues} from '../../../../utils/navigation/content/table/table';
 
 export const getLoaded = (state: RootState) => state.navigation.content.table.loaded;
 export const getLoading = (state: RootState) => state.navigation.content.table.loading;
@@ -69,6 +72,19 @@ export const getNavigationTableDataLensButtonAlerts = createSelector(
             isEmptySchema: !schema.length,
             enableDynamicStoreRedRequired: dynamic ? !enableDynamicStoreRed : false,
         };
+    },
+);
+
+export const getKeyColumns = createSelector(getAttributes, (attributes) =>
+    Columns.getKeyColumns(attributes),
+);
+
+export const getCurrentRowKey = createSelector(
+    [getRows, getKeyColumns, (_state: RootState, index: number) => index],
+    (rows, keyColumns, index) => {
+        const row = rows[index];
+
+        return getColumnsValues(row, keyColumns) as [Array<string>, string];
     },
 );
 

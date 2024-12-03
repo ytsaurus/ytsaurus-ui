@@ -18,6 +18,7 @@ import {
     getColumnsPreset,
     getColumnsPresetHash,
     getIsDynamic,
+    getKeyColumns,
     getLoaded,
     getLoading,
     getMoveOffsetBackward,
@@ -30,10 +31,6 @@ import {
     getYqlTypes,
 } from './table-ts';
 import {getTableTypeByAttributes} from '../../../../utils/navigation/getTableTypeByAttributes';
-
-export const getKeyColumns = createSelector(getAttributes, (attributes) =>
-    Columns.getKeyColumns(attributes),
-);
 
 export const getVisibleColumns = createSelector(
     [getColumns, getColumnsOrder, getColumnsPreset, getColumnsPresetHash],

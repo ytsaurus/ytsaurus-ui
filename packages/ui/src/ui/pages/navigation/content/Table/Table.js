@@ -27,7 +27,6 @@ import {
 } from '../../../../store/actions/navigation/content/table/table';
 import {
     getAllColumns,
-    getKeyColumns,
     getOffsetValue,
     getSrcColumns,
     getVisibleColumns,
@@ -36,6 +35,7 @@ import {
 import {
     getColumns,
     getIsDynamic,
+    getKeyColumns,
     getNavigationTableLoadingState,
     getYqlTypes,
 } from '../../../../store/selectors/navigation/content/table-ts';
