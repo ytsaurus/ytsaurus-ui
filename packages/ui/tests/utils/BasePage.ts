@@ -91,6 +91,16 @@ export class BasePage extends HasPage {
         await this.replaceBreadcrumbsByTitle(E2E_DIR_NAME, 'e2e.1970-01-01.00:00:00.xxxxxxxxxxx');
     }
 
+    async replaceACLInputPath() {
+        await this.page.waitForSelector('.g-dialog');
+        await this.page.evaluate(() => {
+            const input: HTMLInputElement | null = document.querySelector('input#path');
+            if (input) {
+                input.value = 'e2e.1970-01-01.00:00:00.xxxxxxxxxxx';
+            }
+        });
+    }
+
     async waitForACL() {
         await this.page.waitForSelector('.navigation-acl__row .yt-subject-link');
     }

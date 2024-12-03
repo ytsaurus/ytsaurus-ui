@@ -43,6 +43,15 @@ test('Scheduling - ACL', async ({page}) => {
     await scheduling(page).waitForACL();
 
     await expect(page).toHaveScreenshot();
+
+    await page.click('.acl-request-permissions button');
+    await page.waitForSelector('.g-dialog');
+    await expect(page).toHaveScreenshot();
+    await page.click('button[aria-label="Close dialog"]');
+
+    await page.click('.acl-inheritance button');
+    await page.waitForSelector('.g-dialog');
+    await expect(page).toHaveScreenshot();
 });
 
 test('Scheduling - Details', async ({page}) => {
