@@ -105,8 +105,11 @@ test('Accounts - Editor', async ({page}) => {
 
 test('Accounts - ACL', async ({page}) => {
     await page.goto(makeClusterUrl(`accounts/acl?account=account-for-e2e`));
-
     await accounts(page).waitForACL();
 
+    await expect(page).toHaveScreenshot();
+
+    await page.click('.acl-request-permissions button');
+    await page.waitForSelector('.g-dialog');
     await expect(page).toHaveScreenshot();
 });

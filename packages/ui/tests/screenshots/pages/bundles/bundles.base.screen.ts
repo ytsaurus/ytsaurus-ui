@@ -88,4 +88,8 @@ test('Bundles - ACL', async ({page}) => {
     await bundles(page).waitForACL();
 
     await expect(page).toHaveScreenshot();
+
+    await page.click('.acl-request-permissions button');
+    await page.waitForSelector('.g-dialog');
+    await expect(page).toHaveScreenshot();
 });

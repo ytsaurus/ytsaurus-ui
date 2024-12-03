@@ -56,6 +56,18 @@ test('Navigation: map_node - ACL', async ({page}) => {
     await navigationPage(page).replaceBreadcrumbsTestDir();
 
     await expect(page).toHaveScreenshot();
+
+    await page.click('.acl-request-permissions button');
+    await navigationPage(page).replaceACLInputPath();
+    await expect(page).toHaveScreenshot();
+    await page.click('button[aria-label="Close dialog"]');
+
+    await page.click('input[value="column_groups_permissions"]');
+    await expect(page).toHaveScreenshot();
+
+    await page.click('.acl-request-permissions button');
+    await navigationPage(page).replaceACLInputPath();
+    await expect(page).toHaveScreenshot();
 });
 
 test('Navigation - Locks', async ({page}) => {
