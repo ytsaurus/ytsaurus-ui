@@ -46,7 +46,6 @@ import {
 } from '../../../../../store/selectors/settings';
 import {
     getAllColumns,
-    getKeyColumns,
     getNextOffset,
     getRequestedPageSize,
     getVisibleColumns,
@@ -59,6 +58,7 @@ import {
     getDeniedKeyColumns,
     getIsDynamic,
     getIsStrict,
+    getKeyColumns,
     getMoveOffsetBackward,
     getOmittedColumns,
     getRows,
