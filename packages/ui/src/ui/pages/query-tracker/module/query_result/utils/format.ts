@@ -17,9 +17,10 @@ export function convert(
     value: unknown,
     dataType: TypeArray,
     settings: UnipikaSettings,
+    flags?: {incomplete: boolean},
 ): {$type: string; $value: any; $tag?: any} {
     try {
-        return unipika.converters.yql([value, dataType], settings);
+        return unipika.converters.yql([value, dataType], settings, flags);
     } catch (error) {
         console.log(error);
         let valueStr: string;
@@ -62,14 +63,21 @@ export function prepareFormattedValue(
     type: TypeArray,
     settings: UnipikaSettings = defaultSettings,
 ) {
-    const convertedValue = convert(value, type, settings);
+    const flags: {incomplete: boolean} = {incomplete: false};
+    const convertedValue = convert(value, type, settings, flags);
+    const tag = convertedValue.$tag;
 
     let fullValue = convertedValue;
     if (settings?.maxStringSize) {
-        fullValue = convert(value, type, {
-            ...settings,
-            maxStringSize: undefined,
-        });
+        fullValue = convert(
+            value,
+            type,
+            {
+                ...settings,
+                maxStringSize: undefined,
+            },
+            flags,
+        );
     }
 
     let $rawValue = '';
@@ -101,5 +109,7 @@ export function prepareFormattedValue(
                   ? formatResults(fullValue, {...settings, maxStringSize: undefined})
                   : '',
         $rawValue,
+        $incomplete: flags.incomplete,
+        $tagValue: tag,
     };
 }

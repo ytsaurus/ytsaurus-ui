@@ -27,7 +27,7 @@ export const showQueryTrackerCellPreviewModal = (
                     queryIndex,
                     {start: options.rowIndex, end: options.rowIndex + 1},
                     [options.columnName],
-                    {cellsSize: PREVIEW_LIMIT},
+                    {cellsSize: PREVIEW_LIMIT, stringLimit: Math.round(PREVIEW_LIMIT / 10)},
                     cellPreviewCancelHelper.removeAllAndSave,
                 ),
             );
@@ -37,13 +37,16 @@ export const showQueryTrackerCellPreviewModal = (
 
             const type = response.yql_type_registry[Number(typeIndex)];
 
-            const {$type} = prepareFormattedValue(dataRow, type, {
+            const {$type, $tag, $value} = prepareFormattedValue(dataRow, type, {
                 maxListSize: undefined,
                 maxStringSize: undefined,
                 treatValAsData: true,
             });
 
-            dispatch({type: CELL_PREVIEW.SUCCESS, data: {data: {$value: dataRow, $type: $type}}});
+            dispatch({
+                type: CELL_PREVIEW.SUCCESS,
+                data: {data: {$value: $tag ? $value.$value : $value, $type: $type, $tag}},
+            });
         } catch (error: any) {
             if (!isCancelled(error)) {
                 dispatch({type: CELL_PREVIEW.FAILURE, data: {error}});
