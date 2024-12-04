@@ -38,13 +38,21 @@ const getCellPath = ({
     };
 };
 
-const getCliCommand = ({cellPath}: {cellPath: string}): CellPreviewActionType => {
+const getCliCommand = ({
+    cellPath,
+    columnName,
+    tag,
+}: {
+    cellPath: string;
+    columnName: string;
+    tag?: string;
+}): CellPreviewActionType => {
     return (_dispatch, getState) => {
         const isDynamic = getIsDynamic(getState());
 
         const fn = isDynamic ? getDynamicTableCliCommand : getStaticTableCliCommand;
 
-        return fn({cellPath});
+        return fn({cellPath, columnName, tag});
     };
 };
 
@@ -70,11 +78,15 @@ const loadCellPreview = ({cellPath}: {cellPath: string}): CellPreviewActionType 
     };
 };
 
-export const showCellPreviewModal = (columnName: string, index: number): CellPreviewActionType => {
+export const showCellPreviewModal = (
+    columnName: string,
+    index: number,
+    tag?: string,
+): CellPreviewActionType => {
     return async (dispatch) => {
         const cellPath = dispatch(getCellPath({columnName, index}));
 
-        const ytCliDownloadCommand: string = dispatch(getCliCommand({cellPath}));
+        const ytCliDownloadCommand: string = dispatch(getCliCommand({cellPath, columnName, tag}));
 
         batch(() => {
             dispatch({type: CELL_PREVIEW.REQUEST, data: {ytCliDownloadCommand}});
@@ -91,23 +103,26 @@ export const showCellPreviewModal = (columnName: string, index: number): CellPre
             const value = column[0];
             const typeIndex = column[1];
 
-            const {$type, $value} = unipika.converters.yql(
+            const flags: {incomplete: boolean} = {incomplete: false};
+
+            const {$type, $value, $tag} = unipika.converters.yql(
                 [value, parsed.yql_type_registry[typeIndex]],
                 {
                     maxStringSize: undefined,
                     maxListSize: undefined,
                     treatValAsData: true,
                 },
+                flags,
             );
 
-            const isIncomplete = column.$incomplete;
+            const isIncomplete = flags.incomplete;
             const noticeText = isIncomplete
                 ? 'Unable to load content more than 16MiB. Please use the command bellow to load it locally.'
                 : 'You could use the command bellow to load it locally.';
 
             dispatch({
                 type: CELL_PREVIEW.SUCCESS,
-                data: {data: {$type, $value}, noticeText},
+                data: {data: {$type, $value: $tag ? $value.$value : $value, $tag}, noticeText},
             });
         } catch (error: any) {
             if (!isCancelled(error)) {
