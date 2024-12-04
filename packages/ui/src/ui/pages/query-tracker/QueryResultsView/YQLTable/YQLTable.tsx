@@ -11,6 +11,7 @@ import {StrictReactNode, hasKey} from './utils';
 import {MOVING} from '@gravity-ui/react-data-table/build/esm/lib/constants';
 import DataTableYT from '../../../../components/DataTableYT/DataTableYT';
 import {ClickableText} from '../../../../components/ClickableText/ClickableText';
+import Label from '../../../../components/Label/Label';
 
 import './YQLTable.scss';
 
@@ -157,7 +158,8 @@ export default function Table({
                         onShowPreview(name, index);
                     };
 
-                    const isTruncated = value.$incomplete;
+                    const isTruncated: boolean = value.$incomplete;
+                    const tag = value.$tagValue;
 
                     if (isStrippedDown) {
                         return (
@@ -165,6 +167,7 @@ export default function Table({
                                 rawValue={rawValue}
                                 onPreviewClick={handlePreviewClick}
                                 isTruncated={isTruncated}
+                                tag={tag}
                             >
                                 {showFullValueInDialog ? (
                                     <React.Fragment>
@@ -191,6 +194,7 @@ export default function Table({
                             rawValue={rawValue}
                             onPreviewClick={handlePreviewClick}
                             isTruncated={isTruncated}
+                            tag={tag}
                         >
                             <span
                                 className="unipika"
@@ -440,9 +444,10 @@ interface TableCellProps {
     rawValue?: string;
     onPreviewClick: () => void;
     isTruncated?: boolean;
+    tag?: string;
 }
 
-function TableCell({children, rawValue, onPreviewClick, isTruncated}: TableCellProps) {
+function TableCell({children, rawValue, onPreviewClick, isTruncated, tag}: TableCellProps) {
     const cellNodeRef = React.useRef<HTMLDivElement>(null);
     const [mount, setMount] = React.useState(false);
 
@@ -466,10 +471,16 @@ function TableCell({children, rawValue, onPreviewClick, isTruncated}: TableCellP
         };
     }, []);
 
+    const isTruncatedTaggedType = Boolean(tag && isTruncated);
+
     return (
         <span ref={cellNodeRef}>
-            <span className={block('cell-content')}>{children}</span>
-            {mount && (
+            {isTruncatedTaggedType ? (
+                <Label theme="warning" text={`Incomplete '${tag}' type`} />
+            ) : (
+                <span className={block('cell-content')}>{children}</span>
+            )}
+            {(mount || isTruncatedTaggedType) && (
                 <>
                     {rawValue && !isTruncated && (
                         <ClipboardButton className={cellActionClassName} text={rawValue} size="s" />
