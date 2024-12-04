@@ -26,7 +26,7 @@ export function prepareColumns({
     ysonSettings: YsonSettings;
     useRawStrings: boolean | null | undefined;
     schemaByName: Record<string, any>;
-    onShowPreview: (columnName: string, rowIndex: number) => void;
+    onShowPreview: (columnName: string, rowIndex: number, tag?: string) => void;
 }) {
     return map_(columns, (column) => {
         const render = ({value, index}: {value?: any; index: number; row: any}) => (
