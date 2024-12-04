@@ -20,6 +20,7 @@ import Yson from '../../components/Yson/Yson';
 import Error from '../../components/Error/Error';
 import {type YsonSettings, getPreviewCellYsonSettings} from '../../store/selectors/thor/unipika';
 import {closeCellPreviewAndCancelRequest} from '../../store/actions/modals/cell-preview';
+import {isMediaTag} from '../../utils/yql-types';
 
 import './CellPreviewModal.scss';
 
@@ -85,34 +86,36 @@ export const CellPreviewModal: React.FC = () => {
 };
 
 type PreviewContentProps = {
-    data: {$type: string; $value: any} | undefined;
+    data: {$type: string; $value: any; $tag?: string} | undefined;
     unipikaSettings: YsonSettings;
 };
 
 function PreviewContent(props: PreviewContentProps) {
     const {data, unipikaSettings} = props;
 
-    switch (data?.$type) {
-        case 'yql.string':
-        case 'yql.json':
-            return <pre className="elements-code">{data.$value}</pre>;
-        default:
-            return (
-                <Yson
-                    className={b('yson-container')}
-                    folding={true}
-                    value={data?.$value}
-                    tableSettings={{dynamicRenderScrollParentGetter: undefined}}
-                    settings={unipikaSettings}
-                    customLayout={({toolbar, content}) => {
-                        return (
-                            <>
-                                <div className={b('toolbar')}>{toolbar}</div>
-                                {content}
-                            </>
-                        );
-                    }}
-                />
-            );
+    if (data?.$type === 'yql.string' || data?.$type === 'yql.json') {
+        return <pre className="elements-code">{data?.$value}</pre>;
     }
+
+    if (data?.$type === 'yql.tagged' && data.$tag && isMediaTag(data.$tag)) {
+        return <img src={`data:${data.$tag};base64,${data?.$value}`} alt="image-preview" />;
+    }
+
+    return (
+        <Yson
+            className={b('yson-container')}
+            folding={true}
+            value={data?.$value}
+            tableSettings={{dynamicRenderScrollParentGetter: undefined}}
+            settings={unipikaSettings}
+            customLayout={({toolbar, content}) => {
+                return (
+                    <>
+                        <div className={b('toolbar')}>{toolbar}</div>
+                        {content}
+                    </>
+                );
+            }}
+        />
+    );
 }
