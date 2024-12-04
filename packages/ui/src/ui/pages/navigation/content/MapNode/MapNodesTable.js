@@ -322,7 +322,7 @@ class MapNodesTable extends Component {
     }
 
     onItemClick = (item, _index, evt) => {
-        if (evt.target?.classList?.contains?.('map-node_default__table-item_type_chooser')) {
+        if (evt?.target?.classList?.contains?.('map-node_default__table-item_type_chooser')) {
             this.onChooserClick(evt, item);
         } else if (item.parsedPathError) {
             showErrorPopup(item.parsedPathError, {hideOopsMsg: true, disableLogger: true});
