@@ -32,20 +32,6 @@ type CellValueType =
 
 type CellValueData = {$type: string; $value: string} | {$type?: undefined; $value: unknown};
 
-function isValueTruncated(value: CellValueType) {
-    return value?.$incomplete || getArrayValue(value)?.inc;
-}
-
-function getArrayValue(value: CellValueType) {
-    const candidate = value?.[0];
-
-    return Array.isArray(candidate) ? candidate[0] : candidate;
-}
-
-function isValueEmptyOrTruncated(value?: CellValueType) {
-    return !value || isValueTruncated(value);
-}
-
 type ColumnCellProps = {
     className?: string;
 
@@ -55,7 +41,7 @@ type ColumnCellProps = {
     allowRawStrings?: boolean | null;
     rowIndex: number;
     columnName: string;
-    onShowPreview: (columnName: string, rowIndex: number) => void;
+    onShowPreview: (columnName: string, rowIndex: number, tag?: string) => void;
 };
 
 export function ColumnCell({
@@ -88,14 +74,23 @@ export function ColumnCell({
             <Yson value={value} settings={ysonSettings} />
         );
 
-    let isIncompleteTagged = false;
-    if (yqlTypes && value) {
-        const yqlType = yqlTypes[Number(value[1])];
+    const {tag, isIncompleteTagged, isIncompleteValue} = React.useMemo(() => {
+        let isIncompleteTagged = false;
+        let isIncompleteValue = false;
+        let tag: string | undefined;
 
-        if (value[0]?.inc === true && yqlType[0] === 'TaggedType') {
-            isIncompleteTagged = true;
+        if (value && formatType) {
+            const flags: {incomplete: boolean} = {incomplete: false};
+
+            const {$tag} = unipika.converters.yql([value[0], formatType], ysonSettings, flags);
+
+            isIncompleteValue = flags.incomplete;
+            isIncompleteTagged = flags.incomplete && $tag;
+            tag = $tag;
         }
-    }
+
+        return {tag, isIncompleteTagged, isIncompleteValue};
+    }, [value, formatType, ysonSettings]);
 
     const allowRawCopy = value?.$type === 'string';
     const useRawString = allowRawCopy && allowRawStrings;
@@ -121,14 +116,14 @@ export function ColumnCell({
             onMouseLeave={handleMouseLeave}
         >
             {isIncompleteTagged ? (
-                <Label theme="warning" text={`Incomplete '${formatType?.[1]}' type`} />
+                <Label theme="warning" text={`Incomplete '${tag}' type`} />
             ) : (
                 visibleValue
             )}
-            {hovered && (
+            {(hovered || isIncompleteTagged) && (
                 <div className={block('control-button-wrapper')}>
                     <Flex alignItems="center">
-                        {!isValueEmptyOrTruncated(value) && (
+                        {value && !isIncompleteValue && (
                             <Tooltip
                                 content={
                                     !allowRawCopy ? undefined : (
@@ -152,12 +147,12 @@ export function ColumnCell({
                                 />
                             </Tooltip>
                         )}
-                        {isValueTruncated(value) && (
+                        {isIncompleteValue && (
                             <Button
                                 view="flat-secondary"
                                 size="m"
                                 qa="truncated-preview-button"
-                                onClick={() => onShowPreview(columnName, rowIndex)}
+                                onClick={() => onShowPreview(columnName, rowIndex, tag)}
                             >
                                 <UIKitIcon data={Eye} size="12" />
                             </Button>

@@ -7,6 +7,7 @@ import {
 import Query from '../../../../../utils/navigation/content/table/query';
 import {YTApiId, ytApiV3Id} from '../../../../../rum/rum-wrap-api';
 import type {CancelTokenSource} from 'axios';
+import {getCliCommandResultFormat} from './format';
 
 export const getDynamicTableCellPath = ({
     index,
@@ -34,8 +35,16 @@ export const getDynamicTableCellPath = ({
     };
 };
 
-export const getDynamicTableCliCommand = ({cellPath}: {cellPath: string}): string => {
-    return `yt select-rows 'select ${cellPath}' --format json`;
+export const getDynamicTableCliCommand = ({
+    cellPath,
+    tag,
+    columnName,
+}: {
+    cellPath: string;
+    columnName: string;
+    tag?: string;
+}): string => {
+    return `yt select-rows 'select ${cellPath}' ${getCliCommandResultFormat({columnName, tag})}`;
 };
 
 export const loadDynamicTableCellPreview = ({
