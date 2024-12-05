@@ -84,9 +84,20 @@ test('Navigation: static-table - rowselector', async ({page}) => {
     await tablePage(page).waitForTablContent('.navigation-table', 10);
 
     await page.click('.navigation-table-overview__input', {force: true});
-    await page.click('.rc-slider', {force: true, position: {x: 200, y: 0}});
+    const slider = await page.waitForSelector('.rc-slider-handle');
+    const sliderBoundingBox = await slider.boundingBox();
 
-    await page.getByText('key149').waitFor();
+    if (!sliderBoundingBox) return;
+    const newX = sliderBoundingBox.x + 206;
+    const newY = sliderBoundingBox.y + sliderBoundingBox.height / 2;
+
+    await page.mouse.move(
+        sliderBoundingBox.x + sliderBoundingBox.width / 2,
+        sliderBoundingBox.y + sliderBoundingBox.height / 2,
+    );
+    await page.mouse.down();
+    await page.mouse.move(newX, newY);
+    await page.mouse.up();
 
     await expect(page).toHaveScreenshot();
 });
