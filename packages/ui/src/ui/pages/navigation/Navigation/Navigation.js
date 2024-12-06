@@ -272,8 +272,8 @@ class Navigation extends Component {
     }
 
     renderRequestPermission(error) {
-        const objectType = ypath.getValue(error, '/@object_type');
-        const errorPath = ypath.getValue(error, '/@path');
+        const objectType = ypath.getValue(error?.attributes, '/object_type');
+        const errorPath = ypath.getValue(error?.attributes, '/path');
         const {path: currentPath, cluster} = this.props;
         const isRequestPermissionsForPathAllowed = objectType === 'map_node';
 
