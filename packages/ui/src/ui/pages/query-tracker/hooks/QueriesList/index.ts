@@ -54,7 +54,7 @@ export const useQueriesListSidebarToggle = () => {
 
     const toggleQueriesListSideBarToggle = () => {
         dispatch(
-            setSettingByKey<boolean>(
+            setSettingByKey(
                 'global::queryTracker::queriesListSidebarVisibilityMode',
                 !isQueriesListSidebarVisible,
             ),

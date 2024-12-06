@@ -50,6 +50,7 @@ interface NavigationSettings {
     'global::navigation::enableTableSimilarity': boolean;
     'global::navigation::clusterPagePaneSizes': number;
     'global::navigation::defaultChytAlias': string;
+    'global::navigation::sqlService': Array<'qtkit' | 'yqlkit'>;
 }
 
 interface SystemSettings {

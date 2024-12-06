@@ -59,7 +59,6 @@ import Icon from '../../../components/Icon/Icon';
 import {showNavigationAttributesEditor} from '../../../store/actions/navigation/modals/attributes-editor';
 import {getPermissionDeniedError} from '../../../utils/errors';
 import {getParentPath} from '../../../utils/navigation';
-import UIFactory from '../../../UIFactory';
 
 import './Navigation.scss';
 import {UI_TAB_SIZE} from '../../../constants/global';
@@ -333,8 +332,6 @@ class Navigation extends Component {
                             {hasError && this.renderError()}
                         </div>
                     </StickyContainer>
-
-                    {UIFactory.yqlWidgetSetup?.renderWidget()}
 
                     {renderModals()}
                 </div>

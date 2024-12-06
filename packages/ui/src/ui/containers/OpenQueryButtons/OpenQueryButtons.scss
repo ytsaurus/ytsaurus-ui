@@ -1,0 +1,17 @@
+.yt-open-query-buttons {
+    display: flex;
+    flex-wrap: nowrap;
+
+    &__query {
+        display: flex;
+        flex-wrap: nowrap;
+
+        &:not(:last-child) {
+            margin-right: 10px;
+        }
+    }
+
+    &__btn + &__btn {
+        margin-left: 1px;
+    }
+}

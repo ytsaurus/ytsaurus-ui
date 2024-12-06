@@ -9,7 +9,7 @@ import {ChytInfo} from '../../../store/reducers/chyt/list';
 import {SortState} from '../../../types';
 import {multiSortBySortStateArray} from '../../../utils/sort-helpers';
 import {StrawberryListAttributes} from '../../../utils/strawberryControllerApi';
-import {getSettingsData} from '../settings-base';
+import {getSettingsData} from '../../../store/selectors/settings/settings-base';
 
 export const getChytListData = (state: RootState) => state.chyt.list.data;
 

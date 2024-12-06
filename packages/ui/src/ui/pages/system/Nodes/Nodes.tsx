@@ -26,7 +26,7 @@ import type {RootState} from '../../../store/reducers';
 import {
     getSettingSystemNodesNodeType,
     getSettingsSystemNodesCollapsed,
-} from '../../../store/selectors/settings-ts';
+} from '../../../store/selectors/settings/settings-ts';
 import {getSystemNodesNodeTypesToLoad} from '../../../store/selectors/system/nodes';
 import {useThunkDispatch} from '../../../store/thunkDispatch';
 import {

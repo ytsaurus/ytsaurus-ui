@@ -13,7 +13,7 @@ import hammer from '../../../../../common/hammer';
 import {setSettingsAccountsExpandStaticConfiguration} from '../../../../../store/actions/settings/settings';
 
 import './AccountStaticConfiguration.scss';
-import {getSettingsAccountsExpandStaticConfiguration} from '../../../../../store/selectors/settings-ts';
+import {getSettingsAccountsExpandStaticConfiguration} from '../../../../../store/selectors/settings/settings-ts';
 import {UI_COLLAPSIBLE_SIZE} from '../../../../../constants/global';
 const block = cn('account-static-configuration');
 

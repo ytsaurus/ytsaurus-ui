@@ -12,9 +12,9 @@ import {
     getSettingsAccountUsageColumnsList,
     getSettingsAccountUsageColumnsListFolders,
     getSettingsAccountUsageColumnsTree,
-} from '../settings-ts';
+} from '../../../store/selectors/settings/settings-ts';
 import format from '../../../common/hammer/format';
-import {AccountUsageDataItem} from '../../reducers/accounts/usage/account-usage-types';
+import {AccountUsageDataItem} from '../../../store/reducers/accounts/usage/account-usage-types';
 
 const ACCOUNT_USAGE_COLUMN_TITLE: Record<string, string> = {
     approximate_row_count: '~Row count',
