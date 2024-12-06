@@ -382,6 +382,7 @@ export function readQueryResults(
     columns: string[],
     settings: {
         cellsSize: number;
+        stringLimit?: number;
     },
     cancellation?: (token: CancelTokenSource) => void,
 ): ThunkAction<Promise<QueryResult>, RootState, any, any> {
@@ -401,6 +402,7 @@ export function readQueryResults(
                         column_names: columns,
                         value_format: 'yql',
                         field_weight_limit: settings?.cellsSize,
+                        string_weight_limit: settings?.stringLimit,
                         max_selected_column_count: 3000,
                     },
                 },

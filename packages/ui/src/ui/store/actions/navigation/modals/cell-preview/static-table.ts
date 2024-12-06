@@ -2,6 +2,7 @@ import {type CellPreviewActionType} from '../../../modals/cell-preview';
 import {getOffsetValue} from '../../../../selectors/navigation/content/table';
 import type {CancelTokenSource} from 'axios';
 import {ytApiV4} from '../../../../../rum/rum-wrap-api';
+import {getCliCommandResultFormat} from './format';
 
 export const getStaticTableCellPath = ({
     path,
@@ -21,8 +22,16 @@ export const getStaticTableCellPath = ({
     };
 };
 
-export const getStaticTableCliCommand = ({cellPath}: {cellPath: string}): string => {
-    return `yt read-table '${cellPath}' --format json`;
+export const getStaticTableCliCommand = ({
+    cellPath,
+    columnName,
+    tag,
+}: {
+    cellPath: string;
+    columnName: string;
+    tag?: string;
+}): string => {
+    return `yt read-table '${cellPath}' ${getCliCommandResultFormat({columnName, tag})}`;
 };
 
 export const loadStaticTableCellPreview = ({
