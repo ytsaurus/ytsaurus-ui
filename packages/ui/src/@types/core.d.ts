@@ -133,6 +133,11 @@ export interface YTCoreConfig {
     tabletErrorsBaseUrl?: string;
 
     adjustAppConfig?: (nodekit: NodeKit) => void;
+
+    /**
+     * Shows tokens management for oauth users
+     */
+    enableOauthModeForManageTokens?: boolean;
 }
 
 declare module '@gravity-ui/nodekit' {

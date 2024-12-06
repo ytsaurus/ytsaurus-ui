@@ -26,6 +26,7 @@ export async function getLayoutConfig(req: Request, params: Params): Promise<App
         odinBaseUrl,
         userSettingsConfig,
         tabletErrorsBaseUrl,
+        enableOauthModeForManageTokens,
     } = req.ctx.config as YTCoreConfig;
     const YT = ytConfig;
     const uiVersion = getInterfaceVersion();
@@ -70,6 +71,7 @@ export async function getLayoutConfig(req: Request, params: Params): Promise<App
             allowUserColumnPresets: isUserColumnPresetsEnabled(req),
             odinPageEnabled: Boolean(odinBaseUrl),
             allowTabletErrorsAPI: Boolean(tabletErrorsBaseUrl),
+            enableOauthModeForManageTokens: enableOauthModeForManageTokens,
         },
         pluginsOptions: {
             yandexMetrika: {
