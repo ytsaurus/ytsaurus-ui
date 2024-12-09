@@ -4,7 +4,7 @@ import {CELL_PREVIEW} from '../../../constants/modals/cell-preview';
 export interface CellPreviewState {
     visible: boolean;
     loading: boolean;
-    data: {$value: any; $type: string} | undefined;
+    data: {$value: any; $type: string; $tag?: string} | undefined;
     ytCliDownloadCommand?: string;
     noticeText?: string;
     error?: YTError;
