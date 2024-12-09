@@ -1,5 +1,21 @@
 # Changelog
 
+## [1.74.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.73.0...ui-v1.74.0) (2024-12-09)
+
+
+### Features
+
+* **Navigation/CellPreview:** add dynamic table cell preview [[#776](https://github.com/ytsaurus/ytsaurus-ui/issues/776)] ([4fbbb06](https://github.com/ytsaurus/ytsaurus-ui/commit/4fbbb06dcc428e1191f89d33367f15877539a7c2))
+
+
+### Bug Fixes
+
+* **Navigation:** additional to a62d64acbc23a7eff7d4cfb4406fea6b6a1a3887 [YTFRONT-4511] ([b17545f](https://github.com/ytsaurus/ytsaurus-ui/commit/b17545f2735efac23f1f80bac42e777f2d9e6209))
+* **Navigation:** keyboard navigation [YTFRONT-4493] ([3b9fb24](https://github.com/ytsaurus/ytsaurus-ui/commit/3b9fb24c2b3aae09177e10827e99213b45b9a978))
+* **Operations:** job tooltip value format [YTFRONT-4211] ([de238b1](https://github.com/ytsaurus/ytsaurus-ui/commit/de238b19e4ce1ce66666c3c5dddb4e05693174b4))
+* **System:** timestamp providers maintenance [YTFRONT-4452] ([fa837cd](https://github.com/ytsaurus/ytsaurus-ui/commit/fa837cd575aea8d30f6c6a434bbeffa65c16868c))
+* **UI:** celebration theme fix ([67db4f4](https://github.com/ytsaurus/ytsaurus-ui/commit/67db4f41aaa7e84449a88cdeff96f78361b0c88b))
+
 ## [1.73.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.72.0...ui-v1.73.0) (2024-12-02)
 
 
