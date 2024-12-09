@@ -1,0 +1,10 @@
+.yt-graph-click-popup {
+    --top: var(--yt-graph-popup-geometry-y, 0);
+    --left: calc(var(--yt-graph-popup-geometry-x, 0) + var(--yt-graph-popup-geometry-width, 0));
+    transform: translate3d(var(--left, 0), var(--top, 0), 0) scale(var(--scale));
+
+    &_detailed {
+        transform: translate3d(var(--yt-graph-popup-geometry-x, 0), var(--top, 0), 0) scale(var(--scale));
+        margin-left: 0;
+    }
+}

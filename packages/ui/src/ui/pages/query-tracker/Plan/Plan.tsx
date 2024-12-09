@@ -15,6 +15,9 @@ import {ProcessedGraph, ProcessedNode, preprocess, updateProgress} from './utils
 import Timeline from './Timeline/Timeline';
 
 import './Plan.scss';
+import {GraphWrap} from './GraphEditor/GraphWrap';
+import {useSelector} from 'react-redux';
+import {getSettingsQueryTrackerNewGraphType} from '../../../store/selectors/settings-ts';
 
 const block = cn('plan');
 
@@ -29,6 +32,7 @@ export default React.memo(function Plan({isActive, className, prepareNode}: Plan
     const [showLargeGraph, setShowLargeGraph] = React.useState(false);
     const planView = usePlanView();
     const resultProgressShowMinimap = true; // can be setted as user setting on future
+    const newGraphType = useSelector(getSettingsQueryTrackerNewGraphType);
 
     const graph = React.useMemo(() => (plan ? preprocess(plan) : undefined), [plan]);
 
@@ -44,12 +48,18 @@ export default React.memo(function Plan({isActive, className, prepareNode}: Plan
                     {isLargeGraph && !showLargeGraph ? (
                         <LargeGraphInfo showGraph={setShowLargeGraph} graph={graph} />
                     ) : (
-                        <Graph
-                            isActive={isActive && planView === 'graph'}
-                            graph={graph}
-                            showMinimap={resultProgressShowMinimap}
-                            prepareNode={prepareNode}
-                        />
+                        <>
+                            {newGraphType ? (
+                                <GraphWrap graph={graph} />
+                            ) : (
+                                <Graph
+                                    isActive={isActive && planView === 'graph'}
+                                    graph={graph}
+                                    showMinimap={resultProgressShowMinimap}
+                                    prepareNode={prepareNode}
+                                />
+                            )}
+                        </>
                     )}
                 </NotRenderUntilFirstVisible>
                 <NotRenderUntilFirstVisible
