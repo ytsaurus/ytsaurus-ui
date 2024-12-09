@@ -11,6 +11,7 @@ import {
 } from '../../../constants/index';
 import {showToasterError, wrapApiPromiseByToaster} from '../../../utils/utils';
 import {getSettingsCluster} from '../../selectors/global';
+import {getSettingsDataFromInitialConfig} from '../../../config';
 
 function logError(action: string, name: string) {
     console.error('Failed to "%s" setting "%s", settings provider is disabled.', action, name);
@@ -131,6 +132,7 @@ export function reloadSetting(settingName: string, settingNS: SettingNS): Settin
     };
 }
 
+const CELEBRATION_THEME_KEY = 'global::celebrationTheme';
 export function reloadUserSettings(login: string): SettingsThunkAction {
     return async (dispatch, getState) => {
         try {
@@ -149,6 +151,13 @@ export function reloadUserSettings(login: string): SettingsThunkAction {
                           errorContent: 'Cannot load user settings',
                       })
                     : allData;
+            if (data[CELEBRATION_THEME_KEY] === undefined) {
+                const initialSettings = getSettingsDataFromInitialConfig();
+                const celebrationTheme = initialSettings.data[CELEBRATION_THEME_KEY];
+                if (celebrationTheme !== undefined) {
+                    data[CELEBRATION_THEME_KEY] = celebrationTheme;
+                }
+            }
             dispatch({type: UPDATE_SETTING_DATA, data});
         } catch (e) {}
     };
