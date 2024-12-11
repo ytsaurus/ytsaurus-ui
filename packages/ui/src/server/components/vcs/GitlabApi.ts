@@ -94,7 +94,7 @@ export class GitlabApi implements VcsApi {
         repository: VcsRepository;
         branch: string;
         path?: string;
-    }): Promise<{name: string; type: 'tree' | 'blob'; url: string}[]> {
+    }): Promise<{name: string; type: 'file' | 'dir'; url: string}[]> {
         return axios
             .get<GitlabNode[]>(
                 `${this.baseUrl}/${this.getProjectId(repository)}/repository/tree?path=${path}`,
@@ -109,7 +109,7 @@ export class GitlabApi implements VcsApi {
                 return response.data.map((item) => {
                     return {
                         name: item.name,
-                        type: item.type,
+                        type: item.type === 'tree' ? 'dir' : 'file',
                         url: `/-/blob/${branch}/${item.name}`,
                     };
                 });

@@ -163,7 +163,13 @@ export const getDirectoryContent: AppRouteHandler = async (req: Request, res: Re
             },
         });
 
-        response.sort((a, b) => a.type.localeCompare(b.type));
+        response.sort((a, b) => {
+            if (a.type === 'dir' && b.type === 'file') return -1;
+            if (a.type === 'file' && b.type === 'dir') return 1;
+
+            return a.name.localeCompare(b.name, undefined, {sensitivity: 'base'});
+        });
+
         res.status(200).json(response);
     } catch (e) {
         req.ctx.logError('Error getting list of directories', e);
