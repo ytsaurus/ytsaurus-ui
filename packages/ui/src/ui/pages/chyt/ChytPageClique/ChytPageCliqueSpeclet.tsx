@@ -37,6 +37,7 @@ import {YTError} from '../../../../@types/types';
 import {WaitForDefaultPoolTree} from '../../../hooks/global-pool-trees';
 
 import './ChytPageCliqueSpeclet.scss';
+import {YsonDownloadButton} from '../../../components/DownloadAttributesButton';
 
 const block = cn('yt-chyt-clique-speclet');
 
@@ -103,6 +104,13 @@ function ChytSpeclet({alias, unipikaSettings}: {alias?: string; unipikaSettings:
                     value={data}
                     settings={unipikaSettings}
                     folding
+                    extraTools={
+                        <YsonDownloadButton
+                            value={data}
+                            settings={unipikaSettings}
+                            name={`chyt_speclet_${alias}`}
+                        />
+                    }
                 />
             )}
         </div>

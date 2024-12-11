@@ -22,6 +22,8 @@ import {RumMeasureTypes} from '../../../../rum/rum-measure-types';
 import {calculateLoadingStatus, isFinalLoadingStatus} from '../../../../utils/utils';
 
 import './UserAttributes.scss';
+import {YsonDownloadButton} from '../../../../components/DownloadAttributesButton';
+import {pathToFileName} from '../../helpers/pathToFileName';
 
 const block = cn('navigation-user-attributes');
 
@@ -41,7 +43,18 @@ function UserAttributes(props) {
                 {initialLoading ? (
                     <Loader />
                 ) : (
-                    <Yson value={userAttributes} settings={settings} folding />
+                    <Yson
+                        value={userAttributes}
+                        settings={settings}
+                        extraTools={
+                            <YsonDownloadButton
+                                value={userAttributes}
+                                settings={settings}
+                                name={`user_attributes_${pathToFileName(path)}`}
+                            />
+                        }
+                        folding
+                    />
                 )}
             </div>
         </LoadDataHandler>

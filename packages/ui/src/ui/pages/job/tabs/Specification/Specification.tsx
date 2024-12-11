@@ -3,7 +3,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import cn from 'bem-cn-lite';
 
 import Yson from '../../../../components/Yson/Yson';
-import {Checkbox, Loader} from '@gravity-ui/uikit';
+import {Checkbox, Flex, Loader} from '@gravity-ui/uikit';
 import ErrorBoundary from '../../../../components/ErrorBoundary/ErrorBoundary';
 import LoadDataHandler from '../../../../components/LoadDataHandler/LoadDataHandler';
 
@@ -18,6 +18,8 @@ import {
 
 import './Specification.scss';
 import {getJobSpecificationYsonSettings} from '../../../../store/selectors/thor/unipika';
+import {YsonDownloadButton} from '../../../../components/DownloadAttributesButton';
+import {getJob} from '../../../../store/selectors/job/detail';
 
 interface SpecificationProps {
     jobID: string;
@@ -92,6 +94,7 @@ export default function Specification({jobID}: SpecificationProps) {
     const {loading, loaded, error, errorData, specification} = useSelector(
         (state: RootState) => state.job.specification,
     );
+    const {id} = useSelector(getJob);
 
     useEffect(() => {
         dispatch(loadJobSpecification(jobID));
@@ -116,7 +119,16 @@ export default function Specification({jobID}: SpecificationProps) {
                                 folding={true}
                                 settings={settings}
                                 value={specification}
-                                extraTools={<Toolbar jobID={jobID} />}
+                                extraTools={
+                                    <Flex alignItems="center" gap={2}>
+                                        <YsonDownloadButton
+                                            value={specification}
+                                            settings={settings}
+                                            name={`specification_job_${id}`}
+                                        />
+                                        <Toolbar jobID={jobID} />
+                                    </Flex>
+                                }
                             />
                         </LoadDataHandler>
                     )}

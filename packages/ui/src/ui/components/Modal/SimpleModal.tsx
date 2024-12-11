@@ -19,6 +19,7 @@ interface SimpleModalProps {
     borderless?: boolean;
     onCancel: () => void;
     children?: React.ReactNode;
+    footerContent?: React.ReactNode;
     onOutsideClick?: () => void;
     className?: string;
     wrapperClassName?: string;
@@ -74,6 +75,12 @@ class SimpleModal extends Component<SimpleModalProps> {
         return <div className={contentClassName}>{loading ? this.renderLoader() : children}</div>;
     }
 
+    renderFooter() {
+        if (!this.props.footerContent) return null;
+
+        return <div className={b('footer')}>{this.props.footerContent}</div>;
+    }
+
     render() {
         const {visible, onOutsideClick, size, className, wrapperClassName} = this.props;
         return (
@@ -82,6 +89,7 @@ class SimpleModal extends Component<SimpleModalProps> {
                     <div className={b('wrapper', {size}, wrapperClassName)}>
                         {this.renderHeader()}
                         {this.renderContent()}
+                        {this.renderFooter()}
                     </div>
                 </ModalImpl>
             )
