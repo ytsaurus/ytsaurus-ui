@@ -37,6 +37,7 @@ import {StaleJobIcon} from '../../../pages/operations/OperationDetail/tabs/Jobs/
 
 import './JobGeneral.scss';
 import {UI_TAB_SIZE} from '../../../constants/global';
+import {YsonDownloadButton} from '../../../components/DownloadAttributesButton';
 
 const block = cn('job-general');
 
@@ -276,7 +277,18 @@ export default function JobGeneral() {
 
                 <Switch>
                     <Route path={`${path}/${Tab.ATTRIBUTES}`}>
-                        <Yson value={attributes} settings={settings} folding />
+                        <Yson
+                            value={attributes}
+                            settings={settings}
+                            folding
+                            extraTools={
+                                <YsonDownloadButton
+                                    value={attributes}
+                                    settings={settings}
+                                    name={`attributes_job_${id}`}
+                                />
+                            }
+                        />
                     </Route>
                     <Route path={`${path}/${Tab.DETAILS}`}>
                         <Details />

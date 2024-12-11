@@ -9,6 +9,8 @@ import Error from '../../components/Error/Error';
 import Yson from '../Yson/Yson';
 
 import {closeAttributesModal} from '../../store/actions/modals/attributes-modal';
+import {DownloadFileButton} from '../DownloadAttributesButton';
+import {attributesToString} from '../DownloadAttributesButton/helpers/attributesToString';
 
 export class AttributesModal extends Component {
     static propTypes = {
@@ -37,6 +39,19 @@ export class AttributesModal extends Component {
         );
     }
 
+    renderDownloadButton() {
+        const convertedValue = attributesToString(this.props.attributes, this.props.ysonSettings);
+        if (!convertedValue) return null;
+
+        return (
+            <DownloadFileButton
+                content={convertedValue}
+                name={`${this.props.title}.txt`}
+                type="application/txt"
+            />
+        );
+    }
+
     render() {
         const {visible, title, loading} = this.props;
 
@@ -44,6 +59,7 @@ export class AttributesModal extends Component {
             visible && (
                 <SimpleModal
                     title={<FormattedText text={title} />}
+                    footerContent={this.renderDownloadButton()}
                     visible={visible}
                     loading={loading}
                     onCancel={this.handleClose}

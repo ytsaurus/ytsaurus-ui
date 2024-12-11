@@ -3,6 +3,7 @@ import {useSelector} from 'react-redux';
 
 import {
     getOperationDetailsLoadingStatus,
+    getOperationId,
     getOperationTypedAttributes,
 } from '../../../../../store/selectors/operations/operation';
 import Yson from '../../../../../components/Yson/Yson';
@@ -11,6 +12,7 @@ import {useRumMeasureStop} from '../../../../../rum/RumUiContext';
 import {RumMeasureTypes} from '../../../../../rum/rum-measure-types';
 import {isFinalLoadingStatus} from '../../../../../utils/utils';
 import {useAppRumMeasureStart} from '../../../../../rum/rum-app-measures';
+import {YsonDownloadButton} from '../../../../../components/DownloadAttributesButton';
 
 function useOperationAttributesRumMesures() {
     const loadState = useSelector(getOperationDetailsLoadingStatus);
@@ -36,10 +38,25 @@ function useOperationAttributesRumMesures() {
 function OperationAttributes({className}: {className: string}) {
     const typedAttributes = useSelector(getOperationTypedAttributes);
     const settings = useSelector(getOperationAttributesYsonSettings);
+    const id = useSelector(getOperationId);
 
     useOperationAttributesRumMesures();
 
-    return <Yson className={className} value={typedAttributes} settings={settings} folding />;
+    return (
+        <Yson
+            className={className}
+            value={typedAttributes}
+            settings={settings}
+            extraTools={
+                <YsonDownloadButton
+                    value={typedAttributes}
+                    settings={settings}
+                    name={`operation_attributes_${id}`}
+                />
+            }
+            folding
+        />
+    );
 }
 
 export default React.memo(OperationAttributes);

@@ -33,6 +33,8 @@ import Loader from '../../../../../components/Loader/Loader';
 import {UnipikaSettings} from '../../../../../components/Yson/StructuredYson/StructuredYsonTypes';
 
 import './PipelineSpec.scss';
+import {YsonDownloadButton} from '../../../../../components/DownloadAttributesButton';
+import {pathToFileName} from '../../../helpers/pathToFileName';
 
 const block = cn('yt-pipeline-spec');
 
@@ -59,6 +61,11 @@ function PipelineSpec({path, data, error, name, onSave}: PipelineSpecProps) {
                 folding
                 extraTools={
                     <React.Fragment>
+                        <YsonDownloadButton
+                            value={data}
+                            settings={settings}
+                            name={`pipeline_spec_${pathToFileName(path)}`}
+                        />
                         <Button view="outlined" onClick={() => setShowEdit(true)}>
                             <Icon awesome="pencil" />
                             Edit {name}

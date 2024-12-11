@@ -14,7 +14,10 @@ import Yson from '../../../../../components/Yson/Yson';
 
 import {operationProps} from '../../../../../pages/operations/OperationDetail/tabs/details/Details/Details';
 
-import {getOperationDetailsLoadingStatus} from '../../../../../store/selectors/operations/operation';
+import {
+    getOperationDetailsLoadingStatus,
+    getOperationId,
+} from '../../../../../store/selectors/operations/operation';
 import {RumMeasureTypes} from '../../../../../rum/rum-measure-types';
 import {isFinalLoadingStatus} from '../../../../../utils/utils';
 import {useRumMeasureStop} from '../../../../../rum/RumUiContext';
@@ -25,6 +28,7 @@ import ExperimentAssignments from '../../ExperimentAssignments/ExperimentAssignm
 import {docsUrl} from '../../../../../config';
 import UIFactory from '../../../../../UIFactory';
 import {UI_COLLAPSIBLE_SIZE} from '../../../../../constants/global';
+import {YsonDownloadButton} from '../../../../../components/DownloadAttributesButton';
 
 const block = cn('operation-specification');
 
@@ -36,7 +40,7 @@ const onResize = throttle_(
     {leading: false},
 );
 
-function Specification({operation}) {
+function Specification({operation, operationId}) {
     const helpUrl = UIFactory.docsUrls['operations:operations_options'];
 
     const providedSpec = operation.typedProvidedSpec || operation.typedSpec;
@@ -88,6 +92,13 @@ function Specification({operation}) {
                         settings={unipika.prepareSettings()}
                         folding
                         virtualized
+                        extraTools={
+                            <YsonDownloadButton
+                                value={providedSpec}
+                                settings={unipika.prepareSettings()}
+                                name={`provider_specification_${operationId}`}
+                            />
+                        }
                     />
                 </CollapsibleSectionStateLess>
 
@@ -106,6 +117,13 @@ function Specification({operation}) {
                             settings={unipika.prepareSettings()}
                             folding
                             virtualized
+                            extraTools={
+                                <YsonDownloadButton
+                                    value={unrecognizedSpec}
+                                    settings={unipika.prepareSettings()}
+                                    name={`unrecognized_specification_${operationId}`}
+                                />
+                            }
                         />
                     </CollapsibleSectionStateLess>
                 )}
@@ -123,6 +141,13 @@ function Specification({operation}) {
                             settings={unipika.prepareSettings()}
                             folding
                             virtualized
+                            extraTools={
+                                <YsonDownloadButton
+                                    value={fullSpec}
+                                    settings={unipika.prepareSettings()}
+                                    name={`resulting_specification_${operationId}`}
+                                />
+                            }
                         />
                     </CollapsibleSectionStateLess>
                 )}
@@ -136,8 +161,9 @@ Specification.propTypes = {
     operation: operationProps.isRequired,
 };
 
-const mapStateToProps = ({operations}) => ({
-    operation: operations.detail.operation,
+const mapStateToProps = (state) => ({
+    operation: state.operations.detail.operation,
+    operationId: getOperationId(state),
 });
 
 const SpecificationConnected = connect(mapStateToProps)(Specification);

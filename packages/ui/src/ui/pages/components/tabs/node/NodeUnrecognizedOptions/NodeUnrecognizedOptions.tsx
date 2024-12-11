@@ -14,6 +14,7 @@ import {
 import Error from '../../../../../components/Error/Error';
 import Yson from '../../../../../components/Yson/Yson';
 import {getNodeUnrecognizedOptionsYsonSettings} from '../../../../../store/selectors/thor/unipika';
+import {YsonDownloadButton} from '../../../../../components/DownloadAttributesButton';
 
 export function NodeUnrecognizedOptions({host}: {host: string}) {
     const dispatch = useDispatch();
@@ -36,6 +37,13 @@ export function NodeUnrecognizedOptions({host}: {host: string}) {
             settings={unipikaSettings}
             folding
             virtualized
+            extraTools={
+                <YsonDownloadButton
+                    value={data}
+                    settings={unipikaSettings}
+                    name={`unrecognized_options_${host}`}
+                />
+            }
         />
     );
 }
