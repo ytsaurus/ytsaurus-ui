@@ -337,7 +337,7 @@ const AuthenticationTokensSection: FC<{
                             className: block('table-cell'),
                             render: (value) => {
                                 return value.value
-                                    ? moment(value.value).format('DD/MM/YYYY hh:mm:ss')
+                                    ? moment(value.value).format('DD/MM/YYYY HH:mm:ss')
                                     : '';
                             },
                         },
