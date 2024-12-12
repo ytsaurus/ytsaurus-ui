@@ -138,10 +138,13 @@
         }
     }
 
-    &__meta-item {
+    &__meta {
         margin-bottom: 20px;
-        &_with-buttons {
-            margin-right: 500px;
+    }
+
+    &__meta-item {
+        &_flags {
+            margin-right: 16px;
         }
     }
 

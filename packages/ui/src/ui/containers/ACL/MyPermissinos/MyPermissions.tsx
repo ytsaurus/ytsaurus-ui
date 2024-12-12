@@ -12,16 +12,13 @@ import './MyPermissions.scss';
 
 const block = cn('yt-my-permissions');
 
-export function MyPermissions({
-    userPermissions,
-    className,
-}: Pick<ACLReduxProps, 'userPermissions'> & {className?: string}) {
+export function MyPermissions({userPermissions}: Pick<ACLReduxProps, 'userPermissions'>) {
     const groups: Array<typeof userPermissions> = [];
-    for (let i = 0; i < userPermissions?.length; i += 4) {
+    for (let i = 0; i < userPermissions?.length ?? 0; i += 4) {
         groups.push(userPermissions.slice(i, i + 4));
     }
     return (
-        <Flex className={block(null, className)}>
+        <Flex className={block()}>
             {groups.map((items, index) => {
                 return <PermissionsGroup items={items} key={index} />;
             })}

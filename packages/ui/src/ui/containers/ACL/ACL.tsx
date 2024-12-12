@@ -633,19 +633,15 @@ class ACL extends Component<Props> {
                       {name: 'Object permissions', value: mainPermissions.count},
                   ];
 
-        const hasColumns = Boolean(aclMode);
         return (
             <Flex className={block('meta')} wrap alignItems="center">
                 <SegmentControl
-                    className={block('meta-item')}
+                    className={block('meta-overview')}
                     background="neutral-light"
                     groups={[segments, counters].filter(({length}) => length > 0)}
                 />
                 {aclMode !== AclMode.COLUMN_GROUPS_PERMISSISONS && (
-                    <MyPermissions
-                        className={block('meta-item', {'with-buttons': !hasColumns})}
-                        userPermissions={userPermissions}
-                    />
+                    <MyPermissions userPermissions={userPermissions} />
                 )}
             </Flex>
         );

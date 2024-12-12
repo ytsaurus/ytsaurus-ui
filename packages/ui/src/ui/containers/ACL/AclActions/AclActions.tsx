@@ -10,7 +10,6 @@ import RequestPermissions from '../RequestPermissions/RequestPermissions';
 import ManageAcl from '../ManageAcl/ManageAcl';
 import {ACLReduxProps} from '../ACL-connect-helpers';
 import {IdmKindType} from '../../../utils/acl/acl-types';
-import ManageInheritance from '../ManageInheritance/ManageInheritance';
 
 const block = cn('acl-user-permissions');
 
@@ -106,21 +105,6 @@ export class AclActions extends Component<Props> {
                                 columnGroups={columnGroups}
                             />
                             {aclMode !== AclMode.COLUMN_GROUPS_PERMISSISONS && (
-                                <ManageInheritance
-                                    loadAclData={loadAclData}
-                                    loading={loading}
-                                    error={error}
-                                    errorData={errorData}
-                                    path={path}
-                                    idmKind={idmKind}
-                                    version={version}
-                                    inheritAcl={inheritAcl}
-                                    updateAcl={this.updateAcl}
-                                    manageAclError={updateAclError}
-                                    cancelUpdateAcl={cancelUpdateAcl}
-                                />
-                            )}
-                            {aclMode !== AclMode.COLUMN_GROUPS_PERMISSISONS && (
                                 <ManageAcl
                                     loadAclData={loadAclData}
                                     loading={loading}
@@ -129,6 +113,7 @@ export class AclActions extends Component<Props> {
                                     path={path}
                                     idmKind={idmKind}
                                     version={version}
+                                    inheritAcl={inheritAcl}
                                     bossApproval={bossApproval}
                                     disableInheritanceResponsible={disableInheritanceResponsible}
                                     auditors={auditors}
