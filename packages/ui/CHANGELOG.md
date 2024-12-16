@@ -1,5 +1,23 @@
 # Changelog
 
+## [1.75.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.74.0...ui-v1.75.0) (2024-12-16)
+
+
+### Features
+
+* **Attributes:** add download button [YTFRONT-4310] ([6710c0b](https://github.com/ytsaurus/ytsaurus-ui/commit/6710c0b67ff012f3ebec4de3108c25827177f8a5))
+* **CellPreviewModal:** add support image preview [[#773](https://github.com/ytsaurus/ytsaurus-ui/issues/773)] ([7b266dc](https://github.com/ytsaurus/ytsaurus-ui/commit/7b266dc2f15d2a80dff861121244e927c4b2664a))
+* **Navigation/Table:** add support truncated image preview [[#773](https://github.com/ytsaurus/ytsaurus-ui/issues/773)] ([34daef1](https://github.com/ytsaurus/ytsaurus-ui/commit/34daef10fef4c22d0f546b2ec6350c0008135212))
+* **QueryTracker/Table:** add support truncated image preview [[#773](https://github.com/ytsaurus/ytsaurus-ui/issues/773)] ([39684bc](https://github.com/ytsaurus/ytsaurus-ui/commit/39684bc7d68ebb914d8bdddf27fa9f08da491242))
+* **VCS:** new list sort order [YTFRONT-4520] ([cb6b000](https://github.com/ytsaurus/ytsaurus-ui/commit/cb6b0008fecf69dd052dcde2ec249539ccb40a78))
+
+
+### Bug Fixes
+
+* **Accounts:** medium filter value in url [YTFRONT-4567] ([d61ff09](https://github.com/ytsaurus/ytsaurus-ui/commit/d61ff09edd2f841816132ddbf93c98b7234829fe))
+* **ManageTokensModal:** correct time format [[#914](https://github.com/ytsaurus/ytsaurus-ui/issues/914)] ([565b205](https://github.com/ytsaurus/ytsaurus-ui/commit/565b2050959b9b2687385bc6d753d5acf2aebb14))
+* **Toaster:** line break in toaster content [YTFRONT-4543] ([eb8faba](https://github.com/ytsaurus/ytsaurus-ui/commit/eb8fabaa788f6e78c6921c7bbd4a19280d6f3cc5))
+
 ## [1.74.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.73.0...ui-v1.74.0) (2024-12-09)
 
 
