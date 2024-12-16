@@ -35,7 +35,7 @@ import {ObjectPermissionRowWithExpand, PreparedApprover} from '../../store/selec
 
 import {SegmentControl, SegmentControlItem} from '../../components/SegmentControl/SegmentControl';
 import WithStickyToolbar from '../../components/WithStickyToolbar/WithStickyToolbar';
-import {PreparedRole} from '../../utils/acl';
+import {PreparedRole, isGranted} from '../../utils/acl';
 import {AclModeControl} from './AclModeControl';
 import {ExpandButton} from '../../components/ExpandButton';
 import {AclColumnsCell} from './AclColumnsCell';
@@ -601,7 +601,7 @@ class ACL extends Component<Props> {
             UIFactory.getAclPermissionsSettings()[idmKind];
 
         function toSegmentItem(name: string, role?: boolean | PreparedRole, invert?: boolean) {
-            const value = 'boolean' === typeof role ? role : role?.state === 'granted';
+            const value = isGranted(role);
             return {
                 name,
                 value: invert ? !value : value,

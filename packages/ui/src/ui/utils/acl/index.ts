@@ -165,3 +165,7 @@ export function convertFromUIPermission(permission: YTPermissionTypeUI): {
     }
     return {permission};
 }
+
+export function isGranted(role: boolean | PreparedRole | undefined) {
+    return 'boolean' === typeof role ? role : role?.state === 'granted';
+}
