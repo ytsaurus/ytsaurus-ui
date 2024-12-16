@@ -110,6 +110,10 @@ export interface YTCoreConfig {
          *  Label on the Login via OpenID button
          */
         buttonLabel?: string;
+        /**
+         * Represents the URL to which request will be redirected.
+         */
+        callbackBaseUrl?: string;
     };
     /**
      * Modifies headers of /api/yt/login request:

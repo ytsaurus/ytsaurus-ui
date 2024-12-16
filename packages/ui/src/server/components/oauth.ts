@@ -1,6 +1,13 @@
 import axios from 'axios';
 import type {Request, Response} from 'express';
+import crypto from 'node:crypto';
 import {YT_OAUTH_ACCESS_TOKEN_NAME, YT_OAUTH_REFRESH_TOKEN_NAME} from '../../shared/constants';
+
+function getRedirectURL(req: Request) {
+    const config = getOAuthSettings(req);
+
+    return config.callbackBaseUrl ?? `https://${req.get('host')}`;
+}
 
 export function isOAuthAllowed(req: Request) {
     const config = req.ctx.config.ytOAuthSettings;
@@ -72,14 +79,21 @@ export function saveOAuthTokensInCookies(res: Response, tokens: OAuthAuthorizati
     }
 }
 
-export function getOAuthLoginPath(req: Request) {
+export function getOAuthLoginPath(req: Request, res: Response) {
+    const {pathname, search, origin} = new URL(req.get('referrer') ?? '');
+
+    const state = `state_${crypto.randomUUID()}`;
+
+    res.cookie(state, {retPath: pathname + search});
+
     const config = getOAuthSettings(req);
-    const host = req.get('host');
+
     const params = new URLSearchParams({
         response_type: 'code',
         client_id: config.clientId,
         scope: config.scope,
-        redirect_uri: `https://${host}/api/oauth/callback`,
+        redirect_uri: `${config.callbackBaseUrl ?? origin ?? `https://${req.get('host')}`}/api/oauth/callback`,
+        state,
     });
 
     const url = new URL(config.authPath, config.baseURL);
@@ -95,9 +109,8 @@ export function getOAuthLogoutPath(req: Request) {
         return '/api/oauth/logout/callback';
     }
 
-    const host = req.get('host');
     const params = new URLSearchParams({
-        post_logout_redirect_uri: `https://${host}/api/oauth/logout/callback`,
+        post_logout_redirect_uri: `${getRedirectURL(req)}/api/oauth/logout/callback`,
         client_id: config.clientId,
     });
 
@@ -135,13 +148,13 @@ export async function exchangeOAuthToken(
     code: string,
 ): Promise<OAuthAuthorizationTokens> {
     const config = getOAuthSettings(req);
-    const host = req.get('host');
+
     const params = new URLSearchParams({
         grant_type: 'authorization_code',
         client_id: config.clientId,
         code: code as string,
         client_secret: config.clientSecret,
-        redirect_uri: `https://${host}/api/oauth/callback`,
+        redirect_uri: `${getRedirectURL(req)}/api/oauth/callback`,
     });
 
     const {data} = await axios.post(

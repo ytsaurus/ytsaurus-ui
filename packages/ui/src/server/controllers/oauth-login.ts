@@ -7,7 +7,7 @@ import {
 } from '../components/oauth';
 
 export function oauthLogin(req: Request, res: Response) {
-    res.redirect(getOAuthLoginPath(req));
+    res.redirect(getOAuthLoginPath(req, res));
 }
 
 export function oauthLogout(_: Request, res: Response) {
@@ -16,9 +16,15 @@ export function oauthLogout(_: Request, res: Response) {
 }
 
 export async function oauthCallback(req: Request, res: Response) {
-    const {code} = req.query;
+    const {code, state} = req.query;
     if (!code) {
         throw new Error('Authorization code is not specified');
+    }
+
+    let redirectURL = '/';
+
+    if (state) {
+        redirectURL = req.cookies[state as string]?.retPath ?? '/';
     }
 
     try {
@@ -26,7 +32,7 @@ export async function oauthCallback(req: Request, res: Response) {
 
         saveOAuthTokensInCookies(res, tokens);
 
-        res.redirect('/');
+        res.redirect(redirectURL);
     } catch (e) {
         req.ctx.logError('exchange token error', e);
         const message = e instanceof Error ? e.message : 'Unknown error';
