@@ -1,12 +1,15 @@
 .elements-error-details {
     &__details {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+
+        padding: 8px;
         margin-bottom: 10px;
 
-        .unipika-wrapper {
-            background-color: var(--main-background);
+        border-radius: var(--g-border-radius-l);
 
-            padding: 10px 15px;
-        }
+        background-color: var(--light-background);
     }
 
     &__message {
@@ -17,7 +20,7 @@
         margin-bottom: 5px;
 
         &-toggler {
-            margin-right: 5px;
+            margin-right: 4px;
         }
     }
 
@@ -27,7 +30,14 @@
     }
 
     &__tabs {
-        margin: 10px 0 20px;
+        span {
+            color: var(--g-color-text-complementary);
+            font-weight: 700;
+        }
+
+        ::before {
+            display: none;
+        }
     }
 
     &__inner-errors {

@@ -113,12 +113,7 @@ export default class ErrorDetails extends Component {
 
         return (
             <div className={b('tabs')}>
-                <Tabs
-                    onTabChange={this.changeCurrentTab}
-                    active={currentTab}
-                    items={items}
-                    underline
-                />
+                <Tabs onTabChange={this.changeCurrentTab} active={currentTab} items={items} />
             </div>
         );
     }
@@ -219,7 +214,8 @@ export default class ErrorDetails extends Component {
         return (
             <Icon
                 className={b('error-toggler')}
-                awesome={showDetails ? 'angle-up' : 'angle-down'}
+                awesome={showDetails ? 'angle-up' : 'angle-right'}
+                size="l"
             />
         );
     }

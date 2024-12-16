@@ -7,7 +7,6 @@ import cn from 'bem-cn-lite';
 
 import map_ from 'lodash/map';
 
-import ypath from '../../../common/thor/ypath';
 import {getCluster} from '../../../store/selectors/global';
 import {updateTitle} from '../../../store/actions/global';
 
@@ -18,13 +17,11 @@ import {
     MoveObjectModal,
     RestoreObjectModal,
 } from './PathEditorModal';
-import RequestPermissions from '../../../pages/navigation/tabs/ACL/RequestPermissions/RequestPermissions';
 import ErrorBoundary from '../../../components/ErrorBoundary/ErrorBoundary';
 import ContentViewer from './ContentViewer/ContentViewer';
 import {checkContentIsSupported} from './ContentViewer/helpers';
-import Error from '../../../components/Error/Error';
-import {Info} from '../../../components/Info/Info';
 import Tabs from '../../../components/Tabs/Tabs';
+import {NavigationError} from './NavigationError';
 
 import {Tab} from '../../../constants/navigation';
 import {LOADING_STATUS} from '../../../constants/index';
@@ -57,8 +54,6 @@ import CreateACOModal from '../modals/CreateACOModal';
 import Button from '../../../components/Button/Button';
 import Icon from '../../../components/Icon/Icon';
 import {showNavigationAttributesEditor} from '../../../store/actions/navigation/modals/attributes-editor';
-import {getPermissionDeniedError} from '../../../utils/errors';
-import {getParentPath} from '../../../utils/navigation';
 import UIFactory from '../../../UIFactory';
 
 import './Navigation.scss';
@@ -250,65 +245,12 @@ class Navigation extends Component {
     renderError() {
         const {
             error: {message, details},
-            isIdmSupported,
+            cluster,
+            path,
         } = this.props;
 
-        // Looking for permission denied error
-        const permissionDeniedError = getPermissionDeniedError(details);
-        const isPermissionDenied = permissionDeniedError && isIdmSupported;
-
         return (
-            <div>
-                <div className={block('error-block')}>
-                    <Error
-                        className={block('error-block')}
-                        message={message}
-                        error={permissionDeniedError ?? details}
-                    />
-                    {isPermissionDenied && this.renderRequestPermission(permissionDeniedError)}
-                </div>
-            </div>
-        );
-    }
-
-    renderRequestPermission(error) {
-        const objectType = ypath.getValue(error?.attributes, '/object_type');
-        const errorPath = ypath.getValue(error?.attributes, '/path');
-        const {path: currentPath, cluster} = this.props;
-        const isRequestPermissionsForPathAllowed = objectType === 'map_node';
-
-        const path = errorPath ?? currentPath;
-
-        const pathForRequest = isRequestPermissionsForPathAllowed ? path : getParentPath(path);
-        const textForRequest = isRequestPermissionsForPathAllowed
-            ? 'Request permission'
-            : 'Request permission for parent node';
-
-        return (
-            <div>
-                {!isRequestPermissionsForPathAllowed &&
-                    this.renderRequestPermissionIsNotAllowed(objectType)}
-
-                <RequestPermissions
-                    className={block('error-action-button')}
-                    buttonClassName={block('request-permissions-button')}
-                    parentPath={pathForRequest}
-                    path={pathForRequest}
-                    cluster={cluster}
-                    buttonText={textForRequest}
-                    buttonProps={{size: 'l', width: 'max'}}
-                />
-            </div>
-        );
-    }
-
-    renderRequestPermissionIsNotAllowed(objectType) {
-        return (
-            <Info className={block('error-block')}>
-                It is not possible to request access to the{' '}
-                {hammer.format['Readable'](objectType, {caps: 'none'})}. Please request access to
-                the parent directory.
-            </Info>
+            <NavigationError cluster={cluster} path={path} details={details} message={message} />
         );
     }
 
@@ -317,7 +259,7 @@ class Navigation extends Component {
 
         return (
             <ErrorBoundary>
-                <div className="navigation elements-main-section">
+                <div className={block({error: hasError}, 'elements-main-section')}>
                     <StickyContainer>
                         <div className={block('header')}>
                             <NavigationPermissionsNotice />
@@ -328,11 +270,9 @@ class Navigation extends Component {
                             </div>
                         </div>
 
-                        <div className={block('main')}>
-                            {loaded && this.renderView()}
-                            {hasError && this.renderError()}
-                        </div>
+                        <div className={block('main')}>{loaded && this.renderView()}</div>
                     </StickyContainer>
+                    {hasError && this.renderError()}
 
                     {UIFactory.yqlWidgetSetup?.renderWidget()}
 

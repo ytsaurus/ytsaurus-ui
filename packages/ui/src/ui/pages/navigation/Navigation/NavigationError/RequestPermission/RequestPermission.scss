@@ -1,0 +1,12 @@
+.request-permission {
+    &__request-permissions-button {
+        --_--height: auto;
+        width: fit-content;
+
+        padding: 5px 12px;
+    }
+}
+
+.request-permission-is-not-allowed {
+    margin-bottom: 12px;
+}
