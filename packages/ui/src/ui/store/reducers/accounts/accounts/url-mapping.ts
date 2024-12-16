@@ -70,6 +70,7 @@ export function getAccountsPreparedState(state: RootState, {query}: {query: Root
             'activeContentModeFilter',
             queryAccounts.activeContentModeFilter,
         );
+        updateIfChanged(draftAccounts, 'activeMediumFilter', queryAccounts.activeMediumFilter);
         updateIfChanged(draftAccounts, 'activeAccount', queryAccounts.activeAccount);
         updateIfChanged(draftAccounts, 'abcServiceFilter', queryAccounts.abcServiceFilter);
     });
