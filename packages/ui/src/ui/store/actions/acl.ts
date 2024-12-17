@@ -23,7 +23,13 @@ import UIFactory from '../../UIFactory';
 import {AclAction, HasIdmKind} from '../../store/reducers/acl/acl';
 import {isCancelled} from '../../utils/cancel-helper';
 import {RootState} from '../../store/reducers';
-import {IdmKindType, PreparedAclSubject, ResponsibleType, Role} from '../../utils/acl/acl-types';
+import {
+    IdmKindType,
+    PreparedAclSubject,
+    ResponsibleType,
+    Role,
+    UpdateAclParams,
+} from '../../utils/acl/acl-types';
 import {CheckPermissionResult} from '../../../shared/utils/check-permission';
 import {YTApiId, ytApiV3Id} from '../../rum/rum-wrap-api';
 
@@ -342,7 +348,13 @@ export function updateAcl(
         values,
         version,
         idmKind,
-    }: {path: string; values: Partial<UpdateAclValues>; version?: string} & HasIdmKind,
+        mode,
+    }: {
+        path: string;
+        values: Partial<UpdateAclValues>;
+        version?: string;
+        mode?: UpdateAclParams['mode'];
+    } & HasIdmKind,
     {normalizedPoolTree}: HasNormPoolTree = {},
 ): ThunkAclAction {
     return (dispatch, getState) => {
@@ -364,6 +376,7 @@ export function updateAcl(
                 version,
                 idmKind,
                 poolTree,
+                mode,
             })
             .then(() => {
                 dispatch({

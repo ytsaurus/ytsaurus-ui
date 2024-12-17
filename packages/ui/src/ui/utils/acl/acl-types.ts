@@ -258,4 +258,5 @@ export interface UpdateAclParams {
     version?: string;
     poolTree?: string;
     comment?: string;
+    mode?: 'keep-missing-fields';
 }
