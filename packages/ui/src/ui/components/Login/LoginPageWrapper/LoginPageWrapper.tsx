@@ -1,7 +1,8 @@
 import React from 'react';
+import UIFactory from '../../../UIFactory';
+import YT from '../../../config/yt-config';
 
-import LogoLight from '../../../assets/img/svg/YTsaurus-logo-light.svg';
-import LogoDark from '../../../assets/img/svg/YTsaurus-logo-dark.svg';
+import DefaultLoginLogo from './DefaultLoginLogo';
 
 import cn from 'bem-cn-lite';
 
@@ -16,13 +17,11 @@ interface Props {
 }
 
 function LoginPageWrapper({theme, children}: Props) {
+    const {LoginLogo = DefaultLoginLogo} = UIFactory.getClusterAppearance(YT.cluster) || {};
+
     return (
         <div className={block(null)}>
-            {theme === 'light' ? (
-                <LogoLight className={block('logo')} />
-            ) : (
-                <LogoDark className={block('logo')} />
-            )}
+            <LoginLogo theme={theme} />
             <div className={block('content')}>{children}</div>
         </div>
     );
