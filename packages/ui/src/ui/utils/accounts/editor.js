@@ -2,6 +2,7 @@ import reduce_ from 'lodash/reduce';
 
 import yt from '@ytsaurus/javascript-wrapper/lib/yt';
 
+import {ROOT_ACCOUNT_NAME} from '../../constants/accounts/accounts';
 import {EDITOR_TABS} from '../../constants/accounts/editor';
 import hammer from '../../common/hammer';
 import {Toaster} from '@gravity-ui/uikit';
@@ -16,12 +17,13 @@ const toaster = new Toaster();
 const ERRRO_TOASTER_TIMEOUT = 10000;
 const SUCCESS_TOASTER_TIMEOUT = 5000;
 
-export function setResponsibleUsers(cluster, users, accountName) {
+export function setResponsibleUsers(cluster, users, accountName, inheritAcl) {
     const path = accountName;
 
     return updateAcl(cluster, path, {
         idmKind: IdmObjectType.ACCOUNT,
         responsible: users,
+        inheritAcl,
     });
 }
 
@@ -40,7 +42,12 @@ export function createAccountFromInfo(cluster, newAccountInfo) {
             return Promise.all([
                 setAccountAbc(account, id, slug).catch(() => {}),
                 createHome ? createAccountHome(account).catch(() => {}) : Promise.resolve(),
-                setResponsibleUsers(cluster, responsibles, account).catch(() => {}),
+                setResponsibleUsers(
+                    cluster,
+                    responsibles,
+                    account,
+                    parentAccount !== ROOT_ACCOUNT_NAME,
+                ).catch(() => {}),
             ]);
         });
     };
