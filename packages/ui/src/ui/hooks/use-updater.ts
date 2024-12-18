@@ -20,16 +20,27 @@ export type UseUpdaterOptions = {
      * if `true` then `fn()` will be called only once
      */
     onlyOnce?: boolean;
+    /**
+     * Enforces to ignore 'Use auto refresh' user option
+     */
+    forceAutoRefresh?: boolean;
 };
 
 export function useUpdater(
     fn?: () => unknown,
-    {timeout = DEFAULT_UPDATER_TIMEOUT, destructFn, onlyOnce}: UseUpdaterOptions = {},
+    {
+        timeout = DEFAULT_UPDATER_TIMEOUT,
+        destructFn,
+        onlyOnce,
+        forceAutoRefresh,
+    }: UseUpdaterOptions = {},
 ) {
     const useAutoRefresh = useSelector(getUseAutoRefresh) as boolean;
     const optionsRef = React.useRef({skipNextCall: !useAutoRefresh});
 
-    optionsRef.current.skipNextCall = !useAutoRefresh;
+    const allowAutoRefresh = forceAutoRefresh ?? useAutoRefresh;
+
+    optionsRef.current.skipNextCall = !allowAutoRefresh;
 
     React.useEffect(() => {
         let updater: Updater | undefined;

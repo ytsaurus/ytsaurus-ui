@@ -180,6 +180,7 @@ async function loadMastersConfig(): Promise<[MastersConfigResponse, MasterAlert[
     const primaryMaster = primaryMasterResult.output;
     const secondaryMasters = secondaryMastersResult.output;
 
+    const timestampProvierCellId = ypath.getValue(timestampProviderCellTag.output)?.cell_id;
     const timestampProviders = !timestampProvidersResult.output
         ? {}
         : {
@@ -190,8 +191,10 @@ async function loadMastersConfig(): Promise<[MastersConfigResponse, MasterAlert[
                       attributes: ypath.getValue(value, '/@'),
                   };
               }),
-              cellId: ypath.getValue(timestampProviderCellTag.output)?.cell_id,
-              cellTag: getCellIdTag(ypath.getValue(timestampProviderCellTag.output)?.cell_id),
+              cellId: isSameClusterByCellId(masterCellId, timestampProvierCellId)
+                  ? timestampProvierCellId
+                  : undefined,
+              cellTag: getCellIdTag(timestampProvierCellId),
           };
 
     const mainResult: MastersConfigResponse = {
@@ -218,6 +221,7 @@ async function loadMastersConfig(): Promise<[MastersConfigResponse, MasterAlert[
                         attributes: ypath.getValue(value, '/@'),
                     };
                 }),
+                cellId: replaceCellIdTag(masterCellId, Number(cellTag).toString(16)),
                 cellTag: Number(cellTag),
             };
         }),
@@ -352,16 +356,13 @@ function loadHydra(
 }
 
 export const getStateForHost = async (
-    host: string,
+    path: string,
 ): Promise<'leading' | 'following' | undefined> => {
-    const cypressPath = '//sys/primary_masters';
-    const hydraPath = '/orchid/monitoring/hydra';
-
     const masterDataRequests: BatchSubRequest[] = [
         {
             command: 'get' as const,
             parameters: {
-                path: cypressPath + '/' + host + hydraPath,
+                path: `${path}/orchid/monitoring/hydra`,
                 ...USE_SUPRESS_SYNC,
             },
         },
@@ -511,4 +512,27 @@ function getCellIdTag(uuid?: string): number | undefined {
     }
     const [, , third = ''] = uuid.split('-');
     return Number(`0x${third.substring(0, third.length - 4)}`);
+}
+
+function replaceCellIdTag(uuid?: string, newCellIdTag?: string) {
+    if (!uuid || !newCellIdTag) {
+        return undefined;
+    }
+
+    const [first, second, third, ...rest] = uuid.split('-');
+    const newThird = newCellIdTag + third.substring(third.length - 4);
+    return [first, second, newThird, ...rest].join('-');
+}
+
+function isSameClusterByCellId(lCell_id?: string, rClell_id?: string) {
+    if (!lCell_id || !rClell_id) {
+        return false;
+    }
+
+    return removeCellTag(lCell_id) === removeCellTag(rClell_id);
+}
+
+function removeCellTag(cellId: string) {
+    const [first, second, third, ...rest] = cellId.split('-');
+    return [first, second, third.substring(third.length - 4), ...rest].join('-');
 }
