@@ -12,8 +12,7 @@ type SwitchLeaderDialogProps = {
     confirm: (newLeader: string) => Promise<void>;
     visible: boolean;
     cellId: string;
-    hosts: string[];
-    leadingHost: string;
+    hosts: Array<{getPath: () => string; state: 'leading'}>;
 };
 
 type FormValues = {
@@ -24,11 +23,15 @@ const SwitchLeaderDialog = (props: SwitchLeaderDialogProps) => {
     const [error, setError] = useState(undefined);
 
     const selectLeadingHostOptions = props.hosts.map((host) => {
+        const path = host.getPath();
         return {
-            value: host,
-            content: host,
+            value: path,
+            content: path.split('/').pop(),
         };
     });
+
+    const leader = props.hosts.find(({state}) => state === 'leading');
+    const leaderPath = leader?.getPath();
 
     return (
         <YTDFDialog<FormValues>
@@ -37,7 +40,7 @@ const SwitchLeaderDialog = (props: SwitchLeaderDialogProps) => {
                 title: `Switch leader for ${props.cellId}`,
             }}
             initialValues={{
-                leading_primary_master: [props.leadingHost],
+                leading_primary_master: leaderPath ? [leaderPath] : [],
             }}
             fields={[
                 {
@@ -79,27 +82,22 @@ const SwitchLeaderDialog = (props: SwitchLeaderDialogProps) => {
 type SwitchLeaderButtonProps = {
     className: string;
     cellId: string;
-    hosts: string[];
-    leadingHost: string;
+    hosts: Array<{getPath: () => string; state: 'leading'}>;
 };
 
-export const SwitchLeaderButton = ({
-    cellId,
-    hosts,
-    leadingHost,
-    className,
-}: SwitchLeaderButtonProps) => {
+export const SwitchLeaderButton = ({cellId, hosts, className}: SwitchLeaderButtonProps) => {
     const [visible, setVisible] = useState(false);
 
     const handleClick = () => {
         setVisible(true);
     };
 
-    const handleConfirm = async (newLeader: string) => {
+    const handleConfirm = async (newLeaderPath: string) => {
+        const leaderAddress = newLeaderPath.split('/').pop();
         const switchLeader = () => {
             return ytApiV4Id.switchLeader(YTApiId.switchLeader, {
                 cell_id: cellId,
-                new_leader_address: newLeader,
+                new_leader_address: leaderAddress,
             });
         };
 
@@ -108,7 +106,7 @@ export const SwitchLeaderButton = ({
             successContent() {
                 return (
                     <AppStoreProvider>
-                        <SwitchLeaderShortInfo newLeaderAddress={newLeader} />
+                        <SwitchLeaderShortInfo newLeaderPath={newLeaderPath} />
                     </AppStoreProvider>
                 );
             },
@@ -134,14 +132,15 @@ export const SwitchLeaderButton = ({
             >
                 <Icon awesome="crowndiamond" />
             </Button>
-            <SwitchLeaderDialog
-                cellId={cellId}
-                hosts={hosts}
-                leadingHost={leadingHost}
-                confirm={handleConfirm}
-                cancel={handleCancel}
-                visible={visible}
-            />
+            {visible && (
+                <SwitchLeaderDialog
+                    visible
+                    cellId={cellId}
+                    hosts={hosts}
+                    confirm={handleConfirm}
+                    cancel={handleCancel}
+                />
+            )}
         </React.Fragment>
     );
 };
