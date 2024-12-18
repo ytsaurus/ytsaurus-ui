@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.75.1](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.75.0...ui-v1.75.1) (2024-12-18)
+
+
+### Bug Fixes
+
+* **Accounts/Create:** use 'inherit_acl=false' only if parent is 'root' [YTFRONT-4561] ([0a59da8](https://github.com/ytsaurus/ytsaurus-ui/commit/0a59da8bcbe846c07c41a72c40e96d56202198b5))
+* **ACL:** use 'keep-missing-fields' mode for 'Manage Responsibles'/'Manage Inheritance' [YTFRONT-4560] ([1e00b7a](https://github.com/ytsaurus/ytsaurus-ui/commit/1e00b7ae5846d30b4a7009c2b1e7b518306f536d))
+* **OAuth:** fix redirect to previous page instead of / ([77e3471](https://github.com/ytsaurus/ytsaurus-ui/commit/77e347147f95b601e3dd3a691f4e3f8077f79f88))
+* **Scheduling/Overview:** add bottom padding [YTFRONT-4530] ([43837e8](https://github.com/ytsaurus/ytsaurus-ui/commit/43837e8a8dc395cb02ba512bfe0cc0faa75ece44))
+
 ## [1.75.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.74.0...ui-v1.75.0) (2024-12-16)
 
 
