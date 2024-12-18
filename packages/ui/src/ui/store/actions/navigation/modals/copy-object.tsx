@@ -23,56 +23,57 @@ const toaster = new Toaster();
 
 interface CopyOptions {
     preserve_account?: boolean;
+    recursive?: boolean;
 }
 
-function copyObjectIntoDirectory(from: string, to: string, {preserve_account}: CopyOptions) {
+function copyObjectIntoDirectory(from: string, to: string, options: CopyOptions) {
     const parts = from.split('/');
     const name = parts[parts.length - 1];
     return yt.v3.copy({
         parameters: {
             source_path: preparePath(from),
             destination_path: prepareDestinationPath(to, name),
-            preserve_account,
+            ...options,
         },
         cancellation: requests.saveCancelToken,
     });
 }
 
-function copyObjectWithRename(from: string, to: string, {preserve_account}: CopyOptions) {
+function copyObjectWithRename(from: string, to: string, options: CopyOptions) {
     return yt.v3.copy({
         parameters: {
             source_path: preparePath(from),
             destination_path: to,
-            preserve_account,
+            ...options,
         },
         cancellation: requests.saveCancelToken,
     });
 }
 
-function copySingleObject(from: string, to: string, {preserve_account}: CopyOptions) {
+function copySingleObject(from: string, to: string, options: CopyOptions) {
     const lastChar = to.charAt(to.length - 1);
 
     if (lastChar === '/') {
-        return copyObjectIntoDirectory(from, to, {preserve_account});
+        return copyObjectIntoDirectory(from, to, options);
     }
 
     return yt.v3
         .exists({parameters: {path: `${to}&`}, cancellation: requests.saveCancelToken})
         .then((exist: boolean) => {
             return exist
-                ? copyObjectIntoDirectory(from, to, {preserve_account})
-                : copyObjectWithRename(from, to, {preserve_account});
+                ? copyObjectIntoDirectory(from, to, options)
+                : copyObjectWithRename(from, to, options);
         });
 }
 
 function copyObjects(
     items: Array<{path: string; titleUnquoted: string}>,
     copyingPath: string,
-    {preserve_account}: CopyOptions,
+    options: CopyOptions,
 ) {
     if (items.length === 1) {
         const [{path}] = items;
-        return copySingleObject(path, copyingPath, {preserve_account});
+        return copySingleObject(path, copyingPath, options);
     }
 
     return yt.v3.startTransaction({timeout: 120000}).then((id: string) => {
@@ -83,7 +84,7 @@ function copyObjects(
                     transaction_id: id,
                     source_path: preparePath(node.path),
                     destination_path: prepareDestinationPath(copyingPath, node.titleUnquoted),
-                    preserve_account,
+                    ...options,
                 },
             };
         });
@@ -108,7 +109,7 @@ export function copyObject(
     onSuccess: () => void,
     multipleMode: boolean,
     items: Array<{path: string; titleUnquoted: string}>,
-    {preserve_account}: CopyOptions,
+    options: CopyOptions,
 ) {
     return (dispatch: Dispatch) => {
         dispatch({type: COPY_OBJECT.REQUEST});
@@ -116,8 +117,8 @@ export function copyObject(
         return Promise.resolve()
             .then(() =>
                 multipleMode
-                    ? copyObjects(items, copyingPath, {preserve_account})
-                    : copySingleObject(objectPath, copyingPath, {preserve_account}),
+                    ? copyObjects(items, copyingPath, options)
+                    : copySingleObject(objectPath, copyingPath, options),
             )
             .then(() => {
                 dispatch({type: COPY_OBJECT.SUCCESS});

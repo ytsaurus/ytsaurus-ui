@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import {Checkbox, Flex} from '@gravity-ui/uikit';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 
@@ -9,9 +10,11 @@ import {
     abortRequests,
     copyObject,
 } from '../../../../../store/actions/navigation/modals/copy-object';
-import {closeEditingPopup} from '../../../../../store/actions/navigation/modals/path-editing-popup';
+import {
+    closeEditingPopup,
+    hideError,
+} from '../../../../../store/actions/navigation/modals/path-editing-popup';
 import {updateView} from '../../../../../store/actions/navigation';
-import {Checkbox} from '@gravity-ui/uikit';
 
 class CopyObjectModal extends Component {
     static propTypes = {
@@ -33,9 +36,10 @@ class CopyObjectModal extends Component {
         copyObject: PropTypes.func.isRequired,
         abortRequests: PropTypes.func.isRequired,
         closeEditingPopup: PropTypes.func.isRequired,
+        hideError: PropTypes.func.isRequired,
     };
 
-    state = {preserve_account: false};
+    state = {preserve_account: false, recursive: false};
 
     handleConfirmButtonClick = () => {
         const {copyPath} = this.props;
@@ -61,11 +65,12 @@ class CopyObjectModal extends Component {
 
     doCopy(toPath) {
         const {copyObject, updateView, objectPath, multipleMode, items} = this.props;
-        const {preserve_account} = this.state;
+        const {preserve_account, recursive} = this.state;
 
-        copyObject(objectPath, toPath, updateView, multipleMode, items, {preserve_account}).then(
-            () => this.resetOptions(),
-        );
+        copyObject(objectPath, toPath, updateView, multipleMode, items, {
+            preserve_account,
+            recursive,
+        }).then(() => this.resetOptions());
     }
 
     render() {
@@ -102,15 +107,29 @@ class CopyObjectModal extends Component {
     }
 
     renderOptions() {
-        return <Checkbox onUpdate={this.onUpdatePreserveAccount}>Preserve account</Checkbox>;
+        return (
+            <Flex direction="column" gap={2}>
+                <Checkbox onUpdate={this.onUpdatePreserveAccount}>Preserve account</Checkbox>
+                <Checkbox onUpdate={this.onUpdateRecursiveCopy}>
+                    Make parent directories as needed
+                </Checkbox>
+            </Flex>
+        );
     }
 
     resetOptions() {
         this.onUpdatePreserveAccount(false);
+        this.onUpdateRecursiveCopy(false);
     }
 
+    onUpdateRecursiveCopy = (recursive) => {
+        this.props.hideError();
+        this.setState((state) => ({...state, recursive}));
+    };
+
     onUpdatePreserveAccount = (preserve_account) => {
-        this.setState({preserve_account});
+        this.props.hideError();
+        this.setState((state) => ({...state, preserve_account}));
     };
 }
 
@@ -145,6 +164,7 @@ const mapDispatchToProps = {
     copyObject,
     abortRequests,
     closeEditingPopup,
+    hideError,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(CopyObjectModal);
