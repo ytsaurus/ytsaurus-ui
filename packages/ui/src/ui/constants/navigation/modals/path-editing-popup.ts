@@ -14,7 +14,7 @@ export const NetworkCode = {
     NETWORK_ERROR: 0,
     MOUNT_ERROR: 1706,
     NODE_COUNT_LIMIT: 902,
-};
+} as const;
 
 export const ErrorMessage = {
     [NetworkCode.EXIST]: 'Object with the same path already exists. Please, try another one',
