@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.76.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.75.1...ui-v1.76.0) (2024-12-19)
+
+
+### Features
+
+* **CopyObjectModal:** add recursive folders creating while copying [YTFRONT-3041] ([670c084](https://github.com/ytsaurus/ytsaurus-ui/commit/670c084f758d30477ca0cc9915070e06aacbcd62))
+* **ManageTokens:** optional password for token issuing ([e696da8](https://github.com/ytsaurus/ytsaurus-ui/commit/e696da8540821afc5f471c2c3210c75bb9deba58))
+* **Navigation:** add pages for 500 and 901 errors [YTFRONT-4049] ([8b20786](https://github.com/ytsaurus/ytsaurus-ui/commit/8b20786304fcdc2cf3210756483f48d7bc92d836))
+
 ## [1.75.1](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.75.0...ui-v1.75.1) (2024-12-18)
 
 
