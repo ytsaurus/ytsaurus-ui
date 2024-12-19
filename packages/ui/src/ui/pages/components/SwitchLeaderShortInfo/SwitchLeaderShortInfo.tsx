@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useRef, useState} from 'react';
 import cn from 'bem-cn-lite';
 
 import MetaTable from '../../../components/MetaTable/MetaTable';
@@ -8,11 +8,12 @@ import {getStateForHost, loadMasters} from '../../../store/actions/system/master
 import {useDispatch} from 'react-redux';
 import moment from 'moment';
 import './SwitchLeaderShortInfo.scss';
+import {useUpdater} from '../../../hooks/use-updater';
 
 const block = cn('switch-leader-short-info');
 
 interface Props {
-    newLeaderAddress: string;
+    newLeaderPath: string;
 }
 
 export function SwitchLeaderShortInfo(props: Props) {
@@ -21,44 +22,26 @@ export function SwitchLeaderShortInfo(props: Props) {
     const [finishTime, setFinishTime] = useState<any>();
     const dispatch = useDispatch();
 
-    useEffect(() => {
-        const intervalId = setInterval(() => {
+    const updateCurrentTime = React.useCallback(() => {
+        if (!finishTime) {
             setCurrentTime(moment());
+        }
+    }, [finishTime]);
+    useUpdater(updateCurrentTime, {timeout: 1000, forceAutoRefresh: true});
 
-            if (finishTime) {
-                clearInterval(intervalId);
-            }
-        }, 1 * 1000);
+    const updateFn = React.useCallback(async () => {
+        if (finishTime) {
+            return;
+        }
 
-        return () => {
-            clearInterval(intervalId);
-        };
-    }, []);
+        const hostState = await getStateForHost(props.newLeaderPath);
 
-    useEffect(() => {
-        let stillMounted = true;
-
-        const waitForState = async () => {
-            try {
-                const hostState = await getStateForHost(props.newLeaderAddress);
-
-                if (hostState === 'leading') {
-                    setFinishTime(moment());
-                    dispatch(loadMasters());
-                }
-            } catch {
-                if (stillMounted) {
-                    waitForState();
-                }
-            }
-        };
-
-        waitForState();
-
-        return () => {
-            stillMounted = false;
-        };
-    }, [props.newLeaderAddress]);
+        if (hostState === 'leading') {
+            setFinishTime(moment());
+            dispatch(loadMasters());
+        }
+    }, [props.newLeaderPath, finishTime, dispatch]);
+    useUpdater(updateFn, {timeout: 3000, forceAutoRefresh: true});
 
     return (
         <div className={block()}>

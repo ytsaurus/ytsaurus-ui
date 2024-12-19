@@ -57,14 +57,6 @@ class MasterGroup extends Component {
             'no-quorum': 'missing',
             unknown: 'unknown',
         };
-        let leadingHost = '';
-        const hosts = instances.map(({$address, state}) => {
-            if (state === 'leading') {
-                leadingHost = $address;
-            }
-
-            return $address;
-        });
 
         return (
             <Fragment>
@@ -96,13 +88,7 @@ class MasterGroup extends Component {
                     <div className={b('quorum-cell')} title={cellTitle}>
                         {cellTag && <Icon className={b('icon-glyph')} face="solid" awesome="tag" />}
                         {hammer.format['Hex'](cellTag)}
-                        {cellId && (
-                            <SwitchLeaderButton
-                                cellId={cellId}
-                                hosts={hosts}
-                                leadingHost={leadingHost}
-                            />
-                        )}
+                        {cellId && <SwitchLeaderButton cellId={cellId} hosts={instances} />}
                     </div>
                 </div>
             </Fragment>

@@ -255,6 +255,7 @@ function processMastersConfig(
                 instances: map_(sortBy_(master.addresses, 'host'), (address) => {
                     return new MasterInstance(address, 'secondary', master.cellTag);
                 }),
+                cellId: master.cellId,
                 cellTag: master.cellTag,
             };
         }),
@@ -262,6 +263,7 @@ function processMastersConfig(
             instances: map_(sortBy_(timestampProviders.addresses, 'host'), (address) => {
                 return new MasterInstance(address, 'providers', timestampProviders.cellTag);
             }),
+            cellId: timestampProviders.cellId,
             cellTag: timestampProviders.cellTag,
         },
         discovery: {
@@ -352,6 +354,7 @@ function processMastersData(
     const providers = {
         instances: orderBy_(providersInstances, (instance) => instance.$address),
         cellTag: state.providers.cellTag,
+        cellId: state.providers.cellId,
         quorum: getQuorum(providersInstances),
         leader: getLeader(providersInstances),
     };
