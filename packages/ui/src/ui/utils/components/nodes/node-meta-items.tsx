@@ -30,10 +30,12 @@ export function getNodeMetaItems({
     disableWriteSession,
     disableTabletCells,
     full,
+    jobProxyBuildVersion,
     lastSeenTime,
     maintenanceRequests,
     state,
     rack,
+    version,
 }: Pick<
     Node,
     | 'alertCount'
@@ -46,10 +48,12 @@ export function getNodeMetaItems({
     | 'disableWriteSession'
     | 'disableTabletCells'
     | 'full'
+    | 'jobProxyBuildVersion'
     | 'lastSeenTime'
     | 'maintenanceRequests'
     | 'state'
     | 'rack'
+    | 'version'
 >): Array<MetaTableItem> {
     const stateText = hammer.format['FirstUppercase'](state);
     const stateTheme = getStateTheme(state);
@@ -123,6 +127,16 @@ export function getNodeMetaItems({
             value: hammer.format['DateTime'](lastSeenTime, {
                 format: 'full',
             }),
+        },
+        {
+            key: 'version',
+            value: version,
+            visible: Boolean(version),
+        },
+        {
+            key: 'job_proxy_build_version',
+            value: jobProxyBuildVersion,
+            visible: Boolean(jobProxyBuildVersion),
         },
     ];
 }

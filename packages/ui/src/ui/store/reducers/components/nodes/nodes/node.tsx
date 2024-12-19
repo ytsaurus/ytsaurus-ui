@@ -84,6 +84,7 @@ export class Node {
         '/statistics/total_used_space',
         '/statistics/total_available_space',
         'maintenance_requests',
+        'job_proxy_build_version',
     ] as const;
 
     static getResourcesSlots(resourceUsage: unknown, resourceLimits: unknown, key: string) {
@@ -162,6 +163,7 @@ export class Node {
     userSlotsProgress: number | undefined;
     userTags!: string[];
     version?: string;
+    jobProxyBuildVersion?: string;
 
     private statistics: unknown;
 
@@ -187,6 +189,7 @@ export class Node {
         this.memory = ypath.getValue(this.statistics, '/memory') || {};
 
         this.version = ypath.getValue(attributes, '/version');
+        this.jobProxyBuildVersion = ypath.getValue(attributes, '/job_proxy_build_version');
         this.physicalHost = ypath.getValue(attributes, '/annotations')?.['physical_host'];
         this.dataCenter = ypath.getValue(attributes, '/data_center');
         this.state = ypath.getValue(attributes, '/state');
@@ -491,6 +494,7 @@ export const AttributesByProperty: Record<keyof Node, ReadonlyArray<AttributeNam
     gpu: gpuAttributes,
     host: hostAttributes,
     IOWeight: ['/statistics/media'],
+    jobProxyBuildVersion: ['job_proxy_build_version'],
     lastSeenTime: ['last_seen_time'],
     locations: locationsAttributes,
     maintenanceRequests: ['maintenance_requests'],
