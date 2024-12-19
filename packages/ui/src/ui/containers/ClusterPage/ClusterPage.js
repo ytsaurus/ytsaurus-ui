@@ -37,7 +37,10 @@ import {setSetting} from '../../store/actions/settings';
 import {unmountCluster, updateCluster} from '../../store/actions/cluster-params';
 import {updateTitle} from '../../store/actions/global';
 import {getClusterUiConfig} from '../../store/selectors/global';
-import {isQueryTrackerAllowed} from '../../store/selectors/global/experimental-pages';
+import {
+    isExperimentalPagesReady,
+    isQueryTrackerAllowed,
+} from '../../store/selectors/global/experimental-pages';
 import {getClusterConfig} from '../../utils';
 import {NAMESPACES, SettingName} from '../../../shared/constants/settings';
 import {getClusterPagePaneSizes, getStartingPage} from '../../store/selectors/settings';
@@ -88,6 +91,7 @@ class ClusterPage extends Component {
 
         allowChyt: PropTypes.bool,
         allowQueryTracker: PropTypes.bool,
+        allowStartPageRedirect: PropTypes.bool,
     };
 
     state = {
@@ -193,6 +197,7 @@ class ClusterPage extends Component {
             paramsError,
             allowChyt,
             allowQueryTracker,
+            allowStartPageRedirect,
         } = this.props;
 
         return isLoaded && !this.isParamsLoading() ? (
@@ -238,7 +243,9 @@ class ClusterPage extends Component {
                         to={`/:cluster/${Page.COMPONENTS}/versions`}
                     />
                     {makeExtraPageRoutes()}
-                    <Redirect from={`/${cluster}/`} to={`/${cluster}/${startingPage}`} />
+                    {allowStartPageRedirect && (
+                        <Redirect from={`/${cluster}/`} to={`/${cluster}/${startingPage}`} />
+                    )}
                 </Switch>
 
                 <Route path="/:cluster/:page/:tab?" component={PageTracker} />
@@ -337,6 +344,7 @@ function mapStateToProps(state) {
         paramsCluster,
         allowQueryTracker: isQueryTrackerAllowed(state),
         allowChyt: Boolean(getClusterUiConfig(state).chyt_controller_base_url),
+        allowStartPageRedirect: isExperimentalPagesReady(state),
     };
 }
 

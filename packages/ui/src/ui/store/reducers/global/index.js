@@ -80,7 +80,7 @@ const initialState = {
 
     asideHeaderWidth: 56,
 
-    allowedExperimentalPages: [],
+    allowedExperimentalPages: undefined,
 };
 
 function updatedTitle(state, {cluster, page, path, clusters}) {

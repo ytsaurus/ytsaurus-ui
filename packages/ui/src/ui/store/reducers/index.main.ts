@@ -98,7 +98,7 @@ export type RootState = Omit<ReturnType<ReturnType<typeof makeRootReducer>>, 'gl
         cluster?: string;
         rootPagesCluster?: string;
         asideHeaderWidth: number;
-        allowedExperimentalPages: Array<string>;
+        allowedExperimentalPages?: Array<string>;
         ytAuthCluster?: string;
         defaultPoolTree?: string;
     };

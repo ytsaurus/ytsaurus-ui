@@ -48,7 +48,7 @@ const getRecentPagesInfoRaw = createSelector(
         const expPages = UIFactory.getExperimentalPages();
         const hiddenPages = new Set(
             expPages.filter((expPages) => {
-                return !allowExpPages.includes(expPages);
+                return !allowExpPages?.includes(expPages);
             }),
         );
 
