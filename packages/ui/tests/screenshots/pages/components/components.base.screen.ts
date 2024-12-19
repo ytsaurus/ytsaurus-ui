@@ -112,10 +112,10 @@ test('Components - Versions', async ({page}) => {
     await page.waitForSelector('.versions-summary');
 
     await replaceInnerHtml(page, {
-        '.versions-summary__version span': 'XX.X.X-local-os~XXXXXXXXXXXXXXXX+distbuild',
         '.yt-host__tooltip': 'local:XXX',
+        '.version-cell__text': 'XX.X.X-local-os~XXXXXXXXXXXXXXXX+distbuild',
     });
-    replaceInnerHtmlForDateTime(page, ['.components-versions__table-item_type_start-time span']);
+    replaceInnerHtmlForDateTime(page, ['td.components-versions__table-item_type_start-time span']);
 
     await expect(page).toHaveScreenshot();
 });
