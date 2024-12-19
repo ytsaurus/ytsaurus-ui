@@ -35,6 +35,8 @@ interface Props {
     physicalHost: Node['physicalHost'];
     host: Node['host'];
     maintenanceRequests?: Node['maintenanceRequests'];
+    version?: Node['version'];
+    jobProxyBuildVersion?: Node['jobProxyBuildVersion'];
 }
 
 function NodeMeta({
@@ -53,9 +55,11 @@ function NodeMeta({
     disableJobs,
     disableTabletCells,
     disableWriteSession,
+    jobProxyBuildVersion,
     physicalHost,
     host,
     maintenanceRequests,
+    version,
 }: Props): ReturnType<React.VFC> {
     const clusterConfig = useSelector(getCurrentClusterConfig);
 
@@ -71,10 +75,12 @@ function NodeMeta({
             disableTabletCells,
             disableWriteSession,
             full,
+            jobProxyBuildVersion,
             lastSeenTime,
             rack,
             state,
             maintenanceRequests,
+            version,
         });
     }, [
         alertCount,
@@ -87,10 +93,12 @@ function NodeMeta({
         disableTabletCells,
         disableWriteSession,
         full,
+        jobProxyBuildVersion,
         lastSeenTime,
         rack,
         state,
         maintenanceRequests,
+        version,
     ]);
 
     const tagsItems = React.useMemo(
