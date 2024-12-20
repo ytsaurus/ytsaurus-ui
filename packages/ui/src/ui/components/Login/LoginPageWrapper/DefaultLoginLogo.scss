@@ -1,0 +1,15 @@
+.default-login-logo {
+    position: absolute;
+    top: 40px;
+    left: 40px;
+    width: 160.32px;
+    height: 33.06px;
+
+    &_theme_light {
+        fill: #000;
+    }
+
+    &_theme_dark {
+        fill: #fff;
+    }
+}
