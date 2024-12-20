@@ -24,13 +24,35 @@ export async function replaceInnerHtml(
 }
 
 export async function replaceInnerHtmlForDateTime(page: Page, selectors: Array<string>) {
-    const defaultDateTime = '01 Jan 1970 00:00:00';
+    replaceInnerHtmlForSimilarElements(page, selectors, '01 Jan 1970 00:00:00');
+}
+
+export async function replaceInnerHtmlForIsoDate(page: Page, selectors: Array<string>) {
+    replaceInnerHtmlForSimilarElements(page, selectors, '1970-01-01T00:00:00.000000Z');
+}
+
+export async function replaceInnerHtmlForDuration(page: Page, selectors: Array<string>) {
+    replaceInnerHtmlForSimilarElements(page, selectors, 'XX:XX:XX');
+}
+
+export async function replaceInnerHtmlForId(page: Page, selectors: Array<string>) {
+    replaceInnerHtmlForSimilarElements(page, selectors, '00000000-11111111-22222222-33333333');
+}
+
+export async function replaceInnerHtmlForSimilarElements(
+    page: Page,
+    selectors: Array<string>,
+    replacement: string,
+) {
     await replaceInnerHtml(
         page,
-        selectors?.reduce((acc, selector) => {
-            acc[selector] = defaultDateTime;
-            return acc;
-        }, {} as Record<string, string>),
+        selectors?.reduce(
+            (acc, selector) => {
+                acc[selector] = replacement;
+                return acc;
+            },
+            {} as Record<string, string>,
+        ),
     );
 }
 

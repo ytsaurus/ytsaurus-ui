@@ -17,7 +17,7 @@
 
     &__header,
     &__tabs {
-        margin-bottom: 24px;
+        margin-bottom: 20px;
     }
 
     &__speculative-label {
@@ -50,5 +50,10 @@
 
     &__meta-breadcrumbs {
         margin: -2px 0;
+    }
+
+    &__specification,
+    &__attributes {
+        margin-top: -10px;
     }
 }
