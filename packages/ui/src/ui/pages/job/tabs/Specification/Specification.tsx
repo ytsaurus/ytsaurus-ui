@@ -22,6 +22,7 @@ import {YsonDownloadButton} from '../../../../components/DownloadAttributesButto
 import {getJob} from '../../../../store/selectors/job/detail';
 
 interface SpecificationProps {
+    className?: string;
     jobID: string;
 }
 
@@ -61,6 +62,7 @@ function Toolbar({jobID}: SpecificationProps) {
     return (
         <div className={block('toolbar')}>
             <Checkbox
+                className={block('checkbox')}
                 size="l"
                 content="Omit node directory"
                 checked={omitNodeDirectory}
@@ -68,6 +70,7 @@ function Toolbar({jobID}: SpecificationProps) {
             />
 
             <Checkbox
+                className={block('checkbox')}
                 size="l"
                 content="Omit input table specs"
                 checked={omitInputTableSpecs}
@@ -75,6 +78,7 @@ function Toolbar({jobID}: SpecificationProps) {
             />
 
             <Checkbox
+                className={block('checkbox')}
                 size="l"
                 content="Omit output table specs"
                 checked={omitOutputTableSpecs}
@@ -88,7 +92,7 @@ function blurByEvent(e: React.ChangeEvent<HTMLInputElement>) {
     (e.target as HTMLInputElement).blur();
 }
 
-export default function Specification({jobID}: SpecificationProps) {
+export default function Specification({className, jobID}: SpecificationProps) {
     const dispatch = useDispatch();
 
     const {loading, loaded, error, errorData, specification} = useSelector(
@@ -109,7 +113,7 @@ export default function Specification({jobID}: SpecificationProps) {
 
     return (
         <ErrorBoundary>
-            <div className={block()}>
+            <div className={block(null, className)}>
                 <div className={block('content', {loading: initialLoading})}>
                     {initialLoading ? (
                         <Loader />

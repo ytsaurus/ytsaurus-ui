@@ -22,6 +22,7 @@
     "dev": "npm run dev:app",
     "dev:app": "./scripts/check-start-files.sh && npm run copy:icons && APP_ENV=${APP_ENV:-development} APP_DEV_MODE=1 NODE_OPTIONS=\"--max-http-header-size=204800 ${NODE_OPTIONS}\" app-builder dev --config ./build.app.config.ts",
     "dev:localmode": "bash -c '. scripts/dev.localmode-env.sh && TVM_DISABLED=true npm run dev:app'",
+    "dev:localmode:cluster": "APP_INSTALLATION=${APP_INSTALLATION:-e2e} . scripts/dev.localmode-env.sh",
     "dev:localmode:e2e": "APP_INSTALLATION=${APP_INSTALLATION:-e2e} npm run dev:localmode",
     "dev:oss": "APP_INSTALLATION=oss npm run dev",
     "docker:build": "docker build . -t ${npm_package_config_docker_image}:${npm_config_dockertag}",

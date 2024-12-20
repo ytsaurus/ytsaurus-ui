@@ -72,7 +72,7 @@ jobs:
     steps:
       - name: Run containers for 'Local'
         run: |
-          run_local_cluster.sh --node-count 2 --ui-skip-pull true --ui-version local --yt-version stable --ui-app-installation e2e
+          run_local_cluster.sh --node-count 2 --ui-skip-pull true --ui-version local --yt-version stable --ui-app-installation e2e  --init-operations-archive
           sleep 10
       - name: Checkout
         uses: actions/checkout@v2
@@ -119,7 +119,7 @@ jobs:
       - name: Run containers for 'Local as remote'
         run: |
           run_local_cluster.sh --stop
-          run_local_cluster.sh --node-count 2 --ui-skip-pull true --ui-version local --yt-version stable --ui-app-installation e2e --docker-hostname `hostname` --fqdn localhost --ui-network bridge
+          run_local_cluster.sh --node-count 2 --ui-skip-pull true --ui-version local --yt-version stable --ui-app-installation e2e --docker-hostname `hostname` --fqdn localhost --ui-network bridge  --init-operations-archive
           sleep 10
       - name: Checkout
         uses: actions/checkout@v2
@@ -160,7 +160,7 @@ jobs:
       - name: Run containers for 'Local'
         run: |
           run_local_cluster.sh --stop
-          run_local_cluster.sh --node-count 2 --ui-skip-pull true --ui-version local --yt-version stable --ui-app-installation e2e
+          run_local_cluster.sh --node-count 2 --ui-skip-pull true --ui-version local --yt-version stable --ui-app-installation e2e  --init-operations-archive
           sleep 10
       - name: Checkout
         uses: actions/checkout@v2

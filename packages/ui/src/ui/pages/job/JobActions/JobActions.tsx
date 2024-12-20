@@ -259,8 +259,8 @@ export default function JobActions({className}: {className?: string}) {
     return (
         <ErrorBoundary>
             <div className={block(null, className)}>
-                {map_(actions, (action: Action) => (
-                    <ActionBlock {...action} />
+                {map_(actions, (action: Action, index) => (
+                    <ActionBlock key={index} {...action} />
                 ))}
                 <DropdownMenu items={additionalActions} />
 

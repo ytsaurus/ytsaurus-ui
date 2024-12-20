@@ -278,6 +278,7 @@ export default function JobGeneral() {
                 <Switch>
                     <Route path={`${path}/${Tab.ATTRIBUTES}`}>
                         <Yson
+                            className={block('attributes')}
                             value={attributes}
                             settings={settings}
                             folding
@@ -297,7 +298,7 @@ export default function JobGeneral() {
                         <Statistics />
                     </Route>
                     <Route path={`${path}/${Tab.SPECIFICATION}`}>
-                        <Specification jobID={jobID} />
+                        <Specification className={block('specification')} jobID={jobID} />
                     </Route>
                     <Route path={`${path}/:tab`}>
                         <Placeholder />

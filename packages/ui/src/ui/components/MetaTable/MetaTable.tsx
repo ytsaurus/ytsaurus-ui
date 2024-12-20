@@ -7,6 +7,7 @@ import reduce_ from 'lodash/reduce';
 import cn from 'bem-cn-lite';
 
 import hammer from '../../common/hammer';
+import {toClassName} from '../../utils/utils';
 
 import Link from '../Link/Link';
 import Icon from '../Icon/Icon';
@@ -60,7 +61,7 @@ function splitItems(items: MetaTableProps['items'], subTitles?: Array<string>) {
 export default class MetaTable extends Component<MetaTableProps> {
     renderKey(key: string, icon: React.ReactNode, label?: React.ReactChild) {
         return (
-            <div className={itemBlock('key', {key})} key={key + '-key'}>
+            <div className={itemBlock('key', {key: toClassName(key)})} key={key + '-key'}>
                 {icon}
                 {label !== undefined ? label : hammer.format['ReadableField'](key)}
             </div>
@@ -70,7 +71,11 @@ export default class MetaTable extends Component<MetaTableProps> {
     renderValue(item: MetaTableItem) {
         const {value, key, helpUrl, className, qa} = item;
         return (
-            <div className={itemBlock('value', {key}, className)} key={key + '-value'} data-qa={qa}>
+            <div
+                className={itemBlock('value', {key: toClassName(key)}, className)}
+                key={key + '-value'}
+                data-qa={qa}
+            >
                 {typeof value === 'boolean' ? String(value) : value}
                 {helpUrl && (
                     <Link theme={'ghost'} url={helpUrl}>
