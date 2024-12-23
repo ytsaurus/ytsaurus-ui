@@ -39,6 +39,14 @@ export async function replaceInnerHtmlForId(page: Page, selectors: Array<string>
     replaceInnerHtmlForSimilarElements(page, selectors, '00000000-11111111-22222222-33333333');
 }
 
+export async function replaceInnerHtmlProgress(page: Page) {
+    replaceInnerHtmlForSimilarElements(
+        page,
+        ['.g-progress .g-progress__text', '.g-progress__text-inner'],
+        '0 / 00.00 XxX',
+    );
+}
+
 export async function replaceInnerHtmlForSimilarElements(
     page: Page,
     selectors: Array<string>,
