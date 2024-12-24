@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.77.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.76.0...ui-v1.77.0) (2024-12-24)
+
+
+### Features
+
+* **Navigation/Document:** allow `YQL query` button if _yql_type == "view" [YTFRONT-4463] ([0421120](https://github.com/ytsaurus/ytsaurus-ui/commit/0421120c1cd1e9e7c60a500973cf2dde0645372d))
+
 ## [1.76.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.75.1...ui-v1.76.0) (2024-12-20)
 
 
