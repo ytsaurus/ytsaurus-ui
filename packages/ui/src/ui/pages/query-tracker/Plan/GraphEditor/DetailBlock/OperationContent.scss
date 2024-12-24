@@ -1,0 +1,17 @@
+.graph-operation-content {
+    display: flex;
+    flex-direction: column;
+    gap: 6px 0;
+    font-size: 11px;
+
+    &__info {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    &__jobs {
+        display: flex;
+        gap: 0 8px;
+    }
+}

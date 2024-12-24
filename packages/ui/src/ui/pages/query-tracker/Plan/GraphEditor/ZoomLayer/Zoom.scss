@@ -1,0 +1,27 @@
+.yt-graph-zoom {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    display: flex;
+    flex-direction: column;
+    height: 96px;
+    width: 32px;
+    overflow: hidden;
+    border-radius: 8px;
+    background: #fff;
+    color: #657B8F;
+    box-shadow: 0 2px 8px 0 #0000000D, 0 4px 24px 0 #0000000D;
+
+    &__size {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 32px;
+        width: 32px;
+        font-weight: 500;
+        font-size: 11px;
+        border: 1px solid var(--g-color-line-generic);
+        border-left: none;
+        border-right: none;
+    }
+}
