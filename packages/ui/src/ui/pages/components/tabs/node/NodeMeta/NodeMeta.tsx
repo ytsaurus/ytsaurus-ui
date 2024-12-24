@@ -35,6 +35,7 @@ interface Props {
     physicalHost: Node['physicalHost'];
     host: Node['host'];
     maintenanceRequests?: Node['maintenanceRequests'];
+    version?: Node['version'];
 }
 
 function NodeMeta({
@@ -56,6 +57,7 @@ function NodeMeta({
     physicalHost,
     host,
     maintenanceRequests,
+    version,
 }: Props): ReturnType<React.VFC> {
     const clusterConfig = useSelector(getCurrentClusterConfig);
 
@@ -75,6 +77,7 @@ function NodeMeta({
             rack,
             state,
             maintenanceRequests,
+            version,
         });
     }, [
         alertCount,
@@ -91,6 +94,7 @@ function NodeMeta({
         rack,
         state,
         maintenanceRequests,
+        version,
     ]);
 
     const tagsItems = React.useMemo(
