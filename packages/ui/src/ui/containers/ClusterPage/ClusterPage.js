@@ -37,10 +37,7 @@ import {setSetting} from '../../store/actions/settings';
 import {unmountCluster, updateCluster} from '../../store/actions/cluster-params';
 import {updateTitle} from '../../store/actions/global';
 import {getClusterUiConfig} from '../../store/selectors/global';
-import {
-    isExperimentalPagesReady,
-    isQueryTrackerAllowed,
-} from '../../store/selectors/global/experimental-pages';
+import {isExperimentalPagesReady} from '../../store/selectors/global/experimental-pages';
 import {getClusterConfig} from '../../utils';
 import {NAMESPACES, SettingName} from '../../../shared/constants/settings';
 import {getClusterPagePaneSizes, getStartingPage} from '../../store/selectors/settings';
@@ -90,7 +87,6 @@ class ClusterPage extends Component {
         trackVisit: PropTypes.func.isRequired,
 
         allowChyt: PropTypes.bool,
-        allowQueryTracker: PropTypes.bool,
         allowStartPageRedirect: PropTypes.bool,
     };
 
@@ -196,7 +192,6 @@ class ClusterPage extends Component {
             hasError,
             paramsError,
             allowChyt,
-            allowQueryTracker,
             allowStartPageRedirect,
         } = this.props;
 
@@ -228,9 +223,7 @@ class ClusterPage extends Component {
                     {allowChyt && (
                         <Route path={`/:cluster/${Page.CHYT}`} component={ChytPageLazy} />
                     )}
-                    {allowQueryTracker && (
-                        <Route path={`/:cluster/${Page.QUERIES}`} component={QueryTrackerLazy} />
-                    )}
+                    <Route path={`/:cluster/${Page.QUERIES}`} component={QueryTrackerLazy} />
                     {hasOdinPage() && (
                         <Route
                             path={`/:cluster/${odinPageInfo.pageId}`}
@@ -342,7 +335,6 @@ function mapStateToProps(state) {
         clusterPagePaneSizes: getClusterPagePaneSizes(state),
         startingPage: getStartingPage(state),
         paramsCluster,
-        allowQueryTracker: isQueryTrackerAllowed(state),
         allowChyt: Boolean(getClusterUiConfig(state).chyt_controller_base_url),
         allowStartPageRedirect: isExperimentalPagesReady(state),
     };
