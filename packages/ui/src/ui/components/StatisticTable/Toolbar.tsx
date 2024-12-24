@@ -10,7 +10,7 @@ import {TreeState} from './types';
 
 const toolbarBlock = cn('elements-toolbar');
 
-const block = cn('job-statistics');
+const block = cn('yt-statistics-table');
 
 export default function Toolbar(props: {
     helpUrl?: string;

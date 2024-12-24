@@ -68,7 +68,9 @@ test('Job - Details', async ({page}) => {
     await test.step('Statistics', async () => {
         await page.click('.tabs :text("Statistics")');
 
-        await page.waitForSelector('.job-statistics__table-container .job-statistics__group');
+        await page.waitForSelector(
+            '.yt-statistics-table__table-container .yt-statistics-table__group',
+        );
 
         await expect(page).toHaveScreenshot();
     });
