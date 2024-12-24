@@ -6,6 +6,7 @@ import {
     SUPPORTED_FEATURES_SUCCESS,
 } from '../../../constants/global';
 import {mergeStateOnClusterChange} from '../../../store/reducers/utils';
+import type {StatisticInfo} from '../../../components/StatisticTable';
 
 export interface SupportedFeaturesState {
     loaded: boolean;
@@ -22,10 +23,7 @@ export interface SupportedFeaturesState {
     };
 }
 
-export interface OperationStatisticInfo {
-    description?: string;
-    unit?: string;
-}
+export type OperationStatisticInfo = StatisticInfo;
 
 const initialState: SupportedFeaturesState = {
     loaded: false,

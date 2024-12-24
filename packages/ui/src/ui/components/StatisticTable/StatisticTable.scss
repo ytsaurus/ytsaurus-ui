@@ -1,4 +1,4 @@
-.job-statistics {
+.yt-statistics-table {
     .elements-toolbar {
         margin-top: -10px;
         margin-bottom: 10px;
@@ -51,5 +51,11 @@
 
     & &__filter {
         margin-right: 8px;
+    }
+
+    &__description {
+        width: 100%;
+        text-overflow: unset;
+        white-space: unset;
     }
 }

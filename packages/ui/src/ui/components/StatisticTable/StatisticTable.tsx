@@ -3,22 +3,31 @@ import {useSelector} from 'react-redux';
 import cn from 'bem-cn-lite';
 
 import Icon from '../Icon/Icon';
-import hammer from '../../common/hammer';
+import format from '../../common/hammer/format';
 import ErrorBoundary from '../ErrorBoundary/ErrorBoundary';
 import ElementsTableRow from '../ElementsTable/ElementsTable';
+import {ExpandButton} from '../ExpandButton';
 import {getFontFamilies} from '../../store/selectors/global/fonts';
+import {Tooltip} from '../../components/Tooltip/Tooltip';
+import MetaTable from '../../components/MetaTable/MetaTable';
+import {Secondary} from '../../components/Text/Text';
 
 import Toolbar from './Toolbar';
 import {getMinWidth} from './get-min-width';
 import {filterStatisticTree, prepareStatisticTs} from './prepare-statistic.ts';
 import {Statistic, StatisticTree, TreeState} from './types';
-import {ExpandButton} from '../ExpandButton';
 
-import './Statistics.scss';
+import {formatByUnit} from './utils';
+import './StatisticTable.scss';
 
-const block = cn('job-statistics');
+const block = cn('yt-statistics-table');
 
 export const LEVEL_OFFSET = 40;
+
+export type StatisticInfo = {
+    description?: string;
+    unit?: string;
+};
 
 interface TreeItem {
     name: string;
@@ -34,39 +43,43 @@ interface TreeItem {
 
 interface AvgProps {
     item: TreeItem;
+    unit?: string;
 }
 
-function Avg({item}: AvgProps) {
+function Avg({item, unit}: AvgProps) {
     const statistic: Statistic = item.attributes.value as Statistic;
 
     if (statistic && statistic.count && statistic.sum) {
         const result: number = statistic.sum / statistic.count;
 
         if (result < 1) {
-            return hammer.format['Number'](result, {significantDigits: 6});
+            return formatByUnit(result, unit, {significantDigits: 6});
         } else {
-            return hammer.format.Number(result);
+            return formatByUnit(result, unit);
         }
     }
 
-    return hammer.format.NO_VALUE;
+    return format.NO_VALUE;
 }
 
 interface StatisticProps {
     item: TreeItem;
     aggregation: 'avg' | 'min' | 'max' | 'sum' | 'count' | 'last';
+    unit?: string;
 }
 
-function StatisticTableStaticCell({item, aggregation}: StatisticProps) {
+function StatisticTableStaticCell({item, aggregation, unit}: StatisticProps) {
     if (item.isLeafNode && Boolean(item.attributes.value)) {
         if (aggregation === 'avg') {
-            return <Avg item={item} />;
+            return <Avg item={item} unit={unit} />;
+        } else if (aggregation === 'count') {
+            return format['Number'](item.attributes?.value?.[aggregation]);
         } else {
-            return hammer.format['Number'](item.attributes?.value?.[aggregation]);
+            return formatByUnit(item.attributes?.value?.[aggregation], unit);
         }
     }
 
-    return hammer.format.NO_VALUE;
+    return format.NO_VALUE;
 }
 
 interface ItemState {
@@ -81,6 +94,42 @@ interface MetricProps {
     toggleItemState: Function;
     renderValue: (item: TreeItem) => React.ReactChild;
     minWidth?: number;
+    info?: StatisticInfo;
+}
+
+export function StatisticName({title, info}: {title: React.ReactNode; info?: StatisticInfo}) {
+    const emptyInfo = !info?.description && !info?.unit;
+
+    return (
+        <Tooltip
+            content={
+                emptyInfo ? null : (
+                    <MetaTable
+                        items={[
+                            {
+                                key: 'Description',
+                                value: info.description,
+                                visible: Boolean(info.description),
+                                className: block('description'),
+                            },
+                            {
+                                key: 'Unit',
+                                value: info.unit,
+                                visible: Boolean(info.unit),
+                            },
+                        ]}
+                    />
+                )
+            }
+        >
+            {title}{' '}
+            {!emptyInfo && (
+                <Secondary>
+                    <Icon awesome={'question-circle'} />
+                </Secondary>
+            )}
+        </Tooltip>
+    );
 }
 
 export function ExpandedCell({
@@ -89,6 +138,7 @@ export function ExpandedCell({
     toggleItemState,
     minWidth = undefined,
     renderValue,
+    info,
 }: MetricProps) {
     const offsetStyle = React.useMemo(() => {
         return {minWidth, paddingLeft: (item?.level || 0) * LEVEL_OFFSET};
@@ -105,7 +155,7 @@ export function ExpandedCell({
             <span className={block('metric')} style={offsetStyle}>
                 <Icon awesome="chart-line" className={block('metric-icon')} />
 
-                <span>{renderValue(item)}</span>
+                <StatisticName title={renderValue(item)} info={info} />
             </span>
         );
     } else {
@@ -200,17 +250,21 @@ const useJobStatisticTable = ({
 };
 
 export function StatisticTable({
+    className,
     helpUrl,
     virtual,
     visibleColumns,
     fixedHeader,
     statistic,
+    getStatisticInfo,
 }: {
+    className?: string;
     helpUrl?: string;
     virtual?: boolean;
     fixedHeader?: boolean;
     statistic: StatisticTree;
     visibleColumns: Array<'avg' | 'min' | 'max' | 'sum' | 'count' | 'last'>;
+    getStatisticInfo?: (name: string) => StatisticInfo | undefined;
 }) {
     const fontFamilies = useSelector(getFontFamilies);
     const {items, minWidth, treeState, setTreeState, onFilterChange} = useJobStatisticTable({
@@ -222,6 +276,7 @@ export function StatisticTable({
         () =>
             ({
                 name(item, _, toggleItemState, itemState) {
+                    const info = getStatisticInfo?.(item.name) ?? {};
                     return (
                         <ExpandedCell
                             item={item}
@@ -229,18 +284,26 @@ export function StatisticTable({
                             toggleItemState={toggleItemState}
                             itemState={itemState}
                             renderValue={(item) => item?.attributes?.name}
+                            info={info}
                         />
                     );
                 },
                 __default__(item, columnName: ColumnName) {
                     if (item.isLeafNode) {
-                        return <StatisticTableStaticCell item={item} aggregation={columnName} />;
+                        const {unit} = getStatisticInfo?.(item.name) ?? {};
+                        return (
+                            <StatisticTableStaticCell
+                                item={item}
+                                aggregation={columnName}
+                                unit={unit}
+                            />
+                        );
                     }
 
                     return null;
                 },
             }) as StatisticTableTemplate<TreeItem>,
-        [minWidth],
+        [minWidth, getStatisticInfo],
     );
     const tableProps = React.useMemo(() => {
         return prepareTableProps({
@@ -250,7 +313,7 @@ export function StatisticTable({
 
     return (
         <ErrorBoundary>
-            <div className={block()}>
+            <div className={block(null, className)}>
                 <Toolbar
                     helpUrl={helpUrl}
                     onFilterChange={onFilterChange}

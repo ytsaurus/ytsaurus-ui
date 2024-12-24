@@ -180,9 +180,33 @@ export const getOperationStatisticsDescription = createSelector(
             }
         });
 
+        const cache = new Map<string, OperationStatisticInfo | undefined>();
+        function putToCache(key: string, info?: OperationStatisticInfo) {
+            cache.set(key, info);
+            return info;
+        }
+
         return {
-            byName,
-            byRegexp,
+            getStatisticInfo: (name: string) => {
+                if (cache.has(name)) {
+                    return cache.get(name);
+                }
+
+                const key = name.startsWith('<Root>/') ? name.substring('<Root>/'.length) : name;
+                const res = key.endsWith('/$$')
+                    ? byName[key.substring(0, key.length - 3)]
+                    : byName[key];
+                if (res) {
+                    return putToCache(name, res);
+                }
+
+                return putToCache(
+                    name,
+                    find_(byRegexp, ({regexp}) => {
+                        return regexp.test(key);
+                    }),
+                );
+            },
         };
     },
 );
