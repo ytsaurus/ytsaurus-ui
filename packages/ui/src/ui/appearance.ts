@@ -26,6 +26,7 @@ export interface ClusterAppearance {
     icon: string;
     icon2x: string;
     iconbig?: string;
+    LoginLogo?: React.ComponentType<{theme?: 'light' | 'dark'}>;
 }
 
 export const defaultClusterAppearance: ClusterAppearance = {
