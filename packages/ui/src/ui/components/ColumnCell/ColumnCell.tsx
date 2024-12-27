@@ -87,6 +87,8 @@ export function ColumnCell({
             isIncompleteValue = flags.incomplete;
             isIncompleteTagged = flags.incomplete && $tag;
             tag = $tag;
+        } else if (value) {
+            isIncompleteValue = Boolean(value.$incomplete);
         }
 
         return {tag, isIncompleteTagged, isIncompleteValue};
