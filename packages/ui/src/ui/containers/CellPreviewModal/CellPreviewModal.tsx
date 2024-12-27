@@ -86,7 +86,7 @@ export const CellPreviewModal: React.FC = () => {
 };
 
 type PreviewContentProps = {
-    data: {$type: string; $value: any; $tag?: string} | undefined;
+    data: {$type?: string; $value?: any; $tag?: string} | undefined;
     unipikaSettings: YsonSettings;
 };
 

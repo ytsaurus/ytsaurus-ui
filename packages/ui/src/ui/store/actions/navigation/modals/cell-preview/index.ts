@@ -20,6 +20,7 @@ import {
     getStaticTableCliCommand,
     loadStaticTableCellPreview,
 } from './static-table';
+import {isYqlTypesEnabled} from '../../../../selectors/navigation/content/table';
 
 const getCellPath = ({
     columnName,
@@ -56,7 +57,13 @@ const getCliCommand = ({
     };
 };
 
-const loadCellPreview = ({cellPath}: {cellPath: string}): CellPreviewActionType => {
+const loadCellPreview = ({
+    cellPath,
+    useYqlTypes,
+}: {
+    cellPath: string;
+    useYqlTypes: boolean;
+}): CellPreviewActionType => {
     return (dispatch, getState) => {
         const isDynamic = getIsDynamic(getState());
 
@@ -64,7 +71,9 @@ const loadCellPreview = ({cellPath}: {cellPath: string}): CellPreviewActionType 
             stringLimit: PREVIEW_LIMIT,
         });
 
-        output_format.$attributes.value_format = 'yql';
+        if (useYqlTypes) {
+            output_format.$attributes.value_format = 'yql';
+        }
 
         const action = isDynamic ? loadDynamicTableCellPreview : loadStaticTableCellPreview;
 
@@ -83,7 +92,9 @@ export const showCellPreviewModal = (
     index: number,
     tag?: string,
 ): CellPreviewActionType => {
-    return async (dispatch) => {
+    return async (dispatch, getState) => {
+        const useYqlTypes = isYqlTypesEnabled(getState());
+
         const cellPath = dispatch(getCellPath({columnName, index}));
 
         const ytCliDownloadCommand: string = dispatch(getCliCommand({cellPath, columnName, tag}));
@@ -93,36 +104,61 @@ export const showCellPreviewModal = (
             dispatch(openCellPreview());
         });
 
+        const data: {
+            $type?: string;
+            $value?: any;
+            $tag?: string;
+        } = {};
+
+        let isIncomplete = false;
+
         try {
-            const json = await dispatch(loadCellPreview({cellPath}));
+            const json = await dispatch(loadCellPreview({cellPath, useYqlTypes}));
 
             const parsed = JSON.parse(json);
 
             const column = parsed.rows[0][columnName];
 
-            const value = column[0];
-            const typeIndex = column[1];
+            if (useYqlTypes) {
+                const value = column[0];
+                const typeIndex = column[1];
 
-            const flags: {incomplete: boolean} = {incomplete: false};
+                const flags: {incomplete: boolean} = {incomplete: false};
 
-            const {$type, $value, $tag} = unipika.converters.yql(
-                [value, parsed.yql_type_registry[typeIndex]],
-                {
-                    maxStringSize: undefined,
-                    maxListSize: undefined,
-                    treatValAsData: true,
-                },
-                flags,
-            );
+                const {$type, $value, $tag} = unipika.converters.yql(
+                    [value, parsed.yql_type_registry[typeIndex]],
+                    {
+                        maxStringSize: undefined,
+                        maxListSize: undefined,
+                        treatValAsData: true,
+                    },
+                    flags,
+                );
 
-            const isIncomplete = flags.incomplete;
+                isIncomplete = flags.incomplete;
+
+                data.$type = $type;
+                data.$value = $tag ? $value.$value : $value;
+                data.$tag = $tag;
+            } else {
+                const hasType = column && column.$type;
+
+                data.$type = column.$type;
+                data.$value = hasType ? column.$value : column;
+
+                isIncomplete = column.$incomplete;
+            }
+
             const noticeText = isIncomplete
                 ? 'Unable to load content more than 16MiB. Please use the command bellow to load it locally.'
                 : 'You could use the command bellow to load it locally.';
 
             dispatch({
                 type: CELL_PREVIEW.SUCCESS,
-                data: {data: {$type, $value: $tag ? $value.$value : $value, $tag}, noticeText},
+                data: {
+                    data,
+                    noticeText,
+                },
             });
         } catch (error: any) {
             if (!isCancelled(error)) {
