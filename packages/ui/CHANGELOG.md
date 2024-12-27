@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.78.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.77.0...ui-v1.78.0) (2024-12-27)
+
+
+### Features
+
+* **Job/Statistics:** use operation_statistics_descriptions from supported_features [YTFRONT-3522] ([abf49e5](https://github.com/ytsaurus/ytsaurus-ui/commit/abf49e5af07010f7253a01e211e8a19f3a131e3a))
+
+
+### Bug Fixes
+
+* **CellPreview:** show preview button when yql v3 types disabled [[#928](https://github.com/ytsaurus/ytsaurus-ui/issues/928)] ([0e6fd69](https://github.com/ytsaurus/ytsaurus-ui/commit/0e6fd690a44a79eb4245017a7defc3950cb2e27c))
+
 ## [1.77.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.76.0...ui-v1.77.0) (2024-12-24)
 
 
