@@ -34,6 +34,7 @@ export function getNodeMetaItems({
     maintenanceRequests,
     state,
     rack,
+    version,
 }: Pick<
     Node,
     | 'alertCount'
@@ -50,6 +51,7 @@ export function getNodeMetaItems({
     | 'maintenanceRequests'
     | 'state'
     | 'rack'
+    | 'version'
 >): Array<MetaTableItem> {
     const stateText = hammer.format['FirstUppercase'](state);
     const stateTheme = getStateTheme(state);
@@ -123,6 +125,11 @@ export function getNodeMetaItems({
             value: hammer.format['DateTime'](lastSeenTime, {
                 format: 'full',
             }),
+        },
+        {
+            key: 'version',
+            value: version,
+            visible: Boolean(version),
         },
     ];
 }
