@@ -21,7 +21,7 @@ export const AnnotationWithPartial: FC<Props> = ({annotation, expanded, onToggle
 
     return (
         <>
-            <Markdown text={expanded ? value : text} />
+            <Markdown color={'complementary'} text={expanded ? value : text} />
             {isFullText ? null : (
                 <ClickableText color={'secondary'} onClick={onToggle}>
                     {expanded ? 'Hide more' : 'Show more'}
