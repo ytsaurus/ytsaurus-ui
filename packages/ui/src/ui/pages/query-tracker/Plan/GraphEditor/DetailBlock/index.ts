@@ -1,0 +1,1 @@
+export {DetailBlock} from './DetailBlock';
