@@ -8,8 +8,10 @@ import file from './file';
 import replicatedTable from './replicated-table';
 import transaction from './transaction';
 import transactionMap from './transaction-map/transaction-map';
+import {downloadManager} from './table/download-manager';
 
 export default combineReducers({
+    downloadManager,
     replicatedTable,
     mapNode,
     table,

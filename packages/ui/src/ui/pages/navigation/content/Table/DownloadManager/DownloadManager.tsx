@@ -1,5 +1,5 @@
-import React from 'react';
-import {ConnectedProps, connect} from 'react-redux';
+import React, {MouseEvent} from 'react';
+import {ConnectedProps, connect, useDispatch} from 'react-redux';
 import unipika from '../../../../../common/thor/unipika';
 import {compose} from 'redux';
 import cn from 'bem-cn-lite';
@@ -38,6 +38,7 @@ import {
     getSrcColumns,
 } from '../../../../../store/selectors/navigation/content/table';
 import {getColumns} from '../../../../../store/selectors/navigation/content/table-ts';
+import {downloadFile} from '../../../../../store/actions/navigation/content/table/download-manager';
 
 import './DownloadManager.scss';
 import {docsUrl, getExportTableBaseUrl} from '../../../../../config';
@@ -63,6 +64,13 @@ function checkExcelExporter(cluster: string) {
         .catch(() => false);
 }
 
+type Error =
+    | {
+          inner_errors: string[];
+          message: string;
+      }
+    | undefined;
+
 type ReduxProps = Omit<ConnectedProps<typeof connector>, 'dispatch'>;
 type Props = ReduxProps & WithVisibleProps & {className?: string};
 
@@ -76,6 +84,7 @@ type State = {
     valueSentinel: string;
     ysonFormat: 'text' | 'pretty' | 'binary';
     columnsMode: 'all' | 'custom';
+    filename: string;
 
     schemafulDsvMissingMode: 'fail' | 'skip_row' | 'print_sentinel';
     separators: {keyValue?: string; record?: string; field?: string};
@@ -139,6 +148,7 @@ export class DownloadManager extends React.Component<Props, State> {
             ysonFormat: 'text',
             columnsMode: 'all',
             schemafulDsvMissingMode: 'fail', //print_sentinel
+            filename: this.filename,
 
             separators: {
                 keyValue: '=',
@@ -282,6 +292,12 @@ export class DownloadManager extends React.Component<Props, State> {
         return path + this.downloadColumns + this.downloadRows;
     }
 
+    get filename() {
+        const {path} = this.props;
+
+        return path.split('/')[path.split('/').length - 1];
+    }
+
     getDownloadParams() {
         const {transaction_id} = this.props;
         const {value: output_format, error} = this.getOutputFormat();
@@ -300,20 +316,18 @@ export class DownloadManager extends React.Component<Props, State> {
 
     getDownloadLink() {
         const {cluster, proxy, externalProxy} = this.props;
+        const {format, number_precision_mode} = this.state;
+        const {query, error} = this.getDownloadParams();
+
+        if (format === 'excel') {
+            const base = `${getExportTableBaseUrl({cluster})}/${cluster}/api/export`;
+            const params = new URLSearchParams({number_precision_mode});
+            return {url: `${base}?${params}&${query}`, error};
+        }
+
         const base = makeDirectDownloadPath('read_table', {cluster, proxy, externalProxy});
-        const {query, error} = this.getDownloadParams();
-        return {url: base + '?' + query, error};
-    }
 
-    getExcelDownloadLink() {
-        const {cluster} = this.props;
-        const base = `${getExportTableBaseUrl({cluster})}/${cluster}/api/export`;
-
-        const {query, error} = this.getDownloadParams();
-        const {number_precision_mode} = this.state;
-        const params = new URLSearchParams({number_precision_mode});
-
-        return {url: `${base}?${params}&${query}`, error};
+        return {url: `${base}?${query}`, error};
     }
 
     makeDocsUrl(path = '') {
@@ -388,6 +402,7 @@ export class DownloadManager extends React.Component<Props, State> {
     }
 
     changeFormat = (format: State['format']) => this.setState({format});
+    changeFilename = (filename: State['filename']) => this.setState({filename});
     changeNumRows = (numRows: State['numRows']) => this.setState({numRows});
     changeStartRow = (startRow: State['startRow']) => this.setState({startRow});
     changeRowsMode = (rowsMode: State['rowsMode']) => this.setState({rowsMode});
@@ -515,6 +530,17 @@ export class DownloadManager extends React.Component<Props, State> {
                         startRow + numRows >= rowCount || isStartRowInvalid || isNumRowsInvalid,
                 }}
             />
+        );
+    }
+
+    renderFilenameForm() {
+        const {filename} = this.state;
+
+        return (
+            <div className={block('filename-form')}>
+                <div className={block('filename-form__label')}>Filename</div>
+                <TextInput size="m" value={filename} onUpdate={this.changeFilename} />
+            </div>
         );
     }
 
@@ -852,33 +878,25 @@ export class DownloadManager extends React.Component<Props, State> {
                             {format === 'yson' && this.renderYson()}
                             {format === 'excel' && this.renderExcel()}
                         </div>
+                        {this.renderFilenameForm()}
                     </div>
                 </div>
             </div>
         );
     }
 
-    renderConfirmButton = (className: string) => {
-        const {format} = this.state;
-
-        const {url, error} =
-            format === 'excel' ? this.getExcelDownloadLink() : this.getDownloadLink();
-
+    renderModalConfirmButton(classNameConfirm: string) {
+        const {filename} = this.state;
+        const {url, error} = this.getDownloadLink();
         return (
-            <Button
-                size="m"
-                view="action"
-                className={className}
-                title="Download"
-                target="_blank"
-                href={url}
-                disabled={Boolean(error)}
-                qa="download-static-table"
-            >
-                Download
-            </Button>
+            <ConfirmButton
+                className={classNameConfirm}
+                filename={filename}
+                url={url}
+                error={error}
+            />
         );
-    };
+    }
 
     showDialog = () => {
         const {handleShow, cluster} = this.props;
@@ -912,12 +930,39 @@ export class DownloadManager extends React.Component<Props, State> {
                         onCancel={handleClose}
                         confirmText="Download"
                         content={this.renderContent()}
-                        renderCustomConfirm={this.renderConfirmButton}
+                        renderCustomConfirm={this.renderModalConfirmButton.bind(this)}
                     />
                 )}
             </div>
         );
     }
+}
+
+function ConfirmButton(props: {className?: string; filename: string; url: string; error: Error}) {
+    const {url, className, filename, error} = props;
+
+    const dispatch = useDispatch();
+
+    const handleClick = (e: MouseEvent) => {
+        e.preventDefault();
+        dispatch(downloadFile(url, filename));
+    };
+
+    return (
+        <Button
+            size="m"
+            view="action"
+            className={className}
+            title="Download"
+            target="_blank"
+            onClick={handleClick}
+            href={url}
+            disabled={Boolean(error)}
+            qa="download-static-table"
+        >
+            Download
+        </Button>
+    );
 }
 
 const mapStateToProps = (state: RootState) => {
