@@ -75,4 +75,18 @@
     &__dsv-separators-item {
         padding-top: 10px;
     }
+
+    &__filename-form {
+        padding-top: 10px;
+
+        &__label {
+            font-size: 12.6px;
+
+            display: block;
+    
+            margin-bottom: 5px;
+    
+            letter-spacing: 1px;
+        }
+    }
 }
