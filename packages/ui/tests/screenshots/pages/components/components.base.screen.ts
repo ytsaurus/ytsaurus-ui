@@ -108,12 +108,13 @@ test('Components - RPC-Proxies', async ({page}) => {
 });
 
 test('Components - Versions', async ({page}) => {
-    await page.goto(makeClusterUrl(`components/versions`));
+    await page.goto(makeClusterUrl(`components/versions?detailsSort=asc-true,field-type`));
     await page.waitForSelector('.versions-summary');
 
     await replaceInnerHtml(page, {
         '.yt-host__tooltip': 'local:XXX',
         '.version-cell__text': 'XX.X.X-local-os~XXXXXXXXXXXXXXXX+distbuild',
+        '.data-table__td[title="Online"]': 'XX',
     });
     replaceInnerHtmlForDateTime(page, ['td.components-versions__table-item_type_start-time span']);
 
