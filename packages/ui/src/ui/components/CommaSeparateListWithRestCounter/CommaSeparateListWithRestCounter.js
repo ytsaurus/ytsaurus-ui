@@ -75,7 +75,9 @@ export default class CommaSeparatedListWithRestCounter extends React.Component {
         }
 
         const {offsetWidth, offsetHeight} = this.ref;
-        const {font, lineHeight} = getComputedStyle(this.ref);
+        const {fontWeight, lineHeight, fontSize, fontFamily} = getComputedStyle(this.ref);
+        const font = `${fontWeight} ${fontSize}/${lineHeight} ${fontFamily}`;
+
         if (!offsetWidth || !offsetHeight) {
             return this.setStateIfChanged({rows: [], restCounter: 0});
         }
