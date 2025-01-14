@@ -41,12 +41,10 @@ export const initialState = {
         taskName: {
             value: '',
             defaultValue: '',
-            changed: false,
         },
         state: {
-            value: 'all',
+            value: 'auto',
             defaultValue: 'all',
-            changed: false,
         },
         type: {
             value: 'all',
@@ -131,7 +129,7 @@ function prepareJobs({jobs, operationId, clusterConfig}) {
 }
 
 function getInitialStateFilterValue(currentState, operation) {
-    if (currentState.changed) {
+    if (currentState.value !== 'auto') {
         return currentState.value;
     } else if (operation.failedJobs) {
         return 'failed';
@@ -158,9 +156,7 @@ export default (state = initialState, action) => {
 
         case UPDATE_FILTER: {
             const {name, value} = action.data;
-            return updateFilter({...state, loaded: false}, name, value, {
-                changed: true,
-            });
+            return updateFilter({...state, loaded: false}, name, value);
         }
 
         case GET_JOB.REQUEST:
