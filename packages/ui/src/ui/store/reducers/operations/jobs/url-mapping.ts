@@ -26,7 +26,6 @@ const initialJobIdFilter = jobId.value;
 const initialDataSourceFilter = dataSource.value;
 const initialTypeFilter = type.value;
 const initialStateFilter = state.value;
-const initialStateChangedFilter = state.changed;
 const initialWithStderrFilter = withStderr.value;
 const initialWithFailContextFilter = withFailContext.value;
 const initialWithSpecFilter = withSpec.value;
@@ -62,11 +61,6 @@ export const jobsParams: LocationParameters = {
     state: {
         stateKey: 'operations.jobs.filters.state.value',
         initialState: initialStateFilter,
-    },
-    stateChanged: {
-        stateKey: 'operations.jobs.filters.state.changed',
-        initialState: initialStateChangedFilter,
-        type: 'bool',
     },
     withStderr: {
         stateKey: 'operations.jobs.filters.withStderr.value',
@@ -118,7 +112,6 @@ export function getJobsPreparedState(state: RootState, {query}: {query: RootStat
         updateIfChanged(draftFilter.dataSource, 'value', queryFilter.dataSource.value);
         updateIfChanged(draftFilter.type, 'value', queryFilter.type.value);
         updateIfChanged(draftFilter.state, 'value', queryFilter.state.value);
-        updateIfChanged(draftFilter.state, 'changed', queryFilter.state.changed);
         updateIfChanged(draftFilter.withStderr, 'value', queryFilter.withStderr.value);
         updateIfChanged(draftFilter.withFailContext, 'value', queryFilter.withFailContext.value);
         updateIfChanged(draftFilter.withSpec, 'value', queryFilter.withSpec.value);
