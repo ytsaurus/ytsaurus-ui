@@ -230,7 +230,13 @@ export default function MultipleActions(props: {className: string}) {
     }, [dispatch, selectedNodes, dynTablesActions]);
 
     const items = useMemo(() => {
-        return [[editItem], mergeSortSection, restoreMoveCopy, transferItem, dynTablesSection];
+        return [
+            [editItem],
+            mergeSortSection,
+            restoreMoveCopy,
+            transferItem,
+            dynTablesSection,
+        ].filter((e) => e.length);
     }, [restoreMoveCopy, editItem, mergeSortSection]);
 
     const onCopyPathClick = React.useCallback(() => {
