@@ -111,7 +111,7 @@ class CopyObjectModal extends Component {
             <Flex direction="column" gap={2}>
                 <Checkbox onUpdate={this.onUpdatePreserveAccount}>Preserve account</Checkbox>
                 <Checkbox onUpdate={this.onUpdateRecursiveCopy}>
-                    Make parent directories as needed
+                    Create intermediate directories as required
                 </Checkbox>
             </Flex>
         );
