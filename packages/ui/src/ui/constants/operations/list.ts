@@ -42,7 +42,7 @@ export const POLLING_INTERVAL = 30 * 1000;
 export const OPERATIONS_LIST_DEFAULT_FILTERS = {
     text: '',
     user: 'all',
-    subject: 'all',
+    subject: '',
     permissions: [] as Array<string>,
     poolTree: 'all',
     pool: 'all',

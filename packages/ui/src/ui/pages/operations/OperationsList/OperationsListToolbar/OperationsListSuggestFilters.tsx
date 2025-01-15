@@ -65,20 +65,20 @@ export const OperationsListUserSuggestFilter = connect(mapUserStateToProps, {
 function OperationsAccessibleForFilterImpl() {
     const dispatch = useDispatch();
     const {
-        subject: {value, defaultValue},
+        subject: {value},
     } = useSelector(getOperationsListFilters);
-
-    const actualValue = getActualValue(value, defaultValue);
 
     return (
         <div>
             {UIFactory.renderUserSuggest({
-                value: typeof actualValue === 'string' && actualValue ? [actualValue] : [],
+                value: typeof value === 'string' && value ? [value] : [],
                 onUpdate: ([first] = []) => {
                     dispatch(updateFilter('subject', first));
                 },
                 width: 'max',
                 pin: 'round-clear',
+                placeholder: 'Accessible for...',
+                hasClear: true,
             })}
         </div>
     );
