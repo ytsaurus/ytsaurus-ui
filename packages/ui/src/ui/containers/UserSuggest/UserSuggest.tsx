@@ -10,6 +10,9 @@ export interface UserSuggestProps {
 
     multiple?: boolean;
     pin?: `${SideType}-${SideType}`;
+
+    placeholder?: string;
+    hasClear?: boolean;
 }
 
 type SideType = 'round' | 'clear' | 'brick';

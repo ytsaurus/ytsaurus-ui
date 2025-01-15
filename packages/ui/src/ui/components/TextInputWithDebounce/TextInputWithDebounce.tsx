@@ -29,6 +29,7 @@ function TextInputWithDebounce(props: TextInputWithDebounceProps) {
     const handleChange = React.useCallback(
         (text: string) => {
             setInput(text);
+            handleChangeExt.cancel();
             handleChangeExt(text);
         },
         [handleChangeExt, setInput],
