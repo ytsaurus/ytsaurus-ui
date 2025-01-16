@@ -87,7 +87,7 @@ class OperationJobsTable extends React.Component {
             successMessage: 'Successfully aborted the job.',
             errorMessage: 'Could not abort the job.',
             text: 'Abort',
-            message: 'Aborting job will cause losing its data, are you sure you want to proceed?',
+            message: 'Aborting job will cause losing its progress, are you sure you want to proceed?',
             confirmationText: PLEASE_PROCEED_TEXT,
         },
         {
@@ -96,7 +96,7 @@ class OperationJobsTable extends React.Component {
             successMessage: 'Successfully abandoned the job.',
             errorMessage: 'Could not abandon the job.',
             text: 'Abandon',
-            message: 'Abandoning job will cause losing its data, are you sure you want to proceed?',
+            message: 'Abandoning job will cause losing its progress, are you sure you want to proceed?',
             confirmationText: PLEASE_PROCEED_TEXT,
         },
         {
