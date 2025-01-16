@@ -71,6 +71,8 @@ test('Components - Node - Memory popup', async ({page}) => {
         '.nodes-memory__category-data': 'XX.XX MiB / XX.XX GiB',
         '.meta-table-item__value_key_chunks': 'X',
         '.meta-table-item__value_key_sessions': 'X',
+        '.meta-table-item__value_key_version': 'XX.XXXXXXXXX-xxxxx-xx~xXXXXXXXX',
+        '.meta-table-item__value_key_job_proxy_build_version': 'XX.XXXXXXXXX-xxxxx-xx~xXXXXXXXX'
     });
 
     await expect(page).toHaveScreenshot();
