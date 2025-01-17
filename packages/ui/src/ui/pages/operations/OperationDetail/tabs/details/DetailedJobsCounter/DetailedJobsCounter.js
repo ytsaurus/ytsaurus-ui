@@ -2,6 +2,8 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import cn from 'bem-cn-lite';
 
+import {Flex} from '@gravity-ui/uikit';
+
 import MetaTable from '../../../../../../components/MetaTable/MetaTable';
 import Modal from '../../../../../../components/Modal/Modal';
 import Link from '../../../../../../components/Link/Link';
@@ -12,7 +14,6 @@ import hammer from '../../../../../../common/hammer';
 
 import {docsUrl} from '../../../../../../config';
 
-import './DetailedJobsCounter.scss';
 import UIFactory from '../../../../../../UIFactory';
 
 const block = cn('operation-jobs-detailed');
@@ -98,7 +99,7 @@ class DetailedJobsCounter extends Component {
         return type === 'aborted' ? (
             <span>
                 {hammer.format['Number'](primary)}
-                &nbsp; ({hammer.format['Number'](secondary)})
+                &nbsp;({hammer.format['Number'](secondary)})
             </span>
         ) : (
             <span>{hammer.format['Number'](primary + secondary)}</span>
@@ -113,13 +114,11 @@ class DetailedJobsCounter extends Component {
         const modalContent = this.renderModalContent(type);
 
         return (
-            <div className={block()}>
+            <Flex className={block()} gap={1}>
                 <Link theme="ghost" size="xs" onClick={handleShow}>
-                    View
+                    View{' '}
                 </Link>
-
                 {this.renderCount(type, primaryValue, secondaryValue)}
-
                 <Modal
                     onOutsideClick={handleClose}
                     onCancel={handleClose}
@@ -128,7 +127,7 @@ class DetailedJobsCounter extends Component {
                     footer={false}
                     title={title}
                 />
-            </div>
+            </Flex>
         );
     }
 }
