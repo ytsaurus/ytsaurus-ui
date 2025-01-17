@@ -95,27 +95,23 @@ export const Instance: FC<Props> = ({instance, hostType, allowVoting, allowServi
                 <Tooltip content={addressWithoutPort}>
                     <div className={b('host-name')}>{shortName}</div>
                 </Tooltip>
-                <Flex gap={1}>
+                <Flex gap={1} alignItems="center">
                     <span className={b('host-btn')}>
                         <ClipboardButton view="flat-secondary" text={address} />
                     </span>
-                    {allowService && (
-                        <ChangeMaintenanceButton
-                            className={b('host-btn')}
-                            path={instance.getPath()}
-                            title={`Edit ${addressWithoutPort}`}
-                            host={$physicalAddress}
-                            container={$address}
-                            maintenance={maintenance}
-                            maintenanceMessage={maintenanceMessage}
-                            onMaintenanceChange={handleOnMaintenanceChange}
-                        />
-                    )}
-                    {
-                        <Text className={b('nonvoting', {show: denyVoting})} color="secondary">
-                            [nonvoting]
-                        </Text>
-                    }
+                    <ChangeMaintenanceButton
+                        className={b('host-btn', {hidden: !allowService})}
+                        path={instance.getPath()}
+                        title={`Edit ${addressWithoutPort}`}
+                        host={$physicalAddress}
+                        container={$address}
+                        maintenance={maintenance}
+                        maintenanceMessage={maintenanceMessage}
+                        onMaintenanceChange={handleOnMaintenanceChange}
+                    />
+                    <Text className={b('nonvoting', {hidden: !denyVoting})} color="secondary">
+                        [nonvoting]
+                    </Text>
                 </Flex>
             </div>
         </>
