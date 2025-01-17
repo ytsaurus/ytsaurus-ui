@@ -1,5 +1,6 @@
 import React from 'react';
 import cn from 'bem-cn-lite';
+import {ConnectedProps, connect} from 'react-redux';
 
 import map_ from 'lodash/map';
 
@@ -7,6 +8,8 @@ import {Progress} from '@gravity-ui/uikit';
 
 import hammer from '../../../../../common/hammer';
 import {Tooltip} from '../../../../../components/Tooltip/Tooltip';
+import {getSettingsData} from '../../../../../store/selectors/settings/settings-base';
+import {RootState} from '../../../../../store/reducers';
 
 import './MemoryProgress.scss';
 
@@ -25,7 +28,9 @@ type MemoryData = {
     rawData?: {used?: number; limit?: number};
 };
 
-export default class MemoryProgress extends React.Component<MemoryProgressProps> {
+type ReduxProps = ConnectedProps<typeof connector>;
+
+class MemoryProgress extends React.Component<MemoryProgressProps & ReduxProps> {
     progress = React.createRef();
 
     renderProgress() {
@@ -35,11 +40,12 @@ export default class MemoryProgress extends React.Component<MemoryProgressProps>
     }
 
     renderItem(item: MemoryData) {
+        const {showAll} = this.props;
         const rawDataUsed = item.rawData?.used;
         const rawDataLimit = item.rawData?.limit;
         const rawDataLimitIsNumber = typeof rawDataLimit === 'number';
 
-        return (
+        return !showAll && !rawDataUsed ? null : (
             <li key={item.name} className={block('category')}>
                 <div className={block('category-legend')}>
                     <div
@@ -75,9 +81,24 @@ export default class MemoryProgress extends React.Component<MemoryProgressProps>
 
     render() {
         return (
-            <Tooltip className={block()} content={this.renderPopupContent()}>
+            <Tooltip
+                className={block()}
+                tooltipContentClassName={block('tooltip-content')}
+                content={this.renderPopupContent()}
+                placement={'auto'}
+            >
                 <div>{this.renderProgress()}</div>
             </Tooltip>
         );
     }
 }
+
+const mapStateToProps = (state: RootState) => {
+    return {
+        showAll: getSettingsData(state)['global::components::memoryPopupShowAll'],
+    };
+};
+
+const connector = connect(mapStateToProps);
+
+export default connector(MemoryProgress);

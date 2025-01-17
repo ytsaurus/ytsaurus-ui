@@ -58,6 +58,7 @@ import {getDefaultQueryACO} from '../../pages/query-tracker/module/query_aco/sel
 import {getQueryACO, setUserDefaultACO} from '../../pages/query-tracker/module/query_aco/actions';
 import {Item} from '../../components/Select/Select';
 import {useThunkDispatch} from '../../store/thunkDispatch';
+import {BooleanSettingItem} from '../../containers/SettingsMenu/BooleanSettingItem';
 
 export interface SettingsPage {
     title: string;
@@ -389,17 +390,36 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
                 ),
             ]),
         ),
-        makePage('Components', componentsIcon, [
-            makeItem(
-                'Enable side bar',
-                'top',
-                <SettingsMenuItem
-                    settingName={SettingName.COMPONENTS.ENABLE_SIDE_BAR}
-                    settingNS={NAMESPACES.COMPONENTS}
-                    annotation="Display node data in the side bar when clicked."
-                    oneLine={true}
-                />,
-            ),
+        makePageBySections('Components', componentsIcon, [
+            {
+                title: 'General',
+                items: [
+                    makeItem(
+                        'Enable side bar',
+                        'top',
+                        <SettingsMenuItem
+                            settingName={SettingName.COMPONENTS.ENABLE_SIDE_BAR}
+                            settingNS={NAMESPACES.COMPONENTS}
+                            annotation="Display node data in the side bar when clicked."
+                            oneLine={true}
+                        />,
+                    ),
+                ],
+            },
+            {
+                title: 'Memory popup',
+                items: [
+                    makeItem(
+                        'Show empty categories',
+                        'top',
+                        <BooleanSettingItem
+                            settingKey="global::components::memoryPopupShowAll"
+                            description="Display all memory categories even with 0B"
+                            oneLine
+                        />,
+                    ),
+                ],
+            },
         ]),
 
         makePage(
@@ -562,7 +582,15 @@ export function makePage(
     icon: IconProps | undefined,
     items: Array<SettingsItem>,
 ): SettingsPage {
-    return {title, icon: icon || generalIcon, sections: [{title, items}]};
+    return makePageBySections(title, icon, [{title, items}]);
+}
+
+export function makePageBySections(
+    title: string,
+    icon: IconProps | undefined,
+    sections: Array<SettingsSection>,
+) {
+    return {title, icon: icon || generalIcon, sections};
 }
 
 export function makeItem(

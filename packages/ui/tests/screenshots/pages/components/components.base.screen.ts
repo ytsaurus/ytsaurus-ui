@@ -56,14 +56,19 @@ test('Components - Node - Memory popup', async ({page}) => {
 
     await components(page).openSecondNode();
 
-    await components(page).replaceBreadcrumbsTestDir();
-
     await components(page).replaceHostName();
+
+    await components(page).settingsToggleVisibility();
+    await components(page).settingsShowByName('Show empty categories');
+    await components(page).setCheckboxValue('global::components::memoryPopupShowAll', true);
+    await components(page).settingsToggleVisibility({waitUntilClosed: true});
+
+    await replaceInnerHtmlForDateTime(page, ['.meta-table-item__value_key_last_seen']);
+    await components(page).replaceBreadcrumbsTestDir();
 
     await components(page).openMemoryPopup();
 
-    await replaceInnerHtmlForDateTime(page, ['.meta-table-item__value_key_last_seen']);
-
+    await components(page).replaceBreadrumbsLastItem();
     await replaceInnerHtml(page, {
         '.g-progress__text': 'some / progress',
         '.g-progress__item': '',
@@ -72,7 +77,7 @@ test('Components - Node - Memory popup', async ({page}) => {
         '.meta-table-item__value_key_chunks': 'X',
         '.meta-table-item__value_key_sessions': 'X',
         '.meta-table-item__value_key_version': 'XX.XXXXXXXXX-xxxxx-xx~xXXXXXXXX',
-        '.meta-table-item__value_key_job_proxy_build_version': 'XX.XXXXXXXXX-xxxxx-xx~xXXXXXXXX'
+        '.meta-table-item__value_key_job_proxy_build_version': 'XX.XXXXXXXXX-xxxxx-xx~xXXXXXXXX',
     });
 
     await expect(page).toHaveScreenshot();

@@ -53,6 +53,13 @@ interface NavigationSettings {
     'global::navigation::sqlService': Array<'qtkit' | 'yqlkit'>;
 }
 
+interface ComponentsSettings {
+    'global::components::enableSideBar': boolean;
+    'global::components::selectedColumns': Array<string>;
+    'global::components::templates': unknown;
+    'global::components::memoryPopupShowAll': boolean;
+}
+
 interface SystemSettings {
     'global::system::mastersHostType': 'container' | 'host';
     'global::system::nodesType': NodeType;
@@ -119,7 +126,8 @@ export type DescribedSettings = GlobalSettings &
     QueryTrackerSettings &
     ChytSettings &
     QueryTrackerLastSelectedACOsSettings &
-    QueryTrackerUserDefaultACOSettings;
+    QueryTrackerUserDefaultACOSettings &
+    ComponentsSettings;
 
 export type Settings = DescribedSettings & OtherSettings;
 
