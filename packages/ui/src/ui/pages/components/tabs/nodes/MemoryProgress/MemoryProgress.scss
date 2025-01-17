@@ -16,6 +16,11 @@ $padding: 10px 15px;
         list-style: none;
     }
 
+    &__tooltip-content {
+        max-height: 85vh;
+        overflow: auto;
+    }
+
     &__category {
         display: flex;
 
@@ -43,5 +48,9 @@ $padding: 10px 15px;
         &-data {
             text-align: right;
         }
+    }
+
+    &__show-all {
+        text-align: right;
     }
 }

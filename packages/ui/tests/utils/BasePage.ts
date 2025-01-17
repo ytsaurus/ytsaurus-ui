@@ -1,5 +1,6 @@
 import {Page} from '@playwright/test';
 import {E2E_DIR_NAME} from '.';
+import {replaceInnerHtml} from './dom';
 
 class HasPage {
     readonly page;
@@ -91,6 +92,12 @@ export class BasePage extends HasPage {
         await this.replaceBreadcrumbsByTitle(E2E_DIR_NAME, 'e2e.1970-01-01.00:00:00.xxxxxxxxxxx');
     }
 
+    async replaceBreadrumbsLastItem() {
+        await replaceInnerHtml(this.page, {
+            '.g-breadcrumbs2 .g-breadcrumbs2__item:last-child a': 'localhost:XXXXX',
+        });
+    }
+
     async replaceACLInputPath() {
         await this.page.waitForSelector('.g-dialog');
         await this.page.evaluate(() => {
@@ -117,5 +124,26 @@ export class BasePage extends HasPage {
             width: dimensions.width,
             height: dimensions.height,
         });
+    }
+
+    async settingsShowByName(name: string) {
+        await this.page.fill(`.settings-panel [placeholder="Search settings"]`, name);
+    }
+
+    async settingsToggleVisibility({waitUntilClosed}: {waitUntilClosed?: boolean} = {}) {
+        await this.page.click('.gn-aside-header__footer .gn-composite-bar-item:first-child');
+        if (waitUntilClosed) {
+            await this.page.waitForFunction(() => {
+                return !document.querySelector('.settings-panel');
+            });
+        }
+    }
+
+    async setCheckboxValue(testId: string, value: boolean) {
+        const cbx = await this.page.getByTestId(testId);
+        const checked = await cbx.isChecked();
+        if (checked !== value) {
+            await cbx.check();
+        }
     }
 }

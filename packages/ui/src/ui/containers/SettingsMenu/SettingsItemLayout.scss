@@ -1,0 +1,30 @@
+.yt-settings-item {
+    margin-bottom: 15px;
+
+    & > .checkbox_size_s {
+        font-size: 14px;
+    }
+
+    &_one-line {
+        display: flex;
+    }
+
+    &_select {
+        margin-left: 0;
+        margin-bottom: 0;
+    }
+
+    &-description {
+        font-size: 13px;
+        padding-top: 3px;
+        padding-bottom: 10px;
+    }
+
+    &__annotation {
+        padding-left: 19px;
+    }
+
+    &-annotation-highlight {
+        color: var(--danger-color);
+    }
+}
