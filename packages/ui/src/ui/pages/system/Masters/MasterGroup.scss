@@ -51,6 +51,7 @@
         grid-column: host;
         display: flex;
         align-items: center;
+        justify-content: space-between;
         gap: 0 4px;
 
         &-name {
@@ -58,13 +59,23 @@
             @include ellipsis();
         }
 
+        $host: &;
+
         &-btn {
             flex: 0 0 auto;
             visibility: hidden;
+
+            &_hidden {
+                visibility: hidden;
+            }
         }
 
         &:hover &-btn {
             visibility: visible;
+
+            &_hidden {
+                visibility: hidden;
+            }
         }
 
         &_quorum {
@@ -90,9 +101,6 @@
                 &_missing {
                     color: var(--danger-color);
                 }
-
-                &_unknown {
-                }
             }
 
             .yt-icon {
@@ -114,9 +122,8 @@
     }
 
     &__nonvoting {
-        display: none;
-        &_show {
-            display: unset;
+        &_hidden {
+            visibility: hidden;
         }
     }
 }
