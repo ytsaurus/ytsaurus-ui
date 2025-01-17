@@ -1,12 +1,10 @@
-import React, {Component} from 'react';
-import PropTypes from 'prop-types';
+import React from 'react';
 import cn from 'bem-cn-lite';
 
 import map_ from 'lodash/map';
 
 import {Progress} from '@gravity-ui/uikit';
 
-import withVisible from '../../../../../hocs/withVisible';
 import hammer from '../../../../../common/hammer';
 import {Tooltip} from '../../../../../components/Tooltip/Tooltip';
 
@@ -14,45 +12,42 @@ import './MemoryProgress.scss';
 
 const block = cn('nodes-memory');
 
-class MemoryProgress extends Component {
-    static propTypes = {
-        // from parent
-        memoryText: PropTypes.string.isRequired,
-        memoryData: PropTypes.arrayOf(
-            PropTypes.shape({
-                color: PropTypes.string.isRequired,
-                name: PropTypes.string.isRequired,
-                value: PropTypes.number.isRequired,
-                rawData: PropTypes.shape({
-                    limit: PropTypes.number,
-                    used: PropTypes.number,
-                }),
-            }),
-        ).isRequired,
-    };
+type MemoryProgressProps = {
+    // from parent
+    memoryText: string;
+    memoryData?: Array<MemoryData>;
+};
 
+type MemoryData = {
+    color: string;
+    name: string;
+    value: number;
+    rawData?: {used?: number; limit?: number};
+};
+
+export default class MemoryProgress extends React.Component<MemoryProgressProps> {
     progress = React.createRef();
 
     renderProgress() {
-        const {memoryText, memoryData} = this.props;
+        const {memoryText, memoryData = []} = this.props;
 
         return <Progress stack={memoryData} text={memoryText} />;
     }
 
-    renderItem(category) {
-        const rawDataUsed = category.rawData?.used;
-        const rawDataLimit = category.rawData?.limit;
+    renderItem(item: MemoryData) {
+        const rawDataUsed = item.rawData?.used;
+        const rawDataLimit = item.rawData?.limit;
         const rawDataLimitIsNumber = typeof rawDataLimit === 'number';
 
         return (
-            <li key={category.name} className={block('category')}>
+            <li key={item.name} className={block('category')}>
                 <div className={block('category-legend')}>
                     <div
                         className={block('category-legend-color')}
-                        style={{backgroundColor: category.color}}
+                        style={{backgroundColor: item.color}}
                     />
                     <strong className={block('category-legend-title')}>
-                        {hammer.format['ReadableField'](category.name)}
+                        {hammer.format['ReadableField'](item.name)}
                     </strong>
                 </div>
                 <div className={block('category-data')}>
@@ -68,10 +63,10 @@ class MemoryProgress extends Component {
         const {memoryData} = this.props;
 
         return (
-            memoryData.length > 0 && (
+            memoryData?.length! > 0 && (
                 <div className={block('popup')}>
                     <ul className={block('content')}>
-                        {map_(memoryData, (category) => this.renderItem(category))}
+                        {map_(memoryData, (item) => this.renderItem(item))}
                     </ul>
                 </div>
             )
@@ -80,11 +75,9 @@ class MemoryProgress extends Component {
 
     render() {
         return (
-            <Tooltip className={block()} content={this.renderPopupContent()} disableInline>
+            <Tooltip className={block()} content={this.renderPopupContent()}>
                 <div>{this.renderProgress()}</div>
             </Tooltip>
         );
     }
 }
-
-export default withVisible(MemoryProgress);
