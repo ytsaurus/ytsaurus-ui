@@ -50,10 +50,6 @@ export const initialState = {
             value: 'all',
             defaultValue: 'all',
         },
-        dataSource: {
-            value: 'archive',
-            defaultValue: 'archive',
-        },
         withStderr: {
             value: false,
             defaultValue: false,

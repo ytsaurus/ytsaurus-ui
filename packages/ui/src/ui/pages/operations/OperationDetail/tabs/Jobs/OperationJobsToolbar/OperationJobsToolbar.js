@@ -53,13 +53,6 @@ export default function OperationJobsToolbar() {
                     </div>
                     <div className={block('toolbar-state', tbComp)}>
                         <JobsSelectFilter
-                            name="dataSource"
-                            states={['auto', 'runtime', 'archive']}
-                            disabled={showCompetitiveJobs}
-                        />
-                    </div>
-                    <div className={block('toolbar-state', tbComp)}>
-                        <JobsSelectFilter
                             name="type"
                             statesProvider={extractJobTypes}
                             disabled={showCompetitiveJobs}

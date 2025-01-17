@@ -101,8 +101,6 @@ export function getJobsRequestParameters({operations, tables}) {
 
     return {
         operation_id: operation.$value,
-        data_source: filters.dataSource.value,
-        // following options have no use unless dataSource is 'manual' which we don't support yet
         /*
         include_archive: true,
         include_cypress: true,
