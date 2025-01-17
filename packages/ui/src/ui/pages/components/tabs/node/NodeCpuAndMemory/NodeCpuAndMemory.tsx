@@ -21,16 +21,7 @@ export const hasCpuAndMemoryMeta = (node: NodeCpuAndMemoryProps) =>
     node.cpuProgress || node.memoryProgress || node.networkProgress;
 
 function NodeCpuAndMemory({node}: {node: NodeCpuAndMemoryProps}): ReturnType<React.VFC> {
-    const {
-        memoryData,
-        memoryText,
-        memoryProgress,
-        cpuProgress,
-        cpuText,
-        networkProgress,
-        networkText,
-        gpu,
-    } = node;
+    const {memoryData, memoryText, cpuProgress, cpuText, networkProgress, networkText, gpu} = node;
     return (
         <MetaTable
             items={[
@@ -40,13 +31,7 @@ function NodeCpuAndMemory({node}: {node: NodeCpuAndMemoryProps}): ReturnType<Rea
                 },
                 {
                     key: 'memory',
-                    value: (
-                        <MemoryProgress
-                            memoryData={memoryData}
-                            memoryText={memoryText}
-                            memoryProgress={memoryProgress || 0}
-                        />
-                    ),
+                    value: <MemoryProgress memoryData={memoryData} memoryText={memoryText} />,
                 },
                 {
                     key: 'gpu',

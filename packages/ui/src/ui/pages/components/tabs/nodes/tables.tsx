@@ -1377,13 +1377,7 @@ export const NODES_TABLE_TEMPLATES: Templates = {
     },
 
     memory(item) {
-        return (
-            <MemoryProgress
-                memoryData={item.memoryData}
-                memoryText={item.memoryText}
-                memoryProgress={item.memoryProgress || 0}
-            />
-        );
+        return <MemoryProgress memoryData={item.memoryData} memoryText={item.memoryText} />;
     },
 
     memory_total(item) {
