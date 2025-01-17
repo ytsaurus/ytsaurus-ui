@@ -4,7 +4,7 @@ import {Progress} from '@gravity-ui/uikit';
 import MetaTable from '../../../../../components/MetaTable/MetaTable';
 
 import type {Node} from '../../../../../store/reducers/components/nodes/nodes/node';
-import {progressText} from '../../../../../utils/progress';
+import {calcProgressProps} from '../../../../../utils/utils';
 
 interface NodeResourcesProps {
     removalSlots: Node['removalSlots'];
@@ -24,36 +24,32 @@ export const hasResourcesMeta = (node: NodeResourcesProps) =>
     ].some((item) => typeof item !== 'undefined');
 
 function NodeResources(node: NodeResourcesProps): ReturnType<React.VFC> {
-    const userSlots = progressText(node.userSlots.usage, node.userSlots.limits);
-    const sealSlots = progressText(node.sealSlots.usage, node.sealSlots.limits);
-    const repairSlots = progressText(node.repairSlots.usage, node.repairSlots.limits);
-    const removalSlots = progressText(node.removalSlots.usage, node.removalSlots.limits);
-    const replicationSLots = progressText(
-        node.replicationSlots.usage,
-        node.replicationSlots.limits,
-    );
-
     return (
         <MetaTable
             items={[
                 {
                     key: 'user slots',
                     value: (
-                        <Progress value={node.userSlots.usage} text={userSlots} theme="success" />
+                        <Progress
+                            {...calcProgressProps(node.userSlots.usage, node.userSlots.limits)}
+                            theme="success"
+                        />
                     ),
                 },
                 {
                     key: 'seal slots',
                     value: (
-                        <Progress value={node.sealSlots.usage} text={sealSlots} theme="success" />
+                        <Progress
+                            {...calcProgressProps(node.sealSlots.usage, node.sealSlots.limits)}
+                            theme="success"
+                        />
                     ),
                 },
                 {
                     key: 'repair slots',
                     value: (
                         <Progress
-                            value={node.repairSlots.usage}
-                            text={repairSlots}
+                            {...calcProgressProps(node.repairSlots.usage, node.repairSlots.limits)}
                             theme="success"
                         />
                     ),
@@ -62,8 +58,10 @@ function NodeResources(node: NodeResourcesProps): ReturnType<React.VFC> {
                     key: 'removal slots',
                     value: (
                         <Progress
-                            value={node.removalSlots.usage}
-                            text={removalSlots}
+                            {...calcProgressProps(
+                                node.removalSlots.usage,
+                                node.removalSlots.limits,
+                            )}
                             theme="success"
                         />
                     ),
@@ -72,8 +70,10 @@ function NodeResources(node: NodeResourcesProps): ReturnType<React.VFC> {
                     key: 'replication slots',
                     value: (
                         <Progress
-                            value={node.replicationSlots.usage}
-                            text={replicationSLots}
+                            {...calcProgressProps(
+                                node.replicationSlots.usage,
+                                node.replicationSlots.limits,
+                            )}
                             theme="success"
                         />
                     ),
