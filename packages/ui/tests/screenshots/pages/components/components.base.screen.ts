@@ -85,6 +85,12 @@ test('Components - Tablets', async ({page}) => {
         '.yt-host .g-link': 'local:XXX',
         '.g-progress__text': '0 B / X.00 GiB',
     });
+    await page.evaluate(() => {
+        const progress = document.querySelectorAll('.g-progress__item');
+        progress.forEach((element) => {
+            element.remove();
+        });
+    });
     await expect(page).toHaveScreenshot();
 });
 
