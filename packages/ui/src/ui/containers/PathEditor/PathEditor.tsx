@@ -10,6 +10,8 @@ import isEmpty_ from 'lodash/isEmpty';
 
 import {Popup, TextInput} from '@gravity-ui/uikit';
 
+import thorYPath from '../../common/thor/ypath';
+
 import Icon from '../../components/Icon/Icon';
 import ErrorMessage from '../../components/ErrorMessage/ErrorMessage';
 
@@ -319,6 +321,12 @@ export class PathEditor extends Component<PathEditorProps, PathEditorState> {
             event.preventDefault();
         };
 
+        let lastFragment: string | undefined = '';
+        try {
+            const {fragments} = new thorYPath.YPath(item.path, 'absolute');
+            lastFragment = fragments[fragments.length - 1]?.name;
+        } catch {}
+
         return (
             <div
                 key={key}
@@ -327,7 +335,9 @@ export class PathEditor extends Component<PathEditorProps, PathEditorState> {
             >
                 <Icon awesome={iconName} />
 
-                <span className={b('item-path')}>{item.path}</span>
+                <span className={b('item-path')}>
+                    {lastFragment ? `\u2026/${lastFragment}` : item.path}
+                </span>
             </div>
         );
     };
