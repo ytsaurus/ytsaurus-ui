@@ -139,6 +139,10 @@ export class BasePage extends HasPage {
         }
     }
 
+    async settingsShowSection(sectionName: string) {
+        await this.page.click(`.settings-panel [data-id="/${sectionName}"]`);
+    }
+
     async setCheckboxValue(testId: string, value: boolean) {
         const cbx = await this.page.getByTestId(testId);
         const checked = await cbx.isChecked();
@@ -146,4 +150,8 @@ export class BasePage extends HasPage {
             await cbx.check();
         }
     }
+}
+
+export function basePage(page: Page) {
+    return new BasePage({page});
 }
