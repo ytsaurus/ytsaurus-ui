@@ -1,5 +1,20 @@
 # Changelog
 
+## [1.78.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.77.0...ui-v1.78.0) (2025-01-20)
+
+
+### Features
+
+* **Job/Statistics:** use operation_statistics_descriptions from supported_features [YTFRONT-3522] ([abf49e5](https://github.com/ytsaurus/ytsaurus-ui/commit/abf49e5af07010f7253a01e211e8a19f3a131e3a))
+* **Node:** display node version [YTFRONT-4555] ([0e460d2](https://github.com/ytsaurus/ytsaurus-ui/commit/0e460d29bf528a34ea48f4ffef4bccb24dde32f1))
+
+
+### Bug Fixes
+
+* **CellPreview:** show preview button when yql v3 types disabled [[#928](https://github.com/ytsaurus/ytsaurus-ui/issues/928)] ([0e6fd69](https://github.com/ytsaurus/ytsaurus-ui/commit/0e6fd690a44a79eb4245017a7defc3950cb2e27c))
+* **CopyObjectModal:** change checkbox text [YTFRONT-3041] ([ce6a02f](https://github.com/ytsaurus/ytsaurus-ui/commit/ce6a02fd6383371ccc51c844454de0fed605e3a2))
+* **Users/Groups:** simpilfy CommaSeparatedListWithRestCounter component, now user always will be able to see all group members and all groups of specific user [[#704](https://github.com/ytsaurus/ytsaurus-ui/issues/704)] ([453d8d7](https://github.com/ytsaurus/ytsaurus-ui/commit/453d8d7f00fad7d2cf054a3b85fb43687c68e002))
+
 ## [1.77.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.76.0...ui-v1.77.0) (2024-12-24)
 
 
