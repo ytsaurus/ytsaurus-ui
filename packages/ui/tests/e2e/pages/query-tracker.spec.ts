@@ -71,6 +71,7 @@ test('@QueryTracker: Click on a new query button should reset current query', as
     await queryTrackerPage.fillQueryEditor(['SELECT * FROM "//tmp/static-table"\n', 'LIMIT 20;\n']);
     await queryTrackerPage.clickOnRunQuery();
     await queryTrackerPage.clickOnNewQueryButton();
+    await queryTrackerPage.confirmClickOnNewQueryButton();
     await queryTrackerPage.isQueryResultTableHide();
     await expect(page).toHaveURL(new RegExp(/\/queries\/?$/gm));
 });
