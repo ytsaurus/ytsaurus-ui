@@ -1,21 +1,19 @@
 import {Result} from '../../module/query_result/types';
 
-export const getPointValue = (value: Result) => {
-    switch (value.$type) {
-        case 'yql.interval': {
-            return Number(value.$value);
-        }
+export const NumberTypes = [
+    'yql.interval',
+    'yql.int32',
+    'yql.int64',
+    'yql.uint8',
+    'yql.uint32',
+    'yql.uint64',
+    'yql.float',
+    'yql.double',
+    'yql.decimal',
+];
 
-        case 'yql.int32':
-        case 'yql.int64':
-        case 'yql.uint8':
-        case 'yql.uint32':
-        case 'yql.uint64':
-        case 'yql.float':
-        case 'yql.double':
-        case 'yql.decimal':
-            return Number(value.$value);
-        default:
-            return value.$rawValue;
-    }
+export const getPointValue = (value: Result) => {
+    if (NumberTypes.includes(value.$type)) return Number(value.$value);
+
+    return value.$rawValue;
 };

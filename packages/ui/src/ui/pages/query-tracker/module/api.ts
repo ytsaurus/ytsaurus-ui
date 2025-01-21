@@ -18,7 +18,7 @@ import {getLastSelectedACONamespaces, selectIsMultipleAco} from './query_aco/sel
 import {setSettingByKey} from '../../../store/actions/settings';
 import unipika from '../../../common/thor/unipika';
 import {CancelTokenSource} from 'axios';
-import {Visualization} from '../QueryResultsVisualization/types';
+import {VisualizationState} from './queryChart/queryChartSlice';
 
 function getQTApiSetup(): {proxy?: string} {
     const QT_CLUSTER = getQueryTrackerCluster();
@@ -134,7 +134,7 @@ export interface QueryItem extends DraftQuery {
     error?: QueryError;
     annotations?: {
         title?: string;
-        chartConfig?: Visualization;
+        chartConfig?: VisualizationState;
     };
 }
 

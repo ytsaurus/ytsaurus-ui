@@ -1,8 +1,14 @@
 .empty-placeholders-message {
-    align-items: center;
     display: flex;
-    height: 100%;
+    flex-direction: column;
     justify-content: center;
+    align-items: center;
     text-align: center;
+    height: 100%;
     width: 100%;
+    gap: 15px;
+
+    &__icon {
+        height: 150px;
+    }
 }

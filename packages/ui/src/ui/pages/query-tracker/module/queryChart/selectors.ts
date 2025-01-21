@@ -3,21 +3,18 @@ import {RootState} from '../../../../store/reducers';
 import {getQueryResultsState} from '../query_result/selectors';
 import {getQueryDraft} from '../query/selectors';
 import {QueryResultReadyState} from '../query_result/types';
-import {colorsValidation} from '../../QueryResultsVisualization/validation/colorsValidation';
-import {lineAndBarValidation} from '../../QueryResultsVisualization/validation/lineAndBarValidation';
-import {scatterValidation} from '../../QueryResultsVisualization/validation/scatterValidation';
+import {NumberTypes} from '../../QueryResultsVisualization/preparers/getPointData';
 
-export const selectQueryResultVisualization = (state: RootState) =>
+export const selectChartVisualization = (state: RootState) =>
     state.queryTracker.queryChart.visualization;
 
-export const selectQueryResultVisualizationPlaceholders = (state: RootState) =>
-    selectQueryResultVisualization(state).placeholders;
+export const selectChartConfig = (state: RootState) =>
+    state.queryTracker.queryChart.visualization.config;
 
-export const selectQueryResultVisualizationId = (state: RootState) =>
-    selectQueryResultVisualization(state).id;
-
-export const selectQueryResultChartSettings = (state: RootState) =>
-    selectQueryResultVisualization(state).chartSettings;
+export const selectChartAxisType = createSelector(
+    [selectChartConfig],
+    (config) => config.xAxis.type,
+);
 
 export const selectQueryResultChartSaved = (state: RootState) =>
     state.queryTracker.queryChart.saved;
@@ -38,40 +35,16 @@ export const selectAvailableFields = (state: RootState) => {
 
     const row = (result && result[0]) || [];
 
-    const columns: string[] = Object.keys(row).map((name) => {
-        return name;
-    });
+    return Object.keys(row).reduce<{stringColumns: string[]; numberColumns: string[]}>(
+        (acc, key) => {
+            if (NumberTypes.includes(row[key].$type)) {
+                acc['numberColumns'].push(key);
+            } else {
+                acc['stringColumns'].push(key);
+            }
 
-    return columns;
+            return acc;
+        },
+        {stringColumns: [], numberColumns: []},
+    );
 };
-
-export const resultsPlaceholdersValidation = createSelector(
-    [
-        selectQueryResult,
-        selectQueryResultVisualizationPlaceholders,
-        selectQueryResultVisualizationId,
-    ],
-    (queryResult, placeholders, visualizationId): Record<string, {invalid: boolean}> => {
-        const hasColors = Boolean(
-            placeholders.find((placeholder) => placeholder.id === 'colors')?.field,
-        );
-
-        if (hasColors) {
-            return colorsValidation(queryResult, placeholders);
-        }
-
-        const validationFunction =
-            visualizationId === 'scatter' ? scatterValidation : lineAndBarValidation;
-
-        return validationFunction(queryResult, placeholders);
-    },
-);
-
-export const selectIsPlaceholdersFieldsFilled = createSelector(
-    [selectQueryResultVisualizationPlaceholders],
-    (placeholders) => {
-        return placeholders.every((item) => {
-            return (item.id !== 'x' && item.id !== 'y') || item.field !== '';
-        });
-    },
-);
