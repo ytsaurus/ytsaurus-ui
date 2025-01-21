@@ -1,38 +1,34 @@
-import React, {useMemo} from 'react';
+import React, {forwardRef, useMemo} from 'react';
 import ChartKit from '../../../../components/YagrChartKit/YagrChartKit';
 import {settings} from '@gravity-ui/chartkit';
 import type {ChartKitRef} from '@gravity-ui/chartkit';
 import {prepareWidgetData} from '../preparers/prepareWidgetData';
 import {useSelector} from 'react-redux';
-import {
-    selectIsPlaceholdersFieldsFilled,
-    selectQueryResultVisualization,
-} from '../../module/queryChart/selectors';
-import type {QueryResult} from '../preparers/types';
+import {selectChartVisualization, selectQueryResult} from '../../module/queryChart/selectors';
 import {EmptyPlaceholdersMessage} from './EmptyPlaceholdersMessage';
 import {D3Plugin} from '@gravity-ui/chartkit/d3';
 
 settings.set({plugins: [...settings.get('plugins'), D3Plugin]});
 
-type LineBasicProps = {
-    result: QueryResult;
-};
+export const BaseChart = forwardRef<ChartKitRef | undefined>(function BaseChartComponent(_, ref) {
+    const result = useSelector(selectQueryResult);
+    const visualization = useSelector(selectChartVisualization);
 
-export const BaseChart = React.forwardRef<ChartKitRef | undefined, LineBasicProps>(
-    function BaseChartComponent({result}, ref) {
-        const visualization = useSelector(selectQueryResultVisualization);
-        const fieldsIsFilled = useSelector(selectIsPlaceholdersFieldsFilled);
+    const widgetData = useMemo(() => {
+        return prepareWidgetData(result, visualization);
+    }, [result, visualization]);
 
-        const widgetData = useMemo(() => {
-            return prepareWidgetData({result, visualization});
-        }, [result, visualization]);
+    const axisKey = useMemo(() => {
+        return (
+            visualization.xField + visualization.config.xAxis.type + visualization.yField.join('')
+        );
+    }, [visualization]);
 
-        if (!fieldsIsFilled) {
-            return <EmptyPlaceholdersMessage />;
-        }
+    if (!visualization.xField || !visualization.yField || !widgetData) {
+        return <EmptyPlaceholdersMessage />;
+    }
 
-        return <ChartKit type="d3" data={widgetData} ref={ref} />;
-    },
-);
+    return <ChartKit type="d3" data={widgetData} ref={ref} key={axisKey} />;
+});
 
 export const Chart = React.memo(BaseChart);

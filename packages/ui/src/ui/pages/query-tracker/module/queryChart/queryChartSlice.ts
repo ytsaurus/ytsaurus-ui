@@ -1,47 +1,59 @@
-import type {ChartSettings, Visualization} from '../../QueryResultsVisualization/types';
 import {PayloadAction, createSlice} from '@reduxjs/toolkit';
+import {ChartType} from '../../QueryResultsVisualization/constants';
+import type {
+    ChartKitWidgetAxisType,
+    ChartKitWidgetData,
+} from '@gravity-ui/chartkit/build/types/widget-data';
+
+export type Config = {
+    title: ChartKitWidgetData['title'];
+    xAxis: ChartKitWidgetData['xAxis'] & {type: ChartKitWidgetAxisType};
+    yAxis: ChartKitWidgetData['yAxis'];
+    legend: ChartKitWidgetData['legend'];
+};
+
+export type VisualizationState = {
+    type: ChartType | null;
+    xField: string;
+    yField: string[];
+    config: Config;
+};
 
 export type QueryResultsVisualizationState = {
     saved: boolean;
-    visualization: Visualization;
+    visualization: VisualizationState;
 };
 
-export const initialVisualization: Visualization = {
-    id: 'line',
-    placeholders: [
-        {
-            id: 'x',
-            field: '',
-        },
-        {
-            id: 'y',
-            field: '',
-        },
-        {
-            id: 'colors',
-            field: '',
-        },
-    ],
-    chartSettings: {
-        xAxis: {
-            legend: 'on',
-            labels: 'on',
-            title: '',
-            grid: 'on',
-            pixelInterval: '',
-        },
-        yAxis: {
-            labels: 'on',
-            title: '',
-            grid: 'on',
-            pixelInterval: '',
-        },
-    },
-};
+export type FieldKey = 'xField' | 'yField' | 'xType';
 
 export const initialState: QueryResultsVisualizationState = {
     saved: true,
-    visualization: initialVisualization,
+    visualization: {
+        type: null,
+        xField: '',
+        yField: [],
+        config: {
+            title: {
+                text: '',
+            },
+            xAxis: {
+                type: 'linear',
+                title: {
+                    text: '',
+                },
+            },
+            yAxis: [
+                {
+                    title: {
+                        text: '',
+                    },
+                },
+            ],
+            legend: {
+                enabled: false,
+            },
+        },
+    },
 };
 
 const queryChartSlice = createSlice({
@@ -51,66 +63,49 @@ const queryChartSlice = createSlice({
         setSaved: (state, {payload}: PayloadAction<boolean>) => {
             state.saved = payload;
         },
-        setField: (state, {payload}: PayloadAction<{placeholderId: string; fieldName: string}>) => {
-            return {
-                ...state,
-                visualization: {
-                    ...state.visualization,
-                    placeholders: state.visualization.placeholders.map((placeholder) => {
-                        if (placeholder.id === payload.placeholderId) {
-                            return {
-                                ...placeholder,
-                                field: payload.fieldName,
-                            };
-                        }
-
-                        return placeholder;
-                    }),
-                },
-            };
+        setConfig: (state, {payload}: PayloadAction<Config>) => {
+            state.visualization.config = payload;
         },
-        removeField: (
+        setFiled: (
             state,
-            {payload}: PayloadAction<{placeholderId: string; fieldName: string}>,
+            {payload}: PayloadAction<{value: string; oldValue: string; name: FieldKey}>,
         ) => {
-            const placeholders = state.visualization.placeholders.map((placeholder) => {
-                if (placeholder.id === payload.placeholderId) {
-                    return {
-                        ...placeholder,
-                        field: '',
-                    };
+            if (payload.name === 'xField') {
+                state.visualization.xField = payload.value;
+                return;
+            }
+
+            if (payload.value) {
+                if (payload.oldValue) {
+                    const newArray = state.visualization.yField.filter(
+                        (field) => field !== payload.oldValue,
+                    );
+                    state.visualization.yField = [...newArray, payload.value];
+                } else {
+                    state.visualization.yField.push(payload.value);
                 }
-
-                return placeholder;
-            });
-
+            } else {
+                state.visualization.yField = state.visualization.yField.filter(
+                    (field) => field !== payload.oldValue,
+                );
+            }
+        },
+        setVisualizationType: (state, {payload}: PayloadAction<ChartType>) => {
             return {
                 ...state,
                 visualization: {
-                    ...state.visualization,
-                    placeholders,
+                    ...initialState.visualization,
+                    type: payload,
                 },
             };
         },
-        setChartSettings: (state, {payload}: PayloadAction<ChartSettings>) => {
-            return {
-                ...state,
-                visualization: {
-                    ...state.visualization,
-                    chartSettings: payload,
-                },
-            };
-        },
-        setVisualization: (state, {payload}: PayloadAction<Visualization>) => {
-            return {
-                ...state,
-                visualization: payload,
-            };
+        setVisualization: (state, {payload}: PayloadAction<VisualizationState>) => {
+            state.visualization = payload;
         },
     },
 });
 
-export const {setSaved, setChartSettings, setField, removeField, setVisualization} =
+export const {setConfig, setSaved, setFiled, setVisualizationType, setVisualization} =
     queryChartSlice.actions;
 
 export const queryChartReducer = queryChartSlice.reducer;
