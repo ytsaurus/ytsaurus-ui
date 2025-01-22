@@ -131,7 +131,13 @@ export class BasePage extends HasPage {
     }
 
     async settingsToggleVisibility({waitUntilClosed}: {waitUntilClosed?: boolean} = {}) {
-        await this.page.click('.gn-aside-header__footer .gn-composite-bar-item:first-child');
+        await this.page.waitForFunction(() => {
+            const el = document.querySelector<HTMLElement>(
+                '.gn-aside-header__footer [title="Settings"]',
+            );
+            el?.click();
+            return Boolean(el);
+        });
         if (waitUntilClosed) {
             await this.page.waitForFunction(() => {
                 return !document.querySelector('.settings-panel');
@@ -147,7 +153,18 @@ export class BasePage extends HasPage {
         const cbx = await this.page.getByTestId(testId);
         const checked = await cbx.isChecked();
         if (checked !== value) {
-            await cbx.check();
+            await cbx.click();
+        }
+    }
+
+    async waitForHidden(selector: string) {
+        const loc = await this.page.locator(selector);
+        while (loc.isHidden) {
+            try {
+                if (await loc.isHidden()) {
+                    break;
+                }
+            } catch {}
         }
     }
 }

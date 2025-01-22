@@ -432,6 +432,7 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
                     <SettingsMenuItem
                         settingName={SettingName.DEVELOPMENT.YQL_TYPES}
                         settingNS={NAMESPACES.DEVELOPMENT}
+                        qa="settings_yql-v3-types"
                         oneLine
                     />,
                 ),

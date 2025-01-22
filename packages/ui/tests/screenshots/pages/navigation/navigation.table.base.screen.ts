@@ -2,6 +2,7 @@ import {Page, expect, test} from '@playwright/test';
 import {E2E_DIR, makeClusterUrl} from '../../../utils';
 import {replaceInnerHtml} from '../../../utils/dom';
 import {TablePage} from './TablePage';
+import {basePage} from '../../../utils/BasePage';
 
 function tablePage(page: Page) {
     return new TablePage({page});
@@ -147,5 +148,29 @@ test('Navigation: table - userColumnPresets', async ({page, context}) => {
                 return true;
             },
         });
+    });
+});
+
+test('Navigation: yql-v3-types', async ({page}) => {
+    await page.goto(makeClusterUrl(`navigation?path=${E2E_DIR}/tmp/yql-v3-types-table`));
+
+    await tablePage(page).replaceStaticTableMeta();
+    await tablePage(page).waitForTablContent('.navigation-table', 5);
+
+    await test.step('yql-v3-types enabled', async () => {
+        await expect(page).toHaveScreenshot();
+    });
+
+    await test.step('Diable yql-v3-types', async () => {
+        await tablePage(page).settingsToggleVisibility();
+        await tablePage(page).settingsShowByName('YQL V3 types');
+        await tablePage(page).setCheckboxValue('settings_yql-v3-types', false);
+        await tablePage(page).settingsToggleVisibility();
+    });
+
+    await test.step('yql-v3-types disabled', async () => {
+        await tablePage(page).waitForHidden('.data-table__row .yql_datetime64');
+        await tablePage(page).waitForTablContent('.navigation-table', 5);
+        await expect(page).toHaveScreenshot();
     });
 });

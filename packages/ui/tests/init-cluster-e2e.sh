@@ -212,3 +212,24 @@ yt create -r map_node ${SPECIFIC_NAMES_DIR}'/<script>console.error("hello XSS")<
 yt create -r map_node ${SPECIFIC_NAMES_DIR}'/__\//ok'
 yt create -r map_node ${SPECIFIC_NAMES_DIR}'/__\@/ok'
 yt create -r map_node ${SPECIFIC_NAMES_DIR}'/__\&/ok'
+
+YQLV3_TABLE=${E2E_DIR}/tmp/yql-v3-types-table
+yt create -r --attributes "{schema=[
+  {name=bool;type_v3=bool};
+  {name=date32;type_v3=date32};
+  {name=datetime64;type_v3=datetime64};
+  {name=double;type_v3=double};
+  {name=int64;type_v3=int64};
+  {name=timestamp;type_v3=timestamp64};
+  {name=uint64;type_v3=uint64}
+]}" table ${YQLV3_TABLE}
+(
+    set +x
+    for ((i = 1; i < 6; i++)); do
+        d=$i$i$i$i$i$i$i$i$i$i$i
+        date32=$i$i$i$i
+        b=$([ $(expr $i % 2) = "0" ] && echo false || echo true)
+        echo '{"bool":'${b}',"date32":'${date32}',"datetime64":'${d}',"double":'${i}'.'${d}',"int64":'${d}',"timestamp":'${d}',"uint64":'${d}'}'
+    done
+    set -x
+) | yt write-table --format json ${YQLV3_TABLE}

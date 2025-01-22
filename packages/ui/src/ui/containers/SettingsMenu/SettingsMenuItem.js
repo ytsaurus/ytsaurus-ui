@@ -27,6 +27,8 @@ class SettingsMenuItem extends Component {
         oneLine: PropTypes.bool,
 
         useSwitch: PropTypes.bool,
+
+        qa: PropTypes.string,
     };
 
     render() {
@@ -40,6 +42,7 @@ class SettingsMenuItem extends Component {
             label,
             oneLine,
             useSwitch,
+            qa,
         } = this.props;
         const checked = getSetting(settingName, settingNS);
 
@@ -56,12 +59,14 @@ class SettingsMenuItem extends Component {
                     <Switch
                         checked={checked}
                         onUpdate={(value) => setSetting(settingName, settingNS, value)}
+                        qa={qa}
                     />
                 ) : (
                     <Checkbox
                         content={label}
                         checked={checked}
                         onUpdate={(value) => setSetting(settingName, settingNS, value)}
+                        qa={qa}
                     />
                 )}
                 <div className={b('settings-annotation', 'elements-secondary-text')}>

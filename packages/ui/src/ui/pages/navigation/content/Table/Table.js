@@ -31,6 +31,7 @@ import {
     getSrcColumns,
     getVisibleColumns,
     getVisibleRows,
+    isYqlTypesEnabled,
 } from '../../../../store/selectors/navigation/content/table';
 import {
     getColumns,
@@ -166,10 +167,12 @@ const renderTable = (props) => {
 
 function Table(props) {
     const {path, getTableData, abortAndReset} = props;
+    const isYqlV3Types = useSelector(isYqlTypesEnabled);
+
     useEffect(() => {
         getTableData();
         return abortAndReset;
-    }, [path]);
+    }, [path, isYqlV3Types, abortAndReset]);
 
     const {isFullScreen, handleScreenChanged, isDynamic} = props;
     return (
