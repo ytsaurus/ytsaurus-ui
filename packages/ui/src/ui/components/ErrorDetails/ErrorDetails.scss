@@ -6,6 +6,7 @@
 
         padding: 8px;
         margin-bottom: 10px;
+        margin-top: 4px;;
 
         border-radius: var(--g-border-radius-l);
 
@@ -30,6 +31,11 @@
     }
 
     &__tabs {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+
         span {
             color: var(--g-color-text-complementary);
             font-weight: 700;
