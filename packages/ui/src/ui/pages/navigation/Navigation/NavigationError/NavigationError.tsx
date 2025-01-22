@@ -1,6 +1,6 @@
 import React from 'react';
 import cn from 'bem-cn-lite';
-import {Flex, Text} from '@gravity-ui/uikit';
+import {ClipboardButton, Flex, Text} from '@gravity-ui/uikit';
 
 import Error from '../../../../components/Error/Error';
 import {NavigationErrorImage} from './NavigationErrorImage';
@@ -26,8 +26,8 @@ function PrettyError(props: Props) {
 
     const code = getLeadingErrorCode(details);
     const error = code == 901 ? getPermissionDeniedError(details)! : details;
-
     const title = getErrorTitle(error, path);
+    const errorInfo = JSON.stringify(details, null, 4);
 
     return (
         <Flex className={block()} justifyContent="center" alignItems="center" gap={7}>
@@ -37,7 +37,14 @@ function PrettyError(props: Props) {
             <Flex direction="column" className={block('info')} gap={4}>
                 <Text className={block('title')}>{title}</Text>
                 <ErrorDetails error={details} />
-                {code === 901 && <RequestPermission cluster={cluster} path={path} error={error} />}
+                <Flex direction="row" gap={3}>
+                    {code === 901 && (
+                        <RequestPermission cluster={cluster} path={path} error={error} />
+                    )}
+                    <ClipboardButton className={block('copy')} view="outlined" text={errorInfo}>
+                        Copy error details
+                    </ClipboardButton>
+                </Flex>
             </Flex>
         </Flex>
     );

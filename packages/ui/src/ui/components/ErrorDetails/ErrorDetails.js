@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
+import {ClipboardButton, Flex} from '@gravity-ui/uikit';
 import Link from '../../components/Link/Link';
 import block from 'bem-cn-lite';
 import ypath from '../../common/thor/ypath';
@@ -107,13 +108,16 @@ export default class ErrorDetails extends Component {
     }
 
     renderTabs() {
+        const {error} = this.props;
         const {currentTab} = this.state;
 
         const items = this.prepareTabs();
+        const text = unipika.formatFromYSON(error.attributes, {asHTML: false});
 
         return (
             <div className={b('tabs')}>
                 <Tabs onTabChange={this.changeCurrentTab} active={currentTab} items={items} />
+                <ClipboardButton title="Copy error" view="flat-secondary" size="s" text={text} />
             </div>
         );
     }
@@ -229,7 +233,7 @@ export default class ErrorDetails extends Component {
         return (
             <div className={b('error')}>
                 {typeof attributes !== 'undefined' ? (
-                    <div className={'toggle-group'}>
+                    <Flex direction="column">
                         <Link theme="primary" onClick={this.toggleDetails}>
                             {this.renderToggler()}
                             {this.renderMessage()}
@@ -237,7 +241,7 @@ export default class ErrorDetails extends Component {
                         <div className={'toggle-subject'}>
                             {showDetails && this.renderDetails()}
                         </div>
-                    </div>
+                    </Flex>
                 ) : (
                     this.renderMessage()
                 )}
