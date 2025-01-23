@@ -68,13 +68,12 @@ export function updateView(settings = {}) {
                     YTApiId.navigationAttributes,
                     {
                         requests: [
-                            {command: 'get', parameters: prepareRequest('/@', requestParams)},
                             {
                                 command: 'get',
                                 parameters: prepareRequest('/@', {
                                     ...requestParams,
                                     attributes: [
-                                        'path',
+                                        ...attributesToLoad,
                                         ...(allowEffectiveExpiration
                                             ? ['effective_expiration']
                                             : []),
@@ -275,3 +274,44 @@ export function navigateParent() {
         dispatch(updatePath(nextPath));
     };
 }
+
+const attributesToLoad = [
+    'id',
+    'type',
+    'path',
+    'schema',
+    'schema_mode',
+    'acl',
+    'dynamic',
+    'key',
+    'owner',
+    'account',
+    'creation_time',
+    'modification_time',
+    'access_time',
+    'primary_medium',
+    'optimize_for',
+    'compression_ratio',
+    'compression_codec',
+    'replication_factor',
+    'key_columns',
+    'security_tags',
+    'erasure_codec',
+    'sorted',
+    'sorted_by',
+    'chunk_row_count',
+    'chunk_count',
+    'uncompressed_data_size',
+    'compressed_data_size',
+    'disk_space',
+    'default_disk_space',
+    'data_weight',
+    'resource_usage',
+    'locks',
+    'lock_count',
+    'lock_mode',
+    'tablet_state',
+    'tablet_cell_bundle',
+    'tablet_error_count',
+    'in_memory_mode',
+];

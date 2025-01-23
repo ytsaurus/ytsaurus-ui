@@ -82,7 +82,7 @@ export enum YTApiId {
     navigationTableMountConfig,
     navigationTypeDynamic,
     navigationUpdateView,
-    navigationUserAttributeKeys,
+    navigationUserAttributes,
 
     nodeAttributes,
     nodeMemoryUsage,
