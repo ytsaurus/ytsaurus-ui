@@ -278,6 +278,13 @@ export type OutputFormat =
               field_weight_limit?: number;
           };
       }
+    | {
+          $value: 'json';
+          $attributes: {
+              stringify: boolean;
+              annotate_with_types: boolean;
+          };
+      }
     | 'json';
 
 export interface SettingsConfig {
