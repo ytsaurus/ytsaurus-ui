@@ -1,5 +1,4 @@
 import filter_ from 'lodash/filter';
-import find_ from 'lodash/find';
 import sortBy_ from 'lodash/sortBy';
 
 import {LOCATION_POP} from 'redux-location-state/lib/constants';
@@ -14,7 +13,6 @@ import {
     LOADING_STATUS,
     MERGE_SCREEN,
     PRELOAD_ERROR,
-    SET_MAINTENANCE_PAGE_EVENT,
     SPLIT_SCREEN,
     UPDATE_CLUSTER,
     UPDATE_TITLE,
@@ -46,9 +44,7 @@ const initialState = {
     // scrollOffset: 0,
     blocked: false, // user may become automatically temporarily banned
     banned: false, // user may be banned by administrator
-    maintenancePageEvent: null,
-    ongoingPageEvents: null,
-    eventsFirstUpdate: false,
+    ongoingEvents: {cluster: '', events: []},
 
     loadState: LOADING_STATUS.UNINITIALIZED,
     error: EMPTY_OBJECT,
@@ -168,22 +164,9 @@ export default (state = initialState, action) => {
         case BAN_USER:
             return {...state, banned: true};
 
-        case SET_MAINTENANCE_PAGE_EVENT: {
-            const {events, isFirstUpdate} = action.data;
-            const maintenancePageEvent = getNotificationWithMaintenance(events);
-
-            return {
-                ...state,
-                maintenancePageEvent,
-                ongoingPageEvents: events,
-                eventsFirstUpdate: isFirstUpdate,
-            };
-        }
-
         case UPDATE_CLUSTER.REQUEST:
             return {
                 ...state,
-                maintenancePageEvent: null,
                 loadState: LOADING_STATUS.LOADING,
             };
 
@@ -240,15 +223,3 @@ export default (state = initialState, action) => {
             return state;
     }
 };
-
-function getNotificationWithMaintenance(notifications) {
-    return find_(notifications, (notification) => {
-        try {
-            const meta = JSON.parse(notification.meta);
-            return meta && meta.show_maintenance_page;
-        } catch (err) {
-            console.error('Failed to parse notification meta', err);
-            return null;
-        }
-    });
-}

@@ -101,7 +101,20 @@ export type RootState = Omit<ReturnType<ReturnType<typeof makeRootReducer>>, 'gl
         allowedExperimentalPages?: Array<string>;
         ytAuthCluster?: string;
         defaultPoolTree?: string;
+
+        ongoingEvents?: {cluster?: string; events?: Array<MaintenanceEvent>};
     };
+};
+
+export type MaintenanceEvent = {
+    type: string;
+    startTime: string;
+    finishTime: string;
+    severity: string;
+    title: string;
+    description: string;
+    createdBy: string;
+    meta?: string;
 };
 
 function registerReducersAndUrlMapping(
