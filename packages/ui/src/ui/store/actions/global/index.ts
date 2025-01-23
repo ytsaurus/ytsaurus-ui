@@ -23,7 +23,6 @@ import {
     GLOBAL_SET_THEME,
     INC_NAV_BLOCKER_COUNTER,
     MERGE_SCREEN,
-    SET_MAINTENANCE_PAGE_EVENT,
     SPLIT_SCREEN,
     UPDATE_TITLE,
 } from '../../../constants/index';
@@ -288,10 +287,10 @@ export function removeNavigationBlocker() {
     };
 }
 
-export function setMaintenancePageEvent(events: Array<unknown>, isFirstUpdate: boolean) {
+export function setOngoingClusterEvents(cluster: string, events: Array<unknown>) {
     return {
-        type: SET_MAINTENANCE_PAGE_EVENT,
-        data: {events, isFirstUpdate},
+        type: GLOBAL_PARTIAL,
+        data: {ongoingEvents: {events, cluster}},
     };
 }
 

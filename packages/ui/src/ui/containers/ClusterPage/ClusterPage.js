@@ -28,7 +28,7 @@ import {PageHeadByCluster} from '../../components/PageHead/PageHead';
 
 import FlexSplitPane from '../../components/FlexSplitPane/FlexSplitPane';
 import ErrorBlock from '../../components/Error/Error';
-import HandleMaintenance from '../../containers/MaintenancePage/HandleMaintenance';
+import {HandleMaintenance} from '../../containers/MaintenancePage/HandleMaintenance';
 import PreloadError from '../../containers/PreloadError/PreloadError';
 
 import {LOADING_STATUS, Page, SPLIT_PANE_ID} from '../../constants/index';
@@ -68,7 +68,6 @@ class ClusterPage extends Component {
         clusterPagePaneSizes: PropTypes.array,
         login: PropTypes.string,
         queriesPageAllowed: PropTypes.bool,
-        maintenancePageEvent: PropTypes.object,
         startingPage: PropTypes.string.isRequired,
         isLoaded: PropTypes.bool.isRequired,
         hasError: PropTypes.bool.isRequired,
@@ -317,16 +316,8 @@ class ClusterPage extends Component {
 }
 
 function mapStateToProps(state) {
-    const {
-        login,
-        maintenancePageEvent,
-        splitScreen,
-        loadState,
-        error,
-        paramsCluster,
-        paramsLoading,
-        paramsError,
-    } = state.global;
+    const {login, splitScreen, loadState, error, paramsCluster, paramsLoading, paramsError} =
+        state.global;
 
     const clusters = state.clustersMenu.clusters;
 
@@ -338,7 +329,6 @@ function mapStateToProps(state) {
         paramsError,
         login,
         splitScreen,
-        maintenancePageEvent,
         clusterPagePaneSizes: getClusterPagePaneSizes(state),
         startingPage: getStartingPage(state),
         paramsCluster,

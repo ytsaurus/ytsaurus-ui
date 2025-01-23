@@ -5,7 +5,7 @@ import './ClusterPageHeader.scss';
 import {ClusterPicker} from './ClusterPicker';
 import {HeadSpacer} from './HeadSpacer';
 import {getClusterConfigByName} from '../../store/selectors/global';
-import HandleMaintenance from '../../containers/MaintenancePage/HandleMaintenance';
+import {HandleMaintenance} from '../../containers/MaintenancePage/HandleMaintenance';
 
 const block = cn('cluster-page-header');
 
@@ -16,7 +16,7 @@ function ClusterPageHeader({cluster}: {cluster: string}) {
         <div className={block()}>
             <ClusterPicker cluster={cluster} clusterConfig={clusterConfig} />
             <HeadSpacer />
-            <HandleMaintenance cluster={cluster} maintenanceContent={null}>
+            <HandleMaintenance cluster={cluster} emptyMaintenance>
                 <TopRowContent />
             </HandleMaintenance>
         </div>

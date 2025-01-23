@@ -1,51 +1,37 @@
 import React from 'react';
-import {ConnectedProps, connect} from 'react-redux';
+import {useSelector} from 'react-redux';
 
 import {MaintenancePage} from '../../containers/MaintenancePage/MaintenancePage';
-import {RootState} from '../../store/reducers';
 import {isMaintenanceIgnored, setMaintenanceIgnored} from '../../utils/maintenance';
+import {getMaintenanceEvent} from '../../store/selectors/global/maintenance';
 
 type Props = {
     cluster: string;
     children: React.ReactNode;
-    maintenanceContent?: React.ReactNode;
+    emptyMaintenance?: boolean;
 };
 
-type ReduxProps = ConnectedProps<typeof connector>;
+export function HandleMaintenance({cluster, children, emptyMaintenance}: Props) {
+    const [c, forceUpdate] = React.useState(0);
 
-class HandleMaintenance extends React.Component<Props & ReduxProps> {
-    render() {
-        const {cluster, maintenancePageEvent, maintenanceContent, children} = this.props;
+    const maintenancePageEvent = useSelector(getMaintenanceEvent);
 
-        if (maintenancePageEvent) {
-            const isIgnored = isMaintenanceIgnored(cluster);
+    if (maintenancePageEvent) {
+        const isIgnored = isMaintenanceIgnored(cluster);
 
-            if (!isIgnored) {
-                return maintenanceContent !== undefined ? (
-                    maintenanceContent
-                ) : (
-                    <MaintenancePage
-                        cluster={cluster}
-                        maintenancePageEvent={maintenancePageEvent}
-                        onProceed={() => {
-                            setMaintenanceIgnored(cluster);
-                            this.forceUpdate();
-                        }}
-                    />
-                );
-            }
+        if (!isIgnored) {
+            return emptyMaintenance ? null : (
+                <MaintenancePage
+                    cluster={cluster}
+                    maintenancePageEvent={maintenancePageEvent}
+                    onProceed={() => {
+                        setMaintenanceIgnored(cluster);
+                        forceUpdate(c + 1);
+                    }}
+                />
+            );
         }
-
-        return children;
     }
+
+    return children;
 }
-
-const mapStateToProps = (state: RootState) => {
-    const {maintenancePageEvent, eventsFirstUpdate} = state.global;
-
-    return {maintenancePageEvent, eventsFirstUpdate};
-};
-
-const connector = connect(mapStateToProps);
-
-export default connector(HandleMaintenance);
