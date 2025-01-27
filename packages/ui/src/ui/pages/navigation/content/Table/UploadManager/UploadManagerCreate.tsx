@@ -11,7 +11,7 @@ import {getPath} from '../../../../../store/selectors/navigation';
 import {ConnectedProps, connect} from 'react-redux';
 import Error from '../../../../../components/Block/Block';
 import {YTDFDialog} from '../../../../../components/Dialog';
-import {Progress} from '@gravity-ui/uikit';
+import {Alert, Progress} from '@gravity-ui/uikit';
 
 import hammer from '../../../../../common/hammer';
 import format from '../../../../../common/hammer/format';
@@ -28,6 +28,7 @@ import {docsUrl, getConfigUploadTable} from '../../../../../config';
 import HelpLink from '../../../../../components/HelpLink/HelpLink';
 import CancelHelper from '../../../../../utils/cancel-helper';
 import UIFactory from '../../../../../UIFactory';
+import {getSortedNodesNames} from '../../../../../store/selectors/navigation/content/map-node';
 
 const block = cn('upload-manager');
 
@@ -50,6 +51,7 @@ interface State {
     hasUpcomingFile: boolean;
     progress: ProgressState;
     error?: any;
+    nameAlreadyUsed: boolean;
 
     file: File | null;
     fileType: FileType;
@@ -79,12 +81,13 @@ class UploadManagerCreate extends React.Component<Props, State> {
         progress: {inProgress: false},
         firstRowAsNames: true,
         secondRowAsTypes: true,
+        nameAlreadyUsed: false,
     };
 
     private cancelHelper = new CancelHelper();
 
     renderContent() {
-        const {hasUpcomingFile, file, error} = this.state;
+        const {hasUpcomingFile, file, error, nameAlreadyUsed} = this.state;
         return (
             <React.Fragment>
                 <div
@@ -109,9 +112,22 @@ class UploadManagerCreate extends React.Component<Props, State> {
                         </div>
                     )}
                 </div>
-                {error && <Error error={error} message={'The file upload has failed'} />}
+                {error && <Error error={error} />}
+                {nameAlreadyUsed && (
+                    <Alert
+                        theme="info"
+                        message="If you want to supplement the table, go to it and use the upload dialog."
+                    />
+                )}
             </React.Fragment>
         );
+    }
+
+    componentDidUpdate(_: Props, prevState: State) {
+        if (prevState.name !== this.state.name) {
+            const alreadyUsed = this.checkNameAlreadyExist(this.state.name);
+            this.setState({nameAlreadyUsed: alreadyUsed});
+        }
     }
 
     renderFileContent(file: File) {
@@ -156,6 +172,10 @@ class UploadManagerCreate extends React.Component<Props, State> {
                         required: true,
                         extras: {
                             disabled: inProgress,
+                            ...(this.state.nameAlreadyUsed && {
+                                validationState: 'invalid',
+                                errorMessage: 'Node with this name already exists',
+                            }),
                         },
                         onChange: (name: string | Array<string> | undefined) => {
                             this.setState({name: name as string});
@@ -334,7 +354,12 @@ class UploadManagerCreate extends React.Component<Props, State> {
                 size="m"
                 view="action"
                 title="Upload"
-                disabled={Boolean(fileError) || this.inProgress()}
+                disabled={
+                    Boolean(fileError) ||
+                    Boolean(this.state.error) ||
+                    this.inProgress() ||
+                    this.state.nameAlreadyUsed
+                }
                 onClick={this.onXlsxUpload}
             >
                 Upload
@@ -358,6 +383,11 @@ class UploadManagerCreate extends React.Component<Props, State> {
         }
 
         return null;
+    }
+
+    checkNameAlreadyExist(name: string) {
+        const {existingNodes} = this.props;
+        return existingNodes.includes(name);
     }
 
     renderClose = (className: string) => {
@@ -476,7 +506,7 @@ class UploadManagerCreate extends React.Component<Props, State> {
                 {visible && (
                     <Modal
                         size="m"
-                        title="Upload xlsx"
+                        title="Create table from xlsx"
                         visible={visible}
                         onCancel={this.handleClose}
                         confirmText="Upload"
@@ -498,6 +528,7 @@ const mapStateToProps = (state: RootState) => {
     return {
         path,
         cluster: getCluster(state),
+        existingNodes: getSortedNodesNames(state),
     };
 };
 
