@@ -267,6 +267,10 @@ export const getSortedNodes = createSelector(
     },
 );
 
+export const getSortedNodesNames = createSelector([getFilteredNodes], (nodes) => {
+    return nodes.map((node) => node.name);
+});
+
 export const getNodesInfo = createSelector(getSortedNodes, (nodes) => {
     const sumNodesType = hammer.aggregation.countValues(nodes, 'type');
 
