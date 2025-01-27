@@ -77,7 +77,7 @@ export function loadSchedulingData(): SchedulingThunkAction {
                     requests: [
                         makeGet('//sys/scheduler/@alerts'),
                         makeList('//sys/scheduler/orchid/scheduler/pool_trees'),
-                        makeGet('//sys/scheduler/orchid/scheduler/default_fair_share_tree'),
+                        makeGet('//sys/scheduler/orchid/scheduler/default_pool_tree'),
                     ],
                     ...USE_CACHE,
                 }),
