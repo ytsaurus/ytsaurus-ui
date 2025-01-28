@@ -213,7 +213,7 @@ export interface MasterAddress {
     attributes: {
         native_cell_tag: number;
         annotations: unknown;
-        maintenance: boolean;
+        maintanance: boolean;
     };
     state?: 'online' | 'offline' | 'unknown';
 }
