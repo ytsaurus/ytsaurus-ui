@@ -23,6 +23,7 @@ export default function EditTableActions() {
             dropDownBtnTheme={'outlined'}
             dropDownBtnSize={'m'}
             item={{
+                name: '',
                 path,
                 type: 'table',
                 dynamic: ypath.getValue(attributes, '/dynamic'),
