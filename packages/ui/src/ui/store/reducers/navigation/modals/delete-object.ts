@@ -8,11 +8,11 @@ import {
 } from '../../../../constants/navigation/modals/delete-object';
 import type {ActionD, YTError} from '../../../../types';
 
-type DeleteObjectItem = any;
+export type DeleteObjectItem = any;
 
-type MulipleInfoItem = any;
+export type MulipleInfoItem = any;
 
-type ResourceUsage = any;
+export type ResourceUsage = any;
 
 type DeleteObjectState = {
     loading: boolean;
@@ -133,7 +133,7 @@ export default (state = initialState, action: DeleteObjectAction): DeleteObjectS
     }
 };
 
-type DeleteObjectAction =
+export type DeleteObjectAction =
     | ActionD<
           typeof OPEN_DELETE_OBJECT_POPUP,
           {
