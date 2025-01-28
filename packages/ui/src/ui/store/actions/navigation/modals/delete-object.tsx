@@ -1,6 +1,8 @@
+// @ts-expect-error
 import yt from '@ytsaurus/javascript-wrapper/lib/yt';
 import React from 'react';
 import moment from 'moment';
+// @ts-expect-error
 import ypath from '@ytsaurus/interface-helpers/lib/ypath';
 
 import Link from '../../../../components/Link/Link';
@@ -24,10 +26,20 @@ import map_ from 'lodash/map';
 
 import {executeBatchWithRetries} from '../../execute-batch';
 import {YTApiId, ytApiV3Id} from '../../../../rum/rum-wrap-api';
+import type {RootState} from '../../../../store/reducers';
+import type {Dispatch} from 'redux';
+import type {
+    DeleteObjectAction,
+    DeleteObjectItem,
+    MulipleInfoItem,
+} from '../../../../store/reducers/navigation/modals/delete-object';
+import {BatchSubRequest} from '../../../../../shared/yt-types';
+import type {YTError} from '../../../../types';
+import type {AppThunkDispatch} from '../../../../store/thunkDispatch';
 
 const toaster = new Toaster();
 
-function prepareRestorePath(path, type) {
+function prepareRestorePath(path: string, type: string) {
     const lastChar = path.charAt(path.length - 1);
 
     if (type === 'link' && lastChar === SUPPRESS_REDIRECT) {
@@ -37,8 +49,8 @@ function prepareRestorePath(path, type) {
     return path;
 }
 
-export function openDeleteModal(item, multipleMode = false) {
-    return (dispatch, getState) => {
+export function openDeleteModal(item: DeleteObjectItem, multipleMode = false) {
+    return (dispatch: Dispatch, getState: () => RootState) => {
         const inTrash = checkIsTrash(getState());
 
         dispatch({
@@ -60,7 +72,7 @@ export function togglePermanentlyDelete() {
     };
 }
 
-const getPath = (path, type) => {
+const getPath = (path: string, type: string) => {
     return ['link', 'access_control_object'].includes(type)
         ? Promise.resolve(path)
         : ytApiV3Id.get(YTApiId.navigationGetPath, {
@@ -74,7 +86,7 @@ const getPath = (path, type) => {
           });
 };
 
-const getInfo = (realPath) => {
+const getInfo = (realPath: string) => {
     const parsedRealPath = ypath.YPath.create(realPath, 'absolute');
     const path = parsedRealPath.stringify();
     const name = parsedRealPath.getKey();
@@ -89,8 +101,8 @@ const getInfo = (realPath) => {
     ]);
 };
 
-export function getRealPath({path, type}) {
-    return (dispatch) => {
+export function getRealPath({path, type}: {path: string; type: string}) {
+    return (dispatch: Dispatch) => {
         dispatch({type: LOAD_REAL_PATH.REQUEST});
 
         return getPath(path, type)
@@ -109,7 +121,7 @@ export function getRealPath({path, type}) {
                 toaster.add({
                     theme: 'danger',
                     name: 'real path',
-                    timeout: 10000,
+                    autoHiding: 10000,
                     title: 'Could not open delete dialog.',
                     content: error.message,
                     actions: [
@@ -127,11 +139,11 @@ export function getRealPath({path, type}) {
     };
 }
 
-export function getRealPaths(items) {
-    return (dispatch) => {
+export function getRealPaths(items: {path: string}[]) {
+    return (dispatch: Dispatch) => {
         dispatch({type: LOAD_REAL_PATH.REQUEST});
 
-        const requests = map_(items, ({path}) => {
+        const requests: BatchSubRequest[] = map_(items, ({path}) => {
             return {
                 command: 'get',
                 parameters: {
@@ -151,7 +163,7 @@ export function getRealPaths(items) {
             errorTitle: 'Failed to get real paths',
         })
             .then((responses) => {
-                const error = find_(responses, (res) => res.error);
+                const error = find_(responses, (res) => res.error) as {error: YTError} | undefined;
                 if (error) {
                     return Promise.reject(error.error);
                 }
@@ -180,7 +192,7 @@ export function getRealPaths(items) {
                 toaster.add({
                     theme: 'danger',
                     name: 'real path',
-                    timeout: 10000,
+                    autoHiding: 10000,
                     title: 'Could not open delete dialog.',
                     content: error.message,
                     actions: [
@@ -198,11 +210,11 @@ export function getRealPaths(items) {
     };
 }
 
-const createDestinationPath = (account, name, login) =>
+const createDestinationPath = (account: string, name: string, login: string) =>
     `//tmp/trash/by-account/${account}/${login}/${name}_${moment().unix()}`;
 
-function deleteCurrentObject(path, restorePath) {
-    return (dispatch, getState) => {
+function deleteCurrentObject(path: string, restorePath: string) {
+    return (_dispatch: Dispatch, getState: () => RootState): Promise<void> => {
         const {global, navigation} = getState();
         const {permanently, name, account} = navigation.modals.deleteObject;
         const {login} = global;
@@ -212,7 +224,7 @@ function deleteCurrentObject(path, restorePath) {
                 toaster.add({
                     theme: 'success',
                     name: 'delete object',
-                    timeout: 10000,
+                    autoHiding: 10000,
                     title: 'Object has been permanently deleted.',
                 });
             });
@@ -244,7 +256,7 @@ function deleteCurrentObject(path, restorePath) {
                     toaster.add({
                         theme: 'success',
                         name: 'delete object',
-                        timeout: 10000,
+                        autoHiding: 10000,
                         title: 'Object deleted',
                         content: (
                             <div>
@@ -259,12 +271,12 @@ function deleteCurrentObject(path, restorePath) {
 }
 
 export function deleteObject() {
-    return (dispatch, getState) => {
+    return (dispatch: AppThunkDispatch<DeleteObjectAction>, getState: () => RootState) => {
         const {navigation} = getState();
         const {realPath, item} = navigation.modals.deleteObject;
         const {transaction} = navigation.navigation;
 
-        const path = preparePath(realPath, item.type);
+        const path = preparePath(realPath);
         const restorePath = prepareRestorePath(realPath, item.type);
 
         dispatch({type: DELETE_OBJECT.REQUEST});
@@ -275,7 +287,7 @@ export function deleteObject() {
             toaster.add({
                 theme: 'danger',
                 name: 'delete object',
-                timeout: 10000,
+                autoHiding: 10000,
                 title: 'Could not delete the object within transaction.',
             });
         }
@@ -303,7 +315,7 @@ export function deleteObject() {
                 toaster.add({
                     theme: 'danger',
                     name: 'delete object',
-                    timeout: 10000,
+                    autoHiding: 10000,
                     title: 'Could not delete the node.',
                     content: error.message,
                     actions: [
@@ -317,9 +329,9 @@ export function deleteObject() {
     };
 }
 
-function permanentlyDeleteObjects(multipleInfo, transaction) {
-    const requests = map_(multipleInfo, (node) => {
-        const path = preparePath(node.path, node.type);
+function permanentlyDeleteObjects(multipleInfo: MulipleInfoItem[], transaction: string) {
+    const requests: BatchSubRequest[] = map_(multipleInfo, (node) => {
+        const path = preparePath(node.path);
 
         return {
             command: 'remove',
@@ -338,14 +350,14 @@ function permanentlyDeleteObjects(multipleInfo, transaction) {
             toaster.add({
                 theme: 'success',
                 name: 'delete objects',
-                timeout: 10000,
+                autoHiding: 10000,
                 title: 'Objects have been permanently deleted.',
             });
         });
 }
 
-function moveObjectsIntoTrash(multipleInfo, transaction, login) {
-    const setAttributesRequests = map_(multipleInfo, (node) => {
+function moveObjectsIntoTrash(multipleInfo: MulipleInfoItem[], transaction: string, login: string) {
+    const setAttributesRequests: BatchSubRequest[] = map_(multipleInfo, (node) => {
         const restorePath = prepareRestorePath(node.path, node.type);
 
         return {
@@ -364,8 +376,8 @@ function moveObjectsIntoTrash(multipleInfo, transaction, login) {
         };
     });
 
-    const moveRequests = map_(multipleInfo, (node) => {
-        const path = preparePath(node.path, node.type);
+    const moveRequests: BatchSubRequest[] = map_(multipleInfo, (node) => {
+        const path = preparePath(node.path);
         const destinationPath = createDestinationPath(node.account, node.name, login);
 
         return {
@@ -399,7 +411,7 @@ function moveObjectsIntoTrash(multipleInfo, transaction, login) {
             toaster.add({
                 theme: 'success',
                 name: 'delete objects',
-                timeout: 10000,
+                autoHiding: 10000,
                 title: 'Objects deleted',
                 content: 'Objects have been moved to the trash',
             });
@@ -407,7 +419,7 @@ function moveObjectsIntoTrash(multipleInfo, transaction, login) {
 }
 
 export function deleteObjects() {
-    return (dispatch, getState) => {
+    return (dispatch: AppThunkDispatch<DeleteObjectAction>, getState: () => RootState) => {
         const {navigation, global} = getState();
         const {transaction} = navigation.navigation;
         const {permanently, multipleInfo} = navigation.modals.deleteObject;
@@ -419,7 +431,7 @@ export function deleteObjects() {
             toaster.add({
                 theme: 'danger',
                 name: 'delete object',
-                timeout: 10000,
+                autoHiding: 10000,
                 title: 'Could not delete the object within transaction.',
             });
         }
@@ -428,7 +440,7 @@ export function deleteObjects() {
 
         return yt.v3
             .startTransaction({})
-            .then((id) => {
+            .then((id: string) => {
                 if (permanently) {
                     return permanentlyDeleteObjects(multipleInfo, id);
                 }
@@ -440,7 +452,7 @@ export function deleteObjects() {
                 dispatch({type: CLOSE_DELETE_OBJECT_POPUP});
                 dispatch(updateView());
             })
-            .catch((error) => {
+            .catch((error: YTError) => {
                 console.error(error);
                 dispatch({
                     type: DELETE_OBJECT.FAILURE,
@@ -449,7 +461,7 @@ export function deleteObjects() {
                 toaster.add({
                     theme: 'danger',
                     name: 'delete objects',
-                    timeout: 10000,
+                    autoHiding: 10000,
                     title: 'Could not delete the nodes.',
                     content: error.message,
                     actions: [
