@@ -36,7 +36,7 @@ const toaster = new Toaster();
 
 const {NODE_DOES_NOT_EXIST} = YTErrors;
 
-export function filterOutMaintenanceHosts(
+export function filterOutMaintananceHosts(
     value: Record<string, CypressNode<{maintenance?: boolean}, string>> | null,
 ) {
     if (!value) {
@@ -137,10 +137,10 @@ async function loadMastersConfig(): Promise<[MastersConfigResponse, MasterAlert[
 
     const alerts = alertsResult.output ? (alertsResult.output as MasterAlert[]) : [];
     const [timestamp_path] = Object.keys(
-        filterOutMaintenanceHosts(ypath.getValue(timestampProvidersResult.output)),
+        filterOutMaintananceHosts(ypath.getValue(timestampProvidersResult.output)),
     );
     const primaryMasterPaths = Object.keys(
-        filterOutMaintenanceHosts(ypath.getValue(primaryMasterResult.output)),
+        filterOutMaintananceHosts(ypath.getValue(primaryMasterResult.output)),
     );
 
     const timestamp_tag_cell_requests = [
@@ -231,7 +231,7 @@ async function loadMastersConfig(): Promise<[MastersConfigResponse, MasterAlert[
     };
 
     const discoveryRequests = map_(
-        filterOutMaintenanceHosts(ypath.getValue(discoveryServersResult.output)),
+        filterOutMaintananceHosts(ypath.getValue(discoveryServersResult.output)),
         (_v, address) => ({
             command: 'get' as const,
             parameters: {
@@ -243,7 +243,7 @@ async function loadMastersConfig(): Promise<[MastersConfigResponse, MasterAlert[
     );
 
     const queueAgentsStateRequests = map_(
-        filterOutMaintenanceHosts(ypath.getValue(queueAgentsResult.output)),
+        filterOutMaintananceHosts(ypath.getValue(queueAgentsResult.output)),
         (_v, address) => ({
             command: 'get' as const,
             parameters: {
@@ -344,7 +344,7 @@ function loadHydra(
     forEach_(
         sortBy_(addresses, (address) => address.host),
         ({host, attributes}) => {
-            if (!attributes.maintenance) {
+            if (!attributes.maintanance) {
                 masterInfo.push({host, type, cellTag: cellTag!});
                 requests.push({
                     command: 'get',
