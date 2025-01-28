@@ -8,11 +8,28 @@ import {
 } from '../../../../constants/navigation/modals/delete-object';
 import type {ActionD, YTError} from '../../../../types';
 
-export type DeleteObjectItem = any;
+export type DeleteObjectItem = {
+    titleUnquoted?: string;
+    $attributes: object;
+    name: string;
+    path: string;
+    type: string;
+    rows?: number;
+    unmergedRows?: number;
+};
 
-export type MulipleInfoItem = any;
+export type MulipleInfoItem = {
+    name: string;
+    path: string;
+    account: string;
+    type: string;
+    resourceUsage: ResourceUsage;
+};
 
-export type ResourceUsage = any;
+export type ResourceUsage = {
+    disk_space: number;
+    node_count: number;
+};
 
 type DeleteObjectState = {
     loading: boolean;
@@ -32,7 +49,7 @@ type DeleteObjectState = {
     permanently: boolean;
     multipleMode: boolean;
     multipleInfo: MulipleInfoItem[];
-    item: DeleteObjectItem;
+    item: DeleteObjectItem | Array<DeleteObjectItem>;
 };
 
 export const initialState: DeleteObjectState = {
@@ -48,12 +65,15 @@ export const initialState: DeleteObjectState = {
     realPath: '',
     account: '',
     name: '',
-    resourceUsage: {},
+    resourceUsage: {
+        disk_space: 0,
+        node_count: 0,
+    },
     visible: false,
     permanently: false,
     multipleMode: false,
     multipleInfo: [],
-    item: {},
+    item: [],
 };
 
 export default (state = initialState, action: DeleteObjectAction): DeleteObjectState => {
@@ -147,7 +167,7 @@ export type DeleteObjectAction =
     | ActionD<
           typeof LOAD_REAL_PATH.SUCCESS,
           {
-              multipleInfo: MulipleInfoItem;
+              multipleInfo: MulipleInfoItem[];
               realPath: string;
               name: string;
               account: string;

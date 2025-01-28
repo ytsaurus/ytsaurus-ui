@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
-import {connect} from 'react-redux';
-import PropTypes from 'prop-types';
+import {ResolveThunks, connect} from 'react-redux';
+// @ts-expect-error
 import ypath from '@ytsaurus/interface-helpers/lib/ypath';
 import {compose} from 'redux';
 import cn from 'bem-cn-lite';
@@ -30,61 +30,28 @@ import hammer from '../../../../../common/hammer';
 
 import './DeleteObjectModal.scss';
 import UIFactory from '../../../../../UIFactory';
+import type {RootState} from '../../../../../store/reducers';
+import {DeleteObjectItem} from '../../../../../store/reducers/navigation/modals/delete-object';
 
 const block = cn('navigation-delete-object-modal');
 
-export class DeleteObjectModal extends Component {
-    static resourceUsage = PropTypes.shape({
-        disk_space: PropTypes.number,
-        node_count: PropTypes.number,
-    });
+type OwnProps = {};
 
-    static propTypes = {
-        visible: PropTypes.bool.isRequired,
-        error: PropTypes.bool.isRequired,
-        loadingRealPath: PropTypes.bool.isRequired,
-        errorRealPath: PropTypes.bool.isRequired,
-        errorData: PropTypes.object.isRequired,
-        errorDataRealPath: PropTypes.object.isRequired,
-        permanently: PropTypes.bool.isRequired,
-        loading: PropTypes.bool.isRequired,
-        multipleMode: PropTypes.bool.isRequired,
-        realPath: PropTypes.string.isRequired,
-        inTrash: PropTypes.bool.isRequired,
-        resourceUsage: DeleteObjectModal.resourceUsage.isRequired,
-        item: PropTypes.shape({
-            $attributes: PropTypes.object,
-            name: PropTypes.string,
-            path: PropTypes.string,
-            type: PropTypes.string,
-            rows: PropTypes.number,
-            unmergedRows: PropTypes.number,
-        }).isRequired,
-        multipleInfo: PropTypes.arrayOf(
-            PropTypes.shape({
-                path: PropTypes.string.isRequired,
-                account: PropTypes.string.isRequred,
-                type: PropTypes.string.isRequired,
-                resourceUsage: DeleteObjectModal.resourceUsage.isRequired,
-            }),
-        ).isRequired,
+type StateProps = ReturnType<typeof mapStateToProps>;
 
-        getRealPath: PropTypes.func.isRequired,
-        getRealPaths: PropTypes.func.isRequired,
-        deleteObject: PropTypes.func.isRequired,
-        deleteObjects: PropTypes.func.isRequired,
-        closeDeleteModal: PropTypes.func.isRequired,
-        togglePermanentlyDelete: PropTypes.func.isRequired,
-    };
+type DispatchProps = ResolveThunks<typeof mapDispatchToProps>;
 
-    componentDidUpdate(prevProps) {
+type DeleteObjectModalProps = OwnProps & StateProps & DispatchProps;
+
+export class DeleteObjectModal extends Component<DeleteObjectModalProps> {
+    componentDidUpdate(prevProps: DeleteObjectModalProps) {
         const {visible, item, getRealPath, getRealPaths, multipleMode} = this.props;
 
         if (!prevProps.visible && visible) {
             if (multipleMode) {
-                getRealPaths(item);
+                getRealPaths(item as DeleteObjectItem[]);
             } else {
-                getRealPath(item);
+                getRealPath(item as DeleteObjectItem);
             }
         }
     }
@@ -164,13 +131,15 @@ export class DeleteObjectModal extends Component {
                         </div>
 
                         {map_(multipleInfo, ({path, resourceUsage}, index) => {
-                            const {type, titleUnquoted, rows, unmergedRows} = item[index];
+                            const {type, titleUnquoted, rows, unmergedRows} = (
+                                item as DeleteObjectItem[]
+                            )[index];
                             const diskSpace = ypath.get(resourceUsage, '/disk_space');
                             const nodeCount = ypath.get(resourceUsage, '/node_count');
 
                             return (
                                 <React.Fragment key={path}>
-                                    {renderMapNodesTableIcon(item[index])}
+                                    {renderMapNodesTableIcon((item as DeleteObjectItem[])[index])}
                                     <span title={path} className="elements-ellipsis">
                                         {titleUnquoted}
                                     </span>
@@ -197,7 +166,7 @@ export class DeleteObjectModal extends Component {
 
     renderContent() {
         const {item, resourceUsage} = this.props;
-        const {type, rows, unmergedRows} = item;
+        const {type, rows, unmergedRows} = item as DeleteObjectItem;
         const diskSpace = ypath.get(resourceUsage, '/disk_space');
         const nodeCount = ypath.get(resourceUsage, '/node_count');
 
@@ -239,7 +208,7 @@ export class DeleteObjectModal extends Component {
                     <div className={block()}>
                         <p className={block('object')}>
                             {renderMapNodesTableIcon(item)}
-                            <span className={block('path')}>{item.path}</span>
+                            <span className={block('path')}>{(item as DeleteObjectItem).path}</span>
                         </p>
 
                         <MetaTable className={block('meta')} items={buildItems()} />
@@ -275,7 +244,7 @@ export class DeleteObjectModal extends Component {
     }
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state: RootState) => {
     const {
         error,
         errorData,

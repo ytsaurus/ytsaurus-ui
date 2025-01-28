@@ -34,6 +34,7 @@ import {showRemoteCopyModal} from '../../../../store/actions/navigation/modals/r
 
 interface Props {
     item: {
+        name: string;
         type: string;
         dynamic: boolean;
         path: string;

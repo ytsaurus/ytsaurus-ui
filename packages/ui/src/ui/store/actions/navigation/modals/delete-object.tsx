@@ -49,7 +49,10 @@ function prepareRestorePath(path: string, type: string) {
     return path;
 }
 
-export function openDeleteModal(item: DeleteObjectItem, multipleMode = false) {
+export function openDeleteModal(
+    item: DeleteObjectItem | Array<DeleteObjectItem>,
+    multipleMode = false,
+) {
     return (dispatch: Dispatch, getState: () => RootState) => {
         const inTrash = checkIsTrash(getState());
 
@@ -277,7 +280,7 @@ export function deleteObject() {
         const {transaction} = navigation.navigation;
 
         const path = preparePath(realPath);
-        const restorePath = prepareRestorePath(realPath, item.type);
+        const restorePath = prepareRestorePath(realPath, (item as DeleteObjectItem).type);
 
         dispatch({type: DELETE_OBJECT.REQUEST});
 
