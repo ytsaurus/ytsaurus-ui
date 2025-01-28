@@ -1,3 +1,4 @@
+import {Action} from 'redux/dist/redux';
 import {
     CLOSE_DELETE_OBJECT_POPUP,
     DELETE_OBJECT,
@@ -5,8 +6,36 @@ import {
     OPEN_DELETE_OBJECT_POPUP,
     TOGGLE_PERMANENTLY_DELETE,
 } from '../../../../constants/navigation/modals/delete-object';
+import type {ActionD, YTError} from '../../../../types';
 
-export const initialState = {
+type DeleteObjectItem = any;
+
+type MulipleInfoItem = any;
+
+type ResourceUsage = any;
+
+type DeleteObjectState = {
+    loading: boolean;
+    loaded: boolean;
+    error: boolean;
+    errorData: any;
+
+    loadingRealPath: boolean;
+    errorRealPath: boolean;
+    errorDataRealPath: any;
+
+    realPath: string;
+    account: string;
+    name: string;
+    resourceUsage: ResourceUsage;
+    visible: boolean;
+    permanently: boolean;
+    multipleMode: boolean;
+    multipleInfo: MulipleInfoItem[];
+    item: DeleteObjectItem;
+};
+
+export const initialState: DeleteObjectState = {
     loading: false,
     loaded: false,
     error: false,
@@ -27,7 +56,7 @@ export const initialState = {
     item: {},
 };
 
-export default (state = initialState, action) => {
+export default (state = initialState, action: DeleteObjectAction): DeleteObjectState => {
     switch (action.type) {
         case OPEN_DELETE_OBJECT_POPUP: {
             const {item, inTrash, multipleMode} = action.data;
@@ -103,3 +132,35 @@ export default (state = initialState, action) => {
             return state;
     }
 };
+
+type DeleteObjectAction =
+    | ActionD<
+          typeof OPEN_DELETE_OBJECT_POPUP,
+          {
+              item: DeleteObjectItem;
+              inTrash: boolean;
+              multipleMode: boolean;
+          }
+      >
+    | Action<typeof CLOSE_DELETE_OBJECT_POPUP>
+    | Action<typeof LOAD_REAL_PATH.REQUEST>
+    | ActionD<
+          typeof LOAD_REAL_PATH.SUCCESS,
+          {
+              multipleInfo: MulipleInfoItem;
+              realPath: string;
+              name: string;
+              account: string;
+              resourceUsage: ResourceUsage;
+          }
+      >
+    | ActionD<
+          typeof LOAD_REAL_PATH.FAILURE,
+          {
+              error: YTError;
+          }
+      >
+    | Action<typeof TOGGLE_PERMANENTLY_DELETE>
+    | Action<typeof DELETE_OBJECT.REQUEST>
+    | Action<typeof DELETE_OBJECT.SUCCESS>
+    | ActionD<typeof DELETE_OBJECT.FAILURE, {error: YTError}>;
