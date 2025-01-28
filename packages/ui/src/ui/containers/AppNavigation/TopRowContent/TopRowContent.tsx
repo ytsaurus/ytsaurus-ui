@@ -3,7 +3,6 @@ import React from 'react';
 import {useSelector} from 'react-redux';
 
 import {getGlobalLoadState} from '../../../store/selectors/global';
-import {isQueryTrackerAllowed} from '../../../store/selectors/global/experimental-pages';
 
 import {LOADING_STATUS, Page} from '../../../constants/index';
 import {Route, Switch} from 'react-router';
@@ -30,7 +29,6 @@ import {QueryTrackerTopRowLazy} from '../../../pages/query-tracker/lazy';
 
 export default function TopRowContent() {
     const loadState = useSelector(getGlobalLoadState);
-    const allowQT = useSelector(isQueryTrackerAllowed);
 
     return loadState !== LOADING_STATUS.LOADED ? null : (
         <Switch>
@@ -50,12 +48,10 @@ export default function TopRowContent() {
             <Route path={`/:cluster/${Page.DASHBOARD}`} component={DashboardTopRowLazy} />
             <Route path={`/:cluster/${Page.COMPONENTS}`} component={ComponentsTopRowLazy} />
             <Route path={`/:cluster/${Page.CHYT}`} component={ChytPageTopRowLazy} />
-            {allowQT && (
-                <Route
-                    path={`/:cluster/${Page.QUERIES}`}
-                    component={withLazyLoading(QueryTrackerTopRowLazy)}
-                />
-            )}
+            <Route
+                path={`/:cluster/${Page.QUERIES}`}
+                component={withLazyLoading(QueryTrackerTopRowLazy)}
+            />
             {hasOdinPage() && (
                 <Route
                     path={`/:cluster/${odinPageInfo.pageId}`}
