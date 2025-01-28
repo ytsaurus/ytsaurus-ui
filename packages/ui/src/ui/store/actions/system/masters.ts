@@ -16,7 +16,7 @@ import {YTApiId, ytApiV3Id} from '../../../rum/rum-wrap-api';
 import {USE_SUPRESS_SYNC} from '../../../../shared/constants';
 import type {AxiosError} from 'axios';
 import type {Dispatch} from 'redux';
-import type {BatchSubRequest, CypressNode} from '../../../../shared/yt-types';
+import type {BatchSubRequest} from '../../../../shared/yt-types';
 import {
     MasterAlert,
     MasterDataItemInfo,
@@ -26,7 +26,6 @@ import {
 } from '../../reducers/system/masters';
 import {ThunkAction} from 'redux-thunk';
 import type {RootState} from '../../reducers';
-import {ValueOf} from '../../../../@types/types';
 
 export const FETCH_MASTER_CONFIG = createActionTypes('MASTER_CONFIG');
 export const FETCH_MASTER_DATA = createActionTypes('MASTER_DATA');
@@ -35,24 +34,6 @@ export const SET_MASTER_ALERTS = 'SET_MASTER_ALERTS';
 const toaster = new Toaster();
 
 const {NODE_DOES_NOT_EXIST} = YTErrors;
-
-export function filterOutMaintananceHosts(
-    value: Record<string, CypressNode<{maintenance?: boolean}, string>> | null,
-) {
-    if (!value) {
-        return {};
-    }
-
-    return Object.keys(value).reduce(
-        (acc, key) => {
-            if (!value[key].$attributes?.maintenance) {
-                acc[key] = value[key];
-            }
-            return acc;
-        },
-        {} as Record<string, ValueOf<typeof value>>,
-    );
-}
 
 async function loadMastersConfig(): Promise<[MastersConfigResponse, MasterAlert[]]> {
     const requests = [
@@ -136,12 +117,8 @@ async function loadMastersConfig(): Promise<[MastersConfigResponse, MasterAlert[
     }
 
     const alerts = alertsResult.output ? (alertsResult.output as MasterAlert[]) : [];
-    const [timestamp_path] = Object.keys(
-        filterOutMaintananceHosts(ypath.getValue(timestampProvidersResult.output)),
-    );
-    const primaryMasterPaths = Object.keys(
-        filterOutMaintananceHosts(ypath.getValue(primaryMasterResult.output)),
-    );
+    const [timestamp_path] = [...Object.keys(ypath.getValue(timestampProvidersResult.output))];
+    const primaryMasterPaths = [...Object.keys(ypath.getValue(primaryMasterResult.output))];
 
     const timestamp_tag_cell_requests = [
         {
@@ -231,7 +208,7 @@ async function loadMastersConfig(): Promise<[MastersConfigResponse, MasterAlert[
     };
 
     const discoveryRequests = map_(
-        filterOutMaintananceHosts(ypath.getValue(discoveryServersResult.output)),
+        ypath.getValue(discoveryServersResult.output),
         (_v, address) => ({
             command: 'get' as const,
             parameters: {
@@ -243,7 +220,7 @@ async function loadMastersConfig(): Promise<[MastersConfigResponse, MasterAlert[
     );
 
     const queueAgentsStateRequests = map_(
-        filterOutMaintananceHosts(ypath.getValue(queueAgentsResult.output)),
+        ypath.getValue(queueAgentsResult.output),
         (_v, address) => ({
             command: 'get' as const,
             parameters: {
@@ -343,14 +320,12 @@ function loadHydra(
 
     forEach_(
         sortBy_(addresses, (address) => address.host),
-        ({host, attributes}) => {
-            if (!attributes.maintanance) {
-                masterInfo.push({host, type, cellTag: cellTag!});
-                requests.push({
-                    command: 'get',
-                    parameters: {path: cypressPath + '/' + host + hydraPath, ...USE_SUPRESS_SYNC},
-                });
-            }
+        ({host}) => {
+            masterInfo.push({host, type, cellTag: cellTag!});
+            requests.push({
+                command: 'get',
+                parameters: {path: cypressPath + '/' + host + hydraPath, ...USE_SUPRESS_SYNC},
+            });
         },
     );
 }
