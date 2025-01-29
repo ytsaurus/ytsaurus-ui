@@ -126,10 +126,32 @@ test('Components - Versions', async ({page}) => {
 
     await replaceInnerHtml(page, {
         '.yt-host__tooltip': 'local:XXX',
-        '.version-cell__text': 'XX.X.X-local-os~XXXXXXXXXXXXXXXX+distbuild',
-        '.data-table__td[title="Online"]': 'XX',
+        '.data-table__head-row th[data-index="1"]': 'XX.X.X-local-os~XXXXXXXXXXXXXXXX+distbuild',
+        '.versions-summary__value[data-qa="component-amount"]': 'XXX',
+        '.versions-summary__versions-select .g-select-control__option-text':
+            'XX.X.X-local-os~XXXXXXXXXXXXXXXX+distbuild',
     });
-    replaceInnerHtmlForDateTime(page, ['td.components-versions__table-item_type_start-time span']);
+    await replaceInnerHtmlForDateTime(page, [
+        'td.components-versions__table-item_type_start-time span',
+    ]);
+
+    await expect(page).toHaveScreenshot();
+
+    await page
+        .locator('.components-versions__details .elements-table-wrapper')
+        .waitFor({state: 'visible'});
+
+    await page
+        .locator('.components-versions__details .elements-table-wrapper')
+        .scrollIntoViewIfNeeded({timeout: 1000});
+
+    await replaceInnerHtml(page, {
+        '.yt-host__tooltip': 'local:XXX',
+        '.version-cell__text': 'XX.X.X-local-os~XXXXXXXXXXXXXXXX+distbuild',
+    });
+    await replaceInnerHtmlForDateTime(page, [
+        'td.components-versions__table-item_type_start-time span',
+    ]);
 
     await expect(page).toHaveScreenshot();
 });

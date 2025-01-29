@@ -11,7 +11,6 @@ import {getCluster} from '../../../../store/selectors/global';
 import {ThunkAction} from 'redux-thunk';
 import {RootState} from '../../../../store/reducers';
 import {
-    HostType,
     SummaryItem,
     VersionHostInfo,
     VersionSummaryItem,
@@ -24,7 +23,7 @@ export interface DiscoverVersionsData {
     summary: Record<'total' | 'error' | string, VersionSummary>;
 }
 
-type VersionSummary = Record<HostType, SummaryItem>;
+type VersionSummary = Record<string, SummaryItem>;
 
 type NodesThunkAction<T = void> = ThunkAction<Promise<T>, RootState, unknown, any>;
 
@@ -97,7 +96,7 @@ function prepareGroup(group: VersionSummary, version: string) {
         (acc, value, type) => {
             const {total, banned, offline} = value;
 
-            const k = type as HostType;
+            const k = type;
             acc[k] = total;
             acc.banned += banned;
             acc.offline += offline;

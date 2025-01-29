@@ -2,8 +2,10 @@ import {createSelector} from 'reselect';
 import {RootState} from '../../../../store/reducers';
 import {FIX_MY_TYPE, SortState} from '../../../../types';
 import {sortArrayBySortState} from '../../../../utils/sort-helpers';
-import {VersionSummaryItem} from '../../../../store/reducers/components/versions/versions_v2';
-import {isSupportedClusterNodeForVersions} from '../../../../store/selectors/thor/support';
+import {
+    VersionSummaryItem,
+    VersionSummaryRow,
+} from '../../../../store/reducers/components/versions/versions_v2';
 
 export const getSummarySortState = (
     state: RootState,
@@ -15,6 +17,34 @@ const getSummary = (state: RootState): Array<VersionSummaryItem> =>
 
 export const getHideOfflineValue = (state: RootState): boolean =>
     state.components.versionsV2.checkedHideOffline;
+
+function getTotalElementOfSummary(summary: ReturnType<typeof getSummary>) {
+    return summary[summary.length - 1];
+}
+
+export const getVisibleSummaryItems = createSelector(
+    [getSummary, getHideOfflineValue],
+    (summary = [], checkedHideOffline) => {
+        let items = summary;
+        if (checkedHideOffline) {
+            items = items.filter((item) => item && item.online !== undefined);
+        }
+        return items;
+    },
+);
+
+export const getVersions = createSelector([getVisibleSummaryItems], (summary = []) => {
+    const versions = [];
+    for (const item of summary) {
+        if (item) {
+            versions.push({
+                type: item.version,
+                name: item.version,
+            });
+        }
+    }
+    return versions;
+});
 
 export const getVersionsSummaryData = createSelector(
     [getSummary, getSummarySortState, getHideOfflineValue],
@@ -35,44 +65,32 @@ export const getVersionsSummaryData = createSelector(
         if (total) {
             items.push(total);
         }
-        return items;
-    },
-);
 
-export const getVersionsSummaryVisibleColumns = createSelector(
-    [getSummary, isSupportedClusterNodeForVersions],
-    (summary = [], useClusterNode) => {
-        const visibleTypes = new Set<string>();
-        const total = getTotalElementOfSummary(summary);
-        Object.keys(total ?? {}).forEach((k) => {
-            const key = k as keyof typeof total;
-            if (total?.[key]) {
-                visibleTypes.add(key);
-            }
-        });
-        const res: Array<{type: keyof VersionSummaryItem; name: string; shortName: string}> = [];
-        function tryToAdd(type: keyof VersionSummaryItem, name: string, shortName = '') {
-            if (visibleTypes.has(type)) {
-                res.push({type, name, shortName});
+        const components = new Set<string>();
+        for (const item of items) {
+            for (const key in item) {
+                if (key) components.add(key);
             }
         }
 
-        tryToAdd('primary_master', 'Primary Masters', 'Pri Masters');
-        tryToAdd('secondary_master', 'Secondary masters', 'Sec Masters');
-        tryToAdd('scheduler', 'Schedulers');
-        tryToAdd('controller_agent', 'Controller Agents', 'CA');
-        tryToAdd(useClusterNode ? 'cluster_node' : 'node', 'Nodes');
-        tryToAdd('http_proxy', 'HTTP Proxies');
-        tryToAdd('rpc_proxy', 'RPC Proxies');
-        tryToAdd('job_proxy', 'Job Proxies');
-        tryToAdd('online', 'Online');
-        tryToAdd('offline', 'Offline');
-        tryToAdd('banned', 'Banned');
+        const res: VersionSummaryRow[] = [];
+        // iterating over every type of components
+        for (const component of Array.from(components)) {
+            if (component === 'version') continue;
+            // initializing table row object to avoid type errors
+            const row: VersionSummaryRow = {type: component, total: 0};
+            // iterating over array of objects with attribute 'version'
+            for (const item of items) {
+                // apply version of component to the some type in resulting object
+                //                 type  item['version']: item[component] -> amount of components
+                // example: res = {banned: {'2.12.123.1': 3, ...}}
+                row[item['version']] = item[component];
+            }
+            // attribute 'type' will be the name of the row
+            row['type'] = component;
+            res.push(row);
+        }
 
         return res;
     },
 );
-
-function getTotalElementOfSummary(summary: ReturnType<typeof getSummary>) {
-    return summary[summary.length - 1];
-}
