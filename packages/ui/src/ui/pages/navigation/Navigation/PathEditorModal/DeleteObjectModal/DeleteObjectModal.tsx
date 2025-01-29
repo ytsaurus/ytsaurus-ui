@@ -226,14 +226,16 @@ export class DeleteObjectModal extends Component<DeleteObjectModalProps> {
         const helpLinkUrl = UIFactory.docsUrls['common:regular_system_processes'];
         const helpLink =
             helpLinkUrl !== '' ? <HelpLink text="Documentation" url={helpLinkUrl} /> : null;
+        const title = permanently ? 'Delete' : 'Move to trash';
+        const confirmText = permanently ? 'Delete' : 'Move to trash';
 
         return (
             <Modal
-                title="Delete"
+                title={title}
                 visible={visible}
                 loading={loading}
                 confirmTheme={theme}
-                confirmText="Delete"
+                confirmText={confirmText}
                 content={this.content}
                 footerContent={helpLink}
                 contentClassName={block('content')}
