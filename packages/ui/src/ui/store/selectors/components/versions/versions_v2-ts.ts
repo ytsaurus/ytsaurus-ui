@@ -47,7 +47,8 @@ export const getVersionsSummaryVisibleRows = createSelector([getSummary], (summa
 
 export const getVersionsSummaryData = createSelector(
     [getSummary, getSummarySortState, getHideOfflineValue],
-    (summary = [], sortState) => {
+    (summary = [], sortState, offline) => {
+        console.log(offline);
         const error = summary[summary.length - 2];
         const total = getTotalElementOfSummary(summary);
         let items = summary.slice(0, summary.length - 2);

@@ -1,12 +1,14 @@
-import React from 'react';
+import React, { CSSProperties } from 'react';
 import {ConnectedProps, connect} from 'react-redux';
 import cn from 'bem-cn-lite';
+import _ from 'lodash';
 
-import {Checkbox, Select} from '@gravity-ui/uikit';
+import {Button, Checkbox, Flex, Select} from '@gravity-ui/uikit';
 
 import {RootState} from '../../../../store/reducers';
 import DataTableYT from '../../../../components/DataTableYT/DataTableYT';
 import * as DT100 from '@gravity-ui/react-data-table';
+import DataTable from '@gravity-ui/react-data-table';
 import {
     getHideOfflineValue,
     getSummarySortState,
@@ -16,7 +18,6 @@ import {
 
 import hammer from '../../../../common/hammer';
 
-import {ClickableText} from '../../../../components/ClickableText/ClickableText';
 import Icon from '../../../../components/Icon/Icon';
 import Link from '../../../../components/Link/Link';
 import ColumnHeader from '../../../../components/ColumnHeader/ColumnHeader';
@@ -35,8 +36,14 @@ import './VersionSummary.scss';
 const block = cn('versions-summary');
 
 type Props = ConnectedProps<typeof connector>;
+
 type State = Readonly<{
-    currentVersion: string;
+    showAll: boolean,
+    currentVersions: string[],
+    sortOrder?: {
+        order?: DT100.OrderType,
+        columnId?: string,
+    }
 }>
 
 type RenderData = {row: VersionSummaryItem; index: number};
@@ -44,6 +51,9 @@ type RenderData = {row: VersionSummaryItem; index: number};
 const SETTINGS: DT100.Settings = {
     displayIndices: false,
 };
+
+const DEFAULT_COMPONENTS = ['error', 'total'];
+const BASE_TYPES = ['online', 'offline', 'banned'];
 
 function isSpecialRow(version: string) {
     return version === 'error' || version === 'total';
@@ -53,13 +63,14 @@ class VersionsSummary extends React.Component<Props, State> {
     constructor(props: Props) {
         super(props);
         this.state = {
-            currentVersion: '',
+            showAll: true,
+            currentVersions: [],
         }
     }
 
     componentDidUpdate() {
-        if (!this.state.currentVersion && this.props.visibleColumns[0]) {
-            this.setState((state) => ({...state, currentVersion: this.props.visibleColumns[0].name}))
+        if (!this.state.currentVersions.length && this.props.visibleColumns.length && this.state.showAll) {
+            this.setState((state) => ({...state, currentVersions: this.props.visibleColumns.map(col => col.name)}))
         }
     }
 
@@ -68,34 +79,15 @@ class VersionsSummary extends React.Component<Props, State> {
     }
 
     renderVersion = (data: RenderData) => {
-        const {changeVersionStateTypeFilters} = this.props;
-        const type = Object.keys(data.row)[0]
-        let content;
-        if (type === 'error') {
-            content = (
-                <React.Fragment>
-                    <ClickableText
-                        color="primary"
-                        onClick={() => {
-                            changeVersionStateTypeFilters({state: 'error'});
-                        }}
-                    >
-                        <Icon awesome={'exclamation-triangle'} />{' '}
-                        {hammer.format['Readable'](type)}
-                    </ClickableText>
-                </React.Fragment>
-            );
-        } else {
-            content = hammer.format['Readable'](type);
-        }
+        const type = data.row.type
+        let content = hammer.format['Readable'](type);
 
         return <span className={block('value')}>{content}</span>;
     };
 
     renderNumber = (key: keyof VersionSummaryItem, rowData: RenderData) => {
         const {row} = rowData;
-        const value = Object.values(row)[0];
-        
+        const value = row[key];
         const content = !value ? hammer.format.NO_VALUE : hammer.format['Number'](value);
         const onClick = !value
             ? undefined
@@ -118,12 +110,12 @@ class VersionsSummary extends React.Component<Props, State> {
         name,
         shortName,
     }: {
-        type: keyof VersionSummaryItem;
+        type: any;
         name: string;
         shortName?: string;
     }): DT100.Column<VersionSummaryItem> {
         return {
-            name: shortName || name,
+            name: name,
             title: name,
             sortable: false,
             render: this.renderNumber.bind(this, type),
@@ -132,19 +124,28 @@ class VersionsSummary extends React.Component<Props, State> {
         };
     }
 
-    renderHeader(key: keyof VersionSummaryItem, name: string, shortName?: string) {
+    renderHeader(key: keyof VersionSummaryItem, name: string, _shortName?: string) {
         const {sortState, setVersionsSummarySortState} = this.props;
         const {column, order} = sortState || {};
+
         return (
             <ColumnHeader<typeof key>
-                column={key}
-                title={name}
-                shortTitle={shortName || name}
+                column={name}
+                title={name.split('~').join('\n~')}
                 onSort={(column, order) => {
-                    setVersionsSummarySortState({column, order});
+                    if (this.state.sortOrder && this.state.sortOrder.order === DataTable.DESCENDING) {
+                        // @ts-ignore
+                        this.setState((state) => ({...state, sortOrder: {}, currentVersions: this.state.currentVersions}));
+                        setVersionsSummarySortState({});
+                    }else if (order === 'asc') {
+                        this.setState((state) => ({...state, sortOrder: {columnId: column, order: DataTable.ASCENDING}}));
+                        setVersionsSummarySortState({column, order});
+                    } else if (order === 'desc') {
+                        this.setState((state) => ({...state, sortOrder: {columnId: column, order: DataTable.DESCENDING}}));
+                        setVersionsSummarySortState({column, order});
+                    }
                 }}
                 order={key === column ? order : ''}
-                withUndefined
             />
         );
     }
@@ -154,7 +155,7 @@ class VersionsSummary extends React.Component<Props, State> {
     };
 
     render() {
-        const {currentVersion} = this.state;
+        const {currentVersions, sortOrder} = this.state;
         const {visibleColumns} = this.props;
 
         const columns: Array<DT100.Column<VersionSummaryItem>> = [
@@ -162,51 +163,118 @@ class VersionsSummary extends React.Component<Props, State> {
                 name: 'type',
                 render: this.renderVersion,
                 sortable: false,
-                header: this.renderHeader('type', 'Types'),
+                header: this.renderHeader('type', 'Components'),
+                customStyle: () =>
+                    ({
+                        position: 'sticky',
+                        left: 0,
+                        background: 'inherit',
+                        zIndex: 1,
+                        boxShadow: 'inset -1px 0 var(--dark-divider)',
+                        width: 'fit-content',
+                    }) as CSSProperties,
             },
-            this.makeColumnInfo({type: 'version', name: this.state.currentVersion}),
+            ...currentVersions.map(column => this.makeColumnInfo({type: column, name: column})),
         ];
 
         const {items, loading, loaded, cluster, checkedHideOffline} = this.props;
         const monitoringLink = UIFactory.getVersionMonitoringLink(cluster);
 
-        //@ts-ignore
-        let newItems = items.filter(item => item[currentVersion]);
-
-        if (newItems[0]) {
-            let temp = [];
+        let newItems = items.filter(item => currentVersions.includes(Object.keys(item)[0]));
+        const resultItems = [];
+        const keys = new Set();
+        for (const item of newItems) {
+            resultItems.push(...Object.values(item))
+        }
+        for (const item of resultItems) {
             //@ts-ignore
-            for (const key in newItems[0][currentVersion]) {
-                let obj = {};
-                // @ts-ignore
-                if (newItems[0][this.state.currentVersion][key] && key !== 'version') {
-                    // @ts-ignore
-                    obj[key] = newItems[0][this.state.currentVersion][key];
-                    temp.push(obj);
-                }
-
+            for (const key in item) {
+                keys.add(key)
             }
-            newItems = temp;
+        }
+        const temp = Array.from(keys);
+        const res = {}
+        for (const type of temp) {
+            if (type === 'version') continue;
+            // @ts-ignore
+            res[type] = {};
+            for (const item of resultItems) {
+                // @ts-ignore
+                res[type][item['version']] = item[type];
+            }
+            // @ts-ignore
+            res[type]['type'] = type;
         }
 
         const options = (() => {
             let res = [];
             if (visibleColumns) {
                 for (let column of visibleColumns) {
+                    if (DEFAULT_COMPONENTS.includes(column.type)) continue;
                     res.push({value: column.type, content: column.type});
                 }
             }
             return res;
         })();
+        const handleShowAll = () => {
+            this.setState((state) => ({...state, showAll: true, currentVersions: visibleColumnsNames}));
+        }
+        const handleReset = () => {
+            this.setState((state) => ({...state, showAll: false, currentVersions: DEFAULT_COMPONENTS}));
+        }
+        const renderFilter = () => {
+            return (
+                <Flex direction='row'>
+                    <Button view='flat' className={block('filter-button')} onClick={handleShowAll}>Show all</Button>
+                    <Button view='flat' className={block('filter-button')} onClick={handleReset}>Reset</Button>
+                </Flex>
+            )
+        };
+        const visibleColumnsNames = visibleColumns.map(col => col.name);
+        const makeValue = (value: string[]) => {
+            return value.filter(item => !DEFAULT_COMPONENTS.includes(item)).concat(DEFAULT_COMPONENTS);
+        }
+        // @ts-ignore
+        const prepareData = (data) => {
+            let newData = []
+            if (!sortOrder && data && data.length) {
+                // @ts-ignore
+                newData = [...data].filter(item => !BASE_TYPES.includes(item.type)).toSorted((item1, item2) => item1.type.localeCompare(item2.type));
 
+                BASE_TYPES.forEach((t) => {
+                    // @ts-ignore
+                    const item = data.find(item => item.type === t);
+                    newData.push(item);
+                });
+            }
+            return newData;
+        };
         return (
             <div className={block()}>
                 <div className={block('header-actions')}>
+                    <Checkbox
+                        title={'Hide offline'}
+                        content={'Hide offline'}
+                        defaultChecked={checkedHideOffline}
+                        onUpdate={this.handleHideOffline}
+                    />
+                    <Checkbox
+                        title={'Hide non-components columns'}
+                        content={'Hide non-components columns'}
+                        defaultChecked={false}
+                        onUpdate={() => {}}
+                    />
                     <Select
+                        className={block('component-select')}
                         options={options}
-                        // @ts-ignore 
-                        onUpdate={(value) => {this.setState((state) => ({...state, currentVersion: value}))}}
-                        value={[currentVersion]}
+                        onUpdate={(value) => {
+                            this.setState((state) => ({...state, showAll: false, currentVersions: makeValue(value)}));
+                        }}
+                        filterable
+                        value={currentVersions.filter(version => !DEFAULT_COMPONENTS.includes(version))}
+                        renderFilter={renderFilter}
+                        placeholder='Versions'
+                        multiple
                     />
                     {monitoringLink && (
                         <Link
@@ -217,22 +285,21 @@ class VersionsSummary extends React.Component<Props, State> {
                             {monitoringLink.title || 'Monitoring'} <Icon awesome="external-link" />
                         </Link>
                     )}
-                    <Checkbox
-                        title={'Hide offline'}
-                        content={'Hide offline'}
-                        defaultChecked={checkedHideOffline}
-                        onUpdate={this.handleHideOffline}
-                    />
                 </div>
+                {/*
+                //@ts-ignore */}
                 <DataTableYT
+                    className={block('table')}
                     loaded={loaded}
                     loading={loading}
                     // @ts-ignore 
-                    data={newItems}
+                    data={sortOrder ? Object.values(res).reverse() : prepareData(Object.values(res))}
                     columns={columns}
                     theme={'versions'}
                     settings={SETTINGS}
                     rowClassName={this.rowClassName}
+                    // @ts-ignore
+                    sortOrder={sortOrder}
                 />
             </div>
         );
@@ -242,22 +309,24 @@ class VersionsSummary extends React.Component<Props, State> {
         return block('row', {special: isSpecialRow(row.version)});
     }
 
-    onClick = (key: keyof VersionSummaryItem, data: RenderData) => {
+    onClick = (key: keyof VersionSummaryItem, data: any) => {
         const {changeVersionStateTypeFilters} = this.props;
         const {
-            row: {version: rowVersion},
+            row,
         } = data;
-        const isSpecial = isSpecialRow(rowVersion);
-        const version = !isSpecial ? rowVersion : undefined;
+        const isSpecial = isSpecialRow(key);
 
-        const state = rowVersion === 'error' ? 'error' : undefined;
+        const version = !isSpecial ? key : undefined
+        const type: string | undefined = row.type;
 
-        if (key === 'online' || key === 'offline') {
-            changeVersionStateTypeFilters({version, state: state || key});
-        } else if (key === 'banned') {
+        const state = key === 'error' ? 'error' : undefined;
+
+        if (type === 'online' || type === 'offline') {
+            changeVersionStateTypeFilters({version, state: state || type});
+        } else if (type === 'banned') {
             changeVersionStateTypeFilters({version, banned: true});
         } else {
-            changeVersionStateTypeFilters({version, type: key, state});
+            changeVersionStateTypeFilters({version, type, state});
         }
     };
 }

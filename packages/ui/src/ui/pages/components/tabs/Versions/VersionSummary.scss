@@ -16,6 +16,11 @@
         vertical-align: middle;
     }
 
+    &__table {
+        overflow-x: auto;
+        width: 100%;
+    }
+
     &__value {
         &_clickable {
             &:hover {
@@ -49,6 +54,17 @@
         }
     }
 
+    &__component-select {
+        width: 400px;
+        &__all {
+            background-color: transparent;
+        }
+    }
+
+    &__filter-button {
+        width: 50%;
+    }
+
     &__monitoring-link {
         display: flex;
         align-items: center;
@@ -64,4 +80,9 @@
         top: -33px;
         float: right;
     }
+}
+
+.column-header__label {
+    content: "\\n";
+    white-space: pre;
 }
