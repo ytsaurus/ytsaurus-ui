@@ -260,7 +260,7 @@ function deleteCurrentObject(path: string, restorePath: string) {
                         theme: 'success',
                         name: 'delete object',
                         autoHiding: 10000,
-                        title: 'Object deleted',
+                        title: 'Object moved',
                         content: (
                             <div>
                                 Object has been moved to{' '}
@@ -415,8 +415,16 @@ function moveObjectsIntoTrash(multipleInfo: MulipleInfoItem[], transaction: stri
                 theme: 'success',
                 name: 'delete objects',
                 autoHiding: 10000,
-                title: 'Objects deleted',
-                content: 'Objects have been moved to the trash',
+                title: 'Objects moved',
+                content: (
+                    <div>
+                        Objects have been moved to the trash, they might be found at
+                        <br />
+                        <Link url={'navigation?path=//tmp/trash/by-account/'}>
+                            {'//tmp/trash/by-account/...'}
+                        </Link>
+                    </div>
+                ),
             });
         });
 }
