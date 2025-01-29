@@ -2,7 +2,7 @@ import React from 'react';
 import {ConnectedProps, connect} from 'react-redux';
 import cn from 'bem-cn-lite';
 
-import {Checkbox} from '@gravity-ui/uikit';
+import {Checkbox, Select} from '@gravity-ui/uikit';
 
 import {RootState} from '../../../../store/reducers';
 import DataTableYT from '../../../../components/DataTableYT/DataTableYT';
@@ -11,7 +11,7 @@ import {
     getHideOfflineValue,
     getSummarySortState,
     getVersionsSummaryData,
-    getVersionsSummaryVisibleColumns,
+    getVersions,
 } from '../../../../store/selectors/components/versions/versions_v2-ts';
 
 import hammer from '../../../../common/hammer';
@@ -30,12 +30,14 @@ import {getCluster} from '../../../../store/selectors/global';
 import {formatByParams} from '../../../../utils/format';
 import UIFactory from '../../../../UIFactory';
 
-import {VersionCellWithAction} from './VersionCell';
 import './VersionSummary.scss';
 
 const block = cn('versions-summary');
 
 type Props = ConnectedProps<typeof connector>;
+type State = Readonly<{
+    currentVersion: string;
+}>
 
 type RenderData = {row: VersionSummaryItem; index: number};
 
@@ -47,14 +49,29 @@ function isSpecialRow(version: string) {
     return version === 'error' || version === 'total';
 }
 
-class VersionsSummary extends React.Component<Props> {
+class VersionsSummary extends React.Component<Props, State> {
+    constructor(props: Props) {
+        super(props);
+        this.state = {
+            currentVersion: '',
+        }
+    }
+
+    componentDidUpdate() {
+        if (!this.state.currentVersion && this.props.visibleColumns[0]) {
+            this.setState((state) => ({...state, currentVersion: this.props.visibleColumns[0].name}))
+        }
+    }
+
     getColumns(): Array<DT100.Column<VersionSummaryItem>> {
         return [];
     }
-    renderVersion = ({row: {version}}: RenderData) => {
+
+    renderVersion = (data: RenderData) => {
         const {changeVersionStateTypeFilters} = this.props;
+        const type = Object.keys(data.row)[0]
         let content;
-        if (version === 'error') {
+        if (type === 'error') {
             content = (
                 <React.Fragment>
                     <ClickableText
@@ -64,25 +81,21 @@ class VersionsSummary extends React.Component<Props> {
                         }}
                     >
                         <Icon awesome={'exclamation-triangle'} />{' '}
-                        {hammer.format['Readable'](version)}
+                        {hammer.format['Readable'](type)}
                     </ClickableText>
                 </React.Fragment>
             );
-        } else if (version === 'total') {
-            content = hammer.format['Readable'](version);
         } else {
-            content = (
-                <div className={block('version')}>
-                    <VersionCellWithAction version={version} />
-                </div>
-            );
+            content = hammer.format['Readable'](type);
         }
 
         return <span className={block('value')}>{content}</span>;
     };
+
     renderNumber = (key: keyof VersionSummaryItem, rowData: RenderData) => {
         const {row} = rowData;
-        const value = row[key];
+        const value = Object.values(row)[0];
+        
         const content = !value ? hammer.format.NO_VALUE : hammer.format['Number'](value);
         const onClick = !value
             ? undefined
@@ -141,25 +154,60 @@ class VersionsSummary extends React.Component<Props> {
     };
 
     render() {
+        const {currentVersion} = this.state;
         const {visibleColumns} = this.props;
+
         const columns: Array<DT100.Column<VersionSummaryItem>> = [
             {
-                name: 'version',
+                name: 'type',
                 render: this.renderVersion,
                 sortable: false,
-                sortAccessor: (row) => row.version,
-                header: this.renderHeader('version', 'Versions'),
+                header: this.renderHeader('type', 'Types'),
             },
-
-            ...visibleColumns.map((item) => this.makeColumnInfo(item)),
+            this.makeColumnInfo({type: 'version', name: this.state.currentVersion}),
         ];
 
         const {items, loading, loaded, cluster, checkedHideOffline} = this.props;
         const monitoringLink = UIFactory.getVersionMonitoringLink(cluster);
 
+        //@ts-ignore
+        let newItems = items.filter(item => item[currentVersion]);
+
+        if (newItems[0]) {
+            let temp = [];
+            //@ts-ignore
+            for (const key in newItems[0][currentVersion]) {
+                let obj = {};
+                // @ts-ignore
+                if (newItems[0][this.state.currentVersion][key] && key !== 'version') {
+                    // @ts-ignore
+                    obj[key] = newItems[0][this.state.currentVersion][key];
+                    temp.push(obj);
+                }
+
+            }
+            newItems = temp;
+        }
+
+        const options = (() => {
+            let res = [];
+            if (visibleColumns) {
+                for (let column of visibleColumns) {
+                    res.push({value: column.type, content: column.type});
+                }
+            }
+            return res;
+        })();
+
         return (
             <div className={block()}>
                 <div className={block('header-actions')}>
+                    <Select
+                        options={options}
+                        // @ts-ignore 
+                        onUpdate={(value) => {this.setState((state) => ({...state, currentVersion: value}))}}
+                        value={[currentVersion]}
+                    />
                     {monitoringLink && (
                         <Link
                             url={formatByParams(monitoringLink.urlTemplate, {ytCluster: cluster})}
@@ -179,7 +227,8 @@ class VersionsSummary extends React.Component<Props> {
                 <DataTableYT
                     loaded={loaded}
                     loading={loading}
-                    data={items}
+                    // @ts-ignore 
+                    data={newItems}
                     columns={columns}
                     theme={'versions'}
                     settings={SETTINGS}
@@ -217,10 +266,10 @@ const mapStateToProps = (state: RootState) => {
     const {loading, loaded} = state.components.versionsV2;
     const cluster = getCluster(state);
 
-    const items = getVersionsSummaryData(state);
     const sortState = getSummarySortState(state);
 
-    const visibleColumns = getVersionsSummaryVisibleColumns(state);
+    const visibleColumns = getVersions(state);
+    const items = getVersionsSummaryData(state);
 
     return {
         loading: loading as boolean,
