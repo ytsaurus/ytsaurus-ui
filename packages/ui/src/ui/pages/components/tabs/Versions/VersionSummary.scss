@@ -16,6 +16,11 @@
         vertical-align: middle;
     }
 
+    &__table {
+        overflow-x: auto;
+        width: 100%;
+    }
+
     &__value {
         &_clickable {
             &:hover {
@@ -47,6 +52,17 @@
         &_special {
             background-color: var(--light-background);
         }
+    }
+
+    &__component-select {
+        width: 400px;
+        &__all {
+            background-color: transparent;
+        }
+    }
+
+    &__filter-button {
+        width: 50%;
     }
 
     &__monitoring-link {
