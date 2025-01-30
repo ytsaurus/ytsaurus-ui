@@ -1,5 +1,35 @@
 # Changelog
 
+## [1.79.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.78.0...ui-v1.79.0) (2025-01-30)
+
+
+### Features
+
+* **DownloadManager:** add setting for filename [YTFRONT-3564] ([285d075](https://github.com/ytsaurus/ytsaurus-ui/commit/285d075f06a478b096628bf69ada5aa355492eef))
+* **Queries:** new progress graph [YTFRONT-4112] ([24c142e](https://github.com/ytsaurus/ytsaurus-ui/commit/24c142e1bd8fdff6cb948fd1a72c838d6d216db9))
+
+
+### Bug Fixes
+
+* **ACL:** minor fixes for SubjectsControl [YTFRONT-4465] ([92f521b](https://github.com/ytsaurus/ytsaurus-ui/commit/92f521b773df34bff1c8fcf292a2232df4d61669))
+* **Components/Node/MemoryPopup:** do not display lines with '0B' [YTFRONT-4625] ([00268e3](https://github.com/ytsaurus/ytsaurus-ui/commit/00268e33e40d486fd05eca3277867b1a4beec232))
+* **Components/Node/SloutResources:** fix calculation of 'Slot Resources' [YTFRONT-4631] ([4c898c0](https://github.com/ytsaurus/ytsaurus-ui/commit/4c898c0706fea5872810d41384282aac67fe5ce8))
+* **Jobs:** fixed filter by job state, now it's correctrly applying from URL [[#775](https://github.com/ytsaurus/ytsaurus-ui/issues/775)] ([e4f96b7](https://github.com/ytsaurus/ytsaurus-ui/commit/e4f96b749fd22bbb7824196e38221637f6b300a3))
+* **MultipleActions:** filter empty sections [YTFRONT-4627] ([8986360](https://github.com/ytsaurus/ytsaurus-ui/commit/8986360756b9755a03f8dbefa503f402b6cc9668))
+* **Navigation/PathEditor:** use last fragment for suggestion [YTFRONT-4032] ([f451603](https://github.com/ytsaurus/ytsaurus-ui/commit/f451603614e4f659b7eb75c12df5bf5bcbf5ae68))
+* **Navigation/Tabs:** optimize attributes requests [YTFRONT-3182] ([ef9100c](https://github.com/ytsaurus/ytsaurus-ui/commit/ef9100cb0e751abb88821511c16be7f4e711f312))
+* **Operaion/Jobs:** get rid of unnecessary filter 'DataSource' [YTFRONT-4629] ([77c2ace](https://github.com/ytsaurus/ytsaurus-ui/commit/77c2ace10ce2653adc81b6d8847d1cc68a44d574))
+* **Operation/Events:** minor style-fix for progress [YTFRONT-4631] ([c3b1225](https://github.com/ytsaurus/ytsaurus-ui/commit/c3b1225974efe18c586ee74ae23853696003afa5))
+* **OperationDetail/Tasks:** minor fix for Aborted column [YTFRONT-4632] ([73f32c9](https://github.com/ytsaurus/ytsaurus-ui/commit/73f32c95a024477991f6b16e8056c73068ff0557))
+* **Scheduling:** replace deprecated attribute [YTFRONT-4652] ([71d0534](https://github.com/ytsaurus/ytsaurus-ui/commit/71d05349bac045ee4850bb5b3ba631db3e9f0f7b))
+* **System:** minor css-fix for '[nonvoting]' [YTFRONT-4477] ([ec76ecc](https://github.com/ytsaurus/ytsaurus-ui/commit/ec76ecceca83d8abadc0bf2a9256a41ced466977))
+
+
+### Reverts
+
+* "chore(System): do not request data from endpoints with "maintenance" attribute" ([b052987](https://github.com/ytsaurus/ytsaurus-ui/commit/b052987b52e32eb7007144de9ec54fd1d876176b))
+* "fix(System): fixed typo, now we check correct "maintenance" attribute" ([1cb8822](https://github.com/ytsaurus/ytsaurus-ui/commit/1cb88222bc8f79391a8c9d0b887b00e0d290f7e7))
+
 ## [1.78.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.77.0...ui-v1.78.0) (2025-01-20)
 
 
