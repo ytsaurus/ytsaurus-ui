@@ -7,9 +7,9 @@ import {Button, Flex, Icon, Loader} from '@gravity-ui/uikit';
 import playIcon from '../../../assets/img/svg/play.svg';
 import {useDispatch, useSelector} from 'react-redux';
 import {
-    getQuery,
     getQueryEditorErrors,
     getQueryEngine,
+    getQueryId,
     getQueryText,
     isQueryExecuted,
     isQueryLoading,
@@ -41,6 +41,7 @@ import {WaitForFont} from '../../../containers/WaitForFont/WaitForFont';
 import {getHashLineNumber} from './helpers/getHashLineNumber';
 import {makeHighlightedLineDecorator} from './helpers/makeHighlightedLineDecorator';
 import {getDecorationsWithoutHighlight} from './helpers/getDecorationsWithoutHighlight';
+import {useMonacoQuerySuggestions} from '../querySuggestionsModule/useMonacoQuerySuggestions';
 
 const b = block('query-container');
 
@@ -65,7 +66,7 @@ const QueryEditorView = React.memo(function QueryEditorView({
     const [changed, setChanged] = useState(false);
     const editorRef = useRef<monaco.editor.IStandaloneCodeEditor>();
     const {setEditor} = useMonaco();
-    const activeQuery = useSelector(getQuery);
+    const id = useSelector(getQueryId);
     const text = useSelector(getQueryText);
     const engine = useSelector(getQueryEngine);
     const editorErrors = useSelector(getQueryEditorErrors);
@@ -76,6 +77,7 @@ const QueryEditorView = React.memo(function QueryEditorView({
         undefined,
     );
     const model = editorRef.current?.getModel();
+    useMonacoQuerySuggestions(editorRef.current);
 
     const runQueryCallback = useCallback(() => {
         dispatch(runQuery(onStartQuery));
@@ -84,7 +86,7 @@ const QueryEditorView = React.memo(function QueryEditorView({
     useEffect(() => {
         editorRef.current?.focus();
         editorRef.current?.setScrollTop(0);
-    }, [activeQuery?.id]);
+    }, [id]);
 
     useEffect(() => {
         if (editorRef.current) {
@@ -166,6 +168,12 @@ const QueryEditorView = React.memo(function QueryEditorView({
             renderWhitespace: 'boundary',
             minimap: {
                 enabled: true,
+            },
+            inlineSuggest: {
+                enabled: true,
+                showToolbar: 'always',
+                mode: 'subword',
+                keepOnBlur: true,
             },
         };
     }, [engine]);

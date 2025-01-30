@@ -3,6 +3,7 @@ import {createProvideSuggestionsFunction} from '../helpers/createProvideSuggesti
 import {MonacoLanguage} from '../../../constants/monaco';
 import {generateYqlOldSafariSuggestion} from './yql.keywords';
 import {QueryEngine} from '../../../pages/query-tracker/module/engines';
+import {createInlineSuggestions} from '../../../pages/query-tracker/querySuggestionsModule/createInlineSuggestions';
 
 registerLanguage({
     id: MonacoLanguage.YQL,
@@ -19,6 +20,7 @@ registerLanguage({
             provideSuggestionsFunction: autocomplete
                 ? createProvideSuggestionsFunction(autocomplete.parseYqlQuery, QueryEngine.YQL)
                 : generateYqlOldSafariSuggestion,
+            provideInlineSuggestionsFunction: createInlineSuggestions(QueryEngine.YQL),
         };
     },
 });

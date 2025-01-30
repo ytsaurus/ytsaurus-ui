@@ -135,6 +135,19 @@ export type YQLButtonProps = {
     onClose(): void;
 };
 
+export type InlineSuggestionsTelemetryType = 'accepted' | 'discarded' | 'ignored';
+export interface InlineSuggestionsApi {
+    getQuerySuggestions(data: {
+        query: string;
+        line: number;
+        column: number;
+        engine: string;
+    }): Promise<string[]>;
+    sendTelemetry(type: InlineSuggestionsTelemetryType): Promise<{success: boolean}>;
+    onQueryLoad(): void;
+    onQueryCreate(): void;
+}
+
 export interface UIFactory {
     getClusterAppearance(cluster?: string): undefined | ClusterAppearance;
 
@@ -442,6 +455,8 @@ export interface UIFactory {
               additionalAttributes: Array<string>;
               renderNodeIcon: (item: Node) => React.ReactNode;
           };
+
+    getInlineSuggestionsApi(): InlineSuggestionsApi | undefined;
 
     renderCustomPreloaderError: (params: {
         cluster: string;

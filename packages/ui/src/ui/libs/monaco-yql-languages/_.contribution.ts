@@ -15,6 +15,12 @@ interface ILangImpl {
     ) =>
         | {suggestions: languages.CompletionItem[]}
         | Promise<{suggestions: languages.CompletionItem[]}>;
+    provideInlineSuggestionsFunction?: (
+        model: editor.ITextModel,
+        monacoCursorPosition: Position,
+        _context: languages.InlineCompletionContext,
+        _token: CancellationToken,
+    ) => Promise<{items: languages.InlineCompletion[]}>;
 }
 
 const languageDefinitions: {[languageId: string]: ILang} = {};
@@ -80,6 +86,12 @@ export function registerLanguage(def: ILang): void {
             languages.registerCompletionItemProvider(languageId, {
                 triggerCharacters: ['`', ':', '/', '', ' '],
                 provideCompletionItems: mod.provideSuggestionsFunction,
+            });
+        }
+        if (mod.provideInlineSuggestionsFunction) {
+            languages.registerInlineCompletionsProvider(languageId, {
+                provideInlineCompletions: mod.provideInlineSuggestionsFunction,
+                freeInlineCompletions: () => {},
             });
         }
     });

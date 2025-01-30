@@ -10,6 +10,7 @@ import {createProvideSuggestionsFunction} from '../helpers/createProvideSuggesti
 import {generateClickhouseOldSafariSuggestions} from './clickhouse.keywords';
 import {MonacoLanguage} from '../../../constants/monaco';
 import {QueryEngine} from '../../../pages/query-tracker/module/engines';
+import {createInlineSuggestions} from '../../../pages/query-tracker/querySuggestionsModule/createInlineSuggestions';
 
 registerLanguage({
     id: MonacoLanguage.CHYT,
@@ -29,6 +30,7 @@ registerLanguage({
                       QueryEngine.CHYT,
                   )
                 : generateClickhouseOldSafariSuggestions,
+            provideInlineSuggestionsFunction: createInlineSuggestions(QueryEngine.CHYT),
         };
     },
 });
