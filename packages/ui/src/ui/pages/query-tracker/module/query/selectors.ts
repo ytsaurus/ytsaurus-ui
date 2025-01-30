@@ -20,6 +20,7 @@ export const DEFAULT_QUERY_ACO = 'nobody';
 export const SHARED_QUERY_ACO = 'everyone-share';
 
 export const getQuery = (state: RootState) => getState(state).queryItem;
+export const getQueryId = (state: RootState) => getState(state).queryItem?.id;
 export const getQueryGetParams = (state: RootState) => getState(state).params;
 
 export const getQueryDraft = (state: RootState) => getState(state).draft;

@@ -313,4 +313,7 @@ export const defaultUIFactory: UIFactory = {
     renderCustomPreloaderError() {
         return null;
     },
+    getInlineSuggestionsApi() {
+        return undefined;
+    },
 };

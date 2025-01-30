@@ -38,6 +38,7 @@ import {chytApiAction, spytApiAction} from '../../../../utils/strawberryControll
 import guid from '../../../../common/hammer/guid';
 import {getSettingQueryTrackerStage} from '../../../../store/selectors/settings/settings-ts';
 import {getDefaultQueryACO, selectIsMultipleAco} from '../query_aco/selectors';
+import UIFactory from '../../../../UIFactory';
 
 import {
     REQUEST_QUERY,
@@ -135,6 +136,7 @@ export function loadQuery(
                 queryItem.query = state.queryTracker.query.draft.query;
             }
 
+            UIFactory.getInlineSuggestionsApi()?.onQueryLoad();
             dispatch({
                 type: SET_QUERY,
                 data: {
@@ -216,6 +218,7 @@ export function createEmptyQuery(
         const state = getState();
         const defaultQueryACO = getDefaultQueryACO(state);
 
+        UIFactory.getInlineSuggestionsApi()?.onQueryCreate();
         dispatch({
             type: SET_QUERY,
             data: {
