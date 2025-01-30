@@ -1,7 +1,7 @@
 import React from 'react';
 
 import {DialogError, FormApi, YTDFDialog} from '../../../components/Dialog';
-import {makeLink} from '../../../navigation/Navigation/PathEditorModal/CreateTableModal/CreateTableModal';
+import {makeLink} from './CreateTableModal/CreateTableModal';
 import {useDispatch, useSelector} from 'react-redux';
 import {
     hideTableEraseModal,

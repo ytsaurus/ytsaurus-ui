@@ -14,7 +14,7 @@ import {
     remoteCopy,
 } from '../../../store/actions/navigation/modals/remote-copy-modal';
 import {getCluster} from '../../../store/selectors/global';
-import {makeLink} from '../../../navigation/Navigation/PathEditorModal/CreateTableModal/CreateTableModal';
+import {makeLink} from './CreateTableModal/CreateTableModal';
 import {YTError} from '../../../types';
 import {RemoteCopyParams} from '../../../../@types/types';
 import {AxiosError} from 'axios';

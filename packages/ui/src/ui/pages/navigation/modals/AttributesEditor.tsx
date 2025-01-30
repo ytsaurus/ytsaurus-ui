@@ -43,7 +43,7 @@ import {
     normalizeErasureCodec,
     storageOptionFromErasureCodec,
 } from '../../../utils/cypress-attributes';
-import {makeLink} from '../../../navigation/Navigation/PathEditorModal/CreateTableModal/CreateTableModal';
+import {makeLink} from './CreateTableModal/CreateTableModal';
 import {
     getCompressionCodecs,
     getErasureCodecs,
