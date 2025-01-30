@@ -48,7 +48,7 @@ import {SelectWithSubItemsProps} from '../../../../components/Dialog/controls/Se
 import {docsUrl, getNewTableReplicasCount} from '../../../../config';
 
 import './CreateTableModal.scss';
-import {DESCENDING} from './CreateTableTabField/CreateTableTabField';
+import {ASCENDING, DESCENDING} from './CreateTableTabField/CreateTableTabField';
 import {FIX_MY_TYPE} from '../../../../types';
 import UIFactory from '../../../../UIFactory';
 
@@ -67,10 +67,11 @@ export function makeLink(url: string, label = 'Help', inline = false) {
     return inline ? link : <div>{link}</div>;
 }
 
-const TableType = {
-    DYNAMIC: 'dynamic',
-    STATIC: 'static',
-};
+enum TableType {
+    QUEUE = 'queue',
+    DYNAMIC = 'dynamic',
+    STATIC = 'static',
+}
 
 const AGGREGATE_CHOICES = [{value: SELECT_EMPTY_VALUE, text: 'default'}].concat(
     map_(AggrTypes, (i) => ({value: i, text: i})),
@@ -165,7 +166,7 @@ interface TableSettingsTab {
     uniqueKeys: boolean;
     name: string;
     replicasCount: string;
-    tableType: 'static' | 'dynamic';
+    tableType: TableType;
 }
 
 function genNewName(items: Array<{name: string}>, name: string) {
@@ -245,9 +246,8 @@ class CreateTableModalContentImpl extends React.Component<Props> {
         } = values;
         const columns = this.reorderColumns(columnsRaw);
 
-        const isDynamic = tableType === TableType.DYNAMIC;
         const attributes: Record<string, any> = {
-            dynamic: isDynamic,
+            dynamic: tableType === TableType.QUEUE || tableType == TableType.DYNAMIC,
             optimize_for,
         };
 
@@ -314,11 +314,11 @@ class CreateTableModalContentImpl extends React.Component<Props> {
         });
     };
 
-    validateColumnDataType(columnData: ColumnData, isDynamicTable: boolean) {
+    validateColumnDataType(columnData: ColumnData, tableType: TableType) {
         const {dataType, optional} = columnData || {};
 
         if (dataType === ColumnDataTypes.ANY || dataType === ColumnDataTypes.YSON) {
-            if (isDynamicTable && this.isOrderedColumn(columnData)) {
+            if (tableType === TableType.DYNAMIC && this.isOrderedColumn(columnData)) {
                 return `Key-column should not be of type [${dataType}]`;
             }
             if (!optional) {
@@ -326,7 +326,11 @@ class CreateTableModalContentImpl extends React.Component<Props> {
             }
         }
 
-        if (isDynamicTable && this.isDescendingColumn(columnData)) {
+        if (tableType === TableType.QUEUE && this.isSortedColumn(columnData)) {
+            return 'Queue must not have any sorted columns';
+        }
+
+        if (tableType === TableType.DYNAMIC && this.isDescendingColumn(columnData)) {
             return "Dynamic tables do not support 'Descending' order";
         }
 
@@ -356,13 +360,13 @@ class CreateTableModalContentImpl extends React.Component<Props> {
         return undefined;
     }
 
-    validateColumnData(columnData: ColumnData, isDynamicTable: boolean) {
+    validateColumnData(columnData: ColumnData, tableType: TableType) {
         const res: Record<string, string> = {};
         const aggregate = this.validateAggregate(columnData);
         if (aggregate) {
             res.aggregate = aggregate;
         }
-        const dataType = this.validateColumnDataType(columnData, isDynamicTable);
+        const dataType = this.validateColumnDataType(columnData, tableType);
         if (dataType) {
             res.dataType = dataType;
         }
@@ -398,9 +402,18 @@ class CreateTableModalContentImpl extends React.Component<Props> {
         return Boolean(this.props.keyColumns[id]);
     }
 
+    isAscendingColumn(columnData: ColumnData) {
+        const {id} = columnData;
+        return this.props.keyColumns[id] === ASCENDING;
+    }
+
     isDescendingColumn(columnData: ColumnData) {
         const {id} = columnData;
         return this.props.keyColumns[id] === DESCENDING;
+    }
+
+    isSortedColumn(columnData: ColumnData) {
+        return this.isAscendingColumn(columnData) || this.isDescendingColumn(columnData);
     }
 
     validateTableSettings(tableSettings: TableSettingsTab, columns: Array<ColumnData>) {
@@ -417,7 +430,11 @@ class CreateTableModalContentImpl extends React.Component<Props> {
 
         if (tableType === TableType.DYNAMIC && (!hasOrderedColumn || !hasUnorderedColumn)) {
             res.tableType =
-                'Any dynamic table must have at least one sorted column and one unsorted column';
+                'Dynamic table must have at least one sorted column and one unsorted column';
+        }
+
+        if (tableType === TableType.QUEUE && hasOrderedColumn) {
+            res.tableType = 'Queue must not have any sorted columns';
         }
 
         if (tableType === TableType.DYNAMIC && !res.tableType) {
@@ -473,10 +490,7 @@ class CreateTableModalContentImpl extends React.Component<Props> {
             }
 
             // Validate column
-            setError(
-                `${COLUMNS}[${index}]`,
-                this.validateColumnData(columnData, tableType === TableType.DYNAMIC),
-            );
+            setError(`${COLUMNS}[${index}]`, this.validateColumnData(columnData, tableType));
         });
         forEach_(nameCounters, (indices) => {
             if (indices.length > 1) {
@@ -610,11 +624,15 @@ class CreateTableModalContentImpl extends React.Component<Props> {
                                     options: [
                                         {
                                             value: TableType.STATIC,
-                                            label: 'Static',
+                                            label: 'Static table',
                                         },
                                         {
                                             value: TableType.DYNAMIC,
-                                            label: 'Dynamic',
+                                            label: 'Dynamic table',
+                                        },
+                                        {
+                                            value: TableType.QUEUE,
+                                            label: 'Queue',
                                         },
                                     ],
                                 },

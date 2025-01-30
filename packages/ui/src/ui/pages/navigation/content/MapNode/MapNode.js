@@ -17,7 +17,7 @@ import {SelectSingle} from '../../../../components/Select/Select';
 import Error from '../../../../components/Error/Error';
 import Icon from '../../../../components/Icon/Icon';
 import TTLInfo from '../../../../components/TTLInfo/TTLInfo';
-import CreateTableModal from '../../../../navigation/Navigation/PathEditorModal/CreateTableModal/CreateTableModal';
+import CreateTableModal from '../../modals/CreateTableModal/CreateTableModal';
 import {isCreateTableModalVisible} from '../../../../store/selectors/navigation/modals/create-table';
 
 import MapNodesTable from './MapNodesTable';

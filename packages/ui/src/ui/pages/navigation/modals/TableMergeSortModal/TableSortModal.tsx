@@ -19,7 +19,7 @@ import {
     tableSortModalLoadColumns,
 } from '../../../../store/actions/navigation/modals/table-merge-sort-modal';
 import {getCurrentUserName} from '../../../../store/selectors/global';
-import {makeLink} from '../../../../navigation/Navigation/PathEditorModal/CreateTableModal/CreateTableModal';
+import {makeLink} from '../CreateTableModal/CreateTableModal';
 import './TableSortModal.scss';
 import {ColumnSortByInfo} from './TableSortByControl';
 import {docsUrl} from '../../../../config';

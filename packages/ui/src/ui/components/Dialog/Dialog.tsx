@@ -12,11 +12,11 @@ import ClusterSelectControl from './controls/ClusterSelectControl/ClusterSelectC
 import SortableListControl from '../../components/Dialog/controls/SortableListControl/SortableListControl';
 import BytesControl, {NumberControl} from '../../components/Dialog/controls/BytesControl';
 import RoleListControl from './controls/RoleListControl/RoleListControl';
-import CreateTableTabField from '../../navigation/Navigation/PathEditorModal/CreateTableModal/CreateTableTabField/CreateTableTabField';
+import CreateTableTabField from '../../pages/navigation/modals/CreateTableModal/CreateTableTabField/CreateTableTabField';
 import {
     GroupSuggestControl,
     LockSuggestControl,
-} from '../../navigation/Navigation/PathEditorModal/CreateTableModal/CreateTableSuggests/CreateTableSuggests';
+} from '../../pages/navigation/modals/CreateTableModal/CreateTableSuggests/CreateTableSuggests';
 import SelectWithSubItems from './controls/SelectWithSubItems/SelectWithSubItems';
 import CreatePoolParentSuggest from '../../pages/scheduling/Instruments/CreatePoolDialog/CreatePoolParentSuggest';
 import TabletCellBundlesSuggest from '../../pages/components/TabletCellBundlesSuggest/TabletCellBundlesSuggest';
