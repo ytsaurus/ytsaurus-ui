@@ -287,44 +287,43 @@ export function requestPermissions(
         const poolTree =
             idmKind === IdmObjectType.POOL ? normalizedPoolTree || getTree(state) : undefined;
 
-        try {
-            const requestPermissionsPath = await getPathToCheckPermissions(
-                idmKind,
-                values.path,
-                poolTree,
-            );
+        const requestPermissionsPath = await getPathToCheckPermissions(
+            idmKind,
+            values.path,
+            poolTree,
+        );
 
-            //cluster, path, roles, comment, columns
-            return UIFactory.getAclApi()
-                .requestPermissions({
-                    cluster,
-                    path: values.path,
-                    sysPath: requestPermissionsPath,
-                    roles,
-                    roles_grouped: rolesGroupedBySubject.map(convertFromUIPermissions),
-                    comment: values.comment ?? '',
-                    kind: idmKind,
-                    poolTree,
-                })
-                .then(() => {
-                    dispatch({
-                        type: REQUEST_PERMISSION.SUCCESS,
-                        idmKind,
-                    });
-                });
-        } catch (error: any) {
-            if (isCancelled(error)) {
-                dispatch({type: REQUEST_PERMISSION.CANCELLED, idmKind});
-                return undefined;
-            } else {
+        //cluster, path, roles, comment, columns
+        return UIFactory.getAclApi()
+            .requestPermissions({
+                cluster,
+                path: values.path,
+                sysPath: requestPermissionsPath,
+                roles,
+                roles_grouped: rolesGroupedBySubject.map(convertFromUIPermissions),
+                comment: values.comment ?? '',
+                kind: idmKind,
+                poolTree,
+            })
+            .then(() => {
                 dispatch({
-                    type: REQUEST_PERMISSION.FAILURE,
-                    data: error,
+                    type: REQUEST_PERMISSION.SUCCESS,
                     idmKind,
                 });
-                return Promise.reject(error);
-            }
-        }
+            })
+            .catch((error: any) => {
+                if (isCancelled(error)) {
+                    dispatch({type: REQUEST_PERMISSION.CANCELLED, idmKind});
+                    return undefined;
+                } else {
+                    dispatch({
+                        type: REQUEST_PERMISSION.FAILURE,
+                        data: error,
+                        idmKind,
+                    });
+                    return Promise.reject(error);
+                }
+            });
     };
 }
 
