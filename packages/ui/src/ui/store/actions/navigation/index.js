@@ -314,4 +314,5 @@ const attributesToLoad = [
     'tablet_cell_bundle',
     'tablet_error_count',
     'in_memory_mode',
+    'pipeline_format_version',
 ];
