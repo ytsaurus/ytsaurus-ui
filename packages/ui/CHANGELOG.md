@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.79.1](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.79.0...ui-v1.79.1) (2025-01-31)
+
+
+### Bug Fixes
+
+* **DeleteObjectModal:** show different texts in case when user trying to remove objects permanently [[#937](https://github.com/ytsaurus/ytsaurus-ui/issues/937)] ([e067dba](https://github.com/ytsaurus/ytsaurus-ui/commit/e067dba80c45f8cac265694cbb31132f0f7ea7f9))
+* **Navigation:** add missing attribute for flow tab [YTFRONT-4665] ([cb2d40b](https://github.com/ytsaurus/ytsaurus-ui/commit/cb2d40b6168139342f5fa623febf87465e70a656))
+
 ## [1.79.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.78.0...ui-v1.79.0) (2025-01-30)
 
 
