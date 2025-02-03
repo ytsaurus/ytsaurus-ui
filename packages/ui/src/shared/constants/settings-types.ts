@@ -83,6 +83,7 @@ interface QueryTrackerSettings {
     'global::queryTracker::queriesListSidebarVisibilityMode': boolean;
     'global::queryTracker::history::Columns': string[];
     'global::queryTracker::useNewGraphView': boolean;
+    'global::queryTracker::suggestions': boolean;
 }
 
 interface ChytSettings {
