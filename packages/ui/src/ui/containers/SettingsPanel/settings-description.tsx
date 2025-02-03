@@ -95,6 +95,7 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
     const vcsConfig = useSelector(selectVcsConfig);
     const isVcsVisible = useSelector(selectIsVcsVisible);
     const defaultUserACO = useSelector(getDefaultQueryACO);
+    const hasQuerySuggestions = Boolean(UIFactory.getInlineSuggestionsApi());
 
     return compact_([
         makePage('General', generalIcon, [
@@ -571,6 +572,19 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
                         oneLine
                     />,
                 ),
+                ...(hasQuerySuggestions
+                    ? [
+                          makeItem(
+                              'Use query suggestions',
+                              'top',
+                              <BooleanSettingItem
+                                  settingKey="global::queryTracker::suggestions"
+                                  description="Enable query assistant suggestions"
+                                  oneLine
+                              />,
+                          ),
+                      ]
+                    : []),
             ]),
         ),
 
