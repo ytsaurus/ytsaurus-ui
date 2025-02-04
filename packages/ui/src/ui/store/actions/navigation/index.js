@@ -35,6 +35,7 @@ import {getAnnotation} from './tabs/annotation';
 import {loadTabletErrorsCount} from './tabs/tablet-errors/tablet-errors-background';
 import {isSupportedEffectiveExpiration} from '../../../store/selectors/thor/support';
 import {getTabs} from '../../../store/selectors/navigation/navigation';
+import UIFactory from '../../../UIFactory';
 
 export function updateView(settings = {}) {
     return (dispatch, getState) => {
@@ -73,7 +74,7 @@ export function updateView(settings = {}) {
                                 parameters: prepareRequest('/@', {
                                     ...requestParams,
                                     attributes: [
-                                        ...attributesToLoad,
+                                        ...getAttributesToLoad(),
                                         ...(allowEffectiveExpiration
                                             ? ['effective_expiration']
                                             : []),
@@ -343,3 +344,15 @@ const attributesToLoad = [
     'leader_controller_address',
     'treat_as_queue_consumer',
 ];
+
+function getAttributesToLoad() {
+    const additionalAttributes = [];
+
+    UIFactory.getNavigationExtraTabs().forEach((extraTab) => {
+        additionalAttributes.push(...extraTab.additionalAttributes);
+    });
+
+    const attributesSet = new Set([...attributesToLoad, ...additionalAttributes]);
+
+    return [...attributesSet];
+}

@@ -119,6 +119,7 @@ export type ExtraTab = {
         params: LocationParameters;
         getPreparedState: (state: RootState, location: {query: RootState}) => RootState;
     };
+    additionalAttributes: Array<string>;
 };
 
 export type QueryResultChartTab = {
