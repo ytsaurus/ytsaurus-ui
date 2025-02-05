@@ -566,7 +566,7 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
                     'Use new graph progress',
                     'top',
                     <BooleanSettingItem
-                        settingKey="global::queryTracker::queryTrackerNewGraphType"
+                        settingKey="global::queryTracker::useNewGraphView"
                         description="Enable experimental graph vew for Progress tab of a query"
                         oneLine
                     />,

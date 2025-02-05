@@ -135,7 +135,7 @@ const LAST_VISITED_PAGE = createNestedNS(SettingName.LOCAL.LAST_VISITED_PAGE, ME
 const OPERATION_PRESETS = createNestedNS('presets', OPERATION);
 const ACCOUNTS = createNestedNS('accounts', GLOBAL);
 const SCHEDULING = createNestedNS('scheduling', GLOBAL);
-const QUERY_TRACKER = createNestedNS('query-tracker', GLOBAL);
+const QUERY_TRACKER = createNestedNS('queryTracker', GLOBAL);
 const CHYT = createNestedNS('chyt', GLOBAL);
 
 export const NAMESPACES = {
