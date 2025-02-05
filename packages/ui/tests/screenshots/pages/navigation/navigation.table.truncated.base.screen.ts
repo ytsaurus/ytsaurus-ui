@@ -9,8 +9,8 @@ test('Navigation: truncated table - Content', async ({page}) => {
         waitUntil: 'networkidle',
     });
 
-    await tablePage.waitForTablContent('.navigation-table', 1);
-    await tablePage.replaceStaticTableMeta();
+    await tablePage.waitForTableContent('.navigation-table', 1);
+    await tablePage.replaceTableMeta();
 
     await tablePage.resizePageForScreenshot();
 
