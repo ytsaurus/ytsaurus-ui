@@ -3,13 +3,13 @@ import {replaceInnerHtml} from '../../../utils/dom';
 import type {Locator} from '@playwright/test';
 
 export class TablePage extends NavigationPage {
-    async waitForTablContent(selector: string, rowCount: number) {
+    async waitForTableContent(selector: string, rowCount: number) {
         await this.waitForTable(selector, rowCount);
         await this.page.waitForSelector(':text("Data weight")');
         await this.waitForTableSyncedWidth(selector);
     }
 
-    async replaceStaticTableMeta() {
+    async replaceTableMeta() {
         await this.replaceBreadcrumbsTestDir();
         await replaceInnerHtml(this.page, {
             '[data-qa="expiration_timeout_path"]': 'e2e.1970-01-01.00:00:00.xxxxxxxxxxx',

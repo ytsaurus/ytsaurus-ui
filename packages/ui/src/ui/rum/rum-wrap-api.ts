@@ -17,6 +17,7 @@ import {
     OutputFormat,
     PathParams,
     PipelineParams,
+    TableParams,
 } from '../../shared/yt-types';
 import {YTApiId} from '../../shared/constants/yt-api-id';
 
@@ -105,6 +106,8 @@ type YTApiV4 = {
     getPipelineState(...args: ApiMethodParameters<PipelineParams>): Promise<GetPipelineStateData>;
     getFlowView(...args: ApiMethodParameters<PipelineParams>): Promise<GetFlowViewData>;
     listJobs(...args: ApiMethodParameters<ListJobsParameters>): Promise<ListJobsResponse>;
+
+    remountTable(...args: ApiMethodParameters<TableParams>): Promise<void>;
 
     [method: string]: (...args: ApiMethodParameters<any>) => Promise<any>;
 };

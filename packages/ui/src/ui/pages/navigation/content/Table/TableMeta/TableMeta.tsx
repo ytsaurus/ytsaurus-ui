@@ -1,22 +1,25 @@
 import React, {useMemo} from 'react';
 import cn from 'bem-cn-lite';
 import {connect, useSelector} from 'react-redux';
+import ypath from '../../../../../common/thor/ypath';
 
 import {makeMetaItems} from '../../../../../components/MetaTable/presets/presets';
 import CollapsibleSection from '../../../../../components/CollapsibleSection/CollapsibleSection';
 import MetaTable from '../../../../../components/MetaTable/MetaTable';
+import {RemountAlert} from '../RemountAlert/RemountAlert';
 
 import {getTableType} from '../../../../../store/selectors/navigation/content/table';
 import {getIsDynamic} from '../../../../../store/selectors/navigation/content/table-ts';
-import {getAttributes} from '../../../../../store/selectors/navigation';
+import {getAttributes, getAttributesWithTypes} from '../../../../../store/selectors/navigation';
 import {getTabletErrorsBackgroundCount} from '../../../../../store/selectors/navigation/tabs/tablet-errors-background';
 import {Props as AutomaticModeSwitchProps} from './AutomaticModeSwitch';
 
+import {RootState} from '../../../../../store/reducers';
 import {getCluster} from '../../../../../store/selectors/global';
 
-import './TableMeta.scss';
-import {RootState} from '../../../../../store/reducers';
 import {UI_COLLAPSIBLE_SIZE} from '../../../../../constants/global';
+
+import './TableMeta.scss';
 
 const block = cn('navigation-meta-table');
 
@@ -25,6 +28,7 @@ interface Props {
     mediumList: string[];
     isDynamic: boolean;
     tableType: string;
+    remountNeeded: boolean;
     onEditEnableReplicatedTableTracker: AutomaticModeSwitchProps['onEdit'];
 }
 
@@ -33,6 +37,7 @@ function TableMeta({
     tableType,
     mediumList,
     isDynamic,
+    remountNeeded,
     onEditEnableReplicatedTableTracker,
 }: Props) {
     const tabletErrorCount = useSelector(getTabletErrorsBackgroundCount);
@@ -61,6 +66,7 @@ function TableMeta({
     return (
         <CollapsibleSection name="Metadata" size={UI_COLLAPSIBLE_SIZE}>
             <MetaTable className={block()} items={items} />
+            {remountNeeded && <RemountAlert />}
         </CollapsibleSection>
     );
 }
@@ -71,12 +77,18 @@ const mapStateToProps = (state: RootState) => {
     const isDynamic = getIsDynamic(state);
     const tableType = getTableType(state);
     const attributes = getAttributes(state);
+    const attributesWithTypes = getAttributesWithTypes(state);
+
+    const remountNeeded =
+        Boolean(Number(ypath.getValue(attributesWithTypes, '/remount_needed_tablet_count'))) &&
+        isDynamic;
 
     return {
         attributes,
         mediumList,
         isDynamic,
         tableType,
+        remountNeeded,
     };
 };
 

@@ -18,6 +18,7 @@ function createAndMountDynamicTable {
     schema=$2
     yt create -i --attributes "{dynamic=%true;schema=$schema}" table $path
     yt mount-table $path
+    yt set $path/@mount_config/temp 1
 }
 
 # userColumnPresets
