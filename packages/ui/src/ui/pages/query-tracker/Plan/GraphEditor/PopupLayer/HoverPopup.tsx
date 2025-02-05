@@ -41,7 +41,6 @@ export const HoverPopup: FC<Props> = ({graph}) => {
                 onMouseLeave={stopPropagation}
                 onMouseEnter={stopPropagation}
                 onMouseMove={stopPropagation}
-                onClick={stopPropagation}
             />
 
             <Popup
