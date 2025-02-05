@@ -29,7 +29,7 @@ export const getSettingsRegularUserUI = createSelector(makeGetSetting, (getSetti
 });
 
 export const getSettingsQueryTrackerNewGraphType = createSelector(getSettingsData, (data) => {
-    return data['global::queryTracker::queryTrackerNewGraphType'] || false;
+    return data['global::queryTracker::useNewGraphView'] || false;
 });
 
 export const getSettingsSchedulingExpandStaticConfiguration = createSelector(
