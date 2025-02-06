@@ -1,8 +1,8 @@
-import axios from 'axios';
 import * as React from 'react';
 import {useSelector} from 'react-redux';
-import {Alert, Dialog} from '@gravity-ui/uikit';
-import {sha256} from '../../../utils/sha256';
+import {Alert, Dialog, Link} from '@gravity-ui/uikit';
+import {isCryptoSubtleAvailable} from '../../../utils/sha256';
+import {createPasswordStrategy} from './password-strategies';
 import {YTDFDialog, makeErrorFields} from '../../../components/Dialog';
 import {getCurrentUserName, getSettingsCluster} from '../../../store/selectors/global';
 import {YTError} from '../../../../@types/types';
@@ -31,6 +31,7 @@ const PasswordModal = (props: PasswordModalProps) => {
             <Dialog open={props.visible} hasCloseButton={true} onClose={props.handleCancel}>
                 <YTDFDialog<{
                     password: string;
+                    sha256_password: string;
                 }>
                     headerProps={{
                         title: 'Authentication',
@@ -41,26 +42,43 @@ const PasswordModal = (props: PasswordModalProps) => {
                     initialValues={{}}
                     onAdd={async (data) => {
                         setError(undefined);
+                        const {password, sha256_password} = data.getState().values;
 
-                        const password = data.getState().values.password;
+                        const strategy = createPasswordStrategy(
+                            username,
+                            ytAuthCluster,
+                            isCryptoSubtleAvailable(),
+                        );
 
-                        return sha256(password).then((password_sha256) => {
-                            axios
-                                .post(`/api/yt/${ytAuthCluster}/login`, {
-                                    username,
-                                    password,
-                                })
-                                .then(() => props.handleConfirm(password_sha256))
-                                .catch((error) => setError(error?.response?.data || error));
-                        });
+                        return strategy(sha256_password || password)
+                            .then((hashedPassword) => {
+                                props.handleConfirm(hashedPassword);
+                            })
+                            .catch(setError);
                     }}
                     fields={[
                         {
                             name: 'error-block',
                             type: 'block',
                             extras: {
-                                children: (
+                                children: isCryptoSubtleAvailable() ? (
                                     <Alert message="To access tokens management, you need enter your password" />
+                                ) : (
+                                    <Alert
+                                        message={
+                                            <span>
+                                                <Link
+                                                    target="_blank"
+                                                    href="https://developer.mozilla.org/en-US/docs/Web/API/Crypto/subtle"
+                                                >
+                                                    crypto.subtle
+                                                </Link>{' '}
+                                                is not available from your browser, so SHA-256 hash
+                                                cannot be generated. Please generate the hash of
+                                                your password by self.
+                                            </span>
+                                        }
+                                    />
                                 ),
                             },
                         },
@@ -70,6 +88,20 @@ const PasswordModal = (props: PasswordModalProps) => {
                             required: true,
                             caption: 'Password',
                             extras: () => ({type: 'password'}),
+                            visibilityCondition: {
+                                when: '',
+                                isActive: () => isCryptoSubtleAvailable(),
+                            },
+                        },
+                        {
+                            name: 'sha256_password',
+                            type: 'text',
+                            required: true,
+                            caption: 'Password Hash (SHA-256)',
+                            visibilityCondition: {
+                                when: '',
+                                isActive: () => !isCryptoSubtleAvailable(),
+                            },
                         },
                         ...makeErrorFields([error]),
                     ]}
