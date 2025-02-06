@@ -3,3 +3,7 @@ export async function sha256(str: string) {
 
     return [...new Uint8Array(buf)].map((x) => ('00' + x.toString(16)).slice(-2)).join('');
 }
+
+export const isCryptoSubtleAvailable = () => {
+    return Boolean(crypto?.subtle?.digest);
+};
