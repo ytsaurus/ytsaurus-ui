@@ -543,25 +543,26 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
             'Queries',
             undefined,
             compact_([
-                makeItem(
-                    'Default ACO',
-                    undefined,
-                    <SettingsMenuSelect
-                        getOptionsOnMount={() =>
-                            dispatch(getQueryACO()).then((data) => {
-                                return data.access_control_objects.reduce(
-                                    (acc: Item[], item: string) => {
-                                        acc.push({value: item, text: item});
-                                        return acc;
-                                    },
-                                    [] as Item[],
-                                );
-                            })
-                        }
-                        setSetting={(value) => value && dispatch(setUserDefaultACO(value))}
-                        getSetting={() => defaultUserACO}
-                    />,
-                ),
+                cluster &&
+                    makeItem(
+                        'Default ACO',
+                        undefined,
+                        <SettingsMenuSelect
+                            getOptionsOnMount={() =>
+                                dispatch(getQueryACO()).then((data) => {
+                                    return data.access_control_objects.reduce(
+                                        (acc: Item[], item: string) => {
+                                            acc.push({value: item, text: item});
+                                            return acc;
+                                        },
+                                        [] as Item[],
+                                    );
+                                })
+                            }
+                            setSetting={(value) => value && dispatch(setUserDefaultACO(value))}
+                            getSetting={() => defaultUserACO}
+                        />,
+                    ),
                 makeItem(
                     'Use new graph progress',
                     'top',
