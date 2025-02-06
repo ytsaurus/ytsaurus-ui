@@ -191,16 +191,13 @@ export function navigationSetNodeAttributes(
                 }
 
                 const prepareMergeParams = (path: string) => {
-                    const sorted = ypath.getValue(attributesMap[path], '/@sorted');
                     return {
-                        spec: Object.assign(
-                            {
-                                input_table_paths: [path],
-                                output_table_path: path,
-                                force_transform: true,
-                            },
-                            sorted ? {mode: 'sorted'} : {},
-                        ),
+                        spec: Object.assign({
+                            input_table_paths: [path],
+                            output_table_path: path,
+                            force_transform: true,
+                            mode: 'ordered',
+                        }),
                         ...EDIT_MERGE_MARKER,
                     };
                 };
