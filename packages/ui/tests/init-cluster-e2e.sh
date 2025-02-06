@@ -150,6 +150,9 @@ yt create --attributes "{schema=[{name=key;type=string};{name=value;type=string}
     set -x
 ) | yt write-table --format json ${STATIC_TABLE}
 
+PIPELINE=${E2E_DIR}/pipeline
+yt create --type pipeline --attributes "{initialize_tables=false}" --path ${PIPELINE}
+
 # Table with tagged data
 TAGGED_TABLE=${E2E_DIR}/tagged-table
 yt create --attributes '{schema=[

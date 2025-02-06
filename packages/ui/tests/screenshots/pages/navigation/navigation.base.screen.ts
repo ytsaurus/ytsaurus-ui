@@ -93,3 +93,11 @@ test('Navigation - map_node - select-by-first-cell', async ({page}) => {
 
     await expect(page).toHaveScreenshot();
 });
+
+test('Navigation: map_node - Pipeline - flow-tab', async ({page}) => {
+    await page.goto(makeClusterUrl(`navigation?path=${E2E_DIR}/pipeline`));
+
+    await navigationPage(page).replaceBreadcrumbsTestDir();
+
+    await expect(page).toHaveScreenshot();
+});
