@@ -22,6 +22,7 @@ const supportedContentTypes = {
     access_control_object_namespace: MapNode,
     access_control_object: AccessAclTab,
     tablet_cell: MapNode,
+    chaos_cell: MapNode,
     scheduler_pool_tree_map: MapNode,
     scheduler_pool: MapNode,
     document: Document,
