@@ -103,18 +103,24 @@ export const getNavigationParams = (): LocationParameters => {
     }, params);
 };
 
+const GET_PREPARED_STATE = [
+    getNavigationMapNodePreparedState,
+    getNavigationMapNodeFlowPreparedState,
+    getNavigationTablePreparedState,
+    getNavigationTransactionMapPreparedState,
+    getNavigationConsumerPreparedState,
+    getNavigationQueuePreparedState,
+    getAclFiltersPreparedState,
+    getNavigationSchemaPreparedState,
+    getNavigationTabletsPreparedState,
+    getNavigationTabletErrorsPreparedState,
+];
+
 function getNavigationNodeTypesPreparedState(state: RootState, location: {query: RootState}) {
-    let res = getNavigationMapNodePreparedState(state, location);
-    res = getNavigationMapNodeFlowPreparedState(state, location);
-    res = getNavigationTablePreparedState(res, location);
-    res = getNavigationTransactionMapPreparedState(res, location);
-    res = getNavigationConsumerPreparedState(res, location);
-    res = getNavigationQueuePreparedState(res, location);
-    res = getAclFiltersPreparedState(res, location);
-    res = getNavigationSchemaPreparedState(res, location);
-    res = getNavigationTabletsPreparedState(res, location);
-    res = getNavigationTabletErrorsPreparedState(res, location);
-    return res;
+    return GET_PREPARED_STATE.reduce(
+        (acc, getPreparedState) => getPreparedState(acc, location),
+        state,
+    );
 }
 
 export function getNavigationPreparedState(state: RootState, location: {query: RootState}) {
