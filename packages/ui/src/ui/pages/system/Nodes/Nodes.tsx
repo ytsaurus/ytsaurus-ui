@@ -132,7 +132,12 @@ const Nodes = (props: NodesProps) => {
         const stateAsOthers = s === 'others' ? '!online,!offline' : undefined;
         const state = s === 'online' || s === 'offline' ? s : stateAsOthers;
 
-        const flags = s === 'banned' ? ['banned' as const] : [f, '!banned' as const];
+        let flags: Array<typeof f | 'banned' | '!banned'> = [f];
+        if (s === 'banned') {
+            flags = ['banned'];
+        } else if (s) {
+            flags = [f, '!banned'];
+        }
 
         const p: ComponentsNodesLinkParams = {
             cluster,
