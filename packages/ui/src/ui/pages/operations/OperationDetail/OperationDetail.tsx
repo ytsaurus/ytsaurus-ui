@@ -228,7 +228,7 @@ class OperationDetail extends React.Component<ReduxProps & RouteProps> {
     renderTabs() {
         const {
             match: {
-                params: {operationId},
+                params: {operationId, tab: activeTab},
             },
             cluster,
             operation,
@@ -243,7 +243,7 @@ class OperationDetail extends React.Component<ReduxProps & RouteProps> {
         const showSettings: Record<string, TabSettings> = {
             ...getDetailsTabsShowSettings(operation),
             [Tab.STATISTICS]: {show: hasStatististicsTab},
-            [Tab.JOBS_MONITOR]: {show: jobsMonitorVisible},
+            [Tab.JOBS_MONITOR]: {show: jobsMonitorVisible || activeTab === Tab.JOBS_MONITOR},
             [Tab.MONITOR]: {show: monitorTabVisible},
         };
 
@@ -269,7 +269,7 @@ class OperationDetail extends React.Component<ReduxProps & RouteProps> {
             <div className={detailBlock('tabs')}>
                 <Tabs
                     {...props}
-                    active={DEFAULT_TAB}
+                    active={activeTab}
                     routed
                     routedPreserveLocation
                     size={UI_TAB_SIZE}
@@ -279,7 +279,7 @@ class OperationDetail extends React.Component<ReduxProps & RouteProps> {
     }
 
     renderMain() {
-        const {match, cluster, monitorTabVisible, jobsMonitorVisible, monitoringComponent} =
+        const {match, cluster, monitorTabVisible, jobsMonitorIsSupported, monitoringComponent} =
             this.props;
         const {url, params} = match;
         const {operationId} = params;
@@ -320,7 +320,7 @@ class OperationDetail extends React.Component<ReduxProps & RouteProps> {
                             )}
                         />
                     )}
-                    {jobsMonitorVisible && (
+                    {jobsMonitorIsSupported && (
                         <Route path={`${path}/${Tab.JOBS_MONITOR}`} component={JobsMonitor} />
                     )}
                     <Route path={`${path}/:tab`} component={Placeholder} />
@@ -419,8 +419,8 @@ const mapStateToProps = (state: RootState) => {
         monitorTabTitle,
         monitorTabUrlTemplate,
         monitoringComponent,
-        jobsMonitorVisible:
-            Boolean(UIFactory.getMonitorComponentForJob()) && getJobsMonitorTabVisible(state),
+        jobsMonitorIsSupported: Boolean(UIFactory.getMonitorComponentForJob()),
+        jobsMonitorVisible: getJobsMonitorTabVisible(state),
         hasStatististicsTab: getOperationStatiscsHasData(state),
     };
 };
