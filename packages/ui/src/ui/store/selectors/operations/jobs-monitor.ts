@@ -14,6 +14,9 @@ export const getJobsMonitorError = (state: RootState) => state.operations.jobsMo
 export const getJobsMonitorOperationId = (state: RootState) =>
     state.operations.jobsMonitor.operation_id;
 export const getJobsMonitorItems = (state: RootState) => state.operations.jobsMonitor.jobs;
+export const getJobsMonitorItemsLoading = (state: RootState) =>
+    state.operations.jobsMonitor.loading;
+export const getJobsMonitorItemsLoaded = (state: RootState) => state.operations.jobsMonitor.loaded;
 
 export const getJobsMonitoringItemsWithDescriptor = createSelector(
     [getJobsMonitorItems],
