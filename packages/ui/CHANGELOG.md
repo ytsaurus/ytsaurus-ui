@@ -1,5 +1,23 @@
 # Changelog
 
+## [1.80.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.79.1...ui-v1.80.0) (2025-02-10)
+
+
+### Features
+
+* **Navigation/CreateTableModal:** add queue creation option [YTFRONT-4658] ([df445ed](https://github.com/ytsaurus/ytsaurus-ui/commit/df445ed485b5e8983a204fbcb7965d2a7fe15763))
+* now UIFactory.getNavigationExtraTabs allows to request additional attributes for navigation node ([36a2d12](https://github.com/ytsaurus/ytsaurus-ui/commit/36a2d128fd36b9cdcc6e347c20166a3816ea59f8))
+* **Queries:** inline suggestions [YTFRONT-4612] ([11d4b59](https://github.com/ytsaurus/ytsaurus-ui/commit/11d4b596c051310671a8bc805a55612af59e8f49))
+
+
+### Bug Fixes
+
+* **ACL:** ui should display an error when user has no permission to set acl [[#938](https://github.com/ytsaurus/ytsaurus-ui/issues/938)] ([93722c7](https://github.com/ytsaurus/ytsaurus-ui/commit/93722c7fc76d344ce9e1f710316d8302c6ebe7fe))
+* **ManageTokens:** manage tokens does not work for http [[#953](https://github.com/ytsaurus/ytsaurus-ui/issues/953)] ([03fdc67](https://github.com/ytsaurus/ytsaurus-ui/commit/03fdc67ac0ad31bb52cae1332d1b7af469f5f241))
+* **Navigation:** check file existence by name [YTFRONT-4638] ([2edc61b](https://github.com/ytsaurus/ytsaurus-ui/commit/2edc61b2634e6df8dd529848e34fcee80e5e729a))
+* now the attributes editor always using ordered merge, that prevents table rows from shuffle ([8097144](https://github.com/ytsaurus/ytsaurus-ui/commit/809714489139becd16ad1ebf75806d50054eae9e))
+* **Queries:** graph nodes clickable again [YTFRONT-4682] ([ddb125c](https://github.com/ytsaurus/ytsaurus-ui/commit/ddb125cdfeff24fc34447bfd6e83087a8974e0dd))
+
 ## [1.79.1](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.79.0...ui-v1.79.1) (2025-01-31)
 
 
