@@ -1,5 +1,21 @@
 # Changelog
 
+## [1.81.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.80.0...ui-v1.81.0) (2025-02-10)
+
+
+### Features
+
+* **Navigation/ContentViewer:** add ability to view chaos_cells [YTFRONT-3653] ([299de09](https://github.com/ytsaurus/ytsaurus-ui/commit/299de0962a3d2c4e2c00b110d39fa6d267331f6b))
+* **Queries:** chart kit [YTFRONT-4506] ([5ad677d](https://github.com/ytsaurus/ytsaurus-ui/commit/5ad677df47f4f878268cf450ceeda1906d4c226e))
+
+
+### Bug Fixes
+
+* **ClusterMenu:** fix for Settings/Queries ([2de6bd7](https://github.com/ytsaurus/ytsaurus-ui/commit/2de6bd78b1fdafaf559c1426dad35a88dc329b48))
+* **Navigation/MapNode:** filter parameter doesn't work from url [YTFRONT-4481] ([b4d9ab2](https://github.com/ytsaurus/ytsaurus-ui/commit/b4d9ab29be683eb525942737c210c62a55674776))
+* **Operation/JobsMonitor:** better condition of visibility [YTFRONT-4600] ([12184fb](https://github.com/ytsaurus/ytsaurus-ui/commit/12184fb3aac672751c2c4bdfb9aee2d49389e92f))
+* **System/Nodes:** do not use banned=disabled for Rack link [YTFRONT-4603] ([565684b](https://github.com/ytsaurus/ytsaurus-ui/commit/565684b62a53d3a2f46d0a585a11c5667b19ed83))
+
 ## [1.80.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.79.1...ui-v1.80.0) (2025-02-10)
 
 
