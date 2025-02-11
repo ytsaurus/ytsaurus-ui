@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import ypath from '@ytsaurus/interface-helpers/lib/ypath';
 import {Progress} from '@gravity-ui/uikit';
 
@@ -9,10 +8,11 @@ import {Template} from '../../../../../../components/MetaTable/templates/Templat
 import {showErrorModal} from '../../../../../../store/actions/actions';
 import {showInputPaths} from '../../../../../../store/actions/operations/jobs';
 import {useDispatch} from 'react-redux';
+import Job from '../job-selector';
 
 /* ----------------------------------------------------------------------------------------------------------------- */
 
-function JobError({error}) {
+function JobError({error}: {error: Error}) {
     const dispatch = useDispatch();
     return (
         <div>
@@ -21,13 +21,9 @@ function JobError({error}) {
     );
 }
 
-JobError.propTypes = {
-    error: PropTypes.object,
-};
-
 /* ----------------------------------------------------------------------------------------------------------------- */
 
-function JobInputPaths({job}) {
+function JobInputPaths({job}: {job: Job}) {
     const dispatch = useDispatch();
     return (
         <Link theme="ghost" onClick={() => dispatch(showInputPaths(job))}>
@@ -36,25 +32,17 @@ function JobInputPaths({job}) {
     );
 }
 
-JobInputPaths.propTypes = {
-    job: PropTypes.object.isRequired,
-};
-
 /* ----------------------------------------------------------------------------------------------------------------- */
 
-function JobDebugInfo({type, job}) {
-    const {size, url} = job.getDebugInfo(type);
+function JobDebugInfo({type, job}: {type: 'stderr' | 'fail_context' | 'full_input'; job: Job}) {
+    const {size, url} = job.getDebugInfo(type)!;
     return <Template.DownloadLink url={url} size={size} />;
 }
 
-JobDebugInfo.propTypes = {
-    type: PropTypes.oneOf(['stderr', 'fail_context', 'full_input']).isRequired,
-    job: PropTypes.object.isRequired,
-};
-
 /* ----------------------------------------------------------------------------------------------------------------- */
 
-function JobProgress({state, progress}) {
+export type JobProgressState = 'running' | 'completed' | 'failed' | 'aborted';
+function JobProgress({state, progress}: {state: JobProgressState; progress: number}) {
     const RESOLVED_PROGRESS = 100;
     const PENDING_PROGRESS = 0;
 
@@ -72,14 +60,9 @@ function JobProgress({state, progress}) {
     }
 }
 
-JobProgress.propTypes = {
-    state: PropTypes.string,
-    progress: PropTypes.number,
-};
-
 /* ----------------------------------------------------------------------------------------------------------------- */
 
-function renderStatistics(state, statistics) {
+function renderStatistics(state: JobProgressState, statistics: Job['brief_statistics']) {
     const [rowCount, dataSize] = ypath.getValues(statistics, [
         '/processed_input_row_count',
         '/processed_input_uncompressed_data_size',
@@ -90,14 +73,15 @@ function renderStatistics(state, statistics) {
     );
 }
 
-function JobStatistics({state, statistics}) {
+function JobStatistics({
+    state,
+    statistics,
+}: {
+    state: JobProgressState;
+    statistics: Job['brief_statistics'];
+}) {
     return statistics ? renderStatistics(state, statistics) : null;
 }
-
-JobStatistics.propTypes = {
-    state: PropTypes.string,
-    statistics: PropTypes.object,
-};
 
 /* ----------------------------------------------------------------------------------------------------------------- */
 
