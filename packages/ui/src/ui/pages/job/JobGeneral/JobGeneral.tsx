@@ -3,7 +3,7 @@ import cn from 'bem-cn-lite';
 import {useSelector} from 'react-redux';
 import {Redirect, Route, Switch, useRouteMatch} from 'react-router';
 
-import {Link} from '@gravity-ui/uikit';
+import {Alert, Flex, Link} from '@gravity-ui/uikit';
 
 import Specification from '../../../pages/job/tabs/Specification/Specification';
 import ErrorBoundary from '../../../components/ErrorBoundary/ErrorBoundary';
@@ -76,6 +76,7 @@ export default function JobGeneral() {
         monitoring_descriptor,
         pool_tree,
         is_stale,
+        interruption_info,
     } = job;
     const operationUrl = `/${cluster}/${Page.OPERATIONS}/${operationID}/jobs?jobId=${jobID}`;
     const path = `/${cluster}/${Page.JOB}/${operationID}/${jobID}`;
@@ -84,6 +85,7 @@ export default function JobGeneral() {
     const isSpeculativeJob = jobCompetitionId && jobCompetitionId !== id;
 
     const jobShellCommand = `yt --proxy ${cluster} run-job-shell ${id}`;
+    const preemptionReason = hammer.format['ReadableField'](interruption_info?.preemption_reason);
 
     return (
         <ErrorBoundary>
@@ -92,9 +94,18 @@ export default function JobGeneral() {
                     <span className={block('heading')}>
                         {hammer.format['ReadableField'](type)} job
                     </span>
-
-                    <Statuslabel label={state} renderPlaque />
-
+                    <Flex alignItems="center" gap={1}>
+                        <Statuslabel label={state} renderPlaque />
+                        {Boolean(interruption_info) && (
+                            <Label theme="warning">
+                                Interrupted (
+                                {hammer.format['ReadableField'](
+                                    interruption_info?.interruption_reason,
+                                )}
+                                )
+                            </Label>
+                        )}
+                    </Flex>
                     <JobActions className={block('actions')} />
                 </div>
 
@@ -270,6 +281,23 @@ export default function JobGeneral() {
                         ],
                     ]}
                 />
+
+                {Boolean(preemptionReason) && (
+                    <Alert
+                        theme="info"
+                        layout="horizontal"
+                        message={preemptionReason}
+                        actions={
+                            <ClipboardButton
+                                title="Copy reason"
+                                view="flat-secondary"
+                                size="s"
+                                text={preemptionReason}
+                                className={block('popup-button')}
+                            />
+                        }
+                    />
+                )}
 
                 <div className={block('tabs')}>
                     <Tabs {...tabsProps} active={DEFAULT_TAB} routed size={UI_TAB_SIZE} />

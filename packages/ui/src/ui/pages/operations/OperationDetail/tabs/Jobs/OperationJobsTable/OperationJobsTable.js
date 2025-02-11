@@ -1,7 +1,7 @@
 import React, {Fragment} from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
-import {Button, DropdownMenu} from '@gravity-ui/uikit';
+import {Button, DropdownMenu, Icon} from '@gravity-ui/uikit';
 import cn from 'bem-cn-lite';
 
 import map_ from 'lodash/map';
@@ -18,9 +18,7 @@ import ClipboardButton from '../../../../../../components/ClipboardButton/Clipbo
 import ChartLink from '../../../../../../components/ChartLink/ChartLink';
 import MetaTable from '../../../../../../components/MetaTable/MetaTable';
 import Yson from '../../../../../../components/Yson/Yson';
-import Icon from '../../../../../../components/Icon/Icon';
 import Link from '../../../../../../components/Link/Link';
-import {Tooltip} from '../../../../../../components/Tooltip/Tooltip';
 import CollapsibleSection from '../../../../../../components/CollapsibleSection/CollapsibleSection';
 
 import {
@@ -46,10 +44,11 @@ import {StaleJobIcon} from '../StaleJobIcon';
 import JobTemplate from './JobTemplate';
 import './OperationJobsTable.scss';
 import {UI_COLLAPSIBLE_SIZE} from '../../../../../../constants/global';
+import {JobDetails} from './JobDetails';
+import EllipsisIcon from '@gravity-ui/icons/svgs/ellipsis.svg';
+import {StatusInfo} from './StatusInfo';
 
 const block = cn('operation-detail-jobs');
-
-const BriefStatisticsDetailsMemo = React.memo(BriefStatisticsDetails);
 
 class OperationJobsTable extends React.Component {
     static propTypes = {
@@ -250,7 +249,7 @@ class OperationJobsTable extends React.Component {
 
         const button = (
             <Button view="flat-secondary" title="Show actions">
-                <Icon awesome="ellipsis-h" />
+                <Icon data={EllipsisIcon} size={16} />
             </Button>
         );
         const firstGroup = map_(this.preparedActions, ({action, text}) => ({
@@ -388,25 +387,17 @@ class OperationJobsTable extends React.Component {
     }
 
     renderProgress(item) {
-        const {state, progress, brief_statistics: statistics} = item;
+        const {state, progress, brief_statistics, type, interruption_info} = item;
 
         return (
             <div className={block('state')}>
                 <div className={block('state-section', 'elements-ellipsis')}>
-                    {hammer.format['ReadableField'](state)}
+                    <StatusInfo info={interruption_info} state={state} />
                 </div>
                 <div className={block('state-section')}>
                     <JobTemplate.Progress state={state} progress={progress} />
                 </div>
-                <Tooltip
-                    className={block('state-section', 'elements-ellipsis')}
-                    content={<BriefStatisticsDetailsMemo data={item.brief_statistics} />}
-                >
-                    <span>
-                        <JobTemplate.Statistics state={state} statistics={statistics} />
-                    </span>
-                    <Icon className={block('state-icon')} awesome={'question-circle'} />
-                </Tooltip>
+                <JobDetails statistics={brief_statistics} type={type} />
             </div>
         );
     }
@@ -551,26 +542,3 @@ const mapDispatchToProps = {
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(OperationJobsTable);
-
-function BriefStatisticsDetails({data}) {
-    const items = React.useMemo(
-        () =>
-            map_(ypath.getValue(data), (value, key) => {
-                let result = hammer.format.Number(value);
-
-                if (key.endsWith('_data_size') || key.endsWith('_data_weight')) {
-                    result = hammer.format.Bytes(value);
-                } else if (key.endsWith('_time')) {
-                    result = hammer.format.TimeDuration(value, {format: 'milliseconds'});
-                }
-
-                return {
-                    key: hammer.format.Readable(key),
-                    value: <div className={block('state-value')}>{result}</div>,
-                };
-            }),
-        [data],
-    );
-
-    return <MetaTable items={items} />;
-}
