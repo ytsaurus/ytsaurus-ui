@@ -1,8 +1,5 @@
 import React from 'react';
-import ypath from '@ytsaurus/interface-helpers/lib/ypath';
 import {Progress} from '@gravity-ui/uikit';
-
-import hammer from '../../../../../../common/hammer';
 import Link from '../../../../../../components/Link/Link';
 import {Template} from '../../../../../../components/MetaTable/templates/Template';
 import {showErrorModal} from '../../../../../../store/actions/actions';
@@ -62,33 +59,9 @@ function JobProgress({state, progress}: {state: JobProgressState; progress: numb
 
 /* ----------------------------------------------------------------------------------------------------------------- */
 
-function renderStatistics(state: JobProgressState, statistics: Job['brief_statistics']) {
-    const [rowCount, dataSize] = ypath.getValues(statistics, [
-        '/processed_input_row_count',
-        '/processed_input_uncompressed_data_size',
-    ]);
-    return (
-        (state === 'running' || state === 'completed') &&
-        `${hammer.format['Number'](rowCount)} (${hammer.format['Bytes'](dataSize)})`
-    );
-}
-
-function JobStatistics({
-    state,
-    statistics,
-}: {
-    state: JobProgressState;
-    statistics: Job['brief_statistics'];
-}) {
-    return statistics ? renderStatistics(state, statistics) : null;
-}
-
-/* ----------------------------------------------------------------------------------------------------------------- */
-
 export default function JobTemplate() {}
 
 JobTemplate.Error = JobError;
 JobTemplate.InputPaths = JobInputPaths;
 JobTemplate.DebugInfo = JobDebugInfo;
 JobTemplate.Progress = JobProgress;
-JobTemplate.Statistics = JobStatistics;

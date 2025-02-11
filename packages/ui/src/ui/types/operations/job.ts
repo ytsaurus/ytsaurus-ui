@@ -25,6 +25,15 @@ export interface RawJob {
     pool_tree?: string;
     is_stale?: boolean;
     archive_features?: {has_trace?: boolean};
+    interruption_info?: {
+        interruption_reason: string;
+        interruption_timeout?: number;
+        preempted_for?: {
+            allocation_id?: string;
+            operation_id?: string;
+        };
+        preemption_reason?: string;
+    };
 }
 
 export type JobState =
