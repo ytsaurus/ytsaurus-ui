@@ -15,6 +15,20 @@
             "never"
         ],
         "lodash/import-scope": "error",
+        "no-restricted-imports": ["error", {
+            "paths": [
+                {
+                    "name": "@gravity-ui/uikit",
+                    "importNames": ["Dialog"],
+                    "message": "Please use src/components/YTDialog instead."
+                },
+                {
+                    "name": "@gravity-ui/uikit",
+                    "importNames": ["Modal"],
+                    "message": "Please use src/components/Modal or src/components/SimpleModal instead."
+                }
+            ]
+        }]
     },
     "env": {
         "jest": true
