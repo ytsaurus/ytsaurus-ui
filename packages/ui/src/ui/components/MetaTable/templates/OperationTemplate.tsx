@@ -255,3 +255,34 @@ TemplateWeight.propTypes = {
     operation: PropTypes.object.isRequired,
     onEdit: PropTypes.func.isRequired,
 };
+
+interface TemplateLayerPathProps {
+    cluster: string;
+    path: string;
+}
+
+function TemplateLayerPath({cluster, path}: TemplateLayerPathProps) {
+    const getQuery = (p: string) => paramsToQuery({path: p});
+    const getUrl = (p: string) => `/${cluster}/${Page.NAVIGATION}?${getQuery(p)}`;
+
+    return (
+        <li>
+            <Link url={getUrl(path)} title={path}>
+                {path}
+            </Link>
+        </li>
+    );
+}
+
+interface TemplateLayerPathsProps {
+    cluster: string;
+    paths: string[];
+}
+
+export function TemplateLayerPaths({cluster, paths}: TemplateLayerPathsProps) {
+    const items = paths.map((path) => (
+        <TemplateLayerPath path={path} key={path} cluster={cluster} />
+    ));
+
+    return <CollapsibleList items={items} />;
+}
