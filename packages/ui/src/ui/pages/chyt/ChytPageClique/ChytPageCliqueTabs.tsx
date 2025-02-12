@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {Redirect, Route, Switch, useRouteMatch} from 'react-router';
 import {useSelector} from 'react-redux';
 
@@ -9,6 +9,7 @@ import {getChytCurrentAlias} from '../../../store/selectors/chyt';
 import {makeTabProps} from '../../../utils';
 import {formatByParams} from '../../../utils/format';
 import UIFactory from '../../../UIFactory';
+import {ytApiV4} from '../../../rum/rum-wrap-api';
 
 import {ChytPageCliqueAcl} from './ChytPageCliqueAcl';
 import {ChytPageCliqueSpeclet} from './ChytPageCliqueSpeclet';
@@ -19,8 +20,26 @@ export function ChytPageCliqueTabs({className}: {className?: string}) {
 
     const ytCluster = useSelector(getCluster);
     const chytAlias = useSelector(getChytCurrentAlias);
+    const [logsExist, setLogsExist] = useState(false);
 
     const chytMonitoring = UIFactory.getMonitoringComponentForChyt();
+
+    const logsPath = `//sys/strawberry/chyt/${chytAlias}/artifacts/system_log_tables/query_log/latest`;
+
+    useEffect(() => {
+        const checkLogsExist = async () => {
+            try {
+                const {value} = await ytApiV4.exists({path: logsPath});
+                setLogsExist(value);
+            } catch {
+                setLogsExist(false);
+            }
+        };
+
+        if (chytAlias) {
+            checkLogsExist();
+        }
+    }, [chytAlias]);
 
     const tabProps = React.useMemo(() => {
         const {component, urlTemplate, title} = chytMonitoring ?? {};
@@ -37,6 +56,12 @@ export function ChytPageCliqueTabs({className}: {className?: string}) {
                           title,
                       }
                     : {show: Boolean(component)},
+                [ChytCliquePageTab.QUERY_LOGS]: {
+                    show: logsExist,
+                    external: true,
+                    url: `/${ytCluster}/navigation?path=${logsPath}`,
+                    routed: false,
+                },
             },
             undefined,
         );
