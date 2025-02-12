@@ -4,6 +4,53 @@ import {BasePage} from '../../../utils/BasePage';
 import {replaceInnerHtml} from '../../../utils/dom';
 
 const ID_PLACEHOLDER = 'X-XXX-XXXXX-XXXXXXXX';
+const ATTRIBUTES_RESPONSE_MOCK = {
+    id: {$type: 'string', $value: ID_PLACEHOLDER},
+    builtin: {$type: 'boolean', $value: 'false'},
+    sequoia: {$type: 'boolean', $value: 'false'},
+    ref_counter: {$type: 'int64', $value: '1'},
+    ephemeral_ref_counter: {$type: 'int64', $value: '0'},
+    foreign: {$type: 'boolean', $value: 'false'},
+    native_cell_tag: {$type: 'uint64', $value: '1'},
+    revision: {$type: 'uint64', $value: '0'},
+    attribute_revision: {$type: 'uint64', $value: '0'},
+    content_revision: {$type: 'uint64', $value: '0'},
+    effective_acl: null,
+    user_attribute_keys: [],
+    opaque_attribute_keys: null,
+    user_attributes: null,
+    life_stage: {$type: 'string', $value: 'creation_committed'},
+    estimated_creation_time: null,
+    leading_peer_id: {$type: 'int64', $value: '0'},
+    health: null,
+    local_health: null,
+    peers: [
+        {
+            address: {$type: 'string', $value: 'localhost:00'},
+            state: {$type: 'string', $value: 'leading'},
+            last_seen_time: {$type: 'string', $value: '1970-01-01T00:00:00.000Z'},
+            last_seen_state: {$type: 'string', $value: 'leading'},
+        },
+    ],
+    config_version: {$type: 'int64', $value: '2'},
+    prerequisite_transaction_id: {$type: 'string', $value: ID_PLACEHOLDER},
+    cell_bundle_id: {$type: 'string', $value: ID_PLACEHOLDER},
+    area: {$type: 'string', $value: 'default'},
+    area_id: {$type: 'string', $value: ID_PLACEHOLDER},
+    status: {
+        health: {$type: 'string', $value: 'good'},
+        decommissioned: {$type: 'boolean', $value: 'false'},
+    },
+    multicell_status: null,
+    max_changelog_id: null,
+    max_snapshot_id: null,
+    suspended: {$type: 'boolean', $value: 'false'},
+    lease_transaction_ids: null,
+    registered_in_cypress: {$type: 'boolean', $value: 'true'},
+    pending_acls_update: {$type: 'boolean', $value: 'false'},
+    action_ids: null,
+    multicell_statistics: null,
+};
 
 class Bundles extends BasePage {
     async replaceDefaultColumns() {
@@ -51,36 +98,6 @@ class Bundles extends BasePage {
         });
         await this.waitForTableSyncedWidth('.data-table', {useResizeEvent: true});
     }
-
-    async replaceAttributesTime() {
-        await this.page.waitForSelector('pre.unipika span.string');
-        await this.page.evaluate((placeholder) => {
-            const title = document.querySelector<HTMLDivElement>('.elements-modal__header span');
-            if (!title) return;
-
-            const id = title.textContent?.trim();
-            if (!id) return;
-
-            title.innerHTML = placeholder;
-
-            const spans = document.querySelectorAll<HTMLSpanElement>('pre.unipika span.string');
-            const isoTimeRegex = new RegExp(/^"\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{6}Z"$/);
-            const hostRegex = new RegExp(/^"localhost:\d+"$/);
-            spans.forEach((span) => {
-                const text = span.textContent?.trim();
-                if (!text) return;
-                if (text.match(isoTimeRegex)) {
-                    span.innerHTML = '"1970-01-01T00:00:00.000Z"';
-                }
-                if (text.match(hostRegex)) {
-                    span.innerHTML = '"localhost:00"';
-                }
-                if (text === `"${id}"`) {
-                    span.innerHTML = placeholder;
-                }
-            });
-        }, ID_PLACEHOLDER);
-    }
 }
 
 const bundles = (page: Page) => new Bundles({page});
@@ -125,9 +142,20 @@ test('Bundles - List - Tablet cells', async ({page}) => {
 
     await expect(page).toHaveScreenshot();
 
+    await page.route('**/api/yt/ui/api/v3/get', (route) => {
+        route.fulfill({
+            status: 200,
+            contentType: 'application/json',
+            body: JSON.stringify(ATTRIBUTES_RESPONSE_MOCK),
+        });
+    });
     await page.click('.cells-table__actions button');
+    await page.mouse.move(0, 0);
     await page.waitForSelector('pre.unipika');
-    await bundles(page).replaceAttributesTime();
+
+    await replaceInnerHtml(page, {
+        '.elements-modal__header .elements-text': ID_PLACEHOLDER,
+    });
 
     await expect(page).toHaveScreenshot();
 });
