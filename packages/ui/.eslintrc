@@ -26,6 +26,11 @@
                     "name": "@gravity-ui/uikit",
                     "importNames": ["Modal"],
                     "message": "Please use src/components/Modal or src/components/SimpleModal instead."
+                },
+                {
+                    "name": "@gravity-ui/dialog-fields",
+                    "importNames": ["DFDialog"],
+                    "message": "Please use src/components/Dialog instead."
                 }
             ]
         }]

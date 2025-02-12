@@ -33,6 +33,7 @@ import {UsableAccountSuggest} from '../../pages/accounts/UsableAccountSuggest';
 import {EditAnnotationWithPreview} from '../EditAnnotationWithPreview/EditAnnotationWithPreview';
 import {EditJsonWithPreview} from '../EditJsonWithPreview/EditJsonWithPreview';
 import {
+    // eslint-disable-next-line no-restricted-imports
     DFDialog,
     DFDialogField,
     DFDialogProps,
@@ -233,6 +234,7 @@ export function YTDialog<Values, InitialValues = Partial<Values>>(
 
 export {registerDialogControl, registerDialogTabControl, RoleListControl};
 
+// eslint-disable-next-line no-restricted-imports
 export type * from '@gravity-ui/dialog-fields';
 export {EditableList, TabFieldVertical} from '@gravity-ui/dialog-fields';
 export type {ControlStaticApi} from '@gravity-ui/dialog-fields/build/cjs/dialog/types';
