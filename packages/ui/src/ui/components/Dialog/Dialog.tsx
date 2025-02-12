@@ -53,6 +53,7 @@ import {TimeDuration} from '../../components/TimeDuration/TimeDuration';
 import {DatePickerControl} from './controls/DatePickerControl/DatePickerControl';
 import {RangeInputPickerControl} from './controls/RangeInputPickerControl/RangeInputPickerControl';
 import {AclColumnsControl} from '../../containers/ACL/RequestPermissions/AclColumnsControl/AclColumnsControl';
+import {useHotkeysScope} from '../../hooks/use-hotkeysjs-scope';
 
 const block = cn('yt-dialog');
 
@@ -214,10 +215,15 @@ export function YTDialog<Values, InitialValues = Partial<Values>>(
         InitialValues,
         DialogTabField<DialogField<Values>>,
         DialogField<Values>
-    > & {asLeftTopBlock?: boolean},
+    > & {hotkeyScope?: string; asLeftTopBlock?: boolean},
 ) {
-    const {modal, asLeftTopBlock, headerProps} = props;
+    const {modal, asLeftTopBlock, headerProps, hotkeyScope = 'yt-dialog'} = props;
     const dialog = <DFDialog {...(props as any)} modal={asLeftTopBlock ? false : modal} />;
+
+    // We don't want to trigger any page hotkeys when dialog is visible,
+    // therefore we switing to dialog hotkeys scope.
+    useHotkeysScope(hotkeyScope, props.visible);
+
     return asLeftTopBlock ? (
         <div className={block('as-block', {['has-header']: Boolean(headerProps)})}>{dialog}</div>
     ) : (
