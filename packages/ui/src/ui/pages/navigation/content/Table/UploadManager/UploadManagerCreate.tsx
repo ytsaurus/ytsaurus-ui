@@ -80,7 +80,7 @@ class UploadManagerCreate extends React.Component<Props, State> {
         fileType: 'xlsx',
         progress: {inProgress: false},
         firstRowAsNames: true,
-        secondRowAsTypes: true,
+        secondRowAsTypes: false,
         nameAlreadyUsed: false,
     };
 
