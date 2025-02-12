@@ -5,7 +5,8 @@ import fill_ from 'lodash/fill';
 import isEmpty_ from 'lodash/isEmpty';
 import reduce_ from 'lodash/reduce';
 
-import {Button, Dialog, Flex, RadioButton} from '@gravity-ui/uikit';
+import {Button, Flex, RadioButton} from '@gravity-ui/uikit';
+import {DialogWrapper as Dialog} from '../../../components/DialogWrapper/DialogWrapper';
 // @ts-ignore
 import unipika from '@gravity-ui/unipika/lib/unipika';
 

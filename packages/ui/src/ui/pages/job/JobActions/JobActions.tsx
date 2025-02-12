@@ -8,7 +8,8 @@ import map_ from 'lodash/map';
 // @ts-ignore
 import yt from '@ytsaurus/javascript-wrapper/lib/yt';
 
-import {ButtonProps, Dialog, DropdownMenu, Toaster} from '@gravity-ui/uikit';
+import {ButtonProps, DropdownMenu, Toaster} from '@gravity-ui/uikit';
+import {DialogWrapper as Dialog} from '../../../components/DialogWrapper/DialogWrapper';
 import ErrorBoundary from '../../../components/ErrorBoundary/ErrorBoundary';
 import PathEditor from '../../../containers/PathEditor/PathEditor';
 import Button from '../../../components/Button/Button';

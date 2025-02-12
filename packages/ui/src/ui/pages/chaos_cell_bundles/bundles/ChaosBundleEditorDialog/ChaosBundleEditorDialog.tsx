@@ -4,7 +4,8 @@ import cn from 'bem-cn-lite';
 
 import capitalize_ from 'lodash/capitalize';
 
-import {Dialog, Progress} from '@gravity-ui/uikit';
+import {Progress} from '@gravity-ui/uikit';
+import {DialogWrapper as Dialog} from '../../../../components/DialogWrapper/DialogWrapper';
 
 import hammer from '../../../../common/hammer';
 import ypath from '../../../../common/thor/ypath';

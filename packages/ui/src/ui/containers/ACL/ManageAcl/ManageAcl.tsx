@@ -4,7 +4,8 @@ import cn from 'bem-cn-lite';
 
 import isEqual_ from 'lodash/isEqual';
 
-import {Dialog as CommonDialog, Loader} from '@gravity-ui/uikit';
+import {Loader} from '@gravity-ui/uikit';
+import {DialogWrapper as CommonDialog} from '../../../components/DialogWrapper/DialogWrapper';
 
 import {
     DialogField,

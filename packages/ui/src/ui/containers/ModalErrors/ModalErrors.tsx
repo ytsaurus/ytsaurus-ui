@@ -1,4 +1,4 @@
-import {Dialog} from '@gravity-ui/uikit';
+import {DialogWrapper as Dialog} from '../../components/DialogWrapper/DialogWrapper';
 import React from 'react';
 import {ConnectedProps, connect} from 'react-redux';
 

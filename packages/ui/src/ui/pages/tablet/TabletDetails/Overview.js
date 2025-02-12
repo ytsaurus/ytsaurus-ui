@@ -7,7 +7,8 @@ import ypath from '@ytsaurus/interface-helpers/lib/ypath';
 import keys_ from 'lodash/keys';
 import map_ from 'lodash/map';
 
-import {Button, Dialog} from '@gravity-ui/uikit';
+import {Button} from '@gravity-ui/uikit';
+import {DialogWrapper as Dialog} from '../../../components/DialogWrapper/DialogWrapper';
 
 import ErrorBoundary from '../../../components/ErrorBoundary/ErrorBoundary';
 import MetaTable, {Template} from '../../../components/MetaTable/MetaTable';

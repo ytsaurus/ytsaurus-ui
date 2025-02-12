@@ -1,6 +1,7 @@
 import * as React from 'react';
 import {useSelector} from 'react-redux';
-import {Alert, Dialog, Link} from '@gravity-ui/uikit';
+import {Alert, Link} from '@gravity-ui/uikit';
+import {DialogWrapper as Dialog} from '../../../components/DialogWrapper/DialogWrapper';
 import {isCryptoSubtleAvailable} from '../../../utils/sha256';
 import {createPasswordStrategy} from './password-strategies';
 import {YTDFDialog, makeErrorFields} from '../../../components/Dialog';

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {Dialog} from '@gravity-ui/uikit';
+import {DialogWrapper as Dialog} from '../../components/DialogWrapper/DialogWrapper';
 import {useDispatch, useSelector} from 'react-redux';
 import {isManageTokensModalOpened} from '../../store/selectors/manage-tokens';
 import withLazyLoading from '../../hocs/withLazyLoading';

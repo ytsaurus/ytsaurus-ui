@@ -3,7 +3,8 @@ import {useDispatch, useSelector} from 'react-redux';
 
 import map_ from 'lodash/map';
 
-import {Button, Dialog} from '@gravity-ui/uikit';
+import {Button} from '@gravity-ui/uikit';
+import {DialogWrapper as Dialog} from '../../components/DialogWrapper/DialogWrapper';
 
 import {getExecuteBatchState} from '../../store/selectors/execute-batch';
 import {ExecuteBatchStateItem} from '../../store/reducers/execute-batch';

@@ -4,7 +4,7 @@ import cn from 'bem-cn-lite';
 
 import keys_ from 'lodash/keys';
 
-import {Dialog as DeleteDialog} from '@gravity-ui/uikit';
+import {DialogWrapper as DeleteDialog} from '../../../components/DialogWrapper/DialogWrapper';
 
 import ErrorBoundary from '../../../components/ErrorBoundary/ErrorBoundary';
 import Error from '../../../components/Error/Error';
