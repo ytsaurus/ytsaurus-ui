@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import block from 'bem-cn-lite';
 
-import {Modal as ModalImpl} from '@gravity-ui/uikit';
+import {ModalWrapper as ModalImpl} from '../ModalWrapper/ModalWrapper';
 import Icon from '../Icon/Icon';
 
 import withHandledScrollBar from '../../hocs/components/Modal/withHandledScrollBar';
