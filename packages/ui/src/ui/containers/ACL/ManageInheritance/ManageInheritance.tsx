@@ -2,7 +2,8 @@ import React, {useCallback, useMemo, useState} from 'react';
 import {compose} from 'redux';
 import cn from 'bem-cn-lite';
 
-import {Dialog as CommonDialog, Loader} from '@gravity-ui/uikit';
+import {Loader} from '@gravity-ui/uikit';
+import {DialogWrapper as CommonDialog} from '../../../components/DialogWrapper/DialogWrapper';
 
 import isEqual_ from 'lodash/isEqual';
 

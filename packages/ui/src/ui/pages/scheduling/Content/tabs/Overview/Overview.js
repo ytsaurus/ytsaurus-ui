@@ -48,7 +48,7 @@ import ShareUsageBar from '../../controls/ShareUsageBar';
 import SchedulingStaticConfiguration from '../../../PoolStaticConfiguration/SchedulingStaticConfiguration';
 
 import './Overview.scss';
-import {Dialog} from '@gravity-ui/uikit';
+import {DialogWrapper as Dialog} from '../../../../../components/DialogWrapper/DialogWrapper';
 import {Tooltip} from '../../../../../components/Tooltip/Tooltip';
 import SchedulingOperationsError from '../SchedulingOperationsError/SchedulingOperationsError';
 import {

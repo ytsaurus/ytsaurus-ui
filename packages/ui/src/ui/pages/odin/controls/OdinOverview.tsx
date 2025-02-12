@@ -4,7 +4,8 @@ import * as d3 from 'd3';
 import moment from 'moment';
 import map_ from 'lodash/map';
 
-import {Button, Dialog, Loader, Popup, Icon as UIKitIcon} from '@gravity-ui/uikit';
+import {Button, Loader, Popup, Icon as UIKitIcon} from '@gravity-ui/uikit';
+import {DialogWrapper as Dialog} from '../../../components/DialogWrapper/DialogWrapper';
 
 import chevronLeftSvg from '@gravity-ui/icons/svgs/chevron-left.svg';
 import chevronRightSvg from '@gravity-ui/icons/svgs/chevron-right.svg';
