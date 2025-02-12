@@ -6,6 +6,7 @@ import MetaTable, {
     TemplateCommand,
     TemplateEnvironment,
     TemplateFiles,
+    TemplateLayerPaths,
     TemplateLivePreivew,
     TemplateTransferTask,
 } from '../../../../../../components/MetaTable/MetaTable';
@@ -135,7 +136,7 @@ export default class Specification extends Component {
         );
     }
 
-    renderScript({type, caption, className, jobCount, environment, files, command}) {
+    renderScript({type, caption, className, jobCount, environment, files, command, layerPaths}) {
         const {cluster} = this.props;
 
         return (
@@ -170,6 +171,11 @@ export default class Specification extends Component {
                             key: 'command',
                             value: <TemplateCommand value={command} lineCount={5} />,
                             visible: Boolean(command),
+                        },
+                        {
+                            key: 'layer paths',
+                            value: <TemplateLayerPaths paths={layerPaths} cluster={cluster} />,
+                            visible: Boolean(layerPaths),
                         },
                     ]}
                 />

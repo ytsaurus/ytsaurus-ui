@@ -369,6 +369,7 @@ function prepareScript(operation: DetailedOperationSelector, type: string) {
         const className = ypath.getValue(script, '/class_name');
         const jobCount = ypath.getValue(script, '/job_count');
         const files = map_(ypath.getValue(script, '/file_paths'), prepareFile);
+        const layerPaths = ypath.getValue(script, '/layer_paths');
 
         if (command || className || jobCount || files?.length || environment?.length) {
             return {
@@ -379,6 +380,7 @@ function prepareScript(operation: DetailedOperationSelector, type: string) {
                 jobCount,
                 files,
                 environment,
+                layerPaths,
             };
         }
     } catch (err) {
