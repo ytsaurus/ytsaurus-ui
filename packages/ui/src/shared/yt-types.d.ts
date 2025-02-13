@@ -268,6 +268,8 @@ export interface ListJobsParameters {
 
     offset?: number;
     limit?: number;
+
+    operation_incarnation?: string;
 }
 
 export interface ListJobsResponse {
@@ -327,6 +329,7 @@ export type ListJobsItem = InheritedFromRawJob &
                 number | undefined
             >
         >;
+        operation_incarnation?: string;
     };
 
 export type OperationType =

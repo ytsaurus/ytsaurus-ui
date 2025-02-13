@@ -45,23 +45,3 @@ export function getListRequestParameters(state) {
         ...USE_CACHE,
     };
 }
-
-export function getJobRequestParameters({operations}) {
-    const {operation} = operations.detail;
-    const {filters} = operations.jobs;
-    return {
-        operation_id: operation.$value,
-        job_id: filters.jobId.value,
-    };
-}
-export function getCompetitiveJobsRequestParameters({operations, tables}) {
-    const {operation} = operations.detail;
-    const {job} = operations.jobs;
-    const sortState = tables[OPERATION_JOBS_TABLE_ID];
-    return {
-        operation_id: operation.$value,
-        job_competition_id: job.job_competition_id,
-        sort_field: sortState.field || 'none',
-        sort_order: sortState.asc ? 'ascending' : 'descending',
-    };
-}

@@ -67,6 +67,7 @@ export default class OperationSelectFilter extends Component {
 
         return (
             <Select
+                hideFilter={true}
                 {...props}
                 placeholder={placeHolder}
                 value={Array.isArray(value) ? value : [value]}
@@ -74,7 +75,6 @@ export default class OperationSelectFilter extends Component {
                 items={this.items}
                 onUpdate={(vals) => onChange(multiple ? vals : vals[0])}
                 label={hammer.format['FirstUppercase'](name) + ':'}
-                hideFilter={true}
             />
         );
     }
