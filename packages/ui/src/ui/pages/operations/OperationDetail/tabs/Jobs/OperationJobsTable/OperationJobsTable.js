@@ -152,14 +152,14 @@ class OperationJobsTable extends React.Component {
 
     renderIdAddress = (item) => {
         const {cluster} = this.props;
-        const {id, address, jobCompetitionId, operationId, is_stale, attributes} = item;
+        const {id, address, job_competition_id, operationId, is_stale, attributes} = item;
         const host = hammer.format['Address'](address);
 
         const from = ypath.getValue(attributes, '/start_time');
         const to = ypath.getValue(attributes, '/finish_time');
         const monitoring_descriptor = ypath.getValue(attributes, '/monitoring_descriptor');
 
-        const isSpeculativeJob = jobCompetitionId && jobCompetitionId !== id;
+        const isSpeculativeJob = job_competition_id && job_competition_id !== id;
 
         return (
             <div>
@@ -204,7 +204,7 @@ class OperationJobsTable extends React.Component {
                                 'elements-monospace elements-ellipsis',
                             )}
                         >
-                            Speculative job for {jobCompetitionId}
+                            Speculative job for {job_competition_id}
                         </span>
                     </Fragment>
                 )}
@@ -237,7 +237,7 @@ class OperationJobsTable extends React.Component {
             {
                 key: 'full_input',
                 value: <JobTemplate.DebugInfo job={item} type="full_input" />,
-                visible: Boolean(item.hasSpec),
+                visible: Boolean(item.has_spec),
             },
         ];
 

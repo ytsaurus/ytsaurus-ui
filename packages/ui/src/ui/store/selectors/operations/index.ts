@@ -103,23 +103,23 @@ function calculateItemsWithoutCounter(
 
 export const ATTRIBUTE_ITEMS = [
     {
-        value: 'withStderr',
+        value: 'withStderr' as const,
         text: 'With stderr',
     },
     {
-        value: 'withFailContext',
+        value: 'withFailContext' as const,
         text: 'With fail context',
     },
     {
-        value: 'withSpec',
+        value: 'withSpec' as const,
         text: 'With full input',
     },
     {
-        value: 'withCompetitors',
+        value: 'withCompetitors' as const,
         text: 'With competitive jobs',
     },
     {
-        value: 'withMonitoringDescriptor',
+        value: 'withMonitoringDescriptor' as const,
         text: 'With monitoring descriptor',
     },
 ];

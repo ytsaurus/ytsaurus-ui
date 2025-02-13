@@ -53,7 +53,7 @@ import {RumMeasureTypes} from '../../../rum/rum-measure-types';
 import {isFinalLoadingStatus} from '../../../utils/utils';
 
 import './OperationDetail.scss';
-import {updateFilter} from '../../../store/actions/operations/jobs';
+import {updateListJobsFilter} from '../../../store/actions/operations/jobs';
 import OperationDetailsMonitor from './tabs/monitor/OperationDetailsMonitor';
 import {getJobsMonitorTabVisible} from '../../../store/selectors/operations/jobs-monitor';
 import {
@@ -221,8 +221,8 @@ class OperationDetail extends React.Component<ReduxProps & RouteProps> {
     }
 
     onProgressLinkClick = (jobState: JobState) => {
-        const {updateFilter} = this.props;
-        updateFilter('state', jobState);
+        const {updateListJobsFilter} = this.props;
+        updateListJobsFilter({name: 'state', value: jobState});
     };
 
     renderTabs() {
@@ -429,7 +429,7 @@ const mapDispatchToProps = {
     promptAction,
     getOperation,
     showEditPoolsWeightsModal,
-    updateFilter,
+    updateListJobsFilter,
 };
 
 const connector = connect(mapStateToProps, mapDispatchToProps);

@@ -72,7 +72,7 @@ export default function JobGeneral() {
         state,
         type,
         id,
-        jobCompetitionId,
+        job_competition_id,
         monitoring_descriptor,
         pool_tree,
         is_stale,
@@ -82,7 +82,7 @@ export default function JobGeneral() {
     const path = `/${cluster}/${Page.JOB}/${operationID}/${jobID}`;
     const tabsProps = makeTabProps(path, Tab);
 
-    const isSpeculativeJob = jobCompetitionId && jobCompetitionId !== id;
+    const isSpeculativeJob = job_competition_id && job_competition_id !== id;
 
     const jobShellCommand = `yt --proxy ${cluster} run-job-shell ${id}`;
     const preemptionReason = hammer.format['ReadableField'](interruption_info?.preemption_reason);

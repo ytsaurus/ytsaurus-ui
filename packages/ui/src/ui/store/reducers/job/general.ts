@@ -1,6 +1,6 @@
 import {prepareJobEvents} from '../../../utils/operations/tabs/details/events/events';
-import Job from '../../../pages/operations/OperationDetail/tabs/Jobs/job-selector';
-import {JobEvents, JobStatistic, JobStatistics, PreparedJob} from '../../../types/operations/job';
+import {Job} from '../../../pages/operations/OperationDetail/tabs/Jobs/job-selector';
+import {JobEvents, JobStatistic, JobStatistics} from '../../../types/operations/job';
 import {mergeStateOnClusterChange} from '../../../store/reducers/utils';
 import {prepareStatistics} from '../../../utils/job/tabs/statistics';
 import {GeneralActionType} from '../../../store/actions/job/general';
@@ -13,7 +13,7 @@ export interface GeneralState {
     error: boolean;
     errorData?: YTError;
 
-    job: Partial<PreparedJob>;
+    job: Partial<Job>;
     details: {
         events: JobEvents;
         statistics: JobStatistics;
