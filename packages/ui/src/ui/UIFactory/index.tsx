@@ -135,7 +135,12 @@ export type YQLButtonProps = {
     onClose(): void;
 };
 
-export type InlineSuggestionsTelemetryType = 'accepted' | 'discarded' | 'ignored';
+export type InlineSuggestionsTelemetryType =
+    | 'accepted'
+    | 'discarded'
+    | 'ignored'
+    | 'enabled'
+    | 'disabled';
 export interface InlineSuggestionsApi {
     getQuerySuggestions(data: {
         query: string;

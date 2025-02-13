@@ -7,6 +7,10 @@ import UIFactory from '../../../UIFactory';
 export const useMonacoQuerySuggestions = (editor?: monaco.editor.IStandaloneCodeEditor) => {
     const enabled = useSelector(getQuerySuggestionsEnabled);
 
+    useEffect(() => {
+        UIFactory.getInlineSuggestionsApi()?.sendTelemetry(enabled ? 'enabled' : 'disabled');
+    }, [enabled]);
+
     const handleCancelTelemetry = useCallback(
         (e: KeyboardEvent) => {
             if (e.key === 'Escape' && editor && enabled) {
