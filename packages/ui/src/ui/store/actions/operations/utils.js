@@ -1,11 +1,9 @@
 import moment from 'moment';
 
-import {EXTRA_JOBS_COUNT, OPERATION_JOBS_TABLE_ID} from '../../../constants/operations/jobs';
 import {OPERATIONS_DATA_MODE} from '../../../constants/operations';
 import {
     getOperationsListFiltersParameters_FOR_YTFRONT_2838,
     getOperationsListTimeRange,
-    getValueIfNotDefault,
 } from '../../../store/selectors/operations';
 import {USE_CACHE} from '../../../../shared/constants/yt-api';
 
@@ -48,32 +46,6 @@ export function getListRequestParameters(state) {
     };
 }
 
-// Operation Jobs
-
-function getJobFilterParameters(filters, sortState) {
-    const filterBy = filters.filterBy.value || filters.filterBy.defaultValue;
-    return {
-        state: getValueIfNotDefault(filters.state),
-        type: getValueIfNotDefault(filters.type),
-        address: filterBy === 'address' ? getValueIfNotDefault(filters.address) : undefined,
-        with_stderr: getValueIfNotDefault(filters.withStderr),
-        with_monitoring_descriptor: getValueIfNotDefault(filters.withMonitoringDescriptor),
-        with_fail_context: getValueIfNotDefault(filters.withFailContext),
-        with_spec: getValueIfNotDefault(filters.withSpec),
-        with_competitors: getValueIfNotDefault(filters.withCompetitors),
-        sort_field: sortState.field || 'none',
-        sort_order: sortState.asc ? 'ascending' : 'descending',
-        task_name: getValueIfNotDefault(filters.taskName),
-    };
-}
-
-function preparePaginationQuery({offset, limit}) {
-    return {
-        offset: Math.max(0, offset),
-        limit: limit + EXTRA_JOBS_COUNT,
-    };
-}
-
 export function getJobRequestParameters({operations}) {
     const {operation} = operations.detail;
     const {filters} = operations.jobs;
@@ -88,26 +60,8 @@ export function getCompetitiveJobsRequestParameters({operations, tables}) {
     const sortState = tables[OPERATION_JOBS_TABLE_ID];
     return {
         operation_id: operation.$value,
-        job_competition_id: job.jobCompetitionId,
+        job_competition_id: job.job_competition_id,
         sort_field: sortState.field || 'none',
         sort_order: sortState.asc ? 'ascending' : 'descending',
-    };
-}
-
-export function getJobsRequestParameters({operations, tables}) {
-    const {operation} = operations.detail;
-    const {filters, pagination} = operations.jobs;
-    const sortState = tables[OPERATION_JOBS_TABLE_ID];
-
-    return {
-        operation_id: operation.$value,
-        /*
-        include_archive: true,
-        include_cypress: true,
-        include_runtime: true
-        */
-        // prepareSortQuery(),
-        ...getJobFilterParameters(filters, sortState),
-        ...preparePaginationQuery(pagination),
     };
 }

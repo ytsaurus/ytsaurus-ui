@@ -11,7 +11,9 @@ function JobsAttributesFilter(props: {disabled: boolean}) {
     const attributes = useSelector(getFilteredAttributes(ATTRIBUTE_ITEM_NAMES));
     const dispatch = useDispatch();
     const handleChange = useCallback((value: Array<string>) => {
-        dispatch(updateFilteredAttributes(ATTRIBUTE_ITEM_NAMES, value));
+        dispatch(
+            updateFilteredAttributes(ATTRIBUTE_ITEM_NAMES, value as typeof ATTRIBUTE_ITEM_NAMES),
+        );
     }, []);
 
     return (

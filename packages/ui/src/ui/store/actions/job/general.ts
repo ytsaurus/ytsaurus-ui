@@ -9,6 +9,7 @@ import {RootState} from '../../../store/reducers';
 import {ThunkAction} from 'redux-thunk';
 import {YTError} from '../../../types';
 import {Action} from 'redux';
+import {ClusterConfig} from '../../../../shared/yt-types';
 
 const requests = new CancelHelper();
 
@@ -20,7 +21,7 @@ interface LoadJobDataSuccessAction {
     type: typeof JOB.LOAD_JOB_DATA_SUCCESS;
     data: {
         job: RawJob;
-        clusterConfig: {id: string; proxy: string; externalProxy?: string};
+        clusterConfig: ClusterConfig;
     };
 }
 
@@ -31,7 +32,7 @@ interface LoadJobDataFailureAction {
     };
 }
 
-type LoadJobDataAction =
+export type LoadJobDataAction =
     | LoadJobDataRequestAction
     | LoadJobDataSuccessAction
     | LoadJobDataFailureAction;
