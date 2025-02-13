@@ -12,6 +12,8 @@ import {
     GetFlowViewData,
     GetParams,
     GetPipelineStateData,
+    ListJobsParameters,
+    ListJobsResponse,
     OutputFormat,
     PathParams,
     PipelineParams,
@@ -41,6 +43,7 @@ interface YTApiV3 {
             };
         }>
     ): Promise<any>;
+    listJobs(...args: ApiMethodParameters<ListJobsParameters>): Promise<ListJobsResponse>;
     [method: string]: (...args: ApiMethodParameters<any>) => Promise<any>;
 }
 
@@ -101,6 +104,7 @@ type YTApiV4 = {
     pausePipeline(...args: ApiMethodParameters<PipelineParams>): Promise<void>;
     getPipelineState(...args: ApiMethodParameters<PipelineParams>): Promise<GetPipelineStateData>;
     getFlowView(...args: ApiMethodParameters<PipelineParams>): Promise<GetFlowViewData>;
+    listJobs(...args: ApiMethodParameters<ListJobsParameters>): Promise<ListJobsResponse>;
 
     [method: string]: (...args: ApiMethodParameters<any>) => Promise<any>;
 };
@@ -146,7 +150,8 @@ interface ApiMethodParams<ParametersT> {
 }
 
 function makeApiWithId<
-    ApiT extends Record<string, (...args: ApiMethodParameters<any>) => Promise<any>>,
+    K extends keyof ApiT,
+    ApiT extends Record<K, (...args: ApiMethodParameters<any>) => Promise<any>>,
 >(ytApi: ApiT): ApiWithId<ApiT> {
     return reduce_(
         ytApi,

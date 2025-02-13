@@ -13,6 +13,7 @@ import JobsAttributesFilter from './JobsAttributesFilter';
 import {getShowCompetitiveJobs} from '../../../../../../pages/operations/selectors';
 import {getOperationTasksNames} from '../../../../../../store/selectors/operations/operation';
 
+import {JobsOperationIncarnationsFilter} from './JobsOperationsIncarnationsFilter';
 import './OperationJobsToolbar.scss';
 
 const block = cn('operation-detail-jobs');
@@ -70,6 +71,15 @@ export default function OperationJobsToolbar() {
                     <div className={block('toolbar-attributes', tbComp)}>
                         <JobsAttributesFilter disabled={showCompetitiveJobs} width={200} />
                     </div>
+
+                    <JobsOperationIncarnationsFilter
+                        disabled={showCompetitiveJobs}
+                        wrap={(children) => {
+                            return (
+                                <div className={block('toolbar-state', tbComp)}>{children} </div>
+                            );
+                        }}
+                    />
 
                     <div className={block('toolbar-pagination', tbComp)}>
                         <JobsPaginator disabled={showCompetitiveJobs} />
