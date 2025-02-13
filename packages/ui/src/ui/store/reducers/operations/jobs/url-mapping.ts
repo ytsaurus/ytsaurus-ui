@@ -1,10 +1,11 @@
 import {initialState as jobsInitialState} from '../../../../store/reducers/operations/jobs/jobs';
+import {initialState as jobsIncarnactionState} from '../../../../store/reducers/operations/jobs/jobs-operation-incarnations';
 import {initialState as tableSortState} from '../../../../store/reducers/tables';
 import {OPERATION_JOBS_TABLE_ID} from '../../../../constants/operations/jobs';
 import {parseSortState} from '../../../../utils/index';
 import {RootState} from '../../../../store/reducers';
 import {produce} from 'immer';
-import {updateIfChanged} from '../../../../utils/utils';
+import {updateByLocationParams} from '../../../../utils/utils';
 import {LocationParameters} from '../../../../store/location';
 
 const {
@@ -32,6 +33,10 @@ const initialWithCompetitorsFilter = withCompetitors.value;
 const initialSortState = {...tableSortState[OPERATION_JOBS_TABLE_ID]};
 
 export const jobsParams: LocationParameters = {
+    incarnation: {
+        stateKey: 'operations.jobsOperationIncarnations.filter',
+        initialState: jobsIncarnactionState.filter,
+    },
     filterBy: {
         stateKey: 'operations.jobs.filters.filterBy.value',
         initialState: initialFilterBy,
@@ -96,28 +101,6 @@ export const jobsParams: LocationParameters = {
 
 export function getJobsPreparedState(state: RootState, {query}: {query: RootState}) {
     return produce(state, (draft) => {
-        const draftFilter = draft.operations.jobs.filters;
-        const queryFilter = query.operations.jobs.filters;
-
-        updateIfChanged(draftFilter.filterBy, 'value', queryFilter.filterBy.value);
-        updateIfChanged(draftFilter.address, 'value', queryFilter.address.value);
-        updateIfChanged(draftFilter.jobId, 'value', queryFilter.jobId.value);
-        updateIfChanged(draftFilter.taskName, 'value', queryFilter.taskName.value);
-        updateIfChanged(draftFilter.type, 'value', queryFilter.type.value);
-        updateIfChanged(draftFilter.state, 'value', queryFilter.state.value);
-        updateIfChanged(draftFilter.withStderr, 'value', queryFilter.withStderr.value);
-        updateIfChanged(draftFilter.withFailContext, 'value', queryFilter.withFailContext.value);
-        updateIfChanged(draftFilter.withSpec, 'value', queryFilter.withSpec.value);
-        updateIfChanged(draftFilter.withCompetitors, 'value', queryFilter.withCompetitors.value);
-        updateIfChanged(
-            draft.operations.jobs.pagination,
-            'offset',
-            query.operations.jobs.pagination.offset,
-        );
-        updateIfChanged(
-            draft.tables,
-            OPERATION_JOBS_TABLE_ID,
-            query.tables[OPERATION_JOBS_TABLE_ID],
-        );
+        updateByLocationParams({draft, query}, jobsParams);
     });
 }
