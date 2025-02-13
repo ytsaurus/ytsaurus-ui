@@ -1,3 +1,4 @@
+import {OperationType} from '../../../shared/yt-types';
 import {Acl, YTError} from '../../types';
 
 export interface RawJobEvent {
@@ -11,13 +12,13 @@ export interface RawJob {
     archive_state: string;
     finish_time?: string;
     start_time: string;
-    hasCompetitors: boolean;
+    has_competitors: boolean;
     has_spec: boolean;
     job_competition_id: string;
     operation_id: string;
     job_id: string;
     state: JobState;
-    type: string;
+    type: OperationType;
     events: RawJobEvent[];
     exec_attributes: object;
     statistics: JobStatistics;
@@ -34,6 +35,7 @@ export interface RawJob {
         };
         preemption_reason?: string;
     };
+    error?: YTError;
 }
 
 export type JobState =
@@ -67,7 +69,6 @@ export interface PreparedJob extends Partial<RawJob> {
     attributes: RawJob;
     id: string;
     isSupported: () => boolean;
-    jobCompetitionId: string;
     operationId: string;
     startTime: string;
     finishTime?: string;

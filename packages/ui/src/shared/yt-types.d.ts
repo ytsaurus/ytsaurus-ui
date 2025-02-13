@@ -1,4 +1,5 @@
 import type {YTError} from '../@types/types';
+import {RawJob} from '../ytsaurus-ui.ui/types/operations/job';
 import type {Settings, Stage} from './constants/settings-types';
 import type {UISettings} from './ui-settings';
 
@@ -194,7 +195,11 @@ export interface TransferPoolQuotaParams extends BaseBatchParams {
 }
 
 export interface CheckAclParams extends BaseBatchParams {
-    acl: Array<{permissions: Array<YTPermissionType>; subjects: Array<string>; action: 'allow'}>;
+    acl: Array<{
+        permissions: Array<YTPermissionType>;
+        subjects: Array<string>;
+        action: 'allow';
+    }>;
     user: string;
     permission: YTPermissionType;
 }
@@ -246,6 +251,95 @@ export interface RemoveMembersParams extends BaseBatchParams {
     member: string;
 }
 
+export interface ListJobsParameters {
+    operation_id: string;
+
+    state?: JobState;
+    type?: string;
+    address?: string;
+    with_stderr?: boolean;
+    with_monitoring_descriptor?: boolean;
+    with_fail_context?: boolean;
+    with_spec?: boolean;
+    with_competitors?: boolean;
+    sort_field?: 'none' | string;
+    sort_order?: 'ascending' | 'descending';
+    task_name?: string;
+
+    offset?: number;
+    limit?: number;
+}
+
+export interface ListJobsResponse {
+    archive_job_count: number;
+    continuation_token: string;
+    controller_agent_job_count: number;
+    cypress_job_count: number;
+    errors: Array<YTError>;
+    type_coutns: Record<string, number | undefined>;
+    state_counts: Record<string, number | undefined>;
+
+    jobs: Array<ListJobsItem>;
+}
+
+type InheritedFromRawJob = Pick<
+    RawJob,
+    | 'address'
+    | 'archive_state'
+    | 'finish_time'
+    | 'is_stale'
+    | 'job_competition_id'
+    | 'has_competitors'
+    | 'has_spec'
+    | 'start_time'
+    | 'state'
+    | 'type'
+    | 'pool_tree'
+>;
+
+type MissingKeysFromRawJob = Exclude<keyof RawJob, keyof InheritedFromRawJob>;
+type MissingFromRawJob = Partial<Record<MissingKeysFromRawJob, undefined>>;
+
+type JobCompetitionId = ListJobsItem['job_competition_id'];
+
+export type ListJobsItem = InheritedFromRawJob &
+    MissingFromRawJob & {
+        controller_state: string;
+        id: string;
+        job_cookie: number;
+        probing_job_competition_id: string;
+        progress: number;
+        task_name: string;
+        fail_context_size?: number;
+        stderr_size?: number;
+        input_paths?: Array<unknown>;
+        brief_statistics: CypressNode<
+            {timestamp: string},
+            Record<
+                | 'job_proxy_cpu_usage'
+                | 'output_pipe_idle_time'
+                | 'processed_input_compressed_data_size'
+                | 'processed_input_data_weight'
+                | 'processed_input_row_count'
+                | 'processed_input_uncompressed_data_size'
+                | 'processed_output_compressed_data_size'
+                | 'processed_output_uncompressed_data_size',
+                number | undefined
+            >
+        >;
+    };
+
+export type OperationType =
+    | 'map'
+    | 'merge'
+    | 'reduce'
+    | 'join_reduce'
+    | 'map_reduce'
+    | 'sort'
+    | 'erase'
+    | 'remote_copy'
+    | 'vanilla';
+
 export type BatchSubRequest =
     | SubRequest<'transfer_pool_resources', TransferPoolQuotaParams>
     | SubRequest<'mount_table' | 'unmount_table' | 'freeze_table' | 'unfreeze_table', PathParams>
@@ -263,7 +357,8 @@ export type BatchSubRequest =
     | SubRequest<'add_maintenance', AddMaintenanceParams>
     | SubRequest<'remove_maintenance', RemoveMaintenanceParams>
     | SubRequest<'add_member', AddMembersParams>
-    | SubRequest<'remove_member', RemoveMembersParams>;
+    | SubRequest<'remove_member', RemoveMembersParams>
+    | SubRequest<'list_jobs', ListJobsParameters>;
 
 export type OutputFormat =
     | {

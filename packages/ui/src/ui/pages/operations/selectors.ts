@@ -8,6 +8,7 @@ import {createSelector} from 'reselect';
 import {remoteInputUrl} from '../../utils/operations/tabs/details/specification/specification';
 import {FIX_MY_TYPE} from '../../types';
 import {RootState} from '../../store/reducers';
+import {JobsState} from '../../store/reducers/operations/jobs/jobs';
 
 interface OperationPool {
     tree: string;
@@ -331,15 +332,15 @@ export function getActualValue<T>(value: T | undefined, defaultValue?: T) {
     return typeof value === 'undefined' ? defaultValue : value;
 }
 
-export function getFilterValue(name: string) {
-    return (state: RootState) => {
+export function getFilterValue<K extends keyof JobsState['filters']>(name: K) {
+    return (state: RootState): JobsState['filters'][K]['value'] | undefined => {
         const {value, defaultValue} = state.operations.jobs.filters[name];
 
         return getActualValue(value, defaultValue);
     };
 }
 
-export function getFilteredAttributes(attributeNames: Array<string>) {
+export function getFilteredAttributes(attributeNames: Array<keyof JobsState['filters']>) {
     return (state: RootState) => {
         return attributeNames.filter((name) => getFilterValue(name)(state));
     };

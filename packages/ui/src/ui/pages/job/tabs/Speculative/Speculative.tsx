@@ -32,13 +32,13 @@ function IdAddress({job, operationId}: IdAddressProps) {
     const cluster = useSelector(getCluster);
 
     // @ts-ignore
-    const [id, address, jobCompetitionId] = ypath.getValues(job, [
+    const [id, address, job_competition_id] = ypath.getValues(job, [
         '/id',
         '/address',
         '/job_competition_id',
     ]);
     const host = hammer.format['Address'](address);
-    const isSpeculativeJob = jobCompetitionId && jobCompetitionId !== id;
+    const isSpeculativeJob = job_competition_id && job_competition_id !== id;
 
     return (
         <div>
@@ -123,17 +123,18 @@ export default function Competitors() {
         (state: RootState) => state.job.competitors,
     );
 
-    const {jobCompetitionId, operationId} = job;
-    if (!jobCompetitionId || !operationId) {
-        throw new Error('Unexpected behavior: jobCompetitionId or operationId is not defined');
+    const {operationId} = job;
+    const job_competition_id = job.attributes?.job_competition_id;
+    if (!job_competition_id || !operationId) {
+        throw new Error('Unexpected behavior: job_competition_id or operationId is not defined');
     }
 
     const columns = useMemo(getTableColumns, []);
     const templates = useMemo(() => getTableTemplates(operationId), [operationId]);
 
     useEffect(() => {
-        dispatch(loadCompetitors(operationId, jobCompetitionId));
-    }, [dispatch, operationId, jobCompetitionId]);
+        dispatch(loadCompetitors(operationId, job_competition_id));
+    }, [dispatch, operationId, job_competition_id]);
 
     return (
         <ErrorBoundary>
