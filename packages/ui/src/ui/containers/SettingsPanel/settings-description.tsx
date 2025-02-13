@@ -1,6 +1,6 @@
 import React from 'react';
 import {useSelector} from 'react-redux';
-import {IconProps} from '@gravity-ui/uikit';
+import {Flex, IconProps, Text} from '@gravity-ui/uikit';
 
 import compact_ from 'lodash/compact';
 import filter_ from 'lodash/filter';
@@ -576,11 +576,17 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
                 ...(hasQuerySuggestions
                     ? [
                           makeItem(
-                              'Use query suggestions',
+                              'Query assistant',
                               'top',
                               <BooleanSettingItem
                                   settingKey="global::queryTracker::suggestions"
-                                  description="Enable query assistant suggestions"
+                                  description={
+                                      <Flex direction="column">
+                                          <div>Use query assistant to autocomplete</div>
+                                          <Text color="secondary">[Tab] - accept suggestion</Text>
+                                          <Text color="secondary">[Esc] - decline suggestion</Text>
+                                      </Flex>
+                                  }
                                   oneLine
                               />,
                           ),
