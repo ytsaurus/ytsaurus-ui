@@ -1,4 +1,4 @@
-import {Loader, Text} from '@gravity-ui/uikit';
+import {Flex, Icon, Link, Loader, Text} from '@gravity-ui/uikit';
 import React from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import block from 'bem-cn-lite';
@@ -15,6 +15,7 @@ import {
 import {YQLSchemeTable} from './YQLSchemeTable';
 import {ResultPaginator} from './ResultPaginator';
 import NotRenderUntilFirstVisible from '../NotRenderUntilFirstVisible/NotRenderUntilFirstVisible';
+import ArrowUpRightFromSquareIcon from '@gravity-ui/icons/svgs/arrow-up-right-from-square.svg';
 
 import './index.scss';
 import {showQueryTrackerCellPreviewModal} from '../module/cell-preview/actions';
@@ -39,18 +40,31 @@ function QueryReadyResultView({
 }) {
     const mode = result?.settings?.viewMode;
     const {start, end, total, truncated} = getResultRowsInfo(result);
+    const fullResult = result.meta.full_result;
     return (
         <>
             <NotRenderUntilFirstVisible hide={mode !== QueryResultsViewMode.Scheme}>
                 <YQLSchemeTable result={result} />
             </NotRenderUntilFirstVisible>
             <NotRenderUntilFirstVisible hide={mode !== QueryResultsViewMode.Table}>
-                <div className={b('result-info')}>
+                <Flex alignItems="center" gap={2} className={b('result-info')}>
                     <Text>
                         Rows {start}-{end} of {total}
                         {`${truncated ? ' (truncated)' : ''}`}
                     </Text>
-                </div>
+
+                    {fullResult && (
+                        <Link
+                            href={`/${fullResult.cluster}/navigation?path=//${fullResult.table_path}`}
+                            target="_blank"
+                        >
+                            <Flex alignItems="center" gap={1}>
+                                <Icon data={ArrowUpRightFromSquareIcon} size={16} /> View full
+                                result
+                            </Flex>
+                        </Link>
+                    )}
+                </Flex>
                 <ResultsTable result={result} onShowPreview={onShowPreview} />
             </NotRenderUntilFirstVisible>
         </>

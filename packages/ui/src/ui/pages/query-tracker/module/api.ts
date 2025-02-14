@@ -519,6 +519,10 @@ export type QueryResultMeta = {
         unmerged_row_count: number;
         unmerged_data_weight: number;
     };
+    full_result?: {
+        cluster: string;
+        table_path: string;
+    };
     error?: unknown;
 };
 
