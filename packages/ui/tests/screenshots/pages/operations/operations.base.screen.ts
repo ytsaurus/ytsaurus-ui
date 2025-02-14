@@ -1,7 +1,7 @@
 import {Page, expect, test} from '@playwright/test';
 import {makeClusterUrl} from '../../../utils';
 import {BasePage} from '../../../utils/BasePage';
-import {replaceInnerHtml, setDisplayNone} from '../../../utils/dom';
+import {replaceInnerHtml} from '../../../utils/dom';
 
 class OperationsPage extends BasePage {
     async waitForRunningOperation() {
@@ -53,16 +53,6 @@ class OperationsPage extends BasePage {
     async waitForStatisticsRows() {
         await this.page.waitForSelector('.elements-table__row :text("meta_bytes_read_from_disk")');
     }
-
-    async hideMetaByEnv() {
-        const {OPERATION_DETAILS_HIDE_META_BY_KEY: keysAsStr = ''} = process.env;
-        const keys = keysAsStr.split(',').filter(Boolean);
-        const selectors = keys.reduce((acc, k) => {
-            acc.push(`.meta-table-item__key_key_${k}`, `.meta-table-item__value_key_${k}`);
-            return acc;
-        }, [] as Array<string>);
-        setDisplayNone(this.page, selectors);
-    }
 }
 
 const operationsPage = (page: Page) => new OperationsPage({page});
@@ -81,7 +71,6 @@ test('Operation - Details', async ({page}) => {
 
     await operationsPage(page).replaceMetaData();
     await operationsPage(page).replaceDetailsSectionData();
-    await operationsPage(page).hideMetaByEnv();
 
     await expect(page).toHaveScreenshot();
 });
