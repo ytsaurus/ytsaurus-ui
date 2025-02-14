@@ -285,6 +285,7 @@ const attributesToLoad = [
     '_yql_subkey_meta',
     '_yql_type',
     '_yql_value_meta',
+    '_yql_op_id',
     'access_time',
     'account',
     'acl',
