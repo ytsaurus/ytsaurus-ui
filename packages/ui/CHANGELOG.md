@@ -1,5 +1,21 @@
 # Changelog
 
+## [1.82.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.81.0...ui-v1.82.0) (2025-02-14)
+
+
+### Features
+
+* **CHYT/Tabs:** add tab for logs link [YTFRONT-4675] ([fc2f4b9](https://github.com/ytsaurus/ytsaurus-ui/commit/fc2f4b9fa6135b0460921582635d5ae892caeb7c))
+* **Navigation/NavigationError:** add copy button and impove error details [YTFRONT-4049] ([fb70cba](https://github.com/ytsaurus/ytsaurus-ui/commit/fb70cba73da9891e84fb3fc0b072752f05b6e108))
+* **Operations:** preempted jobs [YTFRONT-4641] ([472d41e](https://github.com/ytsaurus/ytsaurus-ui/commit/472d41e25e79e408ed09ffb1192e38b0baa0b894))
+* **Settings:** change suggestions settings item [YTFRONT-4703] ([4c1776c](https://github.com/ytsaurus/ytsaurus-ui/commit/4c1776cefc8348d2eaba97be83f05b397ff52818))
+
+
+### Bug Fixes
+
+* **Navigation:** xlsx types checkbox off by default [YTFRONT-4699] ([233e945](https://github.com/ytsaurus/ytsaurus-ui/commit/233e945fdd820c2906e7ea3868414dc50e9b5893))
+* prevent page hotkeys firing with opened YTDialog [[#768](https://github.com/ytsaurus/ytsaurus-ui/issues/768)] ([1e6d097](https://github.com/ytsaurus/ytsaurus-ui/commit/1e6d097bb1074c8a0b07c4e4a0679afe80380d53))
+
 ## [1.81.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.80.0...ui-v1.81.0) (2025-02-10)
 
 
