@@ -19,7 +19,6 @@ import {HEADER_HEIGHT} from '../../../../../constants/index';
 import './TableOverview.scss';
 import EditTableActions from './EditTableActions';
 import DataLensButton from './DatalensButton';
-import {isQueryTrackerAllowed} from '../../../../../store/selectors/global/experimental-pages';
 
 const block = cn('navigation-table-overview');
 
@@ -27,11 +26,10 @@ TableOverview.propTypes = {
     // from connect
     isFullScreen: PropTypes.bool.isRequired,
     isSplit: PropTypes.bool.isRequired,
-    allowQueryTracker: PropTypes.bool,
 };
 
 function TableOverview(props) {
-    const {isFullScreen, isSplit, allowQueryTracker} = props;
+    const {isFullScreen, isSplit} = props;
 
     // TODO: add sticky for the Overview in the split mode https://github.com/captivationsoftware/react-sticky/issues/282
     return (
@@ -49,9 +47,7 @@ function TableOverview(props) {
                         <OffsetInput block={block} />
                         {!isFullScreen && <ColumnSelectorButton block={block} />}
                         {!isFullScreen && <SettingsButton block={block} />}
-                        {!isFullScreen && allowQueryTracker && (
-                            <CreateQueryFromTable className={block('query')} />
-                        )}
+                        {!isFullScreen && <CreateQueryFromTable className={block('query')} />}
                         {!isFullScreen && <JupyterButton block={block} />}
                         {!isFullScreen && <DataLensButton className={block('datalens')} />}
                         {!isFullScreen && <TableActions block={block} />}
@@ -71,7 +67,6 @@ const mapStateToProps = (state) => {
     return {
         isFullScreen,
         isSplit,
-        allowQueryTracker: isQueryTrackerAllowed(state),
     };
 };
 
