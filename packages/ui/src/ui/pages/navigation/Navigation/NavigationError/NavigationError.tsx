@@ -38,12 +38,18 @@ function PrettyError(props: Props) {
                 <Text className={block('title')}>{title}</Text>
                 <ErrorDetails error={details} />
                 <Flex direction="row" gap={3}>
-                    {code === 901 && (
-                        <RequestPermission cluster={cluster} path={path} error={error} />
+                    {code === 901 ? (
+                        <RequestPermission
+                            cluster={cluster}
+                            path={path}
+                            error={error}
+                            errorInfo={errorInfo}
+                        />
+                    ) : (
+                        <ClipboardButton className={block('copy')} view="outlined" text={errorInfo}>
+                            Copy error details
+                        </ClipboardButton>
                     )}
-                    <ClipboardButton className={block('copy')} view="outlined" text={errorInfo}>
-                        Copy error details
-                    </ClipboardButton>
                 </Flex>
             </Flex>
         </Flex>
