@@ -33,17 +33,10 @@ export default function EditQueryNameModal({query, className}: Props) {
     };
 
     return state === 'completed' || state === 'failed' || state === 'draft' ? (
-        <div
-            className={className}
-            onClick={(event) => {
-                event.stopPropagation();
-            }}
-            onKeyDown={(event) => {
-                event.stopPropagation();
-            }}
-        >
+        <div className={className}>
             <Button
-                onClick={() => {
+                onClick={(event) => {
+                    event.stopPropagation();
                     setVisible(true);
                 }}
                 view={'flat-secondary'}
