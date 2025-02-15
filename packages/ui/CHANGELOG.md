@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.82.1](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.82.0...ui-v1.82.1) (2025-02-15)
+
+
+### Bug Fixes
+
+* **Navigation/Table:** query buttons should be always visible [YTFRONT-4706] ([8d19235](https://github.com/ytsaurus/ytsaurus-ui/commit/8d19235558016e2d342b4973c84c6d0fa09c88f5))
+* **Navigation:** add missing attribute & fix copy button ([f18fd4e](https://github.com/ytsaurus/ytsaurus-ui/commit/f18fd4e21f328a638241d03de8f5140b1dc48a77))
+
 ## [1.82.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.81.0...ui-v1.82.0) (2025-02-14)
 
 
