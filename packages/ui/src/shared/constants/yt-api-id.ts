@@ -98,6 +98,7 @@ export enum YTApiId {
     operationIsEphemeral,
     operationsSchedulerInstances,
     listJobs100,
+    jobsOperationIncarnations,
 
     resourcePlannerPoolDetails,
 

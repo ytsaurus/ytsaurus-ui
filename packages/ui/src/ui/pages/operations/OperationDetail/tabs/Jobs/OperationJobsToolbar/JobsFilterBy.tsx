@@ -9,7 +9,7 @@ import Select from '../../../../../../components/Select/Select';
 import JobsSuggestFilter from './JobsSuggestFilter';
 import Filter from '../../../../../../components/Filter/Filter';
 
-import {updateFilter} from '../../../../../../store/actions/operations/jobs';
+import {updateListJobsFilter} from '../../../../../../store/actions/operations/jobs';
 import {getFilterValue} from '../../../../selectors';
 
 const block = cn('operation-detail-jobs');
@@ -18,7 +18,7 @@ function JobsIdFilter({pin}: Pick<React.ComponentProps<typeof Filter>, 'pin'>) {
     const value = useSelector(getFilterValue('jobId'));
     const dispatch = useDispatch();
     const handleChange = useCallback((value: string) => {
-        dispatch(updateFilter('jobId', value));
+        dispatch(updateListJobsFilter({name: 'jobId', value}));
     }, []);
 
     return (
@@ -26,7 +26,7 @@ function JobsIdFilter({pin}: Pick<React.ComponentProps<typeof Filter>, 'pin'>) {
             size="m"
             placeholder="Filter id..."
             onChange={handleChange}
-            value={value}
+            value={value ?? ''}
             pin={pin}
         />
     );
@@ -36,14 +36,14 @@ function JobsFilterBy() {
     const filterBy = useSelector(getFilterValue('filterBy'));
     const dispatch = useDispatch();
     const handleChange = useCallback((value: string) => {
-        dispatch(updateFilter('filterBy', value));
+        dispatch(updateListJobsFilter({name: 'filterBy', value}));
     }, []);
 
     return (
         <Fragment>
             <div className={block('toolbar-filter-by-select')}>
                 <Select
-                    value={[filterBy]}
+                    value={filterBy ? [filterBy] : []}
                     items={map_(['address', 'id'], (value) => {
                         return {value};
                     })}

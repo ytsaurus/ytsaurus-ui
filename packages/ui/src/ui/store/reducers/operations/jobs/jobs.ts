@@ -1,6 +1,7 @@
-import filter_ from 'lodash/filter';
 import map_ from 'lodash/map';
 import reduce_ from 'lodash/reduce';
+
+import {Action} from 'redux';
 
 import {LOADING_STATUS} from '../../../../constants/index';
 import {
@@ -10,20 +11,69 @@ import {
     GET_JOBS,
     HIDE_INPUT_PATHS,
     JOBS_PER_PAGE_LIMIT,
+    JOB_LIST_UPDATE_FILTER,
     RESET_COMPETITIVE_JOBS,
     SHOW_INPUT_PATHS,
-    UPDATE_FILTER,
     UPDATE_FILTER_COUNTERS,
     UPDATE_OFFSET,
 } from '../../../../constants/operations/jobs';
 import {GET_OPERATION} from '../../../../constants/operations/detail';
-import Job from '../../../../pages/operations/OperationDetail/tabs/Jobs/job-selector';
+import {Job} from '../../../../pages/operations/OperationDetail/tabs/Jobs/job-selector';
+import {ActionD, ValueOf, YTError} from '../../../../types';
+import {ClusterConfig, ListJobsItem, ListJobsResponse} from '../../../../../shared/yt-types';
+import {DetailedOperationSelector} from '../../../../pages/operations/selectors';
 
-export const initialState = {
+export type WithDefaultValue<T> = {
+    value: T;
+    defaultValue: T;
+};
+
+export type JobsState = {
+    loaded: boolean;
+    loading: boolean;
+    /**
+     * Do we really need it?
+     */
+    isLoading?: boolean;
+    error: boolean;
+    errorData?: YTError | unknown;
+    operationId?: string;
+    filters: {
+        filterBy: WithDefaultValue<string>;
+        jobId: WithDefaultValue<string>;
+        address: WithDefaultValue<string> & {data: Array<unknown>};
+        taskName: WithDefaultValue<string>;
+        state: WithDefaultValue<string>;
+        type: WithDefaultValue<string>;
+        withStderr: WithDefaultValue<boolean>;
+        withFailContext: WithDefaultValue<boolean>;
+        withSpec: WithDefaultValue<boolean>;
+        withCompetitors: WithDefaultValue<boolean>;
+        withMonitoringDescriptor: WithDefaultValue<boolean>;
+    };
+
+    inputPaths: {
+        status: ValueOf<typeof LOADING_STATUS>;
+        error?: YTError;
+        paths?: Array<unknown>;
+    };
+    pagination: {
+        firstPageReached: boolean;
+        lastPageReached: boolean;
+        limit: number;
+        offset: number;
+    };
+    jobs: Array<unknown>;
+    jobsErrors?: Array<unknown>;
+    job?: Job;
+    competitiveJobs: Array<unknown>;
+};
+
+export const initialState: JobsState = {
     loading: false,
     loaded: false,
     error: false,
-    errorData: {},
+    errorData: {} as any,
     filters: {
         filterBy: {
             value: 'id',
@@ -81,11 +131,16 @@ export const initialState = {
         offset: 0,
     },
     jobs: [],
-    job: null,
+    job: undefined,
     competitiveJobs: [],
 };
 
-function updateFilter(state, name, value, extra) {
+function updateFilter<K extends keyof JobsState['filters']>(
+    state: JobsState,
+    name: K,
+    value: JobsState['filters'][K]['value'],
+    extra?: Omit<JobsState['filters'][K], 'value' | 'defaultValue'>,
+) {
     const filters = state.filters;
     return {
         ...state,
@@ -96,24 +151,24 @@ function updateFilter(state, name, value, extra) {
     };
 }
 
-function addAllCounter(counters) {
+function aggregateAllValue(counters: Record<string, number>) {
     const totalCount = reduce_(counters, (total, count) => total + count, 0);
     return {...counters, all: totalCount};
 }
 
-function removeForeignAddresses(addresses, jobs) {
-    const ownAddresses = reduce_(
-        jobs,
-        (addresses, job) => {
-            addresses[job.address] = true;
-            return addresses;
-        },
-        {},
-    );
-    return filter_(addresses, (address) => ownAddresses[address]);
+function removeForeignAddresses(jobs: Array<{address: string}>) {
+    return jobs.map(({address}) => address);
 }
 
-function prepareJobs({jobs, operationId, clusterConfig}) {
+function prepareJobs({
+    jobs,
+    operationId,
+    clusterConfig,
+}: {
+    jobs: ListJobsResponse['jobs'];
+    operationId: string;
+    clusterConfig: ClusterConfig;
+}) {
     const prepared = jobs.slice(0, JOBS_PER_PAGE_LIMIT);
 
     // Backward compatibility for fail_context
@@ -124,7 +179,10 @@ function prepareJobs({jobs, operationId, clusterConfig}) {
     });
 }
 
-function getInitialStateFilterValue(currentState, operation) {
+function getInitialStateFilterValue<T>(
+    currentState: WithDefaultValue<T>,
+    operation: DetailedOperationSelector,
+) {
     if (currentState.value !== 'auto') {
         return currentState.value;
     } else if (operation.failedJobs) {
@@ -136,7 +194,7 @@ function getInitialStateFilterValue(currentState, operation) {
     }
 }
 
-export default (state = initialState, action) => {
+export default (state = initialState, action: JobsListAction): JobsState => {
     switch (action.type) {
         case GET_OPERATION.SUCCESS: {
             const {operation} = action.data;
@@ -150,7 +208,7 @@ export default (state = initialState, action) => {
                   );
         }
 
-        case UPDATE_FILTER: {
+        case JOB_LIST_UPDATE_FILTER: {
             const {name, value} = action.data;
             return updateFilter({...state, loaded: false}, name, value);
         }
@@ -161,9 +219,9 @@ export default (state = initialState, action) => {
             return {...state, loading: true};
 
         case GET_JOBS.SUCCESS: {
-            const {jobs, jobsErrors, addresses, operationId, clusterConfig} = action.data;
+            const {jobs, jobsErrors, operationId, clusterConfig} = action.data;
             const address = state.filters.address.value;
-            const ownAddresses = removeForeignAddresses(addresses, jobs);
+            const ownAddresses = removeForeignAddresses(jobs);
             const newState = updateFilter(state, 'address', address, {
                 data: ownAddresses,
             });
@@ -215,8 +273,8 @@ export default (state = initialState, action) => {
 
         case UPDATE_FILTER_COUNTERS: {
             let {stateCounters, typeCounters} = action.data;
-            stateCounters = addAllCounter(stateCounters);
-            typeCounters = addAllCounter(typeCounters);
+            stateCounters = aggregateAllValue(stateCounters);
+            typeCounters = aggregateAllValue(typeCounters);
             const filters = state.filters;
 
             const newState = updateFilter(state, 'state', filters.state.value, {
@@ -231,7 +289,6 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 pagination: {...state.pagination, offset: action.data},
-                wasLoaded: false,
                 isLoading: true,
             };
 
@@ -254,7 +311,7 @@ export default (state = initialState, action) => {
         case RESET_COMPETITIVE_JOBS:
             return {
                 ...state,
-                job: null,
+                job: undefined,
                 competitiveJobs: [],
             };
 
@@ -275,7 +332,7 @@ export default (state = initialState, action) => {
                 ...state,
                 inputPaths: {
                     status: LOADING_STATUS.ERROR,
-                    error: action.data,
+                    error: action.data.error,
                 },
             };
 
@@ -289,3 +346,55 @@ export default (state = initialState, action) => {
             return state;
     }
 };
+
+export type UpdateFilterData = {
+    [KEY in keyof JobsState['filters']]: {
+        name: KEY;
+        value: JobsState['filters'][KEY]['value'];
+    };
+}[keyof JobsState['filters']];
+
+export type JobsListAction =
+    | Action<
+          | typeof GET_JOB.REQUEST
+          | typeof GET_COMPETITIVE_JOBS.REQUEST
+          | typeof GET_JOBS.REQUEST
+          | typeof GET_JOB.CANCELLED
+          | typeof GET_COMPETITIVE_JOBS.CANCELLED
+          | typeof GET_JOBS.CANCELLED
+          | typeof RESET_COMPETITIVE_JOBS
+          | typeof SHOW_INPUT_PATHS.REQUEST
+          | typeof HIDE_INPUT_PATHS
+      >
+    | ActionD<
+          typeof GET_JOBS.SUCCESS,
+          {
+              jobs: ListJobsResponse['jobs'];
+              jobsErrors: JobsState['jobsErrors'];
+              operationId: string;
+              clusterConfig: ClusterConfig;
+          }
+      >
+    | ActionD<
+          typeof GET_JOB.SUCCESS,
+          {job: ListJobsItem; operationId: string; clusterConfig: ClusterConfig}
+      >
+    | ActionD<
+          typeof GET_COMPETITIVE_JOBS.SUCCESS,
+          {jobs: Array<ListJobsItem>; operationId: string; clusterConfig: ClusterConfig}
+      >
+    | ActionD<typeof GET_OPERATION.SUCCESS, {operation: DetailedOperationSelector}>
+    | ActionD<typeof JOB_LIST_UPDATE_FILTER, UpdateFilterData>
+    | ActionD<
+          typeof UPDATE_FILTER_COUNTERS,
+          {stateCounters: Record<string, number>; typeCounters: Record<string, number>}
+      >
+    | ActionD<typeof UPDATE_OFFSET, number>
+    | ActionD<
+          | typeof GET_JOB.FAILURE
+          | typeof GET_COMPETITIVE_JOBS.FAILURE
+          | typeof GET_JOBS.FAILURE
+          | typeof SHOW_INPUT_PATHS.FAILURE,
+          {error: YTError}
+      >
+    | ActionD<typeof SHOW_INPUT_PATHS.SUCCESS, Array<unknown>>;

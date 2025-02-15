@@ -1,38 +1,53 @@
+// @ts-expect-error
 import yt from '@ytsaurus/javascript-wrapper/lib/yt';
+import {ThunkAction} from 'redux-thunk';
 
-import ypath from '../../../common/thor/ypath';
 import {
+    EXTRA_JOBS_COUNT,
     GET_COMPETITIVE_JOBS,
     GET_JOB,
     GET_JOBS,
     HIDE_INPUT_PATHS,
+    JOB_LIST_UPDATE_FILTER,
     OPERATION_JOBS_TABLE_ID,
     RESET_COMPETITIVE_JOBS,
     SHOW_INPUT_PATHS,
-    UPDATE_FILTER,
     UPDATE_FILTER_COUNTERS,
     UPDATE_OFFSET,
 } from '../../../constants/operations/jobs';
 import {changeColumnSortOrder} from '../../../store/actions/tables';
-import {
-    getCompetitiveJobsRequestParameters,
-    getJobRequestParameters,
-    getJobsRequestParameters,
-} from '../../../store/actions/operations/utils';
 import {OPERATIONS_PAGE} from '../../../constants/operations/list';
 import {getCurrentClusterConfig} from '../../../store/selectors/global';
 import {TYPED_OUTPUT_FORMAT} from '../../../constants/index';
-import {USE_CACHE, USE_MAX_SIZE} from '../../../../shared/constants/yt-api';
 
 import {getShowCompetitiveJobs} from '../../../pages/operations/selectors';
 import CancelHelper, {isCancelled} from '../../../utils/cancel-helper';
 import {YTApiId, ytApiV3, ytApiV3Id} from '../../../rum/rum-wrap-api';
+import {RootState} from '../../../store/reducers';
+import {
+    JobsListAction,
+    JobsState,
+    UpdateFilterData,
+} from '../../../store/reducers/operations/jobs/jobs';
+import {OldSortState} from '../../../types';
+import {ListJobsParameters} from '../../../../shared/yt-types';
+import {KeysByType} from '../../../../@types/types';
+import {TablesSortOrderAction} from '../../../store/reducers/tables';
+import {getJobsOperationIncarnactionsFilter} from '../../../store/selectors/operations/jobs';
+import {fetchOperationIncarnationAvailableItems} from './jobs-operation-incarnations';
 
 const requests = new CancelHelper();
 
-const getOperation = (state) => state.operations.detail.operation;
+const getOperation = (state: RootState) => state.operations.detail.operation;
 
-export function getJob() {
+type JobsListThunkAction = ThunkAction<
+    void | Promise<void>,
+    RootState,
+    unknown,
+    JobsListAction | TablesSortOrderAction
+>;
+
+export function getJob(): JobsListThunkAction {
     return (dispatch, getState) => {
         const state = getState();
         const clusterConfig = getCurrentClusterConfig(state);
@@ -67,16 +82,24 @@ export function getJob() {
     };
 }
 
-export function getCompetitiveJobs() {
+function getJobRequestParameters(state: RootState) {
+    const {operation} = state.operations.detail;
+    const {filters} = state.operations.jobs;
+    return {
+        operation_id: operation.$value,
+        job_id: filters.jobId.value,
+    };
+}
+
+export function getCompetitiveJobs(): JobsListThunkAction {
     return (dispatch, getState) => {
         const state = getState();
         const clusterConfig = getCurrentClusterConfig(state);
 
-        requests.removeAllRequests();
         return ytApiV3
             .listJobs({
                 parameters: getCompetitiveJobsRequestParameters(state),
-                cancellation: requests.saveCancelToken,
+                cancellation: requests.removeAllAndSave,
             })
             .then(({jobs}) => {
                 dispatch({
@@ -101,12 +124,84 @@ export function getCompetitiveJobs() {
     };
 }
 
+function getJobsRequestParameters(state: RootState): ListJobsParameters {
+    const {operation} = state.operations.detail;
+    const {filters, pagination} = state.operations.jobs;
+    const sortState = state.tables[OPERATION_JOBS_TABLE_ID];
+
+    const incarnaction = getJobsOperationIncarnactionsFilter(state);
+
+    return {
+        operation_id: operation.$value,
+        /*
+        include_archive: true,
+        include_cypress: true,
+        include_runtime: true
+        */
+        // prepareSortQuery(),
+        ...getJobFilterParameters(filters, sortState),
+        ...preparePaginationQuery(pagination),
+        operation_incarnation: incarnaction || undefined,
+    };
+}
+
+// Operation Jobs
+
+function getJobFilterParameters(filters: JobsState['filters'], sortState: OldSortState) {
+    const filterBy = filters.filterBy.value || filters.filterBy.defaultValue;
+    return {
+        state: getValueIfNotDefault(filters, 'state'),
+        type: getValueIfNotDefault(filters, 'type'),
+        address: filterBy === 'address' ? getValueIfNotDefault(filters, 'address') : undefined,
+        with_stderr: getValueIfNotDefault(filters, 'withStderr'),
+        with_monitoring_descriptor: getValueIfNotDefault(filters, 'withMonitoringDescriptor'),
+        with_fail_context: getValueIfNotDefault(filters, 'withFailContext'),
+        with_spec: getValueIfNotDefault(filters, 'withSpec'),
+        with_competitors: getValueIfNotDefault(filters, 'withCompetitors'),
+        sort_field: sortState.field || 'none',
+        sort_order: sortState.asc ? ('ascending' as const) : ('descending' as const),
+        task_name: getValueIfNotDefault(filters, 'taskName'),
+    };
+}
+
+function getCompetitiveJobsRequestParameters(state: RootState) {
+    const {operation} = state.operations.detail;
+    const {job} = state.operations.jobs;
+    const sortState = state.tables[OPERATION_JOBS_TABLE_ID];
+    return {
+        operation_id: operation.$value,
+        job_competition_id: job?.attributes.job_competition_id,
+        sort_field: sortState.field || 'none',
+        sort_order: sortState.asc ? ('ascending' as const) : ('descending' as const),
+    };
+}
+
+function getValueIfNotDefault<K extends keyof JobsState['filters']>(
+    filters: JobsState['filters'],
+    name: K,
+): JobsState['filters'][K]['value'] | undefined {
+    const filter = filters[name];
+    return filter.value === filter.defaultValue ? undefined : filter.value;
+}
+
+function preparePaginationQuery({offset, limit}: {offset: number; limit: number}) {
+    return {
+        offset: Math.max(0, offset),
+        limit: limit + EXTRA_JOBS_COUNT,
+    };
+}
+
 const getJobsCanceler = new CancelHelper();
 
-export function getJobs() {
+export function getJobs(): JobsListThunkAction {
     return (dispatch, getState) => {
         const state = getState();
         const showCompetitiveJobs = getShowCompetitiveJobs(state);
+
+        const operation = getOperation(state);
+        dispatch(
+            fetchOperationIncarnationAvailableItems({id: operation.id, type: operation.type!}),
+        );
 
         if (showCompetitiveJobs) {
             return dispatch(getJob());
@@ -118,16 +213,8 @@ export function getJobs() {
 
         const requests = [
             {
-                command: 'list_jobs',
+                command: 'list_jobs' as const,
                 parameters: getJobsRequestParameters(state),
-            },
-            {
-                command: 'list',
-                parameters: {
-                    path: '//sys/cluster_nodes',
-                    ...USE_CACHE,
-                    ...USE_MAX_SIZE,
-                },
             },
         ];
 
@@ -138,7 +225,7 @@ export function getJobs() {
                 parameters: {requests},
                 cancellation: getJobsCanceler.removeAllAndSave,
             })
-            .then(([jobs, addresses]) => {
+            .then(([jobs]) => {
                 if (jobs.error) {
                     return Promise.reject(jobs.error);
                 }
@@ -150,8 +237,7 @@ export function getJobs() {
                     data: {
                         jobs: items,
                         jobsErrors: errors,
-                        addresses: ypath.getValue(addresses.output),
-                        operationId: getOperation(state).$value,
+                        operationId: operation.id,
                         clusterConfig,
                     },
                 });
@@ -163,6 +249,8 @@ export function getJobs() {
                         typeCounters: type_counts,
                     },
                 });
+
+                return undefined;
             })
             .catch((error) => {
                 if (!isCancelled(error)) {
@@ -175,11 +263,8 @@ export function getJobs() {
     };
 }
 
-export function setFilter(name, value) {
-    return {
-        type: UPDATE_FILTER,
-        data: {name, value},
-    };
+function setJobsListFilter(data: UpdateFilterData): JobsListAction {
+    return {type: JOB_LIST_UPDATE_FILTER, data};
 }
 
 export function resetCompetitiveJobs() {
@@ -188,18 +273,21 @@ export function resetCompetitiveJobs() {
     };
 }
 
-export function updateFilteredAttributes(attributeNames, filtered) {
+export function updateFilteredAttributes<
+    K extends KeysByType<JobsState['filters'], {value: boolean}>,
+>(filtersToUpdate: Array<K>, selected: Array<K>): JobsListThunkAction {
     return (dispatch) => {
-        attributeNames.forEach((name) => {
-            const isFiltered = filtered.indexOf(name) !== -1;
-            dispatch(setFilter(name, isFiltered));
+        filtersToUpdate.forEach((name) => {
+            const isFiltered = selected.indexOf(name) !== -1;
+            dispatch(setJobsListFilter({name, value: isFiltered}));
         });
         dispatch(gotoJobsPage(OPERATIONS_PAGE.FIRST));
     };
 }
 
-export function updateFilter(name, value) {
+export function updateListJobsFilter(data: UpdateFilterData): JobsListThunkAction {
     return (dispatch) => {
+        const {name, value} = data;
         const isStateFilter = name === 'state';
         const useFinishTime = value === 'completed' || value === 'failed' || value === 'aborted';
         const useStartTime = value === 'all' || value === 'running';
@@ -226,12 +314,12 @@ export function updateFilter(name, value) {
             dispatch(resetCompetitiveJobs());
         }
 
-        dispatch(setFilter(name, value));
+        dispatch(setJobsListFilter(data));
         dispatch(gotoJobsPage(OPERATIONS_PAGE.FIRST));
     };
 }
 
-export function showInputPaths(job) {
+export function showInputPaths(job: {id: string}): JobsListThunkAction {
     return (dispatch) => {
         const {id: jobId} = job;
 
@@ -254,7 +342,7 @@ export function showInputPaths(job) {
                 if (error.code !== yt.codes.CANCELLED) {
                     dispatch({
                         type: SHOW_INPUT_PATHS.FAILURE,
-                        data: error,
+                        data: {error},
                     });
                 }
             });
@@ -267,7 +355,7 @@ export function hideInputPaths() {
     };
 }
 
-export function gotoJobsPage(where) {
+export function gotoJobsPage(where: 'first' | 'next' | 'prev'): JobsListThunkAction {
     return (dispatch, getState) => {
         const {limit, offset} = getState().operations.jobs.pagination;
 

@@ -1,6 +1,6 @@
 import {connect} from 'react-redux';
 
-import {updateFilter} from '../../../../../../store/actions/operations/jobs';
+import {updateListJobsFilter} from '../../../../../../store/actions/operations/jobs';
 import {getActualValue} from '../../../../../../pages/operations/selectors';
 import OperationSelectFilter from '../../../../../../pages/operations/OperationSelectFilter/OperationSelectFilter';
 
@@ -19,4 +19,6 @@ function mapStateToProps({operations}, ownProps) {
     };
 }
 
-export default connect(mapStateToProps, {updateFilter})(OperationSelectFilter);
+export default connect(mapStateToProps, {
+    updateFilter: (name, value) => updateListJobsFilter({name, value}),
+})(OperationSelectFilter);
