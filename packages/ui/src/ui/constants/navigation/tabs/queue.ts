@@ -15,6 +15,7 @@ export enum QUEUE_MODE {
     METRICS = 'metrics',
     PARTITIONS = 'partitions',
     CONSUMERS = 'consumers',
+    EXPORTS = 'exports',
 }
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
