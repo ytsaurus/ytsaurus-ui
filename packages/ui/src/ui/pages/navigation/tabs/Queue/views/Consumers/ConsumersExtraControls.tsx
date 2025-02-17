@@ -17,7 +17,7 @@ import {
     getQueueOwner,
     getQueueRateMode,
     getQueueTimeWindow,
-} from '../../../../../../store/selectors/navigation/tabs/queue';
+} from '../../../../../../store/selectors/navigation/tabs/queue/queue';
 
 import './ConsumersExtraControls.scss';
 

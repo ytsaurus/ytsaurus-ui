@@ -6,7 +6,7 @@ import RadioButton from '../../../../../components/RadioButton/RadioButton';
 import {QUEUE_MODE} from '../../../../../constants/navigation/tabs/queue';
 import {changeQueueMode} from '../../../../../store/actions/navigation/tabs/queue/filters';
 import type {RootState} from '../../../../../store/reducers';
-import {getQueueMode} from '../../../../../store/selectors/navigation/tabs/queue';
+import {getQueueMode} from '../../../../../store/selectors/navigation/tabs/queue/queue';
 
 import './Toolbar.scss';
 
@@ -28,6 +28,10 @@ const tabItems: React.ComponentProps<typeof RadioButton>['items'] = [
     {
         value: QUEUE_MODE.CONSUMERS,
         text: 'Consumers',
+    },
+    {
+        value: QUEUE_MODE.EXPORTS,
+        text: 'Exports',
     },
 ];
 
