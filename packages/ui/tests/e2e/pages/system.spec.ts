@@ -5,14 +5,13 @@ test('System: check short name', async ({page}) => {
     const url = makeClusterUrl(`system/general`);
     await page.goto(url);
 
-    await page.waitForSelector('.system');
-    await page.evaluate(() => {
-        const allMastersContainer = document.querySelector('.system-master__all-masters');
-        if (!allMastersContainer) {
-            const button = document.querySelector<HTMLSpanElement>('.collapsible-section__title');
+    const masterContainer = await page.waitForSelector('.system-master');
+    await page.evaluate((container) => {
+        if (!container.classList.contains('system-master_open')) {
+            const button = container.querySelector<HTMLSpanElement>('.collapsible-section__title');
             if (button) button.click();
         }
-    });
+    }, masterContainer);
 
     const mastersNameElements = await page.$$('.master-group__host-name');
     const firstMasterName = await mastersNameElements[0].innerText();
