@@ -1,7 +1,10 @@
 import {createSelector} from 'reselect';
+import ypath from '../../../../common/thor/ypath';
 
-import type {RootState} from '../../../../store/reducers';
-import type {YtQueueStatus} from '../../../../store/reducers/navigation/tabs/queue/types';
+import type {RootState} from '../../../reducers';
+import type {YtQueueStatus} from '../../../reducers/navigation/tabs/queue/types';
+
+import {QueueExportConfig} from '../../../../types/navigation/queue/queue';
 
 const metaMock = {cell_id: '890', host: 'lbk-vla-249.search.yandex.net'};
 export const emptyRate = {'1m': 0, '1h': 0, '1d': 0};
@@ -109,3 +112,12 @@ export const getConsumers = createSelector(
 );
 
 export type SelectedConsumer = NonNullable<ReturnType<typeof getConsumers>>[0];
+
+export const getExportsConfigRequestInfo = (state: RootState) => ({
+    loading: state.navigation.tabs.queue.exports.loading,
+    loaded: state.navigation.tabs.queue.exports.loaded,
+    error: state.navigation.tabs.queue.exports.error,
+});
+
+export const getExportsConfig = (state: RootState): {[key: string]: QueueExportConfig<number>} =>
+    ypath.getValue(state.navigation.tabs.queue.exports.config, '/static_export_config');
