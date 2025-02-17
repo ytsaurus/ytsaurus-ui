@@ -1,6 +1,6 @@
 import {createSelector} from 'reselect';
 import type {RootState} from '../../../../store/reducers';
-import {emptyRate} from './queue';
+import {emptyRate} from './queue/queue';
 
 export const getConsumerPartitionIndex = (state: RootState) =>
     state.navigation.tabs.consumer.filters.consumerPartitionIndex;
