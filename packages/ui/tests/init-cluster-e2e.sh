@@ -140,6 +140,18 @@ createAndMountDynamicTable "$DYN_TABLE" "[{name=key;sort_order=ascending;type=st
 ) | yt insert-rows --format yson ${DYN_TABLE}
 yt freeze-table ${DYN_TABLE}
 
+QUEUE=${E2E_DIR}/queue
+createAndMountDynamicTable "$QUEUE" "[{name=key;type=string};{name=value;type=string};{name=empty;type=any}]"
+(
+    set +x
+    for ((i = 0; i < 300; i++)); do
+        echo "{key=key$i; value=value$i;};"
+    done
+    set -x
+) | yt insert-rows --format yson ${QUEUE}
+ 
+ yt set ${E2E_DIR}/queue/@static_export_config "{default={export_directory=\"home/$E2EDIR\";export_period=10000};extra={export_directory=\"home/$E2EDIR\";export_period=10000}}"
+
 STATIC_TABLE=${E2E_DIR}/static-table
 yt create --attributes "{schema=[{name=key;type=string};{name=value;type=string};{name=empty;type=any}]}" table ${STATIC_TABLE}
 (

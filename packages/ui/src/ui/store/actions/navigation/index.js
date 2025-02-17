@@ -36,6 +36,7 @@ import {loadTabletErrorsCount} from './tabs/tablet-errors/tablet-errors-backgrou
 import {isSupportedEffectiveExpiration} from '../../../store/selectors/thor/support';
 import {getTabs} from '../../../store/selectors/navigation/navigation';
 import UIFactory from '../../../UIFactory';
+import { fetchOriginatingQueuePath } from './tabs/queue/exports';
 
 export function updateView(settings = {}) {
     return (dispatch, getState) => {
@@ -145,6 +146,7 @@ export function updateView(settings = {}) {
                 };
 
                 dispatch(fetchTableMountConfig(path));
+                dispatch(fetchOriginatingQueuePath());
 
                 if (!account) {
                     /**
@@ -281,19 +283,19 @@ const attributesToLoad = [
     '_read_schema',
     '_restore_path',
     '_yql_key_meta',
+    '_yql_op_id',
     '_yql_row_spec',
     '_yql_subkey_meta',
     '_yql_type',
     '_yql_value_meta',
-    '_yql_op_id',
     'access_time',
     'account',
     'acl',
     'atomicity',
     'broken',
-    'cluster_name',
     'chunk_count',
     'chunk_row_count',
+    'cluster_name',
     'compressed_data_size',
     'compression_codec',
     'compression_ratio',
@@ -302,29 +304,31 @@ const attributesToLoad = [
     'default_disk_space',
     'disk_space',
     'dynamic',
+    'effective_expiration',
     'enable_dynamic_store_read',
+    'erasure_codec',
     'expiration_time',
     'expiration_timeout',
-    'effective_expiration',
-    'replicated_table_options',
-    'replica_path',
-    'erasure_codec',
     'id',
     'in_memory_mode',
     'key',
     'key_columns',
+    'leader_controller_address',
     'lock_count',
     'lock_mode',
     'locks',
+    'mode',
     'modification_time',
     'monitoring_cluster',
     'monitoring_project',
-    'mode',
     'optimize_for',
+    'queue_static_export_destination',
     'owner',
     'path',
     'pipeline_format_version',
     'primary_medium',
+    'replica_path',
+    'replicated_table_options',
     'replication_factor',
     'resource_usage',
     'schema',
@@ -338,12 +342,11 @@ const attributesToLoad = [
     'tablet_error_count',
     'tablet_state',
     'target_path',
-    'type',
-    'title',
     'timeout',
-    'uncompressed_data_size',
-    'leader_controller_address',
+    'title',
     'treat_as_queue_consumer',
+    'type',
+    'uncompressed_data_size',
 ];
 
 function getAttributesToLoad() {

@@ -4,6 +4,7 @@ import {
     CLEAR_TRANSACTION,
     SET_MODE,
     SET_TRANSACTION,
+    SET_ORIGINATING_QUEUE_PATH,
     Tab,
     UPDATE_PATH,
     UPDATE_VIEW,
@@ -29,6 +30,8 @@ const ephemeralState = {
     isWriteable: false,
     isAccountUsable: false,
     checkPermissionsError: undefined,
+    /** @type {string | undefined} */
+    originatingQueuePath: undefined,
 };
 
 export const initialState = {
@@ -46,6 +49,9 @@ const reducer = (state = initialState, action) => {
 
         case SET_TRANSACTION:
             return {...state, transaction: action.data};
+
+        case SET_ORIGINATING_QUEUE_PATH: 
+            return {...state, originatingQueuePath: action.data}
 
         case UPDATE_PATH: {
             const {path, shouldUpdateContentMode} = action.data;
@@ -82,6 +88,7 @@ const reducer = (state = initialState, action) => {
                 isWriteable,
                 isAccountUsable,
                 checkPermissionsError,
+                originatingQueuePath
             } = action.data;
             return {
                 ...state,
@@ -92,6 +99,7 @@ const reducer = (state = initialState, action) => {
                 isWriteable,
                 isAccountUsable,
                 checkPermissionsError,
+                originatingQueuePath,
             };
         }
 

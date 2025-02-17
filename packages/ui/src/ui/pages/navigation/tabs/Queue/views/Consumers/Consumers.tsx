@@ -21,7 +21,7 @@ import {
     getQueueTimeWindow,
     getStatusLoaded,
     getStatusLoading,
-} from '../../../../../../store/selectors/navigation/tabs/queue';
+} from '../../../../../../store/selectors/navigation/tabs/queue/queue';
 
 import './Consumers.scss';
 

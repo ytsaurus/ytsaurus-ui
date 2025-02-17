@@ -541,7 +541,7 @@ class CreateTableModalContentImpl extends React.Component<Props> {
             groupSuggestions,
         } = this.props;
         const name = `${parentDirectory}/new_table`;
-
+        console.log(primitiveTypes)
         return (
             <YTDFDialog<FIX_MY_TYPE>
                 virtualized
@@ -572,7 +572,7 @@ class CreateTableModalContentImpl extends React.Component<Props> {
                         uniqueKeys: this.uniqueKeys,
                         optimize_for: 'lookup',
                     },
-                    [COLUMNS]: [createNewColumn(1, primitiveTypes[0]?.value)],
+                    [COLUMNS]: [],
                 }}
                 fields={[
                     {
