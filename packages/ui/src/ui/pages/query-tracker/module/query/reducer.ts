@@ -77,6 +77,7 @@ export function reducer(state = initState, action: Actions): QueryState {
                 queryItem: action.data,
                 draft: {
                     ...state.draft,
+                    ...action.data,
                     error: action.data?.error,
                 },
             };
