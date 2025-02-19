@@ -58,7 +58,7 @@ import {getDefaultQueryACO} from '../../pages/query-tracker/module/query_aco/sel
 import {getQueryACO, setUserDefaultACO} from '../../pages/query-tracker/module/query_aco/actions';
 import {Item} from '../../components/Select/Select';
 import {useThunkDispatch} from '../../store/thunkDispatch';
-import {BooleanSettingItem} from '../../containers/SettingsMenu/BooleanSettingItem';
+import {BooleanSettingItem} from '../SettingsMenu/BooleanSettingItem';
 
 export interface SettingsPage {
     title: string;
@@ -72,6 +72,7 @@ export interface SettingsSection {
 }
 
 export interface SettingsItem {
+    id: string;
     title: string;
     align?: 'top' | 'center';
     content: React.ReactNode;
@@ -99,8 +100,9 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
 
     return compact_([
         makePage('General', generalIcon, [
-            makeItem('Start page', 'top', <StartPageSettingMemo />),
+            makeItem('startPage', 'Start page', 'top', <StartPageSettingMemo />),
             makeItem(
+                SettingName.GLOBAL.AUTO_REFRESH,
                 'Use auto refresh',
                 'top',
                 <SettingsMenuItem
@@ -111,6 +113,7 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
                 />,
             ),
             makeItem(
+                SettingName.MENU.RECENT_CLUSTER_FIRST,
                 'Use recent clusters',
                 'top',
                 <SettingsMenuItem
@@ -121,6 +124,7 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
                 />,
             ),
             makeItem(
+                SettingName.MENU.RECENT_PAGE_FIRST,
                 'Use recent pages',
                 'top',
                 <SettingsMenuItem
@@ -133,6 +137,7 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
         ]),
         makePage('Appearance', paletteIcon, [
             makeItem(
+                SettingName.GLOBAL.THEME,
                 'Theme',
                 'top',
                 <SettingsMenuRadio
@@ -146,6 +151,7 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
                 />,
             ),
             makeItem(
+                SettingName.A11Y.USE_SAFE_COLORS,
                 'Contrast',
                 'top',
                 <SettingsMenuRadio
@@ -165,6 +171,7 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
             compact_([
                 isAdmin &&
                     makeItem(
+                        SettingName.DEVELOPMENT.REGULAR_USER_UI,
                         "Show regular user's UI",
                         'top',
                         <SettingsMenuItem
@@ -178,6 +185,7 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
                         />,
                     ),
                 makeItem(
+                    SettingName.QUERY_TRACKER.STAGE,
                     'Query Tracker Stage',
                     'top',
                     <SettingsMenuInput
@@ -188,6 +196,7 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
                     />,
                 ),
                 makeItem(
+                    SettingName.QUERY_TRACKER.YQL_AGENT_STAGE,
                     'YQL agent stage',
                     'top',
                     <SettingsMenuInput
@@ -201,6 +210,7 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
 
         makePage('Data', dataIcon, [
             makeItem(
+                SettingName.YSON.FORMAT,
                 'Data format',
                 'top',
                 <SettingsMenuRadio
@@ -223,6 +233,7 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
                 />,
             ),
             makeItem(
+                SettingName.YSON.SHOW_DECODED,
                 'Decode data as UTF8',
                 'top',
                 <SettingsMenuItem
@@ -240,6 +251,7 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
                 />,
             ),
             makeItem(
+                SettingName.YSON.BINARY_AS_HEX,
                 'Binary as HEX',
                 'top',
                 <SettingsMenuItem
@@ -253,6 +265,7 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
                 />,
             ),
             makeItem(
+                SettingName.YSON.ESCAPE_WHITESPACES,
                 'Escape and highlight',
                 'top',
                 <SettingsMenuItem
@@ -272,6 +285,7 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
                 />,
             ),
             makeItem(
+                SettingName.YSON.COMPACT,
                 'Compact view',
                 'top',
                 <SettingsMenuItem
@@ -287,6 +301,7 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
         ]),
         makePage('System', systemIcon, [
             makeItem(
+                SettingName.SYSTEM.MASTERS_HOST_TYPE,
                 'Host type of Masters/Schedulers/Controller',
                 'top',
                 <SettingsMenuRadio
@@ -299,6 +314,7 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
         ]),
         makePage('Operation', operationsIcon, [
             makeItem(
+                SettingName.OPERATIONS.STATISTICS_AGGREGATION_TYPE,
                 "Statistic's type",
                 'top',
                 <SettingsMenuRadio
@@ -315,6 +331,7 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
             compact_([
                 clusterNS &&
                     makeItem(
+                        SettingName.LOCAL.NAVIGATION_DEFAULT_PATH,
                         'Default path',
                         'top',
                         <SettingsMenuInput
@@ -326,6 +343,7 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
                         />,
                     ),
                 makeItem(
+                    SettingName.NAVIGATION.DEFAULT_CHYT_ALIAS,
                     'Default chyt alias',
                     'top',
                     <SettingsMenuInput
@@ -337,6 +355,7 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
                     />,
                 ),
                 makeItem(
+                    SettingName.NAVIGATION.USE_SMART_SORT,
                     'Use smart sort',
                     'top',
                     <SettingsMenuItem
@@ -350,6 +369,7 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
                     />,
                 ),
                 makeItem(
+                    SettingName.NAVIGATION.GROUP_NODES,
                     'Group nodes by type',
                     'top',
                     <SettingsMenuItem
@@ -363,6 +383,7 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
                     />,
                 ),
                 makeItem(
+                    SettingName.NAVIGATION.USE_SMART_FILTER,
                     'Use smart filter',
                     'top',
                     <SettingsMenuItem
@@ -373,6 +394,7 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
                     />,
                 ),
                 makeItem(
+                    SettingName.NAVIGATION.ENABLE_PATH_AUTO_CORRECTION,
                     'Path autocorrection',
                     'top',
                     <SettingsMenuItem
@@ -396,6 +418,7 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
                 title: 'General',
                 items: [
                     makeItem(
+                        SettingName.COMPONENTS.ENABLE_SIDE_BAR,
                         'Enable side bar',
                         'top',
                         <SettingsMenuItem
@@ -411,6 +434,7 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
                 title: 'Memory popup',
                 items: [
                     makeItem(
+                        'global::components::memoryPopupShowAll',
                         'Show empty categories',
                         'top',
                         <BooleanSettingItem
@@ -428,6 +452,7 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
             tableIcon,
             compact_([
                 makeItem(
+                    SettingName.DEVELOPMENT.YQL_TYPES,
                     'YQL V3 types',
                     'top',
                     <SettingsMenuItem
@@ -438,6 +463,7 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
                     />,
                 ),
                 makeItem(
+                    SettingName.NAVIGATION.ROWS_PER_TABLE_PAGE,
                     'Rows per page',
                     'top',
                     <SettingsMenuRadio
@@ -467,6 +493,7 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
                     />,
                 ),
                 makeItem(
+                    SettingName.NAVIGATION.MAXIMUM_TABLE_STRING_SIZE,
                     'Cell size limit',
                     'top',
                     <SettingsMenuRadio
@@ -479,6 +506,7 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
                     />,
                 ),
                 makeItem(
+                    SettingName.NAVIGATION.DEFAULT_TABLE_COLUMN_LIMIT,
                     'Default column limit',
                     'top',
                     <SettingsMenuRadio
@@ -492,6 +520,7 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
                     />,
                 ),
                 makeItem(
+                    SettingName.NAVIGATION.ENABLE_TABLE_SIMILARITY,
                     'Guess visible columns',
                     'top',
                     <SettingsMenuItem
@@ -506,6 +535,7 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
                     />,
                 ),
                 makeItem(
+                    SettingName.NAVIGATION.TABLE_DISPLAY_RAW_STRINGS,
                     'Allow raw string-values',
                     'top',
                     <SettingsMenuItem
@@ -521,6 +551,7 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
         oauthTokenUrl &&
             makePage('Auth', shieldIcon, [
                 makeItem(
+                    'oauthToken',
                     'YT OAuth token',
                     undefined,
                     <Link url={oauthTokenUrl} target="_blank">
@@ -534,9 +565,14 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
                 'VCS',
                 LogoGitlabIcon,
                 compact_([
-                    makeItem('Add or replace token', undefined, <AddTokenForm />),
+                    makeItem('addTokenForm', 'Add or replace token', undefined, <AddTokenForm />),
                     Boolean(vcsConfig.some((i) => i.hasToken)) &&
-                        makeItem('Existing tokens', undefined, <VcsList config={vcsConfig} />),
+                        makeItem(
+                            'existingTokenList',
+                            'Existing tokens',
+                            undefined,
+                            <VcsList config={vcsConfig} />,
+                        ),
                 ]),
             ),
 
@@ -546,6 +582,7 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
             compact_([
                 cluster &&
                     makeItem(
+                        'defaultACO',
                         'Default ACO',
                         undefined,
                         <SettingsMenuSelect
@@ -565,6 +602,7 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
                         />,
                     ),
                 makeItem(
+                    'global::queryTracker::useNewGraphView',
                     'Use new graph progress',
                     'top',
                     <BooleanSettingItem
@@ -576,6 +614,7 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
                 ...(hasQuerySuggestions
                     ? [
                           makeItem(
+                              'global::queryTracker::suggestions',
                               'Query assistant',
                               'top',
                               <BooleanSettingItem
@@ -599,10 +638,18 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
             'About',
             infoIcon,
             compact_([
-                Boolean(cluster) && makeItem('HTTP proxy version', undefined, httpProxyVersion),
-                Boolean(cluster) && makeItem('Scheduler version', undefined, schedulerVersion),
-                Boolean(cluster) && makeItem('Master version', undefined, masterVersion),
-                makeItem('Interface version', undefined, YT.parameters.interface.version),
+                Boolean(cluster) &&
+                    makeItem('httpProxyVersion', 'HTTP proxy version', undefined, httpProxyVersion),
+                Boolean(cluster) &&
+                    makeItem('schedulerVersion', 'Scheduler version', undefined, schedulerVersion),
+                Boolean(cluster) &&
+                    makeItem('masterVersion', 'Master version', undefined, masterVersion),
+                makeItem(
+                    'interfaceVersion',
+                    'Interface version',
+                    undefined,
+                    YT.parameters.interface.version,
+                ),
             ]),
         ),
     ]);
@@ -625,11 +672,12 @@ export function makePageBySections(
 }
 
 export function makeItem(
+    id: string,
     title: string,
     align?: SettingsItem['align'],
     content?: React.ReactNode,
 ): SettingsItem {
-    return {title, align, content};
+    return {id, title, align, content};
 }
 
 export function useSettingsDescription(): Array<SettingsPage> {
@@ -652,7 +700,9 @@ export function useSettingsDescription(): Array<SettingsPage> {
                         const s = extSections[section.title];
                         if (s) {
                             delete extSections[section.title];
-                            section.items.push(...s.items);
+                            const extIdsMap = new Map(s.items.map((i) => [i.id, i]));
+                            const newItems = section.items.filter((i) => !extIdsMap.has(i.id));
+                            section.items = [...newItems, ...s.items];
                         }
                     });
                     forEach_(extSections, (section) => {
