@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.83.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.82.1...ui-v1.83.0) (2025-02-20)
+
+
+### Features
+
+* **Operations/Details:** display layer paths [YTFRONT-4618] ([43f783d](https://github.com/ytsaurus/ytsaurus-ui/commit/43f783dae33dee87174d6a799d2bd64c3b0326ba))
+* **Queries:** add full result link [YTFRONT-4674] ([c32a867](https://github.com/ytsaurus/ytsaurus-ui/commit/c32a867b7ba1b4bbc4b4f90ca9c932a0f62550cb))
+
+
+### Bug Fixes
+
+* now all area of query history item is clickable [[#1000](https://github.com/ytsaurus/ytsaurus-ui/issues/1000)] ([2ff5dec](https://github.com/ytsaurus/ytsaurus-ui/commit/2ff5dece061e8b585d7d2e4a2469254c22a5759a))
+* **OAuth:** replace Authorization header to access_token cookie [[#958](https://github.com/ytsaurus/ytsaurus-ui/issues/958)] ([2a3d604](https://github.com/ytsaurus/ytsaurus-ui/commit/2a3d604a59992d218851d790b668176b5cbe2408))
+
 ## [1.82.1](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.82.0...ui-v1.82.1) (2025-02-15)
 
 
