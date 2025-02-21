@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.83.1](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.83.0...ui-v1.83.1) (2025-02-21)
+
+
+### Bug Fixes
+
+* **Queries:** change result align [YTFRONT-4736] ([95cd793](https://github.com/ytsaurus/ytsaurus-ui/commit/95cd793f073f2dad716581e0878000affb6c6084))
+
 ## [1.83.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.82.1...ui-v1.83.0) (2025-02-20)
 
 
