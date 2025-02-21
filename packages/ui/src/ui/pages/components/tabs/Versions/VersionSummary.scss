@@ -1,4 +1,5 @@
 .versions-summary {
+
     .data-table__row {
         box-sizing: border-box;
         border-bottom: 1px solid var(--light-divider);
@@ -6,6 +7,7 @@
     }
 
     .data-table__head-row {
+        background-color: var(--g-color-base-background);
         border-bottom: 1px solid var(--dark-divider);
     }
 
@@ -14,9 +16,9 @@
         vertical-align: middle;
     }
 
-    .data-table__th {
-        max-width: 100px;
-        min-width: 100px;
+    &__table {
+        overflow-x: auto;
+        width: 100%;
     }
 
     &__value {
@@ -46,9 +48,21 @@
     }
 
     &__row {
+        background-color: var(--g-color-base-background);
         &_special {
             background-color: var(--light-background);
         }
+    }
+
+    &__component-select {
+        width: 400px;
+        &__all {
+            background-color: transparent;
+        }
+    }
+
+    &__filter-button {
+        width: 50%;
     }
 
     &__monitoring-link {

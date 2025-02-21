@@ -1,22 +1,23 @@
-import React from 'react';
+import React, { CSSProperties } from 'react';
 import {ConnectedProps, connect} from 'react-redux';
 import cn from 'bem-cn-lite';
+import _ from 'lodash';
 
-import {Checkbox} from '@gravity-ui/uikit';
+import {Button, Checkbox, Flex, Select} from '@gravity-ui/uikit';
 
 import {RootState} from '../../../../store/reducers';
 import DataTableYT from '../../../../components/DataTableYT/DataTableYT';
 import * as DT100 from '@gravity-ui/react-data-table';
+import DataTable from '@gravity-ui/react-data-table';
 import {
     getHideOfflineValue,
     getSummarySortState,
     getVersionsSummaryData,
-    getVersionsSummaryVisibleColumns,
+    getVersions,
 } from '../../../../store/selectors/components/versions/versions_v2-ts';
 
 import hammer from '../../../../common/hammer';
 
-import {ClickableText} from '../../../../components/ClickableText/ClickableText';
 import Icon from '../../../../components/Icon/Icon';
 import Link from '../../../../components/Link/Link';
 import ColumnHeader from '../../../../components/ColumnHeader/ColumnHeader';
@@ -30,12 +31,20 @@ import {getCluster} from '../../../../store/selectors/global';
 import {formatByParams} from '../../../../utils/format';
 import UIFactory from '../../../../UIFactory';
 
-import {VersionCellWithAction} from './VersionCell';
 import './VersionSummary.scss';
 
 const block = cn('versions-summary');
 
 type Props = ConnectedProps<typeof connector>;
+
+type State = Readonly<{
+    showAll: boolean,
+    currentVersions: string[],
+    sortOrder?: {
+        order?: DT100.OrderType,
+        columnId?: string,
+    }
+}>
 
 type RenderData = {row: VersionSummaryItem; index: number};
 
@@ -43,43 +52,39 @@ const SETTINGS: DT100.Settings = {
     displayIndices: false,
 };
 
+const DEFAULT_COMPONENTS = ['error', 'total'];
+const BASE_TYPES = ['online', 'offline', 'banned'];
+
 function isSpecialRow(version: string) {
     return version === 'error' || version === 'total';
 }
 
-class VersionsSummary extends React.Component<Props> {
+class VersionsSummary extends React.Component<Props, State> {
+    constructor(props: Props) {
+        super(props);
+        this.state = {
+            showAll: true,
+            currentVersions: [],
+        }
+    }
+
+    componentDidUpdate() {
+        if (!this.state.currentVersions.length && this.props.visibleColumns.length && this.state.showAll) {
+            this.setState((state) => ({...state, currentVersions: this.props.visibleColumns.map(col => col.name)}))
+        }
+    }
+
     getColumns(): Array<DT100.Column<VersionSummaryItem>> {
         return [];
     }
-    renderVersion = ({row: {version}}: RenderData) => {
-        const {changeVersionStateTypeFilters} = this.props;
-        let content;
-        if (version === 'error') {
-            content = (
-                <React.Fragment>
-                    <ClickableText
-                        color="primary"
-                        onClick={() => {
-                            changeVersionStateTypeFilters({state: 'error'});
-                        }}
-                    >
-                        <Icon awesome={'exclamation-triangle'} />{' '}
-                        {hammer.format['Readable'](version)}
-                    </ClickableText>
-                </React.Fragment>
-            );
-        } else if (version === 'total') {
-            content = hammer.format['Readable'](version);
-        } else {
-            content = (
-                <div className={block('version')}>
-                    <VersionCellWithAction version={version} />
-                </div>
-            );
-        }
+
+    renderVersion = (data: RenderData) => {
+        const type = data.row.type
+        let content = hammer.format['Readable'](type);
 
         return <span className={block('value')}>{content}</span>;
     };
+
     renderNumber = (key: keyof VersionSummaryItem, rowData: RenderData) => {
         const {row} = rowData;
         const value = row[key];
@@ -105,7 +110,7 @@ class VersionsSummary extends React.Component<Props> {
         name,
         shortName,
     }: {
-        type: keyof VersionSummaryItem;
+        type: any;
         name: string;
         shortName?: string;
     }): DT100.Column<VersionSummaryItem> {
@@ -122,16 +127,26 @@ class VersionsSummary extends React.Component<Props> {
     renderHeader(key: keyof VersionSummaryItem, name: string, shortName?: string) {
         const {sortState, setVersionsSummarySortState} = this.props;
         const {column, order} = sortState || {};
+
         return (
             <ColumnHeader<typeof key>
                 column={key}
                 title={name}
                 shortTitle={shortName || name}
                 onSort={(column, order) => {
-                    setVersionsSummarySortState({column, order});
+                    if (this.state.sortOrder && this.state.sortOrder.order === DataTable.DESCENDING) {
+                        // @ts-ignore
+                        this.setState((state) => ({...state, sortOrder: {}, currentVersions: this.state.currentVersions}));
+                        setVersionsSummarySortState({});
+                    }else if (order === 'asc') {
+                        this.setState((state) => ({...state, sortOrder: {columnId: column, order: DataTable.ASCENDING}}));
+                        setVersionsSummarySortState({column, order});
+                    } else if (order === 'desc') {
+                        this.setState((state) => ({...state, sortOrder: {columnId: column, order: DataTable.DESCENDING}}));
+                        setVersionsSummarySortState({column, order});
+                    }
                 }}
                 order={key === column ? order : ''}
-                withUndefined
             />
         );
     }
@@ -141,25 +156,115 @@ class VersionsSummary extends React.Component<Props> {
     };
 
     render() {
+        const {currentVersions, sortOrder} = this.state;
         const {visibleColumns} = this.props;
+
         const columns: Array<DT100.Column<VersionSummaryItem>> = [
             {
-                name: 'version',
+                name: 'type',
                 render: this.renderVersion,
                 sortable: false,
-                sortAccessor: (row) => row.version,
-                header: this.renderHeader('version', 'Versions'),
+                header: this.renderHeader('type', 'Components'),
+                customStyle: () =>
+                    ({
+                        position: 'sticky',
+                        left: 0,
+                        background: 'inherit',
+                        zIndex: 1,
+                        boxShadow: 'inset -1px 0 var(--dark-divider)',
+                        width: 'fit-content',
+                    }) as CSSProperties,
             },
-
-            ...visibleColumns.map((item) => this.makeColumnInfo(item)),
+            ...currentVersions.map(column => this.makeColumnInfo({type: column, name: column})),
         ];
 
         const {items, loading, loaded, cluster, checkedHideOffline} = this.props;
         const monitoringLink = UIFactory.getVersionMonitoringLink(cluster);
 
+        let newItems = items.filter(item => currentVersions.includes(Object.keys(item)[0]));
+        const resultItems = [];
+        const keys = new Set();
+        for (const item of newItems) {
+            resultItems.push(...Object.values(item))
+        }
+        for (const item of resultItems) {
+            //@ts-ignore
+            for (const key in item) {
+                keys.add(key)
+            }
+        }
+        const temp = Array.from(keys);
+        const res = {}
+        for (const type of temp) {
+            if (type === 'version') continue;
+            // @ts-ignore
+            res[type] = {};
+            for (const item of resultItems) {
+                // @ts-ignore
+                res[type][item['version']] = item[type];
+            }
+            // @ts-ignore
+            res[type]['type'] = type;
+        }
+
+        const options = (() => {
+            let res = [];
+            if (visibleColumns) {
+                for (let column of visibleColumns) {
+                    if (DEFAULT_COMPONENTS.includes(column.type)) continue;
+                    res.push({value: column.type, content: column.type});
+                }
+            }
+            return res;
+        })();
+        const handleShowAll = () => {
+            this.setState((state) => ({...state, showAll: true, currentVersions: visibleColumnsNames}));
+        }
+        const handleReset = () => {
+            this.setState((state) => ({...state, showAll: false, currentVersions: DEFAULT_COMPONENTS}));
+        }
+        const renderFilter = () => {
+            return (
+                <Flex direction='row'>
+                    <Button view='flat' className={block('filter-button')} onClick={handleShowAll}>Show all</Button>
+                    <Button view='flat' className={block('filter-button')} onClick={handleReset}>Reset</Button>
+                </Flex>
+            )
+        };
+        const visibleColumnsNames = visibleColumns.map(col => col.name);
+        const makeValue = (value: string[]) => {
+            return value.filter(item => !DEFAULT_COMPONENTS.includes(item)).concat(DEFAULT_COMPONENTS);
+        }
+        // @ts-ignore
+        const prepareData = (data) => {
+            let newData = []
+            if (!sortOrder && data && data.length) {
+                // @ts-ignore
+                newData = [...data].filter(item => !BASE_TYPES.includes(item.type)).toSorted((item1, item2) => item1.type.localeCompare(item2.type));
+
+                BASE_TYPES.forEach((t) => {
+                    // @ts-ignore
+                    const item = data.find(item => item.type === t);
+                    newData.push(item);
+                });
+            }
+            return newData;
+        };
         return (
             <div className={block()}>
                 <div className={block('header-actions')}>
+                    <Select
+                        className={block('component-select')}
+                        options={options}
+                        onUpdate={(value) => {
+                            this.setState((state) => ({...state, showAll: false, currentVersions: makeValue(value)}));
+                        }}
+                        filterable
+                        value={currentVersions.filter(version => !DEFAULT_COMPONENTS.includes(version))}
+                        renderFilter={renderFilter}
+                        placeholder='Versions'
+                        multiple
+                    />
                     {monitoringLink && (
                         <Link
                             url={formatByParams(monitoringLink.urlTemplate, {ytCluster: cluster})}
@@ -176,14 +281,20 @@ class VersionsSummary extends React.Component<Props> {
                         onUpdate={this.handleHideOffline}
                     />
                 </div>
+                {/*
+                //@ts-ignore */}
                 <DataTableYT
+                    className={block('table')}
                     loaded={loaded}
                     loading={loading}
-                    data={items}
+                    // @ts-ignore 
+                    data={sortOrder ? Object.values(res).reverse() : prepareData(Object.values(res))}
                     columns={columns}
                     theme={'versions'}
                     settings={SETTINGS}
                     rowClassName={this.rowClassName}
+                    // @ts-ignore
+                    sortOrder={sortOrder}
                 />
             </div>
         );
@@ -193,22 +304,24 @@ class VersionsSummary extends React.Component<Props> {
         return block('row', {special: isSpecialRow(row.version)});
     }
 
-    onClick = (key: keyof VersionSummaryItem, data: RenderData) => {
+    onClick = (key: keyof VersionSummaryItem, data: any) => {
         const {changeVersionStateTypeFilters} = this.props;
         const {
-            row: {version: rowVersion},
+            row,
         } = data;
-        const isSpecial = isSpecialRow(rowVersion);
-        const version = !isSpecial ? rowVersion : undefined;
+        const isSpecial = isSpecialRow(key);
 
-        const state = rowVersion === 'error' ? 'error' : undefined;
+        const version = !isSpecial ? key : undefined
+        const type: string | undefined = row.type;
 
-        if (key === 'online' || key === 'offline') {
-            changeVersionStateTypeFilters({version, state: state || key});
-        } else if (key === 'banned') {
+        const state = key === 'error' ? 'error' : undefined;
+
+        if (type === 'online' || type === 'offline') {
+            changeVersionStateTypeFilters({version, state: state || type});
+        } else if (type === 'banned') {
             changeVersionStateTypeFilters({version, banned: true});
         } else {
-            changeVersionStateTypeFilters({version, type: key, state});
+            changeVersionStateTypeFilters({version, type, state});
         }
     };
 }
@@ -217,10 +330,10 @@ const mapStateToProps = (state: RootState) => {
     const {loading, loaded} = state.components.versionsV2;
     const cluster = getCluster(state);
 
-    const items = getVersionsSummaryData(state);
     const sortState = getSummarySortState(state);
 
-    const visibleColumns = getVersionsSummaryVisibleColumns(state);
+    const visibleColumns = getVersions(state);
+    const items = getVersionsSummaryData(state);
 
     return {
         loading: loading as boolean,
