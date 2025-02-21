@@ -4,7 +4,7 @@ import {RootState} from '../../../../store/reducers';
 import {wrapApiPromiseByToaster} from '../../../../utils/utils';
 import {ThunkAction} from 'redux-thunk';
 import {Action, Dispatch} from 'redux';
-import {getQueryItem} from '../query/selectors';
+import {getCurrentQueryACO, getQueryAnnotations, getQueryItem} from '../query/selectors';
 import {
     Config,
     FieldKey,
@@ -23,24 +23,38 @@ import {
 } from './selectors';
 import {getPointValue} from '../../QueryResultsVisualization/preparers/getPointData';
 import {ChartKitWidgetAxisType} from '@gravity-ui/chartkit/build/types/widget-data/axis';
+import {selectIsMultipleAco} from '../query_aco/selectors';
 
 const DELAY = 2 * 1000;
 
 type AsyncAction = ThunkAction<void, RootState, undefined, Action>;
 
-type SaveQueryChartConfig = {
+type SaveQueryChartConfigPayload = {
     state: VisualizationState;
     queryId: string;
 };
 
-const saveChartConfig = (dispatch: Dispatch, chartConfig: SaveQueryChartConfig) => {
+const saveChartConfig = (
+    dispatch: Dispatch,
+    getState: () => RootState,
+    payload: SaveQueryChartConfigPayload,
+) => {
     dispatch(setSaved(false));
+    const state = getState();
+    const annotations = getQueryAnnotations(state);
+    const isMultipleAco = selectIsMultipleAco(state);
+    const aco = getCurrentQueryACO(state);
+
     wrapApiPromiseByToaster(
         ytApiV4Id.alterQuery(YTApiId.alterQuery, {
             parameters: {
-                query_id: chartConfig.queryId,
+                query_id: payload.queryId,
+                ...(isMultipleAco
+                    ? {access_control_objects: aco}
+                    : {access_control_object: aco[0]}),
                 annotations: {
-                    chartConfig: chartConfig.state,
+                    ...annotations,
+                    chartConfig: payload.state,
                 },
             },
         }),
@@ -57,9 +71,9 @@ const saveChartConfig = (dispatch: Dispatch, chartConfig: SaveQueryChartConfig) 
 const debouncedSaveQueryChartConfig = debounce_(saveChartConfig, DELAY);
 
 export const saveQueryChartConfig =
-    (payload: SaveQueryChartConfig): AsyncAction =>
-    (dispatch) => {
-        debouncedSaveQueryChartConfig(dispatch, payload);
+    (payload: SaveQueryChartConfigPayload): AsyncAction =>
+    (dispatch, getState) => {
+        debouncedSaveQueryChartConfig(dispatch, getState, payload);
     };
 
 export const changeAxisType =
