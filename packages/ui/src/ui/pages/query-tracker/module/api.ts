@@ -11,7 +11,11 @@ import {generateQuerySettings, generateQueryText} from '../utils/query_generate'
 import {RootState} from '../../../store/reducers';
 import {makeDirectDownloadPath} from '../../../utils/navigation';
 import {QueriesHistoryCursorDirection, UPDATE_QUERIES_LIST} from './query-tracker-contants';
-import {getEffectiveApiStage, getQueryTrackerRequestOptions} from './query/selectors';
+import {
+    getEffectiveApiStage,
+    getQueryAnnotations,
+    getQueryTrackerRequestOptions,
+} from './query/selectors';
 import {AnyAction} from 'redux';
 import {QueryEngine} from './engines';
 import {getLastSelectedACONamespaces, selectIsMultipleAco} from './query_aco/selectors';
@@ -618,6 +622,8 @@ export function updateACOQuery({
         const state = getState();
         const isMultipleAco = selectIsMultipleAco(state);
         const {stage} = getQueryTrackerRequestOptions(state);
+        const annotations = getQueryAnnotations(state);
+        const chartConfig = state.queryTracker.queryChart.visualization;
 
         return ytApiV4Id
             .alterQuery(YTApiId.alterQuery, {
@@ -627,6 +633,10 @@ export function updateACOQuery({
                     ...(isMultipleAco
                         ? {access_control_objects: aco}
                         : {access_control_object: aco[0]}),
+                    annotations: {
+                        ...annotations,
+                        chartConfig,
+                    },
                 },
                 setup: getQTApiSetup(),
             })
