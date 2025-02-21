@@ -614,24 +614,69 @@ export function updateACOQuery({
     aco: string[];
     query_id: string;
 }): ThunkAction<Promise<any>, RootState, any, AnyAction> {
+    return (dispatch) => {
+        return dispatch(
+            alterQuery({
+                query_id,
+                aco,
+            }),
+        ).then(() => {
+            return dispatch(addACOToLastSelected(aco));
+        });
+    };
+}
+
+export function alterQuery({
+    query_id,
+    annotations,
+    aco,
+}: {
+    query_id: string;
+    annotations?: any;
+    aco?: string[];
+}): ThunkAction<Promise<any>, RootState, any, AnyAction> {
     return async (dispatch, getState) => {
         const state = getState();
-        const isMultipleAco = selectIsMultipleAco(state);
         const {stage} = getQueryTrackerRequestOptions(state);
+        const isMultipleAco = selectIsMultipleAco(getState());
 
-        return ytApiV4Id
-            .alterQuery(YTApiId.alterQuery, {
-                parameters: {
-                    stage,
-                    query_id,
-                    ...(isMultipleAco
-                        ? {access_control_objects: aco}
-                        : {access_control_object: aco[0]}),
-                },
-                setup: getQTApiSetup(),
-            })
-            .then(() => {
-                return dispatch(addACOToLastSelected(aco));
-            });
+        const query = await dispatch(getQuery(query_id));
+
+        const parameters: {
+            stage?: string;
+            query_id?: string;
+            access_control_objects?: string[];
+            access_control_object?: string;
+            annotations?: object;
+        } = {
+            stage,
+            query_id,
+        };
+
+        if (aco) {
+            if (isMultipleAco) {
+                parameters.access_control_objects = aco;
+            } else {
+                parameters.access_control_object = aco[0];
+            }
+        } else {
+            if (isMultipleAco) {
+                parameters.access_control_objects = query.access_control_objects;
+            } else {
+                parameters.access_control_object = query.access_control_object;
+            }
+        }
+
+        if (annotations) {
+            parameters.annotations = {
+                ...query.annotations,
+                ...annotations,
+            };
+        }
+
+        return ytApiV4Id.alterQuery(YTApiId.alterQuery, {
+            parameters,
+            setup: getQTApiSetup(),
+        });
     };
 }

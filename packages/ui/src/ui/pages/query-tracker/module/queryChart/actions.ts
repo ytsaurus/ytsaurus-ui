@@ -1,4 +1,3 @@
-import {YTApiId, ytApiV4Id} from '../../../../rum/rum-wrap-api';
 import debounce_ from 'lodash/debounce';
 import {RootState} from '../../../../store/reducers';
 import {wrapApiPromiseByToaster} from '../../../../utils/utils';
@@ -23,6 +22,7 @@ import {
 } from './selectors';
 import {getPointValue} from '../../QueryResultsVisualization/preparers/getPointData';
 import {ChartKitWidgetAxisType} from '@gravity-ui/chartkit/build/types/widget-data/axis';
+import {alterQuery} from '../api';
 
 const DELAY = 2 * 1000;
 
@@ -35,15 +35,16 @@ type SaveQueryChartConfig = {
 
 const saveChartConfig = (dispatch: Dispatch, chartConfig: SaveQueryChartConfig) => {
     dispatch(setSaved(false));
+
     wrapApiPromiseByToaster(
-        ytApiV4Id.alterQuery(YTApiId.alterQuery, {
-            parameters: {
+        dispatch(
+            alterQuery({
                 query_id: chartConfig.queryId,
                 annotations: {
                     chartConfig: chartConfig.state,
                 },
-            },
-        }),
+            }),
+        ),
         {
             toasterName: 'saveQueryChartConfig',
             skipSuccessToast: true,
