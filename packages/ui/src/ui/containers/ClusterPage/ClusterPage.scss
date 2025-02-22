@@ -3,6 +3,7 @@
 .cluster-page {
     &__panes-wrapper {
         margin-top: var(--app-header-height);
+        padding-bottom: 28.5px;
         overflow: visible;
 
         & .flex-split__pane {
