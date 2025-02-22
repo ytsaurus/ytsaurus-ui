@@ -190,6 +190,6 @@ test('Navigation - escaped symbols are highlighted and cyrillic', async ({page})
         const breadcrumbLink = await page.waitForSelector(
             `[href="/${CLUSTER}/navigation?path=${E2E_DIR}/bad-names/%D0%9A%D0%BE%D0%BC%D0%BF%D0%BE%D0%BD%D0%B5%D0%BD%D1%82%D1%8B%20%D0%B4%D0%BB%D1%8F%20Paysup.json&navmode=content&filter="]`,
         );
-        expect(await breadcrumbLink.innerText()).toEqual('Компоненты для Paysup.json');
+        expect(await breadcrumbLink.innerText()).toEqual('broken');
     });
 });

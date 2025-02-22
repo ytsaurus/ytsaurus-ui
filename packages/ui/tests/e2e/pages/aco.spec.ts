@@ -42,5 +42,5 @@ test('@ACO: the permissions request button should be hidden', async ({page}) => 
     await acoPage.clickOnACLTab();
     await acoPage.waitForACLTableLoad();
 
-    await expect(page.getByText('Edit ACL')).toBeHidden();
+    await expect(page.getByText('broken')).toBeHidden();
 });

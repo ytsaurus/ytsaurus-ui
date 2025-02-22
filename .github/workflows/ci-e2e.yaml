@@ -104,7 +104,7 @@ jobs:
         if: failure()
         with:
           name: local_test-results
-          path: packages/ui/tests/test-results/
+          path: packages/ui/tests/playwright-report/
           retention-days: 7
 
   e2e-local-as-remote:
@@ -144,7 +144,7 @@ jobs:
         if: failure()
         with:
           name: remote_test-results
-          path: packages/ui/tests/test-results/
+          path: packages/ui/tests/playwright-report/
           retention-days: 7
 
   e2e-screenshots:
@@ -192,7 +192,7 @@ jobs:
         if: failure()
         with:
           name: screenshots_test-results
-          path: packages/ui/tests/test-results/
+          path: packages/ui/tests/playwright-report/
           retention-days: 7
 
   stop-vm:
