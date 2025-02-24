@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.83.1](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.83.0...ui-v1.83.1) (2025-02-24)
+
+
+### Bug Fixes
+
+* **Queries:** change result align [YTFRONT-4736] ([95cd793](https://github.com/ytsaurus/ytsaurus-ui/commit/95cd793f073f2dad716581e0878000affb6c6084))
+* **Queries:** now change of query ACO does not reset chart state and vice versa [[#1006](https://github.com/ytsaurus/ytsaurus-ui/issues/1006)] ([1a94c7f](https://github.com/ytsaurus/ytsaurus-ui/commit/1a94c7f8c7561d98bf01ebe3401fbb2c9a5ac94a))
+* **Queries:** the body of the query is not displayed in a new window [[#266](https://github.com/ytsaurus/ytsaurus-ui/issues/266)] ([c80f1ed](https://github.com/ytsaurus/ytsaurus-ui/commit/c80f1ed4881021ffadbff054905376a2abe50256))
+
 ## [1.83.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.82.1...ui-v1.83.0) (2025-02-20)
 
 
