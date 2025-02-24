@@ -1,6 +1,4 @@
-import React from 'react';
-
-import PropTypes from 'prop-types';
+import React, {ReactNode} from 'react';
 
 import cn from 'bem-cn-lite';
 
@@ -13,7 +11,92 @@ import './Timeline.scss';
 const b = cn('yc-timeline');
 const MAX_WIDTH_RATIO = 50;
 
-export const TimelineDefaultWrapper = ({picker, ruler}) => (
+export interface TimelineProps {
+    from: number;
+    to: number;
+    padding?: number;
+
+    /** Minimal bounds range in ms (defaults to 5 minutes) */
+    minRange?: number;
+    /** Maximal bounds range in ms  (defaults to 50 years) */
+    maxRange?: number;
+
+    refreshInterval?: string;
+    shortcut?: string;
+    onUpdate?: (timespan: {
+        from: number;
+        to: number;
+        shortcut?: string;
+        nowReset?: boolean;
+        shortcutValue?: string;
+    }) => void;
+    onRefreshUpdate?: (refreshInterval: string) => void;
+    shortcuts?: TimelineShortcut[][];
+    topShortcuts?: TimelineShortcut[];
+    refreshIntervals?: TimelineRefreshInterval[];
+
+    hasPicker?: boolean;
+    hasRuler?: boolean;
+    hasDatePicker?: boolean;
+    hasRulerNowButton?: boolean;
+    hasRulerZoomButtons?: boolean;
+    wrapper?: (props: TimelineWrapperProps) => ReactNode;
+    onBoundsUpdate?: (b: {leftBound: number; rightBound: number}) => void;
+
+    /** Additional svg height below the ruler */
+    belowSvgHeight?: number;
+    /** Additional svg content to render in the ruler */
+    belowSvg?: (p: TimelineBelowSvgProps) => ReactNode;
+
+    /**
+     * In [0; 1]. Determines fixed point of selected interval when zooming via +/- buttons.
+     *
+     * 0.5 means that the middle of interval will remain fixed,
+     *
+     * 0 means that `from` will not change, and
+     *
+     * 1 means that `to` will stay fixed
+     * default 0.5
+     */
+    zoomCoeffs?: {
+        in: number;
+        out: number;
+    };
+    zoomFixedPoint?: number;
+    zoomSticksToNow?: boolean;
+    /**
+     * Specifies how much can bounds be larger than selection.
+     * The constraint is `maxSelectionToBoundsRatio * (to - from) >= (rightBound - leftBound)`
+     * default 50
+     */
+    maxSelectionToBoundsRatio?: number;
+}
+
+export interface TimelineShortcut {
+    title?: string;
+    time: string;
+}
+export interface TimelineRefreshInterval {
+    title?: string;
+    value: string;
+}
+
+export interface TimelineWrapperProps {
+    ruler: React.ReactNode;
+    picker: React.ReactNode;
+    leftBound: number;
+    rightBound: number;
+}
+
+export interface TimelineBelowSvgProps {
+    leftBound: number;
+    rightBound: number;
+    width: number;
+    height: number;
+    totalHeight: number;
+}
+
+export const TimelineDefaultWrapper = ({picker, ruler}: {picker: ReactNode; ruler: ReactNode}) => (
     <div className={b()}>
         {picker}
         {ruler}
@@ -29,53 +112,20 @@ export const timelineDefaultProps = {
     maxSelectionToBoundsRatio: MAX_WIDTH_RATIO,
 };
 
-export class Timeline extends React.Component {
+export class Timeline extends React.Component<TimelineProps> {
     static calculateShortcutTime = calculateShortcutTime;
-
-    static propTypes = {
-        from: PropTypes.number.isRequired,
-        to: PropTypes.number.isRequired,
-        padding: PropTypes.number,
-
-        refreshInterval: PropTypes.string,
-        shortcut: PropTypes.string,
-        onUpdate: PropTypes.func,
-        onRefreshUpdate: PropTypes.func,
-        shortcuts: PropTypes.array,
-        topShortcuts: PropTypes.array,
-        refreshIntervals: PropTypes.array,
-
-        minRange: PropTypes.number,
-        maxRange: PropTypes.number,
-
-        hasPicker: PropTypes.bool,
-        hasRuler: PropTypes.bool,
-        hasDatePicker: PropTypes.bool,
-        hasRulerNowButton: PropTypes.bool,
-        hasRulerZoomButtons: PropTypes.bool,
-        wrapper: PropTypes.func,
-        onBoundsUpdate: PropTypes.func,
-        belowSvg: PropTypes.func,
-        belowSvgHeight: PropTypes.number,
-
-        zoomCoeffs: PropTypes.shape({
-            in: PropTypes.number,
-            out: PropTypes.number,
-        }),
-        zoomFixedPoint: PropTypes.number,
-        zoomSticksToNow: PropTypes.bool,
-        maxSelectionToBoundsRatio: PropTypes.number,
-    };
     static defaultProps = timelineDefaultProps;
-    state = {};
-    static getDerivedStateFromProps(props, state) {
+    static getDerivedStateFromProps(
+        props: TimelineProps,
+        state: {leftBound: number; rightBound: number},
+    ) {
         const {from, to, padding, maxSelectionToBoundsRatio} = props;
         let leftBound = Math.min(Number(state.leftBound) || from, from);
         let rightBound = Math.max(Number(state.rightBound) || to, to);
         const diff = to - from;
         const ratio = (rightBound - leftBound) / diff;
 
-        if (ratio > maxSelectionToBoundsRatio) {
+        if (maxSelectionToBoundsRatio && ratio > maxSelectionToBoundsRatio) {
             leftBound = from - ((from - leftBound) * maxSelectionToBoundsRatio) / ratio;
             rightBound = to + ((rightBound - to) * maxSelectionToBoundsRatio) / ratio;
         }
@@ -111,13 +161,22 @@ export class Timeline extends React.Component {
             rightBound,
         };
     }
-    setTime = (data) => {
+
+    state: {leftBound: number; rightBound: number} = {leftBound: 0, rightBound: 0};
+
+    setTime = (data: {
+        from: number;
+        to: number;
+        shortcut?: string;
+        nowReset?: boolean;
+        shortcutValue?: string;
+    }) => {
         const {leftBound, rightBound} = {...this.state, ...data};
         this.onBoundsUpdate({leftBound, rightBound});
         this.setState({leftBound, rightBound});
         this.onUpdate(data);
     };
-    onShortcut = (shortcut, shortcutName) => {
+    onShortcut = (shortcut: string, shortcutName: string) => {
         const {from, to} = calculateShortcutTime(shortcut);
         if (this.props.onUpdate && to !== from) {
             this.props.onUpdate({from, to, shortcut: shortcutName, shortcutValue: shortcut});
@@ -130,12 +189,18 @@ export class Timeline extends React.Component {
             this.props.onUpdate({from: now - to + from, to: now, nowReset: true});
         }
     };
-    onRefreshUpdate = (refreshInterval) => {
+    onRefreshUpdate = (refreshInterval: string) => {
         if (this.props.onRefreshUpdate) {
             this.props.onRefreshUpdate(refreshInterval);
         }
     };
-    onUpdate(data) {
+    onUpdate(data: {
+        from: number;
+        to: number;
+        shortcut?: string;
+        nowReset?: boolean;
+        shortcutValue?: string;
+    }) {
         const {from, to} = {...this.props, ...data};
         if (
             this.props.onUpdate &&
@@ -145,7 +210,7 @@ export class Timeline extends React.Component {
             this.props.onUpdate({from, to});
         }
     }
-    onBoundsUpdate(newBounds) {
+    onBoundsUpdate(newBounds: {leftBound: number; rightBound: number}) {
         if (this.props.onBoundsUpdate) {
             const {leftBound, rightBound} = this.state;
 
@@ -200,16 +265,7 @@ export class Timeline extends React.Component {
             return null;
         }
 
-        const {
-            from,
-            to,
-            shortcut,
-            shortcuts,
-            topShortcuts,
-            hasDatePicker,
-            refreshInterval,
-            refreshIntervals,
-        } = this.props;
+        const {from, to, shortcut, shortcuts, topShortcuts, hasDatePicker} = this.props;
 
         return (
             <TimelinePicker
@@ -218,12 +274,9 @@ export class Timeline extends React.Component {
                 to={to}
                 hasDatePicker={hasDatePicker}
                 shortcuts={shortcuts}
-                refreshInterval={refreshInterval}
                 shortcut={shortcut}
-                refreshIntervals={refreshIntervals}
                 topShortcuts={topShortcuts}
                 onUpdate={this.setTime}
-                onRefreshUpdate={this.onRefreshUpdate}
                 onShortcut={this.onShortcut}
             />
         );
@@ -231,7 +284,7 @@ export class Timeline extends React.Component {
     render() {
         const {leftBound, rightBound} = this.state;
 
-        return this.props.wrapper({
+        return this.props.wrapper!({
             picker: this.renderPicker(),
             ruler: this.renderRuler(),
             leftBound,
