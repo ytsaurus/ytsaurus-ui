@@ -17,18 +17,25 @@ test('Download manager: downloaded file should be equal to ideal', async ({page}
     await downloadButton.waitFor();
     await downloadButton.click();
 
-    const downloadButtonModal = page.locator('[data-qa="download-static-table"]');
+    const downloadButtonModal = page.getByTestId('download-static-table');
     await downloadButtonModal.waitFor();
+
+    const downloadPromise = page.waitForEvent('download');
     await downloadButtonModal.click();
 
-    page.on('download', async (download) => {
-        const destination = './downloads/' + download.suggestedFilename();
-        await download.saveAs(destination);
-    
-        const fileHash = getFileHash(destination);
-        const idealFileHash = getFileHash('./data/static-table/static-table');
-        expect(fileHash).toEqual(idealFileHash);
-    });
+    const download = await downloadPromise;
+
+    const toastTitle = page.locator('.g-toast__title');
+    await toastTitle.waitFor();
+    const text = await toastTitle.innerText();
+    expect(text).toBe('Success');
+
+    const destination = './downloads/' + download.suggestedFilename();
+    await download.saveAs(destination);
+
+    const fileHash = getFileHash(destination);
+    const idealFileHash = getFileHash('./data/static-table/static-table');
+    expect(fileHash).toEqual(idealFileHash);
 });
 
 function getFileHash(filePath: string) {
