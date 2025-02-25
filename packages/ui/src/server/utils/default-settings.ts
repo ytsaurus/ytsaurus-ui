@@ -22,6 +22,7 @@ const defaultUserSettings: Partial<DescribedSettings> = {
         [Page.SCHEDULING]: true,
         [Page.TABLET_CELL_BUNDLES]: true,
     },
+    'global::maxContentWidth': 'maximum',
     'global::navigationPanelExpand': undefined as boolean | undefined,
 
     'global::yson::format': 'json',
