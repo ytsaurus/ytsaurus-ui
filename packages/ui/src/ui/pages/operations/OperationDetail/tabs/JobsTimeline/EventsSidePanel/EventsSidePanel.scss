@@ -1,0 +1,16 @@
+.yt-events-side-panel {
+    width: 100%;
+    min-width: 200px;
+    padding: 20px;
+
+    &__meta {
+        margin-top: 20px;
+    }
+
+    &__separator {
+        height: 1px;
+        width: 100%;
+        margin: 20px 0;
+        background: var(--g-color-line-generic);
+    }
+}

@@ -1,0 +1,18 @@
+.yt-timeline-header {
+    display: grid;
+    grid-template-columns: 260px 1fr;
+    grid-gap: 0 20px;
+    padding: 10px 0;
+
+    &__range-selector {
+        width: 100%;
+    }
+}
+
+.yt-sticky-container__sticky .yt-timeline-header {
+    padding: 8px var(--section-main-padding-horizontal);
+
+    .cluster-page__panes-wrapper_with-pane & {
+        top: 0;
+    }
+}

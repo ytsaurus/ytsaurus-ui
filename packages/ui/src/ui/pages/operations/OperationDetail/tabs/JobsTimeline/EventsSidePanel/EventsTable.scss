@@ -1,0 +1,19 @@
+@import "../mixin/stateMixin";
+
+.yt-events-table {
+    &__row {
+        position: relative;
+
+        &:before {
+            position: absolute;
+            left: -12px;
+            top: -11px;
+            display: block;
+            content: '';
+            width: 4px;
+            height: 40px;
+        }
+
+        @include status-border;
+    }
+}

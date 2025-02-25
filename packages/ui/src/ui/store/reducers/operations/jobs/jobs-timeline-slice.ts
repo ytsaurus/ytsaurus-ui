@@ -21,6 +21,9 @@ export type TimelineJob = {
     allocationId?: string;
     groupName: string;
     events: JobEvent[];
+    start_time: string;
+    finish_time?: string;
+    address: string;
 };
 
 export type JobsTimelineState = {

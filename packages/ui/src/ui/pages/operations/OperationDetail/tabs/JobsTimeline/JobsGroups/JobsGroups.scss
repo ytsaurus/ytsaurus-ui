@@ -1,0 +1,8 @@
+.yt-timeline-event-group {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+
+    &__wrap {
+        margin-top: 10px;
+    }
+}

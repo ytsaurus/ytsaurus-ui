@@ -1,0 +1,18 @@
+.yt-timeline-group-collapse {
+    &__head {
+        padding: 4px 8px;
+        background: var(--g-color-base-neutral-light);
+        border-bottom: 1px solid var(--g-color-line-generic);
+        cursor: pointer;
+    }
+
+    &__content {
+        margin-top: 4px;
+    }
+
+    &__icon {
+        &_open {
+            transform: rotate(180deg);
+        }
+    }
+}
