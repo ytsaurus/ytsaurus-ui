@@ -28,6 +28,7 @@ import type {QueryItem} from '../pages/query-tracker/module/api';
 import type {Node} from '../utils/navigation/content/map-nodes/node';
 import type {PreloadErrorType} from '../constants';
 import type {RootState} from '../store/reducers';
+import {YTError} from '../types';
 
 type HeaderItemOrPage =
     | {
@@ -466,7 +467,7 @@ export interface UIFactory {
     renderCustomPreloaderError: (params: {
         cluster: string;
         errorType: PreloadErrorType;
-        error: Error;
+        error: Error | YTError;
     }) => React.ReactNode;
 }
 

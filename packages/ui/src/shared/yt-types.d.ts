@@ -4,6 +4,8 @@ import {RawJob} from '../ytsaurus-ui.ui/types/operations/job';
 import type {DescribedSettings, Stage} from './constants/settings-types';
 import type {UISettings} from './ui-settings';
 
+export type RawVersion = `${MajorMinorPatch}-${string}` | '';
+
 export interface YTConfig {
     clusters: Record<string, ClusterConfig>;
     cluster: string;
@@ -13,7 +15,8 @@ export interface YTConfig {
             version: string;
         };
         login: string;
-        version: string;
+        version: RawVersion;
+        authWay?: AuthWay;
     };
     environment?: 'development' | 'production' | 'farm' | 'localmode';
 }
