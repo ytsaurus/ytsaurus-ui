@@ -90,9 +90,9 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
     const dispatch = useThunkDispatch();
     const clusterNS = useSelector(getCurrentClusterNS);
 
-    const httpProxyVersion: string = useSelector(getHttpProxyVersion);
-    const schedulerVersion: string = useSelector(getGlobalSchedulerVersion);
-    const masterVersion: string = useSelector(getGlobalMasterVersion);
+    const httpProxyVersion = useSelector(getHttpProxyVersion);
+    const schedulerVersion = useSelector(getGlobalSchedulerVersion);
+    const masterVersion = useSelector(getGlobalMasterVersion);
     const vcsConfig = useSelector(selectVcsConfig);
     const isVcsVisible = useSelector(selectIsVcsVisible);
     const defaultUserACO = useSelector(getDefaultQueryACO);
