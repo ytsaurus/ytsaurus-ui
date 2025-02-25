@@ -13,6 +13,7 @@ export const Tab = {
     SPECIFICATION: 'specification',
     STATISTICS: 'statistics',
     JOBS: 'jobs',
+    JOBS_TIMELINE: 'jobs_timeline',
     JOBS_MONITOR: 'jobs_monitor',
     JOB_SIZES: 'job_sizes',
     PARTITION_SIZES: 'partition_sizes',
