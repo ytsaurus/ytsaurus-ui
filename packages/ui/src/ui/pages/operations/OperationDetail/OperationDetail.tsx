@@ -66,6 +66,7 @@ import UIFactory from '../../../UIFactory';
 import {RootState} from '../../../store/reducers';
 import {getCurrentCluster} from '../../../store/selectors/thor';
 import {UI_TAB_SIZE} from '../../../constants/global';
+import {JobsTimeline} from './tabs/JobsTimeline';
 
 const detailBlock = cn('operation-detail');
 
@@ -307,6 +308,7 @@ class OperationDetail extends React.Component<ReduxProps & RouteProps> {
                         path={`${path}/${Tab.JOBS}`}
                         render={() => <Jobs className={detailBlock('jobs')} />}
                     />
+                    <Route path={`${path}/${Tab.JOBS_TIMELINE}`} render={() => <JobsTimeline />} />
                     <Route
                         path={`${path}/${Tab.JOB_SIZES}`}
                         render={() => <JobSizes className={detailBlock('job-sizes')} />}
