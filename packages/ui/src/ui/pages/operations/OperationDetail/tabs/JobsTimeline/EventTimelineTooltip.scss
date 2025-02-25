@@ -1,0 +1,11 @@
+.yt-event-timeline-tooltip {
+    position: absolute;
+    height: 2px;
+    width: 2px;
+    z-index: 1;
+
+    &__anchor {
+        height: 2px;
+        width: 2px;
+    }
+}
