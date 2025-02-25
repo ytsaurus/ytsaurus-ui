@@ -32,6 +32,13 @@ export const resetInterval = (): AsyncAction => (dispatch, getState) => {
     dispatch(setInterval(interval));
 };
 
+type OperationJob = RawJob & {
+    id: string;
+    allocation_id?: string;
+    job_cookie: number;
+    task_name: string;
+};
+
 export const getJobsWithEvents =
     (firstRequest?: boolean): AsyncAction =>
     async (dispatch, getState) => {
@@ -47,7 +54,7 @@ export const getJobsWithEvents =
                 operation_id: operationId,
             });
 
-            const jobs = listResponse.jobs as (RawJob & {id: string})[];
+            const jobs = listResponse.jobs as OperationJob[];
             if (jobs.length > MAX_JOBS_COUNT) {
                 dispatch(setJobsCountError(true));
                 return;
@@ -63,12 +70,9 @@ export const getJobsWithEvents =
                 };
             });
 
-            const response = await ytApiV3Id.executeBatch<RawJob & {task_name?: string}>(
-                YTApiId.operationGetJobs,
-                {
-                    parameters: {requests},
-                },
-            );
+            const response = await ytApiV3Id.executeBatch<OperationJob>(YTApiId.operationGetJobs, {
+                parameters: {requests},
+            });
 
             const error = getBatchError(response, 'Get operation jobs error');
             if (error) {
@@ -80,12 +84,7 @@ export const getJobsWithEvents =
                     if (!job?.events || !job.events.length) return acc;
 
                     const jobEvents = job.events;
-
-                    const lastState = jobEvents.reduce<string | null>((acc, event) => {
-                        if (event.state) acc = event.state;
-                        return acc;
-                    }, null);
-                    const isRunning = lastState === 'running';
+                    const isRunning = job.state === 'running';
 
                     // stretch running job timeline
                     const maxTime = isRunning
@@ -100,6 +99,9 @@ export const getJobsWithEvents =
                         allocationId: job.allocation_id,
                         groupName: job.task_name || '',
                         events: [],
+                        start_time: job.start_time,
+                        finish_time: job.finish_time,
+                        address: job.address,
                     };
 
                     const eventsCount = jobEvents.length;

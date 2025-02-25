@@ -1,0 +1,19 @@
+@mixin status-border {
+    $states:
+        'waiting' var(--default-color),
+        'running' var(--info-color),
+        'running-prev' var(--purple-color),
+        'aborting' var(--g-color-base-misc-heavy),
+        'aborted' var(--g-color-base-misc-heavy),
+        'completed' var(--success-color),
+        'failed' var(--danger-color),
+        'lost' var(--warning-color);
+
+    @each $state, $color in $states {
+        &_state_#{$state} {
+            &:before {
+                background-color: #{$color};
+            }
+        }
+    }
+}
