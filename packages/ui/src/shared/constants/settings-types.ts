@@ -17,6 +17,7 @@ interface GlobalSettings {
     'global::autoRefresh': boolean;
     'global::fontType': string;
     'global::monacoVimMode': boolean;
+    'global::maxContentWidth': 'standard' | 'wide' | 'maximum';
     'global::pagesOrder': Array<string>;
     'global::pagesPinned': Record<string, boolean>;
     'global::navigationPanelExpand': boolean | undefined;
