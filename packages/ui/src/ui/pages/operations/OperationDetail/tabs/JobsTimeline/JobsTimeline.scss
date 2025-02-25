@@ -1,0 +1,11 @@
+.yt-jobs-timeline {
+    &__timeline-ruler {
+        margin-top: 20px;
+        padding: 0 0 0 278px;
+    }
+
+    &__jobs-list {
+        display: grid;
+        grid-template-columns: 278px 1fr;
+    }
+}

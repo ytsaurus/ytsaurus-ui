@@ -1,0 +1,13 @@
+.yt-events-table {
+    &__row {
+        position: relative;
+    }
+
+    &__border {
+        position: absolute;
+        left: -12px;
+        top: -11px;
+        width: 4px;
+        height: 40px;
+    }
+}
