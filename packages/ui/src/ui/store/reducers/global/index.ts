@@ -92,7 +92,11 @@ export type GlobalState = {
 
     allowedExperimentalPages?: undefined | Array<string>;
 
+<<<<<<< HEAD
     enableMaxContentWidth: boolean;
+=======
+    useMaxContentWidth: false;
+>>>>>>> 23889356 (chore(store/reducers/global): rewrite with typescript [YTFRONT-4149])
 
     ytAuthCluster?: string;
 
