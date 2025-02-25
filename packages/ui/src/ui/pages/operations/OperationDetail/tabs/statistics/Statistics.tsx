@@ -64,7 +64,7 @@ export class Statistics extends Component<Props> {
 
     // eslint-disable-next-line react/sort-comp
     get template() {
-        const {setTreeState, activeAggregation} = this.props;
+        const {setTreeState, activeAggregation = 'avg'} = this.props;
 
         return {
             metric(
