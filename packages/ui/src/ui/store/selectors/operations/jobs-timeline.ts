@@ -15,13 +15,7 @@ export const selectEventsInterval = (state: RootState) => {
     return isFinite(interval.from) ? interval : undefined;
 };
 
-export const selectJobsByFilter = createSelector([selectJobs, selectFilter], (jobs, filter) => {
-    return jobs.filter(({cookieId, id}) => {
-        return cookieId.toString().includes(filter) || id.includes(filter);
-    });
-});
-
-export const selectJobsInIntervalByGroup = createSelector([selectJobsByFilter], (jobs) => {
+export const selectJobsInIntervalByGroup = createSelector([selectJobs], (jobs) => {
     return jobs.reduce<Record<string, JobsTimelineState['jobs']>>((acc, job) => {
         if (job.groupName in acc) {
             acc[job.groupName].push(job);

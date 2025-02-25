@@ -1,0 +1,9 @@
+.yt-event-timeline-tooltip-content {
+    padding: 15px;
+    text-wrap: nowrap;
+
+    &__phases {
+        border-top: solid 1px var(--g-color-line-generic);
+        padding: 8px 0;
+    }
+}
