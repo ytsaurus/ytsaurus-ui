@@ -1,0 +1,21 @@
+@import "../mixin/stateMixin";
+
+.yt-event-timeline-tooltip-content-row {
+    &__title {
+        position: relative;
+        padding-left: 12px;
+        white-space: nowrap;
+
+        &:before {
+            position: absolute;
+            left: 0;
+            top: -2px;
+            display: block;
+            content: '';
+            height: calc(100% + 4px);
+            width: 4px;
+        }
+
+        @include status-border;
+    }
+}

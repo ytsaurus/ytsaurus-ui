@@ -70,6 +70,8 @@ import {RootState} from '../../../store/reducers';
 import {getCurrentCluster} from '../../../store/selectors/thor';
 import {UI_TAB_SIZE} from '../../../constants/global';
 import {OperationPool, OperationStates} from '../selectors';
+import {JobsTimeline} from './tabs/JobsTimeline';
+import {getSettingsTimelineTabVisible} from '../../../store/selectors/settings/settings-ts';
 
 const detailBlock = cn('operation-detail');
 
@@ -311,6 +313,7 @@ class OperationDetail extends React.Component<ReduxProps & RouteProps> {
             monitorTabVisible,
             monitorTabTitle,
             monitorTabUrlTemplate,
+            timelineTabVisible,
             operationPerformanceUrlTemplate,
         } = this.props;
         const path = `/${cluster}/${Page.OPERATIONS}/${operationId}`;
@@ -320,6 +323,7 @@ class OperationDetail extends React.Component<ReduxProps & RouteProps> {
             [Tab.STATISTICS]: {show: hasStatististicsTab},
             [Tab.JOBS_MONITOR]: {show: jobsMonitorVisible || activeTab === Tab.JOBS_MONITOR},
             [Tab.MONITOR]: {show: monitorTabVisible},
+            [Tab.JOBS_TIMELINE]: {show: timelineTabVisible},
             [Tab.PERFORMANCE]: {
                 show: Boolean(operationPerformanceUrlTemplate),
                 external: true,
@@ -361,8 +365,14 @@ class OperationDetail extends React.Component<ReduxProps & RouteProps> {
     }
 
     renderMain() {
-        const {match, cluster, monitorTabVisible, jobsMonitorIsSupported, monitoringComponent} =
-            this.props;
+        const {
+            match,
+            cluster,
+            monitorTabVisible,
+            jobsMonitorIsSupported,
+            monitoringComponent,
+            timelineTabVisible,
+        } = this.props;
         const {url, params} = match;
         const {operationId} = params;
 
@@ -389,6 +399,12 @@ class OperationDetail extends React.Component<ReduxProps & RouteProps> {
                         path={`${path}/${Tab.JOBS}`}
                         render={() => <Jobs className={detailBlock('jobs')} />}
                     />
+                    {timelineTabVisible && (
+                        <Route
+                            path={`${path}/${Tab.JOBS_TIMELINE}`}
+                            render={() => <JobsTimeline />}
+                        />
+                    )}
                     <Route
                         path={`${path}/${Tab.JOB_SIZES}`}
                         render={() => <JobSizes className={detailBlock('job-sizes')} />}
@@ -489,6 +505,9 @@ const mapStateToProps = (state: RootState) => {
 
     const monitorTabVisible = Boolean(monitoringComponent) || Boolean(monitorTabUrlTemplate);
 
+    const timelineTabVisible =
+        getSettingsTimelineTabVisible(state) && ypath.getValue(operation, '/@full_spec/is_gang');
+
     return {
         cluster: getCurrentCluster(state),
         operation,
@@ -505,6 +524,7 @@ const mapStateToProps = (state: RootState) => {
         monitorTabTitle,
         monitorTabUrlTemplate,
         monitoringComponent,
+        timelineTabVisible: getSettingsTimelineTabVisible(state),
         jobsMonitorIsSupported: Boolean(UIFactory.getMonitorComponentForJob()),
         jobsMonitorVisible: getJobsMonitorTabVisible(state),
         hasStatististicsTab: getOperationStatiscsHasData(state),

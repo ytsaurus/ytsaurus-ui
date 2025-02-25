@@ -1,0 +1,1 @@
+export {EventsSidePanel} from './EventsSidePanel';
