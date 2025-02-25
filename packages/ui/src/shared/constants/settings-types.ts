@@ -17,6 +17,9 @@ interface GlobalSettings {
     'global::autoRefresh': boolean;
     'global::fontType': string;
     'global::monacoVimMode': boolean;
+    'global::pagesOrder': Array<string>;
+    'global::pagesPinned': Record<string, boolean>;
+    'global::navigationPanelExpand': boolean | undefined;
 }
 
 interface YsonSettings {
@@ -31,6 +34,7 @@ interface DevelopmentSettings {
     'global::development::redirectToBeta': boolean;
     'global::development::redirectToBetaSwitched': boolean;
     'global::development::yqlTypes': boolean;
+    'global::development::regularUserUI': boolean;
 }
 
 interface MenuSettings {
@@ -49,9 +53,14 @@ interface NavigationSettings {
     'global::navigation::maximumTableStringSize': 1024 | 16384 | 32768 | 65536;
     'global::navigation::defaultTableColumnLimit': 10 | 50 | 100 | 200;
     'global::navigation::enableTableSimilarity': boolean;
-    'global::navigation::clusterPagePaneSizes': number;
+    'global::navigation::clusterPagePaneSizes': number | undefined;
     'global::navigation::defaultChytAlias': string;
     'global::navigation::sqlService': Array<'qtkit' | 'yqlkit'>;
+    'global::navigation::annotationVisibility': 'partial' | 'visible';
+
+    'global::navigation::queuePartitionsVisibility': Array<string>;
+    'global::navigation::queueConsumersVisibility': Array<string>;
+    'global::navigation::consumerPartitionsVisibility': Array<string>;
 }
 
 interface ComponentsSettings {
@@ -63,19 +72,58 @@ interface ComponentsSettings {
 
 interface SystemSettings {
     'global::system::mastersHostType': 'container' | 'host';
-    'global::system::nodesType': NodeType;
+    'global::system::mastersCollapsed': boolean | undefined;
+    'global::system::schedulersCollapsed': boolean | undefined;
+    'global::system::chunksCollapsed': boolean | undefined;
+    'global::system::httpProxiesCollapsed': boolean | undefined;
+    'global::system::rpcProxiesCollapsed': boolean | undefined;
+    'global::system::nodesCollapsed': boolean | undefined;
+    'global::system::nodesNodeType': Array<NodeType> | undefined;
 }
 
 interface A11YSettings {
     'global::a11y::useSafeColors': boolean;
 }
 
-interface OperationsSettings {
+type OperationsSettings = OperationPresetsSettings & {
     'global::operations::statisticsAggregationType': 'avg' | 'min' | 'max' | 'sum' | 'count';
-}
+    'global::operations::statisticsActiveJobTypes': Record<string, string>;
+};
+
+export type OperationPresetsSettings = {
+    [key in `global::operation::presets::${string}`]: OperationsListPreset;
+};
+
+export type OperationsListPreset = {
+    name: string;
+    filters: {
+        failedJobs: boolean;
+        permissions: Array<string>;
+        pool: string;
+        poolTree: string;
+        state: string;
+        subject: string;
+        text: string;
+        type: string;
+        user: string;
+    };
+};
 
 interface AccountsSettings {
-    'global::accounts::dashboardVisibilityMode': 'string';
+    'global::accounts::dashboardVisibilityMode': undefined | 'all' | 'usable' | 'favourites';
+    'global::accounts::accountsVisibilityMode': undefined | 'all' | 'usable' | 'favourites';
+    'global::accounts::expandStaticConfiguration': boolean;
+
+    'global::accounts::accountUsageViewType':
+        | 'list'
+        | 'tree'
+        | 'list-plus-folders'
+        | 'tree-diff'
+        | 'list-diff'
+        | 'list-plus-folders-diff';
+    'global::accounts::accountUsageColumnsTree': Array<string>;
+    'global::accounts::accountUsageColumnsList': Array<string>;
+    'global::accounts::accountUsageColumnsListFolders': Array<string>;
 }
 
 export type Stage = string;
@@ -99,9 +147,9 @@ type QueryTrackerUserDefaultACOSettings = {
     [key in `qt-stage::${Stage}::queryTracker::defaultACO`]: string;
 };
 
-interface OtherSettings {
-    [key: string]: any;
-}
+type SchedulingSettings = {
+    'globa::scheduling::expandStaticConfiguration': boolean;
+};
 
 export interface DefaultSettings {
     GLOBAL: GlobalSettings;
@@ -130,8 +178,7 @@ export type DescribedSettings = GlobalSettings &
     ChytSettings &
     QueryTrackerLastSelectedACOsSettings &
     QueryTrackerUserDefaultACOSettings &
-    ComponentsSettings;
-
-export type Settings = DescribedSettings & OtherSettings;
+    ComponentsSettings &
+    SchedulingSettings;
 
 export type SettingKey = keyof DescribedSettings;

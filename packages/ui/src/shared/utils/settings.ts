@@ -1,5 +1,3 @@
-import {Settings} from '../constants/settings-types';
-
 export const NS_SEPARATOR = '::';
 
 export function getPath<Name extends string, Value extends string>(
@@ -35,10 +33,4 @@ export interface SettingNS {
     value: string;
     name: string;
     parent?: {value: string};
-}
-
-export function getSettingValue(settings: Settings, name: string, namespace: SettingNS) {
-    const key = getPath(name, namespace);
-    const res = settings[key];
-    return res;
 }

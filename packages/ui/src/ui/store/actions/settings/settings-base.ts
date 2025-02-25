@@ -13,7 +13,7 @@ export type SettingsThunkAction<T = Promise<void>> = ThunkAction<
     T,
     RootState,
     unknown,
-    SettingsAction
+    SettingsAction<keyof DescribedSettings>
 >;
 
 function logError(action: string, name: string) {
