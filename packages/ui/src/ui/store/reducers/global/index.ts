@@ -1,8 +1,12 @@
+import {Action} from 'redux';
+
 import filter_ from 'lodash/filter';
 import sortBy_ from 'lodash/sortBy';
 
+// @ts-expect-error
 import {LOCATION_POP} from 'redux-location-state/lib/constants';
 
+import {YT} from '../../../config/yt-config';
 import {
     BAN_USER,
     BLOCK_USER,
@@ -11,8 +15,10 @@ import {
     INC_NAV_BLOCKER_COUNTER,
     INIT_CLUSTER_PARAMS,
     LOADING_STATUS,
+    LoadingStatus,
     MERGE_SCREEN,
     PRELOAD_ERROR,
+    PreloadErrorType,
     SPLIT_SCREEN,
     UPDATE_CLUSTER,
     UPDATE_TITLE,
@@ -22,9 +28,79 @@ import {EMPTY_OBJECT} from '../../../constants/empty';
 
 import {getClusterConfig} from '../../../utils';
 import {defaultClusterUiConfig} from './cluster-ui-config';
+import {ActionD, YTError} from '../../../types';
+import {AuthWay} from '../../../../shared/constants';
+import {ClusterConfig, ClusterUiConfig, CypressNode, RawVersion} from '../../../../shared/yt-types';
+import {MaintenanceEvent} from '../index.main';
 
-const YT = window.YT;
-const initialState = {
+export type PoolTree = {
+    [K in string]: PoolTree;
+};
+
+export type GlobalState = {
+    title: string;
+    page?: string;
+    path?: string;
+
+    cluster?: string;
+    rootPagesCluster: string;
+
+    activeNavigationBlockers: number;
+
+    splitScreen: {
+        isSplit: boolean;
+        paneClassNames: Array<string>;
+        type: string;
+    };
+
+    blocked: boolean; // user may become automatically temporarily banned
+    banned: boolean; // user may be banned by administrator
+
+    ongoingEvents: {cluster: string; events: Array<MaintenanceEvent>};
+
+    loadState: LoadingStatus;
+    error?: {error?: YTError; errorType?: PreloadErrorType};
+
+    version?: RawVersion;
+    masterVersion?: RawVersion;
+    schedulerVersion?: RawVersion;
+
+    login: string;
+    authWay: AuthWay;
+
+    // cluster-params
+    paramsCluster?: string;
+    paramsLoading: boolean;
+    paramsLoaded: boolean;
+    paramsError: YTError | undefined;
+
+    isDeveloper: boolean; // groups of current user
+    mediumList: Array<string>;
+    groups?: Array<CypressNode<{upravlyator_managed: boolean}, string>>;
+    users?: Array<CypressNode<{upravlyator_managed: boolean}, string>>;
+    bundles?: Array<string>;
+    accounts?: Array<string>;
+    defaultPoolTree?: string;
+    poolTrees?: PoolTree;
+    clusterUiConfig: Partial<ClusterUiConfig>;
+
+    showLoginDialog: boolean;
+
+    theme: 'dark' | 'light' | '';
+
+    asideHeaderWidth: number;
+
+    allowedExperimentalPages?: undefined | Array<string>;
+
+    useMaxContentWidth: false;
+
+    ytAuthCluster?: string;
+
+    _ym_debug?: string;
+    rumDebug?: string;
+};
+
+const initialState: GlobalState = {
     title: 'Clusters',
     cluster: YT.cluster,
     /**
@@ -41,7 +117,7 @@ const initialState = {
         paneClassNames: [],
         type: '',
     },
-    // scrollOffset: 0,
+
     blocked: false, // user may become automatically temporarily banned
     banned: false, // user may be banned by administrator
     ongoingEvents: {cluster: '', events: []},
@@ -50,15 +126,15 @@ const initialState = {
     error: EMPTY_OBJECT,
 
     version: YT.parameters.version,
-    schedulerVersion: null,
-    masterVersion: null,
+    schedulerVersion: undefined,
+    masterVersion: undefined,
     login: YT.parameters.login,
     authWay: YT.parameters.authWay,
 
     // cluster-params
     paramsLoading: false,
     paramsLoaded: false,
-    paramsError: null,
+    paramsError: undefined,
 
     isDeveloper: false, // groups of current user
     mediumList: [],
@@ -77,21 +153,31 @@ const initialState = {
     asideHeaderWidth: 56,
 
     allowedExperimentalPages: undefined,
+
+    useMaxContentWidth: false,
 };
 
-function updatedTitle(state, {cluster, page, path, clusters}) {
+function updatedTitle(
+    state: GlobalState,
+    {
+        cluster,
+        page,
+        path,
+        clusters,
+    }: Pick<GlobalState, 'cluster' | 'page' | 'path'> & {clusters: Record<string, ClusterConfig>},
+) {
     cluster = typeof cluster !== 'undefined' ? cluster : state.cluster;
     page = typeof page !== 'undefined' ? page : state.page;
     path = typeof path !== 'undefined' ? path : state.path;
 
-    const clusterConfig = getClusterConfig(clusters, cluster);
+    const clusterConfig = getClusterConfig(clusters, cluster ?? '');
     const clusterName = clusterConfig.name || cluster;
     const title = filter_([path, page, clusterName], Boolean).join(' - ');
 
     return {cluster, page, path, title};
 }
 
-export default (state = initialState, action) => {
+export default (state = initialState, action: GloablStateAction): GlobalState => {
     switch (action.type) {
         case UPDATE_TITLE:
             return {...state, ...updatedTitle(state, action.data)};
@@ -223,3 +309,38 @@ export default (state = initialState, action) => {
             return state;
     }
 };
+
+export type GloablStateAction =
+    | Action<
+          | typeof INC_NAV_BLOCKER_COUNTER
+          | typeof DEC_NAV_BLOCKER_COUNTER
+          | typeof INIT_CLUSTER_PARAMS.REQUEST
+          | typeof BLOCK_USER
+          | typeof BAN_USER
+          | typeof UPDATE_CLUSTER.REQUEST
+          | typeof UPDATE_CLUSTER.FINAL_SUCCESS
+          | typeof MERGE_SCREEN
+      >
+    | ActionD<typeof INIT_CLUSTER_PARAMS.FAILURE, GlobalState['paramsError']>
+    | ActionD<
+          typeof INIT_CLUSTER_PARAMS.SUCCESS,
+          Pick<
+              GlobalState,
+              | 'mediumList'
+              | 'schedulerVersion'
+              | 'masterVersion'
+              | 'accounts'
+              | 'isDeveloper'
+              | 'clusterUiConfig'
+              | 'cluster'
+          >
+      >
+    | ActionD<
+          typeof UPDATE_TITLE,
+          Pick<GlobalState, 'cluster' | 'page' | 'path'> & {clusters: Record<string, ClusterConfig>}
+      >
+    | ActionD<typeof UPDATE_CLUSTER.SUCCESS, Pick<GlobalState, 'version'>>
+    | ActionD<typeof UPDATE_CLUSTER.FAILURE, Required<GlobalState>['error']>
+    | ActionD<typeof SPLIT_SCREEN, GlobalState['splitScreen']>
+    | ActionD<typeof GLOBAL_SET_THEME, GlobalState['theme']>
+    | ActionD<typeof GLOBAL_PARTIAL, Partial<GlobalState>>;

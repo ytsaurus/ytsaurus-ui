@@ -32,6 +32,7 @@ import {getWindowStore} from '../../../store/window-store';
 import {reloadUserSettings} from '../settings';
 import {YT} from '../../../config/yt-config';
 import {getConfigData} from '../../../config/ui-settings';
+import {GloablStateAction} from '../../../store/reducers/global';
 
 export function setTheme(theme: 'light' | 'dark' | 'system' | 'light-hc' | 'dark-hc') {
     return {type: GLOBAL_SET_THEME, data: theme};
@@ -39,7 +40,7 @@ export function setTheme(theme: 'light' | 'dark' | 'system' | 'light-hc' | 'dark
 
 let usersInProgress = false;
 
-export type YTThunkAction<T = unknown> = ThunkAction<T, RootState, any, any>;
+export type YTThunkAction<T = unknown> = ThunkAction<T, RootState, any, GloablStateAction>;
 
 export function setAsideHeaderWidth(asideHeaderWidth: number): YTThunkAction {
     return (dispatch, getState) => {

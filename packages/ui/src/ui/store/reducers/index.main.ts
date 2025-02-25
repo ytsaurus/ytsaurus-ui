@@ -31,7 +31,6 @@ import tabletCellBundleEditor from './tablet_cell_bundles/tablet-cell-bundle-edi
 import chaos_cell_bundles from './chaos_cell_bundles';
 import chaosCellBundleEditor from './chaos_cell_bundles/tablet-cell-bundle-editor';
 import {manageTokens} from './manage-tokens';
-import {ClusterUiConfig} from '../../../shared/yt-types';
 import executeBatch from '../../store/reducers/execute-batch';
 import UIFactory, {UIFactoryClusterPageInfo} from '../../UIFactory';
 import {registerExtraPage} from '../../pages';
@@ -41,7 +40,6 @@ import {queryTracker} from '../../pages/query-tracker/module';
 import {odinPageInfo, odinRootPageInfo} from '../../pages/odin/lazy';
 import {hasOdinPage} from '../../config';
 import {chyt} from './chyt';
-import {RawVersion} from '../../store/selectors/thor/support';
 import {getMainLocations} from '../../store/location.main';
 import {flow} from '../../store/reducers/flow';
 import {rootApi} from '../../store/api';
@@ -88,25 +86,7 @@ const appReducers = {
     [rootApi.reducerPath]: rootApi.reducer,
 };
 
-export type RootState = Omit<ReturnType<ReturnType<typeof makeRootReducer>>, 'global'> & {
-    global: {
-        [key: string]: any;
-
-        version: RawVersion;
-        schedulerVersion: RawVersion;
-        masterVersion: RawVersion;
-
-        clusterUiConfig: ClusterUiConfig;
-        cluster?: string;
-        rootPagesCluster?: string;
-        asideHeaderWidth: number;
-        allowedExperimentalPages?: Array<string>;
-        ytAuthCluster?: string;
-        defaultPoolTree?: string;
-
-        ongoingEvents?: {cluster?: string; events?: Array<MaintenanceEvent>};
-    };
-};
+export type RootState = ReturnType<ReturnType<typeof makeRootReducer>>;
 
 export type MaintenanceEvent = {
     type: string;
