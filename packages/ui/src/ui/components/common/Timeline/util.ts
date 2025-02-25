@@ -2,7 +2,6 @@
 import moment, {MomentInput, unitOfTime} from 'moment';
 
 /** @deprecated */
-export const getNow = () => Number(new Date());
 
 export const minute = 60 * 1000;
 export const hour = minute * 60;
@@ -64,30 +63,13 @@ export const formatTime = (date: MomentInput) => {
     return moment(date).format('HH:mm');
 };
 
-export const formatDateCompact = (date: MomentInput) => {
-    return moment(date).format('DD.MM.YY, HH:mm');
-};
-
 export const formatTimeCanonical = (ts: MomentInput) => {
     return moment(ts).format('YYYY-MM-DD HH:mm');
-};
-
-export const formatTimeISO = (ts: MomentInput) => {
-    return moment(ts).toISOString();
-};
-
-export const getUTCFromLocal = (ts: MomentInput) => {
-    const time = moment(ts);
-    time.add(-time.utcOffset(), 'm');
-    return time.valueOf();
 };
 
 export const getTimestampFromDate = (date: MomentInput) => {
     return moment(date).valueOf();
 };
-
-// const minimalFromToDiff = 60000;
-const nowRe = /^now(?:([+-]\d+)([a-zA-Z]))?(?:\/([a-zA-Z]))?$/;
 
 const rangeMap: Record<string, 'M' | undefined> = {
     mo: 'M',
@@ -114,26 +96,6 @@ export const calculateShortcutTime = (shortcut: string) => {
     const from = Date.now();
     const to = calculateBackTimestamp(shortcut, from);
     return from < to ? {from, to} : {from: to, to: from};
-};
-
-export const calculateTimestamp = (ts: string | number) => {
-    if (!isNaN(ts as number)) {
-        return Number(ts);
-    }
-    const match = nowRe.exec(ts as string);
-    if (match) {
-        const [, amount, range, roundRange] = match; // eslint-disable-line no-unused-vars
-        const time = moment();
-        if (amount) {
-            time.add(amount, range as unitOfTime.DurationConstructor);
-        }
-        if (roundRange) {
-            time.startOf(roundRange as unitOfTime.StartOf);
-        }
-        return time.valueOf();
-    } else {
-        return null;
-    }
 };
 
 export function convertTimeToRequestParams(time: {
