@@ -316,10 +316,7 @@ const attributesToLoad = [
     'path',
     'pipeline_format_version',
     'primary_medium',
-<<<<<<< HEAD
     'queue_static_export_destination',
-=======
->>>>>>> e9472370 (chore: rewrite annotation side effects in rtk query)
     'remount_needed_tablet_count',
     'replica_path',
     'replicated_table_options',
