@@ -6,10 +6,11 @@ import {SET_SETTING_VALUE, UNSET_SETTING_VALUE, UPDATE_SETTING_DATA} from '../..
 import {getSettingsDataFromInitialConfig} from '../../config';
 import {YT} from '../../config/yt-config';
 import {ActionD} from '../../types';
+import {DescribedSettings} from '../../../shared/constants/settings-types';
 
 export interface SettingsState {
     provider: SettingsProvider;
-    data: Record<string, unknown>;
+    data: Partial<DescribedSettings>;
 }
 
 const initialState: SettingsState = getInitialState();
@@ -36,19 +37,29 @@ function getInitialState() {
     };
 }
 
-function updatedSettingValue<T>(state: SettingsState, path: string, value: T) {
+function updatedSettingValue<K extends keyof DescribedSettings>(
+    state: SettingsState,
+    path: K,
+    value: DescribedSettings[K],
+) {
     const {data, ...rest} = state;
     return {data: {...data, [path]: value}, ...rest};
 }
 
-function removedSetting(state: SettingsState, path: string) {
+function removedSetting<K extends keyof DescribedSettings>(
+    state: SettingsState,
+    path: K,
+): SettingsState {
     const {data, ...rest} = state;
     const {[path]: _value, ...restData} = data; // eslint-disable-line no-unused-vars
 
     return {...rest, data: restData};
 }
 
-export default (state = initialState, action: SettingsAction) => {
+function reducer<K extends keyof DescribedSettings>(
+    state = initialState,
+    action: SettingsAction<K>,
+): SettingsState {
     switch (action.type) {
         case SET_SETTING_VALUE:
             return updatedSettingValue(state, action.data.path, action.data.value);
@@ -62,9 +73,11 @@ export default (state = initialState, action: SettingsAction) => {
         default:
             return state;
     }
-};
+}
 
-export type SettingsAction =
-    | ActionD<typeof SET_SETTING_VALUE, {path: string; value: any}>
-    | ActionD<typeof UNSET_SETTING_VALUE, {path: string}>
-    | ActionD<typeof UPDATE_SETTING_DATA, object>;
+export type SettingsAction<K extends keyof DescribedSettings> =
+    | ActionD<typeof SET_SETTING_VALUE, {path: K; value: DescribedSettings[K]}>
+    | ActionD<typeof UNSET_SETTING_VALUE, {path: K}>
+    | ActionD<typeof UPDATE_SETTING_DATA, Partial<DescribedSettings>>;
+
+export default reducer;

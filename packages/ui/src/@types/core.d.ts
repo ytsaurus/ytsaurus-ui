@@ -7,7 +7,7 @@ import type {NodeKit} from '@gravity-ui/nodekit';
 import {ClusterConfig} from '../shared/yt-types';
 
 import {UISettings} from '../../shared/ui-settings';
-import {Settings} from '../shared/constants/settings-types';
+import {DescribedSettings} from '../shared/constants/settings-types';
 
 export interface YTCoreConfig {
     /**
@@ -124,7 +124,7 @@ export interface YTCoreConfig {
     /**
      * Allows to override defaultUserSettings
      */
-    defaultUserSettingsOverrides?: Partial<Settings>;
+    defaultUserSettingsOverrides?: Partial<DescribedSettings>;
 
     /**
      * The field is applicabale only for local-clusters, do not use it for clusters from clusters-config.json.

@@ -8,16 +8,12 @@ import {
 } from '../../../../constants/operations/statistics';
 import {GET_OPERATION} from '../../../../constants/operations/detail';
 
-import {NAMESPACES, SettingName} from '../../../../../shared/constants/settings';
-import {getPath} from '../../../../../shared/utils/settings';
 import {getSettingsDataFromInitialConfig} from '../../../../config';
 import type {ActionD, ValueOf} from '../../../../types';
 
 const settings = getSettingsDataFromInitialConfig().data;
-const {STATISTICS_AGGREGATION_TYPE} = SettingName.OPERATIONS;
-const {OPERATIONS} = NAMESPACES;
 
-const activeAggregation = settings[getPath(STATISTICS_AGGREGATION_TYPE, OPERATIONS)];
+const activeAggregation = settings['global::operations::statisticsAggregationType'];
 
 export interface OperationStatistics {
     filterText: string;
