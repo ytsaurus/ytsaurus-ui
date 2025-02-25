@@ -19,7 +19,6 @@ import {flags} from '../../../utils';
 
 import type {RootState} from '../../../store/reducers';
 import {getConfigData, userSettingsCluster} from '../../../config/ui-settings';
-import type {AuthWay} from '../../../../shared/constants';
 
 export * from './cluster';
 export * from './username';
@@ -27,14 +26,14 @@ export * from './username';
 import {getCluster} from './cluster';
 import {isDeveloper} from './is-developer';
 
-export const getGlobalError = (state: RootState) => state.global.error.error;
-export const getGlobalErrorType = (state: RootState) => state.global.error.errorType;
+export const getGlobalError = (state: RootState) => state.global.error?.error;
+export const getGlobalErrorType = (state: RootState) => state.global.error?.errorType;
 
 export const getRootPagesCluster = (state: RootState) => state?.global.rootPagesCluster;
 
 export const getGlobalLoadState = (state: RootState) => state.global.loadState;
 
-export const getTheme = (state: RootState): '' | 'dark' | 'light' => state.global.theme;
+export const getTheme = (state: RootState) => state.global.theme;
 
 export function isAllowYtTwmApi() {
     return !getConfigData().ytApiUseCORS;
@@ -45,7 +44,7 @@ export const getAllAccounts = (state: RootState) => state.global.accounts;
 export const getBundles = (state: RootState) => state?.global.bundles;
 export const getGlobalUsers = (state: RootState) => state.global.users;
 export const getGlobalGroups = (state: RootState) => state.global.groups;
-export const getAuthWay = (state: RootState): AuthWay => state?.global?.authWay;
+export const getAuthWay = (state: RootState) => state?.global?.authWay;
 
 export const getAllUserNames = createSelector([getGlobalUsers], (usersData) => {
     return map_(usersData, ({$value}) => $value as string);
