@@ -16,6 +16,7 @@ interface GlobalSettings {
     'global::theme': 'system' | 'light' | 'dark' | 'light-hc' | 'dark-hc';
     'global::autoRefresh': boolean;
     'global::fontType': string;
+    'global::maxContentWidth': 'standard' | 'wide' | 'maximum';
     'global::pagesOrder': Array<string>;
     'global::pagesPinned': Record<string, boolean>;
     'global::navigationPanelExpand': boolean | undefined;
