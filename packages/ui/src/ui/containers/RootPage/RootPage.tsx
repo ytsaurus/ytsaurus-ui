@@ -8,7 +8,6 @@ import {HeaderWithLinks} from '../../containers/ClustersMenu/HeaderLinks';
 import {ALL_LINKS_ITEMS} from '../../containers/ClustersMenu/header-links-items';
 
 import './RootPage.scss';
-import UIFactory from '../../UIFactory';
 
 const block = cn('yt-root-page');
 
@@ -35,7 +34,6 @@ function RootPage({title, children, currentPathname}: Props) {
             <div className={block('content')}>
                 <div className={'elements-main-section'}>{children}</div>
             </div>
-            {UIFactory.renderAppFooter()}
         </React.Fragment>
     );
 }

@@ -22,6 +22,8 @@ import {setTheme} from '../../store/actions/global';
 import {loadAllowedExperimentalPages} from '../../store/actions/global/experimental-pages';
 import {getAuthPagesEnabled, getGlobalShowLoginDialog} from '../../store/selectors/global';
 import {getFontType} from '../../store/selectors/global/fonts';
+import UIFactory from '../../UIFactory';
+
 import {AppThemeFont, AppThemeFontProps} from './AppThemeFont';
 
 import './App.scss';
@@ -41,6 +43,8 @@ function AppWithRum() {
     const showLogin = useSelector(getGlobalShowLoginDialog);
     const hasAuthPages = useSelector(getAuthPagesEnabled);
     const fontType = useSelector(getFontType);
+
+    const {footer, footerHeight} = UIFactory.renderAppFooter() ?? {};
 
     return showLogin ? (
         <Route render={() => <LoginFormPage theme={themeType} />} />
@@ -62,7 +66,16 @@ function AppWithRum() {
                     <AppThemeFont theme={theme} fontType={fontType}>
                         <AppNavigation>
                             <LoadAllowedExperimentalUrls />
-                            <div className="elements-page">
+                            <div
+                                className="elements-page"
+                                style={
+                                    {
+                                        '--app-footer-height': `${footerHeight ?? 0}px`,
+                                        minHeight:
+                                            'calc(100vh - var(--app-header-height) - var(--app-footer-height))',
+                                    } as React.CSSProperties
+                                }
+                            >
                                 <Route exact path="/" render={() => <ClustersMenuLazy />} />
                                 <Route
                                     path="/:cluster/"
@@ -74,6 +87,7 @@ function AppWithRum() {
                                 <RetryBatchModals />
                                 <ManageTokensModal />
                             </div>
+                            {footer}
                         </AppNavigation>
                     </AppThemeFont>
                 )}
