@@ -31,45 +31,43 @@ export class QueryResultTableDownloadManager extends DownloadManager {
     }
 
     getDownloadLink() {
-        const {getDownloadBaseUrl} = this.props as FIX_MY_TYPE;
-        const {rowsMode, startRow, numRows} = this.state;
+        const {getDownloadBaseUrl, cluster, queryId} = this.props as FIX_MY_TYPE;
+        const {rowsMode, startRow, numRows, format, number_precision_mode} = this.state;
+
+        const {query, error} = this.getDownloadParams();
+
+        if (format === 'excel') {
+            const base = `${getExportTableBaseUrl({cluster})}/${cluster}/api/export-query-result`;
+            const params = new URLSearchParams({
+                number_precision_mode,
+                result_index: '0',
+                query_id: queryId,
+            });
+
+            if (rowsMode === 'range') {
+                params.append('lower_row_index', startRow.toString());
+                params.append(
+                    'upper_row_index',
+                    ((startRow as number) + (numRows as number)).toString(),
+                );
+            }
+
+            const columns = this.prepareColumnsForColumnMode(false);
+            const columnsString = columns ? '&' + columns.map((i) => `columns=${i}`).join('&') : '';
+
+            return {url: `${base}?${params}${columnsString}`, error};
+        }
+
         const cursor =
             rowsMode === 'range'
                 ? {start: startRow as number, end: (startRow as number) + (numRows as number)}
                 : undefined;
         const base = getDownloadBaseUrl(cursor);
 
-        const {query, error} = this.getDownloadParams();
         return {
             url: `${base}&${query}`,
             error,
         };
-    }
-
-    getExcelDownloadLink() {
-        const {cluster, queryId} = this.props as FIX_MY_TYPE;
-        const {number_precision_mode, rowsMode, startRow, numRows} = this.state;
-
-        const base = `${getExportTableBaseUrl({cluster})}/${cluster}/api/export-query-result`;
-        const params = new URLSearchParams({
-            number_precision_mode,
-            result_index: '0',
-            query_id: queryId,
-        });
-
-        if (rowsMode === 'range') {
-            params.append('lower_row_index', startRow.toString());
-            params.append(
-                'upper_row_index',
-                ((startRow as number) + (numRows as number)).toString(),
-            );
-        }
-
-        const columns = this.prepareColumnsForColumnMode(false);
-        const columnsString = columns ? '&' + columns.map((i) => `columns=${i}`).join('&') : '';
-
-        const {error} = this.getDownloadParams();
-        return {url: `${base}?${params}${columnsString}`, error};
     }
 }
 
