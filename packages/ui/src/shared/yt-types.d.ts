@@ -289,6 +289,11 @@ export interface ListJobsParameters {
     operation_incarnation?: string;
 }
 
+export interface GetJobParameters {
+    operation_id: string;
+    job_id: string;
+}
+
 export interface ListJobsResponse {
     archive_job_count: number;
     continuation_token: string;
@@ -378,7 +383,8 @@ export type BatchSubRequest =
     | SubRequest<'remove_maintenance', RemoveMaintenanceParams>
     | SubRequest<'add_member', AddMembersParams>
     | SubRequest<'remove_member', RemoveMembersParams>
-    | SubRequest<'list_jobs', ListJobsParameters>;
+    | SubRequest<'list_jobs', ListJobsParameters>
+    | SubRequest<'get_job', GetJobParameters>;
 
 export type OutputFormat =
     | {
