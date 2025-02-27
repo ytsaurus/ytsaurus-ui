@@ -1,5 +1,6 @@
 import React from 'react';
 
+import {withDisableMaxContentWidth} from '../../containers/MaxContentWidth';
 import withLazyLoading from '../../hocs/withLazyLoading';
 import {UIFactoryClusterPageInfo, UIFactoryRootPageInfo} from '../../UIFactory';
 import {PageOdin} from '../../icons/PageOdin';
@@ -17,15 +18,19 @@ function importPage() {
     return import(/* webpackChunkName: "odin" */ './index');
 }
 
-const OdinLazy = withLazyLoading(
-    React.lazy(async () => {
-        return {default: (await importPage()).Odin};
-    }),
+const OdinLazy = withDisableMaxContentWidth(
+    withLazyLoading(
+        React.lazy(async () => {
+            return {default: (await importPage()).Odin};
+        }),
+    ),
 );
-const IndependentOdinLazy = withLazyLoading(
-    React.lazy(async () => {
-        return {default: (await importPage()).IndependentOdin};
-    }),
+const IndependentOdinLazy = withDisableMaxContentWidth(
+    withLazyLoading(
+        React.lazy(async () => {
+            return {default: (await importPage()).IndependentOdin};
+        }),
+    ),
 );
 const OdinTopRowLazy = withLazyLoading(
     React.lazy(async () => {

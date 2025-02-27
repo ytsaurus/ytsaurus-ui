@@ -1,6 +1,8 @@
 import React from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 
+import {useDisableMaxContentWidth} from '../../../../containers/MaxContentWidth';
+
 import WithStickyToolbar from '../../../../components/WithStickyToolbar/WithStickyToolbar';
 import {
     accessLogResetFilters,
@@ -20,6 +22,8 @@ function AccessLog() {
         dispatch(accessLogResetFilters());
         dispatch(fetchAccessLog());
     }, [dispatch, path]);
+
+    useDisableMaxContentWidth();
 
     return (
         <React.Fragment>

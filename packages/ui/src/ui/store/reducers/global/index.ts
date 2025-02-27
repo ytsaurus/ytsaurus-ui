@@ -92,7 +92,7 @@ export type GlobalState = {
 
     allowedExperimentalPages?: undefined | Array<string>;
 
-    useMaxContentWidth: false;
+    enableMaxContentWidth: boolean;
 
     ytAuthCluster?: string;
 
@@ -154,7 +154,7 @@ const initialState: GlobalState = {
 
     allowedExperimentalPages: undefined,
 
-    useMaxContentWidth: false,
+    enableMaxContentWidth: true,
 };
 
 function updatedTitle(

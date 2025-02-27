@@ -1,6 +1,8 @@
 .navigation-error {
     flex-grow: 1;
 
+    min-height: calc(100vh - 3 * var(--app-header-height) - var(--app-footer-height));
+
     &__info {
         max-width: 650px;
 

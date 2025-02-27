@@ -9,10 +9,13 @@ import {getActiveAccount} from '../../../../store/selectors/accounts/accounts-ts
 import {useSelector} from 'react-redux';
 import {getAccountUsageViewType} from '../../../../store/selectors/accounts/account-usage';
 import ErrorBoundary from '../../../../components/ErrorBoundary/ErrorBoundary';
+import {useDisableMaxContentWidth} from '../../../../containers/MaxContentWidth';
 
 const block = cn('accounts');
 
 function AccountDetailedUsageTab() {
+    useDisableMaxContentWidth();
+
     const account = useSelector(getActiveAccount);
     const viewType = useSelector(getAccountUsageViewType);
 
