@@ -21,7 +21,7 @@ export function useSidePanel(
     const openWidget = React.useCallback(() => {
         dispatch(splitScreen(name));
         setWidgetOpened(true);
-    }, [setWidgetOpened, dispatch]);
+    }, [setWidgetOpened, dispatch, name]);
 
     const onClose = React.useCallback(() => {
         setWidgetOpened(false);

@@ -6,6 +6,7 @@ import {useAppRumMeasureStart} from '../../../../rum/rum-app-measures';
 import {isFinalLoadingStatus} from '../../../../utils/utils';
 import {getNavigationDocumentLoadingStatus} from '../../../../store/selectors/navigation/content/document';
 import {useSelector} from 'react-redux';
+import {useDisableMaxContentWidth} from '../../../../containers/MaxContentWidth';
 
 const DocumentWithRum: FC = () => {
     const loadState = useSelector(getNavigationDocumentLoadingStatus);
@@ -25,6 +26,8 @@ const DocumentWithRum: FC = () => {
             return isFinalLoadingStatus(loadState);
         },
     });
+
+    useDisableMaxContentWidth();
 
     return <Document />;
 };
