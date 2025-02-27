@@ -411,6 +411,10 @@ export type PipelineParams = {
     pipeline_path: string;
 };
 
+export type TableParams = {
+    path: string;
+};
+
 export type ExpectedVersion = {
     expected_version?: string | number;
 };
