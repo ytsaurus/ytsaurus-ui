@@ -232,7 +232,7 @@ export const defaultUIFactory: UIFactory = {
     },
 
     renderAppFooter() {
-        return null;
+        return undefined;
     },
 
     renderAppNavigation(props) {

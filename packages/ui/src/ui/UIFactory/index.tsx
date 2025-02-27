@@ -407,7 +407,7 @@ export interface UIFactory {
         yp_cluster?: string;
     }): string | undefined;
 
-    renderAppFooter(): React.ReactNode;
+    renderAppFooter(): undefined | {footer: React.ReactNode; footerHeight: number};
 
     renderAppNavigation(props: AppNavigationProps): React.ReactElement;
 
