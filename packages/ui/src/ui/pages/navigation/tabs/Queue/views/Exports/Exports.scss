@@ -1,0 +1,10 @@
+.exports-edit {
+    height: 0;
+    text-align: right;
+}
+
+.export-extra-controls {
+    &__divider {
+        border-left: 1px solid var(--dark-divider);
+    }
+}
