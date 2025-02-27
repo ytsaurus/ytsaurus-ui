@@ -3,6 +3,7 @@ import {connect, useSelector} from 'react-redux';
 import PropTypes from 'prop-types';
 import cn from 'bem-cn-lite';
 
+import {useDisableMaxContentWidth} from '../../../../containers/MaxContentWidth';
 import LoadDataHandler from '../../../../components/LoadDataHandler/LoadDataHandler';
 import MetaTable from '../../../../components/MetaTable/MetaTable';
 import {
@@ -173,6 +174,8 @@ const mapDispatchToProps = {
 const FileConnected = connect(mapStateToProps, mapDispatchToProps)(File);
 
 export default function FileWithRum() {
+    useDisableMaxContentWidth();
+
     const loadState = useSelector(getNavigationFileLoadingStatus);
 
     useAppRumMeasureStart({
