@@ -1,14 +1,17 @@
 import React from 'react';
 import withLazyLoading from '../../hocs/withLazyLoading';
+import {withDisableMaxContentWidth} from '../../containers/MaxContentWidth';
 
 function importPage() {
     return import(/* webpackChunkName: "bundles" */ './index');
 }
 
-export const TabletCellBundlesLazy = withLazyLoading(
-    React.lazy(async () => {
-        return {default: (await importPage()).TabletCellBundles};
-    }),
+export const TabletCellBundlesLazy = withDisableMaxContentWidth(
+    withLazyLoading(
+        React.lazy(async () => {
+            return {default: (await importPage()).TabletCellBundles};
+        }),
+    ),
 );
 
 export const TabletCellBundlesTopRowLazy = withLazyLoading(
@@ -17,9 +20,11 @@ export const TabletCellBundlesTopRowLazy = withLazyLoading(
     }),
 );
 
-export const ChaosCellBundlesTopRowLazy = withLazyLoading(
-    React.lazy(async () => {
-        return {default: (await importPage()).ChaosCellBundlesTopRow};
-    }),
-    '',
+export const ChaosCellBundlesTopRowLazy = withDisableMaxContentWidth(
+    withLazyLoading(
+        React.lazy(async () => {
+            return {default: (await importPage()).ChaosCellBundlesTopRow};
+        }),
+        '',
+    ),
 );
