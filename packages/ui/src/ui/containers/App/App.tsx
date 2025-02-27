@@ -6,6 +6,7 @@ import {ThemeProvider, useThemeType, useThemeValue} from '@gravity-ui/uikit';
 
 import ModalErrors from '../../containers/ModalErrors/ModalErrors';
 import AttributesModal from '../../components/AttributesModal/AttributesModal';
+import {MaxContentWidth} from '../../containers/MaxContentWidth';
 import {ClustersMenuLazy} from '../../containers/ClustersMenu/lazy';
 import {ClusterPageWrapperLazy} from '../../containers/ClusterPageWrapper/lazy';
 import ActionModal from '../ActionModal/ActionModal';
@@ -76,11 +77,13 @@ function AppWithRum() {
                                     } as React.CSSProperties
                                 }
                             >
-                                <Route exact path="/" render={() => <ClustersMenuLazy />} />
-                                <Route
-                                    path="/:cluster/"
-                                    render={() => <ClusterPageWrapperLazy />}
-                                />
+                                <MaxContentWidth>
+                                    <Route exact path="/" render={() => <ClustersMenuLazy />} />
+                                    <Route
+                                        path="/:cluster/"
+                                        render={() => <ClusterPageWrapperLazy />}
+                                    />
+                                </MaxContentWidth>
                                 <AttributesModal />
                                 <ActionModal />
                                 <ModalErrors />

@@ -279,7 +279,7 @@ class MapNodeToolbar extends React.PureComponent {
         ]);
 
         return (
-            <React.Fragment>
+            <div className={block('toolbar')}>
                 <div className={tbBlock('container')}>
                     <div className={block('filter', tbBlock('component'))}>
                         <Filter
@@ -350,7 +350,7 @@ class MapNodeToolbar extends React.PureComponent {
                 </div>
                 <UploadManagerCreate ref={this.uploadXlsRef} />
                 {renderModals()}
-            </React.Fragment>
+            </div>
         );
     }
 }
