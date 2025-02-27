@@ -1,7 +1,7 @@
 @import '../../../../../styles/common';
 
 .proxy-card {
-    height: calc(100vh - var(--app-header-height));
+    height: calc(100vh - var(--app-header-height) - var(--app-footer-height));
     width: 100%;
     padding: 0 20px;
 
