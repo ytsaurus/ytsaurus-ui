@@ -36,3 +36,4 @@ run_local_cluster.sh
 
 *.tmp
 *.bak
+tests/downloads/
