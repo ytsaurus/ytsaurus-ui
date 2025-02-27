@@ -17,7 +17,6 @@ import {checkUserTransaction, prepareActions} from '../../../utils/operations/de
 import {prepareAttributes} from '../../../utils';
 import {showErrorPopup} from '../../../utils/utils';
 import {isOperationId} from '../../../utils/operations/list';
-import {TYPED_OUTPUT_FORMAT} from '../../../constants/index';
 import {Toaster} from '@gravity-ui/uikit';
 import CancelHelper from '../../../utils/cancel-helper';
 import {YTErrors} from '../../../rum/constants';
@@ -125,7 +124,17 @@ export function getOperation(
         const isAlias = !isOperationId(id);
 
         const params = Object.assign(
-            {include_scheduler: true, output_format: TYPED_OUTPUT_FORMAT},
+            {
+                include_scheduler: true,
+                output_format: {
+                    $value: 'json' as const,
+                    $attributes: {
+                        stringify: true,
+                        annotate_with_types: true,
+                        encode_utf8: false,
+                    },
+                },
+            },
             isAlias ? {operation_alias: id} : {operation_id: id},
         );
 
