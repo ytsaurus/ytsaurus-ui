@@ -6,6 +6,7 @@ import PropTypes from 'prop-types';
 import {compose} from 'redux';
 import cn from 'bem-cn-lite';
 
+import {useDisableMaxContentWidth} from '../../../../containers/MaxContentWidth';
 import DataTableWrapper from '../../../../pages/navigation/content/Table/DataTableWrapper/DataTableWrapper';
 import TableOverview from '../../../../pages/navigation/content/Table/TableOverview/TableOverview';
 import ColumnSelectorModal from '../../../../components/ColumnSelectorModal/ColumnSelectorModal';
@@ -268,5 +269,6 @@ export default function TableWithRum() {
         },
     });
 
+    useDisableMaxContentWidth();
     return <TableConnected />;
 }

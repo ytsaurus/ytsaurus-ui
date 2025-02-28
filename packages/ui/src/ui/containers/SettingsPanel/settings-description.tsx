@@ -53,7 +53,7 @@ import Link from '../../components/Link/Link';
 import Button from '../../components/Button/Button';
 import {AddTokenForm, VcsList} from '../../pages/query-tracker/Vcs/SettingsMenu';
 import {selectIsVcsVisible, selectVcsConfig} from '../../pages/query-tracker/module/vcs/selectors';
-import {SettingsMenuSelect} from '../SettingsMenu/SettingsMenuSelect';
+import {SettingsMenuRadioByKey, SettingsMenuSelect} from '../SettingsMenu/SettingsMenuSelect';
 import {getDefaultQueryACO} from '../../pages/query-tracker/module/query_aco/selectors';
 import {getQueryACO, setUserDefaultACO} from '../../pages/query-tracker/module/query_aco/actions';
 import {Item} from '../../components/Select/Select';
@@ -90,9 +90,9 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
     const dispatch = useThunkDispatch();
     const clusterNS = useSelector(getCurrentClusterNS);
 
-    const httpProxyVersion: string = useSelector(getHttpProxyVersion);
-    const schedulerVersion: string = useSelector(getGlobalSchedulerVersion);
-    const masterVersion: string = useSelector(getGlobalMasterVersion);
+    const httpProxyVersion = useSelector(getHttpProxyVersion);
+    const schedulerVersion = useSelector(getGlobalSchedulerVersion);
+    const masterVersion = useSelector(getGlobalMasterVersion);
     const vcsConfig = useSelector(selectVcsConfig);
     const isVcsVisible = useSelector(selectIsVcsVisible);
     const defaultUserACO = useSelector(getDefaultQueryACO);
@@ -164,6 +164,21 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
                     ]}
                 />,
             ),
+            {
+                id: 'global::maxContentWidth',
+                title: 'Content width',
+                align: 'top',
+                content: (
+                    <SettingsMenuRadioByKey
+                        settingKey="global::maxContentWidth"
+                        options={[
+                            {value: 'standard', content: 'Standard'},
+                            {value: 'wide', content: 'Wide'},
+                            {value: 'maximum', content: 'Maximum'},
+                        ]}
+                    />
+                ),
+            },
         ]),
         makePage(
             'Development',
