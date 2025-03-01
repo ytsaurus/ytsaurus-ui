@@ -102,7 +102,7 @@ class Details extends Component {
         return (
             error && (
                 <div className={block('result')}>
-                    <Error {...error} />
+                    <Error {...error} disableLogger />
                 </div>
             )
         );
