@@ -1,6 +1,6 @@
 import {Page} from '../../../shared/constants/settings';
 import {Tab as ComponentsTab} from '../../constants/components/main';
-import YT from '../../config/yt-config';
+import {YT} from '../../config/yt-config';
 
 export * from './navigation';
 

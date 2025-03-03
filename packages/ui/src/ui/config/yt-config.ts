@@ -4,9 +4,7 @@ import reduce_ from 'lodash/reduce';
 import {DEFAULT_GROUP} from '../constants/cluster-menu';
 import {ClusterConfig, YTConfig} from '../../shared/yt-types';
 
-const YT = (window as any).YT as YTConfig;
-
-export default YT;
+export const YT = (window as any).YT as YTConfig;
 
 export function getGroupedClusters(clusters = YT.clusters) {
     function sortByClusterName(clusterA: ClusterConfig, clusterB: ClusterConfig) {

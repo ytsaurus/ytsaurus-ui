@@ -1,6 +1,6 @@
 import {getClusterAndPath} from './getClusterAndPath';
 import {QueryEngine} from '../../../pages/query-tracker/module/engines';
-import YT from '../../../config/yt-config';
+import {YT} from '../../../config/yt-config';
 import ypath from '../../../common/thor/ypath';
 import {YTApiId, ytApiV3Id} from '../../../rum/rum-wrap-api';
 import {getClusterProxy} from '../../../store/selectors/global';

@@ -31,7 +31,7 @@ import {GENERIC_ERROR_MESSAGE} from '../../../constants/index';
 import {setOdinLastVisitedTab} from '../_actions/odin-overview';
 import {getOdinLastVisitedTab} from '../_selectors/odin-overview';
 import {CreateNotificationButton} from '../../system/System/SystemTopRowContent';
-import YT from '../../../config/yt-config';
+import {YT} from '../../../config/yt-config';
 import RootPage from '../../../containers/RootPage/RootPage';
 import WithStickyToolbar from '../../../components/WithStickyToolbar/WithStickyToolbar';
 

@@ -11,7 +11,7 @@ import BugIcon from '@gravity-ui/icons/svgs/bug.svg';
 import Link from '../../components/Link/Link';
 import unknown from '../../assets/img/user-avatar.svg';
 import {AppNavigationProps} from './AppNavigationPageLayout';
-import YT from '../../config/yt-config';
+import {YT} from '../../config/yt-config';
 import UIFactory from '../../UIFactory';
 import {getSettingsCluster} from '../../store/selectors/global';
 import {importManageTokens} from '../ManageTokens';

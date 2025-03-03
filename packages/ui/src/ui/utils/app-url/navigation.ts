@@ -1,5 +1,5 @@
 import {Page} from '../../../shared/constants/settings';
-import YT from '../../config/yt-config';
+import {YT} from '../../config/yt-config';
 import type {Tab as NavigationTab} from '../../constants/navigation';
 import {ValueOf} from '../../types';
 

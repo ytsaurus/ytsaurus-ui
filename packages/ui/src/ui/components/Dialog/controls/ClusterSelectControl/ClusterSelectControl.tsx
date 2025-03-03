@@ -7,7 +7,7 @@ import Select, {YTSelectProps} from '../../../../components/Select/Select';
 
 import './ClusterSelectControl.scss';
 import {ClusterConfig} from '../../../../../shared/yt-types';
-import YT from '../../../../config/yt-config';
+import {YT} from '../../../../config/yt-config';
 
 const block = cn('cluster-select-control');
 

@@ -3,7 +3,7 @@ import cn from 'bem-cn-lite';
 
 import {Icon} from '@gravity-ui/uikit';
 
-import YT from '../../config/yt-config';
+import {YT} from '../../config/yt-config';
 
 import userSvg from '../../assets/img/svg/page-users.svg';
 import groupSvg from '../../assets/img/svg/page-groups.svg';

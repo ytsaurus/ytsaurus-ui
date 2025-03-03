@@ -7,7 +7,7 @@ import {QueryEngine} from '../../../pages/query-tracker/module/engines';
 import {SuggestionsWeight} from './generateSuggestions';
 import {suggestionIndexToWeight} from './suggestionIndexToWeight';
 import {getClusterProxy} from '../../../store/selectors/global';
-import YT from '../../../config/yt-config';
+import {YT} from '../../../config/yt-config';
 
 type Props = (data: {
     model: editor.ITextModel;

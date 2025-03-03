@@ -9,7 +9,7 @@ import {RoleActionsLazy} from '../containers/ACL';
 import OperationDetailMonitorLinks from '../pages/operations/OperationDetail/tabs/monitor/OperationDetailsMonitorLinks';
 import {PERMISSIONS_SETTINGS} from '../constants/acl';
 import {uiSettings} from '../config/ui-settings';
-import YT from '../config/yt-config';
+import {YT} from '../config/yt-config';
 import {DefaultSubjectLinkLazy} from '../components/SubjectLink/lazy';
 import type {SubjectCardProps} from '../components/SubjectLink/SubjectLink';
 import {QUERY_RESULT_CHART_TAB} from '../pages/query-tracker/QueryResultsVisualization';
