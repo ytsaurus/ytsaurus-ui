@@ -1,14 +1,10 @@
 import {Action} from 'redux';
 import {ActionD} from '../../../../types';
 import {QUERY_ACO_LOADING} from './constants';
+import {GetQueryTrackerInfoResponse} from '../../../../../shared/yt-types';
 
 export interface QueryACOState {
-    data: {
-        cluster_name: string;
-        access_control_objects: string[];
-        query_tracker_stage: string;
-        supported_features: {access_control: boolean; multiple_aco?: boolean};
-    };
+    data: GetQueryTrackerInfoResponse;
     loading: boolean;
     loaded: boolean;
     error: string | null;

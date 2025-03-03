@@ -7,6 +7,9 @@ import {DEFAULT_QUERY_ACO, SHARED_QUERY_ACO, getEffectiveApiStage} from '../quer
 import {getClusterUiConfig} from '../../../../store/selectors/global';
 const selectAcoState = (state: RootState) => state.queryTracker.aco;
 
+export const getQueryTrackerInfoClusters = (state: RootState) =>
+    state.queryTracker.aco.data.clusters;
+
 export const getLastSelectedACONamespaces = (state: RootState) => {
     const stage = getEffectiveApiStage(state);
 

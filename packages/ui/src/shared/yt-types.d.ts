@@ -467,3 +467,11 @@ export type FlowViewJobInfo = {
 export type FlowViewWorkerInfo = {
     address: FlowViewWorkerId;
 };
+
+export type GetQueryTrackerInfoResponse = {
+    cluster_name: string;
+    access_control_objects: string[];
+    query_tracker_stage: string;
+    supported_features: {access_control: boolean; multiple_aco?: boolean};
+    clusters?: Array<string>;
+};
