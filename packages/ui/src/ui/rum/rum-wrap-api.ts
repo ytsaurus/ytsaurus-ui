@@ -12,6 +12,7 @@ import {
     GetFlowViewData,
     GetParams,
     GetPipelineStateData,
+    GetQueryTrackerInfoResponse,
     ListJobsParameters,
     ListJobsResponse,
     OutputFormat,
@@ -71,11 +72,9 @@ type YTApiV4 = {
     list<Value = any>(...args: ApiMethodParameters<GetParams>): Promise<{value: Value}>;
     exists(...args: ApiMethodParameters<PathParams>): Promise<{value: boolean}>;
 
-    getQueryTrackerInfo(...args: ApiMethodParameters<{stage?: string}>): Promise<{
-        cluster_name: string;
-        access_control_objects: string[];
-        supported_features: {access_control: boolean};
-    }>;
+    getQueryTrackerInfo(
+        ...args: ApiMethodParameters<{stage?: string}>
+    ): Promise<GetQueryTrackerInfoResponse>;
     switchLeader(
         ...args: ApiMethodParameters<{cell_id: string; new_leader_address: string}>
     ): Promise<any>;

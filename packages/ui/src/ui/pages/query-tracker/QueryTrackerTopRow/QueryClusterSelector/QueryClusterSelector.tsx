@@ -1,8 +1,12 @@
 import React, {FC} from 'react';
-import {ClusterConfig} from '../../../../../shared/yt-types';
-import {QueryClusterItem} from './QueryClusterItem';
+import {useSelector} from 'react-redux';
 import {Select} from '@gravity-ui/uikit';
+
+import {ClusterConfig} from '../../../../../shared/yt-types';
+import {getQueryTrackerInfoClusters} from '../../../../pages/query-tracker/module/query_aco/selectors';
 import {QuerySelector} from '../QuerySelector';
+import {QueryClusterItem} from './QueryClusterItem';
+import {YT} from '../../../../config/yt-config';
 
 type Props = {
     clusters: ClusterConfig[];
@@ -11,11 +15,31 @@ type Props = {
 };
 
 export const QueryClusterSelector: FC<Props> = ({clusters, value, onChange}) => {
+    const infoClusters = useSelector(getQueryTrackerInfoClusters);
+
+    const values = React.useMemo((): Array<Pick<ClusterConfig, 'id' | 'name' | 'environment'>> => {
+        if (!infoClusters?.length) {
+            return clusters;
+        }
+
+        if (YT.isLocalCluster) {
+            return (
+                infoClusters?.map((id) => {
+                    return {id, name: id, environment: 'localmode'};
+                }) ?? []
+            );
+        }
+        const knownClusters = new Set(infoClusters);
+        return clusters.filter((item) => {
+            return knownClusters.has(item.id);
+        });
+    }, [clusters, infoClusters, YT.isLocalCluster]);
+
     return (
         <QuerySelector
             placeholder="Cluster"
             filterPlaceholder="Search"
-            items={clusters}
+            items={values}
             onChange={onChange}
             hasClear
             value={value}
