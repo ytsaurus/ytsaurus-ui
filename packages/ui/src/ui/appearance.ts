@@ -1,5 +1,5 @@
 import {ClusterTheme} from '../shared/yt-types';
-import YT from './config/yt-config';
+import {YT} from './config/yt-config';
 import UIFactory from './UIFactory';
 
 const favicon = require('./assets/img/favicon.png');

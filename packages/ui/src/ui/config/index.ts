@@ -1,7 +1,7 @@
 import UIFactory from '../UIFactory';
 
 import {getConfigData, uiSettings} from './ui-settings';
-import YT from '../config/yt-config';
+import {YT} from '../config/yt-config';
 
 function getClusterSpecificUISettings(cluster: string) {
     const clusterConfig = YT.clusters[cluster];

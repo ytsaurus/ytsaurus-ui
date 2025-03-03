@@ -22,7 +22,7 @@ import {
 } from '../../store/actions/clusters-menu';
 import {CLUSTER_MENU_TABLE_ID} from '../../constants/tables';
 import {getClusterAppearance} from '../../appearance';
-import YT from '../../config/yt-config';
+import {YT} from '../../config/yt-config';
 import './ClusterMenuBody.scss';
 import {RootState} from '../../store/reducers';
 import {ClusterConfigWithStatus} from '../../store/reducers/clusters-menu/clusters-menu';

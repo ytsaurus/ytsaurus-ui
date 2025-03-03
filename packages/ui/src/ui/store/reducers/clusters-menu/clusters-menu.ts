@@ -10,7 +10,7 @@ import {
     FETCH_CLUSTER_AVAILABILITY,
     FETCH_CLUSTER_VERSIONS,
 } from '../../../constants/index';
-import YT from '../../../config/yt-config';
+import {YT} from '../../../config/yt-config';
 import {ValueOf} from '../../../../@types/types';
 import {ActionD} from '../../../types';
 

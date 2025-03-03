@@ -1,6 +1,6 @@
 import {createSelector} from 'reselect';
 
-import YT from '../../../config/yt-config';
+import {YT} from '../../../config/yt-config';
 import {RootState} from '../../../store/reducers';
 import {getSettingsRegularUserUI} from '../../../store/selectors/settings/settings-ts';
 

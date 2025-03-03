@@ -30,7 +30,7 @@ import {USE_CACHE, USE_MAX_SIZE} from '../../../../shared/constants/yt-api';
 import {YTApiId, ytApiV3Id} from '../../../rum/rum-wrap-api';
 import {getWindowStore} from '../../../store/window-store';
 import {reloadUserSettings} from '../settings';
-import YT from '../../../config/yt-config';
+import {YT} from '../../../config/yt-config';
 import {getConfigData} from '../../../config/ui-settings';
 
 export function setTheme(theme: 'light' | 'dark' | 'system' | 'light-hc' | 'dark-hc') {

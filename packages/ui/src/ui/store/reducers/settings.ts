@@ -4,7 +4,7 @@ import localProvider from '../../common/utils/settings-local-provider';
 
 import {SET_SETTING_VALUE, UNSET_SETTING_VALUE, UPDATE_SETTING_DATA} from '../../constants/index';
 import {getSettingsDataFromInitialConfig} from '../../config';
-import YT from '../../config/yt-config';
+import {YT} from '../../config/yt-config';
 import {ActionD} from '../../types';
 
 export interface SettingsState {

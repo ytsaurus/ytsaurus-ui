@@ -48,7 +48,7 @@ import {
     cellSizeRadioButtonItems,
     pageSizeRadioButtonItems,
 } from '../../constants/navigation/content/table';
-import YT from '../../config/yt-config';
+import {YT} from '../../config/yt-config';
 import Link from '../../components/Link/Link';
 import Button from '../../components/Button/Button';
 import {AddTokenForm, VcsList} from '../../pages/query-tracker/Vcs/SettingsMenu';

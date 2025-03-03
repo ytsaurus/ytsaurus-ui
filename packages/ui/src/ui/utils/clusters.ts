@@ -1,7 +1,7 @@
 import find_ from 'lodash/find';
 
 import {rumLogError} from '../rum/rum-counter';
-import YT from '../config/yt-config';
+import {YT} from '../config/yt-config';
 
 const {clusters} = YT;
 

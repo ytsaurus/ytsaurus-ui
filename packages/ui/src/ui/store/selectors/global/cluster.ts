@@ -2,7 +2,7 @@ import {createSelector} from 'reselect';
 
 import type {ClusterConfig} from '../../../../shared/yt-types';
 
-import YT from '../../../config/yt-config';
+import {YT} from '../../../config/yt-config';
 import {getConfigData} from '../../../config/ui-settings';
 
 import {RootState} from '../../../store/reducers';

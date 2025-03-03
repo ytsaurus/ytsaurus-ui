@@ -6,7 +6,7 @@ import {Toaster} from '@gravity-ui/uikit';
 import {getWindowStore} from '../store/window-store';
 import {getClusterConfig, getXsrfCookieName} from '../utils';
 import {BAN_USER, BLOCK_USER} from '../constants/index';
-import YT from '../config/yt-config';
+import {YT} from '../config/yt-config';
 import {getClusterProxy} from '../store/selectors/global';
 import {getConfigData} from '../config/ui-settings';
 

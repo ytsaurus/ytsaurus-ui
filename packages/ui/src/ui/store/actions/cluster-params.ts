@@ -24,7 +24,7 @@ import {getBatchError, wrapApiPromiseByToaster} from '../../utils/utils';
 import {BatchResultsItem} from '../../../shared/yt-types';
 import {ThunkAction} from 'redux-thunk';
 import {RootState} from '../../store/reducers';
-import YT from '../../config/yt-config';
+import {YT} from '../../config/yt-config';
 import {GLOBAL_PARTIAL} from '../../constants/global';
 import {FIX_MY_TYPE, YTError} from '../../../@types/types';
 import {initYTApiClusterParams} from '../../common/yt-api-init';
