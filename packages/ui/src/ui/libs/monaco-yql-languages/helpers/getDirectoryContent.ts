@@ -43,6 +43,10 @@ export const getDirectoryContent: Props = async ({model, monacoCursorPosition, e
             },
         });
 
+        const rangeContent = model
+            .getLineContent(range.startLineNumber)
+            .slice(range.startColumn - 1, range.endColumn - 1);
+
         return response.reduce<languages.CompletionItem[]>((acc, item) => {
             const name = ypath.getValue(item);
             const {type, broken} = ypath.getAttributes(item);
@@ -51,8 +55,9 @@ export const getDirectoryContent: Props = async ({model, monacoCursorPosition, e
                 return acc;
 
             const fullPath = clearPath + '/' + name;
-            const insertText = /[^/]\//.test(path)
-                ? fullPath.replace(path, '')
+            const basePath = path.replace(new RegExp(rangeContent + '$'), '');
+            const insertText = /[^/]\//.test(basePath)
+                ? fullPath.replace(basePath, '')
                 : fullPath.replace('//', '');
 
             acc.push({
