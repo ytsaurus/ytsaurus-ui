@@ -13,7 +13,7 @@ export const getClusterAndPath: Props = (rawPath, engine) => {
     const pathMatch = [...rawPath.matchAll(/`(\/\/([^`]*))`/g)][0];
     const path = pathMatch ? pathMatch[1] : null;
 
-    const clusterMatch = [...rawPath.matchAll(/(\w+)\./g)][0];
+    const clusterMatch = [...rawPath.matchAll(/(\w+)\.`/g)][0];
     let cluster = clusterMatch ? clusterMatch[1] : null;
 
     if (!cluster || engine === QueryEngine.SPYT) {
