@@ -1,6 +1,11 @@
 import {expect, test} from '@playwright/test';
-import {E2E_DIR, makeClusterUrl} from '../../utils';
+import {CLUSTER_TITLE, E2E_DIR, makeClusterUrl} from '../../utils';
 import {BasePage} from '../../utils/BasePage';
+
+function replaceNbsps(str: string) {
+    var re = new RegExp(String.fromCharCode(160), "g");
+    return str.replace(re, " ");
+}
 
 class QueryTrackerPage extends BasePage {
     readonly newQueryButton = this.page.getByTestId('new-query-btn');
@@ -14,6 +19,10 @@ class QueryTrackerPage extends BasePage {
         for (const line of lines) {
             await this.page.keyboard.type(line);
         }
+    }
+
+    async type(userInput: string) {
+        await this.page.keyboard.type(userInput);
     }
 
     async isQueryEditorEmpty() {
@@ -49,7 +58,41 @@ class QueryTrackerPage extends BasePage {
     }
 
     async getQueryText() {
-        return this.page.locator('.view-lines.monaco-mouse-cursor-text').innerText();
+        const text = await this.page.locator('.view-lines.monaco-mouse-cursor-text').innerText();
+        return replaceNbsps(text);
+    }
+
+    async waitForSuggest(suggest: string) {
+        await expect(this.page.locator(`[aria-label="${suggest}"]`)).toBeVisible();
+    }
+
+    async clickToSuggest(suggest: string) {
+        return this.page.locator(`[aria-label="${suggest}"]`).click();
+    }
+
+    async setCursor(position: number) {
+        await this.queryEditor.click();
+
+        if (process.platform === 'darwin') {
+            await this.page.keyboard.press("Meta+ArrowLeft");
+        } else {
+            await this.page.keyboard.press("Home");
+        }
+
+        for (let i = 0; i < position; i++) {
+            await this.page.keyboard.press("ArrowRight");
+        }
+    }
+
+    async waitForText(text: string) {
+        const locator = this.page.locator('.view-lines.monaco-mouse-cursor-text');
+        
+        await expect(locator).toHaveText(text);
+    }
+
+    async selectCluster(cluster: string) {
+        await this.page.getByTestId('query-cluster-selector').click();
+        await this.page.getByTestId('query-cluster-item-name').getByText(cluster, {exact: true}).click();
     }
 }
 
@@ -96,4 +139,83 @@ test('@QueryTracker: Click on the new query button in the queries widget should 
     const resetQueryText = await queryTrackerPage.getQueryText();
 
     await expect(resetQueryText).toBe(queryText);
+});
+
+
+test.describe('@QueryTracker: Suggest scenarios', () => {
+    let queryTrackerPage: QueryTrackerPage;
+
+    test.beforeEach(async ({page}) => {
+        queryTrackerPage = new QueryTrackerPage({page});
+        await queryTrackerPage.page.goto(makeClusterUrl('queries'));
+        await queryTrackerPage.selectCluster(CLUSTER_TITLE!);
+    });
+
+    test.describe('Base suggest and cursor position', () => {
+        test(`After typing SELECT * FROM  we expect next suggest: \`//\` with cursor should be right after \`//`, async () => {
+            await queryTrackerPage.fillQueryEditor(['SELECT * FROM ']);
+
+            await queryTrackerPage.clickToSuggest('`//`');
+
+            await queryTrackerPage.waitForText('SELECT * FROM `//`');
+
+            await queryTrackerPage.type('cursor_position');
+
+            await queryTrackerPage.waitForText('SELECT * FROM `//cursor_position`');
+        });
+
+        test(`After typing \` we expect to get \`\` with cursor after \``, async () => {
+            await queryTrackerPage.fillQueryEditor(['SELECT * FROM `']);
+
+            await queryTrackerPage.waitForText('SELECT * FROM ``');
+
+            await queryTrackerPage.type('cursor_position');
+
+            await queryTrackerPage.waitForText('SELECT * FROM `cursor_position`');
+        });
+    })
+
+    test.describe('Directory content suggest', () => {    
+        test(`After typing \`//\` we expect next suggest: //tmp`, async () => {
+            await queryTrackerPage.fillQueryEditor(['SELECT * FROM `']);
+
+            await queryTrackerPage.waitForText('SELECT * FROM ``');
+
+            await queryTrackerPage.type('//');
+
+            await queryTrackerPage.clickToSuggest('//tmp');
+
+            await queryTrackerPage.waitForText('SELECT * FROM `//tmp`');
+        });
+    
+        test(`After typing \`//tm\` we expect next suggest: //tmp`, async () => {
+            await queryTrackerPage.fillQueryEditor(['SELECT * FROM `']);
+
+            await queryTrackerPage.waitForText('SELECT * FROM ``');
+
+            await queryTrackerPage.type('//tm');
+
+            await queryTrackerPage.clickToSuggest('//tmp');
+
+            await queryTrackerPage.waitForText('SELECT * FROM `//tmp`');
+        });
+    });
+
+    test.describe('Table columns suggest', () => { 
+        test(`When we make a select from table we can get columns suggest`, async () => {
+            const query = `SELECT from \`${E2E_DIR}/static-table\``;
+
+            await queryTrackerPage.fillQueryEditor([query]);
+
+            await queryTrackerPage.setCursor('SELECT'.length);
+
+            await queryTrackerPage.type(' ');
+
+            await queryTrackerPage.waitForSuggest(`empty (\`${E2E_DIR}/static-table\`), Column`);
+
+            await queryTrackerPage.waitForSuggest(`key (\`${E2E_DIR}/static-table\`), Column`);
+
+            await queryTrackerPage.waitForSuggest(`value (\`${E2E_DIR}/static-table\`), Column`);
+        });
+    });
 });
