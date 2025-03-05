@@ -44,6 +44,7 @@ export const QueryClusterSelector: FC<Props> = ({clusters, value, onChange}) => 
             hasClear
             value={value}
             getOptionHeight={() => 52}
+            qa="query-cluster-selector"
         >
             {(items) =>
                 items.map(({id, name, environment}) => (
