@@ -34,6 +34,8 @@ export default function metaTablePresetSize(attributes, mediumList) {
         };
     });
 
+    const showMediums = mediumsTemplates.filter((medium) => medium.visible).length > 1;
+
     return [
         {
             key: 'uncompressed_data_size',
@@ -52,9 +54,10 @@ export default function metaTablePresetSize(attributes, mediumList) {
         },
         {
             key: 'disk_space',
+            label: 'Total disk space',
             value: <Template.FormattedValue value={usageDiskSpace || diskSpace} format="Bytes" />,
             visible: Boolean(usageDiskSpace || diskSpace),
         },
-        ...mediumsTemplates,
+        ...(showMediums ? mediumsTemplates : []),
     ];
 }
