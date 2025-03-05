@@ -97,7 +97,7 @@ export function getNodes({
 
                 for (const output of outputs) {
                     for (const item of output) {
-                        const {$value: name} = item;
+                        const name = ypath.getValue(item);
                         if (!collectedItems.has(name)) {
                             nodes.push(item);
                             collectedItems.add(name);
