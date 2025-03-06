@@ -1,5 +1,6 @@
 import set_ from 'lodash/set';
 import forEach_ from 'lodash/forEach';
+import isEmpty_ from 'lodash/isEmpty';
 
 import {ExportConfig} from '../../ExportsEdit';
 import {FormValues} from '../ExportsEditDialog';
@@ -12,7 +13,7 @@ export function validate(values: FormValues) {
     validateTabsNoDuplicates(configs, 'name', errors);
     validateTabsNoDuplicates(configs, 'export_directory', errors);
 
-    return errors;
+    return isEmpty_(errors) ? undefined : errors;
 }
 
 function validateTabsNoDuplicates(
