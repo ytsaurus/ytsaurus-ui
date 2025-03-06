@@ -152,6 +152,7 @@ export type NavigationAction =
     | Action<typeof CLEAR_TRANSACTION | typeof UPDATE_VIEW.REQUEST | typeof UPDATE_VIEW.CANCELLED>
     | ActionD<typeof SET_MODE, NavigationState['mode']>
     | ActionD<typeof SET_TRANSACTION, NavigationState['transaction']>
+    | ActionD<typeof SET_ORIGINATING_QUEUE_PATH, NavigationState['originatingQueuePath']>
     | ActionD<typeof UPDATE_PATH, {path: string; shouldUpdateContentMode?: boolean}>
     | ActionD<
           typeof UPDATE_VIEW.FAILURE,
@@ -166,6 +167,7 @@ export type NavigationAction =
               | 'isWriteable'
               | 'isAccountUsable'
               | 'checkPermissionsError'
+              | 'originatingQueuePath'
           >
       >
     | ActionD<typeof NAVIGATION_PARTIAL, Partial<NavigationState>>;
