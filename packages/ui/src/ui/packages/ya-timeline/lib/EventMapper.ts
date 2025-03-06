@@ -17,6 +17,7 @@ export type EventMapperOptions<Event extends TimelineEvent, RawEvent, Axis exten
   merge?: MergeFn<Event>;
   postProcess?: PostProcessFn<Event>;
   overlapThreshold?: number;
+  skipOverlap?: boolean;
   getAxisIdentity?: (axis: Axis) => string;
 
   onVisibleEventsChanged: (events: Event[]) => void;
@@ -148,7 +149,7 @@ export class EventMapper<
       if (!lastOnTrack) {
         memo[axisId][trackIndex] = candidate;
         candidate = Object.create(null);
-      } else if (this.isOverlapping(lastOnTrack, candidate)) {
+      } else if (this.isOverlapping(lastOnTrack, candidate) && !this.skipOverlap) {
         lastOnTrack.eventsCount += candidate.eventsCount;
         lastOnTrack.from = Math.min(lastOnTrack.from, candidate.from);
         lastOnTrack.to = Math.max(lastOnTrack.to!, candidate.to!);
@@ -200,6 +201,8 @@ export class EventMapper<
   protected readonly finalizeEvent: PostProcessFn<Event> = noop;
 
   protected readonly overlapThreshold: number = yaTimelineConfig.OVERLAPPING_THRESHOLD;
+
+  protected readonly skipOverlap: boolean = yaTimelineConfig.SKIP_OVERLAPPING;
 
   protected readonly onVisibleEventsChanged: (events: Event[]) => void = noop;
 }
