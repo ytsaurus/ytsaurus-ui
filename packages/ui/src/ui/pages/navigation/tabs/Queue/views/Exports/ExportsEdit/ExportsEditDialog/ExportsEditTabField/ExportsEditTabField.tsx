@@ -44,7 +44,7 @@ function AddExport({onAddExport}: {onAddExport: Function}) {
     return (
         <div className={block('add-export')}>
             <span className={block('add-export-label')}>Exports</span>
-            <Button onClick={() => onAddExport(true)}>
+            <Button onClick={() => onAddExport(true)} qa={'create-config'}>
                 <Icon awesome={'plus'} />
                 Add export
             </Button>

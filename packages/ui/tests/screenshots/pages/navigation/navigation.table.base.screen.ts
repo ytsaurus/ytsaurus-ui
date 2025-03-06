@@ -2,7 +2,7 @@ import {Page, expect, test} from '@playwright/test';
 import {E2E_DIR, makeClusterUrl} from '../../../utils';
 import {replaceInnerHtml} from '../../../utils/dom';
 import {TablePage} from './TablePage';
-import {basePage} from '../../../utils/BasePage';
+import {navigationPage} from './NavigationPage';
 
 function tablePage(page: Page) {
     return new TablePage({page});
@@ -172,6 +172,30 @@ test('Navigation: table - userColumnPresets', async ({page, context}) => {
             },
         });
     });
+});
+
+test('Navigation: queue create new export', async ({page}) => {
+    test.slow();
+    await page.goto(makeClusterUrl(`navigation?offsetMode=key&qMode=exports&navmode=queue&path=${E2E_DIR}/queue`));
+
+    await page.locator('.exports-edit__button').click();
+
+    await page.getByTestId('create-config').click();
+
+    await page.locator('.df-text-control input[id="name"]').fill('extra');
+    await page.locator('.path-editor-control .g-text-input__control').fill(`${E2E_DIR}/tmp/queue_export_extra`);
+    await page.keyboard.press('Enter', {delay: 2000});
+    await page.locator('.df-dialog__field-wrapper_type_number input[id="export_period"]').fill('10000');
+
+    await page.locator('button[type="submit"]').click({timeout: 2000});
+
+    await replaceInnerHtml(page, {
+        '.structured-yson-virtualized__row_key_export_directory .structured-yson-virtualized__value':
+            '//tmp/some/path/to/export',
+    });
+    await navigationPage(page).replaceBreadcrumbsTestDir();
+
+    await expect(page).toHaveScreenshot();
 });
 
 test('Navigation: yql-v3-types', async ({page}) => {
