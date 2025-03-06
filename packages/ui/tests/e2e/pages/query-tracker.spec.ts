@@ -2,6 +2,11 @@ import {expect, test} from '@playwright/test';
 import {E2E_DIR, makeClusterUrl} from '../../utils';
 import {BasePage} from '../../utils/BasePage';
 
+function replaceNbsps(str: string) {
+    var re = new RegExp(String.fromCharCode(160), "g");
+    return str.replace(re, " ");
+}
+
 class QueryTrackerPage extends BasePage {
     readonly newQueryButton = this.page.getByTestId('new-query-btn');
     readonly runQueryButton = this.page.getByTestId('qt-run');
@@ -49,7 +54,19 @@ class QueryTrackerPage extends BasePage {
     }
 
     async getQueryText() {
-        return this.page.locator('.view-lines.monaco-mouse-cursor-text').innerText();
+        const text = await this.page.locator('.view-lines.monaco-mouse-cursor-text').innerText();
+        return replaceNbsps(text);
+    }
+
+    async clickToSuggest(suggest: string) {
+        return this.page.locator(`[aria-label="${suggest}"]`).click();
+    }
+
+    async setCursor(position: number) {
+        return this.page.evaluate((position) => {
+            // @ts-ignore
+            document.activeElement?.setinitialCursorPosition(position, position)
+        }, position);
     }
 }
 
@@ -96,4 +113,113 @@ test('@QueryTracker: Click on the new query button in the queries widget should 
     const resetQueryText = await queryTrackerPage.getQueryText();
 
     await expect(resetQueryText).toBe(queryText);
+});
+
+
+test.describe('@QueryTracker: Suggest scenarios', () => {
+    async function waitForAsyncCondition(cb: () => Promise<boolean>) {
+        let attempts = 10;
+
+        while (attempts--) {
+            let result;
+            try {
+             result = await cb();
+            } finally {
+                if (result) {
+                    return;
+                }
+            }
+
+            await new Promise(resolve => setTimeout(resolve, 100));
+        }
+    }
+
+    test.describe('Directory content suggest', () => {
+        test(`After typing SELECT * FROM  we expect next suggest: \`//\``, async ({page}) => {
+            const PARAMS = {
+                userInput: 'SELECT * FROM ',
+                expectedSuggest: '`//`',
+                expectedResult: 'SELECT * FROM `//`',   
+            };
+    
+            await page.goto(makeClusterUrl('queries'));
+        
+            const queryTrackerPage = new QueryTrackerPage({page});
+    
+            await queryTrackerPage.fillQueryEditor([PARAMS.userInput]);
+        
+            await queryTrackerPage.clickToSuggest(PARAMS.expectedSuggest);
+    
+            const queryText = await queryTrackerPage.getQueryText()
+    
+            expect(PARAMS.expectedResult).toEqual(queryText);
+        });
+    
+          test(`After typeing \`//\` we expect next suggest: //tmp`, async ({page}) => {
+            const PARAMS = {
+                initialInput: 'SELECT * FROM ``',
+                initialCursorPosition: 15,
+
+                userInput: '//',
+                expectedSuggest: '//tmp',
+                expectedResult: 'SELECT * FROM `//tmp`',
+            };
+            
+            await page.goto(makeClusterUrl('queries'));
+        
+            const queryTrackerPage = new QueryTrackerPage({page});
+    
+            await queryTrackerPage.fillQueryEditor([PARAMS.initialInput]);
+    
+            await waitForAsyncCondition(async () => {
+                const queryText = await queryTrackerPage.getQueryText()
+    
+                return queryText === PARAMS.initialInput;
+            });
+            
+            await queryTrackerPage.setCursor(PARAMS.initialCursorPosition);
+    
+            await page.keyboard.type(PARAMS.userInput);
+        
+            await queryTrackerPage.clickToSuggest(PARAMS.expectedSuggest);
+    
+            const queryText = await queryTrackerPage.getQueryText()
+    
+            expect(PARAMS.expectedResult).toEqual(queryText);
+        });
+    
+        test(`After typeing \`//tm\` we expect next suggest: //tmp`, async ({page}) => {
+            const PARAMS = {
+                initialInput: 'SELECT * FROM ``',
+                initialCursorPosition: 15,
+
+                userInput: '//tm',
+                expectedSuggest: '//tmp',
+                expectedResult: 'SELECT * FROM `//tmp`',
+                
+            };
+            
+            await page.goto(makeClusterUrl('queries'));
+        
+            const queryTrackerPage = new QueryTrackerPage({page});
+    
+            await queryTrackerPage.fillQueryEditor([PARAMS.initialInput]);
+
+            await waitForAsyncCondition(async () => {
+                const queryText = await queryTrackerPage.getQueryText()
+    
+                return queryText === PARAMS.initialInput;
+            });
+    
+            await queryTrackerPage.setCursor(PARAMS.initialCursorPosition);
+    
+            await page.keyboard.type(PARAMS.userInput);
+        
+            await queryTrackerPage.clickToSuggest(PARAMS.expectedSuggest);
+    
+            const queryText = await queryTrackerPage.getQueryText()
+    
+            expect(PARAMS.expectedResult).toEqual(queryText);
+        });
+    });
 });
