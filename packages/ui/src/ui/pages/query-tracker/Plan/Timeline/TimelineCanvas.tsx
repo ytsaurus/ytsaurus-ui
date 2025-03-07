@@ -19,12 +19,16 @@ import {YEAR} from '../../../../packages/ya-timeline/definitions';
 import {getCSSPropertyValue} from '../styles';
 
 import {OperationRenderer} from './OperationRenderer';
+import {HoverEvent, LeftEvent} from '../../../../packages/ya-timeline/components/Events';
+import {AxesOptions} from '../../../../packages/ya-timeline/components/Axes';
 
 export type EventGroup = TimelineEvent & {
     eventsCount: number;
 };
 
 export class TimelineCanvas extends YaTimeline {
+    private axesOptions: AxesOptions = {};
+
     set events(value: EventGroup[]) {
         this.getComponent(BasicEventsProvider).then((component) => {
             component?.setEvents(value);
@@ -57,7 +61,7 @@ export class TimelineCanvas extends YaTimeline {
         events.registerRenderer('operation', new OperationRenderer());
         return [
             new Grid(this),
-            new Axes(this),
+            new Axes(this, this.axesOptions),
             events,
             new AreaSelectionComponent(this),
             new BasicEventsProvider<EventGroup>(this),
@@ -80,19 +84,22 @@ export class TimelineCanvas extends YaTimeline {
 
 customElements.define('my-timeline-canvas', TimelineCanvas);
 
-interface TimelineProps {
+interface TimelineProps<T extends TimelineEvent> {
     start: number;
     end: number;
     canvasScrollTop?: number;
     isZoomAllowed?: boolean;
     scrollTopChanged?: (event: ScrollTopChangedEvent) => void;
     boundsChanged?: (event: BoundsChangedEvent) => void;
-    eventsSelected?: (event: EventsSelectedEvent<TimelineEvent>) => void;
+    eventsSelected?: (event: EventsSelectedEvent<T>) => void;
+    hoverEvent?: (event: HoverEvent<T>) => void;
+    leftEvent?: (event: LeftEvent<T>) => void;
 
     axes: TimelineAxis[];
+    axesOptions?: AxesOptions;
     markers?: TimelineMarker[];
     events?: EventGroup[];
     theme: string;
 }
 
-export const Timeline = wrapWc<TimelineProps>('my-timeline-canvas');
+export const Timeline = wrapWc<TimelineProps<any>>('my-timeline-canvas');

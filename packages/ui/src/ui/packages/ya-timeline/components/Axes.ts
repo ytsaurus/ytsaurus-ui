@@ -13,6 +13,15 @@ export type TimelineAxis = {
   height: number;
 };
 
+export type AxesOptions = {
+    axisColor?: string;
+    strokeMode?: EStrokeMode;
+    trackHeight?: number;
+    eventOffset?: number;
+    topPadding?: number;
+    identityFunction?: <Axis>(axis: Axis) => string;
+}
+
 export enum EStrokeMode {
   STRAIGHT,
   DASHED,
@@ -20,6 +29,8 @@ export enum EStrokeMode {
 
 export class Axes<Axis extends TimelineAxis = TimelineAxis> extends TimelineComponent {
   public trackHeight: number = yaTimelineConfig.TRACK_HEIGHT;
+  public eventOffset: number = 0;
+  public topPadding: number = 0;
 
   public strokeMode = EStrokeMode.STRAIGHT;
 
@@ -39,17 +50,12 @@ export class Axes<Axis extends TimelineAxis = TimelineAxis> extends TimelineComp
 
   public getAxisTrackPosition(axis: Axis, trackIndex: number): number {
     const index = clamp(trackIndex, 0, axis.tracksCount - 1);
-    return axis.top + this.trackHeight * index + this.trackHeight / 2;
+    return axis.top + this.trackHeight * index + this.topPadding;
   }
 
   public constructor(
     host: YaTimeline,
-    options: {
-      trackHeight?: number;
-      axisColor?: string;
-      strokeMode?: EStrokeMode;
-      identityFunction?: (axis: Axis) => string;
-    } = {}
+    options: AxesOptions = {}
   ) {
     super(host);
 
