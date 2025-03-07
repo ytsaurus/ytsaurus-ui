@@ -7,6 +7,7 @@ import reduce_ from 'lodash/reduce';
 
 import {Toaster} from '@gravity-ui/uikit';
 import metrics from '../../../../../common/utils/metrics';
+import ypath from '../../../../../common/thor/ypath';
 
 import yt from '@ytsaurus/javascript-wrapper/lib/yt';
 
@@ -84,11 +85,13 @@ function loadDynamicTable(requestOutputFormat, setup, state, type, useZeroRangeF
     const path = getPath(state);
     const stringLimit = getCellSize(state);
     const keyColumns = getKeyColumns(state);
+    const columns = getColumns(state);
     const attributes = getAttributes(state);
     const useYqlTypes = isYqlTypesEnabled(state);
     const moveBackward = getMoveOffsetBackward(state);
     const defaultTableColumnLimit = getDefaultTableColumnLimit(state);
     const {offsetValue: offset, moveBackward: descending} = getNextOffset(state);
+    const transaction = getTransaction(state);
     const orderBySupported = true;
     const offsetColumns = keyColumns;
 
@@ -98,9 +101,59 @@ function loadDynamicTable(requestOutputFormat, setup, state, type, useZeroRangeF
         limit--;
     }
 
+    const decodedColumns = decodeNameField(columns);
+    const outputFormat =
+        requestOutputFormat ||
+        getRequestOutputFormat(
+            decodedColumns,
+            stringLimit,
+            login,
+            defaultTableColumnLimit,
+            useYqlTypes,
+        );
+
     const cluster = getCluster(state);
     const isDynamic = getIsDynamic(state);
     const id = makeTableRumId({cluster, isDynamic});
+
+    const isUnmounted = ypath.getValue(attributes, '/tablet_state') === 'unmounted';
+
+    if (isUnmounted) {
+        // in case of unmounted dynamic table treat it as a static table
+        const apiId = type === LOAD_TYPE.PRELOAD ? YTApiId.tableReadPreload : YTApiId.tableRead;
+        // example: offset = "(1, 2)": string , we need [1, 2]: number[]
+        const preparedOffset = offset
+            .replace(/[()]/g, '')
+            .split(',')
+            .map((part) => Number(part.trim()))
+            .filter(Boolean);
+        return id.fetch(
+            apiId,
+            readStaticTable({
+                setup,
+                parameters: {
+                    path: {
+                        $value: path,
+                        $attributes: preparedOffset.length
+                            ? {
+                                  tablet_index: preparedOffset[0],
+                                  row_index: preparedOffset[1],
+                              }
+                            : undefined,
+                    },
+                    table_reader: {
+                        workload_descriptor: {category: 'user_interactive'},
+                    },
+                    transaction,
+                    output_format: outputFormat,
+                    dump_error_into_response: true,
+                    omit_inaccessible_columns: true,
+                },
+                cancellation: requests.saveCancelToken,
+                reverseRows: moveBackward,
+            }),
+        );
+    }
 
     if (type === LOAD_TYPE.PRELOAD) {
         // Get all columns from schema for preload data. Scheme is always strict
