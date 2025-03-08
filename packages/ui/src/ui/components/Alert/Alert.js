@@ -2,8 +2,6 @@ import React, {Component} from 'react';
 
 import Block from '../../components/Block/Block';
 
-import './Alert.scss';
-
 const propTypes = Block.propTypes;
 
 export default class Alert extends Component {
