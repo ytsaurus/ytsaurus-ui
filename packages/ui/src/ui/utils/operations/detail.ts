@@ -10,22 +10,26 @@ import {formatByParams} from '../../utils/format';
 import type {DetailedOperationSelector} from '../../pages/operations/selectors';
 import type {IconName} from '../../components/Icon/Icon';
 
-function isTransactionAlive(transactionId: string): Promise<boolean> {
+export function isTransactionAlive(transactionId?: string): Promise<boolean> {
+    if (!isValidTransactionId(transactionId)) {
+        return Promise.resolve(false);
+    }
+
     return ytApiV3.exists({path: '#' + transactionId}).then(
         (flag) => flag,
         () => false,
     );
 }
 
+export function isValidTransactionId(txId?: string) {
+    return txId && txId !== '0-0-0-0';
+}
+
 export function checkUserTransaction(operationAttributes: {
     user_transaction_id?: {$value?: string};
 }) {
     const transactionId = operationAttributes.user_transaction_id?.$value;
-    return Promise.all(
-        transactionId && transactionId !== '0-0-0-0'
-            ? [Promise.resolve(operationAttributes), isTransactionAlive(transactionId)]
-            : [Promise.resolve(operationAttributes), Promise.resolve(false)],
-    );
+    return Promise.all([Promise.resolve(operationAttributes), isTransactionAlive(transactionId)]);
 }
 
 type OperationActionName = 'complete' | 'abort' | 'resume' | 'suspend';
