@@ -13,7 +13,7 @@ import './Block.scss';
 import FormattedText from '../formatters/FormattedText';
 import {rumLogError} from '../../rum/rum-counter';
 
-const b = block('elements-block');
+const b = block('yt-error-block');
 
 function ErrorLogger({error, type}) {
     React.useEffect(() => {
@@ -123,14 +123,14 @@ export default class ErrorBlock extends Component {
     render() {
         const {type, className, topMargin, bottomMargin, disableLogger} = this.props;
 
-        const classNames = [
-            b({'top-margin': topMargin, ['bottom-margin']: bottomMargin}, 'elements-' + type),
-            className,
-        ].filter(Boolean);
-
         return (
             <React.Fragment>
-                <div className={classNames.join(' ')}>
+                <div
+                    className={b(
+                        {'top-margin': topMargin, ['bottom-margin']: bottomMargin, type},
+                        className,
+                    )}
+                >
                     {this.renderIcon()}
                     {this.renderHeading()}
                     {this.renderBody()}
