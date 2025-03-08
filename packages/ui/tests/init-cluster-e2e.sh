@@ -18,7 +18,6 @@ function createAndMountDynamicTable {
     schema=$2
     yt create -i --attributes "{dynamic=%true;schema=$schema}" table $path
     yt mount-table $path
-    yt set $path/@mount_config/temp 1
 }
 
 # userColumnPresets
@@ -130,6 +129,24 @@ createAccountForQuotaEditor e2e-parent
 createAccountForQuotaEditor e2e-overcommit
 yt set //sys/accounts/e2e-overcommit-${E2E_SUFFIX}/@allow_children_limit_overcommit %true
 
+yt create -r map_node ${E2E_DIR}/tmp/queue_export_default
+yt create -r map_node ${E2E_DIR}/tmp/queue_export_extra
+
+QUEUE=${E2E_DIR}/queue
+createAndMountDynamicTable "$QUEUE" "[{name=key;type=string};{name=value;type=string};{name=empty;type=any}]"
+(
+    set +x
+    for ((i = 0; i < 300; i++)); do
+        echo "{key=key$i; value=value$i;};"
+    done
+    set -x
+) | yt insert-rows --format yson ${QUEUE}
+
+TX_ID=$(yt start-tx)
+yt set ${E2E_DIR}/tmp/queue_export_default/@queue_static_export_destination "{originating_queue_id=$(yt get $E2E_DIR/queue/@id)}" --tx $TX_ID
+yt set ${E2E_DIR}/queue/@static_export_config "{default={export_directory=\"$E2E_DIR/tmp/queue_export_default\";export_period=10000}}" --tx $TX_ID
+yt commit-tx $TX_ID
+
 DYN_TABLE=${E2E_DIR}/dynamic-table
 createAndMountDynamicTable "$DYN_TABLE" "[{name=key;sort_order=ascending;type=string};{name=value;type=string};{name=empty;type=any}]"
 (
@@ -139,6 +156,7 @@ createAndMountDynamicTable "$DYN_TABLE" "[{name=key;sort_order=ascending;type=st
     done
     set -x
 ) | yt insert-rows --format yson ${DYN_TABLE}
+yt set ${E2E_DIR}/dynamic-table/@mount_config/temp 1
 yt freeze-table ${DYN_TABLE}
 
 STATIC_TABLE=${E2E_DIR}/static-table
