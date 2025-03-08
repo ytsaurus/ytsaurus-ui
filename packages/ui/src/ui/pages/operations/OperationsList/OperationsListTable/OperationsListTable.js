@@ -6,10 +6,10 @@ import hammer from '../../../../common/hammer';
 import cn from 'bem-cn-lite';
 import trimEnd_ from 'lodash/trimEnd';
 
+import ypath from '../../../../common/thor/ypath';
 import unipika from '../../../../common/thor/unipika';
 import OperationProgress from '../../../../pages/operations/OperationProgress/OperationProgress';
 import {TemplatePools, TemplateWeight} from '../../../../components/MetaTable/MetaTable';
-import templates, {renderText} from '../../../../components/templates/utils';
 import ClipboardButton from '../../../../components/ClipboardButton/ClipboardButton';
 import ElementsTable from '../../../../components/ElementsTable/ElementsTable';
 import {SubjectCard} from '../../../../components/SubjectLink/SubjectLink';
@@ -24,33 +24,12 @@ import {
 } from '../../../../store/actions/operations';
 import {performAction, prepareActions} from '../../../../utils/operations/detail';
 import {promptAction} from '../../../../store/actions/actions';
-import '../../../../components/templates/meta';
-import OperationIOLink from '../../OperationIOLink/OperationIOLink';
+import {PathItem} from './PathItem';
 
 import './OperationsListTable.scss';
 
 const BLOCK_NAME = 'operations-list';
 const block = cn(BLOCK_NAME);
-
-function renderIO(io) {
-    const className = block('item-io');
-
-    return (
-        <span className={className}>
-            {renderText(io.count, {
-                mix: {block: BLOCK_NAME, elem: 'item-io-count'},
-            })}
-            {
-                <OperationIOLink
-                    path={io.table}
-                    {...io}
-                    theme={'ghost'}
-                    className={block('item-io-table')}
-                />
-            }
-        </span>
-    );
-}
 
 function getTitle(item) {
     return typeof item.title !== 'undefined' ? item.title : item.$value;
@@ -94,8 +73,6 @@ function UserPoolItem({awesomeIcon, children, title}) {
         </div>
     );
 }
-
-const metaItem = templates.get('elements/meta').item;
 
 class OperationsListTable extends Component {
     static propTypes = {
@@ -144,6 +121,17 @@ class OperationsListTable extends Component {
     renderTitle = (item) => {
         const {url} = this.props.match;
 
+        const isRunning = ypath.getValue(item, '/@state') === 'running';
+        const inputTx = isRunning
+            ? ypath.getValue(item, '/@brief_spec/input_transaction_id')
+            : undefined;
+        const outputTx = isRunning
+            ? ypath.getValue(item, '/@brief_spec/output_transaction_id')
+            : undefined;
+        const user_transaction_id = isRunning
+            ? ypath.getValue(item, '/@brief_spec/user_transaction_id')
+            : undefined;
+
         return (
             <div>
                 <div className={block('item-title')}>
@@ -151,18 +139,20 @@ class OperationsListTable extends Component {
                     {renderTitle(item, url)}
                 </div>
                 <div className={block('item-io')}>
-                    {item.input.count > 0 &&
-                        metaItem({
-                            key: 'in',
-                            valueTemplate: renderIO,
-                            value: item.input,
-                        })}
-                    {item.output.count > 0 &&
-                        metaItem({
-                            key: 'out',
-                            valueTemplate: renderIO,
-                            value: item.output,
-                        })}
+                    {item.input.count > 0 && (
+                        <PathItem
+                            caption="in"
+                            item={item.input}
+                            {...{user_transaction_id, transaction: inputTx}}
+                        />
+                    )}
+                    {item.output.count > 0 && (
+                        <PathItem
+                            caption="out"
+                            item={item.output}
+                            {...{user_transaction_id, transaction: outputTx}}
+                        />
+                    )}
                 </div>
             </div>
         );
