@@ -36,21 +36,10 @@ export interface SummaryItem {
 
 export type VersionHostState = 'online' | 'offline' | 'banned';
 
-export type HostType =
-    | 'controller_agent'
-    | 'primary_master'
-    | 'secondary_master'
-    | 'node'
-    | 'cluster_node'
-    | 'http_proxy'
-    | 'rpc_proxy'
-    | 'scheduler'
-    | 'job_proxy';
-
 export interface VersionHostInfo {
     address: string;
     banned: boolean;
-    type: HostType;
+    type: string;
     version: string;
     start_time: string;
     state: string;
@@ -58,8 +47,15 @@ export interface VersionHostInfo {
     error: unknown;
 }
 
-export type VersionSummaryItem = Partial<Record<HostType, number>> &
+export type VersionSummaryItem = Partial<Record<string, number>> &
     Record<'banned' | 'online' | 'offline', number> & {version: string};
+
+export type VersionSummaryRow = {
+    type: string;
+    total: number;
+    error?: YTError;
+    [key: string]: number | string | YTError | undefined;
+};
 
 const ephemeralState: VersionsState = {
     loading: false,
