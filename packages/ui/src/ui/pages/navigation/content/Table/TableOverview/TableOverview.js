@@ -3,6 +3,10 @@ import cn from 'bem-cn-lite';
 import PropTypes from 'prop-types';
 import {Sticky} from 'react-sticky';
 import {connect} from 'react-redux';
+import ypath from '../../../../../common/thor/ypath';
+
+import {getIsSortedDynamic} from '../../../../../store/selectors/navigation/content/table-ts';
+import {getAttributes} from '../../../../../store/selectors/navigation';
 
 import ColumnSelectorButton from '../../../../../pages/navigation/content/Table/TableOverview/ColumnSelectorButton';
 import FullScreenButton from '../../../../../pages/navigation/content/Table/TableOverview/FullScreenButton';
@@ -29,7 +33,7 @@ TableOverview.propTypes = {
 };
 
 function TableOverview(props) {
-    const {isFullScreen, isSplit} = props;
+    const {isFullScreen, isSplit, allowOffsetInput} = props;
 
     // TODO: add sticky for the Overview in the split mode https://github.com/captivationsoftware/react-sticky/issues/282
     return (
@@ -44,7 +48,7 @@ function TableOverview(props) {
                         })}
                     >
                         <Paginator block={block} />
-                        <OffsetInput block={block} />
+                        {allowOffsetInput && <OffsetInput block={block} />}
                         {!isFullScreen && <ColumnSelectorButton block={block} />}
                         {!isFullScreen && <SettingsButton block={block} />}
                         {!isFullScreen && <CreateQueryFromTable className={block('query')} />}
@@ -63,10 +67,16 @@ function TableOverview(props) {
 const mapStateToProps = (state) => {
     const {isFullScreen} = state.navigation.content.table;
     const {isSplit} = state.global.splitScreen;
+    const isSortedDynamic = getIsSortedDynamic(state);
+    const attributes = getAttributes(state);
+
+    const isUnmounted = ypath.getValue(attributes, '/tablet_state') === 'unmounted';
+    const allowOffsetInput = !(isSortedDynamic && isUnmounted);
 
     return {
         isFullScreen,
         isSplit,
+        allowOffsetInput,
     };
 };
 
