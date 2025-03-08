@@ -8,12 +8,12 @@ import {paramsToQuery} from '../../../utils';
 
 const YT = (window as any).YT;
 
-interface Props {
+export interface OperationIOLinkProps {
     name: string;
     cluster?: string;
     path: string;
     originalPath: string;
-    transaction: string;
+    transaction?: string;
     remote: boolean;
     url: string;
     isFolder: boolean;
@@ -21,7 +21,7 @@ interface Props {
     theme: LinkProps['theme'];
 }
 
-export default function OperationIOLink(props: Props) {
+export default function OperationIOLink(props: OperationIOLinkProps) {
     const {
         name,
         cluster,
