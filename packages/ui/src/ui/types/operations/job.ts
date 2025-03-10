@@ -36,6 +36,7 @@ export interface RawJob {
         preemption_reason?: string;
     };
     error?: YTError;
+    task_name?: string;
 }
 
 export type JobState =

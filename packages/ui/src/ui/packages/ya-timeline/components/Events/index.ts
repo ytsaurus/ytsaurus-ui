@@ -30,12 +30,26 @@ export type ContextMenuEvent<T extends TimelineEvent> = CustomEvent<{
   relativeY: number;
 }>;
 
+export type HoverEvent<T extends TimelineEvent> = CustomEvent<{
+    event: T;
+    time: number;
+    offset: {
+        x: number;
+        y: number;
+    }
+}>;
+
+export type LeftEvent<T extends TimelineEvent> = CustomEvent<{
+    event: T;
+}>
+
 export class Events<Event extends TimelineEvent = TimelineEvent> extends TimelineComponent {
   public eventHitboxPadding: number = yaTimelineConfig.EVENT_HITBOX_PADDING;
 
   public eventCounterFont: string = yaTimelineConfig.COUNTER_FONT;
 
   public allowMultipleSelection = true;
+  public activeEvent: TimelineEvent | null = null;
 
   public set events(newEvents: Event[]) {
     this._events = newEvents;
@@ -151,6 +165,7 @@ export class Events<Event extends TimelineEvent = TimelineEvent> extends Timelin
 
     this.canvasApi.canvas.addEventListener("mouseup", this.handleCanvasMouseup);
     this.canvasApi.canvas.addEventListener("contextmenu", this.handleCanvasContextmenu);
+    this.canvasApi.canvas.addEventListener('mousemove', this.handleCanvasMousemove);
   }
 
   public override render(api: TimelineCanvasApi) {
@@ -179,7 +194,7 @@ export class Events<Event extends TimelineEvent = TimelineEvent> extends Timelin
 
       if (!axis) continue;
 
-      const y = axesComponent.getAxisTrackPosition(axis, event.trackIndex);
+      const y = axesComponent.getAxisTrackPosition(axis, event.trackIndex) + axesComponent.eventOffset;
 
       if (axis && rangeToRangeIntersect(api.start, api.end, event.from, event.to!)) {
         const x0 = api.timeToPosition(event.from);
@@ -232,6 +247,43 @@ export class Events<Event extends TimelineEvent = TimelineEvent> extends Timelin
     );
   };
 
+  protected handleCanvasMousemove = (event: MouseEvent) => {
+      event.preventDefault();
+      const candidates = this.getEventsAtPoint(event.offsetX, event.offsetY);
+      const candidate = candidates.length > 0 ? candidates[0] : undefined;
+
+      if (this.activeEvent && (this.activeEvent !== candidate || !candidate)) {
+          this.host.dispatchEvent(
+              new CustomEvent('leftEvent',{
+                  detail: {
+                      event: this.activeEvent
+                  }
+              })
+          );
+      }
+
+      if (!candidate) {
+          this.activeEvent = null;
+          return;
+      }
+
+      const api = this.canvasApi;
+      this.activeEvent = candidate;
+
+      this.host.dispatchEvent(
+          new CustomEvent('hoverEvent',{
+              detail: {
+                  event: candidate,
+                  time: api.positionToTime(event.offsetX),
+                  offset: {
+                      x: event.offsetX,
+                      y: event.offsetY,
+                  }
+              }
+          })
+      );
+  }
+
   protected getEventIdentity: (event: Event) => EventIdentity = (event) =>
     `${event.axisId}:${event.from}-${event.to}`;
 
@@ -249,12 +301,12 @@ export class Events<Event extends TimelineEvent = TimelineEvent> extends Timelin
     const axesComponent = api.getComponent(Axes)!;
     const boxes = this._events.map((event): BBox & { event: Event } => {
       const axis = axesComponent.axesById[event.axisId];
-      const eventTrackY = axesComponent.getAxisTrackPosition(axis, event.trackIndex);
+      const eventTrackY = axesComponent.getAxisTrackPosition(axis, event.trackIndex) + axesComponent.eventOffset;
 
       const minX = event.from;
       const maxX = event.to ? event.to : minX + 1;
-      const minY = eventTrackY - axesComponent.trackHeight / 2;
-      const maxY = eventTrackY + axesComponent.trackHeight / 2;
+      const minY = eventTrackY;
+      const maxY = eventTrackY + axesComponent.trackHeight;
       return { minX, maxX, minY, maxY, event };
     });
     this.index.clear();

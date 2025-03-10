@@ -1,0 +1,17 @@
+.yt-event-timeline-tooltip-content {
+    padding: 15px;
+    text-wrap: nowrap;
+
+    &__phases {
+        display: grid;
+        grid-template-columns: 1fr min-content;
+        grid-gap: 8px;
+        border-top: solid 1px var(--g-color-line-generic);
+        padding: 8px 0;
+    }
+
+    &__color-brick {
+        height: 12px;
+        width: 12px;
+    }
+}
