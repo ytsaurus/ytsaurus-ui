@@ -34,7 +34,7 @@ export function Alerts({className, items, marginDirection = 'bottom'}: AlertsPro
                     marginDirection={marginDirection}
                 >
                     {map_(items, (alert, index) => {
-                        return <YTAlertBlock key={index} error={alert} />;
+                        return <YTAlertBlock key={index} error={alert as YTError} />;
                     })}
                 </CollapsibleSection>
             </div>

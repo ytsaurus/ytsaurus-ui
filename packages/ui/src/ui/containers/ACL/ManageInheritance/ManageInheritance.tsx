@@ -22,7 +22,6 @@ import withVisible, {WithVisibleProps} from '../../../hocs/withVisible';
 
 import './ManageInheritance.scss';
 import UIFactory from '../../../UIFactory';
-import {YTErrorBlock} from '../../../components/Block/Block';
 import {ACLReduxProps} from '../ACL-connect-helpers';
 import {ManageInheritanceFieldNames} from '../ManageAcl/ManageAcl';
 
