@@ -204,7 +204,7 @@ function RequestPermissions(props: Props) {
             subjects: {
                 type: 'acl-subjects',
                 caption: 'Subjects',
-                required: false,
+                required: true,
                 extras: {
                     placeholder: 'Enter group name, user name or login...',
                     allowedTypes: ['users', 'groups', 'app'],
