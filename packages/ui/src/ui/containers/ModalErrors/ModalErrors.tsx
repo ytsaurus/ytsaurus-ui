@@ -4,7 +4,7 @@ import {ConnectedProps, connect} from 'react-redux';
 
 import {hideErrorModal} from '../../store/actions/modals/errors';
 import {getModalErrors} from '../../store/selectors/modals/errors';
-import Alert from '../../components/Alert/Alert';
+import {YTAlertBlock} from '../../components/Alert/Alert';
 import Error from '../../components/Error/Error';
 import {RootState} from '../../store/reducers';
 import {ErrorInfo} from '../../store/reducers/modals/errors';
@@ -24,7 +24,7 @@ export function ModalError({id, data, hide, children}: MEProps) {
     const {error, hideOopsMsg, type, helpURL, disableLogger} = data;
 
     const isAlert = type === 'alert';
-    const ErrorComponent = isAlert ? Alert : Error;
+    const ErrorComponent = isAlert ? YTAlertBlock : Error;
 
     return (
         <Dialog open={true} onClose={close}>

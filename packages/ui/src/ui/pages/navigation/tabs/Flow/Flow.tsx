@@ -4,7 +4,7 @@ import cn from 'bem-cn-lite';
 
 import {Button, Flex, Link, RadioButton, Text} from '@gravity-ui/uikit';
 
-import Alert from '../../../../components/Alert/Alert';
+import {YTAlertBlock} from '../../../../components/Alert/Alert';
 import ClipboardButton from '../../../../components/ClipboardButton/ClipboardButton';
 import format from '../../../../common/hammer/format';
 import Icon from '../../../../components/Icon/Icon';
@@ -88,14 +88,14 @@ function FlowContent({viewMode}: {viewMode: FlowViewMode}) {
             return <FlowLayout path={path} viewMode={viewMode} />;
         case 'graph':
             return (
-                <Alert
+                <YTAlertBlock
                     header={'Warning'}
                     message={`'${viewMode}' view mode is not implemented yet`}
                 />
             );
         default:
             return (
-                <Alert
+                <YTAlertBlock
                     header="Unexpected behaviour"
                     error={new Error(`'${viewMode}' view mode is not implemented`)}
                 />
