@@ -5,6 +5,8 @@ import map_ from 'lodash/map';
 
 import cn from 'bem-cn-lite';
 
+import {YTError} from '../../../@types/types';
+
 import {YTErrorBlock} from '../../components/Error/Error';
 
 import {ROOT_ACCOUNT_NAME} from '../../constants/accounts/accounts';
@@ -111,7 +113,7 @@ export function AccountsSuggestWithLoading(
 ) {
     const [{items, error}, setState] = React.useState<{
         items?: Array<string>;
-        error?: string;
+        error?: YTError;
     }>({items: []});
     React.useMemo(() => {
         fetchFullList1M(YTApiId.listAccounts, {path: '//sys/accounts', ...USE_CACHE})

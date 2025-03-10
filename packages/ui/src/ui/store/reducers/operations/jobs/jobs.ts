@@ -64,7 +64,7 @@ export type JobsState = {
         offset: number;
     };
     jobs: Array<unknown>;
-    jobsErrors?: Array<unknown>;
+    jobsErrors?: Array<YTError>;
     job?: Job;
     competitiveJobs: Array<unknown>;
 };

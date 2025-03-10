@@ -8,7 +8,6 @@ import {
     getNavigationPathAccount,
 } from '../../../store/selectors/navigation/navigation';
 import {useSelector} from 'react-redux';
-import {YTErrorBlock} from '../../../components/Error/Error';
 import {YTErrorBlock} from '../../../components/Block/Block';
 import {getPath} from '../../../store/selectors/navigation';
 import {genAccountsAclLink} from '../../../utils/accounts/accounts';

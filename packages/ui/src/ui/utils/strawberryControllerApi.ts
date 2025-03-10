@@ -1,6 +1,5 @@
 import axios, {CancelToken} from 'axios';
 import {wrapApiPromiseByToaster} from './utils';
-import {YTError} from '../../@types/types';
 import {OptionsGroup} from '../components/Dialog/df-dialog-utils';
 import {QueryEngine} from '../pages/query-tracker/module/engines';
 
@@ -66,7 +65,7 @@ export type StrawberryStatusResponse = {
     };
     state?: StrawberryCliqueStateType;
     health?: StrawberryCliqueHealthType;
-    health_reason?: unknown;
+    health_reason?: string;
     incarnation_index?: number;
     creator?: string;
     speclet_modification_time?: string;
@@ -74,7 +73,7 @@ export type StrawberryStatusResponse = {
     stage?: string;
 
     pool?: string;
-    error?: YTError;
+    error?: string;
 };
 
 export type StrawberryListResponse = WithResult<Array<StrawberryListResponseItem>>;
