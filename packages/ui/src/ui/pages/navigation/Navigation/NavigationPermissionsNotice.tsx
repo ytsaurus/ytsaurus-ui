@@ -9,7 +9,7 @@ import {
 } from '../../../store/selectors/navigation/navigation';
 import {useSelector} from 'react-redux';
 import Error from '../../../components/Error/Error';
-import Block from '../../../components/Block/Block';
+import {YTErrorBlock} from '../../../components/Block/Block';
 import {getPath} from '../../../store/selectors/navigation';
 import {genAccountsAclLink} from '../../../utils/accounts/accounts';
 import {getCluster} from '../../../store/selectors/global';
@@ -33,7 +33,7 @@ export function NavigationPermissionsNotice() {
     const accountAclLink = genAccountsAclLink(cluster, account);
 
     return isWriteable && !isAccountUsable ? (
-        <Block
+        <YTErrorBlock
             type={'alert'}
             message={
                 <div className={block()}>

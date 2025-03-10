@@ -9,7 +9,7 @@ import Modal from '../../../../../components/Modal/Modal';
 
 import {getPath} from '../../../../../store/selectors/navigation';
 import {ConnectedProps, connect} from 'react-redux';
-import Error from '../../../../../components/Block/Block';
+import {YTErrorBlock} from '../../../../../components/Block/Block';
 import {YTDFDialog} from '../../../../../components/Dialog';
 import {Alert, Progress} from '@gravity-ui/uikit';
 
@@ -112,7 +112,7 @@ class UploadManagerCreate extends React.Component<Props, State> {
                         </div>
                     )}
                 </div>
-                {error && <Error error={error} />}
+                {error && <YTErrorBlock error={error} />}
                 {nameAlreadyUsed && (
                     <Alert
                         theme="info"

@@ -7,7 +7,7 @@ import forEach_ from 'lodash/forEach';
 
 import {Progress} from '@gravity-ui/uikit';
 
-import Block from '../../../components/Block/Block';
+import {YTErrorBlock} from '../../../components/Block/Block';
 import hammer from '../../../common/hammer';
 import {getMediumList} from '../../../store/selectors/thor';
 import {loadSystemResources} from '../../../store/actions/system/resources';
@@ -110,7 +110,7 @@ class Resources extends Component {
             return null;
         }
         return (
-            <Block
+            <YTErrorBlock
                 type={fullNodePercentage >= 90 ? 'error' : 'alert'}
                 message={`${fullNodePercentage.toFixed(2)} % (${fullNodeCount}) of nodes are full.`}
             />

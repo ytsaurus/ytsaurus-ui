@@ -28,7 +28,7 @@ import {FlowSpecState} from '../../../../../store/reducers/flow/specs';
 import Yson from '../../../../../components/Yson/Yson';
 import Icon from '../../../../../components/Icon/Icon';
 import {YTDFDialog, makeErrorFields} from '../../../../../components/Dialog';
-import ErrorBlock from '../../../../../components/Block/Block';
+import {YTErrorBlock} from '../../../../../components/Block/Block';
 import Loader from '../../../../../components/Loader/Loader';
 import {UnipikaSettings} from '../../../../../components/Yson/StructuredYson/StructuredYsonTypes';
 
@@ -53,7 +53,7 @@ function PipelineSpec({path, data, error, name, onSave}: PipelineSpecProps) {
 
     return (
         <React.Fragment>
-            {Boolean(error) && <ErrorBlock error={error} />}
+            {Boolean(error) && <YTErrorBlock error={error} />}
             <Yson
                 value={data}
                 settings={settings}
