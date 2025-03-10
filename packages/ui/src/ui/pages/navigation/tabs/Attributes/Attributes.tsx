@@ -6,7 +6,7 @@ import {Loader} from '@gravity-ui/uikit';
 
 import Yson from '../../../../components/Yson/Yson';
 import {YsonDownloadButton} from '../../../../components/DownloadAttributesButton';
-import ErrorBlock from '../../../../components/Block/Block';
+import {YTErrorBlock} from '../../../../components/Block/Block';
 
 import {
     getAttributesPath,
@@ -51,7 +51,7 @@ function Attributes() {
 
     return (
         <Fragment>
-            {error != undefined && <ErrorBlock error={error} />}
+            {error != undefined && <YTErrorBlock error={error} />}
             <Yson
                 settings={settings}
                 value={attributes}

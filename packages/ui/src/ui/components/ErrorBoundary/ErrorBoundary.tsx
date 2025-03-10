@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 
-import ErrorBlock from '../../components/Block/Block';
+import {YTErrorBlock} from '../../components/Block/Block';
 import CompactError from '../CompactError/CompactError';
 
 import {rumLogError} from '../../rum/rum-counter';
@@ -63,6 +63,6 @@ export default class ErrorBoundary extends Component<ErrorBoundaryProps> {
                 children
             );
         }
-        return hasError ? <ErrorBlock error={error} /> : children;
+        return hasError ? <YTErrorBlock error={error} /> : children;
     }
 }
