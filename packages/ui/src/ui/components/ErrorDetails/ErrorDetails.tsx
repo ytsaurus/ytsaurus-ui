@@ -1,5 +1,5 @@
-import React, {Component} from 'react';
-import PropTypes from 'prop-types';
+import React from 'react';
+import {AxiosError} from 'axios';
 import {ClipboardButton, Flex} from '@gravity-ui/uikit';
 import Link from '../../components/Link/Link';
 import block from 'bem-cn-lite';
@@ -16,28 +16,24 @@ import './ErrorDetails.scss';
 import {unescapeSlashX} from '../../utils/utils';
 import FormattedText from '../formatters/FormattedText';
 import {isYTError} from '../../../shared/utils';
+import {UnipikaSettings} from '../../components/Yson/StructuredYson/StructuredYsonTypes';
+import {YTError} from '../../../@types/types';
 
 const b = block('elements-error-details');
 
-export default class ErrorDetails extends Component {
-    static propTypes = {
-        error: PropTypes.shape({
-            attributes: PropTypes.object,
-            message: PropTypes.oneOfType([
-                PropTypes.string,
-                PropTypes.shape({
-                    $type: PropTypes.string.isRequired,
-                    $value: PropTypes.string.isRequired,
-                }),
-            ]),
-            inner_errors: PropTypes.array,
-            code: PropTypes.number,
-        }),
-        settings: PropTypes.object,
-        maxCollapsedDepth: PropTypes.number,
-    };
+export type ErrorDetailsProps = {
+    error: Omit<Partial<YTError> & Partial<AxiosError>, 'code'> & {code?: number | string};
+    settings: UnipikaSettings;
+    maxCollapsedDepth?: number;
+};
 
-    static prepareDefaultTab(props) {
+type State = {
+    showDetails: boolean;
+    currentTab: 'attributes' | 'details' | 'stderrs';
+};
+
+export default class ErrorDetails extends React.Component<ErrorDetailsProps, State> {
+    static prepareDefaultTab(props: ErrorDetailsProps) {
         const {
             error: {attributes},
         } = props;
@@ -56,7 +52,7 @@ export default class ErrorDetails extends Component {
         }
     }
 
-    state = {
+    state: State = {
         showDetails: false,
         currentTab: ErrorDetails.prepareDefaultTab(this.props),
     };
@@ -64,17 +60,17 @@ export default class ErrorDetails extends Component {
     get TABS() {
         return [
             {
-                value: 'details',
+                value: 'details' as const,
                 text: 'Details',
                 show: false,
             },
             {
-                value: 'stderrs',
+                value: 'stderrs' as const,
                 text: 'Stderrs',
                 show: false,
             },
             {
-                value: 'attributes',
+                value: 'attributes' as const,
                 text: 'Attributes',
                 show: true,
             },
@@ -87,7 +83,7 @@ export default class ErrorDetails extends Component {
         });
     };
 
-    changeCurrentTab = (tabName) => {
+    changeCurrentTab = (tabName: State['currentTab']) => {
         this.setState({
             currentTab: tabName,
         });
@@ -100,9 +96,9 @@ export default class ErrorDetails extends Component {
 
         return map_(this.TABS, (tab) => {
             if (typeof attributes[tab.value] !== 'undefined') {
-                return Object.assign({}, tab, {show: true});
+                return {...tab, show: true};
             } else {
-                return Object.assign({}, tab);
+                return {...tab};
             }
         });
     }
@@ -159,12 +155,12 @@ export default class ErrorDetails extends Component {
 
     renderInnerErrors() {
         const {
-            error: {inner_errors: innerErrors = [], isAxiosError = false, response = {}},
+            error: {inner_errors: innerErrors = [], isAxiosError = false, response},
             settings,
             maxCollapsedDepth = Infinity,
         } = this.props;
 
-        if (!innerErrors.length && isAxiosError && response.data) {
+        if (!innerErrors.length && isAxiosError && response?.data) {
             const innerError = isYTError(response.data)
                 ? response.data
                 : {attributes: response.data, message: 'Error'};

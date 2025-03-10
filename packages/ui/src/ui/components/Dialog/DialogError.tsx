@@ -4,7 +4,7 @@ import cn from 'bem-cn-lite';
 import type {FORM_ERROR as FormErrorType} from './index';
 
 import {FIX_MY_TYPE, YTError} from '../../types';
-import Block from '../../components/Block/Block';
+import {YTErrorBlock} from '../../components/Block/Block';
 
 import compact_ from 'lodash/compact';
 import map_ from 'lodash/map';
@@ -12,7 +12,7 @@ import map_ from 'lodash/map';
 const block = cn('yt-dialog-error');
 
 export function DialogError(props: FIX_MY_TYPE) {
-    return <Block {...props} className={block()} />;
+    return <YTErrorBlock {...props} className={block()} />;
 }
 
 export function makeErrorFields(errors: Array<YTError | Error | undefined>) {

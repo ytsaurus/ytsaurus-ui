@@ -1,7 +1,7 @@
 import React, {ComponentType, useEffect} from 'react';
 import {ConnectedProps, connect} from 'react-redux';
 
-import ErrorBlock from '../../../../components/Block/Block';
+import {YTErrorBlock} from '../../../../components/Block/Block';
 import ErrorBoundary from '../../../../components/ErrorBoundary/ErrorBoundary';
 import WithStickyToolbar from '../../../../components/WithStickyToolbar/WithStickyToolbar';
 import {CONSUMER_MODE} from '../../../../constants/navigation/tabs/consumer';
@@ -53,7 +53,7 @@ const Consumer: React.VFC<PropsFromRedux> = ({
     const {ExtraControls, View} = useViewByMode(consumerMode);
 
     if (statusError) {
-        return <ErrorBlock error={statusError} topMargin="none" />;
+        return <YTErrorBlock error={statusError} topMargin="none" />;
     }
 
     return (

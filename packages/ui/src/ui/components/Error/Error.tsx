@@ -1,15 +1,7 @@
-import React, {Component} from 'react';
+import React from 'react';
 
-import Block from '../../components/Block/Block';
+import {YTErrorBlock as Block, YTErrorBlockProps} from '../../components/Block/Block';
 
-const propTypes = Block.propTypes;
-
-export default class Error extends Component {
-    render() {
-        const props = this.props;
-
-        return <Block {...props} type="error" />;
-    }
+export default function Error(props: YTErrorBlockProps) {
+    return <Block {...props} type="error" />;
 }
-
-Error.propTypes = propTypes;
