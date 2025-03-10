@@ -6,7 +6,7 @@ import cn from 'bem-cn-lite';
 
 import {getNodeAlerts} from '../../../../../store/selectors/components/node/node';
 import {useSelector} from 'react-redux';
-import Alert from '../../../../../components/Alert/Alert';
+import {YTAlertBlock} from '../../../../../components/Alert/Alert';
 
 import './NodeAlerts.scss';
 
@@ -17,7 +17,7 @@ function NodeAlerts() {
     return (
         <div>
             {map_(alerts, (item, index) => (
-                <Alert className={block('item')} error={item} key={index} />
+                <YTAlertBlock className={block('item')} error={item} key={index} />
             ))}
         </div>
     );

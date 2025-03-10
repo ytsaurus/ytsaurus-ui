@@ -9,7 +9,7 @@ import {Loader, Text} from '@gravity-ui/uikit';
 import format from '../../../common/hammer/format';
 
 import {useUpdater} from '../../../hooks/use-updater';
-import Alert from '../../../components/Alert/Alert';
+import {YTAlertBlock} from '../../../components/Alert/Alert';
 import Error from '../../../components/Error/Error';
 import Label from '../../../components/Label/Label';
 import {OperationPool} from '../../../components/OperationPool/OperationPool';
@@ -117,7 +117,12 @@ function ChytCliqueErrors() {
                 />
             ) : null}
             {health_reason ? (
-                <Alert header="Health reason" type="alert" message={health_reason} bottomMargin />
+                <YTAlertBlock
+                    header="Health reason"
+                    type="alert"
+                    message={health_reason}
+                    bottomMargin
+                />
             ) : null}
         </React.Fragment>
     );
