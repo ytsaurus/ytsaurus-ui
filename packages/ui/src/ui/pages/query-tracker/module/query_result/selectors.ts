@@ -1,19 +1,15 @@
 import {getSettingsDataFromInitialConfig} from '../../../../config';
 import {RootState} from '../../../../store/reducers';
-import {NAMESPACES, SettingName} from '../../../../../shared/constants/settings';
-import {getPath} from '../../../../../shared/utils/settings';
 import {QueryResult, QueryResultReadyState, QueryResultState} from './types';
 
 export const getQueryResultsState = (state: RootState) => state.queryTracker.results;
 
 export const getQueryResultGlobalSettings = (): QueryResultReadyState['settings'] => {
     const settings = getSettingsDataFromInitialConfig().data;
-    const {ROWS_PER_TABLE_PAGE, MAXIMUM_TABLE_STRING_SIZE} = SettingName.NAVIGATION;
-    const {NAVIGATION} = NAMESPACES;
 
     return {
-        pageSize: settings[getPath(ROWS_PER_TABLE_PAGE, NAVIGATION)],
-        cellSize: settings[getPath(MAXIMUM_TABLE_STRING_SIZE, NAVIGATION)],
+        pageSize: settings['global::navigation::rowsPerTablePage'] || 10,
+        cellSize: settings['global::navigation::maximumTableStringSize'] || 1024,
     };
 };
 

@@ -21,7 +21,7 @@ import {Toaster} from '@gravity-ui/uikit';
 import {RumWrapper, YTApiId} from '../../rum/rum-wrap-api';
 import {RumMeasureTypes} from '../../rum/rum-measure-types';
 import {getBatchError, wrapApiPromiseByToaster} from '../../utils/utils';
-import {BatchResultsItem} from '../../../shared/yt-types';
+import {BatchResultsItem, RawVersion} from '../../../shared/yt-types';
 import {ThunkAction} from 'redux-thunk';
 import {RootState} from '../../store/reducers';
 import {YT} from '../../config/yt-config';
@@ -189,7 +189,7 @@ function initClusterAndUserSettingsAfterClusterChanging(params: {
     };
 }
 interface ClusterInfoData {
-    version?: string;
+    version?: RawVersion;
     versionError?: YTError;
     token?: {
         login: string;

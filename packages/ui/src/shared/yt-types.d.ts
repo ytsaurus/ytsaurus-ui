@@ -1,7 +1,10 @@
 import type {YTError} from '../@types/types';
+
 import {RawJob} from '../ytsaurus-ui.ui/types/operations/job';
-import type {Settings, Stage} from './constants/settings-types';
+import type {DescribedSettings, Stage} from './constants/settings-types';
 import type {UISettings} from './ui-settings';
+
+export type RawVersion = `${MajorMinorPatch}-${string}` | '';
 
 export interface YTConfig {
     clusters: Record<string, ClusterConfig>;
@@ -12,7 +15,8 @@ export interface YTConfig {
             version: string;
         };
         login: string;
-        version: string;
+        version: RawVersion;
+        authWay?: AuthWay;
     };
     environment?: 'development' | 'production' | 'farm' | 'localmode';
 }
@@ -386,7 +390,7 @@ export type OutputFormat =
     | 'json';
 
 export interface SettingsConfig {
-    data: Settings;
+    data: Partial<DescribedSettings>;
     meta: {
         useRemoteSettings: boolean;
         errorMessage: any;

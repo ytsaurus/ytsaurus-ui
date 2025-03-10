@@ -10,9 +10,12 @@
         }
     }
 
+    $self: &;
+
     &__panes-wrapper_with-pane {
         overflow: auto;
-        max-width: calc(100vw - 56px);
+        max-width: calc(100vw - var(--gn-aside-header-size));
+        max-height: calc(100vh - var(--app-header-height) - var(--app-footer-height));
 
         & .flex-split__pane {
             overflow: auto;

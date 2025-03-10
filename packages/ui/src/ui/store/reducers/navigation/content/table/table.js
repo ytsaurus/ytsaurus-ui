@@ -26,8 +26,8 @@ const settings = getSettingsDataFromInitialConfig().data;
 const {ROWS_PER_TABLE_PAGE, MAXIMUM_TABLE_STRING_SIZE} = SettingName.NAVIGATION;
 const {NAVIGATION} = NAMESPACES;
 
-const userPageSize = settings[getPath(ROWS_PER_TABLE_PAGE, NAVIGATION)];
-const userCellSize = settings[getPath(MAXIMUM_TABLE_STRING_SIZE, NAVIGATION)];
+const userPageSize = settings[getPath(ROWS_PER_TABLE_PAGE, NAVIGATION)] || 10;
+const userCellSize = settings[getPath(MAXIMUM_TABLE_STRING_SIZE, NAVIGATION)] || 1024;
 
 const ephemeralState = {
     /** @type {boolean} */

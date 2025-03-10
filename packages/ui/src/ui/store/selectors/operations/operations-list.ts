@@ -15,6 +15,10 @@ import {
 } from '../../../constants/operations/list';
 import {getCurrentUserName} from '../global';
 import {getOperationsListFilters} from '.';
+import {
+    OperationPresetsSettings,
+    OperationsListPreset,
+} from '../../../../shared/constants/settings-types';
 
 export const getOperationsListIsFinalState = createSelector(
     [
@@ -27,11 +31,6 @@ export const getOperationsListIsFinalState = createSelector(
         return isFinalLoadingStatus(status);
     },
 );
-
-interface PresetItem {
-    name: string;
-    filters: Record<string, any>;
-}
 
 /**
  * 
@@ -70,9 +69,10 @@ function createPreconfiguredPresets(login: string) {
 
 export const getOperationsListFilterPresets = createSelector(
     [getSettingsDataRaw, getCurrentUserName],
-    (data, login) => {
-        const collectionKeys = filter_(Object.keys(data), (path) =>
-            path.startsWith(NAMESPACES.OPERATION_PRESETS.value),
+    (data, login): Record<string, OperationsListPreset> => {
+        const collectionKeys: Array<keyof OperationPresetsSettings> = filter_(
+            Object.keys(data) as Array<keyof OperationPresetsSettings>,
+            (path) => path.startsWith(NAMESPACES.OPERATION_PRESETS.value),
         );
         return {
             ...createPreconfiguredPresets(login),
@@ -82,10 +82,10 @@ export const getOperationsListFilterPresets = createSelector(
                     const settingName = path.slice(
                         (NAMESPACES.OPERATION_PRESETS.value + NS_SEPARATOR).length,
                     );
-                    collection[settingName] = {...(data as Record<string, PresetItem>)[path]};
+                    collection[settingName] = {...data[path]};
                     return collection;
                 },
-                {} as Record<string, PresetItem>,
+                {} as Record<string, OperationPresetsSettings>,
             ),
         };
     },

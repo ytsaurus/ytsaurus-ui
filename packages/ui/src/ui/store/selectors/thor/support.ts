@@ -7,6 +7,7 @@ import every_ from 'lodash/every';
 import hammer from '@ytsaurus/interface-helpers/lib/hammer';
 
 import {RootState} from '../../../store/reducers';
+import {RawVersion} from '../../../../shared/yt-types';
 
 export const _LOCAL_ARCADIA_VERSION = '(development)';
 
@@ -107,8 +108,6 @@ const getRawMasterVersion = (state: RootState) => state.global.masterVersion;
 
 type MajorMinorPatch = `${number}.${number}.${number}`;
 type MajorMinorPatchRange = {greater?: MajorMinorPatch; smaller?: MajorMinorPatch};
-
-export type RawVersion = `${MajorMinorPatch}-${string}`;
 
 export type Versions<T> = {proxy?: T | typeof _LOCAL_ARCADIA_VERSION; scheduler?: T; master?: T};
 

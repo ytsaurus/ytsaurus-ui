@@ -6,6 +6,7 @@ import {ThemeProvider, useThemeType, useThemeValue} from '@gravity-ui/uikit';
 
 import ModalErrors from '../../containers/ModalErrors/ModalErrors';
 import AttributesModal from '../../components/AttributesModal/AttributesModal';
+import {MaxContentWidth} from '../../containers/MaxContentWidth';
 import {ClustersMenuLazy} from '../../containers/ClustersMenu/lazy';
 import {ClusterPageWrapperLazy} from '../../containers/ClusterPageWrapper/lazy';
 import ActionModal from '../ActionModal/ActionModal';
@@ -22,6 +23,8 @@ import {setTheme} from '../../store/actions/global';
 import {loadAllowedExperimentalPages} from '../../store/actions/global/experimental-pages';
 import {getAuthPagesEnabled, getGlobalShowLoginDialog} from '../../store/selectors/global';
 import {getFontType} from '../../store/selectors/global/fonts';
+import UIFactory from '../../UIFactory';
+
 import {AppThemeFont, AppThemeFontProps} from './AppThemeFont';
 
 import './App.scss';
@@ -41,6 +44,8 @@ function AppWithRum() {
     const showLogin = useSelector(getGlobalShowLoginDialog);
     const hasAuthPages = useSelector(getAuthPagesEnabled);
     const fontType = useSelector(getFontType);
+
+    const {footer, footerHeight} = UIFactory.renderAppFooter() ?? {};
 
     return showLogin ? (
         <Route render={() => <LoginFormPage theme={themeType} />} />
@@ -62,18 +67,30 @@ function AppWithRum() {
                     <AppThemeFont theme={theme} fontType={fontType}>
                         <AppNavigation>
                             <LoadAllowedExperimentalUrls />
-                            <div className="elements-page">
-                                <Route exact path="/" render={() => <ClustersMenuLazy />} />
-                                <Route
-                                    path="/:cluster/"
-                                    render={() => <ClusterPageWrapperLazy />}
-                                />
+                            <div
+                                className="elements-page"
+                                style={
+                                    {
+                                        '--app-footer-height': `${footerHeight ?? 0}px`,
+                                        minHeight:
+                                            'calc(100vh - var(--app-header-height) - var(--app-footer-height))',
+                                    } as React.CSSProperties
+                                }
+                            >
+                                <MaxContentWidth>
+                                    <Route exact path="/" render={() => <ClustersMenuLazy />} />
+                                    <Route
+                                        path="/:cluster/"
+                                        render={() => <ClusterPageWrapperLazy />}
+                                    />
+                                </MaxContentWidth>
                                 <AttributesModal />
                                 <ActionModal />
                                 <ModalErrors />
                                 <RetryBatchModals />
                                 <ManageTokensModal />
                             </div>
+                            {footer}
                         </AppNavigation>
                     </AppThemeFont>
                 )}
