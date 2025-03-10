@@ -8,7 +8,7 @@ import CollapsibleSection, {
     CollapsibleSectionProps,
 } from '../../components/CollapsibleSection/CollapsibleSection';
 import ErrorBoundary from '../../components/ErrorBoundary/ErrorBoundary';
-import Alert from '../../components/Alert/Alert';
+import {YTAlertBlock} from '../../components/Alert/Alert';
 import {UI_COLLAPSIBLE_SIZE} from '../../constants/global/index';
 import {YTError} from '../../types/index';
 
@@ -34,7 +34,7 @@ export function Alerts({className, items, marginDirection = 'bottom'}: AlertsPro
                     marginDirection={marginDirection}
                 >
                     {map_(items, (alert, index) => {
-                        return <Alert key={index} error={alert} />;
+                        return <YTAlertBlock key={index} error={alert} />;
                     })}
                 </CollapsibleSection>
             </div>
