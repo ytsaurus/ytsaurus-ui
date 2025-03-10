@@ -5,7 +5,7 @@ import sortedIndexOf_ from 'lodash/sortedIndexOf';
 import isEmpty_ from 'lodash/isEmpty';
 
 import Link from '../../../../components/Link/Link';
-import Error from '../../../../components/Error/Error';
+import {YTErrorBlock} from '../../../../components/Error/Error';
 import {FormApi, YTDFDialog} from '../../../../components/Dialog';
 import Button from '../../../../components/Button/Button';
 
@@ -226,7 +226,7 @@ function CreatePoolDialog(props: {onClose: () => void}) {
                     name: 'error-block',
                     type: 'block',
                     extras: {
-                        children: error && <Error error={error} />,
+                        children: error && <YTErrorBlock error={error} />,
                     },
                 },
             ]}

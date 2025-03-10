@@ -14,7 +14,7 @@ import ErrorBoundary from '../../../components/ErrorBoundary/ErrorBoundary';
 import MetaTable, {Template} from '../../../components/MetaTable/MetaTable';
 import Histogram from '../../../components/Histogram/Histogram';
 import {size} from '../../../components/MetaTable/presets';
-import Error from '../../../components/Error/Error';
+import {YTErrorBlock} from '../../../components/Error/Error';
 import Label from '../../../components/Label/Label';
 import Yson from '../../../components/Yson/Yson';
 
@@ -54,7 +54,7 @@ const renderErrorsDialog = (errors, handleClose) => {
                         ...err,
                         message: ypath.getValue(err, '/message'),
                     };
-                    return <Error error={error} key={index} />;
+                    return <YTErrorBlock error={error} key={index} />;
                 })}
             </Dialog.Body>
         </Dialog>
@@ -74,7 +74,7 @@ const renderReplicationErrorsDialog = (replicationErrors, handleClose) => {
                         message: ypath.getValue(err, '/message'),
                     };
                     const message = `Replica ID: ${replica}`;
-                    return <Error message={message} error={error} key={replica} />;
+                    return <YTErrorBlock message={message} error={error} key={replica} />;
                 })}
             </Dialog.Body>
         </Dialog>

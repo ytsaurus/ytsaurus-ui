@@ -11,7 +11,7 @@ import {
     getNodeMemoryViewMode,
 } from '../../../../../store/selectors/components/node/memory';
 import {useUpdater} from '../../../../../hooks/use-updater';
-import ErrorBlock from '../../../../../components/Error/Error';
+import {YTErrorBlock} from '../../../../../components/Error/Error';
 import NodeBundlesTotal from '../NodeBundlesTotal/NodeBundlesTotal';
 import NodeMemoryUsageToolbar from './NodeMemoryUsageToolbar';
 
@@ -41,7 +41,7 @@ function NodeMemoryUsage({match}: Props): ReturnType<React.VFC> {
     return (
         <div className={block()}>
             <React.Fragment>
-                {error && <ErrorBlock error={error} />}
+                {error && <YTErrorBlock error={error} />}
                 <NodeBundlesTotal />
                 <NodeMemoryUsageToolbar />
                 {viewMode === 'cells' ? <NodeBundles /> : <NodeTables />}

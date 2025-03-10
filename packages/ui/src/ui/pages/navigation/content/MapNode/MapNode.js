@@ -14,7 +14,7 @@ import RadioButton from '../../../../components/RadioButton/RadioButton';
 import Button from '../../../../components/Button/Button';
 import Filter from '../../../../components/Filter/Filter';
 import {SelectSingle} from '../../../../components/Select/Select';
-import Error from '../../../../components/Error/Error';
+import {YTErrorBlock} from '../../../../components/Error/Error';
 import Icon from '../../../../components/Icon/Icon';
 import TTLInfo from '../../../../components/TTLInfo/TTLInfo';
 import CreateTableModal from '../../modals/CreateTableModal/CreateTableModal';
@@ -123,7 +123,7 @@ class MapNode extends Component {
         } = this.props;
         return (
             <div className={block('error')}>
-                <Error message={message} error={details} />
+                <YTErrorBlock message={message} error={details} />
             </div>
         );
     }

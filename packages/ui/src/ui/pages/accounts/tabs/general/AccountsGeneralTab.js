@@ -26,7 +26,7 @@ import AccountsTotal from './AccountsTotal';
 import CollapsibleSection from '../../../../components/CollapsibleSection/CollapsibleSection';
 import withStickyHead from '../../../../components/ElementsTable/hocs/withStickyHead';
 import withStickyFooter from '../../../../components/ElementsTable/hocs/withStickyFooter';
-import Error from '../../../../components/Error/Error';
+import {YTErrorBlock} from '../../../../components/Error/Error';
 import ErrorBoundary from '../../../../components/ErrorBoundary/ErrorBoundary';
 import Filter from '../../../../components/Filter/Filter';
 import AccountLink from '../../AccountLink';
@@ -339,7 +339,7 @@ class AccountsGeneralTab extends Component {
     renderUsableError() {
         const {usableError} = this.props;
 
-        return <Error error={usableError} />;
+        return <YTErrorBlock error={usableError} />;
     }
 
     get templates() {
@@ -778,7 +778,7 @@ class AccountsGeneralTab extends Component {
                         toolbar={this.renderFilters()}
                         content={
                             <div>
-                                {error && <Error error={this.props.errorData} />}
+                                {error && <YTErrorBlock error={this.props.errorData} />}
                                 {usableError && this.renderUsableError()}
                                 {(wasLoaded || fetching) && this.renderAccountsTable()}
                             </div>

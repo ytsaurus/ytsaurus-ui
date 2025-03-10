@@ -12,7 +12,7 @@ import ErrorBoundary from '../../../../../components/ErrorBoundary/ErrorBoundary
 import MetaTable from '../../../../../components/MetaTable/MetaTable';
 import HelpLink from '../../../../../components/HelpLink/HelpLink';
 import {Checkbox, Loader} from '@gravity-ui/uikit';
-import Error from '../../../../../components/Error/Error';
+import {YTErrorBlock} from '../../../../../components/Error/Error';
 import Modal from '../../../../../components/Modal/Modal';
 import Label from '../../../../../components/Label/Label';
 
@@ -92,7 +92,7 @@ export class DeleteObjectModal extends Component<DeleteObjectModalProps> {
 
         return (
             <div className={block({error: true})}>
-                <Error error={errorContent} />
+                <YTErrorBlock error={errorContent} />
             </div>
         );
     }

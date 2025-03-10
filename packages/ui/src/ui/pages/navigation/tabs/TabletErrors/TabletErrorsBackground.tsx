@@ -8,7 +8,7 @@ import map_ from 'lodash/map';
 
 import LoadDataHandler from '../../../../components/LoadDataHandler/LoadDataHandler';
 import {Loader} from '@gravity-ui/uikit';
-import Error from '../../../../components/Error/Error';
+import {YTErrorBlock} from '../../../../components/Error/Error';
 import Link from '../../../../components/Link/Link';
 import CollapsibleSection from '../../../../components/CollapsibleSection/CollapsibleSection';
 import {Secondary} from '../../../../components/Text/Text';
@@ -213,7 +213,7 @@ function TabletErrorsBlock({items, cluster, sectionClassName}: Props) {
                     >
                         {map_(errors, (error, index) => {
                             return (
-                                <Error
+                                <YTErrorBlock
                                     key={index}
                                     className={block('error')}
                                     topMargin="none"

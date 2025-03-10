@@ -14,7 +14,7 @@ import {PreparedRole} from '../../../utils/acl';
 import {YTError} from '../../../types';
 
 import Button from '../../../components/Button/Button';
-import Error from '../../../components/Error/Error';
+import {YTErrorBlock} from '../../../components/Error/Error';
 import ErrorBoundary from '../../../components/ErrorBoundary/ErrorBoundary';
 import LoadDataHandler from '../../../components/LoadDataHandler/LoadDataHandler';
 
@@ -162,7 +162,7 @@ function ManageInheritance(props: Props) {
                         type: 'block',
                         extras: {
                             children: manageAclError && (
-                                <Error message="Acl update failure" error={manageAclError} />
+                                <YTErrorBlock message="Acl update failure" error={manageAclError} />
                             ),
                         },
                     },

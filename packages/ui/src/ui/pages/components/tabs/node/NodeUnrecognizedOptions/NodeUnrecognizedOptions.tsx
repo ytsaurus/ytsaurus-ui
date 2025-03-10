@@ -11,7 +11,7 @@ import {
     getNodeUnrecognizedOptionsData,
     getNodeUnrecognizedOptionsError,
 } from '../../../../../store/selectors/components/node/unrecognized-options';
-import Error from '../../../../../components/Error/Error';
+import {YTErrorBlock} from '../../../../../components/Error/Error';
 import Yson from '../../../../../components/Yson/Yson';
 import {getNodeUnrecognizedOptionsYsonSettings} from '../../../../../store/selectors/thor/unipika';
 import {YsonDownloadButton} from '../../../../../components/DownloadAttributesButton';
@@ -29,7 +29,7 @@ export function NodeUnrecognizedOptions({host}: {host: string}) {
     const unipikaSettings = useSelector(getNodeUnrecognizedOptionsYsonSettings);
 
     return error ? (
-        <Error error={error} />
+        <YTErrorBlock error={error} />
     ) : (
         <Yson
             className={block('yson')}

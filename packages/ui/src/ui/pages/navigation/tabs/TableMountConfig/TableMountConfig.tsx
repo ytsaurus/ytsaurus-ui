@@ -2,7 +2,7 @@ import React from 'react';
 import cn from 'bem-cn-lite';
 import {useSelector} from 'react-redux';
 import {getNavigationTableMountConfig} from '../../../../store/selectors/navigation/content/table-mount-config';
-import ErrorBlock from '../../../../components/Error/Error';
+import {YTErrorBlock} from '../../../../components/Error/Error';
 import Yson from '../../../../components/Yson/Yson';
 import {getNavigationMountConfigYsonSettings} from '../../../../store/selectors/thor/unipika';
 import {YsonDownloadButton} from '../../../../components/DownloadAttributesButton';
@@ -21,7 +21,7 @@ function TableMountConfig() {
     return (
         <div className={block('table-mount-config')}>
             {error ? (
-                <ErrorBlock error={error} topMargin={'none'} />
+                <YTErrorBlock error={error} topMargin={'none'} />
             ) : (
                 <Yson
                     value={data}

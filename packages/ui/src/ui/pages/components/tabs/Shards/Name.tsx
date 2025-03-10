@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import {TextInput} from '@gravity-ui/uikit';
 import Button from '../../../../components/Button/Button';
 import Modal from '../../../../components/Modal/Modal';
-import Error from '../../../../components/Error/Error';
+import {YTErrorBlock} from '../../../../components/Error/Error';
 import Icon from '../../../../components/Icon/Icon';
 
 import {
@@ -88,7 +88,7 @@ function Name({
                                 onUpdate={changeName}
                                 placeholder="Enter name..."
                             />
-                            {error && <Error error={errorData} />}
+                            {error && <YTErrorBlock error={errorData} />}
                         </Fragment>
                     }
                 />
