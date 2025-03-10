@@ -434,7 +434,7 @@ function AvailableTimeRange() {
                 <React.Fragment>
                     Available range:{' '}
                     {hidden
-                        ? 'Please until the range is loaded'
+                        ? 'Please wait until the range is loaded'
                         : formatInterval((earliest ?? 0) * 1000, (latest ?? 0) * 1000)}
                 </React.Fragment>
             }
