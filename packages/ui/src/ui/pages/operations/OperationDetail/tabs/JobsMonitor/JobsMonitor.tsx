@@ -1,7 +1,7 @@
 import React from 'react';
 import {useSelector} from 'react-redux';
 
-import Error from '../../../../../components/Error/Error';
+import {YTErrorBlock} from '../../../../../components/Error/Error';
 import ErrorBoundary from '../../../../../components/ErrorBoundary/ErrorBoundary';
 import Loader from '../../../../../components/Loader/Loader';
 import {NoContent} from '../../../../../components/NoContent/NoContent';
@@ -35,7 +35,7 @@ function JobsMonitor() {
 
     return (
         <ErrorBoundary>
-            {error && <Error error={error} />}
+            {error && <YTErrorBlock error={error} />}
             <JobMonitorComponent {...{cluster, job_descriptor, from, to}} />
         </ErrorBoundary>
     );

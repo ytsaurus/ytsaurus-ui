@@ -5,7 +5,7 @@ import unipika from '../../common/thor/unipika';
 
 import FormattedText from '../../components/formatters/FormattedText';
 import SimpleModal from '../../components/Modal/SimpleModal';
-import Error from '../../components/Error/Error';
+import {YTErrorBlock} from '../../components/Error/Error';
 import Yson from '../Yson/Yson';
 
 import {closeAttributesModal} from '../../store/actions/modals/attributes-modal';
@@ -33,7 +33,7 @@ export class AttributesModal extends Component {
         const {attributes, ysonSettings, errorData, error} = this.props;
 
         return error ? (
-            <Error error={errorData} />
+            <YTErrorBlock error={errorData} />
         ) : (
             <Yson value={attributes} settings={ysonSettings} />
         );

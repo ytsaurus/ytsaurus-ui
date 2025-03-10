@@ -11,7 +11,7 @@ import ClipboardButton from '../../../../../components/ClipboardButton/Clipboard
 import DataTableYT, {
     DATA_TABLE_YT_SETTINGS,
 } from '../../../../../components/DataTableYT/DataTableYT';
-import ErrorBlock from '../../../../../components/Error/Error';
+import {YTErrorBlock} from '../../../../../components/Error/Error';
 import {ExpandButton} from '../../../../../components/ExpandButton';
 
 import {useUpdater} from '../../../../../hooks/use-updater';
@@ -56,7 +56,7 @@ export function FlowLayout({path, viewMode}: {path: string; viewMode: 'computati
 
     return (
         <div className={block()}>
-            {Boolean(error) && <ErrorBlock error={error} />}
+            {Boolean(error) && <YTErrorBlock error={error!} />}
             <DataTableYT
                 settings={DATA_TABLE_YT_SETTINGS}
                 columns={columns}

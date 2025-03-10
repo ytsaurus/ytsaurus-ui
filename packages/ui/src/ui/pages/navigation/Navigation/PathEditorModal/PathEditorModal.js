@@ -7,7 +7,7 @@ import {compose} from 'redux';
 import ErrorMessage from '../../../../components/ErrorMessage/ErrorMessage';
 import PathEditor from '../../../../containers/PathEditor/PathEditor';
 import Modal from '../../../../components/Modal/Modal';
-import Error from '../../../../components/Error/Error';
+import {YTErrorBlock} from '../../../../components/Error/Error';
 
 import {hideError, setPath} from '../../../../store/actions/navigation/modals/path-editing-popup';
 import {getOnlyFolders} from '../../../../utils/navigation/path-editing-popup';
@@ -137,7 +137,7 @@ class PathEditorModal extends Component {
                 {showError && (
                     <div className={b('error-wrapper')}>
                         <ErrorMessage message={errorMessage} />
-                        <Error error={error} />
+                        <YTErrorBlock error={error} />
                     </div>
                 )}
             </div>

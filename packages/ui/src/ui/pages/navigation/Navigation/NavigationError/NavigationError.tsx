@@ -2,7 +2,7 @@ import React from 'react';
 import cn from 'bem-cn-lite';
 import {ClipboardButton, Flex, Text} from '@gravity-ui/uikit';
 
-import Error from '../../../../components/Error/Error';
+import {YTErrorBlock} from '../../../../components/Error/Error';
 import {NavigationErrorImage} from './NavigationErrorImage';
 import ErrorDetails from '../../../../components/ErrorDetails/ErrorDetails';
 import {RequestPermission} from './RequestPermission';
@@ -59,7 +59,7 @@ function PrettyError(props: Props) {
 function UnexpectedError(props: Props) {
     const {details, message} = props;
 
-    return <Error className={block('unexpected-error')} error={details} message={message} />;
+    return <YTErrorBlock className={block('unexpected-error')} error={details} message={message} />;
 }
 
 export function NavigationError(props: Props) {

@@ -53,7 +53,7 @@ import {
 } from '../../../../store/selectors/accounts/account-usage';
 import DataTable, {Column, Settings} from '@gravity-ui/react-data-table';
 
-import ErrorBlock from '../../../../components/Error/Error';
+import {YTErrorBlock} from '../../../../components/Error/Error';
 import {
     STICKY_DOUBLE_TOOLBAR_BOTTOM,
     STICKY_TOOLBAR_BOTTOM,
@@ -374,7 +374,7 @@ function AccountUsageDetailsList() {
     const columns = useColumnsByPreset(mediums);
 
     if (!loading && error) {
-        return <ErrorBlock error={error} />;
+        return <YTErrorBlock error={error} />;
     }
 
     return (
@@ -405,7 +405,7 @@ function AccountUsageDetailsListDiff() {
     const columns = useColumnsByPreset(mediums);
 
     if (!loading && error) {
-        return <ErrorBlock error={error} />;
+        return <YTErrorBlock error={error} />;
     }
 
     return (
@@ -439,7 +439,7 @@ function AccountUsageDetailsTree() {
     const columns = useColumnsByPreset(mediums);
 
     if (!loading && error) {
-        return <ErrorBlock error={error} />;
+        return <YTErrorBlock error={error} />;
     }
 
     return (
@@ -470,7 +470,7 @@ function AccountUsageDetailsTreeDiff() {
     const columns = useColumnsByPreset(mediums);
 
     if (!loading && error) {
-        return <ErrorBlock error={error} />;
+        return <YTErrorBlock error={error} />;
     }
 
     return (

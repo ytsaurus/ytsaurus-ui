@@ -19,7 +19,7 @@ import DataTableYT, {
     Column,
     DATA_TABLE_YT_SETTINGS_UNDER_TOOLBAR_DOUBLE_HEIGHT,
 } from '../../../../../components/DataTableYT/DataTableYT';
-import ErrorBlock from '../../../../../components/Error/Error';
+import {YTErrorBlock} from '../../../../../components/Error/Error';
 import {Host} from '../../../../../containers/Host/Host';
 import ClickableAttributesButton from '../../../../../components/AttributesButton/ClickableAttributesButton';
 import ClipboardButton from '../../../../../components/ClipboardButton/ClipboardButton';
@@ -31,7 +31,7 @@ export function TabletErrorsByPathTable({className}: {className?: string}) {
     const error = useSelector(getTabletErrorsByPathError);
     return (
         <div className={className}>
-            {Boolean(error) && <ErrorBlock error={error} />}
+            {Boolean(error) && <YTErrorBlock error={error} />}
             <DataTableYT
                 loading={loading}
                 loaded={loaded}

@@ -9,7 +9,7 @@ import {DialogWrapper as Dialog} from '../../components/DialogWrapper/DialogWrap
 import {getExecuteBatchState} from '../../store/selectors/execute-batch';
 import {ExecuteBatchStateItem} from '../../store/reducers/execute-batch';
 
-import ErrorBlock from '../../components/Error/Error';
+import {YTErrorBlock} from '../../components/Error/Error';
 import {rumLogError} from '../../rum/rum-counter';
 import {
     abortExecuteBatch,
@@ -47,7 +47,7 @@ function RetryBatchImpl(props: ExecuteBatchStateItem) {
             <Dialog.Header caption={'Error'} />
             <Dialog.Body>
                 <div>Some sub-requests have been failed. Would you like to try again?</div>
-                <ErrorBlock error={error} />
+                <YTErrorBlock error={error} />
             </Dialog.Body>
             <Dialog.Footer
                 preset={'default'}

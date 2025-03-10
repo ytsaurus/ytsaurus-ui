@@ -27,7 +27,7 @@ import PageTracker from './PageTracker';
 import {PageHeadByCluster} from '../../components/PageHead/PageHead';
 
 import FlexSplitPane from '../../components/FlexSplitPane/FlexSplitPane';
-import ErrorBlock from '../../components/Error/Error';
+import {YTErrorBlock} from '../../components/Error/Error';
 import {HandleMaintenance} from '../../containers/MaintenancePage/HandleMaintenance';
 import PreloadError from '../../containers/PreloadError/PreloadError';
 
@@ -259,7 +259,7 @@ class ClusterPage extends Component {
                     )}
                 </div>
                 <div className={b('error')}>
-                    {paramsError && <ErrorBlock error={paramsError} />}
+                    {paramsError && <YTErrorBlock error={paramsError} />}
                 </div>
             </React.Fragment>
         );
