@@ -7,7 +7,7 @@ import Button from '../../../../components/Button/Button';
 import Icon from '../../../../components/Icon/Icon';
 import {FormApi, YTDFDialog} from '../../../../components/Dialog';
 import {YTError} from '../../../../types';
-import Error from '../../../../components/Error/Error';
+import {YTErrorBlock} from '../../../../components/Error/Error';
 
 import './ReplicatedTableSettings.scss';
 const block = cn('replicated-table-settings');
@@ -140,7 +140,7 @@ function ReplicatedTableSettingsDialog(props: Props & SettingsProps) {
                               extras: {
                                   children: (
                                       <div className={block('error')}>
-                                          <Error error={error} />
+                                          <YTErrorBlock error={error} />
                                       </div>
                                   ),
                               },

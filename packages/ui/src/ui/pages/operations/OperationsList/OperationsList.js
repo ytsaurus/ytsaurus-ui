@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import cn from 'bem-cn-lite';
 import moment from 'moment';
 
-import Error from '../../../components/Error/Error';
+import {YTErrorBlock} from '../../../components/Error/Error';
 
 import OperationsListTable from './OperationsListTable/OperationsListTable';
 import OperationsListToolbar from './OperationsListToolbar/OperationsListToolbar';
@@ -81,7 +81,7 @@ class OperationsList extends Component {
         const {
             error: {message, details},
         } = this.props;
-        return <Error message={message} error={details} />;
+        return <YTErrorBlock message={message} error={details} />;
     }
 
     firstTimeError() {

@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 
 import {Toaster} from '@gravity-ui/uikit';
-import Error from '../../components/Error/Error';
+import {YTErrorBlock} from '../../components/Error/Error';
 import hammer from '../../common/hammer';
 
 import {showErrorPopup} from '../../utils/utils';
@@ -44,7 +44,7 @@ export default class LoadDataHandler extends Component<LoadDataHandlerProps> {
         const initialLoading = !loaded;
 
         if (error && (alwaysShowError || initialLoading)) {
-            return <Error error={errorData} />;
+            return <YTErrorBlock error={errorData} />;
         }
 
         return children;

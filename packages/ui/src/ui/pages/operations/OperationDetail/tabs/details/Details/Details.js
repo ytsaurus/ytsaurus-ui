@@ -7,7 +7,7 @@ import AlertEvents from '../../../../../../components/AlertEvents/AlertEvents';
 import OperationDescription from '../../../../../../pages/operations/OperationDetail/tabs/details/Description';
 import CollapsibleSection from '../../../../../../components/CollapsibleSection/CollapsibleSection';
 import Button from '../../../../../../components/Button/Button';
-import Error from '../../../../../../components/Error/Error';
+import {YTErrorBlock} from '../../../../../../components/Error/Error';
 import Icon from '../../../../../../components/Icon/Icon';
 
 import DataFlow, {intermediateResourcesProps, resourcesProps} from '../DataFlow/DataFlow';
@@ -102,7 +102,7 @@ class Details extends Component {
         return (
             error && (
                 <div className={block('result')}>
-                    <Error {...error} disableLogger />
+                    <YTErrorBlock {...error} disableLogger />
                 </div>
             )
         );

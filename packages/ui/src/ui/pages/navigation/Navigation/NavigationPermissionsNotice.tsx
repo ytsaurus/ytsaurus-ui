@@ -8,7 +8,7 @@ import {
     getNavigationPathAccount,
 } from '../../../store/selectors/navigation/navigation';
 import {useSelector} from 'react-redux';
-import Error from '../../../components/Error/Error';
+import {YTErrorBlock} from '../../../components/Error/Error';
 import {YTErrorBlock} from '../../../components/Block/Block';
 import {getPath} from '../../../store/selectors/navigation';
 import {genAccountsAclLink} from '../../../utils/accounts/accounts';
@@ -27,7 +27,7 @@ export function NavigationPermissionsNotice() {
     const cluster = useSelector(getCluster);
 
     if (checkPermissionsError) {
-        return <Error error={checkPermissionsError} message={'Check permissions error'} />;
+        return <YTErrorBlock error={checkPermissionsError} message={'Check permissions error'} />;
     }
 
     const accountAclLink = genAccountsAclLink(cluster, account);

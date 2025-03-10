@@ -4,7 +4,7 @@ import cn from 'bem-cn-lite';
 
 import {useSelector} from 'react-redux';
 import {getJobsErrors} from '../../../../../../store/selectors/operations/jobs';
-import ErrorBlock from '../../../../../../components/Error/Error';
+import {YTErrorBlock} from '../../../../../../components/Error/Error';
 
 import './OperationJobsErrors.scss';
 
@@ -16,7 +16,7 @@ function OperationJobsErrors() {
     return (
         <div className={block()}>
             {map_(errors, (error, index) => {
-                return <ErrorBlock key={index} error={error} />;
+                return <YTErrorBlock key={index} error={error} />;
             })}
         </div>
     );

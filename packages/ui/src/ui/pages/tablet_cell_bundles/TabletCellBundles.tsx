@@ -18,7 +18,7 @@ import {
     getTabletsActiveBundleData,
     getTabletsError,
 } from '../../store/selectors/tablet_cell_bundles/index';
-import Error from '../../components/Error/Error';
+import {YTErrorBlock} from '../../components/Error/Error';
 import Bundles from './bundles/Bundles';
 
 import './TabletCellBundles.scss';
@@ -142,7 +142,7 @@ export default function TabletCellBundles() {
                         </div>
                     </div>
                 </div>
-                {error && <Error error={error} />}
+                {error && <YTErrorBlock error={error} />}
                 <div className={b('tab-viewer')}>
                     <Switch>
                         {instTab && (

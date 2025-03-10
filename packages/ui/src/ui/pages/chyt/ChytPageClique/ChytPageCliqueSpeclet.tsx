@@ -4,7 +4,7 @@ import reduce_ from 'lodash/reduce';
 import cn from 'bem-cn-lite';
 
 import Button from '../../../components/Button/Button';
-import Error from '../../../components/Error/Error';
+import {YTErrorBlock} from '../../../components/Error/Error';
 import Icon from '../../../components/Icon/Icon';
 import {YTDFDialog} from '../../../components/Dialog';
 import Yson from '../../../components/Yson/Yson';
@@ -76,7 +76,7 @@ export function ChytPageCliqueSpeclet() {
 
     return (
         <React.Fragment>
-            {error && <Error bottomMargin error={error} />}
+            {error && <YTErrorBlock bottomMargin error={error} />}
             {!specletData ? null : (
                 <React.Fragment>
                     <div className={block('edit')}>
@@ -97,7 +97,9 @@ function ChytSpeclet({alias, unipikaSettings}: {alias?: string; unipikaSettings:
 
     return dataAlias !== alias ? null : (
         <div className={block()}>
-            {error && <Error className={block('raw-speclet-error')} error={error} bottomMargin />}
+            {error && (
+                <YTErrorBlock className={block('raw-speclet-error')} error={error} bottomMargin />
+            )}
             {loaded && (
                 <Yson
                     className={block('raw-speclet')}
@@ -196,7 +198,7 @@ function ChytSpecletEditDialog({
 
     return (
         <React.Fragment>
-            {error && <Error bottomMargin error={error} />}
+            {error && <YTErrorBlock bottomMargin error={error} />}
             <YTDFDialog
                 className={block('dialog')}
                 size="l"

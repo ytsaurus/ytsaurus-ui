@@ -7,7 +7,7 @@ import pick_ from 'lodash/pick';
 import pickBy_ from 'lodash/pickBy';
 
 import {DialogField, FormApi, YTDFDialog} from '../../../../components/Dialog';
-import Error from '../../../../components/Error/Error';
+import {YTErrorBlock} from '../../../../components/Error/Error';
 
 import {
     calculatePoolPath,
@@ -58,7 +58,7 @@ function makePermissionWarning(visible: boolean) {
 }
 
 function makeError(error: any) {
-    return isEmpty_(error) ? null : <Error className={block('error')} error={error} />;
+    return isEmpty_(error) ? null : <YTErrorBlock className={block('error')} error={error} />;
 }
 
 export interface PoolEditorFormValues {

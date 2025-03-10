@@ -9,7 +9,7 @@ import map_ from 'lodash/map';
 import reduce_ from 'lodash/reduce';
 
 import {operationProps} from '../../../pages/operations/OperationDetail/tabs/details/Runtime/Runtime';
-import Error from '../../../components/Error/Error';
+import {YTErrorBlock} from '../../../components/Error/Error';
 import Modal from '../../../components/Modal/Modal';
 import Link from '../../../components/Link/Link';
 import Yson from '../../../components/Yson/Yson';
@@ -176,7 +176,7 @@ function PoolsWeightsEditModal(props) {
                             setWeights,
                         })}
                     </div>
-                    {error && <Error className={block('error')} error={errorData} />}
+                    {error && <YTErrorBlock className={block('error')} error={errorData} />}
                 </Fragment>
             }
         />

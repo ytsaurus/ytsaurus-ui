@@ -1,7 +1,7 @@
 import React, {FC, useCallback, useRef} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import cn from 'bem-cn-lite';
-import ErrorBlock from '../../../components/Error/Error';
+import {YTErrorBlock} from '../../../components/Error/Error';
 import CollapsibleSection from '../../../components/CollapsibleSection/CollapsibleSection';
 import {
     getNavigationAnnotation,
@@ -108,7 +108,7 @@ const NavigationDescription: FC<Props> = ({className}) => {
                             onToggle={handleToggleAnnotationCollapse}
                         />
                     )}
-                    {error && <ErrorBlock error={error} />}
+                    {error && <YTErrorBlock error={error} />}
                 </div>
             </CollapsibleSection>
         </div>

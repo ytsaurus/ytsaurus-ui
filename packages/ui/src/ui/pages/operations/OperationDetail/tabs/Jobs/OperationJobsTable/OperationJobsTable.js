@@ -12,7 +12,7 @@ import hammer from '../../../../../../common/hammer';
 import ElementsTable from '../../../../../../components/ElementsTable/ElementsTable';
 import {OPERATION_JOBS_TABLE_ID} from '../../../../../../constants/operations/jobs';
 import SimpleModal from '../../../../../../components/Modal/SimpleModal';
-import Error from '../../../../../../components/Error/Error';
+import {YTErrorBlock} from '../../../../../../components/Error/Error';
 
 import ClipboardButton from '../../../../../../components/ClipboardButton/ClipboardButton';
 import ChartLink from '../../../../../../components/ChartLink/ChartLink';
@@ -447,7 +447,7 @@ class OperationJobsTable extends React.Component {
         const ysonSettings = unipika.prepareSettings();
         const content =
             status === LOADING_STATUS.ERROR ? (
-                <Error {...error} />
+                <YTErrorBlock {...error} />
             ) : (
                 <Yson value={paths} settings={ysonSettings} />
             );

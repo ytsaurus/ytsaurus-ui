@@ -17,7 +17,7 @@ import ClipboardButton from '../../components/ClipboardButton/ClipboardButton';
 import block from 'bem-cn-lite';
 
 import Yson from '../../components/Yson/Yson';
-import Error from '../../components/Error/Error';
+import {YTErrorBlock} from '../../components/Error/Error';
 import {type YsonSettings, getPreviewCellYsonSettings} from '../../store/selectors/thor/unipika';
 import {closeCellPreviewAndCancelRequest} from '../../store/actions/modals/cell-preview';
 import {isMediaTag} from '../../utils/yql-types';
@@ -76,7 +76,7 @@ export const CellPreviewModal: React.FC = () => {
                     ) : null}
                 </Flex>
                 {error ? (
-                    <Error error={error} />
+                    <YTErrorBlock error={error} />
                 ) : (
                     <PreviewContent data={data} unipikaSettings={unipikaSettings} />
                 )}

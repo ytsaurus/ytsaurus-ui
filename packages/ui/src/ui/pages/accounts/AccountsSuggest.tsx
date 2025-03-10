@@ -5,7 +5,7 @@ import map_ from 'lodash/map';
 
 import cn from 'bem-cn-lite';
 
-import ErrorBlock from '../../components/Error/Error';
+import {YTErrorBlock} from '../../components/Error/Error';
 
 import {ROOT_ACCOUNT_NAME} from '../../constants/accounts/accounts';
 import {getEditableAccountParentSuggests} from '../../store/selectors/accounts/accounts';
@@ -126,7 +126,7 @@ export function AccountsSuggestWithLoading(
     return (
         <React.Fragment>
             <AccountSuggestImpl {...props} items={items || []} />
-            {error && <ErrorBlock error={error} />}
+            {error && <YTErrorBlock error={error} />}
         </React.Fragment>
     );
 }

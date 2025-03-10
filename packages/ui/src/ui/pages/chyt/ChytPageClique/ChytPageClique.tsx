@@ -10,7 +10,7 @@ import format from '../../../common/hammer/format';
 
 import {useUpdater} from '../../../hooks/use-updater';
 import {YTAlertBlock} from '../../../components/Alert/Alert';
-import Error from '../../../components/Error/Error';
+import {YTErrorBlock} from '../../../components/Error/Error';
 import Label from '../../../components/Label/Label';
 import {OperationPool} from '../../../components/OperationPool/OperationPool';
 import MetaTable, {MetaTableItem} from '../../../components/MetaTable/MetaTable';
@@ -107,9 +107,9 @@ function ChytCliqueErrors() {
 
     return (
         <React.Fragment>
-            {error ? <Error className={block('error')} error={error} bottomMargin /> : null}
+            {error ? <YTErrorBlock className={block('error')} error={error} bottomMargin /> : null}
             {startError ? (
-                <Error
+                <YTErrorBlock
                     header="Failed to start"
                     className={block('error')}
                     error={{message: startError}}
