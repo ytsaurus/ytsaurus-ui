@@ -21,7 +21,7 @@ import {PreparedRole} from '../../../utils/acl';
 import {YTError} from '../../../types';
 
 import LoadDataHandler from '../../../components/LoadDataHandler/LoadDataHandler';
-import Error from '../../../components/Error/Error';
+import {YTErrorBlock} from '../../../components/Error/Error';
 import ErrorBoundary from '../../../components/ErrorBoundary/ErrorBoundary';
 import Button from '../../../components/Button/Button';
 
@@ -218,7 +218,7 @@ function ManageAcl(props: Props) {
                         type: 'block',
                         extras: {
                             children: manageAclError && (
-                                <Error message="Acl update failure" error={manageAclError} />
+                                <YTErrorBlock message="Acl update failure" error={manageAclError} />
                             ),
                         },
                     },

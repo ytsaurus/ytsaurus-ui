@@ -3,7 +3,7 @@ import cn from 'bem-cn-lite';
 
 import includes_ from 'lodash/includes';
 
-import Error from '../../../../components/Error/Error';
+import {YTErrorBlock} from '../../../../components/Error/Error';
 import PivotKeys from '../PivotKeys/PivotKeys';
 import Speculative from '../Speculative/Speculative';
 import StatisticsIO from '../StatisticsIO/StatisticsIO';
@@ -32,7 +32,7 @@ function renderEvents(events: JobEvents, collapsibleSize: 'm' | 'ss') {
 function renderError(error: JobError) {
     return error ? (
         <div className={block('result')}>
-            <Error error={error} />
+            <YTErrorBlock error={error} />
         </div>
     ) : null;
 }

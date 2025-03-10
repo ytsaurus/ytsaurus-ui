@@ -1,9 +1,7 @@
-import React, {Component} from 'react';
-import PropTypes from 'prop-types';
+import React from 'react';
 import block from 'bem-cn-lite';
 
-import ClipboardButton from '../../components/ClipboardButton/ClipboardButton';
-import ErrorDetails from '../../components/ErrorDetails/ErrorDetails';
+import ErrorDetails, {ErrorDetailsProps} from '../../components/ErrorDetails/ErrorDetails';
 import HelpLink from '../../components/HelpLink/HelpLink';
 import Icon from '../Icon/Icon';
 
@@ -12,38 +10,42 @@ import hammer from '../../common/hammer';
 import './Block.scss';
 import FormattedText from '../formatters/FormattedText';
 import {rumLogError} from '../../rum/rum-counter';
+import {ErrorToClipboardButton} from '../../components/ErrorToClipboardButton/ErrorToClipboardButton';
 
-const b = block('elements-block');
+const b = block('yt-error-block');
 
-function ErrorLogger({error, type}) {
+function ErrorLogger({error, type}: Pick<YTErrorBlockProps, 'error' | 'type'>) {
     React.useEffect(() => {
         if (error && type === 'error') {
             rumLogError(
                 {
                     block: 'ErrorBlock',
                 },
-                error,
+                error as Error,
             );
         }
     }, [error]);
     return null;
 }
 
-export default class ErrorBlock extends Component {
-    static propTypes = {
-        error: ErrorDetails.propTypes.error,
-        message: PropTypes.node,
-        helpURL: PropTypes.string,
-        type: PropTypes.oneOf(['alert', 'error']),
-        className: PropTypes.string,
-        settings: PropTypes.object,
-        topMargin: PropTypes.oneOf(['none', 'half']),
-        bottomMargin: PropTypes.bool,
-        header: PropTypes.node,
-        maxCollapsedDepth: PropTypes.number, // max depth of collapsed inner errors
-        disableLogger: PropTypes.bool,
-    };
+export type YTErrorBlockProps = {
+    className?: string;
+    topMargin?: 'none' | 'half';
+    bottomMargin?: boolean;
 
+    error?: ErrorDetailsProps['error'];
+    settings?: ErrorDetailsProps['settings'];
+
+    header?: React.ReactNode;
+    message?: React.ReactNode;
+
+    helpURL?: string;
+    type?: 'alert' | 'error';
+    maxCollapsedDepth?: number; // max depth of collapsed inner errors
+    disableLogger?: boolean;
+};
+
+export class YTErrorBlock extends React.Component<YTErrorBlockProps> {
     static defaultProps = {
         type: 'error',
     };
@@ -109,13 +111,12 @@ export default class ErrorBlock extends Component {
     }
 
     renderCopy() {
-        const {error} = this.props;
+        const {error, settings} = this.props;
         const className = b('copy');
-        const text = JSON.stringify(error, null, 4);
 
         return (
             <div className={className}>
-                <ClipboardButton title="Copy error" view="flat-secondary" text={text} size="l" />
+                <ErrorToClipboardButton error={error} settings={settings} size="l" />
             </div>
         );
     }
@@ -123,14 +124,14 @@ export default class ErrorBlock extends Component {
     render() {
         const {type, className, topMargin, bottomMargin, disableLogger} = this.props;
 
-        const classNames = [
-            b({'top-margin': topMargin, ['bottom-margin']: bottomMargin}, 'elements-' + type),
-            className,
-        ].filter(Boolean);
-
         return (
             <React.Fragment>
-                <div className={classNames.join(' ')}>
+                <div
+                    className={b(
+                        {'top-margin': topMargin, ['bottom-margin']: bottomMargin, type},
+                        className,
+                    )}
+                >
                     {this.renderIcon()}
                     {this.renderHeading()}
                     {this.renderBody()}

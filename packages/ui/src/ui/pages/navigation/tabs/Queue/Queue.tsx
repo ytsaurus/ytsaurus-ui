@@ -2,7 +2,7 @@ import React, {ComponentType, useEffect} from 'react';
 import {ConnectedProps, connect, useSelector} from 'react-redux';
 
 import {Alerts} from '../../../../components/Alerts/Alerts';
-import ErrorBlock from '../../../../components/Block/Block';
+import {YTErrorBlock} from '../../../../components/Block/Block';
 import ErrorBoundary from '../../../../components/ErrorBoundary/ErrorBoundary';
 import WithStickyToolbar from '../../../../components/WithStickyToolbar/WithStickyToolbar';
 import {QUEUE_MODE} from '../../../../constants/navigation/tabs/queue';
@@ -62,7 +62,7 @@ const Queue: React.VFC<PropsFromRedux> = ({
     const items = useSelector(getQueueStatusDataAlerts);
 
     if (statusError) {
-        return <ErrorBlock error={statusError} topMargin="none" />;
+        return <YTErrorBlock error={statusError} topMargin="none" />;
     }
 
     return (

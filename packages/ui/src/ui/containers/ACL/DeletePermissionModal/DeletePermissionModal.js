@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import cn from 'bem-cn-lite';
 import {Checkbox} from '@gravity-ui/uikit';
 
-import Error from '../../../components/Error/Error';
+import {YTErrorBlock} from '../../../components/Error/Error';
 import Label from '../../../components/Label/Label';
 import MetaTable from '../../../components/MetaTable/MetaTable';
 import Modal from '../../../components/Modal/Modal';
@@ -130,7 +130,7 @@ export default class DeletePermissionModal extends Component {
                         </p>
 
                         {error && key === lastItemKey && (
-                            <Error message="Could not delete permission" error={error} />
+                            <YTErrorBlock message="Could not delete permission" error={error} />
                         )}
                     </div>
                 }

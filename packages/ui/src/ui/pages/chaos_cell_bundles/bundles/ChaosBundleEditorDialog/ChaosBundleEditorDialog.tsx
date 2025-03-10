@@ -10,7 +10,7 @@ import {DialogWrapper as Dialog} from '../../../../components/DialogWrapper/Dial
 import hammer from '../../../../common/hammer';
 import ypath from '../../../../common/thor/ypath';
 import Button from '../../../../components/Button/Button';
-import ErrorBlock from '../../../../components/Error/Error';
+import {YTErrorBlock} from '../../../../components/Error/Error';
 import Icon from '../../../../components/Icon/Icon';
 import QuotaEditorWithHide from '../../../../components/QuotaEditor/QuotaEditorWithHide';
 import Tabs from '../../../../components/Tabs/Tabs';
@@ -94,7 +94,7 @@ export function ChaosBundleEditorDialog({
                                 resourceType={'tablet_static_memory'}
                                 setBundleQuota={setBundleQuota}
                             />
-                            {error && <ErrorBlock error={error} />}
+                            {error && <YTErrorBlock error={error} />}
                         </React.Fragment>
                     )}
                     {activeTab === 'general' && (

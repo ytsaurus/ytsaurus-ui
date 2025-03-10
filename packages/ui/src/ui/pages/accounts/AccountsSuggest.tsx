@@ -5,7 +5,9 @@ import map_ from 'lodash/map';
 
 import cn from 'bem-cn-lite';
 
-import ErrorBlock from '../../components/Error/Error';
+import {YTError} from '../../../@types/types';
+
+import {YTErrorBlock} from '../../components/Error/Error';
 
 import {ROOT_ACCOUNT_NAME} from '../../constants/accounts/accounts';
 import {getEditableAccountParentSuggests} from '../../store/selectors/accounts/accounts';
@@ -111,7 +113,7 @@ export function AccountsSuggestWithLoading(
 ) {
     const [{items, error}, setState] = React.useState<{
         items?: Array<string>;
-        error?: string;
+        error?: YTError;
     }>({items: []});
     React.useMemo(() => {
         fetchFullList1M(YTApiId.listAccounts, {path: '//sys/accounts', ...USE_CACHE})
@@ -126,7 +128,7 @@ export function AccountsSuggestWithLoading(
     return (
         <React.Fragment>
             <AccountSuggestImpl {...props} items={items || []} />
-            {error && <ErrorBlock error={error} />}
+            {error && <YTErrorBlock error={error} />}
         </React.Fragment>
     );
 }

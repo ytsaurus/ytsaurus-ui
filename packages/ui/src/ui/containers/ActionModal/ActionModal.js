@@ -6,7 +6,7 @@ import cn from 'bem-cn-lite';
 import values_ from 'lodash/values';
 
 import Modal from '../../components/Modal/Modal';
-import Error from '../../components/Error/Error';
+import {YTErrorBlock} from '../../components/Error/Error';
 import Radiobox from '../../components/Radiobox/Radiobox';
 import SimpleModal from '../../components/Modal/SimpleModal';
 import TimeInput from '../../components/TimeInput/TimeInput';
@@ -152,7 +152,7 @@ class ActionModal extends React.Component {
                     onOutsideClick={this.dismissAction}
                 >
                     <p>{errorMessage}</p>
-                    <Error error={error} />
+                    <YTErrorBlock error={error} />
                 </SimpleModal>
             );
         }

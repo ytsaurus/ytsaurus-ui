@@ -7,7 +7,7 @@ import keys_ from 'lodash/keys';
 import {DialogWrapper as DeleteDialog} from '../../../components/DialogWrapper/DialogWrapper';
 
 import ErrorBoundary from '../../../components/ErrorBoundary/ErrorBoundary';
-import Error from '../../../components/Error/Error';
+import {YTErrorBlock} from '../../../components/Error/Error';
 
 import Content from '../Content/Content';
 
@@ -48,7 +48,7 @@ function Scheduling() {
     return (
         <div className={block(null, 'elements-main-section')}>
             <ErrorBoundary>
-                {error && <Error error={error} />}
+                {error && <YTErrorBlock error={error} />}
                 <div className={block('wrapper')}>
                     <SchedulingResources />
                     <Content {...{className: block('content')}} />
@@ -105,7 +105,7 @@ function SchedulingDialogs() {
                     <DeleteDialog.Body>
                         Are you sure you want to delete the <b>{deleteItem?.name}</b> pool?
                         {keys_(poolErrorData).length > 0 ? (
-                            <Error message="Delete pool failure" error={poolErrorData} />
+                            <YTErrorBlock message="Delete pool failure" error={poolErrorData} />
                         ) : null}
                     </DeleteDialog.Body>
                     <DeleteDialog.Footer

@@ -4,7 +4,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import block from 'bem-cn-lite';
 import {RootState} from '../../../store/reducers';
 import {getQueryResult} from '../module/query_result/selectors';
-import Error from '../../../components/Error/Error';
+import {YTErrorBlock} from '../../../components/Error/Error';
 import {ResultsTable} from './ResultsTable';
 import {QueryItem} from '../module/api';
 import {
@@ -112,7 +112,7 @@ export const QueryResultsView = React.memo(
                         )}
                     </>
                 )}
-                {result?.state === QueryResultState.Error && <Error error={result.error} />}
+                {result?.state === QueryResultState.Error && <YTErrorBlock error={result.error} />}
             </div>
         );
     },

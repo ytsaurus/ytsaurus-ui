@@ -11,7 +11,7 @@ import {
 } from '../../../../../store/selectors/navigation/content/table-ts';
 import {Warning} from '../../../../../components/Text/Text';
 import Yson from '../../../../../components/Yson/Yson';
-import ErrorBlock from '../../../../../components/Error/Error';
+import {YTErrorBlock} from '../../../../../components/Error/Error';
 import CollapsibleSection from '../../../../../components/CollapsibleSection/CollapsibleSection';
 
 import './TableColumnsPresetNotice.scss';
@@ -29,7 +29,7 @@ function TableColumnsPresetNotice() {
 
     if (error) {
         return (
-            <ErrorBlock
+            <YTErrorBlock
                 error={error.response?.data || error}
                 message={'Cannot load preset of columns'}
             />

@@ -9,8 +9,8 @@ import {Loader, Text} from '@gravity-ui/uikit';
 import format from '../../../common/hammer/format';
 
 import {useUpdater} from '../../../hooks/use-updater';
-import Alert from '../../../components/Alert/Alert';
-import Error from '../../../components/Error/Error';
+import {YTAlertBlock} from '../../../components/Alert/Alert';
+import {YTErrorBlock} from '../../../components/Error/Error';
 import Label from '../../../components/Label/Label';
 import {OperationPool} from '../../../components/OperationPool/OperationPool';
 import MetaTable, {MetaTableItem} from '../../../components/MetaTable/MetaTable';
@@ -107,9 +107,9 @@ function ChytCliqueErrors() {
 
     return (
         <React.Fragment>
-            {error ? <Error className={block('error')} error={error} bottomMargin /> : null}
+            {error ? <YTErrorBlock className={block('error')} error={error} bottomMargin /> : null}
             {startError ? (
-                <Error
+                <YTErrorBlock
                     header="Failed to start"
                     className={block('error')}
                     error={{message: startError}}
@@ -117,7 +117,12 @@ function ChytCliqueErrors() {
                 />
             ) : null}
             {health_reason ? (
-                <Alert header="Health reason" type="alert" message={health_reason} bottomMargin />
+                <YTAlertBlock
+                    header="Health reason"
+                    type="alert"
+                    message={health_reason}
+                    bottomMargin
+                />
             ) : null}
         </React.Fragment>
     );

@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 
-import Error from '../../../../../../components/Error/Error';
+import {YTErrorBlock} from '../../../../../../components/Error/Error';
 import {Button, Toaster} from '@gravity-ui/uikit';
 import ConfirmMessage from './../ConfirmMessage';
 
@@ -62,7 +62,10 @@ class DeleteContent extends Component {
         return (
             <div className="elements-section">
                 {error && (
-                    <Error message={'Failed to delete account: ' + account.name} error={error} />
+                    <YTErrorBlock
+                        message={'Failed to delete account: ' + account.name}
+                        error={error}
+                    />
                 )}
                 {showConfirmMessage && (
                     <ConfirmMessage

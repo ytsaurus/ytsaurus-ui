@@ -4,7 +4,7 @@ import cn from 'bem-cn-lite';
 
 import ClipboardButton from '../../../../components/ClipboardButton/ClipboardButton';
 import SimpleModal from '../../../../components/Modal/SimpleModal';
-import Error from '../../../../components/Error/Error';
+import {YTErrorBlock} from '../../../../components/Error/Error';
 import Icon from '../../../../components/Icon/Icon';
 import Link from '../../../../components/Link/Link';
 
@@ -51,7 +51,7 @@ class Version extends Component {
                     View
                 </Link>
                 <SimpleModal visible={visible} onCancel={handleClose} onOutsideClick={handleClose}>
-                    <Error error={error} />
+                    <YTErrorBlock error={error} />
                 </SimpleModal>
             </div>
         );

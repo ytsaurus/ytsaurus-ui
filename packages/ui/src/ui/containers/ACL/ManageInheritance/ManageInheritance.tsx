@@ -14,7 +14,7 @@ import {PreparedRole} from '../../../utils/acl';
 import {YTError} from '../../../types';
 
 import Button from '../../../components/Button/Button';
-import Error from '../../../components/Error/Error';
+import {YTErrorBlock} from '../../../components/Error/Error';
 import ErrorBoundary from '../../../components/ErrorBoundary/ErrorBoundary';
 import LoadDataHandler from '../../../components/LoadDataHandler/LoadDataHandler';
 
@@ -22,7 +22,6 @@ import withVisible, {WithVisibleProps} from '../../../hocs/withVisible';
 
 import './ManageInheritance.scss';
 import UIFactory from '../../../UIFactory';
-import ErrorBlock from '../../../components/Block/Block';
 import {ACLReduxProps} from '../ACL-connect-helpers';
 import {ManageInheritanceFieldNames} from '../ManageAcl/ManageAcl';
 
@@ -111,7 +110,7 @@ function ManageInheritance(props: Props) {
                     type: 'block',
                     extras: {
                         children: hasWarning ? (
-                            <ErrorBlock
+                            <YTErrorBlock
                                 type={'alert'}
                                 message={
                                     <>
@@ -121,7 +120,7 @@ function ManageInheritance(props: Props) {
                                         operation.{' '}
                                     </>
                                 }
-                            ></ErrorBlock>
+                            />
                         ) : null,
                     },
                 },
@@ -162,7 +161,7 @@ function ManageInheritance(props: Props) {
                         type: 'block',
                         extras: {
                             children: manageAclError && (
-                                <Error message="Acl update failure" error={manageAclError} />
+                                <YTErrorBlock message="Acl update failure" error={manageAclError} />
                             ),
                         },
                     },

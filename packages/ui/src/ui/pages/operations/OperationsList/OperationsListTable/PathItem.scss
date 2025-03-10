@@ -1,0 +1,21 @@
+.yt-operations-list-path-item {
+    & .elements-meta-item__key {
+        flex-basis: 40px;
+
+        margin-right: 4px;
+        margin-left: -20px;
+    }
+
+    & .elements-meta-item__value {
+        flex-basis: calc(100% - 34px);
+    }
+
+    &__item-count {
+        display: inline-block;
+
+        width: 1.5em;
+        margin-right: 5px;
+
+        color: var(--secondary-text);
+    }
+}

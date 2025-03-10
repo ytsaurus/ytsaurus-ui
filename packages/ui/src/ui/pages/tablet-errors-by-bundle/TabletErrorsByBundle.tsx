@@ -12,7 +12,7 @@ import DataTableYT, {
     Column,
     DATA_TABLE_YT_SETTINGS_UNDER_TOOLBAR_DOUBLE_HEIGHT,
 } from '../../components/DataTableYT/DataTableYT';
-import Error from '../../components/Error/Error';
+import {YTErrorBlock} from '../../components/Error/Error';
 import {
     getTabletErrorsByBundleData,
     getTabletErrorsByBundleError,
@@ -47,7 +47,7 @@ export function TabletErrorsByBundle({bundle}: {bundle: string}) {
             doubleHeight={true}
             content={
                 <div className={block()}>
-                    {Boolean(error) && <Error error={error} />}
+                    {Boolean(error) && <YTErrorBlock error={error} />}
                     <DataTableYT
                         className={block('table')}
                         loaded={loaded}

@@ -1,4 +1,4 @@
-.elements-block {
+.yt-error-block {
     display: grid;
     grid-template-rows: min-content;
     grid-template-columns: 30px 1fr 60px;
@@ -10,6 +10,16 @@
 
     padding: 20px;
     overflow: auto;
+
+    &_type_alert {
+        color: var(--alert-text);
+        background-color: var(--alert-background);
+    }
+
+    &_type_error {
+        color: var(--error-text);
+        background-color: var(--error-background);
+    }
 
     &_top-margin {
         &_none {

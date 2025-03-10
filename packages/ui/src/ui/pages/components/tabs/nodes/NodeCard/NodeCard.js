@@ -11,9 +11,9 @@ import {Progress} from '@gravity-ui/uikit';
 import Icon from '../../../../../components/Icon/Icon';
 import Link from '../../../../../components/Link/Link';
 import Label from '../../../../../components/Label/Label';
-import Alert from '../../../../../components/Alert/Alert';
+import {YTAlertBlock} from '../../../../../components/Alert/Alert';
 import Button from '../../../../../components/Button/Button';
-import Error from '../../../../../components/Error/Error';
+import {YTErrorBlock} from '../../../../../components/Error/Error';
 import MetaTable, {Template} from '../../../../../components/MetaTable/MetaTable';
 import CollapsibleSection from '../../../../../components/CollapsibleSection/CollapsibleSection';
 
@@ -192,7 +192,7 @@ class NodeCard extends Component {
             alerts?.length > 0 && (
                 <CollapsibleSection size="s" name="Alerts" className={block('alerts')} collapsed>
                     {map_(alerts, (alert) => (
-                        <Alert key={alert.message} error={alert} />
+                        <YTAlertBlock key={alert.message} error={alert} />
                     ))}
                 </CollapsibleSection>
             )
@@ -303,7 +303,7 @@ class NodeCard extends Component {
                     </Button>
                 </div>
 
-                {errorData && <Error error={errorData} />}
+                {errorData && <YTErrorBlock error={errorData} />}
 
                 {Boolean(node) && (
                     <React.Fragment>
