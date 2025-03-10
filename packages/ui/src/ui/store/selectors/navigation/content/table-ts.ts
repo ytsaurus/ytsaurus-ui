@@ -31,6 +31,14 @@ export const getOmittedColumns = (state: RootState) =>
 export const getDeniedKeyColumns = (state: RootState) =>
     state.navigation.content.table.deniedKeyColumns;
 
+export const getIsSortedDynamic = createSelector(
+    [getIsDynamic, getAttributes],
+    (isDynamic: boolean, attributes: any) => {
+        const isSorted = ypath.getValue(attributes, '/sorted');
+        return isDynamic && isSorted;
+    },
+);
+
 export const getPageSize = (state: RootState) => state.navigation.content.table.pageSize;
 export const getCellSize = (state: RootState) => state.navigation.content.table.cellSize;
 
