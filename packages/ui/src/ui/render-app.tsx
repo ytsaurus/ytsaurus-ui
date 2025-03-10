@@ -18,6 +18,8 @@ import '@gravity-ui/uikit/styles/styles.css';
 
 import './legacy-styles/legacy.scss';
 import './styles/redefinitions/redefinitions.scss';
+import {ErrorYsonSettingsProvider} from './containers/ErrorYsonSettingsProvider/ErrorYsonSettingsProvider';
+
 import UIFactory, {UIFactory as UIFactoryType, configureUIFactory} from './UIFactory';
 
 configure({lang: 'en'});
@@ -25,7 +27,9 @@ configure({lang: 'en'});
 function AppRoot({store, history}: ReturnType<typeof createMainEntryStore>) {
     return (
         <Provider store={store}>
-            <Router history={history}>{UIFactory.wrapApp(<App />)}</Router>
+            <ErrorYsonSettingsProvider>
+                <Router history={history}>{UIFactory.wrapApp(<App />)}</Router>
+            </ErrorYsonSettingsProvider>
         </Provider>
     );
 }

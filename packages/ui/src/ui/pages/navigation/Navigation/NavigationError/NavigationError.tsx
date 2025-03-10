@@ -1,10 +1,11 @@
 import React from 'react';
 import cn from 'bem-cn-lite';
-import {ClipboardButton, Flex, Text} from '@gravity-ui/uikit';
+import {Flex, Text} from '@gravity-ui/uikit';
 
 import {YTErrorBlock} from '../../../../components/Error/Error';
-import {NavigationErrorImage} from './NavigationErrorImage';
 import ErrorDetails from '../../../../components/ErrorDetails/ErrorDetails';
+import {ErrorToClipboardButton} from '../../../../components/ErrorToClipboardButton/ErrorToClipboardButton';
+import {NavigationErrorImage} from './NavigationErrorImage';
 import {RequestPermission} from './RequestPermission';
 import {getPermissionDeniedError} from '../../../../utils/errors';
 import {YTError} from '../../../../../@types/types';
@@ -27,7 +28,6 @@ function PrettyError(props: Props) {
     const code = getLeadingErrorCode(details);
     const error = code == 901 ? getPermissionDeniedError(details)! : details;
     const title = getErrorTitle(error, path);
-    const errorInfo = JSON.stringify(details, null, 4);
 
     return (
         <Flex className={block()} justifyContent="center" alignItems="center" gap={7}>
@@ -39,16 +39,15 @@ function PrettyError(props: Props) {
                 <ErrorDetails error={details} />
                 <Flex direction="row" gap={3}>
                     {code === 901 ? (
-                        <RequestPermission
-                            cluster={cluster}
-                            path={path}
-                            error={error}
-                            errorInfo={errorInfo}
-                        />
+                        <RequestPermission cluster={cluster} path={path} error={error} />
                     ) : (
-                        <ClipboardButton className={block('copy')} view="outlined" text={errorInfo}>
+                        <ErrorToClipboardButton
+                            className={block('copy')}
+                            view="outlined"
+                            error={details}
+                        >
                             Copy error details
-                        </ClipboardButton>
+                        </ErrorToClipboardButton>
                     )}
                 </Flex>
             </Flex>

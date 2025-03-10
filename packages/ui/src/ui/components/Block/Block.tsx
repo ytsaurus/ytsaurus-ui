@@ -1,7 +1,6 @@
 import React from 'react';
 import block from 'bem-cn-lite';
 
-import ClipboardButton from '../../components/ClipboardButton/ClipboardButton';
 import ErrorDetails, {ErrorDetailsProps} from '../../components/ErrorDetails/ErrorDetails';
 import HelpLink from '../../components/HelpLink/HelpLink';
 import Icon from '../Icon/Icon';
@@ -11,6 +10,7 @@ import hammer from '../../common/hammer';
 import './Block.scss';
 import FormattedText from '../formatters/FormattedText';
 import {rumLogError} from '../../rum/rum-counter';
+import {ErrorToClipboardButton} from '../../components/ErrorToClipboardButton/ErrorToClipboardButton';
 
 const b = block('yt-error-block');
 
@@ -33,8 +33,8 @@ export type YTErrorBlockProps = {
     topMargin?: 'none' | 'half';
     bottomMargin?: boolean;
 
-    error: ErrorDetailsProps['error'];
-    settings: ErrorDetailsProps['settings'];
+    error?: ErrorDetailsProps['error'];
+    settings?: ErrorDetailsProps['settings'];
 
     header?: React.ReactNode;
     message?: React.ReactNode;
@@ -111,13 +111,12 @@ export class YTErrorBlock extends React.Component<YTErrorBlockProps> {
     }
 
     renderCopy() {
-        const {error} = this.props;
+        const {error, settings} = this.props;
         const className = b('copy');
-        const text = JSON.stringify(error, null, 4);
 
         return (
             <div className={className}>
-                <ClipboardButton title="Copy error" view="flat-secondary" text={text} size="l" />
+                <ErrorToClipboardButton error={error} settings={settings} size="l" />
             </div>
         );
     }

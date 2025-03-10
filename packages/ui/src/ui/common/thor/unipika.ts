@@ -11,6 +11,8 @@ import {
     useBinaryAsHex,
 } from '../../store/selectors/settings';
 import type {UnipikaSettings} from '../../components/Yson/StructuredYson/StructuredYsonTypes';
+import {prettyPrint} from '../../utils/unipika';
+
 import {getUnipikaSettingsFromConfig} from './unipika-settings';
 
 const parseSetting = hammer.utils.parseSetting;
@@ -45,18 +47,12 @@ unipika.prepareSettings = function (settings: UnipikaSettings) {
     return settings;
 };
 
+/**
+ * @deprecated The function uses store implicitly, use `prettyPrint` from `utils/unipika.ts instead of it.
+ */
 unipika.prettyprint = function (value: unknown, settings: UnipikaSettings) {
     settings = unipika.prepareSettings(settings);
-
-    function _prettyprint(value: unknown, settings: UnipikaSettings) {
-        return settings.format === 'raw-json'
-            ? unipika.formatRaw(value, settings)
-            : unipika.formatFromYSON(value, settings);
-    }
-
-    return settings.asHTML
-        ? '<pre class="unipika">' + _prettyprint(value, settings) + '</pre>'
-        : _prettyprint(value, settings);
+    return prettyPrint(value, settings);
 };
 
 unipika.decode = function (str: string) {

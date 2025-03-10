@@ -1,6 +1,6 @@
 import React from 'react';
 import {AxiosError} from 'axios';
-import {ClipboardButton, Flex} from '@gravity-ui/uikit';
+import {Flex} from '@gravity-ui/uikit';
 import Link from '../../components/Link/Link';
 import block from 'bem-cn-lite';
 import ypath from '../../common/thor/ypath';
@@ -8,22 +8,24 @@ import unipika from '../../common/thor/unipika';
 
 import map_ from 'lodash/map';
 
+import {YTError} from '../../../@types/types';
+
 import Icon from '../Icon/Icon';
 import Tabs from '../../components/Tabs/Tabs';
 import Yson from '../../components/Yson/Yson';
 
 import './ErrorDetails.scss';
 import {unescapeSlashX} from '../../utils/utils';
-import FormattedText from '../formatters/FormattedText';
+import FormattedText from '../../components/formatters/FormattedText';
 import {isYTError} from '../../../shared/utils';
 import {UnipikaSettings} from '../../components/Yson/StructuredYson/StructuredYsonTypes';
-import {YTError} from '../../../@types/types';
+import {ErrorToClipboardButton} from '../../components/ErrorToClipboardButton/ErrorToClipboardButton';
 
 const b = block('elements-error-details');
 
 export type ErrorDetailsProps = {
     error: Omit<Partial<YTError> & Partial<AxiosError>, 'code'> & {code?: number | string};
-    settings: UnipikaSettings;
+    settings?: UnipikaSettings;
     maxCollapsedDepth?: number;
 };
 
@@ -104,16 +106,15 @@ export default class ErrorDetails extends React.Component<ErrorDetailsProps, Sta
     }
 
     renderTabs() {
-        const {error} = this.props;
+        const {error, settings} = this.props;
         const {currentTab} = this.state;
 
         const items = this.prepareTabs();
-        const text = unipika.formatFromYSON(error.attributes, {asHTML: false});
 
         return (
             <div className={b('tabs')}>
                 <Tabs onTabChange={this.changeCurrentTab} active={currentTab} items={items} />
-                <ClipboardButton title="Copy error" view="flat-secondary" size="s" text={text} />
+                <ErrorToClipboardButton size="s" error={error} settings={settings} />
             </div>
         );
     }
