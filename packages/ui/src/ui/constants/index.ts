@@ -23,6 +23,8 @@ export const LOADING_STATUS = {
     CANCELLED: 'cancelled',
 } as const;
 
+export type LoadingStatus = ValueOf<typeof LOADING_STATUS>;
+
 export const PRELOAD_ERROR = {
     GENERAL: 'general',
     CONNECTION: 'connection',

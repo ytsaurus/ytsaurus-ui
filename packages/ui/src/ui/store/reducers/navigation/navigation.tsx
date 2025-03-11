@@ -1,7 +1,13 @@
-import {LOADING_STATUS} from '../../../constants/index';
+import {Action} from 'redux';
+
+import {ValueOf, YTError} from '../../../../@types/types';
+
+import {ActionD} from '../../../types';
+import {LOADING_STATUS, LoadingStatus} from '../../../constants/index';
 import {mergeStateOnClusterChange} from '../../../store/reducers/utils';
 import {
     CLEAR_TRANSACTION,
+    NAVIGATION_PARTIAL,
     SET_MODE,
     SET_TRANSACTION,
     Tab,
@@ -9,18 +15,41 @@ import {
     UPDATE_VIEW,
 } from '../../../constants/navigation';
 
-const persistedState = {
+export type NavigationState = {
+    path: string;
+    mode: ValueOf<typeof Tab>;
+
+    loadState: LoadingStatus;
+    transaction: string | undefined;
+
+    error: {message: string; details: YTError} | undefined;
+
+    attributesWithTypes: unknown;
+    attributes: unknown;
+    isIdmSupported: boolean;
+
+    remoteDestinationsConfig: unknown;
+    remoteDestinationsState: LoadingStatus;
+    remoteDestinationsError: YTError | undefined;
+
+    isWriteable: boolean | undefined;
+    isAccountUsable: boolean | undefined;
+    checkPermissionsError: YTError | undefined;
+};
+
+const persistedState: Pick<NavigationState, 'path' | 'mode'> = {
     path: '',
     /** @type {typeof Tab[keyof typeof Tab]} */
     mode: Tab.AUTO,
 };
 
-const ephemeralState = {
+const ephemeralState: Omit<NavigationState, keyof typeof persistedState> = {
     /** @type {LOADING_STATUS[keyof LOADING_STATUS]} */
     loadState: LOADING_STATUS.UNINITIALIZED,
-    transaction: null,
+    transaction: undefined,
     error: undefined,
     attributes: {},
+    attributesWithTypes: {},
     isIdmSupported: false,
     remoteDestinationsConfig: undefined,
     remoteDestinationsState: LOADING_STATUS.UNINITIALIZED,
@@ -31,18 +60,18 @@ const ephemeralState = {
     checkPermissionsError: undefined,
 };
 
-export const initialState = {
+export const initialState: NavigationState = {
     ...persistedState,
     ...ephemeralState,
 };
 
-const reducer = (state = initialState, action) => {
+const reducer = (state = initialState, action: NavigationAction): NavigationState => {
     switch (action.type) {
         case SET_MODE:
             return {...state, mode: action.data};
 
         case CLEAR_TRANSACTION:
-            return {...state, transaction: null};
+            return {...state, transaction: undefined};
 
         case SET_TRANSACTION:
             return {...state, transaction: action.data};
@@ -95,9 +124,35 @@ const reducer = (state = initialState, action) => {
             };
         }
 
+        case NAVIGATION_PARTIAL: {
+            return {...state, ...action.data};
+        }
+
         default:
             return state;
     }
 };
+
+export type NavigationAction =
+    | Action<typeof CLEAR_TRANSACTION | typeof UPDATE_VIEW.REQUEST | typeof UPDATE_VIEW.CANCELLED>
+    | ActionD<typeof SET_MODE, NavigationState['mode']>
+    | ActionD<typeof SET_TRANSACTION, NavigationState['transaction']>
+    | ActionD<typeof UPDATE_PATH, {path: string; shouldUpdateContentMode?: boolean}>
+    | ActionD<
+          typeof UPDATE_VIEW.FAILURE,
+          NavigationState['error'] & Pick<NavigationState, 'isIdmSupported'>
+      >
+    | ActionD<
+          typeof UPDATE_VIEW.SUCCESS,
+          Pick<
+              Partial<NavigationState>,
+              | 'attributes'
+              | 'attributesWithTypes'
+              | 'isWriteable'
+              | 'isAccountUsable'
+              | 'checkPermissionsError'
+          >
+      >
+    | ActionD<typeof NAVIGATION_PARTIAL, Partial<NavigationState>>;
 
 export default mergeStateOnClusterChange(ephemeralState, persistedState, reducer);
