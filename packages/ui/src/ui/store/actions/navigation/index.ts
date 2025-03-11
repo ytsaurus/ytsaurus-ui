@@ -1,3 +1,6 @@
+import {ThunkAction} from 'redux-thunk';
+
+// @ts-expect-error
 import yt from '@ytsaurus/javascript-wrapper/lib/yt';
 import metrics from '../../../common/utils/metrics';
 import {navigationTrackVisit} from '../../../store/actions/favourites';
@@ -36,8 +39,12 @@ import {loadTabletErrorsCount} from './tabs/tablet-errors/tablet-errors-backgrou
 import {isSupportedEffectiveExpiration} from '../../../store/selectors/thor/support';
 import {getTabs} from '../../../store/selectors/navigation/navigation';
 import UIFactory from '../../../UIFactory';
+import {RootState} from '../../../store/reducers';
+import {NavigationAction, NavigationState} from '../../../store/reducers/navigation/navigation';
 
-export function updateView(settings = {}) {
+type NavigationThunk<T = void> = ThunkAction<T, RootState, unknown, NavigationAction>;
+
+export function updateView(settings: {trackVisit?: boolean} = {}): NavigationThunk {
     return (dispatch, getState) => {
         const state = getState();
         const currentPath = getPath(state);
@@ -70,16 +77,16 @@ export function updateView(settings = {}) {
                     {
                         requests: [
                             {
-                                command: 'get',
-                                parameters: prepareRequest('/@', {
-                                    ...requestParams,
+                                command: 'get' as const,
+                                parameters: {
+                                    ...prepareRequest('/@', requestParams),
                                     attributes: [
                                         ...getAttributesToLoad(),
                                         ...(allowEffectiveExpiration
                                             ? ['effective_expiration']
                                             : []),
                                     ],
-                                }),
+                                },
                             },
                         ],
                         output_format: TYPED_OUTPUT_FORMAT,
@@ -88,29 +95,19 @@ export function updateView(settings = {}) {
                 ),
             )
             .then((results) => {
-                const [attrs, {output: opaqueAttrs} = {}] = results;
-                const pathError = prepareAttributes(path.error);
-                if (pathError?.code === yt.codes.NODE_DOES_NOT_EXIST) {
-                    delete path.error;
-                }
+                const [attrs] = results;
 
                 const error = getBatchError(results, 'Failed to get navigation attributes');
                 if (error) {
                     throw error;
                 }
 
-                return {
-                    ...attrs.output,
-                    ...(opaqueAttrs?.effective_expiration
-                        ? {effective_expiration: opaqueAttrs.effective_expiration}
-                        : {}),
-                    ...(path.output ? {path: opaqueAttrs.path} : {}),
-                };
+                return attrs.output;
             })
             .then((attributes) => {
                 const preparedAttributes = prepareAttributes(attributes, {
                     asHTML: false,
-                });
+                }) as {account: string; type: string};
 
                 if (settings.trackVisit) {
                     dispatch(navigationTrackVisit(path));
@@ -137,7 +134,10 @@ export function updateView(settings = {}) {
                     isWriteable,
                     isAccountUsable,
                     checkPermissionsError,
-                }) => {
+                }: Pick<
+                    Partial<NavigationState>,
+                    'isWriteable' | 'isAccountUsable' | 'checkPermissionsError'
+                >) => {
                     dispatch({
                         type: NAVIGATION_PARTIAL,
                         data: {isWriteable, isAccountUsable, checkPermissionsError},
@@ -212,7 +212,7 @@ export function updateView(settings = {}) {
     };
 }
 
-export function setMode(mode) {
+export function setMode(mode: NavigationState['mode']): NavigationThunk {
     return (dispatch, getState) => {
         const [firstTab] = getTabs(getState());
 
@@ -223,7 +223,7 @@ export function setMode(mode) {
     };
 }
 
-export function onTransactionChange() {
+export function onTransactionChange(): NavigationThunk {
     return (dispatch) => {
         dispatch(updateView({trackVisit: true}));
         // Need to update breadcrumbs dimensions after transaction change
@@ -231,7 +231,7 @@ export function onTransactionChange() {
     };
 }
 
-export function setTransaction(transaction) {
+export function setTransaction(transaction?: string): NavigationThunk {
     return (dispatch) => {
         dispatch({
             type: SET_TRANSACTION,
@@ -241,7 +241,7 @@ export function setTransaction(transaction) {
     };
 }
 
-export function clearTransaction() {
+export function clearTransaction(): NavigationThunk {
     return (dispatch) => {
         dispatch({
             type: CLEAR_TRANSACTION,
@@ -250,7 +250,7 @@ export function clearTransaction() {
     };
 }
 
-export function updatePath(path, shouldUpdateContentMode = true) {
+export function updatePath(path: string, shouldUpdateContentMode = true): NavigationThunk<string> {
     return (dispatch, getState) => {
         const autoCorrectionEnabled = isPathAutoCorrectionSettingEnabled(getState());
 
@@ -268,7 +268,7 @@ export function updatePath(path, shouldUpdateContentMode = true) {
     };
 }
 
-export function navigateParent() {
+export function navigateParent(): NavigationThunk {
     return (dispatch, getState) => {
         const {path} = getState().navigation.navigation;
         const nextPath = getParentPath(path);
@@ -349,7 +349,7 @@ const attributesToLoad = [
 ];
 
 function getAttributesToLoad() {
-    const additionalAttributes = [];
+    const additionalAttributes: Array<string> = [];
 
     UIFactory.getNavigationExtraTabs().forEach((extraTab) => {
         additionalAttributes.push(...extraTab.additionalAttributes);
