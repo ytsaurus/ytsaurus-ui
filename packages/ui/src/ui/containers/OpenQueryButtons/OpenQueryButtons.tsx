@@ -10,27 +10,47 @@ import {QueryEngine} from '../../pages/query-tracker/module/engines';
 import {createQueryFromTablePath} from '../../pages/query-tracker/module/query/actions';
 import {createNewQueryUrl} from '../../pages/query-tracker/utils/navigation';
 import {getNavigationSqlService} from '../../store/selectors/settings/navigation';
+import {getPath} from '../../store/selectors/navigation';
 import UIFactory from '../../UIFactory';
 import {useSidePanel} from '../../hooks/use-side-panel';
+import {getCluster} from '../../store/selectors/global/cluster';
+import {RootState} from '../../store/reducers';
+import {NavigationState} from '../../store/reducers/navigation/navigation';
+import {setNavigationSidePanelMode} from '../../store/actions/navigation';
 
 import './OpenQueryButtons.scss';
 
 const b = cn('yt-open-query-buttons');
 
+function useNavigationSidePanelMode() {
+    const dispatch = useDispatch();
+
+    const path: string = useSelector(getPath);
+    const cluster = useSelector(getCluster);
+    const panelMode = useSelector((state: RootState) => state.navigation.navigation.sidePanelMode);
+
+    const setPanelMode = React.useCallback(
+        (mode: NavigationState['sidePanelMode']) => {
+            dispatch(setNavigationSidePanelMode(mode));
+        },
+        [dispatch],
+    );
+
+    return {path, cluster, panelMode, setPanelMode};
+}
+
 export type OpenQueryButtonProps = {
     className?: string;
-    path: string;
-    cluster: string;
-
     autoOpen?: boolean;
 };
 
-export function OpenQueryButtons({className, path, cluster, autoOpen}: OpenQueryButtonProps) {
+export function OpenQueryButtonsContent() {
     const dispatch = useDispatch();
-    const [panelMode, setPanelMode] = React.useState<'qt' | 'yqlkit' | undefined>();
+    const {panelMode, setPanelMode, path, cluster} = useNavigationSidePanelMode();
 
-    const onOpenYqlKit = React.useCallback(() => setPanelMode('yqlkit'), []);
-    const onClose = React.useCallback(() => setPanelMode(undefined), []);
+    const onClose = React.useCallback(() => {
+        dispatch(setPanelMode(undefined));
+    }, [dispatch, setPanelMode]);
 
     const {openWidget, closeWidget, widgetContent} = useSidePanel(panelMode + '_widget', {
         renderContent({visible}) {
@@ -41,8 +61,6 @@ export function OpenQueryButtons({className, path, cluster, autoOpen}: OpenQuery
             );
         },
     });
-
-    const {isQtKitEnabled, isYqlKitEnabled} = useSelector(getNavigationSqlService);
 
     React.useEffect(() => {
         if (panelMode === undefined) {
@@ -56,13 +74,24 @@ export function OpenQueryButtons({className, path, cluster, autoOpen}: OpenQuery
         openWidget();
     }, [panelMode, openWidget, closeWidget]);
 
+    return widgetContent;
+}
+
+export function OpenQueryButtons({className, autoOpen}: OpenQueryButtonProps) {
+    const {path, cluster, panelMode, setPanelMode} = useNavigationSidePanelMode();
+
+    const onOpenYqlKit = React.useCallback(() => setPanelMode('yqlkit'), []);
+    const onClose = React.useCallback(() => setPanelMode(undefined), []);
+
+    const {isQtKitEnabled, isYqlKitEnabled} = useSelector(getNavigationSqlService);
+
     const allowQtAutoOpen = autoOpen && isQtKitEnabled;
 
     React.useEffect(() => {
         if (autoOpen) {
             setPanelMode(allowQtAutoOpen ? 'qt' : 'yqlkit');
         }
-    }, [autoOpen, allowQtAutoOpen]);
+    }, [autoOpen, allowQtAutoOpen, setPanelMode]);
 
     return (
         <div className={b(null, className)}>
@@ -76,7 +105,6 @@ export function OpenQueryButtons({className, path, cluster, autoOpen}: OpenQuery
                         view="action"
                         className={b('btn')}
                         selected={panelMode === 'qt'}
-                        disabled={panelMode === 'yqlkit'}
                         title="Open Queries widget"
                     >
                         QT Kit
@@ -95,13 +123,11 @@ export function OpenQueryButtons({className, path, cluster, autoOpen}: OpenQuery
             )}
             {isYqlKitEnabled && (
                 <YQLKitButton
-                    disabled={panelMode === 'qt'}
                     opened={panelMode === 'yqlkit'}
                     onOpen={onOpenYqlKit}
                     onClose={onClose}
                 />
             )}
-            {widgetContent}
         </div>
     );
 }

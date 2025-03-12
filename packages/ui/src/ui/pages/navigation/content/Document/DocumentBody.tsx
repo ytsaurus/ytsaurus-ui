@@ -11,9 +11,6 @@ import Yson from '../../../../components/Yson/Yson';
 import {UnipikaSettings} from '../../../../components/Yson/StructuredYson/StructuredYsonTypes';
 import Icon from '../../../../components/Icon/Icon';
 import {OpenQueryButtons} from '../../../../containers/OpenQueryButtons/OpenQueryButtons';
-import {useSelector} from 'react-redux';
-import {getPath} from '../../../../store/selectors/navigation';
-import {getCluster} from '../../../../store/selectors/global';
 
 import './DocumentBody.scss';
 
@@ -36,20 +33,6 @@ const EditButton: FC<Pick<Props, 'onEditClick'>> = ({onEditClick}) => {
     );
 };
 
-function OpenYqlViewButton({autoOpen}: {autoOpen?: boolean}) {
-    const path: string = useSelector(getPath);
-    const cluster = useSelector(getCluster);
-
-    return (
-        <OpenQueryButtons
-            path={path}
-            cluster={cluster}
-            className={block('yql')}
-            autoOpen={autoOpen}
-        />
-    );
-}
-
 function DocumentExtraTools({
     onEditClick,
     attributes,
@@ -58,7 +41,7 @@ function DocumentExtraTools({
     const isYqlView = 'view' === ypath.getValue(attributes, '/_yql_type');
     return (
         <Flex gap={4}>
-            {isYqlView && <OpenYqlViewButton autoOpen={queryAutoOpen} />}
+            {isYqlView && <OpenQueryButtons className={block('yql')} autoOpen={queryAutoOpen} />}
             <EditButton onEditClick={onEditClick} />
         </Flex>
     );
