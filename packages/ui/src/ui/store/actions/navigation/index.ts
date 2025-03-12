@@ -359,3 +359,9 @@ function getAttributesToLoad() {
 
     return [...attributesSet];
 }
+
+export function setNavigationSidePanelMode(
+    sidePanelMode: NavigationState['sidePanelMode'],
+): NavigationAction {
+    return {type: NAVIGATION_PARTIAL, data: {sidePanelMode}};
+}

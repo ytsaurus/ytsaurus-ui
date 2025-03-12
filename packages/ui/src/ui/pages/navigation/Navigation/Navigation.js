@@ -56,6 +56,7 @@ import Icon from '../../../components/Icon/Icon';
 import {showNavigationAttributesEditor} from '../../../store/actions/navigation/modals/attributes-editor';
 import {UI_TAB_SIZE} from '../../../constants/global';
 import {CellPreviewModal} from '../../../containers/CellPreviewModal/CellPreviewModal';
+import {OpenQueryButtonsContent} from '../../../containers/OpenQueryButtons/OpenQueryButtons';
 
 import './Navigation.scss';
 
@@ -78,6 +79,7 @@ function renderModals() {
             <CreateACOModal />
             <RemoteCopyModal />
             <CellPreviewModal />
+            <OpenQueryButtonsContent />
         </Fragment>
     );
 }
