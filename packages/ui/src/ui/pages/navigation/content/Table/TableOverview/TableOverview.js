@@ -16,7 +16,7 @@ import TableActions from '../../../../../pages/navigation/content/Table/TableOve
 import OffsetInput from '../../../../../pages/navigation/content/Table/TableOverview/OffsetInput';
 import Paginator from '../../../../../pages/navigation/content/Table/TableOverview/Paginator';
 import ErrorBoundary from '../../../../../components/ErrorBoundary/ErrorBoundary';
-import {CreateQueryFromTable} from './CreateQueryFromTable';
+import {OpenQueryButtons} from '../../../../../containers/OpenQueryButtons/OpenQueryButtons';
 
 import {HEADER_HEIGHT} from '../../../../../constants/index';
 
@@ -51,7 +51,7 @@ function TableOverview(props) {
                         {allowOffsetInput && <OffsetInput block={block} />}
                         {!isFullScreen && <ColumnSelectorButton block={block} />}
                         {!isFullScreen && <SettingsButton block={block} />}
-                        {!isFullScreen && <CreateQueryFromTable className={block('query')} />}
+                        {!isFullScreen && <OpenQueryButtons className={block('query')} />}
                         {!isFullScreen && <JupyterButton block={block} />}
                         {!isFullScreen && <DataLensButton className={block('datalens')} />}
                         {!isFullScreen && <TableActions block={block} />}

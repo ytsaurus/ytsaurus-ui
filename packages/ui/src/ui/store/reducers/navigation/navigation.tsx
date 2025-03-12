@@ -35,6 +35,8 @@ export type NavigationState = {
     isWriteable: boolean | undefined;
     isAccountUsable: boolean | undefined;
     checkPermissionsError: YTError | undefined;
+
+    sidePanelMode: 'qt' | 'yqlkit' | undefined;
 };
 
 const persistedState: Pick<NavigationState, 'path' | 'mode'> = {
@@ -58,6 +60,8 @@ const ephemeralState: Omit<NavigationState, keyof typeof persistedState> = {
     isWriteable: false,
     isAccountUsable: false,
     checkPermissionsError: undefined,
+
+    sidePanelMode: undefined,
 };
 
 export const initialState: NavigationState = {
