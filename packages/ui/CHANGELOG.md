@@ -1,5 +1,32 @@
 # Changelog
 
+## [1.84.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.83.0...ui-v1.84.0) (2025-03-12)
+
+
+### Features
+
+* **Components/Versions:** display more columns of node types [YTFRONT-4406] ([bbd62fa](https://github.com/ytsaurus/ytsaurus-ui/commit/bbd62fa594642ca6888a78392cf27ac3dc672472))
+* **Components/Versions:** display more columns of node types [YTFRONT-4406] ([bbd62fa](https://github.com/ytsaurus/ytsaurus-ui/commit/bbd62fa594642ca6888a78392cf27ac3dc672472))
+* **Navigation/Table:** add remount option [YTFRONT-3593] ([a1ea452](https://github.com/ytsaurus/ytsaurus-ui/commit/a1ea452174491b7304787c5a10b9066b150a11a4))
+* **Navigation/Table:** allow to view umounted dynamic tables [YTFRONT-4021] ([519a1b7](https://github.com/ytsaurus/ytsaurus-ui/commit/519a1b763cfb317ff4e4198d0396fdb0b6cbcd0e))
+* **Navigation:** change resource usage metadata [YTFRONT-4764] ([5247a7f](https://github.com/ytsaurus/ytsaurus-ui/commit/5247a7f952200e3bebae41ee382b75c207ce8adc))
+* **Operation/Jobs:** add 'Incarnation' filter [YTFRONT-4684] ([fa3f2e1](https://github.com/ytsaurus/ytsaurus-ui/commit/fa3f2e10a92be34a59c2da9f1313f2af53cd6db1))
+
+
+### Bug Fixes
+
+* added proper padding in datepicker popup ([96f19af](https://github.com/ytsaurus/ytsaurus-ui/commit/96f19af972c6e429edccb639989fd599e1b4567e))
+* **Components:** add margin for custom footers [YTFRONT-4406] ([48b5e40](https://github.com/ytsaurus/ytsaurus-ui/commit/48b5e401b1aa7b982ecd1919f26f7a87330e26a6))
+* **Components:** processing node list data [YTFRONT-4765] ([e27323b](https://github.com/ytsaurus/ytsaurus-ui/commit/e27323baad47aae7c489502fa9fc0ecd9ae4e61e))
+* **localmode/Queries/QueryClusterSelector:** use cluster from get_query_tracker_info and //sys/[@cluster](https://github.com/cluster)_name [YTFRONT-4326] ([becf0ec](https://github.com/ytsaurus/ytsaurus-ui/commit/becf0ec4a35336fbfe60c00c5153ee056f4d16a1))
+* **navigation:** Fix typo in AccessLog ([fdecdbe](https://github.com/ytsaurus/ytsaurus-ui/commit/fdecdbe1c0082337d63b01d7d42640993b78da24))
+* **Operations:** utf8 statistic [YTFRONT-4700] ([e344415](https://github.com/ytsaurus/ytsaurus-ui/commit/e344415863e601d8f44857f482d018232a344a4a))
+* **Queries:** change result align [YTFRONT-4736] ([95cd793](https://github.com/ytsaurus/ytsaurus-ui/commit/95cd793f073f2dad716581e0878000affb6c6084))
+* **Queries:** now change of query ACO does not reset chart state and vice versa [[#1006](https://github.com/ytsaurus/ytsaurus-ui/issues/1006)] ([1a94c7f](https://github.com/ytsaurus/ytsaurus-ui/commit/1a94c7f8c7561d98bf01ebe3401fbb2c9a5ac94a))
+* **Queries:** the body of the query is not displayed in a new window [[#266](https://github.com/ytsaurus/ytsaurus-ui/issues/266)] ([c80f1ed](https://github.com/ytsaurus/ytsaurus-ui/commit/c80f1ed4881021ffadbff054905376a2abe50256))
+* **QueryTracker:** fix exporting query results via excel [[#1022](https://github.com/ytsaurus/ytsaurus-ui/issues/1022)] ([4de3573](https://github.com/ytsaurus/ytsaurus-ui/commit/4de357391c9554389ee1638b21d3d9ae73addbdc))
+* **QueryTracker:** fixed insert of suggested path in query editor [[#1027](https://github.com/ytsaurus/ytsaurus-ui/issues/1027)] ([6515314](https://github.com/ytsaurus/ytsaurus-ui/commit/6515314ba74f60ea206c0ffccec232785b459368))
+
 ## [1.83.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.82.1...ui-v1.83.0) (2025-02-20)
 
 
