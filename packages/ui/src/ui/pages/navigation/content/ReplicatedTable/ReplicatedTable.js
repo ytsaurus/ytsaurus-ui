@@ -6,6 +6,7 @@ import ypath from '@ytsaurus/interface-helpers/lib/ypath';
 import hammer from '../../../../common/hammer';
 import cn from 'bem-cn-lite';
 
+import {useDisableMaxContentWidth} from '../../../../containers/MaxContentWidth';
 import ClickableAttributesButton from '../../../../components/AttributesButton/ClickableAttributesButton';
 import TableActions from '../../../../pages/navigation/content/Table/TableOverview/TableActions';
 import TableMeta from '../../../../pages/navigation/content/Table/TableMeta/TableMeta';
@@ -394,6 +395,8 @@ const mapDispatchToProps = {
 const ReplicatedTableConnected = connect(mapStateToProps, mapDispatchToProps)(ReplicatedTable);
 
 export default function ReplicatedTableWithRum() {
+    useDisableMaxContentWidth();
+
     const loadState = useSelector(getNavigationReplicatedTableLoadingStatus);
 
     useAppRumMeasureStart({

@@ -11,7 +11,6 @@ import {
 } from '../../../constants/index';
 import {showToasterError, wrapApiPromiseByToaster} from '../../../utils/utils';
 import {getSettingsCluster} from '../../selectors/global';
-import {getSettingsDataFromInitialConfig} from '../../../config';
 import {setSettingByKey} from './settings-base';
 
 export * from './settings-base';
@@ -24,7 +23,7 @@ export type SettingsThunkAction<T = Promise<void>> = ThunkAction<
     T,
     RootState,
     unknown,
-    SettingsAction
+    SettingsAction<keyof DescribedSettings>
 >;
 
 export function setSetting<T>(
@@ -40,8 +39,11 @@ export function setSetting<T>(
     };
 }
 
+/**
+ * @deprecated use corresponding method from settings-base.ts
+ */
 export function removeSetting(settingName: string, settingNS: SettingNS): SettingsThunkAction {
-    const path = getPath(settingName, settingNS);
+    const path = getPath(settingName, settingNS) as SettingKey;
 
     return (dispatch, getState) => {
         const {
@@ -74,8 +76,11 @@ export function removeSetting(settingName: string, settingNS: SettingNS): Settin
     };
 }
 
+/**
+ * @deprecated use corresponding method from settings-base.ts
+ */
 export function reloadSetting(settingName: string, settingNS: SettingNS): SettingsThunkAction {
-    const path = getPath(settingName, settingNS);
+    const path = getPath(settingName, settingNS) as SettingKey;
 
     return (dispatch, getState) => {
         const {
@@ -105,7 +110,6 @@ export function reloadSetting(settingName: string, settingNS: SettingNS): Settin
     };
 }
 
-const CELEBRATION_THEME_KEY = 'global::celebrationTheme';
 export function reloadUserSettings(login: string): SettingsThunkAction {
     return async (dispatch, getState) => {
         try {
@@ -124,13 +128,6 @@ export function reloadUserSettings(login: string): SettingsThunkAction {
                           errorContent: 'Cannot load user settings',
                       })
                     : allData;
-            if (data[CELEBRATION_THEME_KEY] === undefined) {
-                const initialSettings = getSettingsDataFromInitialConfig();
-                const celebrationTheme = initialSettings.data[CELEBRATION_THEME_KEY];
-                if (celebrationTheme !== undefined) {
-                    data[CELEBRATION_THEME_KEY] = celebrationTheme;
-                }
-            }
             dispatch({type: UPDATE_SETTING_DATA, data});
         } catch (e) {}
     };
