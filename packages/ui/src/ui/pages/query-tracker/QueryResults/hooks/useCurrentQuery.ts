@@ -7,7 +7,7 @@ import {getDefaultQueryACO} from '../../module/query_aco/selectors';
 import {isQueryProgress} from '../../utils/query';
 import {QueryItem} from '../../module/api';
 import {prepareQueryPlanIds} from '../../module/query/utills';
-import {UPDATE_QUERY} from '../../../../pages/query-tracker/module/query-tracker-contants';
+import {UPDATE_QUERY_ITEM} from '../../module/query-tracker-contants';
 
 export function useCurrentQuery() {
     const query = useSelector(getCurrentQuery);
@@ -20,7 +20,7 @@ export function useCurrentQuery() {
         () =>
             ([item]: QueryItem[]) => {
                 dispatch({
-                    type: UPDATE_QUERY,
+                    type: UPDATE_QUERY_ITEM,
                     data: prepareQueryPlanIds(item, defaultQueryACO),
                 });
             },
