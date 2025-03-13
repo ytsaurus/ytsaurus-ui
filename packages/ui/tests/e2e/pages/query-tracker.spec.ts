@@ -188,7 +188,7 @@ test.describe('@QueryTracker: Suggest scenarios', () => {
             
             await queryTrackerPage.setCursor(PARAMS.initialCursorPosition);
     
-            await page.keyboard.type(PARAMS.userInput);
+            await page.keyboard.type(PARAMS.userInput, {delay: 100});
         
             await queryTrackerPage.clickToSuggest(PARAMS.expectedSuggest);
     
@@ -216,7 +216,7 @@ test.describe('@QueryTracker: Suggest scenarios', () => {
     
             await queryTrackerPage.setCursor(PARAMS.initialCursorPosition);
     
-            await page.keyboard.type(PARAMS.userInput);
+            await page.keyboard.type(PARAMS.userInput, {delay: 100});
         
             await queryTrackerPage.clickToSuggest(PARAMS.expectedSuggest);
     
