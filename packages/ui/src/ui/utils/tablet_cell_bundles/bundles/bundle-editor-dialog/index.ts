@@ -37,6 +37,7 @@ export const bundleEditorDict: {
             'versioned_chunk_meta',
             'lookup_row_cache',
             'key_filter_block_cache',
+            'query',
         ],
         cpu_limits: ['lookup_thread_pool_size', 'query_thread_pool_size', 'write_thread_pool_size'],
     },
@@ -50,6 +51,7 @@ export const bundleEditorDict: {
             versioned_chunk_meta: 0,
             lookup_row_cache: 0,
             key_filter_block_cache: 0,
+            query: 0,
         },
         cpu_limits: {
             threadPool_reset: false,
@@ -126,6 +128,7 @@ export const getInitialFormValues = (
             versioned_chunk_meta: memory_limits?.versioned_chunk_meta || 0,
             lookup_row_cache: memory_limits?.lookup_row_cache || 0,
             key_filter_block_cache: memory_limits?.key_filter_block_cache || 0,
+            query: memory_limits?.query || 0,
         },
         cpu_limits: {
             threadPool_reset: false, //system
@@ -248,6 +251,7 @@ export const prepareSubmitBundle = (form: FormApi<BundleEditorDialogFormValues>)
         '@bundle_controller_target_config/memory_limits/key_filter_block_cache',
         'memory_limits.key_filter_block_cache',
     );
+    addToChange('@bundle_controller_target_config/memory_limits/query', 'memory_limits.query');
     // Cpu_limits
     addToChange(
         '@bundle_controller_target_config/cpu_limits/lookup_thread_pool_size',
