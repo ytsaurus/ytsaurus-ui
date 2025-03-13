@@ -14,7 +14,9 @@ import {
     SET_QUERY_PATCH,
     SET_QUERY_READY,
     UPDATE_ACO_QUERY,
+    UPDATE_DRAFT,
     UPDATE_QUERY,
+    UPDATE_QUERY_ITEM,
 } from '../query-tracker-contants';
 import {cleanupQueryForDraft} from './utills';
 import {DEFAULT_QUERY_ACO} from './selectors';
@@ -80,6 +82,21 @@ export function reducer(state = initState, action: Actions): QueryState {
                     ...action.data,
                     error: action.data?.error,
                 },
+            };
+        }
+        case UPDATE_DRAFT: {
+            return {
+                ...state,
+                draft: {
+                    ...state.draft,
+                    ...action.data,
+                },
+            };
+        }
+        case UPDATE_QUERY_ITEM: {
+            return {
+                ...state,
+                queryItem: action.data,
             };
         }
         case REQUEST_QUERY: {
@@ -154,6 +171,8 @@ type Actions =
     | SetQueryErrorLoadAction
     | SetQueryPatchAction
     | UpdateQueryAction
+    | UpdateDraftAction
+    | UpdateQueryItem
     | SetQueryParamsAction
     | SetQueryReadyAction
     | UpdateACOQueryAction
@@ -173,6 +192,8 @@ export type SetQueryAction = ActionD<
 >;
 
 export type UpdateQueryAction = ActionD<typeof UPDATE_QUERY, QueryItem>;
+export type UpdateDraftAction = ActionD<typeof UPDATE_DRAFT, DraftQuery>;
+export type UpdateQueryItem = ActionD<typeof UPDATE_QUERY_ITEM, QueryItem>;
 
 export type SetQueryErrorLoadAction = ActionD<typeof SET_QUERY_LOAD_ERROR, Error | string>;
 

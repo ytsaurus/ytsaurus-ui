@@ -345,7 +345,7 @@ export default function QueryEditor({
                 }),
             );
         }
-    }, [dispatch, query]);
+    }, [dispatch, query, showStatusInTitle]);
 
     useEffect(() => {
         setResultViewMode('split');

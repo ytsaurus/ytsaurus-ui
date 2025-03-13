@@ -30,7 +30,7 @@ import type {
     SetQueryErrorLoadAction,
     SetQueryPatchAction,
     SetQueryReadyAction,
-    UpdateQueryAction,
+    UpdateDraftAction,
 } from './reducer';
 import {wrapApiPromiseByToaster} from '../../../../utils/utils';
 import {prepareQueryPlanIds} from './utills';
@@ -50,7 +50,7 @@ import {
     SET_QUERY_PATCH,
     SET_QUERY_READY,
     UPDATE_ACO_QUERY,
-    UPDATE_QUERY,
+    UPDATE_DRAFT,
 } from '../query-tracker-contants';
 import {loadVisualization} from '../queryChart/actions';
 
@@ -182,7 +182,7 @@ export function createQueryFromTablePath(
     | RequestQueryAction
     | SetQueryErrorLoadAction
     | SetQueryPatchAction
-    | UpdateQueryAction
+    | UpdateDraftAction
     | SetQueryReadyAction
 > {
     return async (dispatch, getState) => {
@@ -201,8 +201,8 @@ export function createQueryFromTablePath(
             if (draft) {
                 if (options?.useDraft) {
                     dispatch({
-                        type: UPDATE_QUERY,
-                        data: draft as QueryItem,
+                        type: UPDATE_DRAFT,
+                        data: draft,
                     });
                     dispatch({type: SET_QUERY_READY});
                 } else {
