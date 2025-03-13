@@ -85,6 +85,7 @@ export interface MemoryLimits {
     versioned_chunk_meta?: number;
     lookup_row_cache?: number;
     key_filter_block_cache?: number;
+    query?: number;
 }
 
 export interface CPULimits {

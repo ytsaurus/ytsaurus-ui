@@ -47,6 +47,7 @@ import {docsUrl} from '../../../../config';
 
 import './BundleEditorDialog.scss';
 import {Pick2} from '../../../../../@types/types';
+import {getQueryMemoryLimitIsSupported} from '../../../../store/selectors/global/supported-features';
 
 const block = cn('bundle-editor');
 
@@ -75,6 +76,7 @@ export interface BundleEditorDialogFormValues {
         versioned_chunk_meta?: number;
         lookup_row_cache?: number;
         key_filter_block_cache?: number;
+        query?: number;
     };
     cpu_limits: {
         threadPool_reset?: boolean; //system
@@ -94,6 +96,7 @@ export function BundleEditorDialog() {
     } = useSelector(getTabletCellBundleEditorState);
 
     const clusterUiConfig = useSelector(getClusterUiConfig);
+    const queryMemoryLimitIsSupported = useSelector(getQueryMemoryLimitIsSupported);
 
     const {defaultConfig: bundleDefaultConfig} = useSelector(getBundleEditorData);
 
@@ -501,6 +504,19 @@ export function BundleEditorDialog() {
             },
         ],
     };
+
+    if (queryMemoryLimitIsSupported) {
+        renderMemoryTab.fields.push({
+            name: 'query',
+            type: 'bundle-input',
+            caption: 'Query memory limit',
+            extras: {
+                format: 'Bytes',
+                hasClear: true,
+            },
+            validator: simpleBundleValidate,
+        });
+    }
 
     const renderThreadPoolTab: DialogTabField<DialogField<BundleEditorDialogFormValues>> = {
         name: 'cpu_limits',
