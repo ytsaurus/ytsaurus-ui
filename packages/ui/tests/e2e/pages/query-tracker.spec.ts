@@ -34,7 +34,7 @@ class QueryTrackerPage extends BasePage {
         await this.page.keyboard.press('Meta+KeyA');
 
         for (const line of lines) {
-            await this.page.keyboard.type(line, { delay: 100 });
+            await this.page.keyboard.type(line);
         }
     }
 
