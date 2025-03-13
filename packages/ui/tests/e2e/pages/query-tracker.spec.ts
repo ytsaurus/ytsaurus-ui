@@ -82,9 +82,10 @@ class QueryTrackerPage extends BasePage {
     async setCursor(position: number) {
         await this.queryEditor.click();
 
-        await this.page.keyboard.press('Meta+A');
-
-        await this.page.keyboard.press("ArrowLeft");
+        // TODO: just an experiment
+        for (let i = 0; i < 40; i++) {
+            await this.page.keyboard.press("ArrowLeft");
+        }
 
         for (let i = 0; i < position; i++) {
             await this.page.waitForTimeout(100);
