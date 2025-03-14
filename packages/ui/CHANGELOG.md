@@ -1,5 +1,20 @@
 # Changelog
 
+## [1.85.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.84.0...ui-v1.85.0) (2025-03-14)
+
+
+### Features
+
+* **Operations/List:** apply transactions to 'in'/'out' tables [YTFRONT-3134] ([db581dd](https://github.com/ytsaurus/ytsaurus-ui/commit/db581dd0274e3d099d07f368be575aeeec6a2167))
+* **YTErrorBlock:** copy button should use the same text format [YTFRON-3310] ([2a4d92e](https://github.com/ytsaurus/ytsaurus-ui/commit/2a4d92e86d2bd17a34caf1147c3cd542c67bd0dd))
+
+
+### Bug Fixes
+
+* **Navigation/YQLKit:** do not close side panel when go up to parent folder [YTFRONT-4729] ([b9afc28](https://github.com/ytsaurus/ytsaurus-ui/commit/b9afc28826bbef9126107ce1d109350def1f95bd))
+* **Queries:** update draft while query is running [YTFRONT-4791] ([d4647da](https://github.com/ytsaurus/ytsaurus-ui/commit/d4647daa58e8c7e060da730369f7711498a03dc8))
+* **RequestPermissions:** mark 'Subjects' field as required [YTFRONT-4745] ([ed3ec63](https://github.com/ytsaurus/ytsaurus-ui/commit/ed3ec633ee694d18157cc1388c0d955dc0ba8971))
+
 ## [1.84.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.83.0...ui-v1.84.0) (2025-03-12)
 
 
