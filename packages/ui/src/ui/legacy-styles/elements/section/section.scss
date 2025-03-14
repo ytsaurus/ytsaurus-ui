@@ -36,4 +36,9 @@
     &_collapsable_yes {
         border-top: 1px solid var(--light-divider);
     }
+
+    .cluster-page__panes-wrapper_with-pane & {
+        max-width: none;
+        width: calc(100vw - var(--gn-aside-header-size));
+    }
 }
