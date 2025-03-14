@@ -6,6 +6,7 @@ import {Text, TextInput} from '@gravity-ui/uikit';
 import Icon from '../../../../components/Icon/Icon';
 import {useDispatch, useSelector} from 'react-redux';
 import {selectNavigationFilter} from '../../module/queryNavigation/selectors';
+import unipika from '../../../../common/thor/unipika';
 
 type Props = {
     schema: NavigationTableSchema[];
@@ -28,7 +29,7 @@ const columns: Column<NavigationTableSchema>[] = [
                             size={16}
                         />
                     )}{' '}
-                    {row.name}
+                    {unipika.prettyprint(row.name, {asHTML: false})}
                 </>
             );
         },
