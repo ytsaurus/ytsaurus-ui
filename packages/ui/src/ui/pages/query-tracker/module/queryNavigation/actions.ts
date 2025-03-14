@@ -8,6 +8,7 @@ import {
     NavigationTableSchema,
     setCluster,
     setFilter,
+    setLoading,
     setNodeType,
     setNodes,
     setPath,
@@ -83,6 +84,7 @@ export const loadNodeByPath =
 
         if (!clusterConfig) return;
 
+        dispatch(setLoading(true));
         const response = await wrapApiPromiseByToaster(
             ytApiV3Id.list(YTApiId.navigationListNodes, {
                 setup: {
@@ -99,7 +101,9 @@ export const loadNodeByPath =
                 toasterName: 'query_navigation_node',
                 errorTitle: 'Navigation node open failure',
             },
-        );
+        ).finally(() => {
+            dispatch(setLoading(false));
+        });
 
         const nodes: NavigationNode[] = response
             .map((item: unknown) => {
@@ -186,10 +190,10 @@ export const loadTableAttributesByPath =
 
 export const setNavigationCluster =
     (clusterId: string): AsyncAction =>
-    (dispatch) => {
+    async (dispatch) => {
         dispatch(setCluster(clusterId));
         dispatch(setPath('/'));
-        dispatch(loadNodeByPath('/'));
+        await dispatch(loadNodeByPath('/'));
     };
 
 export const initNavigation = (): AsyncAction => async (dispatch, getState) => {
