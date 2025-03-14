@@ -253,6 +253,12 @@ export const defaultUIFactory: UIFactory = {
         },
     },
 
+    externalAnnotationSetup: {
+        load(_cluster: string, _path: string) {
+            return Promise.resolve({});
+        },
+    },
+
     getAclApi() {
         return defaultAclApi;
     },

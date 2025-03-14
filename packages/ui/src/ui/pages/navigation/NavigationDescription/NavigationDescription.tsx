@@ -1,29 +1,23 @@
-import React, {FC, useCallback, useRef} from 'react';
+import React, {FC, useCallback, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import cn from 'bem-cn-lite';
-import {YTErrorBlock} from '../../../components/Error/Error';
+
+import ypath from '../../../common/thor/ypath';
 import CollapsibleSection from '../../../components/CollapsibleSection/CollapsibleSection';
-import {
-    getNavigationAnnotation,
-    getNavigationAnnotationEditing,
-    getNavigationAnnotationError,
-    getNavigationAnnotationPath,
-    getNavigationAnnotationSaving,
-} from '../../../store/selectors/navigation/tabs/annotation';
-import {getPath} from '../../../store/selectors/navigation';
-import {getSettingAnnotationVisibility} from '../../../store/selectors/settings';
+import {getNavigationAnnotationEditing} from '../../../store/selectors/navigation/tabs/annotation';
+import {getAttributes, getPath} from '../../../store/selectors/navigation';
+import {getSettingAnnotationVisibility, getUseAutoRefresh} from '../../../store/selectors/settings';
 import {setSettingAnnotationVisibility} from '../../../store/actions/settings/settings';
 import {AnnotationVisibility} from '../../../../shared/constants/settings-ts';
 import './NavigationDescription.scss';
 import {AnnotationWithPartial} from './AnnotationWithPartial';
-import {ActionButtons} from './ActionButtons';
 import {EditAnnotationWithPreview} from '../../../components/EditAnnotationWithPreview/EditAnnotationWithPreview';
-import {saveAnnotation} from '../../../store/actions/navigation/tabs/annotation';
-import {
-    SET_ANNOTATION,
-    SET_ANNOTATION_EDITING,
-} from '../../../constants/navigation/tabs/annotation';
+import {useGetExternalDescriptionQuery} from '../../../store/api/pages/navigation/tabs/description';
+import {SET_ANNOTATION} from '../../../constants/navigation/tabs/annotation';
 import {UI_COLLAPSIBLE_SIZE} from '../../../constants/global';
+import {NavigationDescriptionOverview} from './NavigationDescriptionOverview';
+import {getCluster} from '../../../store/selectors/global';
+import {DEFAULT_UPDATER_TIMEOUT} from '../../../hooks/use-updater';
 
 const block = cn('navigation-description');
 
@@ -33,14 +27,26 @@ type Props = {
 
 const NavigationDescription: FC<Props> = ({className}) => {
     const dispatch = useDispatch();
-    const annotation = useSelector(getNavigationAnnotation) || '';
-    const visibility = useSelector(getSettingAnnotationVisibility);
+    const attributes = useSelector(getAttributes);
     const path = useSelector(getPath);
-    const isSaving = useSelector(getNavigationAnnotationSaving);
+    const cluster = useSelector(getCluster);
+
+    const visibility = useSelector(getSettingAnnotationVisibility);
     const isEditing = useSelector(getNavigationAnnotationEditing);
-    const annotationPath = useSelector(getNavigationAnnotationPath);
-    const error = useSelector(getNavigationAnnotationError);
-    const oldValue = useRef<string>(annotation);
+
+    const annotation = ypath.getValue(attributes, '/annotation') || '';
+    const annotationPath = ypath.getValue(attributes, '/annotation_path');
+
+    const useAutoRefresh = useSelector(getUseAutoRefresh) as boolean;
+    const {data} = useGetExternalDescriptionQuery(
+        {cluster, path},
+        {
+            pollingInterval: useAutoRefresh ? DEFAULT_UPDATER_TIMEOUT : undefined,
+            skipPollingIfUnfocused: true,
+        },
+    );
+
+    const [showExternalDescription, setShowExternalDescription] = useState(false);
 
     const expanded = visibility === AnnotationVisibility.VISIBLE;
     const handleToggleAnnotationCollapse = useCallback(() => {
@@ -51,16 +57,6 @@ const NavigationDescription: FC<Props> = ({className}) => {
         );
     }, [dispatch, expanded]);
 
-    const handleEditClick = useCallback(() => {
-        oldValue.current = annotation;
-        dispatch({type: SET_ANNOTATION_EDITING, data: true});
-    }, [annotation, dispatch]);
-
-    const handleCancelClick = useCallback(() => {
-        dispatch({type: SET_ANNOTATION, data: oldValue.current});
-        dispatch({type: SET_ANNOTATION_EDITING, data: false});
-    }, [dispatch]);
-
     const handleChangeDescription = useCallback(
         ({value}: {value: string | undefined}) => {
             dispatch({type: SET_ANNOTATION, data: value || ''});
@@ -68,11 +64,7 @@ const NavigationDescription: FC<Props> = ({className}) => {
         [dispatch],
     );
 
-    const handleSaveClick = useCallback(() => {
-        dispatch(saveAnnotation(path));
-    }, [dispatch, path]);
-
-    if (!(path === annotationPath && (error || annotation))) return null;
+    if (!(path === annotationPath && annotation)) return null;
 
     return (
         <div className={block(null, className)}>
@@ -82,12 +74,11 @@ const NavigationDescription: FC<Props> = ({className}) => {
                 collapsed={false}
                 size={UI_COLLAPSIBLE_SIZE}
                 overview={
-                    <ActionButtons
-                        isSaving={isSaving}
-                        editMode={isEditing}
-                        onEditClick={handleEditClick}
-                        onSaveClick={handleSaveClick}
-                        onCancelClick={handleCancelClick}
+                    <NavigationDescriptionOverview
+                        annotationLink={data?.annotationLink || ''}
+                        annotation={data?.annotation || ''}
+                        showExternalDescription={showExternalDescription}
+                        setShowExternalDescription={setShowExternalDescription}
                     />
                 }
             >
@@ -103,12 +94,11 @@ const NavigationDescription: FC<Props> = ({className}) => {
                         />
                     ) : (
                         <AnnotationWithPartial
-                            annotation={annotation}
+                            annotation={showExternalDescription ? data?.annotation : annotation}
                             expanded={expanded}
                             onToggle={handleToggleAnnotationCollapse}
                         />
                     )}
-                    {error && <YTErrorBlock error={error} />}
                 </div>
             </CollapsibleSection>
         </div>

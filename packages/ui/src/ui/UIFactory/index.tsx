@@ -67,6 +67,11 @@ export interface ExternalSchemaDescriptionResponse {
     externalSchema?: Map<string, ExternalSchemaDescription>;
 }
 
+export interface ExternalAnnotationResponse {
+    annotation?: string;
+    annotationLink?: string;
+}
+
 export interface ReducersAndUrlMapping {
     reducers?: Record<string, Reducer<any, any>>;
     urlMapping?: Record<string, PathParameters>;
@@ -412,6 +417,11 @@ export interface UIFactory {
     externalSchemaDescriptionSetup: {
         columns?: Record<keyof ExternalSchemaDescription['glossaryEntity'], string>;
         load(cluster: string, path: string): Promise<ExternalSchemaDescriptionResponse>;
+    };
+
+    externalAnnotationSetup: {
+        externalServiceName?: string;
+        load(cluster: string, path: string): Promise<ExternalAnnotationResponse>;
     };
 
     getAclApi(): AclApi;
