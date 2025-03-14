@@ -1,12 +1,6 @@
 .navigation-node-list {
-    display: flex;
-    flex-direction: column;
     height: 100%;
     overflow: auto;
-
-    tbody &__row {
-        padding: 0 !important;
-    }
 
     &__empty-wrap {
         display: flex;

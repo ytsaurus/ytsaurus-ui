@@ -45,6 +45,7 @@ export const NodeListRow: FC<Props> = ({
     const showActions = isSupported && name !== '...';
 
     const handleClick = () => {
+        if (!isSupported) return;
         onClick(path, type);
     };
 
