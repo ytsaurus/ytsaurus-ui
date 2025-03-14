@@ -1,14 +1,19 @@
 .navigation-cluster-list {
-    overflow: auto;
-    flex-grow: 1;
-
-    &__table-row {
-        padding: 5px 15px;
-        width: 100%;
-        align-items: center;
+    &__row td {
+        padding: 0 !important;
     }
 
-    tbody &__row {
-        padding: 0 !important;
+    &__item {
+        &_active, &:hover {
+            background-color: var(--g-color-base-simple-hover-solid);
+        }
+    }
+
+    &__header {
+        width: 100%;
+    }
+
+    .data-table__head-cell {
+        width: 100%;
     }
 }

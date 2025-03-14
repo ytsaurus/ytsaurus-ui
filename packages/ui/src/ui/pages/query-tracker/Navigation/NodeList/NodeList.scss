@@ -1,11 +1,13 @@
 .navigation-node-list {
-    display: flex;
-    flex-direction: column;
     height: 100%;
     overflow: auto;
 
-    tbody &__row {
+    &__row td {
         padding: 0 !important;
+    }
+
+    &__header {
+        width: 100%;
     }
 
     &__empty-wrap {
@@ -18,5 +20,9 @@
 
     &__empty-icon {
         flex-direction: column;
+    }
+
+    .data-table__head-cell {
+        width: 100%;
     }
 }
