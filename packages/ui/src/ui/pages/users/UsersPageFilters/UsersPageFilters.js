@@ -77,6 +77,7 @@ class UsersPageFilters extends React.Component {
                                     value={groupFilter ? [groupFilter] : undefined}
                                     placeholder="Group name filter..."
                                     onChange={(vals) => this.props.setUsersGroupFilter(vals[0])}
+                                    disablePortal={false}
                                 />
                             </GroupsLoader>
                         ),

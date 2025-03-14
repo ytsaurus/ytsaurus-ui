@@ -31,11 +31,22 @@ interface Props {
     disabled?: boolean;
     width?: SelectProps['width'];
     maxVisibleValues?: number;
+    disablePortal?: boolean;
 }
 
 function GroupSuggest(props: Props) {
-    const {items, width, multiple, onChange, placeholder, className, showTags, value, ...rest} =
-        props;
+    const {
+        items,
+        width,
+        multiple,
+        onChange,
+        placeholder,
+        className,
+        showTags,
+        value,
+        disablePortal = true,
+        ...rest
+    } = props;
 
     const ycItems = map_(items, (item) => ({
         value: item,
@@ -65,7 +76,7 @@ function GroupSuggest(props: Props) {
                 multiple={multiple}
                 width={width ?? 'max'}
                 filterable
-                disablePortal
+                disablePortal={disablePortal}
             />
             {multiple && showTags && <EditableList onChange={onListChange} value={listValue} />}
         </div>
