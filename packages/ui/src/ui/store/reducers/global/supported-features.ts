@@ -20,6 +20,7 @@ export interface SupportedFeaturesState {
         primitive_types?: Array<string>;
         operation_statistics_descriptions?: Record<string, OperationStatisticInfo>;
         require_password_in_authentication_commands?: boolean;
+        query_memory_limit_in_tablet_nodes?: boolean;
     };
 }
 
