@@ -39,6 +39,7 @@ export type NavigationTable = {
 };
 
 export type RepoNavigationState = {
+    loading: boolean;
     nodeType: BodyType;
     path: string;
     cluster: string | undefined;
@@ -48,6 +49,7 @@ export type RepoNavigationState = {
 };
 
 export const initialState: RepoNavigationState = {
+    loading: false,
     nodeType: BodyType.Cluster,
     path: '/',
     cluster: undefined,
@@ -60,6 +62,9 @@ const queryNavigationSlice = createSlice({
     name: 'queryNavigation',
     initialState,
     reducers: {
+        setLoading: (state, action: PayloadAction<boolean>) => {
+            state.loading = action.payload;
+        },
         setCluster(state, {payload}: PayloadAction<string | undefined>) {
             state.cluster = payload;
         },
@@ -81,7 +86,7 @@ const queryNavigationSlice = createSlice({
     },
 });
 
-export const {setFilter, setCluster, setPath, setNodeType, setNodes, setTable} =
+export const {setLoading, setFilter, setCluster, setPath, setNodeType, setNodes, setTable} =
     queryNavigationSlice.actions;
 
 export const queryNavigationReducer = queryNavigationSlice.reducer;

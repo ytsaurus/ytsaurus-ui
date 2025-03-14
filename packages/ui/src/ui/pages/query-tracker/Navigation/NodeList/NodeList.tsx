@@ -1,13 +1,11 @@
 import React, {FC, useCallback, useRef} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {
+    selectLoading,
     selectNavigationClusterConfig,
     selectNodeListByFilter,
 } from '../../module/queryNavigation/selectors';
-import {ClusterConfig} from '../../../../../shared/yt-types';
-import {TableWithSorting} from './TableWithSorting';
 import {NodeListRow} from './NodeListRow';
-import {NavigationNode} from '../../module/queryNavigation/queryNavigationSlice';
 import {
     copyPathToClipboard,
     loadNodeByPath,
@@ -29,7 +27,7 @@ import {createTableSelect} from '../helpers/createTableSelect';
 import {getQueryResultGlobalSettings} from '../../module/query_result/selectors';
 import {useToggle} from 'react-use';
 import {NewQueryPromt} from '../../NewQueryButton/NewQueryButton';
-import {NoContent} from '../../../../components/NoContent/NoContent';
+import {ItemsList} from '../ItemsList';
 
 const b = cn('navigation-node-list');
 
@@ -42,8 +40,8 @@ export const NodeList: FC = () => {
     const engine = useSelector(getQueryEngine);
     const {pageSize} = getQueryResultGlobalSettings();
     const dirtyQuery = useSelector(isQueryDraftEditted);
+    const loading = useSelector(selectLoading);
     const {getEditor} = useMonaco();
-    const isEmpty = nodes.length <= 1;
 
     const handleNodeClick = (path: string, type: string | undefined) => {
         if (isFolderNode(type)) {
@@ -137,38 +135,25 @@ export const NodeList: FC = () => {
 
     return (
         <div className={b()}>
-            <TableWithSorting
+            <ItemsList
+                loading={loading}
                 data={nodes}
-                columns={[
-                    {
-                        className: b('row'),
-                        id: 'name',
-                        name: 'Name',
-                        template: (node) => (
-                            <NodeListRow
-                                node={node as NavigationNode}
-                                queryEngine={engine}
-                                onClick={handleNodeClick}
-                                onFavoriteToggle={handleFavoriteToggle}
-                                onEditorInsert={handleEditorInsert}
-                                onClipboardCopy={onClipboardCopy}
-                                onNewWindowOpen={handleNewWindowOpen}
-                                onNewQuery={handleNewQuery}
-                            />
-                        ),
-                        meta: {
-                            sort: (aCluster: ClusterConfig, bCluster: ClusterConfig) => {
-                                return aCluster.name.localeCompare(bCluster.name);
-                            },
-                        },
-                    },
-                ]}
+                render={(node) => {
+                    return (
+                        <NodeListRow
+                            key={node.path}
+                            node={node}
+                            queryEngine={engine}
+                            onClick={handleNodeClick}
+                            onFavoriteToggle={handleFavoriteToggle}
+                            onEditorInsert={handleEditorInsert}
+                            onClipboardCopy={onClipboardCopy}
+                            onNewWindowOpen={handleNewWindowOpen}
+                            onNewQuery={handleNewQuery}
+                        />
+                    );
+                }}
             />
-            {isEmpty && (
-                <div className={b('empty-wrap')}>
-                    <NoContent className={b('empty-icon')} warning="This directory is empty" />
-                </div>
-            )}
             <NewQueryPromt
                 confirm={handlePromptConfirm}
                 cancel={handlePromptCancel}
