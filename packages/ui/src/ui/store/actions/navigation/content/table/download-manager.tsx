@@ -2,7 +2,7 @@ import React from 'react';
 import {ThunkAction} from 'redux-thunk';
 import {UnknownAction} from 'redux';
 import {Text, Toaster} from '@gravity-ui/uikit';
-import axios from 'axios';
+import axios, {AxiosError} from 'axios';
 
 import {AppStoreProvider} from '../../../../../containers/App/AppStoreProvider';
 import {DownloadShortInfo} from '../../../../../pages/navigation/content/Table/DownloadManager/DownloadShortInfo/DownloadShortInfo';
@@ -11,6 +11,8 @@ import {RootState} from '../../../../reducers';
 import {downloadManagerActions} from '../../../../reducers/navigation/content/table/download-manager';
 
 import {downloadFileFromResponse} from '../../../../../utils/download-file';
+import {showErrorPopup} from '../../../../../utils/utils';
+import {YTError} from '../../../../../types';
 
 const requestDownloadFile = async (url: string) =>
     axios({
@@ -23,6 +25,10 @@ const requestDownloadFile = async (url: string) =>
 const toaster = new Toaster();
 
 const HIDING_TIMING = 5000;
+
+const fallbackError = {
+    message: 'An unexpected error occurred while downloading the file',
+};
 
 export const downloadFile = (
     url: string,
@@ -41,15 +47,14 @@ export const downloadFile = (
 
             dispatch(downloadManagerActions.onSuccess({id}));
             updateToaster(id, 'success');
-        } catch (error: any) {
-            let errorMessage = error;
-            if (error.response) {
-                const errorText = await error.response.data.text();
-                errorMessage = JSON.parse(errorText).message;
+        } catch (e: unknown) {
+            let error = fallbackError;
+            if (e instanceof AxiosError && e.response) {
+                error = JSON.parse(await e.response.data.text());
             }
 
             dispatch(downloadManagerActions.onFailure({id, error}));
-            updateToaster(id, 'failure', {errorMessage});
+            updateToaster(id, 'failure', {error});
         }
 
         setTimeout(() => {
@@ -63,7 +68,7 @@ const updateToaster = (
     status: 'loading' | 'success' | 'failure',
     options?: {
         filename?: string;
-        errorMessage?: string;
+        error?: YTError | AxiosError;
     },
 ) => {
     if (status === 'loading') {
@@ -92,8 +97,17 @@ const updateToaster = (
         toaster.update(`downloadingFile_${id}`, {
             title: 'Failure',
             theme: 'danger',
-            content: <Text>{options?.errorMessage || ''}</Text>,
-            autoHiding: HIDING_TIMING,
+            content: <Text>{options?.error?.message || 'Failed to download file'}</Text>,
+            autoHiding: false,
+            actions: [
+                {
+                    label: 'Details',
+                    onClick: () =>
+                        showErrorPopup(options?.error || fallbackError, {
+                            hideOopsMsg: true,
+                        }),
+                },
+            ],
         });
     }
 };
