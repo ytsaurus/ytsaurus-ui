@@ -429,10 +429,10 @@ export class DownloadManager extends React.Component<Props, State> {
         // `read_table?path/to/file{"column1","column2"}` where they should be wrapped in quotes
 
         // In case of schemaful_dsv format column names are passed as part of request params as well. It looks like:
-        // read_table?path/to/file{"Группа+клиентов","Ранг+оффера"}&output_format[$attributes][columns][]=Группа+клиентов&output_format[$attributes][columns][]=Ранг+оффера
+        // read_table?path/to/file{"Clients+group","Offer+rank"}&output_format[$attributes][columns][]=Clients+group&output_format[$attributes][columns][]=Offer+rank
 
-        // [columns][]=Группа+клиентов -- valid,
-        // [columns][]="Группа+клиентов" -- invalid
+        // [columns][]=Clients+group -- valid,
+        // [columns][]="Clients+group" -- invalid
 
         if (useQuotes) {
             return `"${parsedColumn}"`;
