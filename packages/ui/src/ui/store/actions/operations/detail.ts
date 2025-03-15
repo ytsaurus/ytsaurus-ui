@@ -1,4 +1,3 @@
-import mapValues_ from 'lodash/mapValues';
 import ypath from '../../../common/thor/ypath';
 
 import {
@@ -29,58 +28,6 @@ import type {OperationDetailActionType} from '../../reducers/operations/detail';
 
 const toaster = new Toaster();
 const operationDetailsRequests = new CancelHelper();
-
-function getIsEphemeral([operationAttributes, userTransactionAlive]: Awaited<
-    ReturnType<typeof checkUserTransaction>
->) {
-    const treesInfo = ypath.get(
-        operationAttributes,
-        '/runtime_parameters/scheduling_options_per_pool_tree',
-    );
-    const trees = Object.keys(treesInfo);
-    const poolPaths = Object.values(
-        mapValues_(
-            treesInfo,
-            (infoPerTree, tree) =>
-                `${tree}/pools/${ypath.getValue(infoPerTree, '/pool')}/is_ephemeral`,
-        ),
-    );
-    const requests = poolPaths.map((path) => {
-        return {
-            command: 'get' as const,
-            parameters: {
-                path: '//sys/scheduler/orchid/scheduler/pool_trees/' + path,
-            },
-        };
-    });
-    const orchidAttributes = ytApiV3Id
-        .executeBatch(YTApiId.operationIsEphemeral, {requests})
-        .then((data) =>
-            data.map(({error, output}) =>
-                error
-                    ? ypath.getNumberDeprecated(error.code) === YTErrors.NODE_DOES_NOT_EXIST
-                    : output,
-            ),
-        )
-        .then((res) =>
-            res.reduce(
-                (acc, poolInfo, index) => {
-                    const tree = trees[index];
-                    const pool = ypath.getValue(treesInfo[tree], '/pool');
-                    const isEphemeral = ypath.getBoolean(poolInfo);
-
-                    acc[tree] = {
-                        [pool]: {isEphemeral},
-                    };
-
-                    return acc;
-                },
-                {} as Record<string, {isEphemeral: boolean}>,
-            ),
-        );
-
-    return Promise.all([operationAttributes, userTransactionAlive, orchidAttributes]);
-}
 
 function loadIntermediateResourceUsage(
     operation: unknown,
@@ -143,13 +90,11 @@ export function getOperation(
         return ytApiV3
             .getOperation(params, operationDetailsRequests)
             .then(checkUserTransaction)
-            .then(getIsEphemeral)
-            .then(([operationAttributes, userTransactionAlive, orchidAttributes]) => {
+            .then(([operationAttributes, userTransactionAlive]) => {
                 const preparedAttributes = prepareAttributes(operationAttributes);
                 const operation = new DetailedOperationSelector(
                     preparedAttributes,
                     operationAttributes,
-                    orchidAttributes,
                 );
 
                 const dispatchOperationSuccess = () => {
