@@ -52,6 +52,7 @@ const POOL_FIELDS_TO_LOAD = [
     'demand_ratio',
     'detailed_fair_share',
     'dominant_resource',
+    'effective_lightweight_operations_enabled',
     'estimated_burst_usage_duration_sec',
     'fair_share_ratio',
     'fifo_index',

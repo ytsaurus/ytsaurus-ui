@@ -136,6 +136,10 @@ export function updatePoolChild(data, cypressData, type, treeResources) {
         data.usageRatio = ypath.getNumber(attributes, '/usage_ratio');
         data.demandRatio = ypath.getNumber(attributes, '/demand_ratio');
         data.isEphemeral = ypath.getBoolean(attributes, '/is_ephemeral');
+        data.isEffectiveLightweight = ypath.getBoolean(
+            attributes,
+            '/effective_lightweight_operations_enabled',
+        );
 
         data.integralType = ypath.getValue(attributes, '/integral_guarantee_type');
         const userDefinedBurstCPU = ypath.getNumber(

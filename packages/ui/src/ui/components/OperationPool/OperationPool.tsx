@@ -34,6 +34,7 @@ export type OperationPoolProps = {
         pool: string;
         tree: string;
         isEphemeral?: boolean;
+        isLightweight?: boolean;
         weight?: number;
     };
     erased?: boolean;
@@ -52,7 +53,7 @@ export function OperationPool({
     const url = `/${cluster}/${Page.SCHEDULING}/${Tab.OVERVIEW}?pool=${pool.pool}&tree=${pool.tree}`;
     const isCorrectState = state !== 'completed' && state !== 'failed' && state !== 'aborted';
     const title = `${pool.pool} [${pool.tree}]`;
-    const isEphemeral = pool.isEphemeral;
+    const {isEphemeral, isLightweight} = pool;
 
     return (
         <li className={block(null, className)} key={pool.tree}>
@@ -80,6 +81,11 @@ export function OperationPool({
             {!compact && isEphemeral && (
                 <Tooltip content="Ephemeral pool">
                     <Icon awesome="ghost" />
+                </Tooltip>
+            )}
+            {!compact && isLightweight && (
+                <Tooltip content="Lightweight operations enabled">
+                    <Icon awesome="plane" />
                 </Tooltip>
             )}
             {isCorrectState && renderButton(onEdit, allowDetachEditBtn)}
