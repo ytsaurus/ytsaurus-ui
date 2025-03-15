@@ -324,6 +324,19 @@ class Overview extends Component {
         );
     }
 
+    static renderEffectiveLightweightIcon(item) {
+        return (
+            item.isEffectiveLightweight && (
+                <Tooltip
+                    content="Lightwegith operations enabled"
+                    className={block('ephemeral-icon')}
+                >
+                    <Icon awesome="plane" />
+                </Tooltip>
+            )
+        );
+    }
+
     static renderDominantResource(item) {
         return hammer.format['ReadableField'](item.dominantResource);
     }
@@ -348,6 +361,7 @@ class Overview extends Component {
                     {Overview.renderName(item, Tab.OVERVIEW, cluster, currentPool, changePool)}
                 </span>
                 {Overview.renderEphemeralIcon(item)}
+                {Overview.renderEffectiveLightweightIcon(item)}
                 <PoolTags pool={item} />
             </span>
         );

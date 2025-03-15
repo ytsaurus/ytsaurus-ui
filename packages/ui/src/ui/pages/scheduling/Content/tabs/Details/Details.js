@@ -451,6 +451,7 @@ class Details extends Component {
                     {Overview.renderName(item, Tab.DETAILS, cluster, currentPool, changePool)}
                 </span>
                 {Overview.renderEphemeralIcon(item)}
+                {Overview.renderEffectiveLightweightIcon(item)}
                 <PoolTags pool={item} />
             </span>
         );

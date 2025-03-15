@@ -23,6 +23,7 @@ export interface Pool {
     pool: string;
     tree: string;
     isEphemeral?: boolean;
+    isLightweight?: boolean;
     weight?: number;
 }
 

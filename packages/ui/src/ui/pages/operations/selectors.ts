@@ -64,17 +64,21 @@ export class OperationSelector implements Record<string, any> {
             attributes,
             '/runtime_parameters/scheduling_options_per_pool_tree',
         );
+        const attrsPerPoolTree = ypath.getValue(attributes, '/scheduling_attributes_per_pool_tree');
         const poolsIndexes = ypath.getValue(attributes, '/slot_index_per_pool_tree') || {};
 
         this.pools = map_(trees, (schedulingInfo, name) => {
             const tree = name;
             const pool = schedulingInfo.pool;
             const isEphemeral = orchidAttributes?.[tree]?.[pool]?.isEphemeral || false;
+            const treeData = ypath.getValue(attrsPerPoolTree, `/${tree}`);
+            const isLightweight = ypath.getValue(treeData, '/running_in_lightweight_pool') || false;
 
             return {
                 tree,
                 pool,
                 isEphemeral,
+                isLightweight,
                 slotIndex: poolsIndexes[name],
                 weight: schedulingInfo.weight || 1,
             };
