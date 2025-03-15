@@ -59,7 +59,7 @@ export class OperationSelector implements Record<string, any> {
         return this.state === 'completed';
     }
 
-    computePools(attributes: any, orchidAttributes?: any) {
+    computePools(attributes: any) {
         const trees = ypath.getValue(
             attributes,
             '/runtime_parameters/scheduling_options_per_pool_tree',
@@ -70,8 +70,8 @@ export class OperationSelector implements Record<string, any> {
         this.pools = map_(trees, (schedulingInfo, name) => {
             const tree = name;
             const pool = schedulingInfo.pool;
-            const isEphemeral = orchidAttributes?.[tree]?.[pool]?.isEphemeral || false;
             const treeData = ypath.getValue(attrsPerPoolTree, `/${tree}`);
+            const isEphemeral = ypath.getValue(treeData, '/running_in_ephemeral_pool') || false;
             const isLightweight = ypath.getValue(treeData, '/running_in_lightweight_pool') || false;
 
             return {
@@ -182,7 +182,6 @@ export interface IOProperties {
 
 export class DetailedOperationSelector extends OperationSelector {
     $typedAttributes: unknown;
-    $orchidAttributes: unknown;
 
     alias?: string;
 
@@ -217,15 +216,13 @@ export class DetailedOperationSelector extends OperationSelector {
 
     live_preview: unknown;
 
-    constructor(data: any, typedData: unknown, orchidData: unknown) {
+    constructor(data: any, typedData: unknown) {
         super(data);
 
         this.$typedAttributes = typedData;
-        this.$orchidAttributes = orchidData;
 
         const attributes = this.$attributes;
         const typedAttributes = this.$typedAttributes;
-        const orchidAttributes = this.$orchidAttributes;
 
         const spec = ypath.getValue(attributes, '/spec');
         const fullSpec = ypath.getValue(attributes, '/full_spec');
@@ -254,7 +251,7 @@ export class DetailedOperationSelector extends OperationSelector {
 
         this.duration = (moment(this.finishTime) as any) - (moment(this.startTime) as any);
 
-        this.computePools(attributes, orchidAttributes);
+        this.computePools(attributes);
 
         const progress = ypath.getValue(attributes, '/progress');
         const jobs = (this.jobs = ypath.getValue(progress, '/jobs'));
