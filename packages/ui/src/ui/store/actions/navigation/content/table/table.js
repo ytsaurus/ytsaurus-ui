@@ -114,19 +114,20 @@ function loadDynamicTable(requestOutputFormat, setup, state, type, useZeroRangeF
 
     const cluster = getCluster(state);
     const isDynamic = getIsDynamic(state);
+    const isSorted = ypath.getValue(attributes, '/sorted');
     const id = makeTableRumId({cluster, isDynamic});
 
     const isUnmounted = ypath.getValue(attributes, '/tablet_state') === 'unmounted';
 
-    if (isUnmounted) {
+    if (isUnmounted && !isSorted) {
         // in case of unmounted dynamic table treat it as a static table
         const apiId = type === LOAD_TYPE.PRELOAD ? YTApiId.tableReadPreload : YTApiId.tableRead;
         // example: offset = "(1, 2)": string , we need [1, 2]: number[]
         const preparedOffset = offset
             .replace(/[()]/g, '')
             .split(',')
-            .map((part) => Number(part.trim()))
-            .filter(Boolean);
+            .map((part) => Number(part.trim()));
+
         return id.fetch(
             apiId,
             readStaticTable({
@@ -134,12 +135,20 @@ function loadDynamicTable(requestOutputFormat, setup, state, type, useZeroRangeF
                 parameters: {
                     path: {
                         $value: path,
-                        $attributes: preparedOffset.length
-                            ? {
-                                  tablet_index: preparedOffset[0],
-                                  row_index: preparedOffset[1],
-                              }
-                            : undefined,
+                        $attributes: {
+                            ranges: [
+                                {
+                                    lower_limit: {
+                                        tablet_index: preparedOffset[0] || 0,
+                                        row_index: preparedOffset[1] || 0,
+                                    },
+                                    upper_limit: {
+                                        tablet_index: preparedOffset[0] || 0,
+                                        row_index: limit + (preparedOffset[1] || 0),
+                                    },
+                                },
+                            ],
+                        },
                     },
                     table_reader: {
                         workload_descriptor: {category: 'user_interactive'},
