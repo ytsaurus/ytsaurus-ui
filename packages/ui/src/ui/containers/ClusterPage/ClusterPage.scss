@@ -26,7 +26,6 @@
         flex-direction: column;
 
         &_split_yes {
-            overflow: auto;
             height: calc(100vh - var(--app-header-height));
         }
     }
