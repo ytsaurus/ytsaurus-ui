@@ -26,6 +26,7 @@ import groups from './groups';
 import scheduling from './scheduling';
 import suggests from './suggests';
 import job from './job';
+import dashboard2 from './dashboard2';
 import tablet_cell_bundles from './tablet_cell_bundles';
 import tabletCellBundleEditor from './tablet_cell_bundles/tablet-cell-bundle-editor';
 import chaos_cell_bundles from './chaos_cell_bundles';
@@ -44,6 +45,7 @@ import {chyt} from './chyt';
 import {RawVersion} from '../../store/selectors/thor/support';
 import {getMainLocations} from '../../store/location.main';
 import {flow} from '../../store/reducers/flow';
+import {rootApi} from '../../store/api';
 
 const appReducers = {
     acl,
@@ -56,6 +58,7 @@ const appReducers = {
     modals,
     navigation,
     dashboard,
+    dashboard2,
     operations,
     settings,
     slideoutMenu,
@@ -84,6 +87,7 @@ const appReducers = {
     chyt,
     manageTokens,
     flow,
+    [rootApi.reducerPath]: rootApi.reducer,
 };
 
 export type RootState = Omit<ReturnType<ReturnType<typeof makeRootReducer>>, 'global'> & {

@@ -3,6 +3,8 @@ export enum YTApiId {
     ui_clusterInfo,
     ui_loadColumnPreset,
 
+    favoritesAccountsAttributes,
+
     // Some ids without specific page
     clusterParams,
     clusterParamsIsDeveloper,
@@ -175,4 +177,7 @@ export enum YTApiId {
     issueToken,
 
     setUserPassword,
+
+    //dashboard
+    poolsInfo,
 }

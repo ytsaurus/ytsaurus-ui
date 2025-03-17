@@ -20,6 +20,7 @@ import {SchedulingLazy} from '../../pages/scheduling/lazy';
 import {QueryTrackerLazy} from '../../pages/query-tracker/lazy';
 import {JobLazy} from '../../pages/job/lazy';
 import {ChytPageLazy} from '../../pages/chyt/lazy';
+import {Dashboard2Lazy} from '../../pages/dashboard2/lazy';
 
 import ClusterPageHeader from '../ClusterPageHeader/ClusterPageHeader';
 import PageTracker from './PageTracker';
@@ -211,6 +212,7 @@ class ClusterPage extends Component {
                     <Route path={`/:cluster/${Page.DASHBOARD}`} component={DashboardLazy} />
                     <Route path={`/:cluster/${Page.SYSTEM}`} component={SystemLazy} />
                     <Route path={`/:cluster/${Page.ACCOUNTS}`} component={AccountsLazy} />
+                    <Route path={`/:cluster/${Page.DASHBOARD2}`} component={Dashboard2Lazy} />
                     <Route
                         path={[
                             `/:cluster/${Page.TABLET_CELL_BUNDLES}`,
