@@ -370,6 +370,7 @@ class MapNodesTable extends Component {
     };
 
     renderRowCount = (item, columnName) => {
+        console.log(item)
         const column = this.props.columns[columnName];
         return (item.dynamic ? '≈ ' : '') + hammer.format['Number'](column.get(item));
     };
