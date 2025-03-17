@@ -1,5 +1,26 @@
 # Changelog
 
+## [1.85.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.84.0...ui-v1.85.0) (2025-03-17)
+
+
+### Features
+
+* **Bundles:** add query memory limit [YTFRONT-4651] ([eca2997](https://github.com/ytsaurus/ytsaurus-ui/commit/eca29978c3962cf40a593bec32865390fee0dc37))
+* **Operations/List:** apply transactions to 'in'/'out' tables [YTFRONT-3134] ([db581dd](https://github.com/ytsaurus/ytsaurus-ui/commit/db581dd0274e3d099d07f368be575aeeec6a2167))
+* **YTErrorBlock:** copy button should use the same text format [YTFRON-3310] ([2a4d92e](https://github.com/ytsaurus/ytsaurus-ui/commit/2a4d92e86d2bd17a34caf1147c3cd542c67bd0dd))
+
+
+### Bug Fixes
+
+* **Navigation/DownloadManager:** provide more details in error toaster [YTFRONT-4790] ([25c35ad](https://github.com/ytsaurus/ytsaurus-ui/commit/25c35ad41998c185929ff4553494754363f525d4))
+* **Navigation/YQLKit:** do not close side panel when go up to parent folder [YTFRONT-4729] ([b9afc28](https://github.com/ytsaurus/ytsaurus-ui/commit/b9afc28826bbef9126107ce1d109350def1f95bd))
+* **Nodes:** wrong color in contrast high theme [YTFRONT-4610] ([e00b6c0](https://github.com/ytsaurus/ytsaurus-ui/commit/e00b6c04d97d3d2ca4f4ff3a32473fedb3a0b3b0))
+* **Queries:** improve navigation speed [YTFRONT-4771] ([f60341d](https://github.com/ytsaurus/ytsaurus-ui/commit/f60341d48c8675760a717d0acbf0196977bd226e))
+* **Queries:** schema fix [YTFRONT-4771] ([c008d19](https://github.com/ytsaurus/ytsaurus-ui/commit/c008d1976db7119c7d2f4bfb3034ae71b41987db))
+* **Queries:** update draft while query is running [YTFRONT-4791] ([d4647da](https://github.com/ytsaurus/ytsaurus-ui/commit/d4647daa58e8c7e060da730369f7711498a03dc8))
+* **RequestPermissions:** mark 'Subjects' field as required [YTFRONT-4745] ([ed3ec63](https://github.com/ytsaurus/ytsaurus-ui/commit/ed3ec633ee694d18157cc1388c0d955dc0ba8971))
+* **Users/GroupSuggest:** group suggest visibility [YTFRONT-4737] ([2084021](https://github.com/ytsaurus/ytsaurus-ui/commit/2084021c65c153117331d80fc177fc8c167e0a7d))
+
 ## [1.84.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.83.0...ui-v1.84.0) (2025-03-12)
 
 
