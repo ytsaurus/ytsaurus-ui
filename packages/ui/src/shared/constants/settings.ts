@@ -10,6 +10,7 @@ export const Page = {
     ACCOUNTS: 'accounts',
     OPERATIONS: 'operations',
     DASHBOARD: 'dashboard',
+    DASHBOARD2: 'dashboard2',
     PATH_VIEWER: 'path-viewer',
     TABLET: 'tablet',
     USERS: 'users',

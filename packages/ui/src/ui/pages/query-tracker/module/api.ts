@@ -24,6 +24,7 @@ import unipika from '../../../common/thor/unipika';
 import {CancelTokenSource} from 'axios';
 import {VisualizationState} from './queryChart/queryChartSlice';
 import {YTError} from '../../../../@types/types';
+import {QueryStatus} from '../../../types/query-tracker';
 
 function getQTApiSetup(): {proxy?: string} {
     const QT_CLUSTER = getQueryTrackerCluster();
@@ -148,26 +149,6 @@ export interface QueryItem extends DraftQuery {
         chartConfig?: VisualizationState;
     };
 }
-
-export enum QueryStatus {
-    DRAFT = 'draft',
-    RUNNING = 'running',
-    PENDING = 'pending',
-    COMPLETING = 'completing',
-    COMPLETED = 'completed',
-    FAILING = 'failing',
-    FAILED = 'failed',
-    ABORTING = 'aborting',
-    ABORTED = 'aborted',
-}
-
-export const ProgressStatuses = [
-    QueryStatus.RUNNING,
-    QueryStatus.PENDING,
-    QueryStatus.COMPLETING,
-    QueryStatus.FAILING,
-    QueryStatus.ABORTING,
-];
 
 export const AbortableStatuses = [QueryStatus.RUNNING, QueryStatus.PENDING];
 

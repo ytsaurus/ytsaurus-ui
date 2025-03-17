@@ -274,7 +274,7 @@ class OperationsListTable extends Component {
         css: 'operations-list',
         theme: 'light',
         striped: false,
-        virtualType: 'simple',
+        virtualType: 'variable',
         getItemLink: (item) => `${this.props.match.url}/${item.$value}`,
         computeKey: (item) => item.$value,
         columns: {

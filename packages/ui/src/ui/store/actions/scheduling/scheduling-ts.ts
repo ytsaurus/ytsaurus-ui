@@ -126,7 +126,7 @@ export function loadSchedulingData(): SchedulingThunkAction {
                      */
                     //dispatch(loadExpandedPools(tree));
                 } else {
-                    dispatch(loadExpandedPools(tree));
+                   dispatch(loadExpandedPools(tree));
                 }
 
                 return rumId

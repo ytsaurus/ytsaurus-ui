@@ -36,6 +36,11 @@ const pages: Array<HeaderItem> = [
         header: true,
     },
     {
+        id: Page.DASHBOARD2,
+        name: 'Dashboard 2',
+        header: true,
+    },
+    {
         id: Page.ACCOUNTS,
         name: 'Accounts',
     },

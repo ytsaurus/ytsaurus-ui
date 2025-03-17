@@ -806,7 +806,7 @@ const makeMapStateToProps = () => {
         const contextViewTree = isDashboard
             ? getFilteredAccountsOfDashboard(state)
             : getFilteredAccounts(state);
-
+        console.log(contextViewTree);
         return {
             ...accounts,
             activeContentModeFilter: getAccountsContentMode(state),

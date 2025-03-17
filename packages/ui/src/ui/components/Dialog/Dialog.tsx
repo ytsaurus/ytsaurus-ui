@@ -23,6 +23,7 @@ import TabletCellBundlesSuggest from '../../pages/components/TabletCellBundlesSu
 import EditablePathList from './controls/EditablePathList/EditablePathList';
 import {PathEditorControl} from './controls/PathEditorControl/PathEditorControl';
 import {OutputPathControl} from './controls/OutputPathControl';
+import {AccountsMultiple} from './controls/AccountsMultiple/AccountsMultiple';
 
 import './Dialog.scss';
 import {PoolSuggestControl} from './controls/PoolSuggestControl/PoolSuggestControl';
@@ -62,6 +63,7 @@ registerDialogControl('abc-control', AbcControl);
 registerDialogControl('accountsSuggest', AccountsSuggest);
 registerDialogControl('usable-account', UsableAccountSuggest);
 registerDialogControl('accounts-suggest-with-loading', AccountsSuggestWithLoading);
+registerDialogControl('accounts-with-presets', AccountsMultiple);
 
 registerDialogControl('cluster', ClusterSelectControl);
 
@@ -126,6 +128,11 @@ export type DialogField<FormValues = unknown> =
     | RegisteredDialogField<
           'accounts-suggest-with-loading',
           ComponentProps<typeof AccountsSuggestWithLoading>,
+          FormValues
+      >
+    | RegisteredDialogField<
+          'accounts-with-presets',
+          ComponentProps<typeof AccountsMultiple>,
           FormValues
       >
     | RegisteredDialogField<'cluster', ComponentProps<typeof ClusterSelectControl>, FormValues>

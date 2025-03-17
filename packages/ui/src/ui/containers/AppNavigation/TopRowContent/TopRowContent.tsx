@@ -17,6 +17,7 @@ import {SchedulingTopRowLazy} from '../../../pages/scheduling/lazy';
 import {NavigationTopRowLazy} from '../../../pages/navigation/lazy';
 import {SystemTopRowLazy} from '../../../pages/system/lazy';
 import {DashboardTopRowLazy} from '../../../pages/dashboard/lazy';
+import {Dashboard2TopRowLazy} from '../../../pages/dashboard2/lazy';
 import {ComponentsTopRowLazy} from '../../../pages/components/lazy';
 import {makeExtraPageTopRowRoutes} from '../../../containers/ClusterPage/ExtraClusterPageRoutes';
 
@@ -46,6 +47,7 @@ export default function TopRowContent() {
                 component={ChaosCellBundlesTopRowLazy}
             />
             <Route path={`/:cluster/${Page.DASHBOARD}`} component={DashboardTopRowLazy} />
+            <Route path={`/:cluster/${Page.DASHBOARD2}`} component={Dashboard2TopRowLazy} />
             <Route path={`/:cluster/${Page.COMPONENTS}`} component={ComponentsTopRowLazy} />
             <Route path={`/:cluster/${Page.CHYT}`} component={ChytPageTopRowLazy} />
             <Route
