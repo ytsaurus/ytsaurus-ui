@@ -5,7 +5,7 @@ import {Sticky} from 'react-sticky';
 import {connect} from 'react-redux';
 import ypath from '../../../../../common/thor/ypath';
 
-import {getIsSortedDynamic} from '../../../../../store/selectors/navigation/content/table-ts';
+import {getIsDynamic, getIsSortedDynamic} from '../../../../../store/selectors/navigation/content/table-ts';
 import {getAttributes} from '../../../../../store/selectors/navigation';
 
 import ColumnSelectorButton from '../../../../../pages/navigation/content/Table/TableOverview/ColumnSelectorButton';
@@ -18,11 +18,12 @@ import Paginator from '../../../../../pages/navigation/content/Table/TableOvervi
 import ErrorBoundary from '../../../../../components/ErrorBoundary/ErrorBoundary';
 import {OpenQueryButtons} from '../../../../../containers/OpenQueryButtons/OpenQueryButtons';
 
+import EditTableActions from './EditTableActions';
+import DataLensButton from './DatalensButton';
+
 import {HEADER_HEIGHT} from '../../../../../constants/index';
 
 import './TableOverview.scss';
-import EditTableActions from './EditTableActions';
-import DataLensButton from './DatalensButton';
 
 const block = cn('navigation-table-overview');
 
@@ -33,7 +34,7 @@ TableOverview.propTypes = {
 };
 
 function TableOverview(props) {
-    const {isFullScreen, isSplit, allowOffsetInput} = props;
+    const {isFullScreen, isSplit, allowOffsetInput, allowPagingation} = props;
 
     // TODO: add sticky for the Overview in the split mode https://github.com/captivationsoftware/react-sticky/issues/282
     return (
@@ -47,7 +48,7 @@ function TableOverview(props) {
                             split: isSplit,
                         })}
                     >
-                        <Paginator block={block} />
+                        {allowPagingation && <Paginator block={block} />}
                         {allowOffsetInput && <OffsetInput block={block} />}
                         {!isFullScreen && <ColumnSelectorButton block={block} />}
                         {!isFullScreen && <SettingsButton block={block} />}
@@ -68,15 +69,18 @@ const mapStateToProps = (state) => {
     const {isFullScreen} = state.navigation.content.table;
     const {isSplit} = state.global.splitScreen;
     const isSortedDynamic = getIsSortedDynamic(state);
+    const isDynamic = getIsDynamic(state);
     const attributes = getAttributes(state);
 
     const isUnmounted = ypath.getValue(attributes, '/tablet_state') === 'unmounted';
     const allowOffsetInput = !(isSortedDynamic && isUnmounted);
+    const allowPagingation = !(isDynamic && isUnmounted);
 
     return {
         isFullScreen,
         isSplit,
         allowOffsetInput,
+        allowPagingation,
     };
 };
 

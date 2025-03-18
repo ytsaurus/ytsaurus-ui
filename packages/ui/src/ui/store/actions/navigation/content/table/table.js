@@ -58,6 +58,7 @@ import {
     getColumnsPreset,
     getDeniedKeyColumns,
     getIsDynamic,
+    getIsSortedDynamic,
     getIsStrict,
     getKeyColumns,
     getMoveOffsetBackward,
@@ -94,6 +95,7 @@ function loadDynamicTable(requestOutputFormat, setup, state, type, useZeroRangeF
     const transaction = getTransaction(state);
     const orderBySupported = true;
     const offsetColumns = keyColumns;
+    const isSorted = getIsSortedDynamic(state);
 
     let limit = getRequestedPageSize(state);
     if (isEmpty_(offset) && descending) {
@@ -121,12 +123,13 @@ function loadDynamicTable(requestOutputFormat, setup, state, type, useZeroRangeF
     if (isUnmounted) {
         // in case of unmounted dynamic table treat it as a static table
         const apiId = type === LOAD_TYPE.PRELOAD ? YTApiId.tableReadPreload : YTApiId.tableRead;
+
         // example: offset = "(1, 2)": string , we need [1, 2]: number[]
         const preparedOffset = offset
             .replace(/[()]/g, '')
             .split(',')
             .map((part) => Number(part.trim()))
-            .filter(Boolean);
+
         return id.fetch(
             apiId,
             readStaticTable({
@@ -134,12 +137,20 @@ function loadDynamicTable(requestOutputFormat, setup, state, type, useZeroRangeF
                 parameters: {
                     path: {
                         $value: path,
-                        $attributes: preparedOffset.length
-                            ? {
-                                  tablet_index: preparedOffset[0],
-                                  row_index: preparedOffset[1],
-                              }
-                            : undefined,
+                        $attributes: isSorted ? undefined : {
+                                ranges: [{
+                                    lower_limit:
+                                     {
+                                        tablet_index: preparedOffset[0] || 0,
+                                        row_index: preparedOffset[1] || 0,
+                                    },
+                                    upper_limit:
+                                    {
+                                        tablet_index: preparedOffset[0] || 0,
+                                        row_index: limit + Number(preparedOffset[1] || 0),
+                                    },
+                                }],
+                              },
                     },
                     table_reader: {
                         workload_descriptor: {category: 'user_interactive'},
@@ -313,7 +324,7 @@ async function loadStaticTable(requestOutputFormat, setup, state, type, useZeroR
             defaultTableColumnLimit,
             useYqlTypes,
         );
-
+    console.log(offsetValue);
     const parameters = prepareRequest({
         path,
         table_reader: {

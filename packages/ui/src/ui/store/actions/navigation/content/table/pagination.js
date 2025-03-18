@@ -1,3 +1,5 @@
+import ypath from '../../../../../common/thor/ypath';
+
 import Query from '../../../../../utils/navigation/content/table/query';
 import {updateTableData} from '../../../../../store/actions/navigation/content/table/table';
 import {
@@ -16,6 +18,7 @@ import {
     getPageSize,
     getYqlTypes,
 } from '../../../../../store/selectors/navigation/content/table-ts';
+import {getAttributes} from '../../../../../store/selectors/navigation';
 
 export function moveOffsetToStart() {
     return (dispatch) => {
@@ -34,8 +37,10 @@ export function moveOffsetToLeft() {
         const state = getState();
         const yqlTypes = getYqlTypes(state);
         const isDynamic = getIsDynamic(state);
+        const attributes = getAttributes(state);
+        const isUnmounted = ypath.getValue(attributes, '/tablet_state') === 'unmounted';
 
-        if (isDynamic) {
+        if (isDynamic && !isUnmounted) {
             dispatch({
                 type: MOVE_OFFSET,
                 data: {
