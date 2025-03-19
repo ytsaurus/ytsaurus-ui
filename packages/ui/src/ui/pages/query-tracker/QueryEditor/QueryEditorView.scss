@@ -3,14 +3,6 @@
     height: 100%;
     overflow: visible;
 
-    &__editor {
-        flex: 1;
-        border-bottom: 1px solid var(--dark-divider);
-        width: 100%;
-        height: calc(100% - 40px);
-        overflow: visible;
-    }
-
     &__error-line {
         background: var(--error-background);
     }
@@ -28,17 +20,5 @@
             gap: 0 8px;
             margin-right: 12px;
         }
-
-    }
-
-    .selected-text {
-        z-index: 2;
-        position: absolute;
-        pointer-events: none;
-        opacity: 0.8;
-    }
-
-    .view-lines {
-        z-index: 3;
     }
 }
