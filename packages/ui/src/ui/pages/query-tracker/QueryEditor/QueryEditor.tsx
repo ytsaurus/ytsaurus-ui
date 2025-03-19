@@ -2,7 +2,7 @@ import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import MonacoEditor, {MonacoEditorConfig} from '../../../components/MonacoEditor';
 import block from 'bem-cn-lite';
 import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
-import {Button, Flex, Icon, Loader} from '@gravity-ui/uikit';
+import {Button, Icon, Loader} from '@gravity-ui/uikit';
 
 import playIcon from '../../../assets/img/svg/play.svg';
 import {useDispatch, useSelector} from 'react-redux';
@@ -16,14 +16,7 @@ import {
 } from '../module/query/selectors';
 import {runQuery, updateQueryDraft} from '../module/query/actions';
 import FlexSplitPane from '../../../components/FlexSplitPane/FlexSplitPane';
-import {QueryResults} from '../QueryResults';
-import SquareIcon from '@gravity-ui/icons/svgs/square.svg';
-import LayoutFooterIcon from '@gravity-ui/icons/svgs/layout-footer.svg';
-
-import XmarkIcon from '@gravity-ui/icons/svgs/xmark.svg';
-
 import './QueryEditor.scss';
-import {QueryItem} from '../module/api';
 import {useCurrentQuery} from '../QueryResults/hooks/useCurrentQuery';
 import forEach_ from 'lodash/forEach';
 import uniqBy_ from 'lodash/uniqBy';
@@ -35,13 +28,12 @@ import {QueryEngine} from '../module/engines';
 import {MonacoLanguage} from '../../../constants/monaco';
 import hammer from '../../../common/hammer';
 import {updateTitle} from '../../../store/actions/global';
-import {EditQueryACOModal} from '../QueryACO/EditQueryACOModal/EditQueryACOModal';
-import {ShareButton} from '../QueryResults/ShareButton';
 import {WaitForFont} from '../../../containers/WaitForFont/WaitForFont';
 import {getHashLineNumber} from './helpers/getHashLineNumber';
 import {makeHighlightedLineDecorator} from './helpers/makeHighlightedLineDecorator';
 import {getDecorationsWithoutHighlight} from './helpers/getDecorationsWithoutHighlight';
 import {useMonacoQuerySuggestions} from '../querySuggestionsModule/useMonacoQuerySuggestions';
+import {ResultView} from './ResultView';
 
 const b = block('query-container');
 
@@ -258,58 +250,6 @@ const QueryEditorView = React.memo(function QueryEditorView({
                 </div>
             </div>
         </div>
-    );
-});
-
-const ResultView = React.memo(function ResultView({
-    query,
-    resultViewMode,
-    setResultViewMode,
-}: {
-    query: QueryItem;
-    resultViewMode: ResultMode;
-    setResultViewMode: (v: ResultMode) => void;
-}) {
-    return (
-        <QueryResults
-            query={query}
-            className={b('results')}
-            minimized={resultViewMode === 'minimized'}
-            toolbar={
-                <>
-                    <Flex gap={2} className={b('results-toolbar-buttons')}>
-                        <ShareButton />
-                        <EditQueryACOModal query_id={query.id} />
-                    </Flex>
-                    {resultViewMode === 'split' ? (
-                        <Button
-                            className={b('meta-action')}
-                            view="flat"
-                            onClick={() => setResultViewMode('full')}
-                        >
-                            <Icon data={SquareIcon} size={16} />
-                        </Button>
-                    ) : (
-                        <Button
-                            className={b('meta-action')}
-                            view="flat"
-                            onClick={() => setResultViewMode('split')}
-                        >
-                            <Icon data={LayoutFooterIcon} size={16} />
-                        </Button>
-                    )}
-                    {resultViewMode !== 'minimized' && (
-                        <Button
-                            className={b('meta-action')}
-                            view="flat"
-                            onClick={() => setResultViewMode('minimized')}
-                        >
-                            <Icon data={XmarkIcon} size={16} />
-                        </Button>
-                    )}
-                </>
-            }
-        />
     );
 });
 
