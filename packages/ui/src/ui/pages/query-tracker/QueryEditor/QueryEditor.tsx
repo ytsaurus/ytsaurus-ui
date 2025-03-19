@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {FC, useEffect, useState} from 'react';
 import block from 'bem-cn-lite';
 import {Loader} from '@gravity-ui/uikit';
 import {useDispatch, useSelector} from 'react-redux';
@@ -14,14 +14,14 @@ import {QueryEditorView} from './QueryEditorView';
 
 const b = block('query-container');
 
-type ResultMode = 'full' | 'minimized' | 'split';
-export default function QueryEditor({
-    onStartQuery,
-    showStatusInTitle,
-}: {
+type Props = {
     onStartQuery?: (queryId: string) => boolean | void;
     showStatusInTitle?: boolean;
-}) {
+};
+
+export type ResultMode = 'full' | 'minimized' | 'split';
+
+export const QueryEditor: FC<Props> = ({onStartQuery, showStatusInTitle}) => {
     const dispatch = useDispatch();
     const query = useCurrentQuery();
     const {isQueryTrackerInfoLoading} = useQueryACO();
@@ -81,4 +81,4 @@ export default function QueryEditor({
             </FlexSplitPane>
         </>
     );
-}
+};
