@@ -49,8 +49,8 @@ export function OpenQueryButtonsContent() {
     const {panelMode, setPanelMode, path, cluster} = useNavigationSidePanelMode();
 
     const onClose = React.useCallback(() => {
-        dispatch(setPanelMode(undefined));
-    }, [dispatch, setPanelMode]);
+        setPanelMode(undefined);
+    }, [setPanelMode]);
 
     const {openWidget, closeWidget, widgetContent} = useSidePanel(panelMode + '_widget', {
         renderContent({visible}) {
