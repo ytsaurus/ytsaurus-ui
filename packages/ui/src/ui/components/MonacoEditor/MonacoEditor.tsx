@@ -1,23 +1,18 @@
-import React, {MutableRefObject} from 'react';
+import React, {FC, MutableRefObject, useCallback, useEffect, useRef} from 'react';
 import cn from 'bem-cn-lite';
 import key from 'hotkeys-js';
 import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
-
-import {ConnectedProps, connect} from 'react-redux';
-
+import {useSelector} from 'react-redux';
 import {getTheme} from '../../store/selectors/global';
-import {RootState} from '../../store/reducers';
-
-import './MonacoEditor.scss';
 import {YT_DARK_MONACO_THEME, YT_LIGHT_MONACO_THEME} from './MonacoEditorThemes';
 import isEqual_ from 'lodash/isEqual';
-
 import '../../libs/monaco-yql-languages/monaco.contribution';
+import './MonacoEditor.scss';
 
 const block = cn('yt-monaco-editor');
 
 export type MonacoEditorConfig = Omit<monaco.editor.IStandaloneEditorConstructionOptions, 'theme'>;
-export interface ExtProps {
+export type Props = {
     className?: string;
     value: string;
     language?: string;
@@ -26,29 +21,46 @@ export interface ExtProps {
     monacoConfig?: MonacoEditorConfig;
     editorRef?: MutableRefObject<monaco.editor.IStandaloneCodeEditor | undefined>;
     readOnly?: boolean;
-}
+};
 
-type Props = ExtProps & ConnectedProps<typeof connector>;
-
-const THEMES = {
+const THEMES: Record<string, string> = {
     dark: YT_DARK_MONACO_THEME,
     'dark-hc': 'hc-black',
     light: YT_LIGHT_MONACO_THEME,
     'light-hc': YT_LIGHT_MONACO_THEME,
 };
 
-class MonacoEditor extends React.Component<Props> {
-    ref = React.createRef<HTMLDivElement>();
-    model = monaco.editor.createModel('', this.props.language);
-    editor?: monaco.editor.IStandaloneCodeEditor;
-    prevScope?: string;
-    silent = false;
+const MonacoEditor: FC<Props> = ({
+    className,
+    readOnly,
+    monacoConfig,
+    value,
+    language,
+    onClick,
+    onChange,
+    editorRef,
+}) => {
+    const theme = useSelector(getTheme);
+    const modelRef = useRef(monaco.editor.createModel(value, language));
+    const containerRef = useRef<HTMLDivElement>(null);
+    const prevScopeRef = useRef<string>(key.getScope());
+    const silentRef = useRef<boolean>(false);
+    const prevProps = useRef<Pick<Props, 'monacoConfig' | 'readOnly'> & {theme: string}>({
+        theme,
+        monacoConfig,
+        readOnly,
+    });
 
-    componentDidMount() {
-        const {theme, monacoConfig, editorRef, readOnly} = this.props;
-        this.model.setValue(this.props.value);
-        this.editor = monaco.editor.create(this.ref.current!, {
-            model: this.model,
+    const onContentChanged = useCallback(() => {
+        if (silentRef.current) return;
+        onChange(modelRef.current.getValue());
+    }, [onChange]);
+
+    // first init
+    useEffect(() => {
+        const model = modelRef.current;
+        const editorInstance = monaco.editor.create(containerRef.current!, {
+            model,
             renderLineHighlight: 'none',
             colorDecorators: true,
             automaticLayout: true,
@@ -63,81 +75,75 @@ class MonacoEditor extends React.Component<Props> {
             ...monacoConfig,
         });
 
-        this.editor.updateOptions({
+        editorInstance.updateOptions({
             lineNumbers: (number) => {
                 return `<div class="${block('line-number')}" data-number="${number}">${number}</div>`;
             },
         });
 
-        this.editor.onMouseDown((e) => {
-            this.props.onClick?.(e);
+        editorInstance.onMouseDown((e) => {
+            onClick?.(e);
         });
 
-        this.model.onDidChangeContent(this.onContentChanged);
-        this.prevScope = key.getScope();
+        model.onDidChangeContent(onContentChanged);
+
         key.setScope('monaco-editor');
         if (editorRef) {
-            editorRef.current = this.editor;
-        }
-    }
-
-    componentDidUpdate(prevProps: Readonly<Props>): void {
-        const {theme, value, monacoConfig, readOnly, language} = this.props;
-        const options: monaco.editor.IStandaloneEditorConstructionOptions = {};
-        if (prevProps.theme !== theme) {
-            options.theme = THEMES[theme];
-        }
-        if (!isEqual_(prevProps.monacoConfig, monacoConfig)) {
-            Object.assign(options, monacoConfig);
-        }
-        if (value !== this.model.getValue()) {
-            this.silent = true;
-            this.model.setValue(value);
-            this.silent = false;
-        }
-        if (language !== prevProps.language) {
-            this.model = monaco.editor.createModel(this.model.getValue(), this.props.language);
-            this.model.onDidChangeContent(this.onContentChanged); // the new model needs to re-specify the callback
-            this.editor?.setModel(this.model);
-        }
-        if (readOnly !== prevProps.readOnly) {
-            this.editor?.updateOptions({readOnly});
+            editorRef.current = editorInstance;
         }
 
-        this.editor?.updateOptions(options);
-    }
+        return () => {
+            editorInstance.getModel()?.dispose();
+            editorInstance.dispose();
+            key.setScope(prevScopeRef.current);
+        };
+    }, []);
 
-    componentWillUnmount() {
-        this.editor?.getModel()?.dispose();
-        this.editor?.dispose();
-        key.setScope(this.prevScope!);
-    }
+    // on props change
+    useEffect(() => {
+        const model = modelRef.current;
+        let options: monaco.editor.IStandaloneEditorConstructionOptions = {};
 
-    render() {
-        const {className} = this.props;
-
-        return (
-            <div className={block(null, className)}>
-                <div ref={this.ref} className={block('editor')} />
-            </div>
-        );
-    }
-
-    onContentChanged = () => {
-        if (this.silent) {
-            return;
+        if (model.getValue() !== value) {
+            silentRef.current = true;
+            model.setValue(value);
+            silentRef.current = false;
         }
-        const {onChange} = this.props;
-        const value = this.model.getValue();
-        onChange(value);
-    };
-}
 
-const mapStateToProps = (state: RootState) => {
-    return {
-        theme: getTheme(state) as 'dark' | 'dark-hc' | 'light' | 'light-hc',
-    };
+        if (model.getLanguageId() !== language) {
+            modelRef.current = monaco.editor.createModel(model.getValue(), language);
+            modelRef.current.onDidChangeContent(onContentChanged);
+            editorRef?.current?.setModel(modelRef.current);
+        }
+
+        if (!isEqual_(prevProps.current.monacoConfig, monacoConfig)) {
+            options = {...monacoConfig};
+        }
+
+        if (theme !== prevProps.current.theme) {
+            options.theme = theme;
+        }
+
+        if (readOnly !== prevProps.current.readOnly) {
+            options.readOnly = readOnly;
+        }
+
+        if (Object.keys(options).length) {
+            editorRef?.current?.updateOptions(options);
+        }
+
+        prevProps.current = {
+            monacoConfig,
+            theme,
+            readOnly,
+        };
+    }, [editorRef, language, monacoConfig, onContentChanged, readOnly, theme, value]);
+
+    return (
+        <div className={block(null, className)}>
+            <div ref={containerRef} className={block('editor')} />
+        </div>
+    );
 };
 
-const connector = connect(mapStateToProps);
-export default connector(MonacoEditor);
+export default MonacoEditor;
