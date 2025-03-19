@@ -7,12 +7,12 @@ import {EditQueryACOModal} from '../QueryACO/EditQueryACOModal/EditQueryACOModal
 import SquareIcon from '@gravity-ui/icons/svgs/square.svg';
 import LayoutFooterIcon from '@gravity-ui/icons/svgs/layout-footer.svg';
 import XmarkIcon from '@gravity-ui/icons/svgs/xmark.svg';
+import {ResultMode} from './QueryEditor';
 import cn from 'bem-cn-lite';
 import './ResultView.scss';
 
 const b = cn('yt-qt-result-view');
 
-type ResultMode = 'full' | 'minimized' | 'split';
 type Props = {
     query: QueryItem;
     resultViewMode: ResultMode;
