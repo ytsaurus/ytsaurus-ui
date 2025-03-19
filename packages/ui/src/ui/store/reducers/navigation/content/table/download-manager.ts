@@ -5,9 +5,9 @@ import {CanceledError} from 'axios';
 
 import {YTError} from '../../../../../../@types/types';
 
-interface DownloadItem {
+export interface DownloadItem {
     id: string;
-    startTime: Moment;
+    startTime?: Moment;
 
     loading?: boolean;
     loaded?: boolean;
@@ -16,7 +16,7 @@ interface DownloadItem {
 }
 
 export interface DownloadManagerState {
-    downloads: {[key: string]: DownloadItem};
+    downloads: Record<string, DownloadItem | undefined>;
 }
 
 const initialState: DownloadManagerState = {
@@ -28,6 +28,7 @@ const reducers = {
         return produce(state, (state: DownloadManagerState) => {
             state.downloads[action.payload.id] = {
                 ...state.downloads[action.payload.id],
+                id: action.payload.id,
                 startTime: moment(),
                 loading: true,
                 loaded: false,
@@ -41,6 +42,7 @@ const reducers = {
         return produce(state, (state: DownloadManagerState) => {
             state.downloads[action.payload.id] = {
                 ...state.downloads[action.payload.id],
+                id: action.payload.id,
                 error: action.payload.error,
                 loaded: false,
                 loading: false,
@@ -51,6 +53,7 @@ const reducers = {
         return produce(state, (state: DownloadManagerState) => {
             state.downloads[action.payload.id] = {
                 ...state.downloads[action.payload.id],
+                id: action.payload.id,
                 loading: false,
                 loaded: true,
             };

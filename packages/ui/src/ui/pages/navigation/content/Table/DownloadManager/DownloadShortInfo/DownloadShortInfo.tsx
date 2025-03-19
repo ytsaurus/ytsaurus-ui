@@ -15,9 +15,8 @@ interface Props {
 
 export function DownloadShortInfo({id, filename}: Props) {
     const [time, setTime] = useState<Moment>(moment());
-    const {startTime, loading, loaded} = useSelector((state: RootState) =>
-        getDownloadTableInfo(state, id),
-    );
+    const {startTime, loading, loaded} =
+        useSelector((state: RootState) => getDownloadTableInfo(state, id)) ?? {};
 
     useEffect(() => {
         if (loaded && !loading) return;

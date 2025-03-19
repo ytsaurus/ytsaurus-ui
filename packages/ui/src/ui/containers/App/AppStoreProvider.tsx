@@ -1,13 +1,23 @@
 import React from 'react';
 
-import {Provider} from 'react-redux';
+import {ThemeProvider} from '@gravity-ui/uikit';
+
+import {Provider, useSelector} from 'react-redux';
 import ErrorBoundary from '../../components/ErrorBoundary/ErrorBoundary';
 import {getWindowStore} from '../../store/window-store';
+import {getTheme} from '../../store/selectors/global';
 
 export function AppStoreProvider({children}: {children: React.ReactNode}) {
     return (
         <Provider store={getWindowStore()}>
-            <ErrorBoundary>{children}</ErrorBoundary>
+            <AppThemeProvider>
+                <ErrorBoundary>{children}</ErrorBoundary>
+            </AppThemeProvider>
         </Provider>
     );
+}
+
+export function AppThemeProvider({children}: {children: React.ReactNode}) {
+    const theme = useSelector(getTheme);
+    return <ThemeProvider theme={theme}>{children}</ThemeProvider>;
 }
