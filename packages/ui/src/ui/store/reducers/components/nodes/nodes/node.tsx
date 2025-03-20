@@ -12,7 +12,7 @@ import without_ from 'lodash/without';
 import ypath from '../../../../../common/thor/ypath';
 import hammer from '../../../../../common/hammer';
 import {STACKED_PROGRESS_BAR_COLORS} from '../../../../../constants/colors';
-import type {FIX_MY_TYPE} from '../../../../../types/index';
+import type {FIX_MY_TYPE, YTError} from '../../../../../types/index';
 import {computeProgress, progressText} from '../../../../../utils/progress';
 import {MaintenanceRequestInfo} from '../../../../../store/actions/components/node-maintenance-modal';
 
@@ -101,7 +101,7 @@ export class Node {
     }
 
     alertCount?: number;
-    alerts?: object[];
+    alerts?: YTError[];
     banMessage?: string;
     maintenanceRequests?: Record<string, MaintenanceRequestInfo>;
     banned!: boolean;

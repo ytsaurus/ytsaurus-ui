@@ -2,10 +2,8 @@ import {getYtErrorCode} from '../../../../../utils/errors';
 import {YTError} from '../../../../../../@types/types';
 import {UnipikaValue} from '../../../../../components/Yson/StructuredYson/StructuredYsonTypes';
 
-/**
- * should be: (typeof YTErrors)[keyof typeof YTErrors]
- * after migrating javascript-wrapper on TS
- */
+import ypath from '../../../../../common/thor/ypath';
+
 export type ErrorCode = 500 | 901;
 
 type NoAccessTitlePayload = {
@@ -21,9 +19,11 @@ type NoPathTitlePayload = {
 type TitlePayload = NoAccessTitlePayload & NoPathTitlePayload;
 
 type ErrorInfo = {
-    [key in ErrorCode]: {
-        getTitle: (payload: TitlePayload) => string;
-    };
+    [key in ErrorCode]:
+        | {
+              getTitle: (payload: TitlePayload) => string;
+          }
+        | undefined;
 };
 
 export const ErrorsInfo: ErrorInfo = {
@@ -42,27 +42,24 @@ export const ErrorsInfo: ErrorInfo = {
     },
 };
 
-export function getErrorTitle(error: YTError, path?: string): string {
-    const {attributes} = error;
-
-    const code = getLeadingErrorCode(error);
-
-    if (!code) return 'An unexpected error occurred';
-
-    const title = ErrorsInfo[code].getTitle({
+export function getErrorTitle(
+    {attributes, code}: {code: ErrorCode} & Pick<YTError, 'attributes'>,
+    path?: string,
+): string {
+    const title = ErrorsInfo[code!]?.getTitle({
         path: path || '',
-        username: attributes?.user.$value || '',
-        permissions: attributes?.permission || '',
+        username: ypath.getValue(attributes, '/user') || '',
+        permissions: ypath.getValue(attributes, '/permission') || '',
     });
 
-    return title;
+    return title ?? 'An unexpected error occurred';
 }
 
 /**
  * returns first non-undefined error code,
  * from root error to inner errors
  */
-export function getLeadingErrorCode(error: YTError): ErrorCode | undefined {
+export function getLeadingErrorCode(error: YTError): number | undefined {
     const errorCode = getYtErrorCode(error);
     if (!isNaN(errorCode)) {
         return errorCode;

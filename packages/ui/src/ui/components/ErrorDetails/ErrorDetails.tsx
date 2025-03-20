@@ -8,7 +8,7 @@ import unipika from '../../common/thor/unipika';
 
 import map_ from 'lodash/map';
 
-import {YTError} from '../../../@types/types';
+import {YTErrorRaw} from '../../../@types/types';
 
 import Icon from '../Icon/Icon';
 import Tabs from '../../components/Tabs/Tabs';
@@ -24,7 +24,7 @@ import {ErrorToClipboardButton} from '../../components/ErrorToClipboardButton/Er
 const b = block('elements-error-details');
 
 export type ErrorDetailsProps = {
-    error: Omit<Partial<YTError> & Partial<AxiosError>, 'code'> & {code?: number | string};
+    error: YTErrorRaw<{attributes?: object}> | AxiosError;
     settings?: UnipikaSettings;
     maxCollapsedDepth?: number;
 };
@@ -36,9 +36,7 @@ type State = {
 
 export default class ErrorDetails extends React.Component<ErrorDetailsProps, State> {
     static prepareDefaultTab(props: ErrorDetailsProps) {
-        const {
-            error: {attributes},
-        } = props;
+        const {attributes} = props.error as YTErrorRaw;
         let details, stderrs;
 
         if (attributes) {
@@ -92,12 +90,10 @@ export default class ErrorDetails extends React.Component<ErrorDetailsProps, Sta
     };
 
     prepareTabs() {
-        const {
-            error: {attributes},
-        } = this.props;
+        const {attributes} = this.props.error as YTErrorRaw;
 
         return map_(this.TABS, (tab) => {
-            if (typeof attributes[tab.value] !== 'undefined') {
+            if (typeof attributes?.[tab.value] !== 'undefined') {
                 return {...tab, show: true};
             } else {
                 return {...tab};
@@ -122,10 +118,8 @@ export default class ErrorDetails extends React.Component<ErrorDetailsProps, Sta
     renderTabContent() {
         const {currentTab} = this.state;
 
-        const {
-            error: {attributes},
-            settings,
-        } = this.props;
+        const {error, settings} = this.props;
+        const {attributes} = error as YTErrorRaw;
         let details, stderrs;
         if (attributes) {
             ({details, stderrs} = attributes);
@@ -139,8 +133,12 @@ export default class ErrorDetails extends React.Component<ErrorDetailsProps, Sta
                 {currentTab === 'attributes' && (
                     <Yson value={attributes} settings={unipika.prepareSettings(settings)} />
                 )}
-                {currentTab === 'details' && <pre className={codeClassName}>{details}</pre>}
-                {currentTab === 'stderrs' && <pre className={codeClassName}>{stderrs}</pre>}
+                {currentTab === 'details' && (
+                    <pre className={codeClassName}>{details as React.ReactNode}</pre>
+                )}
+                {currentTab === 'stderrs' && (
+                    <pre className={codeClassName}>{stderrs as React.ReactNode}</pre>
+                )}
             </div>
         );
     }
@@ -155,16 +153,15 @@ export default class ErrorDetails extends React.Component<ErrorDetailsProps, Sta
     }
 
     renderInnerErrors() {
-        const {
-            error: {inner_errors: innerErrors = [], isAxiosError = false, response},
-            settings,
-            maxCollapsedDepth = Infinity,
-        } = this.props;
+        const {settings, maxCollapsedDepth = Infinity} = this.props;
+
+        const {inner_errors: innerErrors = []} = this.props.error as YTErrorRaw;
+        const {isAxiosError = false, response} = this.props.error as AxiosError;
 
         if (!innerErrors.length && isAxiosError && response?.data) {
             const innerError = isYTError(response.data)
                 ? response.data
-                : {attributes: response.data, message: 'Error'};
+                : {attributes: response.data as YTErrorRaw['attributes'], message: 'Error'};
             innerErrors.push(innerError);
         }
 
@@ -222,9 +219,7 @@ export default class ErrorDetails extends React.Component<ErrorDetailsProps, Sta
     }
 
     renderError() {
-        const {
-            error: {attributes},
-        } = this.props;
+        const {attributes} = this.props.error as YTErrorRaw;
         const {showDetails} = this.state;
 
         return (

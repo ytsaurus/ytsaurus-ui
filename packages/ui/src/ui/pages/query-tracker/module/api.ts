@@ -23,6 +23,7 @@ import {setSettingByKey} from '../../../store/actions/settings';
 import unipika from '../../../common/thor/unipika';
 import {CancelTokenSource} from 'axios';
 import {VisualizationState} from './queryChart/queryChartSlice';
+import {YTError} from '../../../../@types/types';
 
 function getQTApiSetup(): {proxy?: string} {
     const QT_CLUSTER = getQueryTrackerCluster();
@@ -92,7 +93,7 @@ export interface DraftQuery {
 
 export type ErrorPosition = {column: number; row: number};
 
-export type QueryError = {
+export type QueryError = YTError<{
     attributes: {
         address?: string;
         connection_id?: string;
@@ -117,10 +118,7 @@ export type QueryError = {
         start_position?: ErrorPosition;
         yql_status?: string;
     };
-    code: number;
-    inner_errors?: QueryError[];
-    message: string;
-};
+}>;
 
 export interface QueryItem extends DraftQuery {
     id: QueryItemId;

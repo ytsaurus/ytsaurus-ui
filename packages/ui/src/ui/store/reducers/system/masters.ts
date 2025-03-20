@@ -126,14 +126,12 @@ function getLeader(instances: any) {
     });
 }
 
-export type MasterAlert = {
-    code: number;
-    message: string;
+export type MasterAlert = YTError<{
     attributes: {
         datetime: string;
         unrecognized_options: Record<string, string>;
     };
-};
+}>;
 
 export interface MastersState {
     fetchingConfig: boolean;

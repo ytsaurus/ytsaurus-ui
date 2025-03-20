@@ -3,8 +3,8 @@ import {HIDE_ERROR_MODAL, SHOW_ERROR_MODAL} from '../../../constants/modals/erro
 import {ErrorInfo, ErrorsAction} from '../../../store/reducers/modals/errors';
 import {YTError} from '../../../types';
 
-export function showErrorModal(
-    error: YTError | AxiosError,
+export function showErrorModal<T extends {attributes?: object}>(
+    error: YTError<T> | AxiosError,
     options: Omit<ErrorInfo, 'error'> = {},
 ): ErrorsAction {
     return {type: SHOW_ERROR_MODAL, data: {...options, error}};

@@ -84,13 +84,11 @@ export const getTabletErrorsReplicationErrors = createSelector([getTabletErrors]
             const errorsByTablet = reduce_(
                 errors,
                 (errAcc, error) => {
-                    const {tablet_id} = error.attributes || {};
-                    const id =
-                        typeof tablet_id === 'object' ? ypath.getValue(tablet_id, '') : tablet_id;
+                    const tablet_id = ypath.getValue(error.attributes, '/tablet_id');
                     if (!errAcc[tablet_id]) {
-                        errAcc[id] = [];
+                        errAcc[tablet_id] = [];
                     }
-                    errAcc[id].push(error);
+                    errAcc[tablet_id].push(error);
                     return errAcc;
                 },
                 {} as ValueOf<typeof acc>,

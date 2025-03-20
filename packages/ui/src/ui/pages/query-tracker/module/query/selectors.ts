@@ -7,7 +7,7 @@ import {
     getSettingQueryTrackerYQLAgentStage,
 } from '../../../../store/selectors/settings/settings-ts';
 import {getQueryTrackerStage} from '../../../../config';
-import {QTEditorError} from '../types/editor';
+import {QTEditorError, isQTEditorError} from '../types/editor';
 import {YTError} from '../../../../types';
 import {isYTError} from '../../../../../shared/utils';
 import {getQueryResults} from '../query_result/selectors';
@@ -69,34 +69,32 @@ export const getQueryTrackerRequestOptions = createSelector(
 
 export const getQueryEditorErrors = (state: RootState): QTEditorError[] => {
     const res: QTEditorError[] = [];
-    const checkIsEditorError = (error: YTError) => {
-        if (error.attributes) {
-            if ('end_position' in error.attributes && 'start_position' in error.attributes) {
-                res.push(error as QTEditorError);
-            }
+    const collectQTEditorErrors = (error: YTError<{attributes?: object}>) => {
+        if (isQTEditorError(error)) {
+            res.push(error);
         }
         if (error.inner_errors && error.inner_errors.length !== 0) {
-            error.inner_errors.forEach((inner_error) => checkIsEditorError(inner_error));
+            error.inner_errors.forEach((inner_error) => collectQTEditorErrors(inner_error));
         }
     };
 
     const {error, id} = getState(state).draft;
     if (isYTError(error)) {
-        checkIsEditorError(error);
+        collectQTEditorErrors(error);
     }
     if (id && !isQueryDraftEditted(state)) {
         const results = getQueryResults(state, id);
         if (results) {
             forOwn_(results, (value) => {
                 if (value.state === 'error' && isYTError(value.error)) {
-                    checkIsEditorError(value.error);
+                    collectQTEditorErrors(value.error);
                 }
             });
         }
     }
     const currentQuery = getCurrentQuery(state);
     if (currentQuery && currentQuery.error) {
-        checkIsEditorError(currentQuery.error);
+        collectQTEditorErrors(currentQuery.error);
     }
 
     return res;
