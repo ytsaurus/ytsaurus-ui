@@ -18,6 +18,9 @@ import {
     FormApi,
     YTDFDialog,
 } from '../../../components/Dialog';
+
+import {yt as ytApi} from '../../../store/api/yt';
+import {TagTypes} from '../../../store/api/';
 import {
     getNavigationAttributesEditorAttributes,
     getNavigationAttributesEditorDynamicTables,
@@ -33,6 +36,7 @@ import {
     navigationSetNodeAttributes,
 } from '../../../store/actions/navigation/modals/attributes-editor';
 import {getMediumListNoCache} from '../../../store/selectors/thor';
+
 import {
     InMemoryMode,
     InMemoryModeType,
@@ -49,6 +53,8 @@ import {
     getErasureCodecs,
 } from '../../../store/selectors/global/supported-features';
 import {docsUrl} from '../../../config';
+
+import {YTApiId} from '../../../rum/rum-wrap-api';
 
 import './AttributesEditor.scss';
 import UIFactory from '../../../UIFactory';
@@ -260,6 +266,11 @@ function AttributesEditorLoaded() {
                         storageAttributes,
                         hasStaticTables && storage.runMerge,
                     ),
+                );
+                dispatch(
+                    ytApi.util.invalidateTags([
+                        {type: TagTypes.YT, id: YTApiId.navigationGetAnnotation},
+                    ]),
                 );
             } catch (e) {
                 setErr(e);
