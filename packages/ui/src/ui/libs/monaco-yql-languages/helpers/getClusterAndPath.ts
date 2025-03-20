@@ -1,17 +1,37 @@
 import {QueryEngine} from '../../../pages/query-tracker/module/engines';
 import {getWindowStore} from '../../../store/window-store';
 
+type Path =
+    | {
+          path: string;
+          position: {
+              start: number;
+              end: number;
+          };
+      }
+    | {path: null; position: null};
+
 type Props = (
     rawPath: string,
     engine: QueryEngine,
 ) => {
-    path: string | null;
     cluster: string | null;
-};
+} & Path;
 
 export const getClusterAndPath: Props = (rawPath, engine) => {
     const pathMatch = [...rawPath.matchAll(/`(\/\/([^`]*))`/g)][0];
-    const path = pathMatch ? pathMatch[1] : null;
+
+    let pathData: Path = {path: null, position: null};
+    if (pathMatch) {
+        const start = pathMatch.index ? pathMatch.index + 1 : 0;
+        pathData = {
+            path: pathMatch[1],
+            position: {
+                start,
+                end: start + pathMatch[0].length,
+            },
+        };
+    }
 
     const clusterMatch = [...rawPath.matchAll(/(\w+)\./g)][0];
     let cluster = clusterMatch ? clusterMatch[1] : null;
@@ -22,7 +42,7 @@ export const getClusterAndPath: Props = (rawPath, engine) => {
     }
 
     return {
-        path,
+        ...pathData,
         cluster,
     };
 };
