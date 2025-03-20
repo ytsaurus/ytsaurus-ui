@@ -15,4 +15,8 @@
     .view-lines {
         z-index: 3;
     }
+
+    &__error-line {
+        background: var(--error-background);
+    }
 }

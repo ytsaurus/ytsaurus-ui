@@ -11,18 +11,31 @@ import {
 } from '../module/query/selectors';
 import {useMonacoQuerySuggestions} from '../querySuggestionsModule/useMonacoQuerySuggestions';
 import {updateQueryDraft} from '../module/query/actions';
-import forEach_ from 'lodash/forEach';
 import {getHashLineNumber} from './helpers/getHashLineNumber';
-import {makeHighlightedLineDecorator} from './helpers/makeHighlightedLineDecorator';
-import uniqBy_ from 'lodash/uniqBy';
 import MonacoEditor, {MonacoEditorConfig} from '../../../components/MonacoEditor';
-import {getDecorationsWithoutHighlight} from './helpers/getDecorationsWithoutHighlight';
 import {WaitForFont} from '../../../containers/WaitForFont/WaitForFont';
 import cn from 'bem-cn-lite';
 import {getLanguageByEngine} from './helpers/getLanguageByEngine';
 import './QueryEditorMonaco.scss';
+import {LinkDecorator} from './decorators/LinkDecorator';
+import {LineDecoration} from './decorators/LineDecoration';
+import {ErrorDecorator} from './decorators/ErrorDecorator';
+import {getMonacoConfig} from './getMonacoConfig';
+import {
+    checkControlCommandKey,
+    getControlCommandKey,
+} from '../../../packages/ya-timeline/lib/utils';
 
 const b = cn('yq-query-editor-monaco');
+
+type Decorators =
+    | {isInitialized: false; linkDecorator: null; lineDecorator: null; errorDecorator: null}
+    | {
+          isInitialized: true;
+          linkDecorator: LinkDecorator;
+          lineDecorator: LineDecoration;
+          errorDecorator: ErrorDecorator;
+      };
 
 export const QueryEditorMonaco: FC = () => {
     const [changed, setChanged] = useState(false);
@@ -34,10 +47,13 @@ export const QueryEditorMonaco: FC = () => {
     const editorErrors = useSelector(getQueryEditorErrors);
     const loading = useSelector(isQueryLoading);
     const dispatch = useDispatch();
-    const decorationsCollection = useRef<monaco.editor.IEditorDecorationsCollection | undefined>(
-        undefined,
-    );
-    const model = editorRef.current?.getModel();
+
+    const decorators = useRef<Decorators>({
+        isInitialized: false,
+        linkDecorator: null,
+        lineDecorator: null,
+        errorDecorator: null,
+    });
     useMonacoQuerySuggestions(editorRef.current);
 
     useEffect(() => {
@@ -48,101 +64,76 @@ export const QueryEditorMonaco: FC = () => {
     useEffect(() => {
         if (editorRef.current) {
             setEditor('queryEditor', editorRef.current);
+
+            if (!decorators.current.isInitialized) {
+                decorators.current = {
+                    isInitialized: true,
+                    linkDecorator: new LinkDecorator(
+                        editorRef.current,
+                        engine,
+                        getControlCommandKey(),
+                    ),
+                    lineDecorator: new LineDecoration(editorRef.current),
+                    errorDecorator: new ErrorDecorator(editorRef.current),
+                };
+            }
         }
     }, [setEditor]);
 
-    useEffect(
-        function updateErrorMarkers() {
-            if (model) {
-                const markers: monaco.editor.IMarkerData[] = [];
-                const decorations: monaco.editor.IModelDeltaDecoration[] = [];
-                forEach_(editorErrors, (error) => {
-                    const {attributes, message} = error;
-                    const range = new monaco.Range(
-                        attributes.start_position.row,
-                        attributes.start_position.column,
-                        attributes.end_position.row,
-                        attributes.end_position.column,
-                    );
-                    const {startLineNumber, startColumn, endLineNumber, endColumn} = range;
-                    const marker: monaco.editor.IMarkerData = {
-                        message: message,
-                        severity: monaco.MarkerSeverity.Error,
-                        startLineNumber,
-                        startColumn,
-                        endLineNumber,
-                        endColumn,
-                    };
-                    markers.push(marker);
-                    const line = {
-                        range: range,
-                        options: {
-                            isWholeLine: true,
-                            className: b('error-line'),
-                        },
-                    };
-                    decorations.push(line);
-                });
-                monaco.editor.setModelMarkers(model, 'query-tracker', markers);
+    useEffect(() => {
+        decorators.current.linkDecorator?.updateLinks();
+    }, [text]);
 
-                const lineNumber = getHashLineNumber();
-                if (!loading && lineNumber && !changed) {
-                    decorations.push(makeHighlightedLineDecorator(model, lineNumber));
-                }
-
-                decorationsCollection.current?.clear();
-                decorationsCollection.current = editorRef.current?.createDecorationsCollection(
-                    uniqBy_(decorations, (d) => d.range.startLineNumber),
-                );
-            }
-        },
-        [editorErrors, loading, model],
-    );
-
-    const monacoConfig = useMemo<MonacoEditorConfig>(() => {
-        return {
-            fontSize: 14,
-            language: engine,
-            renderWhitespace: 'boundary',
-            minimap: {
-                enabled: true,
-            },
-            inlineSuggest: {
-                enabled: true,
-                showToolbar: 'always',
-                mode: 'subword',
-                keepOnBlur: true,
-            },
-        };
+    useEffect(() => {
+        decorators.current.linkDecorator?.setEngine(engine);
     }, [engine]);
 
-    const handleLineNumberClick = useCallback(
-        ({target}: monaco.editor.IEditorMouseEvent) => {
-            if (target.type !== monaco.editor.MouseTargetType.GUTTER_LINE_NUMBERS || !model) return;
+    useEffect(() => {
+        decorators.current.errorDecorator?.setErrors(editorErrors, b('error-line'));
 
-            const lineNumber = (target.element as HTMLDivElement).dataset.number;
-            if (!lineNumber) {
-                editorRef.current?.setSelection(new monaco.Selection(0, 0, 0, 0));
-                return;
-            }
+        const lineNumber = getHashLineNumber();
+        if (!loading && lineNumber && !changed) {
+            decorators.current.lineDecorator?.setActiveLine(lineNumber);
+        }
+    }, [changed, editorErrors, loading]);
+
+    const monacoConfig = useMemo<MonacoEditorConfig>(() => {
+        return getMonacoConfig(engine);
+    }, [engine]);
+
+    const lineNumberClick = useCallback((target: monaco.editor.IEditorMouseEvent['target']) => {
+        const lineNumber = (target.element as HTMLDivElement).dataset.number;
+        if (lineNumber) {
+            decorators.current.lineDecorator?.setActiveLine(parseInt(lineNumber, 10));
 
             const newUrl = new URL(window.location.href);
             newUrl.hash = `#L${lineNumber}`;
             window.history.pushState(null, '', newUrl.toString());
+        } else {
+            decorators.current.lineDecorator?.clearLines();
+        }
+    }, []);
 
-            const otherDecorations = getDecorationsWithoutHighlight(model, editorRef.current);
-            decorationsCollection.current?.clear();
-            decorationsCollection.current?.set([
-                ...otherDecorations,
-                makeHighlightedLineDecorator(model, parseInt(lineNumber, 10)),
-            ]);
-            editorRef.current?.setSelection(new monaco.Selection(0, 0, 0, 0));
+    const pathClick = useCallback((position: monaco.Position) => {
+        const link = decorators.current.linkDecorator?.findLink(position);
+        console.log(link);
+    }, []);
+
+    const handleOnClick = useCallback(
+        ({target, event}: monaco.editor.IEditorMouseEvent) => {
+            if (target.type === monaco.editor.MouseTargetType.GUTTER_LINE_NUMBERS) {
+                lineNumberClick(target);
+            } else if (target.type === monaco.editor.MouseTargetType.CONTENT_TEXT) {
+                if (checkControlCommandKey(event)) {
+                    pathClick(target.position);
+                }
+            }
         },
-        [model],
+        [lineNumberClick, pathClick],
     );
 
     const updateQueryText = useCallback(
-        function (query: string) {
+        (query: string) => {
             setChanged(true);
             dispatch(updateQueryDraft({query, error: undefined}));
         },
@@ -157,7 +148,7 @@ export const QueryEditorMonaco: FC = () => {
                 language={getLanguageByEngine(engine)}
                 className={b()}
                 onChange={updateQueryText}
-                onClick={handleLineNumberClick}
+                onClick={handleOnClick}
                 monacoConfig={monacoConfig}
             />
         </WaitForFont>
