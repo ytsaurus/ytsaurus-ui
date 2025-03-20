@@ -1,0 +1,139 @@
+import {useSelector} from 'react-redux';
+import {BaseQueryFn, TypedUseMutationResult} from '@reduxjs/toolkit/dist/query/react';
+
+import {TagTypes, ytApi} from '..';
+import {BatchApiArgs, BatchApiResults, executeBatchV3} from './endpoints/executeBatch';
+import {getUseAutoRefresh} from '../../../store/selectors/settings';
+import {DEFAULT_UPDATER_TIMEOUT} from '../../../hooks/use-updater';
+import {MutationOptions, UseQueryOptions} from './types';
+
+export const yt = ytApi.injectEndpoints({
+    endpoints: (build) => ({
+        fetchBatch: build.query<BatchApiResults, BatchApiArgs>({
+            queryFn: executeBatchV3,
+            providesTags: (_result, _error, arg) => [{type: TagTypes.YT, id: arg.id}],
+        }),
+        updateBatch: build.mutation<BatchApiResults, BatchApiArgs>({
+            queryFn: executeBatchV3,
+            invalidatesTags: (_result, _error, arg) => [{type: TagTypes.YT, id: arg.id}],
+        }),
+    }),
+});
+
+const {
+    useFetchBatchQuery: useFetchBatchQueryRaw,
+    useUpdateBatchMutation: useUpdateBatchMutationRaw,
+} = yt;
+
+type BatchQueryResult = typeof yt.endpoints.fetchBatch.Types.ResultType;
+type BatchQueryArgs = typeof yt.endpoints.fetchBatch.Types.QueryArg;
+
+/**
+ * Custom hook for fetching batch query data with automatic type conversion.
+ * This hook extends the base RTK Query functionality with automatic refresh support
+ *
+ * @template T The expected type of the batch results data
+ * @param args The batch API arguments including YTApiId and parameters for the batch operation
+ * @param options Optional query configuration options (polling, caching, etc.)
+ * @returns A query result object with properly typed data and status information
+ *
+ * @example
+ * const { data, isLoading } = useFetchBatchQuery<MyDataType>({
+ *   id: YTApiId.getMyAttribute,
+ *   parameters: {
+ *       requests: [
+ *            {
+ *               command: 'get' as const,
+ *               parameters: prepareRequest('/@my_attribute', {
+ *                  path,
+ *               }),
+ *           },
+ *       ],
+ *   },
+ * });
+ */
+export function useFetchBatchQuery<T>(
+    args: BatchApiArgs,
+    options?: UseQueryOptions<BatchQueryResult, BatchQueryArgs>,
+) {
+    const useAutoRefresh = useSelector(getUseAutoRefresh) as boolean;
+
+    const defaultOptions = {
+        pollingInterval: useAutoRefresh ? DEFAULT_UPDATER_TIMEOUT : undefined,
+        skipPollingIfUnfocused: true,
+    };
+
+    const customOptions = {
+        ...defaultOptions,
+        ...options,
+    };
+
+    const {data, ...restResult} = useFetchBatchQueryRaw(args, customOptions);
+
+    const typedData = data as BatchApiResults<T> | undefined;
+
+    return {
+        ...restResult,
+        data: typedData,
+    };
+}
+
+type BatchMutationDefinition = typeof yt.endpoints.updateBatch.Types.MutationDefinition;
+type BatchMutationResultType = typeof yt.endpoints.updateBatch.Types.ResultType;
+
+type BatchMutationReturnType = TypedUseMutationResult<
+    BatchMutationResultType,
+    BatchApiArgs,
+    BaseQueryFn
+>;
+
+/**
+ * Custom hook for executing batch mutation operations.
+ *
+ * @template T The expected type of the batch results data
+ * @param options Optional mutation configuration options
+ * @returns A tuple containing:
+ *   - A typed mutation function that accepts BatchApiArgs
+ *   - The mutation result object with status and data
+ *
+ * @example
+ * const [updateBatch, { isLoading }] = useUpdateBatchMutation<MyDataType>();
+ *
+ * // Later in code:
+ * const result = await updateBatch({
+ *       id: YTApiId.navigationGetAnnotation,
+ *       parameters: {
+ *           requests: [
+ *               {
+ *                   command: 'set' as const,
+ *                   parameters: prepareRequest('/@annotation', {
+ *                       path,
+ *                   }),
+ *                  input: annotation,
+ *              },
+ *          ],
+ *      },
+ *      toaster: {
+ *          toasterName: 'update_annotation',
+ *          successTitle: 'Annotation saved',
+ *          errorTitle: 'Failed to save annotation',
+ *      },
+ * });
+ */
+export function useUpdateBatchMutation<T>(
+    options?: MutationOptions<BatchMutationReturnType, BatchMutationDefinition>,
+) {
+    const [updateFn, result] = useUpdateBatchMutationRaw(options);
+    const typedUpdateFn = async (args: BatchApiArgs) => {
+        const response = await updateFn(args);
+        if (response.data) {
+            return {
+                data: response.data as BatchApiResults<T> | undefined,
+            };
+        }
+
+        return response;
+    };
+
+    return [typedUpdateFn, result] as const;
+}

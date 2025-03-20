@@ -104,7 +104,7 @@
     "@gravity-ui/unipika": "^5.1.0",
     "@gravity-ui/websql-autocomplete": "^12.3.0",
     "@gravity-ui/yagr": "^4.3.1",
-    "@reduxjs/toolkit": "^2.2.3",
+    "@reduxjs/toolkit": "^2.6.0",
     "@statoscope/cli": "^5.28.2",
     "@statoscope/stats-validator-plugin-webpack": "^5.28.2",
     "@statoscope/stats-validator-reporter-stats-report": "^5.28.2",

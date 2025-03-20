@@ -44,6 +44,7 @@ import {chyt} from './chyt';
 import {RawVersion} from '../../store/selectors/thor/support';
 import {getMainLocations} from '../../store/location.main';
 import {flow} from '../../store/reducers/flow';
+import {ytApi} from '../../store/api';
 
 const appReducers = {
     acl,
@@ -84,6 +85,7 @@ const appReducers = {
     chyt,
     manageTokens,
     flow,
+    [ytApi.reducerPath]: ytApi.reducer,
 };
 
 export type RootState = Omit<ReturnType<ReturnType<typeof makeRootReducer>>, 'global'> & {
