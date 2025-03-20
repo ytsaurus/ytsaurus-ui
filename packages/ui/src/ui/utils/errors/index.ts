@@ -1,9 +1,10 @@
 // @ts-expect-error
 import yt from '@ytsaurus/javascript-wrapper/lib/yt';
 
-import ypath from '../../common/thor/ypath';
-import type {YTError} from '../../types';
 import {YTErrorRaw} from '../../../@types/types';
+
+import type {YTError} from '../../types';
+import {ypathBase} from '../../common/thor/ypath-base';
 
 export function getErrorWithCode<T extends YTErrorRaw>(errors: T[], code: number): T | undefined {
     const queue: T[] = [...errors];
@@ -42,5 +43,5 @@ export function appendInnerErrors(targetErr: any, innerErr: YTError) {
 }
 
 export function getYtErrorCode(error: YTErrorRaw | unknown): number {
-    return ypath.getNumber(error, '/code', NaN);
+    return ypathBase.getNumberBase(error, '/code', NaN);
 }

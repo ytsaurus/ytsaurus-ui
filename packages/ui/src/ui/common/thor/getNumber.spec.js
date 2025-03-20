@@ -1,4 +1,6 @@
-import {convertToNumber, getNumber} from './ypath';
+import ypath, {convertToNumber} from './ypath';
+
+const {getNumber} = ypath;
 
 describe('./thor/utils', () => {
     describe('convertToNumber', () => {
