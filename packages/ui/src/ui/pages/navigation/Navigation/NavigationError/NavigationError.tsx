@@ -9,7 +9,7 @@ import {NavigationErrorImage} from './NavigationErrorImage';
 import {RequestPermission} from './RequestPermission';
 import {getPermissionDeniedError} from '../../../../utils/errors';
 import {YTError} from '../../../../../@types/types';
-import {getErrorTitle, getLeadingErrorCode} from './helpers';
+import {ErrorCode, getErrorTitle, getLeadingErrorCode} from './helpers';
 
 import './NavigationError.scss';
 
@@ -22,17 +22,16 @@ type Props = {
     message: string;
 };
 
-function PrettyError(props: Props) {
-    const {details, path, cluster} = props;
+function PrettyError(props: Props & {code: ErrorCode}) {
+    const {details, path, cluster, code} = props;
 
-    const code = getLeadingErrorCode(details);
     const error = code == 901 ? getPermissionDeniedError(details)! : details;
-    const title = getErrorTitle(error, path);
+    const title = getErrorTitle({...error, code}, path);
 
     return (
         <Flex className={block()} justifyContent="center" alignItems="center" gap={7}>
             <Flex>
-                <NavigationErrorImage type={code || 500} />
+                <NavigationErrorImage type={code} />
             </Flex>
             <Flex direction="column" className={block('info')} gap={4}>
                 <Text className={block('title')}>{title}</Text>
@@ -68,8 +67,8 @@ export function NavigationError(props: Props) {
 
     return (
         <>
-            {code !== undefined && [500, 901].includes(code) ? (
-                <PrettyError {...props} />
+            {code === 500 || code === 901 ? (
+                <PrettyError {...props} code={code} />
             ) : (
                 <UnexpectedError {...props} />
             )}

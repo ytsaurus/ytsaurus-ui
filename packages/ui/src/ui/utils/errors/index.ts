@@ -3,22 +3,23 @@ import yt from '@ytsaurus/javascript-wrapper/lib/yt';
 
 import ypath from '../../common/thor/ypath';
 import type {YTError} from '../../types';
+import {YTErrorRaw} from '../../../@types/types';
 
-export function getErrorWithCode(errors: YTError[], code: number): YTError | undefined {
-    const queue: YTError[] = [...errors];
+export function getErrorWithCode<T extends YTErrorRaw>(errors: T[], code: number): T | undefined {
+    const queue: T[] = [...errors];
 
     let i = 0;
     while (queue[i]) {
         const error = queue[i];
         if (getYtErrorCode(error) === code) return error;
-        if (Array.isArray(error.inner_errors)) queue.push(...error.inner_errors);
+        if (Array.isArray(error.inner_errors)) queue.push(...(error.inner_errors as Array<T>));
         i += 1;
     }
 
     return undefined;
 }
 
-export function getPermissionDeniedError(error: YTError): YTError | undefined {
+export function getPermissionDeniedError<T extends YTErrorRaw>(error: T): T | undefined {
     return getErrorWithCode([error], yt.codes.PERMISSION_DENIED);
 }
 
@@ -40,6 +41,6 @@ export function appendInnerErrors(targetErr: any, innerErr: YTError) {
     return targetErr;
 }
 
-export function getYtErrorCode(error: YTError | unknown) {
+export function getYtErrorCode(error: YTErrorRaw | unknown): number {
     return ypath.getNumber(error, '/code', NaN);
 }

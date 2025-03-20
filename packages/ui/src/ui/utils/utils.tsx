@@ -347,7 +347,7 @@ export function makeLink(url: string, text: string) {
 }
 
 export function showErrorPopup(
-    error: YTError | AxiosError,
+    error: YTError<{attributes?: object}> | AxiosError,
     options: Omit<ErrorInfo, 'error'> = {},
 ) {
     getWindowStore().dispatch(showErrorModal(error, options));

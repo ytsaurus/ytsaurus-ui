@@ -20,7 +20,9 @@ export type ErrorBoundaryProps = {
     onError?: (error: any) => void;
 };
 
-export default class ErrorBoundary extends Component<ErrorBoundaryProps> {
+type State = {hasError: false; error: undefined} | {hasError: true; error: YTError};
+
+export default class ErrorBoundary extends Component<ErrorBoundaryProps, State> {
     static getDerivedStateFromError(error: any) {
         return {
             hasError: true,
@@ -28,9 +30,9 @@ export default class ErrorBoundary extends Component<ErrorBoundaryProps> {
         };
     }
 
-    state = {
+    state: State = {
         hasError: false,
-        error: {},
+        error: undefined,
     };
 
     componentDidUpdate() {

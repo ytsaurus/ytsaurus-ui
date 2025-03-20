@@ -1,13 +1,42 @@
+import {AnnotateWithTypes, YTPermissionType} from '../shared/yt-types';
+
 // eslint-disable-next-line @typescript-eslint/naming-convention
 export type FIX_MY_TYPE = any;
 
-export interface YTError {
+export type YTErrorKnownAttributes = {
+    tablet_id?: string | number;
+    user?: string;
+    permission?: Array<YTPermissionType>;
+} & YTErrorBlockTabs;
+
+/**
+ * TODO: Usage of the fileds is found in ErrorDetails, it looks like we need to rework them.
+ */
+export type YTErrorBlockTabs = Record<'attributes' | 'details' | 'stderrs', unknown>;
+
+/**
+ * All common code should use YTErrorRaw instead of the type
+ */
+export type YTError<
+    AttributesT extends {attributes?: object} = {attributes?: YTErrorKnownAttributes},
+> = {
     message: string;
     code?: number;
-    attributes?: any;
-    inner_errors?: YTError[];
+    inner_errors?: Array<YTError<AttributesT>>;
     yt_javascript_wrapper?: {xYTTraceId?: string; xYTRequestId?: string};
-}
+} & AttributesT;
+
+export type YTErrorAnnotated<AttributesT extends {attributes?: object}> = {
+    [K in keyof YTError<AttributesT>]: K extends 'yt_javascript_wrapper'
+        ? YTError[K]
+        : K extends 'inner_errors'
+          ? Array<YTError<AttributesT> | YTErrorAnnotated<AttributesT>>
+          : YTError<AttributesT>[K] | AnnotateWithTypes<YTError<AttributesT>[K]>;
+};
+
+export type YTErrorRaw<
+    AttributesT extends {attributes?: object} = {attributes?: YTErrorKnownAttributes},
+> = YTError<AttributesT> | YTErrorAnnotated<AttributesT>;
 
 export type ValueOf<T> = T[keyof T];
 

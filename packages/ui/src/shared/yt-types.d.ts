@@ -42,6 +42,14 @@ export type CypressNode<AttributesT extends Record<string, unknown>, ValueT> = {
     $value: ValueT;
 };
 
+export type AnnotateWithTypes<T extends Object> = T extends undefined
+    ? undefined
+    : T extends Array<infer Item>
+      ? Array<AnnotateWithTypes<Item>>
+      : T extends Record<string, unknown>
+        ? {[K in keyof T]: AnnotateWithTypes<T[K]>}
+        : {$type: string; $value: unknown};
+
 export type BatchResults<T extends Array<any>> = [...BatchFirst<T>, ...BatchRest<T>];
 
 export type BatchFirst<T extends Array<any>> = T extends [first: infer F, ...rest: any]
@@ -141,7 +149,6 @@ export interface BaseBatchParams {
     disable_per_user_cache?: boolean;
     suppress_transaction_coordinator_sync?: boolean;
     suppress_upstream_sync?: boolean;
-    annotate_with_types?: boolean;
 }
 
 export interface PathParams extends BaseBatchParams {

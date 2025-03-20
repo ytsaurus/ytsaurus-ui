@@ -1,8 +1,9 @@
 import axios, {AxiosError} from 'axios';
-import {YTError} from '../../@types/types';
+import {YTErrorRaw} from '../../@types/types';
 import {isYTError} from '../../shared/utils';
 import {YTErrors} from './constants';
 import {UIBatchError} from '../utils/errors/ui-error';
+import {getYtErrorCode} from '../utils/errors';
 
 const RUM = getRumInstance();
 
@@ -177,7 +178,7 @@ function wrappedHrefOrNull(href?: string) {
 }
 
 function isAllowSendError(error: Error | AxiosError): boolean {
-    const err = axios.isAxiosError(error) ? (error.response?.data as YTError) : error;
+    const err = axios.isAxiosError(error) ? (error.response?.data as YTErrorRaw) : error;
 
     if (!isYTError(err) && !(error instanceof UIBatchError)) {
         return true;
@@ -195,8 +196,8 @@ const RUM_IGNORE_ERRORS = new Set([
     YTErrors.OPERATION_JOBS_LIMIT_EXEEDED,
 ]);
 
-function removeErrorsToIgnore(error: YTError): YTError | undefined {
-    if (RUM_IGNORE_ERRORS.has(error.code)) {
+function removeErrorsToIgnore<T extends YTErrorRaw>(error: T): T | undefined {
+    if (RUM_IGNORE_ERRORS.has(getYtErrorCode(error))) {
         return undefined;
     }
 
@@ -204,7 +205,9 @@ function removeErrorsToIgnore(error: YTError): YTError | undefined {
         const res = Object.assign(
             {...error},
             {
-                inner_errors: error.inner_errors?.filter((e) => !RUM_IGNORE_ERRORS.has(e.code)),
+                inner_errors: error.inner_errors?.filter(
+                    (e) => !RUM_IGNORE_ERRORS.has(getYtErrorCode(e)),
+                ),
             },
         );
         if (!res.inner_errors?.length) {

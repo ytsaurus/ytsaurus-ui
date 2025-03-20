@@ -44,7 +44,7 @@ interface PageId {
     getPage(): string;
 }
 
-export function isYTError(error: any): error is YTError {
+export function isYTError(error: unknown): error is YTError {
     const {yt_javascript_wrapper} = (error as YTError) ?? {};
     return Boolean(yt_javascript_wrapper?.xYTTraceId && yt_javascript_wrapper?.xYTRequestId);
 }
