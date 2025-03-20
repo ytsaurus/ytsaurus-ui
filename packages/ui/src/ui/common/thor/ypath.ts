@@ -2,6 +2,7 @@
 import ypath from '@ytsaurus/interface-helpers/lib/ypath';
 import unipika from './unipika';
 import {appendInnerErrors} from '../../utils/errors';
+import {ypathBase} from './ypath-base';
 
 const yson = unipika.utils.yson;
 
@@ -50,86 +51,41 @@ function convertToNumberOld(value: number | string, defaultValue?: number): numb
 
 // Simple wrapper for ypath that unwraps observables passed to ypath methods
 /**
- * @typedef {Object} Thor
- * @property {Function} get
- * @property {Function} getAttributes
- * @property {Function} getValue
- * @property {Function} getValues
- * @property {Function} getBoolean
- * @property {typeof getNumber} getNumber
- * @property {Function} getNumberDeprecated
  */
 
-/** @type {{[key: string] : any} & Thor} */
-const thorYPath = {...ypath};
+const thorYPath = {
+    ...ypath,
+    ...ypathBase,
 
-thorYPath.get = function (node: unknown, path: string) {
-    if (typeof path === 'undefined') {
-        return node;
-    } else {
-        return ypath.get(node, path);
-    }
-};
-
-thorYPath.getAttributes = function (node: unknown, path: string) {
-    return yson.attributes(thorYPath.get(node, path));
-};
-
-thorYPath.getValue = function (node: unknown, path: string) {
-    return yson.value(thorYPath.get(node, path));
-};
-
-thorYPath.getValues = function (node: unknown, paths: Array<string>) {
-    return ypath.getValues(node, paths);
-};
-
-thorYPath.getBoolean = function (node: unknown, path: string) {
-    const value = thorYPath.get(node, path);
-
-    return convertToBoolean(value);
-};
-
-thorYPath.getNumber = getNumber;
-
-/** @deprecated */
-thorYPath.getNumberDeprecated = function (node: unknown, path: string, defaultValue?: number) {
-    try {
+    getBoolean(node: unknown, path: string) {
         const value = thorYPath.get(node, path);
-        return convertToNumberOld(value, defaultValue);
-    } catch (e) {
-        throw appendInnerErrors(e, {
-            message: `thorYPath.getNumber: failed to convert field with path: "${path}".`,
-        });
-    }
+
+        return convertToBoolean(value);
+    },
+
+    getNumber<T extends number | undefined>(node: any, path: string, defaultValue?: T) {
+        try {
+            return ypathBase.getNumberBase(node, path, defaultValue);
+        } catch (e) {
+            throw appendInnerErrors(e, {
+                message: `getNumber: failed to convert field with path: "${path}".`,
+            });
+        }
+    },
+
+    /** @deprecated */
+    getNumberDeprecated(node: unknown, path: string, defaultValue?: number) {
+        try {
+            const value = thorYPath.get(node, path);
+            return convertToNumberOld(value, defaultValue);
+        } catch (e) {
+            throw appendInnerErrors(e, {
+                message: `thorYPath.getNumber: failed to convert field with path: "${path}".`,
+            });
+        }
+    },
 };
 
-export function convertToNumber<T extends number | undefined>(
-    value: any,
-    defaultValue?: T,
-): number | T {
-    if (value === null) return defaultValue as T;
-    if (value === undefined) return defaultValue as T;
-    const res = Number(value);
-    if (isNaN(res) && defaultValue === undefined) {
-        throw new Error('convertToNumber: value "' + value + '" cannot be converted to number.');
-    }
-    return isNaN(res) ? (defaultValue as T) : res;
-}
-
-export function getNumber<T extends number | undefined>(node: any, path: string, defaultValue?: T) {
-    try {
-        let value;
-        if (typeof path === 'undefined') {
-            value = node;
-        } else {
-            value = thorYPath.getValue(node, path);
-        }
-        return convertToNumber(value, defaultValue);
-    } catch (e) {
-        throw appendInnerErrors(e, {
-            message: `getNumber: failed to convert field with path: "${path}".`,
-        });
-    }
-}
+export {convertToNumber} from './ypath-base';
 
 export default thorYPath;
