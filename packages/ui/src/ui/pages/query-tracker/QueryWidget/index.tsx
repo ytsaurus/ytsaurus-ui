@@ -5,7 +5,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import Icon from '../../../components/Icon/Icon';
 import {getCluster} from '../../../store/selectors/global';
 import {getPath} from '../../../store/selectors/navigation';
-import QueryEditor from '../QueryEditor/QueryEditor';
+import {QueryEditor} from '../QueryEditor';
 import {QueryMetaForm} from './QueryMetaForm';
 import {QueryTrackerOpenButton} from '../QueryTrackerOpenButton/QueryTrackerOpenButton';
 import {QueriesPooling} from '../hooks/QueriesPooling/context';
