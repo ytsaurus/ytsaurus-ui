@@ -1,5 +1,5 @@
 import {initialState as jobsInitialState} from '../../../../store/reducers/operations/jobs/jobs';
-import {initialState as jobsIncarnactionState} from '../../../../store/reducers/operations/jobs/jobs-operation-incarnations';
+import {initialState as jobsIncarnationState} from '../../../../store/reducers/operations/jobs/jobs-operation-incarnations';
 import {initialState as tableSortState} from '../../../../store/reducers/tables';
 import {OPERATION_JOBS_TABLE_ID} from '../../../../constants/operations/jobs';
 import {parseSortState} from '../../../../utils/index';
@@ -35,7 +35,7 @@ const initialSortState = {...tableSortState[OPERATION_JOBS_TABLE_ID]};
 export const jobsParams: LocationParameters = {
     incarnation: {
         stateKey: 'operations.jobsOperationIncarnations.filter',
-        initialState: jobsIncarnactionState.filter,
+        initialState: jobsIncarnationState.filter,
     },
     filterBy: {
         stateKey: 'operations.jobs.filters.filterBy.value',
