@@ -6,7 +6,6 @@ export const YSON_AS_TEXT = (): UnipikaSettings => ({
     asHTML: false,
     indent: 0,
     break: false,
-    compact: true,
 });
 
 export function prettyPrint(value: unknown, settings: UnipikaSettings) {

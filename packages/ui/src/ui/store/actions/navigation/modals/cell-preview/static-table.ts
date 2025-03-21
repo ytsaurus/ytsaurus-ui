@@ -2,7 +2,7 @@ import {type CellPreviewActionType} from '../../../modals/cell-preview';
 import {getOffsetValue} from '../../../../selectors/navigation/content/table';
 import type {CancelTokenSource} from 'axios';
 import {ytApiV4} from '../../../../../rum/rum-wrap-api';
-import {prettyPrint, YSON_AS_TEXT} from '../../../../../utils/unipika';
+import {YSON_AS_TEXT, prettyPrint} from '../../../../../utils/unipika';
 import {getCliCommandResultFormat} from './format';
 
 export const getStaticTableCellPath = ({
