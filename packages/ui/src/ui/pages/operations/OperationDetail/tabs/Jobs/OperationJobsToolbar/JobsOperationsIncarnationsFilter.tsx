@@ -4,8 +4,8 @@ import {useDispatch, useSelector} from 'react-redux';
 import {updateJobsOperationIncarnationFilter} from '../../../../../../store/actions/operations/jobs-operation-incarnations';
 import OperationSelectFilter from '../../../../../../pages/operations/OperationSelectFilter/OperationSelectFilter';
 import {
-    getJobsOperationIncarnactionsFilter,
-    getJobsOperationIncarnactionsValues,
+    getJobsOperationIncarnationsFilter,
+    getJobsOperationIncarnationsValues,
 } from '../../../../../../store/selectors/operations/jobs';
 
 export function JobsOperationIncarnationsFilter({
@@ -17,14 +17,14 @@ export function JobsOperationIncarnationsFilter({
 }) {
     const dispatch = useDispatch();
 
-    const filter = useSelector(getJobsOperationIncarnactionsFilter);
-    const values = useSelector(getJobsOperationIncarnactionsValues);
+    const filter = useSelector(getJobsOperationIncarnationsFilter);
+    const values = useSelector(getJobsOperationIncarnationsValues);
 
     return !values?.length
         ? null
         : wrap(
               <OperationSelectFilter
-                  name="incarnaction"
+                  name="incarnation"
                   states={values.map((name) => ({name, caption: name}))}
                   disabled={disabled}
                   width={'auto'}
