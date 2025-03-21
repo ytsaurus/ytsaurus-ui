@@ -6,6 +6,8 @@ import {BodyType} from '../../module/queryNavigation/queryNavigationSlice';
 import {ClusterList} from '../ClusterList';
 import {NodeList} from '../NodeList';
 import {NavigationTable} from '../NavigationTable';
+import {LoadingPlaceholder} from './LoadingPlaceholder';
+import {NavigationError} from './NavigationError';
 
 export const NavigationBody: FC = () => {
     const nodeType = useSelector(selectNavigationNodeType);
@@ -17,6 +19,10 @@ export const NavigationBody: FC = () => {
             return <NavigationTable />;
         case BodyType.Cluster:
             return <ClusterList />;
+        case BodyType.Loading:
+            return <LoadingPlaceholder />;
+        case BodyType.Error:
+            return <NavigationError />;
         default:
             return <NavigationEmpty />;
     }

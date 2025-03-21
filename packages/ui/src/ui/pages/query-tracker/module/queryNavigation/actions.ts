@@ -7,6 +7,7 @@ import {
     NavigationTable,
     NavigationTableSchema,
     setCluster,
+    setError,
     setFilter,
     setLoading,
     setNodeType,
@@ -15,6 +16,7 @@ import {
     setTable,
 } from './queryNavigationSlice';
 import {
+    selectClusterConfigs,
     selectFavouritePaths,
     selectNavigationCluster,
     selectNavigationClusterConfig,
@@ -47,6 +49,11 @@ import {getDefaultTableColumnLimit} from '../../../../store/selectors/settings';
 import {isYqlTypesEnabled} from '../../../../store/selectors/navigation/content/table';
 import {getClusterProxy, getCurrentUserName} from '../../../../store/selectors/global';
 import {getQueryResultGlobalSettings} from '../query_result/selectors';
+import {SET_QUERIES_LIST_MODE} from '../query-tracker-contants';
+import {QueriesListMode} from '../queries_list/types';
+import type {ClusterConfig} from '../../../../../shared/yt-types';
+import {YTError} from '../../../../../@types/types';
+import {setSettingByKey} from '../../../../store/actions/settings';
 
 const toaster = new Toaster();
 
@@ -75,6 +82,7 @@ export const toggleFavoritePath =
         dispatch(setNodes(newNodes));
     };
 
+// nodes list by path
 export const loadNodeByPath =
     (path: string): AsyncAction =>
     async (dispatch, getState) => {
@@ -126,6 +134,7 @@ export const loadNodeByPath =
         dispatch(setNodes(nodes));
     };
 
+// load table by path
 export const loadTableAttributesByPath =
     (path: string): AsyncAction =>
     async (dispatch, getState) => {
@@ -188,6 +197,36 @@ export const loadTableAttributesByPath =
         }
     };
 
+export const loadPath =
+    (path: string, clusterConfig: ClusterConfig): AsyncAction =>
+    async (dispatch) => {
+        try {
+            dispatch(setCluster(clusterConfig.id));
+            dispatch(setPath(path));
+
+            const type = await ytApiV3Id.get(YTApiId.navigationGetType, {
+                setup: {
+                    proxy: getClusterProxy(clusterConfig),
+                    ...JSONParser,
+                },
+                parameters: {
+                    path: `${path}/@type`,
+                },
+            });
+
+            if (isTableNode(type)) {
+                await dispatch(loadTableAttributesByPath(path));
+            } else if (isFolderNode(type)) {
+                await dispatch(loadNodeByPath(path));
+            } else {
+                throw new Error("Сan't open this type of node");
+            }
+        } catch (e) {
+            dispatch(setError(e as YTError));
+            dispatch(setNodeType(BodyType.Error));
+        }
+    };
+
 export const setNavigationCluster =
     (clusterId: string): AsyncAction =>
     async (dispatch) => {
@@ -203,33 +242,7 @@ export const initNavigation = (): AsyncAction => async (dispatch, getState) => {
 
     if (!clusterConfig) return;
 
-    const r = await wrapApiPromiseByToaster(
-        ytApiV3Id.get(YTApiId.navigationGetType, {
-            setup: {
-                proxy: getClusterProxy(clusterConfig),
-                ...JSONParser,
-            },
-            parameters: {
-                path: `${path}/@type`,
-            },
-        }),
-        {
-            skipSuccessToast: true,
-            toasterName: 'query_navigation_get_node_type',
-            errorTitle: 'Navigation get node type failure',
-        },
-    );
-
-    if (isTableNode(r)) {
-        await dispatch(loadTableAttributesByPath(path));
-        return;
-    }
-    if (isFolderNode(r)) {
-        await dispatch(loadNodeByPath(path));
-        return;
-    }
-
-    dispatch(loadNodeByPath('/'));
+    dispatch(loadPath(path, clusterConfig));
 };
 
 export const copyPathToClipboard =
@@ -278,4 +291,32 @@ export const makeNewQueryWithTableSelect =
 
         const text = await createTableSelect({clusterConfig, path, engine, limit: pageSize});
         insertTextWhereCursor(text, editor);
+    };
+
+// open path in navigation tab on monaco path click
+export const openPath =
+    (path: string, clusterId: string | null): AsyncAction =>
+    async (dispatch, getState) => {
+        const state = getState();
+        const {settings} = getQueryDraft(state);
+        const clusters = selectClusterConfigs(state);
+        const currentClusterId = clusterId || settings?.cluster;
+        if (!currentClusterId) return;
+
+        const clusterConfig = clusters[currentClusterId];
+        if (!clusterConfig) return;
+
+        const cleanPath = path.replace(/\/+$/, '');
+
+        await dispatch(
+            setSettingByKey('global::queryTracker::queriesListSidebarVisibilityMode', true),
+        );
+        dispatch({
+            type: SET_QUERIES_LIST_MODE,
+            data: {
+                listMode: QueriesListMode.Navigation,
+            },
+        });
+        dispatch(setNodeType(BodyType.Loading));
+        dispatch(loadPath(cleanPath, clusterConfig));
     };

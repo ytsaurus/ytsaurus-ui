@@ -1,10 +1,13 @@
 import {PayloadAction, createSlice} from '@reduxjs/toolkit';
 import {ReactNode} from 'react';
+import {YTError} from '../../../../../@types/types';
 
 export const enum BodyType {
     Tree = 'tree',
     Table = 'table',
     Cluster = 'cluster',
+    Loading = 'loading',
+    Error = 'error',
 }
 
 export type NavigationNode = {
@@ -45,7 +48,8 @@ export type RepoNavigationState = {
     cluster: string | undefined;
     filter: string;
     nodes: NavigationNode[];
-    table: null | NavigationTable;
+    table?: NavigationTable;
+    error?: YTError;
 };
 
 export const initialState: RepoNavigationState = {
@@ -55,7 +59,8 @@ export const initialState: RepoNavigationState = {
     cluster: undefined,
     filter: '',
     nodes: [],
-    table: null,
+    table: undefined,
+    error: undefined,
 };
 
 const queryNavigationSlice = createSlice({
@@ -83,10 +88,21 @@ const queryNavigationSlice = createSlice({
         setTable(state, {payload}: PayloadAction<NavigationTable>) {
             state.table = payload;
         },
+        setError(state, {payload}: PayloadAction<RepoNavigationState['error']>) {
+            state.error = payload;
+        },
     },
 });
 
-export const {setLoading, setFilter, setCluster, setPath, setNodeType, setNodes, setTable} =
-    queryNavigationSlice.actions;
+export const {
+    setLoading,
+    setFilter,
+    setCluster,
+    setPath,
+    setNodeType,
+    setNodes,
+    setTable,
+    setError,
+} = queryNavigationSlice.actions;
 
 export const queryNavigationReducer = queryNavigationSlice.reducer;
