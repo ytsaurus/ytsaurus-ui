@@ -2,6 +2,7 @@ import {type CellPreviewActionType} from '../../../modals/cell-preview';
 import {getOffsetValue} from '../../../../selectors/navigation/content/table';
 import type {CancelTokenSource} from 'axios';
 import {ytApiV4} from '../../../../../rum/rum-wrap-api';
+import {YSON_AS_TEXT, prettyPrint} from '../../../../../utils/unipika';
 import {getCliCommandResultFormat} from './format';
 
 export const getStaticTableCellPath = ({
@@ -18,7 +19,7 @@ export const getStaticTableCellPath = ({
 
         const rowIndex = typeof offset === 'number' ? index + offset : index;
 
-        return `${path}{${columnName}}[#${rowIndex}:#${rowIndex + 1}]`;
+        return `${path}{${prettyPrint(columnName, YSON_AS_TEXT())}}[#${rowIndex}:#${rowIndex + 1}]`;
     };
 };
 
