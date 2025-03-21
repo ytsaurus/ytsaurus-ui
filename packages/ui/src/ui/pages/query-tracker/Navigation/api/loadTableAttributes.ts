@@ -19,20 +19,19 @@ export const loadTableAttributes = async (path: string, clusterConfig: ClusterCo
             parameters: {
                 path: `${path}/@`,
             },
-            setup,
         },
         {
             command: 'get' as const,
             parameters: {
                 path: `${path}/@schema`,
             },
-            setup,
         },
     ];
 
     try {
         const results = await ytApiV3Id.executeBatch(YTApiId.navigationGetPath, {
             parameters: {requests},
+            setup,
         });
 
         const error = getBatchError(results, 'Failed to get navigation attributes');

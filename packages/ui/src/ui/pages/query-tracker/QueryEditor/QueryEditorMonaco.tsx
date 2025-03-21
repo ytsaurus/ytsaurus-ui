@@ -3,6 +3,7 @@ import * as monaco from 'monaco-editor';
 import {useMonaco} from '../hooks/useMonaco';
 import {useDispatch, useSelector} from 'react-redux';
 import {
+    getQueryDraftCluster,
     getQueryEditorErrors,
     getQueryEngine,
     getQueryId,
@@ -25,6 +26,7 @@ import {
     checkControlCommandKey,
     getControlCommandKey,
 } from '../../../packages/ya-timeline/lib/utils';
+import {openPath} from '../module/queryNavigation/actions';
 
 const b = cn('yq-query-editor-monaco');
 
@@ -43,6 +45,7 @@ export const QueryEditorMonaco: FC = () => {
     const {setEditor} = useMonaco();
     const id = useSelector(getQueryId);
     const text = useSelector(getQueryText);
+    const cluster = useSelector(getQueryDraftCluster);
     const engine = useSelector(getQueryEngine);
     const editorErrors = useSelector(getQueryEditorErrors);
     const loading = useSelector(isQueryLoading);
@@ -82,7 +85,7 @@ export const QueryEditorMonaco: FC = () => {
 
     useEffect(() => {
         decorators.current.linkDecorator?.updateLinks();
-    }, [text]);
+    }, [text, cluster]);
 
     useEffect(() => {
         decorators.current.linkDecorator?.setEngine(engine);
@@ -114,19 +117,25 @@ export const QueryEditorMonaco: FC = () => {
         }
     }, []);
 
-    const pathClick = useCallback((position: monaco.Position) => {
-        const link = decorators.current.linkDecorator?.findLink(position);
-        console.log(link);
-    }, []);
+    const pathClick = useCallback(
+        (position: monaco.Position) => {
+            const link = decorators.current.linkDecorator?.findLink(position);
+            if (!link) return;
+            dispatch(openPath(link.path, link.cluster));
+        },
+        [dispatch],
+    );
 
     const handleOnClick = useCallback(
         ({target, event}: monaco.editor.IEditorMouseEvent) => {
             if (target.type === monaco.editor.MouseTargetType.GUTTER_LINE_NUMBERS) {
                 lineNumberClick(target);
-            } else if (target.type === monaco.editor.MouseTargetType.CONTENT_TEXT) {
-                if (checkControlCommandKey(event)) {
-                    pathClick(target.position);
-                }
+            }
+            if (
+                target.type === monaco.editor.MouseTargetType.CONTENT_TEXT &&
+                checkControlCommandKey(event)
+            ) {
+                pathClick(target.position);
             }
         },
         [lineNumberClick, pathClick],
