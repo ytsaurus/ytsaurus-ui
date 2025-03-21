@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.86.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.85.0...ui-v1.86.0) (2025-03-21)
+
+
+### Features
+
+* **Scheduling:** add icon for pools with effective_lightweight_operations_enabled [YTFRONT-4275] ([395c512](https://github.com/ytsaurus/ytsaurus-ui/commit/395c5122c06c0255fe69a0756e70f3ca3564d003))
+
+
+### Bug Fixes
+
+* **Navigation/Table:** fix offset and pagination of unmounted tables [YTFRONT-4021] ([f7b2b68](https://github.com/ytsaurus/ytsaurus-ui/commit/f7b2b68ff0b5e04c96f6dc4a9d45664bf6a7530e))
+
 ## [1.85.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.84.0...ui-v1.85.0) (2025-03-17)
 
 
