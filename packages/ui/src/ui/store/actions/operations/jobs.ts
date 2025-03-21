@@ -33,7 +33,7 @@ import {OldSortState} from '../../../types';
 import {ListJobsParameters} from '../../../../shared/yt-types';
 import {KeysByType} from '../../../../@types/types';
 import {TablesSortOrderAction} from '../../../store/reducers/tables';
-import {getJobsOperationIncarnactionsFilter} from '../../../store/selectors/operations/jobs';
+import {getJobsOperationIncarnationsFilter} from '../../../store/selectors/operations/jobs';
 import {fetchOperationIncarnationAvailableItems} from './jobs-operation-incarnations';
 
 const requests = new CancelHelper();
@@ -129,7 +129,7 @@ function getJobsRequestParameters(state: RootState): ListJobsParameters {
     const {filters, pagination} = state.operations.jobs;
     const sortState = state.tables[OPERATION_JOBS_TABLE_ID];
 
-    const incarnaction = getJobsOperationIncarnactionsFilter(state);
+    const incarnation = getJobsOperationIncarnationsFilter(state);
 
     return {
         operation_id: operation.$value,
@@ -141,7 +141,7 @@ function getJobsRequestParameters(state: RootState): ListJobsParameters {
         // prepareSortQuery(),
         ...getJobFilterParameters(filters, sortState),
         ...preparePaginationQuery(pagination),
-        operation_incarnation: incarnaction || undefined,
+        operation_incarnation: incarnation || undefined,
     };
 }
 
