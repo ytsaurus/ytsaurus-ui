@@ -25,6 +25,7 @@ export const getQueryAnnotations = (state: RootState) => getState(state).queryIt
 export const getQueryGetParams = (state: RootState) => getState(state).params;
 
 export const getQueryDraft = (state: RootState) => getState(state).draft;
+export const getQueryDraftCluster = (state: RootState) => getQueryDraft(state).settings?.cluster;
 
 export const getQueryFiles = (state: RootState) => getState(state).draft.files;
 

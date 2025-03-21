@@ -10,6 +10,7 @@ export const selectNavigationCluster = (state: RootState) =>
     state.queryTracker.queryNavigation.cluster;
 export const selectLoading = (state: RootState) => state.queryTracker.queryNavigation.loading;
 export const selectClusterConfigs = (state: RootState) => state.clustersMenu.clusters;
+export const selectNavigationError = (state: RootState) => state.queryTracker.queryNavigation.error;
 
 export const selectNavigationClusterConfig = createSelector(
     [selectNavigationCluster, selectClusterConfigs],
