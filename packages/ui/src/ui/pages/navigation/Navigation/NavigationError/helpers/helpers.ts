@@ -1,7 +1,6 @@
 import {getYtErrorCode} from '../../../../../utils/errors';
 import {YTError} from '../../../../../../@types/types';
 import {UnipikaValue} from '../../../../../components/Yson/StructuredYson/StructuredYsonTypes';
-
 import ypath from '../../../../../common/thor/ypath';
 
 export type ErrorCode = 500 | 901;
@@ -30,7 +29,9 @@ export const ErrorsInfo: ErrorInfo = {
     901: {
         getTitle: (payload: NoAccessTitlePayload) => {
             const {username, permissions, path} = payload;
-            const permission = permissions.map((perm: UnipikaValue) => perm.$value).join(' | ');
+            const permission = permissions
+                .map((perm: UnipikaValue) => ypath.getValue(perm))
+                .join(' | ');
             return `User ${username} does not have "${permission}" access to node "${path}"`;
         },
     },
