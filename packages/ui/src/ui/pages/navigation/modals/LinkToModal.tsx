@@ -76,6 +76,9 @@ export default function LinkToModal() {
                             return e?.message || 'Unexpected type of error: ' + typeof e;
                         }
                     },
+                    extras: {
+                        autoFocus: true,
+                    },
                 },
                 {
                     name: 'target',

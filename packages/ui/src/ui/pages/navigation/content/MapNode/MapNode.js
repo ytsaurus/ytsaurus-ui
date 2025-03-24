@@ -220,7 +220,7 @@ class MapNodeToolbar extends React.PureComponent {
 
     createLinkButtonClick = () => {
         const {path} = this.props;
-        this.props.showLinkToModal({path: `${path}/New link`});
+        this.props.showLinkToModal({path: `${path}/new_link`});
     };
 
     createACOButtonClick = () => {
