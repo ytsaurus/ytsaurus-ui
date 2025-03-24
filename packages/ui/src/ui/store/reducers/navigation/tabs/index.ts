@@ -6,7 +6,6 @@ import consumer from './consumer';
 import locks from './locks';
 import queue from './queue';
 import schema from './schema/schema';
-import annotation from './annotation';
 import tablets from './tablets/tablets';
 import tabletErrorsBackground from './tablet-errors/tablet-errors-background';
 import {tabletErrorsByPath} from './tablet-errors/tablet-errors-by-path';
@@ -20,7 +19,6 @@ export default combineReducers({
     queue,
     schema,
     tablets,
-    annotation,
     tabletErrorsBackground,
     tabletErrorsByPath,
     userAttributes,
