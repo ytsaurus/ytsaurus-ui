@@ -316,4 +316,7 @@ export const defaultUIFactory: UIFactory = {
     getInlineSuggestionsApi() {
         return undefined;
     },
+    renderMarkdown() {
+        return undefined;
+    },
 };
