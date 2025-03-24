@@ -133,18 +133,18 @@ type ApiWithId<ApiT extends Record<string, (...args: ApiMethodParameters<any>) =
     [K in keyof ApiT]: (id: YTApiId, ...args: Parameters<ApiT[K]>) => ReturnType<ApiT[K]>;
 };
 
-interface BatchParameters {
+export interface BatchParameters {
     requests: Array<BatchSubRequest>;
     output_format?: OutputFormat;
 }
 
 type SaveCancellationCb = (cancel: CancelTokenSource) => void;
 
-type ApiMethodParameters<PrametersT = unknown> =
+export type ApiMethodParameters<PrametersT = unknown> =
     | [ApiMethodParams<PrametersT> | ApiMethodParams<PrametersT>['parameters']]
     | [ApiMethodParams<PrametersT> | ApiMethodParams<PrametersT>['parameters'], unknown];
 
-interface ApiMethodParams<ParametersT> {
+export interface ApiMethodParams<ParametersT> {
     parameters: ParametersT;
     data?: any;
     setup?: any;

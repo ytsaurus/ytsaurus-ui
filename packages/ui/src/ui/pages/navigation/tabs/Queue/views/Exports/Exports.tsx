@@ -1,86 +1,105 @@
-import React, {useEffect} from 'react';
-import {useDispatch, useSelector} from 'react-redux';
-import {requestExportsConfig} from '../../../../../../store/actions/navigation/tabs/queue/exports';
-import {
-    getExportsConfig,
-    getExportsConfigRequestInfo,
-} from '../../../../../../store/selectors/navigation/tabs/queue';
+import React from 'react';
+import {useSelector} from 'react-redux';
+
+import {useFetchBatchQuery} from '../../../../../../store/api/yt';
+import {makeGetExportsParams} from '../../../../../../store/api/navigation/tabs/queue/queue';
 import {getPath} from '../../../../../../store/selectors/navigation';
+
 import Link from '../../../../../../components/Link/Link';
 import DataTableYT, {Column} from '../../../../../../components/DataTableYT/DataTableYT';
 
 import hammer from '../../../../../../common/hammer';
-import {QueueExportConfig} from '../../../../../../types/navigation/queue/queue';
+import {QueueExport, QueueExportConfig} from '../../../../../../types/navigation/queue/queue';
 import {makeNavigationLink} from '../../../../../../utils/app-url';
 
 import {ExportsEdit} from './ExportsEdit/ExportsEdit';
 
 import './Exports.scss';
 
-const columns: Array<Column<QueueExportConfig<number>>> = [
+export type ExportConfigUtility = {
+    id: string;
+    export_name: string;
+};
+
+type ExportConfigColumns = ExportConfigUtility & QueueExportConfig<number>;
+
+const columns: Array<Column<ExportConfigColumns>> = [
     {
         name: 'export_name',
-        sortable: false,
         render: renderValue,
+        header: 'Export name',
     },
     {
         name: 'export_directory',
-        sortable: false,
         render: RenderPath,
+        header: 'Export directory',
     },
     {
         name: 'export_period',
-        sortable: false,
         render: renderValue,
+        header: 'Export period, ms',
     },
     {
         name: 'export_ttl',
-        sortable: false,
         render: renderValue,
+        header: 'Export TTL, ms',
     },
     {
         name: 'output_table_name_pattern',
-        sortable: false,
         render: renderValue,
+        header: hammer.format['ReadableField']('output_table_name_pattern'),
     },
     {
         name: 'use_upper_bound_for_table_names',
-        sortable: false,
         render: renderValue,
+        header: hammer.format['ReadableField']('use_upper_bound_for_table_names'),
     },
     {
         name: '',
-        sortable: false,
-        render() {
-            return <ExportsEdit />;
+        render({row}) {
+            return <ExportsEdit prevConfig={row} />;
         },
     },
 ];
 
 export function Exports() {
-    const dispatch = useDispatch();
-
-    const config = useSelector(getExportsConfig);
-    const {loading, loaded} = useSelector(getExportsConfigRequestInfo);
     const path = useSelector(getPath);
 
-    useEffect(() => {
-        dispatch(requestExportsConfig());
-    }, [path]);
+    const {
+        data: config,
+        isLoading,
+        isFetching,
+    } = useFetchBatchQuery<QueueExport<number>>(makeGetExportsParams(path));
+
+    const data: ExportConfigColumns[] = [];
+
+    if (config && config[0].output) {
+        for (const obj in config[0].output) {
+            if (obj) {
+                const newObj: ExportConfigColumns = {
+                    ...config[0].output[obj],
+                    export_name: obj,
+                    id: obj,
+                };
+                data.push(newObj);
+            }
+        }
+    }
 
     return (
-        <DataTableYT<QueueExportConfig<number>>
+        <DataTableYT<ExportConfigColumns>
             columns={columns}
-            data={Object.values(config || {}) || []}
-            loaded={loaded}
-            loading={loading}
+            data={data}
+            loaded={!isFetching}
+            loading={isLoading}
             useThemeYT
+            settings={{displayIndices: false, sortable: false}}
         />
     );
 }
 
 function renderValue({value}: {value?: unknown}) {
-    return <>{value ? hammer.format['Readable'](String(value)) : hammer.format.NO_VALUE}</>;
+    return <>{value ? String(value) : hammer.format.NO_VALUE}</>;
 }
 
 function RenderPath({value}: {value?: unknown}) {

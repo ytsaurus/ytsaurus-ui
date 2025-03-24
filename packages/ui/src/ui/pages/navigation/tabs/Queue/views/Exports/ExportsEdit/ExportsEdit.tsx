@@ -1,38 +1,82 @@
-import React from 'react';
-import {Button} from '@gravity-ui/uikit';
+import React, {useCallback, useState} from 'react';
+import {Button, Flex, Text} from '@gravity-ui/uikit';
 import b from 'bem-cn-lite';
 
+import {useExportMutation} from '../../../../../../../store/api/navigation/tabs/queue/queue';
+
 import Icon from '../../../../../../../components/Icon/Icon';
+import {YTDFDialog} from '../../../../../../../components/Dialog';
 import {QueueExportConfig} from '../../../../../../../types/navigation/queue/queue';
 
-import {ExportsEditDialog} from './ExportsEditDialog/ExportsEditDialog';
-
-import './ExportsEdit.scss';
+import {ExportsEditDialog} from '../ExportsEditDialog/ExportsEditDialog';
+import type {ExportConfigUtility} from '../Exports';
 
 const block = b('exports-edit');
 
-type ExportConfigUtility = {
-    id: string;
-    export_name: string;
-};
-
 export type ExportConfig = ExportConfigUtility & QueueExportConfig<{value: number}>;
 
-export function ExportsEdit() {
-    const [visible, setVisible] = React.useState(false);
+export function ExportsEdit({
+    prevConfig,
+}: {
+    prevConfig: QueueExportConfig<number> & {export_name: string};
+}) {
+    const [update] = useExportMutation();
 
-    const toggleVisibility = React.useCallback(() => {
-        setVisible(!visible);
-    }, [visible, setVisible]);
+    const [editDialogVisible, setEditDialogVisible] = useState(false);
+    const [deleteDialogVisible, setDeleteDialogVisible] = useState(false);
+
+    const toggleEditDialogVisibility = useCallback(() => {
+        setEditDialogVisible(!editDialogVisible);
+    }, [editDialogVisible, setEditDialogVisible]);
+
+    const toggleDeleteDialogVisibility = useCallback(() => {
+        setDeleteDialogVisible(!deleteDialogVisible);
+    }, [deleteDialogVisible, setDeleteDialogVisible]);
 
     return (
         <>
-            <div className={block()}>
-                <Button className={block('button')} view="flat" onClick={toggleVisibility}>
-                    <Icon awesome="pencil" />
+            <Flex direction={'row'} gap={1}>
+                <Button view="flat" onClick={toggleDeleteDialogVisibility}>
+                    <Icon awesome={'trash-bin'} />
                 </Button>
-            </div>
-            <ExportsEditDialog visible={visible} onClose={toggleVisibility} />
+                <Button
+                    className={block('button')}
+                    view="flat"
+                    onClick={toggleEditDialogVisibility}
+                >
+                    <Icon awesome={'pencil'} />
+                </Button>
+            </Flex>
+            <YTDFDialog
+                visible={deleteDialogVisible}
+                pristineSubmittable={true}
+                fields={[
+                    {
+                        name: 'delete',
+                        type: 'block',
+                        extras: {
+                            children: (
+                                <Text variant="body-2">
+                                    Are you shure you want to delete {prevConfig.export_name}?
+                                </Text>
+                            ),
+                        },
+                    },
+                ]}
+                onAdd={async () => {
+                    update({prevConfig, type: 'delete'});
+                }}
+                headerProps={{
+                    title: 'Delete export',
+                }}
+                onClose={toggleDeleteDialogVisibility}
+            />
+            <ExportsEditDialog
+                title={'Edit export'}
+                prevConfig={prevConfig}
+                visible={editDialogVisible}
+                onClose={toggleEditDialogVisibility}
+            />
         </>
     );
 }

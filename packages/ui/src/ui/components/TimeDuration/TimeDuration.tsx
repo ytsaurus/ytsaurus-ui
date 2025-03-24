@@ -50,6 +50,9 @@ export function TimeDuration({value, onChange}: TimeDurationProps) {
                                 }),
                             ]}
                         />
+                        1M=30d
+                        <br />
+                        <br />
                         Examles: 1M2d3h, 4h15m
                     </div>
                 }
@@ -94,7 +97,7 @@ export function formatTimeDuration(value?: number) {
         h,
         m: 60 * 1000,
         s: 1000,
-        ['']: 1,
+        ms: 1,
     };
 
     Object.keys(parts).forEach((k) => {

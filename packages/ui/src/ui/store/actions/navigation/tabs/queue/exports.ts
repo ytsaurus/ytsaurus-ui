@@ -107,9 +107,17 @@ export function fetchOriginatingQueuePath(): AsyncAction {
             '/queue_static_export_destination/originating_queue_id',
         );
         try {
-            const originatingPath = await ytApiV3.get({
-                path: `#${queueId}/@path`,
-                cancellation: cancelHelper.removeAllAndSave,
+            const originatingPath = await ytApiV3.executeBatch({
+                parameters: {
+                    requests: [
+                        {
+                            command: 'get' as const,
+                            parameters: {
+                                path: `#${queueId}/@path`,
+                            },
+                        },
+                    ],
+                },
             });
             dispatch({
                 type: SET_ORIGINATING_QUEUE_PATH,
