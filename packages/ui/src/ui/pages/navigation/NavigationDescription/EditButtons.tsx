@@ -10,7 +10,7 @@ type Props = {
     onSaveClick: () => void;
 };
 
-export const ActionButtons: FC<Props> = ({
+export const EditButtons: FC<Props> = ({
     isSaving,
     editMode,
     onEditClick,
