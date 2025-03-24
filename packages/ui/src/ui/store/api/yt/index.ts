@@ -3,11 +3,7 @@ import {BaseQueryFn, TypedUseMutationResult} from '@reduxjs/toolkit/dist/query/r
 
 import {rootApi} from '..';
 import {BatchApiArgs, BatchApiResults, executeBatchV3} from './endpoints/executeBatch';
-<<<<<<< HEAD
 import {getUseAutoRefresh} from '../../../store/selectors/settings/settings-ts';
-=======
-import {getUseAutoRefresh} from '../../../store/selectors/settings';
->>>>>>> 022ee636 (chore: setup rtk query and execute batch endpoint)
 import {getCluster} from '../../../store/selectors/global';
 import {DEFAULT_UPDATER_TIMEOUT} from '../../../hooks/use-updater';
 import {MutationOptions, UseQueryOptions} from './types';
