@@ -11,12 +11,12 @@ export type LayoutConfig = {
     minWidth: number;
 };
 
-export function useOnLoadSize(widget: PluginWidgetProps, config: LayoutConfig, data: Array<any>) {
+export function useOnLoadSize(widget: PluginWidgetProps, config: LayoutConfig, dataLength: number) {
     const {baseHeight, defaultHeight, rowMultiplier, minHeight, minWidth} = config;
 
     useEffect(() => {
-        const mayBeHeight = baseHeight + data.length * rowMultiplier;
-        if (mayBeHeight < defaultHeight && data.length) {
+        const mayBeHeight = baseHeight + dataLength * rowMultiplier;
+        if (mayBeHeight <= defaultHeight && dataLength) {
             widget.adjustWidgetLayout({
                 widgetId: widget.id,
                 adjustedWidgetLayout: {
@@ -31,5 +31,5 @@ export function useOnLoadSize(widget: PluginWidgetProps, config: LayoutConfig, d
                 },
             });
         }
-    }, []);
+    }, [dataLength]);
 }

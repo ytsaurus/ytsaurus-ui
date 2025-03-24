@@ -4,8 +4,8 @@ import {Button, Flex} from '@gravity-ui/uikit';
 
 import {RowWithName} from '../../../containers/AppNavigation/TopRowContent/SectionName';
 import {Page} from '../../../../shared/constants/settings';
-import {toggleEditing} from '../../../store/reducers/dashboard2';
-import {getIsEditing} from '../../../store/selectors/dashboard2';
+import {toggleEditing} from '../../../store/reducers/dashboard2/dashboard';
+import {getIsEditing} from '../../../store/selectors/dashboard2/dashboard';
 
 export function DashboardTopRow() {
     const dispatch = useDispatch();

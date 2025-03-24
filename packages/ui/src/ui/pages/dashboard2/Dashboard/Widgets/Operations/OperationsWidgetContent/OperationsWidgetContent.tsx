@@ -1,101 +1,89 @@
 import React from 'react';
+import {useSelector} from 'react-redux';
 import b from 'bem-cn-lite';
-import {Flex, Link, Progress, Text} from '@gravity-ui/uikit';
+import {Text} from '@gravity-ui/uikit';
 import {PluginWidgetProps} from '@gravity-ui/dashkit';
 import {createColumnHelper} from '@gravity-ui/table/tanstack';
 
+import {useOperationsQuery} from '../../../../../../store/api/dashboard2/operations';
+import {getCluster} from '../../../../../../store/selectors/global';
+import {getOperationsFilterState} from '../../../../../../store/selectors/dashboard2/operations';
+
 import {WidgetTable} from '../../../../../../pages/dashboard2/Dashboard/components/WidgetTable/WidgetTable';
+import {WidgetSkeleton} from '../../../../../../pages/dashboard2/Dashboard/components/WidgetSkeleton/WidgetSkeleton';
 import {
     LayoutConfig,
     useOnLoadSize,
 } from '../../../../../../pages/dashboard2/Dashboard/hooks/use-on-load-size';
+
+import {Title} from './cells/Title';
+import {UserPool} from './cells/UserPool';
+import {StartTime} from './cells/StartTime';
+import {State} from './cells/State';
 
 import './OperationsWidgetContent.scss';
 
 const block = b('yt-operations-widget-content');
 
 type Operations = {
-    title: string;
-    user_pool: string;
-    start_time: string;
-    state: string;
-}
+    title: {
+        title: string;
+        id: string;
+    };
+    userPool: {
+        user: string;
+        pools: {tree: string; pool: string}[];
+    };
+    startTime: string;
+    progress: any;
+};
 
 const columnHelper = createColumnHelper<Operations>();
 
 const columns = [
-    // {id: 'title', name: 'Title'},
-    // {id: 'user_pool', name: 'User/Pool', template: userPoolTemplate},
-    // {id: 'start_time', name: 'Start time', template: startTimeTemplate},
-    // {id: 'state', name: 'State/Progress', template: stateTemplate},
     columnHelper.accessor('title', {
-        cell: (title) => title.getValue(),
+        header: () => <Text variant={'subheader-1'}>{'Title'}</Text>,
+        cell: (title) => <Title title={title.getValue()} />,
+        maxSize: 200,
     }),
-    columnHelper.accessor('user_pool', {
-        cell: (user_pool) => user_pool.getValue(),
+    columnHelper.accessor('userPool', {
+        header: () => <Text variant={'subheader-1'}>{'User/Pools'}</Text>,
+        cell: (userPool) => <UserPool userPool={userPool.getValue()} />,
     }),
-    columnHelper.accessor('start_time', {
-        cell: (start_time) => start_time.getValue(),
+    columnHelper.accessor('startTime', {
+        header: () => <Text variant={'subheader-1'}>{'Start time'}</Text>,
+        cell: (startTime) => <StartTime startTime={startTime.getValue()} />,
     }),
-    columnHelper.accessor('state', {
-        cell: (state) => state.getValue(),
+    columnHelper.accessor('progress', {
+        header: () => <Text variant={'subheader-1'}>{'State'}</Text>,
+        cell: (progress) => <State progress={progress.getValue()} />,
     }),
 ];
-
-const data = [
-    {
-        title: 'Operation 1',
-        user: 'robot-yt-front',
-        pool: 'yt-front',
-        start_time: '17 Aug 2022 13:14:23',
-        progress: 84,
-    },
-    {
-        title: 'Operation 1',
-        user: 'robot-yt-front',
-        pool: 'yt-front',
-        start_time: '17 Aug 2022 13:14:23',
-        progress: 84,
-    },
-    {
-        title: 'Operation 1',
-        user: 'robot-yt-front',
-        pool: 'yt-front',
-        start_time: '17 Aug 2022 13:14:23',
-        progress: 84,
-    },
-];
-
-//const WidgetWithTable = withTable<any>(Table);
 
 const OperaionsLayout: LayoutConfig = {
     baseHeight: 6,
     defaultHeight: 12,
 
-    rowMultiplier: 2,
+    rowMultiplier: 1.5,
 
     minHeight: 8,
     minWidth: 13,
 };
 
 export function OperationsWidgetContent(props: PluginWidgetProps) {
-    useOnLoadSize(props, OperaionsLayout, data);
-    return <WidgetTable data={data} columns={columns} className={block()} />;
-}
+    const cluster = useSelector(getCluster);
+    const state = useSelector(getOperationsFilterState);
 
-function stateTemplate(item: any) {
-    return <Progress text={item.state} theme={'info'} value={item.progress} />;
-}
+    const {data, isLoading} = useOperationsQuery({cluster, state});
 
-function startTimeTemplate(item: any) {
-    return <Text className={block('start-time-column')}>{item.start_time}</Text>;
-}
-
-function userPoolTemplate(item: any) {
+    useOnLoadSize(props, OperaionsLayout, data?.length || 0);
     return (
-        <Flex direction={'column'}>
-            <Text>{item.user}</Text>
-            <Link href={''}>{item.pool}</Link>
-        </Flex>
+        <>
+            {isLoading ? (
+                <WidgetSkeleton amount={5} itemHeight={40} />
+            ) : (
+                <WidgetTable data={data || []} columns={columns} className={block()} />
+            )}
+        </>
     );
 }

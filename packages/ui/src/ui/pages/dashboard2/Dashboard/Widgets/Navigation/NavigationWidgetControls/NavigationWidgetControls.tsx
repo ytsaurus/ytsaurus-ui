@@ -1,16 +1,22 @@
 import React from 'react';
+import {useDispatch} from 'react-redux';
 import {RadioButton} from '@gravity-ui/uikit';
 
+import {setPathsType} from '../../../../../../store/reducers/dashboard2/navigation';
+
 export function NavigationWidgetControls() {
-    const onChange = () => {};
+    const dispatch = useDispatch();
+    const onUpdate = (value: string) => {
+        dispatch(setPathsType({type: value}));
+    };
 
     return (
         <RadioButton
             options={[
-                {value: 'Last visited', content: 'Last visited'},
-                {value: 'Favorite', content: 'Favorite'},
+                {value: 'last_visited', content: 'Last visited'},
+                {value: 'favourite', content: 'Favorite'},
             ]}
-            onChange={onChange}
+            onUpdate={onUpdate}
         ></RadioButton>
     );
 }

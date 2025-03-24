@@ -9,7 +9,7 @@ import {
     PluginWidgetProps,
 } from '@gravity-ui/dashkit';
 
-import {getIsEditing} from '../../../store/selectors/dashboard2';
+import {getIsEditing} from '../../../store/selectors/dashboard2/dashboard';
 
 import {WidgetBase} from './WidgetBase/WidgetBase';
 import {NavigationWidgetContent} from './Widgets/Navigation/NavigationWidgetContent/NavigationWidgetContent';
@@ -43,7 +43,7 @@ DashKit.registerPlugins({
                 title="Navigation"
                 type="navigation"
                 controls={<NavigationWidgetControls />}
-                content={<NavigationWidgetContent />}
+                content={<NavigationWidgetContent {...props}/>}
             />
         );
     },
@@ -192,7 +192,6 @@ export const config: DashKitProps['config'] = {
 
 export function Dashboard() {
     const isEditing = useSelector(getIsEditing);
-
     const onDrop = (dropProps: ItemDropProps) => {
         dropProps.commit();
     };

@@ -1,62 +1,8 @@
-@use '@gravity-ui/uikit/styles/mixins';
+.widget-table {
+    width: 100%;
+}
 
-$block: '.styled-table';
-
-#{$block} {
-    &__header {
-        background: var(--g-color-base-background);
-    }
-
-    &__cell {
-        @include mixins.text-body-1();
-    }
-
-    &__header-cell {
-        @include mixins.text-subheader-1();
-    }
-
-    &_size {
-        &_s {
-            --_--cell-padding: 7px var(--g-spacing-2) 6px;
-        }
-
-        &_m {
-            --_--cell-padding: 11px var(--g-spacing-2) 10px;
-        }
-    }
-
-    &__cell,
-    &__header-cell,
-    &__footer-cell {
-        padding: var(--_--cell-padding);
-        border-block-end: 1px solid var(--g-color-line-generic);
-
-        &_vertical-align {
-            &_top {
-                align-content: start;
-            }
-
-            &_middle {
-                align-content: center;
-            }
-
-            &_bottom {
-                align-content: end;
-            }
-        }
-    }
-
-    &__row {
-        &_interactive {
-            &:hover {
-                background-color: var(--g-color-base-generic);
-            }
-        }
-
-        &:last-of-type {
-            #{$block}__cell {
-                border-block-end: none;
-            }
-        }
-    }
+// reassign
+.yt-widget {
+    padding-bottom: 5px;
 }
