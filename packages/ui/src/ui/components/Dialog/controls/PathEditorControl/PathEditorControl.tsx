@@ -9,6 +9,7 @@ interface Props {
     onChange: (value: string) => void;
     placeholder?: string;
     disabled?: boolean;
+    autoFocus?: boolean;
 }
 
 export function PathEditorControl(props: Props) {
