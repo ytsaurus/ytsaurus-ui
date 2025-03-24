@@ -1,4 +1,6 @@
 import React from 'react';
+import {Button, Flex, Link} from '@gravity-ui/uikit';
+import {ArrowUpRightFromSquare} from '@gravity-ui/icons';
 
 import isEmpty_ from 'lodash/isEmpty';
 import isEqual_ from 'lodash/isEqual';
@@ -18,6 +20,9 @@ import {
     FormApi,
     YTDFDialog,
 } from '../../../components/Dialog';
+
+import {ytApi} from '../../../store/api/yt';
+import {useGetExternalDescriptionQuery} from '../../../store/api/pages/navigation/tabs/description';
 import {
     getNavigationAttributesEditorAttributes,
     getNavigationAttributesEditorDynamicTables,
@@ -33,6 +38,10 @@ import {
     navigationSetNodeAttributes,
 } from '../../../store/actions/navigation/modals/attributes-editor';
 import {getMediumListNoCache} from '../../../store/selectors/thor';
+
+import {getCluster} from '../../../store/selectors/global';
+import {getPath} from '../../../store/selectors/navigation';
+
 import {
     InMemoryMode,
     InMemoryModeType,
@@ -49,6 +58,8 @@ import {
     getErasureCodecs,
 } from '../../../store/selectors/global/supported-features';
 import {docsUrl} from '../../../config';
+
+import {YTApiId} from '../../../rum/rum-wrap-api';
 
 import './AttributesEditor.scss';
 import UIFactory from '../../../UIFactory';
@@ -261,6 +272,7 @@ function AttributesEditorLoaded() {
                         hasStaticTables && storage.runMerge,
                     ),
                 );
+                dispatch(ytApi.util.invalidateTags([String(YTApiId.navigationGetAnnotation)]));
             } catch (e) {
                 setErr(e);
                 throw e;
@@ -313,6 +325,13 @@ function AttributesEditorLoaded() {
                     valuePath: annotationPath,
                     className: block('full-height'),
                     initialValue: annotationInitial,
+                },
+            },
+            {
+                name: 'externalAnnotation',
+                type: 'block' as const,
+                extras: {
+                    children: <CreateExternalDescriptionButton />,
                 },
             },
             ...mergeNoticeAndError,
@@ -542,6 +561,30 @@ function AttributesEditorLoaded() {
                 ...annotationTab,
             ]}
         />
+    );
+}
+
+function CreateExternalDescriptionButton() {
+    const path = useSelector(getPath);
+    const cluster = useSelector(getCluster);
+
+    const {data: externalDescription} = useGetExternalDescriptionQuery({cluster, path});
+
+    return (
+        <>
+            {!externalDescription?.externalAnnotation &&
+                externalDescription?.externalAnnotationLink && (
+                    <Link href={externalDescription.externalAnnotationLink} target={'_blank'}>
+                        <Button view={'action'}>
+                            <Flex alignItems={'center'} gap={1}>
+                                Create a description with{' '}
+                                {UIFactory.externalAnnotationSetup?.externalServiceName}
+                                <ArrowUpRightFromSquare />
+                            </Flex>
+                        </Button>
+                    </Link>
+                )}
+        </>
     );
 }
 
