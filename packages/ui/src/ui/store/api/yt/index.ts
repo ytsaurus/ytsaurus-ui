@@ -3,7 +3,11 @@ import {BaseQueryFn, TypedUseMutationResult} from '@reduxjs/toolkit/dist/query/r
 
 import {rootApi} from '..';
 import {BatchApiArgs, BatchApiResults, executeBatchV3} from './endpoints/executeBatch';
+<<<<<<< HEAD
 import {getUseAutoRefresh} from '../../../store/selectors/settings/settings-ts';
+=======
+import {getUseAutoRefresh} from '../../../store/selectors/settings';
+>>>>>>> 022ee636 (chore: setup rtk query and execute batch endpoint)
 import {getCluster} from '../../../store/selectors/global';
 import {DEFAULT_UPDATER_TIMEOUT} from '../../../hooks/use-updater';
 import {MutationOptions, UseQueryOptions} from './types';
@@ -64,7 +68,11 @@ export function useFetchBatchQuery<T>(
     args: BatchApiArgs,
     options?: UseQueryOptions<BatchQueryResult, BatchQueryArgs>,
 ) {
+<<<<<<< HEAD
     const useAutoRefresh = useSelector(getUseAutoRefresh);
+=======
+    const useAutoRefresh = useSelector(getUseAutoRefresh) as boolean;
+>>>>>>> 022ee636 (chore: setup rtk query and execute batch endpoint)
     const cluster = useSelector(getCluster);
 
     const defaultOptions = {
@@ -77,6 +85,7 @@ export function useFetchBatchQuery<T>(
         ...options,
     };
 
+<<<<<<< HEAD
     const customArgs: BatchApiArgs = {
         ...args,
     };
@@ -85,6 +94,13 @@ export function useFetchBatchQuery<T>(
         customArgs.cluster = cluster;
     }
 
+=======
+    const customArgs = {
+        ...args,
+        cluster: args.clusterDependency === false ? undefined : cluster,
+    };
+
+>>>>>>> 022ee636 (chore: setup rtk query and execute batch endpoint)
     const {data, ...restResult} = useFetchBatchQueryRaw(customArgs, customOptions);
 
     const typedData = data as BatchApiResults<T> | undefined;

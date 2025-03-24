@@ -7,6 +7,10 @@ export type BatchApiArgs = {
     id: YTApiId;
     toaster?: WrapApiOptions<unknown, 'v3'>;
     cluster?: string;
+<<<<<<< HEAD
+=======
+    clusterDependency?: boolean;
+>>>>>>> 022ee636 (chore: setup rtk query and execute batch endpoint)
 } & ApiMethodParams<BatchParameters>;
 
 export type BatchApiResults<T = unknown> = Array<BatchResultsItem<T>>;
