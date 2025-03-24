@@ -6,6 +6,11 @@ import {OperationSchemas} from '../../utils';
 const DEFAULT_CONTENT_OFFSET = 10;
 const DEFAULT_ICON_OFFSET = 20;
 
+const JOB_COUNTER_FONT_SIZE = 18;
+const JOB_COUNTER_PADDING = 10;
+const JOB_COUNTER_BLOCK_HEIGHT = 30;
+const JOB_COUNTER_RADIUS = 4;
+
 export type NodeBlockMeta = {
     level: ECameraScaleLevel;
     icon: {
@@ -82,8 +87,8 @@ export class NodeBlock extends CanvasBlock<NodeTBlock> {
         );
     }
 
-    private getFont() {
-        return `normal ${this.state.meta.textSize}px YS Text, Arial, sans-serif`;
+    private getFont(fontSize = this.state.meta.textSize) {
+        return `normal ${fontSize}px YS Text, Arial, sans-serif`;
     }
 
     private drawRoundBlock({
@@ -193,18 +198,24 @@ export class NodeBlock extends CanvasBlock<NodeTBlock> {
         if (!nodeProgress || !nodeProgress.total) return;
 
         const total = nodeProgress.total + (nodeProgress.aborted || 0);
-        const padding = 5;
         const {x, y} = this.state;
 
+        this.context.ctx.font = this.getFont(JOB_COUNTER_FONT_SIZE);
         const textMetrics = this.context.ctx.measureText(total.toString());
-        const blockWidth = textMetrics.width + padding * 2;
-        const blockHeight = 18;
+        const textHeight =
+            textMetrics.actualBoundingBoxAscent + textMetrics.actualBoundingBoxDescent;
+        const blockWidth = textMetrics.width + JOB_COUNTER_PADDING * 2;
         const blockX = x - blockWidth / 2;
-        const blockY = y - blockHeight / 2;
-        const radius = 4;
+        const blockY = y - JOB_COUNTER_BLOCK_HEIGHT / 2;
 
         this.context.ctx.beginPath();
-        this.context.ctx.roundRect(blockX, blockY, blockWidth, blockHeight, radius);
+        this.context.ctx.roundRect(
+            blockX,
+            blockY,
+            blockWidth,
+            JOB_COUNTER_BLOCK_HEIGHT,
+            JOB_COUNTER_RADIUS,
+        );
         this.context.ctx.closePath();
         this.context.ctx.fillStyle = GRAPH_COLORS.jobBlockBackground;
         this.context.ctx.fill();
@@ -212,7 +223,7 @@ export class NodeBlock extends CanvasBlock<NodeTBlock> {
         this.context.ctx.fillStyle = GRAPH_COLORS.jobBlockColor;
         this.context.ctx.textAlign = 'center';
         this.context.ctx.textBaseline = 'top';
-        this.context.ctx.fillText(total.toString(), x, blockY + 3.5);
+        this.context.ctx.fillText(total.toString(), x, y - textHeight / 2);
     }
 
     private renderContent(mode: 'minimalistic' | 'schematic') {

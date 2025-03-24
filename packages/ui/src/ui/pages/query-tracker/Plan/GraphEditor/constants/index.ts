@@ -10,8 +10,8 @@ export const GRAPH_COLORS = {
     progressColor: 'rgba(59, 201, 53, 0.15)',
     aborted: getColor('--default-background'),
     failed: getColor('--g-color-base-danger-heavy'),
-    jobBlockBackground: getColor('--secondary-text'),
-    jobBlockColor: getColor('--main-background'),
+    jobBlockBackground: 'rgba(88, 106, 122, 1)',
+    jobBlockColor: getColor('--g-color-text-brand'),
 };
 
 export const JOBS_COLOR_MAP = {
