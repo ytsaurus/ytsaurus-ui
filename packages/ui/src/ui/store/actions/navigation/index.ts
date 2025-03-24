@@ -34,7 +34,6 @@ import {
 import {getCluster, getCurrentUserName} from '../../../store/selectors/global';
 import {fetchTableMountConfig} from '../../../store/actions/navigation/content/table/table-mount-config';
 import {checkPermissions} from '../../../utils/acl/acl-api';
-import {getAnnotation} from './tabs/annotation';
 import {loadTabletErrorsCount} from './tabs/tablet-errors/tablet-errors-background';
 import {isSupportedEffectiveExpiration} from '../../../store/selectors/thor/support';
 import {getTabs} from '../../../store/selectors/navigation/navigation';
@@ -55,7 +54,6 @@ export function updateView(settings: {trackVisit?: boolean} = {}): NavigationThu
         const path = dispatch(updatePath(currentPath, false));
         cancelRequests();
 
-        dispatch(getAnnotation());
         dispatch(loadTabletErrorsCount({path, saveCancelTokenSource: saveRequestCancellation}));
 
         const allowEffectiveExpiration = isSupportedEffectiveExpiration(state);
@@ -281,19 +279,19 @@ const attributesToLoad = [
     '_read_schema',
     '_restore_path',
     '_yql_key_meta',
+    '_yql_op_id',
     '_yql_row_spec',
     '_yql_subkey_meta',
     '_yql_type',
     '_yql_value_meta',
-    '_yql_op_id',
     'access_time',
     'account',
     'acl',
     'atomicity',
     'broken',
-    'cluster_name',
     'chunk_count',
     'chunk_row_count',
+    'cluster_name',
     'compressed_data_size',
     'compression_codec',
     'compression_ratio',
@@ -302,30 +300,31 @@ const attributesToLoad = [
     'default_disk_space',
     'disk_space',
     'dynamic',
+    'effective_expiration',
     'enable_dynamic_store_read',
+    'erasure_codec',
     'expiration_time',
     'expiration_timeout',
-    'effective_expiration',
-    'replicated_table_options',
-    'replica_path',
-    'remount_needed_tablet_count',
-    'erasure_codec',
     'id',
     'in_memory_mode',
     'key',
     'key_columns',
+    'leader_controller_address',
     'lock_count',
     'lock_mode',
     'locks',
+    'mode',
     'modification_time',
     'monitoring_cluster',
     'monitoring_project',
-    'mode',
     'optimize_for',
     'owner',
     'path',
     'pipeline_format_version',
     'primary_medium',
+    'remount_needed_tablet_count',
+    'replica_path',
+    'replicated_table_options',
     'replication_factor',
     'resource_usage',
     'schema',
@@ -340,12 +339,11 @@ const attributesToLoad = [
     'tablet_error_count',
     'tablet_state',
     'target_path',
-    'type',
-    'title',
     'timeout',
-    'uncompressed_data_size',
-    'leader_controller_address',
+    'title',
     'treat_as_queue_consumer',
+    'type',
+    'uncompressed_data_size',
 ];
 
 function getAttributesToLoad() {
