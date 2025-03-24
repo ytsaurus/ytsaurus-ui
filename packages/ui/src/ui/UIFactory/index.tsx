@@ -68,6 +68,11 @@ export interface ExternalSchemaDescriptionResponse {
     externalSchema?: Map<string, ExternalSchemaDescription>;
 }
 
+export interface ExternalAnnotationResponse {
+    externalAnnotation?: string;
+    externalAnnotationLink?: string;
+}
+
 export interface ReducersAndUrlMapping {
     reducers?: Record<string, Reducer<any, any>>;
     urlMapping?: Record<string, PathParameters>;
@@ -415,6 +420,11 @@ export interface UIFactory {
         load(cluster: string, path: string): Promise<ExternalSchemaDescriptionResponse>;
     };
 
+    externalAnnotationSetup?: {
+        externalServiceName?: string;
+        load(cluster: string, path: string): Promise<ExternalAnnotationResponse>;
+    };
+
     getAclApi(): AclApi;
 
     renderAclSubjectsSuggestControl(props: SubjectsControlProps): React.ReactNode;
@@ -469,6 +479,8 @@ export interface UIFactory {
         errorType: PreloadErrorType;
         error: Error | YTError;
     }) => React.ReactNode;
+
+    renderMarkdown(props: {text: string}): React.ReactNode;
 }
 
 // All methods comes from `configureUIFactory` method
