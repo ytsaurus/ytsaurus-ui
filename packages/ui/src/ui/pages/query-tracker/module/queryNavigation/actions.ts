@@ -242,6 +242,10 @@ export const initNavigation = (): AsyncAction => async (dispatch, getState) => {
 
     if (!clusterConfig) return;
 
+    if (path) {
+        dispatch(setNodeType(BodyType.Loading));
+    }
+
     dispatch(loadPath(path, clusterConfig));
 };
 

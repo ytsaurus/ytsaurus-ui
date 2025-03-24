@@ -174,7 +174,7 @@ export const getMainLocations = (): Array<[string, PathParameters]> => [
     ],
     [`/*/${Page.CHAOS_CELL_BUNDLES}`, [chaosAllBundlesParams, getChaosBundlesPreparedState]],
     [`/*/${Page.CHAOS_CELL_BUNDLES}/*`, [chaosBundlesParams, getChaosBundlesPreparedState]],
-    [`/*/${Page.QUERIES}`, [draftQueryParameters, getDraftQueryParameters]],
+    [`/*/${Page.QUERIES}/*`, [draftQueryParameters, getDraftQueryParameters]],
 
     ['global', [globalParams, getGlobalPreparedState]],
 ]
