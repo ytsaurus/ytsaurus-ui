@@ -104,7 +104,8 @@ function QueryPage(props: Props) {
 }
 
 export default function QueryTracker({match}: Props) {
-    const {isQueriesListSidebarVisible} = useQueriesListSidebarToggle();
+    const {isQueriesListSidebarVisible, toggleQueriesListSideBarToggle} =
+        useQueriesListSidebarToggle();
     const isQueryStateDirty = useSelector(getDirtySinceLastSubmit);
     const fileEditor = useSelector(selectFileEditor);
     usePreventUnload({shouldListen: isQueryStateDirty});
@@ -124,6 +125,10 @@ export default function QueryTracker({match}: Props) {
     );
 
     useEffect(() => {
+        const search = new URLSearchParams(window.location.search);
+        if (search.get('listMode') && !isQueriesListSidebarVisible) {
+            toggleQueriesListSideBarToggle();
+        }
         loadQueryTrackerInfo();
     }, []);
 
