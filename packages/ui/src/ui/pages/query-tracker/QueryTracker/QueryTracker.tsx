@@ -27,6 +27,7 @@ import {selectNavigationCluster} from '../module/queryNavigation/selectors';
 import {setSettingByKey} from '../../../store/actions/settings';
 import {CellPreviewModal} from '../../../containers/CellPreviewModal/CellPreviewModal';
 import {SET_QUERY_PARAMS} from '../module/query-tracker-contants';
+import {RedirectConfirmModal} from '../../../components/RedirectConfirmModal';
 
 const b = cn('query-tracker-page');
 
@@ -157,6 +158,12 @@ export default function QueryTracker({match}: Props) {
                 </QueriesPooling>
             </MonacoContext.Provider>
             <CellPreviewModal />
+            {isQueryStateDirty && (
+                <RedirectConfirmModal
+                    title="Unsaved changes"
+                    message="You have unsaved changes in this query. Do you want to continue and lose them?"
+                />
+            )}
         </>
     );
 }

@@ -6,6 +6,7 @@ import type {DraftQuery, QueryItem} from '../api';
 import {QueryEngine} from '../engines';
 import {
     REQUEST_QUERY,
+    SET_DIRTY_SUBMIT,
     SET_QUERY,
     SET_QUERY_CLIQUE_LOADING,
     SET_QUERY_CLUSTER_CLIQUE,
@@ -93,6 +94,12 @@ export function reducer(state = initState, action: Actions): QueryState {
                 },
             };
         }
+        case SET_DIRTY_SUBMIT: {
+            return {
+                ...state,
+                dirtySinceLastSubmit: action.data,
+            };
+        }
         case UPDATE_QUERY_ITEM: {
             return {
                 ...state,
@@ -177,7 +184,8 @@ type Actions =
     | SetQueryReadyAction
     | UpdateACOQueryAction
     | SetQueryClusterClique
-    | SetQueryCliqueLoading;
+    | SetQueryCliqueLoading
+    | SetDirtySubmit;
 
 export type RequestQueryAction = Action<typeof REQUEST_QUERY>;
 
@@ -194,6 +202,7 @@ export type SetQueryAction = ActionD<
 export type UpdateQueryAction = ActionD<typeof UPDATE_QUERY, QueryItem>;
 export type UpdateDraftAction = ActionD<typeof UPDATE_DRAFT, DraftQuery>;
 export type UpdateQueryItem = ActionD<typeof UPDATE_QUERY_ITEM, QueryItem>;
+export type SetDirtySubmit = ActionD<typeof SET_DIRTY_SUBMIT, boolean>;
 
 export type SetQueryErrorLoadAction = ActionD<typeof SET_QUERY_LOAD_ERROR, Error | string>;
 
