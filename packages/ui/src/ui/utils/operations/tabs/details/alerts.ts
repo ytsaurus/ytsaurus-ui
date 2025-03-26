@@ -5,7 +5,7 @@ import map_ from 'lodash/map';
 import UIFactory from '../../../../UIFactory';
 
 export function prepareFaqUrl(type: string) {
-    return docsUrl(UIFactory.docsUrls['faq:alert_type'] + type.replace(/_/g, ''));
+    return docsUrl(UIFactory.docsUrls['faq'] + '#' + type.replace(/_/g, ''));
 }
 
 export function prepareAlerts(alerts?: Record<string, unknown>) {
