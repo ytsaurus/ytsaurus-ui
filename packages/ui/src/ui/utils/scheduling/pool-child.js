@@ -26,7 +26,14 @@ function preparePoolChildResource(data, type, treeResources, resource) {
         );
 
         const limitResource = RESOURCE_LIMIT_MAPPER[resource] || resource;
-        const limit = ypath.getNumber(data.cypressAttributes, '/resource_limits/' + limitResource);
+        const resourceLimit = ypath.getNumber(
+            data.cypressAttributes,
+            '/resource_limits/' + limitResource,
+        );
+        const specifiedResourceLimit = ypath.getNumber(
+            data.attributes,
+            '/specified_resource_limits/' + limitResource,
+        );
 
         const treeLimit = ypath.getNumber(treeResources, '/resource_limits/' + resource);
         const detailed =
@@ -37,7 +44,7 @@ function preparePoolChildResource(data, type, treeResources, resource) {
             guaranteed,
             usage,
             demand,
-            limit,
+            limit: resourceLimit || specifiedResourceLimit,
             detailed,
         };
     }
