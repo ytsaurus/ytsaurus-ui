@@ -8,6 +8,7 @@ import {SuggestionsWeight} from './generateSuggestions';
 import {suggestionIndexToWeight} from './suggestionIndexToWeight';
 import {getClusterProxy} from '../../../store/selectors/global';
 import {YT} from '../../../config/yt-config';
+import {prettyPrint} from '../../../utils/unipika';
 
 type Props = (data: {
     model: editor.ITextModel;
@@ -48,7 +49,7 @@ export const getDirectoryContent: Props = async ({model, monacoCursorPosition, e
             .slice(range.startColumn - 1, range.endColumn - 1);
 
         return response.reduce<languages.CompletionItem[]>((acc, item) => {
-            const name = ypath.getValue(item);
+            const name = prettyPrint(ypath.getValue(item), {asHTML: false}).replaceAll('"', '');
             const {type, broken} = ypath.getAttributes(item);
 
             if (!['table', 'map_node', 'link'].includes(type) || (type === 'link' && broken))
@@ -61,7 +62,8 @@ export const getDirectoryContent: Props = async ({model, monacoCursorPosition, e
                 : fullPath.replace('//', '');
 
             acc.push({
-                label: fullPath,
+                label: insertText,
+                detail: fullPath,
                 insertText,
                 kind: languages.CompletionItemKind[type === 'table' ? 'File' : 'Folder'],
                 range,
