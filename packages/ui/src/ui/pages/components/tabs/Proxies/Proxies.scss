@@ -9,7 +9,6 @@
         margin-bottom: 20px;
 
         z-index: var(--fixed-toolbar-z-index);
-        background-color: var(--main-background);
 
         &_sticky {
             @include sticky-style();
