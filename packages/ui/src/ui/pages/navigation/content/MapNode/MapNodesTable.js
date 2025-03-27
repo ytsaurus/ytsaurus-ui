@@ -44,6 +44,7 @@ import {ROOT_POOL_NAME, Tab as SchedulingTab} from '../../../../constants/schedu
 import {NAVIGATION_MAP_NODE_TABLE_ID} from '../../../../constants/navigation';
 import {LOADING_STATUS, Page} from '../../../../constants/index';
 import hammer from '../../../../common/hammer';
+import ypath from '../../../../common/thor/ypath';
 import {showTableEraseModal} from '../../../../store/actions/navigation/modals/table-erase-modal';
 import {
     showTableMergeModal,
@@ -74,8 +75,22 @@ export function renderMapNodesTableIcon(item) {
         icon = <Icon awesome={getIconNameForType(item.iconType, item.targetPathBroken)} />;
     }
 
+    let title = hammer.format['ReadableField'](item.type);
+    if (item.iconType === 'table') {
+        title = 'Static table';
+    }
+    if (item.iconType === 'table_dynamic') {
+        const {sorted} = ypath.getAttributes(item);
+        if (sorted) {
+            title = 'Dynamic table';
+        } else {
+            title = 'Ordered table';
+            icon = <Icon awesome="ordered-table" />;
+        }
+    }
+
     return (
-        <span className={'icon-wrapper'} title={item.type}>
+        <span className={'icon-wrapper'} title={title}>
             {icon}
         </span>
     );

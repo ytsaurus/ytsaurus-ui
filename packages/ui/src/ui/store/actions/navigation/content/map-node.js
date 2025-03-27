@@ -59,6 +59,7 @@ function getList(path, transaction, cluster, allowEffectiveExpiration) {
                     'modification_time',
                     'creation_time',
                     'resource_usage',
+                    'sorted',
                     'data_weight',
                     'account',
                     'target_path',
