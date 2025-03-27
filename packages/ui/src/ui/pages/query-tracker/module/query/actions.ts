@@ -21,7 +21,7 @@ import {
     getQuery as selectQuery,
 } from './selectors';
 import {getAppBrowserHistory} from '../../../../store/window-store';
-import type {
+import {
     QueryState,
     RequestQueryAction,
     SetQueryAction,
@@ -53,6 +53,7 @@ import {
     UPDATE_DRAFT,
 } from '../query-tracker-contants';
 import {loadVisualization} from '../queryChart/actions';
+import {ChytInfo} from '../../../../store/reducers/chyt/list';
 
 export const setCurrentClusterToQuery =
     (): ThunkAction<void, RootState, unknown, any> => async (dispatch, getState) => {
@@ -97,13 +98,16 @@ export const loadCliqueByCluster =
 
         dispatch({type: SET_QUERY_CLIQUE_LOADING, data: true});
         const apiAction = isSpyt ? spytApiAction : chytApiAction;
-        apiAction('list', cluster, {attributes: ['yt_operation_id' as const]}, {})
+        apiAction('list', cluster, {attributes: ['yt_operation_id', 'state', 'health']}, {})
             .then((data) => {
                 const items = data?.result?.map(({$value, $attributes = {}}) => {
-                    return {
+                    const clique: ChytInfo = {
                         alias: $value,
                         yt_operation_id: $attributes.yt_operation_id,
+                        state: $attributes.state,
+                        health: $attributes.health,
                     };
+                    return clique;
                 });
 
                 dispatch({
