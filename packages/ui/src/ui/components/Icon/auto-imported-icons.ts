@@ -98,6 +98,7 @@ import Star from '../../assets/img/svg/icons/star.svg';
 import StopCircle from '../../assets/img/svg/icons/stop-circle.svg';
 import SyncAlt from '../../assets/img/svg/icons/sync-alt.svg';
 import Table from '../../assets/img/svg/icons/table.svg';
+import OrderedTable from '../../assets/img/svg/icons/ordered-table.svg';
 import Tag from '../../assets/img/svg/icons/tag.svg';
 import Tasks from '../../assets/img/svg/icons/tasks.svg';
 import Th from '../../assets/img/svg/icons/th.svg';
@@ -208,6 +209,7 @@ export const autoIcons = {
     ['stop-circle']: StopCircle,
     ['sync-alt']: SyncAlt,
     ['table']: Table,
+    ['ordered-table']: OrderedTable,
     ['tag']: Tag,
     ['tasks']: Tasks,
     ['th']: Th,
