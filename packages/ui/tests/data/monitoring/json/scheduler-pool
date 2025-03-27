@@ -1,0 +1,1501 @@
+{
+    "panels": [
+        {
+            "gridPos": {
+                "h": 1,
+                "w": 24,
+                "x": 0,
+                "y": 0
+            },
+            "type": "row"
+        },
+        {
+            "type": "text",
+            "options": {
+                "content": "<h2>Usage, demand and strong guarantee</h2>",
+                "mode": "markdown"
+            },
+            "title": "",
+            "gridPos": {
+                "x": 0,
+                "y": 1,
+                "w": 24,
+                "h": 2
+            }
+        },
+        {
+            "gridPos": {
+                "h": 1,
+                "w": 24,
+                "x": 0,
+                "y": 3
+            },
+            "type": "row"
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{service=~\"yt-scheduler\", __name__=~\"yt_scheduler_pools_resource_usage_cpu\", pool=~\"$pool\", tree=~\"$tree\"}",
+                    "refId": "A",
+                    "legendFormat": "usage"
+                },
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{service=~\"yt-scheduler\", __name__=~\"yt_scheduler_pools_resource_demand_cpu\", pool=~\"$pool\", tree=~\"$tree\"}",
+                    "refId": "B",
+                    "legendFormat": "demand"
+                },
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{service=~\"yt-scheduler\", __name__=~\"yt_scheduler_pools_effective_strong_guarantee_resources_cpu\", pool=~\"$pool\", tree=~\"$tree\"}",
+                    "refId": "C",
+                    "legendFormat": "strong_guarantee"
+                },
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{service=~\"yt-scheduler\", __name__=~\"yt_scheduler_pools_specified_resource_limits_cpu\", pool=~\"$pool\", tree=~\"$tree\"}",
+                    "refId": "D",
+                    "legendFormat": "specified_limit"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {
+                        "axisLabel": "CPU, cores",
+                        "hideFrom": {
+                            "legend": false
+                        }
+                    }
+                },
+                "overrides": [
+                    {
+                        "matcher": {
+                            "id": "byFrameRefID",
+                            "options": "A"
+                        },
+                        "properties": [
+                            {
+                                "id": "min",
+                                "value": 0
+                            }
+                        ]
+                    },
+                    {
+                        "matcher": {
+                            "id": "byFrameRefID",
+                            "options": "B"
+                        },
+                        "properties": [
+                            {
+                                "id": "min",
+                                "value": 0
+                            }
+                        ]
+                    },
+                    {
+                        "matcher": {
+                            "id": "byFrameRefID",
+                            "options": "C"
+                        },
+                        "properties": [
+                            {
+                                "id": "min",
+                                "value": 0
+                            }
+                        ]
+                    },
+                    {
+                        "matcher": {
+                            "id": "byFrameRefID",
+                            "options": "D"
+                        },
+                        "properties": [
+                            {
+                                "id": "min",
+                                "value": 0
+                            }
+                        ]
+                    }
+                ]
+            },
+            "title": "CPU: usage, demand, guarantee",
+            "gridPos": {
+                "x": 0,
+                "y": 4,
+                "w": 8,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{service=~\"yt-scheduler\", __name__=~\"yt_scheduler_pools_resource_usage_user_memory\", pool=~\"$pool\", tree=~\"$tree\"}",
+                    "refId": "A",
+                    "legendFormat": "usage"
+                },
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{service=~\"yt-scheduler\", __name__=~\"yt_scheduler_pools_resource_demand_user_memory\", pool=~\"$pool\", tree=~\"$tree\"}",
+                    "refId": "B",
+                    "legendFormat": "demand"
+                },
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{service=~\"yt-scheduler\", __name__=~\"yt_scheduler_pools_effective_strong_guarantee_resources_user_memory\", pool=~\"$pool\", tree=~\"$tree\"}",
+                    "refId": "C",
+                    "legendFormat": "strong_guarantee"
+                },
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{service=~\"yt-scheduler\", __name__=~\"yt_scheduler_pools_specified_resource_limits_user_memory\", pool=~\"$pool\", tree=~\"$tree\"}",
+                    "refId": "D",
+                    "legendFormat": "specified_limit"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {
+                        "axisLabel": "Memory, bytes",
+                        "hideFrom": {
+                            "legend": false
+                        }
+                    }
+                },
+                "overrides": [
+                    {
+                        "matcher": {
+                            "id": "byFrameRefID",
+                            "options": "A"
+                        },
+                        "properties": [
+                            {
+                                "id": "min",
+                                "value": 0
+                            }
+                        ]
+                    },
+                    {
+                        "matcher": {
+                            "id": "byFrameRefID",
+                            "options": "B"
+                        },
+                        "properties": [
+                            {
+                                "id": "min",
+                                "value": 0
+                            }
+                        ]
+                    },
+                    {
+                        "matcher": {
+                            "id": "byFrameRefID",
+                            "options": "C"
+                        },
+                        "properties": [
+                            {
+                                "id": "min",
+                                "value": 0
+                            }
+                        ]
+                    },
+                    {
+                        "matcher": {
+                            "id": "byFrameRefID",
+                            "options": "D"
+                        },
+                        "properties": [
+                            {
+                                "id": "min",
+                                "value": 0
+                            }
+                        ]
+                    }
+                ]
+            },
+            "title": "RAM: usage, demand, guarantee",
+            "gridPos": {
+                "x": 8,
+                "y": 4,
+                "w": 8,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{service=~\"yt-scheduler\", __name__=~\"yt_scheduler_pools_resource_usage_gpu\", pool=~\"$pool\", tree=~\"$tree\"}",
+                    "refId": "A",
+                    "legendFormat": "usage"
+                },
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{service=~\"yt-scheduler\", __name__=~\"yt_scheduler_pools_resource_demand_gpu\", pool=~\"$pool\", tree=~\"$tree\"}",
+                    "refId": "B",
+                    "legendFormat": "demand"
+                },
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{service=~\"yt-scheduler\", __name__=~\"yt_scheduler_pools_effective_strong_guarantee_resources_gpu\", pool=~\"$pool\", tree=~\"$tree\"}",
+                    "refId": "C",
+                    "legendFormat": "strong_guarantee"
+                },
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{service=~\"yt-scheduler\", __name__=~\"yt_scheduler_pools_specified_resource_limits_gpu\", pool=~\"$pool\", tree=~\"$tree\"}",
+                    "refId": "D",
+                    "legendFormat": "specified_limit"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {
+                        "axisLabel": "GPU, cards",
+                        "hideFrom": {
+                            "legend": false
+                        }
+                    }
+                },
+                "overrides": [
+                    {
+                        "matcher": {
+                            "id": "byFrameRefID",
+                            "options": "A"
+                        },
+                        "properties": [
+                            {
+                                "id": "min",
+                                "value": 0
+                            }
+                        ]
+                    },
+                    {
+                        "matcher": {
+                            "id": "byFrameRefID",
+                            "options": "B"
+                        },
+                        "properties": [
+                            {
+                                "id": "min",
+                                "value": 0
+                            }
+                        ]
+                    },
+                    {
+                        "matcher": {
+                            "id": "byFrameRefID",
+                            "options": "C"
+                        },
+                        "properties": [
+                            {
+                                "id": "min",
+                                "value": 0
+                            }
+                        ]
+                    },
+                    {
+                        "matcher": {
+                            "id": "byFrameRefID",
+                            "options": "D"
+                        },
+                        "properties": [
+                            {
+                                "id": "min",
+                                "value": 0
+                            }
+                        ]
+                    }
+                ]
+            },
+            "title": "GPU: usage, demand, guarantee",
+            "gridPos": {
+                "x": 16,
+                "y": 4,
+                "w": 8,
+                "h": 6
+            }
+        },
+        {
+            "gridPos": {
+                "h": 1,
+                "w": 24,
+                "x": 0,
+                "y": 10
+            },
+            "type": "row"
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{service=~\"yt-scheduler\", __name__=~\"yt_scheduler_pools_running_operation_count\", pool=~\"$pool\", tree=~\"$tree\"}",
+                    "refId": "A",
+                    "legendFormat": "usage"
+                },
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{service=~\"yt-scheduler\", __name__=~\"yt_scheduler_pools_lightweight_running_operation_count\", pool=~\"$pool\", tree=~\"$tree\"}",
+                    "refId": "B",
+                    "legendFormat": "lightweight usage"
+                },
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{service=~\"yt-scheduler\", __name__=~\"yt_scheduler_pools_max_running_operation_count\", pool=~\"$pool\", tree=~\"$tree\"}",
+                    "refId": "C",
+                    "legendFormat": "limit"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {
+                        "axisLabel": "Operation count",
+                        "hideFrom": {
+                            "legend": false
+                        }
+                    }
+                },
+                "overrides": [
+                    {
+                        "matcher": {
+                            "id": "byFrameRefID",
+                            "options": "A"
+                        },
+                        "properties": [
+                            {
+                                "id": "min",
+                                "value": 0
+                            }
+                        ]
+                    },
+                    {
+                        "matcher": {
+                            "id": "byFrameRefID",
+                            "options": "B"
+                        },
+                        "properties": [
+                            {
+                                "id": "min",
+                                "value": 0
+                            }
+                        ]
+                    },
+                    {
+                        "matcher": {
+                            "id": "byFrameRefID",
+                            "options": "C"
+                        },
+                        "properties": [
+                            {
+                                "id": "min",
+                                "value": 0
+                            }
+                        ]
+                    }
+                ]
+            },
+            "title": "Running operation count",
+            "gridPos": {
+                "x": 0,
+                "y": 11,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{service=~\"yt-scheduler\", __name__=~\"yt_scheduler_pools_total_operation_count\", pool=~\"$pool\", tree=~\"$tree\"}",
+                    "refId": "A",
+                    "legendFormat": "usage"
+                },
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{service=~\"yt-scheduler\", __name__=~\"yt_scheduler_pools_max_operation_count\", pool=~\"$pool\", tree=~\"$tree\"}",
+                    "refId": "B",
+                    "legendFormat": "limit"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {
+                        "axisLabel": "Operation count",
+                        "hideFrom": {
+                            "legend": false
+                        }
+                    }
+                },
+                "overrides": [
+                    {
+                        "matcher": {
+                            "id": "byFrameRefID",
+                            "options": "A"
+                        },
+                        "properties": [
+                            {
+                                "id": "min",
+                                "value": 0
+                            }
+                        ]
+                    },
+                    {
+                        "matcher": {
+                            "id": "byFrameRefID",
+                            "options": "B"
+                        },
+                        "properties": [
+                            {
+                                "id": "min",
+                                "value": 0
+                            }
+                        ]
+                    }
+                ]
+            },
+            "title": "Total operation count",
+            "gridPos": {
+                "x": 12,
+                "y": 11,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "gridPos": {
+                "h": 1,
+                "w": 24,
+                "x": 0,
+                "y": 17
+            },
+            "type": "row"
+        },
+        {
+            "type": "text",
+            "options": {
+                "content": "**Demand**: amount of resources needed to run all waiting and running jobs in the pool.<br>\n**Usage**: model resource consumption of the pool from scheduler's point of view. Represents the number of resources that are reserved for operations in the pool. Actual resource consumption may differ.<br>\n**Strong guarantee**: amount of resources that is guaranteed for operations in the pool at any moment.<br>\n**Running operation count**: number of operations in the pool which are running, i.e. are considered for job scheduling. Also displays the number of \"lightweight\" running operations, which are not accounted in the running operation count limit.<br>\n**Total operation count**: total number of operations in the pool, includes \"Running operation count\". The difference between \"Total operation count\" and \"Running operation count\" is the size of the queue of operations that are waiting to be started.\n\nResource guarantees or operation count limits can be increased via [ABCD](https://yt.yandex-team.ru/docs/description/common/quota_request#zapros-na-rasshirenie-pula-vychislitelnyh-resursov).",
+                "mode": "markdown"
+            },
+            "title": "",
+            "gridPos": {
+                "x": 0,
+                "y": 18,
+                "w": 24,
+                "h": 7
+            }
+        },
+        {
+            "gridPos": {
+                "h": 1,
+                "w": 24,
+                "x": 0,
+                "y": 25
+            },
+            "type": "row"
+        },
+        {
+            "type": "text",
+            "options": {
+                "content": "<h2>Cluster share</h2>",
+                "mode": "markdown"
+            },
+            "title": "",
+            "gridPos": {
+                "x": 0,
+                "y": 26,
+                "w": 24,
+                "h": 2
+            }
+        },
+        {
+            "gridPos": {
+                "h": 1,
+                "w": 24,
+                "x": 0,
+                "y": 28
+            },
+            "type": "row"
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{service=~\"yt-scheduler\", __name__=~\"yt_scheduler_pools_dominant_usage_share\", pool=~\"$pool\", tree=~\"$tree\"}",
+                    "refId": "A",
+                    "legendFormat": "dominant usage share"
+                },
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{service=~\"yt-scheduler\", __name__=~\"yt_scheduler_pools_dominant_demand_share\", pool=~\"$pool\", tree=~\"$tree\"}",
+                    "refId": "B",
+                    "legendFormat": "dominant demand share"
+                },
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{service=~\"yt-scheduler\", __name__=~\"yt_scheduler_pools_dominant_fair_share_total\", pool=~\"$pool\", tree=~\"$tree\"}",
+                    "refId": "C",
+                    "legendFormat": "dominant fair share"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {
+                        "hideFrom": {
+                            "legend": false
+                        }
+                    }
+                },
+                "overrides": [
+                    {
+                        "matcher": {
+                            "id": "byFrameRefID",
+                            "options": "A"
+                        },
+                        "properties": [
+                            {
+                                "id": "min",
+                                "value": 0
+                            }
+                        ]
+                    },
+                    {
+                        "matcher": {
+                            "id": "byFrameRefID",
+                            "options": "B"
+                        },
+                        "properties": [
+                            {
+                                "id": "min",
+                                "value": 0
+                            }
+                        ]
+                    },
+                    {
+                        "matcher": {
+                            "id": "byFrameRefID",
+                            "options": "C"
+                        },
+                        "properties": [
+                            {
+                                "id": "min",
+                                "value": 0
+                            }
+                        ]
+                    }
+                ]
+            },
+            "title": "Resource shares: usage, demand, fair share",
+            "gridPos": {
+                "x": 0,
+                "y": 29,
+                "w": 8,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{service=~\"yt-scheduler\", __name__=~\"yt_scheduler_pools_fair_share_total_cpu\", pool=~\"$pool\", tree=~\"$tree\"}",
+                    "refId": "A",
+                    "legendFormat": "CPU"
+                },
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{service=~\"yt-scheduler\", __name__=~\"yt_scheduler_pools_fair_share_total_memory\", pool=~\"$pool\", tree=~\"$tree\"}",
+                    "refId": "B",
+                    "legendFormat": "memory"
+                },
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{service=~\"yt-scheduler\", __name__=~\"yt_scheduler_pools_fair_share_total_gpu\", pool=~\"$pool\", tree=~\"$tree\"}",
+                    "refId": "C",
+                    "legendFormat": "GPU"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {
+                        "hideFrom": {
+                            "legend": false
+                        }
+                    }
+                },
+                "overrides": [
+                    {
+                        "matcher": {
+                            "id": "byFrameRefID",
+                            "options": "A"
+                        },
+                        "properties": [
+                            {
+                                "id": "min",
+                                "value": 0
+                            }
+                        ]
+                    },
+                    {
+                        "matcher": {
+                            "id": "byFrameRefID",
+                            "options": "B"
+                        },
+                        "properties": [
+                            {
+                                "id": "min",
+                                "value": 0
+                            }
+                        ]
+                    },
+                    {
+                        "matcher": {
+                            "id": "byFrameRefID",
+                            "options": "C"
+                        },
+                        "properties": [
+                            {
+                                "id": "min",
+                                "value": 0
+                            }
+                        ]
+                    }
+                ]
+            },
+            "title": "Fair share: CPU, RAM, GPU components",
+            "gridPos": {
+                "x": 8,
+                "y": 29,
+                "w": 8,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{service=~\"yt-scheduler\", __name__=~\"yt_scheduler_pools_dominant_fair_share_strong_guarantee\", pool=~\"$pool\", tree=~\"$tree\"}",
+                    "refId": "A",
+                    "legendFormat": "strong guarantee"
+                },
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{service=~\"yt-scheduler\", __name__=~\"yt_scheduler_pools_dominant_fair_share_integral_guarantee\", pool=~\"$pool\", tree=~\"$tree\"}",
+                    "refId": "B",
+                    "legendFormat": "integral guarantee"
+                },
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{service=~\"yt-scheduler\", __name__=~\"yt_scheduler_pools_dominant_fair_share_weight_proportional\", pool=~\"$pool\", tree=~\"$tree\"}",
+                    "refId": "C",
+                    "legendFormat": "weight proportional"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {
+                        "stacking": {
+                            "group": "A",
+                            "mode": "normal"
+                        },
+                        "fillOpacity": 100,
+                        "hideFrom": {
+                            "legend": false
+                        }
+                    }
+                },
+                "overrides": [
+                    {
+                        "matcher": {
+                            "id": "byFrameRefID",
+                            "options": "A"
+                        },
+                        "properties": [
+                            {
+                                "id": "min",
+                                "value": 0
+                            }
+                        ]
+                    },
+                    {
+                        "matcher": {
+                            "id": "byFrameRefID",
+                            "options": "B"
+                        },
+                        "properties": [
+                            {
+                                "id": "min",
+                                "value": 0
+                            }
+                        ]
+                    },
+                    {
+                        "matcher": {
+                            "id": "byFrameRefID",
+                            "options": "C"
+                        },
+                        "properties": [
+                            {
+                                "id": "min",
+                                "value": 0
+                            }
+                        ]
+                    }
+                ]
+            },
+            "title": "Dominant fair share: strong, integral, weight proportional",
+            "gridPos": {
+                "x": 16,
+                "y": 29,
+                "w": 8,
+                "h": 6
+            }
+        },
+        {
+            "gridPos": {
+                "h": 1,
+                "w": 24,
+                "x": 0,
+                "y": 35
+            },
+            "type": "row"
+        },
+        {
+            "type": "text",
+            "options": {
+                "content": "**Usage**, **Demand**, **Fair share**: share of the cluster that is used, demanded or should be given to the pool. For example, 1.0 or 100% corresponds to the total amount of resources in the cluster.<br>\n**CPU. RAM, GPU fair share components**  help to determine pool's dominant resource.\n\nIn addition, fair share can be split into three parts: strong guarantee, integral guarantee and free resources, which are distributed between pools in proportion to their weights.",
+                "mode": "markdown"
+            },
+            "title": "",
+            "gridPos": {
+                "x": 0,
+                "y": 36,
+                "w": 24,
+                "h": 5
+            }
+        },
+        {
+            "gridPos": {
+                "h": 1,
+                "w": 24,
+                "x": 0,
+                "y": 41
+            },
+            "type": "row"
+        },
+        {
+            "type": "text",
+            "options": {
+                "content": "<h2>Job metrics</h2>",
+                "mode": "markdown"
+            },
+            "title": "",
+            "gridPos": {
+                "x": 0,
+                "y": 42,
+                "w": 24,
+                "h": 2
+            }
+        },
+        {
+            "gridPos": {
+                "h": 1,
+                "w": 24,
+                "x": 0,
+                "y": 44
+            },
+            "type": "row"
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "rate({service=~\"yt-scheduler\", __name__=~\"yt_scheduler_pools_metrics_user_job_io_total\", pool=~\"$pool\", tree=~\"$tree\"}[$__rate_interval])",
+                    "refId": "A",
+                    "legendFormat": "user job io rate"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {}
+                },
+                "overrides": [
+                    {
+                        "matcher": {
+                            "id": "byFrameRefID",
+                            "options": "A"
+                        },
+                        "properties": [
+                            {
+                                "id": "min",
+                                "value": 0
+                            }
+                        ]
+                    }
+                ]
+            },
+            "title": "Job metrics: local disk IO",
+            "gridPos": {
+                "x": 0,
+                "y": 45,
+                "w": 8,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "rate({service=~\"yt-scheduler\", __name__=~\"yt_scheduler_pools_metrics_user_job_cpu_system\", pool=~\"$pool\", tree=~\"$tree\"}[$__rate_interval])",
+                    "refId": "A",
+                    "legendFormat": "user job system cpu rate"
+                },
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "rate({service=~\"yt-scheduler\", __name__=~\"yt_scheduler_pools_metrics_user_job_cpu_user\", pool=~\"$pool\", tree=~\"$tree\"}[$__rate_interval])",
+                    "refId": "B",
+                    "legendFormat": "user job user cpu rate"
+                },
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "rate({service=~\"yt-scheduler\", __name__=~\"yt_scheduler_pools_metrics_job_proxy_cpu_system\", pool=~\"$pool\", tree=~\"$tree\"}[$__rate_interval])",
+                    "refId": "C",
+                    "legendFormat": "job proxy system cpu rate"
+                },
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "rate({service=~\"yt-scheduler\", __name__=~\"yt_scheduler_pools_metrics_job_proxy_cpu_user\", pool=~\"$pool\", tree=~\"$tree\"}[$__rate_interval])",
+                    "refId": "D",
+                    "legendFormat": "job proxy user cpu rate"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {
+                        "stacking": {
+                            "group": "A",
+                            "mode": "normal"
+                        },
+                        "fillOpacity": 100
+                    }
+                },
+                "overrides": [
+                    {
+                        "matcher": {
+                            "id": "byFrameRefID",
+                            "options": "A"
+                        },
+                        "properties": [
+                            {
+                                "id": "min",
+                                "value": 0
+                            }
+                        ]
+                    },
+                    {
+                        "matcher": {
+                            "id": "byFrameRefID",
+                            "options": "B"
+                        },
+                        "properties": [
+                            {
+                                "id": "min",
+                                "value": 0
+                            }
+                        ]
+                    },
+                    {
+                        "matcher": {
+                            "id": "byFrameRefID",
+                            "options": "C"
+                        },
+                        "properties": [
+                            {
+                                "id": "min",
+                                "value": 0
+                            }
+                        ]
+                    },
+                    {
+                        "matcher": {
+                            "id": "byFrameRefID",
+                            "options": "D"
+                        },
+                        "properties": [
+                            {
+                                "id": "min",
+                                "value": 0
+                            }
+                        ]
+                    }
+                ]
+            },
+            "title": "Job metrics: CPU usage",
+            "gridPos": {
+                "x": 8,
+                "y": 45,
+                "w": 8,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "rate({service=~\"yt-scheduler\", __name__=~\"yt_scheduler_pools_metrics_gpu_load\", pool=~\"$pool\", tree=~\"$tree\"}[$__rate_interval]) / 1000.0",
+                    "refId": "A",
+                    "legendFormat": "gpu load rate"
+                },
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "rate({service=~\"yt-scheduler\", __name__=~\"yt_scheduler_pools_metrics_gpu_utilization_gpu\", pool=~\"$pool\", tree=~\"$tree\"}[$__rate_interval]) / 1000.0",
+                    "refId": "B",
+                    "legendFormat": "gpu utilization rate"
+                },
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{service=~\"yt-scheduler\", __name__=~\"yt_scheduler_pools_resource_usage_gpu\", pool=~\"$pool\", tree=~\"$tree\"}",
+                    "refId": "C",
+                    "legendFormat": "pools gpu usage"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {}
+                },
+                "overrides": [
+                    {
+                        "matcher": {
+                            "id": "byFrameRefID",
+                            "options": "A"
+                        },
+                        "properties": [
+                            {
+                                "id": "min",
+                                "value": 0
+                            }
+                        ]
+                    },
+                    {
+                        "matcher": {
+                            "id": "byFrameRefID",
+                            "options": "B"
+                        },
+                        "properties": [
+                            {
+                                "id": "min",
+                                "value": 0
+                            }
+                        ]
+                    },
+                    {
+                        "matcher": {
+                            "id": "byFrameRefID",
+                            "options": "C"
+                        },
+                        "properties": [
+                            {
+                                "id": "min",
+                                "value": 0
+                            }
+                        ]
+                    }
+                ]
+            },
+            "title": "Job metrics: GPU usage",
+            "gridPos": {
+                "x": 16,
+                "y": 45,
+                "w": 8,
+                "h": 6
+            }
+        },
+        {
+            "gridPos": {
+                "h": 1,
+                "w": 24,
+                "x": 0,
+                "y": 51
+            },
+            "type": "row"
+        },
+        {
+            "type": "text",
+            "options": {
+                "content": "**Local disk I/O**: total amount of input/output operations per second (IOPS) of all user jobs in the pool.<br>\n**CPU usage**: total detailed CPU usage statistics of all user jobs and their job proxies in the pool.<br>\n**GPU usage**: total detailed GPU utilization statistics of all user jobs in the pool.\n\nConsult [documentation](https://yt.yandex-team.ru/docs/user-guide/problems/jobstatistics) for more information on the corresponding job statistics.",
+                "mode": "markdown"
+            },
+            "title": "",
+            "gridPos": {
+                "x": 0,
+                "y": 52,
+                "w": 24,
+                "h": 4
+            }
+        },
+        {
+            "gridPos": {
+                "h": 1,
+                "w": 24,
+                "x": 0,
+                "y": 56
+            },
+            "type": "row"
+        },
+        {
+            "type": "text",
+            "options": {
+                "content": "<h2>Integral guarantee</h2>",
+                "mode": "markdown"
+            },
+            "title": "",
+            "gridPos": {
+                "x": 0,
+                "y": 57,
+                "w": 24,
+                "h": 2
+            }
+        },
+        {
+            "gridPos": {
+                "h": 1,
+                "w": 24,
+                "x": 0,
+                "y": 59
+            },
+            "type": "row"
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{service=~\"yt-scheduler\", __name__=~\"yt_scheduler_pools_accumulated_resource_volume_cpu\", pool=~\"$pool\", tree=~\"$tree\"}",
+                    "refId": "A",
+                    "legendFormat": "accumulated CPU"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {}
+                },
+                "overrides": [
+                    {
+                        "matcher": {
+                            "id": "byFrameRefID",
+                            "options": "A"
+                        },
+                        "properties": [
+                            {
+                                "id": "min",
+                                "value": 0
+                            }
+                        ]
+                    }
+                ]
+            },
+            "title": "Accumulated resource volume: CPU",
+            "gridPos": {
+                "x": 0,
+                "y": 60,
+                "w": 8,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{service=~\"yt-scheduler\", __name__=~\"yt_scheduler_pools_accumulated_resource_volume_user_memory\", pool=~\"$pool\", tree=~\"$tree\"}",
+                    "refId": "A",
+                    "legendFormat": "accumulated memory"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {}
+                },
+                "overrides": [
+                    {
+                        "matcher": {
+                            "id": "byFrameRefID",
+                            "options": "A"
+                        },
+                        "properties": [
+                            {
+                                "id": "min",
+                                "value": 0
+                            }
+                        ]
+                    }
+                ]
+            },
+            "title": "Accumulated resource volume: RAM",
+            "gridPos": {
+                "x": 8,
+                "y": 60,
+                "w": 8,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{service=~\"yt-scheduler\", __name__=~\"yt_scheduler_pools_accumulated_volume_dominant_share\", pool=~\"$pool\", tree=~\"$tree\"}",
+                    "refId": "A",
+                    "legendFormat": "accumulated dominant resource share"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {}
+                },
+                "overrides": [
+                    {
+                        "matcher": {
+                            "id": "byFrameRefID",
+                            "options": "A"
+                        },
+                        "properties": [
+                            {
+                                "id": "min",
+                                "value": 0
+                            }
+                        ]
+                    }
+                ]
+            },
+            "title": "Accumulated resource volume share",
+            "gridPos": {
+                "x": 16,
+                "y": 60,
+                "w": 8,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{service=~\"yt-scheduler\", __name__=~\"yt_scheduler_pools_accepted_free_volume_cpu\", pool=~\"$pool\", tree=~\"$tree\"}",
+                    "refId": "A",
+                    "legendFormat": "accepted free CPU"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {}
+                },
+                "overrides": [
+                    {
+                        "matcher": {
+                            "id": "byFrameRefID",
+                            "options": "A"
+                        },
+                        "properties": [
+                            {
+                                "id": "min",
+                                "value": 0
+                            }
+                        ]
+                    }
+                ]
+            },
+            "title": "Accepted free volume: CPU",
+            "gridPos": {
+                "x": 4,
+                "y": 66,
+                "w": 8,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{service=~\"yt-scheduler\", __name__=~\"yt_scheduler_pools_accepted_free_volume_user_memory\", pool=~\"$pool\", tree=~\"$tree\"}",
+                    "refId": "A",
+                    "legendFormat": "accepted free memory"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {}
+                },
+                "overrides": [
+                    {
+                        "matcher": {
+                            "id": "byFrameRefID",
+                            "options": "A"
+                        },
+                        "properties": [
+                            {
+                                "id": "min",
+                                "value": 0
+                            }
+                        ]
+                    }
+                ]
+            },
+            "title": "Accepted free volume: RAM",
+            "gridPos": {
+                "x": 12,
+                "y": 66,
+                "w": 8,
+                "h": 6
+            }
+        },
+        {
+            "gridPos": {
+                "h": 1,
+                "w": 24,
+                "x": 0,
+                "y": 72
+            },
+            "type": "row"
+        },
+        {
+            "type": "text",
+            "options": {
+                "content": "The following metrics are only relevant for pools with burst or relaxed integral guarantees.\n\n**Accumulated resource volume share**: amount of virtual resources accumulated in the pool which can be spent on integral guarantees. In `cluster_share*sec`.<br>\n**Accumulated resource volume (CPU/RAM)**: approximate amount of accumulated resources computed based on accumulated volume share and the current total resource amount in the cluster. In `cpu*sec`/`bytes*sec`.<br>\n**Accepted free volume (CPU/RAM)**: virtual resource volume which was obtained by the pool via redistribution of other pools' unused integral resource flows.\n\nConsult [documentation](https://yt.yandex-team.ru/docs/description/mr/scheduler/integral_guarantees) for more information on intergral guarantees.",
+                "mode": "markdown"
+            },
+            "title": "",
+            "gridPos": {
+                "x": 0,
+                "y": 73,
+                "w": 24,
+                "h": 6
+            }
+        }
+    ],
+    "tags": [],
+    "templating": {
+        "list": [
+            {
+                "name": "pool",
+                "label": "Pool",
+                "type": "textbox"
+            },
+            {
+                "name": "tree",
+                "label": "Tree",
+                "type": "textbox"
+            }
+        ]
+    },
+    "uid": "ytsaurus-scheduler-pool",
+    "title": "YTsaurus Scheduler Pool"
+}
