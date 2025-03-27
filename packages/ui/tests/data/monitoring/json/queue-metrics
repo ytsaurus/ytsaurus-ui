@@ -1,0 +1,372 @@
+{
+    "panels": [
+        {
+            "gridPos": {
+                "h": 1,
+                "w": 24,
+                "x": 0,
+                "y": 0
+            },
+            "type": "row"
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "rate({service=~\"yt-queue-agent\", __name__=~\"yt_queue_agent_queue_partition_rows_written\", partition_index=~\"\", queue_cluster=~\"$queue_cluster\", queue_path=~\"$queue_path\"}[$__rate_interval])",
+                    "refId": "A",
+                    "legendFormat": "Rows written"
+                },
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "rate({service=~\"yt-queue-agent\", __name__=~\"yt_queue_agent_queue_partition_rows_trimmed\", partition_index=~\"\", queue_cluster=~\"$queue_cluster\", queue_path=~\"$queue_path\"}[$__rate_interval])",
+                    "refId": "B",
+                    "legendFormat": "Row trimmed"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {}
+                },
+                "overrides": [
+                    {
+                        "matcher": {
+                            "id": "byFrameRefID",
+                            "options": "A"
+                        },
+                        "properties": [
+                            {
+                                "id": "unit",
+                                "value": "cps"
+                            }
+                        ]
+                    },
+                    {
+                        "matcher": {
+                            "id": "byFrameRefID",
+                            "options": "B"
+                        },
+                        "properties": [
+                            {
+                                "id": "unit",
+                                "value": "cps"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "title": "Rows written & trimmed",
+            "gridPos": {
+                "x": 0,
+                "y": 1,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "rate({service=~\"yt-queue-agent\", __name__=~\"yt_queue_agent_queue_partition_data_weight_written\", partition_index=~\"\", queue_cluster=~\"$queue_cluster\", queue_path=~\"$queue_path\"}[$__rate_interval])",
+                    "refId": "A"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {}
+                },
+                "overrides": [
+                    {
+                        "matcher": {
+                            "id": "byFrameRefID",
+                            "options": "A"
+                        },
+                        "properties": [
+                            {
+                                "id": "unit",
+                                "value": "Bps"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "title": "Data weight written",
+            "gridPos": {
+                "x": 12,
+                "y": 1,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{service=~\"yt-queue-agent\", __name__=~\"yt_queue_agent_queue_partitions\", queue_cluster=~\"$queue_cluster\", queue_path=~\"$queue_path\"}",
+                    "refId": "A"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {}
+                },
+                "overrides": [
+                    {
+                        "matcher": {
+                            "id": "byFrameRefID",
+                            "options": "A"
+                        },
+                        "properties": [
+                            {
+                                "id": "unit",
+                                "value": "count"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "title": "Partition count",
+            "gridPos": {
+                "x": 0,
+                "y": 7,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{service=~\"yt-queue-agent\", __name__=~\"yt_queue_agent_queue_consumers\", queue_cluster=~\"$queue_cluster\", queue_path=~\"$queue_path\", vital=~\"true\"}",
+                    "refId": "A",
+                    "legendFormat": "Vital"
+                },
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{service=~\"yt-queue-agent\", __name__=~\"yt_queue_agent_queue_consumers\", queue_cluster=~\"$queue_cluster\", queue_path=~\"$queue_path\", vital=~\"false\"}",
+                    "refId": "B",
+                    "legendFormat": "Non-vital"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {}
+                },
+                "overrides": [
+                    {
+                        "matcher": {
+                            "id": "byFrameRefID",
+                            "options": "A"
+                        },
+                        "properties": [
+                            {
+                                "id": "unit",
+                                "value": "count"
+                            }
+                        ]
+                    },
+                    {
+                        "matcher": {
+                            "id": "byFrameRefID",
+                            "options": "B"
+                        },
+                        "properties": [
+                            {
+                                "id": "unit",
+                                "value": "count"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "title": "Consumer count",
+            "gridPos": {
+                "x": 12,
+                "y": 7,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{service=~\"yt-queue-agent\", __name__=~\"yt_queue_agent_queue_partition_row_count\", partition_index=~\"\", queue_cluster=~\"$queue_cluster\", queue_path=~\"$queue_path\"}",
+                    "refId": "A",
+                    "legendFormat": "Row count"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {}
+                },
+                "overrides": [
+                    {
+                        "matcher": {
+                            "id": "byFrameRefID",
+                            "options": "A"
+                        },
+                        "properties": [
+                            {
+                                "id": "unit",
+                                "value": "count"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "title": "Queue stored row count",
+            "gridPos": {
+                "x": 0,
+                "y": 13,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{service=~\"yt-queue-agent\", __name__=~\"yt_queue_agent_queue_partition_data_weight\", partition_index=~\"\", queue_cluster=~\"$queue_cluster\", queue_path=~\"$queue_path\"}",
+                    "refId": "A",
+                    "legendFormat": "Data weight"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {}
+                },
+                "overrides": [
+                    {
+                        "matcher": {
+                            "id": "byFrameRefID",
+                            "options": "A"
+                        },
+                        "properties": [
+                            {
+                                "id": "unit",
+                                "value": "bytes"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "title": "Queue stored data weight",
+            "gridPos": {
+                "x": 12,
+                "y": 13,
+                "w": 12,
+                "h": 6
+            }
+        }
+    ],
+    "title": "Queue metrics dashboard for UI",
+    "tags": [],
+    "templating": {
+        "list": [
+            {
+                "name": "queue_cluster",
+                "label": "Queue cluster",
+                "type": "textbox",
+                "options": [
+                    {
+                        "selected": true,
+                        "text": "",
+                        "value": ""
+                    }
+                ],
+                "current": {
+                    "selected": true,
+                    "text": "",
+                    "value": ""
+                },
+                "query": "",
+                "hide": 0,
+                "skipUrlSync": false,
+                "allFormat": "glob"
+            },
+            {
+                "name": "queue_path",
+                "label": "Queue path",
+                "type": "textbox",
+                "options": [
+                    {
+                        "selected": true,
+                        "text": "",
+                        "value": ""
+                    }
+                ],
+                "current": {
+                    "selected": true,
+                    "text": "",
+                    "value": ""
+                },
+                "query": "",
+                "hide": 0,
+                "skipUrlSync": false,
+                "allFormat": "glob"
+            }
+        ]
+    },
+    "uid": "ytsaurus-queue-metrics"
+}
