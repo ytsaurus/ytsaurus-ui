@@ -1,0 +1,1357 @@
+{
+    "panels": [
+        {
+            "gridPos": {
+                "h": 1,
+                "w": 24,
+                "x": 0,
+                "y": 0
+            },
+            "type": "row"
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{service=~\"yt-scheduler\", __name__=~\"yt_memory_generic_bytes_in_use_by_app\"}",
+                    "refId": "A",
+                    "legendFormat": "{{pod}}"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {}
+                },
+                "overrides": []
+            },
+            "title": "Scheduler Memory",
+            "gridPos": {
+                "x": 0,
+                "y": 1,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{service=~\"yt-controller-agent\", __name__=~\"yt_memory_generic_bytes_in_use_by_app\"}",
+                    "refId": "A",
+                    "legendFormat": "{{pod}}"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {}
+                },
+                "overrides": []
+            },
+            "title": "Controller Agent Memory",
+            "gridPos": {
+                "x": 12,
+                "y": 1,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{service=~\"yt-scheduler\", __name__=~\"yt_resource_tracker_cpu_wait\", thread=~\"\"}",
+                    "refId": "A"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {}
+                },
+                "overrides": []
+            },
+            "title": "Scheduler CPU Wait",
+            "gridPos": {
+                "x": 0,
+                "y": 7,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{service=~\"yt-controller-agent\", __name__=~\"yt_resource_tracker_cpu_wait\", thread=~\"\"}",
+                    "refId": "A"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {}
+                },
+                "overrides": []
+            },
+            "title": "Controller Agent CPU Wait",
+            "gridPos": {
+                "x": 12,
+                "y": 7,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{service=~\"yt-scheduler\", __name__=~\"yt_resource_tracker_user_cpu\", thread=~\"Control\"}",
+                    "refId": "A",
+                    "legendFormat": "{{pod}}"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {}
+                },
+                "overrides": []
+            },
+            "title": "Scheduler Control CPU",
+            "gridPos": {
+                "x": 0,
+                "y": 13,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{service=~\"yt-controller-agent\", __name__=~\"yt_resource_tracker_user_cpu\", thread=~\"Control\"}",
+                    "refId": "A",
+                    "legendFormat": "{{pod}}"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {}
+                },
+                "overrides": []
+            },
+            "title": "Controller Agent Control CPU",
+            "gridPos": {
+                "x": 12,
+                "y": 13,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{service=~\"yt-scheduler\", __name__=~\"yt_resource_tracker_user_cpu\", thread=~\"NodeShard\"}",
+                    "refId": "A",
+                    "legendFormat": "{{pod}}"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {}
+                },
+                "overrides": []
+            },
+            "title": "Scheduler Node Shards CPU",
+            "gridPos": {
+                "x": 0,
+                "y": 19,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{service=~\"yt-controller-agent\", __name__=~\"yt_resource_tracker_user_cpu\", thread=~\"Controller\"}",
+                    "refId": "A",
+                    "legendFormat": "{{pod}}"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {}
+                },
+                "overrides": []
+            },
+            "title": "Controller Agent Controllers CPU",
+            "gridPos": {
+                "x": 12,
+                "y": 19,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{service=~\"yt-scheduler\", __name__=~\"yt_resource_tracker_user_cpu\", thread=~\"FSUpdatePool|OrchidWorker|Background\"}",
+                    "refId": "A",
+                    "legendFormat": "{{thread}}"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {}
+                },
+                "overrides": []
+            },
+            "title": "Scheduler Thread Pools CPU",
+            "gridPos": {
+                "x": 0,
+                "y": 25,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{service=~\"yt-controller-agent\", __name__=~\"yt_resource_tracker_user_cpu\", thread=~\"JobTracker\"}",
+                    "refId": "A",
+                    "legendFormat": "{{pod}}"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {}
+                },
+                "overrides": []
+            },
+            "title": "Controller Agent JobTracker CPU",
+            "gridPos": {
+                "x": 12,
+                "y": 25,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{service=~\"yt-scheduler\", __name__=~\"yt_resource_tracker_user_cpu\", thread=~\"RpcHeavy\"}",
+                    "refId": "A",
+                    "legendFormat": "{{pod}}"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {}
+                },
+                "overrides": []
+            },
+            "title": "Scheduler RPC Heavy CPU",
+            "gridPos": {
+                "x": 0,
+                "y": 31,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{service=~\"yt-controller-agent\", __name__=~\"yt_resource_tracker_user_cpu\", thread=~\"RpcHeavy\"}",
+                    "refId": "A",
+                    "legendFormat": "{{pod}}"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {}
+                },
+                "overrides": []
+            },
+            "title": "Controller Agent RPC Heavy CPU",
+            "gridPos": {
+                "x": 12,
+                "y": 31,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "rate({service=~\"yt-scheduler\", __name__=~\"yt_action_queue_time_cumulative\", bucket=~\".+\", thread=~\"Control\"}[$__rate_interval])",
+                    "refId": "A",
+                    "legendFormat": "{{bucket}}"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {}
+                },
+                "overrides": []
+            },
+            "title": "Control Thread Buckets",
+            "gridPos": {
+                "x": 6,
+                "y": 37,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "gridPos": {
+                "h": 1,
+                "w": 24,
+                "x": 0,
+                "y": 43
+            },
+            "type": "row"
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{service=~\"yt-scheduler\", __name__=~\"yt_scheduler_pools_running_operation_count|yt_scheduler_pools_total_operation_count\", pool=~\"<Root>\", tree=~\"physical\"}",
+                    "refId": "A",
+                    "legendFormat": "{{__name__}}"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {}
+                },
+                "overrides": [
+                    {
+                        "matcher": {
+                            "id": "byFrameRefID",
+                            "options": "A"
+                        },
+                        "properties": [
+                            {
+                                "id": "min",
+                                "value": 0
+                            }
+                        ]
+                    }
+                ]
+            },
+            "title": "Operation Count",
+            "gridPos": {
+                "x": 0,
+                "y": 44,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{service=~\"yt-scheduler\", __name__=~\"yt_scheduler_pools_schedulable_element_count\", pool=~\"<Root>\", tree=~\".+\"}",
+                    "refId": "A",
+                    "legendFormat": "{{tree}}"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {}
+                },
+                "overrides": [
+                    {
+                        "matcher": {
+                            "id": "byFrameRefID",
+                            "options": "A"
+                        },
+                        "properties": [
+                            {
+                                "id": "min",
+                                "value": 0
+                            }
+                        ]
+                    }
+                ]
+            },
+            "title": "Schedulable Element Count",
+            "gridPos": {
+                "x": 12,
+                "y": 44,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "rate({service=~\"yt-scheduler\", __name__=~\"yt_scheduler_preschedule_job_count\", schedule_jobs_stage=~\"\", scheduling_stage=~\"\", tree=~\".+\"}[$__rate_interval])",
+                    "refId": "A",
+                    "legendFormat": "{{tree}}"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {
+                        "stacking": {
+                            "group": "A",
+                            "mode": "normal"
+                        },
+                        "fillOpacity": 100
+                    }
+                },
+                "overrides": []
+            },
+            "title": "Preschedule job count rate",
+            "gridPos": {
+                "x": 0,
+                "y": 50,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "rate({service=~\"yt-scheduler\", __name__=~\"yt_scheduler_schedule_job_attempt_count\", schedule_jobs_stage=~\"\", scheduling_stage=~\"\", tree=~\".+\"}[$__rate_interval])",
+                    "refId": "A",
+                    "legendFormat": "{{tree}}"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {
+                        "stacking": {
+                            "group": "A",
+                            "mode": "normal"
+                        },
+                        "fillOpacity": 100
+                    }
+                },
+                "overrides": []
+            },
+            "title": "Schedule job attempts",
+            "gridPos": {
+                "x": 12,
+                "y": 50,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "rate({service=~\"yt-scheduler\", __name__=~\"yt_scheduler_preschedule_job_count\", scheduling_stage!~\"non_preemptive|regular.*\", tree=~\"physical\"}[$__rate_interval])",
+                    "refId": "A",
+                    "legendFormat": "{{scheduling_stage}}"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {
+                        "stacking": {
+                            "group": "A",
+                            "mode": "normal"
+                        },
+                        "fillOpacity": 100
+                    }
+                },
+                "overrides": []
+            },
+            "title": "Preemptive preschedule job attempts",
+            "gridPos": {
+                "x": 0,
+                "y": 56,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{service=~\"yt-scheduler\", __name__=~\"yt_scheduler_pools_operation_satisfaction_distribution\", pool=~\"<Root>\", quantile=~\".+\", tree=~\"physical\"}",
+                    "refId": "A",
+                    "legendFormat": "{{quantile}}"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {}
+                },
+                "overrides": []
+            },
+            "title": "Operation satisfaction distribution",
+            "gridPos": {
+                "x": 12,
+                "y": 56,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "gridPos": {
+                "h": 1,
+                "w": 24,
+                "x": 0,
+                "y": 62
+            },
+            "type": "row"
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "rate({service=~\"yt-scheduler\", __name__=~\"yt_logging_enqueued_events_rate|yt_logging_dropped_events\"}[$__rate_interval])",
+                    "refId": "A",
+                    "legendFormat": "{{pod}}, {{__name__}}"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {}
+                },
+                "overrides": []
+            },
+            "title": "Scheduler Logging",
+            "gridPos": {
+                "x": 0,
+                "y": 63,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "rate({service=~\"yt-controller-agent\", __name__=~\"yt_logging_enqueued_events\"}[$__rate_interval])",
+                    "refId": "A",
+                    "legendFormat": "{{pod}}"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {}
+                },
+                "overrides": []
+            },
+            "title": "Controller Agent Logging",
+            "gridPos": {
+                "x": 12,
+                "y": 63,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "gridPos": {
+                "h": 1,
+                "w": 24,
+                "x": 0,
+                "y": 69
+            },
+            "type": "row"
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "rate({service=~\"yt-controller-agent\", __name__=~\"yt_controller_agent_jobs_aborted_job_count\", abort_reason!~\"preemption|^$\", job_type=~\"\", tree=~\"\"}[$__rate_interval])",
+                    "refId": "A",
+                    "legendFormat": "{{abort_reason}}"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {
+                        "stacking": {
+                            "group": "A",
+                            "mode": "normal"
+                        },
+                        "fillOpacity": 100
+                    }
+                },
+                "overrides": []
+            },
+            "title": "Aborted jobs rate",
+            "gridPos": {
+                "x": 0,
+                "y": 70,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "rate({service=~\"yt-scheduler\", __name__=~\"yt_scheduler_pools_metrics_total_time_aborted_rate|yt_scheduler_pools_metrics_total_time_completed\", pool=~\"<Root>\", tree=~\"physical\"}[$__rate_interval])",
+                    "refId": "A",
+                    "legendFormat": "{{__name__}}"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {
+                        "stacking": {
+                            "group": "A",
+                            "mode": "normal"
+                        },
+                        "fillOpacity": 100
+                    }
+                },
+                "overrides": []
+            },
+            "title": "Aborted vs completed job time",
+            "gridPos": {
+                "x": 12,
+                "y": 70,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "gridPos": {
+                "h": 1,
+                "w": 24,
+                "x": 0,
+                "y": 76
+            },
+            "type": "row"
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "rate({service=~\"yt-scheduler\", __name__=~\"yt_rpc_server_request_count\", user=~\"\", yt_service=~\"JobTrackerService|AllocationTrackerService\", method=~\"Heartbeat\"}[$__rate_interval])",
+                    "refId": "A",
+                    "legendFormat": "{{pod}}"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {}
+                },
+                "overrides": [
+                    {
+                        "matcher": {
+                            "id": "byFrameRefID",
+                            "options": "A"
+                        },
+                        "properties": [
+                            {
+                                "id": "min",
+                                "value": 0
+                            }
+                        ]
+                    }
+                ]
+            },
+            "title": "AllocationTrackerService: Heartbeat rate",
+            "gridPos": {
+                "x": 0,
+                "y": 77,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{service=~\"yt-scheduler\", __name__=~\"yt_rpc_server_request_queue_size\", user=~\"\", yt_service=~\"JobTrackerService|AllocationTrackerService\", method=~\"Heartbeat\"}",
+                    "refId": "A",
+                    "legendFormat": "{{pod}}"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {}
+                },
+                "overrides": [
+                    {
+                        "matcher": {
+                            "id": "byFrameRefID",
+                            "options": "A"
+                        },
+                        "properties": [
+                            {
+                                "id": "min",
+                                "value": 0
+                            }
+                        ]
+                    }
+                ]
+            },
+            "title": "AllocationTrackerService: Heartbeat queue size",
+            "gridPos": {
+                "x": 12,
+                "y": 77,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{service=~\"yt-scheduler\", __name__=~\"yt_rpc_server_request_time_total_max\", user=~\"\", yt_service=~\"JobTrackerService|AllocationTrackerService\", method=~\"Heartbeat\"}",
+                    "refId": "A",
+                    "legendFormat": "{{pod}}, {{__name__}}"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {}
+                },
+                "overrides": [
+                    {
+                        "matcher": {
+                            "id": "byFrameRefID",
+                            "options": "A"
+                        },
+                        "properties": [
+                            {
+                                "id": "min",
+                                "value": 0
+                            }
+                        ]
+                    }
+                ]
+            },
+            "title": "AllocationTrackerService: Heartbeat time max",
+            "gridPos": {
+                "x": 0,
+                "y": 83,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{service=~\"yt-scheduler\", __name__=~\"yt_rpc_server_concurrency|yt_rpc_server_concurrency_limit\", user=~\"\", yt_service=~\"JobTrackerService|AllocationTrackerService\", method=~\"Heartbeat\"}",
+                    "refId": "A",
+                    "legendFormat": "{{pod}}, {{__name__}}"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {}
+                },
+                "overrides": [
+                    {
+                        "matcher": {
+                            "id": "byFrameRefID",
+                            "options": "A"
+                        },
+                        "properties": [
+                            {
+                                "id": "min",
+                                "value": 0
+                            }
+                        ]
+                    }
+                ]
+            },
+            "title": "AllocationTrackerService: Heartbeat concurrency",
+            "gridPos": {
+                "x": 12,
+                "y": 83,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "rate({service=~\"yt-scheduler\", __name__=~\"yt_scheduler_node_heartbeat_concurrent_limit_reached_count_rate|yt_scheduler_node_heartbeat_concurrent_complexity_limit_reached_count\", host=~\"Aggr\", user=~\"\", limit_type=~\"\"}[$__rate_interval])",
+                    "refId": "A"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {}
+                },
+                "overrides": [
+                    {
+                        "matcher": {
+                            "id": "byFrameRefID",
+                            "options": "A"
+                        },
+                        "properties": [
+                            {
+                                "id": "min",
+                                "value": 0
+                            }
+                        ]
+                    }
+                ]
+            },
+            "title": "Scheduler heartbeat throttling",
+            "gridPos": {
+                "x": 6,
+                "y": 89,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "rate({service=~\"yt-scheduler\", __name__=~\"yt_rpc_server_request_count\", user=~\"\", yt_service=~\"ControllerAgentTrackerService\", method=~\".*Heartbeat\"}[$__rate_interval])",
+                    "refId": "A",
+                    "legendFormat": "{{method}}"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {}
+                },
+                "overrides": [
+                    {
+                        "matcher": {
+                            "id": "byFrameRefID",
+                            "options": "A"
+                        },
+                        "properties": [
+                            {
+                                "id": "min",
+                                "value": 0
+                            }
+                        ]
+                    }
+                ]
+            },
+            "title": "ControllerAgentTrackerService: Heartbeat rate",
+            "gridPos": {
+                "x": 0,
+                "y": 95,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{service=~\"yt-scheduler\", __name__=~\"yt_rpc_server_request_time_total_max\", user=~\"\", yt_service=~\"ControllerAgentTrackerService\", method=~\".*Heartbeat\"}",
+                    "refId": "A",
+                    "legendFormat": "{{method}}"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {}
+                },
+                "overrides": [
+                    {
+                        "matcher": {
+                            "id": "byFrameRefID",
+                            "options": "A"
+                        },
+                        "properties": [
+                            {
+                                "id": "min",
+                                "value": 0
+                            }
+                        ]
+                    }
+                ]
+            },
+            "title": "ControllerAgentTrackerService: Heartbeat time max",
+            "gridPos": {
+                "x": 12,
+                "y": 95,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "gridPos": {
+                "h": 1,
+                "w": 24,
+                "x": 0,
+                "y": 101
+            },
+            "type": "row"
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "rate({service=~\"yt-controller-agent\", __name__=~\"yt_rpc_server_request_count\", user=~\"\", yt_service=~\"JobTrackerService\", method=~\"Heartbeat\"}[$__rate_interval])",
+                    "refId": "A",
+                    "legendFormat": "{{pod}}"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {}
+                },
+                "overrides": []
+            },
+            "title": "JobTrackerService: Heartbeat rate",
+            "gridPos": {
+                "x": 0,
+                "y": 102,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "rate({service=~\"yt-controller-agent\", __name__=~\"yt_rpc_server_request_count\", user=~\"\", yt_service=~\"JobTrackerService\", method=~\"SettleJob\"}[$__rate_interval])",
+                    "refId": "A",
+                    "legendFormat": "{{pod}}"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {}
+                },
+                "overrides": []
+            },
+            "title": "JobSpecService: SettleJob rate",
+            "gridPos": {
+                "x": 12,
+                "y": 102,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{service=~\"yt-controller-agent\", __name__=~\"yt_rpc_server_request_time_total_max\", user=~\"\", yt_service=~\"JobTrackerService\", method=~\"Heartbeat\"}",
+                    "refId": "A",
+                    "legendFormat": "{{pod}}"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {}
+                },
+                "overrides": []
+            },
+            "title": "JobTrackerService: Heartbeat time max",
+            "gridPos": {
+                "x": 0,
+                "y": 108,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{service=~\"yt-controller-agent\", __name__=~\"yt_rpc_server_request_time_total_max\", user=~\"\", yt_service=~\"JobTrackerService\", method=~\"SettleJob\"}",
+                    "refId": "A",
+                    "legendFormat": "{{pod}}"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {}
+                },
+                "overrides": []
+            },
+            "title": "JobSpecService: SettleJob time max",
+            "gridPos": {
+                "x": 12,
+                "y": 108,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{service=~\"yt-controller-agent\", __name__=~\"yt_rpc_server_request_queue_size\", user=~\"\", yt_service=~\"JobTrackerService\", method=~\"Heartbeat\"}",
+                    "refId": "A",
+                    "legendFormat": "{{pod}}"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {}
+                },
+                "overrides": []
+            },
+            "title": "JobTrackerService: Heartbeat queue size",
+            "gridPos": {
+                "x": 0,
+                "y": 114,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{service=~\"yt-controller-agent\", __name__=~\"yt_rpc_server_request_queue_size\", user=~\"\", yt_service=~\"JobTrackerService\", method=~\"SettleJob\"}",
+                    "refId": "A",
+                    "legendFormat": "{{pod}}"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {}
+                },
+                "overrides": []
+            },
+            "title": "JobSpecService: SettleJob queue size",
+            "gridPos": {
+                "x": 12,
+                "y": 114,
+                "w": 12,
+                "h": 6
+            }
+        }
+    ],
+    "tags": [],
+    "uid": "ytsaurus-scheduler-internal",
+    "title": "YTsaurus Scheduler Internal"
+}
