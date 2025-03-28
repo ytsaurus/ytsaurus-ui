@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.87.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.86.0...ui-v1.87.0) (2025-03-28)
+
+
+### Features
+
+* **Queries/Graph:** increased visibility of the number of tasks [YTFRONT-4812] ([d393feb](https://github.com/ytsaurus/ytsaurus-ui/commit/d393feb2c5d62e43f7ff6bff135206d4896cbd25))
+* **Queries:** open navigation on path click [YTFRONT-4802] ([2630b4c](https://github.com/ytsaurus/ytsaurus-ui/commit/2630b4c29aadc9b5c1559cec69bd29a6bf0aa3a0))
+
+
+### Bug Fixes
+
+* **Queries:** fix navigation by url path [YTFRONT-4802] ([fc5f0e5](https://github.com/ytsaurus/ytsaurus-ui/commit/fc5f0e5bc7b23d5eab5aff39e2fecd34199c0e58))
+* **Scheduling/Details:** operation limits [YTFRONT-4820] ([4798733](https://github.com/ytsaurus/ytsaurus-ui/commit/4798733bd04be733bb1bb2d0bade339c517fa010))
+
 ## [1.86.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.85.0...ui-v1.86.0) (2025-03-21)
 
 
