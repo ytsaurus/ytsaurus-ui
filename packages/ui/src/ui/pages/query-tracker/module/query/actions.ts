@@ -24,6 +24,7 @@ import {getAppBrowserHistory} from '../../../../store/window-store';
 import type {
     QueryState,
     RequestQueryAction,
+    SetDirtySubmit,
     SetQueryAction,
     SetQueryCliqueLoading,
     SetQueryClusterClique,
@@ -44,6 +45,7 @@ import {ytApiV3} from '../../../../rum/rum-wrap-api';
 
 import {
     REQUEST_QUERY,
+    SET_DIRTY_SUBMIT,
     SET_QUERY,
     SET_QUERY_CLIQUE_LOADING,
     SET_QUERY_CLUSTER_CLIQUE,
@@ -251,7 +253,7 @@ export function createEmptyQuery(
 export function runQuery(
     afterCreate?: (query_id: string) => boolean | void,
     options?: {execution_mode: 'validate' | 'optimize'},
-): ThunkAction<any, RootState, any, SetQueryAction> {
+): ThunkAction<any, RootState, any, SetQueryAction | SetDirtySubmit> {
     return async (dispatch, getState) => {
         const state = getState();
         const query = getQueryDraft(state);
@@ -262,6 +264,11 @@ export function runQuery(
                 (i) => i !== SHARED_QUERY_ACO,
             );
         }
+
+        dispatch({
+            type: SET_DIRTY_SUBMIT,
+            data: false,
+        });
 
         const {query_id} = await wrapApiPromiseByToaster(dispatch(startQuery(newQuery, options)), {
             toasterName: 'start_query',

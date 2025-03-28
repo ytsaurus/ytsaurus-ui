@@ -24,6 +24,7 @@ export const SET_QUERY_PARAMS = 'query-tracker/SET_QUERY_PARAMS';
 export const SET_QUERY_CLIQUE_LOADING = 'query-tracker/SET_QUERY_CLIQUE_LOADING';
 export const SET_QUERY_CLUSTER_CLIQUE = 'query-tracker/SET_QUERY_CLUSTER_CLIQUE';
 export const UPDATE_ACO_QUERY = 'query-tracker/UPDATE_ACO_QUERY';
+export const SET_DIRTY_SUBMIT = 'query-tracker/SET_DIRTY_SUBMIT';
 
 export const REQUEST_QUERY_RESULTS = 'query-tracker/REQUEST_QUERY_RESULTS';
 // To create initial result
