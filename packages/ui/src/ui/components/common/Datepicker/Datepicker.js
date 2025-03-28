@@ -353,14 +353,21 @@ export class Datepicker extends React.PureComponent {
         // - если после выбора первой части диапазона пользователь внеапно стер его начало
         const resetPickCounter = !searchText || (range && !to);
 
-        this.setState({
-            searchText,
-            from,
-            to: range ? to : undefined,
-            error: '',
-            invalidInput: false,
-            ...(resetPickCounter && {pick: 0}),
-        });
+        this.setState(
+            {
+                searchText,
+                from,
+                to: range ? to : undefined,
+                error: '',
+                invalidInput: false,
+                ...(resetPickCounter && {pick: 0}),
+            },
+            () => {
+                if (!searchText) {
+                    this.onUpdate();
+                }
+            },
+        );
     };
 
     onInputKeyPress = (e) => {
