@@ -41,6 +41,7 @@ export const QuerySelectorsByEngine: FC<Props> = ({
                     cliqueList={cliqueList}
                     value={settings.clique}
                     onChange={onCliqueChange}
+                    showStatus
                 />
             </>
         );

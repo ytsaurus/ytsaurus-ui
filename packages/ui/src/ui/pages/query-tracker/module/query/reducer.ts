@@ -20,6 +20,7 @@ import {
 } from '../query-tracker-contants';
 import {cleanupQueryForDraft} from './utills';
 import {DEFAULT_QUERY_ACO} from './selectors';
+import {ChytInfo} from '../../../../store/reducers/chyt/list';
 
 export interface QueryState {
     queryItem?: QueryItem;
@@ -32,7 +33,7 @@ export interface QueryState {
     };
     dirtySinceLastSubmit: boolean;
     cliqueLoading: boolean;
-    cliqueMap: Record<string, Record<string, {alias: string; yt_operation_id?: string}[]>>;
+    cliqueMap: Record<string, Record<string, ChytInfo[]>>;
     state: 'init' | 'loading' | 'ready' | 'error';
 }
 
@@ -211,7 +212,7 @@ export type SetQueryClusterClique = ActionD<
     {
         cluster: string;
         engine: QueryEngine.SPYT | QueryEngine.CHYT;
-        items: {alias: string; yt_operation_id?: string}[];
+        items: ChytInfo[];
     }
 >;
 

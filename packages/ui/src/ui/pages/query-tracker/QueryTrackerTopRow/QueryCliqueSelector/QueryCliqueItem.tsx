@@ -2,20 +2,26 @@ import React, {FC} from 'react';
 import {ChytInfo} from '../../../../store/reducers/chyt/list';
 import './QueryCliqueItem.scss';
 import cn from 'bem-cn-lite';
-import {Text} from '@gravity-ui/uikit';
+import {Flex, Label, Text} from '@gravity-ui/uikit';
 
 const block = cn('query-clique-item');
 
 type Props = {
-    name: ChytInfo['alias'];
-    ytId: ChytInfo['yt_operation_id'];
+    alias?: ChytInfo['alias'];
+    id: ChytInfo['yt_operation_id'];
+    active?: boolean;
+    showStatus?: boolean;
 };
 
-export const QueryCliqueItem: FC<Props> = ({name, ytId}) => {
+export const QueryCliqueItem: FC<Props> = ({alias, id, active, showStatus}) => {
+    const showInActiveLabel = !active && showStatus;
     return (
-        <div className={block()}>
-            {name}
-            <Text color="secondary">{ytId}</Text>
-        </div>
+        <Flex direction="column" gap={1} className={block()}>
+            <Flex alignItems="center" gap={2}>
+                <div>{alias}</div>
+                {showInActiveLabel && <Label theme="danger">inactive</Label>}
+            </Flex>
+            <Text color="secondary">{id}</Text>
+        </Flex>
     );
 };
