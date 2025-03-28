@@ -164,6 +164,18 @@ test.describe('@QueryTracker: Suggest scenarios', () => {
             await queryTrackerPage.waitForText('SELECT * FROM `//cursor_position`');
         });
 
+        test('Type "SELECT * FROM `", click to "//" suggest, type "cursor_position", expect to see "SELECT * FROM `//cursor_position`"', async () => {
+            await queryTrackerPage.fillQueryEditor(['SELECT * FROM `']);
+
+            await queryTrackerPage.waitForText('SELECT * FROM ``');
+
+            await queryTrackerPage.clickToSuggest('//');
+
+            await queryTrackerPage.type('cursor_position');
+
+            await queryTrackerPage.waitForText('SELECT * FROM `//cursor_position`');
+        });
+
         test(`After typing \` we expect to get \`\` with cursor after \``, async () => {
             await queryTrackerPage.fillQueryEditor(['SELECT * FROM `']);
 

@@ -34,7 +34,7 @@ export const createProvideSuggestionsFunction =
             range,
         });
 
-        const templateSuggestions = getTemplateSuggestions({parseResult, range});
+        const templateSuggestions = getTemplateSuggestions({model, parseResult, range});
         const suggestions = getSuggestions(parseResult, range);
 
         return {
