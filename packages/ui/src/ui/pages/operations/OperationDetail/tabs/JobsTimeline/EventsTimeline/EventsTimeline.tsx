@@ -1,0 +1,114 @@
+import React, {FC, useCallback, useMemo, useState} from 'react';
+import {Timeline} from './EventCanvas';
+import {
+    Interval,
+    TimelineJob,
+} from '../../../../../../store/reducers/operations/jobs/jobs-timeline-slice';
+import {
+    EventIdentity,
+    EventsSelectedEvent,
+    HoverEvent,
+} from '../../../../../../packages/ya-timeline/components/Events';
+import './EventsTimeline.scss';
+import cn from 'bem-cn-lite';
+import {prepareJobTimeline} from '../helpers/prepareJobTimeline';
+import {JobLineEvent} from './renderer/JobLineRenderer';
+import {EventTimelineTooltip} from './EventTimelineTooltip';
+import {ROW_HEIGHT} from '../constants';
+import {useSidePanel} from '../../../../../../hooks/use-side-panel';
+import {EventsSidePanel} from '../EventsSidePanel';
+import {useThemeValue} from '@gravity-ui/uikit';
+import {BoundsChangedEvent} from '../../../../../../packages/ya-timeline';
+
+const block = cn('yt-events-timeline');
+
+type Props = {
+    jobs: Record<string, TimelineJob>;
+    interval: Interval;
+    onTimelineClick: (jobId: string | null) => void;
+    onBoundsChanged: (interval: Interval) => void;
+};
+
+const getEventId = (event: JobLineEvent) => `${event.axisId}:${event.from}-${event.to}`;
+
+export const EventsTimeline: FC<Props> = ({jobs, interval, onTimelineClick, onBoundsChanged}) => {
+    const theme = useThemeValue();
+    const [selectedEvents, setSelectedEvents] = useState<EventIdentity[]>([]);
+    const [hEvent, setHEvent] = useState<HoverEvent<JobLineEvent>>();
+
+    const {openWidget, closeWidget, widgetContent} = useSidePanel('JobsTimeline', {
+        renderContent({onClose}) {
+            return (
+                <EventsSidePanel
+                    onClose={() => {
+                        setSelectedEvents([]);
+                        onClose();
+                    }}
+                />
+            );
+        },
+    });
+
+    const {axes, timelines} = useMemo(() => {
+        return prepareJobTimeline(jobs);
+    }, [jobs]);
+
+    const handleHoverEvent = useCallback((e: HoverEvent<JobLineEvent>) => {
+        setHEvent(e);
+    }, []);
+
+    const handleLeftEvent = useCallback(() => {
+        setHEvent(undefined);
+    }, []);
+
+    const handleEventClick = useCallback(
+        (e: EventsSelectedEvent<JobLineEvent>) => {
+            const events = e.detail.events;
+            if (!events.length) {
+                onTimelineClick(null);
+                setSelectedEvents([]);
+                closeWidget();
+                return;
+            }
+
+            setSelectedEvents(events.map(getEventId));
+            onTimelineClick(e.detail.events[0].axisId);
+            openWidget();
+        },
+        [closeWidget, onTimelineClick, openWidget],
+    );
+
+    const scrollTopChanged = useCallback(
+        ({detail}: BoundsChangedEvent) => {
+            onBoundsChanged({from: detail.start, to: detail.end});
+        },
+        [onBoundsChanged],
+    );
+
+    return (
+        <div
+            className={block()}
+            onMouseLeave={handleLeftEvent}
+            style={{
+                height: `${axes.length * ROW_HEIGHT}px`,
+            }}
+        >
+            {hEvent && <EventTimelineTooltip event={hEvent.detail} />}
+
+            <Timeline
+                theme={theme}
+                start={interval.from}
+                end={interval.to}
+                axes={axes}
+                selectedEvents={selectedEvents}
+                events={timelines}
+                eventsSelected={handleEventClick}
+                hoverEvent={handleHoverEvent}
+                leftEvent={handleLeftEvent}
+                isZoomAllowed
+                boundsChanged={scrollTopChanged}
+            />
+            {widgetContent}
+        </div>
+    );
+};
