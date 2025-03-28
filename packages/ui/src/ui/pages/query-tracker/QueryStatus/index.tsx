@@ -2,12 +2,12 @@ import {Icon, Spin} from '@gravity-ui/uikit';
 import React from 'react';
 import block from 'bem-cn-lite';
 import hammer from '../../../common/hammer';
-import doneIcon from '../../../assets/img/svg/icons/check-circle.svg';
-import errorIcon from '../../../assets/img/svg/icons/exclamation-circle.svg';
-import abortedIcon from '../../../assets/img/svg/icons/stop-circle.svg';
-import draftIcon from '../../../assets/img/svg/icons/file.svg';
 import {SVGIconData} from '@gravity-ui/uikit/build/esm/components/Icon/types';
 import {ProgressStatuses, QueryStatus} from '../module/api';
+import CircleExclamationIcon from '@gravity-ui/icons/svgs/circle-exclamation.svg';
+import CircleCheckIcon from '@gravity-ui/icons/svgs/circle-check.svg';
+import CircleStopIcon from '@gravity-ui/icons/svgs/circle-stop.svg';
+import FileIcon from '@gravity-ui/icons/svgs/file.svg';
 import './index.scss';
 
 const b = block('query-status');
@@ -19,17 +19,19 @@ type Props = {
 };
 
 const STATUS_ICONS: Partial<Record<QueryStatus, SVGIconData>> = {
-    [QueryStatus.DRAFT]: draftIcon,
-    [QueryStatus.FAILED]: errorIcon,
-    [QueryStatus.ABORTED]: abortedIcon,
-    [QueryStatus.COMPLETED]: doneIcon,
+    [QueryStatus.DRAFT]: FileIcon,
+    [QueryStatus.FAILED]: CircleExclamationIcon,
+    [QueryStatus.ABORTED]: CircleStopIcon,
+    [QueryStatus.COMPLETED]: CircleCheckIcon,
 };
 
 export function QueryStatusIcon({status, className}: {status: QueryStatus; className?: string}) {
     if (ProgressStatuses.includes(status)) {
-        return <Spin size="s" className={b('icon-container', {loading: true}, className)} />;
+        return <Spin size="xs" className={b('icon-container', className)} />;
     }
-    if (STATUS_ICONS[status]) {
+
+    const statusIcon = STATUS_ICONS[status];
+    if (statusIcon) {
         return (
             <Icon
                 className={b(
@@ -39,7 +41,7 @@ export function QueryStatusIcon({status, className}: {status: QueryStatus; class
                     },
                     className,
                 )}
-                data={STATUS_ICONS[status]!}
+                data={statusIcon}
                 size={16}
             />
         );

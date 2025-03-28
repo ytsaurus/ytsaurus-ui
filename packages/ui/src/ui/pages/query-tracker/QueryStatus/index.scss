@@ -17,17 +17,12 @@
             color: var(--color-status-icon-error, var(--g-color-text-danger));
         }
 
-        &.loading {
-            width: 16px;
-            height: 16px;
-        }
-
         &_aborted {
             color: var(--color-status-icon-aborting, var(--g-color-text-secondary));
         }
     }
 
     &_tabs {
-        margin-right: 0px;
+        margin-right: 0;
     }
 }
