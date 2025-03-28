@@ -1,7 +1,5 @@
 import ypath from '@ytsaurus/interface-helpers/lib/ypath';
 
-import {NAMESPACES, SettingName} from '../../../../../../shared/constants/settings';
-import {getPath} from '../../../../../../shared/utils/settings';
 import {UPDATE_PATH, UPDATE_VIEW} from '../../../../../constants/navigation';
 import {mergeStateOnClusterChange} from '../../../../../store/reducers/utils';
 import {
@@ -21,13 +19,13 @@ import {
     TOGGLE_FULL_SCREEN,
 } from '../../../../../constants/navigation/content/table';
 import {getSettingsDataFromInitialConfig} from '../../../../../config';
+import {TABLE_DEFAULTS} from '../../../../../constants/settings/table';
 
 const settings = getSettingsDataFromInitialConfig().data;
-const {ROWS_PER_TABLE_PAGE, MAXIMUM_TABLE_STRING_SIZE} = SettingName.NAVIGATION;
-const {NAVIGATION} = NAMESPACES;
-
-const userPageSize = settings[getPath(ROWS_PER_TABLE_PAGE, NAVIGATION)];
-const userCellSize = settings[getPath(MAXIMUM_TABLE_STRING_SIZE, NAVIGATION)];
+const userPageSize =
+    settings['global::navigation::rowsPerTablePage'] || TABLE_DEFAULTS.rowsPerTablePage;
+const userCellSize =
+    settings['global::navigation::maximumTableStringSize'] || TABLE_DEFAULTS.maximumTableStringSize;
 
 const ephemeralState = {
     /** @type {boolean} */
