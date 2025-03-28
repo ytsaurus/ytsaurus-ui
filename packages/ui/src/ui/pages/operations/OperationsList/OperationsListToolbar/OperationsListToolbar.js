@@ -2,6 +2,7 @@ import React from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import PropTypes from 'prop-types';
 import cn from 'bem-cn-lite';
+import {StickyContainer} from '../../../../components/StickyContainer/StickyContainer';
 
 import map_ from 'lodash/map';
 
@@ -237,12 +238,16 @@ class OperationsListToolbar extends React.PureComponent {
         const {fixedStartedByFilter} = this.props;
 
         return (
-            <div className={block('toolbar', tbBlock())}>
-                {this.renderTopSection()}
-                {this.renderBottomSection()}
-                {fixedStartedByFilter && this.renderWarning_uiissue_2838()}
-                <OperationsFilterPresets />
-            </div>
+            <StickyContainer>
+                {({sticky, topStickyClassName}) => (
+                    <div className={block('toolbar', {sticky}, [tbBlock(), topStickyClassName])}>
+                        {this.renderTopSection()}
+                        {this.renderBottomSection()}
+                        {fixedStartedByFilter && this.renderWarning_uiissue_2838()}
+                        <OperationsFilterPresets />
+                    </div>
+                )}
+            </StickyContainer>
         );
     }
 }

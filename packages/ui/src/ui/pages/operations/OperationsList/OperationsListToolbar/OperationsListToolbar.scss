@@ -2,11 +2,12 @@
 
 .operations-list {
     &__toolbar {
-        position: sticky;
-        top: var(--app-header-height);
         border-bottom: 2px solid var(--light-divider);
-        background-color: var(--main-background);
-        z-index: var(--sticky-toolbar-z-index);
+
+        &_sticky {
+            position: fixed;
+            background-color: var(--main-background);
+        }
 
         &-text-filter {
             flex: 1 0 260px;
