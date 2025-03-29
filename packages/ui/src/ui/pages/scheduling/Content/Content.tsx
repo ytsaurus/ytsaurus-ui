@@ -18,13 +18,14 @@ import {
     getTree,
     isPoolAclAllowed,
 } from '../../../store/selectors/scheduling/scheduling';
-import UIFactory from '../../../UIFactory';
 import {TabSettings, makeTabProps} from '../../../utils';
 import {makeSchedulingUrl} from '../../../utils/app-url';
 import {formatByParams} from '../../../utils/format';
 import './Content.scss';
 import SchedulingExpandedPoolsUpdater from './SchedulingExpandedPoolsUpdater';
 import {PoolAttributes} from './tabs/PoolAttributes/PoolAttributes';
+import UIFactory from '../../../UIFactory';
+import {SchedulingMonitoring} from './tabs/Monitoring/SchedulingMonitoring';
 
 const block = cn('scheduling-content');
 
@@ -58,12 +59,17 @@ function Content({match, location}: ContentProps) {
     const aclTab = showSettings[Tab.ACL];
     aclTab.show = aclTab.show && allowAcl;
 
-    const extraTabs = UIFactory.getSchedulingExtraTabs({
-        cluster,
-        pool,
-        tree,
-        extraOptions: {isRoot, isEphemeral},
-    });
+    const extraTabs = [
+        ...UIFactory.getSchedulingExtraTabs({
+            cluster,
+            pool,
+            tree,
+            extraOptions: {isRoot, isEphemeral},
+        }),
+        ...(isEphemeral
+            ? []
+            : [{name: 'monitor', title: 'Monitoring', component: SchedulingMonitoring}]),
+    ];
 
     const extraRoutes: Array<React.ReactElement> = [];
 
