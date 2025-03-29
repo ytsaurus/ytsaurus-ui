@@ -5,6 +5,7 @@ import cn from 'bem-cn-lite';
 import {DashaboardPanelByType, DashboardInfo} from './PrometheusDashboard';
 
 import './PrometheusDashKit.scss';
+import {renderPluginText} from './plugins/text';
 
 const block = cn('yt-prometheus-dashkit');
 
@@ -48,28 +49,33 @@ export function PrometheusDashKit({panels}: PrometheusDashKitProps) {
 }
 
 type PanelType = DashaboardPanelByType['type'];
+type PanelProps<K extends PanelType> = Omit<DashaboardPanelByType & {type: K}, 'type'>;
+export type PluginRenderProps<K extends PanelType> = Omit<PluginWidgetProps, 'data'> & {
+    data: PanelProps<K>;
+};
 
-type PluginParams<K extends PanelType> = DashaboardPanelByType & {type: K};
 type PluginType<K extends PanelType = PanelType> = `prometheus.${K}`;
 
 const PLUGINS: {
     [K in PanelType]: {
         type: PluginType<K>;
-    } & Plugin<PluginWidgetProps<PluginParams<K>>, PluginParams<K>>;
+    } & Plugin<PluginRenderProps<K>>;
 } = {
     text: {
-        renderer: (props, ref) => renderPanel<'text'>(props, ref, 'text'),
+        renderer: renderPluginText,
         type: 'prometheus.text',
     },
     timeseries: {
-        renderer: (props, ref) => renderPanel<'timeseries'>(props, ref, 'timeseries'),
+        renderer: (props, ref) => renderPanel(props, ref, 'timeseries'),
         type: 'prometheus.timeseries',
     },
     row: {
-        renderer: (props, ref) => renderPanel<'row'>(props, ref, 'row'),
+        renderer: (props, ref) => renderPanel(props, ref, 'row'),
         type: 'prometheus.row',
     },
 };
+
+export type PrometheusPlugins = typeof PLUGINS;
 
 DashKit.registerPlugins(
     ...Object.keys(PLUGINS).map((id) => {
@@ -88,7 +94,7 @@ DashKit.setSettings({
 });
 
 function renderPanel<K extends PanelType>(
-    {id}: PluginWidgetProps<PluginParams<K>>,
+    {id}: PluginRenderProps<K>,
     forwardRef: React.Ref<any>,
     type: K,
 ) {

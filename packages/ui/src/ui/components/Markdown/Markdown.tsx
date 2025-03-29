@@ -1,4 +1,4 @@
-import React, {memo} from 'react';
+import React from 'react';
 import cn from 'bem-cn-lite';
 import axios from 'axios';
 
@@ -16,6 +16,7 @@ const block = cn('yt-markdown');
 
 interface Props {
     text: string;
+    ref?: React.Ref<HTMLDivElement>;
     allowHTML?: boolean;
 }
 
@@ -67,17 +68,21 @@ export function useMarkdown({text, allowHTML = true}: Props) {
     return res;
 }
 
-function MD({text}: Props) {
+const MarkdownImpl = React.forwardRef(function MD({text}: Props, ref: React.Ref<HTMLDivElement>) {
     const {html} = useMarkdown({text, allowHTML: true}).result ?? {};
 
     return (
-        <React.Fragment>
-            <div className={block(null, 'yfm')} dangerouslySetInnerHTML={{__html: html ?? ''}} />
-        </React.Fragment>
+        <div
+            className={block(null, 'yfm')}
+            dangerouslySetInnerHTML={{__html: html ?? ''}}
+            ref={ref}
+        />
     );
-}
-
-export const Markdown = memo(function Markdown({text}: Props) {
-    const customMarkdown = UIFactory.renderMarkdown({text});
-    return customMarkdown ?? <MD text={text} />;
 });
+
+export const Markdown = React.memo(function Markdown({text}: Props) {
+    const customMarkdown = UIFactory.renderMarkdown({text});
+    return customMarkdown ?? <MarkdownImpl text={text} />;
+});
+
+Markdown.displayName = 'Markdown';
