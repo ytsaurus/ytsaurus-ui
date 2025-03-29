@@ -190,4 +190,6 @@ export enum YTApiId {
 
     //pipeline/flow
     flowExecuteDescribePipeline,
+
+    prometheusMonitoringLayout,
 }
