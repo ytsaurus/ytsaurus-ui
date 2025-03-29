@@ -199,4 +199,6 @@ export const enum YTApiId {
 
     //pipeline/flow
     flowExecuteDescribePipeline = 'flowExecuteDescribePipeline',
+
+    prometheusMonitoringLayout = 'prometheusMonitoringLayout',
 }
