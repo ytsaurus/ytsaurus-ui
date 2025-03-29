@@ -70,6 +70,14 @@ test('Navigation: map_node - ACL', async ({page}) => {
     await expect(page).toHaveScreenshot();
 });
 
+test('Navigation: map_node - Originating queue path', async ({page}) => {
+    await page.goto(makeClusterUrl(`navigation?path=${E2E_DIR}/tmp/queue_export_default`));
+
+    await navigationPage(page).replaceBreadcrumbsTestDir();
+
+    await expect(page).toHaveScreenshot();
+});
+
 test('Navigation - Locks', async ({page}) => {
     await page.goto(makeClusterUrl(`navigation?navmode=locks&path=${E2E_DIR}/locked`));
 

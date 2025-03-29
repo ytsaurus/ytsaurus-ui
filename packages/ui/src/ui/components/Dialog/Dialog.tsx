@@ -55,6 +55,7 @@ import {DatePickerControl} from './controls/DatePickerControl/DatePickerControl'
 import {RangeInputPickerControl} from './controls/RangeInputPickerControl/RangeInputPickerControl';
 import {AclColumnsControl} from '../../containers/ACL/RequestPermissions/AclColumnsControl/AclColumnsControl';
 import {useHotkeysScope} from '../../hooks/use-hotkeysjs-scope';
+import ExportsEditTabField from '../../pages/navigation/tabs/Queue/views/Exports/ExportsEdit/ExportsEditDialog/ExportsEditTabField/ExportsEditTabField';
 
 const block = cn('yt-dialog');
 
@@ -204,10 +205,12 @@ export type DialogField<FormValues = unknown> =
       >;
 
 registerDialogTabControl('yt-create-table-tab', CreateTableTabField);
+registerDialogTabControl('yt-create-queue-export-tab', ExportsEditTabField);
 
 export type DialogTabField<FieldT> =
     | DFDialogTabField<FieldT>
-    | RegisteredDialogTabField<'yt-create-table-tab', any, FieldT>;
+    | RegisteredDialogTabField<'yt-create-table-tab', any, FieldT>
+    | RegisteredDialogTabField<'yt-create-queue-export-tab', any, FieldT>;
 
 export type YTDialogType = typeof YTDialog;
 export function YTDialog<Values, InitialValues = Partial<Values>>(
