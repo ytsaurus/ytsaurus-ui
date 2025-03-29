@@ -29,6 +29,7 @@ import {getCluster} from '../../../store/selectors/global';
 import SchedulingExpandedPoolsUpdater from './SchedulingExpandedPoolsUpdater';
 import UIFactory from '../../../UIFactory';
 import {UI_TAB_SIZE} from '../../../constants/global';
+import {SchedulingMonitoring} from './tabs/Monitoring/SchedulingMonitoring';
 
 const block = cn('scheduling-content');
 
@@ -69,12 +70,17 @@ function Content({className, match, location}) {
     const aclTab = showSettings[Tab.ACL];
     aclTab.show = aclTab.show && allowAcl;
 
-    const extraTabs = UIFactory.getSchedulingExtraTabs({
-        cluster,
-        pool,
-        tree,
-        extraOptions: {isRoot, isEphemeral},
-    });
+    const extraTabs = [
+        ...UIFactory.getSchedulingExtraTabs({
+            cluster,
+            pool,
+            tree,
+            extraOptions: {isRoot, isEphemeral},
+        }),
+        ...(isEphemeral
+            ? []
+            : [{name: 'monitor', title: 'Monitoring', component: SchedulingMonitoring}]),
+    ];
 
     const extraRoutes = [];
 
