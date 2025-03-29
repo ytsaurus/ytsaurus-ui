@@ -35,6 +35,7 @@ export default class Query {
             break: false,
             indent: 0,
             asHTML: false,
+            treatValAsData: true,
         };
         if (!yqlTypes || !value) {
             return unipika.formatFromYSON(value, settings);
