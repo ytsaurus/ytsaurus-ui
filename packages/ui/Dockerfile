@@ -1,4 +1,4 @@
-FROM  ghcr.io/gravity-ui/node-nginx:ubuntu20-nodejs18
+FROM  ghcr.io/gravity-ui/node-nginx:ubuntu22-nodejs20-full.2025-01-24
 
 RUN mkdir -p /opt/app
 WORKDIR /opt/app
