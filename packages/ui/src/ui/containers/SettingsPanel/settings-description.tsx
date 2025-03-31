@@ -611,6 +611,16 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
                         oneLine
                     />,
                 ),
+                makeItem(
+                    'global::monacoVimMode',
+                    'Vim mode',
+                    'top',
+                    <BooleanSettingItem
+                        settingKey="global::monacoVimMode"
+                        description="Use monaco vim mode"
+                        oneLine
+                    />,
+                ),
                 ...(hasQuerySuggestions
                     ? [
                           makeItem(

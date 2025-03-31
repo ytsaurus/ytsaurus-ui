@@ -16,6 +16,7 @@ interface GlobalSettings {
     'global::theme': 'system' | 'light' | 'dark' | 'light-hc' | 'dark-hc';
     'global::autoRefresh': boolean;
     'global::fontType': string;
+    'global::monacoVimMode': boolean;
 }
 
 interface YsonSettings {

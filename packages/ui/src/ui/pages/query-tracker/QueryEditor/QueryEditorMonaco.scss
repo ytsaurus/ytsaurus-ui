@@ -19,4 +19,8 @@
     &__error-line {
         background: var(--error-background);
     }
+
+    &_vim-mode {
+        height: calc(100% - 60px);
+    }
 }
