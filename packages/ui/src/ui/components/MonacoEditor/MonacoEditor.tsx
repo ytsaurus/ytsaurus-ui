@@ -2,12 +2,15 @@ import React, {FC, MutableRefObject, useCallback, useEffect, useRef} from 'react
 import cn from 'bem-cn-lite';
 import key from 'hotkeys-js';
 import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
+// @ts-ignore
+import {initVimMode} from 'monaco-vim/src';
 import {useSelector} from 'react-redux';
 import {getTheme} from '../../store/selectors/global';
 import {YT_DARK_MONACO_THEME, YT_LIGHT_MONACO_THEME} from './MonacoEditorThemes';
 import isEqual_ from 'lodash/isEqual';
 import '../../libs/monaco-yql-languages/monaco.contribution';
 import './MonacoEditor.scss';
+import {getSettingsMonacoVimMode} from '../../store/selectors/settings/settings-ts';
 
 const block = cn('yt-monaco-editor');
 
@@ -40,9 +43,14 @@ const MonacoEditor: FC<Props> = ({
     onChange,
     editorRef,
 }) => {
+    const vimMode = useSelector(getSettingsMonacoVimMode);
     const theme = useSelector(getTheme);
     const modelRef = useRef(monaco.editor.createModel(value, language));
+    const vimModeRef = useRef<any>();
+
     const containerRef = useRef<HTMLDivElement>(null);
+    const statusRef = useRef<HTMLDivElement>(null);
+
     const prevScopeRef = useRef<string>(key.getScope());
     const silentRef = useRef<boolean>(false);
     const prevProps = useRef<Pick<Props, 'monacoConfig' | 'readOnly'> & {theme: string}>({
@@ -99,6 +107,15 @@ const MonacoEditor: FC<Props> = ({
         };
     }, []);
 
+    useEffect(() => {
+        if (!vimMode) return;
+        vimModeRef.current = initVimMode(editorRef?.current, statusRef?.current);
+
+        return () => {
+            vimModeRef.current?.dispose();
+        };
+    }, [editorRef, vimMode]);
+
     // on props change
     useEffect(() => {
         const model = modelRef.current;
@@ -140,9 +157,12 @@ const MonacoEditor: FC<Props> = ({
     }, [editorRef, language, monacoConfig, onContentChanged, readOnly, theme, value]);
 
     return (
-        <div className={block(null, className)}>
-            <div ref={containerRef} className={block('editor')} />
-        </div>
+        <>
+            <div className={block(null, className)}>
+                <div ref={containerRef} className={block('editor')} />
+            </div>
+            {vimMode && <div ref={statusRef} className={block('status')} />}
+        </>
     );
 };
 
