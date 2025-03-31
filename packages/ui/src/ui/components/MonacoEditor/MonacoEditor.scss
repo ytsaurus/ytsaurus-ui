@@ -23,4 +23,9 @@
         background: #bb800926;
         border: 1px solid #bb800966;
     }
+
+    &__status {
+        padding: 0 20px;
+        border-bottom: 1px solid var(--dark-divider);
+    }
 }
