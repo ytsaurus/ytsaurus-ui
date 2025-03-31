@@ -188,26 +188,26 @@ test.describe('@QueryTracker: Suggest scenarios', () => {
     })
 
     test.describe('Directory content suggest', () => {    
-        test(`After typing \`//\` we expect next suggest: //tmp`, async () => {
+        test(`After typing \`//\` we expect next suggest: tmp`, async () => {
             await queryTrackerPage.fillQueryEditor(['SELECT * FROM `']);
 
             await queryTrackerPage.waitForText('SELECT * FROM ``');
 
             await queryTrackerPage.type('//');
 
-            await queryTrackerPage.clickToSuggest('//tmp');
+            await queryTrackerPage.clickToSuggest('tmp');
 
             await queryTrackerPage.waitForText('SELECT * FROM `//tmp`');
         });
     
-        test(`After typing \`//tm\` we expect next suggest: //tmp`, async () => {
+        test(`After typing \`//tm\` we expect next suggest: tmp`, async () => {
             await queryTrackerPage.fillQueryEditor(['SELECT * FROM `']);
 
             await queryTrackerPage.waitForText('SELECT * FROM ``');
 
             await queryTrackerPage.type('//tm');
 
-            await queryTrackerPage.clickToSuggest('//tmp');
+            await queryTrackerPage.clickToSuggest('tmp');
 
             await queryTrackerPage.waitForText('SELECT * FROM `//tmp`');
         });
