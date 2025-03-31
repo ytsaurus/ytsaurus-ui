@@ -120,6 +120,14 @@ export type QueryError = YTError<{
     };
 }>;
 
+export type CHYTProgress = {
+    finished: boolean;
+    read_bytes: number;
+    read_rows: number;
+    total_bytes_to_read: number;
+    total_rows_to_read: number;
+};
+
 export interface QueryItem extends DraftQuery {
     id: QueryItemId;
     start_time: string;
@@ -132,6 +140,7 @@ export interface QueryItem extends DraftQuery {
         yql_statistics?: YQLSstatistics;
         yql_progress?: Progress;
         spyt_progress?: number;
+        total_progress?: CHYTProgress;
     };
     error?: QueryError;
     annotations?: {
