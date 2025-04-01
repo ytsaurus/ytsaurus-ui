@@ -10,6 +10,7 @@
         background-color: var(--dark-background);
     }
 
+    &__action,
     &__name {
         display: inline-flex;
         align-items: center;
@@ -25,6 +26,10 @@
         max-width: 120px;
     }
 
+    &__action_row {
+        padding: 0 5px 0 0;
+    }
+
     &__name > &__status-icon {
         min-width: 16px;
         min-height: 16px;
@@ -32,17 +37,13 @@
 
     &__name-edit {
         visibility: hidden;
-        flex: 1px;
         overflow: hidden;
         z-index: 1;
         margin: -14px 0;
     }
 
     &:hover &__name-edit {
-        flex: 1;
-        padding-left: 5px;
         visibility: visible;
-        width: auto;
         overflow: visible;
     }
 
