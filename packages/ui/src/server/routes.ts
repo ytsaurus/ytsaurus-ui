@@ -42,6 +42,7 @@ import {
     sendMessage,
     summarizeConversationTitle,
 } from './controllers/ai-chat';
+import {prometheusQueryRange} from './controllers/prometheus';
 
 const HOME_INDEX_TARGET: AppRouteDescription = {handler: homeIndexFactory(), ui: true};
 
@@ -91,6 +92,8 @@ const routes: AppRoutes = {
     'GET    /api/settings/:ytAuthCluster/:username/:path': {handler: settingsGetItem},
     'PUT    /api/settings/:ytAuthCluster/:username/:path': {handler: settingsSetItem},
     'DELETE /api/settings/:ytAuthCluster/:username/:path': {handler: settingsDeleteItem},
+
+    'GET /api/prometheus/query_range': {handler: prometheusQueryRange},
 
     'GET  /api/table-column-preset/:ytAuthCluster/:hash': {
         handler: tableColumnPresetGet,
