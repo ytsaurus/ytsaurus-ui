@@ -6,16 +6,18 @@ import {PrometheusDashKit} from './PrometheusDashKit';
 
 export type PrometheusDashboardProps = {
     type: 'scheduler-pool';
-    params: {cluster: string; pool: string; tree: string};
+    params?: Record<string, {toString(): string}>;
 };
 
 function PrometheusDashboardImpl({type, params}: PrometheusDashboardProps) {
     const {layout, error} = usePrometheusLayout(type);
-    return (
+    return !params ? null : (
         <div>
             {error && <YTErrorBlock error={error} />}
             <MissingParametersWarning templating={layout?.templating} params={params} />
-            {layout?.panels !== undefined ? <PrometheusDashKit panels={layout.panels} /> : null}
+            {layout?.panels === undefined ? null : (
+                <PrometheusDashKit panels={layout.panels} params={params} />
+            )}
         </div>
     );
 }
@@ -56,14 +58,15 @@ export type DashboardPanel = {
 export type DashaboardPanelByType =
     | {type: 'row'}
     | {type: 'text'; options: {mode: 'markdown'; content: string}}
-    | {type: 'timeseries'; targets: Array<TimeseriesTarget>};
+    | {type: 'timeseries'; targets: Array<TimeseriesTarget>; title: string};
 
-type TimeseriesTarget = {expr: string; legentFormat: string; refId: string};
+export type TimeseriesTarget = {expr: string; legentFormat: string; refId: string};
 
 function MissingParametersWarning({
     templating,
     params,
-}: Pick<Partial<DashboardInfo>, 'templating'> & Pick<PrometheusDashboardProps, 'params'>) {
+}: Pick<Partial<DashboardInfo>, 'templating'> &
+    Pick<Required<PrometheusDashboardProps>, 'params'>) {
     const details: YTError | undefined = React.useMemo(() => {
         const inner_errors = templating?.list.reduce((acc, {name: n}) => {
             const name = n as keyof typeof params;
