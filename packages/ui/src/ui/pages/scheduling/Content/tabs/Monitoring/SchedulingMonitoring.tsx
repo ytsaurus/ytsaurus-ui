@@ -12,7 +12,7 @@ export function SchedulingMonitoring() {
     const tree = useSelector(getTree);
 
     const params = React.useMemo(() => {
-        return {cluster, tree, pool};
+        return !cluster || !pool || !tree ? undefined : {cluster, tree, pool};
     }, [cluster, tree, pool]);
 
     return <PrometheusDashboardLazy type="scheduler-pool" params={params} />;
