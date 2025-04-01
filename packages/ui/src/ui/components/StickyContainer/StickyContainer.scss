@@ -4,7 +4,7 @@
         z-index: 1;
 
         background-color: var(--main-background);
-        box-shadow: 0 1px 10px var(--opacity-background);
+        box-shadow: 0 4px 4px -4px var(--opacity-background);
 
         width: calc(100vw - var(--gn-aside-header-size));
         margin-left: -20px;
