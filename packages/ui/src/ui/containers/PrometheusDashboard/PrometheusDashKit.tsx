@@ -2,22 +2,28 @@ import React from 'react';
 import {Config, DashKit, Plugin, PluginWidgetProps} from '@gravity-ui/dashkit';
 import cn from 'bem-cn-lite';
 
-import {DashaboardPanelByType, DashboardInfo} from './PrometheusDashboard';
+import {
+    DashaboardPanelByType,
+    DashboardInfo,
+    PrometheusDashboardProps,
+} from './PrometheusDashboard';
 
 import './PrometheusDashKit.scss';
 import {renderPluginText} from './plugins/text';
 import {renderPluginRow} from './plugins/row';
+import {renderPluginTimeseries} from './plugins/timeseries';
 
 const block = cn('yt-prometheus-dashkit');
 
 export type PrometheusDashKitProps = {
     panels?: DashboardInfo['panels'];
+    params: Required<PrometheusDashboardProps>['params'];
 };
 
 const salt = `${Math.random().toString()}`;
 
-export function PrometheusDashKit({panels}: PrometheusDashKitProps) {
-    const {config} = useDashKitConfig(panels);
+export function PrometheusDashKit({panels, params}: PrometheusDashKitProps) {
+    const {config} = useDashKitConfig(panels, params);
     return (
         <div className={block()}>
             {!config ? null : <DashKit config={config} editMode={false} />}
@@ -25,7 +31,10 @@ export function PrometheusDashKit({panels}: PrometheusDashKitProps) {
     );
 }
 
-function useDashKitConfig(panels: PrometheusDashKitProps['panels']) {
+function useDashKitConfig(
+    panels: PrometheusDashKitProps['panels'],
+    params: Record<string, {toString(): string}>,
+) {
     const [collapsedRows, setCollapsedRows] = React.useState<Record<string, boolean | undefined>>(
         {},
     );
@@ -39,7 +48,7 @@ function useDashKitConfig(panels: PrometheusDashKitProps['panels']) {
 
                 function addToLayout<T>(extraProps: T) {
                     const itemType: PluginType = `prometheus.${type}`;
-                    const data = Object.assign(rest, extraProps);
+                    const data = Object.assign(rest, extraProps, {params});
                     acc.layout.push({...gridPos, i: id});
                     acc.items.push({
                         id,
@@ -87,12 +96,12 @@ type PanelType = DashaboardPanelByType['type'];
 type PanelProps<K extends PanelType> = Omit<DashaboardPanelByType & {type: K}, 'type'> &
     PanelTypeSpecificProps<K>;
 export type PluginRenderProps<K extends PanelType> = Omit<PluginWidgetProps, 'data'> & {
-    data: PanelProps<K>;
+    data: PanelProps<K> & {params: Record<string, string | number>};
 };
 
 type PanelTypeSpecificProps<K extends PanelType> = K extends 'row'
     ? {collapsed?: boolean; onToggleCollapsed: () => void; childCount: number}
-    : never;
+    : {};
 
 type PluginType<K extends PanelType = PanelType> = `prometheus.${K}`;
 
@@ -106,7 +115,7 @@ const PLUGINS: {
         type: 'prometheus.text',
     },
     timeseries: {
-        renderer: (props, ref) => renderPanel(props, ref, 'timeseries'),
+        renderer: renderPluginTimeseries,
         type: 'prometheus.timeseries',
     },
     row: {
@@ -132,23 +141,3 @@ DashKit.setSettings({
         cols: 24,
     },
 });
-
-function renderPanel<K extends PanelType>(
-    {id}: PluginRenderProps<K>,
-    forwardRef: React.Ref<any>,
-    type: K,
-) {
-    return (
-        <div
-            ref={forwardRef}
-            style={{
-                overflow: 'auto',
-                backgroundColor: 'lightgray',
-                width: '100%',
-                height: '100%',
-            }}
-        >
-            {JSON.stringify({type, id})}
-        </div>
-    );
-}
