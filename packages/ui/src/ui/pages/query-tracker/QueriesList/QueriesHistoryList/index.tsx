@@ -111,6 +111,23 @@ export const NameColumns: Column<TableItem> = {
                 >
                     {name || 'No name'}
                 </Text>
+            </div>
+        );
+    },
+};
+
+export const ActionColumns: Column<TableItem> = {
+    name: ' ',
+    align: 'left',
+    width: 20,
+    className: itemBlock('action_row'),
+    render: ({row}) => {
+        if (isHeaderTableItem(row)) {
+            return null;
+        }
+
+        return (
+            <div className={itemBlock('action')} onClick={(e) => e.stopPropagation()}>
                 <EditQueryNameModal className={itemBlock('name-edit')} query={row} />
             </div>
         );
@@ -211,6 +228,7 @@ export const MyColumns: Column<TableItem>[] = [
     DurationColumns,
     StartedColumns,
     ACOColumns,
+    ActionColumns,
 ];
 export const AllColumns: Column<TableItem>[] = [
     NameColumns,
@@ -219,6 +237,7 @@ export const AllColumns: Column<TableItem>[] = [
     AuthorColumns,
     StartedColumns,
     ACOColumns,
+    ActionColumns,
 ];
 
 const tableSettings: Settings = {
