@@ -66,7 +66,7 @@ export default function Scheduler({
                 )}
             </div>
             <div title={formatedAddress} className={b('scheduler-host')}>
-                <Tooltip content={formatedAddress}>
+                <Tooltip content={formatedAddress} ellipsis>
                     <div className={b('scheduler-host-address')}>
                         {makeShortSystemAddress(formatedAddress) || formatedAddress}
                     </div>
