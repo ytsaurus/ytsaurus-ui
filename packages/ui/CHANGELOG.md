@@ -1,5 +1,33 @@
 # Changelog
 
+## [1.87.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.86.0...ui-v1.87.0) (2025-04-02)
+
+
+### Features
+
+* **Monaco:** vim mode[YTFRONT-4807] ([00b5cb7](https://github.com/ytsaurus/ytsaurus-ui/commit/00b5cb701d3af062dfb6d4dcea40683bc3b98340))
+* **Queries/Graph:** increased visibility of the number of tasks [YTFRONT-4812] ([d393feb](https://github.com/ytsaurus/ytsaurus-ui/commit/d393feb2c5d62e43f7ff6bff135206d4896cbd25))
+* **Queries:** open navigation on path click [YTFRONT-4802] ([2630b4c](https://github.com/ytsaurus/ytsaurus-ui/commit/2630b4c29aadc9b5c1559cec69bd29a6bf0aa3a0))
+* **Queries:** redirect confirm modal [YTFRONT-4809] ([78da341](https://github.com/ytsaurus/ytsaurus-ui/commit/78da34127592eec1afb81f1c6d43e0e8a2bdd238))
+* **Queries:** show status in chyt clique selector [YTFRONT-4825] ([3c5065a](https://github.com/ytsaurus/ytsaurus-ui/commit/3c5065ac85050b9f23c501c264a27f4ec9c9732e))
+
+
+### Bug Fixes
+
+* **Dialog:** update event on clean [YTFRONT-4829] ([9d8ab15](https://github.com/ytsaurus/ytsaurus-ui/commit/9d8ab15fbbf33c3aacc2cb090e87501f91337b86))
+* **Operation/Details/Alerts:** fix for infor urls [YTFRONT-4800] ([c6961a0](https://github.com/ytsaurus/ytsaurus-ui/commit/c6961a043218717ac20269a0aa09052a094445a4))
+* **Operation/Jobs:** fix a misprint [YTFRONT-4798] ([31ea5a1](https://github.com/ytsaurus/ytsaurus-ui/commit/31ea5a137cbc2f7f4c8e46890e08a16d532a0042))
+* **Operation/Statistics:** add copy button for values [YTFRONT-4805] ([d1832fe](https://github.com/ytsaurus/ytsaurus-ui/commit/d1832fe864049ec3f350fa5178218ed1addde290))
+* **Queries/History:** status icon [YTFRONT-4821] ([b5f29a9](https://github.com/ytsaurus/ytsaurus-ui/commit/b5f29a9193127b1f8cde393eb126e202a4cb4e0b))
+* **Queries/Monaco:** cut path suggest [YTFRONT-4806] ([9fb5334](https://github.com/ytsaurus/ytsaurus-ui/commit/9fb5334338e9b097d6e8dc85a6fcb0d5cffece0d))
+* **Queries:** fix navigation by url path [YTFRONT-4802] ([fc5f0e5](https://github.com/ytsaurus/ytsaurus-ui/commit/fc5f0e5bc7b23d5eab5aff39e2fecd34199c0e58))
+* **Queries:** fixed query suggest, now `` are fully replaced by `//` [[#1032](https://github.com/ytsaurus/ytsaurus-ui/issues/1032)] ([d1d43de](https://github.com/ytsaurus/ytsaurus-ui/commit/d1d43de49a224035b23a01c244d40ce3cfa7d62d))
+* **Scheduling/Details:** operation limits [YTFRONT-4820] ([4798733](https://github.com/ytsaurus/ytsaurus-ui/commit/4798733bd04be733bb1bb2d0bade339c517fa010))
+* **System:** masters on small monitors [YTFRONT-4830] ([6e46f6c](https://github.com/ytsaurus/ytsaurus-ui/commit/6e46f6cf8967b39d2e27afa74b0ed19ecc8fea4d))
+* **Table/CellPreview:** preview should work for columns with slashes [YTFRONT-4797] ([c93e8bc](https://github.com/ytsaurus/ytsaurus-ui/commit/c93e8bc2a2e8657c138c107b658cea3f37e4f090))
+* **UI:** incorrect color in high contrast theme [YTFRONT-4818] ([eaafead](https://github.com/ytsaurus/ytsaurus-ui/commit/eaafead3b544a314e20301d89fabd7c8ac675e20))
+* **Yson:** parsed value scroll [YTFRONT-4823] ([43e181d](https://github.com/ytsaurus/ytsaurus-ui/commit/43e181d5e19e2d8c3037f2db196a0ab37121ece5))
+
 ## [1.86.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.85.0...ui-v1.86.0) (2025-03-21)
 
 
