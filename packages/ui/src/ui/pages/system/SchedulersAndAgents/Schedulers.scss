@@ -9,7 +9,7 @@
     &__schedulers-hosts,
     &__agents-hosts {
         display: grid;
-        grid-gap: 8px 80px;
+        grid-gap: 8px 40px;
         grid-auto-flow: column;
 
         margin-bottom: 18px;
@@ -23,8 +23,9 @@
     }
 
     &__scheduler-host {
-        display: flex;
-        gap: 0 4px;
+        display: grid;
+        grid-template-columns: minmax(0, min-content) 25px 25px;
+        grid-gap: 0 4px;
 
         &-address {
             flex: 0 1 auto;
