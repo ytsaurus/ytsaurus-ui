@@ -3,6 +3,11 @@
         & > * {
             width: 100%;
             height: 100%;
+
+            border: 1px solid var(--dark-divider);
+            border-radius: 6px;
+
+            overflow: auto;
         }
     }
 }
