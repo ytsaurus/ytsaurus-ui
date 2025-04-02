@@ -60,7 +60,7 @@ export type DashaboardPanelByType =
     | {type: 'text'; options: {mode: 'markdown'; content: string}}
     | {type: 'timeseries'; targets: Array<TimeseriesTarget>; title: string};
 
-export type TimeseriesTarget = {expr: string; legentFormat: string; refId: string};
+export type TimeseriesTarget = {expr: string; legendFormat: string; refId: string};
 
 function MissingParametersWarning({
     templating,

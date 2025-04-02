@@ -39,6 +39,17 @@ function useDashKitConfig(
         {},
     );
 
+    React.useMemo(() => {
+        DashKit.setSettings({
+            gridLayout: {
+                margin: [4, 4],
+                containerPadding: [0, 0],
+                rowHeight: 30,
+                cols: 24,
+            },
+        });
+    }, []);
+
     const config = React.useMemo(() => {
         let rowSpecificProps: PanelTypeSpecificProps<'row'> | undefined;
         return panels?.reduce(
@@ -88,7 +99,7 @@ function useDashKitConfig(
                 connections: [],
             } as Config,
         );
-    }, [panels, collapsedRows]);
+    }, [panels, collapsedRows, params]);
     return {config};
 }
 
@@ -129,15 +140,6 @@ export type PrometheusPlugins = typeof PLUGINS;
 DashKit.registerPlugins(
     ...Object.keys(PLUGINS).map((id) => {
         const k = id as keyof typeof PLUGINS;
-        return {...PLUGINS[k], defaultLayout: {w: 10, h: 10}};
+        return {...PLUGINS[k]};
     }),
 );
-
-DashKit.setSettings({
-    gridLayout: {
-        margin: [4, 4],
-        containerPadding: [0, 0],
-        rowHeight: 25,
-        cols: 24,
-    },
-});
