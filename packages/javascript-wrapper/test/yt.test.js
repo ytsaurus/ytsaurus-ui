@@ -29,19 +29,17 @@ describe('yt', function () {
             NO_AUTHENTICATION = {
                 type: 'none',
             },
-            GET_METHOD = 'GET',
+            POST_METHOD = 'POST',
             PATH = '//tmp/foo';
 
         var API_VERSION = 'v3';
 
-        var HEADERS_FORMAT = '<encode_utf8=%false>json';
-
         var DEFAULT_HEADERS = {
             Accept: 'application/json',
-            'X-YT-Header-Format': HEADERS_FORMAT,
+            'Content-Type': "application/json",
             'X-YT-Suppress-Redirect': 1,
-            'X-YT-Parameters-0': 'eyJwYXRoIjoiLy90bXAvZm9vIn0=', // { path: '//tmp/foo' }
         };
+        var DATA = JSON.stringify({ path: '//tmp/foo' });
 
         beforeEach(function (done) {
             _yt.core._request = _yt.core._prepareRequestSettings;
@@ -137,12 +135,13 @@ describe('yt', function () {
                 headers: Object.assign({}, DEFAULT_HEADERS),
                 timeout: _yt.setup.getDefaultOption('timeout'),
                 responseType: 'json',
-                method: GET_METHOD,
+                method: POST_METHOD,
                 withCredentials: false,
                 withXSRFToken: false,
                 transformResponse: [_yt.core._identity],
                 xsrfCookieName: '',
                 meta: {command: 'get'},
+                data: DATA,
             });
 
             _yt.setup.unsetGlobalOption('proxy');
@@ -161,12 +160,13 @@ describe('yt', function () {
                     headers: Object.assign({}, DEFAULT_HEADERS),
                     timeout: _yt.setup.getDefaultOption('timeout'),
                     responseType: 'json',
-                    method: GET_METHOD,
+                    method: POST_METHOD,
                     withCredentials: false,
                     withXSRFToken: false,
                     transformResponse: [_yt.core._identity],
                     xsrfCookieName: '',
                     meta: {command: 'get'},
+                    data: DATA,
                 },
             );
 
@@ -190,12 +190,13 @@ describe('yt', function () {
                 }),
                 timeout: _yt.setup.getDefaultOption('timeout'),
                 responseType: 'json',
-                method: GET_METHOD,
+                method: POST_METHOD,
                 withCredentials: true,
                 withXSRFToken: true,
                 transformResponse: [_yt.core._identity],
                 xsrfCookieName: '',
                 meta: {command: 'get'},
+                data: DATA,
             });
 
             _yt.setup.unsetGlobalOption('proxy');
@@ -218,12 +219,13 @@ describe('yt', function () {
                     headers: Object.assign({}, DEFAULT_HEADERS),
                     timeout: _yt.setup.getDefaultOption('timeout'),
                     responseType: 'json',
-                    method: GET_METHOD,
+                    method: POST_METHOD,
                     withCredentials: true,
                     withXSRFToken: true,
                     transformResponse: [_yt.core._identity],
                     xsrfCookieName: '',
                     meta: {command: 'get'},
+                    data: DATA,
                 },
             );
 
@@ -239,12 +241,13 @@ describe('yt', function () {
                 headers: Object.assign({}, DEFAULT_HEADERS),
                 timeout: _yt.setup.getDefaultOption('timeout'),
                 responseType: 'json',
-                method: GET_METHOD,
+                method: POST_METHOD,
                 withCredentials: false,
                 withXSRFToken: false,
                 transformResponse: [_yt.core._identity],
                 xsrfCookieName: '',
                 meta: {command: 'get'},
+                data: DATA,
             };
 
             deeplyCompareAjaxParameters(
@@ -271,12 +274,13 @@ describe('yt', function () {
                 headers: Object.assign({}, DEFAULT_HEADERS),
                 timeout: TIMEOUT,
                 responseType: 'json',
-                method: GET_METHOD,
+                method: POST_METHOD,
                 withCredentials: false,
                 withXSRFToken: false,
                 transformResponse: [_yt.core._identity],
                 xsrfCookieName: '',
                 meta: {command: 'get'},
+                data: DATA,
             });
 
             _yt.setup.unsetGlobalOption('proxy');
@@ -299,12 +303,13 @@ describe('yt', function () {
                     headers: Object.assign({}, DEFAULT_HEADERS),
                     timeout: OVERRIDEN_TIMEOUT,
                     responseType: 'json',
-                    method: GET_METHOD,
+                    method: POST_METHOD,
                     withCredentials: false,
                     withXSRFToken: false,
                     transformResponse: [_yt.core._identity],
                     xsrfCookieName: '',
                     meta: {command: 'get'},
+                    data: DATA,
                 },
             );
 
@@ -325,12 +330,13 @@ describe('yt', function () {
                     headers: Object.assign({}, DEFAULT_HEADERS),
                     timeout: _yt.setup.getDefaultOption('timeout'),
                     responseType: 'json',
-                    method: GET_METHOD,
+                    method: POST_METHOD,
                     withCredentials: false,
                     withXSRFToken: false,
                     transformResponse: [_yt.core._identity],
                     xsrfCookieName: '',
                     meta: {command: 'get'},
+                    data: DATA,
                 },
             );
 
@@ -354,12 +360,13 @@ describe('yt', function () {
                     headers: Object.assign({}, DEFAULT_HEADERS),
                     timeout: _yt.setup.getDefaultOption('timeout'),
                     responseType: 'json',
-                    method: GET_METHOD,
+                    method: POST_METHOD,
                     withCredentials: false,
                     withXSRFToken: false,
                     transformResponse: [_yt.core._identity],
                     xsrfCookieName: '',
                     meta: {command: 'get'},
+                    data: DATA,
                 },
             );
 
