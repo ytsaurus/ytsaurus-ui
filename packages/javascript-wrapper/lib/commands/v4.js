@@ -109,13 +109,15 @@ module.exports = {
     // QueryTracker
     listQueries: {
         name: 'list_queries',
-        method: 'GET',
+        method: 'POST',
         dataType: 'json',
+        useBodyForParameters: true,
     },
     getQuery: {
         name: 'get_query',
-        method: 'GET',
+        method: 'POST',
         dataType: 'json',
+        useBodyForParameters: true,
     },
     startQuery: {
         name: 'start_query',

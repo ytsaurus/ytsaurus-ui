@@ -34,20 +34,23 @@ module.exports = {
     },
     get: {
         name: 'get',
-        method: 'GET',
+        method: 'POST',
         dataType: 'json',
+        useBodyForParameters: true,
         prepareParameters: prepareSuppressAccessTracking,
     },
     list: {
         name: 'list',
-        method: 'GET',
+        method: 'POST',
         dataType: 'json',
+        useBodyForParameters: true,
         prepareParameters: prepareSuppressAccessTracking,
     },
     exists: {
         name: 'exists',
-        method: 'GET',
+        method: 'POST',
         dataType: 'json',
+        useBodyForParameters: true,
         prepareParameters: prepareSuppressAccessTracking,
     },
 
@@ -268,8 +271,9 @@ module.exports = {
     },
     listOperations: {
         name: 'list_operations',
-        method: 'GET',
+        method: 'POST',
         dataType: 'json',
+        useBodyForParameters: true,
     },
     getOperation: {
         name: 'get_operation',
