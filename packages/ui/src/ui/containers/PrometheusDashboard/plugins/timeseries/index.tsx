@@ -16,6 +16,7 @@ import {InlineError} from '../../../../components/InlineError/InlineError';
 import CancelHelper, {isCancelled} from '../../../../utils/cancel-helper';
 import Loader from '../../../../components/Loader/Loader';
 import {humanizeInterval} from '../../../../components/common/Timeline/util';
+import {useElementSize} from '../../../../hooks/useResizeObserver';
 
 import {PrometheusPlugins} from '../../PrometheusDashKit';
 
@@ -40,11 +41,14 @@ type PrometheusChartProps = Props;
 
 function PrometheusChart({data}: PrometheusChartProps) {
     const {title} = data;
+    const [element, setElement] = React.useState<HTMLDivElement | null>(null);
 
-    const {error, data: chartData, loading} = useLoadQueriesData(data);
+    const pointCount = useElementSize({element: element as Element})?.contentRect.width;
+
+    const {error, data: chartData, loading} = useLoadQueriesData(data, pointCount);
 
     return (
-        <Flex className={block('widget')} direction="column">
+        <Flex ref={setElement} className={block('widget')} direction="column">
             {chartData ? (
                 <YTChartKitLazy type="yagr" data={chartData} />
             ) : (
@@ -58,7 +62,10 @@ function PrometheusChart({data}: PrometheusChartProps) {
     );
 }
 
-function useLoadQueriesData({title, targets, params}: PrometheusChartProps['data']) {
+function useLoadQueriesData(
+    {title, targets, params}: PrometheusChartProps['data'],
+    pointCount?: number,
+) {
     const [cancelHelper] = React.useState(new CancelHelper());
     const [chartData, setChartData] = React.useState<{
         data?: YagrWidgetData;
@@ -67,6 +74,10 @@ function useLoadQueriesData({title, targets, params}: PrometheusChartProps['data
     }>({});
 
     React.useEffect(() => {
+        if (!pointCount) {
+            return;
+        }
+
         cancelHelper.removeAllRequests();
         setChartData({loading: true});
         /**
@@ -76,7 +87,7 @@ function useLoadQueriesData({title, targets, params}: PrometheusChartProps['data
         const promises = targets.map((item) => {
             const end = Date.now() / 1000;
             const start = end - 3600;
-            const step = Math.max(1, Math.floor((end - start) / 250));
+            const step = Math.max(1, Math.floor((end - start) / Math.max(10, pointCount)));
             const query = replaceExprParams(item.expr, params, step);
             return axios
                 .get<QueryRangeResponse>('/api/prometheus/query_range', {
@@ -93,7 +104,7 @@ function useLoadQueriesData({title, targets, params}: PrometheusChartProps['data
             .catch((error) => {
                 setChartData({error: isCancelled(error) ? undefined : error, loading: false});
             });
-    }, [targets, params, cancelHelper]);
+    }, [targets, params, cancelHelper, title, pointCount]);
 
     return chartData;
 }
