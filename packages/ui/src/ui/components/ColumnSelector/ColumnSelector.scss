@@ -108,8 +108,8 @@ $item-horizontal-padding: 8px;
 
                 &:hover #{$checkbox}:before {
                     @include yt-fonts();
-
                     content: 'Add';
+                    margin-right: 8px;
                     line-height: 1;
                     color: var(--primary-text);
                 }
@@ -127,6 +127,7 @@ $item-horizontal-padding: 8px;
                     #{$checkbox}:before {
                         @include yt-fonts();
                         content: 'Remove';
+                        margin-right: 8px;
                         line-height: 1;
                         color: var(--primary-text);
                     }

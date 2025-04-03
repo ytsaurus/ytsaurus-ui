@@ -34,21 +34,18 @@ const DragHandle = sortableHandle(() => (
 ));
 
 const SortableItem = sortableElement(
-    ({
-        item,
-        isSortable,
-        isSelectable,
-        isDisabled,
-        itemRenderer,
-        onCheckBoxChange,
-        withClickableHandler,
-    }) => {
+    ({item, isSortable, isSelectable, isDisabled, itemRenderer, onCheckBoxChange}) => {
         const active = !isDisabled && !item.disabled;
         const className = b('list-item', {
             selected: item.checked && active && 'yes',
             selectable: isSelectable && active && 'yes',
             disabled: !active && 'yes',
         });
+
+        let showAction = true;
+        if (item.checked) {
+            showAction = 'isDeletable' in item ? item.isDeletable : true;
+        }
 
         return (
             <div className={className}>
@@ -57,7 +54,7 @@ const SortableItem = sortableElement(
                     {item.keyColumn && <Icon awesome="key" />}
                     {itemRenderer(item)}
                 </div>
-                {active && withClickableHandler && (
+                {active && showAction && (
                     <span
                         className={b('list-item-check')}
                         onClick={onCheckBoxChange}
@@ -81,7 +78,6 @@ const SortableList = sortableContainer(
         onCheckBoxChange,
         isSelectable,
         useStaticSize,
-        withClickableHandler = true,
     }) => {
         const renderer = (index, key) => {
             const item = items[index];
@@ -96,7 +92,6 @@ const SortableList = sortableContainer(
                     isSelectable={isSelectable}
                     itemRenderer={itemRenderer}
                     onCheckBoxChange={onCheckBoxChange}
-                    withClickableHandler={withClickableHandler}
                 />
             );
         };
@@ -226,7 +221,7 @@ export default class ColumnSelector extends Component {
                 if (!visibleMap[item.name]) {
                     return;
                 }
-                if (item.checked && !item.disabled) {
+                if (item.checked && !item.disabled && (item.isDeletable ?? true)) {
                     items[index] = {...item, checked: false};
                 }
             });

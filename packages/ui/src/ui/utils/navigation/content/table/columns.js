@@ -127,13 +127,15 @@ export default class Columns {
         );
 
         columns = map_(columns, (column) => {
+            const keyColumn = isKeyColumn(column);
             const columnSpec = {
                 name: column,
                 data: {
                     caption: Columns.prepareColumnCaption(column),
                     title: Columns.prepareColumnTitle(column),
                 },
-                keyColumn: isKeyColumn(column),
+                keyColumn,
+                isDeletable: !(keyColumn && isDynamic),
                 sortOrder: schemaColumnsByName[column]?.sort_order,
                 disabled: false,
                 checked: Object.hasOwnProperty.call(storedColumnsMap, column)
