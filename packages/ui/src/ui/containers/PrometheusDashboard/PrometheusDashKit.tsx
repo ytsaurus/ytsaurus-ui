@@ -12,6 +12,7 @@ import './PrometheusDashKit.scss';
 import {renderPluginText} from './plugins/text';
 import {renderPluginRow} from './plugins/row';
 import {renderPluginTimeseries} from './plugins/timeseries';
+import {usePrometheusDashboardContext} from './PrometheusDashboardContext/PrometheusDashboardContext';
 
 const block = cn('yt-prometheus-dashkit');
 
@@ -39,23 +40,14 @@ function useDashKitConfig(
         {},
     );
 
-    React.useMemo(() => {
-        DashKit.setSettings({
-            gridLayout: {
-                margin: [4, 4],
-                containerPadding: [0, 0],
-                rowHeight: 30,
-                cols: 24,
-            },
-        });
-    }, []);
+    const {expandedId} = usePrometheusDashboardContext();
 
     const config = React.useMemo(() => {
         let rowSpecificProps: PanelTypeSpecificProps<'row'> | undefined;
-        return panels?.reduce(
+        return getVisiblePanels(expandedId, panels).reduce(
             (acc, item) => {
                 const {gridPos, type, ...rest} = item;
-                const id = `${type}_${gridPos.x}_${gridPos.y}`;
+                const id = makePanelId(item);
 
                 function addToLayout<T>(extraProps: T) {
                     const itemType: PluginType = `prometheus.${type}`;
@@ -99,8 +91,50 @@ function useDashKitConfig(
                 connections: [],
             } as Config,
         );
-    }, [panels, collapsedRows, params]);
+    }, [panels, collapsedRows, params, expandedId]);
+
+    React.useMemo(() => {
+        const widthByY = config?.layout?.reduce(
+            (acc, item) => {
+                const k = `${item.y}` as const;
+                if (acc[k] === undefined) {
+                    acc[k] = 0;
+                }
+                acc[k] += item.w;
+                return acc;
+            },
+            {} as Record<`${number}`, number>,
+        );
+        const cols = Object.values(widthByY ?? {}).reduce((acc, value) => Math.max(acc, value), 0);
+
+        DashKit.setSettings({
+            gridLayout: {
+                margin: [4, 4],
+                containerPadding: [0, 0],
+                rowHeight: 30,
+                cols,
+            },
+        });
+    }, [config]);
+
     return {config};
+}
+
+function makePanelId(item: Exclude<PrometheusDashKitProps['panels'], undefined>[number]) {
+    return `${item.type}_${item.gridPos.x}_${item.gridPos.y}`;
+}
+
+function getVisiblePanels(expandedId?: string, panels: PrometheusDashKitProps['panels'] = []) {
+    const expandedPanelIndex = !expandedId
+        ? undefined
+        : panels?.findIndex((item) => expandedId === makePanelId(item));
+
+    const expandedPanel = expandedPanelIndex ? panels?.[expandedPanelIndex] : undefined;
+    if (!expandedPanelIndex || !expandedPanel) {
+        return panels;
+    }
+
+    return [expandedPanel];
 }
 
 type PanelType = DashaboardPanelByType['type'];
