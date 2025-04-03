@@ -1,18 +1,21 @@
 import React from 'react';
-import {Config, DashKit, Plugin, PluginWidgetProps} from '@gravity-ui/dashkit';
+import {Config, DashKit, Plugin} from '@gravity-ui/dashkit';
 import cn from 'bem-cn-lite';
-
-import {
-    DashaboardPanelByType,
-    DashboardInfo,
-    PrometheusDashboardProps,
-} from './PrometheusDashboard';
 
 import './PrometheusDashKit.scss';
 import {renderPluginText} from './plugins/text';
 import {renderPluginRow} from './plugins/row';
 import {renderPluginTimeseries} from './plugins/timeseries';
 import {usePrometheusDashboardContext} from './PrometheusDashboardContext/PrometheusDashboardContext';
+import {
+    DashboardInfo,
+    PanelType,
+    PanelTypeSpecificProps,
+    PluginRenderProps,
+    PrometheusWidgetId,
+    WidgetType,
+} from './types';
+import {PrometheusDashboardProps} from './PrometheusDashboard';
 
 const block = cn('yt-prometheus-dashkit');
 
@@ -50,7 +53,7 @@ function useDashKitConfig(
                 const id = makePanelId(item);
 
                 function addToLayout<T>(extraProps: T) {
-                    const itemType: PluginType = `prometheus.${type}`;
+                    const itemType: WidgetType = `prometheus.${type}`;
                     const data = Object.assign(rest, extraProps, {params});
                     acc.layout.push({...gridPos, i: id});
                     acc.items.push({
@@ -120,7 +123,9 @@ function useDashKitConfig(
     return {config};
 }
 
-function makePanelId(item: Exclude<PrometheusDashKitProps['panels'], undefined>[number]) {
+function makePanelId(
+    item: Exclude<PrometheusDashKitProps['panels'], undefined>[number],
+): PrometheusWidgetId {
     return `${item.type}_${item.gridPos.x}_${item.gridPos.y}`;
 }
 
@@ -137,22 +142,9 @@ function getVisiblePanels(expandedId?: string, panels: PrometheusDashKitProps['p
     return [expandedPanel];
 }
 
-type PanelType = DashaboardPanelByType['type'];
-type PanelProps<K extends PanelType> = Omit<DashaboardPanelByType & {type: K}, 'type'> &
-    PanelTypeSpecificProps<K>;
-export type PluginRenderProps<K extends PanelType> = Omit<PluginWidgetProps, 'data'> & {
-    data: PanelProps<K> & {params: Record<string, string | number>};
-};
-
-type PanelTypeSpecificProps<K extends PanelType> = K extends 'row'
-    ? {collapsed?: boolean; onToggleCollapsed: () => void; childCount: number}
-    : {};
-
-type PluginType<K extends PanelType = PanelType> = `prometheus.${K}`;
-
 const PLUGINS: {
     [K in PanelType]: {
-        type: PluginType<K>;
+        type: WidgetType<K>;
     } & Plugin<PluginRenderProps<K>>;
 } = {
     text: {
