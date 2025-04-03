@@ -1,11 +1,16 @@
-import {initialState as schedulingInitialState} from './scheduling';
 import {aclFiltersParams} from '../acl/url-mapping';
+import {initialState as schedulingInitialState} from './scheduling';
+
 import {
     makeObjectParseSerialize,
     parseSerializeNumber,
     parseSerializeString,
 } from '../../../utils/parse-serialize';
+
 import {parseSortStateArray, serializeSortStateArray} from '../../../utils/url-mapping';
+
+import {LocationParameters} from '../../../store/location';
+import {prometheusDashboardParams} from '../prometheusDashboard/url-mapping';
 
 export const schedulingParams = {
     pool: {
@@ -52,11 +57,12 @@ export const schedulingOverviewParams = {
     },
 };
 
-export const schedulingMonitorParams = {
-    ...schedulingParams,
-};
-
 export const schedulingAclParams = {
     ...schedulingParams,
     ...aclFiltersParams,
+};
+
+export const schedulingMonitoringParams: LocationParameters = {
+    ...schedulingParams,
+    ...prometheusDashboardParams,
 };

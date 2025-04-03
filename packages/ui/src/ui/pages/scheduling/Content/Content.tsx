@@ -68,7 +68,7 @@ function Content({match, location}: ContentProps) {
         }),
         ...(isEphemeral
             ? []
-            : [{name: 'monitor', title: 'Monitoring', component: SchedulingMonitoring}]),
+            : [{name: 'monitoring', title: 'Monitoring', component: SchedulingMonitoring}]),
     ];
 
     const extraRoutes: Array<React.ReactElement> = [];

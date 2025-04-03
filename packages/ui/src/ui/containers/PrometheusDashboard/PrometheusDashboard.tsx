@@ -1,33 +1,47 @@
 import React from 'react';
 import {YTApiId, ytApiV3Id} from '../../rum/rum-wrap-api';
-import {YTErrorBlock} from '../../components/Block/Block';
+
 import {YTError} from '../../../@types/types';
+
+import {YTErrorBlock} from '../../components/Block/Block';
+import type {PrometheusDashboardType} from '../../store/reducers/prometheusDashboard/prometheusDahsboard';
+import {YTTimeline} from '../../components/common/YTTimeline';
+import WithStickyToolbar from '../../components/WithStickyToolbar/WithStickyToolbar';
+
+import {
+    PrometheusDashboardProvider,
+    usePrometheusDashboardContext,
+} from './PrometheusDashboardContext/PrometheusDashboardContext';
 import {PrometheusDashKit} from './PrometheusDashKit';
-import {PrometheusDashboardProvider} from './PrometheusDashboardContext/PrometheusDashboardContext';
+import {DashboardInfo} from './types';
 
 export type PrometheusDashboardProps = {
-    type: 'scheduler-pool';
+    type: PrometheusDashboardType;
     params?: Record<string, {toString(): string}>;
 };
 
-function PrometheusDashboardImpl({type, params}: PrometheusDashboardProps) {
+export const PrometheusDashboard = React.memo(function ({type, params}: PrometheusDashboardProps) {
     const {layout, error} = useLoadedLayout(type);
     return !params ? null : (
-        <PrometheusDashboardProvider>
-            <div>
-                {error && <YTErrorBlock error={error} />}
-                <MissingParametersWarning templating={layout?.templating} params={params} />
-                {layout?.panels === undefined ? null : (
-                    <PrometheusDashKit panels={layout.panels} params={params} />
-                )}
-            </div>
+        <PrometheusDashboardProvider type={type}>
+            <WithStickyToolbar
+                toolbar={<PrometheusTimeline />}
+                content={
+                    <React.Fragment>
+                        {error && <YTErrorBlock error={error} />}
+                        <MissingParametersWarning templating={layout?.templating} params={params} />
+                        {layout?.panels === undefined ? null : (
+                            <PrometheusDashKit panels={layout.panels} params={params} />
+                        )}
+                    </React.Fragment>
+                }
+            />
         </PrometheusDashboardProvider>
     );
-}
+});
+PrometheusDashboard.displayName = 'PrometheusDashboard';
 
-export const PrometheusDashboard = React.memo(PrometheusDashboardImpl);
-
-function useLoadedLayout(type: PrometheusDashboardProps['type']) {
+function useLoadedLayout(type: PrometheusDashboardType) {
     const [result, setData] = React.useState<{layout?: DashboardInfo; error?: YTError}>({});
     /**
      * Temporary solution withot redux-store
@@ -48,22 +62,22 @@ function useLoadedLayout(type: PrometheusDashboardProps['type']) {
     return result;
 }
 
-export type DashboardInfo = {
-    templating: {list: Array<{name: string}>};
-    panels: Array<DashboardPanel>;
-};
+function PrometheusTimeline() {
+    const {
+        timeRangeFilter: {from, to, shortcutValue},
+        setTimeRangeFilter,
+    } = usePrometheusDashboardContext();
 
-export type DashboardPanel = {
-    title?: string;
-    gridPos: {x: number; y: number; w: number; h: number};
-} & DashaboardPanelByType;
-
-export type DashaboardPanelByType =
-    | {type: 'row'}
-    | {type: 'text'; options: {mode: 'markdown'; content: string}}
-    | {type: 'timeseries'; targets: Array<TimeseriesTarget>; title: string};
-
-export type TimeseriesTarget = {expr: string; legendFormat: string; refId: string};
+    return (
+        <YTTimeline
+            from={from!}
+            to={to!}
+            shortcut={shortcutValue}
+            onUpdate={setTimeRangeFilter}
+            hasRuler={true}
+        />
+    );
+}
 
 function MissingParametersWarning({
     templating,
