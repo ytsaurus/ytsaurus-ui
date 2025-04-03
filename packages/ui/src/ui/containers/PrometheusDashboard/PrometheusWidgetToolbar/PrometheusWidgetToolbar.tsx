@@ -7,13 +7,14 @@ import maximizeSvg from '@gravity-ui/icons/svgs/chevrons-expand-up-right.svg';
 import minimizeSvg from '@gravity-ui/icons/svgs/chevrons-collapse-up-right.svg';
 
 import {usePrometheusDashboardContext} from '../PrometheusDashboardContext/PrometheusDashboardContext';
+import {PrometheusWidgetId} from '../types';
 
 import './PrometheusWidgetToolbar.scss';
 
 const block = cn('yt-prometheus-widget-toolbar');
 
 type PrometheusToolbarProps = {
-    id: string;
+    id: PrometheusWidgetId;
 };
 
 export function PrometheusWidgetToolbar({id}: PrometheusToolbarProps) {
@@ -21,9 +22,13 @@ export function PrometheusWidgetToolbar({id}: PrometheusToolbarProps) {
     const [element, setElement] = React.useState<HTMLDivElement | null>(null);
 
     React.useEffect(() => {
+        let timerId: ReturnType<typeof setTimeout> | undefined;
         if (id === expandedId) {
-            element?.scrollIntoView();
+            timerId = setTimeout(() => element?.scrollIntoView(), 300);
         }
+        return () => {
+            clearTimeout(timerId);
+        };
     }, [id, expandedId, element]);
 
     const isMaximized = id === expandedId;
