@@ -40,7 +40,7 @@ describe('yt', function () {
             Accept: 'application/json',
             'X-YT-Header-Format': HEADERS_FORMAT,
             'X-YT-Suppress-Redirect': 1,
-            'X-YT-Parameters-0': 'eyJwYXRoIjoiLy90bXAvZm9vIn0=', // { path: '//tmp/foo' }
+            'X-YT-Parameters': JSON.stringify({ path: "//tmp/foo" }), // { path: '//tmp/foo' }
         };
 
         beforeEach(function (done) {
