@@ -3,6 +3,7 @@ import {YTApiId, ytApiV3Id} from '../../rum/rum-wrap-api';
 import {YTErrorBlock} from '../../components/Block/Block';
 import {YTError} from '../../../@types/types';
 import {PrometheusDashKit} from './PrometheusDashKit';
+import {PrometheusDashboardProvider} from './PrometheusDashboardContext/PrometheusDashboardContext';
 
 export type PrometheusDashboardProps = {
     type: 'scheduler-pool';
@@ -10,21 +11,23 @@ export type PrometheusDashboardProps = {
 };
 
 function PrometheusDashboardImpl({type, params}: PrometheusDashboardProps) {
-    const {layout, error} = usePrometheusLayout(type);
+    const {layout, error} = useLoadedLayout(type);
     return !params ? null : (
-        <div>
-            {error && <YTErrorBlock error={error} />}
-            <MissingParametersWarning templating={layout?.templating} params={params} />
-            {layout?.panels === undefined ? null : (
-                <PrometheusDashKit panels={layout.panels} params={params} />
-            )}
-        </div>
+        <PrometheusDashboardProvider>
+            <div>
+                {error && <YTErrorBlock error={error} />}
+                <MissingParametersWarning templating={layout?.templating} params={params} />
+                {layout?.panels === undefined ? null : (
+                    <PrometheusDashKit panels={layout.panels} params={params} />
+                )}
+            </div>
+        </PrometheusDashboardProvider>
     );
 }
 
 export const PrometheusDashboard = React.memo(PrometheusDashboardImpl);
 
-function usePrometheusLayout(type: PrometheusDashboardProps['type']) {
+function useLoadedLayout(type: PrometheusDashboardProps['type']) {
     const [result, setData] = React.useState<{layout?: DashboardInfo; error?: YTError}>({});
     /**
      * Temporary solution withot redux-store
