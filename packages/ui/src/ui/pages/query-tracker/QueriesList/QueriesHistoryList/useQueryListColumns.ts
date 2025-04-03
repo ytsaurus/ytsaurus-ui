@@ -2,7 +2,7 @@ import React from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import intersectionBy_ from 'lodash/intersectionBy';
 import {QueriesListAuthorFilter} from '../../module/queries_list/types';
-import {AllColumns, AuthorColumns, MyColumns, NameColumns} from './index';
+import {ActionColumns, AllColumns, AuthorColumns, MyColumns, NameColumns} from './index';
 import {setSettingByKey} from '../../../../store/actions/settings';
 import {getQueryListHistoryColumns} from '../../module/queries_list/selectors';
 
@@ -25,7 +25,7 @@ export const useQueryHistoryListColumns = ({type}: {type?: QueriesListAuthorFilt
         const ALL_COLUMN_NAMES = intersectionBy_(AllColumns, MyColumns, 'name').map(
             (item) => item.name,
         );
-        const EXCLUDED_COLUMNS = [NameColumns.name, AuthorColumns.name];
+        const EXCLUDED_COLUMNS = [NameColumns.name, AuthorColumns.name, ActionColumns.name];
         const currentColumnsPreset = type === QueriesListAuthorFilter.My ? MyColumns : AllColumns;
 
         const selectedColumnNames = new Set(
@@ -34,6 +34,7 @@ export const useQueryHistoryListColumns = ({type}: {type?: QueriesListAuthorFilt
 
         selectedColumnNames.add(NameColumns.name);
         selectedColumnNames.add(AuthorColumns.name);
+        selectedColumnNames.add(ActionColumns.name);
 
         return {
             columns: currentColumnsPreset.filter(({name}) => selectedColumnNames.has(name)),
