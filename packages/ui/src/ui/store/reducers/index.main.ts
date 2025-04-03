@@ -44,6 +44,7 @@ import {chyt} from './chyt';
 import {getMainLocations} from '../../store/location.main';
 import {flow} from '../../store/reducers/flow';
 import {rootApi} from '../../store/api';
+import {prometheusDashboardSlice} from './prometheusDashboard/prometheusDahsboard';
 
 export const appReducers = {
     acl,
@@ -86,6 +87,7 @@ export const appReducers = {
     manageTokens,
     flow,
     [rootApi.reducerPath]: rootApi.reducer,
+    prometheusDashboard: prometheusDashboardSlice.reducer,
 };
 
 export type RootState = ReturnType<ReturnType<typeof makeRootReducer>>;
