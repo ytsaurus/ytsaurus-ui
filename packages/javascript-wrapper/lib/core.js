@@ -49,7 +49,15 @@ function appendEncodedParameters(headers, localSetup, parameters) {
     var settings = setup.getOption(localSetup, 'encodedParametersSettings');
     var serializer = setup.getOption(localSetup, 'JSONSerializer');
 
-    var encodedParameters = settings.encoder(serializer.stringify(parameters));
+    var stringifiedParameters = serializer.stringify(parameters)
+
+    if (stringifiedParameters.length < settings.maxSize) {
+        headers['X-YT-Parameters'] = stringifiedParameters;
+
+        return;
+    }
+
+    var encodedParameters = settings.encoder(stringifiedParameters);
 
     if (encodedParameters.length > settings.maxCount * settings.maxSize) {
         throw new Error(error.prepare('Encoded parameters string is over size limit'));
