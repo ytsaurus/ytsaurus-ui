@@ -79,7 +79,7 @@ function Content({className, match, location}) {
         }),
         ...(isEphemeral
             ? []
-            : [{name: 'monitor', title: 'Monitoring', component: SchedulingMonitoring}]),
+            : [{name: 'monitoring', title: 'Monitoring', component: SchedulingMonitoring}]),
     ];
 
     const extraRoutes = [];
