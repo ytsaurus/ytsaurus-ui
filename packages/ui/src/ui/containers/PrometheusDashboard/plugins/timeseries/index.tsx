@@ -19,6 +19,8 @@ import {humanizeInterval} from '../../../../components/common/Timeline/util';
 import {useElementSize} from '../../../../hooks/useResizeObserver';
 
 import {PrometheusPlugins} from '../../PrometheusDashKit';
+import {PrometheusWidgetToolbar} from '../../PrometheusWidgetToolbar/PrometheusWidgetToolbar';
+import {usePrometheusDashboardContext} from '../../PrometheusDashboardContext/PrometheusDashboardContext';
 
 import './timeseries.scss';
 
@@ -28,18 +30,31 @@ export const renderPluginTimeseries: PrometheusPlugins['timeseries']['renderer']
     props,
     elementRef,
 ) => {
+    return <ExpandablePrometheusChart {...props} elementRef={elementRef} />;
+};
+
+function ExpandablePrometheusChart({
+    elementRef,
+    ...props
+}: PrometheusChartProps & {elementRef: React.Ref<any>}) {
+    const {expandedId} = usePrometheusDashboardContext();
+
     return (
-        <IntersectionObserverContainer key={props.id} className={block()} ref={elementRef}>
+        <IntersectionObserverContainer
+            key={props.id}
+            className={block({expanded: props.id === expandedId})}
+            ref={elementRef}
+        >
             <PrometheusChart {...props} />
         </IntersectionObserverContainer>
     );
-};
+}
 
 type TimeseriesParameters = Parameters<PrometheusPlugins['timeseries']['renderer']>;
 type Props = TimeseriesParameters[0];
 type PrometheusChartProps = Props;
 
-function PrometheusChart({data}: PrometheusChartProps) {
+function PrometheusChart({data, id}: PrometheusChartProps) {
     const {title} = data;
     const [element, setElement] = React.useState<HTMLDivElement | null>(null);
 
@@ -48,17 +63,20 @@ function PrometheusChart({data}: PrometheusChartProps) {
     const {error, data: chartData, loading} = useLoadQueriesData(data, pointCount);
 
     return (
-        <Flex ref={setElement} className={block('widget')} direction="column">
-            {chartData ? (
-                <YTChartKitLazy type="yagr" data={chartData} />
-            ) : (
-                <>
-                    <div className={block('widget-title')}>{title}</div>
-                    {error && <InlineError error={error} />}
-                    {!chartData && loading && <Loader visible centered />}
-                </>
-            )}
-        </Flex>
+        <React.Fragment>
+            <Flex ref={setElement} className={block('widget')} direction="column">
+                {chartData ? (
+                    <YTChartKitLazy type="yagr" data={chartData} />
+                ) : (
+                    <>
+                        <div className={block('widget-title')}>{title}</div>
+                        {error && <InlineError error={error} />}
+                        {!chartData && loading && <Loader visible centered />}
+                    </>
+                )}
+            </Flex>
+            <PrometheusWidgetToolbar id={id} />
+        </React.Fragment>
     );
 }
 
