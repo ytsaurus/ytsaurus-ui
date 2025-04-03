@@ -62,6 +62,7 @@ import {getTabletPreparedState, tabletParams} from '../store/reducers/tablet/url
 
 import {
     schedulingAclParams,
+    schedulingMonitoringParams,
     schedulingOverviewParams,
     schedulingParams,
 } from '../store/reducers/scheduling/url-mapping';
@@ -139,10 +140,12 @@ export const getMainLocations = (): Array<[string, PathParameters]> => [
 
     [`/*/${Page.GROUPS}/*`, [groupsPageParams, getGroupsPreparedState]],
 
+
     [`/*/${Page.SCHEDULING}/${SchedulingTab.OVERVIEW}`, [schedulingOverviewParams]],
     [`/*/${Page.SCHEDULING}/details`, [schedulingOverviewParams]],
     [`/*/${Page.SCHEDULING}/${SchedulingTab.ACL}`, [schedulingAclParams]],
     [`/*/${Page.SCHEDULING}`, [schedulingParams]],
+    [`/*/${Page.SCHEDULING}/monitoring`, [schedulingMonitoringParams]],
 
     [`/*/${Page.SYSTEM}`, [systemParams, getSystemPreparedState]],
 
