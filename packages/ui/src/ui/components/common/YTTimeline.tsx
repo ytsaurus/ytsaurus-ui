@@ -62,6 +62,7 @@ function YTTimelineImpl({className, topShortcuts, ...rest}: Props) {
     return (
         <Timeline
             {...rest}
+            key={width}
             padding={0.05}
             hasPicker={true}
             topShortcuts={topShortcuts || DEFAULT_SHORTCUTS}
