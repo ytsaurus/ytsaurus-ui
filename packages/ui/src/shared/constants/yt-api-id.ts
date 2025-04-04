@@ -175,4 +175,6 @@ export enum YTApiId {
     issueToken,
 
     setUserPassword,
+
+    prometheusMonitoringLayout,
 }

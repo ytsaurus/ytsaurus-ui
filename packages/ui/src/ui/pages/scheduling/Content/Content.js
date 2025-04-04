@@ -12,7 +12,7 @@ import {OverviewWithRum} from '../../../pages/scheduling/Content/tabs/Overview/O
 import Details from '../../../pages/scheduling/Content/tabs/Details/Details';
 import ErrorBoundary from '../../../components/ErrorBoundary/ErrorBoundary';
 
-import {DEFAULT_TAB, SCHEDULING_ALLOWED_ROOT_TABS, Tab} from '../../../constants/scheduling';
+import {DEFAULT_TAB, SCHEDULING_ALLOWED_ROOT_TABS, SchedulingTab} from '../../../constants/scheduling';
 import PoolAcl from '../../../pages/scheduling/Content/tabs/PoolAcl/PoolAcl';
 import {
     getIsRoot,
@@ -29,6 +29,7 @@ import {getCluster} from '../../../store/selectors/global';
 import SchedulingExpandedPoolsUpdater from './SchedulingExpandedPoolsUpdater';
 import UIFactory from '../../../UIFactory';
 import {UI_TAB_SIZE} from '../../../constants/global';
+import {SchedulingMonitoring} from './tabs/Monitoring/SchedulingMonitoring';
 
 const block = cn('scheduling-content');
 
@@ -53,10 +54,10 @@ function Content({className, match, location}) {
     const isRoot = useSelector(getIsRoot);
     const allowAcl = useSelector(isPoolAclAllowed);
 
-    const localTab = {...Tab};
+    const localTab = {...SchedulingTab};
 
     const showSettings = reduce_(
-        Tab,
+        SchedulingTab,
         (acc, tab) => {
             acc[tab] = {show: SCHEDULING_ALLOWED_ROOT_TABS[tab] || !isRoot};
             return acc;
@@ -66,15 +67,17 @@ function Content({className, match, location}) {
 
     const titleDict = {};
 
-    const aclTab = showSettings[Tab.ACL];
+    const aclTab = showSettings[SchedulingTab.ACL];
     aclTab.show = aclTab.show && allowAcl;
 
-    const extraTabs = UIFactory.getSchedulingExtraTabs({
-        cluster,
-        pool,
-        tree,
-        extraOptions: {isRoot, isEphemeral},
-    });
+    const extraTabs = [
+        ...UIFactory.getSchedulingExtraTabs({
+            cluster,
+            pool,
+            tree,
+            extraOptions: {isRoot, isEphemeral},
+        }),
+    ];
 
     const extraRoutes = [];
 
@@ -104,7 +107,7 @@ function Content({className, match, location}) {
     });
 
     delete localTab.ACL;
-    localTab[Tab.ACL] = Tab.ACL;
+    localTab[SchedulingTab.ACL] = SchedulingTab.ACL;
 
     const props = makeTabProps(match.url, localTab, showSettings, {pool, tree}, titleDict);
 
@@ -121,10 +124,10 @@ function Content({className, match, location}) {
                 />
 
                 <Switch>
-                    <Route path={`${match.path}/${Tab.OVERVIEW}`} component={OverviewWithRum} />
-                    <Route path={`${match.path}/${Tab.DETAILS}`} component={Details} />
+                    <Route path={`${match.path}/${SchedulingTab.OVERVIEW}`} component={OverviewWithRum} />
+                    <Route path={`${match.path}/${SchedulingTab.DETAILS}`} component={Details} />
                     {extraRoutes}
-                    {aclTab.show && <Route path={`${match.path}/${Tab.ACL}`} component={PoolAcl} />}
+                    {aclTab.show && <Route path={`${match.path}/${SchedulingTab.ACL}`} component={PoolAcl} />}
                     <Route path={`${match.path}/:tab`} component={Placeholder} />
                     <Redirect
                         from={match.url}

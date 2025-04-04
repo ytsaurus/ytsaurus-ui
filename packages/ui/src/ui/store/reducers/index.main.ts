@@ -44,6 +44,7 @@ import {chyt} from './chyt';
 import {RawVersion} from '../../store/selectors/thor/support';
 import {getMainLocations} from '../../store/location.main';
 import {flow} from '../../store/reducers/flow';
+import {prometheusDashboardSlice} from './prometheusDashboard/prometheusDahsboard';
 
 const appReducers = {
     acl,
@@ -84,6 +85,8 @@ const appReducers = {
     chyt,
     manageTokens,
     flow,
+
+    prometheusDashboard: prometheusDashboardSlice.reducer,
 };
 
 export type RootState = Omit<ReturnType<ReturnType<typeof makeRootReducer>>, 'global'> & {
