@@ -3,7 +3,7 @@ import {YaTimeline} from '../YaTimeline';
 import {EventMapper} from '../lib/EventMapper';
 import {ContinuousRange} from '../lib/Range';
 import {Axes, TimelineAxis} from './Axes';
-import {Events, TimelineEvent} from './Events';
+import {EventIdentity, Events, TimelineEvent} from './Events';
 import {TimelineComponent} from './TimelineComponent';
 
 export class BasicEventsProvider<T extends TimelineEvent> extends TimelineComponent {
@@ -15,6 +15,13 @@ export class BasicEventsProvider<T extends TimelineEvent> extends TimelineCompon
     public setEvents(newEvents: T[]): void {
         this.events = newEvents;
         this.notifyMapperEvents();
+    }
+
+    public setSelectedEvents(events: EventIdentity[]): void {
+        const eventsComponent = this.canvasApi.getComponent(Events);
+        if (eventsComponent) {
+            eventsComponent.selectedEvents = events;
+        }
     }
 
     public set axes(axes: TimelineAxis[]) {
