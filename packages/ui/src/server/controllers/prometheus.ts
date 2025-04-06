@@ -4,9 +4,9 @@ import {UNEXPECTED_PIPE_AXIOS_RESPONSE, pipeAxiosResponse, sendAndLogError} from
 import {getRobotPrometheusAuth} from '../components/requestsSetup';
 import axios from 'axios';
 
-const BASE_URL = 'http://ma-efremoff.ui.yandex-team.ru:9090';
-
 export async function prometheusQueryRange(req: Request, res: Response) {
+    const BASE_URL = req.ctx.config.prometheusBaseUrl;
+
     try {
         const authorization = getRobotPrometheusAuth('');
         req.ctx.log('_______!!!!!!!!params', req.query);

@@ -20,7 +20,10 @@ import {
     openEditModal,
 } from '../../../../../store/actions/scheduling/scheduling';
 import {openPoolDeleteModal} from '../../../../../store/actions/scheduling/scheduling-ts';
-import {SCHEDULING_POOL_CHILDREN_TABLE_ID, SchedulingTab} from '../../../../../constants/scheduling';
+import {
+    SCHEDULING_POOL_CHILDREN_TABLE_ID,
+    SchedulingTab,
+} from '../../../../../constants/scheduling';
 import {calculateTotalOverPools} from '../../../../../utils/scheduling/details';
 import {childTableItems} from '../../../../../utils/scheduling/detailsTable';
 import {getCluster} from '../../../../../store/selectors/global';
@@ -448,7 +451,13 @@ class Details extends Component {
             <span className={block('name-cell', {child: item.isChildPool})}>
                 {Overview.renderType(item, ...rest)}
                 <span className={block('name-cell-text')}>
-                    {Overview.renderName(item, SchedulingTab.DETAILS, cluster, currentPool, changePool)}
+                    {Overview.renderName(
+                        item,
+                        SchedulingTab.DETAILS,
+                        cluster,
+                        currentPool,
+                        changePool,
+                    )}
                 </span>
                 {Overview.renderEphemeralIcon(item)}
                 {Overview.renderEffectiveLightweightIcon(item)}

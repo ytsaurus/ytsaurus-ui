@@ -37,6 +37,10 @@ export const SchedulingTab = {
     DETAILS: 'details',
     ACL: 'acl',
 };
+
+export const SchedulingExtraTabs = {
+    PROMETHEUS_DASHBOARD: 'dashboard',
+};
 export const DEFAULT_TAB = SchedulingTab.OVERVIEW;
 
 export const CREATE_POOL_DIALOG_TREE_ITEMS_REQUEST = 'CREATE_POOL_DIALOG_TREE_ITEMS_REQUEST';
