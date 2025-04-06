@@ -31,7 +31,6 @@ import './Content.scss';
 import SchedulingExpandedPoolsUpdater from './SchedulingExpandedPoolsUpdater';
 import {PoolAttributes} from './tabs/PoolAttributes/PoolAttributes';
 import UIFactory from '../../../UIFactory';
-import {SchedulingMonitoring} from './tabs/Monitoring/SchedulingMonitoring';
 
 const block = cn('scheduling-content');
 
@@ -72,9 +71,6 @@ function Content({match, location}: ContentProps) {
             tree,
             extraOptions: {isRoot, isEphemeral},
         }),
-        ...(isEphemeral
-            ? []
-            : [{name: 'monitoring', title: 'Monitoring', component: SchedulingMonitoring}]),
     ];
 
     const extraRoutes: Array<React.ReactElement> = [];

@@ -1,19 +1,28 @@
 import React from 'react';
-import {defaultAclApi} from '../utils/acl/external-acl-api';
-import {SupportComponentLazy} from '../containers/SupportComponent/lazy';
-import {YTUserSuggestLazy} from '../containers/UserSuggest/YTUserSuggestLazy';
-import {docsUrls} from '../constants/docsUrls';
-import {YTSubjectSuggestLazy} from '../containers/ACL/SubjectsControl/lazy';
-import {RoleActionsLazy} from '../containers/ACL';
-import OperationDetailMonitorLinks from '../pages/operations/OperationDetail/tabs/monitor/OperationDetailsMonitorLinks';
-import {PERMISSIONS_SETTINGS} from '../constants/acl';
-import {uiSettings} from '../config/ui-settings';
+
 import {YT} from '../config/yt-config';
+
+import {getConfigData, uiSettings} from '../config/ui-settings';
+import {PERMISSIONS_SETTINGS} from '../constants/acl';
+import {docsUrls} from '../constants/docsUrls';
+import {SchedulingExtraTabs} from '../constants/scheduling';
+
 import {DefaultSubjectLinkLazy} from '../components/SubjectLink/lazy';
 import type {SubjectCardProps} from '../components/SubjectLink/SubjectLink';
+
+import {RoleActionsLazy} from '../containers/ACL';
+import {YTSubjectSuggestLazy} from '../containers/ACL/SubjectsControl/lazy';
+
+import {SupportComponentLazy} from '../containers/SupportComponent/lazy';
+import {YTUserSuggestLazy} from '../containers/UserSuggest/YTUserSuggestLazy';
+
+import OperationDetailMonitorLinks from '../pages/operations/OperationDetail/tabs/monitor/OperationDetailsMonitorLinks';
+import {SchedulingMonitoring} from '../pages/scheduling/Content/tabs/Monitoring/SchedulingMonitoring';
 import {QUERY_RESULT_CHART_TAB} from '../pages/query-tracker/QueryResultsVisualization';
 import {IncarnationsLazy} from '../pages/operations/OperationDetail/tabs/incarnations/IncarnationsLazy';
 import {AppNavigationPageLayoutLazy} from '../containers/AppNavigation/AppNavigationPageLayout.lazy';
+
+import {defaultAclApi} from '../utils/acl/external-acl-api';
 
 import {UIFactory} from './index';
 
@@ -54,19 +63,26 @@ export const defaultUIFactory: UIFactory = {
     },
 
     getSchedulingExtraTabs() {
-        if (!uiSettings.schedulingMonitoring?.urlTemplate) {
-            return [];
+        const res = [];
+
+        if (getConfigData().allowPrometheusDashboards) {
+            res.push({
+                name: SchedulingExtraTabs.PROMETHEUS_DASHBOARD,
+                title: 'Monitoring',
+                component: SchedulingMonitoring,
+            });
         }
 
-        const {urlTemplate, title = 'Monitoring'} = uiSettings.schedulingMonitoring;
-
-        return [
-            {
+        if (uiSettings.schedulingMonitoring?.urlTemplate) {
+            const {urlTemplate, title = 'Monitoring'} = uiSettings.schedulingMonitoring;
+            res.push({
                 name: 'monitoring',
                 title,
                 urlTemplate,
-            },
-        ];
+            });
+        }
+
+        return res;
     },
     getSystemMonitoringTab() {
         if (!uiSettings?.systemMonitoring) return undefined;
