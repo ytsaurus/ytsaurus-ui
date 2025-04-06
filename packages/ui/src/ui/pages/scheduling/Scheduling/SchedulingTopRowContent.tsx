@@ -23,7 +23,11 @@ import {
     togglePoolFavourites,
 } from '../../../store/actions/scheduling/scheduling';
 
-import {ROOT_POOL_NAME, SCHEDULING_ALLOWED_ROOT_TABS, Tab} from '../../../constants/scheduling';
+import {
+    ROOT_POOL_NAME,
+    SCHEDULING_ALLOWED_ROOT_TABS,
+    SchedulingTab,
+} from '../../../constants/scheduling';
 import ClipboardButton from '../../../components/ClipboardButton/ClipboardButton';
 import {getSchedulingBreadcrumbItems} from '../../../store/selectors/scheduling/scheduling-ts';
 import {Page} from '../../../constants';
@@ -168,7 +172,7 @@ function calcPathname(pathname: string, cluster: string, pool?: string) {
         const isAllowedTab = some_(SCHEDULING_ALLOWED_ROOT_TABS, (_v, tab) =>
             pathname.endsWith('/' + tab),
         );
-        return isAllowedTab ? pathname : `/${cluster}/${Page.SCHEDULING}/${Tab.OVERVIEW}`;
+        return isAllowedTab ? pathname : `/${cluster}/${Page.SCHEDULING}/${SchedulingTab.OVERVIEW}`;
     }
 
     return pathname;
