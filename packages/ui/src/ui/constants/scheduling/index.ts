@@ -32,12 +32,12 @@ export const POOL_TOGGLE_DELETE_VISIBILITY = 'SCHEDULING_TOGGLE_DELETE_VISIBILIT
 export const SCHEDULING_POOL_TREE_TABLE_ID = 'scheduling/pool-tree';
 export const SCHEDULING_POOL_CHILDREN_TABLE_ID = 'scheduling/pool-children';
 export const ROOT_POOL_NAME = '<Root>';
-export const Tab = {
+export const SchedulingTab = {
     OVERVIEW: 'overview',
     DETAILS: 'details',
     ACL: 'acl',
 };
-export const DEFAULT_TAB = Tab.OVERVIEW;
+export const DEFAULT_TAB = SchedulingTab.OVERVIEW;
 
 export const CREATE_POOL_DIALOG_TREE_ITEMS_REQUEST = 'CREATE_POOL_DIALOG_TREE_ITEMS_REQUEST';
 export const CREATE_POOL_DIALOG_TREE_ITEMS_CANCELLED = 'CREATE_POOL_DIALOG_TREE_ITEMS_CANCELLED';
@@ -49,6 +49,6 @@ export const CREATE_POOL_DIALOG_TREE_CREATE_FAILURE = 'CREATE_POOL_DIALOG_TREE_C
 export const SCHEDULING_MONITOR_CHART_STATUS = 'SCHEDULING_MONITOR_CHART_STATUS';
 
 export const SCHEDULING_ALLOWED_ROOT_TABS = {
-    [Tab.OVERVIEW]: true,
-    [Tab.DETAILS]: true,
+    [SchedulingTab.OVERVIEW]: true,
+    [SchedulingTab.DETAILS]: true,
 };
