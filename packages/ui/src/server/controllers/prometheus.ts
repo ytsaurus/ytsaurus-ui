@@ -3,9 +3,9 @@ import type {Request, Response} from 'express';
 import {UNEXPECTED_PIPE_AXIOS_RESPONSE, pipeAxiosResponse, sendAndLogError} from '../utils';
 import axios from 'axios';
 
-const BASE_URL = 'http://ma-efremoff.ui.yandex-team.ru:9090';
-
 export async function prometheusQueryRange(req: Request, res: Response) {
+    const BASE_URL = req.ctx.config.prometheusBaseUrl;
+
     try {
         await axios
             .get(`${BASE_URL}/api/v1/query_range?`, {

@@ -103,3 +103,8 @@ else
   echo YT_LOCAL_CLUSTER_ID=$YT_LOCAL_CLUSTER_ID
   echo -e $NC
 fi
+
+if [ "$PROMETHEUS" != "" ]; then
+  npm run e2e:localmode:monitoring:init
+  export PROMETHEUS_BASE_URL=http://$(hostname):9090
+fi
