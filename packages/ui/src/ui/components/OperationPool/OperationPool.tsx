@@ -7,7 +7,7 @@ import Button from '../../components/Button/Button';
 import {Tooltip} from '../../components/Tooltip/Tooltip';
 
 import {Page} from '../../constants/index';
-import {Tab} from '../../constants/scheduling';
+import {SchedulingTab} from '../../constants/scheduling';
 
 import {LightWeightIcon} from './LightWeightIcon';
 
@@ -76,8 +76,9 @@ export function OperationPool({
     theme,
 }: OperationPoolProps) {
     const url =
-        `/${cluster}/${Page.SCHEDULING}/${Tab.OVERVIEW}?pool=${pool.pool}&tree=${pool.tree}` +
+        `/${cluster}/${Page.SCHEDULING}/${SchedulingTab.OVERVIEW}?pool=${pool.pool}&tree=${pool.tree}` +
         (operationRefId ? `&operation_ref=${operationRefId}` : '');
+
     const isCorrectState = state !== 'completed' && state !== 'failed' && state !== 'aborted';
     const title = `${pool.pool} [${pool.tree}]`;
     const {isEphemeral, isLightweight} = pool;

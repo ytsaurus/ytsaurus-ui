@@ -32,15 +32,15 @@ export const TOGGLE_EDIT_VISIBILITY = 'SCHEDULING_TOGGLE_EDIT_VISIBILITY';
 export const POOL_TOGGLE_DELETE_VISIBILITY = 'SCHEDULING_TOGGLE_DELETE_VISIBILITY';
 
 export const ROOT_POOL_NAME = '<Root>';
-export const Tab = {
+export const SchedulingTab = {
     OVERVIEW: 'overview',
     ATTRIBUTES: 'attributes',
     ACL: 'acl',
 } as const;
 
-export type SchedulingTab = ValueOf<typeof Tab>;
+export type SchedulingTabType = ValueOf<typeof SchedulingTab>;
 
-export const DEFAULT_TAB = Tab.OVERVIEW;
+export const DEFAULT_TAB = SchedulingTab.OVERVIEW;
 
 export const CREATE_POOL_DIALOG_TREE_ITEMS_REQUEST = 'CREATE_POOL_DIALOG_TREE_ITEMS_REQUEST';
 export const CREATE_POOL_DIALOG_TREE_ITEMS_CANCELLED = 'CREATE_POOL_DIALOG_TREE_ITEMS_CANCELLED';
@@ -51,7 +51,7 @@ export const CREATE_POOL_DIALOG_TREE_CREATE_FAILURE = 'CREATE_POOL_DIALOG_TREE_C
 
 export const SCHEDULING_MONITOR_CHART_STATUS = 'SCHEDULING_MONITOR_CHART_STATUS';
 
-export const SCHEDULING_ALLOWED_ROOT_TABS: Partial<Record<SchedulingTab, boolean>> = {
-    [Tab.OVERVIEW]: true,
-    [Tab.ATTRIBUTES]: true,
+export const SCHEDULING_ALLOWED_ROOT_TABS: Partial<Record<SchedulingTabType, boolean>> = {
+    [SchedulingTab.OVERVIEW]: true,
+    [SchedulingTab.ATTRIBUTES]: true,
 };
