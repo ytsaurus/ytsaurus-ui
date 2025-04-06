@@ -1,7 +1,7 @@
 import {AccountsTab} from '../constants/accounts/accounts';
 import {Tab as ComponentsTab} from '../constants/components/main';
 import {Tab as OperationTab} from '../constants/operations/detail';
-import {Tab as SchedulingTab} from '../constants/scheduling';
+import {SchedulingTab} from '../constants/scheduling';
 import {Page} from '../constants/index';
 
 import {
