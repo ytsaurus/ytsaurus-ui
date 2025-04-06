@@ -40,6 +40,10 @@ export const SchedulingTab = {
 
 export type SchedulingTabType = ValueOf<typeof SchedulingTab>;
 
+export const SchedulingExtraTabs = {
+    PROMETHEUS_DASHBOARD: 'dashboard',
+};
+
 export const DEFAULT_TAB = SchedulingTab.OVERVIEW;
 
 export const CREATE_POOL_DIALOG_TREE_ITEMS_REQUEST = 'CREATE_POOL_DIALOG_TREE_ITEMS_REQUEST';

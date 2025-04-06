@@ -1,7 +1,7 @@
 import {AccountsTab} from '../constants/accounts/accounts';
 import {Tab as ComponentsTab} from '../constants/components/main';
 import {Tab as OperationTab} from '../constants/operations/detail';
-import {SchedulingTab} from '../constants/scheduling';
+import {SchedulingExtraTabs, SchedulingTab} from '../constants/scheduling';
 import {Page} from '../constants/index';
 
 import {
@@ -140,12 +140,12 @@ export const getMainLocations = (): Array<[string, PathParameters]> => [
 
     [`/*/${Page.GROUPS}/*`, [groupsPageParams, getGroupsPreparedState]],
 
-
     [`/*/${Page.SCHEDULING}/${SchedulingTab.OVERVIEW}`, [schedulingOverviewParams]],
     [`/*/${Page.SCHEDULING}/details`, [schedulingOverviewParams]],
     [`/*/${Page.SCHEDULING}/${SchedulingTab.ACL}`, [schedulingAclParams]],
     [`/*/${Page.SCHEDULING}`, [schedulingParams]],
     [`/*/${Page.SCHEDULING}/monitoring`, [schedulingMonitoringParams]],
+    [`/*/${Page.SCHEDULING}/${SchedulingExtraTabs.PROMETHEUS_DASHBOARD}`, [schedulingMonitoringParams]],
 
     [`/*/${Page.SYSTEM}`, [systemParams, getSystemPreparedState]],
 
