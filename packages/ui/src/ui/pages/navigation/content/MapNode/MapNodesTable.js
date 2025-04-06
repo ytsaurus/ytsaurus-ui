@@ -40,7 +40,7 @@ import {
 } from '../../../../store/actions/navigation';
 import {setSelectedItem} from '../../../../store/actions/navigation/content/map-node';
 
-import {ROOT_POOL_NAME, Tab as SchedulingTab} from '../../../../constants/scheduling';
+import {ROOT_POOL_NAME, SchedulingTab} from '../../../../constants/scheduling';
 import {NAVIGATION_MAP_NODE_TABLE_ID} from '../../../../constants/navigation';
 import {LOADING_STATUS, Page} from '../../../../constants/index';
 import hammer from '../../../../common/hammer';
