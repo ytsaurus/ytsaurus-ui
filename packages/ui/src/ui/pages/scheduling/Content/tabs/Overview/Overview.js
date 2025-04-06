@@ -353,7 +353,13 @@ class Overview extends Component {
             >
                 {Overview.renderType(item, ...rest, allowExpand)}
                 <span className={block('name-content-name')}>
-                    {Overview.renderName(item, SchedulingTab.OVERVIEW, cluster, currentPool, changePool)}
+                    {Overview.renderName(
+                        item,
+                        SchedulingTab.OVERVIEW,
+                        cluster,
+                        currentPool,
+                        changePool,
+                    )}
                 </span>
                 {Overview.renderEphemeralIcon(item)}
                 {Overview.renderEffectiveLightweightIcon(item)}
