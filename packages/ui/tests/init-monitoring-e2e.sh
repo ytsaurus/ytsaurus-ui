@@ -15,7 +15,7 @@ fi
 pushd $(dirname $0)/data/monitoring/json
 ls | xargs -I {} bash -c "
     echo -n Creating document {}...;
-    yt create -r -i document //sys/interface-monitoring/{} >/dev/null;
-    yt set --format json //sys/interface-monitoring/{} < {};
+    yt create -r -i document //sys/interface-monitoring/{} >/dev/null && \
+    yt set --format json //sys/interface-monitoring/{} < {} && \
     echo OK;
 "

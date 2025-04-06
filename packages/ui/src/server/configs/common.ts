@@ -59,6 +59,8 @@ const config: Partial<AppConfig> = {
         directDownload: true,
         docsBaseUrl: process.env.YT_DOCS_BASE_URL || 'https://ytsaurus.tech/docs/en',
     },
+
+    prometheusBaseUrl: process.env.PROMETHEUS_BASE_URL,
 };
 
 export default config;

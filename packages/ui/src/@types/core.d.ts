@@ -54,6 +54,13 @@ export interface YTCoreConfig {
     odinBaseUrl?: Record<string, string> | string;
 
     /**
+     * If defined enables monitoring dashboards described by
+     * https://github.com/ytsaurus/ytsaurus/tree/main/yt/admin/dashboards
+     * might be provided by process.env.PROMETHEUS_BASE_URL
+     */
+    prometheusBaseUrl?: string;
+
+    /**
      *  The OAuthRobot should have read/write access to mapNodePath
      */
     userSettingsConfig?: {
