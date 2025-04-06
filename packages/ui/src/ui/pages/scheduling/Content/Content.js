@@ -33,7 +33,6 @@ import {getCluster} from '../../../store/selectors/global';
 import SchedulingExpandedPoolsUpdater from './SchedulingExpandedPoolsUpdater';
 import UIFactory from '../../../UIFactory';
 import {UI_TAB_SIZE} from '../../../constants/global';
-import {SchedulingMonitoring} from './tabs/Monitoring/SchedulingMonitoring';
 
 const block = cn('scheduling-content');
 
@@ -81,9 +80,6 @@ function Content({className, match, location}) {
             tree,
             extraOptions: {isRoot, isEphemeral},
         }),
-        ...(isEphemeral
-            ? []
-            : [{name: 'monitoring', title: 'Monitoring', component: SchedulingMonitoring}]),
     ];
 
     const extraRoutes = [];
