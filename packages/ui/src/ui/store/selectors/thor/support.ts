@@ -124,9 +124,6 @@ const FEATURES = {
     nodeMaintenanceApi: {
         proxy: '23.1.11106567',
     } as FeatureVersions,
-    schedulingChildrenByPool: {
-        scheduler: '23.1.11146742',
-    } as FeatureVersions,
 };
 
 export function _isFeatureSupported<T extends Record<string, FeatureVersions>>(
@@ -194,12 +191,5 @@ export const isSupportedNodeMaintenanceApi = createSelector(
     [isSupportedSelector],
     (isSupported) => {
         return isSupported('nodeMaintenanceApi');
-    },
-);
-
-export const isSupportedSchedulingChildrenByPool = createSelector(
-    [isSupportedSelector],
-    (isSupported) => {
-        return isSupported('schedulingChildrenByPool');
     },
 );
