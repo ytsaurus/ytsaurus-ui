@@ -28,11 +28,11 @@ export const getDirectoryContent: Props = async ({model, monacoCursorPosition, e
 
     try {
         let clearPath = path.replace(/(\/$)/g, '');
-        let pathExist = await ytApiV3.exists({path: clearPath}, apiSetup);
+        let pathExist = await ytApiV3.exists({...apiSetup, parameters: {path: clearPath}});
         if (!pathExist) {
             if (/[^/]\/$/.test(path)) return []; // we exclude the situation when we have the wrong path
             clearPath = clearPath.split('/').slice(0, -1).join('/');
-            pathExist = await ytApiV3.exists({path: clearPath}, apiSetup);
+            pathExist = await ytApiV3.exists({...apiSetup, parameters: {path: clearPath}});
             if (!pathExist) return [];
         }
 
