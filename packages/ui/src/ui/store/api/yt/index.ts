@@ -72,6 +72,7 @@ export function useFetchBatchQuery<T>(
         ...options,
     };
 
+<<<<<<< HEAD
     const customArgs =
         'setup' in args
             ? args
@@ -79,6 +80,15 @@ export function useFetchBatchQuery<T>(
                   ...args,
                   cluster,
               };
+=======
+    const customArgs: BatchApiArgs = {
+        ...args,
+    };
+>>>>>>> 3acc6183 (chore: setup rtk query and execute batch endpoint)
+
+    if (!args.setup) {
+        customArgs.cluster = cluster;
+    }
 
     const {data, ...restResult} = useFetchBatchQueryRaw(customArgs, customOptions);
 
