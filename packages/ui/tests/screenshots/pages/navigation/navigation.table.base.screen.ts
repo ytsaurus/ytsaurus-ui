@@ -2,7 +2,7 @@ import {Page, expect, test} from '@playwright/test';
 import {E2E_DIR, makeClusterUrl} from '../../../utils';
 import {replaceInnerHtml} from '../../../utils/dom';
 import {TablePage} from './TablePage';
-import {basePage} from '../../../utils/BasePage';
+import {navigationPage} from './NavigationPage';
 
 function tablePage(page: Page) {
     return new TablePage({page});
