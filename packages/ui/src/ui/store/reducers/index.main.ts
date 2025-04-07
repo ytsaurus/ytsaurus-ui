@@ -42,6 +42,7 @@ import {hasOdinPage} from '../../config';
 import {chyt} from './chyt';
 import {getMainLocations} from '../../store/location.main';
 import {flow} from '../../store/reducers/flow';
+import {rootApi} from '../../store/api';
 
 const appReducers = {
     acl,
@@ -82,6 +83,7 @@ const appReducers = {
     chyt,
     manageTokens,
     flow,
+    [rootApi.reducerPath]: rootApi.reducer,
 };
 
 export type RootState = ReturnType<ReturnType<typeof makeRootReducer>>;

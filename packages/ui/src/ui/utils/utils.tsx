@@ -161,10 +161,12 @@ type BatchWrapApiOption<Type extends 'v3' | 'v4' | undefined> =
     | {batchType?: undefined; errorTitle?: string}
     | {batchType: Type; errorTitle: string};
 
-type WrapApiOptions<T, BatchTypeT extends 'v3' | 'v4' | undefined> = CommonWrapApiOptions<T> &
-    BatchWrapApiOption<BatchTypeT>;
+export type WrapApiOptions<
+    T,
+    BatchTypeT extends 'v3' | 'v4' | undefined,
+> = CommonWrapApiOptions<T> & BatchWrapApiOption<BatchTypeT>;
 
-type BatchResultsOrT<BatchType> = BatchType extends 'v3'
+export type BatchResultsOrT<BatchType> = BatchType extends 'v3'
     ? Array<BatchResultsItem>
     : BatchType extends 'v4'
       ? {results: Array<BatchResultsItem>}
