@@ -40,6 +40,7 @@ import {getTabs} from '../../../store/selectors/navigation/navigation';
 import UIFactory from '../../../UIFactory';
 import {RootState} from '../../../store/reducers';
 import {NavigationAction, NavigationState} from '../../../store/reducers/navigation/navigation';
+import {fetchOriginatingQueuePath} from './tabs/queue/exports';
 
 type NavigationThunk<T = void> = ThunkAction<T, RootState, unknown, NavigationAction>;
 
@@ -143,6 +144,7 @@ export function updateView(settings: {trackVisit?: boolean} = {}): NavigationThu
                 };
 
                 dispatch(fetchTableMountConfig(path));
+                dispatch(fetchOriginatingQueuePath());
 
                 if (!account) {
                     /**
@@ -322,6 +324,7 @@ const attributesToLoad = [
     'path',
     'pipeline_format_version',
     'primary_medium',
+    'queue_static_export_destination',
     'remount_needed_tablet_count',
     'replica_path',
     'replicated_table_options',

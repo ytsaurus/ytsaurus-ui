@@ -149,11 +149,6 @@ export enum YTApiId {
     usersEditData,
     usersSaveData,
 
-    queueStatus,
-    queuePartitions,
-    queueConsumerStatus,
-    queueConsumerPartitions,
-
     bundleControllerZones,
     tabletBundleControllerState,
     tabletBundlesCheckWrite,
@@ -175,4 +170,11 @@ export enum YTApiId {
     issueToken,
 
     setUserPassword,
+
+    // queues
+    queueExportConfig,
+    queueStatus,
+    queuePartitions,
+    queueConsumerStatus,
+    queueConsumerPartitions,
 }

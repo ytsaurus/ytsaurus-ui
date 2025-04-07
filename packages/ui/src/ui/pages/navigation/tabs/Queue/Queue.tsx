@@ -26,6 +26,8 @@ import ConsumersExtraControls from './views/Consumers/ConsumersExtraControls';
 import Partitions from './views/Partitions/Partitions';
 import PartitionsExtraControls from './views/Partitions/PartitionsExtraControls';
 import UIFactory from '../../../../UIFactory';
+import {Exports} from './views/Exports/Exports';
+import {ExportsExtraControls} from './views/Exports/ExportsExtraControls';
 
 const emptyView = {ExtraControls: () => null, View: () => null};
 
@@ -33,6 +35,7 @@ const views: Record<QUEUE_MODE, {ExtraControls: ComponentType; View: ComponentTy
     [QUEUE_MODE.METRICS]: {ExtraControls: () => null, View: () => null},
     [QUEUE_MODE.PARTITIONS]: {ExtraControls: PartitionsExtraControls, View: Partitions},
     [QUEUE_MODE.CONSUMERS]: {ExtraControls: ConsumersExtraControls, View: Consumers},
+    [QUEUE_MODE.EXPORTS]: {ExtraControls: ExportsExtraControls, View: Exports},
 };
 
 function useViewByMode(mode: QUEUE_MODE) {

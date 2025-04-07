@@ -29,6 +29,10 @@ const tabItems: React.ComponentProps<typeof RadioButton>['items'] = [
         value: QUEUE_MODE.CONSUMERS,
         text: 'Consumers',
     },
+    {
+        value: QUEUE_MODE.EXPORTS,
+        text: 'Exports',
+    },
 ];
 
 const Toolbar: React.VFC<Props> = ({extras: Extras, queueMode, changeQueueMode}) => {

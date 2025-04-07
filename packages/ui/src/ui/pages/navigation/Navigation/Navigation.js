@@ -168,7 +168,9 @@ class Navigation extends Component {
 
     onTabChange = (value) => {
         const {setMode} = this.props;
-        setMode(value);
+        if (value !== Tab.ORIGINATING_QUEUE) {
+            setMode(value);
+        }
     };
 
     renderTabs() {
