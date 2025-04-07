@@ -8,7 +8,10 @@ import {RootState} from '../../../../../store/reducers';
 import {rootApi} from '../../../../../store/api';
 import {ytApi} from '../../../../../store/api/yt';
 import {getAttributes, getPath} from '../../../../../store/selectors/navigation';
+<<<<<<< HEAD
 import {getCluster} from '../../../../../store/selectors/global';
+=======
+>>>>>>> 656b38c5 (feat(Navigation/Queue): add features for queues exports [YTFRONT-4482])
 
 import CancelHelper from '../../../../../utils/cancel-helper';
 import {wrapApiPromiseByToaster} from '../../../../../utils/utils';
@@ -57,6 +60,7 @@ async function deleteExtraAttributes(
 }
 
 async function exportsMutation(args: ExportsMutationArgs, api: BaseQueryApi) {
+<<<<<<< HEAD
     try {
         const state = api.getState() as RootState;
         const path = getPath(state);
@@ -80,6 +84,29 @@ async function exportsMutation(args: ExportsMutationArgs, api: BaseQueryApi) {
             newConfigs[newConfig?.export_name] = newConfig;
         }
 
+=======
+    const state = api.getState() as RootState;
+    const path = getPath(state);
+    const attributes = getAttributes(state);
+
+    const {prevConfig, type, newConfig} = args;
+
+    const configs: QueueExport<number> = ytApi.endpoints.fetchBatch.select(
+        makeGetExportsParams(path),
+    )(state).data?.[0].output as QueueExport<number>;
+
+    const newConfigs = {...configs};
+
+    if (prevConfig?.export_name && newConfigs[prevConfig?.export_name]) {
+        delete newConfigs[prevConfig?.export_name];
+    }
+
+    if (type === 'edit' && newConfig?.export_name) {
+        newConfigs[newConfig?.export_name] = newConfig;
+    }
+
+    try {
+>>>>>>> 656b38c5 (feat(Navigation/Queue): add features for queues exports [YTFRONT-4482])
         const transactionId = await yt.v3.startTransaction({});
         try {
             await ytApiV3.set(
