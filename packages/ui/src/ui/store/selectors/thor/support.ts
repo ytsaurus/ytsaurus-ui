@@ -114,10 +114,14 @@ export type Versions<T> = {proxy?: T | typeof _LOCAL_ARCADIA_VERSION; scheduler?
 type FeatureVersions = Versions<MajorMinorPatch | Array<MajorMinorPatchRange>>;
 type RawFeatureVersions = Versions<RawVersion>;
 
+/**
+ * The recommended method to describe features is yt.v3.getSupportedFeatures().
+ * The code is left here for a while in case we decide to use the approach again.
+ */
 const FEATURES = {
-    nodeMaintenanceApi: {
-        proxy: '23.1.11106567',
-    } as FeatureVersions,
+    // nodeMaintenanceApi: {
+    //     proxy: '23.1.11106567',
+    // } as FeatureVersions,
 };
 
 export function _isFeatureSupported<T extends Record<string, FeatureVersions>>(
@@ -174,9 +178,9 @@ export const isSupportedSelector = createSelector(
     (proxy, scheduler, master) => _isFeatureSupported({proxy, scheduler, master}, FEATURES),
 );
 
-export const isSupportedNodeMaintenanceApi = createSelector(
-    [isSupportedSelector],
-    (isSupported) => {
-        return isSupported('nodeMaintenanceApi');
-    },
-);
+// export const isSupportedNodeMaintenanceApi = createSelector(
+//     [isSupportedSelector],
+//     (isSupported) => {
+//         return isSupported('nodeMaintenanceApi');
+//     },
+// );
