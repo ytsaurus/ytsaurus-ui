@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.10.4](https://github.com/ytsaurus/ytsaurus-ui/compare/javascript-wrapper-v0.10.3...javascript-wrapper-v0.10.4) (2025-04-07)
+
+
+### Bug Fixes
+
+* **javascript-wrapper:** use post methods instead of get methods ([0184911](https://github.com/ytsaurus/ytsaurus-ui/commit/01849116015af3b667f9a5647019324e730d106b))
+
 ## [0.10.3](https://github.com/ytsaurus/ytsaurus-ui/compare/javascript-wrapper-v0.10.2...javascript-wrapper-v0.10.3) (2024-11-13)
 
 
