@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
-// import {isSupportedSelector} from '../../../../../store/selectors/thor';
 
 import Pagination from '../../../../../components/Pagination/Pagination';
 
@@ -28,7 +27,6 @@ Paginator.propTypes = {
     isPaginationDisabled: PropTypes.bool.isRequired,
     isTableEndReached: PropTypes.bool.isRequired,
     isDynamic: PropTypes.bool.isRequired,
-    // isSupported: PropTypes.func.isRequired,
 
     previousOffset: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
     offsetValue: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
@@ -40,14 +38,7 @@ Paginator.propTypes = {
 };
 
 function Paginator(props) {
-    const {
-        block,
-        error,
-        isPaginationDisabled,
-        isTableEndReached,
-        offsetValue,
-        isDynamic /*, isSupported */,
-    } = props;
+    const {block, error, isPaginationDisabled, isTableEndReached, offsetValue, isDynamic} = props;
     const {moveOffsetToStart, moveOffsetToLeft, moveOffsetToRight, moveOffsetToEnd} = props;
     const tooltip = isPaginationDisabled
         ? 'Select every key column in Column Selector to enable pagination'
@@ -100,7 +91,6 @@ const mapStateToProps = (state) => {
     const isTableEndReached = getIsTableEndReached(state);
     const offsetValue = getOffsetValue(state);
     const isDynamic = getIsDynamic(state);
-    // const isSupported = isSupportedSelector(state);
 
     return {
         error,
@@ -108,7 +98,6 @@ const mapStateToProps = (state) => {
         offsetValue,
         isPaginationDisabled,
         isTableEndReached,
-        // isSupported,
     };
 };
 

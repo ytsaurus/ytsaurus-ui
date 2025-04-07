@@ -3,7 +3,6 @@ import {createSelector} from 'reselect';
 
 import hammer from '../../../common/hammer';
 import {MediumType} from '../../../constants/index';
-export {isSupportedSelector} from './support';
 
 export const getMediumList = createSelector(
     (state) => state.global.mediumList,
