@@ -1,6 +1,8 @@
-import React from 'react';
+import React, {FC} from 'react';
 import {useSelector} from 'react-redux';
 import cn from 'bem-cn-lite';
+import {Flex, Icon} from '@gravity-ui/uikit';
+import ArrowRightIcon from '@gravity-ui/icons/svgs/arrow-right.svg';
 
 import compact_ from 'lodash/compact';
 
@@ -49,6 +51,21 @@ const TABLE_SETTINGS: Settings = {
     sortable: false,
 };
 
+const PathItem: FC<{
+    cluster: string;
+    path: string;
+}> = ({cluster, path}) => {
+    return (
+        <span className={block('path-link')}>
+            <Link url={genNavigationUrl({cluster, path})} className={block('path-link-link')}>
+                {path}
+                {''}
+            </Link>
+            <ClipboardButton text={path} view={'flat-secondary'} />
+        </span>
+    );
+};
+
 function useColumns() {
     const cluster = useSelector(getCluster);
     const fieldSelector = useSelector(getAccessLogLastLoadedFieldSelector);
@@ -69,7 +86,7 @@ function useColumns() {
             },
             {
                 name: 'Path',
-                render({row: {path, target_path, original_path}}) {
+                render({row: {path, target_path, original_path, destination_path}}) {
                     if (!path) {
                         return (
                             <Secondary>
@@ -79,16 +96,15 @@ function useColumns() {
                     }
                     return (
                         <div className={block('path')}>
-                            <span className={block('path-link')}>
-                                <Link
-                                    url={genNavigationUrl({cluster, path})}
-                                    className={block('path-link-link')}
-                                >
-                                    {path}
-                                    {''}
-                                </Link>
-                                <ClipboardButton text={path} view={'flat-secondary'} />
-                            </span>
+                            <Flex gap={2} direction="column">
+                                <PathItem cluster={cluster} path={path} />
+                                {destination_path && (
+                                    <>
+                                        <Icon data={ArrowRightIcon} size={16} />
+                                        <PathItem cluster={cluster} path={destination_path} />
+                                    </>
+                                )}
+                            </Flex>
                             {target_path && (
                                 <PathTag text="target" cluster={cluster} path={target_path} />
                             )}
