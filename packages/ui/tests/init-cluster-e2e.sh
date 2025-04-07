@@ -18,7 +18,6 @@ function createAndMountDynamicTable {
     schema=$2
     yt create -i --attributes "{dynamic=%true;schema=$schema}" table $path
     yt mount-table $path
-    yt set $path/@mount_config/temp 1
 }
 
 # userColumnPresets
@@ -130,6 +129,9 @@ createAccountForQuotaEditor e2e-parent
 createAccountForQuotaEditor e2e-overcommit
 yt set //sys/accounts/e2e-overcommit-${E2E_SUFFIX}/@allow_children_limit_overcommit %true
 
+QUEUE=${E2E_DIR}/queue
+createAndMountDynamicTable "$QUEUE" "[{name=value;type=string}]"
+
 DYN_TABLE=${E2E_DIR}/dynamic-table
 createAndMountDynamicTable "$DYN_TABLE" "[{name=key;sort_order=ascending;type=string};{name=value;type=string};{name=empty;type=any}]"
 (
@@ -139,6 +141,7 @@ createAndMountDynamicTable "$DYN_TABLE" "[{name=key;sort_order=ascending;type=st
     done
     set -x
 ) | yt insert-rows --format yson ${DYN_TABLE}
+yt set ${E2E_DIR}/dynamic-table/@mount_config/temp 1
 yt freeze-table ${DYN_TABLE}
 
 STATIC_TABLE=${E2E_DIR}/static-table
