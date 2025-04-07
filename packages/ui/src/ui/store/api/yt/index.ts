@@ -3,7 +3,7 @@ import {BaseQueryFn, TypedUseMutationResult} from '@reduxjs/toolkit/dist/query/r
 
 import {rootApi} from '..';
 import {BatchApiArgs, BatchApiResults, executeBatchV3} from './endpoints/executeBatch';
-import {getUseAutoRefresh} from '../../../store/selectors/settings';
+import {getUseAutoRefresh} from '../../../store/selectors/settings/settings-ts';
 import {getCluster} from '../../../store/selectors/global';
 import {DEFAULT_UPDATER_TIMEOUT} from '../../../hooks/use-updater';
 import {MutationOptions, UseQueryOptions} from './types';
@@ -18,6 +18,13 @@ export const ytApi = rootApi.injectEndpoints({
             queryFn: executeBatchV3,
             invalidatesTags: (_result, _error, arg) => [String(arg.id)],
         }),
+<<<<<<< HEAD
+=======
+        listQueries: build.query({
+            queryFn: listQueries,
+            providesTags: (_result, _error, _arg) => [String(YTApiId.listQueries)],
+        }),
+>>>>>>> fd91dbdb (feat(Dashboard2): add new dashboard page [YTFRONT-3400])
     }),
 });
 
@@ -57,7 +64,7 @@ export function useFetchBatchQuery<T>(
     args: BatchApiArgs,
     options?: UseQueryOptions<BatchQueryResult, BatchQueryArgs>,
 ) {
-    const useAutoRefresh = useSelector(getUseAutoRefresh) as boolean;
+    const useAutoRefresh = useSelector(getUseAutoRefresh);
     const cluster = useSelector(getCluster);
 
     const defaultOptions = {
@@ -70,10 +77,13 @@ export function useFetchBatchQuery<T>(
         ...options,
     };
 
-    const customArgs = {
+    const customArgs: BatchApiArgs = {
         ...args,
-        cluster: args.clusterDependency === false ? undefined : cluster,
     };
+
+    if (!args.setup) {
+        customArgs.cluster = cluster;
+    }
 
     const {data, ...restResult} = useFetchBatchQueryRaw(customArgs, customOptions);
 

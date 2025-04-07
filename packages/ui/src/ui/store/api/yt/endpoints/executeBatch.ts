@@ -7,7 +7,6 @@ export type BatchApiArgs = {
     id: YTApiId;
     toaster?: WrapApiOptions<unknown, 'v3'>;
     cluster?: string;
-    clusterDependency?: boolean;
 } & ApiMethodParams<BatchParameters>;
 
 export type BatchApiResults<T = unknown> = Array<BatchResultsItem<T>>;
