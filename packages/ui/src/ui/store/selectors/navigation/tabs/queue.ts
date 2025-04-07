@@ -1,7 +1,7 @@
 import {createSelector} from 'reselect';
 
-import type {RootState} from '../../../../store/reducers';
-import type {YtQueueStatus} from '../../../../store/reducers/navigation/tabs/queue/types';
+import type {RootState} from '../../../reducers';
+import type {YtQueueStatus} from '../../../reducers/navigation/tabs/queue/types';
 
 const metaMock = {cell_id: '890', host: 'lbk-vla-249.search.yandex.net'};
 export const emptyRate = {'1m': 0, '1h': 0, '1d': 0};
