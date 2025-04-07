@@ -115,9 +115,6 @@ type FeatureVersions = Versions<MajorMinorPatch | Array<MajorMinorPatchRange>>;
 type RawFeatureVersions = Versions<RawVersion>;
 
 const FEATURES = {
-    fieldsFilter: {
-        scheduler: '22.1.9091155',
-    } as FeatureVersions,
     nodeMaintenanceApi: {
         proxy: '23.1.11106567',
     } as FeatureVersions,
