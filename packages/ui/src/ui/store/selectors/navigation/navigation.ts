@@ -18,6 +18,7 @@ import {getAccessLogBasePath} from '../../../config';
 import {getTabletErrorsBackgroundCount} from '../../../store/selectors/navigation/tabs/tablet-errors-background';
 import UIFactory from '../../../UIFactory';
 import {getConfigData} from '../../../config/ui-settings';
+import {getCluster} from '../global';
 
 export function getNavigationPathAttributesLoadState(state: RootState) {
     return state.navigation.navigation.loadState;
@@ -71,9 +72,17 @@ export const getNavigationRestorePath = createSelector([getNavigationPathAttribu
     return ypath.getValue(attrs, '/_restore_path');
 });
 
+export const getNavigationOriginatingQueuePath = (state: RootState) =>
+    state.navigation.navigation.originatingQueuePath;
+
 export const getSupportedTabs = createSelector(
-    [getNavigationPathAttributes, getTableMountConfigHasData, getTabletErrorsBackgroundCount],
-    (attributes, mountConfigHasData, tabletErrorsCount) => {
+    [
+        getNavigationPathAttributes,
+        getTableMountConfigHasData,
+        getTabletErrorsBackgroundCount,
+        getNavigationOriginatingQueuePath,
+    ],
+    (attributes, mountConfigHasData, tabletErrorsCount, originatingQueuePath) => {
         const isDynamic = attributes.dynamic === true;
         const isPipeline = attributes.pipeline_format_version !== undefined;
         const mountConfigVisible = mountConfigHasData || isDynamic;
@@ -114,6 +123,10 @@ export const getSupportedTabs = createSelector(
             supportedByAttribute.push(Tab.CONSUMER);
         }
 
+        if (originatingQueuePath) {
+            supportedByAttribute.push(Tab.ORIGINATING_QUEUE);
+        }
+
         let supportedTabletErrors: Array<ValueOf<typeof Tab>> = [];
         if (
             tabletErrorsCount > 0 ||
@@ -139,8 +152,14 @@ export const getSupportedTabs = createSelector(
 );
 
 export const getTabs = createSelector(
-    [getSupportedTabs, getTabletErrorsBackgroundCount, getAttributes],
-    (supportedTabs, tabletErrorsCount, attributes) => {
+    [
+        getSupportedTabs,
+        getTabletErrorsBackgroundCount,
+        getAttributes,
+        getNavigationOriginatingQueuePath,
+        getCluster,
+    ],
+    (supportedTabs, tabletErrorsCount, attributes, originatingQueuePath, cluster) => {
         const isACO = attributes?.type === 'access_control_object';
 
         const tabs: {
@@ -154,6 +173,9 @@ export const getTabs = createSelector(
             text?: string;
             caption?: string;
             counter?: number;
+            url?: string;
+            external?: boolean;
+            routed?: false;
         }[] = [
             {
                 value: Tab.CONSUMER,
@@ -302,6 +324,13 @@ export const getTabs = createSelector(
                 value: Tab.TABLET_ERRORS,
                 title: 'Go to tablets errors',
                 counter: tabletErrorsCount > 0 ? tabletErrorsCount : undefined,
+            },
+            {
+                value: Tab.ORIGINATING_QUEUE,
+                title: 'Originating queue',
+                url: `${window.location.origin}/${cluster}/navigation?path=${originatingQueuePath}`,
+                external: true,
+                routed: false,
             },
         ];
 

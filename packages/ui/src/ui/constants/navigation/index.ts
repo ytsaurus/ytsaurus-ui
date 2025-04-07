@@ -19,6 +19,7 @@ export const Tab = {
     ANNOTATION: 'annotation',
     ACCESS_LOG: 'access_log',
     MOUNT_CONFIG: 'mount_config',
+    ORIGINATING_QUEUE: 'originating_queue',
 } as const;
 
 export const ContentMode = {
@@ -34,6 +35,7 @@ export const SELECT_ALL = `${PREFIX}SELECT_ALL` as const;
 export const SET_CONTENT_MODE = `${PREFIX}SET_CONTENT_MODE` as const;
 export const SET_TEXT_FILTER = `${PREFIX}SET_TEXT_FILTER` as const;
 export const SET_TRANSACTION = `${PREFIX}SET_TRANSACTION` as const;
+export const SET_ORIGINATING_QUEUE_PATH = `${PREFIX}SET_ORIGINATING_QUEUE_PATH` as const;
 export const CLEAR_TRANSACTION = `${PREFIX}CLEAR_TRANSACTION` as const;
 export const UPDATE_PATH = `${PREFIX}UPDATE_PATH` as const;
 export const UPDATE_VIEW = createActionTypes(`${PREFIX}UPDATE_VIEW`);
