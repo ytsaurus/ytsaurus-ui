@@ -42,6 +42,7 @@ export type AccessLogItem = {
     path: string;
     transaction_info?: AccessLogTransactionInfo;
     method_group?: string;
+    destination_path?: string;
 } & AccessLogExtraPaths;
 
 type AccessLogExtraPaths =
