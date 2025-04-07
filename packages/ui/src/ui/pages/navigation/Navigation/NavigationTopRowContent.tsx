@@ -1,10 +1,30 @@
 import React, {FocusEvent} from 'react';
+import {useHistory} from 'react-router';
 import cn from 'bem-cn-lite';
-import {RowWithName} from '../../../containers/AppNavigation/TopRowContent/SectionName';
-import Favourites from '../../../components/Favourites/Favourites';
 import {useDispatch, useSelector} from 'react-redux';
+
+import {Flex} from '@gravity-ui/uikit';
+
+// @ts-ignore
+import metrics from '../../../common/utils/metrics';
+
+import {
+    getMode,
+    getNavigationBreadcrumbs,
+    getNavigationPathAttributes,
+    getNavigationRestorePath,
+} from '../../../store/selectors/navigation/navigation';
+import {getCluster} from '../../../store/selectors/global';
+import {makeRoutedURL} from '../../../store/location';
+import {restoreObject} from '../../../store/actions/navigation/modals/restore-object';
+import {getNavigationDefaultPath} from '../../../store/selectors/settings';
 import {getFavouritePaths, isCurrentPathInFavourites} from '../../../store/selectors/favourites';
-import {getActualPath, getPath, getTransaction} from '../../../store/selectors/navigation';
+import {
+    getActualPath,
+    getPath,
+    getTransaction,
+    isNavigationFinalLoadState,
+} from '../../../store/selectors/navigation';
 import {navigationToggleFavourite} from '../../../store/actions/favourites';
 import {
     clearTransaction,
@@ -12,35 +32,30 @@ import {
     updatePath,
     updateView,
 } from '../../../store/actions/navigation';
+
+import Favourites from '../../../components/Favourites/Favourites';
 import ClipboardButton from '../../../components/ClipboardButton/ClipboardButton';
-// @ts-ignore
-import metrics from '../../../common/utils/metrics';
-
 import {Breadcrumbs, BreadcrumbsItem} from '../../../components/Breadcrumbs';
-import {
-    getMode,
-    getNavigationBreadcrumbs,
-    getNavigationRestorePath,
-} from '../../../store/selectors/navigation/navigation';
-
-import {getCluster} from '../../../store/selectors/global';
-import {makeRoutedURL} from '../../../store/location';
 import Link from '../../../components/Link/Link';
 import Editor from '../../../components/Editor/Editor';
+import {EditButton} from '../../../components/EditableAsText/EditableAsText';
 import Button from '../../../components/Button/Button';
 import Icon from '../../../components/Icon/Icon';
+import MetaTable from '../../../components/MetaTable/MetaTable';
+import {Escaped} from '../../../components/Text/Text';
+import {Tooltip} from '../../../components/Tooltip/Tooltip';
+
+import PathEditor from '../../../containers/PathEditor/PathEditor';
+import {RowWithName} from '../../../containers/AppNavigation/TopRowContent/SectionName';
 
 import {Page} from '../../../constants';
-import {restoreObject} from '../../../store/actions/navigation/modals/restore-object';
-import {inTrash} from '../../../utils/navigation/restore-object';
-import {EditButton} from '../../../components/EditableAsText/EditableAsText';
-import PathEditor from '../../../containers/PathEditor/PathEditor';
-import {getNavigationDefaultPath} from '../../../store/selectors/settings';
 import {Tab} from '../../../constants/navigation';
 
+import {inTrash} from '../../../utils/navigation/restore-object';
+import {makeNavigationLink} from '../../../utils/app-url';
+import {decodeEscapedAbsPath} from '../../../utils/navigation';
+
 import './NavigationTopRowContent.scss';
-import {Escaped} from '../../../components/Text/Text';
-import {useHistory} from 'react-router';
 
 const block = cn('navigation-top-row-content');
 
@@ -102,6 +117,32 @@ function NavigationPathToClipboard() {
 
 function NavigationTargetPathButton() {
     const path = useSelector(getPath);
+    const {path: target_path} = useSelector(getNavigationPathAttributes);
+    const loading = !useSelector(isNavigationFinalLoadState);
+
+    const decodedTargetPath = target_path ? decodeEscapedAbsPath(target_path) : undefined;
+
+    if (loading || !decodedTargetPath || path === decodedTargetPath || path === '/') {
+        return null;
+    }
+
+    return (
+        <Link url={makeNavigationLink({path: decodedTargetPath})} routed>
+            <Tooltip
+                content={
+                    <Flex gap={1}>
+                        <MetaTable items={[{key: 'target_path', value: decodedTargetPath}]} />
+                        <ClipboardButton text={target_path} inlineMargins view="flat" />
+                    </Flex>
+                }
+                placement={'bottom'}
+            >
+                <Button view="flat-info" selected qa="qa:navitation:target-path">
+                    <Icon awesome="link" />
+                </Button>
+            </Tooltip>
+        </Link>
+    );
 }
 
 function onCopyToClipboard() {
@@ -122,6 +163,7 @@ function EditableNavigationBreadcrumbs() {
             ) : (
                 <React.Fragment>
                     <NavigationBreadcrumbs onEdit={toggleEditMode} />
+                    <NavigationTargetPathButton />
                     <EditButton onClick={toggleEditMode} />
                     <NavigationPathToClipboard />
                 </React.Fragment>
