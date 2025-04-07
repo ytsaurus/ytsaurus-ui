@@ -100,6 +100,10 @@ function NavigationPathToClipboard() {
     );
 }
 
+function NavigationTargetPathButton() {
+    const path = useSelector(getPath);
+}
+
 function onCopyToClipboard() {
     metrics.countEvent({'navigation_copy-path': 'clicked'});
 }

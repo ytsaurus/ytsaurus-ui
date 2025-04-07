@@ -119,9 +119,6 @@ const FEATURES = {
     fieldsFilter: {
         scheduler: '22.1.9091155',
     } as FeatureVersions,
-    effectiveExpiration: {
-        master: '23.1.11146445',
-    } as FeatureVersions,
     clusterNodeVersion: {
         proxy: '23.2.0',
     } as FeatureVersions,
@@ -185,13 +182,6 @@ export function _isFeatureSupported<T extends Record<string, FeatureVersions>>(
 export const isSupportedSelector = createSelector(
     [getRawProxyVersion, getRawSchedulerVersion, getRawMasterVersion],
     (proxy, scheduler, master) => _isFeatureSupported({proxy, scheduler, master}, FEATURES),
-);
-
-export const isSupportedEffectiveExpiration = createSelector(
-    [isSupportedSelector],
-    (isSupported) => {
-        return isSupported('effectiveExpiration');
-    },
 );
 
 export const isSupportedClusterNodeForVersions = createSelector(
