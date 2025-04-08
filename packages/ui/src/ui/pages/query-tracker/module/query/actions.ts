@@ -5,6 +5,7 @@ import {RootState} from '../../../../store/reducers';
 import {getCliqueControllerIsSupported, getCluster} from '../../../../store/selectors/global';
 import {QueryEngine} from '../engines';
 import {
+    DraftQuery,
     QueryItem,
     abortQuery,
     addACOToLastSelected,
@@ -18,6 +19,7 @@ import {
     SHARED_QUERY_ACO,
     getCurrentQuery,
     getQueryDraft,
+    getQueryEngine,
     getQuery as selectQuery,
 } from './selectors';
 import {getAppBrowserHistory} from '../../../../store/window-store';
@@ -54,6 +56,11 @@ import {
 } from '../query-tracker-contants';
 import {loadVisualization} from '../queryChart/actions';
 import {ChytInfo} from '../../../../store/reducers/chyt/list';
+import {
+    getLastUserChoiceQueryChytClique,
+    getLastUserChoiceQueryDiscoveryPath,
+    getLastUserChoiceQueryEngine,
+} from '../../../../store/selectors/settings/settings-queries';
 
 export const setCurrentClusterToQuery =
     (): ThunkAction<void, RootState, unknown, any> => async (dispatch, getState) => {
@@ -64,6 +71,32 @@ export const setCurrentClusterToQuery =
         if (settings && 'cluster' in settings) return;
 
         dispatch(updateQueryDraft({settings: {...settings, cluster}}));
+    };
+
+export const setUserLastChoice =
+    (clearProps?: boolean): ThunkAction<void, RootState, unknown, any> =>
+    (dispatch, getState) => {
+        const state = getState();
+        const {settings} = getQueryDraft(state);
+        const engine = getQueryEngine(state);
+        const lastPath = getLastUserChoiceQueryDiscoveryPath(state);
+        const lastClique = getLastUserChoiceQueryChytClique(state);
+
+        const newSettings = {...settings};
+        if (clearProps) {
+            delete newSettings.discovery_group;
+            delete newSettings.clique;
+        }
+
+        if (engine === QueryEngine.SPYT && lastPath) {
+            newSettings.discovery_group = lastPath;
+        }
+
+        if (engine === QueryEngine.CHYT && lastClique) {
+            newSettings.clique = lastClique;
+        }
+
+        dispatch(updateQueryDraft({settings: newSettings}));
     };
 
 export const loadCliqueByCluster =
@@ -154,6 +187,7 @@ export function loadQuery(
             dispatch(createEmptyQuery());
         } finally {
             dispatch(setCurrentClusterToQuery());
+            dispatch(setUserLastChoice());
         }
     };
 }
@@ -216,14 +250,18 @@ export function createQueryFromTablePath(
 }
 
 export function createEmptyQuery(
-    engine = QueryEngine.YQL,
+    engine?: QueryEngine,
     query?: string,
     settings?: Record<string, string>,
 ): ThunkAction<any, RootState, any, SetQueryAction> {
     return (dispatch, getState) => {
         const state = getState();
+        const lastEngine = getLastUserChoiceQueryEngine(state);
         const defaultQueryACO = getDefaultQueryACO(state);
 
+        const initialEngine = engine || lastEngine;
+
+        const defaultSettings: DraftQuery['settings'] = {};
         UIFactory.getInlineSuggestionsApi()?.onQueryCreate();
         dispatch({
             type: SET_QUERY,
@@ -232,12 +270,13 @@ export function createEmptyQuery(
                     access_control_object: defaultQueryACO,
                     access_control_objects: [defaultQueryACO],
                     query: query || '',
-                    engine,
-                    settings: settings || {},
+                    engine: initialEngine,
+                    settings: settings || defaultSettings,
                 } as QueryItem,
             },
         });
         dispatch(setCurrentClusterToQuery());
+        dispatch(setUserLastChoice());
     };
 }
 

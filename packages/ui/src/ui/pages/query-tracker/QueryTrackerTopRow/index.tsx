@@ -8,7 +8,12 @@ import {
     getQueryDraft,
     getQueryGetParams,
 } from '../module/query/selectors';
-import {loadCliqueByCluster, resetQueryTracker, updateQueryDraft} from '../module/query/actions';
+import {
+    loadCliqueByCluster,
+    resetQueryTracker,
+    setUserLastChoice,
+    updateQueryDraft,
+} from '../module/query/actions';
 import {RightButtonsGroup} from './RightButtonsGroup';
 import {HeadSpacer} from '../../../containers/ClusterPageHeader/HeadSpacer';
 import {Flex, Text, Tooltip} from '@gravity-ui/uikit';
@@ -22,6 +27,7 @@ import './QueryTrackerTopRow.scss';
 import cn from 'bem-cn-lite';
 import {EditableAsText} from '../../../components/EditableAsText/EditableAsText';
 import {useIsDesktop} from '../../../hooks/useIsDesktop';
+import {setSettingByKey} from '../../../store/actions/settings';
 
 const NAME_PLACEHOLDER = 'No name';
 const block = cn('query-tracker-top-row');
@@ -36,6 +42,8 @@ const QueryTrackerTopRow: FC = () => {
     const [nameEdit, setNameEdit] = useState(false);
     const isDesktop = useIsDesktop();
 
+    const currentCluster = settings?.cluster;
+
     useEffect(() => {
         if ((engine === QueryEngine.CHYT || engine === QueryEngine.SPYT) && settings?.cluster) {
             dispatch(loadCliqueByCluster(engine, settings.cluster));
@@ -45,18 +53,19 @@ const QueryTrackerTopRow: FC = () => {
     const handleChangeEngine = useCallback(
         (newEngine: QueryEngine) => {
             const newSettings = {...settings};
-            const isSpyt = newEngine === QueryEngine.SPYT;
-            const isChyt = newEngine === QueryEngine.CHYT;
 
-            if (!isSpyt && 'discovery_group' in newSettings) {
-                delete newSettings['discovery_group'];
-                delete newSettings['discovery_path']; // old request type. Deprecated
+            if (newEngine !== QueryEngine.SPYT) {
+                delete newSettings.discovery_group;
+                delete newSettings.discovery_path; // old request type. Deprecated
             }
-            if (!isChyt && 'clique' in newSettings) {
-                delete newSettings['clique'];
+
+            if (newEngine !== QueryEngine.CHYT) {
+                delete newSettings.clique;
             }
 
             dispatch(updateQueryDraft({settings: newSettings}));
+            dispatch(setSettingByKey(`global::queryTracker::lastEngine`, newEngine));
+            dispatch(setUserLastChoice());
         },
         [dispatch, settings],
     );
@@ -88,6 +97,7 @@ const QueryTrackerTopRow: FC = () => {
             }
             delete newSettings['clique'];
             dispatch(updateQueryDraft({settings: newSettings}));
+            dispatch(setUserLastChoice(true));
         },
         [dispatch, settings],
     );
@@ -101,15 +111,24 @@ const QueryTrackerTopRow: FC = () => {
                 newSettings.clique = alias;
             }
             dispatch(updateQueryDraft({settings: newSettings}));
+            dispatch(
+                setSettingByKey(`local::${currentCluster}::queryTracker::lastChytClique`, alias),
+            );
         },
-        [dispatch, settings],
+        [currentCluster, dispatch, settings],
     );
 
     const handlePathChange = useCallback(
         (newPath: string) => {
             dispatch(updateQueryDraft({settings: {...settings, discovery_group: newPath}}));
+            dispatch(
+                setSettingByKey(
+                    `local::${currentCluster}::queryTracker::lastDiscoveryPath`,
+                    newPath,
+                ),
+            );
         },
-        [dispatch, settings],
+        [currentCluster, dispatch, settings],
     );
 
     const name = annotations?.title || NAME_PLACEHOLDER;
