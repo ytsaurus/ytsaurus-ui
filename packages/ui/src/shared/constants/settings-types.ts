@@ -1,4 +1,5 @@
 import {NodeType} from './system';
+import {QueryEngine} from '../../ui/pages/query-tracker/module/engines';
 
 export interface Namespace {
     name: string;
@@ -99,6 +100,17 @@ type QueryTrackerUserDefaultACOSettings = {
     [key in `qt-stage::${Stage}::queryTracker::defaultACO`]: string;
 };
 
+export type Cluster = string;
+export type QueryTrackerUserEngine = {
+    [key in `local::${Cluster}::queryTracker::favoriteEngine`]: QueryEngine;
+};
+export type QueryTrackerFavoritePath = {
+    [key in `local::${Cluster}::queryTracker::favoritePath`]: string;
+};
+export type QueryTrackerFavoriteClique = {
+    [key in `local::${Cluster}::queryTracker::favoriteClique`]: string;
+};
+
 interface OtherSettings {
     [key: string]: any;
 }
@@ -130,6 +142,9 @@ export type DescribedSettings = GlobalSettings &
     ChytSettings &
     QueryTrackerLastSelectedACOsSettings &
     QueryTrackerUserDefaultACOSettings &
+    QueryTrackerUserEngine &
+    QueryTrackerFavoritePath &
+    QueryTrackerFavoriteClique &
     ComponentsSettings;
 
 export type Settings = DescribedSettings & OtherSettings;
