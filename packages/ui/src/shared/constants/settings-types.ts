@@ -1,4 +1,5 @@
 import {NodeType} from './system';
+import {QueryEngine} from '../../ui/pages/query-tracker/module/engines';
 
 export interface Namespace {
     name: string;
@@ -134,6 +135,7 @@ interface QueryTrackerSettings {
     'global::queryTracker::history::Columns': string[];
     'global::queryTracker::useNewGraphView': boolean;
     'global::queryTracker::suggestions': boolean;
+    'global::queryTracker::lastEngine': QueryEngine;
 }
 
 interface ChytSettings {
@@ -146,6 +148,14 @@ type QueryTrackerLastSelectedACOsSettings = {
 
 type QueryTrackerUserDefaultACOSettings = {
     [key in `qt-stage::${Stage}::queryTracker::defaultACO`]: string;
+};
+
+export type Cluster = string;
+export type QueryTrackerLastDiscoveryPath = {
+    [key in `local::${Cluster}::queryTracker::lastDiscoveryPath`]: string;
+};
+export type QueryTrackerLastChytClique = {
+    [key in `local::${Cluster}::queryTracker::lastChytClique`]: string;
 };
 
 type SchedulingSettings = {
@@ -179,6 +189,8 @@ export type DescribedSettings = GlobalSettings &
     ChytSettings &
     QueryTrackerLastSelectedACOsSettings &
     QueryTrackerUserDefaultACOSettings &
+    QueryTrackerLastDiscoveryPath &
+    QueryTrackerLastChytClique &
     ComponentsSettings &
     SchedulingSettings;
 
