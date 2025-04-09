@@ -9,7 +9,7 @@ import {languages} from 'monaco-editor';
 import {createProvideSuggestionsFunction} from '../helpers/createProvideSuggestionsFunction';
 import {generateClickhouseOldSafariSuggestions} from './clickhouse.keywords';
 import {MonacoLanguage} from '../../../constants/monaco';
-import {QueryEngine} from '../../../pages/query-tracker/module/engines';
+import {QueryEngine} from '../../../../shared/constants/engines';
 import {createInlineSuggestions} from '../../../pages/query-tracker/querySuggestionsModule/createInlineSuggestions';
 
 registerLanguage({

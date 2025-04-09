@@ -1,7 +1,7 @@
 import React, {FC} from 'react';
 import {QueryClusterSelector} from './QueryClusterSelector';
 import {ClusterConfig} from '../../../../shared/yt-types';
-import {QueryEngine} from '../module/engines';
+import {QueryEngine} from '../../../../shared/constants/engines';
 import {QueryCliqueSelector} from './QueryCliqueSelector';
 
 type Props = {

@@ -17,19 +17,24 @@ import {QuerySettingsButton} from '../QuerySettingsButton';
 import {QueryFilesButton} from '../QueryFilesButton';
 import {getClusterList} from '../../../store/selectors/slideoutMenu';
 import {QuerySelectorsByEngine} from './QuerySelectorsByEngine';
-import {QueryEngine} from '../module/engines';
+import {QueryEngine} from '../../../../shared/constants/engines';
 import './QueryTrackerTopRow.scss';
 import cn from 'bem-cn-lite';
 import {EditableAsText} from '../../../components/EditableAsText/EditableAsText';
 import {useIsDesktop} from '../../../hooks/useIsDesktop';
+import {setSettingByKey} from '../../../store/actions/settings';
+import {getCluster} from '../../../store/selectors/global';
+import {getFavoriteQuerySettings} from '../../../store/selectors/settings/settings-queries';
 
 const NAME_PLACEHOLDER = 'No name';
 const block = cn('query-tracker-top-row');
 
 const QueryTrackerTopRow: FC = () => {
     const dispatch = useDispatch();
+    const currentCluster = useSelector(getCluster);
     const {cluster, path} = useSelector(getQueryGetParams);
     const {annotations, settings, engine} = useSelector(getQueryDraft);
+    const favoriteSettings = useSelector(getFavoriteQuerySettings);
     const clusters = useSelector(getClusterList);
     const cliqueMap = useSelector(getCliqueMap);
     const cliqueLoading = useSelector(getCliqueLoading);
@@ -45,20 +50,38 @@ const QueryTrackerTopRow: FC = () => {
     const handleChangeEngine = useCallback(
         (newEngine: QueryEngine) => {
             const newSettings = {...settings};
-            const isSpyt = newEngine === QueryEngine.SPYT;
-            const isChyt = newEngine === QueryEngine.CHYT;
 
-            if (!isSpyt && 'discovery_group' in newSettings) {
-                delete newSettings['discovery_group'];
-                delete newSettings['discovery_path']; // old request type. Deprecated
+            const engineType = {
+                isSpyt: newEngine === QueryEngine.SPYT,
+                isChyt: newEngine === QueryEngine.CHYT,
+            };
+
+            if (!engineType.isSpyt) {
+                delete newSettings.discovery_group;
+                delete newSettings.discovery_path; // old request type. Deprecated
             }
-            if (!isChyt && 'clique' in newSettings) {
-                delete newSettings['clique'];
+
+            if (!engineType.isChyt) {
+                delete newSettings.clique;
+            }
+
+            if (engineType.isSpyt && favoriteSettings.path) {
+                newSettings.discovery_group = newSettings.discovery_group || favoriteSettings.path;
+            }
+
+            if (engineType.isChyt && favoriteSettings.clique) {
+                newSettings.clique = newSettings.clique || favoriteSettings.clique;
             }
 
             dispatch(updateQueryDraft({settings: newSettings}));
+            dispatch(
+                setSettingByKey(
+                    `local::${currentCluster}::queryTracker::favoriteEngine`,
+                    newEngine,
+                ),
+            );
         },
-        [dispatch, settings],
+        [currentCluster, dispatch, favoriteSettings.clique, favoriteSettings.path, settings],
     );
 
     const handleCreateNewQuery = useCallback(() => {
@@ -101,6 +124,9 @@ const QueryTrackerTopRow: FC = () => {
                 newSettings.clique = alias;
             }
             dispatch(updateQueryDraft({settings: newSettings}));
+            dispatch(
+                setSettingByKey(`local::${currentCluster}::queryTracker::favoriteClique`, alias),
+            );
         },
         [dispatch, settings],
     );
@@ -108,8 +134,11 @@ const QueryTrackerTopRow: FC = () => {
     const handlePathChange = useCallback(
         (newPath: string) => {
             dispatch(updateQueryDraft({settings: {...settings, discovery_group: newPath}}));
+            dispatch(
+                setSettingByKey(`local::${currentCluster}::queryTracker::favoritePath`, newPath),
+            );
         },
-        [dispatch, settings],
+        [currentCluster, dispatch, settings],
     );
 
     const name = annotations?.title || NAME_PLACEHOLDER;

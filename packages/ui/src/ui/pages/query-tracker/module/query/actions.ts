@@ -3,8 +3,9 @@ import {AnyAction} from 'redux';
 import {ThunkAction} from 'redux-thunk';
 import {RootState} from '../../../../store/reducers';
 import {getCliqueControllerIsSupported, getCluster} from '../../../../store/selectors/global';
-import {QueryEngine} from '../engines';
+import {QueryEngine} from '../../../../../shared/constants/engines';
 import {
+    DraftQuery,
     QueryItem,
     abortQuery,
     addACOToLastSelected,
@@ -56,6 +57,11 @@ import {
 } from '../query-tracker-contants';
 import {loadVisualization} from '../queryChart/actions';
 import {ChytInfo} from '../../../../store/reducers/chyt/list';
+import {
+    getFavoriteQueryClique,
+    getFavoriteQueryEngine,
+    getFavoriteQueryPath,
+} from '../../../../store/selectors/settings/settings-queries';
 
 export const setCurrentClusterToQuery =
     (): ThunkAction<void, RootState, unknown, any> => async (dispatch, getState) => {
@@ -229,13 +235,26 @@ export function createQueryFromTablePath(
 }
 
 export function createEmptyQuery(
-    engine = QueryEngine.YQL,
+    engine?: QueryEngine,
     query?: string,
     settings?: Record<string, string>,
 ): ThunkAction<any, RootState, any, SetQueryAction> {
     return (dispatch, getState) => {
         const state = getState();
+        const favoriteEngine = getFavoriteQueryEngine(state);
+        const favoriteClique = getFavoriteQueryClique(state);
+        const favoritePath = getFavoriteQueryPath(state);
         const defaultQueryACO = getDefaultQueryACO(state);
+
+        const initialEngine = engine || favoriteEngine;
+
+        const defaultSettings: DraftQuery['settings'] = {};
+        if (favoriteClique && initialEngine === QueryEngine.CHYT) {
+            defaultSettings.clique = favoriteClique;
+        }
+        if (favoritePath && initialEngine === QueryEngine.SPYT) {
+            defaultSettings.discovery_group = favoritePath;
+        }
 
         UIFactory.getInlineSuggestionsApi()?.onQueryCreate();
         dispatch({
@@ -245,8 +264,8 @@ export function createEmptyQuery(
                     access_control_object: defaultQueryACO,
                     access_control_objects: [defaultQueryACO],
                     query: query || '',
-                    engine,
-                    settings: settings || {},
+                    engine: initialEngine,
+                    settings: settings || defaultSettings,
                 } as QueryItem,
             },
         });

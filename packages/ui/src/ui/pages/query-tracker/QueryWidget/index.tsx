@@ -10,7 +10,7 @@ import {QueryMetaForm} from './QueryMetaForm';
 import {QueryTrackerOpenButton} from '../QueryTrackerOpenButton/QueryTrackerOpenButton';
 import {QueriesPooling} from '../hooks/QueriesPooling/context';
 import {createQueryFromTablePath} from '../module/query/actions';
-import {QueryEngine} from '../module/engines';
+import {QueryEngine} from '../../../../shared/constants/engines';
 
 import './index.scss';
 

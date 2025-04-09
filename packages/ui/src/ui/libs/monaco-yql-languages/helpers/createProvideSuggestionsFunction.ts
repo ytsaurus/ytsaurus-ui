@@ -2,7 +2,7 @@ import {CancellationToken, Position, editor, languages} from 'monaco-editor';
 import {Parser, getSuggestions} from './getSuggestions';
 import {getRangeToInsertSuggestion} from './getRangeToInsertSuggestion';
 import {getDirectoryContent} from './getDirectoryContent';
-import {QueryEngine} from '../../../pages/query-tracker/module/engines';
+import {QueryEngine} from '../../../../shared/constants/engines';
 import {getColumnSuggestions} from './getColumnSuggestions';
 import {getTemplateSuggestions} from './getTemplateSuggestions';
 

@@ -1,7 +1,7 @@
 import React, {FC} from 'react';
 import {Progress, Tooltip} from '@gravity-ui/uikit';
 import {QueryItem, QueryStatus} from '../../module/api';
-import {QueryEngine} from '../../module/engines';
+import {QueryEngine} from '../../../../../shared/constants/engines';
 import {calculateQueryProgress} from '../helpers/calculateQueryProgress';
 
 type Props = {
