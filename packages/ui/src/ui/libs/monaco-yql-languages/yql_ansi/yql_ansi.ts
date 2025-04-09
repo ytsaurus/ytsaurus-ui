@@ -4,7 +4,7 @@ import {generateSuggestion} from '../helpers/generateSuggestions';
 import {builtinFunctions, keywords, typeKeywords} from '../yql/yql.keywords';
 import {keywords as suggestKeywords} from './yql_ansi.keywords';
 import {getDirectoryContent} from '../helpers/getDirectoryContent';
-import {QueryEngine} from '../../../pages/query-tracker/module/engines';
+import {QueryEngine} from '../../../../shared/constants/engines';
 
 export {conf} from '../yql/yql';
 

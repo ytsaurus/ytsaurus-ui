@@ -4,7 +4,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {getQueryDraft} from '../module/query/selectors';
 import {Engines} from '../module/api';
 import {QueryEnginesNames} from '../utils/query';
-import {QueryEngine} from '../module/engines';
+import {QueryEngine} from '../../../../shared/constants/engines';
 import {createQueryFromTablePath, updateQueryDraft} from '../module/query/actions';
 
 const engineOptions = Engines.map((key) => ({

@@ -3,7 +3,7 @@ import {IRange, Position, editor, languages} from 'monaco-editor';
 import ypath from '../../../common/thor/ypath';
 import {YPathItem} from '../../../pages/query-tracker/Plan/services/tables';
 import {getPathFromMonacoModel} from './getPathFromMonacoModel';
-import {QueryEngine} from '../../../pages/query-tracker/module/engines';
+import {QueryEngine} from '../../../../shared/constants/engines';
 import {SuggestionsWeight} from './generateSuggestions';
 import {suggestionIndexToWeight} from './suggestionIndexToWeight';
 import {getClusterProxy} from '../../../store/selectors/global';

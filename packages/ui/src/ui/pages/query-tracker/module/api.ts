@@ -17,7 +17,7 @@ import {
     getQueryTrackerRequestOptions,
 } from './query/selectors';
 import {AnyAction} from 'redux';
-import {QueryEngine} from './engines';
+import {QueryEngine} from '../../../../shared/constants/engines';
 import {getLastSelectedACONamespaces, selectIsMultipleAco} from './query_aco/selectors';
 import {setSettingByKey} from '../../../store/actions/settings';
 import unipika from '../../../common/thor/unipika';

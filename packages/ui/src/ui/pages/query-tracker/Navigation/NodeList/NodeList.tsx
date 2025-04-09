@@ -21,7 +21,7 @@ import {useMonaco} from '../../hooks/useMonaco';
 import {insertTextWhereCursor} from '../helpers/insertTextWhereCursor';
 import {getQueryEngine, isQueryDraftEditted} from '../../module/query/selectors';
 import {makePathByQueryEngine} from '../helpers/makePathByQueryEngine';
-import {QueryEngine} from '../../module/engines';
+import {QueryEngine} from '../../../../../shared/constants/engines';
 import {getNavigationUrl} from '../helpers/getNavigationUrl';
 import {createTableSelect} from '../helpers/createTableSelect';
 import {getQueryResultGlobalSettings} from '../../module/query_result/selectors';

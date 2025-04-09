@@ -22,7 +22,7 @@ import {QuerySettingsButton} from '../QuerySettingsButton';
 import {QueryFilesButton} from '../QueryFilesButton';
 import {getClusterList} from '../../../store/selectors/slideoutMenu';
 import {QuerySelectorsByEngine} from './QuerySelectorsByEngine';
-import {QueryEngine} from '../module/engines';
+import {QueryEngine} from '../../../../shared/constants/engines';
 import './QueryTrackerTopRow.scss';
 import cn from 'bem-cn-lite';
 import {EditableAsText} from '../../../components/EditableAsText/EditableAsText';

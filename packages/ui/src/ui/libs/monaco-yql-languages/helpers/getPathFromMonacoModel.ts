@@ -1,5 +1,5 @@
 import {Position, editor} from 'monaco-editor';
-import {QueryEngine} from '../../../pages/query-tracker/module/engines';
+import {QueryEngine} from '../../../../shared/constants/engines';
 import {getClusterAndPath} from './getClusterAndPath';
 
 export const getPathFromMonacoModel = (

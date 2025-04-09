@@ -38,7 +38,7 @@ import {NAMESPACES} from '../../../../../shared/constants/settings';
 import {isTableNode} from '../../Navigation/helpers/isTableNode';
 import {isFolderNode} from '../../Navigation/helpers/isFolderNode';
 import {loadTableAttributes} from '../../Navigation/api/loadTableAttributes';
-import {QueryEngine} from '../engines';
+import {QueryEngine} from '../../../../../shared/constants/engines';
 import {createEmptyQuery, loadCliqueByCluster, updateQueryDraft} from '../query/actions';
 import {createTableSelect} from '../../Navigation/helpers/createTableSelect';
 import {insertTextWhereCursor} from '../../Navigation/helpers/insertTextWhereCursor';
