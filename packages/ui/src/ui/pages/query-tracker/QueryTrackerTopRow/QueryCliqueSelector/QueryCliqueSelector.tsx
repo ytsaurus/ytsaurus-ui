@@ -26,7 +26,7 @@ export const QueryCliqueSelector: FC<Props> = ({
             return {
                 alias,
                 id: yt_operation_id,
-                active: state !== 'active' || health !== 'good',
+                active: state === 'active' && health === 'good',
             };
         });
 
