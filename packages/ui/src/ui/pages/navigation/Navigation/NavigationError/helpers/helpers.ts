@@ -6,9 +6,9 @@ import ypath from '../../../../../common/thor/ypath';
 export type ErrorCode = 500 | 901;
 
 type NoAccessTitlePayload = {
-    username: string;
-    permissions: Array<UnipikaValue>;
-    path: string;
+    username?: string;
+    permissions?: Array<UnipikaValue>;
+    path?: string;
 };
 
 type NoPathTitlePayload = {
@@ -30,9 +30,9 @@ export const ErrorsInfo: ErrorInfo = {
         getTitle: (payload: NoAccessTitlePayload) => {
             const {username, permissions, path} = payload;
             const permission = permissions
-                .map((perm: UnipikaValue) => ypath.getValue(perm))
+                ?.map((perm: UnipikaValue) => ypath.getValue(perm))
                 .join(' | ');
-            return `User ${username} does not have "${permission}" access to node "${path}"`;
+            return `User ${username} does not have "${permission ?? ''}" access to node "${path}"`;
         },
     },
     500: {
