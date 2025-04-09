@@ -42,10 +42,9 @@ export const JobDetails: FC<Props> = ({statistics, type}) => {
 
     return (
         <Tooltip content={<MetaTable items={prepareStatistics(statistics)} />}>
-            <Flex gap={2} alignItems="center">
-                <span>
-                    {hammer.format['Number'](rowCount)} ({hammer.format['Bytes'](dataSize)})
-                </span>
+            <Flex gap={2} alignItems="center" wrap>
+                <span>{hammer.format['Number'](rowCount)}</span>
+                <span>({hammer.format['Bytes'](dataSize)})</span>
                 <Icon data={CircleQuestionIcon} size={16} />
             </Flex>
         </Tooltip>
