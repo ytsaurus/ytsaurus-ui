@@ -1,7 +1,7 @@
 import axios, {CancelToken} from 'axios';
 import {wrapApiPromiseByToaster} from './utils';
 import {OptionsGroup} from '../components/Dialog/df-dialog-utils';
-import {QueryEngine} from '../pages/query-tracker/module/engines';
+import {QueryEngine} from '../../shared/constants/engines';
 
 export type WithResult<T> = {result: T};
 

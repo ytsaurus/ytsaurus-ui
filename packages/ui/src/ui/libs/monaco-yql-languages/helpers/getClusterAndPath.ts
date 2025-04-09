@@ -1,4 +1,4 @@
-import {QueryEngine} from '../../../pages/query-tracker/module/engines';
+import {QueryEngine} from '../../../../shared/constants/engines';
 import {getWindowStore} from '../../../store/window-store';
 
 type Path =

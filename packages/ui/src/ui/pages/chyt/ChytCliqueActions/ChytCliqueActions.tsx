@@ -7,7 +7,7 @@ import {Button, DropdownMenu, DropdownMenuItem} from '@gravity-ui/uikit';
 import Icon from '../../../components/Icon/Icon';
 import {getCluster} from '../../../store/selectors/global';
 import {updateQueryDraft} from '../../../pages/query-tracker/module/query/actions';
-import {QueryEngine} from '../../../pages/query-tracker/module/engines';
+import {QueryEngine} from '../../../../shared/constants/engines';
 import UIFactory from '../../../UIFactory';
 
 import {ChytConfirmation} from '../ChytConfirmation/ChytConfirmation';

@@ -4,7 +4,7 @@ import {Route, Switch} from 'react-router';
 import FlexSplitPane from '../../../components/FlexSplitPane/FlexSplitPane';
 import {QueriesPooling} from '../hooks/QueriesPooling/context';
 import {isEngine} from '../module/api';
-import {QueryEngine} from '../module/engines';
+import {QueryEngine} from '../../../../shared/constants/engines';
 import {
     createEmptyQuery,
     createQueryFromTablePath,

@@ -3,7 +3,7 @@ import {Action} from 'redux';
 import {ActionD} from '../../../../types';
 
 import type {DraftQuery, QueryItem} from '../api';
-import {QueryEngine} from '../engines';
+import {QueryEngine} from '../../../../../shared/constants/engines';
 import {
     REQUEST_QUERY,
     SET_DIRTY_SUBMIT,

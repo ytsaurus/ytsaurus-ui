@@ -3,7 +3,7 @@ import {AnyAction} from 'redux';
 import {ThunkAction} from 'redux-thunk';
 import {RootState} from '../../../../store/reducers';
 import {getCliqueControllerIsSupported, getCluster} from '../../../../store/selectors/global';
-import {QueryEngine} from '../engines';
+import {QueryEngine} from '../../../../../shared/constants/engines';
 import {
     DraftQuery,
     QueryItem,

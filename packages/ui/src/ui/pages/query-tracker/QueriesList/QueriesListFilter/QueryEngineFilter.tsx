@@ -1,7 +1,7 @@
 import React, {useCallback, useMemo} from 'react';
 import {ControlGroupOption, RadioButton} from '@gravity-ui/uikit';
 import {Engines} from '../../module/api';
-import {QueryEngine} from '../../module/engines';
+import {QueryEngine} from '../../../../../shared/constants/engines';
 import {QueryEnginesNames} from '../../utils/query';
 
 const ALL_ENGINE_KEY = '__all';

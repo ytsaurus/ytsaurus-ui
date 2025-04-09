@@ -1,5 +1,5 @@
 import {NodeType} from './system';
-import {QueryEngine} from '../../ui/pages/query-tracker/module/engines';
+import {QueryEngine} from './engines';
 
 export interface Namespace {
     name: string;

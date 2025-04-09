@@ -6,7 +6,7 @@ import CircleQuestionIcon from '@gravity-ui/icons/svgs/circle-question.svg';
 
 import './index.scss';
 import {QueryEngineFilter} from './QueryEngineFilter';
-import {QueryEngine} from '../../module/engines';
+import {QueryEngine} from '../../../../../shared/constants/engines';
 import {QueryTextFilter} from './QueryTextFilter';
 import {useQuriesHistoryFilter} from '../../hooks/QueryListFilter';
 import Dropdown from '../../../../components/Dropdown/Dropdown';

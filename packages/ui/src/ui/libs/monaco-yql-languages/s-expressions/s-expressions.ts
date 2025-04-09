@@ -10,7 +10,7 @@ import {generateSuggestion} from '../helpers/generateSuggestions';
 
 import {getRangeToInsertSuggestion} from '../helpers/getRangeToInsertSuggestion';
 import {getDirectoryContent} from '../helpers/getDirectoryContent';
-import {QueryEngine} from '../../../pages/query-tracker/module/engines';
+import {QueryEngine} from '../../../../shared/constants/engines';
 
 export const LANGUAGE_ID = 's-expressions';
 
