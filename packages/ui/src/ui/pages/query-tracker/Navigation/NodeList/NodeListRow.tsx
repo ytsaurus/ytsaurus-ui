@@ -12,7 +12,7 @@ import StarIcon from '@gravity-ui/icons/svgs/star.svg';
 import TextIndentIcon from '@gravity-ui/icons/svgs/text-indent.svg';
 import ArrowUpRightFromSquareIcon from '@gravity-ui/icons/svgs/arrow-up-right-from-square.svg';
 import {useToggle} from 'react-use';
-import {QueryEngine} from '../../module/engines';
+import {QueryEngine} from '../../../../../shared/constants/engines';
 
 const b = cn('navigation-node-list-row');
 

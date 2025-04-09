@@ -1,4 +1,4 @@
-import {QueryEngine} from '../../module/engines';
+import {QueryEngine} from '../../../../../shared/constants/engines';
 import {MonacoLanguage} from '../../../../constants/monaco';
 
 export const getLanguageByEngine = (engine: QueryEngine): MonacoLanguage => {
