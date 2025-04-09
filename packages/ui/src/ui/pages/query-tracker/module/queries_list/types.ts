@@ -1,4 +1,4 @@
-import {QueryEngine} from '../engines';
+import {QueryEngine} from '../../../../../shared/constants/engines';
 import type {QueriesHistoryCursorDirection} from '../query-tracker-contants';
 
 export enum QueriesListAuthorFilter {

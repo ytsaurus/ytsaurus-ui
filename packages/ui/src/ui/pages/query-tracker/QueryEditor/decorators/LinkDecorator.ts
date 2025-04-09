@@ -1,6 +1,6 @@
 import * as monaco from 'monaco-editor';
 import {getClusterAndPath} from '../../../../libs/monaco-yql-languages/helpers/getClusterAndPath';
-import {QueryEngine} from '../../module/engines';
+import {QueryEngine} from '../../../../../shared/constants/engines';
 import {BaseDecorator} from './BaseDecorator';
 import {CommandKey} from '../../../../packages/ya-timeline/lib/utils';
 import isEqual_ from 'lodash/isEqual';

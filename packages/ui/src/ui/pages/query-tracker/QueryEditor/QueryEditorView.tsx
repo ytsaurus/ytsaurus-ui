@@ -7,7 +7,7 @@ import {isSupportedQtACO} from '../module/query_aco/selectors';
 import {runQuery} from '../module/query/actions';
 import {Button, Icon} from '@gravity-ui/uikit';
 import playIcon from '../../../assets/img/svg/play.svg';
-import {QueryEngine} from '../module/engines';
+import {QueryEngine} from '../../../../shared/constants/engines';
 import {QueryACOSelect} from '../QueryACO/QueryACOSelect';
 import cn from 'bem-cn-lite';
 import './QueryEditorView.scss';

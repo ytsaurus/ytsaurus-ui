@@ -1,4 +1,4 @@
-import {QueryEngine} from '../module/engines';
+import {QueryEngine} from '../../../../shared/constants/engines';
 
 const INDENT = '    ';
 
