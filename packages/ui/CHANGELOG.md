@@ -1,5 +1,27 @@
 # Changelog
 
+## [1.88.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.87.0...ui-v1.88.0) (2025-04-09)
+
+
+### Features
+
+* **Navigation/AccessLog:** show destination path [YTFRONT-4341] ([18ac142](https://github.com/ytsaurus/ytsaurus-ui/commit/18ac142f2b21902ff90dace3284e478a0704879e))
+* **Navigation:** change title from tables [YTFRONT-4822] ([ddfa239](https://github.com/ytsaurus/ytsaurus-ui/commit/ddfa239e6becbfc492f0f53c25535c1e1d9972ad))
+* **Queries:** chyt progress [YTFRONT-4833] ([a535db2](https://github.com/ytsaurus/ytsaurus-ui/commit/a535db27cf855f20b70298f618bf3956128af24a))
+* **Queries:** move edit button to the right of the line [[#1033](https://github.com/ytsaurus/ytsaurus-ui/issues/1033)] ([af269c8](https://github.com/ytsaurus/ytsaurus-ui/commit/af269c805cef6656edd1e3865e5b4dabf7da707b))
+* **UI/Layout:** use 'maxContentWidth' for the most of pages [YTFRONT-4149] ([259754a](https://github.com/ytsaurus/ytsaurus-ui/commit/259754ab35a7df49c606146da1269b34f49ef1ed))
+* **UIFactory:** rework `UIFactory.renderAppFooter` method [YTFRONT-4149] ([b3dc9b2](https://github.com/ytsaurus/ytsaurus-ui/commit/b3dc9b259df791822f42f41b09bdf88c7ff9464f))
+* update @ytsaurus/javascript-wrapper ([3513a51](https://github.com/ytsaurus/ytsaurus-ui/commit/3513a51d1a7efaa92a197d1492ccad769e008d65))
+* update @ytsaurus/javascript-wrapper ([dff3aee](https://github.com/ytsaurus/ytsaurus-ui/commit/dff3aeea7822f44544fe483edcfe29de2894ef49))
+
+
+### Bug Fixes
+
+* **Navigation:** do not hide key columns in dyn tables [YTFRONT-4826] ([edc5133](https://github.com/ytsaurus/ytsaurus-ui/commit/edc51336f5978c4cea160e36bc6419646f3dde0b))
+* **Operations:** big rows count in jobs [YTFRONT-4854] ([be0bde3](https://github.com/ytsaurus/ytsaurus-ui/commit/be0bde3ad66cc37eb2da22904df0e3f1be8bf08e))
+* **Queries:** fix show inactive clique status when it is active and good ([8d4f2b7](https://github.com/ytsaurus/ytsaurus-ui/commit/8d4f2b732c2712b7c9ec1dbbead117d794812c8b))
+* **Queries:** get path request ([45964bd](https://github.com/ytsaurus/ytsaurus-ui/commit/45964bd3d45f224cac600b1dc9a9f7b76c9a1761))
+
 ## [1.87.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.86.0...ui-v1.87.0) (2025-04-02)
 
 
