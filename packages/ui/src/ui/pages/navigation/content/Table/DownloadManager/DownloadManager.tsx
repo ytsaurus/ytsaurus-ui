@@ -306,7 +306,6 @@ export class DownloadManager extends React.Component<Props, State> {
                 {
                     path: this.downloadPath,
                     output_format,
-                    dump_error_into_response: true,
                 },
                 transaction_id ? {transaction_id} : {},
             ),
