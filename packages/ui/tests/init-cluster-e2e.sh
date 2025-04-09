@@ -197,18 +197,19 @@ cat $(dirname $0)/data/truncated-table/data.json | yt write-table --format json 
 SPECIFIC_NAMES_DIR=${E2E_DIR}/bad-names
 
 yt execute-batch \
-    '{command=create;parameters={path="'${SPECIFIC_NAMES_DIR}'/trailing-space /ok";type=map_node;recursive=true}}' \
-    '{command=create;parameters={path="'${SPECIFIC_NAMES_DIR}'/escaped-symbol\x0a/ok";type=map_node;recursive=true}}' \
-    '{command=create;parameters={path="'${SPECIFIC_NAMES_DIR}'/_\x09_\x09/ok";type=map_node;recursive=true}}' \
-    '{command=create;parameters={path="'${SPECIFIC_NAMES_DIR}'/_\x10_\x10/ok";type=map_node;recursive=true}}' \
-    '{command=create;parameters={path="'${SPECIFIC_NAMES_DIR}'/\xc3\x90\xc2\x9a\xc3\x90\xc2\xbe\xc3\x90\xc2\xbc\xc3\x90\xc2\xbf\xc3\x90\xc2\xbe\xc3\x90\xc2\xbd\xc3\x90\xc2\xb5\xc3\x90\xc2\xbd\xc3\x91\xc2\x82\xc3\x91\xc2\x8b \xc3\x90\\xc2\xb4\xc3\\x90\xc2\xbb\xc3\x91\xc2\x8f Paysup.json/ok";type=map_node;recursive=true}}' \
-    '{command=create;parameters={path="'${SPECIFIC_NAMES_DIR}'/Компоненты для Paysup.json/ok";type=map_node;recursive=true}}' \
+    '{command=create;parameters={type=map_node;recursive=true;path="'${SPECIFIC_NAMES_DIR}'/trailing-space /ok"}}' \
+    '{command=create;parameters={type=map_node;recursive=true;path="'${SPECIFIC_NAMES_DIR}'/escaped-symbol\x0a/ok"}}' \
+    '{command=create;parameters={type=map_node;recursive=true;path="'${SPECIFIC_NAMES_DIR}'/_\x09_\x09/ok"}}' \
+    '{command=create;parameters={type=map_node;recursive=true;path="'${SPECIFIC_NAMES_DIR}'/_\x10_\x10/ok"}}' \
+    '{command=create;parameters={type=map_node;recursive=true;path="'${SPECIFIC_NAMES_DIR}'/\xc3\x90\xc2\x9a\xc3\x90\xc2\xbe\xc3\x90\xc2\xbc\xc3\x90\xc2\xbf\xc3\x90\xc2\xbe\xc3\x90\xc2\xbd\xc3\x90\xc2\xb5\xc3\x90\xc2\xbd\xc3\x91\xc2\x82\xc3\x91\xc2\x8b \xc3\x90\\xc2\xb4\xc3\\x90\xc2\xbb\xc3\x91\xc2\x8f Paysup.json/ok"}}' \
+    '{command=create;parameters={type=map_node;recursive=true;path="'${SPECIFIC_NAMES_DIR}'/Компоненты для Paysup.json/ok"}}' \
+    '{command=create;parameters={type=map_node;recursive=true;path="'${E2E_DIR}'/tmp/папка"}}' \
+    '{command=create;parameters={type=link;recursive=true;path="'${E2E_DIR}'/tmp/ссылка";attributes={target_path="'${E2E_DIR}'/tmp/папка"}}}' \
     >batch.results.tmp
-
-cat batch.results.tmp
 
 if grep -i error batch.results.tmp; then
     (
+        cat batch.results.tmp
         The last execute-batch has finished with errors
     ) >&2
     exit 1
