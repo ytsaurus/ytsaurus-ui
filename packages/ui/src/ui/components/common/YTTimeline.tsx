@@ -62,13 +62,14 @@ function YTTimelineImpl({className, topShortcuts, ...rest}: Props) {
     return (
         <Timeline
             {...rest}
+            key={width}
             padding={0.05}
             hasPicker={true}
             topShortcuts={topShortcuts || DEFAULT_SHORTCUTS}
             wrapper={({ruler, picker}) => {
                 return (
                     <div className={block(null, className)} ref={setRef}>
-                        {picker}
+                        <div className={block('picker')}>{picker}</div>
                         <div className={block('ruler')}>{ruler}</div>
                     </div>
                 );

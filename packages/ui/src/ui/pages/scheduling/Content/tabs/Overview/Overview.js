@@ -35,7 +35,7 @@ import {
     getTree,
 } from '../../../../../store/selectors/scheduling/scheduling';
 import {getSchedulingAbcFilter} from '../../../../../store/selectors/scheduling/attributes-to-filter';
-import {SCHEDULING_POOL_TREE_TABLE_ID, Tab} from '../../../../../constants/scheduling';
+import {SCHEDULING_POOL_TREE_TABLE_ID, SchedulingTab} from '../../../../../constants/scheduling';
 import {poolsTableItems} from '../../../../../utils/scheduling/overviewTable';
 import {HEADER_HEIGHT, Page} from '../../../../../constants/index';
 import {getCluster} from '../../../../../store/selectors/global';
@@ -358,7 +358,13 @@ class Overview extends Component {
             >
                 {Overview.renderType(item, ...rest, allowExpand)}
                 <span className={block('name-content-name')}>
-                    {Overview.renderName(item, Tab.OVERVIEW, cluster, currentPool, changePool)}
+                    {Overview.renderName(
+                        item,
+                        SchedulingTab.OVERVIEW,
+                        cluster,
+                        currentPool,
+                        changePool,
+                    )}
                 </span>
                 {Overview.renderEphemeralIcon(item)}
                 {Overview.renderEffectiveLightweightIcon(item)}

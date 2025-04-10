@@ -42,6 +42,7 @@ import {hasOdinPage} from '../../config';
 import {chyt} from './chyt';
 import {getMainLocations} from '../../store/location.main';
 import {flow} from '../../store/reducers/flow';
+import {prometheusDashboardSlice} from './prometheusDashboard/prometheusDahsboard';
 
 const appReducers = {
     acl,
@@ -82,6 +83,8 @@ const appReducers = {
     chyt,
     manageTokens,
     flow,
+
+    prometheusDashboard: prometheusDashboardSlice.reducer,
 };
 
 export type RootState = ReturnType<ReturnType<typeof makeRootReducer>>;
