@@ -18,16 +18,6 @@ export const ytApi = rootApi.injectEndpoints({
             queryFn: executeBatchV3,
             invalidatesTags: (_result, _error, arg) => [String(arg.id)],
         }),
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-        listQueries: build.query({
-            queryFn: listQueries,
-            providesTags: (_result, _error, _arg) => [String(YTApiId.listQueries)],
-        }),
->>>>>>> fd91dbdb (feat(Dashboard2): add new dashboard page [YTFRONT-3400])
-=======
->>>>>>> e4b4de1b (chore: setup rtk query and execute batch endpoint)
     }),
 });
 
@@ -67,15 +57,7 @@ export function useFetchBatchQuery<T>(
     args: BatchApiArgs,
     options?: UseQueryOptions<BatchQueryResult, BatchQueryArgs>,
 ) {
-<<<<<<< HEAD
-<<<<<<< HEAD
     const useAutoRefresh = useSelector(getUseAutoRefresh);
-=======
-    const useAutoRefresh = useSelector(getUseAutoRefresh) as boolean;
->>>>>>> 022ee636 (chore: setup rtk query and execute batch endpoint)
-=======
-    const useAutoRefresh = useSelector(getUseAutoRefresh) as boolean;
->>>>>>> e4b4de1b (chore: setup rtk query and execute batch endpoint)
     const cluster = useSelector(getCluster);
 
     const defaultOptions = {
@@ -88,10 +70,6 @@ export function useFetchBatchQuery<T>(
         ...options,
     };
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> e4b4de1b (chore: setup rtk query and execute batch endpoint)
     const customArgs: BatchApiArgs = {
         ...args,
     };
@@ -100,16 +78,6 @@ export function useFetchBatchQuery<T>(
         customArgs.cluster = cluster;
     }
 
-<<<<<<< HEAD
-=======
-    const customArgs = {
-        ...args,
-        cluster: args.clusterDependency === false ? undefined : cluster,
-    };
-
->>>>>>> 022ee636 (chore: setup rtk query and execute batch endpoint)
-=======
->>>>>>> e4b4de1b (chore: setup rtk query and execute batch endpoint)
     const {data, ...restResult} = useFetchBatchQueryRaw(customArgs, customOptions);
 
     const typedData = data as BatchApiResults<T> | undefined;
