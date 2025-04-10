@@ -1,5 +1,6 @@
 import React from 'react';
 import {useDispatch, useSelector} from 'react-redux';
+import cn from 'bem-cn-lite';
 
 import {updateJobsOperationIncarnationFilter} from '../../../../../../store/actions/operations/jobs-operation-incarnations';
 import OperationSelectFilter from '../../../../../../pages/operations/OperationSelectFilter/OperationSelectFilter';
@@ -7,6 +8,10 @@ import {
     getJobsOperationIncarnationsFilter,
     getJobsOperationIncarnationsValues,
 } from '../../../../../../store/selectors/operations/jobs';
+
+import './JobsOperationsIncarnationsFilter.scss';
+
+const block = cn('yt-jobs-incarnation-filter');
 
 export function JobsOperationIncarnationsFilter({
     disabled,
@@ -34,6 +39,7 @@ export function JobsOperationIncarnationsFilter({
                   }}
                   hideClear={false}
                   hideFilter={false}
+                  popupClassName={block('popup')}
               />,
           );
 }
