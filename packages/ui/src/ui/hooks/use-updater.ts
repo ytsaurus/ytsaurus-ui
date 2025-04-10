@@ -3,7 +3,7 @@ import {useSelector} from 'react-redux';
 import isEqual_ from 'lodash/isEqual';
 
 import {Updater} from '../utils/hammer/updater';
-import {getUseAutoRefresh} from '../store/selectors/settings';
+import {getUseAutoRefresh} from '../store/selectors/settings/settings-ts';
 
 export const DEFAULT_UPDATER_TIMEOUT = 30 * 1000;
 

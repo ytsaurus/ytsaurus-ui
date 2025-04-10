@@ -45,10 +45,6 @@ export const getSettingTheme = createSelector(makeGetSetting, (getSetting) =>
     getSetting(SettingName.GLOBAL.THEME, NAMESPACES.GLOBAL),
 );
 
-export const getUseAutoRefresh = createSelector(makeGetSetting, (getSetting) =>
-    getSetting(SettingName.GLOBAL.AUTO_REFRESH, NAMESPACES.GLOBAL),
-);
-
 export const getLastVisitedTabs = createSelector(
     [makeGetSetting, getClusterNS],
     (getSetting, clusterNS) => getSetting(SettingName.LOCAL.LAST_VISITED_TAB, clusterNS) || {},

@@ -3,7 +3,7 @@ import {BaseQueryFn, TypedUseMutationResult} from '@reduxjs/toolkit/dist/query/r
 
 import {rootApi} from '..';
 import {BatchApiArgs, BatchApiResults, executeBatchV3} from './endpoints/executeBatch';
-import {getUseAutoRefresh} from '../../../store/selectors/settings';
+import {getUseAutoRefresh} from '../../../store/selectors/settings/settings-ts';
 import {getCluster} from '../../../store/selectors/global';
 import {DEFAULT_UPDATER_TIMEOUT} from '../../../hooks/use-updater';
 import {MutationOptions, UseQueryOptions} from './types';
@@ -57,7 +57,7 @@ export function useFetchBatchQuery<T>(
     args: BatchApiArgs,
     options?: UseQueryOptions<BatchQueryResult, BatchQueryArgs>,
 ) {
-    const useAutoRefresh = useSelector(getUseAutoRefresh) as boolean;
+    const useAutoRefresh = useSelector(getUseAutoRefresh);
     const cluster = useSelector(getCluster);
 
     const defaultOptions = {
