@@ -1,0 +1,18 @@
+.yt-jobs-timeline {
+    &__timeline-ruler {
+        margin-top: 20px;
+        padding: 0 0 0 278px;
+    }
+
+    &__jobs-list {
+        display: grid;
+        grid-template-columns: 278px 1fr;
+    }
+
+    .with-sticky-toolbar__toolbar_sticky {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        z-index: 1000;
+    }
+}
