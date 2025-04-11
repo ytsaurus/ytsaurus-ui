@@ -14,7 +14,7 @@
         margin-top: 50px;
         padding: 0 10px;
         width: 100vw;
-        height: calc(100vh - 50px);
+        height: calc(100vh - var(--app-header-height) - var(--app-footer-height));
         overflow: auto;
     }
 
