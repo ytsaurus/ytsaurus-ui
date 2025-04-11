@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.89.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.88.0...ui-v1.89.0) (2025-04-11)
+
+
+### Features
+
+* **Navigation/Queue:** add features for queues exports [YTFRONT-4482] ([58baccb](https://github.com/ytsaurus/ytsaurus-ui/commit/58baccb4374a0f6282d331654bf0e53ce825acd2))
+* upgrade path input tooltip ([c1e5e5c](https://github.com/ytsaurus/ytsaurus-ui/commit/c1e5e5cfd4c2115fe89a0222521b8c3c4f2404ca))
+
+
+### Bug Fixes
+
+* no content image background ([61a8f27](https://github.com/ytsaurus/ytsaurus-ui/commit/61a8f278ed9257b63a2cd179f0f403db8bcd882f))
+
 ## [1.88.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.87.0...ui-v1.88.0) (2025-04-09)
 
 
