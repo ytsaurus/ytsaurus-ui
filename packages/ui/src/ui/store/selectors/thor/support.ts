@@ -114,22 +114,14 @@ export type Versions<T> = {proxy?: T | typeof _LOCAL_ARCADIA_VERSION; scheduler?
 type FeatureVersions = Versions<MajorMinorPatch | Array<MajorMinorPatchRange>>;
 type RawFeatureVersions = Versions<RawVersion>;
 
+/**
+ * The recommended method to describe features is yt.v3.getSupportedFeatures().
+ * The code is left here for a while in case we decide to use the approach again.
+ */
 const FEATURES = {
-    fieldsFilter: {
-        scheduler: '22.1.9091155',
-    } as FeatureVersions,
-    effectiveExpiration: {
-        master: '23.1.11146445',
-    } as FeatureVersions,
-    clusterNodeVersion: {
-        proxy: '23.2.0',
-    } as FeatureVersions,
-    nodeMaintenanceApi: {
-        proxy: '23.1.11106567',
-    } as FeatureVersions,
-    schedulingChildrenByPool: {
-        scheduler: '23.1.11146742',
-    } as FeatureVersions,
+    // nodeMaintenanceApi: {
+    //     proxy: '23.1.11106567',
+    // } as FeatureVersions,
 };
 
 export function _isFeatureSupported<T extends Record<string, FeatureVersions>>(
@@ -186,30 +178,9 @@ export const isSupportedSelector = createSelector(
     (proxy, scheduler, master) => _isFeatureSupported({proxy, scheduler, master}, FEATURES),
 );
 
-export const isSupportedEffectiveExpiration = createSelector(
-    [isSupportedSelector],
-    (isSupported) => {
-        return isSupported('effectiveExpiration');
-    },
-);
-
-export const isSupportedClusterNodeForVersions = createSelector(
-    [isSupportedSelector],
-    (isSupported) => {
-        return isSupported('clusterNodeVersion');
-    },
-);
-
-export const isSupportedNodeMaintenanceApi = createSelector(
-    [isSupportedSelector],
-    (isSupported) => {
-        return isSupported('nodeMaintenanceApi');
-    },
-);
-
-export const isSupportedSchedulingChildrenByPool = createSelector(
-    [isSupportedSelector],
-    (isSupported) => {
-        return isSupported('schedulingChildrenByPool');
-    },
-);
+// export const isSupportedNodeMaintenanceApi = createSelector(
+//     [isSupportedSelector],
+//     (isSupported) => {
+//         return isSupported('nodeMaintenanceApi');
+//     },
+// );

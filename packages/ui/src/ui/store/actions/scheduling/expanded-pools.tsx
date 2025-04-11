@@ -32,7 +32,6 @@ import {EMPTY_OBJECT} from '../../../constants/empty';
 import {PoolInfo, getSchedulingPoolsMapByName} from '../../selectors/scheduling/scheduling-pools';
 import {BatchSubRequest} from '../../../../shared/yt-types';
 import {SchedulingAction} from '../../../store/reducers/scheduling/scheduling';
-import {isSupportedSchedulingChildrenByPool} from '../../../store/selectors/thor/support';
 import CancelHelper, {isCancelled} from '../../../utils/cancel-helper';
 import {flattenAttributes} from '../../../utils/scheduling/scheduling';
 import {UIBatchError} from '../../../utils/errors/ui-error';
@@ -180,7 +179,7 @@ function loadExpandedOperationsAndPools(tree: string): ExpandedPoolsThunkAction 
             });
         }
 
-        const loadAllPools = loadAll || !isSupportedSchedulingChildrenByPool(state);
+        const loadAllPools = loadAll;
         const poolsRequests: Array<BatchSubRequest> = [];
         const poolsChildrenRequests: Array<BatchSubRequest> = [];
         const poolsCypressDataRequests: Array<BatchSubRequest> = [];
