@@ -39,11 +39,10 @@ import {getBatchError, showErrorPopup} from '../../../../utils/utils';
 import {RumMeasureTypes} from '../../../../rum/rum-measure-types';
 import hammer from '../../../../common/hammer';
 import {GENERIC_ERROR_MESSAGE} from '../../../../constants';
-import {isSupportedEffectiveExpiration} from '../../../../store/selectors/thor/support';
 import {waitForFontFamilies} from '../../../../store/actions/global/fonts';
 import UIFactory from '../../../../UIFactory';
 
-function getList(path, transaction, cluster, allowEffectiveExpiration) {
+function getList(path, transaction, cluster) {
     const id = new RumWrapper(cluster, RumMeasureTypes.NAVIGATION_CONTENT_MAP_NODE);
     return id.fetch(
         YTApiId.navigationListNodes,
@@ -69,7 +68,7 @@ function getList(path, transaction, cluster, allowEffectiveExpiration) {
                     '_restore_path',
                     'expiration_time',
                     'expiration_timeout',
-                    ...(allowEffectiveExpiration ? ['effective_expiration'] : []),
+                    'effective_expiration',
                     ...(UIFactory.getNavigationMapNodeSettings()?.additionalAttributes || []),
                 ],
                 path,
@@ -87,12 +86,8 @@ export function fetchNodes() {
         const transaction = getTransaction(state);
         const cluster = getCluster(state);
 
-        const allowEffectiveExpiration = isSupportedEffectiveExpiration(state);
-
         dispatch({type: FETCH_NODES.REQUEST});
-        return dispatch(
-            waitForFontFamilies(getList(path, transaction, cluster, allowEffectiveExpiration)),
-        )
+        return dispatch(waitForFontFamilies(getList(path, transaction, cluster)))
             .then(ypath.getValue)
             .then((data) => {
                 dispatch({
