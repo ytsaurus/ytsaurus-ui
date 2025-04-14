@@ -183,16 +183,6 @@ export const isSupportedSelector = createSelector(
     (proxy, scheduler, master) => _isFeatureSupported({proxy, scheduler, master}, FEATURES),
 );
 
-<<<<<<< HEAD
-=======
-export const isSupportedEffectiveExpiration = createSelector(
-    [isSupportedSelector],
-    (isSupported) => {
-        return isSupported('effectiveExpiration');
-    },
-);
-
->>>>>>> 6eaf050f (chore(store/reducers/global): rewrite with typescript [YTFRONT-4149])
 export const isSupportedClusterNodeForVersions = createSelector(
     [isSupportedSelector],
     (isSupported) => {
