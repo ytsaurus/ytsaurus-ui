@@ -35,7 +35,6 @@ import {getCluster, getCurrentUserName} from '../../../store/selectors/global';
 import {fetchTableMountConfig} from '../../../store/actions/navigation/content/table/table-mount-config';
 import {checkPermissions} from '../../../utils/acl/acl-api';
 import {loadTabletErrorsCount} from './tabs/tablet-errors/tablet-errors-background';
-import {isSupportedEffectiveExpiration} from '../../../store/selectors/thor/support';
 import {getTabs} from '../../../store/selectors/navigation/navigation';
 import UIFactory from '../../../UIFactory';
 import {RootState} from '../../../store/reducers';
@@ -57,8 +56,6 @@ export function updateView(settings: {trackVisit?: boolean} = {}): NavigationThu
 
         dispatch(loadTabletErrorsCount({path, saveCancelTokenSource: saveRequestCancellation}));
 
-        const allowEffectiveExpiration = isSupportedEffectiveExpiration(state);
-
         const requestParams = {
             path,
             transaction,
@@ -79,12 +76,7 @@ export function updateView(settings: {trackVisit?: boolean} = {}): NavigationThu
                                 command: 'get' as const,
                                 parameters: {
                                     ...prepareRequest('/@', requestParams),
-                                    attributes: [
-                                        ...getAttributesToLoad(),
-                                        ...(allowEffectiveExpiration
-                                            ? ['effective_expiration']
-                                            : []),
-                                    ],
+                                    attributes: getAttributesToLoad(),
                                 },
                             },
                         ],
