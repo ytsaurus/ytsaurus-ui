@@ -9,6 +9,8 @@ import {Tooltip} from '../../components/Tooltip/Tooltip';
 import {Page} from '../../constants/index';
 import {Tab} from '../../constants/scheduling';
 
+import {LightWeightIcon} from './LightWeightIcon';
+
 import './OperationPool.scss';
 
 const block = cn('operation-pool');
@@ -83,11 +85,7 @@ export function OperationPool({
                     <Icon awesome="ghost" />
                 </Tooltip>
             )}
-            {!compact && isLightweight && (
-                <Tooltip content="Lightweight operations enabled">
-                    <Icon awesome="plane" />
-                </Tooltip>
-            )}
+            {!compact && isLightweight && <LightWeightIcon />}
             {isCorrectState && renderButton(onEdit, allowDetachEditBtn)}
         </li>
     );

@@ -47,9 +47,9 @@ import {getSchedulingIsFinalLoadingState} from '../../../../../store/selectors/s
 import ShareUsageBar from '../../controls/ShareUsageBar';
 import SchedulingStaticConfiguration from '../../../PoolStaticConfiguration/SchedulingStaticConfiguration';
 
-import './Overview.scss';
 import {DialogWrapper as Dialog} from '../../../../../components/DialogWrapper/DialogWrapper';
 import {Tooltip} from '../../../../../components/Tooltip/Tooltip';
+import {LightWeightIcon} from '../../../../../components/OperationPool/LightWeightIcon';
 import SchedulingOperationsError from '../SchedulingOperationsError/SchedulingOperationsError';
 import {
     getPoolPathsByName,
@@ -61,6 +61,8 @@ import {
 import {PoolsSuggest} from '../../../../../pages/scheduling/PoolsSuggest/PoolsSuggest';
 import PoolTags from './PoolTags';
 import UIFactory from '../../../../../UIFactory';
+
+import './Overview.scss';
 
 const block = cn('scheduling-overview');
 
@@ -326,14 +328,7 @@ class Overview extends Component {
 
     static renderEffectiveLightweightIcon(item) {
         return (
-            item.isEffectiveLightweight && (
-                <Tooltip
-                    content="Lightwegith operations enabled"
-                    className={block('ephemeral-icon')}
-                >
-                    <Icon awesome="plane" />
-                </Tooltip>
-            )
+            item.isEffectiveLightweight && <LightWeightIcon className={block('ephemeral-icon')} />
         );
     }
 
