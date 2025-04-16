@@ -34,7 +34,7 @@ jobs:
           git push gh-token $TAG
 
       - name: Setup Node
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v4
         if: ${{ steps.release.outputs.releases_created }}
         with:
           node-version: 20
