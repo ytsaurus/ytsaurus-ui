@@ -3,6 +3,8 @@ import cn from 'bem-cn-lite';
 
 import map_ from 'lodash/map';
 
+import unipika from '../../../../common/thor/unipika';
+
 import {ColumnSelector} from '../../../../components/common/ColumnSelector';
 import {DialogControlProps} from '../../../../components/Dialog/Dialog.types';
 import Icon from '../../../../components/Icon/Icon';
@@ -70,7 +72,7 @@ export function TableSortByControl(props: TableSortByControlProps) {
                                 <Icon awesome={icon} />
                             </span>
                         )}
-                        <span className={block('item-name')}>{name}</span>
+                        <span className={block('item-name')}>{unipika.decode(name)}</span>
                     </div>
                 );
             }}
