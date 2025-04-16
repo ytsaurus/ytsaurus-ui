@@ -102,7 +102,7 @@ export default class ErrorDetails extends React.Component<ErrorDetailsProps, Sta
     }
 
     renderTabs() {
-        const {error, settings} = this.props;
+        const {error} = this.props;
         const {currentTab} = this.state;
 
         const items = this.prepareTabs();
@@ -110,7 +110,7 @@ export default class ErrorDetails extends React.Component<ErrorDetailsProps, Sta
         return (
             <div className={b('tabs')}>
                 <Tabs onTabChange={this.changeCurrentTab} active={currentTab} items={items} />
-                <ErrorToClipboardButton size="s" error={error} settings={settings} />
+                <ErrorToClipboardButton size="s" error={error} />
             </div>
         );
     }
