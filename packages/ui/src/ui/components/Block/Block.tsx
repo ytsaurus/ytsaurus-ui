@@ -111,12 +111,12 @@ export class YTErrorBlock extends React.Component<YTErrorBlockProps> {
     }
 
     renderCopy() {
-        const {error, settings} = this.props;
+        const {error} = this.props;
         const className = b('copy');
 
         return (
             <div className={className}>
-                <ErrorToClipboardButton error={error} settings={settings} size="l" />
+                <ErrorToClipboardButton error={error} size="l" />
             </div>
         );
     }
