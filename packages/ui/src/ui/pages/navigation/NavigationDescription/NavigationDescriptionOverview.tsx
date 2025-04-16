@@ -10,22 +10,20 @@ import {useUpdateAnnotation} from './hooks';
 interface NavigationDescriptionOverviewProps {
     editMode: boolean;
     setEditMode: Dispatch<SetStateAction<boolean>>;
-    ytAnnotation: string | undefined;
-    externalAnnotationLink: string;
-    annotationSwitch: {
-        showSwitch?: boolean;
-        showExternalDescription: boolean;
-        setShowExternalDescription: Dispatch<SetStateAction<boolean>>;
-    };
+    descriptionType: 'yt' | 'external';
+    setDescriptionType: Dispatch<SetStateAction<'yt' | 'external'>>;
+    externalAnnotationLink?: string;
+    ytAnnotation?: string;
     edittingAnnotation?: string;
 }
 
 export const NavigationDescriptionOverview: FC<NavigationDescriptionOverviewProps> = ({
     ytAnnotation,
     externalAnnotationLink,
+    descriptionType,
+    setDescriptionType,
     editMode,
     setEditMode,
-    annotationSwitch: {showSwitch, showExternalDescription, setShowExternalDescription},
     edittingAnnotation,
 }) => {
     const oldValue = useRef<string>(ytAnnotation || '');
@@ -46,11 +44,13 @@ export const NavigationDescriptionOverview: FC<NavigationDescriptionOverviewProp
         setEditMode(false);
     }, [setEditMode, updateFn, edittingAnnotation]);
 
-    const showExternalEdit = showExternalDescription || (!ytAnnotation && externalAnnotationLink);
-
     return (
         <Flex direction={'row'} gap={4} alignItems={'center'}>
-            {!showExternalEdit ? (
+            <SwitchDescription
+                descriptionType={descriptionType}
+                setDescriptionType={setDescriptionType}
+            />
+            {descriptionType === 'yt' && (
                 <EditButtons
                     isSaving={isLoading}
                     editMode={editMode}
@@ -58,19 +58,13 @@ export const NavigationDescriptionOverview: FC<NavigationDescriptionOverviewProp
                     onSaveClick={handleSaveClick}
                     onCancelClick={handleCancelClick}
                 />
-            ) : (
-                <Link href={`${externalAnnotationLink}/edit/description`} target="_blank">
+            )}
+            {descriptionType === 'external' && (
+                <Link href={externalAnnotationLink || ''} target="_blank">
                     <Button view="outlined">
                         <Icon awesome="pencil" />
                     </Button>
                 </Link>
-            )}
-            {showSwitch && (
-                <SwitchDescription
-                    checked={showExternalDescription}
-                    annotationLink={externalAnnotationLink}
-                    onUpdate={(checked: boolean) => setShowExternalDescription(checked)}
-                />
             )}
         </Flex>
     );

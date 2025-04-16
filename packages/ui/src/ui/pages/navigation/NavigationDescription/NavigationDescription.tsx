@@ -1,4 +1,4 @@
-import React, {useCallback, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import cn from 'bem-cn-lite';
 
@@ -30,7 +30,6 @@ function NavigationDescription({className}: Props) {
     const visibility = useSelector(getSettingAnnotationVisibility);
 
     const [editMode, setEditMode] = useState(false);
-    const [showExternalDescription, setShowExternalDescription] = useState(false);
 
     const {ytAnnotation, ytAnnotationPath, isAnnotationLoadedWithData, isAnnotationLoading} =
         useAnnotation();
@@ -39,6 +38,20 @@ function NavigationDescription({className}: Props) {
         useExternalAnnotation();
 
     const [edittingAnnotation, setEdittingAnnotation] = useState<string | undefined>(ytAnnotation);
+
+    const [descriptionType, setDescriptionType] = useState<'yt' | 'external'>('yt');
+
+    useEffect(() => {
+        let newDescriptionType: 'yt' | 'external' = 'yt';
+
+        if (isAnnotationLoadedWithData) {
+            newDescriptionType = 'yt';
+        } else if (isExternalAnnotatonLoadedWithData) {
+            newDescriptionType = 'external';
+        }
+
+        setDescriptionType(newDescriptionType);
+    }, [isAnnotationLoadedWithData, isExternalAnnotatonLoadedWithData]);
 
     const expanded = visibility === AnnotationVisibility.VISIBLE;
 
@@ -54,29 +67,16 @@ function NavigationDescription({className}: Props) {
         setEdittingAnnotation(value);
     };
 
-    const showSwitch = Boolean(ytAnnotation && externalAnnotation && !editMode);
-
     const isLoadedWithData =
         // use isAnnotationLoading to ensure that internal annotation loading process completed
         // before making any rendering decision
         !isAnnotationLoading && (isAnnotationLoadedWithData || isExternalAnnotatonLoadedWithData);
 
     if (!isLoadedWithData && !editMode) {
-        return null;
+        return;
     }
 
-    let annotation = '';
-
-    if (!showExternalDescription && isAnnotationLoadedWithData) {
-        annotation = ytAnnotation || '';
-    }
-
-    if (
-        showExternalDescription ||
-        (!isAnnotationLoadedWithData && isExternalAnnotatonLoadedWithData)
-    ) {
-        annotation = externalAnnotation || '';
-    }
+    const annotation = descriptionType === 'yt' ? ytAnnotation : externalAnnotation;
 
     return (
         <div className={block(null, className)}>
@@ -88,14 +88,11 @@ function NavigationDescription({className}: Props) {
                 overview={
                     <NavigationDescriptionOverview
                         ytAnnotation={ytAnnotation}
-                        externalAnnotationLink={externalAnnotationLink || ''}
+                        externalAnnotationLink={externalAnnotationLink}
+                        descriptionType={descriptionType}
+                        setDescriptionType={setDescriptionType}
                         editMode={editMode}
                         setEditMode={setEditMode}
-                        annotationSwitch={{
-                            showSwitch,
-                            showExternalDescription,
-                            setShowExternalDescription,
-                        }}
                         edittingAnnotation={edittingAnnotation}
                     />
                 }

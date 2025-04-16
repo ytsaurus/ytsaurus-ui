@@ -6,7 +6,7 @@ import ypath from '../../../common/thor/ypath';
 import {getAttributes, getPath} from '../../../store/selectors/navigation';
 import {getCluster} from '../../../store/selectors/global';
 import {useFetchBatchQuery, useUpdateBatchMutation} from '../../../store/api/yt';
-import {useGetExternalDescriptionQuery} from '../../../store/api/pages/navigation/tabs/description';
+import {useGetExternalDescriptionQuery} from '../../../store/api/navigation/tabs/description';
 
 import {prepareRequest} from '../../../utils/navigation';
 

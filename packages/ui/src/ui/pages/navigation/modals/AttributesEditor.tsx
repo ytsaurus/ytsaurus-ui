@@ -22,7 +22,7 @@ import {
 } from '../../../components/Dialog';
 
 import {ytApi} from '../../../store/api/yt';
-import {useGetExternalDescriptionQuery} from '../../../store/api/pages/navigation/tabs/description';
+import {useGetExternalDescriptionQuery} from '../../../store/api/navigation/tabs/description';
 import {
     getNavigationAttributesEditorAttributes,
     getNavigationAttributesEditorDynamicTables,
@@ -105,6 +105,7 @@ function AttributesEditorLoaded() {
     const storeError = useSelector(getNavigationAttributesEditorError);
 
     const [stateError, setErr] = React.useState<any>(undefined);
+    const [currentTab, setCurrentTab] = React.useState<string | undefined>();
 
     const error = stateError || storeError;
 
@@ -325,13 +326,6 @@ function AttributesEditorLoaded() {
                     valuePath: annotationPath,
                     className: block('full-height'),
                     initialValue: annotationInitial,
-                },
-            },
-            {
-                name: 'externalAnnotation',
-                type: 'block' as const,
-                extras: {
-                    children: <CreateExternalDescriptionButton />,
                 },
             },
             ...mergeNoticeAndError,
@@ -560,6 +554,10 @@ function AttributesEditorLoaded() {
                 },
                 ...annotationTab,
             ]}
+            onActiveTabChange={(tab) => setCurrentTab(tab)}
+            footerProps={{
+                content: currentTab === 'description' && <CreateExternalDescriptionButton />,
+            }}
         />
     );
 }
@@ -572,18 +570,16 @@ function CreateExternalDescriptionButton() {
 
     return (
         <>
-            {!externalDescription?.externalAnnotation &&
-                externalDescription?.externalAnnotationLink && (
-                    <Link href={externalDescription.externalAnnotationLink} target={'_blank'}>
-                        <Button view={'action'}>
-                            <Flex alignItems={'center'} gap={1}>
-                                Create a description with{' '}
-                                {UIFactory.externalAnnotationSetup?.externalServiceName}
-                                <ArrowUpRightFromSquare />
-                            </Flex>
-                        </Button>
-                    </Link>
-                )}
+            {externalDescription?.externalAnnotationLink && (
+                <Link href={externalDescription.externalAnnotationLink} target={'_blank'}>
+                    <Button view={'outlined'} size={'m'}>
+                        <Flex alignItems={'center'} gap={1}>
+                            {UIFactory.externalAnnotationSetup?.externalServiceName || 'External'}
+                            <ArrowUpRightFromSquare />
+                        </Flex>
+                    </Button>
+                </Link>
+            )}
         </>
     );
 }

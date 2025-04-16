@@ -1,14 +1,12 @@
 import React from 'react';
 import cn from 'bem-cn-lite';
-import {Button, Flex, Link} from '@gravity-ui/uikit';
-import {ArrowUpRightFromSquare} from '@gravity-ui/icons';
-
+import {Flex, Link, Text} from '@gravity-ui/uikit';
 import ypath from '../../../../../common/thor/ypath';
 
 import {ErrorToClipboardButton} from '../../../../../components/ErrorToClipboardButton/ErrorToClipboardButton';
 import RequestPermissions from '../../../tabs/ACL/RequestPermissions/RequestPermissions';
 
-import {useGetExternalDescriptionQuery} from '../../../../../store/api/pages/navigation/tabs/description';
+import {useGetExternalDescriptionQuery} from '../../../../../store/api/navigation/tabs/description';
 
 import {getParentPath} from '../../../../../utils/navigation';
 import {YTError} from '../../../../../../@types/types';
@@ -40,11 +38,18 @@ export function RequestPermission(props: Props) {
     const {data} = useGetExternalDescriptionQuery({cluster, path});
 
     return (
-        <div>
+        <Flex direction={'column'} gap={3}>
+            {data?.externalAnnotationLink && data?.externalAnnotation && (
+                <Text>
+                    {UIFactory.externalAnnotationSetup?.externalServiceName || 'External'}{' '}
+                    description for this node:{' '}
+                    <Link href={data.externalAnnotationLink}>{data.externalAnnotationLink}</Link>
+                </Text>
+            )}
             {!isRequestPermissionsForPathAllowed && (
                 <RequestPermissionIsNotAllowed objectType={objectType} />
             )}
-            <Flex direction="row" gap={3}>
+            <Flex direction={'row'} gap={3}>
                 <RequestPermissions
                     buttonClassName={block('request-permissions-button')}
                     path={pathForRequest}
@@ -54,19 +59,7 @@ export function RequestPermission(props: Props) {
                 <ErrorToClipboardButton className={block('copy')} view="outlined" error={error}>
                     Copy error details
                 </ErrorToClipboardButton>
-                {data?.externalAnnotationLink && (
-                    <Link href={data.externalAnnotationLink || ''}>
-                        <Button view={'outlined'}>
-                            <Flex alignItems={'center'} gap={1}>
-                                <ArrowUpRightFromSquare />
-                                {UIFactory.externalAnnotationSetup?.externalServiceName ||
-                                    'External'}{' '}
-                                description{' '}
-                            </Flex>
-                        </Button>
-                    </Link>
-                )}
             </Flex>
-        </div>
+        </Flex>
     );
 }

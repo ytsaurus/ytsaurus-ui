@@ -1,26 +1,31 @@
-import React from 'react';
-import {Flex, Link, Switch} from '@gravity-ui/uikit';
-import {ArrowUpRightFromSquare} from '@gravity-ui/icons';
+import React, {Dispatch, SetStateAction} from 'react';
+import {Flex, RadioButton} from '@gravity-ui/uikit';
 
 import UIFactory from '../../../UIFactory';
 
-interface Props {
-    checked: boolean;
-    annotationLink?: string;
-    onUpdate: (checked: boolean) => void;
-}
+type Props = {
+    descriptionType: 'yt' | 'external';
+    setDescriptionType: Dispatch<SetStateAction<'yt' | 'external'>>;
+};
 
-export function SwitchDescription({checked, annotationLink, onUpdate}: Props) {
+export function SwitchDescription(props: Props) {
+    const {descriptionType, setDescriptionType} = props;
+
     return (
         <Flex direction={'row'} gap={1}>
-            <Switch size="m" checked={checked} onUpdate={onUpdate}>
-                Show {UIFactory.externalAnnotationSetup?.externalServiceName || 'external'} content
-            </Switch>
-            {annotationLink && (
-                <Link href={annotationLink} target={'_blank'}>
-                    <ArrowUpRightFromSquare />
-                </Link>
-            )}
+            <RadioButton
+                options={[
+                    {value: 'yt', content: 'YT'},
+                    {
+                        value: 'external',
+                        content:
+                            UIFactory.externalAnnotationSetup?.externalServiceName || 'External',
+                    },
+                ]}
+                value={descriptionType}
+                size={'m'}
+                onUpdate={(value) => setDescriptionType(value)}
+            />
         </Flex>
     );
 }

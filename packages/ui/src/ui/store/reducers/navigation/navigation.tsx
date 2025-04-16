@@ -40,6 +40,8 @@ export type NavigationState = {
     sidePanelMode: 'qt' | 'yqlkit' | undefined;
 
     originatingQueuePath: string | undefined;
+
+    descriptionType: 'yt' | 'external';
 };
 
 const persistedState: Pick<NavigationState, 'path' | 'mode'> = {
@@ -66,8 +68,9 @@ const ephemeralState: Omit<NavigationState, keyof typeof persistedState> = {
 
     sidePanelMode: undefined,
 
-    /** @type {string | undefined} */
     originatingQueuePath: undefined,
+
+    descriptionType: 'yt',
 };
 
 export const initialState: NavigationState = {
