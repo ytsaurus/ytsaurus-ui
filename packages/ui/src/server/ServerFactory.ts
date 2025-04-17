@@ -1,7 +1,7 @@
 import type {Request, Response} from 'express';
 import type {ExpressKit} from '@gravity-ui/expresskit';
 import forEach_ from 'lodash/forEach';
-import {isLocalClusterId} from '../shared/utils';
+import {YT_LOCAL_CLUSTER_ID} from './constants';
 import {ConfigData} from '../shared/yt-types';
 import renderLayout, {AppLayoutConfig} from './render-layout';
 import {isLocalModeByEnvironment} from './utils';
@@ -41,7 +41,7 @@ const serverFactory: ServerFactory = {
         return [];
     },
     isLocalClusterId(cluster) {
-        return isLocalModeByEnvironment() || isLocalClusterId(cluster);
+        return isLocalModeByEnvironment() || cluster === YT_LOCAL_CLUSTER_ID;
     },
     getHomeRedirectedUrl() {
         return Promise.resolve(undefined);

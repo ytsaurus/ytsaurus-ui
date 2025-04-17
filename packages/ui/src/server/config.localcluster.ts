@@ -1,4 +1,4 @@
-import {YT_LOCAL_CLUSTER_ID} from '../shared/constants';
+import {YT_LOCAL_CLUSTER_ID} from './constants';
 import {ClusterConfig, YTConfig} from '../shared/yt-types';
 import {getApp} from './ServerFactory';
 

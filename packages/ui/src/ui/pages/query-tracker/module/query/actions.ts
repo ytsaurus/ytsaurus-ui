@@ -40,8 +40,6 @@ import guid from '../../../../common/hammer/guid';
 import {getSettingQueryTrackerStage} from '../../../../store/selectors/settings/settings-ts';
 import {getDefaultQueryACO, selectIsMultipleAco} from '../query_aco/selectors';
 import UIFactory from '../../../../UIFactory';
-import {YT} from '../../../../config/yt-config';
-import {ytApiV3} from '../../../../rum/rum-wrap-api';
 
 import {
     REQUEST_QUERY,
@@ -60,22 +58,11 @@ import {ChytInfo} from '../../../../store/reducers/chyt/list';
 export const setCurrentClusterToQuery =
     (): ThunkAction<void, RootState, unknown, any> => async (dispatch, getState) => {
         const state = getState();
-        let cluster = getCluster(state);
+        const cluster = getCluster(state);
         const {settings} = getQueryDraft(state);
 
         if (settings && 'cluster' in settings) return;
 
-        if (YT.isLocalCluster) {
-            try {
-                cluster = await wrapApiPromiseByToaster(
-                    ytApiV3.get({path: '//sys/@cluster_name'}),
-                    {
-                        toasterName: 'get_cluster_name',
-                        skipSuccessToast: true,
-                    },
-                );
-            } catch {}
-        }
         dispatch(updateQueryDraft({settings: {...settings, cluster}}));
     };
 
