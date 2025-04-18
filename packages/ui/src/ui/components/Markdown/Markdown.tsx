@@ -1,13 +1,16 @@
-import React from 'react';
+import React, {memo} from 'react';
 import cn from 'bem-cn-lite';
 import axios from 'axios';
 
+import {OutputType} from '@diplodoc/transform/lib/typings';
+
 import {wrapApiPromiseByToaster} from '../../utils/utils';
+import UIFactory from '../../UIFactory';
+
 import './Markdown.scss';
 import '@diplodoc/transform/dist/css/yfm.css';
 import '@diplodoc/transform/dist/js/yfm';
 import './yfm-overrides.scss';
-import {OutputType} from '@diplodoc/transform/lib/typings';
 
 const block = cn('yt-markdown');
 
@@ -64,7 +67,7 @@ export function useMarkdown({text, allowHTML = true}: Props) {
     return res;
 }
 
-export function Markdown({text}: Props) {
+function MD({text}: Props) {
     const {html} = useMarkdown({text, allowHTML: true}).result ?? {};
 
     return (
@@ -73,3 +76,8 @@ export function Markdown({text}: Props) {
         </React.Fragment>
     );
 }
+
+export const Markdown = memo(function Markdown({text}: Props) {
+    const customMarkdown = UIFactory.renderMarkdown({text});
+    return customMarkdown ?? <MD text={text} />;
+});

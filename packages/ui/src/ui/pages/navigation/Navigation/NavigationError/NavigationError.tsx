@@ -41,7 +41,7 @@ function PrettyError(props: Props & {code: ErrorCode}) {
             <Flex>
                 <NavigationErrorImage type={code} />
             </Flex>
-            <Flex direction="column" className={block('info')} gap={4}>
+            <Flex direction={'column'} className={block('info')} gap={3}>
                 <Text className={block('title')}>{title}</Text>
                 <ErrorDetails error={details} />
                 <Flex gap={3} direction={direction}>

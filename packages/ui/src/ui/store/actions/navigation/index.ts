@@ -34,7 +34,6 @@ import {
 import {getCluster, getCurrentUserName} from '../../../store/selectors/global';
 import {fetchTableMountConfig} from '../../../store/actions/navigation/content/table/table-mount-config';
 import {checkPermissions} from '../../../utils/acl/acl-api';
-import {getAnnotation} from './tabs/annotation';
 import {loadTabletErrorsCount} from './tabs/tablet-errors/tablet-errors-background';
 import {getTabs} from '../../../store/selectors/navigation/navigation';
 import UIFactory from '../../../UIFactory';
@@ -55,7 +54,6 @@ export function updateView(settings: {trackVisit?: boolean} = {}): NavigationThu
         const path = dispatch(updatePath(currentPath, false));
         cancelRequests();
 
-        dispatch(getAnnotation());
         dispatch(loadTabletErrorsCount({path, saveCancelTokenSource: saveRequestCancellation}));
 
         const requestParams = {
