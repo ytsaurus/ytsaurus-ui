@@ -1,5 +1,26 @@
 # Changelog
 
+## [1.89.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.88.0...ui-v1.89.0) (2025-04-18)
+
+
+### Features
+
+* **Navigation/Queue:** add features for queues exports [YTFRONT-4482] ([58baccb](https://github.com/ytsaurus/ytsaurus-ui/commit/58baccb4374a0f6282d331654bf0e53ce825acd2))
+* **Navigation/SymLinks:** add target_path button [YTFRONT-4224] ([8072c53](https://github.com/ytsaurus/ytsaurus-ui/commit/8072c53b4022fd84d97d8af2a347a6f3b0e0313d))
+* upgrade path input tooltip ([c1e5e5c](https://github.com/ytsaurus/ytsaurus-ui/commit/c1e5e5cfd4c2115fe89a0222521b8c3c4f2404ca))
+
+
+### Bug Fixes
+
+* get rid of duplicated scrollbars [YTFRONT-4840] ([7c81ad5](https://github.com/ytsaurus/ytsaurus-ui/commit/7c81ad5cdad68a73cba2e602bcdd952793ee4391))
+* **Navigaion/NavigationError:** n.map is not a function [YTFRONT-4858] ([ff5e6c6](https://github.com/ytsaurus/ytsaurus-ui/commit/ff5e6c6bb21e9ccbd78978ca9dc6d581282feee8))
+* no content image background ([61a8f27](https://github.com/ytsaurus/ytsaurus-ui/commit/61a8f278ed9257b63a2cd179f0f403db8bcd882f))
+* **Operation/Jobs:** set min-width of 'Incarnation' filter popup [YTFRONT-4836] ([ee9fed0](https://github.com/ytsaurus/ytsaurus-ui/commit/ee9fed006d8d7c852d198f4357671aa1b91694a6))
+* **Scheduling:** fix a mispring (+new icon) [YTFRONT-4275] ([919a26d](https://github.com/ytsaurus/ytsaurus-ui/commit/919a26d4c91d7f36443edbe30996fc29855eba02))
+* **Table/Download:** do not use `dump_error_into_response: true` [YTFRONT-4856] ([6560aa7](https://github.com/ytsaurus/ytsaurus-ui/commit/6560aa7bba4d5eeb30de1300c541605033348713))
+* **TableSortModal:** column encoding [YTFRONT-4873] ([6a4ab81](https://github.com/ytsaurus/ytsaurus-ui/commit/6a4ab8113e0e44ffdfbe9a34b89f64df4a98858b))
+* **YTErrorBlock:** copy buttonshould use the same text format [YTFRONT-3310] ([cd03ff8](https://github.com/ytsaurus/ytsaurus-ui/commit/cd03ff8e86ee32e3ea20029467eb318d218bae16))
+
 ## [1.88.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.87.0...ui-v1.88.0) (2025-04-09)
 
 
