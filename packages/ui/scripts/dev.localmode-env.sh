@@ -1,4 +1,5 @@
-read -p "Do you want to try to stop running containers yt.backend, yt.frontend? [yN]: " needToStop
+useStop=0
+read -p "Do you want to try to stop running containers? [yN]: " needToStop
 if [ "${needToStop}" = "y" -o "${needToStop}" = "Y" ]; then
   useStop=1
 fi
@@ -31,6 +32,18 @@ if [ $? -ne 0 -o "${useStop}" = "1" ]; then
 
   command="./run_local_cluster.sh --yt-version stable --docker-hostname $(hostname) --fqdn localhost --node-count 2 --ui-app-installation ${APP_INSTALLATION:-''} --init-operations-archive"
 
+  (
+    echo
+    echo "Use following environment variables to control behavior of the script:"
+    echo "    PROMETHEUS=1     - to add --run-prometheus"
+    echo "    SKIP_PULL=1      - to add --ui-skip-pull true --yt-skip-pull true"
+    echo "    "
+  ) >&2
+
+  if [ "$PROMETHEUS" != "" ]; then
+    command="$command --run-prometheus"
+  fi
+
   if [ "$SKIP_PULL" != "" ]; then
     command="$command --ui-skip-pull true --yt-skip-pull true"
   fi
@@ -45,9 +58,11 @@ if [ $? -ne 0 -o "${useStop}" = "1" ]; then
   if [ "${useStop}" = "1" ]; then
     echo Trying to stop running containers:
     $command --stop
+    needToStart=y
   fi
 
-  read -p "Do you want to start local cluster? [Yn]: " needToStart
+  test -n "needToStart" || read -p "Do you want to start local cluster? [Yn]: " needToStart
+
   if [ "${needToStart}" = "" -o "${needToStart}" = "y" -o "${needToStart}" = "Y" ]; then
     $command --stop
     $command
@@ -66,4 +81,9 @@ else
   echo PROXY=$PROXY
   echo APP_INSTALLATION=$APP_INSTALLATION
   echo -e $NC
+fi
+
+if [ "$PROMETHEUS" != "" ]; then
+  npm run e2e:localmode:monitoring:init
+  export PROMETHEUS_BASE_URL=http://$(hostname):9090
 fi

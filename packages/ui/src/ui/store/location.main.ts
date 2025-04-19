@@ -1,7 +1,7 @@
 import {AccountsTab} from '../constants/accounts/accounts';
 import {Tab as ComponentsTab} from '../constants/components/main';
 import {Tab as OperationTab} from '../constants/operations/detail';
-import {Tab as SchedulingTab} from '../constants/scheduling';
+import {SchedulingExtraTabs, SchedulingTab} from '../constants/scheduling';
 import {Page} from '../constants/index';
 
 import {
@@ -60,10 +60,12 @@ import {getTabletPreparedState, tabletParams} from '../store/reducers/tablet/url
 import {
     getSchedulingAclPreparedState,
     getSchedulingDetailsPreparedState,
+    getSchedulingMonitoringParams,
     getSchedulingOverviewPreparedState,
     getSchedulingPreparedState,
     schedulingAclParams,
     schedulingDetailsParams,
+    schedulingMonitoringParams,
     schedulingOverviewParams,
     schedulingParams,
 } from '../store/reducers/scheduling/url-mapping';
@@ -151,6 +153,7 @@ export const getMainLocations = (): Array<[string, PathParameters]> => [
         `/*/${Page.SCHEDULING}/${SchedulingTab.ACL}`,
         [schedulingAclParams, getSchedulingAclPreparedState],
     ],
+    [`/*/${Page.SCHEDULING}/${SchedulingExtraTabs.PROMETHEUS_DASHBOARD}`, [schedulingMonitoringParams, getSchedulingMonitoringParams]],
     [`/*/${Page.SCHEDULING}`, [schedulingParams, getSchedulingPreparedState]],
 
     [`/*/${Page.SYSTEM}`, [systemParams, getSystemPreparedState]],

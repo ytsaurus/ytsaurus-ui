@@ -177,4 +177,6 @@ export enum YTApiId {
     queuePartitions,
     queueConsumerStatus,
     queueConsumerPartitions,
+
+    prometheusMonitoringLayout,
 }
