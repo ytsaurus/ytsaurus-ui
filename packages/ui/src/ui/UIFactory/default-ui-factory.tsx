@@ -22,6 +22,7 @@ import {QUERY_RESULT_CHART_TAB} from '../pages/query-tracker/QueryResultsVisuali
 import {IncarnationsLazy} from '../pages/operations/OperationDetail/tabs/incarnations/IncarnationsLazy';
 import {AppNavigationPageLayoutLazy} from '../containers/AppNavigation/AppNavigationPageLayout.lazy';
 
+import {AccountsMonitorPrometheus} from '../pages/accounts/tabs/monitor/AccountsMonitorPromehteus/AccountsMonitorPrometheus';
 import {QueueMetricsPrometheus} from '../pages/navigation/tabs/Queue/views/QueueMetrics/QueueMetricsPrometheus/QueueMetricsPrometheus';
 import {ConsumerMetricsPrometheus} from '../pages/navigation/tabs/Consumer/views/ConsumerMetrics/ConsumerMetricsPrometheus/ConsumerMetricsPrometheus';
 
@@ -96,6 +97,10 @@ export const defaultUIFactory: UIFactory = {
         return uiSettings.componentVersionsMonitoring;
     },
     getMonitoringForAccounts() {
+        if (getConfigData().allowPrometheusDashboards) {
+            return {component: AccountsMonitorPrometheus};
+        }
+
         if (!uiSettings?.accountsMonitoring?.urlTemplate) {
             return undefined;
         }
