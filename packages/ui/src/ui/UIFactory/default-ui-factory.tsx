@@ -21,6 +21,7 @@ import {SchedulingMonitoring} from '../pages/scheduling/Content/tabs/Monitoring/
 import {QUERY_RESULT_CHART_TAB} from '../pages/query-tracker/QueryResultsVisualization';
 
 import {QueueMetricsPrometheus} from '../pages/navigation/tabs/Queue/views/QueueMetrics/QueueMetricsPrometheus/QueueMetricsPrometheus';
+import {ConsumerMetricsPrometheus} from '../pages/navigation/tabs/Consumer/views/ConsumerMetrics/ConsumerMetricsPrometheus/ConsumerMetricsPrometheus';
 
 import {defaultAclApi} from '../utils/acl/external-acl-api';
 
@@ -229,6 +230,9 @@ export const defaultUIFactory: UIFactory = {
     },
 
     getComponentForConsumerMetrics() {
+        if (getConfigData().allowPrometheusDashboards) {
+            return ConsumerMetricsPrometheus;
+        }
         return undefined;
     },
 
