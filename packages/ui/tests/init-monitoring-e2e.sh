@@ -19,3 +19,17 @@ ls | xargs -I {} bash -c "
     yt set --format json //sys/interface-monitoring/{} < {} && \
     echo OK;
 "
+
+yt create -r -i table //tmp/queue --attributes '{dynamic=true;schema=[{name=data;type=string};{name="$timestamp";type=uint64};{name="$cumulative_data_weight";type=int64}]}'
+yt create -i queue_consumer //tmp/consumer
+yt register-queue-consumer //tmp/queue //tmp/consumer --vital
+yt mount-table --sync //tmp/queue
+yt mount-table --sync //tmp/consumer
+
+(
+    set +x
+    for ((i = 0; i < 300; i++)); do
+        echo "{data=data_$i_$i;};"
+    done
+    set -x
+) | yt insert-rows --format yson //tmp/queue
