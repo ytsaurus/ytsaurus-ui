@@ -22,6 +22,8 @@ import {QUERY_RESULT_CHART_TAB} from '../pages/query-tracker/QueryResultsVisuali
 import {IncarnationsLazy} from '../pages/operations/OperationDetail/tabs/incarnations/IncarnationsLazy';
 import {AppNavigationPageLayoutLazy} from '../containers/AppNavigation/AppNavigationPageLayout.lazy';
 
+import {QueueMetricsPrometheus} from '../pages/navigation/tabs/Queue/views/QueueMetrics/QueueMetricsPrometheus/QueueMetricsPrometheus';
+
 import {defaultAclApi} from '../utils/acl/external-acl-api';
 
 import {UIFactory} from './index';
@@ -233,6 +235,9 @@ export const defaultUIFactory: UIFactory = {
     },
 
     getComonentForQueueMetrics() {
+        if (getConfigData().allowPrometheusDashboards) {
+            return QueueMetricsPrometheus;
+        }
         return undefined;
     },
 
