@@ -25,6 +25,7 @@ import {AppNavigationPageLayoutLazy} from '../containers/AppNavigation/AppNaviga
 import {AccountsMonitorPrometheus} from '../pages/accounts/tabs/monitor/AccountsMonitorPromehteus/AccountsMonitorPrometheus';
 import {QueueMetricsPrometheus} from '../pages/navigation/tabs/Queue/views/QueueMetrics/QueueMetricsPrometheus/QueueMetricsPrometheus';
 import {ConsumerMetricsPrometheus} from '../pages/navigation/tabs/Consumer/views/ConsumerMetrics/ConsumerMetricsPrometheus/ConsumerMetricsPrometheus';
+import {ChytMonitoringPrometheus} from '../pages/chyt/ChytPageClique/ChytMonitoringPrometheus';
 
 import {defaultAclApi} from '../utils/acl/external-acl-api';
 
@@ -136,6 +137,10 @@ export const defaultUIFactory: UIFactory = {
         return undefined;
     },
     getMonitoringComponentForChyt() {
+        if (getConfigData().allowPrometheusDashboards) {
+            return {component: ChytMonitoringPrometheus};
+        }
+
         const {urlTemplate, title} = uiSettings.chytMonitoring ?? {};
         if (!urlTemplate) {
             return undefined;
