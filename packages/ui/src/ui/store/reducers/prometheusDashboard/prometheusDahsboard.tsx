@@ -2,7 +2,7 @@ import {PayloadAction, createSlice} from '@reduxjs/toolkit';
 import {EMPTY_OBJECT} from '../../../constants/empty';
 import type {PrometheusWidgetId} from '../../../containers/PrometheusDashboard/types';
 
-export type PrometheusDashboardType = 'scheduler-pool';
+export type PrometheusDashboardType = 'scheduler-pool' | 'queue-metrics';
 
 export type PrometheusDashboardState = {
     expandedPanels: Partial<Record<PrometheusDashboardType, PrometheusWidgetId>>;
