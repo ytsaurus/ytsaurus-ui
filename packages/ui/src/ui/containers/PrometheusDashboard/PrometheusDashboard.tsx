@@ -7,6 +7,7 @@ import {YTErrorBlock} from '../../components/Block/Block';
 import type {PrometheusDashboardType} from '../../store/reducers/prometheusDashboard/prometheusDahsboard';
 import {YTTimeline} from '../../components/common/YTTimeline';
 import WithStickyToolbar from '../../components/WithStickyToolbar/WithStickyToolbar';
+import {YTErrors} from '../../rum/constants';
 
 import {
     PrometheusDashboardProvider,
@@ -21,7 +22,7 @@ export type PrometheusDashboardProps = {
 };
 
 export const PrometheusDashboard = React.memo(function ({type, params}: PrometheusDashboardProps) {
-    const {layout, error} = useLoadedLayout(type);
+    const {layout, error} = useLoadedLayout({type, params});
     return !params ? null : (
         <PrometheusDashboardProvider type={type}>
             <WithStickyToolbar
@@ -41,7 +42,7 @@ export const PrometheusDashboard = React.memo(function ({type, params}: Promethe
 });
 PrometheusDashboard.displayName = 'PrometheusDashboard';
 
-function useLoadedLayout(type: PrometheusDashboardType) {
+function useLoadedLayout({type, params}: PrometheusDashboardProps) {
     const [result, setData] = React.useState<{layout?: DashboardInfo; error?: YTError}>({});
     /**
      * Temporary solution withot redux-store
@@ -56,10 +57,35 @@ function useLoadedLayout(type: PrometheusDashboardType) {
                 setData({layout});
             })
             .catch((error) => {
-                setData({error});
+                if (error.code === YTErrors.NODE_DOES_NOT_EXIST) {
+                    setData({layout: makeNotImplementedLayout({type, params})});
+                } else {
+                    setData({error});
+                }
             });
     }, [type]);
     return result;
+}
+
+function makeNotImplementedLayout({type, params}: PrometheusDashboardProps) {
+    return {
+        templating: {list: []},
+        panels: [
+            {
+                type: 'text' as const,
+                options: {
+                    content: [
+                        `\`${type}\` dashboard is not implemented yet, provided parameters:`,
+                        '```json',
+                        JSON.stringify(params, null, 4),
+                        '```',
+                    ].join('\n'),
+                    mode: 'markdown' as const,
+                },
+                gridPos: {x: 0, y: 0, w: 24, h: 2},
+            },
+        ],
+    };
 }
 
 function PrometheusTimeline() {
