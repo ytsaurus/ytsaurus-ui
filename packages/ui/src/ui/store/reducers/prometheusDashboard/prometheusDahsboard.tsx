@@ -4,6 +4,7 @@ import type {PrometheusWidgetId} from '../../../containers/PrometheusDashboard/t
 
 export type PrometheusDashboardType =
     | 'account'
+    | 'chyt-monitoring'
     | 'queue-metrics'
     | 'queue-consumer-metrics'
     | 'scheduler-pool';
