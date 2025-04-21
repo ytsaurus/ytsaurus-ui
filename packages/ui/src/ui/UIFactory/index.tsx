@@ -161,6 +161,8 @@ export interface InlineSuggestionsApi {
     onQueryCreate(): void;
 }
 
+export type ChytMonitoringProps = {cluster: string; alias: string};
+
 export interface UIFactory {
     getClusterAppearance(cluster?: string): undefined | ClusterAppearance;
 
@@ -242,7 +244,7 @@ export interface UIFactory {
     getMonitoringComponentForChyt():
         | undefined
         | {
-              component?: React.ComponentType<{cluster: string; alias: string}>;
+              component?: React.ComponentType<ChytMonitoringProps>;
               urlTemplate?: string;
               title?: string;
           };
