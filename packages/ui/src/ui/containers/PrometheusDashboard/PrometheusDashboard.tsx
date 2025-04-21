@@ -75,14 +75,15 @@ function makeNotImplementedLayout({type, params}: PrometheusDashboardProps) {
                 type: 'text' as const,
                 options: {
                     content: [
-                        `\`${type}\` dashboard is not implemented yet, provided parameters:`,
+                        `####   \`//sys/interface-monitoring/${type}\` is not exist`,
+                        '  You have to provide correct dashboard description, see expected parameters below:',
                         '```json',
                         JSON.stringify(params, null, 4),
                         '```',
                     ].join('\n'),
                     mode: 'markdown' as const,
                 },
-                gridPos: {x: 0, y: 0, w: 24, h: 2},
+                gridPos: {x: 0, y: 0, w: 24, h: 7},
             },
         ],
     };
