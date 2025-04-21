@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ytsaurus-ui-chart-v0.1.3...ytsaurus-ui-chart-v0.2.0) (2025-04-21)
+
+
+### Features
+
+* **ui-helm-chart:** add ability to specify nodePort ([b4dde38](https://github.com/ytsaurus/ytsaurus-ui/commit/b4dde38a0ec1dee964d124dcbdc4ab7d52590573))
+
 ## [0.1.3](https://github.com/ytsaurus/ytsaurus-ui/compare/ytsaurus-ui-chart-v0.1.2...ytsaurus-ui-chart-v0.1.3) (2024-10-11)
 
 
