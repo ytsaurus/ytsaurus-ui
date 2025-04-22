@@ -5,8 +5,9 @@ import b from 'bem-cn-lite';
 import {useExportMutation} from '../../../../../../../store/api/navigation/tabs/queue/queue';
 
 import Icon from '../../../../../../../components/Icon/Icon';
-import {YTDFDialog} from '../../../../../../../components/Dialog';
+import {YTDFDialog, makeErrorFields} from '../../../../../../../components/Dialog';
 import {QueueExportConfig} from '../../../../../../../types/navigation/queue/queue';
+import {YTError} from '../../../../../../../types';
 
 import {ExportsEditDialog} from '../ExportsEditDialog/ExportsEditDialog';
 
@@ -17,7 +18,7 @@ export function ExportsEdit({
 }: {
     prevConfig: QueueExportConfig<number> & {export_name: string};
 }) {
-    const [update] = useExportMutation();
+    const [update, {isLoading, error}] = useExportMutation();
 
     const [editDialogVisible, setEditDialogVisible] = useState(false);
     const [deleteDialogVisible, setDeleteDialogVisible] = useState(false);
@@ -60,14 +61,18 @@ export function ExportsEdit({
                             ),
                         },
                     },
+                    ...makeErrorFields([error as YTError]),
                 ]}
                 onAdd={async () => {
-                    update({prevConfig, type: 'delete'});
+                    await update({prevConfig, type: 'delete'}).unwrap();
                 }}
                 headerProps={{
                     title: 'Delete export',
                 }}
                 onClose={toggleDeleteDialogVisibility}
+                isApplyDisabled={() => {
+                    return isLoading;
+                }}
             />
             <ExportsEditDialog
                 type={'edit'}

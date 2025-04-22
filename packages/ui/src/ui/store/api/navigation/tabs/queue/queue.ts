@@ -8,6 +8,7 @@ import {RootState} from '../../../../../store/reducers';
 import {rootApi} from '../../../../../store/api';
 import {ytApi} from '../../../../../store/api/yt';
 import {getAttributes, getPath} from '../../../../../store/selectors/navigation';
+import {getCluster} from '../../../../../store/selectors/global';
 
 import CancelHelper from '../../../../../utils/cancel-helper';
 import {wrapApiPromiseByToaster} from '../../../../../utils/utils';
@@ -56,27 +57,29 @@ async function deleteExtraAttributes(
 }
 
 async function exportsMutation(args: ExportsMutationArgs, api: BaseQueryApi) {
-    const state = api.getState() as RootState;
-    const path = getPath(state);
-    const attributes = getAttributes(state);
-
-    const {prevConfig, type, newConfig} = args;
-
-    const configs: QueueExport<number> = ytApi.endpoints.fetchBatch.select(
-        makeGetExportsParams(path),
-    )(state).data?.[0].output as QueueExport<number>;
-
-    const newConfigs = {...configs};
-
-    if (prevConfig?.export_name && newConfigs[prevConfig?.export_name]) {
-        delete newConfigs[prevConfig?.export_name];
-    }
-
-    if (type === 'edit' && newConfig?.export_name) {
-        newConfigs[newConfig?.export_name] = newConfig;
-    }
-
     try {
+        const state = api.getState() as RootState;
+        const path = getPath(state);
+        const attributes = getAttributes(state);
+        const cluster = getCluster(state);
+
+        const {prevConfig, type, newConfig} = args;
+
+        const configs: QueueExport<number> = ytApi.endpoints.fetchBatch.select({
+            ...makeGetExportsParams(path),
+            cluster,
+        })(state).data?.[0].output as QueueExport<number>;
+
+        const newConfigs = {...configs};
+
+        if (prevConfig?.export_name && newConfigs[prevConfig?.export_name]) {
+            delete newConfigs[prevConfig?.export_name];
+        }
+
+        if (type === 'edit' && newConfig?.export_name) {
+            newConfigs[newConfig?.export_name] = newConfig;
+        }
+
         const transactionId = await yt.v3.startTransaction({});
         try {
             await ytApiV3.set(

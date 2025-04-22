@@ -101,9 +101,7 @@ export function ExportsEditDialog(props: DialogProps) {
             prevConfig,
             newConfig: {...preparedValues, export_name: values.export_name},
             type: 'edit',
-        });
-
-        return error ? Promise.reject(error) : Promise.resolve();
+        }).unwrap();
     };
 
     return (
