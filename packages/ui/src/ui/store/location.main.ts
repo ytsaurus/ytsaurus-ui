@@ -96,6 +96,10 @@ import {
 import {chytListParams, getGhytListPreparedState} from './reducers/chyt/url-mapping';
 
 import type {PathParameters} from '../store/location';
+import {
+    getSystemMonitoringState,
+    systemMonitoringParams,
+} from './reducers/system/monitoring/url-mapping';
 
 // prettier-ignore
 export const getMainLocations = (): Array<[string, PathParameters]> => [
@@ -157,6 +161,7 @@ export const getMainLocations = (): Array<[string, PathParameters]> => [
     [`/*/${Page.SCHEDULING}`, [schedulingParams, getSchedulingPreparedState]],
 
     [`/*/${Page.SYSTEM}`, [systemParams, getSystemPreparedState]],
+    [`/*/${Page.SYSTEM}/monitoring`, [systemMonitoringParams, getSystemMonitoringState]],
 
     [
         `/*/${Page.TABLET_CELL_BUNDLES}/${TabletsTab.TABLET_CELLS}`,
