@@ -122,6 +122,7 @@ export enum YTApiId {
 
     systemCAInstances,
     systemCAStates,
+    systemClusterMasters,
     systemChunks,
     systemMasters,
     systemMastersConfig,
