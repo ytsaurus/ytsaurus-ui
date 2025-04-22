@@ -26,6 +26,7 @@ import {AccountsMonitorPrometheus} from '../pages/accounts/tabs/monitor/Accounts
 import {QueueMetricsPrometheus} from '../pages/navigation/tabs/Queue/views/QueueMetrics/QueueMetricsPrometheus/QueueMetricsPrometheus';
 import {ConsumerMetricsPrometheus} from '../pages/navigation/tabs/Consumer/views/ConsumerMetrics/ConsumerMetricsPrometheus/ConsumerMetricsPrometheus';
 import {ChytMonitoringPrometheus} from '../pages/chyt/ChytPageClique/ChytMonitoringPrometheus';
+import {SystemMonitoringPrometheus} from '../pages/system/SystemMonitoringPrometheus/SystemMonitoringPrometheus';
 
 import {defaultAclApi} from '../utils/acl/external-acl-api';
 
@@ -90,6 +91,9 @@ export const defaultUIFactory: UIFactory = {
         return res;
     },
     getSystemMonitoringTab() {
+        if (getConfigData().allowPrometheusDashboards) {
+            return {component: SystemMonitoringPrometheus};
+        }
         if (!uiSettings?.systemMonitoring) return undefined;
         return uiSettings.systemMonitoring;
     },
