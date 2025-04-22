@@ -124,6 +124,7 @@ export const enum YTApiId {
 
     systemCAInstances = 'systemCAInstances',
     systemCAStates = 'systemCAStates',
+    systemClusterMasters = 'systemClusterMasters',
     systemChunks = 'systemChunks',
     systemMasters = 'systemMasters',
     systemMastersConfig = 'systemMastersConfig',
