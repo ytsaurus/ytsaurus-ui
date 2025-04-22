@@ -6,14 +6,19 @@ import {YTError} from '../../../../types';
 export type BatchApiArgs = {
     id: YTApiId;
     toaster?: WrapApiOptions<unknown, 'v3'>;
-    cluster?: string;
-} & ApiMethodParams<BatchParameters>;
+} & Omit<ApiMethodParams<BatchParameters>, 'setup'> &
+    BatchCluster;
+
+export type BatchCluster =
+    // cluster or setup param should be required for the case of selection
+    {cluster: string} | Required<Pick<ApiMethodParams<BatchParameters>, 'setup'>>;
 
 export type BatchApiResults<T = unknown> = Array<BatchResultsItem<T>>;
 
 export const executeBatchV3 = async (args: BatchApiArgs) => {
-    const {id, setup, parameters, data, cancellation, toaster} = args;
+    const {id, parameters, data, cancellation, toaster} = args;
     try {
+        const setup = 'setup' in args ? args.setup : undefined;
         const request = async () => {
             const results = await ytApiV3Id.executeBatch(id, {
                 parameters,
