@@ -1,8 +1,12 @@
-import React, {CSSProperties} from 'react';
-import {ConnectedProps, connect} from 'react-redux';
+import React, {CSSProperties, useCallback, useEffect, useState} from 'react';
+import {useDispatch, useSelector} from 'react-redux';
 import cn from 'bem-cn-lite';
 
-import {Button, Checkbox, Flex, Select} from '@gravity-ui/uikit';
+import {Checkbox, Select} from '@gravity-ui/uikit';
+
+import map_ from 'lodash/map';
+import filter_ from 'lodash/filter';
+import includes_ from 'lodash/includes';
 
 import {RootState} from '../../../../store/reducers';
 import DataTableYT from '../../../../components/DataTableYT/DataTableYT';
@@ -34,14 +38,6 @@ import './VersionSummary.scss';
 
 const block = cn('versions-summary');
 
-type Props = ConnectedProps<typeof connector>;
-
-type State = Readonly<{
-    showAll: boolean;
-    currentVersions: string[];
-    sortOrder?: DT100.SortOrder | DT100.SortOrder[];
-}>;
-
 type RenderData = {row: VersionSummaryRow; index: number};
 
 const SETTINGS: DT100.Settings = {
@@ -55,158 +51,178 @@ function isSpecialRow(version: string) {
     return DEFAULT_VERSIONS.includes(version);
 }
 
-class VersionsSummary extends React.Component<Props, State> {
-    constructor(props: Props) {
-        super(props);
-        this.state = {
-            showAll: true,
-            currentVersions: [],
-        };
-    }
+function VersionsSummary() {
+    const dispatch = useDispatch();
 
-    componentDidUpdate(prevProps: Props, prevState: State) {
-        const {currentVersions, showAll} = this.state;
-        const {visibleColumns, checkedHideOffline} = this.props;
+    const loading = useSelector(
+        (state: RootState) => state.components.versionsV2.loading as boolean,
+    );
+    const loaded = useSelector((state: RootState) => state.components.versionsV2.loaded as boolean);
+    const cluster = useSelector(getCluster);
+    const sortState = useSelector(getSummarySortState);
+    const visibleColumns = useSelector(getVersions);
+    const items = useSelector(getVersionsSummaryData);
+    const checkedHideOffline = useSelector(getHideOfflineValue);
 
-        const visibleColumnsNames = visibleColumns.map((col) => col.name);
-        const onlineVersions = prevState.currentVersions.filter((version) =>
-            visibleColumnsNames.includes(version),
+    const dispatchChangeVersionStateTypeFilters = useCallback(
+        (payload: any) => dispatch(changeVersionStateTypeFilters(payload)),
+        [dispatch],
+    );
+
+    const dispatchSetVersionsSummarySortState = useCallback(
+        (payload: any) => dispatch(setVersionsSummarySortState(payload)),
+        [dispatch],
+    );
+
+    const dispatchChangeCheckedHideOffline = useCallback(
+        (payload: boolean) => dispatch(changeCheckedHideOffline(payload)),
+        [dispatch],
+    );
+
+    const [currentVersions, setCurrentVersions] = useState<string[]>([]);
+    const [sortOrder, setSortOrder] = useState<DT100.SortOrder | DT100.SortOrder[]>();
+
+    useEffect(() => {
+        const visibleColumnsNames = map_(visibleColumns, (col) => col.name);
+
+        if (!currentVersions.length && visibleColumns.length) {
+            setCurrentVersions(visibleColumnsNames);
+        }
+    }, [visibleColumns]);
+
+    useEffect(() => {
+        const visibleColumnsNames = map_(visibleColumns, (col) => col.name);
+        const onlineVersions = filter_(currentVersions, (version) =>
+            includes_(visibleColumnsNames, version),
         );
 
-        if (!currentVersions.length && visibleColumns.length && showAll) {
-            this.setState((state) => ({...state, currentVersions: visibleColumnsNames}));
+        if (checkedHideOffline) {
+            setCurrentVersions(onlineVersions);
         }
+    }, []);
 
-        const hideOfflineUpdated = prevProps.checkedHideOffline !== checkedHideOffline;
-        if (hideOfflineUpdated && checkedHideOffline) {
-            this.setState((state) => ({...state, currentVersions: onlineVersions}));
-        }
-        // if user unchecked checkbox while all columns was selected
-        if (hideOfflineUpdated && !checkedHideOffline && showAll) {
-            this.setState((state) => ({...state, currentVersions: visibleColumnsNames}));
-        }
-    }
+    const onClick = useCallback(
+        (key: string, data: RenderData) => {
+            const {row} = data;
+            const isSpecial = isSpecialRow(key);
+            const version = !isSpecial ? key : undefined;
+            const type: string | undefined = row.type;
 
-    renderType = (data: RenderData) => {
+            const state = key === 'error' ? 'error' : undefined;
+
+            if (type === 'online' || type === 'offline') {
+                dispatchChangeVersionStateTypeFilters({version, state: state || type});
+            } else if (type === 'banned') {
+                dispatchChangeVersionStateTypeFilters({version, banned: true});
+            } else {
+                dispatchChangeVersionStateTypeFilters({version, type, state});
+            }
+        },
+        [dispatchChangeVersionStateTypeFilters],
+    );
+
+    const renderNumber = useCallback(
+        (key: string, rowData: RenderData) => {
+            const {row} = rowData;
+            const value = row[key];
+            const content = !value ? hammer.format.NO_VALUE : hammer.format['Number'](value);
+            const handleClick = !value
+                ? undefined
+                : () => {
+                      onClick(key, rowData);
+                  };
+            return (
+                <span
+                    className={block('value', {clickable: Boolean(handleClick)})}
+                    onClick={handleClick}
+                    title={handleClick ? 'Click to set corresponding filter values' : undefined}
+                    data-qa="component-amount"
+                >
+                    {content}
+                </span>
+            );
+        },
+        [onClick],
+    );
+
+    const renderType = useCallback((data: RenderData) => {
         const type = data.row.type;
         const content = hammer.format['Readable'](type);
 
         return <span className={block('value')}>{content}</span>;
-    };
+    }, []);
 
-    renderNumber = (key: string, rowData: RenderData) => {
-        const {row} = rowData;
-        const value = row[key];
-        const content = !value ? hammer.format.NO_VALUE : hammer.format['Number'](value);
-        const onClick = !value
-            ? undefined
-            : () => {
-                  this.onClick(key, rowData);
-              };
-        return (
-            <span
-                className={block('value', {clickable: Boolean(onClick)})}
-                onClick={onClick}
-                title={onClick ? 'Click to set corresponding filter values' : undefined}
-                data-qa="component-amount"
-            >
-                {content}
-            </span>
-        );
-    };
+    const handleOnSort = useCallback(
+        (column: string, order: string) => {
+            // unordered case
+            if (
+                sortOrder &&
+                !Array.isArray(sortOrder) &&
+                sortOrder.order === DataTable.DESCENDING
+            ) {
+                setSortOrder([]);
+                setCurrentVersions(currentVersions);
+                dispatchSetVersionsSummarySortState({});
+            } else if (order === 'asc') {
+                setSortOrder({columnId: column, order: DataTable.ASCENDING});
+                dispatchSetVersionsSummarySortState({column, order});
+            } else if (order === 'desc') {
+                setSortOrder({columnId: column, order: DataTable.DESCENDING});
+                dispatchSetVersionsSummarySortState({column, order});
+            }
+        },
+        [sortOrder, currentVersions, dispatchSetVersionsSummarySortState],
+    );
 
-    makeColumnInfo({type, name}: {type: string; name: string}) {
-        return {
-            name: name,
-            title: name,
-            sortable: false,
-            render: this.renderNumber.bind(this, type),
-            align: 'right' as const,
-            header: this.renderHeader(type, name),
-        };
-    }
+    const renderHeader = useCallback(
+        (key: string, name: string) => {
+            const {column, order} = sortState || {};
 
-    renderHeader(key: string, name: string) {
-        const {sortState} = this.props;
-        const {column, order} = sortState || {};
+            return (
+                <ColumnHeader<string>
+                    column={name}
+                    title={name}
+                    shortTitle={name.split('-')[0]}
+                    onSort={handleOnSort}
+                    order={key === column ? order : ''}
+                />
+            );
+        },
+        [sortState, handleOnSort],
+    );
 
-        return (
-            <ColumnHeader<string>
-                column={name}
-                title={name}
-                shortTitle={name.split('-')[0]}
-                onSort={this.handleOnSort}
-                order={key === column ? order : ''}
-            />
-        );
-    }
+    const makeColumnInfo = useCallback(
+        ({type, name}: {type: string; name: string}) => {
+            return {
+                name: name,
+                title: name,
+                sortable: false,
+                render: (data: RenderData) => renderNumber(type, data),
+                align: 'right' as const,
+                header: renderHeader(type, name),
+            };
+        },
+        [renderNumber, renderHeader],
+    );
 
-    renderSelectFilter = () => {
-        return (
-            <Flex direction="row">
-                <Button view="flat" className={block('filter-button')} onClick={this.handleShowAll}>
-                    Show all
-                </Button>
-                <Button view="flat" className={block('filter-button')} onClick={this.handleReset}>
-                    Reset
-                </Button>
-            </Flex>
-        );
-    };
+    const handleHideOffline = useCallback(
+        (value: boolean) => {
+            dispatchChangeCheckedHideOffline(value);
+        },
+        [dispatchChangeCheckedHideOffline],
+    );
 
-    handleOnSort = (column: string, order: string) => {
-        const {setVersionsSummarySortState} = this.props;
-        const {currentVersions, sortOrder} = this.state;
-        // unordered case
-        if (sortOrder && !Array.isArray(sortOrder) && sortOrder.order === DataTable.DESCENDING) {
-            this.setState((state) => ({...state, sortOrder: [], currentVersions: currentVersions}));
-            setVersionsSummarySortState({});
-        } else if (order === 'asc') {
-            this.setState((state) => ({
-                ...state,
-                sortOrder: {columnId: column, order: DataTable.ASCENDING},
-            }));
-            setVersionsSummarySortState({column, order});
-        } else if (order === 'desc') {
-            this.setState((state) => ({
-                ...state,
-                sortOrder: {columnId: column, order: DataTable.DESCENDING},
-            }));
-            setVersionsSummarySortState({column, order});
-        }
-    };
-
-    handleShowAll = () => {
-        const {visibleColumns} = this.props;
-        const visibleColumnsNames = visibleColumns.map((col) => col.name);
-        this.setState((state) => ({...state, showAll: true, currentVersions: visibleColumnsNames}));
-    };
-
-    handleReset = () => {
-        this.setState((state) => ({...state, showAll: false, currentVersions: DEFAULT_VERSIONS}));
-    };
-
-    handleHideOffline = (value: boolean) => {
-        const {changeCheckedHideOffline} = this.props;
-        changeCheckedHideOffline(value);
-    };
-
-    handleSelectUpdate = (value: string[]) => {
+    const handleSelectUpdate = useCallback((value: string[]) => {
         // move default versions to the end
         const prepareValue = (value: string[]) => {
             return value
                 .filter((item) => !DEFAULT_VERSIONS.includes(item))
                 .concat(DEFAULT_VERSIONS);
         };
-        this.setState((state) => ({
-            ...state,
-            showAll: false,
-            currentVersions: prepareValue(value),
-        }));
-    };
+        setCurrentVersions(prepareValue(value));
+    }, []);
 
-    prepareSelectOptions = () => {
-        const {visibleColumns} = this.props;
+    const prepareSelectOptions = useCallback(() => {
         const res = [];
         if (visibleColumns) {
             for (const column of visibleColumns) {
@@ -215,149 +231,101 @@ class VersionsSummary extends React.Component<Props, State> {
             }
         }
         return res;
-    };
+    }, [visibleColumns]);
 
     /*
      * If the user has not applied any sorting
      * for the first column -> sort the types
      * and append the base components to the end.
      */
-    prepareItems = (data: VersionSummaryRow[]) => {
-        const {sortOrder} = this.state;
-        if (!sortOrder) {
-            let newData: VersionSummaryRow[] = [];
-            if (!sortOrder && data && data.length) {
-                newData = [...data]
-                    .filter((item) => !BASE_COMPONENTS.includes(item.type))
-                    .sort((item1, item2) => item1.type.localeCompare(item2.type));
+    const prepareItems = useCallback(
+        (data: VersionSummaryRow[]) => {
+            if (!sortOrder) {
+                let newData: VersionSummaryRow[] = [];
+                if (data && data.length) {
+                    newData = [...data]
+                        .filter((item) => !BASE_COMPONENTS.includes(item.type))
+                        .sort((item1, item2) => item1.type.localeCompare(item2.type));
 
-                BASE_COMPONENTS.forEach((type) => {
-                    const item = data.find((item) => item.type === type);
-                    if (item) newData.push(item);
-                });
+                    BASE_COMPONENTS.forEach((type) => {
+                        const item = data.find((item) => item.type === type);
+                        if (item) newData.push(item);
+                    });
+                }
+                return newData;
             }
-            return newData;
-        }
-        // default components order from backennd -> banned, offline, online, ...
-        // we need -> ..., online, offline, banned
-        return data.reverse();
-    };
+            // default components order from backend -> banned, offline, online, ...
+            // we need -> ..., online, offline, banned
+            return data.reverse();
+        },
+        [sortOrder],
+    );
 
-    render() {
-        const {currentVersions, sortOrder} = this.state;
-        const {items, loading, loaded, cluster, checkedHideOffline} = this.props;
-        const monitoringLink = UIFactory.getVersionMonitoringLink(cluster);
+    const monitoringLink = UIFactory.getVersionMonitoringLink(cluster);
 
-        const columns = [
-            {
-                name: 'type',
-                render: this.renderType,
-                sortable: false,
-                header: this.renderHeader('type', 'Components'),
-                customStyle: () =>
-                    ({
-                        position: 'sticky',
-                        left: 0,
-                        backgroundColor: 'var(--g-color-base-background)',
-                        zIndex: 1,
-                        boxShadow: 'inset -1px 0 var(--dark-divider)',
-                        width: 'fit-content',
-                    }) as CSSProperties,
-            },
-            ...currentVersions.map((column) => this.makeColumnInfo({type: column, name: column})),
-        ];
+    const columns = [
+        {
+            name: 'type',
+            render: renderType,
+            sortable: false,
+            header: renderHeader('type', 'Components'),
+            customStyle: () =>
+                ({
+                    position: 'sticky',
+                    left: 0,
+                    backgroundColor: 'var(--g-color-base-background)',
+                    zIndex: 1,
+                    boxShadow: 'inset -1px 0 var(--dark-divider)',
+                    width: 'fit-content',
+                }) as CSSProperties,
+        },
+        ...currentVersions.map((column) => makeColumnInfo({type: column, name: column})),
+    ];
 
-        return (
-            <div className={block()}>
-                <div className={block('header-actions')}>
-                    <Checkbox
-                        title={'Hide offline'}
-                        content={'Hide offline'}
-                        defaultChecked={checkedHideOffline}
-                        onUpdate={this.handleHideOffline}
-                    />
-                    <Select
-                        className={block('versions-select')}
-                        options={this.prepareSelectOptions()}
-                        onUpdate={this.handleSelectUpdate}
-                        filterable
-                        // filter out default versions to prevent them from appearing in Select
-                        value={currentVersions.filter(
-                            (version) => !DEFAULT_VERSIONS.includes(version),
-                        )}
-                        renderFilter={this.renderSelectFilter}
-                        placeholder="Versions"
-                        multiple
-                    />
-                    {monitoringLink && (
-                        <Link
-                            url={formatByParams(monitoringLink.urlTemplate, {ytCluster: cluster})}
-                            target="_blank"
-                            className={block('monitoring-link')}
-                        >
-                            {monitoringLink.title || 'Monitoring'} <Icon awesome="external-link" />
-                        </Link>
-                    )}
-                </div>
-                <DataTableYT
-                    className={block('table')}
-                    loaded={loaded}
-                    loading={loading}
-                    data={this.prepareItems(items)}
-                    columns={columns}
-                    theme={'versions'}
-                    settings={SETTINGS}
-                    sortOrder={sortOrder}
+    console.log({columId: sortState?.column, order: sortState?.order === 'asc' ? 1 : -1});
+
+    return (
+        <div className={block()}>
+            <div className={block('header-actions')}>
+                <Checkbox
+                    title={'Hide offline'}
+                    content={'Hide offline'}
+                    defaultChecked={checkedHideOffline}
+                    onUpdate={handleHideOffline}
                 />
+                <Select
+                    className={block('versions-select')}
+                    options={prepareSelectOptions()}
+                    onUpdate={handleSelectUpdate}
+                    filterable
+                    // filter out default versions to prevent them from appearing in Select
+                    value={currentVersions.filter((version) => !DEFAULT_VERSIONS.includes(version))}
+                    defaultValue={[]}
+                    placeholder="Versions"
+                    multiple
+                />
+                {monitoringLink && (
+                    <Link
+                        url={formatByParams(monitoringLink.urlTemplate, {ytCluster: cluster})}
+                        target="_blank"
+                        className={block('monitoring-link')}
+                    >
+                        {monitoringLink.title || 'Monitoring'} <Icon awesome="external-link" />
+                    </Link>
+                )}
             </div>
-        );
-    }
-
-    onClick = (key: string, data: RenderData) => {
-        const {changeVersionStateTypeFilters} = this.props;
-        const {row} = data;
-        const isSpecial = isSpecialRow(key);
-        const version = !isSpecial ? key : undefined;
-        const type: string | undefined = row.type;
-
-        const state = key === 'error' ? 'error' : undefined;
-
-        if (type === 'online' || type === 'offline') {
-            changeVersionStateTypeFilters({version, state: state || type});
-        } else if (type === 'banned') {
-            changeVersionStateTypeFilters({version, banned: true});
-        } else {
-            changeVersionStateTypeFilters({version, type, state});
-        }
-    };
+            <DataTableYT
+                className={block('table')}
+                loaded={loaded}
+                loading={loading}
+                data={prepareItems(items)}
+                columns={columns}
+                theme={'versions'}
+                settings={SETTINGS}
+                sortOrder={{columId: sortState?.column, order: sortState?.order}}
+            />
+        </div>
+    );
 }
 
-const mapStateToProps = (state: RootState) => {
-    const {loading, loaded} = state.components.versionsV2;
-    const cluster = getCluster(state);
-
-    const sortState = getSummarySortState(state);
-
-    const visibleColumns = getVersions(state);
-    const items = getVersionsSummaryData(state);
-
-    return {
-        loading: loading as boolean,
-        loaded: loaded as boolean,
-        cluster,
-        items,
-        sortState,
-        checkedHideOffline: getHideOfflineValue(state),
-        visibleColumns,
-    };
-};
-
-const mapDispatchToProps = {
-    changeVersionStateTypeFilters,
-    setVersionsSummarySortState,
-    changeCheckedHideOffline,
-};
-
-const connector = connect(mapStateToProps, mapDispatchToProps);
-
-export default connector(VersionsSummary);
+export default VersionsSummary;
