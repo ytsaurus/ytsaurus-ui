@@ -25,7 +25,7 @@ export const createMainEntryStore = () => {
 
     listenForHistoryChange(store, history);
     (window as any).appBrowserHistory = history;
-    (window as any).store = store;
+    (window as any).store = Object.assign(store, {rootReducer, initialState: store.getState()});
     return {store, history};
 };
 
