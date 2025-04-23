@@ -33,9 +33,11 @@ function throwContextError() {
 export function PrometheusDashboardProvider({
     children,
     type,
+    timeRange,
 }: {
     children: React.ReactNode;
     type: PrometheusDashboardType;
+    timeRange?: {from: number; to?: number};
 }) {
     const dispatch = useDispatch();
     const {expandedPanels, timeRangeFilter} = useSelector(
@@ -61,8 +63,8 @@ export function PrometheusDashboardProvider({
     }, [expandedId, timeRangeFilter, type, dispatch]);
 
     React.useEffect(() => {
-        if (timeRangeFilter.from === undefined || timeRangeFilter.to === undefined) {
-            const {from, to} = calcFromTo(timeRangeFilter);
+        if (timeRangeFilter.from === undefined || timeRangeFilter.to === undefined || timeRange) {
+            const {from, to} = {...calcFromTo(timeRangeFilter), ...timeRange};
             dispatch(
                 prometheusDashboardSlice.actions.setTimeRangeFilter({
                     timeRangeFilter: {...timeRangeFilter, from, to},
