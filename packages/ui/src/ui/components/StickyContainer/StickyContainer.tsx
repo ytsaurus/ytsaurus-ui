@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {CSSProperties} from 'react';
 import cn from 'bem-cn-lite';
 import {HEADER_HEIGHT} from '../../constants';
 import {useIntersectionRatio} from '../../hooks/use-intersection';
@@ -26,8 +26,12 @@ export function StickyContainer({
 
     const sticky = intersectionRatio !== 1;
 
+    const style = React.useMemo(() => {
+        return {'--yt-sticky-container-top-offset': `${topOffset}px`} as CSSProperties;
+    }, [topOffset]);
+
     return (
-        <div className={block()}>
+        <div className={block()} style={style}>
             <div className={block('top')} ref={setElement} />
             {children({
                 sticky,
