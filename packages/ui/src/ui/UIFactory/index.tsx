@@ -167,6 +167,13 @@ export type BundleMonitoringProps = {
     tablet_cell_bundle: string;
     bundleData: any;
 };
+export type JobMonitoringProps = {
+    cluster: string;
+    operation: DetailedOperationSelector;
+    jobs: JobItem[];
+    from?: number;
+    to?: number;
+};
 
 export interface UIFactory {
     getClusterAppearance(cluster?: string): undefined | ClusterAppearance;
@@ -232,15 +239,8 @@ export interface UIFactory {
               title?: undefined;
           }
         | {urlTemplate: string; title?: string; component?: undefined};
-    getMonitorComponentForJob():
-        | undefined
-        | React.ComponentType<{
-              operation: DetailedOperationSelector;
-              jobs: JobItem[];
-              cluster: string;
-              from?: number;
-              to?: number;
-          }>;
+
+    getMonitorComponentForJob(): undefined | React.ComponentType<JobMonitoringProps>;
 
     getMonitoringComponentForChyt():
         | undefined
