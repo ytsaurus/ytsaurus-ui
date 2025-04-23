@@ -26,7 +26,8 @@ import {AccountsMonitorPrometheus} from '../pages/accounts/tabs/monitor/Accounts
 import {QueueMetricsPrometheus} from '../pages/navigation/tabs/Queue/views/QueueMetrics/QueueMetricsPrometheus/QueueMetricsPrometheus';
 import {ConsumerMetricsPrometheus} from '../pages/navigation/tabs/Consumer/views/ConsumerMetrics/ConsumerMetricsPrometheus/ConsumerMetricsPrometheus';
 import {ChytMonitoringPrometheus} from '../pages/chyt/ChytPageClique/ChytMonitoringPrometheus';
-import {SystemMonitoringPrometheus} from '../pages/system/SystemMonitoringPrometheus/SystemMonitoringPrometheus';
+import {SystemMonitoringPrometheusLazy} from '../pages/system/SystemMonitoringPrometheus/lazy';
+import {BundleMonitoringPrometheusLazy} from '../pages/tablet_cell_bundles/bundle/BundleMonitoringPrometheus/lazy';
 
 import {defaultAclApi} from '../utils/acl/external-acl-api';
 
@@ -92,7 +93,7 @@ export const defaultUIFactory: UIFactory = {
     },
     getSystemMonitoringTab() {
         if (getConfigData().allowPrometheusDashboards) {
-            return {component: SystemMonitoringPrometheus};
+            return {component: SystemMonitoringPrometheusLazy};
         }
         if (!uiSettings?.systemMonitoring) return undefined;
         return uiSettings.systemMonitoring;
@@ -114,6 +115,9 @@ export const defaultUIFactory: UIFactory = {
         return {urlTemplate, title};
     },
     getMonitoringForBundle() {
+        if (getConfigData().allowPrometheusDashboards) {
+            return {component: BundleMonitoringPrometheusLazy};
+        }
         if (!uiSettings.bundlesMonitoring?.urlTemplate) {
             return undefined;
         }
