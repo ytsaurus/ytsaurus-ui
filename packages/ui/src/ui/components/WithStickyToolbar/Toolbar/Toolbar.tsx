@@ -28,6 +28,7 @@ interface Props {
         width?: number;
     }>;
     children?: React.ReactNode;
+    marginTopSkip?: boolean;
 }
 
 export class Toolbar extends React.Component<Props> {
@@ -37,9 +38,9 @@ export class Toolbar extends React.Component<Props> {
     };
 
     render() {
-        const {className, children} = this.props;
+        const {className, children, marginTopSkip} = this.props;
         return (
-            <div className={block(null, className)}>
+            <div className={block({'margin-top-skip': marginTopSkip}, className)}>
                 <div className={block('container')}>{this.renderItems()}</div>
                 {children}
             </div>
