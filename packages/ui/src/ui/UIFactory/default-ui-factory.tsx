@@ -29,6 +29,7 @@ import {ChytMonitoringPrometheus} from '../pages/chyt/ChytPageClique/ChytMonitor
 import {SystemMonitoringPrometheusLazy} from '../pages/system/SystemMonitoringPrometheus/lazy';
 import {BundleMonitoringPrometheusLazy} from '../pages/tablet_cell_bundles/bundle/BundleMonitoringPrometheus/lazy';
 import {OperationMonitoringPrometheus} from '../pages/operations/OperationDetail/tabs/monitor/OperationMonitoringPrometheus';
+import {JobMonitoringPrometheus} from '../pages/operations/OperationDetail/tabs/JobsMonitor/JobMonitoringPrometheus/JobMonitoringPrometheus';
 
 import {defaultAclApi} from '../utils/acl/external-acl-api';
 
@@ -147,6 +148,9 @@ export const defaultUIFactory: UIFactory = {
         return {urlTemplate, title};
     },
     getMonitorComponentForJob() {
+        if (getConfigData().allowPrometheusDashboards) {
+            return JobMonitoringPrometheus;
+        }
         return undefined;
     },
     getMonitoringComponentForChyt() {
