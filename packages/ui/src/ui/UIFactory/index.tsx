@@ -162,6 +162,11 @@ export interface InlineSuggestionsApi {
 }
 
 export type ChytMonitoringProps = {cluster: string; alias: string};
+export type BundleMonitoringProps = {
+    cluster: string;
+    tablet_cell_bundle: string;
+    bundleData: any;
+};
 
 export interface UIFactory {
     getClusterAppearance(cluster?: string): undefined | ClusterAppearance;
@@ -214,11 +219,7 @@ export interface UIFactory {
     getMonitoringForBundle():
         | undefined
         | {
-              component: React.ComponentType<{
-                  cluster: string;
-                  tablet_cell_bundle: string;
-                  bundleData: any;
-              }>;
+              component: React.ComponentType<BundleMonitoringProps>;
               urlTemplate?: undefined;
               title?: undefined;
           }
