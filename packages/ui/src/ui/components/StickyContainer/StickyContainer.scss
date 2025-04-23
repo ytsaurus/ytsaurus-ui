@@ -23,6 +23,10 @@
             top: var(--yt-sticky-container-top-offset);
         }
 
+        &_top {
+            top: var(--yt-sticky-container-top-offset);
+        }
+
         &_shadow {
             box-shadow: 0 4px 4px -4px var(--opacity-background);
         }
