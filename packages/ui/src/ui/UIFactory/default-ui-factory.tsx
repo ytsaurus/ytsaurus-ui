@@ -28,6 +28,7 @@ import {ConsumerMetricsPrometheus} from '../pages/navigation/tabs/Consumer/views
 import {ChytMonitoringPrometheus} from '../pages/chyt/ChytPageClique/ChytMonitoringPrometheus';
 import {SystemMonitoringPrometheusLazy} from '../pages/system/SystemMonitoringPrometheus/lazy';
 import {BundleMonitoringPrometheusLazy} from '../pages/tablet_cell_bundles/bundle/BundleMonitoringPrometheus/lazy';
+import {OperationMonitoringPrometheus} from '../pages/operations/OperationDetail/tabs/monitor/OperationMonitoringPrometheus';
 
 import {defaultAclApi} from '../utils/acl/external-acl-api';
 
@@ -126,6 +127,10 @@ export const defaultUIFactory: UIFactory = {
         return {urlTemplate, title};
     },
     getMonitoringForOperation(params) {
+        if (getConfigData().allowPrometheusDashboards) {
+            return {component: OperationMonitoringPrometheus};
+        }
+
         if (!uiSettings.operationsMonitoring?.urlTemplate) {
             return undefined;
         }
