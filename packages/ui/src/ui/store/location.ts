@@ -80,8 +80,8 @@ export function mapLocationToState<T>(state: T, location: LocationWithState<T>) 
     return state;
 }
 
-function makeRoutedURLByPath(pathname: string, paramOverrides: any = {}) {
-    const {location} = stateToParams(getParamSetup(), getWindowStore().getState(), {
+export function makeRoutedURLByPath(pathname: string, paramOverrides: any = {}, rootState?: any) {
+    const {location} = stateToParams(getParamSetup(), rootState ?? getWindowStore().getState(), {
         pathname,
     });
     const {search} = location;
@@ -95,7 +95,7 @@ function makeRoutedURLByPath(pathname: string, paramOverrides: any = {}) {
     return `${pathname}${p}`;
 }
 
-export function makeRoutedURL(url: string, paramOverrides: any = {}) {
+export function makeRoutedURL(url: string, paramOverrides: any = {}, rootState?: any) {
     let path = url;
     const qIndex = url.indexOf('?');
     let overrides = paramOverrides;
@@ -106,7 +106,7 @@ export function makeRoutedURL(url: string, paramOverrides: any = {}) {
             overrides[key] = v;
         });
     }
-    const res = makeRoutedURLByPath(path, overrides);
+    const res = makeRoutedURLByPath(path, overrides, rootState);
     return res;
 }
 
