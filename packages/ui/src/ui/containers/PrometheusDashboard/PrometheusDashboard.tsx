@@ -1,4 +1,6 @@
 import React from 'react';
+import cn from 'bem-cn-lite';
+
 import {YTApiId, ytApiV3Id} from '../../rum/rum-wrap-api';
 
 import {YTError} from '../../../@types/types';
@@ -6,7 +8,8 @@ import {YTError} from '../../../@types/types';
 import {YTErrorBlock} from '../../components/Block/Block';
 import type {PrometheusDashboardType} from '../../store/reducers/prometheusDashboard/prometheusDahsboard';
 import {YTTimeline} from '../../components/common/YTTimeline';
-import WithStickyToolbar from '../../components/WithStickyToolbar/WithStickyToolbar';
+import {Toolbar} from '../../components/WithStickyToolbar/Toolbar/Toolbar';
+import {StickyContainer} from '../../components/StickyContainer/StickyContainer';
 import {YTErrors} from '../../rum/constants';
 
 import {
@@ -16,27 +19,36 @@ import {
 import {PrometheusDashKit} from './PrometheusDashKit';
 import {DashboardInfo} from './types';
 
+import './PrometheusDashboard.scss';
+
+const block = cn('yt-prometheus-dashboard');
+
 export type PrometheusDashboardProps = {
+    toolbarStickyTop?: number;
     type: PrometheusDashboardType;
     params?: Record<string, {toString(): string}>;
 };
 
-export const PrometheusDashboard = React.memo(function ({type, params}: PrometheusDashboardProps) {
+export const PrometheusDashboard = React.memo(function ({
+    type,
+    params,
+    toolbarStickyTop,
+}: PrometheusDashboardProps) {
     const {layout, error} = useLoadedLayout({type, params});
     return !params ? null : (
         <PrometheusDashboardProvider type={type}>
-            <WithStickyToolbar
-                toolbar={<PrometheusTimeline />}
-                content={
+            <StickyContainer topOffset={toolbarStickyTop}>
+                {({topStickyClassName}) => (
                     <React.Fragment>
+                        <PrometheusTimeline className={topStickyClassName} />
                         {error && <YTErrorBlock error={error} />}
                         <MissingParametersWarning templating={layout?.templating} params={params} />
                         {layout?.panels === undefined ? null : (
                             <PrometheusDashKit panels={layout.panels} params={params} />
                         )}
                     </React.Fragment>
-                }
-            />
+                )}
+            </StickyContainer>
         </PrometheusDashboardProvider>
     );
 });
@@ -83,25 +95,36 @@ function makeNotImplementedLayout({type, params}: PrometheusDashboardProps) {
                     ].join('\n'),
                     mode: 'markdown' as const,
                 },
-                gridPos: {x: 0, y: 0, w: 24, h: 7},
+                gridPos: {x: 0, y: 0, w: 24, h: 27},
             },
         ],
     };
 }
 
-function PrometheusTimeline() {
+function PrometheusTimeline({className}: {className?: string}) {
     const {
         timeRangeFilter: {from, to, shortcutValue},
         setTimeRangeFilter,
     } = usePrometheusDashboardContext();
 
     return (
-        <YTTimeline
-            from={from!}
-            to={to!}
-            shortcut={shortcutValue}
-            onUpdate={setTimeRangeFilter}
-            hasRuler={true}
+        <Toolbar
+            className={block('toolbar', className)}
+            itemsToWrap={[
+                {
+                    node: (
+                        <YTTimeline
+                            className={block('timeline')}
+                            from={from!}
+                            to={to!}
+                            shortcut={shortcutValue}
+                            onUpdate={setTimeRangeFilter}
+                            hasRuler={true}
+                        />
+                    ),
+                    growable: true,
+                },
+            ]}
         />
     );
 }
