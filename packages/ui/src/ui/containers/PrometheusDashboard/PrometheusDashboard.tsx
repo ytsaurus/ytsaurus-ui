@@ -27,6 +27,7 @@ export type PrometheusDashboardProps = {
     toolbarStickyTop?: number;
     type: PrometheusDashboardType;
     params?: Record<string, {toString(): string}>;
+    timeRange?: {from: number; to?: number};
 };
 
 export const PrometheusDashboard = React.memo(function ({
