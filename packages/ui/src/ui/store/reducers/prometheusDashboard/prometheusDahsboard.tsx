@@ -18,6 +18,7 @@ export type PrometheusDashboardType =
     | 'cluster-resources'
     | 'master-global'
     | 'master-local'
+    | 'operation'
     | 'queue-metrics'
     | 'queue-consumer-metrics'
     | 'scheduler-internal'
