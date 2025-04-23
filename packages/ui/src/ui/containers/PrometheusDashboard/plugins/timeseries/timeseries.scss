@@ -8,7 +8,7 @@
             100vh - $tabsWithMarginHeight - var(--app-header-height, 0px) - var(
                     --app-footer-height,
                     0px
-                )
+                ) - var(--yt-sticky-container-top-offset, 0px)
         );
     }
 
