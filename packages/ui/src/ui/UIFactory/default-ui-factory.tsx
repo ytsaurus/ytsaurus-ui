@@ -30,6 +30,7 @@ import {SystemMonitoringPrometheusLazy} from '../pages/system/SystemMonitoringPr
 import {BundleMonitoringPrometheusLazy} from '../pages/tablet_cell_bundles/bundle/BundleMonitoringPrometheus/lazy';
 import {OperationMonitoringPrometheus} from '../pages/operations/OperationDetail/tabs/monitor/OperationMonitoringPrometheus';
 import {JobMonitoringPrometheus} from '../pages/operations/OperationDetail/tabs/JobsMonitor/JobMonitoringPrometheus/JobMonitoringPrometheus';
+import {NavigationFlowMonitoringPrometheus} from '../pages/navigation/tabs/Flow/FlowMonitoringPrometheus/FlowMonitoringPrometheus';
 
 import {defaultAclApi} from '../utils/acl/external-acl-api';
 
@@ -166,6 +167,10 @@ export const defaultUIFactory: UIFactory = {
         return {urlTemplate, title};
     },
     getMonitoringComponentForNavigationFlow() {
+        if (getConfigData().allowPrometheusDashboards) {
+            return {component: NavigationFlowMonitoringPrometheus};
+        }
+
         const {urlTemplate, title} = uiSettings.navigationFlowMonitoring ?? {};
         if (!urlTemplate) {
             return undefined;
