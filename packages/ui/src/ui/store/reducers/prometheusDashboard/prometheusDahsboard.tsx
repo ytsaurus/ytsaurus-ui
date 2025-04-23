@@ -16,6 +16,7 @@ export type PrometheusDashboardType =
     | 'bundle-ui-rpc-proxy'
     | 'chyt-monitoring'
     | 'cluster-resources'
+    | 'job'
     | 'master-global'
     | 'master-local'
     | 'operation'
