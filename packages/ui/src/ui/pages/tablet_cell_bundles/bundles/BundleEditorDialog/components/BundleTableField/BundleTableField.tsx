@@ -21,7 +21,8 @@ interface BundleData {
     type: string;
     memory: string;
     vcpu: string;
-    net: string;
+    net: string; // deprecated
+    net_bytes?: string;
     disabled?: boolean;
     initialData: BundleResourceGuarantee;
     [k: string]: any;

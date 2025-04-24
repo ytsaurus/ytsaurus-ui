@@ -139,21 +139,16 @@ export const getInitialFormValues = (
     };
 };
 
-function formatNetwork(value?: number) {
-    const formatted = typeof value !== 'undefined' ? (value / 1000e6).toPrecision(2) : 0;
-    return `${formatted} Gbit RX/TX`;
-}
-
 export const createConfigurationList = (
     data: BundleDefaultConfigData['rpc_proxy_sizes'] | BundleDefaultConfigData['tablet_node_sizes'],
 ) => {
     return Object.entries(data).map(([type, itemData]) => {
-        const {net, vcpu, memory} = itemData.resource_guarantee;
+        const {net, net_bytes, vcpu, memory} = itemData.resource_guarantee;
         return {
             id: type,
             type,
             memory: hammer.format['Bytes'](memory),
-            net: formatNetwork(net),
+            net: hammer.format['BytesPerSecond'](net_bytes ? net_bytes : net / 8),
             vcpu: hammer.format['vCores'](vcpu),
             initialData: {...itemData.resource_guarantee, type},
         };
