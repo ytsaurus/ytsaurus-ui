@@ -1,5 +1,5 @@
-import React, {MouseEvent} from 'react';
-import {ConnectedProps, connect, useDispatch} from 'react-redux';
+import React from 'react';
+import {ConnectedProps, connect} from 'react-redux';
 import unipika from '../../../../../common/thor/unipika';
 import {compose} from 'redux';
 import cn from 'bem-cn-lite';
@@ -47,6 +47,8 @@ import UIFactory from '../../../../../UIFactory';
 import {makeDirectDownloadPath} from '../../../../../utils/navigation';
 import {RootState} from '../../../../../store/reducers';
 import {FIX_MY_TYPE} from '../../../../../types';
+import {ConfirmButton} from './ConfirmButton';
+import {ThunkDispatch} from 'redux-thunk';
 
 const block = cn('table-download-manager');
 const messageBlock = cn('elements-message');
@@ -64,15 +66,13 @@ function checkExcelExporter(cluster: string) {
         .catch(() => false);
 }
 
-type Error =
-    | {
-          inner_errors: string[];
-          message: string;
-      }
-    | undefined;
-
-type ReduxProps = Omit<ConnectedProps<typeof connector>, 'dispatch'>;
-type Props = ReduxProps & WithVisibleProps & {className?: string};
+type ReduxProps = Omit<ConnectedProps<typeof connector>, 'downloadFile'>;
+type Props = ReduxProps &
+    WithVisibleProps & {
+        className?: string;
+        downloadFile: (url: string, filename: string) => Promise<void>;
+        downloadToClipboard?: (url: string, filename: string) => Promise<void>;
+    };
 
 type State = {
     format: 'dsv' | 'schemaful_dsv' | 'yamr' | 'yson' | 'json' | 'excel';
@@ -884,15 +884,38 @@ export class DownloadManager extends React.Component<Props, State> {
         );
     }
 
+    renderModalCopyButton() {
+        if (!this.props.downloadToClipboard) return null;
+
+        const {filename} = this.state;
+        const {url, error} = this.getDownloadLink();
+
+        return (
+            <ConfirmButton
+                filename={filename}
+                url={url}
+                title="Download to clipboard"
+                disabled={Boolean(error)}
+                qa="download-to-clipboard-static-table"
+                onClick={this.props.downloadToClipboard}
+            />
+        );
+    }
+
     renderModalConfirmButton(classNameConfirm: string) {
         const {filename} = this.state;
         const {url, error} = this.getDownloadLink();
+
         return (
             <ConfirmButton
                 className={classNameConfirm}
                 filename={filename}
                 url={url}
-                error={error}
+                title="Download"
+                disabled={Boolean(error)}
+                view="action"
+                qa="download-static-table"
+                onClick={this.props.downloadFile}
             />
         );
     }
@@ -929,39 +952,13 @@ export class DownloadManager extends React.Component<Props, State> {
                         onCancel={handleClose}
                         confirmText="Download"
                         content={this.renderContent()}
+                        footerContent={this.renderModalCopyButton.bind(this)()}
                         renderCustomConfirm={this.renderModalConfirmButton.bind(this)}
                     />
                 )}
             </div>
         );
     }
-}
-
-function ConfirmButton(props: {className?: string; filename: string; url: string; error: Error}) {
-    const {url, className, filename, error} = props;
-
-    const dispatch = useDispatch();
-
-    const handleClick = (e: MouseEvent) => {
-        e.preventDefault();
-        dispatch(downloadFile(url, filename));
-    };
-
-    return (
-        <Button
-            size="m"
-            view="action"
-            className={className}
-            title="Download"
-            target="_blank"
-            onClick={handleClick}
-            href={url}
-            disabled={Boolean(error)}
-            qa="download-static-table"
-        >
-            Download
-        </Button>
-    );
 }
 
 const mapStateToProps = (state: RootState) => {
@@ -999,5 +996,10 @@ const mapStateToProps = (state: RootState) => {
         transaction_id,
     };
 };
-const connector = connect(mapStateToProps);
+
+const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, any>) => ({
+    downloadFile: (filename: string, url: string) => dispatch(downloadFile(filename, url)),
+});
+
+const connector = connect(mapStateToProps, mapDispatchToProps);
 export default compose(connector, withVisible)(DownloadManager);
