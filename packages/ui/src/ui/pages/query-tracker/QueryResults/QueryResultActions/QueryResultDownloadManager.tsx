@@ -10,6 +10,7 @@ import {RootState} from '../../../../store/reducers';
 import {useThunkDispatch} from '../../../../store/thunkDispatch';
 import {FIX_MY_TYPE} from '../../../../../@types/types';
 import {getExportTableBaseUrl} from '../../../../config';
+import {downloadFile} from '../../../../store/actions/navigation/content/table/download-manager';
 
 /**
  * TODO: get rid of inheritance from DownloadManager
@@ -97,6 +98,15 @@ export const QueryResultDownloadManager = React.memo(function QueryResultDownloa
         }));
     }, [allColumns, visibleColumns]);
     const [opened, setOpened] = useState(false);
+
+    const handleDownload = async (url: string, filename: string) => {
+        await dispatch(downloadFile(url, filename));
+    };
+
+    const handleCopy = async (url: string, filename: string) => {
+        await dispatch(downloadFile(url, filename, true));
+    };
+
     return (
         <QueryResultTableDownloadManager
             {...{
@@ -124,6 +134,8 @@ export const QueryResultDownloadManager = React.memo(function QueryResultDownloa
             handleClose={() => setOpened(false)}
             offsetValue={startRow}
             isSchematicTable={true}
+            downloadFile={handleDownload}
+            downloadToClipboard={handleCopy}
         />
     );
 });
