@@ -16,6 +16,7 @@ import {useRumMeasureStop} from '../../../rum/RumUiContext';
 import {getOperationsListIsFinalState} from '../../../store/selectors/operations/operations-list';
 import {getCluster} from '../../../store/selectors/global';
 import {getListRequestParameters} from '../../../store/actions/operations/utils';
+import {StickyContainer} from '../../../components/StickyContainer/StickyContainer';
 
 const block = cn('operations-list');
 
@@ -93,15 +94,19 @@ class OperationsList extends Component {
         const {hasError, inDashboard, timeRange} = this.props;
 
         return (
-            <div className={block()}>
-                <OperationListUpdater timeRange={timeRange} />
-                {inDashboard && (
-                    <div className={cn('elements-heading')({size: 'l'})}>Operations</div>
+            <StickyContainer>
+                {({topStickyClassName}) => (
+                    <div className={block()}>
+                        <OperationListUpdater timeRange={timeRange} />
+                        {inDashboard && (
+                            <div className={cn('elements-heading')({size: 'l'})}>Operations</div>
+                        )}
+                        <OperationsListToolbar className={topStickyClassName} />
+                        {hasError && this.renderError()}
+                        {!this.firstTimeError() && <OperationsListTable />}
+                    </div>
                 )}
-                <OperationsListToolbar />
-                {hasError && this.renderError()}
-                {!this.firstTimeError() && <OperationsListTable />}
-            </div>
+            </StickyContainer>
         );
     }
 }
