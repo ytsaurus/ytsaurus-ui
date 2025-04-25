@@ -15,8 +15,8 @@ import {
 } from '../../module/queryNavigation/actions';
 import './NodeList.scss';
 import cn from 'bem-cn-lite';
-import {isFolderNode} from '../helpers/isFolderNode';
-import {isTableNode} from '../helpers/isTableNode';
+import {isFolderNode} from '../../../../utils/navigation/isFolderNode';
+import {isTableNode} from '../../../../utils/navigation/isTableNode';
 import {useMonaco} from '../../hooks/useMonaco';
 import {insertTextWhereCursor} from '../helpers/insertTextWhereCursor';
 import {getQueryEngine, isQueryDraftEditted} from '../../module/query/selectors';
