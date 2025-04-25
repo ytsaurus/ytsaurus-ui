@@ -65,7 +65,6 @@ import Loader from '../../../../components/Loader/Loader';
 
 import {SubjectCard} from '../../../../components/SubjectLink/SubjectLink';
 import {Secondary, Warning} from '../../../../components/Text/Text';
-import PathView from '../../../../containers/PathFragment/PathFragment';
 import {getIconNameForType} from '../../../../utils/navigation/path-editor';
 import {OrderType} from '../../../../utils/sort-helpers';
 import {NoContent} from '../../../../components/NoContent/NoContent';
@@ -83,6 +82,10 @@ import {useUpdater} from '../../../../hooks/use-updater';
 import './AccountUsageDetails.scss';
 import {AccountActionsField, AccountRequestData} from './AccountActionsField';
 import {DetailTableCell} from './DetailTableCell';
+import {Page} from '../../../../constants/index';
+import Link from '../../../../components/Link/Link';
+import PathView from '../../../../containers/PathFragment/PathFragment';
+import {isFolderNode} from '../../../query-tracker/Navigation/helpers/isFolderNode';
 
 const TABLE_SETTINGS: Settings = {
     displayIndices: false,
@@ -193,9 +196,18 @@ function useColumnsByPreset(mediums: Array<string>) {
             header: <PathHeader />,
             sortable: false,
             render(item) {
-                const {path} = item.row;
+                const {path, type} = item.row;
                 if (!path) {
                     return <Warning>Permission denied</Warning>;
+                }
+
+                if (isFolderNode(type)) {
+                    const url = `/${cluster}/${Page.NAVIGATION}?path=${path}`;
+                    return (
+                        <Link url={url} title={url} theme="primary">
+                            {path}
+                        </Link>
+                    );
                 }
 
                 return <PathView path={path} lastFragmentOnly={viewType === 'tree'} />;
