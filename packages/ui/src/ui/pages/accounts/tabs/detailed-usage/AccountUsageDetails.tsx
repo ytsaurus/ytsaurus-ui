@@ -85,7 +85,7 @@ import {DetailTableCell} from './DetailTableCell';
 import {Page} from '../../../../constants/index';
 import Link from '../../../../components/Link/Link';
 import PathView from '../../../../containers/PathFragment/PathFragment';
-import {isFolderNode} from '../../../query-tracker/Navigation/helpers/isFolderNode';
+import {isFolderNode} from '../../../../utils/navigation/isFolderNode';
 
 const TABLE_SETTINGS: Settings = {
     displayIndices: false,
