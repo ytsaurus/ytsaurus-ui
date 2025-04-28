@@ -100,7 +100,7 @@ jobs:
           npm run e2e:localmode:ui
       - name: Upload local test-results
         uses: actions/upload-artifact@v4
-        if: failure()
+        if: always()
         with:
           name: local_test-results
           path: packages/ui/tests/playwright-report/
@@ -139,7 +139,7 @@ jobs:
           npm run e2e:localmode:remote
       - name: Upload local test-results
         uses: actions/upload-artifact@v4
-        if: failure()
+        if: always()
         with:
           name: remote_test-results
           path: packages/ui/tests/playwright-report/
@@ -186,17 +186,78 @@ jobs:
           npm run e2e:localmode:screenshots
       - name: Upload local test-results
         uses: actions/upload-artifact@v4
-        if: failure()
+        if: always()
         with:
           name: screenshots_test-results
           path: packages/ui/tests/playwright-report/
           retention-days: 7
 
+  publish-and-comment:
+    name: Publish results and create comment
+    needs:
+      - start-vm
+      - e2e-screenshots
+    if: ${{ always() }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download Artifacts
+        uses: actions/download-artifact@v4
+        continue-on-error: true
+        with:
+          name: local_test-results
+          path: ./local
+      - name: Download Artifacts
+        uses: actions/download-artifact@v4
+        continue-on-error: true
+        with:
+          name: remote_test-results
+          path: ./remote
+      - name: Download Artifacts
+        uses: actions/download-artifact@v4
+        continue-on-error: true
+        with:
+          name: screenshots_test-results
+          path: ./screenshots
+      - name: Install AWS CLI
+        uses: unfor19/install-aws-cli-action@v1
+        with:
+          version: 2.22.35
+          arch: amd64
+      - name: Upload to S3 and Prepare comment
+        id: upload_and_prepare
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.UI_S3_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.UI_S3_SECRET_KEY }}
+          REPORTS: 'local remote screenshots'
+        run: |
+            message=""
+            for i in $REPORTS
+            do
+              if [ -d "./$i" ]; then
+                aws s3 cp ./$i s3://playwright-reports/${{ github.event.pull_request.number }}/$i/ --endpoint-url=https://ytsaurus-ui-test-results.s3-private.mds.yandex.net --recursive
+                message="${message}[E2E-$i report](https://ytsaurus-ui-test-results.s3-website.mds.yandex.net/playwright-reports/${{ github.event.pull_request.number }}/$i/index.html) is ready.\n"
+              fi
+            done
+
+            if [ -z "$message" ]; then
+              message="No test reports are available for this run."
+            fi
+
+            echo "message<<EOF" >> $GITHUB_OUTPUT
+            echo -e "$message" >> $GITHUB_OUTPUT
+            echo "EOF" >> $GITHUB_OUTPUT
+        shell: bash
+      - name: Create Comment
+        uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          message: ${{ steps.upload_and_prepare.outputs.message }}
+
   stop-vm:
     name: Stop VM
     needs:
       - start-vm
-      - e2e-screenshots
+      - publish-and-comment
     runs-on: ubuntu-latest
     if: ${{ always() }}
     steps:
@@ -208,3 +269,4 @@ jobs:
           github-token: ${{ secrets.GH_PERSONAL_ACCESS_TOKEN }}
           label: ${{ needs.start-vm.outputs.label }}
           instance-id: ${{ needs.start-vm.outputs.instance-id }}
+
