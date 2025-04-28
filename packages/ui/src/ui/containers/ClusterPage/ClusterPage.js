@@ -31,6 +31,8 @@ import {YTErrorBlock} from '../../components/Error/Error';
 import {HandleMaintenance} from '../../containers/MaintenancePage/HandleMaintenance';
 import PreloadError from '../../containers/PreloadError/PreloadError';
 
+import {ScrollableElementContext} from '../../hooks/use-scrollable-element';
+
 import {LOADING_STATUS, Page, SPLIT_PANE_ID} from '../../constants/index';
 import {joinMenuItemsAction, splitMenuItemsAction, trackVisit} from '../../store/actions/menu';
 import {setSetting} from '../../store/actions/settings';
@@ -292,9 +294,13 @@ class ClusterPage extends Component {
                             width: this.state.width,
                         })}
                     >
-                        <HandleMaintenance cluster={cluster}>
-                            {this.renderContent(clusterConfig)}
-                        </HandleMaintenance>
+                        <ScrollableElementContext.Provider
+                            value={splitScreen.isSplit ? this.contentPaneRef.current : undefined}
+                        >
+                            <HandleMaintenance cluster={cluster}>
+                                {this.renderContent(clusterConfig)}
+                            </HandleMaintenance>
+                        </ScrollableElementContext.Provider>
                     </div>
 
                     {null}
