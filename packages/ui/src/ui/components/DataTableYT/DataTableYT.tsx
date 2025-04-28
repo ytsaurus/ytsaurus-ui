@@ -12,6 +12,7 @@ import {
     STICKY_TOOLBAR_BOTTOM,
 } from '../../components/WithStickyToolbar/WithStickyToolbar';
 import {HEADER_HEIGHT} from '../../constants';
+import {useScrollableElementContenxt} from '../../hooks/use-scrollable-element';
 
 import './DataTableYT.scss';
 
@@ -55,7 +56,7 @@ export const DATA_TABLE_YT_SETTINGS_UNDER_TOOLBAR_DOUBLE_HEIGHT: Settings = {
     stickyTop: STICKY_DOUBLE_TOOLBAR_BOTTOM,
 };
 
-export default class DataTableYT<T> extends React.Component<DataTableYtProps<T>> {
+class DataTableYT<T> extends React.Component<DataTableYtProps<T>> {
     private dataTable = React.createRef<DataTable<T>>();
 
     isEmpty() {
@@ -128,4 +129,20 @@ export default class DataTableYT<T> extends React.Component<DataTableYtProps<T>>
             </div>
         );
     }
+}
+
+export default function DataTableYTWithScroll<T>({settings, ...props}: DataTableYtProps<T>) {
+    const scrollableElement = useScrollableElementContenxt();
+
+    const settingsWithScrollableElement = React.useMemo(() => {
+        return Boolean(scrollableElement) && settings?.dynamicRender
+            ? ({
+                  ...settings,
+                  dynamicRenderScrollParentGetter: () =>
+                      scrollableElement ?? (document.body as any),
+              } as typeof settings)
+            : settings;
+    }, [settings, scrollableElement]);
+
+    return <DataTableYT<T> {...props} settings={settingsWithScrollableElement} />;
 }
