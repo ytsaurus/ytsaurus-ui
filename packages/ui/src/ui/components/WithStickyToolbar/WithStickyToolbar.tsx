@@ -13,14 +13,6 @@ const block = cn('with-sticky-toolbar');
 export const STICKY_TOOLBAR_BOTTOM = HEADER_HEIGHT + TOOLBAR_COMPONENT_HEIGHT + 5;
 export const STICKY_DOUBLE_TOOLBAR_BOTTOM = HEADER_HEIGHT + TOOLBAR_COMPONENT_HEIGHT * 2 + 5;
 
-const SPACER_STYLE = {
-    height: TOOLBAR_COMPONENT_HEIGHT,
-};
-
-const SPACER_STYLE_X2 = {
-    height: TOOLBAR_COMPONENT_HEIGHT * 2,
-};
-
 WithStickyToolbar.propTypes = {
     className: PropTypes.string,
 
@@ -69,10 +61,6 @@ export default function WithStickyToolbar({
     );
 }
 
-function StickySpacer({doubleHeight}: {doubleHeight?: boolean}) {
-    return <div style={doubleHeight ? SPACER_STYLE_X2 : SPACER_STYLE} />;
-}
-
 interface ToolbarWrapperProps {
     isSticky?: boolean;
     toolbar: React.ReactNode;
@@ -93,12 +81,6 @@ function ToolbarWrapperImpl(props: ToolbarWrapperProps) {
             >
                 {toolbar}
             </div>
-            <div
-                className={block('toolbar-spacer', {
-                    sticky: isSticky,
-                    x2: doubleHeight,
-                })}
-            />
         </React.Fragment>
     );
 }

@@ -1,19 +1,23 @@
-import React from 'react';
+import React, {CSSProperties} from 'react';
 import cn from 'bem-cn-lite';
-import {HEADER_HEIGHT} from '../../constants';
 import {useIntersectionRatio} from '../../hooks/use-intersection';
+import {HEADER_HEIGHT} from '../../constants';
 
 import './StickyContainer.scss';
 
 const block = cn('yt-sticky-container');
 
-export function StickyContainer({
-    topOffset = HEADER_HEIGHT,
-    children,
-}: {
+export type StickyContainerProps = {
+    className?: string;
     topOffset?: number;
     children: (params: {sticky: boolean; topStickyClassName?: string}) => React.ReactNode;
-}) {
+};
+
+export function StickyContainer({
+    className,
+    topOffset = HEADER_HEIGHT,
+    children,
+}: StickyContainerProps) {
     const [element, setElement] = React.useState<HTMLDivElement | null>(null);
 
     const intersectionRatio = useIntersectionRatio({
@@ -26,12 +30,14 @@ export function StickyContainer({
 
     const sticky = intersectionRatio !== 1;
 
+    const style = {'--yt-sticky-container-top-offset': `${topOffset}px`} as CSSProperties;
+
     return (
-        <div className={block()}>
+        <div className={block(null, className)} style={style}>
             <div className={block('top')} ref={setElement} />
             {children({
                 sticky,
-                topStickyClassName: sticky ? block('sticky', {top: true}) : undefined,
+                topStickyClassName: sticky ? block('sticky') : undefined,
             })}
         </div>
     );
