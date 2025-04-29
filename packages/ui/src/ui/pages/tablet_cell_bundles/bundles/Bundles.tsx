@@ -27,6 +27,7 @@ export default function Bundles() {
     return (
         <ErrorBoundary>
             <WithStickyToolbar
+                hideToolbarShadow
                 toolbar={<BundlesTableInstruments />}
                 content={<BundlesTable copyHostListToClipboard={handleCopyHostListToClipboard} />}
             />

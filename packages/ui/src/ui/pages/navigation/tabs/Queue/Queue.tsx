@@ -5,6 +5,7 @@ import {Alerts} from '../../../../components/Alerts/Alerts';
 import {YTErrorBlock} from '../../../../components/Block/Block';
 import ErrorBoundary from '../../../../components/ErrorBoundary/ErrorBoundary';
 import WithStickyToolbar from '../../../../components/WithStickyToolbar/WithStickyToolbar';
+import {Toolbar} from '../../../../components/WithStickyToolbar/Toolbar/Toolbar';
 import {QUEUE_MODE} from '../../../../constants/navigation/tabs/queue';
 import {loadQueueStatus} from '../../../../store/actions/navigation/tabs/queue/status';
 import type {RootState} from '../../../../store/reducers';
@@ -19,7 +20,7 @@ import {
 } from '../../../../store/selectors/navigation/tabs/queue';
 
 import Meta from './Meta/Meta';
-import Toolbar from './Toolbar/Toolbar';
+import QueueToolbar from './Toolbar/Toolbar';
 import QueueMetrics from './views/QueueMetrics/QueueMetrics';
 import Consumers from './views/Consumers/Consumers';
 import ConsumersExtraControls from './views/Consumers/ConsumersExtraControls';
@@ -77,7 +78,16 @@ const Queue: React.VFC<PropsFromRedux> = ({
                 writeDataWeightRate={writeDataWeightRate}
                 writeRowCountRate={writeRowCountRate}
             />
-            <WithStickyToolbar toolbar={<Toolbar extras={ExtraControls} />} content={<View />} />
+            <WithStickyToolbar
+                toolbar={
+                    <Toolbar
+                        itemsToWrap={[
+                            {node: <QueueToolbar extras={ExtraControls} />, growable: true},
+                        ]}
+                    />
+                }
+                content={<View />}
+            />
         </ErrorBoundary>
     );
 };

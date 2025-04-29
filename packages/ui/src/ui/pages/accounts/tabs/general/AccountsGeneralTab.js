@@ -301,7 +301,6 @@ class AccountsGeneralTab extends Component {
                         onUpdate={(vals) => this.props.changeContentFilter(vals[0])}
                         label="Mode:"
                         qa="accounts-content-mode"
-                        disablePortal
                     />
                 </div>
                 <div className={b('content-mode-subtype', 'elements-toolbar__component')}>
@@ -313,7 +312,6 @@ class AccountsGeneralTab extends Component {
                             value={[activeMediumFilter]}
                             onUpdate={(vals) => this.props.changeMediumFilter(vals[0])}
                             label="Medium:"
-                            disablePortal
                         />
                     )}
                 </div>
@@ -775,6 +773,7 @@ class AccountsGeneralTab extends Component {
                 <div className={b()}>
                     {viewContext !== DASHBOARD_VIEW_CONTEXT && this.renderAccountsPageHeader()}
                     <WithStickyToolbar
+                        hideToolbarShadow
                         toolbar={this.renderFilters()}
                         content={
                             <div>

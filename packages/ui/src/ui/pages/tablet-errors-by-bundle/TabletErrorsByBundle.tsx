@@ -42,6 +42,7 @@ export function TabletErrorsByBundle({bundle}: {bundle: string}) {
 
     return (
         <WithStickyToolbar
+            hideToolbarShadow
             className={block()}
             toolbar={<TabletErrorsByBundleToolbar bundle={bundle} className={block('toolbar')} />}
             doubleHeight={true}

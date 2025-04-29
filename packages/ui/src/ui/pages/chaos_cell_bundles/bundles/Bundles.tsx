@@ -27,6 +27,7 @@ export default function ChaosCellBundles() {
     return (
         <ErrorBoundary>
             <WithStickyToolbar
+                hideToolbarShadow
                 toolbar={<BundlesTableInstruments />}
                 content={<BundlesTable copyHostListToClipboard={handleCopyHostListToClipboard} />}
             />

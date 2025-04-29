@@ -1,18 +1,22 @@
+.g-root {
+    --yt-sticky-container-top-offset: var(--app-header-height, '0px');
+}
+
 .yt-sticky-container {
     &__sticky {
         position: sticky;
+        top: var(--yt-sticky-container-top-offset);
         z-index: 1;
 
         background-color: var(--main-background);
-        box-shadow: 0 4px 4px -4px var(--opacity-background);
 
         width: calc(100vw - var(--gn-aside-header-size));
         margin-left: -20px;
         padding-left: 20px;
         padding-right: 20px;
 
-        &_top {
-            top: var(--app-header-height);
+        &_shadow {
+            box-shadow: 0 4px 4px -4px var(--opacity-background);
         }
     }
 }

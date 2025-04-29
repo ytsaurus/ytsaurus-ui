@@ -24,10 +24,6 @@ export const getSettingsPagesPinned = createSelector(
     },
 );
 
-export const getSettingsRegularUserUI = createSelector(makeGetSetting, (getSetting) => {
-    return getSetting(SettingName.DEVELOPMENT.REGULAR_USER_UI, NAMESPACES.DEVELOPMENT) || false;
-});
-
 export const getSettingsQueryTrackerNewGraphType = createSelector(getSettingsData, (data) => {
     return data['global::queryTracker::useNewGraphView'] || false;
 });

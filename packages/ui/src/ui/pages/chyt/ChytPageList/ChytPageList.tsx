@@ -18,5 +18,11 @@ export function ChytPageList() {
 
     useUpdater(update);
 
-    return <WithStickyToolbar toolbar={<ChytPageListToolbar />} content={<ChytPageListTable />} />;
+    return (
+        <WithStickyToolbar
+            hideToolbarShadow
+            toolbar={<ChytPageListToolbar />}
+            content={<ChytPageListTable />}
+        />
+    );
 }

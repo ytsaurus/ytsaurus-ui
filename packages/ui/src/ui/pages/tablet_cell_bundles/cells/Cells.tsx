@@ -8,7 +8,11 @@ import CellsTable from '../../../pages/tablet_cell_bundles/cells/CellsTable.conn
 export function BundleCells() {
     return (
         <ErrorBoundary>
-            <WithStickyToolbar toolbar={<CellsInstruments />} content={<CellsTable />} />
+            <WithStickyToolbar
+                hideToolbarShadow
+                toolbar={<CellsInstruments />}
+                content={<CellsTable />}
+            />
         </ErrorBoundary>
     );
 }
