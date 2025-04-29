@@ -11,6 +11,7 @@ export default function GroupsPage() {
     return (
         <div className={block(null, 'elements-main-section')}>
             <WithStickyToolbar
+                hideToolbarShadow
                 className="elements-section"
                 toolbar={<GroupsPageFilters />}
                 content={<GroupsPageTable />}

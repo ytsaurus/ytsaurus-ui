@@ -2,7 +2,7 @@ import {createSelector} from 'reselect';
 
 import {YT} from '../../../config/yt-config';
 import {RootState} from '../../../store/reducers';
-import {getSettingsRegularUserUI} from '../../../store/selectors/settings/settings-ts';
+import {getSettingsData} from '../../../store/selectors/settings/settings-base';
 
 import {getCurrentUserName} from './username';
 
@@ -16,6 +16,10 @@ export const isDeveloperOrWatchMen = createSelector(
         return YT.isLocalCluster || UIFactory.isWatchMen(login) || isDeveloper;
     },
 );
+
+export const getSettingsRegularUserUI = (state: RootState) => {
+    return getSettingsData(state)['global::development::regularUserUI'];
+};
 
 export const isDeveloper = createSelector(
     [isDeveloperOrWatchMen, getSettingsRegularUserUI],

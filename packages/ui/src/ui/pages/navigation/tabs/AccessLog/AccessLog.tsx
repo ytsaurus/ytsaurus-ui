@@ -28,6 +28,7 @@ function AccessLog() {
     return (
         <React.Fragment>
             <WithStickyToolbar
+                hideToolbarShadow
                 doubleHeight
                 toolbar={<AccessLogFilters />}
                 content={

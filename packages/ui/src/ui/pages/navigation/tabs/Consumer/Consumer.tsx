@@ -4,6 +4,7 @@ import {ConnectedProps, connect} from 'react-redux';
 import {YTErrorBlock} from '../../../../components/Block/Block';
 import ErrorBoundary from '../../../../components/ErrorBoundary/ErrorBoundary';
 import WithStickyToolbar from '../../../../components/WithStickyToolbar/WithStickyToolbar';
+import {Toolbar} from '../../../../components/WithStickyToolbar/Toolbar/Toolbar';
 import {CONSUMER_MODE} from '../../../../constants/navigation/tabs/consumer';
 import {loadConsumerStatus} from '../../../../store/actions/navigation/tabs/consumer/status';
 import type {RootState} from '../../../../store/reducers';
@@ -18,7 +19,7 @@ import {
 
 import TargetQueue from './TargetQueue/TargetQueue';
 import Meta from './Meta/Meta';
-import Toolbar from './Toolbar/Toolbar';
+import ConsumerToolbar from './Toolbar/Toolbar';
 import ConsumerMetrics from './views/ConsumerMetrics/ConsumerMetrics';
 import Partitions from './views/Partitions/Partitions';
 import PartitionsExtraControls from './views/Partitions/PartitionsExtraControls';
@@ -65,7 +66,16 @@ const Consumer: React.VFC<PropsFromRedux> = ({
                 readDataWeightRate={readDataWeightRate}
                 readRowCountRate={readRowCountRate}
             />
-            <WithStickyToolbar toolbar={<Toolbar extras={ExtraControls} />} content={<View />} />
+            <WithStickyToolbar
+                toolbar={
+                    <Toolbar
+                        itemsToWrap={[
+                            {node: <ConsumerToolbar extras={ExtraControls} />, growable: true},
+                        ]}
+                    />
+                }
+                content={<View />}
+            />
         </ErrorBoundary>
     );
 };

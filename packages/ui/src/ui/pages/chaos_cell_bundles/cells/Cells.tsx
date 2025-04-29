@@ -8,7 +8,11 @@ import CellsTable from '../../../pages/chaos_cell_bundles/cells/CellsTable.conne
 export function ChaosCells() {
     return (
         <ErrorBoundary>
-            <WithStickyToolbar toolbar={<CellsInstruments />} content={<CellsTable />} />
+            <WithStickyToolbar
+                hideToolbarShadow
+                toolbar={<CellsInstruments />}
+                content={<CellsTable />}
+            />
         </ErrorBoundary>
     );
 }

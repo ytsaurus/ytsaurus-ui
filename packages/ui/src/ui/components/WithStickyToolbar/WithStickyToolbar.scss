@@ -4,10 +4,18 @@
 $stickySpacerHeight: 6px;
 
 .with-sticky-toolbar {
-    $height: $TOOLBAR_COMPONENT_HEIGHT;
+    &_bottom-margin_regular {
+        margin-bottom: 20px;
+    }
 
-    &__toolbar {
-        height: $height;
+    --yt-with-sticky-toolbar-toolbar-height: #{$TOOLBAR_COMPONENT_HEIGHT};
+
+    &_x2 {
+        --yt-with-sticky-toolbar-toolbar-height: #{$TOOLBAR_COMPONENT_HEIGHT * 2};
+    }
+
+    & &__toolbar {
+        z-index: var(--fixed-toolbar-z-index);
 
         &_padding_skip-vertical {
             margin-top: -10px;
@@ -19,48 +27,16 @@ $stickySpacerHeight: 6px;
             padding-right: unset;
         }
 
-        $toolbar: &;
+        height: var(--yt-with-sticky-toolbar-toolbar-height);
 
         &_sticky {
-            @include sticky-style();
-            padding: 0px 20px;
-            z-index: var(--fixed-toolbar-z-index);
-
-            &#{$toolbar}_padding_skip-vertical {
-                margin-top: unset;
-                margin-bottom: unset;
-            }
-
-            &#{$toolbar}_padding_skip-horizontal {
-                padding-left: unset;
-                padding-right: unset;
-            }
-        }
-
-        &_x2 {
-            height: 2 * $height;
-        }
-
-        &-spacer {
-            display: none;
-
-            &_sticky {
-                display: unset;
-                position: fixed;
-                height: $stickySpacerHeight;
-                width: 100%;
-                background-color: var(--main-background);
-                z-index: var(--fixed-toolbar-spacer-z-index);
-                top: calc(var(--app-header-height) + #{$height});
-            }
-
-            &_x2 {
-                top: calc(var(--app-header-height) + #{2 * $height});
-            }
+            position: fixed;
         }
     }
 
-    &_bottom-margin_regular {
-        margin-bottom: 20px;
+    &__toolbar-spacer {
+        &_sticky {
+            height: var(--yt-with-sticky-toolbar-toolbar-height);
+        }
     }
 }

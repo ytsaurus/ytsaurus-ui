@@ -31,6 +31,7 @@ function AccountDetailedUsageTab() {
     return (
         <ErrorBoundary>
             <WithStickyToolbar
+                hideToolbarShadow
                 className={block('usage')}
                 doubleHeight={viewType === 'tree' || viewType === 'tree-diff'}
                 toolbar={<AccountUsageToolbar />}

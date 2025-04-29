@@ -266,6 +266,7 @@ export function CellsBundleController({items, hideColumns}: CellsBundleControlle
     return (
         <div className={block()}>
             <WithStickyToolbar
+                hideToolbarShadow
                 toolbar={renderToolbar}
                 content={
                     <DataTableYT<RowData>

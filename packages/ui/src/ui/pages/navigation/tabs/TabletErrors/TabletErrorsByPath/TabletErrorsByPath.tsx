@@ -35,6 +35,7 @@ const block = cn('yt-tablet-errors-by-path');
 export function TabletErrorsRequest() {
     return (
         <WithStickyToolbar
+            hideToolbarShadow
             className={block()}
             doubleHeight
             toolbar={<TabletErrorsRequestToolbar className={block('toolbar')} />}
