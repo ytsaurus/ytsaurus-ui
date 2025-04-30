@@ -14,20 +14,6 @@
         margin-bottom: 50px;
     }
 
-    &__overview {
-        display: grid;
-        grid-template-columns: 1fr auto;
-        grid-gap: 20px;
-
-        margin-bottom: 20px;
-
-        z-index: var(--fixed-toolbar-z-index);
-
-        &_sticky {
-            @include sticky-style();
-        }
-    }
-
     &__filters {
         display: flex;
         align-items: center;
@@ -64,7 +50,8 @@
 
     $versions: &;
     .elements-table__row {
-        #{$versions}-summary,  #{$versions}-detailed {
+        #{$versions}-summary,
+        #{$versions}-detailed {
             &__table-item {
                 &_type_address {
                     width: 400px;
