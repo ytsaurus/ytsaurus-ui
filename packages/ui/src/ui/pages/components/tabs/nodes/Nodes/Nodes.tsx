@@ -1,5 +1,4 @@
 import React from 'react';
-import {Sticky, StickyContainer} from 'react-sticky';
 import {ConnectedProps, connect, useDispatch, useSelector} from 'react-redux';
 import hammer from '../../../../../common/hammer';
 import {compose} from 'redux';
@@ -22,6 +21,9 @@ import Loader from '../../../../../components/Loader/Loader';
 
 import LoadDataHandler from '../../../../../components/LoadDataHandler/LoadDataHandler';
 import ErrorBoundary from '../../../../../components/ErrorBoundary/ErrorBoundary';
+import WithStickyToolbar from '../../../../../components/WithStickyToolbar/WithStickyToolbar';
+import {Toolbar} from '../../../../../components/WithStickyToolbar/Toolbar/Toolbar';
+
 import FiltersPresets from '../FilterPresets/FiltersPresets';
 import SetupModal from '../SetupModal/SetupModal';
 import NodeCard from '../NodeCard/NodeCard';
@@ -50,7 +52,7 @@ import {
 import type {NodesState} from '../../../../../store/reducers/components/nodes/nodes/nodes';
 
 import {mergeScreen, splitScreen as splitScreenAction} from '../../../../../store/actions/global';
-import {HEADER_HEIGHT, KeyCode} from '../../../../../constants/index';
+import {KeyCode} from '../../../../../constants/index';
 import {
     CONTENT_MODE,
     CONTENT_MODE_ITEMS,
@@ -212,7 +214,7 @@ class Nodes extends React.Component<ReduxProps & WithVisibleProps, State> {
         }
     }
 
-    renderFilters(sticky: boolean, split: boolean) {
+    renderFilters() {
         const {
             changeHostFilter,
             hostFilter,
@@ -225,7 +227,7 @@ class Nodes extends React.Component<ReduxProps & WithVisibleProps, State> {
         const isFiltered = totalItems !== showingItems;
 
         return (
-            <div className={block('filters', {sticky, split})}>
+            <div className={block('filters')}>
                 <Filter
                     className={block('filters-item')}
                     hasClear
@@ -268,43 +270,37 @@ class Nodes extends React.Component<ReduxProps & WithVisibleProps, State> {
         );
     }
 
-    renderOverview() {
-        const {contentMode, loading, showingItems, splitScreen, totalItems} = this.props;
-        const isSplit = isPaneSplit(splitScreen, SPLIT_TYPE);
+    renderToolbar() {
+        const {contentMode, loading, showingItems, totalItems} = this.props;
 
         return (
-            <Sticky topOffset={isSplit ? HEADER_HEIGHT * 2 : -HEADER_HEIGHT} relative={isSplit}>
-                {(props) => {
-                    const {isSticky} = props;
-                    return (
-                        <div
-                            className={block('overview', {
-                                sticky: isSticky,
-                                split: isSplit,
-                            })}
-                        >
-                            <div className={block('overview-top')}>
-                                {this.renderFilters(isSticky, isSplit)}
-                                <div className={block('spacer')} />
-                                <Loader visible={loading} />
-                                <TableInfo showingItems={showingItems} totalItems={totalItems} />
-                            </div>
-
-                            <div className={block('table-presets')}>
-                                <Radiobutton
-                                    size="m"
-                                    value={contentMode}
-                                    items={CONTENT_MODE_ITEMS}
-                                    name="components-nodes-content-mode"
-                                    onUpdate={this.handleContentModeChange}
-                                />
-                            </div>
-
-                            <FiltersPresets onChange={this.handlePresetChange} />
-                        </div>
-                    );
-                }}
-            </Sticky>
+            <React.Fragment>
+                <Toolbar
+                    itemsToWrap={[
+                        {node: this.renderFilters(), growable: true},
+                        {node: <Loader visible={loading} />},
+                        {node: <TableInfo showingItems={showingItems} totalItems={totalItems} />},
+                    ]}
+                />
+                <Toolbar
+                    className={block('toolbar-2')}
+                    itemsToWrap={[
+                        {
+                            node: (
+                                <div className={block('table-presets')}>
+                                    <Radiobutton
+                                        size="m"
+                                        value={contentMode}
+                                        items={CONTENT_MODE_ITEMS}
+                                        name="components-nodes-content-mode"
+                                        onUpdate={this.handleContentModeChange}
+                                    />
+                                </div>
+                            ),
+                        },
+                    ]}
+                />
+            </React.Fragment>
         );
     }
 
@@ -326,6 +322,8 @@ class Nodes extends React.Component<ReduxProps & WithVisibleProps, State> {
 
         return (
             <div className={block('content', {split: hasSplit})}>
+                <FiltersPresets onChange={this.handlePresetChange} />
+
                 <ElementsTable
                     {...nodesTableProps}
                     onItemClick={this.handleItemClick}
@@ -357,10 +355,12 @@ class Nodes extends React.Component<ReduxProps & WithVisibleProps, State> {
                 <NodesUpdater />
                 <LoadDataHandler {...this.props}>
                     <div className={block()} onKeyDown={this.handleKeyDown} tabIndex={-1}>
-                        <StickyContainer>
-                            {this.renderOverview()}
-                            {this.renderContent()}
-                        </StickyContainer>
+                        <WithStickyToolbar
+                            bottomMargin="regular"
+                            doubleHeight
+                            toolbar={this.renderToolbar()}
+                            content={this.renderContent()}
+                        />
 
                         <SetupModal
                             key={preset}

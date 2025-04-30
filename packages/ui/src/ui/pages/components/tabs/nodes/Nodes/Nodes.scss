@@ -10,63 +10,21 @@ $elements-table: '.elements-table';
         outline: none;
     }
 
-    &__overview {
-        display: grid;
-        grid-template-columns: 1fr;
-        grid-gap: 20px;
-
-        z-index: var(--fixed-toolbar-z-index);
-
-        min-width: 200px;
-        padding: 10px 0;
-
-        &_sticky {
-            @include sticky-style();
+    &__content {
+        &::before {
+            content: '';
+            display: block;
+            margin-bottom: 10px;
         }
-
-        &_split {
-            @include sticky-style();
-
-            position: absolute;
-            left: 0;
-            top: 0px;
-
-            #{$self}__filters {
-                .textinput {
-                    width: 360px;
-                }
-            }
-        }
-    }
-
-    &__overview-top {
-        display: flex;
     }
 
     &__spacer {
         flex-grow: 1;
     }
 
-    &__content {
-        &_split {
-            padding-top: 50px;
-        }
-    }
-
     &__filters {
         display: flex;
         align-items: center;
-
-        .textinput {
-            width: 640px;
-            margin-right: 20px;
-        }
-
-        &_split {
-            .textinput {
-                width: 320px !important;
-            }
-        }
 
         &-item {
             & + & {
