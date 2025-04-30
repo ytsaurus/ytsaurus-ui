@@ -5,15 +5,9 @@
         border-width: 1px !important;
     }
 
-    &__overview {
+    &__toolbar {
         padding: 10px 0;
-        margin-bottom: 20px;
-
-        z-index: var(--fixed-toolbar-z-index);
-
-        &_sticky {
-            @include sticky-style();
-        }
+        margin-bottom: 10px;
     }
 
     &__top-section {

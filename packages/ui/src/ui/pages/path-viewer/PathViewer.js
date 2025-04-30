@@ -1,6 +1,5 @@
 import React, {useCallback, useEffect, useMemo} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import {Sticky, StickyContainer} from 'react-sticky';
 import cn from 'bem-cn-lite';
 
 import Yson from '../../components/Yson/Yson';
@@ -8,6 +7,7 @@ import {Checkbox, Loader, TextInput} from '@gravity-ui/uikit';
 import ErrorBoundary from '../../components/ErrorBoundary/ErrorBoundary';
 import LoadDataHandler from '../../components/LoadDataHandler/LoadDataHandler';
 import Select from '../../components/Select/Select';
+import {StickyContainer} from '../../components/StickyContainer/StickyContainer';
 
 import {
     abortAndReset,
@@ -15,7 +15,7 @@ import {
     loadData,
     toggleParameters,
 } from '../../store/actions/path-viewer';
-import {HEADER_HEIGHT, KeyCode} from '../../constants/index';
+import {KeyCode} from '../../constants/index';
 import {getFormat} from '../../store/selectors/settings';
 import {COMMAND} from '../../constants/path-viewer';
 
@@ -23,7 +23,7 @@ import './PathViewer.scss';
 
 const block = cn('path-viewer');
 
-function Overview() {
+function Overview({className}) {
     const dispatch = useDispatch();
 
     const {path, attributes} = useSelector((state) => state.pathViewer);
@@ -71,93 +71,89 @@ function Overview() {
     );
 
     return (
-        <Sticky topOffset={-HEADER_HEIGHT}>
-            {({isSticky}) => (
-                <div className={block('overview', {sticky: isSticky})}>
-                    <div className={block('top-section')}>
-                        <div className={block('path')}>
-                            <TextInput
-                                hasClear
-                                size="m"
-                                placeholder="Enter path..."
-                                onUpdate={handlePathChange}
-                                onKeyDown={handleApply}
-                                value={path}
-                            />
-                        </div>
-
-                        <div className={block('attributes')}>
-                            <TextInput
-                                hasClear
-                                size="m"
-                                placeholder="Enter attributes..."
-                                onUpdate={handleAttributesChange}
-                                onKeyDown={handleApply}
-                                value={attributes}
-                            />
-                        </div>
-                    </div>
-
-                    <div className={block('middle-section')}>
-                        <div className={block('command')}>
-                            <Select
-                                onUpdate={(vals) => handleCommandChange(vals[0])}
-                                hideFilter
-                                value={[command]}
-                                label="Command:"
-                                items={[
-                                    {
-                                        value: COMMAND.GET,
-                                        text: COMMAND.GET,
-                                    },
-                                    {
-                                        value: COMMAND.LIST,
-                                        text: COMMAND.LIST,
-                                    },
-                                ]}
-                            />
-                        </div>
-
-                        <div className={block('max-size')}>
-                            <TextInput
-                                hasClear
-                                size="m"
-                                placeholder="Enter max size..."
-                                onUpdate={handleMaxSizeChange}
-                                onKeyDown={handleApply}
-                                value={maxSize}
-                            />
-                        </div>
-                    </div>
-
-                    <div className={block('bottom-section')}>
-                        <div className={block('checkbox')}>
-                            <Checkbox
-                                content="Encode UTF8"
-                                checked={encodeUTF8}
-                                onChange={handleEncodeChange}
-                            />
-                        </div>
-
-                        <div className={block('checkbox')}>
-                            <Checkbox
-                                content="Stringify"
-                                checked={stringify}
-                                onChange={handleStringifyChange}
-                            />
-                        </div>
-
-                        <div className={block('checkbox')}>
-                            <Checkbox
-                                content="Annotate with types"
-                                checked={annotateWithTypes}
-                                onChange={handleAnnotateWithTypesChange}
-                            />
-                        </div>
-                    </div>
+        <div className={block('toolbar', className)}>
+            <div className={block('top-section')}>
+                <div className={block('path')}>
+                    <TextInput
+                        hasClear
+                        size="m"
+                        placeholder="Enter path..."
+                        onUpdate={handlePathChange}
+                        onKeyDown={handleApply}
+                        value={path}
+                    />
                 </div>
-            )}
-        </Sticky>
+
+                <div className={block('attributes')}>
+                    <TextInput
+                        hasClear
+                        size="m"
+                        placeholder="Enter attributes..."
+                        onUpdate={handleAttributesChange}
+                        onKeyDown={handleApply}
+                        value={attributes}
+                    />
+                </div>
+            </div>
+
+            <div className={block('middle-section')}>
+                <div className={block('command')}>
+                    <Select
+                        onUpdate={(vals) => handleCommandChange(vals[0])}
+                        hideFilter
+                        value={[command]}
+                        label="Command:"
+                        items={[
+                            {
+                                value: COMMAND.GET,
+                                text: COMMAND.GET,
+                            },
+                            {
+                                value: COMMAND.LIST,
+                                text: COMMAND.LIST,
+                            },
+                        ]}
+                    />
+                </div>
+
+                <div className={block('max-size')}>
+                    <TextInput
+                        hasClear
+                        size="m"
+                        placeholder="Enter max size..."
+                        onUpdate={handleMaxSizeChange}
+                        onKeyDown={handleApply}
+                        value={maxSize}
+                    />
+                </div>
+            </div>
+
+            <div className={block('bottom-section')}>
+                <div className={block('checkbox')}>
+                    <Checkbox
+                        content="Encode UTF8"
+                        checked={encodeUTF8}
+                        onChange={handleEncodeChange}
+                    />
+                </div>
+
+                <div className={block('checkbox')}>
+                    <Checkbox
+                        content="Stringify"
+                        checked={stringify}
+                        onChange={handleStringifyChange}
+                    />
+                </div>
+
+                <div className={block('checkbox')}>
+                    <Checkbox
+                        content="Annotate with types"
+                        checked={annotateWithTypes}
+                        onChange={handleAnnotateWithTypesChange}
+                    />
+                </div>
+            </div>
+        </div>
     );
 }
 
@@ -176,17 +172,25 @@ export default function PathViewer() {
         <div className={block(null, 'elements-main-section')}>
             <ErrorBoundary>
                 <StickyContainer>
-                    <Overview />
+                    {({stickyTopClassName}) => (
+                        <React.Fragment>
+                            <Overview className={stickyTopClassName} />
 
-                    <div className={block('content', {loading})}>
-                        {loading ? (
-                            <Loader />
-                        ) : (
-                            <LoadDataHandler loaded={false} error={error} errorData={errorData}>
-                                <Yson value={data} settings={settings} />
-                            </LoadDataHandler>
-                        )}
-                    </div>
+                            <div className={block('content', {loading})}>
+                                {loading ? (
+                                    <Loader />
+                                ) : (
+                                    <LoadDataHandler
+                                        loaded={false}
+                                        error={error}
+                                        errorData={errorData}
+                                    >
+                                        <Yson value={data} settings={settings} />
+                                    </LoadDataHandler>
+                                )}
+                            </div>
+                        </React.Fragment>
+                    )}
                 </StickyContainer>
             </ErrorBoundary>
         </div>
