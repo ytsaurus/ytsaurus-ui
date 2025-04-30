@@ -2,7 +2,8 @@ import {createSelector} from 'reselect';
 
 import {YT} from '../../../config/yt-config';
 import {RootState} from '../../../store/reducers';
-import {getSettingsRegularUserUI} from '../../../store/selectors/settings/settings-ts';
+import {NAMESPACES, SettingName} from '../../../../shared/constants/settings';
+import {makeGetSetting} from '../../../store/selectors/settings';
 
 import {getCurrentUserName} from './username';
 
@@ -17,9 +18,13 @@ export const isDeveloperOrWatchMen = createSelector(
     },
 );
 
+const getSettingsRegularUserUI = createSelector(makeGetSetting, (getSetting) => {
+    return getSetting(SettingName.DEVELOPMENT.REGULAR_USER_UI, NAMESPACES.DEVELOPMENT) || false;
+});
+
 export const isDeveloper = createSelector(
     [isDeveloperOrWatchMen, getSettingsRegularUserUI],
-    (isDeveloper, regularUserUI) => {
-        return !regularUserUI && isDeveloper;
+    (isDeveloperStatus, regularUserUI) => {
+        return !regularUserUI && isDeveloperStatus;
     },
 );

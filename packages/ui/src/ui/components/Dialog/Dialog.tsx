@@ -23,6 +23,7 @@ import TabletCellBundlesSuggest from '../../pages/components/TabletCellBundlesSu
 import EditablePathList from './controls/EditablePathList/EditablePathList';
 import {PathEditorControl} from './controls/PathEditorControl/PathEditorControl';
 import {OutputPathControl} from './controls/OutputPathControl';
+import {AccountsMultiple} from './controls/AccountsMultiple/AccountsMultiple';
 
 import './Dialog.scss';
 import {PoolSuggestControl} from './controls/PoolSuggestControl/PoolSuggestControl';
@@ -55,6 +56,8 @@ import {DatePickerControl} from './controls/DatePickerControl/DatePickerControl'
 import {RangeInputPickerControl} from './controls/RangeInputPickerControl/RangeInputPickerControl';
 import {AclColumnsControl} from '../../containers/ACL/RequestPermissions/AclColumnsControl/AclColumnsControl';
 import {useHotkeysScope} from '../../hooks/use-hotkeysjs-scope';
+import {PoolsMultiple} from './controls/PoolsMultiple/PoolsMultiple';
+import {ServicesSelect} from './controls/ServicesSelect/ServicesSelect';
 
 const block = cn('yt-dialog');
 
@@ -62,6 +65,7 @@ registerDialogControl('abc-control', AbcControl);
 registerDialogControl('accountsSuggest', AccountsSuggest);
 registerDialogControl('usable-account', UsableAccountSuggest);
 registerDialogControl('accounts-suggest-with-loading', AccountsSuggestWithLoading);
+registerDialogControl('accounts-with-presets', AccountsMultiple);
 
 registerDialogControl('cluster', ClusterSelectControl);
 
@@ -77,6 +81,7 @@ registerDialogControl('sortable-list', SortableListControl);
 registerDialogControl('bytes', BytesControl);
 registerDialogControl('number', NumberControl);
 registerDialogControl('time-duration', TimeDuration);
+
 registerDialogControl('datepicker', DatePickerControl);
 
 registerDialogControl('select-with-subitems', SelectWithSubItems);
@@ -96,6 +101,7 @@ registerDialogControl('editable-path-list', EditablePathList);
 
 registerDialogControl('pool', PoolSuggestControl);
 registerDialogControl('pool-tree', PoolTreeSuggestControl);
+registerDialogControl('pools-multiple', PoolsMultiple);
 
 registerDialogControl('table-sort-by', TableSortByControl);
 registerDialogControl('table-chunk-size', TableChunkSize);
@@ -114,6 +120,8 @@ registerDialogControl('range-input-picker', RangeInputPickerControl);
 
 registerDialogControl('before-date', BeforeDatePicker);
 
+registerDialogControl('services-select', ServicesSelect);
+
 export type DialogField<FormValues = unknown> =
     | DFDialogField
     | RegisteredDialogField<'abc-control', ComponentProps<typeof AbcControl>, FormValues>
@@ -126,6 +134,11 @@ export type DialogField<FormValues = unknown> =
     | RegisteredDialogField<
           'accounts-suggest-with-loading',
           ComponentProps<typeof AccountsSuggestWithLoading>,
+          FormValues
+      >
+    | RegisteredDialogField<
+          'accounts-with-presets',
+          ComponentProps<typeof AccountsMultiple>,
           FormValues
       >
     | RegisteredDialogField<'cluster', ComponentProps<typeof ClusterSelectControl>, FormValues>
@@ -179,6 +192,7 @@ export type DialogField<FormValues = unknown> =
           FormValues
       >
     | RegisteredDialogField<'pool', ComponentProps<typeof PoolSuggestControl>, FormValues>
+    | RegisteredDialogField<'pools-multiple', ComponentProps<typeof PoolsMultiple>, FormValues>
     | RegisteredDialogField<'pool-tree', ComponentProps<typeof PoolTreeSuggestControl>, FormValues>
     | RegisteredDialogField<'table-sort-by', ComponentProps<typeof TableSortByControl>, FormValues>
     | RegisteredDialogField<'table-chunk-size', ComponentProps<typeof TableChunkSize>, FormValues>
@@ -201,7 +215,8 @@ export type DialogField<FormValues = unknown> =
           'range-input-picker',
           ComponentProps<typeof RangeInputPickerControl>,
           FormValues
-      >;
+      >
+    | RegisteredDialogField<'services-select', ComponentProps<typeof ServicesSelect>, FormValues>;
 
 registerDialogTabControl('yt-create-table-tab', CreateTableTabField);
 

@@ -13,7 +13,7 @@ export type BatchCluster =
     // cluster or setup param should be required for the case of selection
     {cluster: string} | Required<Pick<ApiMethodParams<BatchParameters>, 'setup'>>;
 
-export type BatchApiResults<T = unknown> = Array<BatchResultsItem<T>>;
+export type BatchApiResults<T = any> = Array<BatchResultsItem<T>>;
 
 export const executeBatchV3 = async (args: BatchApiArgs) => {
     const {id, parameters, data, cancellation, toaster} = args;
@@ -27,7 +27,7 @@ export const executeBatchV3 = async (args: BatchApiArgs) => {
                 cancellation,
             });
 
-            const error = getBatchError(results, results[0].error?.message || 'Failed to batch');
+            const error = getBatchError(results, results[0]?.error?.message || 'Failed to batch');
             if (error) throw error;
 
             return results;
@@ -41,7 +41,7 @@ export const executeBatchV3 = async (args: BatchApiArgs) => {
             results = await request();
         }
 
-        const error = getBatchError(results, results[0].error?.message || 'Failed to batch');
+        const error = getBatchError(results, results[0]?.error?.message || 'Failed to batch');
         if (error) throw error;
 
         return {data: results};

@@ -1,6 +1,7 @@
 import {YTCoreConfig} from '../../@types/core';
 import {Page} from '../../shared/constants/settings';
 import {DescribedSettings} from '../../shared/constants/settings-types';
+import {dashboardConfig} from '../../ytsaurus-ui.ui/constants/dashboard2';
 
 const defaultUserSettings: Partial<DescribedSettings> = {
     'global::theme': 'system',

@@ -3,6 +3,7 @@ import React from 'react';
 import {useSelector} from 'react-redux';
 
 import {getGlobalLoadState} from '../../../store/selectors/global';
+import {getSettingNewDashboardPage} from '../../../store/selectors/settings/settings-ts';
 
 import {LOADING_STATUS, Page} from '../../../constants/index';
 import {Route, Switch} from 'react-router';
@@ -17,6 +18,7 @@ import {SchedulingTopRowLazy} from '../../../pages/scheduling/lazy';
 import {NavigationTopRowLazy} from '../../../pages/navigation/lazy';
 import {SystemTopRowLazy} from '../../../pages/system/lazy';
 import {DashboardTopRowLazy} from '../../../pages/dashboard/lazy';
+import {Dashboard2TopRowLazy} from '../../../pages/dashboard2/lazy';
 import {ComponentsTopRowLazy} from '../../../pages/components/lazy';
 import {makeExtraPageTopRowRoutes} from '../../../containers/ClusterPage/ExtraClusterPageRoutes';
 
@@ -29,6 +31,7 @@ import {QueryTrackerTopRowLazy} from '../../../pages/query-tracker/lazy';
 
 export default function TopRowContent() {
     const loadState = useSelector(getGlobalLoadState);
+    const isNewDashboardPage = useSelector(getSettingNewDashboardPage);
 
     return loadState !== LOADING_STATUS.LOADED ? null : (
         <Switch>
@@ -45,7 +48,10 @@ export default function TopRowContent() {
                 path={`/:cluster/${Page.CHAOS_CELL_BUNDLES}`}
                 component={ChaosCellBundlesTopRowLazy}
             />
-            <Route path={`/:cluster/${Page.DASHBOARD}`} component={DashboardTopRowLazy} />
+            <Route
+                path={`/:cluster/${Page.DASHBOARD}`}
+                component={isNewDashboardPage ? Dashboard2TopRowLazy : DashboardTopRowLazy}
+            />
             <Route path={`/:cluster/${Page.COMPONENTS}`} component={ComponentsTopRowLazy} />
             <Route path={`/:cluster/${Page.CHYT}`} component={ChytPageTopRowLazy} />
             <Route

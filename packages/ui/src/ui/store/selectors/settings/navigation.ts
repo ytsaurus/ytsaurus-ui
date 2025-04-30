@@ -1,8 +1,8 @@
 import {createSelector} from 'reselect';
 
 import UIFactory from '../../../UIFactory';
-import {isDeveloper} from '../../../store/selectors/global/is-developer';
 import {getSettingsData} from './settings-base';
+import {isDeveloper} from '../../../store/selectors/global/is-developer';
 
 export const getNavigationSqlService = createSelector(
     [getSettingsData, isDeveloper],

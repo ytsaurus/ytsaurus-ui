@@ -3,6 +3,8 @@ export enum YTApiId {
     ui_clusterInfo,
     ui_loadColumnPreset,
 
+    favoritesAccountsAttributes,
+
     // Some ids without specific page
     clusterParams,
     clusterParamsIsDeveloper,
@@ -20,6 +22,8 @@ export enum YTApiId {
     listUsableAccounts,
     listUsers,
     listUsersUM,
+    listPoolsTrees,
+    listPools,
     openAttributesModal,
     pathEditorLoadSuggestions,
     updateAttributes,
@@ -177,4 +181,8 @@ export enum YTApiId {
     queuePartitions,
     queueConsumerStatus,
     queueConsumerPartitions,
+
+    //dashboard
+    poolsInfo,
+    listDashboardOperations,
 }
