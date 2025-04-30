@@ -340,10 +340,11 @@ export class Proxies extends Component {
                 <ProxiesUpdater type={this.props.type} />
                 <LoadDataHandler {...this.props}>
                     <div className={block()}>
-                        <StickyContainer>
-                            {this.renderOverview()}
-                            {this.renderContent()}
-                        </StickyContainer>
+                        <WithStickyToolbar
+                            topMargin="none"
+                            toolbar={this.renderToolbar()}
+                            content={this.renderContent()}
+                        />
                         <NodeMaintenanceModal />
                     </div>
                 </LoadDataHandler>
