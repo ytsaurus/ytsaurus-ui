@@ -1,6 +1,9 @@
 import React from 'react';
 import cn from 'bem-cn-lite';
-import {StickyContainer} from '../../components/StickyContainer/StickyContainer';
+import {
+    StickyContainer,
+    StickyContainerProps,
+} from '../../components/StickyContainer/StickyContainer';
 import {HEADER_HEIGHT} from '../../constants/index';
 import {TOOLBAR_COMPONENT_HEIGHT} from './Toolbar/Toolbar';
 
@@ -11,15 +14,14 @@ const block = cn('with-sticky-toolbar');
 export const STICKY_TOOLBAR_BOTTOM = HEADER_HEIGHT + TOOLBAR_COMPONENT_HEIGHT;
 export const STICKY_DOUBLE_TOOLBAR_BOTTOM = HEADER_HEIGHT + TOOLBAR_COMPONENT_HEIGHT * 2;
 
-interface Props {
-    className?: string;
+type Props = Omit<StickyContainerProps, 'children' | 'hideShadow' | 'keepWidth'> & {
     toolbar: React.ReactNode;
     content: React.ReactNode;
     doubleHeight?: boolean;
     padding?: 'skip-vertical' | 'skip-horizontal';
     bottomMargin?: 'regular';
     hideToolbarShadow?: boolean;
-}
+};
 
 export default function WithStickyToolbar({
     className,
@@ -29,11 +31,14 @@ export default function WithStickyToolbar({
     padding,
     bottomMargin,
     hideToolbarShadow,
+    ...rest
 }: Props) {
     return (
         <StickyContainer
+            {...rest}
             className={block({'bottom-margin': bottomMargin, x2: doubleHeight}, className)}
             hideShadow={hideToolbarShadow}
+            sitkyPostion="fixed"
         >
             {({sticky, topStickyClassName}) => (
                 <React.Fragment>

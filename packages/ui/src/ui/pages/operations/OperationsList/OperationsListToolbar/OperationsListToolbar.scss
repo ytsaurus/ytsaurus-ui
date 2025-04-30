@@ -4,11 +4,6 @@
     &__toolbar {
         border-bottom: 2px solid var(--light-divider);
 
-        &_sticky {
-            position: fixed;
-            background-color: var(--main-background);
-        }
-
         &-text-filter {
             flex: 1 0 260px;
 

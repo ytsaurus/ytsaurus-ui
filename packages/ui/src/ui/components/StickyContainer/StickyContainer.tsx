@@ -12,6 +12,7 @@ export type StickyContainerProps = {
     topOffset?: number;
     children: (params: {sticky: boolean; topStickyClassName?: string}) => React.ReactNode;
     hideShadow?: boolean;
+    sitkyPostion?: 'sticky' | 'fixed';
 };
 
 export function StickyContainer({
@@ -19,6 +20,7 @@ export function StickyContainer({
     topOffset = HEADER_HEIGHT,
     children,
     hideShadow,
+    sitkyPostion,
 }: StickyContainerProps) {
     const [element, setElement] = React.useState<HTMLDivElement | null>(null);
 
@@ -39,7 +41,9 @@ export function StickyContainer({
             <div className={block('top')} ref={setElement} />
             {children({
                 sticky,
-                topStickyClassName: sticky ? block('sticky', {shadow: !hideShadow}) : undefined,
+                topStickyClassName: sticky
+                    ? block('sticky', {shadow: !hideShadow, fixed: sitkyPostion === 'fixed'})
+                    : undefined,
             })}
         </div>
     );

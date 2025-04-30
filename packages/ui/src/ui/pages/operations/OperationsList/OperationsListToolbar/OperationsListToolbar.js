@@ -235,24 +235,29 @@ class OperationsListToolbar extends React.PureComponent {
     }
 
     render() {
-        const {fixedStartedByFilter} = this.props;
+        const {fixedStartedByFilter, children} = this.props;
 
         return (
-            <StickyContainer>
+            <StickyContainer hideShadow keepWidth>
                 {({sticky, topStickyClassName}) => (
-                    <div className={block('toolbar', {sticky}, [tbBlock(), topStickyClassName])}>
-                        {this.renderTopSection()}
-                        {this.renderBottomSection()}
-                        {fixedStartedByFilter && this.renderWarning_uiissue_2838()}
-                        <OperationsFilterPresets />
-                    </div>
+                    <React.Fragment>
+                        <div
+                            className={block('toolbar', {sticky}, [tbBlock(), topStickyClassName])}
+                        >
+                            {this.renderTopSection()}
+                            {this.renderBottomSection()}
+                            {fixedStartedByFilter && this.renderWarning_uiissue_2838()}
+                            <OperationsFilterPresets />
+                        </div>
+                        {children}
+                    </React.Fragment>
                 )}
             </StickyContainer>
         );
     }
 }
 
-function OperationsListToolbarHooked() {
+function OperationsListToolbarHooked({children}) {
     const subjects = useSelector(getAllUserNames);
     const {failedJobs} = useSelector((state) => state.operations.list.filters) || {};
     const fixedStartedByFilter = useSelector(
@@ -283,7 +288,9 @@ function OperationsListToolbarHooked() {
             }}
             updateFilter={handleUpdateFilter}
             toggleSaveFilterPresetDialog={handleToggleSaveFilterPresetDialog}
-        />
+        >
+            {children}
+        </OperationsListToolbar>
     );
 }
 
