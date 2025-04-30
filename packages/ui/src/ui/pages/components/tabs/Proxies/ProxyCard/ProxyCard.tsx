@@ -1,11 +1,14 @@
 import React, {Component} from 'react';
-import {connect} from 'react-redux';
+import {useSelector} from 'react-redux';
 import PropTypes from 'prop-types';
-import {compose} from 'redux';
 import cn from 'bem-cn-lite';
 import isEmpty_ from 'lodash/isEmpty';
 
+import {ClusterConfig} from '../../../../../../shared/yt-types';
+
 import hammer from '../../../../../common/hammer';
+
+import {SPLIT_TYPE} from '../../../../../constants/components/proxies/proxies';
 
 import {MaintenanceRequests} from '../../../../../components/MaintenanceRequests/MaintenanceRequests';
 import MetaTable from '../../../../../components/MetaTable/MetaTable';
@@ -14,13 +17,12 @@ import Label from '../../../../../components/Label/Label';
 import Icon from '../../../../../components/Icon/Icon';
 
 import {getCluster, getCurrentClusterConfig} from '../../../../../store/selectors/global';
-import withSplit from '../../../../../hocs/withSplit';
+import {MaintenanceRequestInfo} from '../../../../../store/actions/components/node-maintenance-modal';
+import {useSidePanel} from '../../../../../hooks/use-side-panel';
 
 import './ProxyCard.scss';
 import UIFactory from '../../../../../UIFactory';
 import {NodeColumnRole, NodeColumnState} from '../../NodeColumns';
-import type {RootState} from '../../../../../store/reducers';
-import {MaintenanceRequestInfo} from '../../../../../store/actions/components/node-maintenance-modal';
 
 type ProxyProps = {
     banMessage: string;
@@ -39,15 +41,13 @@ type ProxyProps = {
     networkLoad?: number;
 };
 
-type OwnProps = {
+type ProxyCardProps = {
     proxy: ProxyProps;
     handleClose: () => void;
     isYpCluster: boolean;
+    cluster: string;
+    clusterConfig: ClusterConfig;
 };
-
-type StateProps = ReturnType<typeof mapStateToProps>;
-
-type ProxyCardProps = OwnProps & StateProps;
 
 const block = cn('proxy-card');
 
@@ -171,13 +171,22 @@ export class ProxyCard extends Component<ProxyCardProps> {
     }
 }
 
-const mapStateToProps = (state: RootState) => {
-    return {
-        cluster: getCluster(state),
-        clusterConfig: getCurrentClusterConfig(state),
-    };
-};
+export default function ProxyCardConnected(
+    props: Omit<ProxyCardProps, 'handleClose' | 'cluster' | 'clusterConfig'>,
+) {
+    const cluster = useSelector(getCluster);
+    const clusterConfig = useSelector(getCurrentClusterConfig);
 
-const connector = connect(mapStateToProps);
+    const {openWidget, closeWidget, widgetContent} = useSidePanel(SPLIT_TYPE, {
+        renderContent: ({onClose}) => (
+            <ProxyCard {...props} {...{cluster, clusterConfig}} handleClose={onClose} />
+        ),
+    });
 
-export default compose(connector, withSplit)(ProxyCard);
+    React.useEffect(() => {
+        openWidget();
+        return () => closeWidget();
+    }, [openWidget, closeWidget]);
+
+    return widgetContent;
+}
