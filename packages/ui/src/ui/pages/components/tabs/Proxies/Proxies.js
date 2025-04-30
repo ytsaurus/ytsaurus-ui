@@ -1,4 +1,3 @@
-import {Sticky, StickyContainer} from 'react-sticky';
 import React, {Component} from 'react';
 import {connect, useDispatch} from 'react-redux';
 import hammer from '../../../../common/hammer';
@@ -13,6 +12,8 @@ import ErrorBoundary from '../../../../components/ErrorBoundary/ErrorBoundary';
 import TableInfo from '../../../../pages/components/TableInfo/TableInfo';
 import Filter from '../../../../components/Filter/Filter';
 import Select from '../../../../components/Select/Select';
+import WithStickyToolbar from '../../../../components/WithStickyToolbar/WithStickyToolbar';
+import {Toolbar} from '../../../../components/WithStickyToolbar/Toolbar/Toolbar';
 import ProxyCard from './ProxyCard/ProxyCard';
 
 import {
@@ -32,7 +33,6 @@ import {mergeScreen, splitScreen as splitScreenAction} from '../../../../store/a
 import {proxiesTableColumnItems} from '../../../../utils/components/proxies/table';
 import {showNodeMaintenance} from '../../../../store/actions/components/node-maintenance-modal';
 import {useUpdater} from '../../../../hooks/use-updater';
-import {HEADER_HEIGHT} from '../../../../constants/index';
 import {isPaneSplit} from '../../../../utils';
 import {
     COMPONENTS_PROXIES_TABLE_ID,
@@ -297,25 +297,21 @@ export class Proxies extends Component {
         );
     }
 
-    renderOverview() {
-        const {totalItems, showingItems, splitScreen} = this.props;
-        const isSplit = isPaneSplit(splitScreen, SPLIT_TYPE);
+    renderToolbar() {
+        const {totalItems, showingItems} = this.props;
 
         return (
-            <Sticky topOffset={-HEADER_HEIGHT}>
-                {({isSticky}) => (
-                    <div
-                        className={block('overview', {
-                            sticky: isSticky,
-                            split: isSplit,
-                        })}
-                    >
-                        {this.renderFilters()}
-
-                        <TableInfo showingItems={showingItems} totalItems={totalItems} />
-                    </div>
-                )}
-            </Sticky>
+            <Toolbar
+                itemsToWrap={[
+                    {
+                        node: this.renderFilters(),
+                        growable: true,
+                    },
+                    {
+                        node: <TableInfo showingItems={showingItems} totalItems={totalItems} />,
+                    },
+                ]}
+            />
         );
     }
 
