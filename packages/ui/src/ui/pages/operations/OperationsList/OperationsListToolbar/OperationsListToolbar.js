@@ -239,10 +239,10 @@ class OperationsListToolbar extends React.PureComponent {
 
         return (
             <StickyContainer hideShadow keepWidth>
-                {({sticky, topStickyClassName}) => (
+                {({stickyTop: sticky, stickyTopClassName}) => (
                     <React.Fragment>
                         <div
-                            className={block('toolbar', {sticky}, [tbBlock(), topStickyClassName])}
+                            className={block('toolbar', {sticky}, [tbBlock(), stickyTopClassName])}
                         >
                             {this.renderTopSection()}
                             {this.renderBottomSection()}

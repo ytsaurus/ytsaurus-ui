@@ -251,11 +251,11 @@ class Masters extends Component {
 
         return (
             <StickyContainer>
-                {({topStickyClassName}) => (
+                {({stickyTopClassName}) => (
                     <CollapsibleSectionStateLess
                         name={'Masters'}
                         className={b({open: !collapsed})}
-                        headingClassName={b('heading', topStickyClassName)}
+                        headingClassName={b('heading', stickyTopClassName)}
                         overview={overview}
                         collapsed={collapsed}
                         onToggle={this.onToggle}

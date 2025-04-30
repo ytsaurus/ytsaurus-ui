@@ -40,9 +40,9 @@ export default function WithStickyToolbar({
             hideShadow={hideToolbarShadow}
             sitkyPostion="fixed"
         >
-            {({sticky, topStickyClassName}) => (
+            {({stickyTop: sticky, stickyTopClassName}) => (
                 <React.Fragment>
-                    <div className={block('toolbar', {padding, sticky}, topStickyClassName)}>
+                    <div className={block('toolbar', {padding, sticky}, stickyTopClassName)}>
                         {toolbar}
                     </div>
                     <div className={block('toolbar-spacer', {sticky})} />

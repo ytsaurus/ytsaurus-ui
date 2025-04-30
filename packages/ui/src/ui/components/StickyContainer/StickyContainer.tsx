@@ -1,6 +1,6 @@
 import React, {CSSProperties} from 'react';
 import cn from 'bem-cn-lite';
-import {useIntersectionRatio} from '../../hooks/use-intersection';
+import {useIntersectionEntry} from '../../hooks/use-intersection';
 import {HEADER_HEIGHT} from '../../constants';
 
 import './StickyContainer.scss';
@@ -10,7 +10,7 @@ const block = cn('yt-sticky-container');
 export type StickyContainerProps = {
     className?: string;
     topOffset?: number;
-    children: (params: {sticky: boolean; topStickyClassName?: string}) => React.ReactNode;
+    children: (params: {stickyTop: boolean; stickyTopClassName?: string}) => React.ReactNode;
     hideShadow?: boolean;
     sitkyPostion?: 'sticky' | 'fixed';
 };
@@ -24,15 +24,16 @@ export function StickyContainer({
 }: StickyContainerProps) {
     const [element, setElement] = React.useState<HTMLDivElement | null>(null);
 
-    const intersectionRatio = useIntersectionRatio({
-        element,
-        options: {
-            threshold: [0, 1],
-            rootMargin: `${-topOffset}px 0px 0px 0px`,
-        },
-    });
+    const {intersectionRatio, boundingClientRect} =
+        useIntersectionEntry({
+            element,
+            options: {
+                threshold: [0, 1],
+                rootMargin: `${-topOffset}px 0px 0px 0px`,
+            },
+        }) ?? {};
 
-    const sticky = intersectionRatio !== 1;
+    const stickyTop = intersectionRatio !== 1 && boundingClientRect?.top! < topOffset;
 
     const style = {'--yt-sticky-container-top-offset': `${topOffset}px`} as CSSProperties;
 
@@ -40,8 +41,8 @@ export function StickyContainer({
         <div className={block(null, className)} style={style}>
             <div className={block('top')} ref={setElement} />
             {children({
-                sticky,
-                topStickyClassName: sticky
+                stickyTop,
+                stickyTopClassName: stickyTop
                     ? block('sticky', {shadow: !hideShadow, fixed: sitkyPostion === 'fixed'})
                     : undefined,
             })}

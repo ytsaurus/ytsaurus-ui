@@ -29,10 +29,10 @@ export function ProxiesImpl({
 
     return (
         <StickyContainer>
-            {({topStickyClassName}) => (
+            {({stickyTopClassName}) => (
                 <CollapsibleSectionStateLess
                     name={name}
-                    headingClassName={topStickyClassName}
+                    headingClassName={stickyTopClassName}
                     overview={
                         <>
                             {!collapsed && (
