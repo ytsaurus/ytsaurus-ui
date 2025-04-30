@@ -1,22 +1,6 @@
-@import '../../../../styles/mixins';
-
 .navigation-replicated-table {
     .collapsible-section {
         margin-top: 0;
-    }
-
-    &__overview {
-        display: flex;
-
-        padding: 10px 0;
-        margin-bottom: 20px;
-
-        z-index: var(--fixed-toolbar-z-index);
-        background-color: var(--main-background);
-
-        &_sticky {
-            @include sticky-style();
-        }
     }
 
     &__table {

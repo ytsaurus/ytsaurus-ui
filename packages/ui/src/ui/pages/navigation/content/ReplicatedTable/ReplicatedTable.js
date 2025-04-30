@@ -1,4 +1,3 @@
-import {Sticky, StickyContainer} from 'react-sticky';
 import React, {Component} from 'react';
 import {connect, useSelector} from 'react-redux';
 import PropTypes from 'prop-types';
@@ -17,6 +16,8 @@ import StatusBulb from '../../../../components/StatusBulb/StatusBulb';
 import Icon from '../../../../components/Icon/Icon';
 import Link from '../../../../components/Link/Link';
 import {Tooltip} from '../../../../components/Tooltip/Tooltip';
+import {StickyContainer} from '../../../../components/StickyContainer/StickyContainer';
+import {Toolbar} from '../../../../components/WithStickyToolbar/Toolbar/Toolbar';
 
 import {
     abortAndReset,
@@ -25,7 +26,7 @@ import {
     updateEnableReplicatedTableTracker,
 } from '../../../../store/actions/navigation/content/replicated-table';
 import {getAttributes, getPath} from '../../../../store/selectors/navigation';
-import {HEADER_HEIGHT, Page} from '../../../../constants/index';
+import {Page} from '../../../../constants/index';
 
 import {ReplicatedTableSettingsButton} from './ReplicatedTableSettings';
 import {useRumMeasureStop} from '../../../../rum/RumUiContext';
@@ -340,20 +341,18 @@ class ReplicatedTable extends Component {
                     />
 
                     <StickyContainer>
-                        <Sticky topOffset={-HEADER_HEIGHT}>
-                            {({isSticky}) => (
-                                <div
-                                    className={block('overview', {
-                                        sticky: isSticky,
-                                    })}
-                                >
-                                    {hasActions && <TableActions block={block} />}
-                                </div>
-                            )}
-                        </Sticky>
+                        {({stickyTopClassName}) => (
+                            <React.Fragment>
+                                {hasActions && (
+                                    <Toolbar
+                                        className={stickyTopClassName}
+                                        itemsToWrap={[{node: <TableActions block={block} />}]}
+                                    />
+                                )}
+                                <ElementsTable {...this.tableSettings} items={replicas} />
+                            </React.Fragment>
+                        )}
                     </StickyContainer>
-
-                    <ElementsTable {...this.tableSettings} items={replicas} />
                 </div>
             </LoadDataHandler>
         );
