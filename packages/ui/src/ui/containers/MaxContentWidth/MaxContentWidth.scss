@@ -3,21 +3,13 @@
         max-width: 1400px;
         margin: 0 auto;
 
-        .with-sticky-toolbar__toolbar_sticky .toolbar,
-        .map-node__toolbar {
-            max-width: 1360px;
-            margin: 0 auto;
-        }
+        --yt-with-sticky-toolbar-fixed-max-width: 1400px;
     }
 
     &_size_wide {
         max-width: 1800px;
         margin: 0 auto;
 
-        .with-sticky-toolbar__toolbar_sticky .toolbar,
-        .map-node__toolbar {
-            max-width: 1760px;
-            margin: 0 auto;
-        }
+        --yt-with-sticky-toolbar-fixed-max-width: 1800px;
     }
 }
