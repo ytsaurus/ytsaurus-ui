@@ -1,5 +1,4 @@
 import React, {Component, Fragment} from 'react';
-import {StickyContainer} from 'react-sticky';
 import {connect, useSelector} from 'react-redux';
 import PropTypes from 'prop-types';
 import hammer from '../../../common/hammer';
@@ -263,18 +262,16 @@ class Navigation extends Component {
         return (
             <ErrorBoundary>
                 <div className={block({error: hasError}, 'elements-main-section')}>
-                    <StickyContainer>
-                        <div className={block('header')}>
-                            <NavigationPermissionsNotice />
+                    <div className={block('header')}>
+                        <NavigationPermissionsNotice />
 
-                            <div className={block('tabs')}>
-                                {this.renderEditButton()}
-                                {this.renderTabs()}
-                            </div>
+                        <div className={block('tabs')}>
+                            {this.renderEditButton()}
+                            {this.renderTabs()}
                         </div>
+                    </div>
 
-                        <div className={block('main')}>{loaded && this.renderView()}</div>
-                    </StickyContainer>
+                    <div className={block('main')}>{loaded && this.renderView()}</div>
                     {hasError && this.renderError()}
 
                     {renderModals()}

@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import {Sticky, StickyContainer} from 'react-sticky';
 import {connect, useSelector} from 'react-redux';
 import PropTypes from 'prop-types';
 import hammer from '../../../../common/hammer';
@@ -11,6 +10,8 @@ import {FormattedText, FormattedTextOrLink} from '../../../../components/formatt
 import ElementsTable from '../../../../components/ElementsTable/ElementsTable';
 import Filter from '../../../../components/Filter/Filter';
 import Icon from '../../../../components/Icon/Icon';
+import {StickyContainer} from '../../../../components/StickyContainer/StickyContainer';
+import {Toolbar} from '../../../../components/WithStickyToolbar/Toolbar/Toolbar';
 
 import {NAVIGATION_TRANSACTION_MAP_TABLE_ID} from '../../../../constants/navigation/content/transaction-map';
 import {
@@ -25,7 +26,6 @@ import {tableItems} from '../../../../utils/navigation/content/transaction-map/t
 import {getIconNameForType} from '../../../../utils/navigation/path-editor';
 import {getPath, getTransaction} from '../../../../store/selectors/navigation';
 import {itemNavigationAllowed} from '../../../../pages/navigation/Navigation/ContentViewer/helpers';
-import {HEADER_HEIGHT} from '../../../../constants/index';
 
 import {useRumMeasureStop} from '../../../../rum/RumUiContext';
 import {useAppRumMeasureStart} from '../../../../rum/rum-app-measures';
@@ -137,33 +137,35 @@ class TransactionMap extends Component {
         return (
             <div className={block()}>
                 <StickyContainer>
-                    <Sticky topOffset={-HEADER_HEIGHT}>
-                        {({isSticky}) => (
-                            <div
-                                className={block('overview', {
-                                    sticky: isSticky,
-                                })}
-                            >
-                                <Filter
-                                    hasClear
-                                    size="m"
-                                    value={filter}
-                                    debounce={300}
-                                    className={block('filter')}
-                                    onChange={this.handleFilterChange}
-                                    placeholder="Filter transactions..."
+                    {({stickyTopClassName}) => (
+                        <React.Fragment>
+                            <Toolbar
+                                className={stickyTopClassName}
+                                itemsToWrap={[
+                                    {
+                                        node: (
+                                            <Filter
+                                                hasClear
+                                                size="m"
+                                                value={filter}
+                                                debounce={300}
+                                                className={block('filter')}
+                                                onChange={this.handleFilterChange}
+                                                placeholder="Filter transactions..."
+                                            />
+                                        ),
+                                    },
+                                ]}
+                            />
+                            <LoadDataHandler {...this.props}>
+                                <ElementsTable
+                                    {...this.tableSettings}
+                                    items={transactions}
+                                    isLoading={loading}
                                 />
-                            </div>
-                        )}
-                    </Sticky>
-
-                    <LoadDataHandler {...this.props}>
-                        <ElementsTable
-                            {...this.tableSettings}
-                            items={transactions}
-                            isLoading={loading}
-                        />
-                    </LoadDataHandler>
+                            </LoadDataHandler>
+                        </React.Fragment>
+                    )}
                 </StickyContainer>
             </div>
         );
