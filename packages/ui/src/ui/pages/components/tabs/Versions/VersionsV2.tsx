@@ -1,4 +1,3 @@
-import {Sticky, StickyContainer} from 'react-sticky';
 import React from 'react';
 import {ConnectedProps, connect, useDispatch} from 'react-redux';
 import cn from 'bem-cn-lite';
@@ -10,6 +9,8 @@ import ElementsTable from '../../../../components/ElementsTable/ElementsTable';
 import TableInfo from '../../../../pages/components/TableInfo/TableInfo';
 import Filter from '../../../../components/Filter/Filter';
 import Select from '../../../../components/Select/Select';
+import WithStickyToolbar from '../../../../components/WithStickyToolbar/WithStickyToolbar';
+import {Toolbar} from '../../../../components/WithStickyToolbar/Toolbar/Toolbar';
 
 import {ClickableText} from '../../../../components/ClickableText/ClickableText';
 import Icon from '../../../../components/Icon/Icon';
@@ -34,7 +35,6 @@ import {
     getVersions,
 } from '../../../../store/actions/components/versions/versions_v2';
 import {DEBOUNCE_TIME} from '../../../../constants/components/versions/versions_v2';
-import {HEADER_HEIGHT} from '../../../../constants/index';
 import {useUpdater} from '../../../../hooks/use-updater';
 import VersionsSummary from './VersionSummary';
 import {RootState} from '../../../../store/reducers';
@@ -165,19 +165,16 @@ class VersionsV2 extends React.Component<ReduxProps> {
         changeBannedFilter(v);
     };
 
-    renderOverview() {
+    renderToolbar() {
         const {showingItems, totalItems} = this.props;
 
         return (
-            <Sticky topOffset={-HEADER_HEIGHT}>
-                {({isSticky}) => (
-                    <div className={b('overview', {sticky: isSticky})}>
-                        {this.renderFilters()}
-
-                        <TableInfo showingItems={showingItems} totalItems={totalItems} />
-                    </div>
-                )}
-            </Sticky>
+            <Toolbar
+                itemsToWrap={[
+                    {node: this.renderFilters(), growable: true},
+                    {node: <TableInfo showingItems={showingItems} totalItems={totalItems} />},
+                ]}
+            />
         );
     }
 
@@ -257,23 +254,25 @@ class VersionsV2 extends React.Component<ReduxProps> {
                             <VersionsSummary />
                         </CollapsibleSection>
 
-                        <StickyContainer>
-                            <CollapsibleSection
-                                name="Details"
-                                className={b('details')}
-                                collapsed={false}
-                                size={UI_COLLAPSIBLE_SIZE}
-                            >
-                                {this.renderOverview()}
-
-                                <ElementsTable
-                                    {...detailsTableProps}
-                                    isLoading={initialLoading}
-                                    items={details}
-                                    templates={this.getDetailsTemplates()}
-                                />
-                            </CollapsibleSection>
-                        </StickyContainer>
+                        <CollapsibleSection
+                            name="Details"
+                            className={b('details')}
+                            collapsed={false}
+                            size={UI_COLLAPSIBLE_SIZE}
+                        >
+                            <WithStickyToolbar
+                                topMargin="none"
+                                toolbar={this.renderToolbar()}
+                                content={
+                                    <ElementsTable
+                                        {...detailsTableProps}
+                                        isLoading={initialLoading}
+                                        items={details}
+                                        templates={this.getDetailsTemplates()}
+                                    />
+                                }
+                            />
+                        </CollapsibleSection>
                     </div>
                 </LoadDataHandler>
             </ErrorBoundary>
