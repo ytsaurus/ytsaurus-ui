@@ -98,9 +98,10 @@ class OperationsList extends Component {
                 {inDashboard && (
                     <div className={cn('elements-heading')({size: 'l'})}>Operations</div>
                 )}
-                <OperationsListToolbar />
-                {hasError && this.renderError()}
-                {!this.firstTimeError() && <OperationsListTable />}
+                <OperationsListToolbar>
+                    {hasError && this.renderError()}
+                    {!this.firstTimeError() && <OperationsListTable />}
+                </OperationsListToolbar>
             </div>
         );
     }
