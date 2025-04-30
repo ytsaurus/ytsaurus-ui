@@ -1,7 +1,7 @@
 import React from 'react';
 import {useForkRef} from '@gravity-ui/uikit';
 
-import {useIntersectionRatio} from '../../hooks/use-intersection';
+import {useIntersectionEntry} from '../../hooks/use-intersection';
 
 type IntersectionObserverContainerProps = {
     className?: string;
@@ -14,13 +14,13 @@ type IntersectionObserverContainerProps = {
 export const IntersectionObserverContainer = React.forwardRef(
     ({className, children}: IntersectionObserverContainerProps, ref: React.Ref<HTMLDivElement>) => {
         const [element, setElement] = React.useState<HTMLDivElement | null>(null);
-        const intersectionRatio =
-            useIntersectionRatio({
+        const {intersectionRatio = 0} =
+            useIntersectionEntry({
                 element,
                 options: {
                     threshold: [0, 1],
                 },
-            }) ?? 0;
+            }) ?? {};
 
         const setRef = useForkRef(setElement, ref);
 

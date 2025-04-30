@@ -134,10 +134,10 @@ class SchedulersAndAgents extends Component {
 
         return (
             <StickyContainer>
-                {({topStickyClassName}) => (
+                {({stickyTopClassName}) => (
                     <CollapsibleSectionStateLess
                         name="Schedulers and controller agents"
-                        headingClassName={topStickyClassName}
+                        headingClassName={stickyTopClassName}
                         overview={this.renderOverview()}
                         collapsed={collapsed}
                         onToggle={this.onToggle}

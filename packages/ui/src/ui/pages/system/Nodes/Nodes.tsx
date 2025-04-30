@@ -220,10 +220,10 @@ const Nodes = (props: NodesProps) => {
 
         return (
             <StickyContainer>
-                {({topStickyClassName}) => (
+                {({stickyTopClassName}) => (
                     <CollapsibleSectionStateLess
                         overview={renderOverview()}
-                        headingClassName={topStickyClassName}
+                        headingClassName={stickyTopClassName}
                         collapsed={collapsed}
                         onToggle={onToggle}
                         name={'Nodes'}

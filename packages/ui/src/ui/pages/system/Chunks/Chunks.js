@@ -228,10 +228,10 @@ class Chunks extends Component {
 
         return (
             <StickyContainer>
-                {({topStickyClassName}) => (
+                {({stickyTopClassName}) => (
                     <CollapsibleSectionStateLess
                         name={'Chunks'}
-                        headingClassName={topStickyClassName}
+                        headingClassName={stickyTopClassName}
                         overview={overview}
                         onToggle={this.onToggle}
                         collapsed={collapsed}

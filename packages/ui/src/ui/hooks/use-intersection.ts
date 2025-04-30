@@ -15,7 +15,7 @@ type UseIntersectionParams = {
         threshold: Array<number>;
         rootMargin?: RootMargin;
     };
-    onIntersection?: ((intersectionRatio: number) => void) | undefined;
+    onIntersection?: ((entry: IntersectionObserverEntry) => void) | undefined;
 };
 
 export function useIntersection({element, options, onIntersection}: UseIntersectionParams) {
@@ -26,8 +26,7 @@ export function useIntersection({element, options, onIntersection}: UseIntersect
             return () => {};
         }
         const observer = new IntersectionObserver((entries) => {
-            const value = entries[0].intersectionRatio;
-            onIntersection?.(value);
+            onIntersection?.(entries[0]);
         }, optionsMemoized);
         observer.observe(element);
 
@@ -39,8 +38,8 @@ export function useIntersection({element, options, onIntersection}: UseIntersect
     }, [element, optionsMemoized, onIntersection]);
 }
 
-export function useIntersectionRatio(params: Omit<UseIntersectionParams, 'onIntersection'>) {
-    const [intersectionRatio, setIntersectionRatio] = React.useState<number>();
+export function useIntersectionEntry(params: Omit<UseIntersectionParams, 'onIntersection'>) {
+    const [intersectionRatio, setIntersectionRatio] = React.useState<IntersectionObserverEntry>();
     useIntersection({...params, onIntersection: setIntersectionRatio});
     return intersectionRatio;
 }
