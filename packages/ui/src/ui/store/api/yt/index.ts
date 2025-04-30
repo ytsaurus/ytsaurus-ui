@@ -136,8 +136,10 @@ export function useUpdateBatchMutation<T>(
     options?: MutationOptions<BatchMutationReturnType, BatchMutationDefinition>,
 ) {
     const [updateFn, result] = useUpdateBatchMutationRaw(options);
-    const typedUpdateFn = async (args: BatchApiArgs) => {
-        const response = await updateFn(args);
+    // cluster param makes no sense for mutation requests
+    const typedUpdateFn = async (args: Omit<BatchApiArgs, 'cluster'>) => {
+        // adding cluster param for types compatibility
+        const response = await updateFn({...args, cluster: ''});
         if (response.data) {
             return {
                 data: response.data as BatchApiResults<T> | undefined,
