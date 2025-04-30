@@ -28,6 +28,7 @@ import {PageHeadByCluster} from '../../components/PageHead/PageHead';
 
 import FlexSplitPane from '../../components/FlexSplitPane/FlexSplitPane';
 import {YTErrorBlock} from '../../components/Error/Error';
+import {ElementWidthAsCssVariable} from '../../components/ElementWidthAsCssVariable/ElementWidthAsCssVariable';
 import {HandleMaintenance} from '../../containers/MaintenancePage/HandleMaintenance';
 import PreloadError from '../../containers/PreloadError/PreloadError';
 
@@ -294,6 +295,11 @@ class ClusterPage extends Component {
                             width: this.state.width,
                         })}
                     >
+                        <ElementWidthAsCssVariable
+                            className={b('content-pane')}
+                            element={splitScreen.isSplit ? this.contentPaneRef.current : undefined}
+                            cssVariableName="--yt-with-sticky-toolbar-fixed-max-width"
+                        />
                         <ScrollableElementContext.Provider
                             value={splitScreen.isSplit ? this.contentPaneRef.current : undefined}
                         >

@@ -3,7 +3,6 @@ import React, {Component} from 'react';
 import {connect, useDispatch, useSelector} from 'react-redux';
 import PropTypes from 'prop-types';
 import cn from 'bem-cn-lite';
-import {Sticky, StickyContainer} from 'react-sticky';
 
 import map_ from 'lodash/map';
 
@@ -16,6 +15,7 @@ import Filter from '../../../../components/Filter/Filter';
 import {SelectSingle} from '../../../../components/Select/Select';
 import {YTErrorBlock} from '../../../../components/Error/Error';
 import Icon from '../../../../components/Icon/Icon';
+import {StickyContainer} from '../../../../components/StickyContainer/StickyContainer';
 import TTLInfo from '../../../../components/TTLInfo/TTLInfo';
 import CreateTableModal from '../../modals/CreateTableModal/CreateTableModal';
 import {isCreateTableModalVisible} from '../../../../store/selectors/navigation/modals/create-table';
@@ -37,7 +37,7 @@ import {
 } from '../../../../store/selectors/navigation/content/map-node';
 
 import {OPEN_CREATE_DIRECTORY_POPUP} from '../../../../constants/navigation/modals/create-directory';
-import {HEADER_HEIGHT, LOADING_STATUS} from '../../../../constants/index';
+import {LOADING_STATUS} from '../../../../constants/index';
 import {ContentMode} from '../../../../constants/navigation';
 
 import {openEditingPopup} from '../../../../store/actions/navigation/modals/path-editing-popup';
@@ -105,18 +105,6 @@ class MapNode extends Component {
         }
     }
 
-    renderToolbar() {
-        return (
-            <Sticky topOffset={-HEADER_HEIGHT}>
-                {({isSticky}) => (
-                    <div className={tbBlock({sticky: isSticky})}>
-                        <MapNodeToolbarConnected />
-                    </div>
-                )}
-            </Sticky>
-        );
-    }
-
     renderError() {
         const {
             error: {message, details},
@@ -131,11 +119,16 @@ class MapNode extends Component {
     renderView() {
         return (
             <StickyContainer>
-                {this.renderToolbar()}
-
-                <div className={block('content')}>
-                    <MapNodesTable />
-                </div>
+                {({stickyTopClassName}) => (
+                    <React.Fragment>
+                        <div className={tbBlock({sticky: false}, stickyTopClassName)}>
+                            <MapNodeToolbarConnected />
+                        </div>
+                        <div className={block('content')}>
+                            <MapNodesTable />
+                        </div>
+                    </React.Fragment>
+                )}
             </StickyContainer>
         );
     }

@@ -19,6 +19,8 @@
         max-width: calc(100vw - var(--gn-aside-header-size));
         max-height: calc(100vh - var(--app-header-height) - var(--app-footer-height));
 
+        --yt-sticky-container-top-offset-sticky-diff: -56px;
+
         & .flex-split__pane {
             overflow: auto;
         }
