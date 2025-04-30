@@ -359,7 +359,7 @@ class ACL extends Component<Props> {
                             </Button>
                         </div>
                         <WithStickyToolbar
-                            padding="skip-vertical"
+                            topMargin="none"
                             toolbar={<ApproversFilters />}
                             bottomMargin="regular"
                             content={
@@ -421,7 +421,7 @@ class ACL extends Component<Props> {
                         {useColumns ? 'Private columns permissions' : 'Object permissions'}
                     </div>
                     <WithStickyToolbar
-                        padding="skip-vertical"
+                        topMargin="none"
                         bottomMargin="regular"
                         toolbar={
                             <ObjectPermissionsFilters

@@ -8,6 +8,10 @@ $stickySpacerHeight: 6px;
         margin-bottom: 20px;
     }
 
+    &_top-margin_none {
+        margin-top: -10px;
+    }
+
     --yt-with-sticky-toolbar-toolbar-height: #{$TOOLBAR_COMPONENT_HEIGHT};
 
     &_x2 {
@@ -16,11 +20,6 @@ $stickySpacerHeight: 6px;
 
     & &__toolbar {
         z-index: var(--fixed-toolbar-z-index);
-
-        &_padding_skip-vertical {
-            margin-top: -10px;
-            margin-bottom: 10px;
-        }
 
         &_padding_skip-horizontal {
             padding-left: unset;

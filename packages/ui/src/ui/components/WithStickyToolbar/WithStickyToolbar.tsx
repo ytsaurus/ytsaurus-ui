@@ -18,8 +18,9 @@ type Props = Omit<StickyContainerProps, 'children' | 'hideShadow' | 'keepWidth'>
     toolbar: React.ReactNode;
     content: React.ReactNode;
     doubleHeight?: boolean;
-    padding?: 'skip-vertical' | 'skip-horizontal';
+    padding?: 'skip-horizontal';
     bottomMargin?: 'regular';
+    topMargin?: 'none';
     hideToolbarShadow?: boolean;
 };
 
@@ -30,13 +31,17 @@ export default function WithStickyToolbar({
     content,
     padding,
     bottomMargin,
+    topMargin,
     hideToolbarShadow,
     ...rest
 }: Props) {
     return (
         <StickyContainer
             {...rest}
-            className={block({'bottom-margin': bottomMargin, x2: doubleHeight}, className)}
+            className={block(
+                {'bottom-margin': bottomMargin, 'top-margin': topMargin, x2: doubleHeight},
+                className,
+            )}
             hideShadow={hideToolbarShadow}
             sitkyPostion="fixed"
         >
