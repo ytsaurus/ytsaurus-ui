@@ -1,19 +1,4 @@
-@import '../../../../styles/mixins';
-
 .navigation-transaction-map {
-    &__overview {
-        display: flex;
-
-        padding: 10px 0;
-
-        z-index: var(--fixed-toolbar-z-index);
-        background-color: var(--main-background);
-
-        &_sticky {
-            @include sticky-style();
-        }
-    }
-
     &__filter {
         width: 30%;
         min-width: 200px;
