@@ -1,11 +1,15 @@
 .g-root {
     --yt-sticky-container-top-offset: var(--app-header-height, '0px');
+    --yt-sticky-container-top-offset-sticky-diff: 0px;
 }
 
 .yt-sticky-container {
     &__sticky {
         position: sticky;
-        top: var(--yt-sticky-container-top-offset);
+        top: calc(
+            var(--yt-sticky-container-top-offset) +
+                var(--yt-sticky-container-top-offset-sticky-diff)
+        );
         z-index: 1;
 
         background-color: var(--main-background);
@@ -16,6 +20,7 @@
             margin-left: -20px;
             padding-left: 20px;
             padding-right: 20px;
+            top: var(--yt-sticky-container-top-offset);
         }
 
         &_shadow {

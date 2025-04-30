@@ -30,6 +30,8 @@ $stickySpacerHeight: 6px;
 
         &_sticky {
             position: fixed;
+            max-width: var(--yt-with-sticky-toolbar-fixed-max-width, unset);
+            overflow: hidden;
         }
     }
 

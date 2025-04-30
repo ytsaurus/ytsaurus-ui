@@ -5,13 +5,6 @@
     min-width: 1150px;
     $this: &;
 
-    .elements-toolbar {
-        &_sticky {
-            @include sticky-style();
-            padding: 0 20px;
-        }
-    }
-
     .elements-table__body {
         .elements-table__row {
             cursor: pointer;
