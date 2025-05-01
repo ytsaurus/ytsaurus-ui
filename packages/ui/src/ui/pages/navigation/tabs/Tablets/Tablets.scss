@@ -11,13 +11,6 @@
 
         padding: 10px 0;
         margin-bottom: 20px;
-
-        z-index: var(--fixed-toolbar-z-index);
-        background-color: var(--main-background);
-
-        &_sticky {
-            @include sticky-style();
-        }
     }
 
     &__pivot-key {

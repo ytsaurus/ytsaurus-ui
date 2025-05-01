@@ -1,4 +1,3 @@
-import {Sticky, StickyContainer} from 'react-sticky';
 import React, {Component, Fragment} from 'react';
 import {connect, useSelector} from 'react-redux';
 import PropTypes from 'prop-types';
@@ -18,6 +17,7 @@ import Label from '../../../../components/Label/Label';
 import Link from '../../../../components/Link/Link';
 import Button from '../../../../components/Button/Button';
 import Icon from '../../../../components/Icon/Icon';
+import WithStickyToolbar from '../../../../components/WithStickyToolbar/WithStickyToolbar';
 
 import {getPath, getType} from '../../../../store/selectors/navigation';
 
@@ -29,7 +29,7 @@ import {
 } from '../../../../store/selectors/navigation/tabs/tablets';
 
 import {NAVIGATION_TABLETS_TABLE_ID} from '../../../../constants/navigation/tabs/tablets';
-import {HEADER_HEIGHT, Page} from '../../../../constants/index';
+import {Page} from '../../../../constants/index';
 
 import {
     abortAndReset,
@@ -501,52 +501,48 @@ class Tablets extends Component {
         const {tabletsFilter, changeTabletsFilter, tabletsMode, changeTabletsMode} = this.props;
 
         return (
-            <Sticky topOffset={-HEADER_HEIGHT}>
-                {({isSticky}) => (
-                    <div className={block('overview', {sticky: isSticky})}>
-                        <Filter
-                            size="m"
-                            value={tabletsFilter}
-                            onChange={changeTabletsFilter}
-                            placeholder="Filter by Tablet Id/Cell Id/State/Host..."
-                            className={block('tablets-filter')}
-                        />
+            <div className={block('overview')}>
+                <Filter
+                    size="m"
+                    value={tabletsFilter}
+                    onChange={changeTabletsFilter}
+                    placeholder="Filter by Tablet Id/Cell Id/State/Host..."
+                    className={block('tablets-filter')}
+                />
 
-                        <RadioButton
-                            size="m"
-                            value={tabletsMode}
-                            onChange={changeTabletsMode}
-                            name="navigation-tablets-mode"
-                            items={[
-                                {
-                                    value: 'default',
-                                    text: 'Default',
-                                },
-                                {
-                                    value: 'data',
-                                    text: 'Data',
-                                },
-                                {
-                                    value: 'by_host',
-                                    text: 'Data by nodes',
-                                },
-                                {
-                                    value: 'by_cell',
-                                    text: 'Data by cells',
-                                },
-                                {
-                                    value: 'structure',
-                                    text: 'Structure',
-                                },
-                                {
-                                    value: 'performance',
-                                    text: 'Performance',
-                                },
-                            ]}
-                        />
-                    </div>
-                )}
-            </Sticky>
+                <RadioButton
+                    size="m"
+                    value={tabletsMode}
+                    onChange={changeTabletsMode}
+                    name="navigation-tablets-mode"
+                    items={[
+                        {
+                            value: 'default',
+                            text: 'Default',
+                        },
+                        {
+                            value: 'data',
+                            text: 'Data',
+                        },
+                        {
+                            value: 'by_host',
+                            text: 'Data by nodes',
+                        },
+                        {
+                            value: 'by_cell',
+                            text: 'Data by cells',
+                        },
+                        {
+                            value: 'structure',
+                            text: 'Structure',
+                        },
+                        {
+                            value: 'performance',
+                            text: 'Performance',
+                        },
+                    ]}
+                />
+            </div>
         );
     }
 
@@ -578,16 +574,17 @@ class Tablets extends Component {
                 </CollapsibleSection>
 
                 <CollapsibleSection name="Tablets" size={collapsibleSize}>
-                    <StickyContainer>
-                        {this.renderOverview()}
-
-                        <ElementsTable
-                            {...this.tableSettings}
-                            items={tablets}
-                            rowClassName={Tablets.rowClassName}
-                            onItemClick={this.onRowClick}
-                        />
-                    </StickyContainer>
+                    <WithStickyToolbar
+                        toolbar={this.renderOverview()}
+                        content={
+                            <ElementsTable
+                                {...this.tableSettings}
+                                items={tablets}
+                                rowClassName={Tablets.rowClassName}
+                                onItemClick={this.onRowClick}
+                            />
+                        }
+                    />
                 </CollapsibleSection>
             </Fragment>
         );

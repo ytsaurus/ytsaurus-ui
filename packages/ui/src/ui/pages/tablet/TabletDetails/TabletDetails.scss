@@ -3,6 +3,8 @@
 .tablet-details {
     $graph-height: 300px;
 
+    padding-bottom: 50px;
+
     .meta-table {
         &__group:not(:last-child) {
             .meta-table-item {
@@ -58,15 +60,7 @@
 
     &__table-overview {
         display: flex;
-
         padding: 10px 0;
-
-        z-index: var(--fixed-toolbar-z-index);
-        background-color: var(--main-background);
-
-        &_sticky {
-            @include sticky-style();
-        }
     }
 
     &__table {
