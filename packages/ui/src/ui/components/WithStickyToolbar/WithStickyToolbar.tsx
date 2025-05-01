@@ -16,7 +16,8 @@ export const STICKY_DOUBLE_TOOLBAR_BOTTOM = HEADER_HEIGHT + TOOLBAR_COMPONENT_HE
 
 type Props = Omit<StickyContainerProps, 'children' | 'hideShadow' | 'keepWidth'> & {
     toolbar: React.ReactNode;
-    content: React.ReactNode;
+    toolbarClassName?: string;
+    content: React.ReactNode | ((props: {sticky: boolean}) => React.ReactNode);
     doubleHeight?: boolean;
     padding?: 'skip-horizontal';
     bottomMargin?: 'regular';
@@ -28,6 +29,7 @@ export default function WithStickyToolbar({
     className,
     doubleHeight,
     toolbar,
+    toolbarClassName,
     content,
     padding,
     bottomMargin,
@@ -47,11 +49,17 @@ export default function WithStickyToolbar({
         >
             {({stickyTop: sticky, stickyTopClassName}) => (
                 <React.Fragment>
-                    <div className={block('toolbar', {padding, sticky}, stickyTopClassName)}>
+                    <div
+                        className={block(
+                            'toolbar',
+                            {padding, sticky},
+                            [stickyTopClassName, toolbarClassName].filter(Boolean).join(' '),
+                        )}
+                    >
                         {toolbar}
                     </div>
                     <div className={block('toolbar-spacer', {sticky})} />
-                    {content}
+                    {typeof content === 'function' ? content({sticky}) : content}
                 </React.Fragment>
             )}
         </StickyContainer>
