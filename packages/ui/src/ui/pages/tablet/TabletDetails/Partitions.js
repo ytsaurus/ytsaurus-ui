@@ -1,4 +1,3 @@
-import {Sticky, StickyContainer} from 'react-sticky';
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import hammer from '../../../common/hammer';
@@ -16,12 +15,12 @@ import ErrorBoundary from '../../../components/ErrorBoundary/ErrorBoundary';
 import RadioButton from '../../../components/RadioButton/RadioButton';
 import {FormattedText} from '../../../components/formatters';
 import Label from '../../../components/Label/Label';
+import {StickyContainer} from '../../../components/StickyContainer/StickyContainer';
 
 import {TABLET_PARTITIONS_TABLE_ID} from '../../../constants/tablet';
 import {changeContentMode} from '../../../store/actions/tablet/tablet';
 import {getPartitions} from '../../../store/selectors/tablet/tablet';
 import {partitionsTableItems} from '../../../utils/tablet/table';
-import {HEADER_HEIGHT} from '../../../constants/index';
 import StoresDialog from './StoresDialog';
 
 const headingBlock = cn('elements-heading');
@@ -222,30 +221,22 @@ class Partitions extends Component {
         );
     }
 
-    renderTableOverview() {
+    renderTableOverview(className) {
         const {contentMode, block} = this.props;
 
         return (
-            <Sticky topOffset={-HEADER_HEIGHT}>
-                {({isSticky}) => (
-                    <div
-                        className={block('table-overview', {
-                            sticky: isSticky,
-                        })}
-                    >
-                        <RadioButton
-                            size="m"
-                            value={contentMode}
-                            onChange={this.handleModeChange}
-                            name="tablet-partitions-content-mode"
-                            items={[
-                                {value: 'default', text: 'Default'},
-                                {value: 'keys', text: 'Keys'},
-                            ]}
-                        />
-                    </div>
-                )}
-            </Sticky>
+            <div className={block('table-overview', className)}>
+                <RadioButton
+                    size="m"
+                    value={contentMode}
+                    onChange={this.handleModeChange}
+                    name="tablet-partitions-content-mode"
+                    items={[
+                        {value: 'default', text: 'Default'},
+                        {value: 'keys', text: 'Keys'},
+                    ]}
+                />
+            </div>
         );
     }
 
@@ -257,9 +248,13 @@ class Partitions extends Component {
                 <div className={headingBlock({size: 'm'})}>Partitions</div>
 
                 <StickyContainer>
-                    {this.renderTableOverview()}
+                    {({stickyTopClassName}) => (
+                        <React.Fragment>
+                            {this.renderTableOverview(stickyTopClassName)}
 
-                    <ElementsTable {...this.tableSettings} items={partitions} />
+                            <ElementsTable {...this.tableSettings} items={partitions} />
+                        </React.Fragment>
+                    )}
                 </StickyContainer>
             </ErrorBoundary>
         );
