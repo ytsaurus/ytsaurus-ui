@@ -1,5 +1,3 @@
-/* eslint-disable react/prop-types */
-import {StickyContainer} from 'react-sticky';
 import React, {useEffect} from 'react';
 import {connect, useSelector} from 'react-redux';
 import PropTypes from 'prop-types';
@@ -15,6 +13,7 @@ import TableMeta from '../../../../pages/navigation/content/Table/TableMeta/Tabl
 import LoadDataHandler from '../../../../components/LoadDataHandler/LoadDataHandler';
 import FullScreen from '../../../../components/FullScreen/FullScreen';
 import Yson from '../../../../components/Yson/Yson';
+import WithStickyToolbar from '../../../../components/WithStickyToolbar/WithStickyToolbar';
 
 import {OVERVIEW_HEIGHT} from '../../../../constants/navigation/content/table';
 import {getPath} from '../../../../store/selectors/navigation';
@@ -127,6 +126,7 @@ const renderTable = (props) => {
         loading,
         loaded,
         isSplit,
+        sticky,
     } = props;
 
     let stickyTop;
@@ -167,7 +167,7 @@ const renderTable = (props) => {
 };
 
 function Table(props) {
-    const {path, getTableData, abortAndReset} = props;
+    const {path, getTableData, abortAndReset, isSplit} = props;
     const isYqlV3Types = useSelector(isYqlTypesEnabled);
 
     useEffect(() => {
@@ -176,6 +176,8 @@ function Table(props) {
     }, [path, isYqlV3Types, abortAndReset]);
 
     const {isFullScreen, handleScreenChanged, isDynamic} = props;
+
+    const toolbar = <TableOverview />;
     return (
         <div className={block()}>
             <TableMeta />
@@ -185,10 +187,19 @@ function Table(props) {
                 enabled={isFullScreen}
                 onChange={handleScreenChanged}
             >
-                <StickyContainer>
-                    <TableOverview />
-                    {renderTable(props)}
-                </StickyContainer>
+                {isSplit && !fullScreen ? (
+                    <React.Fragment>
+                        {toolbar}
+                        {renderTable(props)}
+                    </React.Fragment>
+                ) : (
+                    <WithStickyToolbar
+                        hideToolbarShadow
+                        toolbarClassName={block('toolbar', {fullscreen: isFullScreen})}
+                        toolbar={toolbar}
+                        content={({sticky}) => renderTable({...props, sticky})}
+                    />
+                )}
             </FullScreen>
             {renderColumnSelectorModal(props)}
             {isDynamic && <OffsetSelectorModal />}

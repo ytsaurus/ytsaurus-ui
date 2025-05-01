@@ -10,11 +10,12 @@
         }
     }
 
+    $TOOLBAR_HEIGHT: 50px;
+
     &_fullscreen {
-        margin-top: 50px;
         padding: 0 10px;
         width: 100vw;
-        height: calc(100vh - var(--app-header-height) - var(--app-footer-height));
+        height: calc(100vh - #{$TOOLBAR_HEIGHT} - 20px);
         overflow: auto;
     }
 

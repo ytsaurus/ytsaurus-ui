@@ -21,7 +21,7 @@ export const CHANGE_CELL_SIZE = PREFIX + 'CHANGE_CELL_SIZE';
 export const SET_TABLE_COLUMNS_PRESET = PREFIX + 'SET_TABLE_COLUMN_PRESETS';
 export const SET_TABLE_COLUMNS_PRESET_HASH = PREFIX + 'SET_TABLE_PRESET_HASH';
 
-export const OVERVIEW_HEIGHT = 50;
+export const OVERVIEW_HEIGHT = 48;
 
 export const cellSizeRadioButtonItems = [
     {value: String(1024), text: '1 KiB'},

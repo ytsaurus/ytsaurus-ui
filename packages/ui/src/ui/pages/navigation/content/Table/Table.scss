@@ -9,4 +9,13 @@
     &__fullscreen:fullscreen {
         background-color: var(--main-background);
     }
+
+    &__toolbar {
+        &_fullscreen {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            width: calc(100vw - 20px);
+        }
+    }
 }

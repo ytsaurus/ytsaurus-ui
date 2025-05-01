@@ -1,7 +1,6 @@
 import React from 'react';
 import cn from 'bem-cn-lite';
 import PropTypes from 'prop-types';
-import {Sticky} from 'react-sticky';
 import {connect} from 'react-redux';
 import ypath from '../../../../../common/thor/ypath';
 
@@ -17,8 +16,6 @@ import Paginator from '../../../../../pages/navigation/content/Table/TableOvervi
 import ErrorBoundary from '../../../../../components/ErrorBoundary/ErrorBoundary';
 import {OpenQueryButtons} from '../../../../../containers/OpenQueryButtons/OpenQueryButtons';
 
-import {HEADER_HEIGHT} from '../../../../../constants/index';
-
 import './TableOverview.scss';
 import EditTableActions from './EditTableActions';
 import DataLensButton from './DatalensButton';
@@ -28,44 +25,30 @@ const block = cn('navigation-table-overview');
 TableOverview.propTypes = {
     // from connect
     isFullScreen: PropTypes.bool.isRequired,
-    isSplit: PropTypes.bool.isRequired,
 };
 
-function TableOverview(props) {
-    const {isFullScreen, isSplit, allowPagination} = props;
-
+function TableOverview({isFullScreen, allowPagination}) {
     // TODO: add sticky for the Overview in the split mode https://github.com/captivationsoftware/react-sticky/issues/282
     return (
         <ErrorBoundary>
-            <Sticky topOffset={isFullScreen ? HEADER_HEIGHT : -HEADER_HEIGHT}>
-                {({isSticky}) => (
-                    <div
-                        className={block({
-                            sticky: isSticky && !isSplit,
-                            fullscreen: isFullScreen,
-                            split: isSplit,
-                        })}
-                    >
-                        {allowPagination && <Paginator block={block} />}
-                        <OffsetInput block={block} />
-                        {!isFullScreen && <ColumnSelectorButton block={block} />}
-                        {!isFullScreen && <SettingsButton block={block} />}
-                        {!isFullScreen && <OpenQueryButtons className={block('query')} />}
-                        {!isFullScreen && <JupyterButton block={block} />}
-                        {!isFullScreen && <DataLensButton className={block('datalens')} />}
-                        {!isFullScreen && <TableActions block={block} />}
-                        <FullScreenButton block={block} />
-                        {!isFullScreen && <EditTableActions />}
-                    </div>
-                )}
-            </Sticky>
+            <div className={block()}>
+                {allowPagination && <Paginator block={block} />}
+                <OffsetInput block={block} />
+                {!isFullScreen && <ColumnSelectorButton block={block} />}
+                {!isFullScreen && <SettingsButton block={block} />}
+                {!isFullScreen && <OpenQueryButtons className={block('query')} />}
+                {!isFullScreen && <JupyterButton block={block} />}
+                {!isFullScreen && <DataLensButton className={block('datalens')} />}
+                {!isFullScreen && <TableActions block={block} />}
+                <FullScreenButton block={block} />
+                {!isFullScreen && <EditTableActions />}
+            </div>
         </ErrorBoundary>
     );
 }
 
 const mapStateToProps = (state) => {
     const {isFullScreen} = state.navigation.content.table;
-    const {isSplit} = state.global.splitScreen;
     const attributes = getAttributes(state);
 
     const isUnmounted = ypath.getValue(attributes, '/tablet_state') === 'unmounted';
@@ -75,7 +58,6 @@ const mapStateToProps = (state) => {
 
     return {
         isFullScreen,
-        isSplit,
         allowPagination,
     };
 };
