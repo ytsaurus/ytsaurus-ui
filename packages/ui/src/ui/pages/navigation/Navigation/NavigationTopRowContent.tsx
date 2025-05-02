@@ -5,8 +5,7 @@ import {useDispatch, useSelector} from 'react-redux';
 
 import {Flex} from '@gravity-ui/uikit';
 
-// @ts-ignore
-import metrics from '../../../common/utils/metrics';
+import {getMetrics} from '../../../common/utils/metrics';
 
 import {
     getMode,
@@ -146,7 +145,7 @@ function NavigationTargetPathButton() {
 }
 
 function onCopyToClipboard() {
-    metrics.countEvent({'navigation_copy-path': 'clicked'});
+    getMetrics().countEvent('navigation_copy-path');
 }
 
 function EditableNavigationBreadcrumbs() {
@@ -314,9 +313,7 @@ function RefreshButton() {
     const dispatch = useDispatch();
 
     const handleClick = React.useCallback(() => {
-        metrics.countEvent({
-            navigation_refresh: 'clicked',
-        });
+        getMetrics().countEvent('navigation_refresh');
         dispatch(updateView());
     }, [dispatch]);
 

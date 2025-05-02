@@ -1,5 +1,5 @@
 import yt from '@ytsaurus/javascript-wrapper/lib/yt';
-import metrics from '../../../../common/utils/metrics';
+import {getMetrics} from '../../../../common/utils/metrics';
 import ypath from '@ytsaurus/interface-helpers/lib/ypath';
 import hammer from '../../../../common/hammer';
 import CancelHelper from '../../../../utils/cancel-helper';
@@ -78,9 +78,7 @@ export function performReplicaAction({mode, state, auto_replica_tracker, replica
             return Promise.resolve();
         }
 
-        metrics.countEvent({
-            navigation_replicated_table_replica_action: actionName,
-        });
+        getMetrics().countEvent('navigation_replicated_table_replica_action', actionName);
 
         const replicaId = ypath.getValue(replica, '');
         const parameters = {

@@ -3,7 +3,7 @@ import moment from 'moment';
 import yt from '@ytsaurus/javascript-wrapper/lib/yt';
 
 import hammer from '../../../../../common/hammer';
-import metrics from '../../../../../common/utils/metrics';
+import {getMetrics} from '../../../../../common/utils/metrics';
 
 function createTemporaryPath(login) {
     const temporaryPathBase = '//tmp/ui/' + login;
@@ -24,9 +24,7 @@ function createTemporaryPath(login) {
 export function performJobAction({login, name, item}) {
     const parameters = {job_id: item.id};
 
-    metrics.countEvent({
-        'operation_detail_running-jobs_action': name,
-    });
+    getMetrics().countEvent('operation_detail_running-jobs_action', name);
 
     let jobActionPromise;
 

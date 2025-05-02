@@ -1,7 +1,7 @@
 import moment from 'moment';
 
 import ypath from '../../common/thor/ypath';
-import metrics from '../../common/utils/metrics';
+import {getMetrics} from '../../common/utils/metrics';
 import {hasTaskHistograms} from './jobs';
 import {ytApiV3} from '../../..../../rum/rum-wrap-api';
 import {PLEASE_PROCEED_TEXT} from '../../utils/actions';
@@ -55,7 +55,7 @@ export function performAction<T = unknown>({
         parameters = {...parameters, ...option.data.parameters};
     }
 
-    metrics.countEvent({operation_detail_action: name});
+    getMetrics().countEvent('operation_detail_action', name);
 
     return ytApiV3[`${name}Operation`](parameters).then(updateOperation);
 }

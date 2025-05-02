@@ -1,112 +1,73 @@
-import {getConfigData} from '../../config/ui-settings';
-import {YT} from '../../config/yt-config';
+import UIFactory from '../../UIFactory';
 import {rumLogError} from '../../rum/rum-counter';
+import {getConfigData} from '../../config/ui-settings';
+import {YandexMetrika} from './YandexMetrika';
 
-function createMetricsHit(params: object) {
-    return wrapWithEnv({
-        yt_hit: params,
-    });
+type MetricCountEventParams = object | string | number;
+
+export interface AnalyticsService {
+    countHit(params: object): Promise<void>;
+    countEvent(event: string, params?: MetricCountEventParams): Promise<void>;
+    reachGoal(goal: string, options: object): Promise<void>;
 }
 
-function createMetricsEvent(params: object) {
-    return wrapWithEnv({
-        yt_event: params,
-    });
-}
+class MultiAnalytics implements AnalyticsService {
+    private services: AnalyticsService[];
 
-function wrapWithEnv(params: object) {
-    if (YT.environment !== 'development' && YT.environment !== 'localmode') {
-        return params;
-    }
-
-    return {[YT.environment]: params};
-}
-
-interface Counter {
-    hit(url: string, options: object): void;
-    params(params: object): void;
-    reachGoal(goal: string, options: object): void;
-}
-
-const FAKE_COUNTER: Counter = {hit() {}, params() {}, reachGoal() {}};
-
-function getCounter(id: string | number): Counter | undefined {
-    const COUNTER_NAME = 'yaCounter' + id;
-    return (window as any)[COUNTER_NAME];
-}
-
-function waitForCounter(id?: string | number): Promise<Counter> {
-    if (!id) {
-        return Promise.resolve(FAKE_COUNTER);
-    }
-
-    const res = getCounter(id);
-    if (res) {
-        return Promise.resolve(res);
-    } else {
-        const INIT_EVENT_NAME = 'yacounter' + id + 'inited';
-        return new Promise((resolve) => {
-            const listener = () => {
-                document.removeEventListener(INIT_EVENT_NAME, listener);
-                resolve(getCounter(id)!);
-            };
-            document.addEventListener(INIT_EVENT_NAME, listener);
-        });
-    }
-}
-
-class MetrikaCounter {
-    private id?: string | number;
-
-    constructor(id?: string | number) {
-        this.id = id;
+    constructor(services: AnalyticsService[]) {
+        this.services = services;
     }
 
     async countHit(params: object) {
-        const url = this.getURL();
-        const options = {params: createMetricsHit(params)};
-        return this.callImpl('hit', url, options);
+        await this.callImpl('countHit', params);
     }
 
-    async countEvent(params: object) {
-        params = createMetricsEvent(params);
-        return this.callImpl('params', params);
+    async countEvent(event: string, params?: MetricCountEventParams) {
+        await this.callImpl('countEvent', event, params);
     }
 
     async reachGoal(goal: string, options: object) {
-        return this.callImpl('reachGoal', goal, {service: 'yt', ...options});
+        await this.callImpl('reachGoal', goal, options);
     }
 
-    private async callImpl<K extends keyof Counter>(method: K, ...args: Parameters<Counter[K]>) {
-        const counter = await waitForCounter(this.id);
-        try {
-            (counter[method] as any)(...args);
-        } catch (e) {
-            rumLogError(
-                {
-                    message: `Failed to call metrika.${method} for ${this.id}-counter`,
-                    additional: {
-                        args,
-                    },
-                },
-                e as Error,
-            );
-        }
-    }
-
-    private getURL() {
-        // This solution is used due to encoding bug in firefox, that is currently happenning if location.href is used
-        return (
-            location.protocol +
-            '//' +
-            location.host +
-            location.pathname +
-            location.search +
-            location.hash
+    private async callImpl<K extends keyof AnalyticsService>(
+        method: K,
+        ...args: Parameters<AnalyticsService[K]>
+    ) {
+        await Promise.all(
+            this.services.map((service, idx) =>
+                (service[method] as any)(...args).catch((e: Error) => {
+                    rumLogError(
+                        {
+                            message: `Failed to call ${method} in analytics service ${idx}`,
+                            additional: {args},
+                        },
+                        e as Error,
+                    );
+                }),
+            ),
         );
     }
 }
 
-const metrics = new MetrikaCounter(getConfigData().metrikaCounterId);
+const createAnalytics = () => {
+    const config = getConfigData();
+    const additionalServices = UIFactory.getAnalyticsService?.() ?? [];
+    const services = ([] as AnalyticsService[]).concat(additionalServices);
 
-export default metrics;
+    if (config.metrikaCounterId) {
+        services.push(new YandexMetrika(config.metrikaCounterId));
+    }
+
+    return new MultiAnalytics(services);
+};
+
+let analytics: AnalyticsService | null = null;
+
+export function getMetrics(): AnalyticsService {
+    if (!analytics) {
+        analytics = createAnalytics();
+    }
+
+    return analytics;
+}

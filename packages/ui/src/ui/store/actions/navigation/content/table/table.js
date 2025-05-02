@@ -6,7 +6,7 @@ import map_ from 'lodash/map';
 import reduce_ from 'lodash/reduce';
 
 import {Toaster} from '@gravity-ui/uikit';
-import metrics from '../../../../../common/utils/metrics';
+import {getMetrics} from '../../../../../common/utils/metrics';
 import ypath from '../../../../../common/thor/ypath';
 
 import yt from '@ytsaurus/javascript-wrapper/lib/yt';
@@ -635,11 +635,7 @@ export function openTableWithPresetOfColumns() {
             const url = `${href}&columns=${hash}`;
             openInNewTab(url);
 
-            metrics.countEvent({
-                share_columns: {
-                    hash,
-                },
-            });
+            getMetrics().countEvent('share_columns', hash);
         });
     };
 }
@@ -687,9 +683,7 @@ export function mountUnmountTable(action) {
     return (dispatch, getState) => {
         const path = getPath(getState());
 
-        metrics.countEvent({
-            navigation_dynamic_table_action: action,
-        });
+        getMetrics().countEvent('navigation_dynamic_table_action', action);
 
         return ytApiV3[`${action}Table`]({path})
             .then(() => {
