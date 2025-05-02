@@ -8,7 +8,7 @@ import {
     getRecentClustersInfo,
     getRecentPagesInfo,
 } from '../../store/selectors/slideoutMenu';
-import metrics from '../../common/utils/metrics';
+import {getMetrics} from '../../common/utils/metrics';
 import {NAMESPACES, SettingName} from '../../../shared/constants/settings';
 import {getClusterNS, getLastVisitedTabs} from '../../store/selectors/settings';
 import {getPath} from '../../../shared/utils/settings';
@@ -77,7 +77,7 @@ export function trackPageVisit(page) {
         dispatch(mergeScreen());
 
         window.setTimeout(() => {
-            metrics.countHit({page, cluster, login});
+            getMetrics().countHit({page, cluster, login});
         }, 200);
     };
 }

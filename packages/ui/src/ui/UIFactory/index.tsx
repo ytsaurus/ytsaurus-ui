@@ -29,6 +29,7 @@ import type {Node} from '../utils/navigation/content/map-nodes/node';
 import type {PreloadErrorType} from '../constants';
 import type {RootState} from '../store/reducers';
 import {YTError} from '../types';
+import {AnalyticsService} from '../common/utils/metrics';
 
 type HeaderItemOrPage =
     | {
@@ -483,6 +484,7 @@ export interface UIFactory {
     }) => React.ReactNode;
 
     renderMarkdown(props: {text: string}): React.ReactNode;
+    getAnalyticsService(): AnalyticsService[];
 }
 
 // All methods comes from `configureUIFactory` method

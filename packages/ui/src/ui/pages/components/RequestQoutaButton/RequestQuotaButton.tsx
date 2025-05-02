@@ -1,6 +1,6 @@
 import React from 'react';
 import Button from '../../../components/Button/Button';
-import metrics from '../../../common/utils/metrics';
+import {getMetrics} from '../../../common/utils/metrics';
 import {openInNewTab} from '../../../utils/utils';
 import {isDocsAllowed} from '../../../config';
 import UIFactory from '../../../UIFactory';
@@ -19,9 +19,7 @@ export default function RequestQoutaButton(props: Props) {
             <Button
                 view={'action'}
                 onClick={async () => {
-                    metrics.countEvent({
-                        request_quota: page,
-                    });
+                    getMetrics().countEvent('request_quota', page);
 
                     openInNewTab(url);
                 }}

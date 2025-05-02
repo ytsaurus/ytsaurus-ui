@@ -1,4 +1,4 @@
-import metrics from '../../common/utils/metrics';
+import {getMetrics} from '../../common/utils/metrics';
 
 import find_ from 'lodash/find';
 
@@ -79,9 +79,7 @@ function trackLastVisited(value, parentNS, settingName = SettingName.LOCAL.LAST_
 }
 
 export function accountsToggleFavourite(account) {
-    metrics.countEvent({
-        'accounts_toggle-favourites': 'clicked',
-    });
+    getMetrics().countEvent('accounts_toggle-favourites');
 
     return (dispatch, getState) => {
         const parentNS = getAccountsNS(getState());
@@ -90,9 +88,7 @@ export function accountsToggleFavourite(account) {
 }
 
 export function chytToggleFavourite(clique) {
-    metrics.countEvent({
-        'chyt_toggle-favourites': 'clicked',
-    });
+    getMetrics().countEvent('chyt_toggle-favourites');
 
     return (dispatch, getState) => {
         const chytNS = getChytNS(getState());
@@ -101,9 +97,7 @@ export function chytToggleFavourite(clique) {
 }
 
 export function navigationToggleFavourite(path) {
-    metrics.countEvent({
-        'navigation_toggle-favourites': 'clicked',
-    });
+    getMetrics().countEvent('navigation_toggle-favourites');
 
     return (dispatch, getState) => {
         const parentNS = getClusterNS(getState());
@@ -112,9 +106,7 @@ export function navigationToggleFavourite(path) {
 }
 
 export function bundlesToggleFavourite(bundle) {
-    metrics.countEvent({
-        'accounts_toggle-favourites': 'clicked',
-    });
+    getMetrics().countEvent('accounts_toggle-favourites');
 
     return (dispatch, getState) => {
         const parentNS = getBundlesNS(getState());

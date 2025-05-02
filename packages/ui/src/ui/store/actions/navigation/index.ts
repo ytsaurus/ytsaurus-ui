@@ -2,7 +2,7 @@ import {ThunkAction} from 'redux-thunk';
 
 // @ts-expect-error
 import yt from '@ytsaurus/javascript-wrapper/lib/yt';
-import metrics from '../../../common/utils/metrics';
+import {getMetrics} from '../../../common/utils/metrics';
 import {navigationTrackVisit} from '../../../store/actions/favourites';
 import {RumWrapper, YTApiId, ytApiV3, ytApiV3Id} from '../../../rum/rum-wrap-api';
 import {RumMeasureTypes} from '../../../rum/rum-measure-types';
@@ -104,11 +104,7 @@ export function updateView(settings: {trackVisit?: boolean} = {}): NavigationThu
                     dispatch(navigationTrackVisit(path));
                 }
 
-                metrics.countEvent({
-                    navigation_path: {
-                        type: preparedAttributes.type,
-                    },
-                });
+                getMetrics().countEvent('navigation_path', {type: preparedAttributes.type});
 
                 const user = getCurrentUserName(state);
                 const {account} = preparedAttributes;
