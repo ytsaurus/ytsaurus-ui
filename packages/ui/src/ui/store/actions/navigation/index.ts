@@ -106,11 +106,7 @@ export function updateView(settings: {trackVisit?: boolean} = {}): NavigationThu
                     dispatch(navigationTrackVisit(path));
                 }
 
-                metrics.countEvent({
-                    navigation_path: {
-                        type: preparedAttributes.type,
-                    },
-                });
+                metrics.countEvent('navigation_path', {type: preparedAttributes.type});
 
                 const user = getCurrentUserName(state);
                 const {account} = preparedAttributes;
