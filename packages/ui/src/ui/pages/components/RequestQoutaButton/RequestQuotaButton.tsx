@@ -19,9 +19,7 @@ export default function RequestQoutaButton(props: Props) {
             <Button
                 view={'action'}
                 onClick={async () => {
-                    metrics.countEvent({
-                        request_quota: page,
-                    });
+                    metrics.countEvent('request_quota', page);
 
                     openInNewTab(url);
                 }}

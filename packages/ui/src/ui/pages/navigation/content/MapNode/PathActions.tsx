@@ -89,9 +89,8 @@ function PathActions(props: Props) {
                 evt.stopPropagation();
             },
             onShowAttributes(evt: React.MouseEvent) {
-                metrics.countEvent({
-                    'navigation_map-node_attributes': 'clicked',
-                });
+                metrics.countEvent('navigation_map-node_attributes');
+
                 dispatch(
                     openAttributesModal({
                         title: item.$value,
@@ -101,9 +100,8 @@ function PathActions(props: Props) {
                 evt.stopPropagation();
             },
             onEditAttributes(evt: React.MouseEvent) {
-                metrics.countEvent({
-                    'navigation_map-node_edit_attributes': 'clicked',
-                });
+                metrics.countEvent('navigation_map-node_edit_attributes');
+
                 dispatch(showNavigationAttributesEditor([item.path]));
                 evt.stopPropagation();
             },
@@ -113,14 +111,12 @@ function PathActions(props: Props) {
             },
 
             onDeleteClick(evt: React.MouseEvent) {
-                metrics.countEvent({'navigation_map-node_delete': 'clicked'});
+                metrics.countEvent('navigation_map-node_delete');
                 dispatch(openDeleteModal(item));
                 evt.stopPropagation();
             },
             onCopyPathClick(evt: React.MouseEvent) {
-                metrics.countEvent({
-                    'navigation_map-node_copy-path': 'clicked',
-                });
+                metrics.countEvent('navigation_map-node_copy-path');
                 evt.stopPropagation();
             },
             onSort(e: React.MouseEvent) {
