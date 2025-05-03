@@ -1,5 +1,3 @@
-@import '../../../../../styles/mixins';
-
 .scheduling-overview {
     $this: &;
 
@@ -11,10 +9,6 @@
         padding: 10px 0;
 
         z-index: var(--fixed-toolbar-z-index);
-
-        &_sticky {
-            @include sticky-style();
-        }
     }
 
     &__toolbar-button {

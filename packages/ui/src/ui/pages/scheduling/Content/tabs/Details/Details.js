@@ -1,5 +1,4 @@
 import React, {Component, Fragment} from 'react';
-import {Sticky, StickyContainer} from 'react-sticky';
 import {connect, useSelector} from 'react-redux';
 import PropTypes from 'prop-types';
 import hammer from '../../../../../common/hammer';
@@ -12,6 +11,7 @@ import Overview from '../../../../../pages/scheduling/Content/tabs/Overview/Over
 import ErrorBoundary from '../../../../../components/ErrorBoundary/ErrorBoundary';
 import RadioButton from '../../../../../components/RadioButton/RadioButton';
 import Filter from '../../../../../components/Filter/Filter';
+import WithStickyToolbar from '../../../../../components/WithStickyToolbar/WithStickyToolbar';
 
 import {
     changeContentMode,
@@ -23,7 +23,6 @@ import {openPoolDeleteModal} from '../../../../../store/actions/scheduling/sched
 import {SCHEDULING_POOL_CHILDREN_TABLE_ID, Tab} from '../../../../../constants/scheduling';
 import {calculateTotalOverPools} from '../../../../../utils/scheduling/details';
 import {childTableItems} from '../../../../../utils/scheduling/detailsTable';
-import {HEADER_HEIGHT} from '../../../../../constants/index';
 import {getCluster} from '../../../../../store/selectors/global';
 import {
     getContentMode,
@@ -488,53 +487,49 @@ class Details extends Component {
         const {filter, mode, changePoolChildrenFilter, changeContentMode, currentPool} = this.props;
 
         return (
-            <Sticky topOffset={-HEADER_HEIGHT}>
-                {({isSticky}) => (
-                    <div className={block('toolbar', {sticky: isSticky})}>
-                        <Filter
-                            key={currentPool?.name}
-                            size="m"
-                            value={filter}
-                            placeholder="Filter..."
-                            className={block('filter')}
-                            onChange={changePoolChildrenFilter}
-                        />
+            <div className={block('toolbar')}>
+                <Filter
+                    key={currentPool?.name}
+                    size="m"
+                    value={filter}
+                    placeholder="Filter..."
+                    className={block('filter')}
+                    onChange={changePoolChildrenFilter}
+                />
 
-                        <RadioButton
-                            size="m"
-                            value={mode}
-                            onChange={changeContentMode}
-                            name="navigation-tablets-mode"
-                            items={[
-                                {
-                                    value: 'cpu',
-                                    text: 'CPU',
-                                },
-                                {
-                                    value: 'memory',
-                                    text: 'Memory',
-                                },
-                                {
-                                    value: 'gpu',
-                                    text: 'GPU',
-                                },
-                                {
-                                    value: 'user_slots',
-                                    text: 'User slots',
-                                },
-                                {
-                                    value: 'operations',
-                                    text: 'Operations',
-                                },
-                                {
-                                    value: 'integral',
-                                    text: 'Integral guarantees',
-                                },
-                            ]}
-                        />
-                    </div>
-                )}
-            </Sticky>
+                <RadioButton
+                    size="m"
+                    value={mode}
+                    onChange={changeContentMode}
+                    name="navigation-tablets-mode"
+                    items={[
+                        {
+                            value: 'cpu',
+                            text: 'CPU',
+                        },
+                        {
+                            value: 'memory',
+                            text: 'Memory',
+                        },
+                        {
+                            value: 'gpu',
+                            text: 'GPU',
+                        },
+                        {
+                            value: 'user_slots',
+                            text: 'User slots',
+                        },
+                        {
+                            value: 'operations',
+                            text: 'Operations',
+                        },
+                        {
+                            value: 'integral',
+                            text: 'Integral guarantees',
+                        },
+                    ]}
+                />
+            </div>
         );
     }
 
@@ -544,16 +539,21 @@ class Details extends Component {
         return (
             <ErrorBoundary>
                 <div className={block()}>
-                    <StickyContainer>
-                        {this.renderToolbar()}
-                        <SchedulingOperationsError />
-                        <ElementsTableSticky
-                            cssTableMods={{mode}}
-                            {...this.tableSettings}
-                            items={items}
-                            isLoading={isInitialLoading}
-                        />
-                    </StickyContainer>
+                    <WithStickyToolbar
+                        hideToolbarShadow
+                        toolbar={this.renderToolbar()}
+                        content={
+                            <React.Fragment>
+                                <SchedulingOperationsError />
+                                <ElementsTableSticky
+                                    cssTableMods={{mode}}
+                                    {...this.tableSettings}
+                                    items={items}
+                                    isLoading={isInitialLoading}
+                                />
+                            </React.Fragment>
+                        }
+                    />
                 </div>
             </ErrorBoundary>
         );
