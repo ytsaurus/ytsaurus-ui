@@ -69,19 +69,3 @@
     margin: 0;
     margin-bottom: nth($size, 3);
 }
-
-$stickyVerticalPadding: 10px;
-
-@mixin sticky-style() {
-    position: fixed;
-    top: var(--app-header-height);
-    left: var(--gn-aside-header-size);
-    right: 0;
-
-    padding: $stickyVerticalPadding 20px;
-
-    box-shadow: 0 1px 10px var(--opacity-background);
-    background-color: var(--main-background);
-    border-bottom: 1px solid var(--dark-divider);
-    z-index: var(--fixed-toolbar-z-index);
-}
