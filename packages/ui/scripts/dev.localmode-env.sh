@@ -56,15 +56,18 @@ if [ $? -ne 0 -o "${useStop}" = "1" ]; then
     command="$command --ui-version $UI_VERSION_LOCAL --ui-skip-pull true"
   fi
 
+  echo
   echo "The command bellow will be used to start your cluster:"
-  echo "$command" | tr "\n" " "
+  echo "$command" | xargs -I {} echo "    {} \\"
+  echo
 
   if [ "${useStop}" = "1" ]; then
     echo Trying to stop running containers:
     $command --stop
+  else
+    read -p "Do you want to start local cluster? [Yn]: " needToStart
   fi
 
-  read -p "Do you want to start local cluster? [Yn]: " needToStart
   if [ "${needToStart}" = "" -o "${needToStart}" = "y" -o "${needToStart}" = "Y" ]; then
     $command --stop
     $command || exit 1
