@@ -126,7 +126,6 @@ const renderTable = (props) => {
         loading,
         loaded,
         isSplit,
-        sticky,
     } = props;
 
     let stickyTop;
@@ -187,7 +186,7 @@ function Table(props) {
                 enabled={isFullScreen}
                 onChange={handleScreenChanged}
             >
-                {isSplit && !fullScreen ? (
+                {isSplit && !isFullScreen ? (
                     <React.Fragment>
                         {toolbar}
                         {renderTable(props)}
