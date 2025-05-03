@@ -167,6 +167,17 @@ export class BasePage extends HasPage {
             } catch {}
         }
     }
+
+    async scrollIntoVeiwIfNeededPassingByToolbar(selector: string, toolbarSelector = '.with-sticky-toolbar__toolbar') {
+        /**
+         * It is required to call callback from IntersectionObserver of StickyContainer,
+         * without it toolbar will be never sticky on screenshots.
+         */
+        await this.page.locator('.with-sticky-toolbar__toolbar').scrollIntoViewIfNeeded();
+        await this.page.mouse.wheel(0, -200);
+        
+        await this.page.locator(selector).scrollIntoViewIfNeeded({timeout: 1000});
+    }
 }
 
 export function basePage(page: Page) {

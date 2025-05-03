@@ -141,9 +141,9 @@ test('Components - Versions', async ({page}) => {
         .locator('.components-versions__details .elements-table-wrapper')
         .waitFor({state: 'visible'});
 
-    await page
-        .locator('.components-versions__details .elements-table-wrapper')
-        .scrollIntoViewIfNeeded({timeout: 1000});
+    await components(page).scrollIntoVeiwIfNeededPassingByToolbar('.components-versions__details .elements-table-wrapper')
+
+    await page.waitForSelector('tr:nth-child(15) .yt-host');
 
     await replaceInnerHtml(page, {
         '.yt-host__tooltip': 'local:XXX',
