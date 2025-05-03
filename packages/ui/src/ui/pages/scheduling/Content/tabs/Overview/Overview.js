@@ -1,4 +1,3 @@
-import {Sticky, StickyContainer} from 'react-sticky';
 import React, {Component, Fragment} from 'react';
 import {connect, useDispatch, useSelector} from 'react-redux';
 import PropTypes from 'prop-types';
@@ -15,6 +14,7 @@ import Button from '../../../../../components/Button/Button';
 import Label from '../../../../../components/Label/Label';
 import Link from '../../../../../components/Link/Link';
 import Icon from '../../../../../components/Icon/Icon';
+import WithStickyToolbar from '../../../../../components/WithStickyToolbar/WithStickyToolbar';
 
 import {
     changePool,
@@ -37,7 +37,7 @@ import {
 import {getSchedulingAbcFilter} from '../../../../../store/selectors/scheduling/attributes-to-filter';
 import {SCHEDULING_POOL_TREE_TABLE_ID, Tab} from '../../../../../constants/scheduling';
 import {poolsTableItems} from '../../../../../utils/scheduling/overviewTable';
-import {HEADER_HEIGHT, Page} from '../../../../../constants/index';
+import {Page} from '../../../../../constants/index';
 import {getCluster} from '../../../../../store/selectors/global';
 
 import {useRumMeasureStop} from '../../../../../rum/RumUiContext';
@@ -440,13 +440,9 @@ class Overview extends Component {
 
     renderToolbar() {
         return (
-            <Sticky topOffset={-HEADER_HEIGHT}>
-                {({isSticky}) => (
-                    <div className={block('toolbar', {sticky: isSticky})}>
-                        <SchedulingOverviewToolbar {...this.props} />
-                    </div>
-                )}
-            </Sticky>
+            <div className={block('toolbar')}>
+                <SchedulingOverviewToolbar {...this.props} />
+            </div>
         );
     }
 
@@ -462,20 +458,24 @@ class Overview extends Component {
             <ErrorBoundary>
                 <div className={block(null, 'elements-section')}>
                     <SchedulingStaticConfiguration onToggleCollapsedState={fireResizeEvent} />
-                    <StickyContainer>
-                        {this.renderToolbar()}
-                        <SchedulingOperationsError />
-                        <ResetExpandedPoolsOnTreeChange>
-                            <ElementsTable
-                                {...this.tableSettings}
-                                treeStateExpanded={treeStateExpanded}
-                                items={items}
-                                rowClassName={this.rowClassName}
-                                onItemToggleState={this.onItemToggleState}
-                                isLoading={isInitialLoading}
-                            />
-                        </ResetExpandedPoolsOnTreeChange>
-                    </StickyContainer>
+                    <WithStickyToolbar
+                        toolbar={this.renderToolbar()}
+                        content={
+                            <React.Fragment>
+                                <SchedulingOperationsError />
+                                <ResetExpandedPoolsOnTreeChange>
+                                    <ElementsTable
+                                        {...this.tableSettings}
+                                        treeStateExpanded={treeStateExpanded}
+                                        items={items}
+                                        rowClassName={this.rowClassName}
+                                        onItemToggleState={this.onItemToggleState}
+                                        isLoading={isInitialLoading}
+                                    />
+                                </ResetExpandedPoolsOnTreeChange>
+                            </React.Fragment>
+                        }
+                    />
                 </div>
             </ErrorBoundary>
         );
