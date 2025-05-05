@@ -51,6 +51,12 @@ export class NavigationPage extends BasePage {
         await this.page.getByText('Create object').click();
         await this.page.getByRole('menuitem').filter({hasText}).click();
     }
+
+    async gotToPath(path: string) {
+        await this.page.getByTestId('qa:navigation:edit-path').click();
+        await this.page.fill('.path-editor input', path);
+        await this.page.keyboard.press('Enter');
+    }
 }
 
 export function navigationPage(page: Page) {

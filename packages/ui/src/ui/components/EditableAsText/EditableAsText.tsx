@@ -187,7 +187,12 @@ export function EditButton({
     size?: ButtonProps['size'];
 }) {
     return (
-        <Button className={block('edit-btn')} onClick={onClick} size={size}>
+        <Button
+            className={block('edit-btn')}
+            onClick={onClick}
+            size={size}
+            qa="qa:navigation:edit-path"
+        >
             <Icon awesome={'pencil'} />
         </Button>
     );
