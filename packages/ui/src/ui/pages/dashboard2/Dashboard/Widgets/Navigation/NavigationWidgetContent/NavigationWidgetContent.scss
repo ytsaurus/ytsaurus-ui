@@ -1,0 +1,21 @@
+.yt-navigation-widget-content {
+    width: 100%;
+    height: 100%;
+
+    &__navigation-item {
+        height: 10%;
+        min-height: 30px;
+        width: 100%;
+        padding-left: 7px;
+        overflow: hidden;
+    }
+
+    &__link {
+        overflow: hidden;
+    }
+
+    &__list {
+        height: 100%;
+        width: 100%;
+    }
+}
