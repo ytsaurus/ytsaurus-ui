@@ -1,0 +1,28 @@
+@import '@gravity-ui/illustrations/styles/theme.scss';
+
+.g-root {
+    --gil-color-object-base: rgb(232 172 73);
+    --gil-color-object-accent-heavy: rgb(232 172 73);
+    --gil-color-object-hightlight: rgb(255, 210, 141);
+    --gil-color-shadow-over-object: rgb(255, 190, 92);
+    --gil-color-background-lines: rgb(140, 140, 140);
+    --gil-color-background-shapes: rgb(242, 242, 242);
+    --gil-color-object-accent-light: rgb(255, 255, 255);
+    --gil-color-object-danger: rgb(255, 4, 1);
+
+    &_theme_light {
+        @include g-illustrations-colors-light;
+    }
+
+    &_theme_light-hc {
+        @include g-illustrations-colors-light-hc;
+    }
+
+    &_theme_dark {
+        @include g-illustrations-colors-dark;
+    }
+
+    &_theme_dark-hc {
+        @include g-illustrations-colors-dark-hc;
+    }
+}
