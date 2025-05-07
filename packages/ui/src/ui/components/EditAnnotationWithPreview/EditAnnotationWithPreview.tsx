@@ -34,6 +34,7 @@ export function EditAnnotationWithPreview(props: EditAnnotationProps) {
 
     const {value: initialValue} = initialValueProp;
     const {value} = valueProp;
+
     const onChange = React.useCallback(
         ({value: newValue}: {value?: string} = {}) => {
             if (value !== newValue) {

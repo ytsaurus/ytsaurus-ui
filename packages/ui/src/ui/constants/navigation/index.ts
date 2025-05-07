@@ -40,6 +40,7 @@ export const CLEAR_TRANSACTION = `${PREFIX}CLEAR_TRANSACTION` as const;
 export const UPDATE_PATH = `${PREFIX}UPDATE_PATH` as const;
 export const UPDATE_VIEW = createActionTypes(`${PREFIX}UPDATE_VIEW`);
 export const NAVIGATION_PARTIAL = `${PREFIX}NAVIGATION_PARTIAL` as const;
+export const TOGGLE_DESCRIPTION_TYPE = `${PREFIX}TOGGLE_NAVIGATIONT_TYPE` as const;
 
 export const FETCH_NODES = createActionTypes(`${PREFIX}FETCH_NODES`);
 export const UPDATE_RESOURCE_USAGE = createActionTypes(`${PREFIX}UPDATE_RESOURCE_USAGE`);
