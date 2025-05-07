@@ -23,7 +23,7 @@
     --dark-background: #f0f2f3;
     --light-background: #fafafa;
     --hover-background: #f7f7f7;
-    --main-background: #ffffff;
+    --main-background: var(--g-color-base-background);
     --opacity-background: rgba(0, 0, 0, 0.4);
 
     // System
