@@ -1,9 +1,8 @@
 import React from 'react';
 import {Icon} from '@gravity-ui/uikit';
+import {AccessDenied, NotFound} from '@gravity-ui/illustrations';
 import {SVGIconData} from '@gravity-ui/uikit/build/esm/components/Icon/types';
 
-import ErrorImage901 from '../../../../assets/img/svg/901.svg';
-import ErrorImage500 from '../../../../assets/img/svg/500.svg';
 import {ErrorCode} from './helpers';
 
 type Props = {
@@ -15,8 +14,8 @@ type ImageMap = {
 };
 
 const ErrorImages: ImageMap = {
-    500: ErrorImage500,
-    901: ErrorImage901,
+    500: NotFound,
+    901: AccessDenied,
 };
 
 export function NavigationErrorImage(props: Props) {
