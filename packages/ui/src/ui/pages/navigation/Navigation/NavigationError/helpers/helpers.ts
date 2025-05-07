@@ -66,7 +66,7 @@ export function getLeadingErrorCode(error: YTError): number | undefined {
         return errorCode;
     }
 
-    if (!error.inner_errors) return;
+    if (!error?.inner_errors) return;
 
     const errors = error.inner_errors;
 

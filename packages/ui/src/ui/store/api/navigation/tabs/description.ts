@@ -1,4 +1,7 @@
+import {Action, ThunkAction} from '@reduxjs/toolkit';
 import {rootApi} from '../..';
+
+import {RootState} from '../../../../store/reducers';
 
 import {YTApiId, ytApiV3} from '../../../../rum/rum-wrap-api';
 import UIFactory, {ExternalAnnotationResponse} from '../../../../UIFactory';
@@ -52,5 +55,11 @@ export const descriptionApi = rootApi.injectEndpoints({
         }),
     }),
 });
+
+export function invalidateYTAnnotation(): ThunkAction<void, RootState, never, Action> {
+    return (dispatch) => {
+        dispatch(descriptionApi.util.invalidateTags([String(YTApiId.navigationGetAnnotation)]));
+    };
+}
 
 export const {useExternalDescriptionQuery, useAnnotationQuery} = descriptionApi;

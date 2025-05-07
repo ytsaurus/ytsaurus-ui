@@ -1,5 +1,9 @@
 @import '../../../styles/common.scss';
 
+.error-description {
+    margin-top: 20px;
+}
+
 .navigation-description {
     &__collapsible {
         margin-top: unset;
