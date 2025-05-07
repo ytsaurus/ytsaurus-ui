@@ -1,13 +1,15 @@
 import React from 'react';
 import cn from 'bem-cn-lite';
 import {Flex} from '@gravity-ui/uikit';
-
 import ypath from '../../../../../common/thor/ypath';
+
 import {ErrorToClipboardButton} from '../../../../../components/ErrorToClipboardButton/ErrorToClipboardButton';
-import {getParentPath} from '../../../../../utils/navigation';
 import RequestPermissions from '../../../tabs/ACL/RequestPermissions/RequestPermissions';
-import {RequestPermissionIsNotAllowed} from './RequestPermissionIsNotAllowed';
+
+import {getParentPath} from '../../../../../utils/navigation';
 import {YTError} from '../../../../../../@types/types';
+
+import {RequestPermissionIsNotAllowed} from './RequestPermissionIsNotAllowed';
 
 import './RequestPermission.scss';
 
@@ -21,6 +23,7 @@ type Props = {
 
 export function RequestPermission(props: Props) {
     const {path: currentPath, error, cluster} = props;
+
     const objectType = ypath.getValue(error?.attributes, '/object_type');
     const errorPath = ypath.getValue(error?.attributes, '/path');
     const isRequestPermissionsForPathAllowed = objectType === 'map_node';
@@ -30,11 +33,11 @@ export function RequestPermission(props: Props) {
     const pathForRequest = isRequestPermissionsForPathAllowed ? path : getParentPath(path);
 
     return (
-        <div>
+        <Flex direction={'column'} gap={3}>
             {!isRequestPermissionsForPathAllowed && (
                 <RequestPermissionIsNotAllowed objectType={objectType} />
             )}
-            <Flex direction="row" gap={3}>
+            <Flex direction={'row'} gap={3}>
                 <RequestPermissions
                     buttonClassName={block('request-permissions-button')}
                     path={pathForRequest}
@@ -45,6 +48,6 @@ export function RequestPermission(props: Props) {
                     Copy error details
                 </ErrorToClipboardButton>
             </Flex>
-        </div>
+        </Flex>
     );
 }
