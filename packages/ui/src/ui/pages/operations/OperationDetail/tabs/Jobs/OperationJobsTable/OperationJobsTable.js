@@ -457,6 +457,7 @@ class OperationJobsTable extends React.Component {
                 visible
                 onCancel={hideInputPaths}
                 loading={status === LOADING_STATUS.LOADING}
+                onOutsideClick={hideInputPaths}
                 title="Input paths"
             >
                 {content}
