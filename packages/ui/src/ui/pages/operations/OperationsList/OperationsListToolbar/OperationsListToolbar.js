@@ -2,7 +2,6 @@ import React from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import PropTypes from 'prop-types';
 import cn from 'bem-cn-lite';
-import {StickyContainer} from '../../../../components/StickyContainer/StickyContainer';
 
 import map_ from 'lodash/map';
 
@@ -48,6 +47,7 @@ class OperationsListToolbar extends React.PureComponent {
         subjects: PropTypes.arrayOf(PropTypes.string).isRequired,
         // from props
         inDashboard: PropTypes.bool,
+        className: PropTypes.string,
     };
 
     preparePermissionsPlaceholder(permissions) {
@@ -235,24 +235,22 @@ class OperationsListToolbar extends React.PureComponent {
     }
 
     render() {
-        const {fixedStartedByFilter} = this.props;
+        const {fixedStartedByFilter, className} = this.props;
 
         return (
-            <StickyContainer>
-                {({sticky, topStickyClassName}) => (
-                    <div className={block('toolbar', {sticky}, [tbBlock(), topStickyClassName])}>
-                        {this.renderTopSection()}
-                        {this.renderBottomSection()}
-                        {fixedStartedByFilter && this.renderWarning_uiissue_2838()}
-                        <OperationsFilterPresets />
-                    </div>
-                )}
-            </StickyContainer>
+            <div className={block('toolbar-wrap', className)}>
+                <div className={block('toolbar', [tbBlock(), className])}>
+                    {this.renderTopSection()}
+                    {this.renderBottomSection()}
+                    {fixedStartedByFilter && this.renderWarning_uiissue_2838()}
+                    <OperationsFilterPresets />
+                </div>
+            </div>
         );
     }
 }
 
-function OperationsListToolbarHooked() {
+function OperationsListToolbarHooked(props) {
     const subjects = useSelector(getAllUserNames);
     const {failedJobs} = useSelector((state) => state.operations.list.filters) || {};
     const fixedStartedByFilter = useSelector(
@@ -276,6 +274,7 @@ function OperationsListToolbarHooked() {
 
     return (
         <OperationsListToolbar
+            {...props}
             {...{
                 subjects,
                 failedJobsFilter: failedJobs,

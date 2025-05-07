@@ -1,12 +1,17 @@
 @import '../../../../styles/common';
 
 .operations-list {
+    &__toolbar-wrap {
+        min-height: 126px;
+    }
+
     &__toolbar {
         border-bottom: 2px solid var(--light-divider);
 
-        &_sticky {
+        &.yt-sticky-container__sticky {
             position: fixed;
-            background-color: var(--main-background);
+            left: var(--gn-aside-header-size);
+            margin: 0;
         }
 
         &-text-filter {
