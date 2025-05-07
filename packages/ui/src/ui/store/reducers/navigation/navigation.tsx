@@ -66,7 +66,6 @@ const ephemeralState: Omit<NavigationState, keyof typeof persistedState> = {
 
     sidePanelMode: undefined,
 
-    /** @type {string | undefined} */
     originatingQueuePath: undefined,
 };
 

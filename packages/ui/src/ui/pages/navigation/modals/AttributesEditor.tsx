@@ -1,4 +1,6 @@
 import React from 'react';
+import {Button, Flex, Link} from '@gravity-ui/uikit';
+import {ArrowUpRightFromSquare} from '@gravity-ui/icons';
 
 import isEmpty_ from 'lodash/isEmpty';
 import isEqual_ from 'lodash/isEqual';
@@ -18,6 +20,11 @@ import {
     FormApi,
     YTDFDialog,
 } from '../../../components/Dialog';
+
+import {
+    invalidateYTAnnotation,
+    useExternalDescriptionQuery,
+} from '../../../store/api/navigation/tabs/description';
 import {
     getNavigationAttributesEditorAttributes,
     getNavigationAttributesEditorDynamicTables,
@@ -33,6 +40,10 @@ import {
     navigationSetNodeAttributes,
 } from '../../../store/actions/navigation/modals/attributes-editor';
 import {getMediumListNoCache} from '../../../store/selectors/thor';
+
+import {getCluster} from '../../../store/selectors/global';
+import {getPath} from '../../../store/selectors/navigation';
+
 import {
     InMemoryMode,
     InMemoryModeType,
@@ -94,6 +105,7 @@ function AttributesEditorLoaded() {
     const storeError = useSelector(getNavigationAttributesEditorError);
 
     const [stateError, setErr] = React.useState<any>(undefined);
+    const [currentTab, setCurrentTab] = React.useState<string | undefined>();
 
     const error = stateError || storeError;
 
@@ -261,6 +273,7 @@ function AttributesEditorLoaded() {
                         hasStaticTables && storage.runMerge,
                     ),
                 );
+                dispatch(invalidateYTAnnotation());
             } catch (e) {
                 setErr(e);
                 throw e;
@@ -541,7 +554,35 @@ function AttributesEditorLoaded() {
                 },
                 ...annotationTab,
             ]}
+            onActiveTabChange={(tab) => setCurrentTab(tab)}
+            footerProps={{
+                content: currentTab === 'description' && <CreateExternalDescriptionButton />,
+            }}
         />
+    );
+}
+
+function CreateExternalDescriptionButton() {
+    const path = useSelector(getPath);
+    const cluster = useSelector(getCluster);
+
+    const {data: externalDescription} = useExternalDescriptionQuery({cluster, path});
+
+    return (
+        <>
+            {externalDescription?.externalAnnotationLink && (
+                <Link href={externalDescription?.externalAnnotationLink} target={'_blank'}>
+                    <Button view={'outlined'} size={'l'}>
+                        <Flex alignItems={'center'} gap={1}>
+                            {UIFactory?.externalAnnotationSetup?.externalServiceName ||
+                                'Create external description'}{' '}
+                            (Recomended)
+                            <ArrowUpRightFromSquare />
+                        </Flex>
+                    </Button>
+                </Link>
+            )}
+        </>
     );
 }
 
