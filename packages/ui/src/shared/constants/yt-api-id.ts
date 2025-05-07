@@ -116,6 +116,7 @@ export enum YTApiId {
 
     systemCAInstances,
     systemCAStates,
+    systemClusterMasters,
     systemChunks,
     systemMasters,
     systemMastersConfig,
@@ -177,4 +178,6 @@ export enum YTApiId {
     queuePartitions,
     queueConsumerStatus,
     queueConsumerPartitions,
+
+    prometheusMonitoringLayout,
 }

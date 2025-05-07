@@ -13,6 +13,7 @@ const block = cn('yt-markdown');
 
 interface Props {
     text: string;
+    ref?: React.Ref<HTMLDivElement>;
     allowHTML?: boolean;
 }
 
@@ -64,12 +65,16 @@ export function useMarkdown({text, allowHTML = true}: Props) {
     return res;
 }
 
-export function Markdown({text}: Props) {
+export const Markdown = React.forwardRef(({text}: Props, ref: React.Ref<HTMLDivElement>) => {
     const {html} = useMarkdown({text, allowHTML: true}).result ?? {};
 
     return (
-        <React.Fragment>
-            <div className={block(null, 'yfm')} dangerouslySetInnerHTML={{__html: html ?? ''}} />
-        </React.Fragment>
+        <div
+            className={block(null, 'yfm')}
+            dangerouslySetInnerHTML={{__html: html ?? ''}}
+            ref={ref}
+        />
     );
-}
+});
+
+Markdown.displayName = 'Markdown';

@@ -154,6 +154,19 @@ export interface InlineSuggestionsApi {
     onQueryCreate(): void;
 }
 
+export type ChytMonitoringProps = {cluster: string; alias: string};
+export type BundleMonitoringProps = {
+    cluster: string;
+    tablet_cell_bundle: string;
+    bundleData: any;
+};
+export type JobMonitoringProps = {
+    cluster: string;
+    job_descriptor: string;
+    from?: number;
+    to?: number;
+};
+
 export interface UIFactory {
     getClusterAppearance(cluster?: string): undefined | ClusterAppearance;
 
@@ -205,11 +218,7 @@ export interface UIFactory {
     getMonitoringForBundle():
         | undefined
         | {
-              component: React.ComponentType<{
-                  cluster: string;
-                  tablet_cell_bundle: string;
-                  bundleData: any;
-              }>;
+              component: React.ComponentType<BundleMonitoringProps>;
               urlTemplate?: undefined;
               title?: undefined;
           }
@@ -222,19 +231,12 @@ export interface UIFactory {
               title?: undefined;
           }
         | {urlTemplate: string; title?: string; component?: undefined};
-    getMonitorComponentForJob():
-        | undefined
-        | React.ComponentType<{
-              cluster: string;
-              job_descriptor: string;
-              from?: number;
-              to?: number;
-          }>;
+    getMonitorComponentForJob(): undefined | React.ComponentType<JobMonitoringProps>;
 
     getMonitoringComponentForChyt():
         | undefined
         | {
-              component?: React.ComponentType<{cluster: string; alias: string}>;
+              component?: React.ComponentType<ChytMonitoringProps>;
               urlTemplate?: string;
               title?: string;
           };

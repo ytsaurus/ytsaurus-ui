@@ -1,4 +1,4 @@
-import {combineReducers} from 'redux';
+import {combineReducers, combineSlices} from '@reduxjs/toolkit';
 
 import forEach_ from 'lodash/forEach';
 
@@ -43,6 +43,7 @@ import {chyt} from './chyt';
 import {getMainLocations} from '../../store/location.main';
 import {flow} from '../../store/reducers/flow';
 import {rootApi} from '../../store/api';
+import {prometheusDashboardSlice} from './prometheusDashboard/prometheusDahsboard';
 
 const appReducers = {
     acl,
@@ -84,6 +85,7 @@ const appReducers = {
     manageTokens,
     flow,
     [rootApi.reducerPath]: rootApi.reducer,
+    prometheusDashboard: prometheusDashboardSlice.reducer,
 };
 
 export type RootState = ReturnType<ReturnType<typeof makeRootReducer>>;
@@ -154,6 +156,6 @@ export function makeRootReducer() {
         registerReducersAndUrlMapping(item);
     });
 
-    const rootReducer = combineReducers({...appReducers});
-    return rootReducer;
+    const rootReducer = combineSlices({...appReducers} as any);
+    return rootReducer as unknown as ReturnType<typeof combineReducers<typeof appReducers>>;
 }
