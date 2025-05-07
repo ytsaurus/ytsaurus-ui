@@ -1,5 +1,5 @@
 import React from 'react';
-import {Route, Switch} from 'react-router';
+import {Redirect, Route, Switch} from 'react-router';
 import {useDispatch, useSelector} from 'react-redux';
 
 import {ThemeProvider, useThemeType, useThemeValue} from '@gravity-ui/uikit';
@@ -24,6 +24,7 @@ import {loadAllowedExperimentalPages} from '../../store/actions/global/experimen
 import {getAuthPagesEnabled, getGlobalShowLoginDialog} from '../../store/selectors/global';
 import {getFontType} from '../../store/selectors/global/fonts';
 import UIFactory from '../../UIFactory';
+import {YT} from '../../config/yt-config';
 
 import {AppThemeFont, AppThemeFontProps} from './AppThemeFont';
 
@@ -46,6 +47,8 @@ function AppWithRum() {
     const fontType = useSelector(getFontType);
 
     const {footer, footerHeight} = UIFactory.renderAppFooter() ?? {};
+
+    const clusters = Object.values(YT.clusters);
 
     return showLogin ? (
         <Route render={() => <LoginFormPage theme={themeType} />} />
@@ -78,7 +81,11 @@ function AppWithRum() {
                                 }
                             >
                                 <MaxContentWidth>
-                                    <Route exact path="/" render={() => <ClustersMenuLazy />} />
+                                    {clusters.length === 1 ? (
+                                        <Redirect path="/" to={`/${clusters[0].id}/`} />
+                                    ) : (
+                                        <Route exact path="/" render={() => <ClustersMenuLazy />} />
+                                    )}
                                     <Route
                                         path="/:cluster/"
                                         render={() => <ClusterPageWrapperLazy />}
