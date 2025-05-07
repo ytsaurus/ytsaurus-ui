@@ -11,6 +11,7 @@ import {RootState} from '../../../../reducers';
 import {downloadManagerActions} from '../../../../reducers/navigation/content/table/download-manager';
 
 import {downloadFileFromResponse} from '../../../../../utils/download-file';
+import {copyFileToClipboard} from '../../../../../utils/copy-file-to-clipboard';
 import {showErrorPopup} from '../../../../../utils/utils';
 import {YTError} from '../../../../../types';
 
@@ -33,6 +34,7 @@ const fallbackError = {
 export const downloadFile = (
     url: string,
     filename: string,
+    copy?: boolean,
 ): ThunkAction<Promise<void>, RootState, any, UnknownAction> => {
     const id = crypto.randomUUID();
 
@@ -43,7 +45,11 @@ export const downloadFile = (
 
             const response = await requestDownloadFile(url);
 
-            downloadFileFromResponse(filename, response);
+            if (copy) {
+                await copyFileToClipboard(response);
+            } else {
+                downloadFileFromResponse(filename, response);
+            }
 
             dispatch(downloadManagerActions.onSuccess({id}));
             updateToaster(id, 'success');
