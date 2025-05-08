@@ -11,6 +11,7 @@ import {
     SET_MODE,
     SET_ORIGINATING_QUEUE_PATH,
     SET_TRANSACTION,
+    TOGGLE_DESCRIPTION_TYPE,
     Tab,
     UPDATE_PATH,
     UPDATE_VIEW,
@@ -40,6 +41,8 @@ export type NavigationState = {
     sidePanelMode: 'qt' | 'yqlkit' | undefined;
 
     originatingQueuePath: string | undefined;
+
+    descriptionType: 'yt' | 'external';
 };
 
 const persistedState: Pick<NavigationState, 'path' | 'mode'> = {
@@ -66,8 +69,9 @@ const ephemeralState: Omit<NavigationState, keyof typeof persistedState> = {
 
     sidePanelMode: undefined,
 
-    /** @type {string | undefined} */
     originatingQueuePath: undefined,
+
+    descriptionType: 'yt',
 };
 
 export const initialState: NavigationState = {
@@ -77,6 +81,9 @@ export const initialState: NavigationState = {
 
 const reducer = (state = initialState, action: NavigationAction): NavigationState => {
     switch (action.type) {
+        case TOGGLE_DESCRIPTION_TYPE:
+            return {...state, descriptionType: state.descriptionType === 'yt' ? 'external' : 'yt'};
+
         case SET_MODE:
             return {...state, mode: action.data};
 
@@ -170,6 +177,7 @@ export type NavigationAction =
               | 'originatingQueuePath'
           >
       >
-    | ActionD<typeof NAVIGATION_PARTIAL, Partial<NavigationState>>;
+    | ActionD<typeof NAVIGATION_PARTIAL, Partial<NavigationState>>
+    | ActionD<typeof TOGGLE_DESCRIPTION_TYPE, Pick<NavigationState, 'descriptionType'>>;
 
 export default mergeStateOnClusterChange(ephemeralState, persistedState, reducer);

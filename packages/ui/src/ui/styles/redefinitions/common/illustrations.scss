@@ -1,0 +1,28 @@
+@import '@gravity-ui/illustrations/styles/theme.scss';
+
+.g-root {
+    --gil-color-object-base: var(--external-link) !important;
+    --gil-color-object-accent-heavy: #ECF2F9 !important;
+    --gil-color-object-hightlight: #027BF3 !important;
+    --gil-color-shadow-over-object: #ECF2F9 !important;
+    --gil-color-background-lines: #2EE5C0 !important;
+    --gil-color-background-shapes: #ECF2F9 !important;
+    --gil-color-object-accent-light: white !important;
+    --gil-color-object-danger: var(--danger-color) !important;
+
+    &_theme_light {
+        @include g-illustrations-colors-light;
+    }
+
+    &_theme_light-hc {
+        @include g-illustrations-colors-light-hc;
+    }
+
+    &_theme_dark {
+        @include g-illustrations-colors-dark;
+    }
+
+    &_theme_dark-hc {
+        @include g-illustrations-colors-dark-hc;
+    }
+}
