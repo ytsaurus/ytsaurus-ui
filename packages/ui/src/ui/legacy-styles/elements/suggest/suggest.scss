@@ -9,8 +9,7 @@
 
         max-height: 300px;
 
-        overflow-x: hidden;
-        overflow-y: auto;
+        overflow: hidden auto;
 
         border: 1px solid var(--dark-divider);
         border-top: none;
