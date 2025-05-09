@@ -22,3 +22,7 @@ export function absolute(relative: string, base?: string) {
     }
     return stack.join('/');
 }
+
+export function isLinkExternal(url: string) {
+    return url.startsWith('//') || url.startsWith('http');
+}

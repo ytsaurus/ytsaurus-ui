@@ -379,7 +379,7 @@ export const getAllColumnGroupsActual = createSelector(
                 : undefined,
             nameFilterLower?.length
                 ? (item: ItemType) =>
-                      -1 !== item.name?.toLowerCase().indexOf(nameFilterLower) ?? false
+                      -1 !== (item.name?.toLowerCase()?.indexOf(nameFilterLower) ?? -1)
                 : undefined,
         ]);
         const filtered = filter_(items, concatByAnd(...predicates)).map((item) => {
