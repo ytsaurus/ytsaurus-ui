@@ -125,7 +125,7 @@ export function prepareAclSubject(item: ResponsibleType): Subject {
 export function convertToUIPermissions<
     T extends {permissions?: Array<YTPermissionType>; vital?: boolean},
 >(role: T): Omit<T, 'permissions'> & {permissions?: Array<YTPermissionTypeUI>} {
-    if (!role.vital ?? !role.permissions) {
+    if (!role.vital || !role.permissions) {
         return role;
     }
 

@@ -85,7 +85,7 @@
     "zod": "^3.21.4"
   },
   "devDependencies": {
-    "@gravity-ui/app-builder": "^0.10.0",
+    "@gravity-ui/app-builder": "^0.26.0",
     "@gravity-ui/chartkit": "^5.11.0",
     "@gravity-ui/components": "^3.7.0",
     "@gravity-ui/dashkit": "^8.3.0",
