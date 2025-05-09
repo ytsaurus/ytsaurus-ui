@@ -1,4 +1,4 @@
-import urlUtils from '../../common/utils/url';
+import {isLinkExternal} from '../../common/utils/url';
 
 const action = {
     openInAnotherTab(evt) {
@@ -57,7 +57,7 @@ const action = {
                 evt.stopPropagation();
                 if (action.openInAnotherTab(evt)) {
                     window.open(url);
-                } else if (!urlUtils.isLinkExternal(url)) {
+                } else if (!isLinkExternal(url)) {
                     evt.preventDefault();
                 } else {
                     window.location.href = url;
