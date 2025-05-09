@@ -31,7 +31,7 @@ export class QueryResultTableDownloadManager extends DownloadManager {
     }
 
     getDownloadLink() {
-        const {getDownloadBaseUrl, cluster, queryId} = this.props as FIX_MY_TYPE;
+        const {getDownloadBaseUrl, cluster, queryId, resultIndex} = this.props as FIX_MY_TYPE;
         const {rowsMode, startRow, numRows, format, number_precision_mode} = this.state;
 
         const {query, error} = this.getDownloadParams();
@@ -40,7 +40,7 @@ export class QueryResultTableDownloadManager extends DownloadManager {
             const base = `${getExportTableBaseUrl({cluster})}/${cluster}/api/export-query-result`;
             const params = new URLSearchParams({
                 number_precision_mode,
-                result_index: '0',
+                result_index: resultIndex,
                 query_id: queryId,
             });
 
