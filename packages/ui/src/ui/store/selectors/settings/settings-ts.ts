@@ -1,6 +1,7 @@
 import {createSelector} from 'reselect';
 
 import {getCluster} from '../../../store/selectors/global';
+import {getSettingsData} from './settings-base';
 import {getClusterNS, makeGetSetting} from '../../../store/selectors/settings';
 import {NAMESPACES, SettingName} from '../../../../shared/constants/settings';
 import {AccountUsageViewType} from '../../../store/reducers/accounts/usage/accounts-usage-filters';
@@ -9,7 +10,6 @@ import {ActiveJobTypesMap} from '../../../store/actions/settings/settings';
 import {RootState} from '../../../store/reducers';
 import {NODE_TYPE} from '../../../../shared/constants/system';
 import {ValueOf} from '../../../types';
-import {getSettingsData} from './settings-base';
 
 export const getSettingsDataRaw = (state: RootState) => state.settings.data;
 
@@ -187,6 +187,10 @@ export const getSettingQueryTrackerYQLAgentStage = createSelector(
 export const getCurrentClusterNS = createSelector([getCluster, getClusterNS], (cluster, ns) => {
     return cluster ? ns : undefined;
 });
+
+export const getSettingNewDashboardPage = createSelector(makeGetSetting, (getSetting) =>
+    getSetting(SettingName.GLOBAL.NEW_DASHBOARD, NAMESPACES.GLOBAL),
+);
 
 export const getUseAutoRefresh = (state: RootState) =>
     getSettingsData(state)['global::autoRefresh'];

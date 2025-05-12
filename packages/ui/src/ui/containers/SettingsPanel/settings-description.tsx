@@ -103,6 +103,17 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
         makePage('General', generalIcon, [
             makeItem('startPage', 'Start page', 'top', <StartPageSettingMemo />),
             makeItem(
+                SettingName.GLOBAL.NEW_DASHBOARD,
+                'New dashboard page',
+                'top',
+                <SettingsMenuItem
+                    settingName={SettingName.GLOBAL.NEW_DASHBOARD}
+                    settingNS={NAMESPACES.GLOBAL}
+                    annotation={'Enable new dashboard page'}
+                    oneLine
+                />,
+            ),
+            makeItem(
                 SettingName.GLOBAL.AUTO_REFRESH,
                 'Use auto refresh',
                 'top',
