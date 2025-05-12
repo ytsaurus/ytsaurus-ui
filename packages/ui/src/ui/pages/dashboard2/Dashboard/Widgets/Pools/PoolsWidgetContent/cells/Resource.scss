@@ -1,0 +1,14 @@
+.pool-resource {
+    display: block !important;
+    position: relative;
+
+    &__tick {
+        position: absolute;
+        top: -3px;
+        left: calc(50% - 1px);
+        width: 0;
+        border: 1px solid var(--g-color-line-generic-accent);
+        height: calc(100% + 4px);
+        z-index: 1;
+    }
+}
