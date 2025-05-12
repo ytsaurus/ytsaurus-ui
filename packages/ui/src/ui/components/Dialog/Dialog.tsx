@@ -56,6 +56,7 @@ import {DatePickerControl} from './controls/DatePickerControl/DatePickerControl'
 import {RangeInputPickerControl} from './controls/RangeInputPickerControl/RangeInputPickerControl';
 import {AclColumnsControl} from '../../containers/ACL/RequestPermissions/AclColumnsControl/AclColumnsControl';
 import {useHotkeysScope} from '../../hooks/use-hotkeysjs-scope';
+import {PoolsMultiple} from './controls/PoolsMultiple/PoolsMultiple';
 
 const block = cn('yt-dialog');
 
@@ -98,6 +99,7 @@ registerDialogControl('editable-path-list', EditablePathList);
 
 registerDialogControl('pool', PoolSuggestControl);
 registerDialogControl('pool-tree', PoolTreeSuggestControl);
+registerDialogControl('pools-multiple', PoolsMultiple);
 
 registerDialogControl('table-sort-by', TableSortByControl);
 registerDialogControl('table-chunk-size', TableChunkSize);
@@ -116,7 +118,6 @@ registerDialogControl('range-input-picker', RangeInputPickerControl);
 
 registerDialogControl('before-date', BeforeDatePicker);
 
-registerDialogControl('services-select', ServicesSelect);
 
 export type DialogField<FormValues = unknown> =
     | DFDialogField
@@ -188,6 +189,7 @@ export type DialogField<FormValues = unknown> =
           FormValues
       >
     | RegisteredDialogField<'pool', ComponentProps<typeof PoolSuggestControl>, FormValues>
+    | RegisteredDialogField<'pools-multiple', ComponentProps<typeof PoolsMultiple>, FormValues>
     | RegisteredDialogField<'pool-tree', ComponentProps<typeof PoolTreeSuggestControl>, FormValues>
     | RegisteredDialogField<'table-sort-by', ComponentProps<typeof TableSortByControl>, FormValues>
     | RegisteredDialogField<'table-chunk-size', ComponentProps<typeof TableChunkSize>, FormValues>
