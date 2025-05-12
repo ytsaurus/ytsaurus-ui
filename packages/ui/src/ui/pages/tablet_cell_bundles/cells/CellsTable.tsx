@@ -14,7 +14,7 @@ import Label, {LabelTheme} from '../../../components/Label/Label';
 import Link from '../../../components/Link/Link';
 import {Tooltip} from '../../../components/Tooltip/Tooltip';
 import {STICKY_TOOLBAR_BOTTOM} from '../../../components/WithStickyToolbar/WithStickyToolbar';
-import {Health} from '../../../pages/tablet_cell_bundles/bundle/BundleGeneralMeta';
+import {Health} from '../../../components/Health/Health';
 import {OrderType} from '../../../utils/sort-helpers';
 import {Host} from '../../../containers/Host/Host';
 // @ts-ignore
