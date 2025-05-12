@@ -1,0 +1,45 @@
+import React from 'react';
+import {ClipboardButton, Progress} from '@gravity-ui/uikit';
+import b from 'bem-cn-lite';
+
+import hammer from '../../../../../../../common/hammer';
+
+import {Tooltip} from '../../../../../../../components/Tooltip/Tooltip';
+
+import {Resource} from '../AccountsWidgetContent';
+
+import './AccountsProgressCell.scss';
+
+const block = b('progress-cell');
+
+type Props = Resource & {type: 'Number' | 'Bytes'};
+
+export function AccountsProgressCell(props: Props) {
+    const {committed, uncommitted, theme, limit, progressText, type} = props;
+
+    if (committed === undefined || limit === undefined || uncommitted === undefined) {
+        return <Progress text={'- / -'} value={0} />;
+    }
+
+    const stack = [
+        {theme, value: (committed / (limit || 1)) * 100},
+        {color: 'var(--default-color)', value: (uncommitted / (limit || 1)) * 100},
+    ];
+
+    return (
+        <Tooltip
+            content={
+                <>
+                    <ClipboardButton text={progressText ?? '- / -'} />
+                    {progressText}
+                </>
+            }
+            className={block('tooltip')}
+        >
+            <Progress
+                stack={stack}
+                text={`${hammer.format[type](committed + uncommitted)} / ${hammer.format[type](limit)}`}
+            />
+        </Tooltip>
+    );
+}
