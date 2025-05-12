@@ -6,13 +6,14 @@ import block from 'bem-cn-lite';
 import React, {useCallback, useContext, useEffect, useMemo, useRef} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import DataTable, {Column, Settings} from '@gravity-ui/react-data-table';
-import {QueryItem, QueryStatus} from '../../module/api';
+import {QueryStatus} from '../../../../types/query-tracker';
+import {QueryItem} from '../../module/api';
 import {refreshQueriesListIfNeeded} from '../../module/queries_list/actions';
 import {getQueriesListTimestamp, getUncompletedItems} from '../../module/queries_list/selectors';
-import {QueryStatusIcon} from '../../QueryStatus';
 import hammer from '../../../../common/hammer';
 
 import Pagination from '../../../../components/Pagination/Pagination';
+import {QueryStatusIcon} from '../../../../components/QueryStatus';
 import {QueriesPoolingContext} from '../../hooks/QueriesPooling/context';
 import {formatTime} from '../../../../components/common/Timeline/util';
 import {QueryEnginesNames} from '../../utils/query';
@@ -23,6 +24,7 @@ import {useQueryNavigation} from '../../hooks/Query';
 import {useQueriesPagination, useQueryList} from '../../hooks/QueriesList';
 import EditQueryNameModal from '../EditQueryNameModal/EditQueryNameModal';
 import {UPDATE_QUERIES_LIST} from '../../module/query-tracker-contants';
+
 import {useQueryHistoryListColumns} from './useQueryListColumns';
 
 import './index.scss';

@@ -408,6 +408,7 @@ export type BatchSubRequest =
     | SubRequest<'list_operations', any>
     | SubRequest<'register_queue_consumer', RegisterQueueConsumerParams>
     | SubRequest<'unregister_queue_consumer', UnregisterQueueConsumerParams>
+    | SubRequest<'list_queries', ListQueriesParams>
     | SubRequest<'get_job', GetJobParameters>;
 
 export type OutputFormat =

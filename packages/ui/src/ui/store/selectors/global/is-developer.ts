@@ -23,7 +23,7 @@ export const getSettingsRegularUserUI = (state: RootState) => {
 
 export const isDeveloper = createSelector(
     [isDeveloperOrWatchMen, getSettingsRegularUserUI],
-    (isDeveloper, regularUserUI) => {
-        return !regularUserUI && isDeveloper;
+    (isDeveloperStatus, regularUserUI) => {
+        return !regularUserUI && isDeveloperStatus;
     },
 );

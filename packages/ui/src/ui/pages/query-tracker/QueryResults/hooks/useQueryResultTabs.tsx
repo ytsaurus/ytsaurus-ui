@@ -2,14 +2,15 @@ import {TabsItemProps} from '@gravity-ui/uikit';
 import times_ from 'lodash/times';
 import has_ from 'lodash/has';
 import find_ from 'lodash/find';
-import {CompletedStates, QueryItem, QueryStatus} from '../../module/api';
-import {QueryStatusIcon} from '../../QueryStatus';
+import {QueryStatus} from '../../../../types/query-tracker';
+import {CompletedStates, QueryItem} from '../../module/api';
 import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {loadQueryResultsErrors} from '../../module/query_result/actions';
 import {getQueryResults} from '../../module/query_result/selectors';
 import {RootState} from '../../../../store/reducers';
 import UIFactory from '../../../../UIFactory';
+import {QueryStatusIcon} from '../../../../components/QueryStatus';
 
 export enum QueryResultTab {
     ERROR = 'error',

@@ -11,6 +11,8 @@ import {multiSortBySortStateArray} from '../../../utils/sort-helpers';
 import {StrawberryListAttributes} from '../../../utils/strawberryControllerApi';
 import {getSettingsData} from '../../../store/selectors/settings/settings-base';
 
+import {defaultColumns} from '../../../constants/chyt';
+
 export const getChytListData = (state: RootState) => state.chyt.list.data;
 
 export const getChytListAvailableCreators = createSelector([getChytListData], (data) => {
@@ -57,18 +59,7 @@ export type ChytSelectableColumn = keyof typeof CHYT_LIST_SELECTABLE_COLUMNS;
 type ChytColumnItem = {checked: boolean; column: ChytListColumns};
 
 export const getChytListColumnsFromSettings = (state: RootState) => {
-    return (
-        getSettingsData(state)['global::chyt::list_columns'] ??
-        ([
-            'health',
-            'state',
-            'instance_count',
-            'total_cpu',
-            'total_memory',
-            'creator',
-            'creation_time',
-        ] as const)
-    );
+    return getSettingsData(state)['global::chyt::list_columns'] ?? defaultColumns;
 };
 
 export const getChytListVisibleColumns = createSelector(

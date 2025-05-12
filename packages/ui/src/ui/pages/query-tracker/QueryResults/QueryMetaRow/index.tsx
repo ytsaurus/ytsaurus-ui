@@ -5,8 +5,9 @@ import {useDispatch} from 'react-redux';
 import hammer from '../../../../common/hammer';
 import {QueryItem} from '../../module/api';
 import {QueryDuration} from '../../QueryDuration';
-import {QueryStatusView} from '../../QueryStatus';
 import stopIcon from '../../../../assets/img/svg/icons/stop-circle.svg';
+
+import {QueryStatusView} from '../../../../components/QueryStatus';
 
 import './index.scss';
 import {isAbortable} from '../../utils/query';

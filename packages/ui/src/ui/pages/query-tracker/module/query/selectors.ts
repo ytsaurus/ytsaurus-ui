@@ -1,7 +1,8 @@
 import forOwn_ from 'lodash/forOwn';
 import {createSelector} from 'reselect';
 import {RootState} from '../../../../store/reducers';
-import {DraftQuery, QTRequestOptions, QueryItem, QueryStatus} from '../api';
+import {QueryStatus} from '../../../../types/query-tracker';
+import {DraftQuery, QTRequestOptions, QueryItem} from '../api';
 import {
     getSettingQueryTrackerStage,
     getSettingQueryTrackerYQLAgentStage,
