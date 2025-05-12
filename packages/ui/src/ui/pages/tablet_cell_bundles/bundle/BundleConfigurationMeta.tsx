@@ -18,7 +18,7 @@ import {OrchidBundlesData} from '../../../store/reducers/tablet_cell_bundles';
 import Icon from '../../../components/Icon/Icon';
 import MetaTable, {MetaTableItem} from '../../../components/MetaTable/MetaTable';
 import {BundleMetaResourceProgress} from '../../../components/BundleMetaResourceProgress/BundleMetaResourceProgress';
-import {Health} from './BundleGeneralMeta';
+import {Health} from '../../../components/Health/Health';
 import {Tooltip} from '../../../components/Tooltip/Tooltip';
 import {printUsageLimit} from '../../../utils';
 import {useUpdater} from '../../../hooks/use-updater';
