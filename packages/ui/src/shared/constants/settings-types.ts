@@ -1,3 +1,4 @@
+import {DashKitProps} from '@gravity-ui/dashkit';
 import {NodeType} from './system';
 import {QueryEngine} from './engines';
 
@@ -142,6 +143,10 @@ interface ChytSettings {
     'global::chyt::list_columns': Array<string>;
 }
 
+type DashboardSettings = {
+    [key in `local::${Cluster}::dashboard::config`]: DashKitProps['config'];
+};
+
 type QueryTrackerLastSelectedACOsSettings = {
     [key in `qt-stage::${Stage}::queryTracker::lastSelectedACOs`]: string[];
 };
@@ -192,6 +197,7 @@ export type DescribedSettings = GlobalSettings &
     QueryTrackerLastDiscoveryPath &
     QueryTrackerLastChytClique &
     ComponentsSettings &
-    SchedulingSettings;
+    SchedulingSettings &
+    DashboardSettings;
 
 export type SettingKey = keyof DescribedSettings;
