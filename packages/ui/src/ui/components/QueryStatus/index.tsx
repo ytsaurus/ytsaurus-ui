@@ -1,9 +1,9 @@
 import {Icon, Spin} from '@gravity-ui/uikit';
 import React from 'react';
 import block from 'bem-cn-lite';
-import hammer from '../../../common/hammer';
+import hammer from '../../common/hammer';
 import {SVGIconData} from '@gravity-ui/uikit/build/esm/components/Icon/types';
-import {ProgressStatuses, QueryStatus} from '../module/api';
+import {ProgressStatuses, QueryStatus} from '../../types/query-tracker';
 import CircleExclamationIcon from '@gravity-ui/icons/svgs/circle-exclamation.svg';
 import CircleCheckIcon from '@gravity-ui/icons/svgs/circle-check.svg';
 import CircleStopIcon from '@gravity-ui/icons/svgs/circle-stop.svg';

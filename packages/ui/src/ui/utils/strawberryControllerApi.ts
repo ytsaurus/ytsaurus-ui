@@ -102,7 +102,7 @@ export type StrawberryListResponseItem = {
 export type StrawberryCliqueHealthType = 'good' | 'pending' | 'failed';
 export type StrawberryCliqueStateType = 'active' | 'inactive' | 'untracked';
 
-type StrawberryApiType = <
+export type StrawberryApiType = <
     T extends StrawberryApi['action'] = never,
     ApiItem extends StrawberryApi & {action: T} = StrawberryApi & {action: T},
 >(

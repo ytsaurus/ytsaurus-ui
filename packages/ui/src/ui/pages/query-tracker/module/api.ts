@@ -23,7 +23,8 @@ import {setSettingByKey} from '../../../store/actions/settings';
 import unipika from '../../../common/thor/unipika';
 import {CancelTokenSource} from 'axios';
 import {VisualizationState} from './queryChart/queryChartSlice';
-import {YTError} from '../../../../@types/types';
+import {YTError} from '../../../types';
+import {QueryStatus} from '../../../types/query-tracker';
 
 function getQTApiSetup(): {proxy?: string} {
     const QT_CLUSTER = getQueryTrackerCluster();
@@ -149,34 +150,10 @@ export interface QueryItem extends DraftQuery {
     };
 }
 
-export enum QueryStatus {
-    DRAFT = 'draft',
-    RUNNING = 'running',
-    PENDING = 'pending',
-    COMPLETING = 'completing',
-    COMPLETED = 'completed',
-    FAILING = 'failing',
-    FAILED = 'failed',
-    ABORTING = 'aborting',
-    ABORTED = 'aborted',
-}
+// Define these constants based on string values to avoid circular dependencies
+export const AbortableStatuses = ['running', 'pending'];
 
-export const ProgressStatuses = [
-    QueryStatus.RUNNING,
-    QueryStatus.PENDING,
-    QueryStatus.COMPLETING,
-    QueryStatus.FAILING,
-    QueryStatus.ABORTING,
-];
-
-export const AbortableStatuses = [QueryStatus.RUNNING, QueryStatus.PENDING];
-
-export const CompletedStates = [
-    QueryStatus.DRAFT,
-    QueryStatus.ABORTED,
-    QueryStatus.COMPLETED,
-    QueryStatus.FAILED,
-];
+export const CompletedStates = ['draft', 'aborted', 'completed', 'failed'];
 
 const secureDecoding = (value: string) => {
     try {
