@@ -1,4 +1,6 @@
 .yt-monaco-editor {
+    $self: &;
+
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
@@ -27,5 +29,11 @@
     &__status {
         padding: 0 20px;
         border-bottom: 1px solid var(--dark-divider);
+    }
+
+    &_vim-mode {
+        #{$self}__editor {
+            height: calc(100% - 20px);
+        }
     }
 }

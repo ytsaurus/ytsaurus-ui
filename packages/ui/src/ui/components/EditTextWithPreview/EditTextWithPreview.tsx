@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useRef} from 'react';
 import cn from 'bem-cn-lite';
 import SplitPane from 'react-split-pane';
 
@@ -10,6 +10,7 @@ import TabbedContent from './TabbedContent';
 
 import './EditTextWithPreview.scss';
 import {DropdownMenuItem} from '@gravity-ui/uikit';
+import type {editor} from 'monaco-editor';
 
 const DEFAULT_SIZE = 350;
 const block = cn('edit-text-with-preview');
@@ -54,6 +55,7 @@ export function EditTextWithPreview({
     disabled,
     initialSplitSize,
 }: EditTextWithPreviewProps) {
+    const editorRef = useRef<editor.IStandaloneCodeEditor>();
     const {value} = valueProp;
 
     const [showPreview, setShowPreview] = React.useState(initialShowPreview);
@@ -92,6 +94,7 @@ export function EditTextWithPreview({
                 className={block('monaco')}
                 onChange={onChange}
                 readOnly={disabled}
+                editorRef={editorRef}
             />
         </TabbedContent>
     );

@@ -2,7 +2,6 @@
     flex: 1;
     border-bottom: 1px solid var(--dark-divider);
     width: 100%;
-    height: calc(100% - 40px);
     overflow: visible;
 
     .selected-text {
@@ -18,9 +17,5 @@
 
     &__error-line {
         background: var(--error-background);
-    }
-
-    &_vim-mode {
-        height: calc(100% - 60px);
     }
 }

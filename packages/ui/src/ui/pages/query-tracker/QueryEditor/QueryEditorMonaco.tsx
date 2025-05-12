@@ -27,7 +27,6 @@ import {
     getControlCommandKey,
 } from '../../../packages/ya-timeline/lib/utils';
 import {openPath} from '../module/queryNavigation/actions';
-import {getSettingsMonacoVimMode} from '../../../store/selectors/settings/settings-ts';
 
 const b = cn('yq-query-editor-monaco');
 
@@ -51,7 +50,6 @@ export const QueryEditorMonaco: FC = () => {
     const editorErrors = useSelector(getQueryEditorErrors);
     const loading = useSelector(isQueryLoading);
     const dispatch = useDispatch();
-    const vimMode = useSelector(getSettingsMonacoVimMode);
 
     const decorators = useRef<Decorators>({
         isInitialized: false,
@@ -157,7 +155,7 @@ export const QueryEditorMonaco: FC = () => {
                 editorRef={editorRef}
                 value={text || ''}
                 language={getLanguageByEngine(engine)}
-                className={b({'vim-mode': vimMode})}
+                className={b()}
                 onChange={updateQueryText}
                 onClick={handleOnClick}
                 monacoConfig={monacoConfig}
