@@ -8,7 +8,6 @@ import {getCluster} from '../../../store/selectors/global';
 
 import {DEFAULT_UPDATER_TIMEOUT} from '../../../hooks/use-updater';
 import {YTApiId} from '../../../../shared/constants/yt-api-id';
-import {BatchResultsItem} from '../../../../shared/yt-types';
 
 import {MutationOptions, UseQueryOptions} from './types';
 import {listQueries} from './endpoints/listQueries';
@@ -37,7 +36,7 @@ const {
 
 export const useListQueriesQuery = ytApi.useListQueriesQuery;
 
-type BatchQueryResult<T = unknown> = BatchResultsItem<T>[];
+type BatchQueryResult = typeof ytApi.endpoints.fetchBatch.Types.ResultType;
 type BatchQueryArgs = typeof ytApi.endpoints.fetchBatch.Types.QueryArg;
 
 /**
@@ -68,7 +67,7 @@ export function useFetchBatchQuery<T>(
     args: BatchQueryArgs extends {setup: unknown}
         ? BatchQueryArgs
         : Omit<BatchQueryArgs, 'cluster'>,
-    options?: UseQueryOptions<BatchQueryResult<T>, BatchQueryArgs>,
+    options?: UseQueryOptions<BatchQueryResult, BatchQueryArgs>,
 ) {
     const useAutoRefresh = useSelector(getUseAutoRefresh);
     const cluster = useSelector(getCluster);
