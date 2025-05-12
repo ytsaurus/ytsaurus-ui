@@ -5,8 +5,13 @@ import {rootApi} from '..';
 import {BatchApiArgs, BatchApiResults, executeBatchV3} from './endpoints/executeBatch';
 import {getUseAutoRefresh} from '../../../store/selectors/settings/settings-ts';
 import {getCluster} from '../../../store/selectors/global';
+
 import {DEFAULT_UPDATER_TIMEOUT} from '../../../hooks/use-updater';
+import {YTApiId} from '../../../../shared/constants/yt-api-id';
+import {BatchResultsItem} from '../../../../shared/yt-types';
+
 import {MutationOptions, UseQueryOptions} from './types';
+import {listQueries} from './endpoints/listQueries';
 
 export const ytApi = rootApi.injectEndpoints({
     endpoints: (build) => ({
@@ -18,6 +23,10 @@ export const ytApi = rootApi.injectEndpoints({
             queryFn: executeBatchV3,
             invalidatesTags: (_result, _error, arg) => [String(arg.id)],
         }),
+        listQueries: build.query({
+            queryFn: listQueries,
+            providesTags: (_result, _error, _arg) => [String(YTApiId.listQueries)],
+        }),
     }),
 });
 
@@ -26,7 +35,9 @@ const {
     useUpdateBatchMutation: useUpdateBatchMutationRaw,
 } = ytApi;
 
-type BatchQueryResult = typeof ytApi.endpoints.fetchBatch.Types.ResultType;
+export const useListQueriesQuery = ytApi.useListQueriesQuery;
+
+type BatchQueryResult<T = unknown> = BatchResultsItem<T>[];
 type BatchQueryArgs = typeof ytApi.endpoints.fetchBatch.Types.QueryArg;
 
 /**
@@ -57,7 +68,7 @@ export function useFetchBatchQuery<T>(
     args: BatchQueryArgs extends {setup: unknown}
         ? BatchQueryArgs
         : Omit<BatchQueryArgs, 'cluster'>,
-    options?: UseQueryOptions<BatchQueryResult, BatchQueryArgs>,
+    options?: UseQueryOptions<BatchQueryResult<T>, BatchQueryArgs>,
 ) {
     const useAutoRefresh = useSelector(getUseAutoRefresh);
     const cluster = useSelector(getCluster);
