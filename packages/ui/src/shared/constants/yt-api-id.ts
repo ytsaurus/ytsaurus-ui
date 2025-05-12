@@ -22,6 +22,8 @@ export enum YTApiId {
     listUsableAccounts,
     listUsers,
     listUsersUM,
+    listPoolsTrees,
+    listPools,
     openAttributesModal,
     pathEditorLoadSuggestions,
     updateAttributes,
