@@ -1,9 +1,9 @@
 import React from 'react';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {Lang, configure} from '@gravity-ui/uikit';
 import {DashKit, ItemDropProps} from '@gravity-ui/dashkit';
 
-import {getEditMode} from '../../../store/reducers/dashboard2/dashboard';
+import {editItem, getEditMode} from '../../../store/reducers/dashboard2/dashboard';
 import {getDashboardConfig} from '../../../store/selectors/dashboard2/dashboard';
 
 import {useDisableMaxContentWidth} from '../../../containers/MaxContentWidth';
@@ -23,6 +23,8 @@ DashKit.setSettings({
 });
 
 export function Dashboard() {
+    const dispatch = useDispatch();
+
     const editMode = useSelector(getEditMode);
     const config = useSelector(getDashboardConfig);
 
@@ -44,9 +46,12 @@ export function Dashboard() {
                     update(dash.config);
                 }}
                 onDrop={onDrop}
-                onItemEdit={() => {}}
+                onItemEdit={(edittingItem) => {
+                    dispatch(editItem({edittingItem}));
+                }}
                 overlayMenuItems={['settings']}
             />
+            <WidgetSettings />
         </div>
     );
 }
