@@ -12,6 +12,7 @@ import {AccountsWidgetContent} from '../Widgets/Accounts/AccountsWidgetContent/A
 import {PoolsWidgetContent} from '../Widgets/Pools/PoolsWidgetContent/PoolsWidgetContent';
 import {QueriesWidgetControls} from '../Widgets/Queries/QueriesWidgetControls/QueriesWidgetControls';
 import {QueriesWidgetContent} from '../Widgets/Queries/QueriesWidgetContent/QueriesWidgetContent';
+import {ServicesWidgetContent} from '../Widgets/Services/ServicesWidgetContent/ServicesWidgetContent';
 
 export function registerPlugins() {
     DashKit.registerPlugins({
@@ -73,6 +74,18 @@ export function registerPlugins() {
                 type="queries"
                 controls={<QueriesWidgetControls {...props} />}
                 content={<QueriesWidgetContent {...props} />}
+            />
+        ),
+    });
+
+    DashKit.registerPlugins({
+        type: 'services',
+        renderer: (props: PluginWidgetProps) => (
+            <WidgetBase
+                {...props}
+                title="Serviсes"
+                type="services"
+                content={<ServicesWidgetContent {...props} />}
             />
         ),
     });

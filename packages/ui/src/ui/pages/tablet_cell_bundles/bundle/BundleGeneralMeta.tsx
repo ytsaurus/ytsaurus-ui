@@ -9,9 +9,8 @@ import {Progress} from '@gravity-ui/uikit';
 import hammer from '@ytsaurus/interface-helpers/lib/hammer';
 import ypath from '../../../common/thor/ypath';
 
-import {YTHealth} from '../../../types';
 import AccountLink from '../../accounts/AccountLink';
-import Label, {LabelTheme} from '../../../components/Label/Label';
+import {Health} from '../../../components/Health/Health';
 import {calcProgressProps} from '../../../utils/utils';
 import {
     getCluster,
@@ -27,26 +26,6 @@ const block = cn('bundle-general-meta');
 export function BundleBalancerValue(props: {value?: boolean; blocking?: boolean}) {
     const {value = true, blocking} = props;
     return <span className={block('bb', {success: value, blocking})}>{value ? 'on' : 'off'}</span>;
-}
-
-const HEALTH_TO_THEME: {[health: string]: LabelTheme} = {
-    good: 'success',
-    initializing: 'warning',
-    degrading: 'warning',
-    failed: 'danger',
-    changing: 'info',
-};
-
-export function Health(props: {value?: YTHealth; className?: string}) {
-    const {value, className} = props;
-    const theme: LabelTheme = HEALTH_TO_THEME[value || ''];
-    return !value ? (
-        hammer.format.NO_VALUE
-    ) : (
-        <Label className={className} theme={theme}>
-            {value}
-        </Label>
-    );
 }
 
 export default function BundleGeneralMeta() {

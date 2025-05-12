@@ -14,6 +14,7 @@ const HEALTH_TO_THEME: {[health: string]: LabelTheme} = {
     degrading: 'warning',
     failed: 'danger',
     changing: 'info',
+    pending: 'info',
 };
 
 export function Health(props: {value?: YTHealth | StrawberryCliqueHealthType; className?: string}) {
