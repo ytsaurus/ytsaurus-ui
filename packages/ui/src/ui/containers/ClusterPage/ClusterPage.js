@@ -20,6 +20,7 @@ import {SchedulingLazy} from '../../pages/scheduling/lazy';
 import {QueryTrackerLazy} from '../../pages/query-tracker/lazy';
 import {JobLazy} from '../../pages/job/lazy';
 import {ChytPageLazy} from '../../pages/chyt/lazy';
+import {Dashboard2Lazy} from '../../pages/dashboard2/lazy';
 
 import ClusterPageHeader from '../ClusterPageHeader/ClusterPageHeader';
 import PageTracker from './PageTracker';
@@ -44,6 +45,7 @@ import {isExperimentalPagesReady} from '../../store/selectors/global/experimenta
 import {getClusterConfig} from '../../utils';
 import {NAMESPACES, SettingName} from '../../../shared/constants/settings';
 import {getClusterPagePaneSizes, getStartingPage} from '../../store/selectors/settings';
+import {getSettingNewDashboardPage} from '../../store/selectors/settings/settings-ts';
 import SupportedFeaturesUpdater from './SupportedFeaturesUpdater';
 import {useRumMeasureStart, useRumMeasureStop} from '../../rum/RumUiContext';
 import {RumMeasureTypes} from '../../rum/rum-measure-types';
@@ -194,6 +196,7 @@ class ClusterPage extends Component {
             paramsError,
             allowChyt,
             allowStartPageRedirect,
+            isNewDashboardPage,
         } = this.props;
 
         return isLoaded && !this.isParamsLoading() ? (
@@ -205,7 +208,10 @@ class ClusterPage extends Component {
                     <Route path={`/:cluster/${Page.COMPONENTS}`} component={ComponentsLazy} />
                     <Route path={`/:cluster/${Page.OPERATIONS}`} component={OperationsLazy} />
                     <Route path={`/:cluster/${Page.JOB}`} component={JobLazy} />
-                    <Route path={`/:cluster/${Page.DASHBOARD}`} component={DashboardLazy} />
+                    <Route
+                        path={`/:cluster/${Page.DASHBOARD}`}
+                        component={isNewDashboardPage ? Dashboard2Lazy : DashboardLazy}
+                    />
                     <Route path={`/:cluster/${Page.SYSTEM}`} component={SystemLazy} />
                     <Route path={`/:cluster/${Page.ACCOUNTS}`} component={AccountsLazy} />
                     <Route
@@ -334,6 +340,7 @@ function mapStateToProps(state) {
         paramsCluster,
         allowChyt: Boolean(getClusterUiConfig(state).chyt_controller_base_url),
         allowStartPageRedirect: isExperimentalPagesReady(state),
+        isNewDashboardPage: getSettingNewDashboardPage(state),
     };
 }
 
