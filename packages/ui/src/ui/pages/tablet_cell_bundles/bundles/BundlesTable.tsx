@@ -15,13 +15,11 @@ import DataTableYT from '../../../components/DataTableYT/DataTableYT';
 import Icon from '../../../components/Icon/Icon';
 import Link from '../../../components/Link/Link';
 import {Tooltip} from '../../../components/Tooltip/Tooltip';
+import {Health} from '../../../components/Health/Health';
 import {STICKY_TOOLBAR_BOTTOM} from '../../../components/WithStickyToolbar/WithStickyToolbar';
 // @ts-ignore
 import hammer from '@ytsaurus/interface-helpers/lib/hammer';
-import {
-    BundleBalancerValue,
-    Health,
-} from '../../../pages/tablet_cell_bundles/bundle/BundleGeneralMeta';
+import {BundleBalancerValue} from '../../../pages/tablet_cell_bundles/bundle/BundleGeneralMeta';
 import type {TabletBundle} from '../../../store/reducers/tablet_cell_bundles';
 import type {SortState} from '../../../types';
 import type {OrderType} from '../../../utils/sort-helpers';
