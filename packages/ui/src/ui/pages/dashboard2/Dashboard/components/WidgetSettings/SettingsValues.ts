@@ -1,3 +1,7 @@
 import {ConfigItemData} from '@gravity-ui/dashkit';
 
-export type SettingsValues = ConfigItemData;
+import {NavigationSettingsValues} from '../../Widgets/Navigation/settings';
+
+export type SettingsValues =
+    | NavigationSettingsValues
+    | ConfigItemData;
