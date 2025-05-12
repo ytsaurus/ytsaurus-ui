@@ -1,4 +1,5 @@
 @import '../../styles/mixins.scss';
+@import 'constants';
 
 .yt-tabbed-content {
     display: flex;
@@ -12,7 +13,7 @@
         align-items: center;
         flex-wrap: nowrap;
         flex-shrink: 0;
-        height: 40px;
+        height: $tabbed-content-header-height;
         overflow: hidden;
         border-bottom: 1px solid var(--dark-divider);
 

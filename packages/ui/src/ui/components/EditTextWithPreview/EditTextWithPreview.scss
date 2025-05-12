@@ -1,3 +1,5 @@
+@import 'constants';
+
 .edit-text-with-preview {
     display: flex;
     flex-direction: column;
@@ -6,6 +8,7 @@
     min-height: 100px;
 
     &__left {
+        height: calc(100% - #{$tabbed-content-header-height});
         display: flex;
     }
 
@@ -20,7 +23,7 @@
     }
 
     .Pane {
-        min-width: 0px;
+        min-width: 0;
     }
 
     &__panel {

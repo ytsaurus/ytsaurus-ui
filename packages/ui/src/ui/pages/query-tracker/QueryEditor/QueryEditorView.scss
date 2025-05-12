@@ -1,9 +1,14 @@
+$action-panel-height: 40px;
+
 .yt-qt-query-editor-view {
+    display: grid;
+    grid-template-rows: calc(100% - #{$action-panel-height}) #{$action-panel-height};
     width: 100%;
     height: 100%;
     overflow: visible;
 
     &__actions {
+        height: #{$action-panel-height};
         padding: 6px 20px;
         display: flex;
         flex-direction: row;

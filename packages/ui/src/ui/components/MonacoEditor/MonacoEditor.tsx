@@ -108,7 +108,7 @@ const MonacoEditor: FC<Props> = ({
     }, []);
 
     useEffect(() => {
-        if (!vimMode) return;
+        if (!vimMode || !editorRef?.current) return;
         vimModeRef.current = initVimMode(editorRef?.current, statusRef?.current);
 
         return () => {
@@ -156,13 +156,19 @@ const MonacoEditor: FC<Props> = ({
         };
     }, [editorRef, language, monacoConfig, onContentChanged, readOnly, theme, value]);
 
-    return (
-        <>
-            <div className={block(null, className)}>
+    if (vimMode) {
+        return (
+            <div className={block({'vim-mode': vimMode}, className)}>
                 <div ref={containerRef} className={block('editor')} />
+                <div ref={statusRef} className={block('status')} />
             </div>
-            {vimMode && <div ref={statusRef} className={block('status')} />}
-        </>
+        );
+    }
+
+    return (
+        <div className={block(null, className)}>
+            <div ref={containerRef} className={block('editor')} />
+        </div>
     );
 };
 
