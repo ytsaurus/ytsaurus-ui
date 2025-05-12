@@ -391,7 +391,8 @@ export type BatchSubRequest =
     | SubRequest<'add_member', AddMembersParams>
     | SubRequest<'remove_member', RemoveMembersParams>
     | SubRequest<'list_jobs', ListJobsParameters>
-    | SubRequest<'list_operations', any>;
+    | SubRequest<'list_operations', any>
+    | SubRequest<'list_queries', ListQueriesParams>;
 
 export type OutputFormat =
     | {
