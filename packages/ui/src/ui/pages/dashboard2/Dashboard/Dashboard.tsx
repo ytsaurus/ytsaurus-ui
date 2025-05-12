@@ -3,6 +3,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {Lang, configure} from '@gravity-ui/uikit';
 import {DashKit, ItemDropProps} from '@gravity-ui/dashkit';
 
+import {registerPlugins} from './utils/registerPlugins';
 import {editItem, getEditMode} from '../../../store/reducers/dashboard2/dashboard';
 import {getDashboardConfig} from '../../../store/selectors/dashboard2/dashboard';
 
@@ -21,6 +22,8 @@ DashKit.setSettings({
         margin: [8, 8],
     },
 });
+
+registerPlugins();
 
 export function Dashboard() {
     const dispatch = useDispatch();
