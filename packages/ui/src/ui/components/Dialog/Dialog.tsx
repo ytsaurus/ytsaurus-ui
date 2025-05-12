@@ -57,6 +57,7 @@ import {RangeInputPickerControl} from './controls/RangeInputPickerControl/RangeI
 import {AclColumnsControl} from '../../containers/ACL/RequestPermissions/AclColumnsControl/AclColumnsControl';
 import {useHotkeysScope} from '../../hooks/use-hotkeysjs-scope';
 import {PoolsMultiple} from './controls/PoolsMultiple/PoolsMultiple';
+import {ServicesSelect} from './controls/ServicesSelect/ServicesSelect';
 
 const block = cn('yt-dialog');
 
@@ -80,6 +81,7 @@ registerDialogControl('sortable-list', SortableListControl);
 registerDialogControl('bytes', BytesControl);
 registerDialogControl('number', NumberControl);
 registerDialogControl('time-duration', TimeDuration);
+
 registerDialogControl('datepicker', DatePickerControl);
 
 registerDialogControl('select-with-subitems', SelectWithSubItems);
@@ -118,6 +120,7 @@ registerDialogControl('range-input-picker', RangeInputPickerControl);
 
 registerDialogControl('before-date', BeforeDatePicker);
 
+registerDialogControl('services-select', ServicesSelect);
 
 export type DialogField<FormValues = unknown> =
     | DFDialogField
@@ -212,7 +215,8 @@ export type DialogField<FormValues = unknown> =
           'range-input-picker',
           ComponentProps<typeof RangeInputPickerControl>,
           FormValues
-      >;
+      >
+    | RegisteredDialogField<'services-select', ComponentProps<typeof ServicesSelect>, FormValues>;
 
 registerDialogTabControl('yt-create-table-tab', CreateTableTabField);
 
