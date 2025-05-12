@@ -9,6 +9,7 @@ import {NavigationWidgetControls} from '../Widgets/Navigation/NavigationWidgetCo
 import {OperationsWidgetContent} from '../Widgets/Operations/OperationsWidgetContent/OperationsWidgetContent';
 import {OperationsWidgetControls} from '../Widgets/Operations/OperationsWidgetControls/OperationsWidgetControls';
 import {AccountsWidgetContent} from '../Widgets/Accounts/AccountsWidgetContent/AccountsWidgetContent';
+import {PoolsWidgetContent} from '../Widgets/Pools/PoolsWidgetContent/PoolsWidgetContent';
 
 export function registerPlugins() {
     DashKit.registerPlugins({
@@ -45,6 +46,18 @@ export function registerPlugins() {
                 title="Accounts"
                 type="accounts"
                 content={<AccountsWidgetContent {...props} />}
+            />
+        ),
+    });
+
+    DashKit.registerPlugins({
+        type: 'pools',
+        renderer: (props: PluginWidgetProps) => (
+            <WidgetBase
+                {...props}
+                title="Pools"
+                type="pools"
+                content={<PoolsWidgetContent {...props} />}
             />
         ),
     });
