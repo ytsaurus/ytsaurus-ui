@@ -1,8 +1,21 @@
 import React from 'react';
+import {useSelector} from 'react-redux';
 import {Lang, configure} from '@gravity-ui/uikit';
 import {DashKit, ItemDropProps} from '@gravity-ui/dashkit';
 
+import {getEditMode} from '../../../store/reducers/dashboard2/dashboard';
+import {getDashboardConfig} from '../../../store/selectors/dashboard2/dashboard';
+
+<<<<<<< Updated upstream
+import {useUpdateDashboard} from '../hooks/use-update-dashboard';
 import {useDisableMaxContentWidth} from '../../../containers/MaxContentWidth';
+=======
+import {useDashboardActions} from '../hooks/use-dashboard-actions';
+
+import {WidgetSettings} from './components/WidgetSettings/WidgetSettings';
+
+import {registerPlugins} from './utils/registerPlugins';
+>>>>>>> Stashed changes
 
 configure({lang: Lang.En});
 
@@ -13,7 +26,17 @@ DashKit.setSettings({
 });
 
 export function Dashboard() {
+    const editMode = useSelector(getEditMode);
+    const config = useSelector(getDashboardConfig);
+
     useDisableMaxContentWidth();
+
+<<<<<<< Updated upstream
+    const {update} = useUpdateDashboard();
+=======
+    useUsableAccountsQuery(undefined, {skip: isAdmin});
+    const {update} = useDashboardActions();
+>>>>>>> Stashed changes
 
     const onDrop = (dropProps: ItemDropProps) => {
         dropProps.commit();
@@ -22,9 +45,11 @@ export function Dashboard() {
     return (
         <div style={{margin: '8px'}}>
             <DashKit
-                editMode={false}
-                config={{}}
-                onChange={() => {}}
+                editMode={editMode}
+                config={config}
+                onChange={(dash) => {
+                    update(dash.config);
+                }}
                 onDrop={onDrop}
                 onItemEdit={() => {}}
                 overlayMenuItems={['settings']}
