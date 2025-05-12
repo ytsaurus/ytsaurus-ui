@@ -23,20 +23,10 @@ export const navigationWidgetSlice = createSlice({
             state,
             {payload}: PayloadAction<{id: string; type: NavigationWidgetState[string]['type']}>,
         ) {
-            if (!state[payload.id]) {
-                return {
-                    ...state,
-                    [payload.id]: {
-                        ...state[payload.id],
-                        type: payload.type,
-                    },
-                };
-            }
-
             return {
                 ...state,
                 [payload.id]: {
-                    ...state[payload.id],
+                    ...state?.[payload.id],
                     type: payload.type,
                 },
             };
