@@ -26,6 +26,7 @@ import groups from './groups';
 import scheduling from './scheduling';
 import suggests from './suggests';
 import job from './job';
+import dashboard2 from './dashboard2';
 import tablet_cell_bundles from './tablet_cell_bundles';
 import tabletCellBundleEditor from './tablet_cell_bundles/tablet-cell-bundle-editor';
 import chaos_cell_bundles from './chaos_cell_bundles';
@@ -55,6 +56,7 @@ const appReducers = {
     modals,
     navigation,
     dashboard,
+    dashboard2,
     operations,
     settings,
     slideoutMenu,
