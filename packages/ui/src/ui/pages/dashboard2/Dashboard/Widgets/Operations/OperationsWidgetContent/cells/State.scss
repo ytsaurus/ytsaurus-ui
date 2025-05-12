@@ -1,0 +1,13 @@
+
+.progress {
+
+    &__label {
+        white-space: nowrap;
+    }
+
+    &__bar {
+        width: 100%;
+
+        line-height: 20px;
+    }
+}

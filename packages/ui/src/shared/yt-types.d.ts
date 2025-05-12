@@ -293,6 +293,19 @@ export interface GetJobParameters {
     operation_id: string;
     job_id: string;
 }
+type QueriesListRequestParams = {
+    limit?: number;
+    output_format?: string;
+    is_tutorial?: string;
+    user?: string;
+    engine?: string;
+    filter?: string;
+    state?: string;
+};
+
+export type ListQueriesParams = ApiMethodParams<QueriesListRequestParams> & {
+    stage?: string;
+};
 
 export interface ListJobsResponse {
     archive_job_count: number;
@@ -392,6 +405,7 @@ export type BatchSubRequest =
     | SubRequest<'add_member', AddMembersParams>
     | SubRequest<'remove_member', RemoveMembersParams>
     | SubRequest<'list_jobs', ListJobsParameters>
+    | SubRequest<'list_operations', any>
     | SubRequest<'register_queue_consumer', RegisterQueueConsumerParams>
     | SubRequest<'unregister_queue_consumer', UnregisterQueueConsumerParams>
     | SubRequest<'get_job', GetJobParameters>;

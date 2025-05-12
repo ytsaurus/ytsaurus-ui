@@ -178,4 +178,8 @@ export enum YTApiId {
     queuePartitions,
     queueConsumerStatus,
     queueConsumerPartitions,
+
+    //dashboard
+    poolsInfo,
+    listDashboardOperations,
 }
