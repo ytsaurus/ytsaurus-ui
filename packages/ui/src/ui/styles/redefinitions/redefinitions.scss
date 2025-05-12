@@ -2,11 +2,13 @@
 @import './common/link';
 @import './common/icon';
 @import './common/progress';
+@import './common/illustrations';
 @import './chartkit';
 @import './DataTable';
 @import './common/Breadcrumbs';
 @import '../fonts/manrope.scss';
 @import '../fonts/roboto-mono.scss';
+@import '@gravity-ui/illustrations/styles/styles.scss';
 
 .data-table {
     &__table {
