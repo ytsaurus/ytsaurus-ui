@@ -240,4 +240,9 @@ module.exports = {
         method: 'POST',
         dataType: 'json',
     },
+    pollJobShell: {
+        name: 'poll_job_shell',
+        method: 'POST',
+        dataType: 'json',
+    }
 };
