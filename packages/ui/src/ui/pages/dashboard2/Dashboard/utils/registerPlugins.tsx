@@ -77,7 +77,7 @@ export function registerPlugins() {
                 controls={<QueriesWidgetControls {...props} />}
                 content={<QueriesWidgetContent {...props} />}
             />
-        )
+        ),
     });
 
     DashKit.registerPlugins({

@@ -1,6 +1,7 @@
 export type OperationsSettingsValues = {
     name: string;
     authors: string[];
+    autoheight: boolean;
 };
 
 export function useOperationsSettings() {
@@ -21,6 +22,11 @@ export function useOperationsSettings() {
             extras: {
                 placeholder: 'Enter name or login',
             },
+        },
+        {
+            type: 'tumbler' as const,
+            name: 'autoheight',
+            caption: 'Use autoheight',
         },
     ];
 }

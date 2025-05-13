@@ -47,6 +47,7 @@ export function useQueriesWidget(widgetId: string) {
                 engine: queryEngine?.length ? queryEngine : undefined,
                 user,
                 output_format: 'json',
+                limit: 10,
             },
         ];
     };
