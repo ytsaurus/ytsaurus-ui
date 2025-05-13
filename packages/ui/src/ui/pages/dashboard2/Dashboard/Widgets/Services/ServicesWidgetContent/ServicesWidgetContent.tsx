@@ -6,6 +6,7 @@ import {createColumnHelper} from '@gravity-ui/table/tanstack';
 import {ServiceInfo} from '../../../../../../store/api/dashboard2/services/services';
 
 import {WidgetTable} from '../../../../../../pages/dashboard2/Dashboard/components/WidgetTable/WidgetTable';
+import {useAutoHeight} from '../../../../../../pages/dashboard2/Dashboard/hooks/use-autoheight';
 
 import {Health} from '../../../../../../components/Health/Health';
 
@@ -35,8 +36,20 @@ const columns = [
     }),
 ];
 
+// 1 react-grid height value ~ 25.3px
+const servicesLayout = {
+    baseHeight: 4.5,
+    defaultHeight: 12,
+
+    rowHeight: 1.6,
+
+    minWidth: 10,
+};
+
 export function ServicesWidgetContent(props: PluginWidgetProps) {
     const {data, error, isLoading} = useServicesWidget(props);
+
+    useAutoHeight(props, servicesLayout, data?.length || 0);
 
     return (
         <WidgetTable

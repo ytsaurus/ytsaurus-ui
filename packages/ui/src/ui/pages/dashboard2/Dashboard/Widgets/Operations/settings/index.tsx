@@ -3,12 +3,8 @@ import {Author} from '../OperationsWidgetContent/use-operations-widget';
 
 export type OperationsSettingsValues = {
     name: string;
-<<<<<<< Updated upstream
-    authors: string[];
-=======
     authors: Array<Author>;
     autoheight: boolean;
->>>>>>> Stashed changes
 };
 
 export function useOperationsSettings() {
@@ -30,14 +26,16 @@ export function useOperationsSettings() {
                 placeholder: 'Enter name or login',
                 allowedTypes: ['users'],
             },
-<<<<<<< Updated upstream
-=======
         } as FIX_MY_TYPE, // types break for some reason when allowed types not default
         {
             type: 'tumbler' as const,
             name: 'autoheight',
             caption: 'Use autoheight',
->>>>>>> Stashed changes
+        },
+        {
+            type: 'tumbler' as const,
+            name: 'autoheight',
+            caption: 'Use autoheight',
         },
     ];
 }
