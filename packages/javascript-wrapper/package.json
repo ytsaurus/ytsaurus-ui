@@ -1,6 +1,6 @@
 {
   "name": "@ytsaurus/javascript-wrapper",
-  "version": "0.10.4",
+  "version": "0.11.0",
   "private": false,
   "description": "Simple tool for running YT commands in your browser.",
   "repository": {

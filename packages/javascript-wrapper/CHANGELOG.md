@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.11.0](https://github.com/ytsaurus/ytsaurus-ui/compare/javascript-wrapper-v0.10.4...javascript-wrapper-v0.11.0) (2025-05-13)
+
+
+### Features
+
+* **javascript-wrapper:** add new poll_job_shell command ([f269395](https://github.com/ytsaurus/ytsaurus-ui/commit/f2693953a061a91447f2a2f52be8bdad54d0ac5e))
+
 ## [0.10.4](https://github.com/ytsaurus/ytsaurus-ui/compare/javascript-wrapper-v0.10.3...javascript-wrapper-v0.10.4) (2025-04-07)
 
 
