@@ -69,6 +69,14 @@ export function accountUsageApiUrl(handle: string) {
     return getAccountsUsageBasePath() + handle;
 }
 
+export function normalizeTimestamp(timestamp?: unknown): number {
+    const seconds = Math.floor(Date.now() / 1000);
+    if (!timestamp) return seconds;
+
+    const parsed = Number(timestamp);
+    return isNaN(parsed) ? seconds : parsed;
+}
+
 export function syncAccountsUsageViewTypeWithSettings(): FiltersThunkAction {
     return (dispatch, getState) => {
         const state = getState();
@@ -160,7 +168,7 @@ export function fetchAccountUsageList(): UsageListThunkAction {
         const params = getFilterParameters(state);
         const requestParams: AccountUsageListDataParams = {
             ...params,
-            timestamp: timestamp || Date.now() / 1000,
+            timestamp: normalizeTimestamp(timestamp),
         };
 
         dispatch({
@@ -211,7 +219,7 @@ export function fetchAccountUsageTree(): UsageTreeThunkAction {
         const params = getFilterParameters(state);
         const requestParams: AccountUsageTreeData['requestParams'] = {
             ...params,
-            timestamp: timestamp || Date.now() / 1000,
+            timestamp: normalizeTimestamp(timestamp),
             row_filter: {
                 ...params.row_filter,
                 base_path: getAccountUsageTreePath(state),

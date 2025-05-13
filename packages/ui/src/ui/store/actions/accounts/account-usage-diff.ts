@@ -8,7 +8,7 @@ import {
     AccountUsageListDiffDataParams,
     AccountsUsageDiffDataResponse,
 } from '../../../store/reducers/accounts/usage/accounts-usage-list-diff';
-import {accountUsageApiUrl, getFilterParameters} from './account-usage';
+import {accountUsageApiUrl, getFilterParameters, normalizeTimestamp} from './account-usage';
 import {
     ACCOUNTS_USAGE_LIST_DIFF_FAILED,
     ACCOUNTS_USAGE_LIST_DIFF_REQUEST,
@@ -40,8 +40,8 @@ function getFilterFromToTimestamps(state: RootState) {
     }
 
     return {
-        older: {timestamp: from || Date.now() / 1000},
-        newer: {timestamp: to || Date.now() / 1000},
+        older: {timestamp: normalizeTimestamp(from)},
+        newer: {timestamp: normalizeTimestamp(to)},
     };
 }
 
