@@ -5,21 +5,18 @@ import {DashKit} from '@gravity-ui/dashkit';
 
 import isEqual_ from 'lodash/isEqual';
 
-import {registerPlugins} from './utils/registerPlugins';
+import {useUsableAccountsQuery} from '../../../store/api/accounts';
 import {editItem, getEditMode} from '../../../store/reducers/dashboard2/dashboard';
 import {getDashboardConfig} from '../../../store/selectors/dashboard2/dashboard';
+import {isDeveloper} from '../../../store/selectors/global/is-developer';
 
-<<<<<<< Updated upstream
-import {useUpdateDashboard} from '../hooks/use-update-dashboard';
-import {WidgetSettings} from './components/WidgetSettings/WidgetSettings';
 import {useDisableMaxContentWidth} from '../../../containers/MaxContentWidth';
-=======
+
 import {useDashboardActions} from '../hooks/use-dashboard-actions';
 
 import {WidgetSettings} from './components/WidgetSettings/WidgetSettings';
 
 import {registerPlugins} from './utils/registerPlugins';
->>>>>>> Stashed changes
 
 configure({lang: Lang.En});
 
@@ -36,15 +33,12 @@ export function Dashboard() {
 
     const editMode = useSelector(getEditMode);
     const config = useSelector(getDashboardConfig);
+    const isAdmin = useSelector(isDeveloper);
 
     useDisableMaxContentWidth();
 
-<<<<<<< Updated upstream
-    const {update} = useUpdateDashboard();
-=======
     useUsableAccountsQuery(undefined, {skip: isAdmin});
     const {update} = useDashboardActions();
->>>>>>> Stashed changes
 
     return (
         <div style={{margin: '8px'}}>
