@@ -9,6 +9,7 @@ export enum YTApiId {
     clusterParams,
     clusterParamsIsDeveloper,
 
+    usableAccounts,
     checkPermissions,
     getPoolTree,
     getPoolTrees,
