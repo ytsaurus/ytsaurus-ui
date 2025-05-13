@@ -1,5 +1,6 @@
 export type QueriesSettingsValues = {
     name: string;
+    autoheight: boolean;
 };
 
 export function useQueriesSettings() {
@@ -11,6 +12,11 @@ export function useQueriesSettings() {
             extras: {
                 placeholder: 'Queries',
             },
+        },
+        {
+            type: 'tumbler' as const,
+            name: 'autoheight',
+            caption: 'Use autoheight',
         },
     ];
 }

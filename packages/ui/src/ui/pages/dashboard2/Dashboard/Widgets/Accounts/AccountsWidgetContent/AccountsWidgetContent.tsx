@@ -7,6 +7,8 @@ import {useAccountsQuery} from '../../../../../../store/api/dashboard2/accounts'
 
 import {WidgetTable} from '../../../../../../pages/dashboard2/Dashboard/components/WidgetTable/WidgetTable';
 
+import {useAutoHeight} from '../../../../../../pages/dashboard2/Dashboard/hooks/use-autoheight';
+
 import {AccountsProgressCell} from './cells/AccountsProgressCell';
 import {AccountsNameCell} from './cells/AccountsNameCell';
 
@@ -55,6 +57,16 @@ const columns = [
     }),
 ];
 
+// 1 react-grid height value ~ 25.3px
+const accountsLayout = {
+    baseHeight: 4.5,
+    defaultHeight: 12,
+
+    rowHeight: 1.9,
+
+    minWidth: 10,
+};
+
 export function AccountsWidgetContent(props: PluginWidgetProps) {
     const {data} = props;
 
@@ -67,6 +79,8 @@ export function AccountsWidgetContent(props: PluginWidgetProps) {
         accountsList: data.accounts as string[],
         medium: data.medium as string | undefined,
     });
+
+    useAutoHeight(props, accountsLayout, accounts?.length || 0);
 
     return (
         <WidgetTable

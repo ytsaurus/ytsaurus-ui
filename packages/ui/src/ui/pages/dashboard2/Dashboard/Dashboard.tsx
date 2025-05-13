@@ -1,7 +1,9 @@
 import React from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {Lang, configure} from '@gravity-ui/uikit';
-import {DashKit, ItemDropProps} from '@gravity-ui/dashkit';
+import {DashKit} from '@gravity-ui/dashkit';
+
+import isEqual_ from 'lodash/isEqual';
 
 import {registerPlugins} from './utils/registerPlugins';
 import {editItem, getEditMode} from '../../../store/reducers/dashboard2/dashboard';
@@ -36,19 +38,16 @@ export function Dashboard() {
     useUsableAccountsQuery(undefined, {skip: isAdmin});
     const {update} = useDashboardActions();
 
-    const onDrop = (dropProps: ItemDropProps) => {
-        dropProps.commit();
-    };
-
     return (
         <div style={{margin: '8px'}}>
             <DashKit
                 editMode={editMode}
                 config={config}
                 onChange={(dash) => {
-                    update(dash.config);
+                    if (!isEqual_(config, dash.config)) {
+                        update(dash.config);
+                    }
                 }}
-                onDrop={onDrop}
                 onItemEdit={(edittingItem) => {
                     dispatch(editItem({edittingItem}));
                 }}

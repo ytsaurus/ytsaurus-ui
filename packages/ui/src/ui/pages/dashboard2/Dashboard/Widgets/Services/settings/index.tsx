@@ -3,6 +3,7 @@ import {ServicePair} from '../../../../../../components/Dialog/controls/Services
 export type ServicesSettingsValues = {
     name: string;
     services: ServicePair[];
+    autoheight: boolean;
 };
 
 export function useServicesSettings() {
@@ -19,6 +20,11 @@ export function useServicesSettings() {
             type: 'services-select' as const,
             name: 'services',
             caption: 'Services',
+        },
+        {
+            type: 'tumbler' as const,
+            name: 'autoheight',
+            caption: 'Use autoheight',
         },
     ];
 }
