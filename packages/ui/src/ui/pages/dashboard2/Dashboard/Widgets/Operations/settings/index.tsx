@@ -21,7 +21,6 @@ export function useOperationsSettings() {
             name: 'authors',
             type: 'acl-subjects' as const,
             caption: 'Authors',
-            required: true,
             extras: {
                 placeholder: 'Enter name or login',
                 allowedTypes: ['users'],

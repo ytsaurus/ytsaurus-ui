@@ -5,9 +5,10 @@ import {DashKit} from '@gravity-ui/dashkit';
 
 import isEqual_ from 'lodash/isEqual';
 
-import {registerPlugins} from './utils/registerPlugins';
+import {useUsableAccountsQuery} from '../../../store/api/accounts';
 import {editItem, getEditMode} from '../../../store/reducers/dashboard2/dashboard';
 import {getDashboardConfig} from '../../../store/selectors/dashboard2/dashboard';
+import {isDeveloper} from '../../../store/selectors/global/is-developer';
 
 import {useDisableMaxContentWidth} from '../../../containers/MaxContentWidth';
 
@@ -32,6 +33,7 @@ export function Dashboard() {
 
     const editMode = useSelector(getEditMode);
     const config = useSelector(getDashboardConfig);
+    const isAdmin = useSelector(isDeveloper);
 
     useDisableMaxContentWidth();
 
