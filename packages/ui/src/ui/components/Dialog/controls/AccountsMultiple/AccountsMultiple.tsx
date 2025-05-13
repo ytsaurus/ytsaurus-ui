@@ -8,8 +8,8 @@ import filter_ from 'lodash/filter';
 import concat_ from 'lodash/concat';
 
 import {useFetchBatchQuery} from '../../../../store/api/yt';
+import {useUsableAccountsQuery} from '../../../../store/api/accounts';
 import {getFavouriteAccounts} from '../../../../store/selectors/favourites';
-import {getCurrentUserName} from '../../../../store/selectors/global';
 
 import {DialogControlProps} from '../../../../components/Dialog/Dialog.types';
 
@@ -25,7 +25,6 @@ export function AccountsMultiple(props: Props) {
     const {value, onChange} = props;
 
     const favourites = useSelector(getFavouriteAccounts);
-    const username = useSelector(getCurrentUserName);
 
     const {data: accounts, isLoading} = useFetchBatchQuery<string>({
         parameters: {
@@ -40,22 +39,7 @@ export function AccountsMultiple(props: Props) {
         errorTitle: 'Failed to fetch accounts list',
     });
 
-    const {data: usableAccountsData} = useFetchBatchQuery<string>({
-        parameters: {
-            requests: [
-                {
-                    command: 'get' as const,
-                    parameters: {path: `//sys/users/${username}/@usable_accounts`},
-                },
-            ],
-        },
-        id: YTApiId.listAccounts,
-    });
-
-    const usableAccounts =
-        usableAccountsData && usableAccountsData.length && usableAccountsData[0].output
-            ? usableAccountsData[0].output
-            : [];
+    const {data: usableAccounts} = useUsableAccountsQuery(undefined);
 
     const accountsLoadedWithData = accounts && accounts.length && accounts[0].output;
 
@@ -78,7 +62,7 @@ export function AccountsMultiple(props: Props) {
 
     const addUsable = () => {
         const currentValue = value.length && value[0] !== '' ? [...value] : [];
-        onChange(concat_(currentValue, usableAccounts));
+        onChange(concat_(currentValue, usableAccounts || []));
     };
 
     return (
