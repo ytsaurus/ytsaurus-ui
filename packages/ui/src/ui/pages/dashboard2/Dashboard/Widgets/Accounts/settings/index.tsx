@@ -10,6 +10,7 @@ export type AccountsSettingsValues = {
     name: string;
     accounts: string[];
     medium: string;
+    autoheight: boolean;
 };
 
 export function useAccountsSettings() {
@@ -41,6 +42,11 @@ export function useAccountsSettings() {
                 width: 'max' as const,
                 options: mediumOptions,
             },
+        },
+        {
+            type: 'tumbler' as const,
+            name: 'autoheight',
+            caption: 'Use autoheight',
         },
     ];
 }

@@ -49,6 +49,7 @@ export function useQueriesWidget(widgetId: string) {
                 engine: queryEngine,
                 user,
                 output_format: 'json',
+                limit: 10,
             },
         ];
     };
