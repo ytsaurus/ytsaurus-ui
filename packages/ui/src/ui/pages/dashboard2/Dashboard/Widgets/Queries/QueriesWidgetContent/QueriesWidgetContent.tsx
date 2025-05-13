@@ -4,6 +4,7 @@ import {PluginWidgetProps} from '@gravity-ui/dashkit';
 import {createColumnHelper} from '@gravity-ui/table/tanstack';
 
 import {WidgetTable} from '../../../../../../pages/dashboard2/Dashboard/components/WidgetTable/WidgetTable';
+import {useAutoHeight} from '../../../../../../pages/dashboard2/Dashboard/hooks/use-autoheight';
 
 import {QueryStatus} from '../../../../../../types/query-tracker';
 
@@ -48,8 +49,20 @@ const columns = [
     }),
 ];
 
+// 1 react-grid height value ~ 25.3px
+const queriesLayout = {
+    baseHeight: 4.5,
+    defaultHeight: 12,
+
+    rowHeight: 1.65,
+
+    minWidth: 10,
+};
+
 export function QueriesWidgetContent(props: PluginWidgetProps) {
     const {queries, error, isLoading, isFetching} = useQueriesWidget(props.id);
+
+    useAutoHeight(props, queriesLayout, queries?.length || 0);
 
     return (
         <WidgetTable
