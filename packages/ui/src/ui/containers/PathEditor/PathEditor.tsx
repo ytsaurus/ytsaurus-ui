@@ -295,7 +295,7 @@ export class PathEditor extends Component<PathEditorProps, PathEditorState> {
                 onKeyDown={this.handleKeyDown}
                 onUpdate={this.handleInputChange}
                 onFocus={this.handleInputFocus}
-                //onBlur={this.handleInputBlur}
+                onBlur={this.handleInputBlur}
                 placeholder={placeholder}
                 hasClear={hasClear}
                 autoFocus={autoFocus}
