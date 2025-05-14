@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.90.1](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.90.0...ui-v1.90.1) (2025-05-14)
+
+
+### Bug Fixes
+
+* **PathEditor:** bring back onBlur callback ([dea479b](https://github.com/ytsaurus/ytsaurus-ui/commit/dea479be18178a9f6a891f75f1fc027fffa61c9a))
+
 ## [1.90.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.89.0...ui-v1.90.0) (2025-05-14)
 
 
