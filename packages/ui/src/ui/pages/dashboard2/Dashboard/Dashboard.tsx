@@ -6,7 +6,11 @@ import {DashKit} from '@gravity-ui/dashkit';
 import isEqual_ from 'lodash/isEqual';
 
 import {useUsableAccountsQuery} from '../../../store/api/accounts';
-import {editItem, getEditMode} from '../../../store/reducers/dashboard2/dashboard';
+import {
+    ItemsTypes,
+    getEditMode,
+    openSettingsDialog,
+} from '../../../store/reducers/dashboard2/dashboard';
 import {getDashboardConfig} from '../../../store/selectors/dashboard2/dashboard';
 import {isDeveloper} from '../../../store/selectors/global/is-developer';
 
@@ -51,7 +55,15 @@ export function Dashboard() {
                     }
                 }}
                 onItemEdit={(edittingItem) => {
-                    dispatch(editItem({edittingItem}));
+                    dispatch(
+                        openSettingsDialog({
+                            edittingConfig: {
+                                ...edittingItem,
+                                target: 'editItem',
+                                type: edittingItem.type as ItemsTypes,
+                            },
+                        }),
+                    );
                 }}
                 overlayMenuItems={['settings']}
             />
