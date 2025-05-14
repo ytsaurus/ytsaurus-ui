@@ -1,12 +1,12 @@
 import React from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 
-import remove_ from 'lodash/remove';
-
-import {setSettingByKey} from '../../../../../store/actions/settings';
-import {editItem, getEdittingItem} from '../../../../../store/reducers/dashboard2/dashboard';
-import {getDashboardConfig} from '../../../../../store/selectors/dashboard2/dashboard';
-import {getCluster} from '../../../../../store/selectors/global';
+import {editConfig} from '../../../../../store/actions/dashboard2/dashboard';
+import {
+    closeSettingsDialog,
+    getEdittingItem,
+    getSettingsDialogVisibility,
+} from '../../../../../store/reducers/dashboard2/dashboard';
 
 import {FormApi, YTDFDialog} from '../../../../../components/Dialog';
 
@@ -22,28 +22,18 @@ export function WidgetSettings() {
     const dispatch = useDispatch();
 
     const item = useSelector(getEdittingItem);
-    const config = useSelector(getDashboardConfig);
-    const cluster = useSelector(getCluster);
+    const visible = useSelector(getSettingsDialogVisibility);
 
     const {getFields} = useSettingsFields();
 
     const onClose = () => {
-        dispatch(editItem({}));
+        dispatch(closeSettingsDialog());
     };
 
     const onAdd = async (form: FormApi<SettingsValues>) => {
         const {values} = form.getState();
-        const configItems = [...config.items];
-        const prevItem = configItems.find((e) => e.id === item?.id);
-        if (prevItem) {
-            const newItem = {...prevItem, data: {...values}};
-            remove_(configItems, prevItem);
-            configItems.push(newItem);
-            const newConfig = {...config, items: [...configItems]};
-            dispatch(setSettingByKey(`local::${cluster}::dashboard::config`, newConfig));
-            return Promise.resolve();
-        }
-        return Promise.reject('Failed to update dashboard');
+        dispatch(editConfig(item?.target, values, item));
+        return Promise.resolve();
     };
 
     return (
@@ -54,7 +44,7 @@ export function WidgetSettings() {
             }}
             pristineSubmittable
             initialValues={item?.data}
-            visible={Boolean(item)}
+            visible={visible}
             fields={getFields(item?.type)}
             onClose={onClose}
         />

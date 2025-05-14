@@ -40,5 +40,5 @@ export function useAutoHeight(
                 needSetDefault: true,
             });
         }
-    }, [widget?.data?.autoheight]);
+    }, [widget?.data?.autoheight, dataLength]);
 }
