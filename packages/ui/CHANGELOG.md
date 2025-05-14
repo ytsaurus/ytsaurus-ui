@@ -1,5 +1,28 @@
 # Changelog
 
+## [1.90.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.89.0...ui-v1.90.0) (2025-05-14)
+
+
+### Features
+
+* **Accounts:** path string to link [YTFRONT-4896] ([a514bbe](https://github.com/ytsaurus/ytsaurus-ui/commit/a514bbec1287e561dac0bca4aa8c2c44d06bb85e))
+* **Bundles:** bit/s to B/S [YTFRONT-4523] ([34f08aa](https://github.com/ytsaurus/ytsaurus-ui/commit/34f08aa3d5a8b93a79e007400eae64adcd010ac2))
+* **Download:** copy to clipboard [YTFRONT-4895] ([623201e](https://github.com/ytsaurus/ytsaurus-ui/commit/623201e8b19a4a8e1327bf96eb3455b51683b019))
+* **Queries:** save user engine choice [YTFRONT-4816] ([6865bde](https://github.com/ytsaurus/ytsaurus-ui/commit/6865bdeaf77ff8fca429ec4df51eb4f86160145c))
+
+
+### Bug Fixes
+
+* **Account:** normalize timestamp [YTFRONT-4913] ([76b38e1](https://github.com/ytsaurus/ytsaurus-ui/commit/76b38e17eb8574668ea5d4c00ec5b5434482d850))
+* batch api types ([41a3d68](https://github.com/ytsaurus/ytsaurus-ui/commit/41a3d6823d596e913dffdf5e70e5de0f90a60e97))
+* dark hight contrast theme background color [YTFRONT-4818] ([cd157b3](https://github.com/ytsaurus/ytsaurus-ui/commit/cd157b3243053966525029c86007e24554f49f17))
+* **DataTableYT:** table's Attributes should be properly scrollable when QT-side-panel is opened [YTFRONT-4900] ([9f64661](https://github.com/ytsaurus/ytsaurus-ui/commit/9f6466109d8935d2c231a4c858f5e477720dbe99))
+* **icons:** ordered table icon ([f872cde](https://github.com/ytsaurus/ytsaurus-ui/commit/f872cdec0d8fe80f1cc1786aedd9b64d0d13e353))
+* **localmode:** sync cluster_name [YTFRONT-4326] ([3bddca1](https://github.com/ytsaurus/ytsaurus-ui/commit/3bddca1a4403da895605b992181b6c976c0d6209))
+* **OperationJobsTable:** input path modal close on esc ([80629ec](https://github.com/ytsaurus/ytsaurus-ui/commit/80629ecc2b40eb8d43cc2621d270d13b4425ed16))
+* **Operations/List:** table content should not jump up when toolbar becomes sticky [YTFRONT-4870] ([f227af2](https://github.com/ytsaurus/ytsaurus-ui/commit/f227af2f809c6948336bb4af00fb7eaf0e7cae99))
+* queue creation and deletion error messages ([35bc106](https://github.com/ytsaurus/ytsaurus-ui/commit/35bc106219d7926eaf78aa93a8f5d1242c07ad67))
+
 ## [1.89.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.88.0...ui-v1.89.0) (2025-04-18)
 
 
