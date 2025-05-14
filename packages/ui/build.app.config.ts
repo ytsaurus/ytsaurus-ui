@@ -12,9 +12,18 @@ if (debugPort) {
     console.log({debugPort}, '\n');
 }
 
+const isDev = process.env.APP_ENV === 'development';
+
 const port = Number(process.env.LOCAL_DEV_PORT);
 
+const devConfig = {
+    bundler: 'rspack',
+    javaScriptLoader: 'swc',
+    cache: 'true',
+};
+
 const client: ServiceConfig['client'] = {
+    ...(isDev ? devConfig : {}),
     watchOptions: {
         aggregateTimeout: 1000,
     },

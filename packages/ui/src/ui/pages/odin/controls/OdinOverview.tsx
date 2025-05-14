@@ -12,7 +12,7 @@ import chevronRightSvg from '@gravity-ui/icons/svgs/chevron-right.svg';
 
 import {DatePicker} from '@gravity-ui/date-components';
 
-import {absolute} from '../../../common/utils/url-ts';
+import {absolute} from '../../../common/utils/url';
 
 import hammer from '../../../common/hammer';
 
