@@ -464,6 +464,8 @@ export interface UIFactory {
 
     getInlineSuggestionsApi(): InlineSuggestionsApi | undefined;
 
+    getChat(): undefined | React.ReactNode;
+
     renderCustomPreloaderError: (params: {
         cluster: string;
         errorType: PreloadErrorType;
