@@ -597,11 +597,11 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
                 title: 'Visual settings',
                 items: [
                     makeItem(
-                        'global::monacoVimMode',
+                        'global::editor::vimMode',
                         'Vim mode',
                         'top',
                         <BooleanSettingItem
-                            settingKey="global::monacoVimMode"
+                            settingKey="global::editor::vimMode"
                             description="Use monaco vim mode"
                             oneLine
                         />,

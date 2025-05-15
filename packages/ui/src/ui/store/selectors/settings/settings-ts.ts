@@ -28,8 +28,8 @@ export const getSettingsQueryTrackerNewGraphType = createSelector(getSettingsDat
     return data['global::queryTracker::useNewGraphView'] || false;
 });
 
-export const getSettingsMonacoVimMode = createSelector(getSettingsData, (data) => {
-    return data['global::monacoVimMode'] || false;
+export const getSettingsEditorVimMode = createSelector(getSettingsData, (data) => {
+    return data['global::editor::vimMode'] || false;
 });
 
 export const getSettingsSchedulingExpandStaticConfiguration = createSelector(
