@@ -24,6 +24,7 @@ import shieldIcon from '../../assets/img/svg/shield-icon.svg';
 import tableIcon from '../../assets/img/svg/table-icon.svg';
 import infoIcon from '../../assets/img/svg/info-icon.svg';
 import LogoGitlabIcon from '@gravity-ui/icons/svgs/logo-gitlab.svg';
+import PencilToSquareIcon from '@gravity-ui/icons/svgs/pencil-to-square.svg';
 import {useClusterFromLocation} from '../../hooks/use-cluster';
 import {docsUrl} from '../../config/index';
 import {uiSettings} from '../../config/ui-settings';
@@ -591,6 +592,23 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
                 ]),
             ),
 
+        makePageBySections('Editor', PencilToSquareIcon, [
+            {
+                title: 'Visual settings',
+                items: [
+                    makeItem(
+                        'global::monacoVimMode',
+                        'Vim mode',
+                        'top',
+                        <BooleanSettingItem
+                            settingKey="global::monacoVimMode"
+                            description="Use monaco vim mode"
+                            oneLine
+                        />,
+                    ),
+                ],
+            },
+        ]),
         makePage(
             'Queries',
             undefined,
@@ -623,16 +641,6 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
                     <BooleanSettingItem
                         settingKey="global::queryTracker::useNewGraphView"
                         description="Enable experimental graph vew for Progress tab of a query"
-                        oneLine
-                    />,
-                ),
-                makeItem(
-                    'global::monacoVimMode',
-                    'Vim mode',
-                    'top',
-                    <BooleanSettingItem
-                        settingKey="global::monacoVimMode"
-                        description="Use monaco vim mode"
                         oneLine
                     />,
                 ),
