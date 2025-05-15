@@ -55,7 +55,7 @@ export function performAction<T = unknown>({
         parameters = {...parameters, ...option.data.parameters};
     }
 
-    metrics.countEvent({operation_detail_action: name});
+    metrics.countEvent('operation_detail_action', name);
 
     return ytApiV3[`${name}Operation`](parameters).then(updateOperation);
 }

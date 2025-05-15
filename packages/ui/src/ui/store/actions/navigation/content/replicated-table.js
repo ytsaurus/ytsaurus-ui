@@ -78,9 +78,7 @@ export function performReplicaAction({mode, state, auto_replica_tracker, replica
             return Promise.resolve();
         }
 
-        metrics.countEvent({
-            navigation_replicated_table_replica_action: actionName,
-        });
+        metrics.countEvent('navigation_replicated_table_replica_action', actionName);
 
         const replicaId = ypath.getValue(replica, '');
         const parameters = {

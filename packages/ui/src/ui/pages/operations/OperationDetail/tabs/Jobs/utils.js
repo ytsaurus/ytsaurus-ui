@@ -24,9 +24,7 @@ function createTemporaryPath(login) {
 export function performJobAction({login, name, item}) {
     const parameters = {job_id: item.id};
 
-    metrics.countEvent({
-        'operation_detail_running-jobs_action': name,
-    });
+    metrics.countEvent('operation_detail_running-jobs_action', name);
 
     let jobActionPromise;
 
