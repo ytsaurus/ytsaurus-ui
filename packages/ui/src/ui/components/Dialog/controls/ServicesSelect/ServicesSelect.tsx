@@ -1,8 +1,14 @@
 import React from 'react';
-import {Button, Flex, Select} from '@gravity-ui/uikit';
+import {useSelector} from 'react-redux';
+import {Button, Flex, Select, Text} from '@gravity-ui/uikit';
 import {Plus} from '@gravity-ui/icons';
 
 import map_ from 'lodash/map';
+
+import {useFetchBatchQuery} from '../../../../store/api/yt';
+import {getClusterUiConfig} from '../../../../store/selectors/global';
+
+import {YTApiId} from '../../../../rum/rum-wrap-api';
 
 import {DialogControlProps} from '../../Dialog.types';
 
@@ -22,12 +28,6 @@ type Props = DialogControlProps<ServicePair[]> & {
 export function ServicesSelect(props: Props) {
     const {value = [{service: '', item: ''}], onChange, disabled} = props;
 
-<<<<<<< Updated upstream
-    const serviceTypeOptions = [
-        {value: 'bundle', content: 'Bundle'},
-        {value: 'chyt', content: 'CHYT'},
-    ];
-=======
     const chytAllowed = useSelector(getClusterUiConfig).chyt_controller_base_url;
 
     const {data: bundlesAllowedResp} = useFetchBatchQuery({
@@ -42,11 +42,7 @@ export function ServicesSelect(props: Props) {
             ],
         },
         id: YTApiId.tabletBundleControllerState,
-<<<<<<< Updated upstream
-        errorTitle: 'Failed to check is bundles allowed',
-=======
         errorTitle: 'Failed to fetch bundle controller existance',
->>>>>>> Stashed changes
     });
 
     const serviceTypeOptions: {value: 'chyt' | 'bundle'; content: 'CHYT' | 'Bundle'}[] = [];
@@ -58,7 +54,6 @@ export function ServicesSelect(props: Props) {
     if (bundlesAllowedResp?.[0]?.output) {
         serviceTypeOptions.push({value: 'bundle', content: 'Bundle'});
     }
->>>>>>> Stashed changes
 
     const {bundles, isBundlesLoading} = useBunldesList();
 
@@ -91,49 +86,61 @@ export function ServicesSelect(props: Props) {
     };
 
     return (
-        <Flex direction={'column'} gap={2}>
-            {value.map((pair, index) => (
-                <Flex key={index} gap={2}>
-                    <Select
-                        options={serviceTypeOptions}
-                        onUpdate={(newValue) => updateService(index, newValue[0])}
-                        popupWidth={'fit'}
-                        value={[pair.service]}
-                        hasClear
-                        width={'max'}
-                        disabled={disabled}
-                        placeholder={'Select service'}
-                    />
-                    <Select
-                        onUpdate={(newValue) => updateItem(index, newValue[0])}
-                        width={'max'}
-                        hasClear
-                        value={[pair.item]}
-                        options={makeItemsOptions(pair)}
-                        loading={isItemsListLoading(pair)}
-                        disabled={disabled || !pair.service}
-                        placeholder={makeItemPlaceholder(pair)}
-                    />
-                    {value.length > 1 && (
-                        <Button view="flat" onClick={() => removePair(index)} disabled={disabled}>
-                            Remove
-                        </Button>
-                    )}
-                </Flex>
-            ))}
-            {Boolean(value.length) &&
-                value[value.length - 1]?.service &&
-                value[value.length - 1]?.item && (
-                    <Flex>
-                        <Button size={'m'} onClick={addPair} disabled={disabled}>
-                            <Flex alignItems={'center'} gap={2}>
-                                <Plus />
-                                Add Service
+        <>
+            {serviceTypeOptions.length ? (
+                <Flex direction={'column'} gap={2}>
+                    {value.map((pair, index) => (
+                        <Flex key={index} gap={2}>
+                            <Select
+                                options={serviceTypeOptions}
+                                onUpdate={(newValue) => updateService(index, newValue[0])}
+                                popupWidth={'fit'}
+                                value={[pair.service]}
+                                hasClear
+                                width={'max'}
+                                disabled={disabled}
+                                placeholder={'Select service'}
+                            />
+                            <Select
+                                onUpdate={(newValue) => updateItem(index, newValue[0])}
+                                width={'max'}
+                                hasClear
+                                value={[pair.item]}
+                                options={makeItemsOptions(pair)}
+                                loading={isItemsListLoading(pair)}
+                                disabled={disabled || !pair.service}
+                                placeholder={makeItemPlaceholder(pair)}
+                            />
+                            {value.length > 1 && (
+                                <Button
+                                    view="flat"
+                                    onClick={() => removePair(index)}
+                                    disabled={disabled}
+                                >
+                                    Remove
+                                </Button>
+                            )}
+                        </Flex>
+                    ))}
+                    {Boolean(value.length) &&
+                        value[value.length - 1]?.service &&
+                        value[value.length - 1]?.item && (
+                            <Flex>
+                                <Button size={'m'} onClick={addPair} disabled={disabled}>
+                                    <Flex alignItems={'center'} gap={2}>
+                                        <Plus />
+                                        Add Service
+                                    </Flex>
+                                </Button>
                             </Flex>
-                        </Button>
-                    </Flex>
-                )}
-        </Flex>
+                        )}
+                </Flex>
+            ) : (
+                <Text color={'danger'} variant={'body-2'}>
+                    There are no services available on current cluster
+                </Text>
+            )}
+        </>
     );
 }
 
