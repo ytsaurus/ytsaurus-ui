@@ -10,7 +10,7 @@ import {YT_DARK_MONACO_THEME, YT_LIGHT_MONACO_THEME} from './MonacoEditorThemes'
 import isEqual_ from 'lodash/isEqual';
 import '../../libs/monaco-yql-languages/monaco.contribution';
 import './MonacoEditor.scss';
-import {getSettingsMonacoVimMode} from '../../store/selectors/settings/settings-ts';
+import {getSettingsEditorVimMode} from '../../store/selectors/settings/settings-ts';
 
 const block = cn('yt-monaco-editor');
 
@@ -43,7 +43,7 @@ const MonacoEditor: FC<Props> = ({
     onChange,
     editorRef,
 }) => {
-    const vimMode = useSelector(getSettingsMonacoVimMode);
+    const vimMode = useSelector(getSettingsEditorVimMode);
     const theme = useSelector(getTheme);
     const modelRef = useRef(monaco.editor.createModel(value, language));
     const vimModeRef = useRef<any>();

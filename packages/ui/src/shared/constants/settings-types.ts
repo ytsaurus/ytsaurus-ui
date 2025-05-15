@@ -17,11 +17,14 @@ interface GlobalSettings {
     'global::theme': 'system' | 'light' | 'dark' | 'light-hc' | 'dark-hc';
     'global::autoRefresh': boolean;
     'global::fontType': string;
-    'global::monacoVimMode': boolean;
     'global::maxContentWidth': 'standard' | 'wide' | 'maximum';
     'global::pagesOrder': Array<string>;
     'global::pagesPinned': Record<string, boolean>;
     'global::navigationPanelExpand': boolean | undefined;
+}
+
+interface EditorSettings {
+    'global::editor::vimMode': boolean;
 }
 
 interface YsonSettings {
@@ -177,6 +180,7 @@ export interface DefaultSettings {
 }
 
 export type DescribedSettings = GlobalSettings &
+    EditorSettings &
     YsonSettings &
     DevelopmentSettings &
     SystemSettings &
