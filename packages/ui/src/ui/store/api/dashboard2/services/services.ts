@@ -25,14 +25,21 @@ const makeItemLink = (type: 'chyt' | 'bundle', name: string, cluster: string) =>
     return `/${cluster}/${page}/${itemParam}`;
 };
 
-const bundlesRequests = (items: ServicesItem[]) =>
-    map_(items, ({item}) => ({
+const bundlesRequests = (items: ServicesItem[]) => [
+    {
+        command: 'exists' as const,
+        parameters: {
+            path: '//sys/bundle_controller/orchid/bundle_controller/state/bundles',
+        },
+    },
+    ...map_(items, ({item}) => ({
         command: 'get' as const,
         parameters: {
             path: `//sys/tablet_cell_bundles/${item}`,
             attributes: ['health', 'bundle_controller_target_config'],
         },
-    }));
+    })),
+];
 
 async function fetchBundles(items: ServicesItem[], cluster: string) {
     const response = await ytApiV3Id.executeBatch(YTApiId.tabletCellBundles, {
@@ -44,9 +51,11 @@ async function fetchBundles(items: ServicesItem[], cluster: string) {
         throw error;
     }
 
-    if (!response.length) return [];
+    const [isBundlesSupported, ...bundles] = response;
 
-    const bundlesInfo = map_(response, ({output}, idx) => {
+    if (!isBundlesSupported || !bundles?.length) return [];
+
+    const bundlesInfo = map_(bundles, ({output}, idx) => {
         if (!output) {
             return {
                 type: 'bundle' as const,
@@ -115,7 +124,7 @@ export async function services(args: {cluster: string; items?: ServicesItem[]}, 
 
         const requestedCliques = filter_(items, ({service}) => service === 'chyt');
         const requestedBundles = filter_(items, ({service}) => service === 'bundle');
-
+        //Boolean(getClusterUiConfig(state).chyt_controller_base_url)
         const cliques = await fetchChyt(requestedCliques, cluster, isAdmin);
         const bundles = await fetchBundles(requestedBundles, cluster);
 
