@@ -13,10 +13,16 @@ import {PoolsWidgetContent} from '../Widgets/Pools/PoolsWidgetContent/PoolsWidge
 import {QueriesWidgetControls} from '../Widgets/Queries/QueriesWidgetControls/QueriesWidgetControls';
 import {QueriesWidgetContent} from '../Widgets/Queries/QueriesWidgetContent/QueriesWidgetContent';
 import {ServicesWidgetContent} from '../Widgets/Services/ServicesWidgetContent/ServicesWidgetContent';
+import {defaultDashboardItems} from '../../../../constants/dashboard2';
 
 export function registerPlugins() {
     DashKit.registerPlugins({
         type: 'navigation',
+        defaultLayout: {
+            h: defaultDashboardItems['navigation'].layout.h,
+            w: defaultDashboardItems['navigation'].layout.w,
+            y: Infinity,
+        },
         renderer: (props: PluginWidgetProps) => (
             <WidgetBase
                 {...props}
@@ -30,6 +36,11 @@ export function registerPlugins() {
 
     DashKit.registerPlugins({
         type: 'operations',
+        defaultLayout: {
+            h: defaultDashboardItems['operations'].layout.h,
+            w: defaultDashboardItems['operations'].layout.w,
+            y: Infinity,
+        },
         renderer: (props: PluginWidgetProps) => (
             <WidgetBase
                 {...props}
@@ -43,6 +54,11 @@ export function registerPlugins() {
 
     DashKit.registerPlugins({
         type: 'accounts',
+        defaultLayout: {
+            h: defaultDashboardItems['accounts'].layout.h,
+            w: defaultDashboardItems['accounts'].layout.w,
+            y: Infinity,
+        },
         renderer: (props: PluginWidgetProps) => (
             <WidgetBase
                 {...props}
@@ -55,6 +71,11 @@ export function registerPlugins() {
 
     DashKit.registerPlugins({
         type: 'pools',
+        defaultLayout: {
+            h: defaultDashboardItems['pools'].layout.h,
+            w: defaultDashboardItems['pools'].layout.w,
+            y: Infinity,
+        },
         renderer: (props: PluginWidgetProps) => (
             <WidgetBase
                 {...props}
@@ -67,6 +88,11 @@ export function registerPlugins() {
 
     DashKit.registerPlugins({
         type: 'queries',
+        defaultLayout: {
+            h: defaultDashboardItems['queries'].layout.h,
+            w: defaultDashboardItems['queries'].layout.w,
+            y: Infinity,
+        },
         renderer: (props: PluginWidgetProps) => (
             <WidgetBase
                 {...props}
@@ -80,6 +106,11 @@ export function registerPlugins() {
 
     DashKit.registerPlugins({
         type: 'services',
+        defaultLayout: {
+            h: defaultDashboardItems['services'].layout.h,
+            w: defaultDashboardItems['services'].layout.w,
+            y: Infinity,
+        },
         renderer: (props: PluginWidgetProps) => (
             <WidgetBase
                 {...props}
