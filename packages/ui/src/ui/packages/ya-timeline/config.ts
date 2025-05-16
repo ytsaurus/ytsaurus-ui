@@ -58,9 +58,11 @@ export const yaTimelineConfig = {
   WHEEL_PAN_SPEED: 0.00025,
 
   MAX_TRACKS: 5,
+  LINE_HEIGHT: 25,
   TRACK_HEIGHT: 25,
 
   OVERLAPPING_THRESHOLD: 8,
+  SKIP_OVERLAPPING: false,
 
   GRID_STROKE_WIDTH: 1,
 
