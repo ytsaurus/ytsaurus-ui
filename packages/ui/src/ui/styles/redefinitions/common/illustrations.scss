@@ -1,0 +1,19 @@
+@import '@gravity-ui/illustrations/styles/theme.scss';
+
+.g-root {
+    &_theme_light {
+        @include g-illustrations-colors-light;
+    }
+
+    &_theme_light-hc {
+        @include g-illustrations-colors-light-hc;
+    }
+
+    &_theme_dark {
+        @include g-illustrations-colors-dark;
+    }
+
+    &_theme_dark-hc {
+        @include g-illustrations-colors-dark-hc;
+    }
+}
