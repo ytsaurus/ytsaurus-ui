@@ -28,7 +28,15 @@ export function useUpdateDashboard() {
         dispatch(setSettingByKey(settingPath, {...newConfig}));
     };
     const add = (itemType: ConfigsTypes) => {
-        dispatch(openSettingsDialog({edittingConfig: {target: 'createItem', type: itemType}}));
+        dispatch(
+            openSettingsDialog({
+                edittingConfig: {
+                    target: 'createItem',
+                    type: itemType,
+                    data: defaultDashboardItems[itemType].data,
+                },
+            }),
+        );
     };
     const cancel = () => {
         dispatch(setSettingByKey(settingPath, prevConfig.current));
