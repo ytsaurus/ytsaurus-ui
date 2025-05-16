@@ -87,17 +87,10 @@ export function performReplicaAction({mode, state, auto_replica_tracker, replica
             replica_id: replicaId,
             mode,
             enabled: state === 'enabled',
+            enable_replicated_table_tracker: auto_replica_tracker === 'enabled',
         };
 
-        return Promise.all([
-            ytApiV3.alterTableReplica(parameters),
-            prevAutoReplicaTracker === auto_replica_tracker
-                ? Promise.resolve()
-                : ytApiV3.set(
-                      {path: `#${replicaId}/@enable_replicated_table_tracker`},
-                      auto_replica_tracker === 'enabled',
-                  ),
-        ]).then(() => dispatch(loadReplicas()));
+        return ytApiV3.alterTableReplica(parameters).then(() => dispatch(loadReplicas()));
     };
 }
 
