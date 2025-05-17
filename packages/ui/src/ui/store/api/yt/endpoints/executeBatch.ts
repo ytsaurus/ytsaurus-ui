@@ -5,6 +5,7 @@ import {YTError} from '../../../../types';
 
 export type BatchApiArgs = {
     id: YTApiId;
+    errorTitle: string;
     toaster?: WrapApiOptions<unknown, 'v3'>;
 } & Omit<ApiMethodParams<BatchParameters>, 'setup'> &
     BatchCluster;
@@ -16,7 +17,7 @@ export type BatchCluster =
 export type BatchApiResults<T = unknown> = Array<BatchResultsItem<T>>;
 
 export const executeBatchV3 = async (args: BatchApiArgs) => {
-    const {id, parameters, data, cancellation, toaster} = args;
+    const {id, errorTitle, parameters, data, cancellation, toaster} = args;
     try {
         const setup = 'setup' in args ? args.setup : undefined;
         const request = async () => {
@@ -27,7 +28,7 @@ export const executeBatchV3 = async (args: BatchApiArgs) => {
                 cancellation,
             });
 
-            const error = getBatchError(results, results[0].error?.message || 'Failed to batch');
+            const error = getBatchError(results, errorTitle);
             if (error) throw error;
 
             return results;
@@ -41,7 +42,7 @@ export const executeBatchV3 = async (args: BatchApiArgs) => {
             results = await request();
         }
 
-        const error = getBatchError(results, results[0].error?.message || 'Failed to batch');
+        const error = getBatchError(results, errorTitle);
         if (error) throw error;
 
         return {data: results};

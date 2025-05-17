@@ -28,6 +28,7 @@ type ExportsMutationArgs = {
 
 export const makeGetExportsParams = (path: string) => ({
     id: YTApiId.queueExportConfig,
+    errorTitle: 'Failed to get export config',
     parameters: {
         requests: [
             {
