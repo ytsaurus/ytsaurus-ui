@@ -24,7 +24,7 @@ export type AclKindState = {
     userPermissions: Array<{type: YTPermissionTypeUI} & CheckPermissionResult>;
     objectPermissions: Array<PreparedAclSubject>;
     columnGroups: Array<AclColumnGroup>;
-    inheritAcl: boolean;
+    inheritAcl?: boolean;
 
     bossApproval: PreparedRole | undefined;
     disableAclInheritance: boolean | PreparedRole | undefined;
@@ -52,7 +52,7 @@ const ephemeralState: AclKindState = {
     userPermissions: [],
     objectPermissions: [],
     columnGroups: [],
-    inheritAcl: false,
+    inheritAcl: undefined,
     bossApproval: undefined,
     disableAclInheritance: false,
     disableInheritanceResponsible: false,
@@ -119,32 +119,8 @@ export default (state = initialState, action: AclAction) => {
             return modifyFieldState(state, action.idmKind, {loading: true});
 
         case LOAD_DATA.SUCCESS: {
-            const {
-                path,
-                objectPermissions,
-                columnGroups,
-                userPermissions,
-                disableAclInheritance,
-                bossApproval,
-                disableInheritanceResponsible,
-                auditors,
-                responsible,
-                version,
-                readApprovers,
-            } = action.data;
-
             return modifyFieldState(state, action.idmKind, {
-                path,
-                version,
-                disableAclInheritance,
-                bossApproval,
-                disableInheritanceResponsible,
-                auditors,
-                responsible,
-                userPermissions,
-                objectPermissions,
-                columnGroups,
-                readApprovers,
+                ...action.data,
                 loading: false,
                 loaded: true,
                 error: false,

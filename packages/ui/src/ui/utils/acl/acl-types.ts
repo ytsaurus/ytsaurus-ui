@@ -171,6 +171,7 @@ export interface ACLResponsible {
 export interface PreparedAclData {
     permissions: Array<PreparedAclSubject>;
     column_groups: Array<AclColumnGroup>;
+    inheritAcl?: boolean;
 }
 
 export type TypedAclSubject =

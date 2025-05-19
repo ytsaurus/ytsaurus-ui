@@ -123,6 +123,7 @@ export function loadAclData(
                         auditors: responsible.auditors,
                         objectPermissions: acl.permissions,
                         columnGroups: acl.column_groups,
+                        inheritAcl: acl.inheritAcl,
                         responsible: responsible.responsible,
                         userPermissions: prepareUserPermissions(userPermissions, idmKind),
                         readApprovers: responsible.readApprovers,
