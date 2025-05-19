@@ -23,17 +23,62 @@ jobs:
         run: |
           cd packages/ui
           npm run build:analyze
-          mv dist/public/build/stats.json .
           cp statoscope.config.js statoscope.config.js.bak
+          mv dist/public/build/stats.json ./input.json 
       - name: Analyze previos build
         run: |
           cd packages/ui
           git reset --hard ${{ github.event.pull_request.base.sha }}
           npm ci
           npm run build:analyze
-          mv dist/public/build/stats.json ./prev-stats.json
+          mv dist/public/build/stats.json ./reference.json
       - name: Validate
         run: |
           cd packages/ui
           cp statoscope.config.js.bak statoscope.config.js
-          npx statoscope validate -i ./stats.json -r ./prev-stats.json
+          ls
+          npx statoscope validate -i input.json -r reference.json
+      - name: Upload statoscope results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: report
+          path: packages/ui/report.html
+          retention-days: 7
+  publish-and-comment:
+    name: Publish results and create comment
+    needs:
+      - verify_files
+    if: ${{ always() }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download Artifacts
+        uses: actions/download-artifact@v4
+        continue-on-error: true
+        with:
+          name: report
+          path: ./report.html
+      - name: Install AWS CLI
+        uses: unfor19/install-aws-cli-action@v1
+        with:
+          version: 2.22.35
+          arch: amd64
+      - name: Upload to S3 and Prepare comment
+        id: upload_and_prepare
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.UI_S3_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.UI_S3_SECRET_KEY }}
+        run: |
+            aws s3 cp ./report.html s3://statoscope-reports/${{ github.event.pull_request.number }} --endpoint-url=https://ytsaurus-ui-test-results.s3-private.mds.yandex.net --recursive
+            message="${message}[Statoscope report](https://ytsaurus-ui-test-results.s3-website.mds.yandex.net/statoscope-reports/${{ github.event.pull_request.number }}/report.html) is ready.\n"
+
+            echo "message<<EOF" >> $GITHUB_OUTPUT
+            echo -e "$message" >> $GITHUB_OUTPUT
+            echo "EOF" >> $GITHUB_OUTPUT
+        shell: bash
+      - name: Create Comment
+        uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          header: Statoscope
+          message: ${{ steps.upload_and_prepare.outputs.message }}

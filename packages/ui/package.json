@@ -12,6 +12,7 @@
   "scripts": {
     "build": "npm run copy:icons &&  NODE_OPTIONS=\"--max-old-space-size=4096\" NODE_ENV=production app-builder build --config ./build.app.config.ts",
     "build:analyze": "ANALYZE_BUNDLE=statoscope npm run build",
+    "build:diff": "statoscope validate -i dist/public/build/input.json -r dist/public/build/reference.json",
     "clean": "rm -rf dist/*",
     "copy:icons": "mkdir -p dist/public && cp src/ui/assets/img/favicon*.png dist/public",
     "cut:version": "node -e \"const json=require('${npm_config_file}'); delete json.version; console.log(JSON.stringify(json, null, 2))\"",
