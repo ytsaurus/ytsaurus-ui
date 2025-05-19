@@ -6,7 +6,7 @@ module.exports = {
             // console-reporter to output results into console (enabled by default)
             '@statoscope/console',
             // reporter that generates UI-report with validation-results
-            ['@statoscope/stats-report', {saveStatsTo: 'validated.json'}],
+            ['@statoscope/stats-report', {open: true, saveReportTo: 'report.html'}],
         ],
         // rules to validate your stats (use all of them or only specific rules)
         rules: {
