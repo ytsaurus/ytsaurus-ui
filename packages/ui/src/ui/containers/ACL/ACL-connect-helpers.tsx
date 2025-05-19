@@ -70,6 +70,7 @@ const makeAclMapStateToProps = (inputIdmKind: IdmKindType) => {
             disableAclInheritance,
             bossApproval,
             disableInheritanceResponsible,
+            inheritAcl,
         } = state.acl[idmKind];
 
         const hasApprovers = getHasApprovers(state, idmKind);
@@ -102,6 +103,7 @@ const makeAclMapStateToProps = (inputIdmKind: IdmKindType) => {
             version: getIdmPathVersion(state, idmKind),
             idmKind,
             disableAclInheritance,
+            inheritAcl,
             bossApproval,
             disableInheritanceResponsible,
             columnGroups,

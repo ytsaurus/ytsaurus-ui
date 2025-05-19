@@ -596,27 +596,38 @@ class ACL extends Component<Props> {
             bossApproval,
             disableInheritanceResponsible,
             userPermissions,
+            inheritAcl,
         } = this.props;
         const {allowBossApprovals, allowInheritAcl, allowInheritResponsibles} =
             UIFactory.getAclPermissionsSettings()[idmKind];
 
-        function toSegmentItem(name: string, role?: boolean | PreparedRole, invert?: boolean) {
-            const value = isGranted(role);
+        function toSegmentItem(
+            name: string,
+            role?: boolean | PreparedRole,
+            {invertRole, envforceValue}: {invertRole?: boolean; envforceValue?: boolean} = {},
+        ) {
+            const granted = isGranted(role);
             return {
                 name,
-                value: invert ? !value : value,
-                url: 'boolean' === typeof role ? undefined : role?.idmLink,
+                value: envforceValue ?? (invertRole ? !granted : granted),
+                role: typeof role === 'object' ? role : undefined,
             };
         }
 
         const segments: Array<SegmentControlItem> = compact_([
-            allowInheritAcl && toSegmentItem('Inherit ACL', disableAclInheritance, true),
+            allowInheritAcl &&
+                toSegmentItem('Inherit ACL', disableAclInheritance, {
+                    invertRole: true,
+                    envforceValue: inheritAcl,
+                }),
             isIdmAclAvailable() &&
                 allowBossApprovals &&
                 toSegmentItem('Boss approval', bossApproval),
             isIdmAclAvailable() &&
                 allowInheritResponsibles &&
-                toSegmentItem('Inherit responsibles', disableInheritanceResponsible, true),
+                toSegmentItem('Inherit responsibles', disableInheritanceResponsible, {
+                    invertRole: true,
+                }),
         ]);
 
         const {mainPermissions, columnsPermissions, approversFiltered, columnGroups, aclMode} =

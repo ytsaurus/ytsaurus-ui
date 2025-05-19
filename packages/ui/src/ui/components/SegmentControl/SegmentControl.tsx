@@ -5,6 +5,7 @@ import {Flex, Link} from '@gravity-ui/uikit';
 
 import Icon from '../../components/Icon/Icon';
 import MetaTable from '../../components/MetaTable/MetaTable';
+import {PreparedRole} from '../../utils/acl';
 
 import './SegmentControl.scss';
 
@@ -17,7 +18,7 @@ export type SegmentControlProps = {
 export type SegmentControlItem = {
     name: string;
     value: boolean | number;
-    url?: string;
+    role?: PreparedRole;
 };
 
 const block = cn('yt-segment-control');
@@ -38,13 +39,17 @@ function SegmentGroup({items}: {items: Array<SegmentControlItem>}) {
             className={block('item')}
             rowGap={4}
             items={items.map((item) => {
-                return {key: item.name, value: <SegmentValue value={item.value} url={item.url} />};
+                return {
+                    key: item.name,
+                    value: <SegmentValue value={item.value} role={item.role} />,
+                };
             })}
         />
     );
 }
 
-function SegmentValue({value, url}: Pick<SegmentControlItem, 'value' | 'url'>) {
+function SegmentValue({value, role}: Pick<SegmentControlItem, 'value' | 'role'>) {
+    const url = role?.idmLink;
     return (
         <Flex>
             <Value value={value} />
