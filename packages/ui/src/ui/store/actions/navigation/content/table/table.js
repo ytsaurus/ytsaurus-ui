@@ -635,11 +635,7 @@ export function openTableWithPresetOfColumns() {
             const url = `${href}&columns=${hash}`;
             openInNewTab(url);
 
-            metrics.countEvent({
-                share_columns: {
-                    hash,
-                },
-            });
+            metrics.countEvent('share_columns', hash);
         });
     };
 }
@@ -687,9 +683,7 @@ export function mountUnmountTable(action) {
     return (dispatch, getState) => {
         const path = getPath(getState());
 
-        metrics.countEvent({
-            navigation_dynamic_table_action: action,
-        });
+        metrics.countEvent('navigation_dynamic_table_action', action);
 
         return ytApiV3[`${action}Table`]({path})
             .then(() => {

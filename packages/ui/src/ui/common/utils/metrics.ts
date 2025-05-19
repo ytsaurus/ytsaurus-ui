@@ -1,6 +1,7 @@
-import {getConfigData} from '../../config/ui-settings';
+import UIFactory from '../../UIFactory';
 import {YT} from '../../config/yt-config';
 import {rumLogError} from '../../rum/rum-counter';
+import {getConfigData} from '../../config/ui-settings';
 
 function createMetricsHit(params: object) {
     return wrapWithEnv({
@@ -22,6 +23,12 @@ function wrapWithEnv(params: object) {
     return {[YT.environment]: params};
 }
 
+export interface AnalyticsService {
+    countHit(params: object): Promise<void>;
+    countEvent(event: string, params: object | string | number): Promise<void>;
+    reachGoal(goal: string, options: object): Promise<void>;
+}
+
 interface Counter {
     hit(url: string, options: object): void;
     params(params: object): void;
@@ -30,33 +37,8 @@ interface Counter {
 
 const FAKE_COUNTER: Counter = {hit() {}, params() {}, reachGoal() {}};
 
-function getCounter(id: string | number): Counter | undefined {
-    const COUNTER_NAME = 'yaCounter' + id;
-    return (window as any)[COUNTER_NAME];
-}
-
-function waitForCounter(id?: string | number): Promise<Counter> {
-    if (!id) {
-        return Promise.resolve(FAKE_COUNTER);
-    }
-
-    const res = getCounter(id);
-    if (res) {
-        return Promise.resolve(res);
-    } else {
-        const INIT_EVENT_NAME = 'yacounter' + id + 'inited';
-        return new Promise((resolve) => {
-            const listener = () => {
-                document.removeEventListener(INIT_EVENT_NAME, listener);
-                resolve(getCounter(id)!);
-            };
-            document.addEventListener(INIT_EVENT_NAME, listener);
-        });
-    }
-}
-
-class MetrikaCounter {
-    private id?: string | number;
+class YandexMetrika implements AnalyticsService {
+    private readonly id?: string | number;
 
     constructor(id?: string | number) {
         this.id = id;
@@ -68,17 +50,41 @@ class MetrikaCounter {
         return this.callImpl('hit', url, options);
     }
 
-    async countEvent(params: object) {
-        params = createMetricsEvent(params);
-        return this.callImpl('params', params);
+    async countEvent(event: string, params: object | number | string) {
+        return this.callImpl('params', createMetricsEvent({[event]: params}));
     }
 
     async reachGoal(goal: string, options: object) {
         return this.callImpl('reachGoal', goal, {service: 'yt', ...options});
     }
 
+    private getCounter(id: string | number): Counter | undefined {
+        const COUNTER_NAME = 'yaCounter' + id;
+        return (window as any)[COUNTER_NAME];
+    }
+
+    private async waitForCounter(id?: string | number): Promise<Counter> {
+        if (!id) {
+            return Promise.resolve(FAKE_COUNTER);
+        }
+
+        const res = this.getCounter(id);
+        if (res) {
+            return Promise.resolve(res);
+        } else {
+            const INIT_EVENT_NAME = 'yacounter' + id + 'inited';
+            return new Promise((resolve) => {
+                const listener = () => {
+                    document.removeEventListener(INIT_EVENT_NAME, listener);
+                    resolve(this.getCounter(id)!);
+                };
+                document.addEventListener(INIT_EVENT_NAME, listener);
+            });
+        }
+    }
+
     private async callImpl<K extends keyof Counter>(method: K, ...args: Parameters<Counter[K]>) {
-        const counter = await waitForCounter(this.id);
+        const counter = await this.waitForCounter(this.id);
         try {
             (counter[method] as any)(...args);
         } catch (e) {
@@ -95,7 +101,6 @@ class MetrikaCounter {
     }
 
     private getURL() {
-        // This solution is used due to encoding bug in firefox, that is currently happenning if location.href is used
         return (
             location.protocol +
             '//' +
@@ -107,6 +112,76 @@ class MetrikaCounter {
     }
 }
 
-const metrics = new MetrikaCounter(getConfigData().metrikaCounterId);
+class MultiAnalytics implements AnalyticsService {
+    private services: AnalyticsService[];
+
+    constructor(services: AnalyticsService[]) {
+        this.services = services;
+    }
+
+    async countHit(params: object) {
+        await Promise.all(
+            this.services.map((service) =>
+                service.countHit(params).catch((e) => {
+                    rumLogError(
+                        {
+                            message: 'Failed to count hit in analytics service',
+                            additional: {params},
+                        },
+                        e as Error,
+                    );
+                }),
+            ),
+        );
+    }
+
+    async countEvent(event: string, params: object) {
+        await Promise.all(
+            this.services.map((service) =>
+                service.countEvent(event, params).catch((e) => {
+                    rumLogError(
+                        {
+                            message: 'Failed to count event in analytics service',
+                            additional: {params},
+                        },
+                        e as Error,
+                    );
+                }),
+            ),
+        );
+    }
+
+    async reachGoal(goal: string, options: object) {
+        await Promise.all(
+            this.services.map((service) =>
+                service.reachGoal(goal, options).catch((e) => {
+                    rumLogError(
+                        {
+                            message: 'Failed to reach goal in analytics service',
+                            additional: {goal, options},
+                        },
+                        e as Error,
+                    );
+                }),
+            ),
+        );
+    }
+}
+
+class AnalyticsFactory {
+    static createAnalytics(): AnalyticsService {
+        const config = getConfigData();
+        const additionalServices = UIFactory.getAnalyticsService(config);
+        const services = ([] as AnalyticsService[]).concat(additionalServices);
+
+        if (config.metrikaCounterId) {
+            services.push(new YandexMetrika(config.metrikaCounterId));
+        }
+
+        return new MultiAnalytics(services);
+    }
+}
+
+const metrics = AnalyticsFactory.createAnalytics();
 
 export default metrics;
