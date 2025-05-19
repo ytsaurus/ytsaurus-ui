@@ -1,5 +1,20 @@
 # Changelog
 
+## [1.91.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.90.1...ui-v1.91.0) (2025-05-19)
+
+
+### Features
+
+* update @ytsaurus/javascript-wrapper ([a953b63](https://github.com/ytsaurus/ytsaurus-ui/commit/a953b6370921e691013b74a6909906a64d2201f4))
+
+
+### Bug Fixes
+
+* **ChaosReplicatedTable:** use `alter_table_replica` to control `enable_replicated_table_tracker` [YTFRONT-4796] ([6983439](https://github.com/ytsaurus/ytsaurus-ui/commit/6983439c34cc6f9536824c3aa7f5125bfdfc3ab5))
+* execute batch api endpoint ([9c8df79](https://github.com/ytsaurus/ytsaurus-ui/commit/9c8df79e867725e86eff9c6aa62b7f61a813bee7))
+* **Navigation/Metadata:** monaco vim mode [YTFRONT-4908] ([10d4f4b](https://github.com/ytsaurus/ytsaurus-ui/commit/10d4f4bc333a7ae50befbbd4ffc7318cdab160dc))
+* **Queries:** fix excel download link ([912dc1e](https://github.com/ytsaurus/ytsaurus-ui/commit/912dc1ef7a87db854c0c858facb02de554bbb9b4))
+
 ## [1.90.1](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.90.0...ui-v1.90.1) (2025-05-14)
 
 
