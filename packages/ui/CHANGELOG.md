@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.91.2](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.91.1...ui-v1.91.2) (2025-05-20)
+
+
+### Bug Fixes
+
+* **ACL:** bring back `inheritAcl` field [YTFRONT-4718] ([bf0f4bc](https://github.com/ytsaurus/ytsaurus-ui/commit/bf0f4bc573096d7db41b54b43f84b8c25cc02122))
+
 ## [1.91.1](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.91.0...ui-v1.91.1) (2025-05-19)
 
 
