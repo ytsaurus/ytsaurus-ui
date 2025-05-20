@@ -59,7 +59,6 @@ export const EditQueryACOModal: FC<Props> = ({query_id}) => {
                         {
                             name: 'aco',
                             type: 'select',
-                            required: true,
                             extras: {
                                 options: selectACOOptions,
                                 placeholder: 'ACO',
