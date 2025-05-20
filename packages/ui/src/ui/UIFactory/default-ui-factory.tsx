@@ -295,7 +295,7 @@ export const defaultUIFactory: UIFactory = {
         return PERMISSIONS_SETTINGS;
     },
 
-    onChytAliasSqlClick() {},
+    onChytAliasSqlClick: undefined,
 
     getNavigationExtraTabs() {
         return [];
