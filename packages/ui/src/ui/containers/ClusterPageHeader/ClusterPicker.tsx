@@ -7,6 +7,7 @@ import './ClusterPageHeader.scss';
 import {Popup} from '@gravity-ui/uikit';
 import {makeClusterUrl} from './helpers/makeClusterUrl';
 import {getAppBrowserHistory} from '../../store/window-store';
+import {isMultiClusterInstallation} from '../../config/yt-config';
 
 const block = cn('cluster-page-header');
 
@@ -17,6 +18,7 @@ type Props = {
 
 export const ClusterPicker: FC<Props> = ({clusterConfig}) => {
     const [visible, setVisible] = React.useState(false);
+    const isMultiCluster = isMultiClusterInstallation();
 
     const toggleVisibility = useCallback(() => {
         setVisible((prevState) => !prevState);
@@ -39,8 +41,16 @@ export const ClusterPicker: FC<Props> = ({clusterConfig}) => {
 
     const iconRef = React.useRef<HTMLDivElement>(null);
 
+    if (!isMultiCluster) {
+        return (
+            <div className={block('cluster')} onClick={toggleVisibility}>
+                <ClusterGroupItem forwardImageRef={iconRef} {...clusterConfig} shortEnv />
+            </div>
+        );
+    }
+
     return (
-        <div className={block('cluster')} onClick={toggleVisibility}>
+        <div className={block('cluster', {clickable: true})} onClick={toggleVisibility}>
             <ClusterGroupItem forwardImageRef={iconRef} {...clusterConfig} shortEnv />
             <Icon awesome={'chevron-down'} size="l" />
             <Popup
