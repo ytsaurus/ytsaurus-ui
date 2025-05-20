@@ -358,6 +358,14 @@ export type OperationType =
     | 'remote_copy'
     | 'vanilla';
 
+export interface RegisterQueueConsumerParams extends BaseBatchParams {
+    vital: boolean;
+    queue_path: string;
+    consumer_path: string;
+}
+
+export type UnregisterQueueConsumerParams = Omit<RegisterQueueConsumerParams, 'vital'>;
+
 export type BatchSubRequest =
     | SubRequest<'transfer_pool_resources', TransferPoolQuotaParams>
     | SubRequest<'mount_table' | 'unmount_table' | 'freeze_table' | 'unfreeze_table', PathParams>
@@ -376,7 +384,9 @@ export type BatchSubRequest =
     | SubRequest<'remove_maintenance', RemoveMaintenanceParams>
     | SubRequest<'add_member', AddMembersParams>
     | SubRequest<'remove_member', RemoveMembersParams>
-    | SubRequest<'list_jobs', ListJobsParameters>;
+    | SubRequest<'list_jobs', ListJobsParameters>
+    | SubRequest<'register_queue_consumer', RegisterQueueConsumerParams>
+    | SubRequest<'unregister_queue_consumer', UnregisterQueueConsumerParams>;
 
 export type OutputFormat =
     | {

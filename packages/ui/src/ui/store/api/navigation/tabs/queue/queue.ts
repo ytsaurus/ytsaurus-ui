@@ -13,7 +13,7 @@ import {getCluster} from '../../../../../store/selectors/global';
 import CancelHelper from '../../../../../utils/cancel-helper';
 import {wrapApiPromiseByToaster} from '../../../../../utils/utils';
 import {prepareRequest} from '../../../../../utils/navigation';
-import {YTApiId, ytApiV3} from '../../../../../rum/rum-wrap-api';
+import {YTApiId, ytApiV3, ytApiV4} from '../../../../../rum/rum-wrap-api';
 import {QueueExport, QueueExportConfig} from '../../../../../types/navigation/queue/queue';
 
 const cancelHelper = new CancelHelper();
@@ -129,13 +129,110 @@ async function exportsMutation(args: ExportsMutationArgs, api: BaseQueryApi) {
     }
 }
 
+type ConsumersMutationArgs = {
+    consumerPath: string;
+} & (
+    | {
+          register?: false | undefined;
+          vital?: boolean;
+      }
+    | {
+          register: true;
+          vital: boolean;
+      }
+);
+
+export async function createConsumer(args: ConsumersMutationArgs, api: BaseQueryApi) {
+    try {
+        const {vital, register, consumerPath} = args;
+
+        const state = api.getState() as RootState;
+        const queue_path = getPath(state);
+
+        const transactionId = await yt.v3.startTransaction({});
+        console.log(transactionId);
+        try {
+            await ytApiV3.create({
+                type: 'queue_consumer',
+                path: `${consumerPath}`,
+                transactionId: transactionId,
+            });
+
+            if (register) {
+                await ytApiV4.executeBatch({
+                    parameters: {
+                        requests: [
+                            {
+                                command: 'register_queue_consumer' as const,
+                                parameters: {
+                                    vital,
+                                    queue_path,
+                                    consumer_path: consumerPath,
+                                    transaction_id: transactionId,
+                                },
+                            },
+                        ],
+                    },
+                });
+            }
+        } catch (error) {
+            await yt.v3.abortTransaction({transaction_id: transactionId});
+        }
+
+        await yt.v3.commitTransaction({transaction_id: transactionId});
+
+        return {data: []};
+    } catch (error) {
+        return {error};
+    }
+}
+
+async function unregisterConsumer(
+    args: Pick<ConsumersMutationArgs, 'consumerPath'>,
+    api: BaseQueryApi,
+) {
+    try {
+        const {consumerPath} = args;
+
+        const state = api.getState() as RootState;
+        const queue_path = getPath(state);
+
+        await ytApiV4.executeBatch({
+            parameters: {
+                requests: [
+                    {
+                        command: 'unregister_queue_consumer' as const,
+                        parameters: {
+                            queue_path,
+                            consumer_path: consumerPath,
+                        },
+                    },
+                ],
+            },
+        });
+
+        return {data: []};
+    } catch (error) {
+        return {error};
+    }
+}
+
 export const queueApi = rootApi.injectEndpoints({
     endpoints: (build) => ({
         export: build.mutation({
             queryFn: exportsMutation,
             invalidatesTags: [String(YTApiId.queueExportConfig)],
         }),
+        createConsumer: build.mutation({
+            queryFn: createConsumer,
+            invalidatesTags: [String(YTApiId.queueConsumerPartitions)],
+        }),
+        unregisterConsumer: build.mutation({
+            queryFn: unregisterConsumer,
+            invalidatesTags: [String(YTApiId.queueConsumerPartitions)],
+        }),
     }),
 });
 
-export const {useExportMutation} = queueApi;
+export const {useExportMutation, useCreateConsumerMutation, useUnregisterConsumerMutation} =
+    queueApi;
