@@ -6,7 +6,7 @@ import {ClusterConfig} from '../../../../../shared/yt-types';
 import {getQueryTrackerInfoClusters} from '../../../../pages/query-tracker/module/query_aco/selectors';
 import {QuerySelector} from '../QuerySelector';
 import {QueryClusterItem} from './QueryClusterItem';
-import {YT} from '../../../../config/yt-config';
+import {YT, isMultiClusterInstallation} from '../../../../config/yt-config';
 
 type Props = {
     clusters: ClusterConfig[];
@@ -16,6 +16,7 @@ type Props = {
 
 export const QueryClusterSelector: FC<Props> = ({clusters, value, onChange}) => {
     const infoClusters = useSelector(getQueryTrackerInfoClusters);
+    const isMultiCluster = isMultiClusterInstallation();
 
     const values = React.useMemo((): Array<Pick<ClusterConfig, 'id' | 'name' | 'environment'>> => {
         if (!infoClusters?.length) {
@@ -34,6 +35,10 @@ export const QueryClusterSelector: FC<Props> = ({clusters, value, onChange}) => 
             return knownClusters.has(item.id);
         });
     }, [clusters, infoClusters, YT.isLocalCluster]);
+
+    if (!isMultiCluster) {
+        return null;
+    }
 
     return (
         <QuerySelector

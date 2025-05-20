@@ -28,3 +28,5 @@ export function getGroupedClusters(clusters = YT.clusters) {
 
     return groups;
 }
+
+export const isMultiClusterInstallation = () => Object.keys(YT.clusters).length > 1;

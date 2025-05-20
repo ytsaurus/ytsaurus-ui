@@ -25,7 +25,8 @@
 
         font-size: var(--g-text-body-2-font-size);
 
-        &:hover {
+        
+        &_clickable:hover {
             cursor: pointer;
         }
     }
