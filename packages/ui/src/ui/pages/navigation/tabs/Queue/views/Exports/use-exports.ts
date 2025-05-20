@@ -1,7 +1,7 @@
 import {useSelector} from 'react-redux';
 
 import {useFetchBatchQuery} from '../../../../../../store/api/yt';
-import {makeGetExportsParams} from '../../../../../../store/api/navigation/tabs/queue/queue';
+import {makeGetExportsParams} from '../../../../../../store/api/navigation/tabs/queue/exports';
 
 import {getPath} from '../../../../../../store/selectors/navigation';
 
