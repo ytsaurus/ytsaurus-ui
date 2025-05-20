@@ -3,10 +3,8 @@ import {useSelector} from 'react-redux';
 import {Text} from '@gravity-ui/uikit';
 
 import {useFetchBatchQuery} from '../../../../../../../store/api/yt';
-import {
-    makeGetExportsParams,
-    useExportMutation,
-} from '../../../../../../../store/api/navigation/tabs/queue/queue';
+import {useExportMutation} from '../../../../../../../store/api/navigation/tabs/queue/queue';
+import {makeGetExportsParams} from '../../../../../../../store/api/navigation/tabs/queue/exports';
 import {getPath} from '../../../../../../../store/selectors/navigation';
 
 import {FormApi, YTDFDialog, makeErrorFields} from '../../../../../../../components/Dialog';
