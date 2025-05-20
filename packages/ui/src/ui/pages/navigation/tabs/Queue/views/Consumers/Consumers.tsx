@@ -1,8 +1,10 @@
 import React from 'react';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import cn from 'bem-cn-lite';
 import {createSelector} from 'reselect';
 import type {Column, Settings} from '@gravity-ui/react-data-table';
+import {Xmark} from '@gravity-ui/icons';
+import {Button} from '@gravity-ui/uikit';
 
 import format from '../../../../../../common/hammer/format';
 import DataTableYT from '../../../../../../components/DataTableYT/DataTableYT';
@@ -14,6 +16,7 @@ import {
     ypath,
 } from '../../../../../../pages/navigation/tabs/Queue/utils/column-builder';
 import type {TPerformanceCounters} from '../../../../../../store/reducers/navigation/tabs/queue/types';
+import {openUnregisterDialog} from '../../../../../../store/reducers/navigation/tabs/queue/consumers';
 import {
     SelectedConsumer,
     getConsumers,
@@ -22,6 +25,9 @@ import {
     getStatusLoaded,
     getStatusLoading,
 } from '../../../../../../store/selectors/navigation/tabs/queue';
+
+import {CreateConsumersDialog} from './CreateConsumersDialog';
+import {UnregisterConsumerDialog} from './UnregisterConsumerDialog';
 
 import './Consumers.scss';
 
@@ -48,8 +54,24 @@ const getColumns = createSelector(
             rateMode === QUEUE_RATE_MODE.ROWS ? format.RowsPerSecond : format.BytesPerSecond,
         ),
         bool<SelectedConsumer>('Vital', (x) => x.vital),
+        {
+            name: 'actions',
+            render: (value) => {
+                return <UnregisterConsumer consumerPath={value.row.consumer} />;
+            },
+            header: '',
+        },
     ],
 );
+
+function UnregisterConsumer({consumerPath}: {consumerPath: string}) {
+    const dispatch = useDispatch();
+    return (
+        <Button view={'flat'} onClick={() => dispatch(openUnregisterDialog({consumerPath}))}>
+            <Xmark />
+        </Button>
+    );
+}
 
 const settings: Settings = {displayIndices: false};
 
@@ -60,14 +82,18 @@ export default function Consumers() {
     const consumersLoaded = useSelector(getStatusLoaded);
 
     return (
-        <DataTableYT
-            className={block('table-row')}
-            columns={columns}
-            data={consumers}
-            loading={consumersLoading}
-            loaded={consumersLoaded}
-            useThemeYT
-            settings={settings}
-        />
+        <>
+            <DataTableYT
+                className={block('table-row')}
+                columns={columns}
+                data={consumers}
+                loading={consumersLoading}
+                loaded={consumersLoaded}
+                useThemeYT
+                settings={settings}
+            />
+            <CreateConsumersDialog />
+            <UnregisterConsumerDialog />
+        </>
     );
 }

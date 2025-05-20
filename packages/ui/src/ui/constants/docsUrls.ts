@@ -48,6 +48,7 @@ export const docsUrls = {
     'chyt:yt_tables#dynamic': `${baseUrl}/user-guide/data-processing/chyt/yt-tables#dynamic`,
     'common:regular_system_processes': '',
     'acl:permissions': `${baseUrl}/user-guide/storage/access-control#authorization`,
+    'dynamic-tables:queues#creating-a-consumer': `${baseUrl}/user-guide/dynamic-tables/queues#creating-a-consumer`,
 };
 
 export type DocsUrls = typeof docsUrls;
