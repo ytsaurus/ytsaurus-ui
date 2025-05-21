@@ -7,7 +7,10 @@ import Filter from '../../../../../../components/Filter/Filter';
 import RadioButton from '../../../../../../components/RadioButton/RadioButton';
 import {QUEUE_RATE_MODE} from '../../../../../../constants/navigation/tabs/queue';
 
-import {toggleCreateDialog} from '../../../../../../store/reducers/navigation/tabs/queue/consumers';
+import {
+    toggleCreateDialog,
+    toggleRegisterDialog,
+} from '../../../../../../store/reducers/navigation/tabs/queue/consumers';
 import {
     changeQueueConsumerName,
     changeQueueOwner,
@@ -46,7 +49,8 @@ const ConsumersExtraControls: React.VFC<Props> = ({
     changeQueueRateMode,
 }) => {
     const dispatch = useDispatch();
-    const openDialog = () => dispatch(toggleCreateDialog());
+    const openCreateDialog = () => dispatch(toggleCreateDialog());
+    const openRegisterDialog = () => dispatch(toggleRegisterDialog());
     return (
         <>
             <div className={block('divider')} />
@@ -57,8 +61,11 @@ const ConsumersExtraControls: React.VFC<Props> = ({
                 placeholder="Consumer name..."
             />
             <RadioButton value={queueRateMode} onChange={changeQueueRateMode} items={rateItems} />
-            <Button view={'outlined'} onClick={openDialog}>
+            <Button view={'outlined'} onClick={openCreateDialog}>
                 Create consumer
+            </Button>
+            <Button view={'outlined'} onClick={openRegisterDialog}>
+                Register consumer
             </Button>
         </>
     );

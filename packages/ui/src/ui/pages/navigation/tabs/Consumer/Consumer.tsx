@@ -21,6 +21,7 @@ import {QueueError} from '../Queue/QueueError';
 import TargetQueue from './TargetQueue/TargetQueue';
 import Meta from './Meta/Meta';
 import ConsumerToolbar from './Toolbar/Toolbar';
+import {RegisterConsumerDialog} from './modals/RegisterDialog';
 import ConsumerMetrics from './views/ConsumerMetrics/ConsumerMetrics';
 import Partitions from './views/Partitions/Partitions';
 import PartitionsExtraControls from './views/Partitions/PartitionsExtraControls';
@@ -77,6 +78,7 @@ const Consumer: React.VFC<PropsFromRedux> = ({
                 }
                 content={<View />}
             />
+            <RegisterConsumerDialog />
         </ErrorBoundary>
     );
 };
