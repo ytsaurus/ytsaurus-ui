@@ -5,6 +5,7 @@ import FolderArrowDown from '@gravity-ui/icons/svgs/folder-arrow-down.svg';
 import FolderOpen from '@gravity-ui/icons/svgs/folder-open.svg';
 import LayoutSideContent from '@gravity-ui/icons/svgs/layout-side-content.svg';
 import TrashBin from '@gravity-ui/icons/svgs/trash-bin.svg';
+import Xmark from '@gravity-ui/icons/svgs/xmark.svg';
 
 import {AbbrSql, CrownDiamond} from '@gravity-ui/icons';
 
@@ -18,4 +19,5 @@ export const iconNames = {
     ['sql']: AbbrSql,
     ['crowndiamond']: CrownDiamond,
     ['trash-bin']: TrashBin,
+    ['xmark']: Xmark,
 };
