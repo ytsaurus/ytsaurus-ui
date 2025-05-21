@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.91.3](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.91.2...ui-v1.91.3) (2025-05-21)
+
+
+### Bug Fixes
+
+* allow empty ACO for existing query ([2ee0d26](https://github.com/ytsaurus/ytsaurus-ui/commit/2ee0d2661d2af2dca765b386ef6fbf33a780f6db))
+* changed default value of UIFactory.onChytAliasSqlClick - now sql button is working on chyt page ([2ed97f0](https://github.com/ytsaurus/ytsaurus-ui/commit/2ed97f06a344eb9bfd8a2112e4c144180d0aaa5a))
+* do not show cluster selectors in case when we have only one cluster ([01ce947](https://github.com/ytsaurus/ytsaurus-ui/commit/01ce947dfb86ada716ae3fb5acbc47356a77737f))
+
 ## [1.91.2](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.91.1...ui-v1.91.2) (2025-05-20)
 
 
