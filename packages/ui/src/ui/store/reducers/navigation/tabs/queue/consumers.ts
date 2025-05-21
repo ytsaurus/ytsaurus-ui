@@ -3,6 +3,7 @@ import {RootState} from '../../../../../store/reducers';
 
 type ConsumersState = {
     createDialogVisibility: boolean;
+    registerDialogVisibility: boolean;
 } & (
     | {
           unregisterDialogVisibility: true;
@@ -16,6 +17,7 @@ type ConsumersState = {
 
 const initialState: ConsumersState = {
     createDialogVisibility: false,
+    registerDialogVisibility: false,
     unregisterDialogVisibility: false,
     consumerPath: undefined,
 };
@@ -27,6 +29,10 @@ const consumersSlice = createSlice({
         toggleCreateDialog: (state) => ({
             ...state,
             createDialogVisibility: !state.createDialogVisibility,
+        }),
+        toggleRegisterDialog: (state) => ({
+            ...state,
+            registerDialogVisibility: !state.registerDialogVisibility,
         }),
         openUnregisterDialog: (state, {payload}: PayloadAction<{consumerPath: string}>) => ({
             ...state,
@@ -40,13 +46,22 @@ const consumersSlice = createSlice({
     },
     selectors: {
         getCreateDialogVisibility: (state) => state.createDialogVisibility,
+        getRegisterDialogVisibility: (state) => state.registerDialogVisibility,
         getUnregisterDialogVisibility: (state) => state.unregisterDialogVisibility,
         getConsumerPath: (state) => state.consumerPath,
     },
 });
 
 export const consumers = consumersSlice.reducer;
-export const {toggleCreateDialog, openUnregisterDialog, closeUnregisterDialog} =
-    consumersSlice.actions;
-export const {getCreateDialogVisibility, getUnregisterDialogVisibility, getConsumerPath} =
-    consumersSlice.getSelectors((state: RootState) => state.navigation.tabs.queue.consumers);
+export const {
+    toggleCreateDialog,
+    toggleRegisterDialog,
+    openUnregisterDialog,
+    closeUnregisterDialog,
+} = consumersSlice.actions;
+export const {
+    getCreateDialogVisibility,
+    getRegisterDialogVisibility,
+    getUnregisterDialogVisibility,
+    getConsumerPath,
+} = consumersSlice.getSelectors((state: RootState) => state.navigation.tabs.queue.consumers);

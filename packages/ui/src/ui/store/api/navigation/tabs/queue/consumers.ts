@@ -74,6 +74,66 @@ export async function createConsumer(args: CreateConsumersMutationArgs, api: Bas
     }
 }
 
+type RegisterConsumersMutationArgs = {
+    consumerPath: string;
+    consumerCluster: string;
+    vital: boolean;
+};
+
+export async function registerConsumer(args: RegisterConsumersMutationArgs, api: BaseQueryApi) {
+    try {
+        const {vital, consumerPath, consumerCluster} = args;
+
+        const state = api.getState() as RootState;
+        const queuePath = getPath(state);
+        const queueCluster = getCluster(state);
+
+        const response = await wrapApiPromiseByToaster<
+            {results: BatchResultsItem<unknown>[]},
+            'v4'
+        >(
+            ytApiV4.executeBatch({
+                parameters: {
+                    requests: [
+                        {
+                            command: 'register_queue_consumer' as const,
+                            parameters: {
+                                vital,
+                                queue_path: {
+                                    $value: queuePath,
+                                    $attributes: {
+                                        cluster: queueCluster,
+                                    },
+                                },
+                                consumer_path: {
+                                    $value: consumerPath,
+                                    $attributes: {
+                                        cluster: consumerCluster,
+                                    },
+                                },
+                            },
+                        },
+                    ],
+                },
+            }),
+            {
+                toasterName: 'register queue consumer',
+                successContent: 'Registration of the consumer has started, this may take some time',
+                skipErrorToast: true,
+                batchType: 'v4',
+                errorTitle: '',
+            },
+        );
+
+        if (response.results[0]?.error) {
+            throw response.results[0]?.error;
+        }
+        return {data: []};
+    } catch (error) {
+        return {error};
+    }
+}
+
 export async function unregisterConsumer(args: {consumerPath: string}, api: BaseQueryApi) {
     try {
         const {consumerPath} = args;
