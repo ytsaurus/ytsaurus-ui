@@ -4,7 +4,7 @@ import cn from 'bem-cn-lite';
 import {createSelector} from 'reselect';
 import type {Column, Settings} from '@gravity-ui/react-data-table';
 import {Xmark} from '@gravity-ui/icons';
-import {Button} from '@gravity-ui/uikit';
+import {Button, Flex} from '@gravity-ui/uikit';
 
 import format from '../../../../../../common/hammer/format';
 import DataTableYT from '../../../../../../components/DataTableYT/DataTableYT';
@@ -26,8 +26,9 @@ import {
     getStatusLoading,
 } from '../../../../../../store/selectors/navigation/tabs/queue';
 
-import {CreateConsumersDialog} from './CreateConsumersDialog';
+import {CreateConsumerDialog} from './CreateConsumerDialog';
 import {UnregisterConsumerDialog} from './UnregisterConsumerDialog';
+import {RegisterConsumerDialog} from './RegisterConsumerDialog';
 
 import './Consumers.scss';
 
@@ -67,9 +68,11 @@ const getColumns = createSelector(
 function UnregisterConsumer({consumerPath}: {consumerPath: string}) {
     const dispatch = useDispatch();
     return (
-        <Button view={'flat'} onClick={() => dispatch(openUnregisterDialog({consumerPath}))}>
-            <Xmark />
-        </Button>
+        <Flex alignItems={'center'}>
+            <Button view={'flat'} onClick={() => dispatch(openUnregisterDialog({consumerPath}))}>
+                <Xmark />
+            </Button>
+        </Flex>
     );
 }
 
@@ -92,8 +95,9 @@ export default function Consumers() {
                 useThemeYT
                 settings={settings}
             />
-            <CreateConsumersDialog />
+            <CreateConsumerDialog />
             <UnregisterConsumerDialog />
+            <RegisterConsumerDialog />
         </>
     );
 }
