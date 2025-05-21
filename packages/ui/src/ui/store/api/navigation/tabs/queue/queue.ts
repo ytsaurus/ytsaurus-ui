@@ -1,7 +1,7 @@
 import {rootApi} from '../../../../../store/api';
 
 import {YTApiId} from '../../../../../rum/rum-wrap-api';
-import {createConsumer, unregisterConsumer} from './consumers';
+import {createConsumer, registerConsumer, unregisterConsumer} from './consumers';
 import {exportsMutation} from './exports';
 
 export const queueApi = rootApi.injectEndpoints({
@@ -12,14 +12,19 @@ export const queueApi = rootApi.injectEndpoints({
         }),
         createConsumer: build.mutation({
             queryFn: createConsumer,
-            //invalidatesTags: [String(YTApiId.queueConsumerPartitions)],
         }),
         unregisterConsumer: build.mutation({
             queryFn: unregisterConsumer,
-            //invalidatesTags: [String(YTApiId.queueConsumerPartitions)],
+        }),
+        registerConsumer: build.mutation({
+            queryFn: registerConsumer,
         }),
     }),
 });
 
-export const {useExportMutation, useCreateConsumerMutation, useUnregisterConsumerMutation} =
-    queueApi;
+export const {
+    useExportMutation,
+    useCreateConsumerMutation,
+    useRegisterConsumerMutation,
+    useUnregisterConsumerMutation,
+} = queueApi;

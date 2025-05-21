@@ -8,15 +8,14 @@ import {
 import {useCreateConsumerMutation} from '../../../../../../store/api/navigation/tabs/queue/queue';
 
 import {FormApi, YTDFDialog, makeErrorFields} from '../../../../../../components/Dialog';
-<<<<<<< Updated upstream:packages/ui/src/ui/pages/navigation/tabs/Queue/views/Consumers/CreateConsumersDialog.tsx
-=======
 
 import {docsUrl} from '../../../../../../config';
 import UIFactory from '../../../../../../UIFactory';
 import {makeLink} from '../../../../../../utils/utils';
 
->>>>>>> Stashed changes:packages/ui/src/ui/pages/navigation/tabs/Queue/views/Consumers/CreateConsumerDialog.tsx
 import {YTError} from '../../../../../../../@types/types';
+
+import {validateCreateConsumerPath} from './utils';
 
 type FormValues = {
     consumerPath: string;
@@ -31,7 +30,7 @@ type FormValues = {
       }
 );
 
-export function CreateConsumersDialog() {
+export function CreateConsumerDialog() {
     const dispatch = useDispatch();
     const visible = useSelector(getCreateDialogVisibility);
 
@@ -50,6 +49,7 @@ export function CreateConsumersDialog() {
                     extras: {
                         placeholder: 'Path to consumer node...',
                     },
+                    validator: validateCreateConsumerPath,
                 },
                 {
                     type: 'tumbler' as const,

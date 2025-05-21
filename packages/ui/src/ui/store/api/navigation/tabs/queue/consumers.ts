@@ -28,7 +28,7 @@ export async function createConsumer(args: ConsumersMutationArgs, api: BaseQuery
         const queue_path = getPath(state);
 
         const transactionId = await yt.v3.startTransaction({});
-        console.log(transactionId);
+
         try {
             await ytApiV3.create({
                 type: 'queue_consumer',
@@ -59,6 +59,36 @@ export async function createConsumer(args: ConsumersMutationArgs, api: BaseQuery
 
         await yt.v3.commitTransaction({transaction_id: transactionId});
 
+        return {data: []};
+    } catch (error) {
+        return {error};
+    }
+}
+
+export async function registerConsumer(
+    args: Pick<ConsumersMutationArgs, 'consumerPath'> & {vital: boolean},
+    api: BaseQueryApi,
+) {
+    try {
+        const {vital, consumerPath} = args;
+
+        const state = api.getState() as RootState;
+        const queue_path = getPath(state);
+
+        await ytApiV4.executeBatch({
+            parameters: {
+                requests: [
+                    {
+                        command: 'register_queue_consumer' as const,
+                        parameters: {
+                            vital,
+                            queue_path,
+                            consumer_path: consumerPath,
+                        },
+                    },
+                ],
+            },
+        });
         return {data: []};
     } catch (error) {
         return {error};
