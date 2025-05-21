@@ -45,10 +45,10 @@ const cache: Record<string, ClusterAppearance> = {};
 
 export function getClusterAppearance(cluster = ''): ClusterAppearance {
     if (!cache[cluster]) {
-        const {isLocalCluster, theme} = YT.clusters[cluster] ?? {};
+        const {theme} = YT.clusters[cluster] ?? {};
 
         const item = (cache[cluster] = {
-            ...(isLocalCluster ? localClusterAppearance : defaultClusterAppearance),
+            ...(YT.isLocalCluster ? localClusterAppearance : defaultClusterAppearance),
         });
 
         Object.assign(

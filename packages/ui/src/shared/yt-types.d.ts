@@ -113,8 +113,6 @@ export interface ClusterConfig {
     secure?: boolean;
     description?: string;
 
-    isLocalCluster?: boolean;
-
     urls?: {
         icon: string;
         icon2x: string;
