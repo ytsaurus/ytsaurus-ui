@@ -3,11 +3,12 @@ import {useDispatch, useSelector} from 'react-redux';
 import cn from 'bem-cn-lite';
 import {createSelector} from 'reselect';
 import type {Column, Settings} from '@gravity-ui/react-data-table';
-import {Xmark} from '@gravity-ui/icons';
-import {Button, Flex} from '@gravity-ui/uikit';
+import {Button} from '@gravity-ui/uikit';
 
 import format from '../../../../../../common/hammer/format';
 import DataTableYT from '../../../../../../components/DataTableYT/DataTableYT';
+import Icon from '../../../../../../components/Icon/Icon';
+
 import {QUEUE_RATE_MODE} from '../../../../../../constants/navigation/tabs/queue';
 import {
     bool,
@@ -68,11 +69,9 @@ const getColumns = createSelector(
 function UnregisterConsumer({consumerPath}: {consumerPath: string}) {
     const dispatch = useDispatch();
     return (
-        <Flex alignItems={'center'}>
-            <Button view={'flat'} onClick={() => dispatch(openUnregisterDialog({consumerPath}))}>
-                <Xmark />
-            </Button>
-        </Flex>
+        <Button view={'flat'} onClick={() => dispatch(openUnregisterDialog({consumerPath}))}>
+            <Icon awesome={'xmark'} size={'l'} />
+        </Button>
     );
 }
 
