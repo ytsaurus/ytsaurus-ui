@@ -44,7 +44,7 @@ type Props = {
     };
 };
 
-const initialSizes = [23, 77];
+const initialSizes = [20, 80];
 const minSize = 380; // see history list's cells size
 
 function QueryPageDraft() {
