@@ -139,9 +139,9 @@ export default function DataTableYTWithScroll<T>({settings, ...props}: DataTable
     const settingsWithScrollableElement = React.useMemo(() => {
         return Boolean(scrollableElement) && settings?.dynamicRender
             ? ({
-                  ...settings,
                   dynamicRenderScrollParentGetter: () =>
                       scrollableElement ?? (document.body as any),
+                  ...settings,
               } as typeof settings)
             : settings;
     }, [settings, scrollableElement]);
