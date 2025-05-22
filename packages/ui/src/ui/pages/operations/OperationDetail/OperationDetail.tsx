@@ -130,16 +130,53 @@ class OperationDetail extends React.Component<ReduxProps & RouteProps> {
     };
 
     renderHeader() {
-        const {actions = []} = this.props;
-        const {type, user = '', state, suspended, title, $value} = this.props.operation;
+        const {actions = [], runtime} = this.props;
+        const {type, user = '', state, suspended, title, pools, $value} = this.props.operation;
+
+        console.log(pools);
+        const fairShareRatio = runtime?.[0]?.progress.fair_share_ratio;
+        const usageRatio = runtime?.[0]?.progress.usage_ratio;
+        const demandRatio = runtime?.[0]?.progress.demand_ratio;
+        const isSingleTree = new Set(pools?.map((pool) => pool.tree)).size === 1;
+        console.log('isSingleTree --> ', isSingleTree);
+        const isSpecialStatus = type === 'vanilla' && isSingleTree && state === 'running';
+
+        console.log('isSpecialStatus --> ', isSpecialStatus);
+        const isWaitingForResources =
+            isSpecialStatus && fairShareRatio === usageRatio && fairShareRatio === 0;
+        const isWaitingForJobs =
+            isSpecialStatus && fairShareRatio === demandRatio && usageRatio < fairShareRatio;
+
         const label = suspended ? 'suspended' : state;
+
+        console.log(isWaitingForJobs || isWaitingForResources);
+
+        const statusProps = isSpecialStatus
+            ? {state: 'unknown' as const, iconState: 'running' as const, text: 'Running'}
+            : {label: label};
 
         return (
             <div className={detailBlock('header', 'elements-section')}>
                 <div className={detailBlock('header-heading', headingBlock({size: 'l'}))}>
                     {hammer.format['ReadableField'](type)} operation by <SubjectCard name={user} />
                     &ensp;
-                    <StatusLabel label={label} renderPlaque />
+                    <StatusLabel {...statusProps} renderPlaque />
+                    {isWaitingForJobs && (
+                        <StatusLabel
+                            state={'running'}
+                            iconState={'running'}
+                            text={'Waiting for jobs'}
+                            renderPlaque
+                        />
+                    )}
+                    {isWaitingForResources && (
+                        <StatusLabel
+                            state={'running'}
+                            iconState={'running'}
+                            text={'Waiting for resources'}
+                            renderPlaque
+                        />
+                    )}
                 </div>
 
                 <div className={detailBlock('header-title')}>
@@ -391,10 +428,13 @@ class OperationDetail extends React.Component<ReduxProps & RouteProps> {
 }
 
 const mapStateToProps = (state: RootState) => {
-    const {operation, errorData, loading, loaded, error, actions} = state.operations.detail;
+    const {operation, errorData, loading, loaded, error, actions, details} =
+        state.operations.detail;
     const totalJobWallTime = getTotalJobWallTime(state);
     const cpuTimeSpent = getTotalCpuTimeSpent(state);
     const erasedTrees = getOperationErasedTrees(state);
+
+    const {runtime} = details;
 
     const {
         component: monitoringComponent,
@@ -412,6 +452,7 @@ const mapStateToProps = (state: RootState) => {
         loaded,
         error,
         actions,
+        runtime,
         totalJobWallTime,
         cpuTimeSpent,
         erasedTrees,

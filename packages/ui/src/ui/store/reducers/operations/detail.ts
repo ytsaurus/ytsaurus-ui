@@ -28,6 +28,7 @@ export interface OperationDetailState {
     actions: Array<OperationAction>;
     details: {
         alert_events: Array<AlertEvent>;
+        runtime?: any;
     };
     resourcesStatus: (typeof LOADING_STATUS)[keyof typeof LOADING_STATUS];
     resources: {intermediateResources?: unknown};
