@@ -11,13 +11,13 @@ import MetaTable, {Template, TemplatePools} from '../../../components/MetaTable/
 import OperationProgress from '../OperationProgress/OperationProgress';
 import ErrorBoundary from '../../../components/ErrorBoundary/ErrorBoundary';
 import {SubjectCard} from '../../../components/SubjectLink/SubjectLink';
-import StatusLabel from '../../../components/StatusLabel/StatusLabel';
 import Button from '../../../components/Button/Button';
-import {Loader} from '@gravity-ui/uikit';
+import {Loader, Tooltip} from '@gravity-ui/uikit';
 import {YTErrorBlock} from '../../../components/Error/Error';
 import Icon from '../../../components/Icon/Icon';
 import Tabs from '../../../components/Tabs/Tabs';
 import Yson from '../../../components/Yson/Yson';
+import StatusLabel from '../../../components/StatusLabel/StatusLabel';
 
 import PartitionSizes from './tabs/partition-sizes/PartitionSizes/PartitionSizes';
 import Details from './tabs/details/Details/Details';
@@ -47,6 +47,7 @@ import {
     getOperationDetailsLoadingStatus,
     getOperationErasedTrees,
     getOperationPerformanceUrlTemplate,
+    selectIsOperationInGpuTree,
 } from '../../../store/selectors/operations/operation';
 
 import {useAppRumMeasureStart} from '../../../rum/rum-app-measures';
@@ -57,6 +58,7 @@ import './OperationDetail.scss';
 import {updateListJobsFilter} from '../../../store/actions/operations/jobs';
 import OperationDetailsMonitor from './tabs/monitor/OperationDetailsMonitor';
 import {getJobsMonitorTabVisible} from '../../../store/selectors/operations/jobs-monitor';
+import {RuntimeItem} from '../../../store/reducers/operations/detail';
 import {
     JobState,
     getOperationStatiscsHasData,
@@ -67,6 +69,7 @@ import UIFactory from '../../../UIFactory';
 import {RootState} from '../../../store/reducers';
 import {getCurrentCluster} from '../../../store/selectors/thor';
 import {UI_TAB_SIZE} from '../../../constants/global';
+import {OperationPool, OperationStates} from '../selectors';
 
 const detailBlock = cn('operation-detail');
 
@@ -86,6 +89,52 @@ function OperationDetailUpdater({operationId}: {operationId: string}) {
     useUpdater(updateFn, {timeout: 15 * 1000});
 
     return null;
+}
+
+function getSpecialWaitingStatuses(
+    pools: OperationPool[],
+    state: OperationStates,
+    runtime: RuntimeItem[] | undefined,
+    type: string | undefined,
+    isGpuOperation: boolean | undefined,
+) {
+    const fairShareRatio = runtime?.[0]?.progress?.fair_share_ratio as number | undefined;
+    const usageRatio = runtime?.[0]?.progress?.usage_ratio as number | undefined;
+    const demandRatio = runtime?.[0]?.progress?.demand_ratio as number | undefined;
+
+    const isSingleTree = new Set(pools?.map((pool) => pool?.tree)).size === 1;
+    const isSpecialStatus =
+        type === 'vanilla' && isSingleTree && state === 'running' && isGpuOperation;
+
+    const isWaitingForResources =
+        isSpecialStatus && fairShareRatio === usageRatio && fairShareRatio === 0;
+
+    const isWaitingForJobs =
+        isSpecialStatus &&
+        fairShareRatio === demandRatio &&
+        usageRatio !== undefined &&
+        fairShareRatio !== undefined &&
+        usageRatio < fairShareRatio;
+
+    return {isWaitingForResources, isWaitingForJobs};
+}
+
+const waitingForJobsTooltip =
+    'Operation scheduling has started, but not all jobs have been scheduled yet. If the problem persists, contact cluster administrators.';
+const waitingForResourcesTooltip =
+    'Not enough resources to start operation scheduling. This may happen if the pool has too many operations in the queue or too low resource guarantees.';
+
+function SpecialWaitingStatus({type}: {type: 'jobs' | 'resources'}) {
+    return (
+        <Tooltip content={type === 'jobs' ? waitingForJobsTooltip : waitingForResourcesTooltip}>
+            <StatusLabel
+                state={'running'}
+                iconState={'running'}
+                text={`Waiting for ${type}`}
+                renderPlaque
+            />
+        </Tooltip>
+    );
 }
 
 class OperationDetail extends React.Component<ReduxProps & RouteProps> {
@@ -131,18 +180,36 @@ class OperationDetail extends React.Component<ReduxProps & RouteProps> {
     };
 
     renderHeader() {
-        const {actions = []} = this.props;
-        const {type, user = '', state, suspended, title, $value} = this.props.operation;
+        const {actions = [], runtime, operation, isGpuOperation} = this.props;
+        const {type, user = '', state, suspended, pools, title, $value} = operation;
+
+        const {isWaitingForJobs, isWaitingForResources} = getSpecialWaitingStatuses(
+            pools,
+            state,
+            runtime,
+            type,
+            isGpuOperation,
+        );
+
         const label = suspended ? 'suspended' : state;
+
+        const mainStatusProps:
+            | {label: typeof label}
+            | {state: 'unknown'; iconState: 'running'; text: string} =
+            isWaitingForJobs || isWaitingForResources
+                ? {state: 'unknown', iconState: 'running', text: 'Running'}
+                : {label: suspended ? 'suspended' : state};
 
         return (
             <div className={detailBlock('header', 'elements-section')}>
                 <div className={detailBlock('header-heading', headingBlock({size: 'l'}))}>
                     {hammer.format['ReadableField'](type)} operation by <SubjectCard name={user} />
                     &ensp;
-                    <StatusLabel label={label} renderPlaque />
+                    <StatusLabel {...mainStatusProps} renderPlaque />
+                    &ensp;
+                    {isWaitingForJobs && <SpecialWaitingStatus type={'jobs'} />}
+                    {isWaitingForResources && <SpecialWaitingStatus type={'resources'} />}
                 </div>
-
                 <div className={detailBlock('header-title')}>
                     <Yson value={title || $value} inline />
                 </div>
@@ -400,10 +467,13 @@ class OperationDetail extends React.Component<ReduxProps & RouteProps> {
 }
 
 const mapStateToProps = (state: RootState) => {
-    const {operation, errorData, loading, loaded, error, actions} = state.operations.detail;
+    const {operation, errorData, loading, loaded, error, actions, details} =
+        state.operations.detail;
     const totalJobWallTime = getTotalJobWallTime(state);
     const cpuTimeSpent = getTotalCpuTimeSpent(state);
     const erasedTrees = getOperationErasedTrees(state);
+
+    const {runtime} = details;
 
     const {
         component: monitoringComponent,
@@ -421,6 +491,7 @@ const mapStateToProps = (state: RootState) => {
         loaded,
         error,
         actions,
+        runtime,
         totalJobWallTime,
         cpuTimeSpent,
         erasedTrees,
@@ -431,6 +502,7 @@ const mapStateToProps = (state: RootState) => {
         jobsMonitorIsSupported: Boolean(UIFactory.getMonitorComponentForJob()),
         jobsMonitorVisible: getJobsMonitorTabVisible(state),
         hasStatististicsTab: getOperationStatiscsHasData(state),
+        isGpuOperation: selectIsOperationInGpuTree(state),
         operationPerformanceUrlTemplate: getOperationPerformanceUrlTemplate(state),
     };
 };
