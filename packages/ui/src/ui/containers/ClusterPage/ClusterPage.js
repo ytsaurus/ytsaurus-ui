@@ -284,7 +284,6 @@ class ClusterPage extends Component {
                     onResizeEnd={this.onResizeEnd}
                     onSplit={this.handleSplit}
                     onUnSplit={this.handleSplit}
-                    minSize={600}
                     getInitialSizes={this.getInitialSizes}
                     id={SPLIT_PANE_ID}
                 >
