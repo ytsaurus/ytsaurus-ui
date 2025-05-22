@@ -360,8 +360,8 @@ export type OperationType =
 
 export interface RegisterQueueConsumerParams extends BaseBatchParams {
     vital: boolean;
-    queue_path: string;
-    consumer_path: string;
+    queue_path: CypressNodeRaw;
+    consumer_path: CypressNodeRaw;
 }
 
 export type UnregisterQueueConsumerParams = Omit<RegisterQueueConsumerParams, 'vital'>;

@@ -9,10 +9,10 @@ import {useRegisterConsumerMutation} from '../../../../../../store/api/navigatio
 
 import {FormApi, YTDFDialog, makeErrorFields} from '../../../../../../components/Dialog';
 
-import {validatePathExistance} from '../../../../../../utils/validators/validate-path-existance';
 import {docsUrl} from '../../../../../../config';
 import UIFactory from '../../../../../../UIFactory';
 import {makeLink} from '../../../../../../utils/utils';
+import {YT} from '../../../../../../config/yt-config';
 
 import {YTError} from '../../../../../../../@types/types';
 
@@ -29,16 +29,31 @@ export function RegisterConsumerDialog() {
 
     const [update, {isLoading, error}] = useRegisterConsumerMutation();
 
+    const clusterControlOptions = Object.keys(YT.clusters).map((cluster) => ({
+        value: cluster,
+        content: cluster,
+    }));
+
     return (
         <YTDFDialog
             visible={visible}
             headerProps={{title: 'Register consumer'}}
             fields={[
                 {
-                    type: 'path' as const,
+                    type: 'select' as const,
+                    name: 'cluster',
+                    caption: 'Cluster',
+                    extras: {
+                        options: clusterControlOptions,
+                        placeholder: 'Cluster',
+                        width: 'max',
+                        filterable: true,
+                    },
+                },
+                {
+                    type: 'text' as const,
                     name: 'consumerPath',
                     caption: 'Path',
-                    validator: validatePathExistance,
                     extras: {
                         placeholder: 'Path to consumer node...',
                     },

@@ -5,35 +5,47 @@ import {rootApi} from '../../../../../store/api';
 import {RootState} from '../../../../../store/reducers';
 import {getPath} from '../../../../../store/selectors/navigation';
 import {getTargetQueue} from '../../../../../store/selectors/navigation/tabs/consumer';
+import {getCluster} from '../../../../../store/selectors/global';
 
 import {ytApiV4} from '../../../../../rum/rum-wrap-api';
 
 type RegisterConsumerArgs = {
     queuePath: string;
+    queueCluster: string;
 };
 
 async function register(args: RegisterConsumerArgs, api: BaseQueryApi) {
     try {
-        const {queuePath} = args;
+        const {queuePath, queueCluster} = args;
 
         const state = api.getState() as RootState;
         const consumerPath = getPath(state);
+        const consumerCluster = getCluster(state);
         const {vital} = getTargetQueue(state) ?? {vital: false};
 
-        await ytApiV4.executeBatch({
+        const response = await ytApiV4.executeBatch({
             parameters: {
                 requests: [
                     {
                         command: 'register_queue_consumer' as const,
                         parameters: {
                             vital,
-                            queue_path: queuePath,
-                            consumer_path: consumerPath,
+                            queue_path: {
+                                $value: queuePath,
+                                $attributes: {cluster: queueCluster},
+                            },
+                            consumer_path: {
+                                $value: consumerPath,
+                                $attributes: {cluster: consumerCluster},
+                            },
                         },
                     },
                 ],
             },
         });
+        if (response.results[0]?.error) {
+            throw response.results[0]?.error;
+        }
         return {data: []};
     } catch (error) {
         return {error};

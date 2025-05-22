@@ -9,12 +9,13 @@ import {useRegisterMutation} from '../../../../../store/api/navigation/tabs/cons
 
 import {FormApi, YTDFDialog, makeErrorFields} from '../../../../../components/Dialog';
 
-import {validatePathExistance} from '../../../../../utils/validators/validate-path-existance';
+import {YT} from '../../../../../config/yt-config';
 
 import {YTError} from '../../../../../../@types/types';
 
 type FormValues = {
     queuePath: string;
+    queueCluster: string;
 };
 
 export function RegisterConsumerDialog() {
@@ -25,16 +26,31 @@ export function RegisterConsumerDialog() {
 
     const [update, {isLoading, error}] = useRegisterMutation();
 
+    const clusterControlOptions = Object.keys(YT.clusters).map((cluster) => ({
+        value: cluster,
+        content: cluster,
+    }));
+
     return (
         <YTDFDialog
             visible={visible}
             headerProps={{title: 'Register consumer to queue'}}
             fields={[
                 {
-                    type: 'path' as const,
+                    type: 'select' as const,
+                    name: 'queueCluster',
+                    caption: 'Cluster',
+                    extras: {
+                        options: clusterControlOptions,
+                        placeholder: 'Cluster',
+                        width: 'max',
+                        filterable: true,
+                    },
+                },
+                {
+                    type: 'text' as const,
                     name: 'queuePath',
                     caption: 'Path',
-                    validator: validatePathExistance,
                     extras: {
                         placeholder: 'Path to queue...',
                     },
@@ -44,7 +60,8 @@ export function RegisterConsumerDialog() {
             size={'m'}
             onAdd={async (form: FormApi<FormValues>) => {
                 const {values} = form.getState();
-                await update(values).unwrap();
+                const newValues = {...values, queueCluster: values.queueCluster[0]};
+                await update(newValues).unwrap();
             }}
             isApplyDisabled={(state) => {
                 return state.hasValidationErrors || isLoading;

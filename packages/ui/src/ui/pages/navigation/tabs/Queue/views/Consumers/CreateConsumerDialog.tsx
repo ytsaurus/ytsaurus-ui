@@ -13,12 +13,13 @@ import {docsUrl} from '../../../../../../config';
 import UIFactory from '../../../../../../UIFactory';
 import {makeLink} from '../../../../../../utils/utils';
 
+import {YT} from '../../../../../../config/yt-config';
+
 import {YTError} from '../../../../../../../@types/types';
 
-import {validateCreateConsumerPath} from './utils';
-
-type FormValues = {
+export type CreateConsumerFormValues = {
     consumerPath: string;
+    consumerCluster: string;
 } & (
     | {
           register?: false | undefined;
@@ -38,18 +39,34 @@ export function CreateConsumerDialog() {
 
     const onClose = () => dispatch(toggleCreateDialog());
 
+    const clusterControlOptions = Object.keys(YT.clusters).map((cluster) => ({
+        value: cluster,
+        content: cluster,
+    }));
+
     return (
-        <YTDFDialog<FormValues>
+        <YTDFDialog<CreateConsumerFormValues>
             visible={visible}
             fields={[
                 {
-                    type: 'path' as const,
+                    type: 'select' as const,
+                    name: 'consumerCluster',
+                    caption: 'Cluster',
+                    extras: {
+                        options: clusterControlOptions,
+                        placeholder: 'Cluster',
+                        width: 'max',
+                        filterable: true,
+                    },
+                },
+                {
+                    type: 'text' as const,
                     name: 'consumerPath',
                     caption: 'Path',
+                    required: true,
                     extras: {
                         placeholder: 'Path to consumer node...',
                     },
-                    validator: validateCreateConsumerPath,
                 },
                 {
                     type: 'tumbler' as const,
@@ -79,9 +96,10 @@ export function CreateConsumerDialog() {
             ]}
             headerProps={{title: 'Create consumer'}}
             size={'m'}
-            onAdd={async (form: FormApi<FormValues>) => {
+            onAdd={async (form: FormApi<CreateConsumerFormValues>) => {
                 const {values} = form.getState();
-                await update(values).unwrap();
+                const newValues = {...values, consumerCluster: values.consumerCluster[0]};
+                await update(newValues).unwrap();
             }}
             isApplyDisabled={(state) => {
                 return state.hasValidationErrors || isLoading;

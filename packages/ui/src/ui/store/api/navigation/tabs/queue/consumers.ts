@@ -1,14 +1,14 @@
 import {BaseQueryApi} from '@reduxjs/toolkit/query';
-//@ts-expect-error
-import yt from '@ytsaurus/javascript-wrapper/lib/yt';
 
 import {RootState} from '../../../../../store/reducers';
 import {getPath} from '../../../../../store/selectors/navigation';
+import {getCluster} from '../../../../../store/selectors/global';
 
 import {ytApiV3, ytApiV4} from '../../../../../rum/rum-wrap-api';
 
 type ConsumersMutationArgs = {
     consumerPath: string;
+    consumerCluster: string;
 } & (
     | {
           register?: false | undefined;
@@ -22,42 +22,55 @@ type ConsumersMutationArgs = {
 
 export async function createConsumer(args: ConsumersMutationArgs, api: BaseQueryApi) {
     try {
-        const {vital, register, consumerPath} = args;
+        const {vital, register, consumerPath, consumerCluster} = args;
 
         const state = api.getState() as RootState;
-        const queue_path = getPath(state);
+        const queuePath = getPath(state);
+        const queueCluster = getCluster(state);
 
-        const transactionId = await yt.v3.startTransaction({});
-
-        try {
-            await ytApiV3.create({
+        const response = await ytApiV3.create({
+            parameters: {
                 type: 'queue_consumer',
-                path: `${consumerPath}`,
-                transactionId: transactionId,
-            });
+                path: {
+                    $value: consumerPath,
+                    $attributes: {
+                        cluster: consumerCluster,
+                    },
+                },
+            },
+        });
 
-            if (register) {
-                await ytApiV4.executeBatch({
-                    parameters: {
-                        requests: [
-                            {
-                                command: 'register_queue_consumer' as const,
-                                parameters: {
-                                    vital,
-                                    queue_path,
-                                    consumer_path: consumerPath,
-                                    transaction_id: transactionId,
+        console.log(response);
+
+        if (register) {
+            const response = await ytApiV4.executeBatch({
+                parameters: {
+                    requests: [
+                        {
+                            command: 'register_queue_consumer' as const,
+                            parameters: {
+                                vital,
+                                queue_path: {
+                                    $value: queuePath,
+                                    $attributes: {
+                                        cluster: queueCluster,
+                                    },
+                                },
+                                consumer_path: {
+                                    $value: consumerPath,
+                                    $attributes: {
+                                        cluster: consumerCluster,
+                                    },
                                 },
                             },
-                        ],
-                    },
-                });
+                        },
+                    ],
+                },
+            });
+            if (response.results[0]?.error) {
+                throw response.results[0]?.error;
             }
-        } catch (error) {
-            await yt.v3.abortTransaction({transaction_id: transactionId});
         }
-
-        await yt.v3.commitTransaction({transaction_id: transactionId});
 
         return {data: []};
     } catch (error) {
