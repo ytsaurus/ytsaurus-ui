@@ -141,6 +141,13 @@ interface QueryTrackerSettings {
     'global::queryTracker::lastEngine': QueryEngine;
 }
 
+interface VCSSettings {
+    'global::vcs:type': string;
+    'global::vcs:repository': string;
+    'global::vcs:branch': string;
+    'global::vcs:path': string;
+}
+
 interface ChytSettings {
     'global::chyt::list_columns': Array<string>;
 }
@@ -191,6 +198,7 @@ export type DescribedSettings = GlobalSettings &
     AccountsSettings &
     QueryTrackerSettings &
     ChytSettings &
+    VCSSettings &
     QueryTrackerLastSelectedACOsSettings &
     QueryTrackerUserDefaultACOSettings &
     QueryTrackerLastDiscoveryPath &
