@@ -259,7 +259,7 @@ export function createEmptyQuery(
         const lastEngine = getLastUserChoiceQueryEngine(state);
         const defaultQueryACO = getDefaultQueryACO(state);
 
-        const initialEngine = engine || lastEngine;
+        const initialEngine = engine || lastEngine || QueryEngine.YQL;
 
         const defaultSettings: DraftQuery['settings'] = {};
         UIFactory.getInlineSuggestionsApi()?.onQueryCreate();
