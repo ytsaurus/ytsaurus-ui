@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.91.4](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.91.3...ui-v1.91.4) (2025-05-23)
+
+
+### Bug Fixes
+
+* always setted non-empty engine value in query-tracker [[#1150](https://github.com/ytsaurus/ytsaurus-ui/issues/1150)] ([2e0c35c](https://github.com/ytsaurus/ytsaurus-ui/commit/2e0c35cea6a4a34c32c48b54010303aa283c5424))
+
 ## [1.91.3](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.91.2...ui-v1.91.3) (2025-05-21)
 
 
