@@ -285,6 +285,20 @@ export interface ListJobsParameters {
     operation_incarnation?: string;
 }
 
+type QueriesListRequestParams = {
+    limit?: number;
+    output_format?: string;
+    is_tutorial?: string;
+    user?: string;
+    engine?: string;
+    filter?: string;
+    state?: string;
+};
+
+export type ListQueriesParams = ApiMethodParams<QueriesListRequestParams> & {
+    stage?: string;
+};
+
 export interface ListJobsResponse {
     archive_job_count: number;
     continuation_token: string;
@@ -374,7 +388,9 @@ export type BatchSubRequest =
     | SubRequest<'remove_maintenance', RemoveMaintenanceParams>
     | SubRequest<'add_member', AddMembersParams>
     | SubRequest<'remove_member', RemoveMembersParams>
-    | SubRequest<'list_jobs', ListJobsParameters>;
+    | SubRequest<'list_jobs', ListJobsParameters>
+    | SubRequest<'list_operations', any>
+    | SubRequest<'list_queries', ListQueriesParams>;
 
 export type OutputFormat =
     | {
