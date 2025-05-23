@@ -97,6 +97,7 @@ export const QueryEditorMonaco: FC = () => {
         const lineNumber = getHashLineNumber();
         if (!loading && lineNumber && !changed) {
             decorators.current.lineDecorator?.setActiveLine(lineNumber);
+            editorRef.current?.revealLineInCenter(lineNumber);
         }
     }, [changed, editorErrors, loading]);
 
