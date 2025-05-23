@@ -23,7 +23,7 @@ export const QueryEditorSplit: FC<Props> = ({
         <FlexSplitPane
             direction={FlexSplitPane.HORIZONTAL}
             onResizeEnd={setSize}
-            getInitialSizes={sizes}
+            getInitialSizes={() => sizes}
         >
             {hideQueryEditor && <QueryEditor onStartQuery={onStartQuery} showStatusInTitle />}
             {fileEditorVisible && <FileEditor />}
