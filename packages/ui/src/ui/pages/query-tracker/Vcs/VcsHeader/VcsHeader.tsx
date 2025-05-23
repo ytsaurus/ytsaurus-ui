@@ -16,6 +16,7 @@ import {
     changeCurrentRepository,
     getVcsRepositories,
     getVcsTokensAvailability,
+    setLastVcs,
 } from '../../module/vcs/actions';
 import './VcsHeader.scss';
 import cn from 'bem-cn-lite';
@@ -40,6 +41,7 @@ export const VcsHeader: FC = () => {
 
     useEffect(() => {
         dispatch(getVcsTokensAvailability());
+        dispatch(setLastVcs());
     }, [dispatch]);
 
     const handleChangeVcs = useCallback(
