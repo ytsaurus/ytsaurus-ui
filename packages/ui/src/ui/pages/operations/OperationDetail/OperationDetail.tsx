@@ -18,6 +18,7 @@ import {YTErrorBlock} from '../../../components/Error/Error';
 import Icon from '../../../components/Icon/Icon';
 import Tabs from '../../../components/Tabs/Tabs';
 import Yson from '../../../components/Yson/Yson';
+import {Tooltip} from '../../../components/Tooltip/Tooltip';
 
 import PartitionSizes from './tabs/partition-sizes/PartitionSizes/PartitionSizes';
 import Details from './tabs/details/Details/Details';
@@ -66,6 +67,8 @@ import UIFactory from '../../../UIFactory';
 import {RootState} from '../../../store/reducers';
 import {getCurrentCluster} from '../../../store/selectors/thor';
 import {UI_TAB_SIZE} from '../../../constants/global';
+import {OperationPool, OperationStates} from '../selectors';
+import {RuntimeItem} from '../../../store/reducers/operations/detail';
 
 const detailBlock = cn('operation-detail');
 
@@ -74,6 +77,34 @@ const headingBlock = cn('elements-heading');
 type RouteProps = {match: MatchType<{operationId: string; tab: OperationTabType}>};
 
 type ReduxProps = ConnectedProps<typeof connector>;
+
+function getSpecialWaitingStatuses(
+    pools: OperationPool[],
+    state: OperationStates,
+    runtime: RuntimeItem[] | undefined,
+    type: string | undefined,
+) {
+    const fairShareRatio = runtime?.[0]?.progress?.fair_share_ratio as number | undefined;
+    const usageRatio = runtime?.[0]?.progress?.usage_ratio as number | undefined;
+    const demandRatio = runtime?.[0]?.progress?.demand_ratio as number | undefined;
+    const dominantResource = runtime?.[0]?.progress?.dominant_resource as string | undefined;
+
+    const isSingleTree = new Set(pools?.map((pool) => pool.tree)).size === 1;
+    const isSpecialStatus =
+        type === 'vanilla' && isSingleTree && state === 'running' && dominantResource === 'gpu';
+
+    const isWaitingForResources =
+        isSpecialStatus && fairShareRatio === usageRatio && fairShareRatio === 0;
+
+    const isWaitingForJobs =
+        isSpecialStatus &&
+        fairShareRatio === demandRatio &&
+        usageRatio !== undefined &&
+        fairShareRatio !== undefined &&
+        usageRatio < fairShareRatio;
+
+    return {isWaitingForResources, isWaitingForJobs};
+}
 
 function OperationDetailUpdater({operationId}: {operationId: string}) {
     const dispatch = useDispatch();
@@ -85,6 +116,19 @@ function OperationDetailUpdater({operationId}: {operationId: string}) {
     useUpdater(updateFn, {timeout: 15 * 1000});
 
     return null;
+}
+
+function SpecialWaitingStatus({type}: {type: 'jobs' | 'resources'}) {
+    return (
+        <Tooltip content={'some docs'}>
+            <StatusLabel
+                state={'running'}
+                iconState={'running'}
+                text={`Waiting for ${type}`}
+                renderPlaque
+            />
+        </Tooltip>
+    );
 }
 
 class OperationDetail extends React.Component<ReduxProps & RouteProps> {
@@ -133,27 +177,21 @@ class OperationDetail extends React.Component<ReduxProps & RouteProps> {
         const {actions = [], runtime} = this.props;
         const {type, user = '', state, suspended, title, pools, $value} = this.props.operation;
 
-        console.log(pools);
-        const fairShareRatio = runtime?.[0]?.progress.fair_share_ratio;
-        const usageRatio = runtime?.[0]?.progress.usage_ratio;
-        const demandRatio = runtime?.[0]?.progress.demand_ratio;
-        const isSingleTree = new Set(pools?.map((pool) => pool.tree)).size === 1;
-        console.log('isSingleTree --> ', isSingleTree);
-        const isSpecialStatus = type === 'vanilla' && isSingleTree && state === 'running';
-
-        console.log('isSpecialStatus --> ', isSpecialStatus);
-        const isWaitingForResources =
-            isSpecialStatus && fairShareRatio === usageRatio && fairShareRatio === 0;
-        const isWaitingForJobs =
-            isSpecialStatus && fairShareRatio === demandRatio && usageRatio < fairShareRatio;
+        const {isWaitingForJobs, isWaitingForResources} = getSpecialWaitingStatuses(
+            pools,
+            state,
+            runtime,
+            type,
+        );
 
         const label = suspended ? 'suspended' : state;
 
-        console.log(isWaitingForJobs || isWaitingForResources);
-
-        const statusProps = isSpecialStatus
-            ? {state: 'unknown' as const, iconState: 'running' as const, text: 'Running'}
-            : {label: label};
+        const statusProps:
+            | {label: typeof label}
+            | {state: 'unknown'; iconState: 'running'; text: string} =
+            isWaitingForJobs || isWaitingForResources
+                ? {state: 'unknown', iconState: 'running', text: 'Running'}
+                : {label: suspended ? 'suspended' : state};
 
         return (
             <div className={detailBlock('header', 'elements-section')}>
@@ -161,22 +199,9 @@ class OperationDetail extends React.Component<ReduxProps & RouteProps> {
                     {hammer.format['ReadableField'](type)} operation by <SubjectCard name={user} />
                     &ensp;
                     <StatusLabel {...statusProps} renderPlaque />
-                    {isWaitingForJobs && (
-                        <StatusLabel
-                            state={'running'}
-                            iconState={'running'}
-                            text={'Waiting for jobs'}
-                            renderPlaque
-                        />
-                    )}
-                    {isWaitingForResources && (
-                        <StatusLabel
-                            state={'running'}
-                            iconState={'running'}
-                            text={'Waiting for resources'}
-                            renderPlaque
-                        />
-                    )}
+                    &ensp;
+                    {isWaitingForJobs && <SpecialWaitingStatus type={'jobs'} />}
+                    {isWaitingForResources && <SpecialWaitingStatus type={'resources'} />}
                 </div>
 
                 <div className={detailBlock('header-title')}>
