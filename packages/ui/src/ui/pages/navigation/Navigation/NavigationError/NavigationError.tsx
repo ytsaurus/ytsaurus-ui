@@ -5,6 +5,9 @@ import {Flex, FlexProps, Text} from '@gravity-ui/uikit';
 import {YTErrorBlock} from '../../../../components/Error/Error';
 import ErrorDetails from '../../../../components/ErrorDetails/ErrorDetails';
 import {ErrorToClipboardButton} from '../../../../components/ErrorToClipboardButton/ErrorToClipboardButton';
+
+import NavigationDescription from '../../../../pages/navigation/NavigationDescription/NavigationDescription';
+
 import {NavigationErrorImage} from './NavigationErrorImage';
 import {RequestPermission} from './RequestPermission';
 import {getPermissionDeniedError} from '../../../../utils/errors';
@@ -26,36 +29,42 @@ type Props = {
 function PrettyError(props: Props & {code: ErrorCode}) {
     const {details, path, cluster, code, vertical} = props;
 
-    const error = code == 901 ? getPermissionDeniedError(details)! : details;
+    const error = code === 901 ? getPermissionDeniedError(details)! : details;
     const title = getErrorTitle({...error, code}, path);
     const direction: FlexProps['direction'] = vertical ? 'column' : undefined;
 
     return (
         <Flex
-            className={block()}
-            justifyContent="center"
-            alignItems="center"
-            direction={direction}
-            gap={7}
+            direction={'column'}
+            minHeight={'calc(100vh - 3 * var(--app-header-height) - var(--app-footer-height))'}
         >
-            <Flex>
-                <NavigationErrorImage type={code} />
-            </Flex>
-            <Flex direction="column" className={block('info')} gap={4}>
-                <Text className={block('title')}>{title}</Text>
-                <ErrorDetails error={details} />
-                <Flex gap={3} direction={direction}>
-                    {code === 901 ? (
-                        <RequestPermission cluster={cluster} path={path} error={error} />
-                    ) : (
-                        <ErrorToClipboardButton
-                            className={block('copy')}
-                            view="outlined"
-                            error={details}
-                        >
-                            Copy error details
-                        </ErrorToClipboardButton>
-                    )}
+            {code === 901 && <NavigationDescription className={'error-description'} />}
+            <Flex
+                className={block()}
+                justifyContent="center"
+                alignItems="center"
+                direction={direction}
+                gap={7}
+            >
+                <Flex>
+                    <NavigationErrorImage type={code} />
+                </Flex>
+                <Flex direction={'column'} className={block('info')} gap={3}>
+                    <Text className={block('title')}>{title}</Text>
+                    <ErrorDetails error={details} />
+                    <Flex gap={3} direction={direction}>
+                        {code === 901 ? (
+                            <RequestPermission cluster={cluster} path={path} error={error} />
+                        ) : (
+                            <ErrorToClipboardButton
+                                className={block('copy')}
+                                view="outlined"
+                                error={details}
+                            >
+                                Copy error details
+                            </ErrorToClipboardButton>
+                        )}
+                    </Flex>
                 </Flex>
             </Flex>
         </Flex>
