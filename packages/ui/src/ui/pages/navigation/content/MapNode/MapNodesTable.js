@@ -84,8 +84,8 @@ export function renderMapNodesTableIcon(item) {
         if (sorted) {
             title = 'Dynamic table';
         } else {
-            title = 'Ordered table';
-            icon = <Icon awesome="ordered-table" />;
+            title = 'Queue table';
+            icon = <Icon awesome="queue-table" />;
         }
     }
 
