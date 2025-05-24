@@ -19,6 +19,11 @@ export interface AlertEvent {
     error: unknown;
 }
 
+export interface RuntimeItem {
+    name: string;
+    progress: Record<string, unknown>;
+}
+
 export interface OperationDetailState {
     loading: boolean;
     loaded: boolean;
@@ -28,6 +33,7 @@ export interface OperationDetailState {
     actions: Array<OperationAction>;
     details: {
         alert_events: Array<AlertEvent>;
+        runtime?: Array<RuntimeItem>;
     };
     resourcesStatus: (typeof LOADING_STATUS)[keyof typeof LOADING_STATUS];
     resources: {intermediateResources?: unknown};

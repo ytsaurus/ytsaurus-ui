@@ -10,13 +10,18 @@ import {FIX_MY_TYPE} from '../../types';
 import {RootState} from '../../store/reducers';
 import {JobsState} from '../../store/reducers/operations/jobs/jobs';
 
-interface OperationPool {
+export interface OperationPool {
     tree: string;
     pool: string;
     isEphemeral: boolean;
     slotIndex?: number;
     weight?: number;
 }
+
+type PreparingStates = 'materializing' | 'initializing' | 'preparing' | 'pending';
+type RunningStates = 'running' | 'completing' | 'failing' | 'aborting' | 'reviving';
+
+export type OperationStates = PreparingStates | RunningStates | 'completed' | 'failed' | 'aborted';
 
 export class OperationSelector implements Record<string, any> {
     static PREPARING_STATES = ['materializing', 'initializing', 'preparing', 'pending'] as const;
@@ -31,7 +36,7 @@ export class OperationSelector implements Record<string, any> {
     id: string;
     $value: string;
     $attributes: any;
-    state: (typeof OperationSelector.INTERMEDIATE_STATES)[0] | 'completed' | 'failed' | 'aborted';
+    state: OperationStates;
     pools: Array<OperationPool> = [];
 
     constructor(data: any) {
