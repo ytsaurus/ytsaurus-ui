@@ -34,7 +34,10 @@ import {
     getTableItems,
     getTree,
 } from '../../../../../store/selectors/scheduling/scheduling';
-import {getSchedulingAbcFilter} from '../../../../../store/selectors/scheduling/attributes-to-filter';
+import {
+    getOperationRefId,
+    getSchedulingAbcFilter,
+} from '../../../../../store/selectors/scheduling/attributes-to-filter';
 import {SCHEDULING_POOL_TREE_TABLE_ID, Tab} from '../../../../../constants/scheduling';
 import {poolsTableItems} from '../../../../../utils/scheduling/overviewTable';
 import {Page} from '../../../../../constants/index';
@@ -397,6 +400,7 @@ class Overview extends Component {
             striped: false,
             tableId: SCHEDULING_POOL_TREE_TABLE_ID,
             tree: true,
+            itemHeight: 40,
             columns: {
                 items: poolsTableItems,
                 sets: {
@@ -452,7 +456,9 @@ class Overview extends Component {
     };
 
     render() {
-        const {items, treeStateExpanded, isInitialLoading} = this.props;
+        const {items, treeStateExpanded, isInitialLoading, operationRefId} = this.props;
+
+        const refItem = items?.find((item) => item?.name === operationRefId);
 
         return (
             <ErrorBoundary>
@@ -471,6 +477,8 @@ class Overview extends Component {
                                         rowClassName={this.rowClassName}
                                         onItemToggleState={this.onItemToggleState}
                                         isLoading={isInitialLoading}
+                                        highlightedItem={refItem}
+                                        compareHighlitedBy={'name'}
                                     />
                                 </ResetExpandedPoolsOnTreeChange>
                             </React.Fragment>
@@ -500,6 +508,8 @@ const mapStateToProps = (state) => {
 
     const isInitialLoading = getSchedulingIsInitialLoading(state);
 
+    const operationRefId = getOperationRefId(state);
+
     return {
         cluster,
         items,
@@ -509,6 +519,7 @@ const mapStateToProps = (state) => {
         treeStateExpanded: isRoot || !items[0] ? undefined : [items[0].key],
         abcServiceFilter: getSchedulingAbcFilter(state),
         isInitialLoading,
+        operationRefId,
     };
 };
 
