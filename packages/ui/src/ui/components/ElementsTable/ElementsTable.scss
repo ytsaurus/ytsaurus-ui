@@ -107,6 +107,10 @@ $thin-border: 1px solid var(--light-divider);
                 background-color: var(--hover-background);
             }
         }
+
+        &_highlighted_yes {
+            background-color: var(--hover-background);
+        }
     }
 
     &__cell {

@@ -39,6 +39,7 @@ interface TemplatePoolsProps {
     pools: Pool[];
     erasedTrees?: Record<string, boolean | undefined>;
     allowDetachEditBtn?: boolean;
+    operationRefId?: string;
 }
 
 export function TemplatePools({
@@ -46,6 +47,7 @@ export function TemplatePools({
     cluster,
     state,
     onEdit,
+    operationRefId = undefined,
     compact = false,
     erasedTrees = {},
     allowDetachEditBtn,
@@ -58,6 +60,7 @@ export function TemplatePools({
                     compact={compact}
                     cluster={cluster}
                     onEdit={onEdit}
+                    operationRefId={operationRefId}
                     state={state}
                     pool={pool}
                     erased={erasedTrees[pool.tree]}

@@ -99,6 +99,10 @@ class ElementsTable extends Component {
         rowClassName: PropTypes.func,
         colSpan: PropTypes.func,
         headerClassName: PropTypes.string,
+
+        // ROW HIGHLIGHT
+        highlightedItem: PropTypes.object,
+        compareHighlitedBy: PropTypes.string,
     };
 
     static defaultProps = {
@@ -259,7 +263,8 @@ class ElementsTable extends Component {
     };
 
     componentDidUpdate(prevProps) {
-        const {selectedIndex, onItemSelect} = this.props;
+        const {highlightedItem, items, selectedIndex, onItemSelect, compareHighlitedBy} =
+            this.props;
         const reactList = this.list?.current;
 
         if (prevProps.selectedIndex !== selectedIndex && onItemSelect && reactList) {
@@ -273,7 +278,65 @@ class ElementsTable extends Component {
                 window.scrollBy(0, 40);
             }
         }
+
+        if (
+            prevProps.highlightedItem?.[compareHighlitedBy] !==
+                highlightedItem?.[compareHighlitedBy] &&
+            reactList
+        ) {
+            const highlightedIndex = items?.findIndex(
+                (items) =>
+                    highlightedItem?.[compareHighlitedBy] &&
+                    items?.[compareHighlitedBy] &&
+                    highlightedItem?.[compareHighlitedBy] === items?.[compareHighlitedBy],
+            );
+            reactList.scrollAround(highlightedIndex);
+            this.waitForHighlightedElementAndScroll();
+        }
     }
+
+    waitForHighlightedElementAndScroll = () => {
+        const scrollToHighlightedElement = () => {
+            const highlightedElement = document.querySelector(
+                '.elements-table__row_highlighted_yes',
+            );
+            if (highlightedElement) {
+                highlightedElement.scrollIntoView({
+                    block: 'center',
+                });
+                return true;
+            }
+            return false;
+        };
+
+        const checkForElement = () => {
+            if (scrollToHighlightedElement()) {
+                return;
+            }
+
+            const observer = new MutationObserver(() => {
+                if (scrollToHighlightedElement()) {
+                    observer.disconnect();
+                }
+            });
+
+            const tableBody = document.querySelector('.elements-table__body');
+            if (tableBody) {
+                observer.observe(tableBody, {
+                    childList: true,
+                    subtree: true,
+                    attributes: true,
+                    attributeFilter: ['class'],
+                });
+
+                setTimeout(() => {
+                    observer.disconnect();
+                }, 2000);
+            }
+        };
+
+        requestAnimationFrame(checkForElement);
+    };
 
     prevMouseCoordinates = {};
     list = createRef();
@@ -429,7 +492,7 @@ class ElementsTable extends Component {
         );
     };
 
-    renderRow(item, index, key = index) {
+    renderRow(item, index, highlightedIndex, key = index) {
         const {
             css,
             itemHeight,
@@ -444,7 +507,9 @@ class ElementsTable extends Component {
         } = this.props;
         const {items: itemStates, columnItems, columnSet} = this.state;
 
+        const highlighted = highlightedIndex === index;
         const selected = selectedIndex === index;
+
         const currentKey = typeof computeKey === 'function' ? computeKey(item) : key;
 
         return (
@@ -462,6 +527,7 @@ class ElementsTable extends Component {
                 css={css}
                 templates={templates}
                 selected={selected}
+                highlighted={highlighted}
                 index={index}
                 itemMods={itemMods}
                 onMouseMove={onMouseMove}
@@ -491,8 +557,18 @@ class ElementsTable extends Component {
     );
 
     renderDynamicTable(items) {
-        const {virtualType, selectedIndex} = this.props;
-        const itemRenderer = (index, key) => this.renderRow(items[index], index, key);
+        const {virtualType, selectedIndex, itemHeight, highlightedItem, compareHighlitedBy} =
+            this.props;
+
+        const highlightedIndex = items?.findIndex(
+            (items) =>
+                highlightedItem?.[compareHighlitedBy] &&
+                items?.[compareHighlitedBy] &&
+                highlightedItem?.[compareHighlitedBy] === items?.[compareHighlitedBy],
+        );
+
+        const itemRenderer = (index, key) =>
+            this.renderRow(items[index], index, highlightedIndex, key);
 
         return (
             <ReactList
@@ -502,6 +578,7 @@ class ElementsTable extends Component {
                 length={items.length}
                 type={virtualType}
                 ref={this.list}
+                itemSizeEstimator={() => itemHeight}
                 useStaticSize
             />
         );

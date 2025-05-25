@@ -166,6 +166,7 @@ class OperationDetail extends React.Component<ReduxProps & RouteProps> {
                             onEdit={this.handlePoolsEditClick}
                             cluster={cluster}
                             pools={pools}
+                            operationRefId={$value}
                             state={state}
                             erasedTrees={erasedTrees}
                         />
