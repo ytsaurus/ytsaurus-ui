@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.92.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.91.3...ui-v1.92.0) (2025-05-26)
+
+
+### Features
+
+* **Navigation/Description:** add external description option [YTFRONT-4680] ([dbfe196](https://github.com/ytsaurus/ytsaurus-ui/commit/dbfe196174aad542e6616acf5677f92edb064644))
+* **UIFactory:** extend the UIFactory for external descriptions [YTFRONT-4680] ([7201467](https://github.com/ytsaurus/ytsaurus-ui/commit/7201467d87cba61c0fd5ca172fe30032d16be5eb))
+
+
+### Bug Fixes
+
+* always setted non-empty engine value in query-tracker [[#1150](https://github.com/ytsaurus/ytsaurus-ui/issues/1150)] ([2e0c35c](https://github.com/ytsaurus/ytsaurus-ui/commit/2e0c35cea6a4a34c32c48b54010303aa283c5424))
+
 ## [1.91.3](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.91.2...ui-v1.91.3) (2025-05-21)
 
 
