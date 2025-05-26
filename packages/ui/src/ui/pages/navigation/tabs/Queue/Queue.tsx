@@ -2,7 +2,6 @@ import React, {ComponentType, useEffect} from 'react';
 import {ConnectedProps, connect, useSelector} from 'react-redux';
 
 import {Alerts} from '../../../../components/Alerts/Alerts';
-import {YTErrorBlock} from '../../../../components/Block/Block';
 import ErrorBoundary from '../../../../components/ErrorBoundary/ErrorBoundary';
 import WithStickyToolbar from '../../../../components/WithStickyToolbar/WithStickyToolbar';
 import {Toolbar} from '../../../../components/WithStickyToolbar/Toolbar/Toolbar';
@@ -29,6 +28,7 @@ import PartitionsExtraControls from './views/Partitions/PartitionsExtraControls'
 import UIFactory from '../../../../UIFactory';
 import {Exports} from './views/Exports/Exports';
 import {ExportsExtraControls} from './views/Exports/ExportsExtraControls';
+import {QueueError} from './QueueError';
 
 const emptyView = {ExtraControls: () => null, View: () => null};
 
@@ -66,7 +66,7 @@ const Queue: React.VFC<PropsFromRedux> = ({
     const items = useSelector(getQueueStatusDataAlerts);
 
     if (statusError) {
-        return <YTErrorBlock error={statusError} topMargin="none" />;
+        return <QueueError error={statusError} topMargin="none" />;
     }
 
     return (
