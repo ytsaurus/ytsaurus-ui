@@ -134,7 +134,7 @@ export function TemplateEnvironment({environments = []}: TemplateEnvironmentProp
         );
     });
 
-    return <CollapsableText lineCount={10}>{variables}</CollapsableText>;
+    return <CollapsableText lineCount={4}>{variables}</CollapsableText>;
 }
 
 TemplateEnvironment.propTypes = {
@@ -285,5 +285,5 @@ export function TemplateLayerPaths({cluster, paths}: TemplateLayerPathsProps) {
         <TemplateLayerPath path={path} key={path} cluster={cluster} />
     ));
 
-    return <CollapsibleList items={items} />;
+    return <CollapsibleList items={items} itemsCount={4} />;
 }
