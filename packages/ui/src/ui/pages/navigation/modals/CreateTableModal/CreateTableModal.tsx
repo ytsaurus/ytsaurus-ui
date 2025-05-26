@@ -632,7 +632,7 @@ class CreateTableModalContentImpl extends React.Component<Props> {
                                         },
                                         {
                                             value: TableType.QUEUE,
-                                            label: 'Queue',
+                                            label: 'Queue table',
                                         },
                                     ],
                                 },
