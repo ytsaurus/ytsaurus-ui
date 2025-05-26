@@ -149,7 +149,8 @@ class Details extends Component {
         const {resources, intermediateResources, operation, collapsibleSize} = this.props;
 
         return (
-            resources && (
+            resources &&
+            operation.type !== 'vanilla' && (
                 <CollapsibleSection
                     name="Data flow"
                     className={block('resources')}
