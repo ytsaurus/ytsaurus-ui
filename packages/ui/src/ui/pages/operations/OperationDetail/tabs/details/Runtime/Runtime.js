@@ -14,6 +14,7 @@ import {formatShare} from '../../../../../../utils/operations/tabs/details/runti
 import {showEditPoolsWeightsModal} from '../../../../../../store/actions/operations';
 import hammer from '../../../../../../common/hammer';
 import {OperationPool} from '../../../../../../components/OperationPool/OperationPool';
+import ypath from '../../../../../../common/thor/ypath';
 
 const headingBlock = cn('elements-heading');
 const runtimeBlock = cn('runtime');
@@ -77,12 +78,13 @@ class Runtime extends Component {
             weight: progress.weight,
         };
 
+        const isGang = ypath.getValue(operation, '/@full_spec/is_gang');
+
         return (
             <div className={runtimeBlock('tree')} key={name}>
                 <div className={headingBlock({size: 's'})}>
                     {hammer.format['ReadableField'](name)}
                 </div>
-
                 <MetaTable
                     items={[
                         [
@@ -109,30 +111,54 @@ class Runtime extends Component {
                                 ),
                             },
                             {
-                                key: 'min_share',
-                                value:
-                                    formatShare(progress.min_share_ratio) +
-                                    ' / ' +
-                                    formatShare(progress.adjusted_min_share_ratio),
+                                key: 'fifo_index',
+                                value: (
+                                    <Template.FormattedValue
+                                        value={progress.fifo_index}
+                                        format="Number"
+                                    />
+                                ),
                             },
                             {
-                                key: 'fair_share_ratio',
+                                key: 'fair_share',
                                 value: formatShare(progress.fair_share_ratio),
                             },
                             {
-                                key: 'usage_ratio',
+                                key: 'usage',
                                 value: formatShare(progress.usage_ratio),
                             },
                             {
-                                key: 'demand_ratio',
+                                key: 'demand',
                                 value: formatShare(progress.demand_ratio),
                             },
                         ],
                         [
                             {
+                                key: 'dominant_resource',
+                                value: hammer.format.Readable(progress.dominant_resource),
+                            },
+                            {
                                 key: 'Starvation status',
                                 value: <StarvingStatus progress={progress} />,
                             },
+                            {
+                                key: 'scheduling_status',
+                                value: hammer.format.Readable(progress.scheduling_status),
+                            },
+                            {
+                                key: 'gang',
+                                value: isGang,
+                            },
+                            ...(isGang
+                                ? [
+                                      {
+                                          key: 'scheduling_segment',
+                                          value: hammer.format.Readable(
+                                              progress.scheduling_segment,
+                                          ),
+                                      },
+                                  ]
+                                : []),
                             {
                                 key: 'partitions',
                                 value:
@@ -140,37 +166,6 @@ class Runtime extends Component {
                                     ' / ' +
                                     progress.partitions?.total,
                                 visible: Boolean(progress.partitions),
-                            },
-                            {
-                                key: 'scheduling_status',
-                                value: hammer.format.Readable(progress.scheduling_status),
-                            },
-                            {
-                                key: 'dominant_resource',
-                                value: hammer.format.Readable(progress.dominant_resource),
-                            },
-                            {
-                                key: 'preemptable_job_count',
-                                value: (
-                                    <Template.FormattedValue
-                                        value={progress.preemptable_job_count}
-                                        format="Number"
-                                    />
-                                ),
-                            },
-                            {
-                                key: 'memory_size_per_jobs',
-                                value: (
-                                    <Template.FormattedValue
-                                        // eslint-disable-next-line camelcase
-                                        value={
-                                            progress.resource_demand?.memory /
-                                            progress.resource_demand?.user_slots
-                                        }
-                                        format="Bytes"
-                                    />
-                                ),
-                                visible: Boolean(progress.resource_demand),
                             },
                         ],
                     ]}
