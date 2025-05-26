@@ -17,7 +17,7 @@ export function getAuthWay(req: Request): AuthWay | undefined {
     if (isUserOAuthLogged(req)) {
         return 'oauth';
     }
-    return 'passwd';
+    return req.ctx.config.allowPasswordAuth ? 'passwd' : undefined;
 }
 
 export function authorizationResolver(resolver: AppMiddleware): AppMiddleware {
