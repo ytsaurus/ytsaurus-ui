@@ -1,3 +1,5 @@
+import {USE_CACHE} from '../../../../shared/constants/yt-api';
+
 import ypath from '../../../common/thor/ypath';
 
 import {
@@ -10,11 +12,15 @@ import {prepareRuntime} from '../../../utils/operations/tabs/details/runtime';
 import {prepareAlerts} from '../../../utils/operations/tabs/details/alerts';
 import {prepareError} from '../../../utils/operations/tabs/details/error';
 
-import {GET_OPERATION, LOAD_RESOURCE_USAGE} from '../../../constants/operations/detail';
+import {
+    GET_OPERATION,
+    LOAD_RESOURCE_USAGE,
+    OPERATION_DETAIL_PARTIAL,
+} from '../../../constants/operations/detail';
 import {DetailedOperationSelector} from '../../../pages/operations/selectors';
 import {checkUserTransaction, prepareActions} from '../../../utils/operations/detail';
 import {prepareAttributes} from '../../../utils';
-import {showErrorPopup} from '../../../utils/utils';
+import {showErrorPopup, wrapApiPromiseByToaster} from '../../../utils/utils';
 import {isOperationId} from '../../../utils/operations/list';
 import {Toaster} from '@gravity-ui/uikit';
 import CancelHelper from '../../../utils/cancel-helper';
@@ -124,6 +130,7 @@ export function getOperation(
                     });
 
                     dispatch(getJobsMonitoringDescriptors(id));
+                    dispatch(loadOperationPoolTreeConfigs(operation));
                 };
 
                 if (operation.inIntermediateState()) {
@@ -157,5 +164,41 @@ export function getOperation(
                     });
                 }
             });
+    };
+}
+
+export function loadOperationPoolTreeConfigs({
+    pools,
+}: DetailedOperationSelector): ThunkAction<
+    Promise<void>,
+    RootState,
+    unknown,
+    OperationDetailActionType
+> {
+    return (dispatch) => {
+        const treeNames = pools?.map((i) => i.tree);
+        return wrapApiPromiseByToaster(
+            ytApiV3Id.executeBatch(YTApiId.operationTreeConfigs, {
+                requests: treeNames.map((item) => ({
+                    command: 'get',
+                    parameters: {path: `//sys/pool_trees/${item}/@config`, ...USE_CACHE},
+                })),
+            }),
+            {
+                toasterName: 'operationTreeConfigs',
+                skipSuccessToast: true,
+                batchType: 'v3' as const,
+                errorTitle: 'Failed to load tree configs',
+            },
+        ).then((data) => {
+            dispatch({
+                type: OPERATION_DETAIL_PARTIAL,
+                data: {
+                    treeConfigs: data.map((item, index) => {
+                        return {tree: treeNames[index], config: item.output};
+                    }),
+                },
+            });
+        });
     };
 }
