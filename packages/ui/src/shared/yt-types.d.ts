@@ -532,3 +532,19 @@ export type GetQueryTrackerInfoResponse = {
     supported_features: {access_control: boolean; multiple_aco?: boolean};
     clusters?: Array<string>;
 };
+
+export type FlowExecuteCommand = 'describe-pipeline';
+
+export type FlowExecuteParams<Command extends FlowExecuteCommand> = {
+    flow_command: Command;
+    pipeline_path: string;
+};
+
+export type FlowExecuteData<Command extends FlowExecuteCommand> = FlowExecuteDataByCommand &
+    {
+        command: Command;
+    }[Command];
+
+export type FlowExecuteDataByCommand = {
+    'describet-pipeline': unknown;
+};
