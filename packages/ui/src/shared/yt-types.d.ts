@@ -512,7 +512,7 @@ export type GetQueryTrackerInfoResponse = {
 export type FlowExecuteCommand = 'describe-pipeline';
 
 export type FlowExecuteParams<Command extends FlowExecuteCommand> = {
-    command: Command;
+    flow_command: Command;
     pipeline_path: string;
 };
 
