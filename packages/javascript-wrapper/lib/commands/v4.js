@@ -229,6 +229,11 @@ module.exports = {
         method: 'GET',
         dataType: 'json',
     },
+    flowExecute: {
+        name: 'flow_execute',
+        method: 'POST',
+        dataType: 'json',
+    },
 
     addMaintenance: {
         name: 'add_maintenance',
@@ -244,5 +249,5 @@ module.exports = {
         name: 'poll_job_shell',
         method: 'POST',
         dataType: 'json',
-    }
+    },
 };
