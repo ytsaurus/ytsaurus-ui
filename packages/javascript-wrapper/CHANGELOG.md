@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.12.0](https://github.com/ytsaurus/ytsaurus-ui/compare/javascript-wrapper-v0.11.0...javascript-wrapper-v0.12.0) (2025-05-27)
+
+
+### Features
+
+* **javascript-wrapper:** add 'v4.flowExecute' command [YTFRONT-3978] ([7eff9ad](https://github.com/ytsaurus/ytsaurus-ui/commit/7eff9adc254b59358018205c0cacf772b2ebb5c4))
+
 ## [0.11.0](https://github.com/ytsaurus/ytsaurus-ui/compare/javascript-wrapper-v0.10.4...javascript-wrapper-v0.11.0) (2025-05-13)
 
 
