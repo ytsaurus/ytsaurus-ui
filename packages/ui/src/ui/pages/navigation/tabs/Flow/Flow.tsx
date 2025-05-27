@@ -28,6 +28,7 @@ import {formatByParams} from '../../../../utils/format';
 import {FlowLayout} from './FlowLayout/FlowLayout';
 import {FlowDynamicSpec, FlowStaticSpec} from './PipelineSpec/PipelineSpec';
 import './Flow.scss';
+import {FlowGraph} from './FlowGraph/FlowGraph';
 
 const block = cn('yt-navigation-flow');
 
@@ -87,12 +88,7 @@ function FlowContent({viewMode}: {viewMode: FlowViewMode}) {
         case 'computations':
             return <FlowLayout path={path} viewMode={viewMode} />;
         case 'graph':
-            return (
-                <YTAlertBlock
-                    header={'Warning'}
-                    message={`'${viewMode}' view mode is not implemented yet`}
-                />
-            );
+            return <FlowGraph pipeline_path={path} />;
         default:
             return (
                 <YTAlertBlock
