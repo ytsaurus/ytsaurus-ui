@@ -32,6 +32,8 @@ export interface OperationDetailState {
     resourcesStatus: (typeof LOADING_STATUS)[keyof typeof LOADING_STATUS];
     resources: {intermediateResources?: unknown};
     monitorChartStates: Record<string, boolean>;
+
+    treeConfigs: undefined | Array<{tree: string; config: {main_resource?: 'gpu'}}>;
 }
 
 const initialState: OperationDetailState = {
@@ -45,6 +47,7 @@ const initialState: OperationDetailState = {
     resourcesStatus: LOADING_STATUS.UNINITIALIZED,
     resources: {},
     monitorChartStates: {},
+    treeConfigs: undefined,
 };
 
 export type OperationDetailActionType =
@@ -62,7 +65,8 @@ export type OperationDetailActionType =
       >
     | Action<typeof LOAD_RESOURCE_USAGE.FAILURE>
     | Action<typeof LOAD_RESOURCE_USAGE.CANCELLED>
-    | ActionD<typeof OPERATION_DETAIL_PARTIAL, Pick<OperationDetailState, 'monitorChartStates'>>;
+    | ActionD<typeof OPERATION_DETAIL_PARTIAL, Pick<OperationDetailState, 'monitorChartStates'>>
+    | ActionD<typeof OPERATION_DETAIL_PARTIAL, Pick<OperationDetailState, 'treeConfigs'>>;
 
 function reducer(state = initialState, action: OperationDetailActionType): OperationDetailState {
     switch (action.type) {

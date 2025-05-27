@@ -87,6 +87,8 @@ export const getOperationTasksNames = createSelector(
     },
 );
 
+export const getOperationTreeConfigs = (state: RootState) => state.operations.detail.treeConfigs;
+
 export const getOperationDetailsLoadingStatus = createSelector(
     [
         (state: RootState) => (state.operations.detail as FIX_MY_TYPE).loading,
@@ -163,6 +165,13 @@ export const getOperationJobsMonitorTabSettings = createSelector(
     (jobsCount) => {
         const maxJobCount = 200;
         return {visible: jobsCount > 0 && jobsCount <= maxJobCount, maxJobCount};
+    },
+);
+
+export const selectIsOperationInGpuTree = createSelector(
+    [getOperationTreeConfigs],
+    (treeConfigs) => {
+        return treeConfigs?.every((item) => item.config.main_resource === 'gpu');
     },
 );
 

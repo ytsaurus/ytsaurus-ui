@@ -97,6 +97,7 @@ export enum YTApiId {
     operationIntermediateResourceUsage,
     operationIsEphemeral,
     operationsSchedulerInstances,
+    operationTreeConfigs,
     listJobs100,
     jobsOperationIncarnations,
 
