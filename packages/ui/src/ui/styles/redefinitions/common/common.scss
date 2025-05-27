@@ -7,3 +7,7 @@
 .g-toast__content {
     word-break: break-word;
 }
+
+.gn-composite-bar-item__icon {
+    color: var(--gn-aside-header-item-icon-color, var(--_--item-icon-color));
+}
