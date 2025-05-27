@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.12.1](https://github.com/ytsaurus/ytsaurus-ui/compare/javascript-wrapper-v0.12.0...javascript-wrapper-v0.12.1) (2025-05-27)
+
+
+### Bug Fixes
+
+* **javascript-wrapper:** use 'PUT' for 'v4.flowExecute' [YTFRONT-3978] ([db6b28b](https://github.com/ytsaurus/ytsaurus-ui/commit/db6b28b6b427d8d4254c4ea63892cdff719ad3da))
+
 ## [0.12.0](https://github.com/ytsaurus/ytsaurus-ui/compare/javascript-wrapper-v0.11.0...javascript-wrapper-v0.12.0) (2025-05-27)
 
 
