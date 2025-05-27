@@ -9,6 +9,8 @@ import {AlertInfo} from '../../../components/AlertEvents/AlertEvents';
 import {calculateLoadingStatus} from '../../../utils/utils';
 import {FIX_MY_TYPE} from '../../../types';
 import {prepareFaqUrl} from '../../../utils/operations/tabs/details/alerts';
+import {getClusterUiConfig} from '../global';
+import {formatByParams} from '../../../utils/format';
 
 const getOperationErasedTreesRaw = (state: RootState) => {
     return ypath.getValue(state.operations.detail, '/operation/@runtime_parameters/erased_trees');
@@ -161,5 +163,21 @@ export const getOperationJobsMonitorTabSettings = createSelector(
     (jobsCount) => {
         const maxJobCount = 200;
         return {visible: jobsCount > 0 && jobsCount <= maxJobCount, maxJobCount};
+    },
+);
+
+export const getOperationPerformanceUrlTemplate = createSelector(
+    [getOperationId, getClusterUiConfig],
+    (operationId, uiConfig) => {
+        const operationPerformanceUrlTemplate = uiConfig?.operation_performance_url_template;
+
+        if (!operationPerformanceUrlTemplate) return undefined;
+
+        return {
+            url: formatByParams(operationPerformanceUrlTemplate.url_template, {
+                operation_id: operationId,
+            }),
+            title: operationPerformanceUrlTemplate.title,
+        };
     },
 );

@@ -35,6 +35,10 @@ export interface ClusterUiConfig {
         url_template: string;
         enforce_for_trees?: Array<string>;
     };
+    operation_performance_url_template?: {
+        title: string;
+        url_template: string;
+    };
 }
 
 export type CypressNodeRaw<AttributesT extends Record<string, unknown>, ValueT> =
