@@ -287,8 +287,13 @@ export class PathEditor extends Component<PathEditorProps, PathEditorState> {
     };
 
     renderInput() {
-        const {placeholder, autoFocus, hasClear, disabled} = this.props;
+        const {placeholder, hasClear, disabled} = this.props;
         const {path} = this.state;
+
+        // We don't want to use TextInput autoFocus property
+        // Because then handleInputFocus() will be called before componentDidMount()
+        // which will lead to broken hotkeys-js scope - it's will always stay 'path-editor'.
+        const autoFocus = false;
 
         return (
             <TextInput
