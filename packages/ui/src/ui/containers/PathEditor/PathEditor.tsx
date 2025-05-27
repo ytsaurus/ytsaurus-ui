@@ -115,6 +115,7 @@ export class PathEditor extends Component<PathEditorProps, PathEditorState> {
     private suggestionsList = React.createRef<HTMLDivElement>();
     private input = React.createRef<HTMLInputElement>();
     private prevScope = '';
+    private mounted = false;
 
     constructor(props: PathEditorProps) {
         super(props);
@@ -131,6 +132,7 @@ export class PathEditor extends Component<PathEditorProps, PathEditorState> {
     }
 
     componentDidMount() {
+        this.mounted = true;
         const {loadSuggestionsList, customFilter, autoFocus} = this.props;
         const {path} = this.state;
 
@@ -209,6 +211,12 @@ export class PathEditor extends Component<PathEditorProps, PathEditorState> {
     };
 
     handleInputFocus = (e: FocusEvent<HTMLInputElement>) => {
+        if (!this.mounted) {
+            // We need this return because handleInputFocus() could be called before
+            // componentDidMount() which will lead to broken hotkeys-js scope - it's will always
+            // stuck with 'path-editor' scope.
+            return;
+        }
         const {onFocus} = this.props;
         const {path} = this.state;
 
