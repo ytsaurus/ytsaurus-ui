@@ -231,7 +231,7 @@ module.exports = {
     },
     flowExecute: {
         name: 'flow_execute',
-        method: 'POST',
+        method: 'PUT',
         dataType: 'json',
     },
 
