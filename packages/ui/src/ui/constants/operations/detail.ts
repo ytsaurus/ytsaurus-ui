@@ -17,6 +17,7 @@ export const Tab = {
     JOB_SIZES: 'job_sizes',
     PARTITION_SIZES: 'partition_sizes',
     MONITOR: 'monitor',
+    PERFORMANCE: 'performance',
 } as const;
 
 export type OperationTabType = ValueOf<typeof Tab>;

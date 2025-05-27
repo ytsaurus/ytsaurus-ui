@@ -46,6 +46,7 @@ import {Page} from '../../../constants/index';
 import {
     getOperationDetailsLoadingStatus,
     getOperationErasedTrees,
+    getOperationPerformanceUrlTemplate,
 } from '../../../store/selectors/operations/operation';
 
 import {useAppRumMeasureStart} from '../../../rum/rum-app-measures';
@@ -237,6 +238,7 @@ class OperationDetail extends React.Component<ReduxProps & RouteProps> {
             monitorTabVisible,
             monitorTabTitle,
             monitorTabUrlTemplate,
+            operationPerformanceUrlTemplate,
         } = this.props;
         const path = `/${cluster}/${Page.OPERATIONS}/${operationId}`;
 
@@ -245,6 +247,13 @@ class OperationDetail extends React.Component<ReduxProps & RouteProps> {
             [Tab.STATISTICS]: {show: hasStatististicsTab},
             [Tab.JOBS_MONITOR]: {show: jobsMonitorVisible || activeTab === Tab.JOBS_MONITOR},
             [Tab.MONITOR]: {show: monitorTabVisible},
+            [Tab.PERFORMANCE]: {
+                show: Boolean(operationPerformanceUrlTemplate),
+                external: true,
+                url: operationPerformanceUrlTemplate?.url,
+                title: operationPerformanceUrlTemplate?.title,
+                routed: false,
+            },
         };
 
         if (monitorTabUrlTemplate) {
@@ -422,6 +431,7 @@ const mapStateToProps = (state: RootState) => {
         jobsMonitorIsSupported: Boolean(UIFactory.getMonitorComponentForJob()),
         jobsMonitorVisible: getJobsMonitorTabVisible(state),
         hasStatististicsTab: getOperationStatiscsHasData(state),
+        operationPerformanceUrlTemplate: getOperationPerformanceUrlTemplate(state),
     };
 };
 
