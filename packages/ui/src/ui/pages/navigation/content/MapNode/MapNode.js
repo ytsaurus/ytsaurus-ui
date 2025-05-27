@@ -61,6 +61,7 @@ import {openCreateACOModal} from '../../../../store/actions/navigation/modals/cr
 import NavigationExtraActions from '../../../../containers/NavigationExtraActions/NavigationExtraActions';
 import UIFactory from '../../../../UIFactory';
 import {getCluster} from '../../../../store/selectors/global';
+import {UploadFileManagerWithClose} from '../../../../components/UploadFileManager';
 
 import './MapNode.scss';
 
@@ -194,6 +195,7 @@ export default function MapNodeWithRum() {
 
 class MapNodeToolbar extends React.PureComponent {
     uploadXlsRef = React.createRef();
+    uploadFileRef = React.createRef();
 
     createDirectoryButtonClick = () => {
         const {path, openEditingPopup} = this.props;
@@ -208,6 +210,12 @@ class MapNodeToolbar extends React.PureComponent {
     uploadTableButtonClick = () => {
         if (this.uploadXlsRef.current) {
             this.uploadXlsRef.current.handleShow();
+        }
+    };
+
+    uploadFileButtonClick = () => {
+        if (this.uploadFileRef.current) {
+            this.uploadFileRef.current.handleShow();
         }
     };
 
@@ -268,6 +276,11 @@ class MapNodeToolbar extends React.PureComponent {
                 action: this.createACOButtonClick,
                 text: <NoWrap>ACO</NoWrap>,
                 icon: <Icon awesome={'acl-object'} />,
+            },
+            {
+                action: this.uploadFileButtonClick,
+                text: <NoWrap>Upload file</NoWrap>,
+                icon: <Icon awesome={'upload'} />,
             },
         ]);
 
@@ -342,6 +355,7 @@ class MapNodeToolbar extends React.PureComponent {
                     <NodesTypes />
                 </div>
                 <UploadManagerCreate ref={this.uploadXlsRef} />
+                <UploadFileManagerWithClose ref={this.uploadFileRef} title={'Upload file'} />
                 {renderModals()}
             </div>
         );
