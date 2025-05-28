@@ -30,9 +30,8 @@ import AccountsUsageTab from '../tabs/detailed-usage/AccountUsageTab';
 import {useAppRumMeasureStart} from '../../../rum/rum-app-measures';
 import {useRumMeasureStop} from '../../../rum/RumUiContext';
 import {RumMeasureTypes} from '../../../rum/rum-measure-types';
-import {getCluster} from '../../../store/selectors/global';
+import {getAccountsUsageBaseUrl, getCluster} from '../../../store/selectors/global';
 import AccountsUpdater from './AccountsUpdater';
-import {getAccountsUsageBasePath} from '../../../config';
 import {RootState} from '../../../store/reducers';
 
 import './Accounts.scss';
@@ -154,7 +153,7 @@ const mapStateToProps = (state: RootState) => {
     return {
         lastVisitedTab: lastVisitedTabs[Page.ACCOUNTS],
         activeAccount: getActiveAccount(state),
-        allowUsageTab: Boolean(getAccountsUsageBasePath()),
+        allowUsageTab: Boolean(getAccountsUsageBaseUrl(state)),
         cluster: getCluster(state),
     };
 };

@@ -8,7 +8,7 @@ import {
     AccountUsageListDiffDataParams,
     AccountsUsageDiffDataResponse,
 } from '../../../store/reducers/accounts/usage/accounts-usage-list-diff';
-import {accountUsageApiUrl, getFilterParameters, normalizeTimestamp} from './account-usage';
+import {getFilterParameters, normalizeTimestamp} from './account-usage';
 import {
     ACCOUNTS_USAGE_LIST_DIFF_FAILED,
     ACCOUNTS_USAGE_LIST_DIFF_REQUEST,
@@ -29,6 +29,7 @@ import {
     AccountUsageTreeDiffData,
 } from '../../reducers/accounts/usage/accounts-usage-tree-diff';
 import {AccountUsageData} from '../../reducers/accounts/usage/account-usage-types';
+import {getAccountsUsageBaseUrl} from '../../selectors/global';
 
 type UsageListThunkAction = ThunkAction<any, RootState, any, AccountUsageListDiffAction>;
 
@@ -50,6 +51,7 @@ export function fetchAccountUsageListDiff(): UsageListThunkAction {
         const state = getState();
 
         const timestamps = getFilterFromToTimestamps(state);
+        const accountsUsageBaseUrl = getAccountsUsageBaseUrl(state);
 
         if (!timestamps) {
             return;
@@ -69,7 +71,7 @@ export function fetchAccountUsageListDiff(): UsageListThunkAction {
         return axios
             .request<AccountsUsageDiffDataResponse>({
                 method: 'POST',
-                url: accountUsageApiUrl('get-resource-usage-diff'),
+                url: accountsUsageBaseUrl + 'get-resource-usage-diff',
                 data: requestParams,
                 withCredentials: true,
             })
@@ -105,6 +107,7 @@ export function fetchAccountUsageTreeDiff(): UsageTreeThunkAction {
         const state = getState();
 
         const timestamps = getFilterFromToTimestamps(state);
+        const accountsUsageBaseUrl = getAccountsUsageBaseUrl(state);
 
         if (!timestamps) {
             return;
@@ -128,7 +131,7 @@ export function fetchAccountUsageTreeDiff(): UsageTreeThunkAction {
         return axios
             .request<AccountUsageData>({
                 method: 'POST',
-                url: accountUsageApiUrl('get-children-and-resource-usage-diff'),
+                url: accountsUsageBaseUrl + 'get-children-and-resource-usage-diff',
                 data: requestParams,
                 withCredentials: true,
             })
