@@ -17,12 +17,13 @@ import {getNodesAndAges} from './helpers/getNodesAndAges';
 import {NodeBlock} from './canvas/NodeBlock';
 import {selectConnectionsByBlockId} from '@gravity-ui/graph/build/store/connection/selectors';
 import cn from 'bem-cn-lite';
-import './Graph.scss';
+import './QueriesGraph.scss';
 
 const BLOCK_SIDE = 100;
+
 const blockSize = {height: BLOCK_SIDE, width: BLOCK_SIDE};
 
-const b = cn('yt-graph');
+const b = cn('yt-queries-graph');
 
 type Props = {
     processedGraph: ProcessedGraph;
