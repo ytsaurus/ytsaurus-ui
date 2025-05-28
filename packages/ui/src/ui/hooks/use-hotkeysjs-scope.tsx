@@ -15,3 +15,9 @@ export function useHotkeysScope(scope: string, visible: boolean) {
         };
     }, [scope, visible]);
 }
+
+export function UseHotkeysScope({visible, scope}: {visible: boolean; scope: string}) {
+    useHotkeysScope(scope, visible);
+
+    return null;
+}

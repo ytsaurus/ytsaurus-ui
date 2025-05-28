@@ -2,7 +2,6 @@ import React, {Component, FocusEvent, Key, KeyboardEvent, MouseEvent} from 'reac
 import {connect} from 'react-redux';
 import ReactList from 'react-list';
 import block from 'bem-cn-lite';
-import key from 'hotkeys-js';
 
 import debounce_ from 'lodash/debounce';
 import find_ from 'lodash/find';
@@ -28,6 +27,7 @@ import {
 } from '../../store/actions/navigation/path-editor/path-editor';
 import {RootState} from '../../store/reducers';
 import {KeyCode} from '../../constants/index';
+import {UseHotkeysScope} from '../../hooks/use-hotkeysjs-scope';
 
 import './PathEditor.scss';
 
@@ -114,7 +114,6 @@ export class PathEditor extends Component<PathEditorProps, PathEditorState> {
 
     private suggestionsList = React.createRef<HTMLDivElement>();
     private input = React.createRef<HTMLInputElement>();
-    private prevScope = '';
 
     constructor(props: PathEditorProps) {
         super(props);
@@ -134,7 +133,6 @@ export class PathEditor extends Component<PathEditorProps, PathEditorState> {
         const {loadSuggestionsList, customFilter, autoFocus} = this.props;
         const {path} = this.state;
 
-        this.prevScope = key.getScope();
         if (path) {
             loadSuggestionsList(path, customFilter);
         }
@@ -212,7 +210,6 @@ export class PathEditor extends Component<PathEditorProps, PathEditorState> {
         const {onFocus} = this.props;
         const {path} = this.state;
 
-        key.setScope('path-editor');
         this.setState({inputFocus: true});
         onFocus?.(e, {path});
     };
@@ -221,7 +218,6 @@ export class PathEditor extends Component<PathEditorProps, PathEditorState> {
         const {onBlur} = this.props;
         const {path} = this.state;
 
-        key.setScope(this.prevScope);
         this.hideSuggestions();
         this.callCallback(onBlur, path);
     };
@@ -396,6 +392,7 @@ export class PathEditor extends Component<PathEditorProps, PathEditorState> {
             <div className={b(null, this.props.className)}>
                 {this.renderInput()}
                 {this.renderPopup()}
+                <UseHotkeysScope scope={'path-editor'} visible={this.state.inputFocus} />
             </div>
         );
     }
