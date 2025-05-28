@@ -8,6 +8,10 @@
     word-break: break-word;
 }
 
-.gn-composite-bar-item__icon {
+.gn-composite-bar_autosizer .gn-composite-bar-item__icon {
     color: var(--gn-aside-header-item-icon-color, var(--_--item-icon-color));
+}
+
+.gn-collapse-button .gn-collapse-button__icon {
+    color: var(--g-color-text-secondary);
 }
