@@ -8,6 +8,8 @@ import {getSchedulingPoolsMapByName} from './scheduling-pools';
 export const getSchedulingAbcFilter = (state: RootState) =>
     state.scheduling.scheduling.abcServiceFilter;
 
+export const getOperationRefId = (state: RootState) => state.scheduling.scheduling.operationRefId;
+
 export const getSchedulingAttributesToFilter = (state: RootState) =>
     state.scheduling.scheduling.attributesToFilter;
 export const getSchedulingAttributesToFilterParams = (state: RootState) =>

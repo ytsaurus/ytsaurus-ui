@@ -26,6 +26,7 @@ const renderButton = (onEdit?: () => void, detachable?: boolean) => {
 };
 
 export type OperationPoolProps = {
+    operationRefId?: string;
     className?: string;
     cluster: string;
     allowDetachEditBtn?: boolean;
@@ -43,6 +44,7 @@ export type OperationPoolProps = {
 };
 
 export function OperationPool({
+    operationRefId,
     className,
     cluster,
     allowDetachEditBtn,
@@ -52,7 +54,9 @@ export function OperationPool({
     state,
     erased,
 }: OperationPoolProps) {
-    const url = `/${cluster}/${Page.SCHEDULING}/${Tab.OVERVIEW}?pool=${pool.pool}&tree=${pool.tree}`;
+    const url =
+        `/${cluster}/${Page.SCHEDULING}/${Tab.OVERVIEW}?pool=${pool.pool}&tree=${pool.tree}` +
+        (operationRefId ? `&operation_ref=${operationRefId}` : '');
     const isCorrectState = state !== 'completed' && state !== 'failed' && state !== 'aborted';
     const title = `${pool.pool} [${pool.tree}]`;
     const {isEphemeral, isLightweight} = pool;

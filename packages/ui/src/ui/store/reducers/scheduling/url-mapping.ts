@@ -51,6 +51,10 @@ export const schedulingOverviewParams = {
             id: parseSerializeNumber,
         }),
     },
+    operation_ref: {
+        stateKey: 'scheduling.scheduling.operationRefId',
+        initialState: schedulingInitialState.operationRefId,
+    },
 };
 
 export function getSchedulingOverviewPreparedState(state: RootState, {query}: {query: RootState}) {
@@ -65,6 +69,11 @@ export function getSchedulingOverviewPreparedState(state: RootState, {query}: {q
             draft.tables,
             SCHEDULING_POOL_TREE_TABLE_ID,
             query.tables[SCHEDULING_POOL_TREE_TABLE_ID],
+        );
+        updateIfChanged(
+            draft.scheduling.scheduling,
+            'operationRefId',
+            query.scheduling.scheduling.operationRefId,
         );
     });
 }

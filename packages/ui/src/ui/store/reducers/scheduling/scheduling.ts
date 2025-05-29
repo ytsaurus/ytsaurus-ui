@@ -72,6 +72,7 @@ export interface SchedulingPersistentState {
         id?: number;
     };
     monitorChartStatus: {};
+    operationRefId?: string;
 }
 
 const ephemeralState: SchedulingEphemeralState = {

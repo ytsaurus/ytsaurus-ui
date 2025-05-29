@@ -28,6 +28,7 @@ export default class ElementsTableRow extends React.PureComponent {
         cssHover: PropTypes.bool.isRequired,
         onItemSelect: PropTypes.func,
         rowClassName: PropTypes.func,
+        highlighted: PropTypes.bool,
     };
 
     componentDidUpdate() {
@@ -90,6 +91,7 @@ export default class ElementsTableRow extends React.PureComponent {
             onItemHover,
             cssHover,
             onMouseMove,
+            highlighted,
             rowClassName: classNameFn,
         } = this.props;
 
@@ -97,11 +99,13 @@ export default class ElementsTableRow extends React.PureComponent {
         const rowClassName = block(ELEMENTS_TABLE)(
             'row',
             {
+                highlighted: highlighted ? 'yes' : undefined,
                 selected: selected ? 'yes' : undefined,
                 hover: cssHover ? 'yes' : undefined,
             },
             [this.getItemMods(item, index), extraClassName].filter(Boolean).join(' '),
         );
+
         const rowStyle = {height: itemHeight};
 
         const cells = [];
