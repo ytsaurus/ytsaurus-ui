@@ -1,5 +1,23 @@
 # Changelog
 
+## [1.93.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.92.0...ui-v1.93.0) (2025-05-29)
+
+
+### Features
+
+* **Operations/Detail:** add special statuses for gpu vanilla operations [YTFRONT-4943] ([a4a6a40](https://github.com/ytsaurus/ytsaurus-ui/commit/a4a6a40796058c658cedf200700788612763f81f))
+* **Operations:** add performance analysis system link [YTFRONT-4924] ([1bd2b69](https://github.com/ytsaurus/ytsaurus-ui/commit/1bd2b69ca71b8538504ce33b469d9c905e784410))
+* **Operations:** change runtime meta data [YTFRONT-4940] ([db63474](https://github.com/ytsaurus/ytsaurus-ui/commit/db63474a5e160f2fb2207f9cb61c0c4d3c4f3cf7))
+* **Queries/Monaco:** scroll editor to selected line [YTFRONT-4915] ([9a747aa](https://github.com/ytsaurus/ytsaurus-ui/commit/9a747aae7241ad742988c54b1b645b4c3b93d1ba))
+* **UIFactory/Query:** add chat [YTFRONT-4813] ([757de1f](https://github.com/ytsaurus/ytsaurus-ui/commit/757de1fbbe45a0381be13e70e1ba8efe0530f1be))
+* **VCS:** remember user last choice [YTFRONT-4504] ([d253b09](https://github.com/ytsaurus/ytsaurus-ui/commit/d253b096391acb94700069dc09b6c8d00145cd3a))
+
+
+### Bug Fixes
+
+* color reassign ([aba8a7f](https://github.com/ytsaurus/ytsaurus-ui/commit/aba8a7fffd534817cbe809b1d80f24aca163b378))
+* PathEditor component will not corrupt hotkeys scope anymore [[#1160](https://github.com/ytsaurus/ytsaurus-ui/issues/1160)] ([cfd7a74](https://github.com/ytsaurus/ytsaurus-ui/commit/cfd7a740ee69a41309185b567df8747c05910386))
+
 ## [1.92.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.91.3...ui-v1.92.0) (2025-05-26)
 
 
