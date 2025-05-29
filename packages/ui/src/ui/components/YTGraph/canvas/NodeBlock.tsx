@@ -1,18 +1,15 @@
-import {CanvasBlock, ECameraScaleLevel, TBlock} from '@gravity-ui/graph';
-import {type NodeDetails, NodeProgress} from '../../models/plan';
+import {CanvasBlock, TBlock} from '@gravity-ui/graph';
 import {GRAPH_COLORS} from '../constants';
-import {OperationSchemas} from '../../utils';
 
 const DEFAULT_CONTENT_OFFSET = 10;
 const DEFAULT_ICON_OFFSET = 20;
 
-const JOB_COUNTER_FONT_SIZE = 18;
-const JOB_COUNTER_PADDING = 10;
-const JOB_COUNTER_BLOCK_HEIGHT = 30;
-const JOB_COUNTER_RADIUS = 4;
+const COUNTER_FONT_SIZE = 18;
+const COUNTER_PADDING = 10;
+const COUNTER_BLOCK_HEIGHT = 30;
+const COUNTER_RADIUS = 4;
 
-export type NodeBlockMeta = {
-    level: ECameraScaleLevel;
+export type BaseMeta = {
     icon: {
         src: string;
         height: number;
@@ -21,12 +18,15 @@ export type NodeBlockMeta = {
     bottomText?: string;
     textSize: number;
     padding?: number;
-    nodeProgress?: NodeProgress;
-    schemas?: OperationSchemas;
-    details?: NodeDetails;
+    nodeProgress?: {
+        state?: 'Finished' | 'Started' | 'InProgress' | string;
+        total?: number;
+        completed?: number;
+        aborted?: number;
+    };
 };
 
-export type NodeTBlock = Omit<TBlock, 'meta'> & {meta: NodeBlockMeta};
+export type NodeTBlock<T extends BaseMeta> = Omit<TBlock, 'meta'> & {meta: T};
 
 type RoundedBlockProps = {
     x: number;
@@ -51,7 +51,7 @@ type RoundedBlockProps = {
 
 const MAX_TEXT_LENGTH = 16;
 
-export class NodeBlock extends CanvasBlock<NodeTBlock> {
+export class NodeBlock<T extends NodeTBlock<BaseMeta>> extends CanvasBlock<T> {
     icon: null | HTMLImageElement = null;
 
     override renderMinimalisticBlock() {
@@ -200,21 +200,21 @@ export class NodeBlock extends CanvasBlock<NodeTBlock> {
         const total = nodeProgress.total + (nodeProgress.aborted || 0);
         const {x, y} = this.state;
 
-        this.context.ctx.font = this.getFont(JOB_COUNTER_FONT_SIZE);
+        this.context.ctx.font = this.getFont(COUNTER_FONT_SIZE);
         const textMetrics = this.context.ctx.measureText(total.toString());
         const textHeight =
             textMetrics.actualBoundingBoxAscent + textMetrics.actualBoundingBoxDescent;
-        const blockWidth = textMetrics.width + JOB_COUNTER_PADDING * 2;
+        const blockWidth = textMetrics.width + COUNTER_PADDING * 2;
         const blockX = x - blockWidth / 2;
-        const blockY = y - JOB_COUNTER_BLOCK_HEIGHT / 2;
+        const blockY = y - COUNTER_BLOCK_HEIGHT / 2;
 
         this.context.ctx.beginPath();
         this.context.ctx.roundRect(
             blockX,
             blockY,
             blockWidth,
-            JOB_COUNTER_BLOCK_HEIGHT,
-            JOB_COUNTER_RADIUS,
+            COUNTER_BLOCK_HEIGHT,
+            COUNTER_RADIUS,
         );
         this.context.ctx.closePath();
         this.context.ctx.fillStyle = GRAPH_COLORS.jobBlockBackground;

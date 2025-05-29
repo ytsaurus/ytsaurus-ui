@@ -1,0 +1,7 @@
+.yt-graph {
+    &__graph {
+        canvas.layer:nth-child(-n + 2) {
+            background: var(--main-background);
+        }
+    }
+}

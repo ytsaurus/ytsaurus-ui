@@ -3,7 +3,7 @@ import ResizeObserver from 'resize-observer-polyfill';
 import debounce_ from 'lodash/debounce';
 
 interface Props {
-    element?: Element;
+    element?: Element | null;
     onResize: ResizeObserverCallback;
     debounceMs?: number;
 }
