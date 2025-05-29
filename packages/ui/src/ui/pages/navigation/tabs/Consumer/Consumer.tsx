@@ -1,7 +1,6 @@
 import React, {ComponentType, useEffect} from 'react';
 import {ConnectedProps, connect} from 'react-redux';
 
-import {YTErrorBlock} from '../../../../components/Block/Block';
 import ErrorBoundary from '../../../../components/ErrorBoundary/ErrorBoundary';
 import WithStickyToolbar from '../../../../components/WithStickyToolbar/WithStickyToolbar';
 import {Toolbar} from '../../../../components/WithStickyToolbar/Toolbar/Toolbar';
@@ -16,6 +15,8 @@ import {
     getReadRowCountRate,
     getStatusError,
 } from '../../../../store/selectors/navigation/tabs/consumer';
+
+import {QueueError} from '../Queue/QueueError';
 
 import TargetQueue from './TargetQueue/TargetQueue';
 import Meta from './Meta/Meta';
@@ -54,7 +55,7 @@ const Consumer: React.VFC<PropsFromRedux> = ({
     const {ExtraControls, View} = useViewByMode(consumerMode);
 
     if (statusError) {
-        return <YTErrorBlock error={statusError} topMargin="none" />;
+        return <QueueError error={statusError} topMargin="none" />;
     }
 
     return (

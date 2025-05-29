@@ -12,6 +12,7 @@ type Props = {
     items: Array<React.ReactElement<HTMLLIElement>>;
     renderToggler: () => React.ReactNode;
     useFlex?: boolean;
+    itemsCount?: number;
 };
 
 function CollapsibleList({className, useFlex, items, renderToggler}: Props) {

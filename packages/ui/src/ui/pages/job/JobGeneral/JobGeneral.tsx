@@ -34,6 +34,7 @@ import ClipboardButton from '../../../components/ClipboardButton/ClipboardButton
 import {getCluster, getClusterUiConfig} from '../../../store/selectors/global';
 import UIFactory from '../../../UIFactory';
 import {StaleJobIcon} from '../../../pages/operations/OperationDetail/tabs/Jobs/StaleJobIcon';
+import {Host} from '../../../containers/Host/Host';
 
 import './JobGeneral.scss';
 import {UI_TAB_SIZE} from '../../../constants/global';
@@ -142,12 +143,13 @@ export default function JobGeneral() {
                                 key: 'host',
                                 value: (
                                     <span className={block('meta-host')}>
-                                        <Template.Id id={address?.split(':')[0]} />
+                                        <Host address={address!} />
                                         <ChartLink
                                             url={UIFactory.makeUrlForNodeIO(cluster, address)}
                                         />
                                     </span>
                                 ),
+                                visible: Boolean(address),
                             },
                             {
                                 key: 'type',

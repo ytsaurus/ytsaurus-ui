@@ -220,8 +220,11 @@ class OperationDetail extends React.Component<ReduxProps & RouteProps> {
     }
 
     renderOverview() {
-        const {operation, cluster, totalJobWallTime, cpuTimeSpent, erasedTrees} = this.props;
+        const {operation, cluster, totalJobWallTime, cpuTimeSpent, erasedTrees, isGpuOperation} =
+            this.props;
         const {$value, user = '', type, startTime, finishTime, duration, pools, state} = operation;
+
+        const isGpuVanillaOperation = isGpuOperation && type === 'vanilla';
 
         const items = [
             [
@@ -257,10 +260,12 @@ class OperationDetail extends React.Component<ReduxProps & RouteProps> {
                 {
                     key: 'total job wall time',
                     value: <Template.Time time={totalJobWallTime} valueFormat="TimeDuration" />,
+                    visible: !isGpuVanillaOperation,
                 },
                 {
                     key: 'total cpu time spent',
                     value: <Template.Time time={cpuTimeSpent} valueFormat="TimeDuration" />,
+                    visible: !isGpuVanillaOperation,
                 },
             ],
         ];

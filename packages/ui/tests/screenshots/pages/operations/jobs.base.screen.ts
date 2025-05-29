@@ -19,6 +19,7 @@ test('Job - Details', async ({page}) => {
         replaceInnerHtml(page, {
             '.operation-detail__events-progress-percentage': 'X.X1X%',
             '.operation-detail__events-progress .g-progress': '',
+            '.yt-host a': 'localhost',
         });
 
         await replaceInnerHtmlForDateTime(page, [
