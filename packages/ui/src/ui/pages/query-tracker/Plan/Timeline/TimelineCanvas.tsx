@@ -16,7 +16,7 @@ import {
     yaTimelineConfig,
 } from '../../../../packages/ya-timeline';
 import {YEAR} from '../../../../packages/ya-timeline/definitions';
-import {getCSSPropertyValue} from '../styles';
+import {getCSSPropertyValue} from '../../../../utils/get-css-color';
 
 import {OperationRenderer} from './OperationRenderer';
 

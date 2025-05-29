@@ -15,7 +15,7 @@ import {ProcessedGraph, ProcessedNode, preprocess, updateProgress} from './utils
 import Timeline from './Timeline/Timeline';
 
 import './Plan.scss';
-import {GraphLazy} from './GraphEditor';
+import {QueriesGraphLazy} from './GraphEditor';
 import {useSelector} from 'react-redux';
 import {getSettingsQueryTrackerNewGraphType} from '../../../store/selectors/settings/settings-ts';
 
@@ -50,7 +50,7 @@ export default React.memo(function Plan({isActive, className, prepareNode}: Plan
                     ) : (
                         <>
                             {newGraphType ? (
-                                <GraphLazy processedGraph={graph} />
+                                <QueriesGraphLazy processedGraph={graph} />
                             ) : (
                                 <Graph
                                     isActive={isActive && planView === 'graph'}

@@ -1,6 +1,6 @@
 import {ProcessedGraph} from '../../utils';
 import {ECameraScaleLevel, TBlockId} from '@gravity-ui/graph';
-import {NodeTBlock} from '../canvas/NodeBlock';
+import {QueriesNodeBlock} from '../QueriesNodeBlock';
 import type {Progress} from '../../models/plan';
 import {OperationType} from '../enums';
 import {iconToBase} from './iconToBase';
@@ -21,7 +21,7 @@ export const createBlocks = async (
     },
     level: ECameraScaleLevel,
     sizes: {height: number; width: number},
-): Promise<{blocks: NodeTBlock[]; connections: TMultipointConnection[]}> => {
+): Promise<{blocks: QueriesNodeBlock[]; connections: TMultipointConnection[]}> => {
     const isMinimalisticView = level === ECameraScaleLevel.Minimalistic;
 
     if (Object.keys(positions.blocks).length === 0) return {blocks: [], connections: []};

@@ -1,41 +1,55 @@
-import {HookGraphParams, MultipointConnection} from '@gravity-ui/graph';
-import {getColor} from './helpers/getColor';
-import {NodeBlock} from './canvas/NodeBlock';
+import React from 'react';
+
 import {ElkExtendedEdge} from 'elkjs/lib/elk-api';
+import {CanvasBlock, HookGraphParams, MultipointConnection} from '@gravity-ui/graph';
 import {RecursivePartial} from '@gravity-ui/graph/build/utils/types/helpers';
 import {TGraphColors} from '@gravity-ui/graph/build/graphConfig';
+
+import {getCssColor} from '../../utils/get-css-color';
+import {BaseMeta, NodeBlock, NodeTBlock} from './canvas/NodeBlock';
 
 export const getGraphColors = (): RecursivePartial<TGraphColors> => {
     return {
         connection: {
-            background: getColor('--yql-graph-color-edge'),
-            selectedBackground: getColor('--yql-graph-color-edge-highlight'),
+            background: getCssColor('--yql-graph-color-edge'),
+            selectedBackground: getCssColor('--yql-graph-color-edge-highlight'),
         },
         block: {
-            background: getColor('--g-color-base-generic-ultralight'),
-            selectedBorder: getColor('--yql-graph-color-edge-highlight'),
-            border: getColor('--yql-graph-color-edge'),
-            text: getColor('--yql-graph-color-text-label'),
+            background: getCssColor('--g-color-base-generic-ultralight'),
+            selectedBorder: getCssColor('--yql-graph-color-edge-highlight'),
+            border: getCssColor('--yql-graph-color-edge'),
+            text: getCssColor('--yql-graph-color-text-label'),
         },
     };
 };
 
-export const config: HookGraphParams = {
-    settings: {
-        connection: MultipointConnection,
-        canDuplicateBlocks: false,
-        canCreateNewConnections: false,
-        canZoomCamera: true,
-        blockComponents: {
-            block: NodeBlock,
-        },
-    },
-    viewConfiguration: {
-        colors: {
-            ...getGraphColors(),
-        },
-    },
-};
+export function useConfig<T extends NodeTBlock<BaseMeta>>(
+    block?: typeof CanvasBlock<T>,
+): {config: HookGraphParams; isBlock: (v: unknown) => v is CanvasBlock<T>} {
+    return React.useMemo(() => {
+        const b = block ?? NodeBlock;
+        const config = {
+            settings: {
+                connection: MultipointConnection,
+                canDuplicateBlocks: false,
+                canCreateNewConnections: false,
+                canZoomCamera: true,
+                blockComponents: {block: b},
+            },
+            viewConfiguration: {
+                colors: {
+                    ...getGraphColors(),
+                },
+            },
+        };
+        return {
+            config,
+            isBlock: (v: unknown) => {
+                return v instanceof b;
+            },
+        };
+    }, [block]);
+}
 
 export const getElkConfig = (
     children: {id: string; level: number}[],

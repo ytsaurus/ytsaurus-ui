@@ -1,12 +1,12 @@
 import React, {FC, useMemo} from 'react';
 import {Flex, Text} from '@gravity-ui/uikit';
 import {OperationContent} from './OperationContent';
-import {NodeTBlock} from '../canvas/NodeBlock';
+import {QueriesNodeBlock} from '../QueriesNodeBlock';
 import {OperationType} from '../enums';
 import {DetailBlockTitle} from './DetailBlockTitle';
 
 type Props = {
-    block: NodeTBlock;
+    block: QueriesNodeBlock;
 };
 
 export const DetailBlockHeader: FC<Props> = ({

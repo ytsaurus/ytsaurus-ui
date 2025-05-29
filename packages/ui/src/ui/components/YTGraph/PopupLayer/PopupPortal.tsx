@@ -1,10 +1,13 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {createPortal} from 'react-dom';
-import {Graph} from '@gravity-ui/graph';
+import {Graph, TBlock} from '@gravity-ui/graph';
 import {PopupLayer} from './PopupLayer';
-import {HoverPopup} from './HoverPopup';
+import {HoverPopup, HoverPopupProps} from './HoverPopup';
 
-export function PopupPortal({graph}: {graph?: Graph | null}) {
+export function PopupPortal<B extends TBlock>({
+    graph,
+    ...rest
+}: {graph?: Graph | null} & Omit<HoverPopupProps<B>, 'graph'>) {
     const [ready, setReady] = useState(false);
     const layerRef = useRef<PopupLayer | null>(null);
 
@@ -18,6 +21,6 @@ export function PopupPortal({graph}: {graph?: Graph | null}) {
     }, [graph]);
 
     return graph && ready && layerRef.current
-        ? createPortal(<HoverPopup graph={graph} />, layerRef.current.getHTML())
+        ? createPortal(<HoverPopup {...rest} graph={graph} />, layerRef.current.getHTML())
         : null;
 }

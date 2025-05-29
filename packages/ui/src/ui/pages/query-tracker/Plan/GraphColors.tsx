@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import {useThemeValue} from '@gravity-ui/uikit';
 import isEqual_ from 'lodash/isEqual';
-import {getCSSPropertyValue, getHEXColor} from './styles';
+import {getCSSPropertyValue, getHEXColor} from '../../../utils/get-css-color';
 
 export type GraphColors = ReturnType<typeof getGraphColors>;
 const GraphColorsContext = React.createContext<GraphColors | undefined>(undefined);

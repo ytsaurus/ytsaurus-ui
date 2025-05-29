@@ -1,21 +1,27 @@
-import React, {FC, MouseEvent, useRef} from 'react';
-import {Graph} from '@gravity-ui/graph';
-import {Popup} from '@gravity-ui/uikit';
-import {useHoverBlock} from '../hooks/useHoverBlock';
-import './Popup.scss';
-import './HoverPopup.scss';
+import React, {MouseEvent, useRef} from 'react';
 import cn from 'bem-cn-lite';
-import {DetailBlock} from '../DetailBlock';
 
-type Props = {
+import {CanvasBlock, Graph, TBlock} from '@gravity-ui/graph';
+import {Popup} from '@gravity-ui/uikit';
+
+import {useHoverBlock} from '../hooks/useHoverBlock';
+import './HoverPopup.scss';
+
+export type HoverPopupProps<B extends TBlock> = {
     graph: Graph;
+    renderContent: (props: {data: B}) => React.ReactNode;
+    isBlockNode: (node: unknown) => node is CanvasBlock<B>;
 };
 
 const commonClass = cn('yt-graph-popup');
 
-export const HoverPopup: FC<Props> = ({graph}) => {
+export function HoverPopup<B extends TBlock>({
+    graph,
+    renderContent,
+    isBlockNode,
+}: HoverPopupProps<B>) {
     const containerRef = useRef<HTMLDivElement>(null);
-    const {block, handleClearTimeout} = useHoverBlock(graph, containerRef.current);
+    const {block, handleClearTimeout} = useHoverBlock(graph, containerRef.current, isBlockNode);
 
     const stopPropagation = (e: MouseEvent<HTMLDivElement>) => {
         e.preventDefault();
@@ -36,7 +42,7 @@ export const HoverPopup: FC<Props> = ({graph}) => {
         <>
             <div
                 ref={containerRef}
-                className={commonClass({visible: true}, 'yt-graph-hover-popup')}
+                className={commonClass({visible: true})}
                 style={position}
                 onMouseLeave={stopPropagation}
                 onMouseEnter={stopPropagation}
@@ -49,8 +55,8 @@ export const HoverPopup: FC<Props> = ({graph}) => {
                 anchorRef={containerRef}
                 onMouseEnter={handleClearTimeout}
             >
-                <DetailBlock graph={graph} block={block} />
+                {renderContent({data: block.state})}
             </Popup>
         </>
     );
-};
+}

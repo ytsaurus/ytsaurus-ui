@@ -1,25 +1,21 @@
 import React, {CSSProperties, FC, useMemo, useRef} from 'react';
 import './DetailBlock.scss';
 import cn from 'bem-cn-lite';
-import {NodeBlock} from '../canvas/NodeBlock';
+import {QueriesNodeBlock} from '../QueriesNodeBlock';
 import OperationNodeInfo from '../../OperationNodeInfo';
 import {hasDetailsInfo, hasJobsInfo, hasStagesInfo} from '../../utils';
 import {DetailBlockHeader} from './DetailBlockHeader';
-import {Graph} from '@gravity-ui/graph';
-
 const b = cn('yt-detail-block');
 
 type Props = {
-    block: NodeBlock;
-    graph: Graph;
+    data: QueriesNodeBlock;
     className?: string;
     style?: CSSProperties;
 };
 
-export const DetailBlock: FC<Props> = ({block, className, style}) => {
+export const DetailBlock: FC<Props> = ({data, className, style}) => {
     const detailBlockRef = useRef<HTMLDivElement>(null);
-    const {state} = block;
-    const {nodeProgress, details, schemas} = state.meta;
+    const {nodeProgress, details, schemas} = data.meta;
 
     const showNodeInfo = useMemo(() => {
         return (
@@ -42,7 +38,7 @@ export const DetailBlock: FC<Props> = ({block, className, style}) => {
                 e.stopPropagation();
             }}
         >
-            <DetailBlockHeader block={state} />
+            <DetailBlockHeader block={data} />
             {showNodeInfo && (
                 <OperationNodeInfo
                     progress={nodeProgress || undefined}

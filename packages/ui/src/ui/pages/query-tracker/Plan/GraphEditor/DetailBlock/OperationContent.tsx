@@ -5,7 +5,7 @@ import {JobItem} from './JobItem';
 import cn from 'bem-cn-lite';
 import {Progress, Text} from '@gravity-ui/uikit';
 import {makeJobsScope} from '../helpers/makeJobsScope';
-import {JOBS_COLOR_MAP} from '../constants';
+import {STATE_COLOR_MAP} from '../../../../../components/YTGraph/constants';
 
 const block = cn('yt-graph-operation-content');
 
@@ -29,18 +29,18 @@ export const OperationContent: FC<Props> = ({nodeProgress}) => {
                 </div>
                 <div className={block('jobs')}>
                     <JobItem
-                        color={JOBS_COLOR_MAP.completed}
+                        color={STATE_COLOR_MAP.completed}
                         tooltip="completed"
                         value={nodeProgress.completed}
                     />
-                    <JobItem color={JOBS_COLOR_MAP.pending} tooltip="pending" value={pending} />
+                    <JobItem color={STATE_COLOR_MAP.pending} tooltip="pending" value={pending} />
                     <JobItem
-                        color={JOBS_COLOR_MAP.aborted}
+                        color={STATE_COLOR_MAP.aborted}
                         tooltip="aborted"
                         value={nodeProgress.aborted}
                     />
                     <JobItem
-                        color={JOBS_COLOR_MAP.failed}
+                        color={STATE_COLOR_MAP.failed}
                         tooltip="failed"
                         value={nodeProgress.failed}
                     />
