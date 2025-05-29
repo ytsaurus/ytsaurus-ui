@@ -1,5 +1,5 @@
 import React, {FC} from 'react';
-import {NodeBlockMeta} from '../canvas/NodeBlock';
+import {QueriesBlockMeta} from '../QueriesNodeBlock';
 import cn from 'bem-cn-lite';
 import './DetailBlockTitle.scss';
 import {Button, Icon} from '@gravity-ui/uikit';
@@ -8,7 +8,7 @@ import {ArrowUpRightFromSquare} from '@gravity-ui/icons';
 const block = cn('yt-detailed-block-title');
 
 type Props = {
-    icon: NodeBlockMeta['icon'];
+    icon: QueriesBlockMeta['icon'];
     name: string;
     id?: string;
 };
