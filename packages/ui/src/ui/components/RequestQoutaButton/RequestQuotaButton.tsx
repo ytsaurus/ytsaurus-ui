@@ -1,9 +1,9 @@
 import React from 'react';
-import Button from '../../../components/Button/Button';
-import {getMetrics} from '../../../common/utils/metrics';
-import {openInNewTab} from '../../../utils/utils';
-import {isDocsAllowed} from '../../../config';
-import UIFactory from '../../../UIFactory';
+import Button from '../../components/Button/Button';
+import {getMetrics} from '../../common/utils/metrics';
+import {openInNewTab} from '../../utils/utils';
+import {isDocsAllowed} from '../../config';
+import UIFactory from '../../UIFactory';
 
 interface Props {
     className?: string;
