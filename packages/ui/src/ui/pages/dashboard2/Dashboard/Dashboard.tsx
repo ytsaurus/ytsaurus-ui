@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {Lang, configure} from '@gravity-ui/uikit';
 import {DashKit} from '@gravity-ui/dashkit';
@@ -24,12 +24,6 @@ import {registerPlugins} from './utils/registerPlugins';
 
 configure({lang: Lang.En});
 
-DashKit.setSettings({
-    gridLayout: {
-        margin: [8, 8],
-    },
-});
-
 registerPlugins();
 
 export function Dashboard() {
@@ -38,6 +32,14 @@ export function Dashboard() {
     const editMode = useSelector(getEditMode);
     const config = useSelector(getDashboardConfig);
     const isAdmin = useSelector(isDeveloper);
+
+    useEffect(() => {
+        DashKit.setSettings({
+            gridLayout: {
+                margin: [8, 8],
+            },
+        });
+    }, []);
 
     useDisableMaxContentWidth();
 
