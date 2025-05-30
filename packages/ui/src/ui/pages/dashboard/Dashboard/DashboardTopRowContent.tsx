@@ -2,7 +2,7 @@ import React from 'react';
 import cn from 'bem-cn-lite';
 import {RowWithName} from '../../../containers/AppNavigation/TopRowContent/SectionName';
 import {Page} from '../../../constants';
-import RequestQoutaButton from '../../components/RequestQoutaButton/RequestQuotaButton';
+import RequestQoutaButton from '../../../components/RequestQoutaButton/RequestQuotaButton';
 
 import './DashboardTopRowContent.scss';
 
