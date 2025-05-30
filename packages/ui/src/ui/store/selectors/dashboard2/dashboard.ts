@@ -11,6 +11,8 @@ import {getCluster} from '../../../store/selectors/global';
 
 import {dashboardConfig} from '../../../constants/dashboard2';
 
+import {makeDashboardConfigSettingName} from '../../../utils/dashboard/makeDashboardConfigSettingName';
+
 export const getUsableAccountsResult = (state: RootState) => {
     const selector = accountsApi.endpoints.usableAccounts.select(undefined);
     return selector(state)?.data;
@@ -19,9 +21,10 @@ export const getUsableAccountsResult = (state: RootState) => {
 export const getDashboardConfig = createSelector(
     [getSettingsData, getCluster, getUsableAccountsResult],
     (data, cluster, usableAccounts) => {
+        const settingName = makeDashboardConfigSettingName(cluster);
         // if user setuped his dashboard on current cluster no need to retrun default values
-        if (data[`local::${cluster}::dashboard::config`]?.items?.length) {
-            return data[`local::${cluster}::dashboard::config`];
+        if (data[settingName]?.items?.length) {
+            return data[settingName];
         }
 
         const prevItems = [...dashboardConfig.items.slice(0, 4)];

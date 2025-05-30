@@ -11,6 +11,8 @@ import {getDashboardConfig} from './../../selectors/dashboard2/dashboard';
 
 import {dashboardConfig, defaultDashboardItems} from '../../../constants/dashboard2';
 
+import {makeDashboardConfigSettingName} from '../../../utils/dashboard/makeDashboardConfigSettingName';
+
 export function editConfig(
     type: 'editItem' | 'createItem',
     data: any,
@@ -18,9 +20,11 @@ export function editConfig(
 ): ThunkAction<any, RootState, any, any> {
     return (dispatch, getState) => {
         const state = getState();
-        const cluster = state.global.cluster;
+        const cluster = state.global.cluster || '';
         const config = getDashboardConfig(state);
         const configItems = [...(config?.items || [])];
+
+        const settingName = makeDashboardConfigSettingName(cluster);
 
         const generateConfig = (configType: ItemsTypes, data: any) =>
             DashKit.setItem({
@@ -39,12 +43,12 @@ export function editConfig(
                 remove_(configItems, prevItem);
                 configItems.push(newItem);
                 const newConfig = {...config, items: [...configItems]};
-                dispatch(setSettingByKey(`local::${cluster}::dashboard::config`, newConfig));
+                dispatch(setSettingByKey(settingName, newConfig));
             }
         }
         if (type === 'createItem') {
             const newConfig = generateConfig(edittingItem?.type, data);
-            dispatch(setSettingByKey(`local::${cluster}::dashboard::config`, {...newConfig}));
+            dispatch(setSettingByKey(settingName, {...newConfig}));
         }
     };
 }
@@ -52,14 +56,13 @@ export function editConfig(
 export function importConfig(cluster: string): ThunkAction<any, RootState, any, any> {
     return (dispatch, getState) => {
         const state = getState();
-        const currentCluster = state.global.cluster;
-        const config = state.settings.data[`local::${cluster}::dashboard::config`];
+        const currentCluster = state.global.cluster || '';
 
-        dispatch(
-            setSettingByKey(
-                `local::${currentCluster}::dashboard::config` as const,
-                config ?? dashboardConfig,
-            ),
-        );
+        const settingName = makeDashboardConfigSettingName(cluster);
+        const config = state.settings.data[settingName];
+
+        const currentClusterSettingName = makeDashboardConfigSettingName(currentCluster);
+
+        dispatch(setSettingByKey(currentClusterSettingName, config ?? dashboardConfig));
     };
 }

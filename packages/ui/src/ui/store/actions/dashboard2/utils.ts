@@ -10,6 +10,8 @@ import {getDashboardConfig} from '../../../store/selectors/dashboard2/dashboard'
 
 import {dashboardConfig} from '../../../constants/dashboard2';
 
+import {makeDashboardConfigSettingName} from '../../../utils/dashboard/makeDashboardConfigSettingName';
+
 export function createWidgetDataFieldAction<FieldType>(
     fieldName: string,
 ): (id: string, data: FieldType) => ThunkAction<any, RootState, any, any> {
@@ -18,6 +20,8 @@ export function createWidgetDataFieldAction<FieldType>(
             const state = getState();
             const cluster = getCluster(state);
             const config = getDashboardConfig(state);
+
+            const settingName = makeDashboardConfigSettingName(cluster);
 
             const oldItem = config.items.find((item) => item.id === id);
 
@@ -30,12 +34,7 @@ export function createWidgetDataFieldAction<FieldType>(
             ];
             const newConfig = {...config, items: newItems};
 
-            dispatch(
-                setSettingByKey(
-                    `local::${cluster}::dashboard::config` as const,
-                    newConfig ?? dashboardConfig,
-                ),
-            );
+            dispatch(setSettingByKey(settingName, newConfig ?? dashboardConfig));
         };
     };
 }

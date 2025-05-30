@@ -9,6 +9,8 @@ import {getCluster} from '../../../store/selectors/global';
 
 import {defaultDashboardItems} from '../../../constants/dashboard2';
 
+import {makeDashboardConfigSettingName} from '../../../utils/dashboard/makeDashboardConfigSettingName';
+
 type ConfigsTypes = keyof typeof defaultDashboardItems;
 
 export function useUpdateDashboard() {
@@ -17,15 +19,15 @@ export function useUpdateDashboard() {
     const cluster = useSelector(getCluster);
     const config = useSelector(getDashboardConfig);
 
-    const settingPath = `local::${cluster}::dashboard::config` as const;
+    const settingName = makeDashboardConfigSettingName(cluster);
     const prevConfig = useRef(config);
 
     const save = () => {
-        dispatch(setSettingByKey(settingPath, config));
+        dispatch(setSettingByKey(settingName, config));
         dispatch(toggleEditing());
     };
     const update = (newConfig: DashKitProps['config']) => {
-        dispatch(setSettingByKey(settingPath, {...newConfig}));
+        dispatch(setSettingByKey(settingName, {...newConfig}));
     };
     const add = (itemType: ConfigsTypes) => {
         dispatch(
@@ -39,7 +41,7 @@ export function useUpdateDashboard() {
         );
     };
     const cancel = () => {
-        dispatch(setSettingByKey(settingPath, prevConfig.current));
+        dispatch(setSettingByKey(settingName, prevConfig.current));
         dispatch(toggleEditing());
     };
     const edit = () => {
