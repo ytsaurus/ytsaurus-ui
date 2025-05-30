@@ -23,7 +23,7 @@ import {
 
 import {EventGroup, Timeline} from './TimelineCanvas';
 import {RowType, TimelineTable} from './TimelineTable';
-import {MIN_RANGE, OperationColorsType, parseGraph, useTimelineInterval} from './utils';
+import {OperationColorsType, parseGraph, useTimelineInterval} from './utils';
 
 import './Timeline.scss';
 
@@ -280,7 +280,8 @@ function TimelineWithSidebar({graph, prepareNode}: TimelineWithSidebarProps) {
                                 hasPicker={false}
                                 hasDatePicker={false}
                                 hasRulerNowButton={false}
-                                minRange={MIN_RANGE}
+                                minRange={timelineStart}
+                                maxRange={timelineEnd}
                             />
                         </div>
                         {Boolean(timelineAxes.length) && (
