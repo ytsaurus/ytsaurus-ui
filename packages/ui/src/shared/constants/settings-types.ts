@@ -22,6 +22,7 @@ interface GlobalSettings {
     'global::pagesOrder': Array<string>;
     'global::pagesPinned': Record<string, boolean>;
     'global::navigationPanelExpand': boolean | undefined;
+    'global::newDashboardPage': boolean;
 }
 
 interface EditorSettings {

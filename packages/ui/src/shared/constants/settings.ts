@@ -38,7 +38,6 @@ export const SettingName = {
         AUTO_REFRESH: 'autoRefresh',
         PAGES_ORDER: 'pagesOrder',
         PAGES_PINNED: 'pagesPinned',
-        NEW_DASHBOARD: 'newDashboard',
     },
     YSON: {
         FORMAT: 'format',

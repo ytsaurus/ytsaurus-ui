@@ -103,13 +103,12 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
         makePage('General', generalIcon, [
             makeItem('startPage', 'Start page', 'top', <StartPageSettingMemo />),
             makeItem(
-                SettingName.GLOBAL.NEW_DASHBOARD,
+                'global::newDashboardPage',
                 'New dashboard page',
                 'top',
-                <SettingsMenuItem
-                    settingName={SettingName.GLOBAL.NEW_DASHBOARD}
-                    settingNS={NAMESPACES.GLOBAL}
-                    annotation={'Enable new dashboard page'}
+                <BooleanSettingItem
+                    settingKey={'global::newDashboardPage'}
+                    description={'Enable new dashboard page'}
                     oneLine
                 />,
             ),

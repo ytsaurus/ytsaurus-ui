@@ -3,7 +3,7 @@ import React from 'react';
 import {useSelector} from 'react-redux';
 
 import {getGlobalLoadState} from '../../../store/selectors/global';
-import {getSettingNewDashboardPage} from '../../../store/selectors/settings/settings-ts';
+import {getSettingNewDashboardPage} from '../../../store/selectors/dashboard2/dashboard';
 
 import {LOADING_STATUS, Page} from '../../../constants/index';
 import {Route, Switch} from 'react-router';
