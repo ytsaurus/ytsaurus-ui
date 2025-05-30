@@ -146,7 +146,7 @@ function NavigationTargetPathButton() {
 }
 
 function onCopyToClipboard() {
-    metrics.countEvent({'navigation_copy-path': 'clicked'});
+    metrics.countEvent('navigation_copy-path');
 }
 
 function EditableNavigationBreadcrumbs() {
@@ -314,9 +314,7 @@ function RefreshButton() {
     const dispatch = useDispatch();
 
     const handleClick = React.useCallback(() => {
-        metrics.countEvent({
-            navigation_refresh: 'clicked',
-        });
+        metrics.countEvent('navigation_refresh');
         dispatch(updateView());
     }, [dispatch]);
 

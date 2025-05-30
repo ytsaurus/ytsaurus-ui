@@ -322,4 +322,7 @@ export const defaultUIFactory: UIFactory = {
     renderMarkdown() {
         return undefined;
     },
+    getAnalyticsService() {
+        return [];
+    },
 };
