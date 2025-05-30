@@ -1,10 +1,16 @@
 import React from 'react';
-import {ConnectedProps, connect} from 'react-redux';
+import {Button} from '@gravity-ui/uikit';
+import {ConnectedProps, connect, useDispatch} from 'react-redux';
 import cn from 'bem-cn-lite';
 
 import Filter from '../../../../../../components/Filter/Filter';
 import RadioButton from '../../../../../../components/RadioButton/RadioButton';
 import {QUEUE_RATE_MODE} from '../../../../../../constants/navigation/tabs/queue';
+
+import {
+    toggleCreateDialog,
+    toggleRegisterDialog,
+} from '../../../../../../store/reducers/navigation/tabs/queue/consumers';
 import {
     changeQueueConsumerName,
     changeQueueOwner,
@@ -42,6 +48,9 @@ const ConsumersExtraControls: React.VFC<Props> = ({
     changeQueueConsumerName,
     changeQueueRateMode,
 }) => {
+    const dispatch = useDispatch();
+    const openCreateDialog = () => dispatch(toggleCreateDialog());
+    const openRegisterDialog = () => dispatch(toggleRegisterDialog());
     return (
         <>
             <div className={block('divider')} />
@@ -52,6 +61,12 @@ const ConsumersExtraControls: React.VFC<Props> = ({
                 placeholder="Consumer name..."
             />
             <RadioButton value={queueRateMode} onChange={changeQueueRateMode} items={rateItems} />
+            <Button view={'outlined'} onClick={openCreateDialog}>
+                Create consumer
+            </Button>
+            <Button view={'outlined'} onClick={openRegisterDialog}>
+                Register consumer
+            </Button>
         </>
     );
 };
