@@ -188,9 +188,8 @@ export const getCurrentClusterNS = createSelector([getCluster, getClusterNS], (c
     return cluster ? ns : undefined;
 });
 
-export const getSettingNewDashboardPage = createSelector(makeGetSetting, (getSetting) =>
-    getSetting(SettingName.GLOBAL.NEW_DASHBOARD, NAMESPACES.GLOBAL),
-);
+export const getSettingNewDashboardPage = (state: RootState) =>
+    getSettingsData(state)['global::autoRefresh'];
 
 export const getUseAutoRefresh = (state: RootState) =>
     getSettingsData(state)['global::autoRefresh'];

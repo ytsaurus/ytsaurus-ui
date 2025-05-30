@@ -46,3 +46,7 @@ export const getDashboardConfig = createSelector(
         return config;
     },
 );
+
+export const getSettingNewDashboardPage = (state: RootState) =>
+    getSettingsData(state)['global::newDashboardPage'];
+
