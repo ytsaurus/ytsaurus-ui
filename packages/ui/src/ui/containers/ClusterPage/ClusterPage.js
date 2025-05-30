@@ -45,7 +45,7 @@ import {isExperimentalPagesReady} from '../../store/selectors/global/experimenta
 import {getClusterConfig} from '../../utils';
 import {NAMESPACES, SettingName} from '../../../shared/constants/settings';
 import {getClusterPagePaneSizes, getStartingPage} from '../../store/selectors/settings';
-import {getSettingNewDashboardPage} from '../../store/selectors/settings/settings-ts';
+import {getSettingNewDashboardPage} from '../../store/selectors/dashboard2/dashboard';
 import SupportedFeaturesUpdater from './SupportedFeaturesUpdater';
 import {useRumMeasureStart, useRumMeasureStop} from '../../rum/RumUiContext';
 import {RumMeasureTypes} from '../../rum/rum-measure-types';
