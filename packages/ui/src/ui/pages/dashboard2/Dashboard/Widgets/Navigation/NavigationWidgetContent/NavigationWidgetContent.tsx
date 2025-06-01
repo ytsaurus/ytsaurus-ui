@@ -23,16 +23,16 @@ const navigationLayout = {
 export function NavigationWidgetContent(props: PluginWidgetProps) {
     const type = useSelector((state: RootState) => getPathsType(state, props.id));
     const cluster = useSelector(getCluster);
-    const {data: items, isLoading} = usePathsQuery({cluster, type});
+    const {data: items, isLoading, isFetching} = usePathsQuery({cluster, type});
 
     useAutoHeight(props, navigationLayout, items?.length || 0);
 
     return (
         <>
-            {isLoading ? (
+            {isLoading || isFetching ? (
                 <WidgetSkeleton itemHeight={30} />
             ) : (
-                <NavigationWidgetContentBase items={items || []} />
+                <NavigationWidgetContentBase pathsType={type} items={items || []} />
             )}
         </>
     );

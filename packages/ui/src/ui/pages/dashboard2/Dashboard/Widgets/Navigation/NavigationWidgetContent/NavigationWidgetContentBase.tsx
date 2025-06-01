@@ -5,10 +5,14 @@ import {Flex, Text} from '@gravity-ui/uikit';
 
 import includes_ from 'lodash/includes';
 
+import hammer from '../../../../../../common/hammer';
+
 import {getCluster} from '../../../../../../store/selectors/global';
 
 import Icon from '../../../../../../components/Icon/Icon';
 import Link from '../../../../../../components/Link/Link';
+
+import {WidgetFallback} from '../../../../../../pages/dashboard2/Dashboard/components/WidgetFallback/WidgetFallback';
 
 import {getIconNameForType} from '../../../../../../utils/navigation/path-editor';
 import {Page} from '../../../../../../../shared/constants/settings';
@@ -27,10 +31,11 @@ type NavigationItem = {
 
 type Props = {
     items: NavigationItem[];
+    pathsType: 'last_visited' | 'favourite';
 };
 
 export function NavigationWidgetContentBase(props: Props) {
-    const {items} = props;
+    const {items, pathsType} = props;
 
     const containerRef = useRef<HTMLDivElement>(null);
     const [visibleItems, setVisibleItems] = useState<(string | undefined)[]>([]);
@@ -75,25 +80,37 @@ export function NavigationWidgetContentBase(props: Props) {
     }, [items, visibleItems.length]);
 
     return (
-        <Flex ref={containerRef} className={block('list')} direction={'column'}>
-            {items.map((item, idx) => (
-                <div
-                    key={idx}
-                    data-id={idx}
-                    ref={(el: HTMLDivElement | null) => {
-                        itemRefs.current[idx] = el;
-                    }}
-                    style={{
-                        visibility: includes_(visibleItems, String(idx)) ? 'visible' : 'hidden',
-                    }}
-                >
-                    {idx !== 0 && (
-                        <div style={{borderBottom: '1px solid var(--g-color-line-generic)'}}></div>
-                    )}
-                    <Item {...item} />
-                </div>
-            ))}
-        </Flex>
+        <>
+            {items.length ? (
+                <Flex ref={containerRef} className={block('list')} direction={'column'}>
+                    {items.map((item, idx) => (
+                        <div
+                            key={idx}
+                            data-id={idx}
+                            ref={(el: HTMLDivElement | null) => {
+                                itemRefs.current[idx] = el;
+                            }}
+                            style={{
+                                visibility: includes_(visibleItems, String(idx))
+                                    ? 'visible'
+                                    : 'hidden',
+                            }}
+                        >
+                            {idx !== 0 && (
+                                <div
+                                    style={{borderBottom: '1px solid var(--g-color-line-generic)'}}
+                                ></div>
+                            )}
+                            <Item {...item} />
+                        </div>
+                    ))}
+                </Flex>
+            ) : (
+                <WidgetFallback
+                    itemsName={`${hammer.format['ReadableField'](pathsType).toLowerCase()} paths`}
+                />
+            )}
+        </>
     );
 }
 

@@ -15,7 +15,7 @@ export function NavigationWidgetControls(props: PluginWidgetProps) {
         <RadioButton
             options={[
                 {value: 'last_visited', content: 'Last visited'},
-                {value: 'favourite', content: 'Favorite'},
+                {value: 'favourite', content: 'Favourite'},
             ]}
             onUpdate={onUpdate}
         ></RadioButton>
