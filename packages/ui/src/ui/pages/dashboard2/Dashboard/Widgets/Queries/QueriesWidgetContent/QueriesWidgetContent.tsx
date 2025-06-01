@@ -51,11 +51,9 @@ const columns = [
 
 // 1 react-grid height value ~ 25.3px
 const queriesLayout = {
-    baseHeight: 4.5,
+    baseHeight: 4.66,
     defaultHeight: 12,
-
-    rowHeight: 1.65,
-
+    rowHeight: 1.67,
     minWidth: 10,
 };
 
