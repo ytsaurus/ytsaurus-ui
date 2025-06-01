@@ -1,5 +1,5 @@
 import {PayloadAction, createSlice} from '@reduxjs/toolkit';
-import {ConfigItem} from '@gravity-ui/dashkit';
+import {Config, ConfigItem} from '@gravity-ui/dashkit';
 
 import {RootState} from '..';
 import {defaultDashboardItems} from '../../../constants/dashboard2';
@@ -9,22 +9,24 @@ export type ItemsTypes = keyof typeof defaultDashboardItems;
 type DashboardSettings = {
     editMode: boolean;
     importDialogVisibility: boolean;
-    edittingConfig: Partial<ConfigItem> & {target: 'createItem' | 'editItem'; type: ItemsTypes};
+    edittingItem: Partial<ConfigItem> & {target: 'createItem' | 'editItem'; type: ItemsTypes};
     settingsDialogVisibility: boolean;
+    edittingConfig: Config | undefined;
 };
 
 const initialState: DashboardSettings = {
     editMode: false,
     importDialogVisibility: false,
-    edittingConfig: {target: 'editItem', type: 'navigation'},
+    edittingItem: {target: 'editItem', type: 'navigation'},
     settingsDialogVisibility: false,
+    edittingConfig: undefined,
 };
 
 export const dashboard2Slice = createSlice({
     name: 'dashboard2',
     initialState,
     reducers: {
-        toggleEditing: (state) => ({
+        toggleEditting: (state) => ({
             ...state,
             editMode: !state.editMode,
         }),
@@ -34,32 +36,39 @@ export const dashboard2Slice = createSlice({
         }),
         openSettingsDialog: (
             state,
-            {payload}: PayloadAction<Pick<DashboardSettings, 'edittingConfig'>>,
+            {payload}: PayloadAction<Pick<DashboardSettings, 'edittingItem'>>,
         ) => ({
             ...state,
             settingsDialogVisibility: true,
-            edittingConfig: payload.edittingConfig,
+            edittingItem: payload.edittingItem,
         }),
         closeSettingsDialog: (state) => ({...state, settingsDialogVisibility: false}),
+        setEdittingConfig: (
+            state,
+            {payload}: PayloadAction<Pick<DashboardSettings, 'edittingConfig'>>,
+        ) => ({...state, edittingConfig: payload.edittingConfig}),
     },
     selectors: {
         getEditMode: (state) => state.editMode,
-        getEdittingItem: (state) => state.edittingConfig,
+        getEdittingItem: (state) => state.edittingItem,
         getImportDialogVisibility: (state) => state.importDialogVisibility,
         getSettingsDialogVisibility: (state) => state.settingsDialogVisibility,
+        getEdittingConfig: (state) => state.edittingConfig,
     },
 });
 
 export const {
-    toggleEditing,
+    toggleEditting,
     toggleImportDialogVisibility,
     openSettingsDialog,
     closeSettingsDialog,
+    setEdittingConfig,
 } = dashboard2Slice.actions;
 export const {
     getEdittingItem,
     getEditMode,
     getImportDialogVisibility,
     getSettingsDialogVisibility,
+    getEdittingConfig,
 } = dashboard2Slice.getSelectors((state: RootState) => state.dashboard2.dashboard2);
 export const dashboard2 = dashboard2Slice.reducer;

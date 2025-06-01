@@ -9,6 +9,7 @@ import {useUsableAccountsQuery} from '../../../store/api/accounts';
 import {
     ItemsTypes,
     getEditMode,
+    getEdittingConfig,
     openSettingsDialog,
 } from '../../../store/reducers/dashboard2/dashboard';
 import {getDashboardConfig} from '../../../store/selectors/dashboard2/dashboard';
@@ -31,6 +32,7 @@ export function Dashboard() {
 
     const editMode = useSelector(getEditMode);
     const config = useSelector(getDashboardConfig);
+    const edittingConfig = useSelector(getEdittingConfig);
     const isAdmin = useSelector(isDeveloper);
 
     useEffect(() => {
@@ -46,20 +48,22 @@ export function Dashboard() {
     useUsableAccountsQuery(undefined, {skip: isAdmin});
     const {update} = useDashboardActions();
 
+    const currentConfig = editMode && edittingConfig ? edittingConfig : config;
+
     return (
         <div style={{margin: '8px'}}>
             <DashKit
                 editMode={editMode}
-                config={config}
+                config={currentConfig}
                 onChange={(dash) => {
-                    if (!isEqual_(config, dash.config)) {
+                    if (!isEqual_(edittingConfig, dash.config)) {
                         update(dash.config);
                     }
                 }}
                 onItemEdit={(edittingItem) => {
                     dispatch(
                         openSettingsDialog({
-                            edittingConfig: {
+                            edittingItem: {
                                 ...edittingItem,
                                 target: 'editItem',
                                 type: edittingItem.type as ItemsTypes,
