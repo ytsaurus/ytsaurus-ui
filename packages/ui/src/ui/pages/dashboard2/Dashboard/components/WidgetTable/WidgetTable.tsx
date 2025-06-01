@@ -73,7 +73,7 @@ export function WidgetTable<T>({
         return () => {
             resizeObserver.disconnect();
         };
-    }, [data, visibleRowsCount]);
+    }, [visibleRowsCount]);
 
     const visibleData = useMemo(() => {
         return data.slice(0, visibleRowsCount);
