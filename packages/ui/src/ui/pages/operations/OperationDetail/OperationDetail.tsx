@@ -505,9 +505,6 @@ const mapStateToProps = (state: RootState) => {
 
     const monitorTabVisible = Boolean(monitoringComponent) || Boolean(monitorTabUrlTemplate);
 
-    const timelineTabVisible =
-        getSettingsTimelineTabVisible(state) && ypath.getValue(operation, '/@full_spec/is_gang');
-
     return {
         cluster: getCurrentCluster(state),
         operation,

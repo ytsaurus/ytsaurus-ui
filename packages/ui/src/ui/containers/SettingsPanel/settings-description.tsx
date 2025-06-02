@@ -340,6 +340,16 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
                     items={AGGREGATOR_RADIO_ITEMS}
                 />,
             ),
+            makeItem(
+                'global::operations::showTimelineTab',
+                'Show timeline tab',
+                'top',
+                <BooleanSettingItem
+                    settingKey="global::operations::showTimelineTab"
+                    description="Display timeline tab in operation"
+                    oneLine
+                />,
+            ),
         ]),
         makePage(
             'Navigation',

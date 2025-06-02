@@ -93,6 +93,7 @@ interface A11YSettings {
 type OperationsSettings = OperationPresetsSettings & {
     'global::operations::statisticsAggregationType': 'avg' | 'min' | 'max' | 'sum' | 'count';
     'global::operations::statisticsActiveJobTypes': Record<string, string>;
+    'global::operations::showTimelineTab': boolean;
 };
 
 export type OperationPresetsSettings = {

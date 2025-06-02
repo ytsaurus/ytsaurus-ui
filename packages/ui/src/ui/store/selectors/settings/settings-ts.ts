@@ -190,3 +190,7 @@ export const getCurrentClusterNS = createSelector([getCluster, getClusterNS], (c
 
 export const getUseAutoRefresh = (state: RootState) =>
     getSettingsData(state)['global::autoRefresh'];
+
+export const getSettingsTimelineTabVisible = createSelector([getSettingsData], (data) => {
+    return data['global::operations::showTimelineTab'] || false;
+});
