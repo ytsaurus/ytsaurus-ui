@@ -25,7 +25,7 @@ const attributesToLoad = [
     'name',
 ];
 
-export async function accounts(args: AccountsWidgetArgs) {
+export async function fetchAccounts(args: AccountsWidgetArgs) {
     try {
         const {accountsList, medium} = args;
         const response = await ytApiV3.executeBatch({

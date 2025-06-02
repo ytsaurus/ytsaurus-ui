@@ -1,11 +1,11 @@
 import {rootApi} from '../../../../store/api';
 
-import {accounts} from './accounts';
+import {fetchAccounts} from './accounts';
 
 const accountsWidgetApi = rootApi.injectEndpoints({
     endpoints: (build) => ({
         accounts: build.query({
-            queryFn: accounts,
+            queryFn: fetchAccounts,
         }),
     }),
 });

@@ -1,11 +1,11 @@
 import {rootApi} from '../../../../store/api';
 
-import {pools} from './pools';
+import {fetchPools} from './pools';
 
 const poolsWidgetApi = rootApi.injectEndpoints({
     endpoints: (build) => ({
         pools: build.query({
-            queryFn: pools,
+            queryFn: fetchPools,
         }),
     }),
 });
