@@ -15,7 +15,7 @@ export type PoolsQueryArgs = {
 
 const QUOTA_LIMIT = 50;
 
-export async function pools(args: PoolsQueryArgs) {
+export async function fetchPools(args: PoolsQueryArgs) {
     try {
         const {queries} = args;
         const response = await ytApiV3.executeBatch({

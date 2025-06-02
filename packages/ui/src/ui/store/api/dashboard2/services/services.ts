@@ -116,7 +116,10 @@ async function fetchChyt(items: ServicesItem[], cluster: string, isAdmin: boolea
     return cliques;
 }
 
-export async function services(args: {cluster: string; items?: ServicesItem[]}, api: BaseQueryApi) {
+export async function fetchServices(
+    args: {cluster: string; items?: ServicesItem[]},
+    api: BaseQueryApi,
+) {
     try {
         const {cluster, items} = args;
 

@@ -1,10 +1,10 @@
 import {dashboardApi} from '..';
-import {services} from './services';
+import {fetchServices} from './services';
 
 export const servicesWidgetApi = dashboardApi.injectEndpoints({
     endpoints: (build) => ({
         services: build.query({
-            queryFn: services,
+            queryFn: fetchServices,
         }),
     }),
 });

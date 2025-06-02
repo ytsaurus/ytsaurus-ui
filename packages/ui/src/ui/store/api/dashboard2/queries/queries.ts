@@ -11,7 +11,7 @@ const makeRequests = (args: ListQueriesParams[]) =>
         parameters: {...arg},
     }));
 
-export async function list(args: ListQueriesParams[]) {
+export async function fetchQuerieslist(args: ListQueriesParams[]) {
     try {
         const response = await ytApiV4Id.executeBatch(YTApiId.listQueries, {
             requests: makeRequests(args),

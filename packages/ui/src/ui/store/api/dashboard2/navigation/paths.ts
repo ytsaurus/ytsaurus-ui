@@ -14,7 +14,7 @@ function makePathsAttributesRequests(paths: string[]) {
 
 type PathsType = 'last_visited' | 'favourite';
 
-export async function paths(args: {cluster: string; type: PathsType}, api: BaseQueryApi) {
+export async function fetchPaths(args: {cluster: string; type: PathsType}, api: BaseQueryApi) {
     try {
         const {type} = args;
         const state = api.getState() as RootState;
