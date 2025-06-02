@@ -1,6 +1,7 @@
 import React from 'react';
 import {Flex, Text} from '@gravity-ui/uikit';
-import {NoSearchResults, NotFound} from '@gravity-ui/illustrations';
+import {NoSearchResults} from '@gravity-ui/illustrations';
+import {NoContent} from '../../../../../components/NoContent/NoContent';
 
 type Props = {
     itemsName?: string;
@@ -34,21 +35,8 @@ export function WidgetFallback(props: Props) {
                     </Flex>
                 </>
             ) : (
-                <NoWidgetItems itemsName={itemsName} />
+                <NoContent hint={`No ${itemsName || 'items'} found`} imageSize={100} />
             )}
         </Flex>
-    );
-}
-
-function NoWidgetItems({itemsName}: {itemsName?: string}) {
-    return (
-        <>
-            <NotFound height={100} width={100} />
-            <Flex maxWidth={300} alignItems={'center'}>
-                <Text variant={'subheader-2'} color={'primary'}>
-                    No {itemsName || 'items'} found
-                </Text>
-            </Flex>
-        </>
     );
 }
