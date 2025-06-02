@@ -2,7 +2,7 @@ import React from 'react';
 import cn from 'bem-cn-lite';
 import {RowWithName} from '../../../containers/AppNavigation/TopRowContent/SectionName';
 import {Page} from '../../../constants';
-import RequestQoutaButton from '../../../components/RequestQoutaButton/RequestQuotaButton';
+import {RequestQuotaButton} from '../../../components/RequestQuotaButton/RequestQuotaButton';
 
 import './DashboardTopRowContent.scss';
 
@@ -12,7 +12,7 @@ function DashboardTopRowContent() {
     return (
         <RowWithName page={Page.DASHBOARD}>
             <div className={block()}>
-                <RequestQoutaButton page={Page.DASHBOARD} />
+                <RequestQuotaButton page={Page.DASHBOARD} />
             </div>
         </RowWithName>
     );
