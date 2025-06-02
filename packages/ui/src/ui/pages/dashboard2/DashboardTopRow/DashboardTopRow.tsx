@@ -11,7 +11,7 @@ import {
 } from '../../../store/reducers/dashboard2/dashboard';
 import {getCluster, getCurrentUserName} from '../../../store/selectors/global';
 
-import RequestQoutaButton from '../../../components/RequestQoutaButton/RequestQuotaButton';
+import {RequestQuotaButton} from '../../../components/RequestQuotaButton/RequestQuotaButton';
 
 import {Page} from '../../../../shared/constants/settings';
 
@@ -40,7 +40,7 @@ export function DashboardTopRow() {
         <RowWithName page={Page.DASHBOARD}>
             <Flex grow={true} justifyContent={'flex-end'} gap={3}>
                 <MyRolesLink />
-                <RequestQoutaButton page={Page.DASHBOARD} />
+                <RequestQuotaButton page={Page.DASHBOARD} />
                 {editMode && <ImportButton toggleImportDialog={toggleImportDialog} />}
                 {editMode && <AddWidgetMenu />}
                 {editMode && <CancelButton onCancel={cancel} />}

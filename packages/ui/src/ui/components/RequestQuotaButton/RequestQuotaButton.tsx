@@ -10,7 +10,7 @@ interface Props {
     page: string;
 }
 
-export default function RequestQoutaButton(props: Props) {
+export function RequestQuotaButton(props: Props) {
     const {className, page} = props;
     const url = UIFactory.docsUrls['common:quota_request'];
 
