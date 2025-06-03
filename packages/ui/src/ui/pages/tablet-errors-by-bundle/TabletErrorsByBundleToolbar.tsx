@@ -8,7 +8,7 @@ import HelpLink from '../../components/HelpLink/HelpLink';
 import Select from '../../components/Select/Select';
 import SimplePagination from '../../components/Pagination/SimplePagination';
 import {Toolbar} from '../../components/WithStickyToolbar/Toolbar/Toolbar';
-import {YTTimeline, calcFromTo} from '../../components/common/YTTimeline';
+import {YTTimeline, calcFromTo} from '../../components/Timeline';
 import TextInputWithDebounce from '../../components/TextInputWithDebounce/TextInputWithDebounce';
 
 import {

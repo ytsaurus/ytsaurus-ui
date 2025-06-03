@@ -2,9 +2,9 @@ import React, {ReactNode} from 'react';
 
 import cn from 'bem-cn-lite';
 
-import {TimelinePicker} from './TimelinePicker/TimelinePicker';
-import {TimelineRuler} from './TimelineRuler/TimelineRuler';
-import {calculateShortcutTime} from './util';
+import {TimelinePicker} from '../common/Timeline/TimelinePicker/TimelinePicker';
+import {TimelineRuler} from './TimelineRuler';
+import {calculateShortcutTime} from '../common/Timeline/util';
 
 import './Timeline.scss';
 
@@ -129,7 +129,7 @@ export class Timeline extends React.Component<TimelineProps> {
         );
     }
     renderPicker() {
-        if (this.props.hasPicker === false) {
+        if (this.props.hasPicker === false || !this.props.topShortcuts?.length) {
             return null;
         }
 
