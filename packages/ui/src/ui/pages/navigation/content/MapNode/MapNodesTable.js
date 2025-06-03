@@ -60,6 +60,9 @@ import WarningIcon from '../../../../components/WarningIcon/WarningIcon';
 import TTLInfo from '../../../../components/TTLInfo/TTLInfo';
 import UIFactory from '../../../../UIFactory';
 
+import QueueConsumerIcon from '../../../../assets/img/svg/icons/queue-consumer.svg';
+import QueueProducerIcon from '../../../../assets/img/svg/icons/queue-producer.svg';
+
 import './MapNodesTable.scss';
 
 const block = cn('map-nodes-table');
@@ -79,6 +82,7 @@ export function renderMapNodesTableIcon(item) {
     if (item.iconType === 'table') {
         title = 'Static table';
     }
+
     if (item.iconType === 'table_dynamic') {
         const {sorted} = ypath.getAttributes(item);
         if (sorted) {
@@ -87,6 +91,16 @@ export function renderMapNodesTableIcon(item) {
             title = 'Queue table';
             icon = <Icon awesome="queue-table" />;
         }
+    }
+
+    if (ypath.getAttributes(item)?.treat_as_queue_consumer) {
+        title = 'Queue consumer';
+        icon = <QueueConsumerIcon />;
+    }
+
+    if (ypath.getAttributes(item)?.treat_as_queue_producer) {
+        title = 'Queue producer';
+        icon = <QueueProducerIcon />;
     }
 
     return (
