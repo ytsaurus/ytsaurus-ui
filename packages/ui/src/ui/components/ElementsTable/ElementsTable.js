@@ -69,6 +69,7 @@ class ElementsTable extends Component {
         tableId: PropTypes.string,
         emptyDataDescription: PropTypes.string,
         sortState: sortStateType,
+        getEffectiveSortState: PropTypes.func,
         // callBack SORT
         onSort: PropTypes.func,
         // COLUMNS

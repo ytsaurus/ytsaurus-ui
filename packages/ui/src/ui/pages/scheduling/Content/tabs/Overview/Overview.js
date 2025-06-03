@@ -31,6 +31,7 @@ import {
     getSchedulingIsInitialLoading,
     getSchedulingOverviewMaxDepth,
     getSchedulingTreeState,
+    getSortState,
     getTableItems,
     getTree,
 } from '../../../../../store/selectors/scheduling/scheduling';
@@ -456,7 +457,7 @@ class Overview extends Component {
     };
 
     render() {
-        const {items, treeStateExpanded, isInitialLoading, operationRefId} = this.props;
+        const {items, treeStateExpanded, isInitialLoading, operationRefId, sortState} = this.props;
 
         const refItem = items?.find((item) => item?.name === operationRefId);
 
@@ -479,6 +480,7 @@ class Overview extends Component {
                                         isLoading={isInitialLoading}
                                         highlightedItem={refItem}
                                         compareHighlitedBy={'name'}
+                                        getEffectiveSortState={() => sortState}
                                     />
                                 </ResetExpandedPoolsOnTreeChange>
                             </React.Fragment>
@@ -499,6 +501,7 @@ class Overview extends Component {
 }
 
 const mapStateToProps = (state) => {
+    const sortState = getSortState(state);
     const items = getTableItems(state);
     const itemsMaxDepth = getSchedulingOverviewMaxDepth(state);
     const cluster = getCluster(state);
@@ -512,6 +515,7 @@ const mapStateToProps = (state) => {
 
     return {
         cluster,
+        sortState,
         items,
         itemsMaxDepth,
         currentPool,
