@@ -4,4 +4,10 @@
             background: var(--main-background);
         }
     }
+
+    &__render-block {
+        position: absolute;
+        overflow: hidden;
+        padding: 10px;
+    }
 }

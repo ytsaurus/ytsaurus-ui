@@ -1,65 +1,32 @@
-import React, {FC, useEffect, useMemo, useState} from 'react';
+import React, {FC, useState} from 'react';
 
-import {ECameraScaleLevel, useElk} from '@gravity-ui/graph';
+import {ECameraScaleLevel} from '@gravity-ui/graph';
 import {Loader} from '@gravity-ui/uikit';
 
-import {YTGraph, getElkConfig, useConfig} from '../../../../components/YTGraph';
+import {NodeBlock, YTGraph, useConfig, useElkLayout} from '../../../../components/YTGraph';
 
 import {ProcessedGraph} from '../utils';
 import {useResultProgress} from '../PlanContext';
 import {createBlocks} from './helpers/createBlocks';
-import {getNodesAndAges} from './helpers/getNodesAndAges';
 import {QueriesNodeBlock} from './QueriesNodeBlock';
 import {DetailBlock} from './DetailBlock';
-import {Logger} from '../../../../utils/logger';
-import {useMemoizedIfEqual} from '../../../../hooks/use-updater';
-
-const BLOCK_SIDE = 100;
-
-const blockSize = {height: BLOCK_SIDE, width: BLOCK_SIDE};
 
 type Props = {
     processedGraph: ProcessedGraph;
 };
 
-const logger = new Logger('QuereisGraph');
-
 const Graph: FC<Props> = ({processedGraph}) => {
-    const {config, isBlock} = useConfig<QueriesNodeBlock>();
+    const {config, isBlock, scale, setScale} = useConfig<QueriesNodeBlock>({block: NodeBlock});
 
     const [loading, setLoading] = useState(true);
-    const [scale, setScale] = useState<ECameraScaleLevel>(ECameraScaleLevel.Schematic);
-    const progress = useResultProgress();
 
-    const elkConfig = useMemo(() => {
-        const {children, edges} = getNodesAndAges(processedGraph);
-        return getElkConfig(children, edges, blockSize);
-    }, [processedGraph]);
+    const {data, isLoading} = useQueriesGraphData(processedGraph, scale);
 
-    const [positions] = useMemoizedIfEqual(useElk(elkConfig));
-
-    const [data, setData] = React.useState<any>();
-
-    useEffect(() => {
-        if (positions.isLoading || !positions.result) return;
-
-        createBlocks(processedGraph, progress, positions.result, scale, blockSize).then(
-            ({blocks, connections}) => {
-                setData({blocks, connections});
-                setLoading(false);
-            },
-        );
-    }, [positions, processedGraph, progress, scale]);
-
-    logger.diff('createBlocks', {
-        config,
-        processedGraph,
-        elkConfig,
-        positions,
-        data,
-        progress,
-        scale,
-    });
+    React.useEffect(() => {
+        if (!isLoading) {
+            setLoading(false);
+        }
+    }, [isLoading]);
 
     return loading ? (
         <Loader />
@@ -73,6 +40,16 @@ const Graph: FC<Props> = ({processedGraph}) => {
         />
     );
 };
+
+function useQueriesGraphData(progressGraph: ProcessedGraph, scale: ECameraScaleLevel) {
+    const progress = useResultProgress();
+
+    const data = React.useMemo(() => {
+        return createBlocks(progressGraph, progress, scale);
+    }, [progressGraph, scale, progress]);
+
+    return useElkLayout(data);
+}
 
 function renderPopup(props: {data: QueriesNodeBlock}) {
     return <DetailBlock {...props} />;
