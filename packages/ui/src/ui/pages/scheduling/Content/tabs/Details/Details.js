@@ -29,6 +29,7 @@ import {
     getCurrentPool,
     getPollChildrenTableItems,
     getPoolChildrenFilter,
+    getPoolChildrenSortState,
     getSchedulingIsInitialLoading,
     getSortedPoolChildren,
 } from '../../../../../store/selectors/scheduling/scheduling';
@@ -534,7 +535,7 @@ class Details extends Component {
     }
 
     render() {
-        const {items, mode, isInitialLoading} = this.props;
+        const {items, mode, isInitialLoading, sortState} = this.props;
 
         return (
             <ErrorBoundary>
@@ -550,6 +551,7 @@ class Details extends Component {
                                     {...this.tableSettings}
                                     items={items}
                                     isLoading={isInitialLoading}
+                                    getEffectiveSortState={() => sortState}
                                 />
                             </React.Fragment>
                         }
@@ -562,6 +564,7 @@ class Details extends Component {
 
 const mapStateToProps = (state) => {
     const currentPool = getCurrentPool(state);
+    const sortState = getPoolChildrenSortState(state);
     const items = getPollChildrenTableItems(state);
     const mode = getContentMode(state);
     const filter = getPoolChildrenFilter(state);
@@ -570,7 +573,7 @@ const mapStateToProps = (state) => {
 
     const isInitialLoading = getSchedulingIsInitialLoading(state);
 
-    return {currentPool, mode, filter, items, children, cluster, isInitialLoading};
+    return {currentPool, mode, filter, sortState, items, children, cluster, isInitialLoading};
 };
 
 const mapDispatchToProps = {

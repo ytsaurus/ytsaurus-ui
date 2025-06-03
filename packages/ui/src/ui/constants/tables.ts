@@ -6,3 +6,5 @@ export const TOGGLE_COLUMN_SORT_ORDER = TABLES_PREFIX + 'TOGGLE_COLUMN_SORT_ORDE
 
 export const CLUSTER_MENU_TABLE_ID = 'clusters';
 export const SYSTEM_CHUNKS_TABLE_ID = 'system/chunks';
+
+export const FIELD_AUTO = '__auto__';

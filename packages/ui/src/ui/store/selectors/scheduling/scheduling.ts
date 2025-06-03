@@ -10,11 +10,14 @@ import {getCluster} from '../../../store/selectors/global';
 import {prepareResources} from '../../../utils/scheduling/overview';
 import {childTableItems} from '../../../utils/scheduling/detailsTable';
 import {poolsTableItems} from '../../../utils/scheduling/overviewTable';
+import {FIELD_AUTO} from '../../../constants/tables';
 import {
     ROOT_POOL_NAME,
     SCHEDULING_POOL_CHILDREN_TABLE_ID,
     SCHEDULING_POOL_TREE_TABLE_ID,
 } from '../../../constants/scheduling';
+
+import {OldSortState} from '../../../types';
 
 import {
     OperationInfo,
@@ -30,6 +33,7 @@ import {
     getSchedulingAttributesToFilter,
     getSchedulingFilteredPoolNames,
 } from './attributes-to-filter';
+
 export const getPools = getPoolsImpl;
 
 const getExpandedPoolsIsInitialLoading = (state: RootState) => {
@@ -55,9 +59,29 @@ export const getPool = (state: RootState) => state.scheduling.scheduling.pool;
 
 export const getSchedulingEditItem = (state: RootState) => state.scheduling.scheduling.editItem;
 
-export const getSortState = (state: RootState) => state.tables[SCHEDULING_POOL_TREE_TABLE_ID];
-export const getPoolChildrenSortState = (state: RootState) =>
+export const getCurrentPool = createSelector([getPool, getPools], (pool, pools) =>
+    find_(pools, (item) => item.name === pool),
+);
+
+const getSortStateRaw = (state: RootState) => state.tables[SCHEDULING_POOL_TREE_TABLE_ID];
+export const getSortState = createSelector([getSortStateRaw, getCurrentPool], schedulingSortState);
+
+const getPoolChildrenSortStateRaw = (state: RootState) =>
     state.tables[SCHEDULING_POOL_CHILDREN_TABLE_ID];
+
+export const getPoolChildrenSortState = createSelector(
+    [getPoolChildrenSortStateRaw, getCurrentPool],
+    schedulingSortState,
+);
+
+function schedulingSortState(sortState: OldSortState, pool?: {mode?: 'fifo' | string}) {
+    const {field, asc} = sortState;
+    if (field !== FIELD_AUTO) {
+        return sortState;
+    }
+
+    return pool?.mode === 'fifo' ? {field: 'FI', asc} : {field: 'name', asc};
+}
 
 export const getPoolsNames = createSelector(
     getSchedulingAttributesToFilter,
@@ -94,10 +118,6 @@ export const getPoolsSelectItems = createSelector(getPoolsNames, (pools) => {
 
     return items;
 });
-
-export const getCurrentPool = createSelector([getPool, getPools], (pool, pools) =>
-    find_(pools, (item) => item.name === pool),
-);
 
 export const getPoolIsEphemeral = createSelector([getCurrentPool], (currentPool) => {
     if (currentPool && currentPool.isEphemeral !== undefined) return currentPool.isEphemeral;

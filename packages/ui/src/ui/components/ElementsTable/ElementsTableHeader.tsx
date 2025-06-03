@@ -43,6 +43,7 @@ export interface ElementsTableHeaderProps {
     //sortInfo?: () => OldSortState;
     tableId: keyof RootState['tables'];
     sortState?: Record<string, OldSortState>;
+    getEffectiveSortState?: (v: OldSortState) => OldSortState;
     onSort?: (columnName?: string) => void;
 
     columns: ColumnsItem;
@@ -130,6 +131,7 @@ export default class ElementsTableHeader extends Component<ElementsTableHeaderPr
         // new SORT
         tableId: PropTypes.string,
         sortState: sortStateType,
+        getEffectiveSortState: PropTypes.func,
         // COLUMNS
         columns: PropTypes.shape({
             items: PropTypes.object.isRequired,
@@ -206,7 +208,7 @@ export default class ElementsTableHeader extends Component<ElementsTableHeaderPr
 
     renderSortableHeaderCaption(columnName: string) {
         const className = block('g-link')({view: 'primary'});
-        const {sortState, onSort} = this.props;
+        const {sortState, onSort, getEffectiveSortState} = this.props;
 
         const {sortWithUndefined, allowedOrderTypes} = this.state.columnItems[columnName];
 
@@ -214,7 +216,8 @@ export default class ElementsTableHeader extends Component<ElementsTableHeaderPr
         let sortQuery, toggleOrder;
         if (sortState) {
             const {tableId, toggleColumnSortOrder} = this.props;
-            sortInfo = sortState[tableId!];
+            const ss = sortState[tableId!];
+            sortInfo = getEffectiveSortState ? getEffectiveSortState(ss) : ss;
             toggleOrder = () => {
                 toggleColumnSortOrder({
                     tableId,
