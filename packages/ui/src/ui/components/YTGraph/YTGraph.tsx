@@ -11,6 +11,7 @@ import {
     useGraphEvent,
 } from '@gravity-ui/graph';
 import {useThemeValue} from '@gravity-ui/uikit';
+
 import {PopupPortal} from './PopupLayer';
 import {getGraphColors} from './config';
 import cn from 'bem-cn-lite';
@@ -19,16 +20,34 @@ import './YTGraph.scss';
 const block = cn('yt-graph');
 
 export type YTGraphProps<B extends TBlock, C extends TConnection> = {
-    data: {blocks: Array<B>; connections: Array<C>};
+    className?: string;
+
+    data: YTGraphData<B, C>;
     setScale: (v: ECameraScaleLevel) => void;
     config: HookGraphParams;
     isBlock: (v: unknown) => v is CanvasBlock<B>;
     renderPopup: ({data}: {data: B}) => React.ReactNode;
+    renderBlock?: React.ComponentProps<typeof GraphCanvas>['renderBlock'];
 };
 
-export function YTGraph<B extends TBlock, C extends TConnection>(props: YTGraphProps<B, C>) {
-    const {config, isBlock, data, setScale, renderPopup} = props;
+export type YTGraphData<B extends TBlock, C extends TConnection> = {
+    blocks: Array<B>;
+    connections: Array<C>;
+};
 
+export type YTGraphBlock<IS, Meta extends Record<string, unknown>> = Omit<TBlock<Meta>, 'is'> & {
+    is: IS;
+};
+
+export function YTGraph<B extends TBlock, C extends TConnection>({
+    config,
+    isBlock,
+    data,
+    setScale,
+    renderPopup,
+    className,
+    renderBlock,
+}: YTGraphProps<B, C>) {
     const theme = useThemeValue();
     const {graph, setEntities, start} = useGraph(config);
 
@@ -70,13 +89,33 @@ export function YTGraph<B extends TBlock, C extends TConnection>(props: YTGraphP
         graph.setColors(getGraphColors());
     }, [graph, theme]);
 
+    const renderBlockCallback = React.useCallback(
+        (...args: Parameters<Exclude<typeof renderBlock, undefined>>) => {
+            const item = args[1];
+            return !renderBlock ? (
+                <></>
+            ) : (
+                <div
+                    className={block('render-block')}
+                    style={{
+                        left: item.x,
+                        top: item.y,
+                        width: item.width,
+                        height: item.height,
+                    }}
+                >
+                    {renderBlock(...args)}
+                </div>
+            );
+        },
+        [renderBlock],
+    );
+
     return (
-        <div className={block()}>
+        <div className={block(null, className)}>
             <GraphCanvas
                 graph={graph}
-                renderBlock={() => {
-                    return <></>;
-                }}
+                renderBlock={renderBlockCallback}
                 className={block('graph')}
             />
             <PopupPortal graph={graph} renderContent={renderPopup} isBlockNode={isBlock} />
