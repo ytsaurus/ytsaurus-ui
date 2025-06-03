@@ -13,7 +13,7 @@ import {FormApi, YTDFDialog, makeErrorFields} from '../../../../../../components
 import {docsUrl} from '../../../../../../config';
 import UIFactory from '../../../../../../UIFactory';
 import {makeLink} from '../../../../../../utils/utils';
-import {YT} from '../../../../../../config/yt-config';
+import {makeClusterSelectOptionsSameEnv} from '../../../../../../utils/navigation/tabs/make-cluster-select-options-same-env';
 
 import {YTError} from '../../../../../../../@types/types';
 
@@ -32,19 +32,9 @@ export function RegisterConsumerDialog() {
 
     const [update, {isLoading, error}] = useRegisterConsumerMutation();
 
-    const clusters = Object.entries(YT.clusters)
-        .filter(([_, value]) => value.environment === YT.clusters[cluster].environment)
-        .map(([key]) => key);
-
     const clusterControlOptions = useMemo(
-        () =>
-            clusters
-                .map((cluster) => ({
-                    value: cluster,
-                    content: cluster,
-                }))
-                ?.sort((a, b) => a.value.localeCompare(b.value)),
-        [clusters],
+        () => makeClusterSelectOptionsSameEnv(cluster),
+        [cluster],
     );
 
     return (
