@@ -5,7 +5,7 @@ import cn from 'bem-cn-lite';
 import HelpLink from '../../../../../components/HelpLink/HelpLink';
 import SimplePagination from '../../../../../components/Pagination/SimplePagination';
 import Select from '../../../../../components/Select/Select';
-import {YTTimeline, calcFromTo} from '../../../../../components/common/YTTimeline';
+import {YTTimeline, calcFromTo} from '../../../../../components/Timeline';
 import WithStickyToolbar from '../../../../../components/WithStickyToolbar/WithStickyToolbar';
 import {Toolbar} from '../../../../../components/WithStickyToolbar/Toolbar/Toolbar';
 import TextInputWithDebounce from '../../../../../components/TextInputWithDebounce/TextInputWithDebounce';

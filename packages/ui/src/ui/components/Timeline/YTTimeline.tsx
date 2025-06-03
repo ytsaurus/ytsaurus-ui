@@ -3,8 +3,8 @@ import cn from 'bem-cn-lite';
 
 import useResizeObserver from '../../hooks/useResizeObserver';
 
-import {Timeline, TimelineProps} from './Timeline/Timeline';
-import {calculateShortcutTime} from './Timeline/util';
+import {Timeline, TimelineProps} from './Timeline';
+import {calculateShortcutTime} from '../common/Timeline/util';
 
 import './YTTimeline.scss';
 

@@ -7,7 +7,7 @@ import cn from 'bem-cn-lite';
 import reduce_ from 'lodash/reduce';
 
 import {DataSet} from 'vis-data';
-import {Timeline as TimelineRuler} from '../../../../components/common/Timeline/Timeline';
+import {Timeline as TimelineRuler} from '../../../../components/Timeline';
 import {BoundsChangedEvent, yaTimelineConfig} from '../../../../packages/ya-timeline';
 import {NodeState} from '../models/plan';
 
