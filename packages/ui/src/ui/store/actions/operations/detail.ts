@@ -1,7 +1,12 @@
+import type {ThunkAction} from 'redux-thunk';
+
+import {Toaster} from '@gravity-ui/uikit';
+
 import {USE_CACHE} from '../../../../shared/constants/yt-api';
 
 import ypath from '../../../common/thor/ypath';
 
+import {forEachYTError} from '../../../utils/errors';
 import {
     prepareCompletedUsage,
     prepareIntermediateUsage,
@@ -22,14 +27,13 @@ import {checkUserTransaction, prepareActions} from '../../../utils/operations/de
 import {prepareAttributes} from '../../../utils';
 import {showErrorPopup, wrapApiPromiseByToaster} from '../../../utils/utils';
 import {isOperationId} from '../../../utils/operations/list';
-import {Toaster} from '@gravity-ui/uikit';
 import CancelHelper from '../../../utils/cancel-helper';
 import {YTErrors} from '../../../rum/constants';
 import {YTApiId, ytApiV3, ytApiV3Id} from '../../../rum/rum-wrap-api';
 import {getJobsMonitoringDescriptors} from '../../../store/actions/operations/jobs-monitor';
 
+import {getCluster} from '../../../store/selectors/global';
 import type {RootState} from './../../../store/reducers';
-import type {ThunkAction} from 'redux-thunk';
 import type {OperationDetailActionType} from '../../reducers/operations/detail';
 
 const toaster = new Toaster();
@@ -113,6 +117,29 @@ export function getOperation(
                     const runtime = prepareRuntime(operation);
                     const events = prepareOperationEvents(operation);
                     const resources = prepareCompletedUsage(operation);
+
+                    if (error?.error) {
+                        forEachYTError([error.error], (item) => {
+                            const attributes = ypath.getValue(item, '/attributes');
+                            const job_id = ypath.getValue(attributes, '/job_id');
+
+                            const dst = attributes.$value ?? attributes;
+                            if ('string' === typeof job_id) {
+                                const cluster = getCluster(getState());
+                                Object.assign(dst, {
+                                    job_id: {
+                                        $attributes: {
+                                            _type_tag: 'url',
+                                        },
+                                        $value: {
+                                            href: `${window.location.origin}/${cluster}/job/${id}/${job_id}`,
+                                            text: job_id,
+                                        },
+                                    },
+                                });
+                            }
+                        });
+                    }
 
                     const details = {
                         specification,
