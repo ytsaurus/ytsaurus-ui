@@ -9,14 +9,17 @@ const COUNTER_PADDING = 10;
 const COUNTER_BLOCK_HEIGHT = 30;
 const COUNTER_RADIUS = 4;
 
+const ICON_SIZE = 24;
+const TEXT_SIZE = 14;
+
 export type BaseMeta = {
     icon: {
         src: string;
-        height: number;
-        width: number;
+        height?: number;
+        width?: number;
     };
     bottomText?: string;
-    textSize: number;
+    textSize?: number;
     padding?: number;
     nodeProgress?: {
         state?: 'Finished' | 'Started' | 'InProgress' | string;
@@ -87,7 +90,7 @@ export class NodeBlock<T extends NodeTBlock<BaseMeta>> extends CanvasBlock<T> {
         );
     }
 
-    private getFont(fontSize = this.state.meta.textSize) {
+    private getFont(fontSize = this.state.meta.textSize ?? TEXT_SIZE) {
         return `normal ${fontSize}px YS Text, Arial, sans-serif`;
     }
 
@@ -172,7 +175,7 @@ export class NodeBlock<T extends NodeTBlock<BaseMeta>> extends CanvasBlock<T> {
     private drawInnerText(yPosition: number) {
         const {height, width, x, y} = this.state;
         const padding = this.state.meta.padding || 0;
-        const iconHeight = this.state.meta.icon.height;
+        const iconHeight = this.state.meta.icon?.height ?? ICON_SIZE;
         const name =
             this.state.name.length > MAX_TEXT_LENGTH
                 ? this.state.name.slice(0, 13) + '...'
@@ -229,8 +232,8 @@ export class NodeBlock<T extends NodeTBlock<BaseMeta>> extends CanvasBlock<T> {
     private renderContent(mode: 'minimalistic' | 'schematic') {
         const {height, width, x, y} = this.state;
         const padding = this.state.meta.padding || 0;
-        const textSize = this.state.meta.textSize;
-        const iconHeight = this.state.meta.icon.height;
+        const textSize = this.state.meta.textSize ?? TEXT_SIZE;
+        const {iconWidth, iconHeight} = iconSizes(this.state.meta);
         const isSchematic = mode === 'schematic';
 
         let textHeight = 0;
@@ -250,10 +253,10 @@ export class NodeBlock<T extends NodeTBlock<BaseMeta>> extends CanvasBlock<T> {
 
             this.drawIcon(
                 this.state.meta.icon.src,
-                x + (width - this.state.meta.icon.width) / 2,
+                x + (width - iconWidth) / 2,
                 y + startYPosition,
-                this.state.meta.icon.width,
-                this.state.meta.icon.height,
+                iconWidth,
+                iconHeight,
             );
         } else {
             this.drawIcon(
@@ -303,4 +306,11 @@ export class NodeBlock<T extends NodeTBlock<BaseMeta>> extends CanvasBlock<T> {
         });
         this.renderContent(mode);
     }
+}
+
+function iconSizes(meta: BaseMeta) {
+    return {
+        iconWidth: meta.icon?.width ?? ICON_SIZE,
+        iconHeight: meta.icon?.height ?? ICON_SIZE,
+    };
 }
