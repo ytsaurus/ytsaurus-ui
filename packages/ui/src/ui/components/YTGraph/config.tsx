@@ -1,12 +1,21 @@
 import React from 'react';
 
-import {ElkExtendedEdge} from 'elkjs/lib/elk-api';
-import {CanvasBlock, HookGraphParams, MultipointConnection} from '@gravity-ui/graph';
+import {ElkExtendedEdge} from 'elkjs';
+import {
+    CanvasBlock,
+    ECameraScaleLevel,
+    HookGraphParams,
+    MultipointConnection,
+    TBlock,
+    TConnection,
+    useElk,
+} from '@gravity-ui/graph';
 import {RecursivePartial} from '@gravity-ui/graph/build/utils/types/helpers';
 import {TGraphColors} from '@gravity-ui/graph/build/graphConfig';
 
 import {getCssColor} from '../../utils/get-css-color';
-import {BaseMeta, NodeBlock, NodeTBlock} from './canvas/NodeBlock';
+import {useMemoizedIfEqual} from '../../hooks/use-updater';
+import {YTGraphData} from './YTGraph';
 
 export const getGraphColors = (): RecursivePartial<TGraphColors> => {
     return {
@@ -23,18 +32,27 @@ export const getGraphColors = (): RecursivePartial<TGraphColors> => {
     };
 };
 
-export function useConfig<T extends NodeTBlock<BaseMeta>>(
-    block?: typeof CanvasBlock<T>,
-): {config: HookGraphParams; isBlock: (v: unknown) => v is CanvasBlock<T>} {
-    return React.useMemo(() => {
-        const b = block ?? NodeBlock;
+const DEFAULT_BLOCK_SIZE = 100;
+
+export function useConfig<T extends TBlock>(
+    blockComponents: Record<T['is'], typeof CanvasBlock<T>>,
+): {
+    config: HookGraphParams;
+    isBlock: (v: unknown) => v is CanvasBlock<T>;
+    scale: ECameraScaleLevel;
+    setScale: (v: ECameraScaleLevel) => void;
+} {
+    const [scale, setScale] = React.useState<ECameraScaleLevel>(ECameraScaleLevel.Schematic);
+    const [blockComponentsCached] = useMemoizedIfEqual(blockComponents);
+
+    const config = React.useMemo(() => {
         const config = {
             settings: {
                 connection: MultipointConnection,
                 canDuplicateBlocks: false,
                 canCreateNewConnections: false,
                 canZoomCamera: true,
-                blockComponents: {block: b},
+                blockComponents,
             },
             viewConfiguration: {
                 colors: {
@@ -42,26 +60,32 @@ export function useConfig<T extends NodeTBlock<BaseMeta>>(
                 },
             },
         };
+        const knownTypes = new Set(Object.keys(blockComponentsCached));
         return {
             config,
-            isBlock: (v: unknown) => {
-                return v instanceof b;
+            isBlock: (v: unknown): v is CanvasBlock<T> => {
+                return knownTypes.has((v as Partial<CanvasBlock<T>>).state?.is!);
             },
         };
-    }, [block]);
+    }, [blockComponentsCached]);
+
+    return {...config, scale, setScale};
 }
 
-export const getElkConfig = (
-    children: {id: string; level: number}[],
+const getElkConfig = (
+    children: {id: string; level?: number; width?: number; height?: number}[],
     edges: ElkExtendedEdge[],
-    sizes: {height: number; width: number},
+    defaultSize: {height: number; width: number} = {
+        width: DEFAULT_BLOCK_SIZE,
+        height: DEFAULT_BLOCK_SIZE,
+    },
 ) => {
     return {
         id: 'root',
         children: children.map((node) => ({
             id: node.id,
-            width: sizes.width,
-            height: sizes.height,
+            width: node.width ?? defaultSize.width,
+            height: node.height ?? defaultSize.height,
             ...(node.level === 1
                 ? {
                       layoutOptions: {
@@ -74,8 +98,8 @@ export const getElkConfig = (
         layoutOptions: {
             'elk.algorithm': 'layered',
             'elk.direction': 'RIGHT',
-            'spacing.nodeNode': sizes.height.toString(), // Node horizontal spacing
-            'spacing.nodeNodeBetweenLayers': Math.round(sizes.height / 2).toString(), // Layer spacing
+            'spacing.nodeNode': String(DEFAULT_BLOCK_SIZE), // Node horizontal spacing
+            'spacing.nodeNodeBetweenLayers': Math.round(defaultSize.height / 2).toString(), // Layer spacing
             'spacing.edgeNode': '25', // Nodes and edges spacing
             'spacing.edgeEdge': '25', // Edges spacing
             'spacing.edgeEdgeBetweenLayers': '35', // Distance between edges in layers
@@ -88,3 +112,52 @@ export const getElkConfig = (
         },
     };
 };
+
+export function useElkLayout<B extends TBlock, C extends TConnection>({
+    blocks,
+    connections,
+}: YTGraphData<B, C>): {data: YTGraphData<B, C>; isLoading: boolean} {
+    const elkConfig = React.useMemo(() => {
+        const children = blocks.map(({id, width, height}) => ({
+            id: String(id),
+            width,
+            height,
+        }));
+        const edges = connections.map((item) => ({
+            id: connectionId(item),
+            sources: [item.sourceBlockId as string],
+            targets: [item.targetBlockId as string],
+        }));
+
+        return getElkConfig(children, edges);
+    }, [blocks, connections]);
+
+    const [positions] = useMemoizedIfEqual(useElk(elkConfig));
+
+    const res = React.useMemo(() => {
+        const {result, isLoading} = positions;
+
+        if (positions.isLoading || !result || Object.keys(result.blocks).length === 0) {
+            return {isLoading, data: {blocks: [], connections: []}};
+        }
+
+        return {
+            isLoading,
+            data: {
+                blocks: blocks.map((item) => {
+                    return {...item, ...result?.blocks?.[item.id]};
+                }),
+                connections: connections.map((item) => {
+                    return {...item, ...result?.edges?.[connectionId(item)]};
+                }),
+            },
+        };
+    }, [blocks, connections, positions]);
+    return res;
+}
+
+function connectionId(item: TConnection) {
+    return item.id !== undefined
+        ? String(item.id)
+        : `${String(item.sourceBlockId)}:${String(item.targetBlockId)}`;
+}
