@@ -6,18 +6,31 @@ import {YTErrorRaw} from '../../../@types/types';
 import type {YTError} from '../../types';
 import {ypathBase} from '../../common/thor/ypath-base';
 
-export function getErrorWithCode<T extends YTErrorRaw>(errors: T[], code: number): T | undefined {
+export function forEachYTError<T extends YTErrorRaw>(
+    errors: Array<T>,
+    visitor: (error: T) => void,
+) {
     const queue: T[] = [...errors];
 
     let i = 0;
     while (queue[i]) {
-        const error = queue[i];
-        if (getYtErrorCode(error) === code) return error;
-        if (Array.isArray(error.inner_errors)) queue.push(...(error.inner_errors as Array<T>));
-        i += 1;
+        const item = queue[i];
+        visitor(item);
+        if (Array.isArray(item.inner_errors)) {
+            queue.push(...(item.inner_errors as Array<T>));
+        }
+        ++i;
     }
+}
 
-    return undefined;
+export function getErrorWithCode<T extends YTErrorRaw>(errors: T[], code: number): T | undefined {
+    let res: T | undefined;
+    forEachYTError(errors, (error) => {
+        if (!res && getYtErrorCode(error) === code) {
+            res = error;
+        }
+    });
+    return res;
 }
 
 export function getPermissionDeniedError<T extends YTErrorRaw>(error: T): T | undefined {
