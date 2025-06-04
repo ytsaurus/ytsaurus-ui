@@ -28,6 +28,8 @@ import {makePathByQueryEngine} from '../helpers/makePathByQueryEngine';
 import {insertTextWhereCursor} from '../helpers/insertTextWhereCursor';
 import {getQueryEngine} from '../../module/query/selectors';
 import {useMonaco} from '../../hooks/useMonaco';
+import {makeRoutedURL} from '../../../../store/location';
+import {Page} from '../../../../../shared/constants/settings';
 
 const b = cn('navigation-header');
 
@@ -65,6 +67,10 @@ export const NavigationHeader: FC = () => {
         dispatch(copyPathToClipboard(path));
     };
 
+    const handleOpenLink = () => {
+        window.open(makeRoutedURL(`/${cluster}/${Page.NAVIGATION}`, {path}), '_blank');
+    };
+
     const handlePastePath = useCallback(() => {
         if (!cluster) return;
         const editor = getEditor('queryEditor');
@@ -88,6 +94,7 @@ export const NavigationHeader: FC = () => {
                 {cluster && (
                     <HeaderActions
                         isFavorite={favorites.includes(path)}
+                        onOpenLink={handleOpenLink}
                         onFavoriteToggle={handleFavoriteToggle}
                         onPathCopy={handlePathCopy}
                         onPastePath={handlePastePath}
