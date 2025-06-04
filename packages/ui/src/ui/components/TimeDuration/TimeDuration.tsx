@@ -18,15 +18,16 @@ export type TimeDurationProps = {
     className?: string;
 
     value: NumberInputWithErrorProps['value'];
+    error?: string;
     onChange: (value: TimeDurationProps['value']) => void;
 };
 
-export function TimeDuration({value, onChange}: TimeDurationProps) {
+export function TimeDuration({value, onChange, error}: TimeDurationProps) {
     return (
         <div className={block()}>
             <NumberInputWithError
                 className={block('input')}
-                value={value}
+                value={{...value, value: value?.value, error: value?.error ?? error}}
                 onChange={onChange}
                 formatFn={formatTimeDuration}
                 parseFn={parseTimeDuration}
@@ -73,7 +74,7 @@ TimeDuration.isEmpty = (v: TimeDurationProps['value']) => {
     return !v;
 };
 
-TimeDuration.validate = (v: TimeDurationProps['value']) => {
+TimeDuration.validator = (v: TimeDurationProps['value']) => {
     return v?.error;
 };
 
