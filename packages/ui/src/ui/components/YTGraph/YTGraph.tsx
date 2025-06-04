@@ -96,7 +96,7 @@ export function YTGraph<B extends TBlock, C extends TConnection>({
                 <></>
             ) : (
                 <div
-                    className={block('render-block')}
+                    className={block('render-block', {selected: item.selected})}
                     style={{
                         left: item.x,
                         top: item.y,

@@ -1,3 +1,5 @@
+@import '../../styles/yql-colors';
+
 .yt-graph {
     &__graph {
         canvas.layer:nth-child(-n + 2) {
@@ -9,5 +11,13 @@
         position: absolute;
         overflow: hidden;
         padding: 10px;
+        border-radius: 8px;
+
+        background-color: var(--g-color-base-generic-ultralight);
+
+        &_selected {
+            outline: 2px solid var(--g-color-line-brand);
+            background-color: var(--hover-background);
+        }
     }
 }
