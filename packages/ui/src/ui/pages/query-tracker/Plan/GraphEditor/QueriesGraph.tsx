@@ -3,12 +3,12 @@ import React, {FC, useState} from 'react';
 import {ECameraScaleLevel} from '@gravity-ui/graph';
 import {Loader} from '@gravity-ui/uikit';
 
-import {NodeBlock, YTGraph, useConfig, useElkLayout} from '../../../../components/YTGraph';
+import {YTGraph, useConfig, useElkLayout} from '../../../../components/YTGraph';
 
 import {ProcessedGraph} from '../utils';
 import {useResultProgress} from '../PlanContext';
 import {createBlocks} from './helpers/createBlocks';
-import {QueriesNodeBlock} from './QueriesNodeBlock';
+import {QueriesCanvasBlock, QueriesNodeBlock} from './QueriesNodeBlock';
 import {DetailBlock} from './DetailBlock';
 
 type Props = {
@@ -16,7 +16,9 @@ type Props = {
 };
 
 const Graph: FC<Props> = ({processedGraph}) => {
-    const {config, isBlock, scale, setScale} = useConfig<QueriesNodeBlock>({block: NodeBlock});
+    const {config, isBlock, scale, setScale} = useConfig<QueriesNodeBlock>({
+        block: QueriesCanvasBlock,
+    });
 
     const [loading, setLoading] = useState(true);
 
