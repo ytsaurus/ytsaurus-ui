@@ -1,0 +1,32 @@
+.g-root {
+    // Node operation styles
+    --yql-graph-color-operation-new: var(--g-color-base-simple-hover);
+    --yql-graph-color-operation-new-border: var(--g-color-line-generic-active);
+    --yql-graph-color-operation-new-background: var(--g-color-base-generic-ultralight);
+    --yql-graph-color-operation-pending: var(--g-color-base-warning-heavy);
+    --yql-graph-color-operation-completed: var(--g-color-base-positive-heavy);
+    --yql-graph-color-operation-completed-border: var(--g-color-line-positive);
+    --yql-graph-color-operation-completed-background: var(--g-color-base-positive-light);
+    --yql-graph-color-operation-running: var(--g-color-base-info-heavy);
+    --yql-graph-color-operation-running-border: var(--g-color-line-brand);
+    --yql-graph-color-operation-running-background: var(--g-color-base-info-light);
+    --yql-graph-color-operation-aborted: var(--g-color-base-misc-heavy);
+    --yql-graph-color-operation-aborted-border: var(--g-color-line-misc);
+    --yql-graph-color-operation-aborted-background: var(--g-color-base-misc-light);
+    --yql-graph-color-operation-started: var(--g-color-base-simple-hover);
+    --yql-graph-color-operation-started-border: var(--g-color-line-brand);
+    --yql-graph-color-operation-started-background: var(--g-color-base-generic-ultralight);
+    --yql-graph-color-operation-failed: var(--g-color-base-danger-heavy);
+    --yql-graph-color-operation-failed-border: var(--g-color-line-danger);
+    --yql-graph-color-operation-failed-background: var(--g-color-base-danger-light);
+    // Node table styles
+    --yql-graph-color-table-fill1: var(--g-color-text-secondary);
+    --yql-graph-color-table-fill2: var(--g-color-text-hint);
+    // Edge styles
+    --yql-graph-color-edge: var(--g-color-line-generic-active);
+    --yql-graph-color-edge-highlight: var(--g-color-base-info-heavy);
+    // Text
+    --yql-graph-color-text-operation-count: var(--g-color-text-primary);
+    --yql-graph-color-text-label: var(--g-color-text-complementary);
+    --yql-graph-color-text-link: var(--g-color-text-link);
+}
