@@ -53,7 +53,7 @@ const fields = [
         caption: 'Export period',
         required: true,
         tooltip: 'Export period mask will be converted to milliseconds',
-        validate: validateExportPeriod,
+        validator: validateExportPeriod,
     },
     {
         type: 'time-duration' as const,

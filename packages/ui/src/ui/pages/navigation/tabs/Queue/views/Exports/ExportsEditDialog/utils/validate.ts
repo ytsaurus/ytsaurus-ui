@@ -7,8 +7,10 @@ import {QueueExport} from '../../../../../../../../types/navigation/queue/queue'
 
 import {ExportsFormValues} from '../ExportsEditDialog';
 
-export function validateExportPeriod(value?: number) {
-    return !value || value % 1000 ? 'Export period should be a multiple of 1000' : undefined;
+export function validateExportPeriod(period?: {value?: number; error?: string}) {
+    return !period?.value || period?.value % 1000 !== 0
+        ? 'Export period should be a multiple of 1000ms'
+        : undefined;
 }
 
 export async function validateExportDirectory(path: string) {
