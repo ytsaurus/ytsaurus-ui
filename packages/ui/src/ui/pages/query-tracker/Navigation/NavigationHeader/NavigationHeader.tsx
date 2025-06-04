@@ -28,6 +28,8 @@ import {makePathByQueryEngine} from '../helpers/makePathByQueryEngine';
 import {insertTextWhereCursor} from '../helpers/insertTextWhereCursor';
 import {getQueryEngine} from '../../module/query/selectors';
 import {useMonaco} from '../../hooks/useMonaco';
+import {makeRoutedURL} from '../../../../store/location';
+import {Page} from '../../../../../shared/constants/settings';
 
 const b = cn('navigation-header');
 
@@ -88,6 +90,7 @@ export const NavigationHeader: FC = () => {
                 {cluster && (
                     <HeaderActions
                         isFavorite={favorites.includes(path)}
+                        navigationUrl={makeRoutedURL(`/${cluster}/${Page.NAVIGATION}`, {path})}
                         onFavoriteToggle={handleFavoriteToggle}
                         onPathCopy={handlePathCopy}
                         onPastePath={handlePastePath}
