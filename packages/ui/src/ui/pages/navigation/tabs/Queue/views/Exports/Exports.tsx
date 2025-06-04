@@ -1,7 +1,11 @@
 import React from 'react';
+import {ClipboardButton, Flex, Text} from '@gravity-ui/uikit';
 
 import Link from '../../../../../../components/Link/Link';
+import Icon from '../../../../../../components/Icon/Icon';
 import DataTableYT, {Column} from '../../../../../../components/DataTableYT/DataTableYT';
+import {Tooltip} from '../../../../../../components/Tooltip/Tooltip';
+import {formatTimeDuration} from '../../../../../../components/TimeDuration/TimeDuration';
 
 import hammer from '../../../../../../common/hammer';
 import {QueueExportConfig} from '../../../../../../types/navigation/queue/queue';
@@ -30,13 +34,13 @@ const columns: Array<Column<ExportConfigColumns>> = [
     },
     {
         name: 'export_period',
-        render: Value,
-        header: 'Export period, ms',
+        render: Time,
+        header: 'Export period',
     },
     {
         name: 'export_ttl',
-        render: Value,
-        header: 'Export TTL, ms',
+        render: Time,
+        header: 'Export TTL',
     },
     {
         name: 'output_table_name_pattern',
@@ -73,6 +77,26 @@ export function Exports() {
 
 function Value({value}: {value?: unknown}) {
     return <>{value ? String(value) : hammer.format.NO_VALUE}</>;
+}
+
+function Time({value}: {value?: unknown}) {
+    return (
+        <Flex alignItems={'center'} gap={1}>
+            <Text>{value ? formatTimeDuration(Number(value)) : hammer.format.NO_VALUE}</Text>
+            {Boolean(value) && (
+                <Tooltip
+                    content={
+                        <Flex gap={2} alignItems={'center'}>
+                            <ClipboardButton text={String(value)} />
+                            {String(value)}, ms
+                        </Flex>
+                    }
+                >
+                    <Icon awesome={'question-circle'} />
+                </Tooltip>
+            )}
+        </Flex>
+    );
 }
 
 function Path({value}: {value?: unknown}) {
