@@ -117,6 +117,11 @@ export function parseTimeDuration(rawValue: string) {
     if (!rawValue) {
         return {value: undefined};
     }
+
+    if (!/^[\d\sa-zA-Z]*$/.test(rawValue)) {
+        return {value: undefined, error: 'only digits and latin characters are allowed'};
+    }
+
     const skipSpaces = rawValue.replace(/\s+/g, '');
     const res = [...skipSpaces.matchAll(/\d+[a-zA-Z]*/g)];
     if (!res.length || res[0].index !== 0) {
