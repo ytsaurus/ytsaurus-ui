@@ -3,8 +3,6 @@ import {GRAPH_COLORS} from '../constants';
 
 const DEFAULT_CONTENT_OFFSET = 10;
 
-const ICON_SIZE = 24;
-
 const COUNTER_PADDING = 10;
 const COUNTER_BLOCK_HEIGHT = 30;
 const COUNTER_RADIUS = 4;
@@ -12,7 +10,12 @@ const COUNTER_RADIUS = 4;
 const FONT_SIZE = {
     normal: 14,
     header: 18,
+    header2: 24,
 };
+
+const ELLIPSIS_CHAR = '\u2026';
+
+type FontSize = keyof typeof FONT_SIZE;
 
 export type BaseMeta = {};
 
@@ -40,8 +43,6 @@ type RoundedBlockProps = {
     inProgress?: boolean;
 };
 
-const MAX_TEXT_LENGTH = 16;
-
 export class YTGrapCanvasBlock<T extends NodeTBlock<BaseMeta>> extends CanvasBlock<T> {
     icon: null | HTMLImageElement = null;
 
@@ -59,14 +60,17 @@ export class YTGrapCanvasBlock<T extends NodeTBlock<BaseMeta>> extends CanvasBlo
 
     renderBlock(_mode: 'minimalistic' | 'schematic') {
         this.drawBorder({});
-        this.drawInnerText({text: this.state.name});
+        this.drawInnerText({
+            text: this.state.name,
+            fontSize: 'header2',
+        });
     }
 
     getGeometry() {
         return this.connectedState.$geometry.value;
     }
 
-    protected getFont(type: keyof typeof FONT_SIZE = 'normal') {
+    protected getFont(type: FontSize = 'normal') {
         return `normal ${FONT_SIZE[type] ?? FONT_SIZE.normal}px YS Text, Arial, sans-serif`;
     }
 
@@ -157,16 +161,17 @@ export class YTGrapCanvasBlock<T extends NodeTBlock<BaseMeta>> extends CanvasBlo
         text,
         yPosition = DEFAULT_CONTENT_OFFSET,
         padding = DEFAULT_CONTENT_OFFSET,
-        hasIcon,
+        fontSize,
     }: {
         text: string;
         yPosition?: number;
-        hasIcon?: boolean;
         padding?: number;
+        fontSize?: FontSize;
     }) {
         const {height, width, x, y} = this.state;
-        const iconHeight = hasIcon ? ICON_SIZE : 0;
-        const name = text.length > MAX_TEXT_LENGTH ? text.slice(0, 13) + '...' : text;
+        const textAreaWidth = width - 2 * padding;
+
+        const name = this.fitText(textAreaWidth, text, fontSize);
 
         this.context.ctx.fillStyle = this.context.colors.block?.text || GRAPH_COLORS.text;
         this.context.ctx.textAlign = 'center';
@@ -174,11 +179,11 @@ export class YTGrapCanvasBlock<T extends NodeTBlock<BaseMeta>> extends CanvasBlo
             rect: {
                 x: x + padding,
                 y: y + yPosition,
-                width: width - padding * 2,
-                height: height - iconHeight - DEFAULT_CONTENT_OFFSET,
+                width: textAreaWidth,
+                height: height - padding * 2 - yPosition,
             },
             renderParams: {
-                font: this.getFont(),
+                font: this.getFont(fontSize),
             },
         });
     }
@@ -224,8 +229,7 @@ export class YTGrapCanvasBlock<T extends NodeTBlock<BaseMeta>> extends CanvasBlo
     protected drawCounter(total: number) {
         const {x, y} = this.state;
 
-        this.context.ctx.font = this.getFont('header');
-        const textMetrics = this.context.ctx.measureText(total.toString());
+        const textMetrics = this.measureText(total.toString(), 'header');
         const textHeight =
             textMetrics.actualBoundingBoxAscent + textMetrics.actualBoundingBoxDescent;
         const blockWidth = textMetrics.width + COUNTER_PADDING * 2;
@@ -248,5 +252,29 @@ export class YTGrapCanvasBlock<T extends NodeTBlock<BaseMeta>> extends CanvasBlo
         this.context.ctx.textAlign = 'center';
         this.context.ctx.textBaseline = 'top';
         this.context.ctx.fillText(total.toString(), x, y - textHeight / 2);
+    }
+
+    protected fitText(maxWidth: number, text: string, fontSize?: FontSize): string {
+        this.context.ctx.font = this.getFont(fontSize);
+
+        let width = Infinity;
+        let res = text;
+        while (width > maxWidth) {
+            width = this.context.ctx.measureText(res).width;
+            if (width <= maxWidth) {
+                break;
+            }
+
+            const cw = width / res.length;
+            const newLength = maxWidth / cw;
+            res = res.slice(0, newLength);
+        }
+
+        return res === text ? res : res.slice(0, res.length - 1) + ELLIPSIS_CHAR;
+    }
+
+    protected measureText(text: string, fontSize?: FontSize) {
+        this.context.ctx.font = this.getFont(fontSize);
+        return this.context.ctx.measureText(text);
     }
 }
