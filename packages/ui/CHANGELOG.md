@@ -1,5 +1,49 @@
 # Changelog
 
+## [1.94.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.93.0...ui-v1.94.0) (2025-06-05)
+
+
+### Features
+
+* **Analytics:** create analytics factory ([9e47bdb](https://github.com/ytsaurus/ytsaurus-ui/commit/9e47bdb9629b3603fce6ac0ec5a1f32107aa69b7))
+* **Consumer:** add register buttons for queues and consumers [YTFRONT-4869] ([f9d0a84](https://github.com/ytsaurus/ytsaurus-ui/commit/f9d0a843905362050fa80ddbdffeb4f5056d078f))
+* **Dashboard2:** add roles and quota info links [YTFRONT-3400] ([6da78a0](https://github.com/ytsaurus/ytsaurus-ui/commit/6da78a0e0e0dfb8e8ba70a3ed50ac7dbfcd75f57))
+* **Dashboard2:** add sizing on load [YTFRONT-3400] ([0c8beca](https://github.com/ytsaurus/ytsaurus-ui/commit/0c8beca7e2d4e6bb134229059660f3f5c4b1f011))
+* **Dashboard2:** autoheight widget setting [YTFRONT-3400] ([2a23ae9](https://github.com/ytsaurus/ytsaurus-ui/commit/2a23ae9666b0e9bc08fbd59d9accdb2aae348797))
+* **Dashboard2:** do not display options for not allowed services [YTFRONT-3400] ([e648b94](https://github.com/ytsaurus/ytsaurus-ui/commit/e648b9445bfcfa8f9ac047ee1ba5b113020ce0ea))
+* **Dashboard2:** init new dashboard page [YTFRONT-3400] ([3cb7cea](https://github.com/ytsaurus/ytsaurus-ui/commit/3cb7cea40dc04275688c86db3093b9cdfe24b3c1))
+* **Dashboard2:** setup accounts widget [YTFRONT-3400] ([798d61e](https://github.com/ytsaurus/ytsaurus-ui/commit/798d61ee7abd9ffbef9ddb642337a19676dbbfc7))
+* **Dashboard2:** setup navigation widget [YTFRONT-3400] ([ea74f14](https://github.com/ytsaurus/ytsaurus-ui/commit/ea74f1411386764b3b63478ffd7e9976b47f0e5c))
+* **Dashboard2:** setup new dashboard top row [YTFRONT-3400] ([e1cc255](https://github.com/ytsaurus/ytsaurus-ui/commit/e1cc2557616cc7370fd87337a6e1b1f27c967c48))
+* **Dashboard2:** setup operations widget [YTFRONT-3400] ([0e712ad](https://github.com/ytsaurus/ytsaurus-ui/commit/0e712adc19944bdbfb04707d5dc99bf87f87598a))
+* **Dashboard2:** setup pools widget [YTFRONT-3400] ([8dc1aa4](https://github.com/ytsaurus/ytsaurus-ui/commit/8dc1aa48d874cc59eaef82568c4befc1dc086fbb))
+* **Dashboard2:** setup queries widget [YTFRONT-3400] ([35e09d2](https://github.com/ytsaurus/ytsaurus-ui/commit/35e09d28984a0ed410de51986da467d50b4d3a6d))
+* **Dashboard2:** setup services widget [YTFRONT-3400] ([c6d2f1f](https://github.com/ytsaurus/ytsaurus-ui/commit/c6d2f1fdf13f116ecd50de6f19d6b2b0082fb90b))
+* **Dashboard2:** setup widget on adding [YTFRONT-3400] ([967a735](https://github.com/ytsaurus/ytsaurus-ui/commit/967a7357f4eadbd6d5af53f887ebb4ad49dc68fd))
+* **Dashboard2:** update default dashboard setup [YTFRONT-3400] ([f916498](https://github.com/ytsaurus/ytsaurus-ui/commit/f91649856fd5f51685c5a7ec4153085997f51e61))
+* **Dialog:** accounts with presets ([237ef65](https://github.com/ytsaurus/ytsaurus-ui/commit/237ef650f1907e9c0413dbf9d5d08e982a1150e8))
+* **Dialog:** add pools multiple select control ([305bb97](https://github.com/ytsaurus/ytsaurus-ui/commit/305bb97786180496573569012022e0e43c4b6a15))
+* **Dialog:** add services select control ([f3005fa](https://github.com/ytsaurus/ytsaurus-ui/commit/f3005fa3bffed8d19c5bb69fb638e3a46f5273de))
+* **Navigation/Queue:** add consumer creation [YTFRONT-4869] ([69c23f9](https://github.com/ytsaurus/ytsaurus-ui/commit/69c23f9e4b1cba38cf2aea3cc803cdd64eb937b9))
+* **Operations:** jobs timeline [YTFRONT-4695] ([6f0296e](https://github.com/ytsaurus/ytsaurus-ui/commit/6f0296e1de33b764a2ae56f481ce33ffd23cba06))
+* **Scheduling:** scroll into ref operation view [YTFRONT-4941] ([237e207](https://github.com/ytsaurus/ytsaurus-ui/commit/237e207a04b68bf311f52d6ad3eb326ada718ff2))
+
+
+### Bug Fixes
+
+* **BundleEditorDialog:** minor fixes [YTFRONT-4947] ([7a7432a](https://github.com/ytsaurus/ytsaurus-ui/commit/7a7432a4644e809a24a75f177a64dbd26506f81a))
+* **CreateTableModal:** rename 'Queue' =&gt; 'Queue table' [YTFRONT-4953] ([50b46b1](https://github.com/ytsaurus/ytsaurus-ui/commit/50b46b1b59327100a3b1bf986eb5b3260978ac5f))
+* **Dashboard2:** config editting [YTFRONT-3400] ([1d3cea1](https://github.com/ytsaurus/ytsaurus-ui/commit/1d3cea14ed3d82858a143c28015a64ed11fddbff))
+* **Dashboard:** autohieght, typos, extra contol in operations settings, navigation fallback [YTFRONT-3400] ([3a55fc1](https://github.com/ytsaurus/ytsaurus-ui/commit/3a55fc1bbb1a3229c6d48d6fdbc7a30dd4395b70))
+* **Job:** host should be clickable [YTFRONT-4958] ([fd55fa5](https://github.com/ytsaurus/ytsaurus-ui/commit/fd55fa507546711be886d1be9bfa65682bb94508))
+* **Navigation/Consumers:** icon position in button [YTFRONT-4869] ([f59d4c5](https://github.com/ytsaurus/ytsaurus-ui/commit/f59d4c599a28c9e71a476db1bf7e8fd75c6e630d))
+* **Navigation/Queue:** add 'mapping in proggress' message [YTFRONT-4954] ([0b14083](https://github.com/ytsaurus/ytsaurus-ui/commit/0b1408368e944b0cfb8bca71023d17c2a08e9bdf))
+* **Operation/Details:** set default limit for visible count of env/layers [YTFRONT-4962] ([29a1217](https://github.com/ytsaurus/ytsaurus-ui/commit/29a12172d24a478aa943b52248c030a06f76ae23))
+* **Operation:** do not display 'Data flow' for 'vanilla' [YTFRONT-4959] ([50c8a1f](https://github.com/ytsaurus/ytsaurus-ui/commit/50c8a1f6a01198fc652e91680b33d09c488a9d37))
+* **Operation:** do not show 'total job wall time'/'total cpu time spent' for 'vanilla' [YTFRONT-4960] ([4d9dec9](https://github.com/ytsaurus/ytsaurus-ui/commit/4d9dec9b02b87807aba8cebeff9c43756f8577c7))
+* **Operations/Detail:** special status tooltip [YTFRONT-4943] ([7405792](https://github.com/ytsaurus/ytsaurus-ui/commit/7405792875fe57cff6a4cfd30199f480f96262ba))
+* widgets adding ([2d8a988](https://github.com/ytsaurus/ytsaurus-ui/commit/2d8a98890af464951cd98112f65b602b0cd4d7be))
+
 ## [1.93.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.92.0...ui-v1.93.0) (2025-05-29)
 
 
