@@ -176,7 +176,7 @@ export type QueryTrackerLastChytClique = {
 };
 
 type SchedulingSettings = {
-    'globa::scheduling::expandStaticConfiguration': boolean;
+    'global::scheduling::expandStaticConfiguration': boolean;
 };
 
 export interface DefaultSettings {

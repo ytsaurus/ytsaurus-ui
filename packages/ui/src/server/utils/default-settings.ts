@@ -73,7 +73,7 @@ const defaultUserSettings: Partial<DescribedSettings> = {
     'global::menu::recentClustersFirst': true,
     'global::menu::recentPagesFirst': true,
 
-    'globa::scheduling::expandStaticConfiguration': false,
+    'global::scheduling::expandStaticConfiguration': false,
 
     'global::accounts::dashboardVisibilityMode': 'usable',
     'global::accounts::accountsVisibilityMode': 'all',

@@ -1,5 +1,6 @@
 import {
     CLUSTER_MENU_TABLE_ID,
+    FIELD_AUTO,
     SYSTEM_CHUNKS_TABLE_ID,
     TOGGLE_COLUMN_SORT_ORDER,
 } from '../../constants/tables';
@@ -67,8 +68,8 @@ export const initialState: TablesSortOrderState = {
 
     [COMPONENTS_PROXIES_TABLE_ID]: {field: 'host', asc: true},
 
-    [SCHEDULING_POOL_TREE_TABLE_ID]: NAME_ASC_SORT_VALUE,
-    [SCHEDULING_POOL_CHILDREN_TABLE_ID]: NAME_ASC_SORT_VALUE,
+    [SCHEDULING_POOL_TREE_TABLE_ID]: {field: FIELD_AUTO, asc: true},
+    [SCHEDULING_POOL_CHILDREN_TABLE_ID]: {field: FIELD_AUTO, asc: true},
 };
 
 export default (state = initialState, action: TablesSortOrderAction) => {
