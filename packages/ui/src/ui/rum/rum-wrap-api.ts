@@ -110,7 +110,7 @@ type YTApiV4 = {
     listJobs(...args: ApiMethodParameters<ListJobsParameters>): Promise<ListJobsResponse>;
     flowExecute<Command extends FlowExecuteCommand = 'describe-pipeline'>(
         ...args: ApiMethodParameters<FlowExecuteParams<Command>>
-    ): Promise<FlowExecuteData<Command>>;
+    ): Promise<FlowExecuteData[Command]>;
 
     remountTable(...args: ApiMethodParameters<TableParams>): Promise<void>;
 
