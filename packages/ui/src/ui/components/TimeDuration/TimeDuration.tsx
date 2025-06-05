@@ -18,15 +18,16 @@ export type TimeDurationProps = {
     className?: string;
 
     value: NumberInputWithErrorProps['value'];
+    error?: string;
     onChange: (value: TimeDurationProps['value']) => void;
 };
 
-export function TimeDuration({value, onChange}: TimeDurationProps) {
+export function TimeDuration({value, onChange, error}: TimeDurationProps) {
     return (
         <div className={block()}>
             <NumberInputWithError
                 className={block('input')}
-                value={value}
+                value={{...value, value: value?.value, error: value?.error ?? error}}
                 onChange={onChange}
                 formatFn={formatTimeDuration}
                 parseFn={parseTimeDuration}
@@ -73,7 +74,7 @@ TimeDuration.isEmpty = (v: TimeDurationProps['value']) => {
     return !v;
 };
 
-TimeDuration.validate = (v: TimeDurationProps['value']) => {
+TimeDuration.validator = (v: TimeDurationProps['value']) => {
     return v?.error;
 };
 
@@ -116,6 +117,11 @@ export function parseTimeDuration(rawValue: string) {
     if (!rawValue) {
         return {value: undefined};
     }
+
+    if (!/^[\d\sa-zA-Z]*$/.test(rawValue)) {
+        return {value: undefined, error: 'only digits and latin characters are allowed'};
+    }
+
     const skipSpaces = rawValue.replace(/\s+/g, '');
     const res = [...skipSpaces.matchAll(/\d+[a-zA-Z]*/g)];
     if (!res.length || res[0].index !== 0) {
