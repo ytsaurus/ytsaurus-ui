@@ -38,7 +38,9 @@ export function HoverPopup<B extends TBlock>({
         width: `${width}px`,
     };
 
-    return (
+    const content = renderContent({data: block.state});
+
+    return !content ? null : (
         <>
             <div
                 ref={containerRef}
@@ -55,7 +57,7 @@ export function HoverPopup<B extends TBlock>({
                 anchorRef={containerRef}
                 onMouseEnter={handleClearTimeout}
             >
-                {renderContent({data: block.state})}
+                {content}
             </Popup>
         </>
     );

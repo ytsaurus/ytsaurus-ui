@@ -81,7 +81,6 @@ export class QueriesCanvasBlock extends YTGrapCanvasBlock<QueriesNodeBlock> {
             this.drawInnerText({
                 text: this.state.name,
                 yPosition: startYPosition + DEFAULT_CONTENT_OFFSET + iconHeight,
-                hasIcon: Boolean(this.state.meta.icon?.src),
             });
             this.drawBottomText(this.state.meta.bottomText);
 

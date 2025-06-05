@@ -540,11 +540,33 @@ export type FlowExecuteParams<Command extends FlowExecuteCommand> = {
     pipeline_path: string;
 };
 
-export type FlowExecuteData<Command extends FlowExecuteCommand> = FlowExecuteDataByCommand &
-    {
-        command: Command;
-    }[Command];
-
-export type FlowExecuteDataByCommand = {
-    'describet-pipeline': unknown;
+export type FlowExecuteData = {
+    'describe-pipeline': FlowDescribePipelineData;
 };
+
+export type FlowDescribePipelineData = {
+    computations: Record<string, FlowComputation>;
+};
+
+export type FlowComputation = {
+    id: string;
+    input_streams: Record<string, FlowStream>;
+    output_streams: Record<string, FlowStream>;
+    sink_streams: Record<string, FlowStream>;
+    source_streams: Record<string, FlowStream>;
+    metrics: {
+        cpu_usage_current: number;
+        memory_usage_current: number;
+    };
+    partitions_stats: {
+        count: 1;
+        count_by_state: Record<
+            'Completed' | 'Executing' | 'Transient' | 'Interrupted',
+            number | undefined
+        >;
+    };
+    group_by_schema_str: string;
+    epoches_per_second: number;
+};
+
+export type FlowStream = {id: string; bytes_per_second: number; messages_per_second: number};
