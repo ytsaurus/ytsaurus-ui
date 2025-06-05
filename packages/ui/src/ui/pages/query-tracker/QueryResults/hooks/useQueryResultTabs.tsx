@@ -3,7 +3,7 @@ import times_ from 'lodash/times';
 import has_ from 'lodash/has';
 import find_ from 'lodash/find';
 import {QueryStatus} from '../../../../types/query-tracker';
-import {CompletedStates, QueryItem} from '../../module/api';
+import {CompletedStates, QueryItem, isSingleProgress} from '../../module/api';
 import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {loadQueryResultsErrors} from '../../module/query_result/actions';
@@ -79,6 +79,7 @@ export const useQueryResultTabs = (
             return [];
         }
         const items: TabsItemProps[] = [];
+        const progress = isSingleProgress(query?.progress) ? query.progress : {};
 
         if (query.state === QueryStatus.FAILED) {
             items.push({id: QueryResultTab.ERROR, title: 'Error'});
@@ -106,8 +107,7 @@ export const useQueryResultTabs = (
         }
 
         const emptyProgress =
-            !query.progress?.yql_plan?.Basic.nodes.length &&
-            !query.progress?.yql_plan?.Basic.links?.length;
+            !progress?.yql_plan?.Basic.nodes.length && !progress?.yql_plan?.Basic.links?.length;
         if (query.progress && !emptyProgress) {
             items.push({
                 id: QueryResultTab.PROGRESS,
@@ -124,7 +124,7 @@ export const useQueryResultTabs = (
                 });
             }
 
-            if (query.progress?.yql_statistics) {
+            if (progress?.yql_statistics) {
                 items.push({
                     id: QueryResultTab.STATISTIC,
                     title: 'Statistics',
