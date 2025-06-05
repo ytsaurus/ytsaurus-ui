@@ -1,3 +1,19 @@
 .yt-flow-graph {
-    
+    &__graph {
+        position: relative;
+
+        width: calc(100vw - var(--gn-aside-header-size) * 2);
+        height: calc(100vh - var(--app-header-height) - var(--app-footer-height));
+    }
+
+    &__item-container {
+        display: flex;
+        overflow: hidden;
+    }
+
+    &__item {
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+    }
 }
