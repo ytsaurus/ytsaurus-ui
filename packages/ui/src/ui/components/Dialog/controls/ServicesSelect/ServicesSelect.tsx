@@ -105,6 +105,7 @@ export function ServicesSelect(props: Props) {
                                 onUpdate={(newValue) => updateItem(index, newValue[0])}
                                 width={'max'}
                                 hasClear
+                                filterable
                                 value={[pair.item]}
                                 options={makeItemsOptions(pair)}
                                 loading={isItemsListLoading(pair)}
