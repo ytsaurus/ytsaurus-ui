@@ -2,6 +2,7 @@ import React from 'react';
 import {
     CanvasBlock,
     ECameraScaleLevel,
+    Graph,
     GraphCanvas,
     GraphState,
     HookGraphParams,
@@ -26,8 +27,15 @@ export type YTGraphProps<B extends TBlock, C extends TConnection> = {
     setScale: (v: ECameraScaleLevel) => void;
     config: HookGraphParams;
     isBlock: (v: unknown) => v is CanvasBlock<B>;
-    renderPopup: ({data}: {data: B}) => React.ReactNode;
-    renderBlock?: React.ComponentProps<typeof GraphCanvas>['renderBlock'];
+    renderPopup?: ({data}: {data: B}) => React.ReactNode;
+    renderBlock?: (props: RenderContentProps<B>) => React.ReactNode;
+};
+
+export type RenderContentProps<B extends TBlock> = {
+    graph: Graph;
+    data: B;
+    className: string;
+    style: React.CSSProperties;
 };
 
 export type YTGraphData<B extends TBlock, C extends TConnection> = {
@@ -90,22 +98,23 @@ export function YTGraph<B extends TBlock, C extends TConnection>({
     }, [graph, theme]);
 
     const renderBlockCallback = React.useCallback(
-        (...args: Parameters<Exclude<typeof renderBlock, undefined>>) => {
-            const item = args[1];
+        (graph: Graph, data: B) => {
             return !renderBlock ? (
                 <></>
             ) : (
-                <div
-                    className={block('render-block', {selected: item.selected})}
-                    style={{
-                        left: item.x,
-                        top: item.y,
-                        width: item.width,
-                        height: item.height,
-                    }}
-                >
-                    {renderBlock(...args)}
-                </div>
+                renderBlock({
+                    graph,
+                    data,
+                    className: block('render-block', {selected: data.selected}),
+                    style: {
+                        left: data.x,
+                        top: data.y,
+                        width: data.width,
+                        height: data.height,
+                        overflow: 'hidden',
+                        position: 'absolute',
+                    },
+                })
             );
         },
         [renderBlock],
@@ -115,10 +124,12 @@ export function YTGraph<B extends TBlock, C extends TConnection>({
         <div className={block(null, className)}>
             <GraphCanvas
                 graph={graph}
-                renderBlock={renderBlockCallback}
+                renderBlock={renderBlockCallback as any}
                 className={block('graph')}
             />
-            <PopupPortal graph={graph} renderContent={renderPopup} isBlockNode={isBlock} />
+            {renderPopup !== undefined && (
+                <PopupPortal graph={graph} renderContent={renderPopup} isBlockNode={isBlock} />
+            )}
         </div>
     );
 }

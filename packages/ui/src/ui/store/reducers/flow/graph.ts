@@ -12,7 +12,7 @@ export type FlowGraphState = {
     error: YTError | undefined;
 
     pipeline_path: string | undefined;
-    data: FlowExecuteData<'describe-pipeline'> | undefined;
+    data: FlowExecuteData['describe-pipeline'] | undefined;
 };
 
 export const initialState: FlowGraphState = {

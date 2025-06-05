@@ -88,7 +88,9 @@ function FlowContent({viewMode}: {viewMode: FlowViewMode}) {
         case 'computations':
             return <FlowLayout path={path} viewMode={viewMode} />;
         case 'graph':
-            return <FlowGraph pipeline_path={path} />;
+        case 'graph-data':
+            return <FlowGraph pipeline_path={path} yson={viewMode === 'graph-data'} />;
+
         default:
             return (
                 <YTAlertBlock
