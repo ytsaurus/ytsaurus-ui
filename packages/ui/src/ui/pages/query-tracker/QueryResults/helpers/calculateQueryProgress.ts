@@ -1,6 +1,6 @@
-import {QueryItem} from '../../module/api';
+import {SingleProgress} from '../../module/api';
 
-export const calculateQueryProgress = (progress: QueryItem['progress']): number => {
+export const calculateQueryProgress = (progress: SingleProgress): number => {
     if (!progress) return 0;
 
     if (progress.spyt_progress) {

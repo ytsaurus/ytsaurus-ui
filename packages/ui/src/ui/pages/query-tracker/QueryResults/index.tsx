@@ -1,6 +1,6 @@
 import React, {ReactNode} from 'react';
 import block from 'bem-cn-lite';
-import {QueryItem} from '../module/api';
+import {QueryItem, isSingleProgress} from '../module/api';
 import {Tabs} from '@gravity-ui/uikit';
 import {QueryMetaInfo} from './QueryMetaRow';
 import QueryMetaTable from '../QueryMetaTable';
@@ -34,13 +34,15 @@ export const QueryResults = React.memo<Props>(function QueryResults({
     minimized = false,
 }) {
     const [tabs, setTab, {activeTabId, category, activeResultParams}] = useQueryResultTabs(query);
-    const operationIdToCluster = React.useMemo(
-        () => extractOperationIdToCluster(query?.progress?.yql_statistics),
-        [query?.progress?.yql_statistics],
-    );
+    const operationIdToCluster = React.useMemo(() => {
+        return extractOperationIdToCluster(
+            isSingleProgress(query?.progress) ? query?.progress?.yql_statistics : undefined,
+        );
+    }, [query?.progress]);
 
     if (!query) return null;
 
+    const progress = isSingleProgress(query?.progress) ? query.progress : {};
     const resultIndex = activeResultParams?.resultIndex;
 
     return (
@@ -52,8 +54,8 @@ export const QueryResults = React.memo<Props>(function QueryResults({
             <QueryProgress query={query} />
             <NotRenderUntilFirstVisible className={b('result', {minimized})} hide={minimized}>
                 <PlanProvider
-                    plan={query.progress?.yql_plan}
-                    progress={query.progress?.yql_progress}
+                    plan={progress.yql_plan}
+                    progress={progress?.yql_progress}
                     defaultView="graph"
                 >
                     <div className={b('header')}>
