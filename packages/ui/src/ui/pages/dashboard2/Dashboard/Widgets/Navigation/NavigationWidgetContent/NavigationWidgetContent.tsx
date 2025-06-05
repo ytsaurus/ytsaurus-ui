@@ -4,8 +4,8 @@ import {PluginWidgetProps} from '@gravity-ui/dashkit';
 
 import {RootState} from '../../../../../../store/reducers';
 import {usePathsQuery} from '../../../../../../store/api/dashboard2/navigation';
-import {getPathsType} from '../../../../../../store/reducers/dashboard2/navigation';
 import {getCluster} from '../../../../../../store/selectors/global';
+import {getNavigationTypeFilter} from '../../../../../../store/selectors/dashboard2/navigation';
 
 import {WidgetSkeleton} from '../../../../../../pages/dashboard2/Dashboard/components/WidgetSkeleton/WidgetSkeleton';
 import {useAutoHeight} from '../../../../../../pages/dashboard2/Dashboard/hooks/use-autoheight';
@@ -21,7 +21,7 @@ const navigationLayout = {
 };
 
 export function NavigationWidgetContent(props: PluginWidgetProps) {
-    const type = useSelector((state: RootState) => getPathsType(state, props.id));
+    const type = useSelector((state: RootState) => getNavigationTypeFilter(state, props.id));
     const cluster = useSelector(getCluster);
     const {data: items, isLoading, isFetching} = usePathsQuery({cluster, type});
 
