@@ -40,7 +40,7 @@ export class ComputationCanvasBlock extends YTGrapCanvasBlock<FlowGraphBlockItem
     renderMeta() {
         const {height, width} = this.state;
         const {
-            metrics: {cpu_usage_current},
+            metrics: {cpu_usage_current, memory_usage_current},
         } = this.state.meta;
 
         const maxWidth = Math.round((width - PADDING * 3) / 2);
@@ -56,7 +56,7 @@ export class ComputationCanvasBlock extends YTGrapCanvasBlock<FlowGraphBlockItem
             padding: PADDING,
         });
 
-        const value = format.Bytes(2423412341, {digits: 1});
+        const value = format.Bytes(memory_usage_current, {digits: 1});
         this.drawMetaItem({
             xPos: PADDING * 1.5 + maxWidth,
             yPos,

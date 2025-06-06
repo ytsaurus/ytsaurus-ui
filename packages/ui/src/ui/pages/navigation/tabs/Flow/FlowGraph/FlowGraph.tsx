@@ -11,7 +11,6 @@ import {FlowComputation, FlowStream} from '../../../../../../shared/yt-types';
 import {useUpdater} from '../../../../../hooks/use-updater';
 import Yson from '../../../../../components/Yson/Yson';
 import {
-    YTGrapCanvasBlock,
     YTGraph,
     YTGraphBlock,
     YTGraphData,
@@ -28,6 +27,7 @@ import {Stream} from './renderers/Stream';
 
 import './FlowGraph.scss';
 import {ComputationCanvasBlock} from './renderers/ComputationCanvas';
+import {StreamCanvasBlock} from './renderers/StreamCanvas';
 
 const block = cn('yt-flow-graph');
 
@@ -56,7 +56,7 @@ export type FlowGraphBlockItem<T extends FlowGraphBlock['is']> = FlowGraphBlock 
 export function FlowGraphImpl() {
     const config = useConfig<FlowGraphBlock>({
         computation: ComputationCanvasBlock,
-        stream: YTGrapCanvasBlock,
+        stream: StreamCanvasBlock,
     } as any);
 
     const {isEmpty, data} = useFlowGraphData();
