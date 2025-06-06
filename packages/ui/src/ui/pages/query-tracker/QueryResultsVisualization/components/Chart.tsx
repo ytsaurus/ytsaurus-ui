@@ -4,7 +4,10 @@ import {settings} from '@gravity-ui/chartkit';
 import type {ChartKitRef} from '@gravity-ui/chartkit';
 import {prepareWidgetData} from '../preparers/prepareWidgetData';
 import {useSelector} from 'react-redux';
-import {selectChartVisualization, selectQueryResult} from '../../module/queryChart/selectors';
+import {
+    selectCurrentChartVisualization,
+    selectQueryResult,
+} from '../../module/queryChart/selectors';
 import {EmptyPlaceholdersMessage} from './EmptyPlaceholdersMessage';
 import {D3Plugin} from '@gravity-ui/chartkit/d3';
 
@@ -12,7 +15,7 @@ settings.set({plugins: [...settings.get('plugins'), D3Plugin]});
 
 export const BaseChart = forwardRef<ChartKitRef | undefined>(function BaseChartComponent(_, ref) {
     const result = useSelector(selectQueryResult);
-    const visualization = useSelector(selectChartVisualization);
+    const visualization = useSelector(selectCurrentChartVisualization);
 
     const widgetData = useMemo(() => {
         return prepareWidgetData(result, visualization);

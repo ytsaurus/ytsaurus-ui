@@ -3,7 +3,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {
     selectAvailableFields,
     selectChartAxisType,
-    selectChartVisualization,
+    selectCurrentChartVisualization,
 } from '../../../module/queryChart/selectors';
 import PlusIcon from '@gravity-ui/icons/svgs/plus.svg';
 import {FieldKey} from '../../../module/queryChart/queryChartSlice';
@@ -23,9 +23,8 @@ const b = cn('yt-chart-wizard');
 
 export const Wizard: FC = () => {
     const dispatch = useDispatch();
-    const {type} = useSelector(selectChartVisualization);
+    const {type, xField, yField} = useSelector(selectCurrentChartVisualization);
     const {stringColumns, numberColumns} = useSelector(selectAvailableFields);
-    const {xField, yField} = useSelector(selectChartVisualization);
     const axisType = useSelector(selectChartAxisType);
     const [addFormVisible, toggleForm] = useToggle(!yField.length);
 

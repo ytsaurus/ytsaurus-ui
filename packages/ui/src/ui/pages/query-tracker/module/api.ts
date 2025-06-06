@@ -129,6 +129,19 @@ export type CHYTProgress = {
     total_rows_to_read: number;
 };
 
+export type SingleProgress = {
+    yql_plan?: Plan;
+    yql_statistics?: YQLSstatistics;
+    yql_progress?: Progress;
+    spyt_progress?: number;
+    total_progress?: CHYTProgress;
+};
+
+export type CHYTMultiProgress = {
+    queries_count: number;
+    progress: {query_id: string; total_progress: CHYTProgress}[];
+};
+
 export interface QueryItem extends DraftQuery {
     id: QueryItemId;
     start_time: string;
@@ -136,19 +149,19 @@ export interface QueryItem extends DraftQuery {
     user: string;
     state: QueryStatus;
     result_count: number;
-    progress?: {
-        yql_plan?: Plan;
-        yql_statistics?: YQLSstatistics;
-        yql_progress?: Progress;
-        spyt_progress?: number;
-        total_progress?: CHYTProgress;
-    };
+    progress?: SingleProgress | CHYTMultiProgress;
     error?: QueryError;
     annotations?: {
         title?: string;
         chartConfig?: VisualizationState;
     };
 }
+
+export const isSingleProgress = (
+    progress?: SingleProgress | CHYTMultiProgress,
+): progress is SingleProgress => {
+    return Boolean(progress) && !('queries_count' in progress!);
+};
 
 // Define these constants based on string values to avoid circular dependencies
 export const AbortableStatuses = ['running', 'pending'];

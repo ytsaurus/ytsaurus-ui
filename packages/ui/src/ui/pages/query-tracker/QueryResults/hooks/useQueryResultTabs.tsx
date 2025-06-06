@@ -3,7 +3,7 @@ import times_ from 'lodash/times';
 import has_ from 'lodash/has';
 import find_ from 'lodash/find';
 import {QueryStatus} from '../../../../types/query-tracker';
-import {CompletedStates, QueryItem} from '../../module/api';
+import {CompletedStates, QueryItem, isSingleProgress} from '../../module/api';
 import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {loadQueryResultsErrors} from '../../module/query_result/actions';
@@ -22,10 +22,9 @@ export enum QueryResultTab {
 }
 
 const isResultTab = (tabId: string) => tabId.startsWith('result/');
+const createTabId = (tab: QueryResultTab, index: number) => `${tab}/${index}`;
 
-const createResultTabId = (index: number) => `result/${index}`;
-
-const parseResultTabIndex = (tabId: string) => {
+export const parseResultTabIndex = (tabId: string) => {
     const parts = tabId.split('/');
     return parts?.[1] ? parseInt(parts?.[1], 10) : undefined;
 };
@@ -48,7 +47,7 @@ export const useQueryResultTabs = (
 
     const activeTabId = useMemo(() => {
         if (tab === QueryResultTab.RESULT) {
-            return createResultTabId(activeResultParams?.resultIndex || 0);
+            return createTabId(QueryResultTab.RESULT, activeResultParams?.resultIndex || 0);
         }
         return tab;
     }, [tab, activeResultParams]);
@@ -79,6 +78,7 @@ export const useQueryResultTabs = (
             return [];
         }
         const items: TabsItemProps[] = [];
+        const progress = isSingleProgress(query?.progress) ? query.progress : {};
 
         if (query.state === QueryStatus.FAILED) {
             items.push({id: QueryResultTab.ERROR, title: 'Error'});
@@ -97,7 +97,7 @@ export const useQueryResultTabs = (
                         );
                     }
                     return {
-                        id: createResultTabId(num),
+                        id: createTabId(QueryResultTab.RESULT, num),
                         title: query.result_count === 1 ? 'Result' : `Result #${num + 1}`,
                         icon,
                     };
@@ -106,8 +106,7 @@ export const useQueryResultTabs = (
         }
 
         const emptyProgress =
-            !query.progress?.yql_plan?.Basic.nodes.length &&
-            !query.progress?.yql_plan?.Basic.links?.length;
+            !progress?.yql_plan?.Basic.nodes.length && !progress?.yql_plan?.Basic.links?.length;
         if (query.progress && !emptyProgress) {
             items.push({
                 id: QueryResultTab.PROGRESS,
@@ -118,13 +117,18 @@ export const useQueryResultTabs = (
         if (query.state === QueryStatus.COMPLETED) {
             const queryResultChartTab = UIFactory.getQueryResultChartTab();
             if (queryResultChartTab && query.result_count) {
-                items.push({
-                    id: QueryResultTab.CHART_TAB,
-                    title: queryResultChartTab.title,
-                });
+                items.push(
+                    ...times_(query.result_count, (num) => {
+                        const suffix = query.result_count === 1 ? '' : ` #${num + 1}`;
+                        return {
+                            id: createTabId(QueryResultTab.CHART_TAB, num),
+                            title: queryResultChartTab.title + suffix,
+                        };
+                    }),
+                );
             }
 
-            if (query.progress?.yql_statistics) {
+            if (progress?.yql_statistics) {
                 items.push({
                     id: QueryResultTab.STATISTIC,
                     title: 'Statistics',

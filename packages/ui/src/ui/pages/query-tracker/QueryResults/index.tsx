@@ -1,11 +1,11 @@
 import React, {ReactNode} from 'react';
 import block from 'bem-cn-lite';
-import {QueryItem} from '../module/api';
+import {QueryItem, isSingleProgress} from '../module/api';
 import {Tabs} from '@gravity-ui/uikit';
 import {QueryMetaInfo} from './QueryMetaRow';
 import QueryMetaTable from '../QueryMetaTable';
 import {QueryResultActions} from './QueryResultActions';
-import {QueryResultTab, useQueryResultTabs} from './hooks/useQueryResultTabs';
+import {QueryResultTab, parseResultTabIndex, useQueryResultTabs} from './hooks/useQueryResultTabs';
 import {YQLStatisticsTable} from '../QueryResultsView/YQLStatistics';
 import NotRenderUntilFirstVisible from '../NotRenderUntilFirstVisible/NotRenderUntilFirstVisible';
 import {PlanProvider} from '../Plan/PlanContext';
@@ -34,13 +34,15 @@ export const QueryResults = React.memo<Props>(function QueryResults({
     minimized = false,
 }) {
     const [tabs, setTab, {activeTabId, category, activeResultParams}] = useQueryResultTabs(query);
-    const operationIdToCluster = React.useMemo(
-        () => extractOperationIdToCluster(query?.progress?.yql_statistics),
-        [query?.progress?.yql_statistics],
-    );
+    const operationIdToCluster = React.useMemo(() => {
+        return extractOperationIdToCluster(
+            isSingleProgress(query?.progress) ? query?.progress?.yql_statistics : undefined,
+        );
+    }, [query?.progress]);
 
     if (!query) return null;
 
+    const progress = isSingleProgress(query?.progress) ? query.progress : {};
     const resultIndex = activeResultParams?.resultIndex;
 
     return (
@@ -52,8 +54,8 @@ export const QueryResults = React.memo<Props>(function QueryResults({
             <QueryProgress query={query} />
             <NotRenderUntilFirstVisible className={b('result', {minimized})} hide={minimized}>
                 <PlanProvider
-                    plan={query.progress?.yql_plan}
-                    progress={query.progress?.yql_progress}
+                    plan={progress.yql_plan}
+                    progress={progress?.yql_progress}
                     defaultView="graph"
                 >
                     <div className={b('header')}>
@@ -83,10 +85,13 @@ export const QueryResults = React.memo<Props>(function QueryResults({
                             />
                         </NotRenderUntilFirstVisible>
                         <NotRenderUntilFirstVisible
-                            hide={category !== QueryResultTab.CHART_TAB}
+                            hide={!category.includes(QueryResultTab.CHART_TAB)}
                             className={b('result-wrap')}
                         >
-                            <QueryChartTab query={query} />
+                            <QueryChartTab
+                                query={query}
+                                resultIndex={parseResultTabIndex(category) || 0}
+                            />
                         </NotRenderUntilFirstVisible>
                         {category === QueryResultTab.ERROR && <ErrorTree rootError={query.error} />}
                         {category === QueryResultTab.META && <QueryMetaTable query={query} />}

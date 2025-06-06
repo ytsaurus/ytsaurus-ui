@@ -4,14 +4,21 @@ import {RootState} from '../../../../store/reducers';
 import {wrapApiPromiseByToaster} from '../../../../utils/utils';
 import {ThunkAction} from 'redux-thunk';
 import {Action, Dispatch} from 'redux';
-import {getCurrentQueryACO, getQueryAnnotations, getQueryItem} from '../query/selectors';
+import {
+    getCurrentQueryACO,
+    getQueryAnnotations,
+    getQueryDraft,
+    getQueryItem,
+} from '../query/selectors';
 import {
     Config,
     FieldKey,
     VisualizationState,
-    initialState,
+    defaultVisualization,
     setConfig,
     setFiled,
+    setLoading,
+    setResultIndex,
     setSaved,
     setVisualization,
 } from './queryChartSlice';
@@ -19,42 +26,39 @@ import {
     selectChartAxisType,
     selectChartConfig,
     selectChartVisualization,
+    selectCurrentChartVisualization,
     selectQueryResult,
+    selectQueryResults,
 } from './selectors';
 import {getPointValue} from '../../QueryResultsVisualization/preparers/getPointData';
 import {ChartKitWidgetAxisType} from '@gravity-ui/chartkit/build/types/widget-data/axis';
 import {selectIsMultipleAco} from '../query_aco/selectors';
+import cloneDeep_ from 'lodash/cloneDeep';
+import {loadQueryResult} from '../query_result/actions';
 
 const DELAY = 2 * 1000;
 
 type AsyncAction = ThunkAction<void, RootState, undefined, Action>;
 
-type SaveQueryChartConfigPayload = {
-    state: VisualizationState;
-    queryId: string;
-};
-
-const saveChartConfig = (
-    dispatch: Dispatch,
-    getState: () => RootState,
-    payload: SaveQueryChartConfigPayload,
-) => {
+const saveChartConfig = (dispatch: Dispatch, getState: () => RootState) => {
     dispatch(setSaved(false));
     const state = getState();
     const annotations = getQueryAnnotations(state);
     const isMultipleAco = selectIsMultipleAco(state);
     const aco = getCurrentQueryACO(state);
+    const {id} = getQueryDraft(state);
+    const config = selectChartVisualization(state);
 
     wrapApiPromiseByToaster(
         ytApiV4Id.alterQuery(YTApiId.alterQuery, {
             parameters: {
-                query_id: payload.queryId,
+                query_id: id,
                 ...(isMultipleAco
                     ? {access_control_objects: aco}
                     : {access_control_object: aco[0]}),
                 annotations: {
                     ...annotations,
-                    chartConfig: payload.state,
+                    chartConfig: config,
                 },
             },
         }),
@@ -70,18 +74,22 @@ const saveChartConfig = (
 
 const debouncedSaveQueryChartConfig = debounce_(saveChartConfig, DELAY);
 
-export const saveQueryChartConfig =
-    (payload: SaveQueryChartConfigPayload): AsyncAction =>
-    (dispatch, getState) => {
-        debouncedSaveQueryChartConfig(dispatch, getState, payload);
-    };
+export const saveQueryChartConfig = (): AsyncAction => (dispatch, getState) => {
+    debouncedSaveQueryChartConfig(dispatch, getState);
+};
 
 export const changeAxisType =
     (axisType: ChartKitWidgetAxisType): AsyncAction =>
     (dispatch, getState) => {
         const state = getState();
         const result = selectQueryResult(state);
-        const {config, xField} = selectChartVisualization(state);
+        const currentVisualization = selectCurrentChartVisualization(state);
+
+        if (!currentVisualization) {
+            return;
+        }
+
+        const {config, xField} = currentVisualization;
 
         const newConfig: Config = {
             ...config,
@@ -116,6 +124,11 @@ export const changeConfig =
     (dispatch, getState) => {
         const state = getState();
         const config = selectChartConfig(state);
+
+        if (!config) {
+            return;
+        }
+
         const newConfig = {...config};
 
         switch (name) {
@@ -139,8 +152,70 @@ export const changeConfig =
         dispatch(setConfig(newConfig));
     };
 
+function isVisualizationState(config: any): config is VisualizationState {
+    if (typeof config !== 'object' || config === null) {
+        return false;
+    }
+
+    const requiredFields: Array<keyof VisualizationState> = ['type', 'xField', 'yField', 'config'];
+    for (const field of requiredFields) {
+        if (!(field in config)) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+const validateChartConfig = (config: any): config is Record<number, VisualizationState> => {
+    if (typeof config !== 'object' || config === null) {
+        return false;
+    }
+
+    return Object.values(config).every((value) => {
+        return isVisualizationState(value);
+    });
+};
+
 export const loadVisualization = (): AsyncAction => (dispatch, getState) => {
     const queryItem = getQueryItem(getState());
+    const chartConfig = queryItem?.annotations?.chartConfig;
 
-    dispatch(setVisualization(queryItem?.annotations?.chartConfig || initialState.visualization));
+    dispatch(setResultIndex(0));
+    if (validateChartConfig(chartConfig)) {
+        dispatch(setVisualization(chartConfig));
+    } else {
+        dispatch(setVisualization({0: cloneDeep_(defaultVisualization)}));
+    }
 };
+
+export const changeVisualizationResultIndex =
+    (resultIndex: number): AsyncAction =>
+    async (dispatch, getState) => {
+        const state = getState();
+        const visualizations = selectChartVisualization(state);
+        const results = selectQueryResults(state);
+        const {id} = getQueryDraft(state);
+
+        dispatch(setLoading(true));
+
+        if (!id || !Object.keys(results).length) {
+            dispatch(setLoading(false));
+            return;
+        }
+
+        if (!visualizations[resultIndex]) {
+            const newVisualizations = {
+                ...visualizations,
+                [resultIndex]: cloneDeep_(defaultVisualization),
+            };
+            dispatch(setVisualization(newVisualizations));
+        }
+
+        if (!(resultIndex in results)) {
+            await dispatch(loadQueryResult(id, resultIndex));
+        }
+
+        dispatch(setLoading(false));
+        dispatch(setResultIndex(resultIndex));
+    };

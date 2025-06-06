@@ -2,7 +2,7 @@ import forOwn_ from 'lodash/forOwn';
 import {createSelector} from 'reselect';
 import {RootState} from '../../../../store/reducers';
 import {QueryStatus} from '../../../../types/query-tracker';
-import {DraftQuery, QTRequestOptions, QueryItem} from '../api';
+import {DraftQuery, QTRequestOptions, QueryItem, isSingleProgress} from '../api';
 import {
     getSettingQueryTrackerStage,
     getSettingQueryTrackerYQLAgentStage,
@@ -132,5 +132,9 @@ export const getCurrentDraftQueryACO = (state: RootState) => {
 };
 
 export const getProgressYQLStatistics = (state: RootState) => {
-    return state.queryTracker?.query?.queryItem?.progress?.yql_statistics;
+    const progress = state.queryTracker?.query?.queryItem?.progress;
+
+    if (!isSingleProgress(progress)) return undefined;
+
+    return progress.yql_statistics;
 };

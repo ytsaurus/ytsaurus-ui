@@ -2,7 +2,7 @@ import React, {FC, useEffect} from 'react';
 import {Select} from '@gravity-ui/uikit';
 import {useDispatch, useSelector} from 'react-redux';
 import {setVisualizationType} from '../../module/queryChart/queryChartSlice';
-import {selectChartVisualization} from '../../module/queryChart/selectors';
+import {selectCurrentChartVisualization} from '../../module/queryChart/selectors';
 import './ChartLeftMenu.scss';
 import cn from 'bem-cn-lite';
 import {ChartType} from '../constants';
@@ -21,19 +21,14 @@ const b = cn('yt-chart-left-menu');
 
 export const ChartLeftMenu: FC = () => {
     const dispatch = useDispatch();
-    const visualization = useSelector(selectChartVisualization);
+    const visualization = useSelector(selectCurrentChartVisualization);
     const {id} = useSelector(getQueryDraft);
     const {type} = visualization;
 
     useEffect(() => {
         if (!id) return;
 
-        dispatch(
-            saveQueryChartConfig({
-                queryId: id,
-                state: visualization,
-            }),
-        );
+        dispatch(saveQueryChartConfig());
     }, [id, visualization, dispatch]);
 
     const handleChangeVisualization = (val: string[]) => {
