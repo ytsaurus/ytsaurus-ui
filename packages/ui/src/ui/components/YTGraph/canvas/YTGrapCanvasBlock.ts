@@ -1,6 +1,9 @@
+import React from 'react';
+
 import {CanvasBlock} from '@gravity-ui/graph';
 import {GRAPH_COLORS} from '../constants';
 import {YTGraphBlock} from '../YTGraph';
+import {iconToBase} from '../utils/iconToBase';
 
 export const DEFAULT_PADDING = 10;
 
@@ -19,6 +22,10 @@ const ELLIPSIS_CHAR = '\u2026';
 export type YTGraphFontSize = keyof typeof FONT_SIZE;
 
 export type BaseMeta = {};
+
+type IconSrc =
+    | {src: string; currentColor?: undefined}
+    | {src: React.ReactElement; currentColor?: string};
 
 type RoundedBlockProps = {
     x: number;
@@ -136,6 +143,30 @@ export class YTGrapCanvasBlock<T extends YTGraphBlock<string, {}>> extends Canva
                 console.error('Failed to load image:', error);
             }
         }
+    }
+
+    protected async drawInnerIcon({
+        xPos,
+        yPos,
+        w,
+        h,
+        ...icon
+    }: {
+        xPos: number;
+        yPos: number;
+        w: number;
+        h: number;
+    } & IconSrc) {
+        if (!icon.src) {
+            return;
+        }
+
+        const {x, y} = this.state;
+
+        const source =
+            'string' === typeof icon.src ? icon.src : iconToBase(icon.src, icon.currentColor);
+
+        return this.drawIcon(source, x + xPos, y + yPos, w, h);
     }
 
     protected drawBottomText(bottomText?: string) {

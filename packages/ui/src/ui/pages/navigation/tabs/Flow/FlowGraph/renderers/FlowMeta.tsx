@@ -6,13 +6,13 @@ export function FlowMeta({
     className,
 }: {
     className?: string;
-    items: Array<{label: string; value: string; grow?: number}>;
+    items: Array<{label: string; value: string}>;
 }) {
     return (
         <Flex className={className}>
-            {items.map(({label, value, grow}, index) => {
+            {items.map(({label, value}, index) => {
                 return (
-                    <Flex key={index} grow={grow} direction="column">
+                    <Flex key={index} grow={index < items.length - 1 ? 1 : 0} direction="column">
                         <Text variant="caption-1" color="secondary">
                             {label}
                         </Text>

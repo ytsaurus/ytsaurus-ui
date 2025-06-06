@@ -14,6 +14,7 @@ const GRAPH_COLORS_ = {
     failed: () => getCssColor('--g-color-base-danger-heavy'),
     jobBlockBackground: () => 'rgba(88, 106, 122, 1)',
     jobBlockColor: () => getCssColor('--g-color-text-brand'),
+    icon: () => getCssColor('--yql-graph-icon-color'),
 };
 
 const STATE_COLOR_MAP_ = {

@@ -52,12 +52,10 @@ export function Computation({item, className}: ComputationProps) {
                         value: format.Number(cpu_usage_current, {
                             digits: cpu_usage_current! > 1 ? 1 : 2,
                         }),
-                        grow: 1,
                     },
                     {
                         label: 'RAM Usage',
                         value: format.Bytes(memory_usage_current),
-                        grow: 1,
                     },
                     {
                         label: 'Epoch, per/s',
