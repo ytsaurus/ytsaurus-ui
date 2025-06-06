@@ -3,7 +3,7 @@ import {ECameraScaleLevel, TBlockId} from '@gravity-ui/graph';
 import {QueriesNodeBlock} from '../QueriesNodeBlock';
 import type {Progress} from '../../models/plan';
 import {OperationType} from '../enums';
-import {iconToBase} from './iconToBase';
+import {iconToBase} from '../../../../../components/YTGraph/utils/iconToBase';
 import {getOperationType} from './getOperationType';
 import {getBlockIcon} from './getBlockIcon';
 import {TMultipointConnection} from '@gravity-ui/graph/build/plugins/elk/types';
@@ -40,7 +40,7 @@ export const createBlocks = (
             meta: {
                 level,
                 icon: {
-                    src: iconToBase(icon, '#657B8F'),
+                    src: iconToBase(icon),
                 },
                 bottomText,
                 padding: 10,
