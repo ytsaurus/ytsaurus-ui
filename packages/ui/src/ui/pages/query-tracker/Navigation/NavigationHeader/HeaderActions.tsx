@@ -6,6 +6,7 @@ import TextIndentIcon from '@gravity-ui/icons/svgs/text-indent.svg';
 import CopyIcon from '@gravity-ui/icons/svgs/copy.svg';
 import './HeaderActions.scss';
 import cn from 'bem-cn-lite';
+import ArrowUpRightFromSquareIcon from '@gravity-ui/icons/svgs/arrow-up-right-from-square.svg';
 
 const b = cn('navigation-header-actions');
 
@@ -13,6 +14,7 @@ type Props = {
     showCopyBtn: boolean;
     isFavorite: boolean;
     onFavoriteToggle: () => void;
+    onOpenLink: () => void;
     onPathCopy: () => void;
     onPastePath: () => void;
 };
@@ -21,11 +23,15 @@ export const HeaderActions: FC<Props> = ({
     isFavorite,
     showCopyBtn,
     onFavoriteToggle,
+    onOpenLink,
     onPathCopy,
     onPastePath,
 }) => {
     return (
         <div className={b()}>
+            <Button view="flat" onClick={onOpenLink}>
+                <Icon data={ArrowUpRightFromSquareIcon} size={16} />
+            </Button>
             <Button view="flat" onClick={onFavoriteToggle}>
                 <Icon data={isFavorite ? StarFillIcon : StarIcon} size={16} />
             </Button>

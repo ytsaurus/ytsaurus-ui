@@ -1,4 +1,8 @@
 .navigation-header {
+    --cluster-button-width: 24px;
+    --hader-actions-width: 128px;
+    --total-gaps-width: 16px;
+
     display: flex;
     flex-direction: column;
     gap: 8px;
@@ -6,7 +10,7 @@
 
     &__path-wrap {
         display: grid;
-        grid-template-columns: 24px calc(100% - 24px - 92px - 16px) 92px;
+        grid-template-columns: var(--cluster-button-width) calc(100% - var(--cluster-button-width) - var(--hader-actions-width) - var(--total-gaps-width)) var(--hader-actions-width);
         align-items: center;
         gap: 0 8px;
     }
