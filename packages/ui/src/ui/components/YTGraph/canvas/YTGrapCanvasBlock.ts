@@ -1,7 +1,8 @@
-import {CanvasBlock, TBlock} from '@gravity-ui/graph';
+import {CanvasBlock} from '@gravity-ui/graph';
 import {GRAPH_COLORS} from '../constants';
+import {YTGraphBlock} from '../YTGraph';
 
-const DEFAULT_CONTENT_OFFSET = 10;
+export const DEFAULT_PADDING = 10;
 
 const COUNTER_PADDING = 10;
 const COUNTER_BLOCK_HEIGHT = 30;
@@ -15,11 +16,9 @@ const FONT_SIZE = {
 
 const ELLIPSIS_CHAR = '\u2026';
 
-type FontSize = keyof typeof FONT_SIZE;
+export type YTGraphFontSize = keyof typeof FONT_SIZE;
 
 export type BaseMeta = {};
-
-export type NodeTBlock<T extends BaseMeta> = Omit<TBlock, 'meta'> & {meta: T};
 
 type RoundedBlockProps = {
     x: number;
@@ -43,7 +42,7 @@ type RoundedBlockProps = {
     inProgress?: boolean;
 };
 
-export class YTGrapCanvasBlock<T extends NodeTBlock<BaseMeta>> extends CanvasBlock<T> {
+export class YTGrapCanvasBlock<T extends YTGraphBlock<string, {}>> extends CanvasBlock<T> {
     icon: null | HTMLImageElement = null;
 
     override renderMinimalisticBlock() {
@@ -70,7 +69,7 @@ export class YTGrapCanvasBlock<T extends NodeTBlock<BaseMeta>> extends CanvasBlo
         return this.connectedState.$geometry.value;
     }
 
-    protected getFont(type: FontSize = 'normal') {
+    protected getFont(type: YTGraphFontSize = 'normal') {
         return `normal ${FONT_SIZE[type] ?? FONT_SIZE.normal}px YS Text, Arial, sans-serif`;
     }
 
@@ -159,33 +158,49 @@ export class YTGrapCanvasBlock<T extends NodeTBlock<BaseMeta>> extends CanvasBlo
 
     protected drawInnerText({
         text,
-        yPosition = DEFAULT_CONTENT_OFFSET,
-        padding = DEFAULT_CONTENT_OFFSET,
+        yPos = DEFAULT_PADDING,
+        xPos,
+        padding = DEFAULT_PADDING,
         fontSize,
+        color,
+        align,
+        oneLine,
     }: {
         text: string;
-        yPosition?: number;
+        yPos?: number;
+        xPos?: number;
         padding?: number;
-        fontSize?: FontSize;
+        fontSize?: YTGraphFontSize;
+        color?: 'secondary';
+        align?: 'left' | 'right' | 'center';
+        oneLine?: boolean;
     }) {
         const {height, width, x, y} = this.state;
         const textAreaWidth = width - 2 * padding;
 
-        const name = this.fitText(textAreaWidth, text, fontSize);
+        const {
+            fitText: name,
+            fitTextWidth,
+            height: fitHeight,
+        } = this.fitText(textAreaWidth, text, fontSize);
 
-        this.context.ctx.fillStyle = this.context.colors.block?.text || GRAPH_COLORS.text;
-        this.context.ctx.textAlign = 'center';
+        this.context.ctx.fillStyle =
+            color === 'secondary'
+                ? GRAPH_COLORS.secondary
+                : this.context.colors.block?.text || GRAPH_COLORS.text;
+        this.context.ctx.textAlign = align ?? (xPos ? 'left' : 'center');
         this.renderText(name, this.context.ctx, {
             rect: {
-                x: x + padding,
-                y: y + yPosition,
-                width: textAreaWidth,
-                height: height - padding * 2 - yPosition,
+                x: xPos === undefined ? x + padding : x + xPos,
+                y: y + yPos,
+                width: xPos ? width - xPos - padding : textAreaWidth,
+                height: oneLine ? fitHeight : height - padding - yPos,
             },
             renderParams: {
                 font: this.getFont(fontSize),
             },
         });
+        return xPos !== undefined ? fitTextWidth : undefined;
     }
 
     private loadImage(src: string): Promise<HTMLImageElement> {
@@ -254,7 +269,7 @@ export class YTGrapCanvasBlock<T extends NodeTBlock<BaseMeta>> extends CanvasBlo
         this.context.ctx.fillText(total.toString(), x, y - textHeight / 2);
     }
 
-    protected fitText(maxWidth: number, text: string, fontSize?: FontSize): string {
+    protected fitText(maxWidth: number, text: string, fontSize: YTGraphFontSize = 'normal') {
         this.context.ctx.font = this.getFont(fontSize);
 
         let width = Infinity;
@@ -270,11 +285,57 @@ export class YTGrapCanvasBlock<T extends NodeTBlock<BaseMeta>> extends CanvasBlo
             res = res.slice(0, newLength);
         }
 
-        return res === text ? res : res.slice(0, res.length - 1) + ELLIPSIS_CHAR;
+        const isSameText = res === text;
+
+        res = isSameText ? res : res.slice(0, res.length - 1) + ELLIPSIS_CHAR;
+        return {
+            fitText: res,
+            fitTextWidth: isSameText ? width : this.context.ctx.measureText(res).width,
+            height: FONT_SIZE[fontSize],
+        };
     }
 
-    protected measureText(text: string, fontSize?: FontSize) {
+    protected measureText(text: string, fontSize?: YTGraphFontSize) {
         this.context.ctx.font = this.getFont(fontSize);
         return this.context.ctx.measureText(text);
+    }
+
+    protected drawMetaItem({
+        maxWidth,
+        xPos,
+        yPos,
+        label,
+        value,
+        fontSize,
+        padding,
+    }: {
+        maxWidth: number;
+        xPos: number;
+        yPos: number;
+        label: string;
+        value: string;
+        fontSize: YTGraphFontSize;
+        padding?: number;
+    }) {
+        const l = this.fitText(maxWidth, label, fontSize);
+
+        this.drawInnerText({
+            xPos,
+            yPos,
+            text: l.fitText,
+            color: 'secondary',
+            fontSize,
+            padding,
+        });
+
+        const v = this.fitText(maxWidth, value, fontSize);
+
+        this.drawInnerText({
+            xPos,
+            yPos: yPos + l.height,
+            text: v.fitText,
+            fontSize: 'header2',
+            padding,
+        });
     }
 }
