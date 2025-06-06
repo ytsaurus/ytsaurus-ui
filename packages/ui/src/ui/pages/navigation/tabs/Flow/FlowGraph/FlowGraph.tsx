@@ -27,6 +27,7 @@ import {Computation} from './renderers/Computation';
 import {Stream} from './renderers/Stream';
 
 import './FlowGraph.scss';
+import {ComputationCanvasBlock} from './renderers/ComputationCanvas';
 
 const block = cn('yt-flow-graph');
 
@@ -54,7 +55,7 @@ export type FlowGraphBlockItem<T extends FlowGraphBlock['is']> = FlowGraphBlock 
 
 export function FlowGraphImpl() {
     const config = useConfig<FlowGraphBlock>({
-        computation: YTGrapCanvasBlock,
+        computation: ComputationCanvasBlock,
         stream: YTGrapCanvasBlock,
     } as any);
 

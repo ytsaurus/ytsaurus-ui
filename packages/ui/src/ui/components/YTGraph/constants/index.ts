@@ -2,6 +2,7 @@ import {getCssColor} from '../../../utils/get-css-color';
 
 export const GRAPH_COLORS = {
     text: getCssColor('--yql-graph-color-text-label'),
+    secondary: getCssColor('--g-color-text-secondary'),
     border: getCssColor('--yql-graph-color-edge'),
     selectedBorder: getCssColor('--yql-graph-color-edge-highlight'),
     progressBorder: getCssColor('--info-color'),
