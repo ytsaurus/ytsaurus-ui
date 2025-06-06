@@ -29,6 +29,7 @@ export interface ClusterUiConfig {
     enable_maintenance_api_proxies?: boolean;
     chyt_controller_base_url?: string;
     livy_controller_base_url?: string;
+    resource_usage_base_url?: string;
     query_tracker_default_aco?: Record<Stage, string>;
     job_trace_url_template?: {
         title: string;

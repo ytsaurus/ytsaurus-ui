@@ -99,7 +99,8 @@ Available flags (**default values** are highlighted in bold):
 | livy_controller_base_url               | **null**, url as string                                                              | Base url for spyt-controller                                                                                                                                                                                                                                                                                                                |
 | job_trace_url_template                 | **null**, `{title: string; url_template: string; enforce_for_trees?: Array<string>}` | If defined adds `Job trace` item to meta-table on `Job/Details` page for a job with `archive_features/has_trace == true` and for jobs from a tree in `enforce_for_trees`, example: `{title: 'Open im MyProfiling', url_template: 'https://my.profiling.service/{cluster}/{operationId}/{jobId}', enforce_for_trees: ['tree-with-traces'] }` |
 | query_tracker_default_aco              | **null**, `{stage1: string; stage2: string; }`                                       | Sets the default ACO in Query Tracker requests for each stage                                                                                                                                                                                                                                                                               |
-| operation_performance_url_template     | **null**, `{title: string; url_template: string}`                                    | Configuration for operation performance analysis system integration. Template must contain {operation_id} placeholder which will be replaced with actual operationId                                                                                                                                                                          |
+| operation_performance_url_template     | **null**, `{title: string; url_template: string}`                                    | Configuration for operation performance analysis system integration. Template must contain {operation_id} placeholder which will be replaced with actual operationId                                                                                                                                                                        |
+| resource_usage_base_url               | **null**, url as string                                                              | Base URL for accounts usage service to override uiSettings.accountsUsageBasePath                                                                                                                                                                                                                                                            |
 
 ### Configuration
 
@@ -139,8 +140,8 @@ docker run --rm --network host -it -w /work \
     -e BASE_URL=${BASE_URL} \
     "ghcr.io/gravity-ui/node-nginx:ubuntu20-nodejs18" \
     /bin/bash -c '
-            cd tests 
-            npm ci 
+            cd tests
+            npm ci
             npx playwright install --with-deps chromium
             cd ..
             npm run e2e:localmode:screenshots:update

@@ -18,7 +18,7 @@ import {
     ACCOUNTS_USAGE_TREE_SUCCESS,
 } from '../../../constants/accounts/accounts';
 import axios from 'axios';
-import {getCluster} from '../../selectors/global';
+import {getAccountsUsageBaseUrl, getCluster} from '../../selectors/global';
 import {
     AccountUsageListAction,
     AccountUsageListDataParams,
@@ -58,16 +58,11 @@ import {
 } from '../settings/settings';
 import {AccountUsageDataParams} from '../../reducers/accounts/usage/account-usage-types';
 import {fetchAccountUsageListDiff, fetchAccountUsageTreeDiff} from './account-usage-diff';
-import {getAccountsUsageBasePath} from '../../../config';
 import {updateSortStateArray} from '../../../utils/sort-helpers';
 import {Action} from 'redux';
 import {openModal} from '../modals/attributes-modal';
 
 type SnapshotsThunkAction = ThunkAction<any, RootState, any, AccountsSnapshotsAction>;
-
-export function accountUsageApiUrl(handle: string) {
-    return getAccountsUsageBasePath() + handle;
-}
 
 export function normalizeTimestamp(timestamp?: unknown): number {
     const seconds = Math.floor(Date.now() / 1000);
@@ -91,7 +86,8 @@ export function syncAccountsUsageViewTypeWithSettings(): FiltersThunkAction {
 }
 
 export function fetchAccountsUsageSnapshots(cluster: string): SnapshotsThunkAction {
-    return (dispatch) => {
+    return (dispatch, getState) => {
+        const accountsUsageBaseUrl = getAccountsUsageBaseUrl(getState());
         dispatch({type: ACCOUNTS_USAGE_SNAPSHOTS_REQUEST});
 
         return axios
@@ -99,7 +95,7 @@ export function fetchAccountsUsageSnapshots(cluster: string): SnapshotsThunkActi
                 snapshot_timestamps: Array<number>;
             }>({
                 method: 'POST',
-                url: accountUsageApiUrl('list-timestamps'),
+                url: accountsUsageBaseUrl + 'list-timestamps',
                 data: {cluster},
                 withCredentials: true,
             })
@@ -164,6 +160,7 @@ export function fetchAccountUsageList(): UsageListThunkAction {
         const state = getState();
 
         const timestamp = getAccountUsageCurrentSnapshot(state);
+        const accountsUsageBaseUrl = getAccountsUsageBaseUrl(state);
 
         const params = getFilterParameters(state);
         const requestParams: AccountUsageListDataParams = {
@@ -179,7 +176,7 @@ export function fetchAccountUsageList(): UsageListThunkAction {
         return axios
             .request<AccountsUsageDataResponse>({
                 method: 'POST',
-                url: accountUsageApiUrl('get-resource-usage'),
+                url: accountsUsageBaseUrl + 'get-resource-usage',
                 data: requestParams,
                 withCredentials: true,
             })
@@ -215,6 +212,7 @@ export function fetchAccountUsageTree(): UsageTreeThunkAction {
         const state = getState();
 
         const timestamp = getAccountUsageCurrentSnapshot(state);
+        const accountsUsageBaseUrl = getAccountsUsageBaseUrl(state);
 
         const params = getFilterParameters(state);
         const requestParams: AccountUsageTreeData['requestParams'] = {
@@ -234,7 +232,7 @@ export function fetchAccountUsageTree(): UsageTreeThunkAction {
         return axios
             .request<AccountsUsageDataResponse>({
                 method: 'POST',
-                url: accountUsageApiUrl('get-children-and-resource-usage'),
+                url: accountsUsageBaseUrl + 'get-children-and-resource-usage',
                 data: requestParams,
                 withCredentials: true,
             })
@@ -385,14 +383,15 @@ export const openAccountAttributesModal =
         account: string;
         path: string;
     }): ThunkAction<void, RootState, null, Action> =>
-    (dispatch) =>
-        dispatch(
+    (dispatch, getState) => {
+        const accountsUsageBaseUrl = getAccountsUsageBaseUrl(getState());
+        return dispatch(
             openModal({
                 title: path,
                 promise: axios
                     .request({
                         method: 'POST',
-                        url: accountUsageApiUrl('get-versioned-resource-usage'),
+                        url: accountsUsageBaseUrl + 'get-versioned-resource-usage',
                         data: {
                             cluster,
                             account,
@@ -404,3 +403,4 @@ export const openAccountAttributesModal =
                     .then((data) => data.data),
             }),
         );
+    };
