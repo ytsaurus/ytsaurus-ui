@@ -234,15 +234,6 @@ export class YTGrapCanvasBlock<T extends YTGraphBlock<string, {}>> extends Canva
         return xPos !== undefined ? fitTextWidth : undefined;
     }
 
-    private loadImage(src: string): Promise<HTMLImageElement> {
-        return new Promise((resolve, reject) => {
-            const img = new Image();
-            img.onload = () => resolve(img);
-            img.onerror = reject;
-            img.src = src;
-        });
-    }
-
     protected drawBorder({
         inProgress,
         progressPercent,
@@ -367,6 +358,15 @@ export class YTGrapCanvasBlock<T extends YTGraphBlock<string, {}>> extends Canva
             text: v.fitText,
             fontSize: 'header2',
             padding,
+        });
+    }
+
+    private loadImage(src: string): Promise<HTMLImageElement> {
+        return new Promise((resolve, reject) => {
+            const img = new Image();
+            img.onload = () => resolve(img);
+            img.onerror = reject;
+            img.src = src;
         });
     }
 }
