@@ -131,7 +131,7 @@ export type ExtraTab = {
 
 export type QueryResultChartTab = {
     title: string;
-    renderContent: (params: {query: QueryItem}) => React.ReactNode;
+    renderContent: (params: {query: QueryItem; resultIndex: number}) => React.ReactNode;
 };
 
 export type YQLButtonProps = {

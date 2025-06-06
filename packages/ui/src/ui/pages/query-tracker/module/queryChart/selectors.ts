@@ -8,26 +8,42 @@ import {NumberTypes} from '../../QueryResultsVisualization/preparers/getPointDat
 export const selectChartVisualization = (state: RootState) =>
     state.queryTracker.queryChart.visualization;
 
-export const selectChartConfig = (state: RootState) =>
-    state.queryTracker.queryChart.visualization.config;
+export const selectChartResultIndex = (state: RootState) =>
+    state.queryTracker.queryChart.resultIndex;
+
+export const selectChartLoading = (state: RootState) => state.queryTracker.queryChart.loading;
+
+export const selectCurrentChartVisualization = createSelector(
+    [selectChartVisualization, selectChartResultIndex],
+    (visualization, resultIndex) => visualization[resultIndex],
+);
+
+export const selectQueryResults = createSelector(
+    [getQueryDraft, getQueryResultsState],
+    ({id}, results) => {
+        if (!id || !(id in results)) return [];
+
+        return results[id];
+    },
+);
+
+export const selectQueryResult = createSelector(
+    [selectQueryResults, selectChartResultIndex],
+    (results, index) => {
+        if (!(index in results)) return [];
+
+        return (results[index] as QueryResultReadyState).results;
+    },
+);
+
+export const selectChartConfig = createSelector(
+    [selectCurrentChartVisualization],
+    (visualization) => visualization?.config,
+);
 
 export const selectChartAxisType = createSelector(
     [selectChartConfig],
-    (config) => config.xAxis.type,
-);
-
-export const selectQueryResultChartSaved = (state: RootState) =>
-    state.queryTracker.queryChart.saved;
-
-export const selectQueryResult = createSelector(
-    [getQueryDraft, getQueryResultsState],
-    (draft, results) => {
-        const {id} = draft;
-
-        if (!id || !(id in results)) return [];
-
-        return (results[id][0] as QueryResultReadyState).results;
-    },
+    (config) => config?.xAxis.type,
 );
 
 export const selectAvailableFields = (state: RootState) => {

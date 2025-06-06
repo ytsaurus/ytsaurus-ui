@@ -21,39 +21,45 @@ export type VisualizationState = {
 
 export type QueryResultsVisualizationState = {
     saved: boolean;
-    visualization: VisualizationState;
+    loading: boolean;
+    resultIndex: number;
+    visualization: Record<number, VisualizationState>;
 };
 
 export type FieldKey = 'xField' | 'yField' | 'xType';
 
-export const initialState: QueryResultsVisualizationState = {
-    saved: true,
-    visualization: {
-        type: null,
-        xField: '',
-        yField: [],
-        config: {
+export const defaultVisualization: VisualizationState = {
+    type: null,
+    xField: '',
+    yField: [],
+    config: {
+        title: {
+            text: '',
+        },
+        xAxis: {
+            type: 'linear',
             title: {
                 text: '',
             },
-            xAxis: {
-                type: 'linear',
+        },
+        yAxis: [
+            {
                 title: {
                     text: '',
                 },
             },
-            yAxis: [
-                {
-                    title: {
-                        text: '',
-                    },
-                },
-            ],
-            legend: {
-                enabled: false,
-            },
+        ],
+        legend: {
+            enabled: false,
         },
     },
+};
+
+export const initialState: QueryResultsVisualizationState = {
+    saved: true,
+    loading: false,
+    resultIndex: 0,
+    visualization: {},
 };
 
 const queryChartSlice = createSlice({
@@ -63,49 +69,59 @@ const queryChartSlice = createSlice({
         setSaved: (state, {payload}: PayloadAction<boolean>) => {
             state.saved = payload;
         },
+        setResultIndex: (state, {payload}: PayloadAction<number>) => {
+            state.resultIndex = payload;
+        },
         setConfig: (state, {payload}: PayloadAction<Config>) => {
-            state.visualization.config = payload;
+            state.visualization[state.resultIndex].config = payload;
+        },
+        setLoading: (state, {payload}: PayloadAction<boolean>) => {
+            state.loading = payload;
         },
         setFiled: (
             state,
             {payload}: PayloadAction<{value: string; oldValue: string; name: FieldKey}>,
         ) => {
             if (payload.name === 'xField') {
-                state.visualization.xField = payload.value;
+                state.visualization[state.resultIndex].xField = payload.value;
                 return;
             }
 
             if (payload.value) {
                 if (payload.oldValue) {
-                    const newArray = state.visualization.yField.filter(
+                    const newArray = state.visualization[state.resultIndex].yField.filter(
                         (field) => field !== payload.oldValue,
                     );
-                    state.visualization.yField = [...newArray, payload.value];
+                    state.visualization[state.resultIndex].yField = [...newArray, payload.value];
                 } else {
-                    state.visualization.yField.push(payload.value);
+                    state.visualization[state.resultIndex].yField.push(payload.value);
                 }
             } else {
-                state.visualization.yField = state.visualization.yField.filter(
-                    (field) => field !== payload.oldValue,
-                );
+                state.visualization[state.resultIndex].yField = state.visualization[
+                    state.resultIndex
+                ].yField.filter((field) => field !== payload.oldValue);
             }
         },
         setVisualizationType: (state, {payload}: PayloadAction<ChartType>) => {
-            return {
-                ...state,
-                visualization: {
-                    ...initialState.visualization,
-                    type: payload,
-                },
-            };
+            state.visualization[state.resultIndex].type = payload;
         },
-        setVisualization: (state, {payload}: PayloadAction<VisualizationState>) => {
+        setVisualization: (
+            state,
+            {payload}: PayloadAction<QueryResultsVisualizationState['visualization']>,
+        ) => {
             state.visualization = payload;
         },
     },
 });
 
-export const {setConfig, setSaved, setFiled, setVisualizationType, setVisualization} =
-    queryChartSlice.actions;
+export const {
+    setConfig,
+    setLoading,
+    setResultIndex,
+    setSaved,
+    setFiled,
+    setVisualizationType,
+    setVisualization,
+} = queryChartSlice.actions;
 
 export const queryChartReducer = queryChartSlice.reducer;
