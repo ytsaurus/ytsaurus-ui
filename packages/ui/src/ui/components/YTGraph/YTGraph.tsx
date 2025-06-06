@@ -43,8 +43,12 @@ export type YTGraphData<B extends TBlock, C extends TConnection> = {
     connections: Array<C>;
 };
 
-export type YTGraphBlock<IS, Meta extends Record<string, unknown>> = Omit<TBlock<Meta>, 'is'> & {
+export type YTGraphBlock<IS, Meta extends Record<string, unknown>> = Omit<
+    TBlock<Meta>,
+    'is' | 'meta'
+> & {
     is: IS;
+    meta: Meta;
 };
 
 export function YTGraph<B extends TBlock, C extends TConnection>({
