@@ -4,13 +4,14 @@ import cn from 'bem-cn-lite';
 import {Graph} from '@gravity-ui/graph';
 import {Flex, Progress, ProgressTheme, Text} from '@gravity-ui/uikit';
 
+import {FlowComputation} from '../../../../../../../shared/yt-types';
+
 import format from '../../../../../../common/hammer/format';
 
 import Link from '../../../../../../components/Link/Link';
 
 import {FlowGraphBlockItem} from '../FlowGraph';
 import Icon from '../../../../../../components/Icon/Icon';
-import {FlowComputation} from '../../../../../../../shared/yt-types';
 
 import {FlowMeta} from './FlowMeta';
 import './Computation.scss';
