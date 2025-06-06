@@ -4,6 +4,11 @@
     gap: 0 20px;
     border-bottom: 1px solid var(--g-color-line-generic);
 
+    &__loading {
+        height: 100%;
+        width: 100%;
+    }
+
     &__loader-wrapper {
         height: 100%;
         display: flex;
