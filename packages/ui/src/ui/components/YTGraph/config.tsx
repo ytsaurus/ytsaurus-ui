@@ -1,6 +1,6 @@
 import React from 'react';
 
-import {ElkExtendedEdge} from 'elkjs';
+import ELK, {ElkExtendedEdge} from 'elkjs';
 import {
     CanvasBlock,
     ECameraScaleLevel,
@@ -132,7 +132,11 @@ export function useElkLayout<B extends TBlock, C extends TConnection>({
         return getElkConfig(children, edges);
     }, [blocks, connections]);
 
-    const [positions] = useMemoizedIfEqual(useElk(elkConfig));
+    const elk = React.useMemo(() => {
+        return new ELK();
+    }, []);
+
+    const [positions] = useMemoizedIfEqual(useElk(elkConfig, elk));
 
     const res = React.useMemo(() => {
         const {result, isLoading} = positions;

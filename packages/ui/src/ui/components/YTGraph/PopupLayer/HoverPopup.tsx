@@ -1,4 +1,4 @@
-import React, {MouseEvent, useRef} from 'react';
+import React, {MouseEvent} from 'react';
 import cn from 'bem-cn-lite';
 
 import {CanvasBlock, Graph, TBlock} from '@gravity-ui/graph';
@@ -20,8 +20,8 @@ export function HoverPopup<B extends TBlock>({
     renderContent,
     isBlockNode,
 }: HoverPopupProps<B>) {
-    const containerRef = useRef<HTMLDivElement>(null);
-    const {block, handleClearTimeout} = useHoverBlock(graph, containerRef.current, isBlockNode);
+    const [element, setElement] = React.useState<HTMLDivElement | null>(null);
+    const {block, handleClearTimeout} = useHoverBlock(graph, element, isBlockNode);
 
     const stopPropagation = (e: MouseEvent<HTMLDivElement>) => {
         e.preventDefault();
@@ -43,7 +43,7 @@ export function HoverPopup<B extends TBlock>({
     return !content ? null : (
         <>
             <div
-                ref={containerRef}
+                ref={setElement}
                 className={commonClass({visible: true})}
                 style={position}
                 onMouseLeave={stopPropagation}
@@ -54,7 +54,7 @@ export function HoverPopup<B extends TBlock>({
             <Popup
                 open
                 key={`${x}-${y}`}
-                anchorRef={containerRef}
+                anchorRef={{current: element}}
                 onMouseEnter={handleClearTimeout}
             >
                 {content}
