@@ -8,13 +8,11 @@ import FileCodeIcon from '@gravity-ui/icons/svgs/file-code.svg';
 
 import format from '../../../../../../common/hammer/format';
 
-//import Link from '../../../../../../components/Link/Link';
-
 import {FlowGraphBlockItem} from '../FlowGraph';
 
 import {FlowMeta} from './FlowMeta';
 
-import './Computation.scss';
+import './Stream.scss';
 
 const block = cn('yt-flow-stream');
 
@@ -29,7 +27,7 @@ export function Stream({item, className}: StreamProps) {
     return (
         <div className={block(null, className)}>
             <Flex gap={1} alignItems="center" style={{paddingBottom: '10px'}}>
-                <Icon data={FileCodeIcon} />
+                <Icon className={block('icon')} data={FileCodeIcon} />
                 <Text variant="caption-2" style={{lineHeight: '12px'}}>
                     {item.name}
                 </Text>
@@ -39,7 +37,6 @@ export function Stream({item, className}: StreamProps) {
                     {
                         label: 'Rows per/s',
                         value: format.Number(item.meta?.messages_per_second),
-                        grow: 1,
                     },
                     {label: 'Bytes per/s', value: format.Number(item.meta?.bytes_per_second)},
                 ]}
