@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.95.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.94.0...ui-v1.95.0) (2025-06-06)
+
+
+### Features
+
+* **Dialog:** add filter for services select control [YTFRONT-5007] ([51aab9b](https://github.com/ytsaurus/ytsaurus-ui/commit/51aab9b249b07cedcf7039dbb13b9235c3036cd1))
+* **Navigation:** add icons for queue producers and consumers [YTFRONT-4981] ([401465d](https://github.com/ytsaurus/ytsaurus-ui/commit/401465d2250ba6e893ac9b5bca20a09067869e35))
+
+
+### Bug Fixes
+
+* **Dashboard2:** navigation options and rewrite oprtions selectors [YTFRONT-5007] ([815ba7f](https://github.com/ytsaurus/ytsaurus-ui/commit/815ba7f444e9c71a81ac2f547921243471da7869))
+
 ## [1.94.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.93.0...ui-v1.94.0) (2025-06-05)
 
 
