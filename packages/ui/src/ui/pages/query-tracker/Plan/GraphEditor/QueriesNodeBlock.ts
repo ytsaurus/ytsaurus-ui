@@ -1,7 +1,6 @@
-import {TBlock} from '@gravity-ui/graph';
 import {ECameraScaleLevel} from '@gravity-ui/graph';
 
-import {YTGrapCanvasBlock} from '../../../../components/YTGraph';
+import {YTGrapCanvasBlock, YTGraphBlock} from '../../../../components/YTGraph';
 
 import {type NodeDetails, NodeProgress} from '../models/plan';
 import {OperationSchemas} from '../utils';
@@ -22,15 +21,13 @@ export type QueriesBlockMeta = {
     padding?: number;
 };
 
-export type QueriesNodeBlock = NodeTBlock<QueriesBlockMeta>;
+export type QueriesNodeBlock = YTGraphBlock<string, QueriesBlockMeta>;
 
 const DEFAULT_CONTENT_OFFSET = 10;
 const DEFAULT_ICON_OFFSET = 20;
 
 const ICON_SIZE = 24;
 const TEXT_SIZE = 14;
-
-export type NodeTBlock<T extends QueriesBlockMeta> = Omit<TBlock, 'meta'> & {meta: T};
 
 export class QueriesCanvasBlock extends YTGrapCanvasBlock<QueriesNodeBlock> {
     icon: null | HTMLImageElement = null;
@@ -80,7 +77,7 @@ export class QueriesCanvasBlock extends YTGrapCanvasBlock<QueriesNodeBlock> {
         if (isSchematic) {
             this.drawInnerText({
                 text: this.state.name,
-                yPosition: startYPosition + DEFAULT_CONTENT_OFFSET + iconHeight,
+                yPos: startYPosition + DEFAULT_CONTENT_OFFSET + iconHeight,
             });
             this.drawBottomText(this.state.meta.bottomText);
 
