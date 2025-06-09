@@ -8,10 +8,7 @@ import {FlowComputation} from '../../../../../../../shared/yt-types';
 
 import format from '../../../../../../common/hammer/format';
 
-import Link from '../../../../../../components/Link/Link';
-
 import {FlowGraphBlockItem} from '../FlowGraph';
-import Icon from '../../../../../../components/Icon/Icon';
 
 import {FlowMeta} from './FlowMeta';
 import './Computation.scss';
@@ -31,14 +28,12 @@ export function Computation({item, className}: ComputationProps) {
     return (
         <div className={className}>
             <Flex gap={4} alignItems="baseline" style={{paddingBottom: '10px'}}>
-                <Flex grow={1}>
-                    <Text variant="caption-2">
-                        <Link onClick={() => alert('not implemented')}>
-                            {item.name} <Icon awesome="external-link" />
-                        </Link>
+                <Flex grow={1} overflow="hidden">
+                    <Text variant="caption-2" ellipsis>
+                        {item.name}
                     </Text>
                 </Flex>
-                <Flex grow={1}>
+                <Flex grow={1} overflow="hidden">
                     <Text variant="caption-1" color="secondary" ellipsis>
                         {item.meta?.group_by_schema_str}
                     </Text>
@@ -59,7 +54,7 @@ export function Computation({item, className}: ComputationProps) {
                     },
                     {
                         label: 'Epoch, per/s',
-                        value: format.Number(item.meta?.epoches_per_second),
+                        value: format.Number(item.meta?.epoch_per_second),
                     },
                 ]}
             />
@@ -72,7 +67,9 @@ type ComputationProgressProps = {
     stats?: FlowComputation['partitions_stats'];
 };
 
-type FlowComputationPartitionStates = keyof FlowComputation['partitions_stats']['count_by_state'];
+type FlowComputationPartitionStates = keyof Required<
+    Required<FlowComputation>['partitions_stats']
+>['count_by_state'];
 const STATE_TO_THEME: Record<FlowComputationPartitionStates, ProgressTheme> = {
     Completed: 'info',
     Transient: 'warning',
