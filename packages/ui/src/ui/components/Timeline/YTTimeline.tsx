@@ -40,7 +40,7 @@ const DEFAULT_SHORTCUTS = [
     },
 ];
 
-function YTTimelineImpl({className, topShortcuts, ...rest}: Props) {
+function YTTimelineImpl({className, topShortcuts, from, to, ...rest}: Props) {
     const [width, setWidth] = React.useState<number | undefined>();
     const [ref, setRef] = React.useState<HTMLDivElement | null>(null);
 
@@ -59,9 +59,13 @@ function YTTimelineImpl({className, topShortcuts, ...rest}: Props) {
         onResize,
     });
 
+    if (!from || !to) return null;
+
     return (
         <Timeline
             {...rest}
+            from={from}
+            to={to}
             hasPicker={true}
             topShortcuts={topShortcuts || DEFAULT_SHORTCUTS}
             wrapper={({ruler, picker}) => {
