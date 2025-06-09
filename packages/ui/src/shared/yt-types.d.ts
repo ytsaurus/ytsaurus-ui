@@ -544,29 +544,45 @@ export type FlowExecuteData = {
     'describe-pipeline': FlowDescribePipelineData;
 };
 
+type ComputationId = string;
+type StreamId = string;
+
 export type FlowDescribePipelineData = {
-    computations: Record<string, FlowComputation>;
+    computations: Record<ComputationId, FlowComputation>;
+    streams: Record<StreamId, FlowStream>;
 };
 
-export type FlowComputation = {
-    id: string;
-    input_streams: Record<string, FlowStream>;
-    output_streams: Record<string, FlowStream>;
-    sink_streams: Record<string, FlowStream>;
-    source_streams: Record<string, FlowStream>;
+export type FlowComputation = FlowComputationStreams & {
+    id: ComputationId;
     metrics: {
         cpu_usage_current: number;
         memory_usage_current: number;
     };
-    partitions_stats: {
+    partitions_stats?: {
         count: 1;
-        count_by_state: Record<
+        count_by_state?: Record<
             'Completed' | 'Executing' | 'Transient' | 'Interrupted',
             number | undefined
         >;
     };
     group_by_schema_str: string;
-    epoches_per_second: number;
+    epoch_per_second: number;
 };
 
-export type FlowStream = {id: string; bytes_per_second: number; messages_per_second: number};
+export type FlowComputationStreams = Record<FlowComputationStreamType, Array<StreamId>>;
+
+type FlowComputationStreamType =
+    | 'input_streams'
+    | 'output_streams'
+    | 'source_streams'
+    | 'sink_streams'
+    | 'timer_streams';
+
+export type FlowStream = {
+    id: string;
+    name: string;
+    bytes_per_second?: number;
+    messages_per_second?: number;
+    inflight_bytes?: number;
+    inflight_rows?: number;
+};

@@ -2,8 +2,8 @@
     &__graph {
         position: relative;
 
-        width: calc(100vw - var(--gn-aside-header-size) * 2);
-        height: calc(100vh - var(--app-header-height) - var(--app-footer-height));
+        width: calc(100vw - var(--gn-aside-header-size) - 40px);
+        height: calc(100vh - var(--app-header-height) * 4 - var(--app-footer-height));
     }
 
     &__item-container {
@@ -15,5 +15,6 @@
         display: flex;
         flex-direction: column;
         flex-grow: 1;
+        overflow: hidden;
     }
 }
