@@ -13,28 +13,35 @@ export class ComputationCanvasBlock extends YTGrapCanvasBlock<FlowGraphBlockItem
     }
 
     renderHeader() {
-        const {
-            count,
-            count_by_state: {Executing},
-        } = this.state.meta.partitions_stats;
+        const {count, count_by_state: {Executing} = {}} = this.state.meta.partitions_stats ?? {};
 
         const textWidth = this.drawInnerText({
             yPos: PADDING,
             xPos: PADDING,
             text: this.state.name,
-            fontSize: 'header2',
+            fontSize: 'header',
             padding: PADDING,
         });
 
-        this.drawInnerText({
-            yPos: PADDING,
-            xPos: PADDING * 2 + textWidth!,
-            text: `${Executing}/${count}`,
-            color: 'secondary',
-            padding: PADDING,
-            fontSize: 'header2',
-            align: 'right',
-        });
+        const counts: Array<string> = [];
+        if (Number.isFinite(count)) {
+            if (Number.isFinite(Executing)) {
+                counts.push(String(Executing));
+                if (count !== Executing) {
+                    counts.push(String(count));
+                }
+
+                this.drawInnerText({
+                    yPos: PADDING,
+                    xPos: PADDING * 2 + textWidth!,
+                    text: counts.join('/'),
+                    color: 'secondary',
+                    padding: PADDING,
+                    fontSize: 'header',
+                    align: 'right',
+                });
+            }
+        }
     }
 
     renderMeta() {

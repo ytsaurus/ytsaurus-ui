@@ -1,5 +1,5 @@
 import {ProcessedGraph} from '../../utils';
-import {ECameraScaleLevel, TBlockId} from '@gravity-ui/graph';
+import {ECameraScaleLevel} from '@gravity-ui/graph';
 import {QueriesNodeBlock} from '../QueriesNodeBlock';
 import type {Progress} from '../../models/plan';
 import {OperationType} from '../enums';
@@ -32,7 +32,7 @@ export const createBlocks = (
             ...{level: node.level},
             width: 100,
             height: 100,
-            id: node.id as TBlockId,
+            id: node.id as string,
             is: 'block',
             selected: false,
             name,

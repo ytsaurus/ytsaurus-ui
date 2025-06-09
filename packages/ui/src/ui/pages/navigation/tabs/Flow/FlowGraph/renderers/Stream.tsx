@@ -4,8 +4,6 @@ import cn from 'bem-cn-lite';
 import {Graph} from '@gravity-ui/graph';
 import {Flex, Icon, Text} from '@gravity-ui/uikit';
 
-import FileCodeIcon from '@gravity-ui/icons/svgs/file-code.svg';
-
 import format from '../../../../../../common/hammer/format';
 
 import {FlowGraphBlockItem} from '../FlowGraph';
@@ -26,19 +24,26 @@ type StreamProps = {
 export function Stream({item, className}: StreamProps) {
     return (
         <div className={block(null, className)}>
-            <Flex gap={1} alignItems="center" style={{paddingBottom: '10px'}}>
-                <Icon className={block('icon')} data={FileCodeIcon} />
-                <Text variant="caption-2" style={{lineHeight: '12px'}}>
+            <Flex gap={1} alignItems="center" style={{paddingBottom: '10px'}} overflow="hidden">
+                {item.icon && (
+                    <Flex shrink={0}>
+                        <Icon className={block('icon')} data={item.icon} />
+                    </Flex>
+                )}
+                <Text variant="caption-2" style={{lineHeight: '12px'}} ellipsis>
                     {item.name}
                 </Text>
             </Flex>
             <FlowMeta
                 items={[
                     {
-                        label: 'Rows per/s',
-                        value: format.Number(item.meta?.messages_per_second),
+                        label: 'Inflight per/s',
+                        value: format.Bytes(item.meta?.inflight_bytes, {digits: 1}),
                     },
-                    {label: 'Bytes per/s', value: format.Number(item.meta?.bytes_per_second)},
+                    {
+                        label: 'Bytes per/s',
+                        value: format.Bytes(item.meta?.bytes_per_second, {digits: 1}),
+                    },
                 ]}
             />
         </div>
