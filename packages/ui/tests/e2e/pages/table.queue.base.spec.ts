@@ -20,7 +20,7 @@ test('Queue: create export', async ({page, context}) => {
     await page.getByTestId('edit-export').click();
     await page.locator('input[value="30s "]').fill('1234567000');
     await page.locator('button[type="submit"]').click();
-    await expect(page.getByText('1234567000', {exact: true})).toBeVisible();
+    await expect(page.getByText('14d 6h 56m 7s', {exact: true})).toBeVisible();
 
     const pathCell = page.getByText(E2E_DIR, {exact: true});
     await expect(pathCell).toBeVisible();
