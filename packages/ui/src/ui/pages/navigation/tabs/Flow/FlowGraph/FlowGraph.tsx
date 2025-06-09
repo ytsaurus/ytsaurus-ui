@@ -1,12 +1,20 @@
 import React from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import cn from 'bem-cn-lite';
-import forEach_ from 'lodash/forEach';
 
 import {Graph, TConnection} from '@gravity-ui/graph';
 import {Flex} from '@gravity-ui/uikit';
+import {SVGIconSvgrData} from '@gravity-ui/uikit/build/esm/components/Icon/types';
 
-import {FlowComputation, FlowStream} from '../../../../../../shared/yt-types';
+import {
+    FlowComputation,
+    FlowComputationStreamType,
+    FlowStream,
+} from '../../../../../../shared/yt-types';
+
+import ClockIcon from '@gravity-ui/icons/svgs/clock.svg';
+import FileCodeIcon from '@gravity-ui/icons/svgs/file-code.svg';
+import ReceiptIcon from '@gravity-ui/icons/svgs/receipt.svg';
 
 import {useUpdater} from '../../../../../hooks/use-updater';
 import Yson from '../../../../../components/Yson/Yson';
@@ -24,10 +32,10 @@ import {getFlowGraphData} from '../../../../../store/selectors/flow/graph';
 
 import {Computation} from './renderers/Computation';
 import {Stream} from './renderers/Stream';
-
-import './FlowGraph.scss';
 import {ComputationCanvasBlock} from './renderers/ComputationCanvas';
 import {StreamCanvasBlock} from './renderers/StreamCanvas';
+
+import './FlowGraph.scss';
 
 const block = cn('yt-flow-graph');
 
@@ -49,7 +57,7 @@ export function FlowGraph({pipeline_path, yson}: {pipeline_path: string; yson: b
 
 export type FlowGraphBlock =
     | YTGraphBlock<'computation', FlowComputation>
-    | YTGraphBlock<'stream', FlowStream>;
+    | (YTGraphBlock<'stream', FlowStream> & {icon?: SVGIconSvgrData});
 
 export type FlowGraphBlockItem<T extends FlowGraphBlock['is']> = FlowGraphBlock & {is: T};
 
@@ -57,7 +65,7 @@ export function FlowGraphImpl() {
     const config = useConfig<FlowGraphBlock>({
         computation: ComputationCanvasBlock,
         stream: StreamCanvasBlock,
-    } as any);
+    });
 
     const {isEmpty, data} = useFlowGraphData();
 
@@ -88,62 +96,85 @@ function renderContent(graph: Graph, data: FlowGraphBlock) {
         case 'stream':
             return <Stream className={block('item')} graph={graph} item={data} />;
     }
-    return null;
 }
+
+const ICON_BY_TYPE: Record<
+    FlowComputationStreamType,
+    Pick<FlowGraphBlockItem<'stream'>, 'icon'>
+> = {
+    input_streams: {icon: FileCodeIcon},
+    output_streams: {icon: FileCodeIcon},
+    source_streams: {icon: FileCodeIcon},
+    sink_streams: {icon: ReceiptIcon},
+    timer_streams: {icon: ClockIcon},
+};
 
 function useFlowGraphData() {
     const loadedData = useSelector(getFlowGraphData);
-    const {computations = {}} = loadedData ?? {};
 
     const data: YTGraphData<FlowGraphBlock, TConnection> = React.useMemo(() => {
-        return Object.keys(computations).reduce(
-            (acc, key) => {
-                const computation = computations[key];
-                const block: (typeof acc)['blocks'][number] = makeBlock(
-                    'computation',
-                    computation,
-                    {width: 240, height: 108},
-                );
-                acc.blocks.push(block);
+        const {computations = {}, streams = {}} = loadedData ?? {};
 
-                function collectStreams<T>(
-                    streams: Record<string, FlowStream>,
-                    type: T,
-                    isInput: boolean,
-                    size?: {width: number; height: number},
-                ) {
-                    forEach_(streams, (item) => {
-                        acc.blocks.push(
-                            makeBlock('stream', item, size ?? {width: 136, height: 70}),
-                        );
+        const res: typeof data = {blocks: [], connections: []};
 
-                        const sourceBlockId = isInput ? item.id : computation.id;
-                        const targetBlockId = isInput ? computation.id : item.id;
-                        acc.connections.push({
-                            sourceBlockId,
-                            targetBlockId,
-                            ...{points: []},
-                            label: type as string,
-                        });
-                    });
-                }
+        const streamTypeById: Map<string, FlowComputationStreamType> = new Map();
 
-                collectStreams(computation.input_streams, 'input_stream', true);
-                collectStreams(computation.source_streams, 'source_stream', true);
-                collectStreams(computation.output_streams, 'output_stream', false);
-                collectStreams(computation.sink_streams, 'sink_stream', false, {
-                    width: 70,
-                    height: 70,
+        Object.entries(computations).forEach(([name, computation]) => {
+            const block: (typeof res)['blocks'][number] = makeBlock('computation', computation, {
+                name,
+                width: 240,
+                height: 108,
+            });
+            res.blocks.push(block);
+
+            function addConnection(sourceBlockId: string, targetBlockId: string) {
+                res.connections.push({sourceBlockId, targetBlockId, ...{points: []}});
+            }
+
+            function collectStreams<K extends FlowComputationStreamType>(key: K) {
+                const streams = computation[key] ?? [];
+
+                streams.forEach((id) => {
+                    streamTypeById.set(id, key);
+                    const isInput =
+                        key === 'input_streams' ||
+                        key === 'source_streams' ||
+                        key === 'timer_streams';
+
+                    if (isInput) {
+                        addConnection(id, computation.id);
+                    } else {
+                        addConnection(computation.id, id);
+                    }
+
+                    if (key === 'timer_streams') {
+                        addConnection(computation.id, id);
+                    }
                 });
+            }
 
-                return acc;
-            },
-            {
-                blocks: [],
-                connections: [],
-            } as typeof data,
-        );
-    }, [computations]);
+            collectStreams('input_streams');
+            collectStreams('output_streams');
+            collectStreams('source_streams');
+            collectStreams('sink_streams');
+            collectStreams('timer_streams');
+        });
+
+        Object.values(streams).forEach((stream) => {
+            const streamType = streamTypeById.get(stream.id);
+            const options = ICON_BY_TYPE[streamType!];
+            res.blocks.push(
+                makeBlock('stream', stream, {
+                    width: 136,
+                    height: 70,
+                    name: stream.name,
+                    ...options,
+                }),
+            );
+        });
+
+        return res;
+    }, [loadedData]);
 
     return {
         isEmpty: !data.blocks.length,
@@ -151,10 +182,10 @@ function useFlowGraphData() {
     };
 }
 
-function makeBlock<T extends string, D extends {id: string}>(
+function makeBlock<T extends FlowGraphBlock['is'], D extends FlowGraphBlockItem<T>>(
     type: T,
-    item: D,
-    size: {width: number; height: number},
+    item: D['meta'],
+    options?: Partial<D>,
 ) {
     return {
         id: item.id,
@@ -164,7 +195,9 @@ function makeBlock<T extends string, D extends {id: string}>(
         y: NaN,
         selected: false,
         anchors: [],
-        ...size,
+        width: 136,
+        height: 70,
+        ...options,
         meta: item,
     };
 }

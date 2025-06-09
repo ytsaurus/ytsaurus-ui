@@ -1,4 +1,5 @@
 import React from 'react';
+
 import {
     CanvasBlock,
     ECameraScaleLevel,
@@ -45,13 +46,14 @@ export type YTGraphData<B extends TBlock, C extends TConnection> = {
 
 export type YTGraphBlock<IS, Meta extends Record<string, unknown>> = Omit<
     TBlock<Meta>,
-    'is' | 'meta'
+    'id' | 'is' | 'meta'
 > & {
+    id: string;
     is: IS;
     meta: Meta;
 };
 
-export function YTGraph<B extends TBlock, C extends TConnection>({
+export function YTGraph<B extends YTGraphBlock<string, {}>, C extends TConnection>({
     config,
     isBlock,
     data,
