@@ -1,9 +1,8 @@
-import React from 'react';
-
 import {CanvasBlock} from '@gravity-ui/graph';
 import {GRAPH_COLORS} from '../constants';
 import {YTGraphBlock} from '../YTGraph';
-import {iconToBase} from '../utils/iconToBase';
+import {svgDataToBase} from '../utils/iconToBase';
+import {SVGIconSvgrData} from '@gravity-ui/uikit/build/esm/components/Icon/types';
 
 export const DEFAULT_PADDING = 10;
 
@@ -25,7 +24,7 @@ export type BaseMeta = {};
 
 type IconSrc =
     | {src: string; currentColor?: undefined}
-    | {src: React.ReactElement; currentColor?: string};
+    | {src?: SVGIconSvgrData; currentColor?: string};
 
 type RoundedBlockProps = {
     x: number;
@@ -164,7 +163,7 @@ export class YTGrapCanvasBlock<T extends YTGraphBlock<string, {}>> extends Canva
         const {x, y} = this.state;
 
         const source =
-            'string' === typeof icon.src ? icon.src : iconToBase(icon.src, icon.currentColor);
+            'string' === typeof icon.src ? icon.src : svgDataToBase(icon.src, icon.currentColor);
 
         return this.drawIcon(source, x + xPos, y + yPos, w, h);
     }
@@ -207,7 +206,7 @@ export class YTGrapCanvasBlock<T extends YTGraphBlock<string, {}>> extends Canva
         oneLine?: boolean;
     }) {
         const {height, width, x, y} = this.state;
-        const textAreaWidth = width - 2 * padding;
+        const textAreaWidth = xPos ? width - xPos - padding : width - 2 * padding;
 
         const {
             fitText: name,
@@ -215,18 +214,20 @@ export class YTGrapCanvasBlock<T extends YTGraphBlock<string, {}>> extends Canva
             height: fitHeight,
         } = this.fitText(textAreaWidth, text, fontSize);
 
+        const rect = {
+            x: xPos === undefined ? x + padding : x + xPos,
+            y: y + yPos,
+            width: textAreaWidth,
+            height: oneLine ? fitHeight : height - padding - yPos,
+        };
+
         this.context.ctx.fillStyle =
             color === 'secondary'
                 ? GRAPH_COLORS.secondary
                 : this.context.colors.block?.text || GRAPH_COLORS.text;
         this.context.ctx.textAlign = align ?? (xPos ? 'left' : 'center');
         this.renderText(name, this.context.ctx, {
-            rect: {
-                x: xPos === undefined ? x + padding : x + xPos,
-                y: y + yPos,
-                width: xPos ? width - xPos - padding : textAreaWidth,
-                height: oneLine ? fitHeight : height - padding - yPos,
-            },
+            rect,
             renderParams: {
                 font: this.getFont(fontSize),
             },
@@ -356,7 +357,7 @@ export class YTGrapCanvasBlock<T extends YTGraphBlock<string, {}>> extends Canva
             xPos,
             yPos: yPos + l.height,
             text: v.fitText,
-            fontSize: 'header2',
+            fontSize: 'header',
             padding,
         });
     }
