@@ -556,6 +556,10 @@ export type FlowComputation = FlowComputationStreams & {
     id: ComputationId;
     metrics: {
         cpu_usage_current: number;
+        cpu_usage_30s: number;
+        cpu_usage_10m: number;
+        memory_usage_current: number;
+        memory_usage_30s: number;
         memory_usage_current: number;
     };
     partitions_stats?: {
