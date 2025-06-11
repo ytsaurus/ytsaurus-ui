@@ -1,3 +1,5 @@
+import CpuIcon from '@gravity-ui/icons/svgs/cpu.svg';
+
 import format from '../../../../../../common/hammer/format';
 
 import {YTGrapCanvasBlock} from '../../../../../../components/YTGraph';
@@ -6,10 +8,15 @@ import {FlowGraphBlockItem} from '../FlowGraph';
 const PADDING = 15;
 
 export class ComputationCanvasBlock extends YTGrapCanvasBlock<FlowGraphBlockItem<'computation'>> {
-    renderBlock(_mode: 'minimalistic' | 'schematic'): void {
+    renderBlock(mode: 'minimalistic' | 'schematic'): void {
         this.drawBorder({});
-        this.renderHeader();
-        this.renderMeta();
+
+        if (mode === 'minimalistic') {
+            this.drawCenteredIcon({src: CpuIcon, size: 50});
+        } else {
+            this.renderHeader();
+            this.renderMeta();
+        }
     }
 
     renderHeader() {
