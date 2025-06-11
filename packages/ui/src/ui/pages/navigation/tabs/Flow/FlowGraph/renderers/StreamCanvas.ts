@@ -6,9 +6,14 @@ import {FlowGraphBlockItem} from '../FlowGraph';
 const PADDING = 10;
 
 export class StreamCanvasBlock extends YTGrapCanvasBlock<FlowGraphBlockItem<'stream'>> {
-    renderBlock(_mode: 'minimalistic' | 'schematic'): void {
+    renderBlock(mode: 'minimalistic' | 'schematic'): void {
         this.drawBorder({});
-        this.renderHeader();
+
+        if (mode === 'minimalistic') {
+            this.drawCenteredIcon({src: this.state.icon});
+        } else {
+            this.renderHeader();
+        }
     }
 
     renderHeader() {
