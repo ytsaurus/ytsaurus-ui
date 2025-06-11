@@ -17,4 +17,16 @@
         flex-grow: 1;
         overflow: hidden;
     }
+
+    &__item-popup {
+        padding: 10px 12px;
+
+        &_type_computation {
+            min-width: 300px;
+        }
+
+        &_type_stream {
+            min-width: 200px;
+        }
+    }
 }

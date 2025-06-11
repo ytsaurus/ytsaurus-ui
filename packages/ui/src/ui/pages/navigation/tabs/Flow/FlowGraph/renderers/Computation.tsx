@@ -1,12 +1,12 @@
 import React from 'react';
 import cn from 'bem-cn-lite';
 
-import {Graph} from '@gravity-ui/graph';
 import {Flex, Progress, ProgressTheme, Text} from '@gravity-ui/uikit';
 
 import {FlowComputation} from '../../../../../../../shared/yt-types';
 
 import format from '../../../../../../common/hammer/format';
+import MetaTable from '../../../../../../components/MetaTable/MetaTable';
 
 import {FlowGraphBlockItem} from '../FlowGraph';
 
@@ -18,15 +18,16 @@ const block = cn('yt-flow-computation');
 type ComputationProps = {
     className?: string;
 
-    graph: Graph;
+    detailed?: boolean;
+
     item: FlowGraphBlockItem<'computation'>;
 };
 
-export function Computation({item, className}: ComputationProps) {
+export function Computation({detailed, item, className}: ComputationProps) {
     const {cpu_usage_current, memory_usage_current} = item.meta?.metrics ?? {};
 
     return (
-        <div className={className}>
+        <div className={block(null, className)}>
             <Flex gap={4} alignItems="baseline" style={{paddingBottom: '10px'}}>
                 <Flex grow={1} overflow="hidden">
                     <Text variant="caption-2" ellipsis>
@@ -59,6 +60,7 @@ export function Computation({item, className}: ComputationProps) {
                 ]}
             />
             <ComputaionProgress stats={item.meta?.partitions_stats} />
+            {detailed !== false && <ComputationDetails item={item} />}
         </div>
     );
 }
@@ -115,8 +117,8 @@ type ComputationProgressHistoryProps = {
 function ComputationProgressHistory({data}: ComputationProgressHistoryProps) {
     return (
         <Flex alignItems="baseline" grow={1} gap={2} justifyContent="end">
-            {data.map(({value, type}) => {
-                return <ComputationProgressHistoryItem value={value} type={type} />;
+            {data.map(({value, type}, index) => {
+                return <ComputationProgressHistoryItem key={index} value={value} type={type} />;
             })}
         </Flex>
     );
@@ -140,5 +142,23 @@ function ComputationProgressHistoryItem({
             </div>
             <Text variant="caption-2">{value}</Text>
         </Flex>
+    );
+}
+
+function ComputationDetails({item}: Pick<ComputationProps, 'item'>) {
+    const {cpu_usage_current: _cpu, memory_usage_current: _mem, ...rest} = item.meta?.metrics ?? {};
+    return (
+        <MetaTable
+            className={block('details')}
+            items={[
+                Object.entries(rest).map(([key, value]) => {
+                    const fmt = key.startsWith('memory_') ? format.Bytes : format.Number;
+                    return {
+                        key,
+                        value: fmt(value, {digits: 2}),
+                    };
+                }),
+            ]}
+        />
     );
 }

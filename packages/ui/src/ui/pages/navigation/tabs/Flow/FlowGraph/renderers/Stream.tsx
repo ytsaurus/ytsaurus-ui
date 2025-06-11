@@ -1,7 +1,6 @@
 import React from 'react';
 import cn from 'bem-cn-lite';
 
-import {Graph} from '@gravity-ui/graph';
 import {Flex, Icon, Text} from '@gravity-ui/uikit';
 
 import format from '../../../../../../common/hammer/format';
@@ -17,11 +16,12 @@ const block = cn('yt-flow-stream');
 type StreamProps = {
     className?: string;
 
-    graph: Graph;
+    detailed?: boolean;
+
     item: FlowGraphBlockItem<'stream'>;
 };
 
-export function Stream({item, className}: StreamProps) {
+export function Stream({item, detailed, className}: StreamProps) {
     return (
         <div className={block(null, className)}>
             <Flex gap={1} alignItems="center" style={{paddingBottom: '10px'}} overflow="hidden">
@@ -37,12 +37,28 @@ export function Stream({item, className}: StreamProps) {
             <FlowMeta
                 items={[
                     {
-                        label: 'Inflight per/s',
-                        value: format.Bytes(item.meta?.inflight_bytes, {digits: 1}),
+                        label: 'Messages',
+                        value: (
+                            <div>
+                                {detailed && (
+                                    <div>{format.Number(item.meta?.messages_per_second)}</div>
+                                )}
+                                {format.Bytes(item.meta?.bytes_per_second, {
+                                    digits: detailed ? 2 : 0,
+                                }) + '/s'}
+                            </div>
+                        ),
                     },
                     {
-                        label: 'Bytes per/s',
-                        value: format.Bytes(item.meta?.bytes_per_second, {digits: 1}),
+                        label: 'Inflight',
+                        value: (
+                            <div>
+                                {detailed && <div>{format.Number(item.meta?.inflight_rows)}</div>}
+                                {format.Bytes(item.meta?.inflight_bytes, {
+                                    digits: detailed ? 2 : 0,
+                                })}
+                            </div>
+                        ),
                     },
                 ]}
             />
