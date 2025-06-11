@@ -1,5 +1,29 @@
 # Changelog
 
+## [1.95.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.94.0...ui-v1.95.0) (2025-06-11)
+
+
+### Features
+
+* **Accounts:** add custom accounts usage base url [YTFRONT-4927] ([510587e](https://github.com/ytsaurus/ytsaurus-ui/commit/510587e7da13a6990e949316f1d4a74147e874ba))
+* **Dialog/TimeDuration:** forbid all symbols except numbers and latin chars [YTFRONT-4995] ([380c4ab](https://github.com/ytsaurus/ytsaurus-ui/commit/380c4ab0ad8aa531c8acf3647d397301012d668c))
+* **Dialog:** add filter for services select control [YTFRONT-5007] ([51aab9b](https://github.com/ytsaurus/ytsaurus-ui/commit/51aab9b249b07cedcf7039dbb13b9235c3036cd1))
+* **Navigation:** add icons for queue producers and consumers [YTFRONT-4981] ([401465d](https://github.com/ytsaurus/ytsaurus-ui/commit/401465d2250ba6e893ac9b5bca20a09067869e35))
+* **Operation/Details:** error.job_id attributes should be displayed as a link [YTFRONT-3916] ([fd38edf](https://github.com/ytsaurus/ytsaurus-ui/commit/fd38edf1e6b11407fbd81fef146d69e2ed8f9a97))
+* **Queries/Navigation:** add open new tab button [YTFRONT-4985] ([4bb9786](https://github.com/ytsaurus/ytsaurus-ui/commit/4bb978649a4a956913dd4d585c9a399ab95fdf9b))
+* **Queries:** add multi chart [YTFRONT-4999] ([d760704](https://github.com/ytsaurus/ytsaurus-ui/commit/d760704cdfa14914c019a339b872a30528a94044))
+* **Queries:** add multi progress [YTFRONT-4999] ([37eb5d2](https://github.com/ytsaurus/ytsaurus-ui/commit/37eb5d2416ca0d1145cd43337dd5b84d8c5260b8))
+* **Queue/Exports:** move ms to tooltips [YTFRONT-4995] ([77010c4](https://github.com/ytsaurus/ytsaurus-ui/commit/77010c4c59d5361421b8845b72369eba66dc7d67))
+
+
+### Bug Fixes
+
+* **Chart:** yql datetime in chart [YTFRONT-4937] ([e3d692b](https://github.com/ytsaurus/ytsaurus-ui/commit/e3d692b0036786aace2d3fc9d87eb9f0a38565ee))
+* **Dashboard2:** navigation options and rewrite oprtions selectors [YTFRONT-5007] ([815ba7f](https://github.com/ytsaurus/ytsaurus-ui/commit/815ba7f444e9c71a81ac2f547921243471da7869))
+* **Queue/Exports:** export duration validator [YTFRONT-4995] ([462525c](https://github.com/ytsaurus/ytsaurus-ui/commit/462525c7da3a959794f6feac7dc0724ba2efd44d))
+* **Scheduling:** use fifo_index as sort column for FIFO-pool by default [YTFRONT-4942] ([422ffe7](https://github.com/ytsaurus/ytsaurus-ui/commit/422ffe7f50afdcbb169fe971a7502fd14f72281f))
+* **Timeline:** from to error [YTFRONT-5011] ([b58e037](https://github.com/ytsaurus/ytsaurus-ui/commit/b58e0376e88ff9af6d0afceb6debbec5a16a3ccf))
+
 ## [1.94.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.93.0...ui-v1.94.0) (2025-06-05)
 
 
