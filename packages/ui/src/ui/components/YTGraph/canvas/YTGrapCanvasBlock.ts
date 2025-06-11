@@ -144,6 +144,23 @@ export class YTGrapCanvasBlock<T extends YTGraphBlock<string, {}>> extends Canva
         }
     }
 
+    protected async drawCenteredIcon({
+        padding = DEFAULT_PADDING,
+        size,
+        ...icon
+    }: {size?: number; padding?: number} & IconSrc) {
+        const {width, height} = this.state;
+        const iconSize = size ?? Math.min(width, height) - padding * 2;
+
+        this.drawInnerIcon({
+            ...icon,
+            xPos: Math.round(width / 2 - iconSize / 2),
+            yPos: Math.round(height / 2 - iconSize / 2),
+            w: iconSize,
+            h: iconSize,
+        });
+    }
+
     protected async drawInnerIcon({
         xPos,
         yPos,
