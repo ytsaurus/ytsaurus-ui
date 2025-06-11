@@ -6,7 +6,7 @@ export function FlowMeta({
     className,
 }: {
     className?: string;
-    items: Array<{label: string; value: string}>;
+    items: Array<{label: string; value: React.ReactNode}>;
 }) {
     return (
         <Flex className={className}>

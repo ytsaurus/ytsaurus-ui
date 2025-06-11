@@ -2,7 +2,7 @@ import React from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import cn from 'bem-cn-lite';
 
-import {Graph, TConnection} from '@gravity-ui/graph';
+import {TConnection} from '@gravity-ui/graph';
 import {Flex} from '@gravity-ui/uikit';
 import {SVGIconSvgrData} from '@gravity-ui/uikit/build/esm/components/Icon/types';
 
@@ -78,23 +78,30 @@ export function FlowGraphImpl() {
             className={block('graph')}
             {...config}
             data={data}
-            renderBlock={({className, style, graph, data}) => {
+            renderBlock={({className, style, data}) => {
                 return (
                     <Flex className={block('item-container', className)} style={style}>
-                        {renderContent(graph, data)}
+                        {renderContent({item: data})}
                     </Flex>
+                );
+            }}
+            renderPopup={({data}) => {
+                return (
+                    <div className={block('item-popup', {type: data.is})}>
+                        {renderContent({item: data, detailed: true})}
+                    </div>
                 );
             }}
         />
     );
 }
 
-function renderContent(graph: Graph, data: FlowGraphBlock) {
-    switch (data.is) {
+function renderContent({item, ...rest}: {item: FlowGraphBlock; detailed?: boolean}) {
+    switch (item.is) {
         case 'computation':
-            return <Computation className={block('item')} graph={graph} item={data} />;
+            return <Computation className={block('item')} item={item} {...rest} />;
         case 'stream':
-            return <Stream className={block('item')} graph={graph} item={data} />;
+            return <Stream className={block('item')} item={item} {...rest} />;
     }
 }
 
