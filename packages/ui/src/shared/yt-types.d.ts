@@ -524,3 +524,61 @@ export type GetQueryTrackerInfoResponse = {
     supported_features: {access_control: boolean; multiple_aco?: boolean};
     clusters?: Array<string>;
 };
+
+export type FlowExecuteCommand = 'describe-pipeline';
+
+export type FlowExecuteParams<Command extends FlowExecuteCommand> = {
+    flow_command: Command;
+    pipeline_path: string;
+};
+
+export type FlowExecuteData = {
+    'describe-pipeline': FlowDescribePipelineData;
+};
+
+type ComputationId = string;
+type StreamId = string;
+
+export type FlowDescribePipelineData = {
+    computations: Record<ComputationId, FlowComputation>;
+    streams: Record<StreamId, FlowStream>;
+};
+
+export type FlowComputation = FlowComputationStreams & {
+    id: ComputationId;
+    metrics: {
+        cpu_usage_current: number;
+        cpu_usage_30s: number;
+        cpu_usage_10m: number;
+        memory_usage_current: number;
+        memory_usage_30s: number;
+        memory_usage_current: number;
+    };
+    partitions_stats?: {
+        count: 1;
+        count_by_state?: Record<
+            'Completed' | 'Executing' | 'Transient' | 'Interrupted',
+            number | undefined
+        >;
+    };
+    group_by_schema_str: string;
+    epoch_per_second: number;
+};
+
+export type FlowComputationStreams = Record<FlowComputationStreamType, Array<StreamId>>;
+
+type FlowComputationStreamType =
+    | 'input_streams'
+    | 'output_streams'
+    | 'source_streams'
+    | 'sink_streams'
+    | 'timer_streams';
+
+export type FlowStream = {
+    id: string;
+    name: string;
+    bytes_per_second?: number;
+    messages_per_second?: number;
+    inflight_bytes?: number;
+    inflight_rows?: number;
+};
