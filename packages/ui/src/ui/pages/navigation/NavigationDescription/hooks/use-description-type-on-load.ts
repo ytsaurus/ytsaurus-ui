@@ -26,6 +26,4 @@ export function useUpdateDescriptionTypeOnLoad(
             dispatch(setDescriptionType({descriptionType: newDescriptionType}));
         }
     }, [isAnnotationLoadedWithData, isExternalAnnotatonLoadedWithData]);
-
-    return {descriptionType};
 }

@@ -4,6 +4,7 @@ import {getDescriptionType, getEditMode} from '../../../../store/reducers/naviga
 
 import {useYTAnnotation} from './use-yt-annotation';
 import {useExternalAnnotation} from './use-external-annotation';
+import {useUpdateDescriptionTypeOnLoad} from './use-description-type-on-load';
 
 export function useDescription() {
     const editMode = useSelector(getEditMode);
@@ -19,6 +20,8 @@ export function useDescription() {
         !isAnnotationLoading && (isAnnotationLoadedWithData || isExternalAnnotatonLoadedWithData);
 
     const description = descriptionType === 'yt' ? ytAnnotation : externalAnnotation;
+
+    useUpdateDescriptionTypeOnLoad(isAnnotationLoadedWithData, isExternalAnnotatonLoadedWithData);
 
     return {
         visible: isLoadedWithData || editMode,
