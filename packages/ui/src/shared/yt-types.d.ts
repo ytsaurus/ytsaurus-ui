@@ -40,6 +40,7 @@ export interface ClusterUiConfig {
         title: string;
         url_template: string;
     };
+    tablet_errors_base_url?: string;
 }
 
 export type CypressNodeRaw<AttributesT extends Record<string, unknown>, ValueT> =

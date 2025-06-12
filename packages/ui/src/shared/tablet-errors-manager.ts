@@ -52,6 +52,7 @@ export type MethodErrors = {
     fixed_end_timestamp: number;
     total_row_count: number;
     all_methods: Array<string>;
+    error_count_limit_exceeded?: boolean;
 };
 
 export type TabletError = {

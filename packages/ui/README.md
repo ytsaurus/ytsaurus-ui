@@ -102,6 +102,8 @@ Available flags (**default values** are highlighted in bold):
 | operation_performance_url_template     | **null**, `{title: string; url_template: string}`                                    | Configuration for operation performance analysis system integration. Template must contain {operation_id} placeholder which will be replaced with actual operationId                                                                                                                                                                        |
 | resource_usage_base_url               | **null**, url as string                                                              | Base URL for accounts usage service to override uiSettings.accountsUsageBasePath                                                                                                                                                                                                                                                            |
 
+| tablet_errors_base_url               | **null**, url as string                                                              | Base URL for tablet errors service to override uiSettings.tabletErrorsBaseUrl                                                                                                                                                                                                                                                            |
+
 ### Configuration
 
 By default the application uses base configuration from `path_to_dist/server/configs/common.js` file. The behavior might be adjusted through `APP_ENV` and `APP_INSTALLATION` environment variables, see [README.config.md](./docs/configuration.md) for more details.
