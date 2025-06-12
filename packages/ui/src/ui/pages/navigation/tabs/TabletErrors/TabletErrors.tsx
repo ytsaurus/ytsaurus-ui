@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, {useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 
 import {RadioButton} from '@gravity-ui/uikit';
@@ -26,10 +26,10 @@ export default function TabletErrors() {
         viewMode === 'request_errors' ? <TabletErrorsRequest /> : <TabletErrorsBackground />;
 
     useEffect(() => {
-      return () => {
-        dispatch(tabletErrorsByPathActions.updateFilter({timeRangeFilter: undefined}));
-        dispatch(updateTabletErrorsViewMode());
-      };
+        return () => {
+            dispatch(tabletErrorsByPathActions.updateFilter({timeRangeFilter: undefined}));
+            dispatch(updateTabletErrorsViewMode());
+        };
     }, []);
 
     return (

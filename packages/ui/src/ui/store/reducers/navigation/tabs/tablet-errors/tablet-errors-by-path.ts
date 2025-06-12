@@ -68,7 +68,10 @@ const tabletErrorsByPathSlice = createSlice({
             {
                 payload,
             }: PayloadAction<
-                Pick<TabletErrorsByPathState, 'data' | 'total_row_count' | 'dataParams' | 'error_count_limit_exceeded'>
+                Pick<
+                    TabletErrorsByPathState,
+                    'data' | 'total_row_count' | 'dataParams' | 'error_count_limit_exceeded'
+                >
             >,
         ) {
             return {...state, ...payload, loading: false, loaded: true, error: undefined};

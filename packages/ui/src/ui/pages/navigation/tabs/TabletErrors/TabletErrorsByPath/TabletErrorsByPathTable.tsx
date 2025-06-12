@@ -30,7 +30,8 @@ import {showErrorPopup} from '../../../../../utils/utils';
 
 const block = cn('yt-tablet-errors-by-path-table');
 
-const countLimitExceededMessage = 'A maximum of 10000 errors can be displayed for the selected time period. To view more, please adjust the time range';
+const countLimitExceededMessage =
+    'A maximum of 10000 errors can be displayed for the selected time period. To view more, please adjust the time range';
 
 export function TabletErrorsByPathTable({className}: {className?: string}) {
     const {columns, data, loading, loaded, countLimitExceeded} = useTableColumnsAndData();
@@ -38,13 +39,18 @@ export function TabletErrorsByPathTable({className}: {className?: string}) {
     return (
         <div className={className}>
             {Boolean(error) && <YTErrorBlock error={error} />}
-            {Boolean(countLimitExceeded) && <Alert theme={'info'} message={countLimitExceededMessage}/>}
+            {Boolean(countLimitExceeded) && (
+                <Alert theme={'info'} message={countLimitExceededMessage} />
+            )}
             <DataTableYT
                 loading={loading}
                 loaded={loaded}
                 columns={columns}
                 data={data}
-                settings={{...DATA_TABLE_YT_SETTINGS_UNDER_TOOLBAR_DOUBLE_HEIGHT, dynamicRender: false}}
+                settings={{
+                    ...DATA_TABLE_YT_SETTINGS_UNDER_TOOLBAR_DOUBLE_HEIGHT,
+                    dynamicRender: false,
+                }}
                 useThemeYT
             />
         </div>
@@ -120,7 +126,9 @@ function useTableColumnsAndData() {
                 header: null,
                 render({row: {error}}) {
                     return (
-                        <AttributesButton onClick={() => showErrorPopup(error, {hideOopsMsg: true})} />
+                        <AttributesButton
+                            onClick={() => showErrorPopup(error, {hideOopsMsg: true})}
+                        />
                     );
                 },
             },
