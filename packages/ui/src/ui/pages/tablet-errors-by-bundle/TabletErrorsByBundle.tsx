@@ -114,7 +114,7 @@ function useTabletErrorsColumns(loading: boolean) {
             ...(all_methods ?? presented_methods).map((method) => {
                 return {
                     name: `method_${method}`,
-                    header: <ColumnHeader column={method + ' errors'} />,
+                    header: <ColumnHeader column={method} title={method}/>,
                     render({row}) {
                         return format.Number(row.method_counts?.[method]);
                     },

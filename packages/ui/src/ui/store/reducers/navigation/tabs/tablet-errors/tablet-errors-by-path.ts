@@ -8,6 +8,8 @@ export type TabletErrorsByPathState = {
     loaded: boolean;
     error: YTError | undefined;
 
+    error_count_limit_exceeded?: boolean;
+
     table_id: string;
     table_path: string;
     data: TabletErrorsApi['tablet_errors_by_table']['response'] | undefined;
@@ -42,6 +44,7 @@ const ephemeralState: Omit<TabletErrorsByPathState, keyof typeof persistentState
     data: undefined,
     total_row_count: undefined,
     dataParams: undefined,
+    error_count_limit_exceeded: undefined,
 };
 
 export const initialState: TabletErrorsByPathState = {...persistentState, ...ephemeralState};
@@ -65,7 +68,7 @@ const tabletErrorsByPathSlice = createSlice({
             {
                 payload,
             }: PayloadAction<
-                Pick<TabletErrorsByPathState, 'data' | 'total_row_count' | 'dataParams'>
+                Pick<TabletErrorsByPathState, 'data' | 'total_row_count' | 'dataParams' | 'error_count_limit_exceeded'>
             >,
         ) {
             return {...state, ...payload, loading: false, loaded: true, error: undefined};
