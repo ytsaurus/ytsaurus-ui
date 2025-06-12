@@ -73,8 +73,17 @@ export function loadTabletErrorsByTablePath(
             .then(({data}) => {
                 const payload =
                     page === 0
-                        ? {data, dataParams: params, total_row_count: data.total_row_count, error_count_limit_exceeded: data?.error_count_limit_exceeded}
-                        : {data, dataParams: params, error_count_limit_exceeded: data?.error_count_limit_exceeded};
+                        ? {
+                              data,
+                              dataParams: params,
+                              total_row_count: data.total_row_count,
+                              error_count_limit_exceeded: data?.error_count_limit_exceeded,
+                          }
+                        : {
+                              data,
+                              dataParams: params,
+                              error_count_limit_exceeded: data?.error_count_limit_exceeded,
+                          };
 
                 dispatch(tabletErrorsByPathActions.onSuccess(payload));
             })

@@ -118,13 +118,19 @@ export function getUserYTApiSetup(cluster: string, req: Request): YTApiUserSetup
     };
 }
 
-export function getUserTabletErrorApiSetup(cluster: string, req: Request, testingHeaders?: boolean) {
+export function getUserTabletErrorApiSetup(
+    cluster: string,
+    req: Request,
+    testingHeaders?: boolean,
+) {
     const {authentication} = getYTApiClusterSetup(cluster).setup;
-    const tabletsHeaders = testingHeaders ? req.yt.tabletErrorTestingApiAuthHeaders : req.yt.tabletErrorApiAuthHeaders;
+    const tabletsHeaders = testingHeaders
+        ? req.yt.tabletErrorTestingApiAuthHeaders
+        : req.yt.tabletErrorApiAuthHeaders;
 
     const authHeaders =
         authentication && authentication !== 'none'
-            ?  tabletsHeaders || req.yt.ytApiAuthHeaders || {}
+            ? tabletsHeaders || req.yt.ytApiAuthHeaders || {}
             : {};
 
     return {authHeaders};
