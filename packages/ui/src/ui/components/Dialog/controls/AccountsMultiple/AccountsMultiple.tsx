@@ -1,6 +1,6 @@
 import React from 'react';
 import {useSelector} from 'react-redux';
-import {Button, Flex, Select} from '@gravity-ui/uikit';
+import {Button, Flex, Label, Select} from '@gravity-ui/uikit';
 import {Plus} from '@gravity-ui/icons';
 
 import map_ from 'lodash/map';
@@ -16,6 +16,8 @@ import {DialogControlProps} from '../../../../components/Dialog/Dialog.types';
 import ypath from '../../../../common/thor/ypath';
 
 import {YTApiId} from '../../../../../shared/constants/yt-api-id';
+
+import './AccountsMultiple.scss';
 
 type Props = DialogControlProps<string[]> & {
     disabled?: boolean;
@@ -65,6 +67,10 @@ export function AccountsMultiple(props: Props) {
         onChange(concat_(currentValue, usableAccounts || []));
     };
 
+    const onDelete = (deleted: string) => {
+        onChange(value.filter((item) => item !== deleted));
+    };
+
     return (
         <Flex gap={2} direction={'column'}>
             <Select
@@ -78,21 +84,42 @@ export function AccountsMultiple(props: Props) {
                 width={'max'}
                 loading={isLoading}
             />
-            <Flex direction={'row'} gap={1}>
-                <Button size={'m'} onClick={addFavorite}>
-                    <Flex alignItems={'center'} gap={2}>
-                        <Plus />
-                        Favourites
-                    </Flex>
-                </Button>
-                <Button size={'m'} onClick={addUsable}>
-                    <Flex alignItems={'center'} gap={2}>
-                        <Plus />
-                        Usable
-                    </Flex>
-                </Button>
-            </Flex>
+            <div>{value?.length ? <ItemsList items={value} onDelete={onDelete} /> : null}</div>
+            <div>
+                <Flex direction={'row'} gap={1}>
+                    <Button size={'m'} onClick={addFavorite}>
+                        <Flex alignItems={'center'} gap={2}>
+                            <Plus />
+                            Favourites
+                        </Flex>
+                    </Button>
+                    <Button size={'m'} onClick={addUsable}>
+                        <Flex alignItems={'center'} gap={2}>
+                            <Plus />
+                            Usable
+                        </Flex>
+                    </Button>
+                </Flex>
+            </div>
         </Flex>
+    );
+}
+
+function ItemsList({items, onDelete}: {items: string[]; onDelete: (item: string) => void}) {
+    return (
+        <Flex gap={1}>
+            {items.map((item) => (
+                <Item item={item} onDelete={onDelete} key={item} />
+            ))}
+        </Flex>
+    );
+}
+
+function Item({item, onDelete}: {item: string; onDelete: (item: string) => void}) {
+    return (
+        <Label type={'close'} size={'xs'} onCloseClick={() => onDelete(item)}>
+            {item}
+        </Label>
     );
 }
 
