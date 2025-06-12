@@ -29,7 +29,6 @@ export const getTabletErrorCountLimitExceeded = (state: RootState) => {
     return state.navigation.tabs.tabletErrorsByPath?.error_count_limit_exceeded;
 };
 
-
 // Filters
 
 export const getTabletErrorsByPathTimeRange = (state: RootState) =>
