@@ -3,9 +3,12 @@ import {useSelector} from 'react-redux';
 import moment from 'moment';
 import cn from 'bem-cn-lite';
 
-import {Flex, Link, Text} from '@gravity-ui/uikit';
+import ypath from '../../../../../common/thor/ypath';
+
+import {Alert, Flex, Link, Text} from '@gravity-ui/uikit';
 
 import {
+    getTabletErrorCountLimitExceeded,
     getTabletErrorsByPathData,
     getTabletErrorsByPathError,
     getTabletErrorsByPathLoaded,
@@ -21,23 +24,27 @@ import DataTableYT, {
 } from '../../../../../components/DataTableYT/DataTableYT';
 import {YTErrorBlock} from '../../../../../components/Error/Error';
 import {Host} from '../../../../../containers/Host/Host';
-import ClickableAttributesButton from '../../../../../components/AttributesButton/ClickableAttributesButton';
 import ClipboardButton from '../../../../../components/ClipboardButton/ClipboardButton';
+import AttributesButton from '../../../../../components/AttributesButton/AttributesButton';
+import {showErrorPopup} from '../../../../../utils/utils';
 
 const block = cn('yt-tablet-errors-by-path-table');
 
+const countLimitExceededMessage = 'A maximum of 10000 errors can be displayed for the selected time period. To view more, please adjust the time range';
+
 export function TabletErrorsByPathTable({className}: {className?: string}) {
-    const {columns, data, loading, loaded} = useTableColumnsAndData();
+    const {columns, data, loading, loaded, countLimitExceeded} = useTableColumnsAndData();
     const error = useSelector(getTabletErrorsByPathError);
     return (
         <div className={className}>
             {Boolean(error) && <YTErrorBlock error={error} />}
+            {Boolean(countLimitExceeded) && <Alert theme={'info'} message={countLimitExceededMessage}/>}
             <DataTableYT
                 loading={loading}
                 loaded={loaded}
                 columns={columns}
                 data={data}
-                settings={DATA_TABLE_YT_SETTINGS_UNDER_TOOLBAR_DOUBLE_HEIGHT}
+                settings={{...DATA_TABLE_YT_SETTINGS_UNDER_TOOLBAR_DOUBLE_HEIGHT, dynamicRender: false}}
                 useThemeYT
             />
         </div>
@@ -52,6 +59,7 @@ function useTableColumnsAndData() {
     const loaded = useSelector(getTabletErrorsByPathLoaded);
     const page = useSelector(getTabletErrorsByPathPageFilter);
     const pageCount = useSelector(getTabletErrorsByPathPageCount);
+    const countLimitExceeded = useSelector(getTabletErrorCountLimitExceeded);
 
     const {errors = []} = useSelector(getTabletErrorsByPathData) ?? {};
     const columns = React.useMemo(() => {
@@ -61,6 +69,7 @@ function useTableColumnsAndData() {
                 header: (
                     <ColumnHeader
                         column="Tablet Id"
+                        title="Tablet ID"
                         loading={loading}
                         pageIndex={page}
                         pageCount={pageCount}
@@ -103,7 +112,7 @@ function useTableColumnsAndData() {
                 header: <ColumnHeader column="Error message" />,
                 className: block('cell-error-msg'),
                 render({row: {error}}) {
-                    return error.message;
+                    return ypath.getValue(error.message);
                 },
             },
             {
@@ -111,16 +120,12 @@ function useTableColumnsAndData() {
                 header: null,
                 render({row: {error}}) {
                     return (
-                        <ClickableAttributesButton
-                            title="Details"
-                            attributes={error}
-                            inlineMargins
-                        />
+                        <AttributesButton onClick={() => showErrorPopup(error, {hideOopsMsg: true})} />
                     );
                 },
             },
         ];
         return res;
     }, [cluster, page, pageCount, loading]);
-    return {data: errors, columns, loading, loaded};
+    return {data: errors, columns, loading, loaded, countLimitExceeded};
 }
