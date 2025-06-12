@@ -16,6 +16,7 @@ import {
     TabletErrorsApi,
     TabletErrorsManagerPostActionType,
 } from '../../shared/tablet-errors-manager';
+import {getPreloadedClusterUiConfig} from '../components/cluster-params';
 
 export async function ytTabletErrorsApi(req: Request, res: Response) {
     try {
@@ -35,15 +36,19 @@ function isTabletErrorsManagerPostAction(v: string): v is TabletErrorsManagerPos
 
 async function ytTabletErrorsApiImpl(req: Request, res: Response) {
     const {ctx, query} = req;
+    const {action, ytAuthCluster} = req.params;
     const {tabletErrorsBaseUrl} = ctx.config;
+
+    const isDeveloper = req.query.isDeveloper === 'true';
+    const config = await getPreloadedClusterUiConfig(ytAuthCluster, req.ctx, isDeveloper);
+    const clusterSpecificBaseUrl = config?.tablet_errors_base_url;
+
     if (!tabletErrorsBaseUrl) {
         throw new ErrorWithCode(
             404,
             'The installation of UI is not configured to work with TabletErrorsManager, check your config.tabletErrorsBaseUrl',
         );
     }
-
-    const {action, ytAuthCluster} = req.params;
 
     if (!isTabletErrorsManagerPostAction(action)) {
         throw new ErrorWithCode(404, 'Unexpected action: ' + action);
@@ -53,7 +58,7 @@ async function ytTabletErrorsApiImpl(req: Request, res: Response) {
 
     let cfg;
     try {
-        cfg = getUserTabletErrorApiSetup(ytAuthCluster, req);
+        cfg = getUserTabletErrorApiSetup(ytAuthCluster, req, Boolean(clusterSpecificBaseUrl));
     } catch (e: any) {
         return sendAndLogError(req.ctx, res, 400, e);
     }
@@ -62,7 +67,7 @@ async function ytTabletErrorsApiImpl(req: Request, res: Response) {
 
     return axios
         .request({
-            url: `${tabletErrorsBaseUrl}/${action}${search}`,
+            url: `${clusterSpecificBaseUrl ?? tabletErrorsBaseUrl}/${action}${search}`,
             method: req.method as any,
             headers: {...ctx.getMetadata(), ...authHeaders, 'accept-encoding': 'gzip'},
             data: req.body as TabletErrorsApi[typeof action]['body'],
