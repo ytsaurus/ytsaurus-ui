@@ -47,3 +47,5 @@ export const UPDATE_RESOURCE_USAGE = createActionTypes(`${PREFIX}UPDATE_RESOURCE
 export const NAVIGATION_MAP_NODE_TABLE_ID = 'navigation/map-nodes' as const;
 export const SET_MEDIUM_TYPE = PREFIX + 'SET_MEDIUM_TYPE';
 export const APPLY_CUSTOM_SORT = PREFIX + 'APPLY_CUSTOM_SORT';
+
+export const TRASH_PATH = '//tmp/trash';

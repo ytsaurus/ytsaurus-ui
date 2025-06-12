@@ -19,7 +19,6 @@ import Link from '../../../../components/Link/Link';
 import Icon from '../../../../components/Icon/Icon';
 import AccountLink from '../../../accounts/AccountLink';
 
-import {getIconNameForType} from '../../../../utils/navigation/path-editor';
 import {itemNavigationAllowed} from '../../../../pages/navigation/Navigation/ContentViewer/helpers';
 
 import {
@@ -44,7 +43,6 @@ import {ROOT_POOL_NAME, Tab as SchedulingTab} from '../../../../constants/schedu
 import {NAVIGATION_MAP_NODE_TABLE_ID} from '../../../../constants/navigation';
 import {LOADING_STATUS, Page} from '../../../../constants/index';
 import hammer from '../../../../common/hammer';
-import ypath from '../../../../common/thor/ypath';
 import {showTableEraseModal} from '../../../../store/actions/navigation/modals/table-erase-modal';
 import {
     showTableMergeModal,
@@ -58,57 +56,15 @@ import PathActions from './PathActions';
 import {Tooltip} from '../../../../components/Tooltip/Tooltip';
 import WarningIcon from '../../../../components/WarningIcon/WarningIcon';
 import TTLInfo from '../../../../components/TTLInfo/TTLInfo';
-import UIFactory from '../../../../UIFactory';
+import {MapNodeIcon} from '../../../../components/MapNodeIcon/MapNodeIcon';
 
-import QueueConsumerIcon from '../../../../assets/img/svg/icons/queue-consumer.svg';
-import QueueProducerIcon from '../../../../assets/img/svg/icons/queue-producer.svg';
+import {isTrashNode} from '../../../../utils/navigation/isTrashNode';
+import {isLinkToTrashNode} from '../../../../utils/navigation/isLinkToTrashNode';
 
 import './MapNodesTable.scss';
 
 const block = cn('map-nodes-table');
 const ElementsTable = withKeyboardNavigation(ElementsTableBase);
-
-export function renderMapNodesTableIcon(item) {
-    let icon = UIFactory.getNavigationMapNodeSettings()?.renderNodeIcon(item);
-    if (icon) {
-        // do nothing
-    } else if (MapNodesTable.isTrashNode(item) || MapNodesTable.isLinkToTrashNode(item)) {
-        icon = <Icon awesome="trash-alt" />;
-    } else {
-        icon = <Icon awesome={getIconNameForType(item.iconType, item.targetPathBroken)} />;
-    }
-
-    let title = hammer.format['ReadableField'](item.type);
-    if (item.iconType === 'table') {
-        title = 'Static table';
-    }
-
-    if (item.iconType === 'table_dynamic') {
-        const {sorted} = ypath.getAttributes(item);
-        if (sorted) {
-            title = 'Dynamic table';
-        } else {
-            title = 'Queue table';
-            icon = <Icon awesome="queue-table" />;
-        }
-    }
-
-    if (ypath.getAttributes(item)?.treat_as_queue_consumer) {
-        title = 'Queue consumer';
-        icon = <QueueConsumerIcon />;
-    }
-
-    if (ypath.getAttributes(item)?.treat_as_queue_producer) {
-        title = 'Queue producer';
-        icon = <QueueProducerIcon />;
-    }
-
-    return (
-        <span className={'icon-wrapper'} title={title}>
-            {icon}
-        </span>
-    );
-}
 
 class MapNodesTable extends Component {
     static propTypes = {
@@ -132,16 +88,6 @@ class MapNodesTable extends Component {
         updatePath: PropTypes.func.isRequired,
         updateView: PropTypes.func.isRequired,
     };
-
-    static TRASH_PATH = '//tmp/trash';
-
-    static isTrashNode(item) {
-        return item.path === MapNodesTable.TRASH_PATH;
-    }
-
-    static isLinkToTrashNode(item) {
-        return item.targetPath === MapNodesTable.TRASH_PATH;
-    }
 
     static renderTrash(linkState) {
         return <FormattedLink text="trash" state={linkState} theme="primary" />;
@@ -170,9 +116,9 @@ class MapNodesTable extends Component {
     }
 
     static renderNameImpl(item) {
-        if (MapNodesTable.isTrashNode(item)) {
+        if (isTrashNode(item)) {
             return MapNodesTable.renderTrash(item.pathState);
-        } else if (MapNodesTable.isLinkToTrashNode(item)) {
+        } else if (isLinkToTrashNode(item)) {
             return MapNodesTable.renderTrash(item.targetPathState);
         }
 
@@ -331,7 +277,7 @@ class MapNodesTable extends Component {
             columns: this.columns,
             templates: {
                 chooser: this.renderChooser,
-                icon: renderMapNodesTableIcon,
+                icon: (node) => <MapNodeIcon node={node} />,
                 name: MapNodesTable.renderName,
                 locks: MapNodesTable.renderLocks,
                 modification_time: MapNodesTable.renderModificationTime,
