@@ -8,7 +8,17 @@ import {ytApiV3} from '../../../../rum/rum-wrap-api';
 function makePathsAttributesRequests(paths: string[]) {
     return map_(paths, (path) => ({
         command: 'get' as const,
-        parameters: {path: `${path}/@`},
+        parameters: {
+            path: `${path}/@`,
+            attributes: [
+                'path',
+                'treat_as_queue_consumer',
+                'treat_as_queue_producer',
+                'type',
+                'dynamic',
+                'sorted',
+            ],
+        },
     }));
 }
 
@@ -36,6 +46,8 @@ export async function fetchPaths(args: {cluster: string; type: PathsType}, api: 
                     type: itemData?.type,
                     path: paths?.[idx]?.path,
                     targetPath: itemData?.target_path,
+                    iconType: itemData?.type,
+                    attributes: itemData,
                 };
             }
 

@@ -9,24 +9,22 @@ import hammer from '../../../../../../common/hammer';
 
 import {getCluster} from '../../../../../../store/selectors/global';
 
-import Icon from '../../../../../../components/Icon/Icon';
+import {MapNodeIcon} from '../../../../../../components/MapNodeIcon/MapNodeIcon';
 import Link from '../../../../../../components/Link/Link';
 
 import {WidgetFallback} from '../../../../../../pages/dashboard2/Dashboard/components/WidgetFallback/WidgetFallback';
 
-import {getIconNameForType} from '../../../../../../utils/navigation/path-editor';
 import {Page} from '../../../../../../../shared/constants/settings';
 
 import './NavigationWidgetContent.scss';
 
 const block = b('yt-navigation-widget-content');
 
-const TRASH_PATH = '//tmp/trash';
-
 type NavigationItem = {
     type: string;
     path: string;
     targetPath?: string;
+    attributes?: Record<string, unknown>;
 };
 
 type Props = {
@@ -120,7 +118,7 @@ function Item(item: NavigationItem) {
 
     return (
         <Flex direction={'row'} gap={4} alignItems={'center'} className={block('navigation-item')}>
-            <MapNodesIcon {...item} />
+            <MapNodeIcon node={{$attributes: item?.attributes}} />
             <Text whiteSpace={'nowrap'} ellipsis>
                 <Link url={url} theme={'primary'} routed>
                     {item.path}
@@ -128,23 +126,4 @@ function Item(item: NavigationItem) {
             </Text>
         </Flex>
     );
-}
-
-const isTrashNode = (item: NavigationItem) => {
-    return item.path === TRASH_PATH;
-};
-
-const isLinkToTrashNode = (item: NavigationItem) => {
-    return item.targetPath === TRASH_PATH;
-};
-
-function MapNodesIcon(item: NavigationItem) {
-    let icon = <Icon awesome={'not-suported'} />;
-    if (isTrashNode(item) || isLinkToTrashNode(item)) {
-        icon = <Icon awesome={'trash-alt'} />;
-    } else {
-        icon = <Icon awesome={getIconNameForType(item.type)} />;
-    }
-
-    return icon;
 }

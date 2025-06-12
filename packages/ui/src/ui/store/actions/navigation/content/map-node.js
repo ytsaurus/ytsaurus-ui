@@ -71,6 +71,7 @@ function getList(path, transaction, cluster) {
                     'effective_expiration',
                     'treat_as_queue_consumer',
                     'treat_as_queue_producer',
+                    'path',
                     ...(UIFactory.getNavigationMapNodeSettings()?.additionalAttributes || []),
                 ],
                 path,

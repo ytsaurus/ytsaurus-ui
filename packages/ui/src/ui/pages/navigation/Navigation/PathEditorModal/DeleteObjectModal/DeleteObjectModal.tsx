@@ -7,7 +7,7 @@ import cn from 'bem-cn-lite';
 
 import map_ from 'lodash/map';
 
-import {renderMapNodesTableIcon} from '../../../../../pages/navigation/content/MapNode/MapNodesTable';
+import {MapNodeIcon} from '../../../../../components/MapNodeIcon/MapNodeIcon';
 import ErrorBoundary from '../../../../../components/ErrorBoundary/ErrorBoundary';
 import MetaTable from '../../../../../components/MetaTable/MetaTable';
 import HelpLink from '../../../../../components/HelpLink/HelpLink';
@@ -139,7 +139,7 @@ export class DeleteObjectModal extends Component<DeleteObjectModalProps> {
 
                             return (
                                 <React.Fragment key={path}>
-                                    {renderMapNodesTableIcon((item as DeleteObjectItem[])[index])}
+                                    <MapNodeIcon node={(item as DeleteObjectItem[])[index]} />
                                     <span title={path} className="elements-ellipsis">
                                         {titleUnquoted}
                                     </span>
@@ -207,7 +207,7 @@ export class DeleteObjectModal extends Component<DeleteObjectModalProps> {
                 <div className={block()}>
                     <div className={block()}>
                         <p className={block('object')}>
-                            {renderMapNodesTableIcon(item)}
+                            <MapNodeIcon node={item as DeleteObjectItem} />
                             <span className={block('path')}>{(item as DeleteObjectItem).path}</span>
                         </p>
 
