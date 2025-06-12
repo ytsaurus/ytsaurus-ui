@@ -163,6 +163,7 @@ declare global {
                 login?: string;
                 ytApiAuthHeaders?: Record<string, string>;
                 tabletErrorApiAuthHeaders?: Record<string, string>;
+                tabletErrorTestingApiAuthHeaders?: Record<string, string>;
             };
         }
     }
@@ -175,6 +176,7 @@ declare module 'express' {
             login?: string;
             ytApiAuthHeaders?: Record<string, string>;
             tabletErrorApiAuthHeaders?: Record<string, string>;
+            tabletErrorTestingApiAuthHeaders?: Record<string, string>;
         };
         ctx: AppContext;
     }
