@@ -8,6 +8,7 @@ import ypath from '../../../../common/thor/ypath';
 import {useFetchBatchQuery} from '../../../../store/api/yt';
 
 import {YTApiId} from '../../../../rum/rum-wrap-api';
+import {USE_CACHE, USE_MAX_SIZE} from '../../../../../shared/constants/yt-api';
 
 export function usePools(trees: string[]) {
     const poolRequests = useMemo(() => {
@@ -15,6 +16,8 @@ export function usePools(trees: string[]) {
             command: 'list' as const,
             parameters: {
                 path: `//sys/scheduler/orchid/scheduler/pool_trees/${tree}/pools`,
+                ...USE_MAX_SIZE,
+                ...USE_CACHE,
             },
         }));
     }, [trees]);

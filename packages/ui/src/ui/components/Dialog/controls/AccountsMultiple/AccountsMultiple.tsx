@@ -16,6 +16,7 @@ import {DialogControlProps} from '../../../../components/Dialog/Dialog.types';
 import ypath from '../../../../common/thor/ypath';
 
 import {YTApiId} from '../../../../../shared/constants/yt-api-id';
+import {USE_CACHE, USE_MAX_SIZE} from '../../../../../shared/constants/yt-api';
 
 type Props = DialogControlProps<string[]> & {
     disabled?: boolean;
@@ -31,7 +32,11 @@ export function AccountsMultiple(props: Props) {
             requests: [
                 {
                     command: 'list' as const,
-                    parameters: {path: `//sys/accounts`},
+                    parameters: {
+                        path: `//sys/accounts`,
+                        ...USE_MAX_SIZE,
+                        ...USE_CACHE,
+                    },
                 },
             ],
         },
