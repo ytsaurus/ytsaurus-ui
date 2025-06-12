@@ -152,6 +152,6 @@ export function updateTabletErrrosCount(
     return {type: GET_TABLET_ERRORS.PARTITION, data: {errorsCountPath, errorsCount}};
 }
 
-export function updateTabletErrorsViewMode(viewMode: NavigationTabletErrorsMode) {
+export function updateTabletErrorsViewMode(viewMode?: NavigationTabletErrorsMode) {
     return {type: GET_TABLET_ERRORS.PARTITION, data: {viewMode}};
 }
