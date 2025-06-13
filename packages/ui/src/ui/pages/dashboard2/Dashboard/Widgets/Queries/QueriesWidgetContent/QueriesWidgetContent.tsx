@@ -39,6 +39,10 @@ const columns = [
         cell: (engine) => <Engine engine={engine.getValue()} />,
         header: () => 'Type',
     }),
+    columnHelper.accessor('author', {
+        cell: (author) => <Text>{author.getValue()}</Text>,
+        header: () => 'Author',
+    }),
     columnHelper.accessor('duration', {
         cell: (duration) => <Duration duration={duration.getValue()} />,
         header: () => 'Duration',
@@ -58,7 +62,7 @@ const queriesLayout = {
 };
 
 export function QueriesWidgetContent(props: PluginWidgetProps) {
-    const {queries, error, isLoading, isFetching} = useQueriesWidget(props.id);
+    const {queries, error, isLoading, isFetching} = useQueriesWidget(props);
 
     useAutoHeight(props, queriesLayout, queries?.length || 0);
 
