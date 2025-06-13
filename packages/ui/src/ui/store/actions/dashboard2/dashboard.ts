@@ -23,7 +23,11 @@ export function editConfig(
 ): ThunkAction<void, RootState, any, any> {
     return (dispatch, getState) => {
         const state = getState();
-        const config = getDashboardConfig(state);
+
+        const edittingConfig = getEdittingConfig(state);
+        const fallbackConfig = getDashboardConfig(state);
+        const config = edittingConfig ?? fallbackConfig;
+
         const configItems = [...(config?.items || [])];
 
         const generateConfig = (configType: ItemsTypes, data: any) =>
