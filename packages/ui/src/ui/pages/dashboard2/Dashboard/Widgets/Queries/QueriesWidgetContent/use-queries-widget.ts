@@ -1,4 +1,5 @@
 import {useSelector} from 'react-redux';
+import {PluginWidgetProps} from '@gravity-ui/dashkit';
 
 import map_ from 'lodash/map';
 
@@ -8,9 +9,9 @@ import {
     getQueryFilterEngine,
     getQueryFilterState,
 } from '../../../../../../store/selectors/dashboard2/queries';
-import {getCurrentUserName} from '../../../../../../store/selectors/global';
 
 import {QueryEngine} from '../../../../../../../shared/constants/engines';
+import {ListQueriesParams} from '../../../../../../../shared/yt-types';
 
 const mapQueryStateToRequestStates: Record<string, string[]> = {
     running: ['running', 'pending'],
@@ -19,10 +20,18 @@ const mapQueryStateToRequestStates: Record<string, string[]> = {
     aborted: ['aborting', 'aborted'],
 };
 
-export function useQueriesWidget(widgetId: string) {
+export type Author = {
+    value: string;
+    type: 'users';
+};
+
+export function useQueriesWidget(props: PluginWidgetProps) {
+    const {id: widgetId, data} = props;
+
+    const users = map_(data?.authors as Array<Author>, ({value}) => value);
+
     const queryState = useSelector((state: RootState) => getQueryFilterState(state, widgetId));
     const engine = useSelector((state: RootState) => getQueryFilterEngine(state, widgetId));
-    const user = useSelector(getCurrentUserName);
 
     let queryEngine = engine?.toLowerCase();
 
@@ -35,23 +44,30 @@ export function useQueriesWidget(widgetId: string) {
     if (queryState && mapQueryStateToRequestStates[queryState]) {
         requestedStates = mapQueryStateToRequestStates[queryState];
     }
+
     const makeRequests = (states: string[] | undefined) => {
         if (states?.length) {
-            return map_(states, (state) => ({
-                engine: queryEngine,
-                state,
-                user,
-                output_format: 'json',
-            }));
+            const requests: ListQueriesParams[] = [];
+
+            users.forEach((user) => {
+                requests.push(
+                    ...map_(states, (state) => ({
+                        engine: queryEngine,
+                        state,
+                        user,
+                        output_format: 'json',
+                    })),
+                );
+            });
+
+            return requests;
         }
-        return [
-            {
-                engine: queryEngine?.length ? queryEngine : undefined,
-                user,
-                output_format: 'json',
-                limit: 10,
-            },
-        ];
+        return map_(users, (user) => ({
+            engine: queryEngine?.length ? queryEngine : undefined,
+            user,
+            output_format: 'json',
+            limit: 10,
+        }));
     };
 
     const {
