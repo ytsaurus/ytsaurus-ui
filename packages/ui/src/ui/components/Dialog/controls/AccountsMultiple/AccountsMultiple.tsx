@@ -1,11 +1,10 @@
 import React from 'react';
 import {useSelector} from 'react-redux';
 import {Button, Flex, Select} from '@gravity-ui/uikit';
-import {Plus} from '@gravity-ui/icons';
+import {StarFill} from '@gravity-ui/icons';
 
 import map_ from 'lodash/map';
 import filter_ from 'lodash/filter';
-import concat_ from 'lodash/concat';
 
 import {useFetchBatchQuery} from '../../../../store/api/yt';
 import {useUsableAccountsQuery} from '../../../../store/api/accounts';
@@ -50,19 +49,12 @@ export function AccountsMultiple(props: Props) {
           }))
         : [];
 
-    const addFavorite = () => {
-        const currentValue = value.length && value[0] !== '' ? [...value] : [];
-        onChange(
-            concat_(
-                currentValue,
-                map_(favourites, ({path}) => path),
-            ),
-        );
+    const setFavorite = () => {
+        onChange(map_(favourites, ({path}) => path));
     };
 
-    const addUsable = () => {
-        const currentValue = value.length && value[0] !== '' ? [...value] : [];
-        onChange(concat_(currentValue, usableAccounts || []));
+    const setUsable = () => {
+        onChange(usableAccounts || []);
     };
 
     return (
@@ -79,15 +71,14 @@ export function AccountsMultiple(props: Props) {
                 loading={isLoading}
             />
             <Flex direction={'row'} gap={1}>
-                <Button size={'m'} onClick={addFavorite}>
+                <Button size={'m'} onClick={setFavorite}>
                     <Flex alignItems={'center'} gap={2}>
-                        <Plus />
+                        <StarFill />
                         Favourites
                     </Flex>
                 </Button>
-                <Button size={'m'} onClick={addUsable}>
+                <Button size={'m'} onClick={setUsable}>
                     <Flex alignItems={'center'} gap={2}>
-                        <Plus />
                         Usable
                     </Flex>
                 </Button>
