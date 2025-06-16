@@ -50,6 +50,7 @@ export type JobsState = {
         withSpec: WithDefaultValue<boolean>;
         withCompetitors: WithDefaultValue<boolean>;
         withMonitoringDescriptor: WithDefaultValue<boolean>;
+        withInterruptionInfo: WithDefaultValue<boolean>;
     };
 
     inputPaths: {
@@ -117,6 +118,10 @@ export const initialState: JobsState = {
             defaultValue: false,
         },
         withMonitoringDescriptor: {
+            value: false,
+            defaultValue: false,
+        },
+        withInterruptionInfo: {
             value: false,
             defaultValue: false,
         },

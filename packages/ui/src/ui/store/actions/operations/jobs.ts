@@ -155,6 +155,7 @@ function getJobFilterParameters(filters: JobsState['filters'], sortState: OldSor
         address: filterBy === 'address' ? getValueIfNotDefault(filters, 'address') : undefined,
         with_stderr: getValueIfNotDefault(filters, 'withStderr'),
         with_monitoring_descriptor: getValueIfNotDefault(filters, 'withMonitoringDescriptor'),
+        with_interruption_info: getValueIfNotDefault(filters, 'withInterruptionInfo'),
         with_fail_context: getValueIfNotDefault(filters, 'withFailContext'),
         with_spec: getValueIfNotDefault(filters, 'withSpec'),
         with_competitors: getValueIfNotDefault(filters, 'withCompetitors'),

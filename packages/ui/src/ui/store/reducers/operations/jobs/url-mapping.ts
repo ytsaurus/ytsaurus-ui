@@ -71,6 +71,11 @@ export const jobsParams: LocationParameters = {
         initialState: jobsInitialState.filters.withMonitoringDescriptor.value,
         type: 'bool',
     },
+    withInterruptionInfo: {
+        stateKey: 'operations.jobs.filters.withInterruptionInfo.value',
+        initialState: jobsInitialState.filters.withInterruptionInfo.value,
+        type: 'bool',
+    },
     withFailContext: {
         stateKey: 'operations.jobs.filters.withFailContext.value',
         initialState: initialWithFailContextFilter,
