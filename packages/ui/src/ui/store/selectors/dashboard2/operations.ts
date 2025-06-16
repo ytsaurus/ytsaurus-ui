@@ -1,6 +1,6 @@
 import {createWidgetDataFieldSelector} from './utils';
 
-export const getOperationsStateFilter = createWidgetDataFieldSelector<string | undefined>('state');
+export const getOperationsStateFilter = createWidgetDataFieldSelector<string>('state', 'all');
 export const getOperationsAuthorTypeFilter = createWidgetDataFieldSelector<'me' | 'my-list'>(
     'authorType',
 );

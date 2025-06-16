@@ -9,7 +9,10 @@ import {
     setOperationsAuthorTypeFilter,
     setOperationsStateFilter,
 } from '../../../../../../store/actions/dashboard2/operations';
-import {getOperationsAuthorTypeFilter} from '../../../../../../store/selectors/dashboard2/operations';
+import {
+    getOperationsAuthorTypeFilter,
+    getOperationsStateFilter,
+} from '../../../../../../store/selectors/dashboard2/operations';
 
 import './OperationsWidgetControls.scss';
 
@@ -20,6 +23,7 @@ export function OperationsWidgetControls(props: PluginWidgetProps) {
 
     const dispatch = useDispatch();
 
+    const state = useSelector((state: RootState) => getOperationsStateFilter(state, id));
     const authorType = useSelector((state: RootState) => getOperationsAuthorTypeFilter(state, id));
 
     const onStateFilterUpdate = (value: string[]) => {
@@ -41,7 +45,7 @@ export function OperationsWidgetControls(props: PluginWidgetProps) {
                     {value: 'aborted', content: 'Aborted'},
                 ]}
                 label={'State:'}
-                defaultValue={['all']}
+                value={[state]}
                 onUpdate={onStateFilterUpdate}
                 className={block('state')}
             />
