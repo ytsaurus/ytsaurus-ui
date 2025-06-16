@@ -92,6 +92,7 @@ export function FlowGraphImpl() {
                     </div>
                 );
             }}
+            hasGroups
         />
     );
 }
@@ -124,13 +125,17 @@ function useFlowGraphData() {
 
         const res: typeof data = {blocks: [], connections: []};
 
-        const streamTypeById: Map<string, FlowComputationStreamType> = new Map();
+        const blockOptionsById: Map<string, {type: FlowComputationStreamType; groupId?: string}> =
+            new Map();
 
         Object.entries(computations).forEach(([name, computation]) => {
+            const groupId = `group(${computation.id})`;
+
             const block: (typeof res)['blocks'][number] = makeBlock('computation', computation, {
                 name,
                 width: 240,
                 height: 108,
+                groupId,
             });
             res.blocks.push(block);
 
@@ -142,7 +147,13 @@ function useFlowGraphData() {
                 const streams = computation[key] ?? [];
 
                 streams.forEach((id) => {
-                    streamTypeById.set(id, key);
+                    blockOptionsById.set(id, {
+                        type: key,
+                        groupId:
+                            key !== 'input_streams' && key !== 'output_streams'
+                                ? groupId
+                                : undefined,
+                    });
                     const isInput =
                         key === 'input_streams' ||
                         key === 'source_streams' ||
@@ -168,14 +179,15 @@ function useFlowGraphData() {
         });
 
         Object.values(streams).forEach((stream) => {
-            const streamType = streamTypeById.get(stream.id);
-            const options = ICON_BY_TYPE[streamType!];
+            const {type, ...rest} = blockOptionsById.get(stream.id) ?? {};
+            const options = ICON_BY_TYPE[type!];
             res.blocks.push(
                 makeBlock('stream', stream, {
                     width: 136,
                     height: 70,
                     name: stream.name,
                     ...options,
+                    ...rest,
                 }),
             );
         });

@@ -1,18 +1,24 @@
 import React from 'react';
 
 import {
+    BlockGroups,
+    BlockState,
     CanvasBlock,
     ECameraScaleLevel,
     Graph,
     GraphCanvas,
     GraphState,
+    Group,
     HookGraphParams,
     TBlock,
     TConnection,
+    TRect,
     useGraph,
     useGraphEvent,
 } from '@gravity-ui/graph';
 import {useThemeValue} from '@gravity-ui/uikit';
+
+import {getCssColor} from '../../utils/get-css-color';
 
 import {PopupPortal} from './PopupLayer';
 import {getGraphColors} from './config';
@@ -30,6 +36,8 @@ export type YTGraphProps<B extends TBlock, C extends TConnection> = {
     isBlock: (v: unknown) => v is CanvasBlock<B>;
     renderPopup?: ({data}: {data: B}) => React.ReactNode;
     renderBlock?: (props: RenderContentProps<B>) => React.ReactNode;
+
+    hasGroups?: boolean;
 };
 
 export type RenderContentProps<B extends TBlock> = {
@@ -51,6 +59,7 @@ export type YTGraphBlock<IS, Meta extends Record<string, unknown>> = Omit<
     id: string;
     is: IS;
     meta: Meta;
+    groupId?: string;
 };
 
 export function YTGraph<B extends YTGraphBlock<string, {}>, C extends TConnection>({
@@ -61,9 +70,12 @@ export function YTGraph<B extends YTGraphBlock<string, {}>, C extends TConnectio
     renderPopup,
     className,
     renderBlock,
+    hasGroups,
 }: YTGraphProps<B, C>) {
     const theme = useThemeValue();
     const {graph, setEntities, start} = useGraph(config);
+
+    useGroups({hasGroups, graph});
 
     React.useEffect(() => {
         setEntities(data);
@@ -138,4 +150,58 @@ export function YTGraph<B extends YTGraphBlock<string, {}>, C extends TConnectio
             )}
         </div>
     );
+}
+
+function useGroups<B extends YTGraphBlock<string, {}>>({
+    graph,
+    hasGroups,
+}: {
+    graph: Graph;
+    hasGroups?: boolean;
+}) {
+    React.useEffect(() => {
+        if (!hasGroups) {
+            return undefined;
+        }
+
+        const YTGraphGroup = Group.define({
+            style: {
+                background: getCssColor('--g-color-base-info-light'),
+                border: getCssColor('--g-color-line-generic'),
+            },
+        });
+
+        const AutoGroups = BlockGroups.withBlockGrouping({
+            // Put blocks in groups
+            groupingFn: (blocks: Array<BlockState<TBlock>>) => {
+                const groups: Record<string, Array<BlockState<TBlock>>> = {};
+                blocks.forEach((b) => {
+                    const block = b.asTBlock();
+                    const {groupId} = block as B;
+                    if (!groupId) {
+                        return;
+                    }
+
+                    if (!groups[groupId]) {
+                        groups[groupId] = [];
+                    }
+                    groups[groupId].push(b);
+                });
+                return groups;
+            },
+            // Set how groups look
+            mapToGroups: (groupId: string, {rect}: {rect: TRect}) => ({
+                id: groupId,
+                rect,
+                component: YTGraphGroup,
+            }),
+        });
+
+        // Add groups to graph
+        const groupLayer = graph.addLayer(AutoGroups, {});
+
+        return () => {
+            graph.detachLayer(groupLayer);
+        };
+    }, [graph, hasGroups]);
 }
