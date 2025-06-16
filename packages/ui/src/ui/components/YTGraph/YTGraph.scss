@@ -1,12 +1,6 @@
 @import '../../styles/yql-colors';
 
 .yt-graph {
-    &__graph {
-        canvas.layer:nth-child(-n + 2) {
-            background: var(--main-background);
-        }
-    }
-
     &__render-block {
         padding: 10px;
         border-radius: 8px;
