@@ -385,6 +385,13 @@ export interface RegisterQueueConsumerParams extends BaseBatchParams {
     consumer_path: CypressNodeRaw;
 }
 
+export interface ListOperationsParams extends BaseBatchParams {
+    pool?: string;
+    limit?: number;
+    user?: string;
+    state?: string;
+}
+
 export type UnregisterQueueConsumerParams = Omit<RegisterQueueConsumerParams, 'vital'>;
 
 export type BatchSubRequest =
@@ -406,7 +413,7 @@ export type BatchSubRequest =
     | SubRequest<'add_member', AddMembersParams>
     | SubRequest<'remove_member', RemoveMembersParams>
     | SubRequest<'list_jobs', ListJobsParameters>
-    | SubRequest<'list_operations', any>
+    | SubRequest<'list_operations', ListOperationsParams>
     | SubRequest<'register_queue_consumer', RegisterQueueConsumerParams>
     | SubRequest<'unregister_queue_consumer', UnregisterQueueConsumerParams>
     | SubRequest<'list_queries', ListQueriesParams>

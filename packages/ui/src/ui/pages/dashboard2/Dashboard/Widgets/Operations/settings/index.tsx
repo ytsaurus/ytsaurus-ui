@@ -1,10 +1,10 @@
-import {FIX_MY_TYPE} from '../../../../../../../@types/types';
 import {Author} from '../OperationsWidgetContent/use-operations-widget';
 
 export type OperationsSettingsValues = {
     name: string;
     authors: Array<Author>;
     autoheight: boolean;
+    pool: string;
 };
 
 export function useOperationsSettings() {
@@ -23,9 +23,14 @@ export function useOperationsSettings() {
             caption: 'Authors',
             extras: {
                 placeholder: 'Enter name or login',
-                allowedTypes: ['users'],
+                allowedTypes: ['users' as const],
             },
-        } as FIX_MY_TYPE, // types break for some reason when allowed types not default
+        },
+        {
+            name: 'pool',
+            type: 'pool' as const,
+            caption: 'Pool',
+        },
         {
             type: 'tumbler' as const,
             name: 'autoheight',
