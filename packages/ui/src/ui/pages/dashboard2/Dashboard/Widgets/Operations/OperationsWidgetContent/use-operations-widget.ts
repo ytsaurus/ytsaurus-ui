@@ -22,6 +22,7 @@ export function useOperationsWidget(props: PluginWidgetProps) {
     const authorType = useSelector((state: RootState) => getOperationsAuthorTypeFilter(state, id));
 
     const authors = data.authors as Array<Author>;
+    const pool = data.pool as string;
 
     const {
         data: operations,
@@ -33,6 +34,7 @@ export function useOperationsWidget(props: PluginWidgetProps) {
         authorType,
         state,
         authors,
+        pool,
     });
 
     return {filters: {state}, data: {operations, isLoading, isFetching, error}};

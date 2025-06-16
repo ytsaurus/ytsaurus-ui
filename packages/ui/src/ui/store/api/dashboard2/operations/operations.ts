@@ -8,6 +8,7 @@ import {RootState} from '../../../../store/reducers';
 import ypath from '../../../../common/thor/ypath';
 import {YTApiId, ytApiV3Id} from '../../../../rum/rum-wrap-api';
 import {NavigationFlowState, StatusLabelState} from '../../../../types/common/states';
+import {ListOperationsParams} from '../../../../../shared/yt-types';
 
 export type OperationProgressInfo = {
     completed: number;
@@ -22,25 +23,41 @@ export async function fetchOperations(
         authorType: 'me' | 'my-list';
         state?: string;
         authors?: Array<{value: string; type: string}>;
+        pool?: string;
     },
     api: BaseQueryApi,
 ) {
     try {
-        const {cluster: _cluster, authorType, state: queryState, authors} = args;
+        const {cluster: _cluster, authorType, state: operationState, authors, pool} = args;
         const state = api.getState() as RootState;
         const user = state.global.login;
 
         let response;
 
         if (authorType === 'my-list') {
-            const requests = map_(authors, (item) => ({
+            let requests = map_(authors, (item) => ({
                 command: 'list_operations' as const,
                 parameters: {
                     limit: 10,
-                    state: queryState === 'all' ? undefined : queryState,
+                    state: operationState === 'all' ? undefined : operationState,
                     user: item.value,
-                },
+                    pool,
+                } as ListOperationsParams,
             }));
+
+            if (pool && !authors?.length) {
+                requests = [
+                    {
+                        command: 'list_operations' as const,
+                        parameters: {
+                            limit: 10,
+                            state: operationState === 'all' ? undefined : operationState,
+                            pool,
+                        },
+                    },
+                ];
+            }
+
             response = await ytApiV3Id.executeBatch(YTApiId.listDashboardOperations, {
                 requests,
             });
@@ -49,8 +66,9 @@ export async function fetchOperations(
             response = await ytApiV3Id.listOperations(YTApiId.listDashboardOperations, {
                 parameters: {
                     limit: 10,
-                    state: queryState === 'all' ? undefined : queryState,
+                    state: operationState === 'all' ? undefined : operationState,
                     user,
+                    pool,
                 },
             });
         }
