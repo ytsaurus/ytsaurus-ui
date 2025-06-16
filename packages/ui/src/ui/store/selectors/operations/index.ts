@@ -122,6 +122,10 @@ export const ATTRIBUTE_ITEMS = [
         value: 'withMonitoringDescriptor' as const,
         text: 'With monitoring descriptor',
     },
+    {
+        value: 'withInterruptionInfo' as const,
+        text: 'With interruption info',
+    },
 ];
 export const ATTRIBUTE_ITEM_NAMES = map_(ATTRIBUTE_ITEMS, ({value}) => value);
 
