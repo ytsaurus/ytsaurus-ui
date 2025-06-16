@@ -3,6 +3,8 @@ import {Config, ConfigItem} from '@gravity-ui/dashkit';
 
 import {RootState} from '..';
 import {defaultDashboardItems} from '../../../constants/dashboard2';
+import {RESET_STORE_BEFORE_CLUSTER_CHANGE} from '../../../constants/utils';
+import {mergeStateOnClusterChange} from '../utils';
 
 export type ItemsTypes = keyof typeof defaultDashboardItems;
 
@@ -47,6 +49,12 @@ export const dashboard2Slice = createSlice({
             state,
             {payload}: PayloadAction<Pick<DashboardSettings, 'edittingConfig'>>,
         ) => ({...state, edittingConfig: payload.edittingConfig}),
+    },
+    extraReducers: (builder) => {
+        builder.addCase(
+            RESET_STORE_BEFORE_CLUSTER_CHANGE,
+            mergeStateOnClusterChange(initialState, {}, (state) => state),
+        );
     },
     selectors: {
         getEditMode: (state) => state.editMode,
