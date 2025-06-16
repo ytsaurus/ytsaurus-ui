@@ -4,41 +4,18 @@ import cn from 'bem-cn-lite';
 
 import {Flex} from '@gravity-ui/uikit';
 
-import MetaTable from '../../../../../../components/MetaTable/MetaTable';
 import Modal from '../../../../../../components/Modal/Modal';
 import Link from '../../../../../../components/Link/Link';
-import Icon from '../../../../../../components/Icon/Icon';
 
 import withVisible from '../../../../../../hocs/withVisible';
 import hammer from '../../../../../../common/hammer';
 
-import {docsUrl} from '../../../../../../config';
-
 import UIFactory from '../../../../../../UIFactory';
+import {JobCounters} from './JobCounters';
 
 const block = cn('operation-jobs-detailed');
 
 class DetailedJobsCounter extends Component {
-    renderSection(name, items) {
-        return (
-            <div className="elements-section">
-                <div className="elements-heading elements-heading_size_s">{name}</div>
-
-                <MetaTable items={items} />
-            </div>
-        );
-    }
-
-    renderHelpLink(helpUrl) {
-        return docsUrl(
-            <div className="elements-section">
-                <Link url={helpUrl}>
-                    <Icon awesome="book" /> Help
-                </Link>
-            </div>,
-        );
-    }
-
     renderAborted(item) {
         const scheduledCounters = item.scheduled.counters;
         const scheduledTotal = {key: 'total', value: item.scheduled.total};
@@ -54,13 +31,11 @@ class DetailedJobsCounter extends Component {
         const helpUrl = UIFactory.docsUrls['operations:overview#aborted_jobs'];
 
         return (
-            <div className="pretty-scroll">
-                {this.renderSection('Scheduled', scheduledItems)}
-
-                {this.renderSection('Non scheduled', nonScheduledItems)}
-
-                {this.renderHelpLink(helpUrl)}
-            </div>
+            <JobCounters
+                helpUrl={helpUrl}
+                data={{Scheduled: scheduledItems, 'Non scheduled': nonScheduledItems}}
+                allowHideEmpty
+            />
         );
     }
 
@@ -77,13 +52,13 @@ class DetailedJobsCounter extends Component {
         const helpUrl = UIFactory.docsUrls['operations:overview#completed_jobs'];
 
         return (
-            <div className="pretty-scroll">
-                {this.renderSection('Non interrupted', nonInterruptedItems)}
-
-                {this.renderSection('Interrupted', nonScheduledItems)}
-
-                {this.renderHelpLink(helpUrl)}
-            </div>
+            <JobCounters
+                helpUrl={helpUrl}
+                data={{
+                    'Non interrupted': nonInterruptedItems,
+                    Interrupted: nonScheduledItems,
+                }}
+            />
         );
     }
 
