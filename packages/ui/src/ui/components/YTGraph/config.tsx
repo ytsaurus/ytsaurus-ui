@@ -12,6 +12,7 @@ import {
 } from '@gravity-ui/graph';
 import {RecursivePartial} from '@gravity-ui/graph/build/utils/types/helpers';
 import {TGraphColors} from '@gravity-ui/graph/build/graphConfig';
+import {Component} from '@gravity-ui/graph/build/lib';
 
 import {getCssColor} from '../../utils/get-css-color';
 import {useMemoizedIfEqual} from '../../hooks/use-updater';
@@ -32,7 +33,12 @@ export const getGraphColors = (): RecursivePartial<TGraphColors> => {
     };
 };
 
-const DEFAULT_BLOCK_SIZE = 100;
+class NoopBGLayer extends Component {
+    render() {
+        // noop;
+        return;
+    }
+}
 
 export function useConfig<T extends TBlock>(
     blockComponents: Record<T['is'], typeof CanvasBlock<T>>,
@@ -46,13 +52,16 @@ export function useConfig<T extends TBlock>(
     const [blockComponentsCached] = useMemoizedIfEqual(blockComponents);
 
     const config = React.useMemo(() => {
-        const config = {
+        const config: HookGraphParams = {
             settings: {
                 connection: MultipointConnection,
                 canDuplicateBlocks: false,
                 canCreateNewConnections: false,
                 canZoomCamera: true,
                 blockComponents,
+                // TODO: figure out how to use correct types here
+                // @ts-expect-error
+                background: NoopBGLayer,
             },
             viewConfiguration: {
                 colors: {
