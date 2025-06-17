@@ -25,37 +25,10 @@ export type Resource = Partial<{
 }>;
 
 type AccountInfo = {
-    name: string;
-    chunkCount?: Resource;
-    diskSpace?: Resource;
-    nodeCount?: Resource;
+    [key: string]: any;
 };
 
 const columnHelper = createColumnHelper<AccountInfo>();
-
-const columns = [
-    columnHelper.accessor('name', {
-        cell: (name) => <AccountsNameCell name={name.getValue()} />,
-        header: () => <Text variant={'subheader-1'}>{'Name'}</Text>,
-        maxSize: 200,
-    }),
-    columnHelper.accessor('diskSpace', {
-        cell: (diskSpace) => <AccountsProgressCell type={'Bytes'} {...diskSpace.getValue()} />,
-        header: () => (
-            <Text variant={'subheader-1'} whiteSpace={'nowrap'}>
-                {'Disk space'}
-            </Text>
-        ),
-    }),
-    columnHelper.accessor('nodeCount', {
-        cell: (nodeCount) => <AccountsProgressCell type={'Number'} {...nodeCount.getValue()} />,
-        header: () => <Text variant={'subheader-1'}>{'Nodes'}</Text>,
-    }),
-    columnHelper.accessor('chunkCount', {
-        cell: (chunksCount) => <AccountsProgressCell type={'Number'} {...chunksCount.getValue()} />,
-        header: () => <Text variant={'subheader-1'}>{'Chunks'}</Text>,
-    }),
-];
 
 // 1 react-grid height value ~ 25.3px
 const accountsLayout = {
@@ -77,8 +50,34 @@ export function AccountsWidgetContent(props: PluginWidgetProps) {
         error,
     } = useAccountsQuery({
         accountsList: data.accounts as string[],
-        medium: data.medium as string | undefined,
+        medium: data?.disk_columns ? (data.disk_columns as ({name: string})[]).map(item => item.name) : undefined,
     });
+
+    const columns = [
+        columnHelper.accessor('name', {
+            cell: (name) => <AccountsNameCell name={name.getValue()} />,
+            header: () => <Text variant={'subheader-1'}>{'Name'}</Text>,
+            maxSize: 200,
+        }),
+    ];
+
+    if ((data?.columns as {name: string}[] | undefined)?.length) {
+        columns.push(...((data?.columns as {name: string}[])?.map(column =>
+            columnHelper.accessor(column.name === 'Chunks' ? 'chunkCount' : 'nodeCount', {
+                cell: (item) =>  <AccountsProgressCell type={'Number'} {...item.getValue()} />,
+                header: () => <Text variant={'subheader-1'}>{column.name}</Text>,
+            }),
+        )));
+    }
+
+    if ((data?.disk_columns as {name: string}[] | undefined)?.length) {
+        columns.push(...((data?.disk_columns as {name: string}[])?.map(column =>
+            columnHelper.accessor(column.name, {
+                cell: (medium) =>  <AccountsProgressCell type={'Bytes'} {...medium.getValue()} />,
+                header: (header) => <Text variant={'subheader-1'}>{header.column.id}</Text>,
+            }),
+        )));
+    }
 
     useAutoHeight(props, accountsLayout, accounts?.length || 0);
 
