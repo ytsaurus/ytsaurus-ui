@@ -6,10 +6,10 @@ import map_ from 'lodash/map';
 import hammer from '../../../../../common/hammer';
 
 import {
-    getImportDialogVisibility,
-    toggleImportDialogVisibility,
+    getCopyConfigDialogVisibility,
+    toggleCopyConfigDialogVisibility,
 } from '../../../../../store/reducers/dashboard2/dashboard';
-import {importConfig} from '../../../../../store/actions/dashboard2/dashboard';
+import {copyConfig} from '../../../../../store/actions/dashboard2/dashboard';
 import {getClusterList} from '../../../../../store/selectors/slideoutMenu';
 
 import {FormApi, YTDFDialog} from '../../../../../components/Dialog';
@@ -18,15 +18,15 @@ interface FormValues {
     cluster: string[];
 }
 
-export function ImportConfigDialog() {
+export function CopyConfigDialog() {
     const dispatch = useDispatch();
 
     const clusterList = useSelector(getClusterList);
-    const importDialogVisibility = useSelector(getImportDialogVisibility);
+    const copyConfigDialogVisibility = useSelector(getCopyConfigDialogVisibility);
 
-    const onClose = () => dispatch(toggleImportDialogVisibility());
+    const onClose = () => dispatch(toggleCopyConfigDialogVisibility());
 
-    const importOptions = map_(clusterList, (cluster) => ({
+    const copyConfigOptions = map_(clusterList, (cluster) => ({
         value: cluster.name.toLowerCase(),
         content: hammer.format['ReadableField'](cluster.name),
     }));
@@ -35,17 +35,17 @@ export function ImportConfigDialog() {
         <YTDFDialog<FormValues>
             onAdd={async (form: FormApi<FormValues>) => {
                 const {cluster} = form.getState().values;
-                await dispatch(importConfig(cluster[0]));
+                await dispatch(copyConfig(cluster[0]));
             }}
-            headerProps={{title: 'Import config'}}
-            visible={importDialogVisibility}
+            headerProps={{title: 'Copy config'}}
+            visible={copyConfigDialogVisibility}
             fields={[
                 {
                     type: 'select',
                     name: 'cluster',
                     caption: 'Cluser',
                     extras: {
-                        options: importOptions,
+                        options: copyConfigOptions,
                         width: 'max',
                         placeholder: 'Cluster',
                     },

@@ -10,7 +10,7 @@ export type ItemsTypes = keyof typeof defaultDashboardItems;
 
 type DashboardSettings = {
     editMode: boolean;
-    importDialogVisibility: boolean;
+    copyConfigDialogVisibility: boolean;
     edittingItem: Partial<ConfigItem> & {target: 'createItem' | 'editItem'; type: ItemsTypes};
     settingsDialogVisibility: boolean;
     edittingConfig: Config | undefined;
@@ -18,7 +18,7 @@ type DashboardSettings = {
 
 const initialState: DashboardSettings = {
     editMode: false,
-    importDialogVisibility: false,
+    copyConfigDialogVisibility: false,
     edittingItem: {target: 'editItem', type: 'navigation'},
     settingsDialogVisibility: false,
     edittingConfig: undefined,
@@ -32,9 +32,9 @@ export const dashboard2Slice = createSlice({
             ...state,
             editMode: !state.editMode,
         }),
-        toggleImportDialogVisibility: (state) => ({
+        toggleCopyConfigDialogVisibility: (state) => ({
             ...state,
-            importDialogVisibility: !state.importDialogVisibility,
+            copyConfigDialogVisibility: !state.copyConfigDialogVisibility,
         }),
         openSettingsDialog: (
             state,
@@ -59,7 +59,7 @@ export const dashboard2Slice = createSlice({
     selectors: {
         getEditMode: (state) => state.editMode,
         getEdittingItem: (state) => state.edittingItem,
-        getImportDialogVisibility: (state) => state.importDialogVisibility,
+        getCopyConfigDialogVisibility: (state) => state.copyConfigDialogVisibility,
         getSettingsDialogVisibility: (state) => state.settingsDialogVisibility,
         getEdittingConfig: (state) => state.edittingConfig,
     },
@@ -67,7 +67,7 @@ export const dashboard2Slice = createSlice({
 
 export const {
     toggleEditting,
-    toggleImportDialogVisibility,
+    toggleCopyConfigDialogVisibility,
     openSettingsDialog,
     closeSettingsDialog,
     setEdittingConfig,
@@ -75,7 +75,7 @@ export const {
 export const {
     getEdittingItem,
     getEditMode,
-    getImportDialogVisibility,
+    getCopyConfigDialogVisibility,
     getSettingsDialogVisibility,
     getEdittingConfig,
 } = dashboard2Slice.getSelectors((state: RootState) => state.dashboard2.dashboard2);
