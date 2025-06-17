@@ -32,7 +32,8 @@ export const ErrorsInfo: ErrorInfo = {
             const permission = permissions
                 ?.map((perm: UnipikaValue) => ypath.getValue(perm))
                 .join(' | ');
-            return `User ${username} does not have "${permission ?? ''}" access to node "${path}"`;
+            const permissionsStr = permission ? `"${permission}"` : '';
+            return `User ${username} does not have ${permissionsStr} access to node "${path}"`;
         },
     },
     500: {
@@ -50,7 +51,7 @@ export function getErrorTitle(
     const title = ErrorsInfo[code!]?.getTitle({
         path: path || '',
         username: ypath.getValue(attributes, '/user') || '',
-        permissions: ypath.getValue(attributes, '/permission') || '',
+        permissions: ypath.getValue(attributes, '/permission') || [],
     });
 
     return title ?? 'An unexpected error occurred';
