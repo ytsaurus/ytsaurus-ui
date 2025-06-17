@@ -7,7 +7,7 @@ import {parseAccountData} from '../../../../utils/accounts/accounts-selector';
 
 type AccountsWidgetArgs = {
     accountsList: string[];
-    medium?: string;
+    medium?: string[] | string;
 };
 
 const attributesToLoad = [
@@ -48,12 +48,19 @@ export async function fetchAccounts(args: AccountsWidgetArgs) {
             }
             const account = new Account(parseAccountData(output));
 
-            return {
+            let res: Record<string, any> = {
                 name: output?.$attributes?.name || accountsList?.[idx] || 'noname',
                 chunkCount: account.getChunkCountProgressInfo(),
-                diskSpace: account.getDiskSpaceProgressInfo(medium || 'default', true),
                 nodeCount: account.getNodeCountProgressInfo(),
-            };
+            }
+
+            if (Array.isArray(medium)) {
+                medium.forEach(item => {
+                    res[item] = account.getDiskSpaceProgressInfo(item, true);
+                });
+            }
+
+            return res;
         });
         return {data: accounts};
     } catch (error) {

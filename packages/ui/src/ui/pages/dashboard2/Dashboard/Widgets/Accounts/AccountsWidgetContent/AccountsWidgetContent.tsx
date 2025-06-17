@@ -1,9 +1,14 @@
-import React from 'react';
+import React, {useMemo} from 'react';
+import {useSelector} from 'react-redux';
 import {ProgressTheme, Text} from '@gravity-ui/uikit';
-import {createColumnHelper} from '@gravity-ui/table/tanstack';
 import {PluginWidgetProps} from '@gravity-ui/dashkit';
+import {createColumnHelper} from '@gravity-ui/table/tanstack';
 
+import {RootState} from '../../../../../../store/reducers';
 import {useAccountsQuery} from '../../../../../../store/api/dashboard2/accounts';
+import {getAccountsList, getAccountsTypeFilter} from '../../../../../../store/selectors/dashboard2/accounts';
+import {useUsableAccountsQuery} from '../../../../../../store/api/accounts';
+import {isDeveloper} from '../../../../../../store/selectors/global/is-developer';
 
 import {WidgetTable} from '../../../../../../pages/dashboard2/Dashboard/components/WidgetTable/WidgetTable';
 
@@ -25,37 +30,10 @@ export type Resource = Partial<{
 }>;
 
 type AccountInfo = {
-    name: string;
-    chunkCount?: Resource;
-    diskSpace?: Resource;
-    nodeCount?: Resource;
+    [key: string]: any;
 };
 
 const columnHelper = createColumnHelper<AccountInfo>();
-
-const columns = [
-    columnHelper.accessor('name', {
-        cell: (name) => <AccountsNameCell name={name.getValue()} />,
-        header: () => <Text variant={'subheader-1'}>{'Name'}</Text>,
-        maxSize: 200,
-    }),
-    columnHelper.accessor('diskSpace', {
-        cell: (diskSpace) => <AccountsProgressCell type={'Bytes'} {...diskSpace.getValue()} />,
-        header: () => (
-            <Text variant={'subheader-1'} whiteSpace={'nowrap'}>
-                {'Disk space'}
-            </Text>
-        ),
-    }),
-    columnHelper.accessor('nodeCount', {
-        cell: (nodeCount) => <AccountsProgressCell type={'Number'} {...nodeCount.getValue()} />,
-        header: () => <Text variant={'subheader-1'}>{'Nodes'}</Text>,
-    }),
-    columnHelper.accessor('chunkCount', {
-        cell: (chunksCount) => <AccountsProgressCell type={'Number'} {...chunksCount.getValue()} />,
-        header: () => <Text variant={'subheader-1'}>{'Chunks'}</Text>,
-    }),
-];
 
 // 1 react-grid height value ~ 25.3px
 const accountsLayout = {
@@ -70,15 +48,50 @@ const accountsLayout = {
 export function AccountsWidgetContent(props: PluginWidgetProps) {
     const {data} = props;
 
+    const type = useSelector((state: RootState) => getAccountsTypeFilter(state, props.id));
+    const isAdmin = useSelector(isDeveloper);
+
+    useUsableAccountsQuery(undefined, {skip: isAdmin});
+
+    const accountsList = useSelector((state: RootState) => getAccountsList(state, props.id, data?.accounts as string[]));
+
     const {
         data: accounts,
         isLoading,
         isFetching,
         error,
     } = useAccountsQuery({
-        accountsList: data.accounts as string[],
-        medium: data.medium as string | undefined,
+        accountsList,
+        medium: data?.disk_columns ? (data.disk_columns as ({name: string})[]).map(item => item.name) : undefined,
     });
+
+    const columns = useMemo(() =>{
+        const cols = [
+            columnHelper.accessor('name', {
+                cell: (name) => <AccountsNameCell name={name.getValue()} />,
+                header: () => <Text variant={'subheader-1'}>{'Name'}</Text>,
+                maxSize: 200,
+            }),
+        ];
+        if ((data?.disk_columns as {name: string}[] | undefined)?.length) {
+            cols.push(...((data?.disk_columns as {name: string}[])?.map(column =>
+                columnHelper.accessor(column.name, {
+                    cell: (medium) =>  <AccountsProgressCell type={'Bytes'} {...medium.getValue()} />,
+                    header: (header) => <Text variant={'subheader-1'} whiteSpace={'nowrap'} ellipsis>{header.column.id}</Text>,
+                }),
+            )));
+        }
+
+        if ((data?.columns as {name: string}[] | undefined)?.length) {
+            cols.push(...((data?.columns as {name: string}[])?.map(column =>
+                columnHelper.accessor(column.name === 'Chunks' ? 'chunkCount' : 'nodeCount', {
+                    cell: (item) =>  <AccountsProgressCell type={'Number'} {...item.getValue()} />,
+                    header: () => <Text variant={'subheader-1'}>{column.name}</Text>,
+                }),
+            )));
+        }
+        return cols;
+    }, [data?.columns, data?.disk_columns]);
 
     useAutoHeight(props, accountsLayout, accounts?.length || 0);
 
@@ -88,7 +101,7 @@ export function AccountsWidgetContent(props: PluginWidgetProps) {
             data={accounts || []}
             itemHeight={50}
             isLoading={isLoading || isFetching}
-            fallback={{itemsName: 'accounts'}}
+            fallback={{itemsName: `${type} accounts`}}
             error={error}
         />
     );

@@ -55,7 +55,7 @@ export const defaultDashboardItems = {
             x: queriesLayoutWidth,
             y: rowHeight,
         },
-        data: {name: 'Accounts'},
+        data: {name: 'Accounts', columns: [{name: 'Nodes'}, {name: 'Chunks'}]},
     },
     pools: {
         layout: {
@@ -96,7 +96,7 @@ export const dashboardConfig: DashKitProps['config'] = {
         },
         {
             id: 'accounts',
-            data: {name: 'Accounts'},
+            data: defaultDashboardItems.accounts.data,
             type: 'accounts',
             namespace: 'dashboard',
             orderId: 4,

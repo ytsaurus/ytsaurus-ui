@@ -1,24 +1,17 @@
 import {useSelector} from 'react-redux';
 
-import map_ from 'lodash/map';
-
-import hammer from '../../../../../../common/hammer';
-
 import {getMediumList} from '../../../../../../store/selectors/thor';
 
 export type AccountsSettingsValues = {
     name: string;
     accounts: string[];
-    medium: string;
     autoheight: boolean;
+    columns: string[];
 };
 
 export function useAccountsSettings() {
     const mediumList = useSelector(getMediumList);
-    const mediumOptions = map_(mediumList, (item) => ({
-        value: item,
-        content: hammer.format['ReadableField'](item),
-    }));
+
     return [
         {
             type: 'text' as const,
@@ -34,13 +27,19 @@ export function useAccountsSettings() {
             caption: 'Accounts',
         },
         {
-            type: 'select' as const,
-            name: 'medium',
-            caption: 'Medium',
+            type: 'table-sort-by' as const,
+            name: 'disk_columns',
+            caption: 'Disk space columns(mediums)',
             extras: {
-                placeholder: 'Default',
-                width: 'max' as const,
-                options: mediumOptions,
+                suggestColumns: mediumList,
+            },
+        },
+        {
+            type: 'table-sort-by' as const,
+            name: 'columns',
+            caption: 'Columns',
+            extras: {
+                suggestColumns: ['Nodes', 'Chunks'],
             },
         },
         {
