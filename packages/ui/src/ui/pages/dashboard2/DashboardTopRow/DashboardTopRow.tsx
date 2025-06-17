@@ -7,7 +7,7 @@ import {RowWithName} from '../../../containers/AppNavigation/TopRowContent/Secti
 
 import {
     getEditMode,
-    toggleImportDialogVisibility,
+    toggleCopyConfigDialogVisibility,
 } from '../../../store/reducers/dashboard2/dashboard';
 import {getCluster, getCurrentUserName} from '../../../store/selectors/global';
 
@@ -17,7 +17,7 @@ import {Page} from '../../../../shared/constants/settings';
 
 import UIFactory from '../../../UIFactory';
 
-import {ImportConfigDialog} from '../Dashboard/components/ImportConfigDialog/ImportConfigDialog';
+import {CopyConfigDialog} from '../Dashboard/components/CopyConfigDialog/CopyConfigDialog';
 
 import {useDashboardActions} from '../hooks/use-dashboard-actions';
 
@@ -28,20 +28,16 @@ import './DashboardTopRow.scss';
 const block = b('dashboard-top-row');
 
 export function DashboardTopRow() {
-    const dispatch = useDispatch();
-
     const editMode = useSelector(getEditMode);
 
     const {edit, cancel, save} = useDashboardActions();
-
-    const toggleImportDialog = () => dispatch(toggleImportDialogVisibility());
 
     return (
         <RowWithName page={Page.DASHBOARD}>
             <Flex grow={true} justifyContent={'flex-end'} gap={3}>
                 <MyRolesLink />
                 <RequestQuotaButton page={Page.DASHBOARD} />
-                {editMode && <ImportButton toggleImportDialog={toggleImportDialog} />}
+                {editMode && <CopyConfigButton />}
                 {editMode && <AddWidgetMenu />}
                 {editMode && <CancelButton onCancel={cancel} />}
                 <Button
@@ -52,7 +48,7 @@ export function DashboardTopRow() {
                     {editMode ? 'Save dashboard' : 'Edit dashboard'}
                 </Button>
             </Flex>
-            <ImportConfigDialog />
+            <CopyConfigDialog />
         </RowWithName>
     );
 }
@@ -65,10 +61,15 @@ function CancelButton({onCancel}: {onCancel: () => void}) {
     );
 }
 
-function ImportButton({toggleImportDialog}: {toggleImportDialog: () => void}) {
+function CopyConfigButton() {
+    const dispatch = useDispatch();
     return (
-        <Button size={'m'} view={'outlined'} onClick={toggleImportDialog}>
-            Import config
+        <Button
+            size={'m'}
+            view={'outlined'}
+            onClick={() => dispatch(toggleCopyConfigDialogVisibility())}
+        >
+            Copy from
         </Button>
     );
 }

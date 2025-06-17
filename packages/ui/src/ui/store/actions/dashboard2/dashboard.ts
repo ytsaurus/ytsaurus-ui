@@ -57,18 +57,13 @@ export function editConfig(
     };
 }
 
-export function importConfig(cluster: string): ThunkAction<void, RootState, any, any> {
+export function copyConfig(cluster: string): ThunkAction<void, RootState, any, any> {
     return (dispatch, getState) => {
         const state = getState();
-        const currentCluster = state.global.cluster;
-        const config = state.settings.data[`local::${cluster}::dashboard::config`];
+        const config =
+            state.settings.data[`local::${cluster}::dashboard::config`] || dashboardConfig;
 
-        dispatch(
-            setSettingByKey(
-                `local::${currentCluster}::dashboard::config` as const,
-                config ?? dashboardConfig,
-            ),
-        );
+        dispatch(updateEdittingConfig(config));
     };
 }
 
