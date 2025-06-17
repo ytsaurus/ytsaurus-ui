@@ -20,7 +20,10 @@ export const getDashboardConfig = createSelector(
     [getSettingsData, getCluster, getUsableAccountsResult],
     (data, cluster, usableAccounts) => {
         // if user setuped his dashboard on current cluster no need to retrun default values
-        if (data[`local::${cluster}::dashboard::config`]?.salt !== dashboardConfig.salt) {
+        if (
+            data[`local::${cluster}::dashboard::config`] &&
+            data[`local::${cluster}::dashboard::config`]?.salt !== dashboardConfig.salt
+        ) {
             return data[`local::${cluster}::dashboard::config`];
         }
 

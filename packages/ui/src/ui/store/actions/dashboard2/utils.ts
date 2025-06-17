@@ -28,7 +28,7 @@ export function createWidgetDataFieldAction<FieldType>(
                 ...filter_(config.items, (item) => !isEqual_(item, oldItem)),
                 newItem,
             ];
-            const newConfig = {...config, items: newItems};
+            const newConfig = {...config, salt: crypto.randomUUID(), items: newItems};
 
             dispatch(
                 setSettingByKey(
