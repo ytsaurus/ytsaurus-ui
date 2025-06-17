@@ -22,16 +22,17 @@ export function useAutoHeight(
         if (widget.data?.autoheight) {
             const mayBeHeight = baseHeight + dataLength * rowHeight;
             const widgetLayout = widget.layout.find((item) => item.i === widget.id);
+            const adjustedHeight = dataLength ? mayBeHeight : defaultHeight;
             widget.adjustWidgetLayout({
                 widgetId: widget.id,
                 adjustedWidgetLayout: {
-                    h: dataLength ? mayBeHeight : defaultHeight,
+                    h: adjustedHeight,
                     i: widget.id,
                     w: widgetLayout?.w || 0,
                     x: widgetLayout?.x || 0,
                     y: widgetLayout?.y || 0,
-                    minH: mayBeHeight,
-                    maxH: mayBeHeight,
+                    minH: adjustedHeight,
+                    maxH: adjustedHeight,
                     minW: minWidth,
                 },
             });
