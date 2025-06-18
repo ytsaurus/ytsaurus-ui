@@ -5,7 +5,7 @@ import cn from 'bem-cn-lite';
 
 import ypath from '../../../../../common/thor/ypath';
 
-import {Alert, Flex, Link, Text} from '@gravity-ui/uikit';
+import {Alert, Button, Flex, Link, Text} from '@gravity-ui/uikit';
 
 import {
     getTabletErrorCountLimitExceeded,
@@ -118,7 +118,15 @@ function useTableColumnsAndData() {
                 header: <ColumnHeader column="Error message" />,
                 className: block('cell-error-msg'),
                 render({row: {error}}) {
-                    return ypath.getValue(error.message);
+                    return (
+                        <Button
+                            onClick={() =>
+                                showErrorPopup(error, {hideOopsMsg: true, defaultExpandedCount: 1})
+                            }
+                        >
+                            {ypath.getValue(error.message)}
+                        </Button>
+                    );
                 },
             },
             {
@@ -127,7 +135,9 @@ function useTableColumnsAndData() {
                 render({row: {error}}) {
                     return (
                         <AttributesButton
-                            onClick={() => showErrorPopup(error, {hideOopsMsg: true})}
+                            onClick={() =>
+                                showErrorPopup(error, {hideOopsMsg: true, defaultExpandedCount: 1})
+                            }
                         />
                     );
                 },

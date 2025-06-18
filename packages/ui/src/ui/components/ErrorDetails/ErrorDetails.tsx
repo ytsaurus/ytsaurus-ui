@@ -27,6 +27,7 @@ export type ErrorDetailsProps = {
     error: YTErrorRaw<{attributes?: object}> | AxiosError;
     settings?: UnipikaSettings;
     maxCollapsedDepth?: number;
+    defaultExpadedCount?: number;
 };
 
 type State = {
@@ -53,7 +54,7 @@ export default class ErrorDetails extends React.Component<ErrorDetailsProps, Sta
     }
 
     state: State = {
-        showDetails: false,
+        showDetails: Boolean(this.props.defaultExpadedCount),
         currentTab: ErrorDetails.prepareDefaultTab(this.props),
     };
 
@@ -153,7 +154,7 @@ export default class ErrorDetails extends React.Component<ErrorDetailsProps, Sta
     }
 
     renderInnerErrors() {
-        const {settings, maxCollapsedDepth = Infinity} = this.props;
+        const {settings, defaultExpadedCount = 0, maxCollapsedDepth = Infinity} = this.props;
 
         const {inner_errors: innerErrors = []} = this.props.error as YTErrorRaw;
         const {isAxiosError = false, response} = this.props.error as AxiosError;
@@ -177,6 +178,7 @@ export default class ErrorDetails extends React.Component<ErrorDetailsProps, Sta
                             key={index}
                             error={error}
                             {...{settings}}
+                            defaultExpadedCount={defaultExpadedCount ? defaultExpadedCount - 1 : 0}
                             maxCollapsedDepth={
                                 this.state.showDetails ? Infinity : maxCollapsedDepth - 1
                             }
