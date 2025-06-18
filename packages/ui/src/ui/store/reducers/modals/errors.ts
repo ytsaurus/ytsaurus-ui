@@ -13,6 +13,7 @@ export interface ErrorInfo {
     type?: 'error' | 'alert';
     helpURL?: string;
     disableLogger?: boolean;
+    defaultExpandedCount?: number;
 }
 
 const initialState: ErrorsState = {

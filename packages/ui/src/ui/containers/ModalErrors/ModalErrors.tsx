@@ -21,7 +21,7 @@ export function ModalError({id, data, hide, children}: MEProps) {
         hide(id);
     }, [id, hide]);
 
-    const {error, hideOopsMsg, type, helpURL, disableLogger} = data;
+    const {error, hideOopsMsg, type, helpURL, disableLogger, defaultExpandedCount} = data;
 
     const isAlert = type === 'alert';
     const ErrorComponent = isAlert ? YTAlertBlock : YTErrorBlock;
@@ -40,6 +40,7 @@ export function ModalError({id, data, hide, children}: MEProps) {
                     error={error}
                     helpURL={helpURL}
                     disableLogger={disableLogger}
+                    defaultExpandedCount={defaultExpandedCount}
                 />
                 {children}
             </Dialog.Body>

@@ -42,6 +42,7 @@ export type YTErrorBlockProps = {
     helpURL?: string;
     type?: 'alert' | 'error';
     maxCollapsedDepth?: number; // max depth of collapsed inner errors
+    defaultExpandedCount?: number;
     disableLogger?: boolean;
 };
 
@@ -72,7 +73,7 @@ export class YTErrorBlock extends React.Component<YTErrorBlockProps> {
     }
 
     renderBody() {
-        const {error, settings, maxCollapsedDepth} = this.props;
+        const {error, settings, maxCollapsedDepth, defaultExpandedCount} = this.props;
         const className = b('body');
         return (
             <div className={className}>
@@ -82,6 +83,7 @@ export class YTErrorBlock extends React.Component<YTErrorBlockProps> {
                         error={error}
                         settings={settings}
                         maxCollapsedDepth={maxCollapsedDepth}
+                        defaultExpadedCount={defaultExpandedCount}
                     />
                 )}
             </div>
