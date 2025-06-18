@@ -1,5 +1,30 @@
 # Changelog
 
+## [1.96.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.95.0...ui-v1.96.0) (2025-06-18)
+
+
+### Features
+
+* **Dashboard2/Operations:** add pool setting [YTFRONT-3400] ([06e00cc](https://github.com/ytsaurus/ytsaurus-ui/commit/06e00ccf0cc0d3bfb1aa23877faa8a23da11c279))
+* **Dashboard2/Queries:** add author setting [YTFRONT-3400] ([13c99bd](https://github.com/ytsaurus/ytsaurus-ui/commit/13c99bd910a8a97fd970b4b8c3cc3a6763df3dd1))
+* **Dashboard2:** take map node icons from navigation [YTFRONT-3400] ([afb6bec](https://github.com/ytsaurus/ytsaurus-ui/commit/afb6becab7c36101fdd211331fac998be9e150c2))
+* **Dialog/AccountsMultiple:** add items deleting labels [YTFRONT-3400] ([44e34aa](https://github.com/ytsaurus/ytsaurus-ui/commit/44e34aa32bf1bf7222ab9f7fa1206cf978cc21d1))
+* **Navigation/Description:** display loaded description [YTFRONT-5015] ([76fc3d3](https://github.com/ytsaurus/ytsaurus-ui/commit/76fc3d358db8719f350d9969d40eb575bf2836c9))
+* **Operation/Jobs:** add 'With interruption info' attribute support [YTFRONT-4810] ([02cf8ea](https://github.com/ytsaurus/ytsaurus-ui/commit/02cf8ea5c667c413f57579ce33e57c3134c75ab1))
+
+
+### Bug Fixes
+
+* **Dashboard/Settings:** dont use main config as editting in settings [YTFRONT-3400] ([aacfcdc](https://github.com/ytsaurus/ytsaurus-ui/commit/aacfcdc4aefac88f72dbf291c5c7ba6ea1bcb9f6))
+* **Dashboard2/Operations:** uncontrolled filter [YTFRONT-3400] ([d6e69a3](https://github.com/ytsaurus/ytsaurus-ui/commit/d6e69a3c7dd2cea36a9431fbf6ffb63d5ac564be))
+* **Dashboard2/Operations:** uncontrolled filter [YTFRONT-3400] ([f3cdf97](https://github.com/ytsaurus/ytsaurus-ui/commit/f3cdf97b8d77e2c0147842a9fe0105f5fd7269c9))
+* **Dashboard2:** autohieght with zero items [YTFRONT-3400] ([809a8f3](https://github.com/ytsaurus/ytsaurus-ui/commit/809a8f32b7910dab65d5fd7b96f00cf79e042aed))
+* **Dashboard2:** copy config [YTFRONT-3400] ([b2d3bea](https://github.com/ytsaurus/ytsaurus-ui/commit/b2d3bea54d0e3ba86738598f3b9674483e6b32c7))
+* **Dashboard2:** edit mode on cluster change [YTFRONT-3400] ([d865de5](https://github.com/ytsaurus/ytsaurus-ui/commit/d865de5dc83df49394fe444f4f16b053e7407d7e))
+* **Dashboard2:** searching multiple accounts and pools on large clusters [YTFRONT-3400] ([012a578](https://github.com/ytsaurus/ytsaurus-ui/commit/012a578d59afacd1a63b9380a51e06c4b83b63ed))
+* **Operation/Details/Tasks:** add 'Hide empty' filter to "Aborted statistics" dialog [YTFRONT-5012] ([4a55020](https://github.com/ytsaurus/ytsaurus-ui/commit/4a550206c57eab90ef5456f7b8e5e8e88639e9c8))
+* **Operation/LivePreview:** fix for 'n.map is not a function ...' [YTFRONT-5021] ([71fda06](https://github.com/ytsaurus/ytsaurus-ui/commit/71fda06115b2375d389ff33b847243ccb27b8de8))
+
 ## [1.95.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.94.0...ui-v1.95.0) (2025-06-11)
 
 
