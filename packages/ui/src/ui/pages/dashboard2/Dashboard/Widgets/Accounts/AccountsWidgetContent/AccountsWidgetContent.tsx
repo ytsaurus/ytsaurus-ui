@@ -6,7 +6,10 @@ import {createColumnHelper} from '@gravity-ui/table/tanstack';
 
 import {RootState} from '../../../../../../store/reducers';
 import {useAccountsQuery} from '../../../../../../store/api/dashboard2/accounts';
-import {getAccountsList, getAccountsTypeFilter} from '../../../../../../store/selectors/dashboard2/accounts';
+import {
+    getAccountsList,
+    getAccountsTypeFilter,
+} from '../../../../../../store/selectors/dashboard2/accounts';
 import {useUsableAccountsQuery} from '../../../../../../store/api/accounts';
 import {isDeveloper} from '../../../../../../store/selectors/global/is-developer';
 
@@ -53,7 +56,9 @@ export function AccountsWidgetContent(props: PluginWidgetProps) {
 
     useUsableAccountsQuery(undefined, {skip: isAdmin});
 
-    const accountsList = useSelector((state: RootState) => getAccountsList(state, props.id, data?.accounts as string[]));
+    const accountsList = useSelector((state: RootState) =>
+        getAccountsList(state, props.id, data?.accounts as string[]),
+    );
 
     const {
         data: accounts,
@@ -62,10 +67,12 @@ export function AccountsWidgetContent(props: PluginWidgetProps) {
         error,
     } = useAccountsQuery({
         accountsList,
-        medium: data?.disk_columns ? (data.disk_columns as ({name: string})[]).map(item => item.name) : undefined,
+        medium: data?.disk_columns
+            ? (data.disk_columns as {name: string}[]).map((item) => item.name)
+            : undefined,
     });
 
-    const columns = useMemo(() =>{
+    const columns = useMemo(() => {
         const cols = [
             columnHelper.accessor('name', {
                 cell: (name) => <AccountsNameCell name={name.getValue()} />,
@@ -74,21 +81,33 @@ export function AccountsWidgetContent(props: PluginWidgetProps) {
             }),
         ];
         if ((data?.disk_columns as {name: string}[] | undefined)?.length) {
-            cols.push(...((data?.disk_columns as {name: string}[])?.map(column =>
-                columnHelper.accessor(column.name, {
-                    cell: (medium) =>  <AccountsProgressCell type={'Bytes'} {...medium.getValue()} />,
-                    header: (header) => <Text variant={'subheader-1'} whiteSpace={'nowrap'} ellipsis>{header.column.id}</Text>,
-                }),
-            )));
+            cols.push(
+                ...(data.disk_columns as {name: string}[]).map((column) =>
+                    columnHelper.accessor(column.name, {
+                        cell: (medium) => (
+                            <AccountsProgressCell type={'Bytes'} {...medium.getValue()} />
+                        ),
+                        header: (header) => (
+                            <Text variant={'subheader-1'} whiteSpace={'nowrap'} ellipsis>
+                                {header.column.id}
+                            </Text>
+                        ),
+                    }),
+                ),
+            );
         }
 
         if ((data?.columns as {name: string}[] | undefined)?.length) {
-            cols.push(...((data?.columns as {name: string}[])?.map(column =>
-                columnHelper.accessor(column.name === 'Chunks' ? 'chunkCount' : 'nodeCount', {
-                    cell: (item) =>  <AccountsProgressCell type={'Number'} {...item.getValue()} />,
-                    header: () => <Text variant={'subheader-1'}>{column.name}</Text>,
-                }),
-            )));
+            cols.push(
+                ...(data.columns as {name: string}[]).map((column) =>
+                    columnHelper.accessor(column.name === 'Chunks' ? 'chunkCount' : 'nodeCount', {
+                        cell: (item) => (
+                            <AccountsProgressCell type={'Number'} {...item.getValue()} />
+                        ),
+                        header: () => <Text variant={'subheader-1'}>{column.name}</Text>,
+                    }),
+                ),
+            );
         }
         return cols;
     }, [data?.columns, data?.disk_columns]);
