@@ -12,6 +12,6 @@ export function useServicesWidget(props: PluginWidgetProps) {
     const cluster = useSelector(getCluster);
 
     const {data, isLoading, error} = useServicesQuery({cluster, items});
-
+    console.log(data);
     return {data, isLoading, error};
 }
