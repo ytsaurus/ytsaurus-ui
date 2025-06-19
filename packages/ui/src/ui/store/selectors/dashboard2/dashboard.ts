@@ -20,7 +20,7 @@ export const getDashboardConfig = createSelector(
     [getSettingsData, getCluster, getUsableAccountsResult],
     (data, cluster, usableAccounts) => {
         // if user setuped his dashboard on current cluster no need to retrun default values
-        if (data[`local::${cluster}::dashboard::config`]?.items?.length) {
+        if (data[`local::${cluster}::dashboard::config`]?.salt !== dashboardConfig.salt) {
             return data[`local::${cluster}::dashboard::config`];
         }
 
@@ -28,6 +28,7 @@ export const getDashboardConfig = createSelector(
 
         // we always have account item in default config(its a constant)
         const accountsItem = find_(prevItems, (item) => item.type === 'accounts')!;
+        // new item cause of default usable accounts setting
         const newItem = {
             ...accountsItem,
             data: {
