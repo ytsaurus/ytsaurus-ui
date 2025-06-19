@@ -484,7 +484,10 @@ export interface UIFactory {
     }) => React.ReactNode;
 
     renderMarkdown(props: {text: string}): React.ReactNode;
+
     getAnalyticsService(): AnalyticsService[];
+
+    renderPyDLTelemetry(props: any): React.ReactNode | undefined;
 }
 
 // All methods comes from `configureUIFactory` method

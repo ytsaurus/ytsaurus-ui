@@ -325,4 +325,7 @@ export const defaultUIFactory: UIFactory = {
     getAnalyticsService() {
         return [];
     },
+    renderPyDLTelemetry() {
+        return undefined;
+    }
 };
