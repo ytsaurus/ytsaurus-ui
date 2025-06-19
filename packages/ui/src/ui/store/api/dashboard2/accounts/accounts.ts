@@ -48,18 +48,21 @@ export async function fetchAccounts(args: AccountsWidgetArgs) {
             }
             const account = new Account(parseAccountData(output));
 
-            let res: Record<string, any> = {
+            const res: Record<string, any> = {
                 name: output?.$attributes?.name || accountsList?.[idx] || 'noname',
                 chunkCount: account.getChunkCountProgressInfo(),
                 nodeCount: account.getNodeCountProgressInfo(),
-            }
+            };
 
             if (Array.isArray(medium)) {
-                medium.forEach(item => {
+                medium.forEach((item) => {
                     res[item] = account.getDiskSpaceProgressInfo(item, true);
                 });
             } else {
-                res['DiskSpace(Deafault)'] = account.getDiskSpaceProgressInfo(medium || 'default', true)
+                res['DiskSpace(Deafault)'] = account.getDiskSpaceProgressInfo(
+                    medium || 'default',
+                    true,
+                );
             }
 
             return res;

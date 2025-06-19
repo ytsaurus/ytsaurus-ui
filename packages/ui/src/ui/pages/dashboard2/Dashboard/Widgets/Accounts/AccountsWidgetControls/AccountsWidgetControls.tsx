@@ -21,7 +21,7 @@ export function AccountsWidgetControls(props: PluginWidgetProps) {
             options={[
                 {value: 'favourite', content: 'Favourite'},
                 {value: 'usable', content: 'Usable'},
-                {value: 'custom', content: 'Custom'}
+                {value: 'custom', content: 'Custom'},
             ]}
             value={type}
             onUpdate={onUpdate}

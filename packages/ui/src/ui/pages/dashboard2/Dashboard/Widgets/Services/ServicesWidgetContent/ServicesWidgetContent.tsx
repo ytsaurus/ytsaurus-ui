@@ -23,7 +23,7 @@ const columns = [
         header: 'Name',
     }),
     columnHelper.accessor('type', {
-        cell: (type) => <Type type={type.getValue()}/>,
+        cell: (type) => <Type type={type.getValue()} />,
         header: 'Type',
     }),
     columnHelper.accessor('status', {
