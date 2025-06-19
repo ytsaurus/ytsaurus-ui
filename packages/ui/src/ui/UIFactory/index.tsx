@@ -18,6 +18,7 @@ import type {SettingsPage} from '../containers/SettingsPanel/settings-descriptio
 import type {UserSuggestProps} from '../containers/UserSuggest/UserSuggest';
 import type {DocsUrls} from '../constants/docsUrls';
 import type {Props as RoleActionsProps} from '../containers/ACL/RoleActions';
+import type {DetailedOperationSelector} from '../pages/operations/selectors';
 
 import type {PERMISSIONS_SETTINGS} from '../constants/acl';
 import type {PreparedAclSubject} from '../utils/acl/acl-types';
@@ -484,7 +485,13 @@ export interface UIFactory {
     }) => React.ReactNode;
 
     renderMarkdown(props: {text: string}): React.ReactNode;
+
     getAnalyticsService(): AnalyticsService[];
+
+    PyDLTelemetrySetup?: {
+        renderPyDLTelemetry(): React.ReactNode | undefined;
+        hasTelemtery(operation: DetailedOperationSelector): boolean;
+    };
 }
 
 // All methods comes from `configureUIFactory` method

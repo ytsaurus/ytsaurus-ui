@@ -318,6 +318,7 @@ class OperationDetail extends React.Component<ReduxProps & RouteProps> {
             monitorTabUrlTemplate,
             timelineTabVisible,
             operationPerformanceUrlTemplate,
+            pyDLTelemetryTabVisible,
         } = this.props;
         const path = `/${cluster}/${Page.OPERATIONS}/${operationId}`;
 
@@ -327,6 +328,7 @@ class OperationDetail extends React.Component<ReduxProps & RouteProps> {
             [Tab.JOBS_MONITOR]: {show: jobsMonitorVisible || activeTab === Tab.JOBS_MONITOR},
             [Tab.MONITOR]: {show: monitorTabVisible},
             [Tab.JOBS_TIMELINE]: {show: timelineTabVisible},
+            [Tab.PYDL_TELEMETRY]: {show: pyDLTelemetryTabVisible},
             [Tab.PERFORMANCE]: {
                 show: Boolean(operationPerformanceUrlTemplate),
                 external: true,
@@ -375,11 +377,14 @@ class OperationDetail extends React.Component<ReduxProps & RouteProps> {
             jobsMonitorIsSupported,
             monitoringComponent,
             timelineTabVisible,
+            pyDLTelemetryTabVisible,
         } = this.props;
         const {url, params} = match;
         const {operationId} = params;
 
         const path = `/${cluster}/${Page.OPERATIONS}/${operationId}`;
+
+        const PyDLTelemetry = UIFactory.PyDLTelemetrySetup?.renderPyDLTelemetry;
 
         // NOTE: <Redirect> has issues with urls which contain '*', and since every operation alias starts with it,
         // we have to redirect to real operation id in those cases
@@ -423,6 +428,9 @@ class OperationDetail extends React.Component<ReduxProps & RouteProps> {
                     )}
                     {jobsMonitorIsSupported && (
                         <Route path={`${path}/${Tab.JOBS_MONITOR}`} component={JobsMonitor} />
+                    )}
+                    {pyDLTelemetryTabVisible && (
+                        <Route path={`${path}/${Tab.PYDL_TELEMETRY}`} render={PyDLTelemetry} />
                     )}
                     <Route path={`${path}/:tab`} component={Placeholder} />
                     <Redirect from={url} to={`${path}/${DEFAULT_TAB}`} />
@@ -508,6 +516,11 @@ const mapStateToProps = (state: RootState) => {
 
     const monitorTabVisible = Boolean(monitoringComponent) || Boolean(monitorTabUrlTemplate);
 
+    const pyDLTelemetryTabVisible = Boolean(
+        UIFactory.PyDLTelemetrySetup?.hasTelemtery(operation) &&
+            ['completed', 'failed', 'aborted'].includes(operation?.state),
+    );
+
     return {
         cluster: getCurrentCluster(state),
         operation,
@@ -524,6 +537,7 @@ const mapStateToProps = (state: RootState) => {
         monitorTabTitle,
         monitorTabUrlTemplate,
         monitoringComponent,
+        pyDLTelemetryTabVisible,
         timelineTabVisible: getSettingsTimelineTabVisible(state),
         jobsMonitorIsSupported: Boolean(UIFactory.getMonitorComponentForJob()),
         jobsMonitorVisible: getJobsMonitorTabVisible(state),
