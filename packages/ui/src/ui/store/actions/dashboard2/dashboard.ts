@@ -82,7 +82,9 @@ export function updateEdittingConfig(
     edittingConfig: DashKitProps['config'],
 ): ThunkAction<void, RootState, any, any> {
     return (dispatch) => {
-        dispatch(setEdittingConfig({edittingConfig}));
+        dispatch(
+            setEdittingConfig({edittingConfig: {...edittingConfig, salt: crypto.randomUUID()}}),
+        );
     };
 }
 
