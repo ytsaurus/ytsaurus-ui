@@ -45,6 +45,7 @@ export function WidgetSettings() {
             pristineSubmittable
             initialValues={item?.data}
             visible={visible}
+            size={'l'}
             fields={getFields(item?.type)}
             onClose={onClose}
         />

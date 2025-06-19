@@ -28,18 +28,18 @@ export function useAccountsSettings() {
         },
         {
             type: 'table-sort-by' as const,
-            name: 'columns',
-            caption: 'Columns',
-            extras: {
-                suggestColumns: ['Nodes', 'Chunks'],
-            },
-        },
-        {
-            type: 'table-sort-by' as const,
             name: 'disk_columns',
             caption: 'Disk space columns(mediums)',
             extras: {
                 suggestColumns: mediumList,
+            },
+        },
+        {
+            type: 'table-sort-by' as const,
+            name: 'columns',
+            caption: 'Columns',
+            extras: {
+                suggestColumns: ['Nodes', 'Chunks'],
             },
         },
         {
