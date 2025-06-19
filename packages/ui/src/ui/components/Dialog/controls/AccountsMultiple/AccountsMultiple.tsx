@@ -66,19 +66,21 @@ export function AccountsMultiple(props: Props) {
     };
 
     return (
-        <Flex gap={2} direction={'column'}>
-            <Select
-                onUpdate={onChange}
-                options={options}
-                multiple
-                popupWidth={'fit'}
-                value={value}
-                filterable
-                hasClear
-                width={'max'}
-                loading={isLoading}
-            />
-            <div>{value?.length ? <ItemsList items={value} onDelete={onDelete} /> : null}</div>
+        <Flex gap={1} direction={'column'}>
+            <Flex gap={1} direction={'column'}>
+                <Select
+                    onUpdate={onChange}
+                    options={options}
+                    multiple
+                    popupWidth={'fit'}
+                    value={value}
+                    filterable
+                    hasClear
+                    width={'max'}
+                    loading={isLoading}
+                />
+                <div>{value?.length ? <ItemsList items={value} onDelete={onDelete} /> : null}</div>
+            </Flex>
             <div>
                 <Flex direction={'row'} gap={1}>
                     <Button size={'m'} onClick={setFavorite}>
