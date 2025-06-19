@@ -3,6 +3,8 @@ import {useDispatch, useSelector} from 'react-redux';
 
 import cn from 'bem-cn-lite';
 
+import {Checkbox} from '@gravity-ui/uikit';
+
 import Button from '../../../../components/Button/Button';
 import Icon from '../../../../components/Icon/Icon';
 
@@ -19,6 +21,7 @@ import {
     getAccessLogFilterMethod,
     getAccessLogFilterPagination,
     getAccessLogFilterPathRegex,
+    getAccessLogFilterRecursive,
     getAccessLogFilterScope,
     getAccessLogFilterTime,
     getAccessLogFilterUserRegex,
@@ -104,10 +107,29 @@ function AccessLogFilters() {
                         node: <AccessLogMethod />,
                         wrapperClassName: block('method-group'),
                     },
+                    {
+                        node: <AccessLogRecursive />,
+                    },
                     {node: <AccessLogApplyFilters />},
                 ]}
             />
         </React.Fragment>
+    );
+}
+
+function AccessLogRecursive() {
+    const dispatch = useDispatch();
+    const recursive = useSelector(getAccessLogFilterRecursive);
+
+    return (
+        <Checkbox
+            checked={recursive}
+            onUpdate={(value) => {
+                dispatch(setAccessLogFilters({recursive: value}));
+            }}
+        >
+            Recursive
+        </Checkbox>
     );
 }
 
