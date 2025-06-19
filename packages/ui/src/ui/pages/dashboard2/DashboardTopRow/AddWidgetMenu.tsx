@@ -30,7 +30,7 @@ export function AddWidgetMenu() {
             renderSwitcher={(props) => (
                 <Button {...props} size={'m'}>
                     <Flex alignItems={'center'} gap={3}>
-                        Add
+                        Add widget
                         {dropdownOpened ? <ChevronDown /> : <ChevronUp />}
                     </Flex>
                 </Button>

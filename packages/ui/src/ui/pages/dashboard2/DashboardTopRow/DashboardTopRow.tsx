@@ -40,11 +40,7 @@ export function DashboardTopRow() {
                 {editMode && <CopyConfigButton />}
                 {editMode && <AddWidgetMenu />}
                 {editMode && <CancelButton onCancel={cancel} />}
-                <Button
-                    size={'m'}
-                    view={editMode ? 'outlined' : 'action'}
-                    onClick={editMode ? () => save() : () => edit()}
-                >
+                <Button size={'m'} view={'action'} onClick={editMode ? () => save() : () => edit()}>
                     {editMode ? 'Save dashboard' : 'Edit dashboard'}
                 </Button>
             </Flex>
@@ -55,7 +51,7 @@ export function DashboardTopRow() {
 
 function CancelButton({onCancel}: {onCancel: () => void}) {
     return (
-        <Button size={'m'} view={'action'} onClick={onCancel}>
+        <Button size={'m'} view={'outlined'} onClick={onCancel}>
             Cancel
         </Button>
     );
