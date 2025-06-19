@@ -203,7 +203,9 @@ function calcAggregationRow(treeItem, masterMemoryMedia) {
     };
 
     forEach_(children, (treeItem) => {
-        const {attributes: account} = treeItem;
+        const {attributes: acc} = treeItem;
+        const account = acc.getResourceInfoSource(true);
+
         forEach_(AGGREGATION_FIELDS, (key) => {
             set_(aggAccount, key, addIfDefined(aggAccount, account, key));
         });
