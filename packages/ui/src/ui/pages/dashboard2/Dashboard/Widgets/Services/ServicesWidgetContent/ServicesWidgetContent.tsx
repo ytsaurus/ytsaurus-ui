@@ -1,5 +1,5 @@
 import React from 'react';
-import {Label, Text} from '@gravity-ui/uikit';
+import {Text} from '@gravity-ui/uikit';
 import {PluginWidgetProps} from '@gravity-ui/dashkit';
 import {createColumnHelper} from '@gravity-ui/table/tanstack';
 
@@ -11,6 +11,8 @@ import {useAutoHeight} from '../../../../../../pages/dashboard2/Dashboard/hooks/
 
 import {Health} from '../../../../../../components/Health/Health';
 
+import {Type} from './cells/Type';
+
 import {useServicesWidget} from './use-services-widget';
 
 const columnHelper = createColumnHelper<ServiceInfo>();
@@ -21,7 +23,7 @@ const columns = [
         header: 'Name',
     }),
     columnHelper.accessor('type', {
-        cell: (type) => <Label>{String(...type.getValue())}</Label>,
+        cell: (type) => <Type type={type.getValue()}/>,
         header: 'Type',
     }),
     columnHelper.accessor('status', {

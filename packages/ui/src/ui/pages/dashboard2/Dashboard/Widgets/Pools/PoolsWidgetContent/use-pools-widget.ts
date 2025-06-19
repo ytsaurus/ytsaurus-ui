@@ -18,6 +18,6 @@ export function usePoolsWidget(props: PluginWidgetProps) {
         resources,
         map_(resources, (resource) => includes_(resourcesColumns, resource)),
     );
-
+    console.log(data);
     return {visibleColumns, data: {pools: data, isLoading, isFetching, error}};
 }
