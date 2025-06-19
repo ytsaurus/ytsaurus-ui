@@ -43,7 +43,7 @@ function getViewState(label?: StatusLabelProps['label']): ViewState {
     return states[label!] ?? 'unknown';
 }
 
-type ViewState =
+export type ViewState =
     | 'preparing'
     | 'running'
     | 'failed'
