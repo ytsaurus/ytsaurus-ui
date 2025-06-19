@@ -41,11 +41,11 @@ export async function fetchOperations(
                     limit: 10,
                     state: operationState === 'all' ? undefined : operationState,
                     user: item.value,
-                    pool,
+                    pool: pool?.length ? pool : undefined,
                 } as ListOperationsParams,
             }));
 
-            if (pool && !authors?.length) {
+            if (pool?.length && !authors?.length) {
                 requests = [
                     {
                         command: 'list_operations' as const,
@@ -68,7 +68,7 @@ export async function fetchOperations(
                     limit: 10,
                     state: operationState === 'all' ? undefined : operationState,
                     user,
-                    pool,
+                    pool: pool?.length ? pool : undefined,
                 },
             });
         }
