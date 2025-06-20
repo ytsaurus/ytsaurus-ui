@@ -40,7 +40,7 @@ export class StreamCanvasBlock extends YTGrapCanvasBlock<FlowGraphBlockItem<'str
         });
 
         this.drawInnerText({
-            yPos: yPos + 25,
+            yPos: yPos + 35,
             xPos,
             text: format.Bytes(this.state.meta.bytes_per_second, {digits: 0}) + '/s',
             align: 'right',

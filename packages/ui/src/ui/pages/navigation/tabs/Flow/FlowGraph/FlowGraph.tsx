@@ -189,8 +189,8 @@ function useFlowGraphData() {
             const options = ICON_BY_TYPE[type!];
             res.blocks.push(
                 makeBlock('stream', stream, {
-                    width: 136,
-                    height: 70,
+                    width: 160,
+                    height: 84,
                     name: stream.name,
                     ...options,
                     ...rest,

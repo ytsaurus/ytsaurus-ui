@@ -39,25 +39,31 @@ export function Stream({item, detailed, className}: StreamProps) {
                     {
                         label: 'Messages',
                         value: (
-                            <div>
-                                {detailed && (
-                                    <div>{format.Number(item.meta?.messages_per_second)}</div>
-                                )}
-                                {format.Bytes(item.meta?.bytes_per_second, {
-                                    digits: detailed ? 2 : 0,
-                                }) + '/s'}
-                            </div>
+                            <Flex direction="column">
+                                <Text variant="inherit" whiteSpace="nowrap" ellipsis>
+                                    {format.Number(item.meta?.messages_per_second)} per/s
+                                </Text>
+                                <Text variant="inherit" whiteSpace="nowrap" ellipsis>
+                                    {format.Bytes(item.meta?.bytes_per_second, {
+                                        digits: detailed ? 2 : 0,
+                                    }) + '/s'}
+                                </Text>
+                            </Flex>
                         ),
                     },
                     {
-                        label: 'Inflight',
+                        label: 'Inflight rows',
                         value: (
-                            <div>
-                                {detailed && <div>{format.Number(item.meta?.inflight_rows)}</div>}
-                                {format.Bytes(item.meta?.inflight_bytes, {
-                                    digits: detailed ? 2 : 0,
-                                })}
-                            </div>
+                            <Flex direction="column" style={{overflow: 'hidden'}}>
+                                <Text variant="inherit" whiteSpace="nowrap" ellipsis>
+                                    {format.Number(item.meta?.inflight_rows)}
+                                </Text>
+                                <Text variant="inherit" whiteSpace="nowrap" ellipsis>
+                                    {format.Bytes(item.meta?.inflight_bytes, {
+                                        digits: detailed ? 2 : 0,
+                                    })}
+                                </Text>
+                            </Flex>
                         ),
                     },
                 ]}
