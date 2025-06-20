@@ -379,6 +379,8 @@ class OperationDetail extends React.Component<ReduxProps & RouteProps> {
 
         const path = `/${cluster}/${Page.OPERATIONS}/${operationId}`;
 
+        const PyDLTelemetry = UIFactory.renderPyDLTelemetry({});
+
         // NOTE: <Redirect> has issues with urls which contain '*', and since every operation alias starts with it,
         // we have to redirect to real operation id in those cases
         return !isOperationId(operationId) ? (
@@ -421,6 +423,9 @@ class OperationDetail extends React.Component<ReduxProps & RouteProps> {
                     )}
                     {jobsMonitorIsSupported && (
                         <Route path={`${path}/${Tab.JOBS_MONITOR}`} component={JobsMonitor} />
+                    )}
+                    {PyDLTelemetry && (
+                        <Route path={`${path}/${Tab.PYDL_TELEMTRY}`} render={UIFactory.renderPyDLTelemetry} />
                     )}
                     <Route path={`${path}/:tab`} component={Placeholder} />
                     <Redirect from={url} to={`${path}/${DEFAULT_TAB}`} />
