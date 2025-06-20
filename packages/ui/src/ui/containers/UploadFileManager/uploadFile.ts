@@ -1,9 +1,8 @@
 // @ts-ignore
 import yt from '@ytsaurus/javascript-wrapper/lib/yt';
-import axios, {AxiosProgressEvent} from 'axios';
+import {AxiosProgressEvent} from 'axios';
 
 import {YT} from '../../config/yt-config';
-import {getXsrfCookieName} from '../../utils';
 import CancelHelper from '../../utils/cancel-helper';
 
 interface StartUploadProps {
@@ -16,7 +15,7 @@ interface StartUploadProps {
 
 export const uploadFile = (opts: StartUploadProps) => {
     const {filePath, file, cluster} = opts;
-    const clusterConfig = YT.clusters[opts.cluster];
+    const clusterConfig = YT.clusters[cluster];
     const externalProxy = clusterConfig.externalProxy;
 
     const cancelHelper = opts.cancelHelper;
@@ -30,30 +29,25 @@ export const uploadFile = (opts: StartUploadProps) => {
         })
         .then(() => {
             return yt.v3.startTransaction({}).then((transactionId: string) => {
-                const xYTParameters = JSON.stringify({
-                    path: filePath,
-                    compute_md5: false,
-                    ping_ancestor_transactions: true,
-                    transaction_id: transactionId,
-                });
-
-                return axios
-                    .put(`//${externalProxy}/api/v3/write_file`, file, {
-                        onUploadProgress: opts.handleUploadProgress,
-                        withCredentials: true,
-                        withXSRFToken: true,
-                        xsrfCookieName: getXsrfCookieName(cluster),
-                        xsrfHeaderName: 'X-Csrf-Token',
-                        cancelToken: cancelHelper.generateNextToken(),
-                        headers: {
-                            'X-YT-Header-Format': '<encode_utf8=%false>json',
-                            'X-Yt-Parameters-0': btoa(unescape(encodeURIComponent(xYTParameters))),
+                return yt.v3
+                    .writeFile({
+                        setup: {
+                            onUploadProgress: opts.handleUploadProgress,
+                            proxy: externalProxy,
                         },
+                        parameters: {
+                            path: filePath,
+                            compute_md5: false,
+                            ping_ancestor_transactions: true,
+                            transaction_id: transactionId,
+                        },
+                        cancelToken: cancelHelper.generateNextToken(),
+                        data: file,
                     })
                     .then(() => {
                         return yt.v3.commitTransaction({transaction_id: transactionId});
                     })
-                    .catch(async (err) => {
+                    .catch(async (err: any) => {
                         await yt.v3.abortTransaction({transaction_id: transactionId});
 
                         throw err;
