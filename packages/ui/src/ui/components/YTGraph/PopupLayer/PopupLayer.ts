@@ -7,12 +7,11 @@ export class PopupLayer extends Layer<AreaLayerProps, AreaLayerContext> {
         super({
             ...props,
             html: {
+                transformByCameraPosition: true,
                 zIndex: 6,
                 classNames: ['graph-popup-layer'],
             },
         });
-
-        this.context.camera.on('update', this.updateHTMLCamera);
     }
 
     updateHTMLCamera = () => {
@@ -24,14 +23,13 @@ export class PopupLayer extends Layer<AreaLayerProps, AreaLayerContext> {
     protected afterInit() {
         const html = this.getHTML();
 
-        html.style.position = 'absolute';
-        html.style.top = '0';
-        html.style.left = '0';
         html.style.isolation = 'isolate';
         html.style.transformOrigin = '0 0';
         html.style.transformStyle = 'preserve-3d';
         html.style.willChange = 'transform';
         html.style.pointerEvents = 'none';
+
+        super.afterInit();
     }
 
     protected unmount(): void {

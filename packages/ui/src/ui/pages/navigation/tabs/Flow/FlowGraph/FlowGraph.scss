@@ -1,0 +1,32 @@
+.yt-flow-graph {
+    &__graph {
+        position: relative;
+
+        width: calc(100vw - var(--gn-aside-header-size) - 40px);
+        height: calc(100vh - var(--app-header-height) * 4 - var(--app-footer-height));
+    }
+
+    &__item-container {
+        display: flex;
+        overflow: hidden;
+    }
+
+    &__item {
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+        overflow: hidden;
+    }
+
+    &__item-popup {
+        padding: 10px 12px;
+
+        &_type_computation {
+            min-width: 300px;
+        }
+
+        &_type_stream {
+            min-width: 200px;
+        }
+    }
+}
