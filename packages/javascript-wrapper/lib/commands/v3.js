@@ -75,7 +75,15 @@ module.exports = {
     },
     writeFile: {
         name: 'write_file',
-        notImplemented: true,
+        method: 'PUT',
+        dataType: 'text',
+        version: 'v3',
+        headers: {
+            'Content-Type': 'application/octet-stream',
+        },
+        heavy: true,
+        bigUpload: true,
+        prepareData: utils.prepareWriteFileData,
     },
 
     // Tables

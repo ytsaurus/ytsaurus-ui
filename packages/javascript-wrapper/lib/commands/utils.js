@@ -28,7 +28,18 @@ function prepareWriteTableData(localSetup, data) {
     }
 }
 
+function prepareWriteFileData(localSetup, data) {
+    const type = Object.prototype.toString.call(data);
+
+    if (type === '[object File]') {
+        return data;
+    } else {
+        throw new Error(error.prepare('bad command arguments - "data" must be a File.'));
+    }
+}
+
 module.exports = {
     prepareInputRows: prepareInputRows,
     prepareWriteTableData: prepareWriteTableData,
+    prepareWriteFileData: prepareWriteFileData,
 };
