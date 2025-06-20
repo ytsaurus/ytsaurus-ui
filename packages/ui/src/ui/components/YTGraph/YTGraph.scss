@@ -11,5 +11,20 @@
             outline: 2px solid var(--g-color-line-brand);
             background-color: var(--hover-background);
         }
+
+        &_background {
+            &_success {
+                background-color: var(--success-background);
+            }
+            &_info {
+                background-color: var(--info-background);
+            }
+            &_warning {
+                background-color: var(--warning-background);
+            }
+            &_danger {
+                background-color: var(--danger-background);
+            }
+        }
     }
 }

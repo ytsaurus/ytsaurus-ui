@@ -563,7 +563,19 @@ export type FlowComputation = FlowComputationStreams & {
     };
     group_by_schema_str: string;
     epoch_per_second: number;
+    status: FlowNodeStatus;
 };
+
+export type FlowNodeStatus =
+    | 'minimum'
+    | 'trace'
+    | 'debug'
+    | 'info'
+    | 'warning'
+    | 'error'
+    | 'alert'
+    | 'fatal'
+    | 'maximum';
 
 export type FlowComputationStreams = Record<FlowComputationStreamType, Array<StreamId>>;
 
@@ -581,4 +593,5 @@ export type FlowStream = {
     messages_per_second?: number;
     inflight_bytes?: number;
     inflight_rows?: number;
+    status: FlowNodeStatus;
 };
