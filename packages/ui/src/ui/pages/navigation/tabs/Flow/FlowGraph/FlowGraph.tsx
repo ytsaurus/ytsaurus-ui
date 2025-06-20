@@ -26,9 +26,10 @@ import {
     useElkLayout,
 } from '../../../../../components/YTGraph';
 import {NoContent} from '../../../../../components/NoContent/NoContent';
+import {YTErrorBlock} from '../../../../../components/Error/Error';
 
 import {loadFlowGraph} from '../../../../../store/actions/flow/graph';
-import {getFlowGraphData} from '../../../../../store/selectors/flow/graph';
+import {getFlowGraphData, getFlowGraphError} from '../../../../../store/selectors/flow/graph';
 
 import {Computation} from './renderers/Computation';
 import {Stream} from './renderers/Stream';
@@ -47,6 +48,11 @@ export function FlowGraph({pipeline_path, yson}: {pipeline_path: string; yson: b
     useUpdater(updateFn);
 
     const data = useSelector(getFlowGraphData);
+    const error = useSelector(getFlowGraphError);
+
+    if (error) {
+        return <YTErrorBlock error={error} />;
+    }
 
     return (
         <div className={block()}>
