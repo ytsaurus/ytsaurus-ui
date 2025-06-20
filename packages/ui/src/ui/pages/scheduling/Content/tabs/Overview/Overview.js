@@ -159,11 +159,12 @@ class Overview extends Component {
     }
 
     static renderWeight(item) {
-        const {weightEdited} = item;
+        const {weightEdited, type} = item;
         const edited = !isNaN(weightEdited);
+        const content = edited ? 'Explicitly defined' : 'Automatically calculated';
         return (
             <span className={block('weight-content', {edited})}>
-                <Tooltip content={edited ? 'Explicitly defined' : 'Automatically calculated'}>
+                <Tooltip content={type === 'pool' ? content : null}>
                     {hammer.format['Number'](item.weight, {
                         digits: 6,
                         digitsOnlyForFloat: true,
