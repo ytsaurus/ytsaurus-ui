@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {DFDialogProps, YTDFDialog, makeFormSubmitError} from '../Dialog';
+import {DFDialogProps, YTDFDialog, makeFormSubmitError} from '../../../components/Dialog';
 import {UploadFileManagerFileFormValues} from './UploadFileManagerTypes';
 
 interface FileSettingsFormProps {
@@ -18,9 +18,9 @@ export const UploadFileManagerFileSettingsForm: React.FC<FileSettingsFormProps> 
     initialValues,
 }) => {
     return (
-        <YTDFDialog
+        <YTDFDialog<UploadFileManagerFileFormValues>
             onAdd={(formApi) => {
-                const values = formApi.getState().values as UploadFileManagerFileFormValues;
+                const values = formApi.getState().values;
 
                 return onSubmit(values).catch(makeFormSubmitError);
             }}

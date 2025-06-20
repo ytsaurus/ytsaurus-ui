@@ -4,11 +4,11 @@ import {getPath} from '../../store/selectors/navigation';
 import {getCluster} from '../../store/selectors/global';
 import {AxiosError, AxiosProgressEvent, isCancel} from 'axios';
 import CancelHelper from '../../utils/cancel-helper';
-import useFileValidation from '../../components/UploadFileManager/useFileValidation';
-import {UploadFileManagerFileFormValues} from '../../components/UploadFileManager/UploadFileManagerTypes';
+import {UploadFileManagerFileFormValues} from '../../pages/navigation/UploadFileManager/UploadFileManagerTypes';
 import {updateView} from '../../store/actions/navigation';
 import hammer from '../../common/hammer';
 import {uploadFile} from './uploadFile';
+import {ytApiV3} from '../../rum/rum-wrap-api';
 
 type UseUploadFileManagerProps = {
     onSuccess(params: {filePath: string}): void;
@@ -25,8 +25,6 @@ export const useUploadFileManager = (opts: UseUploadFileManagerProps) => {
 
     const cancelHelperRef = React.useRef(new CancelHelper());
     const cancelHelper = cancelHelperRef.current;
-
-    const {validateName, nameAlreadyUsed} = useFileValidation();
 
     const formId = React.useMemo(() => `upload-form-${Math.random()}`, []);
 
@@ -83,20 +81,23 @@ export const useUploadFileManager = (opts: UseUploadFileManagerProps) => {
         return {};
     }, [path, file]);
 
-    const onValidation = React.useCallback(
-        (values: UploadFileManagerFileFormValues) => {
-            if (!values.name) {
-                return {name: 'File name is required'};
-            }
+    const onValidation = React.useCallback(async (values: UploadFileManagerFileFormValues) => {
+        if (!values.name) {
+            return {name: 'File name is required'};
+        }
 
-            if (validateName(values.name)) {
+        if (values.path && values.name) {
+            const ok = await ytApiV3.exists({
+                path: `${values.path}/${values.name}`,
+            });
+
+            if (ok) {
                 return {name: 'A file with this name already exists'};
             }
+        }
 
-            return undefined;
-        },
-        [validateName],
-    );
+        return undefined;
+    }, []);
 
     const cancelUpload = () => {
         cancelHelper.removeAllRequests();
@@ -125,6 +126,5 @@ export const useUploadFileManager = (opts: UseUploadFileManagerProps) => {
         initialValues,
         progressEvent,
         onValidation,
-        nameAlreadyUsed,
     };
 };

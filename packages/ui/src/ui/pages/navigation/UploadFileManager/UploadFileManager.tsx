@@ -1,14 +1,14 @@
 import * as React from 'react';
 import {Button, Toaster} from '@gravity-ui/uikit';
 
-import Link from '../Link/Link';
-import Modal from '../Modal/Modal';
-import withVisible, {WithVisibleProps} from '../../hocs/withVisible';
-import FileDropZone from '../FileDropZone/FileDropZone';
-import FileUploadProgress from '../FileUploadProgress/FileUploadProgress';
+import Link from '../../../components/Link/Link';
+import Modal from '../../../components/Modal/Modal';
+import withVisible, {WithVisibleProps} from '../../../hocs/withVisible';
+import FileDropZone from '../../../components/FileDropZone/FileDropZone';
+import FileUploadProgress from '../../../components/FileUploadProgress/FileUploadProgress';
 
 import UploadFileManagerFileSettingsForm from './UploadFileManagerFileSettingsForm';
-import {useUploadFileManager} from '../../containers/UploadFileManager';
+import {useUploadFileManager} from '../../../containers/UploadFileManager';
 
 interface UploadFileManagerProps extends WithVisibleProps {
     title: string;
