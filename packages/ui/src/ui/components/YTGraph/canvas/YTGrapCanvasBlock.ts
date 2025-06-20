@@ -1,5 +1,5 @@
 import {CanvasBlock} from '@gravity-ui/graph';
-import {GRAPH_COLORS} from '../constants';
+import {GRAPH_BACKGROUND_COLORS, GRAPH_COLORS} from '../constants';
 import {YTGraphBlock} from '../YTGraph';
 import {svgDataToBase} from '../utils/iconToBase';
 import {SVGIconSvgrData} from '@gravity-ui/uikit/build/esm/components/Icon/types';
@@ -255,8 +255,13 @@ export class YTGrapCanvasBlock<T extends YTGraphBlock<string, {}>> extends Canva
     protected drawBorder({
         inProgress,
         progressPercent,
-    }: Pick<RoundedBlockProps, 'inProgress' | 'progressPercent'>) {
+        backgroundTheme,
+    }: Pick<RoundedBlockProps, 'inProgress' | 'progressPercent'> & Pick<T, 'backgroundTheme'>) {
         const {x, y, height, width} = this.state;
+
+        const bgColorByTheme = backgroundTheme
+            ? GRAPH_BACKGROUND_COLORS[backgroundTheme]
+            : undefined;
 
         this.drawRoundBlock({
             x,
@@ -266,9 +271,11 @@ export class YTGrapCanvasBlock<T extends YTGraphBlock<string, {}>> extends Canva
             radius: 8,
             selected: this.state.selected,
             background: {
-                default: this.context.colors.block?.background || GRAPH_COLORS.background,
-                selected: GRAPH_COLORS.selectedBackground,
-                active: GRAPH_COLORS.progressColor,
+                default:
+                    bgColorByTheme ??
+                    (this.context.colors.block?.background || GRAPH_COLORS.background),
+                selected: bgColorByTheme ?? GRAPH_COLORS.selectedBackground,
+                active: bgColorByTheme ?? GRAPH_COLORS.progressColor,
             },
             borderWidth: 2,
             borderColor: {

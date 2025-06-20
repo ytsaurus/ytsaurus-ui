@@ -9,7 +9,7 @@ const PADDING = 15;
 
 export class ComputationCanvasBlock extends YTGrapCanvasBlock<FlowGraphBlockItem<'computation'>> {
     renderBlock(mode: 'minimalistic' | 'schematic'): void {
-        this.drawBorder({});
+        this.drawBorder({backgroundTheme: this.state.backgroundTheme});
 
         if (mode === 'minimalistic') {
             this.drawCenteredIcon({src: CpuIcon, size: 50});

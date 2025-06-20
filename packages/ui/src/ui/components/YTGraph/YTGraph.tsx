@@ -60,6 +60,7 @@ export type YTGraphBlock<IS, Meta extends Record<string, unknown>> = Omit<
     is: IS;
     meta: Meta;
     groupId?: string;
+    backgroundTheme?: 'info' | 'warning' | 'success' | 'danger';
 };
 
 export function YTGraph<B extends YTGraphBlock<string, {}>, C extends TConnection>({
@@ -123,7 +124,10 @@ export function YTGraph<B extends YTGraphBlock<string, {}>, C extends TConnectio
                 renderBlock({
                     graph,
                     data,
-                    className: block('render-block', {selected: data.selected}),
+                    className: block('render-block', {
+                        selected: data.selected,
+                        background: data.backgroundTheme,
+                    }),
                     style: {
                         left: data.x,
                         top: data.y,
