@@ -33,7 +33,7 @@ export const uploadFile = (opts: StartUploadProps) => {
                 const xYTParameters = JSON.stringify({
                     path: filePath,
                     compute_md5: false,
-                    ping: false,
+                    ping_ancestor_transactions: true,
                     transaction_id: transactionId,
                 });
 
