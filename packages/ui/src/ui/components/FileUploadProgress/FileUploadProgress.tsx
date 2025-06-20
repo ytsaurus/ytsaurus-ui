@@ -1,8 +1,7 @@
 import React from 'react';
 import cn from 'bem-cn-lite';
 import {Progress} from '@gravity-ui/uikit';
-
-import hammer from '../../common/hammer';
+import {calcProgressProps} from '../../utils/utils';
 
 import './FileUploadProgress.scss';
 
@@ -16,19 +15,18 @@ interface FileUploadProgressProps {
 }
 
 export const FileUploadProgress: React.FC<FileUploadProgressProps> = ({event}) => {
-    const {total, loaded} = event;
-    const totalStr = hammer.format['Bytes'](total);
-    const loadedStr = hammer.format['Bytes'](loaded);
+    const {total = 0, loaded = 0} = event;
+    const progress = calcProgressProps(loaded, total, 'Bytes');
 
     return (
         <div className={block('progress')}>
             <div className={block('progress-wrapper')}>
                 <Progress
-                    text={`${loadedStr} / ${totalStr}`}
+                    text={progress.text}
                     stack={[
                         {
-                            value: (100 * loaded) / ((total ?? loaded) || 1),
-                            theme: 'info',
+                            value: progress.value ?? 0,
+                            theme: progress.theme,
                         },
                     ]}
                 />
