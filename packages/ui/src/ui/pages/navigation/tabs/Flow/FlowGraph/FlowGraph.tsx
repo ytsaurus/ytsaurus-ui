@@ -9,6 +9,7 @@ import {SVGIconSvgrData} from '@gravity-ui/uikit/build/esm/components/Icon/types
 import {
     FlowComputation,
     FlowComputationStreamType,
+    FlowNodeStatus,
     FlowStream,
 } from '../../../../../../shared/yt-types';
 
@@ -123,6 +124,16 @@ const ICON_BY_TYPE: Record<
     timer_streams: {icon: ClockIcon},
 };
 
+const STATUS_TO_BG_THEME: Partial<
+    Record<FlowNodeStatus, 'success' | 'info' | 'warning' | 'danger'>
+> = {
+    warning: 'warning',
+    alert: 'warning',
+    error: 'danger',
+    fatal: 'danger',
+    maximum: 'danger',
+};
+
 function useFlowGraphData() {
     const loadedData = useSelector(getFlowGraphData);
 
@@ -142,6 +153,7 @@ function useFlowGraphData() {
                 width: 240,
                 height: 108,
                 groupId,
+                backgroundTheme: STATUS_TO_BG_THEME[computation.status],
             });
             res.blocks.push(block);
 
@@ -193,6 +205,7 @@ function useFlowGraphData() {
                     height: 84,
                     name: stream.name,
                     ...options,
+                    backgroundTheme: STATUS_TO_BG_THEME[stream.status],
                     ...rest,
                 }),
             );
