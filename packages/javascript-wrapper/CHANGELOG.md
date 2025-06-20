@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.13.0](https://github.com/ytsaurus/ytsaurus-ui/compare/javascript-wrapper-v0.12.1...javascript-wrapper-v0.13.0) (2025-06-20)
+
+
+### Features
+
+* **javascript-wrapper:** add write file method ([dc53142](https://github.com/ytsaurus/ytsaurus-ui/commit/dc5314263a5c7c193ef2457a2fe9f7a05bc8fe2a))
+
 ## [0.12.1](https://github.com/ytsaurus/ytsaurus-ui/compare/javascript-wrapper-v0.12.0...javascript-wrapper-v0.12.1) (2025-05-27)
 
 
