@@ -17,6 +17,13 @@ const GRAPH_COLORS_ = {
     icon: () => getCssColor('--yql-graph-icon-color'),
 };
 
+const GRAPH_BACKGROUND_COLORS_ = {
+    info: () => getCssColor('--info-background'),
+    warning: () => getCssColor('--warning-background'),
+    danger: () => getCssColor('--danger-background'),
+    success: () => getCssColor('--success-background'),
+};
+
 const STATE_COLOR_MAP_ = {
     completed: () => getCssColor('--success-color'),
     pending: () => getCssColor('--info-color'),
@@ -29,6 +36,11 @@ export const GRAPH_COLORS = makeObjectWithDelayedInit(GRAPH_COLORS_, {
     defaultValue: '',
 });
 export const STATE_COLOR_MAP = makeObjectWithDelayedInit(STATE_COLOR_MAP_, {
+    skipUndefined: true,
+    defaultValue: '',
+});
+
+export const GRAPH_BACKGROUND_COLORS = makeObjectWithDelayedInit(GRAPH_BACKGROUND_COLORS_, {
     skipUndefined: true,
     defaultValue: '',
 });
