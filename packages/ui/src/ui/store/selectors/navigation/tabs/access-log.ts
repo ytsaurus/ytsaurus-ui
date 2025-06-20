@@ -10,6 +10,9 @@ import {convertTimeToRequestParams} from '../../../../components/common/Timeline
 const getAccessLogFiltersState = (state: RootState) =>
     state.navigation.tabs.accessLog.accessLogFilters;
 
+export const getAccessLogFilterRecursive = (state: RootState) =>
+    state.navigation.tabs.accessLog.accessLogFilters.recursive;
+
 export const getAccessLogFilterPagination = (state: RootState) =>
     state.navigation.tabs.accessLog.accessLogFilters.pagination;
 
