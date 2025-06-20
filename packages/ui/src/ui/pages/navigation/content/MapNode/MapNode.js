@@ -61,7 +61,7 @@ import {openCreateACOModal} from '../../../../store/actions/navigation/modals/cr
 import NavigationExtraActions from '../../../../containers/NavigationExtraActions/NavigationExtraActions';
 import UIFactory from '../../../../UIFactory';
 import {getCluster} from '../../../../store/selectors/global';
-import {UploadFileManagerWithClose} from '../../../../components/UploadFileManager';
+import {UploadFileManagerWithClose} from '../../UploadFileManager';
 
 import './MapNode.scss';
 
