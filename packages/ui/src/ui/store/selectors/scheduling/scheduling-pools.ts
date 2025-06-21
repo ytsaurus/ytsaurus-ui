@@ -136,7 +136,7 @@ export interface OperationInfo {
     name: string;
     type: 'operation';
     parent: string;
-    attributes: object;
+    attributes: {title?: string; user?: string; type?: string};
     cypressAttributes: object;
     flowCPU: number;
     burstCPU: number;

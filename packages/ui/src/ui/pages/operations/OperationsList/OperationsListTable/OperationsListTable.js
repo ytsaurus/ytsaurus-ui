@@ -16,6 +16,7 @@ import {SubjectCard} from '../../../../components/SubjectLink/SubjectLink';
 import Button from '../../../../components/Button/Button';
 import Link from '../../../../components/Link/Link';
 import Icon from '../../../../components/Icon/Icon';
+import {OperationType} from '../../../../components/OperationType/OperationType';
 import {Tooltip} from '../../../../components/Tooltip/Tooltip';
 
 import {
@@ -91,9 +92,7 @@ class OperationsListTable extends Component {
     };
 
     static renderType(item) {
-        return (
-            <span className={block('item-type')}>{hammer.format['ReadableField'](item.type)}</span>
-        );
+        return <OperationType value={item.type} />;
     }
 
     static renderStartTime(item) {
