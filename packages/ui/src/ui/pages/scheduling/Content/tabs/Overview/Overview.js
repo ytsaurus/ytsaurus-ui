@@ -1,9 +1,12 @@
 import React, {Component, Fragment} from 'react';
 import {connect, useDispatch, useSelector} from 'react-redux';
 import PropTypes from 'prop-types';
-import hammer from '../../../../../common/hammer';
 import cn from 'bem-cn-lite';
 import qs from 'qs';
+
+import {Flex, Text} from '@gravity-ui/uikit';
+
+import hammer from '../../../../../common/hammer';
 
 import ElementsTable from '../../../../../components/ElementsTable/ElementsTable';
 import {FormattedLink, FormattedText} from '../../../../../components/formatters';
@@ -14,6 +17,7 @@ import Button from '../../../../../components/Button/Button';
 import Label from '../../../../../components/Label/Label';
 import Link from '../../../../../components/Link/Link';
 import Icon from '../../../../../components/Icon/Icon';
+import {OperationType} from '../../../../../components/OperationType/OperationType';
 import WithStickyToolbar from '../../../../../components/WithStickyToolbar/WithStickyToolbar';
 
 import {
@@ -48,12 +52,14 @@ import {useRumMeasureStop} from '../../../../../rum/RumUiContext';
 import {useAppRumMeasureStart} from '../../../../../rum/rum-app-measures';
 import {RumMeasureTypes} from '../../../../../rum/rum-measure-types';
 import {getSchedulingIsFinalLoadingState} from '../../../../../store/selectors/scheduling';
+import {getSchedulingOverivewColumns} from '../../../../../store/selectors/scheduling/overview-columns';
 import ShareUsageBar from '../../controls/ShareUsageBar';
 import SchedulingStaticConfiguration from '../../../PoolStaticConfiguration/SchedulingStaticConfiguration';
 
 import {DialogWrapper as Dialog} from '../../../../../components/DialogWrapper/DialogWrapper';
 import {Tooltip} from '../../../../../components/Tooltip/Tooltip';
 import {LightWeightIcon} from '../../../../../components/OperationPool/LightWeightIcon';
+import {SubjectCard} from '../../../../../components/SubjectLink/SubjectLink';
 import SchedulingOperationsError from '../SchedulingOperationsError/SchedulingOperationsError';
 import {
     getPoolPathsByName,
@@ -67,6 +73,7 @@ import PoolTags from './PoolTags';
 import UIFactory from '../../../../../UIFactory';
 
 import './Overview.scss';
+import {OverviewColumnsButton} from './OverviewColumnsButton';
 
 const block = cn('scheduling-overview');
 
@@ -314,7 +321,20 @@ class Overview extends Component {
                 return <FormattedLink text={text} state={state} theme="primary" routed />;
             }
         } else if (item.type === 'operation') {
+            const {title} = item.attributes;
             const url = `/${cluster}/operations/${item.id}`;
+            if (title?.length > 0) {
+                return (
+                    <Flex direction="column">
+                        <Text variant="inherit" ellipsis>
+                            <Link url={url}>{title}</Link>
+                        </Text>
+                        <Text variant="code-inline-1" color="secondary">
+                            {item.id}
+                        </Text>
+                    </Flex>
+                );
+            }
             return <Link url={url}>{linkText[item.type]}</Link>;
         } else {
             return <FormattedText text={item.name} />;
@@ -393,7 +413,7 @@ class Overview extends Component {
     };
 
     get tableSettings() {
-        const {treeState} = this.props;
+        const {treeState, overviewColumns} = this.props;
 
         return {
             treeState,
@@ -407,19 +427,7 @@ class Overview extends Component {
                 items: poolsTableItems,
                 sets: {
                     default: {
-                        items: [
-                            'name',
-                            'FI',
-                            'weight',
-                            'fair_share_usage',
-                            'fair_share',
-                            'usage',
-                            'demand',
-                            'min_share',
-                            'operation_overview',
-                            'dominant_resource',
-                            'actions',
-                        ],
+                        items: overviewColumns,
                     },
                 },
                 mode: 'default',
@@ -437,6 +445,13 @@ class Overview extends Component {
                 dominant_resource: Overview.renderDominantResource,
                 operation_overview: Overview.renderOperationOverview,
                 actions: this.renderActions,
+                user: (item) => {
+                    const {user} = item.attributes;
+                    return user ? <SubjectCard name={user} type="user" /> : null;
+                },
+                operation_type: (item) => {
+                    return <OperationType value={item.attributes.type} />;
+                },
             },
             computeKey(item) {
                 return item.key;
@@ -525,6 +540,7 @@ const mapStateToProps = (state) => {
         abcServiceFilter: getSchedulingAbcFilter(state),
         isInitialLoading,
         operationRefId,
+        overviewColumns: getSchedulingOverivewColumns(state),
     };
 };
 
@@ -658,6 +674,8 @@ class SchedulingOverviewToolbar extends React.PureComponent {
                     value: {slug},
                     onChange: this.onAbcServiceFilter,
                 })}
+
+                <OverviewColumnsButton className={block('columns-filter')} />
 
                 <Button
                     size="m"

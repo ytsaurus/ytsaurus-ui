@@ -158,6 +158,10 @@
         }
     }
 
+    &__columns-filter {
+        margin-right: 20px;
+    }
+
     &__name-content {
         $ncbMinWidth: 350px;
         $levelPadding: 38px;
@@ -310,5 +314,9 @@
 
     &__pool-meta {
         padding-right: 75px;
+    }
+
+    &__operation-type {
+        font-size: 0.9em;
     }
 }

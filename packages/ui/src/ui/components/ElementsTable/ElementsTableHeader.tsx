@@ -101,6 +101,8 @@ export interface ColumnInfo {
 
     groupName?: undefined;
 
+    title?: string;
+
     caption?: React.ReactNode;
     captionTail?: React.ReactNode; // rendered after sort-order icon
 }
