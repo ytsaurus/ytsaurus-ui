@@ -7,7 +7,7 @@ import remove_ from 'lodash/remove';
 import {RootState} from '../../../store/reducers';
 import {accountsApi} from '../../../store/api/accounts';
 import {getSettingsData} from '../../../store/selectors/settings/settings-base';
-import {getCluster} from '../../../store/selectors/global';
+import {getCluster, getCurrentUserName} from '../../../store/selectors/global';
 
 import {dashboardConfig} from '../../../constants/dashboard2';
 
@@ -17,8 +17,8 @@ export const getUsableAccountsResult = (state: RootState) => {
 };
 
 export const getDashboardConfig = createSelector(
-    [getSettingsData, getCluster, getUsableAccountsResult],
-    (data, cluster, usableAccounts) => {
+    [getSettingsData, getCluster, getCurrentUserName],
+    (data, cluster, username) => {
         // if user setuped his dashboard on current cluster no need to retrun default values
         if (
             data[`local::${cluster}::dashboard::config`] &&
@@ -29,18 +29,18 @@ export const getDashboardConfig = createSelector(
 
         const prevItems = [...dashboardConfig.items.slice(0, 4)];
 
-        // we always have account item in default config(its a constant)
-        const accountsItem = find_(prevItems, (item) => item.type === 'accounts')!;
-        // new item cause of default usable accounts setting
+        // we always have queries item in default config(its a constant)
+        const queriesItem = find_(prevItems, (item) => item.type === 'queries')!;
+        // new item cause of default username
         const newItem = {
-            ...accountsItem,
+            ...queriesItem,
             data: {
-                ...accountsItem?.data,
-                accounts: usableAccounts,
+                ...queriesItem?.data,
+                authors: [{value: username, type: 'users'}],
             },
         };
 
-        remove_(prevItems, (item) => item.type === 'accounts');
+        remove_(prevItems, (item) => item.type === 'queries');
 
         const config: DashKitProps['config'] = {
             ...dashboardConfig,
