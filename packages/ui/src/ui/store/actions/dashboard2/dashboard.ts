@@ -12,9 +12,11 @@ import {
     setEdittingConfig,
     toggleEditting,
 } from '../../../store/reducers/dashboard2/dashboard';
-import {getDashboardConfig} from './../../selectors/dashboard2/dashboard';
+import {getDashboardConfig} from '../../../store/selectors/dashboard2/dashboard';
+import {getCurrentUserName} from '../../../store/selectors/global/username';
 
-import {dashboardConfig, defaultDashboardItems} from '../../../constants/dashboard2';
+import {defaultDashboardItems} from '../../../constants/dashboard2';
+import {makeDefaultConfig} from '../../../utils/dashboard2/make-default-config';
 
 export function editConfig(
     type: 'editItem' | 'createItem',
@@ -60,8 +62,13 @@ export function editConfig(
 export function copyConfig(cluster: string): ThunkAction<void, RootState, any, any> {
     return (dispatch, getState) => {
         const state = getState();
-        const config =
-            state.settings.data[`local::${cluster}::dashboard::config`] || dashboardConfig;
+        const username = getCurrentUserName(state);
+
+        let config = state.settings.data[`local::${cluster}::dashboard::config`];
+
+        if (!config) {
+            config = makeDefaultConfig(username);
+        }
 
         dispatch(updateEdittingConfig(config));
     };
@@ -70,8 +77,7 @@ export function copyConfig(cluster: string): ThunkAction<void, RootState, any, a
 export function startEditting(): ThunkAction<void, RootState, any, any> {
     return (dispatch, getState) => {
         const state = getState();
-        const cluster = state.global.cluster;
-        const config = state.settings.data[`local::${cluster}::dashboard::config`];
+        const config = getDashboardConfig(state);
 
         dispatch(setEdittingConfig({edittingConfig: config}));
         dispatch(toggleEditting());
