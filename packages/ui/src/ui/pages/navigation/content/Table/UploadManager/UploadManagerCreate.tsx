@@ -11,14 +11,13 @@ import {getPath} from '../../../../../store/selectors/navigation';
 import {ConnectedProps, connect} from 'react-redux';
 import {YTErrorBlock} from '../../../../../components/Block/Block';
 import {YTDFDialog} from '../../../../../components/Dialog';
-import {Alert, Progress} from '@gravity-ui/uikit';
+import {Alert} from '@gravity-ui/uikit';
 
 import hammer from '../../../../../common/hammer';
 import format from '../../../../../common/hammer/format';
 
 import './UploadManager.scss';
 import {updateView} from '../../../../../store/actions/navigation';
-import FilePicker from '../../../../../components/FilePicker/FilePicker';
 import {getCluster} from '../../../../../store/selectors/global';
 import {RootState} from '../../../../../store/reducers';
 import {getXsrfCookieName} from '../../../../../utils';
@@ -29,6 +28,8 @@ import HelpLink from '../../../../../components/HelpLink/HelpLink';
 import CancelHelper from '../../../../../utils/cancel-helper';
 import UIFactory from '../../../../../UIFactory';
 import {getSortedNodesNames} from '../../../../../store/selectors/navigation/content/map-node';
+import FileUploadProgress from '../../../../../components/FileUploadProgress/FileUploadProgress';
+import FileDropZone from '../../../../../components/FileDropZone/FileDropZone';
 
 const block = cn('upload-manager');
 
@@ -48,7 +49,6 @@ function trimXLSX(fileName = '') {
 interface State {
     name: string;
 
-    hasUpcomingFile: boolean;
     progress: ProgressState;
     error?: any;
     nameAlreadyUsed: boolean;
@@ -75,7 +75,6 @@ const getExcelBaseUrl = (payload: {cluster: string}) => {
 class UploadManagerCreate extends React.Component<Props, State> {
     state: State = {
         name: '',
-        hasUpcomingFile: false,
         file: null,
         fileType: 'xlsx',
         progress: {inProgress: false},
@@ -87,31 +86,12 @@ class UploadManagerCreate extends React.Component<Props, State> {
     private cancelHelper = new CancelHelper();
 
     renderContent() {
-        const {hasUpcomingFile, file, error, nameAlreadyUsed} = this.state;
+        const {file, error, nameAlreadyUsed} = this.state;
         return (
             <React.Fragment>
-                <div
-                    className={block('drag-area', {
-                        dropable: hasUpcomingFile,
-                        empty: !file,
-                    })}
-                    onDrop={this.onDrop}
-                    onDragEnter={this.onDragEnter}
-                    onDragLeave={this.onDragLeave}
-                    onDragOver={this.onDragOver}
-                >
-                    {file ? (
-                        this.renderFileContent(file)
-                    ) : (
-                        <div>
-                            <div>Drag a file here</div>
-                            or
-                            <div>
-                                <FilePicker onChange={this.onFile}>Pick a file</FilePicker>
-                            </div>
-                        </div>
-                    )}
-                </div>
+                <FileDropZone isDropable={!this.inProgress()} isEmpty={!file} onFile={this.onFile}>
+                    {file ? this.renderFileContent(file) : null}
+                </FileDropZone>
                 {error && <YTErrorBlock error={error} />}
                 {nameAlreadyUsed && (
                     <Alert
@@ -255,30 +235,12 @@ class UploadManagerCreate extends React.Component<Props, State> {
     renderProgress() {
         const {progress} = this.state;
         const event = progress.inProgress ? progress.event : {total: 1, loaded: 0};
-        const {total, loaded} = event;
-        const totalStr = hammer.format['Bytes'](total);
-        const loadedStr = hammer.format['Bytes'](loaded);
-        return (
-            progress.inProgress && (
-                <div
-                    className={block('progress', {
-                        hidden: !progress.inProgress,
-                    })}
-                >
-                    <div className={block('progress-wrapper')}>
-                        <Progress
-                            text={`${loadedStr} / ${totalStr}`}
-                            stack={[
-                                {
-                                    value: (100 * loaded) / ((total ?? loaded) || 1),
-                                    theme: 'info',
-                                },
-                            ]}
-                        />
-                    </div>
-                </div>
-            )
-        );
+
+        if (progress.inProgress) {
+            return <FileUploadProgress event={event} />;
+        }
+
+        return null;
     }
 
     cancelUpload = () => {
@@ -290,40 +252,10 @@ class UploadManagerCreate extends React.Component<Props, State> {
         return progress.inProgress;
     }
 
-    onDragOver = (event: React.DragEvent<HTMLDivElement>) => {
-        event.preventDefault();
-        event.stopPropagation();
-
-        if (this.inProgress()) {
-            return;
-        }
-
-        if (!this.state.hasUpcomingFile) {
-            this.setState({hasUpcomingFile: true});
-        }
-    };
-
-    onDrop = (event: React.DragEvent<HTMLDivElement>) => {
-        event.preventDefault();
-        event.stopPropagation();
-
-        if (this.inProgress()) {
-            return;
-        }
-
-        const {files} = event.dataTransfer;
-        if (!files) {
-            return;
-        }
-
-        this.onFile(files);
-    };
-
     onFile = (files: FileList | null) => {
         const file = files && files[0];
         this.setState({
             file,
-            hasUpcomingFile: false,
             name: trimXLSX(file?.name) || '',
         });
         if (file) {
@@ -331,18 +263,6 @@ class UploadManagerCreate extends React.Component<Props, State> {
             if (fileError) {
                 this.setState({error: {message: fileError}});
             }
-        }
-    };
-
-    onDragEnter = () => {
-        if (!this.inProgress()) {
-            this.setState({hasUpcomingFile: true});
-        }
-    };
-
-    onDragLeave = () => {
-        if (!this.inProgress()) {
-            this.setState({hasUpcomingFile: false});
         }
     };
 

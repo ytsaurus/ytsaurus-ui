@@ -19,13 +19,11 @@ import {getPath} from '../../../../../store/selectors/navigation';
 import {ConnectedProps, connect} from 'react-redux';
 import {YTErrorBlock} from '../../../../../components/Block/Block';
 import {DialogField, YTDFDialog} from '../../../../../components/Dialog';
-import {Progress} from '@gravity-ui/uikit';
 
 import hammer from '../../../../../common/hammer';
 
 import './UploadManager.scss';
 import {updateView} from '../../../../../store/actions/navigation';
-import FilePicker from '../../../../../components/FilePicker/FilePicker';
 import {getSchema} from '../../../../../store/selectors/navigation/tabs/schema';
 import {getCluster, getCurrentClusterConfig} from '../../../../../store/selectors/global';
 import {RootState} from '../../../../../store/reducers';
@@ -34,6 +32,8 @@ import {docsUrl, getConfigUploadTable} from '../../../../../config';
 import HelpLink from '../../../../../components/HelpLink/HelpLink';
 import CancelHelper from '../../../../../utils/cancel-helper';
 import UIFactory from '../../../../../UIFactory';
+import FileDropZone from '../../../../../components/FileDropZone/FileDropZone';
+import FileUploadProgress from '../../../../../components/FileUploadProgress/FileUploadProgress';
 
 const block = cn('upload-manager');
 
@@ -42,7 +42,6 @@ type PropsFromRedux = ConnectedProps<typeof connector>;
 type Props = PropsFromRedux & WithVisibleProps;
 
 interface State {
-    hasUpcomingFile: boolean;
     progress: ProgressState;
     error?: any;
 
@@ -101,7 +100,6 @@ type ProgressState =
 
 class UploadManager extends React.Component<Props, State> {
     state: State = {
-        hasUpcomingFile: false,
         file: null,
         fileType: 'json',
         progress: {inProgress: false},
@@ -115,31 +113,12 @@ class UploadManager extends React.Component<Props, State> {
     private cancelHelper = new CancelHelper();
 
     renderContent() {
-        const {hasUpcomingFile, file, error} = this.state;
+        const {file, error} = this.state;
         return (
             <React.Fragment>
-                <div
-                    className={block('drag-area', {
-                        dropable: hasUpcomingFile,
-                        empty: !file,
-                    })}
-                    onDrop={this.onDrop}
-                    onDragEnter={this.onDragEnter}
-                    onDragLeave={this.onDragLeave}
-                    onDragOver={this.onDragOver}
-                >
-                    {file ? (
-                        this.renderFileContent(file)
-                    ) : (
-                        <div>
-                            <div>Drag a file here</div>
-                            or
-                            <div>
-                                <FilePicker onChange={this.onFile}>Pick a file</FilePicker>
-                            </div>
-                        </div>
-                    )}
-                </div>
+                <FileDropZone isDropable={!this.inProgress()} isEmpty={!file} onFile={this.onFile}>
+                    {file ? this.renderFileContent(file) : null}
+                </FileDropZone>
                 {error && <YTErrorBlock error={error} message={'The file upload has failed'} />}
             </React.Fragment>
         );
@@ -287,30 +266,12 @@ class UploadManager extends React.Component<Props, State> {
     renderProgress() {
         const {progress} = this.state;
         const event = progress.inProgress ? progress.event : {total: 1, loaded: 0};
-        const {total, loaded} = event;
-        const totalStr = hammer.format['Bytes'](total);
-        const loadedStr = hammer.format['Bytes'](loaded);
-        return (
-            progress.inProgress && (
-                <div
-                    className={block('progress', {
-                        hidden: !progress.inProgress,
-                    })}
-                >
-                    <div className={block('progress-wrapper')}>
-                        <Progress
-                            text={`${loadedStr} / ${totalStr}`}
-                            stack={[
-                                {
-                                    value: (100 * loaded) / ((total ?? loaded) || 1),
-                                    theme: 'info',
-                                },
-                            ]}
-                        />
-                    </div>
-                </div>
-            )
-        );
+
+        if (progress.inProgress) {
+            return <FileUploadProgress event={event} />;
+        }
+
+        return null;
     }
 
     cancelUpload = () => {
@@ -322,39 +283,10 @@ class UploadManager extends React.Component<Props, State> {
         return progress.inProgress;
     }
 
-    onDragOver = (event: React.DragEvent<HTMLDivElement>) => {
-        event.preventDefault();
-        event.stopPropagation();
-
-        if (this.inProgress()) {
-            return;
-        }
-
-        if (!this.state.hasUpcomingFile) {
-            this.setState({hasUpcomingFile: true});
-        }
-    };
-
-    onDrop = (event: React.DragEvent<HTMLDivElement>) => {
-        event.preventDefault();
-        event.stopPropagation();
-
-        if (this.inProgress()) {
-            return;
-        }
-
-        const {files} = event.dataTransfer;
-        if (!files) {
-            return;
-        }
-
-        this.onFile(files);
-    };
-
     onFile = (files: FileList | null) => {
         const {cluster} = this.props;
         const file = files && files[0];
-        this.setState({file, hasUpcomingFile: false});
+        this.setState({file});
         if (file) {
             const lastDotIndex = file.name.lastIndexOf('.');
             const extStr = file.name.substr(lastDotIndex + 1);
@@ -367,18 +299,6 @@ class UploadManager extends React.Component<Props, State> {
             if (fileError) {
                 this.setState({error: {message: fileError}});
             }
-        }
-    };
-
-    onDragEnter = () => {
-        if (!this.inProgress()) {
-            this.setState({hasUpcomingFile: true});
-        }
-    };
-
-    onDragLeave = () => {
-        if (!this.inProgress()) {
-            this.setState({hasUpcomingFile: false});
         }
     };
 
