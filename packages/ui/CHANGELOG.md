@@ -1,5 +1,28 @@
 # Changelog
 
+## [1.97.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.96.0...ui-v1.97.0) (2025-06-23)
+
+
+### Features
+
+* **Dashboard2/Accounts:** multiple mediums setting [YTFRONT-3400] ([8cf7d07](https://github.com/ytsaurus/ytsaurus-ui/commit/8cf7d070a85496a4e39e9ce000281b9f6d41499d))
+* **Navigation/TabletErorrs:** make error message button and expand first error [YTFRONT-4740] ([865f759](https://github.com/ytsaurus/ytsaurus-ui/commit/865f7598ba0ce86e9b5e8e3cb30c21f76b2aa431))
+* **Navigation/TabletErrors:** remove useless url params on unmount [YTFRONT-4740] ([f755d62](https://github.com/ytsaurus/ytsaurus-ui/commit/f755d62e6853b8a6764f3938bef348fc51bcde80))
+* **Navigation/TabletErrors:** small upgrades [YTFRONT-4740] ([e9b459b](https://github.com/ytsaurus/ytsaurus-ui/commit/e9b459bbdd146ba359d45f7f59a6a90b6b272fd1))
+* **TabletError:** add testing api option [YTFRONT-4740] ([9bd661d](https://github.com/ytsaurus/ytsaurus-ui/commit/9bd661dbd3e5c6ddced004a27622914f4c055e10))
+
+
+### Bug Fixes
+
+* **Accounts:** use recoursive_resource_usage for 'Aggregation' [YTFRONT-5024] ([a15f1a9](https://github.com/ytsaurus/ytsaurus-ui/commit/a15f1a906b6e0dc1ba6319998502f1aabb540d34))
+* **Dashboard2/TopRow:** recolor buttons [YTFRONT-3400] ([2ccd8c8](https://github.com/ytsaurus/ytsaurus-ui/commit/2ccd8c84fefc82d0fab3f1ca1ad3e58ee261ee0f))
+* **Dashboard2:** remove usable accounts from defaults and add queries author [YTFRONT-3400] ([76f0248](https://github.com/ytsaurus/ytsaurus-ui/commit/76f024886f1f8d22e7a0adb5a0719772314ce48f))
+* **Dashboard2:** request usable accounts on cluster change [YTFRONT-3400] ([ed1efa5](https://github.com/ytsaurus/ytsaurus-ui/commit/ed1efa53f66cddce8c6281a638761fa929d803b5))
+* **Dashboard2:** zero widgets dashboard [YTFRONT-3400] ([97a0ce2](https://github.com/ytsaurus/ytsaurus-ui/commit/97a0ce2962130df5327fd551d53de3d01240b444))
+* **Dialog/AccountsMultiple:** gaps [YTFRONT-3400] ([0d2213f](https://github.com/ytsaurus/ytsaurus-ui/commit/0d2213f06d879fe5a15d533adfa589ad72f7b5dc))
+* **Navigation/AccessLog:** add 'Recursive' checkbox filter [YTFRONT-5023] ([3e96cca](https://github.com/ytsaurus/ytsaurus-ui/commit/3e96cca6aac21c08008e2b9f281d0bdcbbf65ebe))
+* **Scheduling:** display 'Automatically calculated' only for pools [YTFRONT-3812] ([a2b80d3](https://github.com/ytsaurus/ytsaurus-ui/commit/a2b80d3abb37c5565ffe0faf43143cb1d7d85dec))
+
 ## [1.96.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.95.0...ui-v1.96.0) (2025-06-18)
 
 
