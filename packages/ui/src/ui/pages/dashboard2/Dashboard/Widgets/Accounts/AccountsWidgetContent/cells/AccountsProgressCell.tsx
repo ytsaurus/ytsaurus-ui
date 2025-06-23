@@ -4,9 +4,9 @@ import b from 'bem-cn-lite';
 
 import hammer from '../../../../../../../common/hammer';
 
-import {Tooltip} from '../../../../../../../components/Tooltip/Tooltip';
+import {Resource} from '../../../../../../../store/api/dashboard2/accounts/accounts';
 
-import {Resource} from '../AccountsWidgetContent';
+import {Tooltip} from '../../../../../../../components/Tooltip/Tooltip';
 
 import './AccountsProgressCell.scss';
 

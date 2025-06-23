@@ -1,3 +1,5 @@
+import {ProgressTheme} from '@gravity-ui/uikit';
+
 import map_ from 'lodash/map';
 
 import Account from '../../../../pages/accounts/selector';
@@ -25,6 +27,21 @@ const attributesToLoad = [
     'name',
 ];
 
+export type Resource = Partial<{
+    committed: number;
+    uncommitted: number;
+    total: number;
+    limit: number;
+    theme: ProgressTheme;
+    progress: number;
+    progressText: string;
+}>;
+
+export type AccountInfo = {
+    name: string;
+    [key: string]: Resource | string;
+};
+
 export async function fetchAccounts(args: AccountsWidgetArgs) {
     try {
         const {accountsList, medium} = args;
@@ -39,7 +56,7 @@ export async function fetchAccounts(args: AccountsWidgetArgs) {
 
         if (!response.length) return {data: []};
 
-        const accounts = map_(response, (item, idx) => {
+        const accounts: AccountInfo[] = map_(response, (item, idx) => {
             const {output} = item;
             if (!output) {
                 return {
@@ -48,7 +65,7 @@ export async function fetchAccounts(args: AccountsWidgetArgs) {
             }
             const account = new Account(parseAccountData(output));
 
-            const res: Record<string, any> = {
+            const res: AccountInfo = {
                 name: output?.$attributes?.name || accountsList?.[idx] || 'noname',
                 chunkCount: account.getChunkCountProgressInfo(),
                 nodeCount: account.getNodeCountProgressInfo(),
