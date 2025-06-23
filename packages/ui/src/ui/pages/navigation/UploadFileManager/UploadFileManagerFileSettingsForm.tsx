@@ -1,6 +1,11 @@
 import * as React from 'react';
 import {DFDialogProps, YTDFDialog, makeFormSubmitError} from '../../../components/Dialog';
-import {UploadFileManagerFileFormValues} from './UploadFileManagerTypes';
+
+export type UploadFileManagerFileFormValues = {
+    name?: string;
+    path?: string;
+    size?: string;
+};
 
 interface FileSettingsFormProps {
     initialValues: UploadFileManagerFileFormValues;

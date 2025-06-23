@@ -4,7 +4,6 @@ import {getPath} from '../../store/selectors/navigation';
 import {getCluster} from '../../store/selectors/global';
 import {AxiosError, AxiosProgressEvent, isCancel} from 'axios';
 import CancelHelper from '../../utils/cancel-helper';
-import {UploadFileManagerFileFormValues} from '../../pages/navigation/UploadFileManager/UploadFileManagerTypes';
 import {updateView} from '../../store/actions/navigation';
 import hammer from '../../common/hammer';
 import {uploadFile} from './uploadFile';
@@ -12,6 +11,12 @@ import {ytApiV3} from '../../rum/rum-wrap-api';
 
 type UseUploadFileManagerProps = {
     onSuccess(params: {filePath: string}): void;
+};
+
+export type UseUploadFileManagerFileFormValues = {
+    name?: string;
+    path?: string;
+    size?: string;
 };
 
 export const useUploadFileManager = (opts: UseUploadFileManagerProps) => {
@@ -36,7 +41,7 @@ export const useUploadFileManager = (opts: UseUploadFileManagerProps) => {
         }
     };
 
-    const handleSubmit = (values: UploadFileManagerFileFormValues) => {
+    const handleSubmit = (values: UseUploadFileManagerFileFormValues) => {
         if (file) {
             setProgress(true);
 
@@ -81,7 +86,7 @@ export const useUploadFileManager = (opts: UseUploadFileManagerProps) => {
         return {};
     }, [path, file]);
 
-    const onValidation = React.useCallback(async (values: UploadFileManagerFileFormValues) => {
+    const onValidation = React.useCallback(async (values: UseUploadFileManagerFileFormValues) => {
         if (!values.name) {
             return {name: 'File name is required'};
         }
