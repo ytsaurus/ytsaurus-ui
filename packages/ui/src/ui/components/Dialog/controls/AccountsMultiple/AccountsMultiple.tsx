@@ -8,6 +8,7 @@ import filter_ from 'lodash/filter';
 import {useFetchBatchQuery} from '../../../../store/api/yt';
 import {useUsableAccountsQuery} from '../../../../store/api/accounts';
 import {getFavouriteAccounts} from '../../../../store/selectors/favourites';
+import {getCluster} from '../../../../store/selectors/global';
 
 import {DialogControlProps} from '../../../../components/Dialog/Dialog.types';
 
@@ -24,6 +25,7 @@ export function AccountsMultiple(props: Props) {
     const {value, onChange} = props;
 
     const favourites = useSelector(getFavouriteAccounts);
+    const cluster = useSelector(getCluster);
 
     const {data: accounts, isLoading} = useFetchBatchQuery<string>({
         parameters: {
@@ -42,7 +44,7 @@ export function AccountsMultiple(props: Props) {
         errorTitle: 'Failed to fetch accounts list',
     });
 
-    const {data: usableAccounts} = useUsableAccountsQuery(undefined);
+    const {data: usableAccounts} = useUsableAccountsQuery({cluster});
 
     const accountsLoadedWithData = accounts && accounts.length && accounts[0].output;
 

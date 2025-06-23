@@ -3,10 +3,9 @@ import {createSelector} from '@reduxjs/toolkit';
 import {RootState} from '../../../store/reducers';
 import {accountsApi} from '../../../store/api/accounts';
 import {getFavouriteAccounts} from '../../../store/selectors/favourites';
+import {getCluster} from '../../../store/selectors/global/cluster';
 
 import {createWidgetDataFieldSelector} from './utils';
-
-const usableAccountsSelector = accountsApi.endpoints.usableAccounts.select(undefined);
 
 export const getAccountsTypeFilter = createWidgetDataFieldSelector<
     'favourite' | 'usable' | 'custom'
@@ -16,7 +15,10 @@ const createGetAccountsList = (widgetId: string) =>
     createSelector(
         [
             (state: RootState) => getAccountsTypeFilter(state, widgetId),
-            (state: RootState) => usableAccountsSelector(state),
+            (state: RootState) => {
+                const cluster = getCluster(state);
+                return accountsApi.endpoints.usableAccounts.select({cluster})(state);
+            },
             getFavouriteAccounts,
             (_, custom) => custom,
         ],
