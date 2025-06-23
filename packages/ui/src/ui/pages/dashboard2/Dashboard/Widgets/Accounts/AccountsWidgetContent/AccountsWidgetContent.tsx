@@ -12,6 +12,7 @@ import {
 } from '../../../../../../store/selectors/dashboard2/accounts';
 import {useUsableAccountsQuery} from '../../../../../../store/api/accounts';
 import {isDeveloper} from '../../../../../../store/selectors/global/is-developer';
+import {getCluster} from '../../../../../../store/selectors/global';
 
 import {WidgetTable} from '../../../../../../pages/dashboard2/Dashboard/components/WidgetTable/WidgetTable';
 
@@ -51,10 +52,11 @@ const accountsLayout = {
 export function AccountsWidgetContent(props: PluginWidgetProps) {
     const {data} = props;
 
+    const cluster = useSelector(getCluster);
     const type = useSelector((state: RootState) => getAccountsTypeFilter(state, props.id));
     const isAdmin = useSelector(isDeveloper);
 
-    useUsableAccountsQuery(undefined, {skip: isAdmin});
+    useUsableAccountsQuery({cluster}, {skip: isAdmin});
 
     const accountsList = useSelector((state: RootState) =>
         getAccountsList(state, props.id, data?.accounts as string[]),
