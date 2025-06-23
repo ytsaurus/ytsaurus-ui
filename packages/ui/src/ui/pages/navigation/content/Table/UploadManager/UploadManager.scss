@@ -1,22 +1,4 @@
 .upload-manager {
-    &__drag-area {
-        min-height: 200px;
-        border-radius: 4px;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-
-        &_empty {
-            text-align: center;
-            align-items: center;
-            background-color: var(--g-color-base-simple-hover);
-        }
-
-        &_dropable {
-            background-color: var(--g-color-line-generic);
-        }
-    }
-
     &__help-link {
         padding-left: 10px;
     }
@@ -27,22 +9,6 @@
 
     .g-dialog-footer {
         display: none;
-    }
-
-    &__progress {
-        display: flex;
-        align-items: center;
-        &_hidden {
-            visibility: hidden;
-        }
-
-        &-wrapper {
-            flex-grow: 1;
-        }
-    }
-
-    .g-progress {
-        margin: unset;
     }
 
     .df-dialog__field-wrapper {

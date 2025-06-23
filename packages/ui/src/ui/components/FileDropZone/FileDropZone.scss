@@ -1,12 +1,15 @@
 .file-drop-zone {
     &__drag-area {
         align-items: center;
-        background-color: var(--g-color-base-simple-hover);
         border-radius: 4px;
         display: flex;
         flex-direction: column;
         justify-content: center;
         min-height: 200px;
+
+        &_empty {
+            background-color: var(--g-color-base-simple-hover);
+        }
     }
 
     &__info {
