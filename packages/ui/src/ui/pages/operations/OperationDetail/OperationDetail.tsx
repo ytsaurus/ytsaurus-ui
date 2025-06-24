@@ -97,6 +97,7 @@ function OperationDetailUpdater({operationId}: {operationId: string}) {
 function getSpecialWaitingStatuses(
     pools: OperationPool[],
     state: OperationStates,
+    suspended: boolean | undefined,
     runtime: RuntimeItem[] | undefined,
     type: string | undefined,
     isGpuOperation: boolean | undefined,
@@ -107,7 +108,7 @@ function getSpecialWaitingStatuses(
 
     const isSingleTree = new Set(pools?.map((pool) => pool?.tree)).size === 1;
     const isSpecialStatus =
-        type === 'vanilla' && isSingleTree && state === 'running' && isGpuOperation;
+        type === 'vanilla' && isSingleTree && state === 'running' && isGpuOperation && !suspended;
 
     const isWaitingForResources =
         isSpecialStatus && fairShareRatio === usageRatio && fairShareRatio === 0;
@@ -189,6 +190,7 @@ class OperationDetail extends React.Component<ReduxProps & RouteProps> {
         const {isWaitingForJobs, isWaitingForResources} = getSpecialWaitingStatuses(
             pools,
             state,
+            suspended,
             runtime,
             type,
             isGpuOperation,
