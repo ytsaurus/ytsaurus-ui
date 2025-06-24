@@ -11,7 +11,7 @@ export type ItemsTypes = keyof typeof defaultDashboardItems;
 type DashboardSettings = {
     editMode: boolean;
     copyConfigDialogVisibility: boolean;
-    edittingItem: Partial<ConfigItem> & {target: 'createItem' | 'editItem'; type: ItemsTypes};
+    edittingItem?: Partial<ConfigItem> & {target: 'createItem' | 'editItem'; type: ItemsTypes};
     settingsDialogVisibility: boolean;
     edittingConfig: Config | undefined;
 };
@@ -19,7 +19,7 @@ type DashboardSettings = {
 const initialState: DashboardSettings = {
     editMode: false,
     copyConfigDialogVisibility: false,
-    edittingItem: {target: 'editItem', type: 'navigation'},
+    edittingItem: undefined,
     settingsDialogVisibility: false,
     edittingConfig: undefined,
 };

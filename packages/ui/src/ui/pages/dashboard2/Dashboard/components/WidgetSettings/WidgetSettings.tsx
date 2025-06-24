@@ -32,6 +32,9 @@ export function WidgetSettings() {
 
     const onAdd = async (form: FormApi<SettingsValues>) => {
         const {values} = form.getState();
+        if (!item) {
+            return Promise.reject("Can't get current widget, please try again");
+        }
         dispatch(editConfig(item?.target, values, item));
         return Promise.resolve();
     };
@@ -39,6 +42,7 @@ export function WidgetSettings() {
     return (
         <YTDFDialog<SettingsValues>
             onAdd={onAdd}
+            key={item?.id}
             headerProps={{
                 title: `${hammer.format['ReadableField'](item?.type + ' widget') || 'Widget'} settings`,
             }}
