@@ -18,7 +18,7 @@ type Props = DialogControlProps<PoolPair[]> & {
 };
 
 export function PoolsMultiple(props: Props) {
-    const {value = [{tree: '', pool: ''}], onChange, disabled} = props;
+    const {value, onChange, disabled} = props;
 
     const {trees, isTreesLoading, treesOptions} = useTrees(value);
 
@@ -31,7 +31,7 @@ export function PoolsMultiple(props: Props) {
 
     return (
         <Flex gap={2} direction={'column'}>
-            {value.map((pair, index) => (
+            {(value?.length ? value : [{tree: '', pool: ''}]).map((pair, index) => (
                 <Flex key={index} gap={2} direction={'row'} alignItems={'center'}>
                     <Select
                         onUpdate={(newValue) => updateTree(index, newValue[0])}
@@ -83,7 +83,7 @@ PoolsMultiple.isEmpty = (value: PoolPair[]) => {
 };
 
 PoolsMultiple.getDefaultValue = () => {
-    return [{tree: '', pool: ''}];
+    return [];
 };
 
 PoolsMultiple.validate = (value: PoolPair[]) => {
