@@ -26,7 +26,7 @@ export const FileUploadProgress: React.FC<FileUploadProgressProps> = ({event}) =
                     stack={[
                         {
                             value: progress.value ?? 0,
-                            theme: progress.theme,
+                            theme: 'info',
                         },
                     ]}
                 />

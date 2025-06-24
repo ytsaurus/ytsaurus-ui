@@ -17,6 +17,7 @@ export const uploadFile = (opts: StartUploadProps) => {
     const {filePath, file, cluster} = opts;
     const clusterConfig = YT.clusters[cluster];
     const externalProxy = clusterConfig.externalProxy;
+    const proxy = clusterConfig.proxy;
 
     const cancelHelper = opts.cancelHelper;
 
@@ -33,7 +34,7 @@ export const uploadFile = (opts: StartUploadProps) => {
                     .writeFile({
                         setup: {
                             onUploadProgress: opts.handleUploadProgress,
-                            proxy: externalProxy,
+                            proxy: externalProxy ?? proxy,
                         },
                         parameters: {
                             path: filePath,
