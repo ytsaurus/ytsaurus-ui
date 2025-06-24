@@ -147,7 +147,10 @@ class Tablets extends Component {
         const content =
             level === 0 ? (
                 <React.Fragment>
-                    <Button view={'flat-secondary'}>
+                    <Button
+                        view={'flat-secondary'}
+                        onClick={() => this.props.toggleExpandedHost(name)}
+                    >
                         <Icon awesome={isCollapsed ? 'angle-down' : 'angle-up'} />
                     </Button>{' '}
                     {name === cell_leader_address
@@ -416,7 +419,7 @@ class Tablets extends Component {
                 mode: tabletsMode,
             },
             templates: {
-                name_tablet_id: Tablets.renderName,
+                name_tablet_id: Tablets.renderName.bind(this),
                 name_cell_id: Tablets.renderName,
                 index: Tablets.renderIndex,
                 tablet_id: Tablets.renderTabletId,
