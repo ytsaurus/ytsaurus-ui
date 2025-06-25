@@ -32,6 +32,12 @@ export const UploadFileManager: React.FC<UploadFileManagerProps> = (props) => {
     });
     const isUploadButtonDisabled = uploadSettings.isProgress || !uploadSettings.file;
 
+    const handleClose = () => {
+        props.handleClose();
+        uploadSettings.cancelUpload();
+        uploadSettings.onReset();
+    };
+
     const renderContent = () => {
         return (
             <React.Fragment>
@@ -96,7 +102,7 @@ export const UploadFileManager: React.FC<UploadFileManagerProps> = (props) => {
                 size="m"
                 title="Close"
                 disabled={uploadSettings.isProgress}
-                onClick={props.handleClose}
+                onClick={handleClose}
             >
                 Close
             </Button>
@@ -109,7 +115,7 @@ export const UploadFileManager: React.FC<UploadFileManagerProps> = (props) => {
                 size="m"
                 title={props.title}
                 visible={props.visible}
-                onCancel={() => {}}
+                onCancel={handleClose}
                 confirmText="Upload"
                 content={renderContent()}
                 footerContent={uploadSettings.file ? renderFooterContent() : null}
