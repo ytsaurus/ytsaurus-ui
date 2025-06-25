@@ -258,15 +258,6 @@ class MapNodeToolbar extends React.PureComponent {
                 text: <NoWrap>Directory</NoWrap>,
                 icon: <Icon awesome={'folder'} face={'solid'} />,
             },
-            ...(!uploadTableExcelBaseUrl
-                ? []
-                : [
-                      {
-                          action: this.uploadTableButtonClick,
-                          text: <NoWrap>Upload xlsx</NoWrap>,
-                          icon: <Icon awesome={'upload'} />,
-                      },
-                  ]),
             {
                 action: this.createLinkButtonClick,
                 text: <NoWrap>Link</NoWrap>,
@@ -277,6 +268,15 @@ class MapNodeToolbar extends React.PureComponent {
                 text: <NoWrap>ACO</NoWrap>,
                 icon: <Icon awesome={'acl-object'} />,
             },
+            ...(!uploadTableExcelBaseUrl
+                ? []
+                : [
+                      {
+                          action: this.uploadTableButtonClick,
+                          text: <NoWrap>Upload xlsx</NoWrap>,
+                          icon: <Icon awesome={'upload'} />,
+                      },
+                  ]),
             {
                 action: this.uploadFileButtonClick,
                 text: <NoWrap>Upload file</NoWrap>,
