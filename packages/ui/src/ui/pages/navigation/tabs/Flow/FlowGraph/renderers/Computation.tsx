@@ -12,6 +12,7 @@ import {FlowGraphBlockItem} from '../FlowGraph';
 
 import {FlowMeta} from './FlowMeta';
 import './Computation.scss';
+import {FlowCaption1, FlowCaption2, FlowMessages} from './FlowGraphRenderer';
 
 const block = cn('yt-flow-computation');
 
@@ -30,14 +31,10 @@ export function Computation({detailed, item, className}: ComputationProps) {
         <div className={block(null, className)}>
             <Flex gap={4} alignItems="baseline" style={{paddingBottom: '10px'}}>
                 <Flex grow={1} overflow="hidden">
-                    <Text variant="caption-2" ellipsis>
-                        {item.name}
-                    </Text>
+                    <FlowCaption2 text={item.name} />
                 </Flex>
                 <Flex grow={1} overflow="hidden">
-                    <Text variant="caption-1" color="secondary" ellipsis>
-                        {item.meta?.group_by_schema_str}
-                    </Text>
+                    <FlowCaption1 text={item.meta?.group_by_schema_str} />
                 </Flex>
             </Flex>
             <FlowMeta
@@ -60,7 +57,7 @@ export function Computation({detailed, item, className}: ComputationProps) {
                 ]}
             />
             <ComputaionProgress stats={item.meta?.partitions_stats} />
-            {detailed !== false && <ComputationDetails item={item} />}
+            {detailed && <ComputationDetails item={item} />}
         </div>
     );
 }
